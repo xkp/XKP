@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="6"
+   name=""
+   committed-date="2009-12-04T23:02:45.490349Z"
+   url="https://xkp.googlecode.com/svn/trunk/xkp/build/vs2005"
+   last-author="xkp.santos"
+   kind="dir"
+   uuid="4384d7fe-d9f7-11de-82ea-1f113a1b7651"
+   prop-time="2009-11-25T20:12:22.755910Z"
+   revision="6"/>
+<entry
+   committed-rev="14"
+   name="core.sln"
+   text-time="2009-12-24T07:28:48.304000Z"
+   committed-date="2009-12-30T06:50:13.893255Z"
+   checksum="bfaf9918174c2c8d0ec6efa0ec118250"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T19:57:58.016510Z"
+   revision="14"/>
+<entry
+   name="core_test"
+   kind="dir"/>
+<entry
+   name="libxkp"
+   kind="dir"/>
+<entry
+   name="xs_test"
+   kind="dir"/>
+<entry
+   committed-rev="15"
+   name="core.suo"
+   text-time="2010-01-23T04:09:52.353000Z"
+   committed-date="2010-01-23T04:11:43.631172Z"
+   checksum="1c23cfd6297a15fb6fd84e07e0210a00"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:58.466710Z"
+   revision="15"/>
+<entry
+   committed-rev="15"
+   name="xkp.vsprops"
+   text-time="2010-01-17T18:37:24.111614Z"
+   committed-date="2010-01-23T04:11:43.631172Z"
+   checksum="aa2b41f819b61dbb8e396c29695dd477"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:58.497910Z"
+   revision="15"/>
+<entry
+   name="serial_test"
+   kind="dir"/>
+</wc-entries>

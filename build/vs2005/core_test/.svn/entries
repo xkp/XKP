@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="6"
+   name=""
+   committed-date="2009-12-04T23:02:45.490349Z"
+   url="https://xkp.googlecode.com/svn/trunk/xkp/build/vs2005/core_test"
+   last-author="xkp.santos"
+   kind="dir"
+   uuid="4384d7fe-d9f7-11de-82ea-1f113a1b7651"
+   revision="6"/>
+<entry
+   committed-rev="2"
+   name="stdafx.h"
+   text-time="2009-11-25T19:57:58.156910Z"
+   committed-date="2009-11-25T19:40:21.665146Z"
+   checksum="b102f5beb0c69076b3b226874bf607a2"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T19:57:58.047710Z"/>
+<entry
+   committed-rev="15"
+   name="core_test.cpp"
+   text-time="2010-01-10T22:02:18.191724Z"
+   committed-date="2010-01-23T04:11:43.631172Z"
+   checksum="3901a4ff3a8fb1ece508f1ff0bb00412"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T19:57:58.063310Z"
+   revision="15"/>
+<entry
+   committed-rev="2"
+   name="core_test.vcproj.Owner-PC.Owner.user"
+   text-time="2009-11-25T19:57:58.156910Z"
+   committed-date="2009-11-25T19:40:21.665146Z"
+   checksum="e61eb12b73c4953d7a7290eb43166de7"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T19:57:58.078910Z"/>
+<entry
+   committed-rev="2"
+   name="core_test.vcproj"
+   text-time="2009-11-25T19:57:58.172510Z"
+   committed-date="2009-11-25T19:40:21.665146Z"
+   checksum="3fafe4050d81f767a2fe8d64e05ace1f"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T19:57:58.110110Z"/>
+<entry
+   committed-rev="2"
+   name="stdafx.cpp"
+   text-time="2009-11-25T19:57:58.172510Z"
+   committed-date="2009-11-25T19:40:21.665146Z"
+   checksum="5389a22b757ba76a5addcbf74dd07785"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T19:57:58.125710Z"/>
+<entry
+   committed-rev="2"
+   name="ReadMe.txt"
+   text-time="2009-11-25T19:57:58.188110Z"
+   committed-date="2009-11-25T19:40:21.665146Z"
+   checksum="2ccc2dbc817af056df28654b23e58def"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T19:57:58.125710Z"/>
+</wc-entries>

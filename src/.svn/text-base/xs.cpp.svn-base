@@ -1,0 +1,180 @@
+
+#include <xs.h>
+#include <xs/ast.h>
+#include <xs/compiler.h>
+#include <xs/linker.h>
+
+using namespace xkp;
+
+//code_context
+ByteCode xs_utils::compile_code(const str& src, code_context& ctx)
+  {
+    code_linker linker_(ctx);
+
+    //import dsls
+    dsl_list dl;
+
+    //td: !!!
+    //dsl_info_list::iterator it = ctx.dsl_.begin();
+    //dsl_info_list::iterator nd = ctx.dsl_.end();
+    //
+    //for(; it != nd; it++)
+    //  {
+    //    dl.push_back( it->name );
+    //    linker_.register_dsl(it->name, it->linker);
+    //  }
+    
+    xs_compiler compiler(dl);
+    
+    code code_;
+    compiler.compile_code(src, code_);
+
+    code_.visit(&linker_);
+    
+    return linker_.link();
+  }
+  
+variant xs_utils::execute_xs(const str& src, code_context& ctx)
+  {
+    code_linker linker_(ctx);
+
+    //import dsls
+    dsl_list dl;
+
+    //td: !!!
+    //dsl_info_list::iterator it = ctx.dsl_.begin();
+    //dsl_info_list::iterator nd = ctx.dsl_.end();
+    //
+    //for(; it != nd; it++)
+    //  {
+    //    dl.push_back( it->name );
+    //    linker_.register_dsl(it->name, it->linker);
+    //  }
+    
+    xs_compiler compiler(dl);
+    
+    code code_;
+    compiler.compile_code(src, code_);
+
+    code_.visit(&linker_);
+    
+    ByteCode dbc = linker_.link();
+    execution_context dec(dbc, ctx.this_);
+    return dec.execute();
+  }
+
+void xs_utils::compile_class(const str& src, code_context& ctx)
+  {
+    xs_compiler  compiler;
+    xs_container results;
+    compiler.compile_xs(src, results);
+    
+    for(size_t i = 0; i < results.size(); i++)
+      {
+        //assumes there are only classes in there
+        //td: this is really ugly
+        xs_class ci = results.get(i);
+        class_linker cl(ctx); 
+        cl.link(ci);
+      }
+  }
+
+void xs_utils::compile_instance(const str& src, DynamicObject instance, code_context& ctx) 
+  {
+    xs_compiler  compiler;
+    xs_container results;
+    compiler.compile_xs(src, results);
+    
+    for(size_t i = 0; i < results.size(); i++)
+      {
+        //assumes there are only classes in there
+        xs_instance ii = results.get(i);
+        instance_linker il(ctx, instance); 
+        il.link(ii);
+      }
+  }
+
+void xs_utils::compile(const str& src, code_context& ctx)
+  {
+    xs_compiler  compiler;
+    xs_container results;
+    compiler.compile_xs(src, results);
+    
+    IEditableObject* output = variant_cast<IEditableObject*>(ctx.this_, null);
+    base_xs_linker linker(ctx, output);
+    results.visit( &linker );
+  }
+
+
+//basic_scope
+void basic_scope::register_symbol(const str& name, variant value)
+  {
+    symbols_.insert(symbol_pair(name, value));
+  }
+  
+bool basic_scope::resolve(const str& name, variant& result)
+  {
+    symbol_list::iterator it = symbols_.find(name);
+    if (it != symbols_.end())  
+      {
+        result = it->second;
+        return true;
+      }
+      
+    return false;
+  }
+  
+//object_scope
+void object_scope::register_symbol(const str& name, variant value)
+  {
+    assert(false); //td: error, this shouldnt happen
+  }
+
+bool object_scope::resolve(const str& name, variant& result)
+  {
+    assert(obj_);
+    schema_item itm;
+    if (obj_->resolve(name, itm))
+      {
+        result = itm;
+        return true;
+      }
+    
+    return false;
+  }
+
+//composite_scope
+void composite_scope::register_symbol(const str& name, variant value)
+  {
+    assert(false); //td: this might be valid, but I dont see any use case
+  }
+  
+bool composite_scope::resolve(const str& name, variant& result)
+  {
+    if (s1_->resolve(name, result))
+      return true;
+    else if (s2_->resolve(name, result))
+      return true;
+
+    return false;
+  }    
+
+//type_scope
+void type_scope::register_symbol(const str& name, variant value)
+  {
+    assert(false); //td: error, this shouldnt happen
+  }
+  
+bool type_scope::resolve(const str& name, variant& result)
+  {
+    assert(type_); //td: no null types, please
+    
+    schema_item si;
+    if (type_->resolve(name, si))
+      {
+        result = si;
+        return true;
+      }
+      
+    return false;
+  };

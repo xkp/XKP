@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="9"
+   name=""
+   committed-date="2009-12-10T22:58:05.561111Z"
+   url="https://xkp.googlecode.com/svn/trunk/xkp/include/text"
+   last-author="xkp.santos"
+   kind="dir"
+   revision="9"/>
+<entry
+   committed-rev="9"
+   name="text_renderer.h"
+   text-time="2009-12-10T22:30:46.317105Z"
+   committed-date="2009-12-10T22:58:05.561111Z"
+   checksum="b0cd524b9b93e1663ba129b2c4cffce8"
+   last-author="xkp.santos"
+   kind="file"/>
+</wc-entries>

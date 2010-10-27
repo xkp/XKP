@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="6"
+   name=""
+   committed-date="2009-12-04T23:02:45.490349Z"
+   url="https://xkp.googlecode.com/svn/trunk/xkp/src"
+   last-author="xkp.santos"
+   kind="dir"
+   uuid="4384d7fe-d9f7-11de-82ea-1f113a1b7651"
+   revision="6"/>
+<entry
+   committed-rev="15"
+   name="serial.cpp"
+   text-time="2010-01-22T23:48:44.173197Z"
+   committed-date="2010-01-23T04:11:43.631172Z"
+   checksum="adf5668fc06109584d9ba949918b34b2"
+   last-author="xkp.santos"
+   kind="file"
+   revision="15"/>
+<entry
+   name="archive"
+   kind="dir"/>
+<entry
+   name="text"
+   kind="dir"/>
+<entry
+   committed-rev="15"
+   name="node.cpp"
+   text-time="2010-01-07T18:28:44.161254Z"
+   committed-date="2010-01-23T04:11:43.631172Z"
+   checksum="565686b62f4ea7e8d5c71888995dafcb"
+   last-author="xkp.santos"
+   kind="file"
+   revision="15"/>
+<entry
+   name="xs"
+   kind="dir"/>
+<entry
+   committed-rev="14"
+   name="xs.cpp"
+   text-time="2009-12-30T04:49:01.105023Z"
+   committed-date="2009-12-30T06:50:13.893255Z"
+   checksum="f43856498383589f8fc3e5fd5e66c605"
+   last-author="xkp.santos"
+   kind="file"
+   revision="14"/>
+<entry
+   committed-rev="14"
+   name="dynamic_objects.cpp"
+   text-time="2009-12-30T06:16:55.170023Z"
+   committed-date="2009-12-30T06:50:13.893255Z"
+   checksum="c64375b7a68b953297299c81b784d853"
+   last-author="xkp.santos"
+   kind="file"
+   revision="14"/>
+</wc-entries>

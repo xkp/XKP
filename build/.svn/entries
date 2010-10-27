@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="6"
+   name=""
+   committed-date="2009-12-04T23:02:45.490349Z"
+   url="https://xkp.googlecode.com/svn/trunk/xkp/build"
+   last-author="xkp.santos"
+   kind="dir"
+   uuid="4384d7fe-d9f7-11de-82ea-1f113a1b7651"
+   revision="6"/>
+<entry
+   name="vs2005"
+   kind="dir"/>
+</wc-entries>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="12"
+   name=""
+   committed-date="2009-12-23T01:20:41.785171Z"
+   url="https://xkp.googlecode.com/svn/trunk/xkp/third_party/gold"
+   last-author="xkp.santos"
+   kind="dir"
+   uuid="4384d7fe-d9f7-11de-82ea-1f113a1b7651"
+   revision="12"/>
+<entry
+   committed-rev="12"
+   name="xs.grm"
+   text-time="2009-12-21T00:01:25.785100Z"
+   committed-date="2009-12-23T01:20:41.785171Z"
+   checksum="5e68eafb03c2f7435a5e4df19440c0cc"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:05:09.897310Z"/>
+</wc-entries>

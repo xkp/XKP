@@ -1,0 +1,19 @@
+<HTML>
+<HEAD>
+<TITLE>Hello, excessive world</TITLE>
+</HEAD>
+
+<script href="prototype.js"/>
+
+<script>
+<xss:code>
+for(var i in instances)
+{
+    render_instance(i, "instance.xss");
+}
+</xss:code>
+</script>
+
+<BODY>
+</BODY>
+</HTML>

@@ -1,0 +1,70 @@
+<HTML>
+<HEAD>
+<TITLE>Hello, excessive world</TITLE>
+</HEAD>
+
+<script href="prototype.js"/>
+
+<script>
+button_btn1 = button.Create(
+{
+    down : null,
+    up : null,
+    click0 : function() 
+    {
+    	btn2.caption = "Clicked";
+    },
+
+    dispatch_click: function()
+    {
+        click0(  );
+    },
+
+});
+button_btn2 = button.Create(
+{
+    down : null,
+    up : null,
+    click0 : function() 
+    {
+    	btn1.caption = "Old value: " + application.target;
+    	application.target_set(300);
+    },
+
+    dispatch_click: function()
+    {
+        click0(  );
+    },
+
+});
+applications_application = applications.Create(
+{
+    target : null,
+    target_set : function (value)
+    {
+        this.target = value;
+        btn2.caption = "target acquired " + value;
+        for(var i = 0; i < 20; i++)
+        {
+            btn2.width--;
+            if (btn2.width < 100)
+            {
+                btn2.width = 200;
+            }
+        }
+    }
+    reset : function(s) 
+    {
+    	target_set(s);
+    	btn1.caption = "...";
+    	btn2.caption = "...";
+    },
+
+});
+
+</script>
+
+<BODY>
+</BODY>
+</HTML>
+

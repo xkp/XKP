@@ -1,0 +1,86 @@
+
+<xss:code>
+for (gb in global_variables)
+{
+	js()
+	{
+		var <xss:expression>gb.name</xss:expression> = <xss:expression>gb.value</xss:expression>;
+	}
+}
+</xss:code>
+
+//this is js
+var global_resource_list = 
+[
+	//now xs
+	<xss:code>
+	
+	for (tex in resources.textures)
+	{
+		js()
+		{
+			//and again js, just fillin' the array
+			{ type: "texture", href: "<xss:expression>tex.href</xss:expression>" },
+		}
+	}
+
+	</xss:code>
+];
+
+function init_resources(o3dClient)
+{
+	g_streamer = new Streamer();
+
+	for(var i = 0; i < global_resource_list.length; i++)
+	{
+		g_streamer.queue( global_resource_list[i] );	
+	}
+}
+
+//declare instances
+<xss:code>
+    for (inst in global_instances)
+    {
+        if (inst.custom_renderer)
+        {
+            inst.render();
+            continue;
+        }
+        
+        js { var <xss:expression>inst.name</xss:expression> = }
+        
+        if (inst.instantiable)
+        {
+            js { new <xss:expression>inst.class_name</xss:expression>( inst.ancestor, <xss:open_bracket/> }
+        }
+        else
+        {
+            js { <xss:open_bracket/> }
+        }
+
+        for(mthd in inst.methods)    render_method(mthd);
+        for(prop in inst.properties) render_property(prop);
+        for(ev in inst.events)       render_event(ev);
+
+        if (inst.instantiable)
+        {
+            js { <xss:closed_bracket/>); }
+        }
+        else
+        {
+            js { <xss:closed_bracket/> }
+        }
+    }
+</xss:code>
+
+function init_instances()
+{
+<xss:code>
+    for (inst in global_instances)
+    {
+        js { <xss:expression>inst.name</xss:expression>.init(); }
+    }
+</xss:code>
+}
+
+        

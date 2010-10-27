@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="2"
+   name=""
+   committed-date="2009-11-25T19:40:21.665146Z"
+   url="https://xkp.googlecode.com/svn/trunk/xkp/include/xs/qi"
+   last-author="xkp.santos"
+   kind="dir"
+   uuid="4384d7fe-d9f7-11de-82ea-1f113a1b7651"
+   revision="6"/>
+<entry
+   committed-rev="2"
+   name="code.h"
+   text-time="2009-11-25T20:04:59.059510Z"
+   committed-date="2009-11-25T19:40:21.665146Z"
+   checksum="c9139a50073ca95c726d5b4f2233df48"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:59.028310Z"/>
+<entry
+   committed-rev="2"
+   name="compiler.h"
+   text-time="2009-11-25T20:04:59.059510Z"
+   committed-date="2009-11-25T19:40:21.665146Z"
+   checksum="77d59fed6c5a9a7566db54b33e9c5f96"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:59.028310Z"/>
+<entry
+   committed-rev="2"
+   name="grammar.h"
+   text-time="2009-11-25T20:04:59.075110Z"
+   committed-date="2009-11-25T19:40:21.665146Z"
+   checksum="5980c9efa61b7b7f1b948bef13250363"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:59.043910Z"/>
+<entry
+   committed-rev="2"
+   name="ast.h"
+   text-time="2009-11-25T20:04:59.075110Z"
+   committed-date="2009-11-25T19:40:21.665146Z"
+   checksum="264499664457ca2e4981769234896e22"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:59.059510Z"/>
+</wc-entries>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="6"
+   name=""
+   committed-date="2009-12-04T23:02:45.490349Z"
+   url="https://xkp.googlecode.com/svn/trunk/xkp/include/xs"
+   last-author="xkp.santos"
+   kind="dir"
+   uuid="4384d7fe-d9f7-11de-82ea-1f113a1b7651"
+   revision="6"/>
+<entry
+   committed-rev="5"
+   name="compiler.h"
+   text-time="2009-11-28T03:03:05.442106Z"
+   committed-date="2009-11-28T07:14:00.247698Z"
+   checksum="478dd104099a1e50df64bb16335988e9"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:58.763110Z"/>
+<entry
+   committed-rev="10"
+   name="operators.h"
+   text-time="2009-12-13T19:31:19.642305Z"
+   committed-date="2009-12-13T22:05:34.536932Z"
+   checksum="a1071688e60af5cf3e572ea102a96598"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:58.763110Z"
+   revision="10"/>
+<entry
+   committed-rev="12"
+   name="vm.h"
+   text-time="2009-12-22T23:19:26.584777Z"
+   committed-date="2009-12-23T01:20:41.785171Z"
+   checksum="14a4de1069e0d268fcfe22e565172f5d"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:58.794310Z"
+   revision="12"/>
+<entry
+   name="qi"
+   kind="dir"/>
+<entry
+   committed-rev="12"
+   name="linker.h"
+   text-time="2009-12-22T23:19:26.491183Z"
+   committed-date="2009-12-23T01:20:41.785171Z"
+   checksum="c5443530e5c574f6ff5b45835f30cc47"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:59.090710Z"
+   revision="12"/>
+<entry
+   committed-rev="14"
+   name="behaviour.h"
+   text-time="2009-12-24T22:14:00.335000Z"
+   committed-date="2009-12-30T06:50:13.893255Z"
+   checksum="a04d3e46c550a27929990b9fe339f8f2"
+   last-author="xkp.santos"
+   kind="file"
+   revision="14"/>
+<entry
+   committed-rev="2"
+   name="engine.h"
+   text-time="2009-11-25T20:04:59.340310Z"
+   committed-date="2009-11-25T19:40:21.665146Z"
+   checksum="8645c9482213a56771892c9a2396483d"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:59.090710Z"/>
+<entry
+   committed-rev="12"
+   name="grammar.h"
+   text-time="2009-12-21T00:27:33.685100Z"
+   committed-date="2009-12-23T01:20:41.785171Z"
+   checksum="c8e56c685527aec97077807050e42b58"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:59.246710Z"
+   revision="12"/>
+<entry
+   committed-rev="11"
+   name="debug_utils.h"
+   text-time="2009-12-15T07:42:37.176000Z"
+   committed-date="2009-12-15T22:22:14.958350Z"
+   checksum="81ad9ba49cd38b369e6a82019d8542a3"
+   last-author="xkp.santos"
+   kind="file"
+   revision="11"/>
+<entry
+   committed-rev="12"
+   name="ast.h"
+   text-time="2009-12-21T02:01:42.270100Z"
+   committed-date="2009-12-23T01:20:41.785171Z"
+   checksum="e6bdfcdcfb7c78996b3b46c0312e4760"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:59.246710Z"
+   revision="12"/>
+</wc-entries>

@@ -1,0 +1,8 @@
+bin/
+
+*.pdb
+*.ilk
+*.ncb
+
+*.exe
+*.obj

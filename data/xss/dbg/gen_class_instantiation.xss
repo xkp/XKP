@@ -1,0 +1,146 @@
+<xss:e>it.class_name</xss:e>_<xss:e>it.id</xss:e> = <xss:e>it.class_name</xss:e>.Create(
+{
+    <xss:code>
+        
+    //this file generates a class for a particular instance passed as parameter "it"            
+    //these comments will not show in the output file
+    
+    //render properties
+    if (it.properties)
+    {
+        for(var prop in it.properties)
+        {
+            if (prop.set && prop.get)
+            {
+                out(indent = 1)
+                {
+                    <xss:e>prop.name</xss:e>_get : function ()
+                    {
+                        <xss:e>prop.get.generate()</xss:e>
+                    },
+
+                    <xss:e>prop.name</xss:e>_set : function (value)
+                    {
+                        <xss:e>prop.set.generate()</xss:e>
+                    },
+                }
+            }
+            else if (prop.set)
+            {
+                breakpoint();
+                out(indent = 1)
+                {
+                    <xss:e>prop.name</xss:e> : <xss:e>prop.generate_value()</xss:e>,
+
+                    <xss:e>prop.name</xss:e>_set : function (value)
+                    {
+                        this.<xss:e>prop.name</xss:e> = value;
+                        <xss:e>prop.set.generate()</xss:e>
+                    }
+                }
+            }
+            else if (prop.get)
+            {
+                out(indent = 1)
+                {
+                    <xss:e>prop.name</xss:e>_get : function ()
+                    {
+                        <xss:e>prop.get.generate()</xss:e>
+                    }
+                }
+            }
+            else
+            {
+                //finally, just a simple property
+                //i.e property foo = 10;
+                out(indent = 1)
+                {
+                    <xss:e>prop.name</xss:e> : <xss:e>prop.generate_value()</xss:e>,
+                }
+            }
+        }    
+    }
+    
+    //methods, easy bastards
+    if (it.methods)
+    {
+        for(var mthd in it.methods)
+        {
+			out(indent = 1)
+			{
+				<xss:e>mthd.name</xss:e> : function(<xss:e>mthd.args.generate()</xss:e>) 
+				{
+					<xss:e>mthd.generate_code()</xss:e>
+				},
+			}
+        }
+    }    
+    
+    //render events as functions to be called on the dispatch
+    if (it.events)
+    {
+        for(var ev in it.events)
+        {
+			//remember every event could be impemented multiple times
+			var evname = ev.name;
+			var impls  = ev.impls;
+			var evargs = null;
+			
+			//generate functions
+			int			  count  = 0;
+			array<string> fnames = [];
+			for(var evimpl in impls)
+			{
+                if (!evargs)
+                {
+                    evargs = evimpl.args; 
+                }
+            
+				var func_name = evname + count;
+				count++;
+                
+                //remember the name
+                fnames += func_name;
+                
+				//and actually output it
+				out(indent = 1)
+				{
+					<xss:e>func_name</xss:e> : function(<xss:e>evargs.generate()</xss:e>) 
+					{
+						<xss:e>evimpl.generate_code()</xss:e>
+					},
+					
+				}
+			}
+            
+            //now try to find a method to be overritten that acts as event dispatcher
+            //i.e you are planning to use native code (say, a js library) and you are supposed
+            //to override the "on_click" method. Thats what resolve_dispatcher would return.
+            string dispatcher_func = resolve_dispatcher(it, evname);
+            if (dispatcher_func == "")
+            {
+                dispatcher_func = "dispatch_" + evname; //assume otherwise
+            }
+            
+            out(indent = 1)
+            {
+                <xss:e>dispatcher_func</xss:e>: function(<xss:e>evargs.generate()</xss:e>)
+                <xss:open_brace/>
+            }
+
+            for(var fname in fnames)
+            {
+                out(indent = 2)
+                {
+                    <xss:e>fname</xss:e>( <xss:e>evargs.generate()</xss:e> );
+                }
+            }
+
+            out(indent = 1)
+            {
+                <xss:close_brace/>,
+            }
+        }
+    }
+    </xss:code>
+});

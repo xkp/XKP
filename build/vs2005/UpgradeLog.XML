@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="core">
+</Property><Property Name="Solution File" Value="D:\xkp\GI\build\vs2005\core.sln">
+</Property><Property Name="User Options File" Value="D:\xkp\GI\build\vs2005\core.suo">
+</Property><Property Name="Date" Value="Saturday, July 31, 2010">
+</Property><Property Name="Time" Value="2:37 AM">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="core.sln" Description="File successfully backed up as D:\xkp\GI\build\vs2005\core.sln.old">
+</Event><Event ErrorLevel="0" Project="" Source="core.suo" Description="File successfully backed up as D:\xkp\GI\build\vs2005\core.suo.old">
+</Event><Event ErrorLevel="1" Project="libxkp" Source="libxkp\libxkp.vcproj" Description="This application has been updated to include settings related to the User Account Control (UAC) feature of Windows Vista. By default, when run on Windows Vista with UAC enabled, this application is marked to run with the same privileges as the process that launched it. This marking also disables the application from running with virtualization. You can change UAC related settings from the Property Pages of the project.">
+</Event><Event ErrorLevel="0" Project="libxkp" Source="libxkp\libxkp.vcproj" Description="Project file successfully backed up as 'D:\xkp\GI\build\vs2005\libxkp\libxkp.vcproj.8.00.old'.">
+</Event><Event ErrorLevel="0" Project="libxkp" Source="libxkp\libxkp.vcproj" Description="Project upgraded successfully.">
+</Event><Event ErrorLevel="3" Project="libxkp" Source="libxkp\libxkp.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="core_test" Source="core_test\core_test.vcproj" Description="Web deployment to the local IIS server is no longer supported. The Web Deployment build tool has been removed from your project settings.">
+</Event><Event ErrorLevel="1" Project="core_test" Source="core_test\core_test.vcproj" Description="This application has been updated to include settings related to the User Account Control (UAC) feature of Windows Vista. By default, when run on Windows Vista with UAC enabled, this application is marked to run with the same privileges as the process that launched it. This marking also disables the application from running with virtualization. You can change UAC related settings from the Property Pages of the project.">
+</Event><Event ErrorLevel="0" Project="core_test" Source="core_test\core_test.vcproj" Description="Project file successfully backed up as 'D:\xkp\GI\build\vs2005\core_test\core_test.vcproj.8.00.old'.">
+</Event><Event ErrorLevel="0" Project="core_test" Source="core_test\core_test.vcproj" Description="Project upgraded successfully.">
+</Event><Event ErrorLevel="3" Project="core_test" Source="core_test\core_test.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="xs_test" Source="xs_test\xs_test.vcproj" Description="Web deployment to the local IIS server is no longer supported. The Web Deployment build tool has been removed from your project settings.">
+</Event><Event ErrorLevel="1" Project="xs_test" Source="xs_test\xs_test.vcproj" Description="This application has been updated to include settings related to the User Account Control (UAC) feature of Windows Vista. By default, when run on Windows Vista with UAC enabled, this application is marked to run with the same privileges as the process that launched it. This marking also disables the application from running with virtualization. You can change UAC related settings from the Property Pages of the project.">
+</Event><Event ErrorLevel="0" Project="xs_test" Source="xs_test\xs_test.vcproj" Description="Project file successfully backed up as 'D:\xkp\GI\build\vs2005\xs_test\xs_test.vcproj.8.00.old'.">
+</Event><Event ErrorLevel="0" Project="xs_test" Source="xs_test\xs_test.vcproj" Description="Project upgraded successfully.">
+</Event><Event ErrorLevel="3" Project="xs_test" Source="xs_test\xs_test.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="serial_test" Source="serial_test\serial_test.vcproj" Description="Web deployment to the local IIS server is no longer supported. The Web Deployment build tool has been removed from your project settings.">
+</Event><Event ErrorLevel="1" Project="serial_test" Source="serial_test\serial_test.vcproj" Description="This application has been updated to include settings related to the User Account Control (UAC) feature of Windows Vista. By default, when run on Windows Vista with UAC enabled, this application is marked to run with the same privileges as the process that launched it. This marking also disables the application from running with virtualization. You can change UAC related settings from the Property Pages of the project.">
+</Event><Event ErrorLevel="0" Project="serial_test" Source="serial_test\serial_test.vcproj" Description="Project file successfully backed up as 'D:\xkp\GI\build\vs2005\serial_test\serial_test.vcproj.8.00.old'.">
+</Event><Event ErrorLevel="0" Project="serial_test" Source="serial_test\serial_test.vcproj" Description="Project upgraded successfully.">
+</Event><Event ErrorLevel="3" Project="serial_test" Source="serial_test\serial_test.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="core.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="core.sln" Description="Converted">
+</Event></UpgradeLog>

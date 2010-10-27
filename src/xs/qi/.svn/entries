@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="2"
+   name=""
+   committed-date="2009-11-25T19:40:21.665146Z"
+   url="https://xkp.googlecode.com/svn/trunk/xkp/src/xs/qi"
+   last-author="xkp.santos"
+   kind="dir"
+   uuid="4384d7fe-d9f7-11de-82ea-1f113a1b7651"
+   revision="6"/>
+<entry
+   committed-rev="2"
+   name="code.cpp"
+   text-time="2009-11-25T20:04:59.496310Z"
+   committed-date="2009-11-25T19:40:21.665146Z"
+   checksum="f8bc5c3e6ce00f84604cb4d974f52dd8"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:59.480710Z"/>
+<entry
+   committed-rev="2"
+   name="compiler.cpp"
+   text-time="2009-11-25T20:04:59.496310Z"
+   committed-date="2009-11-25T19:40:21.665146Z"
+   checksum="1bf50fe7d20fa34faf079c4051d48e7c"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:59.480710Z"/>
+</wc-entries>

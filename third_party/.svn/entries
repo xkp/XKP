@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="15"
+   name=""
+   committed-date="2010-01-23T04:11:43.631172Z"
+   url="https://xkp.googlecode.com/svn/trunk/xkp/third_party"
+   last-author="xkp.santos"
+   kind="dir"
+   uuid="4384d7fe-d9f7-11de-82ea-1f113a1b7651"
+   prop-time="2010-01-23T04:11:10.850817Z"
+   revision="15"/>
+<entry
+   name="gold"
+   kind="dir"/>
+</wc-entries>

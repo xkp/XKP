@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="6"
+   name=""
+   committed-date="2009-12-04T23:02:45.490349Z"
+   url="https://xkp.googlecode.com/svn/trunk/xkp/src/xs"
+   last-author="xkp.santos"
+   kind="dir"
+   uuid="4384d7fe-d9f7-11de-82ea-1f113a1b7651"
+   revision="6"/>
+<entry
+   committed-rev="11"
+   name="operators.cpp"
+   text-time="2009-12-15T06:32:26.135000Z"
+   committed-date="2009-12-15T22:22:14.958350Z"
+   checksum="b7bb3506286a664cf7c0d4d9f3c4e54e"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:59.418310Z"
+   revision="11"/>
+<entry
+   committed-rev="12"
+   name="vm.cpp"
+   text-time="2009-12-22T23:23:20.868218Z"
+   committed-date="2009-12-23T01:20:41.785171Z"
+   checksum="79a34738c30b15d64d7fe0cbc9d56232"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:59.418310Z"
+   revision="12"/>
+<entry
+   committed-rev="14"
+   name="linker.cpp"
+   text-time="2009-12-23T16:25:11.914171Z"
+   committed-date="2009-12-30T06:50:13.893255Z"
+   checksum="7e5570ab1ef9c1dbc761cc3cad3d1850"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:59.433910Z"
+   revision="14"/>
+<entry
+   committed-rev="14"
+   name="behaviour.cpp"
+   text-time="2009-12-24T22:17:43.021000Z"
+   committed-date="2009-12-30T06:50:13.893255Z"
+   checksum="a568c60f4a3c7d3c0fe6abcf34bfaedd"
+   last-author="xkp.santos"
+   kind="file"
+   revision="14"/>
+<entry
+   committed-rev="5"
+   name="engine.c"
+   text-time="2009-11-26T17:31:35.767506Z"
+   committed-date="2009-11-28T07:14:00.247698Z"
+   checksum="bd8c6a3537d036e4d6d8610265536a70"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:59.449510Z"/>
+<entry
+   committed-rev="12"
+   name="debug_utils.cpp"
+   text-time="2009-12-21T02:03:55.742100Z"
+   committed-date="2009-12-23T01:20:41.785171Z"
+   checksum="a212eb57297f650cee7dde614828561d"
+   last-author="xkp.santos"
+   kind="file"
+   revision="12"/>
+<entry
+   committed-rev="11"
+   name="ast.cpp"
+   text-time="2009-12-15T07:42:37.061000Z"
+   committed-date="2009-12-15T22:22:14.958350Z"
+   checksum="0b60cbbb488afd451c63877818285e64"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:59.449510Z"
+   revision="11"/>
+<entry
+   name="qi"
+   kind="dir"/>
+<entry
+   committed-rev="12"
+   name="compiler.cpp"
+   text-time="2009-12-21T02:06:04.711100Z"
+   committed-date="2009-12-23T01:20:41.785171Z"
+   checksum="74606b4fee44255a865a0784d2e808f2"
+   last-author="xkp.santos"
+   kind="file"
+   prop-time="2009-11-25T20:04:59.511910Z"
+   revision="12"/>
+</wc-entries>

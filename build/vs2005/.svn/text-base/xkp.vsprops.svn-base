@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="xkp"
+	OutputDirectory="../../../bin/$(ConfigurationName)"
+	IntermediateDirectory="$(TEMP_DIR)/$(ConfigurationName)"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="&quot;$(XKP_INCLUDE)&quot;;&quot;$(BOOST_INCLUDE)&quot;"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalLibraryDirectories="$(BOOST_LIB)"
+	/>
+	<UserMacro
+		Name="BOOST_INCLUDE"
+		Value="C:\Program Files\boost\boost_1_36_0"
+	/>
+	<UserMacro
+		Name="XKP_INCLUDE"
+		Value="../../../include"
+	/>
+	<UserMacro
+		Name="TEMP_DIR"
+		Value="d:\xkp\temp"
+	/>
+	<UserMacro
+		Name="BOOST_LIB"
+		Value="$(BOOST_INCLUDE)/lib"
+	/>
+	<UserMacro
+		Name="JSON_INCLUDE"
+		Value="../../../third_party/jsoncpp/include"
+	/>
+	<UserMacro
+		Name="TINY_XML_INCLUDE"
+		Value="../../../third_party/tinyXml"
+	/>
+</VisualStudioPropertySheet>
