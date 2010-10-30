@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="xss" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\xss" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D_CONSOLE" />
+					<Add option="-DTIXML_USE_STL" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin\Release\xss" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_CONSOLE" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add directory="..\..\..\include" />
+			<Add directory="..\..\..\include\xs" />
+			<Add directory="..\..\..\include\xss" />
+			<Add directory="..\..\..\include\archive" />
+			<Add directory="..\..\..\third_party\tinyXml" />
+			<Add directory="..\..\..\third_party\jsoncpp\include" />
+			<Add directory="$(#boost_1_42)" />
+		</Compiler>
+		<Unit filename="stdafx.cpp" />
+		<Unit filename="stdafx.h" />
+		<Unit filename="targetver.h" />
+		<Unit filename="xss.cpp" />
+		<Unit filename="..\..\..\data\xss\demo\app.xml" />
+		<Unit filename="..\..\..\data\xss\demo\app.xs" />
+		<Unit filename="..\..\..\data\xss\demo\app_gen.xss" />
+		<Unit filename="..\..\..\data\xss\demo\instance.xss" />
+		<Unit filename="..\..\..\include\archive\json_archive.h" />
+		<Unit filename="..\..\..\include\archive\xml_archive.h" />
+		<Unit filename="..\..\..\include\base.h" />
+		<Unit filename="..\..\..\include\schema.h" />
+		<Unit filename="..\..\..\include\serial.h" />
+		<Unit filename="..\..\..\include\xs\array.h" />
+		<Unit filename="..\..\..\include\xs\ast.h" />
+		<Unit filename="..\..\..\include\xs\behaviour.h" />
+		<Unit filename="..\..\..\include\xs\compiler.h" />
+		<Unit filename="..\..\..\include\xs\debug_utils.h" />
+		<Unit filename="..\..\..\include\xs\engine.h" />
+		<Unit filename="..\..\..\include\xs\grammar.h" />
+		<Unit filename="..\..\..\include\xs\linker.h" />
+		<Unit filename="..\..\..\include\xs\operators.h" />
+		<Unit filename="..\..\..\include\xs\pair_array.h" />
+		<Unit filename="..\..\..\include\xs\vm.h" />
+		<Unit filename="..\..\..\include\xss\idiom.h" />
+		<Unit filename="..\..\..\include\xss\project.h" />
+		<Unit filename="..\..\..\include\xss\utils.h" />
+		<Unit filename="..\..\..\include\xss\xss_generator.h" />
+		<Unit filename="..\..\..\include\xss\xss_parser.h" />
+		<Unit filename="..\..\..\src\archive\json_archive.cpp" />
+		<Unit filename="..\..\..\src\archive\xml_archive.cpp" />
+		<Unit filename="..\..\..\src\dynamic_objects.cpp" />
+		<Unit filename="..\..\..\src\gen\generator.cpp" />
+		<Unit filename="..\..\..\src\serial.cpp" />
+		<Unit filename="..\..\..\src\xs.cpp" />
+		<Unit filename="..\..\..\src\xs\array.cpp" />
+		<Unit filename="..\..\..\src\xs\ast.cpp" />
+		<Unit filename="..\..\..\src\xs\behaviour.cpp" />
+		<Unit filename="..\..\..\src\xs\compiler.cpp" />
+		<Unit filename="..\..\..\src\xs\engine.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\..\src\xs\linker.cpp" />
+		<Unit filename="..\..\..\src\xs\operators.cpp" />
+		<Unit filename="..\..\..\src\xs\vm.cpp" />
+		<Unit filename="..\..\..\src\xss\dsl_out.cpp" />
+		<Unit filename="..\..\..\src\xss\idiom.cpp" />
+		<Unit filename="..\..\..\src\xss\project.cpp" />
+		<Unit filename="..\..\..\src\xss\xss_generator.cpp" />
+		<Unit filename="..\..\..\src\xss\xss_parser.cpp" />
+		<Unit filename="..\..\..\third_party\jsoncpp\src\lib_json\json_reader.cpp" />
+		<Unit filename="..\..\..\third_party\jsoncpp\src\lib_json\json_value.cpp" />
+		<Unit filename="..\..\..\third_party\jsoncpp\src\lib_json\json_writer.cpp" />
+		<Unit filename="..\..\..\third_party\tinyXml\tinystr.cpp" />
+		<Unit filename="..\..\..\third_party\tinyXml\tinyxml.cpp" />
+		<Unit filename="..\..\..\third_party\tinyXml\tinyxmlerror.cpp" />
+		<Unit filename="..\..\..\third_party\tinyXml\tinyxmlparser.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

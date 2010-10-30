@@ -225,7 +225,7 @@ void xml_write_archive::save(const variant& what)
 	  TiXmlPrinter printer;
 	  printer.SetIndent( "\t" );
 
-	  base_write_archive::save( what );
+	  base_write_archive::save( what ); 
 	  
 	  doc_.Accept( &printer );
 	  result_ = printer.Str();

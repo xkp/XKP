@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="xss_test" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\xss_test" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D_CONSOLE" />
+					<Add option="-DTIXML_USE_STL" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin\Release\xss_test" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_CONSOLE" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add directory="..\..\..\include" />
+			<Add directory="..\..\..\include\xs" />
+			<Add directory="..\..\..\include\xss" />
+			<Add directory="..\..\..\include\archive" />
+			<Add directory="..\..\..\third_party\tinyXml" />
+			<Add directory="..\..\..\third_party\jsoncpp\include" />
+			<Add directory="$(#boost_1_42)" />
+		</Compiler>
+		<Unit filename="stdafx.cpp" />
+		<Unit filename="stdafx.h" />
+		<Unit filename="targetver.h" />
+		<Unit filename="xss_test.cpp" />
+		<Unit filename="..\..\..\data\xs\app.xss" />
+		<Unit filename="..\..\..\data\xs\joe.xs" />
+		<Unit filename="..\..\..\data\xs\o3d.xss" />
+		<Unit filename="..\..\..\data\xs\o3d_test.xs" />
+		<Unit filename="..\..\..\data\xs\test_ui.xs" />
+		<Unit filename="..\..\..\include\gen\generator.h" />
+		<Unit filename="..\..\..\src\gen\generator.cpp" />
+		<Unit filename="..\..\..\src\xs\ast.cpp" />
+		<Unit filename="..\..\..\src\xs\compiler.cpp" />
+		<Unit filename="..\..\..\src\xs\engine.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\..\src\xs\operators.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

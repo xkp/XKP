@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="xss.cpp" open="1" top="1" tabpos="20">
+		<Cursor position="1648" topLine="65" />
+	</File>
+	<File name="..\..\..\include\archive\json_archive.h" open="0" top="0" tabpos="0">
+		<Cursor position="221" topLine="0" />
+	</File>
+	<File name="..\..\..\include\archive\xml_archive.h" open="0" top="0" tabpos="3">
+		<Cursor position="66" topLine="0" />
+	</File>
+	<File name="..\..\..\include\base.h" open="1" top="0" tabpos="3">
+		<Cursor position="4955" topLine="126" />
+	</File>
+	<File name="..\..\..\include\schema.h" open="1" top="0" tabpos="1">
+		<Cursor position="13322" topLine="404" />
+	</File>
+	<File name="..\..\..\include\xs\array.h" open="1" top="0" tabpos="5">
+		<Cursor position="1496" topLine="55" />
+	</File>
+	<File name="..\..\..\include\xs\grammar.h" open="1" top="0" tabpos="23">
+		<Cursor position="207681" topLine="11257" />
+	</File>
+	<File name="..\..\..\include\xs\linker.h" open="1" top="0" tabpos="9">
+		<Cursor position="2293" topLine="46" />
+	</File>
+	<File name="..\..\..\include\xs\operators.h" open="1" top="0" tabpos="11">
+		<Cursor position="1501" topLine="37" />
+	</File>
+	<File name="..\..\..\include\xss\idiom.h" open="0" top="0" tabpos="0">
+		<Cursor position="2547" topLine="89" />
+	</File>
+	<File name="..\..\..\include\xss\project.h" open="0" top="0" tabpos="0">
+		<Cursor position="4737" topLine="136" />
+	</File>
+	<File name="..\..\..\include\xss\utils.h" open="1" top="0" tabpos="13">
+		<Cursor position="291" topLine="0" />
+	</File>
+	<File name="..\..\..\src\archive\json_archive.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="572" topLine="12" />
+	</File>
+	<File name="..\..\..\src\archive\xml_archive.cpp" open="1" top="0" tabpos="25">
+		<Cursor position="5750" topLine="214" />
+	</File>
+	<File name="..\..\..\src\dynamic_objects.cpp" open="1" top="0" tabpos="7">
+		<Cursor position="7837" topLine="296" />
+	</File>
+	<File name="..\..\..\src\serial.cpp" open="1" top="0" tabpos="8">
+		<Cursor position="2451" topLine="75" />
+	</File>
+	<File name="..\..\..\src\xs.cpp" open="1" top="0" tabpos="19">
+		<Cursor position="4244" topLine="160" />
+	</File>
+	<File name="..\..\..\src\xs\array.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="479" topLine="5" />
+	</File>
+	<File name="..\..\..\src\xs\ast.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="42" topLine="281" />
+	</File>
+	<File name="..\..\..\src\xs\compiler.cpp" open="0" top="0" tabpos="3">
+		<Cursor position="9460" topLine="126" />
+	</File>
+	<File name="..\..\..\src\xs\linker.cpp" open="1" top="0" tabpos="10">
+		<Cursor position="33735" topLine="1132" />
+	</File>
+	<File name="..\..\..\src\xs\operators.cpp" open="1" top="0" tabpos="4">
+		<Cursor position="7629" topLine="304" />
+	</File>
+	<File name="..\..\..\src\xs\vm.cpp" open="1" top="0" tabpos="12">
+		<Cursor position="4168" topLine="137" />
+	</File>
+	<File name="..\..\..\src\xss\dsl_out.cpp" open="1" top="0" tabpos="14">
+		<Cursor position="6815" topLine="221" />
+	</File>
+	<File name="..\..\..\src\xss\idiom.cpp" open="1" top="0" tabpos="15">
+		<Cursor position="12639" topLine="429" />
+	</File>
+	<File name="..\..\..\src\xss\project.cpp" open="1" top="0" tabpos="16">
+		<Cursor position="12834" topLine="455" />
+	</File>
+	<File name="..\..\..\third_party\jsoncpp\src\lib_json\json_reader.cpp" open="1" top="0" tabpos="17">
+		<Cursor position="167" topLine="0" />
+	</File>
+	<File name="..\..\..\third_party\jsoncpp\src\lib_json\json_value.cpp" open="1" top="0" tabpos="18">
+		<Cursor position="869" topLine="0" />
+	</File>
+</CodeBlocks_layout_file>

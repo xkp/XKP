@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="xss_test.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="126" topLine="0" />
+	</File>
+	<File name="..\..\..\src\xs\operators.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="7647" topLine="450" />
+	</File>
+</CodeBlocks_layout_file>
