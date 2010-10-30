@@ -30,16 +30,16 @@ struct xss_gather : xss_visitor
             {
               result_.push_back(part('"' + text + '"'));
             }
-          else if (tag == "xss:e") 
+          else if (tag == "xss:e")
             {
               result_.push_back(part(result_.size()));
               expressions_.push_back(text);
             }
-          else if (tag == "xss:open_brace") 
+          else if (tag == "xss:open_brace")
             {
               result_.push_back(part("{"));
             }
-          else if (tag == "xss:close_brace") 
+          else if (tag == "xss:close_brace")
             {
               result_.push_back(part("}"));
             }
@@ -47,17 +47,17 @@ struct xss_gather : xss_visitor
             {
               //td: !!!
               result_.push_back(part("code can not be embbeded in out"));
-            } 
+            }
           else
             {
               assert(false); //td: error, unknown tag
-            } 
+            }
         }
     private:
       part_list&        result_;
       std::vector<str>& expressions_;
   };
-  
+
 struct worker
   {
     public:
@@ -74,7 +74,7 @@ struct worker
         {
           part_list::iterator it = parts_.begin();
           part_list::iterator nd = parts_.end();
-          
+
           size_t param = params.size() - 1;
           str    result;
           for(; it != nd; it++)
@@ -87,12 +87,12 @@ struct worker
                   if (is_multi_line(expr_value))
                     {
                       //we'll try to keep the original indentation
-                      str padding = last_padding(result); 
-                      
+                      str padding = last_padding(result);
+
                       //so we'll add the original padding to every line
                       std::vector<str> lines;
                       split_lines(expr_value, lines);
-                      
+
                       std::vector<str>::iterator lit = lines.begin();
                       std::vector<str>::iterator lnd = lines.end();
                       bool first = true;
@@ -100,43 +100,43 @@ struct worker
                         {
                           if (first)
                             first = false;
-                          else  
+                          else
                             result += padding;
-                            
+
                           result += *lit + '\n';
                         }
                     }
                   else
                     result += expr_value;
-                }  
+                }
             }
-          
+
           if (indent_ >= 0)
             {
               result = apply_indent(result, indent_);
             }
           gen_->append(result);
         }
-        
+
       str apply_indent(const str& s, int indent)
         {
           str result;
-          
+
           std::vector<str> lines;
           split_lines(s, lines);
-          
+
           std::vector<str>::iterator it = lines.begin();
           std::vector<str>::iterator nd = lines.end();
 
           //find out the minimum start position per line
-          //it will assume it is properly formatted 
+          //it will assume it is properly formatted
           //from there on
-          size_t _min  = str.npos;
+          size_t _min  = str::npos;
 
           for(; it != nd; it++)
             {
               size_t _curr = 0;
-              bool   _counting = true; 
+              bool   _counting = true;
               str    line = *it;
               for(size_t i = 0; i < line.length(); i++)
                 {
@@ -161,21 +161,21 @@ struct worker
                         }
                     }
                 }
-                
+
               if (_curr < _min)
                 _min = _curr;
             }
-            
-          //now delete that amont 
+
+          //now delete that amont
           it = lines.begin();
           for(; it != nd; it++)
             {
               //find out the minimum start position per line
-              //it will assume it is properly formatted 
+              //it will assume it is properly formatted
               //from there on
               size_t _curr = 0;
               size_t to_erase = 0;
-              str    curr_line = *it; 
+              str    curr_line = *it;
               while(to_erase < curr_line.size() && _curr < _min)
                 {
                   char ch = curr_line[to_erase];
@@ -185,17 +185,17 @@ struct worker
                     _curr += 4;
                   else
                     break;
-                  
+
                   to_erase++;
                 }
-              
+
               curr_line.erase(0, to_erase);
               if (!curr_line.empty())
                 {
-                  for(int i = 0; i < indent_*tab_; i++)                
+                  for(int i = 0; i < indent_*tab_; i++)
                     curr_line.insert(0, " ");
                 }
-                
+
               result += curr_line + '\n';
             }
 
@@ -220,29 +220,32 @@ struct worker
                   curr = i;
                 }
             }
-            
+
           return result;
         }
   };
 
 typedef reference<worker> Worker;
 
-struct worker_schema : object_schema<worker>  
+struct worker_schema : object_schema<worker>
   {
     worker_schema()
       {
         dynamic_method_( "generate", &worker::generate );
       }
   };
-  
-register_complete_type(worker, worker_schema);
+
+namespace xkp
+{
+    register_complete_type(worker, worker_schema);
+}
 
 //out_linker
 void out_linker::link(dsl& info, code_linker& owner)
   {
     int indent   = -1;
     int tab_size = 4;
-    
+
     //process parameters
     variant indent_value = info.params.get("indent");
     if (!indent_value.empty())
@@ -250,7 +253,7 @@ void out_linker::link(dsl& info, code_linker& owner)
         expression expr = indent_value;
         indent = owner.evaluate_expression(expr);
       }
-  
+
     //td: utilify
     variant tab_value = info.params.get("tab_size");
     if (!tab_value.empty())
@@ -262,19 +265,19 @@ void out_linker::link(dsl& info, code_linker& owner)
     std::vector<str> expressions;
     part_list parts;
     xss_gather gather(parts, expressions);
-    
+
     //process xss
     xss_parser parser;
     parser.register_tag("xss:e");
     parser.register_tag("xss:code");
     parser.register_tag("xss:open_brace");
     parser.register_tag("xss:close_brace");
-    
+
     parser.parse(info.text, &gather);
-    
+
     //now xs
     xs_utils xs;
-    
+
     //create a safe reference to be inserted in the execution context later on
     Worker wrk(new worker(&gen_, parts, indent, tab_size));
     owner.add_instruction(i_load_constant, owner.add_constant(wrk));
@@ -287,7 +290,7 @@ void out_linker::link(dsl& info, code_linker& owner)
         expression expr;
         if (!xs.compile_expression(*it, expr))
           assert(false);
-          
+
         owner.link_expression(expr);
       }
 

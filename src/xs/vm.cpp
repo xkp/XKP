@@ -5,8 +5,8 @@
 
 using namespace xkp;
 
-//td: un duplicate 
-const char* vm_operator_name[] = 
+//td: un duplicate
+const char* vm_operator_name[] =
   {
     "++",   //op_inc,
     "--",   //op_dec,
@@ -72,7 +72,7 @@ execution_context::execution_context(ByteCode code, variant _this, param_list* a
 variant execution_context::execute()
   {
     size_t isz = instructions_.size();
-    
+
     while(pc_ < isz)
       {
         instruction& i = instructions_[pc_];
@@ -85,7 +85,7 @@ variant execution_context::execute()
                 jump_ = true;
                 break;
               }
-              
+
             case i_jump_if:
               {
                 bool control = pop();
@@ -96,7 +96,7 @@ variant execution_context::execute()
                   }
                 break;
               }
-              
+
             case i_jump_if_not:
               {
                 bool control = variant_cast<bool>(pop(), false); //td: its bool or false
@@ -107,10 +107,10 @@ variant execution_context::execute()
                   }
                 break;
               }
-              
+
             case i_store:
               {
-                stack_[i.data.value] = pop(); 
+                stack_[i.data.value] = pop();
                 break;
               }
 
@@ -128,31 +128,32 @@ variant execution_context::execute()
 
             case i_return:       return variant();
             case i_return_value: return operands_.top();
-              
-            case i_dup_top:  
+
+            case i_dup_top:
               {
                 variant top = operands_.top();
-                operands_.push( top ); 
+                operands_.push( top );
                 break;
               }
             case i_pop:      operands_.pop();                   break;
 
             case i_binary_operator:
               {
-                operator_exec* e      = operators_.get_operator(i.data.value); 
+                operator_exec* e      = operators_.get_operator(i.data.value);
                 variant        arg2   = pop();
                 variant        arg1   = pop();
-                variant        result = e->exec(arg1, arg2); 
-                
+                variant        result = e->exec(arg1, arg2);
+
                 operands_.push(result);
                 break;
               }
             case i_unary_operator:
               {
-                operator_exec* e      = operators_.get_operator(i.data.value); 
+                operator_exec* e      = operators_.get_operator(i.data.value);
                 variant        arg1   = pop();
-                variant        result = e->exec(arg1, variant()); 
-                
+                variant        useless;
+                variant        result = e->exec(arg1, useless);
+
                 operands_.push(result);
                 break;
               }
@@ -165,7 +166,7 @@ variant execution_context::execute()
 
                 variant        result;
                 operator_type  opid   = (operator_type)i.data.value;
-                operator_exec* opexec = operators_.get_operator(opid, type1, type2); 
+                operator_exec* opexec = operators_.get_operator(opid, type1, type2);
                 if (!opexec)
                   {
                     schema_item custom_operator;
@@ -179,9 +180,9 @@ variant execution_context::execute()
                             IDynamicObject* obj = arg1; //td: catch type mismatch
                             caller_id = obj;
                           }
-                        else 
+                        else
                           caller_id = arg1.get_pointer();
-                        
+
                         param_list args;
                         args.add(arg2);
                         result = custom_operator.exec->exec(caller_id, args );
@@ -191,8 +192,8 @@ variant execution_context::execute()
                         assert(false); //unknown identifier
                       }
                   }
-                else result = opexec->exec(arg1, arg2); 
-                
+                else result = opexec->exec(arg1, arg2);
+
                 operands_.push(result);
                 break;
               }
@@ -203,7 +204,7 @@ variant execution_context::execute()
 
                 variant        result;
                 operator_type  opid   = (operator_type)i.data.value;
-                operator_exec* opexec = operators_.get_operator(opid, type1, null); 
+                operator_exec* opexec = operators_.get_operator(opid, type1, null);
                 if (!opexec)
                   {
                     schema_item custom_operator;
@@ -217,9 +218,9 @@ variant execution_context::execute()
                             IDynamicObject* obj = arg1; //td: catch type mismatch
                             caller_id = obj;
                           }
-                        else 
+                        else
                           caller_id = arg1.get_pointer();
-                        
+
                         param_list args;
                         result = custom_operator.exec->exec(caller_id, args );
                       }
@@ -228,12 +229,12 @@ variant execution_context::execute()
                         assert(false); //unknown identifier
                       }
                   }
-                else 
+                else
                   {
                     variant arg2;
-                    result = opexec->exec(arg1, arg2); 
+                    result = opexec->exec(arg1, arg2);
                   }
-                
+
                 operands_.push(result);
                 break;
               }
@@ -241,11 +242,11 @@ variant execution_context::execute()
               {
                 str     getter_name = constants_[i.data.value];
                 variant getted      = pop();
-                
+
                 variant result;
                 if (!dynamic_try_get(getted, getter_name, result))
                   assert(false); //unknown identifier + getter_name
-                  
+
                 operands_.push(result);
                 break;
               }
@@ -254,13 +255,13 @@ variant execution_context::execute()
                 str     resolve_name  = constants_[i.data.value];
                 variant resolver      = operands_.top();
                 schema* resolver_type = true_type(resolver);
-                
+
                 schema_item itm;
                 if (resolver_type->resolve(resolve_name, itm))
                   {
                     operands_.push(itm.exec); //td: not sure this should be done exclusively for executers
                   }
-                else 
+                else
                   {
                     IDynamicObject* obj = variant_cast<IDynamicObject*>(resolver, null);
                     if (obj && obj->resolve(resolve_name, itm))
@@ -277,37 +278,37 @@ variant execution_context::execute()
               {
                 operands_.push( this_ );
                 break;
-              }  
+              }
             case i_call:
               {
                 Executer call = pop();
                 param_list pl;
                 for(int p = 0; p < i.data.call_data.param_count; p++)
                   {
-                    pl.add(pop()); 
+                    pl.add(pop());
                   }
-                
+
                 variant caller = pop();
                 if (caller.empty())
                   {
                     assert(false); //td: !!! start trhowing exceptions already
-                                   //in this case, someone is calling something to a null 
+                                   //in this case, someone is calling something to a null
                   }
 
                 void*   caller_id;
                 if (i.data.call_data.is_dynamic)
                   {
-                    IDynamicObject* obj = variant_cast<IDynamicObject*>(caller, null); 
+                    IDynamicObject* obj = variant_cast<IDynamicObject*>(caller, null);
                     if (obj)
                       caller_id = obj;
-                    else 
+                    else
                       caller_id = caller.get_pointer(); //revert to undynamic, there should be a better solution
                   }
-                else 
+                else
                   caller_id = caller.get_pointer();
-                
-                variant result = call->exec(caller_id, pl); 
-                operands_.push( result );  
+
+                variant result = call->exec(caller_id, pl);
+                operands_.push( result );
                 break;
               }
             case i_this_call:
@@ -316,30 +317,30 @@ variant execution_context::execute()
                 param_list pl;
                 for(int p = 0; p < i.data.call_data.param_count; p++)
                   {
-                    pl.add(pop()); 
+                    pl.add(pop());
                   }
-                
+
                 void* caller_id;
                 if (i.data.call_data.is_dynamic)
                   {
                     IDynamicObject* obj = this_; //td: catch type mismatch
                     caller_id           = obj;
                   }
-                else 
+                else
                   caller_id = this_.get_pointer();
 
-                operands_.push( call->exec(caller_id, pl) );  
+                operands_.push( call->exec(caller_id, pl) );
                 break;
               }
             case i_get:
               {
                 Getter  call   = pop();
-                variant caller = pop();      
-                
+                variant caller = pop();
+
                 if (caller.empty())
                   {
                     assert(false); //td: error, calling null
-                  }                            
+                  }
 
                 void* caller_id;
                 if (i.data.value)
@@ -347,18 +348,18 @@ variant execution_context::execute()
                     IDynamicObject* obj = caller; //td: catch type mismatch
                     caller_id           = obj;
                   }
-                else 
+                else
                   caller_id = caller.get_pointer();
 
-                variant result = call->get(caller_id);  
+                variant result = call->get(caller_id);
                 operands_.push(result);
                 break;
               }
             case i_set:
               {
                 Setter  call      = pop();
-                variant value     = pop();                                  
-                variant caller    = pop();                                  
+                variant value     = pop();
+                variant caller    = pop();
 
                 void* caller_id;
                 if (i.data.value)
@@ -366,10 +367,10 @@ variant execution_context::execute()
                     IDynamicObject* obj = caller; //td: catch type mismatch
                     caller_id           = obj;
                   }
-                else 
+                else
                   caller_id = caller.get_pointer();
 
-                call->set(caller_id, value);  
+                call->set(caller_id, value);
                 break;
               }
             case i_instantiate:
@@ -378,9 +379,9 @@ variant execution_context::execute()
                 param_list pl;
                 for(int p = 0; p < i.data.value; p++)
                   {
-                    pl.add(pop()); 
+                    pl.add(pop());
                   }
-                  
+
                 variant result;
                 if (type->create(result, &pl))
                   operands_.push(result);
@@ -392,26 +393,26 @@ variant execution_context::execute()
               {
                 event_info      ev     = pop();
                 IDynamicObject* caller = pop();
-                
+
                 param_list pl;
                 for(int p = 0; p < i.data.value; p++)
                   {
-                    pl.add(pop()); 
+                    pl.add(pop());
                   }
-                
+
                 caller->dispatch_event(ev.id, pl);
                 break;
               }
             default:
               assert(false); //say wha
           }
-        
+
         if (!jump_)
           pc_++;
-          
+
         jump_ = false;
       }
-      
+
     return variant();
   }
 
@@ -420,24 +421,24 @@ void execution_context::push(variant v)
     //td: optimize, pushes and pops ought to be faster
     operands_.push(v);
   }
-  
+
 variant execution_context::pop()
   {
     if (operands_.empty())
       return variant();
-    
+
     variant r = operands_.top();
     operands_.pop();
     return r;
   }
-  
+
 //code_setter
 code_setter::code_setter(ByteCode _code, int var_idx):
   code_(_code),
   idx_(var_idx)
   {
   }
-  
+
 void code_setter::set( void* instance, const variant value )
   {
     IDynamicObject* self = static_cast<IDynamicObject*>(instance);
@@ -447,8 +448,8 @@ void code_setter::set( void* instance, const variant value )
         //do the value assigment if there is an anonymous slot for it
         self->set_anonymous(idx_, value);
       }
-    
-    //td: pass the previous value  
+
+    //td: pass the previous value
     execution_context e(code_, self);
     e.execute();
   }
@@ -458,7 +459,7 @@ code_getter::code_getter(ByteCode _code):
   code_(_code)
   {
   }
-  
+
 variant code_getter::get(void* instance)
   {
     IDynamicObject* self = static_cast<IDynamicObject*>(instance);
@@ -471,11 +472,11 @@ code_executer::code_executer(ByteCode _code):
   code_(_code)
   {
   }
-  
+
 variant code_executer::exec(void* instance, const param_list args)
   {
     IDynamicObject* d = static_cast<IDynamicObject*>(instance);
     execution_context e(code_, d, const_cast<param_list*>(&args));
     return e.execute();
   }
-  
+

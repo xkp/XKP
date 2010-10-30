@@ -145,6 +145,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
     private:
       xss_idiom*        idiom_; 
       str               source_path_; 
+      str               output_path_; 
       meta_array_schema array_type_;
       XSSGenerator      current_; 
       XSSContext        context_; 
@@ -152,6 +153,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       void prepare_context(base_code_context& context, xss_generator& gen);
       str  generate_xss(const str& xss, xss_generator& gen);
       str  load_file(const str& fname);
+      void save_file(const str& fname, const str& contents);
       str  generate_file(const str& fname);
       void preprocess();
       str  localize_file(const str& );

@@ -16,7 +16,7 @@ namespace xkp
       {
         M m_;
         returns0( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             return boost::bind( m_, static_cast<T*>(instance))();
@@ -28,20 +28,20 @@ namespace xkp
       {
         M m_;
         void0( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             boost::bind( m_, static_cast<T*>(instance))();
             return variant();
           }
       };
-      
+
     template <typename T, typename M>
     struct returns1 : public executer
       {
         M m_;
         returns1( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             return boost::bind( m_, static_cast<T*>(instance), _1)( args.get(0) );
@@ -53,7 +53,7 @@ namespace xkp
       {
         M m_;
         void1( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             boost::bind( m_, static_cast<T*>(instance), _1)( args.get(0) );
@@ -66,7 +66,7 @@ namespace xkp
       {
         M m_;
         void45( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             boost::bind( m_, static_cast<T*>(instance), _1)( args );
@@ -79,7 +79,7 @@ namespace xkp
       {
         M m_;
         returns2( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             return boost::bind( m_, static_cast<T*>(instance), _1, _2)( args.get(0), args.get(1));
@@ -91,7 +91,7 @@ namespace xkp
       {
         M m_;
         void2( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             boost::bind( m_, static_cast<T*>(instance), _1, _2)( args.get(0), args.get(1));
@@ -104,7 +104,7 @@ namespace xkp
       {
         M m_;
         returns3( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             return boost::bind( m_, static_cast<T*>(instance), _1, _2, _3)( args.get(0), args.get(1), args.get(2));
@@ -116,7 +116,7 @@ namespace xkp
       {
         M m_;
         void3( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             boost::bind( m_, static_cast<T*>(instance), _1, _2, _3)( args.get(0), args.get(1), args.get(2));
@@ -129,7 +129,7 @@ namespace xkp
       {
         M m_;
         returns4( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             return boost::bind( m_, static_cast<T*>(instance), _1, _2, _3, _4)( args.get(0), args.get(1), args.get(2), args.get(3));
@@ -141,7 +141,7 @@ namespace xkp
       {
         M m_;
         void4( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             boost::bind( m_, static_cast<T*>(instance), _1, _2, _3, _4)( args.get(0), args.get(1), args.get(2), args.get(3));
@@ -154,7 +154,7 @@ namespace xkp
       {
         M m_;
         returns5( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             return boost::bind( m_, static_cast<T*>(instance), _1, _2, _3, _4, _5)( args.get(0), args.get(1), args.get(2), args.get(3), args.get(4));
@@ -166,7 +166,7 @@ namespace xkp
       {
         M m_;
         void5( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             boost::bind( m_, static_cast<T*>(instance), _1, _2, _3, _4, _5)( args.get(0), args.get(1), args.get(2), args.get(3), args.get(4));
@@ -215,13 +215,13 @@ namespace xkp
 
     template <typename T, typename M>
     struct executer_type<T, void, M, 5> { typedef void5<T, M> type; };
-    
+
     template <typename T, typename M>
     struct functor_returns0 : public executer
       {
         M m_;
         functor_returns0( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             return boost::bind( m_, _1)( static_cast<T*>(instance) );
@@ -233,20 +233,20 @@ namespace xkp
       {
         M m_;
         functor_void0( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             boost::bind( m_, _1)(static_cast<T*>(instance));
             return variant();
           }
       };
-      
+
     template <typename T, typename M>
     struct functor_returns1 : public executer
       {
         M m_;
         functor_returns1( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             return boost::bind( m_, _1, _2)( static_cast<T*>(instance), args.get(0) );
@@ -258,7 +258,7 @@ namespace xkp
       {
         M m_;
         functor_void1( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             boost::bind( m_, _1, _2)( static_cast<T*>(instance), args.get(0) );
@@ -271,7 +271,7 @@ namespace xkp
       {
         M m_;
         functor_returns2( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             return boost::bind(m_, _1, _2, _3)( static_cast<T*>(instance), args.get(0), args.get(1));
@@ -283,7 +283,7 @@ namespace xkp
       {
         M m_;
         functor_void2( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             boost::bind( m_, _1, _2, _3)( static_cast<T*>(instance), args.get(0), args.get(1));
@@ -296,7 +296,7 @@ namespace xkp
       {
         M m_;
         functor_returns3( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             return boost::bind( m_, _1, _2, _3, _4)( static_cast<T*>(instance), args.get(0), args.get(1), args.get(2));
@@ -308,7 +308,7 @@ namespace xkp
       {
         M m_;
         functor_void3( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             boost::bind( m_, _1, _2, _3, _4)( static_cast<T*>(instance), args.get(0), args.get(1), args.get(2));
@@ -321,7 +321,7 @@ namespace xkp
       {
         M m_;
         functor_returns4( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             return boost::bind( m_, _1, _2, _3, _4, _5)( static_cast<T*>(instance), args.get(0), args.get(1), args.get(2), args.get(3));
@@ -333,7 +333,7 @@ namespace xkp
       {
         M m_;
         functor_void4( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             boost::bind( m_, _1, _2, _3, _4, _5)( static_cast<T*>(instance), args.get(0), args.get(1), args.get(2), args.get(3));
@@ -346,7 +346,7 @@ namespace xkp
       {
         M m_;
         functor_returns5( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             return boost::bind( m_, _1, _2, _3, _4, _5, _6)( static_cast<T*>(instance), args.get(0), args.get(1), args.get(2), args.get(3), args.get(4));
@@ -358,7 +358,7 @@ namespace xkp
       {
         M m_;
         functor_void5( M m ): m_(m) {}
-      
+
         virtual variant exec( void* instance, const param_list args )
           {
             boost::bind( m_, _1, _2, _3, _4, _5, _6)( static_cast<T*>(instance), args.get(0), args.get(1), args.get(2), args.get(3), args.get(4));
@@ -411,13 +411,14 @@ namespace xkp
 
     template <typename T, typename M>
     struct dynamic_method_executer : public executer
-      { 
+      {
         M m_;
         dynamic_method_executer( M m ): m_(m) {}
 
         virtual variant exec( void* instance, const param_list args )
           {
             boost::bind(m_, static_cast<T*>(instance))(args);
+            return variant();
           }
       };
 
@@ -427,7 +428,7 @@ namespace xkp
       {
         G g_;
         property_getter( G g ): g_(g) {}
-        
+
         virtual variant get ( void* instance )
           {
             return boost::bind( g_, static_cast<T*>(instance))();
@@ -439,20 +440,20 @@ namespace xkp
       {
         S s_;
         property_setter( S s ): s_(s) {}
-        
+
         virtual void set ( void* instance, const variant value )
           {
             boost::bind( s_, static_cast<T*>(instance), _1)( value );
           }
       };
-    
+
     template <typename T, typename RT>
     struct member_getter : getter
-      { 
+      {
         RT T::* mp_;
-        
+
         member_getter(RT T::* mp) : mp_(mp) {}
-        
+
         virtual variant get ( void* instance )
           {
             T* self = static_cast<T*>(instance);
@@ -462,11 +463,11 @@ namespace xkp
 
     template <typename T, typename RT>
     struct static_field_getter : getter
-      { 
+      {
         RT T::* mp_;
-        
+
         static_field_getter(RT T::* mp) : mp_(mp) {}
-        
+
         virtual variant get ( void* instance )
           {
             T* self = static_cast<T*>(instance);
@@ -479,7 +480,7 @@ namespace xkp
       {
         G g_;
         functor_property_getter( G g ): g_(g) {}
-        
+
         virtual variant get ( void* instance )
           {
             return boost::bind(g_, _1)(static_cast<T*>(instance));
@@ -491,7 +492,7 @@ namespace xkp
       {
         S s_;
         functor_property_setter( S s ): s_(s) {}
-        
+
         virtual void set ( void* instance, const variant value )
           {
             boost::bind( s_, _1, _2)( static_cast<T*>(instance), value );
@@ -502,23 +503,37 @@ namespace xkp
     struct member_setter : setter
       {
         RT T::* mp_;
-        
+
         member_setter(RT T::* mp) : mp_(mp) {}
-        
+
         virtual void set ( void* instance, const variant value )
           {
             T* self = static_cast<T*>(instance);
 			      self->*mp_ = (RT)value;
           }
       };
-    
-  }  
-  
+
+    template <typename T>
+    struct member_setter<T, str> : setter
+      {
+        str T::* mp_;
+
+        member_setter(str T::* mp) : mp_(mp) {}
+
+        virtual void set ( void* instance, const variant value )
+          {
+            T* self = static_cast<T*>(instance);
+            str v = value;
+			self->*mp_ = v;
+          }
+      };
+  }
+
   struct caster
     {
       virtual variant cast(const variant src) = 0;
     };
-    
+
   typedef reference<caster> Caster;
 
   //some defult casters
@@ -536,7 +551,7 @@ namespace xkp
           return res_;
         }
     };
-    
+
   template <typename S, typename D>
   struct ref2super_pointer  : caster
     {
@@ -587,18 +602,18 @@ namespace xkp
         {
           return 0;
         }
-      
+
       virtual void visit(schema_visitor* visitor)
         {
           vmt_indices::iterator it = indices_.begin();
           vmt_indices::iterator nd = indices_.end();
-          
+
           for(; it != nd; it++)
             {
               visitor->visit( it->first, it->second, vmt_[it->second]);
             }
         }
-        
+
       virtual bool resolve(const str& name, schema_item& item)
         {
           vmt_indices::iterator it = indices_.find(name);
@@ -607,15 +622,15 @@ namespace xkp
               item = vmt_[it->second];
               return true;
             }
-          
+
           return false;
         }
-        
+
       virtual size_t size()
         {
           return vmt_.size();
         }
-        
+
       virtual bool at(size_t idx, schema_item& item)
         {
           if (idx < vmt_.size())
@@ -640,11 +655,11 @@ namespace xkp
       typedef std::vector<schema_item> vmt;
       typedef std::map <str, size_t>   vmt_indices;
       typedef std::pair<str, size_t>   vmt_pair;
-      
+
       struct cast_types
         {
-          schema* src; 
-          schema* dest; 
+          schema* src;
+          schema* dest;
 
           bool operator < (const cast_types& k) const
             {
@@ -660,20 +675,20 @@ namespace xkp
 
       typedef std::map<cast_types, Caster>  caster_map;
       typedef std::pair<cast_types, Caster> caster_pair;
-      
+
       vmt         vmt_;
       vmt_indices indices_;
-      caster_map  casters_;  
-      
+      caster_map  casters_;
+
       void register_method(const str& name, executer* exec, schema* type, size_t flags)
         {
           schema_item itm;
           itm.flags = flags;
           itm.exec  = Executer(exec);
           itm.type  = type;
-          
-          indices_.insert(vmt_pair(name, vmt_.size())); 
-          vmt_.push_back(itm); 
+
+          indices_.insert(vmt_pair(name, vmt_.size()));
+          vmt_.push_back(itm);
         }
 
       void register_property(const str& name, getter* get, setter* set, schema* type, size_t flags)
@@ -683,16 +698,16 @@ namespace xkp
           itm.get   = Getter(get);
           itm.set   = Setter(set);
           itm.type  = type;
-          
-          indices_.insert(vmt_pair(name, vmt_.size())); 
-          vmt_.push_back(itm); 
+
+          indices_.insert(vmt_pair(name, vmt_.size()));
+          vmt_.push_back(itm);
         }
-        
+
       void register_caster(cast_types& ct, Caster c)
         {
           casters_.insert( caster_pair(ct, c) );
         }
-        
+
     public:
       //casting, pretty slow for now
       template <typename S, typename D, typename C>
@@ -710,23 +725,23 @@ namespace xkp
           ct.src  = src.get_schema();
           ct.dest = s;
           caster_map::iterator it = casters_.find(ct);
-          if (it != casters_.end()) 
+          if (it != casters_.end())
             {
               result = it->second->cast(src);
               return;
             }
-          
+
           throw type_mismatch();
         }
     };
-    
+
   struct composite_schema : schema
     {
-      composite_schema(schema* _delgate) : 
+      composite_schema(schema* _delgate) :
         delgate_(_delgate)
         {
         }
-        
+
       virtual size_t  options()                                             {return delgate_->options();}
       virtual void    visit(schema_visitor* visitor)                        {return delgate_->visit(visitor);}
       virtual bool    resolve(const str& name, schema_item& item)           {return delgate_->resolve(name, item);}
@@ -737,7 +752,7 @@ namespace xkp
       virtual bool    create(variant& result, param_list* args = null)      {return delgate_->create(result, args);}
       virtual bool    clone(const variant v, variant& result)               {return delgate_->clone(v, result);}
       virtual void*   get_access()                                          {return delgate_;}
-    
+
       schema* delgate_;
     };
 
@@ -745,54 +760,54 @@ namespace xkp
   struct object_schema : basic_schema
     {
       template <typename RT, int N, typename M>
-      void method_(const str& name, M m, size_t flags = 0) 
+      void method_(const str& name, M m, size_t flags = 0)
         {
-          typedef detail::executer_type<T, RT, M, N>::type et;  
+          typedef typename detail::executer_type<T, RT, M, N>::type et;
           register_method(name, new et( m ), type_schema<RT>(),  flags);
-        }  
+        }
 
       template <typename M>
-      void dynamic_method_(const str& name, M m, size_t flags = 0) 
+      void dynamic_method_(const str& name, M m, size_t flags = 0)
         {
-          typedef detail::void45<T, M> et;  
+          typedef detail::void45<T, M> et;
           register_method(name, new et(m), type_schema<void>(), flags);
-        }  
+        }
 
       template <typename RT, typename G, typename S>
-      void property_(const str& name, G g, S s, size_t flags = 0 ) 
+      void property_(const str& name, G g, S s, size_t flags = 0 )
         {
           register_property(name, new detail::property_getter<T, G>( g ), new detail::property_setter<T, S>( s ), type_schema<RT>(), flags);
-        }  
+        }
 
       template <typename RT>
-      void property_(const str& name, RT T::* mp, size_t flags = 0 ) 
+      void property_(const str& name, RT T::* mp, size_t flags = 0 )
         {
           register_property(name, new detail::member_getter<T, RT>( mp ), new detail::member_setter<T, RT>( mp ), type_schema<RT>(), flags);
-        }  
+        }
 
       template <typename RT, typename G>
-      void readonly_property(const str& name, G g, size_t flags = 0 ) 
+      void readonly_property(const str& name, G g, size_t flags = 0 )
         {
           register_property(name, new detail::property_getter<T, G>( g ), null, type_schema<RT>(), flags);
-        }  
+        }
 
       template <typename RT, typename S>
-      void writeonly_property(const str& name, S s, size_t flags = 0 ) 
+      void writeonly_property(const str& name, S s, size_t flags = 0 )
         {
           register_property(name, null, new detail::property_setter<T, S>( s ), type_schema<RT>(), flags);
-        }  
-        
+        }
+
       template <typename RT>
-      void static_field(const str& name, RT T::* mp, size_t flags = 0 ) 
+      void static_field(const str& name, RT T::* mp, size_t flags = 0 )
         {
           register_property(name, new detail::static_field_getter<T, RT>( mp ), null, type_schema<RT>(), flags|STATIC_FIELD);
-        }  
-        
+        }
+
       template <typename C, typename RT, typename G>
-      void class_property(const str& name, G g, size_t flags = 0 ) 
+      void class_property(const str& name, G g, size_t flags = 0 )
         {
           register_property(name, new detail::property_getter<C, G>( g ), null, type_schema<RT>(), flags|CLASS);
-        }  
+        }
 
       template <typename I>
       void inherit_from()
@@ -801,14 +816,14 @@ namespace xkp
           typedef T*           my_pointer;
           typedef reference<I> their_ref;
           typedef I*           their_pointer;
-          
+
           caster<my_ref, their_ref,         ref2super<T, I>          >();
           caster<my_ref, their_pointer,     ref2super_pointer<T, I>  >();
           caster<my_ref, I,                 ref2super_obj<T, I>      >();
           caster<my_pointer, their_pointer, pointer2super<T, I>      >();
           caster<my_pointer, I,             pointer2super_obj<T, I>  >();
         }
-        
+
       template <typename I>
       void implements()
         {
@@ -816,37 +831,37 @@ namespace xkp
           typedef T*           my_pointer;
           typedef reference<I> their_ref;
           typedef I*           their_pointer;
-          
+
           caster<my_ref, their_ref,         ref2super<T, I>          >();
           caster<my_ref, their_pointer,     ref2super_pointer<T, I>  >();
           caster<my_pointer, their_pointer, pointer2super<T, I>      >();
         }
 
       template <typename RT, int N, typename M>
-      void functor_method(const str& name, M m, size_t flags = 0) 
+      void functor_method(const str& name, M m, size_t flags = 0)
         {
-          typedef detail::functor_executer_type<T, RT, M, N>::type et;  
+          typedef typename detail::functor_executer_type<T, RT, M, N>::type et;
           register_method(name, new et( m ), type_schema<RT>(),  flags);
-        }  
-        
+        }
+
       template <typename RT, typename G, typename S>
-      void functor_property(const str& name, G g, S s, size_t flags = 0 ) 
+      void functor_property(const str& name, G g, S s, size_t flags = 0 )
         {
           register_property(name, new detail::functor_property_getter<T, G>( g ), new detail::functor_property_setter<T, S>( s ), type_schema<RT>(), flags);
-        }  
-      
+        }
+
       template <typename RT, typename G>
-      void functor_readonly_property(const str& name, G g, size_t flags = 0 ) 
+      void functor_readonly_property(const str& name, G g, size_t flags = 0 )
         {
           register_property(name, new detail::functor_property_getter<T, G>( g ), null, type_schema<RT>(), flags);
-        }  
-        
+        }
+
       //schema
       virtual void* get_pointer(void** src)
         {
           if (sizeof(T) <= sizeof(void*))
             return src;
-          
+
           return *src;
         }
 
@@ -855,14 +870,14 @@ namespace xkp
           result = v;
           return true;
         }
-        
+
       virtual bool create(variant& result, param_list* args = null)
         {
           result = reference<T>( new T() );
           return true;
-        }  
+        }
     };
-  
+
   template <typename T>
   struct pointer_schema : composite_schema
     {
@@ -920,7 +935,7 @@ namespace xkp
           if (s == delgate_)
             {
               reference<T> t = src;
-              
+
               T* self = t.get();
               result  = *self;
             }
@@ -946,11 +961,11 @@ namespace xkp
           return true;
         }
     };
-    
+
   #define register_complete_type(T, S) \
     template <>  struct schema_descriptor<T>  { typedef S type; }; \
     template <>  struct schema_descriptor<T*> { typedef pointer_schema<T> type; }; \
-    template <>  struct schema_descriptor< reference<T> > { typedef reference_schema<T> type; }; 
+    template <>  struct schema_descriptor< reference<T> > { typedef reference_schema<T> type; };
 
   //interfaces
   template<typename T>
@@ -963,16 +978,16 @@ namespace xkp
           typedef T*           my_pointer;
           typedef reference<I> their_ref;
           typedef I*           their_pointer;
-          
+
           caster<my_ref, their_ref,         ref2super<T, I>          >();
           caster<my_ref, their_pointer,     ref2super_pointer<T, I>  >();
           caster<my_pointer, their_pointer, pointer2super<T, I>      >();
         }
-        
+
       virtual size_t  options()
         {
           return TYPE_NON_INSTANTIABLE;
-        }  
+        }
 
       virtual void* get_pointer(void** src)
         {
@@ -1030,7 +1045,7 @@ namespace xkp
   #define register_interface_type(T, S) \
     template <>  struct schema_descriptor<T>  { typedef S type; }; \
     template <>  struct schema_descriptor<T*> { typedef interface_pointer_schema<T> type; }; \
-    template <>  struct schema_descriptor< reference<T> > { typedef interface_reference_schema<T> type; }; 
+    template <>  struct schema_descriptor< reference<T> > { typedef interface_reference_schema<T> type; };
 
   //iterators
   struct iterator
@@ -1042,10 +1057,10 @@ namespace xkp
           variant result = var_exec(impl_, "++"); assert(!result.empty());
           return iterator( result );
         }
-      
+
       bool operator == (const iterator& other)
         {
-          bool result = var_exec(impl_, "==", other.impl_); 
+          bool result = var_exec(impl_, "==", other.impl_);
           return result;
         }
 
@@ -1056,13 +1071,13 @@ namespace xkp
 
       bool operator == (const variant& other)
         {
-          bool result = var_exec(impl_, "==", other); 
+          bool result = var_exec(impl_, "==", other);
           return result;
         }
-        
+
       variant operator *()
         {
-          return variant_get(impl_, "value"); 
+          return variant_get(impl_, "value");
         }
 
       variant impl_;
@@ -1071,46 +1086,46 @@ namespace xkp
   struct iterable
     {
       iterable(variant impl) : impl_(impl) {}
-      
+
       iterator begin()
         {
-          variant result = variant_get(impl_, "begin"); 
+          variant result = variant_get(impl_, "begin");
           return iterator(result);
         }
-      
+
       iterator end()
         {
-          variant result = variant_get(impl_, "end"); 
+          variant result = variant_get(impl_, "end");
           return iterator(result);
         }
-        
+
       void insert(const variant& value)
         {
           param_list pl;
           pl.add( value );
           variant_exec(impl_, "insert", pl); //td: !!! must check if the interface is met
         }
-        
+
       schema* iterated_type()
         {
-          variant result = variant_get(impl_, "iterated_type"); 
+          variant result = variant_get(impl_, "iterated_type");
           return interface_cast<schema>(result);
         }
 
       variant impl_;
     };
 
-  template <typename T>  
+  template <typename T>
   struct vector_schema : object_schema< std::vector<T> >
     {
       typedef std::vector<T>                    this_type;
       typedef typename std::vector<T>::iterator this_iterator;
-      
+
       static this_iterator begin(std::vector<T>* v)
         {
           return v->begin();
         }
-    
+
       static this_iterator end(std::vector<T>* v)
         {
           return v->end();
@@ -1120,7 +1135,7 @@ namespace xkp
         {
           v->push_back( t );
         }
-        
+
       static schema* iterated_type(std::vector<T>* v)
         {
           return type_schema<T>();
@@ -1128,20 +1143,20 @@ namespace xkp
 
       vector_schema()
         {
-          functor_readonly_property<this_iterator>("begin",         &vector_schema::begin);
-          functor_readonly_property<this_iterator>("end",           &vector_schema::end);
-          functor_method<void, 1>                 ("insert",        &vector_schema::insert);
-          functor_readonly_property<schema*>      ("iterated_type", &vector_schema::iterated_type);
+          this->template functor_readonly_property<this_iterator>("begin",         &vector_schema::begin);
+          this->template functor_readonly_property<this_iterator>("end",           &vector_schema::end);
+          this->template functor_method<void, 1>                 ("insert",        &vector_schema::insert);
+          this->template functor_readonly_property<schema*>      ("iterated_type", &vector_schema::iterated_type);
         }
-        
+
       virtual size_t options() {return TYPE_ITERATED;}
     };
-    
-  template <typename T>  
+
+  template <typename T>
   struct vector_iterator_schema : object_schema< typename std::vector<T>::iterator >
     {
       typedef typename std::vector<T>::iterator this_type;
-    
+
       static this_type advance(this_type* it)
         {
           this_type& my_ref = *it;
@@ -1161,16 +1176,16 @@ namespace xkp
 
       vector_iterator_schema()
         {
-          functor_method<this_type, 0>("++",    &vector_iterator_schema::advance);
-          functor_method<bool,      1>("==",    &vector_iterator_schema::compare);
-          functor_readonly_property<T>("value", &vector_iterator_schema::value  );
+          this->template functor_method<this_type, 0>("++",    &vector_iterator_schema::advance);
+          this->template functor_method<bool,      1>("==",    &vector_iterator_schema::compare);
+          this->template functor_readonly_property<T>("value", &vector_iterator_schema::value  );
         }
     };
-    
-    
+
+
   #define register_iterator(T) \
     register_complete_type(std::vector<T>, vector_schema<T>) \
-    template <>  struct schema_descriptor< std::vector<T>::iterator > { typedef vector_iterator_schema<T> type; }; 
+    template <>  struct schema_descriptor< std::vector<T>::iterator > { typedef vector_iterator_schema<T> type; };
 
 }
 

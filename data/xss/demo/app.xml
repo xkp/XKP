@@ -1,5 +1,5 @@
 <xss:project>
-    <path generator="app_gen.xss" source_path="d:/xkp/gi/data/xss/demo/" output_path="d:/xkp/gi/data/xss/output/demo/"/>
+    <path generator="app_gen.xss" source_path="d:/xkp/gi/data/xss/demo/" output_path="d:/xkp/gi/data/xss/output/" output_file="app.html"/>
 
     <idiom class="js-idiom"/>
 

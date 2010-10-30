@@ -6,19 +6,19 @@
 namespace xkp
 {
 
-inline bool is_multi_line(const str& s)  
+inline bool is_multi_line(const str& s)
   {
-    return s.find('\n') != str.npos;
-  }  
+    return s.find('\n') != str::npos;
+  }
 
 inline str last_padding(const str& s)
   {
     size_t last_eol = s.find_last_of('\n');
-    if (last_eol == str.npos)    
+    if (last_eol == str::npos)
       last_eol = 0;
-    else 
+    else
       last_eol++;
-      
+
     str result = s.substr(last_eol, s.size());
     for(int i = 0; i < result.size(); i++)
       {
@@ -27,8 +27,8 @@ inline str last_padding(const str& s)
           result[i] = ' ';
       }
     return result;
-  } 
-                      
+  }
+
 inline void split_lines(const str& s, std::vector<str>& lines)
   {
     size_t curr = 0;
@@ -42,12 +42,12 @@ inline void split_lines(const str& s, std::vector<str>& lines)
           }
       }
   }
-  
+
 inline void trim_last_empty_line(str& s)
   {
     if (s.empty())
       return;
-    
+
     bool keep_going = true;
     for(size_t i = s.size() - 1; i >= 0 && keep_going; i--)
       {
@@ -68,7 +68,7 @@ inline void trim_last_empty_line(str& s)
       }
   }
 
-  
+
 }
 
 #endif

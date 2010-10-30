@@ -6,7 +6,7 @@
 using namespace xkp;
 
 //td: !!! stop duplicating this array
-const char* operator_str[] = 
+const char* operator_str[] =
   {
     "++",   //op_inc,
     "--",   //op_dec,
@@ -47,8 +47,8 @@ const char* operator_str[] =
     "",     //op_array,
     "",     //op_parameter
   };
-  
-const int operator_prec[] = 
+
+const int operator_prec[] =
   {
     2,  //"++",   //op_inc,
     2,  //"--",   //op_dec,
@@ -98,7 +98,7 @@ struct already_rendered
     already_rendered() : precedence(0)
     {
     }
-    
+
     str     value;
     variant object;
     int precedence;
@@ -112,7 +112,7 @@ struct expression_renderer : expression_visitor
       {
         if (v.is<XSSProperty>())
           return v;
-          
+
         if (v.is<already_rendered>())
           {
             already_rendered ar = v;
@@ -123,10 +123,10 @@ struct expression_renderer : expression_visitor
             expression_identifier ei = v;
             return ctx_->get_property(ei.value);
           }
-        
+
         return XSSProperty();
       }
-      
+
     XSSProperty get_property(variant v, const str& name)
       {
         if (v.is<DynamicObject>())
@@ -143,7 +143,7 @@ struct expression_renderer : expression_visitor
           {
             assert(false); //td:
           }
-          
+
         return XSSProperty();
       }
 
@@ -164,7 +164,7 @@ struct expression_renderer : expression_visitor
             expression_identifier ei = v;
             return ctx_->resolve_instance(ei.value);
           }
-          
+
         return DynamicObject();
       }
 
@@ -184,7 +184,7 @@ struct expression_renderer : expression_visitor
           {
             assert(false);
           }
-          
+
         return DynamicObject();
       }
 
@@ -193,7 +193,7 @@ struct expression_renderer : expression_visitor
       {
         stack_.push(operand);
       }
-      
+
     virtual void exec_operator(operator_type op, int pop_count, int push_count)
       {
         variant arg1, arg2;
@@ -201,15 +201,15 @@ struct expression_renderer : expression_visitor
           {
             case 0: break;
             case 1: arg1 = stack_.top(); stack_.pop(); break;
-            case 2: 
+            case 2:
               {
-                arg2 = stack_.top(); stack_.pop(); 
-                arg1 = stack_.top(); stack_.pop(); 
+                arg2 = stack_.top(); stack_.pop();
+                arg1 = stack_.top(); stack_.pop();
                 break;
               }
             default: assert(false);
           }
-          
+
         int op_prec = operator_prec[op];
         switch(op)
           {
@@ -224,11 +224,11 @@ struct expression_renderer : expression_visitor
                   ss << "(" << os << ")" << operator_str[op];
                 else
                   ss << os << operator_str[op];
-                
+
                 push_rendered(ss.str(), op_prec, arg1.get_schema());
                 break;
               }
-              
+
             case op_unary_plus:
             case op_unary_minus:
             case op_not:
@@ -245,21 +245,21 @@ struct expression_renderer : expression_visitor
                 push_rendered(ss.str(), op_prec, arg1.get_schema());
                 break;
               }
-              
-            case op_assign:       
+
+            case op_assign:
               {
                 //we need to know if we're assigning to a property that might have a setter
                 XSSProperty prop = get_property(arg1);
-                
+
                 std::stringstream ss;
                 str os1 = operand_to_string(arg1);
                 str os2 = operand_to_string(arg2);
 
                 if (prop && !prop->set.empty())
                   ss << os1 << "_set(" << os2 << ")"; //td: formalize the calling conventions
-                else   
+                else
                   ss << os1 << " = " << os2;
-                
+
                 push_rendered(ss.str(), op_prec, prop);
                 break;
               }
@@ -292,13 +292,13 @@ struct expression_renderer : expression_visitor
               {
                 int p1;
                 int p2;
-              
+
                 str os1 = operand_to_string(arg1, &p1);
                 str os2 = operand_to_string(arg2, &p2);
 
                 if (op_prec < p1)
                   os1 = "(" + os1 + ")";
-                
+
                 if (op_prec < p2)
                   os2 = "(" + os2 + ")";
 
@@ -317,10 +317,10 @@ struct expression_renderer : expression_visitor
                 DynamicObject o1 = get_instance(arg1);
                 str           s2 = operand_to_string(arg2);
                 DynamicObject o2 = get_instance(o1, s2);
-                
+
                 XSSProperty   prop = get_property(o1, s2);
                 bool          has_getter = prop && !prop->get.empty();
-                
+
                 std::stringstream ss;
                 ss << operand_to_string(arg1) << "." << s2;
                 if (has_getter)
@@ -340,21 +340,21 @@ struct expression_renderer : expression_visitor
                 push_rendered(ss.str(), op_prec, variant());
                 break;
               }
-              
+
             case op_call:
             case op_func_call:
               {
                 std::stringstream result;
 
-                result << "("; 
-                
+                result << "(";
+
                 int args = arg1;
                 //pop the arguments
                 for(int i = 0; i < args; i++)
                   {
                     variant arg = stack_.top(); stack_.pop();
                     result << operand_to_string(arg);
-                    
+
                     XSSProperty prop = get_property(arg);
                     if (prop && !prop->get.empty())
                       result << "_get()";
@@ -365,15 +365,15 @@ struct expression_renderer : expression_visitor
                       }
                   }
 
-                result << ")"; 
-                
+                result << ")";
+
                 variant top = stack_.top(); stack_.pop();
                 str caller = operand_to_string(top);
 
                 push_rendered(caller + result.str(), op_prec, variant()); //td: we could find out the type here or something
                 break;
               }
-              
+
             case op_parameter:
               {
                 //do nothing, this is just a notification
@@ -385,18 +385,18 @@ struct expression_renderer : expression_visitor
                 assert(false); //td
                 break;
               }
-              
+
             case op_index:
             default:
               assert(false); //td:
           }
       }
-      
+
     str get()
       {
         if(stack_.empty())
           return "***EMPTY STACK***";
-        
+
         variant result = stack_.top();
         if (result.is<already_rendered>())
           {
@@ -405,21 +405,22 @@ struct expression_renderer : expression_visitor
           }
         else if (result.is<str>())
           {
-            str ss = '"' + (str)result + '"';
+            str res = result;
+            str ss = '"' + res + '"';
             return ss;
-          }          
-          
+          }
+
         str to_string = result;
         return to_string;
       }
 
     protected:
       typedef std::stack<variant> expr_stack;
-      
+
       expr_stack        stack_;
       std::stringstream result_;
       XSSContext        ctx_;
-      
+
       str operand_to_string(variant operand, int* prec = null)
         {
           str result;
@@ -437,11 +438,13 @@ struct expression_renderer : expression_visitor
             }
           else if (operand.is<str>())
             {
-              result = '"' + (str)operand + '"';
+              str opstr = operand;
+              result = '"' + opstr + '"';
             }
           else
             {
-              result = (str)operand;
+              str opstr = operand;
+              result = opstr;
             }
 
           if (prec) *prec = result_prec;
@@ -454,16 +457,16 @@ struct expression_renderer : expression_visitor
           ar.object = object;
           ar.value = value;
           ar.precedence = prec;
-          
+
           stack_.push(ar);
         }
   };
-  
+
 str render_expression(expression& expr, XSSContext ctx)
   {
-    expression_renderer er(ctx);    
+    expression_renderer er(ctx);
     expr.visit(&er);
-    
+
     return er.get();
   }
 
@@ -475,26 +478,26 @@ struct code_renderer : code_visitor
       {
         return result_;
       }
-      
+
     //code_visitor
     virtual void if_(stmt_if& info)
       {
         std::stringstream ss;
         str ind = get_indent_str();
-        
-        ss  << ind << "if (" << render_expression(info.expr, ctx_) << ")" << '\n' 
-            << ind << "{" << '\n'  
-                   << render_code(info.if_code, indent_ + 1) << '\n' 
+
+        ss  << ind << "if (" << render_expression(info.expr, ctx_) << ")" << '\n'
+            << ind << "{" << '\n'
+                   << render_code(info.if_code, indent_ + 1) << '\n'
             << ind << "}" << '\n';
-            
+
         if (!info.else_code.empty())
-          ss  << ind << "{"  
+          ss  << ind << "{"
                 << render_code(info.else_code, indent_ + 1)
               << ind << "}";
-              
-        add_line(ss.str());      
+
+        add_line(ss.str());
       }
-      
+
     virtual void variable_(stmt_variable& info)
       {
         std::stringstream ss;
@@ -505,46 +508,46 @@ struct code_renderer : code_visitor
           ss << " = " << render_expression(info.value, ctx_);
 
         ss << ";\n";
-        
+
         add_line(ss.str());
       }
-      
+
     virtual void for_(stmt_for& info)
       {
         std::stringstream ss;
         str ind = get_indent_str();
 
-        ss << ind << "for(var " << info.init_variable.id << " = " << render_expression(info.init_variable.value, ctx_) 
-           << "; " << render_expression(info.cond_expr, ctx_) 
+        ss << ind << "for(var " << info.init_variable.id << " = " << render_expression(info.init_variable.value, ctx_)
+           << "; " << render_expression(info.cond_expr, ctx_)
            << "; " << render_expression(info.iter_expr, ctx_) << ")\n";
-        
+
         ss << ind << "{" << "\n"
                   << render_code(info.for_code, indent_ + 1);
         ss << ind << "}" << "\n";
-        
+
         add_line(ss.str());
       }
-      
+
     virtual void iterfor_(stmt_iter_for& info)
       {
         assert(false);
       }
-      
+
     virtual void while_(stmt_while& info)
       {
         assert(false);
       }
-      
+
     virtual void break_()
       {
         assert(false);
       }
-      
+
     virtual void continue_()
       {
         assert(false);
       }
-      
+
     virtual void return_(stmt_return& info)
       {
         if (info.expr.empty())
@@ -552,18 +555,18 @@ struct code_renderer : code_visitor
         else
           add_line("return " + render_expression(info.expr, ctx_) + ";", true);
       }
-      
+
     virtual void expression_(stmt_expression& info)
       {
         str value = render_expression(info.expr, ctx_);
         add_line(value + ";", true);
       }
-      
+
     virtual void dsl_(dsl& info)
       {
         assert(false);
       }
-      
+
     virtual void dispatch(stmt_dispatch& info)
       {
         assert(false);
@@ -583,67 +586,67 @@ struct code_renderer : code_visitor
           if (dress_line)
             result_ += '\n';
         }
-        
+
       str render_code(code& code, int indent)
         {
           code_renderer renderer(ctx_, indent);
           code.visit(&renderer);
 
-          return renderer.get(); 
+          return renderer.get();
         }
 
       str get_indent_str()
         {
           str result;
-          for(int i = 0; i < indent_*4; i++) 
+          for(int i = 0; i < indent_*4; i++)
             {
               result += ' ';
             }
-            
+
           return result;
         }
-  };    
+  };
 
 //base_xss_expression
 base_xss_expression::base_xss_expression()
   {
   }
-  
+
 base_xss_expression::base_xss_expression(XSSContext ctx, expression& expr):
   expr_(expr),
   ctx_(ctx)
   {
   }
-  
-str base_xss_expression::generate() 
+
+str base_xss_expression::generate()
   {
     return render_expression(expr_, ctx_);
   }
-  
+
 //base_xss_code
 base_xss_code::base_xss_code()
   {
   }
-  
+
 base_xss_code::base_xss_code(XSSContext ctx, code& code):
   code_(code),
-  ctx_(ctx) 
+  ctx_(ctx)
   {
   }
-  
+
 str base_xss_code::generate()
   {
     code_renderer renderer(ctx_, 0);
     code_.visit(&renderer);
 
-    return renderer.get(); 
+    return renderer.get();
   }
-  
+
 //base_xss_args
 base_xss_args::base_xss_args()
   {
   }
-    
+
 base_xss_args::base_xss_args(const base_xss_args& other):
   args_(other.args_)
   {
@@ -653,11 +656,11 @@ base_xss_args::base_xss_args(param_list_decl& args):
   args_(args)
   {
   }
-    
+
 str base_xss_args::generate()
   {
     std::ostringstream oss;
-    
+
     param_list_decl::iterator it = args_.begin();
     param_list_decl::iterator nd = args_.end();
     for(; it != nd; it++)
@@ -665,7 +668,7 @@ str base_xss_args::generate()
         //td: defaults values, etc
         oss << it->name << ",";
       }
-    
+
     str result = oss.str();
     if (!result.empty())
       result.erase(result.end() - 1);
@@ -685,39 +688,39 @@ base_xss_function::base_xss_function( const code& code, const str& name, XSSCont
   ctx_(ctx)
   {
   }
-  
+
 str base_xss_function::generate_code()
   {
     code_renderer renderer(ctx_, 0);
     code_.visit(&renderer);
 
-    return renderer.get(); 
+    return renderer.get();
   }
 
-//base_idiom 
+//base_idiom
 void base_idiom::set_context(XSSContext ctx)
   {
     ctx_ = ctx;
   }
-  
+
 variant base_idiom::process_method(DynamicObject instance, xs_method& mthd)
   {
     XSSContext ctx(new xss_composite_context(ctx_));
     ctx->this_ = instance;
-     
+
     xssFunction result(new base_xss_function(mthd.cde, mthd.name, ctx, mthd.args));
     functions_.push_back(result);
-    return result; 
+    return result;
   }
-  
+
 variant base_idiom::process_event(DynamicObject instance, const str& event_name, xs_event& ev)
   {
     XSSContext ctx(new xss_composite_context(ctx_));
     ctx->this_ = instance;
-     
+
     xssFunction result(new base_xss_function(ev.cde, event_name, ctx, ev.args));
     functions_.push_back(result);
-    return result; 
+    return result;
   }
 
 variant base_idiom::process_code(code& cde, DynamicObject this_)

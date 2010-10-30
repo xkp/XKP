@@ -7,7 +7,7 @@
 
 using namespace xkp;
 
-const char* operator_name[] = 
+const char* operator_name[] =
   {
     "++",   //op_inc,
     "--",   //op_dec,
@@ -75,19 +75,19 @@ code_linker::code_linker(code_context& context):
             variant value = args->get(i);
 
             int local_idx = local_count_++;
-            
-            local_variable lv(local_idx, value.get_schema()); 
+
+            local_variable lv(local_idx, value.get_schema());
             locals_.insert( locals_pair(name, lv) );
           }
       }
 
   }
-  
+
 ByteCode code_linker::link()
   {
     return ByteCode( new byte_code(code_, constants_) );
   }
-  
+
 void code_linker::link(ByteCode result)
   {
     return link(result.get());
@@ -103,7 +103,7 @@ void code_linker::if_(stmt_if& info)
   {
     link_expression(info.expr);
     int if_jump = add_instruction( i_jump_if_not );
-    
+
     link_code(info.if_code);
 
     if (info.else_code.empty())
@@ -119,9 +119,9 @@ void code_linker::if_(stmt_if& info)
         link_code(info.else_code);
 
         instruction_data( afterif_jump, pc_ );
-      } 
+      }
   }
-  
+
 void code_linker::variable_(stmt_variable& info)
   {
     register_variable( info );
@@ -134,7 +134,7 @@ void code_linker::for_(stmt_for& info)
       register_variable(info.init_variable);
     else if (!info.init_expr.empty())
       link_expression(info.init_expr);
-  
+
     //link condition
     int exit_jump = 0;
     int loop_jump = pc_;
@@ -150,16 +150,16 @@ void code_linker::for_(stmt_for& info)
     //link iterator
     link_expression(info.iter_expr);
     add_instruction( i_jump, loop_jump);
-    
+
     if (exit_jump > 0)
       instruction_data( exit_jump, pc_ );
   }
 
 void code_linker::iterfor_(stmt_iter_for& info)
   {
-    schema* value_type    = typeof(info.type);
+    schema* value_type    = typeof_(info.type);
     schema* iterable_type = link_expression(info.iter_expr);
-    
+
     if (iterable_type)
       {
         //grab the iterated type
@@ -178,25 +178,25 @@ void code_linker::iterfor_(stmt_iter_for& info)
               assert(false); //type mismatch
           }
       }
-      
+
     int value_ = register_variable(info.id, value_type);
 
-    //now on top of the stack lies an iterable, 
+    //now on top of the stack lies an iterable,
     //as you can see there is a contract that closely
     //resembles the std interface
 
     //must have it twice in the stack (to grab begin and end)
     add_instruction(i_dup_top);
-    
+
     //generate local variables for iterators & value
     schema* iterator_type = add_stack_lookup("begin", iterable_type);
     int     iterator_     = register_variable("iterator@" + info.id, iterator_type);
     add_instruction(i_store, iterator_);
-    
+
     schema* end_type = add_stack_lookup("end", iterable_type); assert(end_type == iterator_type);
     int     end_     = register_variable("end_iterator@" + info.id, end_type);
     add_instruction(i_store, end_);
-    
+
     int loop_jump = pc_;
 
     //td: this is sort of slow, begin and end should be on top of the stack
@@ -204,9 +204,9 @@ void code_linker::iterfor_(stmt_iter_for& info)
     test_iterator.push_operand( local_variable(iterator_, iterator_type) );
     test_iterator.push_operand( local_variable(end_, end_type) );
     test_iterator.push_operator(op_equal);
-    
+
     link_expression(test_iterator);
-    
+
     int exit_jump = add_instruction( i_jump_if );
 
     //update variable
@@ -214,7 +214,7 @@ void code_linker::iterfor_(stmt_iter_for& info)
     update_variable.push_operand   ( local_variable(iterator_, iterator_type) );
     update_variable.push_identifier( "value" );
     update_variable.push_operator  ( op_dot );
-    
+
     link_expression(update_variable);
 
     add_instruction(i_store, value_);
@@ -226,9 +226,9 @@ void code_linker::iterfor_(stmt_iter_for& info)
     expression advance_iterator;
     advance_iterator.push_operand( local_variable(iterator_, iterator_type) );
     advance_iterator.push_operator( op_inc );
-    
+
     link_expression(advance_iterator);
-    
+
     add_instruction(i_pop);
     add_instruction(i_pop);
     add_instruction( i_jump, loop_jump);
@@ -273,12 +273,12 @@ void code_linker::expression_(stmt_expression& info)
     //after expressions are evaluated as staments
     //we should not push the result into the operand list
     bool empty_stack = true;
-    link_expression(info.expr, &empty_stack); 
-    
+    link_expression(info.expr, &empty_stack);
+
     if (!empty_stack)
       add_instruction(i_pop);
   }
-  
+
 void code_linker::dsl_(dsl& info)
   {
     dsl_linker_list::iterator it = dsl_linkers_.find(info.name);
@@ -297,10 +297,10 @@ void code_linker::dispatch(stmt_dispatch& info)
     std::vector<str> id = info.target;
     str ev_name = id.back();
     id.erase(id.end() - 1);
-      
+
     expression caller;
-    std::vector<str>::iterator it = id.begin();  
-    std::vector<str>::iterator nd = id.end();  
+    std::vector<str>::iterator it = id.begin();
+    std::vector<str>::iterator nd = id.end();
     bool first = true;
     for(; it != nd; it++)
       {
@@ -315,7 +315,7 @@ void code_linker::dispatch(stmt_dispatch& info)
             caller.push_identifier( *it );
           }
       }
-    
+
     schema* caller_type = null;
     if (!caller.empty())
       caller_type = link_expression(caller);
@@ -324,10 +324,10 @@ void code_linker::dispatch(stmt_dispatch& info)
         caller_type = context_.this_type;
         add_instruction(i_load_this);
       }
-    
-    //we must keep the caller in the stack  
+
+    //we must keep the caller in the stack
     add_instruction(i_dup_top);
-    
+
     //now resolve the actual event name
     expression event_expr;
     event_expr.push_operand( already_in_stack(caller_type) );
@@ -337,10 +337,10 @@ void code_linker::dispatch(stmt_dispatch& info)
 
     add_instruction(i_dispatch, info.arg_count);
   }
-  
+
 void code_linker::push(variant operand)
   {
-    if (operand.is<expression_identifier>() || 
+    if (operand.is<expression_identifier>() ||
         operand.is<already_in_stack>()      ||
         operand.is<local_variable>()        )
       {
@@ -353,7 +353,7 @@ void code_linker::push(variant operand)
         stack_.push(c);
       }
   }
-  
+
 void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
   {
     variant arg1, arg2;
@@ -361,15 +361,15 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
       {
         case 0: break;
         case 1: arg1 = stack_.top(); stack_.pop(); break;
-        case 2: 
+        case 2:
           {
-            arg2 = stack_.top(); stack_.pop(); 
-            arg1 = stack_.top(); stack_.pop(); 
+            arg2 = stack_.top(); stack_.pop();
+            arg1 = stack_.top(); stack_.pop();
             break;
           }
         default: assert(false);
       }
-      
+
     switch(op)
       {
         case op_dec:
@@ -377,15 +377,15 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
           {
             resolve_value(arg1);
             add_instruction( i_dup_top );
-            
+
             bool dont_assign = false;
             resolve_unary_operator( op, arg1, &dont_assign);
-            
+
             if (!dont_assign)
               resolve_assign(arg1);
             break;
           }
-          
+
         case op_unary_plus:
         case op_unary_minus:
         case op_not:
@@ -393,7 +393,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
             resolve_unary_operator( op, arg1, null );
             break;
           }
-          
+
         case op_mult:
         case op_divide:
         case op_mod:
@@ -416,7 +416,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
             resolve_operator(op, arg1, arg2, null);
             break;
           }
-        case op_assign:       
+        case op_assign:
         case op_plus_equal:
         case op_minus_equal:
         case op_mult_equal:
@@ -434,7 +434,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
                 case op_shift_right_equal:  xe = op_shift_right; break;
                 case op_shift_left_equal:   xe = op_shift_left;  break;
               }
-            
+
             bool dont_assign = false;
             if (xe != op_assign)
               {
@@ -442,10 +442,10 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
               }
             else
               resolve_value(arg2);
-            
-            if (!dont_assign)  
+
+            if (!dont_assign)
               resolve_assign( arg1 );
-            
+
             if (!stack_.empty())
               stack_.pop(); //td: !!! this line prevents (*)= operators (+=, etc) from being used
                             //as expressions (if (a -= 3 > 5)) but only as statements (a -= b)
@@ -457,9 +457,9 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
         case op_dot:
           {
             schema* type = null;
-            resolve_value(arg1, &type); 
-            
-            expression_identifier ei = arg2; 
+            resolve_value(arg1, &type);
+
+            expression_identifier ei = arg2;
 
             if (type && type != type_schema<empty_type>())
               {
@@ -471,12 +471,12 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
                     IDynamicObject* do_ = variant_cast<IDynamicObject*>(arg1, null);
                     if (do_ && do_->resolve(ei.value, si))
                       stack_.push( si );
-                    else 
+                    else
                       {
                         assert(false); //td: unknown identifier
                       }
                   }
-              }              
+              }
             else
               {
                 add_instruction(i_dynamic_get, add_constant(ei.value));
@@ -484,13 +484,13 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
               }
             break;
           }
-          
+
         case op_dot_call:
           {
             schema* type = null;
-            resolve_value(arg1, &type); 
-            
-            expression_identifier ei = arg2; 
+            resolve_value(arg1, &type);
+
+            expression_identifier ei = arg2;
 
             if (type && type != type_schema<empty_type>())
               {
@@ -502,12 +502,12 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
                     IDynamicObject* do_ = variant_cast<IDynamicObject*>(arg1, null);
                     if (do_ && do_->resolve(ei.value, si))
                       stack_.push( si );
-                    else 
+                    else
                       {
                         assert(false); //td: unknown identifier
                       }
                   }
-              }              
+              }
             else
               {
                 add_instruction(i_dynamic_resolve, add_constant(ei.value));
@@ -520,17 +520,17 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
           {
             constant    arg_count = arg1;
             int         args      = arg_count.value;
-            
+
             //pop the arguments
             for(int i = 0; i < args; i++)
               {
                 variant arg = stack_.top(); stack_.pop();
                 resolve_value(arg);
               }
-            
+
             assert(!stack_.empty());
             variant call_value = stack_.top(); stack_.pop();
-            
+
             bool    is_dyamic = false;
             schema* result_type = null;
             if (call_value.is<schema_item>())
@@ -539,7 +539,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
 
                 is_dyamic = call.flags&DYNAMIC_ACCESS;
                 result_type = call.type;
-                
+
                 assert(call.exec);
                 add_instruction(i_load_constant, add_constant(call.exec));
               }
@@ -549,28 +549,28 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
                 assert(!ais.type); //I'm not sure why this would hapeen, I'll wait and see
                 is_dyamic = true;
               }
-            else 
+            else
               assert(false);
 
             add_call(i_call, args, is_dyamic);
-            stack_.push( already_in_stack(result_type) );              
+            stack_.push( already_in_stack(result_type) );
             break;
           }
-          
+
         case op_func_call:
           {
             expression_identifier name      = arg1;
             constant              arg_count = arg2;
             int                   args      = arg_count.value;
-            
+
             //simple functions can be either:
             // - instantiation
             // - calling a local (this) method
             // - global functions
-            
+
             type_registry*  types     = context_.types_;
             schema*         this_type = context_.this_type;
-            schema*         instantiator; 
+            schema*         instantiator;
             schema_item     this_item;
             IDynamicObject* dynamic = null;
             variant         scope_call;
@@ -587,7 +587,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
                 add_instruction(i_load_constant, add_constant(instantiator));
                 add_instruction(i_instantiate, args);
               }
-            else if (this_type && this_type->resolve(name.value, this_item))  
+            else if (this_type && this_type->resolve(name.value, this_item))
               {
                 assert(this_item.exec);
 
@@ -599,10 +599,10 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
 
                 add_instruction(i_load_constant, add_constant(this_item.exec));
                 add_call(i_this_call, args, this_item.flags & DYNAMIC_ACCESS );
-                stack_.push( already_in_stack(this_item.type) );              
+                stack_.push( already_in_stack(this_item.type) );
               }
-            else if (!context_.this_.empty() && 
-                     (dynamic = variant_cast<IDynamicObject*>(context_.this_, null)) && 
+            else if (!context_.this_.empty() &&
+                     (dynamic = variant_cast<IDynamicObject*>(context_.this_, null)) &&
                      dynamic->resolve(name.value, this_item))
               {
                 assert(this_item.exec);
@@ -621,7 +621,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
                 assert(scope_call.is<schema_item>());
                 this_item = scope_call;
                 assert(this_item.exec);
-                
+
                 for(int i = 0; i < args; i++)
                   {
                     variant arg = stack_.top(); stack_.pop();
@@ -637,7 +637,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
               }
             break;
           }
-          
+
         case op_parameter:
           {
             //this is neccessary to avoid hanging members (a.b) in a parameter list
@@ -651,7 +651,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
                     schema* type = null;
                     resolve_value(arg, &type);
                     stack_.pop();
-                    stack_.push( already_in_stack(type) );              
+                    stack_.push( already_in_stack(type) );
                   }
               }
             break;
@@ -661,68 +661,68 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
           {
             constant arg_count = arg1;
             int      args      = arg_count.value;
-            
+
             for(int i = 0; i < args; i++)
               {
-                variant array_value = stack_.top(); 
+                variant array_value = stack_.top();
                 stack_.pop();
-                
+
                 schema* value_type = null;
                 resolve_value(array_value, &value_type);
-                
+
                 if (array_type_ && array_type_ != value_type)
                   assert(false); //td: error, invalid types
               }
-            
-            //grab the array type needed 
+
+            //grab the array type needed
             type_registry* types      = context_.types_;
             param_list     pl;
-            if (array_type_)  
-              pl.add(array_type_); 
-            
-            schema* array_type = types->get_type("array", array_type_? &pl : null ); 
-            assert(array_type);  
-              
+            if (array_type_)
+              pl.add(array_type_);
+
+            schema* array_type = types->get_type("array", array_type_? &pl : null );
+            assert(array_type);
+
             add_instruction(i_load_constant, add_constant(array_type));
             add_instruction(i_instantiate, args);
 
             //i_instantiate
-              
+
             break;
           }
-          
+
         case op_index:
         default:
           assert(false); //td:
       }
   }
-  
+
 void code_linker::register_dsl(const str& name, DslLinker linker)
   {
     dsl_linkers_.insert( dsl_linker_pair(name, linker) );
   }
-  
+
 variant code_linker::evaluate_expression(expression& expr)
-  { 
+  {
     //td: only constants for now
     expr_evaluator eval;
-    expr.visit( &eval );   
+    expr.visit( &eval );
     return eval.value();
   }
-  
-schema* code_linker::typeof(const xs_type type)
+
+schema* code_linker::typeof_(const xs_type type)
   {
     type_registry* types  = context_.types_;
     schema*        result = null;
-    if (types && !type.name.empty()) 
+    if (types && !type.name.empty())
       {
         result = types->get_type(type.name);
         assert(result || type.name == "var"); //td: error, type does not exist
       }
-      
+
     return result;
   }
-  
+
 void code_linker::link_code(code& cde, int loop_pc)
   {
     fixup_.clear();
@@ -730,41 +730,41 @@ void code_linker::link_code(code& cde, int loop_pc)
 
     fixup_list::iterator it = fixup_.begin();
     fixup_list::iterator nd = fixup_.end();
-    
+
     for(; it != nd; it++)
       {
         switch(it->dest)
           {
-            case fixup_exit: 
-              instruction_data(it->instruction_idx, pc_); 
-              break; 
-            case fixup_loop: 
-              assert(loop_pc >= 0); 
-              instruction_data(it->instruction_idx, loop_pc); 
+            case fixup_exit:
+              instruction_data(it->instruction_idx, pc_);
+              break;
+            case fixup_loop:
+              assert(loop_pc >= 0);
+              instruction_data(it->instruction_idx, loop_pc);
               break;
           }
       }
   }
-  
+
 schema* code_linker::link_expression(expression& expr, bool* empty_stack, schema* array_type)
   {
-    while (!stack_.empty()) stack_.pop();	
+    while (!stack_.empty()) stack_.pop();
     array_type_ = array_type;
-  
+
     expr.visit(this);
 
     if (!stack_.empty())
       {
         assert(stack_.size() == 1);
-        
+
         if (empty_stack) *empty_stack = false;
-          
+
         variant top      = stack_.top(); stack_.pop();
         schema* top_type = null;
         resolve_value(top, &top_type);
         return top_type;
       }
-      
+
     return null;
   }
 
@@ -775,7 +775,7 @@ int code_linker::add_instruction( instruction_type i )
     pc_++;
     return pc_ - 1;
   }
-  
+
 int code_linker::add_instruction( instruction_type i, short data )
   {
     instruction ii(i, data);
@@ -783,7 +783,7 @@ int code_linker::add_instruction( instruction_type i, short data )
     pc_++;
     return pc_ - 1;
   }
-  
+
 void code_linker::instruction_data( int idx, short data )
   {
     code_[idx].data.value = data;
@@ -792,13 +792,13 @@ void code_linker::instruction_data( int idx, short data )
 int code_linker::add_call( instruction_type i, unsigned char param_count, bool is_dynamic )
   {
     assert(i == i_call || i == i_this_call);
-  
+
     instruction ii(i, param_count, is_dynamic);
     code_.push_back(ii);
     pc_++;
     return pc_ - 1;
   }
-  
+
 int code_linker::add_call(variant caller, const str& name, int param_count, bool is_dynamic )
   {
     schema* caller_type = true_type(caller);
@@ -806,13 +806,13 @@ int code_linker::add_call(variant caller, const str& name, int param_count, bool
       {
         assert(false); //td: dynamic access
       }
-    
+
     schema_item si;
     if (!caller_type->resolve(name, si))
       {
         assert(false); //td: error, unknown identifier
       }
-    
+
     if (!si.exec)
       {
         assert(false); //td: error, read only
@@ -821,29 +821,29 @@ int code_linker::add_call(variant caller, const str& name, int param_count, bool
     add_instruction(i_load_constant, add_constant(si.exec));
     return add_call(i_call, param_count, is_dynamic );
   }
-  
+
 int code_linker::add_anonymous_local()
   {
     stmt_variable v;
     v.id = "@" + boost::lexical_cast<str>(local_count_);
     return register_variable(v);
   }
-  
+
 void code_linker::add_fixup( int idx, fixup_dest dest )
   {
     fixup_.push_back( fixup_data(idx, dest) );
   }
-  
+
 schema* code_linker::add_stack_lookup(const str& query, schema* type)
   {
     expression expr;
     expr.push_operand   ( already_in_stack(type) );
     expr.push_identifier( query                  );
     expr.push_operator  ( op_dot                 );
-    
+
     return link_expression(expr);
   }
-  
+
 int code_linker::register_variable(stmt_variable& info)
   {
     return register_variable(info.id, info.type, &info.value);
@@ -853,12 +853,12 @@ int code_linker::register_variable(const str& name, const str& type, expression*
   {
     type_registry* types_   = context_.types_;
     schema*        var_type = null;
-    if (types_ && !type.empty()) 
+    if (types_ && !type.empty())
       {
         var_type = types_->get_type(type);
         assert(var_type || type == "var");
       }
-    
+
     return register_variable(name, var_type, value);
   }
 
@@ -869,7 +869,7 @@ struct expr_typeof : expression_visitor
   {
     schema*      result;
     code_linker& linker;
-    
+
     virtual void push(variant operand)
       {
         if (operand.is<expression_identifier>())
@@ -889,30 +889,30 @@ struct expr_typeof : expression_visitor
           {
             assert(false); //not sure?
           }
-        else   
+        else
           {
             stack_.push(true_type(operand));
           }
       }
-      
+
     virtual void exec_operator(operator_type op, int pop_count, int push_count)
       {
         variant arg1, arg2;
         switch(pop_count)
           {
-            case 1: 
+            case 1:
               {
                 arg1 = stack_.top(); stack_.pop(); break;
               }
-            case 2: 
+            case 2:
               {
-                arg2 = stack_.top(); stack_.pop(); 
-                arg1 = stack_.top(); stack_.pop(); 
+                arg2 = stack_.top(); stack_.pop();
+                arg1 = stack_.top(); stack_.pop();
                 break;
               }
             default: assert(false);
           }
-          
+
         schema* type1 = null;
         schema* type2 = null;
         if (op == dot)
@@ -923,21 +923,21 @@ struct expr_typeof : expression_visitor
           {
             type1 = true_type(arg1);
             type2 = true_type(arg2);
-          }  
-                
+          }
+
         schema* result;
-        operator_exec* exec = operators_.get_operator(op, type1, type1, &result); 
-        
+        operator_exec* exec = operators_.get_operator(op, type1, type1, &result);
+
         if (push_count > 0)
           push( result );
       }
-    
-    private: 
+
+    private:
       typedef std::stack<variant> expr_stack;
 
-      expr_stack        stack_;      
-      operator_registry operators_;       
-  };      
+      expr_stack        stack_;
+      operator_registry operators_;
+  };
 */
 
 int code_linker::register_variable(const str& name, schema* type, expression* value)
@@ -946,23 +946,23 @@ int code_linker::register_variable(const str& name, schema* type, expression* va
     if (it == locals_.end())
       {
         int local_idx = local_count_++;
-        
+
         if (value && !value->empty())
           {
             //td: type checking
-            //expr_typeof to(*this); 
+            //expr_typeof to(*this);
             //value->visit(&to);
-          
+
             schema* expr_type  = link_expression(*value); //to.result;
             add_instruction( i_store, local_idx );
 
             if (type == null)
               type = expr_type;
-              
+
             assert(type == expr_type || expr_type == null); //td: error, type mismatch
           }
-          
-        local_variable lv(local_idx, type); 
+
+        local_variable lv(local_idx, type);
         locals_.insert( locals_pair(name, lv) );
         return local_idx;
       }
@@ -970,19 +970,19 @@ int code_linker::register_variable(const str& name, schema* type, expression* va
       {
         assert(false); //td: error system
       }
-    
+
     return -1;
   }
 
 void code_linker::resolve_value(variant& arg, schema** type)
   {
     scope* scope_ = context_.scope_;
-    
+
     if (arg.is<local_variable>())
       {
         local_variable lv = arg;
         add_instruction(i_load, lv.index);
-        
+
         if (type) *type = lv.type;
       }
     else if (arg.is<already_in_stack>())
@@ -1011,56 +1011,56 @@ void code_linker::resolve_value(variant& arg, schema** type)
             schema*         this_ = context_.this_type;
             IDynamicObject* dynamic = null;
             variant         scope_result;
-            
+
             if (id.value == "this")
               {
                 assert(this_); //td: error, must not be a thisless code
-                add_instruction(i_load_this); 
+                add_instruction(i_load_this);
                 if (type) *type = this_;
               }
             else if (scope_ && scope_->resolve(id.value, scope_result))
               {
                 arg = scope_result;
-                add_instruction(i_load_constant, add_constant(scope_result)); 
+                add_instruction(i_load_constant, add_constant(scope_result));
                 //test for concrete types
-                if (type) 
+                if (type)
                   {
                     IDynamicObject* do_ = variant_cast<IDynamicObject*>(scope_result, null);
                     if (do_)
                       *type = do_->get_type();
-                    else 
+                    else
                       *type = scope_result.get_schema();
                   }
               }
             else if (this_ && this_->resolve(id.value, this_item))
               {
                 assert(this_item.get); //must not be read only
-              
-                add_instruction(i_load_this); 
-                add_instruction(i_load_constant, add_constant(this_item.get)); 
-                add_instruction(i_get, this_item.flags&DYNAMIC_ACCESS); 
+
+                add_instruction(i_load_this);
+                add_instruction(i_load_constant, add_constant(this_item.get));
+                add_instruction(i_get, this_item.flags&DYNAMIC_ACCESS);
 
                 if (type) *type = this_item.type;
               }
-            else if (!context_.this_.empty() && 
-                     (dynamic = variant_cast<IDynamicObject*>(context_.this_, null)) && 
+            else if (!context_.this_.empty() &&
+                     (dynamic = variant_cast<IDynamicObject*>(context_.this_, null)) &&
                      dynamic->resolve(id.value, this_item))
               {
                 //td: move all this resolving stuff into the context
                 assert(this_item.get); //must not be read only
-              
-                add_instruction(i_load_this); 
-                add_instruction(i_load_constant, add_constant(this_item.get)); 
-                add_instruction(i_get, this_item.flags&DYNAMIC_ACCESS); 
+
+                add_instruction(i_load_this);
+                add_instruction(i_load_constant, add_constant(this_item.get));
+                add_instruction(i_get, this_item.flags&DYNAMIC_ACCESS);
 
                 if (type) *type = this_item.type;
               }
             else if (scope_ && scope_->resolve(id.value, result))
               {
-                add_instruction(i_load_constant, add_constant(result)); 
+                add_instruction(i_load_constant, add_constant(result));
                 if (type) *type = result.get_schema();
               }
-            else 
+            else
               {
                 assert(false); //td: unknown identifier + id
               }
@@ -1070,26 +1070,26 @@ void code_linker::resolve_value(variant& arg, schema** type)
       {
         schema_item si = arg;
         assert(si.get);
-        add_instruction(i_load_constant, add_constant(si.get)); 
-        add_instruction(i_get, si.flags&DYNAMIC_ACCESS); 
+        add_instruction(i_load_constant, add_constant(si.get));
+        add_instruction(i_get, si.flags&DYNAMIC_ACCESS);
 
         if (type) *type = si.type;
       }
     else if (arg.empty())
       {
         if (type) *type = null;
-        
+
         add_instruction(i_load_constant, add_constant(variant())); //td: not optimal, do i_load_null
       }
     else
       {
         constant c = arg;
         if (type) *type = c.value.get_schema();
-        
+
         add_instruction(i_load_constant, add_constant(c.value));
       }
   }
-  
+
 void code_linker::resolve_operator(operator_type op, variant arg1, variant arg2, bool* dont_assign)
   {
     if (dont_assign) *dont_assign = false;
@@ -1107,18 +1107,18 @@ void code_linker::resolve_operator(operator_type op, variant arg1, variant arg2,
             return;
           }
       }
-  
+
     schema* type1;
     schema* type2;
     resolve_value(arg1, &type1);
     resolve_value(arg2, &type2);
-    
+
     size_t  result;
     schema* result_type;
     if (operators_.get_operator_index(op, type1, type2, result, &result_type))
       {
         add_instruction(i_binary_operator, static_cast<short>(result));
-        already_in_stack ais(result_type); 
+        already_in_stack ais(result_type);
         stack_.push(ais);
       }
     else
@@ -1128,13 +1128,13 @@ void code_linker::resolve_operator(operator_type op, variant arg1, variant arg2,
             if (!resolve_custom_operator(op, type2, dont_assign))
               {
                 add_instruction(i_dynamic_binary_operator, static_cast<short>(op));
-                already_in_stack ais(null); 
+                already_in_stack ais(null);
                 stack_.push(ais);
               }
           }
       }
   }
-  
+
 void code_linker::resolve_unary_operator(operator_type op, variant arg1, bool* dont_assign)
   {
     if (dont_assign) *dont_assign = false;
@@ -1146,22 +1146,23 @@ void code_linker::resolve_unary_operator(operator_type op, variant arg1, bool* d
         operator_exec* exec = operators_.get_operator(op, c1.value.get_schema(), type2);
         if (exec)
           {
-            variant  result = exec->exec(c1.value, variant());
+            variant  useless;
+            variant  result = exec->exec(c1.value, useless);
             constant rc; rc.value = result;
             stack_.push( rc );
             return;
           }
       }
-  
+
     schema* type1;
     resolve_value(arg1, &type1);
-    
+
     size_t result;
     schema* result_type;
     if (operators_.get_operator_index(op, type1, type2, result, &result_type))
       {
         add_instruction(i_unary_operator, static_cast<short>(result));
-        already_in_stack ais(result_type); 
+        already_in_stack ais(result_type);
         stack_.push(ais);
       }
     else
@@ -1174,7 +1175,7 @@ void code_linker::resolve_unary_operator(operator_type op, variant arg1, bool* d
                 assert(custom_operator.exec);
                 add_instruction(i_load_constant, add_constant(custom_operator.exec));
                 add_call(i_call, 0, custom_operator.flags&DYNAMIC_ACCESS );
-                stack_.push( already_in_stack(custom_operator.type) );              
+                stack_.push( already_in_stack(custom_operator.type) );
 
                 if (dont_assign)
                   *dont_assign = custom_operator.flags&OP_BLOCK_ASSIGN;
@@ -1190,12 +1191,12 @@ void code_linker::resolve_unary_operator(operator_type op, variant arg1, bool* d
           }
       }
   }
-  
+
 bool code_linker::resolve_custom_operator(operator_type op, schema* type, bool* dont_assign)
   {
     if (!type)
       return false;
-      
+
     schema_item custom_operator;
     if (!type->resolve(operator_name[op], custom_operator))
       return false;
@@ -1203,15 +1204,15 @@ bool code_linker::resolve_custom_operator(operator_type op, schema* type, bool* 
     assert(custom_operator.exec);
     add_instruction(i_load_constant, add_constant(custom_operator.exec));
     add_call(i_call, 1, custom_operator.flags&DYNAMIC_ACCESS );
-    stack_.push( already_in_stack(custom_operator.type) );              
-    
+    stack_.push( already_in_stack(custom_operator.type) );
+
     if (dont_assign)
       {
         *dont_assign = custom_operator.flags&OP_BLOCK_ASSIGN;
       }
     return true;
   }
-  
+
 void code_linker::resolve_assign(const variant& arg)
   {
     if (arg.is<local_variable>())
@@ -1234,35 +1235,35 @@ void code_linker::resolve_assign(const variant& arg)
         else if (this_ && this_->resolve(id.value, this_item))
           {
             assert(this_item.set); //must not be write only
-            
+
             //there is a little disagreement between the way the operand
             //stack is arranged when linking member sets with "this" sets
             //it all boils down to the semantic difference between x.y() and y()
             //this issue should be addressed properly.
             //td:
-            
+
             int lidx = add_anonymous_local();
-            add_instruction(i_store, lidx); 
-            
-            add_instruction(i_load_this); 
-            add_instruction(i_load, lidx); 
-            add_instruction(i_load_constant, add_constant(this_item.set)); 
-            add_instruction(i_set, this_item.flags&DYNAMIC_ACCESS); 
+            add_instruction(i_store, lidx);
+
+            add_instruction(i_load_this);
+            add_instruction(i_load, lidx);
+            add_instruction(i_load_constant, add_constant(this_item.set));
+            add_instruction(i_set, this_item.flags&DYNAMIC_ACCESS);
           }
-        else if (!context_.this_.empty() && 
-                 (dynamic = variant_cast<IDynamicObject*>(context_.this_, null)) && 
+        else if (!context_.this_.empty() &&
+                 (dynamic = variant_cast<IDynamicObject*>(context_.this_, null)) &&
                  dynamic->resolve(id.value, this_item))
           {
             //td: move all this resolving stuff into the context
             assert(this_item.set); //must not be write only
-            
+
             int lidx = add_anonymous_local();
-            add_instruction(i_store, lidx); 
-            
-            add_instruction(i_load_this); 
-            add_instruction(i_load, lidx); 
-            add_instruction(i_load_constant, add_constant(this_item.set)); 
-            add_instruction(i_set, this_item.flags&DYNAMIC_ACCESS); 
+            add_instruction(i_store, lidx);
+
+            add_instruction(i_load_this);
+            add_instruction(i_load, lidx);
+            add_instruction(i_load_constant, add_constant(this_item.set));
+            add_instruction(i_set, this_item.flags&DYNAMIC_ACCESS);
           }
         else
           {
@@ -1273,19 +1274,19 @@ void code_linker::resolve_assign(const variant& arg)
       {
         schema_item si = arg;
         assert(si.set); //td: error, write only
-        add_instruction(i_load_constant, add_constant(si.set)); 
-        add_instruction(i_set, si.flags&DYNAMIC_ACCESS); 
+        add_instruction(i_load_constant, add_constant(si.set));
+        add_instruction(i_set, si.flags&DYNAMIC_ACCESS);
       }
     else
       {
         assert(false); //td: error, trying to assign to const
       }
   }
-  
+
 int code_linker::add_constant( variant constant )
   {
     constants_.push_back( constant );
-    return static_cast<int>(constants_.size()) - 1; 
+    return static_cast<int>(constants_.size()) - 1;
   }
 
 //base_xs_linker
@@ -1294,8 +1295,8 @@ void base_xs_linker::link(xs_container& xs)
     //traverse the container items, this process will
     //register names and collect code to be linked
     xs.visit( this );
-    
-    //and then we link code, a this point all symbols 
+
+    //and then we link code, a this point all symbols
     //should be bound for linking
     std::vector<link_item>::iterator lit = link_.begin();
     std::vector<link_item>::iterator lnd = link_.end();
@@ -1311,31 +1312,31 @@ void base_xs_linker::link(xs_container& xs)
 
         code_linker linker(ctx);
         lit->cde.visit(&linker);
-        
+
         linker.link(lit->bc);
       }
   }
-  
+
 DynamicObject base_xs_linker::resolve_instance(std::vector<str> name)
   {
     if (name.empty())
       return DynamicObject();
-      
-    DynamicObject result = resolve_instance(*name.begin()); 
+
+    DynamicObject result = resolve_instance(*name.begin());
     if (result)
       {
         name.erase(name.begin());
         if (!name.empty())
           return result->resolve_instance(name);
       }
-      
+
     return result;
   }
 
 DynamicObject base_xs_linker::resolve_instance(const str& name)
   {
     DynamicObject result;
-    
+
     if (output_)
       {
         std::vector<str> id;
@@ -1344,16 +1345,16 @@ DynamicObject base_xs_linker::resolve_instance(const str& name)
         if (result)
           return result;
       }
-    
+
     variant scope_object;
     if (ctx_.scope_ && ctx_.scope_->resolve(name, scope_object))
       {
         result = scope_object; //td: catch exception, throw invalid instance error.
       }
-      
+
     return result;
   }
-  
+
 struct decode_property
   {
     decode_property(code_context& ctx, xs_property& info, DynamicObject output)
@@ -1371,7 +1372,7 @@ struct decode_property
           {
             code_linker exp_linker(ctx);
             value = exp_linker.evaluate_expression(info.value);
-            
+
             if (itm.type)
               {
                 assert(value.get_schema() == itm.type); //td: type mismatch
@@ -1397,7 +1398,7 @@ struct decode_property
         else if (!info.set.empty())
           {
             //set & store
-            int idx = output->add_anonymous(value);        
+            int idx = output->add_anonymous(value);
             itm.get = Getter( new anonymous_getter(idx) );
 
             set_ref  = ByteCode( new byte_code );
@@ -1415,19 +1416,19 @@ struct decode_property
         else
           {
             //regular property, no code
-            int idx = output->add_anonymous(value);        
+            int idx = output->add_anonymous(value);
             itm.get = Getter( new anonymous_getter(idx) );
             itm.set = Setter( new anonymous_setter(idx) );
           }
       }
-    
+
     schema_item itm;
     ByteCode    get_ref;
     ByteCode    set_ref;
-    code        get_code;  
-    code        set_code;  
+    code        get_code;
+    code        set_code;
   };
-  
+
 void base_xs_linker::property_(xs_property& info)
   {
     assert(editable_output_); //td: error, declaring items on a non editable object
@@ -1441,7 +1442,7 @@ void base_xs_linker::property_(xs_property& info)
       {
         itm.type = ctx_.types_->get_type(info.type);
         assert(itm.type); //td: error, unknown type
-      }  
+      }
 
     variant value;
     if (info.value.empty())
@@ -1453,7 +1454,7 @@ void base_xs_linker::property_(xs_property& info)
       {
         code_linker exp_linker(ctx_);
         value = exp_linker.evaluate_expression(info.value);
-        
+
         if (itm.type)
           {
             assert(value.get_schema() == itm.type); //td: type mismatch
@@ -1472,18 +1473,18 @@ void base_xs_linker::property_(xs_property& info)
 
         itm.get   = Getter( new code_getter(get_code) );
         itm.set   = Setter( new code_setter(set_code) );
-        
+
         //keep track of the code, so we can link when the scope is complete
         link_item gli(get_code, info.get, ctx_.this_type);
         link_item sli(set_code, info.set, ctx_.this_type);
-        
+
         link_.push_back(gli);
         link_.push_back(sli);
       }
     else if (!info.set.empty())
       {
         //set & store
-        int idx = output_->add_anonymous(value);        
+        int idx = output_->add_anonymous(value);
         itm.get = Getter( new anonymous_getter(idx) );
 
         ByteCode set_code = ByteCode( new byte_code );
@@ -1503,14 +1504,14 @@ void base_xs_linker::property_(xs_property& info)
     else
       {
         //regular property, no code
-        int idx = output_->add_anonymous(value);        
+        int idx = output_->add_anonymous(value);
         itm.get = Getter( new anonymous_getter(idx) );
         itm.set = Setter( new anonymous_setter(idx) );
       }
-    
+
     editable_output_->add_item(info.name, itm);
   }
-  
+
 struct decode_method
   {
     decode_method(xs_method& info, code_context& ctx)
@@ -1519,27 +1520,27 @@ struct decode_method
         bc        = ByteCode( new byte_code );
         itm.exec  = Executer( new code_executer(bc) );
         cde       = info.cde;
-      
+
         pl = ParamList(new param_list);
         param_list_decl::iterator it = info.args.begin();
         param_list_decl::iterator nd = info.args.end();
         for(; it != nd; it++)
-          { 
+          {
             schema* param_type = it->type.empty()? null : ctx.types_->get_type(it->type);
-            
+
             variant value;
             if (!it->default_value.empty())
               {
                 code_linker exp_linker(ctx);
                 value = exp_linker.evaluate_expression(it->default_value);
-                
+
                 assert(!param_type || value.get_schema() == param_type); //type mismatch
               }
             else if (param_type)
               {
                 param_type->create(value);
               }
-              
+
             pl->add(it->name, value);
           }
       }
@@ -1547,9 +1548,9 @@ struct decode_method
     schema_item itm;
     ByteCode    bc;
     ParamList   pl;
-    code        cde;  
+    code        cde;
   };
-  
+
 void base_xs_linker::method_(xs_method& info)
   {
     assert(editable_output_); //td: error, declaring items on a non editable object
@@ -1558,42 +1559,42 @@ void base_xs_linker::method_(xs_method& info)
     itm.flags          = DYNAMIC_ACCESS;
     ByteCode exec_code = ByteCode( new byte_code );
     itm.exec           = Executer( new code_executer(exec_code) );
-  
+
     ParamList pl = ParamList(new param_list);
     param_list_decl::iterator it = info.args.begin();
     param_list_decl::iterator nd = info.args.end();
     for(; it != nd; it++)
-      { 
+      {
         schema* param_type = it->type.empty()? null : ctx_.types_->get_type(it->type);
-        
+
         variant value;
         if (!it->default_value.empty())
           {
             code_linker exp_linker(ctx_);
             value = exp_linker.evaluate_expression(it->default_value);
-            
+
             assert(!param_type || value.get_schema() == param_type); //type mismatch
           }
         else if (param_type)
           {
             param_type->create(value);
           }
-          
+
         pl->add(it->name, value);
       }
-    
+
 
     link_item eli(exec_code, info.cde, ctx_.this_type, pl);
     link_.push_back(eli);
 
     editable_output_->add_item(info.name, itm);
   }
-  
+
 void base_xs_linker::event_(xs_event& info)
   {
     IDynamicObject*  object = output_?  output_.get() : null;
     IEditableObject* target = editable_output_;
-    
+
     std::vector<str> name = info.name;
     str ev_name = name[info.name.size() - 1];
     name.erase(name.end() - 1);
@@ -1604,7 +1605,7 @@ void base_xs_linker::event_(xs_event& info)
         object = inst.get();
         target = variant_cast<IEditableObject*>(inst, null);
       }
-      
+
     assert(object && target); //td: error, unknown instance
     int id = object->event_id(ev_name);
 
@@ -1613,85 +1614,85 @@ void base_xs_linker::event_(xs_event& info)
     ByteCode exec_code = ByteCode( new byte_code );
     itm.get            = Getter( new const_getter(id) );
     itm.exec           = Executer( new code_executer(exec_code) );
-    
+
     ParamList pl = ParamList(new param_list);
     param_list_decl::iterator it = info.args.begin();
     param_list_decl::iterator nd = info.args.end();
     for(; it != nd; it++)
-      { 
+      {
         schema* param_type = it->type.empty()? null : ctx_.types_->get_type(it->type);
-        
+
         variant value;
         if (!it->default_value.empty())
           {
             code_linker exp_linker(ctx_);
             value = exp_linker.evaluate_expression(it->default_value);
-            
+
             assert(!param_type || value.get_schema() == param_type); //type mismatch
           }
         else if (param_type)
           {
             param_type->create(value);
           }
-          
+
         pl->add(it->name, value);
       }
-    
+
     link_item eli(exec_code, info.cde, ctx_.this_type, pl);
     link_.push_back(eli);
 
     target->add_item(ev_name, itm);
   }
-  
+
 void base_xs_linker::event_decl_(xs_event_decl& info)
   {
     assert(editable_output_);
     schema_item itm;
     itm.flags = EVENT_DECL; //td: signature
-    
+
     editable_output_->add_item(info.name, itm);
   }
-  
+
 void base_xs_linker::const_(xs_const& info)
   {
     assert(false); //td:
   }
-  
+
 void base_xs_linker::instance_(xs_instance& info)
   {
     std::vector<str> id = info.id;
     assert(!id.empty());
     str instance_name = id[0];
-    
+
     DynamicObject instance = resolve_instance(instance_name);
     id.erase(id.begin());
-    
+
     if (!id.empty())
       {
-        assert(instance); 
+        assert(instance);
 
         instance = instance->resolve_instance(id);
 
         assert(instance); //td: error, unknown instance
       }
-    
+
     if (!instance)
       {
         schema* i_type;
-        
+
         if ((!info.class_name.empty()))
           i_type = ctx_.types_->get_type(info.class_name);
-        else 
+        else
           i_type = type_schema<default_object>();
-        
+
         assert(i_type); //td: unknown type
-        
+
         //instantiate
         variant res;
         i_type->create(res);
-        
+
         instance = res; //td: check mismatch
-        
+
         //td: rethink this mechanism at this stage
         //basically adding instances to the scope when they are not
         //found. At the moment it serves testng pursposes.
@@ -1700,33 +1701,33 @@ void base_xs_linker::instance_(xs_instance& info)
       }
 
     assert(instance); //td: unknown instance
-    
+
     instance_linker il(ctx_, instance);
     il.link(info);
   }
-  
+
 void base_xs_linker::class_(xs_class& info)
   {
     class_linker cl(ctx_);
     cl.link(info);
   }
-  
+
 void base_xs_linker::behaviour_(xs_behaviour& info)
   {
     behaviour_linker linker(ctx_);
     linker.link(info);
   }
-  
+
 void base_xs_linker::behaveas_(xs_implement_behaviour& info)
   {
     schema* type = ctx_.types_->get_type(info.name);
     assert(type); //td: error, no such behaviour
 
-    behaviour_schema* behaviour = dynamic_cast<behaviour_schema*>(type); 
+    behaviour_schema* behaviour = dynamic_cast<behaviour_schema*>(type);
     assert(behaviour); //td: error, can only behave as behaviours
 
     //this code, as fas as this early revision, is special
-    //its purpose if to link symbols between the concrete type 
+    //its purpose if to link symbols between the concrete type
     //and the behaviour. It's probably going to be touchy for
     //a while. So, please, assign known identifiers and dont get
     //smart. For instance:
@@ -1737,66 +1738,66 @@ void base_xs_linker::behaveas_(xs_implement_behaviour& info)
     //
     //td: this should be linked as a "class" method, gonna be so sweet
     //td: meta, this are gonna go together and be oh so sweeter.
-    
+
     //so we collect the delegates names
     name_collect_visitor ncv;
     behaviour->delegates().visit( &ncv );
-    
-    //then create a fake object to 
+
+    //then create a fake object to
     default_object bindings;
     std::vector<str>::iterator it = ncv.names.begin();
     std::vector<str>::iterator nd = ncv.names.end();
     for(; it != nd; it++)
       {
         bindings.add_property(*it);
-      }        
-    
+      }
+
     code_context    bind_ctx;
     type_scope      class_scope(ctx_.this_type); //class access
     object_scope    this_scope(output_.get());   //instance access
     composite_scope bind_scope(&class_scope, &this_scope);
-    
+
     bind_ctx.this_     = &bindings;
-    bind_ctx.this_type = null;    
-    bind_ctx.scope_    = &bind_scope; 
+    bind_ctx.this_type = null;
+    bind_ctx.scope_    = &bind_scope;
     if (!info.cde.empty())
       {
         code_linker cl(bind_ctx);
         info.cde.visit( &cl );
-        
+
         ByteCode bc = cl.link();
         execution_context ec(bc, bind_ctx.this_);
         ec.execute();
       }
-    
+
     //private items, the final frontier, the idea
-    //here is to hide the private names from the output   
-    //so we'll stash then on a context 
+    //here is to hide the private names from the output
+    //so we'll stash then on a context
     editable_scope link_symbols;
     bind_ctx.types_ = ctx_.types_;
     prelink_visitor plv(bind_ctx, &link_symbols, output_);
     behaviour->privates().visit(&plv);
-    
+
     //and before we're ready to finally link the code, we'll add
     //the bindings to the output object, note the delegates items
     //will be public
     delegate_visitor dv(&bindings, editable_output_, output_);
     behaviour->delegates().visit(&dv);
-    
+
     //reconfigure for the actual code
-    composite_scope code_scope(&link_symbols, ctx_.scope_);    
+    composite_scope code_scope(&link_symbols, ctx_.scope_);
 
     code_context  link_ctx;
     link_ctx.types_    = ctx_.types_;
     link_ctx.this_     = output_;
-    link_ctx.this_type = ctx_.this_type;    
+    link_ctx.this_type = ctx_.this_type;
     link_ctx.scope_    = &code_scope;
-    
+
     base_xs_linker linker(link_ctx, editable_output_); //note the output is the actual object being behaved-assed
 
     linker.output_ = output_;
     linker.link(behaviour->publics());
-    
+
     //now that everything is settled we can link the private items
     prelink_visitor::prelink_list::iterator lit = plv.links.begin();
     prelink_visitor::prelink_list::iterator lnd = plv.links.end();
@@ -1806,23 +1807,23 @@ void base_xs_linker::behaveas_(xs_implement_behaviour& info)
 
         code_linker linker(link_ctx);
         lit->cde.visit(&linker);
-        
+
         linker.link(lit->bc);
       }
   }
-  
+
 void base_xs_linker::dsl_(dsl& info)
   {
     assert(false); //td:
   }
 
-//class_linker  
+//class_linker
 class_linker::class_linker(code_context& ctx):
   base_xs_linker(ctx),
   result_(null)
   {
   }
-  
+
 void class_linker::link(xs_class& info)
   {
     if (!info.super.empty())
@@ -1840,15 +1841,15 @@ void class_linker::link(xs_class& info)
       }
     else
       output_ = DynamicObject(new default_object);
-    
+
     result_           = new dynamic_class_schema(output_);
     class_            = DynamicClass( result_ );
     editable_output_  = result_;
     ctx_.this_type    = result_;
-    ctx_.this_        = variant(); 
-    
+    ctx_.this_        = variant();
+
     base_xs_linker::link( info );
-    
+
     ctx_.types_->add_type(info.name, class_);
   }
 
@@ -1858,24 +1859,24 @@ instance_linker::instance_linker(code_context& ctx, DynamicObject instance):
   instance_(instance)
   {
   }
-  
+
 void instance_linker::link(xs_instance& info)
   {
     output_          = instance_;
     editable_output_ = variant_cast<IEditableObject*>(instance_, null);
     ctx_.this_type   = instance_->get_type();
     ctx_.this_       = instance_;
-    
+
     base_xs_linker::link( info );
   }
-  
+
 //behaviour_linker
 behaviour_linker::behaviour_linker(code_context& ctx):
   ctx_(ctx),
   result_(null)
   {
   }
-  
+
 void behaviour_linker::link(xs_behaviour& info)
   {
     behaviour_schema* super = null;
@@ -1884,7 +1885,7 @@ void behaviour_linker::link(xs_behaviour& info)
         super = dynamic_cast<behaviour_schema*>(ctx_.types_->get_type(info.super));
         assert(super); //td: undeclared
       }
-    
+
     result_ = new behaviour_schema(super); //td: lost
     class_  = Schema(result_);
 
@@ -1898,47 +1899,47 @@ void prelink_visitor::property_(xs_property& info)
   {
     assert(editable_);
     decode_property prop(ctx_, info, output_);
-    
+
     if (!prop.get_code.empty())
       {
         pre_link pl;
         pl.bc  = prop.get_ref; assert(prop.get_ref);
-        pl.cde = prop.get_code; 
-        
+        pl.cde = prop.get_code;
+
         links.push_back(pl);
       }
-      
+
     if (!prop.set_code.empty())
       {
         pre_link pl;
         pl.bc  = prop.set_ref; assert(prop.set_ref);
-        pl.cde = prop.set_code; 
-        
+        pl.cde = prop.set_code;
+
         links.push_back(pl);
       }
-      
+
     editable_->add_item(info.name, prop.itm);
   }
-  
+
 void prelink_visitor::method_(xs_method& info)
   {
     decode_method meth(info, ctx_);
 
     pre_link pl;
     pl.bc   = meth.bc;
-    pl.cde  = meth.cde; 
+    pl.cde  = meth.cde;
     pl.args = meth.pl;
     links.push_back(pl);
 
     editable_->add_item(info.name, meth.itm);
   }
-  
+
 //name_collect_visitor
 void name_collect_visitor::property_(xs_property& info)
   {
     names.push_back(info.name);
   }
-  
+
 void name_collect_visitor::method_(xs_method& info)
   {
     names.push_back(info.name);

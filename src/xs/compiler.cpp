@@ -6,7 +6,7 @@ extern "C"
 {
   #include <xs/engine.h>
   #include <xs/grammar.h>
-}  
+}
 
 #include <fstream>
 
@@ -17,7 +17,7 @@ inline str wide2str(const std::wstring& w)
   {
     str result;
     result.assign(w.begin(), w.end());
-    
+
     return result;
   }
 
@@ -25,17 +25,17 @@ inline std::wstring str2wide(const str& s)
   {
     std::wstring result;
     result.assign(s.begin(), s.end());
-    
+
     return result;
   }
 
-//a list of rules of interest, note that this struct ought to be updated 
+//a list of rules of interest, note that this struct ought to be updated
 //everytime the grammar is changed, use the rule description as a guide
 enum xs_rules
   {
     rule_qualified_id   = 0,        //<Qualified ID> ::= Identifier <Member List>
     rule_member_list    = 1,        //<Member List> ::= <Member List> MemberName
-    rule_member_empty   = 2,        //<Member List> ::= 
+    rule_member_empty   = 2,        //<Member List> ::=
     rule_assign         = 15,       //<Expression> ::= <Conditional Exp> '=' <Expression>
     rule_plusequal      = 16,       //<Expression> ::= <Conditional Exp> '+=' <Expression>
     rule_minusequal     = 17,       //<Expression> ::= <Conditional Exp> '-=' <Expression>
@@ -73,7 +73,7 @@ enum xs_rules
     rule_post_dec       = 61,       //<Method> ::= --
     rule_array          = 64,       //<Array Literal> ::= '[' <Arg List Opt> ']'
     rule_func_call      = 67,       //<Primary> ::= Identifier '(' <Arg List Opt> ')'
-    rule_empty_args     = 70,       //<Arg List Opt> ::= 
+    rule_empty_args     = 70,       //<Arg List Opt> ::=
     rule_argument_list  = 71,       //<Arg List> ::= <Arg List> ',' <Argument>
     rule_named_argument = 73,       //<Argument> ::= Identifier '=' <Conditional Exp>
     rule_argument       = 74,       //<Argument> ::= <Conditional Exp>
@@ -108,7 +108,7 @@ enum xs_rules
     rule_for_opt        = 115,      //<For Iterator Opt> ::= <Expression>
     rule_for_cond       = 117,      //<For Condition Opt> ::= <Expression>
     rule_adjetive_list  = 123,      //<Adj List> ::= <Adj List> <Adjetive>
-    rule_plist_empty    = 130,      //<Arg Decl List Opt> ::= 
+    rule_plist_empty    = 130,      //<Arg Decl List Opt> ::=
     rule_plist_decl     = 131,      //<Arg Decl List> ::= <Arg Decl List> ',' <Argument Decl>
     rule_default_arg    = 133,      //<Argument Decl> ::= <Type> Identifier '=' <Expression>
     rule_arg            = 134,      //<Argument Decl> ::= <Type> Identifier
@@ -117,7 +117,7 @@ enum xs_rules
     rule_class_def_arg  = 138,      //<Class Argument Decl> ::= Identifier '=' <Primary Exp>
     rule_class_arg      = 139,      //<Class Argument Decl> ::= Identifier
     rule_class_args     = 140,      //<Class Arg List Opt> ::= '<' <Class Arg Decl List> '>'
-    rule_class_no_args  = 141,      //<Class Arg List Opt> ::= 
+    rule_class_no_args  = 141,      //<Class Arg List Opt> ::=
     rule_adj_property   = 142,      //<Construct> ::= <Adj List> <Property>
     rule_adj_method     = 143,      //<Construct> ::= <Adj List> <Method Decl>
     rule_instance       = 146,      //<Construct> ::= instance <Qualified ID> <Type Opt> <Construct Block>
@@ -157,7 +157,7 @@ enum xs_terminals
     terminal_true         = 79, //"true"
   };
 
-//parse tree visitors, will walk the parse tree and return a human usable 
+//parse tree visitors, will walk the parse tree and return a human usable
 //abstract syntax tree
 struct parsetree_visitor
   {
@@ -168,7 +168,7 @@ struct parsetree_visitor
           {
             if (token->ReductionRule < 0) //ignore terminals
               return;
-          
+
             //if a rule is ignored by the acting visitor lets traverse the cihldren
             int TokenCount = Grammar.RuleArray[token->ReductionRule].SymbolsCount;
             for(int i = 0; i < TokenCount; i++)
@@ -177,14 +177,14 @@ struct parsetree_visitor
               }
           }
       }
-      
-    str get_dsl(int index) 
+
+    str get_dsl(int index)
       {
         return dsl_text[index];
       }
-      
+
     std::vector<str> dsl_text;
-  };  
+  };
 
 //a base for visitors, allow binding of rules to local functions
 template <typename T>
@@ -196,21 +196,21 @@ struct visitor_base
     typedef std::pair<xs_rules, rule_handler> handler_pair;
 
     handler_map handlers_;
-    
+
     void register_rule(xs_rules rule, rule_handler handler)
       {
         handlers_.insert( handler_pair(rule, handler) );
       }
-      
+
     bool visit_rule(T* self, TokenStruct* token, parsetree_visitor* visitor)
       {
-        handler_map::iterator it = handlers_.find( static_cast<xs_rules>(token->ReductionRule) );
+        typename handler_map::iterator it = handlers_.find( static_cast<xs_rules>(token->ReductionRule) );
         if (it != handlers_.end())
           {
             (self->*(it->second))(token, visitor);
             return true;
           }
-          
+
         return false;
       }
   };
@@ -221,13 +221,13 @@ struct expression_;
 struct parameters_ : visitor_base<parameters_>
   {
     parameters_(expression_& _expr);
-  
+
     bool visit(TokenStruct* token, parsetree_visitor* visitor);
 
     //data
     expression_& expr;
     param_list   values;
-    int          param_count; 
+    int          param_count;
 
     //rule handlers
     void named_argument( TokenStruct* token, parsetree_visitor* visitor );
@@ -240,24 +240,24 @@ struct expression_ : visitor_base<expression_>
     expression_( expression& ctx );
 
     bool visit(TokenStruct* token, parsetree_visitor* visitor);
-    
+
     //data
     expression& ctx_;
-    
+
     void register_rules();
 
     void parameter_added()
       {
         ctx_.push_operator( op_parameter );
       }
-      
+
     //actual handlers
     template <operator_type op>
     void binary_operator( TokenStruct* token, parsetree_visitor* visitor )
       {
         visitor->visit( token->Tokens[0], *this );
         visitor->visit( token->Tokens[2], *this );
-        
+
         ctx_.push_operator( op );
       }
 
@@ -267,27 +267,27 @@ struct expression_ : visitor_base<expression_>
         visitor->visit( token->Tokens[1], *this );
         ctx_.push_operator( op );
       }
-      
+
     template <operator_type op>
     void post_unary_operator( TokenStruct* token, parsetree_visitor* visitor )
       {
         ctx_.push_operator( op );
       };
-    
+
     void index( TokenStruct* token, parsetree_visitor* visitor );
     void function_call( TokenStruct* token, parsetree_visitor* visitor );
     void member_call( TokenStruct* token, parsetree_visitor* visitor );
     void build_array( TokenStruct* token, parsetree_visitor* visitor );
     void to_do( TokenStruct* token, parsetree_visitor* visitor );
   };
-  
+
 //code
 struct code_ : visitor_base<code_>
   {
     code_( code& output );
-    
+
     bool visit(TokenStruct* token, parsetree_visitor* visitor);
-      
+
     void code_block( TokenStruct* token, parsetree_visitor* visitor );
     void statement_if( TokenStruct* token, parsetree_visitor* visitor );
     void statement_for( TokenStruct* token, parsetree_visitor* visitor );
@@ -310,44 +310,44 @@ struct code_ : visitor_base<code_>
 struct if_ : visitor_base<if_>
   {
     if_(stmt_if& output);
-      
+
     bool visit(TokenStruct* token, parsetree_visitor* visitor);
-    
+
     void without_else( TokenStruct* token, parsetree_visitor* visitor );
     void wih_else( TokenStruct* token, parsetree_visitor* visitor );
 
     stmt_if& output_;
   };
-  
+
 struct for_ : visitor_base<for_>
   {
     for_(stmt_for& output);
-      
+
     bool visit(TokenStruct* token, parsetree_visitor* visitor);
-    
+
     void init_var( TokenStruct* token, parsetree_visitor* visitor );
 
     stmt_for& output_;
   };
-  
+
 struct iterfor_ : visitor_base<iterfor_>
   {
     iterfor_(stmt_iter_for& output);
-      
+
     bool visit(TokenStruct* token, parsetree_visitor* visitor);
-    
+
     stmt_iter_for& output_;
   };
-  
+
 struct while_ : visitor_base<while_>
   {
     while_(stmt_while& output);
-      
+
     bool visit(TokenStruct* token, parsetree_visitor* visitor);
-    
+
     stmt_while& output_;
   };
-  
+
 struct variable_ : visitor_base<variable_>
   {
     variable_(stmt_variable& output):
@@ -356,24 +356,24 @@ struct variable_ : visitor_base<variable_>
         register_rule(rule_varname,  &variable_::var_no_init );
         register_rule(rule_varinit,  &variable_::var_init );
       }
-      
+
     bool visit(TokenStruct* token, parsetree_visitor* visitor);
     void var_no_init( TokenStruct* token, parsetree_visitor* visitor );
     void var_init( TokenStruct* token, parsetree_visitor* visitor );
-    
+
     stmt_variable& output_;
   };
-  
+
 //parameters_
-parameters_::parameters_(expression_& _expr) : 
-  expr(_expr), 
-  param_count(0) 
+parameters_::parameters_(expression_& _expr) :
+  expr(_expr),
+  param_count(0)
   {
     register_rule( rule_empty_args,     &parameters_::empty_args );
     register_rule( rule_argument_list,  &parameters_::argument_list );
     register_rule( rule_named_argument, &parameters_::named_argument );
   };
-  
+
 bool parameters_::visit(TokenStruct* token, parsetree_visitor* visitor)
   {
     if (!visit_rule(this, token, visitor))
@@ -383,21 +383,21 @@ bool parameters_::visit(TokenStruct* token, parsetree_visitor* visitor)
         visitor->visit( token, expr);
         expr.parameter_added();
       }
-      
+
     return true;
-  };  
+  };
 
 void parameters_::named_argument( TokenStruct* token, parsetree_visitor* visitor )
   {
     //rule_named_argument = 73,       //<Argument> ::= Identifier '=' <Expression>
     TokenStruct* tpm = token->Tokens[0];        assert( tpm->ReductionRule < 0 );
     str param_name = wide2str( tpm->Data );     assert(!param_name.empty());
-    
+
     expression  value;
     expression_ value_(value);
     visitor->visit( token->Tokens[2], value_ );
     values.add(param_name, value);
-    
+
     visitor->visit( token->Tokens[2], expr );
     param_count++;
   }
@@ -407,16 +407,16 @@ void parameters_::argument_list( TokenStruct* token, parsetree_visitor* visitor 
     visit( token->Tokens[0], visitor );
     visit( token->Tokens[2], visitor );
   }
-  
+
 void parameters_::empty_args( TokenStruct* token, parsetree_visitor* visitor )
   {
     param_count = 0;
   }
-  
+
 //expression_
 
-expression_::expression_( expression& ctx ) 
-  : ctx_(ctx) 
+expression_::expression_( expression& ctx )
+  : ctx_(ctx)
   {
     register_rule(rule_assign,      &expression_::binary_operator<op_assign>);
     register_rule(rule_plusequal,   &expression_::binary_operator<op_plus_equal>);
@@ -461,15 +461,15 @@ bool expression_::visit(TokenStruct* token, parsetree_visitor* visitor)
     if (token->ReductionRule < 0 )
       {
         assert(token->Data);
-        
+
         variant operand;
         std::wstring val(token->Data);
         switch (token->Symbol)
           {
             case terminal_char_string:
-            case terminal_string:       
+            case terminal_string:
               {
-                str res = wide2str( val ); 
+                str res = wide2str( val );
                 res.erase(0, 1);
                 res.erase(res.size() - 1, 1);
                 operand = res;
@@ -478,30 +478,30 @@ bool expression_::visit(TokenStruct* token, parsetree_visitor* visitor)
             case terminal_int:          operand = boost::lexical_cast<int>( val ); break;
             case terminal_false:        operand = false; break;
             case terminal_hex:          operand = boost::lexical_cast<int>( val ); break;
-            case terminal_identifier:   
+            case terminal_identifier:
               {
-                ctx_.push_identifier(wide2str( val )); 
+                ctx_.push_identifier(wide2str( val ));
                 return true;
               }
-            case terminal_null:         break; //pass a null    
+            case terminal_null:         break; //pass a null
             case terminal_float:        operand = boost::lexical_cast<float>( val ); break;
             case terminal_true:         operand = true; break;
             case terminal_member_name:
               {
                 str member = wide2str( val );
                 member.erase(0, 1);
-                ctx_.push_identifier(member); 
-                ctx_.push_operator(op_dot); 
+                ctx_.push_identifier(member);
+                ctx_.push_operator(op_dot);
                 return true;
               }
 
             default: return true; //just ingnore?
           }
-          
+
         ctx_.push_operand(operand);
         return true;
       }
-      
+
     return visit_rule(this, token, visitor);
   }
 
@@ -510,20 +510,20 @@ void expression_::index( TokenStruct* token, parsetree_visitor* visitor )
     visitor->visit( token->Tokens[1], *this );
     ctx_.push_operator( op_index );
   }
-  
+
 void expression_::function_call( TokenStruct* token, parsetree_visitor* visitor )
   {
     //grab the parameters
     parameters_ args(*this);
     visitor->visit(token->Tokens[2], args);
-    
+
     //save info on the call
     //td: named parameters
     visitor->visit( token->Tokens[0], *this ); //push our identifier
     ctx_.push_operand( args.param_count );
     ctx_.push_operator( op_func_call );
   }
-  
+
 void expression_::member_call( TokenStruct* token, parsetree_visitor* visitor )
   {
     visitor->visit( token->Tokens[0], *this ); //identifier
@@ -531,42 +531,42 @@ void expression_::member_call( TokenStruct* token, parsetree_visitor* visitor )
     //grab the parameters
     parameters_ args(*this);
     visitor->visit(token->Tokens[2], args);
-    
+
     //save info on the call
     //td: named parameters
     ctx_.push_operand( args.param_count );
     ctx_.push_operator( op_call );
   }
-  
+
 void expression_::build_array( TokenStruct* token, parsetree_visitor* visitor )
   {
     parameters_ args(*this);
     visitor->visit(token->Tokens[1], args);
-    
+
     ctx_.push_operand( args.param_count );
     ctx_.push_operator( op_array );
   }
-  
+
 void expression_::to_do( TokenStruct* token, parsetree_visitor* visitor )
   {
     assert( false );
   }
-  
+
 //qualified_id_
 struct qualified_id_ : visitor_base<qualified_id_>
   {
-    qualified_id_(std::vector<str>& output) : output_(output) 
+    qualified_id_(std::vector<str>& output) : output_(output)
       {
         register_rule(rule_qualified_id, &qualified_id_::main );
         register_rule(rule_member_list,  &qualified_id_::member_list );
         register_rule(rule_member_empty, &qualified_id_::member_list_empty );
       }
-    
+
     bool visit(TokenStruct* token, parsetree_visitor* visitor)
       {
         return visit_rule(this, token, visitor);
       }
-    
+
     std::vector<str>& output_;
 
     void main( TokenStruct* token, parsetree_visitor* visitor )
@@ -590,12 +590,12 @@ struct qualified_id_ : visitor_base<qualified_id_>
 
 struct type_args_ : visitor_base<type_args_>
   {
-    type_args_(std::vector<xs_const>& output) : output_(output) 
+    type_args_(std::vector<xs_const>& output) : output_(output)
       {
         register_rule( rule_type_args,      &type_args_::argument_list );
         register_rule( rule_type_arg_named, &type_args_::named_argument );
       }
-      
+
     bool visit(TokenStruct* token, parsetree_visitor* visitor)
       {
         if (!visit_rule(this, token, visitor))
@@ -606,7 +606,7 @@ struct type_args_ : visitor_base<type_args_>
 
             output_.push_back( result );
           }
-          
+
         return true;
       }
 
@@ -619,26 +619,26 @@ struct type_args_ : visitor_base<type_args_>
     void named_argument( TokenStruct* token, parsetree_visitor* visitor )
       {
         xs_const result;
-      
-        result.name = wide2str( token->Tokens[0]->Data ); 
-        
+
+        result.name = wide2str( token->Tokens[0]->Data );
+
         expression_ expr(result.value);
         visitor->visit( token->Tokens[2], expr);
-        
+
         output_.push_back( result );
       }
-      
+
     std::vector<xs_const>& output_;
   };
-  
+
 struct type_ : visitor_base<type_>
   {
-    type_(xs_type& output) : output_(output) 
+    type_(xs_type& output) : output_(output)
       {
         register_rule(rule_type_params, &type_::parametric );
         register_rule(rule_type,        &type_::simple );
       }
-      
+
     bool visit(TokenStruct* token, parsetree_visitor* visitor)
       {
         if (!visit_rule(this, token, visitor))
@@ -648,11 +648,11 @@ struct type_ : visitor_base<type_>
           }
         return true;
       }
-    
+
     void parametric( TokenStruct* token, parsetree_visitor* visitor )
       {
         output_.name = wide2str(token->Tokens[0]->Data);
-        
+
         type_args_ args(output_.args);
         visitor->visit(token->Tokens[2], args);
       }
@@ -664,9 +664,9 @@ struct type_ : visitor_base<type_>
 
     xs_type& output_;
   };
-  
+
 //code_
-code_::code_( code& output ) : 
+code_::code_( code& output ) :
   output_(output)
   {
     register_rule( rule_block,         &code_::code_block );
@@ -686,23 +686,23 @@ code_::code_( code& output ) :
     register_rule( rule_parameter_dsl, &code_::parameter_dsl );
     register_rule( rule_simple_dsl,    &code_::simple_dsl );
   }
-    
+
 bool code_::visit(TokenStruct* token, parsetree_visitor* visitor)
   {
     return visit_rule(this, token, visitor);
   }
-  
+
 void code_::code_block( TokenStruct* token, parsetree_visitor* visitor )
   {
     visitor->visit(token->Tokens[1], *this);
   }
-  
+
 void code_::statement_if( TokenStruct* token, parsetree_visitor* visitor )
   {
     stmt_if si;
     if_     v(si);
     visitor->visit(token, v);
-    
+
     output_.add_statement( si );
   }
 
@@ -711,7 +711,7 @@ void code_::statement_for( TokenStruct* token, parsetree_visitor* visitor )
     stmt_for sf;
     for_     f(sf);
     visitor->visit(token, f);
-    
+
     output_.add_statement( sf );
   }
 
@@ -720,7 +720,7 @@ void code_::statement_iter_for( TokenStruct* token, parsetree_visitor* visitor )
     stmt_iter_for sif;
     iterfor_      iif(sif);
     visitor->visit(token, iif);
-    
+
     output_.add_statement( sif );
   }
 
@@ -729,7 +729,7 @@ void code_::statement_while( TokenStruct* token, parsetree_visitor* visitor )
     stmt_while sw;
     while_     w(sw);
     visitor->visit(token, w);
-    
+
     output_.add_statement( sw );
   }
 
@@ -737,12 +737,12 @@ void code_::statement_switch( TokenStruct* token, parsetree_visitor* visitor )
   {
     assert( false );
   }
-  
+
 void code_::statement_dispatch( TokenStruct* token, parsetree_visitor* visitor )
   {
     //<Statement> ::= dispatch <Qualified ID> '(' <Arg List Opt> ')' ';'
     stmt_dispatch sd;
-    
+
     qualified_id_ qi(sd.target);
     visitor->visit(token->Tokens[1], qi);
 
@@ -779,7 +779,7 @@ void code_::statement_expression( TokenStruct* token, parsetree_visitor* visitor
     stmt_expression se;
     expression_ expr(se.expr);
     visitor->visit(token, expr);
-    
+
     output_.add_statement( se );
   }
 
@@ -788,7 +788,7 @@ void code_::declare_variable( TokenStruct* token, parsetree_visitor* visitor )
     stmt_variable sv;
     variable_     v(sv);
     visitor->visit(token, v);
-    
+
     output_.add_statement( sv );
   }
 
@@ -798,25 +798,25 @@ void code_::complete_dsl(TokenStruct* token, parsetree_visitor* visitor)
     result.name = wide2str(token->Tokens[0]->Data);
     result.name.erase(0, 2);
     result.id   = wide2str(token->Tokens[1]->Data);
-   
+
     expression_ arg_exp(result.param_expr);
     parameters_ args(arg_exp);
     visitor->visit(token->Tokens[3], args);
     result.param_count = args.param_count;
 
     int text_index = boost::lexical_cast<int>( token->Tokens[6]->Data );
-    
+
     result.text = visitor->get_dsl(text_index);
 
     output_.add_statement( result );
   }
-  
+
 void code_::parameter_dsl( TokenStruct* token, parsetree_visitor* visitor )
   {
     dsl result;
     result.name = wide2str(token->Tokens[0]->Data);
     result.name.erase(0, 2);
-   
+
     expression_ arg_exp(result.param_expr);
     parameters_ args(arg_exp);
     visitor->visit(token->Tokens[2], args);
@@ -825,12 +825,12 @@ void code_::parameter_dsl( TokenStruct* token, parsetree_visitor* visitor )
     result.param_count = args.param_count;
 
     int text_index = boost::lexical_cast<int>( token->Tokens[5]->Data );
-    
+
     result.text = visitor->get_dsl(text_index);
 
     output_.add_statement( result );
   }
-  
+
 void code_::simple_dsl( TokenStruct* token, parsetree_visitor* visitor )
   {
     dsl result;
@@ -844,13 +844,13 @@ void code_::simple_dsl( TokenStruct* token, parsetree_visitor* visitor )
   }
 
 //if_
-if_::if_(stmt_if& output) : 
+if_::if_(stmt_if& output) :
   output_(output)
   {
     register_rule( rule_if,     &if_::without_else );
     register_rule( rule_ifelse, &if_::wih_else );
   }
-  
+
 bool if_::visit(TokenStruct* token, parsetree_visitor* visitor)
   {
     return visit_rule(this, token, visitor);
@@ -860,7 +860,7 @@ void if_::without_else( TokenStruct* token, parsetree_visitor* visitor )
   {
     expression_ expr(output_.expr);
     visitor->visit(token->Tokens[2], expr);
-    
+
     code_ if_code(output_.if_code);
     visitor->visit(token->Tokens[4], if_code);
   }
@@ -869,7 +869,7 @@ void if_::wih_else( TokenStruct* token, parsetree_visitor* visitor )
   {
     expression_ expr(output_.expr);
     visitor->visit(token->Tokens[2], expr);
-    
+
     code_ if_code(output_.if_code);
     visitor->visit(token->Tokens[4], if_code);
 
@@ -878,12 +878,12 @@ void if_::wih_else( TokenStruct* token, parsetree_visitor* visitor )
   }
 
 //for_
-for_::for_(stmt_for& output): 
-  output_(output) 
+for_::for_(stmt_for& output):
+  output_(output)
   {
     register_rule(rule_vardecl, &for_::init_var );
   }
-      
+
 bool for_::visit(TokenStruct* token, parsetree_visitor* visitor)
   {
     if (!visit_rule(this, token->Tokens[2], visitor))
@@ -900,26 +900,26 @@ bool for_::visit(TokenStruct* token, parsetree_visitor* visitor)
 
     code_ for_code(output_.for_code);
     visitor->visit(token->Tokens[8], for_code);
-    
+
     return true;
   }
-    
+
 void for_::init_var( TokenStruct* token, parsetree_visitor* visitor )
   {
     variable_     v(output_.init_variable);
     visitor->visit(token, v);
   }
-  
+
 //iterfor_
 iterfor_::iterfor_(stmt_iter_for& output):
   output_(output)
   {
   }
-  
+
 bool iterfor_::visit(TokenStruct* token, parsetree_visitor* visitor)
   {
     //for '(' <Type> Identifier in <Expression> ')' <Statement>
-    
+
     type_ type(output_.type);
     visitor->visit(token->Tokens[2], type);
     output_.id   = wide2str( token->Tokens[3]->Data );
@@ -937,7 +937,7 @@ while_::while_(stmt_while& output):
   output_(output)
   {
   }
-  
+
 bool while_::visit(TokenStruct* token, parsetree_visitor* visitor)
   {
     expression_ expr(output_.expr);
@@ -947,9 +947,9 @@ bool while_::visit(TokenStruct* token, parsetree_visitor* visitor)
     visitor->visit(token->Tokens[4], while_code);
     return true;
   }
-  
+
 //variable_
-bool variable_::visit(TokenStruct* token, parsetree_visitor* visitor)  
+bool variable_::visit(TokenStruct* token, parsetree_visitor* visitor)
   {
     output_.type = wide2str( token->Tokens[0]->Tokens[0]->Data );
 
@@ -960,22 +960,22 @@ void variable_::var_no_init( TokenStruct* token, parsetree_visitor* visitor )
   {
     output_.id = wide2str( token->Tokens[0]->Data );
   }
-  
+
 void variable_::var_init( TokenStruct* token, parsetree_visitor* visitor )
   {
     output_.id = wide2str( token->Tokens[0]->Data );
-    
+
     expression_ expr(output_.value);
     visitor->visit(token->Tokens[2], expr);
   }
-  
-//high level visitors  
+
+//high level visitors
 struct param_decl_ : visitor_base<param_decl_>
   {
-    param_decl_(param_list_decl& output) : output_(output) 
+    param_decl_(param_list_decl& output) : output_(output)
       {
       }
-      
+
     bool visit(TokenStruct* token, parsetree_visitor* visitor)
       {
         switch (token->ReductionRule)
@@ -992,21 +992,21 @@ struct param_decl_ : visitor_base<param_decl_>
                 param_decl pd;
                 pd.type = wide2str(token->Tokens[0]->Data);
                 pd.name = wide2str(token->Tokens[1]->Data);
-                
+
                 expression_ dv(pd.default_value);
                 visitor->visit(token->Tokens[3], dv);
                 output_.push_back( pd);
                 break;
-              }    
+              }
             case rule_arg:
               {
                 param_decl pd;
                 pd.type = wide2str(token->Tokens[0]->Tokens[0]->Data);
                 pd.name = wide2str(token->Tokens[1]->Data);
-                
+
                 output_.push_back( pd);
                 break;
-              }      
+              }
             default:
               {
                 //ought to be a identifier
@@ -1015,11 +1015,11 @@ struct param_decl_ : visitor_base<param_decl_>
                 output_.push_back( pd);
               }
           }
-        return true;        
+        return true;
       }
-      
+
     param_list_decl& output_;
-  };  
+  };
 
 struct opt_type_ : visitor_base<opt_type_>
   {
@@ -1027,7 +1027,7 @@ struct opt_type_ : visitor_base<opt_type_>
       {
         register_rule(rule_typed, &opt_type_::main );
       }
-    
+
     bool visit(TokenStruct* token, parsetree_visitor* visitor)
       {
         return visit_rule(this, token, visitor);
@@ -1037,13 +1037,13 @@ struct opt_type_ : visitor_base<opt_type_>
       {
         type_ = wide2str(token->Tokens[1]->Tokens[0]->Data);
       }
-      
+
     str type_;
   };
 
 struct property_ : visitor_base<property_>
   {
-    property_(xs_property& output) : output_(output) 
+    property_(xs_property& output) : output_(output)
       {
         register_rule(rule_property,        &property_::main );
         register_rule(rule_block,           &property_::set_only );
@@ -1067,7 +1067,7 @@ struct property_ : visitor_base<property_>
         opt_type_ tp;
         visitor->visit(token->Tokens[2], tp);
         output_.type = tp.type_;
-        
+
         visitor->visit(token->Tokens[3], *this);
       }
 
@@ -1076,7 +1076,7 @@ struct property_ : visitor_base<property_>
         code_ cd(output_.set);
         visitor->visit(token, cd);
       }
-      
+
     void get_set( TokenStruct* token, parsetree_visitor* visitor )
       {
         code_ cd_get(output_.get);
@@ -1084,19 +1084,19 @@ struct property_ : visitor_base<property_>
         visitor->visit(token->Tokens[1], cd_get);
         visitor->visit(token->Tokens[2], cd_set);
       }
-      
+
     void get_only( TokenStruct* token, parsetree_visitor* visitor )
       {
         code_ cd_get(output_.get);
         visitor->visit(token->Tokens[1], cd_get);
       }
-      
+
     void value( TokenStruct* token, parsetree_visitor* visitor )
       {
         expression_ e(output_.value);
         visitor->visit(token->Tokens[1], e);
       }
-      
+
     void value_set( TokenStruct* token, parsetree_visitor* visitor )
       {
         expression_ e(output_.value);
@@ -1106,11 +1106,11 @@ struct property_ : visitor_base<property_>
         visitor->visit(token->Tokens[2], set);
       }
 
-  };  
+  };
 
 struct method_ : visitor_base<method_>
   {
-    method_(xs_method& output) : output_(output) 
+    method_(xs_method& output) : output_(output)
       {
         register_rule(rule_method, &method_::main );
       }
@@ -1123,7 +1123,7 @@ struct method_ : visitor_base<method_>
     void main( TokenStruct* token, parsetree_visitor* visitor )
       {
         output_.name = wide2str(token->Tokens[1]->Data);
-        
+
         param_decl_ pd(output_.args);
         visitor->visit(token->Tokens[3], pd);
 
@@ -1134,10 +1134,10 @@ struct method_ : visitor_base<method_>
         code_ cd(output_.cde);
         visitor->visit(token->Tokens[6], cd);
       }
-      
+
     xs_method& output_;
   };
-  
+
 struct adjetive_ : visitor_base<adjetive_>
   {
     adjetive_() : adjetives(0) {}
@@ -1148,28 +1148,28 @@ struct adjetive_ : visitor_base<adjetive_>
           {
             switch (token->Symbol)
               {
-                case terminal_public   : adjetives |= adj_public; break; 
-                case terminal_private  : adjetives |= adj_private; break; 
-                case terminal_delegate : adjetives |= adj_delegate; break; 
-                default: assert(false); 
+                case terminal_public   : adjetives |= adj_public; break;
+                case terminal_private  : adjetives |= adj_private; break;
+                case terminal_delegate : adjetives |= adj_delegate; break;
+                default: assert(false);
               }
           }
-          
+
         return false;
       }
-      
+
     int adjetives;
   };
-  
+
 struct class_args_ : visitor_base<class_args_>
   {
-    class_args_(std::vector<xs_const>& output) : output_(output) 
+    class_args_(std::vector<xs_const>& output) : output_(output)
       {
         register_rule( rule_class_no_args, &class_args_::no_args );
         register_rule( rule_class_plist,   &class_args_::argument_list );
         register_rule( rule_class_def_arg, &class_args_::named_argument );
       }
-      
+
     bool visit(TokenStruct* token, parsetree_visitor* visitor)
       {
         if (!visit_rule(this, token, visitor))
@@ -1180,7 +1180,7 @@ struct class_args_ : visitor_base<class_args_>
 
             output_.push_back( result );
           }
-          
+
         return true;
       }
 
@@ -1197,21 +1197,21 @@ struct class_args_ : visitor_base<class_args_>
     void named_argument( TokenStruct* token, parsetree_visitor* visitor )
       {
         xs_const result;
-      
-        result.name = wide2str( token->Tokens[0]->Data ); 
-        
+
+        result.name = wide2str( token->Tokens[0]->Data );
+
         expression_ expr(result.value);
         visitor->visit( token->Tokens[2], expr);
-        
+
         output_.push_back( result );
       }
-      
+
     std::vector<xs_const>& output_;
   };
 
 struct xs_ : visitor_base<xs_>
   {
-    xs_(xs_container& output) : output_(output) 
+    xs_(xs_container& output) : output_(output)
       {
         register_rule(rule_adj_property,    &xs_::adj_property );
         register_rule(rule_adj_method,      &xs_::adj_method );
@@ -1229,12 +1229,12 @@ struct xs_ : visitor_base<xs_>
         register_rule( rule_behaveas,       &xs_::behaveas );
         register_rule( rule_behaveas_empty, &xs_::behaveas_simple );
       }
-    
+
     bool visit(TokenStruct* token, parsetree_visitor* visitor)
       {
         return visit_rule(this, token, visitor);
       }
-      
+
     void adj_property( TokenStruct* token, parsetree_visitor* visitor )
       {
         xs_property xp;
@@ -1242,13 +1242,13 @@ struct xs_ : visitor_base<xs_>
         adjetive_ adj;
         visitor->visit(token->Tokens[0], adj);
         xp.adjetives = adj.adjetives;
-                        
+
         property_   p(xp);
         visitor->visit(token->Tokens[1], p);
-        
+
         output_.add( xp );
       }
-      
+
     void adj_method( TokenStruct* token, parsetree_visitor* visitor )
       {
         xs_method xm;
@@ -1258,16 +1258,16 @@ struct xs_ : visitor_base<xs_>
 
         method_   m(xm);
         visitor->visit(token->Tokens[1], m);
-        
+
         output_.add( xm );
       }
-      
+
     void instance( TokenStruct* token, parsetree_visitor* visitor )
       {
         xs_instance   xi;
         qualified_id_ qi(xi.id);
         visitor->visit(token->Tokens[1], qi);
-        
+
         opt_type_ tp;
         visitor->visit(token->Tokens[2], tp);
         xi.class_name = tp.type_;
@@ -1277,7 +1277,7 @@ struct xs_ : visitor_base<xs_>
 
         output_.add( xi );
       }
-      
+
     void class_( TokenStruct* token, parsetree_visitor* visitor )
       {
         xs_class xc;
@@ -1285,17 +1285,17 @@ struct xs_ : visitor_base<xs_>
 
         class_args_ ca(xc.args);
         visitor->visit(token->Tokens[2], ca);
-        
+
         opt_type_ tp;
         visitor->visit(token->Tokens[3], tp);
         xc.super = tp.type_;
-                
+
         xs_ c(xc);
         visitor->visit(token->Tokens[4], c);
 
         output_.add( xc );
       }
-      
+
     void behaviour_( TokenStruct* token, parsetree_visitor* visitor )
       {
         xs_behaviour xb;
@@ -1310,7 +1310,7 @@ struct xs_ : visitor_base<xs_>
 
         output_.add( xb );
       }
-      
+
     void event_( TokenStruct* token, parsetree_visitor* visitor )
       {
         xs_event xe;
@@ -1325,18 +1325,18 @@ struct xs_ : visitor_base<xs_>
 
         output_.add( xe );
       }
-      
+
     void const_( TokenStruct* token, parsetree_visitor* visitor )
       {
         xs_const xc;
         xc.name = wide2str(token->Tokens[1]->Data);
-        
+
         expression_ ce(xc.value);
         visitor->visit(token->Tokens[3], ce);
 
         output_.add( xc );
       }
-      
+
     void event_decl( TokenStruct* token, parsetree_visitor* visitor )
       {
         xs_event_decl xe;
@@ -1347,39 +1347,39 @@ struct xs_ : visitor_base<xs_>
 
         output_.add( xe );
       }
-      
+
     void add_property( TokenStruct* token, parsetree_visitor* visitor )
       {
         xs_property xp;
         property_   p(xp);
-        visitor->visit(token, p); 
-        
+        visitor->visit(token, p);
+
         output_.add( xp );
       }
-      
+
     void add_method( TokenStruct* token, parsetree_visitor* visitor )
       {
         xs_method xm;
         method_   m(xm);
-        visitor->visit(token, m); 
-        
+        visitor->visit(token, m);
+
         output_.add( xm );
       }
-      
+
     void complete_dsl( TokenStruct* token, parsetree_visitor* visitor )
       {
         dsl result;
         result.name = wide2str(token->Tokens[0]->Data);
         result.name.erase(0, 2);
         result.id   = wide2str(token->Tokens[1]->Data);
-       
+
         expression_ arg_exp(result.param_expr);
         parameters_ args(arg_exp);
         visitor->visit(token->Tokens[3], args);
         result.param_count = args.param_count;
 
         int text_index = boost::lexical_cast<int>( token->Tokens[6]->Data );
-        
+
         result.text = visitor->get_dsl(text_index);
 
         output_.add( result );
@@ -1390,14 +1390,14 @@ struct xs_ : visitor_base<xs_>
         dsl result;
         result.name = wide2str(token->Tokens[0]->Data);
         result.name.erase(0, 2);
-       
+
         expression_ arg_exp(result.param_expr);
         parameters_ args(arg_exp);
         visitor->visit(token->Tokens[2], args);
         result.param_count = args.param_count;
 
         int text_index = boost::lexical_cast<int>( token->Tokens[5]->Data );
-        
+
         result.text = visitor->get_dsl(text_index);
 
         output_.add( result );
@@ -1418,7 +1418,7 @@ struct xs_ : visitor_base<xs_>
     void behaveas_simple( TokenStruct* token, parsetree_visitor* visitor )
       {
         xs_implement_behaviour result;
-        
+
         result.name = wide2str(token->Tokens[2]->Data);
 
         output_.add( result );
@@ -1427,7 +1427,7 @@ struct xs_ : visitor_base<xs_>
     void behaveas( TokenStruct* token, parsetree_visitor* visitor )
       {
         xs_implement_behaviour result;
-        
+
         result.name = wide2str(token->Tokens[2]->Data);
 
         code_ cde(result.cde);
@@ -1450,7 +1450,7 @@ xs_compiler::xs_compiler(std::vector<str>& dsls):
   {
     init_grammar();
   }
-  
+
 bool xs_compiler::compile_expression(const str& expr, expression& result)
   {
     TokenStruct* root;
@@ -1458,21 +1458,21 @@ bool xs_compiler::compile_expression(const str& expr, expression& result)
     bool         success      = true;
     int          parse_result = Parse((wchar_t*)buf.c_str(), buf.size(), 1, 0, &root);
 
-    if (parse_result == PARSEACCEPT) 
+    if (parse_result == PARSEACCEPT)
       {
         success = true;
         parsetree_visitor  v;
         expression_ ev(result);
         v.visit(root, ev);
       }
-    
+
     //cleanup
     DeleteTokens(root);
     free(root);
-    
+
     return success;
   }
-  
+
 bool xs_compiler::compile_code(const str& code_str, code& result)
   {
     parsetree_visitor v;
@@ -1483,7 +1483,7 @@ bool xs_compiler::compile_code(const str& code_str, code& result)
     bool         success      = false;
     int          parse_result = Parse((wchar_t*)buf.c_str(), buf.size(), 1, 0, &root);
 
-    if (parse_result == PARSEACCEPT) 
+    if (parse_result == PARSEACCEPT)
       {
         success = true;
         code_ cd_(result);
@@ -1493,13 +1493,13 @@ bool xs_compiler::compile_code(const str& code_str, code& result)
       {
         assert(false); //td: did I mention error handling?
       }
-    
+
     //cleanup
     DeleteTokens(root);
-    
+
     return success;
   }
-  
+
 bool xs_compiler::compile_xs(const str& code_str, xs_container& result)
   {
     parsetree_visitor v;
@@ -1510,16 +1510,16 @@ bool xs_compiler::compile_xs(const str& code_str, xs_container& result)
     bool         success      = false;
     int          parse_result = Parse((wchar_t*)buf.c_str(), buf.size(), 1, 0, &root);
 
-    if (parse_result == PARSEACCEPT) 
+    if (parse_result == PARSEACCEPT)
       {
         success = true;
         xs_ xs(result);
         v.visit(root, xs);
       }
-    
+
     //cleanup
     DeleteTokens(root);
-    
+
     return success;
   }
 
@@ -1527,7 +1527,7 @@ bool xs_compiler::compile_xs_file(const str& filename, xs_container& result)
   {
     return compile_xs(file2str(filename), result);
   }
-  
+
 void xs_compiler::init_grammar()
   {
     Grammar.CaseSensitive = False;
@@ -1552,20 +1552,20 @@ str xs_compiler::process_dsl(const str& src, std::vector<str>& dsl_texts)
     for(; it != nd; it++)
       {
         size_t curr = 0;
-        str    dsl  = *it; 
+        str    dsl  = *it;
         while(true)
           {
             curr = result.find(dsl, curr);
             if (curr == str::npos)
               break;
-            
+
             size_t next_char = curr + dsl.size();
             if (next_char < result.size() && isalpha(result[next_char]) )
               {
                 curr = next_char;
                 continue; //just part of a word
               }
-              
+
             //make sure this is not an accidental use of the keywords
             bool   is_dsl      = false;
             bool   not_dsl     = false;
@@ -1578,17 +1578,17 @@ str xs_compiler::process_dsl(const str& src, std::vector<str>& dsl_texts)
               {
                 switch (result[search_pos])
                   {
-                    case ';' : 
+                    case ';' :
                       {
                         if (brace_count == 0)
                           not_dsl = true;
-                        
-                        break; 
+
+                        break;
                       }
 
-                    case '(' :  pcount++; break; 
-                    case ')' :  pcount--; break; 
-                    
+                    case '(' :  pcount++; break;
+                    case ')' :  pcount--; break;
+
                     case '{':
                       {
                         if (brace_count == 0)
@@ -1601,7 +1601,7 @@ str xs_compiler::process_dsl(const str& src, std::vector<str>& dsl_texts)
                                 brace_start = search_pos;
                               }
                           }
-                          
+
                         brace_count++;
                         break;
 
@@ -1619,17 +1619,17 @@ str xs_compiler::process_dsl(const str& src, std::vector<str>& dsl_texts)
                           else
                             {
                               not_dsl = true; //td: there is actually an error here
-                              is_dsl  = false; 
+                              is_dsl  = false;
                             }
                           break;
                         }
                       }
                   }
-                  
+
                 search_pos++;
               }
-            
-            size_t to_advance = dsl.size();  
+
+            size_t to_advance = dsl.size();
             if (is_dsl)
               {
                 //do the deed, all this dressing happens so the grammar doesn't do wacko.
@@ -1637,34 +1637,34 @@ str xs_compiler::process_dsl(const str& src, std::vector<str>& dsl_texts)
                 str dsl_text(result.begin() + brace_start + 1, result.begin() + brace_end - 1);
                 size_t text_idx = dsl_texts.size();
                 dsl_texts.push_back( dsl_text );
-                
+
                 result.erase(brace_start, brace_end - brace_start + 1);
-                
+
                 //leave a note saying which text this is
-                result.insert(brace_start, "@" + boost::lexical_cast<str>(static_cast<int>(text_idx))); 
-                
+                result.insert(brace_start, "@" + boost::lexical_cast<str>(static_cast<int>(text_idx)));
+
                 //and mark the block as a dsl
                 result.insert(curr, "@@");
-                
+
                 to_advance += 2;
               }
-              
+
             curr += to_advance;
           }
       }
-      
+
     return result;
   }
-  
+
 str xs_compiler::file2str(const str& filename)
   {
     std::ifstream ifs(filename.c_str());
-    if (!ifs) 
+    if (!ifs)
       return ""; //td: error
-    
+
    // Read the whole file into a string
    std::stringstream ss;
-   ss << ifs.rdbuf();  
-   
+   ss << ifs.rdbuf();
+
    return ss.str();
   }

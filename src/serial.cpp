@@ -9,29 +9,29 @@ using namespace xkp;
 struct mutable_reader : reader_visitor
   {
     mutable_reader(IDynamicObject* obj, base_read_archive& archive) : obj_(obj), archive_(archive) {}
-    
+
     virtual void attribute(const str& name, const variant value)
       {
         schema_item itm;
         if (!obj_->resolve(name, itm))
           assert(false); //ought to be mutable
-          
+
         assert(itm.set); //same
         itm.set->set(obj_, value);
       }
-      
+
     virtual void object(const str& name, Reader reader)
       {
         variant result;
-        archive_.read(reader, type_schema<variant>(), result); 
-        
+        archive_.read(reader, type_schema<variant>(), result);
+
         attribute(name, result);
       }
-      
+
     virtual void iterator(const str& name, ReadIterator reader)
       {
         DynamicArray da( new dynamic_array );
-        archive_.read_iterable(reader, da, null); 
+        archive_.read_iterable(reader, da, null);
 
         attribute(name, da);
       }
@@ -44,10 +44,10 @@ struct mutable_reader : reader_visitor
 //base_archive
 bool base_archive::attributed_type(schema* type)
   {
-    return (type == type_schema<int>())    || 
-           (type == type_schema<long>())   || 
-           (type == type_schema<float>())  || 
-           (type == type_schema<double>()) || 
+    return (type == type_schema<int>())    ||
+           (type == type_schema<long>())   ||
+           (type == type_schema<float>())  ||
+           (type == type_schema<double>()) ||
            (type == type_schema<str>());
   }
 
@@ -55,23 +55,23 @@ bool base_archive::attributed_type(schema* type)
 //base_write_archive
 void base_write_archive::save(const variant& what)
   {
-    Writer w = create_root(); assert( w ); 
-    
+    Writer w = create_root(); assert( w );
+
     variant v = what;
     write(w, "", v);
   }
-  
+
 void base_write_archive::write( Writer w, const str& name, variant& v)
   {
     schema* type  = true_type(v);
     void*   this_ = v.get_pointer();
-    
+
     //3 use cases:
     //- we know the type as attibuted (ints, strings, things like that)
-    //  note the implementor is free to define its custom types  
-    //  
-    //- we are saving an iterable type  
-    //  
+    //  note the implementor is free to define its custom types
+    //
+    //- we are saving an iterable type
+    //
     //- or we are saving an object, these seem to be reasonable assumptions.
     if (attributed_type(type))
       {
@@ -86,10 +86,10 @@ void base_write_archive::write( Writer w, const str& name, variant& v)
             iterable iter(v);
             iterator it = iter.begin();
             iterator nd = iter.end();
-            
+
             WriteIterator wit = w->create_iterator(name, iter.iterated_type());
 
-            for(; it != nd; it++)
+            for(; it != nd; ++it)
               {
                 variant iv = *it;
                 Writer  iw = wit->next(iv);
@@ -100,14 +100,14 @@ void base_write_archive::write( Writer w, const str& name, variant& v)
         else
           {
             Writer writer_ = name.empty()? w : w->create_node(name);
-            
+
             schema* otype = v.get_schema(); assert(otype);
             size_t  oopt  = otype->options();
             if (oopt & TYPE_NON_INSTANTIABLE)
               {
                 assert(type != otype);
                 assert(types_);
-                
+
                 str class_id = types_->type_name(type); assert( !class_id.empty() );
                 w->attribute("class", class_id);
               }
@@ -115,7 +115,7 @@ void base_write_archive::write( Writer w, const str& name, variant& v)
             //collect what we're saving
             schema_collector sc;
             type->visit(&sc);
-            
+
             schema_collector::container::iterator it = sc.begin();
             schema_collector::container::iterator nd = sc.end();
             for(; it != nd; it++)
@@ -123,7 +123,7 @@ void base_write_archive::write( Writer w, const str& name, variant& v)
                 schema_item& item = it->second;
                 if (item.flags & CONST)
                   continue;
-                  
+
                 if (item.flags & TRANSIENT)
                   continue;
 
@@ -143,22 +143,22 @@ variant base_read_archive::get(schema* type)
     Reader  root = create_root();
     variant result;
     read(root, type, result);
-    
+
     return result;
   }
-  
+
 variant base_read_archive::query(const str& name)
   {
     assert(false); //td:
     return variant();
   }
-  
+
 bool base_read_archive::read(Reader r, schema* type, variant& result)
   {
     if (!type || type->options() & TYPE_NON_INSTANTIABLE || type == type_schema<variant>())
       {
         assert(types_);
-        
+
         variant v;
         if (!r->attribute("class", type_schema<str>(), v))
           {
@@ -168,8 +168,8 @@ bool base_read_archive::read(Reader r, schema* type, variant& result)
 
         str class_id  = v;
         type          = types_->get_type(class_id); assert(type);
-      }    
-    
+      }
+
     assert(type);
 
     //instantiate
@@ -177,28 +177,28 @@ bool base_read_archive::read(Reader r, schema* type, variant& result)
       {
         return false;
       }
-      
+
     void* this_ = result.get_pointer();
-    
+
     size_t type_options = type->options();
     if (type_options & TYPE_ITERATED)
       {
         iterable     iter(result);
         schema*      iter_type = iter.iterated_type();
-        
-        ReadIterator rit = r->create_iterator("", iter_type); 
+
+        ReadIterator rit = r->create_iterator("", iter_type);
 
         Reader  item_reader;
         variant item;
         while(rit->next(item_reader, item))
           {
             variant result_item;
-            
+
             if (item_reader)
               read(item_reader, iter_type, result_item);
             else
               result_item = item;
-              
+
             iter.insert( result_item );
           }
       }
@@ -208,11 +208,11 @@ bool base_read_archive::read(Reader r, schema* type, variant& result)
         mutable_reader mr(obj, *this);
         r->visit(&mr);
       }
-    else 
+    else
       {
         schema_collector sc;
         type->visit(&sc);
-        
+
         schema_collector::container::iterator it = sc.begin();
         schema_collector::container::iterator nd = sc.end();
         for(; it != nd; it++)
@@ -220,7 +220,7 @@ bool base_read_archive::read(Reader r, schema* type, variant& result)
             schema_item& item = it->second;
             if (item.flags & CONST)
               continue;
-              
+
             if (item.flags & TRANSIENT)
               continue;
 
@@ -246,9 +246,9 @@ bool base_read_archive::read(Reader r, schema* type, variant& result)
               }
             else if (item.flags & STATIC_FIELD)
               {
-                assert(item.get); 
+                assert(item.get);
                 variant sf = item.get->get(this_);
-                
+
                 if (item.type->options() & TYPE_ITERATED)
                   {
                     read_iterated(r, it->first, sf);
@@ -260,16 +260,16 @@ bool base_read_archive::read(Reader r, schema* type, variant& result)
               }
           }
       }
-      
+
     return true;
   }
-  
+
 void base_read_archive::read_iterated(Reader r, const str& name, variant& iterated)
   {
     iterable     iter(iterated);
     schema*      iter_type = iter.iterated_type();
-    
-    ReadIterator rit = r->create_iterator(name, iter_type); 
+
+    ReadIterator rit = r->create_iterator(name, iter_type);
     if (!rit)
       return;
 
@@ -278,12 +278,12 @@ void base_read_archive::read_iterated(Reader r, const str& name, variant& iterat
     while(rit->next(item_reader, item))
       {
         variant result_item;
-        
+
         if (item_reader)
           read(item_reader, iter_type, result_item);
         else
           result_item = item;
-          
+
         iter.insert( result_item );
       }
   }
@@ -293,9 +293,9 @@ void base_read_archive::read_object(Reader r, const str& name, variant& obj, sch
     //collect what we're saving
     schema_collector sc;
     type->visit(&sc);
-    
+
     void* this_ = obj.get_pointer();
-    
+
     schema_collector::container::iterator it = sc.begin();
     schema_collector::container::iterator nd = sc.end();
     for(; it != nd; it++)
@@ -303,7 +303,7 @@ void base_read_archive::read_object(Reader r, const str& name, variant& obj, sch
         schema_item& item = it->second;
         if (item.flags & CONST)
           continue;
-          
+
         if (item.set)
           {
             variant value;
@@ -327,10 +327,10 @@ void base_read_archive::read_object(Reader r, const str& name, variant& obj, sch
         else if (item.flags & STATIC_FIELD)
           {
             //td: !!! resuse read_iterated & read_object
-          
+
             assert(item.get);
             variant sf = item.get->get(this_);
-            
+
             if (item.type->options() & TYPE_ITERATED)
               {
                 read_iterated(r, it->first, sf);
@@ -342,23 +342,23 @@ void base_read_archive::read_object(Reader r, const str& name, variant& obj, sch
           }
       }
   }
-  
+
 void base_read_archive::read_iterable(ReadIterator rit, variant obj, schema* type)
   {
     iterable iter(obj);
     schema*  iter_type = iter.iterated_type();
-    
+
     Reader  item_reader;
     variant item;
     while(rit->next(item_reader, item))
       {
         variant result_item;
-        
+
         if (item_reader)
           read(item_reader, iter_type, result_item);
         else
           result_item = item;
-          
+
         iter.insert( result_item );
       }
   }
