@@ -22,7 +22,7 @@ struct xss_gather : xss_visitor
     public:
       xss_gather(part_list& result, std::vector<str>& expressions) : result_(result), expressions_(expressions) {}
     public:
-      virtual void visit(const str& tag, const str& text)
+      virtual void visit(const str& tag, const str& text, param_list* args)
         {
           if (tag == "text")
             result_.push_back(part(text));
@@ -32,8 +32,15 @@ struct xss_gather : xss_visitor
             }
           else if (tag == "xss:e")
             {
-              result_.push_back(part(result_.size()));
-              expressions_.push_back(text);
+              str expr_text = text;
+              if (expr_text.empty() && args)
+                expr_text = variant_cast<str>(args->get("value"), "");
+
+              if (!expr_text.empty())
+                {
+                  result_.push_back(part(result_.size()));
+                  expressions_.push_back(expr_text);
+                }
             }
           else if (tag == "xss:open_brace")
             {

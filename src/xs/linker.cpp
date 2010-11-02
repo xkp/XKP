@@ -220,7 +220,7 @@ void code_linker::iterfor_(stmt_iter_for& info)
     add_instruction(i_store, value_);
 
     //then the code
-    link_code(info.for_code);
+    link_code(info.for_code, loop_jump);
 
     //advance
     expression advance_iterator;
@@ -725,7 +725,15 @@ schema* code_linker::typeof_(const xs_type type)
 
 void code_linker::link_code(code& cde, int loop_pc)
   {
-    fixup_.clear();
+    bool       keep_track = loop_pc >= 0;
+    fixup_list fixup_cpy;
+    if (keep_track)
+      {
+        loops_.push(loop_pc);
+        fixup_cpy = fixup_;
+        fixup_.clear();
+      }
+  
     cde.visit( this );
 
     fixup_list::iterator it = fixup_.begin();
@@ -739,10 +747,19 @@ void code_linker::link_code(code& cde, int loop_pc)
               instruction_data(it->instruction_idx, pc_);
               break;
             case fixup_loop:
-              assert(loop_pc >= 0);
-              instruction_data(it->instruction_idx, loop_pc);
-              break;
+              {
+                assert(!loops_.empty()); //td: error, 
+                int pc = loops_.top(); 
+                instruction_data(it->instruction_idx, pc);
+                break;
+              }
           }
+      }
+
+    if (keep_track)
+      {
+        loops_.pop();
+        fixup_ = fixup_cpy;
       }
   }
 
@@ -1276,6 +1293,10 @@ void code_linker::resolve_assign(const variant& arg)
         assert(si.set); //td: error, write only
         add_instruction(i_load_constant, add_constant(si.set));
         add_instruction(i_set, si.flags&DYNAMIC_ACCESS);
+      }
+    else if (arg.is<already_in_stack>())
+      {
+        assert(false); //td: dynamic assign
       }
     else
       {

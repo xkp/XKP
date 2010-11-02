@@ -4,6 +4,7 @@
 
 #include <base.h>
 #include <schema.h>
+#include <dynamic_objects.h>
 #include <xs.h>
 
 #include "xss_generator.h"
@@ -60,7 +61,7 @@ struct xss_idiom
 
 //these are basically copies of their xs counterpart, but offer xss stuff, like generating
 //they are also vm friendly, unlike the low level xs's ast.  
-struct xss_property
+struct xss_property : public sponge_object
   {
     xss_property(): flags(0) {}
     xss_property(const xss_property& other);
@@ -106,7 +107,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       DynamicObjectList classes;
       
       void compile_instance(const str& filename, DynamicObject instance);
-      void register_instance(const str& id, DynamicObject instance);
+      void register_instance(const str& id, DynamicObject instance, DynamicObject parent = DynamicObject());
       void render_instance(DynamicObject instance, const str& xss);      
       str  resolve_dispatcher(DynamicObject instance, const str& event_name);
       str  instance_class(DynamicObject instance);
@@ -117,7 +118,8 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       DynamicArray  get_property_array(DynamicObject obj);
       DynamicArray  get_method_array(DynamicObject obj);
       DynamicArray  get_event_array(DynamicObject obj);
-
+      DynamicArray  get_children_array(DynamicObject obj);
+      
       //some utils, god those are long names
       DynamicObject get_instance(const str& id);
       void          add_application_file(const str& file, DynamicObject obj);
@@ -172,7 +174,7 @@ struct xss_project_schema : object_schema<xss_project>
         property_("idiom",       &xss_project::idiom);
 
         method_<void, 2>("compile_instance",    &xss_project::compile_instance);
-        method_<void, 2>("register_instance",   &xss_project::register_instance);
+        method_<void, 3>("register_instance",   &xss_project::register_instance);
         method_<void, 2>("render_instance",     &xss_project::render_instance);
         method_<str,  2>("resolve_dispatcher",  &xss_project::resolve_dispatcher);
         method_<str,  1>("instance_class",      &xss_project::instance_class);
@@ -189,7 +191,7 @@ struct xss_event_schema : object_schema<xss_event>
       }
   };
 
-struct xss_property_schema : object_schema<xss_property>  
+struct xss_property_schema : sponge_object_schema<xss_property>  
   {
     xss_property_schema()
       {

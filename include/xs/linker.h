@@ -106,6 +106,7 @@ namespace xkp
         typedef std::vector<fixup_data>         fixup_list;
         typedef std::map<str, DslLinker>        dsl_linker_list;
         typedef std::pair<str, DslLinker>       dsl_linker_pair;
+        typedef std::stack<int>                 loop_stack;
 
         instruction_list  code_;
         locals_list       locals_;
@@ -119,6 +120,7 @@ namespace xkp
         code_context      context_;
         dsl_linker_list   dsl_linkers_;
         schema*           array_type_; //td: proper type expectancy
+        loop_stack        loops_;
 
         void    resolve_value(variant& arg, schema** type = null);
         void    resolve_operator(operator_type op, variant arg1, variant arg2, bool* dont_assign);

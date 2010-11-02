@@ -25,12 +25,12 @@ void xss_generator::append(const str& s)
     result_ += s;
   }
   
-void xss_generator::visit(const str& tag, const str& text)
+void xss_generator::visit(const str& tag, const str& text, param_list* args)
   {
     handler_map::iterator it = handlers_.find(tag);  
     if (it != handlers_.end())
       {
-        (this->*(it->second))(text);
+        (this->*(it->second))(text, args);
       }
     else
       {
@@ -38,13 +38,13 @@ void xss_generator::visit(const str& tag, const str& text)
       }
   }
   
-bool xss_generator::handle_text(const str& text)
+bool xss_generator::handle_text(const str& text, param_list* args)
   {
     result_ += text;
     return true;
   }
 
-bool xss_generator::handle_code(const str& text)
+bool xss_generator::handle_code(const str& text, param_list* args)
   {
     //details, details... 
     trim_last_empty_line(result_);
@@ -54,11 +54,21 @@ bool xss_generator::handle_code(const str& text)
     return true;
   }
 
-bool xss_generator::handle_expression(const str& text)
+bool xss_generator::handle_expression(const str& text, param_list* args)
   {
     xs_utils xs;
     
-    str result = variant_cast<str>(xs.evaluate_xs_expression(text, context_), str("Error"));
+    str expr = text;
+    if (text.empty() && args)
+      {
+        variant vv = args->get("value");
+        if (!vv.empty())
+          {
+            expr = variant_cast<str>(vv, "");
+          }
+      }
+     
+    str result = variant_cast<str>(xs.evaluate_xs_expression(expr, context_), str("Error"));
     result_   += result;
     return true;
   }

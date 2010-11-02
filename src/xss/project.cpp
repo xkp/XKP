@@ -235,7 +235,7 @@ struct pre_process : dynamic_visitor
                   }
 
                 //aside of that, we'll just interpret as an object
-                owner_.register_instance(id, visitable); //object_
+                owner_.register_instance(id, visitable, object_); 
                 pre_process pp(visitable, object_, owner_);
                 visitable->visit(&pp);
               }
@@ -435,12 +435,13 @@ void xss_project::compile_instance(const str& filename, DynamicObject instance)
       }
   }
 
-void xss_project::register_instance(const str& id, DynamicObject it)
+void xss_project::register_instance(const str& id, DynamicObject it, DynamicObject parent)
   {
     str _id = id;
     if (_id.empty())
       _id = "i" + boost::lexical_cast<str>(instances_.size());
 
+    //td: debug code
     str rid = variant_cast<str>(dynamic_get(it, "id"), "");
     str rclaz = variant_cast<str>(dynamic_get(it, "class_name"), "");
     if (rid != _id)
@@ -450,6 +451,13 @@ void xss_project::register_instance(const str& id, DynamicObject it)
     dynamic_set(it, "id", _id);
     instances_.insert(instance_registry_pair(_id, instances.size()));
     instances.push_back(it);
+    
+    if (parent)
+      {
+        dynamic_set(it, "parent", parent);
+        DynamicArray children = get_children_array(parent);
+        children->push_back(it);
+      }
   }
 
 void xss_project::render_instance(DynamicObject instance, const str& xss)
@@ -597,6 +605,25 @@ DynamicArray xss_project::get_event_array(DynamicObject obj)
     return result;
   }
 
+DynamicArray xss_project::get_children_array(DynamicObject obj)
+  {
+    DynamicArray result;
+    variant v = dynamic_get(obj, "children");
+
+    if (v.empty())
+      {
+        result = DynamicArray(new dynamic_array());
+        dynamic_set(obj, "children", result);
+      }
+    else
+      {
+        assert(v.is<DynamicArray>());
+        result = v;
+      }
+
+    return result;
+  }
+  
 DynamicObject xss_project::get_instance(const str& id)
   {
       instance_registry::iterator it = instances_.find(id);

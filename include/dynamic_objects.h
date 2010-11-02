@@ -353,7 +353,8 @@ namespace xkp
         }
     };
 
-  struct sponge_object_schema : dynamic_object_schema<sponge_object>
+  template<typename T>
+  struct sponge_object_schema : dynamic_object_schema<T>
     {
       sponge_object_schema()
         {
@@ -362,12 +363,12 @@ namespace xkp
 
       virtual size_t options()
         {
-          return dynamic_object_schema<sponge_object>::options() | TYPE_MUTABLE;
+          return dynamic_object_schema<T>::options() | TYPE_MUTABLE;
         }
     };
 
   register_complete_type(default_object, default_object_schema);
-  register_complete_type(sponge_object,  sponge_object_schema);
+  register_complete_type(sponge_object,  sponge_object_schema<sponge_object>);
 
   //this will represent a class created in xs
   struct dynamic_class_schema : basic_schema,

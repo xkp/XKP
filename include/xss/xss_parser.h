@@ -9,7 +9,7 @@ namespace xkp
   class xss_visitor
   {
     public:
-      virtual void visit(const str& tag, const str& text) = 0;
+      virtual void visit(const str& tag, const str& text, param_list* args) = 0;
   };
   
   namespace detail
@@ -18,9 +18,10 @@ namespace xkp
       {
         tag_info() : single(false), closed(false) {}
       
-        str  name;
-        bool single;
-        bool closed;
+        str         name;
+        bool        single;
+        bool        closed;
+        param_list  args;
       };  
   }
   
@@ -33,6 +34,8 @@ namespace xkp
       std::vector<str> tags_;
       bool read_tag(const str& text, size_t pos, detail::tag_info& tag, size_t& end_tag);
       bool skip_spaces(const str& text, size_t& pos);
+      bool read_attributes(const str& text, size_t& pos, detail::tag_info& tag);
+      bool registered_tag(const str& tagname);
   };
 }
 

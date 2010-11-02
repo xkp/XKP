@@ -24,7 +24,7 @@ using namespace xkp;
 class dump_visitor : public xss_visitor
 {
   public:
-    virtual void visit(const str& tag, const str& text)
+    virtual void visit(const str& tag, const str& text, param_list* args)
       {
         std::cout << "-------------TAG: " + tag + "-------------" << '\n' << text << '\n' ;
       }

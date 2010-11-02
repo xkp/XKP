@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>TITLE</title>
+<script type="text/javascript" src="jquery.js"></script>
+
+<script type="text/javascript">
+$(function() {
+    <xss:code>
+    for(var i in instances)
+    {
+        render_instance(i, "instance.xss");
+    }
+    </xss:code>
+});
+</script>
+
+<style>
+</style>
+</head>
+
+<body>
+    <button id="btn1">TODO</button>
+    <button id="btn2">TODO</button>
+</body>
+</html>

@@ -401,6 +401,30 @@
 				RelativePath="..\..\..\data\xss\demo\instance.xss"
 				>
 			</File>
+			<Filter
+				Name="jquery"
+				>
+				<File
+					RelativePath="..\..\..\data\xss\jquery\app.xss"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\data\xss\jquery\component.xss"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\data\xss\jquery\instance.xss"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\data\xss\jquery\test_button.xml"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\data\xss\jquery\test_button.xs"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
