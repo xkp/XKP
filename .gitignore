@@ -3,7 +3,8 @@ bin/
 *.pdb
 *.ilk
 *.ncb
+*.user
+*.suo
 
 *.exe
 *.obj
-*.user

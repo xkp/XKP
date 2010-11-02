@@ -197,6 +197,9 @@ struct pre_process : dynamic_visitor
 
     virtual void item(const str& name, variant value)
       {
+        if (name == "parent")
+          return; //td: generalize
+
         if (name == "source")
           {
             str file_name = value;
