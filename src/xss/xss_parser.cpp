@@ -216,9 +216,9 @@ bool xss_parser::read_attributes(const str& text, size_t& pos, detail::tag_info&
               }
             case 1: 
               {
-                if (isalpha(c))
+                if (isalpha(c) || c == '_')
                   attr_name += c;
-                else if (c = ' ')
+                else if (c == ' ' || c == '=')
                   {
                     if (!skip_spaces(text, pos))
                       return false;

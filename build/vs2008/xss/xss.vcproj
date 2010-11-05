@@ -368,6 +368,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\xss\xss_context.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\xss\xss_generator.h"
 				>
 			</File>

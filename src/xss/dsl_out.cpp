@@ -68,11 +68,11 @@ struct xss_gather : xss_visitor
 struct worker
   {
     public:
-      worker() : gen_(0), indent_(0), tab_(4) {}
-      worker(xss_generator* gen, part_list parts, int indent, int tab):
+      worker() : gen_(0), tab_(4) {}
+      worker(xss_generator* gen, part_list parts, int tab):
         gen_(gen),
         parts_(parts),
-        indent_(indent),
+        indent_(-1),
         tab_(tab)
         {
         }
@@ -82,7 +82,9 @@ struct worker
           part_list::iterator it = parts_.begin();
           part_list::iterator nd = parts_.end();
 
-          size_t param = params.size() - 1;
+          indent_ = params.get(params.size() - 1);
+          
+          size_t param = params.size() - 2;
           str    result;
           for(; it != nd; it++)
             {
@@ -90,7 +92,11 @@ struct worker
                 result += it->text;
               else
                 {
-                  str expr_value = params.get(param--);
+                  variant vv = params.get(param--);
+                  if (vv.empty())
+                    vv = str("null"); //td: this should be an error?
+                
+                  str expr_value = vv;
                   if (is_multi_line(expr_value))
                     {
                       //we'll try to keep the original indentation
@@ -250,15 +256,23 @@ namespace xkp
 //out_linker
 void out_linker::link(dsl& info, code_linker& owner)
   {
-    int indent   = -1;
     int tab_size = 4;
 
+    std::vector<str> expressions;
+
     //process parameters
-    variant indent_value = info.params.get("indent");
+    variant    indent_value = info.params.get("indent");
+    expression indent_expr;
     if (!indent_value.empty())
       {
-        expression expr = indent_value;
-        indent = owner.evaluate_expression(expr);
+        indent_expr = indent_value; //td: catch type mismatch
+      }
+    else
+      {
+        //we'll always pass the value of indent dynamically (resolved at runtime)
+        //in this case the user did not especify an indent param, so we fake an expression
+        int default_indent   = -1;
+        indent_expr.push_operand(default_indent);
       }
 
     //td: utilify
@@ -266,10 +280,9 @@ void out_linker::link(dsl& info, code_linker& owner)
     if (!tab_value.empty())
       {
         expression expr = tab_value;
-        tab_size = owner.evaluate_expression(expr);
+        tab_size = owner.evaluate_expression(expr); //td: only contants, lazy me
       }
 
-    std::vector<str> expressions;
     part_list parts;
     xss_gather gather(parts, expressions);
 
@@ -286,8 +299,11 @@ void out_linker::link(dsl& info, code_linker& owner)
     xs_utils xs;
 
     //create a safe reference to be inserted in the execution context later on
-    Worker wrk(new worker(&gen_, parts, indent, tab_size));
+    Worker wrk(new worker(&gen_, parts, tab_size));
     owner.add_instruction(i_load_constant, owner.add_constant(wrk));
+
+    //and so we link the indent, after having the worker on
+    owner.link_expression(indent_expr);
 
     //push the expression to be used as parameters
     std::vector<str>::iterator it = expressions.begin();
@@ -301,7 +317,7 @@ void out_linker::link(dsl& info, code_linker& owner)
         owner.link_expression(expr);
       }
 
-    //for this call
-    owner.add_call(wrk, "generate", expressions.size(), false);
+    //for this call, remember the indent is always the forat parameter
+    owner.add_call(wrk, "generate", expressions.size() + 1, false);
   }
 

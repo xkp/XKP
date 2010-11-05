@@ -5,16 +5,19 @@
 
 #include <xs.h>
 
+
 using namespace xkp;
 
 //xss_generator
-xss_generator::xss_generator(code_context& context) : context_(context)
+xss_generator::xss_generator(XSSContext context):
+  context_(context)
   {
-    handlers_.insert(handler_pair("text",     &xss_generator::handle_text));
-    handlers_.insert(handler_pair("xss:code", &xss_generator::handle_code));
-    handlers_.insert(handler_pair("xss:e",    &xss_generator::handle_expression));
+    handlers_.insert(handler_pair("text",       &xss_generator::handle_text));
+    handlers_.insert(handler_pair("xss:code",   &xss_generator::handle_code));
+    handlers_.insert(handler_pair("xss:e",      &xss_generator::handle_expression));
+    handlers_.insert(handler_pair("xss:class",  &xss_generator::handle_class));
   }
-  
+
 str xss_generator::get()
   {
     return result_;
@@ -49,8 +52,10 @@ bool xss_generator::handle_code(const str& text, param_list* args)
     //details, details... 
     trim_last_empty_line(result_);
     
+    code_context& ctx = *(context_.get());
+    
     xs_utils xs;
-    xs.execute_xs(text, context_);
+    xs.execute_xs(text, ctx);
     return true;
   }
 
@@ -68,7 +73,36 @@ bool xss_generator::handle_expression(const str& text, param_list* args)
           }
       }
      
-    str result = variant_cast<str>(xs.evaluate_xs_expression(expr, context_), str("Error"));
+    code_context& ctx = *(context_.get());
+    str result = variant_cast<str>(xs.evaluate_xs_expression(expr, ctx), str("Error"));
     result_   += result;
+    return true;
+  }
+
+bool xss_generator::handle_class(const str& text, param_list* args)
+  {
+    xs_utils xs;
+    
+    //what we'll really compile is an instance, but xss:class sounder classier
+    DynamicObject instance(new default_object);
+
+    xss_composite_context ctx(context_);
+    ctx.this_ = instance;
+
+    DslLinker ol(new out_linker(*this));
+    ctx.dsls.insert(dsl_list_pair("out", ol));
+    ctx.dsl_ = &ctx.dsls; //td: !!! this will break under many dsls
+
+    xs.compile_implicit_instance(text, instance, ctx);
+    str entry_point = "generate";
+    if (args)
+      {
+        variant vv = args->get("entry_point");
+        if (!vv.empty())
+          entry_point = (str)vv;
+      }  
+    
+    param_list pl;
+    dynamic_exec(instance, entry_point, pl);
     return true;
   }

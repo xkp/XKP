@@ -8,8 +8,8 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="&quot;$(XKP_INCLUDE)&quot;;&quot;$(BOOST_INCLUDE)&quot;"
-		PreprocessorDefinitions="BOOST_NO_MEMBER_TEMPLATE_FRIENDS"
+		AdditionalIncludeDirectories="&quot;$(XKP_INCLUDE)&quot;;&quot;$(BOOST_INCLUDE)&quot;;..\..\..\third_party\tinyXml;..\..\..\third_party\jsoncpp\include"
+		PreprocessorDefinitions="BOOST_NO_MEMBER_TEMPLATE_FRIENDS;TIXML_USE_STL"
 	/>
 	<Tool
 		Name="VCLinkerTool"

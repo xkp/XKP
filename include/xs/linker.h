@@ -204,6 +204,15 @@ namespace xkp
       DynamicObject instance_;
     };
 
+  struct implicit_instance_linker : base_xs_linker
+    {
+      implicit_instance_linker(code_context& ctx, DynamicObject instance);
+
+      void link(xs_container& info);
+
+      DynamicObject instance_;
+    };
+
   struct behaviour_linker
     {
       behaviour_linker(code_context& ctx);

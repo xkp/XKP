@@ -14,11 +14,11 @@
 using namespace xkp;
 
 //xss_code_context
-xss_code_context::xss_code_context(xss_project& _project) : base_code_context(), project(_project)
+xss_code_context::xss_code_context(const variant _project) : base_code_context(), project_(_project)
   {
   }
 
-xss_code_context::xss_code_context(xss_code_context& other) : base_code_context(other), project(other.project)
+xss_code_context::xss_code_context(xss_code_context& other) : base_code_context(other), project_(other.project_)
   {
   }
 
@@ -36,7 +36,8 @@ XSSProperty xss_code_context::get_property(DynamicObject obj, const str& name)
   {
     if (obj)
       {
-        DynamicArray props = project.get_property_array(obj);
+        XSSProject project = project_; //I know, unnecesary cast, it aint that big a deal
+        DynamicArray props = project->get_property_array(obj);
         for(size_t i = 0; i < props->size(); i++)
           {
             XSSProperty prop = props->at(i);
@@ -52,7 +53,8 @@ XSSProperty xss_code_context::get_property(DynamicObject obj, const str& name)
 
 DynamicObject xss_code_context::resolve_instance(const str& id)
   {
-    return project.get_instance(id); //td: consider this, scope, and stuff
+    XSSProject project = project_; 
+    return project->get_instance(id); //td: consider this, scope, and stuff
   }
 
 variant xss_code_context::evaluate_property(DynamicObject obj, const str& name)
@@ -68,9 +70,15 @@ variant xss_code_context::evaluate_property(DynamicObject obj, const str& name)
 
 //xss_composite_context
 xss_composite_context::xss_composite_context(XSSContext ctx):
-  xss_code_context(ctx->project),
+  xss_code_context(ctx->project_),
   ctx_(ctx)
   {
+    types_    = ctx->types_;
+    scope_    = ctx->scope_;
+    args_     = ctx->args_;
+    this_type = ctx->this_type;
+    this_     = ctx->this_;
+    dsl_      = ctx->dsl_; 
   }
 
 XSSProperty xss_composite_context::get_property(const str& name)
@@ -323,13 +331,15 @@ void xss_project::build()
     idiom_ = idiom;
 
     //contextualize
-    context_ = XSSContext(new xss_code_context(*this));
+    XSSProject me = shared_from_this();
+    context_      = XSSContext(new xss_code_context(me));
+    current_      = XSSGenerator(new xss_generator(context_));
 
-    xss_code_context& code_ctx = *(context_.get());
-    current_ = XSSGenerator(new xss_generator(code_ctx));
-
+    //td: stupid references
     xss_generator& gen = *(current_.get());
+    xss_code_context& code_ctx = *(context_.get());
     prepare_context(code_ctx, gen);
+    code_ctx.scope_->register_symbol("project", me);
 
     idiom_->set_context(context_);
 
@@ -471,11 +481,13 @@ void xss_project::render_instance(DynamicObject instance, const str& xss)
     str class_name = variant_cast<str>(dynamic_get(instance, "class_name"), "");
 
     //setup the context
-    base_code_context context;
-    xss_generator     gen(context);
+    XSSProject me = shared_from_this();
+    xss_code_context* ctx = new xss_code_context(me);
+    XSSContext context(ctx);
+    xss_generator gen(context);
 
-    prepare_context(context, gen);
-    context.scope.register_symbol("it", instance); //td: make sure its not there
+    prepare_context(*ctx, gen);
+    ctx->scope.register_symbol("it", instance); //td: make sure its not there
 
     current_->append(generate_xss(gen_text, gen));
   }
@@ -514,6 +526,12 @@ str xss_project::instance_class(DynamicObject instance)
     return "ERROR(classless instance)"; //td: yeah right
   }
 
+str xss_project::inline_properties(DynamicObject instance)
+  {
+    //td: yeah right
+    return "ERROR(inline_properties not implemented)"; 
+  }
+  
 DynamicObject xss_project::find_class(const str& event_name)
   {
     return DynamicObject();
@@ -693,6 +711,7 @@ str xss_project::generate_xss(const str& xss, xss_generator& gen)
     xss_parser parser;
     parser.register_tag("xss:code");
     parser.register_tag("xss:e");
+    parser.register_tag("xss:class");
 
     parser.parse(xss, &gen);
     return gen.get();
@@ -706,7 +725,7 @@ str xss_project::generate_file(const str& fname)
     XSSContext context(new xss_composite_context(context_));
     xss_code_context& ctx = *context.get();
 
-    XSSGenerator  gen(new xss_generator(ctx));
+    XSSGenerator  gen(new xss_generator(context));
     XSSGenerator  old = current_;
     current_          = gen;
 

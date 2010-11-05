@@ -62,6 +62,7 @@ code_linker::code_linker(code_context& context):
   pc_(0),
   context_(context)
   {
+    context_.this_ = context.this_;
     if (!context_.types_)
       context_.types_ = &default_types_;
 
@@ -80,7 +81,17 @@ code_linker::code_linker(code_context& context):
             locals_.insert( locals_pair(name, lv) );
           }
       }
-
+    
+    if (context_.dsl_)
+      {
+        dsl_list::iterator it = context_.dsl_->begin();
+        dsl_list::iterator nd = context_.dsl_->end();
+        
+        for(; it != nd; ++it)
+          {
+            dsl_linkers_.insert(dsl_linker_pair(it->first, it->second));
+          }
+      }
   }
 
 ByteCode code_linker::link()
@@ -1328,6 +1339,7 @@ void base_xs_linker::link(xs_container& xs)
         ctx.types_    = ctx_.types_;
         ctx.scope_    = ctx_.scope_;
         ctx.this_     = ctx_.this_;
+        ctx.dsl_      = ctx_.dsl_;
         ctx.this_type = lit->this_type;
         ctx.args_     = lit->args.get();
 
@@ -1882,6 +1894,23 @@ instance_linker::instance_linker(code_context& ctx, DynamicObject instance):
   }
 
 void instance_linker::link(xs_instance& info)
+  {
+    output_          = instance_;
+    editable_output_ = variant_cast<IEditableObject*>(instance_, null);
+    ctx_.this_type   = instance_->get_type();
+    ctx_.this_       = instance_;
+
+    base_xs_linker::link( info );
+  }
+
+//implicit_instance_linker
+implicit_instance_linker::implicit_instance_linker(code_context& ctx, DynamicObject instance):
+  base_xs_linker(ctx),
+  instance_(instance)
+  {
+  }
+  
+void implicit_instance_linker::link(xs_container& info)
   {
     output_          = instance_;
     editable_output_ = variant_cast<IEditableObject*>(instance_, null);

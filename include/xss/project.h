@@ -7,47 +7,11 @@
 #include <dynamic_objects.h>
 #include <xs.h>
 
+#include "xss_context.h"
 #include "xss_generator.h"
 #include "xs/array.h"
 
 namespace xkp{
-
-//forwards
-class xss_project;
-struct xss_property;
-
-//and their references
-typedef reference<xss_project> XSSProject;
-typedef reference<xss_property> XSSProperty;
-  
-struct xss_code_context : base_code_context
-  {
-    xss_code_context(xss_project& _project);
-    xss_code_context(xss_code_context& other);
-      
-    //this will function as resolver
-    virtual XSSProperty   get_property(const str& name);
-    virtual XSSProperty   get_property(DynamicObject obj, const str& name);
-    virtual DynamicObject resolve_instance(const str& id);
-    virtual variant       evaluate_property(DynamicObject obj, const str& name);
-    public:
-      xss_project& project;
-  };
-  
-typedef reference<xss_code_context> XSSContext;
-
-struct xss_composite_context : xss_code_context
-  {
-    xss_composite_context(XSSContext ctx);
-      
-    //this will function as resolver
-    virtual XSSProperty   get_property(const str& name);
-    virtual XSSProperty   get_property(DynamicObject obj, const str& name);
-    virtual DynamicObject resolve_instance(const str& id);
-    virtual variant       evaluate_property(DynamicObject obj, const str& name);
-    private:
-      XSSContext ctx_;
-  };
 
 //the idiom interface, under designed
 struct xss_idiom
@@ -59,38 +23,6 @@ struct xss_idiom
     virtual variant process_expression(expression expr, DynamicObject this_)                   = 0;
   };
 
-//these are basically copies of their xs counterpart, but offer xss stuff, like generating
-//they are also vm friendly, unlike the low level xs's ast.  
-struct xss_property : public sponge_object
-  {
-    xss_property(): flags(0) {}
-    xss_property(const xss_property& other);
-    xss_property(const str& name, variant value, DynamicObject _this_);
-    xss_property(const str& name, variant value, variant _get, variant _set, DynamicObject _this_);
-
-    str           name;
-    variant       get;
-    variant       set;
-    size_t        flags;
-    DynamicObject this_;
-    
-    str     generate_value();
-    variant get_value();
-    private:
-      variant value_;
-  };
-  
-struct xss_event
-  {
-    xss_event();
-    xss_event(const xss_event& other);
-
-    str          name;
-    DynamicArray impls;
-  };
-  
-typedef reference<xss_event> XSSEvent;
-    
 class xss_project : public boost::enable_shared_from_this<xss_project>
   {
     public:
@@ -111,6 +43,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       void render_instance(DynamicObject instance, const str& xss);      
       str  resolve_dispatcher(DynamicObject instance, const str& event_name);
       str  instance_class(DynamicObject instance);
+      str  inline_properties(DynamicObject instance);
       DynamicObject find_class(const str& event_name);
       void breakpoint(const param_list params);
     public:
@@ -161,6 +94,9 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       str  localize_file(const str& );
   };  
 
+typedef reference<xss_project> XSSProject;
+
+//glue
 struct xss_project_schema : object_schema<xss_project>  
   {
     xss_project_schema()
@@ -179,6 +115,7 @@ struct xss_project_schema : object_schema<xss_project>
         method_<str,  2>("resolve_dispatcher",  &xss_project::resolve_dispatcher);
         method_<str,  1>("instance_class",      &xss_project::instance_class);
         dynamic_method_ ("breakpoint",          &xss_project::breakpoint);
+        method_<str,  1>("inline_properties",   &xss_project::inline_properties);
       }
   };
   

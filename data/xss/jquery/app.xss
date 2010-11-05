@@ -21,7 +21,43 @@ $(function() {
 </head>
 
 <body>
-    <button id="btn1">TODO</button>
-    <button id="btn2">TODO</button>
+    <xss:class entry_point="generate">
+    method generate_component(var component, int ind)
+    {
+        out(indent = ind)
+        {
+            <<xss:e value="component.tag_name"/> <xss:e value="project.inline_properties(component)"/>>
+        }
+        
+        if (component.insert_text)
+        {
+            out(dont_break = true)
+            {
+                <xss:e value="component.text"/> </<xss:e value="component.tag_name"/>>
+            }      
+        }
+        else //render children, recursively
+        {
+            if (component.children)
+            {
+                for(var child in component.children)
+                {
+                    generate_component(child, ind + 1);
+                }
+            }
+            
+            //close the tag
+            out(indent = ind + 1)
+            {
+                </<xss:e value="component.tag_name"/>>
+            }
+        }
+    }
+
+    method generate()
+    {
+        generate_component(application, indent = 0);
+    }
+    </xss:class>
 </body>
 </html>

@@ -1516,6 +1516,8 @@ bool xs_compiler::compile_xs(const str& code_str, xs_container& result)
         xs_ xs(result);
         v.visit(root, xs);
       }
+    else 
+      assert(false);
 
     //cleanup
     DeleteTokens(root);

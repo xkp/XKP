@@ -8,7 +8,7 @@
 using namespace xkp;
 
 //utils
-void prepare_dsl(code_context& ctx, code_linker& linker, std::vector<str>& names)
+void prepare_dsl(code_context& ctx, code_linker* linker, std::vector<str>& names)
   {
     if (ctx.dsl_)
       {
@@ -17,10 +17,13 @@ void prepare_dsl(code_context& ctx, code_linker& linker, std::vector<str>& names
         
         for(; it != nd; it++)
           {
-            DslLinker lnk = it->second;
             names.push_back( it->first );
             
-            linker.register_dsl(it->first, lnk);
+            if (linker)
+              {
+                DslLinker lnk = it->second;
+                linker->register_dsl(it->first, lnk);
+              }
           }
       }
   }
@@ -57,7 +60,7 @@ ByteCode xs_utils::compile_code(const str& src, code_context& ctx)
 
     //import dsls
     std::vector<str> dl;
-    prepare_dsl(ctx, linker, dl);
+    prepare_dsl(ctx, &linker, dl);
 
     //do the deed
     xs_compiler compiler(dl);
@@ -86,7 +89,7 @@ variant xs_utils::execute_xs(const str& src, code_context& ctx)
 
     //import dsls
     std::vector<str> dl;
-    prepare_dsl(ctx, linker, dl);
+    prepare_dsl(ctx, &linker, dl);
 
     //do the deed
     xs_compiler compiler(dl);
@@ -132,6 +135,20 @@ void xs_utils::compile_instance(const str& src, DynamicObject instance, code_con
         instance_linker il(ctx, instance); 
         il.link(ii);
       }
+  }
+
+void xs_utils::compile_implicit_instance(const str& src, DynamicObject instance, code_context& ctx) 
+  {
+    std::vector<str> dl;
+    prepare_dsl(ctx, null, dl);
+    
+    xs_compiler  compiler(dl);
+    xs_container results;
+    
+    compiler.compile_xs(src, results);
+    
+    implicit_instance_linker il(ctx, instance); 
+    il.link(results);
   }
 
 void xs_utils::compile(const str& src, code_context& ctx)

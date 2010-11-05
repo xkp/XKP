@@ -117,6 +117,7 @@ namespace xkp
       
       //compile instance code
       void compile_instance(const str& src, DynamicObject instance, code_context& ctx);
+      void compile_implicit_instance(const str& src, DynamicObject instance, code_context& ctx);
       
       //compile class code, the result types will be added to the context's type list
       //note these 2 functions will fail (via exception error) when there is mixed code

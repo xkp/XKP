@@ -53,16 +53,17 @@ void dump_file(const str fname)
   
 void dump_result(const str& text, code_context& context)
   {
-    xss_generator gen(context);
-    xss_parser parser;  
-    parser.register_tag("xss:code");
-    parser.register_tag("xss:expression");
-    parser.register_tag("xss:quote");
-    
-    parser.parse(text, &gen);  
+    //td: never really used this, so I'mnot going to bother
+    //xss_generator gen(context);
+    //xss_parser parser;  
+    //parser.register_tag("xss:code");
+    //parser.register_tag("xss:expression");
+    //parser.register_tag("xss:quote");
+    //
+    //parser.parse(text, &gen);  
 	  
-    std::cout << "-------------OUTPUT: " << '\n';
-    std::cout << gen.get();
+    //std::cout << "-------------OUTPUT: " << '\n';
+    //std::cout << gen.get();
   }  
   
 int main(int argc, char* argv[])
