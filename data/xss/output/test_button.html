@@ -8,16 +8,21 @@
 <script type="text/javascript">
 $(function() {
 var btn1 = $("#btn1");
+btn1.text("One button");
+btn1.width(100);
 btn1.click(function(event)
 {    
-    btn2.caption = "Clicked";
+    this.text("Other Clicked");
+    btn2.text("Clicked");
 });
 
 
 var btn2 = $("#btn2");
+btn2.text("One button");
+btn2.width(100);
 btn2.click(function(event)
 {    
-    btn1.caption = "Old value: " + application.target;
+    btn1.text("Old value: " + application.target);
     application.target_set(300);
 });
 
@@ -27,21 +32,21 @@ application.target = null;
 application.target_set = function (value)
 {
     application.target = value;
-    btn2.caption = "target acquired " + value;
+    btn2.text("target acquired " + value);
     for(var i = 0; i < 20; i++)
     {
-        btn2.width--;
-        if (btn2.width < 100)
+        btn2.width(btn2.width() + 10);
+        if (btn2.width() > 200)
         {
-            btn2.width = 200;
+            btn2.width(100);
         }
     }
 }
     application.target = function(s) 
     {
-    	target_set(s);
-    	btn1.caption = "...";
-    	btn2.caption = "...";
+    	this.target_set(s);
+    	btn1.text("...");
+    	btn2.text("...");
     };
 
 
@@ -54,12 +59,12 @@ application.target_set = function (value)
 </head>
 
 <body>
-    <null ERROR(inline_properties not implemented)>
-    <null ERROR(inline_properties not implemented)>
-        </null>
-    <null ERROR(inline_properties not implemented)>
-        </null>
-    </null>
+    <div ERROR(inline_properties not implemented)>
+    <button ERROR(inline_properties not implemented)>
+        </button>
+    <button ERROR(inline_properties not implemented)>
+        </button>
+    </div>
 
 </body>
 </html>

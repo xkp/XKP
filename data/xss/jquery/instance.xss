@@ -60,9 +60,21 @@ if (it.properties)
         }
         else
         {
-            out(indent = 0)
+            //this is a plain property, unless the class specify otherwise
+            if (prop.set_fn)
             {
-                <xss:e value="prop_name"/> =  <xss:e>prop.generate_value()</xss:e>;
+                out(indent = 0)
+                {
+                    <xss:e value="it.id"/>.<xss:e value="prop.set_fn"/>(<xss:e>prop.generate_value()</xss:e>);
+                }
+            }
+            else
+            {
+                //plain vanilla
+                out(indent = 0)
+                {
+                    <xss:e value="prop_name"/> =  <xss:e>prop.generate_value()</xss:e>;
+                }
             }
         }
     }    

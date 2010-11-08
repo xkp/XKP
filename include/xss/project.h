@@ -13,16 +13,6 @@
 
 namespace xkp{
 
-//the idiom interface, under designed
-struct xss_idiom
-  {
-    virtual void    set_context(XSSContext ctx)                                                = 0;
-    virtual variant process_method(DynamicObject instance, xs_method& mthd)                    = 0; 
-    virtual variant process_event(DynamicObject instance, const str& event_name, xs_event& ev) = 0;
-    virtual variant process_code(code& cde, DynamicObject this_)                               = 0;
-    virtual variant process_expression(expression expr, DynamicObject this_)                   = 0;
-  };
-
 class xss_project : public boost::enable_shared_from_this<xss_project>
   {
     public:
@@ -36,7 +26,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       variant           idiom;
       variant           path;
       DynamicObjectList instances;
-      DynamicObjectList classes;
+      DynamicArray      classes;
       
       void compile_instance(const str& filename, DynamicObject instance);
       void register_instance(const str& id, DynamicObject instance, DynamicObject parent = DynamicObject());
@@ -62,8 +52,11 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       //these are applications objects (i.e, pure data)
       typedef std::map<str,  size_t> instance_registry;
       typedef std::pair<str, size_t> instance_registry_pair;
+      typedef std::map<str,  DynamicObject>   class_registry;
+      typedef std::pair<str, DynamicObject>   class_registry_pair;
       
       instance_registry instances_;
+      class_registry    classes_; 
     public:
       //must keep some info about files
       struct file_info
@@ -91,6 +84,8 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       void save_file(const str& fname, const str& contents);
       str  generate_file(const str& fname);
       void preprocess();
+      void read_classes(const str& class_library_file);
+
       str  localize_file(const str& );
   };  
 

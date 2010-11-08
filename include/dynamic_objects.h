@@ -333,6 +333,7 @@ namespace xkp
       public:
         //interface
         void stop();
+        void add(const str& name, variant value);
       public:
         //schema
         virtual void visit(schema_visitor* visitor);

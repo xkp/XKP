@@ -56,6 +56,7 @@ $(function() {
 
     method generate()
     {
+        //recursively generate child components
         generate_component(application, indent = 0);
     }
     </xss:class>

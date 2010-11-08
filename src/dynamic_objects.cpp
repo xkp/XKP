@@ -292,6 +292,18 @@ void sponge_object::stop()
     stopped_ = true;
   }
 
+void sponge_object::add(const str& name, variant value)
+  {
+    //td: utilify
+    int idx = add_anonymous(value);        
+    schema_item si;
+    si.flags = DYNAMIC_ACCESS;
+    si.get   = Getter( new anonymous_getter(idx) );
+    si.type  = value.get_schema();
+   
+    add_item(name, si);
+  }
+  
 void sponge_object::visit(schema_visitor* visitor)
   {
     item_list::iterator it = items_.begin();

@@ -266,7 +266,9 @@ variant execution_context::execute()
                     IDynamicObject* obj = variant_cast<IDynamicObject*>(resolver, null);
                     if (obj && obj->resolve(resolve_name, itm))
                       {
-                        assert(itm.exec);
+                        if (!itm.exec)
+                          assert(false);
+                      
                         operands_.push(itm.exec);
                       }
                     else

@@ -413,6 +413,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\data\xss\jquery\classes.xml"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\data\xss\jquery\component.xss"
 					>
 				</File>

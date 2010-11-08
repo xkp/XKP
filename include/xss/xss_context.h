@@ -7,12 +7,26 @@
 namespace xkp {
 
 //forwards
-class             xss_property;
-typedef reference<xss_property> XSSProperty;
+class   xss_property;
+struct  xss_code_context;
+  
+typedef reference<xss_property>     XSSProperty;
+typedef reference<xss_code_context> XSSContext;
+
+//the idiom interface, under designed
+struct xss_idiom
+  {
+    virtual void    set_context(XSSContext ctx)                                                = 0;
+    virtual variant process_method(DynamicObject instance, xs_method& mthd)                    = 0; 
+    virtual variant process_event(DynamicObject instance, const str& event_name, xs_event& ev) = 0;
+    virtual variant process_code(code& cde, DynamicObject this_)                               = 0;
+    virtual variant process_expression(expression expr, DynamicObject this_)                   = 0;
+    virtual str     resolve_this(XSSContext ctx)                                               = 0;
+  };
 
 struct xss_code_context : base_code_context
   {
-    xss_code_context(const variant project);
+    xss_code_context(const variant project, xss_idiom* idiom);
     xss_code_context(xss_code_context& other);
 
     //this will function as resolver
@@ -22,11 +36,10 @@ struct xss_code_context : base_code_context
     virtual variant       evaluate_property(DynamicObject obj, const str& name);
     public:
       //td: ugles, this is the way it is to circunvent c++ and its dependencies
-      variant project_;
+      variant    project_;
+      xss_idiom* idiom_;
   };
   
-typedef reference<xss_code_context> XSSContext;
-
 struct xss_composite_context : xss_code_context
   {
     xss_composite_context(XSSContext ctx);
@@ -54,11 +67,10 @@ struct xss_property : public sponge_object
     variant       set;
     size_t        flags;
     DynamicObject this_;
+    variant       value_;
     
     str     generate_value();
     variant get_value();
-    private:
-      variant value_;
   };
   
 struct xss_event

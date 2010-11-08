@@ -5,6 +5,7 @@
 #include "xs/linker.h"
 #include "xs/compiler.h"
 #include "archive/json_archive.h"
+#include "archive/xml_archive.h"
 
 #include <dynamic_objects.h>
 
@@ -13,12 +14,94 @@
 
 using namespace xkp;
 
+//visitors, fun stuff like that
+struct class_internal_gather : dynamic_visitor
+  {
+    class_internal_gather(IEditableObject* editable, IDynamicObject* output):
+      editable_(editable),
+      output_(output)
+      {
+      }
+    
+    virtual void item(const str& name, variant value)
+      {
+        if (name == "properties")
+          return; //bail
+          
+        //td: utilify
+        int idx = output_->add_anonymous(value);        
+        schema_item si;
+        si.flags = DYNAMIC_ACCESS;
+        si.get   = Getter( new anonymous_getter(idx) );
+        si.type  = value.get_schema();
+       
+        editable_->add_item(name, si);
+      }
+      
+      private:
+        IEditableObject* editable_;
+        IDynamicObject*  output_;
+  };
+  
+
+struct property_mixer : dynamic_visitor
+  {
+    property_mixer(DynamicObject prop, DynamicObject instance):
+      prop_(prop),
+      instance_(instance),
+      result_(new xss_property())
+      {
+        //td: XSS props must have type
+        result_->flags  = 0;
+        result_->this_  = instance;
+      }
+    
+    virtual void item(const str& name, variant value)
+      {
+        if (name == "name")
+          result_->name = (str)value;
+        else if (name == "default_value")
+          result_->value_ = value;
+        else if (name == "type")
+          type_ = (str)value;
+        else 
+          result_->add(name, value);
+      }
+    
+    XSSProperty result()
+      {
+        assert(!result_->name.empty());
+        variant instance_value = dynamic_get(instance_, result_->name); //td: do.query
+        if (!instance_value.empty())
+          {
+            result_->value_ = instance_value;
+          }
+        else if (result_->value_.empty())
+          {
+            //td: get default value from type
+          }
+          
+        return result_;
+      }  
+    private:
+      DynamicObject prop_;
+      DynamicObject instance_;
+      XSSProperty   result_; 
+      str           type_; 
+  };
+
 //xss_code_context
-xss_code_context::xss_code_context(const variant _project) : base_code_context(), project_(_project)
+xss_code_context::xss_code_context(const variant _project, xss_idiom* idiom) : 
+  base_code_context(), 
+  project_(_project),
+  idiom_(idiom)
   {
   }
 
-xss_code_context::xss_code_context(xss_code_context& other) : base_code_context(other), project_(other.project_)
+xss_code_context::xss_code_context(xss_code_context& other) : 
+  base_code_context(other), 
+  project_(other.project_),
+  idiom_(other.idiom_)
   {
   }
 
@@ -70,7 +153,7 @@ variant xss_code_context::evaluate_property(DynamicObject obj, const str& name)
 
 //xss_composite_context
 xss_composite_context::xss_composite_context(XSSContext ctx):
-  xss_code_context(ctx->project_),
+  xss_code_context(ctx->project_, ctx->idiom_),
   ctx_(ctx)
   {
     types_    = ctx->types_;
@@ -164,6 +247,11 @@ str xss_property::generate_value()
             //return json.result();
 
             return "null";
+          }
+        else if (value_.is<str>())
+          {
+            str ss = (str)value_;
+            v = '"' + ss + '"';
           }
         else
           {
@@ -327,12 +415,16 @@ void xss_project::build()
     str op = dynamic_get(path, "output_path");
     output_path_ = op;
     
+    //read the classes
+    str class_library = dynamic_get(path, "class_library");
+    read_classes(class_library);
+    
     //grab the idiom
     idiom_ = idiom;
 
     //contextualize
     XSSProject me = shared_from_this();
-    context_      = XSSContext(new xss_code_context(me));
+    context_      = XSSContext(new xss_code_context(me, idiom_));
     current_      = XSSGenerator(new xss_generator(context_));
 
     //td: stupid references
@@ -345,8 +437,9 @@ void xss_project::build()
 
     //go at it
     preprocess();
-
-    dynamic_set(application, "class_name", str("applications"));
+    
+    //the application object is manually handled... not sure why atm
+    dynamic_set(application, "class_name", str("application"));
     register_instance("application", application);
 
     //compile the code aasociated with the app, note that any
@@ -456,15 +549,52 @@ void xss_project::register_instance(const str& id, DynamicObject it, DynamicObje
 
     //td: debug code
     str rid = variant_cast<str>(dynamic_get(it, "id"), "");
-    str rclaz = variant_cast<str>(dynamic_get(it, "class_name"), "");
     if (rid != _id)
       {
       }
+    
+    //update the instance, this is largely inefficient memory wise
+    //but oh so easy to write.
+    str class_name = variant_cast<str>(dynamic_get(it, "class_name"), "");
+    class_registry::iterator cit = classes_.find(class_name);
+    if (cit == classes_.end())
+      assert(false);
+      
+    DynamicObject clazz      = cit->second;
+    DynamicArray  properties = variant_cast<DynamicArray>(dynamic_get(clazz, "properties"), DynamicArray()); 
+    DynamicArray  instance_properties = get_property_array(it);
+    
+    if (properties)
+      {
+        //Here it gets a little tricky, coherent, but tricky.
+        //we need to convert the classes incoming properties into
+        //XSSProperties, we should account for values that come in the instace
+        //to be the proper values.
+        for(size_t pp = 0; pp < properties->size(); pp++)
+        {
+          DynamicObject pobj = properties->at(pp);
+          property_mixer mixer(pobj, it);
+          pobj->visit(&mixer);
+          
+          XSSProperty ppprop = mixer.result(); assert(ppprop);
+          instance_properties->push_back(ppprop);
+        }
+      }
+      
+    //we have only copied the high level properties, we still have to grab the internal 
+    //properties, the ones to be used by the generator.
+    IEditableObject* editable = variant_cast<IEditableObject*>(it, null);
+    IDynamicObject*  output   = it.get();
+    class_internal_gather gather(editable, output);
+        
+    clazz->visit(&gather);
 
+    //all set, lets register it 
     dynamic_set(it, "id", _id);
     instances_.insert(instance_registry_pair(_id, instances.size()));
     instances.push_back(it);
     
+    //and build a tree
     if (parent)
       {
         dynamic_set(it, "parent", parent);
@@ -482,7 +612,7 @@ void xss_project::render_instance(DynamicObject instance, const str& xss)
 
     //setup the context
     XSSProject me = shared_from_this();
-    xss_code_context* ctx = new xss_code_context(me);
+    xss_code_context* ctx = new xss_code_context(me, idiom_);
     XSSContext context(ctx);
     xss_generator gen(context);
 
@@ -544,7 +674,8 @@ void xss_project::breakpoint(const param_list params)
         str param_name = params.get_name(i);
         variant value  = params.get(i);
 
-        str string_value = variant_cast<str>(value, "");
+        str           string_value = variant_cast<str>(value, "");
+        DynamicObject obj_value    = variant_cast<DynamicObject>(value, DynamicObject());
       }
   }
 
@@ -743,4 +874,32 @@ void xss_project::preprocess()
     DynamicObject app_object = application;
     pre_process pp(app_object, DynamicObject(), *this);
     app_object->visit(&pp);
+  }
+
+void xss_project::read_classes(const str& class_library_file)
+  {
+    type_registry types;
+    types.set_default_type(type_schema<sponge_object>());
+
+    xml_read_archive class_library_achive(load_file(source_path_ + class_library_file), &types);
+    classes = class_library_achive.get( type_schema<DynamicArray>() );
+    
+    for(size_t i = 0; i < classes->size(); i++)
+      {
+        DynamicObject obj = classes->at(i);
+        str           id  = dynamic_get(obj, "id");
+        
+        if (id.empty())
+          assert(false); //td: error, classes must have id
+        
+        class_registry::iterator it = classes_.find(id);
+        if (it == classes_.end())
+          {
+            classes_.insert(class_registry_pair(id, obj));
+          }
+        else
+          {
+            assert(false); //td: 
+          }
+      }
   }

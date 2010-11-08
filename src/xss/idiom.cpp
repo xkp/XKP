@@ -217,7 +217,7 @@ struct expression_renderer : expression_visitor
             case op_inc:
               {
                 int prec;
-                str os = operand_to_string(arg1, &prec);
+                str os = operand_to_string(arg1, DynamicObject(), &prec);
 
                 std::stringstream ss;
                 if (op_prec < prec)
@@ -234,7 +234,7 @@ struct expression_renderer : expression_visitor
             case op_not:
               {
                 int prec;
-                str os = operand_to_string(arg1, &prec);
+                str os = operand_to_string(arg1, DynamicObject(), &prec);
 
                 std::stringstream ss;
                 if (op_prec < prec)
@@ -248,17 +248,60 @@ struct expression_renderer : expression_visitor
 
             case op_assign:
               {
-                //we need to know if we're assigning to a property that might have a setter
-                XSSProperty prop = get_property(arg1);
-
                 std::stringstream ss;
                 str os1 = operand_to_string(arg1);
                 str os2 = operand_to_string(arg2);
 
-                if (prop && !prop->set.empty())
-                  ss << os1 << "_set(" << os2 << ")"; //td: formalize the calling conventions
+                //we need to know if we're assigning to a property that might have a setter
+                XSSProperty prop = get_property(arg1);
+                if (prop)
+                  {
+                    str set_fn = variant_cast<str>(dynamic_get(prop, "set_fn"), ""); //let the outside world determine
+                                                                                     //if a native function call shouls be made 
+                    if (!set_fn.empty())
+                      {
+                        //replace the property name with the set function
+                        //this gets a little hacky, I admit, because of a use case
+                        //where the get function has already been inserted
+                        str  prop_name = prop->name;
+                        bool found     = false;
+                        if (os1.size() > prop_name.size())
+                          {
+                            //check for the property name at the end of os1
+                            str ppnm = os1.substr(os1.size() - prop_name.size(), prop_name.size());
+                            if (ppnm == prop_name)
+                              {
+                                os1.erase(os1.size() - prop_name.size(), prop_name.size());
+                                os1 += set_fn;
+                                found = true;
+                              }
+                          }
+                        
+                        if (!found)
+                          {
+                            str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
+                            if (!get_fn.empty() && os1.size() > (get_fn.size() + 2)) //in the hacky case () has been added
+                              {
+                                str ppnm = os1.substr(os1.size() - (get_fn.size() + 2), get_fn.size() + 2);
+                                if (ppnm == (get_fn + "()"))
+                                  {
+                                    os1.erase(os1.size() - 2, 2); //just get rid of the ()
+                                    found = true;
+                                  }
+                              }
+                          }
+                        
+                        ss << os1 << "(" << os2 << ")";
+                      }
+                    else if (!prop->set.empty())
+                      ss << os1 << "_set(" << os2 << ")"; //td: formalize the calling conventions
+                    else 
+                      ss << os1 << " = " << os2;
+                  }
                 else
-                  ss << os1 << " = " << os2;
+                  {
+                    ss << os1 << " = " << os2;
+                  }
 
                 push_rendered(ss.str(), op_prec, prop);
                 break;
@@ -293,8 +336,8 @@ struct expression_renderer : expression_visitor
                 int p1;
                 int p2;
 
-                str os1 = operand_to_string(arg1, &p1);
-                str os2 = operand_to_string(arg2, &p2);
+                str os1 = operand_to_string(arg1, DynamicObject(), &p1);
+                str os2 = operand_to_string(arg2, DynamicObject(), &p2); //td: resolve properties and stuff
 
                 if (op_prec < p1)
                   os1 = "(" + os1 + ")";
@@ -315,16 +358,27 @@ struct expression_renderer : expression_visitor
                 //type checking, that's a lot of work unless the code_linker feels
                 //like cooperating
                 DynamicObject o1 = get_instance(arg1);
-                str           s2 = operand_to_string(arg2);
+                str           s2 = operand_to_string(arg2, o1);
                 DynamicObject o2 = get_instance(o1, s2);
 
-                XSSProperty   prop = get_property(o1, s2);
+                XSSProperty   prop       = get_property(o1, s2);
                 bool          has_getter = prop && !prop->get.empty();
 
                 std::stringstream ss;
-                ss << operand_to_string(arg1) << "." << s2;
-                if (has_getter)
-                  ss << "_get()";
+                ss << operand_to_string(arg1);
+                
+                if (prop)
+                  {
+                    str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
+                    if (!get_fn.empty())
+                      ss << "." << get_fn << "()";
+                    else if (has_getter)
+                      ss << "." << s2 << "_get()";
+                    else   
+                      ss << "." << s2;
+                  }
+                else 
+                   ss << "." << s2;
 
                 if (prop)
                   push_rendered(ss.str(), op_prec, prop);
@@ -352,12 +406,22 @@ struct expression_renderer : expression_visitor
                 //pop the arguments
                 for(int i = 0; i < args; i++)
                   {
-                    variant arg = stack_.top(); stack_.pop();
-                    result << operand_to_string(arg);
-
+                    variant arg  = stack_.top(); stack_.pop();
+                    str     sarg = operand_to_string(arg);
+                    
                     XSSProperty prop = get_property(arg);
-                    if (prop && !prop->get.empty())
-                      result << "_get()";
+                    if (prop)
+                      {
+                        str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
+                        if (!get_fn.empty())
+                          result << get_fn << "()";
+                        else if (!prop->get.empty())
+                          result << sarg << "_get()";
+                        else   
+                          result << sarg;
+                      }
+                    else 
+                       result << sarg;
 
                     if (i < args - 1)
                       {
@@ -395,7 +459,7 @@ struct expression_renderer : expression_visitor
     str get()
       {
         if(stack_.empty())
-          return "***EMPTY STACK***";
+          return "***EMPTY STACK***"; //td: error
 
         variant result = stack_.top();
         if (result.is<already_rendered>())
@@ -421,7 +485,7 @@ struct expression_renderer : expression_visitor
       std::stringstream result_;
       XSSContext        ctx_;
 
-      str operand_to_string(variant operand, int* prec = null)
+      str operand_to_string(variant operand, DynamicObject parent = DynamicObject(), int* prec = null)
         {
           str result;
           int result_prec = 0;
@@ -429,6 +493,24 @@ struct expression_renderer : expression_visitor
             {
               expression_identifier ei = operand;
               result = ei.value;
+
+              if (!parent)
+                {
+                  //here we ought to resolve a single symbol (ex width = 10)
+                  //thid *could* belong to the "this" pointer
+                  
+                  if (ctx_->idiom_)
+                    {
+                      XSSProperty prop = ctx_->get_property(ei.value);
+                      if (prop)
+                        {
+                          //well, lets see how the idiom handles thises
+                          str this_str = ctx_->idiom_->resolve_this(ctx_);
+                          if (!this_str.empty())
+                            result = this_str + "." + ei.value; //otherwise it doesnt get translated 
+                        }
+                    }
+                }
             }
           else if (operand.is<already_rendered>())
             {
@@ -530,22 +612,45 @@ struct code_renderer : code_visitor
 
     virtual void iterfor_(stmt_iter_for& info)
       {
-        assert(false);
+        std::stringstream ss;
+        str ind = get_indent_str();
+
+        str iterable_name = info.id + "_iterable";
+        str iterator_name = info.id + "_iterator";
+        ss << ind << "var " << iterable_name << " = " << render_expression(info.iter_expr, ctx_) << "\n";
+        ss << ind << "for(var " << iterator_name << " = 0; " 
+           << iterator_name << " < " << iterable_name << ".length; "
+           << iterator_name << "++" << ")\n";
+
+        ss << ind << "{" << "\n"
+                  <<    "var " << info.id << " = " << iterable_name << "[" << iterator_name << "];\n"
+                  <<    render_code(info.for_code, indent_ + 1);
+        ss << ind << "}" << "\n";
+
+        add_line(ss.str());
       }
 
     virtual void while_(stmt_while& info)
       {
-        assert(false);
+        std::stringstream ss;
+        str ind = get_indent_str();
+
+        ss << ind << "while(" << render_expression(info.expr, ctx_) << ")\n" ;
+        ss << ind << "{" << "\n"
+                  <<    render_code(info.while_code, indent_ + 1);
+        ss << ind << "}" << "\n";
+
+        add_line(ss.str());
       }
 
     virtual void break_()
       {
-        assert(false);
+        add_line("break;", true);
       }
 
     virtual void continue_()
       {
-        assert(false);
+        add_line("continue;", true);
       }
 
     virtual void return_(stmt_return& info)
@@ -564,12 +669,13 @@ struct code_renderer : code_visitor
 
     virtual void dsl_(dsl& info)
       {
-        assert(false);
+        assert(false); //td: there is some stuff to implement here... later
       }
 
     virtual void dispatch(stmt_dispatch& info)
       {
-        assert(false);
+        assert(false); //td: ought to define what to do here, it would seem like the idiom would like
+                       //to handle this 
       }
     private:
       str        result_;
@@ -739,4 +845,29 @@ variant base_idiom::process_expression(expression expr, DynamicObject this_)
 
     xssExpression result(new base_xss_expression(ctx, expr));
     return result;
+  }
+
+str base_idiom::resolve_this(XSSContext ctx)
+  {
+    //orogramming languages do not agree on how to use this pointers
+    //c++ lets you ignore them, jsva script et all force you to 
+    //and there are other intrincate circumstances (like functions in js)
+    //where something must be done.
+    
+    if (id_as_this_)
+      {
+        if (ctx->this_)
+          {
+            str iid = variant_cast<str>(dynamic_get(ctx->this_, "id"), ""); 
+            assert(!iid.empty()); //td: error, nameless instance
+            
+            return iid;
+          }
+      }
+    else if (force_this_ && !ctx->this_.empty())
+      {
+        return "this";
+      }    
+      
+    return "";
   }

@@ -768,11 +768,23 @@ namespace detail
 
       virtual void cast(const variant src, schema* s, variant& result)
         {
-          T t = src;
           if (s == type_schema<str>())
             {
               //string conversion
+              T t = src;
               result = boost::lexical_cast<str>( t );
+            }
+          else if (s == type_schema<bool>()) //bool conversion
+            {
+              if (src.is<str>())
+                result = true; //strings are always true
+              else if (src.is<int>())
+                {
+                  int ii = src;
+                  result = ii != 0; 
+                }
+              else 
+                throw type_mismatch(); //td: do the rest of simple types
             }
           else
             throw type_mismatch(); //td: simple type casting (ints, etc)

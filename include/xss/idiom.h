@@ -73,18 +73,22 @@ typedef reference<base_xss_function> xssFunction;
 //the aim is that you dont have to
 struct base_idiom : xss_idiom
   {
-    base_idiom()                                            {}    
-    base_idiom(const base_idiom& other)  : ctx_(other.ctx_) {}
+    base_idiom()                         : id_as_this_(false), force_this_(true)                  {}    
+    base_idiom(const base_idiom& other)  : ctx_(other.ctx_),id_as_this_(false), force_this_(true) {}
   
     virtual void    set_context(XSSContext ctx);
     virtual variant process_method(DynamicObject instance, xs_method& mthd);
     virtual variant process_event(DynamicObject instance, const str& event_name, xs_event& ev);
     virtual variant process_code(code& cde, DynamicObject this_);
     virtual variant process_expression(expression expr, DynamicObject this_);
+    virtual str     resolve_this(XSSContext ctx);
     
     protected:
       std::vector<xssFunction> functions_;
       XSSContext               ctx_;
+    public:  
+      bool id_as_this_;
+      bool force_this_;
   };
 
 
@@ -113,6 +117,8 @@ struct base_idiom_schema : object_schema<base_idiom>
     base_idiom_schema()
       {
         implements<xss_idiom>();
+        property_("id_as_this", &base_idiom::id_as_this_);
+        property_("force_this", &base_idiom::force_this_);
       }
   };
   
