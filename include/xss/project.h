@@ -98,11 +98,11 @@ struct xss_project_schema : object_schema<xss_project>
       {
         static_field("includes",  &xss_project::includes);
         static_field("instances", &xss_project::instances, TRANSIENT);
-        static_field("classes",   &xss_project::classes, TRANSIENT);
 
         property_("application", &xss_project::application);
         property_("path",        &xss_project::path);
         property_("idiom",       &xss_project::idiom);
+        property_("classes",     &xss_project::classes, TRANSIENT);
 
         method_<void, 2>("compile_instance",    &xss_project::compile_instance);
         method_<void, 3>("register_instance",   &xss_project::register_instance);

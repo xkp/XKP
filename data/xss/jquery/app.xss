@@ -22,11 +22,23 @@ $(function() {
 
 <body>
     <xss:class entry_point="generate">
+    method tag_properties(var component)
+    {
+        string result = "";
+        if (component.id)
+        {
+            string id = component.id;
+            result = "id='" + id + "'";
+        }
+            
+        return result;
+    }
+    
     method generate_component(var component, int ind)
     {
         out(indent = ind)
         {
-            <<xss:e value="component.tag_name"/> <xss:e value="project.inline_properties(component)"/>>
+            <<xss:e value="component.tag_name"/> <xss:e value="tag_properties(component)"/>>
         }
         
         if (component.insert_text)

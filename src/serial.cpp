@@ -48,6 +48,7 @@ bool base_archive::attributed_type(schema* type)
            (type == type_schema<long>())   ||
            (type == type_schema<float>())  ||
            (type == type_schema<double>()) ||
+           (type == type_schema<bool>())   ||
            (type == type_schema<str>());
   }
 

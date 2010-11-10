@@ -12,13 +12,13 @@ btn1.text("One button");
 btn1.width(100);
 btn1.click(function(event)
 {    
-    this.text("Other Clicked");
     btn2.text("Clicked");
+    btn1.text("Other Clicked");
 });
 
 
 var btn2 = $("#btn2");
-btn2.text("One button");
+btn2.text("Two button");
 btn2.width(100);
 btn2.click(function(event)
 {    
@@ -42,12 +42,12 @@ application.target_set = function (value)
         }
     }
 }
-    application.target = function(s) 
-    {
-    	this.target_set(s);
-    	btn1.text("...");
-    	btn2.text("...");
-    };
+application.reset = function(s) 
+{
+	application.target_set(s);
+	btn1.text("...");
+	btn2.text("...");
+};
 
 
 
@@ -59,10 +59,10 @@ application.target_set = function (value)
 </head>
 
 <body>
-    <div ERROR(inline_properties not implemented)>
-    <button ERROR(inline_properties not implemented)>
+    <div id='application'>
+    <button id='btn1'>
         </button>
-    <button ERROR(inline_properties not implemented)>
+    <button id='btn2'>
         </button>
     </div>
 

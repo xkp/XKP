@@ -359,6 +359,7 @@ void code_linker::push(variant operand)
       }
     else
       {
+        //td: !!! stuff should be added (on code) as they come, not when the operators get popped
         constant c;
         c.value = operand;
         stack_.push(c);

@@ -417,10 +417,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\data\xss\jquery\component.xss"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\data\xss\jquery\instance.xss"
 					>
 				</File>

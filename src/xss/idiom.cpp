@@ -856,7 +856,7 @@ str base_idiom::resolve_this(XSSContext ctx)
     
     if (id_as_this_)
       {
-        if (ctx->this_)
+        if (!ctx->this_.empty())
           {
             str iid = variant_cast<str>(dynamic_get(ctx->this_, "id"), ""); 
             assert(!iid.empty()); //td: error, nameless instance

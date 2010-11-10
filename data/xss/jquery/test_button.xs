@@ -1,7 +1,7 @@
 on btn1.click()
 {
-	caption = "Other Clicked";
 	btn2.caption = "Clicked";
+	caption = "Other Clicked";
 }
 
 property target

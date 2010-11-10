@@ -83,10 +83,10 @@ if (it.properties)
 //methods, easy bastards
 if (it.methods)
 {
-    string mthd_name = it.id + "." + prop.name;
     for(var mthd in it.methods)
     {
-		out(indent = 1)
+        string mthd_name = it.id + "." + mthd.name;
+		out(indent = 0)
 		{
 			<xss:e value="mthd_name"/> = function(<xss:e>mthd.args.generate()</xss:e>) 
 			{
