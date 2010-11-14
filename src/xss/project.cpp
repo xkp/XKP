@@ -882,11 +882,14 @@ void xss_project::read_classes(const str& class_library_file)
     types.set_default_type(type_schema<sponge_object>());
 
     xml_read_archive class_library_achive(load_file(source_path_ + class_library_file), &types);
-    classes = class_library_achive.get( type_schema<DynamicArray>() );
+    classes = class_library_achive.get( type_schema<DynamicObjectList>() );
     
-    for(size_t i = 0; i < classes->size(); i++)
+    DynamicObjectList::iterator it = classes.begin();
+    DynamicObjectList::iterator nd = classes.end();
+
+    for(; it != nd; it++)
       {
-        DynamicObject obj = classes->at(i);
+        DynamicObject obj = *it;
         str           id  = dynamic_get(obj, "id");
         
         if (id.empty())

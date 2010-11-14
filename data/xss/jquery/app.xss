@@ -8,6 +8,10 @@
 <script type="text/javascript">
 $(function() {
     <xss:code>
+    for(var c in classes)
+    {
+    }
+
     for(var i in instances)
     {
         render_instance(i, "instance.xss");

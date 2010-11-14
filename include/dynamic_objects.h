@@ -210,6 +210,11 @@ namespace xkp
   template <typename T>
   struct do_interface_schema : default_schema<T>
     {
+      virtual size_t options()
+        {
+          return default_schema<T>::options() | TYPE_NON_INSTANTIABLE;
+        }
+      
       virtual void cast(const variant src, schema* ss, variant& result)
         {
           T self = src;
