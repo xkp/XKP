@@ -1,8 +1,19 @@
 
 #include <xs/behaviour.h>
+#include <xs/xs_error.h>
 
 using namespace xkp;
 
+//strings
+const str SErrorOutOfContext("ooc");
+const str SInstanceNotAllowedOnBehaviours("Instances are not allowed inside behaviours");
+const str SClassesNotAllowedOnBehaviours("Classes are not allowed inside behaviours");
+const str SNoNestedBehaviours("Nested behaviours are not allowed");
+const str SInterfaceNotMet("behaviour-interface");
+const str SProvideBehaviourWithProperty("This behaviour needs a property");
+const str SProvideBehaviourWithMethod("This behaviour needs a method");
+
+//behaviour_schema
 behaviour_schema::behaviour_schema(behaviour_schema* super)
   {
     if (super)
@@ -62,22 +73,34 @@ void behaviour_schema::const_(xs_const& info)
   
 void behaviour_schema::instance_(xs_instance& info)
   {
-    assert(false); //td: error, no instances allowed inside behaviours
+    param_list error;
+    error.add("id", SErrorOutOfContext);
+    error.add("desc", SInstanceNotAllowedOnBehaviours);
+    xs_throw(error);
   }
   
 void behaviour_schema::class_(xs_class& info)
   {
-    assert(false); //td: error, no classes allowed inside behaviours
+    param_list error;
+    error.add("id", SErrorOutOfContext);
+    error.add("desc", SClassesNotAllowedOnBehaviours);
+    xs_throw(error);
   }
   
 void behaviour_schema::behaviour_(xs_behaviour& info)
   {
-    assert(false); //td: error, no nested behaviours allowed
+    param_list error;
+    error.add("id", SErrorOutOfContext);
+    error.add("desc", SNoNestedBehaviours);
+    xs_throw(error);
   }
   
 void behaviour_schema::behaveas_(xs_implement_behaviour& info)
   {
-    assert(false); //td: error, no nested behaviours allowed
+    param_list error;
+    error.add("id", SErrorOutOfContext);
+    error.add("desc", SNoNestedBehaviours);
+    xs_throw(error);
   }
   
 void behaviour_schema::dsl_(dsl& info)
@@ -119,7 +142,11 @@ void delegate_visitor::property_(xs_property& info)
       }
     else
       {
-        assert(false); //td: error, interface not met, possibly do constants?
+        param_list error;
+        error.add("id", SInterfaceNotMet);
+        error.add("desc", SProvideBehaviourWithProperty);
+        error.add("property", info.name);
+        xs_throw(error);
       }
   }
   
@@ -129,6 +156,7 @@ void delegate_visitor::method_(xs_method& info)
     if (output_->resolve(info.name, result))
       return; //already there
     
+    bool resolved = false;
     if (bindings_->resolve(info.name, result))
       {
         variant binding = result.get->get(bindings_);
@@ -136,15 +164,18 @@ void delegate_visitor::method_(xs_method& info)
           {
             schema_item si = binding;
             editable_->add_item(info.name, si);
-          }
-        else
-          {
-            assert(false); //td: error, not a method
+
+            resolved = true;
           }
       }
-    else
+    
+    if (!resolved)
       {
-        assert(false); //td: error, interface not met
+        param_list error;
+        error.add("id", SInterfaceNotMet);
+        error.add("desc", SProvideBehaviourWithMethod);
+        error.add("property", info.name);
+        xs_throw(error);
       }
   }
   

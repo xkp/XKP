@@ -4,8 +4,34 @@
 #include <xs/vm.h>
 #include <xs/behaviour.h>
 #include <xs/array.h>
+#include <xs/xs_error.h>
 
 using namespace xkp;
+
+//strings
+const str SOutOfContext("not-sure");
+const str SUnknownIdentifier("cannot-resolve");
+const str STypeMismatch("type-mismatch");
+const str SDuplicate("dup");
+const str SAssignError("assign");
+
+const str SCannotResolve("Unknown identifier");
+const str STypedArrayMustContainTheSameType("Adding an element to an array that does not match the type");
+const str SCannotResolveType("Unknown type");
+const str SCannotResolveCall("Unknown identifier");
+const str STryingToCallANonCollable("Trying to call something it shouldnt be called");
+const str SAssigningMismatchedLocalVariable("Incompatible types assigning a local variable");
+const str SLocalVariableAlreadyDeclared("Local variable already declared");
+const str SAccesingThisOnAThislessCode("There isn't a 'this' on this context");
+const str SCannotAssign("Cannot assign");
+const str SAssigningToWriteOnly("Cannot assign, write only");
+const str SAssigningToConstant("Cannot assign, constant");
+const str SAlteringInmutableObject("Cannot enhance an inmutable object");
+const str SInstanceNotFound("Instance not found");
+const str STypeNotFound("Type not found");
+const str SBehaviourNotFound("Behaviour not found");
+const str STypeIsNotABehaviour("Expecting behaviour");
+const str SSuperclassNotFound("Superclass not found");
 
 const char* operator_name[] =
   {
@@ -485,7 +511,11 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
                       stack_.push( si );
                     else
                       {
-                        assert(false); //td: unknown identifier
+                        param_list error;
+                        error.add("id", SUnknownIdentifier);
+                        error.add("desc", SCannotResolve);
+                        error.add("identifier", ei.value);
+                        xs_throw(error);
                       }
                   }
               }
@@ -516,7 +546,11 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
                       stack_.push( si );
                     else
                       {
-                        assert(false); //td: unknown identifier
+                        param_list error;
+                        error.add("id", SUnknownIdentifier);
+                        error.add("desc", SCannotResolve);
+                        error.add("identifier", ei.value);
+                        xs_throw(error);
                       }
                   }
               }
@@ -645,7 +679,12 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
               }
             else
               {
-                assert(false); //td: globals
+                //td: globals
+                param_list error;
+                error.add("id", SUnknownIdentifier);
+                error.add("desc", SCannotResolve);
+                error.add("identifier", name.value);
+                xs_throw(error);
               }
             break;
           }
@@ -683,7 +722,12 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
                 resolve_value(array_value, &value_type);
 
                 if (array_type_ && array_type_ != value_type)
-                  assert(false); //td: error, invalid types
+                  {
+                    param_list error;
+                    error.add("id", STypeMismatch);
+                    error.add("desc", STypedArrayMustContainTheSameType);
+                    xs_throw(error);
+                  }
               }
 
             //grab the array type needed
@@ -729,7 +773,14 @@ schema* code_linker::typeof_(const xs_type type)
     if (types && !type.name.empty())
       {
         result = types->get_type(type.name);
-        assert(result || type.name == "var"); //td: error, type does not exist
+        if (!result && type.name != "var")
+          {
+            param_list error;
+            error.add("id", SUnknownIdentifier);
+            error.add("desc", SCannotResolveType);
+            error.add("type", type.name);
+            xs_throw(error);
+          }
       }
 
     return result;
@@ -760,7 +811,7 @@ void code_linker::link_code(code& cde, int loop_pc)
               break;
             case fixup_loop:
               {
-                assert(!loops_.empty()); //td: error, 
+                assert(!loops_.empty()); //wha?
                 int pc = loops_.top(); 
                 instruction_data(it->instruction_idx, pc);
                 break;
@@ -839,12 +890,20 @@ int code_linker::add_call(variant caller, const str& name, int param_count, bool
     schema_item si;
     if (!caller_type->resolve(name, si))
       {
-        assert(false); //td: error, unknown identifier
+        param_list error;
+        error.add("id", SUnknownIdentifier);
+        error.add("desc", SCannotResolveCall);
+        error.add("call", name);
+        xs_throw(error);
       }
 
     if (!si.exec)
       {
-        assert(false); //td: error, read only
+        param_list error;
+        error.add("id", SOutOfContext);
+        error.add("desc", STryingToCallANonCollable);
+        error.add("call", name);
+        xs_throw(error);
       }
 
     add_instruction(i_load_constant, add_constant(si.exec));
@@ -988,7 +1047,14 @@ int code_linker::register_variable(const str& name, schema* type, expression* va
             if (type == null)
               type = expr_type;
 
-            assert(type == expr_type || expr_type == null); //td: error, type mismatch
+            if (type != expr_type && expr_type != null)
+              {
+                param_list error;
+                error.add("id", STypeMismatch);
+                error.add("desc", SAssigningMismatchedLocalVariable);
+                error.add("variable", name);
+                xs_throw(error);
+              }
           }
 
         local_variable lv(local_idx, type);
@@ -997,7 +1063,11 @@ int code_linker::register_variable(const str& name, schema* type, expression* va
       }
     else
       {
-        assert(false); //td: error system
+        param_list error;
+        error.add("id", SDuplicate);
+        error.add("desc", SLocalVariableAlreadyDeclared);
+        error.add("variable", name);
+        xs_throw(error);
       }
 
     return -1;
@@ -1043,7 +1113,14 @@ void code_linker::resolve_value(variant& arg, schema** type)
 
             if (id.value == "this")
               {
-                assert(this_); //td: error, must not be a thisless code
+                if(!this_)
+                  {
+                    param_list error;
+                    error.add("id", SOutOfContext);
+                    error.add("desc", SAccesingThisOnAThislessCode);
+                    xs_throw(error);
+                  }
+
                 add_instruction(i_load_this);
                 if (type) *type = this_;
               }
@@ -1091,7 +1168,11 @@ void code_linker::resolve_value(variant& arg, schema** type)
               }
             else
               {
-                assert(false); //td: unknown identifier + id
+                param_list error;
+                error.add("id", SUnknownIdentifier);
+                error.add("desc", SCannotResolve);
+                error.add("identifier", id.value);
+                xs_throw(error);
               }
           }
       }
@@ -1296,13 +1377,24 @@ void code_linker::resolve_assign(const variant& arg)
           }
         else
           {
-            assert(false); //td: cannot assign
+            param_list error;
+            error.add("id", SAssignError);
+            error.add("desc", SCannotAssign);
+            error.add("identifier", id.value);
+            xs_throw(error);
           }
       }
     else if (arg.is<schema_item>())
       {
         schema_item si = arg;
-        assert(si.set); //td: error, write only
+        if (!si.set)
+          {
+            param_list error;
+            error.add("id", SAssignError);
+            error.add("desc", SAssigningToWriteOnly);
+            xs_throw(error);
+          }
+        
         add_instruction(i_load_constant, add_constant(si.set));
         add_instruction(i_set, si.flags&DYNAMIC_ACCESS);
       }
@@ -1312,7 +1404,10 @@ void code_linker::resolve_assign(const variant& arg)
       }
     else
       {
-        assert(false); //td: error, trying to assign to const
+        param_list error;
+        error.add("id", SAssignError);
+        error.add("desc", SAssigningToConstant);
+        xs_throw(error);
       }
   }
 
@@ -1409,7 +1504,14 @@ struct decode_property
 
             if (itm.type)
               {
-                assert(value.get_schema() == itm.type); //td: type mismatch
+                if (value.get_schema() != itm.type)
+                  {
+                    param_list error;
+                    error.add("id", STypeMismatch);
+                    error.add("property", info.name);
+                    error.add("type", info.type);
+                    xs_throw(error);
+                  }
               }
             else
               {
@@ -1465,7 +1567,15 @@ struct decode_property
 
 void base_xs_linker::property_(xs_property& info)
   {
-    assert(editable_output_); //td: error, declaring items on a non editable object
+    if(!editable_output_)
+      {
+        param_list error;
+        error.add("id", SOutOfContext);
+        error.add("desc", SAlteringInmutableObject);
+        error.add("property", info.name);
+        error.add("type", info.type);
+        xs_throw(error);
+      }
 
     schema_item itm;
     itm.flags = DYNAMIC_ACCESS;
@@ -1475,7 +1585,15 @@ void base_xs_linker::property_(xs_property& info)
     else
       {
         itm.type = ctx_.types_->get_type(info.type);
-        assert(itm.type); //td: error, unknown type
+        if (!itm.type)
+          {
+            param_list error;
+            error.add("id", SUnknownIdentifier);
+            error.add("desc", SCannotResolveType);
+            error.add("property", info.name);
+            error.add("type", info.type);
+            xs_throw(error);
+          }
       }
 
     variant value;
@@ -1492,6 +1610,10 @@ void base_xs_linker::property_(xs_property& info)
         if (itm.type)
           {
             assert(value.get_schema() == itm.type); //td: type mismatch
+            param_list error;
+            error.add("id", STypeMismatch);
+            error.add("property", info.name);
+            error.add("type", info.type);
           }
         else
           {
@@ -1587,7 +1709,15 @@ struct decode_method
 
 void base_xs_linker::method_(xs_method& info)
   {
-    assert(editable_output_); //td: error, declaring items on a non editable object
+    if(!editable_output_)
+      {
+        param_list error;
+        error.add("id", SOutOfContext);
+        error.add("desc", SAlteringInmutableObject);
+        error.add("method", info.name);
+        error.add("type", info.type);
+        xs_throw(error);
+      }
 
     schema_item itm;
     itm.flags          = DYNAMIC_ACCESS;
@@ -1635,12 +1765,44 @@ void base_xs_linker::event_(xs_event& info)
     if (!name.empty())
       {
         DynamicObject inst = resolve_instance(name);
-        assert(inst);
         object = inst.get();
         target = variant_cast<IEditableObject*>(inst, null);
       }
 
-    assert(object && target); //td: error, unknown instance
+    if(!object)
+      {
+        if (info.name.size() > 1)
+          {
+            param_list error;
+            error.add("id", SUnknownIdentifier);
+            error.add("desc", SInstanceNotFound);
+            
+            std::vector<str>::iterator it = name.begin();
+            std::vector<str>::iterator nd = name.end();
+            
+            std::ostringstream oss;
+            for(; it != nd; it++)
+              oss << *it << "."; 
+            
+            str instance_name = oss.str();
+            instance_name = instance_name.substr(0, instance_name.size() - 1);
+            
+            error.add("instance", instance_name);
+            xs_throw(error);
+          }
+        else
+          assert(false); //internal malfunctioning
+      }
+
+    if(!target)
+      {
+        param_list error;
+        error.add("id", SOutOfContext);
+        error.add("desc", SAlteringInmutableObject);
+        error.add("event", info.name);
+        xs_throw(error);
+      }
+      
     int id = object->event_id(ev_name);
 
     schema_item itm;
@@ -1707,7 +1869,14 @@ void base_xs_linker::instance_(xs_instance& info)
 
         instance = instance->resolve_instance(id);
 
-        assert(instance); //td: error, unknown instance
+        if (!instance) 
+          {
+            param_list error;
+            error.add("id", SUnknownIdentifier);
+            error.add("desc", SInstanceNotFound);
+            error.add("instance", instance_name); //td: names to string
+            xs_throw(error);
+          }
       }
 
     if (!instance)
@@ -1719,7 +1888,14 @@ void base_xs_linker::instance_(xs_instance& info)
         else
           i_type = type_schema<default_object>();
 
-        assert(i_type); //td: unknown type
+        if (!i_type) 
+          {
+            param_list error;
+            error.add("id", SUnknownIdentifier);
+            error.add("desc", STypeNotFound);
+            error.add("type", info.class_name); 
+            xs_throw(error);
+          }
 
         //instantiate
         variant res;
@@ -1734,7 +1910,14 @@ void base_xs_linker::instance_(xs_instance& info)
           ctx_.scope_->register_symbol(instance_name, instance);
       }
 
-    assert(instance); //td: unknown instance
+    if (!instance) 
+      {
+        param_list error;
+        error.add("id", SUnknownIdentifier);
+        error.add("desc", SInstanceNotFound);
+        error.add("instance", instance_name); 
+        xs_throw(error);
+      }
 
     instance_linker il(ctx_, instance);
     il.link(info);
@@ -1755,10 +1938,24 @@ void base_xs_linker::behaviour_(xs_behaviour& info)
 void base_xs_linker::behaveas_(xs_implement_behaviour& info)
   {
     schema* type = ctx_.types_->get_type(info.name);
-    assert(type); //td: error, no such behaviour
+    if (!type) 
+      {
+        param_list error;
+        error.add("id", SUnknownIdentifier);
+        error.add("desc", SBehaviourNotFound);
+        error.add("behaviour", info.name); 
+        xs_throw(error);
+      }
 
     behaviour_schema* behaviour = dynamic_cast<behaviour_schema*>(type);
-    assert(behaviour); //td: error, can only behave as behaviours
+    if (!behaviour) 
+      {
+        param_list error;
+        error.add("id", SOutOfContext);
+        error.add("desc", STypeIsNotABehaviour);
+        error.add("type", info.name); 
+        xs_throw(error);
+      }
 
     //this code, as fas as this early revision, is special
     //its purpose if to link symbols between the concrete type
@@ -1870,7 +2067,11 @@ void class_linker::link(xs_class& info)
           }
         else
           {
-            assert(false); //td: unknown super
+            param_list error;
+            error.add("id", SUnknownIdentifier);
+            error.add("desc", SSuperclassNotFound);
+            error.add("type", info.super); 
+            xs_throw(error);
           }
       }
     else
@@ -1934,7 +2135,14 @@ void behaviour_linker::link(xs_behaviour& info)
     if (!info.super.empty())
       {
         super = dynamic_cast<behaviour_schema*>(ctx_.types_->get_type(info.super));
-        assert(super); //td: undeclared
+        if(!super)
+          {
+            param_list error;
+            error.add("id", SUnknownIdentifier);
+            error.add("desc", SSuperclassNotFound);
+            error.add("type", info.super); 
+            xs_throw(error);
+          }
       }
 
     result_ = new behaviour_schema(super); //td: lost

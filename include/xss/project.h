@@ -20,6 +20,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       xss_project(const xss_project& other) {}
     public:
       void build();
+      str  output_path();
     public:
       std::vector<str>  includes;
       variant           application;

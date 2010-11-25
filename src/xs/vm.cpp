@@ -1,9 +1,16 @@
 
 #include <xs/vm.h>
+#include <xs/runtime_error.h>
+
 #include <types.h>
 #include <dynamic_objects.h>
 
 using namespace xkp;
+
+const str SRuntime("vm");
+
+const str SCallingNull("Trying to access null object");
+const str STypeDoesNotInstantiate("Cannot instantiate type");
 
 //td: un duplicate
 const char* vm_operator_name[] =
@@ -293,8 +300,10 @@ variant execution_context::execute()
                 variant caller = pop();
                 if (caller.empty())
                   {
-                    assert(false); //td: !!! start trhowing exceptions already
-                                   //in this case, someone is calling something to a null
+                    param_list error;
+                    error.add("id", SRuntime);
+                    error.add("desc", SCallingNull);
+                    runtime_throw(error);
                   }
 
                 void*   caller_id;
@@ -341,7 +350,10 @@ variant execution_context::execute()
 
                 if (caller.empty())
                   {
-                    assert(false); //td: error, calling null
+                    param_list error;
+                    error.add("id", SRuntime);
+                    error.add("desc", SCallingNull);
+                    runtime_throw(error);
                   }
 
                 void* caller_id;
@@ -388,6 +400,12 @@ variant execution_context::execute()
                 if (type->create(result, &pl))
                   operands_.push(result);
                 else
+                  {
+                    param_list error;
+                    error.add("id", SRuntime);
+                    error.add("desc", STypeDoesNotInstantiate);
+                    runtime_throw(error);
+                  }
                   assert(false); //td: error, type does not instantiate
                 break;
               }

@@ -1,9 +1,18 @@
 
-#include "xss/dsl_out.h"
-#include "xss/utils.h"
-#include "xs/ast.h"
+#include <xss/dsl_out.h>
+#include <xss/utils.h>
+#include <xss/utils.h>
+#include <xss/xss_error.h>
+#include <xs/ast.h>
 
 using namespace xkp;
+
+//strings
+const str SInvalidTag("xss-tags");
+const str STypeMismatch("type-mismatch");
+
+const str SUnknownXSSTag("Using an unknown tag");
+const str SExpectingExpression("Expecting expression");
 
 struct part
   {
@@ -57,7 +66,11 @@ struct xss_gather : xss_visitor
             }
           else
             {
-              assert(false); //td: error, unknown tag
+              param_list error;
+              error.add("id", SInvalidTag);
+              error.add("desc", SUnknownXSSTag);
+              error.add("tag", tag);
+              xss_throw(error);
             }
         }
     private:
@@ -265,7 +278,17 @@ void out_linker::link(dsl& info, code_linker& owner)
     expression indent_expr;
     if (!indent_value.empty())
       {
-        indent_expr = indent_value; //td: catch type mismatch
+        try
+          {
+            indent_expr = indent_value; 
+          }
+        catch(type_mismatch tm)
+          {
+            param_list error;
+            error.add("id", STypeMismatch);
+            error.add("desc", SExpectingExpression);
+            xss_throw(error);
+          }
       }
     else
       {

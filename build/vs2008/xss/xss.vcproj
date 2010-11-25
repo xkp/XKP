@@ -344,6 +344,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\xs\runtime_error.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\serial.h"
 				>
 			</File>
@@ -368,7 +372,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\xs\xs_error.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\xss\xss_context.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\xss\xss_error.h"
 				>
 			</File>
 			<File

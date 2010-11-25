@@ -1,6 +1,6 @@
 
 #include <xs/compiler.h>
-#include <boost/lexical_cast.hpp>
+#include <xs/xs_error.h>
 
 extern "C"
 {
@@ -9,8 +9,12 @@ extern "C"
 }
 
 #include <fstream>
+#include <boost/lexical_cast.hpp>
 
 using namespace xkp;
+
+const str SCompilerError("syntax-error");
+const str SErrorCompiling("Error while compiling xs");
 
 //utils
 inline str wide2str(const std::wstring& w)
@@ -1491,7 +1495,12 @@ bool xs_compiler::compile_code(const str& code_str, code& result)
       }
     else
       {
-        assert(false); //td: did I mention error handling?
+        param_list error;
+        error.add("id", SCompilerError);
+        error.add("desc", SErrorCompiling);
+        error.add("line", root->Line);
+        error.add("column", root->Column);
+        xs_throw(error);
       }
 
     //cleanup
@@ -1510,17 +1519,27 @@ bool xs_compiler::compile_xs(const str& code_str, xs_container& result)
     bool         success      = false;
     int          parse_result = Parse((wchar_t*)buf.c_str(), buf.size(), 1, 0, &root);
 
+    bool error = false;
     if (parse_result == PARSEACCEPT)
       {
         success = true;
         xs_ xs(result);
         v.visit(root, xs);
       }
-    else 
-      assert(false);
+    else error = true;
 
     //cleanup
     DeleteTokens(root);
+
+    if (error)
+      {
+        param_list error;
+        error.add("id", SCompilerError);
+        error.add("desc", SErrorCompiling);
+        error.add("line", root->Line);
+        error.add("column", root->Column);
+        xs_throw(error);
+      }
 
     return success;
   }

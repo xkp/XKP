@@ -18,6 +18,8 @@ property target
 
 method reset(string s)
 {
+	reset_other();
+	
 	target = s;
 	btn1.caption = "...";
 	btn2.caption = "...";

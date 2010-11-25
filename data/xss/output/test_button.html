@@ -44,6 +44,7 @@ application.target_set = function (value)
 }
 application.reset = function(s) 
 {
+	reset_other();
 	application.target_set(s);
 	btn1.text("...");
 	btn2.text("...");

@@ -2,6 +2,8 @@
 #include "xss/project.h"
 #include "xss/idiom.h"
 #include "xss/dsl_out.h"
+#include "xss/xss_error.h"
+
 #include "xs/linker.h"
 #include "xs/compiler.h"
 #include "archive/json_archive.h"
@@ -13,6 +15,14 @@
 #include <fstream>
 
 using namespace xkp;
+
+const str SOutOfContext("not-sure");
+const str SNotImplemented("not-implemented");
+
+const str SInstancesMustProvideAClass("Instances must provide a class");
+const str SWhatWasThisAgain("What was that again?");
+const str SClassesMustHaveId("Classes must provide an id");
+const str SDuplicateClass("Class already declared");
 
 //visitors, fun stuff like that
 struct class_internal_gather : dynamic_visitor
@@ -459,6 +469,11 @@ void xss_project::build()
     save_file(output_path_ + of, result);
   }
 
+str xss_project::output_path()
+  {
+    return output_path_;
+  }
+
 void xss_project::compile_instance(const str& filename, DynamicObject instance)
   {
     //parse the xs into top level constructs, like properties and stuff
@@ -653,17 +668,30 @@ str xss_project::instance_class(DynamicObject instance)
         str clazz = result;
         return clazz;
       }
-    return "ERROR(classless instance)"; //td: yeah right
+    
+    param_list error;
+    error.add("id", SOutOfContext);
+    error.add("desc", SInstancesMustProvideAClass);
+    xss_throw(error);
+    
+    return ""; //never gets here
   }
 
 str xss_project::inline_properties(DynamicObject instance)
   {
-    //td: yeah right
-    return "ERROR(inline_properties not implemented)"; 
+    param_list error;
+    error.add("id", SNotImplemented);
+    error.add("desc", SWhatWasThisAgain);
+    xss_throw(error);
+    return ""; 
   }
   
 DynamicObject xss_project::find_class(const str& event_name)
   {
+    param_list error;
+    error.add("id", SNotImplemented);
+    error.add("desc", SWhatWasThisAgain);
+    xss_throw(error);
     return DynamicObject();
   }
 
@@ -893,7 +921,12 @@ void xss_project::read_classes(const str& class_library_file)
         str           id  = dynamic_get(obj, "id");
         
         if (id.empty())
-          assert(false); //td: error, classes must have id
+          {
+            param_list error;
+            error.add("id", SOutOfContext);
+            error.add("desc", SClassesMustHaveId);
+            xss_throw(error);
+          }
         
         class_registry::iterator it = classes_.find(id);
         if (it == classes_.end())
@@ -902,7 +935,11 @@ void xss_project::read_classes(const str& class_library_file)
           }
         else
           {
-            assert(false); //td: 
+            param_list error;
+            error.add("id", SOutOfContext);
+            error.add("desc", SDuplicateClass);
+            error.add("class", id);
+            xss_throw(error);
           }
       }
   }

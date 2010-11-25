@@ -11,12 +11,15 @@
 #include "xs/compiler.h"
 #include "xs/debug_utils.h"
 #include "xs/array.h"
+#include "xs/xs_error.h"
+#include "xs/runtime_error.h"
 #include "text/text_renderer.h"
 #include "gen/generator.h"
 #include "xss/xss_parser.h"
 #include "xss/xss_generator.h"
 #include "xss/idiom.h"
 #include "xss/project.h"
+#include "xss/xss_error.h"
 #include "archive/xml_archive.h"
 
 using namespace xkp;
@@ -65,6 +68,34 @@ void dump_result(const str& text, code_context& context)
     //std::cout << "-------------OUTPUT: " << '\n';
     //std::cout << gen.get();
   }  
+
+void print_error(param_list data)
+  {
+    str id   = variant_cast<str>(data.get("id"), "");
+    str desc = variant_cast<str>(data.get("desc"), "");
+    
+    std::cout << "Error [" << id << "] " << desc << '\n';
+    
+    for(size_t i = 0; i < data.size(); i++)
+      {
+        str name = data.get_name(i);
+        if (name == "id" || name == "desc")
+          continue;
+          
+        variant value = data.get(i);
+        str     value_str;
+        try
+          {
+            value_str = str(value);
+          }
+        catch(type_mismatch)
+          {
+            value_str = "[cannot-resolve]";
+          }
+
+        std::cout << name << " = " << value_str << '\n';
+      }
+  }
   
 int main(int argc, char* argv[])
   {
@@ -89,8 +120,32 @@ int main(int argc, char* argv[])
     xml_read_archive project_file(text, &types, XML_RESOLVE_CLASS|XML_RESOLVE_ID);
     XSSProject project = project_file.get( type_schema<XSSProject>() );
 
-    project->build();
+    bool succeeded = true;
+    try
+      {
+        project->build();
+      }
+    catch(xs_error xse)
+      {
+        succeeded = false;
+        print_error(xse.data);
+      }
+    catch(xss_error xsse)
+      {
+        succeeded = false;
+        print_error(xsse.data);
+      }
+    catch(runtime_error rte)
+      {
+        succeeded = false;
+        print_error(rte.data);
+      }
     
+    if (succeeded)
+      {
+        std::cout << "Build Succeeded, your project is at: " << project->output_path();
+      }
+      
     std::cin.get();
 	  
 	  return 0;

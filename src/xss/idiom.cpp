@@ -1,9 +1,17 @@
 
-#include "xss/idiom.h"
+#include <xss/idiom.h>
+#include <xss/xss_error.h>
 
 #include <fstream>
 
 using namespace xkp;
+
+//strings
+const str SEmptyStack("empty-stack");
+const str SIdiom("idiom");
+
+const str SEmptyExpression("Trying to use an empty expression");
+const str SEveryInstanceMustHaveId("Trying to use an instance without id");
 
 //td: !!! stop duplicating this array
 const char* operator_str[] =
@@ -395,8 +403,51 @@ struct expression_renderer : expression_visitor
                 break;
               }
 
-            case op_call:
             case op_func_call:
+              {
+                //td!!! this is silly, function calls ( foo(bar) instead of foo1.foo(bar) ) configure
+                //the stack differently, so we must duplicate the code.  
+              
+                std::stringstream result;
+
+                str caller = operand_to_string(arg1);
+
+                result << caller << "(";
+
+                int args = arg2;
+                //pop the arguments
+                for(int i = 0; i < args; i++)
+                  {
+                    variant arg  = stack_.top(); stack_.pop();
+                    str     sarg = operand_to_string(arg);
+                    
+                    XSSProperty prop = get_property(arg);
+                    if (prop)
+                      {
+                        str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
+                        if (!get_fn.empty())
+                          result << get_fn << "()";
+                        else if (!prop->get.empty())
+                          result << sarg << "_get()";
+                        else   
+                          result << sarg;
+                      }
+                    else 
+                       result << sarg;
+
+                    if (i < args - 1)
+                      {
+                        result << ", ";
+                      }
+                  }
+
+                result << ")";
+
+                push_rendered(result.str(), op_prec, variant()); //td: we could find out the type here or something
+                break;
+              }
+
+            case op_call:
               {
                 std::stringstream result;
 
@@ -459,7 +510,12 @@ struct expression_renderer : expression_visitor
     str get()
       {
         if(stack_.empty())
-          return "***EMPTY STACK***"; //td: error
+          {
+            param_list error;
+            error.add("id", SEmptyStack);
+            error.add("desc", SEmptyExpression);
+            xss_throw(error);
+          }
 
         variant result = stack_.top();
         if (result.is<already_rendered>())
@@ -859,8 +915,14 @@ str base_idiom::resolve_this(XSSContext ctx)
         if (!ctx->this_.empty())
           {
             str iid = variant_cast<str>(dynamic_get(ctx->this_, "id"), ""); 
-            assert(!iid.empty()); //td: error, nameless instance
-            
+            if (iid.empty())
+              {
+                param_list error;
+                error.add("id", SIdiom);
+                error.add("desc", SEveryInstanceMustHaveId);
+                xss_throw(error);
+              }
+
             return iid;
           }
       }
