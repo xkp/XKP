@@ -95,7 +95,7 @@ struct base_idiom : xss_idiom
 //type info
 struct base_xss_args_schema : object_schema<base_xss_args>  
   {
-    base_xss_args_schema()
+    virtual void declare()
       {
         method_<str, 0>("generate", &base_xss_args::generate);
       }
@@ -103,7 +103,7 @@ struct base_xss_args_schema : object_schema<base_xss_args>
 
 struct base_xss_function_schema : object_schema<base_xss_function>  
   {
-    base_xss_function_schema()
+    virtual void declare()
       {
         property_("name",  &base_xss_function::name_);
         static_field("args", &base_xss_function::args_);
@@ -114,7 +114,7 @@ struct base_xss_function_schema : object_schema<base_xss_function>
 
 struct base_idiom_schema : object_schema<base_idiom>  
   {
-    base_idiom_schema()
+    virtual void declare()
       {
         implements<xss_idiom>();
         property_("id_as_this", &base_idiom::id_as_this_);
@@ -124,7 +124,7 @@ struct base_idiom_schema : object_schema<base_idiom>
   
 struct base_xss_code_schema : object_schema<base_xss_code>  
   {
-    base_xss_code_schema()
+    virtual void declare()
       {
         method_<str, 0>("generate", &base_xss_code::generate);
       }
@@ -132,7 +132,7 @@ struct base_xss_code_schema : object_schema<base_xss_code>
   
 struct base_xss_expression_schema : object_schema<base_xss_expression>  
   {
-    base_xss_expression_schema()
+    virtual void declare()
       {
         method_<str, 0>("generate", &base_xss_expression::generate);
       }

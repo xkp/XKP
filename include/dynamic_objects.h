@@ -210,6 +210,10 @@ namespace xkp
   template <typename T>
   struct do_interface_schema : default_schema<T>
     {
+      virtual void declare()
+        {
+        }
+        
       virtual size_t options()
         {
           return default_schema<T>::options() | TYPE_NON_INSTANTIABLE;
@@ -236,9 +240,34 @@ namespace xkp
         }
     };
 
-  register_type(IDynamicObject*, do_interface_schema<IDynamicObject*>);
-  register_type(DynamicObject,   do_interface_schema<DynamicObject>  );
+  register_type(IDynamicObject*,  do_interface_schema<IDynamicObject*>);
+  register_type(DynamicObject,    do_interface_schema<DynamicObject>  );
   register_iterator(DynamicObject);
+
+  template <typename T>
+  struct eo_interface_schema : default_schema<T>
+    {
+      virtual void declare()
+        {
+        }
+        
+      virtual size_t options()
+        {
+          return default_schema<T>::options() | TYPE_NON_INSTANTIABLE;
+        }
+      
+      virtual bool create(variant& result, param_list* args = null)
+        {
+          throw type_mismatch(); //the actual type of the object is not known,
+                                 //you should not instantiate types you are not
+                                 //aware of.
+          return false;
+        }
+    };
+
+  register_type(IEditableObject*, eo_interface_schema<IEditableObject*>);
+  register_type(EditableObject,   eo_interface_schema<EditableObject>  );
+
 
   //Note the above schema is not for public comsumption. It basically
   //wraps the interface. Below are the schemas you should use to define your types
@@ -246,11 +275,11 @@ namespace xkp
   template <typename T>
   struct dynamic_object_schema : object_schema<T>
     {
-      dynamic_object_schema()
+      virtual void declare_base()
         {
           this->template implements<IDynamicObject>();
         }
-
+        
       virtual void cast(const variant src, schema* ss, variant& result)
         {
           IDynamicObject* d;
@@ -353,7 +382,7 @@ namespace xkp
   //schemas
   struct default_object_schema : dynamic_object_schema<default_object>
     {
-      default_object_schema()
+      virtual void declare()
         {
           implements<IEditableObject>();
         }
@@ -362,7 +391,7 @@ namespace xkp
   template<typename T>
   struct sponge_object_schema : dynamic_object_schema<T>
     {
-      sponge_object_schema()
+      virtual void declare()
         {
           implements<IEditableObject>();
         }
@@ -393,6 +422,7 @@ namespace xkp
       virtual void*   get_pointer(void**);
       virtual bool    create(variant& result, param_list* args = null);
       virtual bool    clone(const variant v, variant& result);
+      virtual void    declare();
 
       //IEditableObject
       virtual void add_item(const str& name, schema_item& item);

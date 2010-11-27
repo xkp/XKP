@@ -598,6 +598,14 @@ namespace xkp
 
   struct basic_schema : schema
     {
+      basic_schema()
+        {
+        }
+      
+      virtual void declare_base()
+        {
+        }
+        
       virtual size_t options()
         {
           return 0;
@@ -752,6 +760,8 @@ namespace xkp
       virtual bool    create(variant& result, param_list* args = null)      {return delgate_->create(result, args);}
       virtual bool    clone(const variant v, variant& result)               {return delgate_->clone(v, result);}
       virtual void*   get_access()                                          {return delgate_;}
+      virtual void    declare_base()                                        {} 
+      virtual void    declare()                                             {} 
 
       schema* delgate_;
     };
@@ -1141,7 +1151,7 @@ namespace xkp
           return type_schema<T>();
         }
 
-      vector_schema()
+      virtual void declare()
         {
           this->template functor_readonly_property<this_iterator>("begin",         &vector_schema::begin);
           this->template functor_readonly_property<this_iterator>("end",           &vector_schema::end);
@@ -1174,7 +1184,7 @@ namespace xkp
           return *(*it);
         }
 
-      vector_iterator_schema()
+      virtual void declare()
         {
           this->template functor_method<this_type, 0>("++",    &vector_iterator_schema::advance);
           this->template functor_method<bool,      1>("==",    &vector_iterator_schema::compare);

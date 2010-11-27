@@ -19,6 +19,7 @@ namespace xkp
       
       //schema
       virtual void visit(schema_visitor* visitor);
+      virtual void declare();
 
       //xs_visitor
       virtual void property_(xs_property& info);

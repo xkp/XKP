@@ -159,7 +159,7 @@ namespace xkp
     {
       typedef typed_iterator<T> this_type;
 
-      typed_iterator_schema()
+      virtual void declare()
         {
           this->template method_<this_type, 0>("++",    &this_type::advance);
           this->template method_<bool,      1>("==",    &this_type::compare);
@@ -170,7 +170,7 @@ namespace xkp
   template<typename T>
   struct typed_array_schema : object_schema<T>
     {
-      typed_array_schema()
+      virtual void declare()
         {
           this->template class_property<typed_array_schema, schema*> ("iterated_type", &typed_array_schema::iterated_type);
 
@@ -229,6 +229,7 @@ namespace xkp
       virtual bool   create(variant& result, param_list* args);
       virtual void*  get_pointer(void**);
       virtual bool   clone(const variant v, variant& result);
+      virtual void   declare(); 
     };
 
   //registry

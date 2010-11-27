@@ -18,15 +18,19 @@ property target
 
 method reset(string s)
 {
-	reset_other();
-	
 	target = s;
 	btn1.caption = "...";
 	btn2.caption = "...";
 }
 
+//mindless code, mind you
 on btn2.click()
 {
 	btn1.caption = "Old value: " + application.target;
 	application.target = 300;
+}
+
+on btn3.click()
+{
+	application.reset();
 }

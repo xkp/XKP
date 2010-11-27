@@ -27,6 +27,15 @@ btn2.click(function(event)
 });
 
 
+var btn3 = $("#btn3");
+btn3.text("Reset");
+btn3.width(100);
+btn3.click(function(event)
+{    
+    application.reset();
+});
+
+
 var application = $("#application");
 application.target = null;
 application.target_set = function (value)
@@ -44,7 +53,6 @@ application.target_set = function (value)
 }
 application.reset = function(s) 
 {
-	reset_other();
 	application.target_set(s);
 	btn1.text("...");
 	btn2.text("...");
@@ -64,6 +72,8 @@ application.reset = function(s)
     <button id='btn1'>
         </button>
     <button id='btn2'>
+        </button>
+    <button id='btn3'>
         </button>
     </div>
 

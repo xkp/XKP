@@ -96,6 +96,11 @@ namespace xkp
         virtual bool    create(variant& result, param_list* args = null)  = 0;
         virtual bool    clone(const variant v, variant& result)           = 0;
         virtual void*   get_access()                                      = 0;
+
+        //this process happened on the constructor of schemas, gcc tends to disagree
+        //It should really be thought thru
+        virtual void declare_base() = 0;
+        virtual void declare()      = 0; 
     };
 
   //this is the mechanism to bind types to schemas
@@ -111,6 +116,8 @@ namespace xkp
       virtual bool   create(variant& result, param_list* args = null);
       virtual bool   clone(const variant v, variant& result);
       virtual void*  get_access();
+      virtual void   declare_base();
+      virtual void   declare();
     };
 
   template <typename T>
@@ -127,8 +134,43 @@ namespace xkp
   inline schema* type_schema()
     {
       typedef typename schema_descriptor<T>::type type_type;
+      
+      #ifdef GCC
+      
+      //silly rabbit
+      static schema* type_singleton = null;
+      if (!type_singleton) 
+        {
+          //td: !!! type_schema is still being called inside constructors
+          //(on the composite schema), this causes all kind of problems
+          schema* tmp = new type_type; 
+          if (!type_singleton)
+            {
+              type_singleton = tmp;
+              type_singleton->declare_base();
+              type_singleton->declare(); 
+            }
+          else
+            delete tmp;
+        }
+        
+      return type_singleton;
+      
+      #else
+      
       static type_type result;
+      static bool      declared = false;
+      
+      if (!declared) 
+        {
+          declared = true;
+          result.declare_base();
+          result.declare();
+        }
+      
       return &result;
+      
+      #endif
     };
 
   template <>
@@ -427,6 +469,14 @@ namespace detail
       return this;
     }
 
+  inline void opaque_schema::declare_base()
+    {
+    }
+    
+  inline void opaque_schema::declare()
+    {
+    }
+
   //this is the static-only version of the schema, it will provide no reflection
   //and it will be assigned by default to any type that doesn't explicitly define one
   template <typename T>
@@ -464,6 +514,10 @@ namespace detail
       virtual void* get_access()
         {
           return this;
+        }
+
+      virtual void declare_base()
+        {
         }
     };
 
@@ -761,6 +815,11 @@ namespace detail
   template <typename T>
   struct simpletype_schema : default_schema<T>
     {
+      virtual void declare()
+        {
+          //empty, for now
+        }
+        
       virtual size_t  options()
         {
           return TYPE_SIMPLE;
@@ -827,6 +886,10 @@ namespace detail
       virtual void* get_pointer(void** src)
         {
           return null;
+        }
+        
+      virtual void declare()
+        {
         }
     };
 

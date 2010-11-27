@@ -95,7 +95,7 @@ typedef reference<xss_project> XSSProject;
 //glue
 struct xss_project_schema : object_schema<xss_project>  
   {
-    xss_project_schema()
+    virtual void declare()
       {
         static_field("includes",  &xss_project::includes);
         static_field("instances", &xss_project::instances, TRANSIENT);
@@ -117,7 +117,7 @@ struct xss_project_schema : object_schema<xss_project>
   
 struct xss_event_schema : object_schema<xss_event>  
   {
-    xss_event_schema()
+    virtual void declare()
       {
         property_("name",  &xss_event::name);
         property_("impls", &xss_event::impls);
@@ -126,7 +126,7 @@ struct xss_event_schema : object_schema<xss_event>
 
 struct xss_property_schema : sponge_object_schema<xss_property>  
   {
-    xss_property_schema()
+    virtual void declare()
       {
         property_("name",  &xss_property::name);
         property_("get",   &xss_property::get);

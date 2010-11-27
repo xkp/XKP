@@ -29,6 +29,11 @@ void behaviour_schema::visit(schema_visitor* visitor)
     assert(false); //td: implement a mutant visitor
   }
   
+void behaviour_schema::declare()
+  {
+    assert(false); //shouldnt happen
+  }
+  
 void behaviour_schema::property_(xs_property& info)
   {
     if (info.adjetives & adj_delegate)

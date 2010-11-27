@@ -25,3 +25,7 @@ bool meta_array_schema::clone(const variant v, variant& result)
     assert(false);
     return false;
   }
+
+void meta_array_schema::declare()
+  {
+  }

@@ -255,7 +255,7 @@ typedef reference<worker> Worker;
 
 struct worker_schema : object_schema<worker>
   {
-    worker_schema()
+    virtual void declare()
       {
         dynamic_method_( "generate", &worker::generate );
       }

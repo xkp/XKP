@@ -11,6 +11,8 @@ const str SRuntime("vm");
 
 const str SCallingNull("Trying to access null object");
 const str STypeDoesNotInstantiate("Cannot instantiate type");
+const str SCannotResolveDynamically("Cannot resolve");
+const str SNotExecutableDynamic("Attempting to call a non-function");
 
 //td: un duplicate
 const char* vm_operator_name[] =
@@ -252,7 +254,14 @@ variant execution_context::execute()
 
                 variant result;
                 if (!dynamic_try_get(getted, getter_name, result))
-                  assert(false); //unknown identifier + getter_name
+                  {
+                    param_list error;
+                    error.add("id", SRuntime);
+                    error.add("desc", SCannotResolveDynamically);
+                    error.add("object", getted);
+                    error.add("property", getter_name);
+                    runtime_throw(error);
+                  }
 
                 operands_.push(result);
                 break;
@@ -274,12 +283,26 @@ variant execution_context::execute()
                     if (obj && obj->resolve(resolve_name, itm))
                       {
                         if (!itm.exec)
-                          assert(false);
+                          {
+                            param_list error;
+                            error.add("id", SRuntime);
+                            error.add("desc", SNotExecutableDynamic);
+                            error.add("object", obj);
+                            error.add("method", resolve_name);
+                            runtime_throw(error);
+                          }
                       
                         operands_.push(itm.exec);
                       }
                     else
-                      assert(false); //cannot resolve
+                      {
+                        param_list error;
+                        error.add("id", SRuntime);
+                        error.add("desc", SCannotResolveDynamically);
+                        error.add("object", obj);
+                        error.add("method", resolve_name);
+                        runtime_throw(error);
+                      }
                   }
                 break;
               }

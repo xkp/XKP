@@ -262,6 +262,10 @@ bool dynamic_class_schema::clone(const variant v, variant& result)
     return base_schema_->clone(v, result);
   }
 
+void dynamic_class_schema::declare()
+  {
+  }
+  
 void dynamic_class_schema::add_item(const str& name, schema_item& item)
   {
     if (!event_holder::add_item(name, item))
