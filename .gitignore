@@ -5,6 +5,8 @@ bin/
 *.ncb
 *.user
 *.suo
+*.sdf
+*.opensdf
 
 *.exe
 *.obj

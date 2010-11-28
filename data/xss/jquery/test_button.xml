@@ -1,8 +1,8 @@
 <xss:project>
     <path generator="app.xss"
           class_library="classes.xml"
-          source_path="d:/xkp/gi/data/xss/jquery/" 
-          output_path="d:/xkp/gi/data/xss/output/" 
+          source_path="c:/work/xkp/data/xss/jquery/" 
+          output_path="c:/work/xkp/data/xss/output/" 
           output_file="test_button.html"/>
 
     <idiom class="js-idiom" id_as_this="true"/>

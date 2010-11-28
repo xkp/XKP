@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{6EBBD992-D67B-4866-B6D1-95898F138C00}</ProjectGuid>
+    <RootNamespace>xss</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\vs2005\xkp.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\vs2005\xkp.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\bin\debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\bin\debug\obj\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\bin\release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\bin\release\obj\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\third_party\tinyXml;..\..\..\third_party\jsoncpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;TIXML_USE_STL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\xs\array.cpp" />
+    <ClCompile Include="..\..\..\src\xs\ast.cpp" />
+    <ClCompile Include="..\..\..\src\xs\behaviour.cpp" />
+    <ClCompile Include="..\..\..\src\xs\compiler.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl_out.cpp" />
+    <ClCompile Include="..\..\..\src\dynamic_objects.cpp" />
+    <ClCompile Include="..\..\..\src\xs\engine.c" />
+    <ClCompile Include="..\..\..\src\gen\generator.cpp" />
+    <ClCompile Include="..\..\..\src\xss\idiom.cpp" />
+    <ClCompile Include="..\..\..\src\archive\json_archive.cpp" />
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\lib_json\json_reader.cpp" />
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\lib_json\json_value.cpp" />
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\lib_json\json_writer.cpp" />
+    <ClCompile Include="..\..\..\src\xs\linker.cpp" />
+    <ClCompile Include="..\..\..\src\xs\operators.cpp" />
+    <ClCompile Include="..\..\..\src\xss\project.cpp" />
+    <ClCompile Include="..\..\..\src\serial.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="..\..\..\third_party\tinyXml\tinystr.cpp" />
+    <ClCompile Include="..\..\..\third_party\tinyXml\tinyxml.cpp" />
+    <ClCompile Include="..\..\..\third_party\tinyXml\tinyxmlerror.cpp" />
+    <ClCompile Include="..\..\..\third_party\tinyXml\tinyxmlparser.cpp" />
+    <ClCompile Include="..\..\..\src\xs\vm.cpp" />
+    <ClCompile Include="..\..\..\src\archive\xml_archive.cpp" />
+    <ClCompile Include="..\..\..\src\xs.cpp" />
+    <ClCompile Include="xss.cpp" />
+    <ClCompile Include="..\..\..\src\xss\xss_generator.cpp" />
+    <ClCompile Include="..\..\..\src\xss\xss_parser.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\xs\array.h" />
+    <ClInclude Include="..\..\..\include\xs\ast.h" />
+    <ClInclude Include="..\..\..\include\xs\behaviour.h" />
+    <ClInclude Include="..\..\..\include\xs\compiler.h" />
+    <ClInclude Include="..\..\..\include\xs\debug_utils.h" />
+    <ClInclude Include="..\..\..\include\xs\engine.h" />
+    <ClInclude Include="..\..\..\include\xs\grammar.h" />
+    <ClInclude Include="..\..\..\include\xss\idiom.h" />
+    <ClInclude Include="..\..\..\include\archive\json_archive.h" />
+    <ClInclude Include="..\..\..\include\xs\linker.h" />
+    <ClInclude Include="..\..\..\include\xs\operators.h" />
+    <ClInclude Include="..\..\..\include\xs\pair_array.h" />
+    <ClInclude Include="..\..\..\include\xss\project.h" />
+    <ClInclude Include="..\..\..\include\xs\runtime_error.h" />
+    <ClInclude Include="..\..\..\include\serial.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="..\..\..\include\xss\utils.h" />
+    <ClInclude Include="..\..\..\include\xs\vm.h" />
+    <ClInclude Include="..\..\..\include\archive\xml_archive.h" />
+    <ClInclude Include="..\..\..\include\xs\xs_error.h" />
+    <ClInclude Include="..\..\..\include\xss\xss_context.h" />
+    <ClInclude Include="..\..\..\include\xss\xss_error.h" />
+    <ClInclude Include="..\..\..\include\xss\xss_generator.h" />
+    <ClInclude Include="..\..\..\include\xss\xss_parser.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\data\xss\demo\app.xml" />
+    <None Include="..\..\..\data\xss\demo\app.xs" />
+    <None Include="..\..\..\data\xss\demo\app_gen.xss" />
+    <None Include="..\..\..\data\xss\demo\instance.xss" />
+    <None Include="..\..\..\data\xss\jquery\app.xss" />
+    <None Include="..\..\..\data\xss\jquery\classes.xml" />
+    <None Include="..\..\..\data\xss\jquery\instance.xss" />
+    <None Include="..\..\..\data\xss\jquery\test_button.xml" />
+    <None Include="..\..\..\data\xss\jquery\test_button.xs" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

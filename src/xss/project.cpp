@@ -419,14 +419,14 @@ void xss_project::build()
   {
     //grab the path
     //td: change path to config... or something.            
-    str sp = dynamic_get(path, "source_path");
+    str sp = variant_cast<str>(dynamic_get(path, "source_path"), "");
     source_path_ = sp;
     
-    str op = dynamic_get(path, "output_path");
+    str op = variant_cast<str>(dynamic_get(path, "output_path"), "");
     output_path_ = op;
     
     //read the classes
-    str class_library = dynamic_get(path, "class_library");
+    str class_library = variant_cast<str>(dynamic_get(path, "class_library"), "");
     read_classes(class_library);
     
     //grab the idiom
@@ -462,10 +462,10 @@ void xss_project::build()
         compile_instance(it->file, it->obj);
       }
 
-    str generator_file = dynamic_get(path, "generator");
+    str generator_file = variant_cast<str>(dynamic_get(path, "generator"), "");
     str result = generate_file(source_path_ + generator_file);
     
-    str of = dynamic_get(path, "output_file");
+    str of = variant_cast<str>(dynamic_get(path, "output_file"), "");
     save_file(output_path_ + of, result);
   }
 
@@ -651,9 +651,9 @@ str xss_project::resolve_dispatcher(DynamicObject instance, const str& event_nam
         for(; it != nd; ++it)
           {
             DynamicObject dp = *it;
-            str key = dynamic_get(dp, "id");
+            str key = variant_cast<str>(dynamic_get(dp, "id"), "");
             if (key == event_name)
-              return dynamic_get(dp, "value");
+              return variant_cast<str>(dynamic_get(dp, "value"), "");
           }
       }
 
@@ -918,7 +918,7 @@ void xss_project::read_classes(const str& class_library_file)
     for(; it != nd; it++)
       {
         DynamicObject obj = *it;
-        str           id  = dynamic_get(obj, "id");
+        str           id  = variant_cast<str>(dynamic_get(obj, "id"), "");
         
         if (id.empty())
           {
