@@ -213,12 +213,12 @@ namespace xkp
       virtual void declare()
         {
         }
-        
+
       virtual size_t options()
         {
           return default_schema<T>::options() | TYPE_NON_INSTANTIABLE;
         }
-      
+
       virtual void cast(const variant src, schema* ss, variant& result)
         {
           T self = src;
@@ -250,12 +250,12 @@ namespace xkp
       virtual void declare()
         {
         }
-        
+
       virtual size_t options()
         {
           return default_schema<T>::options() | TYPE_NON_INSTANTIABLE;
         }
-      
+
       virtual bool create(variant& result, param_list* args = null)
         {
           throw type_mismatch(); //the actual type of the object is not known,
@@ -279,7 +279,7 @@ namespace xkp
         {
           this->template implements<IDynamicObject>();
         }
-        
+
       virtual void cast(const variant src, schema* ss, variant& result)
         {
           IDynamicObject* d;
@@ -393,7 +393,9 @@ namespace xkp
     {
       virtual void declare()
         {
-          implements<IEditableObject>();
+          // changed by Cuba
+          //implements<IEditableObject>();
+          this->template implements<IEditableObject>();
         }
 
       virtual size_t options()

@@ -100,7 +100,7 @@ namespace xkp
         //this process happened on the constructor of schemas, gcc tends to disagree
         //It should really be thought thru
         virtual void declare_base() = 0;
-        virtual void declare()      = 0; 
+        virtual void declare()      = 0;
     };
 
   //this is the mechanism to bind types to schemas
@@ -134,43 +134,43 @@ namespace xkp
   inline schema* type_schema()
     {
       typedef typename schema_descriptor<T>::type type_type;
-      
-      #ifdef GCC
-      
+
+#if defined(__GNUC__)
+
       //silly rabbit
       static schema* type_singleton = null;
-      if (!type_singleton) 
+      if (!type_singleton)
         {
           //td: !!! type_schema is still being called inside constructors
           //(on the composite schema), this causes all kind of problems
-          schema* tmp = new type_type; 
+          schema* tmp = new type_type;
           if (!type_singleton)
             {
               type_singleton = tmp;
               type_singleton->declare_base();
-              type_singleton->declare(); 
+              type_singleton->declare();
             }
           else
             delete tmp;
         }
-        
+
       return type_singleton;
-      
-      #else
-      
+
+#else
+
       static type_type result;
       static bool      declared = false;
-      
-      if (!declared) 
+
+      if (!declared)
         {
           declared = true;
           result.declare_base();
           result.declare();
         }
-      
+
       return &result;
-      
-      #endif
+
+#endif
     };
 
   template <>
@@ -472,7 +472,7 @@ namespace detail
   inline void opaque_schema::declare_base()
     {
     }
-    
+
   inline void opaque_schema::declare()
     {
     }
@@ -819,7 +819,7 @@ namespace detail
         {
           //empty, for now
         }
-        
+
       virtual size_t  options()
         {
           return TYPE_SIMPLE;
@@ -840,9 +840,9 @@ namespace detail
               else if (src.is<int>())
                 {
                   int ii = src;
-                  result = ii != 0; 
+                  result = ii != 0;
                 }
-              else 
+              else
                 throw type_mismatch(); //td: do the rest of simple types
             }
           else
@@ -887,7 +887,7 @@ namespace detail
         {
           return null;
         }
-        
+
       virtual void declare()
         {
         }
