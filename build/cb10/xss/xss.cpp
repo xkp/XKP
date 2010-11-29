@@ -79,6 +79,11 @@ int main(int argc, char* argv[])
         text += '\n';
       }
 
+    schema_descriptor < reference<sponge_object> > my_schema_descrip;
+    reference_schema <sponge_object> my_ref_sponge;
+
+    sponge_object yxy;
+
     schema* ttt = type_schema<sponge_object>();
 
     //setup types

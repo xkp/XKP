@@ -4426,3 +4426,349 @@
 	"tinyxml.h"
 	<windows.h>
 
+1288559486 source:d:\xkpx\build\cb10\xss\stdafx.cpp
+	"stdafx.h"
+
+1288559486 d:\xkpx\build\cb10\xss\stdafx.h
+	"targetver.h"
+	<stdio.h>
+	<tchar.h>
+
+1288559486 d:\xkpx\build\cb10\xss\targetver.h
+
+1289001335 source:d:\xkpx\build\cb10\xss\xss.cpp
+	"stdafx.h"
+	<iostream>
+	<fstream>
+	<schema.h>
+	<serial.h>
+	<xs.h>
+	"xs/ast.h"
+	"xs/compiler.h"
+	"xs/debug_utils.h"
+	"xs/array.h"
+	"text/text_renderer.h"
+	"gen/generator.h"
+	"xss/xss_parser.h"
+	"xss/xss_generator.h"
+	"xss/idiom.h"
+	"xss/project.h"
+	"archive/xml_archive.h"
+
+1288559487 d:\xkpx\include\schema.h
+	"base.h"
+	<boost/bind.hpp>
+	<boost/function.hpp>
+	<map>
+
+1288559487 d:\xkpx\include\base.h
+	"types.h"
+	<map>
+	<vector>
+	<boost/lexical_cast.hpp>
+
+1288559487 d:\xkpx\include\types.h
+	<string>
+	<boost/shared_ptr.hpp>
+	<boost/weak_ptr.hpp>
+
+1288559487 d:\xkpx\include\serial.h
+	"base.h"
+	"dynamic_objects.h"
+
+1288559487 d:\xkpx\include\dynamic_objects.h
+	"schema.h"
+	<boost/enable_shared_from_this.hpp>
+
+1288559487 d:\xkpx\include\xs.h
+	<types.h>
+	<base.h>
+	<dynamic_objects.h>
+	<xs/vm.h>
+	<xs/ast.h>
+
+1288559488 d:\xkpx\include\xs\vm.h
+	<base.h>
+	<xs/operators.h>
+	<map>
+	<stack>
+
+1288559488 d:\xkpx\include\xs\operators.h
+	<base.h>
+	<memory>
+
+1288559488 d:\xkpx\include\xs\ast.h
+	<base.h>
+	<schema.h>
+	"xs/operators.h"
+	<vector>
+	<stack>
+
+1288559488 d:\xkpx\include\xs\compiler.h
+	<xs/ast.h>
+	<boost/lexical_cast.hpp>
+
+1288559488 d:\xkpx\include\xs\debug_utils.h
+	"ast.h"
+
+1288559488 d:\xkpx\include\xs\array.h
+	<schema.h>
+
+1288559487 d:\xkpx\include\text\text_renderer.h
+	<xs.h>
+	<xs/vm.h>
+
+1288559487 d:\xkpx\include\gen\generator.h
+	"xs/ast.h"
+
+1288559488 d:\xkpx\include\xss\xss_parser.h
+	<base.h>
+
+1288559488 d:\xkpx\include\xss\xss_generator.h
+	"xss_parser.h"
+	<xs.h>
+	<map>
+
+1288559488 d:\xkpx\include\xss\idiom.h
+	<base.h>
+	<schema.h>
+	<xs/ast.h>
+	<xss/project.h>
+
+1288559488 d:\xkpx\include\xss\project.h
+	<base.h>
+	<schema.h>
+	<xs.h>
+	"xss_generator.h"
+	"xs/array.h"
+
+1288559487 d:\xkpx\include\archive\xml_archive.h
+	<serial.h>
+	<tinyxml.h>
+
+1288559489 d:\xkpx\third_party\tinyxml\tinyxml.h
+	<ctype.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<assert.h>
+	<string>
+	<iostream>
+	<sstream>
+	"tinystr.h"
+
+1288559489 d:\xkpx\third_party\tinyxml\tinystr.h
+	<assert.h>
+	<string.h>
+
+1288559488 source:d:\xkpx\src\archive\json_archive.cpp
+	<archive/json_archive.h>
+	<json/writer.h>
+	<json/reader.h>
+
+1288559487 d:\xkpx\include\archive\json_archive.h
+	<serial.h>
+	<json/value.h>
+
+1288559489 d:\xkpx\third_party\jsoncpp\include\json\value.h
+	"forwards.h"
+	<string>
+	<vector>
+	<map>
+	<cpptl/smallmap.h>
+	<cpptl/forwards.h>
+
+1288559489 d:\xkpx\third_party\jsoncpp\include\json\forwards.h
+	"config.h"
+
+1288559489 d:\xkpx\third_party\jsoncpp\include\json\config.h
+	<cpptl/config.h>
+
+1288559489 d:\xkpx\third_party\jsoncpp\include\json\writer.h
+	"value.h"
+	<vector>
+	<string>
+	<iostream>
+
+1288559489 d:\xkpx\third_party\jsoncpp\include\json\reader.h
+	"forwards.h"
+	"value.h"
+	<deque>
+	<stack>
+	<string>
+	<iostream>
+
+1288559488 source:d:\xkpx\src\archive\xml_archive.cpp
+	<archive/xml_archive.h>
+
+1288559488 source:d:\xkpx\src\dynamic_objects.cpp
+	"dynamic_objects.h"
+	<xs/vm.h>
+	<boost/functional/hash.hpp>
+
+1288559488 source:d:\xkpx\src\gen\generator.cpp
+	"gen/generator.h"
+
+1288559488 source:d:\xkpx\src\serial.cpp
+	<serial.h>
+	<xs/array.h>
+
+1288559488 source:d:\xkpx\src\xs.cpp
+	<xs.h>
+	<xs/ast.h>
+	<xs/compiler.h>
+	<xs/linker.h>
+	<xs/array.h>
+
+1288559488 d:\xkpx\include\xs\linker.h
+	<schema.h>
+	<xs.h>
+	<dynamic_objects.h>
+	"ast.h"
+	"vm.h"
+	"behaviour.h"
+
+1288559488 d:\xkpx\include\xs\behaviour.h
+	"ast.h"
+	<dynamic_objects.h>
+
+1288559488 source:d:\xkpx\src\xs\array.cpp
+	<xs/array.h>
+
+1288559488 source:d:\xkpx\src\xs\ast.cpp
+	<xs/ast.h>
+
+1288559488 source:d:\xkpx\src\xs\behaviour.cpp
+	<xs/behaviour.h>
+
+1288559488 source:d:\xkpx\src\xs\compiler.cpp
+	<xs/compiler.h>
+	<boost/lexical_cast.hpp>
+	<xs/engine.h>
+	<xs/grammar.h>
+	<fstream>
+
+1288559488 d:\xkpx\include\xs\engine.h
+
+1288559488 d:\xkpx\include\xs\grammar.h
+
+1288559488 source:d:\xkpx\src\xs\engine.c
+	<stdio.h>
+	<stdlib.h>
+	<wchar.h>
+	<xs/engine.h>
+
+1288559488 source:d:\xkpx\src\xs\linker.cpp
+	<schema.h>
+	<xs/linker.h>
+	<xs/vm.h>
+	<xs/behaviour.h>
+	<xs/array.h>
+
+1288559488 source:d:\xkpx\src\xs\operators.cpp
+	<schema.h>
+	<xs/operators.h>
+
+1288559488 source:d:\xkpx\src\xs\vm.cpp
+	<xs/vm.h>
+	<types.h>
+	<dynamic_objects.h>
+
+1288561978 source:d:\xkpx\src\xss\dsl_out.cpp
+	"xss/dsl_out.h"
+	"xss/utils.h"
+	"xs/ast.h"
+
+1288559488 d:\xkpx\include\xss\dsl_out.h
+	"xss_generator.h"
+	<xs/linker.h>
+
+1288559488 d:\xkpx\include\xss\utils.h
+	<base.h>
+
+1288559488 source:d:\xkpx\src\xss\idiom.cpp
+	"xss/idiom.h"
+	<fstream>
+
+1288561978 source:d:\xkpx\src\xss\project.cpp
+	"xss/project.h"
+	"xss/idiom.h"
+	"xss/dsl_out.h"
+	"xs/linker.h"
+	"xs/compiler.h"
+	"archive/json_archive.h"
+	<dynamic_objects.h>
+	<iostream>
+	<fstream>
+
+1288559488 source:d:\xkpx\src\xss\xss_generator.cpp
+	"xss/xss_generator.h"
+	"xss/dsl_out.h"
+	"xss/utils.h"
+	<xs.h>
+
+1288559488 source:d:\xkpx\src\xss\xss_parser.cpp
+	"xss/xss_parser.h"
+	<locale>
+
+1288559489 source:d:\xkpx\third_party\jsoncpp\src\lib_json\json_reader.cpp
+	<json/reader.h>
+	<json/value.h>
+	<utility>
+	<stdio.h>
+	<assert.h>
+	<iostream>
+	<stdexcept>
+	<cstring>
+
+1288559489 source:d:\xkpx\third_party\jsoncpp\src\lib_json\json_value.cpp
+	<iostream>
+	<json/value.h>
+	<json/writer.h>
+	<utility>
+	<stdexcept>
+	<cstring>
+	"assert.h"
+	<cpptl/conststring.h>
+	<stddef.h>
+	"json_batchallocator.h"
+	"json_internalarray.inl"
+	"json_internalmap.inl"
+	"json_valueiterator.inl"
+
+1288559489 d:\xkpx\third_party\jsoncpp\src\lib_json\json_batchallocator.h
+	<stdlib.h>
+	<assert.h>
+
+1288559489 d:\xkpx\third_party\jsoncpp\src\lib_json\json_internalarray.inl
+
+1288559489 d:\xkpx\third_party\jsoncpp\src\lib_json\json_internalmap.inl
+
+1288559489 d:\xkpx\third_party\jsoncpp\src\lib_json\json_valueiterator.inl
+
+1288559489 source:d:\xkpx\third_party\jsoncpp\src\lib_json\json_writer.cpp
+	<json/writer.h>
+	<utility>
+	<assert.h>
+	<stdio.h>
+	<string.h>
+	<iostream>
+
+1288559489 source:d:\xkpx\third_party\tinyxml\tinystr.cpp
+	"tinystr.h"
+
+1288559489 source:d:\xkpx\third_party\tinyxml\tinyxml.cpp
+	<ctype.h>
+	<sstream>
+	<iostream>
+	"tinyxml.h"
+
+1288559489 source:d:\xkpx\third_party\tinyxml\tinyxmlerror.cpp
+	"tinyxml.h"
+
+1288559489 source:d:\xkpx\third_party\tinyxml\tinyxmlparser.cpp
+	<ctype.h>
+	<stddef.h>
+	"tinyxml.h"
+	<windows.h>
+
