@@ -19,6 +19,12 @@
     <Filter Include="data\jquery">
       <UniqueIdentifier>{e7099485-14da-44bf-bac8-3fb04cf4278a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="data\ms">
+      <UniqueIdentifier>{f7730fc1-67fb-40b5-b158-0a53b76de2a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\qt">
+      <UniqueIdentifier>{9881335c-4410-4e7b-8fce-73fe0da13ddb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\xs\array.cpp">
@@ -210,6 +216,39 @@
     </None>
     <None Include="..\..\..\data\xss\jquery\test_button.xs">
       <Filter>data\jquery</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\ms\app.xss">
+      <Filter>data\ms</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\ms\canvas_test.html">
+      <Filter>data\ms</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\ms\ms-ui.js">
+      <Filter>data\ms</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\ms\ms.js">
+      <Filter>data\ms</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\ms\ms-streamer.js">
+      <Filter>data\ms</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\qt\qt_cpp_app.xss">
+      <Filter>data\qt</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\qt\qt_cpp_button.xml">
+      <Filter>data\qt</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\qt\qt_cpp_button.xs">
+      <Filter>data\qt</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\qt\qt_cpp_classes.xml">
+      <Filter>data\qt</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\qt\qt_cpp_includes.xss">
+      <Filter>data\qt</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\qt\qt_cpp_instance.xss">
+      <Filter>data\qt</Filter>
     </None>
   </ItemGroup>
 </Project>

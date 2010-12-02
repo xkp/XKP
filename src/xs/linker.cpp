@@ -499,7 +499,10 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
 
             expression_identifier ei = arg2;
 
-            if (type && type != type_schema<empty_type>())
+            if (type && 
+				type != type_schema<empty_type>() &&
+				type != type_schema<IDynamicObject*>() &&
+				type != type_schema<DynamicObject>())
               {
                 schema_item si;
                 if (type->resolve(ei.value, si))
