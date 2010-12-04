@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+
+		<title>Canvas test</title>
+
+		<!--[if IE]><script src="excanvas.js"></script><![endif]-->
+
+    <script type="text/javascript" src="jquery-1.4.2.min.js" ></script>
+    <script type="text/javascript" src="jquery.utils.js"></script>
+    <script type="text/javascript" src="utils.js"></script>
+    <script type="text/javascript" src="prototype.js"></script>
+
+    <script type="text/javascript" src="ms-ui.js"></script>
+    <script type="text/javascript" src="ms-streamer.js"></script>
+
+    <script type="text/javascript">			
+
+			window.onload = function() 
+      {
+				var drawingCanvas = document.getElementById('myDrawing');
+        var context = drawingCanvas.getContext('2d');
+
+				if (drawingCanvas && drawingCanvas.getContext)
+        {
+            var client =
+            {
+                width: 200,
+                height: 200,
+                canvas: drawingCanvas
+            };
+
+            var streamer = new ms.streamer.Streamer();
+            var ui = new ms.ui.Manager(client, streamer);
+      
+            ui.load_images(['images/img.png'], function()
+            {
+                var img = ui.root.newImage('images/img.png');
+                img.rect(20, 20, 50, 50);
+
+                var txt = ui.root.newLabel('bold 12px Verdana');
+                txt.position(20, 100);
+                txt.text("Mutant State");
+
+                ui.draw(context);
+            });
+
+        }
+
+      }
+    </script>
+
+	</head>
+
+	<body>
+
+		<canvas id="myDrawing" width="200" height="200">
+
+			<p>Your browser doesn't support canvas.</p>
+
+		</canvas>
+
+	</body>
+
+</html>
