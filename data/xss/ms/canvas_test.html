@@ -19,11 +19,33 @@
 
     <script type="text/javascript">			
 
-			window.onload = function() 
+      var g_ui;
+      var g_elapsed = 0;
+      var g_delta = 0.0;
+      var g_canvas;
+      
+      function start(resolution)  
+      {  
+          var start = new Date().getTime();  
+          function update()  
+          {  
+              var now   = new Date().getTime();
+              g_delta  = now - g_elapsed;  
+              g_elapsed = now; 
+              
+              var context = g_canvas.getContext('2d');
+              g_ui.update(g_delta, context);
+              
+              window.setTimeout(update, resolution);  
+          }  
+          window.setTimeout(update, resolution);  
+      }  
+      
+      window.onload = function() 
       {
 				var drawingCanvas = document.getElementById('myDrawing');
-        var context = drawingCanvas.getContext('2d');
-
+        
+        g_canvas = drawingCanvas;
 				if (drawingCanvas && drawingCanvas.getContext)
         {
             var client =
@@ -32,20 +54,50 @@
                 height: 200,
                 canvas: drawingCanvas
             };
-
+            
             var streamer = new ms.streamer.Streamer();
             var ui = new ms.ui.Manager(client, streamer);
+            g_ui = ui;
       
-            ui.load_images(['images/img.png'], function()
+            ui.load_images(['images/img.png', 'images/img2.png'], function()
             {
-                var img = ui.root.newImage('images/img.png');
-                img.rect(20, 20, 50, 50);
+
+                drawingCanvas.onmousemove = function(ev)
+                {
+                    ui.mouse_move(ev.x, ev.y);                  
+                };
+
+                drawingCanvas.onmousedown = function(ev)
+                {
+                    ui.mouse_down(ev.x, ev.y);                  
+                };
+
+                drawingCanvas.onmouseup = function(ev)
+                {
+                    ui.mouse_up(ev.x, ev.y);                  
+                };
+
+                //var img = ui.root.newImage('images/img.png');
+                //img.rect(20, 20, 50, 50);
 
                 var txt = ui.root.newLabel('bold 12px Verdana');
                 txt.position(20, 100);
                 txt.text("Mutant State");
+                
+                var holder = ui.root.newComponent();
+                holder.rect(100, 100, 100, 100);
+                
+                var btn = holder.newButton('images/img2.png', 'images/img.png');
+                btn.rect(0, 0, 75, 75);
+                
+                btn.click = function()
+                {
+                    txt.text("Clicked");
+                };
 
-                ui.draw(context);
+                start();
+                
+                ui.draw(drawingCanvas.getContext('2d'));
             });
 
         }

@@ -141,22 +141,188 @@ ms.ui.Manager = Class.create(
 	    return this.mouse_over != this.root;
 	},
 
-	update: function(elapsed)
+    screen_pos: function(cmp)
+    {
+        var p = cmp.parent;
+        var result = {x: cmp.x, y: cmp.y};
+        while(p)
+        {
+            result.x += p.x;
+            result.y += p.y;
+
+            p = p.parent;
+        }
+
+        return result;
+    },
+
+    invalidate_all: function()
+    {
+        this.redraw_ = true;
+    },
+
+	invalidate: function(cmp)
 	{
-		var anims = this.animations;
-		for(var i = 0; i < anims.length; i++)
-		{
-			var anim = anims[i];
-			if (anim.active)
-				anim.update(elapsed);
-		}
+        var gpos = this.screen_pos(cmp);
+        gpos.w = cmp.w;
+        gpos.h = cmp.h;
+
+        var found = false;
+        
+        for(var i = 0; i < this.dirt_.length; i++)
+        {
+            var rect = this.dirt_[i];
+            if (rect.intersects(gpos))
+            {
+                if (rect.x > cmp.x)
+                    rect.x = cmp.x; 
+
+                if (rect.y > cmp.y)
+                    rect.y = cmp.y; 
+
+                if (rect.x + rect.w < cmp.x + cmp.w)
+                    rect.w = cmp.x + cmp.w - rect.x; 
+
+                if (rect.y + rect.h < cmp.y + cmp.h)
+                    rect.h = cmp.y + cmp.h - rect.y; 
+
+                    found = true;
+                break;
+            }
+        }
+
+        if (!found)
+        {
+            this.dirt_.push(
+            {
+                x: gpos.x,
+                y: gpos.y,
+                w: gpos.w,
+                h: gpos.h,
+
+                intersects: function(r)
+                {
+                    if (this.x + this.w < r.x)
+                        return false;
+
+                    if (r.x + r.w < this.x)
+                        return false;
+
+                    if (this.y + this.h < r.y)
+                        return false;
+
+                    if (r.y + r.h < this.y)
+                        return false;
+
+                    return true;
+                },
+
+                isContainedBy: function(r)
+                {
+                    return  r.x <= this.x && 
+                            r.y <= this.y &&
+                            r.x + r.w >= this.x + this.w &&
+                            r.y + r.h >= this.y + this.h;
+                },
+            });
+        }
 	},
+    
+    dirt_: [],
+    backgroundFill: '#FFFFFF',
+
+    findContainer: function(rect)
+    {
+        var path = [];
+        function do_find(x, y, cmp, r)
+        {
+            var rr = {x: cmp.x + x, y: cmp.y + y, w: cmp.w, h: cmp.h};
+            if (r.isContainedBy(rr))
+            {
+                path.push(cmp);
+                for(var i = 0; i < cmp.components.length; i++)
+                {
+                    do_find(x + cmp.y, y + cmp.y, cmp.components[i], r);    
+                }
+            }
+        }
+
+        do_find(0, 0, this.root, rect);
+
+        var last = null;
+        for(var i = path.length - 1; i >= 0; i--)
+        {
+            var cmp = path[i];
+            if (cmp != this.root)
+                last = cmp;
+
+            if (cmp.opaque())
+                return cmp;
+        }
+
+        return last;
+    },
+
+    update: function(elapsed, context)
+    {
+        if (this.redraw_)
+        {
+            this.redraw_ = false;
+
+            this.draw(context);
+            this.dirt_ = [];
+            return;
+        }
+
+
+        var bg_dirt    = [];
+        var to_draw    = [];
+        
+        for(var i = 0; i < this.dirt_.length; i++)
+        {
+            var rect = this.dirt_[i];
+            var cmp  = this.findContainer(rect);
+
+            if (cmp)
+            {
+                to_draw.push(cmp);
+                
+                if (!cmp.opaque())
+                {
+                    bg_dirt.push(rect);                    
+                }
+            }
+            else
+                bg_dirt.push(rect);                    
+        }
+
+        for(var i = 0; i < bg_dirt.length; i++)
+        {
+            var rect = bg_dirt[i];
+            context.fillStyle = this.backgroundFill;
+
+            context.fillRect(rect.x, rect.y, rect.w, rect.h);
+        }
+
+        for(var i = 0; i < to_draw.length; i++)
+        {
+            var cmp  = to_draw[i];
+            var gpos = this.screen_pos(cmp.parent);
+
+            cmp.draw(context, gpos.x, gpos.y);
+        }
+
+        this.dirt_ = [];
+    },
 
     draw: function(context)
     {
-        //td: dirt
+        //background
+        context.fillStyle = this.backgroundFill;
+        context.fillRect(this.root.x, this.root.y, this.root.w, this.root.h);
+
         this.root.draw(context, 0, 0);
-    }
+    },
 });
 
 ms.ui.Component = Class.create(
@@ -175,6 +341,11 @@ ms.ui.Component = Class.create(
 		if (parent)
 			parent.addComponent(this);
 	},
+
+    opaque: function()
+    {
+        return false;
+    },
 
 	rect: function(x, y, w, h)
 	{
@@ -228,11 +399,17 @@ ms.ui.Component = Class.create(
 
 	hide: function()
 	{
-		this.visible_ = false;
+        if (this.visible_)
+            this.invalidate();
+		
+        this.visible_ = false;
 	},
 
 	show: function()
 	{
+        if (!this.visible_)
+            this.invalidate();
+
 		this.visible_ = true;
 	},
 
@@ -244,6 +421,11 @@ ms.ui.Component = Class.create(
 	positioned: function() {},
 	resized: 	function() {},
     visible_:   true,
+
+    invalidate: function()
+    {
+        this.manager.invalidate(this);
+    },
 
 	find: function(x, y)
 	{
@@ -296,7 +478,7 @@ ms.ui.Component = Class.create(
             var cmp = this.components[i];
             if (cmp.isVisible())
             {
-                cmp.draw(context, x, y);
+                cmp.draw(context, this.x + x, this.y + y);
             }
         }
     },
@@ -342,12 +524,12 @@ ms.ui.Component = Class.create(
 
 	    result.mouse_in = function()
 	    {
-	        this.sampler.texture = over_texture;
+	        this.image(over_texture);
 	    }
 
 	    result.mouse_out = function()
 	    {
-	        this.sampler.texture = normal_texture;
+	        this.image(normal_texture);
 	    }
 
 	    return result;
@@ -364,7 +546,7 @@ ms.ui.Component = Class.create(
 	    result.click = function()
 	    {
 	    	this.down 			 = !this.down;
-	    	this.sampler.texture = this.down? down_texture : up_texture;
+	    	this.image(this.down? down_texture : up_texture);
 
 	    	if (this.change)
 	    		this.change(this.down);
@@ -373,7 +555,7 @@ ms.ui.Component = Class.create(
 	    result.state = function(down)
 	    {
 	    	this.down 			 = down;
-	    	this.sampler.texture = this.down? down_texture : up_texture;
+	    	this.image(this.down? down_texture : up_texture);
 	    }
 
 	    return result;
@@ -397,20 +579,30 @@ ms.ui.Image = Class.create(ms.ui.Component,
 	{
 	},
 
-	color: function(r, g, b, a)
+	fill: function(f)
 	{
+        this.fill_ = f;
+        this.invalidate();
 	},
 
 	image: function(texture)
 	{
 	    this.texture = texture;
+        this.invalidate();
 	},
 
     draw: function($super, context, x, y)
     {
         if (this.texture)
         {
-            context.drawImage(this.texture, this.x + x, this.y + y);
+            context.drawImage(  this.texture, 
+                                this.x + x, this.y + y, 
+                                this.w, this.h);
+        }
+        else if (this.fill_)
+        {
+            context.fillStyle = this.fill_;
+            context.fillRect(this.x + x, this.y + y, this.w, this.h);
         }
 
         $super(context);
@@ -459,7 +651,7 @@ ms.ui.Label = Class.create(ms.ui.Component,
 	text: function(text)
 	{
 		this.value = text;
-		this.resized();
+		this.manager.invalidate_all(); //td: do extents!!!
 	},
 
 	resized: function()
@@ -474,6 +666,7 @@ ms.ui.Label = Class.create(ms.ui.Component,
     draw: function($super, context, x, y)
     {
         context.font = this.font;
+        context.fillStyle = 'black'; //td:
         context.fillText(this.value, this.x + x, this.y + y);
 
         $super(context);
