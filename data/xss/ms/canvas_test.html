@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+
+		<title>Canvas test</title>
+
+		<!--[if IE]><script src="excanvas.js"></script><![endif]-->
+
+    <script type="text/javascript" src="jquery-1.4.2.min.js" ></script>
+    <script type="text/javascript" src="jquery.utils.js"></script>
+    <script type="text/javascript" src="utils.js"></script>
+    <script type="text/javascript" src="prototype.js"></script>
+
+    <script type="text/javascript" src="ms-ui.js"></script>
+    <script type="text/javascript" src="ms-streamer.js"></script>
+
+    <script type="text/javascript">			
+
+      var g_ui;
+      var g_elapsed = 0;
+      var g_delta = 0.0;
+      var g_canvas;
+      
+      function start(resolution)  
+      {  
+          var start = new Date().getTime();  
+          function update()  
+          {  
+              var now   = new Date().getTime();
+              g_delta  = now - g_elapsed;  
+              g_elapsed = now; 
+              
+              var context = g_canvas.getContext('2d');
+              g_ui.update(g_delta, context);
+              
+              window.setTimeout(update, resolution);  
+          }  
+          window.setTimeout(update, resolution);  
+      }  
+      
+      window.onload = function() 
+      {
+				var drawingCanvas = document.getElementById('myDrawing');
+        
+        g_canvas = drawingCanvas;
+				if (drawingCanvas && drawingCanvas.getContext)
+        {
+            var client =
+            {
+                width: 200,
+                height: 200,
+                canvas: drawingCanvas
+            };
+            
+            var streamer = new ms.streamer.Streamer();
+            var ui = new ms.ui.Manager(client, streamer);
+            g_ui = ui;
+      
+            ui.load_images(['images/img.png', 'images/img2.png'], function()
+            {
+
+                drawingCanvas.onmousemove = function(ev)
+                {
+                    ui.mouse_move(ev.x, ev.y);                  
+                };
+
+                drawingCanvas.onmousedown = function(ev)
+                {
+                    ui.mouse_down(ev.x, ev.y);                  
+                };
+
+                drawingCanvas.onmouseup = function(ev)
+                {
+                    ui.mouse_up(ev.x, ev.y);                  
+                };
+
+                //var img = ui.root.newImage('images/img.png');
+                //img.rect(20, 20, 50, 50);
+
+                var txt = ui.root.newLabel('bold 12px Verdana');
+                txt.position(20, 100);
+                txt.text("Mutant State");
+                
+                var holder = ui.root.newComponent();
+                holder.rect(100, 100, 100, 100);
+                
+                var btn = holder.newButton('images/img2.png', 'images/img.png');
+                btn.rect(0, 0, 75, 75);
+                
+                btn.click = function()
+                {
+                    txt.text("Clicked");
+                };
+
+                start();
+                
+                ui.draw(drawingCanvas.getContext('2d'));
+            });
+
+        }
+
+      }
+    </script>
+
+	</head>
+
+	<body>
+
+		<canvas id="myDrawing" width="200" height="200">
+
+			<p>Your browser doesn't support canvas.</p>
+
+		</canvas>
+
+	</body>
+
+</html>

@@ -1,0 +1,127 @@
+//preconditions
+<xss:code>
+if (!config.canvasElement)
+	config.canvasElement = "myCanvas";
+</xss:code>
+
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+
+		<title><xss:e value = "application.Title"/></title>
+
+		<xss:code>
+		if (config.IE)
+		{
+			out(indent = 0)
+			{
+				<script src="excanvas.js"></script>
+			}
+		}
+		</xss:code>
+
+		<script src="ms-ui.js"></script>
+		
+		<script type="text/javascript">			
+			var g_ui;
+			var g_canvas;
+			window.onload = function() 
+			{
+				var drawingCanvas = document.getElementById('<xss:e value="config.canvasElement"/>');
+				g_canvas = drawingCanvas;
+
+				if(drawingCanvas && drawingCanvas.getContext) 
+				{
+					var client =
+					{
+						width: 200,
+						height: 200,
+						canvas: drawingCanvas
+					};
+
+					g_ui = new ms.ui.Manager(client, streamer);
+
+					streamer.loaded(function()
+					{
+						request_start();
+					});
+
+					<xss:class entry_point="generate_ui">
+					
+					method generate_component(cmp, parent)
+					{
+						if (parent)
+						{
+							out(indent = 1)
+							{
+								var <xss:e value = "cmp_name"/> = parent.<xss:e value = "cmp.creationFn"/>();
+							}
+						}
+						else
+						{
+							out(indent = 1)
+							{
+								var application = new ms.ui.Div();
+								application.rect(0, 0, client.width, client.width);
+							}
+						}
+						
+						render_instance(cmp, "instance.xss");
+						for(child in cmp.children)
+						{
+							generate_component(child, cmp);
+						}
+					}
+
+					method generate_ui()
+					{
+						generate_component(application, null);
+					}
+					</xss:class>
+
+					//start rendering
+					request_start();
+				}
+				else
+				{
+					alert('Canvas not supported');
+				}
+			}
+
+			var g_allLoaded = 2;
+			var g_actuallyLoaded = 0;
+			var g_timeout;
+			function request_start()
+			{
+				g_actuallyLoaded++;
+				if (g_allLoaded == g_actuallyLoaded)
+				{
+					g_timeout = setTimeout(update_ui, 50); 
+				}
+			}
+
+			function update_ui()
+			{
+				g_timeout = setTimeout(update_ui, 50); 
+
+				var context = g_canvas.getContext('2d');
+				g_ui.update(context);
+			}
+
+		</script>
+
+	</head>
+
+	<body>
+
+		<canvas id="myDrawing" width="200" height="200">
+
+			<p>Your browser doesn't support canvas.</p>
+
+		</canvas>
+
+	</body>
+
+</html>
