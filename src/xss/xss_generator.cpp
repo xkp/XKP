@@ -22,15 +22,15 @@ str xss_generator::get()
   {
     return result_;
   }
-  
+
 void xss_generator::append(const str& s)
   {
     result_ += s;
   }
-  
+
 void xss_generator::visit(const str& tag, const str& text, param_list* args)
   {
-    handler_map::iterator it = handlers_.find(tag);  
+    handler_map::iterator it = handlers_.find(tag);
     if (it != handlers_.end())
       {
         (this->*(it->second))(text, args);
@@ -40,7 +40,7 @@ void xss_generator::visit(const str& tag, const str& text, param_list* args)
         //td: error handling
       }
   }
-  
+
 bool xss_generator::handle_text(const str& text, param_list* args)
   {
     result_ += text;
@@ -49,11 +49,11 @@ bool xss_generator::handle_text(const str& text, param_list* args)
 
 bool xss_generator::handle_code(const str& text, param_list* args)
   {
-    //details, details... 
+    //details, details...
     trim_last_empty_line(result_);
-    
+
     code_context& ctx = *(context_.get());
-    
+
     xs_utils xs;
     xs.execute_xs(text, ctx);
     return true;
@@ -62,7 +62,7 @@ bool xss_generator::handle_code(const str& text, param_list* args)
 bool xss_generator::handle_expression(const str& text, param_list* args)
   {
     xs_utils xs;
-    
+
     str expr = text;
     if (text.empty() && args)
       {
@@ -72,7 +72,7 @@ bool xss_generator::handle_expression(const str& text, param_list* args)
             expr = variant_cast<str>(vv, "");
           }
       }
-     
+
     code_context& ctx = *(context_.get());
     str result = variant_cast<str>(xs.evaluate_xs_expression(expr, ctx), str("Error"));
     result_   += result;
@@ -82,7 +82,7 @@ bool xss_generator::handle_expression(const str& text, param_list* args)
 bool xss_generator::handle_class(const str& text, param_list* args)
   {
     xs_utils xs;
-    
+
     //what we'll really compile is an instance, but xss:class sounder classier
     DynamicObject instance(new default_object);
 
@@ -99,9 +99,9 @@ bool xss_generator::handle_class(const str& text, param_list* args)
       {
         variant vv = args->get("entry_point");
         if (!vv.empty())
-          entry_point = (str)vv;
-      }  
-    
+          entry_point = variant_cast<str>(vv, "");
+      }
+
     param_list pl;
     dynamic_exec(instance, entry_point, pl);
     return true;

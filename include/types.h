@@ -9,7 +9,7 @@
 namespace xkp
 {
   typedef std::string str;
-  
+
   const int null = 0;
 
   template <class T>
@@ -24,12 +24,17 @@ namespace xkp
         {
         }
 
+        // added by Cuba
+        reference(const boost::shared_ptr<T> p): boost::shared_ptr<T>(p)
+        {
+        }
+
         template<class Y>
         explicit reference( Y * p ): boost::shared_ptr<T>( p )
         {
         }
     };
-  
+
   #define weak_reference boost::weak_ptr
 }
 

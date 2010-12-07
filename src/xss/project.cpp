@@ -32,27 +32,27 @@ struct class_internal_gather : dynamic_visitor
       output_(output)
       {
       }
-    
+
     virtual void item(const str& name, variant value)
       {
         if (name == "properties")
           return; //bail
-          
+
         //td: utilify
-        int idx = output_->add_anonymous(value);        
+        int idx = output_->add_anonymous(value);
         schema_item si;
         si.flags = DYNAMIC_ACCESS;
         si.get   = Getter( new anonymous_getter(idx) );
         si.type  = value.get_schema();
-       
+
         editable_->add_item(name, si);
       }
-      
+
       private:
         IEditableObject* editable_;
         IDynamicObject*  output_;
   };
-  
+
 
 struct property_mixer : dynamic_visitor
   {
@@ -65,19 +65,23 @@ struct property_mixer : dynamic_visitor
         result_->flags  = 0;
         result_->this_  = instance;
       }
-    
+
     virtual void item(const str& name, variant value)
       {
         if (name == "name")
-          result_->name = (str)value;
+          // changed by Cuba
+          //result_->name = (str)value;
+          result_->name = variant_cast<str>(value, "");
         else if (name == "default_value")
           result_->value_ = value;
         else if (name == "type")
-          type_ = (str)value;
-        else 
+          // changed by Cuba
+          //type_ = (str)value;
+          type_ = variant_cast<str>(value, "");
+        else
           result_->add(name, value);
       }
-    
+
     XSSProperty result()
       {
         assert(!result_->name.empty());
@@ -90,26 +94,26 @@ struct property_mixer : dynamic_visitor
           {
             //td: get default value from type
           }
-          
+
         return result_;
-      }  
+      }
     private:
       DynamicObject prop_;
       DynamicObject instance_;
-      XSSProperty   result_; 
-      str           type_; 
+      XSSProperty   result_;
+      str           type_;
   };
 
 //xss_code_context
-xss_code_context::xss_code_context(const variant _project, xss_idiom* idiom) : 
-  base_code_context(), 
+xss_code_context::xss_code_context(const variant _project, xss_idiom* idiom) :
+  base_code_context(),
   project_(_project),
   idiom_(idiom)
   {
   }
 
-xss_code_context::xss_code_context(xss_code_context& other) : 
-  base_code_context(other), 
+xss_code_context::xss_code_context(xss_code_context& other) :
+  base_code_context(other),
   project_(other.project_),
   idiom_(other.idiom_)
   {
@@ -146,7 +150,7 @@ XSSProperty xss_code_context::get_property(DynamicObject obj, const str& name)
 
 DynamicObject xss_code_context::resolve_instance(const str& id)
   {
-    XSSProject project = project_; 
+    XSSProject project = project_;
     return project->get_instance(id); //td: consider this, scope, and stuff
   }
 
@@ -171,7 +175,7 @@ xss_composite_context::xss_composite_context(XSSContext ctx):
     args_     = ctx->args_;
     this_type = ctx->this_type;
     this_     = ctx->this_;
-    dsl_      = ctx->dsl_; 
+    dsl_      = ctx->dsl_;
   }
 
 XSSProperty xss_composite_context::get_property(const str& name)
@@ -260,7 +264,9 @@ str xss_property::generate_value()
           }
         else if (value_.is<str>())
           {
-            str ss = (str)value_;
+            // changed by Cuba
+            //str ss = (str)value_;
+            str ss = variant_cast<str>(value_, "");
             v = '"' + ss + '"';
           }
         else
@@ -344,7 +350,7 @@ struct pre_process : dynamic_visitor
                   }
 
                 //aside of that, we'll just interpret as an object
-                owner_.register_instance(id, visitable, object_); 
+                owner_.register_instance(id, visitable, object_);
                 pre_process pp(visitable, object_, owner_);
                 visitable->visit(&pp);
               }
@@ -418,22 +424,24 @@ struct source_code_gather :  xs_visitor
 void xss_project::build()
   {
     //grab the path
-    //td: change path to config... or something.            
+    //td: change path to config... or something.
     str sp = variant_cast<str>(dynamic_get(path, "source_path"), "");
     source_path_ = sp;
-    
+
     str op = variant_cast<str>(dynamic_get(path, "output_path"), "");
     output_path_ = op;
-    
+
     //read the classes
     str class_library = variant_cast<str>(dynamic_get(path, "class_library"), "");
     read_classes(class_library);
-    
+
     //grab the idiom
     idiom_ = idiom;
 
     //contextualize
-    XSSProject me = shared_from_this();
+    // changed by Cuba
+    //XSSProject me = shared_from_this();
+    XSSProject me(shared_from_this());
     context_      = XSSContext(new xss_code_context(me, idiom_));
     current_      = XSSGenerator(new xss_generator(context_));
 
@@ -447,7 +455,7 @@ void xss_project::build()
 
     //go at it
     preprocess();
-    
+
     //the application object is manually handled... not sure why atm
     dynamic_set(application, "class_name", str("application"));
     register_instance("application", application);
@@ -464,7 +472,7 @@ void xss_project::build()
 
     str generator_file = variant_cast<str>(dynamic_get(path, "generator"), "");
     str result = generate_file(source_path_ + generator_file);
-    
+
     str of = variant_cast<str>(dynamic_get(path, "output_file"), "");
     save_file(output_path_ + of, result);
   }
@@ -567,18 +575,18 @@ void xss_project::register_instance(const str& id, DynamicObject it, DynamicObje
     if (rid != _id)
       {
       }
-    
+
     //update the instance, this is largely inefficient memory wise
     //but oh so easy to write.
     str class_name = variant_cast<str>(dynamic_get(it, "class_name"), "");
     class_registry::iterator cit = classes_.find(class_name);
     if (cit == classes_.end())
       assert(false);
-      
+
     DynamicObject clazz      = cit->second;
-    DynamicArray  properties = variant_cast<DynamicArray>(dynamic_get(clazz, "properties"), DynamicArray()); 
+    DynamicArray  properties = variant_cast<DynamicArray>(dynamic_get(clazz, "properties"), DynamicArray());
     DynamicArray  instance_properties = get_property_array(it);
-    
+
     if (properties)
       {
         //Here it gets a little tricky, coherent, but tricky.
@@ -590,25 +598,25 @@ void xss_project::register_instance(const str& id, DynamicObject it, DynamicObje
           DynamicObject pobj = properties->at(pp);
           property_mixer mixer(pobj, it);
           pobj->visit(&mixer);
-          
+
           XSSProperty ppprop = mixer.result(); assert(ppprop);
           instance_properties->push_back(ppprop);
         }
       }
-      
-    //we have only copied the high level properties, we still have to grab the internal 
+
+    //we have only copied the high level properties, we still have to grab the internal
     //properties, the ones to be used by the generator.
     IEditableObject* editable = variant_cast<IEditableObject*>(it, null);
     IDynamicObject*  output   = it.get();
     class_internal_gather gather(editable, output);
-        
+
     clazz->visit(&gather);
 
-    //all set, lets register it 
+    //all set, lets register it
     dynamic_set(it, "id", _id);
     instances_.insert(instance_registry_pair(_id, instances.size()));
     instances.push_back(it);
-    
+
     //and build a tree
     if (parent)
       {
@@ -626,7 +634,9 @@ void xss_project::render_instance(DynamicObject instance, const str& xss)
     str class_name = variant_cast<str>(dynamic_get(instance, "class_name"), "");
 
     //setup the context
+    // changed by Cuba
     XSSProject me = shared_from_this();
+    //XSSProject me(shared_from_this());
     xss_code_context* ctx = new xss_code_context(me, idiom_);
     XSSContext context(ctx);
     xss_generator gen(context);
@@ -668,12 +678,12 @@ str xss_project::instance_class(DynamicObject instance)
         str clazz = result;
         return clazz;
       }
-    
+
     param_list error;
     error.add("id", SOutOfContext);
     error.add("desc", SInstancesMustProvideAClass);
     xss_throw(error);
-    
+
     return ""; //never gets here
   }
 
@@ -683,9 +693,9 @@ str xss_project::inline_properties(DynamicObject instance)
     error.add("id", SNotImplemented);
     error.add("desc", SWhatWasThisAgain);
     xss_throw(error);
-    return ""; 
+    return "";
   }
-  
+
 DynamicObject xss_project::find_class(const str& event_name)
   {
     param_list error;
@@ -803,7 +813,7 @@ DynamicArray xss_project::get_children_array(DynamicObject obj)
 
     return result;
   }
-  
+
 DynamicObject xss_project::get_instance(const str& id)
   {
       instance_registry::iterator it = instances_.find(id);
@@ -911,7 +921,7 @@ void xss_project::read_classes(const str& class_library_file)
 
     xml_read_archive class_library_achive(load_file(source_path_ + class_library_file), &types);
     classes = class_library_achive.get( type_schema<DynamicObjectList>() );
-    
+
     DynamicObjectList::iterator it = classes.begin();
     DynamicObjectList::iterator nd = classes.end();
 
@@ -919,7 +929,7 @@ void xss_project::read_classes(const str& class_library_file)
       {
         DynamicObject obj = *it;
         str           id  = variant_cast<str>(dynamic_get(obj, "id"), "");
-        
+
         if (id.empty())
           {
             param_list error;
@@ -927,7 +937,7 @@ void xss_project::read_classes(const str& class_library_file)
             error.add("desc", SClassesMustHaveId);
             xss_throw(error);
           }
-        
+
         class_registry::iterator it = classes_.find(id);
         if (it == classes_.end())
           {

@@ -28,22 +28,22 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       variant           path;
       DynamicObjectList instances;
       DynamicObjectList classes;
-      
+
       void compile_instance(const str& filename, DynamicObject instance);
       void register_instance(const str& id, DynamicObject instance, DynamicObject parent = DynamicObject());
-      void render_instance(DynamicObject instance, const str& xss);      
+      void render_instance(DynamicObject instance, const str& xss);
       str  resolve_dispatcher(DynamicObject instance, const str& event_name);
       str  instance_class(DynamicObject instance);
       str  inline_properties(DynamicObject instance);
       DynamicObject find_class(const str& event_name);
       void breakpoint(const param_list params);
     public:
-      //access 
+      //access
       DynamicArray  get_property_array(DynamicObject obj);
       DynamicArray  get_method_array(DynamicObject obj);
       DynamicArray  get_event_array(DynamicObject obj);
       DynamicArray  get_children_array(DynamicObject obj);
-      
+
       //some utils, god those are long names
       DynamicObject get_instance(const str& id);
       void          add_application_file(const str& file, DynamicObject obj);
@@ -55,29 +55,29 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       typedef std::pair<str, size_t> instance_registry_pair;
       typedef std::map<str,  DynamicObject>   class_registry;
       typedef std::pair<str, DynamicObject>   class_registry_pair;
-      
+
       instance_registry instances_;
-      class_registry    classes_; 
+      class_registry    classes_;
     public:
       //must keep some info about files
       struct file_info
         {
           file_info(const str& f, DynamicObject o): obj(o), file(f) {}
-          
+
           DynamicObject obj;
           str           file;
         };
-        
+
       typedef std::vector<file_info> file_list;
-      
+
       file_list app_files_;
     private:
-      xss_idiom*        idiom_; 
-      str               source_path_; 
-      str               output_path_; 
+      xss_idiom*        idiom_;
+      str               source_path_;
+      str               output_path_;
       meta_array_schema array_type_;
-      XSSGenerator      current_; 
-      XSSContext        context_; 
+      XSSGenerator      current_;
+      XSSContext        context_;
 
       void prepare_context(base_code_context& context, xss_generator& gen);
       str  generate_xss(const str& xss, xss_generator& gen);
@@ -88,12 +88,14 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       void read_classes(const str& class_library_file);
 
       str  localize_file(const str& );
-  };  
+  };
 
+// changed by Cuba
 typedef reference<xss_project> XSSProject;
+//typedef boost::shared_ptr<xss_project> XSSProject;
 
 //glue
-struct xss_project_schema : object_schema<xss_project>  
+struct xss_project_schema : object_schema<xss_project>
   {
     virtual void declare()
       {
@@ -114,8 +116,8 @@ struct xss_project_schema : object_schema<xss_project>
         method_<str,  1>("inline_properties",   &xss_project::inline_properties);
       }
   };
-  
-struct xss_event_schema : object_schema<xss_event>  
+
+struct xss_event_schema : object_schema<xss_event>
   {
     virtual void declare()
       {
@@ -124,14 +126,14 @@ struct xss_event_schema : object_schema<xss_event>
       }
   };
 
-struct xss_property_schema : sponge_object_schema<xss_property>  
+struct xss_property_schema : sponge_object_schema<xss_property>
   {
     virtual void declare()
       {
         property_("name",  &xss_property::name);
         property_("get",   &xss_property::get);
         property_("set",   &xss_property::set);
-        
+
         method_<str, 0>("generate_value", &xss_property::generate_value);
       }
   };
@@ -139,7 +141,7 @@ struct xss_property_schema : sponge_object_schema<xss_property>
 register_complete_type(xss_project,   xss_project_schema);
 register_complete_type(xss_event,     xss_event_schema);
 register_complete_type(xss_property,  xss_property_schema);
-  
+
 }
 
 #endif
