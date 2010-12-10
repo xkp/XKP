@@ -115,6 +115,16 @@ namespace xkp
         {
           return type_schema<T>();
         }
+
+			variant index(int value)
+				{
+					return (*ref_)[value];
+				}	
+
+			int size()
+				{
+					return (int)ref_->size();
+				}
       protected:
         container_ref ref_;
     };
@@ -136,11 +146,6 @@ namespace xkp
       void push_back(variant v)
         {
           ref_->push_back(v);
-        }
-
-      size_t size()
-        {
-          return ref_->size();
         }
 
       variant at(size_t idx)
@@ -174,11 +179,13 @@ namespace xkp
         {
           this->template class_property<typed_array_schema, schema*> ("iterated_type", &typed_array_schema::iterated_type);
 
-          this->template readonly_property<typename T::iterator>("begin",  &T::begin);
-          this->template readonly_property<typename T::iterator>("end",    &T::end);
+          this->template readonly_property<typename T::iterator>("begin", &T::begin);
+          this->template readonly_property<typename T::iterator>("end",   &T::end);
+          this->template readonly_property<int>									("size",	&T::size);
           this->template method_<void, 1>              ("insert", &T::insert);
           this->template method_<void, 1>              ("+",      &T::insert, OP_BLOCK_ASSIGN);
           this->template method_<void, 1>              ("+=",     &T::insert, OP_BLOCK_ASSIGN);
+          this->template method_<variant, 1>           ("[]",     &T::index);
         }
 
       virtual size_t options()

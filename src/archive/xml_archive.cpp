@@ -424,7 +424,7 @@ void xml_reader::visit(reader_visitor* visitor)
                     curr = curr->NextSiblingElement();
                   }
                   
-                is_array = same_count > 1;
+                is_array = same_count >= 1;
               }
           }
 

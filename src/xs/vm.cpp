@@ -13,6 +13,7 @@ const str SCallingNull("Trying to access null object");
 const str STypeDoesNotInstantiate("Cannot instantiate type");
 const str SCannotResolveDynamically("Cannot resolve");
 const str SNotExecutableDynamic("Attempting to call a non-function");
+const str SCannotResolveOperator("Cannot resolve operator");
 
 //td: un duplicate
 const char* vm_operator_name[] =
@@ -49,6 +50,7 @@ const char* vm_operator_name[] =
     "*=",   //op_mult_equal,
     "/=",   //op_div_equal,
     ".",    //op_dot,
+		".",		//op_dot_call
     "[]",   //op_index,
     "",     //op_call,
     "",     //op_func_call
@@ -196,9 +198,13 @@ variant execution_context::execute()
                         args.add(arg2);
                         result = custom_operator.exec->exec(caller_id, args );
                       }
-                    else if (true)
+                    else
                       {
-                        assert(false); //unknown identifier
+												param_list error;
+												error.add("id", SRuntime);
+												error.add("desc", SCannotResolveOperator);
+												error.add("operator", str(vm_operator_name[opid]));
+												runtime_throw(error);
                       }
                   }
                 else result = opexec->exec(arg1, arg2);
@@ -235,7 +241,11 @@ variant execution_context::execute()
                       }
                     else
                       {
-                        assert(false); //unknown identifier
+												param_list error;
+												error.add("id", SRuntime);
+												error.add("desc", SCannotResolveOperator);
+												error.add("operator", str(vm_operator_name[opid]));
+												runtime_throw(error);
                       }
                   }
                 else

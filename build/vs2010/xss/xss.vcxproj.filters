@@ -25,6 +25,12 @@
     <Filter Include="data\qt">
       <UniqueIdentifier>{9881335c-4410-4e7b-8fce-73fe0da13ddb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="data\ms\javascript">
+      <UniqueIdentifier>{06ae4124-706c-45ad-93e3-4b9be8c0c307}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\ms\test">
+      <UniqueIdentifier>{96061dbc-27c5-4f15-9fa9-fe73ebd4479a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\xs\array.cpp">
@@ -220,18 +226,6 @@
     <None Include="..\..\..\data\xss\ms\app.xss">
       <Filter>data\ms</Filter>
     </None>
-    <None Include="..\..\..\data\xss\ms\canvas_test.html">
-      <Filter>data\ms</Filter>
-    </None>
-    <None Include="..\..\..\data\xss\ms\ms-ui.js">
-      <Filter>data\ms</Filter>
-    </None>
-    <None Include="..\..\..\data\xss\ms\ms.js">
-      <Filter>data\ms</Filter>
-    </None>
-    <None Include="..\..\..\data\xss\ms\ms-streamer.js">
-      <Filter>data\ms</Filter>
-    </None>
     <None Include="..\..\..\data\xss\qt\qt_cpp_app.xss">
       <Filter>data\qt</Filter>
     </None>
@@ -249,6 +243,30 @@
     </None>
     <None Include="..\..\..\data\xss\qt\qt_cpp_instance.xss">
       <Filter>data\qt</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\ms\instance.xss">
+      <Filter>data\ms</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\ms\ms-streamer.js">
+      <Filter>data\ms\javascript</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\ms\ms.js">
+      <Filter>data\ms\javascript</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\ms\ms-ui.js">
+      <Filter>data\ms\javascript</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\ms\canvas_test.html">
+      <Filter>data\ms\test</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\ms\ms-test.xml">
+      <Filter>data\ms\test</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\ms\ms-test.xs">
+      <Filter>data\ms\test</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\ms\classes.xml">
+      <Filter>data\ms</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -1655,7 +1655,7 @@ str xs_compiler::process_dsl(const str& src, std::vector<str>& dsl_texts)
               {
                 //do the deed, all this dressing happens so the grammar doesn't do wacko.
                 //first we capture the dsl text
-                str dsl_text(result.begin() + brace_start + 1, result.begin() + brace_end - 1);
+                str dsl_text(result.begin() + brace_start + 1, result.begin() + brace_end);
                 size_t text_idx = dsl_texts.size();
                 dsl_texts.push_back( dsl_text );
 

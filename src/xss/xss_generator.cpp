@@ -2,11 +2,16 @@
 #include "xss/xss_generator.h"
 #include "xss/dsl_out.h"
 #include "xss/utils.h"
+#include "xss/xss_error.h"
 
 #include <xs.h>
 
 
 using namespace xkp;
+
+const str SRuntime("xss-runtime");
+
+const str SCannotEvaluate("Cannot evaluate expression");
 
 //xss_generator
 xss_generator::xss_generator(XSSContext context):
@@ -74,7 +79,17 @@ bool xss_generator::handle_expression(const str& text, param_list* args)
       }
 
     code_context& ctx = *(context_.get());
-    str result = variant_cast<str>(xs.evaluate_xs_expression(expr, ctx), str("Error"));
+
+		str result = variant_cast<str>(xs.evaluate_xs_expression(expr, ctx), str("@@Error"));
+		if (result == "@@Error")
+		{
+				param_list error;
+				error.add("id", SRuntime);
+				error.add("desc", SCannotEvaluate);
+				error.add("expression", expr);
+				xss_throw(error);
+		}
+
     result_   += result;
     return true;
   }

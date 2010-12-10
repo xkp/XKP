@@ -156,7 +156,11 @@
     <None Include="..\..\..\data\xss\ms\canvas_test.html">
       <SubType>Designer</SubType>
     </None>
+    <None Include="..\..\..\data\xss\ms\classes.xml" />
+    <None Include="..\..\..\data\xss\ms\instance.xss" />
     <None Include="..\..\..\data\xss\ms\ms-streamer.js" />
+    <None Include="..\..\..\data\xss\ms\ms-test.xml" />
+    <None Include="..\..\..\data\xss\ms\ms-test.xs" />
     <None Include="..\..\..\data\xss\ms\ms-ui.js" />
     <None Include="..\..\..\data\xss\ms\ms.js" />
     <None Include="..\..\..\data\xss\qt\qt_cpp_app.xss" />

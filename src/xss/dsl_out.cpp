@@ -5,6 +5,8 @@
 #include <xss/xss_error.h>
 #include <xs/ast.h>
 
+#include <boost/algorithm/string.hpp>
+
 using namespace xkp;
 
 //strings
@@ -82,11 +84,12 @@ struct worker
   {
     public:
       worker() : gen_(0), tab_(4) {}
-      worker(xss_generator* gen, part_list parts, int tab):
+      worker(xss_generator* gen, part_list parts, int tab, bool dont_break):
         gen_(gen),
         parts_(parts),
         indent_(-1),
-        tab_(tab)
+        tab_(tab),
+				dont_break_(dont_break)
         {
         }
     public:
@@ -129,7 +132,10 @@ struct worker
                           else
                             result += padding;
 
-                          result += *lit + '\n';
+                          result += *lit;
+													
+													if (!dont_break_)
+														result += '\n';
                         }
                     }
                   else
@@ -222,7 +228,10 @@ struct worker
                     curr_line.insert(0, " ");
                 }
 
-              result += curr_line + '\n';
+              result += curr_line;
+							
+							if(!dont_break_)
+								result += '\n';
             }
 
           return result;
@@ -233,6 +242,7 @@ struct worker
       int            indent_;
       int            tab_;
       part_list      parts_;
+			bool					 dont_break_;
 
       std::vector<str> load_lines(const str& s)
         {
@@ -270,6 +280,9 @@ namespace xkp
 void out_linker::link(dsl& info, code_linker& owner)
   {
     int tab_size = 4;
+    bool dont_break = false;
+    bool do_break = false;
+		bool trim = false;
 
     std::vector<str> expressions;
 
@@ -306,23 +319,51 @@ void out_linker::link(dsl& info, code_linker& owner)
         tab_size = owner.evaluate_expression(expr); //td: only contants, lazy me
       }
 
-    part_list parts;
-    xss_gather gather(parts, expressions);
+    variant dont_break_v = info.params.get("dont_break");
+    if (!dont_break_v.empty())
+      {
+        expression expr = dont_break_v;
+        dont_break = owner.evaluate_expression(expr); //td: only contants, lazy me
+      }
 
+    variant do_break_v = info.params.get("do_break");
+    if (!do_break_v.empty())
+      {
+        expression expr = do_break_v;
+        do_break = owner.evaluate_expression(expr); //td: only contants, lazy me
+      }
+
+		variant trim_v = info.params.get("trim");
+    if (!trim_v.empty())
+      {
+        expression expr = trim_v;
+        trim = owner.evaluate_expression(expr); //td: only contants, lazy me
+      }
+		
     //process xss
+		part_list parts;
+		xss_gather gather(parts, expressions);
+
     xss_parser parser;
     parser.register_tag("xss:e");
     parser.register_tag("xss:code");
     parser.register_tag("xss:open_brace");
     parser.register_tag("xss:close_brace");
+		
+		str to_parse = info.text;
+		if (trim)
+			boost::trim(to_parse);
 
-    parser.parse(info.text, &gather);
+		if (do_break)
+				to_parse += '\n';
+
+		parser.parse(to_parse, &gather);
 
     //now xs
     xs_utils xs;
 
     //create a safe reference to be inserted in the execution context later on
-    Worker wrk(new worker(&gen_, parts, tab_size));
+		Worker wrk(new worker(&gen_, parts, tab_size, dont_break));
     owner.add_instruction(i_load_constant, owner.add_constant(wrk));
 
     //and so we link the indent, after having the worker on
