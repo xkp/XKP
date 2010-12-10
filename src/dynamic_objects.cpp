@@ -38,7 +38,7 @@ size_t base_dynamic_object::add_anonymous(const variant value)
 
 void base_dynamic_object::set_anonymous(size_t idx, const variant value)
   {
-    if (idx > anonymous_.size())
+	  if (idx > anonymous_.size())
       {
         assert(false); //td: error system
       }

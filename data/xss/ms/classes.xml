@@ -1,0 +1,29 @@
+<xml>
+    <class id="button" inherits="component" creation_function="newButton">
+        <parameters>
+            <parameter property_name="up"/>
+            <parameter property_name="down"/>
+        </parameters>
+        
+        <properties>
+            <property name="up" type="string" set_fn="up" get_fn="up" />
+            <property name="down" type="string" set_fn="down" get_fn="down"/>
+
+            <property name="width"  set_fn="width" get_fn="width"/>
+            <property name="height" set_fn="height" get_fn="height"/>
+        </properties>
+    </class>
+    
+    <class id="label" inherits="component" creation_function="newLabel">
+        <parameters>
+            <parameter property_name="font"/>
+        </parameters>
+        
+        <properties>
+            <property name="font" type="string" set_fn="font" get_fn="font"/>
+            <property name="caption" type="string" set_fn="text" get_fn="text"/>
+        </properties>
+    </class>
+
+    <class id="application"/>
+</xml>

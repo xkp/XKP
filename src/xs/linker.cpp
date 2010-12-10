@@ -402,6 +402,17 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
         case 2:
           {
             arg2 = stack_.top(); stack_.pop();
+						if (arg2.is<already_in_stack>())
+							{
+								//the second argument being on the stack already causes the order of the parameters for the call to invert
+								//one way to solve is to create a temporary variable and make sure it gets loaded later
+								already_in_stack ais = arg2;								
+								int lv = register_variable("", ais.type, null);
+								add_instruction(i_store, lv);
+
+								arg2 = local_variable(lv, ais.type); //note the switcheroo
+							}
+
             arg1 = stack_.top(); stack_.pop();
             break;
           }
@@ -450,6 +461,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
         case op_le:
         case op_and:
         case op_or:
+        case op_index:
           {
             resolve_operator(op, arg1, arg2, null);
             break;
@@ -500,9 +512,9 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
             expression_identifier ei = arg2;
 
             if (type && 
-				type != type_schema<empty_type>() &&
-				type != type_schema<IDynamicObject*>() &&
-				type != type_schema<DynamicObject>())
+								type != type_schema<empty_type>() &&
+								type != type_schema<IDynamicObject*>() &&
+								type != type_schema<DynamicObject>())
               {
                 schema_item si;
                 if (type->resolve(ei.value, si))
@@ -744,13 +756,8 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
 
             add_instruction(i_load_constant, add_constant(array_type));
             add_instruction(i_instantiate, args);
-
-            //i_instantiate
-
             break;
           }
-
-        case op_index:
         default:
           assert(false); //td:
       }
@@ -1033,8 +1040,12 @@ struct expr_typeof : expression_visitor
 
 int code_linker::register_variable(const str& name, schema* type, expression* value)
   {
-    locals_list::iterator it = locals_.find(name);
-    if (it == locals_.end())
+    locals_list::iterator it = locals_.end();
+		
+		if (!name.empty())
+			it = locals_.find(name);
+    
+		if (it == locals_.end())
       {
         int local_idx = local_count_++;
 

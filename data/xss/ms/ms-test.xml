@@ -1,0 +1,19 @@
+<xss:project>
+    <path generator="app.xss"
+          class_library="classes.xml"
+          source_path="c:/work/xkp/data/xss/ms/" 
+          output_path="c:/work/xkp/data/xss/output/" 
+          output_file="ms-test.txt"/>
+
+    <idiom class="js-idiom" id_as_this="true"/>
+
+    <application source="ms-test.xs" width="640" height="400" title="">
+        <resources>
+            <resource type="image" src="images/img1.png"/>
+            <resource type="image" src="images/img2.png"/>
+        </resources>
+      
+        <button id="btn1" normal="images/img1.png" highlite="images/img1.png" x="10" y="10" width="40" height="40"/>
+        <label id="label1" font="bold 12px Verdana" x="10" y="60"/>
+    </application>
+</xss:project>

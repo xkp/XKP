@@ -639,6 +639,16 @@ namespace detail
       schema* s = v.get_schema();
       if (s == type_schema<str>())
         return *((str*)v.get_pointer());
+
+			try
+        {
+          str res = v;
+					return res;
+        }
+      catch(type_mismatch)
+        {
+        }
+
       return default_value;
     }
 
