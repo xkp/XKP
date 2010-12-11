@@ -10,7 +10,8 @@
 
 namespace xkp
 {
-  class xss_generator : public xss_visitor
+  class xss_generator : public xss_visitor,
+												public boost::enable_shared_from_this<xss_generator>
   {
     public:
       xss_generator(XSSContext context);
@@ -35,6 +36,7 @@ namespace xkp
       bool handle_code(const str& text, param_list* args);
       bool handle_expression(const str& text, param_list* args);
       bool handle_class(const str& text, param_list* args);
+      bool handle_file(const str& text, param_list* args);
   };
   
   typedef reference<xss_generator> XSSGenerator;

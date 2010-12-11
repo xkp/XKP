@@ -16,6 +16,9 @@
 	<File name="..\..\..\include\schema.h" open="1" top="0" tabpos="1">
 		<Cursor position="15619" topLine="498" />
 	</File>
+	<File name="..\..\..\include\types.h" open="1" top="0" tabpos="11">
+		<Cursor position="461" topLine="15" />
+	</File>
 	<File name="..\..\..\include\xs\array.h" open="0" top="0" tabpos="5">
 		<Cursor position="1496" topLine="55" />
 	</File>
@@ -49,8 +52,8 @@
 	<File name="..\..\..\src\archive\xml_archive.cpp" open="0" top="0" tabpos="25">
 		<Cursor position="5750" topLine="214" />
 	</File>
-	<File name="..\..\..\src\dynamic_objects.cpp" open="1" top="0" tabpos="4">
-		<Cursor position="0" topLine="0" />
+	<File name="..\..\..\src\dynamic_objects.cpp" open="1" top="1" tabpos="4">
+		<Cursor position="6016" topLine="240" />
 	</File>
 	<File name="..\..\..\src\serial.cpp" open="0" top="0" tabpos="8">
 		<Cursor position="2451" topLine="75" />
@@ -82,8 +85,8 @@
 	<File name="..\..\..\src\xss\idiom.cpp" open="0" top="0" tabpos="15">
 		<Cursor position="12639" topLine="429" />
 	</File>
-	<File name="..\..\..\src\xss\project.cpp" open="1" top="1" tabpos="9">
-		<Cursor position="11570" topLine="434" />
+	<File name="..\..\..\src\xss\project.cpp" open="1" top="0" tabpos="9">
+		<Cursor position="11672" topLine="434" />
 	</File>
 	<File name="..\..\..\src\xss\xss_generator.cpp" open="1" top="0" tabpos="7">
 		<Cursor position="2180" topLine="79" />

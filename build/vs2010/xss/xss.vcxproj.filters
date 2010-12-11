@@ -196,18 +196,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\data\xss\demo\app.xml">
-      <Filter>data</Filter>
-    </None>
-    <None Include="..\..\..\data\xss\demo\app.xs">
-      <Filter>data</Filter>
-    </None>
-    <None Include="..\..\..\data\xss\demo\app_gen.xss">
-      <Filter>data</Filter>
-    </None>
-    <None Include="..\..\..\data\xss\demo\instance.xss">
-      <Filter>data</Filter>
-    </None>
     <None Include="..\..\..\data\xss\jquery\app.xss">
       <Filter>data\jquery</Filter>
     </None>
@@ -260,6 +248,9 @@
       <Filter>data\qt</Filter>
     </None>
     <None Include="..\..\..\data\xss\qt\qt_classes.xml">
+      <Filter>data\qt</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\qt\qt_ui.xss">
       <Filter>data\qt</Filter>
     </None>
   </ItemGroup>

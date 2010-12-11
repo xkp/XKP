@@ -37,6 +37,10 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       str  inline_properties(DynamicObject instance);
       DynamicObject find_class(const str& event_name);
       void breakpoint(const param_list params);
+      str  generate_file(const str& fname, XSSContext context = XSSContext());
+      void prepare_context(base_code_context& context, XSSGenerator gen);
+      str  generate_xss(const str& xss, XSSGenerator gen);
+			void output_file(const str& fname, const str& contents);
     public:
       //access
       DynamicArray  get_property_array(DynamicObject obj);
@@ -72,27 +76,25 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
 
       file_list app_files_;
     private:
-      xss_idiom*        idiom_;
-      str               source_path_;
-      str               output_path_;
-      meta_array_schema array_type_;
-      XSSGenerator      current_;
-      XSSContext        context_;
+      xss_idiom*								idiom_;
+      str												source_path_;
+      str												output_path_;
+      meta_array_schema					array_type_;
+      XSSGenerator							current_;
+      XSSContext								context_;
+			std::stack<XSSGenerator>	generators_; 	
 
-      void prepare_context(base_code_context& context, xss_generator& gen);
-      str  generate_xss(const str& xss, xss_generator& gen);
       str  load_file(const str& fname);
       void save_file(const str& fname, const str& contents);
-      str  generate_file(const str& fname);
       void preprocess();
       void read_classes(const str& class_library_file);
 
-      str  localize_file(const str& );
+		public:
+			void push_generator(XSSGenerator gen);
+			void pop_generator();
   };
 
-// changed by Cuba
 typedef reference<xss_project> XSSProject;
-//typedef boost::shared_ptr<xss_project> XSSProject;
 
 //glue
 struct xss_project_schema : object_schema<xss_project>

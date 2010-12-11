@@ -250,9 +250,8 @@ bool dynamic_class_schema::create(variant& result, param_list* args)
         return false;
       }
 
-    DynamicObject do_                            = result;
-    boost::shared_ptr<IDynamicClass> this_shared = shared_from_this();
-    DynamicClass  type( this_shared );
+    DynamicObject do_ = result;
+    DynamicClass  type( shared_from_this() );
     do_->set_type( type );
     return true;
   }

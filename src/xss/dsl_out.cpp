@@ -83,8 +83,8 @@ struct xss_gather : xss_visitor
 struct worker
   {
     public:
-      worker() : gen_(0), tab_(4) {}
-      worker(xss_generator* gen, part_list parts, int tab, bool dont_break):
+      worker() : tab_(4) {}
+      worker(XSSGenerator gen, part_list parts, int tab, bool dont_break):
         gen_(gen),
         parts_(parts),
         indent_(-1),
@@ -238,11 +238,11 @@ struct worker
         }
 
     private:
-      xss_generator* gen_; //td: make it a references, to be politically correct
-      int            indent_;
-      int            tab_;
-      part_list      parts_;
-			bool					 dont_break_;
+      XSSGenerator	gen_; //td: make it a references, to be politically correct
+      int           indent_;
+      int           tab_;
+      part_list     parts_;
+			bool					dont_break_;
 
       std::vector<str> load_lines(const str& s)
         {
@@ -363,7 +363,7 @@ void out_linker::link(dsl& info, code_linker& owner)
     xs_utils xs;
 
     //create a safe reference to be inserted in the execution context later on
-		Worker wrk(new worker(&gen_, parts, tab_size, dont_break));
+		Worker wrk(new worker(gen_, parts, tab_size, dont_break));
     owner.add_instruction(i_load_constant, owner.add_constant(wrk));
 
     //and so we link the indent, after having the worker on
