@@ -1,4 +1,4 @@
-[1] ----- main.cpp -----
+<xss:file output="app.cpp">
 #include <QtGui/QApplication>
 #include "widget.h"
 
@@ -11,62 +11,6 @@ int main(int argc, char *argv[])
 	
     return app.exec();
 }
-[1] ----- main.cpp -----
+</xss:file>
 
-
-[2] ----- widget.ui -----
-<?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.0">
-	<class>Widget</class>
-	<widget class="QWidget" name="Widget">
-		<property name="geometry">
-			<rect>
-				<x>0</x>
-				<y>0</y>
-				<width><xss:e value="application.width"/></width>
-				<height><xss:e value="application.height"/></height>
-			</rect>
-		</property>
-		<property name="windowTitle">
-			<string><xss:e value="application.title"/></string>
-		</property>
-	</widget>
-	<xss:code>
-		for(var i in instances)
-		{
-			out(indent = 3)
-			{
-				<widget class="<xss:e value="i.tag_name"/>" name="<xss:e value="i.id"/>">
-					<property name="geometry">
-						<rect>
-							<x><xss:e value="i.x"/></x>
-							<y><xss:e value="i.y"/></y>
-							<width><xss:e value="i.width"/></width>
-							<height><xss:e value="i.height"/></height>
-						</rect>
-					</property>
-			}
-
-			for(var p in i.properties)
-			{
-				if (p.is_x_or_y_etc)
-					continue;
-
-				out(indent = 4)
-				{
-					<property name="<xss:e value="p.name"/>">
-						<<xss:e value="p.type"/>><xss:e value="p.value"/></<xss:e value="p.type"/>>
-					</property>
-				}
-			}
-			out(indent = 3)
-			{
-				</widget>
-			}
-		}
-	</xss:code>
-	<layoutdefault spacing="6" margin="11"/>
-	<resources/>
-	<connections/>
-</ui>
-[2] ----- widget.ui -----
+<xss:file output="app.ui" src="qt_ui.xss"/>

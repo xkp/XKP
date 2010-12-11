@@ -3,6 +3,7 @@
 #include "xss/dsl_out.h"
 #include "xss/utils.h"
 #include "xss/xss_error.h"
+#include "xss/project.h"
 
 #include <xs.h>
 
@@ -10,8 +11,10 @@
 using namespace xkp;
 
 const str SRuntime("xss-runtime");
+const str SExpectingData("xss-expecting");
 
 const str SCannotEvaluate("Cannot evaluate expression");
+const str SExpectingOutputAttribute("Tag must contain 'output' attribute");
 
 //xss_generator
 xss_generator::xss_generator(XSSContext context):
@@ -21,6 +24,7 @@ xss_generator::xss_generator(XSSContext context):
     handlers_.insert(handler_pair("xss:code",   &xss_generator::handle_code));
     handlers_.insert(handler_pair("xss:e",      &xss_generator::handle_expression));
     handlers_.insert(handler_pair("xss:class",  &xss_generator::handle_class));
+    handlers_.insert(handler_pair("xss:file",		&xss_generator::handle_file));
   }
 
 str xss_generator::get()
@@ -104,7 +108,8 @@ bool xss_generator::handle_class(const str& text, param_list* args)
     xss_composite_context ctx(context_);
     ctx.this_ = instance;
 
-    DslLinker ol(new out_linker(*this));
+		XSSGenerator me(shared_from_this());
+    DslLinker ol(new out_linker(me));
     ctx.dsls.insert(dsl_list_pair("out", ol));
     ctx.dsl_ = &ctx.dsls; //td: !!! this will break under many dsls
 
@@ -121,3 +126,45 @@ bool xss_generator::handle_class(const str& text, param_list* args)
     dynamic_exec(instance, entry_point, pl);
     return true;
   }
+
+bool xss_generator::handle_file(const str& text, param_list* args)
+	{
+		XSSProject project = context_->project_; 
+		assert(args); //just checking
+
+		str output = variant_cast<str>(args->get("output"), "");
+		str src		 = variant_cast<str>(args->get("src"), "");
+
+		if (output.empty())
+			{
+				param_list error;
+				error.add("id", SExpectingData);
+				error.add("desc", SExpectingOutputAttribute);
+				error.add("tag", str("xss:file"));
+				xss_throw(error);
+			}
+
+		str result;
+		if (!src.empty())
+			{
+				result = project->generate_file(src, context_);
+			}
+		else
+			{
+				//td: utilify
+				XSSContext safe_context(new xss_composite_context(context_));
+				xss_code_context& ctx = *safe_context.get();
+
+				XSSGenerator gen(new xss_generator(safe_context));
+    
+				project->push_generator(gen);
+
+				project->prepare_context(ctx, gen);
+				result = project->generate_xss(text, gen);
+
+				project->pop_generator();
+			}
+
+		project->output_file(output, result);
+		return true;	
+	}

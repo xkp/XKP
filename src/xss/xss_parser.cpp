@@ -209,7 +209,7 @@ bool xss_parser::read_attributes(const str& text, size_t& pos, detail::tag_info&
                   {
                     return true;
                   }
-                else
+                else if (c != ' ')
                   return false;
                 
                 break;

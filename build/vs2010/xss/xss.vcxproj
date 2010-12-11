@@ -163,6 +163,7 @@
     <None Include="..\..\..\data\xss\qt\qt_app.xs" />
     <None Include="..\..\..\data\xss\qt\qt_app.xss" />
     <None Include="..\..\..\data\xss\qt\qt_classes.xml" />
+    <None Include="..\..\..\data\xss\qt\qt_ui.xss" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
