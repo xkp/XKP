@@ -1,8 +1,8 @@
 <xss:project>
     <path generator="qt_app.xss"
           class_library="qt_classes.xml"
-          source_path="d:/xkp/data/xss/qt/" 
-          output_path="d:/xkp/data/xss/output/" 
+          source_path="c:/work/xkp/data/xss/qt/" 
+          output_path="c:/work/xkp/data/xss/output/" 
           output_file="qt_app.cpp"/>
 
     <idiom class="js-idiom" id_as_this="true"/>

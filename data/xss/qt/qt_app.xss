@@ -46,16 +46,17 @@ int main(int argc, char *argv[])
 						</rect>
 					</property>
 			}
-			for(var p in properties)
+
+			for(var p in i.properties)
 			{
-				if(p is not in ['x', 'y', 'width', 'height'])
+				if (p.is_x_or_y_etc)
+					continue;
+
+				out(indent = 4)
 				{
-					out(indent = 4)
-					{
-						<property name="<xss:e value="p.name"/>">
-							<<xss:e value="p.type"/>><xss:e value="p.value"/></<xss:e value="p.type"/>>
-						</property>
-					}
+					<property name="<xss:e value="p.name"/>">
+						<<xss:e value="p.type"/>><xss:e value="p.value"/></<xss:e value="p.type"/>>
+					</property>
 				}
 			}
 			out(indent = 3)
