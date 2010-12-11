@@ -163,12 +163,10 @@
     <None Include="..\..\..\data\xss\ms\ms-test.xs" />
     <None Include="..\..\..\data\xss\ms\ms-ui.js" />
     <None Include="..\..\..\data\xss\ms\ms.js" />
-    <None Include="..\..\..\data\xss\qt\qt_cpp_app.xss" />
-    <None Include="..\..\..\data\xss\qt\qt_cpp_button.xml" />
-    <None Include="..\..\..\data\xss\qt\qt_cpp_button.xs" />
-    <None Include="..\..\..\data\xss\qt\qt_cpp_classes.xml" />
-    <None Include="..\..\..\data\xss\qt\qt_cpp_includes.xss" />
-    <None Include="..\..\..\data\xss\qt\qt_cpp_instance.xss" />
+    <None Include="..\..\..\data\xss\qt\qt_app.xml" />
+    <None Include="..\..\..\data\xss\qt\qt_app.xs" />
+    <None Include="..\..\..\data\xss\qt\qt_app.xss" />
+    <None Include="..\..\..\data\xss\qt\qt_classes.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

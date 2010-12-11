@@ -11,10 +11,10 @@
 		<Cursor position="66" topLine="0" />
 	</File>
 	<File name="..\..\..\include\base.h" open="1" top="0" tabpos="2">
-		<Cursor position="5066" topLine="133" />
+		<Cursor position="5066" topLine="111" />
 	</File>
 	<File name="..\..\..\include\schema.h" open="1" top="0" tabpos="1">
-		<Cursor position="26709" topLine="846" />
+		<Cursor position="15619" topLine="498" />
 	</File>
 	<File name="..\..\..\include\xs\array.h" open="0" top="0" tabpos="5">
 		<Cursor position="1496" topLine="55" />
@@ -32,13 +32,13 @@
 		<Cursor position="2547" topLine="89" />
 	</File>
 	<File name="..\..\..\include\xss\project.h" open="1" top="0" tabpos="10">
-		<Cursor position="3232" topLine="85" />
+		<Cursor position="3200" topLine="85" />
 	</File>
 	<File name="..\..\..\include\xss\utils.h" open="0" top="0" tabpos="13">
 		<Cursor position="291" topLine="0" />
 	</File>
 	<File name="..\..\..\include\xss\xss_generator.h" open="1" top="0" tabpos="6">
-		<Cursor position="483" topLine="16" />
+		<Cursor position="483" topLine="14" />
 	</File>
 	<File name="..\..\..\include\xss\xss_parser.h" open="1" top="0" tabpos="8">
 		<Cursor position="174" topLine="0" />
@@ -50,7 +50,7 @@
 		<Cursor position="5750" topLine="214" />
 	</File>
 	<File name="..\..\..\src\dynamic_objects.cpp" open="1" top="0" tabpos="4">
-		<Cursor position="0" topLine="290" />
+		<Cursor position="0" topLine="0" />
 	</File>
 	<File name="..\..\..\src\serial.cpp" open="0" top="0" tabpos="8">
 		<Cursor position="2451" topLine="75" />
@@ -83,10 +83,10 @@
 		<Cursor position="12639" topLine="429" />
 	</File>
 	<File name="..\..\..\src\xss\project.cpp" open="1" top="1" tabpos="9">
-		<Cursor position="11384" topLine="433" />
+		<Cursor position="11570" topLine="434" />
 	</File>
 	<File name="..\..\..\src\xss\xss_generator.cpp" open="1" top="0" tabpos="7">
-		<Cursor position="2479" topLine="81" />
+		<Cursor position="2180" topLine="79" />
 	</File>
 	<File name="..\..\..\third_party\jsoncpp\src\lib_json\json_reader.cpp" open="0" top="0" tabpos="17">
 		<Cursor position="167" topLine="0" />

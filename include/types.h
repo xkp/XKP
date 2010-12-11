@@ -24,10 +24,17 @@ namespace xkp
         {
         }
 
-        // added by Cuba
-        reference(const boost::shared_ptr<T> p): boost::shared_ptr<T>(p)
-        {
-        }
+//        // added by Cuba
+//        reference(const boost::shared_ptr<T>& p): boost::shared_ptr<T>(p)
+//        {
+//        }
+//
+//        // added by Cuba
+//        reference& operator= (const reference& rhs)
+//          {
+//            boost::shared_ptr<T>::operator= (std::move(rhs));
+//            return *this;
+//          }
 
         template<class Y>
         explicit reference( Y * p ): boost::shared_ptr<T>( p )

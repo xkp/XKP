@@ -354,7 +354,7 @@ struct pre_process : dynamic_visitor
                 pre_process pp(visitable, object_, owner_);
                 visitable->visit(&pp);
               }
-						else 
+						else
 							{
 								//DynamicArray arr = variant_cast<DynamicArray>(value, DynamicArray());
 								//td: check this case out
@@ -445,8 +445,8 @@ void xss_project::build()
 
     //contextualize
     // changed by Cuba
-    //XSSProject me = shared_from_this();
-    XSSProject me(shared_from_this());
+    XSSProject me = shared_from_this();
+    //XSSProject me(shared_from_this());
     context_      = XSSContext(new xss_code_context(me, idiom_));
     current_      = XSSGenerator(new xss_generator(context_));
 
