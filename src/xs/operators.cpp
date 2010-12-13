@@ -300,6 +300,66 @@ struct default_and : operator_exec
       }
   };
 
+struct opexec_arg1 : operator_exec
+  {
+    virtual variant exec(variant& arg1, variant& arg2)
+      {
+        return arg1;
+      }
+  };
+
+struct opexec_arg2 : operator_exec
+  {
+    virtual variant exec(variant& arg1, variant& arg2)
+      {
+        return arg2;
+      }
+  };
+
+struct default_or : operator_exec
+  {
+    virtual variant exec(variant& arg1, variant& arg2)
+      {
+        bool a1 = variant_cast<bool>(arg1, false);
+        if (a1)
+          return true;
+
+        return variant_cast<bool>(arg2, false);
+      }
+  };
+
+struct opexec_null1 : operator_exec
+  {
+    virtual variant exec(variant& arg1, variant& arg2)
+      {
+				return arg1.empty();
+      }
+  };
+
+struct opexec_null2 : operator_exec
+  {
+    virtual variant exec(variant& arg1, variant& arg2)
+      {
+				return arg2.empty();
+      }
+  };
+
+struct opexec_notnull1 : operator_exec
+  {
+    virtual variant exec(variant& arg1, variant& arg2)
+      {
+				return !arg1.empty();
+      }
+  };
+
+struct opexec_notnull2 : operator_exec
+  {
+    virtual variant exec(variant& arg1, variant& arg2)
+      {
+				return !arg2.empty();
+      }
+  };
+
 //some utils
 template<typename T1, typename T2, template <typename, typename> class E >
 void combine_types(operator_registry& registry, operator_type op)
@@ -369,16 +429,27 @@ operator_registry::operator_registry()
     combine_types<string_types, numerical_types, add_str_number>(*this, op_plus);
     combine_types<numerical_types, string_types, add_number_str>(*this, op_plus);
 
-    //not
-    register_operator(op_not, type_schema<empty_type>(), null,                      new opexec_true() ); //not null
-    register_operator(op_not, type_schema<empty_type>(), type_schema<empty_type>(), new opexec_true() );
+    //null operator
+    register_operator(op_not,			 type_schema<empty_type>(), null,                      new opexec_true() ); //not null
+    register_operator(op_not,			 type_schema<empty_type>(), type_schema<empty_type>(), new opexec_true() );
+    register_operator(op_equal,		 type_schema<empty_type>(), type_schema<empty_type>(), new opexec_true() );
+    register_operator(op_notequal, type_schema<empty_type>(), type_schema<empty_type>(), new opexec_false() );
 
     //boolean operators, this might be nuts, but i will register ands and ors that if the types
     //are unknown react to it, directly casting to boolean, sometimes
     register_wildcard(op_and, null,                      type_schema<empty_type>(), new opexec_false() );
     register_wildcard(op_and, type_schema<empty_type>(), null                     , new opexec_false() );
     register_wildcard(op_and, null,                      null                     , new default_and() );
-  }
+
+    register_wildcard(op_or,	null,                      type_schema<empty_type>(), new opexec_arg1() );
+    register_wildcard(op_and, type_schema<empty_type>(), null                     , new opexec_arg2() );
+    register_wildcard(op_and, null,                      null                     , new default_or() );
+
+    register_wildcard(op_equal,			null,											 type_schema<empty_type>(), new opexec_null1() );
+    register_wildcard(op_equal,			type_schema<empty_type>(), null											, new opexec_null2() );
+    register_wildcard(op_notequal,	null,											 type_schema<empty_type>(), new opexec_notnull1() );
+    register_wildcard(op_notequal,	type_schema<empty_type>(), null											, new opexec_notnull2() );
+}
 
 size_t operator_registry::register_operator(operator_type op, schema* t1, schema* t2, operator_exec* exec)
   {

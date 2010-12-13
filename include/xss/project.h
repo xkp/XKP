@@ -41,6 +41,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       void prepare_context(base_code_context& context, XSSGenerator gen);
       str  generate_xss(const str& xss, XSSGenerator gen);
 			void output_file(const str& fname, const str& contents);
+			variant evaluate_property(DynamicObject obj, const str& prop);
     public:
       //access
       DynamicArray  get_property_array(DynamicObject obj);
@@ -52,6 +53,9 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       DynamicObject get_instance(const str& id);
       void          add_application_file(const str& file, DynamicObject obj);
       DynamicArray  get_event_impl(DynamicObject obj, const str& event_name);
+
+			//access to current generator
+			XSSGenerator generator();
     public:
       //instance registry, for generation purposes
       //these are applications objects (i.e, pure data)
@@ -109,13 +113,15 @@ struct xss_project_schema : object_schema<xss_project>
         property_("path",        &xss_project::path);
         property_("idiom",       &xss_project::idiom);
 
-        method_<void, 2>("compile_instance",    &xss_project::compile_instance);
-        method_<void, 3>("register_instance",   &xss_project::register_instance);
-        method_<void, 2>("render_instance",     &xss_project::render_instance);
-        method_<str,  2>("resolve_dispatcher",  &xss_project::resolve_dispatcher);
-        method_<str,  1>("instance_class",      &xss_project::instance_class);
-        dynamic_method_ ("breakpoint",          &xss_project::breakpoint);
-        method_<str,  1>("inline_properties",   &xss_project::inline_properties);
+        dynamic_method_ ("breakpoint", &xss_project::breakpoint);
+
+				method_<void,			2>("compile_instance",    &xss_project::compile_instance);
+        method_<void,			3>("register_instance",   &xss_project::register_instance);
+        method_<void,			2>("render_instance",     &xss_project::render_instance);
+        method_<str,			2>("resolve_dispatcher",  &xss_project::resolve_dispatcher);
+        method_<str,			1>("instance_class",      &xss_project::instance_class);
+				method_<str,			1>("inline_properties",   &xss_project::inline_properties);
+				method_<variant,	2>("evaluate_property",   &xss_project::evaluate_property);
       }
   };
 

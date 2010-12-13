@@ -84,8 +84,8 @@ struct worker
   {
     public:
       worker() : tab_(4) {}
-      worker(XSSGenerator gen, part_list parts, int tab, bool dont_break):
-        gen_(gen),
+      worker(XSSProject project, part_list parts, int tab, bool dont_break):
+        project_(project),
         parts_(parts),
         indent_(-1),
         tab_(tab),
@@ -95,6 +95,8 @@ struct worker
     public:
       void generate(const param_list params)
         {
+					XSSGenerator gen = project_->generator();
+
           part_list::iterator it = parts_.begin();
           part_list::iterator nd = parts_.end();
 
@@ -147,7 +149,7 @@ struct worker
             {
               result = apply_indent(result, indent_);
             }
-          gen_->append(result);
+          gen->append(result);
         }
 
       str apply_indent(const str& s, int indent)
@@ -238,11 +240,11 @@ struct worker
         }
 
     private:
-      XSSGenerator	gen_; //td: make it a references, to be politically correct
-      int           indent_;
-      int           tab_;
-      part_list     parts_;
-			bool					dont_break_;
+      XSSProject	project_; 
+      int         indent_;
+      int         tab_;
+      part_list   parts_;
+			bool				dont_break_;
 
       std::vector<str> load_lines(const str& s)
         {
@@ -363,7 +365,7 @@ void out_linker::link(dsl& info, code_linker& owner)
     xs_utils xs;
 
     //create a safe reference to be inserted in the execution context later on
-		Worker wrk(new worker(gen_, parts, tab_size, dont_break));
+		Worker wrk(new worker(project_, parts, tab_size, dont_break));
     owner.add_instruction(i_load_constant, owner.add_constant(wrk));
 
     //and so we link the indent, after having the worker on
