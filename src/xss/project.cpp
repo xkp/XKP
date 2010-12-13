@@ -260,8 +260,6 @@ str xss_property::generate_value()
           }
         else if (value_.is<str>())
           {
-            // changed by Cuba
-            //str ss = (str)value_;
             str ss = variant_cast<str>(value_, "");
             v = '"' + ss + '"';
           }
@@ -352,7 +350,8 @@ struct pre_process : dynamic_visitor
               }
 						else
 							{
-								//DynamicArray arr = variant_cast<DynamicArray>(value, DynamicArray());
+								DynamicArray arr = variant_cast<DynamicArray>(value, DynamicArray());
+								
 								//td: check this case out
 							}
           }
@@ -449,6 +448,7 @@ void xss_project::build()
 
 		prepare_context(code_ctx, current_);
     code_ctx.scope_->register_symbol("project", me);
+    code_ctx.scope_->register_symbol("compiler", me);
 
     idiom_->set_context(context_);
 
@@ -457,6 +457,8 @@ void xss_project::build()
 
     //the application object is manually handled... not sure why atm
     dynamic_set(application, "class_name", str("application"));
+    dynamic_set(application, "x", 0);
+    dynamic_set(application, "y", 0);
     register_instance("application", application);
 
     //compile the code aasociated with the app, note that any
@@ -638,16 +640,18 @@ void xss_project::render_instance(DynamicObject instance, const str& xss)
     xss_code_context& ctx = *context.get();
     XSSGenerator gen(new xss_generator(context));
     
-		//od the deed
 		push_generator(gen);
-
+		
+		//do the deed
     prepare_context(ctx, gen);
 		context->scope_->register_symbol("it", instance); //td: make sure its not there
 
 		str result = generate_xss(gen_text, gen);
 
 		pop_generator();
-  }
+
+		current_->append(result);
+}
 
 str xss_project::resolve_dispatcher(DynamicObject instance, const str& event_name)
   {
@@ -759,7 +763,12 @@ DynamicArray xss_project::get_event_impl(DynamicObject obj, const str& event_nam
     return ev->impls;
   }
 
-DynamicArray  xss_project::get_method_array(DynamicObject obj)
+XSSGenerator xss_project::generator()
+	{
+		return current_;
+	}
+
+DynamicArray xss_project::get_method_array(DynamicObject obj)
   {
     DynamicArray result;
     variant v = dynamic_get(obj, "methods");
@@ -859,7 +868,8 @@ void xss_project::prepare_context(base_code_context& context, XSSGenerator gen)
     context.this_     = this; //makes our methods directly accesible
 
     //fill up the context
-    DslLinker ol(new out_linker(gen));
+		XSSProject me(shared_from_this());
+    DslLinker ol(new out_linker(me));
     context.dsls.insert(dsl_list_pair("out", ol));
 
     //add our identifiers
@@ -893,6 +903,11 @@ void xss_project::output_file(const str& fname, const str& contents)
 	{
     save_file(output_path_ + fname, contents);
 	}
+
+variant xss_project::evaluate_property(DynamicObject obj, const str& prop)
+	{
+		return dynamic_get(obj, prop);
+	}	
 
 str xss_project::generate_file(const str& fname, XSSContext context)
   {
@@ -971,7 +986,10 @@ void xss_project::push_generator(XSSGenerator gen)
 
 void xss_project::pop_generator()
 	{
-		assert(!generators_.empty());
-		current_ = generators_.top();
 		generators_.pop();
+
+		if (!generators_.empty())
+			current_ = generators_.top();
+		else
+			current_ = XSSGenerator();
 	}

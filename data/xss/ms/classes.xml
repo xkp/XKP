@@ -6,11 +6,10 @@
         </parameters>
         
         <properties>
-            <property name="up" type="string" set_fn="up" get_fn="up" />
-            <property name="down" type="string" set_fn="down" get_fn="down"/>
-
-            <property name="width"  set_fn="width" get_fn="width"/>
-            <property name="height" set_fn="height" get_fn="height"/>
+            <property name="x"  set_fn="x" get_fn="x" dont_init="true"/>
+            <property name="y" set_fn="y" get_fn="y" dont_init="true"/>
+            <property name="width"  set_fn="width" get_fn="width" dont_init="true"/>
+            <property name="height" set_fn="height" get_fn="height" dont_init="true"/>
         </properties>
     </class>
     
@@ -20,7 +19,7 @@
         </parameters>
         
         <properties>
-            <property name="font" type="string" set_fn="font" get_fn="font"/>
+            <property name="font" type="string" set_fn="font" get_fn="font" dont_init="true"/>
             <property name="caption" type="string" set_fn="text" get_fn="text"/>
         </properties>
     </class>

@@ -108,8 +108,8 @@ bool xss_generator::handle_class(const str& text, param_list* args)
     xss_composite_context ctx(context_);
     ctx.this_ = instance;
 
-		XSSGenerator me(shared_from_this());
-    DslLinker ol(new out_linker(me));
+		XSSProject owner = context_->project_;
+    DslLinker ol(new out_linker(owner));
     ctx.dsls.insert(dsl_list_pair("out", ol));
     ctx.dsl_ = &ctx.dsls; //td: !!! this will break under many dsls
 

@@ -141,7 +141,7 @@ void code_linker::if_(stmt_if& info)
     link_expression(info.expr);
     int if_jump = add_instruction( i_jump_if_not );
 
-    link_code(info.if_code);
+    link_code(info.if_code, false);
 
     if (info.else_code.empty())
       {
@@ -153,7 +153,7 @@ void code_linker::if_(stmt_if& info)
         int afterif_jump = add_instruction( i_jump );
         instruction_data( if_jump, pc_ );
 
-        link_code(info.else_code);
+        link_code(info.else_code, false);
 
         instruction_data( afterif_jump, pc_ );
       }
@@ -175,6 +175,7 @@ void code_linker::for_(stmt_for& info)
     //link condition
     int exit_jump = 0;
     int loop_jump = pc_;
+
     if (!info.cond_expr.empty())
       {
         link_expression(info.cond_expr);
@@ -182,14 +183,22 @@ void code_linker::for_(stmt_for& info)
       }
 
     //link code
-    link_code(info.for_code);
+    link_code(info.for_code, true, -1, -2);
 
-    //link iterator
-    link_expression(info.iter_expr);
+    //add a couple of jumps so breaks and continues work
+    int continue_jump = add_instruction( i_jump, pc_ + 2 );
+    int break_jump = add_instruction( i_jump );
+
+		//link iterator
+
+		link_expression(info.iter_expr);
     add_instruction( i_jump, loop_jump);
 
     if (exit_jump > 0)
       instruction_data( exit_jump, pc_ );
+
+		if (break_jump > 0)
+      instruction_data( break_jump, pc_ );
   }
 
 void code_linker::iterfor_(stmt_iter_for& info)
@@ -257,9 +266,13 @@ void code_linker::iterfor_(stmt_iter_for& info)
     add_instruction(i_store, value_);
 
     //then the code
-    link_code(info.for_code, loop_jump);
+    link_code(info.for_code, true, -1, -2);
 
-    //advance
+    //add a couple of jumps so breaks and continues work
+    int continue_jump = add_instruction( i_jump, pc_ + 2 );
+    int break_jump = add_instruction( i_jump );
+
+		//advance
     expression advance_iterator;
     advance_iterator.push_operand( local_variable(iterator_, iterator_type) );
     advance_iterator.push_operator( op_inc );
@@ -270,7 +283,8 @@ void code_linker::iterfor_(stmt_iter_for& info)
     add_instruction(i_pop);
     add_instruction( i_jump, loop_jump);
     instruction_data( exit_jump, pc_ );
-  }
+    instruction_data( break_jump, pc_ );
+}
 
 void code_linker::while_(stmt_while& info)
   {
@@ -278,7 +292,7 @@ void code_linker::while_(stmt_while& info)
     link_expression(info.expr);
     int exit_jump = add_instruction( i_jump_if_not );
 
-    link_code(info.while_code);
+    link_code(info.while_code, true, -1, -2);
 
     add_instruction( i_jump, loop_jump);
     instruction_data( exit_jump, pc_ );
@@ -286,12 +300,12 @@ void code_linker::while_(stmt_while& info)
 
 void code_linker::break_()
   {
-    add_fixup(add_instruction( i_jump ), fixup_exit);
+    add_fixup(add_instruction( i_jump ), fixup_break);
   }
 
 void code_linker::continue_()
   {
-    add_fixup(add_instruction( i_jump ), fixup_loop);
+    add_fixup(add_instruction( i_jump ), fixup_continue);
   }
 
 void code_linker::return_(stmt_return& info)
@@ -796,13 +810,12 @@ schema* code_linker::typeof_(const xs_type type)
     return result;
   }
 
-void code_linker::link_code(code& cde, int loop_pc)
+void code_linker::link_code(code& cde, bool track, int continue_pc, int break_pc)
   {
-    bool       keep_track = loop_pc >= 0;
     fixup_list fixup_cpy;
-    if (keep_track)
+    if (track)
       {
-        loops_.push(loop_pc);
+				loops_.push(std::pair<int, int>(continue_pc, break_pc));
         fixup_cpy = fixup_;
         fixup_.clear();
       }
@@ -814,22 +827,23 @@ void code_linker::link_code(code& cde, int loop_pc)
 
     for(; it != nd; it++)
       {
-        switch(it->dest)
+        assert(!loops_.empty()); //wha?
+				std::pair<int, int> info = loops_.top();
+
+				int continue_address	= info.first >= 0? info.first : pc_ + abs(info.first) - 1;
+				int break_address			= info.second >= 0? info.second : pc_ + abs(info.second) - 1;
+				switch(it->dest)
           {
-            case fixup_exit:
-              instruction_data(it->instruction_idx, pc_);
+            case fixup_continue:
+              instruction_data(it->instruction_idx, continue_address);
               break;
-            case fixup_loop:
-              {
-                assert(!loops_.empty()); //wha?
-                int pc = loops_.top(); 
-                instruction_data(it->instruction_idx, pc);
-                break;
-              }
+            case fixup_break:
+              instruction_data(it->instruction_idx, break_address);
+              break;
           }
       }
 
-    if (keep_track)
+    if (track)
       {
         loops_.pop();
         fixup_ = fixup_cpy;

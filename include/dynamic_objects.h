@@ -393,8 +393,6 @@ namespace xkp
     {
       virtual void declare()
         {
-          // changed by Cuba
-          //implements<IEditableObject>();
           this->template implements<IEditableObject>();
         }
 
