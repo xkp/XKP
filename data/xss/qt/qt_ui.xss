@@ -17,7 +17,7 @@
 	<xss:code>
 		for(var i in instances)
 		{
-			out(indent = 3)
+			out(indent = 1)
 			{
 				<widget class="<xss:e value="i.tag_name"/>" name="<xss:e value="i.id"/>">
 					<property name="geometry">
@@ -35,14 +35,14 @@
 				if (p.is_x_or_y_etc)
 					continue;
 
-				out(indent = 4)
+				out(indent = 2)
 				{
 					<property name="<xss:e value="p.name"/>">
 						<<xss:e value="p.type"/>><xss:e value="p.value"/></<xss:e value="p.type"/>>
 					</property>
 				}
 			}
-			out(indent = 3)
+			out(indent = 1)
 			{
 				</widget>
 			}

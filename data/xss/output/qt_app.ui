@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+	<class>Widget</class>
+	<widget class="QWidget" name="Widget">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>431</width>
+				<height>174</height>
+			</rect>
+		</property>
+		<property name="windowTitle">
+			<string>My first application</string>
+		</property>
+	</widget>
+	    <widget class="QLabel" name="label">
+    	<property name="geometry">
+    		<rect>
+    			<x>170</x>
+    			<y>70</y>
+    			<width>91</width>
+    			<height>16</height>
+    		</rect>
+    	</property>
+        <property name="caption">
+        	<null>null</null>
+        </property>
+        <property name="width">
+        	<null>null</null>
+        </property>
+        <property name="height">
+        	<null>null</null>
+        </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_1">
+    	<property name="geometry">
+    		<rect>
+    			<x>110</x>
+    			<y>30</y>
+    			<width>75</width>
+    			<height>23</height>
+    		</rect>
+    	</property>
+        <property name="caption">
+        	<null>null</null>
+        </property>
+        <property name="width">
+        	<null>null</null>
+        </property>
+        <property name="height">
+        	<null>null</null>
+        </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_2">
+    	<property name="geometry">
+    		<rect>
+    			<x>210</x>
+    			<y>30</y>
+    			<width>91</width>
+    			<height>23</height>
+    		</rect>
+    	</property>
+        <property name="caption">
+        	<null>null</null>
+        </property>
+        <property name="width">
+        	<null>null</null>
+        </property>
+        <property name="height">
+        	<null>null</null>
+        </property>
+    </widget>
+    <widget class="div" name="application">
+    	<property name="geometry">
+    		<rect>
+    			<x>0</x>
+    			<y>0</y>
+    			<width>431</width>
+    			<height>174</height>
+    		</rect>
+    	</property>
+        <property name="title">
+        	<null>null</null>
+        </property>
+        <property name="width">
+        	<null>null</null>
+        </property>
+        <property name="height">
+        	<null>null</null>
+        </property>
+        <property name="target">
+        	<null>null</null>
+        </property>
+    </widget>
+
+	<layoutdefault spacing="6" margin="11"/>
+	<resources/>
+	<connections/>
+</ui>
+

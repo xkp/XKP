@@ -116,6 +116,7 @@
     <ClCompile Include="..\..\..\src\xss\xss_parser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\types.h" />
     <ClInclude Include="..\..\..\include\xs\array.h" />
     <ClInclude Include="..\..\..\include\xs\ast.h" />
     <ClInclude Include="..\..\..\include\xs\behaviour.h" />
@@ -159,6 +160,7 @@
     <None Include="..\..\..\data\xss\ms\ms-test.xs" />
     <None Include="..\..\..\data\xss\ms\ms-ui.js" />
     <None Include="..\..\..\data\xss\ms\ms.js" />
+    <None Include="..\..\..\data\xss\output\qt_app.ui" />
     <None Include="..\..\..\data\xss\qt\qt_app.xml">
       <SubType>Designer</SubType>
     </None>
@@ -167,7 +169,9 @@
     <None Include="..\..\..\data\xss\qt\qt_classes.xml">
       <SubType>Designer</SubType>
     </None>
-    <None Include="..\..\..\data\xss\qt\qt_ui.xss" />
+    <None Include="..\..\..\data\xss\qt\qt_ui.xss">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

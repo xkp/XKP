@@ -194,6 +194,9 @@
     <ClInclude Include="..\..\..\include\xss\xss_parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\data\xss\jquery\app.xss">
@@ -251,6 +254,9 @@
       <Filter>data\qt</Filter>
     </None>
     <None Include="..\..\..\data\xss\qt\qt_ui.xss">
+      <Filter>data\qt</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\output\qt_app.ui">
       <Filter>data\qt</Filter>
     </None>
   </ItemGroup>
