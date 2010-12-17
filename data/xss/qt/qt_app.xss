@@ -1,7 +1,7 @@
 <xss:code>
 
-  // this slots is for include in .h and .cpp file
-  // remember in the returned type of this slots, 
+  // this slots is for add in .h and .cpp file
+  // remember the returned type of this slots, 
   // for now is void type...
   var array slots;
 
