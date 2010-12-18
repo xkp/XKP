@@ -41,8 +41,8 @@ namespace xkp
       virtual void dispatch(stmt_dispatch& info);
 
       //expression_visitor
-      virtual void push(variant operand);
-      virtual void exec_operator(operator_type op, int pop_count, int push_count);
+      virtual void push(variant operand, bool top);
+      virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top);
 
       public:
         //the linker interface

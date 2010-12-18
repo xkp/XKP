@@ -5,3 +5,8 @@ on btn1.click()
 	label1.caption = "Clicked " + application.counter++;
 }
 
+on btn2.change()
+{
+	pbar.value += 10;
+}
+

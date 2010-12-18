@@ -11,7 +11,7 @@ namespace xkp
       print_expression()           : indent_(0)      {}
       print_expression(int indent) : indent_(indent) {}
     
-      virtual void push(variant operand);
+      virtual void push(variant operand, bool top);
       virtual void exec_operator(operator_type op, int pop_count, int push_count);
       
       private:

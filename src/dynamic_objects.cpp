@@ -181,6 +181,12 @@ void base_editable_object::visit(dynamic_visitor* visitor)
       }
   }
 
+bool base_editable_object::has(const str& id)
+	{
+    item_list::iterator it = items_.find(id);
+		return it != items_.end();
+	}
+
 void base_editable_object::add_item(const str& name, schema_item& item)
   {
     if (!event_holder::add_item(name, item))

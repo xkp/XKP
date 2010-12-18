@@ -504,7 +504,7 @@ ms.ui.Component = Class.create(
 	{
 		if (!images)
 		{
-			images = ['/assets/ui/progress.empty.png', '/assets/ui/progress.full.png'];
+			images = ['images/progress.empty.png', 'images/progress.full.png'];
 		}
 
 		return new ms.ui.ProgressBar(this.manager, this, images[0], images[1]);

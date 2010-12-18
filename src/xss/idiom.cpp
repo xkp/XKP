@@ -112,9 +112,78 @@ struct already_rendered
     int precedence;
   };
 
+struct expression_splitter : expression_visitor
+  {
+		expression_splitter(operator_type divider) : divider_(divider), operands_(0), found_left_(false) {}
+
+    virtual void push(variant operand, bool top)
+			{
+				operands_++;
+
+				if (!found_left_)
+					left.push_operand(operand);
+				else
+					right.push_operand(operand);
+			}
+    
+		virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top)
+			{
+				if (op == divider_)
+					{
+						if (!found_left_)
+							{
+								//edge case, no operators for left side, so...
+								variant left_operand = left.pop_first();
+								right = left;
+								left.clear();
+								left.push_operand(left_operand);
+							}
+					}
+				else
+					{
+						operands_ -= pop_count;
+						if (operands_ == 0)
+							{
+								assert(!found_left_);
+								found_left_ = true;
+								left.push_operator(op);
+							}
+						else if (!found_left_)
+							left.push_operator(op);
+						else
+							right.push_operator(op);
+
+						operands_ += push_count;
+				}
+			}
+
+		expression left;
+		expression right;
+		
+		private:
+			operator_type divider_;
+			int operands_;
+			bool found_left_;
+	};
+
+enum assign_type
+	{
+		VANILLA,
+		FN_CALL,
+		XSS_RESOLVE
+	};
+
+struct assign_info
+	{
+		assign_info() : type(VANILLA) {}
+
+		assign_type type;
+		str					data;
+	};
+
 struct expression_renderer : expression_visitor
   {
-    expression_renderer(XSSContext ctx) : ctx_(ctx) {}
+    expression_renderer(XSSContext ctx) : ctx_(ctx), assigner(null) {}
 
     XSSProperty get_property(variant v)
       {
@@ -197,12 +266,46 @@ struct expression_renderer : expression_visitor
       }
 
     //expression_visitor
-    virtual void push(variant operand)
+		assign_info* assigner;
+
+		str resolve_assigner(variant operand, DynamicObject instance)
+			{
+				assert(operand.is<expression_identifier>()); //again, this is a trap for use cases
+				expression_identifier ei = operand;
+
+				XSSProperty prop = get_property(instance, ei.value);
+        if (prop)
+          {
+            str set_fn = variant_cast<str>(dynamic_get(prop, "set_fn"), ""); //let the outside world determine
+                                                                              //if a native function call shouls be made 
+            if (!set_fn.empty())
+              {
+								assigner->type = FN_CALL;
+								return set_fn;
+              }
+            else if (!prop->set.empty())
+							{
+								assigner->type = FN_CALL;
+								return prop->name + "_set";
+							}
+          }
+
+				assigner->type = VANILLA;
+				return operand_to_string(operand, instance, null);
+			}
+
+    virtual void push(variant operand, bool top)
       {
+				if (top && assigner)
+					{
+						str ass = resolve_assigner(operand, DynamicObject());
+						push_rendered(ass, 0, operand.get_schema()); 
+					}
+
         stack_.push(operand);
       }
 
-    virtual void exec_operator(operator_type op, int pop_count, int push_count)
+    virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top)
       {
         variant arg1, arg2;
         switch(pop_count)
@@ -217,6 +320,12 @@ struct expression_renderer : expression_visitor
               }
             default: assert(false);
           }
+
+				if (top && assigner)
+					{
+						assert(op == op_dot); //I'm sure there are more use cases, but I'll deal with this one exclusively
+																	//for now
+					}
 
         int op_prec = operator_prec[op];
         switch(op)
@@ -333,18 +442,11 @@ struct expression_renderer : expression_visitor
             case op_le:
             case op_and:
             case op_or:
-
-            case op_plus_equal:
-            case op_minus_equal:
-            case op_mult_equal:
-            case op_div_equal:
-            case op_shift_right_equal:
-            case op_shift_left_equal:
               {
                 int p1;
                 int p2;
 
-                str os1 = operand_to_string(arg1, DynamicObject(), &p1);
+								str os1 = operand_to_string(arg1, DynamicObject(), &p1);
                 str os2 = operand_to_string(arg2, DynamicObject(), &p2); //td: resolve properties and stuff
 
                 if (op_prec < p1)
@@ -359,7 +461,32 @@ struct expression_renderer : expression_visitor
                 break;
               }
 
-            case op_dot:
+            case op_plus_equal:
+            case op_minus_equal:
+            case op_mult_equal:
+            case op_div_equal:
+            case op_shift_right_equal:
+            case op_shift_left_equal:
+							{
+                int p1;
+                int p2;
+
+								str os1 = operand_to_string(arg1, DynamicObject(), &p1);
+                str os2 = operand_to_string(arg2, DynamicObject(), &p2); //td: resolve properties and stuff
+
+                if (op_prec < p1)
+                  os1 = "(" + os1 + ")";
+
+                if (op_prec < p2)
+                  os2 = "(" + os2 + ")";
+
+                std::stringstream ss;
+                ss << os1 << " " << operator_str[op] << " " << os2;
+                push_rendered(ss.str(), op_prec, variant());
+								break;
+							}
+
+						case op_dot:
               {
                 //so here we'll try to find out if we're generating an object
                 //with a get function on a property. This does not constitute
@@ -375,7 +502,11 @@ struct expression_renderer : expression_visitor
                 std::stringstream ss;
                 ss << operand_to_string(arg1);
                 
-                if (prop)
+								if (top && assigner)
+									{
+										ss << "." << resolve_assigner(arg2, o1);	
+									}
+								else if (prop)
                   {
                     str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
                     if (!get_fn.empty())
@@ -602,6 +733,77 @@ struct expression_renderer : expression_visitor
 
 str render_expression(expression& expr, XSSContext ctx)
   {
+		//deal with assigns
+		operator_type op;
+		if (expr.top_operator(op))
+			{
+				bool simple_assign = false;
+				switch(op)
+					{
+						case op_assign:
+							simple_assign = true;
+            case op_plus_equal:
+            case op_minus_equal:
+            case op_mult_equal:
+            case op_div_equal:
+            case op_shift_right_equal:
+            case op_shift_left_equal:
+							{
+								expression_splitter es(op);
+								expr.visit(&es);
+								
+								expression_renderer value_renderer(ctx);
+								es.right.visit(&value_renderer);
+
+								str value = value_renderer.get();
+
+								//get the assigner
+								expression_renderer assign_renderer(ctx);
+								assign_info ai;
+								assign_renderer.assigner = &ai;
+
+								es.left.visit(&assign_renderer);
+
+								str assign = assign_renderer.get();
+
+								str result;
+								switch(ai.type)
+									{
+										case FN_CALL:
+											{
+												if (simple_assign)
+													result = assign + "(" + value + ")";
+												else
+													{
+														//we need to resolve the getter as well for *= operators
+														expression_renderer getter(ctx);
+														es.left.visit(&getter);
+
+														//this is lame
+														str op_str = operator_str[op];
+														
+														assert(op_str.size() > 1);
+														op_str.erase(op_str.end() - 1);
+
+														result = assign + "(" + getter.get() + " " + op_str + " " + value + ")";
+													}
+												break;
+											}
+
+										case VANILLA:
+											{
+												result = assign + " " + operator_str[op] + " " + value;
+												break;
+											}
+										default:
+											assert(false); //trap use cases
+									}
+								
+								return result;
+							}
+					}
+			}
+
     expression_renderer er(ctx);
     expr.visit(&er);
 

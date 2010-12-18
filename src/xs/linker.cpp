@@ -389,7 +389,7 @@ void code_linker::dispatch(stmt_dispatch& info)
     add_instruction(i_dispatch, info.arg_count);
   }
 
-void code_linker::push(variant operand)
+void code_linker::push(variant operand, bool top)
   {
     if (operand.is<expression_identifier>() ||
         operand.is<already_in_stack>()      ||
@@ -406,7 +406,7 @@ void code_linker::push(variant operand)
       }
   }
 
-void code_linker::exec_operator(operator_type op, int pop_count, int push_count)
+void code_linker::exec_operator(operator_type op, int pop_count, int push_count, bool top)
   {
     variant arg1, arg2;
     switch(pop_count)

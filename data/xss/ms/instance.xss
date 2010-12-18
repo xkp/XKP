@@ -19,7 +19,6 @@ else
 //render properties
 if (it.properties)
 {
-    breakpoint(it.id);
     for(var prop in it.properties)
     {
         if (prop.dont_init)
@@ -77,10 +76,15 @@ if (it.properties)
             }
             else
             {
-                //plain vanilla
-                out(indent = 0)
+                //plain vanilla, make sure sure we dont initialize value-less properties
+                
+                var value = compiler.evaluate_property(it, prop.name);
+                if (value != null)
                 {
-                    <xss:e value="prop_name"/> =  <xss:e>prop.generate_value()</xss:e>;
+                    out(indent = 0)
+                    {
+                        <xss:e value="prop_name"/> =  <xss:e>prop.generate_value()</xss:e>;
+                    }
                 }
             }
         }

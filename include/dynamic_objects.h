@@ -58,6 +58,7 @@ namespace xkp
         virtual size_t        event_id(const str& name)                       = 0;
         virtual void          dispatch_event(size_t ev_id, param_list& args)  = 0;
         virtual void          visit(dynamic_visitor* visitor)                 = 0;
+        virtual bool          has(const str& id)															= 0;
     };
 
   class IEditableObject
@@ -147,6 +148,7 @@ namespace xkp
         virtual size_t event_id(const str& name);
         virtual void   dispatch_event(size_t ev_id, param_list& args);
         virtual void   visit(dynamic_visitor* visitor);
+        virtual bool   has(const str& id);
 
         //IEditableObject
         virtual void add_item(const str& name, schema_item& item);
@@ -222,6 +224,13 @@ namespace xkp
       virtual void cast(const variant src, schema* ss, variant& result)
         {
           T self = src;
+
+					if (ss == type_schema<bool>())
+						{
+							result = self? true : false;
+							return;
+						}
+
           self->get_type()->cast(src, ss, result);
         }
 

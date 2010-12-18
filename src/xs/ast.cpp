@@ -94,13 +94,15 @@ void expression::visit(expression_visitor* v)
     expr_stack::iterator nd = stack_.end();
     for(; it != nd; it++)
       {
+				bool top = it == nd - 1;
+
         if (it->is<operator_type>())
           {
             operator_type op = *it;
-            v->exec_operator(op, operand_count[op], 1 );
+            v->exec_operator(op, operand_count[op], 1, top );
           }
         else 
-            v->push(*it);
+            v->push(*it, top);
       }
   }
 
@@ -114,13 +116,42 @@ bool expression::is_constant(variant& value)
     return false;
   }
 
+bool expression::top_operator(operator_type& op)
+	{
+		if (stack_.empty())
+			return false;
+
+		variant top = stack_.back();
+		if (top.is<operator_type>())
+			{
+				op = top;
+				return true;
+			}
+
+		return false;
+	}
+
+variant expression::pop_first()
+	{
+		assert(!stack_.empty());
+		variant result = stack_.front();
+		stack_.erase(stack_.begin());
+
+		return result;
+	}
+
+void expression::clear()
+	{
+		stack_.clear();
+	}
+
 //expr_evaluator
-void expr_evaluator::push(variant operand)
+void expr_evaluator::push(variant operand, bool top)
   {
     stack_.push(operand);
   }
   
-void expr_evaluator::exec_operator(operator_type op, int pop_count, int push_count )
+void expr_evaluator::exec_operator(operator_type op, int pop_count, int push_count, bool top)
   {
     variant arg1, arg2;
     switch(pop_count)
@@ -139,7 +170,7 @@ void expr_evaluator::exec_operator(operator_type op, int pop_count, int push_cou
     variant result = exec->exec(arg1, arg2);
     
     if (push_count > 0)
-      push( result );
+      push( result, top );
   }
   
 variant expr_evaluator::value()

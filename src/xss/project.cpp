@@ -18,11 +18,15 @@ using namespace xkp;
 
 const str SOutOfContext("not-sure");
 const str SNotImplemented("not-implemented");
+const str SCannotResolve("unkown-identifier");
 
 const str SInstancesMustProvideAClass("Instances must provide a class");
 const str SWhatWasThisAgain("What was that again?");
 const str SClassesMustHaveId("Classes must provide an id");
 const str SDuplicateClass("Class already declared");
+const str SNoSoup("Super class not found");
+const str SUnknownClass("Class not found");
+const str SUnknownInstance("Instance not found");
 
 //visitors, fun stuff like that
 struct class_internal_gather : dynamic_visitor
@@ -421,6 +425,48 @@ struct source_code_gather :  xs_visitor
         std::vector<xs_event>    events;
   };
 
+struct instantiator : dynamic_visitor
+  {
+		instantiator(DynamicObject obj, xss_project& prj) : obj_(obj), prj_(prj) {}
+
+    virtual void item(const str& name, variant value)
+			{
+				if (value.is<DynamicArray>())
+					{
+						//lets clone the arrays to be on the safe side
+						DynamicArray org = value;	
+						DynamicArray cln;
+
+						cln = variant_cast<DynamicArray>(dynamic_get(obj_, name), DynamicArray());
+						if (!cln)
+							{
+									cln = DynamicArray( new dynamic_array() );
+							}
+
+						for(int i = 0; i < org->size(); i++)
+							{
+								variant val = org->at( i );
+								cln->push_back( val );
+							}
+
+						dynamic_set(obj_, name, cln);
+					}
+				else
+					{
+						variant prop = dynamic_get(obj_, name);
+						if (prop.empty())
+							{
+								dynamic_set(obj_, name, value);
+							}
+					}
+			}
+		
+		private:
+			DynamicObject obj_;
+			xss_project&	prj_;
+  };
+
+
 void xss_project::build()
   {
     //grab the path
@@ -535,26 +581,45 @@ void xss_project::compile_instance(const str& filename, DynamicObject instance)
       {
         DynamicObject actual_instance = instance;
         str inst_name;
+				str complete_name;
         for(size_t idx = 0; idx < it->name.size() - 1 && instance; idx++)
           {
             inst_name = it->name[idx];
             if (idx == 0)
               {
+								complete_name = inst_name;
                 actual_instance = get_instance(inst_name);
               }
             else
               {
-                variant vv;
+                complete_name += '.' + inst_name;
+								variant vv;
                 if (dynamic_try_get(actual_instance, inst_name, vv))
                   {
                     actual_instance = variant_cast<DynamicObject>(vv, DynamicObject());
                   }
                 else
-                  assert(false);
+									{
+										param_list error;
+										error.add("id", SCannotResolve);
+										error.add("desc", SUnknownInstance);
+										error.add("instance", complete_name);
+						
+										xss_throw(error);
+									}
               }
           }
 
-        assert(actual_instance);
+        if (!actual_instance)
+					{
+            param_list error;
+            error.add("id", SCannotResolve);
+            error.add("desc", SUnknownInstance);
+            error.add("instance", complete_name);
+						
+            xss_throw(error);
+					}
+
         str event_name = it->name[it->name.size() - 1];
 
         DynamicArray impls = get_event_impl(actual_instance, event_name);
@@ -582,7 +647,13 @@ void xss_project::register_instance(const str& id, DynamicObject it, DynamicObje
     str class_name = variant_cast<str>(dynamic_get(it, "class_name"), "");
     class_registry::iterator cit = classes_.find(class_name);
     if (cit == classes_.end())
-      assert(false);
+			{
+        param_list error;
+        error.add("id", SCannotResolve);
+        error.add("desc", SUnknownClass);
+        error.add("class", class_name);
+        xss_throw(error);
+			}
 
     DynamicObject clazz      = cit->second;
     DynamicArray  properties = variant_cast<DynamicArray>(dynamic_get(clazz, "properties"), DynamicArray());
@@ -645,6 +716,7 @@ void xss_project::render_instance(DynamicObject instance, const str& xss)
 		//do the deed
     prepare_context(ctx, gen);
 		context->scope_->register_symbol("it", instance); //td: make sure its not there
+		context->scope_->register_symbol("compiler", me); 
 
 		str result = generate_xss(gen_text, gen);
 
@@ -720,6 +792,12 @@ void xss_project::breakpoint(const param_list params)
 
         str           string_value = variant_cast<str>(value, "");
         DynamicObject obj_value    = variant_cast<DynamicObject>(value, DynamicObject());
+				
+				str	obj_id;
+				if (obj_value)
+					{
+						obj_id = variant_cast<str>(dynamic_get(obj_value, "id"), str(""));
+					}
       }
   }
 
@@ -904,9 +982,22 @@ void xss_project::output_file(const str& fname, const str& contents)
     save_file(output_path_ + fname, contents);
 	}
 
-variant xss_project::evaluate_property(DynamicObject obj, const str& prop)
+variant xss_project::evaluate_property(DynamicObject obj, const str& prop_name)
 	{
-		return dynamic_get(obj, prop);
+		if (obj && obj->has(prop_name))
+			return dynamic_get(obj, prop_name);
+
+		DynamicArray props = get_property_array(obj);
+    for(size_t i = 0; i < props->size(); i++)
+      {
+        XSSProperty prop = props->at(i);
+        if (prop->name == prop_name)
+          {
+						return prop->generate_value();
+          }
+      }
+
+		return variant();
 	}	
 
 str xss_project::generate_file(const str& fname, XSSContext context)
@@ -951,8 +1042,9 @@ void xss_project::read_classes(const str& class_library_file)
 
     for(; it != nd; it++)
       {
-        DynamicObject obj = *it;
-        str           id  = variant_cast<str>(dynamic_get(obj, "id"), "");
+        DynamicObject obj		= *it;
+        str           id		= variant_cast<str>(dynamic_get(obj, "id"),		 "");
+        str           super	= variant_cast<str>(dynamic_get(obj, "super"), "");
 
         if (id.empty())
           {
@@ -961,6 +1053,23 @@ void xss_project::read_classes(const str& class_library_file)
             error.add("desc", SClassesMustHaveId);
             xss_throw(error);
           }
+
+				if (!super.empty())
+					{
+						class_registry::iterator sit = classes_.find(super);
+						if (sit == classes_.end())
+							{
+								param_list error;
+								error.add("id", SCannotResolve);
+								error.add("desc", SNoSoup);
+								error.add("class", super);
+								xss_throw(error);
+							}
+
+						DynamicObject clazz = sit->second;
+						instantiator i(obj, *this);
+						clazz->visit(&i);
+					}
 
         class_registry::iterator it = classes_.find(id);
         if (it == classes_.end())

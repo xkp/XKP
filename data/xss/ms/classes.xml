@@ -1,10 +1,5 @@
 <xml>
-    <class id="button" inherits="component" creation_function="newButton">
-        <parameters>
-            <parameter property_name="up"/>
-            <parameter property_name="down"/>
-        </parameters>
-        
+    <class id="component">
         <properties>
             <property name="x"  set_fn="x" get_fn="x" dont_init="true"/>
             <property name="y" set_fn="y" get_fn="y" dont_init="true"/>
@@ -12,8 +7,31 @@
             <property name="height" set_fn="height" get_fn="height" dont_init="true"/>
         </properties>
     </class>
-    
-    <class id="label" inherits="component" creation_function="newLabel">
+
+    <class id="div" super="component" creation_function="newComponent">
+    </class>
+
+    <class id="img" super="component" creation_function="newImage">
+        <parameters>
+            <parameter property_name="src"/>
+        </parameters>
+    </class>
+
+    <class id="button" super="component" creation_function="newButton">
+        <parameters>
+            <parameter property_name="up"/>
+            <parameter property_name="down"/>
+        </parameters>
+    </class>
+
+    <class id="state_button" super="component" creation_function="newStateButton">
+        <parameters>
+            <parameter property_name="up"/>
+            <parameter property_name="down"/>
+        </parameters>
+    </class>
+
+    <class id="label" super="component" creation_function="newLabel">
         <parameters>
             <parameter property_name="font"/>
         </parameters>
@@ -21,6 +39,12 @@
         <properties>
             <property name="font" type="string" set_fn="font" get_fn="font" dont_init="true"/>
             <property name="caption" type="string" set_fn="text" get_fn="text"/>
+        </properties>
+    </class>
+
+    <class id="progress" super="component" creation_function="newProgressBar">
+        <properties>
+            <property name="value" type="int" set_fn="value" get_fn="get_value"/>
         </properties>
     </class>
 

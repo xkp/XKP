@@ -13,8 +13,8 @@ namespace xkp
 {
   struct expression_visitor
     {
-      virtual void push(variant operand)                                          = 0;
-      virtual void exec_operator(operator_type op, int pop_count, int push_count) = 0;
+      virtual void push(variant operand, bool top)																					= 0;
+      virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top) = 0;
     };
     
   struct expression_identifier
@@ -35,6 +35,9 @@ namespace xkp
       public:
         void visit(expression_visitor* v);
         bool is_constant(variant& value);
+				bool top_operator(operator_type& op);
+				variant pop_first();
+				void clear();
       private:
         typedef std::vector<variant> expr_stack;
         expr_stack                   stack_; 
@@ -43,8 +46,8 @@ namespace xkp
   //expression visitors
   struct expr_evaluator : expression_visitor
     {
-      virtual void push(variant operand);
-      virtual void exec_operator(operator_type op, int pop_count, int push_count);
+      virtual void push(variant operand, bool top);
+      virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top);
       
       variant value();
       

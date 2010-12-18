@@ -106,19 +106,22 @@ if (!application.canvasElement)
 									var <xss:e value = "cmp.id"/> = <xss:e value = "parent.id"/>.<xss:e value = "cmp.creation_function"/>(
 								}
 
-								for(int i = 0; i < cmp.parameters.size; i++)
-								{
-									var param = cmp.parameters[i];
-									out(dont_break = true, trim = true)
-									{
-										'<xss:e value="compiler.evaluate_property(cmp, param.property_name)"/>'
-                                    }
+								if (cmp.parameters)
+                                {
+                                    for(int i = 0; i < cmp.parameters.size; i++)
+								    {
+									    var param = cmp.parameters[i];
+									    out(dont_break = true, trim = true)
+									    {
+										    '<xss:e value="compiler.evaluate_property(cmp, param.property_name)"/>'
+                                        }
 
-                                    if (i < cmp.parameters.size - 1)
-                                    {
-                                        out(dont_break = true) {,}
-                                    }
-								}
+                                        if (i < cmp.parameters.size - 1)
+                                        {
+                                            out(dont_break = true) {,}
+                                        }
+								    }
+                                }
 
 								out(do_break = true) {);}
 							}
