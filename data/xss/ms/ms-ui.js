@@ -163,6 +163,10 @@ ms.ui.Manager = Class.create(
 
 	invalidate: function(cmp)
 	{
+        this.invalidate_all();
+        return;
+
+        //td: make it work
         var gpos = this.screen_pos(cmp);
         gpos.w = cmp.w;
         gpos.h = cmp.h;
@@ -695,5 +699,12 @@ ms.ui.Switch = Class.create(ms.ui.Component,
 		this.active_ = idx;
 
 		this.components[this.active_].show();
-	}
+
+        this.invalidate();
+	},
+
+    get_active: function()
+    {
+        return this.active_;
+    },
 });

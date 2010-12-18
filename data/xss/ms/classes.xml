@@ -5,6 +5,7 @@
             <property name="y" set_fn="y" get_fn="y" dont_init="true"/>
             <property name="width"  set_fn="width" get_fn="width" dont_init="true"/>
             <property name="height" set_fn="height" get_fn="height" dont_init="true"/>
+            <property name="count"  get_fn="count" dont_init="true"/>
         </properties>
     </class>
 
@@ -45,6 +46,12 @@
     <class id="progress" super="component" creation_function="newProgressBar">
         <properties>
             <property name="value" type="int" set_fn="value" get_fn="get_value"/>
+        </properties>
+    </class>
+
+    <class id="switch" super="component" creation_function="newSwitch">
+        <properties>
+            <property name="active" type="int" set_fn="active" get_fn="get_active"/>
         </properties>
     </class>
 

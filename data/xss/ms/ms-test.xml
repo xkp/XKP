@@ -22,6 +22,11 @@
             <img src="images/img.png" x="0" y="0" width="100" height="100"/>
             <state_button id="btn2" x="120" y="0" width="50" height="50" up="images/img.png" down="images/img2.png"/>
             <progress id="pbar" x="120" y="60" width="50" height="8"/>
+            
+            <switch id="switch1" x="120" y="80" width="200" height="200">
+                <label id="switchLabel1" x="0" y="0" caption="Now you see me"/>
+                <label id="switchLabel2" x="0" y="0" caption="Now you dont"/>
+            </switch>
         </div>
     </application>
 </xss:project>

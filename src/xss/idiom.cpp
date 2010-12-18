@@ -9,9 +9,11 @@ using namespace xkp;
 //strings
 const str SEmptyStack("empty-stack");
 const str SIdiom("idiom");
+const str SInvalidOperator("invalid-operator");
 
 const str SEmptyExpression("Trying to use an empty expression");
 const str SEveryInstanceMustHaveId("Trying to use an instance without id");
+const str SAssignOperator("Assign operators can only be used as the base of an expression");
 
 //td: !!! stop duplicating this array
 const char* operator_str[] =
@@ -268,29 +270,55 @@ struct expression_renderer : expression_visitor
     //expression_visitor
 		assign_info* assigner;
 
-		str resolve_assigner(variant operand, DynamicObject instance)
+		str resolve_assigner(variant operand, DynamicObject instance, assign_info* ai)
 			{
-				assert(operand.is<expression_identifier>()); //again, this is a trap for use cases
-				expression_identifier ei = operand;
+				XSSProperty prop;
+				str					result;
 
-				XSSProperty prop = get_property(instance, ei.value);
+				if (operand.is<expression_identifier>())
+					{
+						expression_identifier ei = operand;
+						prop = get_property(instance, ei.value);
+					}
+				else if (operand.is<already_rendered>())
+					{
+						already_rendered ar = operand;
+						result = ar.value;
+
+						//here comes the hacky hoo
+						size_t last_dot = result.find_last_of(".");
+						if (last_dot != str::npos)
+							{
+								size_t count = result.size() - last_dot;
+								result.erase(result.end() - count, result.end());
+							}
+
+						prop = variant_cast<XSSProperty>(ar.object, XSSProperty());
+					}
+
         if (prop)
           {
             str set_fn = variant_cast<str>(dynamic_get(prop, "set_fn"), ""); //let the outside world determine
                                                                               //if a native function call shouls be made 
             if (!set_fn.empty())
               {
-								assigner->type = FN_CALL;
-								return set_fn;
+								ai->type = FN_CALL;
+								if (result.empty())
+									return set_fn;
+								else
+									return result + "." + set_fn;
               }
             else if (!prop->set.empty())
 							{
-								assigner->type = FN_CALL;
-								return prop->name + "_set";
+								ai->type = FN_CALL;
+								if (result.empty())
+									return prop->name + "_set";
+								else
+									return result + "." + prop->name + "_set";
 							}
           }
 
-				assigner->type = VANILLA;
+				ai->type = VANILLA;
 				return operand_to_string(operand, instance, null);
 			}
 
@@ -298,7 +326,7 @@ struct expression_renderer : expression_visitor
       {
 				if (top && assigner)
 					{
-						str ass = resolve_assigner(operand, DynamicObject());
+						str ass = resolve_assigner(operand, DynamicObject(), assigner);
 						push_rendered(ass, 0, operand.get_schema()); 
 					}
 
@@ -333,14 +361,42 @@ struct expression_renderer : expression_visitor
             case op_dec:
             case op_inc:
               {
-                int prec;
+								assign_info ai;
+								str ass = resolve_assigner(arg1, DynamicObject(), &ai);
+
+								int prec;
                 str os = operand_to_string(arg1, DynamicObject(), &prec);
 
-                std::stringstream ss;
-                if (op_prec < prec)
-                  ss << "(" << os << ")" << operator_str[op];
-                else
-                  ss << os << operator_str[op];
+								std::stringstream ss;
+								switch (ai.type)
+									{
+										case VANILLA:
+											{
+												if (op_prec < prec)
+													ss << "(" << os << ")" << operator_str[op];
+												else
+													ss << os << operator_str[op];
+												break;
+											}
+
+										case FN_CALL:
+											{
+												str op_str = operator_str[op];
+												op_str.erase(op_str.end() - 1); //now this is too much fun
+
+												ss << ass << "(" << os << " " << op_str << " 1)";
+												break;
+											}
+										default:
+											assert(false); //use case trap
+									}
+								
+
+                //std::stringstream ss;
+                //if (op_prec < prec)
+                //  ss << "(" << os << ")" << operator_str[op];
+                //else
+                //  ss << os << operator_str[op];
 
                 push_rendered(ss.str(), op_prec, arg1.get_schema());
                 break;
@@ -364,64 +420,19 @@ struct expression_renderer : expression_visitor
               }
 
             case op_assign:
+            case op_plus_equal:
+            case op_minus_equal:
+            case op_mult_equal:
+            case op_div_equal:
+            case op_shift_right_equal:
+            case op_shift_left_equal:
               {
-                std::stringstream ss;
-                str os1 = operand_to_string(arg1);
-                str os2 = operand_to_string(arg2);
+								param_list error;
+								error.add("id", SInvalidOperator);
+								error.add("desc", SAssignOperator);
 
-                //we need to know if we're assigning to a property that might have a setter
-                XSSProperty prop = get_property(arg1);
-                if (prop)
-                  {
-                    str set_fn = variant_cast<str>(dynamic_get(prop, "set_fn"), ""); //let the outside world determine
-                                                                                     //if a native function call shouls be made 
-                    if (!set_fn.empty())
-                      {
-                        //replace the property name with the set function
-                        //this gets a little hacky, I admit, because of a use case
-                        //where the get function has already been inserted
-                        str  prop_name = prop->name;
-                        bool found     = false;
-                        if (os1.size() > prop_name.size())
-                          {
-                            //check for the property name at the end of os1
-                            str ppnm = os1.substr(os1.size() - prop_name.size(), prop_name.size());
-                            if (ppnm == prop_name)
-                              {
-                                os1.erase(os1.size() - prop_name.size(), prop_name.size());
-                                os1 += set_fn;
-                                found = true;
-                              }
-                          }
-                        
-                        if (!found)
-                          {
-                            str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
-                            if (!get_fn.empty() && os1.size() > (get_fn.size() + 2)) //in the hacky case () has been added
-                              {
-                                str ppnm = os1.substr(os1.size() - (get_fn.size() + 2), get_fn.size() + 2);
-                                if (ppnm == (get_fn + "()"))
-                                  {
-                                    os1.erase(os1.size() - 2, 2); //just get rid of the ()
-                                    found = true;
-                                  }
-                              }
-                          }
-                        
-                        ss << os1 << "(" << os2 << ")";
-                      }
-                    else if (!prop->set.empty())
-                      ss << os1 << "_set(" << os2 << ")"; //td: formalize the calling conventions
-                    else 
-                      ss << os1 << " = " << os2;
-                  }
-                else
-                  {
-                    ss << os1 << " = " << os2;
-                  }
-
-                push_rendered(ss.str(), op_prec, prop);
-                break;
+								xss_throw(error);
+								break;
               }
 
             case op_mult:
@@ -461,31 +472,6 @@ struct expression_renderer : expression_visitor
                 break;
               }
 
-            case op_plus_equal:
-            case op_minus_equal:
-            case op_mult_equal:
-            case op_div_equal:
-            case op_shift_right_equal:
-            case op_shift_left_equal:
-							{
-                int p1;
-                int p2;
-
-								str os1 = operand_to_string(arg1, DynamicObject(), &p1);
-                str os2 = operand_to_string(arg2, DynamicObject(), &p2); //td: resolve properties and stuff
-
-                if (op_prec < p1)
-                  os1 = "(" + os1 + ")";
-
-                if (op_prec < p2)
-                  os2 = "(" + os2 + ")";
-
-                std::stringstream ss;
-                ss << os1 << " " << operator_str[op] << " " << os2;
-                push_rendered(ss.str(), op_prec, variant());
-								break;
-							}
-
 						case op_dot:
               {
                 //so here we'll try to find out if we're generating an object
@@ -504,7 +490,7 @@ struct expression_renderer : expression_visitor
                 
 								if (top && assigner)
 									{
-										ss << "." << resolve_assigner(arg2, o1);	
+										ss << "." << resolve_assigner(arg2, o1, assigner);	
 									}
 								else if (prop)
                   {
@@ -831,9 +817,10 @@ struct code_renderer : code_visitor
             << ind << "}" << '\n';
 
         if (!info.else_code.empty())
-          ss  << ind << "{"
+          ss  << ind << "else\n" 
+							<< ind << "{\n"
                 << render_code(info.else_code, indent_ + 1)
-              << ind << "}";
+              << ind << "}\n";
 
         add_line(ss.str());
       }

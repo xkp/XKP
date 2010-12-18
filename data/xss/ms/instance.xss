@@ -67,18 +67,21 @@ if (it.properties)
         else
         {
             //this is a plain property, unless the class specify otherwise
+            //we will also try to initialize it
+            
+            var value = compiler.evaluate_property(it, prop.name);
             if (prop.set_fn)
             {
-                out(indent = 0)
+                if (value != null) //dont initialize empty values
                 {
-                    <xss:e value="it.id"/>.<xss:e value="prop.set_fn"/>(<xss:e>prop.generate_value()</xss:e>);
+                    out(indent = 0)
+                    {
+                        <xss:e value="it.id"/>.<xss:e value="prop.set_fn"/>(<xss:e>prop.generate_value()</xss:e>);
+                    }
                 }
             }
             else
             {
-                //plain vanilla, make sure sure we dont initialize value-less properties
-                
-                var value = compiler.evaluate_property(it, prop.name);
                 if (value != null)
                 {
                     out(indent = 0)

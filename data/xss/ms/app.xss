@@ -133,13 +133,13 @@ if (!application.canvasElement)
 								}
 							}
 						
-							project.render_instance(cmp, "instance.xss");
-
 							if (cmp.children)
 							{
 								for(var child in cmp.children)
 									generate_component(child, cmp);
 							}
+                            
+							project.render_instance(cmp, "instance.xss");
 						}
 
 						method generate_ui()
