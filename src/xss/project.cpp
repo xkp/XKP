@@ -352,7 +352,7 @@ struct pre_process : dynamic_visitor
                 pre_process pp(visitable, object_, owner_);
                 visitable->visit(&pp);
               }
-						else 
+						else
 							{
 								DynamicArray arr = variant_cast<DynamicArray>(value, DynamicArray());
 								
