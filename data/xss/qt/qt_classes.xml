@@ -1,23 +1,26 @@
 <xml>
     <class id="button" header="#include <QPushButton>" tag_name="QPushButton">
-        <properties>
-            <property name="caption" type="string" set_fn="text" get_fn="text" include_text="true"/>
-            <property name="width" set_fn="width" get_fn="width" />
-			<property name="height" set_fn="height" get_fn="height"/>
-        </properties>
+      <properties>
+        <property name="caption" type="string" set_fn="setText" get_fn="text"/>
+        <!--<property name="visible" type="bool" set_fn="setVisible" get_fn="isVisible"/> -->
+        <property name="width" type="int" set_fn="size" get_fn="width" />
+        <property name="height" type="int" set_fn="size" get_fn="height"/>
+      </properties>
     </class>
     <class id="label" header="#include <QLabel>" tag_name="QLabel">
-        <properties>
-            <property name="caption" type="string" set_fn="text" get_fn="text" include_text="true"/>
-            <property name="width" set_fn="width" get_fn="width" />
-			<property name="height" set_fn="height" get_fn="height"/>
-        </properties>
+      <properties>
+        <property name="caption" type="string" set_fn="setText" get_fn="text"/>
+        <!--<property name="visible" type="bool" set_fn="setVisible" get_fn="isVisible"/> -->
+        <property name="width" type="int" set_fn="size" get_fn="width" />
+        <property name="height" type="int" set_fn="size" get_fn="height"/>
+      </properties>
     </class>
-    <class id="application" tag_name="div">
-		<properties>
-			<property name="title" type="string"/>
-			<property name="width" type="int"/>
-			<property name="height" type="int"/>
-		</properties>
+    <class id="application" header="#include <QWidget>" tag_name="QWidget">
+    <properties>
+      <property name="id" type="string"/>
+      <property name="title" type="string"/>
+      <property name="width" type="int"/>
+      <property name="height" type="int"/>
+    </properties>
     </class>
 </xml>

@@ -194,20 +194,11 @@
     <ClInclude Include="..\..\..\include\xss\xss_parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\data\xss\demo\app.xml">
-      <Filter>data</Filter>
-    </None>
-    <None Include="..\..\..\data\xss\demo\app.xs">
-      <Filter>data</Filter>
-    </None>
-    <None Include="..\..\..\data\xss\demo\app_gen.xss">
-      <Filter>data</Filter>
-    </None>
-    <None Include="..\..\..\data\xss\demo\instance.xss">
-      <Filter>data</Filter>
-    </None>
     <None Include="..\..\..\data\xss\jquery\app.xss">
       <Filter>data\jquery</Filter>
     </None>
@@ -225,24 +216,6 @@
     </None>
     <None Include="..\..\..\data\xss\ms\app.xss">
       <Filter>data\ms</Filter>
-    </None>
-    <None Include="..\..\..\data\xss\qt\qt_cpp_app.xss">
-      <Filter>data\qt</Filter>
-    </None>
-    <None Include="..\..\..\data\xss\qt\qt_cpp_button.xml">
-      <Filter>data\qt</Filter>
-    </None>
-    <None Include="..\..\..\data\xss\qt\qt_cpp_button.xs">
-      <Filter>data\qt</Filter>
-    </None>
-    <None Include="..\..\..\data\xss\qt\qt_cpp_classes.xml">
-      <Filter>data\qt</Filter>
-    </None>
-    <None Include="..\..\..\data\xss\qt\qt_cpp_includes.xss">
-      <Filter>data\qt</Filter>
-    </None>
-    <None Include="..\..\..\data\xss\qt\qt_cpp_instance.xss">
-      <Filter>data\qt</Filter>
     </None>
     <None Include="..\..\..\data\xss\ms\instance.xss">
       <Filter>data\ms</Filter>
@@ -267,6 +240,27 @@
     </None>
     <None Include="..\..\..\data\xss\ms\classes.xml">
       <Filter>data\ms</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\qt\qt_app.xml">
+      <Filter>data\qt</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\qt\qt_app.xs">
+      <Filter>data\qt</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\qt\qt_app.xss">
+      <Filter>data\qt</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\qt\qt_classes.xml">
+      <Filter>data\qt</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\qt\qt_ui.xss">
+      <Filter>data\qt</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\output\qt_app.ui">
+      <Filter>data\qt</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\qt\qt_widget.xss">
+      <Filter>data\qt</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -1,12 +1,30 @@
 <xss:code>
 
-//fill an instance
+//position the component
+if (it.width != null && it.height != null)
+{
+    out(indent = 0)
+    {
+        <xss:e value="it.id"/>.rect(<xss:e value="it.x"/>, <xss:e value="it.y"/>, <xss:e value="it.width"/>, <xss:e value="it.height"/>);
+    }
+}
+else 
+{
+    out(indent = 0)
+    {
+        <xss:e value="it.id"/>.position(<xss:e value="it.x"/>, <xss:e value="it.y"/>);
+    }
+}
 
 //render properties
 if (it.properties)
 {
+    breakpoint(it.id);
     for(var prop in it.properties)
     {
+        if (prop.dont_init)
+            continue;
+    
         string prop_name = it.id + "." + prop.name;
 
         if (prop.set && prop.get)
@@ -97,7 +115,7 @@ if (it.events)
 		//generate functions
 		out(indent = 0)
 		{
-		    <xss:e value="ev_name"/>(function(event)
+		    <xss:e value="ev_name"/> = function()
 		    <xss:open_brace/>    
 		}
 		
@@ -116,7 +134,7 @@ if (it.events)
         
 		out(indent = 0)
 		{
-		    <xss:close_brace/>);
+		    <xss:close_brace/>;
 		}
     }
 }

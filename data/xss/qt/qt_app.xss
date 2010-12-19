@@ -1,4 +1,41 @@
-[1] ----- main.cpp -----
+<xss:code>
+
+  // this slots is for add in .h and .cpp file
+  // remember the returned type of this slots, 
+  // for now is void type...
+  var array slots;
+
+  for(var i in instances)
+  {
+    for(var e in events)
+    {
+      var string idiom_ev_name;
+
+      switch(e.name)
+      {
+      case "click":
+        idiom_ev_name = "clicked";
+        break;
+      case "other":
+        idiom_ev_name = "other";
+        break;
+      default:
+        idiom_ev_name = "";
+      }
+      
+      var string ev_name = "on_" + i.id + "_" + idiom_ev_name;
+      var impls = e.impls;
+      var evargs = null;
+
+	  slots += ev_name;
+    }
+  }
+
+<xss:file output="qt_app.ui" src="qt_ui.xss"/>
+<xss:file output="widget.h" src="qt_widget.xss"/>
+
+// it's a main file
+<xss:file output="qt_app.cpp">
 #include <QtGui/QApplication>
 #include "widget.h"
 
@@ -11,61 +48,6 @@ int main(int argc, char *argv[])
 	
     return app.exec();
 }
-[1] ----- main.cpp -----
+</xss:file>
 
-
-[2] ----- widget.ui -----
-<?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.0">
-	<class>Widget</class>
-	<widget class="QWidget" name="Widget">
-		<property name="geometry">
-			<rect>
-				<x>0</x>
-				<y>0</y>
-				<width><xss:e value="application.width"/></width>
-				<height><xss:e value="application.height"/></height>
-			</rect>
-		</property>
-		<property name="windowTitle">
-			<string><xss:e value="application.title"/></string>
-		</property>
-	</widget>
-	<xss:code>
-		for(var i in instances)
-		{
-			out(indent = 3)
-			{
-				<widget class="<xss:e value="i.tag_name"/>" name="<xss:e value="i.id"/>">
-					<property name="geometry">
-						<rect>
-							<x><xss:e value="i.x"/></x>
-							<y><xss:e value="i.y"/></y>
-							<width><xss:e value="i.width"/></width>
-							<height><xss:e value="i.height"/></height>
-						</rect>
-					</property>
-			}
-			for(var p in properties)
-			{
-				if(p is not in ['x', 'y', 'width', 'height'])
-				{
-					out(indent = 4)
-					{
-						<property name="<xss:e value="p.name"/>">
-							<<xss:e value="p.type"/>><xss:e value="p.value"/></<xss:e value="p.type"/>>
-						</property>
-					}
-				}
-			}
-			out(indent = 3)
-			{
-				</widget>
-			}
-		}
-	</xss:code>
-	<layoutdefault spacing="6" margin="11"/>
-	<resources/>
-	<connections/>
-</ui>
-[2] ----- widget.ui -----
+</xss:code>

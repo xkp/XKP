@@ -69,14 +69,10 @@ struct property_mixer : dynamic_visitor
     virtual void item(const str& name, variant value)
       {
         if (name == "name")
-          // changed by Cuba
-          //result_->name = (str)value;
           result_->name = variant_cast<str>(value, "");
         else if (name == "default_value")
           result_->value_ = value;
         else if (name == "type")
-          // changed by Cuba
-          //type_ = (str)value;
           type_ = variant_cast<str>(value, "");
         else
           result_->add(name, value);
@@ -264,8 +260,6 @@ str xss_property::generate_value()
           }
         else if (value_.is<str>())
           {
-            // changed by Cuba
-            //str ss = (str)value_;
             str ss = variant_cast<str>(value_, "");
             v = '"' + ss + '"';
           }
@@ -354,9 +348,10 @@ struct pre_process : dynamic_visitor
                 pre_process pp(visitable, object_, owner_);
                 visitable->visit(&pp);
               }
-						else 
+						else
 							{
-								//DynamicArray arr = variant_cast<DynamicArray>(value, DynamicArray());
+								DynamicArray arr = variant_cast<DynamicArray>(value, DynamicArray());
+								
 								//td: check this case out
 							}
           }
@@ -444,17 +439,16 @@ void xss_project::build()
     idiom_ = idiom;
 
     //contextualize
-    // changed by Cuba
-    //XSSProject me = shared_from_this();
     XSSProject me(shared_from_this());
-    context_      = XSSContext(new xss_code_context(me, idiom_));
-    current_      = XSSGenerator(new xss_generator(context_));
+    context_  = XSSContext(new xss_code_context(me, idiom_));
+    current_  = XSSGenerator(new xss_generator(context_));
 
     //td: stupid references
-    xss_generator& gen = *(current_.get());
     xss_code_context& code_ctx = *(context_.get());
-    prepare_context(code_ctx, gen);
+
+		prepare_context(code_ctx, current_);
     code_ctx.scope_->register_symbol("project", me);
+    code_ctx.scope_->register_symbol("compiler", me);
 
     idiom_->set_context(context_);
 
@@ -463,6 +457,8 @@ void xss_project::build()
 
     //the application object is manually handled... not sure why atm
     dynamic_set(application, "class_name", str("application"));
+    dynamic_set(application, "x", 0);
+    dynamic_set(application, "y", 0);
     register_instance("application", application);
 
     //compile the code aasociated with the app, note that any
@@ -476,7 +472,7 @@ void xss_project::build()
       }
 
     str generator_file = variant_cast<str>(dynamic_get(path, "generator"), "");
-    str result = generate_file(source_path_ + generator_file);
+    str result = generate_file(generator_file);
 
     str of = variant_cast<str>(dynamic_get(path, "output_file"), "");
     save_file(output_path_ + of, result);
@@ -639,18 +635,23 @@ void xss_project::render_instance(DynamicObject instance, const str& xss)
     str class_name = variant_cast<str>(dynamic_get(instance, "class_name"), "");
 
     //setup the context
-    // changed by Cuba
-    XSSProject me = shared_from_this();
-    //XSSProject me(shared_from_this());
-    xss_code_context* ctx = new xss_code_context(me, idiom_);
-    XSSContext context(ctx);
-    xss_generator gen(context);
+		XSSProject me(shared_from_this());
+    XSSContext context(new xss_code_context(me, idiom_));
+    xss_code_context& ctx = *context.get();
+    XSSGenerator gen(new xss_generator(context));
+    
+		push_generator(gen);
+		
+		//do the deed
+    prepare_context(ctx, gen);
+		context->scope_->register_symbol("it", instance); //td: make sure its not there
 
-    prepare_context(*ctx, gen);
-    ctx->scope.register_symbol("it", instance); //td: make sure its not there
+		str result = generate_xss(gen_text, gen);
 
-    current_->append(generate_xss(gen_text, gen));
-  }
+		pop_generator();
+
+		current_->append(result);
+}
 
 str xss_project::resolve_dispatcher(DynamicObject instance, const str& event_name)
   {
@@ -762,7 +763,12 @@ DynamicArray xss_project::get_event_impl(DynamicObject obj, const str& event_nam
     return ev->impls;
   }
 
-DynamicArray  xss_project::get_method_array(DynamicObject obj)
+XSSGenerator xss_project::generator()
+	{
+		return current_;
+	}
+
+DynamicArray xss_project::get_method_array(DynamicObject obj)
   {
     DynamicArray result;
     variant v = dynamic_get(obj, "methods");
@@ -856,13 +862,14 @@ void xss_project::save_file(const str& fname, const str& contents)
     ofs.close();
   }
 
-void xss_project::prepare_context(base_code_context& context, xss_generator& gen)
+void xss_project::prepare_context(base_code_context& context, XSSGenerator gen)
   {
     context.this_type = type_schema<xss_project>();
     context.this_     = this; //makes our methods directly accesible
 
     //fill up the context
-    DslLinker ol(new out_linker(gen));
+		XSSProject me(shared_from_this());
+    DslLinker ol(new out_linker(me));
     context.dsls.insert(dsl_list_pair("out", ol));
 
     //add our identifiers
@@ -880,35 +887,47 @@ void xss_project::prepare_context(base_code_context& context, xss_generator& gen
     context.types_->add_type("array", &array_type_);
   }
 
-str xss_project::generate_xss(const str& xss, xss_generator& gen)
+str xss_project::generate_xss(const str& xss, XSSGenerator gen)
   {
     xss_parser parser;
     parser.register_tag("xss:code");
     parser.register_tag("xss:e");
     parser.register_tag("xss:class");
+    parser.register_tag("xss:file");
 
-    parser.parse(xss, &gen);
-    return gen.get();
+		parser.parse(xss, gen.get());
+    return gen->get();
   }
 
-str xss_project::generate_file(const str& fname)
+void xss_project::output_file(const str& fname, const str& contents)
+	{
+    save_file(output_path_ + fname, contents);
+	}
+
+variant xss_project::evaluate_property(DynamicObject obj, const str& prop)
+	{
+		return dynamic_get(obj, prop);
+	}	
+
+str xss_project::generate_file(const str& fname, XSSContext context)
   {
-    str gen_text = load_file(fname);
+    str gen_text = load_file(source_path_ + fname);
 
-    //setup the context
-    XSSContext context(new xss_composite_context(context_));
-    xss_code_context& ctx = *context.get();
+		if (!context)
+				context = context_;
 
-    XSSGenerator  gen(new xss_generator(context));
-    XSSGenerator  old = current_;
-    current_          = gen;
+    //setup the context & generator
+    XSSContext safe_context(new xss_composite_context(context));
+    xss_code_context& ctx = *safe_context.get();
+    XSSGenerator gen(new xss_generator(safe_context));
+    
+		//od the deed
+		push_generator(gen);
 
-    xss_generator& gen_ref = *current_.get();
+    prepare_context(ctx, gen);
+    str result = generate_xss(gen_text, gen);
 
-    prepare_context(ctx, gen_ref);
-    str result = generate_xss(gen_text, gen_ref);
-
-    current_ = old;
+		pop_generator();
     return result;
   }
 
@@ -958,3 +977,19 @@ void xss_project::read_classes(const str& class_library_file)
           }
       }
   }
+
+void xss_project::push_generator(XSSGenerator gen)
+	{
+		current_ = gen;
+		generators_.push(gen); 	
+	}
+
+void xss_project::pop_generator()
+	{
+		generators_.pop();
+
+		if (!generators_.empty())
+			current_ = generators_.top();
+		else
+			current_ = XSSGenerator();
+	}

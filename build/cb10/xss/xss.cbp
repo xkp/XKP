@@ -39,6 +39,8 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
+			<Add option="-DTIXML_USE_STL" />
+			<Add option="-DBOOST_NO_MEMBER_TEMPLATE_FRIENDS" />
 			<Add directory="..\..\..\include" />
 			<Add directory="..\..\..\include\xs" />
 			<Add directory="..\..\..\include\xss" />
@@ -60,6 +62,7 @@
 		<Unit filename="..\..\..\include\base.h" />
 		<Unit filename="..\..\..\include\schema.h" />
 		<Unit filename="..\..\..\include\serial.h" />
+		<Unit filename="..\..\..\include\types.h" />
 		<Unit filename="..\..\..\include\xs\array.h" />
 		<Unit filename="..\..\..\include\xs\ast.h" />
 		<Unit filename="..\..\..\include\xs\behaviour.h" />

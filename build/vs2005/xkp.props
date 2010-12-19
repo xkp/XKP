@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="UserMacros">
-    <BOOST_INCLUDE>c:\boost\boost_1_44</BOOST_INCLUDE>
+    <BOOST_INCLUDE>d:\libraries\boost_1_44_0</BOOST_INCLUDE>
     <XKP_INCLUDE>../../../include</XKP_INCLUDE>
     <TEMP_DIR>d:\xkp\temp</TEMP_DIR>
     <BOOST_LIB>$(BOOST_INCLUDE)/lib</BOOST_LIB>

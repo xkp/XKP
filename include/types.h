@@ -24,7 +24,6 @@ namespace xkp
         {
         }
 
-        // added by Cuba
         reference(const boost::shared_ptr<T> p): boost::shared_ptr<T>(p)
         {
         }

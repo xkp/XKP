@@ -56,7 +56,7 @@ namespace xkp
         int     register_variable(const str& name, const str& type, expression* value = null);
         int     register_variable(const str& name, schema* type, expression* value = null);
         int     add_constant( variant constant );
-        void    link_code(code& cde, int loop_pc = -1);
+        void    link_code(code& cde, bool track, int continue_pc = 0, int break_pc = 0);
         schema* link_expression(expression& expr, bool* empty_stack = null, schema* array_type = null);
         void    register_dsl(const str& name, DslLinker linker);
         variant evaluate_expression(expression& expr);
@@ -64,8 +64,8 @@ namespace xkp
       private:
         enum fixup_dest
           {
-            fixup_exit,
-            fixup_loop
+            fixup_break,
+            fixup_continue,
           };
 
         struct fixup_data
@@ -100,13 +100,13 @@ namespace xkp
           };
 
         //containers
-        typedef std::map<str, local_variable>   locals_list;
-        typedef std::pair<str, local_variable>  locals_pair;
-        typedef std::stack<variant>             expr_stack;
-        typedef std::vector<fixup_data>         fixup_list;
-        typedef std::map<str, DslLinker>        dsl_linker_list;
-        typedef std::pair<str, DslLinker>       dsl_linker_pair;
-        typedef std::stack<int>                 loop_stack;
+        typedef std::map<str, local_variable>			locals_list;
+        typedef std::pair<str, local_variable>		locals_pair;
+        typedef std::stack<variant>								expr_stack;
+        typedef std::vector<fixup_data>						fixup_list;
+        typedef std::map<str, DslLinker>					dsl_linker_list;
+        typedef std::pair<str, DslLinker>					dsl_linker_pair;
+        typedef std::stack<std::pair<int, int> >	loop_stack;
 
         instruction_list  code_;
         locals_list       locals_;
