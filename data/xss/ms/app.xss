@@ -10,161 +10,161 @@ if (!application.canvasElement)
 
 <html>
 
-	<head>
+<head>
 
-		<title><xss:e value = "application.title"/></title>
+<title><xss:e value = "application.title"/></title>
 
-		<script type="text/javascript" src="jquery-1.4.2.min.js" ></script>
-		<script type="text/javascript" src="jquery.utils.js"></script>
-		<script type="text/javascript" src="utils.js"></script>
-		<script type="text/javascript" src="prototype.js"></script>
+<script type="text/javascript" src="jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="jquery.utils.js"></script>
+<script type="text/javascript" src="utils.js"></script>
+<script type="text/javascript" src="prototype.js"></script>
 
-		<script type="text/javascript" src="ms-ui.js"></script>
-		<script type="text/javascript" src="ms-streamer.js"></script>
+<script type="text/javascript" src="ms-ui.js"></script>
+<script type="text/javascript" src="ms-streamer.js"></script>
 
-		<script type="text/javascript">			
-			var g_ui;
-			var g_elapsed = 0;
-			var g_delta = 0.0;
-			var g_canvas;
+<script type="text/javascript">			
+var g_ui;
+var g_elapsed = 0;
+var g_delta = 0.0;
+var g_canvas;
       
-			function start(resolution)  
-			{  
-				var start = new Date().getTime();  
-				function update()  
-				{  
-					var now   = new Date().getTime();
-					g_delta  = now - g_elapsed;  
-					g_elapsed = now; 
+function start(resolution)  
+{  
+	var start = new Date().getTime();  
+	function update()  
+	{  
+		var now   = new Date().getTime();
+		g_delta  = now - g_elapsed;  
+		g_elapsed = now; 
               
-					var context = g_canvas.getContext('2d');
-					g_ui.update(g_delta, context);
+		var context = g_canvas.getContext('2d');
+		g_ui.update(g_delta, context);
               
-					window.setTimeout(update, resolution);  
-				}  
-				window.setTimeout(update, resolution);  
-			}  
+		window.setTimeout(update, resolution);  
+	}  
+	window.setTimeout(update, resolution);  
+}  
 
-			window.onload = function() 
-			{
-				var drawingCanvas = document.getElementById("<xss:e value="application.canvasElement"/>");
+window.onload = function() 
+{
+	var drawingCanvas = document.getElementById("<xss:e value="application.canvasElement"/>");
         
-				g_canvas = drawingCanvas;
-				if (drawingCanvas && drawingCanvas.getContext)
-				{
-					var client =
-					{
-						width: <xss:e value="application.width"/>,
-						height: <xss:e value="application.height"/>,
-						canvas: drawingCanvas
-					};
+	g_canvas = drawingCanvas;
+	if (drawingCanvas && drawingCanvas.getContext)
+	{
+		var client =
+		{
+			width: <xss:e value="application.width"/>,
+			height: <xss:e value="application.height"/>,
+			canvas: drawingCanvas
+		};
             
-					var streamer = new ms.streamer.Streamer();
-					var ui = new ms.ui.Manager(client, streamer);
-					g_ui = ui;
+		var streamer = new ms.streamer.Streamer();
+		var ui = new ms.ui.Manager(client, streamer);
+		g_ui = ui;
 
-					var images = 
-					[
-						<xss:code>
-						for(var res in application.resources)
-						{
-							out(indent = 3)
-							{
-								'<xss:e value="res.src"/>',
-							}
-						}
-						</xss:code>
-					];
-      
-					ui.load_images(images, function()
-					{
-						drawingCanvas.onmousemove = function(ev)
-						{
-							ui.mouse_move(ev.x, ev.y);                  
-						};
-
-						drawingCanvas.onmousedown = function(ev)
-						{
-							ui.mouse_down(ev.x, ev.y);                  
-						};
-
-						drawingCanvas.onmouseup = function(ev)
-						{
-							ui.mouse_up(ev.x, ev.y);                  
-						};
-
-
-						<xss:class entry_point="generate_ui">
-					
-						//generate ui, recursively
-						method generate_component(cmp, parent)
-						{
-							if (parent)
-							{
-								out(indent = 1, dont_break = true)
-								{
-									var <xss:e value = "cmp.id"/> = <xss:e value = "parent.id"/>.<xss:e value = "cmp.creation_function"/>(
-								}
-
-								if (cmp.parameters)
-                                {
-                                    for(int i = 0; i < cmp.parameters.size; i++)
-								    {
-									    var param = cmp.parameters[i];
-									    out(dont_break = true, trim = true)
-									    {
-										    '<xss:e value="compiler.evaluate_property(cmp, param.property_name)"/>'
-                                        }
-
-                                        if (i < cmp.parameters.size - 1)
-                                        {
-                                            out(dont_break = true) {,}
-                                        }
-								    }
-                                }
-
-								out(do_break = true) {);}
-							}
-							else
-							{
-								out(indent = 1)
-								{
-									var application = ui.root;
-								}
-							}
-						
-							if (cmp.children)
-							{
-								for(var child in cmp.children)
-									generate_component(child, cmp);
-							}
-                            
-							project.render_instance(cmp, "instance.xss");
-						}
-
-						method generate_ui()
-						{
-							generate_component(application, null);
-						}
-						</xss:class>
-
-						start();
-						ui.draw(drawingCanvas.getContext('2d'));
-					});
+		var images = 
+		[
+			<xss:code>
+			for(var res in application.resources)
+			{
+				out(indent = 3, trim = true)
+				{
+					'<xss:e value="res.src"/>',
 				}
 			}
-		</script>
+            </xss:code>
+		];
+      
+		ui.load_images(images, function()
+		{
+			drawingCanvas.onmousemove = function(ev)
+			{
+				ui.mouse_move(ev.x, ev.y);                  
+			};
 
-	</head>
+			drawingCanvas.onmousedown = function(ev)
+			{
+				ui.mouse_down(ev.x, ev.y);                  
+			};
 
-	<body>
+			drawingCanvas.onmouseup = function(ev)
+			{
+				ui.mouse_up(ev.x, ev.y);                  
+			};
 
-		<canvas id="<xss:e value="application.canvasElement"/>" width="<xss:e value="application.width"/>" height="<xss:e value="application.height"/>">
 
-			<p>Your browser doesn't support canvas.</p>
+			<xss:class entry_point="generate_ui">
+					
+			//generate ui, recursively
+			method generate_component(cmp, parent)
+			{
+				if (parent)
+				{
+					out(indent = 3, trim = true, dont_break = true)
+					{
+						var <xss:e value = "cmp.id"/> = <xss:e value = "parent.id"/>.<xss:e value = "cmp.creation_function"/>(
+					}
 
-		</canvas>
+					if (cmp.parameters)
+                    {
+                        for(int i = 0; i < cmp.parameters.size; i++)
+						{
+							var param = cmp.parameters[i];
+							out(dont_break = true, trim = true)
+							{
+								'<xss:e value="compiler.evaluate_property(cmp, param.property_name)"/>'
+                            }
 
-	</body>
+                            if (i < cmp.parameters.size - 1)
+                            {
+                                out(dont_break = true) {,}
+                            }
+						}
+                    }
+
+					out(do_break = true) {);}
+				}
+				else
+				{
+					out(indent = 0, trim = true)
+					{
+						var application = ui.root;
+					}
+				}
+						
+				if (cmp.children)
+				{
+					for(var child in cmp.children)
+						generate_component(child, cmp);
+				}
+                            
+				project.render_instance(cmp, "instance.xss", indent = 2);
+			}
+
+			method generate_ui()
+			{
+				generate_component(application, null);
+			}
+			</xss:class>
+
+			start();
+			ui.draw(drawingCanvas.getContext('2d'));
+		});
+	}
+}
+</script>
+
+</head>
+
+<body>
+
+	<canvas id="<xss:e value="application.canvasElement"/>" width="<xss:e value="application.width"/>" height="<xss:e value="application.height"/>">
+
+		<p>Your browser doesn't support canvas.</p>
+
+	</canvas>
+
+</body>
 
 </html>

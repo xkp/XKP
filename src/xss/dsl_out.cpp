@@ -232,7 +232,7 @@ struct worker
 
               result += curr_line;
 							
-							if(!dont_break_)
+							if(!dont_break_ && !curr_line.empty())
 								result += '\n';
             }
 

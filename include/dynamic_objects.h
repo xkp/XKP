@@ -231,7 +231,10 @@ namespace xkp
 							return;
 						}
 
-          self->get_type()->cast(src, ss, result);
+					if (self)
+						self->get_type()->cast(src, ss, result);
+					else
+						throw type_mismatch();
         }
 
       virtual bool create(variant& result, param_list* args = null)

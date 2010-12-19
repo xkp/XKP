@@ -41,7 +41,12 @@ inline void split_lines(const str& s, std::vector<str>& lines)
             curr = i + 1;
           }
       }
-  }
+
+		if (curr < s.size())
+			{
+				lines.push_back( s.substr(curr, s.size() - curr) );
+			}
+	}
 
 inline void trim_last_empty_line(str& s)
   {
@@ -56,6 +61,7 @@ inline void trim_last_empty_line(str& s)
           {
             case ' ':
             case '/t':
+						case 9:
               break; //let it go
             case '/n':
             case 10: //td: there's gotta be a way to do this right, boost?

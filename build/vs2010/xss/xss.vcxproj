@@ -160,19 +160,11 @@
     <None Include="..\..\..\data\xss\ms\ms-test.xs" />
     <None Include="..\..\..\data\xss\ms\ms-ui.js" />
     <None Include="..\..\..\data\xss\ms\ms.js" />
-    <None Include="..\..\..\data\xss\output\qt_app.ui" />
-    <None Include="..\..\..\data\xss\qt\qt_app.xml">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="..\..\..\data\xss\qt\qt_app.xml" />
     <None Include="..\..\..\data\xss\qt\qt_app.xs" />
     <None Include="..\..\..\data\xss\qt\qt_app.xss" />
-    <None Include="..\..\..\data\xss\qt\qt_classes.xml">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="..\..\..\data\xss\qt\qt_ui.xss">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="..\..\..\data\xss\qt\qt_widget.xss" />
+    <None Include="..\..\..\data\xss\qt\qt_classes.xml" />
+    <None Include="..\..\..\data\xss\qt\qt_ui.xss" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

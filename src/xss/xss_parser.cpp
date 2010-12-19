@@ -45,7 +45,16 @@ bool xss_parser::parse(const str& text, xss_visitor* visitor)
                                 str tag_text = text.substr(last_ip, step_ip - last_ip - 1);
                                 visitor->visit(current_tag.name, tag_text, &current_tag.args);
                                 
-                                last_ip = ip;
+																last_ip = ip;
+
+																skip_spaces(text, ip);
+                                if (text[ip] == '\n')
+																	{
+																		ip++;
+																		last_ip = ip;
+																	}
+																else 
+																	ip = last_ip;
                               }
                           }
                         else if (!tag.single)

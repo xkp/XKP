@@ -14,7 +14,7 @@ $(function() {
 
     for(var i in instances)
     {
-        render_instance(i, "instance.xss");
+        render_instance(i, "instance.xss", indent = 0);
     }
     </xss:code>
 });

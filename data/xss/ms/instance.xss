@@ -99,7 +99,7 @@ if (it.methods)
     for(var mthd in it.methods)
     {
         string mthd_name = it.id + "." + mthd.name;
-		out(indent = 0)
+		out(indent = 0, trim = true)
 		{
 			<xss:e value="mthd_name"/> = function(<xss:e>mthd.args.generate()</xss:e>) 
 			{
@@ -126,7 +126,7 @@ if (it.events)
 		    <xss:open_brace/>    
 		}
 		
-		for(var evimpl in impls)
+        for(var evimpl in impls)
 		{
             if (!evargs)
             {
@@ -138,7 +138,7 @@ if (it.events)
 			    <xss:e>evimpl.generate_code()</xss:e>
 			}
 		}
-        
+
 		out(indent = 0)
 		{
 		    <xss:close_brace/>;

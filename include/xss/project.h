@@ -31,7 +31,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
 
       void compile_instance(const str& filename, DynamicObject instance);
       void register_instance(const str& id, DynamicObject instance, DynamicObject parent = DynamicObject());
-      void render_instance(DynamicObject instance, const str& xss);
+      void render_instance(DynamicObject instance, const str& xss, int indent);
       str  resolve_dispatcher(DynamicObject instance, const str& event_name);
       str  instance_class(DynamicObject instance);
       str  inline_properties(DynamicObject instance);
@@ -96,6 +96,10 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
 		public:
 			void push_generator(XSSGenerator gen);
 			void pop_generator();
+
+		private:
+			typedef std::map<str, int> anonymous_list;	
+			anonymous_list anonymous_;
   };
 
 typedef reference<xss_project> XSSProject;
@@ -117,7 +121,7 @@ struct xss_project_schema : object_schema<xss_project>
 
 				method_<void,			2>("compile_instance",    &xss_project::compile_instance);
         method_<void,			3>("register_instance",   &xss_project::register_instance);
-        method_<void,			2>("render_instance",     &xss_project::render_instance);
+        method_<void,			3>("render_instance",     &xss_project::render_instance);
         method_<str,			2>("resolve_dispatcher",  &xss_project::resolve_dispatcher);
         method_<str,			1>("instance_class",      &xss_project::instance_class);
 				method_<str,			1>("inline_properties",   &xss_project::inline_properties);

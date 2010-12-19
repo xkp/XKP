@@ -65,8 +65,8 @@ bool xss_generator::handle_code(const str& text, param_list* args)
 
     xs_utils xs;
     xs.execute_xs(text, ctx);
-    return true;
-  }
+		return true;
+}
 
 bool xss_generator::handle_expression(const str& text, param_list* args)
   {

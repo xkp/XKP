@@ -684,7 +684,24 @@ void xss_project::register_instance(const str& id, DynamicObject it, DynamicObje
 
     clazz->visit(&gather);
 
-    //all set, lets register it
+    //unnamed object will appear with an id identical to its class
+		if (_id == class_name && class_name != "application")
+			{
+				anonymous_list::iterator ait  = anonymous_.find(class_name);
+				int											 aidx = 1;
+				if (ait == anonymous_.end())
+					{
+						anonymous_.insert( std::pair<str, int>(class_name, aidx ));
+					}
+				else
+					{
+						aidx = ++ait->second;
+					}
+
+				_id = "__" + class_name + boost::lexical_cast<str>(aidx);
+			}
+
+		//all set, lets register it
     dynamic_set(it, "id", _id);
     instances_.insert(instance_registry_pair(_id, instances.size()));
     instances.push_back(it);
@@ -698,7 +715,7 @@ void xss_project::register_instance(const str& id, DynamicObject it, DynamicObje
       }
   }
 
-void xss_project::render_instance(DynamicObject instance, const str& xss)
+void xss_project::render_instance(DynamicObject instance, const str& xss, int indent)
   {
     str gen_text = load_file(source_path_ + xss);
 
@@ -719,6 +736,21 @@ void xss_project::render_instance(DynamicObject instance, const str& xss)
 		context->scope_->register_symbol("compiler", me); 
 
 		str result = generate_xss(gen_text, gen);
+		if (indent > 0)
+			{
+				str indent_str;
+				int spaces = indent*4;
+				for(int i = 0; i < spaces; i++) //td: tab size
+					indent_str += " ";
+
+				int npos = 0;
+				do 
+				{
+					result.insert(result.begin() + npos + 1, indent_str.begin(), indent_str.end());
+					npos = result.find("\n", npos + spaces + 1);
+				}
+				while (npos != str::npos && npos < result.size() - 1);
+			}
 
 		pop_generator();
 
