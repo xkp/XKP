@@ -439,7 +439,6 @@ variant execution_context::execute()
                     error.add("desc", STypeDoesNotInstantiate);
                     runtime_throw(error);
                   }
-                  assert(false); //td: error, type does not instantiate
                 break;
               }
             case i_dispatch:

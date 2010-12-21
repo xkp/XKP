@@ -22,6 +22,8 @@
 #include "xss/xss_error.h"
 #include "archive/xml_archive.h"
 
+#include "boost/filesystem.hpp" 
+
 using namespace xkp;
 
 class dump_visitor : public xss_visitor
@@ -100,7 +102,7 @@ void print_error(param_list data)
 int main(int argc, char* argv[])
   {
     char* fname = argv[1];
-    std::ifstream ifs(fname);
+		std::ifstream ifs(fname);
     
     str text;
     char buffer[1024]; 
@@ -119,6 +121,11 @@ int main(int argc, char* argv[])
     //read the project file, 
     xml_read_archive project_file(text, &types, XML_RESOLVE_CLASS|XML_RESOLVE_ID);
     XSSProject project = project_file.get( type_schema<XSSProject>() );
+
+		boost::filesystem::path base(fname); 
+		
+		str path = base.parent_path().string();
+		project->base_path(base.parent_path());
 
     bool succeeded = true;
     try

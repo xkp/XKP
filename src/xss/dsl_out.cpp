@@ -15,23 +15,87 @@ const str STypeMismatch("type-mismatch");
 
 const str SUnknownXSSTag("Using an unknown tag");
 const str SExpectingExpression("Expecting expression");
+const str SFileParameterMustHaveName("File parameters must have names");
+const str SUnexpectedTag("Unexpected tag");
+const str SFileMustHaveOutput("You must specify an output attribue on this tag");
+const str SFileMustHaveSource("You must specify an source attribue on this tag");
+
+enum part_type
+	{
+		PART_TEXT,
+		PART_EXPRESSION,
+		PART_FILE,
+	};
 
 struct part
   {
-    int dyn_idx;
-    str text;
+		part_type type;
+    int				dyn_idx;
+    str				text;
 
-    part(): dyn_idx(-1)                          {}
-    part(const str& txt): dyn_idx(-1), text(txt) {}
-    part(int didx): dyn_idx(didx)                {}
+    part(): dyn_idx(-1), type(PART_TEXT)																									{}
+    part(const str& txt): dyn_idx(-1), type(PART_TEXT), text(txt)													{}
+		part(int didx): dyn_idx(didx), type(PART_EXPRESSION)																	{}
+		part(part_type _type, const str& txt, int idx): dyn_idx(idx), type(_type), text(txt)	{}
   };
 
 typedef std::vector<part> part_list;
 
+struct file_parser : xss_visitor
+	{
+    virtual void visit(const str& tag, const str& text, param_list* args)
+      {
+				if (tag == "text")
+					{
+						result += text;
+					}
+				else if (tag == "parameter")
+					{
+						if (args->has("name"))
+							{
+								parameters.push_back(args->get("name"));
+							}
+						else
+							{
+								param_list error;
+								error.add("id", SInvalidTag);
+								error.add("desc", SFileParameterMustHaveName);
+								error.add("tag", tag);
+								xss_throw(error);
+							}
+					}
+				else
+					{
+						param_list error;
+						error.add("id", SInvalidTag);
+						error.add("desc", SUnexpectedTag);
+						error.add("tag", tag);
+						xss_throw(error);
+					}
+			}
+
+		str result;
+		std::vector<str> parameters;
+	};
+
+struct outfile_info
+	{
+		str source;
+		str output;
+		std::vector<str> parameters;
+
+		outfile_info(str _source, str _output, std::vector<str>& _parameters):
+			source(_source),
+			output(_output),
+			parameters(_parameters)
+			{
+			}
+	};
+
 struct xss_gather : xss_visitor
   {
     public:
-      xss_gather(part_list& result, std::vector<str>& expressions) : result_(result), expressions_(expressions) {}
+      xss_gather(part_list& result, std::vector<outfile_info>& files, std::vector<str>& expressions) : result_(result), expressions_(expressions), files_(files) {}
     public:
       virtual void visit(const str& tag, const str& text, param_list* args)
         {
@@ -66,6 +130,49 @@ struct xss_gather : xss_visitor
               //td: !!!
               result_.push_back(part("code can not be embbeded in out"));
             }
+					else if (tag == "xss:file")
+						{
+							//grab info
+							str output = variant_cast<str>(args->get("output"), str(""));
+							if (output.empty())
+								{
+									param_list error;
+									error.add("id", SInvalidTag);
+									error.add("desc", SFileMustHaveOutput);
+									error.add("tag", tag);
+									xss_throw(error);
+								}
+
+							str source = variant_cast<str>(args->get("src"), str(""));
+							if (source.empty())
+								{
+									param_list error;
+									error.add("id", SInvalidTag);
+									error.add("desc", SFileMustHaveSource);
+									error.add("tag", tag);
+									xss_throw(error);
+								}
+
+							//grab the parameters
+							file_parser fparser;
+							xss_parser	xparser;
+
+							xparser.register_tag("parameter");
+							xparser.parse(text, &fparser);
+
+							std::vector<str>::iterator it = fparser.parameters.begin();
+							std::vector<str>::iterator nd = fparser.parameters.end();
+
+							//register the parameters as expressions
+							for(; it != nd; it++)
+								{
+									expressions_.push_back(*it);
+								}
+							
+							//keep track of the parts
+							files_.push_back(outfile_info(source, output, fparser.parameters));
+              result_.push_back(part(PART_FILE, text, files_.size() - 1));
+						}
           else
             {
               param_list error;
@@ -76,17 +183,19 @@ struct xss_gather : xss_visitor
             }
         }
     private:
-      part_list&        result_;
-      std::vector<str>& expressions_;
+      part_list&									result_;
+      std::vector<str>&						expressions_;
+      std::vector<outfile_info>&	files_;
   };
 
 struct worker
   {
     public:
       worker() : tab_(4) {}
-      worker(XSSProject project, part_list parts, int tab, bool dont_break):
+      worker(XSSProject project, part_list parts, std::vector<outfile_info> files, int tab, bool dont_break):
         project_(project),
         parts_(parts),
+				files_(files),
         indent_(-1),
         tab_(tab),
 				dont_break_(dont_break)
@@ -106,43 +215,82 @@ struct worker
           str    result;
           for(; it != nd; it++)
             {
-              if (it->dyn_idx < 0)
-                result += it->text;
-              else
-                {
-                  variant vv = params.get(param--);
-                  if (vv.empty())
-                    vv = str("null"); //td: this should be an error?
+							switch(it->type)
+								{
+									case PART_TEXT:
+										{
+											result += it->text;
+											break;
+										}
+									case PART_EXPRESSION:
+										{
+											variant vv = params.get(param--);
+											if (vv.empty())
+												vv = str("null"); //td: this should be an error?
                 
-                  str expr_value = vv;
-                  if (is_multi_line(expr_value))
-                    {
-                      //we'll try to keep the original indentation
-                      str padding = last_padding(result);
+											str expr_value = vv;
+											if (is_multi_line(expr_value))
+												{
+													//we'll try to keep the original indentation
+													str padding = last_padding(result);
 
-                      //so we'll add the original padding to every line
-                      std::vector<str> lines;
-                      split_lines(expr_value, lines);
+													//so we'll add the original padding to every line
+													std::vector<str> lines;
+													split_lines(expr_value, lines);
 
-                      std::vector<str>::iterator lit = lines.begin();
-                      std::vector<str>::iterator lnd = lines.end();
-                      bool first = true;
-                      for(; lit != lnd; lit++)
-                        {
-                          if (first)
-                            first = false;
-                          else
-                            result += padding;
+													std::vector<str>::iterator lit = lines.begin();
+													std::vector<str>::iterator lnd = lines.end();
+													bool first = true;
+													for(; lit != lnd; lit++)
+														{
+															if (first)
+																first = false;
+															else
+																result += padding;
 
-                          result += *lit;
+															result += *lit;
 													
-													if (!dont_break_)
-														result += '\n';
-                        }
-                    }
-                  else
-                    result += expr_value;
-                }
+															if (!dont_break_)
+																result += '\n';
+														}
+												}
+											else
+												result += expr_value;
+
+											break;
+										}
+									case PART_FILE:
+										{
+											outfile_info& file_info = files_[it->dyn_idx];
+
+											str src_file = project_->source_file_name(file_info.source);
+											str source	 = project_->load_file(src_file);
+											
+											//td: utilify this crap already, or something
+											XSSContext context(new xss_code_context(project_, project_->idiom));
+											xss_code_context& ctx = *context.get();
+
+											XSSGenerator gen(new xss_generator(context));
+											project_->push_generator(gen);
+
+											project_->prepare_context(ctx, gen);
+
+											std::vector<str>::reverse_iterator it = file_info.parameters.rbegin();
+											std::vector<str>::reverse_iterator nd = file_info.parameters.rend();
+											for(; it != nd; it++)
+												{
+													variant vv = params.get(param--);
+													ctx.scope_->register_symbol(*it, vv);
+												}
+
+											result = project_->generate_xss(source, gen);
+
+											project_->pop_generator();
+											project_->output_file(file_info.output, result);
+
+											break;
+										}
+								}
             }
 
           if (indent_ >= 0)
@@ -240,11 +388,12 @@ struct worker
         }
 
     private:
-      XSSProject	project_; 
-      int         indent_;
-      int         tab_;
-      part_list   parts_;
-			bool				dont_break_;
+      XSSProject								project_; 
+      int												indent_;
+      int												tab_;
+      part_list									parts_;
+			bool											dont_break_;
+			std::vector<outfile_info> files_;
 
       std::vector<str> load_lines(const str& s)
         {
@@ -344,13 +493,15 @@ void out_linker::link(dsl& info, code_linker& owner)
 		
     //process xss
 		part_list parts;
-		xss_gather gather(parts, expressions);
+		std::vector<outfile_info> files;
+		xss_gather gather(parts, files, expressions);
 
     xss_parser parser;
     parser.register_tag("xss:e");
     parser.register_tag("xss:code");
     parser.register_tag("xss:open_brace");
     parser.register_tag("xss:close_brace");
+		parser.register_tag("xss:file");
 		
 		str to_parse = info.text;
 		if (trim)
@@ -365,7 +516,7 @@ void out_linker::link(dsl& info, code_linker& owner)
     xs_utils xs;
 
     //create a safe reference to be inserted in the execution context later on
-		Worker wrk(new worker(project_, parts, tab_size, dont_break));
+		Worker wrk(new worker(project_, parts, files, tab_size, dont_break));
     owner.add_instruction(i_load_constant, owner.add_constant(wrk));
 
     //and so we link the indent, after having the worker on

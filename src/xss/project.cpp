@@ -19,6 +19,7 @@ using namespace xkp;
 const str SOutOfContext("not-sure");
 const str SNotImplemented("not-implemented");
 const str SCannotResolve("unkown-identifier");
+const str SFileError("404");
 
 const str SInstancesMustProvideAClass("Instances must provide a class");
 const str SWhatWasThisAgain("What was that again?");
@@ -27,6 +28,7 @@ const str SDuplicateClass("Class already declared");
 const str SNoSoup("Super class not found");
 const str SUnknownClass("Class not found");
 const str SUnknownInstance("Instance not found");
+const str SFileNotFound("File not found");
 
 //visitors, fun stuff like that
 struct class_internal_gather : dynamic_visitor
@@ -494,7 +496,6 @@ void xss_project::build()
 
 		prepare_context(code_ctx, current_);
     code_ctx.scope_->register_symbol("project", me);
-    code_ctx.scope_->register_symbol("compiler", me);
 
     idiom_->set_context(context_);
 
@@ -521,18 +522,26 @@ void xss_project::build()
     str result = generate_file(generator_file);
 
     str of = variant_cast<str>(dynamic_get(path, "output_file"), "");
-    save_file(output_path_ + of, result);
+
+		fs::path fname = base_path_ / output_path_ / of; 
+		save_file(fname.string(), result);
   }
 
 str xss_project::output_path()
   {
-    return output_path_;
+    return output_path_.string();
   }
+
+void xss_project::base_path(fs::path path)
+	{
+		base_path_ = path;
+	}
 
 void xss_project::compile_instance(const str& filename, DynamicObject instance)
   {
     //parse the xs into top level constructs, like properties and stuff
-    str source = load_file(source_path_ + filename);
+		fs::path fname = base_path_ / source_path_ / filename; 
+    str source = load_file( fname.string() );
 
     code_context  ctx;
     xs_compiler  compiler;
@@ -717,7 +726,8 @@ void xss_project::register_instance(const str& id, DynamicObject it, DynamicObje
 
 void xss_project::render_instance(DynamicObject instance, const str& xss, int indent)
   {
-    str gen_text = load_file(source_path_ + xss);
+		fs::path fname = base_path_ / source_path_ / xss; 
+		str gen_text = load_file(fname.string());
 
     str id = variant_cast<str>(dynamic_get(instance, "id"), "");
     str class_name = variant_cast<str>(dynamic_get(instance, "class_name"), "");
@@ -733,7 +743,6 @@ void xss_project::render_instance(DynamicObject instance, const str& xss, int in
 		//do the deed
     prepare_context(ctx, gen);
 		context->scope_->register_symbol("it", instance); //td: make sure its not there
-		context->scope_->register_symbol("compiler", me); 
 
 		str result = generate_xss(gen_text, gen);
 		if (indent > 0)
@@ -949,9 +958,30 @@ void xss_project::add_application_file(const str& file, DynamicObject obj)
     app_files_.push_back( file_info(file, obj) );
   }
 
+str	xss_project::source_file_name(const str& fname)
+	{
+		fs::path filename = base_path_ / source_path_ / fname; 
+    return filename.string();
+	}
+
+str	xss_project::output_file_name(const str& fname)
+	{
+		fs::path filename = base_path_ / output_path_ / fname; 
+    return filename.string();
+	}
+
 str xss_project::load_file(const str& fname)
   {
     std::ifstream ifs(fname.c_str());
+		if (!ifs.good())
+			{
+				param_list error;
+				error.add("id", SFileError);
+				error.add("desc", SFileNotFound);
+				error.add("file", fname);
+						
+				xss_throw(error);
+			}
 
     str result;
     char buffer[1024];
@@ -984,6 +1014,7 @@ void xss_project::prepare_context(base_code_context& context, XSSGenerator gen)
 
     //add our identifiers
     context.scope.register_symbol("application", application);
+    context.scope.register_symbol("compiler", me);
 
     //setup the scope
     instance_registry::iterator it = instances_.begin();
@@ -1011,7 +1042,8 @@ str xss_project::generate_xss(const str& xss, XSSGenerator gen)
 
 void xss_project::output_file(const str& fname, const str& contents)
 	{
-    save_file(output_path_ + fname, contents);
+		fs::path filename = base_path_ / output_path_ / fname; 
+		save_file(filename.string(), contents);
 	}
 
 variant xss_project::evaluate_property(DynamicObject obj, const str& prop_name)
@@ -1034,7 +1066,8 @@ variant xss_project::evaluate_property(DynamicObject obj, const str& prop_name)
 
 str xss_project::generate_file(const str& fname, XSSContext context)
   {
-    str gen_text = load_file(source_path_ + fname);
+		fs::path filepath = base_path_ / source_path_ / fname; 
+    str gen_text = load_file(filepath.string());
 
 		if (!context)
 				context = context_;
@@ -1066,7 +1099,9 @@ void xss_project::read_classes(const str& class_library_file)
     type_registry types;
     types.set_default_type(type_schema<sponge_object>());
 
-    xml_read_archive class_library_achive(load_file(source_path_ + class_library_file), &types);
+		fs::path filepath = base_path_ / source_path_ / class_library_file; 
+
+		xml_read_archive class_library_achive(load_file(filepath.string()), &types);
     classes = class_library_achive.get( type_schema<DynamicObjectList>() );
 
     DynamicObjectList::iterator it = classes.begin();

@@ -11,6 +11,9 @@
 #include "xss_generator.h"
 #include "xs/array.h"
 
+#include "boost/filesystem.hpp" 
+namespace fs = boost::filesystem;
+
 namespace xkp{
 
 class xss_project : public boost::enable_shared_from_this<xss_project>
@@ -21,6 +24,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
     public:
       void build();
       str  output_path();
+			void base_path(fs::path path);
     public:
       std::vector<str>  includes;
       variant           application;
@@ -40,6 +44,9 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       str  generate_file(const str& fname, XSSContext context = XSSContext());
       void prepare_context(base_code_context& context, XSSGenerator gen);
       str  generate_xss(const str& xss, XSSGenerator gen);
+			str	 source_file_name(const str& fname);
+			str	 output_file_name(const str& fname);
+      str  load_file(const str& fname);
 			void output_file(const str& fname, const str& contents);
 			variant evaluate_property(DynamicObject obj, const str& prop);
     public:
@@ -81,14 +88,15 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       file_list app_files_;
     private:
       xss_idiom*								idiom_;
-      str												source_path_;
-      str												output_path_;
-      meta_array_schema					array_type_;
+      fs::path									base_path_;
+      fs::path									source_path_;
+      fs::path									output_path_;
+      
+			meta_array_schema					array_type_;
       XSSGenerator							current_;
       XSSContext								context_;
 			std::stack<XSSGenerator>	generators_; 	
 
-      str  load_file(const str& fname);
       void save_file(const str& fname, const str& contents);
       void preprocess();
       void read_classes(const str& class_library_file);

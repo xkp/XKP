@@ -557,6 +557,12 @@ namespace detail
           return variant();
         }
 
+			bool has(const str& name) const
+				{
+          name_container::const_iterator it = names_.find(name);
+          return it != names_.end();
+				}
+
       void add( variant value )
         {
           values_.push_back(value);

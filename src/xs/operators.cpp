@@ -441,9 +441,9 @@ operator_registry::operator_registry()
     register_wildcard(op_and, type_schema<empty_type>(), null                     , new opexec_false() );
     register_wildcard(op_and, null,                      null                     , new default_and() );
 
-    register_wildcard(op_or,	null,                      type_schema<empty_type>(), new opexec_arg1() );
-    register_wildcard(op_and, type_schema<empty_type>(), null                     , new opexec_arg2() );
-    register_wildcard(op_and, null,                      null                     , new default_or() );
+    register_wildcard(op_or, null,                      type_schema<empty_type>(), new opexec_arg1() );
+    register_wildcard(op_or, type_schema<empty_type>(), null                     , new opexec_arg2() );
+    register_wildcard(op_or, null,                      null                     , new default_or() );
 
     register_wildcard(op_equal,			null,											 type_schema<empty_type>(), new opexec_null1() );
     register_wildcard(op_equal,			type_schema<empty_type>(), null											, new opexec_null2() );

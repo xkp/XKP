@@ -1,40 +1,15 @@
 <xss:code>
+array slots = ["a", "b", 20];
 
-  // this slots is for add in .h and .cpp file
-  // remember the returned type of this slots, 
-  // for now is void type...
-  var array slots;
+out()
+{
+    <xss:file output="qt_app.ui" src="qt_ui.xss">
+        <parameter name="slots"/>        
+    </xss:file>
+}
+</xss:code>
+    
 
-  for(var i in instances)
-  {
-    for(var e in events)
-    {
-      var string idiom_ev_name;
-
-      switch(e.name)
-      {
-      case "click":
-        idiom_ev_name = "clicked";
-        break;
-      case "other":
-        idiom_ev_name = "other";
-        break;
-      default:
-        idiom_ev_name = "";
-      }
-      
-      var string ev_name = "on_" + i.id + "_" + idiom_ev_name;
-      var impls = e.impls;
-      var evargs = null;
-
-	  slots += ev_name;
-    }
-  }
-
-<xss:file output="qt_app.ui" src="qt_ui.xss"/>
-<xss:file output="widget.h" src="qt_widget.xss"/>
-
-// it's a main file
 <xss:file output="qt_app.cpp">
 #include <QtGui/QApplication>
 #include "widget.h"
@@ -49,5 +24,3 @@ int main(int argc, char *argv[])
     return app.exec();
 }
 </xss:file>
-
-</xss:code>

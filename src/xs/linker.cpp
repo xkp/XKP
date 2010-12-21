@@ -206,24 +206,25 @@ void code_linker::iterfor_(stmt_iter_for& info)
     schema* value_type    = typeof_(info.type);
     schema* iterable_type = link_expression(info.iter_expr);
 
-    if (iterable_type)
-      {
-        //grab the iterated type
-        schema_item itm;
-        schema* array_type = null;
-        if (iterable_type->resolve("iterated_type", itm) && itm.get)
-          array_type = itm.get->get( iterable_type ); //expects the iterated_type to be a class property
-        else
-          assert(false); //error, invalid iterable
+    //td !!! type checking, correct iterator mechanism
+		//if (iterable_type)
+    //  {
+    //    //grab the iterated type
+    //    schema_item itm;
+    //    schema* array_type = null;
+    //    if (iterable_type->resolve("iterated_type", itm) && itm.get)
+    //      array_type = itm.get->get( iterable_type ); //expects the iterated_type to be a class property
+    //    else
+    //      assert(false); //error, invalid iterable
 
-        if (array_type != value_type)
-          {
-            if (!value_type)
-              value_type = array_type;
-            else
-              assert(false); //type mismatch
-          }
-      }
+    //    if (array_type != value_type)
+    //      {
+    //        if (!value_type)
+    //          value_type = array_type;
+    //        else
+    //          assert(false); //type mismatch
+    //      }
+    //  }
 
     int value_ = register_variable(info.id, value_type);
 

@@ -1,5 +1,5 @@
 <xml>
-    <class id="button" header="#include <QPushButton>" tag_name="QPushButton">
+    <class id="button" header="QPushButton" tag_name="QPushButton">
       <properties>
         <property name="caption" type="string" set_fn="setText" get_fn="text"/>
         <!--<property name="visible" type="bool" set_fn="setVisible" get_fn="isVisible"/> -->
@@ -7,7 +7,7 @@
         <property name="height" type="int" set_fn="size" get_fn="height"/>
       </properties>
     </class>
-    <class id="label" header="#include <QLabel>" tag_name="QLabel">
+    <class id="label" header="QLabel" tag_name="QLabel">
       <properties>
         <property name="caption" type="string" set_fn="setText" get_fn="text"/>
         <!--<property name="visible" type="bool" set_fn="setVisible" get_fn="isVisible"/> -->
@@ -15,7 +15,7 @@
         <property name="height" type="int" set_fn="size" get_fn="height"/>
       </properties>
     </class>
-    <class id="application" header="#include <QWidget>" tag_name="QWidget">
+    <class id="application" header="QWidget" tag_name="QWidget">
     <properties>
       <property name="id" type="string"/>
       <property name="title" type="string"/>
