@@ -48,7 +48,9 @@
         <property name="caption">
             <null>Click me</null>
         </property>
-    </widget>
+
+                    FOUND QT NAME: on_click
+                    </widget>
     <widget class="QPushButton" name="pushButton_2">
         <property name="geometry">
             <rect>
@@ -61,7 +63,9 @@
         <property name="caption">
             <null>Change text</null>
         </property>
-    </widget>
+
+                    FOUND QT NAME: on_click
+                    </widget>
     <widget class="QWidget" name="application">
         <property name="geometry">
             <rect>

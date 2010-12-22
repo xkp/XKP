@@ -242,7 +242,7 @@ bool xss_parser::read_attributes(const str& text, size_t& pos, detail::tag_info&
                     if (!skip_spaces(text, pos))
                       return false;
                     
-                    if (text[pos] != '"')
+										if (text[pos] != '"' /*|| text[pos] != '\''*/)
                       return false;
 
                     state = 2; //reading value
@@ -251,7 +251,7 @@ bool xss_parser::read_attributes(const str& text, size_t& pos, detail::tag_info&
               }
             case 2:
               {
-                if (c == '"')
+                if (c == '"' /*|| c == '\''*/)
                   {
                     tag.args.add(attr_name, attr_value);
                     attr_name  = "";

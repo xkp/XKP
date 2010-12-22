@@ -64,6 +64,33 @@ for(var i in instances)
 		}
     }
 	
+    //testing events
+    if (i.events)
+    {
+        for(var e in i.events)
+        {
+            //find the translation
+            var qt_name = null;
+            if (i.event_declaration)
+            {
+                for(var ev in i.event_declaration)
+                {
+                    qt_name = ev.qt_name;
+                    compiler.breakpoint(qt_name);
+                    break;
+                }
+            }         
+            
+            if (qt_name != null)
+            {
+                out()
+                {
+                    FOUND QT NAME: <xss:e v="qt_name"/>
+                }
+            }
+        }
+    }
+
     out(indent = 1)
 	{
     </widget>

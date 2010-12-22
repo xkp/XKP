@@ -146,7 +146,7 @@ variant execution_context::execute()
                 operands_.push( top );
                 break;
               }
-            case i_pop:      operands_.pop();                   break;
+            case i_pop: operands_.pop(); break;
 
             case i_binary_operator:
               {

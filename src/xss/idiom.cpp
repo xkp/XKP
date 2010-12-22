@@ -299,8 +299,21 @@ struct expression_renderer : expression_visitor
         if (prop)
           {
             str set_fn = variant_cast<str>(dynamic_get(prop, "set_fn"), ""); //let the outside world determine
-                                                                              //if a native function call shouls be made 
-            if (!set_fn.empty())
+                                                                             //if a native function call shouls be made 
+
+            str set_xss = variant_cast<str>(dynamic_get(prop, "set_xss"), ""); //such world can request to parse xss
+
+						if (!set_xss.empty())
+							{
+								ai->type = XSS_RESOLVE;
+								ai->data = set_xss;
+
+								if (result.empty())
+									return set_xss;
+								else
+									return result + "." + set_xss;
+							}
+						else if (!set_fn.empty())
               {
 								ai->type = FN_CALL;
 								if (result.empty())
@@ -640,6 +653,11 @@ struct expression_renderer : expression_visitor
             already_rendered ar = result;
             return ar.value;
           }
+				if (result.is<expression_identifier>())
+					{
+						expression_identifier ei = result;
+						return ei.value;
+					}
         else if (result.is<str>())
           {
             str res = result;
@@ -779,6 +797,56 @@ str render_expression(expression& expr, XSSContext ctx)
 										case VANILLA:
 											{
 												result = assign + " " + operator_str[op] + " " + value;
+												break;
+											}
+										case XSS_RESOLVE:
+											{
+												expression_renderer getter_(ctx);
+												es.left.visit(&getter_);
+												str getter = getter_.get();
+
+												if (!simple_assign)
+													{
+														str op_str = operator_str[op];
+														assert(op_str.size() > 1);
+														op_str.erase(op_str.end() - 1);
+
+														value = getter + " " + op_str + " " + value; 
+													}
+
+												size_t last_dot = getter.find_last_of(".");
+												if (last_dot != str::npos)
+													{
+														size_t count = getter.size() - last_dot;
+														getter.erase(getter.end() - count, getter.end());
+													}
+												else
+													getter = "this";
+
+												//replace quotes, life is hard
+												for(size_t i = 0; i < assign.size(); i++)
+													{
+														if (assign[i] == 39)
+															assign[i] = '"';
+													}
+												
+												//td: is all this really neccesary?
+												XSSProject project_ = ctx->project_;
+												xss_idiom* idiom_		= ctx->idiom_;
+												XSSContext context(new xss_code_context(project_, idiom_));
+												xss_code_context& ctx = *context.get();
+
+												XSSGenerator gen(new xss_generator(context));
+												project_->push_generator(gen);
+
+												project_->prepare_context(ctx, gen);
+
+												ctx.scope_->register_symbol("value",	value);
+												ctx.scope_->register_symbol("object", getter);
+												
+												result = project_->generate_xss(assign, gen);
+
+												project_->pop_generator();
 												break;
 											}
 										default:

@@ -111,6 +111,9 @@ struct xss_gather : xss_visitor
               if (expr_text.empty() && args)
                 expr_text = variant_cast<str>(args->get("value"), "");
 
+							if (expr_text.empty() && args)
+                expr_text = variant_cast<str>(args->get("v"), "");
+
               if (!expr_text.empty())
                 {
                   result_.push_back(part(result_.size()));

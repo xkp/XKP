@@ -2,6 +2,8 @@ on pushButton_1.click()
 {
 	pushButton_2.caption = "Clicked";
 	caption = "Other Clicked";
+
+	pushButton_2.width += pushButton_1.width;
 }
 
 property target

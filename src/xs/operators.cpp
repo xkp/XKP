@@ -432,8 +432,8 @@ operator_registry::operator_registry()
     //null operator
     register_operator(op_not,			 type_schema<empty_type>(), null,                      new opexec_true() ); //not null
     register_operator(op_not,			 type_schema<empty_type>(), type_schema<empty_type>(), new opexec_true() );
-    register_operator(op_equal,		 type_schema<empty_type>(), type_schema<empty_type>(), new opexec_true() );
-    register_operator(op_notequal, type_schema<empty_type>(), type_schema<empty_type>(), new opexec_false() );
+    //register_operator(op_equal,		 type_schema<empty_type>(), type_schema<empty_type>(), new opexec_true() );
+    //register_operator(op_notequal, type_schema<empty_type>(), type_schema<empty_type>(), new opexec_false() );
 
     //boolean operators, this might be nuts, but i will register ands and ors that if the types
     //are unknown react to it, directly casting to boolean, sometimes

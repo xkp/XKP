@@ -76,6 +76,9 @@ bool xss_generator::handle_expression(const str& text, param_list* args)
     if (text.empty() && args)
       {
         variant vv = args->get("value");
+        if (vv.empty())
+					vv = args->get("v");
+
         if (!vv.empty())
           {
             expr = variant_cast<str>(vv, "");
