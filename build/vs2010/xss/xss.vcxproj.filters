@@ -256,5 +256,11 @@
     <None Include="..\..\..\data\xss\qt\qt_ui.xss">
       <Filter>data\qt</Filter>
     </None>
+    <None Include="..\..\..\data\xss\qt\qt_widget_h.xss">
+      <Filter>data\qt</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\qt\qt_widget_cpp.xss">
+      <Filter>data\qt</Filter>
+    </None>
   </ItemGroup>
 </Project>
