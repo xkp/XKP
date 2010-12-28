@@ -36,6 +36,8 @@ namespace xkp
       i_dynamic_unary_operator,   //20   
       i_dynamic_get,              //21   
       i_dynamic_resolve,          //22
+			i_dynamic_set,							//23
+			i_nop,											//24
     };  
 
   struct instruction

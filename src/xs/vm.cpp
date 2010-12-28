@@ -12,6 +12,7 @@ const str SRuntime("vm");
 const str SCallingNull("Trying to access null object");
 const str STypeDoesNotInstantiate("Cannot instantiate type");
 const str SCannotResolveDynamically("Cannot resolve");
+const str SCannotAssignDynamically("Cannot assign resolve");
 const str SNotExecutableDynamic("Attempting to call a non-function");
 const str SCannotResolveOperator("Cannot resolve operator");
 
@@ -276,6 +277,26 @@ variant execution_context::execute()
                 operands_.push(result);
                 break;
               }
+						case i_dynamic_set:
+							{
+                str     getter_name = constants_[i.data.value];
+								variant value			  = pop();
+                variant getted      = pop();
+
+                variant result;
+                if (!dynamic_set(getted, getter_name, value))
+                  {
+                    param_list error;
+                    error.add("id", SRuntime);
+                    error.add("desc", SCannotAssignDynamically);
+                    error.add("object", getted);
+                    error.add("property", getter_name);
+                    runtime_throw(error);
+                  }
+
+                operands_.push(result);
+								break;
+							}
             case i_dynamic_resolve:
               {
                 str     resolve_name  = constants_[i.data.value];
@@ -455,6 +476,7 @@ variant execution_context::execute()
                 caller->dispatch_event(ev.id, pl);
                 break;
               }
+						case i_nop: break;
             default:
               assert(false); //say wha
           }

@@ -51,7 +51,7 @@ namespace xkp
       
       variant value();
       
-      private: 
+      protected: 
         typedef std::stack<variant> expr_stack;
 
         expr_stack        stack_;      

@@ -1,8 +1,8 @@
 <xss:project>
     <path generator="app.xss"
           class_library="classes.xml"
-          source_path="c:/work/xkp/data/xss/ms/" 
-          output_path="c:/work/xkp/data/xss/output/" 
+          source_path="../ms/" 
+          output_path="../output/" 
           output_file="ms-test.html"/>
 
     <idiom class="js-idiom" id_as_this="true"/>
@@ -14,6 +14,29 @@
             <resource type="image" src="images/progress.empty.png"/>
             <resource type="image" src="images/progress.full.png"/>
         </resources>
+        
+        <sequence id="">
+            <at time="0">
+                <animate property="x" from="0" to="20" in="3s"/>
+                <animate property="y" from="0" to="20" in="3s"/>
+            </at>
+            <at time="0">
+                <run sequence="grow"/>
+            </at>
+            
+            <sequence id="grow">
+                <animate property="width"  from="10" to="200" in="5s"/>
+                <animate property="height" from="10" to="200" in="5s"/>
+            </sequence>
+            
+            <when expr="width >= 100">
+                <execute method="shrink"/>
+            </when>
+
+            <when expr="width <= 50">
+                <run sequence="grow"/>
+            </when>
+        </sequence>
       
         <button id="btn1" up="images/img.png" down="images/img2.png" x="10" y="10" width="40" height="40"/>
         <label id="label1" caption="Hello" font="bold 12px Verdana" x="10" y="70"/>

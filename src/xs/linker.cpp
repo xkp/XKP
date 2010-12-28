@@ -75,6 +75,39 @@ const char* operator_name[] =
     "",     //op_parameter
   };
 
+struct array_evaluator : expr_evaluator
+	{
+		array_evaluator(): result( new dynamic_array ) {}
+		
+    virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top)
+			{
+				assert(!top || op == op_array);
+				switch(op)
+					{
+						case op_array:
+							{
+								int count = stack_.top(); stack_.pop();
+								assert(result->size() == count);
+								assert(stack_.size() == 0);
+								stack_.push(result);
+								break;
+							}
+						case op_parameter:
+							{
+								assert(stack_.size() == 1);
+								variant val = stack_.top(); stack_.pop();
+								result->insert(val);
+								break;
+							}
+						default:
+							expr_evaluator::exec_operator(op, pop_count, push_count, top);
+					}
+			}
+
+		DynamicArray result;
+	};
+
+
 //code_linker
 code_linker::code_linker():
   local_count_(0),
@@ -446,7 +479,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
             resolve_unary_operator( op, arg1, &dont_assign);
 
             if (!dont_assign)
-              resolve_assign(arg1);
+              resolve_assign(arg1, -1);
             break;
           }
 
@@ -501,7 +534,8 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
               }
 
             bool dont_assign = false;
-            if (xe != op_assign)
+            int  last_pc = pc_ - 1;
+						if (xe != op_assign)
               {
                 resolve_operator(xe, arg1, arg2, &dont_assign);
               }
@@ -509,7 +543,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
               resolve_value(arg2);
 
             if (!dont_assign)
-              resolve_assign( arg1 );
+              resolve_assign( arg1, last_pc );
 
             if (!stack_.empty())
               stack_.pop(); //td: !!! this line prevents (*)= operators (+=, etc) from being used
@@ -786,6 +820,16 @@ void code_linker::register_dsl(const str& name, DslLinker linker)
 variant code_linker::evaluate_expression(expression& expr)
   {
     //td: only constants for now
+
+		operator_type op;
+		if (expr.top_operator(op) && op == op_array)
+			{
+				array_evaluator eval;
+				expr.visit( &eval );
+
+				return eval.result;
+			}
+
     expr_evaluator eval;
     expr.visit( &eval );
     return eval.value();
@@ -1352,7 +1396,7 @@ bool code_linker::resolve_custom_operator(operator_type op, schema* type, bool* 
     return true;
   }
 
-void code_linker::resolve_assign(const variant& arg)
+void code_linker::resolve_assign(const variant& arg, int last_pc)
   {
     if (arg.is<local_variable>())
       {
@@ -1429,7 +1473,16 @@ void code_linker::resolve_assign(const variant& arg)
       }
     else if (arg.is<already_in_stack>())
       {
-        assert(false); //td: dynamic assign
+				//td: there's a bit of a cluster f*ck here
+				//resolving assigners works must cases except for this one
+				//where a dynamic get has already been inserted. The right solution
+				//is already implemented at xss (splitting expressions)
+        assert(last_pc >= 0); 
+				assert(code_[last_pc].id == i_dynamic_get);
+				int idx = code_[last_pc].data.value;
+				code_[last_pc].id = i_nop; //invalidate the get, keep the stack intact
+
+				add_instruction(i_dynamic_set, idx);
       }
     else
       {
