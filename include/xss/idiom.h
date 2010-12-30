@@ -77,10 +77,10 @@ struct base_idiom : xss_idiom
     base_idiom(const base_idiom& other)  : ctx_(other.ctx_),id_as_this_(false), force_this_(true) {}
   
     virtual void    set_context(XSSContext ctx);
-    virtual variant process_method(DynamicObject instance, xs_method& mthd);
-    virtual variant process_event(DynamicObject instance, const str& event_name, xs_event& ev);
-    virtual variant process_code(code& cde, DynamicObject this_);
-    virtual variant process_expression(expression expr, DynamicObject this_);
+    virtual variant process_method(XSSObject instance, xs_method& mthd);
+    virtual variant process_event(XSSObject instance, const str& event_name, xs_event& ev);
+    virtual variant process_code(code& cde, XSSObject this_);
+    virtual variant process_expression(expression expr, XSSObject this_);
     virtual str     resolve_this(XSSContext ctx);
     
     protected:

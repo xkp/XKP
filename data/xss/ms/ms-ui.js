@@ -691,6 +691,9 @@ ms.ui.Switch = Class.create(ms.ui.Component,
 
 	active: function( idx )
 	{
+        if (idx == null)
+            return;
+
 		if (idx == this.active_)
 			return;
 
