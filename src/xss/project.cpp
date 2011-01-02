@@ -20,6 +20,7 @@ const str SOutOfContext("not-sure");
 const str SNotImplemented("not-implemented");
 const str SCannotResolve("unkown-identifier");
 const str SFileError("404");
+const str STypeMismatch("type-mismatch");
 
 const str SInstancesMustProvideAClass("Instances must provide a class");
 const str SWhatWasThisAgain("What was that again?");
@@ -29,6 +30,7 @@ const str SNoSoup("Super class not found");
 const str SUnknownClass("Class not found");
 const str SUnknownInstance("Instance not found");
 const str SFileNotFound("File not found");
+const str SOutputtingNonString("Trying to output a value that does not translate to a string");
 
 //xss_object
 xss_object::xss_object():
@@ -475,13 +477,37 @@ variant xss_property::get_value()
     return value_;
   }
 
+str	xss_property::resolve_assign(const str& value)
+	{
+    str set_fn = variant_cast<str>(dynamic_get(this, "set_fn"), ""); //let the outside world determine
+                                                                      //if a native function call shouls be made 
+
+    str set_xss = variant_cast<str>(dynamic_get(this, "set_xss"), ""); //such world can request to parse xss
+
+		if (!set_xss.empty())
+			{
+				assert(false); //td:
+			}
+		else if (!set_fn.empty())
+      {
+				return set_fn + '(' + value + ')';
+      }
+    else if (!set.empty())
+			{
+				return name + "_set(" + value + ')';
+			}
+
+		return name + " = " + value;
+  }
+
 //pre_process
 struct pre_process : dynamic_visitor
   {
-    pre_process(XSSObject object, XSSObject parent, xss_project& owner):
+    pre_process(XSSObject object, XSSObject parent, xss_project& owner, bool do_register):
       object_(object),
       owner_(owner),
-      parent_(parent)
+      parent_(parent),
+			do_register_(do_register)
       {
       }
 
@@ -526,7 +552,7 @@ struct pre_process : dynamic_visitor
 										
 										//hook up the type
 										XSSObject clazz = owner_.get_class(class_name);
-										if (!clazz)
+										if (!clazz && do_register_)
 											{
 												param_list error;
 												error.add("id", SCannotResolve);
@@ -535,20 +561,25 @@ struct pre_process : dynamic_visitor
 												xss_throw(error);
 											}
 
-										child->xss_type(clazz);
-
-										//unnamed object will appear with an id identical to its class
-										if (id == class_name && class_name != "application")
+										if (clazz)
 											{
-												id = owner_.get_anonymous_id(class_name);
-												dynamic_set(child, "id", id);
-											}
+												child->xss_type(clazz);
 
-										//register it into the project
-										owner_.register_instance(id, child);
+												//unnamed object will appear with an id identical to its class
+												if (id == class_name && class_name != "application")
+													{
+														id = owner_.get_anonymous_id(class_name);
+														dynamic_set(child, "id", id);
+													}
+
+												//register it into the project
+												if (do_register_)
+													owner_.register_instance(id, child);
+											}
 										
 										//go down the hierarchy
-										pre_process pp(child, object_, owner_);
+										bool is_name_space = variant_cast<bool>(dynamic_get(child, "namespace"), false);
+										pre_process pp(child, object_, owner_, do_register_ && !is_name_space);
 										child->visit(&pp);
                   }
 							}
@@ -559,6 +590,7 @@ struct pre_process : dynamic_visitor
       XSSObject			object_;
       XSSObject			parent_;
       xss_project&  owner_;
+			bool					do_register_;
   };
 
 struct source_code_gather :  xs_visitor
@@ -590,7 +622,7 @@ struct source_code_gather :  xs_visitor
 
     virtual void instance_(xs_instance& info)
       {
-        assert(false); //td: implement
+				instances.push_back(info);
       }
 
     virtual void class_(xs_class& info)
@@ -617,8 +649,42 @@ struct source_code_gather :  xs_visitor
         std::vector<xs_property> properties;
         std::vector<xs_method>   methods;
         std::vector<xs_event>    events;
+        std::vector<xs_instance> instances;
   };
 
+//out
+out::out()
+	{
+	}
+
+out::out(XSSProject prj): prj_(prj)
+	{
+	}
+
+void out::append(variant v)
+	{
+		str value;
+		try
+			{
+				value = str(v);
+			}
+		catch(type_mismatch)
+			{
+				param_list error;
+				error.add("id", STypeMismatch);
+				error.add("desc", SOutputtingNonString);
+				xss_throw(error);
+			}
+
+		prj_->generator()->append(value);
+	}
+
+str out::line_break()
+	{
+		return "\n";
+	}
+
+//xss_project
 void xss_project::build()
   {
     //grab the path
@@ -687,17 +753,8 @@ void xss_project::base_path(fs::path path)
 		base_path_ = path;
 	}
 
-void xss_project::compile_instance(const str& filename, XSSObject instance)
-  {
-    //parse the xs into top level constructs, like properties and stuff
-		fs::path fname = base_path_ / source_path_ / filename; 
-    str source = load_file( fname.string() );
-
-    code_context  ctx;
-    xs_compiler  compiler;
-    xs_container ast;
-    compiler.compile_xs(source, ast);
-
+void xss_project::compile_ast(xs_container& ast, XSSObject instance)
+	{
     source_code_gather gather;
     ast.visit(&gather);
 
@@ -787,6 +844,144 @@ void xss_project::compile_instance(const str& filename, XSSObject instance)
         variant impl = idiom_->process_event(actual_instance, event_name, *it);
         impls->push_back(impl);
       }
+
+		std::vector<xs_instance>::iterator iit = gather.instances.begin();
+		std::vector<xs_instance>::iterator ind = gather.instances.end();
+		for(; iit != ind; iit++)
+			{
+				xs_instance& instance_ast = *iit;
+				XSSObject		 instance_instance = resolve_path(instance_ast.id, instance);
+
+				compile_ast(instance_ast, instance_instance);
+			}
+	}
+
+str wind(const std::vector<str> path)
+	{
+		str result;
+		for(size_t i = 0; i < path.size(); i++)
+			result += path[i] + '.';
+
+		if (!result.empty())
+			result.erase(result.end() - 1);
+
+		return result;
+	}
+
+std::vector<str> unwind(const str& path)
+	{
+		std::vector<str> result;
+		size_t pos = 0;
+		while(pos < path.size())
+			{
+				size_t last_pos = pos;
+				pos = path.find('.', pos);
+				if (pos != str::npos)
+					{
+						result.push_back(path.substr(last_pos, pos - last_pos));
+						pos++;
+					}
+				else
+					{
+						result.push_back(path.substr(last_pos, path.size() - last_pos));
+					}
+			}
+
+		return result;
+	}
+
+variant xss_project::resolve_property(const str& prop, variant parent)
+	{
+		XSSObject base;
+		str				path_str;
+
+		if (parent.is<str>())
+			{
+				str id(parent);
+				base = resolve_path(unwind(id), XSSObject());
+				path_str = id;
+			}
+		else if (parent.is<XSSObject>())
+			base = parent;
+
+		std::vector<str> path = unwind(prop); assert(!path.empty());
+		str prop_name = path[path.size() - 1];
+		path.erase(path.end() - 1);
+
+		XSSObject obj = resolve_path(path, base);
+		if (!obj)
+			return variant();
+
+		XSSProperty propobj = obj->get_property(prop_name);
+		if (!propobj)
+			return variant();
+
+		sponge_object* r = new sponge_object;
+		r->add_property("prop", propobj);
+		r->add_property("path", wind(path));
+
+		DynamicObject result(r);
+		return result;
+	}
+
+XSSObject xss_project::resolve_path(const std::vector<str>& path, XSSObject base)
+	{
+    XSSObject result = base;
+    str inst_name;
+		str complete_name;
+    for(size_t idx = 0; idx < path.size(); idx++)
+      {
+        inst_name = path[idx];
+        if (idx == 0)
+          {
+						complete_name = inst_name;
+            result = get_instance(inst_name);
+          }
+        else
+          {
+            complete_name += '.' + inst_name;
+						variant vv;
+            if (dynamic_try_get(result, inst_name, vv))
+              {
+                result = variant_cast<XSSObject>(vv, XSSObject());
+              }
+            else
+							{
+								param_list error;
+								error.add("id", SCannotResolve);
+								error.add("desc", SUnknownInstance);
+								error.add("instance", complete_name);
+						
+								xss_throw(error);
+							}
+          }
+      }
+
+    if (!result)
+			{
+        param_list error;
+        error.add("id", SCannotResolve);
+        error.add("desc", SUnknownInstance);
+        error.add("instance", complete_name);
+						
+        xss_throw(error);
+			}
+
+		return result;
+	}
+
+void xss_project::compile_instance(const str& filename, XSSObject instance)
+  {
+    //parse the xs into top level constructs, like properties and stuff
+		fs::path fname = base_path_ / source_path_ / filename; 
+    str source = load_file( fname.string() );
+
+    code_context  ctx;
+    xs_compiler  compiler;
+    xs_container ast;
+    compiler.compile_xs(source, ast);
+
+		compile_ast(ast, instance);
   }
 
 void xss_project::register_instance(const str& id, XSSObject it)
@@ -1084,8 +1279,11 @@ void xss_project::prepare_context(base_code_context& context, XSSGenerator gen)
     context.dsls.insert(dsl_list_pair("out", ol));
 
     //add our identifiers
+		reference<out> out_obj(new out(me));
+
     context.scope.register_symbol("application", application);
     context.scope.register_symbol("compiler", me);
+    context.scope.register_symbol("out", out_obj);
 
     //setup the scope
     instance_registry::iterator it = instances_.begin();
@@ -1097,6 +1295,7 @@ void xss_project::prepare_context(base_code_context& context, XSSGenerator gen)
 
     //and some types
     context.types_->add_type("array", &array_type_);
+    context.types_->add_type<sponge_object>("object");
   }
 
 str xss_project::generate_xss(const str& xss, XSSGenerator gen)
@@ -1186,7 +1385,7 @@ str xss_project::generate_file(const str& fname, XSSContext context)
 void xss_project::preprocess()
   {
     XSSObject app_object = application;
-    pre_process pp(app_object, XSSObject(), *this);
+    pre_process pp(app_object, XSSObject(), *this, true);
     app_object->visit(&pp);
   }
 

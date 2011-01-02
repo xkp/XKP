@@ -443,6 +443,7 @@ void code_linker::push(variant operand, bool top)
 void code_linker::exec_operator(operator_type op, int pop_count, int push_count, bool top)
   {
     variant arg1, arg2;
+		int     fixer_upper = 1;
     switch(pop_count)
       {
         case 0: break;
@@ -459,6 +460,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
 								add_instruction(i_store, lv);
 
 								arg2 = local_variable(lv, ais.type); //note the switcheroo
+								fixer_upper = 2;
 							}
 
             arg1 = stack_.top(); stack_.pop();
@@ -534,7 +536,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
               }
 
             bool dont_assign = false;
-            int  last_pc = pc_ - 1;
+            int  last_pc = pc_ - fixer_upper;
 						if (xe != op_assign)
               {
                 resolve_operator(xe, arg1, arg2, &dont_assign);
@@ -563,6 +565,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
             if (type && 
 								type != type_schema<empty_type>() &&
 								type != type_schema<IDynamicObject*>() &&
+								type != type_schema<variant>() &&
 								type != type_schema<DynamicObject>())
               {
                 schema_item si;
@@ -586,7 +589,13 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
             else
               {
                 add_instruction(i_dynamic_get, add_constant(ei.value));
-                stack_.push( already_in_stack(null) );
+
+								int lv = register_variable("", null, null);
+								add_instruction(i_store, lv);
+
+								//i've decided to save dynamic gets into the stack
+								//to avoid general unplesantness with alredy_in_stack.
+								stack_.push( local_variable(lv, null) );
               }
             break;
           }
@@ -597,6 +606,10 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
             resolve_value(arg1, &type);
 
             expression_identifier ei = arg2;
+						if (ei.value == "linker_breakpoint")
+						{
+							ei.value = "linker_breakpoint";
+						}
 
             if (type && type != type_schema<empty_type>())
               {
@@ -621,7 +634,13 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
             else
               {
                 add_instruction(i_dynamic_resolve, add_constant(ei.value));
-                stack_.push( already_in_stack(null) );
+
+								int lv = register_variable("", null, null);
+								add_instruction(i_store, lv);
+
+								//i've decided to save dynamic gets into the stack
+								//to avoid general unplesantness with alredy_in_stack.
+								stack_.push( local_variable(lv, null) );
               }
             break;
           }
@@ -657,6 +676,12 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
               {
                 already_in_stack ais = call_value;
                 assert(!ais.type); //I'm not sure why this would hapeen, I'll wait and see
+                is_dyamic = true;
+              }
+            else if (call_value.is<local_variable>())
+              {
+                local_variable lv = call_value;
+								add_instruction(i_load, lv.index);
                 is_dyamic = true;
               }
             else
@@ -768,6 +793,18 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
                     stack_.pop();
                     stack_.push( already_in_stack(type) );
                   }
+								else if (arg.is<already_in_stack>())
+									{
+										//td: transitioning out
+										//already_in_stack ais = arg;								
+										//int lv = register_variable("", ais.type, null);
+										//add_instruction(i_store, lv);
+
+										//arg = local_variable(lv, ais.type); //note the switcheroo
+
+										//stack_.pop();
+										//stack_.push( arg );
+									}
               }
             break;
           }
@@ -805,6 +842,8 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
 
             add_instruction(i_load_constant, add_constant(array_type));
             add_instruction(i_instantiate, args);
+
+						stack_.push( already_in_stack(array_type) );
             break;
           }
         default:
@@ -1473,16 +1512,19 @@ void code_linker::resolve_assign(const variant& arg, int last_pc)
       }
     else if (arg.is<already_in_stack>())
       {
-				//td: there's a bit of a cluster f*ck here
-				//resolving assigners works must cases except for this one
-				//where a dynamic get has already been inserted. The right solution
-				//is already implemented at xss (splitting expressions)
-        assert(last_pc >= 0); 
-				assert(code_[last_pc].id == i_dynamic_get);
-				int idx = code_[last_pc].data.value;
-				code_[last_pc].id = i_nop; //invalidate the get, keep the stack intact
+				//td: phasing out
+				assert(false);
 
-				add_instruction(i_dynamic_set, idx);
+				////td: there's a bit of a cluster f*ck here
+				////resolving assigners works must cases except for this one
+				////where a dynamic get has already been inserted. The right solution
+				////is already implemented at xss (splitting expressions)
+    //    assert(last_pc >= 0); 
+				//assert(code_[last_pc].id == i_dynamic_get);
+				//int idx = code_[last_pc].data.value;
+				//code_[last_pc].id = i_nop; //invalidate the get, keep the stack intact
+
+				//add_instruction(i_dynamic_set, idx);
       }
     else
       {

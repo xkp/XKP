@@ -36,6 +36,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       XSSObjectList			classes;
 
       void compile_instance(const str& filename, XSSObject instance);
+			void compile_ast(xs_container& ast, XSSObject instance);
       void register_instance(const str& id, XSSObject instance);
       void render_instance(XSSObject instance, const str& xss, int indent);
       str  resolve_dispatcher(XSSObject instance, const str& event_name);
@@ -53,6 +54,8 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
 			variant evaluate_property(XSSObject obj, const str& prop);
 			XSSObject get_class(const str& name);
 			str	get_anonymous_id(const str& class_name);
+			XSSObject resolve_path(const std::vector<str>& path, XSSObject base);
+			variant resolve_property(const str& path, variant parent);
     public:
       //access
       DynamicArray  get_property_array(XSSObject obj);
@@ -116,6 +119,19 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
 
 typedef reference<xss_project> XSSProject;
 
+//a little object to represent the output
+struct out
+	{
+		out();
+		out(XSSProject prj);
+
+		void append(variant v);
+		str  line_break(); 
+
+		private:	
+			XSSProject prj_;
+	};
+
 //glue
 template <typename T>
 struct xss_object_schema : editable_object_schema<T>
@@ -140,6 +156,7 @@ struct xss_project_schema : object_schema<xss_project>
         property_("idiom",       &xss_project::idiom);
 
         dynamic_method_ ("breakpoint", &xss_project::breakpoint);
+        dynamic_method_ ("linker_breakpoint", &xss_project::breakpoint);
 
 				method_<void,			2>("compile_instance",    &xss_project::compile_instance);
         method_<void,			2>("register_instance",   &xss_project::register_instance);
@@ -148,6 +165,8 @@ struct xss_project_schema : object_schema<xss_project>
         method_<str,			1>("instance_class",      &xss_project::instance_class);
 				method_<str,			1>("inline_properties",   &xss_project::inline_properties);
 				method_<variant,	2>("evaluate_property",   &xss_project::evaluate_property);
+				method_<str,			1>("genid",								&xss_project::get_anonymous_id);
+				method_<variant,	2>("resolve_property",		&xss_project::resolve_property);
       }
   };
 
@@ -169,7 +188,17 @@ struct xss_property_schema : xss_object_schema<xss_property>
         property_("set",   &xss_property::set);
 
         method_<str, 0>("generate_value", &xss_property::generate_value);
+        method_<str, 1>("resolve_assign", &xss_property::resolve_assign);
+      }
+  };
 
+struct out_schema : object_schema<out>
+  {
+    virtual void declare()
+      {
+				readonly_property<str>("new_line", &out::line_break);
+
+        method_<void, 1>("<<",  &out::append);
       }
   };
 
@@ -177,6 +206,7 @@ register_complete_type(xss_object,		xss_object_schema<xss_object>);
 register_complete_type(xss_project,		xss_project_schema);
 register_complete_type(xss_event,			xss_event_schema);
 register_complete_type(xss_property,  xss_property_schema);
+register_complete_type(out,						out_schema);
 
 register_iterator(XSSObject);
 

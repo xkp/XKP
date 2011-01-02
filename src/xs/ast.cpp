@@ -53,21 +53,51 @@ void expression::push_operator(operator_type op)
         //this is sort of tricky, basically an op_dot followed by an op_call
         //will turn that dot into a dot_call, this way the called knows 
         //wheter is a property access or a method call.
-        assert(stack_.size() > 1);
-        
-        variant last_op = stack_[stack_.size() - 2];
-        if (last_op.is<operator_type>())
-          {
-            operator_type ot = last_op;
-            if (ot == op_dot)
-              {
-                variant arg_count = stack_[stack_.size() - 1];
-                stack_.erase(stack_.end() - 2, stack_.end());
-                
-                stack_.push_back(op_dot_call);
-                stack_.push_back(arg_count);
-              }
-          }
+				assert(stack_.size() > 1);
+
+				bool found		 = false;
+        int	 dot_pos	 = stack_.size() - 1;
+				int	 arg_count = stack_[dot_pos--];
+
+				//unroll parameters
+				for(int p = 0; p < arg_count; p++)
+				{
+					int pop_count = 1;
+					while(dot_pos >= 0)
+						{
+							variant ii = stack_[dot_pos--];
+							if (ii.is<operator_type>())
+								{
+									operator_type ot = ii;
+									if (ot == op_parameter)
+										continue; //ignore
+
+									pop_count += operand_count[ot];
+								}
+							
+							pop_count--;
+
+							if (pop_count <= 0)
+								break;
+						}
+				}
+
+				found = dot_pos >= 0;
+				if (found)
+					{
+							variant ii = stack_[dot_pos];
+							if (ii.is<operator_type>())
+								{
+									operator_type ot = ii;
+									found = ot == op_dot;
+								}
+					}
+
+				if (found)
+					{
+						stack_[dot_pos] = op_dot_call;
+					}
+
       }
 
     stack_.push_back( op );

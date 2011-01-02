@@ -109,6 +109,7 @@ struct xss_property : public xss_object
     
     str     generate_value();
     variant get_value();
+		str			resolve_assign(const str& value);
   };
   
 struct xss_event
