@@ -59,6 +59,48 @@ const char* vm_operator_name[] =
     "",     //op_parameter
   };
 
+operator_type vm_native_op[] =
+  {
+		op_not, //op_inc,
+    op_not, //op_dec,
+    op_not, //op_ref,
+    op_not, //op_unary_plus,
+    op_not, //op_unary_minus,
+    op_not, //op_not,
+    op_not, //op_mult,
+    op_not, //op_divide,
+    op_not, //op_mod,
+    op_not, //op_typecast,
+    op_not, //op_typecheck,
+    op_not, //op_namecheck,
+    op_not, //op_plus,
+    op_not, //op_minus,
+    op_not, //op_shift_right,
+    op_not, //op_shift_left,
+    op_shift_right, //op_shift_right_equal,
+    op_shift_left,	//op_shift_left_equal,
+    op_not, //op_equal,
+    op_not, //op_notequal,
+    op_not, //op_gt,
+    op_not, //op_lt,
+    op_not, //op_ge,
+    op_not, //op_le,
+    op_not, //op_and,
+    op_not, //op_or,
+    op_not, //op_assign,
+    op_plus,		//op_plus_equal,
+    op_minus,		//op_minus_equal,
+    op_mult,		//op_mult_equal,
+    op_divide,	//op_div_equal,
+    op_not, //op_dot,
+    op_not, //op_dot_call
+    op_not, //op_index,
+    op_not, //op_call,
+    op_not, //op_func_call
+    op_not, //op_array,
+    op_not, //op_parameter
+  };
+
 //execution_context
 execution_context::execution_context(ByteCode code, variant _this, param_list* args):
   code_(code),
@@ -213,6 +255,61 @@ variant execution_context::execute()
                 operands_.push(result);
                 break;
               }
+						case i_dynamic_binary_assign_operator:
+							{
+                bool		assign = false;
+								variant arg2	 = pop();
+                variant arg1   = pop();
+                schema* type1  = true_type(arg1); assert(type1);
+                schema* type2  = true_type(arg2); assert(type2);
+
+                variant        result;
+                operator_type  opid   = (operator_type)i.data.value;
+                operator_exec* opexec = operators_.get_operator(opid, type1, type2);
+                if (!opexec)
+                  {
+                    schema_item custom_operator;
+                    if (type1->resolve(vm_operator_name[opid], custom_operator))
+                      {
+                        assert(custom_operator.exec); //read only
+
+                        void*   caller_id;
+                        if (custom_operator.flags & DYNAMIC_ACCESS)
+                          {
+                            IDynamicObject* obj = arg1; //td: catch type mismatch
+                            caller_id = obj;
+                          }
+                        else
+                          caller_id = arg1.get_pointer();
+
+                        param_list args;
+                        args.add(arg2);
+                        result = custom_operator.exec->exec(caller_id, args );
+                      }
+										else
+											{
+												operator_exec* nopexec = operators_.get_operator(vm_native_op[opid], type1, type2);
+												if (nopexec)
+													{
+														result = nopexec->exec(arg1, arg2);
+														assign = true;
+													}
+												else
+													{
+														param_list error;
+														error.add("id", SRuntime);
+														error.add("desc", SCannotResolveOperator);
+														error.add("operator", str(vm_operator_name[opid]));
+														runtime_throw(error);
+													}
+											}
+                  }
+                else result = opexec->exec(arg1, arg2);
+
+                operands_.push(result);
+                operands_.push(!assign);
+								break;
+							}
             case i_dynamic_unary_operator:
               {
                 variant arg1  = pop();
@@ -280,8 +377,8 @@ variant execution_context::execute()
 						case i_dynamic_set:
 							{
                 str     getter_name = constants_[i.data.value];
-								variant value			  = pop();
                 variant getted      = pop();
+								variant value			  = pop();
 
                 variant result;
                 if (!dynamic_set(getted, getter_name, value))
@@ -346,12 +443,27 @@ variant execution_context::execute()
               {
                 Executer call = pop();
                 param_list pl;
-                for(int p = 0; p < i.data.call_data.param_count; p++)
-                  {
-                    pl.add(pop());
-                  }
+                variant caller;
 
-                variant caller = pop();
+								if (i.data.call_data.invert)
+									{
+										caller = pop();
+
+										for(int p = 0; p < i.data.call_data.param_count; p++)
+											{
+												pl.add(pop());
+											}
+									}
+								else
+									{
+										for(int p = 0; p < i.data.call_data.param_count; p++)
+											{
+												pl.add(pop());
+											}
+
+										caller = pop();
+									}
+
                 if (caller.empty())
                   {
                     param_list error;
@@ -425,12 +537,23 @@ variant execution_context::execute()
               }
             case i_set:
               {
-                Setter  call      = pop();
-                variant value     = pop();
-                variant caller    = pop();
+                Setter call = pop();
+                
+								variant value;
+                variant caller;
+								if (i.data.set_data.invert)
+									{
+										caller = pop();
+										value  = pop();
+									}
+								else
+									{
+										value  = pop();
+										caller = pop();
+									}
 
                 void* caller_id;
-                if (i.data.value)
+								if (i.data.set_data.is_dynamic)
                   {
                     IDynamicObject* obj = caller; //td: catch type mismatch
                     caller_id           = obj;

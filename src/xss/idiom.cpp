@@ -114,59 +114,6 @@ struct already_rendered
     int precedence;
   };
 
-struct expression_splitter : expression_visitor
-  {
-		expression_splitter(operator_type divider) : divider_(divider), operands_(0), found_left_(false) {}
-
-    virtual void push(variant operand, bool top)
-			{
-				operands_++;
-
-				if (!found_left_)
-					left.push_operand(operand);
-				else
-					right.push_operand(operand);
-			}
-    
-		virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top)
-			{
-				if (op == divider_)
-					{
-						if (!found_left_)
-							{
-								//edge case, no operators for left side, so...
-								variant left_operand = left.pop_first();
-								right = left;
-								left.clear();
-								left.push_operand(left_operand);
-							}
-					}
-				else
-					{
-						operands_ -= pop_count;
-						if (operands_ == 0)
-							{
-								assert(!found_left_);
-								found_left_ = true;
-								left.push_operator(op);
-							}
-						else if (!found_left_)
-							left.push_operator(op);
-						else
-							right.push_operator(op);
-
-						operands_ += push_count;
-				}
-			}
-
-		expression left;
-		expression right;
-		
-		private:
-			operator_type divider_;
-			int operands_;
-			bool found_left_;
-	};
 
 enum assign_type
 	{

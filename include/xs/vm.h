@@ -38,6 +38,7 @@ namespace xkp
       i_dynamic_resolve,          //22
 			i_dynamic_set,							//23
 			i_nop,											//24
+			i_dynamic_binary_assign_operator, //25
     };  
 
   struct instruction
@@ -60,23 +61,38 @@ namespace xkp
           data.value = _data;    
         }
         
-      instruction(instruction_type _id, unsigned char param_count, bool is_dynamic): 
+      instruction(instruction_type _id, unsigned char param_count, bool is_dynamic, bool invert): 
         id(_id)
         {
           data.call_data.is_dynamic  = is_dynamic;
+					data.call_data.invert			 = invert;
           data.call_data.param_count = param_count;
         }
     
-      union instruction_data
+      instruction(instruction_type _id, bool is_dynamic, bool invert_set): 
+        id(_id)
+        {
+          data.set_data.is_dynamic  = is_dynamic;
+          data.set_data.invert			= invert_set;
+        }
+
+			union instruction_data
         {
           short value;
           
           struct __call_data
             {
-              bool     is_dynamic  : 8;
-              unsigned param_count : 8;
+              bool     is_dynamic  : 1;
+              bool     invert			 : 1;
+              unsigned param_count : 14;
             }call_data;
-        };
+
+          struct __set_data
+            {
+              bool is_dynamic	: 8;
+              bool invert			: 8;
+            }set_data;
+				};
 
       short            id;
       instruction_data data;

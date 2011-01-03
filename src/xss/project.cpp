@@ -919,6 +919,7 @@ variant xss_project::resolve_property(const str& prop, variant parent)
 		sponge_object* r = new sponge_object;
 		r->add_property("prop", propobj);
 		r->add_property("path", wind(path));
+		r->add_property("obj", obj);
 
 		DynamicObject result(r);
 		return result;
@@ -1305,6 +1306,7 @@ str xss_project::generate_xss(const str& xss, XSSGenerator gen)
     parser.register_tag("xss:e");
     parser.register_tag("xss:class");
     parser.register_tag("xss:file");
+    parser.register_tag("xss:marker");
 
 		parser.parse(xss, gen.get());
     return gen->get();
