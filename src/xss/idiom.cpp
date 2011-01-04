@@ -114,59 +114,6 @@ struct already_rendered
     int precedence;
   };
 
-struct expression_splitter : expression_visitor
-  {
-		expression_splitter(operator_type divider) : divider_(divider), operands_(0), found_left_(false) {}
-
-    virtual void push(variant operand, bool top)
-			{
-				operands_++;
-
-				if (!found_left_)
-					left.push_operand(operand);
-				else
-					right.push_operand(operand);
-			}
-    
-		virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top)
-			{
-				if (op == divider_)
-					{
-						if (!found_left_)
-							{
-								//edge case, no operators for left side, so...
-								variant left_operand = left.pop_first();
-								right = left;
-								left.clear();
-								left.push_operand(left_operand);
-							}
-					}
-				else
-					{
-						operands_ -= pop_count;
-						if (operands_ == 0)
-							{
-								assert(!found_left_);
-								found_left_ = true;
-								left.push_operator(op);
-							}
-						else if (!found_left_)
-							left.push_operator(op);
-						else
-							right.push_operator(op);
-
-						operands_ += push_count;
-				}
-			}
-
-		expression left;
-		expression right;
-		
-		private:
-			operator_type divider_;
-			int operands_;
-			bool found_left_;
-	};
 
 enum assign_type
 	{
@@ -208,9 +155,9 @@ struct expression_renderer : expression_visitor
 
     XSSProperty get_property(variant v, const str& name)
       {
-        if (v.is<DynamicObject>())
+        if (v.is<XSSObject>())
           {
-            DynamicObject obj = v;
+            XSSObject obj = v;
             return ctx_->get_property(obj, name);
           }
         else if (v.is<already_rendered>())
@@ -226,11 +173,11 @@ struct expression_renderer : expression_visitor
         return XSSProperty();
       }
 
-    DynamicObject get_instance(variant v)
+    XSSObject get_instance(variant v)
       {
-        if (v.is<DynamicObject>())
+        if (v.is<XSSObject>())
           {
-            DynamicObject obj = v;
+            XSSObject obj = v;
             return obj;
           }
         else if (v.is<already_rendered>())
@@ -244,33 +191,33 @@ struct expression_renderer : expression_visitor
             return ctx_->resolve_instance(ei.value);
           }
 
-        return DynamicObject();
+        return XSSObject();
       }
 
-    DynamicObject get_instance(variant v, const str& name)
+    XSSObject get_instance(variant v, const str& name)
       {
-        if (v.is<DynamicObject>())
+        if (v.is<XSSObject>())
           {
-            DynamicObject obj = v;
-            return variant_cast<DynamicObject>(ctx_->evaluate_property(obj, name), DynamicObject());
+            XSSObject obj = v;
+            return variant_cast<XSSObject>(ctx_->evaluate_property(obj, name), XSSObject());
           }
         else if (v.is<already_rendered>())
           {
             already_rendered ar = v;
-            return variant_cast<DynamicObject>(ctx_->evaluate_property(ar.object, name), DynamicObject());
+            return variant_cast<XSSObject>(ctx_->evaluate_property(ar.object, name), XSSObject());
           }
         else if (v.is<expression_identifier>())
           {
             assert(false);
           }
 
-        return DynamicObject();
+        return XSSObject();
       }
 
     //expression_visitor
 		assign_info* assigner;
 
-		str resolve_assigner(variant operand, DynamicObject instance, assign_info* ai)
+		str resolve_assigner(variant operand, XSSObject instance, assign_info* ai)
 			{
 				XSSProperty prop;
 				str					result;
@@ -339,7 +286,7 @@ struct expression_renderer : expression_visitor
       {
 				if (top && assigner)
 					{
-						str ass = resolve_assigner(operand, DynamicObject(), assigner);
+						str ass = resolve_assigner(operand, XSSObject(), assigner);
 						push_rendered(ass, 0, operand.get_schema()); 
 					}
 
@@ -375,10 +322,10 @@ struct expression_renderer : expression_visitor
             case op_inc:
               {
 								assign_info ai;
-								str ass = resolve_assigner(arg1, DynamicObject(), &ai);
+								str ass = resolve_assigner(arg1, XSSObject(), &ai);
 
 								int prec;
-                str os = operand_to_string(arg1, DynamicObject(), &prec);
+                str os = operand_to_string(arg1, XSSObject(), &prec);
 
 								std::stringstream ss;
 								switch (ai.type)
@@ -420,7 +367,7 @@ struct expression_renderer : expression_visitor
             case op_not:
               {
                 int prec;
-                str os = operand_to_string(arg1, DynamicObject(), &prec);
+                str os = operand_to_string(arg1, XSSObject(), &prec);
 
                 std::stringstream ss;
                 if (op_prec < prec)
@@ -470,8 +417,8 @@ struct expression_renderer : expression_visitor
                 int p1;
                 int p2;
 
-								str os1 = operand_to_string(arg1, DynamicObject(), &p1);
-                str os2 = operand_to_string(arg2, DynamicObject(), &p2); //td: resolve properties and stuff
+								str os1 = operand_to_string(arg1, XSSObject(), &p1);
+                str os2 = operand_to_string(arg2, XSSObject(), &p2); //td: resolve properties and stuff
 
                 if (op_prec < p1)
                   os1 = "(" + os1 + ")";
@@ -491,9 +438,9 @@ struct expression_renderer : expression_visitor
                 //with a get function on a property. This does not constitute
                 //type checking, that's a lot of work unless the code_linker feels
                 //like cooperating
-                DynamicObject o1 = get_instance(arg1);
+                XSSObject o1 = get_instance(arg1);
                 str           s2 = operand_to_string(arg2, o1);
-                DynamicObject o2 = get_instance(o1, s2);
+                XSSObject o2 = get_instance(o1, s2);
 
                 XSSProperty   prop       = get_property(o1, s2);
                 bool          has_getter = prop && !prop->get.empty();
@@ -676,7 +623,7 @@ struct expression_renderer : expression_visitor
       std::stringstream result_;
       XSSContext        ctx_;
 
-      str operand_to_string(variant operand, DynamicObject parent = DynamicObject(), int* prec = null)
+      str operand_to_string(variant operand, XSSObject parent = XSSObject(), int* prec = null)
         {
           str result;
           int result_prec = 0;
@@ -1122,7 +1069,7 @@ void base_idiom::set_context(XSSContext ctx)
     ctx_ = ctx;
   }
 
-variant base_idiom::process_method(DynamicObject instance, xs_method& mthd)
+variant base_idiom::process_method(XSSObject instance, xs_method& mthd)
   {
     XSSContext ctx(new xss_composite_context(ctx_));
     ctx->this_ = instance;
@@ -1132,7 +1079,7 @@ variant base_idiom::process_method(DynamicObject instance, xs_method& mthd)
     return result;
   }
 
-variant base_idiom::process_event(DynamicObject instance, const str& event_name, xs_event& ev)
+variant base_idiom::process_event(XSSObject instance, const str& event_name, xs_event& ev)
   {
     XSSContext ctx(new xss_composite_context(ctx_));
     ctx->this_ = instance;
@@ -1142,7 +1089,7 @@ variant base_idiom::process_event(DynamicObject instance, const str& event_name,
     return result;
   }
 
-variant base_idiom::process_code(code& cde, DynamicObject this_)
+variant base_idiom::process_code(code& cde, XSSObject this_)
   {
     XSSContext ctx(new xss_composite_context(ctx_));
     ctx->this_ = this_;
@@ -1151,7 +1098,7 @@ variant base_idiom::process_code(code& cde, DynamicObject this_)
     return result;
   }
 
-variant base_idiom::process_expression(expression expr, DynamicObject this_)
+variant base_idiom::process_expression(expression expr, XSSObject this_)
   {
     XSSContext ctx(new xss_composite_context(ctx_));
     ctx->this_ = this_;

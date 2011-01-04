@@ -861,7 +861,27 @@ namespace detail
               else
                 throw type_mismatch(); //td: do the rest of simple types
             }
-          else
+          else if (s == type_schema<int>())
+						{
+							if (src.is<float>())
+								{
+									float ii = src;
+									result = (int)ii;
+								}
+              else
+                throw type_mismatch(); 
+						}
+          else if (s == type_schema<float>())
+						{
+							if (src.is<int>())
+								{
+									int ii = src;
+									result = (float)ii;
+								}
+              else
+                throw type_mismatch(); //td: do the rest of simple types
+						}
+					else
             throw type_mismatch(); //td: simple type casting (ints, etc)
         }
 

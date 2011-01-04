@@ -49,15 +49,16 @@ namespace xkp
         int     add_instruction( instruction_type i );
         int     add_instruction( instruction_type i, short data );
         void    instruction_data( int idx, short data );
-        int     add_call( instruction_type i, unsigned char param_count, bool is_dynamic );
-        int     add_call(variant caller, const str& name, int param_count, bool is_dynamic );
+        int     add_call(instruction_type i, unsigned char param_count, bool is_dynamic, bool invert = false);
+        int     add_call(variant caller, const str& name, int param_count, bool is_dynamic, bool invert = false);
+				int			add_set(bool is_dynamic, bool invert = false);
         int     add_anonymous_local();
         int     register_variable(stmt_variable& info);
         int     register_variable(const str& name, const str& type, expression* value = null);
         int     register_variable(const str& name, schema* type, expression* value = null);
         int     add_constant( variant constant );
         void    link_code(code& cde, bool track, int continue_pc = 0, int break_pc = 0);
-        schema* link_expression(expression& expr, bool* empty_stack = null, schema* array_type = null);
+        schema* link_expression(expression& expr, bool assigner = false, bool* empty_stack = null, schema* array_type = null);
         void    register_dsl(const str& name, DslLinker linker);
         variant evaluate_expression(expression& expr);
         schema* typeof_(const xs_type type);
@@ -121,12 +122,13 @@ namespace xkp
         dsl_linker_list   dsl_linkers_;
         schema*           array_type_; //td: proper type expectancy
         loop_stack        loops_;
+				bool							resolving_assigner_;
 
         void    resolve_value(variant& arg, schema** type = null);
         void    resolve_operator(operator_type op, variant arg1, variant arg2, bool* dont_assign);
         void    resolve_unary_operator(operator_type op, variant arg, bool* dont_assign);
         bool    resolve_custom_operator(operator_type op, schema* type, bool* dont_assign);
-        void    resolve_assign(const variant& arg);
+        void    resolve_assign(const variant& arg, bool invert_set = false);
         void    add_fixup( int idx, fixup_dest dest );
         schema* add_stack_lookup(const str& query, schema* type);
     };
