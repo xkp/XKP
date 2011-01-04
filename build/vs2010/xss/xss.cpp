@@ -115,7 +115,7 @@ int main(int argc, char* argv[])
       
     //setup types
     type_registry types;
-    types.set_default_type(type_schema<sponge_object>());
+    types.set_default_type(type_schema<xss_object>());
     types.add_type("js-idiom", type_schema<base_idiom>());
     
     //read the project file, 

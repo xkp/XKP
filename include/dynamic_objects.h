@@ -175,6 +175,9 @@ namespace xkp
           }
     };
 
+	//and when not
+	#define DYNAMIC_INHERITANCE(type) schema_ = type_schema<type>();
+
   template <typename T>
   class editable_object : public base_editable_object
     {
@@ -197,7 +200,7 @@ namespace xkp
             si.flags = DYNAMIC_ACCESS;
             si.get   = Getter( new anonymous_getter(idx) );
             si.set   = Setter( new anonymous_setter(idx) );
-            si.type  = schema_;
+						si.type  = true_type(value);
 
             items_.insert( item_pair(name, si) );
           }
@@ -352,6 +355,21 @@ namespace xkp
           return true;
         }
     };
+
+  template <typename T>
+  struct editable_object_schema : dynamic_object_schema<T>
+		{
+      virtual void declare_base()
+        {
+					dynamic_object_schema<T>::declare_base();
+					this->template implements<IEditableObject>();
+        }
+
+			virtual size_t options()
+				{
+					return dynamic_object_schema<T>::options() | TYPE_MUTABLE;
+				}
+		};
 
   //default xs objects,namely the ones being instantiated
   //when you dont inherit (class foo {...})

@@ -31,6 +31,9 @@
     <Filter Include="data\ms\test">
       <UniqueIdentifier>{96061dbc-27c5-4f15-9fa9-fe73ebd4479a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="data\anim">
+      <UniqueIdentifier>{fe69807a-04c2-4aa3-bc92-3b83b13e242b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\xs\array.cpp">
@@ -194,9 +197,6 @@
     <ClInclude Include="..\..\..\include\xss\xss_parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\types.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\data\xss\jquery\app.xss">
@@ -261,6 +261,12 @@
     </None>
     <None Include="..\..\..\data\xss\qt\qt_widget_cpp.xss">
       <Filter>data\qt</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\ms\ms-state.js">
+      <Filter>data\ms\javascript</Filter>
+    </None>
+    <None Include="..\..\..\data\xss\mutant-state\test\anim_test.html">
+      <Filter>data\anim</Filter>
     </None>
   </ItemGroup>
 </Project>

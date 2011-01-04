@@ -51,14 +51,32 @@ namespace xkp
       
       variant value();
       
-      private: 
+      protected: 
         typedef std::stack<variant> expr_stack;
 
         expr_stack        stack_;      
         operator_registry operators_;       
     };      
     
-  //helpers
+struct expression_splitter : expression_visitor
+  {
+		expression_splitter(operator_type divider);
+
+		//expression_visitor
+    virtual void push(variant operand, bool top);
+		virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top);
+
+		//output
+		expression left;
+		expression right;
+		
+		private:
+			operator_type divider_;
+			int operands_;
+			bool found_left_;
+	};
+
+//helpers
   struct xs_const
     {
       str        name;

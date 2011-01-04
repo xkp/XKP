@@ -195,13 +195,14 @@ struct worker
   {
     public:
       worker() : tab_(4) {}
-      worker(XSSProject project, part_list parts, std::vector<outfile_info> files, int tab, bool dont_break):
+      worker(XSSProject project, part_list parts, std::vector<outfile_info> files, int tab, bool dont_break, str marker):
         project_(project),
         parts_(parts),
 				files_(files),
         indent_(-1),
         tab_(tab),
-				dont_break_(dont_break)
+				dont_break_(dont_break),
+				marker_(marker)
         {
         }
     public:
@@ -300,7 +301,11 @@ struct worker
             {
               result = apply_indent(result, indent_);
             }
-          gen->append(result);
+
+					if (marker_.empty())
+						gen->append(result);
+					else
+						gen->append_marker(marker_, result);
         }
 
       str apply_indent(const str& s, int indent)
@@ -396,6 +401,7 @@ struct worker
       int												tab_;
       part_list									parts_;
 			bool											dont_break_;
+			str												marker_;
 			std::vector<outfile_info> files_;
 
       std::vector<str> load_lines(const str& s)
@@ -494,7 +500,15 @@ void out_linker::link(dsl& info, code_linker& owner)
         trim = owner.evaluate_expression(expr); //td: only contants, lazy me
       }
 		
-    //process xss
+		variant marker_v = info.params.get("marker");
+		str			marker;
+		if (!marker_v.empty())
+			{
+        expression expr = marker_v;
+        marker = variant_cast<str>(owner.evaluate_expression(expr), str("")); 
+			}
+
+		//process xss
 		part_list parts;
 		std::vector<outfile_info> files;
 		xss_gather gather(parts, files, expressions);
@@ -519,7 +533,7 @@ void out_linker::link(dsl& info, code_linker& owner)
     xs_utils xs;
 
     //create a safe reference to be inserted in the execution context later on
-		Worker wrk(new worker(project_, parts, files, tab_size, dont_break));
+		Worker wrk(new worker(project_, parts, files, tab_size, dont_break, marker));
     owner.add_instruction(i_load_constant, owner.add_constant(wrk));
 
     //and so we link the indent, after having the worker on

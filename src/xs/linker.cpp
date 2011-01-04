@@ -75,10 +75,87 @@ const char* operator_name[] =
     "",     //op_parameter
   };
 
+//just a very bad name
+operator_type native_op[] =
+  {
+		op_not, //op_inc,
+    op_not, //op_dec,
+    op_not, //op_ref,
+    op_not, //op_unary_plus,
+    op_not, //op_unary_minus,
+    op_not, //op_not,
+    op_not, //op_mult,
+    op_not, //op_divide,
+    op_not, //op_mod,
+    op_not, //op_typecast,
+    op_not, //op_typecheck,
+    op_not, //op_namecheck,
+    op_not, //op_plus,
+    op_not, //op_minus,
+    op_not, //op_shift_right,
+    op_not, //op_shift_left,
+    op_shift_right, //op_shift_right_equal,
+    op_shift_left,	//op_shift_left_equal,
+    op_not, //op_equal,
+    op_not, //op_notequal,
+    op_not, //op_gt,
+    op_not, //op_lt,
+    op_not, //op_ge,
+    op_not, //op_le,
+    op_not, //op_and,
+    op_not, //op_or,
+    op_not, //op_assign,
+    op_plus,		//op_plus_equal,
+    op_minus,		//op_minus_equal,
+    op_mult,		//op_mult_equal,
+    op_divide,	//op_div_equal,
+    op_not, //op_dot,
+    op_not, //op_dot_call
+    op_not, //op_index,
+    op_not, //op_call,
+    op_not, //op_func_call
+    op_not, //op_array,
+    op_not, //op_parameter
+  };
+
+struct array_evaluator : expr_evaluator
+	{
+		array_evaluator(): result( new dynamic_array ) {}
+		
+    virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top)
+			{
+				assert(!top || op == op_array);
+				switch(op)
+					{
+						case op_array:
+							{
+								int count = stack_.top(); stack_.pop();
+								assert(result->size() == count);
+								assert(stack_.size() == 0);
+								stack_.push(result);
+								break;
+							}
+						case op_parameter:
+							{
+								assert(stack_.size() == 1);
+								variant val = stack_.top(); stack_.pop();
+								result->insert(val);
+								break;
+							}
+						default:
+							expr_evaluator::exec_operator(op, pop_count, push_count, top);
+					}
+			}
+
+		DynamicArray result;
+	};
+
+
 //code_linker
 code_linker::code_linker():
   local_count_(0),
-  pc_(0)
+  pc_(0),
+	resolving_assigner_(false)
   {
     context_.types_ = &default_types_;
   }
@@ -86,7 +163,8 @@ code_linker::code_linker():
 code_linker::code_linker(code_context& context):
   local_count_(0),
   pc_(0),
-  context_(context)
+  context_(context),
+	resolving_assigner_(false)
   {
     context_.this_ = context.this_;
     if (!context_.types_)
@@ -325,7 +403,7 @@ void code_linker::expression_(stmt_expression& info)
     //after expressions are evaluated as staments
     //we should not push the result into the operand list
     bool empty_stack = true;
-    link_expression(info.expr, &empty_stack);
+    link_expression(info.expr, false, &empty_stack);
 
     if (!empty_stack)
       add_instruction(i_pop);
@@ -489,6 +567,8 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
         case op_shift_right_equal:
         case op_shift_left_equal:
           {
+						//td: phase out
+						assert(false);
             operator_type xe = op_assign;
             switch (op)
               {
@@ -501,7 +581,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
               }
 
             bool dont_assign = false;
-            if (xe != op_assign)
+						if (xe != op_assign)
               {
                 resolve_operator(xe, arg1, arg2, &dont_assign);
               }
@@ -529,6 +609,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
             if (type && 
 								type != type_schema<empty_type>() &&
 								type != type_schema<IDynamicObject*>() &&
+								type != type_schema<variant>() &&
 								type != type_schema<DynamicObject>())
               {
                 schema_item si;
@@ -551,8 +632,21 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
               }
             else
               {
-                add_instruction(i_dynamic_get, add_constant(ei.value));
-                stack_.push( already_in_stack(null) );
+								if (resolving_assigner_)
+									{
+										add_instruction(i_dynamic_set, add_constant(ei.value));
+									}
+								else
+									{
+										add_instruction(i_dynamic_get, add_constant(ei.value));
+
+										int lv = register_variable("", null, null);
+										add_instruction(i_store, lv);
+
+										//i've decided to save dynamic gets into the stack
+										//to avoid general unplesantness with alredy_in_stack.
+										stack_.push( local_variable(lv, null) );
+									}
               }
             break;
           }
@@ -563,6 +657,10 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
             resolve_value(arg1, &type);
 
             expression_identifier ei = arg2;
+						if (ei.value == "linker_breakpoint")
+						{
+							ei.value = "linker_breakpoint";
+						}
 
             if (type && type != type_schema<empty_type>())
               {
@@ -587,7 +685,13 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
             else
               {
                 add_instruction(i_dynamic_resolve, add_constant(ei.value));
-                stack_.push( already_in_stack(null) );
+
+								int lv = register_variable("", null, null);
+								add_instruction(i_store, lv);
+
+								//i've decided to save dynamic gets into the stack
+								//to avoid general unplesantness with alredy_in_stack.
+								stack_.push( local_variable(lv, null) );
               }
             break;
           }
@@ -623,6 +727,12 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
               {
                 already_in_stack ais = call_value;
                 assert(!ais.type); //I'm not sure why this would hapeen, I'll wait and see
+                is_dyamic = true;
+              }
+            else if (call_value.is<local_variable>())
+              {
+                local_variable lv = call_value;
+								add_instruction(i_load, lv.index);
                 is_dyamic = true;
               }
             else
@@ -734,6 +844,18 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
                     stack_.pop();
                     stack_.push( already_in_stack(type) );
                   }
+								else if (arg.is<already_in_stack>())
+									{
+										//td: transitioning out
+										//already_in_stack ais = arg;								
+										//int lv = register_variable("", ais.type, null);
+										//add_instruction(i_store, lv);
+
+										//arg = local_variable(lv, ais.type); //note the switcheroo
+
+										//stack_.pop();
+										//stack_.push( arg );
+									}
               }
             break;
           }
@@ -771,6 +893,8 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
 
             add_instruction(i_load_constant, add_constant(array_type));
             add_instruction(i_instantiate, args);
+
+						stack_.push( already_in_stack(array_type) );
             break;
           }
         default:
@@ -786,6 +910,16 @@ void code_linker::register_dsl(const str& name, DslLinker linker)
 variant code_linker::evaluate_expression(expression& expr)
   {
     //td: only constants for now
+
+		operator_type op;
+		if (expr.top_operator(op) && op == op_array)
+			{
+				array_evaluator eval;
+				expr.visit( &eval );
+
+				return eval.result;
+			}
+
     expr_evaluator eval;
     expr.visit( &eval );
     return eval.value();
@@ -851,12 +985,97 @@ void code_linker::link_code(code& cde, bool track, int continue_pc, int break_pc
       }
   }
 
-schema* code_linker::link_expression(expression& expr, bool* empty_stack, schema* array_type)
+schema* code_linker::link_expression(expression& expr, bool assigner, bool* empty_stack, schema* array_type)
   {
     while (!stack_.empty()) stack_.pop();
     array_type_ = array_type;
 
+		//deal with assignment
+		operator_type op;
+		if (!assigner && expr.top_operator(op))
+			{
+				bool simple_assign = false;
+				switch(op)
+					{
+						case op_assign:
+							simple_assign = true;
+            case op_plus_equal:
+            case op_minus_equal:
+            case op_mult_equal:
+            case op_div_equal:
+            case op_shift_right_equal:
+            case op_shift_left_equal:
+							{
+								expression_splitter es(op);
+								expr.visit(&es);
+
+								schema* right_type = link_expression(es.right, false);
+								
+								if (simple_assign)
+									{
+										link_expression(es.left, true);
+									}
+								else
+									{
+										size_t  result;
+										schema* result_type;
+										bool		dont_assign = false;
+
+										schema* left_type	 = link_expression(es.left, false);
+										if (operators_.get_operator_index(op, left_type, right_type, result, &result_type))
+											{
+												add_instruction(i_binary_operator, static_cast<short>(result));
+												already_in_stack ais(result_type);
+												stack_.push(ais);
+												dont_assign = true;
+											}
+										else
+											{
+												if (!resolve_custom_operator(op, left_type, &dont_assign))
+													{
+														if (!resolve_custom_operator(op, right_type, &dont_assign))
+															{
+																//now that we've tried everything folk,
+																//lets try the native operator (like + in +=)
+																//and an assignment
+																operator_type nop = native_op[op];
+																if (operators_.get_operator_index(nop, left_type, right_type, result, &result_type))
+																	{
+																		resolve_operator(nop, already_in_stack(left_type), already_in_stack(right_type), null);
+																		
+																		//the aforementioned assignment
+																		link_expression(es.left, true);
+																		resolve_assign(already_in_stack(left_type));
+																	}
+																else
+																	{
+																		//oh well, I tried... now we must prepare for eventualities
+																		//use case: the dynamic operator to be solved could be an array +=, no assign
+																		//use case: regular +=, must assign so:
+																		//i_dynamic_binary_assign_operator will return whether to assign or not
+																		add_instruction(i_dynamic_binary_assign_operator, static_cast<short>(op));
+																		
+																		int assign_jump = add_instruction(i_jump_if); 
+																		link_expression(es.left, true); 
+
+																		instruction_data(assign_jump, pc_);
+																	}
+															}
+													}
+											}
+									}
+
+								return null;
+							}
+					}
+			}
+
+		//if not an assigment...
+		assert(assigner || !resolving_assigner_);
+
+		resolving_assigner_ = assigner;
     expr.visit(this);
+		resolving_assigner_ = false;
 
     if (!stack_.empty())
       {
@@ -866,7 +1085,11 @@ schema* code_linker::link_expression(expression& expr, bool* empty_stack, schema
 
         variant top      = stack_.top(); stack_.pop();
         schema* top_type = null;
-        resolve_value(top, &top_type);
+
+				if (assigner)
+					resolve_assign(top, true);
+				else
+					resolve_value(top, &top_type);
         return top_type;
       }
 
@@ -894,17 +1117,25 @@ void code_linker::instruction_data( int idx, short data )
     code_[idx].data.value = data;
   }
 
-int code_linker::add_call( instruction_type i, unsigned char param_count, bool is_dynamic )
+int code_linker::add_call( instruction_type i, unsigned char param_count, bool is_dynamic, bool invert )
   {
     assert(i == i_call || i == i_this_call);
 
-    instruction ii(i, param_count, is_dynamic);
+    instruction ii(i, param_count, is_dynamic, invert);
     code_.push_back(ii);
     pc_++;
     return pc_ - 1;
   }
 
-int code_linker::add_call(variant caller, const str& name, int param_count, bool is_dynamic )
+int code_linker::add_set(bool is_dynamic, bool invert)
+  {
+		instruction ii(i_set, is_dynamic, invert);
+    code_.push_back(ii);
+    pc_++;
+    return pc_ - 1;
+  }
+
+int code_linker::add_call(variant caller, const str& name, int param_count, bool is_dynamic, bool invert )
   {
     schema* caller_type = true_type(caller);
     if (!caller_type)
@@ -932,7 +1163,7 @@ int code_linker::add_call(variant caller, const str& name, int param_count, bool
       }
 
     add_instruction(i_load_constant, add_constant(si.exec));
-    return add_call(i_call, param_count, is_dynamic );
+		return add_call(i_call, param_count, is_dynamic, invert );
   }
 
 int code_linker::add_anonymous_local()
@@ -1342,7 +1573,7 @@ bool code_linker::resolve_custom_operator(operator_type op, schema* type, bool* 
 
     assert(custom_operator.exec);
     add_instruction(i_load_constant, add_constant(custom_operator.exec));
-    add_call(i_call, 1, custom_operator.flags&DYNAMIC_ACCESS );
+    add_call(i_call, 1, custom_operator.flags&DYNAMIC_ACCESS, true);
     stack_.push( already_in_stack(custom_operator.type) );
 
     if (dont_assign)
@@ -1352,7 +1583,7 @@ bool code_linker::resolve_custom_operator(operator_type op, schema* type, bool* 
     return true;
   }
 
-void code_linker::resolve_assign(const variant& arg)
+void code_linker::resolve_assign(const variant& arg, bool invert_set)
   {
     if (arg.is<local_variable>())
       {
@@ -1387,7 +1618,7 @@ void code_linker::resolve_assign(const variant& arg)
             add_instruction(i_load_this);
             add_instruction(i_load, lidx);
             add_instruction(i_load_constant, add_constant(this_item.set));
-            add_instruction(i_set, this_item.flags&DYNAMIC_ACCESS);
+            add_set(this_item.flags&DYNAMIC_ACCESS);
           }
         else if (!context_.this_.empty() &&
                  (dynamic = variant_cast<IDynamicObject*>(context_.this_, null)) &&
@@ -1402,7 +1633,7 @@ void code_linker::resolve_assign(const variant& arg)
             add_instruction(i_load_this);
             add_instruction(i_load, lidx);
             add_instruction(i_load_constant, add_constant(this_item.set));
-            add_instruction(i_set, this_item.flags&DYNAMIC_ACCESS);
+						add_set(this_item.flags&DYNAMIC_ACCESS);
           }
         else
           {
@@ -1425,11 +1656,23 @@ void code_linker::resolve_assign(const variant& arg)
           }
         
         add_instruction(i_load_constant, add_constant(si.set));
-        add_instruction(i_set, si.flags&DYNAMIC_ACCESS);
+				add_set(si.flags&DYNAMIC_ACCESS, invert_set);
       }
     else if (arg.is<already_in_stack>())
       {
-        assert(false); //td: dynamic assign
+				//td: phasing out, this should do nothing
+				_asm nop;
+
+				////td: there's a bit of a cluster f*ck here
+				////resolving assigners works must cases except for this one
+				////where a dynamic get has already been inserted. The right solution
+				////is already implemented at xss (splitting expressions)
+    //    assert(last_pc >= 0); 
+				//assert(code_[last_pc].id == i_dynamic_get);
+				//int idx = code_[last_pc].data.value;
+				//code_[last_pc].id = i_nop; //invalidate the get, keep the stack intact
+
+				//add_instruction(i_dynamic_set, idx);
       }
     else
       {

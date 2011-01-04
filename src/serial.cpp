@@ -16,7 +16,11 @@ struct mutable_reader : reader_visitor
         if (!obj_->resolve(name, itm))
           assert(false); //ought to be mutable
 
-        assert(itm.set); //same
+        if (!itm.set)
+					{
+						assert(false); //same
+					}
+
         itm.set->set(obj_, value);
       }
 
