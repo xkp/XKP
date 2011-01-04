@@ -39,6 +39,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
+			<Add option="-DUNICODE" />
 			<Add option="-DTIXML_USE_STL" />
 			<Add option="-DBOOST_NO_MEMBER_TEMPLATE_FRIENDS" />
 			<Add directory="..\..\..\include" />

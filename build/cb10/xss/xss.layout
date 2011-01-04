@@ -13,8 +13,8 @@
 	<File name="..\..\..\include\base.h" open="1" top="0" tabpos="2">
 		<Cursor position="5066" topLine="111" />
 	</File>
-	<File name="..\..\..\include\schema.h" open="1" top="0" tabpos="1">
-		<Cursor position="15664" topLine="495" />
+	<File name="..\..\..\include\schema.h" open="1" top="1" tabpos="1">
+		<Cursor position="15619" topLine="501" />
 	</File>
 	<File name="..\..\..\include\types.h" open="1" top="0" tabpos="11">
 		<Cursor position="366" topLine="0" />
@@ -52,7 +52,7 @@
 	<File name="..\..\..\src\archive\xml_archive.cpp" open="0" top="0" tabpos="25">
 		<Cursor position="5750" topLine="214" />
 	</File>
-	<File name="..\..\..\src\dynamic_objects.cpp" open="1" top="1" tabpos="4">
+	<File name="..\..\..\src\dynamic_objects.cpp" open="1" top="0" tabpos="4">
 		<Cursor position="6932" topLine="288" />
 	</File>
 	<File name="..\..\..\src\serial.cpp" open="0" top="0" tabpos="8">
