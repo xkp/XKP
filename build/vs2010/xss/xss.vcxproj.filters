@@ -256,9 +256,6 @@
     <None Include="..\..\..\data\xss\qt\qt_ui.xss">
       <Filter>data\qt</Filter>
     </None>
-    <None Include="..\..\..\data\xss\ms\ms-state.js">
-      <Filter>data\ms\javascript</Filter>
-    </None>
     <None Include="..\..\..\data\xss\mutant-state\test\anim_test.html">
       <Filter>data\anim</Filter>
     </None>
