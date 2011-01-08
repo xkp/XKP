@@ -1,14 +1,18 @@
 <xss:project>
-  <path generator="qt_app.xss"
-        class_library="qt_classes.xml"
-        source_path="../qt/"
-        output_path="../output/"/>
+    <path generator="qt_app.xss"
+          class_library="qt_classes.xml"
+          source_path=""
+          output_path="../output/"/>
 
-  <idiom class="js-idiom" id_as_this="true"/>
+    <idiom class="js-idiom" id_as_this="true"/>
 
-  <application id="main_app" source="qt_app.xs" title="My first application" width="431" height="174">
-    <button id="pushButton_1" caption="Click me" x="110" y="30" width="75" height="23"/>
-    <button id="pushButton_2" caption="Change text" x="210" y="30" width="91" height="23"/>
-    <label id="label" caption="Here is the text" x="170" y="70" width="91" height="16"/>
-  </application>
+    <application id="main_app" source="qt_app.xs" title="My first application" width="431" height="174">
+        <button id="pushButton_1" caption="Click me" x="110" y="30" width="75" height="23"/>
+        <button id="pushButton_2" caption="Change text" x="210" y="30" width="91" height="23"/>
+        <label id="label_1" caption="Here is the text" x="170" y="70" width="91" height="16"/>
+        
+            <!-- esta línea me genera una cáscara cuando muestro el valor del nombre de la instancia -->
+            <!--<label id="label" caption="Here is the text" x="170" y="70" width="91" height="16"/> -->
+      
+    </application>
 </xss:project>

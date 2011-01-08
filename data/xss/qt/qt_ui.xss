@@ -1,28 +1,11 @@
-<xss:code>
-    
-//testing slots parameter
-int count = 0;    
-
-for(var slot in slots)
-{
-    count++;
-    out()
-    {
-        SLOT#<xss:e value="count"/> = <xss:e value="slot"/>
-    }
-}
-
-</xss:code>
-
-
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
     <class>Widget</class>
     <widget class="<xss:e value="application.tag_name"/>" name="<xss:e value="application.id"/>">
         <property name="geometry">
             <rect>
-                <x>0</x>
-                <y>0</y>
+                <x><xss:e value="application.x"/></x>
+                <y><xss:e value="application.y"/></y>
                 <width><xss:e value="application.width"/></width>
                 <height><xss:e value="application.height"/></height>
             </rect>
@@ -31,70 +14,47 @@ for(var slot in slots)
             <string><xss:e value="application.title"/></string>
         </property>
     </widget>
-  
+
 <xss:code>
 for(var i in instances)
 {
-    //if (i.id == "application")
-    //  continue;
+    if (i.id == "application")
+        continue;
+
     out(indent = 1)
     {
-    <widget class="<xss:e value="i.tag_name"/>" name="<xss:e value="i.id"/>">
-        <property name="geometry">
-            <rect>
-                <x><xss:e value="i.x"/></x>
-                <y><xss:e value="i.y"/></y>
-                <width><xss:e value="i.width"/></width>
-                <height><xss:e value="i.height"/></height>
-            </rect>
-        </property>
-	}
+        <widget class="<xss:e value="i.tag_name"/>" name="<xss:e value="i.id"/>">
+            <property name="geometry">
+                <rect>
+                    <x><xss:e value="i.x"/></x>
+                    <y><xss:e value="i.y"/></y>
+                    <width><xss:e value="i.width"/></width>
+                    <height><xss:e value="i.height"/></height>
+                </rect>
+            </property>
+	  }
 
     for(var p in i.properties)
-	{
-        // no accept || operator
-        if (p.name == "width" || p.name == "height")
-            continue;
-
-        out(indent = 2)
-		{
-        <property name="<xss:e value="p.name"/>">
-            <<xss:e value="p.type"/>><xss:e value="compiler.evaluate_property(i, p.name)"/></<xss:e value="p.type"/>>
-        </property>
-		}
-    }
-	
-    //testing events
-    if (i.events)
-    {
-        for(var e in i.events)
+  	{
+        // this line not work, it's make a console error "!="
+        //if(p.qt_ui != "true")
+        //    break;
+        
+        if(p.qt_ui == "true")
         {
-            //find the translation
-            var qt_name = null;
-            if (i.event_declaration)
+            out(indent = 2)
             {
-                for(var ev in i.event_declaration)
-                {
-                    qt_name = ev.qt_name;
-                    compiler.breakpoint(qt_name);
-                    break;
-                }
-            }         
-            
-            if (qt_name != null)
-            {
-                out()
-                {
-                    FOUND QT NAME: <xss:e v="qt_name"/>
-                }
+                <property name="<xss:e value="p.name"/>">
+                    <<xss:e value="p.type"/>><xss:e value="compiler.evaluate_property(i, p.name)"/></<xss:e value="p.type"/>>
+                </property>
             }
         }
     }
-
+	
     out(indent = 1)
-	{
-    </widget>
-	}
+    {
+        </widget>
+    }
 }
 </xss:code>
 

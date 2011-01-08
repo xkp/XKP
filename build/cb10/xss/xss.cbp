@@ -39,6 +39,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
+			<Add option="-DUNICODE" />
 			<Add option="-DTIXML_USE_STL" />
 			<Add option="-DBOOST_NO_MEMBER_TEMPLATE_FRIENDS" />
 			<Add directory="..\..\..\include" />
@@ -47,7 +48,7 @@
 			<Add directory="..\..\..\include\archive" />
 			<Add directory="..\..\..\third_party\tinyXml" />
 			<Add directory="..\..\..\third_party\jsoncpp\include" />
-			<Add directory="$(#boost_1_42)" />
+			<Add directory="$(#boost_1_44)" />
 		</Compiler>
 		<Unit filename="stdafx.cpp" />
 		<Unit filename="stdafx.h" />

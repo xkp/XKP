@@ -1,6 +1,9 @@
 on pushButton_1.click()
 {
 	pushButton_2.caption = "Clicked";
+	
+	// this assign is not translated correctly
+	// cuz not asume the property owner
 	caption = "Other Clicked";
 
 	pushButton_2.width += pushButton_1.width;
