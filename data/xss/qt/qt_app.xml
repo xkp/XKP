@@ -12,7 +12,8 @@
         <label id="label_1" caption="Here is the text" x="170" y="70" width="91" height="16"/>
         
             <!-- esta línea me genera una cáscara cuando muestro el valor del nombre de la instancia -->
-            <!--<label id="label" caption="Here is the text" x="170" y="70" width="91" height="16"/> -->
+            <!-- si te refieres al _label1 no es casscara, es que label es el nombre de la clase -->
+            <label id="label" caption="Here is the text" x="170" y="70" width="91" height="16"/> 
       
     </application>
 </xss:project>

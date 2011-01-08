@@ -9,25 +9,22 @@
 
             <property name="visible" type="bool" set_fn="setVisible" get_fn="isVisible"/>
         </properties>
-        <event_declaration>
+        <events>
             <event name="click" qt_name="clicked"/>
             <event name="up" qt_name="mouseup"/>
-        </event_declaration>
+        </events>
     </class>
   
     <class id="button" super="qt_component" header="QPushButton" tag_name="QPushButton">
         <properties>
             <property name="caption" type="string" qt_ui="true" set_fn="setText" get_fn="text"/>
         </properties>
-        <event_declaration>
-            <event name="click" qt_name="clicked"/>
-            <event name="up" qt_name="mouseup"/>
-        </event_declaration>
     </class>
   
     <class id="label" super="qt_component" header="QLabel" tag_name="QLabel">
         <properties>
             <property name="caption" type="string" qt_ui="true" set_fn="setText" get_fn="text"/>
+            <property name="need more than one property" type="string" qt_ui="true" set_fn="setText" get_fn="text"/>
         </properties>
     </class>
   

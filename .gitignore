@@ -1,4 +1,5 @@
 bin/
+output/
 
 *.pdb
 *.ilk

@@ -226,6 +226,14 @@ bool xss_generator::handle_file(const str& text, param_list* args)
 				xss_throw(error);
 			}
 
+		XSSContext ctx = context_;
+
+		str this_id = variant_cast<str>(args->get("this"), "");
+		if (!this_id.empty())
+			{
+				assert(false);
+			}
+
 		str result;
 		if (!src.empty())
 			{

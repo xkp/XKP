@@ -13,6 +13,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <boost/algorithm/string.hpp>
 
 using namespace xkp;
 
@@ -31,6 +32,27 @@ const str SUnknownClass("Class not found");
 const str SUnknownInstance("Instance not found");
 const str SFileNotFound("File not found");
 const str SOutputtingNonString("Trying to output a value that does not translate to a string");
+
+struct property_mixer : dynamic_visitor
+  {
+    property_mixer(XSSObject source, XSSObject dest):
+      src_(source),
+      dst_(dest)
+      {
+      }
+
+    virtual void item(const str& name, variant value)
+      {
+				if (!dst_->has(name))
+					{
+						dst_->add_property(name, value);
+					}
+      }
+
+    private:
+      XSSObject	src_;
+      XSSObject	dst_;
+  };
 
 //xss_object
 xss_object::xss_object():
@@ -54,8 +76,11 @@ XSSObject xss_object::type()
 void xss_object::xss_type(XSSObject type)
 	{
 		type_ = type;	
+		
+		XSSObject me(shared_from_this());
+		property_mixer pm(type, me);
+		type_->visit(&pm);
 
-		//instantiate
 		DynamicArray tprops = type->properties();
 		for(int i = 0; i < tprops->size(); i++)
 			{
@@ -75,6 +100,25 @@ void xss_object::xss_type(XSSObject type)
 				else
 					{
 						assert(false); //td: mix properties
+					}
+			}
+
+		DynamicArray tevents = type->events();
+		for(int i = 0; i < tevents->size(); i++)
+			{
+				XSSEvent ev   = tevents->at(i);
+				XSSEvent myev = get_event(ev->name);
+
+				if (!myev)
+					{
+						XSSEvent cln(new xss_event(*(ev.get())));
+						cln->copy(ev.get()); //td: proper cloning
+
+						events_->insert(cln);
+					}
+				else
+					{
+						myev->copy(ev.get());
 					}
 			}
 	}
@@ -106,8 +150,21 @@ DynamicArray xss_object::events()
 
 void xss_object::copy(xss_object* other)
 	{
-		anonymous_ = other->anonymous_;
-		items_		 = other->items_;
+		item_list::iterator it = other->items_.begin();
+		item_list::iterator nd = other->items_.end();
+		for(; it != nd; it++)
+			{
+				if (has(it->first))
+					continue; //td: decide
+				
+				//make sure we only copy dynamic stuff
+				anonymous_getter* getter = dynamic_cast<anonymous_getter*>(it->second.get.get());
+				if (getter)
+					{
+						variant value = other->get_anonymous(getter->idx_);	
+						add_property(it->first, value);
+					}
+			}
 	}
 
 XSSProperty xss_object::get_property(const str& name)
@@ -121,6 +178,19 @@ XSSProperty xss_object::get_property(const str& name)
 
 		return XSSProperty();
 	}
+
+XSSEvent xss_object::get_event(const str& name)
+	{
+		for(int i = 0; i < events_->size(); i++)
+			{
+				XSSEvent ev = events_->at(i);
+				if (ev->name == name)
+					return ev;
+			}
+
+		return XSSEvent();
+	}
+
 
 struct limbo_setter : setter
   {
@@ -149,8 +219,7 @@ struct limbo_getter : getter
 
 		virtual variant get(void* instance)
 			{
-				return variant(); //td: there could be an error condition here,
-													//the limbo access should be instant
+				return variant();
 			}
 
     XSSObject obj_;
@@ -241,52 +310,6 @@ struct class_internal_gather : dynamic_visitor
   };
 
 
-struct property_mixer : dynamic_visitor
-  {
-    property_mixer(XSSObject prop, XSSObject instance):
-      prop_(prop),
-      instance_(instance),
-      result_(new xss_property())
-      {
-        //td: XSS props must have type
-        result_->flags  = 0;
-        result_->this_  = instance;
-      }
-
-    virtual void item(const str& name, variant value)
-      {
-        if (name == "name")
-          result_->name = variant_cast<str>(value, "");
-        else if (name == "default_value")
-          result_->value_ = value;
-        else if (name == "type")
-          type_ = variant_cast<str>(value, "");
-        else
-          result_->add_property(name, value);
-      }
-
-    XSSProperty result()
-      {
-        assert(!result_->name.empty());
-        variant instance_value = dynamic_get(instance_, result_->name); //td: do.query
-        if (!instance_value.empty())
-          {
-            result_->value_ = instance_value;
-          }
-        else if (result_->value_.empty())
-          {
-            //td: get default value from type
-          }
-
-        return result_;
-      }
-    private:
-      XSSObject			prop_;
-      XSSObject			instance_;
-      XSSProperty   result_;
-      str           type_;
-  };
-
 //xss_code_context
 xss_code_context::xss_code_context(const variant _project, xss_idiom* idiom) :
   base_code_context(),
@@ -375,13 +398,20 @@ variant xss_composite_context::evaluate_property(XSSObject obj, const str& name)
 xss_event::xss_event():
   impls(new dynamic_array)
   {
+		DYNAMIC_INHERITANCE(xss_event)
   }
 
 xss_event::xss_event(const xss_event& other):
   name(other.name),
-  impls(other.impls)
+  impls(new dynamic_array)
   {
-  }
+		DYNAMIC_INHERITANCE(xss_event)
+
+		for(int i = 0; i < other.impls->size(); i++)
+			{
+				impls->insert(other.impls->at(i));
+			}
+	}
 
 //xss_property
 xss_property::xss_property(): flags(0) 
@@ -521,7 +551,7 @@ struct pre_process : dynamic_visitor
             str file_name = value;
             owner_.add_application_file(file_name, object_);
           }
-        else if (name == "children")
+        else if (name == "children" || name == "application")
 					{
 						DynamicArray children = value;
 						for(int i = 0; i < children->size(); i++)
@@ -536,47 +566,9 @@ struct pre_process : dynamic_visitor
                 if (dynamic_try_get(child, "class", v))
                   {
                     class_name = str(v);
-                    if (class_name == "property")
-                      {
-                        //shameful plug, yay me
-                        XSSProperty prop(new xss_property(id, child, object_));
-
-                        //grab the "properties" array
-                        assert(parent_);
-                        DynamicArray obj_properties = owner_.get_property_array(object_);
-                        obj_properties->push_back(prop);
-                        return;
-                      }
-
-                    dynamic_set(child, "class_name", class_name);
 										
-										//hook up the type
-										XSSObject clazz = owner_.get_class(class_name);
-										if (!clazz && do_register_)
-											{
-												param_list error;
-												error.add("id", SCannotResolve);
-												error.add("desc", SUnknownClass);
-												error.add("class", class_name);
-												xss_throw(error);
-											}
+										instantiate(child, id, class_name);
 
-										if (clazz)
-											{
-												child->xss_type(clazz);
-
-												//unnamed object will appear with an id identical to its class
-												if (id == class_name && class_name != "application")
-													{
-														id = owner_.get_anonymous_id(class_name);
-														dynamic_set(child, "id", id);
-													}
-
-												//register it into the project
-												if (do_register_)
-													owner_.register_instance(id, child);
-											}
-										
 										//go down the hierarchy
 										bool is_name_space = variant_cast<bool>(dynamic_get(child, "namespace"), false);
 										pre_process pp(child, object_, owner_, do_register_ && !is_name_space);
@@ -584,7 +576,51 @@ struct pre_process : dynamic_visitor
                   }
 							}
 					}
-      }
+			}
+
+		void instantiate(XSSObject obj, str& id, const str& class_name)
+			{
+        if (class_name == "property")
+          {
+            //shameful plug, yay me
+            XSSProperty prop(new xss_property(id, obj, object_));
+
+            //grab the "properties" array
+            assert(parent_);
+            DynamicArray obj_properties = owner_.get_property_array(object_);
+            obj_properties->push_back(prop);
+            return;
+          }
+
+        dynamic_set(obj, "class_name", class_name);
+										
+				//hook up the type
+				XSSObject clazz = owner_.get_class(class_name);
+				if (!clazz && do_register_)
+					{
+						param_list error;
+						error.add("id", SCannotResolve);
+						error.add("desc", SUnknownClass);
+						error.add("class", class_name);
+						xss_throw(error);
+					}
+
+				if (clazz)
+					{
+						obj->xss_type(clazz);
+
+						//unnamed object will appear with an id identical to its class
+						if (id == class_name && class_name != "application")
+							{
+								id = owner_.get_anonymous_id(class_name);
+								dynamic_set(obj, "id", id);
+							}
+
+						//register it into the project
+						if (do_register_)
+							owner_.register_instance(id, obj);
+					}
+			}
 
     private:
       XSSObject			object_;
@@ -925,6 +961,62 @@ variant xss_project::resolve_property(const str& prop, variant parent)
 		return result;
 	}
 
+str xss_project::last_rendered(int count)
+	{
+		if (!current_)
+			return "";
+
+		str result = current_->get();
+		boost::trim(result);
+
+		int curr_count = 0;
+		int char_count = 0;
+
+		str::reverse_iterator it = result.rbegin();
+		str::reverse_iterator nd = result.rend();
+		for(; it != nd; it++, char_count++)
+			{
+				char c = *it;
+				if (c == '\n')
+					{
+						curr_count++;
+						if (curr_count > count)
+							{
+								return result.substr(result.size() - char_count, char_count);
+							}
+					}
+			}
+
+		return result;
+	}
+
+void xss_project::log(const param_list params)
+	{
+    for(int i = (int)params.size() - 1; i >= 0; i--)
+      {
+        str param_name = params.get_name(i);
+        variant value  = params.get(i);
+
+        str string_value = variant_cast<str>(value, "");
+				if (string_value.empty())
+					{
+					}
+				else
+					{
+						XSSObject obj_value    = variant_cast<XSSObject>(value, XSSObject());
+				
+						str	obj_id;
+						if (obj_value)
+							{
+								obj_id = variant_cast<str>(dynamic_get(obj_value, "id"), str(""));
+								string_value = "Object with id: " + obj_id;
+							}
+					}
+
+				std::cout << "Log: " << string_value << '\n';
+      }
+	}
+
 XSSObject xss_project::resolve_path(const std::vector<str>& path, XSSObject base)
 	{
     XSSObject result = base;
@@ -1175,21 +1267,7 @@ DynamicArray xss_project::get_method_array(XSSObject obj)
 
 DynamicArray xss_project::get_event_array(XSSObject obj)
   {
-    DynamicArray result;
-    variant v = dynamic_get(obj, "events");
-
-    if (v.empty())
-      {
-        result = DynamicArray(new dynamic_array());
-        dynamic_set(obj, "events", result);
-      }
-    else
-      {
-        assert(v.is<DynamicArray>());
-        result = v;
-      }
-
-    return result;
+		return obj->events();
   }
 
 DynamicArray xss_project::get_children_array(XSSObject obj)
@@ -1388,7 +1466,10 @@ void xss_project::preprocess()
   {
     XSSObject app_object = application;
     pre_process pp(app_object, XSSObject(), *this, true);
-    app_object->visit(&pp);
+
+		str id = "application";
+		pp.instantiate(app_object, id, "application");
+		app_object->visit(&pp);
   }
 
 void xss_project::read_classes(const str& class_library_file)
@@ -1396,6 +1477,7 @@ void xss_project::read_classes(const str& class_library_file)
     type_registry types;
     types.set_default_type(type_schema<xss_object>());
 		types.add_type<xss_property>("property");
+		types.add_type<xss_event>("event");
 
 		fs::path filepath = base_path_ / source_path_ / class_library_file; 
 

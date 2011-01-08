@@ -23,9 +23,8 @@ private:
 private slots:
 	// remember to implement the returned type of events
 <xss:code>
-	// this line dispatch an assert in linker.cpp:1324
-    //if(!slots)
-    //    return;
+    if(!slots)
+		return;
 
     for(var s in slots)
     {

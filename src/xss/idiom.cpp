@@ -124,15 +124,16 @@ enum assign_type
 
 struct assign_info
 	{
-		assign_info() : type(VANILLA) {}
+		assign_info() : type(VANILLA), this_(false) {}
 
 		assign_type type;
 		str					data;
+		bool				this_;
 	};
 
 struct expression_renderer : expression_visitor
   {
-    expression_renderer(XSSContext ctx) : ctx_(ctx), assigner(null) {}
+    expression_renderer(XSSContext ctx, bool id_as_this = false) : ctx_(ctx), assigner(null) {}
 
     XSSProperty get_property(variant v)
       {
@@ -603,6 +604,18 @@ struct expression_renderer : expression_visitor
 				if (result.is<expression_identifier>())
 					{
 						expression_identifier ei = result;
+						if (assigner)
+							{
+								XSSObject this_ = variant_cast<XSSObject>(ctx_->this_, XSSObject());
+								str ass = resolve_assigner(ei, this_, assigner);
+
+								xss_idiom* idiom = ctx_->idiom_;
+								str result = idiom->resolve_this(ctx_);
+								if (result.empty())
+									return ass;
+
+								return result + "." + ass;
+							}
 						return ei.value;
 					}
         else if (result.is<str>())
@@ -703,7 +716,7 @@ str render_expression(expression& expr, XSSContext ctx)
 								expression_splitter es(op);
 								expr.visit(&es);
 								
-								expression_renderer value_renderer(ctx);
+								expression_renderer value_renderer(ctx); 
 								es.right.visit(&value_renderer);
 
 								str value = value_renderer.get();

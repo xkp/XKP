@@ -32,6 +32,7 @@ const str STypeNotFound("Type not found");
 const str SBehaviourNotFound("Behaviour not found");
 const str STypeIsNotABehaviour("Expecting behaviour");
 const str SSuperclassNotFound("Superclass not found");
+const str SCannotResolveOperator("Cannot resolve operator");
 
 const char* operator_name[] =
   {
@@ -1537,7 +1538,11 @@ void code_linker::resolve_unary_operator(operator_type op, variant arg1, bool* d
       }
     else
       {
-        if (type1)
+        if (type1 &&
+						type1 != type_schema<empty_type>() &&
+						type1 != type_schema<IDynamicObject*>() &&
+						type1 != type_schema<variant>() &&
+						type1 != type_schema<DynamicObject>())
           {
             schema_item custom_operator;
             if (type1->resolve(operator_name[op], custom_operator))
@@ -1552,8 +1557,12 @@ void code_linker::resolve_unary_operator(operator_type op, variant arg1, bool* d
               }
             else
               {
-                assert(false);
-              }
+                param_list error;
+                error.add("id", STypeMismatch);
+                error.add("desc", SCannotResolveOperator);
+                error.add("operator", str(operator_name[op]));
+                xs_throw(error);
+						}
           }
         else
           {

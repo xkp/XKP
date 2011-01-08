@@ -9,11 +9,13 @@ namespace xkp {
 //forwards
 class		xss_object;
 class   xss_property;
+class   xss_event;
 struct  xss_code_context;
   
 typedef reference<xss_object>				XSSObject;
 typedef reference<xss_property>     XSSProperty;
 typedef reference<xss_code_context> XSSContext;
+typedef reference<xss_event>				XSSEvent;
 
 class xss_object : public editable_object<xss_object>,
 									 public boost::enable_shared_from_this<xss_object>
@@ -34,6 +36,7 @@ class xss_object : public editable_object<xss_object>,
 			void copy(xss_object* other);
 		public:
 			XSSProperty get_property(const str& name);
+			XSSEvent		get_event(const str& name);
 		public:
 			//misc, not neccesarily to be published
 			void limbo_add(const str& id, variant value);
@@ -85,7 +88,7 @@ struct xss_composite_context : xss_code_context
     //this will function as resolver
     virtual XSSProperty   get_property(const str& name);
     virtual XSSProperty   get_property(XSSObject obj, const str& name);
-    virtual XSSObject resolve_instance(const str& id);
+    virtual XSSObject			resolve_instance(const str& id);
     virtual variant       evaluate_property(XSSObject obj, const str& name);
     private:
       XSSContext ctx_;
@@ -93,35 +96,41 @@ struct xss_composite_context : xss_code_context
 
 //these are basically copies of their xs counterpart, but offer xss stuff, like generating
 //they are also vm friendly, unlike the low level xs's ast.  
-struct xss_property : public xss_object
+class xss_property : public xss_object
   {
-    xss_property();
-    xss_property(const xss_property& other);
-    xss_property(const str& name, variant value, XSSObject _this_);
-    xss_property(const str& name, variant value, variant _get, variant _set, XSSObject _this_);
+		public:
+			xss_property();
+			xss_property(const xss_property& other);
+			xss_property(const str& name, variant value, XSSObject _this_);
+			xss_property(const str& name, variant value, variant _get, variant _set, XSSObject _this_);
 
-    str       name;
-    variant   get;
-    variant   set;
-    size_t    flags;
-    XSSObject this_;
-    variant   value_;
+			str       name;
+			variant   get;
+			variant   set;
+			size_t    flags;
+			XSSObject this_;
+			variant   value_;
     
-    str     generate_value();
-    variant get_value();
-		str			resolve_assign(const str& value);
+			str     generate_value();
+			variant get_value();
+			str			resolve_assign(const str& value);
   };
   
-struct xss_event
+class xss_event : public xss_object
   {
-    xss_event();
-    xss_event(const xss_event& other);
+		public:
+			xss_event();
+			xss_event(const xss_event& other);
 
-    str          name;
-    DynamicArray impls;
+			str          name;
+			DynamicArray impls;
+
+			bool implemented()
+				{
+					return impls->size() > 0;
+				}
   };
   
-typedef reference<xss_event> XSSEvent;
 }
 
 

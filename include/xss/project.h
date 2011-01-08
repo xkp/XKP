@@ -56,6 +56,8 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
 			str	get_anonymous_id(const str& class_name);
 			XSSObject resolve_path(const std::vector<str>& path, XSSObject base);
 			variant resolve_property(const str& path, variant parent);
+			str last_rendered(int count);
+			void log(const param_list params);
     public:
       //access
       DynamicArray  get_property_array(XSSObject obj);
@@ -139,6 +141,8 @@ struct xss_object_schema : editable_object_schema<T>
     virtual void declare()
       {
 				property_("properties", &T::properties_);
+				property_("events",			&T::events_);
+				property_("children",		&T::children_);
 			}
   };
 
@@ -157,6 +161,7 @@ struct xss_project_schema : object_schema<xss_project>
 
         dynamic_method_ ("breakpoint", &xss_project::breakpoint);
         dynamic_method_ ("linker_breakpoint", &xss_project::breakpoint);
+        dynamic_method_ ("log", &xss_project::log);
 
 				method_<void,			2>("compile_instance",    &xss_project::compile_instance);
         method_<void,			2>("register_instance",   &xss_project::register_instance);
@@ -170,12 +175,17 @@ struct xss_project_schema : object_schema<xss_project>
       }
   };
 
-struct xss_event_schema : object_schema<xss_event>
+struct xss_event_schema : xss_object_schema<xss_event>
   {
     virtual void declare()
       {
+				xss_object_schema<xss_event>::declare();
+
+				inherit_from<xss_object>();
+
         property_("name",  &xss_event::name);
         property_("impls", &xss_event::impls);
+				readonly_property<bool>("implemented", &xss_event::implemented);
       }
   };
 
@@ -183,7 +193,11 @@ struct xss_property_schema : xss_object_schema<xss_property>
   {
     virtual void declare()
       {
-        property_("name",  &xss_property::name);
+				inherit_from<xss_object>();
+
+				xss_object_schema<xss_property>::declare();
+
+				property_("name",  &xss_property::name);
         property_("get",   &xss_property::get);
         property_("set",   &xss_property::set);
 

@@ -3,34 +3,14 @@
   
     for(var i in instances)
     {
-        // this line not work, it's dispatch a console error "!"
-        //if(!i.events) 
-        if(i.events == null)
-            continue;
-          
         for(var e in i.events)
         {
-            if(i.event_declaration == null)
+            if(!e.implemented)
                 continue;
-              
-            string qt_ev_name = "";
-            // aquí no entiendo por qué si es un arreglo aparte lo de los 
-            // eventos declarados por las instancias y los del classes,
-            // tengo que acceder desde la instancia en curso a cada uno de 
-            // eventos declarados en el classes
-            for(var ev in i.event_declaration)
-            {
-                if(e.name == ev.name)
-                {
-                    qt_ev_name = ev.qt_name;
-                    break;
-                }
-            }
-          
-            if(qt_ev_name == "")
-                continue;
-              
-            string slot_name = "on_" + i.id + "_" + qt_ev_name;
+                
+            compiler.log(e.name);
+
+            string slot_name = "on_" + i.id + "_" + e.qt_name;
             slots += slot_name;
         }
     }

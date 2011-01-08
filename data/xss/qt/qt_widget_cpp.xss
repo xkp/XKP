@@ -32,19 +32,14 @@ void Widget::changeEvent(QEvent *e)
 		{
 			for(var e in i.events)
 			{
-				string qt_ev_name = "";
-				for(var ev in i.event_declaration)
-				{
-					if(e.name == ev.name)
-					{
-						qt_ev_name = ev.qt_name;
-						break;
-					}
-				}
+				if (!e.implemented)
+					continue;
+
+				compiler.breakpoint(e.qt_name);
 				
 				out(indent = 0)
 				{
-					void Widget::on_<xss:e value="i.id"/>_<xss:e value="qt_ev_name"/>()
+					void Widget::on_<xss:e value="i.id"/>_<xss:e value="e.qt_name"/>()
 					<xss:open_brace/>
 				}
 				

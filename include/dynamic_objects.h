@@ -202,7 +202,12 @@ namespace xkp
             si.set   = Setter( new anonymous_setter(idx) );
 						si.type  = true_type(value);
 
-            items_.insert( item_pair(name, si) );
+						item_list::iterator it = items_.find(name);
+						if (it != items_.end())
+						{
+							assert(false);
+						}
+						items_.insert( item_pair(name, si) );
           }
     };
 

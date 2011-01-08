@@ -300,6 +300,24 @@ struct default_and : operator_exec
       }
   };
 
+struct default_not : operator_exec
+  {
+    virtual variant exec(variant& arg1, variant& arg2)
+      {
+				try	
+					{
+						bool result = arg1;
+						return !result;
+					}
+				catch(type_mismatch)
+					{
+						return arg1.empty();
+					}
+				
+				return false;
+      }
+  };
+
 struct opexec_arg1 : operator_exec
   {
     virtual variant exec(variant& arg1, variant& arg2)
@@ -426,6 +444,7 @@ operator_registry::operator_registry()
     //string operators
     register_operator(op_plus, type_schema<str>(), type_schema<str>(), new add_<str, str>() );
     register_operator(op_equal, type_schema<str>(), type_schema<str>(), new equal_<str, str>() );
+    register_operator(op_notequal, type_schema<str>(), type_schema<str>(), new notequal_<str, str>() );
     combine_types<string_types, numerical_types, add_str_number>(*this, op_plus);
     combine_types<numerical_types, string_types, add_number_str>(*this, op_plus);
 
@@ -449,6 +468,7 @@ operator_registry::operator_registry()
     register_wildcard(op_equal,			type_schema<empty_type>(), null											, new opexec_null2() );
     register_wildcard(op_notequal,	null,											 type_schema<empty_type>(), new opexec_notnull1() );
     register_wildcard(op_notequal,	type_schema<empty_type>(), null											, new opexec_notnull2() );
+    register_wildcard(op_not,				null,											 null,											new default_not() );
 }
 
 size_t operator_registry::register_operator(operator_type op, schema* t1, schema* t2, operator_exec* exec)
@@ -480,14 +500,14 @@ operator_exec* operator_registry::get_operator(operator_type op, schema* t1, sch
         it = wildcard_executors_.find( wk2 );
         if (it != wildcard_executors_.end())
           return executors_[it->second];
-
-        key wk3(op, null, null);
-        it = wildcard_executors_.find( wk3 );
-        if (it != wildcard_executors_.end())
-          return executors_[it->second];
       }
 
-    return null;
+		key wk3(op, null, null);
+		it = wildcard_executors_.find( wk3 );
+		if (it != wildcard_executors_.end())
+			return executors_[it->second];
+
+		return null;
   }
 
 bool operator_registry::get_operator_index(operator_type op, schema* t1, schema* t2, size_t& result, schema** result_type)
@@ -508,7 +528,15 @@ bool operator_registry::get_operator_index(operator_type op, schema* t1, schema*
         return true;
       }
 
-    return false;
+		key wk3(op, null, null);
+		it = wildcard_executors_.find( wk3 );
+		if (it != wildcard_executors_.end())
+			{
+				result = it->second;	
+				return true;
+			}
+
+		return false;
   }
 
 operator_exec* operator_registry::get_operator(size_t idx)

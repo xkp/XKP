@@ -71,7 +71,7 @@ void dump_result(const str& text, code_context& context)
     //std::cout << gen.get();
   }  
 
-void print_error(param_list data)
+void print_error(param_list data, XSSProject project)
   {
     str id   = variant_cast<str>(data.get("id"), "");
     str desc = variant_cast<str>(data.get("desc"), "");
@@ -97,6 +97,8 @@ void print_error(param_list data)
 
         std::cout << name << " = " << value_str << '\n';
       }
+
+		std::cout << "\nLast Rendererd: \n\n" << project->last_rendered(5);
   }
   
 int main(int argc, char* argv[])
@@ -135,17 +137,17 @@ int main(int argc, char* argv[])
     catch(xs_error xse)
       {
         succeeded = false;
-        print_error(xse.data);
+        print_error(xse.data, project);
       }
     catch(xss_error xsse)
       {
         succeeded = false;
-        print_error(xsse.data);
+        print_error(xsse.data, project);
       }
     catch(runtime_error rte)
       {
         succeeded = false;
-        print_error(rte.data);
+        print_error(rte.data, project);
       }
     
     if (succeeded)

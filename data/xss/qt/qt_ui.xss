@@ -37,8 +37,8 @@ for(var i in instances)
     for(var p in i.properties)
   	{
         // this line not work, it's make a console error "!="
-        //if(p.qt_ui != "true")
-        //    break;
+        if(p.qt_ui != "true")
+            break;
         
         if(p.qt_ui == "true")
         {
