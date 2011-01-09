@@ -1,33 +1,26 @@
 <xss:code>
-    array<string> slots = [];
-  
-    for(var i in instances)
-    {
-        for(var e in i.events)
-        {
-            if(!e.implemented)
-                continue;
-                
-            compiler.log(e.name);
-
-            string slot_name = "on_" + i.id + "_" + e.qt_name;
-            slots += slot_name;
-        }
-    }
-
+    string main_class_name = "Widget";
+    array<string> methods = [];
+    array<string> priv_vars = [];
+    
     out()
     {
-        <xss:file output="qt_app.ui" src="qt_ui.xss"/>
-
-        <xss:file output="widget.h" src="qt_widget_h.xss">
-            <parameter name="slots"/>
+        <xss:file output="qt_app.ui" src="qt_ui.xss">
+            <parameter name="main_class_name" access="read"/>
         </xss:file>
-
+      
         <xss:file output="widget.cpp" src="qt_widget_cpp.xss">
-            <parameter name="slots"/>
+            <parameter name="main_class_name" access="read"/>
+            <parameter name="methods" access="read_write"/>
+            <parameter name="priv_vars" acces="read_write"/>
+        </xss:file>
+      
+        <xss:file output="widget.h" src="qt_widget_h.xss">
+            <parameter name="main_class_name" access="read"/>
+            <parameter name="methods" access="read"/>
+            <parameter name="priv_vars" acces="read"/>
         </xss:file>
     }
-
 </xss:code>
 
 <xss:file output="qt_app.cpp">

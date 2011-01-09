@@ -28,18 +28,80 @@ void Widget::changeEvent(QEvent *e)
 <xss:code>
 	for(var i in instances)
 	{
+		if(i.properties)
+		{
+			for(var p in i.properties)
+			{
+				string prop_name = i.id + "_" + p.name;
+				string set_prop_name = "set_" + prop_name;
+				string get_prop_name = "get_" + prop_name;
+
+				if(p.set || p.get)
+				{
+					//compiler.log(p.type);
+
+					// push methods of properties in array for include in class declaration
+					methods += set_prop_name;
+					methods += get_prop_name;
+
+					// update methods's name of property for idiom translations
+					p.set_fn = set_prop_name;
+					p.get_fn = get_prop_name;
+
+					string var_name = prop_name;
+					//priv_vars += var_name;
+
+					// it's a idea of an array of object that contain all 
+					// private variable of custom properties
+					// and this requerid to implement, a 'object type' and 'p.type'
+					//object prop_variable = (name = var_name, type = p.type);
+
+					out(indent = 0)
+					{
+						<xss:e value="prop_name"/> = <xss:e value="p.generate_value()"/>;
+
+						void Widget::<xss:e value="set_prop_name"/>(<xss:e value="p.type"/> value)
+						<xss:open_brace/>
+							<xss:e value="var_name"/> = value;
+					}
+
+					if(p.set)
+					{
+						out(indent = 0)
+						{
+							<xss:e value="p.set.generate()"/>
+						}
+					}
+
+					out(indent = 0)
+					{
+						<xss:close_brace/>
+						<xss:return/>
+					}
+				}
+				else
+				{
+					// do nothing in C/C++
+					//compiler.log("plain ./. " + i.id + "_" + p.name);
+				}
+			}
+		} // if(i.properties)
+
 		if(i.events)
 		{
 			for(var e in i.events)
 			{
-				if (!e.implemented)
+				if(!e.implemented)
 					continue;
 
-				compiler.breakpoint(e.qt_name);
-				
+				string evt_name = "on_" + i.id + "_" + e.qt_name + "()";
+
+				// push event in array for include in class declaration
+				methods += evt_name;
+
 				out(indent = 0)
 				{
-					void Widget::on_<xss:e value="i.id"/>_<xss:e value="e.qt_name"/>()
+					void Widget::<xss:e value="evt_name"/>
 					<xss:open_brace/>
 				}
 				
@@ -54,16 +116,33 @@ void Widget::changeEvent(QEvent *e)
 				out(indent = 0)
 				{
 					<xss:close_brace/>
+					<xss:return/>
 				}
 			}
-		}
+		} // if(i.events)
 		
 		if(i.methods)
 		{
+			//reset method is twise repeated, why?
+
 			for(var m in i.methods)
 			{
-				
+				//compiler.log(i.id + "-" + m.name);
+
+				string mthd_name = m.name + "(" + m.args.generate() + ")";
+
+				// push emthod in array for include in class declaration
+				methods += mthd_name;
+
+				out(indent = 0)
+				{
+					void Widget::<xss:e value="mthd_name"/>
+					<xss:open_brace/>
+						<xss:e>m.generate_code()</xss:e>
+					<xss:close_brace/>
+					<xss:return/>
+				}
 			}
-		}
+		} // if(i.methods)
 	}
 </xss:code>

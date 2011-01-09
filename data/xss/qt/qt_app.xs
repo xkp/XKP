@@ -7,6 +7,7 @@ on pushButton_1.click()
 	caption = "Other Clicked";
 
 	pushButton_2.width += pushButton_1.width;
+	application.reset(600);
 }
 
 property target
@@ -25,7 +26,7 @@ method reset(string s)
 {
 	target = s;
 	pushButton_1.caption = "...";
-	pushButton_2.caption = "...";
+	pushButton_2.caption = "..." + target;
 }
 
 on pushButton_2.click()

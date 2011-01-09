@@ -4,35 +4,35 @@
 #include <QWidget>
 
 namespace Ui {
-    class Widget;
+    class <xss:e value="main_class_name"/>;
 }
 
 // remember to personalize the name of this class
-class Widget : public QWidget {
+class <xss:e value="main_class_name"/> : public QWidget {
     Q_OBJECT
 public:
-    Widget(QWidget *parent = 0);
-    ~Widget();
+    <xss:e value="main_class_name"/>(QWidget *parent = 0);
+    ~<xss:e value="main_class_name"/>();
 
 protected:
     void changeEvent(QEvent *e);
 
 private:
-    Ui::Widget *ui;
+    Ui::<xss:e value="main_class_name"/> *ui;
 
 private slots:
 	// remember to implement the returned type of events
 <xss:code>
-    if(!slots)
-		return;
-
-    for(var s in slots)
-    {
-        out(indent = 1)
-        {
-            void <xss:e value="s"/>();
-        }
-    }
+	if(methods)
+	{
+		for(var m in methods)
+		{
+			out(indent = 1)
+			{
+				<xss:e value="m"/>;
+			}
+		}
+	}
 </xss:code>
 };
 

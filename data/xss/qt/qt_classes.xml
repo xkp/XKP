@@ -1,9 +1,9 @@
 <xml>
-    <class id="qt_component">
+    <class id="qt_component" qt_ui="true">
         <properties>
             <!-- geometry location -->
-            <property name="x" type="int" set_fn="move(<xss:e v='value'/>, <xss:e v='object'/>.y())" get_fn="x"/>
-            <property name="y" type="int" set_fn="move(<xss:e v='object'/>.x(), <xss:e v='value'/>)" get_fn="y"/>
+            <property name="x" type="int" set_xss="move(<xss:e v='value'/>, <xss:e v='object'/>.y())" get_fn="x"/>
+            <property name="y" type="int" set_xss="move(<xss:e v='object'/>.x(), <xss:e v='value'/>)" get_fn="y"/>
             <property name="width" type="int" set_xss="resize(<xss:e v='value'/>, <xss:e v='object'/>.height())" get_fn="width"/>
             <property name="height" type="int" set_xss="resize(<xss:e v='object'/>.width(), <xss:e v='value'/>)" get_fn="height"/>
 
@@ -24,11 +24,10 @@
     <class id="label" super="qt_component" header="QLabel" tag_name="QLabel">
         <properties>
             <property name="caption" type="string" qt_ui="true" set_fn="setText" get_fn="text"/>
-            <property name="need more than one property" type="string" qt_ui="true" set_fn="setText" get_fn="text"/>
         </properties>
     </class>
   
-    <class id="application" header="QWidget" tag_name="QWidget">
+    <class id="application" header="QWidget" tag_name="QWidget" qt_ui="false">
         <properties>
             <property name="id" type="string"/>
             <property name="title" type="string"/>

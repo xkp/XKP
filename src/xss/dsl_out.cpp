@@ -128,6 +128,10 @@ struct xss_gather : xss_visitor
             {
               result_.push_back(part("}"));
             }
+					else if (tag == "xss:return")
+						{
+							result_.push_back(part("\n"));
+						}
           else if (tag == "xss:code")
             {
               //td: !!!
@@ -518,6 +522,7 @@ void out_linker::link(dsl& info, code_linker& owner)
     parser.register_tag("xss:code");
     parser.register_tag("xss:open_brace");
     parser.register_tag("xss:close_brace");
+		parser.register_tag("xss:return");
 		parser.register_tag("xss:file");
 		
 		str to_parse = info.text;
