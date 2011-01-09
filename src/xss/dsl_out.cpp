@@ -83,11 +83,13 @@ struct outfile_info
 		str source;
 		str output;
 		std::vector<str> parameters;
+		int param_offset;
 
-		outfile_info(str _source, str _output, std::vector<str>& _parameters):
+		outfile_info(str _source, str _output, std::vector<str>& _parameters, int _param_offset):
 			source(_source),
 			output(_output),
-			parameters(_parameters)
+			parameters(_parameters),
+			param_offset(_param_offset)
 			{
 			}
 	};
@@ -171,13 +173,14 @@ struct xss_gather : xss_visitor
 							std::vector<str>::iterator nd = fparser.parameters.end();
 
 							//register the parameters as expressions
+							int param_offset = expressions_.size() + 1; //account for indent
 							for(; it != nd; it++)
 								{
 									expressions_.push_back(*it);
 								}
 							
 							//keep track of the parts
-							files_.push_back(outfile_info(source, output, fparser.parameters));
+							files_.push_back(outfile_info(source, output, fparser.parameters, param_offset));
               result_.push_back(part(PART_FILE, text, files_.size() - 1));
 						}
           else
@@ -283,11 +286,14 @@ struct worker
 
 											project_->prepare_context(ctx, gen);
 
-											std::vector<str>::reverse_iterator it = file_info.parameters.rbegin();
-											std::vector<str>::reverse_iterator nd = file_info.parameters.rend();
-											for(; it != nd; it++)
+											std::vector<str>::iterator it = file_info.parameters.begin();
+											std::vector<str>::iterator nd = file_info.parameters.end();
+											int last = params.size() - 1;
+											int curr = 0;
+											for(; it != nd; it++, curr++)
 												{
-													variant vv = params.get(param--);
+													param--;
+													variant vv = params.get(last - file_info.param_offset - curr);
 													ctx.scope_->register_symbol(*it, vv);
 												}
 
