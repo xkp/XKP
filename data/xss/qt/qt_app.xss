@@ -1,6 +1,6 @@
 <xss:code>
     array<string> slots = [];
-  
+    
     for(var i in instances)
     {
         for(var e in i.events)
@@ -15,12 +15,16 @@
         }
     }
 
+    int ii = 23;
+    string jj = "Pincha";
     out()
     {
         <xss:file output="qt_app.ui" src="qt_ui.xss"/>
 
         <xss:file output="widget.h" src="qt_widget_h.xss">
             <parameter name="slots"/>
+            <parameter name="ii"/>
+            <parameter name="jj"/>
         </xss:file>
 
         <xss:file output="widget.cpp" src="qt_widget_cpp.xss">

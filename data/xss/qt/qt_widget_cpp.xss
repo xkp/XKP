@@ -35,8 +35,6 @@ void Widget::changeEvent(QEvent *e)
 				if (!e.implemented)
 					continue;
 
-				compiler.breakpoint(e.qt_name);
-				
 				out(indent = 0)
 				{
 					void Widget::on_<xss:e value="i.id"/>_<xss:e value="e.qt_name"/>()

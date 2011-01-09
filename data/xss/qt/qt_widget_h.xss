@@ -25,6 +25,12 @@ private slots:
 <xss:code>
     if(!slots)
 		return;
+	
+	out()
+	{
+		<xss:e v="ii"/>
+		<xss:e v="jj"/>
+	}
 
     for(var s in slots)
     {
