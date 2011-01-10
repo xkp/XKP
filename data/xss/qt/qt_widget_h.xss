@@ -4,21 +4,33 @@
 #include <QWidget>
 
 namespace Ui {
-    class <xss:e value="main_class_name"/>;
+    class <xss:e value="main_class"/>;
 }
 
 // remember to personalize the name of this class
-class <xss:e value="main_class_name"/> : public QWidget {
+class <xss:e value="main_class"/> : public QWidget {
     Q_OBJECT
 public:
-    <xss:e value="main_class_name"/>(QWidget *parent = 0);
-    ~<xss:e value="main_class_name"/>();
+    <xss:e value="main_class"/>(QWidget *parent = 0);
+    ~<xss:e value="main_class"/>();
 
 protected:
     void changeEvent(QEvent *e);
 
 private:
-    Ui::<xss:e value="main_class_name"/> *ui;
+    Ui::<xss:e value="main_class"/> *ui;
+<xss:code>
+	if(priv_vars)
+	{
+		for(var pv in priv_vars)
+		{
+			out(indent = 1)
+			{
+				<xss:e value="pv"/>;
+			}
+		}
+	}
+</xss:code>
 
 private slots:
 	// remember to implement the returned type of events
@@ -37,4 +49,3 @@ private slots:
 };
 
 #endif // WIDGET_H
-

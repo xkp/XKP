@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-    <class><xss:e value="main_class_name"/></class>
+    <class><xss:e value="main_class"/></class>
     <widget class="<xss:e value="application.tag_name"/>" name="<xss:e value="application.id"/>">
         <property name="geometry">
             <rect>
