@@ -1,19 +1,19 @@
 #include "widget.h"
 #include "ui_widget.h"
 
-Widget::Widget(QWidget *parent) :
+<xss:e value="main_class"/>::<xss:e value="main_class"/>(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::Widget)
+    ui(new Ui::<xss:e value="main_class"/>)
 {
     ui->setupUi(this);
 }
 
-Widget::~Widget()
+<xss:e value="main_class"/>::~<xss:e value="main_class"/>()
 {
     delete ui;
 }
 
-void Widget::changeEvent(QEvent *e)
+void <xss:e value="main_class"/>::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {
@@ -25,43 +25,29 @@ void Widget::changeEvent(QEvent *e)
     }
 }
 
-<xss:code>
-	for(var i in instances)
+<xss:class entry_point="generate_cpp">
+	method generate_component(var cmp, var parent)
 	{
-		if(i.events)
+		if(cmp.children)
 		{
-			for(var e in i.events)
-			{
-				if (!e.implemented)
-					continue;
-
-				out(indent = 0)
-				{
-					void Widget::on_<xss:e value="i.id"/>_<xss:e value="e.qt_name"/>()
-					<xss:open_brace/>
-				}
-				
-				for(var impl in e.impls)
-				{
-					out(indent = 1)
-					{
-						<xss:e>impl.generate_code()</xss:e>
-					}
-				}
-				
-				out(indent = 0)
-				{
-					<xss:close_brace/>
-				}
-			}
+			for(var child in cmp.children)
+				generate_component(child, cmp);
 		}
-		
-		if(i.methods)
+
+		//compiler.render_instance(cmp, "instance.xss", indent = 0);
+		out()
 		{
-			for(var m in i.methods)
-			{
-				
-			}
+			<xss:file output="temporal_file.cpp" src="instance.xss">
+				<parameter name="main_class" access="read"/>
+				<parameter name="methods" access="read_write"/>
+				<parameter name="priv_vars" access="read_write"/>
+				<parameter name="cmp" access="read"/>
+			</xss:file>
 		}
 	}
-</xss:code>
+
+	method generate_cpp()
+	{
+		generate_component(application, null);
+	}
+</xss:class>

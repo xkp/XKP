@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-    <class>Widget</class>
+    <class><xss:e value="main_class"/></class>
     <widget class="<xss:e value="application.tag_name"/>" name="<xss:e value="application.id"/>">
         <property name="geometry">
             <rect>
@@ -18,7 +18,7 @@
 <xss:code>
 for(var i in instances)
 {
-    if (i.id == "application")
+    if (i.qt_ui == "false")
         continue;
 
     out(indent = 1)
@@ -36,18 +36,14 @@ for(var i in instances)
 
     for(var p in i.properties)
   	{
-        // this line not work, it's make a console error "!="
         if(p.qt_ui != "true")
-            break;
+            continue;
         
-        if(p.qt_ui == "true")
+        out(indent = 2)
         {
-            out(indent = 2)
-            {
-                <property name="<xss:e value="p.name"/>">
-                    <<xss:e value="p.type"/>><xss:e value="compiler.evaluate_property(i, p.name)"/></<xss:e value="p.type"/>>
-                </property>
-            }
+            <property name="<xss:e value="p.name"/>">
+                <<xss:e value="p.type"/>><xss:e value="compiler.evaluate_property(i, p.name)"/></<xss:e value="p.type"/>>
+            </property>
         }
     }
 	

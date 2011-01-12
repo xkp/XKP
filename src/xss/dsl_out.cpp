@@ -149,14 +149,6 @@ struct xss_gather : xss_visitor
 								}
 
 							str source = variant_cast<str>(args->get("src"), str(""));
-							if (source.empty())
-								{
-									param_list error;
-									error.add("id", SInvalidTag);
-									error.add("desc", SFileMustHaveSource);
-									error.add("tag", tag);
-									xss_throw(error);
-								}
 
 							//grab the parameters
 							file_parser fparser;
@@ -177,7 +169,7 @@ struct xss_gather : xss_visitor
 							
 							//keep track of the parts
 							files_.push_back(outfile_info(source, output, fparser.parameters, param_offset));
-              result_.push_back(part(PART_FILE, text, files_.size() - 1));
+							result_.push_back(part(PART_FILE, fparser.result, files_.size() - 1));
 						}
           else
             {
@@ -270,8 +262,12 @@ struct worker
 										{
 											outfile_info& file_info = files_[it->dyn_idx];
 
-											str src_file = project_->source_file_name(file_info.source);
-											str source	 = project_->load_file(src_file);
+											str source = it->text;
+											if (!file_info.source.empty())
+												{
+													str src_file = project_->source_file_name(file_info.source);
+													source	 = project_->load_file(src_file);
+												}
 											
 											//td: utilify this crap already, or something
 											XSSContext context(new xss_code_context(project_, project_->idiom));

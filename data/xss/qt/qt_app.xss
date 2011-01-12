@@ -1,40 +1,3 @@
-<xss:code>
-    array<string> slots = [];
-    
-    for(var i in instances)
-    {
-        for(var e in i.events)
-        {
-            if(!e.implemented)
-                continue;
-                
-            compiler.log(e.name);
-
-            string slot_name = "on_" + i.id + "_" + e.qt_name;
-            slots += slot_name;
-        }
-    }
-
-    int ii = 23;
-    string jj = "Pincha";
-    out()
-    {
-        <xss:file output="qt_app.ui" src="qt_ui.xss"/>
-
-        <xss:file output="widget.h" src="qt_widget_h.xss">
-            <parameter name="slots"/>
-            <parameter name="ii"/>
-            <parameter name="jj"/>
-        </xss:file>
-
-        <xss:file output="widget.cpp" src="qt_widget_cpp.xss">
-            <parameter name="slots"/>
-        </xss:file>
-    }
-
-</xss:code>
-
-<xss:file output="qt_app.cpp">
 #include <QtGui/QApplication>
 #include "widget.h"
 
@@ -42,9 +5,8 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 	
-    Widget window;
+    <xss:e value="main_class"/> window;
     window.show();
 	
     return app.exec();
 }
-</xss:file>
