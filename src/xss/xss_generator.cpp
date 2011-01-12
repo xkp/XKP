@@ -255,6 +255,10 @@ bool xss_generator::handle_file(const str& text, param_list* args)
 				project->pop_generator();
 			}
 
-		project->output_file(output, result);
+		if (output == "inline")
+			project->generator()->append(result);
+		else
+			project->output_file(output, result);
+		
 		return true;	
 	}

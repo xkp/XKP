@@ -615,12 +615,38 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
               {
                 schema_item si;
                 if (type->resolve(ei.value, si))
-                  stack_.push( si );
+									{
+										if (resolving_assigner_ && top)
+											{
+												stack_.push( si );
+											}
+										else
+											{
+												schema* type = null;
+												variant vv = si;
+												resolve_value(vv, &type);
+
+												stack_.push( already_in_stack(type) );
+											}
+									}
                 else
                   {
                     IDynamicObject* do_ = variant_cast<IDynamicObject*>(arg1, null);
                     if (do_ && do_->resolve(ei.value, si))
-                      stack_.push( si );
+											{
+												if (resolving_assigner_ && top)
+													{
+														stack_.push( si );
+													}
+												else
+													{
+														schema* type = null;
+														variant vv = si;
+														resolve_value(vv, &type);
+
+														stack_.push( already_in_stack(type) );
+													}
+											}
                     else
                       {
                         param_list error;
