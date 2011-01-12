@@ -1,5 +1,5 @@
 <xss:project>
-    <path generator="qt_app.xss"
+    <path generator="qt_main.xss"
           class_library="qt_classes.xml"
           source_path=""
           output_path="../output/"/>

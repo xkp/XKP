@@ -1,25 +1,20 @@
 <xss:code>
-	if(it.properties)
+	if(cmp.properties)
 	{
-		for(var p in it.properties)
+		for(var p in cmp.properties)
 		{
-			string prop_name = it.id + "_" + p.name;
-			string set_prop_name = "set_" + prop_name;
-			string get_prop_name = "get_" + prop_name;
-
 			if(p.set || p.get)
 			{
 				//compiler.log(p.type);
+
+				string set_prop_name = p.name + "_set(" + p.type + " value)";
+				string get_prop_name = p.name + "_get(void)";
 
 				// push methods of properties in array for include in class declaration
 				methods += set_prop_name;
 				methods += get_prop_name;
 
-				// update methods's name of property for idiom translations
-				p.set_fn = set_prop_name;
-				p.get_fn = get_prop_name;
-
-				string var_name = prop_name;
+				string var_name = p.name + "_";
 
 				//string var_decl = (p.type) ? (p.type + " " + var_name) : ("one_type " + var_name); // not implement yet
 				string var_decl = "one_type " + var_name; // for now
@@ -30,13 +25,13 @@
 				// and this requerid to implement, a 'object type' and 'p.type'
 				//object prop_variable = (name = var_name, type = p.type);
 
+				// generate method for set value to property
 				out(indent = 0)
 				{
-					void Widget::<xss:e value="set_prop_name"/>(<xss:e value="p.type"/> value)
+					void <xss:e value="main_class"/>::<xss:e value="set_prop_name"/>
 					<xss:open_brace/>
 						<xss:e value="var_name"/> = value;
 				}
-
 				if(p.set)
 				{
 					out(indent = 1)
@@ -44,9 +39,28 @@
 						<xss:e value="p.set.generate()"/>
 					}
 				}
-
 				out(indent = 0)
 				{
+					<xss:close_brace/>
+					<xss:return/>
+				}
+
+				// generate method for get value of property
+				out(indent = 0)
+				{
+					void <xss:e value="main_class"/>::<xss:e value="get_prop_name"/>
+					<xss:open_brace/>
+				}
+				if(p.get)
+				{
+					out(indent = 1)
+					{
+						<xss:e value="p.get.generate()"/>
+					}
+				}
+				out(indent = 0)
+				{
+						return <xss:e value="var_name"/>;
 					<xss:close_brace/>
 					<xss:return/>
 				}
@@ -54,26 +68,28 @@
 			else
 			{
 				// do nothing in C/C++
-				//compiler.log("plain property => " + it.id + "_" + p.name);
 			}
 		}
-	} // if(it.properties)
+	} // if(cmp.properties)
 
-	if(it.events)
+	if(cmp.events)
 	{
-		for(var e in it.events)
+		for(var e in cmp.events)
 		{
 			if(!e.implemented)
 				continue;
 
-			string evt_name = "on_" + it.id + "_" + e.qt_name + "()";
+			compiler.log(cmp.id);
+			compiler.log(e.qt_name);
+
+			string evt_name = "on_" + cmp.id + "_" + e.qt_name + "()";
 
 			// push event in array for include in class declaration
 			methods += evt_name;
 
 			out(indent = 0)
 			{
-				void Widget::<xss:e value="evt_name"/>
+				void <xss:e value="main_class"/>::<xss:e value="evt_name"/>
 				<xss:open_brace/>
 			}
 				
@@ -91,16 +107,14 @@
 				<xss:return/>
 			}
 		}
-	} // if(it.events)
+	} // if(cmp.events)
 		
-	if(it.methods)
+	if(cmp.methods)
 	{
 		//reset method is twise repeated, why?
 
-		for(var m in it.methods)
+		for(var m in cmp.methods)
 		{
-			//compiler.log(it.id + "-" + m.name);
-
 			string mthd_name = m.name + "(" + m.args.generate() + ")";
 
 			// push method in array for include in class declaration
@@ -108,12 +122,12 @@
 
 			out(indent = 0)
 			{
-				void Widget::<xss:e value="mthd_name"/>
+				void <xss:e value="main_class"/>::<xss:e value="mthd_name"/>
 				<xss:open_brace/>
 					<xss:e>m.generate_code()</xss:e>
 				<xss:close_brace/>
 				<xss:return/>
 			}
 		}
-	} // if(it.methods)
+	} // if(cmp.methods)
 </xss:code>

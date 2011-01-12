@@ -7,7 +7,6 @@ namespace Ui {
     class <xss:e value="main_class"/>;
 }
 
-// remember to personalize the name of this class
 class <xss:e value="main_class"/> : public QWidget {
     Q_OBJECT
 public:

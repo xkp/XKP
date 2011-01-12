@@ -34,7 +34,16 @@ void <xss:e value="main_class"/>::changeEvent(QEvent *e)
 				generate_component(child, cmp);
 		}
 
-		compiler.render_instance(cmp, "instance.xss", indent = 0);
+		//compiler.render_instance(cmp, "instance.xss", indent = 0);
+		out()
+		{
+			<xss:file output="temporal_file.cpp" src="instance.xss">
+				<parameter name="main_class" access="read"/>
+				<parameter name="methods" access="read_write"/>
+				<parameter name="priv_vars" access="read_write"/>
+				<parameter name="cmp" access="read"/>
+			</xss:file>
+		}
 	}
 
 	method generate_cpp()
