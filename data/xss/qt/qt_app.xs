@@ -10,7 +10,7 @@ on pushButton_1.click()
 	application.reset(600);
 }
 
-property target
+property target : string
 {
 	pushButton_2.caption = "target acquired " + value;
 	

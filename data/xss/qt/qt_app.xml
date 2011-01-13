@@ -14,6 +14,8 @@
             <!-- qva: esta línea me genera una cáscara cuando muestro el valor del nombre de la instancia -->
             <!-- xkp: si te refieres al _label1 no es casscara, es que label es el nombre de la clase -->
             <!-- qva: creo que sería prudente advertir por consola con un warning o error -->
+            <!-- xkp: no, no seria prudente. En apps grandes se usan muchisimos divs que no hay que ponerle nombre -->
+            <!-- xkp: y la forma que el sistema esta implementado asi sucede (a los que no tienen nombre se le pone el de su clase) -->
             <!-- <label id="label" caption="Here is the text" x="170" y="70" width="91" height="16"/> -->
 
       <!-- remember to implement a container component for check recursively theirs components -->

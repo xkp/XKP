@@ -23,7 +23,7 @@ private:
 	{
 		for(var pv in priv_vars)
 		{
-			out(indent = 1)
+			out(indent = 0)
 			{
 				<xss:e value="pv"/>;
 			}
@@ -32,13 +32,12 @@ private:
 </xss:code>
 
 private slots:
-	// remember to implement the returned type of events
 <xss:code>
 	if(methods)
 	{
 		for(var m in methods)
 		{
-			out(indent = 1)
+			out(indent = 0)
 			{
 				<xss:e value="m"/>;
 			}
