@@ -29,6 +29,23 @@ method reset(string s)
 	pushButton_2.caption = "..." + target;
 }
 
+method returning_stuff()
+{
+	var i = 0;
+	return i + 23;
+}
+
+method declaring_error() : string
+{
+	var s = "hello";
+	return 12;
+}
+
+method declaring_ok() : int
+{
+	return 23;
+}
+
 on pushButton_2.click()
 {
 	pushButton_1.caption = "Old value: " + application.target;

@@ -695,6 +695,7 @@ struct expression_renderer : expression_visitor
         }
   };
 
+
 str render_expression(expression& expr, XSSContext ctx)
   {
 		//deal with assigns
@@ -823,6 +824,261 @@ str render_expression(expression& expr, XSSContext ctx)
 
     return er.get();
   }
+
+str idiom_utils::expr2str(expression& expr, XSSContext ctx)
+	{
+		return render_expression(expr, ctx);
+	}
+
+struct expr_type_resolver : expression_visitor
+	{
+		typedef std::map<str, schema*> local_variables;
+
+		expr_type_resolver(local_variables& local_vars, XSSContext ctx) : 
+			is_variant_(false),
+			local_(local_vars),
+			ctx_(ctx)
+			{
+			}
+		
+		schema* get()
+			{
+				if (is_variant_)
+					return null;
+
+				assert(stack_.size() == 1);
+				return resolve_type(stack_.top());
+			}
+
+		//expression_visitor
+		virtual void push(variant operand, bool top)
+			{
+				stack_.push(operand);
+			}
+
+		virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top)
+			{
+				if (is_variant_)
+					return; //cannot resolve anymore, bail
+
+				switch(op)
+					{
+						case op_inc:
+						case op_dec:
+						case op_ref:
+						case op_unary_plus:
+						case op_unary_minus:
+							{
+								variant top = stack_.top(); stack_.pop();
+								stack_.push(resolve_type(top));
+								break;
+							}
+
+						case op_not:
+						case op_typecheck:
+						case op_namecheck:
+							{
+								stack_.pop();
+								stack_.push(type_schema<bool>());
+								break;
+							}
+
+						case op_equal:
+						case op_notequal:
+						case op_gt:
+						case op_lt:
+						case op_ge:
+						case op_le:
+						case op_and:
+						case op_or:
+							{
+								stack_.pop();
+								stack_.pop();
+								stack_.push(type_schema<bool>());
+								break;
+							}
+
+						case op_typecast:
+							{
+								variant top = stack_.top(); stack_.pop();
+								stack_.pop();
+
+								stack_.push(top);
+								break;
+							}
+
+						case op_shift_right_equal:
+						case op_shift_left_equal:
+						case op_assign:
+						case op_plus_equal:
+						case op_minus_equal:
+						case op_mult_equal:
+						case op_div_equal:
+							{
+                param_list error;
+                error.add("id", SIdiom);
+                error.add("desc", SAssignOperator);
+                xss_throw(error);
+								break; 
+							}
+
+						case op_call:
+						case op_func_call:
+						case op_array:
+						case op_parameter:
+						case op_dot_call:
+						case op_index:
+							{
+								//td: warning
+								is_variant_ = true;
+								break;
+							}
+
+						case op_mult:
+						case op_divide:
+						case op_mod:
+						case op_plus:
+						case op_minus:
+						case op_shift_right:
+						case op_shift_left:
+							{
+								variant arg2 = stack_.top(); stack_.pop();
+								variant arg1 = stack_.top(); stack_.pop();
+
+								schema* type1 = resolve_type(arg1);
+								schema* type2 = resolve_type(arg2);
+								schema* result = null;
+								size_t  idx;
+								if (operators_.get_operator_index(op, type1, type2, idx, &result) && result)
+									stack_.push(result);
+								else
+									is_variant_ = true;
+								break;
+							}
+
+						case op_dot:
+							{
+								XSSObject							obj = resolve_object(stack_.top()); stack_.pop();
+								expression_identifier ei  = stack_.top(); stack_.pop();
+								break;
+							}
+					}
+			}
+
+		private:
+			typedef std::stack<variant>		 expr_stack;
+			
+			expr_stack				stack_;
+			bool							is_variant_;	
+			operator_registry operators_;  
+			local_variables		local_;
+			XSSContext				ctx_;
+
+			schema* resolve_type(variant var)
+				{
+					schema* result = null;
+
+					if (var.is<schema*>())
+						return var;
+					else if (var.is<expression_identifier>())
+						{
+							expression_identifier ei = var;
+							if (!resolve_variable(ei.value, result))
+								{
+									XSSObject		obj = ctx_->resolve_instance(ei.value);
+									XSSProperty	prop;
+									if (obj)
+										{
+											result = type_schema<XSSObject>();
+										}
+									else if (prop = ctx_->get_property(ei.value))
+										{
+											result = ctx_->get_type(prop->type);
+										}
+								}
+						}
+					else
+						result = var.get_schema();
+
+					return result;
+				}
+
+			bool resolve_variable(const str& id, schema* &type)
+				{
+					local_variables::iterator it = local_.find(id);
+					if (it != local_.end())
+						{
+							type = it->second;
+							return true;
+						}
+					return false;
+				}
+
+			XSSObject	resolve_object(const variant v)
+				{
+					if (v.is<XSSObject>())
+						return v;
+					else if (v.is<expression_identifier>())
+						{
+							expression_identifier ei = v;
+							return ctx_->resolve_instance(ei.value);
+						}
+					else
+						assert(false); //use case
+
+					return XSSObject();
+				}
+	};
+
+//code_type_resolver
+schema* code_type_resolver::get()
+	{
+		if (is_variant_)
+			return null;
+
+		return result_;
+	}
+
+void code_type_resolver::variable_(stmt_variable& info)     
+	{
+		schema* type = ctx_->get_type(info.type);
+		if (!type)
+			{
+				if (!info.value.empty())
+					{
+						expr_type_resolver typer(vars_, ctx_);
+						info.value.visit(&typer);
+
+						type = typer.get();
+					}
+			}
+
+		vars_.insert(std::pair<str, schema*>(info.id, type));
+	}
+
+void code_type_resolver::return_(stmt_return& info)         
+	{
+		if (is_variant_)
+			return;
+
+		expr_type_resolver typer(vars_, ctx_);
+		info.expr.visit(&typer);
+
+		schema* type = typer.get();
+		if (!type)
+			{
+				is_variant_ = true;
+				return;
+			}
+
+		if (!result_)
+			result_ = type;
+		else if (result_ != type)
+			{
+				is_variant_ = true;
+				return;
+			}
+	}
 
 struct code_renderer : code_visitor
   {

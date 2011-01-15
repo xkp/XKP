@@ -22,6 +22,7 @@ const str SNotImplemented("not-implemented");
 const str SCannotResolve("unkown-identifier");
 const str SFileError("404");
 const str STypeMismatch("type-mismatch");
+const str SCompile("syntax-error");
 
 const str SInstancesMustProvideAClass("Instances must provide a class");
 const str SWhatWasThisAgain("What was that again?");
@@ -32,6 +33,8 @@ const str SUnknownClass("Class not found");
 const str SUnknownInstance("Instance not found");
 const str SFileNotFound("File not found");
 const str SOutputtingNonString("Trying to output a value that does not translate to a string");
+const str SInvalidExpression("Cannot compile expression");
+const str SIncompatibleReturnType("Return type differs from declared type");
 
 struct property_mixer : dynamic_visitor
   {
@@ -360,6 +363,22 @@ variant xss_code_context::evaluate_property(XSSObject obj, const str& name)
     return variant();
   }
 
+schema* xss_code_context::get_type(const str& name)
+	{
+		if (!types_)
+			return null; 
+
+		return types_->get_type(name);
+	}
+
+str	xss_code_context::get_type_name(schema* type)
+	{
+		if (!types_)
+			return ""; 
+
+		return types_->type_name(type);
+	}
+
 //xss_composite_context
 xss_composite_context::xss_composite_context(XSSContext ctx):
   xss_code_context(ctx->project_, ctx->idiom_),
@@ -432,22 +451,24 @@ xss_property::xss_property(const xss_property& other):
 		DYNAMIC_INHERITANCE(xss_property)
   }
 
-xss_property::xss_property(const str& _name, variant _value, XSSObject _this_):
+xss_property::xss_property(const str& _name, const str& _type, variant _value, XSSObject _this_):
   flags(0),
   name(_name),
   value_(_value),
-  this_(_this_)
+  this_(_this_),
+	type(_type)
   {
 		DYNAMIC_INHERITANCE(xss_property)
   }
 
-xss_property::xss_property(const str& _name, variant _value, variant _get, variant _set, XSSObject _this_):
+xss_property::xss_property(const str& _name, const str& _type, variant _value, variant _get, variant _set, XSSObject _this_):
   flags(0),
   name(_name),
   get(_get),
   set(_set),
   value_(_value),
-  this_(_this_)
+  this_(_this_),
+	type(_type)
   {
 		DYNAMIC_INHERITANCE(xss_property)
   }
@@ -583,7 +604,8 @@ struct pre_process : dynamic_visitor
         if (class_name == "property")
           {
             //shameful plug, yay me
-            XSSProperty prop(new xss_property(id, obj, object_));
+            str type = variant_cast<str>(dynamic_get(obj, "type"), "");
+						XSSProperty prop(new xss_property(id, type, obj, object_));
 
             //grab the "properties" array
             assert(parent_);
@@ -815,7 +837,7 @@ void xss_project::compile_ast(xs_container& ast, XSSObject instance)
         if (!pit->value.empty())
           value = idiom_->process_expression(pit->value, instance);
 
-        XSSProperty new_prop(new xss_property(pit->name, value, getter, setter, instance));
+				XSSProperty new_prop(new xss_property(pit->name, pit->type, value, getter, setter, instance));
         properties->push_back(new_prop);
       }
 
@@ -823,6 +845,27 @@ void xss_project::compile_ast(xs_container& ast, XSSObject instance)
     std::vector<xs_method>::iterator mnd = gather.methods.end();
     for(; mit != mnd; mit++)
       {
+				code_type_resolver typer(context_);
+				mit->cde.visit(&typer);
+				str type;
+				schema* tt = typer.get();
+				if (tt)
+					type = context_->get_type_name(tt);
+
+				if (type.empty())
+					type = mit->type;
+
+				if (!mit->type.empty() && type != mit->type)
+					{
+						param_list error;
+						error.add("id", STypeMismatch);
+						error.add("desc", SIncompatibleReturnType);
+						error.add("declared as", mit->type);
+						error.add("returns",type);
+						
+						xss_throw(error);
+					}
+
         variant impl = idiom_->process_method(instance, *mit);
         methods->push_back(impl);
       }
@@ -1015,6 +1058,27 @@ void xss_project::log(const param_list params)
 
 				std::cout << "Log: " << string_value << '\n';
       }
+	}
+
+str xss_project::generate_expression(const str& expr)
+	{
+		xs_utils	 xs;
+		expression e;
+		if (!xs.compile_expression(expr, e))
+			{
+				param_list error;
+				error.add("id", SCompile);
+				error.add("desc", SInvalidExpression);
+				error.add("expression", expr);
+						
+				xss_throw(error);
+			}
+
+		XSSProject me(shared_from_this());
+    XSSContext context(new xss_code_context(me, idiom_));
+		fill_context(context);
+
+		return idiom_utils::expr2str(e, context_);
 	}
 
 XSSObject xss_project::resolve_path(const std::vector<str>& path, XSSObject base)
@@ -1346,6 +1410,19 @@ void xss_project::save_file(const str& fname, const str& contents)
     ofs << contents;
     ofs.close();
   }
+
+void xss_project::fill_context(XSSContext ctx)
+	{
+    ctx->scope.register_symbol("application", application);
+
+    //setup the scope
+    instance_registry::iterator it = instances_.begin();
+    instance_registry::iterator nd = instances_.end();
+    for(; it != nd; it++)
+      {
+        ctx->scope.register_symbol(it->first, it->second);
+      }
+	}
 
 void xss_project::prepare_context(base_code_context& context, XSSGenerator gen)
   {

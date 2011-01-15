@@ -73,8 +73,11 @@ struct xss_code_context : base_code_context
     //this will function as resolver
     virtual XSSProperty   get_property(const str& name);
     virtual XSSProperty   get_property(XSSObject obj, const str& name);
-    virtual XSSObject resolve_instance(const str& id);
+    virtual XSSObject			resolve_instance(const str& id);
     virtual variant       evaluate_property(XSSObject obj, const str& name);
+		virtual schema*				get_type(const str& name);
+		virtual str						get_type_name(schema* type);
+		
     public:
       //td: ugles, this is the way it is to circunvent c++ and its dependencies
       variant    project_;
@@ -101,8 +104,8 @@ class xss_property : public xss_object
 		public:
 			xss_property();
 			xss_property(const xss_property& other);
-			xss_property(const str& name, variant value, XSSObject _this_);
-			xss_property(const str& name, variant value, variant _get, variant _set, XSSObject _this_);
+			xss_property(const str& name, const str& type, variant value, XSSObject _this_);
+			xss_property(const str& name, const str& type, variant value, variant _get, variant _set, XSSObject _this_);
 
 			str       name;
 			variant   get;
@@ -110,6 +113,7 @@ class xss_property : public xss_object
 			size_t    flags;
 			XSSObject this_;
 			variant   value_;
+			str				type;
     
 			str     generate_value();
 			variant get_value();
@@ -130,7 +134,7 @@ class xss_event : public xss_object
 					return impls->size() > 0;
 				}
   };
-  
+
 }
 
 
