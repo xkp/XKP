@@ -1,58 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
     <class><xss:e value="main_class"/></class>
-    <widget class="<xss:e value="application.tag_name"/>" name="<xss:e value="application.id"/>">
-        <property name="geometry">
-            <rect>
-                <x><xss:e value="application.x"/></x>
-                <y><xss:e value="application.y"/></y>
-                <width><xss:e value="application.width"/></width>
-                <height><xss:e value="application.height"/></height>
-            </rect>
-        </property>
-        <property name="windowTitle">
-            <string><xss:e value="application.title"/></string>
-        </property>
-    </widget>
 
-<xss:code>
-for(var i in instances)
-{
-    if (i.qt_ui == "false")
-        continue;
-
-    out(indent = 1)
+<xss:class entry_point="generate_ui">
+	  // this recursive method is for generate all components, 
+	  // inclusively containers components with childs
+    method generate_properties(var cmp, int ind)
     {
-        <widget class="<xss:e value="i.tag_name"/>" name="<xss:e value="i.id"/>">
-            <property name="geometry">
-                <rect>
-                    <x><xss:e value="i.x"/></x>
-                    <y><xss:e value="i.y"/></y>
-                    <width><xss:e value="i.width"/></width>
-                    <height><xss:e value="i.height"/></height>
-                </rect>
-            </property>
-	  }
-
-    for(var p in i.properties)
-  	{
-        if(p.qt_ui != "true")
-            continue;
+        for(var p in cmp.properties)
+  	    {
+            if(p.qt_ui != "true")
+                continue;
         
-        out(indent = 2)
-        {
-            <property name="<xss:e value="p.name"/>">
-                <<xss:e value="p.type"/>><xss:e value="compiler.evaluate_property(i, p.name)"/></<xss:e value="p.type"/>>
-            </property>
+            out(indent = ind)
+            {
+                <property name="<xss:e value="p.name"/>">
+                    <<xss:e value="p.type"/>><xss:e value="compiler.evaluate_property(cmp, p.name)"/></<xss:e value="p.type"/>>
+                </property>
+            }
         }
     }
+    
+	  method generate_component(var cmp, var parent, int ind)
+	  {
+        if(cmp.qt_ui != "true")
+            return;
+        
+		    out(indent = ind)
+		    {
+            <widget class="<xss:e value="cmp.tag_name"/>" name="<xss:e value="cmp.id"/>">
+                <property name="geometry">
+                    <rect>
+                        <x><xss:e value="cmp.x"/></x>
+                        <y><xss:e value="cmp.y"/></y>
+                        <width><xss:e value="cmp.width"/></width>
+                        <height><xss:e value="cmp.height"/></height>
+                    </rect>
+                </property>
+		    }
+        
+        generate_properties(cmp, ind);
+        
+        // generate all childrens recursively
+		    if(cmp.children)
+		    {
+			      for(var child in cmp.children)
+				        generate_component(child, cmp, ind + 1);
+		    }
 	
-    out(indent = 1)
-    {
-        </widget>
-    }
-}
-</xss:code>
+        out(indent = ind)
+        {
+            </widget>
+        }
+	  }
+
+	  method generate_ui()
+	  {
+		    generate_component(application, null, 1);
+	  }
+</xss:class>
 
     <layoutdefault spacing="6" margin="11"/>
     <resources/>

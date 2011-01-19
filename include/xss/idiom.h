@@ -91,6 +91,41 @@ struct base_idiom : xss_idiom
       bool force_this_;
   };
 
+//utils
+struct idiom_utils
+	{
+		static str expr2str(expression& expr, XSSContext ctx);
+	};
+
+//utils, this is soon to be changed completely
+struct code_type_resolver : code_visitor
+	{
+		code_type_resolver(XSSContext ctx) : result_(null), ctx_(ctx), is_variant_(false) {}
+
+		schema* get();
+
+		//code_visitor
+    virtual void variable_(stmt_variable& info);     
+    virtual void return_(stmt_return& info);         
+		
+		virtual void if_(stmt_if& info)									{}
+    virtual void for_(stmt_for& info)               {}
+    virtual void iterfor_(stmt_iter_for& info)      {}
+    virtual void while_(stmt_while& info)           {}
+    virtual void break_()                           {}
+    virtual void continue_()                        {}
+    virtual void expression_(stmt_expression& info) {}
+    virtual void dsl_(dsl& info)                    {}
+    virtual void dispatch(stmt_dispatch& info)      {}
+		
+		private:
+			std::map<str, schema*> vars_;
+			XSSContext						 ctx_;	
+			bool									 is_variant_;
+			schema*								 result_;
+	};
+
+
 
 //type info
 struct base_xss_args_schema : object_schema<base_xss_args>  

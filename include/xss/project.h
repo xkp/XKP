@@ -11,7 +11,7 @@
 #include "xss_generator.h"
 #include "xs/array.h"
 
-#include "boost/filesystem.hpp" 
+#include "boost/filesystem.hpp"
 namespace fs = boost::filesystem;
 
 namespace xkp{
@@ -46,6 +46,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       void breakpoint(const param_list params);
       str  generate_file(const str& fname, XSSContext context = XSSContext());
       void prepare_context(base_code_context& context, XSSGenerator gen);
+      void fill_context(XSSContext ctx);
       str  generate_xss(const str& xss, XSSGenerator gen);
 			str	 source_file_name(const str& fname);
 			str	 output_file_name(const str& fname);
@@ -58,6 +59,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
 			variant resolve_property(const str& path, variant parent);
 			str last_rendered(int count);
 			void log(const param_list params);
+			str generate_expression(const str& expr);
     public:
       //access
       DynamicArray  get_property_array(XSSObject obj);
@@ -100,11 +102,11 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       fs::path									base_path_;
       fs::path									source_path_;
       fs::path									output_path_;
-      
+
 			meta_array_schema					array_type_;
       XSSGenerator							current_;
       XSSContext								context_;
-			std::stack<XSSGenerator>	generators_; 	
+			std::stack<XSSGenerator>	generators_;
 
       void save_file(const str& fname, const str& contents);
       void preprocess();
@@ -115,7 +117,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
 			void pop_generator();
 
 		private:
-			typedef std::map<str, int> anonymous_list;	
+			typedef std::map<str, int> anonymous_list;
 			anonymous_list anonymous_;
   };
 
@@ -128,9 +130,9 @@ struct out
 		out(XSSProject prj);
 
 		void append(variant v);
-		str  line_break(); 
+		str  line_break();
 
-		private:	
+		private:
 			XSSProject prj_;
 	};
 
@@ -172,6 +174,7 @@ struct xss_project_schema : object_schema<xss_project>
 				method_<variant,	2>("evaluate_property",   &xss_project::evaluate_property);
 				method_<str,			1>("genid",								&xss_project::get_anonymous_id);
 				method_<variant,	2>("resolve_property",		&xss_project::resolve_property);
+				method_<str,			1>("generate_expression",	&xss_project::generate_expression);
       }
   };
 

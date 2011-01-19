@@ -6,23 +6,15 @@
 
     <idiom class="js-idiom" id_as_this="true"/>
 
-    <application id="main_app" source="qt_app.xs" title="My first application" width="431" height="174">
+    <application id="main_app" source="qt_app.xs" title="My first application" width="631" height="174">
         <button id="pushButton_1" caption="Click me" x="110" y="30" width="75" height="23"/>
         <button id="pushButton_2" caption="Change text" x="210" y="30" width="91" height="23"/>
         <label id="label_1" caption="Here is the text" x="170" y="70" width="91" height="16"/>
         
-            <!-- qva: esta línea me genera una cáscara cuando muestro el valor del nombre de la instancia -->
-            <!-- xkp: si te refieres al _label1 no es casscara, es que label es el nombre de la clase -->
-            <!-- qva: creo que sería prudente advertir por consola con un warning o error -->
-            <!-- xkp: no, no seria prudente. En apps grandes se usan muchisimos divs que no hay que ponerle nombre -->
-            <!-- xkp: y la forma que el sistema esta implementado asi sucede (a los que no tienen nombre se le pone el de su clase) -->
-            <!-- <label id="label" caption="Here is the text" x="170" y="70" width="91" height="16"/> -->
-
-      <!-- remember to implement a container component for check recursively theirs components -->
-      <!--
-        <div x="30" y="50" width="100" height="60">
-            <label id="dv_label_1" caption="In div holder" x="10" y="10" width="60" height="16"/>
+        <div x="30" y="80" width="300" height="60">
+            <label id="div_label_1" caption="In div holder" x="10" y="10" width="40" height="16"/>
+			<button id="pushButton_3" caption="Test's Placements" width="100" placement="right"/>
+			<button id="pushButton_4" caption="Test's Placements" width="100" placement="left"/>
         </div>
-      -->
     </application>
 </xss:project>

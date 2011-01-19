@@ -1,13 +1,13 @@
 # depslib dependency file v1.0
-1290985350 source:d:\xkp\build\cb10\xss\stdafx.cpp
+1293323478 source:d:\xkp\build\cb10\xss\stdafx.cpp
 	"stdafx.h"
 
-1290985350 d:\xkp\build\cb10\xss\stdafx.h
+1293323478 d:\xkp\build\cb10\xss\stdafx.h
 	"targetver.h"
 	<stdio.h>
 	<tchar.h>
 
-1290985350 d:\xkp\build\cb10\xss\targetver.h
+1293323478 d:\xkp\build\cb10\xss\targetver.h
 
 1291421476 source:d:\xkp\build\cb10\xss\xss.cpp
 	"stdafx.h"

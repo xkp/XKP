@@ -1,5 +1,5 @@
 <xml>
-    <class id="qt_component" qt_ui="true">
+    <class id="qwidget" qt_ui="true">
         <properties>
             <!-- geometry location -->
             <property name="x" type="int" set_xss="move(<xss:e v='value'/>, <xss:e v='object'/>.y())" get_fn="x"/>
@@ -7,30 +7,79 @@
             <property name="width" type="int" set_xss="resize(<xss:e v='value'/>, <xss:e v='object'/>.height())" get_fn="width"/>
             <property name="height" type="int" set_xss="resize(<xss:e v='object'/>.width(), <xss:e v='value'/>)" get_fn="height"/>
 
+			<!-- implement standards properties of qwidget -->
             <property name="visible" type="bool" set_fn="setVisible" get_fn="isVisible"/>
         </properties>
+		<!-- implement standards events of qwidget -->
         <events>
             <event name="click" qt_name="clicked"/>
             <event name="up" qt_name="mouseup"/>
         </events>
     </class>
   
-    <class id="button" super="qt_component" header="QPushButton" tag_name="QPushButton">
+	<!-- implement components with particular properties and events -->
+    <class id="div" super="qwidget" tag_name="QWidget">
+    </class>
+  
+    <class id="button" super="qwidget" tag_name="QPushButton">
         <properties>
             <property name="caption" type="string" qt_ui="true" set_fn="setText" get_fn="text"/>
         </properties>
     </class>
   
-    <class id="label" super="qt_component" header="QLabel" tag_name="QLabel">
+    <class id="label" super="qwidget" tag_name="QLabel">
         <properties>
             <property name="caption" type="string" qt_ui="true" set_fn="setText" get_fn="text"/>
         </properties>
     </class>
+	
+	<class id="checkbox" super="qwidget" tag_name="QCheckBox">
+        <properties>
+            <property name="caption" type="string" qt_ui="true" set_fn="setText" get_fn="text"/>
+        </properties>
+		<events>
+		</events>
+	</class>
+	
+	<class id="combobox" super="qwidget" tag_name="QComboBox">
+        <properties>
+        </properties>
+		<events>
+		</events>
+	</class>
   
-    <class id="application" header="QWidget" tag_name="QWidget" qt_ui="false">
+	<class id="radiobutton" super="qwidget" tag_name="QRadioButton">
+        <properties>
+        </properties>
+		<events>
+		</events>
+	</class>
+	
+	<class id="groupbox" super="qwidget" tag_name="QGroupBox">
+        <properties>
+        </properties>
+		<events>
+		</events>
+	</class>
+	
+	<class id="edit" super="qwidget" tag_name="QLineEdit">
+        <properties>
+        </properties>
+		<events>
+		</events>
+	</class>
+	
+	<class id="field" super="qwidget" tag_name="QTextEdit">
+        <properties>
+        </properties>
+		<events>
+		</events>
+	</class>
+	
+    <class id="application" tag_name="QWidget" qt_ui="true">
         <properties>
             <property name="id" type="string"/>
-            <property name="title" type="string"/>
+            <property name="windowTitle" type="string" qt_ui="true" set_fn="setWindowTitle" get_fn="windowTitle"/>
             <property name="width" type="int"/>
             <property name="height" type="int"/>
         </properties>
