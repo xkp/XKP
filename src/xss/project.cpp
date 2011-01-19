@@ -551,6 +551,24 @@ str	xss_property::resolve_assign(const str& value)
 		return name + " = " + value;
   }
 
+//xss_method
+xss_method::xss_method() 
+	{
+	}
+
+xss_method::xss_method(const xss_method& other): 
+	xss_object(other)
+	{
+	}
+
+xss_method::xss_method(const str& _name, const str& _type, variant _args, variant _code) : 
+	name(_name),
+	type(_type),
+	args(_args),
+	code(_code)
+	{
+	}
+
 //pre_process
 struct pre_process : dynamic_visitor
   {
@@ -828,10 +846,21 @@ void xss_project::compile_ast(xs_container& ast, XSSObject instance)
         variant getter;
         variant setter;
         if (!pit->get.empty())
-          getter = idiom_->process_code(pit->get, instance);
+					{
+						param_list_decl args;
+
+						getter = idiom_->process_code(pit->get, args, instance);
+					}
 
         if (!pit->set.empty())
-          setter = idiom_->process_code(pit->set, instance);
+					{
+						param_list_decl args;
+						param_decl			arg;
+						arg.name = "value";
+						arg.type = pit->type;
+						args.push_back(arg);
+						setter = idiom_->process_code(pit->set, args, instance);
+					}
 
         variant value;
         if (!pit->value.empty())
@@ -866,8 +895,11 @@ void xss_project::compile_ast(xs_container& ast, XSSObject instance)
 						xss_throw(error);
 					}
 
-        variant impl = idiom_->process_method(instance, *mit);
-        methods->push_back(impl);
+				variant args = idiom_->process_args(mit->args);											 assert(!args.empty()); 
+				variant cde  = idiom_->process_code(mit->cde, mit->args, instance);  assert(!cde.empty()); 
+
+				XSSMethod mthd(new xss_method(mit->name, type, args, cde));
+        methods->push_back(mthd); //td: !!! inheritance!
       }
 
     xs_event_list::iterator it = gather.events.begin();
@@ -917,10 +949,13 @@ void xss_project::compile_ast(xs_container& ast, XSSObject instance)
 
         str event_name = it->name[it->name.size() - 1];
 
-        DynamicArray impls = get_event_impl(actual_instance, event_name);
+				XSSEvent		 ev;
+        DynamicArray impls = get_event_impl(actual_instance, event_name, ev);
 
-        //let te idiom process implementations
-        variant impl = idiom_->process_event(actual_instance, event_name, *it);
+				ev->args = idiom_->process_args(it->args);
+
+        //let the idiom process implementations
+				variant impl = idiom_->process_code(it->cde, it->args, actual_instance);
         impls->push_back(impl);
       }
 
@@ -1287,18 +1322,18 @@ DynamicArray xss_project::get_property_array(XSSObject obj)
     return result;
   }
 
-DynamicArray xss_project::get_event_impl(XSSObject obj, const str& event_name)
+DynamicArray xss_project::get_event_impl(XSSObject obj, const str& event_name, XSSEvent& ev)
   {
     DynamicArray events = get_event_array(obj);
     for(size_t i = 0; i < events->size(); i++)
       {
-        XSSEvent ev = events->at(i);
+        ev = events->at(i);
         if (ev->name == event_name)
           return ev->impls;
       }
 
     //not implemented, create
-    XSSEvent ev(new xss_event);
+    ev = XSSEvent(new xss_event);
     ev->name = event_name;
 
     events->push_back(ev);

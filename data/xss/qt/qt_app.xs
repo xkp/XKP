@@ -38,7 +38,7 @@ method returning_stuff()
 method declaring_error() : string
 {
 	var s = "hello";
-	return 12;
+	return s; //123
 }
 
 method declaring_ok() : int

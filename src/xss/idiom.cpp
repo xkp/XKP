@@ -1080,9 +1080,9 @@ void code_type_resolver::return_(stmt_return& info)
 			}
 	}
 
-struct code_renderer : code_visitor
+struct code_renderer__ : code_visitor
   {
-    code_renderer(XSSContext ctx, int indent): ctx_(ctx), indent_(indent) {}
+    code_renderer__(XSSContext ctx, int indent): ctx_(ctx), indent_(indent) {}
 
     str get()
       {
@@ -1224,7 +1224,7 @@ struct code_renderer : code_visitor
 
       str render_code(code& code, int indent)
         {
-          code_renderer renderer(ctx_, indent);
+          code_renderer__ renderer(ctx_, indent);
           code.visit(&renderer);
 
           return renderer.get();
@@ -1253,29 +1253,172 @@ base_xss_expression::base_xss_expression(XSSContext ctx, expression& expr):
   {
   }
 
-str base_xss_expression::generate()
+str base_xss_expression::generate(const param_list pl)
   {
     return render_expression(expr_, ctx_);
   }
 
 //base_xss_code
-base_xss_code::base_xss_code()
+base_xss_code::base_xss_code() : indent_(0)
   {
   }
 
 base_xss_code::base_xss_code(XSSContext ctx, code& code):
   code_(code),
-  ctx_(ctx)
+  ctx_(ctx),
+	indent_(0)
   {
   }
 
-str base_xss_code::generate()
+str base_xss_code::generate(const param_list pl)
   {
-    code_renderer renderer(ctx_, 0);
-    code_.visit(&renderer);
+    code_.visit(this);
 
-    return renderer.get();
+    return result_;
   }
+
+void base_xss_code::if_(stmt_if& info)
+	{
+    std::stringstream ss;
+    str ind = get_indent_str();
+
+    add_line("if (" + render_expression(info.expr, ctx_) + ")", true);
+    add_line("{", true);
+			render_code(info.if_code, indent_ + 1);
+		add_line("}", true);
+
+    if (!info.else_code.empty())
+			{
+				add_line("else", true);
+				add_line("{", true);
+					render_code(info.else_code, indent_ + 1);
+				add_line("}", true);
+			}
+
+    add_line(ss.str());
+	}
+
+void base_xss_code::variable_(stmt_variable& info)
+	{
+    std::stringstream ss;
+    str ind = get_indent_str();
+
+    ss << ind << "var " << info.id;
+    if (!info.value.empty())
+      ss << " = " << render_expression(info.value, ctx_);
+
+    ss << ";\n";
+
+    add_line(ss.str());
+	}
+
+void base_xss_code::for_(stmt_for& info)
+	{
+    std::stringstream ss;
+
+    ss << "for(var " << info.init_variable.id << " = " << render_expression(info.init_variable.value, ctx_)
+        << "; " << render_expression(info.cond_expr, ctx_)
+        << "; " << render_expression(info.iter_expr, ctx_) << ")";
+
+    add_line(ss.str(), true);
+    add_line("{", true);
+			render_code(info.for_code, indent_ + 1);
+		add_line("}", true);
+	}
+
+void base_xss_code::iterfor_(stmt_iter_for& info)
+	{
+    std::stringstream ss;
+    str ind = get_indent_str();
+
+    str iterable_name = info.id + "_iterable";
+    str iterator_name = info.id + "_iterator";
+    ss << ind << "var " << iterable_name << " = " << render_expression(info.iter_expr, ctx_) << "\n";
+    ss << ind << "for(var " << iterator_name << " = 0; " 
+        << iterator_name << " < " << iterable_name << ".length; "
+        << iterator_name << "++" << ")\n";
+
+		add_line(ss.str());
+		add_line("{", true);
+		add_line("  var " + info.id + " = " + iterable_name + "[" + iterator_name + "];", true);
+			render_code(info.for_code, indent_ + 1);
+		add_line("}", true);
+	}
+
+void base_xss_code::while_(stmt_while& info)
+	{
+    add_line("while(" + render_expression(info.expr, ctx_) + ")", true);
+		add_line("{", true);
+			render_code(info.while_code, indent_ + 1);
+		add_line("}", true);
+	}
+
+void base_xss_code::break_()
+	{
+		add_line("break;", true);
+	}
+
+void base_xss_code::continue_()
+	{
+		add_line("continue;", true);
+	}
+
+void base_xss_code::return_(stmt_return& info)
+	{
+    if (info.expr.empty())
+      add_line("return;", true);
+    else
+      add_line("return " + render_expression(info.expr, ctx_) + ";", true);
+	}
+
+void base_xss_code::expression_(stmt_expression& info)
+	{
+    str value = render_expression(info.expr, ctx_);
+    add_line(value + ";", true);
+	}
+
+void base_xss_code::dsl_(dsl& info)
+	{
+		assert(false); //td: there is some stuff to implement here... later
+	}
+
+void base_xss_code::dispatch(stmt_dispatch& info)
+	{
+    assert(false); //td: ought to define what to do here, it would seem like the idiom would like
+                    //to handle this 
+	}
+
+void base_xss_code::add_line(const str& line, bool dress_line)
+  {
+    if (dress_line)
+      result_ += get_indent_str();
+
+    result_ += line;
+
+    if (dress_line)
+      result_ += '\n';
+  }
+
+str base_xss_code::get_indent_str()
+  {
+    str result;
+    for(int i = 0; i < indent_*4; i++)
+      {
+        result += ' ';
+      }
+
+    return result;
+  }
+
+void base_xss_code::render_code(code& cde, int indent)
+	{
+		int old_indent = indent_;
+		indent_ = indent;
+
+		cde.visit(this);
+
+		indent_ = old_indent;
+	}
 
 //base_xss_args
 base_xss_args::base_xss_args()
@@ -1292,7 +1435,7 @@ base_xss_args::base_xss_args(param_list_decl& args):
   {
   }
 
-str base_xss_args::generate()
+str base_xss_args::generate(const param_list pl)
   {
     std::ostringstream oss;
 
@@ -1300,109 +1443,14 @@ str base_xss_args::generate()
     param_list_decl::iterator nd = args_.end();
     for(; it != nd; it++)
       {
+				str param = resolve_param(*it);
         //td: defaults values, etc
-        oss << it->name << ",";
+        oss << param << ",";
       }
 
     str result = oss.str();
     if (!result.empty())
       result.erase(result.end() - 1);
+
     return result;
-  }
-
-//base_xss_function
-base_xss_function::base_xss_function()
-  {
-  }
-
-
-base_xss_function::base_xss_function( const code& code, const str& name, XSSContext ctx, param_list_decl& args):
-  code_(code),
-  name_(name),
-  args_(args),
-  ctx_(ctx)
-  {
-  }
-
-str base_xss_function::generate_code()
-  {
-    code_renderer renderer(ctx_, 0);
-    code_.visit(&renderer);
-
-    return renderer.get();
-  }
-
-//base_idiom
-void base_idiom::set_context(XSSContext ctx)
-  {
-    ctx_ = ctx;
-  }
-
-variant base_idiom::process_method(XSSObject instance, xs_method& mthd)
-  {
-    XSSContext ctx(new xss_composite_context(ctx_));
-    ctx->this_ = instance;
-
-    xssFunction result(new base_xss_function(mthd.cde, mthd.name, ctx, mthd.args));
-    functions_.push_back(result);
-    return result;
-  }
-
-variant base_idiom::process_event(XSSObject instance, const str& event_name, xs_event& ev)
-  {
-    XSSContext ctx(new xss_composite_context(ctx_));
-    ctx->this_ = instance;
-
-    xssFunction result(new base_xss_function(ev.cde, event_name, ctx, ev.args));
-    functions_.push_back(result);
-    return result;
-  }
-
-variant base_idiom::process_code(code& cde, XSSObject this_)
-  {
-    XSSContext ctx(new xss_composite_context(ctx_));
-    ctx->this_ = this_;
-
-    xssCode result(new base_xss_code(ctx, cde));
-    return result;
-  }
-
-variant base_idiom::process_expression(expression expr, XSSObject this_)
-  {
-    XSSContext ctx(new xss_composite_context(ctx_));
-    ctx->this_ = this_;
-
-    xssExpression result(new base_xss_expression(ctx, expr));
-    return result;
-  }
-
-str base_idiom::resolve_this(XSSContext ctx)
-  {
-    //orogramming languages do not agree on how to use this pointers
-    //c++ lets you ignore them, jsva script et all force you to 
-    //and there are other intrincate circumstances (like functions in js)
-    //where something must be done.
-    
-    if (id_as_this_)
-      {
-        if (!ctx->this_.empty())
-          {
-            str iid = variant_cast<str>(dynamic_get(ctx->this_, "id"), ""); 
-            if (iid.empty())
-              {
-                param_list error;
-                error.add("id", SIdiom);
-                error.add("desc", SEveryInstanceMustHaveId);
-                xss_throw(error);
-              }
-
-            return iid;
-          }
-      }
-    else if (force_this_ && !ctx->this_.empty())
-      {
-        return "this";
-      }    
-      
-    return "";
   }

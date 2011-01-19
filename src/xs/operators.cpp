@@ -318,6 +318,22 @@ struct default_not : operator_exec
       }
   };
 
+struct plus_str : operator_exec
+  {
+    virtual variant exec(variant& arg1, variant& arg2)
+      {
+				str a2 = arg2;
+				
+				if (arg1.empty())
+					return"null" + a2;
+				else
+				{
+					str a1 = arg1; //td: 
+					return a1 + a2;
+				}
+      }
+  };
+
 struct str_plus : operator_exec
   {
     virtual variant exec(variant& arg1, variant& arg2)
@@ -488,6 +504,7 @@ operator_registry::operator_registry()
 
 		//some string generals
 		register_wildcard(op_plus, type_schema<str>(), null, new str_plus() );
+		register_wildcard(op_plus, null, type_schema<str>(), new plus_str() );
 }
 
 size_t operator_registry::register_operator(operator_type op, schema* t1, schema* t2, operator_exec* exec)

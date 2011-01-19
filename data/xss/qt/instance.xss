@@ -1,0 +1,135 @@
+<xss:code>
+	if(cmp.properties)
+	{
+		for(var p in cmp.properties)
+		{
+            compiler.log("Before Cuchi Cuchi ");
+            string xx = p.type + "Cuchi";
+            compiler.log("Cuchi is: " + xx);
+        
+			if(p.set || p.get)
+			{
+				string set_prop_name = p.name + "_set(" + p.type + " value)";
+				string get_prop_name = p.name + "_get(void)";
+
+				// push methods of properties in array for include in class declaration
+				methods += set_prop_name;
+				methods += get_prop_name;
+
+				string var_name = p.name + "_";
+
+				//string var_decl = (p.type) ? (p.type + " " + var_name) : ("one_type " + var_name); // not implement yet
+				string var_decl = "one_type " + var_name; // for now
+				priv_vars += var_decl;
+
+				// it's a idea of an array of object that contain all 
+				// private variable of custom properties
+				// and this requerid to implement, a 'object type' and 'p.type'
+				//object prop_variable = (name = var_name, type = p.type);
+
+				// generate method for set value to property
+				out(indent = 0)
+				{
+					void <xss:e value="main_class"/>::<xss:e value="set_prop_name"/>
+					<xss:open_brace/>
+						<xss:e value="var_name"/> = value;
+				}
+				if(p.set)
+				{
+					out(indent = 1)
+					{
+						<xss:e value="p.set.generate()"/>
+					}
+				}
+				out(indent = 0)
+				{
+					<xss:close_brace/>
+					<xss:return/>
+				}
+
+				// generate method for get value of property
+				out(indent = 0)
+				{
+					void <xss:e value="main_class"/>::<xss:e value="get_prop_name"/>
+					<xss:open_brace/>
+				}
+				if(p.get)
+				{
+					out(indent = 1)
+					{
+						<xss:e value="p.get.generate()"/>
+					}
+				}
+				out(indent = 0)
+				{
+						return <xss:e value="var_name"/>;
+					<xss:close_brace/>
+					<xss:return/>
+				}
+			}
+			else
+			{
+				// do nothing in C/C++
+			}
+		}
+	} // if(cmp.properties)
+
+    if(cmp.events)
+	{
+		for(var e in cmp.events)
+		{
+			if(!e.implemented)
+				continue;
+
+			string evt_name = "on_" + cmp.id + "_" + e.qt_name + "()";
+
+            compiler.log(evt_name);
+
+			// push event in array for include in class declaration
+			methods += evt_name;
+
+			out(indent = 0)
+			{
+				void <xss:e value="main_class"/>::<xss:e value="evt_name"/>
+				<xss:open_brace/>
+			}
+				
+			for(var impl in e.impls)
+			{
+				out(indent = 1)
+				{
+					<xss:e>impl.generate()</xss:e>
+				}
+			}
+				
+			out(indent = 0)
+			{
+				<xss:close_brace/>
+				<xss:return/>
+			}
+		}
+	} // if(cmp.events)
+		
+    if(cmp.methods)
+	{
+		//reset method is twise repeated, why?
+
+		for(var m in cmp.methods)
+		{
+			compiler.log(m.name + " : " + m.type);
+            string mthd_name = m.name + "(" + m.args.generate() + ")";
+
+			// push method in array for include in class declaration
+			methods += mthd_name;
+
+			out(indent = 0)
+			{
+				void <xss:e value="main_class"/>::<xss:e value="mthd_name"/>
+				<xss:open_brace/>
+					<xss:e>m.code.generate()</xss:e>
+				<xss:close_brace/>
+				<xss:return/>
+			}
+		}
+	} // if(cmp.methods)
+</xss:code>

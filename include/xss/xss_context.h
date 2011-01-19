@@ -10,12 +10,14 @@ namespace xkp {
 class		xss_object;
 class   xss_property;
 class   xss_event;
+class   xss_method;
 struct  xss_code_context;
   
 typedef reference<xss_object>				XSSObject;
 typedef reference<xss_property>     XSSProperty;
 typedef reference<xss_code_context> XSSContext;
 typedef reference<xss_event>				XSSEvent;
+typedef reference<xss_method>				XSSMethod;
 
 class xss_object : public editable_object<xss_object>,
 									 public boost::enable_shared_from_this<xss_object>
@@ -57,12 +59,11 @@ class xss_object : public editable_object<xss_object>,
 //the idiom interface, under designed
 struct xss_idiom
   {
-    virtual void    set_context(XSSContext ctx)                                                = 0;
-    virtual variant process_method(XSSObject instance, xs_method& mthd)                    = 0; 
-    virtual variant process_event(XSSObject instance, const str& event_name, xs_event& ev) = 0;
-    virtual variant process_code(code& cde, XSSObject this_)                               = 0;
-    virtual variant process_expression(expression expr, XSSObject this_)                   = 0;
-    virtual str     resolve_this(XSSContext ctx)                                               = 0;
+    virtual void    set_context(XSSContext ctx)																				=	0;
+    virtual variant process_code(code& cde, param_list_decl& params, XSSObject this_) = 0;
+    virtual variant process_expression(expression expr, XSSObject this_)							= 0;
+		virtual variant process_args(param_list_decl& params)															= 0;
+    virtual str     resolve_this(XSSContext ctx)																			= 0;
   };
 
 struct xss_code_context : base_code_context
@@ -128,6 +129,7 @@ class xss_event : public xss_object
 
 			str          name;
 			DynamicArray impls;
+			variant			 args;	
 
 			bool implemented()
 				{
@@ -135,6 +137,18 @@ class xss_event : public xss_object
 				}
   };
 
+class xss_method : public xss_object
+  {
+		public:
+			xss_method();
+			xss_method(const xss_method& other);
+			xss_method(const str& _name, const str& type, variant _args, variant code);
+
+			str     name;
+			str			type;
+			variant args;	
+			variant code;	
+  };
 }
 
 
