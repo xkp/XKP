@@ -575,12 +575,41 @@ struct expression_renderer : expression_visitor
 
             case op_array:
               {
-                assert(false); //td
-                break;
+                std::stringstream result;
+
+                result << "[";
+
+								std::vector<str> params;
+								int arg_count = arg1;
+                for(int i = 0; i < arg_count; i++)
+									{
+										variant opnd = stack_.top(); stack_.pop();
+										params.push_back( operand_to_string(opnd) );
+									}
+
+								std::vector<str>::reverse_iterator ait = params.rbegin();
+								std::vector<str>::reverse_iterator and = params.rend();
+								for(; ait != and; ait++)
+									{
+										result << *ait;
+										if (ait + 1 != and)
+											result << ", ";
+									}
+
+                result << "]";
+                push_rendered(result.str(), op_prec, variant()); 
+								break;
               }
 
             case op_index:
-            default:
+              {
+                std::stringstream result;
+								result << operand_to_string(arg1) << "[" << operand_to_string(arg2) << "]";
+                push_rendered(result.str(), op_prec, variant()); 
+                break;
+              }
+
+						default:
               assert(false); //td:
           }
       }
@@ -1272,6 +1301,8 @@ base_xss_code::base_xss_code(XSSContext ctx, code& code):
 
 str base_xss_code::generate(const param_list pl)
   {
+		result_ = ""; //td: cache
+
     code_.visit(this);
 
     return result_;

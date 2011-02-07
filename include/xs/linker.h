@@ -127,7 +127,7 @@ namespace xkp
         void    resolve_value(variant& arg, schema** type = null);
         void    resolve_operator(operator_type op, variant arg1, variant arg2, bool* dont_assign);
         void    resolve_unary_operator(operator_type op, variant arg, bool* dont_assign);
-        bool    resolve_custom_operator(operator_type op, schema* type, bool* dont_assign);
+        bool    resolve_custom_operator(operator_type op, schema* type, bool invert, bool* dont_assign);
         void    resolve_assign(const variant& arg, bool invert_set = false);
         void    add_fixup( int idx, fixup_dest dest );
         schema* add_stack_lookup(const str& query, schema* type);

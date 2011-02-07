@@ -258,8 +258,8 @@ variant execution_context::execute()
 						case i_dynamic_binary_assign_operator:
 							{
                 bool		assign = false;
-								variant arg2	 = pop();
-                variant arg1   = pop();
+								variant arg1	 = pop();
+                variant arg2   = pop();
                 schema* type1  = true_type(arg1); assert(type1);
                 schema* type2  = true_type(arg2); assert(type2);
 

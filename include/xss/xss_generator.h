@@ -54,6 +54,7 @@ namespace xkp
       bool handle_class(const str& text, param_list* args);
       bool handle_file(const str& text, param_list* args);
 			bool handle_marker(const str& text, param_list* args);
+			bool handle_instance(const str& text, param_list* args);
   };
   
   typedef reference<xss_generator> XSSGenerator;

@@ -117,7 +117,7 @@ if (it.events)
 		//remember every event could be impemented multiple times
         string ev_name = it.id + "." + ev.name;
 		var    impls   = ev.impls;
-		var    evargs  = null;
+		var    evargs  = ev.args;
 		
 		//generate functions
 		out(indent = 0)
@@ -128,14 +128,9 @@ if (it.events)
 		
         for(var evimpl in impls)
 		{
-            if (!evargs)
-            {
-                evargs = evimpl.args; 
-            }
-        
 			out(indent = 1)
 			{
-			    <xss:e>evimpl.generate_code()</xss:e>
+			    <xss:e>evimpl.generate()</xss:e>
 			}
 		}
 

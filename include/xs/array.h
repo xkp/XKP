@@ -125,6 +125,11 @@ namespace xkp
 				{
 					return (int)ref_->size();
 				}
+
+			bool empty()
+				{
+					return ref_->empty();
+				}
       protected:
         container_ref ref_;
     };
@@ -182,6 +187,7 @@ namespace xkp
           this->template readonly_property<typename T::iterator>("begin", &T::begin);
           this->template readonly_property<typename T::iterator>("end",   &T::end);
           this->template readonly_property<int>									("size",	&T::size);
+          this->template readonly_property<bool>								("empty",	&T::empty);
           this->template method_<void, 1>              ("insert", &T::insert);
           this->template method_<void, 1>              ("+",      &T::insert, OP_BLOCK_ASSIGN);
           this->template method_<void, 1>              ("+=",     &T::insert, OP_BLOCK_ASSIGN);

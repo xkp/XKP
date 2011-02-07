@@ -39,7 +39,7 @@ struct js_idiom : xss_idiom
     js_idiom(const js_idiom& other)	: ctx_(other.ctx_),id_as_this_(false) {}
   
     virtual void    set_context(XSSContext ctx);
-    virtual variant process_code(code& cde, param_list_decl& params, XSSObject this_);
+    virtual variant process_code(code& cde, param_list_decl& params, XSSContext ctx);
     virtual variant process_expression(expression expr, XSSObject this_);
 		virtual variant process_args(param_list_decl& params);
     virtual str     resolve_this(XSSContext ctx);

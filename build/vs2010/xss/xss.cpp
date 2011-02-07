@@ -99,6 +99,7 @@ void print_error(param_list data, XSSProject project)
         std::cout << name << " = " << value_str << '\n';
       }
 
+		std::cout << "\nFile:" << project->top_file() << '\n';
 		std::cout << "\nLast Rendererd: \n\n" << project->last_rendered(5);
   }
   
@@ -150,6 +151,13 @@ int main(int argc, char* argv[])
         succeeded = false;
         print_error(rte.data, project);
       }
+		//catch(type_mismatch tm)
+		//	{
+  //      succeeded = false;
+		//		param_list data;
+		//		data.add("desc", str("Type mismatch"));
+  //      print_error(data, project);
+		//	}
     
     if (succeeded)
       {

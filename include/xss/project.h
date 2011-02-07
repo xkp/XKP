@@ -28,15 +28,15 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
     public:
 			typedef std::vector<XSSObject> XSSObjectList;
 
-      std::vector<str>  includes;
-      variant           application;
-      variant           idiom;
-      variant           path;
-      XSSObjectList			instances;
-      XSSObjectList			classes;
+      variant       application;
+      variant       idiom;
+      variant       path;
+      XSSObjectList	instances;
+      XSSObjectList	classes;
+      XSSObjectList	includes;
 
       void compile_instance(const str& filename, XSSObject instance);
-			void compile_ast(xs_container& ast, XSSObject instance);
+			void compile_ast(xs_container& ast, XSSContext ctx);
       void register_instance(const str& id, XSSObject instance);
       void render_instance(XSSObject instance, const str& xss, int indent);
       str  resolve_dispatcher(XSSObject instance, const str& event_name);
@@ -53,22 +53,18 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       str  load_file(const str& fname);
 			void output_file(const str& fname, const str& contents);
 			variant evaluate_property(XSSObject obj, const str& prop);
-			XSSObject get_class(const str& name);
+			XSSObject get_class(const str& name, bool enforce = false);
 			str	get_anonymous_id(const str& class_name);
-			XSSObject resolve_path(const std::vector<str>& path, XSSObject base);
+			XSSObject resolve_path(const std::vector<str>& path, XSSObject base, str& result);
 			variant resolve_property(const str& path, variant parent);
 			str last_rendered(int count);
 			void log(const param_list params);
 			str generate_expression(const str& expr);
+			bool parse_expression(variant v);
+			str replace(const str& s, const str& o, const str& n);
     public:
-      //access
-      DynamicArray  get_property_array(XSSObject obj);
-      DynamicArray  get_method_array(XSSObject obj);
-      DynamicArray  get_event_array(XSSObject obj);
-      DynamicArray  get_children_array(XSSObject obj);
-
       //some utils, god those are long names
-      XSSObject get_instance(const str& id);
+      XSSObject			get_instance(const str& id);
       void          add_application_file(const str& file, XSSObject obj);
       DynamicArray  get_event_impl(XSSObject obj, const str& event_name, XSSEvent& ev);
 
@@ -107,14 +103,20 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       XSSGenerator							current_;
       XSSContext								context_;
 			std::stack<XSSGenerator>	generators_; 	
+			std::stack<str>						file_stack_; 	
 
-      void save_file(const str& fname, const str& contents);
-      void preprocess();
-      void read_classes(const str& class_library_file);
+      void					save_file(const str& fname, const str& contents);
+      void					preprocess();
+      void					read_classes(const str& class_library_file);
+			void					do_includes();
+			XSSObjectList read_xs_classes(const str& xs_file);
 
 		public:
 			void push_generator(XSSGenerator gen);
 			void pop_generator();
+			void push_file(const str& fname);
+			void pop_file();
+			str	 top_file();
 
 		private:
 			typedef std::map<str, int> anonymous_list;	
@@ -144,6 +146,7 @@ struct xss_object_schema : editable_object_schema<T>
       {
 				property_("properties", &T::properties_);
 				property_("events",			&T::events_);
+				property_("methods",		&T::methods_);
 				property_("children",		&T::children_);
 			}
   };
@@ -175,6 +178,8 @@ struct xss_project_schema : object_schema<xss_project>
 				method_<str,			1>("genid",								&xss_project::get_anonymous_id);
 				method_<variant,	2>("resolve_property",		&xss_project::resolve_property);
 				method_<str,			1>("generate_expression",	&xss_project::generate_expression);
+				method_<bool,			1>("parse_expression",		&xss_project::parse_expression);
+				method_<str,			3>("replace",							&xss_project::replace);
       }
   };
 
@@ -220,6 +225,7 @@ struct xss_property_schema : xss_object_schema<xss_property>
         property_("set",   &xss_property::set);
 
         method_<str, 0>("generate_value", &xss_property::generate_value);
+        method_<str, 0>("resolve_value",	&xss_property::resolve_value);
         method_<str, 1>("resolve_assign", &xss_property::resolve_assign);
       }
   };

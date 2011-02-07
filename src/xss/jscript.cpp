@@ -19,11 +19,8 @@ void js_idiom::set_context(XSSContext ctx)
 		ctx_ = ctx;
 	}
 
-variant js_idiom::process_code(code& cde, param_list_decl& params, XSSObject this_)
+variant js_idiom::process_code(code& cde, param_list_decl& params, XSSContext ctx)
 	{
-    XSSContext ctx(new xss_composite_context(ctx_));
-    ctx->this_ = this_;
-
     JSCode result(new js_code(ctx, cde));
     return result;
 	}
@@ -50,7 +47,10 @@ str js_idiom::resolve_this(XSSContext ctx)
     //and there are other intrincate circumstances (like functions in js)
     //where something must be done.
     
-    if (id_as_this_)
+		XSSObject instance = variant_cast<XSSObject>(ctx->this_, XSSObject());
+		bool		  override_id_as_this = instance->has("@class");
+
+		if (!override_id_as_this && id_as_this_)
       {
         if (!ctx->this_.empty())
           {

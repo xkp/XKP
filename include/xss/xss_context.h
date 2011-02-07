@@ -24,7 +24,9 @@ class xss_object : public editable_object<xss_object>,
 	{
 		public:
 			xss_object();
-
+		public:
+			//IDynamicObject
+			virtual void visit(dynamic_visitor* visitor);
 		public:
 			//accesors
 			XSSObject type();
@@ -39,6 +41,7 @@ class xss_object : public editable_object<xss_object>,
 		public:
 			XSSProperty get_property(const str& name);
 			XSSEvent		get_event(const str& name);
+			XSSMethod		get_method(const str& name);
 		public:
 			//misc, not neccesarily to be published
 			void limbo_add(const str& id, variant value);
@@ -60,7 +63,7 @@ class xss_object : public editable_object<xss_object>,
 struct xss_idiom
   {
     virtual void    set_context(XSSContext ctx)																				=	0;
-    virtual variant process_code(code& cde, param_list_decl& params, XSSObject this_) = 0;
+    virtual variant process_code(code& cde, param_list_decl& params, XSSContext ctx)	= 0;
     virtual variant process_expression(expression expr, XSSObject this_)							= 0;
 		virtual variant process_args(param_list_decl& params)															= 0;
     virtual str     resolve_this(XSSContext ctx)																			= 0;
@@ -119,6 +122,7 @@ class xss_property : public xss_object
 			str     generate_value();
 			variant get_value();
 			str			resolve_assign(const str& value);
+			str			resolve_value();
   };
   
 class xss_event : public xss_object
@@ -142,7 +146,7 @@ class xss_method : public xss_object
 		public:
 			xss_method();
 			xss_method(const xss_method& other);
-			xss_method(const str& _name, const str& type, variant _args, variant code);
+			xss_method(const str& _name, const str& type, variant _args, variant _code);
 
 			str     name;
 			str			type;

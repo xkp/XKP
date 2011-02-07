@@ -263,8 +263,12 @@ struct worker
 											outfile_info& file_info = files_[it->dyn_idx];
 
 											str source = it->text;
+											bool got_src = false;
 											if (!file_info.source.empty())
 												{
+													got_src = true;
+													project_->push_file(file_info.source);
+
 													str src_file = project_->source_file_name(file_info.source);
 													source	 = project_->load_file(src_file);
 												}
@@ -289,10 +293,19 @@ struct worker
 													ctx.scope_->register_symbol(*it, vv);
 												}
 
-											result = project_->generate_xss(source, gen);
+											str contents = project_->generate_xss(source, gen);
 
 											project_->pop_generator();
-											project_->output_file(file_info.output, result);
+											if (got_src)
+												project_->pop_file();
+
+											if (file_info.output == "inline")
+											{
+												result += contents;
+												//project_->generator()->append(result);
+											}
+											else
+												project_->output_file(file_info.output, contents);
 
 											break;
 										}

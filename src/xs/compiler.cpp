@@ -1459,7 +1459,7 @@ bool xs_compiler::compile_expression(const str& expr, expression& result)
   {
     TokenStruct* root;
     std::wstring buf          = str2wide(expr);
-    bool         success      = true;
+    bool         success      = false;
     int          parse_result = Parse((wchar_t*)buf.c_str(), buf.size(), 1, 0, &root);
 
     if (parse_result == PARSEACCEPT)

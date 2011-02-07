@@ -555,6 +555,10 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
         case op_le:
         case op_and:
         case op_or:
+          {
+            resolve_operator(op, arg1, arg2, null);
+            break;
+          }
         case op_index:
           {
             resolve_operator(op, arg1, arg2, null);
@@ -603,9 +607,9 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
         case op_dot:
           {
             schema* type = null;
-            resolve_value(arg1, &type);
-
             expression_identifier ei = arg2;
+            
+						resolve_value(arg1, &type);
 
             if (type && 
 								type != type_schema<empty_type>() &&
@@ -1058,9 +1062,9 @@ schema* code_linker::link_expression(expression& expr, bool assigner, bool* empt
 											}
 										else
 											{
-												if (!resolve_custom_operator(op, left_type, &dont_assign))
+												if (!resolve_custom_operator(op, left_type, true, &dont_assign))
 													{
-														if (!resolve_custom_operator(op, right_type, &dont_assign))
+														if (!resolve_custom_operator(op, right_type, true, &dont_assign))
 															{
 																//now that we've tried everything folk,
 																//lets try the native operator (like + in +=)
@@ -1520,9 +1524,10 @@ void code_linker::resolve_operator(operator_type op, variant arg1, variant arg2,
       }
     else
       {
-        if (!resolve_custom_operator(op, type1, dont_assign))
+				bool invert = !arg1.is<already_in_stack>();
+        if (!resolve_custom_operator(op, type1, invert, dont_assign))
           {
-            if (!resolve_custom_operator(op, type2, dont_assign))
+            if (!resolve_custom_operator(op, type2, invert, dont_assign))
               {
                 add_instruction(i_dynamic_binary_operator, static_cast<short>(op));
                 already_in_stack ais(null);
@@ -1597,7 +1602,7 @@ void code_linker::resolve_unary_operator(operator_type op, variant arg1, bool* d
       }
   }
 
-bool code_linker::resolve_custom_operator(operator_type op, schema* type, bool* dont_assign)
+bool code_linker::resolve_custom_operator(operator_type op, schema* type, bool invert, bool* dont_assign)
   {
     if (!type)
       return false;
@@ -1608,7 +1613,7 @@ bool code_linker::resolve_custom_operator(operator_type op, schema* type, bool* 
 
     assert(custom_operator.exec);
     add_instruction(i_load_constant, add_constant(custom_operator.exec));
-    add_call(i_call, 1, custom_operator.flags&DYNAMIC_ACCESS, true);
+    add_call(i_call, 1, custom_operator.flags&DYNAMIC_ACCESS, invert); 
     stack_.push( already_in_stack(custom_operator.type) );
 
     if (dont_assign)
