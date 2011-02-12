@@ -19,17 +19,19 @@ const str SExpectingOutputAttribute("Tag must contain 'output' attribute");
 const str SMarkerWithNoName("Markers must contain 'name' attribute");
 const str SDuplicateMarker("Duplicate marker");
 const str SUnknownMarker("Unknown marker");
+const str SUnnamedInstance("Instances must have id");
 
 //xss_generator
 xss_generator::xss_generator(XSSContext context):
   context_(context)
   {
-    handlers_.insert(handler_pair("text",       &xss_generator::handle_text));
-    handlers_.insert(handler_pair("xss:code",   &xss_generator::handle_code));
-    handlers_.insert(handler_pair("xss:e",      &xss_generator::handle_expression));
-    handlers_.insert(handler_pair("xss:class",  &xss_generator::handle_class));
-    handlers_.insert(handler_pair("xss:file",		&xss_generator::handle_file));
-    handlers_.insert(handler_pair("xss:marker",	&xss_generator::handle_marker));
+    handlers_.insert(handler_pair("text",					&xss_generator::handle_text));
+    handlers_.insert(handler_pair("xss:code",			&xss_generator::handle_code));
+    handlers_.insert(handler_pair("xss:e",				&xss_generator::handle_expression));
+    handlers_.insert(handler_pair("xss:class",		&xss_generator::handle_class));
+    handlers_.insert(handler_pair("xss:file",			&xss_generator::handle_file));
+    handlers_.insert(handler_pair("xss:marker",		&xss_generator::handle_marker));
+    handlers_.insert(handler_pair("xss:instance",	&xss_generator::handle_instance));
 	}
 
 str xss_generator::get()
@@ -146,7 +148,7 @@ bool xss_generator::handle_class(const str& text, param_list* args)
     xs_utils xs;
 
     //what we'll really compile is an instance, but xss:class sounder classier
-    DynamicObject instance(new default_object);
+    DynamicObject instance(new xss_object);
 
     xss_composite_context ctx(context_);
     ctx.this_ = instance;
@@ -261,4 +263,34 @@ bool xss_generator::handle_file(const str& text, param_list* args)
 			project->output_file(output, result);
 		
 		return true;	
+	}
+
+bool xss_generator::handle_instance(const str& text, param_list* args)
+	{
+		str id = variant_cast<str>(args->get("id"), "");
+		if (id.empty())
+			{
+					param_list error;
+					error.add("id", SExpectingData);
+					error.add("desc", SUnnamedInstance);
+					xss_throw(error);
+			}
+
+		xs_utils xs;
+
+    //what we'll really compile is an instance, but xss:class sounder classier
+    DynamicObject instance(new xss_object);
+
+    xss_composite_context ctx(context_);
+    ctx.this_ = instance;
+
+		XSSProject owner = context_->project_;
+    DslLinker ol(new out_linker(owner));
+    ctx.dsls.insert(dsl_list_pair("out", ol));
+    ctx.dsl_ = &ctx.dsls; //td: !!! this will break under many dsls
+
+    xs.compile_implicit_instance(text, instance, ctx);
+
+		context_->scope_->register_symbol(id, instance); //td: !!! redeisgn the context
+    return true;
 	}

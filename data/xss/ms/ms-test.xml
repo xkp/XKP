@@ -2,7 +2,7 @@
     <path generator="app.xss"
           class_library="classes.xml"
           source_path="../ms/" 
-          output_path="../output/" 
+          output_path="../output/ms/" 
           output_file="ms-test.html"/>
 
     <idiom class="js-idiom" id_as_this="true"/>
@@ -28,5 +28,7 @@
                 <label id="switchLabel2" x="0" y="0" caption="Now you dont"/>
             </switch>
         </div>
+
+        <line x1="0" y1="0" x2="100" y2="100" lineWidth="5"/>
     </application>
 </xss:project>

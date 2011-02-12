@@ -35,6 +35,9 @@ const str SFileNotFound("File not found");
 const str SOutputtingNonString("Trying to output a value that does not translate to a string");
 const str SInvalidExpression("Cannot compile expression");
 const str SIncompatibleReturnType("Return type differs from declared type");
+const str SOnlyClassAllowed("Only class are allowed in include files");
+const str SBadInheritance("A class cannot inherit different types");
+const str SDuplicateClassOnLibrary("Duplicate class");
 
 struct property_mixer : dynamic_visitor
   {
@@ -65,10 +68,16 @@ xss_object::xss_object():
 	methods_(new dynamic_array),
 	events_(new dynamic_array)
 	{
-		add_property("children", children_);
-		//add_property("properties", properties_);
-		add_property("methods", methods_);
-		add_property("events", events_);
+	}
+
+void xss_object::visit(dynamic_visitor* visitor)
+	{
+		visitor->item("children", children_);
+		visitor->item("properties", properties_);
+		visitor->item("methods", methods_);
+		visitor->item("events", events_);
+
+		editable_object<xss_object>::visit(visitor);
 	}
 
 XSSObject xss_object::type()
@@ -83,6 +92,14 @@ void xss_object::xss_type(XSSObject type)
 		XSSObject me(shared_from_this());
 		property_mixer pm(type, me);
 		type_->visit(&pm);
+
+		bool native = variant_cast<bool>(dynamic_get(type, "native"), false);
+		if (native)
+			{
+				str id = variant_cast<str>(dynamic_get(type, "id"), str());
+				dynamic_set(this, "native_class", id);
+				return;
+			}
 
 		DynamicArray tprops = type->properties();
 		for(int i = 0; i < tprops->size(); i++)
@@ -106,6 +123,23 @@ void xss_object::xss_type(XSSObject type)
 					}
 			}
 
+		DynamicArray tmethods = type->methods();
+		for(int i = 0; i < tmethods->size(); i++)
+			{
+				XSSMethod mthd	 = tmethods->at(i);
+				XSSMethod mymthd = get_method(mthd->name);
+
+				if (mymthd)
+					{
+						assert(false); //td: do super
+					}
+
+				XSSMethod cln(new xss_method(*(mymthd.get())));
+				cln->copy(mymthd.get()); //td: proper cloning
+
+				methods_->insert(cln);
+			}
+
 		DynamicArray tevents = type->events();
 		for(int i = 0; i < tevents->size(); i++)
 			{
@@ -123,6 +157,13 @@ void xss_object::xss_type(XSSObject type)
 					{
 						myev->copy(ev.get());
 					}
+			}
+
+		DynamicArray tchildren = type->children();
+		for(int i = 0; i < tchildren->size(); i++)
+			{
+				XSSObject child = tchildren->at(i);
+				children_->insert(child); //td: cloning
 			}
 	}
 
@@ -157,6 +198,9 @@ void xss_object::copy(xss_object* other)
 		item_list::iterator nd = other->items_.end();
 		for(; it != nd; it++)
 			{
+				if (it->first == "@class") 
+					continue; //td: generalize system variables
+
 				if (has(it->first))
 					continue; //td: decide
 				
@@ -194,6 +238,17 @@ XSSEvent xss_object::get_event(const str& name)
 		return XSSEvent();
 	}
 
+XSSMethod	xss_object::get_method(const str& name)
+	{
+		for(int i = 0; i < events_->size(); i++)
+			{
+				XSSMethod mthd = methods_->at(i);
+				if (mthd->name == name)
+					return mthd;
+			}
+
+		return XSSMethod();
+	}
 
 struct limbo_setter : setter
   {
@@ -446,7 +501,8 @@ xss_property::xss_property(const xss_property& other):
   get(other.get),
   set(other.set),
   value_(other.value_),
-  this_(other.this_)
+  this_(other.this_),
+	type(other.type)
   {
 		DYNAMIC_INHERITANCE(xss_property)
   }
@@ -551,6 +607,17 @@ str	xss_property::resolve_assign(const str& value)
 		return name + " = " + value;
   }
 
+str	xss_property::resolve_value()
+	{
+    str get_fn = variant_cast<str>(dynamic_get(this, "get_fn"), ""); 
+
+		if (!get.empty())
+			return name + "_get()";
+		else if (!get_fn.empty())
+			return get_fn + "()";
+		return name;
+  }
+
 //xss_method
 xss_method::xss_method() 
 	{
@@ -602,7 +669,7 @@ struct pre_process : dynamic_visitor
                 str     id  = variant_cast<str>(v, "");
 								str			class_name;
 
-                if (dynamic_try_get(child, "class", v))
+								if (dynamic_try_get(child, "class", v) && !v.empty())
                   {
                     class_name = str(v);
 										
@@ -625,10 +692,7 @@ struct pre_process : dynamic_visitor
             str type = variant_cast<str>(dynamic_get(obj, "type"), "");
 						XSSProperty prop(new xss_property(id, type, obj, object_));
 
-            //grab the "properties" array
-            assert(parent_);
-            DynamicArray obj_properties = owner_.get_property_array(object_);
-            obj_properties->push_back(prop);
+            object_->properties()->push_back(prop);
             return;
           }
 
@@ -763,20 +827,15 @@ str out::line_break()
 //xss_project
 void xss_project::build()
   {
-    //grab the path
+    idiom_ = idiom;
+
+		//grab the path
     //td: change path to config... or something.
     str sp = variant_cast<str>(dynamic_get(path, "source_path"), "");
     source_path_ = sp;
 
     str op = variant_cast<str>(dynamic_get(path, "output_path"), "");
     output_path_ = op;
-
-    //read the classes
-    str class_library = variant_cast<str>(dynamic_get(path, "class_library"), "");
-    read_classes(class_library);
-
-    //grab the idiom
-    idiom_ = idiom;
 
     //contextualize
     XSSProject me(shared_from_this());
@@ -791,7 +850,13 @@ void xss_project::build()
 
     idiom_->set_context(context_);
 
-    //go at it
+		//load the classes
+    str class_library = variant_cast<str>(dynamic_get(path, "class_library"), "");
+
+    read_classes(class_library);
+		do_includes();
+
+		//go at it
     preprocess();
 
     //the application object is manually handled... not sure why atm
@@ -807,17 +872,191 @@ void xss_project::build()
 
     for(; it != nd; it++)
       {
-        compile_instance(it->file, it->obj);
+        push_file(it->file);
+				compile_instance(it->file, it->obj);
+        pop_file();
       }
 
     str generator_file = variant_cast<str>(dynamic_get(path, "generator"), "");
-    str result = generate_file(generator_file);
+    
+		str result = generate_file(generator_file);
 
     str of = variant_cast<str>(dynamic_get(path, "output_file"), "");
 
 		fs::path fname = base_path_ / output_path_ / of; 
 		save_file(fname.string(), result);
   }
+
+void xss_project::do_includes()
+	{
+		XSSObjectList::iterator it = includes.begin();
+		XSSObjectList::iterator nd = includes.end();
+		for(; it != nd; it++)
+			{
+				str src_file = variant_cast<str>(dynamic_get(*it, "src"), str(""));	
+				str def_file = variant_cast<str>(dynamic_get(*it, "def"), str(""));	
+
+				//so we must mix instances again, the strategy in this case is to
+				//grab the code and then add the props coming from the definition
+				type_registry types;
+				types.set_default_type(type_schema<xss_object>());
+
+				fs::path filepath = base_path_ / source_path_ / def_file; 
+				xml_read_archive arch(load_file(filepath.string()), &types, XML_RESOLVE_CLASS|XML_RESOLVE_ID); //td: generalize xml
+
+				//grab the definition clasess and extract their names for efficiency purposes
+				typedef std::map<str, XSSObject> def_clazz_list;
+
+				XSSObjectList def_classes = arch.get( type_schema<XSSObjectList>() );
+
+				def_clazz_list def_clazzes;
+				XSSObjectList::iterator dit = def_classes.begin();
+				XSSObjectList::iterator dnd = def_classes.end();
+				for(; dit != dnd; dit++)
+					{
+						XSSObject def_clazz = *dit;
+						str				def_class_id  = variant_cast<str>(dynamic_get(def_clazz, "id"), str()); assert(!def_class_id.empty());
+						
+						def_clazz_list::iterator dcit = def_clazzes.find(def_class_id);
+						if (dcit != def_clazzes.end())
+							{
+								param_list error;
+								error.add("id", SOutOfContext);
+								error.add("desc", SDuplicateClassOnLibrary);
+								error.add("class", def_class_id);
+								xss_throw(error);
+							}
+
+						def_clazzes.insert(std::pair<str, XSSObject>(def_class_id, def_clazz));
+					}
+
+				//now get the xs classes
+				XSSObjectList src_classes = read_xs_classes(src_file);
+
+				XSSObjectList::iterator sit = src_classes.begin();
+				XSSObjectList::iterator snd = src_classes.end();
+				for(; sit != snd; sit++)
+					{
+						XSSObject clazz    = *sit;
+						clazz->seal();
+
+						str				class_id = variant_cast<str>(dynamic_get(clazz, "id"), str()); assert(!class_id.empty());
+						str				super		 = variant_cast<str>(dynamic_get(clazz, "super"), str()); 
+						XSSObject super_clazz;
+
+						def_clazz_list::iterator dcit = def_clazzes.find(class_id);
+						if (dcit != def_clazzes.end())
+							{
+								//check super classes
+								str	def_super = variant_cast<str>(dynamic_get(dcit->second, "super"), str()); 
+								if (!def_super.empty())
+									{
+										if (super.empty())	
+											{
+												super       = def_super;
+												super_clazz = get_class(def_super, true); 
+												clazz->xss_type(super_clazz);
+											}
+										else if (super != def_super)
+											{
+												param_list error;
+												error.add("id", SOutOfContext);
+												error.add("desc", SBadInheritance);
+												error.add("super 1", def_super);
+												error.add("super 2", super);
+												xss_throw(error);
+											}
+									}
+									
+								
+								super_clazz = get_class(super, true); 
+								dynamic_set(clazz, "super", super);
+								dynamic_set(clazz, "super_class", super_clazz);
+
+								//and composite
+								clazz->xss_type(dcit->second);
+							}
+
+						clazz->add_property("native", true);
+						classes.push_back(clazz);
+						classes_.insert(class_registry_pair(class_id, clazz));
+					}
+			}
+	}
+
+xss_project::XSSObjectList xss_project::read_xs_classes(const str& xs_file)
+	{
+		XSSObjectList result;
+
+		fs::path filepath = base_path_ / source_path_ / xs_file;
+
+		xs_compiler  compiler;
+    xs_container results;
+		compiler.compile_xs(load_file(filepath.string()), results);
+    
+    for(size_t i = 0; i < results.size(); i++)
+      {
+				variant vv = results.get(i);
+				if (!vv.is<xs_class>())
+					{
+						//what kinda class are you?
+						param_list error;
+						error.add("id", SCompile);
+						error.add("desc", SOnlyClassAllowed);
+						xss_throw(error);
+					}
+
+				XSSObject clazz = XSSObject(new xss_object());
+
+				xs_class  ci = vv;
+				if (!ci.super.empty())
+					{
+						XSSObject super = get_class(ci.super);
+						if (!super)
+							{
+								param_list error;
+								error.add("id", SCannotResolve);
+								error.add("desc", SUnknownClass);
+								error.add("class", ci.super);
+								xss_throw(error);
+							}
+
+						clazz->xss_type(super);
+						dynamic_set(clazz, "super", ci.super);
+						dynamic_set(clazz, "super_class", super);
+					}
+
+				dynamic_set(clazz, "id", ci.name);
+				dynamic_set(clazz, "@class", true); //some fun
+				
+				XSSContext ictx(new xss_composite_context(context_));
+				ictx->this_ = clazz;
+
+				compile_ast(ci, ictx);
+				result.push_back(clazz);
+      }
+
+		return result;
+	}
+
+void xss_project::push_file(const str& fname)
+	{
+    std::cout << "Processing: " << fname << '\n';
+		file_stack_.push(fname);
+	}
+
+void xss_project::pop_file()
+	{
+		file_stack_.pop();
+	}
+
+str	xss_project::top_file()
+	{
+		if (file_stack_.empty())		
+			return "pre-process";
+
+		return file_stack_.top();
+	}
 
 str xss_project::output_path()
   {
@@ -829,15 +1068,17 @@ void xss_project::base_path(fs::path path)
 		base_path_ = path;
 	}
 
-void xss_project::compile_ast(xs_container& ast, XSSObject instance)
+void xss_project::compile_ast(xs_container& ast, XSSContext ctx)
 	{
     source_code_gather gather;
     ast.visit(&gather);
 
     //create a safe array to pass around, this should be the standard practice
     //
-    DynamicArray properties = get_property_array(instance);
-    DynamicArray methods    = get_method_array(instance);
+		XSSObject instance = variant_cast<XSSObject>(ctx->this_, XSSObject());
+
+		DynamicArray properties = instance->properties();
+		DynamicArray methods    = instance->methods();
 
     std::vector<xs_property>::iterator pit = gather.properties.begin();
     std::vector<xs_property>::iterator pnd = gather.properties.end();
@@ -849,7 +1090,7 @@ void xss_project::compile_ast(xs_container& ast, XSSObject instance)
 					{
 						param_list_decl args;
 
-						getter = idiom_->process_code(pit->get, args, instance);
+						getter = idiom_->process_code(pit->get, args, ctx);
 					}
 
         if (!pit->set.empty())
@@ -859,7 +1100,7 @@ void xss_project::compile_ast(xs_container& ast, XSSObject instance)
 						arg.name = "value";
 						arg.type = pit->type;
 						args.push_back(arg);
-						setter = idiom_->process_code(pit->set, args, instance);
+						setter = idiom_->process_code(pit->set, args, ctx);
 					}
 
         variant value;
@@ -895,8 +1136,8 @@ void xss_project::compile_ast(xs_container& ast, XSSObject instance)
 						xss_throw(error);
 					}
 
-				variant args = idiom_->process_args(mit->args);											 assert(!args.empty()); 
-				variant cde  = idiom_->process_code(mit->cde, mit->args, instance);  assert(!cde.empty()); 
+				variant args = idiom_->process_args(mit->args);									assert(!args.empty()); 
+				variant cde  = idiom_->process_code(mit->cde, mit->args, ctx);  assert(!cde.empty()); 
 
 				XSSMethod mthd(new xss_method(mit->name, type, args, cde));
         methods->push_back(mthd); //td: !!! inheritance!
@@ -952,11 +1193,63 @@ void xss_project::compile_ast(xs_container& ast, XSSObject instance)
 				XSSEvent		 ev;
         DynamicArray impls = get_event_impl(actual_instance, event_name, ev);
 
-				ev->args = idiom_->process_args(it->args);
+				if (actual_instance != instance)
+					{
+						//here's one. It would seem convinient that events implemented in 
+						//the context of a different instance would generate code using such
+						//instance as the *this* pointer. At least this should be a compiler option.
 
-        //let the idiom process implementations
-				variant impl = idiom_->process_code(it->cde, it->args, actual_instance);
-        impls->push_back(impl);
+						str iid    = variant_cast<str>(dynamic_get(instance, "id"), str("")); assert(!iid.empty());
+						str	mname  = iid + "_" + event_name;
+						
+						//so, create a method in the original instance
+						variant margs = idiom_->process_args(it->args);								 assert(!margs.empty()); 
+						variant mcde  = idiom_->process_code(it->cde, it->args, ctx);  assert(!mcde.empty()); 
+
+						XSSMethod mthd(new xss_method(mname, "", margs, mcde));
+						methods->push_back(mthd); 
+
+						//and generate a call to it on the actual method implementation
+						//the generation is a simple string.
+						std::stringstream css;
+						css << iid << '.' << mname << "(";
+
+						//stringify the parameters
+						std::stringstream pss;
+						param_list_decl::iterator pit = it->args.begin();
+						param_list_decl::iterator pnd = it->args.end();
+						for(; pit != pnd; pit++)
+							{
+								css << pit->name;
+								if (pit + 1 != pnd)
+									{
+										css << ",";
+									}
+							}
+
+						css << ");";
+
+						xs_compiler xsc;
+						code				cde;
+						if(xsc.compile_code(css.str(), cde))
+							{
+								XSSContext ictx(new xss_composite_context(ctx));
+								ictx->this_ = actual_instance;
+
+								variant impl = idiom_->process_code(cde, it->args, ictx);
+								impls->push_back(impl);
+							}
+					}
+				else
+					{
+						//let the idiom process implementations
+						XSSContext ictx(new xss_composite_context(ctx));
+						ictx->this_ = actual_instance;
+						variant impl = idiom_->process_code(it->cde, it->args, ictx);
+						impls->push_back(impl);
+					}
+
+				ev->args = idiom_->process_args(it->args);
       }
 
 		std::vector<xs_instance>::iterator iit = gather.instances.begin();
@@ -964,9 +1257,12 @@ void xss_project::compile_ast(xs_container& ast, XSSObject instance)
 		for(; iit != ind; iit++)
 			{
 				xs_instance& instance_ast = *iit;
-				XSSObject		 instance_instance = resolve_path(instance_ast.id, instance);
+				str					 pth;	
+				XSSObject		 instance_instance = resolve_path(instance_ast.id, instance, pth);
 
-				compile_ast(instance_ast, instance_instance);
+				XSSContext ictx(new xss_composite_context(context_));
+				ictx->this_ = instance_instance;
+				compile_ast(instance_ast, ictx);
 			}
 	}
 
@@ -1012,7 +1308,8 @@ variant xss_project::resolve_property(const str& prop, variant parent)
 		if (parent.is<str>())
 			{
 				str id(parent);
-				base = resolve_path(unwind(id), XSSObject());
+				str	pth;	
+				base = resolve_path(unwind(id), XSSObject(), pth);
 				path_str = id;
 			}
 		else if (parent.is<XSSObject>())
@@ -1022,7 +1319,8 @@ variant xss_project::resolve_property(const str& prop, variant parent)
 		str prop_name = path[path.size() - 1];
 		path.erase(path.end() - 1);
 
-		XSSObject obj = resolve_path(path, base);
+		str pth;
+		XSSObject obj = resolve_path(path, base, pth);
 		if (!obj)
 			return variant();
 
@@ -1032,7 +1330,7 @@ variant xss_project::resolve_property(const str& prop, variant parent)
 
 		sponge_object* r = new sponge_object;
 		r->add_property("prop", propobj);
-		r->add_property("path", wind(path));
+		r->add_property("path", pth);
 		r->add_property("obj", obj);
 
 		DynamicObject result(r);
@@ -1116,50 +1414,111 @@ str xss_project::generate_expression(const str& expr)
 		return idiom_utils::expr2str(e, context_);
 	}
 
-XSSObject xss_project::resolve_path(const std::vector<str>& path, XSSObject base)
+bool xss_project::parse_expression(variant v)
 	{
-    XSSObject result = base;
+		if (!v.is<str>())
+			return false;
+
+		str s(v);
+		xs_compiler compiler;
+		expression expr;
+		return compiler.compile_expression(s, expr);
+	}
+
+str xss_project::replace(const str& s, const str& o, const str& n)
+	{
+		//td:
+		//this is a hack and it would be done properly...
+		//so I'll be shameless
+		str result = n + str(s.begin() + o.size(), s.end());
+		return result;
+	}
+
+XSSObject xss_project::resolve_path(const std::vector<str>& path, XSSObject base, str& result)
+	{
+    XSSObject obj = base;
     str inst_name;
-		str complete_name;
+		bool first = true;
     for(size_t idx = 0; idx < path.size(); idx++)
       {
         inst_name = path[idx];
-        if (idx == 0)
+				if (obj)
+					{
+						//look for properties first
+						XSSProperty prop	= obj->get_property(inst_name);
+						bool				found = false;
+						if (prop)
+							{
+								if (!prop->type.empty())
+									{
+										XSSObject clazz = get_class(prop->type);
+										if (clazz)
+											{
+												obj = clazz; //td: using the type, its ok because the resolving process is const 
+												
+												if (first)
+													{
+														XSSContext ctx(new xss_composite_context(context_));
+														ctx->this_ = base;
+													
+														result += idiom_->resolve_this(ctx);
+														first  = false;
+													}
+
+												result += first? prop->resolve_value() : "." + prop->resolve_value();
+												found = true;
+											}
+										else
+											{
+												assert(false); //use case
+											}
+									}
+								else
+									{
+										assert(false); //use case
+									}
+							}
+
+						if (found)
+							continue;
+					}
+
+        if (first)
           {
-						complete_name = inst_name;
-            result = get_instance(inst_name);
+						result = inst_name;
+            obj    = get_instance(inst_name);
           }
         else
           {
-            complete_name += '.' + inst_name;
+            result += '.' + inst_name;
 						variant vv;
             if (dynamic_try_get(result, inst_name, vv))
               {
-                result = variant_cast<XSSObject>(vv, XSSObject());
+                obj = variant_cast<XSSObject>(vv, XSSObject());
               }
             else
 							{
 								param_list error;
 								error.add("id", SCannotResolve);
 								error.add("desc", SUnknownInstance);
-								error.add("instance", complete_name);
+								error.add("instance", result);
 						
 								xss_throw(error);
 							}
           }
       }
 
-    if (!result)
+    if (!obj)
 			{
         param_list error;
         error.add("id", SCannotResolve);
         error.add("desc", SUnknownInstance);
-        error.add("instance", complete_name);
+        error.add("instance", result);
 						
         xss_throw(error);
 			}
 
-		return result;
+		return obj;
 	}
 
 void xss_project::compile_instance(const str& filename, XSSObject instance)
@@ -1173,7 +1532,9 @@ void xss_project::compile_instance(const str& filename, XSSObject instance)
     xs_container ast;
     compiler.compile_xs(source, ast);
 
-		compile_ast(ast, instance);
+		XSSContext ictx(new xss_composite_context(context_));
+		ictx->this_ = instance;
+		compile_ast(ast, ictx);
   }
 
 void xss_project::register_instance(const str& id, XSSObject it)
@@ -1300,31 +1661,9 @@ void xss_project::breakpoint(const param_list params)
       }
   }
 
-DynamicArray xss_project::get_property_array(XSSObject obj)
-  {
-    if (!obj)
-      return DynamicArray();
-
-    DynamicArray result;
-    variant v = dynamic_get(obj, "properties");
-
-    if (v.empty())
-      {
-        result = DynamicArray(new dynamic_array());
-        dynamic_set(obj, "properties", result);
-      }
-    else
-      {
-        assert(v.is<DynamicArray>());
-        result = v;
-      }
-
-    return result;
-  }
-
 DynamicArray xss_project::get_event_impl(XSSObject obj, const str& event_name, XSSEvent& ev)
   {
-    DynamicArray events = get_event_array(obj);
+		DynamicArray events = obj->events();
     for(size_t i = 0; i < events->size(); i++)
       {
         ev = events->at(i);
@@ -1344,49 +1683,6 @@ XSSGenerator xss_project::generator()
 	{
 		return current_;
 	}
-
-DynamicArray xss_project::get_method_array(XSSObject obj)
-  {
-    DynamicArray result;
-    variant v = dynamic_get(obj, "methods");
-
-    if (v.empty())
-      {
-        result = DynamicArray(new dynamic_array());
-        dynamic_set(obj, "methods", result);
-      }
-    else
-      {
-        assert(v.is<DynamicArray>());
-        result = v;
-      }
-
-    return result;
-  }
-
-DynamicArray xss_project::get_event_array(XSSObject obj)
-  {
-		return obj->events();
-  }
-
-DynamicArray xss_project::get_children_array(XSSObject obj)
-  {
-    DynamicArray result;
-    variant v = dynamic_get(obj, "children");
-
-    if (v.empty())
-      {
-        result = DynamicArray(new dynamic_array());
-        dynamic_set(obj, "children", result);
-      }
-    else
-      {
-        assert(v.is<DynamicArray>());
-        result = v;
-      }
-
-    return result;
-  }
 
 XSSObject xss_project::get_instance(const str& id)
   {
@@ -1497,6 +1793,7 @@ str xss_project::generate_xss(const str& xss, XSSGenerator gen)
     parser.register_tag("xss:class");
     parser.register_tag("xss:file");
     parser.register_tag("xss:marker");
+    parser.register_tag("xss:instance");
 
 		parser.parse(xss, gen.get());
     return gen->get();
@@ -1524,11 +1821,19 @@ str	xss_project::get_anonymous_id(const str& class_name)
 		return "__" + class_name + boost::lexical_cast<str>(aidx);
 	}
 
-XSSObject xss_project::get_class(const str& name)
+XSSObject xss_project::get_class(const str& name, bool enforce)
 	{
     class_registry::iterator cit = classes_.find(name);
 		if (cit != classes_.end())
 			return cit->second;
+
+		if (enforce)
+			{	
+        param_list error;
+        error.add("id", SCannotResolve);
+				error.add("desc", SUnknownClass);
+        xss_throw(error);
+			}
 
 		return XSSObject();
 	}
@@ -1538,7 +1843,7 @@ variant xss_project::evaluate_property(XSSObject obj, const str& prop_name)
 		if (obj && obj->has(prop_name))
 			return dynamic_get(obj, prop_name);
 
-		DynamicArray props = get_property_array(obj);
+		DynamicArray props = obj->properties();
     for(size_t i = 0; i < props->size(); i++)
       {
         XSSProperty prop = props->at(i);
@@ -1553,6 +1858,8 @@ variant xss_project::evaluate_property(XSSObject obj, const str& prop_name)
 
 str xss_project::generate_file(const str& fname, XSSContext context)
   {
+		push_file(fname);
+
 		fs::path filepath = base_path_ / source_path_ / fname; 
     str gen_text = load_file(filepath.string());
 
@@ -1571,7 +1878,9 @@ str xss_project::generate_file(const str& fname, XSSContext context)
     str result = generate_xss(gen_text, gen);
 
 		pop_generator();
-    return result;
+		pop_file();
+
+		return result;
   }
 
 void xss_project::preprocess()
