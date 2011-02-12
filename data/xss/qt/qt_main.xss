@@ -24,5 +24,13 @@
             <parameter name="methods" access="read"/>
             <parameter name="priv_vars" acces="read"/>
         </xss:file>
+
+        <xss:file output="testing_test.txt">
+            <parameter name="main_class" access="read"/>
+            <parameter name="methods" access="read"/>
+            <parameter name="priv_vars" acces="read"/>
+            
+            <xss:e v="main_class"/>
+        </xss:file>
     }
 </xss:code>

@@ -70,7 +70,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       //some utils, god those are long names
       XSSObject get_instance(const str& id);
       void          add_application_file(const str& file, XSSObject obj);
-      DynamicArray  get_event_impl(XSSObject obj, const str& event_name);
+      DynamicArray  get_event_impl(XSSObject obj, const str& event_name, XSSEvent& ev);
 
 			//access to current generator
 			XSSGenerator generator();
@@ -192,6 +192,21 @@ struct xss_event_schema : xss_object_schema<xss_event>
       }
   };
 
+struct xss_method_schema : xss_object_schema<xss_method>
+  {
+    virtual void declare()
+      {
+				xss_object_schema<xss_method>::declare();
+
+				inherit_from<xss_object>();
+
+        property_("name", &xss_method::name);
+        property_("type", &xss_method::type);
+        property_("args", &xss_method::args);
+        property_("code", &xss_method::code);
+      }
+  };
+
 struct xss_property_schema : xss_object_schema<xss_property>
   {
     virtual void declare()
@@ -223,6 +238,7 @@ register_complete_type(xss_object,		xss_object_schema<xss_object>);
 register_complete_type(xss_project,		xss_project_schema);
 register_complete_type(xss_event,			xss_event_schema);
 register_complete_type(xss_property,  xss_property_schema);
+register_complete_type(xss_method,		xss_method_schema);
 register_complete_type(out,						out_schema);
 
 register_iterator(XSSObject);

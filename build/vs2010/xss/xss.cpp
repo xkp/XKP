@@ -20,6 +20,7 @@
 #include "xss/idiom.h"
 #include "xss/project.h"
 #include "xss/xss_error.h"
+#include "xss/jscript.h"
 #include "archive/xml_archive.h"
 
 #include "boost/filesystem.hpp" 
@@ -118,7 +119,7 @@ int main(int argc, char* argv[])
     //setup types
     type_registry types;
     types.set_default_type(type_schema<xss_object>());
-    types.add_type("js-idiom", type_schema<base_idiom>());
+    types.add_type("js-idiom", type_schema<js_idiom>());
     
     //read the project file, 
     xml_read_archive project_file(text, &types, XML_RESOLVE_CLASS|XML_RESOLVE_ID);
@@ -128,6 +129,9 @@ int main(int argc, char* argv[])
 		
 		str path = base.parent_path().string();
 		project->base_path(base.parent_path());
+
+    std::cout << "Current path: " << boost::filesystem::current_path().string() << std::endl;
+    std::cout << "Parameter path: " << base.parent_path().string() << std::endl;
 
     bool succeeded = true;
     try

@@ -13,8 +13,8 @@
         
         <div x="30" y="80" width="300" height="60">
             <label id="div_label_1" caption="In div holder" x="10" y="10" width="40" height="16"/>
-			<button id="pushButton_3" caption="Test's Placements" width="100" placement="right"/>
-			<button id="pushButton_4" caption="Test's Placements" width="100" placement="left"/>
+			      <button id="pushButton_3" caption="Test's Placements" width="100" placement="right"/>
+			      <button id="pushButton_4" caption="Test's Placements" width="100" placement="left"/>
         </div>
     </application>
 </xss:project>

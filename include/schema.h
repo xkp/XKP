@@ -75,6 +75,18 @@ namespace xkp
       };
 
     template <typename T, typename M>
+    struct void46 : public executer
+      {
+        M m_;
+        void46( M m ): m_(m) {}
+
+        virtual variant exec( void* instance, const param_list args )
+          {
+            return boost::bind( m_, static_cast<T*>(instance), _1)( args );
+          }
+      };
+
+    template <typename T, typename M>
     struct returns2 : public executer
       {
         M m_;
@@ -783,7 +795,14 @@ namespace xkp
           register_method(name, new et(m), type_schema<void>(), flags);
         }
 
-      template <typename RT, typename G, typename S>
+      template <typename RT, typename M>
+      void dynamic_function_(const str& name, M m, size_t flags = 0)
+        {
+          typedef detail::void46<T, M> et;
+          register_method(name, new et(m), type_schema<RT>(), flags);
+        }
+
+			template <typename RT, typename G, typename S>
       void property_(const str& name, G g, S s, size_t flags = 0 )
         {
           register_property(name, new detail::property_getter<T, G>( g ), new detail::property_setter<T, S>( s ), type_schema<RT>(), flags);
