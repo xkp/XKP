@@ -6,6 +6,89 @@
     ui(new Ui::<xss:e value="main_class"/>)
 {
     ui->setupUi(this);
+
+    XKPPlacementLayout *layout;
+
+<xss:class entry_point="generate_layouts">
+    method qt_placement(string pl)
+    {
+        for(int i = 0; i < xs_placement_values.size; ++i)
+        {
+            if(xs_placement_values[i] == pl)
+                return qt_placement_values[i];
+        }
+        
+        return pl;
+    }
+  
+    method generate_layouts()
+	{
+	    int idx = 0;
+		int size = 1;
+	    array<var> queue = [];
+		queue += application;
+
+		compiler.breakpoint();
+	    var cur_cmp = application;
+		var parent = null;
+
+		compiler.log(application.name);
+		//compiler.log(cur_cmp.name);
+		while(idx < size)
+		{
+			//cur_cmp = queue[0];
+			// = queue[idx];
+
+			//array qt = [];
+			//var a = qt[0];
+
+			//if(cur_cmp.container)
+			if(cur_cmp)
+				out()
+				{
+					layout = addLayout();
+				}
+
+			for(var child in cur_cmp.children)
+			{
+				//child.parent = cur_cmp;
+				compiler.breakpoint();
+				//string plt = qt_placement(child.placement);
+				string plt;
+				out()
+				{
+				    layout->addWidget(<xss:e value="child.name"/>, <xss:e value="plt"/>);
+				}
+
+			    //if(cur_cmp.container)
+				if(cur_cmp)
+				{
+				    queue += child;
+					size++;
+				}
+			}
+
+			if(cur_cmp)
+			{
+				out()
+				{
+					<xss:e value=""/>cur_cmp.parent.name->setLayout(layout);
+				}
+			}
+			else
+			{
+				out()
+				{
+					setLayout(layout);
+				}
+			}
+
+			idx++;
+		}
+	}
+</xss:class>
+
+    setLayout(layout);
 }
 
 <xss:e value="main_class"/>::~<xss:e value="main_class"/>()
@@ -25,7 +108,7 @@ void <xss:e value="main_class"/>::changeEvent(QEvent *e)
     }
 }
 
-<xss:class entry_point="generate_cpp">
+<xss:class entry_point="generate_methods">
 	// this recursive method is for generate all components, 
 	// inclusively containers components with childs
 	method generate_component(var cmp, var parent)
@@ -47,7 +130,7 @@ void <xss:e value="main_class"/>::changeEvent(QEvent *e)
 		}
 	}
 
-	method generate_cpp()
+	method generate_methods()
 	{
 		generate_component(application, null);
 	}

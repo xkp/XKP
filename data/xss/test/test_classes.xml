@@ -36,51 +36,6 @@
         </properties>
     </class>
 
-    <!--
-	  <class id="checkbox" super="qwidget" tag_name="QCheckBox">
-        <properties>
-            <property name="caption" type="string" qt_ui="true" set_fn="setText" get_fn="text"/>
-        </properties>
-		    <events>
-		    </events>
-	  </class>
-	
-	  <class id="combobox" super="qwidget" tag_name="QComboBox">
-        <properties>
-        </properties>
-		    <events>
-		    </events>
-	  </class>
-  
-	  <class id="radiobutton" super="qwidget" tag_name="QRadioButton">
-        <properties>
-        </properties>
-		    <events>
-		    </events>
-	  </class>
-	
-	  <class id="groupbox" super="qwidget" tag_name="QGroupBox">
-        <properties>
-        </properties>
-		    <events>
-		    </events>
-	  </class>
-	
-	  <class id="edit" super="qwidget" tag_name="QLineEdit">
-        <properties>
-        </properties>
-		    <events>
-		    </events>
-	  </class>
-	
-	  <class id="field" super="qwidget" tag_name="QTextEdit">
-        <properties>
-        </properties>
-		    <events>
-		    </events>
-	  </class>
-    -->
-	
     <class id="application" tag_name="QWidget" qt_ui="true" container="true">
         <properties>
             <property name="id" type="string"/>

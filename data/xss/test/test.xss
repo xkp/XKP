@@ -1,0 +1,18 @@
+// 
+// Test example
+//
+<xss:class entry_point="generate_test">
+    method generate_test()
+	{
+	    int idx = 0;
+		int size = 1;
+	    array<var> queue = [];
+		queue += application;
+
+		while(idx < size)
+		{
+
+			idx++;
+		}
+	}
+</xss:class>

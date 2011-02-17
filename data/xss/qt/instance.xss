@@ -5,17 +5,18 @@
 		    {
 			      if(p.set || p.get)
 			      {
-				        compiler.log(p.type);
+				        //compiler.log(p.type);
 
 				        // bellow 'if' is to avoid xkp::type_mismatch in base.h
 				        string prop_type = "prop_type";
 				        if(p.type)
 					          prop_type = p.type;
+                //string prop_type = p.type;
 
-				        string set_prop_name = p.name + "_set(" + prop_type + " value)";
-				        string get_prop_name = p.name + "_get(void)";
+                string set_prop_name = "set_" + p.name + "(" + prop_type + " value)";
+                string get_prop_name = "get_" + p.name + "(void)";
 
-				        string var_name = p.name + "_";
+				        string var_name = "_" + p.name;
 				        string var_decl = prop_type + " " + var_name;
 				        priv_vars += var_decl;
 
@@ -92,7 +93,7 @@
 			      {
 				        out(indent = 1)
 				        {
-					          <xss:e value="impl.generate_code()"/>
+					          <xss:e value="impl.generate()"/>
 				        }
 			      }
 
@@ -113,24 +114,28 @@
 	  {
 		    for(var m in cmp.methods)
 		    {
-			      //compiler.log(m.return_type);
-
-			      string mthd_name = m.name + "(" + m.args.generate() + ")";
-
+			      string mthd_name;
+            string mthd_type;
+            
+			      if(m.type)
+                mthd_type = m.type;
+            else
+                mthd_type = "void";
+            
+            mthd_name = m.name + "(" + m.args.generate() + ")";
+            
+            // in the generate method, all reference/calls to cmp are with 
+            // 'ui->objectName' schema, think that!
 			      out(indent = 0)
 			      {
-				        void <xss:e value="main_class"/>::<xss:e value="mthd_name"/>
+				        <xss:e value="mthd_type"/> <xss:e value="main_class"/>::<xss:e value="mthd_name"/>
 				        <xss:open_brace/>
-					          <xss:e value="m.generate()"/>
-				        <xss:close_brace/>
+                    <xss:e value="m.code.generate()"/>
+                <xss:close_brace/>
 				        <xss:return/>
 			      }
-
-			      // with this, it's necesary to know the returned type of method
-			      //if(m.return_type)
-			      //    mthd_name = m.return_type + " " + mthd_name;
-			      //else
-			      mthd_name = "void " + mthd_name;
+            
+            mthd_name = mthd_type + " " + mthd_name;
 
 			      // push method in array for include in class declaration
 			      methods += mthd_name;

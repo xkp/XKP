@@ -1,0 +1,22 @@
+<xss:project>
+    <path generator="test.xss"
+          class_library="test_classes.xml"
+          source_path=""
+          output_path="../output/test.txt"/>
+
+    <idiom class="js-idiom" id_as_this="true"/>
+
+    <application id="main" source="test.xs" title="Test application" width="400" height="200">
+        <button id="btn1" caption="Click me" x="110" y="30" width="75" height="23"/>
+        <button id="btn2" caption="Change text" x="210" y="30" width="91" height="23"/>
+        <label id="lbl1" caption="Here is the text" x="170" y="70" width="91" height="16"/>
+        
+        <div x="30" y="80" width="300" height="60">
+            <label id="lbl2" caption="In div holder" x="10" y="10" width="60" height="16"/>
+			<button id="btn3" caption="Test's Placements" width="100" placement="right"/>
+			<button id="btn4" caption="Test's Placements" width="100" placement="left"/>
+        </div>
+    
+        <button id="btn5" caption="Button at Bottom of window" height="30" placement="bottom"/>
+    </application>
+</xss:project>

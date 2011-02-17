@@ -2,6 +2,9 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <string>
+
+#include "xkpplacementlayout.h"
 
 namespace Ui {
     class <xss:e value="main_class"/>;
@@ -17,6 +20,7 @@ protected:
     void changeEvent(QEvent *e);
 
 private:
+	QList<XKPPlacementLayout *> layouts;
     Ui::<xss:e value="main_class"/> *ui;
 <xss:code>
 	if(priv_vars)

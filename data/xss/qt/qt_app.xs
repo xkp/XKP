@@ -35,19 +35,22 @@ method returning_stuff()
 	return i + 23;
 }
 
-method declaring_error() : string
+//method declaring_error() : string
+method declaring_error()
 {
 	var s = "hello";
 	//return 12;
 	return s;
 }
 
-method declaring_ok() : int
+//method declaring_ok() : int
+method declaring_ok()
 {
 	return 23;
 }
 
-method returned_real() : float
+//method returned_real() : float
+method returned_real()
 {
 	return 3.14;
 }
