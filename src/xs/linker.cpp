@@ -182,7 +182,13 @@ code_linker::code_linker(code_context& context):
 
             int local_idx = local_count_++;
 
-            local_variable lv(local_idx, value.get_schema());
+						schema* arg_type = null;
+						if (!value.empty())
+							{
+								arg_type = value.get_schema();
+							}
+
+            local_variable lv(local_idx, arg_type);
             locals_.insert( locals_pair(name, lv) );
           }
       }
@@ -651,7 +657,18 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
 														stack_.push( already_in_stack(type) );
 													}
 											}
-                    else
+										else if (type && (type->options() & TYPE_DYNAMIC) != 0)
+											{
+												add_instruction(i_dynamic_get, add_constant(ei.value));
+
+												int lv = register_variable("", null, null);
+												add_instruction(i_store, lv);
+
+												//i've decided to save dynamic gets into the stack
+												//to avoid general unplesantness with alredy_in_stack.
+												stack_.push( local_variable(lv, null) );
+											}
+										else
                       {
                         param_list error;
                         error.add("id", SUnknownIdentifier);
@@ -690,7 +707,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
             expression_identifier ei = arg2;
 						if (ei.value == "linker_breakpoint")
 						{
-							ei.value = "linker_breakpoint";
+							str xxx("set breakpoint here");
 						}
 
             if (type && type != type_schema<empty_type>())
@@ -1524,7 +1541,7 @@ void code_linker::resolve_operator(operator_type op, variant arg1, variant arg2,
       }
     else
       {
-				bool invert = !arg1.is<already_in_stack>();
+				bool invert = arg1.is<already_in_stack>();
         if (!resolve_custom_operator(op, type1, invert, dont_assign))
           {
             if (!resolve_custom_operator(op, type2, invert, dont_assign))
@@ -1613,7 +1630,7 @@ bool code_linker::resolve_custom_operator(operator_type op, schema* type, bool i
 
     assert(custom_operator.exec);
     add_instruction(i_load_constant, add_constant(custom_operator.exec));
-    add_call(i_call, 1, custom_operator.flags&DYNAMIC_ACCESS, invert); 
+		add_call(i_call, 1, custom_operator.flags&DYNAMIC_ACCESS, invert); 
     stack_.push( already_in_stack(custom_operator.type) );
 
     if (dont_assign)

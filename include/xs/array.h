@@ -148,7 +148,12 @@ namespace xkp
           return type_;
         }
 
-      void push_back(variant v)
+      void insert(variant v)
+        {
+          ref_->push_back(v);
+        }
+
+			void push_back(variant v)
         {
           ref_->push_back(v);
         }
@@ -157,6 +162,10 @@ namespace xkp
         {
           return ref_->at(idx);
         }
+			void remove(size_t idx)
+				{
+					ref_->erase(ref_->begin() + idx);
+				}
       private:
         schema* type_;
     };

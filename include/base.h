@@ -76,6 +76,7 @@ namespace xkp
       TYPE_NON_INSTANTIABLE = 0x04,
       TYPE_SIMPLE           = 0x08,
       TYPE_MUTABLE          = 0x10,
+      TYPE_DYNAMIC          = 0x20,
     };
 
   struct schema_visitor

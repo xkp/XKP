@@ -1,0 +1,73 @@
+// 
+// Test example
+//
+<xss:class entry_point="generate_test">
+    method generate_test()
+	{
+	    int idx = 0;
+		int size = 1;
+	    array queue = [];
+		queue += application;
+
+		// this assign don't work cuz the follow log, 
+		// dispatch a 'unknown identifier name' console error
+
+		//ESC: works now, but name doesnt really exist?
+		var current_cmp = application;
+		compiler.log(current_cmp.name);
+		
+		while(idx < size)
+		{
+			// this line dispatch a type mismatch error
+			// ESC: funciona, pero algo se rompio y no se donde (es una historia larga)
+			// con esto te quiero decir que me mandes el error en cuanto suceda.
+			current_cmp = queue[idx];
+			
+			// this line dispatch a 'unknown identifier parent' console error
+			// ESC: pinchates
+			current_cmp.parent = null;
+		
+			// same of 'parent' or 'name', only that, 
+			// the 'container' property is declared in classes.xml
+			// ESC: ditto
+			if(current_cmp.container)
+			{
+			}
+			
+			idx++;
+		}
+		
+		for(var cmp in application.children)
+		{
+			if(cmp.properties)
+			{
+				for(var p in cmp.properties)
+				{
+					//compiler.log(p.name);
+					if(p.set || p.get)
+					{
+						compiler.log(p.name);
+						compiler.log(p.type);
+						
+						// this lines dispatch a type mismatch error
+						// ESC: A mi no... no se si los resultados sean correctos
+						string prop_type = p.type;
+						
+				        string var_name = "_" + p.name;
+				        string var_decl = prop_type + " " + var_name;
+					}
+					
+					// this lines dispatch a type mismatch error 
+					// ESC: Ahora pincha, receurda que los valores pueden 
+					// ser null
+					string prop_value = p.value;
+					if (prop_value)
+					{
+						if(prop_value == "null")
+							continue;
+					}
+				}
+			}
+		}
+	}
+</xss:class>
