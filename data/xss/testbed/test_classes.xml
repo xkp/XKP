@@ -1,0 +1,47 @@
+<xml>
+    <class id="qwidget" qt_ui="true">
+        <properties>
+            <!-- geometry location -->
+            <property name="x" type="int" set_xss="move(<xss:e v='value'/>, <xss:e v='object'/>.y())" get_fn="x"/>
+            <property name="y" type="int" set_xss="move(<xss:e v='object'/>.x(), <xss:e v='value'/>)" get_fn="y"/>
+            <property name="width" type="int" set_xss="resize(<xss:e v='value'/>, <xss:e v='object'/>.height())" get_fn="width"/>
+            <property name="height" type="int" set_xss="resize(<xss:e v='object'/>.width(), <xss:e v='value'/>)" get_fn="height"/>
+
+			      <!-- implement standards properties of qwidget -->
+            <property name="visible" type="bool" set_fn="setVisible" get_fn="isVisible"/>
+            <property name="enabled" type="bool" qt_ui="true" set_fn="setEnabled" get_fn="isEnabled"/>
+			      <property name="placement" type="enum" qt_ui="true" set_fn="setProperty" get_fn="property"/>
+        </properties>
+		    <!-- implement standards events of qwidget -->
+        <events>
+            <event name="click" qt_name="clicked"/>
+            <event name="up" qt_name="mouseup"/>
+        </events>
+    </class>
+  
+	  <!-- implement components with particular properties and events -->
+    <class id="div" super="qwidget" tag_name="QWidget" container="true">
+    </class>
+  
+    <class id="button" super="qwidget" tag_name="QPushButton">
+        <properties>
+            <property name="caption" ui_name="text" type="string" qt_ui="true" set_fn="setText" get_fn="text"/>
+        </properties>
+    </class>
+  
+    <class id="label" super="qwidget" tag_name="QLabel">
+        <properties>
+            <property name="caption" ui_name="text" type="string" qt_ui="true" set_fn="setText" get_fn="text"/>
+            <property name="wordWrap" type="bool" qt_ui="true" set_fn="setWordWrap" get_fn="wordWrap"/>
+        </properties>
+    </class>
+
+    <class id="application" tag_name="QWidget" qt_ui="true" container="true">
+        <properties>
+            <property name="id" type="string"/>
+            <property name="title" ui_name="windowTitle" type="string" qt_ui="true" set_fn="setWindowTitle" get_fn="windowTitle"/>
+            <property name="width" type="int"/>
+            <property name="height" type="int"/>
+        </properties>
+    </class>
+</xml>

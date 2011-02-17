@@ -62,7 +62,7 @@ struct property_mixer : dynamic_visitor
 
 //xss_object
 xss_object::xss_object():
-	sealed_(false),
+	sealed_(true),
 	children_(new dynamic_array),
 	properties_(new dynamic_array),
 	methods_(new dynamic_array),
@@ -83,6 +83,29 @@ void xss_object::visit(dynamic_visitor* visitor)
 XSSObject xss_object::type()
 	{
 		return type_;
+	}
+
+void xss_object::propertize()
+	{
+		XSSObject me(shared_from_this());
+
+		//convert attributes to properties
+		item_list::iterator it = items_.begin();
+		item_list::iterator nd = items_.end();
+		for(; it != nd; it++)
+			{
+				if (it->first == "type" ||
+						it->first == "class" ||
+						it->first == "class_name" ||
+						it->first == "id")
+						continue;
+
+				str			type  = ""; //td: !!!
+				variant	value = dynamic_get(this, it->first);
+				XSSProperty prop(new xss_property(it->first, type, value, me));
+
+				properties_->push_back(prop);
+			}
 	}
 
 void xss_object::xss_type(XSSObject type)
@@ -163,6 +186,10 @@ void xss_object::xss_type(XSSObject type)
 		for(int i = 0; i < tchildren->size(); i++)
 			{
 				XSSObject child = tchildren->at(i);
+
+				str iiid = variant_cast<str>(dynamic_get( child, "id" ), str());
+				str iidd = variant_cast<str>(dynamic_get( this, "id" ), str());
+
 				children_->insert(child); //td: cloning
 			}
 	}
@@ -190,6 +217,17 @@ DynamicArray xss_object::methods()
 DynamicArray xss_object::events()
 	{
 		return events_;
+	}
+
+void xss_object::remove_child(XSSObject obj)
+	{
+		int child_count = children_->size();
+		for(int i = child_count - 1; i >= 0; i--)
+			{
+				XSSObject child = variant_cast<XSSObject>(children_->at(i), XSSObject());
+				if (child && child == obj)
+					children_->remove(i);
+			}
 	}
 
 void xss_object::copy(xss_object* other)
@@ -291,6 +329,9 @@ void xss_object::limbo_add(const str& id, variant value)
 		XSSObject obj = variant_cast<XSSObject>(value, XSSObject());
 		if (obj)
 			{
+				str iiid = variant_cast<str>(dynamic_get( obj, "id" ), str());
+				str iidd = variant_cast<str>(dynamic_get( this, "id" ), str());
+
 				children_->insert(obj);
 			}
 		else
@@ -302,7 +343,16 @@ void xss_object::limbo_add(const str& id, variant value)
 
 void xss_object::seal()
 	{
+		if (sealed_)
+			return;
+
 		sealed_ = true;
+		for(int i = 0; i < children_->size(); i++)
+			{
+				XSSObject obj = variant_cast<XSSObject>(children_->at(i), XSSObject());	
+				if (obj)
+					obj->seal();
+			}
 	}
 	
 bool xss_object::resolve(const str& name, schema_item& result)
@@ -315,6 +365,11 @@ bool xss_object::resolve(const str& name, schema_item& result)
 				XSSObject me(shared_from_this());
 
 				//we are acquiring children (quite likely in the serialization process)
+				if (name == "parent")
+				{
+					_asm nop;
+				}
+				
 				result.get   = Getter( new limbo_getter(me, name) );
 				result.set   = Setter( new limbo_setter(me, name) );
 				result.flags = DYNAMIC_ACCESS;
@@ -660,7 +715,7 @@ struct pre_process : dynamic_visitor
         else if (name == "children" || name == "application")
 					{
 						DynamicArray children = value;
-						for(int i = 0; i < children->size(); i++)
+						for(int i = children->size() - 1; i >= 0; i--)
 							{
 								XSSObject child = children->at(i);
 								child->seal();
@@ -689,10 +744,26 @@ struct pre_process : dynamic_visitor
         if (class_name == "property")
           {
             //shameful plug, yay me
-            str type = variant_cast<str>(dynamic_get(obj, "type"), "");
-						XSSProperty prop(new xss_property(id, type, obj, object_));
+            str type			= variant_cast<str>(dynamic_get(obj, "type"), "");
+						variant value = obj;
+
+						//and as long as I'm plugging, what the hell
+						if (type == "array")
+							{
+								//build up child objects based on their attributes
+								DynamicArray children = obj->children();
+								for(int i = 0; i < children->size(); i++)
+									{
+										//td: simple types
+										XSSObject obj = children->at(i);
+										obj->propertize();
+									}
+							}
+						
+						XSSProperty prop(new xss_property(id, type, value, object_));
 
             object_->properties()->push_back(prop);
+						object_->remove_child(obj);
             return;
           }
 
@@ -889,8 +960,8 @@ void xss_project::build()
 
 void xss_project::do_includes()
 	{
-		XSSObjectList::iterator it = includes.begin();
-		XSSObjectList::iterator nd = includes.end();
+		XSSSerialObjectList::iterator it = includes.begin();
+		XSSSerialObjectList::iterator nd = includes.end();
 		for(; it != nd; it++)
 			{
 				str src_file = variant_cast<str>(dynamic_get(*it, "src"), str(""));	
@@ -899,7 +970,7 @@ void xss_project::do_includes()
 				//so we must mix instances again, the strategy in this case is to
 				//grab the code and then add the props coming from the definition
 				type_registry types;
-				types.set_default_type(type_schema<xss_object>());
+				types.set_default_type(type_schema<xss_serial_object>());
 
 				fs::path filepath = base_path_ / source_path_ / def_file; 
 				xml_read_archive arch(load_file(filepath.string()), &types, XML_RESOLVE_CLASS|XML_RESOLVE_ID); //td: generalize xml
@@ -907,15 +978,17 @@ void xss_project::do_includes()
 				//grab the definition clasess and extract their names for efficiency purposes
 				typedef std::map<str, XSSObject> def_clazz_list;
 
-				XSSObjectList def_classes = arch.get( type_schema<XSSObjectList>() );
+				XSSSerialObjectList def_classes = arch.get( type_schema<XSSSerialObjectList>() );
 
 				def_clazz_list def_clazzes;
-				XSSObjectList::iterator dit = def_classes.begin();
-				XSSObjectList::iterator dnd = def_classes.end();
+				XSSSerialObjectList::iterator dit = def_classes.begin();
+				XSSSerialObjectList::iterator dnd = def_classes.end();
 				for(; dit != dnd; dit++)
 					{
 						XSSObject def_clazz = *dit;
-						str				def_class_id  = variant_cast<str>(dynamic_get(def_clazz, "id"), str()); assert(!def_class_id.empty());
+						def_clazz->seal(); //plumbing
+						
+						str	def_class_id  = variant_cast<str>(dynamic_get(def_clazz, "id"), str()); assert(!def_class_id.empty());
 						
 						def_clazz_list::iterator dcit = def_clazzes.find(def_class_id);
 						if (dcit != def_clazzes.end())
@@ -1199,8 +1272,9 @@ void xss_project::compile_ast(xs_container& ast, XSSContext ctx)
 						//the context of a different instance would generate code using such
 						//instance as the *this* pointer. At least this should be a compiler option.
 
+						str aid    = variant_cast<str>(dynamic_get(actual_instance, "id"), str("")); assert(!aid.empty());
 						str iid    = variant_cast<str>(dynamic_get(instance, "id"), str("")); assert(!iid.empty());
-						str	mname  = iid + "_" + event_name;
+						str	mname  = aid + "_" + event_name;
 						
 						//so, create a method in the original instance
 						variant margs = idiom_->process_args(it->args);								 assert(!margs.empty()); 
@@ -1423,6 +1497,11 @@ bool xss_project::parse_expression(variant v)
 		xs_compiler compiler;
 		expression expr;
 		return compiler.compile_expression(s, expr);
+	}
+
+xss_idiom* xss_project::get_idiom()
+	{
+		return idiom_;
 	}
 
 str xss_project::replace(const str& s, const str& o, const str& n)
@@ -1896,7 +1975,7 @@ void xss_project::preprocess()
 void xss_project::read_classes(const str& class_library_file)
   {
     type_registry types;
-    types.set_default_type(type_schema<xss_object>());
+    types.set_default_type(type_schema<xss_serial_object>());
 		types.add_type<xss_property>("property");
 		types.add_type<xss_event>("event");
 
@@ -1914,7 +1993,8 @@ void xss_project::read_classes(const str& class_library_file)
         XSSObject     obj		= *it;
         str           id		= variant_cast<str>(dynamic_get(obj, "id"),		 "");
         str           super	= variant_cast<str>(dynamic_get(obj, "super"), "");
-
+				
+				obj->seal();
         if (id.empty())
           {
             param_list error;

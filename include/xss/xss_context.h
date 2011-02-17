@@ -8,16 +8,18 @@ namespace xkp {
 
 //forwards
 class		xss_object;
+class		xss_serial_object;
 class   xss_property;
 class   xss_event;
 class   xss_method;
 struct  xss_code_context;
   
-typedef reference<xss_object>				XSSObject;
-typedef reference<xss_property>     XSSProperty;
-typedef reference<xss_code_context> XSSContext;
-typedef reference<xss_event>				XSSEvent;
-typedef reference<xss_method>				XSSMethod;
+typedef reference<xss_object>					XSSObject;
+typedef reference<xss_serial_object>	XSSSerialObject;
+typedef reference<xss_property>				XSSProperty;
+typedef reference<xss_code_context>		XSSContext;
+typedef reference<xss_event>					XSSEvent;
+typedef reference<xss_method>					XSSMethod;
 
 class xss_object : public editable_object<xss_object>,
 									 public boost::enable_shared_from_this<xss_object>
@@ -29,15 +31,17 @@ class xss_object : public editable_object<xss_object>,
 			virtual void visit(dynamic_visitor* visitor);
 		public:
 			//accesors
-			XSSObject type();
-			void xss_type(XSSObject type);
-			XSSObject parent();
+			XSSObject			type();
+			void					xss_type(XSSObject type);
+			void					propertize();
+			XSSObject			parent();
 			DynamicArray	children();
 			DynamicArray	properties();
 			DynamicArray	methods();
 			DynamicArray	events();
 		public:
 			void copy(xss_object* other);
+			void remove_child(XSSObject obj);
 		public:
 			XSSProperty get_property(const str& name);
 			XSSEvent		get_event(const str& name);
@@ -57,6 +61,15 @@ class xss_object : public editable_object<xss_object>,
 			DynamicArray	methods_;
 			DynamicArray	events_;
 			bool					sealed_;
+	};
+
+class xss_serial_object : public xss_object
+	{
+		public:
+			xss_serial_object() : xss_object()
+				{
+					sealed_ = false;
+				}
 	};
 
 //the idiom interface, under designed

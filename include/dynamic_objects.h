@@ -226,7 +226,7 @@ namespace xkp
 
       virtual size_t options()
         {
-          return default_schema<T>::options() | TYPE_NON_INSTANTIABLE;
+          return default_schema<T>::options() | TYPE_NON_INSTANTIABLE | TYPE_DYNAMIC;
         }
 
       virtual void cast(const variant src, schema* ss, variant& result)
@@ -295,7 +295,12 @@ namespace xkp
   template <typename T>
   struct dynamic_object_schema : object_schema<T>
     {
-      virtual void declare_base()
+      virtual size_t options()
+        {
+          return object_schema<T>::options() | TYPE_DYNAMIC;
+        }
+
+			virtual void declare_base()
         {
           this->template implements<IDynamicObject>();
         }

@@ -1,6 +1,7 @@
 
 #include <schema.h>
 #include <xs/operators.h>
+#include <dynamic_objects.h>
 
 using namespace xkp;
 
@@ -318,6 +319,21 @@ struct default_not : operator_exec
       }
   };
 
+struct has : operator_exec
+  {
+    virtual variant exec(variant& arg1, variant& arg2)
+      {
+				str							name = arg2;
+				IDynamicObject* obj  = variant_cast<IDynamicObject*>(arg1, null);
+				if (obj)
+					return obj->has(name);
+
+				schema* type = true_type(arg1);
+				schema_item itm;
+				return type && type->resolve(name, itm);
+      }
+  };
+
 struct plus_str : operator_exec
   {
     virtual variant exec(variant& arg1, variant& arg2)
@@ -505,6 +521,9 @@ operator_registry::operator_registry()
 		//some string generals
 		register_wildcard(op_plus, type_schema<str>(), null, new str_plus() );
 		register_wildcard(op_plus, null, type_schema<str>(), new plus_str() );
+
+		//has
+		register_wildcard(op_namecheck, null, null, new has() );
 }
 
 size_t operator_registry::register_operator(operator_type op, schema* t1, schema* t2, operator_exec* exec)

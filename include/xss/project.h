@@ -26,14 +26,15 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       str  output_path();
 			void base_path(fs::path path);
     public:
-			typedef std::vector<XSSObject> XSSObjectList;
+			typedef std::vector<XSSObject>			 XSSObjectList;
+			typedef std::vector<XSSSerialObject> XSSSerialObjectList;
 
-      variant       application;
-      variant       idiom;
-      variant       path;
-      XSSObjectList	instances;
-      XSSObjectList	classes;
-      XSSObjectList	includes;
+      variant							application;
+      variant							idiom;
+      variant							path;
+      XSSObjectList				instances;
+      XSSObjectList				classes;
+      XSSSerialObjectList	includes;
 
       void compile_instance(const str& filename, XSSObject instance);
 			void compile_ast(xs_container& ast, XSSContext ctx);
@@ -62,6 +63,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
 			str generate_expression(const str& expr);
 			bool parse_expression(variant v);
 			str replace(const str& s, const str& o, const str& n);
+			xss_idiom* get_idiom();
     public:
       //some utils, god those are long names
       XSSObject			get_instance(const str& id);
@@ -151,6 +153,15 @@ struct xss_object_schema : editable_object_schema<T>
 			}
   };
 
+struct xss_serial_object_schema : xss_object_schema<xss_serial_object>
+	{
+    virtual void declare()
+      {
+				xss_object_schema<xss_serial_object>::declare();
+				inherit_from<xss_object>();
+			}
+	};
+
 
 struct xss_project_schema : object_schema<xss_project>
   {
@@ -223,6 +234,8 @@ struct xss_property_schema : xss_object_schema<xss_property>
 				property_("name",  &xss_property::name);
         property_("get",   &xss_property::get);
         property_("set",   &xss_property::set);
+        property_("value", &xss_property::value_);
+        property_("type",  &xss_property::type);
 
         method_<str, 0>("generate_value", &xss_property::generate_value);
         method_<str, 0>("resolve_value",	&xss_property::resolve_value);
@@ -240,14 +253,16 @@ struct out_schema : object_schema<out>
       }
   };
 
-register_complete_type(xss_object,		xss_object_schema<xss_object>);
-register_complete_type(xss_project,		xss_project_schema);
-register_complete_type(xss_event,			xss_event_schema);
-register_complete_type(xss_property,  xss_property_schema);
-register_complete_type(xss_method,		xss_method_schema);
-register_complete_type(out,						out_schema);
+register_complete_type(xss_object,				xss_object_schema<xss_object>);
+register_complete_type(xss_serial_object,	xss_serial_object_schema);
+register_complete_type(xss_project,				xss_project_schema);
+register_complete_type(xss_event,					xss_event_schema);
+register_complete_type(xss_property,			xss_property_schema);
+register_complete_type(xss_method,				xss_method_schema);
+register_complete_type(out,								out_schema);
 
 register_iterator(XSSObject);
+register_iterator(XSSSerialObject);
 
 }
 
