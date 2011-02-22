@@ -41,6 +41,18 @@ struct part
 
 typedef std::vector<part> part_list;
 
+struct file_parameter
+	{
+		file_parameter(const str& _name, const str& _value):
+			name(_name),
+			value(_value)
+			{
+			}
+
+		str name;
+		str value;
+	};
+
 struct file_parser : xss_visitor
 	{
     virtual void visit(const str& tag, const str& text, param_list* args)
@@ -53,7 +65,10 @@ struct file_parser : xss_visitor
 					{
 						if (args->has("name"))
 							{
-								parameters.push_back(args->get("name"));
+								str name  = variant_cast<str>(args->get("name"), str()); assert(!name.empty());
+								str value = variant_cast<str>(args->get("value"), name);
+
+								parameters.push_back(file_parameter(name, value));
 							}
 						else
 							{
@@ -75,17 +90,17 @@ struct file_parser : xss_visitor
 			}
 
 		str result;
-		std::vector<str> parameters;
+		std::vector<file_parameter> parameters;
 	};
 
 struct outfile_info
 	{
 		str source;
 		str output;
-		std::vector<str> parameters;
+		std::vector<file_parameter> parameters;
 		int param_offset;
 
-		outfile_info(str _source, str _output, std::vector<str>& _parameters, int _param_offset):
+		outfile_info(str _source, str _output, std::vector<file_parameter>& _parameters, int _param_offset):
 			source(_source),
 			output(_output),
 			parameters(_parameters),
@@ -161,14 +176,17 @@ struct xss_gather : xss_visitor
 							xparser.register_tag("parameter");
 							xparser.parse(text, &fparser);
 
-							std::vector<str>::iterator it = fparser.parameters.begin();
-							std::vector<str>::iterator nd = fparser.parameters.end();
+							std::vector<file_parameter>::iterator it = fparser.parameters.begin();
+							std::vector<file_parameter>::iterator nd = fparser.parameters.end();
 
 							//register the parameters as expressions
 							int param_offset = expressions_.size() + 1; //account for indent
 							for(; it != nd; it++)
 								{
-									expressions_.push_back(*it);
+									str value = it->value;
+									if (value.empty())
+										value = it->name;
+									expressions_.push_back(value);
 								}
 							
 							//keep track of the parts
@@ -286,15 +304,15 @@ struct worker
 
 											project_->prepare_context(ctx, gen);
 
-											std::vector<str>::iterator it = file_info.parameters.begin();
-											std::vector<str>::iterator nd = file_info.parameters.end();
+											std::vector<file_parameter>::iterator it = file_info.parameters.begin();
+											std::vector<file_parameter>::iterator nd = file_info.parameters.end();
 											int last = params.size() - 1;
 											int curr = 0;
 											for(; it != nd; it++, curr++)
 												{
 													param--;
 													variant vv = params.get(last - file_info.param_offset - curr);
-													ctx.scope_->register_symbol(*it, vv);
+													ctx.scope_->register_symbol(it->name, vv);
 												}
 
 											str contents = project_->generate_xss(source, gen);

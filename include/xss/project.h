@@ -64,6 +64,8 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
 			bool parse_expression(variant v);
 			str replace(const str& s, const str& o, const str& n);
 			xss_idiom* get_idiom();
+			bool options(const str& name);
+			bool is_object(const variant v);
     public:
       //some utils, god those are long names
       XSSObject			get_instance(const str& id);
@@ -82,6 +84,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
 
       instance_registry instances_;
       class_registry    classes_;
+			variant						options_;
     public:
       //must keep some info about files
       struct file_info
@@ -174,6 +177,7 @@ struct xss_project_schema : object_schema<xss_project>
         property_("application", &xss_project::application);
         property_("path",        &xss_project::path);
         property_("idiom",       &xss_project::idiom);
+        property_("options",     &xss_project::options_);
 
         dynamic_method_ ("breakpoint", &xss_project::breakpoint);
         dynamic_method_ ("linker_breakpoint", &xss_project::breakpoint);
@@ -191,6 +195,7 @@ struct xss_project_schema : object_schema<xss_project>
 				method_<str,			1>("generate_expression",	&xss_project::generate_expression);
 				method_<bool,			1>("parse_expression",		&xss_project::parse_expression);
 				method_<str,			3>("replace",							&xss_project::replace);
+				method_<bool,			1>("is_object",						&xss_project::is_object);
       }
   };
 

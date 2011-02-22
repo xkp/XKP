@@ -1541,7 +1541,7 @@ void code_linker::resolve_operator(operator_type op, variant arg1, variant arg2,
       }
     else
       {
-				bool invert = arg1.is<already_in_stack>();
+				bool invert = false; //arg1.is<already_in_stack>();
         if (!resolve_custom_operator(op, type1, invert, dont_assign))
           {
             if (!resolve_custom_operator(op, type2, invert, dont_assign))

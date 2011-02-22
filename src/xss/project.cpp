@@ -278,7 +278,7 @@ XSSEvent xss_object::get_event(const str& name)
 
 XSSMethod	xss_object::get_method(const str& name)
 	{
-		for(int i = 0; i < events_->size(); i++)
+		for(int i = 0; i < methods_->size(); i++)
 			{
 				XSSMethod mthd = methods_->at(i);
 				if (mthd->name == name)
@@ -455,6 +455,24 @@ XSSProperty xss_code_context::get_property(XSSObject obj, const str& name)
 
     return XSSProperty();
   }
+
+XSSMethod xss_code_context::get_method(const str& name)
+	{
+    XSSObject obj = variant_cast<XSSObject>(this_, XSSObject());
+    if (obj)
+      {
+        return get_method(obj, name);
+      }
+    return XSSMethod();
+	}
+
+XSSMethod	xss_code_context::get_method(XSSObject obj, const str& name)
+	{
+    if (obj)
+			return obj->get_method(name);
+
+    return XSSMethod();
+	}
 
 XSSObject xss_code_context::resolve_instance(const str& id)
   {
@@ -1266,7 +1284,7 @@ void xss_project::compile_ast(xs_container& ast, XSSContext ctx)
 				XSSEvent		 ev;
         DynamicArray impls = get_event_impl(actual_instance, event_name, ev);
 
-				if (actual_instance != instance)
+				if (actual_instance != instance && options("gen_event_method"))
 					{
 						//here's one. It would seem convinient that events implemented in 
 						//the context of a different instance would generate code using such
@@ -1499,6 +1517,24 @@ bool xss_project::parse_expression(variant v)
 		return compiler.compile_expression(s, expr);
 	}
 
+bool xss_project::options(const str& name)
+	{
+		XSSObject obj = variant_cast<XSSObject>(options_, XSSObject());
+		if (obj)
+			{
+				bool result = variant_cast<bool>(dynamic_get(obj, name), false);
+				return result;
+			}
+
+		return false;
+	}
+
+bool xss_project::is_object(const variant v)
+	{
+		XSSObject obj = variant_cast<XSSObject>(v, XSSObject());
+		return (bool)obj;
+	}	
+
 xss_idiom* xss_project::get_idiom()
 	{
 		return idiom_;
@@ -1624,6 +1660,8 @@ void xss_project::register_instance(const str& id, XSSObject it)
 
 void xss_project::render_instance(XSSObject instance, const str& xss, int indent)
   {
+		push_file(xss);
+
 		fs::path fname = base_path_ / source_path_ / xss; 
 		str gen_text = load_file(fname.string());
 
@@ -1662,6 +1700,8 @@ void xss_project::render_instance(XSSObject instance, const str& xss, int indent
 		pop_generator();
 
 		current_->append(result);
+
+		pop_file();
 }
 
 str xss_project::resolve_dispatcher(XSSObject instance, const str& event_name)

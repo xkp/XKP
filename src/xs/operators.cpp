@@ -604,13 +604,13 @@ schema* operator_registry::get_result_type(schema* t1, schema* t2)
     if (t1 == t2)
       return t1;
 
-    int r1 = -1;
+		int r1 = -1;
     int r2 = -1;
 
     type_rank::iterator it   = rank_.begin();
     type_rank::iterator nd   = rank_.end();
     int                 curr = 0;
-    for(; it != nd; it++, curr)
+    for(; it != nd; it++, curr++)
       {
         if (t1 == *it)
           r1 = curr;
