@@ -4,6 +4,10 @@
 <xss:class entry_point="generate_test">
     method generate_test()
 	{
+		//ESC: A + B + C
+		string xxx = application.id + 23 + " yup";
+		compiler.log(xxx);
+
 	    int idx = 0;
 		int size = 1;
 	    array queue = [];

@@ -90,6 +90,8 @@ struct xss_code_context : base_code_context
     //this will function as resolver
     virtual XSSProperty   get_property(const str& name);
     virtual XSSProperty   get_property(XSSObject obj, const str& name);
+		virtual XSSMethod			get_method(const str& name);
+		virtual XSSMethod			get_method(XSSObject obj, const str& name);
     virtual XSSObject			resolve_instance(const str& id);
     virtual variant       evaluate_property(XSSObject obj, const str& name);
 		virtual schema*				get_type(const str& name);

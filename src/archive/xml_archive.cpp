@@ -460,9 +460,14 @@ variant xml_reader::attribute_value(const TiXmlAttribute* attr)
     double dv;
     if (attr->QueryDoubleValue(&dv) == TIXML_SUCCESS)
       return (float)dv;
-      
+
     str s(attr->Value());
-    return s;
+		if (s == "true")
+			return true;
+		else if (s == "false")
+			return false;
+		
+		return s;
   }
   
 //xml_read_archive

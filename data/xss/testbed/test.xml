@@ -3,6 +3,8 @@
           class_library="test_classes.xml"
           source_path=""
           output_path="../../data/xss/output/test.txt"/>
+    
+    <options gen_event_method="false"/>
 
     <idiom class="js-idiom" id_as_this="true"/>
 

@@ -645,6 +645,17 @@ struct expression_renderer : expression_visitor
 
 								return result + "." + ass;
 							}
+
+						//test the this pointer
+            XSSProperty prop = ctx_->get_property(ei.value);
+						XSSMethod mthd = ctx_->get_method(ei.value);
+            if (prop || mthd)
+              {
+                str this_str = ctx_->idiom_->resolve_this(ctx_);
+                if (!this_str.empty())
+                  return this_str + "." + ei.value; 
+              }
+
 						return ei.value;
 					}
         else if (result.is<str>())
@@ -682,7 +693,8 @@ struct expression_renderer : expression_visitor
                   if (ctx_->idiom_)
                     {
                       XSSProperty prop = ctx_->get_property(ei.value);
-                      if (prop)
+											XSSMethod mthd = ctx_->get_method(ei.value);
+                      if (prop || mthd)
                         {
                           //well, lets see how the idiom handles thises
                           str this_str = ctx_->idiom_->resolve_this(ctx_);
@@ -1175,7 +1187,7 @@ struct code_renderer__ : code_visitor
 
         str iterable_name = info.id + "_iterable";
         str iterator_name = info.id + "_iterator";
-        ss << ind << "var " << iterable_name << " = " << render_expression(info.iter_expr, ctx_) << "\n";
+        ss << ind << "var " << iterable_name << " = " << render_expression(info.iter_expr, ctx_) << ";\n";
         ss << ind << "for(var " << iterator_name << " = 0; " 
            << iterator_name << " < " << iterable_name << ".length; "
            << iterator_name << "++" << ")\n";
@@ -1364,7 +1376,7 @@ void base_xss_code::iterfor_(stmt_iter_for& info)
 
     str iterable_name = info.id + "_iterable";
     str iterator_name = info.id + "_iterator";
-    ss << ind << "var " << iterable_name << " = " << render_expression(info.iter_expr, ctx_) << "\n";
+    ss << ind << "var " << iterable_name << " = " << render_expression(info.iter_expr, ctx_) << ";\n";
     ss << ind << "for(var " << iterator_name << " = 0; " 
         << iterator_name << " < " << iterable_name << ".length; "
         << iterator_name << "++" << ")\n";
