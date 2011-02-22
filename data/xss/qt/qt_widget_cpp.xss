@@ -12,6 +12,11 @@
 <xss:class entry_point="generate_layouts">
     method qt_placement(string pl)
     {
+		// this make an type mismatch error
+		//if(pl == "null")
+		if(!pl)
+			return qt_placement_values[0];
+
         for(int i = 0; i < xs_placement_values.size; ++i)
         {
             if(xs_placement_values[i] == pl)
@@ -25,59 +30,54 @@
 	{
 	    int idx = 0;
 		int size = 1;
+
 	    array<var> queue = [];
 		queue += application;
 
-		compiler.breakpoint();
-	    var cur_cmp = application;
 		var parent = null;
 
-		compiler.log(application.name);
-		//compiler.log(cur_cmp.name);
 		while(idx < size)
 		{
-			//cur_cmp = queue[0];
-			// = queue[idx];
+			cur_cmp = queue[idx];
 
-			//array qt = [];
-			//var a = qt[0];
+			// this make a type mismatch error
+			//compiler.log("size: " + size + " idx: " + idx);
 
-			//if(cur_cmp.container)
-			if(cur_cmp)
-				out()
+			if(cur_cmp.container)
+			{
+				out(indent = 0)
 				{
 					layout = addLayout();
 				}
+			}
 
 			for(var child in cur_cmp.children)
 			{
-				//child.parent = cur_cmp;
-				compiler.breakpoint();
-				//string plt = qt_placement(child.placement);
-				string plt;
-				out()
+				child.parent = cur_cmp;
+				string plt = qt_placement(child.placement);
+
+				out(indent = 0)
 				{
-				    layout->addWidget(<xss:e value="child.name"/>, <xss:e value="plt"/>);
+				    layout->addWidget(<xss:e value="child.id"/>, <xss:e value="plt"/>);
 				}
 
-			    //if(cur_cmp.container)
-				if(cur_cmp)
+			    if(child.container)
 				{
 				    queue += child;
 					size++;
 				}
 			}
 
-			if(cur_cmp)
+			if(cur_cmp.container && cur_cmp.parent)
 			{
-				out()
+				out(indent = 0)
 				{
-					<xss:e value=""/>cur_cmp.parent.name->setLayout(layout);
+					<xss:e value="cur_cmp.id"/>->setLayout(layout);
 				}
 			}
 			else
 			{
-				out()
+				out(indent = 0)
 				{
 					setLayout(layout);
 				}
@@ -87,8 +87,6 @@
 		}
 	}
 </xss:class>
-
-    setLayout(layout);
 }
 
 <xss:e value="main_class"/>::~<xss:e value="main_class"/>()
@@ -106,6 +104,14 @@ void <xss:e value="main_class"/>::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+XKPPlacementLayout *<xss:e value="main_class"/>::addLayout()
+{
+    XKPPlacementLayout *plLayout = new XKPPlacementLayout;
+    layouts.append(plLayout);
+
+    return plLayout;
 }
 
 <xss:class entry_point="generate_methods">

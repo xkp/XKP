@@ -20,8 +20,11 @@ protected:
     void changeEvent(QEvent *e);
 
 private:
+	XKPPlacementLayout *addLayout();
+
 	QList<XKPPlacementLayout *> layouts;
     Ui::<xss:e value="main_class"/> *ui;
+
 <xss:code>
 	if(priv_vars)
 	{

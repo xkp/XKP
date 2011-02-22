@@ -131,11 +131,6 @@ int main(int argc, char* argv[])
 		str path = base.parent_path().string();
 		project->base_path(base.parent_path());
 
-    std::cout << "Current path: " << boost::filesystem::current_path().string() << std::endl;
-    std::cout << "Parameter path: " << base.parent_path().string() << std::endl;
-    std::cout << "Base filename: " << base.filename() << std::endl;
-    std::cout << "Relative path: " << base.relative_path() << std::endl;
-
     bool succeeded = true;
     try
       {

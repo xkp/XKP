@@ -2,20 +2,28 @@
 // Test example
 //
 <xss:class entry_point="generate_test">
+    method qt_placement(string pl)
+    {
+        for(int i = 0; i < xs_placement_values.size; ++i)
+        {
+            if(xs_placement_values[i] == pl)
+                return qt_placement_values[i];
+        }
+        
+        return pl;
+    }
+  
     method generate_test()
 	{
 	    int idx = 0;
 		int size = 1;
+
+		// why the variant type don'st appeard in array yet?
+		// array<var> queue = [];
+		
 	    array queue = [];
 		queue += application;
 
-		// this assign don't work cuz the follow log, 
-		// dispatch a 'unknown identifier name' console error
-
-		//ESC: works now, but name doesnt really exist?
-		var current_cmp = application;
-		compiler.log(current_cmp.name);
-		
 		while(idx < size)
 		{
 			// this line dispatch a type mismatch error
@@ -23,8 +31,17 @@
 			// con esto te quiero decir que me mandes el error en cuanto suceda.
 			current_cmp = queue[idx];
 			
-			// this line dispatch a 'unknown identifier parent' console error
-			// ESC: pinchates
+			if(current_cmp.container)
+				out()
+				{
+					layout = addLayout();
+				}
+
+			for(var child in current_cmp.children)
+			{
+				child.parent = current_cmp;
+				
+			}
 			current_cmp.parent = null;
 		
 			// same of 'parent' or 'name', only that, 
@@ -32,6 +49,9 @@
 			// ESC: ditto
 			if(current_cmp.container)
 			{
+				compiler.log("added one container");
+				queue += current_cmp;
+				size++;
 			}
 			
 			idx++;
