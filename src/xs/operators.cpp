@@ -394,6 +394,22 @@ struct default_or : operator_exec
       }
   };
 
+struct op_true : operator_exec
+  {
+    virtual variant exec(variant& arg1, variant& arg2)
+      {
+        return true;
+      }
+  };
+
+struct op_false : operator_exec
+  {
+    virtual variant exec(variant& arg1, variant& arg2)
+      {
+        return false;
+      }
+  };
+
 struct opexec_null1 : operator_exec
   {
     virtual variant exec(variant& arg1, variant& arg2)
@@ -524,6 +540,9 @@ operator_registry::operator_registry()
 
 		//has
 		register_wildcard(op_namecheck, null, null, new has() );
+
+		//defaults
+		register_default_operator(op_equal, new op_false());
 }
 
 size_t operator_registry::register_operator(operator_type op, schema* t1, schema* t2, operator_exec* exec)
@@ -594,6 +613,21 @@ bool operator_registry::get_operator_index(operator_type op, schema* t1, schema*
 		return false;
   }
 
+bool operator_registry::get_default_operator(operator_type op, operator_exec** exec, schema** result_type)
+	{
+		default_executor_list::iterator it = default_ops_.find(op);
+		if (it != default_ops_.end())
+			{
+				*exec = it->second;
+				
+				if (result_type)
+					*result_type = null; //td: typing
+				return true;
+			}
+		
+		return false;
+	}
+
 operator_exec* operator_registry::get_operator(size_t idx)
   {
     return executors_[idx];
@@ -626,6 +660,13 @@ schema* operator_registry::get_result_type(schema* t1, schema* t2)
 
     return t2;
   }
+
+size_t operator_registry::register_default_operator(operator_type op, operator_exec* exec)
+	{
+		size_t idx = default_ops_.size();
+		default_ops_.insert(default_executor_pair(op, exec));
+		return idx;
+	}
 
 size_t operator_registry::register_wildcard(operator_type op, schema* t1, schema* t2, operator_exec* exec )
   {

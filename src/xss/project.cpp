@@ -121,7 +121,6 @@ void xss_object::xss_type(XSSObject type)
 			{
 				str id = variant_cast<str>(dynamic_get(type, "id"), str());
 				dynamic_set(this, "native_class", id);
-				return;
 			}
 
 		DynamicArray tprops = type->properties();
@@ -145,7 +144,10 @@ void xss_object::xss_type(XSSObject type)
 						assert(false); //td: mix properties
 					}
 			}
-
+		
+		if (native)
+			return; //no need to add class methods, these will be generated in the native class
+		
 		DynamicArray tmethods = type->methods();
 		for(int i = 0; i < tmethods->size(); i++)
 			{
@@ -157,8 +159,8 @@ void xss_object::xss_type(XSSObject type)
 						assert(false); //td: do super
 					}
 
-				XSSMethod cln(new xss_method(*(mymthd.get())));
-				cln->copy(mymthd.get()); //td: proper cloning
+				XSSMethod cln(new xss_method(*(mthd.get())));
+				cln->copy(mthd.get()); //td: proper cloning
 
 				methods_->insert(cln);
 			}
@@ -507,6 +509,25 @@ str	xss_code_context::get_type_name(schema* type)
 		return types_->type_name(type);
 	}
 
+XSSObject	xss_code_context::get_xss_type(const str& name)
+	{
+		variable_types::iterator it = vars_.find(name);
+		if (it != vars_.end())
+			return it->second;
+		return XSSObject();
+	}
+
+bool xss_code_context::has_var(const str& name)
+	{
+		variable_types::iterator it = vars_.find(name);
+		return it != vars_.end();
+	}
+
+void xss_code_context::register_variable(const str& name, XSSObject xss_type)
+	{
+		vars_.insert(std::pair<str, XSSObject>(name, xss_type));
+	}
+
 //xss_composite_context
 xss_composite_context::xss_composite_context(XSSContext ctx):
   xss_code_context(ctx->project_, ctx->idiom_),
@@ -694,11 +715,17 @@ str	xss_property::resolve_value()
 //xss_method
 xss_method::xss_method() 
 	{
+		DYNAMIC_INHERITANCE(xss_method)
 	}
 
 xss_method::xss_method(const xss_method& other): 
-	xss_object(other)
+	xss_object(other),
+	name(other.name),
+	type(other.type),
+	args(other.args),	
+	code(other.code)	
 	{
+		DYNAMIC_INHERITANCE(xss_method)
 	}
 
 xss_method::xss_method(const str& _name, const str& _type, variant _args, variant _code) : 
@@ -707,6 +734,7 @@ xss_method::xss_method(const str& _name, const str& _type, variant _args, varian
 	args(_args),
 	code(_code)
 	{
+		DYNAMIC_INHERITANCE(xss_method)
 	}
 
 //pre_process
@@ -777,8 +805,12 @@ struct pre_process : dynamic_visitor
 										obj->propertize();
 									}
 							}
+
+						if (obj->has("value"))
+							value = dynamic_get(obj, "value");
 						
-						XSSProperty prop(new xss_property(id, type, value, object_));
+						str prop_name = variant_cast<str>(dynamic_get(obj, "name"), id);
+						XSSProperty prop(new xss_property(prop_name, type, value, object_));
 
             object_->properties()->push_back(prop);
 						object_->remove_child(obj);
@@ -1417,11 +1449,15 @@ variant xss_project::resolve_property(const str& prop, variant parent)
 			return variant();
 
 		XSSProperty propobj = obj->get_property(prop_name);
-		if (!propobj)
-			return variant();
 
 		sponge_object* r = new sponge_object;
-		r->add_property("prop", propobj);
+		
+		if (propobj)
+			r->add_property("prop", propobj);
+		else
+			r->add_property("prop", variant());
+
+		r->add_property("prop_name", prop_name);
 		r->add_property("path", pth);
 		r->add_property("obj", obj);
 
@@ -1485,7 +1521,7 @@ void xss_project::log(const param_list params)
       }
 	}
 
-str xss_project::generate_expression(const str& expr)
+str xss_project::generate_expression(const str& expr, XSSObject this_)
 	{
 		xs_utils	 xs;
 		expression e;
@@ -1502,8 +1538,9 @@ str xss_project::generate_expression(const str& expr)
 		XSSProject me(shared_from_this());
     XSSContext context(new xss_code_context(me, idiom_));
 		fill_context(context);
+		context->this_ = this_;
 
-		return idiom_utils::expr2str(e, context_);
+		return idiom_utils::expr2str(e, context);
 	}
 
 bool xss_project::parse_expression(variant v)
@@ -1535,17 +1572,30 @@ bool xss_project::is_object(const variant v)
 		return (bool)obj;
 	}	
 
+str xss_project::generate_property(XSSProperty prop, XSSObject this_)
+	{
+
+		return "IMPLEMENT ME";
+	}
+
 xss_idiom* xss_project::get_idiom()
 	{
 		return idiom_;
 	}
 
-str xss_project::replace(const str& s, const str& o, const str& n)
+str xss_project::replace_this(const str& s, const str& this_)
 	{
-		//td:
-		//this is a hack and it would be done properly...
-		//so I'll be shameless
-		str result = n + str(s.begin() + o.size(), s.end());
+		str    result;
+		size_t curr = 0;
+		size_t pos = s.find("this");
+		while(pos != str::npos)
+			{
+				result += s.substr(curr, pos - curr) + this_;
+				curr = pos + 4;
+				pos = s.find("this", curr);
+			}
+
+		result += s.substr(curr, s.size() - curr);
 		return result;
 	}
 
@@ -1590,7 +1640,17 @@ XSSObject xss_project::resolve_path(const std::vector<str>& path, XSSObject base
 									}
 								else
 									{
-										assert(false); //use case
+										if (first)
+											{
+												XSSContext ctx(new xss_composite_context(context_));
+												ctx->this_ = base;
+													
+												result += idiom_->resolve_this(ctx);
+												first  = false;
+											}
+
+										result += first? prop->resolve_value() : "." + prop->resolve_value();
+										found = true;
 									}
 							}
 
@@ -2017,6 +2077,7 @@ void xss_project::read_classes(const str& class_library_file)
     type_registry types;
     types.set_default_type(type_schema<xss_serial_object>());
 		types.add_type<xss_property>("property");
+		types.add_type<xss_method>("method");
 		types.add_type<xss_event>("event");
 
 		fs::path filepath = base_path_ / source_path_ / class_library_file; 

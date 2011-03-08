@@ -60,12 +60,13 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
 			variant resolve_property(const str& path, variant parent);
 			str last_rendered(int count);
 			void log(const param_list params);
-			str generate_expression(const str& expr);
+			str generate_expression(const str& expr, XSSObject this_);
 			bool parse_expression(variant v);
-			str replace(const str& s, const str& o, const str& n);
+			str replace_this(const str& s, const str& this_);
 			xss_idiom* get_idiom();
 			bool options(const str& name);
 			bool is_object(const variant v);
+			str generate_property(XSSProperty prop, XSSObject this_);
     public:
       //some utils, god those are long names
       XSSObject			get_instance(const str& id);
@@ -192,10 +193,11 @@ struct xss_project_schema : object_schema<xss_project>
 				method_<variant,	2>("evaluate_property",   &xss_project::evaluate_property);
 				method_<str,			1>("genid",								&xss_project::get_anonymous_id);
 				method_<variant,	2>("resolve_property",		&xss_project::resolve_property);
-				method_<str,			1>("generate_expression",	&xss_project::generate_expression);
+				method_<str,			2>("generate_expression",	&xss_project::generate_expression);
 				method_<bool,			1>("parse_expression",		&xss_project::parse_expression);
-				method_<str,			3>("replace",							&xss_project::replace);
+				method_<str,			2>("replace_this",				&xss_project::replace_this);
 				method_<bool,			1>("is_object",						&xss_project::is_object);
+				method_<str,			2>("generate_property",		&xss_project::generate_property);
       }
   };
 

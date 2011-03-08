@@ -194,20 +194,24 @@ namespace xkp
 
         void add_property(const str& name, variant value = variant())
           {
-            int idx = add_anonymous(value);
-
-            schema_item si;
-            si.flags = DYNAMIC_ACCESS;
-            si.get   = Getter( new anonymous_getter(idx) );
-            si.set   = Setter( new anonymous_setter(idx) );
-						si.type  = true_type(value);
-
 						item_list::iterator it = items_.find(name);
 						if (it != items_.end())
-						{
-							assert(false);
-						}
-						items_.insert( item_pair(name, si) );
+							{
+								Setter set = it->second.set; assert(set);
+								set->set(this, value);
+							}
+						else
+							{
+								int idx = add_anonymous(value);
+
+								schema_item si;
+								si.flags = DYNAMIC_ACCESS;
+								si.get   = Getter( new anonymous_getter(idx) );
+								si.set   = Setter( new anonymous_setter(idx) );
+								si.type  = true_type(value);
+
+								items_.insert( item_pair(name, si) );
+							}
           }
     };
 

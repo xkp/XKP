@@ -439,11 +439,28 @@ struct expression_renderer : expression_visitor
                 //with a get function on a property. This does not constitute
                 //type checking, that's a lot of work unless the code_linker feels
                 //like cooperating
-                XSSObject o1 = get_instance(arg1);
-                str           s2 = operand_to_string(arg2, o1);
-                XSSObject o2 = get_instance(o1, s2);
+                XSSObject caller = get_instance(arg1);
+								if (!caller && top)
+								{
+									if (arg1.is<expression_identifier>())
+										{
+											expression_identifier ei = arg1;
+											caller = ctx_->get_xss_type(ei.value); //td: meh, do the context
+										}
+									else if (arg1.is<already_rendered>())
+										{
+											already_rendered ar = arg1;
+										}
+									else
+										{
+											assert(false);
+										}
+								}
 
-                XSSProperty   prop       = get_property(o1, s2);
+                str           s2 = operand_to_string(arg2, caller);
+                XSSObject o2 = get_instance(caller, s2);
+
+                XSSProperty   prop       = get_property(caller, s2);
                 bool          has_getter = prop && !prop->get.empty();
 
                 std::stringstream ss;
@@ -451,7 +468,7 @@ struct expression_renderer : expression_visitor
                 
 								if (top && assigner)
 									{
-										ss << "." << resolve_assigner(arg2, o1, assigner);	
+										ss << "." << resolve_assigner(arg2, caller, assigner);	
 									}
 								else if (prop)
                   {
@@ -489,11 +506,12 @@ struct expression_renderer : expression_visitor
                 std::stringstream result;
 
                 str caller = operand_to_string(arg1);
-
                 result << caller << "(";
 
                 int args = arg2;
+
                 //pop the arguments
+								std::vector<str> params;
                 for(int i = 0; i < args; i++)
                   {
                     variant arg  = stack_.top(); stack_.pop();
@@ -504,20 +522,25 @@ struct expression_renderer : expression_visitor
                       {
                         str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
                         if (!get_fn.empty())
-                          result << get_fn << "()";
+                          sarg = get_fn + "()";
                         else if (!prop->get.empty())
-                          result << sarg << "_get()";
-                        else   
-                          result << sarg;
+                          sarg = sarg + "_get()";
                       }
-                    else 
-                       result << sarg;
 
-                    if (i < args - 1)
+										params.push_back(sarg);
+                  }
+
+								std::vector<str>::reverse_iterator pit = params.rbegin();
+								std::vector<str>::reverse_iterator pnd = params.rend();
+								int i = 0;
+								for(; pit != pnd; pit++, i++)
+									{
+                    result << *pit;
+										if (i < args - 1)
                       {
                         result << ", ";
                       }
-                  }
+									}
 
                 result << ")";
 
@@ -532,7 +555,9 @@ struct expression_renderer : expression_visitor
                 result << "(";
 
                 int args = arg1;
-                //pop the arguments
+
+								//pop the arguments
+								std::vector<str> params;
                 for(int i = 0; i < args; i++)
                   {
                     variant arg  = stack_.top(); stack_.pop();
@@ -543,20 +568,25 @@ struct expression_renderer : expression_visitor
                       {
                         str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
                         if (!get_fn.empty())
-                          result << get_fn << "()";
+                          sarg = get_fn + "()";
                         else if (!prop->get.empty())
-                          result << sarg << "_get()";
-                        else   
-                          result << sarg;
+                          sarg = sarg + "_get()";
                       }
-                    else 
-                       result << sarg;
 
-                    if (i < args - 1)
+										params.push_back(sarg);
+                  }
+
+								std::vector<str>::reverse_iterator pit = params.rbegin();
+								std::vector<str>::reverse_iterator pnd = params.rend();
+								int i = 0;
+								for(; pit != pnd; pit++, i++)
+									{
+                    result << *pit;
+										if (i < args - 1)
                       {
                         result << ", ";
                       }
-                  }
+									}
 
                 result << ")";
 
@@ -635,6 +665,9 @@ struct expression_renderer : expression_visitor
 						expression_identifier ei = result;
 						if (assigner)
 							{
+								if (ctx_->has_var(ei.value))
+									return ei.value;
+								
 								XSSObject this_ = variant_cast<XSSObject>(ctx_->this_, XSSObject());
 								str ass = resolve_assigner(ei, this_, assigner);
 
@@ -684,6 +717,11 @@ struct expression_renderer : expression_visitor
             {
               expression_identifier ei = operand;
               result = ei.value;
+
+							if (result == "xss_breakpoint")
+								{
+									str xxx("Breakpoint here");	
+								}
 
               if (!parent)
                 {
@@ -1341,8 +1379,17 @@ void base_xss_code::if_(stmt_if& info)
     add_line(ss.str());
 	}
 
+void base_xss_code::register_var(const str& name, const str& type)
+	{
+		XSSProject project	= ctx_->project_;
+		XSSObject  clazz    = project->get_class(type);
+		ctx_->register_variable(name, clazz);
+	}
+
 void base_xss_code::variable_(stmt_variable& info)
 	{
+		register_var(info.id, info.type); //td: resolve type from value
+
     std::stringstream ss;
     str ind = get_indent_str();
 
@@ -1357,7 +1404,9 @@ void base_xss_code::variable_(stmt_variable& info)
 
 void base_xss_code::for_(stmt_for& info)
 	{
-    std::stringstream ss;
+		register_var(info.init_variable.id, info.init_variable.type);
+
+		std::stringstream ss;
 
     ss << "for(var " << info.init_variable.id << " = " << render_expression(info.init_variable.value, ctx_)
         << "; " << render_expression(info.cond_expr, ctx_)
@@ -1371,7 +1420,10 @@ void base_xss_code::for_(stmt_for& info)
 
 void base_xss_code::iterfor_(stmt_iter_for& info)
 	{
-    std::stringstream ss;
+		register_var(info.id, info.type.name);
+
+		//render
+		std::stringstream ss;
     str ind = get_indent_str();
 
     str iterable_name = info.id + "_iterable";

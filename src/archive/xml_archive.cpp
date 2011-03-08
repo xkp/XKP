@@ -453,14 +453,14 @@ void xml_reader::visit(reader_visitor* visitor)
 
 variant xml_reader::attribute_value(const TiXmlAttribute* attr)
   {
-    int iv;
-    if (attr->QueryIntValue(&iv) == TIXML_SUCCESS)
-      return iv;
-      
     double dv;
     if (attr->QueryDoubleValue(&dv) == TIXML_SUCCESS)
       return (float)dv;
 
+		int iv;
+    if (attr->QueryIntValue(&iv) == TIXML_SUCCESS)
+      return iv;
+      
     str s(attr->Value());
 		if (s == "true")
 			return true;

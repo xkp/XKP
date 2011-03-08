@@ -96,11 +96,17 @@ struct xss_code_context : base_code_context
     virtual variant       evaluate_property(XSSObject obj, const str& name);
 		virtual schema*				get_type(const str& name);
 		virtual str						get_type_name(schema* type);
-		
-    public:
+		virtual XSSObject			get_xss_type(const str& name);
+		virtual void					register_variable(const str& name, XSSObject xss_type);
+		virtual bool					has_var(const str& name);
+	public:
       //td: ugles, this is the way it is to circunvent c++ and its dependencies
       variant    project_;
       xss_idiom* idiom_;
+
+			typedef std::map<str, XSSObject> variable_types;
+			
+			variable_types vars_;
   };
   
 struct xss_composite_context : xss_code_context

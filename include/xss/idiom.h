@@ -73,6 +73,7 @@ struct base_xss_code : ITranslator, code_visitor
 			void add_line(const str& line, bool dress_line = false);
 			str	 get_indent_str();
       void render_code(code& cde, int indent);
+			void register_var(const str& name, const str& type);
   };
 
 //utils
