@@ -12,7 +12,7 @@
 				<Option object_output="..\..\..\bin\cb\debug\obj\" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="app.xml" />
+				<Option parameters="C:\Work\XKP\data\xss\mutant-state\images.xml" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-D_DEBUG" />
@@ -42,6 +42,7 @@
 			<Add option="-DUNICODE" />
 			<Add option="-DTIXML_USE_STL" />
 			<Add option="-DBOOST_NO_MEMBER_TEMPLATE_FRIENDS" />
+			<Add option="-DBOOST_SYSTEM_NO_DEPRECATED" />
 			<Add directory="..\..\..\include" />
 			<Add directory="..\..\..\include\xs" />
 			<Add directory="..\..\..\include\xss" />
@@ -98,6 +99,7 @@
 		<Unit filename="..\..\..\src\xs\vm.cpp" />
 		<Unit filename="..\..\..\src\xss\dsl_out.cpp" />
 		<Unit filename="..\..\..\src\xss\idiom.cpp" />
+		<Unit filename="..\..\..\src\xss\jscript.cpp" />
 		<Unit filename="..\..\..\src\xss\project.cpp" />
 		<Unit filename="..\..\..\src\xss\xss_generator.cpp" />
 		<Unit filename="..\..\..\src\xss\xss_parser.cpp" />

@@ -184,7 +184,7 @@ struct xss_gather : xss_visitor
 										value = it->name;
 									expressions_.push_back(value);
 								}
-							
+
 							//keep track of the parts
 							files_.push_back(outfile_info(source, output, fparser.parameters, param_offset));
 							result_.push_back(part(PART_FILE, fparser.result, files_.size() - 1));
@@ -227,7 +227,7 @@ struct worker
           part_list::iterator nd = parts_.end();
 
           indent_ = params.get(params.size() - 1);
-          
+
           size_t param = params.size() - 2;
           str    result;
           for(; it != nd; it++)
@@ -244,7 +244,7 @@ struct worker
 											variant vv = params.get(param--);
 											if (vv.empty())
 												vv = str("null"); //td: this should be an error?
-                
+
 											str expr_value = vv;
 											if (is_multi_line(expr_value))
 												{
@@ -266,7 +266,7 @@ struct worker
 																result += padding;
 
 															result += *lit;
-													
+
 															if (!dont_break_)
 																result += '\n';
 														}
@@ -290,7 +290,7 @@ struct worker
 													str src_file = project_->source_file_name(file_info.source);
 													source	 = project_->load_file(src_file);
 												}
-											
+
 											//td: utilify this crap already, or something
 											XSSContext context(new xss_code_context(project_, project_->idiom));
 											xss_code_context& ctx = *context.get();
@@ -420,7 +420,7 @@ struct worker
                 }
 
               result += curr_line;
-							
+
 							if(!dont_break_ && !curr_line.empty())
 								result += '\n';
             }
@@ -429,7 +429,7 @@ struct worker
         }
 
     private:
-      XSSProject								project_; 
+      XSSProject								project_;
       int												indent_;
       int												tab_;
       part_list									parts_;
@@ -486,9 +486,9 @@ void out_linker::link(dsl& info, code_linker& owner)
       {
         try
           {
-            indent_expr = indent_value; 
+            indent_expr = indent_value;
           }
-        catch(type_mismatch tm)
+        catch(...)
           {
             param_list error;
             error.add("id", STypeMismatch);
@@ -532,13 +532,13 @@ void out_linker::link(dsl& info, code_linker& owner)
         expression expr = trim_v;
         trim = owner.evaluate_expression(expr); //td: only contants, lazy me
       }
-		
+
 		variant marker_v = info.params.get("marker");
 		str			marker;
 		if (!marker_v.empty())
 			{
         expression expr = marker_v;
-        marker = variant_cast<str>(owner.evaluate_expression(expr), str("")); 
+        marker = variant_cast<str>(owner.evaluate_expression(expr), str(""));
 			}
 
 		//process xss
@@ -552,7 +552,7 @@ void out_linker::link(dsl& info, code_linker& owner)
     parser.register_tag("xss:open_brace");
     parser.register_tag("xss:close_brace");
 		parser.register_tag("xss:file");
-		
+
 		str to_parse = info.text;
 		if (trim)
 			boost::trim(to_parse);

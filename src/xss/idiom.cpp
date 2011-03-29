@@ -247,7 +247,7 @@ struct expression_renderer : expression_visitor
         if (prop)
           {
             str set_fn = variant_cast<str>(dynamic_get(prop, "set_fn"), ""); //let the outside world determine
-                                                                             //if a native function call shouls be made 
+                                                                             //if a native function call shouls be made
 
             str set_xss = variant_cast<str>(dynamic_get(prop, "set_xss"), ""); //such world can request to parse xss
 
@@ -288,7 +288,7 @@ struct expression_renderer : expression_visitor
 				if (top && assigner)
 					{
 						str ass = resolve_assigner(operand, XSSObject(), assigner);
-						push_rendered(ass, 0, operand.get_schema()); 
+						push_rendered(ass, 0, operand.get_schema());
 					}
 
         stack_.push(operand);
@@ -351,7 +351,7 @@ struct expression_renderer : expression_visitor
 										default:
 											assert(false); //use case trap
 									}
-								
+
 
                 //std::stringstream ss;
                 //if (op_prec < prec)
@@ -465,22 +465,22 @@ struct expression_renderer : expression_visitor
 
                 std::stringstream ss;
                 ss << operand_to_string(arg1);
-                
+
 								if (top && assigner)
 									{
-										ss << "." << resolve_assigner(arg2, caller, assigner);	
+										ss << "." << resolve_assigner(arg2, caller, assigner);
 									}
 								else if (prop)
                   {
-                    str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
+                    str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), "");
                     if (!get_fn.empty())
                       ss << "." << get_fn << "()";
                     else if (has_getter)
                       ss << "." << s2 << "_get()";
-                    else   
+                    else
                       ss << "." << s2;
                   }
-                else 
+                else
                    ss << "." << s2;
 
                 if (prop)
@@ -501,8 +501,8 @@ struct expression_renderer : expression_visitor
             case op_func_call:
               {
                 //td!!! this is silly, function calls ( foo(bar) instead of foo1.foo(bar) ) configure
-                //the stack differently, so we must duplicate the code.  
-              
+                //the stack differently, so we must duplicate the code.
+
                 std::stringstream result;
 
                 str caller = operand_to_string(arg1);
@@ -516,11 +516,11 @@ struct expression_renderer : expression_visitor
                   {
                     variant arg  = stack_.top(); stack_.pop();
                     str     sarg = operand_to_string(arg);
-                    
+
                     XSSProperty prop = get_property(arg);
                     if (prop)
                       {
-                        str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
+                        str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), "");
                         if (!get_fn.empty())
                           sarg = get_fn + "()";
                         else if (!prop->get.empty())
@@ -562,11 +562,11 @@ struct expression_renderer : expression_visitor
                   {
                     variant arg  = stack_.top(); stack_.pop();
                     str     sarg = operand_to_string(arg);
-                    
+
                     XSSProperty prop = get_property(arg);
                     if (prop)
                       {
-                        str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
+                        str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), "");
                         if (!get_fn.empty())
                           sarg = get_fn + "()";
                         else if (!prop->get.empty())
@@ -618,16 +618,16 @@ struct expression_renderer : expression_visitor
 									}
 
 								std::vector<str>::reverse_iterator ait = params.rbegin();
-								std::vector<str>::reverse_iterator and = params.rend();
-								for(; ait != and; ait++)
+								std::vector<str>::reverse_iterator andd = params.rend();
+								for(; ait != andd; ait++)
 									{
 										result << *ait;
-										if (ait + 1 != and)
+										if (ait + 1 != andd)
 											result << ", ";
 									}
 
                 result << "]";
-                push_rendered(result.str(), op_prec, variant()); 
+                push_rendered(result.str(), op_prec, variant());
 								break;
               }
 
@@ -635,7 +635,7 @@ struct expression_renderer : expression_visitor
               {
                 std::stringstream result;
 								result << operand_to_string(arg1) << "[" << operand_to_string(arg2) << "]";
-                push_rendered(result.str(), op_prec, variant()); 
+                push_rendered(result.str(), op_prec, variant());
                 break;
               }
 
@@ -667,7 +667,7 @@ struct expression_renderer : expression_visitor
 							{
 								if (ctx_->has_var(ei.value))
 									return ei.value;
-								
+
 								XSSObject this_ = variant_cast<XSSObject>(ctx_->this_, XSSObject());
 								str ass = resolve_assigner(ei, this_, assigner);
 
@@ -686,7 +686,7 @@ struct expression_renderer : expression_visitor
               {
                 str this_str = ctx_->idiom_->resolve_this(ctx_);
                 if (!this_str.empty())
-                  return this_str + "." + ei.value; 
+                  return this_str + "." + ei.value;
               }
 
 						return ei.value;
@@ -720,14 +720,14 @@ struct expression_renderer : expression_visitor
 
 							if (result == "xss_breakpoint")
 								{
-									str xxx("Breakpoint here");	
+									str xxx("Breakpoint here");
 								}
 
               if (!parent)
                 {
                   //here we ought to resolve a single symbol (ex width = 10)
                   //thid *could* belong to the "this" pointer
-                  
+
                   if (ctx_->idiom_)
                     {
                       XSSProperty prop = ctx_->get_property(ei.value);
@@ -737,8 +737,19 @@ struct expression_renderer : expression_visitor
                           //well, lets see how the idiom handles thises
                           str this_str = ctx_->idiom_->resolve_this(ctx_);
                           if (!this_str.empty())
-                            result = this_str + "." + ei.value; //otherwise it doesnt get translated 
+                            result = this_str + "." + ei.value; //otherwise it doesnt get translated
                         }
+											else
+											{
+												//another use case, we might have an instance that has an internal id
+												//which means a name to be used in code instead of the plain instance name
+												XSSObject obj = ctx_->resolve_instance(result);
+												if (obj && obj->has("internal_id"))
+													{
+														result = variant_cast<str>(dynamic_get(obj, "internal_id"), str());
+														assert(!result.empty());
+													}
+											}
                     }
                 }
             }
@@ -795,8 +806,8 @@ str render_expression(expression& expr, XSSContext ctx)
 							{
 								expression_splitter es(op);
 								expr.visit(&es);
-								
-								expression_renderer value_renderer(ctx); 
+
+								expression_renderer value_renderer(ctx);
 								es.right.visit(&value_renderer);
 
 								str value = value_renderer.get();
@@ -825,7 +836,7 @@ str render_expression(expression& expr, XSSContext ctx)
 
 														//this is lame
 														str op_str = operator_str[op];
-														
+
 														assert(op_str.size() > 1);
 														op_str.erase(op_str.end() - 1);
 
@@ -851,7 +862,7 @@ str render_expression(expression& expr, XSSContext ctx)
 														assert(op_str.size() > 1);
 														op_str.erase(op_str.end() - 1);
 
-														value = getter + " " + op_str + " " + value; 
+														value = getter + " " + op_str + " " + value;
 													}
 
 												size_t last_dot = getter.find_last_of(".");
@@ -869,7 +880,7 @@ str render_expression(expression& expr, XSSContext ctx)
 														if (assign[i] == 39)
 															assign[i] = '"';
 													}
-												
+
 												//td: is all this really neccesary?
 												XSSProject project_ = ctx->project_;
 												xss_idiom* idiom_		= ctx->idiom_;
@@ -883,7 +894,7 @@ str render_expression(expression& expr, XSSContext ctx)
 
 												ctx.scope_->register_symbol("value",	value);
 												ctx.scope_->register_symbol("object", getter);
-												
+
 												result = project_->generate_xss(assign, gen);
 
 												project_->pop_generator();
@@ -892,7 +903,7 @@ str render_expression(expression& expr, XSSContext ctx)
 										default:
 											assert(false); //trap use cases
 									}
-								
+
 								return result;
 							}
 					}
@@ -913,13 +924,13 @@ struct expr_type_resolver : expression_visitor
 	{
 		typedef std::map<str, schema*> local_variables;
 
-		expr_type_resolver(local_variables& local_vars, XSSContext ctx) : 
+		expr_type_resolver(local_variables& local_vars, XSSContext ctx) :
 			is_variant_(false),
 			local_(local_vars),
 			ctx_(ctx)
 			{
 			}
-		
+
 		schema* get()
 			{
 				if (is_variant_)
@@ -998,7 +1009,7 @@ struct expr_type_resolver : expression_visitor
                 error.add("id", SIdiom);
                 error.add("desc", SAssignOperator);
                 xss_throw(error);
-								break; 
+								break;
 							}
 
 						case op_call:
@@ -1046,10 +1057,10 @@ struct expr_type_resolver : expression_visitor
 
 		private:
 			typedef std::stack<variant>		 expr_stack;
-			
+
 			expr_stack				stack_;
-			bool							is_variant_;	
-			operator_registry operators_;  
+			bool							is_variant_;
+			operator_registry operators_;
 			local_variables		local_;
 			XSSContext				ctx_;
 
@@ -1118,7 +1129,7 @@ schema* code_type_resolver::get()
 		return result_;
 	}
 
-void code_type_resolver::variable_(stmt_variable& info)     
+void code_type_resolver::variable_(stmt_variable& info)
 	{
 		schema* type = ctx_->get_type(info.type);
 		if (!type)
@@ -1135,7 +1146,7 @@ void code_type_resolver::variable_(stmt_variable& info)
 		vars_.insert(std::pair<str, schema*>(info.id, type));
 	}
 
-void code_type_resolver::return_(stmt_return& info)         
+void code_type_resolver::return_(stmt_return& info)
 	{
 		if (is_variant_)
 			return;
@@ -1180,7 +1191,7 @@ struct code_renderer__ : code_visitor
             << ind << "}" << '\n';
 
         if (!info.else_code.empty())
-          ss  << ind << "else\n" 
+          ss  << ind << "else\n"
 							<< ind << "{\n"
                 << render_code(info.else_code, indent_ + 1)
               << ind << "}\n";
@@ -1226,7 +1237,7 @@ struct code_renderer__ : code_visitor
         str iterable_name = info.id + "_iterable";
         str iterator_name = info.id + "_iterator";
         ss << ind << "var " << iterable_name << " = " << render_expression(info.iter_expr, ctx_) << ";\n";
-        ss << ind << "for(var " << iterator_name << " = 0; " 
+        ss << ind << "for(var " << iterator_name << " = 0; "
            << iterator_name << " < " << iterable_name << ".length; "
            << iterator_name << "++" << ")\n";
 
@@ -1283,7 +1294,7 @@ struct code_renderer__ : code_visitor
     virtual void dispatch(stmt_dispatch& info)
       {
         assert(false); //td: ought to define what to do here, it would seem like the idiom would like
-                       //to handle this 
+                       //to handle this
       }
     private:
       str        result_;
@@ -1429,7 +1440,7 @@ void base_xss_code::iterfor_(stmt_iter_for& info)
     str iterable_name = info.id + "_iterable";
     str iterator_name = info.id + "_iterator";
     ss << ind << "var " << iterable_name << " = " << render_expression(info.iter_expr, ctx_) << ";\n";
-    ss << ind << "for(var " << iterator_name << " = 0; " 
+    ss << ind << "for(var " << iterator_name << " = 0; "
         << iterator_name << " < " << iterable_name << ".length; "
         << iterator_name << "++" << ")\n";
 
@@ -1480,7 +1491,7 @@ void base_xss_code::dsl_(dsl& info)
 void base_xss_code::dispatch(stmt_dispatch& info)
 	{
     assert(false); //td: ought to define what to do here, it would seem like the idiom would like
-                    //to handle this 
+                    //to handle this
 	}
 
 void base_xss_code::add_line(const str& line, bool dress_line)

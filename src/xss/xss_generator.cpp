@@ -183,7 +183,7 @@ bool xss_generator::handle_marker(const str& text, param_list* args)
 				xss_throw(error);
 			}
 
-		str name(vname);
+		str name = variant_cast<str>(vname, str());
 
 		marker_map::iterator it = markers_.find(name);
 		if (it != markers_.end())
@@ -213,7 +213,7 @@ bool xss_generator::handle_marker(const str& text, param_list* args)
 
 bool xss_generator::handle_file(const str& text, param_list* args)
 	{
-		XSSProject project = context_->project_; 
+		XSSProject project = context_->project_;
 		assert(args); //just checking
 
 		str output = variant_cast<str>(args->get("output"), "");
@@ -248,7 +248,7 @@ bool xss_generator::handle_file(const str& text, param_list* args)
 				xss_code_context& ctx = *safe_context.get();
 
 				XSSGenerator gen(new xss_generator(safe_context));
-    
+
 				project->push_generator(gen);
 
 				project->prepare_context(ctx, gen);
@@ -261,8 +261,8 @@ bool xss_generator::handle_file(const str& text, param_list* args)
 			project->generator()->append(result);
 		else
 			project->output_file(output, result);
-		
-		return true;	
+
+		return true;
 	}
 
 bool xss_generator::handle_instance(const str& text, param_list* args)

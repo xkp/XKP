@@ -20,7 +20,10 @@
 #include "xss/idiom.h"
 #include "xss/project.h"
 #include "xss/xss_error.h"
+#include "xss/jscript.h"
 #include "archive/xml_archive.h"
+
+#include "boost/filesystem.hpp"
 
 using namespace xkp;
 
@@ -69,7 +72,7 @@ void dump_result(const str& text, code_context& context)
     //std::cout << gen.get();
   }
 
-void print_error(param_list data)
+void print_error(param_list data, XSSProject project)
   {
     str id   = variant_cast<str>(data.get("id"), "");
     str desc = variant_cast<str>(data.get("desc"), "");
@@ -86,7 +89,7 @@ void print_error(param_list data)
         str     value_str;
         try
           {
-            value_str = variant_cast<str>(value, "");
+            value_str =variant_cast<str>(value, str());
           }
         catch(type_mismatch)
           {
@@ -95,12 +98,15 @@ void print_error(param_list data)
 
         std::cout << name << " = " << value_str << '\n';
       }
+
+		std::cout << "\nFile:" << project->top_file() << '\n';
+		std::cout << "\nLast Rendererd: \n\n" << project->last_rendered(5);
   }
 
 int main(int argc, char* argv[])
   {
     char* fname = argv[1];
-    std::ifstream ifs(fname);
+		std::ifstream ifs(fname);
 
     str text;
     char buffer[1024];
@@ -113,12 +119,17 @@ int main(int argc, char* argv[])
 
     //setup types
     type_registry types;
-    types.set_default_type(type_schema<sponge_object>());
-    types.add_type("js-idiom", type_schema<base_idiom>());
+    types.set_default_type(type_schema<xss_serial_object>());
+    types.add_type("js-idiom", type_schema<js_idiom>());
 
     //read the project file,
     xml_read_archive project_file(text, &types, XML_RESOLVE_CLASS|XML_RESOLVE_ID);
     XSSProject project = project_file.get( type_schema<XSSProject>() );
+
+		boost::filesystem::path base(fname);
+
+		str path = base.parent_path().string();
+		project->base_path(base.parent_path());
 
     bool succeeded = true;
     try
@@ -128,18 +139,25 @@ int main(int argc, char* argv[])
     catch(xs_error xse)
       {
         succeeded = false;
-        print_error(xse.data);
+        print_error(xse.data, project);
       }
     catch(xss_error xsse)
       {
         succeeded = false;
-        print_error(xsse.data);
+        print_error(xsse.data, project);
       }
     catch(runtime_error rte)
       {
         succeeded = false;
-        print_error(rte.data);
+        print_error(rte.data, project);
       }
+		//catch(type_mismatch tm)
+		//	{
+  //      succeeded = false;
+		//		param_list data;
+		//		data.add("desc", str("Type mismatch"));
+  //      print_error(data, project);
+		//	}
 
     if (succeeded)
       {
@@ -148,6 +166,6 @@ int main(int argc, char* argv[])
 
     std::cin.get();
 
-	  return 0;
+	return 0;
   }
 

@@ -11,7 +11,7 @@
 #include "xss_generator.h"
 #include "xs/array.h"
 
-#include "boost/filesystem.hpp" 
+#include "boost/filesystem.hpp"
 namespace fs = boost::filesystem;
 
 namespace xkp{
@@ -104,12 +104,12 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       fs::path									base_path_;
       fs::path									source_path_;
       fs::path									output_path_;
-      
+
 			meta_array_schema					array_type_;
       XSSGenerator							current_;
       XSSContext								context_;
-			std::stack<XSSGenerator>	generators_; 	
-			std::stack<str>						file_stack_; 	
+			std::stack<XSSGenerator>	generators_;
+			std::stack<str>						file_stack_;
 
       void					save_file(const str& fname, const str& contents);
       void					preprocess();
@@ -125,7 +125,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
 			str	 top_file();
 
 		private:
-			typedef std::map<str, int> anonymous_list;	
+			typedef std::map<str, int> anonymous_list;
 			anonymous_list anonymous_;
   };
 
@@ -138,9 +138,9 @@ struct out
 		out(XSSProject prj);
 
 		void append(variant v);
-		str  line_break(); 
+		str  line_break();
 
-		private:	
+		private:
 			XSSProject prj_;
 	};
 
@@ -150,10 +150,10 @@ struct xss_object_schema : editable_object_schema<T>
   {
     virtual void declare()
       {
-				property_("properties", &T::properties_);
-				property_("events",			&T::events_);
-				property_("methods",		&T::methods_);
-				property_("children",		&T::children_);
+				this->template property_<DynamicArray>("properties", &T::properties_);
+				this->template property_<DynamicArray>("events",			&T::events_);
+				this->template property_<DynamicArray>("methods",		&T::methods_);
+				this->template property_<DynamicArray>("children",		&T::children_);
 			}
   };
 

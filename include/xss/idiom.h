@@ -20,7 +20,7 @@ struct base_xss_args : ITranslator
     base_xss_args();
     base_xss_args(const base_xss_args& other);
     base_xss_args(param_list_decl& args);
-    
+
 		//ITranslator
 		virtual str generate(const param_list pl);
 
@@ -34,7 +34,7 @@ struct base_xss_expression : ITranslator
   {
     base_xss_expression();
     base_xss_expression(XSSContext ctx, expression& expr);
-  
+
 		//ITranslator
 		virtual str generate(const param_list pl);
 
@@ -47,10 +47,10 @@ struct base_xss_code : ITranslator, code_visitor
   {
     base_xss_code();
     base_xss_code(XSSContext ctx, code& code);
-  
+
 		//ITranslator
 		virtual str generate(const param_list pl);
-		
+
 		//code_visitor
     virtual void if_(stmt_if& info);
     virtual void variable_(stmt_variable& info);
@@ -67,9 +67,9 @@ struct base_xss_code : ITranslator, code_visitor
 		private:
       code       code_;
       XSSContext ctx_;
-			str				 result_;	
+			str				 result_;
 			int				 indent_;
-			
+
 			void add_line(const str& line, bool dress_line = false);
 			str	 get_indent_str();
       void render_code(code& cde, int indent);
@@ -90,9 +90,9 @@ struct code_type_resolver : code_visitor
 		schema* get();
 
 		//code_visitor
-    virtual void variable_(stmt_variable& info);     
-    virtual void return_(stmt_return& info);         
-		
+    virtual void variable_(stmt_variable& info);
+    virtual void return_(stmt_return& info);
+
 		virtual void if_(stmt_if& info)									{}
     virtual void for_(stmt_for& info)               {}
     virtual void iterfor_(stmt_iter_for& info)      {}
@@ -102,10 +102,10 @@ struct code_type_resolver : code_visitor
     virtual void expression_(stmt_expression& info) {}
     virtual void dsl_(dsl& info)                    {}
     virtual void dispatch(stmt_dispatch& info)      {}
-		
+
 		private:
 			std::map<str, schema*> vars_;
-			XSSContext						 ctx_;	
+			XSSContext						 ctx_;
 			bool									 is_variant_;
 			schema*								 result_;
 	};
@@ -114,12 +114,12 @@ struct code_type_resolver : code_visitor
 
 //type info
 template<typename T>
-struct translator_schema : object_schema<T>  
+struct translator_schema : object_schema<T>
 	{
     virtual void declare_base()
       {
-        implements<ITranslator>();
-				dynamic_function_<str>("generate", &T::generate);
+        this->template implements<ITranslator>();
+		this->template dynamic_function_<str>("generate", &T::generate);
       }
 
 		virtual void declare()

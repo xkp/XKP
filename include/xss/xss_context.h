@@ -13,7 +13,7 @@ class   xss_property;
 class   xss_event;
 class   xss_method;
 struct  xss_code_context;
-  
+
 typedef reference<xss_object>					XSSObject;
 typedef reference<xss_serial_object>	XSSSerialObject;
 typedef reference<xss_property>				XSSProperty;
@@ -105,14 +105,14 @@ struct xss_code_context : base_code_context
       xss_idiom* idiom_;
 
 			typedef std::map<str, XSSObject> variable_types;
-			
+
 			variable_types vars_;
   };
-  
+
 struct xss_composite_context : xss_code_context
   {
     xss_composite_context(XSSContext ctx);
-      
+
     //this will function as resolver
     virtual XSSProperty   get_property(const str& name);
     virtual XSSProperty   get_property(XSSObject obj, const str& name);
@@ -123,7 +123,7 @@ struct xss_composite_context : xss_code_context
   };
 
 //these are basically copies of their xs counterpart, but offer xss stuff, like generating
-//they are also vm friendly, unlike the low level xs's ast.  
+//they are also vm friendly, unlike the low level xs's ast.
 class xss_property : public xss_object
   {
 		public:
@@ -139,13 +139,13 @@ class xss_property : public xss_object
 			XSSObject this_;
 			variant   value_;
 			str				type;
-    
+
 			str     generate_value();
 			variant get_value();
 			str			resolve_assign(const str& value);
 			str			resolve_value();
   };
-  
+
 class xss_event : public xss_object
   {
 		public:
@@ -154,7 +154,7 @@ class xss_event : public xss_object
 
 			str          name;
 			DynamicArray impls;
-			variant			 args;	
+			variant			 args;
 
 			bool implemented()
 				{
@@ -171,8 +171,8 @@ class xss_method : public xss_object
 
 			str     name;
 			str			type;
-			variant args;	
-			variant code;	
+			variant args;
+			variant code;
   };
 }
 
