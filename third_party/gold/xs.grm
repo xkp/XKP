@@ -321,7 +321,7 @@ Comment End = '*/'
 
 <Prop Descriptor>
 	::=  <Block>
-        |   '=' <Block> <Block>
+     |   '=' <Block> <Block>
 	 |   '=' <Block>
 	 |   '=' <Expression> <Block>
 	 |   '=' <Expression> ';'

@@ -310,7 +310,6 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
 											ss << os << operator_str[op];
 										break;
 									}
-
 								case FN_CALL:
 									{
 										str op_str = operator_str[op];
@@ -952,7 +951,7 @@ schema* code_type_resolver::get()
 		return result_;
 	}
 
-void code_type_resolver::variable_(stmt_variable& info)     
+void code_type_resolver::variable_(stmt_variable& info)
 	{
 		schema* type = ctx_->get_type(info.type);
 		if (!type)
@@ -969,7 +968,7 @@ void code_type_resolver::variable_(stmt_variable& info)
 		vars_.insert(std::pair<str, schema*>(info.id, type));
 	}
 
-void code_type_resolver::return_(stmt_return& info)         
+void code_type_resolver::return_(stmt_return& info)
 	{
 		if (is_variant_)
 			return;
@@ -1014,7 +1013,7 @@ struct code_renderer__ : code_visitor
             << ind << "}" << '\n';
 
         if (!info.else_code.empty())
-          ss  << ind << "else\n" 
+          ss  << ind << "else\n"
 							<< ind << "{\n"
                 << render_code(info.else_code, indent_ + 1)
               << ind << "}\n";
@@ -1117,7 +1116,7 @@ struct code_renderer__ : code_visitor
     virtual void dispatch(stmt_dispatch& info)
       {
         assert(false); //td: ought to define what to do here, it would seem like the idiom would like
-                       //to handle this 
+                       //to handle this
       }
     private:
       str        result_;
@@ -1223,7 +1222,6 @@ void base_xss_code::register_var(const str& name, const str& type)
 void base_xss_code::variable_(stmt_variable& info)
 	{
 		register_var(info.id, info.type); //td: resolve type from value
-		
     std::stringstream ss;
     str ind = get_indent_str();
 
@@ -1263,7 +1261,7 @@ void base_xss_code::iterfor_(stmt_iter_for& info)
     str iterable_name = info.id + "_iterable";
     str iterator_name = info.id + "_iterator";
     ss << ind << "var " << iterable_name << " = " << render_expression(info.iter_expr, ctx_) << ";\n";
-    ss << ind << "for(var " << iterator_name << " = 0; " 
+    ss << ind << "for(var " << iterator_name << " = 0; "
         << iterator_name << " < " << iterable_name << ".length; "
         << iterator_name << "++" << ")\n";
 
@@ -1314,7 +1312,7 @@ void base_xss_code::dsl_(dsl& info)
 void base_xss_code::dispatch(stmt_dispatch& info)
 	{
     assert(false); //td: ought to define what to do here, it would seem like the idiom would like
-                    //to handle this 
+                    //to handle this
 	}
 
 void base_xss_code::add_line(const str& line, bool dress_line)

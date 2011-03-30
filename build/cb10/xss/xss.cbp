@@ -12,7 +12,7 @@
 				<Option object_output="..\..\..\bin\cb\debug\obj\" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="app.xml" />
+				<Option parameters="C:\Work\XKP\data\xss\mutant-state\images.xml" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-D_DEBUG" />
@@ -76,9 +76,7 @@
 		<Unit filename="..\..\..\include\xs\operators.h" />
 		<Unit filename="..\..\..\include\xs\pair_array.h" />
 		<Unit filename="..\..\..\include\xs\vm.h" />
-		<Unit filename="..\..\..\include\xss\c++.h" />
 		<Unit filename="..\..\..\include\xss\idiom.h" />
-		<Unit filename="..\..\..\include\xss\jscript.h" />
 		<Unit filename="..\..\..\include\xss\project.h" />
 		<Unit filename="..\..\..\include\xss\utils.h" />
 		<Unit filename="..\..\..\include\xss\xss_generator.h" />
@@ -99,7 +97,6 @@
 		<Unit filename="..\..\..\src\xs\linker.cpp" />
 		<Unit filename="..\..\..\src\xs\operators.cpp" />
 		<Unit filename="..\..\..\src\xs\vm.cpp" />
-		<Unit filename="..\..\..\src\xss\c++.cpp" />
 		<Unit filename="..\..\..\src\xss\dsl_out.cpp" />
 		<Unit filename="..\..\..\src\xss\idiom.cpp" />
 		<Unit filename="..\..\..\src\xss\jscript.cpp" />
