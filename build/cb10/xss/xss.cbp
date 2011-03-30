@@ -42,6 +42,7 @@
 			<Add option="-DUNICODE" />
 			<Add option="-DTIXML_USE_STL" />
 			<Add option="-DBOOST_NO_MEMBER_TEMPLATE_FRIENDS" />
+			<Add option="-DBOOST_SYSTEM_NO_DEPRECATED" />
 			<Add directory="..\..\..\include" />
 			<Add directory="..\..\..\include\xs" />
 			<Add directory="..\..\..\include\xss" />
@@ -75,7 +76,9 @@
 		<Unit filename="..\..\..\include\xs\operators.h" />
 		<Unit filename="..\..\..\include\xs\pair_array.h" />
 		<Unit filename="..\..\..\include\xs\vm.h" />
+		<Unit filename="..\..\..\include\xss\c++.h" />
 		<Unit filename="..\..\..\include\xss\idiom.h" />
+		<Unit filename="..\..\..\include\xss\jscript.h" />
 		<Unit filename="..\..\..\include\xss\project.h" />
 		<Unit filename="..\..\..\include\xss\utils.h" />
 		<Unit filename="..\..\..\include\xss\xss_generator.h" />
@@ -96,8 +99,10 @@
 		<Unit filename="..\..\..\src\xs\linker.cpp" />
 		<Unit filename="..\..\..\src\xs\operators.cpp" />
 		<Unit filename="..\..\..\src\xs\vm.cpp" />
+		<Unit filename="..\..\..\src\xss\c++.cpp" />
 		<Unit filename="..\..\..\src\xss\dsl_out.cpp" />
 		<Unit filename="..\..\..\src\xss\idiom.cpp" />
+		<Unit filename="..\..\..\src\xss\jscript.cpp" />
 		<Unit filename="..\..\..\src\xss\project.cpp" />
 		<Unit filename="..\..\..\src\xss\xss_generator.cpp" />
 		<Unit filename="..\..\..\src\xss\xss_parser.cpp" />

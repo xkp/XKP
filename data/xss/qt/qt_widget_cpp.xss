@@ -1,5 +1,5 @@
 #include "widget.h"
-#include "ui_widget.h"
+#include "ui_qt_app.h"
 
 <xss:e value="main_class"/>::<xss:e value="main_class"/>(QWidget *parent) :
     QWidget(parent),
@@ -12,18 +12,13 @@
 <xss:class entry_point="generate_layouts">
     method qt_placement(string pl)
     {
-		// this make an type mismatch error
-		//if(pl == "null")
-		if(!pl)
-			return qt_placement_values[0];
-
         for(int i = 0; i < xs_placement_values.size; ++i)
         {
             if(xs_placement_values[i] == pl)
                 return qt_placement_values[i];
         }
         
-        return pl;
+        return qt_placement_values[0];
     }
   
     method generate_layouts()
@@ -40,9 +35,6 @@
 		{
 			cur_cmp = queue[idx];
 
-			// this make a type mismatch error
-			//compiler.log("size: " + size + " idx: " + idx);
-
 			if(cur_cmp.container)
 			{
 				out(indent = 0)
@@ -58,7 +50,8 @@
 
 				out(indent = 0)
 				{
-				    layout->addWidget(<xss:e value="child.id"/>, <xss:e value="plt"/>);
+					<xss:e value="child.internal_id"/>->setProperty(placementName, <xss:e value="plt"/>);
+				    layout->addWidget(<xss:e value="child.internal_id"/>, <xss:e value="plt"/>);
 				}
 
 			    if(child.container)
@@ -72,7 +65,7 @@
 			{
 				out(indent = 0)
 				{
-					<xss:e value="cur_cmp.id"/>->setLayout(layout);
+					<xss:e value="cur_cmp.internal_id"/>->setLayout(layout);
 				}
 			}
 			else

@@ -22,6 +22,11 @@
         "XKPPlacementLayout::Center",
         "XKPPlacementLayout::Client"
     ];
+	
+	for(var inst in instances)
+	{
+		inst.internal_id = "ui->" + inst.id;
+	}
 
     out()
     {

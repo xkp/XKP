@@ -521,7 +521,9 @@ namespace xkp
         virtual void set ( void* instance, const variant value )
           {
             T* self = static_cast<T*>(instance);
-			      self->*mp_ = (RT)value;
+            RT val = value;
+			      self->*mp_ = val;
+			      //self->*mp_ = (RT)value;
           }
       };
 
@@ -613,11 +615,11 @@ namespace xkp
       basic_schema()
         {
         }
-      
+
       virtual void declare_base()
         {
         }
-        
+
       virtual size_t options()
         {
           return 0;
@@ -772,8 +774,8 @@ namespace xkp
       virtual bool    create(variant& result, param_list* args = null)      {return delgate_->create(result, args);}
       virtual bool    clone(const variant v, variant& result)               {return delgate_->clone(v, result);}
       virtual void*   get_access()                                          {return delgate_;}
-      virtual void    declare_base()                                        {} 
-      virtual void    declare()                                             {} 
+      virtual void    declare_base()                                        {}
+      virtual void    declare()                                             {}
 
       schema* delgate_;
     };

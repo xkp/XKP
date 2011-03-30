@@ -750,6 +750,9 @@ namespace detail
       if (type->resolve(item, itm) && itm.get)
         {
           void* access = itm.flags&CLASS? type->get_access() : v.get_pointer();
+					if (!access)
+						return false;
+
           result = itm.get->get( access );
           return true;
         }

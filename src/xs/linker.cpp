@@ -122,7 +122,7 @@ operator_type native_op[] =
 struct array_evaluator : expr_evaluator
 	{
 		array_evaluator(): result( new dynamic_array ) {}
-		
+
     virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top)
 			{
 				assert(!top || op == op_array);
@@ -192,12 +192,12 @@ code_linker::code_linker(code_context& context):
             locals_.insert( locals_pair(name, lv) );
           }
       }
-    
+
     if (context_.dsl_)
       {
         dsl_list::iterator it = context_.dsl_->begin();
         dsl_list::iterator nd = context_.dsl_->end();
-        
+
         for(; it != nd; ++it)
           {
             dsl_linkers_.insert(dsl_linker_pair(it->first, it->second));
@@ -506,7 +506,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
 							{
 								//the second argument being on the stack already causes the order of the parameters for the call to invert
 								//one way to solve is to create a temporary variable and make sure it gets loaded later
-								already_in_stack ais = arg2;								
+								already_in_stack ais = arg2;
 								int lv = register_variable("", ais.type, null);
 								add_instruction(i_store, lv);
 
@@ -614,10 +614,10 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
           {
             schema* type = null;
             expression_identifier ei = arg2;
-            
+
 						resolve_value(arg1, &type);
 
-            if (type && 
+            if (type &&
 								type != type_schema<empty_type>() &&
 								type != type_schema<IDynamicObject*>() &&
 								type != type_schema<variant>() &&
@@ -895,7 +895,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
 								else if (arg.is<already_in_stack>())
 									{
 										//td: transitioning out
-										//already_in_stack ais = arg;								
+										//already_in_stack ais = arg;
 										//int lv = register_variable("", ais.type, null);
 										//add_instruction(i_store, lv);
 
@@ -1002,7 +1002,7 @@ void code_linker::link_code(code& cde, bool track, int continue_pc, int break_pc
         fixup_cpy = fixup_;
         fixup_.clear();
       }
-  
+
     cde.visit( this );
 
     fixup_list::iterator it = fixup_.begin();
@@ -1058,7 +1058,7 @@ schema* code_linker::link_expression(expression& expr, bool assigner, bool* empt
 								expr.visit(&es);
 
 								schema* right_type = link_expression(es.right, false);
-								
+
 								if (simple_assign)
 									{
 										link_expression(es.left, true);
@@ -1090,7 +1090,7 @@ schema* code_linker::link_expression(expression& expr, bool assigner, bool* empt
 																if (operators_.get_operator_index(nop, left_type, right_type, result, &result_type))
 																	{
 																		resolve_operator(nop, already_in_stack(left_type), already_in_stack(right_type), null);
-																		
+
 																		//the aforementioned assignment
 																		link_expression(es.left, true);
 																		resolve_assign(already_in_stack(left_type));
@@ -1102,9 +1102,9 @@ schema* code_linker::link_expression(expression& expr, bool assigner, bool* empt
 																		//use case: regular +=, must assign so:
 																		//i_dynamic_binary_assign_operator will return whether to assign or not
 																		add_instruction(i_dynamic_binary_assign_operator, static_cast<short>(op));
-																		
-																		int assign_jump = add_instruction(i_jump_if); 
-																		link_expression(es.left, true); 
+
+																		int assign_jump = add_instruction(i_jump_if);
+																		link_expression(es.left, true);
 
 																		instruction_data(assign_jump, pc_);
 																	}
@@ -1335,10 +1335,10 @@ struct expr_typeof : expression_visitor
 int code_linker::register_variable(const str& name, schema* type, expression* value)
   {
     locals_list::iterator it = locals_.end();
-		
+
 		if (!name.empty())
 			it = locals_.find(name);
-    
+
 		if (it == locals_.end())
       {
         int local_idx = local_count_++;
@@ -1630,7 +1630,7 @@ bool code_linker::resolve_custom_operator(operator_type op, schema* type, bool i
 
     assert(custom_operator.exec);
     add_instruction(i_load_constant, add_constant(custom_operator.exec));
-		add_call(i_call, 1, custom_operator.flags&DYNAMIC_ACCESS, invert); 
+		add_call(i_call, 1, custom_operator.flags&DYNAMIC_ACCESS, invert);
     stack_.push( already_in_stack(custom_operator.type) );
 
     if (dont_assign)
@@ -1711,20 +1711,19 @@ void code_linker::resolve_assign(const variant& arg, bool invert_set)
             error.add("desc", SAssigningToWriteOnly);
             xs_throw(error);
           }
-        
+
         add_instruction(i_load_constant, add_constant(si.set));
 				add_set(si.flags&DYNAMIC_ACCESS, invert_set);
       }
     else if (arg.is<already_in_stack>())
       {
 				//td: phasing out, this should do nothing
-				_asm nop;
 
 				////td: there's a bit of a cluster f*ck here
 				////resolving assigners works must cases except for this one
 				////where a dynamic get has already been inserted. The right solution
 				////is already implemented at xss (splitting expressions)
-    //    assert(last_pc >= 0); 
+    //    assert(last_pc >= 0);
 				//assert(code_[last_pc].id == i_dynamic_get);
 				//int idx = code_[last_pc].data.value;
 				//code_[last_pc].id = i_nop; //invalidate the get, keep the stack intact
@@ -2105,17 +2104,17 @@ void base_xs_linker::event_(xs_event& info)
             param_list error;
             error.add("id", SUnknownIdentifier);
             error.add("desc", SInstanceNotFound);
-            
+
             std::vector<str>::iterator it = name.begin();
             std::vector<str>::iterator nd = name.end();
-            
+
             std::ostringstream oss;
             for(; it != nd; it++)
-              oss << *it << "."; 
-            
+              oss << *it << ".";
+
             str instance_name = oss.str();
             instance_name = instance_name.substr(0, instance_name.size() - 1);
-            
+
             error.add("instance", instance_name);
             xs_throw(error);
           }
@@ -2131,7 +2130,7 @@ void base_xs_linker::event_(xs_event& info)
         error.add("event", info.name);
         xs_throw(error);
       }
-      
+
     int id = object->event_id(ev_name);
 
     schema_item itm;
@@ -2198,7 +2197,7 @@ void base_xs_linker::instance_(xs_instance& info)
 
         instance = instance->resolve_instance(id);
 
-        if (!instance) 
+        if (!instance)
           {
             param_list error;
             error.add("id", SUnknownIdentifier);
@@ -2217,12 +2216,12 @@ void base_xs_linker::instance_(xs_instance& info)
         else
           i_type = type_schema<default_object>();
 
-        if (!i_type) 
+        if (!i_type)
           {
             param_list error;
             error.add("id", SUnknownIdentifier);
             error.add("desc", STypeNotFound);
-            error.add("type", info.class_name); 
+            error.add("type", info.class_name);
             xs_throw(error);
           }
 
@@ -2239,12 +2238,12 @@ void base_xs_linker::instance_(xs_instance& info)
           ctx_.scope_->register_symbol(instance_name, instance);
       }
 
-    if (!instance) 
+    if (!instance)
       {
         param_list error;
         error.add("id", SUnknownIdentifier);
         error.add("desc", SInstanceNotFound);
-        error.add("instance", instance_name); 
+        error.add("instance", instance_name);
         xs_throw(error);
       }
 
@@ -2267,22 +2266,22 @@ void base_xs_linker::behaviour_(xs_behaviour& info)
 void base_xs_linker::behaveas_(xs_implement_behaviour& info)
   {
     schema* type = ctx_.types_->get_type(info.name);
-    if (!type) 
+    if (!type)
       {
         param_list error;
         error.add("id", SUnknownIdentifier);
         error.add("desc", SBehaviourNotFound);
-        error.add("behaviour", info.name); 
+        error.add("behaviour", info.name);
         xs_throw(error);
       }
 
     behaviour_schema* behaviour = dynamic_cast<behaviour_schema*>(type);
-    if (!behaviour) 
+    if (!behaviour)
       {
         param_list error;
         error.add("id", SOutOfContext);
         error.add("desc", STypeIsNotABehaviour);
-        error.add("type", info.name); 
+        error.add("type", info.name);
         xs_throw(error);
       }
 
@@ -2399,7 +2398,7 @@ void class_linker::link(xs_class& info)
             param_list error;
             error.add("id", SUnknownIdentifier);
             error.add("desc", SSuperclassNotFound);
-            error.add("type", info.super); 
+            error.add("type", info.super);
             xs_throw(error);
           }
       }
@@ -2440,7 +2439,7 @@ implicit_instance_linker::implicit_instance_linker(code_context& ctx, DynamicObj
   instance_(instance)
   {
   }
-  
+
 void implicit_instance_linker::link(xs_container& info)
   {
     output_          = instance_;
@@ -2469,7 +2468,7 @@ void behaviour_linker::link(xs_behaviour& info)
             param_list error;
             error.add("id", SUnknownIdentifier);
             error.add("desc", SSuperclassNotFound);
-            error.add("type", info.super); 
+            error.add("type", info.super);
             xs_throw(error);
           }
       }

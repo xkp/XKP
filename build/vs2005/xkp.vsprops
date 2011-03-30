@@ -17,7 +17,7 @@
 	/>
 	<UserMacro
 		Name="BOOST_INCLUDE"
-		Value="d:\boost\boost_1_42"
+		Value="d:\libraries\boost_1_44_0"
 	/>
 	<UserMacro
 		Name="XKP_INCLUDE"
@@ -29,7 +29,7 @@
 	/>
 	<UserMacro
 		Name="BOOST_LIB"
-		Value="$(BOOST_INCLUDE)/lib"
+		Value="$(BOOST_INCLUDE)\stage\lib"
 	/>
 	<UserMacro
 		Name="JSON_INCLUDE"

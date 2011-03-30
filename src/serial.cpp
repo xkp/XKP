@@ -207,12 +207,6 @@ bool base_read_archive::read(Reader r, schema* type, variant& result)
             iter.insert( result_item );
           }
       }
-    else if (type_options & TYPE_MUTABLE)
-      {
-        IDynamicObject* obj = result;
-        mutable_reader mr(obj, *this);
-        r->visit(&mr);
-      }
     else
       {
         schema_collector sc;
@@ -264,7 +258,16 @@ bool base_read_archive::read(Reader r, schema* type, variant& result)
                   }
               }
           }
-      }
+
+				if (type_options & TYPE_MUTABLE)
+					{
+						IDynamicObject* obj = result;
+						mutable_reader mr(obj, *this);
+						r->visit(&mr);
+
+						obj = null;
+					}
+			}
 
     return true;
   }

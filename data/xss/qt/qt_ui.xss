@@ -6,13 +6,13 @@
 <xss:class entry_point="generate_ui">
     method qt_placement(string pl)
     {
-        //for(int i = 0; i < xs_placement_values.size; ++i)
-        //{
-        //    if(xs_placement_values[i] == pl)
-        //        return qt_placement_values[i];
-        //}
+        for(int i = 0; i < xs_placement_values.size; ++i)
+        {
+            if(xs_placement_values[i] == pl)
+                return qt_placement_values[i];
+        }
         
-        return pl;
+        return qt_placement_values[0];
     }
   
     method generate_properties(var cmp, int ind)
@@ -26,8 +26,10 @@
             //if(prop_value == "null")
             //    continue;
 
-            if(p.qt_ui != "true")
-                continue;
+			// these line make a type mismatch
+            //if(p.qt_ui != "true")
+			      if(!p.qt_ui)
+				        continue;
                 
             // don't generate property without assign value
             var prop_value = compiler.evaluate_property(cmp, p.name);
@@ -40,8 +42,8 @@
                 
             // translate property name if it not coincided
             string prop_name = p.name;
-            if(p.ui_name)
-                prop_name = p.ui_name;
+            if(p.qt_name)
+                prop_name = p.qt_name;
                 
             if(prop_name == "placement")
                 prop_value = qt_placement(prop_value);
@@ -59,7 +61,8 @@
 	  // inclusively containers components with childs
 	  method generate_component(var cmp, var parent, int ind)
 	  {
-        if(cmp.qt_ui != "true")
+        //if(cmp.qt_ui != "true")
+        if(!cmp.qt_ui)
             return;
         
 		    out(indent = ind)

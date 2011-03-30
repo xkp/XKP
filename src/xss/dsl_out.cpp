@@ -492,7 +492,7 @@ void out_linker::link(dsl& info, code_linker& owner)
           {
             indent_expr = indent_value; 
           }
-        catch(type_mismatch tm)
+        catch(...)
           {
             param_list error;
             error.add("id", STypeMismatch);

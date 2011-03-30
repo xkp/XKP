@@ -1,26 +1,34 @@
 on pushButton_1.click()
 {
 	pushButton_2.caption = "Clicked";
-	
-	// this assign is not translated correctly
-	// cuz not asume the property owner
 	caption = "Other Clicked";
-
 	pushButton_2.width += pushButton_1.width;
 	application.reset(600);
 }
 
-property target : string
+on pushButton_2.click()
 {
-	pushButton_2.caption = "target acquired " + value;
-	
-	for(int i = 0; i < 20; i++)
-	{
-		pushButton_2.width = pushButton_2.width + 10;
-		if (pushButton_2.width > 200)
-			pushButton_2.width = 100;
-	}
+	pushButton_1.caption = "Old value: " + application.target;
+	application.target = 300;
 }
+
+property target : string =
+{
+	return value;
+}
+{
+	value = "ok";
+}
+// {
+	// pushButton_2.caption = "target acquired " + value;
+	
+	// for(int i = 0; i < 20; i++)
+	// {
+		// pushButton_2.width = pushButton_2.width + 10;
+		// if (pushButton_2.width > 200)
+			// pushButton_2.width = 100;
+	// }
+// }
 
 method reset(string s)
 {
@@ -39,24 +47,26 @@ method returning_stuff()
 method declaring_error()
 {
 	var s = "hello";
-	//return 12;
+	return 12;
 	return s;
 }
 
 //method declaring_ok() : int
-method declaring_ok()
+method declaring_ok(int value)
 {
-	return 23;
+	return value;
+}
+
+//this is a very trick
+method declaring_trick(var value)
+{
+	return value;
 }
 
 //method returned_real() : float
 method returned_real()
 {
-	return 3.14;
+	int pi = 3.14;
+	return pi;
 }
 
-on pushButton_2.click()
-{
-	pushButton_1.caption = "Old value: " + application.target;
-	application.target = 300;
-}

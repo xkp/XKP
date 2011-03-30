@@ -64,11 +64,12 @@ namespace xkp
         size_t         register_wildcard(operator_type op, schema* t1, schema* t2, operator_exec* exec ); 
         operator_exec* get_operator(operator_type op, schema* t1, schema* t2);
         bool           get_operator_index(operator_type op, schema* t1, schema* t2, size_t& result, schema** result_type);
+        bool           get_default_operator(operator_type op, operator_exec** exec, schema** result_type);
         operator_exec* get_operator(size_t idx);
         schema*        get_result_type(schema* t1, schema* t2);
       private:
-        typedef std::vector<operator_exec*> executor_list;
-        typedef std::vector<schema*>        type_rank;
+        typedef std::vector<operator_exec*>	executor_list;
+        typedef std::vector<schema*>				type_rank;
         
         //dynamic search struct, probably not too fast        
         struct key
@@ -99,12 +100,16 @@ namespace xkp
               }
           };
           
-        typedef std::map<key, size_t>  dynamic_executor_list;
-        typedef std::pair<key, size_t> dynamic_executor_pair;
+        typedef std::map<key, size_t>											dynamic_executor_list;
+        typedef std::pair<key, size_t>										dynamic_executor_pair;
+        typedef std::map<operator_type, operator_exec*>		default_executor_list;
+        typedef std::pair<operator_type, operator_exec*>	default_executor_pair;
         
         executor_list         executors_;
         dynamic_executor_list dynamic_executors_;
         dynamic_executor_list wildcard_executors_;
+				default_executor_list	default_ops_;
+
         type_rank             rank_;
     };
 }

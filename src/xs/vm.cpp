@@ -243,11 +243,18 @@ variant execution_context::execute()
                       }
                     else
                       {
-												param_list error;
-												error.add("id", SRuntime);
-												error.add("desc", SCannotResolveOperator);
-												error.add("operator", str(vm_operator_name[opid]));
-												runtime_throw(error);
+												if (operators_.get_default_operator(opid, &opexec, null))
+													{
+														result = opexec->exec(arg1, arg2);
+													}
+												else
+												{
+													param_list error;
+													error.add("id", SRuntime);
+													error.add("desc", SCannotResolveOperator);
+													error.add("operator", str(vm_operator_name[opid]));
+													runtime_throw(error);
+												}
                       }
                   }
                 else result = opexec->exec(arg1, arg2);

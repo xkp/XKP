@@ -1,140 +1,140 @@
 <xss:code>
-	  if(cmp.properties)
-	  {
-		    for(var p in cmp.properties)
-		    {
-			      if(p.set || p.get)
-			      {
-                string prop_type = p.type;
+	if(cmp.properties)
+	{
+		for(var p in cmp.properties)
+		{
+			if(p.set || p.get)
+			{
+				string prop_type = p.type;
 
-                string set_prop_name = "set_" + p.name + "(" + prop_type + " value)";
-                string get_prop_name = "get_" + p.name + "(void)";
+				string set_prop_name = "set_" + p.name + "(" + prop_type + " value)";
+				string get_prop_name = "get_" + p.name + "(void)";
 
-				        string var_name = "_" + p.name;
-				        string var_decl = prop_type + " " + var_name;
-				        priv_vars += var_decl;
+				string var_name = "_" + p.name;
+				string var_decl = prop_type + " " + var_name;
+				priv_vars += var_decl;
 
-				        // generate method for set value to property
-				        out(indent = 0)
-				        {
-					          void <xss:e value="main_class"/>::<xss:e value="set_prop_name"/>
-					          <xss:open_brace/>
-						            <xss:e value="var_name"/> = value;
-				        }
-				        if(p.set)
-				        {
-					          out(indent = 1)
-					          {
-						            <xss:e value="p.set.generate()"/>
-					          }
-				        }
-				        out(indent = 0)
-				        {
-					          <xss:close_brace/>
-					          <xss:return/>
-				        }
+				// generate method for set value to property
+				out(indent = 0)
+				{
+					void <xss:e value="main_class"/>::<xss:e value="set_prop_name"/>
+					<xss:open_brace/>
+						<xss:e value="var_name"/> = value;
+				}
+				if(p.set)
+				{
+					out(indent = 1)
+					{
+						<xss:e value="p.set.generate()"/>
+					}
+				}
+				out(indent = 0)
+				{
+					<xss:close_brace/>
+					<xss:return/>
+				}
 
-				        // generate method for get value of property
-				        out(indent = 0)
-				        {
-					          <xss:e value="prop_type"/> <xss:e value="main_class"/>::<xss:e value="get_prop_name"/>
-					          <xss:open_brace/>
-				        }
-				        if(p.get)
-				        {
-					          out(indent = 1)
-					          {
-						            <xss:e value="p.get.generate()"/>
-					          }
-				        }
-				        out(indent = 0)
-				        {
-						            return <xss:e value="var_name"/>;
-					          <xss:close_brace/>
-					          <xss:return/>
-				        }
+				// generate method for get value of property
+				out(indent = 0)
+				{
+					<xss:e value="prop_type"/> <xss:e value="main_class"/>::<xss:e value="get_prop_name"/>
+					<xss:open_brace/>
+				}
+				if(p.get)
+				{
+					out(indent = 1)
+					{
+						<xss:e value="p.get.generate()"/>
+					}
+				}
+				out(indent = 0)
+				{
+						return <xss:e value="var_name"/>;
+					<xss:close_brace/>
+					<xss:return/>
+				}
 
-				        set_prop_name = "void " + set_prop_name;
-				        get_prop_name = prop_type + " " + get_prop_name;
+				set_prop_name = "void " + set_prop_name;
+				get_prop_name = prop_type + " " + get_prop_name;
 
-				        // push methods of properties in array for include in class declaration
-				        methods += set_prop_name;
-				        methods += get_prop_name;
-			      }
-			      else
-			      {
-				        // do nothing in C/C++
-			      }
-		    }
-	  } // if(cmp.properties)
+				// push methods of properties in array for include in class declaration
+				methods += set_prop_name;
+				methods += get_prop_name;
+			}
+			else
+			{
+				// do nothing in C/C++
+			}
+		}
+	} // if(cmp.properties)
 
-	  if(cmp.events)
-	  {
-		    for(var e in cmp.events)
-		    {
-			      if(!e.implemented)
-				        continue;
+	if(cmp.events)
+	{
+		for(var e in cmp.events)
+		{
+			if(!e.implemented)
+				continue;
 
-			      string evt_name = "on_" + cmp.id + "_" + e.qt_name + "()";
+			string evt_name = "on_" + cmp.id + "_" + e.qt_name + "()";
 
-			      out(indent = 0)
-			      {
-				        void <xss:e value="main_class"/>::<xss:e value="evt_name"/>
-				        <xss:open_brace/>
-			      }
+			out(indent = 0)
+			{
+				void <xss:e value="main_class"/>::<xss:e value="evt_name"/>
+				<xss:open_brace/>
+			}
 
-            for(var impl in e.impls)
-			      {
-				        out(indent = 1)
-				        {
-					          <xss:e value="impl.generate()"/>
-				        }
-			      }
+			for(var impl in e.impls)
+			{
+				out(indent = 1)
+				{
+					<xss:e value="impl.generate()"/>
+				}
+			}
 
-			      out(indent = 0)
-			      {
-				        <xss:close_brace/>
-				        <xss:return/>
-			      }
+			out(indent = 0)
+			{
+				<xss:close_brace/>
+				<xss:return/>
+			}
 
-			      evt_name = "void " + evt_name;
+			evt_name = "void " + evt_name;
 
-			      // push event in array for include in class declaration
-			      methods += evt_name;
-		    }
-	  } // if(cmp.events)
+			// push event in array for include in class declaration
+			methods += evt_name;
+		}
+	} // if(cmp.events)
 
-	  if(cmp.methods)
-	  {
-		    for(var m in cmp.methods)
-		    {
-			      string mthd_name;
-            string mthd_type;
-            
-            // why i get an empty value when method don't return nothing, 
-            // and i not get a null pointer 
-			      if(m.type != "")
-                mthd_type = m.type;
-            else
-                mthd_type = "void";
-            
-            mthd_name = m.name + "(" + m.args.generate() + ")";
-            
-            // in the generate method, all reference/calls to cmp are with 
-            // 'ui->objectName' schema, think that!
-			      out(indent = 0)
-			      {
-                <xss:e value="mthd_type"/> <xss:e value="main_class"/>::<xss:e value="mthd_name"/>
-                <xss:open_brace/>
-                    <xss:e value="m.code.generate()"/>
-                <xss:close_brace/>
-                <xss:return/>
-			      }
-            
-            mthd_name = mthd_type + " " + mthd_name;
+	if(cmp.methods)
+	{
+		for(var m in cmp.methods)
+		{
+			string mthd_name;
+			string mthd_type;
 
-			      // push method in array for include in class declaration
-			      methods += mthd_name;
-		    }
-	  } // if(cmp.methods)
+			// why i get an empty value when method don't return nothing, 
+			// and i not get a null pointer 
+			if(m.type != "")
+				mthd_type = m.type;
+			else
+				mthd_type = "void";
+
+			mthd_name = m.name + "(" + m.args.generate() + ")";
+
+			// in the generate method, all reference/calls to cmp are with 
+			// 'ui->objectName' schema, think that!
+			out(indent = 0)
+			{
+				<xss:e value="mthd_type"/> <xss:e value="main_class"/>::<xss:e value="mthd_name"/>
+				<xss:open_brace/>
+					<xss:e value="m.code.generate()"/>
+				<xss:close_brace/>
+				<xss:return/>
+			}
+
+			mthd_name = mthd_type + " " + mthd_name;
+
+			// push method in array for include in class declaration
+			methods += mthd_name;
+		}
+	} // if(cmp.methods)
 </xss:code>

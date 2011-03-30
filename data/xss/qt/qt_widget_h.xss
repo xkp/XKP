@@ -6,12 +6,15 @@
 
 #include "xkpplacementlayout.h"
 
+using namespace std;
+
 namespace Ui {
     class <xss:e value="main_class"/>;
 }
 
 class <xss:e value="main_class"/> : public QWidget {
     Q_OBJECT
+	
 public:
     <xss:e value="main_class"/>(QWidget *parent = 0);
     ~<xss:e value="main_class"/>();
