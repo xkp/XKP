@@ -148,6 +148,11 @@ str cpp_idiom::resolve_this(XSSContext ctx)
     return "";
 	}
 
+str cpp_idiom::resolve_separator(XSSObject lh)
+	{
+		return "->";
+	}
+
 //cpp_expression_renderer
 str cpp_expression_renderer::resolve_assigner(variant operand, XSSObject instance, assign_info* ai)
 	{
@@ -434,7 +439,13 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
           
             std::stringstream result;
 
-            str caller = operand_to_string(arg1);
+						str caller = operand_to_string(arg1);
+
+						if (caller == "xss_breakpoint")
+						{
+							str xxx("Breakpoint here");
+						}
+
 
             result << caller << "(";
 
@@ -648,9 +659,15 @@ str cpp_expression_renderer::operand_to_string(variant operand, XSSObject parent
               {
                 XSSProperty prop = ctx_->get_property(ei.value);
 								XSSMethod mthd = ctx_->get_method(ei.value);
-                if (prop || mthd)
+								if (prop)
+									{
+										result = prop->resolve_value();
+										str this_str = ctx_->idiom_->resolve_this(ctx_);
+                    if (!this_str.empty())
+                      result = this_str + "->" + result;  
+									}
+								else if (mthd)
                   {
-                    //well, lets see how the idiom handles thises
                     str this_str = ctx_->idiom_->resolve_this(ctx_);
                     if (!this_str.empty())
                       result = this_str + "->" + ei.value; //otherwise it doesnt get translated 

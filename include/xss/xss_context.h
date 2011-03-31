@@ -80,6 +80,7 @@ struct xss_idiom
     virtual variant process_expression(expression expr, XSSObject this_)							= 0;
 		virtual variant process_args(param_list_decl& params)															= 0;
     virtual str     resolve_this(XSSContext ctx)																			= 0;
+    virtual str     resolve_separator(XSSObject lh = XSSObject())											= 0;
   };
 
 struct xss_code_context : base_code_context

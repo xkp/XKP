@@ -476,7 +476,13 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
             std::stringstream result;
 
             str caller = operand_to_string(arg1);
-            result << caller << "(";
+
+						if (caller == "xss_breakpoint")
+						{
+							str xxx("Breakpoint here");
+						}
+
+						result << caller << "(";
 
             int args = arg2;
 			
@@ -992,167 +998,10 @@ void code_type_resolver::return_(stmt_return& info)
 			}
 	}
 
-struct code_renderer__ : code_visitor
-  {
-    code_renderer__(XSSContext ctx, int indent): ctx_(ctx), indent_(indent) {}
-
-    str get()
-      {
-        return result_;
-      }
-
-    //code_visitor
-    virtual void if_(stmt_if& info)
-      {
-        std::stringstream ss;
-        str ind = get_indent_str();
-
-        ss  << ind << "if (" << idiom_utils::render_expression<expression_renderer>(info.expr, ctx_) << ")" << '\n'
-            << ind << "{" << '\n'
-                   << render_code(info.if_code, indent_ + 1) << '\n'
-            << ind << "}" << '\n';
-
-        if (!info.else_code.empty())
-          ss  << ind << "else\n"
-							<< ind << "{\n"
-                << render_code(info.else_code, indent_ + 1)
-              << ind << "}\n";
-
-        add_line(ss.str());
-      }
-
-    virtual void variable_(stmt_variable& info)
-      {
-        std::stringstream ss;
-        str ind = get_indent_str();
-
-        ss << ind << "var " << info.id;
-        if (!info.value.empty())
-          ss << " = " << idiom_utils::render_expression<expression_renderer>(info.value, ctx_);
-
-        ss << ";\n";
-
-        add_line(ss.str());
-      }
-
-    virtual void for_(stmt_for& info)
-      {
-        std::stringstream ss;
-        str ind = get_indent_str();
-
-        ss << ind << "for(var " << info.init_variable.id << " = " << idiom_utils::render_expression<expression_renderer>(info.init_variable.value, ctx_)
-           << "; " << idiom_utils::render_expression<expression_renderer>(info.cond_expr, ctx_)
-           << "; " << idiom_utils::render_expression<expression_renderer>(info.iter_expr, ctx_) << ")\n";
-
-        ss << ind << "{" << "\n"
-                  << render_code(info.for_code, indent_ + 1);
-        ss << ind << "}" << "\n";
-
-        add_line(ss.str());
-      }
-
-    virtual void iterfor_(stmt_iter_for& info)
-      {
-        std::stringstream ss;
-        str ind = get_indent_str();
-
-        str iterable_name = info.id + "_iterable";
-        str iterator_name = info.id + "_iterator";
-        ss << ind << "var " << iterable_name << " = " << idiom_utils::render_expression<expression_renderer>(info.iter_expr, ctx_) << ";\n";
-        ss << ind << "for(var " << iterator_name << " = 0; " 
-           << iterator_name << " < " << iterable_name << ".length; "
-           << iterator_name << "++" << ")\n";
-
-        ss << ind << "{" << "\n"
-                  <<    "var " << info.id << " = " << iterable_name << "[" << iterator_name << "];\n"
-                  <<    render_code(info.for_code, indent_ + 1);
-        ss << ind << "}" << "\n";
-
-        add_line(ss.str());
-      }
-
-    virtual void while_(stmt_while& info)
-      {
-        std::stringstream ss;
-        str ind = get_indent_str();
-
-        ss << ind << "while(" << idiom_utils::render_expression<expression_renderer>(info.expr, ctx_) << ")\n" ;
-        ss << ind << "{" << "\n"
-                  <<    render_code(info.while_code, indent_ + 1);
-        ss << ind << "}" << "\n";
-
-        add_line(ss.str());
-      }
-
-    virtual void break_()
-      {
-        add_line("break;", true);
-      }
-
-    virtual void continue_()
-      {
-        add_line("continue;", true);
-      }
-
-    virtual void return_(stmt_return& info)
-      {
-        if (info.expr.empty())
-          add_line("return;", true);
-        else
-          add_line("return " + idiom_utils::render_expression<expression_renderer>(info.expr, ctx_) + ";", true);
-      }
-
-    virtual void expression_(stmt_expression& info)
-      {
-        str value = idiom_utils::render_expression<expression_renderer>(info.expr, ctx_);
-        add_line(value + ";", true);
-      }
-
-    virtual void dsl_(dsl& info)
-      {
-        assert(false); //td: there is some stuff to implement here... later
-      }
-
-    virtual void dispatch(stmt_dispatch& info)
-      {
-        assert(false); //td: ought to define what to do here, it would seem like the idiom would like
-                       //to handle this
-      }
-    private:
-      str        result_;
-      XSSContext ctx_;
-      int        indent_;
-
-      void add_line(const str& line, bool dress_line = false)
-        {
-          if (dress_line)
-            result_ += get_indent_str();
-
-          result_ += line;
-
-          if (dress_line)
-            result_ += '\n';
-        }
-
-      str render_code(code& code, int indent)
-        {
-          code_renderer__ renderer(ctx_, indent);
-          code.visit(&renderer);
-
-          return renderer.get();
-        }
-
-      str get_indent_str()
-        {
-          str result;
-          for(int i = 0; i < indent_*4; i++)
-            {
-              result += ' ';
-            }
-
-          return result;
-        }
-  };
+void code_type_resolver::register_var(const str& name, schema* type)
+	{
+		vars_.insert(std::pair<str, schema*>(name, type));
+	}
 
 //base_xss_expression
 base_xss_expression::base_xss_expression()

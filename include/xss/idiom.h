@@ -222,14 +222,19 @@ struct idiom_utils
 														    value = getter + " " + op_str + " " + value; 
 													    }
 
-												    size_t last_dot = getter.find_last_of(".");
+														//lets find out if the getter is a single word (like "width") or a composite (like "object.width")
+														//if composite we'll get rid of the last accesor (width) to get the actual accesor
+												    
+														xss_idiom* idiom = ctx->idiom_;
+														str separator = idiom->resolve_separator();
+														size_t last_dot = getter.find_last_of(separator);
 												    if (last_dot != str::npos)
 													    {
-														    size_t count = getter.size() - last_dot;
+														    size_t count = getter.size() - last_dot + 1;
 														    getter.erase(getter.end() - count, getter.end());
 													    }
 												    else
-													    getter = "this";
+															getter = idiom->resolve_this(ctx);
 
 												    //replace quotes, life is hard
 												    for(size_t i = 0; i < assign.size(); i++)
@@ -296,6 +301,8 @@ struct code_type_resolver : code_visitor
     virtual void dsl_(dsl& info)                    {}
     virtual void dispatch(stmt_dispatch& info)      {}
 
+		public:
+			void register_var(const str& name, schema* type);
 		private:
 			std::map<str, schema*> vars_;
 			XSSContext						 ctx_;

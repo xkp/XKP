@@ -43,7 +43,7 @@ struct js_idiom : xss_idiom
     virtual variant process_expression(expression expr, XSSObject this_);
 		virtual variant process_args(param_list_decl& params);
     virtual str     resolve_this(XSSContext ctx);
-    
+    virtual str     resolve_separator(XSSObject lh);
     public:  
       XSSContext ctx_;
       bool			 id_as_this_;

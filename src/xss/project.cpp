@@ -1234,6 +1234,14 @@ void xss_project::compile_ast(xs_container& ast, XSSContext ctx)
     for(; mit != mnd; mit++)
       {
 				code_type_resolver typer(context_);
+				
+				param_list_decl::iterator mait = mit->args.begin();
+				param_list_decl::iterator mand = mit->args.end();
+				for(; mait != mand; mait++)
+					{
+						typer.register_var(mait->name, context_->get_type(mait->type));
+					}
+ 
 				mit->cde.visit(&typer);
 				str type;
 				schema* tt = typer.get();

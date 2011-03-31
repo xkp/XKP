@@ -2,6 +2,8 @@ on pushButton_1.click()
 {
 	pushButton_2.caption = "Clicked";
 	caption = "Other Clicked";
+
+	xss_breakpoint();
 	pushButton_2.width += pushButton_1.width;
 	application.reset(600);
 }
@@ -32,9 +34,11 @@ property target : string =
 
 method reset(string s)
 {
-	target = s;
-	pushButton_1.caption = "...";
-	pushButton_2.caption = "..." + target;
+	//target = s;
+	//pushButton_1.caption = "...";
+	//pushButton_2.caption = "..." + target;
+	xss_breakpoint();
+	return target + "...";
 }
 
 method returning_stuff()

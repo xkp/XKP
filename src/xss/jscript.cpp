@@ -74,3 +74,7 @@ str js_idiom::resolve_this(XSSContext ctx)
     return "";
 	}
 
+str js_idiom::resolve_separator(XSSObject lh)
+	{
+		return ".";
+	}
