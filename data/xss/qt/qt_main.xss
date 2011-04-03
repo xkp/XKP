@@ -25,7 +25,15 @@
 	
 	for(var inst in instances)
 	{
-		inst.internal_id = "ui->" + inst.id;
+		if(inst.id == "application")
+		{
+			inst.internal_id = "";
+			//continue;
+		}
+		else
+		{
+			inst.internal_id = "ui->" + inst.id;
+		}
 	}
 
     out()

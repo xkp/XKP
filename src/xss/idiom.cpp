@@ -477,11 +477,6 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
 
             str caller = operand_to_string(arg1);
 
-						if (caller == "xss_breakpoint")
-						{
-							str xxx("Breakpoint here");
-						}
-
 						result << caller << "(";
 
             int args = arg2;

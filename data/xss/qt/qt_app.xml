@@ -12,9 +12,9 @@
         <label id="label_1" caption="Here is the text" x="170" y="70" width="91" height="16"/>
         
         <div x="30" y="80" width="300" height="60">
-            <label id="div_label_1" caption="In div holder" x="10" y="10" width="60" height="16"/>
-			      <button id="pushButton_3" caption="Test's Placements" width="100" placement="right"/>
-			      <button id="pushButton_4" caption="Test's Placements" width="100" placement="left"/>
+            <label id="div_label_1" caption="In div holder" x="110" y="10" width="60" height="16"/>
+			<button id="pushButton_3" caption="Test's Placements" width="100" height="20" placement="right"/>
+			<button id="pushButton_4" caption="Test's Placements" width="100" height="20" placement="left"/>
         </div>
     
         <button id="pushButton_5" caption="Button at Bottom of window" height="30" placement="bottom"/>

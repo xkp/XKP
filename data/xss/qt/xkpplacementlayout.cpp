@@ -5,21 +5,19 @@
 
 #include "xkpplacementlayout.h"
 
-static const char* propertyPlSize = "placementSize";
-
-XKPPlacementLayout::XKPPlacementLayout(int spacing)
+XKPPlacementLayout::XKPPlacementLayout(QWidget *parent, int spacing, int margin)
+    : QLayout(parent), inSetGeometry(false)
 {
-    inSetGeometry = false;
+    setMargin(margin);
     setSpacing(spacing);
-    setSizeType(SizeHint);
     setSizeType(PlacementSize);
 }
 
-XKPPlacementLayout::XKPPlacementLayout(QWidget *parent, int margin, int spacing)
-    : QLayout(parent)
+XKPPlacementLayout::XKPPlacementLayout(int spacing)
+    : inSetGeometry(false)
 {
     inSetGeometry = false;
-    setMargin(margin);
+    setMargin(0);
     setSpacing(spacing);
     setSizeType(PlacementSize);
 }
@@ -39,6 +37,12 @@ void XKPPlacementLayout::addItem(QLayoutItem *item)
 void XKPPlacementLayout::addWidget(QWidget *widget, Placement position)
 {
     add(new QWidgetItem(widget), position, widget);
+    widget->installEventFilter(this);
+}
+
+void XKPPlacementLayout::addWidget(QWidget *widget)
+{
+    add(new QWidgetItem(widget), Placement(widget->property(placementName).toUInt()), widget);
     widget->installEventFilter(this);
 }
 
@@ -119,7 +123,7 @@ void XKPPlacementLayout::setGeometry(const QRect &rect)
         ItemWrapper *wrapper = list.at(i);
         QLayoutItem *item = wrapper->item;
         Placement position = wrapper->position;
-        QSize placementSize = wrapper->widget->property(propertyPlSize).toSize();
+        QSize placementSize = wrapper->widget->property(placementSizeName).toSize();
         QRect itemRect;
 
 #ifdef DEBUG_XKPPLACEMENT
@@ -131,7 +135,7 @@ void XKPPlacementLayout::setGeometry(const QRect &rect)
         // to prevent object without assign size
         if(placementSize == QSize(-1, -1)) {
             wrapper->widget->resize(item->sizeHint());
-            wrapper->widget->setProperty(propertyPlSize, item->sizeHint());
+            wrapper->widget->setProperty(placementSizeName, item->sizeHint());
         }
 
         if(position == None) {
@@ -176,7 +180,7 @@ void XKPPlacementLayout::setGeometry(const QRect &rect)
         ItemWrapper *wrapper = list.at(i);
         QLayoutItem *item = wrapper->item;
         Placement position = wrapper->position;
-        QSize placementSize = wrapper->widget->property(propertyPlSize).toSize();
+        QSize placementSize = wrapper->widget->property(placementSizeName).toSize();
         QRect itemRect;
 
 #ifdef DEBUG_XKPPLACEMENT
@@ -188,7 +192,7 @@ void XKPPlacementLayout::setGeometry(const QRect &rect)
         // to prevent object without assign size
         if(placementSize == QSize(-1, -1)) {
             wrapper->widget->resize(item->sizeHint());
-            wrapper->widget->setProperty(propertyPlSize, item->sizeHint());
+            wrapper->widget->setProperty(placementSizeName, item->sizeHint());
         }
 
         if(position == None) {
@@ -247,11 +251,11 @@ QSize XKPPlacementLayout::calculateSize(SizeType sizeType) const
         else if(sizeType == SizeHint)
             itemSize = wrapper->item->sizeHint();
         else if(sizeType == PlacementSize && wrapper->widget) {
-            if(wrapper->widget->property(propertyPlSize).toSize() == QSize(-1, -1)) {
-                wrapper->widget->setProperty(propertyPlSize, wrapper->widget->size());
+            if(wrapper->widget->property(placementSizeName).toSize() == QSize(-1, -1)) {
+                wrapper->widget->setProperty(placementSizeName, wrapper->widget->size());
                 itemSize = wrapper->widget->size();
             } else {
-                itemSize = wrapper->widget->property(propertyPlSize).toSize();
+                itemSize = wrapper->widget->property(placementSizeName).toSize();
             }
         }
 
@@ -285,7 +289,7 @@ bool XKPPlacementLayout::eventFilter(QObject *object, QEvent *event)
         qDebug() << "eventFilter:: object " << object->objectName() << " was resized";
 #endif
         // update dynamic property 'placementSize' with widget size
-        object->setProperty(propertyPlSize, resizeEvent->size());
+        object->setProperty(placementSizeName, resizeEvent->size());
 
         // update geometry in the general widget
         updateGeometry();
@@ -299,7 +303,7 @@ bool XKPPlacementLayout::eventFilter(QObject *object, QEvent *event)
                 static_cast<QDynamicPropertyChangeEvent *>(event);
 
         // if dynamic property 'placement' is changed
-        if(dynamicPropertyChangeEvent->propertyName() == "placement") {
+        if(dynamicPropertyChangeEvent->propertyName() == placementName) {
 
 #ifdef DEBUG_XKPPLACEMENT
         qDebug() << "eventFilter:: propery 'placement' of object " <<
@@ -312,7 +316,7 @@ bool XKPPlacementLayout::eventFilter(QObject *object, QEvent *event)
 
                 if(wrapper->widget == widget) {
                     wrapper->position =
-                            Placement(wrapper->widget->property("placement").toUInt());
+                            Placement(wrapper->widget->property(placementName).toUInt());
                     break;
                 }
             }

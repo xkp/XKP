@@ -11,7 +11,7 @@
             <property name="enabled" type="bool" qt_ui="true" set_fn="setEnabled" get_fn="isEnabled"/>
 			
 			<!--<property name="placement" type="enum" qt_ui="true" set_fn="setProperty" get_fn="property"/>-->
-			<property name="placement" type="enum" qt_ui="false" set_fn="setProperty" get_fn="property"/>
+			<property name="placement" type="enum" qt_ui="false" set_xss="setProperty(placementName, <xss:e v='value'/>)" get_xss="property(placementName)"/>
         </properties>
     </class>
 
