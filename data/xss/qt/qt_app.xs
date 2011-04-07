@@ -15,22 +15,22 @@ on pushButton_2.click()
 }
 
 property target : string =
-{
-	return value;
-}
-{
-	value = "ok";
-}
-// {
-	// pushButton_2.caption = "target acquired " + value;
+//{
+//	return value;
+//}
+//{
+//	value = "ok";
+//}
+ {
+	pushButton_2.caption = "target acquired " + value;
 	
-	// for(int i = 0; i < 20; i++)
-	// {
-		// pushButton_2.width = pushButton_2.width + 10;
-		// if (pushButton_2.width > 200)
-			// pushButton_2.width = 100;
-	// }
-// }
+	 for(int i = 0; i < 20; i++)
+	 {
+		 pushButton_2.width = pushButton_2.width + 10;
+		 if (pushButton_2.width > 200)
+			 pushButton_2.width = 100;
+	 }
+ }
 
 method reset(string s)
 {

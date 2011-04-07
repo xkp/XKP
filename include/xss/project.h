@@ -67,6 +67,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
 			bool options(const str& name);
 			bool is_object(const variant v);
 			str generate_property(XSSProperty prop, XSSObject this_);
+			str translate_type(const str& type_name);
     public:
       //some utils, god those are long names
       XSSObject			get_instance(const str& id);
@@ -198,6 +199,7 @@ struct xss_project_schema : object_schema<xss_project>
 				method_<str,			2>("replace_this",				&xss_project::replace_this);
 				method_<bool,			1>("is_object",						&xss_project::is_object);
 				method_<str,			2>("generate_property",		&xss_project::generate_property);
+				method_<str,			1>("translate_type",			&xss_project::translate_type);
       }
   };
 

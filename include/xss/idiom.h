@@ -136,6 +136,22 @@ struct base_xss_code : ITranslator, code_visitor
       virtual str render_expression(expression& expr, XSSContext ctx);
   };
 
+struct base_idiom : xss_idiom
+  {
+		base_idiom();
+		base_idiom(const base_idiom& other);
+
+		//xss_idiom
+    virtual void set_context(XSSContext ctx);
+    virtual str  resolve_separator(XSSObject lh = XSSObject());
+    virtual str  translate_type(const str& type);
+		public:
+			XSSContext ctx_;
+			void setTypes(DynamicArray da);
+		protected:
+			std::map<str, str> types_;
+  };
+
 //utils
 struct idiom_utils
 	{
@@ -352,6 +368,15 @@ struct translator_schema : object_schema<T>
 			}
 	};
 
+template <typename T>
+struct base_idiom_schema : object_schema<T>  
+  {
+    virtual void declare_base()
+      {
+        implements<xss_idiom>();
+        writeonly_property<DynamicArray>("types", &T::setTypes);
+      }
+  };
 } //namespace
 
 

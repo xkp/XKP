@@ -410,28 +410,30 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
             //type checking, that's a lot of work unless the code_linker feels
             //like cooperating
 			      XSSObject caller = get_instance(arg1);
-			      if (!caller && top)
+			      if (!caller)
 			      {
 				      if (arg1.is<expression_identifier>())
 					      {
 						      expression_identifier ei = arg1;
 						      caller = ctx_->get_xss_type(ei.value); //td: meh, do the context
-					      }
-				      else if (arg1.is<already_rendered>())
-					      {
-						      already_rendered ar = arg1;
-					      }
-				      else
-					      {
-						      assert(false);
+																												 //also do static members, this is getting sloppy	
 					      }
 			      }
 			
             str           s2 = operand_to_string(arg2, caller);
             XSSObject o2 = get_instance(caller, s2);
 
-            XSSProperty   prop       = get_property(caller, s2);
-            bool          has_getter = prop && !prop->get.empty();
+            XSSProperty prop = get_property(caller, s2);
+						if (prop && prop->has("internal_id"))
+							{
+								//this I'm not sure how right is... but here goes anyway.
+								//At the moment this solves enumerators that must carry different names into the output
+								str iid = variant_cast<str>(dynamic_get(prop, "internal_id"), str()); assert(!iid.empty());
+								push_rendered(iid, op_prec, variant());
+								break;
+							}
+
+            bool has_getter = prop && !prop->get.empty();
 
             std::stringstream ss;
             ss << operand_to_string(arg1);
@@ -1200,6 +1202,45 @@ str base_xss_code::render_expression(expression& expr, XSSContext ctx)
   {
     return idiom_utils::render_expression<expression_renderer>(expr, ctx);
   }
+
+//base_idiom
+base_idiom::base_idiom()
+	{
+	}
+
+base_idiom::base_idiom(const base_idiom& other):
+	ctx_(other.ctx_)
+	{
+	}
+
+void base_idiom::set_context(XSSContext ctx)
+	{
+		ctx_ = ctx;
+	}
+
+str base_idiom::resolve_separator(XSSObject lh)
+	{
+		return ".";
+	}
+
+str base_idiom::translate_type(const str& type)
+	{
+		std::map<str, str>::iterator it = types_.find(type);
+		if (it != types_.end())
+			return it->second;
+		return type;
+	}
+
+void base_idiom::setTypes(DynamicArray da)
+	{
+		for(int i = 0; i < da->size(); i++)
+			{
+				str ot = variant_cast<str>(dynamic_get(da->at(i), "xs_type"),		  str()); assert(!ot.empty());
+				str rt = variant_cast<str>(dynamic_get(da->at(i), "output_type"), str()); assert(!rt.empty());
+
+				types_.insert(std::pair<str, str>(ot, rt));
+			}
+	}
 
 //base_xss_args
 base_xss_args::base_xss_args()

@@ -1581,6 +1581,11 @@ str xss_project::generate_property(XSSProperty prop, XSSObject this_)
 		return "IMPLEMENT ME";
 	}
 
+str xss_project::translate_type(const str& type_name)
+	{
+		return idiom_->translate_type(type_name);
+	}
+
 xss_idiom* xss_project::get_idiom()
 	{
 		return idiom_;

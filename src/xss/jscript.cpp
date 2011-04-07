@@ -14,11 +14,6 @@ str js_args::resolve_param(const param_decl& param)
 	}
 
 //js_idiom
-void js_idiom::set_context(XSSContext ctx)
-	{
-		ctx_ = ctx;
-	}
-
 variant js_idiom::process_code(code& cde, param_list_decl& params, XSSContext ctx)
 	{
     JSCode result(new js_code(ctx, cde));
@@ -74,7 +69,3 @@ str js_idiom::resolve_this(XSSContext ctx)
     return "";
 	}
 
-str js_idiom::resolve_separator(XSSObject lh)
-	{
-		return ".";
-	}

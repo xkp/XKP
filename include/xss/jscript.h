@@ -33,24 +33,21 @@ typedef reference<js_expr> JSExpression;
 typedef reference<js_args> JSArgs;
 
 //then the idiom per se
-struct js_idiom : xss_idiom
+struct js_idiom : base_idiom
   {
-    js_idiom()                      : id_as_this_(false)                  {}    
-    js_idiom(const js_idiom& other)	: ctx_(other.ctx_),id_as_this_(false) {}
+    js_idiom()                      : id_as_this_(false)										{}    
+    js_idiom(const js_idiom& other)	: base_idiom(other), id_as_this_(false) {}
   
-    virtual void    set_context(XSSContext ctx);
     virtual variant process_code(code& cde, param_list_decl& params, XSSContext ctx);
     virtual variant process_expression(expression expr, XSSObject this_);
 		virtual variant process_args(param_list_decl& params);
     virtual str     resolve_this(XSSContext ctx);
-    virtual str     resolve_separator(XSSObject lh);
     public:  
-      XSSContext ctx_;
-      bool			 id_as_this_;
+      bool id_as_this_;
   };
 
 //typeinfo
-struct js_idiom_schema : object_schema<js_idiom>  
+struct js_idiom_schema : base_idiom_schema<js_idiom>
   {
     virtual void declare()
       {

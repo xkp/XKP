@@ -37,12 +37,11 @@ typedef reference<cpp_expr> CPPExpression;
 typedef reference<cpp_args> CPPArgs;
 
 //then the idiom per se
-struct cpp_idiom : xss_idiom
+struct cpp_idiom : base_idiom
   {
-    cpp_idiom()                       : id_as_this_(false)                  {}
-    cpp_idiom(const cpp_idiom& other)	: ctx_(other.ctx_),id_as_this_(false) {}
+    cpp_idiom()                       : id_as_this_(false)                   {}
+    cpp_idiom(const cpp_idiom& other)	: base_idiom(other),id_as_this_(false) {}
 
-    virtual void    set_context(XSSContext ctx);
     virtual variant process_code(code& cde, param_list_decl& params, XSSContext ctx);
     virtual variant process_expression(expression expr, XSSObject this_);
 		virtual variant process_args(param_list_decl& params);
@@ -50,8 +49,7 @@ struct cpp_idiom : xss_idiom
     virtual str     resolve_separator(XSSObject lh);
 
     public:
-      XSSContext ctx_;
-      bool			 id_as_this_;
+      bool id_as_this_;
   };
 
 struct cpp_expression_renderer : expression_renderer
@@ -67,7 +65,7 @@ struct cpp_expression_renderer : expression_renderer
   };
 
 //typeinfo
-struct cpp_idiom_schema : object_schema<cpp_idiom>
+struct cpp_idiom_schema : base_idiom_schema<cpp_idiom>
   {
     virtual void declare()
       {
