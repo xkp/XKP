@@ -1,4 +1,16 @@
 <xml>
+	<class id="placement">
+		<properties>
+			<property name="none" internal_id="XKPPlacementLayout::None"/>
+			<property name="left" internal_id="XKPPlacementLayout::Left"/>
+			<property name="top" internal_id="XKPPlacementLayout::Top"/>
+			<property name="bottom" internal_id="XKPPlacementLayout::Bottom"/>
+			<property name="right" internal_id="XKPPlacementLayout::Right"/>
+			<property name="center" internal_id="XKPPlacementLayout::Center"/>
+			<property name="client" internal_id="XKPPlacementLayout::Client"/>
+		</properties>
+	</class>
+
     <class id="qwidget" qt_ui="true">
         <properties>
             <!-- geometry location -->

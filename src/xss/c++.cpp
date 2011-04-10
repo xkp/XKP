@@ -74,11 +74,6 @@ str cpp_args::resolve_param(const param_decl& param)
 	}
 
 //cpp_idiom
-void cpp_idiom::set_context(XSSContext ctx)
-	{
-		ctx_ = ctx;
-	}
-
 variant cpp_idiom::process_code(code& cde, param_list_decl& params, XSSContext ctx)
 	{
     CPPCode result(new cpp_code(ctx, cde));

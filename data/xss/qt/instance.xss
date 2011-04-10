@@ -74,7 +74,7 @@
 				methods += get_prop_name;
 			}
 			else
-			if(!p.get_fn && !p.set_fn)
+			if(!p.get_fn && !p.set_fn && !p.get_xss && !p.set_xss)
 			{
 				// add a data member variable with a property name
 				// how to know is property is added on xs code or it is defined in classes section?
