@@ -333,6 +333,7 @@ struct expr_type_resolver : expression_visitor
 
     expr_type_resolver(local_variables& local_vars, XSSContext ctx);
 		schema* get();
+		str type_name();
 
 		//expression_visitor
     virtual void push(variant operand, bool top);
@@ -347,7 +348,12 @@ struct expr_type_resolver : expression_visitor
 		  local_variables		local_;
 		  XSSContext				ctx_;
 
+			schema*		result_schema;
+			XSSObject result_xss;
+
 			schema* resolve_type(variant var);
+			XSSObject resolve_xss_type(variant var);
+
 			bool resolve_variable(const str& id, schema* &type);
 			XSSObject	resolve_object(const variant v);
   };

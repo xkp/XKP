@@ -1,9 +1,13 @@
 on pushButton_1.click()
 {
+	//Aqui estan algunos ejemplos
+	var placement = pushButton_1.placement;
+	Placement pl = Placement.Left;
+	var pl1 = Placement.Right;
+
 	pushButton_2.caption = "Clicked";
 	caption = "Other Clicked";
 
-	xss_breakpoint();
 	pushButton_2.width += pushButton_1.width;
 	application.reset(600);
 }
@@ -11,6 +15,8 @@ on pushButton_1.click()
 on pushButton_2.click()
 {
 	pushButton_1.caption = "Old value: " + application.target;
+
+	xss_breakpoint();
 	application.target = 300;
 }
 
@@ -37,7 +43,6 @@ method reset(string s)
 	//target = s;
 	//pushButton_1.caption = "...";
 	//pushButton_2.caption = "..." + target;
-	xss_breakpoint();
 	return target + "...";
 }
 

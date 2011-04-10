@@ -781,6 +781,26 @@ schema* expr_type_resolver::get()
 		return resolve_type(stack_.top());
 	}
 
+str expr_type_resolver::type_name()
+	{
+		assert(stack_.size() == 1);
+
+		schema* s = resolve_type(stack_.top());
+		if (s)
+			return ctx_->get_type_name(s);
+		else
+			{
+				XSSObject obj = resolve_xss_type(stack_.top());	
+				if (obj->has("internal_id"))
+					return variant_cast<str>(dynamic_get(obj, "internal_id"), str());
+
+				if (obj->has("id"))
+					return variant_cast<str>(dynamic_get(obj, "id"), str());
+			}
+
+		return "";
+	}
+
 void expr_type_resolver::push(variant operand, bool top)
 	{
 		stack_.push(operand);
@@ -888,11 +908,51 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
 
 				case op_dot:
 					{
-						XSSObject							obj = resolve_object(stack_.top()); stack_.pop();
-						expression_identifier ei  = stack_.top(); stack_.pop();
+						expression_identifier arg1  = stack_.top(); stack_.pop();
+						expression_identifier arg2  = stack_.top(); stack_.pop();
+
+						XSSObject obj	 = resolve_object(arg2); 
+						if (!obj)
+							obj	 = resolve_xss_type(arg2);
+
+						if (obj)
+							{
+								XSSProperty prop = obj->get_property(arg1.value);
+								if (prop)
+									{
+										schema* result = ctx_->get_type(prop->type);
+										if (result)
+											stack_.push(result);
+										else 
+											{
+												XSSObject prop_type_obj = ctx_->get_xss_type(prop->type);
+												if (prop_type_obj)
+													stack_.push(prop_type_obj);
+												else if (obj->has("enum"))
+													stack_.push(obj);
+											}
+										break;
+									}
+							}
+
+
+						stack_.push(null);
 						break;
 					}
 			}
+	}
+
+XSSObject expr_type_resolver::resolve_xss_type(variant var)
+	{
+		if (var.is<XSSObject>())
+			return var;
+		else if (var.is<expression_identifier>())
+			{
+				expression_identifier ei = var;
+				return ctx_->get_xss_type(ei.value); //td: variables
+			}
+
+		return XSSObject();
 	}
 
 schema* expr_type_resolver::resolve_type(variant var)
@@ -918,7 +978,7 @@ schema* expr_type_resolver::resolve_type(variant var)
 							}
 					}
 			}
-		else
+		else if (!var.is<XSSObject>())
 			result = var.get_schema();
 
 		return result;
