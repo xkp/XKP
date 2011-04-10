@@ -21,6 +21,7 @@
 #include "xss/project.h"
 #include "xss/xss_error.h"
 #include "xss/jscript.h"
+#include "xss/c++.h"
 #include "archive/xml_archive.h"
 
 #include "boost/filesystem.hpp"
@@ -89,7 +90,7 @@ void print_error(param_list data, XSSProject project)
         str     value_str;
         try
           {
-            value_str =variant_cast<str>(value, str());
+            value_str = variant_cast<str>(value, str());
           }
         catch(type_mismatch)
           {
@@ -121,6 +122,7 @@ int main(int argc, char* argv[])
     type_registry types;
     types.set_default_type(type_schema<xss_serial_object>());
     types.add_type("js-idiom", type_schema<js_idiom>());
+    types.add_type("cpp-idiom", type_schema<cpp_idiom>());
 
     //read the project file,
     xml_read_archive project_file(text, &types, XML_RESOLVE_CLASS|XML_RESOLVE_ID);
