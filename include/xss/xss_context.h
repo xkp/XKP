@@ -32,7 +32,7 @@ class xss_object : public editable_object<xss_object>,
 		public:
 			//accesors
 			XSSObject			type();
-			void					xss_type(XSSObject type);
+			void					xss_type(XSSObject type, XSSContext ctx);
 			void					propertize();
 			XSSObject			parent();
 			DynamicArray	children();
@@ -101,6 +101,7 @@ struct xss_code_context : base_code_context
 		virtual XSSObject			get_xss_type(const str& name);
 		virtual void					register_variable(const str& name, XSSObject xss_type);
 		virtual bool					has_var(const str& name);
+		virtual xss_idiom*		getIdiom();
 	public:
       //td: ugles, this is the way it is to circunvent c++ and its dependencies
       variant    project_;

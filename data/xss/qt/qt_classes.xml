@@ -1,5 +1,5 @@
 <xml>
-	<class id="placement">
+	<class id="placement" enum="true" as_expression="true" internal_id="XKPPlacementLayout::Placement">
 		<properties>
 			<property name="none" internal_id="XKPPlacementLayout::None"/>
 			<property name="left" internal_id="XKPPlacementLayout::Left"/>
@@ -22,15 +22,13 @@
             <property name="visible" type="bool" set_fn="setVisible" get_fn="isVisible"/>
             <property name="enabled" type="bool" qt_ui="true" set_fn="setEnabled" get_fn="isEnabled"/>
 			
-			<!--<property name="placement" type="enum" qt_ui="true" set_fn="setProperty" get_fn="property"/>-->
-			<property name="placement" type="enum" qt_ui="false" set_xss="setProperty(placementName, <xss:e v='value'/>)" get_xss="property(placementName)"/>
+			<property name="placement" type="placement" qt_ui="false" set_xss="setProperty(placementName, <xss:e v='value'/>)" get_xss="property(placementName).toInt()"/>
         </properties>
     </class>
 
   	<class id="qabstractbutton" super="qwidget">
         <properties>
-            <!--<property name="caption" qt_name="text" type="string" qt_ui="true" set_fn="setText" get_fn="text"/>-->
-			<property name="caption" qt_name="text" type="string" qt_ui="true" set_xss="setText(QString(string(<xss:e v='value'/>).c_str()))" get_fn="text"/>
+			<property name="caption" qt_name="text" type="string" qt_ui="true" set_xss="setText(QString(string(<xss:e v='value'/>).c_str()))" get_xss="text().toStdString()"/>
 			<property name="checkable" type="bool"  default_value="false" qt_ui="false" set_fn="setCheckable" get_fn="isCheckable"/>
 			<property name="checked" type="bool"  default_value="false" qt_ui="true" set_fn="setChecked" get_fn="isChecked"/>
 			<property name="icon" type="resource" qt_ui="true" set_fn="setIcon" get_fn="icon"/>

@@ -25,7 +25,7 @@ void cpp_code::for_(stmt_for& info)
 
     add_line(ss.str(), true);
     add_line("{", true);
-			render_code(info.for_code, indent_ + 1);
+		render_code(info.for_code, indent_ + 1);
 		add_line("}", true);
 	}
 
@@ -33,6 +33,7 @@ void cpp_code::variable_(stmt_variable& info)
   {
 		schema* sche_type = ctx_->get_type(info.type);
     cpp_expression_renderer cpp_rend(ctx_);
+    str str_type;
 		if (!sche_type)
 			{
 				if (!info.value.empty())
@@ -41,14 +42,16 @@ void cpp_code::variable_(stmt_variable& info)
 						info.value.visit(&typer);
 
 						sche_type = typer.get();
+						str_type = typer.type_name();
 					}
 			}
 
-    if (!sche_type)
-      assert(false);
+    if (sche_type)
+			{
+				str_type = ctx_->get_type_name(sche_type);
+			}
 
-    str str_type = ctx_->get_type_name(sche_type);
-		vars_.insert(std::pair<str, schema*>(info.id, sche_type));
+		vars_.insert(std::pair<str, schema*>(info.id, sche_type)); //td: !!! XSSType
 
     std::stringstream ss;
     str ind = get_indent_str();
@@ -162,6 +165,9 @@ str cpp_expression_renderer::resolve_assigner(variant operand, XSSObject instanc
 		XSSProperty prop;
 		str					result;
 
+    XSSObject caller = get_instance(operand);
+    str separator = ctx_->getIdiom()->resolve_separator(caller);
+
 		if (operand.is<expression_identifier>())
 			{
 				expression_identifier ei = operand;
@@ -173,7 +179,8 @@ str cpp_expression_renderer::resolve_assigner(variant operand, XSSObject instanc
 				result = ar.value;
 
 				//here comes the hacky hoo
-				size_t last_dot = result.find_last_of("->");
+				//size_t last_dot = result.find_last_of("->");
+        size_t last_dot = result.find_last_of(separator);
 				if (last_dot != str::npos)
 					{
 						size_t count = result.size() - last_dot;
@@ -198,7 +205,8 @@ str cpp_expression_renderer::resolve_assigner(variant operand, XSSObject instanc
 						if (result.empty())
 							return set_xss;
 						else
-							return result + "->" + set_xss;
+							//return result + "->" + set_xss;
+              return result + separator + set_xss;
 					}
 				else if (!set_fn.empty())
           {
@@ -206,7 +214,8 @@ str cpp_expression_renderer::resolve_assigner(variant operand, XSSObject instanc
 						if (result.empty())
 							return set_fn;
 						else
-							return result + "->" + set_fn;
+							//return result + "->" + set_fn;
+              return result + separator + set_fn;
           }
         else if (!prop->set.empty())
 					{
@@ -214,7 +223,8 @@ str cpp_expression_renderer::resolve_assigner(variant operand, XSSObject instanc
 						if (result.empty())
 							return prop->name + "_set";
 						else
-							return result + "->" + prop->name + "_set";
+							//return result + "->" + prop->name + "_set";
+              return result + separator + prop->name + "_set";
 					}
       }
 
@@ -291,11 +301,11 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
             switch(pop_count)
               {
                 case 0: break;
-                case 1: expression_renderer::stack_.push(arg1); break;
+                case 1: stack_.push(arg1); break;
                 case 2:
                   {
-                    expression_renderer::stack_.push(arg1);
-                    expression_renderer::stack_.push(arg2);
+                    stack_.push(arg1);
+                    stack_.push(arg2);
                     break;
                   }
                 default: assert(false);
@@ -313,49 +323,55 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
             //type checking, that's a lot of work unless the code_linker feels
             //like cooperating
 			      XSSObject caller = get_instance(arg1);
-			      if (!caller && top)
+			      if (!caller)
 			      {
 				      if (arg1.is<expression_identifier>())
 					      {
 						      expression_identifier ei = arg1;
 						      caller = ctx_->get_xss_type(ei.value); //td: meh, do the context
-					      }
-				      else if (arg1.is<already_rendered>())
-					      {
-						      already_rendered ar = arg1;
-					      }
-				      else
-					      {
-						      assert(false);
+																												 //also do static members, this is getting sloppy	
 					      }
 			      }
 			
-            str           s2 = operand_to_string(arg2, caller);
+            str       s2 = operand_to_string(arg2, caller);
             XSSObject o2 = get_instance(caller, s2);
 
-            XSSProperty   prop       = get_property(caller, s2);
-            bool          has_getter = prop && !prop->get.empty();
+            XSSProperty prop = get_property(caller, s2);
+						if (prop && prop->has("internal_id"))
+							{
+								//this I'm not sure how right is... but here goes anyway.
+								//At the moment this solves enumerators that must carry different names into the output
+								str iid = variant_cast<str>(dynamic_get(prop, "internal_id"), str()); assert(!iid.empty());
+								push_rendered(iid, op_prec, variant());
+								break;
+							}
+
+            bool has_getter = prop && !prop->get.empty();
 
             std::stringstream ss;
             ss << operand_to_string(arg1);
-            
-            if (!ss.str().empty())
-              ss << "->";
 
+						str separator = ctx_->getIdiom()->resolve_separator(caller);
+            if (!ss.str().empty())
+              ss << separator;
+            
 						if (top && assigner)
 							{
 								ss << resolve_assigner(arg2, caller, assigner);	
 							}
 						else if (prop)
               {
-                str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
-                if (!get_fn.empty())
+                str get_fn  = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
+                str get_xss = variant_cast<str>(dynamic_get(prop, "get_xss"), ""); 
+
+                if (!get_xss.empty())
+                  ss << get_xss;
+                else if (!get_fn.empty())
                   ss << get_fn << "()";
                 else if (has_getter)
                   ss << s2 << "_get()";
-                else   
-                  //ss << "->" << s2;
-                  ss << s2 << "_get()";
+                else
+                  ss << s2;
               }
             else 
                ss << s2;

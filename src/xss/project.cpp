@@ -108,7 +108,7 @@ void xss_object::propertize()
 			}
 	}
 
-void xss_object::xss_type(XSSObject type)
+void xss_object::xss_type(XSSObject type, XSSContext ctx)
 	{
 		type_ = type;
 
@@ -135,7 +135,34 @@ void xss_object::xss_type(XSSObject type)
 					{
 						XSSProperty cln(new xss_property(*(prop.get())));
 						cln->copy(prop.get()); //td: proper cloning
-						cln->value_ = !myvalue.empty()? myvalue : value;
+
+						str	 prop_type = variant_cast<str>(dynamic_get(prop, "type"), str());
+						bool as_expression = false;
+						if (!prop_type.empty())
+							{
+								XSSObject prop_type_for_real = ctx->get_xss_type(prop_type);
+								as_expression = variant_cast<bool>(dynamic_get(prop_type_for_real, "as_expression"), false);
+							}	
+						
+						as_expression |= variant_cast<bool>(dynamic_get(type, "as_expression"), false);
+						variant vv = !myvalue.empty()? myvalue : value;
+
+						if (!as_expression || vv.empty())
+							cln->value_ = vv;
+						else
+							{
+								//this makes the value to be evaluated as an expression at runtime
+								//thus must be a string
+								str value_str = variant_cast<str>(vv, ""); assert(!value_str.empty());
+
+								//od the compiling
+								xs_utils xs;
+								expression expr;
+								if (!xs.compile_expression(value_str, expr))
+									assert(false); //td: throw, please
+
+								cln->value_ = ctx->getIdiom()->process_expression(expr, me);
+							}
 
 						properties_->insert(cln);
 					}
@@ -509,13 +536,22 @@ XSSObject	xss_code_context::get_xss_type(const str& name)
 		variable_types::iterator it = vars_.find(name);
 		if (it != vars_.end())
 			return it->second;
-		return XSSObject();
+
+		XSSProject proj   = project_;
+		XSSObject  result = proj->get_class(name);
+		return result;
 	}
 
 bool xss_code_context::has_var(const str& name)
 	{
 		variable_types::iterator it = vars_.find(name);
 		return it != vars_.end();
+	}
+
+xss_idiom* xss_code_context::getIdiom()
+	{
+    XSSProject project = project_;
+		return project->get_idiom();
 	}
 
 void xss_code_context::register_variable(const str& name, XSSObject xss_type)
@@ -698,10 +734,13 @@ str	xss_property::resolve_assign(const str& value)
 
 str	xss_property::resolve_value()
 	{
-    str get_fn = variant_cast<str>(dynamic_get(this, "get_fn"), "");
+    str get_fn  = variant_cast<str>(dynamic_get(this, "get_fn"), "");
+    str get_xss = variant_cast<str>(dynamic_get(this, "get_xss"), "");
 
 		if (!get.empty())
 			return name + "_get()";
+    else if (!get_xss.empty())
+      return get_xss;
 		else if (!get_fn.empty())
 			return get_fn + "()";
 		return name;
@@ -735,11 +774,12 @@ xss_method::xss_method(const str& _name, const str& _type, variant _args, varian
 //pre_process
 struct pre_process : dynamic_visitor
   {
-    pre_process(XSSObject object, XSSObject parent, xss_project& owner, bool do_register):
+    pre_process(XSSObject object, XSSObject parent, xss_project& owner, bool do_register, XSSContext context):
       object_(object),
       owner_(owner),
       parent_(parent),
-			do_register_(do_register)
+			do_register_(do_register),
+			context_(context)
       {
       }
 
@@ -773,7 +813,7 @@ struct pre_process : dynamic_visitor
 
 										//go down the hierarchy
 										bool is_name_space = variant_cast<bool>(dynamic_get(child, "namespace"), false);
-										pre_process pp(child, object_, owner_, do_register_ && !is_name_space);
+										pre_process pp(child, object_, owner_, do_register_ && !is_name_space, context_);
 										child->visit(&pp);
                   }
 							}
@@ -827,7 +867,7 @@ struct pre_process : dynamic_visitor
 
 				if (clazz)
 					{
-						obj->xss_type(clazz);
+						obj->xss_type(clazz, context_);
 
 						//unnamed object will appear with an id identical to its class
 						if (id == class_name && class_name != "application")
@@ -846,6 +886,7 @@ struct pre_process : dynamic_visitor
       XSSObject			object_;
       XSSObject			parent_;
       xss_project&  owner_;
+			XSSContext		context_;
 			bool					do_register_;
   };
 
@@ -1073,7 +1114,7 @@ void xss_project::do_includes()
 											{
 												super       = def_super;
 												super_clazz = get_class(def_super, true);
-												clazz->xss_type(super_clazz);
+												clazz->xss_type(super_clazz, context_);
 											}
 										else if (super != def_super)
 											{
@@ -1092,7 +1133,7 @@ void xss_project::do_includes()
 								dynamic_set(clazz, "super_class", super_clazz);
 
 								//and composite
-								clazz->xss_type(dcit->second);
+								clazz->xss_type(dcit->second, context_);
 							}
 
 						clazz->add_property("native", true);
@@ -1139,7 +1180,7 @@ xss_project::XSSObjectList xss_project::read_xs_classes(const str& xs_file)
 								xss_throw(error);
 							}
 
-						clazz->xss_type(super);
+						clazz->xss_type(super, context_);
 						dynamic_set(clazz, "super", ci.super);
 						dynamic_set(clazz, "super_class", super);
 					}
@@ -2073,7 +2114,7 @@ str xss_project::generate_file(const str& fname, XSSContext context)
 void xss_project::preprocess()
   {
     XSSObject app_object = application;
-    pre_process pp(app_object, XSSObject(), *this, true);
+    pre_process pp(app_object, XSSObject(), *this, true, context_);
 
 		str id = "application";
 		pp.instantiate(app_object, id, "application");
@@ -2125,7 +2166,7 @@ void xss_project::read_classes(const str& class_library_file)
 							}
 
 						XSSObject super = sit->second;
-						obj->xss_type(super);
+						obj->xss_type(super, context_);
 					}
 
         class_registry::iterator it = classes_.find(id);
