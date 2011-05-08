@@ -1,47 +1,136 @@
 <xml>
+	<class id="placement" enum="true" as_expression="true" internal_id="XKPPlacementLayout::Placement">
+		<properties>
+			<property name="none" internal_id="XKPPlacementLayout::None"/>
+			<property name="left" internal_id="XKPPlacementLayout::Left"/>
+			<property name="top" internal_id="XKPPlacementLayout::Top"/>
+			<property name="bottom" internal_id="XKPPlacementLayout::Bottom"/>
+			<property name="right" internal_id="XKPPlacementLayout::Right"/>
+			<property name="center" internal_id="XKPPlacementLayout::Center"/>
+			<property name="client" internal_id="XKPPlacementLayout::Client"/>
+		</properties>
+	</class>
+	
+	<class id="alignment" enum="true" as_expression="true" internal_id="Qt::Alignment">
+		<properties>
+			horizontal Qt flags
+			<property name="left" internal_id="Qt::AlignLeft"/>
+			<property name="right" internal_id="Qt::AlignRight"/>
+			<property name="hcenter" internal_id="Qt::AlignHCenter"/>
+			<property name="justify" internal_id="Qt::AlignJustify"/>
+			vertical Qt flags
+			<property name="top" internal_id="Qt::AlignTop"/>
+			<property name="bottom" internal_id="Qt::AlignBottom"/>
+			<property name="vcenter" internal_id="Qt::AlignVCenter"/>
+			center Qt flags
+			<property name="center" internal_id="Qt::AlignCenter"/>
+		</properties>
+	</class>
+	
+	<class id="font">
+	</class>
+
     <class id="qwidget" qt_ui="true">
         <properties>
-            <!-- geometry location -->
-            <property name="x" type="int" set_xss="move(<xss:e v='value'/>, <xss:e v='object'/>.y())" get_fn="x"/>
-            <property name="y" type="int" set_xss="move(<xss:e v='object'/>.x(), <xss:e v='value'/>)" get_fn="y"/>
-            <property name="width" type="int" set_xss="resize(<xss:e v='value'/>, <xss:e v='object'/>.height())" get_fn="width"/>
-            <property name="height" type="int" set_xss="resize(<xss:e v='object'/>.width(), <xss:e v='value'/>)" get_fn="height"/>
+             geometry location 
+            <property name="x" type="int" set_xss="move(<xss:e v='value'/>, <xss:e v='object'/>->y())" get_fn="x"/>
+            <property name="y" type="int" set_xss="move(<xss:e v='object'/>->x(), <xss:e v='value'/>)" get_fn="y"/>
+            <property name="width" type="int" set_xss="resize(<xss:e v='value'/>, <xss:e v='object'/>->height())" get_fn="width"/>
+            <property name="height" type="int" set_xss="resize(<xss:e v='object'/>->width(), <xss:e v='value'/>)" get_fn="height"/>
 
-			      <!-- implement standards properties of qwidget -->
             <property name="visible" type="bool" set_fn="setVisible" get_fn="isVisible"/>
             <property name="enabled" type="bool" qt_ui="true" set_fn="setEnabled" get_fn="isEnabled"/>
-			      <property name="placement" type="enum" qt_ui="true" set_fn="setProperty" get_fn="property"/>
+			
+			<property name="placement" type="placement" custom_type="true" qt_ui="true" default_value="none" set_xss="setProperty(placementName, <xss:e v='value'/>)" 
+                      property_xss="(Placement)<xss:e v='path'/>.property(placementName).toInt()"/>
         </properties>
-		    <!-- implement standards events of qwidget -->
+    </class>
+
+  	<class id="qabstractbutton" super="qwidget">
+        <properties>
+			<property name="caption" qt_name="text" type="string" qt_ui="true" set_xss="setText(QString(string(<xss:e v='value'/>).c_str()))" get_xss="text().toStdString()"/>
+			<property name="checkable" type="bool"  default_value="false" qt_ui="false" set_fn="setCheckable" get_fn="isCheckable"/>
+			<property name="checked" type="bool"  default_value="false" qt_ui="true" set_fn="setChecked" get_fn="isChecked"/>
+			<property name="icon" type="resource" qt_ui="true" set_fn="setIcon" get_fn="icon"/>
+        </properties>
         <events>
             <event name="click" qt_name="clicked"/>
-            <event name="up" qt_name="mouseup"/>
+            <event name="mouseup" qt_name="released"/>
+      		<event name="mousedown" qt_name="pressed"/>
         </events>
+	</class>
+
+    <class id="button" super="qabstractbutton" tag_name="QPushButton">
+		<properties>
+			<property name="default" type="bool" default_value="false" qt_ui="true" set_fn="setDefault" get_fn="isDefault"/>
+		</properties>
     </class>
   
-	  <!-- implement components with particular properties and events -->
-    <class id="div" super="qwidget" tag_name="QWidget" container="true">
-    </class>
-  
-    <class id="button" super="qwidget" tag_name="QPushButton">
-        <properties>
-            <property name="caption" ui_name="text" type="string" qt_ui="true" set_fn="setText" get_fn="text"/>
-        </properties>
+	<class id="checkbox" super="qabstractbutton" tag_name="QCheckBox">
+		<properties>
+			<property name="tristate" type="bool" default_value="false" qt_ui="true" set_fn="setTristate" get_fn="isTristate"/>
+		</properties>
+		<events>
+			<event name="changed" qt_name="stateChanged"/>
+		</events>
+	</class>
+	
+	<class id="radiobutton" super="qabstractbutton" tag_name="QRadioButton">
+	</class>
+	
+	<class id="div" super="qwidget" tag_name="QWidget" container="true">
     </class>
   
     <class id="label" super="qwidget" tag_name="QLabel">
         <properties>
-            <property name="caption" ui_name="text" type="string" qt_ui="true" set_fn="setText" get_fn="text"/>
-            <property name="wordWrap" type="bool" qt_ui="true" set_fn="setWordWrap" get_fn="wordWrap"/>
+            <property name="caption" qt_name="text" type="string" qt_ui="true" set_fn="setText" get_fn="text"/>
+            <property name="word_wrap" qt_name="wordWrap" type="bool" qt_ui="true" set_fn="setWordWrap" get_fn="wordWrap"/>
+			<property name="alignment" type="alignment" custom_type="true" qt_ui="true" set_fn="setAlignment" get_fn="alignment"/>
+			<property name="margin" type="int" qt_ui="true" set_fn="setMargin" get_fn="margin"/>
+			<property name="indent" type="int" qt_ui="true" set_fn="setIndent" get_fn="indent"/>
+			<property name="font" type="font" set_fn="setFont" get_fn="font"/>
         </properties>
+		 dispatch console error on generate method instruction
+		<methods>
+			<method name="clear" qt_name="clear"/>
+		</methods>
+		
+		<events>
+			<event name="link_activated" qt_name="linkActivated(const QString & link)"/>
+			<event name="link_hovered" qt_name="linkActivated(const QString & link)"/>
+		</events>
     </class>
 
+	<class id="edit" super="qwidget" tag_name="QLineEdit">
+		<properties>
+			<property name="text" qt_name="text" type="string" qt_ui="true" set_xss="setText(QString(string(<xss:e v='value'/>).c_str()))" get_xss="text().toStdString()"/>
+			<property name="readonly" qt_name="readOnly" type="bool" qt_ui="true" set_fn="setReadOnly" get_fn="isReadOnly"/>
+			<property name="alignment" type="alignment" custom_type="true" qt_ui="true" set_fn="setAlignment" get_fn="alignment"/>
+		</properties>
+	</class>
+	
+	<class id="field" super="qwidget" tag_name="QTextEdit">
+		<properties>
+			<property name="text" qt_name="text" type="string" qt_ui="true" set_xss="setPlainText(QString(string(<xss:e v='value'/>).c_str()))" get_xss="toPlainText().toStdString()"/>
+			<property name="readonly" qt_name="readOnly" type="bool" qt_ui="true" set_fn="setReadOnly" get_fn="isReadOnly"/>
+		</properties>
+	</class>
+	
+	<class id="combobox" super="qwidget" tag_name="QComboBox">
+		<properties>
+		</properties>
+	</class>
+
+	<class id="groupbox" super="qwidget" tag_name="QGroupBox">
+	</class>
+	
     <class id="application" tag_name="QWidget" qt_ui="true" container="true">
         <properties>
             <property name="id" type="string"/>
-            <property name="title" ui_name="windowTitle" type="string" qt_ui="true" set_fn="setWindowTitle" get_fn="windowTitle"/>
+            <property name="title" qt_name="windowTitle" type="string" qt_ui="true" set_fn="setWindowTitle" get_fn="windowTitle"/>
             <property name="width" type="int"/>
             <property name="height" type="int"/>
         </properties>
     </class>
+    
 </xml>

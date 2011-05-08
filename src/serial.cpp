@@ -16,6 +16,21 @@ struct mutable_reader : reader_visitor
         if (!obj_->resolve(name, itm))
           assert(false); //ought to be mutable
 
+				//this tries to fix an importand design flaw of the mutant/xml reader... fault to deduce arrays
+				variant val = value;
+				if (itm.type)
+					{
+						int options = itm.type->options();
+						if (options & TYPE_ITERATED)
+							{
+								schema* vtype = value.get_schema();
+								if (!vtype || !(vtype->options() & TYPE_ITERATED))
+									{
+										return; //just bail if whats being assigned to an array is not
+									}
+							}
+					}
+
         if (!itm.set)
 					{
 						assert(false); //same
@@ -39,6 +54,7 @@ struct mutable_reader : reader_visitor
 
         attribute(name, da);
       }
+
     private:
       IDynamicObject*     obj_;
       base_read_archive&  archive_;

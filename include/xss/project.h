@@ -155,7 +155,9 @@ struct xss_object_schema : editable_object_schema<T>
 				this->template property_<DynamicArray>("events",			&T::events_);
 				this->template property_<DynamicArray>("methods",		&T::methods_);
 				this->template property_<DynamicArray>("children",		&T::children_);
-			}
+
+				this->template method_<XSSProperty, 1>("find_property", &T::get_property);
+		}
   };
 
 struct xss_serial_object_schema : xss_object_schema<xss_serial_object>

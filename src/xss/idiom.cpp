@@ -101,11 +101,9 @@ const int operator_prec[] =
   };
 
 
-
-
 //expression_renderer
 expression_renderer::expression_renderer(XSSContext ctx, bool id_as_this) 
-  : ctx_(ctx), assigner(null) 
+  : ctx_(ctx), assigner(null), capturing_property_(false) 
   {
   }
 
@@ -265,9 +263,51 @@ void expression_renderer::push(variant operand, bool top)
     stack_.push(operand);
   }
 
+str expression_renderer::render_captured_property()
+	{
+		variant prop = stack_.top(); stack_.pop();
+		str     value = operand_to_string(prop);
+				
+		//td: !!! CONTEXT
+		XSSProject project_ = ctx_->project_;
+		xss_idiom* idiom_		= ctx_->idiom_;
+		XSSContext context(new xss_code_context(project_, idiom_));
+		xss_code_context& ctx = *context.get();
+
+		XSSGenerator gen(new xss_generator(context));
+		project_->push_generator(gen);
+
+		project_->prepare_context(ctx, gen);
+
+		ctx.scope_->register_symbol("path",	value);
+		ctx.scope_->register_symbol("property",	prop);
+    												
+		str result = project_->generate_xss(capture_property_.xss, gen);
+
+		project_->pop_generator();
+
+		return result;
+	}
+
 void expression_renderer::exec_operator(operator_type op, int pop_count, int push_count, bool top)
   {
-    variant arg1, arg2;
+		if (capturing_property_ && op != op_dot)
+			{
+				//the dot chain has stopped, lets collect
+				//td: unfortunately this solution only works for straight dot chains. 
+				//I'll worry about it later
+
+				variant prop = stack_.top(); 
+				capturing_property_ = false;
+
+				already_rendered ar;
+				ar.value = render_captured_property();
+				ar.object = prop;
+
+				stack_.push(ar);
+			}
+
+		variant arg1, arg2;
     switch(pop_count)
       {
         case 0: break;
@@ -430,6 +470,27 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
 								//At the moment this solves enumerators that must carry different names into the output
 								str iid = variant_cast<str>(dynamic_get(prop, "internal_id"), str()); assert(!iid.empty());
 								push_rendered(iid, op_prec, variant());
+								break;
+							}
+
+						//And since I am on it...
+						//there is a use case where some properties need a variable to represent them 
+						//unfortunately such variables need the whole property chain in order to be effective
+						if (prop && prop->has("property_xss"))
+							{
+								assert(!capturing_property_); //only a variable property per schema, please
+								capturing_property_ = true; 
+
+								capture_property_.prop = prop;
+								capture_property_.xss  = variant_cast<str>(dynamic_get(prop, "property_xss"), str());
+
+								for(int i = 0; i < capture_property_.xss.size(); i++)
+									{
+										if (capture_property_.xss[i] == '\'')
+											capture_property_.xss[i] ='"';
+									}
+
+								push_rendered(operand_to_string(arg1), op_prec, prop);
 								break;
 							}
 
@@ -631,6 +692,12 @@ str expression_renderer::get()
         error.add("desc", SEmptyExpression);
         xss_throw(error);
       }
+
+		if (capturing_property_)
+			{
+				capturing_property_ = false;
+				return render_captured_property();
+			}
 
     variant result = stack_.top();
     if (result.is<already_rendered>())

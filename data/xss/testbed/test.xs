@@ -22,9 +22,7 @@ property target : string
 
 method reset(string s)
 {
-	target = s;
-	btn1.caption = "...";
-	btn2.caption = "..." + target;
+	var xx = btn5.placement;
 }
 
 on btn2.click()

@@ -10,6 +10,7 @@ extern "C"
 
 #include <fstream>
 #include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string.hpp>
 
 using namespace xkp;
 
@@ -438,6 +439,7 @@ expression_::expression_( expression& ctx )
     register_rule(rule_le,          &expression_::binary_operator<op_le>);
     register_rule(rule_ge,          &expression_::binary_operator<op_ge>);
     register_rule(rule_typecheck,   &expression_::binary_operator<op_typecheck>);
+		register_rule(rule_cast,				&expression_::binary_operator<op_typecast>);
     register_rule(rule_namecheck,   &expression_::binary_operator<op_namecheck>);
     register_rule(rule_shiftleft,   &expression_::binary_operator<op_shift_left>);
     register_rule(rule_shiftright,  &expression_::binary_operator<op_shift_right>);
@@ -1595,6 +1597,10 @@ str xs_compiler::process_dsl(const str& src, std::vector<str>& dsl_texts)
             size_t brace_start = 0;
             size_t brace_end   = 0;
             int    pcount      = 0;
+						str    gap;
+						bool   found_my_p = false; //have we found out our first parenthesis
+						bool   close_my_p = false; //have closed it yet?
+						bool   clear_gap  = false; //clear whatever we're keeping
             while (search_pos < result.size() && !not_dsl)
               {
                 switch (result[search_pos])
@@ -1607,14 +1613,58 @@ str xs_compiler::process_dsl(const str& src, std::vector<str>& dsl_texts)
                         break;
                       }
 
-                    case '(' :  pcount++; break;
-                    case ')' :  pcount--; break;
+                    case '(' :  
+											{
+												if (!found_my_p)
+													{
+														found_my_p = true;
+
+														//make sure there's no garbage
+														boost::trim(gap);
+														if (!gap.empty() && gap != dsl)
+															{
+																not_dsl = true;
+																is_dsl = false;
+															}
+													}
+
+												pcount++; 
+												break;
+											}
+
+                    case ')' :  
+											{
+												pcount--; 
+												if (!close_my_p && pcount == 0)
+													{
+														close_my_p = true;
+														clear_gap = true;
+													}
+
+												break;
+											}
 
                     case '{':
                       {
-                        if (brace_count == 0)
+                        if (!close_my_p)
+													{
+														//no parenthesis
+														not_dsl = true;
+														is_dsl = false;
+														break;
+													}
+
+												if (brace_count == 0)
                           {
-                            if (pcount != 0)
+														boost::trim(gap);
+														if (!gap.empty())
+															{
+																not_dsl = true;
+																is_dsl = false;
+																break;
+															}
+														
+														if (pcount != 0)
                               not_dsl = true;
                             else
                               {
@@ -1647,7 +1697,14 @@ str xs_compiler::process_dsl(const str& src, std::vector<str>& dsl_texts)
                       }
                   }
 
-                search_pos++;
+                gap += result[search_pos];
+								if (clear_gap)
+									{
+										gap.clear();
+										clear_gap = false;
+									}
+
+								search_pos++;
               }
 
             size_t to_advance = dsl.size();

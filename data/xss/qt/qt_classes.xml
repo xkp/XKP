@@ -18,7 +18,7 @@
             <property name="enabled" type="bool" qt_ui="true" set_fn="setEnabled" get_fn="isEnabled"/>
 			
 			<!--<property name="placement" type="enum" qt_ui="true" set_fn="setProperty" get_fn="property"/>-->
-			<property name="placement" type="Placement" qt_ui="false" set_fn="setProperty" get_fn="property"/>
+			<property name="placement" type="Placement" qt_ui="false" set_fn="setProperty" property_xss="(UnCast)<xss:e v='path'/>.property('Placement')"/>
         </properties>
     </class>
 

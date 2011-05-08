@@ -2,7 +2,7 @@
     <path generator="test.xss"
           class_library="test_classes.xml"
           source_path=""
-          output_path="../../data/xss/output/test.txt"/>
+          output_path="../output/test.txt"/>
     
     <options gen_event_method="false"/>
 
