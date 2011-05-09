@@ -2,96 +2,49 @@
 // Test example
 //
 <xss:class entry_point="generate_test">
-    method qt_placement(string pl)
+	
+    method generate_properties(var cmp, int ind)
     {
-        for(int i = 0; i < xs_placement_values.size; ++i)
-        {
-            if(xs_placement_values[i] == pl)
-                return qt_placement_values[i];
+        for(var p in cmp.properties)
+  	    {
+            // this dispatch error
+			// string p_value = p.value as string;
+   			
+            // and this equal
+            // string p_value = p.value;
+            // if(p_value == "null")
+            //  continue;
+
+			// this make assert error
+			// var plt = compiler.evaluate_property(cmp, cmp.placement);
+			
+            // this dispatch error with the word between quotes
+            // don't generate property <<"without">>        <-- mysterious word
+			// if((!p.qt_ui) || (!prop_value))
+			if(p.qt_ui == false)
+			{
+			}
         }
-        
-        return pl;
     }
-  
-    method generate_test()
+    
+	method generate_component(var cmp, var parent, int ind)
 	{
-		//ESC: A + B + C
-		string xxx = application.id + 23 + " yup";
-		compiler.log(xxx);
+		if(!cmp.qt_ui)
+			return;
 
-	    int idx = 0;
-		int size = 1;
+		generate_properties(cmp, ind);
 
-		// why the variant type don'st appeard in array yet?
-		// array<var> queue = [];
-		
-	    array queue = [];
-		queue += application;
-
-		while(idx < size)
+		// generate all childrens recursively
+		if(cmp.children)
 		{
-			// this line dispatch a type mismatch error
-			// ESC: funciona, pero algo se rompio y no se donde (es una historia larga)
-			// con esto te quiero decir que me mandes el error en cuanto suceda.
-			current_cmp = queue[idx];
-			
-			if(current_cmp.container)
-				out()
-				{
-					layout = addLayout();
-				}
-
-			for(var child in current_cmp.children)
-			{
-				child.parent = current_cmp;
-				
-			}
-			current_cmp.parent = null;
-		
-			// same of 'parent' or 'name', only that, 
-			// the 'container' property is declared in classes.xml
-			// ESC: ditto
-			if(current_cmp.container)
-			{
-				compiler.log("added one container");
-				queue += current_cmp;
-				size++;
-			}
-			
-			idx++;
-		}
-		
-		for(var cmp in application.children)
-		{
-			if(cmp.properties)
-			{
-				for(var p in cmp.properties)
-				{
-					//compiler.log(p.name);
-					if(p.set || p.get)
-					{
-						compiler.log(p.name);
-						compiler.log(p.type);
-						
-						// this lines dispatch a type mismatch error
-						// ESC: A mi no... no se si los resultados sean correctos
-						string prop_type = p.type;
-						
-				        string var_name = "_" + p.name;
-				        string var_decl = prop_type + " " + var_name;
-					}
-					
-					// this lines dispatch a type mismatch error 
-					// ESC: Ahora pincha, receurda que los valores pueden 
-					// ser null
-					string prop_value = p.value;
-					if (prop_value)
-					{
-						if(prop_value == "null")
-							continue;
-					}
-				}
-			}
+			for(var child in cmp.children)
+				generate_component(child, cmp, ind + 1);
 		}
 	}
+
+	method generate_test()
+	{
+		generate_component(application, null, 1);
+	}
+
 </xss:class>

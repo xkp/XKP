@@ -1,6 +1,7 @@
 on pushButton_1.click()
 {
-	var pl1 = pushButton_1.placement;
+	// it's neccesary enum cast in c++
+	//var pl1 = pushButton_1.placement;
 	placement pl2 = placement.left;
 	var pl3 = placement.right;
 	placement = placement.top;
@@ -15,11 +16,13 @@ on pushButton_2.click()
 {
 	pushButton_1.caption = "Old value: " + application.target;
 	application.target = "300";
+	edtText.text = "btn2 clicked";
 }
 
 on pushButton_3.click()
 {
 	placement = (placement + 1) % 8;
+	edtText.readonly = !edtText.readonly;
 }
 
 property xxx : int;

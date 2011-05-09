@@ -3,32 +3,11 @@
     array<string> methods = [];
     array<string> priv_vars = [];
 
-    array<string> xs_placement_values = [
-        "none",
-        "left",
-        "top",
-        "bottom",
-        "right",
-        "center",
-        "client"
-    ];
-        
-    array<string> qt_placement_values = [
-        "XKPPlacementLayout::None",
-        "XKPPlacementLayout::Left",
-        "XKPPlacementLayout::Top",
-        "XKPPlacementLayout::Bottom",
-        "XKPPlacementLayout::Right",
-        "XKPPlacementLayout::Center",
-        "XKPPlacementLayout::Client"
-    ];
-	
 	for(var inst in instances)
 	{
 		if(inst.id == "application")
 		{
 			inst.internal_id = "";
-			//continue;
 		}
 		else
 		{
@@ -44,16 +23,12 @@
       
         <xss:file output="qt_app.ui" src="qt_ui.xss">
             <parameter name="main_class" access="read"/>
-            <parameter name="xs_placement_values" access="read"/>
-            <parameter name="qt_placement_values" access="read"/>
         </xss:file>
       
         <xss:file output="widget.cpp" src="qt_widget_cpp.xss">
             <parameter name="main_class" access="read"/>
             <parameter name="methods" access="read_write"/>
             <parameter name="priv_vars" acces="read_write"/>
-            <parameter name="xs_placement_values" access="read"/>
-            <parameter name="qt_placement_values" access="read"/>
         </xss:file>
       
         <xss:file output="widget.h" src="qt_widget_h.xss">

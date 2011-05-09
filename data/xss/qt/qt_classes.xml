@@ -10,6 +10,25 @@
 			<property name="client" internal_id="XKPPlacementLayout::Client"/>
 		</properties>
 	</class>
+	
+	<class id="alignment" enum="true" as_expression="true" internal_id="Qt::Alignment">
+		<properties>
+			<!--horizontal Qt flags-->
+			<property name="left" internal_id="Qt::AlignLeft"/>
+			<property name="right" internal_id="Qt::AlignRight"/>
+			<property name="hcenter" internal_id="Qt::AlignHCenter"/>
+			<property name="justify" internal_id="Qt::AlignJustify"/>
+			<!--vertical Qt flags-->
+			<property name="top" internal_id="Qt::AlignTop"/>
+			<property name="bottom" internal_id="Qt::AlignBottom"/>
+			<property name="vcenter" internal_id="Qt::AlignVCenter"/>
+			<!--center Qt flags-->
+			<property name="center" internal_id="Qt::AlignCenter"/>
+		</properties>
+	</class>
+	
+	<class id="font">
+	</class>
 
     <class id="qwidget" qt_ui="true">
         <properties>
@@ -22,7 +41,7 @@
             <property name="visible" type="bool" set_fn="setVisible" get_fn="isVisible"/>
             <property name="enabled" type="bool" qt_ui="true" set_fn="setEnabled" get_fn="isEnabled"/>
 			
-			<property name="placement" type="placement" qt_ui="false" set_xss="setProperty(placementName, <xss:e v='value'/>)" get_xss="property(placementName).toInt()"/>
+			<property name="placement" type="placement" custom_type="true" qt_ui="true" default_value="none" set_xss="setProperty(placementName, <xss:e v='value'/>)" get_xss="property(placementName).toInt()"/>
         </properties>
     </class>
 
@@ -64,40 +83,43 @@
     <class id="label" super="qwidget" tag_name="QLabel">
         <properties>
             <property name="caption" qt_name="text" type="string" qt_ui="true" set_fn="setText" get_fn="text"/>
-            <property name="wordWrap" type="bool" qt_ui="true" set_fn="setWordWrap" get_fn="wordWrap"/>
+            <property name="word_wrap" qt_name="wordWrap" type="bool" qt_ui="true" set_fn="setWordWrap" get_fn="wordWrap"/>
+			<property name="alignment" type="alignment" custom_type="true" qt_ui="true" set_fn="setAlignment" get_fn="alignment"/>
+			<property name="margin" type="int" qt_ui="true" set_fn="setMargin" get_fn="margin"/>
+			<property name="indent" type="int" qt_ui="true" set_fn="setIndent" get_fn="indent"/>
+			<property name="font" type="font" set_fn="setFont" get_fn="font"/>
         </properties>
+		<!-- dispatch console error on generate method instruction
+		<methods>
+			<method name="clear" qt_name="clear"/>
+		</methods>
+		-->
+		<events>
+			<event name="link_activated" qt_name="linkActivated(const QString & link)"/>
+			<event name="link_hovered" qt_name="linkActivated(const QString & link)"/>
+		</events>
     </class>
 
+	<class id="edit" super="qwidget" tag_name="QLineEdit">
+		<properties>
+			<property name="text" qt_name="text" type="string" qt_ui="true" set_xss="setText(QString(string(<xss:e v='value'/>).c_str()))" get_xss="text().toStdString()"/>
+			<property name="readonly" qt_name="readOnly" type="bool" qt_ui="true" set_fn="setReadOnly" get_fn="isReadOnly"/>
+			<property name="alignment" type="alignment" custom_type="true" qt_ui="true" set_fn="setAlignment" get_fn="alignment"/>
+		</properties>
+	</class>
 	
-    <!--
-	  <class id="combobox" super="qwidget" tag_name="QComboBox">
-        <properties>
-        </properties>
-		    <events>
-		    </events>
-	  </class>
-  
-	  <class id="groupbox" super="qwidget" tag_name="QGroupBox">
-        <properties>
-        </properties>
-		    <events>
-		    </events>
-	  </class>
+	<class id="field" super="qwidget" tag_name="QTextEdit">
+		<properties>
+			<property name="text" qt_name="text" type="string" qt_ui="true" set_xss="setPlainText(QString(string(<xss:e v='value'/>).c_str()))" get_xss="toPlainText().toStdString()"/>
+			<property name="readonly" qt_name="readOnly" type="bool" qt_ui="true" set_fn="setReadOnly" get_fn="isReadOnly"/>
+		</properties>
+	</class>
 	
-	  <class id="edit" super="qwidget" tag_name="QLineEdit">
-        <properties>
-        </properties>
-		    <events>
-		    </events>
-	  </class>
-	
-	  <class id="field" super="qwidget" tag_name="QTextEdit">
-        <properties>
-        </properties>
-		    <events>
-		    </events>
-	  </class>
-    -->
+	<class id="combobox" super="qwidget" tag_name="QComboBox">
+	</class>
+
+	<class id="groupbox" super="qwidget" tag_name="QGroupBox">
+	</class>
 	
     <class id="application" tag_name="QWidget" qt_ui="true" container="true">
         <properties>
