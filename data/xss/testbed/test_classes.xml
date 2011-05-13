@@ -1,5 +1,5 @@
 <xml>
-	<class id="placement" enum="true" as_expression="true" internal_id="XKPPlacementLayout::Placement">
+	<class id="Placement" enum="true" as_expression="true" internal_id="XKPPlacementLayout::Placement">
 		<properties>
 			<property name="none" internal_id="XKPPlacementLayout::None"/>
 			<property name="left" internal_id="XKPPlacementLayout::Left"/>
@@ -13,16 +13,16 @@
 	
 	<class id="alignment" enum="true" as_expression="true" internal_id="Qt::Alignment">
 		<properties>
-			horizontal Qt flags
+			<!-- horizontal Qt flags -->
 			<property name="left" internal_id="Qt::AlignLeft"/>
 			<property name="right" internal_id="Qt::AlignRight"/>
 			<property name="hcenter" internal_id="Qt::AlignHCenter"/>
 			<property name="justify" internal_id="Qt::AlignJustify"/>
-			vertical Qt flags
+			<!-- vertical Qt flags -->
 			<property name="top" internal_id="Qt::AlignTop"/>
 			<property name="bottom" internal_id="Qt::AlignBottom"/>
 			<property name="vcenter" internal_id="Qt::AlignVCenter"/>
-			center Qt flags
+			<!-- center Qt flags -->
 			<property name="center" internal_id="Qt::AlignCenter"/>
 		</properties>
 	</class>
@@ -32,7 +32,7 @@
 
     <class id="qwidget" qt_ui="true">
         <properties>
-             geometry location 
+            <!-- geometry location -->
             <property name="x" type="int" set_xss="move(<xss:e v='value'/>, <xss:e v='object'/>->y())" get_fn="x"/>
             <property name="y" type="int" set_xss="move(<xss:e v='object'/>->x(), <xss:e v='value'/>)" get_fn="y"/>
             <property name="width" type="int" set_xss="resize(<xss:e v='value'/>, <xss:e v='object'/>->height())" get_fn="width"/>
@@ -41,8 +41,8 @@
             <property name="visible" type="bool" set_fn="setVisible" get_fn="isVisible"/>
             <property name="enabled" type="bool" qt_ui="true" set_fn="setEnabled" get_fn="isEnabled"/>
 			
-			<property name="placement" type="placement" custom_type="true" qt_ui="true" default_value="none" set_xss="setProperty(placementName, <xss:e v='value'/>)" 
-                      property_xss="(Placement)<xss:e v='path'/>.property(placementName).toInt()"/>
+			<property name="placement" type="Placement" custom_type="true" qt_ui="true" default_value="none" set_xss="setProperty(placementName, <xss:e v='value'/>)" 
+                      property_xss="(XKPPlacementLayout::Placement)<xss:e v='path'/>.property(placementName).toInt()"/>
         </properties>
     </class>
 
@@ -85,16 +85,16 @@
         <properties>
             <property name="caption" qt_name="text" type="string" qt_ui="true" set_fn="setText" get_fn="text"/>
             <property name="word_wrap" qt_name="wordWrap" type="bool" qt_ui="true" set_fn="setWordWrap" get_fn="wordWrap"/>
-			<property name="alignment" type="alignment" custom_type="true" qt_ui="true" set_fn="setAlignment" get_fn="alignment"/>
+			<property name="alignment" type="alignment" custom_type="true" default_value="left" qt_ui="true" set_fn="setAlignment" get_fn="alignment"/>
 			<property name="margin" type="int" qt_ui="true" set_fn="setMargin" get_fn="margin"/>
 			<property name="indent" type="int" qt_ui="true" set_fn="setIndent" get_fn="indent"/>
 			<property name="font" type="font" set_fn="setFont" get_fn="font"/>
         </properties>
-		 dispatch console error on generate method instruction
+		<!-- dispatch console error on generate method instruction
 		<methods>
 			<method name="clear" qt_name="clear"/>
 		</methods>
-		
+		-->
 		<events>
 			<event name="link_activated" qt_name="linkActivated(const QString & link)"/>
 			<event name="link_hovered" qt_name="linkActivated(const QString & link)"/>
@@ -132,5 +132,4 @@
             <property name="height" type="int"/>
         </properties>
     </class>
-    
 </xml>

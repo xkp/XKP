@@ -127,7 +127,7 @@ struct xss_composite_context : xss_code_context
 
 //these are basically copies of their xs counterpart, but offer xss stuff, like generating
 //they are also vm friendly, unlike the low level xs's ast.
-class xss_property : public xss_object
+class xss_property : public xss_serial_object
   {
 		public:
 			xss_property();

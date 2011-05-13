@@ -184,7 +184,11 @@ void base_editable_object::visit(dynamic_visitor* visitor)
 bool base_editable_object::has(const str& id)
 	{
     item_list::iterator it = items_.find(id);
-		return it != items_.end();
+		if (it != items_.end())
+			return true;
+
+		schema_item itm;
+		return false; //td: what? schema_ && schema_->resolve(id, itm);
 	}
 
 void base_editable_object::add_item(const str& name, schema_item& item)
