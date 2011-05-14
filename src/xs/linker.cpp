@@ -1127,7 +1127,13 @@ schema* code_linker::link_expression(expression& expr, bool assigner, bool* empt
 
     if (!stack_.empty())
       {
-        assert(stack_.size() == 1);
+        //td: !!! debug
+				if (stack_.size() != 1)
+					{
+						_asm nop;
+					}
+
+				assert(stack_.size() == 1);
 
         if (empty_stack) *empty_stack = false;
 
@@ -1383,7 +1389,8 @@ int code_linker::register_variable(const str& name, schema* type, expression* va
 
 void code_linker::resolve_value(variant& arg, schema** type)
   {
-    scope* scope_ = context_.scope_;
+    scope*				 scope_	= context_.scope_;
+    type_registry* types_ = context_.types_;
 
     if (arg.is<local_variable>())
       {
@@ -1401,88 +1408,100 @@ void code_linker::resolve_value(variant& arg, schema** type)
     else if (arg.is<expression_identifier>())
       {
         expression_identifier id = arg;
-        locals_list::iterator it = locals_.find(id.value);
-        if (it != locals_.end())
-          {
-            arg = it->second;
-            if (type) *type = it->second.type;
-            add_instruction(i_load, it->second.index);
-          }
-        else
-          {
-            //resolve symbol, note that loose identifiers
-            //are always unqualified (are not part of of a member chain)
-            //td: don't repeat constants on multiple access
-            variant         result;
-            schema_item     this_item;
-            schema*         this_ = context_.this_type;
-            IDynamicObject* dynamic = null;
-            variant         scope_result;
 
-            if (id.value == "this")
-              {
-                if(!this_)
-                  {
-                    param_list error;
-                    error.add("id", SOutOfContext);
-                    error.add("desc", SAccesingThisOnAThislessCode);
-                    xs_throw(error);
-                  }
+				schema* type_value = types_->get_type(id.value);
+				if (type_value)
+					{
+						if (type) *type = type_schema<schema*>();
+						
+						arg = type_value;
+						add_instruction(i_load_constant, add_constant(type_value));
+					}
+				else
+					{
+						locals_list::iterator it = locals_.find(id.value);
+						if (it != locals_.end())
+							{
+								arg = it->second;
+								if (type) *type = it->second.type;
+								add_instruction(i_load, it->second.index);
+							}
+						else
+							{
+								//resolve symbol, note that loose identifiers
+								//are always unqualified (are not part of of a member chain)
+								//td: don't repeat constants on multiple access
+								variant         result;
+								schema_item     this_item;
+								schema*         this_ = context_.this_type;
+								IDynamicObject* dynamic = null;
+								variant         scope_result;
 
-                add_instruction(i_load_this);
-                if (type) *type = this_;
-              }
-            else if (scope_ && scope_->resolve(id.value, scope_result))
-              {
-                arg = scope_result;
-                add_instruction(i_load_constant, add_constant(scope_result));
-                //test for concrete types
-                if (type)
-                  {
-                    IDynamicObject* do_ = variant_cast<IDynamicObject*>(scope_result, null);
-                    if (do_)
-                      *type = do_->get_type();
-                    else
-                      *type = scope_result.get_schema();
-                  }
-              }
-            else if (this_ && this_->resolve(id.value, this_item))
-              {
-                assert(this_item.get); //must not be read only
+								if (id.value == "this")
+									{
+										if(!this_)
+											{
+												param_list error;
+												error.add("id", SOutOfContext);
+												error.add("desc", SAccesingThisOnAThislessCode);
+												xs_throw(error);
+											}
 
-                add_instruction(i_load_this);
-                add_instruction(i_load_constant, add_constant(this_item.get));
-                add_instruction(i_get, this_item.flags&DYNAMIC_ACCESS);
+										add_instruction(i_load_this);
+										if (type) *type = this_;
+									}
+								else if (scope_ && scope_->resolve(id.value, scope_result))
+									{
+										arg = scope_result;
+										add_instruction(i_load_constant, add_constant(scope_result));
+										//test for concrete types
+										if (type)
+											{
+												IDynamicObject* do_ = variant_cast<IDynamicObject*>(scope_result, null);
+												if (do_)
+													*type = do_->get_type();
+												else
+													*type = scope_result.get_schema();
+											}
+									}
+								else if (this_ && this_->resolve(id.value, this_item))
+									{
+										assert(this_item.get); //must not be read only
 
-                if (type) *type = this_item.type;
-              }
-            else if (!context_.this_.empty() &&
-                     (dynamic = variant_cast<IDynamicObject*>(context_.this_, null)) &&
-                     dynamic->resolve(id.value, this_item))
-              {
-                //td: move all this resolving stuff into the context
-                assert(this_item.get); //must not be read only
+										add_instruction(i_load_this);
+										add_instruction(i_load_constant, add_constant(this_item.get));
+										add_instruction(i_get, this_item.flags&DYNAMIC_ACCESS);
 
-                add_instruction(i_load_this);
-                add_instruction(i_load_constant, add_constant(this_item.get));
-                add_instruction(i_get, this_item.flags&DYNAMIC_ACCESS);
+										if (type) *type = this_item.type;
+									}
+								else if (!context_.this_.empty() &&
+												 (dynamic = variant_cast<IDynamicObject*>(context_.this_, null)) &&
+												 dynamic->resolve(id.value, this_item))
+									{
+										//td: move all this resolving stuff into the context
+										assert(this_item.get); //must not be read only
 
-                if (type) *type = this_item.type;
-              }
-            else if (scope_ && scope_->resolve(id.value, result))
-              {
-                add_instruction(i_load_constant, add_constant(result));
-                if (type) *type = result.get_schema();
-              }
-            else
-              {
-                param_list error;
-                error.add("id", SUnknownIdentifier);
-                error.add("desc", SCannotResolve);
-                error.add("identifier", id.value);
-                xs_throw(error);
-              }
-          }
+										add_instruction(i_load_this);
+										add_instruction(i_load_constant, add_constant(this_item.get));
+										add_instruction(i_get, this_item.flags&DYNAMIC_ACCESS);
+
+										if (type) *type = this_item.type;
+									}
+								else if (scope_ && scope_->resolve(id.value, result))
+									{
+										add_instruction(i_load_constant, add_constant(result));
+										if (type) *type = result.get_schema();
+									}
+								else
+									{
+										param_list error;
+										error.add("id", SUnknownIdentifier);
+										error.add("desc", SCannotResolve);
+										error.add("identifier", id.value);
+										xs_throw(error);
+									}
+							}
+					}
       }
     else if (arg.is<schema_item>())
       {
@@ -1535,7 +1554,12 @@ void code_linker::resolve_operator(operator_type op, variant arg1, variant arg2,
     schema* result_type;
     if (operators_.get_operator_index(op, type1, type2, result, &result_type))
       {
-        add_instruction(i_binary_operator, static_cast<short>(result));
+				if (op == op_typecast)
+					{
+						result_type = variant_cast<schema*>(arg2, null);
+					}
+				
+				add_instruction(i_binary_operator, static_cast<short>(result));
         already_in_stack ais(result_type);
         stack_.push(ais);
       }

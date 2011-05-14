@@ -42,6 +42,12 @@ struct assign_info
 		bool				this_;
 	};
 
+struct capture_property
+	{
+		XSSProperty prop;
+		str					xss;
+	};
+
 struct expression_renderer : expression_visitor
   {
     expression_renderer(XSSContext ctx, bool id_as_this = false);
@@ -67,8 +73,11 @@ struct expression_renderer : expression_visitor
       expr_stack        stack_;
       std::stringstream result_;
       XSSContext        ctx_;
-
+			bool							capturing_property_;
+			capture_property	capture_property_;
+      
       void push_rendered(str value, int prec, variant object);
+			str	 render_captured_property();
   };
 
 //engine, this are the items that get translated

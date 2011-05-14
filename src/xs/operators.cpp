@@ -334,6 +334,27 @@ struct has : operator_exec
       }
   };
 
+struct as : operator_exec
+  {
+    virtual variant exec(variant& arg1, variant& arg2)
+      {
+				schema* cast_type = arg2; //td: check errors
+				schema* type = arg1.get_schema();
+				
+				variant result;
+				try
+					{
+						type->cast(arg1, cast_type, result);
+					}
+				catch(...)
+					{
+					}
+
+				return result;
+      }
+  };
+
+
 struct plus_str : operator_exec
   {
     virtual variant exec(variant& arg1, variant& arg2)
@@ -540,6 +561,9 @@ operator_registry::operator_registry()
 
 		//has
 		register_wildcard(op_namecheck, null, null, new has() );
+
+		//as
+		register_wildcard(op_typecast, null, null, new as() );
 
 		//defaults
 		register_default_operator(op_equal, new op_false());

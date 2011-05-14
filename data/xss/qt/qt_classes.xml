@@ -1,5 +1,5 @@
 <xml>
-	<class id="placement" enum="true" as_expression="true" internal_id="XKPPlacementLayout::Placement">
+	<class id="placement" enum="true" as_expression="true" internal_id="XKPPlacementLayout::Placement" default_value="none">
 		<properties>
 			<property name="none" internal_id="XKPPlacementLayout::None"/>
 			<property name="left" internal_id="XKPPlacementLayout::Left"/>
@@ -11,7 +11,7 @@
 		</properties>
 	</class>
 	
-	<class id="alignment" enum="true" as_expression="true" internal_id="Qt::Alignment">
+	<class id="alignment" enum="true" as_expression="true" internal_id="Qt::Alignment" default_value="left">
 		<properties>
 			<!--horizontal Qt flags-->
 			<property name="left" internal_id="Qt::AlignLeft"/>
@@ -38,10 +38,12 @@
             <property name="width" type="int" set_xss="resize(<xss:e v='value'/>, <xss:e v='object'/>->height())" get_fn="width"/>
             <property name="height" type="int" set_xss="resize(<xss:e v='object'/>->width(), <xss:e v='value'/>)" get_fn="height"/>
 
-            <property name="visible" type="bool" set_fn="setVisible" get_fn="isVisible"/>
-            <property name="enabled" type="bool" qt_ui="true" set_fn="setEnabled" get_fn="isEnabled"/>
+            <property name="visible" type="bool" default_value="true" set_fn="setVisible" get_fn="isVisible"/>
+            <property name="enabled" type="bool" default_value="true" qt_ui="true" set_fn="setEnabled" get_fn="isEnabled"/>
 			
-			<property name="placement" type="placement" custom_type="true" qt_ui="true" default_value="none" set_xss="setProperty(placementName, <xss:e v='value'/>)" get_xss="property(placementName).toInt()"/>
+			<property name="placement" type="placement" custom_type="true" qt_ui="true" default_value="none" set_xss="setProperty(placementName, <xss:e v='value'/>)" 
+					  property_xss="(placement)<xss:e v='path'/>.property(placementName).toInt()"/>
+                      <!--property_xss="(XKPPlacementLayout::Placement)<xss:e v='path'/>.property(placementName).toInt()"/>-->
         </properties>
     </class>
 
@@ -50,7 +52,7 @@
 			<property name="caption" qt_name="text" type="string" qt_ui="true" set_xss="setText(QString(string(<xss:e v='value'/>).c_str()))" get_xss="text().toStdString()"/>
 			<property name="checkable" type="bool"  default_value="false" qt_ui="false" set_fn="setCheckable" get_fn="isCheckable"/>
 			<property name="checked" type="bool"  default_value="false" qt_ui="true" set_fn="setChecked" get_fn="isChecked"/>
-			<property name="icon" type="resource" qt_ui="true" set_fn="setIcon" get_fn="icon"/>
+			<property name="icon" type="resource" qt_ui="false" set_fn="setIcon" get_fn="icon"/>
         </properties>
         <events>
             <event name="click" qt_name="clicked"/>

@@ -4,6 +4,8 @@
           source_path=""
           output_path="../output/"/>
 
+    <options gen_event_method="false"/>
+
     <idiom class="cpp-idiom" id_as_this="true"/>
 
     <application source="qt_app.xs" title="My first application" width="500" height="174">

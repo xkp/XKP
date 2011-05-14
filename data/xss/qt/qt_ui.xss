@@ -8,38 +8,39 @@
     {
         for(var p in cmp.properties)
   	    {
-			//compiler.log(cmp.id + " " + p.name);
-			
-            // if i do this, type mismatch error is dispatched
-            // the error is produced in vm.cpp on 'case i_binary_operator:'
-            // when execute the line: 'variant        result = e->exec(arg1, arg2);'
-            //string p_value = p.value;
-            //if(p_value == "null")
-            //    continue;
+			//compiler.log("----------- default_value: " + p.default_value + " custom_type: " + p.custom_type);
 
-            var prop_value = compiler.evaluate_property(cmp, p.name);
-
-			var prop = cmp.find_property(p.name);
-			var pvalue = prop.generate_value();
-			
-			compiler.log(cmp.id + "." + p.name + " ##/> 1=" + prop_value + ", 2=" + pvalue);
-			//compiler.log("- " + p.value + " : " + prop.value);
+			if(!p.qt_ui)
+				continue;
 			
             string prop_type = p.type;
             string prop_name = p.name;
-
-            // don't generate property w.h.i.t.h.o.u.t. assign value
-			//if((!p.qt_ui) || (!prop_value))
-			if(p.qt_ui == false)
+			
+			var prop = cmp.find_property(prop_name);
+			
+			//if(p.default_value != null)
+			if(p.default_value)
 			{
-				if(p.default_value)
-				{
-					p.value = p.default_value;
-				}
+				p.value = p.default_value;
+				prop.value = p.default_value;
+			}
 				
-				continue;
+            var prop_value = compiler.evaluate_property(cmp, prop_name);
+			var pvalue = prop.generate_value();
+			
+			if(p.custom_type)
+			{
+				//var prop = cmp.find_property(p.name);
+				prop_value = prop.generate_value();
+				compiler.log("Inside if: " + p.name + " " + prop_value);
 			}
             
+            // don't generate property whithout assign value
+			if(!prop_value)
+				continue;
+			
+			compiler.log(cmp.id + "." + prop_name + " ##/> 1=" + prop_value + ", 2=" + pvalue + ", 3=" + prop.value + ", 4=" + p.value);
+			
             if(prop_type == "int")
                 prop_type = "number";
             
@@ -47,17 +48,6 @@
             if(p.qt_name)
                 prop_name = p.qt_name;
 			
-			//compiler.log("before custom_type: " + cmp.id + "." + p.name);
-			//compiler.log(p.custom_type);
-			
-			if(p.custom_type)
-			{
-				compiler.log("inside if");
-				//var prop = cmp.find_property(p.name);
-				prop_value = prop.generate_value();
-				compiler.log(p.name + " " + prop_value);
-			}
-            
             out(indent = ind)
             {
                 <property name="<xss:e value="prop_name"/>">

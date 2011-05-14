@@ -234,6 +234,22 @@ str cpp_expression_renderer::resolve_assigner(variant operand, XSSObject instanc
 
 void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int push_count, bool top)
   {
+		if (capturing_property_ && op != op_dot)
+			{
+				//the dot chain has stopped, lets collect
+				//td: unfortunately this solution only works for straight dot chains. 
+				//I'll worry about it later
+
+				variant prop = stack_.top(); 
+				capturing_property_ = false;
+
+				already_rendered ar;
+				ar.value = render_captured_property();
+				ar.object = prop;
+
+				stack_.push(ar);
+			}
+
     variant arg1, arg2;
     switch(pop_count)
       {
@@ -346,6 +362,28 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
 								break;
 							}
 
+						//And since I am on it...
+						//there is a use case where some properties need a variable to represent them 
+						//unfortunately such variables need the whole property chain in order to be effective
+						if (prop && prop->has("property_xss"))
+							{
+								assert(!capturing_property_); //only a variable property per schema, please
+								capturing_property_ = true; 
+
+								capture_property_.prop = prop;
+								capture_property_.xss  = variant_cast<str>(dynamic_get(prop, "property_xss"), str());
+
+								for(int i = 0; i < capture_property_.xss.size(); i++)
+									{
+										if (capture_property_.xss[i] == '\'')
+											capture_property_.xss[i] ='"';
+									}
+
+								push_rendered(operand_to_string(arg1), op_prec, prop);
+								break;
+							}
+
+
             bool has_getter = prop && !prop->get.empty();
 
             std::stringstream ss;
@@ -410,6 +448,12 @@ str cpp_expression_renderer::get()
         error.add("desc", SCPPEmptyExpression);
         xss_throw(error);
       }
+
+		if (capturing_property_)
+			{
+				capturing_property_ = false;
+				return render_captured_property();
+			}
 
     variant result = stack_.top();
     if (result.is<already_rendered>())

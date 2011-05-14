@@ -396,7 +396,7 @@ void xml_reader::visit(reader_visitor* visitor)
     while(node)
       {
         str node_name = node->Value();
-        
+
         //for convenience, we'll try to deduce arrays
         //td: there is a problem here where some nodes are mistaken as arrays
         //an scene full of cubes, for example
