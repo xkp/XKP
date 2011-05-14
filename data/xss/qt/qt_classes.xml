@@ -1,5 +1,5 @@
 <xml>
-	<class id="placement" enum="true" as_expression="true" internal_id="XKPPlacementLayout::Placement" default_value="none">
+	<class id="Placement" enum="true" as_expression="true" internal_id="XKPPlacementLayout::Placement" default_value="none">
 		<properties>
 			<property name="none" internal_id="XKPPlacementLayout::None"/>
 			<property name="left" internal_id="XKPPlacementLayout::Left"/>
@@ -11,7 +11,7 @@
 		</properties>
 	</class>
 	
-	<class id="alignment" enum="true" as_expression="true" internal_id="Qt::Alignment" default_value="left">
+	<class id="Alignment" enum="true" as_expression="true" internal_id="Qt::Alignment" default_value="left">
 		<properties>
 			<!--horizontal Qt flags-->
 			<property name="left" internal_id="Qt::AlignLeft"/>
@@ -41,9 +41,8 @@
             <property name="visible" type="bool" default_value="true" set_fn="setVisible" get_fn="isVisible"/>
             <property name="enabled" type="bool" default_value="true" qt_ui="true" set_fn="setEnabled" get_fn="isEnabled"/>
 			
-			<property name="placement" type="placement" custom_type="true" qt_ui="true" default_value="none" set_xss="setProperty(placementName, <xss:e v='value'/>)" 
-					  property_xss="(placement)<xss:e v='path'/>.property(placementName).toInt()"/>
-                      <!--property_xss="(XKPPlacementLayout::Placement)<xss:e v='path'/>.property(placementName).toInt()"/>-->
+			<property name="placement" type="Placement" qt_ui="true" custom_type="true" default_value="Placement.none" set_xss="setProperty(placementName, <xss:e v='value'/>)" 
+					  property_xss="(XKPPlacementLayout::Placement)<xss:e v='path'/>.property(placementName).toInt()"/>
         </properties>
     </class>
 
@@ -86,7 +85,7 @@
         <properties>
             <property name="caption" qt_name="text" type="string" qt_ui="true" set_fn="setText" get_fn="text"/>
             <property name="word_wrap" qt_name="wordWrap" type="bool" qt_ui="true" set_fn="setWordWrap" get_fn="wordWrap"/>
-			<property name="alignment" type="alignment" custom_type="true" qt_ui="true" set_fn="setAlignment" get_fn="alignment"/>
+			<property name="alignment" type="Alignment" qt_ui="true" custom_type="true" default_value="Alignment.left" set_fn="setAlignment" get_fn="alignment"/>
 			<property name="margin" type="int" qt_ui="true" set_fn="setMargin" get_fn="margin"/>
 			<property name="indent" type="int" qt_ui="true" set_fn="setIndent" get_fn="indent"/>
 			<property name="font" type="font" set_fn="setFont" get_fn="font"/>
@@ -106,7 +105,7 @@
 		<properties>
 			<property name="text" qt_name="text" type="string" qt_ui="true" set_xss="setText(QString(string(<xss:e v='value'/>).c_str()))" get_xss="text().toStdString()"/>
 			<property name="readonly" qt_name="readOnly" type="bool" qt_ui="true" set_fn="setReadOnly" get_fn="isReadOnly"/>
-			<property name="alignment" type="alignment" custom_type="true" qt_ui="true" set_fn="setAlignment" get_fn="alignment"/>
+			<property name="alignment" type="Alignment" qt_ui="true" custom_type="true" set_fn="setAlignment" get_fn="alignment"/>
 		</properties>
 	</class>
 	
@@ -118,6 +117,8 @@
 	</class>
 	
 	<class id="combobox" super="qwidget" tag_name="QComboBox">
+		<properties>
+		</properties>
 	</class>
 
 	<class id="groupbox" super="qwidget" tag_name="QGroupBox">

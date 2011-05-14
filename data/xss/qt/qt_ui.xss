@@ -8,38 +8,27 @@
     {
         for(var p in cmp.properties)
   	    {
-			//compiler.log("----------- default_value: " + p.default_value + " custom_type: " + p.custom_type);
-
 			if(!p.qt_ui)
 				continue;
 			
             string prop_type = p.type;
             string prop_name = p.name;
-			
 			var prop = cmp.find_property(prop_name);
 			
-			//if(p.default_value != null)
-			if(p.default_value)
+			if(!p.value)
 			{
-				p.value = p.default_value;
-				prop.value = p.default_value;
+				if(p.default_value)
+				{
+					prop.value = p.default_value;
+					p.value = p.default_value;
+				}
+				else
+				{
+					// don't generate property whithout assign value
+					continue;
+				}
 			}
-				
-            var prop_value = compiler.evaluate_property(cmp, prop_name);
-			var pvalue = prop.generate_value();
-			
-			if(p.custom_type)
-			{
-				//var prop = cmp.find_property(p.name);
-				prop_value = prop.generate_value();
-				compiler.log("Inside if: " + p.name + " " + prop_value);
-			}
-            
-            // don't generate property whithout assign value
-			if(!prop_value)
-				continue;
-			
-			compiler.log(cmp.id + "." + prop_name + " ##/> 1=" + prop_value + ", 2=" + pvalue + ", 3=" + prop.value + ", 4=" + p.value);
+			prop_value = p.value;
 			
             if(prop_type == "int")
                 prop_type = "number";
@@ -47,6 +36,13 @@
             // translate property name if it not coincided with qt_name
             if(p.qt_name)
                 prop_name = p.qt_name;
+				
+			if(p.custom_type)
+			{
+				prop_type = "enum";
+				var pvalue = prop.generate_value();
+				prop_value = pvalue;
+			}
 			
             out(indent = ind)
             {

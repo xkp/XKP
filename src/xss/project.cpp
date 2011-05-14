@@ -826,22 +826,25 @@ struct pre_process : dynamic_visitor
           {
             //shameful plug, yay me
             str type			= variant_cast<str>(dynamic_get(obj, "type"), "");
-						variant value = obj;
+						variant value;
+						bool is_array = type == "array";
 
 						//and as long as I'm plugging, what the hell
-						if (type == "array")
+						if (is_array)
 							{
 								//build up child objects based on their attributes
 								DynamicArray children = obj->children();
 								for(int i = 0; i < children->size(); i++)
 									{
 										//td: simple types
-										XSSObject obj = children->at(i);
-										obj->propertize();
+										XSSObject array_obj = children->at(i);
+										array_obj->propertize();
 									}
 							}
 
-						if (obj->has("value"))
+						if (is_array)
+							value = obj;
+						else if (obj->has("value"))
 							value = dynamic_get(obj, "value");
 
 						str prop_name = variant_cast<str>(dynamic_get(obj, "name"), id);
@@ -994,7 +997,31 @@ void xss_project::build()
     str op = variant_cast<str>(dynamic_get(path, "output_path"), "");
     output_path_ = op;
 
-    //contextualize
+    //grab application file
+		str src = variant_cast<str>(dynamic_get(application_data, "src"), "");
+		if (src.empty())
+			{
+				param_list error;
+				error.add("id", SFileError);
+				error.add("desc", SFileNotFound);
+				error.add("file", src);
+				xss_throw(error);
+			}
+
+    type_registry types;
+    types.set_default_type(type_schema<xss_serial_object>());
+		//types.add_type<xss_property>("property");
+		//types.add_type<xss_method>("method");
+		//types.add_type<xss_event>("event");
+
+		fs::path filepath = base_path_ / source_path_ / src;
+
+		//actual loading
+		xml_read_archive class_library_achive(load_file(filepath.string()), &types, XML_RESOLVE_CLASS|XML_RESOLVE_ID);
+		application = class_library_achive.get( type_schema<XSSSerialObject>() );
+		application->seal();
+
+		//contextualize
     XSSProject me(shared_from_this());
     context_  = XSSContext(new xss_code_context(me, idiom_));
     current_  = XSSGenerator(new xss_generator(context_));
@@ -1014,13 +1041,10 @@ void xss_project::build()
 		do_includes();
 
 		//go at it
-    preprocess();
-
-    //the application object is manually handled... not sure why atm
-    dynamic_set(application, "class_name", str("application"));
+		dynamic_set(application, "class_name", str("application"));
     dynamic_set(application, "x", 0);
     dynamic_set(application, "y", 0);
-    register_instance("application", application);
+    preprocess();
 
     //compile the code aasociated with the app, note that any
     //node in the app can ave their separate file

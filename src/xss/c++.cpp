@@ -250,27 +250,35 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
 				stack_.push(ar);
 			}
 
-    variant arg1, arg2;
-    switch(pop_count)
-      {
-        case 0: break;
-        case 1: arg1 = stack_.top(); stack_.pop(); break;
-        case 2:
-          {
-            arg2 = stack_.top(); stack_.pop();
-            arg1 = stack_.top(); stack_.pop();
-            break;
-          }
-        default: assert(false);
-      }
-
 		if (top && assigner)
 			{
 				assert(op == op_dot); //I'm sure there are more use cases, but I'll deal with this one exclusively
 															//for now
 			}
 
+    variant arg1, arg2;
     int op_prec = idiom_utils::get_operator_prec(op);
+    switch(op)
+      {
+        // add here the operators that I'll customize
+				case op_dot:
+        case op_dot_call:
+          {
+            switch(pop_count)
+              {
+                case 0: break;
+                case 1: arg1 = stack_.top(); stack_.pop(); break;
+                case 2:
+                  {
+                    arg2 = stack_.top(); stack_.pop();
+                    arg1 = stack_.top(); stack_.pop();
+                    break;
+                  }
+                default: assert(false);
+              }
+          }
+      }
+
     switch(op)
       {
         case op_dec:
@@ -310,24 +318,7 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
         case op_func_call:
         case op_parameter:
           {
-            // the functionality of these operators are equal to
-            // exec_operator of base class
-
-            // push arguments that are poped
-            switch(pop_count)
-              {
-                case 0: break;
-                case 1: stack_.push(arg1); break;
-                case 2:
-                  {
-                    stack_.push(arg1);
-                    stack_.push(arg2);
-                    break;
-                  }
-                default: assert(false);
-              }
-
-            // execute base class exec_operator with the same parameters
+            // execute exec_operator of base class with the same parameters
             expression_renderer::exec_operator(op, pop_count, push_count, top);
             break;
           }
@@ -361,6 +352,7 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
 								push_rendered(iid, op_prec, variant());
 								break;
 							}
+
 
 						//And since I am on it...
 						//there is a use case where some properties need a variable to represent them 

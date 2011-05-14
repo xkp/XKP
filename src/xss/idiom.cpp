@@ -774,7 +774,7 @@ str expression_renderer::operand_to_string(variant operand, XSSObject parent, in
 					          XSSObject obj = ctx_->resolve_instance(result);
 					          if (obj && obj->has("internal_id"))
 						          {
-							          result = variant_cast<str>(dynamic_get(obj, "internal_id"), str());
+							          str result = variant_cast<str>(dynamic_get(obj, "internal_id"), str());
 							          assert(!result.empty());
 						          }
 				          }

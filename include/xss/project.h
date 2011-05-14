@@ -29,7 +29,8 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
 			typedef std::vector<XSSObject>			 XSSObjectList;
 			typedef std::vector<XSSSerialObject> XSSSerialObjectList;
 
-      variant							application;
+      variant							application_data;
+			XSSSerialObject			application;
       variant							idiom;
       variant							path;
       XSSObjectList				instances;
@@ -178,7 +179,7 @@ struct xss_project_schema : object_schema<xss_project>
         static_field("instances", &xss_project::instances, TRANSIENT);
         static_field("classes",   &xss_project::classes, TRANSIENT);
 
-        property_("application", &xss_project::application);
+        property_("application", &xss_project::application_data);
         property_("path",        &xss_project::path);
         property_("idiom",       &xss_project::idiom);
         property_("options",     &xss_project::options_);

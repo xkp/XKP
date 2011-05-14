@@ -1,10 +1,10 @@
 on pushButton_1.click()
 {
 	// it's neccesary enum cast in c++
-	//var pl1 = pushButton_1.placement;
-	placement pl2 = placement.left;
-	var pl3 = placement.right;
-	placement = placement.top;
+	var pl1 = pushButton_1.placement;
+	Placement pl2 = Placement.left;
+	var pl3 = Placement.right;
+	Placement = Placement.top;
 
 	pushButton_2.caption = "Clicked";
 	caption = "Other Clicked";
