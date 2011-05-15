@@ -55,6 +55,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       str  load_file(const str& fname);
 			void output_file(const str& fname, const str& contents);
 			variant evaluate_property(XSSObject obj, const str& prop);
+			variant compile_expression(const str& expr);
 			XSSObject get_class(const str& name, bool enforce = false);
 			str	get_anonymous_id(const str& class_name);
 			XSSObject resolve_path(const std::vector<str>& path, XSSObject base, str& result);
@@ -204,6 +205,7 @@ struct xss_project_schema : object_schema<xss_project>
 				method_<bool,			1>("is_object",						&xss_project::is_object);
 				method_<str,			2>("generate_property",		&xss_project::generate_property);
 				method_<str,			1>("translate_type",			&xss_project::translate_type);
+				method_<variant,	1>("compile_expression",	&xss_project::compile_expression);
       }
   };
 

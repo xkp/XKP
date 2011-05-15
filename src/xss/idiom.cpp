@@ -737,6 +737,14 @@ str expression_renderer::get()
         str ss = '"' + res + '"';
         return ss;
       }
+		else if (result.is<bool>())
+			{
+				bool rr = result;
+				if (rr)
+					return "true";
+				else
+					return "false";
+			}
 
     str to_string = result;
     return to_string;

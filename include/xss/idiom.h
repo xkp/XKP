@@ -280,7 +280,7 @@ struct idiom_utils
 												    project_->prepare_context(ctx, gen);
 
 												    ctx.scope_->register_symbol("value",	value);
-												    ctx.scope_->register_symbol("object", getter);
+												    ctx.scope_->register_symbol("caller", getter);
 
 												    result = project_->generate_xss(assign, gen);
 

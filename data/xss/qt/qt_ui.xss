@@ -19,12 +19,14 @@
 			{
 				if(p.default_value)
 				{
-					prop.value = p.default_value;
-					p.value = p.default_value;
+                    var def_value = compiler.compile_expression(p.default_value);
+                
+					prop.value = def_value;
+					p.value    = def_value;
 				}
 				else
 				{
-					// don't generate property whithout assign value
+					// don't generate property whithout assigning a value
 					continue;
 				}
 			}

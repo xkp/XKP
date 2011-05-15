@@ -33,10 +33,10 @@
     <class id="qwidget" qt_ui="true">
         <properties>
             <!-- geometry location -->
-            <property name="x" type="int" set_xss="move(<xss:e v='value'/>, <xss:e v='object'/>->y())" get_fn="x"/>
-            <property name="y" type="int" set_xss="move(<xss:e v='object'/>->x(), <xss:e v='value'/>)" get_fn="y"/>
-            <property name="width" type="int" set_xss="resize(<xss:e v='value'/>, <xss:e v='object'/>->height())" get_fn="width"/>
-            <property name="height" type="int" set_xss="resize(<xss:e v='object'/>->width(), <xss:e v='value'/>)" get_fn="height"/>
+            <property name="x" type="int" set_xss="move(<xss:e v='value'/>, <xss:e v='caller'/>->y())" get_fn="x"/>
+            <property name="y" type="int" set_xss="move(<xss:e v='caller'/>->x(), <xss:e v='value'/>)" get_fn="y"/>
+            <property name="width" type="int" set_xss="resize(<xss:e v='value'/>, <xss:e v='caller'/>->height())" get_fn="width"/>
+            <property name="height" type="int" set_xss="resize(<xss:e v='caller'/>->width(), <xss:e v='value'/>)" get_fn="height"/>
 
             <property name="visible" type="bool" default_value="true" set_fn="setVisible" get_fn="isVisible"/>
             <property name="enabled" type="bool" default_value="true" qt_ui="true" set_fn="setEnabled" get_fn="isEnabled"/>

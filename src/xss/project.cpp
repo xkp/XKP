@@ -155,7 +155,7 @@ void xss_object::xss_type(XSSObject type, XSSContext ctx)
 								//thus must be a string
 								str value_str = variant_cast<str>(vv, ""); assert(!value_str.empty());
 
-								//od the compiling
+								//do the compiling
 								xs_utils xs;
 								expression expr;
 								if (!xs.compile_expression(value_str, expr))
@@ -2099,6 +2099,21 @@ XSSObject xss_project::get_class(const str& name, bool enforce)
 			}
 
 		return XSSObject();
+	}
+
+variant xss_project::compile_expression(const str& e)
+	{
+		xs_utils xs;
+		expression expr;
+		if (!xs.compile_expression(e, expr))
+			{
+        param_list error;
+        error.add("id", SCannotResolve);
+				error.add("desc", SUnknownClass);
+        xss_throw(error);
+			}
+
+		return idiom_->process_expression(expr, XSSObject());
 	}
 
 variant xss_project::evaluate_property(XSSObject obj, const str& prop_name)

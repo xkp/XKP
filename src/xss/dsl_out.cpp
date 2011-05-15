@@ -251,6 +251,27 @@ struct worker
 											if (vv.empty())
 												vv = str("null"); //td: this should be an error?
 
+											if (!vv.is<str>())
+												{
+													param_list pl;
+													variant    v;
+													if (dynamic_try_exec(vv, "generate", pl, v))
+														{
+															str ss = variant_cast<str>(v, str()); //td: error, maybe?
+															result += ss;
+															break;
+														}
+													else if (vv.is<bool>())
+														{
+															bool bb = vv;
+															if (bb)
+																result += "true";
+															else
+																result += "false";
+															break;
+														}
+												}
+
 											str expr_value = vv;
 											if (is_multi_line(expr_value))
 												{

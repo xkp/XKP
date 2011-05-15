@@ -1528,7 +1528,12 @@ bool xs_compiler::compile_xs(const str& code_str, xs_container& result)
         xs_ xs(result);
         v.visit(root, xs);
       }
-    else error = true;
+    else if (root->ReductionRule == -1 && root->Symbol == 0)
+			{
+        success = true;
+			}
+		else	
+			error = true;
 
     //cleanup
     DeleteTokens(root);
