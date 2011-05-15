@@ -271,7 +271,7 @@ str expression_renderer::render_captured_property()
 		//td: !!! CONTEXT
 		XSSProject project_ = ctx_->project_;
 		xss_idiom* idiom_		= ctx_->idiom_;
-		XSSContext context(new xss_code_context(project_, idiom_));
+		XSSContext context(new xss_code_context(project_, idiom_, fs::path()));
 		xss_code_context& ctx = *context.get();
 
 		XSSGenerator gen(new xss_generator(context));

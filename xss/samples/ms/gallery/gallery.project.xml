@@ -1,0 +1,16 @@
+<xss:project>
+    <path generator="..\..\..\idioms\ms\main.xss"
+          class_library="..\..\..\idioms\ms\classes.xml"
+          source_path="" 
+          output_path="../../../bin/" 
+          output_file="gallery.html"/>
+
+    <options gen_event_method="true"/>
+    <idiom class="js-idiom" id_as_this="true"/>
+    
+    <includes>
+        <include src="anims.xs" def="anims.xml"/>
+    </includes>
+
+    <application src="gallery.xml"/>
+</xss:project>

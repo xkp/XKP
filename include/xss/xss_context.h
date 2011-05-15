@@ -4,6 +4,9 @@
 #include <xs.h>
 #include <xs/array.h>
 
+#include "boost/filesystem.hpp"
+namespace fs = boost::filesystem;
+
 namespace xkp {
 
 //forwards
@@ -86,7 +89,7 @@ struct xss_idiom
 
 struct xss_code_context : base_code_context
   {
-    xss_code_context(const variant project, xss_idiom* idiom);
+    xss_code_context(const variant project, xss_idiom* idiom, fs::path path);
     xss_code_context(xss_code_context& other);
 
     //this will function as resolver
@@ -110,6 +113,7 @@ struct xss_code_context : base_code_context
 			typedef std::map<str, XSSObject> variable_types;
 
 			variable_types vars_;
+			fs::path				path_;	
   };
 
 struct xss_composite_context : xss_code_context

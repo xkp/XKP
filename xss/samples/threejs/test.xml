@@ -1,0 +1,30 @@
+<application source="test.xs" width="1024" height="720" title="Test 3D">
+	
+	<basic_material id="cube_materials">
+		<texture color="13223476"/>
+		<texture color="871680"/>
+		<texture color="21930"/>
+		<texture color="16711680"/>
+		<texture color="30481"/>
+		<texture color="4444444"/>
+	</basic_material>
+	
+	<basic_material id="plane_material">
+		<texture color="14737632"/>
+	</basic_material>
+	
+	<face_material id="face_material_1">
+		
+	<scene id=scene_1>
+		 
+		<camera id="camera_1" fov="75" aspect="1.5" near="1" far="1000" position.z="500" position.y="300"/>
+				
+		<cube id="cube_1" width="200" height="200" depth="200" materials="cube_materials"/>
+		<mesh id="mesh_1" geometry="cube_1" materials="face_material_1" position.y="150" rotation.y="150"/>
+						
+		<plane id="plane_1" width="200" height="200"/>
+		<mesh id="mesh_1" geometry="plane_1" materials="plane_material" rotation.x="-1.57" rotation.z="150"/>
+			
+	</scene>
+	
+</application>

@@ -271,7 +271,7 @@ struct idiom_utils
 												    //td: is all this really neccesary?
 												    XSSProject project_ = ctx->project_;
 												    xss_idiom* idiom_		= ctx->idiom_;
-												    XSSContext context(new xss_code_context(project_, idiom_));
+														XSSContext context(new xss_code_context(project_, idiom_, fs::path()));
 												    xss_code_context& ctx = *context.get();
 
 												    XSSGenerator gen(new xss_generator(context));

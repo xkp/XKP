@@ -1,0 +1,94 @@
+<application source="gallery.xs" width="1000" height="640" title="">
+    <resources>
+        <package id="ui_package">
+            <resource src="images/arrow.png"/>
+            <resource src="images/arrow2.png"/>
+            <resource src="images/progress.empty.png"/>
+            <resource src="images/progress.full.png"/>
+        </package>
+        <package id="page1">
+            <resource src="images/n739882607_704246_8746.jpg"/>
+            <resource src="images/n739882607_704109_46.jpg"/>
+            <resource src="images/n739882607_704119_5840.jpg"/>
+        </package>
+        <package id="page2">
+            <resource src="images/n739882607_794182_2354.jpg"/>
+            <resource src="images/n739882607_704116_4921.jpg"/>
+            <resource src="images/n739882607_704120_6153.jpg"/>
+        </package>
+        <package id="page3">
+            <resource src="images/n739882607_704118_5476.jpg"/>
+            <resource src="images/n739882607_704247_9725.jpg"/>
+            <resource src="images/n739882607_704117_5209.jpg"/>
+        </package>
+    </resources>
+        
+    <!--An array describing every page-->
+    <property name="pages" type="array">
+        <object type="page">
+            <property name="image_location" type="array">
+                <object x="300" y="200" w="350" h="247"/>
+                <object x="700" y="50" w="200" h="516"/>
+                <object x="0" y="0" w="250" h="337"/>
+            </property>
+            <property name="package" value="page1"/>
+        </object>
+        <object type="page">
+            <property name="image_location" type="array">
+                <object x="200" y="300" w="600" h="274"/>
+                <object x="20" y="20" w="280" h="273"/>
+                <object x="600" y="40" w="200" h="200"/>
+            </property>
+            <property name="package" value="page2"/>
+        </object>
+        <object type="page">
+            <property name="image_location" type="array">
+                <object x="700" y="0" w="300" h="221"/>
+                <object x="300" y="50" w="400" h="346"/>
+                <object x="0" y="200" w="300" h="300"/>
+            </property>
+            <property name="package" value="page3"/>
+        </object>
+    </property>
+        
+    <!--The sequence that loads a particular page-->
+    <sequence id="load_package">
+        <every t="0.3">
+            <run method="percentage"/>
+        </every>            
+    </sequence>
+        
+    <!--Three images at the time-->
+    <img id="img1" x="0" y="0" width="100" height="100"/>
+    <img id="img2" x="120" y="140" width="200" height="200"/>
+    <img id="img3" x="300" y="300" width="200" height="200"/>
+
+    <!--And their frames, made by individual lines-->
+    <line id="ln1"  x1 ="20" y1="40" x2 ="40" y2="140" lineWidth="1"/>
+    <line id="ln2"  x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
+    <line id="ln3"  x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
+    <line id="ln4"  x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
+    <line id="ln5"  x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
+    <line id="ln6"  x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
+    <line id="ln7"  x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
+    <line id="ln8"  x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
+    <line id="ln9"  x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
+    <line id="ln10" x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
+    <line id="ln11" x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
+    <line id="ln12" x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
+        
+    <!--One animation per image-->
+    <frame_anim id="anim1"/>
+    <frame_anim id="anim2"/>
+    <frame_anim id="anim3"/>
+        
+    <fade_in id="fade1"/>
+    <fade_in id="fade2"/>
+    <fade_in id="fade3"/>
+
+    <!--UI-->
+    <label id="label1" caption="Paintings by Dany Dennis" font="bold 12px Verdana" x="420" y="10"/>
+    <progress_bar id="loading_bar" x="430" y="610" width="100" height="4"/>
+    <button id="next" up="images/arrow2.png" down="images/arrow.png" x="300" y="580" width="60" height="60"/>
+    <button id="prev" up="images/arrow.png" down="images/arrow2.png" x="600" y="580" width="60" height="60"/>
+</application>

@@ -1,0 +1,429 @@
+
+
+<xss:code>
+//preconditions
+if (!application.canvasElement)
+	application.canvasElement = "myCanvas";
+</xss:code>
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title><xss:e value = "application.title"/></title>
+
+<script type="text/javascript" src="js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="js/jquery.utils.js"></script>
+<script type="text/javascript" src="js/utils.js"></script>
+<script type="text/javascript" src="js/prototype.js"></script>
+
+<script type="text/javascript" src="js/ms-ui.js"></script>
+<script type="text/javascript" src="js/ms-streamer.js"></script>
+<script type="text/javascript" src="js/ms-state.js"></script>
+
+<script type="text/javascript">			
+var g_ui;
+var g_elapsed = -1;
+var g_delta = 0.0;
+var g_canvas;
+
+function default_interpolate(a, b, t)
+{
+    return a + (b - a)*t;
+}
+
+function start(resolution)  
+{  
+	var start = new Date().getTime();  
+	function update()  
+	{  
+		var now   = new Date().getTime();
+        if (g_elapsed < 0)
+            g_delta = 0; //first update
+        else
+		    g_delta  = now - g_elapsed;  
+		
+        g_elapsed = now; 
+              
+		var context = g_canvas.getContext('2d');
+		g_ui.update(g_delta, context);
+        
+        update_sequences(g_delta);
+              
+		window.setTimeout(update, resolution);  
+	}  
+	window.setTimeout(update, resolution);  
+}  
+
+var g_sequences = [];
+<xss:marker name="variables"/>
+
+
+function update_sequences(delta)
+{
+    <xss:marker name="conditions"/>
+    
+	for(var i = 0; i < g_sequences.length; i++)
+	{
+		var seq = g_sequences[i]
+		if (seq.running)
+        {
+            var is_running = true;
+            var curr       = seq.parent_sequence;
+            while(curr && is_running)
+            {
+                is_running = curr.running;
+                curr = curr.parent_sequence;
+            }
+            
+            if (is_running)
+                seq.update(delta);
+        }
+	}
+}
+
+window.onload = function() 
+{
+	var drawingCanvas = document.getElementById("<xss:e value="application.canvasElement"/>");
+        
+	g_canvas = drawingCanvas;
+	if (drawingCanvas && drawingCanvas.getContext)
+	{
+		var client =
+		{
+			width: <xss:e value="application.width"/>,
+			height: <xss:e value="application.height"/>,
+			canvas: drawingCanvas
+		};
+            
+		var streamer = new ms.streamer.Streamer();
+		var ui = new ms.ui.Manager(client, streamer);
+		g_ui = ui;
+
+		var images = 
+		[
+			<xss:code>
+			for(var res in application.resources)
+			{
+				out(indent = 3, trim = true)
+				{
+					'<xss:e value="res.src"/>',
+				}
+			}
+            </xss:code>
+		];
+      
+		ui.load_images(images, function()
+		{
+			drawingCanvas.onmousemove = function(ev)
+			{
+				ui.mouse_move(ev.clientX, ev.clientY);                  
+			};
+
+			drawingCanvas.onmousedown = function(ev)
+			{
+				ui.mouse_down(ev.clientX, ev.clientY);                  
+			};
+
+			drawingCanvas.onmouseup = function(ev)
+			{
+				ui.mouse_up(ev.clientX, ev.clientY);                  
+			};
+
+
+			<xss:class entry_point="generate">
+			property sequences = [];
+            
+			//generate ui, recursively
+			method generate_component(cmp, parent)
+			{
+				if (parent)
+				{
+                    if (cmp.class_name == "sequence")
+                    {
+                        var seq = cmp;
+                        
+                        sequences += seq;
+                        return;
+                    }
+                
+					out(indent = 0, marker = "variables")
+                    {
+                        var <xss:e value = "cmp.id"/>;
+                    }
+                    
+                    out(indent = 3, trim = true, dont_break = true)
+					{
+						<xss:e value = "cmp.id"/> = <xss:e value = "parent.id"/>.<xss:e value = "cmp.creation_function"/>(
+					}
+
+					if (cmp.parameters)
+                    {
+                        for(int i = 0; i < cmp.parameters.size; i++)
+						{
+							var param = cmp.parameters[i];
+							out(dont_break = true, trim = true)
+							{
+								'<xss:e value="compiler.evaluate_property(cmp, param.property_name)"/>'
+                            }
+
+                            if (i < cmp.parameters.size - 1)
+                            {
+                                out(dont_break = true) {,}
+                            }
+						}
+                    }
+
+					out(do_break = true) {);}
+				}
+				else
+				{
+					out(indent = 0, trim = true)
+					{
+						var application = ui.root;
+					}
+				}
+						
+				if (cmp.children)
+				{
+					for(var child in cmp.children)
+						generate_component(child, cmp);
+				}
+                            
+				project.render_instance(cmp, "instance.xss", indent = 2);
+			}
+
+            method generate_at(at, seq)
+            {
+                float time = at.time;
+                for(var itm in at.children)
+                {
+                    if (itm.class_name == "animate")
+                    {
+                        var prop_info = compiler.resolve_property(itm.property, seq.target);
+                        var prop      = prop_info.prop;
+                                
+                        string prop_name = prop.name;
+                        string iid       = compiler.genid('__i');
+                        
+                        out(indent = 2)
+                        {
+                            var <xss:e v="iid"/> = new ms.state.Interpolator(
+                                "<xss:e v="prop_name"/>", 
+                                default_interpolate,
+                                function(value)
+                                {
+                                    <xss:e v="prop_info.path"/>.<xss:e v="prop.resolve_assign('value')"/>;
+                                },
+                                [
+                        }
+                        
+                        //generate keys
+                        array keys;
+                        if (itm.keys)
+                        {
+                            keys = itm.keys;
+                        }
+                        else
+                        {
+                            //a simple from/to animation
+                            var start   = object();
+                            start.t     = 0;
+                            start.value = itm.from;
+
+                            var end     = object();
+                            end.t       = itm.in;
+                            end.value   = itm.to;
+                            
+                            keys = [start, end];
+                        }
+                        
+                        float length = 0.0;
+                        for(var key in keys)
+                        {
+                            if (key.t > length)
+                                length = key.t; 
+                            
+                            key.t += time;
+                            out(indent = 4)
+                            {
+                                {t: <xss:e v="key.t"/>, value: <xss:e v="key.value"/>},
+                            }
+                        }
+
+                        //close the interpolator and add the action
+                        out(indent = 2)
+                        {
+                                ]);
+                            <xss:e v="seq.id"/>.addAction(<xss:e v="prop_info.obj.id"/>, "<xss:e v="prop_name"/>", new ms.state.State(<xss:e v="time"/>, <xss:e v="time + length"/>, <xss:e v="iid"/>));                    
+                            
+                        }
+                    }
+                    else if (itm.class_name == "run")
+                    {
+                        if (itm.method)
+                        {
+                            string mid = compiler.genid('__m');
+                            out(indent = 2)
+                            {
+                                var <xss:e v="mid"/> = new ms.state.Caller(function()
+                                {
+                                    <xss:e v="seq.id"/>.<xss:e v="itm.method"/>();
+                                });
+                                <xss:e v="seq.id"/>.addAction(null, null, new ms.state.State(<xss:e v="time"/>, <xss:e v="time"/>, <xss:e v="mid"/>));                    
+                            }
+                        }
+                        else if (itm.sequence)
+                        {
+                            string sid = compiler.genid('__s');
+                            out(indent = 2)
+                            {
+                                var <xss:e v="sid"/> = new ms.state.Caller(function()
+                                {
+                                    <xss:e v="itm.sequence"/>.start();
+                                });
+                                <xss:e v="seq.id"/>.addAction(null, null, new ms.state.State(<xss:e v="time"/>, <xss:e v="time"/>, <xss:e v="sid"/>));                    
+                            }
+                        }
+                        else
+                        {
+                            //td: error
+                        }
+                    }
+                }
+            }
+            
+            method generate_when(itm, seq)
+            {
+                if (!itm.expr)
+                    return; //td: error
+                
+                out(indent = 1, marker = "conditions")
+                {
+                    if (<xss:e v="seq.id"/>.running && (<xss:e v="compiler.generate_expression(itm.expr)"/>))
+                    <xss:open_brace/>
+                }                                
+                
+                for(var child in itm.children)
+                {
+                    if (child.class_name == "run")
+                    {
+                        if (child.method)
+                        {
+                            out(indent = 2, marker = "conditions") 
+                            {
+                                <xss:e v="seq.id"/>.<xss:e v="child.method"/>();
+                            }
+                        }
+                        else if (child.sequence)
+                        {
+                            out(indent = 2, marker = "conditions") 
+                            {
+                                <xss:e v="child.sequence"/>.start();
+                            }
+                        }
+                        else
+                        {
+                            //td: error
+                        }
+                    }
+                    else
+                    {
+                        //td: error
+                    }
+                }
+                
+                out(indent = 1, marker = "conditions")
+                {
+                    <xss:close_brace/>
+                }
+            }
+            
+            method generate_item(itm, seq)
+            {
+                if (itm.class_name == "at")
+                    generate_at(itm, seq);
+                else if (itm.class_name == "when")
+                    generate_when(itm, seq);
+                else if (itm.class_name == "sequence")
+                {
+                    generate_sequence(itm, seq);
+                }
+                else
+                {
+                    //td: error
+                }
+            }
+            
+            method generate_sequence(seq, parent)
+            {
+                string parent_id = "null";
+                if (parent)
+                    parent_id = parent.id;
+                
+                //generate the variable declaration at start up time, like... global
+                out(indent = 0, marker = "variables")
+                {
+                    var <xss:e v="seq.id"/> = new ms.state.Sequence();
+                }
+                
+                //but the rest of the init process inline
+                out(indent = 2)
+                {
+                    <xss:e v="seq.id"/>.parent_sequence = <xss:e v="parent_id"/>;
+                    g_sequences.push(<xss:e v="seq.id"/>);
+                }
+                
+                if (seq.auto_start)
+                {
+                    out(indent = 2)
+                    {
+                        <xss:e v="seq.id"/>.start();
+                    }
+                }
+                
+                compiler.render_instance(seq, "instance.xss", indent = 2);
+                
+                for(var item in seq.children)
+                {
+                    generate_item(item, seq);
+                }
+            }
+            
+			method generate_sequences()
+            {
+                for(var seq in sequences)
+                {
+                    generate_sequence(seq, null);
+                }
+            }
+            
+			method generate()
+			{
+				generate_component(application, null);
+                generate_sequences();
+			}
+			</xss:class>
+    
+			start();
+			ui.draw(drawingCanvas.getContext('2d'));
+		});
+	}
+}
+</script>
+
+</head>
+
+<body>
+
+	<canvas id="<xss:e value="application.canvasElement"/>" width="<xss:e value="application.width"/>" height="<xss:e value="application.height"/>">
+
+		<p>Your browser doesn't support canvas.</p>
+
+	</canvas>
+
+</body>
+
+</html>

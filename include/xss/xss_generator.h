@@ -19,6 +19,7 @@ namespace xkp
       str get();
       void append(const str& s);
       void append_marker(const str& name, const str& s);
+			XSSContext context();
     public:
       virtual void visit(const str& tag, const str& text, param_list* args);
     private:

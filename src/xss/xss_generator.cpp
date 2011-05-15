@@ -63,6 +63,11 @@ void xss_generator::append(const str& s)
     result_ += s;
   }
 
+XSSContext xss_generator::context()
+	{
+		return context_;	
+	}
+
 void xss_generator::append_marker(const str& name, const str& s)
 	{
 		marker_map::iterator it = markers_.find(name);

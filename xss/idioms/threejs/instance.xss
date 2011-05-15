@@ -1,0 +1,133 @@
+<xss:code>
+
+//render properties
+if (it.properties)
+{
+    for(var prop in it.properties)
+    {
+        if (prop.dont_init)
+            continue;
+			
+		string prop_name;
+		
+		if(it.id == "application"){
+			prop_name = "var " + prop.name;
+		}
+		else{
+			prop_name = it.id + "." + prop.name;
+		}
+        if (prop.set && prop.get)
+        {
+            out(indent = 0)
+            {
+                <xss:e value="prop_name"/>_get = function ()
+                {
+                    <xss:e>prop.get.generate()</xss:e>
+                };
+
+                <xss:e value="prop_name"/>_set = function (value)
+                {
+                    <xss:e>prop.set.generate()</xss:e>
+                };
+            }
+        }
+        else if (prop.set)
+        {
+            out(indent = 0)
+            {
+                <xss:e value="prop_name"/> = <xss:e value=prop.generate_value()/>;
+
+                <xss:e value="prop_name"/>_set = function (value)
+                {
+                    <xss:e value="prop_name"/> = value;
+                    <xss:e value=prop.set.generate()/>
+                }
+            }
+        }
+        else if (prop.get)
+        {
+            out(indent = 0)
+            {
+                <xss:e>prop.name</xss:e>_get = function ()
+                {
+                    <xss:e>prop.get.generate()</xss:e>
+                };
+            }
+        }
+        else
+        {
+            //this is a plain property, unless the class specify otherwise
+            //we will also try to initialize it
+            
+            var value = compiler.evaluate_property(it, prop.name);
+            if (prop.set_fn)
+            {
+                if (value != null) //dont initialize empty values
+                {
+                    out(indent = 0)
+                    {
+                        <xss:e value="it.id"/>.<xss:e value="prop.set_fn"/>(<xss:e>prop.generate_value()</xss:e>);
+                    }
+                }
+            }
+            else
+            {
+                if (value != null)
+                {
+                    out(indent = 0)
+                    {
+                        <xss:e value="prop_name"/> =  <xss:e>prop.generate_value()</xss:e>;
+                    }
+                }
+            }
+        }
+    }    
+}
+
+if (it.methods)
+{
+    for(var mthd in it.methods)
+    {
+        string mthd_name = it.id + "." + mthd.name;
+		out(indent = 0, trim = true)
+		{
+			<xss:e value="mthd_name"/> = function(<xss:e>mthd.args.generate()</xss:e>) 
+			{
+				<xss:e>mthd.generate_code()</xss:e>
+			};
+		}
+    }
+}    
+
+//render events as functions provided by jquery
+if (it.events)
+{
+    for(var ev in it.events)
+    {
+		//remember every event could be impemented multiple times
+        string ev_name = it.id + "." + ev.name;
+		var    impls   = ev.impls;
+		var    evargs  = ev.args;
+		
+		//generate functions
+		out(indent = 0)
+		{
+		    <xss:e value="ev_name"/> = function()
+		    <xss:open_brace/>    
+		}
+		
+        for(var evimpl in impls)
+		{
+			out(indent = 1)
+			{
+			    <xss:e>evimpl.generate()</xss:e>
+			}
+		}
+
+		out(indent = 0)
+		{
+		    <xss:close_brace/>;
+		}
+    }
+}
+</xss:code>

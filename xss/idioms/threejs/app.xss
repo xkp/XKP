@@ -1,0 +1,134 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title><xss:e value = "application.title"/></title>
+
+</head>
+
+<body>
+
+<script type="text/javascript" src="js/three/Three.js"></script>
+<script type="text/javascript" src="js/three/Stats.js"></script>
+<script type="text/javascript" src="js/three/RequestAnimationFrame.js"></script>
+
+
+<script type="text/javascript">		
+	
+var renderer = new THREE.CanvasRenderer();
+renderer.setSize( <xss:e value="application.width"/>, <xss:e value="application.height"/> );
+
+<xss:class entry_point="generate_ui">
+	method generate_component(cmp, parent)
+			{
+				if (parent)
+				{
+					if( cmp.class_name != "basic_material" && cmp.class_name != "texture"){
+						out(indent = 3, trim = true, dont_break = true)
+						{						
+						var <xss:e value = "cmp.id"/> = new <xss:e value = "cmp.inst_class"/>(
+						}
+					}else if( cmp.class_name == "basic_material" ){
+							out(){
+							var <xss:e value = "cmp.id"/> = [];
+							}
+					}else{
+						out(dont_break = true, trim = true)
+								{	
+								<xss:e value = "parent.id"/>.push( new THREE.MeshBasicMaterial( <xss:open_brace/>    
+								}	
+					}
+					if (cmp.parameters)
+                    {	
+							if( cmp.class_name != "basic_material" && cmp.class_name != "texture"){
+							 for(int i = 0; i < cmp.parameters.size; i++)
+							 {
+							
+								var param = cmp.parameters[i];
+								out(dont_break = true, trim = true)
+								{								
+								<xss:e value = "compiler.evaluate_property(cmp, param.property_name)"/>
+								}	
+
+								if (i < cmp.parameters.size - 1)
+								{
+									out(dont_break = true) {,}
+								}
+							 }
+							}else{									
+								for(int j = 0; j < cmp.parameters.size; j++){
+									var par = cmp.parameters[j];
+									var value = compiler.evaluate_property(cmp, par.property_name);
+									if(value != null){
+										if(par.property_name == "texture_src"){
+											out(dont_break = true, trim = true){
+											map:THREE.ImageUtils.loadTexture( '<xss:e value = "value"/>' ),
+											}
+										}else{
+											out(dont_break = true, trim = true){
+											<xss:e value = "par.property_name"/>:<xss:e value = "value"/>,
+											}
+										}
+									}
+								}
+								out(dont_break = true, trim = true)
+								{								
+								<xss:close_brace/>  )
+								}
+						   }										
+                    }
+					
+					if ( cmp.class_name != "basic_material" ){
+					 out(do_break = true) {);}
+					}
+					
+					if( cmp.class_name == "mesh"){
+							
+						out(){
+						scene_1.addObject(<xss:e value = "cmp.id"/>);
+						}
+						
+					}
+				}
+										
+				if (cmp.children)
+				{
+					for(var child in cmp.children)
+						generate_component(child, cmp);
+				}
+                            
+				project.render_instance(cmp, "instance.xss", indent = 2);
+			}
+
+			method generate_ui()
+			{
+				generate_component(application, null);
+				
+			}
+			
+					
+	
+</xss:class>
+
+document.body.appendChild( renderer.domElement );
+animate();
+
+function animate() {
+	requestAnimationFrame( animate );
+	render();
+}
+
+function render() {				
+	renderer.render( scene_1, camera_1 );
+}
+
+</script>
+
+</body>
+
+</html>

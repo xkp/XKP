@@ -1,0 +1,33 @@
+<xss:classes>
+    <class id="frame_anim" super="sequence">
+        <at time="0">
+            <animate property="left.x1" from="@" to="dest.x"          in="2"/>
+            <animate property="left.y1" from="@" to="dest.y"          in="2"/>
+            <animate property="left.x2" from="@" to="dest.x + dest.w" in="2"/>
+            <animate property="left.y2" from="@" to="dest.y"          in="2"/>
+
+            <animate property="right.x1" from="@" to="dest.x + dest.w" in="2"/>
+            <animate property="right.y1" from="@" to="dest.y"          in="2"/>
+            <animate property="right.x2" from="@" to="dest.x + dest.w" in="2"/>
+            <animate property="right.y2" from="@" to="dest.y + dest.h" in="2"/>
+
+            <animate property="top.x1" from="@" to="dest.x + dest.w" in="2"/>
+            <animate property="top.y1" from="@" to="dest.y + dest.h" in="2"/>
+            <animate property="top.x2" from="@" to="dest.x"          in="2"/>
+            <animate property="top.y2" from="@" to="dest.y + dest.h" in="2"/>
+
+            <animate property="bottom.x1" from="@" to="dest.x"          in="2"/>
+            <animate property="bottom.y1" from="@" to="dest.y + dest.h" in="2"/>
+            <animate property="bottom.x2" from="@" to="dest.x"          in="2"/>
+            <animate property="bottom.y2" from="@" to="dest.y"          in="2"/>
+        </at>
+    </class>
+    <class id="fade_in" super="sequence">
+        <at time="0">
+            <animate property="target.alpha" from="0" to="0.3" in="1"/>
+        </at>
+        <at time="1">
+            <animate property="target.alpha" from="0.3" to="1" in="1"/>
+        </at>
+    </class>
+</xss:classes>

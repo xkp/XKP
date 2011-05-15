@@ -448,17 +448,19 @@ struct class_internal_gather : dynamic_visitor
 
 
 //xss_code_context
-xss_code_context::xss_code_context(const variant _project, xss_idiom* idiom) :
+xss_code_context::xss_code_context(const variant _project, xss_idiom* idiom, fs::path path) :
   base_code_context(),
   project_(_project),
-  idiom_(idiom)
+  idiom_(idiom),
+	path_(path)
   {
   }
 
 xss_code_context::xss_code_context(xss_code_context& other) :
   base_code_context(other),
   project_(other.project_),
-  idiom_(other.idiom_)
+  idiom_(other.idiom_),
+	path_(other.path_)
   {
   }
 
@@ -561,7 +563,7 @@ void xss_code_context::register_variable(const str& name, XSSObject xss_type)
 
 //xss_composite_context
 xss_composite_context::xss_composite_context(XSSContext ctx):
-  xss_code_context(ctx->project_, ctx->idiom_),
+  xss_code_context(ctx->project_, ctx->idiom_, ctx->path_),
   ctx_(ctx)
   {
     types_    = ctx->types_;
@@ -1020,7 +1022,7 @@ void xss_project::build()
 
 		//contextualize
     XSSProject me(shared_from_this());
-    context_  = XSSContext(new xss_code_context(me, idiom_));
+    context_  = XSSContext(new xss_code_context(me, idiom_, base_path_ / source_path_));
     current_  = XSSGenerator(new xss_generator(context_));
 
     //td: stupid references
@@ -1601,7 +1603,7 @@ str xss_project::generate_expression(const str& expr, XSSObject this_)
 			}
 
 		XSSProject me(shared_from_this());
-    XSSContext context(new xss_code_context(me, idiom_));
+    XSSContext context(new xss_code_context(me, idiom_, fs::path()));
 		fill_context(context);
 		context->this_ = this_;
 
@@ -1641,6 +1643,11 @@ str xss_project::generate_property(XSSProperty prop, XSSObject this_)
 	{
 
 		return "IMPLEMENT ME";
+	}
+
+XSSContext xss_project::current_context()
+	{
+		return current_->context();
 	}
 
 str xss_project::translate_type(const str& type_name)
@@ -1792,7 +1799,11 @@ void xss_project::render_instance(XSSObject instance, const str& xss, int indent
   {
 		push_file(xss);
 
-		fs::path fname = base_path_ / source_path_ / xss;
+		XSSContext curr_ctx = current_context();
+
+		fs::path fname = curr_ctx->path_ / xss;
+		fs::path curr_path = fname.parent_path();
+
 		str gen_text = load_file(fname.string());
 
     str id = variant_cast<str>(dynamic_get(instance, "id"), "");
@@ -1800,7 +1811,7 @@ void xss_project::render_instance(XSSObject instance, const str& xss, int indent
 
     //setup the context
 		XSSProject me(shared_from_this());
-    XSSContext context(new xss_code_context(me, idiom_));
+    XSSContext context(new xss_code_context(me, idiom_, curr_path));
     xss_code_context& ctx = *context.get();
     XSSGenerator gen(new xss_generator(context));
 
@@ -2107,17 +2118,18 @@ variant xss_project::evaluate_property(XSSObject obj, const str& prop_name)
 
 str xss_project::generate_file(const str& fname, XSSContext context)
   {
-		push_file(fname);
-
-		fs::path filepath = base_path_ / source_path_ / fname;
-    str gen_text = load_file(filepath.string());
-
 		if (!context)
 				context = context_;
 
+		push_file(fname);
+
+		fs::path filepath = context->path_ / fname;
+    str gen_text = load_file(filepath.string());
+
     //setup the context & generator
     XSSContext safe_context(new xss_composite_context(context));
-    xss_code_context& ctx = *safe_context.get();
+		safe_context->path_ = filepath.parent_path();
+		xss_code_context& ctx = *safe_context.get();
     XSSGenerator gen(new xss_generator(safe_context));
 
 		//od the deed

@@ -69,6 +69,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
 			bool is_object(const variant v);
 			str generate_property(XSSProperty prop, XSSObject this_);
 			str translate_type(const str& type_name);
+			XSSContext current_context();
     public:
       //some utils, god those are long names
       XSSObject			get_instance(const str& id);

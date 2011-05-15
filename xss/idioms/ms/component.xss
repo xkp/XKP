@@ -1,0 +1,43 @@
+<xss:code>
+    
+    out(indent = 3, trim = true, dont_break = true)
+	{
+		<xss:e value = "cmp.id"/> = <xss:e value = "cmp.parent.id"/>.<xss:e value = "cmp.creation_function"/>(
+	}
+
+	if (cmp.parameters)
+    {
+        for(int i = 0; i < cmp.parameters.size; i++)
+		{
+            var param = cmp.parameters[i];
+			out(dont_break = true, trim = true)
+			{
+				'<xss:e value="compiler.evaluate_property(cmp, param.property_name)"/>'
+            }
+
+            if (i < cmp.parameters.size - 1)
+            {
+                out(dont_break = true) {,}
+            }
+		}
+    }
+
+	out(do_break = true) {);}
+
+    //position the component
+    if (cmp.width != null && cmp.height != null)
+    {
+        out(indent = 0)
+        {
+            <xss:e value="cmp.id"/>.rect(<xss:e value="cmp.x"/>, <xss:e value="cmp.y"/>, <xss:e value="cmp.width"/>, <xss:e value="cmp.height"/>);
+        }
+    }
+    else if (cmp.x != null && cmp.y != null)
+    {
+        out(indent = 0)
+        {
+            <xss:e value="cmp.id"/>.position(<xss:e value="cmp.x"/>, <xss:e value="cmp.y"/>);
+        }
+    }
+
+</xss:code>

@@ -6,7 +6,9 @@
 #include <xs/ast.h>
 
 #include <boost/algorithm/string.hpp>
+#include "boost/filesystem.hpp"
 
+namespace fs = boost::filesystem;
 using namespace xkp;
 
 //strings
@@ -286,17 +288,22 @@ struct worker
 
 											str source = it->text;
 											bool got_src = false;
+											fs::path path = project_->current_context()->path_;
 											if (!file_info.source.empty())
 												{
 													got_src = true;
 													project_->push_file(file_info.source);
 
-													str src_file = project_->source_file_name(file_info.source);
-													source	 = project_->load_file(src_file);
+													fs::path src_file = path / file_info.source;
+													source	 = project_->load_file(src_file.string());
+
+													path = src_file.parent_path();
 												}
 
 											//td: utilify this crap already, or something
-											XSSContext context(new xss_code_context(project_, project_->idiom));
+											XSSContext curr_ctx = project_->current_context();
+
+											XSSContext context(new xss_code_context(project_, project_->idiom, path));
 											xss_code_context& ctx = *context.get();
 
 											XSSGenerator gen(new xss_generator(context));

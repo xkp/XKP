@@ -1,0 +1,47 @@
+{
+<xss:code>
+
+//This is a way to generate simple objects mainly coming from xml
+//its kinda crappy and will be revised in time
+for(var prop in obj.properties)
+{
+	if (prop.type == "array")
+	{
+		out()
+		{
+			<xss:e value="prop.name"/> : [
+		}
+
+        for(var array_item in prop.value.children)
+        {
+            out()
+            {
+                <xss:file output="inline" src="object.xss">
+                    <parameter name="obj" value="array_item"/>
+                </xss:file>,
+            }
+        }
+
+		out()
+		{
+			],
+		}
+	}
+	else if (compiler.is_object(prop.value))
+	{
+		out()
+		{
+			<xss:e value="prop.name"/> : <xss:e v="compiler.evaluate_property(obj, prop.name)"/>,
+		}
+	}
+	else
+	{
+		out()
+		{
+			<xss:e value="prop.name"/> : <xss:e v="compiler.evaluate_property(obj, prop.name)"/>,
+		}
+	}
+}
+
+</xss:code>
+}
