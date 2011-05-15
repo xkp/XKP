@@ -57,6 +57,8 @@ struct cpp_expression_renderer : expression_renderer
     cpp_expression_renderer(XSSContext ctx, bool id_as_this = false)
       : expression_renderer(ctx, id_as_this) {}
 
+    //expression_visitor
+    virtual void push(variant operand, bool top);
     virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top);
 
     virtual str resolve_assigner(variant operand, XSSObject instance, assign_info* ai);

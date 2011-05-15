@@ -734,10 +734,13 @@ str	xss_property::resolve_assign(const str& value)
 
 str	xss_property::resolve_value()
 	{
-    str get_fn = variant_cast<str>(dynamic_get(this, "get_fn"), "");
+    str get_fn  = variant_cast<str>(dynamic_get(this, "get_fn"), "");
+    str get_xss = variant_cast<str>(dynamic_get(this, "get_xss"), "");
 
 		if (!get.empty())
 			return name + "_get()";
+    else if (!get_xss.empty())
+      return get_xss;
 		else if (!get_fn.empty())
 			return get_fn + "()";
 		return name;

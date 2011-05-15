@@ -24,7 +24,7 @@
 #include "xss/c++.h"
 #include "archive/xml_archive.h"
 
-#include "boost/filesystem.hpp"
+#include "boost/filesystem.hpp" 
 
 using namespace xkp;
 
@@ -40,57 +40,57 @@ class dump_visitor : public xss_visitor
 void dump_file(const str fname)
   {
     std::ifstream ifs(fname.c_str());
-
+    
     str text;
-    char buffer[1024];
+    char buffer[1024]; 
     while(ifs.good())
       {
-        ifs.getline(buffer, 1024);
+        ifs.getline(buffer, 1024); 
         text += buffer;
         text += '\n';
       }
-
+      
     dump_visitor visitor;
-    xss_parser parser;
+    xss_parser parser;  
     parser.register_tag("xss:code");
     parser.register_tag("xss:e");
-
-    parser.parse(text, &visitor);
+    
+    parser.parse(text, &visitor);  
   }
-
+  
 void dump_result(const str& text, code_context& context)
   {
     //td: never really used this, so I'mnot going to bother
     //xss_generator gen(context);
-    //xss_parser parser;
+    //xss_parser parser;  
     //parser.register_tag("xss:code");
     //parser.register_tag("xss:expression");
     //parser.register_tag("xss:quote");
     //
-    //parser.parse(text, &gen);
-
+    //parser.parse(text, &gen);  
+	  
     //std::cout << "-------------OUTPUT: " << '\n';
     //std::cout << gen.get();
-  }
+  }  
 
 void print_error(param_list data, XSSProject project)
   {
     str id   = variant_cast<str>(data.get("id"), "");
     str desc = variant_cast<str>(data.get("desc"), "");
-
+    
     std::cout << "Error [" << id << "] " << desc << '\n';
-
+    
     for(size_t i = 0; i < data.size(); i++)
       {
         str name = data.get_name(i);
         if (name == "id" || name == "desc")
           continue;
-
+          
         variant value = data.get(i);
         str     value_str;
         try
           {
-            value_str = variant_cast<str>(value, str());
+            value_str = str(value);
           }
         catch(type_mismatch)
           {
@@ -103,33 +103,33 @@ void print_error(param_list data, XSSProject project)
 		std::cout << "\nFile:" << project->top_file() << '\n';
 		std::cout << "\nLast Rendererd: \n\n" << project->last_rendered(5);
   }
-
+  
 int main(int argc, char* argv[])
   {
     char* fname = argv[1];
 		std::ifstream ifs(fname);
-
+    
     str text;
-    char buffer[1024];
+    char buffer[1024]; 
     while(ifs.good())
       {
-        ifs.getline(buffer, 1024);
+        ifs.getline(buffer, 1024); 
         text += buffer;
         text += '\n';
       }
-
+      
     //setup types
     type_registry types;
     types.set_default_type(type_schema<xss_serial_object>());
     types.add_type("js-idiom", type_schema<js_idiom>());
     types.add_type("cpp-idiom", type_schema<cpp_idiom>());
-
-    //read the project file,
+    
+    //read the project file, 
     xml_read_archive project_file(text, &types, XML_RESOLVE_CLASS|XML_RESOLVE_ID);
     XSSProject project = project_file.get( type_schema<XSSProject>() );
 
-		boost::filesystem::path base(fname);
-
+		boost::filesystem::path base(fname); 
+		
 		str path = base.parent_path().string();
 		project->base_path(base.parent_path());
 
@@ -160,14 +160,14 @@ int main(int argc, char* argv[])
 		//		data.add("desc", str("Type mismatch"));
   //      print_error(data, project);
 		//	}
-
+    
     if (succeeded)
       {
         std::cout << "Build Succeeded, your project is at: " << project->output_path();
       }
-
+      
     std::cin.get();
-
+	  
 	return 0;
   }
 

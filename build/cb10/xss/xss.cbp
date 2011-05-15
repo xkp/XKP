@@ -12,7 +12,7 @@
 				<Option object_output="..\..\..\bin\cb\debug\obj\" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="C:\Work\XKP\data\xss\mutant-state\images.xml" />
+				<Option parameters="../../../data/xss/qt/qt_app.xml" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-D_DEBUG" />
@@ -97,6 +97,7 @@
 		<Unit filename="..\..\..\src\xs\linker.cpp" />
 		<Unit filename="..\..\..\src\xs\operators.cpp" />
 		<Unit filename="..\..\..\src\xs\vm.cpp" />
+		<Unit filename="..\..\..\src\xss\c++.cpp" />
 		<Unit filename="..\..\..\src\xss\dsl_out.cpp" />
 		<Unit filename="..\..\..\src\xss\idiom.cpp" />
 		<Unit filename="..\..\..\src\xss\jscript.cpp" />

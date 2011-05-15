@@ -5,18 +5,24 @@
 #include <QRect>
 #include <QWidgetItem>
 
+#if !defined(placementName) && !defined(placementSizeName)
+#define placementName "placement"
+#define placementSizeName "placementSize"
+#endif
+
 class XKPPlacementLayout : public QLayout
 {
 public:
     enum Placement { None, Left, Top, Bottom, Right, Center, Client };
     enum SizeType { MinimumSize, SizeHint, PlacementSize };
 
+    XKPPlacementLayout(QWidget *parent, int spacing = -1, int margin = 0);
     XKPPlacementLayout(int spacing = -1);
-    XKPPlacementLayout(QWidget *parent, int margin = 0, int spacing = -1);
     ~XKPPlacementLayout();
 
     void addItem(QLayoutItem *item);
     void addWidget(QWidget *widget, Placement position);
+    void addWidget(QWidget *widget);
     void add(QLayoutItem *item, Placement position, QWidget *widget);
     QLayoutItem *takeAt(int index);
 
@@ -35,12 +41,12 @@ private:
     struct ItemWrapper
     {
         ItemWrapper(QLayoutItem *i, Placement p, QWidget *w) {
-	    item = i;
-	    position = p;
+            item = i;
+            position = p;
             widget = w;
-	}
+        }
 
-	QLayoutItem *item;
+        QLayoutItem *item;
         QWidget *widget;
         Placement position;
     };

@@ -1,7 +1,9 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
+#include <QtGui>
 #include <QWidget>
+#include <QVariant>
 #include <string>
 
 #include "xkpplacementlayout.h"

@@ -140,8 +140,8 @@ struct base_xss_code : ITranslator, code_visitor
 			void add_line(const str& line, bool dress_line = false);
 			str	 get_indent_str();
       void render_code(code& cde, int indent);
-	    void register_var(const str& name, const str& type); 
-	  
+	    void register_var(const str& name, const str& type);
+
       virtual str render_expression(expression& expr, XSSContext ctx);
   };
 
@@ -188,7 +188,7 @@ struct idiom_utils
 							    {
 								    expression_splitter es(op);
 								    expr.visit(&es);
-    								
+
                     T value_renderer(ctx);
 								    es.right.visit(&value_renderer);
 
@@ -218,7 +218,7 @@ struct idiom_utils
 
 														    //this is lame
                                 str op_str = get_operator_str(op);
-    														
+
 														    assert(op_str.size() > 1);
 														    op_str.erase(op_str.end() - 1);
 
@@ -244,12 +244,12 @@ struct idiom_utils
 														    assert(op_str.size() > 1);
 														    op_str.erase(op_str.end() - 1);
 
-														    value = getter + " " + op_str + " " + value; 
+														    value = getter + " " + op_str + " " + value;
 													    }
 
 														//lets find out if the getter is a single word (like "width") or a composite (like "object.width")
 														//if composite we'll get rid of the last accesor (width) to get the actual accesor
-												    
+
 														xss_idiom* idiom = ctx->idiom_;
 														str separator = idiom->resolve_separator();
 														size_t last_dot = getter.find_last_of(separator);
@@ -267,7 +267,7 @@ struct idiom_utils
 														    if (assign[i] == 39)
 															    assign[i] = '"';
 													    }
-    												
+
 												    //td: is all this really neccesary?
 												    XSSProject project_ = ctx->project_;
 												    xss_idiom* idiom_		= ctx->idiom_;
@@ -281,7 +281,7 @@ struct idiom_utils
 
 												    ctx.scope_->register_symbol("value",	value);
 												    ctx.scope_->register_symbol("object", getter);
-    												
+
 												    result = project_->generate_xss(assign, gen);
 
 												    project_->pop_generator();
@@ -290,7 +290,7 @@ struct idiom_utils
 										    default:
 											    assert(false); //trap use cases
 									    }
-    								
+
 								    return result;
 							    }
 					    }
@@ -350,10 +350,10 @@ struct expr_type_resolver : expression_visitor
 
     private:
 		  typedef std::stack<variant>		 expr_stack;
-  		
+
 		  expr_stack				stack_;
-		  bool							is_variant_;	
-		  operator_registry operators_;  
+		  bool							is_variant_;
+		  operator_registry operators_;
 		  local_variables		local_;
 		  XSSContext				ctx_;
 
@@ -384,12 +384,12 @@ struct translator_schema : object_schema<T>
 	};
 
 template <typename T>
-struct base_idiom_schema : object_schema<T>  
+struct base_idiom_schema : object_schema<T>
   {
     virtual void declare_base()
       {
-        implements<xss_idiom>();
-        writeonly_property<DynamicArray>("types", &T::setTypes);
+        this->template implements<xss_idiom>();
+        this->template writeonly_property<DynamicArray>("types", &T::setTypes);
       }
   };
 } //namespace

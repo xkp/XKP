@@ -25,7 +25,7 @@ void cpp_code::for_(stmt_for& info)
 
     add_line(ss.str(), true);
     add_line("{", true);
-			render_code(info.for_code, indent_ + 1);
+		render_code(info.for_code, indent_ + 1);
 		add_line("}", true);
 	}
 
@@ -121,18 +121,15 @@ str cpp_idiom::resolve_this(XSSContext ctx)
                 xss_throw(error);
               }
 
-            if (iid == "application")
-              {
-                return "";
-              }
-
             //another use case, we might have an instance that has an internal id
 	          //which means a name to be used in code instead of the plain instance name
 	          XSSObject obj = ctx->resolve_instance(iid);
 	          if (obj && obj->has("internal_id"))
 		          {
 			          iid = variant_cast<str>(dynamic_get(obj, "internal_id"), str());
-			          assert(!iid.empty());
+
+                // so i need some internal_id emptys
+			          //assert(!iid.empty());
 		          }
 
             return iid;
@@ -152,10 +149,24 @@ str cpp_idiom::resolve_separator(XSSObject lh)
 	}
 
 //cpp_expression_renderer
+void cpp_expression_renderer::push(variant operand, bool top)
+  {
+		if (top && assigner)
+			{
+				str ass = resolve_assigner(operand, XSSObject(), assigner);
+				push_rendered(ass, 0, operand.get_schema()); 
+			}
+
+    stack_.push(operand);
+  }
+
 str cpp_expression_renderer::resolve_assigner(variant operand, XSSObject instance, assign_info* ai)
 	{
 		XSSProperty prop;
 		str					result;
+
+    XSSObject caller = get_instance(operand);
+    str separator = ctx_->getIdiom()->resolve_separator(caller);
 
 		if (operand.is<expression_identifier>())
 			{
@@ -168,7 +179,8 @@ str cpp_expression_renderer::resolve_assigner(variant operand, XSSObject instanc
 				result = ar.value;
 
 				//here comes the hacky hoo
-				size_t last_dot = result.find_last_of("->");
+				//size_t last_dot = result.find_last_of("->");
+        size_t last_dot = result.find_last_of(separator);
 				if (last_dot != str::npos)
 					{
 						size_t count = result.size() - last_dot;
@@ -193,7 +205,8 @@ str cpp_expression_renderer::resolve_assigner(variant operand, XSSObject instanc
 						if (result.empty())
 							return set_xss;
 						else
-							return result + "->" + set_xss;
+							//return result + "->" + set_xss;
+              return result + separator + set_xss;
 					}
 				else if (!set_fn.empty())
           {
@@ -201,15 +214,17 @@ str cpp_expression_renderer::resolve_assigner(variant operand, XSSObject instanc
 						if (result.empty())
 							return set_fn;
 						else
-							return result + "->" + set_fn;
+							//return result + "->" + set_fn;
+              return result + separator + set_fn;
           }
         else if (!prop->set.empty())
 					{
 						ai->type = FN_CALL;
 						if (result.empty())
-							return "set_" + prop->name;
+							return prop->name + "_set";
 						else
-							return result + "->set_" + prop->name;
+							//return result + "->" + prop->name + "_set";
+              return result + separator + prop->name + "_set";
 					}
       }
 
@@ -219,19 +234,21 @@ str cpp_expression_renderer::resolve_assigner(variant operand, XSSObject instanc
 
 void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int push_count, bool top)
   {
-    variant arg1, arg2;
-    switch(pop_count)
-      {
-        case 0: break;
-        case 1: arg1 = stack_.top(); stack_.pop(); break;
-        case 2:
-          {
-            arg2 = stack_.top(); stack_.pop();
-            arg1 = stack_.top(); stack_.pop();
-            break;
-          }
-        default: assert(false);
-      }
+		if (capturing_property_ && op != op_dot)
+			{
+				//the dot chain has stopped, lets collect
+				//td: unfortunately this solution only works for straight dot chains. 
+				//I'll worry about it later
+
+				variant prop = stack_.top(); 
+				capturing_property_ = false;
+
+				already_rendered ar;
+				ar.value = render_captured_property();
+				ar.object = prop;
+
+				stack_.push(ar);
+			}
 
 		if (top && assigner)
 			{
@@ -239,70 +256,36 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
 															//for now
 			}
 
+    variant arg1, arg2;
     int op_prec = idiom_utils::get_operator_prec(op);
+    switch(op)
+      {
+        // add here the operators that I'll customize
+				case op_dot:
+        case op_dot_call:
+          {
+            switch(pop_count)
+              {
+                case 0: break;
+                case 1: arg1 = stack_.top(); stack_.pop(); break;
+                case 2:
+                  {
+                    arg2 = stack_.top(); stack_.pop();
+                    arg1 = stack_.top(); stack_.pop();
+                    break;
+                  }
+                default: assert(false);
+              }
+          }
+      }
+
     switch(op)
       {
         case op_dec:
         case op_inc:
-          {
-						assign_info ai;
-						str ass = resolve_assigner(arg1, XSSObject(), &ai);
-
-						int prec;
-            str os = operand_to_string(arg1, XSSObject(), &prec);
-
-						std::stringstream ss;
-						switch (ai.type)
-							{
-								case VANILLA:
-									{
-										if (op_prec < prec)
-                      ss << "(" << os << ")" << idiom_utils::get_operator_str(op);
-										else
-											ss << os << idiom_utils::get_operator_str(op);
-										break;
-									}
-
-								case FN_CALL:
-									{
-										str op_str = idiom_utils::get_operator_str(op);
-										op_str.erase(op_str.end() - 1); //now this is too much fun
-
-										ss << ass << "(" << os << " " << op_str << " 1)";
-										break;
-									}
-								default:
-									assert(false); //use case trap
-							}
-						
-
-            //std::stringstream ss;
-            //if (op_prec < prec)
-            //  ss << "(" << os << ")" << operator_str[op];
-            //else
-            //  ss << os << operator_str[op];
-
-            push_rendered(ss.str(), op_prec, arg1.get_schema());
-            break;
-          }
-
         case op_unary_plus:
         case op_unary_minus:
         case op_not:
-          {
-            int prec;
-            str os = operand_to_string(arg1, XSSObject(), &prec);
-
-            std::stringstream ss;
-            if (op_prec < prec)
-              ss << idiom_utils::get_operator_str(op) << "(" << os << ")";
-            else
-              ss << idiom_utils::get_operator_str(op) << os;
-
-            push_rendered(ss.str(), op_prec, arg1.get_schema());
-            break;
-          }
-
         case op_assign:
         case op_plus_equal:
         case op_minus_equal:
@@ -310,15 +293,6 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
         case op_div_equal:
         case op_shift_right_equal:
         case op_shift_left_equal:
-          {
-						param_list error;
-						error.add("id", SCPPInvalidOperator);
-						error.add("desc", SCPPAssignOperator);
-
-						xss_throw(error);
-						break;
-          }
-
         case op_mult:
         case op_divide:
         case op_mod:
@@ -337,22 +311,15 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
         case op_le:
         case op_and:
         case op_or:
+
+        case op_array:
+        case op_index:
+        case op_call:
+        case op_func_call:
+        case op_parameter:
           {
-            int p1;
-            int p2;
-
-						str os1 = operand_to_string(arg1, XSSObject(), &p1);
-            str os2 = operand_to_string(arg2, XSSObject(), &p2); //td: resolve properties and stuff
-
-            if (op_prec < p1)
-              os1 = "(" + os1 + ")";
-
-            if (op_prec < p2)
-              os2 = "(" + os2 + ")";
-
-            std::stringstream ss;
-            ss << os1 << " " << idiom_utils::get_operator_str(op) << " " << os2;
-            push_rendered(ss.str(), op_prec, variant());
+            // execute exec_operator of base class with the same parameters
+            expression_renderer::exec_operator(op, pop_count, push_count, top);
             break;
           }
 
@@ -373,7 +340,7 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
 					      }
 			      }
 			
-            str           s2 = operand_to_string(arg2, caller);
+            str       s2 = operand_to_string(arg2, caller);
             XSSObject o2 = get_instance(caller, s2);
 
             XSSProperty prop = get_property(caller, s2);
@@ -386,29 +353,58 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
 								break;
 							}
 
+
+						//And since I am on it...
+						//there is a use case where some properties need a variable to represent them 
+						//unfortunately such variables need the whole property chain in order to be effective
+						if (prop && prop->has("property_xss"))
+							{
+								assert(!capturing_property_); //only a variable property per schema, please
+								capturing_property_ = true; 
+
+								capture_property_.prop = prop;
+								capture_property_.xss  = variant_cast<str>(dynamic_get(prop, "property_xss"), str());
+
+								for(int i = 0; i < capture_property_.xss.size(); i++)
+									{
+										if (capture_property_.xss[i] == '\'')
+											capture_property_.xss[i] ='"';
+									}
+
+								push_rendered(operand_to_string(arg1), op_prec, prop);
+								break;
+							}
+
+
             bool has_getter = prop && !prop->get.empty();
 
             std::stringstream ss;
             ss << operand_to_string(arg1);
 
 						str separator = ctx_->getIdiom()->resolve_separator(caller);
+            if (!ss.str().empty())
+              ss << separator;
             
 						if (top && assigner)
 							{
-								ss << separator << resolve_assigner(arg2, caller, assigner);	
+								ss << resolve_assigner(arg2, caller, assigner);	
 							}
 						else if (prop)
               {
-                str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
-                if (!get_fn.empty())
-                  ss << separator << get_fn << "()";
+                str get_fn  = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
+                str get_xss = variant_cast<str>(dynamic_get(prop, "get_xss"), ""); 
+
+                if (!get_xss.empty())
+                  ss << get_xss;
+                else if (!get_fn.empty())
+                  ss << get_fn << "()";
                 else if (has_getter)
-                  ss << separator << s2 << "_get()";
-                else   
-                  ss << separator << s2;
+                  ss << s2 << "_get()";
+                else
+                  ss << s2;
               }
             else 
-               ss << separator << s2;
+               ss << s2;
 
             if (prop)
               push_rendered(ss.str(), op_prec, prop);
@@ -430,152 +426,6 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
             break;
           }
 
-        case op_func_call:
-          {
-            //td!!! this is silly, function calls ( foo(bar) instead of foo1.foo(bar) ) configure
-            //the stack differently, so we must duplicate the code.  
-          
-            std::stringstream result;
-
-						str caller = operand_to_string(arg1);
-
-						if (caller == "xss_breakpoint")
-						{
-							str xxx("Breakpoint here");
-						}
-
-
-            result << caller << "(";
-
-            int args = arg2;
-            //pop the arguments
-	      		std::vector<str> params;
-            for(int i = 0; i < args; i++)
-              {
-                variant arg  = stack_.top(); stack_.pop();
-                str     sarg = operand_to_string(arg);
-                
-                XSSProperty prop = get_property(arg);
-                if (prop)
-                  {
-                    str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
-                    if (!get_fn.empty())
-                      sarg = get_fn + "()";
-                    else if (!prop->get.empty())
-                      sarg = "get_" + sarg + "()";
-                  }
-
-                params.push_back(sarg);
-			        }
-			  
-			      std::vector<str>::reverse_iterator pit = params.rbegin();
-			      std::vector<str>::reverse_iterator pnd = params.rend();
-			      int i = 0;
-			      for(; pit != pnd; pit++, i++)
-			        {
-  				      result << *pit;
-                if (i < args - 1)
-                  {
-                    result << ", ";
-                  }
-              }
-
-            result << ")";
-
-            push_rendered(result.str(), op_prec, variant()); //td: we could find out the type here or something
-            break;
-          }
-
-        case op_call:
-          {
-            std::stringstream result;
-
-            result << "(";
-
-            int args = arg1;
-            //pop the arguments
-	      		std::vector<str> params;
-            for(int i = 0; i < args; i++)
-              {
-                variant arg  = stack_.top(); stack_.pop();
-                str     sarg = operand_to_string(arg);
-                
-                XSSProperty prop = get_property(arg);
-                if (prop)
-                  {
-                    str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
-                    if (!get_fn.empty())
-                      sarg = get_fn + "()";
-                    else if (!prop->get.empty())
-                      sarg = "get_" + sarg + "()";
-                  }
-
-                params.push_back(sarg);
-			        }
-			  
-			      std::vector<str>::reverse_iterator pit = params.rbegin();
-			      std::vector<str>::reverse_iterator pnd = params.rend();
-			      int i = 0;
-			      for(; pit != pnd; pit++, i++)
-			        {
-  				      result << *pit;
-                if (i < args - 1)
-                  {
-                    result << ", ";
-                  }
-              }
-
-            result << ")";
-
-            variant top = stack_.top(); stack_.pop();
-            str caller = operand_to_string(top);
-
-            push_rendered(caller + result.str(), op_prec, variant()); //td: we could find out the type here or something
-            break;
-          }
-
-        case op_parameter:
-          {
-            //do nothing, this is just a notification
-            break;
-          }
-
-        case op_array:
-          {
-            std::stringstream result;
-
-            result << "[";
-
-						std::vector<str> params;
-						int arg_count = arg1;
-            for(int i = 0; i < arg_count; i++)
-							{
-								variant opnd = stack_.top(); stack_.pop();
-								params.push_back( operand_to_string(opnd) );
-							}
-
-						std::vector<str>::reverse_iterator arit = params.rbegin();
-						std::vector<str>::reverse_iterator arnd = params.rend();
-						for(; arit != arnd; arit++)
-							{
-								result << *arit;
-								if (arit + 1 != arnd)
-									result << ", ";
-							}
-
-            result << "]";
-            push_rendered(result.str(), op_prec, variant()); 
-						break;
-          }
-
-        case op_index:
-          {
-            std::stringstream result;
-						result << operand_to_string(arg1) << "[" << operand_to_string(arg2) << "]";
-            push_rendered(result.str(), op_prec, variant()); 
-            break;
-          }
-
 				default:
           assert(false); //td:
       }
@@ -590,6 +440,12 @@ str cpp_expression_renderer::get()
         error.add("desc", SCPPEmptyExpression);
         xss_throw(error);
       }
+
+		if (capturing_property_)
+			{
+				capturing_property_ = false;
+				return render_captured_property();
+			}
 
     variant result = stack_.top();
     if (result.is<already_rendered>())
@@ -676,16 +532,12 @@ str cpp_expression_renderer::operand_to_string(variant operand, XSSObject parent
 					          //which means a name to be used in code instead of the plain instance name
 					          XSSObject obj = ctx_->resolve_instance(result);
 
-                    str iid = variant_cast<str>(dynamic_get(obj, "id"), str());
-                    if (iid == "application")
-                      {
-                        result = "";
-                      }
-                    else
 					          if (obj && obj->has("internal_id"))
 						          {
 							          result = variant_cast<str>(dynamic_get(obj, "internal_id"), str());
-							          assert(!result.empty());
+
+                        // so i need some internal_id emptys
+							          //assert(!result.empty());
 						          }
 				          }
               }

@@ -10,17 +10,6 @@
     XKPPlacementLayout *layout;
 
 <xss:class entry_point="generate_layouts">
-    method qt_placement(string pl)
-    {
-        for(int i = 0; i < xs_placement_values.size; ++i)
-        {
-            if(xs_placement_values[i] == pl)
-                return qt_placement_values[i];
-        }
-        
-        return qt_placement_values[0];
-    }
-  
     method generate_layouts()
 	{
 	    int idx = 0;
@@ -45,13 +34,18 @@
 
 			for(var child in cur_cmp.children)
 			{
+				// make a parent property of current cmp
 				child.parent = cur_cmp;
-				string plt = qt_placement(child.placement);
-
+				
+				var pl_prop = child.find_property("placement");
+				string str_plt = pl_prop.generate_value();
+				if(str_plt == "null")
+					str_plt = "XKPPlacementLayout::None";
+				
 				out(indent = 0)
 				{
-					<xss:e value="child.internal_id"/>->setProperty(placementName, <xss:e value="plt"/>);
-				    layout->addWidget(<xss:e value="child.internal_id"/>, <xss:e value="plt"/>);
+					<xss:e value="child.internal_id"/>->setProperty(placementName, <xss:e value="str_plt"/>);
+				    layout->addWidget(<xss:e value="child.internal_id"/>, <xss:e value="str_plt"/>);
 				}
 
 			    if(child.container)
