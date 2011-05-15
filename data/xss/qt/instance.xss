@@ -3,12 +3,12 @@
 	{
 		for(var p in cmp.properties)
 		{
+			string prop_type = p.type;
+
 			if(p.set || p.get)
 			{
-				string prop_type = p.type;
-
-				string set_prop_name = "set_" + p.name + "(" + prop_type + " value)";
-				string get_prop_name = "get_" + p.name + "(void)";
+				string set_prop_name = p.name + "_set(" + prop_type + " value)";
+				string get_prop_name = p.name + "_get(void)";
 
 				string var_name = "_" + p.name;
 				string var_decl = prop_type + " " + var_name;
@@ -19,13 +19,19 @@
 				{
 					void <xss:e value="main_class"/>::<xss:e value="set_prop_name"/>
 					<xss:open_brace/>
-						<xss:e value="var_name"/> = value;
 				}
 				if(p.set)
 				{
 					out(indent = 1)
 					{
 						<xss:e value="p.set.generate()"/>
+					}
+				}
+				else
+				{
+					out(indent = 1)
+					{
+						<xss:e value="var_name"/> = value;
 					}
 				}
 				out(indent = 0)
@@ -47,9 +53,15 @@
 						<xss:e value="p.get.generate()"/>
 					}
 				}
+				else
+				{
+					out(indent = 1)
+					{
+						return <xss:e value="var_name"/>;
+					}
+				}
 				out(indent = 0)
 				{
-						return <xss:e value="var_name"/>;
 					<xss:close_brace/>
 					<xss:return/>
 				}
@@ -62,8 +74,14 @@
 				methods += get_prop_name;
 			}
 			else
+			if(!p.get_fn && !p.set_fn && !p.get_xss && !p.set_xss)
 			{
-				// do nothing in C/C++
+				// add a data member variable with a property name
+				// how to know is property is added on xs code or it is defined in classes section?
+				if(prop_type == "")
+					prop_type = "QVariant";
+				
+				priv_vars += prop_type + " " + p.name;
 			}
 		}
 	} // if(cmp.properties)

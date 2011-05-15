@@ -4,50 +4,46 @@
     <class><xss:e value="main_class"/></class>
 
 <xss:class entry_point="generate_ui">
-    method qt_placement(string pl)
-    {
-        for(int i = 0; i < xs_placement_values.size; ++i)
-        {
-            if(xs_placement_values[i] == pl)
-                return qt_placement_values[i];
-        }
-        
-        return qt_placement_values[0];
-    }
-  
     method generate_properties(var cmp, int ind)
     {
         for(var p in cmp.properties)
   	    {
-            // if i do this, type mismatch error is dispatched
-            // the error is produced in vm.cpp on 'case i_binary_operator:'
-            // when execute the line: 'variant        result = e->exec(arg1, arg2);'
-            //string prop_value = p.value;
-            //if(prop_value == "null")
-            //    continue;
-
-			// these line make a type mismatch
-            //if(p.qt_ui != "true")
-			      if(!p.qt_ui)
-				        continue;
-                
-            // don't generate property without assign value
-            var prop_value = compiler.evaluate_property(cmp, p.name);
-            if(!prop_value)
-                continue;
-            
+			if(!p.qt_ui)
+				continue;
+			
             string prop_type = p.type;
+            string prop_name = p.name;
+			var prop = cmp.find_property(prop_name);
+			
+			if(!p.value)
+			{
+				if(p.default_value)
+				{
+					prop.value = p.default_value;
+					p.value = p.default_value;
+				}
+				else
+				{
+					// don't generate property whithout assign value
+					continue;
+				}
+			}
+			prop_value = p.value;
+			
             if(prop_type == "int")
                 prop_type = "number";
-                
-            // translate property name if it not coincided
-            string prop_name = p.name;
+            
+            // translate property name if it not coincided with qt_name
             if(p.qt_name)
                 prop_name = p.qt_name;
-                
-            if(prop_name == "placement")
-                prop_value = qt_placement(prop_value);
-        
+				
+			if(p.custom_type)
+			{
+				prop_type = "enum";
+				var pvalue = prop.generate_value();
+				prop_value = pvalue;
+			}
+			
             out(indent = ind)
             {
                 <property name="<xss:e value="prop_name"/>">
@@ -57,46 +53,45 @@
         }
     }
     
-	  // this recursive method is for generate all components, 
-	  // inclusively containers components with childs
-	  method generate_component(var cmp, var parent, int ind)
-	  {
-        //if(cmp.qt_ui != "true")
-        if(!cmp.qt_ui)
-            return;
-        
-		    out(indent = ind)
-		    {
-            <widget class="<xss:e value="cmp.tag_name"/>" name="<xss:e value="cmp.id"/>">
-                <property name="geometry">
-                    <rect>
-                        <x><xss:e value="cmp.x"/></x>
-                        <y><xss:e value="cmp.y"/></y>
-                        <width><xss:e value="cmp.width"/></width>
-                        <height><xss:e value="cmp.height"/></height>
-                    </rect>
-                </property>
-		    }
-        
-        generate_properties(cmp, ind);
-        
-        // generate all childrens recursively
-		    if(cmp.children)
-		    {
-			      for(var child in cmp.children)
-				        generate_component(child, cmp, ind + 1);
-		    }
-	
-        out(indent = ind)
-        {
-            </widget>
-        }
-	  }
+	// this recursive method is for generate all components, 
+	// inclusively containers components with childs
+	method generate_component(var cmp, var parent, int ind)
+	{
+		if(!cmp.qt_ui)
+			return;
 
-	  method generate_ui()
-	  {
-		    generate_component(application, null, 1);
-	  }
+		out(indent = ind)
+		{
+			<widget class="<xss:e value="cmp.tag_name"/>" name="<xss:e value="cmp.id"/>">
+				<property name="geometry">
+					<rect>
+						<x><xss:e value="cmp.x"/></x>
+						<y><xss:e value="cmp.y"/></y>
+						<width><xss:e value="cmp.width"/></width>
+						<height><xss:e value="cmp.height"/></height>
+					</rect>
+				</property>
+		}
+
+		generate_properties(cmp, ind);
+
+		// generate all childrens recursively
+		if(cmp.children)
+		{
+			for(var child in cmp.children)
+				generate_component(child, cmp, ind + 1);
+		}
+
+		out(indent = ind)
+		{
+			</widget>
+		}
+	}
+
+	method generate_ui()
+	{
+		generate_component(application, null, 1);
+	}
 </xss:class>
 
     <layoutdefault spacing="3" margin="5"/>
