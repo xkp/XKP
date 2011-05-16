@@ -63,7 +63,6 @@ struct cpp_expression_renderer : expression_renderer
 
     virtual str resolve_assigner(variant operand, XSSObject instance, assign_info* ai);
     virtual str operand_to_string(variant operand, XSSObject parent = XSSObject(), int* prec = null);
-    virtual str get();
   };
 
 //typeinfo

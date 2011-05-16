@@ -431,70 +431,6 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
       }
   }
 
-str cpp_expression_renderer::get()
-  {
-    if(stack_.empty())
-      {
-        param_list error;
-        error.add("id", SCPPEmptyStack);
-        error.add("desc", SCPPEmptyExpression);
-        xss_throw(error);
-      }
-
-		if (capturing_property_)
-			{
-				capturing_property_ = false;
-				return render_captured_property();
-			}
-
-    variant result = stack_.top();
-    if (result.is<already_rendered>())
-      {
-        already_rendered ar = result;
-        return ar.value;
-      }
-		if (result.is<expression_identifier>())
-			{
-				expression_identifier ei = result;
-				if (assigner)
-					{
-						if (ctx_->has_var(ei.value))
-							return ei.value;
-
-						XSSObject this_ = variant_cast<XSSObject>(ctx_->this_, XSSObject());
-						str ass = resolve_assigner(ei, this_, assigner);
-
-						xss_idiom* idiom = ctx_->idiom_;
-						str result = idiom->resolve_this(ctx_);
-						if (result.empty())
-							return ass;
-
-						return result + "->" + ass;
-					}
-
-				//test the this pointer
-        XSSProperty prop = ctx_->get_property(ei.value);
-				XSSMethod mthd = ctx_->get_method(ei.value);
-        if (prop || mthd)
-          {
-            str this_str = ctx_->idiom_->resolve_this(ctx_);
-            if (!this_str.empty())
-              return this_str + "->" + ei.value; 
-          }
-
-				return ei.value;
-			}
-    else if (result.is<str>())
-      {
-        str res = result;
-        str ss = '"' + res + '"';
-        return ss;
-      }
-
-    str to_string = result;
-    return to_string;
-  }
-
 str cpp_expression_renderer::operand_to_string(variant operand, XSSObject parent, int* prec)
   {
     str result;
@@ -518,7 +454,7 @@ str cpp_expression_renderer::operand_to_string(variant operand, XSSObject parent
 										result = prop->resolve_value();
 										str this_str = ctx_->idiom_->resolve_this(ctx_);
                     if (!this_str.empty())
-                      result = this_str + "->" + result;  
+                      result = this_str + "->" + result;
 									}
 								else if (mthd)
                   {
