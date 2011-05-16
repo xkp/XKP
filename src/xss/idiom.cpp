@@ -853,7 +853,7 @@ schema* expr_type_resolver::get()
 
 str expr_type_resolver::type_name()
 	{
-		assert(stack_.size() == 1);
+		assert(stack_.size() == 1); 
 
 		schema* s = resolve_type(stack_.top());
 		if (s)
@@ -861,11 +861,14 @@ str expr_type_resolver::type_name()
 		else
 			{
 				XSSObject obj = resolve_xss_type(stack_.top());	
-				if (obj->has("internal_id"))
-					return variant_cast<str>(dynamic_get(obj, "internal_id"), str());
+				if (obj)
+					{
+						if (obj->has("internal_id"))
+							return variant_cast<str>(dynamic_get(obj, "internal_id"), str());
 
-				if (obj->has("id"))
-					return variant_cast<str>(dynamic_get(obj, "id"), str());
+						if (obj->has("id"))
+							return variant_cast<str>(dynamic_get(obj, "id"), str());
+					}
 			}
 
 		return "";
@@ -1019,6 +1022,17 @@ XSSObject expr_type_resolver::resolve_xss_type(variant var)
 		else if (var.is<expression_identifier>())
 			{
 				expression_identifier ei = var;
+				XSSObject		obj = ctx_->resolve_instance(ei.value);
+				XSSProperty	prop;
+				if (obj)
+					{
+						return obj->type();
+					}
+				else if (prop = ctx_->get_property(ei.value))
+					{
+						return ctx_->get_xss_type(prop->type);
+					}
+
 				return ctx_->get_xss_type(ei.value); //td: variables
 			}
 
