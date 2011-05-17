@@ -42,7 +42,7 @@
             <property name="enabled" type="bool" qt_ui="true" set_fn="setEnabled" get_fn="isEnabled"/>
 			
 			<property name="placement" type="Placement" custom_type="true" qt_ui="true" default_value="Placement.none" set_xss="setProperty(placementName, <xss:e v='value'/>)" 
-                      property_xss="(XKPPlacementLayout::Placement)<xss:e v='path'/>.property(placementName).toInt()"/>
+                      property_xss="(XKPPlacementLayout::Placement)<xss:e v='path'/>->property(placementName).toInt()"/>
         </properties>
     </class>
 

@@ -192,6 +192,9 @@ str expression_renderer::resolve_assigner(variant operand, XSSObject instance, a
 		XSSProperty prop;
 		str					result;
 
+    XSSObject caller = get_instance(operand);
+    str separator = ctx_->getIdiom()->resolve_separator(caller);
+
 		if (operand.is<expression_identifier>())
 			{
 				expression_identifier ei = operand;
@@ -203,7 +206,7 @@ str expression_renderer::resolve_assigner(variant operand, XSSObject instance, a
 				result = ar.value;
 
 				//here comes the hacky hoo
-				size_t last_dot = result.find_last_of(".");
+        size_t last_dot = result.find_last_of(separator);
 				if (last_dot != str::npos)
 					{
 						size_t count = result.size() - last_dot;
@@ -228,7 +231,7 @@ str expression_renderer::resolve_assigner(variant operand, XSSObject instance, a
 						if (result.empty())
 							return set_xss;
 						else
-							return result + "." + set_xss;
+              return result + separator + set_xss;
 					}
 				else if (!set_fn.empty())
           {
@@ -236,7 +239,7 @@ str expression_renderer::resolve_assigner(variant operand, XSSObject instance, a
 						if (result.empty())
 							return set_fn;
 						else
-							return result + "." + set_fn;
+              return result + separator + set_fn;
           }
         else if (!prop->set.empty())
 					{
@@ -244,7 +247,7 @@ str expression_renderer::resolve_assigner(variant operand, XSSObject instance, a
 						if (result.empty())
 							return prop->name + "_set";
 						else
-							return result + "." + prop->name + "_set";
+              return result + separator + prop->name + "_set";
 					}
       }
 
@@ -460,7 +463,7 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
 					      }
 			      }
 			
-            str           s2 = operand_to_string(arg2, caller);
+            str       s2 = operand_to_string(arg2, caller);
             XSSObject o2 = get_instance(caller, s2);
 
             XSSProperty prop = get_property(caller, s2);
@@ -702,6 +705,9 @@ str expression_renderer::get()
       }
 		if (result.is<expression_identifier>())
 			{
+				xss_idiom* idiom = ctx_->idiom_;
+        str separator = idiom->resolve_separator();
+
 				expression_identifier ei = result;
 				if (assigner)
 					{
@@ -711,12 +717,11 @@ str expression_renderer::get()
 						XSSObject this_ = variant_cast<XSSObject>(ctx_->this_, XSSObject());
 						str ass = resolve_assigner(ei, this_, assigner);
 
-						xss_idiom* idiom = ctx_->idiom_;
 						str result = idiom->resolve_this(ctx_);
 						if (result.empty())
 							return ass;
 
-						return result + "." + ass;
+						return result + separator + ass;
 					}
 
 				//test the this pointer
@@ -726,7 +731,7 @@ str expression_renderer::get()
           {
             str this_str = ctx_->idiom_->resolve_this(ctx_);
             if (!this_str.empty())
-              return this_str + "." + ei.value; 
+              return this_str + separator + ei.value; 
           }
 
 				return ei.value;

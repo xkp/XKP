@@ -1,6 +1,18 @@
 on pushButton_1.click()
 {
-	var pl1 = placement;
+	// it's neccesary enum cast in c++
+	//placement = (placement + 1) % 8;
+	
+	var pl1 = pushButton_1.placement;
+	
+	Placement pl2 = Placement.left;
+	var pl3 = Placement.right;
+	placement = Placement.top;
+
+	pushButton_2.caption = "Clicked";
+	caption = "Other Clicked";
+	pushButton_2.width += pushButton_1.width;
+	application.reset("600");
 }
 
 on pushButton_2.click()
@@ -12,7 +24,10 @@ on pushButton_2.click()
 
 on pushButton_3.click()
 {
-	placement = (placement + 1) % 8;
+	// this make a deficient translation on second operand 
+	// with placement property
+	//placement = (placement + 1) % 8;
+	
 	edtText.readonly = !edtText.readonly;
 }
 

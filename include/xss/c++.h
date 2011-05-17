@@ -58,12 +58,9 @@ struct cpp_expression_renderer : expression_renderer
       : expression_renderer(ctx, id_as_this) {}
 
     //expression_visitor
-    virtual void push(variant operand, bool top);
     virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top);
 
-    virtual str resolve_assigner(variant operand, XSSObject instance, assign_info* ai);
     virtual str operand_to_string(variant operand, XSSObject parent = XSSObject(), int* prec = null);
-    virtual str get();
   };
 
 //typeinfo

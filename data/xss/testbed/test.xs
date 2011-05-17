@@ -1,12 +1,20 @@
-// on btn1.click()
-// {
+on btn1.click()
+{
+	var pl = placement;
+	
+	placement = (placement + 1) % 8;
+	Placement pl = btn1.placement;
+
+
+	
+	
 	// btn2.caption = "Clicked";
 	
 	// caption = "btnn1 was clicked!";
 
 	// btn2.width += btn1.width;
 	// application.reset(600);
-// }
+}
 
 // property target : string
 // {
@@ -20,10 +28,10 @@
 	// }
 // }
 
-method reset(string s)
-{
-	var xx = btn4.placement;
-}
+// method reset(string s)
+// {
+	// var xx = btn4.placement;
+// }
 
 // on btn2.click()
 // {

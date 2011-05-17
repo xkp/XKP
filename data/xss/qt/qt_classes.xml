@@ -41,8 +41,8 @@
             <property name="visible" type="bool" default_value="true" set_fn="setVisible" get_fn="isVisible"/>
             <property name="enabled" type="bool" default_value="true" qt_ui="true" set_fn="setEnabled" get_fn="isEnabled"/>
 			
-			<property name="placement" type="Placement" qt_ui="true" custom_type="true" default_value="Placement.none" set_xss="setProperty(placementName, <xss:e v='value'/>)" 
-					  property_xss="(XKPPlacementLayout::Placement)<xss:e v='path'/>.property(placementName).toInt()"/>
+			<property name="placement" type="Placement" qt_ui="false" custom_type="true" default_value="Placement.none" set_xss="setProperty(placementName, <xss:e v='value'/>)" 
+					  property_xss="(XKPPlacementLayout::Placement)<xss:e v='path'/>->property(placementName).toInt()"/>
         </properties>
     </class>
 

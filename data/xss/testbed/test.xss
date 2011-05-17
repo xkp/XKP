@@ -10,23 +10,16 @@
 			if(!p.qt_ui)
 				continue;
 				
-			var prop_value = compiler.evaluate_property(cmp, p.name); 
-			var prop = cmp.find_property(p.name);
-			string p_value = prop.generate_value();
+			//var prop_value = compiler.evaluate_property(cmp, p.name); 
+			//var prop = cmp.find_property(p.name);
+			//string p_value = prop.generate_value();
 		
-			//compiler.log(cmp.id + "." + p.name + " = " + p.value + " = " + prop.value + " = " + prop_value + " = " + p_value);
-			//compiler.log(cmp.id + "." + p.name + " = " + p_value + " " + prop_value);
-			
 			if(!p.value && p.default_value)
 			{
-				prop.value = p.default_value;
-				p_value = prop.generate_value();
+				//prop.value = p.default_value;
+				//p_value = prop.generate_value();
 			}
 			
-			out()
-			{
-				<xss:e v="cmp.id"/>.<xss:e v="p.name"/> = <xss:e v="prop.generate_value()"/> or = <xss:e v="p_value"/>;
-			}
         }
 
 		for(var mthd in cmp.methods)
@@ -34,6 +27,17 @@
 			out()
 			{
 				<xss:e v="mthd.code.generate()"/>
+			}
+		}
+
+		for(var evt in cmp.events)
+		{
+			for(var impl in evt.impls)
+			{
+				out(indent = 1)
+				{
+					<xss:e value="impl.generate()"/>
+				}
 			}
 		}
     }
