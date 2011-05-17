@@ -192,6 +192,9 @@ str expression_renderer::resolve_assigner(variant operand, XSSObject instance, a
 		XSSProperty prop;
 		str					result;
 
+    XSSObject caller = get_instance(operand);
+    str separator = ctx_->getIdiom()->resolve_separator(caller);
+
 		if (operand.is<expression_identifier>())
 			{
 				expression_identifier ei = operand;
@@ -203,7 +206,7 @@ str expression_renderer::resolve_assigner(variant operand, XSSObject instance, a
 				result = ar.value;
 
 				//here comes the hacky hoo
-				size_t last_dot = result.find_last_of(".");
+        size_t last_dot = result.find_last_of(separator);
 				if (last_dot != str::npos)
 					{
 						size_t count = result.size() - last_dot;
@@ -228,7 +231,7 @@ str expression_renderer::resolve_assigner(variant operand, XSSObject instance, a
 						if (result.empty())
 							return set_xss;
 						else
-							return result + "." + set_xss;
+              return result + separator + set_xss;
 					}
 				else if (!set_fn.empty())
           {
@@ -236,7 +239,7 @@ str expression_renderer::resolve_assigner(variant operand, XSSObject instance, a
 						if (result.empty())
 							return set_fn;
 						else
-							return result + "." + set_fn;
+              return result + separator + set_fn;
           }
         else if (!prop->set.empty())
 					{
@@ -244,7 +247,7 @@ str expression_renderer::resolve_assigner(variant operand, XSSObject instance, a
 						if (result.empty())
 							return prop->name + "_set";
 						else
-							return result + "." + prop->name + "_set";
+              return result + separator + prop->name + "_set";
 					}
       }
 
@@ -460,7 +463,7 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
 					      }
 			      }
 			
-            str           s2 = operand_to_string(arg2, caller);
+            str       s2 = operand_to_string(arg2, caller);
             XSSObject o2 = get_instance(caller, s2);
 
             XSSProperty prop = get_property(caller, s2);
@@ -855,7 +858,7 @@ schema* expr_type_resolver::get()
 
 str expr_type_resolver::type_name()
 	{
-		assert(stack_.size() == 1);
+		assert(stack_.size() == 1); 
 
 		schema* s = resolve_type(stack_.top());
 		if (s)
@@ -863,11 +866,14 @@ str expr_type_resolver::type_name()
 		else
 			{
 				XSSObject obj = resolve_xss_type(stack_.top());	
-				if (obj->has("internal_id"))
-					return variant_cast<str>(dynamic_get(obj, "internal_id"), str());
+				if (obj)
+					{
+						if (obj->has("internal_id"))
+							return variant_cast<str>(dynamic_get(obj, "internal_id"), str());
 
-				if (obj->has("id"))
-					return variant_cast<str>(dynamic_get(obj, "id"), str());
+						if (obj->has("id"))
+							return variant_cast<str>(dynamic_get(obj, "id"), str());
+					}
 			}
 
 		return "";
@@ -1021,6 +1027,17 @@ XSSObject expr_type_resolver::resolve_xss_type(variant var)
 		else if (var.is<expression_identifier>())
 			{
 				expression_identifier ei = var;
+				XSSObject		obj = ctx_->resolve_instance(ei.value);
+				XSSProperty	prop;
+				if (obj)
+					{
+						return obj->type();
+					}
+				else if (prop = ctx_->get_property(ei.value))
+					{
+						return ctx_->get_xss_type(prop->type);
+					}
+
 				return ctx_->get_xss_type(ei.value); //td: variables
 			}
 

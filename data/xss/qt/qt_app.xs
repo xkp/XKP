@@ -5,11 +5,6 @@ on pushButton_1.click()
 	
 	var pl1 = pushButton_1.placement;
 	
-	
-	// these make an errors
-	//var pl0 = placement;
-	//Placement p0 = placement;
-	
 	Placement pl2 = Placement.left;
 	var pl3 = Placement.right;
 	placement = Placement.top;
@@ -29,7 +24,10 @@ on pushButton_2.click()
 
 on pushButton_3.click()
 {
-	placement = (placement + 1) % 8;
+	// this make a deficient translation on second operand 
+	// with placement property
+	//placement = (placement + 1) % 8;
+	
 	edtText.readonly = !edtText.readonly;
 }
 

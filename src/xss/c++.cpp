@@ -149,89 +149,6 @@ str cpp_idiom::resolve_separator(XSSObject lh)
 	}
 
 //cpp_expression_renderer
-void cpp_expression_renderer::push(variant operand, bool top)
-  {
-		if (top && assigner)
-			{
-				str ass = resolve_assigner(operand, XSSObject(), assigner);
-				push_rendered(ass, 0, operand.get_schema()); 
-			}
-
-    stack_.push(operand);
-  }
-
-str cpp_expression_renderer::resolve_assigner(variant operand, XSSObject instance, assign_info* ai)
-	{
-		XSSProperty prop;
-		str					result;
-
-    XSSObject caller = get_instance(operand);
-    str separator = ctx_->getIdiom()->resolve_separator(caller);
-
-		if (operand.is<expression_identifier>())
-			{
-				expression_identifier ei = operand;
-				prop = get_property(instance, ei.value);
-			}
-		else if (operand.is<already_rendered>())
-			{
-				already_rendered ar = operand;
-				result = ar.value;
-
-				//here comes the hacky hoo
-				//size_t last_dot = result.find_last_of("->");
-        size_t last_dot = result.find_last_of(separator);
-				if (last_dot != str::npos)
-					{
-						size_t count = result.size() - last_dot;
-						result.erase(result.end() - count, result.end());
-					}
-
-				prop = variant_cast<XSSProperty>(ar.object, XSSProperty());
-			}
-
-    if (prop)
-      {
-        str set_fn = variant_cast<str>(dynamic_get(prop, "set_fn"), ""); //let the outside world determine
-                                                                         //if a native function call shouls be made 
-
-        str set_xss = variant_cast<str>(dynamic_get(prop, "set_xss"), ""); //such world can request to parse xss
-
-				if (!set_xss.empty())
-					{
-						ai->type = XSS_RESOLVE;
-						ai->data = set_xss;
-
-						if (result.empty())
-							return set_xss;
-						else
-							//return result + "->" + set_xss;
-              return result + separator + set_xss;
-					}
-				else if (!set_fn.empty())
-          {
-						ai->type = FN_CALL;
-						if (result.empty())
-							return set_fn;
-						else
-							//return result + "->" + set_fn;
-              return result + separator + set_fn;
-          }
-        else if (!prop->set.empty())
-					{
-						ai->type = FN_CALL;
-						if (result.empty())
-							return prop->name + "_set";
-						else
-							//return result + "->" + prop->name + "_set";
-              return result + separator + prop->name + "_set";
-					}
-      }
-
-		ai->type = VANILLA;
-		return operand_to_string(operand, instance, null);
-	}
-
 void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int push_count, bool top)
   {
 		if (capturing_property_ && op != op_dot)
@@ -353,7 +270,6 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
 								break;
 							}
 
-
 						//And since I am on it...
 						//there is a use case where some properties need a variable to represent them 
 						//unfortunately such variables need the whole property chain in order to be effective
@@ -374,7 +290,6 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
 								push_rendered(operand_to_string(arg1), op_prec, prop);
 								break;
 							}
-
 
             bool has_getter = prop && !prop->get.empty();
 
@@ -445,6 +360,7 @@ str cpp_expression_renderer::operand_to_string(variant operand, XSSObject parent
             //here we ought to resolve a single symbol (ex width = 10)
             //thid *could* belong to the "this" pointer
             
+            str separator = ctx_->idiom_->resolve_separator();
             if (ctx_->idiom_)
               {
                 XSSProperty prop = ctx_->get_property(ei.value);
@@ -454,13 +370,13 @@ str cpp_expression_renderer::operand_to_string(variant operand, XSSObject parent
 										result = prop->resolve_value();
 										str this_str = ctx_->idiom_->resolve_this(ctx_);
                     if (!this_str.empty())
-                      result = this_str + "->" + result;
+                      result = this_str + separator + result;
 									}
 								else if (mthd)
                   {
                     str this_str = ctx_->idiom_->resolve_this(ctx_);
                     if (!this_str.empty())
-                      result = this_str + "->" + ei.value; //otherwise it doesnt get translated 
+                      result = this_str + separator + ei.value; //otherwise it doesnt get translated 
                   }
 				        else
 				          {
