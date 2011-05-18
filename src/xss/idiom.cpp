@@ -727,12 +727,36 @@ str expression_renderer::get()
 				//test the this pointer
         XSSProperty prop = ctx_->get_property(ei.value);
 				XSSMethod mthd = ctx_->get_method(ei.value);
-        if (prop || mthd)
+        if (prop)
           {
             str this_str = ctx_->idiom_->resolve_this(ctx_);
             if (!this_str.empty())
+              {
+                if (prop->has("property_xss"))
+                  {
+                    capture_property_.prop = prop;
+                    capture_property_.xss  = variant_cast<str>(dynamic_get(prop, "property_xss"), str());
+
+                    for(int i = 0; i < capture_property_.xss.size(); i++)
+                      {
+                        if (capture_property_.xss[i] == '\'')
+                          capture_property_.xss[i] ='"';
+                      }
+
+                    push_rendered(this_str, 0, prop);
+                    return render_captured_property();
+                  }
+
+                return this_str + separator + ei.value; 
+						}
+					}
+				else if (mthd)
+					{
+            str this_str = ctx_->idiom_->resolve_this(ctx_);
+            if (!this_str.empty())            str this_str = ctx_->idiom_->resolve_this(ctx_);
+						if (!this_str.empty())
               return this_str + separator + ei.value; 
-          }
+					}
 
 				return ei.value;
 			}
