@@ -3,6 +3,11 @@
 
 namespace xkp
 {
+
+	class xss_compiler
+		{
+
+		}
 }
 
 

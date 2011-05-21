@@ -14,6 +14,8 @@
 #include "boost/filesystem.hpp"
 namespace fs = boost::filesystem;
 
+//This is all going to hell
+
 namespace xkp{
 
 class xss_project : public boost::enable_shared_from_this<xss_project>
