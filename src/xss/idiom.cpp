@@ -294,22 +294,6 @@ str expression_renderer::render_captured_property()
 
 void expression_renderer::exec_operator(operator_type op, int pop_count, int push_count, bool top)
   {
-		if (capturing_property_ && op != op_dot)
-			{
-				//the dot chain has stopped, lets collect
-				//td: unfortunately this solution only works for straight dot chains. 
-				//I'll worry about it later
-
-				variant prop = stack_.top(); 
-				capturing_property_ = false;
-
-				already_rendered ar;
-				ar.value = render_captured_property();
-				ar.object = prop;
-
-				stack_.push(ar);
-			}
-
 		variant arg1, arg2;
     switch(pop_count)
       {
@@ -476,48 +460,56 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
 								break;
 							}
 
-						//And since I am on it...
-						//there is a use case where some properties need a variable to represent them 
-						//unfortunately such variables need the whole property chain in order to be effective
-						if (prop && prop->has("property_xss"))
-							{
-								assert(!capturing_property_); //only a variable property per schema, please
-								capturing_property_ = true; 
-
-								capture_property_.prop = prop;
-								capture_property_.xss  = variant_cast<str>(dynamic_get(prop, "property_xss"), str());
-
-								for(int i = 0; i < capture_property_.xss.size(); i++)
-									{
-										if (capture_property_.xss[i] == '\'')
-											capture_property_.xss[i] ='"';
-									}
-
-								push_rendered(operand_to_string(arg1), op_prec, prop);
-								break;
-							}
-
             bool has_getter = prop && !prop->get.empty();
 
             std::stringstream ss;
             ss << operand_to_string(arg1);
+
+						str separator = ctx_->getIdiom()->resolve_separator(caller);
+            if (!ss.str().empty())
+              ss << separator;
             
 						if (top && assigner)
 							{
-								ss << "." << resolve_assigner(arg2, caller, assigner);	
+								ss << resolve_assigner(arg2, caller, assigner);	
 							}
 						else if (prop)
               {
-                str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
-                if (!get_fn.empty())
-                  ss << "." << get_fn << "()";
+						    //And since I am on it...
+						    //there is a use case where some properties need a variable to represent them 
+						    //unfortunately such variables need the whole property chain in order to be effective
+						    if (prop->has("property_xss"))
+							    {
+								    assert(!capturing_property_); //only a variable property per schema, please
+
+								    capture_property_.prop = prop;
+								    capture_property_.xss  = variant_cast<str>(dynamic_get(prop, "property_xss"), str());
+
+								    for(int i = 0; i < capture_property_.xss.size(); i++)
+									    {
+										    if (capture_property_.xss[i] == '\'')
+											    capture_property_.xss[i] ='"';
+									    }
+
+                    push_rendered(operand_to_string(arg1), 0, prop);
+                    push_rendered(render_captured_property(), op_prec, prop);
+                    break;
+							    }
+
+                str get_fn  = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
+                str get_xss = variant_cast<str>(dynamic_get(prop, "get_xss"), ""); 
+
+                if (!get_xss.empty())
+                  ss << get_xss;
+                else if (!get_fn.empty())
+                  ss << get_fn << "()";
                 else if (has_getter)
-                  ss << "." << s2 << "_get()";
-                else   
-                  ss << "." << s2;
+                  ss << s2 << "_get()";
+                else
+                  ss << s2;
               }
             else 
-               ss << "." << s2;
+               ss << s2;
 
             if (prop)
               push_rendered(ss.str(), op_prec, prop);
