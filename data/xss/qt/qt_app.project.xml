@@ -1,1 +1,1 @@
-<xss:project>    <path generator="qt_main.xss"          class_library="qt_classes.xml"          source_path=""          output_path="../output/"/>    <options gen_event_method="false"/>    <idiom class="cpp-idiom" id_as_this="true"/>		<application src="qt_app.xml"/></xss:project>
+<xss:project>    <path generator="qt_main.xss"          class_library="qt_classes.xml"          source_path=""          output_path="../output/"/>    <options gen_event_method="false"/>    <idiom class="cpp-idiom"/>		<application src="qt_app.xml"/></xss:project>

@@ -5,13 +5,11 @@
 using namespace xkp;
 
 //strings
-const str SCPPEmptyStack("empty-stack");
 const str SCPPIdiom("idiom");
-const str SCPPInvalidOperator("invalid-operator");
+const str SCPPCannotResolve("unkown-identifier");
 
-const str SCPPEmptyExpression("Trying to use an empty expression");
 const str SCPPEveryInstanceMustHaveId("Trying to use an instance without id");
-const str SCPPAssignOperator("Assign operators can only be used as the base of an expression");
+const str SCPPUnknownInstance("Instance not found");
 
 //cpp_code
 void cpp_code::for_(stmt_for& info)
@@ -104,40 +102,30 @@ str cpp_idiom::resolve_this(XSSContext ctx)
     //c++ lets you ignore them, jsva script et all force you to 
     //and there are other intrincate circumstances (like functions in js)
     //where something must be done.
-    
-		XSSObject instance = variant_cast<XSSObject>(ctx->this_, XSSObject());
-		bool		  override_id_as_this = instance->has("@class");
 
-		if (!override_id_as_this && id_as_this_)
+    if (!ctx->this_.empty())
       {
-        if (!ctx->this_.empty())
+        str iid = variant_cast<str>(dynamic_get(ctx->this_, "id"), str());
+        if (iid.empty())
           {
-            str iid = variant_cast<str>(dynamic_get(ctx->this_, "id"), str());
-            if (iid.empty())
-              {
-                param_list error;
-                error.add("id", SCPPIdiom);
-                error.add("desc", SCPPEveryInstanceMustHaveId);
-                xss_throw(error);
-              }
-
-            //another use case, we might have an instance that has an internal id
-	          //which means a name to be used in code instead of the plain instance name
-	          XSSObject obj = ctx->resolve_instance(iid);
-	          if (obj && obj->has("internal_id"))
-		          {
-			          iid = variant_cast<str>(dynamic_get(obj, "internal_id"), str());
-
-                // so i need some internal_id emptys
-			          //assert(!iid.empty());
-		          }
-
-            return iid;
+            param_list error;
+            error.add("id", SCPPIdiom);
+            error.add("desc", SCPPEveryInstanceMustHaveId);
+            xss_throw(error);
           }
-      }
-    else if (!ctx->this_.empty())
-      {
-        return "this";
+
+        //another use case, we might have an instance that has an internal id
+        //which means a name to be used in code instead of the plain instance name
+        XSSObject obj = ctx->resolve_instance(iid);
+        if (obj && obj->has("internal_id"))
+          {
+	          iid = variant_cast<str>(dynamic_get(obj, "internal_id"), str());
+
+            // so i need some internal_id emptys
+	          //assert(!iid.empty());
+          }
+
+        return iid;
       }
       
     return "";
@@ -151,22 +139,6 @@ str cpp_idiom::resolve_separator(XSSObject lh)
 //cpp_expression_renderer
 void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int push_count, bool top)
   {
-		if (capturing_property_ && op != op_dot)
-			{
-				//the dot chain has stopped, lets collect
-				//td: unfortunately this solution only works for straight dot chains. 
-				//I'll worry about it later
-
-				variant prop = stack_.top(); 
-				capturing_property_ = false;
-
-				already_rendered ar;
-				ar.value = render_captured_property();
-				ar.object = prop;
-
-				stack_.push(ar);
-			}
-
 		if (top && assigner)
 			{
 				assert(op == op_dot); //I'm sure there are more use cases, but I'll deal with this one exclusively
@@ -178,7 +150,6 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
     switch(op)
       {
         // add here the operators that I'll customize
-				case op_dot:
         case op_dot_call:
           {
             switch(pop_count)
@@ -234,97 +205,10 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
         case op_call:
         case op_func_call:
         case op_parameter:
+				case op_dot:
           {
             // execute exec_operator of base class with the same parameters
             expression_renderer::exec_operator(op, pop_count, push_count, top);
-            break;
-          }
-
-				case op_dot:
-          {
-            //so here we'll try to find out if we're generating an object
-            //with a get function on a property. This does not constitute
-            //type checking, that's a lot of work unless the code_linker feels
-            //like cooperating
-			      XSSObject caller = get_instance(arg1);
-			      if (!caller)
-			      {
-				      if (arg1.is<expression_identifier>())
-					      {
-						      expression_identifier ei = arg1;
-						      caller = ctx_->get_xss_type(ei.value); //td: meh, do the context
-																												 //also do static members, this is getting sloppy	
-					      }
-			      }
-			
-            str       s2 = operand_to_string(arg2, caller);
-            XSSObject o2 = get_instance(caller, s2);
-
-            XSSProperty prop = get_property(caller, s2);
-						if (prop && prop->has("internal_id"))
-							{
-								//this I'm not sure how right is... but here goes anyway.
-								//At the moment this solves enumerators that must carry different names into the output
-								str iid = variant_cast<str>(dynamic_get(prop, "internal_id"), str()); assert(!iid.empty());
-								push_rendered(iid, op_prec, variant());
-								break;
-							}
-
-						//And since I am on it...
-						//there is a use case where some properties need a variable to represent them 
-						//unfortunately such variables need the whole property chain in order to be effective
-						if (prop && prop->has("property_xss"))
-							{
-								assert(!capturing_property_); //only a variable property per schema, please
-								capturing_property_ = true; 
-
-								capture_property_.prop = prop;
-								capture_property_.xss  = variant_cast<str>(dynamic_get(prop, "property_xss"), str());
-
-								for(int i = 0; i < capture_property_.xss.size(); i++)
-									{
-										if (capture_property_.xss[i] == '\'')
-											capture_property_.xss[i] ='"';
-									}
-
-								push_rendered(operand_to_string(arg1), op_prec, prop);
-								break;
-							}
-
-            bool has_getter = prop && !prop->get.empty();
-
-            std::stringstream ss;
-            ss << operand_to_string(arg1);
-
-						str separator = ctx_->getIdiom()->resolve_separator(caller);
-            if (!ss.str().empty())
-              ss << separator;
-            
-						if (top && assigner)
-							{
-								ss << resolve_assigner(arg2, caller, assigner);	
-							}
-						else if (prop)
-              {
-                str get_fn  = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
-                str get_xss = variant_cast<str>(dynamic_get(prop, "get_xss"), ""); 
-
-                if (!get_xss.empty())
-                  ss << get_xss;
-                else if (!get_fn.empty())
-                  ss << get_fn << "()";
-                else if (has_getter)
-                  ss << s2 << "_get()";
-                else
-                  ss << s2;
-              }
-            else 
-               ss << s2;
-
-            if (prop)
-              push_rendered(ss.str(), op_prec, prop);
-            else
-              push_rendered(ss.str(), op_prec, o2);
             break;
           }
 
@@ -334,7 +218,7 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
             
             str iid = operand_to_string(arg1);
             if (!iid.empty())
-              ss << "->";
+              ss << iid << "->";
 
             ss << operand_to_string(arg2);
             push_rendered(ss.str(), op_prec, variant());
@@ -391,6 +275,15 @@ str cpp_expression_renderer::operand_to_string(variant operand, XSSObject parent
                         // so i need some internal_id emptys
 							          //assert(!result.empty());
 						          }
+                    else
+                      {
+										    param_list error;
+										    error.add("id", SCPPCannotResolve);
+										    error.add("desc", SCPPUnknownInstance);
+										    error.add("instance", result);
+
+										    xss_throw(error);
+                      }
 				          }
               }
           }
@@ -415,4 +308,3 @@ str cpp_expression_renderer::operand_to_string(variant operand, XSSObject parent
     if (prec) *prec = result_prec;
     return result;
   }
-
