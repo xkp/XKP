@@ -43,6 +43,18 @@ class xss_object : public editable_object<xss_object>,
 			DynamicArray	methods();
 			DynamicArray	events();
 		public:
+      //new shit
+      template <typename T> 
+      T get(const str& what, T default_value)
+        {
+          return variant_cast<T>(dynamic_get(this, what), default_value);
+        }
+
+      XSSObject              find(const str& what);
+      std::vector<XSSObject> find_by_class(const str& which);
+      str                    getClassName();
+      str                    getId();
+		public:
 			void copy(xss_object* other);
 			void remove_child(XSSObject obj);
 		public:
