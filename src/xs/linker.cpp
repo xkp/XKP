@@ -1127,13 +1127,7 @@ schema* code_linker::link_expression(expression& expr, bool assigner, bool* empt
 
     if (!stack_.empty())
       {
-        //td: !!! debug
-				if (stack_.size() != 1)
-					{
-						_asm nop;
-					}
-
-				assert(stack_.size() == 1);
+		assert(stack_.size() == 1);
 
         if (empty_stack) *empty_stack = false;
 
@@ -1413,7 +1407,7 @@ void code_linker::resolve_value(variant& arg, schema** type)
 				if (type_value)
 					{
 						if (type) *type = type_schema<schema*>();
-						
+
 						arg = type_value;
 						add_instruction(i_load_constant, add_constant(type_value));
 					}
@@ -1558,7 +1552,7 @@ void code_linker::resolve_operator(operator_type op, variant arg1, variant arg2,
 					{
 						result_type = variant_cast<schema*>(arg2, null);
 					}
-				
+
 				add_instruction(i_binary_operator, static_cast<short>(result));
         already_in_stack ais(result_type);
         stack_.push(ais);

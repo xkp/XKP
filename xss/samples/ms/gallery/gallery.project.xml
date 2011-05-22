@@ -2,7 +2,7 @@
     <path generator="..\..\..\idioms\ms\main.xss"
           class_library="..\..\..\idioms\ms\classes.xml"
           source_path="" 
-          output_path="../../../bin/" 
+          output_path="../../../production/" 
           output_file="gallery.html"/>
 
     <options gen_event_method="true"/>

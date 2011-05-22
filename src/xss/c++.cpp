@@ -270,20 +270,12 @@ str cpp_expression_renderer::operand_to_string(variant operand, XSSObject parent
 
 					          if (obj && obj->has("internal_id"))
 						          {
-							          result = variant_cast<str>(dynamic_get(obj, "internal_id"), str());
-
+							          str ss = variant_cast<str>(dynamic_get(obj, "internal_id"), str());
+                        if (!ss.empty())
+                          result = ss;
                         // so i need some internal_id emptys
 							          //assert(!result.empty());
 						          }
-                    else
-                      {
-										    param_list error;
-										    error.add("id", SCPPCannotResolve);
-										    error.add("desc", SCPPUnknownInstance);
-										    error.add("instance", result);
-
-										    xss_throw(error);
-                      }
 				          }
               }
           }

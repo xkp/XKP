@@ -142,8 +142,8 @@ void xss_object::xss_type(XSSObject type, XSSContext ctx)
 							{
 								XSSObject prop_type_for_real = ctx->get_xss_type(prop_type);
 								as_expression = variant_cast<bool>(dynamic_get(prop_type_for_real, "as_expression"), false);
-							}	
-						
+							}
+
 						as_expression |= variant_cast<bool>(dynamic_get(type, "as_expression"), false);
 						variant vv = !myvalue.empty()? myvalue : value;
 
@@ -1301,14 +1301,14 @@ void xss_project::compile_ast(xs_container& ast, XSSContext ctx)
     for(; mit != mnd; mit++)
       {
 				code_type_resolver typer(context_);
-				
+
 				param_list_decl::iterator mait = mit->args.begin();
 				param_list_decl::iterator mand = mit->args.end();
 				for(; mait != mand; mait++)
 					{
 						typer.register_var(mait->name, context_->get_type(mait->type));
 					}
- 
+
 				mit->cde.visit(&typer);
 				str type;
 				schema* tt = typer.get();
@@ -2164,7 +2164,7 @@ str xss_project::generate_file(const str& fname, XSSContext context)
 
 void xss_project::preprocess()
   {
-    XSSObject app_object = application;
+    XSSObject app_object(application);
     pre_process pp(app_object, XSSObject(), *this, true, context_);
 
 		str id = "application";
