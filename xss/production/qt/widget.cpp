@@ -63,7 +63,7 @@ XKPPlacementLayout *Widget::addLayout()
 	{
     	ui->pushButton_1->setProperty(placementName, ((XKPPlacementLayout::Placement)ui->pushButton_1->property(placementName).toInt() + 1) % 7);
     	ui->pushButton_1->setText(QString(string("Clicked").c_str()));
-    	application->reset("600");
+    	reset("600");
     	ui->pushButton_2->setEnabled(true);
 	}
 	
@@ -71,8 +71,8 @@ XKPPlacementLayout *Widget::addLayout()
 		
 				void Widget::on_pushButton_2_clicked()
 	{
-    	ui->pushButton_1->setText(QString(string("Old value: " + application->target_get()).c_str()));
-    	application->target_set(application->target_get() + 10);
+    	ui->pushButton_1->setText(QString(string("Old value: " + target_get()).c_str()));
+    	target_set(target_get() + 10);
 	}
 	
 
@@ -136,7 +136,7 @@ XKPPlacementLayout *Widget::addLayout()
 	
 	int Widget::target_get(void)
 	{
-    	return application->xxx;
+    	return xxx;
 	}
 	
 	void Widget::reset(string s)
