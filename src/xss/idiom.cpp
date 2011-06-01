@@ -10,10 +10,14 @@ using namespace xkp;
 const str SEmptyStack("empty-stack");
 const str SIdiom("idiom");
 const str SInvalidOperator("invalid-operator");
+const str SDeclaration("variable-declaration");
+const str SCannotResolve("unkown-identifier");
 
 const str SEmptyExpression("Trying to use an empty expression");
 const str SEveryInstanceMustHaveId("Trying to use an instance without id");
 const str SAssignOperator("Assign operators can only be used as the base of an expression");
+const str SDuplicateVariable("Variable already declared");
+const str SUnknownVariable("Variable not found");
 
 //td: !!! stop duplicating this array
 const char* operator_str[] =
@@ -349,13 +353,6 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
 									assert(false); //use case trap
 							}
 						
-
-            //std::stringstream ss;
-            //if (op_prec < prec)
-            //  ss << "(" << os << ")" << operator_str[op];
-            //else
-            //  ss << os << operator_str[op];
-
             push_rendered(ss.str(), op_prec, arg1.get_schema());
             break;
           }
@@ -785,16 +782,23 @@ str expression_renderer::operand_to_string(variant operand, XSSObject parent, in
             //here we ought to resolve a single symbol (ex width = 10)
             //thid *could* belong to the "this" pointer
             
+            str separator = ctx_->idiom_->resolve_separator();
             if (ctx_->idiom_)
               {
                 XSSProperty prop = ctx_->get_property(ei.value);
 								XSSMethod mthd = ctx_->get_method(ei.value);
-                if (prop || mthd)
+                if (prop)
                   {
-                    //well, lets see how the idiom handles thises
+										result = prop->resolve_value();
                     str this_str = ctx_->idiom_->resolve_this(ctx_);
                     if (!this_str.empty())
-                      result = this_str + "." + ei.value; //otherwise it doesnt get translated 
+                      result = this_str + separator + result; //otherwise it doesnt get translated 
+                  }
+								else if (mthd)
+                  {
+                    str this_str = ctx_->idiom_->resolve_this(ctx_);
+                    if (!this_str.empty())
+                      result = this_str + separator + ei.value; //otherwise it doesnt get translated 
                   }
 				        else
 				          {
@@ -803,8 +807,10 @@ str expression_renderer::operand_to_string(variant operand, XSSObject parent, in
 					          XSSObject obj = ctx_->resolve_instance(result);
 					          if (obj && obj->has("internal_id"))
 						          {
-							          str result = variant_cast<str>(dynamic_get(obj, "internal_id"), str());
-							          assert(!result.empty());
+							          result = variant_cast<str>(dynamic_get(obj, "internal_id"), str());
+
+                        // so i need some internal_id emptys
+                        //assert(!result.empty());
 						          }
 				          }
               }
@@ -856,6 +862,54 @@ str idiom_utils::expr2str(expression& expr, XSSContext ctx)
 	{
     return render_expression<expression_renderer>(expr, ctx);
 	}
+
+str idiom_utils::operand_to_string(variant operand, XSSContext ctx)
+  {
+    str result;
+    if (operand.is<expression_identifier>())
+      {
+        expression_identifier ei = operand;
+        result = ei.value;
+        if (ctx->idiom_)
+          {
+            XSSProperty prop = ctx->get_property(ei.value);
+						XSSMethod mthd = ctx->get_method(ei.value);
+            if (prop)
+              {
+								result = prop->resolve_value();
+              }
+						else if (mthd)
+              {
+                result = ei.value;
+              }
+		        else
+		          {
+			          XSSObject obj = ctx->resolve_instance(result);
+			          if (obj && obj->has("internal_id"))
+				          {
+					          result = variant_cast<str>(dynamic_get(obj, "internal_id"), str());
+				          }
+		          }
+          }
+      }
+    else if (operand.is<already_rendered>())
+      {
+        already_rendered ar = operand;
+        result = ar.value;
+      }
+    else if (operand.is<str>())
+      {
+        str opstr = operand;
+        result = '"' + opstr + '"';
+      }
+    else
+      {
+        str opstr = operand;
+        result = opstr;
+      }
+
+    return result;
+  }
 
 //expr_type_resolver
 expr_type_resolver::expr_type_resolver(local_variables& local_vars, XSSContext ctx) 
@@ -1115,6 +1169,13 @@ XSSObject	expr_type_resolver::resolve_object(const variant v)
 		return XSSObject();
 	}
 
+variant expr_type_resolver::top_stack()
+  {
+    assert(stack_.size() == 1);
+
+    return stack_.top();
+  }
+
 //code_type_resolver
 schema* code_type_resolver::get()
 	{
@@ -1138,7 +1199,7 @@ void code_type_resolver::variable_(stmt_variable& info)
 					}
 			}
 
-		vars_.insert(std::pair<str, schema*>(info.id, type));
+    register_var(info.id, type);
 	}
 
 void code_type_resolver::return_(stmt_return& info)
@@ -1165,10 +1226,132 @@ void code_type_resolver::return_(stmt_return& info)
 			}
 	}
 
+void code_type_resolver::expression_(xkp::stmt_expression &info)
+  {
+    schema* type = expression_type_resolver(info.expr, ctx_);
+  }
+
+void code_type_resolver::if_(stmt_if& info)
+  {
+    schema* type = expression_type_resolver(info.expr, ctx_);
+
+    info.if_code.visit(this);
+
+    if (!info.else_code.empty())
+			{
+        info.else_code.visit(this);
+			}
+  }
+
+void code_type_resolver::for_(stmt_for& info)
+  {
+    variable_(info.init_variable);
+
+    expression_type_resolver(info.init_expr, ctx_);
+    expression_type_resolver(info.cond_expr, ctx_);
+    expression_type_resolver(info.iter_expr, ctx_);
+
+    info.for_code.visit(this);
+  }
+
+void code_type_resolver::iterfor_(stmt_iter_for& info)
+  {
+    register_var(info.id, ctx_->get_type(info.type.name));
+    expression_type_resolver(info.iter_expr, ctx_);
+
+    info.for_code.visit(this);
+  }
+
 void code_type_resolver::register_var(const str& name, schema* type)
 	{
-		vars_.insert(std::pair<str, schema*>(name, type));
+    std::pair < std::map<str, schema *>::iterator, bool > ret;
+
+    ret = vars_.insert(std::pair<str, schema*>(name, type));
+    if (!ret.second)
+      {
+        param_list error;
+        error.add("id", SDeclaration);
+        error.add("desc", SDuplicateVariable);
+        error.add("variable", name);
+
+        xss_throw(error);
+      }
 	}
+
+void code_type_resolver::type_to_var(const str& name, schema *type)
+  {
+		map_variables::iterator it = vars_.find(name);
+		if (it != vars_.end())
+			{
+				it->second = type;
+			}
+    else
+      {
+        param_list error;
+        error.add("id", SCannotResolve);
+        error.add("desc", SUnknownVariable);
+        error.add("variable", name);
+
+        xss_throw(error);
+      }
+  }
+
+schema* code_type_resolver::expression_type_resolver(xkp::expression &expr, xkp::XSSContext ctx)
+  {
+    operator_type op;
+    if (expr.top_operator(op))
+	    {
+		    switch(op)
+			    {
+				    case op_assign:
+            case op_plus_equal:
+            case op_minus_equal:
+            case op_mult_equal:
+            case op_div_equal:
+            case op_shift_right_equal:
+            case op_shift_left_equal:
+					    {
+						    expression_splitter es(op);
+						    expr.visit(&es);
+
+                //resolve type of right expression
+                expr_type_resolver right_type(vars_, ctx);
+                es.right.visit(&right_type);
+
+                variant rtype = right_type.get();
+                schema *sche_rtype_ = rtype.get_schema();
+                schema *sche_rtype = right_type.get();
+
+                //resolve type of left expression
+                expr_type_resolver left_type(vars_, ctx);
+                es.left.visit(&left_type);
+
+                variant ltype = left_type.get();
+                schema *sche_ltype_ = ltype.get_schema();
+                schema *sche_ltype = left_type.get();
+
+                variant left_res = left_type.top_stack();
+                str var_name = idiom_utils::operand_to_string(left_res, ctx);
+
+                //assert(ltype.get_schema() == rtype.get_schema());
+                //assert(sche_rtype == sche_ltype);
+
+                if (sche_ltype != sche_rtype)
+                  {
+                    sche_ltype = sche_rtype;
+                    type_to_var(var_name, sche_ltype);
+                  }
+
+						    return sche_ltype;
+					    }
+			    }
+	    }
+
+    expr_type_resolver er(vars_, ctx);
+    expr.visit(&er);
+
+    return er.get();
+  }
 
 //base_xss_expression
 base_xss_expression::base_xss_expression()

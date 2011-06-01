@@ -161,6 +161,7 @@ XKPPlacementLayout *Widget::addLayout()
 	
 	int Widget::declaring_ok(int value)
 	{
+		 list = [1, 2, 3];
 		return value;
 	}
 	

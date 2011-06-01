@@ -303,6 +303,7 @@ struct idiom_utils
       }
 
 		static str expr2str(expression& expr, XSSContext ctx);
+    static str operand_to_string(variant operand, XSSContext ctx);
 	};
 
 //utils, this is soon to be changed completely
@@ -315,24 +316,30 @@ struct code_type_resolver : code_visitor
 		//code_visitor
     virtual void variable_(stmt_variable& info);
     virtual void return_(stmt_return& info);
+    virtual void expression_(stmt_expression& info);
+		virtual void if_(stmt_if& info);
+    virtual void for_(stmt_for& info);
+    virtual void iterfor_(stmt_iter_for& info);
 
-		virtual void if_(stmt_if& info)									{}
-    virtual void for_(stmt_for& info)               {}
-    virtual void iterfor_(stmt_iter_for& info)      {}
     virtual void while_(stmt_while& info)           {}
+
     virtual void break_()                           {}
     virtual void continue_()                        {}
-    virtual void expression_(stmt_expression& info) {}
     virtual void dsl_(dsl& info)                    {}
     virtual void dispatch(stmt_dispatch& info)      {}
 
 		public:
 			void register_var(const str& name, schema* type);
+      void type_to_var(const str& name, schema* type);
+    public:
+  		typedef std::map<str, schema*> map_variables;
+			map_variables          vars_;
 		private:
-			std::map<str, schema*> vars_;
 			XSSContext						 ctx_;
 			bool									 is_variant_;
 			schema*								 result_;
+
+      schema* expression_type_resolver(expression& expr, XSSContext ctx);
 	};
 
 //expr_type_resolver
@@ -343,6 +350,7 @@ struct expr_type_resolver : expression_visitor
     expr_type_resolver(local_variables& local_vars, XSSContext ctx);
 		schema* get();
 		str type_name();
+    variant top_stack();
 
 		//expression_visitor
     virtual void push(variant operand, bool top);

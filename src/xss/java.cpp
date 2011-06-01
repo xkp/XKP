@@ -1,39 +1,35 @@
 
-#include <xss/c++.h>
+#include <xss/java.h>
 #include <xss/xss_error.h>
 
 using namespace xkp;
 
 //strings
-const str SCPPIdiom("idiom");
-const str SCPPCannotResolve("unkown-identifier");
+const str SJavaIdiom("idiom");
+const str SJavaCannotResolve("unkown-identifier");
 
-const str SCPPEveryInstanceMustHaveId("Trying to use an instance without id");
-const str SCPPUnknownInstance("Instance not found");
+const str SJavaEveryInstanceMustHaveId("Trying to use an instance without id");
+const str SJavaUnknownInstance("Instance not found");
 
-//cpp_code
-void cpp_code::variable_(stmt_variable& info)
+//java_code
+str java_code::get_type_name(const str& var_name)
   {
-		schema* sche_type = ctx_->get_type(info.type);
-    str str_type;
-		if (!sche_type)
-			{
-				if (!info.value.empty())
-					{
-						expr_type_resolver typer(vars_, ctx_);
-						info.value.visit(&typer);
+    str str_type = "";
+    map_variables::iterator it = vars_.find(var_name);
+    if (it != vars_.end())
+      {
+        schema *sche_type = it->second;
+        str_type = ctx_->get_type_name(sche_type);
+      }
 
-						sche_type = typer.get();
-						str_type = typer.type_name();
-					}
-			}
+    return str_type;
+  }
 
-    if (sche_type)
-			{
-				str_type = ctx_->get_type_name(sche_type);
-			}
-
-		vars_.insert(std::pair<str, schema*>(info.id, sche_type)); //td: !!! XSSType
+void java_code::variable_(stmt_variable& info)
+  {
+    //td: when declaration separated by comma appears
+    //    implement loop section with this
+    str str_type = get_type_name(info.id);
 
     std::stringstream ss;
     str ind = get_indent_str();
@@ -47,10 +43,14 @@ void cpp_code::variable_(stmt_variable& info)
     add_line(ss.str());
   }
 
-void cpp_code::for_(stmt_for& info)
+void java_code::for_(stmt_for& info)
 	{
+    //td: when declaration separated by comma appears
+    //    implement loop section with this
+    str str_type = get_type_name(info.init_variable.id);
+
     std::stringstream ss;
-    str iterable_declaration = info.init_variable.type + " " + info.init_variable.id;
+    str iterable_declaration = str_type + " " + info.init_variable.id;
     ss << "for(" << iterable_declaration << " = " << render_expression(info.init_variable.value, ctx_)
         << "; " << render_expression(info.cond_expr, ctx_)
         << "; " << render_expression(info.iter_expr, ctx_) << ")";
@@ -61,45 +61,59 @@ void cpp_code::for_(stmt_for& info)
 		add_line("}", true);
 	}
 
-void cpp_code::iterfor_(stmt_iter_for& info)
+void java_code::iterfor_(stmt_iter_for& info)
 	{
-    assert(false); //td:
+    str iterable_type = get_type_name(info.id);
+
+    std::stringstream ss;
+    str ind = get_indent_str();
+
+    ss << ind << "for(" << iterable_type << " " << info.id << " : "
+      << render_expression(info.iter_expr, ctx_) << ")\n";
+
+		add_line(ss.str());
+		add_line("{", true);
+			render_code(info.for_code, indent_ + 1);
+		add_line("}", true);
 	}
 
-str cpp_code::render_expression(expression& expr, XSSContext ctx)
+str java_code::render_expression(expression& expr, XSSContext ctx)
   {
-    return idiom_utils::render_expression<cpp_expression_renderer>(expr, ctx);
+    return idiom_utils::render_expression<java_expression_renderer>(expr, ctx);
   }
 
-//cpp_args
-str cpp_args::resolve_param(const param_decl& param)
+//java_args
+str java_args::resolve_param(const param_decl& param)
 	{
     return param.type + " " + param.name;
 	}
 
-//cpp_idiom
-variant cpp_idiom::process_code(code& cde, param_list_decl& params, XSSContext ctx)
+//java_idiom
+variant java_idiom::process_code(code& cde, param_list_decl& params, XSSContext ctx)
 	{
-    CPPCode result(new cpp_code(ctx, cde));
+    code_type_resolver ctyper(ctx);
+    cde.visit(&ctyper);
+
+    JavaCode result(new java_code(ctx, cde, ctyper.vars_));
     return result;
 	}
 
-variant cpp_idiom::process_expression(expression expr, XSSObject this_)
+variant java_idiom::process_expression(expression expr, XSSObject this_)
 	{
     XSSContext ctx(new xss_composite_context(ctx_));
     ctx->this_ = this_;
 
-    CPPExpression result(new cpp_expr(ctx, expr));
+    JavaExpression result(new java_expr(ctx, expr));
     return result;
 	}
 
-variant cpp_idiom::process_args(param_list_decl& params)
+variant java_idiom::process_args(param_list_decl& params)
 	{
-		CPPArgs result(new cpp_args(params));
+		JavaArgs result(new java_args(params));
 		return result;
 	}
 
-str cpp_idiom::resolve_this(XSSContext ctx)
+str java_idiom::resolve_this(XSSContext ctx)
 	{
     //Programming languages do not agree on how to use *this* pointers
     //c++ lets you ignore them, jsva script et all force you to 
@@ -112,8 +126,8 @@ str cpp_idiom::resolve_this(XSSContext ctx)
         if (iid.empty())
           {
             param_list error;
-            error.add("id", SCPPIdiom);
-            error.add("desc", SCPPEveryInstanceMustHaveId);
+            error.add("id", SJavaIdiom);
+            error.add("desc", SJavaEveryInstanceMustHaveId);
             xss_throw(error);
           }
 
@@ -134,13 +148,13 @@ str cpp_idiom::resolve_this(XSSContext ctx)
     return "";
 	}
 
-str cpp_idiom::resolve_separator(XSSObject lh)
+str java_idiom::resolve_separator(XSSObject lh)
 	{
-		return "->";
+		return ".";
 	}
 
-//cpp_expression_renderer
-void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int push_count, bool top)
+//java_expression_renderer
+void java_expression_renderer::exec_operator(operator_type op, int pop_count, int push_count, bool top)
   {
 		if (top && assigner)
 			{
@@ -153,7 +167,7 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
     switch(op)
       {
         // add here the operators that I'll customize
-        case op_dot_call:
+        case op_array:
           {
             switch(pop_count)
               {
@@ -203,9 +217,9 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
         case op_and:
         case op_or:
 
-        case op_array:
         case op_index:
         case op_call:
+        case op_dot_call:
         case op_func_call:
         case op_parameter:
 				case op_dot:
@@ -215,17 +229,32 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
             break;
           }
 
-        case op_dot_call:
+        case op_array:
           {
-            std::stringstream ss;
-            
-            str iid = operand_to_string(arg1);
-            if (!iid.empty())
-              ss << iid << "->";
+            std::stringstream result;
 
-            ss << operand_to_string(arg2);
-            push_rendered(ss.str(), op_prec, variant());
-            break;
+            result << "{";
+
+						std::vector<str> params;
+						int arg_count = arg1;
+            for(int i = 0; i < arg_count; i++)
+							{
+								variant opnd = stack_.top(); stack_.pop();
+								params.push_back( operand_to_string(opnd) );
+							}
+
+						std::vector<str>::reverse_iterator arit = params.rbegin();
+						std::vector<str>::reverse_iterator arnd = params.rend();
+						for(; arit != arnd; arit++)
+							{
+								result << *arit;
+								if (arit + 1 != arnd)
+									result << ", ";
+							}
+
+            result << "}";
+            push_rendered(result.str(), op_prec, variant()); 
+						break;
           }
 
 				default:
