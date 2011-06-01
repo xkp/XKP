@@ -37,6 +37,7 @@ namespace xkp
         bool is_constant(variant& value);
 				bool top_operator(operator_type& op);
 				variant pop_first();
+        variant pop();
 				void clear();
       private:
         typedef std::vector<variant> expr_stack;
@@ -72,8 +73,9 @@ struct expression_splitter : expression_visitor
 		
 		private:
 			operator_type divider_;
-			int operands_;
-			bool found_left_;
+
+      std::vector<variant> result_;
+      std::stack<int>      positions_; 
 	};
 
 //helpers

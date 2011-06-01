@@ -170,6 +170,15 @@ variant expression::pop_first()
 		return result;
 	}
 
+variant expression::pop()
+	{
+		assert(!stack_.empty());
+		variant result = stack_.back();
+		stack_.erase(stack_.end() - 1);
+
+		return result;
+	}
+
 void expression::clear()
 	{
 		stack_.clear();
@@ -214,51 +223,51 @@ variant expr_evaluator::value()
 //expression_splitter
 
 expression_splitter::expression_splitter(operator_type divider) : 
-	divider_(divider), 
-	operands_(0), 
-	found_left_(false) 
+	divider_(divider)
 	{
 	}
 
 void expression_splitter::push(variant operand, bool top)
 			{
-				operands_++;
-
-				if (!found_left_)
-					left.push_operand(operand);
-				else
-					right.push_operand(operand);
+				result_.push_back(operand);
+        positions_.push(result_.size());
 			}
     
 void expression_splitter::exec_operator(operator_type op, int pop_count, int push_count, bool top)
 	{
-		if (op == divider_)
+		if (op == divider_ && top)
 			{
-				if (!found_left_)
-					{
-						//edge case, no operators for left side, so...
-						variant left_operand = left.pop_first();
-						right = left;
-						left.clear();
-						left.push_operand(left_operand);
-					}
+        assert(positions_.size() == 2);
+        positions_.pop();
+        int left_pos = positions_.top(); 
+        for(int i = 0; i < left_pos; i++)
+          {
+            variant value = result_[i];
+            if (value.is<operator_type>())
+              left.push_operator(value);                
+            else
+              left.push_operand(value);                
+          }
+
+        for(int i = left_pos; i < result_.size(); i++)
+          {
+            variant value = result_[i];
+            if (value.is<operator_type>())
+              right.push_operator(value);                
+            else
+              right.push_operand(value);                
+          }
 			}
 		else
 			{
-				operands_ -= pop_count;
-				if (operands_ == 0)
-					{
-						assert(!found_left_);
-						found_left_ = true;
-						left.push_operator(op);
-					}
-				else if (!found_left_)
-					left.push_operator(op);
-				else
-					right.push_operator(op);
-
-				operands_ += push_count;
-		}
+        for(int i = 0; i < pop_count; i++)
+          {
+            positions_.pop();
+          }
+        
+        result_.push_back(operator_type(op));
+        positions_.push(result_.size());
+		  }
 	}
 
 //code
