@@ -228,10 +228,10 @@ expression_splitter::expression_splitter(operator_type divider) :
 	}
 
 void expression_splitter::push(variant operand, bool top)
-			{
-				result_.push_back(operand);
-        positions_.push(result_.size());
-			}
+{
+	result_.push_back(operand);
+  positions_.push(result_.size());
+}
     
 void expression_splitter::exec_operator(operator_type op, int pop_count, int push_count, bool top)
 	{
@@ -258,15 +258,35 @@ void expression_splitter::exec_operator(operator_type op, int pop_count, int pus
               right.push_operand(value);                
           }
 			}
-		else
-			{
+		else 
+      {
+        bool record = true;
+        switch(op)
+          {
+            case op_array:
+				      pop_count += (int)result_.back();
+              break;
+            case op_call:
+            case op_func_call:
+				      pop_count += (int)result_.back();
+              break;
+            case op_parameter:
+              pop_count++;
+              break;
+            case op_dot_call:
+              record = false; //it will be followed by a op_call
+              break;
+          }
+
         for(int i = 0; i < pop_count; i++)
           {
             positions_.pop();
           }
         
         result_.push_back(operator_type(op));
-        positions_.push(result_.size());
+
+        if (record)
+          positions_.push(result_.size());
 		  }
 	}
 
