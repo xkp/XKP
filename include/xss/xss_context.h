@@ -11,18 +11,23 @@ namespace xkp {
 
 //forwards
 class		xss_object;
-class		xss_serial_object;
 class   xss_property;
 class   xss_event;
 class   xss_method;
-struct  xss_code_context;
+struct  xss_context;
+class		xss_type;
 
-typedef reference<xss_object>					XSSObject;
-typedef reference<xss_serial_object>	XSSSerialObject;
-typedef reference<xss_property>				XSSProperty;
-typedef reference<xss_code_context>		XSSContext;
-typedef reference<xss_event>					XSSEvent;
-typedef reference<xss_method>					XSSMethod;
+//interfaces
+struct ILanguage;
+
+//reference types
+typedef reference<xss_object>		XSSObject;
+typedef reference<xss_property> XSSProperty;
+typedef reference<xss_context>	XSSContext;
+typedef reference<xss_event>		XSSEvent;
+typedef reference<xss_method>		XSSMethod;
+typedef reference<ILanguage>		Language;
+typedef reference<xss_type>		  XSSType;
 
 class xss_object : public editable_object<xss_object>,
 									 public boost::enable_shared_from_this<xss_object>
@@ -30,126 +35,81 @@ class xss_object : public editable_object<xss_object>,
 		public:
 			xss_object();
 		public:
-			//IDynamicObject
-			virtual void visit(dynamic_visitor* visitor);
-		public:
 			//accesors
-			XSSObject			type();
-			void					xss_type(XSSObject type, XSSContext ctx);
-			void					propertize();
-			XSSObject			parent();
-			DynamicArray	children();
-			DynamicArray	properties();
-			DynamicArray	methods();
-			DynamicArray	events();
-		public:
-      //new shit
       template <typename T> 
       T get(const str& what, T default_value)
         {
           return variant_cast<T>(dynamic_get(this, what), default_value);
         }
 
+      str           id();
+      str           type_name();
+			XSSObject			type();
+			XSSObject			parent();
+			DynamicArray	children();
+			DynamicArray	properties();
+			DynamicArray	methods();
+			DynamicArray	events();
+		public:
+      //misc
+			void					         set_type(XSSObject type);
       XSSObject              find(const str& what);
       std::vector<XSSObject> find_by_class(const str& which);
-      str                    getClassName();
-      str                    getId();
 		public:
-			void copy(xss_object* other);
-			void remove_child(XSSObject obj);
+      //children management
+			void add_child(XSSObject obj);
+      void remove_child(XSSObject obj);
 		public:
-			XSSProperty get_property(const str& name);
-			XSSEvent		get_event(const str& name);
-			XSSMethod		get_method(const str& name);
-		public:
-			//misc, not neccesarily to be published
-			void limbo_add(const str& id, variant value);
-			void seal();
-		public:
-      //IXSSObject
-      virtual bool resolve(const str& name, schema_item& result);
-		public:
-			XSSObject type_;
-			XSSObject parent_;
+			XSSProperty           get_property(const str& name);
+			std::vector<XSSEvent> get_events(const str& name);
+			XSSMethod		          get_method(const str& name);
+    public:
+      str           id_;
+      str           type_name_;
+			XSSObject     type_;
+			XSSObject     parent_;
 			DynamicArray	children_;
 			DynamicArray	properties_;
 			DynamicArray	methods_;
 			DynamicArray	events_;
-			bool					sealed_;
 	};
 
-class xss_serial_object : public xss_object
-	{
-		public:
-			xss_serial_object() : xss_object()
-				{
-					sealed_ = false;
-				}
-	};
+class xss_type : public xss_object  
+  {
+  };
 
 //the idiom interface, under designed
-struct xss_idiom
+struct ILanguage
   {
-    virtual void    set_context(XSSContext ctx)																				=	0;
-    virtual variant process_code(code& cde, param_list_decl& params, XSSContext ctx)	= 0;
-    virtual variant process_expression(expression expr, XSSObject this_)							= 0;
-		virtual variant process_args(param_list_decl& params)															= 0;
+    virtual variant compile_code(code& cde, param_list_decl& params, XSSContext ctx)	= 0;
+    virtual variant compile_expression(expression expr, XSSObject this_)							= 0;
+		virtual variant compile_args(param_list_decl& params)															= 0;
     virtual str     resolve_this(XSSContext ctx)																			= 0;
     virtual str     resolve_separator(XSSObject lh = XSSObject())											= 0;
-    virtual str     translate_type(const str& type)																		= 0;
   };
 
-struct xss_code_context : base_code_context
+struct xss_context
   {
-    xss_code_context(const variant project, xss_idiom* idiom, fs::path path);
-    xss_code_context(xss_code_context& other);
-
-    //this will function as resolver
-    virtual XSSProperty   get_property(const str& name);
-    virtual XSSProperty   get_property(XSSObject obj, const str& name);
-		virtual XSSMethod			get_method(const str& name);
-		virtual XSSMethod			get_method(XSSObject obj, const str& name);
-    virtual XSSObject			resolve_instance(const str& id);
-    virtual variant       evaluate_property(XSSObject obj, const str& name);
-		virtual schema*				get_type(const str& name);
-		virtual str						get_type_name(schema* type);
-		virtual XSSObject			get_xss_type(const str& name);
-		virtual void					register_variable(const str& name, XSSObject xss_type);
-		virtual bool					has_var(const str& name);
-		virtual xss_idiom*		getIdiom();
-	public:
-      //td: ugles, this is the way it is to circunvent c++ and its dependencies
-      variant    project_;
-      xss_idiom* idiom_;
-
-			typedef std::map<str, XSSObject> variable_types;
-
-			variable_types vars_;
-			fs::path				path_;	
-  };
-
-struct xss_composite_context : xss_code_context
-  {
-    xss_composite_context(XSSContext ctx);
-
-    //this will function as resolver
-    virtual XSSProperty   get_property(const str& name);
-    virtual XSSProperty   get_property(XSSObject obj, const str& name);
-    virtual XSSObject			resolve_instance(const str& id);
-    virtual variant       evaluate_property(XSSObject obj, const str& name);
-    private:
-      XSSContext ctx_;
+    xss_context(XSSContext parent = XSSContext());
+	  
+    public:
+      XSSType   get_type(const str& type);
+      XSSObject get_this();
+      void      set_this(XSSObject this_);
+      Language  get_language();
+    protected:
+			XSSContext parent_;	
   };
 
 //these are basically copies of their xs counterpart, but offer xss stuff, like generating
 //they are also vm friendly, unlike the low level xs's ast.
-class xss_property : public xss_serial_object
+class xss_property : public xss_object
   {
 		public:
 			xss_property();
 			xss_property(const xss_property& other);
-			xss_property(const str& name, const str& type, variant value, XSSObject _this_);
-			xss_property(const str& name, const str& type, variant value, variant _get, variant _set, XSSObject _this_);
+			xss_property(const str& name, XSSType type, variant value, XSSObject _this_);
+			xss_property(const str& name, XSSType type, variant value, variant _get, variant _set, XSSObject _this_);
 
 			str       name;
 			variant   get;
@@ -157,7 +117,7 @@ class xss_property : public xss_serial_object
 			size_t    flags;
 			XSSObject this_;
 			variant   value_;
-			str				type;
+			XSSType	  type;
 
 			str     generate_value();
 			variant get_value();

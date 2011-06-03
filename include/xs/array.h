@@ -162,10 +162,14 @@ namespace xkp
         {
           return ref_->at(idx);
         }
+
 			void remove(size_t idx)
 				{
 					ref_->erase(ref_->begin() + idx);
 				}
+
+      container::iterator begin();
+      container::iterator end();
       private:
         schema* type_;
     };
