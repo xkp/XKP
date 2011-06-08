@@ -14,6 +14,7 @@ using namespace xkp;
 const str SProjectError("project");
 const str SCannotResolve("cannot-resolve");
 const str STypeMismatch("type-mismatch");
+const str SFileError("404");
 
 const str SCannotReadModule("Unable to read module");
 const str SMustProvideEntryPointForApplicationType("Applications must provide an entry point");
@@ -27,6 +28,7 @@ const str SOnlyClassAllowedInInclude("Only classes are allowed in includes");
 const str SUnknownClass("Cannot find type");
 const str SIncompatibleReturnType("Return type is inconsistent");
 const str SUnknownInstance("Instance not found");
+const str SFileNotFound("File not found");
 
 //xss_application_renderer
 xss_application_renderer::xss_application_renderer(const str& xss_file):
@@ -37,13 +39,23 @@ xss_application_renderer::xss_application_renderer(const str& xss_file):
 
 XSSContext xss_application_renderer::context()
   {
+    return context_;
   }
 
 void xss_application_renderer::register_module(const str& id, XSSModule module)
   {
   }
 
-  
+str xss_application_renderer::target()
+  {
+    return target_;
+  }
+   
+void xss_application_renderer::set_target(const str& target)
+  {
+    target_ = target;
+  }
+ 
 //xss_module
 xss_module::xss_module(XSSContext ctx):
   ctx_(ctx)
@@ -51,10 +63,16 @@ xss_module::xss_module(XSSContext ctx):
   }
 
 //xss_compiler
-void xss_compiler::build(const str& xml)
+void xss_compiler::build(fs::path xml)
   {
-    XSSObject project_data = read_project(xml);
+    XSSObject project_data = read_project(xml.string());
     read_includes(project_data);
+  }
+
+fs::path xss_compiler::output_path()
+  {
+    assert(false); //td implement
+    return fs::path();
   }
 
 XSSObject xss_compiler::read_project(const str& xml)
@@ -125,7 +143,7 @@ void xss_compiler::read_application_types(std::vector<XSSObject> & applications)
 
 XSSModule xss_compiler::read_module(const str& src, XSSApplicationRenderer app, XSSObject module)
   {
-    xss_object_reader reader;
+    xss_object_reader reader(app->context());
     XSSObject module_data = reader.read(src); //td: path
 
     if (!module_data)
@@ -301,10 +319,12 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx)
 							    }
 					    }
 
-				    XSSType clazz(new xss_type(def_class, super));
+				    XSSType clazz(new xss_type());
+            clazz->add_surrogate(def_class);
+            clazz->set_super(super);
 
 				    XSSContext ictx(new xss_context(ctx));
-				    ictx->set_this(clazz);
+				    ictx->set_this(XSSObject(clazz));
 
 				    compile_ast(ci, ictx);
           }
@@ -365,7 +385,8 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 				param_list_decl::iterator mand = mit->args.end();
 				for(; mait != mand; mait++)
 					{
-						typer.register_var(mait->name, ctx->get_type(mait->type));
+            assert(false); //td: get rid of
+						//typer.register_var(mait->name, ctx->get_type(mait->type));
 					}
  
 				mit->cde.visit(&typer);
@@ -407,11 +428,11 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
             if (idx == 0)
               {
 								complete_name = inst_name;
-                actual_instance = get_instance(inst_name);
+                actual_instance = ctx->resolve(inst_name, RESOLVE_INSTANCE);
               }
             else
               {
-                complete_name += '.' + inst_name;
+                complete_name += ctx->get_language()->resolve_separator() + inst_name;
 								variant vv;
                 if (dynamic_try_get(actual_instance, inst_name, vv))
                   {
@@ -442,10 +463,12 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
         str event_name = it->name[it->name.size() - 1];
 
 				XSSEvent		 ev;
-        DynamicArray impls = get_event_impl(actual_instance, event_name, ev);
+        DynamicArray impls = actual_instance->get_event_impl(event_name, ev);
 
 				if (actual_instance != instance && options("gen_event_method"))
 					{
+            assert(false); //td: rewrite, this should not be a compiler option, maybe language options or application renderer
+
 						//here's one. It would seem convinient that events implemented in
 						//the context of a different instance would generate code using such
 						//instance as the *this* pointer. At least this should be a compiler option.
@@ -458,7 +481,7 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 						variant margs = lang->compile_args(it->args);								 assert(!margs.empty());
 						variant mcde  = lang->compile_code(it->cde, it->args, ctx);  assert(!mcde.empty());
 
-						XSSMethod mthd(new xss_method(mname, "", margs, mcde));
+						XSSMethod mthd(new xss_method(mname, XSSType(), margs, mcde));
 						methods->push_back(mthd);
 
 						//and generate a call to it on the actual method implementation
@@ -511,7 +534,7 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 			{
 				xs_instance& instance_ast = *iit;
 				str					 pth;
-				XSSObject		 instance_instance = resolve_path(instance_ast.id, instance, pth);
+				XSSObject		 instance_instance = ctx->resolve_path(instance_ast.id);
 
 				XSSContext ictx(new xss_context(ctx));
 				ictx->set_this(instance_instance);
@@ -530,3 +553,38 @@ void xss_compiler::compile_xs_file(fs::path file, xs_container& result)
     xs_compiler compiler;
 		compiler.compile_xs(load_file(file.string()), result); //td: errors
   }
+
+str xss_compiler::load_file(fs::path fname)
+  {
+    //td: please do this seriously
+    std::ifstream ifs(fname.string().c_str());
+		if (!ifs.good())
+			{
+				param_list error;
+				error.add("id", SFileError);
+				error.add("desc", SFileNotFound);
+				error.add("file", fname.string());
+
+				xss_throw(error);
+			}
+
+    str result;
+    char buffer[1024];
+    while(ifs.good())
+      {
+        ifs.getline(buffer, 1024);
+        result += buffer;
+        result += '\n';
+      }
+
+    return result;
+  }
+
+bool xss_compiler::options(const str& name)
+	{
+    if (options_ && options_->has(name))
+      {
+        return variant_cast<bool>(options_->get(name, variant()), false);
+      }
+		return false;
+	}

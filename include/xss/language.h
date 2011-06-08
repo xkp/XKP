@@ -2,6 +2,7 @@
 #define LANGUAGE_HH
 
 #include "xs/compiler.h"
+#include "xss_context.h"
 
 namespace xkp
 {
@@ -45,14 +46,6 @@ struct code_type_resolver : code_visitor
     virtual void expression_(stmt_expression& info);
     virtual void dsl_(dsl& info);
     virtual void dispatch(stmt_dispatch& info);
-
-		public:
-			void register_var(const str& name, XSSType type);
-		private:
-			std::map<str, XSSType> vars_;
-			XSSContext						 ctx_;
-			bool									 is_variant_;
-			schema*								 result_;
 	};
 
 }

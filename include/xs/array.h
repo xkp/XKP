@@ -168,8 +168,15 @@ namespace xkp
 					ref_->erase(ref_->begin() + idx);
 				}
 
-      container::iterator begin();
-      container::iterator end();
+      container::iterator begin()
+        {
+          return ref_->begin();
+        }
+
+      container::iterator end()
+        {
+          return ref_->end();
+        }
       private:
         schema* type_;
     };

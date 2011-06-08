@@ -29,11 +29,16 @@ typedef reference<xss_method>		XSSMethod;
 typedef reference<ILanguage>		Language;
 typedef reference<xss_type>		  XSSType;
 
+//misc
+typedef std::vector<XSSObject> XSSObjectList;
+
 class xss_object : public editable_object<xss_object>,
 									 public boost::enable_shared_from_this<xss_object>
 	{
 		public:
 			xss_object();
+		public:
+      virtual bool resolve(const str& name, schema_item& result);
 		public:
 			//accesors
       template <typename T> 
@@ -45,16 +50,21 @@ class xss_object : public editable_object<xss_object>,
       str           id();
       str           type_name();
 			XSSObject			type();
+			void					set_type(XSSObject type);
 			XSSObject			parent();
 			DynamicArray	children();
 			DynamicArray	properties();
 			DynamicArray	methods();
 			DynamicArray	events();
+
+      void set_id(const str& id);
+      void set_type_name(const str& id);
 		public:
       //misc
-			void					         set_type(XSSObject type);
       XSSObject              find(const str& what);
       std::vector<XSSObject> find_by_class(const str& which);
+      void                   add_surrogate(XSSObject s);
+      DynamicArray           get_event_impl(const str& event_name, XSSEvent& ev);
 		public:
       //children management
 			void add_child(XSSObject obj);
@@ -64,6 +74,7 @@ class xss_object : public editable_object<xss_object>,
 			std::vector<XSSEvent> get_events(const str& name);
 			XSSMethod		          get_method(const str& name);
     public:
+      XSSObjectList surrogates_;
       str           id_;
       str           type_name_;
 			XSSObject     type_;
@@ -76,6 +87,10 @@ class xss_object : public editable_object<xss_object>,
 
 class xss_type : public xss_object  
   {
+    public:
+      void set_super(XSSType super);
+    private:
+      XSSType super_;
   };
 
 //the idiom interface, under designed
@@ -88,6 +103,11 @@ struct ILanguage
     virtual str     resolve_separator(XSSObject lh = XSSObject())											= 0;
   };
 
+enum RESOLVE_ITEM
+  {
+    RESOLVE_INSTANCE,
+  };
+
 struct xss_context
   {
     xss_context(XSSContext parent = XSSContext());
@@ -97,8 +117,13 @@ struct xss_context
       XSSObject get_this();
       void      set_this(XSSObject this_);
       Language  get_language();
+    public:
+      variant resolve(const str& id, RESOLVE_ITEM item_type);
+      variant resolve_path(const std::vector<str>& path);
     protected:
 			XSSContext parent_;	
+      Language   lang_;
+      XSSObject  this_;
   };
 
 //these are basically copies of their xs counterpart, but offer xss stuff, like generating
@@ -119,10 +144,11 @@ class xss_property : public xss_object
 			variant   value_;
 			XSSType	  type;
 
-			str     generate_value();
-			variant get_value();
-			str			resolve_assign(const str& value);
-			str			resolve_value();
+			//td: revise interface
+      //str     generate_value();
+			//variant get_value();
+			//str			resolve_assign(const str& value);
+			//str			resolve_value();
   };
 
 class xss_event : public xss_object
@@ -130,15 +156,13 @@ class xss_event : public xss_object
 		public:
 			xss_event();
 			xss_event(const xss_event& other);
+			xss_event(const str& name);
 
 			str          name;
 			DynamicArray impls;
 			variant			 args;
 
-			bool implemented()
-				{
-					return impls->size() > 0;
-				}
+			bool implemented();
   };
 
 class xss_method : public xss_object
@@ -146,10 +170,10 @@ class xss_method : public xss_object
 		public:
 			xss_method();
 			xss_method(const xss_method& other);
-			xss_method(const str& _name, const str& type, variant _args, variant _code);
+			xss_method(const str& _name, XSSType type, variant _args, variant _code);
 
 			str     name;
-			str			type;
+			XSSType	type;
 			variant args;
 			variant code;
   };
