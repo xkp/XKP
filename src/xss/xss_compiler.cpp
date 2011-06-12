@@ -65,7 +65,10 @@ xss_module::xss_module(XSSContext ctx):
 //xss_compiler
 void xss_compiler::build(fs::path xml)
   {
-    XSSObject project_data = read_project(xml.string());
+    fs::path pp = xml;
+    base_path_ = pp.parent_path();
+
+    XSSObject project_data = read_project(xml);
     read_includes(project_data);
   }
 
@@ -75,10 +78,10 @@ fs::path xss_compiler::output_path()
     return fs::path();
   }
 
-XSSObject xss_compiler::read_project(const str& xml)
+XSSObject xss_compiler::read_project(fs::path xml_file)
   {
     xss_object_reader reader;
-    XSSObject project_data = reader.read(xml);
+    XSSObject project_data = reader.read(load_file(xml_file));
     if (!project_data)
       {
         param_list error;
@@ -101,7 +104,7 @@ XSSObject xss_compiler::read_project(const str& xml)
 void xss_compiler::read_application_types(std::vector<XSSObject> & applications)
   {
     std::vector<XSSObject>::iterator it = applications.begin();
-    std::vector<XSSObject>::iterator nd = applications.begin();
+    std::vector<XSSObject>::iterator nd = applications.end();
 
     for(; it != nd; it++)
       {
@@ -249,7 +252,7 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx)
 
         for(; cit != cnd; cit++)
           {
-            XSSObject clazz_data;
+            XSSObject clazz_data = *cit;
             str cid = clazz_data->id();
 
 						std::map<str, XSSObject>::iterator dcit = def_types.find(cid);
@@ -320,15 +323,44 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx)
 					    }
 
 				    XSSType clazz(new xss_type());
-            clazz->add_surrogate(def_class);
+            clazz->set_definition(def_class);
             clazz->set_super(super);
 
 				    XSSContext ictx(new xss_context(ctx));
 				    ictx->set_this(XSSObject(clazz));
 
 				    compile_ast(ci, ictx);
+
+            ctx->add_type(cid, clazz);
           }
 			}
+
+    //process the left over classes
+    std::map<str, XSSObject>::iterator it = def_types.begin();
+    std::map<str, XSSObject>::iterator nd = def_types.end();
+    for(; it != nd; it++)
+      {
+				XSSType clazz(new xss_type());
+        clazz->set_definition(it->second);
+
+        str super = it->second->get<str>("super", str());
+        if (!super.empty())
+          {
+            XSSType super_clazz = ctx->get_type(super);
+            if (!super_clazz)
+              {
+								param_list error;
+								error.add("id", SProjectError);
+								error.add("desc", SUnknownClass);
+								error.add("class", super);
+								xss_throw(error);
+              }
+
+            clazz->set_super(super_clazz);
+          }
+
+        ctx->add_type(it->first, clazz);
+      }
   }
 
 void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
@@ -379,20 +411,24 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
     std::vector<xs_method>::iterator mnd = gather.methods.end();
     for(; mit != mnd; mit++)
       {
-				code_type_resolver typer(ctx);
-				
-				param_list_decl::iterator mait = mit->args.begin();
-				param_list_decl::iterator mand = mit->args.end();
-				for(; mait != mand; mait++)
-					{
-            assert(false); //td: get rid of
-						//typer.register_var(mait->name, ctx->get_type(mait->type));
-					}
+        //td: !!! decide how to obtain the type in a way that doesn't 
+        //involve resolving code until every thing has been preprocessed
+        //either that or having a pp step
+
+				//code_type_resolver typer(ctx);
+				//
+				//param_list_decl::iterator mait = mit->args.begin();
+				//param_list_decl::iterator mand = mit->args.end();
+				//for(; mait != mand; mait++)
+				//	{
+        //    assert(false); //td: get rid of
+				//		//typer.register_var(mait->name, ctx->get_type(mait->type));
+				//	}
  
-				mit->cde.visit(&typer);
+				//mit->cde.visit(&typer);
 				
         XSSType decl_type   = ctx->get_type(mit->type);
-        XSSType return_type = typer.get();
+        XSSType return_type = decl_type; //typer.get();
 
 				if (!decl_type)
 					decl_type = return_type;
@@ -545,7 +581,7 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 void xss_compiler::read_object_array(fs::path file, std::vector<XSSObject>& classes_data)
   {
     xss_object_reader reader;
-    classes_data = reader.read_array(file.string()); //td: errors
+    classes_data = reader.read_array(load_file(file)); 
   }
 
 void xss_compiler::compile_xs_file(fs::path file, xs_container& result)

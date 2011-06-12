@@ -55,7 +55,7 @@ namespace xkp
         fs::path  source_path_;
         XSSObject options_;
         
-        XSSObject read_project(const str& xml);
+        XSSObject read_project(fs::path xml_file);
         void      read_application_types(std::vector<XSSObject> & applications);
         XSSModule read_module(const str& src, XSSApplicationRenderer app, XSSObject module);
         void      read_types(XSSObject module_data, XSSApplicationRenderer app, XSSModule module);

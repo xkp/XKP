@@ -5,8 +5,10 @@
 using namespace xkp;
 
 const str STypeMismatch("type-mismatch");
+const str SContextError("context");
 
 const str SCannotOverrideTypes("Cannot override types");
+const str SDupType("Duplicate type");
 
 //xss_context
 xss_context::xss_context(XSSContext parent):
@@ -16,8 +18,44 @@ xss_context::xss_context(XSSContext parent):
 
 XSSType xss_context::get_type(const str& type)
   {
-    assert(false);
+    type_list::iterator it = types_.find(type);
+    if (it != types_.end())
+      return it->second;
+
+    if (parent_)
+      return parent_->get_type(type);
+
     return XSSType();
+  }
+
+void xss_context::add_type(const str& id, XSSType type, bool override_parent)
+  {
+    if (override_parent)
+      {
+        type_list::iterator it = types_.find(id);
+        if (it != types_.end())
+          {
+            param_list error;
+            error.add("id", SContextError);
+            error.add("desc", SDupType);
+            error.add("type", id);
+            xss_throw(error);
+          }
+      }
+    else
+      {
+        XSSType already = get_type(id);
+        if (already)
+          {
+            param_list error;
+            error.add("id", SContextError);
+            error.add("desc", SDupType);
+            error.add("type", id);
+            xss_throw(error);
+          }
+      }
+
+    types_.insert(type_list_pair(id, type));
   }
 
 XSSObject xss_context::get_this()
@@ -35,6 +73,11 @@ Language xss_context::get_language()
     return lang_;
   }
 
+void xss_context::set_language(Language lang)
+  {
+    lang_ = lang;
+  }
+
 variant xss_context::resolve(const str& id, RESOLVE_ITEM item_type)
   {
     assert(false);
@@ -48,7 +91,11 @@ variant xss_context::resolve_path(const std::vector<str>& path)
   }
 
 //xss_object
-xss_object::xss_object()
+xss_object::xss_object():
+	children_(new dynamic_array),
+	properties_(new dynamic_array),
+	methods_(new dynamic_array),
+	events_(new dynamic_array)
   {
   }
 
@@ -270,6 +317,12 @@ XSSMethod xss_object::get_method(const str& name)
 void xss_type::set_super(XSSType super)
   {
     super_ = super;
+  }
+
+void xss_type::set_definition(XSSObject def)
+  {
+    add_surrogate(def);
+    //td: resolve property sharing
   }
 
 //xss_property

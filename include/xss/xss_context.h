@@ -89,6 +89,7 @@ class xss_type : public xss_object
   {
     public:
       void set_super(XSSType super);
+      void set_definition(XSSObject def);
     private:
       XSSType super_;
   };
@@ -103,6 +104,7 @@ struct ILanguage
     virtual str     resolve_separator(XSSObject lh = XSSObject())											= 0;
   };
 
+//resolver
 enum RESOLVE_ITEM
   {
     RESOLVE_INSTANCE,
@@ -114,16 +116,22 @@ struct xss_context
 	  
     public:
       XSSType   get_type(const str& type);
+      void      add_type(const str& id, XSSType type, bool override_parent = false);
       XSSObject get_this();
       void      set_this(XSSObject this_);
       Language  get_language();
+      void      set_language(Language lang);
     public:
       variant resolve(const str& id, RESOLVE_ITEM item_type);
       variant resolve_path(const std::vector<str>& path);
     protected:
+      typedef std::map<str, XSSType>  type_list;
+      typedef std::pair<str, XSSType> type_list_pair;
+
 			XSSContext parent_;	
       Language   lang_;
       XSSObject  this_;
+      type_list  types_;
   };
 
 //these are basically copies of their xs counterpart, but offer xss stuff, like generating
@@ -177,6 +185,72 @@ class xss_method : public xss_object
 			variant args;
 			variant code;
   };
+
+//glue
+template <typename T>
+struct xss_object_schema : editable_object_schema<T>
+  {
+    virtual void declare()
+      {
+				this->template property_<DynamicArray>("properties",  &T::properties_);
+				this->template property_<DynamicArray>("events",			&T::events_);
+				this->template property_<DynamicArray>("methods",		  &T::methods_);
+				this->template property_<DynamicArray>("children",		&T::children_);
+		}
+  };
+
+struct xss_event_schema : xss_object_schema<xss_event>
+  {
+    virtual void declare()
+      {
+				xss_object_schema<xss_event>::declare();
+
+				inherit_from<xss_object>();
+
+        property_("name",  &xss_event::name);
+        property_("impls", &xss_event::impls);
+				readonly_property<bool>("implemented", &xss_event::implemented);
+      }
+  };
+
+struct xss_method_schema : xss_object_schema<xss_method>
+  {
+    virtual void declare()
+      {
+				xss_object_schema<xss_method>::declare();
+
+				inherit_from<xss_object>();
+
+        property_("name", &xss_method::name);
+        property_("type", &xss_method::type);
+        property_("args", &xss_method::args);
+        property_("code", &xss_method::code);
+      }
+  };
+
+struct xss_property_schema : xss_object_schema<xss_property>
+  {
+    virtual void declare()
+      {
+				inherit_from<xss_object>();
+
+				xss_object_schema<xss_property>::declare();
+
+				property_("name",  &xss_property::name);
+        property_("get",   &xss_property::get);
+        property_("set",   &xss_property::set);
+        property_("value", &xss_property::value_);
+        property_("type",  &xss_property::type);
+      }
+  };
+
+register_complete_type(xss_object,    xss_object_schema<xss_object>);
+register_complete_type(xss_event,		  xss_event_schema);
+register_complete_type(xss_property,	xss_property_schema);
+register_complete_type(xss_method,		xss_method_schema);
+
+register_iterator(XSSObject);
+
 }
 
 

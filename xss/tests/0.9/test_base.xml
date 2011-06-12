@@ -1,0 +1,5 @@
+<project entry_point="test_base.xss">
+    <include def="test_base_classes.xml" src="test_base_classes.xs"/>
+</project>
+           
+         

@@ -9,6 +9,7 @@ const str SReaderError("reader");
 
 const str SPropertyMustHaveName("Properties must have a name");
 const str SPropertyMustHaveType("Properties must have a type");
+const str SCannotParseXML("Invalid XML file");
 
 //xss_object_reader
 xss_object_reader::xss_object_reader(XSSContext ctx):
@@ -26,26 +27,33 @@ std::vector<XSSObject> xss_object_reader::read_array(const str& xml)
 	{
     parse_xml(xml);
 
-    return read_array(doc_.RootElement()->FirstChildElement());
+    return read_array(doc_.RootElement());
 	}
 
-void xss_object_reader::parse_xml(const str& file)
+void xss_object_reader::parse_xml(const str& xml)
   {
-    const char* result = doc_.Parse(file.c_str());
-    assert(false); //td: !!! throw error
+    doc_.Parse(xml.c_str());
+    if (doc_.Error())
+      {
+				param_list error;
+				error.add("id", SReaderError);
+				error.add("desc", SCannotParseXML);
+				error.add("error", str(doc_.ErrorDesc()));
+				error.add("line", doc_.ErrorRow());
+				error.add("column", doc_.ErrorCol());
+
+				xss_throw(error);
+      }
   }
 
 XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent)
   {
-    XSSObject result;
+    XSSObject result(new xss_object());
 
     str class_name = node->Value();
     if (!special_node(node, parent, result))
       {
-        result = XSSObject(new xss_object());
-
 	      bool found_class = false;
-	      bool found_id    = false;
 
         //read properties
         const TiXmlAttribute* attr = node->FirstAttribute();
@@ -56,6 +64,7 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent)
 
             if (attr_name == "class")
               {
+                found_class = true;
                 result->set_type_name(attr_value);
               }
             else if (attr_name == "id")
@@ -70,6 +79,9 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent)
 	          attr = attr->Next();
 	        }
 
+	      if (!found_class)
+          result->set_type_name(node->Value());
+
         //children
         TiXmlElement* child_node = node->FirstChildElement();
         while(child_node)
@@ -77,7 +89,7 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent)
             XSSObject child = read_object(child_node, XSSObject());
             result->add_child( child );
 
-            node = node->NextSiblingElement();
+            child_node = child_node->NextSiblingElement();
           }
       }
 
@@ -122,7 +134,9 @@ variant xss_object_reader::attribute_value(const TiXmlAttribute* attr)
 bool xss_object_reader::special_node(TiXmlElement* node, XSSObject parent, XSSObject& result)
   {
     str class_name = node->Value();
-    str type       = node->Attribute("type");
+    
+    const char* ta = node->Attribute("type");
+    str type(ta? ta : "");
 
     if (class_name == "property")
       {
@@ -146,7 +160,8 @@ bool xss_object_reader::special_node(TiXmlElement* node, XSSObject parent, XSSOb
           }
         else
           {
-            str value_str = node->Attribute("value");
+            const char* av = node->Attribute("value"); 
+            str value_str(av? av : "");
             if (!value_str.empty())
               {
                 assert(false); //td: punting the type resolvation (sic) for later
@@ -178,7 +193,7 @@ bool xss_object_reader::special_node(TiXmlElement* node, XSSObject parent, XSSOb
         XSSType xtype = ctx_? ctx_->get_type(type) : XSSType();
         XSSProperty prop(new xss_property(name, xtype, value, parent)); 
 
-        parent->properties()->push_back(prop); //td: check for existing properties
+        result->properties()->push_back(prop); //td: check for existing properties
       }
 
     return false;
