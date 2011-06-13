@@ -12,12 +12,14 @@ const str SIdiom("idiom");
 const str SInvalidOperator("invalid-operator");
 const str SDeclaration("variable-declaration");
 const str SCannotResolve("unkown-identifier");
+const str SVariableAssigner("variable-assigner");
 
 const str SEmptyExpression("Trying to use an empty expression");
 const str SEveryInstanceMustHaveId("Trying to use an instance without id");
 const str SAssignOperator("Assign operators can only be used as the base of an expression");
 const str SDuplicateVariable("Variable already declared");
 const str SUnknownVariable("Variable not found");
+const str SMultipleTypeVariable("Multiple type assign to only one variable");
 
 //td: !!! stop duplicating this array
 const char* operator_str[] =
@@ -314,8 +316,11 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
 
 		if (top && assigner)
 			{
-				assert(op == op_dot); //I'm sure there are more use cases, but I'll deal with this one exclusively
-															//for now
+				assert(op == op_dot || 
+               op == op_index);   //I'm sure there are more use cases, but I'll deal with this one exclusively
+															    //for now
+				//assert(op == op_dot); //I'm sure there are more use cases, but I'll deal with this one exclusively
+				//											//for now
 			}
 
     int op_prec = operator_prec[op];
@@ -439,8 +444,9 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
 				      if (arg1.is<expression_identifier>())
 					      {
 						      expression_identifier ei = arg1;
-						      caller = ctx_->get_xss_type(ei.value); //td: meh, do the context
-																												 //also do static members, this is getting sloppy	
+                  xs_type_info xsti = ctx_->get_xss_type(ei.value); //td: meh, do the context
+																												            //also do static members, this is getting sloppy	
+                  caller = xsti.object;
 					      }
 			      }
 			
@@ -837,6 +843,11 @@ str expression_renderer::operand_to_string(variant operand, XSSObject parent, in
     return result;
   }
 
+str expression_renderer::array_operation(str lopnd, str ropnd, operator_type op)
+  {
+    return lopnd + " " + idiom_utils::get_operator_str(op) + " " + ropnd;
+  }
+
 void expression_renderer::push_rendered(str value, int prec, variant object)
   {
     already_rendered ar;
@@ -912,12 +923,12 @@ str idiom_utils::operand_to_string(variant operand, XSSContext ctx)
   }
 
 //expr_type_resolver
-expr_type_resolver::expr_type_resolver(local_variables& local_vars, XSSContext ctx) 
-  : is_variant_(false), local_(local_vars), ctx_(ctx) 
+expr_type_resolver::expr_type_resolver(XSSContext ctx) 
+  : is_variant_(false), local_(ctx->vars_), ctx_(ctx) 
   {
   }
 
-schema* expr_type_resolver::get()
+xs_type_info expr_type_resolver::get()
 	{
 		if (is_variant_)
 			return null;
@@ -930,9 +941,9 @@ str expr_type_resolver::type_name()
 	{
 		assert(stack_.size() == 1); 
 
-		schema* s = resolve_type(stack_.top());
-		if (s)
-			return ctx_->get_type_name(s);
+		xs_type_info ti = resolve_type(stack_.top());
+    if (ti.type)
+      return ctx_->get_type_name(ti.type);
 		else
 			{
 				XSSObject obj = resolve_xss_type(stack_.top());	
@@ -968,7 +979,7 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
 				case op_unary_minus:
 					{
 						variant top = stack_.top(); stack_.pop();
-						stack_.push(resolve_type(top));
+						stack_.push(xs_type_info(resolve_type(top)));
 						break;
 					}
 
@@ -977,7 +988,7 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
 				case op_namecheck:
 					{
 						stack_.pop();
-						stack_.push(type_schema<bool>());
+						stack_.push(xs_type_info(type_schema<bool>()));
 						break;
 					}
 
@@ -992,7 +1003,7 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
 					{
 						stack_.pop();
 						stack_.pop();
-						stack_.push(type_schema<bool>());
+						stack_.push(xs_type_info(type_schema<bool>()));
 						break;
 					}
 
@@ -1020,17 +1031,50 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
 						break; 
 					}
 
-				case op_call:
-				case op_func_call:
-				case op_array:
 				case op_parameter:
-				case op_dot_call:
+          {
+						//do nothing
+            break;
+          }
+
 				case op_index:
 					{
 						//td: warning
-						is_variant_ = true;
+						//is_variant_ = true;
+            int array_pos							= stack_.top(); stack_.pop();
+            expression_identifier ei	= stack_.top(); stack_.pop();
+
+						stack_.push(ei);
 						break;
 					}
+
+				case op_array:
+          {
+            int arg_count = stack_.top(); stack_.pop();
+
+            //verify array type from the type of there elements
+            schema *arr_type = null;
+            for(int i = 0; i < arg_count; i++)
+							{
+								variant opnd = stack_.top(); stack_.pop();
+								xs_type_info xsti = resolve_type(opnd);
+                if (arr_type != xsti.type)
+                  {
+                    if (arr_type)
+                      arr_type = type_schema<variant>();
+                    else
+                      arr_type = xsti.type;
+                  }
+							}
+            
+            xs_type_info result;
+            result.type = type_schema<DynamicArray>();
+            result.is_array = true;
+            result.array_type = arr_type;
+
+            stack_.push(result);
+            break;
+          }
 
 				case op_mult:
 				case op_divide:
@@ -1043,51 +1087,117 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
 						variant arg2 = stack_.top(); stack_.pop();
 						variant arg1 = stack_.top(); stack_.pop();
 
-						schema* type1 = resolve_type(arg1);
-						schema* type2 = resolve_type(arg2);
+						xs_type_info xstype1 = resolve_type(arg1);
+						xs_type_info xstype2 = resolve_type(arg2);
 						schema* result = null;
 						size_t  idx;
-						if (operators_.get_operator_index(op, type1, type2, idx, &result) && result)
-							stack_.push(result);
+            
+            // i don't imagine how it's work operations with array operands
+            if (operators_.get_operator_index(op, xstype1.type, xstype2.type, idx, &result) && result)
+							stack_.push(xs_type_info(result));
 						else
 							is_variant_ = true;
 						break;
 					}
+
+				case op_call:
+          {
+            int args = stack_.top(); stack_.pop();
+
+            //pop all parameters from stack
+            for(int i = 0; i < args; i++)
+							stack_.pop();
+
+            //and do nothing
+            break;
+          }
+
+				case op_func_call:
+          {
+            int args = stack_.top(); stack_.pop();
+            expression_identifier ei = stack_.top(); stack_.pop();
+
+            //pop all parameters from stack
+            for(int i = 0; i < args; i++)
+							stack_.pop();
+
+            xs_type_info xsti;
+            XSSMethod mthd = ctx_->get_method(ei.value);
+            if (mthd)
+              {
+                schema* result = ctx_->get_type(mthd->type);
+						    if (result)
+                  xsti.type = result;
+						    else 
+                  xsti = ctx_->get_xss_type(mthd->type);
+              }
+
+            stack_.push(xsti);
+            break;
+          }
 
 				case op_dot:
 					{
 						expression_identifier arg1  = stack_.top(); stack_.pop();
 						expression_identifier arg2  = stack_.top(); stack_.pop();
 
-						XSSObject obj	 = resolve_object(arg2); 
+						XSSObject obj	 = resolve_object(arg2);
 						if (!obj)
 							obj	 = resolve_xss_type(arg2);
 
-						if (obj)
-							{
+						xs_type_info xsti;
+            if (obj)
+              {
 								XSSProperty prop = obj->get_property(arg1.value);
-								if (prop)
-									{
+                if (prop)
+                  {
 										schema* result = ctx_->get_type(prop->type);
 										if (result)
-											stack_.push(result);
+											xsti.type = result;
 										else 
 											{
-												XSSObject prop_type_obj = ctx_->get_xss_type(prop->type);
-												if (prop_type_obj)
-													stack_.push(prop_type_obj);
-												else if (obj->has("enum"))
-													stack_.push(obj);
+                        xsti = ctx_->get_xss_type(prop->type);
+												if (!xsti.object && obj->has("enum"))
+													xsti.object = obj;
 											}
-										break;
-									}
-							}
+                  }
+              }
 
-
-						stack_.push(null);
-						break;
+            stack_.push(xsti);
+            break;
 					}
-			}
+
+				case op_dot_call:
+          {
+						expression_identifier arg1  = stack_.top(); stack_.pop();
+						expression_identifier arg2  = stack_.top(); stack_.pop();
+
+						XSSObject obj	 = resolve_object(arg2);
+						if (!obj)
+							obj	 = resolve_xss_type(arg2);
+
+						xs_type_info xsti;
+            if (obj)
+              {
+                XSSMethod mthd = obj->get_method(arg1.value);
+                if (mthd)
+                  {
+										schema* result = ctx_->get_type(mthd->type);
+										if (result)
+											xsti.type = result;
+										else 
+											{
+                        xsti = ctx_->get_xss_type(mthd->type);
+												if (!xsti.object && obj->has("enum"))
+													xsti.object = obj;
+											}
+                  }
+              }
+
+            stack_.push(xsti);
+            break;
+          }
+			} // switch
 	}
 
 XSSObject expr_type_resolver::resolve_xss_type(variant var)
@@ -1105,20 +1215,20 @@ XSSObject expr_type_resolver::resolve_xss_type(variant var)
 					}
 				else if (prop = ctx_->get_property(ei.value))
 					{
-						return ctx_->get_xss_type(prop->type);
+            return ctx_->get_xss_type(prop->type).object;
 					}
 
-				return ctx_->get_xss_type(ei.value); //td: variables
+        return ctx_->get_xss_type(ei.value).object; //td: variables
 			}
 
 		return XSSObject();
 	}
 
-schema* expr_type_resolver::resolve_type(variant var)
+xs_type_info expr_type_resolver::resolve_type(variant var)
 	{
-		schema* result = null;
+		xs_type_info result;
 
-		if (var.is<schema*>())
+		if (var.is<xs_type_info>())
 			return var;
 		else if (var.is<expression_identifier>())
 			{
@@ -1129,26 +1239,26 @@ schema* expr_type_resolver::resolve_type(variant var)
 						XSSProperty	prop;
 						if (obj)
 							{
-								result = type_schema<XSSObject>();
+                result.type = type_schema<XSSObject>();
 							}
 						else if (prop = ctx_->get_property(ei.value))
 							{
-								result = ctx_->get_type(prop->type);
+                result.type = ctx_->get_type(prop->type);
 							}
 					}
 			}
 		else if (!var.is<XSSObject>())
-			result = var.get_schema();
+      result.type = var.get_schema();
 
 		return result;
 	}
 
-bool expr_type_resolver::resolve_variable(const str& id, schema* &type)
+bool expr_type_resolver::resolve_variable(const str& id, xs_type_info &xstype)
 	{
 		local_variables::iterator it = local_.find(id);
 		if (it != local_.end())
 			{
-				type = it->second;
+        xstype = it->second;
 				return true;
 			}
 		return false;
@@ -1177,29 +1287,53 @@ variant expr_type_resolver::top_stack()
   }
 
 //code_type_resolver
-schema* code_type_resolver::get()
+xs_type_info code_type_resolver::get()
 	{
 		if (is_variant_)
 			return null;
+
+    xs_type_info result_;
+    local_variables::iterator it = vars_.find("@@result_");
+    if (it != vars_.end())
+      result_ = it->second;
 
 		return result_;
 	}
 
 void code_type_resolver::variable_(stmt_variable& info)
 	{
-		schema* type = ctx_->get_type(info.type);
-		if (!type)
+    xs_type_info xsti;
+    xsti.type = ctx_->get_type(info.type);
+		if (!xsti.type)
 			{
 				if (!info.value.empty())
 					{
-						expr_type_resolver typer(vars_, ctx_);
+						expr_type_resolver typer(ctx_);
 						info.value.visit(&typer);
 
-						type = typer.get();
+            variant ty_top = typer.top_stack();
+
+            if (ty_top.is<xs_type_info>())
+              xsti = ty_top;
+            else
+              xsti = typer.get();
 					}
 			}
+    else if (xsti.type->options() & TYPE_ITERATED)
+      {
+        xsti.is_array = true;
+        xsti.array_type = type_schema<variant>();
 
-    register_var(info.id, type);
+        if (!info.value.empty())
+          {
+            expr_type_resolver typer(ctx_);
+            info.value.visit(&typer);
+
+            xsti = typer.get();
+          }
+      }
+
+    register_var(info.id, xsti, info.type);
 	}
 
 void code_type_resolver::return_(stmt_return& info)
@@ -1207,19 +1341,27 @@ void code_type_resolver::return_(stmt_return& info)
 		if (is_variant_)
 			return;
 
-		expr_type_resolver typer(vars_, ctx_);
+		expr_type_resolver typer(ctx_);
 		info.expr.visit(&typer);
 
-		schema* type = typer.get();
-		if (!type)
+		xs_type_info xstype = typer.get();
+    if (!xstype.type)
 			{
 				is_variant_ = true;
 				return;
 			}
 
-		if (!result_)
-			result_ = type;
-		else if (result_ != type)
+    xs_type_info result_;
+    local_variables::iterator it = vars_.find("@@result_");
+    if (it != vars_.end())
+      result_ = it->second;
+
+    if (!result_.type)
+      {
+			  result_ = xstype;
+        vars_["@@result_"] = result_;
+      }
+    else if (result_.type != xstype.type)
 			{
 				is_variant_ = true;
 				return;
@@ -1228,12 +1370,12 @@ void code_type_resolver::return_(stmt_return& info)
 
 void code_type_resolver::expression_(xkp::stmt_expression &info)
   {
-    schema* type = expression_type_resolver(info.expr, ctx_);
+    expression_type_resolver(info.expr, ctx_);
   }
 
 void code_type_resolver::if_(stmt_if& info)
   {
-    schema* type = expression_type_resolver(info.expr, ctx_);
+    expression_type_resolver(info.expr, ctx_);
 
     info.if_code.visit(this);
 
@@ -1256,17 +1398,30 @@ void code_type_resolver::for_(stmt_for& info)
 
 void code_type_resolver::iterfor_(stmt_iter_for& info)
   {
-    register_var(info.id, ctx_->get_type(info.type.name));
+    register_var(info.id, xs_type_info(ctx_->get_type(info.type.name)), info.type.name);
     expression_type_resolver(info.iter_expr, ctx_);
 
     info.for_code.visit(this);
   }
 
-void code_type_resolver::register_var(const str& name, schema* type)
+void code_type_resolver::while_(stmt_while& info)
 	{
-    std::pair < std::map<str, schema *>::iterator, bool > ret;
+		expression_type_resolver(info.expr, ctx_);
 
-    ret = vars_.insert(std::pair<str, schema*>(name, type));
+		info.while_code.visit(this);
+	}
+
+void code_type_resolver::register_var(const str& name, xs_type_info type, const str& str_type)
+	{
+    std::pair < local_variables::iterator, bool > ret;
+
+    if (!str_type.empty())
+      {
+		    XSSProject project = ctx_->project_;
+        type.object        = project->get_class(str_type);
+      }
+
+    ret = vars_.insert(std::pair<str, xs_type_info>(name, type));
     if (!ret.second)
       {
         param_list error;
@@ -1278,9 +1433,9 @@ void code_type_resolver::register_var(const str& name, schema* type)
       }
 	}
 
-void code_type_resolver::type_to_var(const str& name, schema *type)
+void code_type_resolver::update_type(const str& name, xs_type_info type)
   {
-		map_variables::iterator it = vars_.find(name);
+		local_variables::iterator it = vars_.find(name);
 		if (it != vars_.end())
 			{
 				it->second = type;
@@ -1296,7 +1451,7 @@ void code_type_resolver::type_to_var(const str& name, schema *type)
       }
   }
 
-schema* code_type_resolver::expression_type_resolver(xkp::expression &expr, xkp::XSSContext ctx)
+void code_type_resolver::expression_type_resolver(xkp::expression &expr, xkp::XSSContext ctx)
   {
     operator_type op;
     if (expr.top_operator(op))
@@ -1315,42 +1470,60 @@ schema* code_type_resolver::expression_type_resolver(xkp::expression &expr, xkp:
 						    expr.visit(&es);
 
                 //resolve type of right expression
-                expr_type_resolver right_type(vars_, ctx);
+                expr_type_resolver right_type(ctx);
                 es.right.visit(&right_type);
 
-                variant rtype = right_type.get();
-                schema *sche_rtype_ = rtype.get_schema();
-                schema *sche_rtype = right_type.get();
+                xs_type_info right_tinfo = right_type.get();
 
                 //resolve type of left expression
-                expr_type_resolver left_type(vars_, ctx);
+                expr_type_resolver left_type(ctx);
                 es.left.visit(&left_type);
 
-                variant ltype = left_type.get();
-                schema *sche_ltype_ = ltype.get_schema();
-                schema *sche_ltype = left_type.get();
+                xs_type_info left_tinfo = left_type.get();
+                variant left_var = left_type.top_stack();
 
-                variant left_res = left_type.top_stack();
-                str var_name = idiom_utils::operand_to_string(left_res, ctx);
+                str var_name = idiom_utils::operand_to_string(left_var, ctx);
 
-                //assert(ltype.get_schema() == rtype.get_schema());
-                //assert(sche_rtype == sche_ltype);
-
-                if (sche_ltype != sche_rtype)
+                //somes stupid tipified use case
+                if (left_tinfo.type != right_tinfo.type)
                   {
-                    sche_ltype = sche_rtype;
-                    type_to_var(var_name, sche_ltype);
+                    if (left_tinfo.type)
+                      {
+                        if (left_tinfo.is_array && left_tinfo.array_type != right_tinfo.type)
+                          {
+                            right_tinfo = left_tinfo;
+                            right_tinfo.array_type = type_schema<variant>();
+
+                            update_type(var_name, right_tinfo);
+                          }
+                        else if (!left_tinfo.is_array)
+                          {
+                            param_list error;
+                            error.add("id", SVariableAssigner);
+                            error.add("desc", SMultipleTypeVariable);
+                            error.add("variable", var_name);
+
+                            xss_throw(error);
+                          }
+                      }
+                    else if (!var_name.empty())
+                      {
+                        update_type(var_name, right_tinfo);
+                      }
                   }
+                else if (left_tinfo.is_array && right_tinfo.is_array)
+                  {
+                    if (left_tinfo.array_type != right_tinfo.array_type)
+                      {
+                        xs_type_info xsti = left_tinfo;
+                        xsti.array_type = type_schema<variant>();
 
-						    return sche_ltype;
+                        update_type(var_name, xsti);
+                      }
+                  }
 					    }
-			    }
+			    } //switch
 	    }
-
-    expr_type_resolver er(vars_, ctx);
-    expr.visit(&er);
-
-    return er.get();
   }
 
 //base_xss_expression
@@ -1377,7 +1550,8 @@ base_xss_code::base_xss_code() : indent_(0)
 base_xss_code::base_xss_code(XSSContext ctx, code& code):
   code_(code),
   ctx_(ctx),
-	indent_(0)
+	indent_(0),
+  vars_(ctx->vars_)
   {
   }
 
@@ -1413,9 +1587,10 @@ void base_xss_code::if_(stmt_if& info)
 
 void base_xss_code::register_var(const str& name, const str& type)
 	{
+    xs_type_info xsti;
 		XSSProject project	= ctx_->project_;
-		XSSObject  clazz    = project->get_class(type);
-		ctx_->register_variable(name, clazz);
+    xsti.object         = project->get_class(type);
+		ctx_->register_variable(name, xsti);
 	}
 
 void base_xss_code::variable_(stmt_variable& info)

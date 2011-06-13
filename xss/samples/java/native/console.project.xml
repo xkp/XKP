@@ -1,0 +1,13 @@
+<xss:project>
+    <path generator="../../../idioms/java/native/main.xss"
+          class_library="../../../idioms/java/native/classes.xml"
+          source_path=""
+          output_path="../../../production/java/"
+		  output_file="console.java"/>
+
+    <options gen_event_method="false"/>
+
+    <idiom class="java-idiom"/>
+	
+	<application src="console.xml"/>
+</xss:project> 

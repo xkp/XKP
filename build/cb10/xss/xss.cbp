@@ -12,7 +12,7 @@
 				<Option object_output="..\..\..\bin\cb\debug\obj\" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="../../../data/xss/qt/qt_app.xml" />
+				<Option parameters="../../../xss/samples/java/native/console.project.xml" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-D_DEBUG" />
@@ -76,9 +76,15 @@
 		<Unit filename="..\..\..\include\xs\operators.h" />
 		<Unit filename="..\..\..\include\xs\pair_array.h" />
 		<Unit filename="..\..\..\include\xs\vm.h" />
+		<Unit filename="..\..\..\include\xss\c++.h" />
+		<Unit filename="..\..\..\include\xss\dsl_out.h" />
 		<Unit filename="..\..\..\include\xss\idiom.h" />
+		<Unit filename="..\..\..\include\xss\java.h" />
+		<Unit filename="..\..\..\include\xss\jscript.h" />
 		<Unit filename="..\..\..\include\xss\project.h" />
 		<Unit filename="..\..\..\include\xss\utils.h" />
+		<Unit filename="..\..\..\include\xss\xss_context.h" />
+		<Unit filename="..\..\..\include\xss\xss_error.h" />
 		<Unit filename="..\..\..\include\xss\xss_generator.h" />
 		<Unit filename="..\..\..\include\xss\xss_parser.h" />
 		<Unit filename="..\..\..\src\archive\json_archive.cpp" />
@@ -100,6 +106,7 @@
 		<Unit filename="..\..\..\src\xss\c++.cpp" />
 		<Unit filename="..\..\..\src\xss\dsl_out.cpp" />
 		<Unit filename="..\..\..\src\xss\idiom.cpp" />
+		<Unit filename="..\..\..\src\xss\java.cpp" />
 		<Unit filename="..\..\..\src\xss\jscript.cpp" />
 		<Unit filename="..\..\..\src\xss\project.cpp" />
 		<Unit filename="..\..\..\src\xss\xss_generator.cpp" />
@@ -114,7 +121,9 @@
 		<Extensions>
 			<code_completion />
 			<envvars />
-			<debugger />
+			<debugger>
+				<search_path add="..\..\..\xss\samples\java\native" />
+			</debugger>
 			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>

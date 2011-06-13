@@ -63,6 +63,7 @@ struct expression_renderer : expression_visitor
 
     virtual str resolve_assigner(variant operand, XSSObject instance, assign_info* ai);
     virtual str operand_to_string(variant operand, XSSObject parent = XSSObject(), int* prec = null);
+    virtual str array_operation(str lopnd, str ropnd, operator_type op);
     virtual str get();
 
     assign_info* assigner;
@@ -131,7 +132,7 @@ struct base_xss_code : ITranslator, code_visitor
     virtual void dispatch(stmt_dispatch& info);
 
     protected:
-    	std::map<str, schema*> vars_;
+    	std::map<str, xs_type_info> vars_;
       code       code_;
       XSSContext ctx_;
 			str				 result_;
@@ -170,131 +171,138 @@ struct idiom_utils
     template <typename T>
     static str render_expression(expression& expr, XSSContext ctx)
       {
-		    //deal with assigns
-		    operator_type op;
-		    if (expr.top_operator(op))
-			    {
-				    bool simple_assign = false;
-				    switch(op)
-					    {
-						    case op_assign:
-							    simple_assign = true;
+        //deal with assigns
+        operator_type op;
+        if (expr.top_operator(op))
+	        {
+		        bool simple_assign = false;
+		        switch(op)
+			        {
+				        case op_assign:
+					        simple_assign = true;
                 case op_plus_equal:
                 case op_minus_equal:
                 case op_mult_equal:
                 case op_div_equal:
                 case op_shift_right_equal:
                 case op_shift_left_equal:
-							    {
-								    expression_splitter es(op);
-								    expr.visit(&es);
+					        {
+						        expression_splitter es(op);
+						        expr.visit(&es);
 
                     T value_renderer(ctx);
-								    es.right.visit(&value_renderer);
+						        es.right.visit(&value_renderer);
 
-								    str value = value_renderer.get();
+						        str value = value_renderer.get();
 
-								    //get the assigner
+						        //get the assigner
                     T assign_renderer(ctx);
-								    assign_info ai;
-								    assign_renderer.assigner = &ai;
+						        assign_info ai;
+						        assign_renderer.assigner = &ai;
 
-								    es.left.visit(&assign_renderer);
+						        es.left.visit(&assign_renderer);
 
-								    str assign = assign_renderer.get();
+						        str assign = assign_renderer.get();
 
-								    str result;
-								    switch(ai.type)
-									    {
-										    case FN_CALL:
-											    {
-												    if (simple_assign)
-													    result = assign + "(" + value + ")";
-												    else
-													    {
-														    //we need to resolve the getter as well for *= operators
+						        str result;
+						        switch(ai.type)
+							        {
+								        case FN_CALL:
+									        {
+										        if (simple_assign)
+											        result = assign + "(" + value + ")";
+										        else
+											        {
+												        //we need to resolve the getter as well for *= operators
                                 T getter(ctx);
-														    es.left.visit(&getter);
+												        es.left.visit(&getter);
 
-														    //this is lame
+												        //this is lame
                                 str op_str = get_operator_str(op);
 
-														    assert(op_str.size() > 1);
-														    op_str.erase(op_str.end() - 1);
+												        assert(op_str.size() > 1);
+												        op_str.erase(op_str.end() - 1);
 
-														    result = assign + "(" + getter.get() + " " + op_str + " " + value + ")";
-													    }
-												    break;
-											    }
+												        result = assign + "(" + getter.get() + " " + op_str + " " + value + ")";
+											        }
+										        break;
+									        }
 
-										    case VANILLA:
-											    {
-                            result = assign + " " + get_operator_str(op) + " " + value;
-												    break;
-											    }
-										    case XSS_RESOLVE:
-											    {
+								        case VANILLA:
+									        {
+                            xs_type_info xstype = ctx->get_xss_type(assign);
+
+                            if ((op == op_plus_equal || op == op_minus_equal) && xstype.is_array)
+                              result = assign_renderer.array_operation(assign, value, op);
+                            else if (simple_assign && xstype.is_array && !ai.data.empty())
+                              result = ai.data + value + ")";
+                            else
+                              result = assign + " " + get_operator_str(op) + " " + value;
+										        break;
+									        }
+								        case XSS_RESOLVE:
+									        {
                             T getter_(ctx);
-												    es.left.visit(&getter_);
-												    str getter = getter_.get();
+										        es.left.visit(&getter_);
+										        str getter = getter_.get();
 
-												    if (!simple_assign)
-													    {
+										        if (!simple_assign)
+											        {
                                 str op_str = get_operator_str(op);
-														    assert(op_str.size() > 1);
-														    op_str.erase(op_str.end() - 1);
+												        assert(op_str.size() > 1);
+												        op_str.erase(op_str.end() - 1);
 
-														    value = getter + " " + op_str + " " + value;
-													    }
+												        value = getter + " " + op_str + " " + value;
+											        }
 
-														//lets find out if the getter is a single word (like "width") or a composite (like "object.width")
-														//if composite we'll get rid of the last accesor (width) to get the actual accesor
+												    //lets find out if the getter is a single word (like "width") or a composite (like "object.width")
+												    //if composite we'll get rid of the last accesor (width) to get the actual accesor
 
-														xss_idiom* idiom = ctx->idiom_;
-														str separator = idiom->resolve_separator();
-														size_t last_dot = getter.find_last_of(separator);
-												    if (last_dot != str::npos)
-													    {
-														    size_t count = getter.size() - last_dot + 1;
-														    getter.erase(getter.end() - count, getter.end());
-													    }
-												    else
-															getter = idiom->resolve_this(ctx);
+												    xss_idiom* idiom = ctx->idiom_;
+												    str separator = idiom->resolve_separator();
+												    size_t last_dot = getter.find_last_of(separator);
+										        if (last_dot != str::npos)
+											        {
+												        size_t count = getter.size() - last_dot + 1;
+												        getter.erase(getter.end() - count, getter.end());
+											        }
+										        else
+													    getter = idiom->resolve_this(ctx);
 
-												    //replace quotes, life is hard
-												    for(size_t i = 0; i < assign.size(); i++)
-													    {
-														    if (assign[i] == 39)
-															    assign[i] = '"';
-													    }
+										        //replace quotes, life is hard
+										        for(size_t i = 0; i < assign.size(); i++)
+											        {
+												        if (assign[i] == 39)
+													        assign[i] = '"';
+											        }
 
-												    //td: is all this really neccesary?
-												    XSSProject project_ = ctx->project_;
-												    xss_idiom* idiom_		= ctx->idiom_;
-														XSSContext context(new xss_code_context(project_, idiom_, fs::path()));
-												    xss_code_context& ctx = *context.get();
+										        //td: is all this really neccesary?
+										        XSSProject project_ = ctx->project_;
+										        xss_idiom* idiom_		= ctx->idiom_;
+												    XSSContext context(new xss_code_context(project_, idiom_, fs::path()));
+										        xss_code_context& ctx = *context.get();
 
-												    XSSGenerator gen(new xss_generator(context));
-												    project_->push_generator(gen);
+										        XSSGenerator gen(new xss_generator(context));
+										        project_->push_generator(gen);
 
-												    project_->prepare_context(ctx, gen);
+										        project_->prepare_context(ctx, gen);
 
-												    ctx.scope_->register_symbol("value",	value);
-												    ctx.scope_->register_symbol("caller", getter);
+										        ctx.scope_->register_symbol("value",	value);
+										        ctx.scope_->register_symbol("caller", getter);
 
-												    result = project_->generate_xss(assign, gen);
+										        result = project_->generate_xss(assign, gen);
 
-												    project_->pop_generator();
-												    break;
-											    }
-										    default:
-											    assert(false); //trap use cases
-									    }
+										        project_->pop_generator();
+										        break;
+									        }
+								        default:
+									        assert(false); //trap use cases
+							        }
 
-								    return result;
-							    }
-					    }
-			    }
+						        return result;
+					        }
+			        }
+	        }
 
         T er(ctx);
         expr.visit(&er);
@@ -309,9 +317,10 @@ struct idiom_utils
 //utils, this is soon to be changed completely
 struct code_type_resolver : code_visitor
 	{
-		code_type_resolver(XSSContext ctx) : result_(null), ctx_(ctx), is_variant_(false) {}
+		code_type_resolver(XSSContext ctx) 
+      : ctx_(ctx), is_variant_(false), vars_(ctx->vars_) {}
 
-		schema* get();
+		xs_type_info get();
 
 		//code_visitor
     virtual void variable_(stmt_variable& info);
@@ -320,8 +329,7 @@ struct code_type_resolver : code_visitor
 		virtual void if_(stmt_if& info);
     virtual void for_(stmt_for& info);
     virtual void iterfor_(stmt_iter_for& info);
-
-    virtual void while_(stmt_while& info)           {}
+    virtual void while_(stmt_while& info);
 
     virtual void break_()                           {}
     virtual void continue_()                        {}
@@ -329,26 +337,23 @@ struct code_type_resolver : code_visitor
     virtual void dispatch(stmt_dispatch& info)      {}
 
 		public:
-			void register_var(const str& name, schema* type);
-      void type_to_var(const str& name, schema* type);
+			void register_var(const str& name, xs_type_info type, const str& str_type = str());
+      void update_type(const str& name, xs_type_info type);
     public:
-  		typedef std::map<str, schema*> map_variables;
-			map_variables          vars_;
+  		typedef std::map<str, xs_type_info> local_variables;
+			local_variables&       vars_;
 		private:
 			XSSContext						 ctx_;
 			bool									 is_variant_;
-			schema*								 result_;
 
-      schema* expression_type_resolver(expression& expr, XSSContext ctx);
+      void expression_type_resolver(expression& expr, XSSContext ctx);
 	};
 
 //expr_type_resolver
 struct expr_type_resolver : expression_visitor
 	{
-		typedef std::map<str, schema*> local_variables;
-
-    expr_type_resolver(local_variables& local_vars, XSSContext ctx);
-		schema* get();
+    expr_type_resolver(XSSContext ctx);
+		xs_type_info get();
 		str type_name();
     variant top_stack();
 
@@ -357,21 +362,22 @@ struct expr_type_resolver : expression_visitor
 		virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top);
 
     private:
-		  typedef std::stack<variant>		 expr_stack;
+  		typedef std::map<str, xs_type_info> local_variables;
+		  typedef std::stack<variant>		      expr_stack;
 
 		  expr_stack				stack_;
 		  bool							is_variant_;
 		  operator_registry operators_;
-		  local_variables		local_;
+		  local_variables&	local_;
 		  XSSContext				ctx_;
 
-			schema*		result_schema;
-			XSSObject result_xss;
+			xs_type_info		result_xs_type_info;
+			XSSObject       result_xss;
 
-			schema* resolve_type(variant var);
+			xs_type_info resolve_type(variant var);
 			XSSObject resolve_xss_type(variant var);
 
-			bool resolve_variable(const str& id, schema* &type);
+			bool resolve_variable(const str& id, xs_type_info &xstype);
 			XSSObject	resolve_object(const variant v);
   };
 

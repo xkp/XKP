@@ -75,6 +75,19 @@ class xss_serial_object : public xss_object
 				}
 	};
 
+struct xs_type_info
+  {
+    xs_type_info() : 
+      is_array(false), array_type(null), type(null), object()     {}
+    xs_type_info(schema *tp, XSSObject xssobj = XSSObject(), schema *artp = null, bool isar = false) : 
+      is_array(isar), array_type(artp), type(tp), object(xssobj)  {}
+
+    bool      is_array;
+    schema*   array_type;
+    schema*   type;
+    XSSObject object;
+  };
+
 //the idiom interface, under designed
 struct xss_idiom
   {
@@ -101,8 +114,8 @@ struct xss_code_context : base_code_context
     virtual variant       evaluate_property(XSSObject obj, const str& name);
 		virtual schema*				get_type(const str& name);
 		virtual str						get_type_name(schema* type);
-		virtual XSSObject			get_xss_type(const str& name);
-		virtual void					register_variable(const str& name, XSSObject xss_type);
+		virtual xs_type_info  get_xss_type(const str& name);
+    virtual void					register_variable(const str& name, xs_type_info xstype);
 		virtual bool					has_var(const str& name);
 		virtual xss_idiom*		getIdiom();
 	public:
@@ -110,10 +123,10 @@ struct xss_code_context : base_code_context
       variant    project_;
       xss_idiom* idiom_;
 
-			typedef std::map<str, XSSObject> variable_types;
+      typedef std::map<str, xs_type_info> variable_types;
 
-			variable_types vars_;
-			fs::path				path_;	
+			variable_types  vars_;
+			fs::path				path_;
   };
 
 struct xss_composite_context : xss_code_context

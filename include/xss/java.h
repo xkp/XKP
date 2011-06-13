@@ -8,13 +8,8 @@ namespace xkp{
 
 struct java_code : base_xss_code
 	{
-    typedef std::map<str, schema*> map_variables;
-
-		java_code()	                                               : base_xss_code() {};
-    java_code(XSSContext ctx, code& code, map_variables &vars) : base_xss_code(ctx, code) 
-      {
-        vars_ = vars;
-      };
+		java_code()	                          : base_xss_code()          {};
+    java_code(XSSContext ctx, code& code) : base_xss_code(ctx, code) {};
 
     virtual void variable_(stmt_variable& info);
     virtual void for_(stmt_for& info);
@@ -24,7 +19,7 @@ struct java_code : base_xss_code
       virtual str render_expression(expression& expr, XSSContext ctx);
     private:
       // return the type name of the given variable name
-      // from std::map<str, schema*> vars_
+      // from std::map<str, xs_type_info> vars_
       str get_type_name(const str& var_name);
 	};
 
@@ -57,6 +52,9 @@ struct java_idiom : base_idiom
 		virtual variant process_args(param_list_decl& params);
     virtual str     resolve_this(XSSContext ctx);
     virtual str     resolve_separator(XSSObject lh);
+
+    // return the java type name of the given schema* type
+    static str get_type(schema *type);
   };
 
 struct java_expression_renderer : expression_renderer
@@ -66,6 +64,8 @@ struct java_expression_renderer : expression_renderer
 
     //expression_visitor
     virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top);
+
+    virtual str array_operation(str lopnd, str ropnd, operator_type op);
   };
 
 //typeinfo

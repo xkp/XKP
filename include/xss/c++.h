@@ -8,7 +8,7 @@ namespace xkp{
 
 struct cpp_code : base_xss_code
 	{
-		cpp_code()													 : base_xss_code()					 {};
+		cpp_code()													 : base_xss_code()					{};
 		cpp_code(XSSContext ctx, code& code) : base_xss_code(ctx, code) {};
 
     virtual void variable_(stmt_variable& info);

@@ -14,12 +14,14 @@ const str SJavaUnknownInstance("Instance not found");
 //java_code
 str java_code::get_type_name(const str& var_name)
   {
-    str str_type = "";
-    map_variables::iterator it = vars_.find(var_name);
+    str str_type;
+    std::map<str, xs_type_info>::iterator it = vars_.find(var_name);
     if (it != vars_.end())
       {
-        schema *sche_type = it->second;
-        str_type = ctx_->get_type_name(sche_type);
+        xs_type_info xsti = it->second;
+        schema *sche_type = xsti.type;
+        //str_type = ctx_->get_type_name(sche_type);
+        str_type = java_idiom::get_type(sche_type);
       }
 
     return str_type;
@@ -33,8 +35,8 @@ void java_code::variable_(stmt_variable& info)
 
     std::stringstream ss;
     str ind = get_indent_str();
-
     ss << ind << str_type << " " << info.id;
+
     if (!info.value.empty())
       ss << " = " << render_expression(info.value, ctx_);
 
@@ -89,12 +91,48 @@ str java_args::resolve_param(const param_decl& param)
 	}
 
 //java_idiom
+str java_idiom::get_type(schema* type)
+  {
+    str str_type;
+    if (!type)
+      {
+        str_type = "Object";
+      }
+    else if (type->options() & TYPE_DYNAMIC)
+      {
+        str_type = "Object";
+      }
+    else if (type->options() & TYPE_ITERATED)
+      {
+        str_type = "ArrayList";
+      }
+    else if (type == type_schema<int>())
+      {
+        str_type = "Integer";
+      }
+    else if (type == type_schema<str>())
+      {
+        str_type = "String";
+      }
+    else if (type == type_schema<float>())
+      {
+        str_type = "Double";
+      }
+    else if (type == type_schema<bool>())
+      {
+        str_type = "Boolean";
+      }
+    //td: specialize xs custom class with serialize methods
+
+    return str_type;
+  }
+
 variant java_idiom::process_code(code& cde, param_list_decl& params, XSSContext ctx)
 	{
     code_type_resolver ctyper(ctx);
     cde.visit(&ctyper);
 
-    JavaCode result(new java_code(ctx, cde, ctyper.vars_));
+    JavaCode result(new java_code(ctx, cde));
     return result;
 	}
 
@@ -158,8 +196,9 @@ void java_expression_renderer::exec_operator(operator_type op, int pop_count, in
   {
 		if (top && assigner)
 			{
-				assert(op == op_dot); //I'm sure there are more use cases, but I'll deal with this one exclusively
-															//for now
+				assert(op == op_dot || 
+               op == op_index);   //I'm sure there are more use cases, but I'll deal with this one exclusively
+															    //for now
 			}
 
     variant arg1, arg2;
@@ -167,6 +206,8 @@ void java_expression_renderer::exec_operator(operator_type op, int pop_count, in
     switch(op)
       {
         // add here the operators that I'll customize
+        case op_index:
+        case op_typecast:
         case op_array:
           {
             switch(pop_count)
@@ -201,7 +242,6 @@ void java_expression_renderer::exec_operator(operator_type op, int pop_count, in
         case op_mult:
         case op_divide:
         case op_mod:
-        case op_typecast:
         case op_typecheck:
         case op_namecheck:
         case op_plus:
@@ -217,7 +257,6 @@ void java_expression_renderer::exec_operator(operator_type op, int pop_count, in
         case op_and:
         case op_or:
 
-        case op_index:
         case op_call:
         case op_dot_call:
         case op_func_call:
@@ -229,12 +268,30 @@ void java_expression_renderer::exec_operator(operator_type op, int pop_count, in
             break;
           }
 
+        case op_typecast:
+          {
+            int p1;
+
+						str os1 = operand_to_string(arg1, XSSObject(), &p1);
+
+            expression_identifier ei2 = arg2;
+            str os2 = ei2.value;
+            schema* totype = ctx_->get_type(os2);
+
+            std::stringstream ss;
+            ss << java_idiom::get_type(totype) << ".valueOf(" << os1 << ")";
+
+            push_rendered(ss.str(), op_prec, variant());
+            break;
+          }
+
         case op_array:
           {
             std::stringstream result;
 
-            result << "{";
-
+            str str_type = "Object"; //td: this value must come from expression
+            result << "new ArrayList(Arrays.asList( new " << str_type << " [] {";
+            
 						std::vector<str> params;
 						int arg_count = arg1;
             for(int i = 0; i < arg_count; i++)
@@ -252,12 +309,46 @@ void java_expression_renderer::exec_operator(operator_type op, int pop_count, in
 									result << ", ";
 							}
 
-            result << "}";
+            result << "} ))";
+
             push_rendered(result.str(), op_prec, variant()); 
 						break;
+          }
+
+        case op_index:
+          {
+            //i assume that arg1 is always array type
+            std::stringstream result;
+
+            if (assigner)
+              {
+					      result << operand_to_string(arg1);
+
+                //enormous patch
+                assigner->data = operand_to_string(arg1) + ".set(" +
+                                 operand_to_string(arg2) + ", ";
+              }
+            else
+              result << operand_to_string(arg1) << ".get(" 
+                     << operand_to_string(arg2) << ")";
+
+            push_rendered(result.str(), op_prec, variant()); 
+            break;
           }
 
 				default:
           assert(false); //td:
       }
+  }
+
+str java_expression_renderer::array_operation(str lopnd, str ropnd, operator_type op)
+  {
+    str result = lopnd + " " + idiom_utils::get_operator_str(op) + " " + ropnd;
+
+    if (op == op_plus_equal)
+      result = lopnd + ".add(" + ropnd + ")";
+    else if (op == op_minus_equal)
+      result = lopnd + ".remove(" + ropnd + ")"; //td: verify correct object erase
+
+    return result;
   }

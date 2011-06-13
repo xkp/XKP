@@ -20,10 +20,11 @@ void cpp_code::variable_(stmt_variable& info)
 			{
 				if (!info.value.empty())
 					{
-						expr_type_resolver typer(vars_, ctx_);
+						expr_type_resolver typer(ctx_);
 						info.value.visit(&typer);
 
-						sche_type = typer.get();
+            xs_type_info xsti = typer.get();
+						sche_type = xsti.type;
 						str_type = typer.type_name();
 					}
 			}
@@ -33,7 +34,7 @@ void cpp_code::variable_(stmt_variable& info)
 				str_type = ctx_->get_type_name(sche_type);
 			}
 
-		vars_.insert(std::pair<str, schema*>(info.id, sche_type)); //td: !!! XSSType
+		vars_.insert(std::pair<str, xs_type_info>(info.id, sche_type)); //td: !!! XSSType
 
     std::stringstream ss;
     str ind = get_indent_str();

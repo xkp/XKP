@@ -140,7 +140,7 @@ void xss_object::xss_type(XSSObject type, XSSContext ctx)
 						bool as_expression = false;
 						if (!prop_type.empty())
 							{
-								XSSObject prop_type_for_real = ctx->get_xss_type(prop_type);
+                XSSObject prop_type_for_real = ctx->get_xss_type(prop_type).object;
 								as_expression = variant_cast<bool>(dynamic_get(prop_type_for_real, "as_expression"), false);
 							}
 
@@ -533,15 +533,17 @@ str	xss_code_context::get_type_name(schema* type)
 		return types_->type_name(type);
 	}
 
-XSSObject	xss_code_context::get_xss_type(const str& name)
+xs_type_info xss_code_context::get_xss_type(const str& name)
 	{
 		variable_types::iterator it = vars_.find(name);
 		if (it != vars_.end())
 			return it->second;
 
-		XSSProject proj   = project_;
-		XSSObject  result = proj->get_class(name);
-		return result;
+    xs_type_info xsti;
+		XSSProject proj  = project_;
+    xsti.object      = proj->get_class(name);
+
+		return xsti;
 	}
 
 bool xss_code_context::has_var(const str& name)
@@ -556,9 +558,9 @@ xss_idiom* xss_code_context::getIdiom()
 		return project->get_idiom();
 	}
 
-void xss_code_context::register_variable(const str& name, XSSObject xss_type)
+void xss_code_context::register_variable(const str& name, xs_type_info xstype)
 	{
-		vars_.insert(std::pair<str, XSSObject>(name, xss_type));
+		vars_.insert(std::pair<str, xs_type_info>(name, xstype));
 	}
 
 //xss_composite_context
@@ -1265,6 +1267,19 @@ void xss_project::compile_ast(xs_container& ast, XSSContext ctx)
 		DynamicArray properties = instance->properties();
 		DynamicArray methods    = instance->methods();
 
+		std::vector<xs_instance>::iterator iit = gather.instances.begin();
+		std::vector<xs_instance>::iterator ind = gather.instances.end();
+		for(; iit != ind; iit++)
+			{
+				xs_instance& instance_ast = *iit;
+				str					 pth;
+				XSSObject		 instance_instance = resolve_path(instance_ast.id, instance, pth);
+
+				XSSContext ictx(new xss_composite_context(context_));
+				ictx->this_ = instance_instance;
+				compile_ast(instance_ast, ictx);
+			}
+
     std::vector<xs_property>::iterator pit = gather.properties.begin();
     std::vector<xs_property>::iterator pnd = gather.properties.end();
     for(; pit != pnd; pit++)
@@ -1290,7 +1305,19 @@ void xss_project::compile_ast(xs_container& ast, XSSContext ctx)
 
         variant value;
         if (!pit->value.empty())
-          value = idiom_->process_expression(pit->value, instance);
+					value = idiom_->process_expression(pit->value, instance);
+
+				if (pit->type.empty())
+					{
+						expression expr = pit->value;
+
+						expr_type_resolver expr_typer(ctx);
+						expr.visit(&expr_typer);
+
+						xs_type_info xsti = expr_typer.get();
+						if (xsti.type)
+							pit->type = context_->get_type_name(xsti.type);
+					}
 
 				XSSProperty new_prop(new xss_property(pit->name, pit->type, value, getter, setter, instance));
         properties->push_back(new_prop);
@@ -1300,20 +1327,22 @@ void xss_project::compile_ast(xs_container& ast, XSSContext ctx)
     std::vector<xs_method>::iterator mnd = gather.methods.end();
     for(; mit != mnd; mit++)
       {
-				code_type_resolver typer(context_);
+        code_type_resolver typer(ctx);
 
 				param_list_decl::iterator mait = mit->args.begin();
 				param_list_decl::iterator mand = mit->args.end();
 				for(; mait != mand; mait++)
 					{
-						typer.register_var(mait->name, context_->get_type(mait->type));
+            typer.register_var(mait->name, xs_type_info(context_->get_type(mait->type)), mait->type);
 					}
 
-				mit->cde.visit(&typer);
+				variant args = idiom_->process_args(mit->args);									assert(!args.empty());
+				variant cde  = idiom_->process_code(mit->cde, mit->args, ctx);  assert(!cde.empty());
+
 				str type;
-				schema* tt = typer.get();
-				if (tt)
-					type = context_->get_type_name(tt);
+				xs_type_info xsti = typer.get();
+        if (xsti.type)
+          type = context_->get_type_name(xsti.type);
 
 				if (type.empty())
 					type = mit->type;
@@ -1328,9 +1357,6 @@ void xss_project::compile_ast(xs_container& ast, XSSContext ctx)
 
 						xss_throw(error);
 					}
-
-				variant args = idiom_->process_args(mit->args);									assert(!args.empty());
-				variant cde  = idiom_->process_code(mit->cde, mit->args, ctx);  assert(!cde.empty());
 
 				XSSMethod mthd(new xss_method(mit->name, type, args, cde));
         methods->push_back(mthd); //td: !!! inheritance!
@@ -1445,19 +1471,6 @@ void xss_project::compile_ast(xs_container& ast, XSSContext ctx)
 
 				ev->args = idiom_->process_args(it->args);
       }
-
-		std::vector<xs_instance>::iterator iit = gather.instances.begin();
-		std::vector<xs_instance>::iterator ind = gather.instances.end();
-		for(; iit != ind; iit++)
-			{
-				xs_instance& instance_ast = *iit;
-				str					 pth;
-				XSSObject		 instance_instance = resolve_path(instance_ast.id, instance, pth);
-
-				XSSContext ictx(new xss_composite_context(context_));
-				ictx->this_ = instance_instance;
-				compile_ast(instance_ast, ictx);
-			}
 	}
 
 str wind(const std::vector<str> path)
