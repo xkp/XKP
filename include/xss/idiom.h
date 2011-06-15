@@ -198,6 +198,7 @@ struct idiom_utils
 						        //get the assigner
                     T assign_renderer(ctx);
 						        assign_info ai;
+                    ai.data = value;
 						        assign_renderer.assigner = &ai;
 
 						        es.left.visit(&assign_renderer);
@@ -235,7 +236,7 @@ struct idiom_utils
                             if ((op == op_plus_equal || op == op_minus_equal) && xstype.is_array)
                               result = assign_renderer.array_operation(assign, value, op);
                             else if (simple_assign && xstype.is_array && !ai.data.empty())
-                              result = ai.data + value + ")";
+                              result = ai.data;
                             else
                               result = assign + " " + get_operator_str(op) + " " + value;
 										        break;
@@ -311,7 +312,6 @@ struct idiom_utils
       }
 
 		static str expr2str(expression& expr, XSSContext ctx);
-    static str operand_to_string(variant operand, XSSContext ctx);
 	};
 
 //utils, this is soon to be changed completely

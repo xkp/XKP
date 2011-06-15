@@ -1,15 +1,5 @@
 on pbtn1.click()
 {
-	array<int> lx = [1, 2, 3];
-	lx += 69;
-	lx -= 2;
-	lx[0] = 2 * 3;							// java traduction: lx.set(0, 2 * 3);
-	int leftv = lx[3];
-	
-	var ex2;
-	ex2 = xvalue;
-	ex2 = pbtn1.xvalue;
-	
 	var mthd;
 	mthd = test(10); 						// 10; op_param; 'test'; 1; op_func_call;
 	mthd = pbtn1.test(10);					// 'pbtn1'; 'test'; op_dot_call; 10; op_param; 1; op_call;
@@ -18,26 +8,6 @@ on pbtn1.click()
 	
 	object obj = [1, 2];
 	obj.setValue(j);
-	
-	int j = 20;
-	j = 5;
-	//j = lx[3];
-
-	var i = 0;
-	i = 1;
-	i += j;
-	i -= 2;
-	
-	array<int> list = [1, 2, 3];
-	list += 4;
-	for(int e in list)
-	{
-		System.out.println(e);
-	}
-	list[0] = 2 * 3;
-
-	var xxx = [1, 2, 3];
-	xxx = [4, 5, 6, 7];
 	
 	int a = 10;
 	//a += j + obj.getValue();
@@ -77,6 +47,33 @@ on pbtn1.click()
 	//* TESTS IMPLEMENTED *
 	//*********************
 
+	//[ok]: test declaration of array type with assign, 
+	//      add, remove and reasign elements. Then
+	//		set the value of a element and resolve other one.
+	array<int> list = [1, 2, 3];
+	list += 4;
+	list -= 2;
+	for(int e in list)
+	{
+		System.out.println(e);
+	}
+	list = [5, 6, 7, 8];
+	list[0] = 2 * 3;
+	var itx = list[2];
+
+	int j = 20;
+	j = 5;
+	j = list[2];
+
+	var i = 0;
+	i = 1;
+	i += j;
+	i -= 2;
+	
+	//[ok]: test declaration of array variant with assign.
+	var adyn = [1, 2, 3];
+	adyn = [4, 5, 6, 7];
+	
 	//[ok]: test simple variant type with initialization
 	var w = 2;
 	
@@ -86,9 +83,19 @@ on pbtn1.click()
 	float fval = svar as float;
 
 	//[ok]: test variant variable for resolve type 
-	// 		from returned method value
-	var yyy;
-	yyy = test(10);
+	// 		from returned method value and 
+	//		test operator op_func_call
+	var rmthd;
+	rmthd = test(10);
+	var thd = application.app_test(2);
+	
+	//[ok]: test variant variable for resolve type 
+	// 		from returned property value and 
+	//		test operator op_dot
+	var ex2;
+	ex2 = xvalue;
+	ex2 = pbtn1.xvalue;
+	var ex3 = application.yvalue;
 	
 	//[ok]: test redefined variable
 	//int v1;
@@ -96,6 +103,8 @@ on pbtn1.click()
 
 //console error with message: "'syntax error': error while compiling xs"
 //method pbtn1.testa()
+
+property yvalue = "string v";
 
 method app_test(int value)
 {

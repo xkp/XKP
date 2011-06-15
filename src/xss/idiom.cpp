@@ -524,7 +524,22 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
         case op_dot_call:
           {
             std::stringstream ss;
-            ss << operand_to_string(arg1) << "." << operand_to_string(arg2);
+
+            str opnd1 = operand_to_string(arg1);
+            str opnd2 = operand_to_string(arg2);
+
+						str separator = ctx_->getIdiom()->resolve_separator();
+
+				    //here comes the hacky hoo
+            size_t first_dot = opnd2.find_first_of(separator);
+				    if (first_dot != str::npos)
+					    {
+						    str str_this = opnd2.substr(0, first_dot);
+                if (str_this == opnd1)
+                  opnd2.erase(0, first_dot + 1);
+					    }
+
+            ss << opnd1 << "." << opnd2;
             push_rendered(ss.str(), op_prec, variant());
             break;
           }
@@ -874,54 +889,6 @@ str idiom_utils::expr2str(expression& expr, XSSContext ctx)
     return render_expression<expression_renderer>(expr, ctx);
 	}
 
-str idiom_utils::operand_to_string(variant operand, XSSContext ctx)
-  {
-    str result;
-    if (operand.is<expression_identifier>())
-      {
-        expression_identifier ei = operand;
-        result = ei.value;
-        if (ctx->idiom_)
-          {
-            XSSProperty prop = ctx->get_property(ei.value);
-						XSSMethod mthd = ctx->get_method(ei.value);
-            if (prop)
-              {
-								result = prop->resolve_value();
-              }
-						else if (mthd)
-              {
-                result = ei.value;
-              }
-		        else
-		          {
-			          XSSObject obj = ctx->resolve_instance(result);
-			          if (obj && obj->has("internal_id"))
-				          {
-					          result = variant_cast<str>(dynamic_get(obj, "internal_id"), str());
-				          }
-		          }
-          }
-      }
-    else if (operand.is<already_rendered>())
-      {
-        already_rendered ar = operand;
-        result = ar.value;
-      }
-    else if (operand.is<str>())
-      {
-        str opstr = operand;
-        result = '"' + opstr + '"';
-      }
-    else
-      {
-        str opstr = operand;
-        result = opstr;
-      }
-
-    return result;
-  }
-
 //expr_type_resolver
 expr_type_resolver::expr_type_resolver(XSSContext ctx) 
   : is_variant_(false), local_(ctx->vars_), ctx_(ctx) 
@@ -1041,10 +1008,16 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
 					{
 						//td: warning
 						//is_variant_ = true;
-            int array_pos							= stack_.top(); stack_.pop();
-            expression_identifier ei	= stack_.top(); stack_.pop();
+            variant arg1 = stack_.top(); stack_.pop();
+            variant arg2 = stack_.top(); stack_.pop();
 
-						stack_.push(ei);
+            xs_type_info result(type_schema<variant>());
+            xs_type_info xsti = resolve_type(arg2);
+
+            if (xsti.is_array)
+              result.type = xsti.array_type;
+
+            stack_.push(result);
 						break;
 					}
 
@@ -1480,9 +1453,21 @@ void code_type_resolver::expression_type_resolver(xkp::expression &expr, xkp::XS
                 es.left.visit(&left_type);
 
                 xs_type_info left_tinfo = left_type.get();
-                variant left_var = left_type.top_stack();
 
-                str var_name = idiom_utils::operand_to_string(left_var, ctx);
+                //i assume that first operand is a expression identifier
+                variant left_var = es.left.pop_first();
+
+                str var_name;
+                if (left_var.is<expression_identifier>())
+                  {
+                    expression_identifier ei = left_var;
+                    var_name = ei.value;
+                  }
+                else
+                  {
+                    str opndstr = left_var;
+                    var_name = opndstr;
+                  }
 
                 //somes stupid tipified use case
                 if (left_tinfo.type != right_tinfo.type)
@@ -1502,6 +1487,8 @@ void code_type_resolver::expression_type_resolver(xkp::expression &expr, xkp::XS
                             error.add("id", SVariableAssigner);
                             error.add("desc", SMultipleTypeVariable);
                             error.add("variable", var_name);
+                            error.add("origin type", ctx->get_type_name(left_tinfo.type));
+                            error.add("new type", ctx->get_type_name(right_tinfo.type));
 
                             xss_throw(error);
                           }

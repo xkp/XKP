@@ -319,18 +319,18 @@ void java_expression_renderer::exec_operator(operator_type op, int pop_count, in
           {
             //i assume that arg1 is always array type
             std::stringstream result;
+            str op1 = operand_to_string(arg1);
+            str op2 = operand_to_string(arg2);
 
             if (assigner)
               {
-					      result << operand_to_string(arg1);
-
+					      result << op1;
                 //enormous patch
-                assigner->data = operand_to_string(arg1) + ".set(" +
-                                 operand_to_string(arg2) + ", ";
+                assigner->data = op1 + ".set(" + op2 + ", " + 
+                                 assigner->data + ")";
               }
             else
-              result << operand_to_string(arg1) << ".get(" 
-                     << operand_to_string(arg2) << ")";
+              result << op1 << ".get(" << op2 << ")";
 
             push_rendered(result.str(), op_prec, variant()); 
             break;
