@@ -15,22 +15,13 @@ public class console {
 
 				    	void click
     	{
-    		Integer mthd;
-    		mthd = pbtn1.test(10);
-    		mthd = pbtn1.test(10);
-    		mthd = pbtn1.test(10, "a", -2);
-    		mthd = pbtn1.test(2 * 5, "b" + "a", 1);
-    		Object obj = new ArrayList(Arrays.asList( new Object [] {1, 2} ));
-    		obj.setValue(j);
-    		Integer a = 10;
-    		Integer v1 = 10;
-    		Integer v2 = 20;
-    		if (v1 = 10 * v2)
-    		{
-    		}
+    		ArrayList types = new ArrayList(Arrays.asList( new Object [] {object("int", "Integer"), object("float", "Double"), object("string", "String")} ));
+    		pbtn1.exploit = 20;
     		Integer ex1 = pbtn1.exploit;
     		Integer exp;
     		exp = pbtn1.exploit;
+    		Object obj = new ArrayList(Arrays.asList( new Object [] {1, 2} ));
+    		obj.setValue(j);
     		ArrayList list = new ArrayList(Arrays.asList( new Object [] {1, 2, 3} ));
     		list.add(4);
     		list.remove(2);
@@ -48,6 +39,8 @@ public class console {
     		i = 1;
     		i += j;
     		i -= 2;
+    		Integer a = 10;
+    		a += j + obj.getValue();
     		ArrayList adyn = new ArrayList(Arrays.asList( new Object [] {1, 2, 3} ));
     		new ArrayList(Arrays.asList( new Object [] {4, 5, 6, 7} ));
     		Integer w = 2;
@@ -57,10 +50,18 @@ public class console {
     		Integer rmthd;
     		rmthd = pbtn1.test(10);
     		String thd = application.app_test(2);
+    		Integer mthd;
+    		mthd = pbtn1.test(10);
+    		mthd = pbtn1.test(10);
+    		mthd = pbtn1.test(10, "a", -2);
+    		mthd = pbtn1.test(2 * 5, "b" + "a", 1);
     		Double ex2;
     		ex2 = pbtn1.xvalue;
     		ex2 = pbtn1.xvalue;
     		String ex3 = application.yvalue;
+    		application.yvalue = "new string";
+    		pbtn1.xvalue = 20.2000008;
+    		pbtn1.xvalue = 10;
     	}
 	}
 }

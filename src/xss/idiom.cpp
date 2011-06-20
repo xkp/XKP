@@ -108,8 +108,8 @@ const int operator_prec[] =
 
 
 //expression_renderer
-expression_renderer::expression_renderer(XSSContext ctx, bool id_as_this) 
-  : ctx_(ctx), assigner(null), capturing_property_(false) 
+expression_renderer::expression_renderer(XSSContext ctx, bool id_as_this)
+  : assigner(null), ctx_(ctx), capturing_property_(false)
   {
   }
 
@@ -225,7 +225,7 @@ str expression_renderer::resolve_assigner(variant operand, XSSObject instance, a
     if (prop)
       {
         str set_fn = variant_cast<str>(dynamic_get(prop, "set_fn"), ""); //let the outside world determine
-                                                                         //if a native function call shouls be made 
+                                                                         //if a native function call shouls be made
 
         str set_xss = variant_cast<str>(dynamic_get(prop, "set_xss"), ""); //such world can request to parse xss
 
@@ -266,7 +266,7 @@ void expression_renderer::push(variant operand, bool top)
 		if (top && assigner)
 			{
 				str ass = resolve_assigner(operand, XSSObject(), assigner);
-				push_rendered(ass, 0, operand.get_schema()); 
+				push_rendered(ass, 0, operand.get_schema());
 			}
 
     stack_.push(operand);
@@ -276,7 +276,7 @@ str expression_renderer::render_captured_property()
 	{
 		variant prop = stack_.top(); stack_.pop();
 		str     value = operand_to_string(prop);
-				
+
 		//td: !!! CONTEXT
 		XSSProject project_ = ctx_->project_;
 		xss_idiom* idiom_		= ctx_->idiom_;
@@ -290,7 +290,7 @@ str expression_renderer::render_captured_property()
 
 		ctx.scope_->register_symbol("path",	value);
 		ctx.scope_->register_symbol("property",	prop);
-    												
+
 		str result = project_->generate_xss(capture_property_.xss, gen);
 
 		project_->pop_generator();
@@ -316,7 +316,7 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
 
 		if (top && assigner)
 			{
-				assert(op == op_dot || 
+				assert(op == op_dot ||
                op == op_index);   //I'm sure there are more use cases, but I'll deal with this one exclusively
 															    //for now
 				//assert(op == op_dot); //I'm sure there are more use cases, but I'll deal with this one exclusively
@@ -357,7 +357,7 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
 								default:
 									assert(false); //use case trap
 							}
-						
+
             push_rendered(ss.str(), op_prec, arg1.get_schema());
             break;
           }
@@ -445,11 +445,11 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
 					      {
 						      expression_identifier ei = arg1;
                   xs_type_info xsti = ctx_->get_xss_type(ei.value); //td: meh, do the context
-																												            //also do static members, this is getting sloppy	
+																												            //also do static members, this is getting sloppy
                   caller = xsti.object;
 					      }
 			      }
-			
+
             str       s2 = operand_to_string(arg2, caller);
             XSSObject o2 = get_instance(caller, s2);
 
@@ -471,15 +471,15 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
 						str separator = ctx_->getIdiom()->resolve_separator(caller);
             if (!ss.str().empty())
               ss << separator;
-            
+
 						if (top && assigner)
 							{
-								ss << resolve_assigner(arg2, caller, assigner);	
+								ss << resolve_assigner(arg2, caller, assigner);
 							}
 						else if (prop)
               {
 						    //And since I am on it...
-						    //there is a use case where some properties need a variable to represent them 
+						    //there is a use case where some properties need a variable to represent them
 						    //unfortunately such variables need the whole property chain in order to be effective
 						    if (prop->has("property_xss"))
 							    {
@@ -488,7 +488,7 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
 								    capture_property_.prop = prop;
 								    capture_property_.xss  = variant_cast<str>(dynamic_get(prop, "property_xss"), str());
 
-								    for(int i = 0; i < capture_property_.xss.size(); i++)
+								    for(size_t i = 0; i < capture_property_.xss.size(); i++)
 									    {
 										    if (capture_property_.xss[i] == '\'')
 											    capture_property_.xss[i] ='"';
@@ -499,8 +499,8 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
                     break;
 							    }
 
-                str get_fn  = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
-                str get_xss = variant_cast<str>(dynamic_get(prop, "get_xss"), ""); 
+                str get_fn  = variant_cast<str>(dynamic_get(prop, "get_fn"), "");
+                str get_xss = variant_cast<str>(dynamic_get(prop, "get_xss"), "");
 
                 if (!get_xss.empty())
                   ss << get_xss;
@@ -511,7 +511,7 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
                 else
                   ss << s2;
               }
-            else 
+            else
                ss << s2;
 
             if (prop)
@@ -547,8 +547,8 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
         case op_func_call:
           {
             //td!!! this is silly, function calls ( foo(bar) instead of foo1.foo(bar) ) configure
-            //the stack differently, so we must duplicate the code.  
-          
+            //the stack differently, so we must duplicate the code.
+
             std::stringstream result;
 
             str caller = operand_to_string(arg1);
@@ -556,18 +556,18 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
 						result << caller << "(";
 
             int args = arg2;
-			
+
             //pop the arguments
 			      std::vector<str> params;
             for(int i = 0; i < args; i++)
               {
                 variant arg  = stack_.top(); stack_.pop();
                 str     sarg = operand_to_string(arg);
-                
+
                 XSSProperty prop = get_property(arg);
                 if (prop)
                   {
-                    str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
+                    str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), "");
                     if (!get_fn.empty())
                       sarg = get_fn + "()";
                     else if (!prop->get.empty())
@@ -576,7 +576,7 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
 
                 params.push_back(sarg);
 			        }
-			  
+
 			      std::vector<str>::reverse_iterator pit = params.rbegin();
 			      std::vector<str>::reverse_iterator pnd = params.rend();
 			      int i = 0;
@@ -602,18 +602,18 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
             result << "(";
 
             int args = arg1;
-			
+
             //pop the arguments
 	      		std::vector<str> params;
             for(int i = 0; i < args; i++)
               {
                 variant arg  = stack_.top(); stack_.pop();
                 str     sarg = operand_to_string(arg);
-                
+
                 XSSProperty prop = get_property(arg);
                 if (prop)
                   {
-                    str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), ""); 
+                    str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), "");
                     if (!get_fn.empty())
                       sarg = get_fn + "()";
                     else if (!prop->get.empty())
@@ -622,7 +622,7 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
 
                 params.push_back(sarg);
 			        }
-			  
+
 			      std::vector<str>::reverse_iterator pit = params.rbegin();
 			      std::vector<str>::reverse_iterator pnd = params.rend();
 			      int i = 0;
@@ -674,7 +674,7 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
 							}
 
             result << "]";
-            push_rendered(result.str(), op_prec, variant()); 
+            push_rendered(result.str(), op_prec, variant());
 						break;
           }
 
@@ -682,7 +682,7 @@ void expression_renderer::exec_operator(operator_type op, int pop_count, int pus
           {
             std::stringstream result;
 						result << operand_to_string(arg1) << "[" << operand_to_string(arg2) << "]";
-            push_rendered(result.str(), op_prec, variant()); 
+            push_rendered(result.str(), op_prec, variant());
             break;
           }
 
@@ -757,7 +757,7 @@ str expression_renderer::get()
                     return render_captured_property();
                   }
 
-                return this_str + separator + ei.value; 
+                return this_str + separator + ei.value;
 						}
 					}
 				else if (mthd)
@@ -765,7 +765,7 @@ str expression_renderer::get()
             str this_str = ctx_->idiom_->resolve_this(ctx_);
             if (!this_str.empty())            str this_str = ctx_->idiom_->resolve_this(ctx_);
 						if (!this_str.empty())
-              return this_str + separator + ei.value; 
+              return this_str + separator + ei.value;
 					}
 
 				return ei.value;
@@ -802,7 +802,7 @@ str expression_renderer::operand_to_string(variant operand, XSSObject parent, in
           {
             //here we ought to resolve a single symbol (ex width = 10)
             //thid *could* belong to the "this" pointer
-            
+
             str separator = ctx_->idiom_->resolve_separator();
             if (ctx_->idiom_)
               {
@@ -813,13 +813,13 @@ str expression_renderer::operand_to_string(variant operand, XSSObject parent, in
 										result = prop->resolve_value();
                     str this_str = ctx_->idiom_->resolve_this(ctx_);
                     if (!this_str.empty())
-                      result = this_str + separator + result; //otherwise it doesnt get translated 
+                      result = this_str + separator + result; //otherwise it doesnt get translated
                   }
 								else if (mthd)
                   {
                     str this_str = ctx_->idiom_->resolve_this(ctx_);
                     if (!this_str.empty())
-                      result = this_str + separator + ei.value; //otherwise it doesnt get translated 
+                      result = this_str + separator + ei.value; //otherwise it doesnt get translated
                   }
 				        else
 				          {
@@ -890,8 +890,8 @@ str idiom_utils::expr2str(expression& expr, XSSContext ctx)
 	}
 
 //expr_type_resolver
-expr_type_resolver::expr_type_resolver(XSSContext ctx) 
-  : is_variant_(false), local_(ctx->vars_), ctx_(ctx) 
+expr_type_resolver::expr_type_resolver(XSSContext ctx)
+  : is_variant_(false), local_(ctx->vars_), ctx_(ctx)
   {
   }
 
@@ -900,20 +900,24 @@ xs_type_info expr_type_resolver::get()
 		if (is_variant_)
 			return null;
 
-		assert(stack_.size() == 1);
-		return resolve_type(stack_.top());
+		assert(stack_.size() <= 1);
+
+    if (stack_.size() == 1)
+		  return resolve_type(stack_.top());
+    else
+      return xs_type_info(type_schema<variant>());
 	}
 
 str expr_type_resolver::type_name()
 	{
-		assert(stack_.size() == 1); 
+		assert(stack_.size() == 1);
 
 		xs_type_info ti = resolve_type(stack_.top());
     if (ti.type)
       return ctx_->get_type_name(ti.type);
 		else
 			{
-				XSSObject obj = resolve_xss_type(stack_.top());	
+				XSSObject obj = resolve_xss_type(stack_.top());
 				if (obj)
 					{
 						if (obj->has("internal_id"))
@@ -995,7 +999,7 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
             error.add("id", SIdiom);
             error.add("desc", SAssignOperator);
             xss_throw(error);
-						break; 
+						break;
 					}
 
 				case op_parameter:
@@ -1039,7 +1043,7 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
                       arr_type = xsti.type;
                   }
 							}
-            
+
             xs_type_info result;
             result.type = type_schema<DynamicArray>();
             result.is_array = true;
@@ -1064,8 +1068,8 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
 						xs_type_info xstype2 = resolve_type(arg2);
 						schema* result = null;
 						size_t  idx;
-            
-            // i don't imagine how it's work operations with array operands
+
+            // i don't imagine how it's operations work with array operands
             if (operators_.get_operator_index(op, xstype1.type, xstype2.type, idx, &result) && result)
 							stack_.push(xs_type_info(result));
 						else
@@ -1101,7 +1105,7 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
                 schema* result = ctx_->get_type(mthd->type);
 						    if (result)
                   xsti.type = result;
-						    else 
+						    else
                   xsti = ctx_->get_xss_type(mthd->type);
               }
 
@@ -1127,7 +1131,7 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
 										schema* result = ctx_->get_type(prop->type);
 										if (result)
 											xsti.type = result;
-										else 
+										else
 											{
                         xsti = ctx_->get_xss_type(prop->type);
 												if (!xsti.object && obj->has("enum"))
@@ -1158,7 +1162,7 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
 										schema* result = ctx_->get_type(mthd->type);
 										if (result)
 											xsti.type = result;
-										else 
+										else
 											{
                         xsti = ctx_->get_xss_type(mthd->type);
 												if (!xsti.object && obj->has("enum"))
@@ -1454,7 +1458,7 @@ void code_type_resolver::expression_type_resolver(xkp::expression &expr, xkp::XS
 
                 xs_type_info left_tinfo = left_type.get();
 
-                //i assume that first operand is a expression identifier
+                //i assume that first operand is an expression identifier
                 variant left_var = es.left.pop_first();
 
                 str var_name;
@@ -1469,6 +1473,9 @@ void code_type_resolver::expression_type_resolver(xkp::expression &expr, xkp::XS
                     var_name = opndstr;
                   }
 
+                if (!right_tinfo.type)
+                  break;
+
                 //somes stupid tipified use case
                 if (left_tinfo.type != right_tinfo.type)
                   {
@@ -1481,7 +1488,8 @@ void code_type_resolver::expression_type_resolver(xkp::expression &expr, xkp::XS
 
                             update_type(var_name, right_tinfo);
                           }
-                        else if (!left_tinfo.is_array)
+                        else if (!left_tinfo.is_array &&
+                          !ctx->getIdiom()->allow_cast(left_tinfo.type, right_tinfo.type))
                           {
                             param_list error;
                             error.add("id", SVariableAssigner);
@@ -1509,6 +1517,7 @@ void code_type_resolver::expression_type_resolver(xkp::expression &expr, xkp::XS
                       }
                   }
 					    }
+            default: break;
 			    } //switch
 	    }
   }
@@ -1535,10 +1544,10 @@ base_xss_code::base_xss_code() : indent_(0)
   }
 
 base_xss_code::base_xss_code(XSSContext ctx, code& code):
+  vars_(ctx->vars_),
   code_(code),
   ctx_(ctx),
-	indent_(0),
-  vars_(ctx->vars_)
+	indent_(0)
   {
   }
 
@@ -1598,7 +1607,7 @@ void base_xss_code::variable_(stmt_variable& info)
 void base_xss_code::for_(stmt_for& info)
 	{
 		register_var(info.init_variable.id, info.init_variable.type);
-		
+
     std::stringstream ss;
 
     ss << "for(var " << info.init_variable.id << " = " << render_expression(info.init_variable.value, ctx_)
@@ -1740,6 +1749,16 @@ str base_idiom::translate_type(const str& type)
 			return it->second;
 		return type;
 	}
+
+str base_idiom::translate_type(schema *type)
+  {
+    return ctx_->get_type_name(type);
+  }
+
+bool base_idiom::allow_cast(schema* fts_type, schema* sec_type)
+  {
+    return true;
+  }
 
 void base_idiom::setTypes(DynamicArray da)
 	{

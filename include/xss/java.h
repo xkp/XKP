@@ -54,7 +54,8 @@ struct java_idiom : base_idiom
     virtual str     resolve_separator(XSSObject lh);
 
     // return the java type name of the given schema* type
-    static str get_type(schema *type);
+    virtual str     translate_type(schema *type);
+    virtual bool    allow_cast(schema *fts_type, schema *sec_type);
   };
 
 struct java_expression_renderer : expression_renderer

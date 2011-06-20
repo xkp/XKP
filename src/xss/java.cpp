@@ -20,8 +20,7 @@ str java_code::get_type_name(const str& var_name)
       {
         xs_type_info xsti = it->second;
         schema *sche_type = xsti.type;
-        //str_type = ctx_->get_type_name(sche_type);
-        str_type = java_idiom::get_type(sche_type);
+        str_type = ctx_->getIdiom()->translate_type(sche_type);
       }
 
     return str_type;
@@ -91,7 +90,7 @@ str java_args::resolve_param(const param_decl& param)
 	}
 
 //java_idiom
-str java_idiom::get_type(schema* type)
+str java_idiom::translate_type(schema* type)
   {
     str str_type;
     if (!type)
@@ -127,6 +126,24 @@ str java_idiom::get_type(schema* type)
     return str_type;
   }
 
+bool java_idiom::allow_cast(schema* fts_type, schema* sec_type)
+  {
+    if (fts_type == type_schema<float>())
+      {
+        if (sec_type == type_schema<double>() ||
+          sec_type == type_schema<int>())
+          return true;
+      }
+    else if (fts_type == type_schema<double>())
+      {
+        if (sec_type == type_schema<float>() ||
+          sec_type == type_schema<int>())
+          return true;
+      }
+
+    return false;
+  }
+
 variant java_idiom::process_code(code& cde, param_list_decl& params, XSSContext ctx)
 	{
     code_type_resolver ctyper(ctx);
@@ -154,7 +171,7 @@ variant java_idiom::process_args(param_list_decl& params)
 str java_idiom::resolve_this(XSSContext ctx)
 	{
     //Programming languages do not agree on how to use *this* pointers
-    //c++ lets you ignore them, jsva script et all force you to 
+    //c++ lets you ignore them, jsva script et all force you to
     //and there are other intrincate circumstances (like functions in js)
     //where something must be done.
 
@@ -182,7 +199,7 @@ str java_idiom::resolve_this(XSSContext ctx)
 
         return iid;
       }
-      
+
     return "";
 	}
 
@@ -196,7 +213,7 @@ void java_expression_renderer::exec_operator(operator_type op, int pop_count, in
   {
 		if (top && assigner)
 			{
-				assert(op == op_dot || 
+				assert(op == op_dot ||
                op == op_index);   //I'm sure there are more use cases, but I'll deal with this one exclusively
 															    //for now
 			}
@@ -222,6 +239,7 @@ void java_expression_renderer::exec_operator(operator_type op, int pop_count, in
                   }
                 default: assert(false);
               }
+            default: break;
           }
       }
 
@@ -279,7 +297,8 @@ void java_expression_renderer::exec_operator(operator_type op, int pop_count, in
             schema* totype = ctx_->get_type(os2);
 
             std::stringstream ss;
-            ss << java_idiom::get_type(totype) << ".valueOf(" << os1 << ")";
+            //ss << java_idiom::get_type(totype) << ".valueOf(" << os1 << ")";
+            ss << ctx_->getIdiom()->translate_type(totype) << ".valueOf(" << os1 << ")";
 
             push_rendered(ss.str(), op_prec, variant());
             break;
@@ -291,7 +310,7 @@ void java_expression_renderer::exec_operator(operator_type op, int pop_count, in
 
             str str_type = "Object"; //td: this value must come from expression
             result << "new ArrayList(Arrays.asList( new " << str_type << " [] {";
-            
+
 						std::vector<str> params;
 						int arg_count = arg1;
             for(int i = 0; i < arg_count; i++)
@@ -311,7 +330,7 @@ void java_expression_renderer::exec_operator(operator_type op, int pop_count, in
 
             result << "} ))";
 
-            push_rendered(result.str(), op_prec, variant()); 
+            push_rendered(result.str(), op_prec, variant());
 						break;
           }
 
@@ -326,13 +345,13 @@ void java_expression_renderer::exec_operator(operator_type op, int pop_count, in
               {
 					      result << op1;
                 //enormous patch
-                assigner->data = op1 + ".set(" + op2 + ", " + 
+                assigner->data = op1 + ".set(" + op2 + ", " +
                                  assigner->data + ")";
               }
             else
               result << op1 << ".get(" << op2 << ")";
 
-            push_rendered(result.str(), op_prec, variant()); 
+            push_rendered(result.str(), op_prec, variant());
             break;
           }
 

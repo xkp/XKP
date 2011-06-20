@@ -76,7 +76,7 @@ struct expression_renderer : expression_visitor
       XSSContext        ctx_;
 			bool							capturing_property_;
 			capture_property	capture_property_;
-      
+
       void push_rendered(str value, int prec, variant object);
 			str	 render_captured_property();
   };
@@ -155,6 +155,8 @@ struct base_idiom : xss_idiom
     virtual void set_context(XSSContext ctx);
     virtual str  resolve_separator(XSSObject lh = XSSObject());
     virtual str  translate_type(const str& type);
+    virtual str  translate_type(schema *type);
+    virtual bool allow_cast(schema *fts_type, schema *sec_type);
 		public:
 			XSSContext ctx_;
 			void setTypes(DynamicArray da);
@@ -302,6 +304,7 @@ struct idiom_utils
 
 						        return result;
 					        }
+                default: break;
 			        }
 	        }
 
@@ -317,8 +320,8 @@ struct idiom_utils
 //utils, this is soon to be changed completely
 struct code_type_resolver : code_visitor
 	{
-		code_type_resolver(XSSContext ctx) 
-      : ctx_(ctx), is_variant_(false), vars_(ctx->vars_) {}
+		code_type_resolver(XSSContext ctx)
+      : vars_(ctx->vars_), ctx_(ctx), is_variant_(false) {}
 
 		xs_type_info get();
 

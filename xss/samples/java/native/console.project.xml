@@ -5,6 +5,10 @@
           output_path="../../../production/java/"
 		  output_file="console.java"/>
 
+	<types>
+		<type xs_type="int" output_type="Integer"/>
+	</types>
+
     <options gen_event_method="false"/>
 
     <idiom class="java-idiom"/>

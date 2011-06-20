@@ -98,6 +98,8 @@ struct xss_idiom
     virtual str     resolve_this(XSSContext ctx)																			= 0;
     virtual str     resolve_separator(XSSObject lh = XSSObject())											= 0;
     virtual str     translate_type(const str& type)																		= 0;
+    virtual str     translate_type(schema *type)                                      = 0;
+    virtual bool    allow_cast(schema *fts_type, schema *sec_type)                    = 0;
   };
 
 struct xss_code_context : base_code_context

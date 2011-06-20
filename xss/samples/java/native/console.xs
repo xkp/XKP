@@ -1,52 +1,31 @@
 on pbtn1.click()
 {
-	var mthd;
-	mthd = test(10); 						// 10; op_param; 'test'; 1; op_func_call;
-	mthd = pbtn1.test(10);					// 'pbtn1'; 'test'; op_dot_call; 10; op_param; 1; op_call;
-	mthd = pbtn1.test(10, "a", -2);			// 'pbtn1'; 'test'; op_dot_call; 10; op_param; "a"; op_param; -2; op_param; 3; op_call;
-	mthd = pbtn1.test(2 * 5, "b" + "a", 1);	//
-	
-	object obj = [1, 2];
-	obj.setValue(j);
-	
-	int a = 10;
-	//a += j + obj.getValue();
-	
-	// how xs traduce this
-	var v1 = 10;
-	int v2 = 20;
-	//v1 = v2 = 30;
-	//v1 * v2 = 30;
-	if(v1 = 10 * v2)
-	{
-	}
-	
-	// test property with assigned data type from classes
-	// and assign value of different data type, then
-	// assign property value to variant variable...
-	
-	// this make a assert
-	//pbtn1.exploit = "exploit";
-	//exploit = "exploit";
-	//var ex1 = pbtn1.exploit;
-	var ex1 = exploit;
-	
-	//var ex2;
-	//ex2	= xvalue;
-
-	var exp;
-	exp = exploit;
-	
-	//it'snt possible, this make an console error
-	//int xyx = 1;
-	//for(; xyx < 5; xyx++)
-	//{
-	//}
+	// how traduce this?
+	array <object> types = [
+		object(xs_type = "int", output_type = "Integer"),
+		object(xs_type = "float", output_type = "Double"),
+		object(xs_type = "string", output_type = "String")
+	];
 	
 	//*********************
 	//* TESTS IMPLEMENTED *
 	//*********************
 
+	//[ok]: test property with assigned data type from classes
+	// 		and assign value of different data type, then
+	// 		assign property value to variant variable...
+	pbtn1.exploit = 20;
+	var ex1 = pbtn1.exploit;
+	var exp;
+	exp = exploit;
+	// and correct raise type mistmatch 
+	//pbtn1.exploit = "exploit";
+	//exploit = "exploit";
+	
+	//[ok]: test some assigned object
+	object obj = [1, 2];
+	obj.setValue(j);
+	
 	//[ok]: test declaration of array type with assign, 
 	//      add, remove and reasign elements. Then
 	//		set the value of a element and resolve other one.
@@ -70,6 +49,9 @@ on pbtn1.click()
 	i += j;
 	i -= 2;
 	
+	int a = 10;
+	a += j + obj.getValue();
+	
 	//[ok]: test declaration of array variant with assign.
 	var adyn = [1, 2, 3];
 	adyn = [4, 5, 6, 7];
@@ -88,6 +70,12 @@ on pbtn1.click()
 	var rmthd;
 	rmthd = test(10);
 	var thd = application.app_test(2);
+
+	var mthd;
+	mthd = test(10); 						// 10; op_param; 'test'; 1; op_func_call;
+	mthd = pbtn1.test(10);					// 'pbtn1'; 'test'; op_dot_call; 10; op_param; 1; op_call;
+	mthd = pbtn1.test(10, "a", -2);			// 'pbtn1'; 'test'; op_dot_call; 10; op_param; "a"; op_param; -2; op_param; 3; op_call;
+	mthd = pbtn1.test(2 * 5, "b" + "a", 1);	//
 	
 	//[ok]: test variant variable for resolve type 
 	// 		from returned property value and 
@@ -96,6 +84,14 @@ on pbtn1.click()
 	ex2 = xvalue;
 	ex2 = pbtn1.xvalue;
 	var ex3 = application.yvalue;
+	
+	//[ok]: test assign property with a type 
+	//      and some resolved casts
+	application.yvalue = "new string";
+	xvalue = 20.2;
+	
+	//[ok]: allow cast from int to float
+	xvalue = 10;
 	
 	//[ok]: test redefined variable
 	//int v1;
