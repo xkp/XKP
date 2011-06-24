@@ -23,9 +23,10 @@ namespace xkp
       code_linker();
       code_linker(code_context& context);
 
-      ByteCode link();
-      void     link(ByteCode result);
-      void     link(byte_code* result);
+      ByteCode      link();
+      void          link(ByteCode result);
+      void          link(byte_code* result);
+      code_context& context();
 
       //code_visitor
       virtual void if_(stmt_if& info);

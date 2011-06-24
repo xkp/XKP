@@ -1,4 +1,4 @@
-<project entry_point="test_base.xss">
+<project entry_point="test_base.xss" language="debug">
     <include def="test_base_classes.xml" src="test_base_classes.xs"/>
 </project>
            

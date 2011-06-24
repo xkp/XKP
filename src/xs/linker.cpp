@@ -221,6 +221,11 @@ void code_linker::link(byte_code* result)
     result->constants    = constants_;
   }
 
+code_context& code_linker::context()
+  {
+    return context_;
+  }
+
 void code_linker::if_(stmt_if& info)
   {
     link_expression(info.expr);

@@ -19,15 +19,22 @@ class		xss_type;
 
 //interfaces
 struct ILanguage;
+struct IRenderer;
+struct ICodeRenderer;
+struct IExpressionRenderer;
+struct IArgumentRenderer;
 
 //reference types
-typedef reference<xss_object>		XSSObject;
-typedef reference<xss_property> XSSProperty;
-typedef reference<xss_context>	XSSContext;
-typedef reference<xss_event>		XSSEvent;
-typedef reference<xss_method>		XSSMethod;
-typedef reference<ILanguage>		Language;
-typedef reference<xss_type>		  XSSType;
+typedef reference<xss_object>		        XSSObject;
+typedef reference<xss_property>         XSSProperty;
+typedef reference<xss_context>	        XSSContext;
+typedef reference<xss_event>		        XSSEvent;
+typedef reference<xss_method>		        XSSMethod;
+typedef reference<xss_type>		          XSSType;
+typedef reference<ILanguage>		        Language;
+typedef reference<ICodeRenderer>	      CodeRenderer;
+typedef reference<IExpressionRenderer>  ExpressionRenderer;
+typedef reference<IArgumentRenderer>    ArgumentRenderer;
 
 //misc
 typedef std::vector<XSSObject> XSSObjectList;
@@ -94,14 +101,33 @@ class xss_type : public xss_object
       XSSType super_;
   };
 
-//the idiom interface, under designed
+//the language interface
+struct IRenderer
+  {
+    virtual str render() = 0;
+  };
+
+struct ICodeRenderer : public IRenderer
+  {
+    virtual XSSType type() = 0;
+  };
+
+struct IExpressionRenderer : public IRenderer 
+  {
+    virtual XSSType type() = 0;
+  };
+
+struct IArgumentRenderer : public IRenderer
+  {
+  };
+
 struct ILanguage
   {
-    virtual variant compile_code(code& cde, param_list_decl& params, XSSContext ctx)	= 0;
-    virtual variant compile_expression(expression expr, XSSObject this_)							= 0;
-		virtual variant compile_args(param_list_decl& params)															= 0;
-    virtual str     resolve_this(XSSContext ctx)																			= 0;
-    virtual str     resolve_separator(XSSObject lh = XSSObject())											= 0;
+    virtual CodeRenderer       compile_code(code& cde, param_list_decl& params, XSSContext ctx)	= 0;
+    virtual ExpressionRenderer compile_expression(expression expr, XSSContext ctx)							= 0;
+		virtual ArgumentRenderer   compile_args(param_list_decl& params, XSSContext ctx)					  = 0;
+    virtual str                resolve_this(XSSContext ctx)																			= 0;
+    virtual str                resolve_separator(XSSObject lh = XSSObject())										= 0;
   };
 
 //resolver
@@ -115,15 +141,18 @@ struct xss_context
     xss_context(XSSContext parent = XSSContext());
 	  
     public:
-      XSSType   get_type(const str& type);
-      void      add_type(const str& id, XSSType type, bool override_parent = false);
-      XSSObject get_this();
-      void      set_this(XSSObject this_);
-      Language  get_language();
-      void      set_language(Language lang);
+      XSSType       get_type(const str& type);
+      void          add_type(const str& id, XSSType type, bool override_parent = false);
+      XSSObject     get_this();
+      void          set_this(XSSObject this_);
+      Language      get_language();
+      void          set_language(Language lang);
+      code_context  get_compile_context();
+      fs::path      path();
     public:
       variant resolve(const str& id, RESOLVE_ITEM item_type);
       variant resolve_path(const std::vector<str>& path);
+      void    register_symbol(RESOLVE_ITEM type, const str& id, variant symbol);
     protected:
       typedef std::map<str, XSSType>  type_list;
       typedef std::pair<str, XSSType> type_list_pair;
@@ -184,6 +213,12 @@ class xss_method : public xss_object
 			XSSType	type;
 			variant args;
 			variant code;
+  };
+
+//utils
+struct xss_utils
+  {
+    static str var_to_string(variant& v);
   };
 
 //glue

@@ -2,8 +2,10 @@
 
 #include "xss/xss_compiler.h"
 #include "xss/object_reader.h"
+#include "xss/xss_renderer.h"
 #include "xss/xss_error.h"
 #include "xss/language.h"
+#include "xss/lang/debug.h"
 
 #include "xs/linker.h"
 #include "xs/compiler.h"
@@ -29,12 +31,15 @@ const str SUnknownClass("Cannot find type");
 const str SIncompatibleReturnType("Return type is inconsistent");
 const str SUnknownInstance("Instance not found");
 const str SFileNotFound("File not found");
+const str SMustProvideLanguageForApplicationType("Applications must provide a language");
+const str SNotaLanguage("There is no language with this name");
 
 //xss_application_renderer
-xss_application_renderer::xss_application_renderer(const str& xss_file):
+xss_application_renderer::xss_application_renderer(const str& xss_file, Language lang):
   filename_(xss_file),
   context_(new xss_context)
   {
+    context_->set_language(lang);
   }
 
 XSSContext xss_application_renderer::context()
@@ -78,6 +83,34 @@ fs::path xss_compiler::output_path()
     return fs::path();
   }
 
+variant xss_compiler::compile_xss_file(const str& src_file, XSSContext ctx)
+  {
+    fs::path path = ctx->path() / src_file;
+    return compile_xss(load_file(path), ctx);
+  }
+
+variant xss_compiler::compile_xss(const str& src, XSSContext ctx)
+  {
+    XSSRenderer result(new xss_renderer(shared_from_this(), ctx));
+
+    xss_parser parser;
+    parser.register_tag("xss:code");
+    parser.register_tag("xss:e");
+    parser.register_tag("xss:class");
+    parser.register_tag("xss:file");
+    parser.register_tag("xss:marker");
+    parser.register_tag("xss:instance");
+
+		parser.parse(src, result.get());
+    return result;
+
+  }
+
+void xss_compiler::output_file(const str& fname, const str& contents)
+  {
+    assert(false); //td:
+  }
+
 XSSObject xss_compiler::read_project(fs::path xml_file)
   {
     xss_object_reader reader;
@@ -119,8 +152,27 @@ void xss_compiler::read_application_types(std::vector<XSSObject> & applications)
             error.add("desc", SMustProvideEntryPointForApplicationType);
             xss_throw(error);
           }
+
+        str language_name = app_data->get<str>("language", str());
+        if (language_name.empty())
+          {
+            param_list error;
+            error.add("id", SProjectError);
+            error.add("desc", SMustProvideLanguageForApplicationType);
+            xss_throw(error);
+          }
         
-        XSSApplicationRenderer app(new xss_application_renderer(entry_point));
+        Language lang = get_language(language_name);
+        if (!lang)
+          {
+            param_list error;
+            error.add("id", SProjectError);
+            error.add("desc", SNotaLanguage);
+            error.add("language", language_name);
+            xss_throw(error);
+          }
+
+        XSSApplicationRenderer app(new xss_application_renderer(entry_point, lang));
 
         //load modules
         XSSObject module_data = app_data->get<XSSObject>("modules", XSSObject());
@@ -400,7 +452,7 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 
         variant value;
         if (!pit->value.empty())
-          value = lang->compile_expression(pit->value, instance);
+          value = lang->compile_expression(pit->value, ctx);
 
         XSSType prop_type = ctx->get_type(pit->type);
 				XSSProperty new_prop(new xss_property(pit->name, prop_type, value, getter, setter, instance));
@@ -444,7 +496,7 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 						xss_throw(error);
 					}
 
-				variant args = lang->compile_args(mit->args);									assert(!args.empty());
+				variant args = lang->compile_args(mit->args, ctx);						assert(!args.empty());
 				variant cde  = lang->compile_code(mit->cde, mit->args, ctx);  assert(!cde.empty());
 
 				XSSMethod mthd(new xss_method(mit->name, decl_type, args, cde));
@@ -514,7 +566,7 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 						str	mname  = aid + "_" + event_name;
 
 						//so, create a method in the original instance
-						variant margs = lang->compile_args(it->args);								 assert(!margs.empty());
+						variant margs = lang->compile_args(it->args, ctx);						assert(!margs.empty());
 						variant mcde  = lang->compile_code(it->cde, it->args, ctx);  assert(!mcde.empty());
 
 						XSSMethod mthd(new xss_method(mname, XSSType(), margs, mcde));
@@ -561,7 +613,7 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 						impls->push_back(impl);
 					}
 
-				ev->args = lang->compile_args(it->args);
+				ev->args = lang->compile_args(it->args, ctx);
       }
 
 		std::vector<xs_instance>::iterator iit = gather.instances.begin();
@@ -624,3 +676,16 @@ bool xss_compiler::options(const str& name)
       }
 		return false;
 	}
+
+Language xss_compiler::get_language(const str& name)
+  {
+    //look the other way ma
+    if (name == "js")
+      {
+        assert(false); //td:
+      }
+    else if (name == "debug")
+      return Language(new debug_language);
+
+    return Language();
+  }

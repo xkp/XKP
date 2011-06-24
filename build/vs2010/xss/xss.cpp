@@ -17,12 +17,12 @@
 #include "xs/runtime_error.h"
 #include "gen/generator.h"
 #include "xss/xss_parser.h"
-#include "xss/xss_generator.h"
 #include "xss/xss_error.h"
 #include "xss/xss_compiler.h"
 //#include "xss/jscript.h"
 //#include "xss/c++.h"
 //#include "archive/xml_archive.h"
+//#include "xss/xss_generator.h"
 
 #include "boost/filesystem.hpp" 
 

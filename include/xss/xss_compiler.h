@@ -24,7 +24,7 @@ namespace xkp
 	class xss_application_renderer : public xss_object
     {
       public:
-        xss_application_renderer(const str& xss_file);
+        xss_application_renderer(const str& xss_file, Language lang);
       public:
         XSSContext context();
         void       register_module(const str& id, XSSModule module);
@@ -44,11 +44,14 @@ namespace xkp
         XSSContext ctx_;
     };
 
-  class xss_compiler
+  class xss_compiler : public boost::enable_shared_from_this<xss_compiler>
 		{
       public:
         void      build(fs::path xml);
         fs::path  output_path();
+				variant   compile_xss_file(const str& src_file, XSSContext ctx);
+				variant   compile_xss(const str& src, XSSContext ctx);
+			  void      output_file(const str& fname, const str& contents);
 		  private:
         std::vector<XSSApplicationRenderer> applications_;
         fs::path  base_path_;
@@ -63,6 +66,7 @@ namespace xkp
         void      read_include(fs::path def, fs::path src, XSSContext ctx);
         void      compile_ast(xs_container& ast, XSSContext ctx);
         bool      options(const str& name);
+        Language  get_language(const str& name);
       private:
         //cache
         str   load_file(fs::path file);

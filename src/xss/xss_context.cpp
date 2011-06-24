@@ -10,6 +10,23 @@ const str SContextError("context");
 const str SCannotOverrideTypes("Cannot override types");
 const str SDupType("Duplicate type");
 
+str xss_utils::var_to_string(variant& v)
+  {
+    if (v.is<str>())
+      return variant_cast<str>(v, str());
+
+    if (v.is<bool>())
+      {
+        bool vv = v;
+        if (vv)
+          return "true";
+        else
+          return "false";
+      }
+    
+    return variant_cast<str>(v, str());
+  }
+
 //xss_context
 xss_context::xss_context(XSSContext parent):
   parent_(parent)
@@ -70,12 +87,40 @@ void xss_context::set_this(XSSObject _this_)
 
 Language xss_context::get_language()
   {
-    return lang_;
+    if (lang_)
+      return lang_;
+
+    if (parent_)
+      return parent_->get_language();
+
+    return Language();
   }
 
 void xss_context::set_language(Language lang)
   {
     lang_ = lang;
+  }
+
+code_context xss_context::get_compile_context()
+  {
+    assert(false); //td:
+
+    code_context result;
+    result.types_;
+    result.scope_;
+    result.args_;
+    result.this_type;
+    result.this_;
+    result.dsl_; 
+
+    return result;
+  }
+
+fs::path xss_context::path()
+  {
+    assert(false); //td:
+
+    return fs::path();
   }
 
 variant xss_context::resolve(const str& id, RESOLVE_ITEM item_type)
@@ -88,6 +133,10 @@ variant xss_context::resolve_path(const std::vector<str>& path)
   {
     assert(false);
     return variant();
+  }
+
+void xss_context::register_symbol(RESOLVE_ITEM type, const str& id, variant symbol)
+  {
   }
 
 //xss_object
