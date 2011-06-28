@@ -6,6 +6,7 @@
 #include "xss/xss_error.h"
 #include "xss/language.h"
 #include "xss/lang/debug.h"
+#include "xss/dsl_out.h"
 
 #include "xs/linker.h"
 #include "xs/compiler.h"
@@ -33,13 +34,17 @@ const str SUnknownInstance("Instance not found");
 const str SFileNotFound("File not found");
 const str SMustProvideLanguageForApplicationType("Applications must provide a language");
 const str SNotaLanguage("There is no language with this name");
+const str SAppsMustHaveTarget("Application renderer (entry_point) must be present in your idiom");
 
 //xss_application_renderer
-xss_application_renderer::xss_application_renderer(const str& xss_file, Language lang):
-  filename_(xss_file),
-  context_(new xss_context)
+xss_application_renderer::xss_application_renderer(fs::path entry_point, Language lang, XSSCompiler compiler):
+  filename_(entry_point)
   {
+    context_ = XSSContext(new xss_context(XSSContext(), entry_point.parent_path()));
     context_->set_language(lang);
+    
+    //register standard dsls
+    context_->register_dsl("out", DslLinker(new out_linker(compiler)));
   }
 
 XSSContext xss_application_renderer::context()
@@ -56,6 +61,11 @@ str xss_application_renderer::target()
     return target_;
   }
    
+fs::path xss_application_renderer::entry_point()
+  {
+    return filename_;
+  }
+
 void xss_application_renderer::set_target(const str& target)
   {
     target_ = target;
@@ -75,6 +85,8 @@ void xss_compiler::build(fs::path xml)
 
     XSSObject project_data = read_project(xml);
     read_includes(project_data);
+
+    run();
   }
 
 fs::path xss_compiler::output_path()
@@ -83,15 +95,20 @@ fs::path xss_compiler::output_path()
     return fs::path();
   }
 
-variant xss_compiler::compile_xss_file(const str& src_file, XSSContext ctx)
+XSSRenderer xss_compiler::compile_xss_file(const str& src_file, XSSContext ctx)
   {
     fs::path path = ctx->path() / src_file;
-    return compile_xss(load_file(path), ctx);
+    return compile_xss(load_file(path), ctx, path);
   }
 
-variant xss_compiler::compile_xss(const str& src, XSSContext ctx)
+XSSRenderer xss_compiler::compile_xss_file(fs::path src_file, XSSContext ctx)
   {
-    XSSRenderer result(new xss_renderer(shared_from_this(), ctx));
+    return compile_xss(load_file(src_file), ctx, src_file);
+  }
+
+XSSRenderer xss_compiler::compile_xss(const str& src, XSSContext ctx, fs::path path)
+  {
+    xss_renderer* result = new xss_renderer(shared_from_this(), ctx, path);
 
     xss_parser parser;
     parser.register_tag("xss:code");
@@ -101,14 +118,29 @@ variant xss_compiler::compile_xss(const str& src, XSSContext ctx)
     parser.register_tag("xss:marker");
     parser.register_tag("xss:instance");
 
-		parser.parse(src, result.get());
-    return result;
-
+		parser.parse(src, result);
+    return XSSRenderer(result);
   }
 
 void xss_compiler::output_file(const str& fname, const str& contents)
   {
     assert(false); //td:
+  }
+
+void xss_compiler::push_renderer(XSSRenderer renderer)
+  {
+    renderers_.push(renderer);
+  }
+
+void xss_compiler::pop_renderer()
+  {
+    renderers_.pop();
+  }
+
+XSSRenderer xss_compiler::current_renderer()
+  {
+    assert(!renderers_.empty());
+    return renderers_.top();
   }
 
 XSSObject xss_compiler::read_project(fs::path xml_file)
@@ -172,7 +204,8 @@ void xss_compiler::read_application_types(std::vector<XSSObject> & applications)
             xss_throw(error);
           }
 
-        XSSApplicationRenderer app(new xss_application_renderer(entry_point, lang));
+        fs::path path = fs::complete(base_path_ / entry_point);
+        XSSApplicationRenderer app(new xss_application_renderer(path, lang, shared_from_this()));
 
         //load modules
         XSSObject module_data = app_data->get<XSSObject>("modules", XSSObject());
@@ -294,8 +327,11 @@ void xss_compiler::read_includes(XSSObject project_data)
 void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx)
   {
     std::map<str, XSSObject> def_types;
+    fs::path path;
     if (!def.empty())
       {
+        path = def;
+
         std::vector<XSSObject> classes_data;
         read_object_array(def, classes_data);
 
@@ -323,6 +359,9 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx)
 
     if (!src.empty())
       {
+        if (path.empty())
+          path = src;
+
         xs_container results;
 		    compile_xs_file(src, results);
 
@@ -378,7 +417,7 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx)
             clazz->set_definition(def_class);
             clazz->set_super(super);
 
-				    XSSContext ictx(new xss_context(ctx));
+				    XSSContext ictx(new xss_context(ctx, path.parent_path()));
 				    ictx->set_this(XSSObject(clazz));
 
 				    compile_ast(ci, ictx);
@@ -688,4 +727,29 @@ Language xss_compiler::get_language(const str& name)
       return Language(new debug_language);
 
     return Language();
+  }
+
+void xss_compiler::run()
+  {
+    std::vector<XSSApplicationRenderer>::iterator it = applications_.begin();
+    std::vector<XSSApplicationRenderer>::iterator nd = applications_.end();
+
+    for(; it != nd; it++)
+      {
+        XSSApplicationRenderer app = *it;
+        fs::path target = app->entry_point(); 
+        if (target.empty())
+          {
+				    param_list error;
+				    error.add("id", SProjectError);
+				    error.add("desc", SAppsMustHaveTarget);
+
+				    xss_throw(error);
+          }
+
+        XSSRenderer renderer = compile_xss_file(target, app->context());
+
+        str result = renderer->render(XSSObject(), null);
+        std::cout << result;
+      }
   }

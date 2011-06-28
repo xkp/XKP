@@ -168,12 +168,12 @@ namespace xkp
 					ref_->erase(ref_->begin() + idx);
 				}
 
-      container::iterator begin()
+      container::iterator ref_begin()
         {
           return ref_->begin();
         }
 
-      container::iterator end()
+      container::iterator ref_end()
         {
           return ref_->end();
         }
@@ -268,6 +268,7 @@ namespace xkp
   //registry
   register_complete_type(dynamic_array,           dynamic_array_schema);
   register_type         (typed_iterator<variant>, typed_iterator_schema<variant> );
+  register_iterator     (variant);
 }
 
 #endif

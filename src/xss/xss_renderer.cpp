@@ -26,7 +26,7 @@ str text_renderer::render(XSSObject this_, param_list* args)
     return text_;
   }
 
-struct code_renderer : item_renderer
+struct xss_code_renderer : item_renderer
   {
     //item_renderer
     virtual str render(XSSObject this_, param_list* args)
@@ -47,7 +47,7 @@ struct code_renderer : item_renderer
       ByteCode code_;
   };
 
-struct expression_renderer : item_renderer
+struct xss_expression_renderer : item_renderer
   {
     //item_renderer
     virtual str render(XSSObject this_, param_list* args)
@@ -97,6 +97,13 @@ struct class_renderer : item_renderer
     class_renderer() : 
       instance_(new xss_object)
       {
+        //register the render event
+        IEditableObject* editable = variant_cast<IEditableObject*>(instance_.get(), null);
+
+        schema_item itm;
+        itm.flags = EVENT_DECL;
+
+        editable->add_item("render", itm);
       }
       
     //item_renderer
@@ -186,8 +193,8 @@ struct file_renderer : item_renderer
   };
 
 //xss_renderer
-xss_renderer::xss_renderer(XSSCompiler compiler, XSSContext context):
-  context_(new xss_context(context)),
+xss_renderer::xss_renderer(XSSCompiler compiler, XSSContext context, fs::path xss_file):
+  context_(new xss_context(context, xss_file.parent_path())),
   compiler_(compiler)
   {
     handlers_.insert(handler_pair("text",					  &xss_renderer::handle_text));
@@ -200,17 +207,28 @@ xss_renderer::xss_renderer(XSSCompiler compiler, XSSContext context):
     handlers_.insert(handler_pair("xss:parameter",  &xss_renderer::handle_parameter));
   }
 
+renderer_parameter_list& xss_renderer::params()
+  {
+    return params_;
+  }
+
 str xss_renderer::render(XSSObject this_, param_list* args)
   {
-		item_list::iterator it = items_.begin();
+    XSSRenderer me(shared_from_this());
+    compiler_->push_renderer(me);
+
+    //reset first
+    result_ = str();
+
+		//loop thru the compiled items
+    item_list::iterator it = items_.begin();
 		item_list::iterator nd = items_.end();
 
     std::vector<int> positions;
-    str result;
     for(; it != nd; it++)
       {
-        positions.push_back(result.size());
-        result += (*it)->render(XSSObject(), null);
+        positions.push_back(result_.size());
+        result_ += (*it)->render(XSSObject(), null);
       }
     
     marker_map::iterator mit = markers_.begin();
@@ -221,7 +239,8 @@ str xss_renderer::render(XSSObject this_, param_list* args)
 				if (mit->second.idx >= 0)
 					{
             int pos = positions[mit->second.idx];
-						result.insert(result.begin() + pos, mit->second.value.begin(), mit->second.value.end());
+						result_.insert(result_.begin() + pos, mit->second.value.begin(), mit->second.value.end());
+            mit->second.value = str(); //reset
 					}
 				else
 					{
@@ -233,12 +252,18 @@ str xss_renderer::render(XSSObject this_, param_list* args)
 					}
 			}
 
-    return result;
+    compiler_->pop_renderer();
+    return result_;
   }
 
-std::vector<str> xss_renderer::params()
+void xss_renderer::append(const str& what)
   {
-    return params_;
+    result_ += what;
+  }
+
+void xss_renderer::append_at(const str& what, const str& marker)
+  {
+    assert(false); //td: 
   }
 
 void xss_renderer::handle_text(const str& text, param_list* args)
@@ -248,7 +273,7 @@ void xss_renderer::handle_text(const str& text, param_list* args)
 
 void xss_renderer::handle_code(const str& text, param_list* args)
   {
-    code_renderer* result = new code_renderer();
+    xss_code_renderer* result = new xss_code_renderer();
     result->compile(text, args, context_); 
 
     items_.push_back(ItemRenderer(result));
@@ -256,7 +281,7 @@ void xss_renderer::handle_code(const str& text, param_list* args)
 
 void xss_renderer::handle_expression(const str& text, param_list* args)
   {
-    expression_renderer* result = new expression_renderer();
+    xss_expression_renderer* result = new xss_expression_renderer();
     result->compile(text, args, context_); 
 
     items_.push_back(ItemRenderer(result));
@@ -346,5 +371,6 @@ void xss_renderer::handle_parameter(const str& text, param_list* args)
 					xss_throw(error);
 			}
 
-      params_.push_back(id);
+      //td: !!! grab type and default value
+      params_.push_back(renderer_parameter(id, XSSType(), str()));
   }

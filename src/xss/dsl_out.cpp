@@ -127,25 +127,25 @@ struct out_file_renderer : item_renderer
 				    xss_throw(error);
 			    }
 
-        renderer_ = compiler_->compile_xss(src, ctx);
+        renderer_ = compiler_->compile_xss_file(src, ctx);
       }
 
     //item_renderer
     virtual str render(XSSObject this_, param_list* args)
       {
-        std::vector<str> params = renderer_->params(); //td: type
+        renderer_parameter_list& params = renderer_->params(); //td: check types
         param_list file_params;
         
         //translate outside parameters into file parameters
-        std::vector<str>::iterator it = params.begin();
-        std::vector<str>::iterator nd = params.end();
+        renderer_parameter_list::iterator it = params.begin();
+        renderer_parameter_list::iterator nd = params.end();
         for(; it != nd; it++)
           {
-            std::map<str, int>::iterator pp = params_.find(*it);
+            std::map<str, int>::iterator pp = params_.find(it->id);
             if (pp != params_.end())
-              file_params.add(*it, args->get(pp->second));
+              file_params.add(it->id, args->get(pp->second));
             else
-              file_params.add(*it, variant());
+              file_params.add(it->id, variant());
           }
 
         str result = renderer_->render(XSSObject(), &file_params);
@@ -191,7 +191,18 @@ struct out_renderer : base_xss_renderer<out_renderer>
 
     void handle_expression(const str& text, param_list* args)
       {
-        expressions_.push_back(text);
+        str expr_ = text;
+        if (text.empty() && args)
+          {
+            variant vv = args->get("value");
+            if (vv.empty())
+					    vv = args->get("v");
+
+            if (!vv.empty())
+              expr_ = variant_cast<str>(vv, "");
+          }
+
+        expressions_.push_back(expr_);
         items_.push_back(ItemRenderer(new out_expr_renderer(expressions_.size() - 1)));
       }
 
@@ -257,11 +268,11 @@ struct worker
               result += ir->render(XSSObject(), args);
             }
 
-					//td:
-          //if (marker_.empty())
-					//	gen->append(result);
-					//else
-					//	gen->append_marker(marker_, result);
+          XSSRenderer rr = compiler_->current_renderer();
+          if (marker_.empty())
+						rr->append(result);
+					else
+						rr->append_at(result, marker_);
         }
 
     private:

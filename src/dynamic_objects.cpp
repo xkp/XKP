@@ -68,12 +68,16 @@ DynamicObject base_dynamic_object::resolve_instance(std::vector<str> name)
 
 size_t base_dynamic_object::event_id(const str& name)
   {
-    return class_->event_id( name );
+    if (class_)
+      return class_->event_id( name );
+    
+    return 0;
   }
 
 void base_dynamic_object::dispatch_event(size_t ev_id, param_list& args)
   {
-    class_->dispatch_event(this, ev_id, args);
+    if (class_)
+      class_->dispatch_event(this, ev_id, args);
   }
 
 //event_holder
@@ -83,6 +87,7 @@ bool event_holder::add_item(const str& name, schema_item& item)
       {
         int ev_id = item.get->get(null);
         events_.insert( event_pair(ev_id, item.exec) );
+        return true;
       }
     else if (item.flags & EVENT_DECL)
       {
@@ -94,13 +99,9 @@ bool event_holder::add_item(const str& name, schema_item& item)
         event_info ei(ev_id);
         item.flags |= CONST;
         item.get    = Getter( new const_getter(ei) );
-        return false;
-
       }
-    else
-      return false;
 
-    return true;
+    return false;
   }
 
 size_t event_holder::event_id(const str& name)

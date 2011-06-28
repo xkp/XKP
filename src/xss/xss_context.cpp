@@ -9,6 +9,8 @@ const str SContextError("context");
 
 const str SCannotOverrideTypes("Cannot override types");
 const str SDupType("Duplicate type");
+const str SContextHasNoPath("Requesting path on a context without it");
+const str SDuplicateSymbol("A symbol with this name already exists");
 
 str xss_utils::var_to_string(variant& v)
   {
@@ -27,9 +29,40 @@ str xss_utils::var_to_string(variant& v)
     return variant_cast<str>(v, str());
   }
 
+//xss_context_scope
+xss_context_scope::xss_context_scope(XSSContext owner):
+  owner_(owner)
+  {
+  }
+
+void xss_context_scope::set(XSSContext owner)
+  {
+    owner_ = owner;
+  }
+
+void xss_context_scope::register_symbol(const str& name, variant value)
+  {
+    assert(false); //td: why would this be called?
+  }
+
+bool xss_context_scope::resolve(const str& name, variant& result)
+  {
+    if (name == "#context")
+      {
+        result = owner_;
+        return true;
+      }
+
+    result = owner_->resolve(name);
+    return !result.empty();
+  }
+
 //xss_context
-xss_context::xss_context(XSSContext parent):
-  parent_(parent)
+xss_context::xss_context(XSSContext parent, fs::path path):
+  parent_(parent),
+  path_(path),
+  code_scope_(),
+  got_dsls_(false)
   {
   }
 
@@ -103,29 +136,46 @@ void xss_context::set_language(Language lang)
 
 code_context xss_context::get_compile_context()
   {
-    assert(false); //td:
-
+    code_scope_.set(shared_from_this());
+    collect_dsl();
+    
     code_context result;
-    result.types_;
-    result.scope_;
-    result.args_;
-    result.this_type;
-    result.this_;
-    result.dsl_; 
+    result.types_  = &code_types_;
+    result.scope_  = &code_scope_;
+    result.dsl_    = &dsls_; 
 
     return result;
   }
 
 fs::path xss_context::path()
   {
-    assert(false); //td:
+    if (!path_.empty())
+      return path_;
 
+    if (parent_)
+      return parent_->path();
+
+    param_list error;
+    error.add("id", SContextError);
+    error.add("desc", SContextHasNoPath);
+    xss_throw(error);
+    
     return fs::path();
+  }
+
+void xss_context::register_dsl(const str& id, DslLinker dsl)
+  {
+    dsls_.insert(dsl_list_pair(id, dsl));
   }
 
 variant xss_context::resolve(const str& id, RESOLVE_ITEM item_type)
   {
-    assert(false);
+    symbol_list::iterator it = symbols_.find(id);
+    if (it != symbols_.end())
+      {
+        if (item_type == RESOLVE_ANY || item_type == it->second.type)
+          return it->second.value;
+      }
     return variant();
   }
 
@@ -137,6 +187,40 @@ variant xss_context::resolve_path(const std::vector<str>& path)
 
 void xss_context::register_symbol(RESOLVE_ITEM type, const str& id, variant symbol)
   {
+      symbol_list::iterator it = symbols_.find(id);
+      if (it != symbols_.end())
+        {
+          param_list error;
+          error.add("id", SContextError);
+          error.add("desc", SDuplicateSymbol);
+          error.add("symbol", id);
+          xss_throw(error);
+        }
+
+      symbols_.insert(symbol_list_pair(id, resolve_info(type, symbol)));
+  }
+
+void xss_context::collect_dsl()
+  {
+    if (got_dsls_)
+      return;
+
+    if (parent_)
+      {
+        //aint the most efficient way
+        code_context pctx = parent_->get_compile_context();
+        dsl_list::iterator it = pctx.dsl_->begin();        
+        dsl_list::iterator nd = pctx.dsl_->end();        
+
+        for(; it != nd; it++)
+          {
+            dsl_list::iterator mine = dsls_.find(it->first);
+            if (mine == dsls_.end())
+              dsls_.insert(dsl_list_pair(it->first, it->second));
+          }
+      }
+
+      got_dsls_ = true;
   }
 
 //xss_object
@@ -253,8 +337,8 @@ void xss_object::set_type(XSSObject type)
 
 XSSObject xss_object::find(const str& what)
   {
-    std::vector<variant>::iterator it = children_->begin();
-    std::vector<variant>::iterator nd = children_->end();
+    std::vector<variant>::iterator it = children_->ref_begin();
+    std::vector<variant>::iterator nd = children_->ref_end();
 
     for(; it != nd; it++)
       {
@@ -270,8 +354,8 @@ std::vector<XSSObject> xss_object::find_by_class(const str& which)
   {
     std::vector<XSSObject> result;
     
-    std::vector<variant>::iterator it = children_->begin();
-    std::vector<variant>::iterator nd = children_->end();
+    std::vector<variant>::iterator it = children_->ref_begin();
+    std::vector<variant>::iterator nd = children_->ref_end();
 
     for(; it != nd; it++)
       {
@@ -317,8 +401,8 @@ void xss_object::remove_child(XSSObject obj)
 
 XSSProperty xss_object::get_property(const str& name)
   {
-    std::vector<variant>::iterator it = properties_->begin();
-    std::vector<variant>::iterator nd = properties_->end();
+    std::vector<variant>::iterator it = properties_->ref_begin();
+    std::vector<variant>::iterator nd = properties_->ref_end();
 
     for(; it != nd; it++)
       {
@@ -333,8 +417,8 @@ XSSProperty xss_object::get_property(const str& name)
 
 std::vector<XSSEvent> xss_object::get_events(const str& name)
   {
-    std::vector<variant>::iterator it = events_->begin();
-    std::vector<variant>::iterator nd = events_->end();
+    std::vector<variant>::iterator it = events_->ref_begin();
+    std::vector<variant>::iterator nd = events_->ref_end();
 
     std::vector<XSSEvent> result;
     for(; it != nd; it++)
@@ -349,8 +433,8 @@ std::vector<XSSEvent> xss_object::get_events(const str& name)
 
 XSSMethod xss_object::get_method(const str& name)
   {
-    std::vector<variant>::iterator it = properties_->begin();
-    std::vector<variant>::iterator nd = properties_->end();
+    std::vector<variant>::iterator it = properties_->ref_begin();
+    std::vector<variant>::iterator nd = properties_->ref_end();
 
     for(; it != nd; it++)
       {

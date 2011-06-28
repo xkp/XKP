@@ -13,10 +13,8 @@ namespace xkp
 {
   //forwards
   struct item_renderer;
-  class  xss_renderer;
 
   typedef reference<item_renderer> ItemRenderer;
-  typedef reference<xss_renderer>  XSSRenderer;
 
   //interface
   struct item_renderer
@@ -61,16 +59,22 @@ namespace xkp
     };                              
   
 
-  class xss_renderer : public base_xss_renderer<xss_renderer>
+  class xss_renderer : public base_xss_renderer<xss_renderer>, 
+                       public IXSSRenderer,
+                       public boost::enable_shared_from_this<xss_renderer> 
     {
       public:
-        xss_renderer(XSSCompiler compiler, XSSContext ctx);
+        xss_renderer(XSSCompiler compiler, XSSContext ctx, fs::path xss_file);
       public:
-        str              render(XSSObject this_, param_list* args);
-        std::vector<str> params();
+        //IXSSRenderer
+        virtual renderer_parameter_list&  params();
+        virtual str                       render(XSSObject this_, param_list* args);
+        virtual void                      append(const str& what);
+        virtual void                      append_at(const str& what, const str& marker);
       private:
         XSSContext  context_;
         XSSCompiler compiler_;
+        str         result_; //td: !!! makes the whole thing single threaded
 
 			  //markers, this simplifies the xss code in ways it didnt expect
 			  struct marker_info
@@ -88,7 +92,7 @@ namespace xkp
 			  marker_map markers_;
 
         //parameters
-        std::vector<str> params_;
+        renderer_parameter_list params_;
 
         //actual handlers
         void handle_text(const str& text, param_list* args);

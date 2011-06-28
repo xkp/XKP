@@ -259,6 +259,13 @@ struct expression_renderer : IExpressionRenderer
       {
       }
 
+    ~expression_renderer()
+      {
+        int xx = 10;
+        if (xx > 5)
+          xx = 0;
+      }
+
     virtual XSSType type()
       {
         return XSSType();
@@ -271,7 +278,7 @@ struct expression_renderer : IExpressionRenderer
         return rend.get();
       }
     private:
-      expression& expr_;
+      expression expr_;
   };
 
 //debug_language

@@ -327,8 +327,9 @@ namespace detail
             {
               //xkp
               schema* s_ = type_schema<T>();
+              schema* me_ = get_schema();
               variant custom_cast;
-              get_schema()->cast(*this, s_, custom_cast);
+              me_->cast(*this, s_, custom_cast);
               T result = custom_cast;
               return result;
             }

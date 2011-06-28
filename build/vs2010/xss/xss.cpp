@@ -102,7 +102,7 @@ int main(int argc, char* argv[])
     
     if (succeeded)
       {
-        std::cout << "Build Succeeded, your project is at: " << compiler->output_path();
+        std::cout << "Success are greateful";
       }
       
     std::cin.get();

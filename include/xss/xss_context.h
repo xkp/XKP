@@ -3,6 +3,7 @@
 
 #include <xs.h>
 #include <xs/array.h>
+#include <xs/linker.h>
 
 #include "boost/filesystem.hpp"
 namespace fs = boost::filesystem;
@@ -133,12 +134,39 @@ struct ILanguage
 //resolver
 enum RESOLVE_ITEM
   {
+    RESOLVE_ANY,
     RESOLVE_INSTANCE,
   };
 
-struct xss_context
+//code scope, this should not be public
+struct xss_context_scope : scope
   {
-    xss_context(XSSContext parent = XSSContext());
+    xss_context_scope() {}
+    xss_context_scope(XSSContext owner);
+
+    void set(XSSContext owner);
+
+    virtual void register_symbol(const str& name, variant value);
+    virtual bool resolve(const str& name, variant& result);
+    private:
+      XSSContext owner_; //td: !!! weak references
+  };
+
+struct resolve_info
+  {
+    resolve_info(RESOLVE_ITEM _type, variant _value):
+      type(_type),
+      value(_value)
+      {
+      } 
+
+    RESOLVE_ITEM type;
+    variant      value; 
+  };
+
+struct xss_context : boost::enable_shared_from_this<xss_context>
+  {
+    xss_context(XSSContext parent, fs::path path = fs::path());
 	  
     public:
       XSSType       get_type(const str& type);
@@ -149,8 +177,9 @@ struct xss_context
       void          set_language(Language lang);
       code_context  get_compile_context();
       fs::path      path();
+      void          register_dsl(const str& id, DslLinker dsl);
     public:
-      variant resolve(const str& id, RESOLVE_ITEM item_type);
+      variant resolve(const str& id, RESOLVE_ITEM item_type = RESOLVE_ANY);
       variant resolve_path(const std::vector<str>& path);
       void    register_symbol(RESOLVE_ITEM type, const str& id, variant symbol);
     protected:
@@ -161,6 +190,22 @@ struct xss_context
       Language   lang_;
       XSSObject  this_;
       type_list  types_;
+      fs::path   path_;
+    protected:
+      //symbols
+      typedef std::map<str, resolve_info>  symbol_list;
+      typedef std::pair<str, resolve_info> symbol_list_pair;
+      
+      symbol_list symbols_;
+    protected:
+      //this might not be the best way to simulate the link context
+      //a much better way will be to integrate the contexts, that'll be latter
+      type_registry     code_types_;
+      xss_context_scope code_scope_;
+      dsl_list          dsls_; 
+
+      bool got_dsls_;
+      void collect_dsl();
   };
 
 //these are basically copies of their xs counterpart, but offer xss stuff, like generating
