@@ -1424,7 +1424,7 @@ void code_type_resolver::update_type(const str& name, xs_type_info type)
         error.add("desc", SUnknownVariable);
         error.add("variable", name);
 
-        xss_throw(error);
+        //xss_throw(error);
       }
   }
 

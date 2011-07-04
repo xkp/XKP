@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Android Simple Test Application</string>
+    	<string name="res0">Your fullname is </string>
+    	<string name="res1">Resolve FullName</string>
+    	<string name="res2">Enter lastname: </string>
+    	<string name="res3">Enter firstname: </string>
+</resources>
+

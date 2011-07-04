@@ -108,6 +108,7 @@ class xss_project : public boost::enable_shared_from_this<xss_project>
       fs::path									base_path_;
       fs::path									source_path_;
       fs::path									output_path_;
+      fs::path                  current_path_;
 
 			meta_array_schema					array_type_;
       XSSGenerator							current_;

@@ -1,0 +1,72 @@
+<xss:code>
+	string appName = "SimpleTest";
+	string outputPath = compiler.path.system_complete;
+	array<object> allResources = [];
+	int sdkVersion = 8;
+	int resCounter = 0;
+	
+	//if this array is not initialized then make a console error: "Trying to access null object"
+	//array<string> imports;
+	array<string> imports = [];
+	
+	//i don't remember how it's define and declare object
+	//object options = [object(eclipse_project = true)];
+	bool eclipse_project = true;
+	
+	for(var inst in instances)
+	{
+		if(inst.import)
+		{
+			//live is hard; :)
+			//it's necessary to implement vector, stack, queue and set containers
+			bool found = false;
+			for(var imp in imports)
+			{
+				if(imp == inst.import)
+				{
+					found = true;
+					break;
+				}
+			}
+			
+			if(!found)
+				imports += inst.import;
+		}
+	}
+	
+	out()
+	{
+		<xss:file output="AndroidManifest.xml" src="AndroidManifest.xml.xss">
+			<parameter name="appName" access="read"/>
+			<parameter name="sdkVersion" access="read"/>
+		</xss:file>
+		
+		<xss:file output="src/com/xkp/android/SimpleTest/ActSimpleTest.java" src="mainActivity.java.xss">
+			<parameter name="appName" access="read"/>
+			<parameter name="imports" access="read"/>
+		</xss:file>
+		
+		<xss:file output="res/values/strings.xml" src="stringValues.xml.xss">
+			<parameter name="appName" access="read"/>
+			<parameter name="resCounter" access="read_write"/>
+			<parameter name="allResources" access="read_write"/>
+		</xss:file>
+		
+		<xss:file output="res/layout/main.xml" src="mainLayout.xml.xss">
+			<parameter name="appName" access="read"/>
+		</xss:file>
+		
+		<xss:file output="build.bat" src="build.bat.xss">
+			<parameter name="appName" access="read"/>
+			<parameter name="outputPath" access="read"/>
+			<parameter name="sdkVersion" access="read"/>
+		</xss:file>
+	}
+	
+	
+	if(compiler.options.eclipse_project)
+	{
+		//copy .project and .classpath files to output_path
+	}
+
+</xss:code>

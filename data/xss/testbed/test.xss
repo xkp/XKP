@@ -1,6 +1,17 @@
 // 
 // Test example
 //
+<xss:code>
+	int varToChange = 2;
+
+	out()
+	{
+		<xss:file output="testbed.xml" src="testbed.xss">
+			<parameter name="varToChange" access="read_write"/>
+		</xss:file>
+	}
+</xss:code>
+
 <xss:class entry_point="generate_test">
 	
     method generate_properties(var cmp, int ind)

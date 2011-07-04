@@ -1044,6 +1044,10 @@ void xss_project::build()
     read_classes(class_library);
 		do_includes();
 
+    fs::path output_absolute_path = current_path_ / output_path_;
+    dynamic_set(path, "current_path", current_path_.directory_string());
+    dynamic_set(path, "system_complete", fs::system_complete(output_absolute_path).directory_string());
+
 		//go at it
 		dynamic_set(application, "class_name", str("application"));
     dynamic_set(application, "x", 0);
@@ -1253,6 +1257,7 @@ str xss_project::output_path()
 void xss_project::base_path(fs::path path)
 	{
 		base_path_ = path;
+    current_path_ = fs::initial_path();
 	}
 
 void xss_project::compile_ast(xs_container& ast, XSSContext ctx)
