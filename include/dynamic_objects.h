@@ -115,6 +115,7 @@ namespace xkp
     {
       public:
         bool   add_item(const str& name, schema_item& item);
+        int    add_event(const str& name, schema_item& item);
         size_t event_id(const str& name);
         void   dispatch_event(IDynamicObject* this_, size_t ev_id, param_list& args);
       protected:
@@ -157,6 +158,8 @@ namespace xkp
         typedef std::pair<str, schema_item>   item_pair;
 
         item_list items_;
+      protected:
+        int register_event(const str& name);
     };
 
   //type friendly

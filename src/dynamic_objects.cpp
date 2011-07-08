@@ -91,17 +91,25 @@ bool event_holder::add_item(const str& name, schema_item& item)
       }
     else if (item.flags & EVENT_DECL)
       {
-        boost::hash<std::string> string_hash;
-        size_t ev_id = string_hash(name);
-
-        event_decl_.insert(event_decl_pair(name, ev_id)); //td: isnt this redundant?
-
-        event_info ei(ev_id);
-        item.flags |= CONST;
-        item.get    = Getter( new const_getter(ei) );
+        add_event(name, item);
       }
 
     return false;
+  }
+
+int event_holder::add_event(const str& name, schema_item& item)
+  {
+    boost::hash<std::string> string_hash;
+    size_t ev_id = string_hash(name);
+
+    event_decl_.insert(event_decl_pair(name, ev_id)); //td: isnt this redundant?
+
+    event_info ei(ev_id);
+
+    item.flags |= CONST;
+    item.get    = Getter( new const_getter(ei) );
+
+    return ev_id;
   }
 
 size_t event_holder::event_id(const str& name)
@@ -198,6 +206,15 @@ void base_editable_object::add_item(const str& name, schema_item& item)
       {
         items_.insert( item_pair(name, item) );
       }
+  }
+
+int base_editable_object::register_event(const str& name)
+  {
+    schema_item itm;
+    int result = event_holder::add_event(name, itm);
+    items_.insert( item_pair(name, itm) );
+
+    return result;
   }
 
 //anonymous_setter

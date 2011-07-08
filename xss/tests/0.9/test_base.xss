@@ -1,0 +1,36 @@
+<xss:instance id = "person">
+	property name = "Louis";
+    
+    property lyrics = 
+    [
+        "Darling",
+        "Im glad to see you back where you belong"
+    ];
+</xss:instance>
+
+hello, darling
+this is <xss:e v="person.name"/>
+
+<xss:code>
+for(string lyric in person.lyrics)
+{
+	out()
+	{
+		<xss:e v="lyric"/>
+	}
+}
+</xss:code>
+
+<xss:class>
+    property bu_bye = "Thats all folks";
+    
+    on render()
+    {
+        string signature = "It was a pleasure";
+        out()
+        {
+            <xss:e v="bu_bye"/>
+            <xss:e v="signature"/>
+        }
+    }
+</xss:class>

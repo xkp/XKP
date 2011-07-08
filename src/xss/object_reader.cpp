@@ -10,6 +10,7 @@ const str SReaderError("reader");
 const str SPropertyMustHaveName("Properties must have a name");
 const str SPropertyMustHaveType("Properties must have a type");
 const str SCannotParseXML("Invalid XML file");
+const str STypeNotFound("Cannot find type");
 
 //xss_object_reader
 xss_object_reader::xss_object_reader(XSSContext ctx):
@@ -20,7 +21,7 @@ xss_object_reader::xss_object_reader(XSSContext ctx):
 XSSObject xss_object_reader::read(const str& xml)
 	{
     parse_xml(xml);
-    return read_object(doc_.RootElement(), XSSObject());
+    return read_object(doc_.RootElement(), XSSObject(), true);
 	}
 
 std::vector<XSSObject> xss_object_reader::read_array(const str& xml)
@@ -46,14 +47,24 @@ void xss_object_reader::parse_xml(const str& xml)
       }
   }
 
-XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent)
+XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, bool do_special)
   {
     XSSObject result(new xss_object());
 
     str class_name = node->Value();
-    if (!special_node(node, parent, result))
+    if (!do_special || !special_node(node, parent, result))
       {
-	      bool found_class = false;
+        //read class
+        str class_name;
+        const char* cc = node->Attribute("class");
+        if (cc)
+          class_name = cc;
+        else
+          class_name = node->Value();
+
+        XSSType type = ctx_? ctx_->get_type(class_name) : XSSType();
+        result->set_type(type);
+        result->set_type_name(class_name);
 
         //read properties
         const TiXmlAttribute* attr = node->FirstAttribute();
@@ -64,8 +75,7 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent)
 
             if (attr_name == "class")
               {
-                found_class = true;
-                result->set_type_name(attr_value);
+                //do nothing
               }
             else if (attr_name == "id")
               {
@@ -73,20 +83,35 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent)
               }
             else
               {
-                result->add_property(attr_name, attribute_value(attr));
+                bool found_prop = false;
+                if (type)
+                  {
+                    //if the type already contains this attribute's name
+                    //we'll simply assign its value, creating a property in the process
+                    XSSProperty prop = type->get_property(attr_name);
+                    if (prop)
+                      {
+                        found_prop = true;
+                        XSSProperty new_prop(new xss_property(prop->id(), prop->type, variant(), prop->get, prop->set, result));
+                        new_prop->copy(XSSObject(prop)); //sort of inefficient, but safe & consistent
+                        new_prop->value_ = attribute_value(attr);
+
+                        result->properties()->push_back(new_prop);
+                      }
+                  }
+                
+                if (!found_prop)
+                  result->add_property(attr_name, attribute_value(attr));
               }
 
 	          attr = attr->Next();
 	        }
 
-	      if (!found_class)
-          result->set_type_name(node->Value());
-
         //children
         TiXmlElement* child_node = node->FirstChildElement();
         while(child_node)
           {
-            XSSObject child = read_object(child_node, XSSObject());
+            XSSObject child = read_object(child_node, result, true);
             result->add_child( child );
 
             child_node = child_node->NextSiblingElement();
@@ -103,7 +128,7 @@ XSSObjectList xss_object_reader::read_array(TiXmlElement* node)
     TiXmlElement* child = node->FirstChildElement();
     while(child)
       {
-        XSSObject child_obj = read_object(child, XSSObject());
+        XSSObject child_obj = read_object(child, XSSObject(), true);
         result.push_back(child_obj);
 
         child = child->NextSiblingElement();
@@ -168,7 +193,7 @@ bool xss_object_reader::special_node(TiXmlElement* node, XSSObject parent, XSSOb
               }
           }
         
-        str name = node->Attribute("name");
+        str name = node->Attribute("id")? str(node->Attribute("id")) : str();
         if (name.empty())
           {
 						param_list error;
@@ -191,9 +216,24 @@ bool xss_object_reader::special_node(TiXmlElement* node, XSSObject parent, XSSOb
           }
 
         XSSType xtype = ctx_? ctx_->get_type(type) : XSSType();
+        if (!xtype)
+          {
+            param_list error;
+            error.add("id", SReaderError);
+            error.add("desc", STypeNotFound);
+            error.add("type", type);
+            xss_throw(error);
+          }
+
         XSSProperty prop(new xss_property(name, xtype, value, parent)); 
 
-        result->properties()->push_back(prop); //td: check for existing properties
+        //grab the rest of the stuff
+        XSSObject surrogate = read_object(node, XSSObject(), false);
+        prop->copy(surrogate);
+
+        parent->properties()->push_back(prop); //td: check for existing properties
+
+        return true;
       }
 
     return false;

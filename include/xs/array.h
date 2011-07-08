@@ -94,6 +94,11 @@ namespace xkp
         {
         }
 
+      container& ref()
+        {
+          return *ref_;
+        }
+
       iterator begin()
         {
           if (ref_->empty())

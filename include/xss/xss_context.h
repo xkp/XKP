@@ -45,7 +45,10 @@ class xss_object : public editable_object<xss_object>,
 	{
 		public:
 			xss_object();
+    public:
+      virtual void copy(XSSObject obj);
 		public:
+      //IDinamicObject
       virtual bool resolve(const str& name, schema_item& result);
 		public:
 			//accesors
@@ -57,8 +60,8 @@ class xss_object : public editable_object<xss_object>,
 
       str           id();
       str           type_name();
-			XSSObject			type();
-			void					set_type(XSSObject type);
+			XSSType			  type();
+			void					set_type(XSSType type);
 			XSSObject			parent();
 			DynamicArray	children();
 			DynamicArray	properties();
@@ -71,7 +74,6 @@ class xss_object : public editable_object<xss_object>,
       //misc
       XSSObject              find(const str& what);
       std::vector<XSSObject> find_by_class(const str& which);
-      void                   add_surrogate(XSSObject s);
       DynamicArray           get_event_impl(const str& event_name, XSSEvent& ev);
 		public:
       //children management
@@ -82,10 +84,9 @@ class xss_object : public editable_object<xss_object>,
 			std::vector<XSSEvent> get_events(const str& name);
 			XSSMethod		          get_method(const str& name);
     public:
-      XSSObjectList surrogates_;
       str           id_;
       str           type_name_;
-			XSSObject     type_;
+			XSSType       type_;
 			XSSObject     parent_;
 			DynamicArray	children_;
 			DynamicArray	properties_;
@@ -96,10 +97,29 @@ class xss_object : public editable_object<xss_object>,
 class xss_type : public xss_object  
   {
     public:
-      void set_super(XSSType super);
-      void set_definition(XSSObject def);
+      xss_type();
+      xss_type(schema* xs_type);
+    public:
+      void    set_super(XSSType super);
+      void    set_definition(XSSObject def);
+      schema* native_type();
+    public:
+      void as_enum();
+      void as_array(XSSType type);
+      void as_variant();
+    public:
+      bool is_enum();
+      bool is_array();
+      bool is_object();
+      bool is_native();
+      bool is_variant();
     private:
       XSSType super_;
+      schema* xs_type_;
+      bool    is_enum_;
+      bool    is_array_;
+      bool    is_object_;
+      bool    is_variant_;
   };
 
 //the language interface
@@ -170,7 +190,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
 	  
     public:
       XSSType       get_type(const str& type);
-      void          add_type(const str& id, XSSType type, bool override_parent = false);
+      XSSType       add_type(const str& id, XSSType type, bool override_parent = false);
       XSSObject     get_this();
       void          set_this(XSSObject this_);
       Language      get_language();
@@ -178,6 +198,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       code_context  get_compile_context();
       fs::path      path();
       void          register_dsl(const str& id, DslLinker dsl);
+      void          add_parameter(const str& id, XSSType type);
     public:
       variant resolve(const str& id, RESOLVE_ITEM item_type = RESOLVE_ANY);
       variant resolve_path(const std::vector<str>& path);
@@ -191,6 +212,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       XSSObject  this_;
       type_list  types_;
       fs::path   path_;
+      param_list args_;
     protected:
       //symbols
       typedef std::map<str, resolve_info>  symbol_list;
@@ -218,16 +240,18 @@ class xss_property : public xss_object
 			xss_property(const str& name, XSSType type, variant value, XSSObject _this_);
 			xss_property(const str& name, XSSType type, variant value, variant _get, variant _set, XSSObject _this_);
 
-			str       name;
-			variant   get;
+			virtual void copy(XSSObject obj);
+
+      variant   get;
 			variant   set;
 			size_t    flags;
 			XSSObject this_;
 			variant   value_;
 			XSSType	  type;
 
+      str render_value();
+
 			//td: revise interface
-      //str     generate_value();
 			//variant get_value();
 			//str			resolve_assign(const str& value);
 			//str			resolve_value();
@@ -272,11 +296,28 @@ struct xss_object_schema : editable_object_schema<T>
   {
     virtual void declare()
       {
+				this->template property_<str>         ("id",          &T::id_);
 				this->template property_<DynamicArray>("properties",  &T::properties_);
 				this->template property_<DynamicArray>("events",			&T::events_);
 				this->template property_<DynamicArray>("methods",		  &T::methods_);
 				this->template property_<DynamicArray>("children",		&T::children_);
 		}
+  };
+
+struct xss_type_schema : xss_object_schema<xss_type>
+  {
+    virtual void declare()
+      {
+				xss_object_schema<xss_type>::declare();
+
+				inherit_from<xss_object>();
+
+				readonly_property<bool>("is_enum",    &xss_type::is_enum);
+				readonly_property<bool>("is_array",   &xss_type::is_array);
+				readonly_property<bool>("is_object",  &xss_type::is_object);
+				readonly_property<bool>("is_native",  &xss_type::is_native);
+				readonly_property<bool>("is_variant", &xss_type::is_variant);
+      }
   };
 
 struct xss_event_schema : xss_object_schema<xss_event>
@@ -312,22 +353,25 @@ struct xss_property_schema : xss_object_schema<xss_property>
   {
     virtual void declare()
       {
-				inherit_from<xss_object>();
-
 				xss_object_schema<xss_property>::declare();
 
-				property_("name",  &xss_property::name);
+				inherit_from<xss_object>();
+
+				property_("name",  &xss_property::id_);
         property_("get",   &xss_property::get);
         property_("set",   &xss_property::set);
         property_("value", &xss_property::value_);
         property_("type",  &xss_property::type);
+
+        method_<str, 0>("render_value", &xss_property::render_value);
       }
   };
 
 register_complete_type(xss_object,    xss_object_schema<xss_object>);
+register_complete_type(xss_type,      xss_type_schema);
 register_complete_type(xss_event,		  xss_event_schema);
-register_complete_type(xss_property,	xss_property_schema);
-register_complete_type(xss_method,		xss_method_schema);
+register_complete_type(xss_property,  xss_property_schema);
+register_complete_type(xss_method,	  xss_method_schema);
 
 register_iterator(XSSObject);
 

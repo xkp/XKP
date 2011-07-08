@@ -60,18 +60,36 @@ namespace xkp
         str        target(); 
         fs::path   entry_point(); 
         void       set_target(const str& target); 
+      public:
+        std::vector<XSSModule>& modules();
       private:
-        fs::path   filename_;
-        str        target_;
-        XSSContext context_;
+        fs::path               filename_;
+        str                    target_;
+        XSSContext             context_;
+        std::vector<XSSModule> modules_;
     };
   
+  enum pre_process_result
+    {
+      PREPROCESS_HANDLED,
+      PREPROCESS_KEEPGOING,
+    };
+
 	class xss_module : public xss_object
     {
       public:
+        xss_module();
         xss_module(XSSContext ctx);
+      public:
+        pre_process_result pre_process(XSSObject obj, XSSObject parent); 
+      public:
+        //glue visibility
+        DynamicArray instances_;
       private:
-        XSSContext ctx_;
+        XSSContext   ctx_;
+        size_t       ev_pprocess_;
+
+        void register_instance(XSSObject obj);
     };
 
   class xss_compiler : public boost::enable_shared_from_this<xss_compiler>
@@ -83,6 +101,8 @@ namespace xkp
 				XSSRenderer compile_xss_file(fs::path src_file, XSSContext ctx);
 				XSSRenderer compile_xss(const str& src, XSSContext ctx, fs::path path = fs::path());
 			  void        output_file(const str& fname, const str& contents);
+        str         genid(const str& what);
+        void        xss(const param_list params);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -101,16 +121,50 @@ namespace xkp
         void      read_types(XSSObject module_data, XSSApplicationRenderer app, XSSModule module);
         void      read_includes(XSSObject project_data);
         void      read_include(fs::path def, fs::path src, XSSContext ctx);
+        void      read_application(const str& app_file);
         void      compile_ast(xs_container& ast, XSSContext ctx);
         bool      options(const str& name);
         Language  get_language(const str& name);
+        void      pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent);
         void      run();
       private:
+        //id gen
+        typedef std::map<str, int> genid_list;
+        
+        genid_list genid_;
+      private:
         //cache
+        std::map<int, XSSRenderer> xss_cache;
+
         str   load_file(fs::path file);
         void  read_object_array(fs::path file, std::vector<XSSObject>& classes_data);
 		    void  compile_xs_file(fs::path file, xs_container& result);
 		};
+
+//glue
+struct xss_compiler_schema : object_schema<xss_compiler>
+  {
+    virtual void declare()
+      {
+        method_<str, 1>("genid",	&xss_compiler::genid);
+        dynamic_method_ ("xss",   &xss_compiler::xss);
+      }
+  };
+
+struct xss_module_schema : xss_object_schema<xss_module>
+  {
+    virtual void declare()
+      {
+				xss_object_schema<xss_module>::declare();
+
+				inherit_from<xss_object>();
+
+        property_("instances", &xss_module::instances_);
+      }
+  };
+
+  register_complete_type(xss_compiler,  xss_compiler_schema);
+  register_complete_type(xss_module,    xss_module_schema);
 }
 
 

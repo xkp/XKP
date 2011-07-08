@@ -55,7 +55,7 @@ struct xss_expression_renderer : item_renderer
         execution_context ctx(code_, this_, args);
         variant res = ctx.execute();
 
-		    str result = variant_cast<str>(res, str("@@Error"));
+		    str result = xss_utils::var_to_string(res);
 		    if (result == "@@Error")
 		      {
 				      param_list error;
@@ -228,7 +228,7 @@ str xss_renderer::render(XSSObject this_, param_list* args)
     for(; it != nd; it++)
       {
         positions.push_back(result_.size());
-        result_ += (*it)->render(XSSObject(), null);
+        result_ += (*it)->render(XSSObject(), args);
       }
     
     marker_map::iterator mit = markers_.begin();
@@ -373,4 +373,5 @@ void xss_renderer::handle_parameter(const str& text, param_list* args)
 
       //td: !!! grab type and default value
       params_.push_back(renderer_parameter(id, XSSType(), str()));
+      context_->add_parameter(id, XSSType());
   }
