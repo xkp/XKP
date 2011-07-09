@@ -63,7 +63,7 @@ $(function() {
             }
             
             //close the tag
-            out(indent = ind + 1)
+            out()
             {
                 </<xss:e value="component.tag_name"/>>
             }

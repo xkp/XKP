@@ -346,11 +346,19 @@ bool xss_object::resolve(const str& name, schema_item& result)
 	{
 		if (editable_object<xss_object>::resolve(name, result))
 			return true;
+    
+    variant value;
+    bool    read_only = false;
+    if (type_ && type_->has(name))
+      {
+        value = dynamic_get(type_, name);
+        read_only = true;
+      }
 
 		//sponge-like
-		int idx      = add_anonymous(variant());
+		int idx      = add_anonymous(value);
 		result.get   = Getter( new anonymous_getter(idx) );
-		result.set   = Setter( new anonymous_setter(idx) );
+		result.set   = !read_only? Setter( new anonymous_setter(idx) ) : Setter();
 		result.flags = DYNAMIC_ACCESS;
 
 		items_.insert( item_pair(name, result) );
