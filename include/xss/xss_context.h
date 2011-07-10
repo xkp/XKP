@@ -144,11 +144,11 @@ struct IArgumentRenderer : public IRenderer
 
 struct ILanguage
   {
-    virtual CodeRenderer       compile_code(code& cde, param_list_decl& params, XSSContext ctx)	= 0;
-    virtual ExpressionRenderer compile_expression(expression expr, XSSContext ctx)							= 0;
-		virtual ArgumentRenderer   compile_args(param_list_decl& params, XSSContext ctx)					  = 0;
-    virtual str                resolve_this(XSSContext ctx)																			= 0;
-    virtual str                resolve_separator(XSSObject lh = XSSObject())										= 0;
+    virtual variant compile_code(code& cde, param_list_decl& params, XSSContext ctx)	= 0;
+    virtual variant compile_expression(expression expr, XSSContext ctx)							  = 0;
+		virtual variant compile_args(param_list_decl& params, XSSContext ctx)					    = 0;
+    virtual str     resolve_this(XSSContext ctx)																			= 0;
+    virtual str     resolve_separator(XSSObject lh = XSSObject())										  = 0;
   };
 
 //resolver
@@ -374,6 +374,23 @@ register_complete_type(xss_property,  xss_property_schema);
 register_complete_type(xss_method,	  xss_method_schema);
 
 register_iterator(XSSObject);
+
+//interface glue
+template <typename T>
+struct renderer_schema : object_schema<T>
+  {
+    virtual void declare_base()
+      {
+        implements<IRenderer>();
+
+        method_<str, 0>("render", &T::render);
+      }
+
+    virtual void declare()
+      {
+        //compiler pleaser
+      }
+  };
 
 }
 

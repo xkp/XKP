@@ -47,6 +47,7 @@ namespace xkp
       virtual str                       render(XSSObject this_, param_list* args)     = 0;
       virtual void                      append(const str& what)                       = 0;
       virtual void                      append_at(const str& what, const str& marker) = 0;
+      virtual XSSContext                context()                                     = 0;
     };
 
   //classes

@@ -705,7 +705,8 @@ str xss_property::render_value()
   }
 
 //xss_event
-xss_event::xss_event()
+xss_event::xss_event():
+  impls(new dynamic_array)
   {
     DYNAMIC_INHERITANCE(xss_event)
   }
@@ -719,6 +720,7 @@ xss_event::xss_event(const xss_event& other):
   }
 
 xss_event::xss_event(const str& _name):
+  impls(new dynamic_array),
   name(_name)
   {
     DYNAMIC_INHERITANCE(xss_event)

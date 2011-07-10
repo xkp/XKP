@@ -266,6 +266,11 @@ void xss_renderer::append_at(const str& what, const str& marker)
     assert(false); //td: 
   }
 
+XSSContext xss_renderer::context()
+  {
+    return context_;
+  }
+
 void xss_renderer::handle_text(const str& text, param_list* args)
   {
     items_.push_back(ItemRenderer(new text_renderer(text)));

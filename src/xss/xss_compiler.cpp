@@ -39,6 +39,7 @@ const str SAppsMustHaveTarget("Application renderer (entry_point) must be presen
 const str SMustHaveProjectTarget("A target application must be specified on your project");
 const str STargetNotFound("A target was not found for a type of application");
 const str STypeNotFound("Cannot find type");
+const str SXSSNeedsFile("compiler.xss needs a xss file to render");
 
 //xss_application_renderer
 xss_application_renderer::xss_application_renderer(fs::path entry_point, Language lang, XSSCompiler compiler):
@@ -242,7 +243,49 @@ str xss_compiler::genid(const str& what)
 
 void xss_compiler::xss(const param_list params)
   {
-    str xxx("debug");
+    if (params.size() == 0)
+      {
+        param_list error;
+        error.add("id", SProjectError);
+        error.add("desc", SXSSNeedsFile);
+        xss_throw(error);
+      }
+
+    str file_name = variant_cast<str>(params.get(0), str());
+    if (file_name.empty())
+      {
+        param_list error;
+        error.add("id", SProjectError);
+        error.add("desc", SXSSNeedsFile);
+        xss_throw(error);
+      }
+
+    XSSRenderer r   = current_renderer();
+    XSSContext  ctx = r->context();
+
+    fs::path path = ctx->path() / file_name;
+    XSSRenderer result = compile_xss_file(path, ctx);
+    
+    //match the parameters, by order
+    //td: !!! please get parameter names
+    renderer_parameter_list& result_args = result->params();
+
+    param_list result_params;
+    size_t     param_count = params.size() - 1;
+    for(size_t i = 0; i < result_args.size(); i++)
+      {
+        variant value = i < param_count? 
+                          params.get(i + 1) : 
+                          variant(); 
+        
+        //td: check types
+        result_params.add(result_args[i].id, value);
+
+      }
+
+    push_renderer(result);
+    r->append(result->render(XSSObject(), &result_params)); //td: change dynamic methods to return a variant
+    pop_renderer();
   }
 void xss_compiler::push_renderer(XSSRenderer renderer)
   {
@@ -591,14 +634,6 @@ void xss_compiler::read_application(const str& app_file)
       }
 
     fs::path app_path = base_path_ / app_file;
-    if (!fs::exists(app_path))
-      {
-        param_list error;
-        error.add("id", SFileError);
-        error.add("desc", SFileNotFound);
-        error.add("file", app_file);
-        xss_throw(error);
-      }
     
     //every application type will process a fresh copy of the application,
     //hence it will be parsed multiple times. A simple clone will save this operation
@@ -633,6 +668,11 @@ void xss_compiler::read_application(const str& app_file)
               }
           }
 
+        //pre process, basically the application will be traversed and
+        //notified to the application modules. From then on it is their business
+        //the expected result is an application object ready for rendering.
+        pre_process(app_renderer, app_data, XSSObject());
+
         str src = app_data->get<str>("src", str());
         fs::path src_path = base_path_ / src;
         if (!src.empty() && !code_compiled)
@@ -646,11 +686,7 @@ void xss_compiler::read_application(const str& app_file)
         
         compile_ast(code, code_ctx);
 
-        //pre process, basically the application will be traversed and
-        //notified to the application modules. From then on it is their business
-        //the expected result is an application object ready for rendering.
-        pre_process(app_renderer, app_data, XSSObject());
-
+        app_data->set_id("application");
         app_renderer->context()->register_symbol(RESOLVE_INSTANCE, "application", app_data);
       }
   }
@@ -695,15 +731,24 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
           value = lang->compile_expression(pit->value, ctx);
 
         XSSType prop_type = ctx->get_type(pit->type);
-        if (!prop_type)
+        if (!pit->type.empty())
           {
-            param_list error;
-            error.add("id", SProjectError);
-            error.add("desc", STypeNotFound);
-            error.add("type", pit->type);
-            xss_throw(error);
+            prop_type = ctx->get_type(pit->type);
+            if (!prop_type)
+              {
+                param_list error;
+                error.add("id", SProjectError);
+                error.add("desc", STypeNotFound);
+                error.add("type", pit->type);
+                xss_throw(error);
+              }
+          }
+        else
+          {
+            prop_type = ctx->get_type("var"); //td: undefined
           }
 
+        assert(prop_type);
 				XSSProperty new_prop(new xss_property(pit->name, prop_type, value, getter, setter, instance));
         properties->push_back(new_prop); //td: check types with class
       }
@@ -765,7 +810,19 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
             if (idx == 0)
               {
 								complete_name = inst_name;
-                actual_instance = ctx->resolve(inst_name, RESOLVE_INSTANCE);
+
+                variant iv = ctx->resolve(inst_name, RESOLVE_INSTANCE);
+                if (iv.empty())
+                  {
+										param_list error;
+										error.add("id", SCannotResolve);
+										error.add("desc", SUnknownInstance);
+										error.add("instance", complete_name);
+
+										xss_throw(error);
+                  }
+
+                actual_instance = iv;
               }
             else
               {

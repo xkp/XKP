@@ -86,6 +86,11 @@ struct expr_renderer : expression_visitor
 struct code_renderer : ICodeRenderer,
                        code_visitor
   {
+    code_renderer():
+      indent_(0)
+      {
+      }
+
     code_renderer(code& cde, XSSContext ctx, int indent = 0):
       code_(cde),
       ctx_(ctx),
@@ -254,6 +259,10 @@ struct code_renderer : ICodeRenderer,
 
 struct expression_renderer : IExpressionRenderer
   {
+    expression_renderer()
+      {
+      }
+
     expression_renderer(expression& expr):
       expr_(expr)
       {
@@ -261,9 +270,6 @@ struct expression_renderer : IExpressionRenderer
 
     ~expression_renderer()
       {
-        int xx = 10;
-        if (xx > 5)
-          xx = 0;
       }
 
     virtual XSSType type()
@@ -281,20 +287,36 @@ struct expression_renderer : IExpressionRenderer
       expression expr_;
   };
 
+struct param_list_renderer : public IArgumentRenderer
+  {
+    param_list_renderer()
+      {
+      }
+
+    param_list_renderer(param_list_decl& params)
+      {
+      }
+
+    virtual str render()
+      {
+        return "I WILL WRITE THIS CODE LATER, sincerely";
+      }
+  };
+
 //debug_language
-CodeRenderer debug_language::compile_code(code& cde, param_list_decl& params, XSSContext ctx)
+variant debug_language::compile_code(code& cde, param_list_decl& params, XSSContext ctx)
   {
-    return CodeRenderer(new code_renderer(cde, ctx));
+    return reference<code_renderer>(new code_renderer(cde, ctx));
   }
 
-ExpressionRenderer debug_language::compile_expression(expression expr, XSSContext ctx)
+variant debug_language::compile_expression(expression expr, XSSContext ctx)
   {
-    return ExpressionRenderer(new expression_renderer(expr));
+    return reference<expression_renderer>(new expression_renderer(expr));
   }
 
-ArgumentRenderer debug_language::compile_args(param_list_decl& params, XSSContext ctx)
+variant debug_language::compile_args(param_list_decl& params, XSSContext ctx)
   {
-    return ArgumentRenderer();  //td:
+    return reference<param_list_renderer>(new param_list_renderer(params));
   }
 
 str debug_language::resolve_this(XSSContext ctx)
@@ -307,3 +329,8 @@ str debug_language::resolve_separator(XSSObject lh)
     return ".";
   }
 
+//glue
+
+register_complete_type(code_renderer,       renderer_schema<code_renderer>);
+register_complete_type(expression_renderer, renderer_schema<expression_renderer>);
+register_complete_type(param_list_renderer, renderer_schema<param_list_renderer>);
