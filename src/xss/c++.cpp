@@ -12,34 +12,19 @@ const str SCPPEveryInstanceMustHaveId("Trying to use an instance without id");
 const str SCPPUnknownInstance("Instance not found");
 
 //cpp_code
-void cpp_code::for_(stmt_for& info)
-	{
-    std::stringstream ss;
-    str iterable_declaration = info.init_variable.type + " " + info.init_variable.id;
-    cpp_expression_renderer cpp_rend(ctx_);
-    ss << "for(" << iterable_declaration << " = " << render_expression(info.init_variable.value, ctx_)
-        << "; " << render_expression(info.cond_expr, ctx_)
-        << "; " << render_expression(info.iter_expr, ctx_) << ")";
-
-    add_line(ss.str(), true);
-    add_line("{", true);
-		render_code(info.for_code, indent_ + 1);
-		add_line("}", true);
-	}
-
 void cpp_code::variable_(stmt_variable& info)
   {
 		schema* sche_type = ctx_->get_type(info.type);
-    cpp_expression_renderer cpp_rend(ctx_);
     str str_type;
 		if (!sche_type)
 			{
 				if (!info.value.empty())
 					{
-						expr_type_resolver typer(vars_, ctx_);
+						expr_type_resolver typer(ctx_);
 						info.value.visit(&typer);
 
-						sche_type = typer.get();
+            xs_type_info xsti = typer.get();
+						sche_type = xsti.type;
 						str_type = typer.type_name();
 					}
 			}
@@ -49,7 +34,7 @@ void cpp_code::variable_(stmt_variable& info)
 				str_type = ctx_->get_type_name(sche_type);
 			}
 
-		vars_.insert(std::pair<str, schema*>(info.id, sche_type)); //td: !!! XSSType
+		vars_.insert(std::pair<str, xs_type_info>(info.id, sche_type)); //td: !!! XSSType
 
     std::stringstream ss;
     str ind = get_indent_str();
@@ -62,6 +47,25 @@ void cpp_code::variable_(stmt_variable& info)
 
     add_line(ss.str());
   }
+
+void cpp_code::for_(stmt_for& info)
+	{
+    std::stringstream ss;
+    str iterable_declaration = info.init_variable.type + " " + info.init_variable.id;
+    ss << "for(" << iterable_declaration << " = " << render_expression(info.init_variable.value, ctx_)
+        << "; " << render_expression(info.cond_expr, ctx_)
+        << "; " << render_expression(info.iter_expr, ctx_) << ")";
+
+    add_line(ss.str(), true);
+    add_line("{", true);
+		  render_code(info.for_code, indent_ + 1);
+		add_line("}", true);
+	}
+
+void cpp_code::iterfor_(stmt_iter_for& info)
+	{
+    assert(false); //td:
+	}
 
 str cpp_code::render_expression(expression& expr, XSSContext ctx)
   {
@@ -228,75 +232,4 @@ void cpp_expression_renderer::exec_operator(operator_type op, int pop_count, int
 				default:
           assert(false); //td:
       }
-  }
-
-str cpp_expression_renderer::operand_to_string(variant operand, XSSObject parent, int* prec)
-  {
-    str result;
-    int result_prec = 0;
-    if (operand.is<expression_identifier>())
-      {
-        expression_identifier ei = operand;
-        result = ei.value;
-
-        if (!parent)
-          {
-            //here we ought to resolve a single symbol (ex width = 10)
-            //thid *could* belong to the "this" pointer
-            
-            str separator = ctx_->idiom_->resolve_separator();
-            if (ctx_->idiom_)
-              {
-                XSSProperty prop = ctx_->get_property(ei.value);
-								XSSMethod mthd = ctx_->get_method(ei.value);
-								if (prop)
-									{
-										result = prop->resolve_value();
-										str this_str = ctx_->idiom_->resolve_this(ctx_);
-                    if (!this_str.empty())
-                      result = this_str + separator + result;
-									}
-								else if (mthd)
-                  {
-                    str this_str = ctx_->idiom_->resolve_this(ctx_);
-                    if (!this_str.empty())
-                      result = this_str + separator + ei.value; //otherwise it doesnt get translated 
-                  }
-				        else
-				          {
-					          //another use case, we might have an instance that has an internal id
-					          //which means a name to be used in code instead of the plain instance name
-					          XSSObject obj = ctx_->resolve_instance(result);
-
-					          if (obj && obj->has("internal_id"))
-						          {
-							          str ss = variant_cast<str>(dynamic_get(obj, "internal_id"), str());
-                        if (!ss.empty())
-                          result = ss;
-                        // so i need some internal_id emptys
-							          //assert(!result.empty());
-						          }
-				          }
-              }
-          }
-      }
-    else if (operand.is<already_rendered>())
-      {
-        already_rendered ar = operand;
-        result = ar.value;
-        result_prec = ar.precedence;
-      }
-    else if (operand.is<str>())
-      {
-        str opstr = operand;
-        result = '"' + opstr + '"';
-      }
-    else
-      {
-        str opstr = operand;
-        result = opstr;
-      }
-
-    if (prec) *prec = result_prec;
-    return result;
   }

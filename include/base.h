@@ -873,7 +873,7 @@ namespace detail
 									result = (int)ii;
 								}
               else
-                throw type_mismatch(); 
+                throw type_mismatch();
 						}
           else if (s == type_schema<float>())
 						{
@@ -891,7 +891,11 @@ namespace detail
 
       virtual bool create(variant& result, param_list* args = null)
         {
+#if defined(__GNUC__)
+          T res = T();
+#else
           T res;
+#endif
           result = res;
           return true;
         }

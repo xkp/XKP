@@ -1,0 +1,3 @@
+<application source="console.xs" title="Java console application" width="300" height="200">
+	<button id="pbtn1" caption="Click me" x="110" y="30" width="75" height="23"/>
+</application>

@@ -8,11 +8,12 @@ namespace xkp{
 
 struct cpp_code : base_xss_code
 	{
-		cpp_code()													 : base_xss_code()					 {};
+		cpp_code()													 : base_xss_code()					{};
 		cpp_code(XSSContext ctx, code& code) : base_xss_code(ctx, code) {};
 
-    virtual void for_(stmt_for& info);
     virtual void variable_(stmt_variable& info);
+    virtual void for_(stmt_for& info);
+    virtual void iterfor_(stmt_iter_for& info);
 
     protected:
       virtual str render_expression(expression& expr, XSSContext ctx);
@@ -56,8 +57,6 @@ struct cpp_expression_renderer : expression_renderer
 
     //expression_visitor
     virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top);
-
-    virtual str operand_to_string(variant operand, XSSObject parent = XSSObject(), int* prec = null);
   };
 
 //typeinfo

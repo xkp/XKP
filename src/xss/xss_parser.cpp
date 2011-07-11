@@ -69,17 +69,7 @@ bool xss_parser::parse(const str& text, xss_visitor* visitor)
                     std::vector<str>::iterator it = tags_.begin();
                     std::vector<str>::iterator nd = tags_.end();
                     
-                    bool found = false;
-                    for(; it != nd; it++)
-                      {
-                        if (*it == tag.name)
-                          {
-                            found = true;
-                            break;
-                          }
-                      }
-                    
-                    if (found)
+                    if (registered_tag(tag.name))
                       {
                         if (ip > last_ip)
                           {
@@ -98,7 +88,7 @@ bool xss_parser::parse(const str& text, xss_visitor* visitor)
                             current_tag = tag;
                             reading_tag = true;
                             open_count  = 1;
-                          }  
+                          }
                       }
                   }  
               }

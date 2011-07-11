@@ -372,7 +372,7 @@ schema* type_registry::get_type(const str& type_id, param_list* args)
           {
             variant dynamic_type;
             if (result->create(dynamic_type, args))
-              result = dynamic_type; //td: the meta tyoe is responsible for keeping the references to created types, iffy
+              result = dynamic_type; //td: the meta type is responsible for keeping the references to created types, iffy
             else
               return null;
           }

@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="UserMacros">
-    <BOOST_INCLUDE>C:\boost\boost_1_44</BOOST_INCLUDE>
+    <BOOST_INCLUDE>d:\libraries\boost_1_44_0\</BOOST_INCLUDE>
     <XKP_INCLUDE>../../../include</XKP_INCLUDE>
     <TEMP_DIR>d:\xkp\temp</TEMP_DIR>
-    <BOOST_LIB>$(BOOST_INCLUDE)/lib</BOOST_LIB>
+    <BOOST_LIB>$(BOOST_INCLUDE)/libs</BOOST_LIB>
     <JSON_INCLUDE>../../../third_party/jsoncpp/include</JSON_INCLUDE>
     <TINY_XML_INCLUDE>../../../third_party/tinyXml</TINY_XML_INCLUDE>
   </PropertyGroup>

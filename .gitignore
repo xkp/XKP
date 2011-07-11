@@ -1,6 +1,9 @@
 bin/
 output/
 
+*.depend
+*.layout
+
 *.pdb
 *.ilk
 *.ncb

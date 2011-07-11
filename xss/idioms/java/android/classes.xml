@@ -1,0 +1,41 @@
+<xml>
+	<class id="application">
+		<properties>
+			<property name="title" type="string"/>
+		</properties>
+	</class>
+	
+	<class id="widget">
+		<properties>
+			<!-- fill_parent, match_parent, wrap_content-->
+			<property name="layout_width" type="enum"/>
+			<property name="layout_height" type="enum"/>
+			
+			<!-- top, bottom, left, right, center_vertical, fill_vertical, center_horizontal, fill_horizontal, center, fill, clip_vertical, clip_horizontal-->
+			<property name="layout_gravity" type="enum"/>
+			
+			<property name="layout_margin" type="int"/>
+			<property name="layout_weight" type="float"/>
+			
+			<property name="width" type="int"/>
+			<property name="height" type="int"/>
+		</properties>
+	</class>
+	
+	<class id="label" super="widget" import="TextView">
+		<properties>
+			<property name="caption" android_layout_name="text" type="string" resource="true"/>
+		</properties>
+	</class>
+	
+	<class id="button" super="widget" import="Button">
+		<properties>
+			<property name="caption" android_layout_name="text" type="string" resource="true"/>
+		</properties>
+	</class>
+	
+	<class id="editbox" super="widget" import="EditText">
+		<properties>
+		</properties>
+	</class>
+</xml>
