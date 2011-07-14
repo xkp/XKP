@@ -180,7 +180,7 @@ variant xss_context::resolve(const str& id, RESOLVE_ITEM item_type)
     symbol_list::iterator it = symbols_.find(id);
     if (it != symbols_.end())
       {
-        if (item_type == RESOLVE_ANY || item_type == it->second.type)
+        if ((item_type == RESOLVE_ANY) || (item_type == it->second.type))
           return it->second.value;
       }
 
@@ -207,7 +207,7 @@ void xss_context::register_symbol(RESOLVE_ITEM type, const str& id, variant symb
           xss_throw(error);
         }
 
-      symbols_.insert(symbol_list_pair(id, resolve_info(type, symbol)));
+      symbols_.insert(symbol_list_pair(id, resolve_info(type, symbol, type)));
   }
 
 void xss_context::collect_dsl()

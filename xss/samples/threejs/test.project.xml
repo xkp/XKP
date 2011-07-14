@@ -1,8 +1,8 @@
 <xss:project>
-    <path generator="..\..\idioms\threejs\app.xss"
-          class_library="..\..\idioms\threejs\classes.xml"
+    <path generator="app.xss"
+          class_library="classes.xml"
           source_path="" 
-          output_path="..\..\bin\" 
+          output_path="" 
           output_file="test.html"/>
 
     <idiom class="js-idiom" id_as_this="true"/>

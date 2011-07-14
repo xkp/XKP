@@ -1,4 +1,5 @@
 #include <xss/lang/js.h>
+#include <xss/language.h>
 
 using namespace xkp;
 
@@ -80,6 +81,44 @@ str js_code_renderer::render_code(code& cde)
   {
   }
 
+//js_expr_renderer
+js_expr_renderer::js_expr_renderer()
+  {
+  }
+
+js_expr_renderer::js_expr_renderer(const js_expr_renderer& other):
+  ctx_(other.ctx_),
+  expr_(other.expr_)
+  {
+  }
+
+js_expr_renderer::js_expr_renderer(expression& expr, XSSContext ctx):
+  ctx_(ctx),
+  expr_(expr)
+  {
+  }
+
+XSSType js_expr_renderer::type()
+  {
+    if (!type_)
+      {
+        //expr_type_resolver
+      }
+  }
+
+str js_expr_renderer::render()
+  {
+    return lang_utils::render_expression<js_expr_renderer>(expr_, ctx_);
+  }
+
+void js_expr_renderer::push(variant operand, bool top)
+  {
+  }
+
+void js_expr_renderer::exec_operator(operator_type op, int pop_count, int push_count, bool top)
+  {
+  }
+
 //js_lang
 variant js_lang::compile_code(code& cde, param_list_decl& params, XSSContext ctx)
   {
@@ -88,7 +127,7 @@ variant js_lang::compile_code(code& cde, param_list_decl& params, XSSContext ctx
 
 variant js_lang::compile_expression(expression expr, XSSContext ctx)
   {
-    return reference<js_expr_renderer>(new js_expr_renderer(expr));
+    return reference<js_expr_renderer>(new js_expr_renderer(expr, ctx));
   }
 
 variant js_lang::compile_args(param_list_decl& params, XSSContext ctx)

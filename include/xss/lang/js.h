@@ -40,17 +40,85 @@ struct js_code_renderer : ICodeRenderer,
       str render_code(code& cde);
   };
 
-struct js_expr_renderer : IExpressionRenderer
+//expression rendering
+struct already_rendered
+  {
+    already_rendered() : precedence(0)
+    {
+    }
+
+    str     value;
+    variant object;
+    int precedence;
+  };
+
+enum assign_type
+	{
+		VANILLA,
+		FN_CALL,
+		XSS_RESOLVE
+	};
+
+struct assign_info
+	{
+		assign_info() : type(VANILLA), this_(false) {}
+
+		assign_type type;
+		str					data;
+		bool				this_;
+	};
+
+struct capture_property
+	{
+		XSSProperty prop;
+		str					xss;
+	};
+
+//td: !!! delete this \/
+struct __expression_renderer : expression_visitor
+  {
+    __expression_renderer(XSSContext ctx);
+
+
+    virtual str resolve_assigner(variant operand, XSSObject instance, assign_info* ai);
+    virtual str operand_to_string(variant operand, XSSObject parent = XSSObject(), int* prec = null);
+    virtual str array_operation(str lopnd, str ropnd, operator_type op);
+    virtual str get();
+
+    assign_info* assigner;
+
+    protected:
+      typedef std::stack<variant> expr_stack;
+
+      expr_stack        stack_;
+      std::stringstream result_;
+      XSSContext        ctx_;
+			bool							capturing_property_;
+			capture_property	capture_property_;
+
+      void push_rendered(str value, int prec, variant object);
+			str	 render_captured_property();
+  };
+
+struct js_expr_renderer : IExpressionRenderer,
+                          expression_visitor
   {
     js_expr_renderer();
     js_expr_renderer(const js_expr_renderer& other);
-    js_expr_renderer(expression& expr);
+    js_expr_renderer(expression& expr, XSSContext ctx);
 
+    //IExpressionRenderer
     virtual XSSType type();
     virtual str     render();
+
+    //expression_visitor
+    virtual void push(variant operand, bool top);
+    virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top);
     
     private:
+      XSSContext ctx_;
       expression expr_;
+      XSSType    type_;
   };
 
 struct js_args_renderer : public IArgumentRenderer

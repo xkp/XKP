@@ -103,6 +103,7 @@ class xss_type : public xss_object
       void    set_super(XSSType super);
       void    set_definition(XSSObject def);
       schema* native_type();
+      XSSType array_type();
     public:
       void as_enum();
       void as_array(XSSType type);
@@ -156,6 +157,7 @@ enum RESOLVE_ITEM
   {
     RESOLVE_ANY,
     RESOLVE_INSTANCE,
+    RESOLVE_METHOD,
   };
 
 //code scope, this should not be public
@@ -170,6 +172,20 @@ struct xss_context_scope : scope
     virtual bool resolve(const str& name, variant& result);
     private:
       XSSContext owner_; //td: !!! weak references
+  };
+
+struct search_info
+  {
+    search_info():
+      what(RESOLVE_ANY),
+      left(null)
+      {
+      }
+
+    RESOLVE_ITEM what;
+    XSSType      type; 
+    variant      value; 
+    search_info* left;
   };
 
 struct resolve_info
@@ -190,6 +206,8 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
 	  
     public:
       XSSType       get_type(const str& type);
+      XSSType       get_type(schema* type);
+      XSSType       get_array_type(XSSType type);
       XSSType       add_type(const str& id, XSSType type, bool override_parent = false);
       XSSObject     get_this();
       void          set_this(XSSObject this_);
@@ -201,6 +219,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       void          add_parameter(const str& id, XSSType type);
     public:
       variant resolve(const str& id, RESOLVE_ITEM item_type = RESOLVE_ANY);
+      bool    resolve(const str& id, search_info& info);
       variant resolve_path(const std::vector<str>& path);
       void    register_symbol(RESOLVE_ITEM type, const str& id, variant symbol);
     protected:

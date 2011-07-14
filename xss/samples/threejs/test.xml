@@ -1,30 +1,30 @@
-<application source="test.xs" width="1024" height="720" title="Test 3D">
+<application source="test.xs" title="Test 3D" renderer="canvas" background="#785">
+
+	<resources>
 	
-	<basic_material id="cube_materials">
-		<texture color="13223476"/>
-		<texture color="871680"/>
-		<texture color="21930"/>
-		<texture color="16711680"/>
-		<texture color="30481"/>
-		<texture color="4444444"/>
-	</basic_material>
-	
-	<basic_material id="plane_material">
-		<texture color="14737632"/>
-	</basic_material>
-	
-	<face_material id="face_material_1">
+		<video id="video_1" style="display:none">
+			<source src="textures/sintel.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'/>
+			<source src="textures/sintel.ogv" type='video/ogg; codecs="theora, vorbis"'/>
+		</video>
 		
-	<scene id=scene_1>
-		 
-		<camera id="camera_1" fov="75" aspect="1.5" near="1" far="1000" position.z="500" position.y="300"/>
-				
-		<cube id="cube_1" width="200" height="200" depth="200" materials="cube_materials"/>
-		<mesh id="mesh_1" geometry="cube_1" materials="face_material_1" position.y="150" rotation.y="150"/>
-						
-		<plane id="plane_1" width="200" height="200"/>
-		<mesh id="mesh_1" geometry="plane_1" materials="plane_material" rotation.x="-1.57" rotation.z="150"/>
-			
-	</scene>
+		<canvas_image id="image_1" width="480" height="204">
+            <image_context id="img1_context" fill_style="#000000" fill_rect="0, 0, 480, 204"/>
+        </canvas_image>
+		
+		<canvas_image id="image_reflection" width="480" height="204">
+            <image_context id="reflection_context" fill_style="#000000" fill_rect="0, 0, 480, 204">
+				<linear_gradient id="reflection_gradient" gradient_data="0, 0, 0, 204">
+					<color_stop color_data="0, 'rgba(240, 240, 240, 1)'"/>
+					<color_stop color_data="1, 'rgba(240, 240, 240, 0.8)'"/>
+				</linear_gradient>
+			</image_context>
+        </canvas_image>		
+		
+	</resources>
 	
+	<scene>		 
+		
+	</scene>
+			
 </application>
+
