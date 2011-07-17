@@ -15,6 +15,7 @@ namespace xkp
 		    virtual variant compile_args(param_list_decl& params, XSSContext ctx);
         virtual str     resolve_this(XSSContext ctx);
         virtual str     resolve_separator(XSSObject lh = XSSObject());
+        virtual bool    can_cast(XSSType left, XSSType right);
     };
 }
 

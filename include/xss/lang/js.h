@@ -35,9 +35,12 @@ struct js_code_renderer : ICodeRenderer,
       XSSContext      ctx_;
       str             result_;
       str             expr_;
+      str             indent_str_;
+      XSSType         type_;
 
-      str render_expression(expression& expr);
-      str render_code(code& cde);
+      str   render_expression(expression& expr, XSSContext ctx);
+      str   render_code(code& cde);
+      void  add_line(str line, bool trim = true);
   };
 
 //expression rendering
@@ -74,38 +77,20 @@ struct capture_property
 		str					xss;
 	};
 
-//td: !!! delete this \/
-struct __expression_renderer : expression_visitor
-  {
-    __expression_renderer(XSSContext ctx);
-
-
-    virtual str resolve_assigner(variant operand, XSSObject instance, assign_info* ai);
-    virtual str operand_to_string(variant operand, XSSObject parent = XSSObject(), int* prec = null);
-    virtual str array_operation(str lopnd, str ropnd, operator_type op);
-    virtual str get();
-
-    assign_info* assigner;
-
-    protected:
-      typedef std::stack<variant> expr_stack;
-
-      expr_stack        stack_;
-      std::stringstream result_;
-      XSSContext        ctx_;
-			bool							capturing_property_;
-			capture_property	capture_property_;
-
-      void push_rendered(str value, int prec, variant object);
-			str	 render_captured_property();
-  };
-
 struct js_expr_renderer : IExpressionRenderer,
                           expression_visitor
   {
     js_expr_renderer();
     js_expr_renderer(const js_expr_renderer& other);
     js_expr_renderer(expression& expr, XSSContext ctx);
+
+    //interface, verbatim from 0.8, got to keep it working
+    virtual str resolve_assigner(variant operand, XSSObject instance, assign_info* ai);
+    virtual str operand_to_string(variant operand, XSSObject parent = XSSObject(), int* prec = null);
+    virtual str get();
+
+    //there has to be a way to make this prettier
+    assign_info* assigner;
 
     //IExpressionRenderer
     virtual XSSType type();
@@ -119,6 +104,19 @@ struct js_expr_renderer : IExpressionRenderer,
       XSSContext ctx_;
       expression expr_;
       XSSType    type_;
+
+      XSSObject   get_instance(variant v);
+      XSSProperty get_property(variant v);
+    protected:
+      //meat
+      typedef std::stack<variant> expr_stack;
+
+      expr_stack        stack_;
+			bool							capturing_property_;
+			capture_property	capture_property_;
+
+      void push_rendered(str value, int prec, variant object);
+			str	 render_captured_property();
   };
 
 struct js_args_renderer : public IArgumentRenderer
@@ -128,6 +126,9 @@ struct js_args_renderer : public IArgumentRenderer
     js_args_renderer(param_list_decl& params);
 
     virtual str render();
+
+    private:
+      param_list_decl args_;
   };
 
 struct js_lang : public ILanguage
@@ -137,7 +138,12 @@ struct js_lang : public ILanguage
 		virtual variant compile_args(param_list_decl& params, XSSContext ctx);
     virtual str     resolve_this(XSSContext ctx);
     virtual str     resolve_separator(XSSObject lh = XSSObject());
+    virtual bool    can_cast(XSSType left, XSSType right);
   };
+
+register_complete_type(js_code_renderer, renderer_schema<js_code_renderer>);
+register_complete_type(js_expr_renderer, renderer_schema<js_expr_renderer>);
+register_complete_type(js_args_renderer, renderer_schema<js_args_renderer>);
 
 }
 #endif

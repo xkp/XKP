@@ -264,7 +264,7 @@ Comment End = '*/'
 
 <Adjetive>
 	::= delegate 
-        |  public
+     |  public
 	 |  private
 	 |  class
 

@@ -3,6 +3,7 @@
 
 #include "xs/compiler.h"
 #include "xss_context.h"
+#include "xss_compiler.h"
 
 namespace xkp
 {
@@ -46,6 +47,17 @@ struct code_type_resolver : code_visitor
     virtual void expression_(stmt_expression& info);
     virtual void dsl_(dsl& info);
     virtual void dispatch(stmt_dispatch& info);
+		private:
+			XSSContext	     ctx_;
+			bool				     is_variant_;
+      XSSType          result_;
+
+      //unused variables
+      typedef std::vector<str> var_list;
+      var_list var_vars_;
+
+      void register_var(const str&id, XSSType type);
+      void return_type_found(XSSType type);
 	};
 
 struct expr_type_resolver : expression_visitor
@@ -73,13 +85,15 @@ struct expr_type_resolver : expression_visitor
 			XSSObject result_xss;
 
 			XSSType resolve_type(variant var);
-			XSSObject resolve_xss_type(variant var);
+			//XSSObject resolve_xss_type(variant var);
   };
 
 struct lang_utils
 	{
-    static str get_operator_str(operator_type op);
-    static int get_operator_prec(operator_type op);
+    static str     operator_string(operator_type op);
+    static int     operator_prec(operator_type op);
+    static XSSType code_type(code& code, XSSContext ctx);
+    static XSSType expr_type(expression& expr, XSSContext ctx);
 
     template <typename T>
     static str render_expression(expression& expr, XSSContext ctx)
@@ -103,13 +117,13 @@ struct lang_utils
 								    expression_splitter es(op);
 								    expr.visit(&es);
 
-                    T value_renderer(ctx);
+                    T value_renderer(es.right, ctx);
 								    es.right.visit(&value_renderer);
 
 								    str value = value_renderer.get();
 
 								    //get the assigner
-                    T assign_renderer(ctx);
+                    T assign_renderer(es.left, ctx);
 								    assign_info ai;
 								    assign_renderer.assigner = &ai;
 
@@ -127,11 +141,11 @@ struct lang_utils
 												    else
 													    {
 														    //we need to resolve the getter as well for *= operators
-                                T getter(ctx);
+                                T getter(es.left, ctx);
 														    es.left.visit(&getter);
 
 														    //this is lame
-                                str op_str = get_operator_str(op);
+                                str op_str = lang_utils::operator_string(op);
 
 														    assert(op_str.size() > 1);
 														    op_str.erase(op_str.end() - 1);
@@ -143,18 +157,18 @@ struct lang_utils
 
 										    case VANILLA:
 											    {
-                            result = assign + " " + get_operator_str(op) + " " + value;
+                            result = assign + " " + lang_utils::operator_string(op) + " " + value;
 												    break;
 											    }
 										    case XSS_RESOLVE:
 											    {
-                            T getter_(ctx);
+                            T getter_(es.left, ctx);
 												    es.left.visit(&getter_);
 												    str getter = getter_.get();
 
 												    if (!simple_assign)
 													    {
-                                str op_str = get_operator_str(op);
+                                str op_str = lang_utils::operator_string(op);
 														    assert(op_str.size() > 1);
 														    op_str.erase(op_str.end() - 1);
 
@@ -164,8 +178,8 @@ struct lang_utils
 														//lets find out if the getter is a single word (like "width") or a composite (like "object.width")
 														//if composite we'll get rid of the last accesor (width) to get the actual accesor
 
-														xss_idiom* idiom = ctx->idiom_;
-														str separator = idiom->resolve_separator();
+														Language lang = ctx->get_language();
+														str separator = lang->resolve_separator();
 														size_t last_dot = getter.find_last_of(separator);
 												    if (last_dot != str::npos)
 													    {
@@ -173,7 +187,7 @@ struct lang_utils
 														    getter.erase(getter.end() - count, getter.end());
 													    }
 												    else
-															getter = idiom->resolve_this(ctx);
+															getter = lang->resolve_this(ctx);
 
 												    //replace quotes, life is hard
 												    for(size_t i = 0; i < assign.size(); i++)
@@ -181,24 +195,15 @@ struct lang_utils
 														    if (assign[i] == 39)
 															    assign[i] = '"';
 													    }
+                            
+                            XSSContext assign_ctx(new xss_context(XSSContext()));
+												    assign_ctx->register_symbol(RESOLVE_CONST, "value",	value);
+												    assign_ctx->register_symbol(RESOLVE_CONST, "caller", getter);
 
-												    //td: is all this really neccesary?
-												    XSSProject project_ = ctx->project_;
-												    xss_idiom* idiom_		= ctx->idiom_;
-														XSSContext context(new xss_code_context(project_, idiom_, fs::path()));
-												    xss_code_context& ctx = *context.get();
+												    XSSCompiler compiler = ctx->resolve("compiler");
+                            XSSRenderer renderer = compiler->compile_xss(assign, assign_ctx);
 
-												    XSSGenerator gen(new xss_generator(context));
-												    project_->push_generator(gen);
-
-												    project_->prepare_context(ctx, gen);
-
-												    ctx.scope_->register_symbol("value",	value);
-												    ctx.scope_->register_symbol("caller", getter);
-
-												    result = project_->generate_xss(assign, gen);
-
-												    project_->pop_generator();
+												    result = renderer->render(XSSObject(), null);
 												    break;
 											    }
 										    default:
@@ -210,13 +215,11 @@ struct lang_utils
 					    }
 			    }
 
-        T er(ctx);
+        T er(expr, ctx);
         expr.visit(&er);
 
         return er.get();
       }
-
-		static str expr2str(expression& expr, XSSContext ctx);
 	};
 
 }

@@ -1,49 +1,8 @@
 
 #include "xss/lang/debug.h"
+#include "xss/language.h"
 
 using namespace xkp;
-
-const char* operator_str[] =
-  {
-    "++",   //op_inc,
-    "--",   //op_dec,
-    "&",    //op_ref,
-    "+",    //op_unary_plus,
-    "-",    //op_unary_minus,
-    "!",    //op_not,
-    "*",    //op_mult,
-    "/",    //op_divide,
-    "%",    //op_mod,
-    "as",   //op_typecast,
-    "is",   //op_typecheck,
-    "has",  //op_namecheck,
-    "+",    //op_plus,
-    "-",    //op_minus,
-    ">>",   //op_shift_right,
-    "<<",   //op_shift_left,
-    ">>=",  //op_shift_right_equal,
-    "<<=",  //op_shift_left_equal,
-    "==",   //op_equal,
-    "!=",   //op_notequal,
-    ">",    //op_gt,
-    "<",    //op_lt,
-    ">=",   //op_ge,
-    "<=",   //op_le,
-    "&&",   //op_and,
-    "||",   //op_or,
-    "=",    //op_assign,
-    "+=",   //op_plus_equal,
-    "-=",   //op_minus_equal,
-    "*=",   //op_mult_equal,
-    "/=",   //op_div_equal,
-    ".",    //op_dot,
-    ".",    //op_dot_call
-    "[]",   //op_index,
-    "",     //op_call,
-    "",     //op_func_call
-    "",     //op_array,
-    "",     //op_parameter
-  };
 
 struct expr_renderer : expression_visitor 
   {
@@ -70,7 +29,7 @@ struct expr_renderer : expression_visitor
 
     virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top)
       {
-        result_ += indent_ + operator_str[op] + '\n';
+        result_ += indent_ + lang_utils::operator_string(op) + '\n';
       }
 
     str get()
@@ -327,6 +286,11 @@ str debug_language::resolve_this(XSSContext ctx)
 str debug_language::resolve_separator(XSSObject lh)
   {
     return ".";
+  }
+
+bool debug_language::can_cast(XSSType left, XSSType right)
+  {
+    return true;
   }
 
 //glue

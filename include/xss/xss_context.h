@@ -59,6 +59,7 @@ class xss_object : public editable_object<xss_object>,
         }
 
       str           id();
+      str           output_id();
       str           type_name();
 			XSSType			  type();
 			void					set_type(XSSType type);
@@ -85,6 +86,7 @@ class xss_object : public editable_object<xss_object>,
 			XSSMethod		          get_method(const str& name);
     public:
       str           id_;
+      str           output_id_;
       str           type_name_;
 			XSSType       type_;
 			XSSObject     parent_;
@@ -116,6 +118,7 @@ class xss_type : public xss_object
       bool is_variant();
     private:
       XSSType super_;
+      XSSType array_type_;
       schema* xs_type_;
       bool    is_enum_;
       bool    is_array_;
@@ -150,6 +153,7 @@ struct ILanguage
 		virtual variant compile_args(param_list_decl& params, XSSContext ctx)					    = 0;
     virtual str     resolve_this(XSSContext ctx)																			= 0;
     virtual str     resolve_separator(XSSObject lh = XSSObject())										  = 0;
+    virtual bool    can_cast(XSSType left, XSSType right)                             = 0;
   };
 
 //resolver
@@ -158,6 +162,12 @@ enum RESOLVE_ITEM
     RESOLVE_ANY,
     RESOLVE_INSTANCE,
     RESOLVE_METHOD,
+    RESOLVE_PROPERTY,
+    RESOLVE_NATIVE,
+    RESOLVE_CONST,
+    RESOLVE_VARIABLE,
+    RESOLVE_TYPE,
+    RESOLVE_CHILD,
   };
 
 //code scope, this should not be public
@@ -174,23 +184,23 @@ struct xss_context_scope : scope
       XSSContext owner_; //td: !!! weak references
   };
 
-struct search_info
+struct resolve_info
   {
-    search_info():
+    resolve_info():
       what(RESOLVE_ANY),
       left(null)
       {
       }
 
-    RESOLVE_ITEM what;
-    XSSType      type; 
-    variant      value; 
-    search_info* left;
+    RESOLVE_ITEM  what;
+    XSSType       type; 
+    variant       value; 
+    resolve_info* left;
   };
 
-struct resolve_info
+struct symbol_data
   {
-    resolve_info(RESOLVE_ITEM _type, variant _value):
+    symbol_data(RESOLVE_ITEM _type, variant _value):
       type(_type),
       value(_value)
       {
@@ -219,7 +229,8 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       void          add_parameter(const str& id, XSSType type);
     public:
       variant resolve(const str& id, RESOLVE_ITEM item_type = RESOLVE_ANY);
-      bool    resolve(const str& id, search_info& info);
+      bool    resolve(const str& id, resolve_info& info);
+      variant resolve(const str& id, XSSObject instance, RESOLVE_ITEM item_type = RESOLVE_ANY);
       variant resolve_path(const std::vector<str>& path);
       void    register_symbol(RESOLVE_ITEM type, const str& id, variant symbol);
     protected:
@@ -232,12 +243,16 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       type_list  types_;
       fs::path   path_;
       param_list args_;
+      
+      variant empty_type_value(RESOLVE_ITEM item_type);
     protected:
       //symbols
-      typedef std::map<str, resolve_info>  symbol_list;
-      typedef std::pair<str, resolve_info> symbol_list_pair;
+      typedef std::map<str, symbol_data>  symbol_list;
+      typedef std::pair<str, symbol_data> symbol_list_pair;
       
       symbol_list symbols_;
+
+      bool find_symbol(const str& id, resolve_info& info);
     protected:
       //this might not be the best way to simulate the link context
       //a much better way will be to integrate the contexts, that'll be latter

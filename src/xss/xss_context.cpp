@@ -11,6 +11,7 @@ const str SCannotOverrideTypes("Cannot override types");
 const str SDupType("Duplicate type");
 const str SContextHasNoPath("Requesting path on a context without it");
 const str SDuplicateSymbol("A symbol with this name already exists");
+const str SEmptyArrayType("Arrays must have an inner type");
 
 str xss_utils::var_to_string(variant& v)
   {
@@ -76,6 +77,50 @@ XSSType xss_context::get_type(const str& type)
       return parent_->get_type(type);
 
     return XSSType();
+  }
+
+XSSType xss_context::get_type(schema* type)
+  {
+    type_list::iterator it = types_.begin();
+    type_list::iterator nd = types_.end();
+
+    for(; it != nd; it++)
+      {
+        if (it->second->native_type() == type)
+          return it->second;
+      }
+
+    if (parent_)
+      return parent_->get_type(type);
+
+    return XSSType();
+  }
+
+XSSType xss_context::get_array_type(XSSType type)
+  {
+    str type_name = type->id();
+    if (type_name.empty())
+      {
+        param_list error;
+        error.add("id", SContextError);
+        error.add("desc", SEmptyArrayType);
+        xss_throw(error);
+      }
+
+    str array_type_name = "array<" + type_name + ">"; //im gonna go basic on this one
+
+    type_list::iterator it = types_.find(array_type_name);
+    if (it != types_.end())
+      {
+        return it->second;
+      }
+
+    //create it
+    XSSType new_type(new xss_type);
+    new_type->set_id(array_type_name);
+    new_type->as_array(type);
+
+    return new_type;
   }
 
 XSSType xss_context::add_type(const str& id, XSSType type, bool override_parent)
@@ -177,16 +222,119 @@ void xss_context::add_parameter(const str& id, XSSType type)
 
 variant xss_context::resolve(const str& id, RESOLVE_ITEM item_type)
   {
-    symbol_list::iterator it = symbols_.find(id);
-    if (it != symbols_.end())
+    resolve_info si;
+    si.what = item_type;
+    if (resolve(id, si))
+      return si.value;
+
+    return empty_type_value(item_type);
+  }
+
+variant xss_context::resolve(const str& id, XSSObject instance, RESOLVE_ITEM item_type)
+  {
+    resolve_info left;
+    left.what  = RESOLVE_INSTANCE;
+    left.value = instance;
+    left.type  = instance->type();
+
+    resolve_info si;
+    si.what  = item_type;
+    si.left = &left; 
+
+    if (resolve(id, si))
+      return si.value;
+
+    return empty_type_value(item_type);
+  }
+
+bool xss_context::resolve(const str& id, resolve_info& info)
+  {
+    //resolve types
+    bool search_types = info.what == RESOLVE_TYPE;
+    if (search_types)
       {
-        if ((item_type == RESOLVE_ANY) || (item_type == it->second.type))
-          return it->second.value;
+        assert(!info.left);
       }
 
-    if (parent_)
-      return parent_->resolve(id, item_type);
-    return variant();
+    if (!search_types && info.what == RESOLVE_ANY)
+      {
+        search_types = true;
+      }
+    
+    if (search_types)
+      {
+        type_list::iterator it = types_.find(id);
+        if (it != types_.end())
+          {
+            info.what  = RESOLVE_TYPE;
+            info.value = it->second;
+            info.type  = it->second;
+            return true;
+          }
+      }
+    
+    //search symbols
+    if (!find_symbol(id, info))
+      {
+        //daddy!
+        return parent_? parent_->resolve(id, info) : false;
+      }
+
+    switch(info.what)
+      {
+        case RESOLVE_INSTANCE:
+          {
+            XSSObject obj = info.value;
+            info.type = obj->type();
+            break;
+          }
+        case RESOLVE_METHOD:
+          {
+            XSSMethod mthd = info.value;
+            info.type = mthd->type;
+            break;
+          }
+        case RESOLVE_PROPERTY:
+          {
+            XSSProperty prop = info.value;
+            info.type = prop->type;
+            break;
+          }
+        
+        case RESOLVE_VARIABLE:
+          {
+            XSSType type = info.value;
+            info.type = type;
+            break;
+          }
+
+        case RESOLVE_CHILD:
+          {
+            XSSObject obj = this_;
+            if (info.left)
+              {
+                assert(info.what == RESOLVE_INSTANCE);
+                obj = info.left->value;
+              }
+
+            XSSObject child = obj->find(id);
+            if (!child)
+              return false;
+
+            info.what  = RESOLVE_INSTANCE;
+            info.type  = child->type();
+            info.value = child;
+            break;
+          }
+
+        case RESOLVE_ANY:
+        case RESOLVE_NATIVE:
+        case RESOLVE_CONST:
+          //all done
+          break;
+      }
+
+    return true;
   }
 
 variant xss_context::resolve_path(const std::vector<str>& path)
@@ -207,7 +355,34 @@ void xss_context::register_symbol(RESOLVE_ITEM type, const str& id, variant symb
           xss_throw(error);
         }
 
-      symbols_.insert(symbol_list_pair(id, resolve_info(type, symbol, type)));
+      symbols_.insert(symbol_list_pair(id, symbol_data(type, symbol)));
+  }
+
+variant xss_context::empty_type_value(RESOLVE_ITEM item_type)
+  {
+    switch (item_type)
+      {
+        case RESOLVE_INSTANCE:  return XSSObject();
+        case RESOLVE_METHOD:    return XSSMethod();
+        case RESOLVE_PROPERTY:  return XSSProperty();
+        case RESOLVE_VARIABLE:  return XSSType();
+        case RESOLVE_TYPE:      return XSSType();
+        case RESOLVE_CHILD:     return XSSObject();
+      }
+    return variant();
+  }
+
+bool xss_context::find_symbol(const str& id, resolve_info& info)
+  {
+    symbol_list::iterator it = symbols_.find(id);
+    if (it != symbols_.end())
+      {
+        info.what  = it->second.type;
+        info.value = it->second.value;
+        return true;
+      }
+
+      return false;
   }
 
 void xss_context::collect_dsl()
@@ -368,6 +543,11 @@ bool xss_object::resolve(const str& name, schema_item& result)
 str xss_object::id()
   {
     return id_;
+  }
+
+str xss_object::output_id()
+  {
+    return output_id_.empty()? id_ : output_id_;
   }
 
 str xss_object::type_name()
@@ -586,6 +766,11 @@ schema* xss_type::native_type()
     return xs_type_;
   }
 
+XSSType xss_type::array_type()
+  {
+    return array_type_;
+  }
+
 void xss_type::as_enum()
   {
     is_enum_ = true;
@@ -596,7 +781,7 @@ void xss_type::as_array(XSSType type)
     is_object_ = false;
     is_array_  = true;
 
-    //td: do the array type logic
+    array_type_ = type;
   }
 
 void xss_type::as_variant()

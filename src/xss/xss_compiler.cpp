@@ -5,6 +5,7 @@
 #include "xss/xss_error.h"
 #include "xss/language.h"
 #include "xss/lang/debug.h"
+#include "xss/lang/js.h"
 #include "xss/dsl_out.h"
 
 #include "xs/linker.h"
@@ -49,7 +50,7 @@ xss_application_renderer::xss_application_renderer(fs::path entry_point, Languag
     context_->set_language(lang);
 
     //register default instances
-    context_->register_symbol(RESOLVE_INSTANCE, "compiler", compiler);
+    context_->register_symbol(RESOLVE_NATIVE, "compiler", compiler);
     
     //register standard dsls
     context_->register_dsl("out", DslLinker(new out_linker(compiler)));
@@ -987,9 +988,7 @@ Language xss_compiler::get_language(const str& name)
   {
     //look the other way ma
     if (name == "js")
-      {
-        assert(false); //td:
-      }
+      return Language(new js_lang());
     else if (name == "debug")
       return Language(new debug_language);
 
