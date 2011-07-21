@@ -27,8 +27,14 @@ js_code_renderer::js_code_renderer(const js_code_renderer& other):
 
 js_code_renderer::js_code_renderer(code& cde, XSSContext ctx):
   code_(cde),
-  ctx_(ctx)
+  ctx_(new xss_context(ctx))
   {
+  }
+
+void js_code_renderer::set_this(variant this_)
+  {
+    ctx_->register_symbol(RESOLVE_CONST, "#this", this_); 
+    ctx_->set_this(variant_cast<XSSObject>(this_, XSSObject()));
   }
 
 str js_code_renderer::render()
@@ -166,10 +172,10 @@ str js_code_renderer::render_expression(expression& expr, XSSContext ctx)
 
 str js_code_renderer::render_code(code& cde)
   {
-    XSSContext ctx(new xss_context(ctx_)); //td: !!! hash to cache
-    js_code_renderer inner(cde, ctx); 
-
-    return inner.render();
+    js_code_renderer inner(cde, ctx_); 
+    str result = inner.render();
+    add_line(result);
+    return result;
   }
 
 void js_code_renderer::add_line(str line, bool trim)
@@ -215,15 +221,20 @@ str js_expr_renderer::resolve_assigner(variant operand, XSSObject instance, assi
 		str					result;
 
     XSSObject caller = get_instance(operand);
-    str separator = ctx_->get_language()->resolve_separator(caller);
+    Language  lang   = ctx_->get_language();
+    str separator    = lang->resolve_separator(caller);
 
-		if (operand.is<expression_identifier>())
+		bool use_this = false;
+    if (operand.is<expression_identifier>())
 			{
 				expression_identifier ei = operand;
 				if (instance)
           prop = ctx_->resolve(ei.value, instance, RESOLVE_PROPERTY);
         else
-          prop = ctx_->resolve(ei.value, RESOLVE_PROPERTY);
+          {
+            use_this = true;
+            prop = ctx_->resolve(ei.value, RESOLVE_PROPERTY);
+          }
 			}
 		else if (operand.is<already_rendered>())
 			{
@@ -264,7 +275,15 @@ str js_expr_renderer::resolve_assigner(variant operand, XSSObject instance, assi
           {
 						ai->type = FN_CALL;
 						if (result.empty())
-							return set_fn;
+              {
+							  if (use_this)
+                  {
+                    str this_str = lang->resolve_this(ctx_);
+                    if (!this_str.empty())
+                      return this_str + separator + set_fn;
+                  }
+                return set_fn;
+              }
 						else
               return result + separator + set_fn;
           }
@@ -272,7 +291,17 @@ str js_expr_renderer::resolve_assigner(variant operand, XSSObject instance, assi
 					{
 						ai->type = FN_CALL;
 						if (result.empty())
-							return prop->id() + "_set";
+              {
+                str fn_call = prop->output_id() + "_set";
+							  if (use_this)
+                  {
+                    str this_str = lang->resolve_this(ctx_);
+                    if (!this_str.empty())
+                      return this_str + separator + fn_call;
+                  }
+
+							  return fn_call;
+              }
 						else
               return result + separator + prop->id() + "_set";
 					}
@@ -492,6 +521,7 @@ void js_expr_renderer::push(variant operand, bool top)
 			{
 				str ass = resolve_assigner(operand, XSSObject(), assigner);
 				push_rendered(ass, 0, operand.get_schema());
+        return;
 			}
 
     stack_.push(operand);
@@ -631,42 +661,55 @@ void js_expr_renderer::exec_operator(operator_type op, int pop_count, int push_c
 
 				case op_dot:
           {
-					  str arg1_str = operand_to_string(arg1);
-					  str arg2_str = operand_to_string(arg2);
+            str caller_str = operand_to_string(arg1);
+            
+            expression_identifier ei = arg2;
+            str right_str  = ei.value;
 
-            std::stringstream ss;
-            ss << arg1_str;
-
+            //and who may I say is calling
             XSSObject caller = get_instance(arg1);
 			      if (!caller)
 			      {
 				      if (arg1.is<expression_identifier>())
 					      {
 						      expression_identifier ei = arg1;
-                  caller = XSSObject(ctx_->resolve(ei.value, RESOLVE_ANY)); //td: statics and such
+                  caller = variant_cast<XSSObject>(ctx_->resolve(ei.value, RESOLVE_ANY), XSSObject()); 
 					      }
 			      }
 
-            XSSProperty prop;
-            str value_str;
+						str separator = ctx_->get_language()->resolve_separator(caller);
             if (caller)
               {
+						    if (top && assigner)
+							    {
+								    str result = caller_str + separator + resolve_assigner(arg2, caller, assigner);
+                    push_rendered(result, op_prec, variant()); 
+                    return;
+							    }
+
                 resolve_info left;
                 left.what  = RESOLVE_INSTANCE;
                 left.value = caller;
                 
                 resolve_info right;
+                right.left = &left;
+
                 expression_identifier ei = arg2;
                 if (ctx_->resolve(ei.value, right))
                   {
-                    bool bail = false;
                     switch(right.what)
                       {
+                        case RESOLVE_CHILD:
+                        case RESOLVE_INSTANCE:
+                          {
+                            XSSObject obj = right.value;
+                            push_rendered(caller->output_id() + separator + obj->output_id(), 0, obj);
+                            return;
+                          }
                         case RESOLVE_PROPERTY:
                           {
-                            prop = right.value;
+                            XSSProperty prop = right.value;
                             str out_id = prop->output_id();
-                            value_str = out_id;
 
 						                if (prop->has("property_xss"))
 							                {
@@ -683,55 +726,38 @@ void js_expr_renderer::exec_operator(operator_type op, int pop_count, int push_c
 
                                 push_rendered(operand_to_string(arg1), 0, prop);
                                 push_rendered(render_captured_property(), op_prec, prop);
-                                break;
+                                return;
 							                }
 
                             str get_fn  = variant_cast<str>(dynamic_get(prop, "get_fn"), "");
                             str get_xss = variant_cast<str>(dynamic_get(prop, "get_xss"), "");
                             bool has_getter = prop && !prop->get.empty();
+                            str  result = caller->output_id() + separator;
 
                             if (!get_xss.empty())
-                              ss << get_xss;
+                              {
+                                assert(false); //punt
+                              }
                             else if (!get_fn.empty())
-                              ss << get_fn << "()";
+                              result += get_fn + "()";
                             else if (has_getter)
-                              ss << arg2_str << "_get()";
+                              result += right_str + "_get()";
                             else
-                              ss << arg2_str;
-								            break;
+                              result += right_str;
+
+                            push_rendered(result, 0, prop);
+								            return;
+                          }
+                        default:
+                          {
+                            assert(false); //use case
                           }
                       }
                   }
               }
 
-            str s2 = operand_to_string(arg2, caller);
-            
-
-						str separator = ctx_->get_language()->resolve_separator(caller);
-            if (!ss.str().empty())
-              ss << separator;
-
-						if (top && assigner)
-							{
-								ss << resolve_assigner(arg2, caller, assigner);
-							}
-						else if (prop)
-              {
-						    //And since I am on it...
-						    //there is a use case where some properties need a variable to represent them
-						    //unfortunately such variables need the whole property chain in order to be effective
-              }
-            else
-               ss << s2;
-
-            if (prop)
-              push_rendered(ss.str(), op_prec, prop);
-            else
-              {
-                XSSObject obj = ctx_->resolve(arg2_str, caller, RESOLVE_CHILD);
-                push_rendered(ss.str(), op_prec, obj);
-              }
-            break;
+            push_rendered(caller_str + separator + right_str, 0, variant());
+            return;
           }
 
         case op_dot_call:
@@ -1020,7 +1046,11 @@ variant js_lang::compile_args(param_list_decl& params, XSSContext ctx)
 
 str js_lang::resolve_this(XSSContext ctx)
   {
-    return "this"; //td: deal with java script nested functions
+    XSSObject sub = variant_cast<XSSObject>(ctx->resolve("#this", RESOLVE_CONST), XSSObject());
+    if (sub)
+      return sub->output_id();
+
+    return "this"; 
   }
 
 str js_lang::resolve_separator(XSSObject lh)

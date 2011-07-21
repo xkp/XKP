@@ -55,7 +55,6 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, b
     if (!do_special || !special_node(node, parent, result))
       {
         //read class
-        str class_name;
         const char* cc = node->Attribute("class");
         if (cc)
           class_name = cc;

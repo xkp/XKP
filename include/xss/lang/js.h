@@ -12,6 +12,8 @@ struct js_code_renderer : ICodeRenderer,
     js_code_renderer(const js_code_renderer& other);
     js_code_renderer(code& cde, XSSContext ctx);
 
+    void set_this(variant this_);
+
     //ICodeRenderer
     virtual str     render();
     virtual XSSType type();
@@ -141,7 +143,16 @@ struct js_lang : public ILanguage
     virtual bool    can_cast(XSSType left, XSSType right);
   };
 
-register_complete_type(js_code_renderer, renderer_schema<js_code_renderer>);
+//glue
+struct js_code_renderer_schema : renderer_schema<js_code_renderer>
+  {
+    virtual void declare()
+      {
+        method_<void, 1>("set_this", &js_code_renderer::set_this);
+      }
+  };
+
+register_complete_type(js_code_renderer, js_code_renderer_schema);
 register_complete_type(js_expr_renderer, renderer_schema<js_expr_renderer>);
 register_complete_type(js_args_renderer, renderer_schema<js_args_renderer>);
 

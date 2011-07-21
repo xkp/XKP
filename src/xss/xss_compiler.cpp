@@ -87,6 +87,21 @@ fs::path xss_application_renderer::entry_point()
     return filename_;
   }
 
+fs::path xss_application_renderer::output_path()
+  {
+    return output_path_;
+  }
+
+void xss_application_renderer::output_path(fs::path path)
+  {
+    output_path_ = path;
+  }
+
+void xss_application_renderer::set_output_path(const str& path)
+  {
+    output_path_ = path;
+  }
+
 void xss_application_renderer::set_target(const str& target)
   {
     target_ = target;
@@ -167,18 +182,23 @@ void xss_compiler::build(fs::path xml)
     base_path_ = pp.parent_path();
 
     XSSObject project_data = read_project(xml);
+    
+    //resolve path
+    output_path_       = base_path_;
+    XSSObject path_obj = project_data->find("path");
+    if (path_obj)
+      {
+        XSSObject op = path_obj->find("output");
+        if (op)
+          output_path_ /= op->get<str>("path", str());
+      }
+
     read_includes(project_data);
 
     str app_file = project_data->get<str>("target", str());
     read_application(app_file);
 
     run();
-  }
-
-fs::path xss_compiler::output_path()
-  {
-    assert(false); //td implement
-    return fs::path();
   }
 
 XSSRenderer xss_compiler::compile_xss_file(const str& src_file, XSSContext ctx)
@@ -223,7 +243,17 @@ XSSRenderer xss_compiler::compile_xss(const str& src, XSSContext ctx, fs::path p
 
 void xss_compiler::output_file(const str& fname, const str& contents)
   {
-    assert(false); //td:
+    fs::path path = output_path_ / fname;
+    output_file(path, contents);
+  }
+
+void xss_compiler::output_file(fs::path fpath, const str& contents)
+  {
+    fs::create_directories(fpath.parent_path());
+
+    std::ofstream ofs(fpath.string().c_str());
+    ofs << contents;
+    ofs.close();
   }
 
 str xss_compiler::genid(const str& what)
@@ -367,6 +397,9 @@ void xss_compiler::read_application_types(std::vector<XSSObject> & applications)
 
         fs::path path = fs::complete(base_path_ / entry_point);
         XSSApplicationRenderer app(new xss_application_renderer(path, lang, shared_from_this()));
+
+        fs::path op = fs::path(app_data->get<str>("output", str()));
+        app->output_path(op);
 
         //load modules 
         std::vector<XSSObject> modules = app_data->find_by_class("idiom");
@@ -758,24 +791,8 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
     std::vector<xs_method>::iterator mnd = gather.methods.end();
     for(; mit != mnd; mit++)
       {
-        //td: !!! decide how to obtain the type in a way that doesn't 
-        //involve resolving code until every thing has been preprocessed
-        //either that or having a pp step
-
-				//code_type_resolver typer(ctx);
-				//
-				//param_list_decl::iterator mait = mit->args.begin();
-				//param_list_decl::iterator mand = mit->args.end();
-				//for(; mait != mand; mait++)
-				//	{
-        //    assert(false); //td: get rid of
-				//		//typer.register_var(mait->name, ctx->get_type(mait->type));
-				//	}
- 
-				//mit->cde.visit(&typer);
-				
         XSSType decl_type   = ctx->get_type(mit->type);
-        XSSType return_type = decl_type; //typer.get();
+        XSSType return_type = decl_type; //td: use type_resolver
 
 				if (!decl_type)
 					decl_type = return_type;
@@ -860,65 +877,12 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 				XSSEvent		 ev;
         DynamicArray impls = actual_instance->get_event_impl(event_name, ev);
 
-				if (actual_instance != instance && options("gen_event_method"))
-					{
-            assert(false); //td: rewrite, this should not be a compiler option, maybe language options or application renderer
-
-						//here's one. It would seem convinient that events implemented in
-						//the context of a different instance would generate code using such
-						//instance as the *this* pointer. At least this should be a compiler option.
-
-						str aid    = variant_cast<str>(dynamic_get(actual_instance, "id"), str("")); assert(!aid.empty());
-						str iid    = variant_cast<str>(dynamic_get(instance, "id"), str("")); assert(!iid.empty());
-						str	mname  = aid + "_" + event_name;
-
-						//so, create a method in the original instance
-						variant margs = lang->compile_args(it->args, ctx);						assert(!margs.empty());
-						variant mcde  = lang->compile_code(it->cde, it->args, ctx);  assert(!mcde.empty());
-
-						XSSMethod mthd(new xss_method(mname, XSSType(), margs, mcde));
-						methods->push_back(mthd);
-
-						//and generate a call to it on the actual method implementation
-						//the generation is a simple string.
-						std::stringstream css;
-						css << iid << '.' << mname << "(";
-
-						//stringify the parameters
-						std::stringstream pss;
-						param_list_decl::iterator pit = it->args.begin();
-						param_list_decl::iterator pnd = it->args.end();
-						for(; pit != pnd; pit++)
-							{
-								css << pit->name;
-								if (pit + 1 != pnd)
-									{
-										css << ",";
-									}
-							}
-
-						css << ");";
-
-						xs_compiler xsc;
-						code				cde;
-						if(xsc.compile_code(css.str(), cde))
-							{
-								XSSContext ictx(new xss_context(ctx));
-								ictx->set_this(actual_instance);
-
-								variant impl = lang->compile_code(cde, it->args, ictx);
-								impls->push_back(impl);
-							}
-					}
-				else
-					{
-						//let the idiom process implementations
-						XSSContext ictx(new xss_context(ctx));
-						ictx->set_this(actual_instance);
+				//let the idiom process implementations
+				XSSContext ictx(new xss_context(ctx));
+				ictx->set_this(actual_instance);
 						
-            variant impl = lang->compile_code(it->cde, it->args, ictx);
-						impls->push_back(impl);
-					}
+        variant impl = lang->compile_code(it->cde, it->args, ictx);
+				impls->push_back(impl);
 
 				ev->args = lang->compile_args(it->args, ctx);
       }
@@ -1044,6 +1008,11 @@ void xss_compiler::run()
         XSSRenderer renderer = compile_xss_file(target, app->context());
 
         str result = renderer->render(XSSObject(), null);
-        std::cout << result;
+
+        fs::path out_file = app->output_path();
+        if (out_file.empty())
+          std::cout << result;
+        else
+          output_file(output_path_ / out_file, result);
       }
   }

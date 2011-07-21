@@ -1,19 +1,19 @@
-on btn1.click()
-{
-	btn2.caption = "Clicked";
-	caption = "Other Clicked";
-}
-
 property target
 {
 	btn2.caption = "target acquired " + value;
 	
 	for(int i = 0; i < 20; i++)
 	{
-		btn2.width = btn2.width + 10;
+		btn2.width += 10;
 		if (btn2.width > 200)
 			btn2.width = 100;
 	}
+}
+
+on btn1.click()
+{
+	btn2.caption = "Clicked";
+	caption = "Other Clicked";
 }
 
 method reset(string s)

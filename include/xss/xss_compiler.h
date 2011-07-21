@@ -59,12 +59,16 @@ namespace xkp
         XSSContext context();
         void       register_module(const str& id, XSSModule module);
         str        target(); 
-        fs::path   entry_point(); 
         void       set_target(const str& target); 
+        fs::path   entry_point(); 
+        fs::path   output_path();
+        void       output_path(fs::path path);
+        void       set_output_path(const str& path); 
       public:
         std::vector<XSSModule>& modules();
       private:
         fs::path               filename_;
+        fs::path               output_path_;
         str                    target_;
         XSSContext             context_;
         std::vector<XSSModule> modules_;
@@ -97,11 +101,11 @@ namespace xkp
 		{
       public:
         void        build(fs::path xml);
-        fs::path    output_path();
 				XSSRenderer compile_xss_file(const str& src_file, XSSContext ctx);
 				XSSRenderer compile_xss_file(fs::path src_file, XSSContext ctx);
 				XSSRenderer compile_xss(const str& src, XSSContext ctx, fs::path path = fs::path());
 			  void        output_file(const str& fname, const str& contents);
+			  void        output_file(fs::path fpath, const str& contents);
         str         genid(const str& what);
         void        xss(const param_list params);
       public:
@@ -114,6 +118,7 @@ namespace xkp
         std::stack<XSSRenderer>             renderers_;
         fs::path                            base_path_;
         fs::path                            source_path_;
+        fs::path                            output_path_;
         XSSObject                           options_;
         
         XSSObject read_project(fs::path xml_file);

@@ -156,7 +156,10 @@ XSSType xss_context::add_type(const str& id, XSSType type, bool override_parent)
 
 XSSObject xss_context::get_this()
   {
-    return this_;
+    if (this_)
+      return this_;
+
+    return parent_? parent_->get_this() : XSSObject();
   }
 
 void xss_context::set_this(XSSObject _this_)
@@ -249,92 +252,161 @@ variant xss_context::resolve(const str& id, XSSObject instance, RESOLVE_ITEM ite
 
 bool xss_context::resolve(const str& id, resolve_info& info)
   {
-    //resolve types
-    bool search_types = info.what == RESOLVE_TYPE;
-    if (search_types)
-      {
-        assert(!info.left);
-      }
-
-    if (!search_types && info.what == RESOLVE_ANY)
-      {
-        search_types = true;
-      }
-    
-    if (search_types)
-      {
-        type_list::iterator it = types_.find(id);
-        if (it != types_.end())
-          {
-            info.what  = RESOLVE_TYPE;
-            info.value = it->second;
-            info.type  = it->second;
-            return true;
-          }
-      }
-    
-    //search symbols
-    if (!find_symbol(id, info))
-      {
-        //daddy!
-        return parent_? parent_->resolve(id, info) : false;
-      }
-
+    bool any = false; //kids, dont do this at home
     switch(info.what)
       {
-        case RESOLVE_INSTANCE:
+        case RESOLVE_ANY:
           {
-            XSSObject obj = info.value;
-            info.type = obj->type();
-            break;
-          }
-        case RESOLVE_METHOD:
-          {
-            XSSMethod mthd = info.value;
-            info.type = mthd->type;
-            break;
-          }
-        case RESOLVE_PROPERTY:
-          {
-            XSSProperty prop = info.value;
-            info.type = prop->type;
-            break;
+            any = true;
+            //fallthru                        
           }
         
-        case RESOLVE_VARIABLE:
+        case RESOLVE_TYPE:
           {
-            XSSType type = info.value;
-            info.type = type;
-            break;
-          }
-
-        case RESOLVE_CHILD:
-          {
-            XSSObject obj = this_;
-            if (info.left)
+            if (!info.left)
               {
-                assert(info.what == RESOLVE_INSTANCE);
-                obj = info.left->value;
+                type_list::iterator it = types_.find(id);
+                if (it != types_.end())
+                  {
+                    info.what  = RESOLVE_TYPE;
+                    info.value = it->second;
+                    info.type  = it->second;
+                    return true;
+                  }
               }
 
-            XSSObject child = obj->find(id);
-            if (!child)
-              return false;
-
-            info.what  = RESOLVE_INSTANCE;
-            info.type  = child->type();
-            info.value = child;
-            break;
+            if (!any) //continue falling thru
+              break;
           }
 
-        case RESOLVE_ANY:
-        case RESOLVE_NATIVE:
-        case RESOLVE_CONST:
-          //all done
-          break;
+        case RESOLVE_METHOD:
+          {
+            XSSObject inst;
+            if (info.left)
+              inst = variant_cast<XSSObject>(info.left->value, XSSObject());
+            else
+              inst = get_this();
+              
+            if (inst)
+              {
+                XSSMethod mthd = inst->get_method(id);
+                if (!mthd)
+                  {
+                    XSSType type = inst->type();
+                    if (type)
+                      mthd = type->get_method(id);
+                  }
+                
+                if (mthd)
+                  {
+                    info.what = RESOLVE_METHOD;
+                    info.value = mthd;
+                    info.type = mthd->type;
+                    return true;
+                  }
+              }  
+              
+            if (!any)
+              return false;
+          }
+
+        case RESOLVE_PROPERTY:
+          {
+            XSSObject inst;
+            if (info.left)
+              inst = variant_cast<XSSObject>(info.left->value, XSSObject());
+            else
+              inst = get_this();
+              
+            if (inst)
+              {
+                XSSProperty prop = inst->get_property(id);
+                if (!prop && inst->type())
+                  prop = inst->type()->get_property(id);
+                
+                if (prop)
+                  {
+                    info.what = RESOLVE_PROPERTY;
+                    info.value = prop;
+                    info.type = prop->type;
+                    return true;
+                  }
+              }  
+              
+            if (!any)
+              return false;
+          }
+        
+        case RESOLVE_CHILD:
+          {
+            XSSObject obj = get_this();
+            if (info.left)
+              {
+                assert(info.left->what == RESOLVE_INSTANCE);
+                obj = info.left->value;
+              }
+            
+            if (obj)
+              {
+                XSSObject child = obj->find(id);
+                if (child)
+                  {
+                    info.what  = RESOLVE_INSTANCE;
+                    info.type  = child->type();
+                    info.value = child;
+                    return true;
+                  }
+              }
+            
+            if (!any)
+              break;
+          }
       }
 
-    return true;
+    if (info.left)
+      return false; 
+      
+    //check globals now
+    if (find_symbol(id, info))
+      {
+        switch(info.what)
+          {
+            case RESOLVE_INSTANCE:
+              {
+                XSSObject obj = info.value;
+                info.type = obj->type();
+                break;
+              }
+            case RESOLVE_METHOD:
+              {
+                XSSMethod mthd = info.value;
+                info.type = mthd->type;
+                break;
+              }
+            case RESOLVE_PROPERTY:
+              {
+                XSSProperty prop = info.value;
+                info.type = prop->type;
+                break;
+              }
+        
+            case RESOLVE_VARIABLE:
+              {
+                XSSType type = info.value;
+                info.type = type;
+                break;
+              }
+
+            case RESOLVE_NATIVE:
+            case RESOLVE_CONST:
+              //all done
+              break;
+          }
+          
+        return true;
+      }
+
+    return parent_? parent_->resolve(id, info) : false;
   }
 
 variant xss_context::resolve_path(const std::vector<str>& path)
@@ -715,8 +787,8 @@ std::vector<XSSEvent> xss_object::get_events(const str& name)
 
 XSSMethod xss_object::get_method(const str& name)
   {
-    std::vector<variant>::iterator it = properties_->ref_begin();
-    std::vector<variant>::iterator nd = properties_->ref_end();
+    std::vector<variant>::iterator it = methods_->ref_begin();
+    std::vector<variant>::iterator nd = methods_->ref_end();
 
     for(; it != nd; it++)
       {
