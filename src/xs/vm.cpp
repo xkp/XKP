@@ -521,6 +521,8 @@ variant execution_context::execute()
                 Getter  call   = pop();
                 variant caller = pop();
 
+                IDynamicObject* ooobbjjj = variant_cast<IDynamicObject*>(caller, null);
+
                 if (caller.empty())
                   {
                     param_list error;
@@ -679,8 +681,14 @@ code_executer::code_executer(ByteCode _code):
 
 variant code_executer::exec(void* instance, const param_list args)
   {
+    //we must obtain the actual type of instance, not IDynamicObject 
+    //but any class on top of it
     IDynamicObject* d = static_cast<IDynamicObject*>(instance);
-    execution_context e(code_, d, const_cast<param_list*>(&args));
+    schema* type = d->get_type();
+    variant this_; 
+    type->cast(d, type, this_);
+
+    execution_context e(code_, this_, const_cast<param_list*>(&args));
     return e.execute();
   }
 

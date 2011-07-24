@@ -64,7 +64,8 @@ namespace xkp
   class IEditableObject
     {
       public:
-        virtual void add_item(const str& name, schema_item& item) = 0;
+        virtual void   add_item(const str& name, schema_item& item) = 0;
+        virtual size_t register_event(const str& name)              = 0;
     };
 
   class IDynamicClass
@@ -115,7 +116,7 @@ namespace xkp
     {
       public:
         bool   add_item(const str& name, schema_item& item);
-        int    add_event(const str& name, schema_item& item);
+        size_t add_event(const str& name, schema_item& item);
         size_t event_id(const str& name);
         void   dispatch_event(IDynamicObject* this_, size_t ev_id, param_list& args);
       protected:
@@ -152,14 +153,14 @@ namespace xkp
         virtual bool   has(const str& id);
 
         //IEditableObject
-        virtual void add_item(const str& name, schema_item& item);
+        virtual void   add_item(const str& name, schema_item& item);
+        virtual size_t register_event(const str& name);
       protected:
         typedef std::map<str, schema_item>    item_list;
         typedef std::pair<str, schema_item>   item_pair;
 
         item_list items_;
       protected:
-        int register_event(const str& name);
     };
 
   //type friendly
@@ -322,6 +323,12 @@ namespace xkp
               if (!self)
                 throw type_mismatch();
 
+              if (this == ss)
+                {
+                  result = self; //c'est moi
+                  return;
+                }
+
               object_schema<T>::cast(self, ss, result);
               return;
             }
@@ -472,7 +479,8 @@ namespace xkp
       virtual void    declare();
 
       //IEditableObject
-      virtual void add_item(const str& name, schema_item& item);
+      virtual void   add_item(const str& name, schema_item& item);
+      virtual size_t register_event(const str& name);
 
       //IDynamicClass
       virtual size_t  event_id(const str& name);

@@ -19,8 +19,8 @@ var application = $("#application");
                 btn2.text("target acquired " + value);
 for(var i = 0; i < 20; i++)
 {
-btn2.width(btn2.width + 10);
-if (btn2.width > 200)
+btn2.width(btn2.width() + 10);
+if (btn2.width() > 200)
 {
 btn2.width(100);
 }
@@ -47,7 +47,7 @@ var btn1 = $("#btn1");
 		btn1.click(function()
 		{    
 	
-			btn2text().text("Clicked");
+			btn2.text("Clicked");
 btn1.text("Other Clicked");
 		
 		});
@@ -64,8 +64,8 @@ var btn2 = $("#btn2");
 		btn2.click(function()
 		{    
 	
-			btn1text().text("Old value: " + applicationbtn2.null.);
-applicationbtn2.null.target_set(300);
+			btn1.text("Old value: " + application.target);
+application.target_set(300);
 		
 		});
 	

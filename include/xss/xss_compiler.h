@@ -108,6 +108,8 @@ namespace xkp
 			  void        output_file(fs::path fpath, const str& contents);
         str         genid(const str& what);
         void        xss(const param_list params);
+        void        inject(const param_list params);
+        void        log(const param_list params);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -152,8 +154,10 @@ struct xss_compiler_schema : object_schema<xss_compiler>
   {
     virtual void declare()
       {
-        method_<str, 1>("genid",	&xss_compiler::genid);
-        dynamic_method_ ("xss",   &xss_compiler::xss);
+        method_<str, 1>("genid",	 &xss_compiler::genid);
+        dynamic_method_ ("xss",    &xss_compiler::xss);
+        dynamic_method_ ("inject", &xss_compiler::inject);
+        dynamic_method_ ("log",    &xss_compiler::log);
       }
   };
 

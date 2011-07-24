@@ -2121,6 +2121,7 @@ void base_xs_linker::event_(xs_event& info)
     name.erase(name.end() - 1);
     if (!name.empty())
       {
+        assert(false); //td: !!! this is fffffffffffuuuuuuuuuuu 
         DynamicObject inst = resolve_instance(name);
         object = inst.get();
         target = variant_cast<IEditableObject*>(inst, null);
@@ -2160,12 +2161,17 @@ void base_xs_linker::event_(xs_event& info)
         xs_throw(error);
       }
 
-    int id = object->event_id(ev_name);
+    size_t id = object->event_id(ev_name);
+    if (id == 0)
+      {
+        //td: !!! revise this, it basically makes the event declarations absolote
+        id = target->register_event(ev_name);
+      }
 
     schema_item itm;
     itm.flags          = DYNAMIC_ACCESS|EVENT;
     ByteCode exec_code = ByteCode( new byte_code );
-    itm.get            = Getter( new const_getter(id) );
+    itm.get            = Getter( new const_getter((int)id) ); //td: declare uint
     itm.exec           = Executer( new code_executer(exec_code) );
 
     ParamList pl = ParamList(new param_list);

@@ -172,6 +172,11 @@ namespace xkp
           {
             register_symbol(name, item);
           }
+        virtual size_t register_event(const str& name)
+          {
+            assert(false); //see no reason to
+            return 0;
+          }
     };              
 }
 

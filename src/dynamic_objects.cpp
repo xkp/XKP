@@ -97,7 +97,7 @@ bool event_holder::add_item(const str& name, schema_item& item)
     return false;
   }
 
-int event_holder::add_event(const str& name, schema_item& item)
+size_t event_holder::add_event(const str& name, schema_item& item)
   {
     boost::hash<std::string> string_hash;
     size_t ev_id = string_hash(name);
@@ -208,10 +208,10 @@ void base_editable_object::add_item(const str& name, schema_item& item)
       }
   }
 
-int base_editable_object::register_event(const str& name)
+size_t base_editable_object::register_event(const str& name)
   {
     schema_item itm;
-    int result = event_holder::add_event(name, itm);
+    size_t result = event_holder::add_event(name, itm);
     items_.insert( item_pair(name, itm) );
 
     return result;
@@ -301,6 +301,12 @@ void dynamic_class_schema::add_item(const str& name, schema_item& item)
         indices_.insert(vmt_pair(name, vmt_.size()));
         vmt_.push_back(item);
       }
+  }
+
+size_t dynamic_class_schema::register_event(const str& name)
+  {
+    assert(false); //td: implement
+    return 0;
   }
 
 size_t dynamic_class_schema::event_id(const str& name)
