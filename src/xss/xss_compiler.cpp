@@ -527,7 +527,18 @@ variant xss_compiler::resolve_property(const str& prop, variant parent)
 		str prop_name = path[path.size() - 1];
 		path.erase(path.end() - 1);
 
-		XSSObject obj = ctx->resolve_path(path, base, pth);
+		XSSObject obj;
+
+    try
+      {
+        obj = ctx->resolve_path(path, base, pth);
+      }
+    catch(xss_error xsse)
+      {
+        //try the global scope
+        obj = ctx->resolve_path(path, XSSObject(), pth);
+      }
+
 		if (!obj)
 			return variant();
 

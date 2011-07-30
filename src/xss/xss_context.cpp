@@ -435,7 +435,7 @@ variant xss_context::resolve_path(const std::vector<str>& path, XSSObject base, 
                 param_list error;
                 error.add("id", SContextError);
                 error.add("desc", SCannotResolve);
-                error.add("instance", result);
+                error.add("instance", inst_name);
 
                 xss_throw(error);
               }
@@ -1026,9 +1026,12 @@ str xss_property::render_value()
     if (value_.empty())
       return "null"; //td: somehow the language must resolve this
 
-    IExpressionRenderer* renderer = variant_cast<IExpressionRenderer*>(value_, null);
+    IRenderer* renderer = variant_cast<IRenderer*>(value_, null);
     if (renderer)
-      return renderer->render();
+      {
+        str result = renderer->render();
+        return result;
+      }
 
     if (value_.is<str>())
       {
@@ -1050,6 +1053,29 @@ str xss_property::render_get()
       return name + "_get()";
 
     return name;
+  }
+
+str	xss_property::render_set(const str& value)
+	{
+    str set_fn = variant_cast<str>(dynamic_get(this, "set_fn"), ""); //let the outside world determine
+                                                                      //if a native function call shouls be made
+
+    str set_xss = variant_cast<str>(dynamic_get(this, "set_xss"), ""); //such world can request to parse xss
+
+		if (!set_xss.empty())
+			{
+				assert(false); //td:
+			}
+		else if (!set_fn.empty())
+      {
+				return set_fn + '(' + value + ')';
+      }
+    else if (!set.empty())
+			{
+				return id_ + "_set(" + value + ')';
+			}
+
+		return id_ + " = " + value;
   }
 
 //xss_event

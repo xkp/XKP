@@ -286,11 +286,7 @@ class xss_property : public xss_object
 
       str render_value();
       str render_get();
-
-			//td: revise interface
-			//variant get_value();
-			//str			resolve_assign(const str& value);
-			//str			resolve_value();
+      str	render_set(const str& value);
   };
 
 class xss_event : public xss_object
@@ -404,6 +400,8 @@ struct xss_property_schema : xss_object_schema<xss_property>
         property_("type",  &xss_property::type);
 
         method_<str, 0>("render_value", &xss_property::render_value);
+        method_<str, 0>("render_get",   &xss_property::render_get);
+        method_<str, 1>("render_set",   &xss_property::render_set);
       }
   };
 

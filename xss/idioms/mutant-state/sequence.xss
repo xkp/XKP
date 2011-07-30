@@ -28,7 +28,7 @@
             //same deal, only this time we'll assign the current value 
             //kinda neat
             var nfo = object();
-            nfo.expr = prop_info.path + "." + prop_info.prop.resolve_value();
+            nfo.expr = prop_info.path + "." + prop_info.prop.render_get();
             nfo.idx  = key_index;
             nfo.interp = interp;
             
@@ -41,10 +41,6 @@
         {
             key.value = key_value;
         }
-    }
-    
-    method generate_runnable_item(itm)
-    {
     }
     
     method generate_at(at, seq, rendering_instance)
@@ -75,7 +71,7 @@
                         default_interpolate,
                         function(value)
                         {
-                            <xss:e v="path"/>.<xss:e v="prop.resolve_assign('value')"/>;
+                            <xss:e v="path"/>.<xss:e v="prop.render_set('value')"/>;
                         },
                         [
                 }
@@ -380,7 +376,7 @@
             {
                 out(indent = 3)
                 {
-                    if (<xss:e v="cond">)
+                    if (<xss:e v="cond"/>)
                     <xss:open_brace/>
                 }
                 
