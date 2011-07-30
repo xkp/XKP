@@ -1,4 +1,7 @@
-<xss:class entry_point="generate">
+<xss:parameter id="seq"/>
+<xss:parameter id="rendering_class"/>
+
+<xss:class>
     method resolve_key(key, key_value, key_index, owner_seq, prop_info, interp)
     {
         //for good measure
@@ -11,7 +14,7 @@
             //Note: such expressions will be evaluated at sequence's start time 
             
             var info = object();
-            info.expr = compiler.generate_expression(key_value, owner_seq);
+            info.expr = compiler.render_expression(key_value, owner_seq);
             info.idx  = key_index;
             info.interp = interp;
             
@@ -217,8 +220,6 @@
             
     method generate_item(itm, seq, rendering_instance)
     {
-        compiler.log("ITEM = " + itm.class_name);
-
         if (itm.class_name == "at")         generate_at(itm, seq, rendering_instance);
         else if (itm.class_name == "when")  generate_when(itm, seq);
         else if (itm.class_name == "every") generate_every(itm, seq, rendering_instance);
@@ -270,6 +271,7 @@
     {
         string parent_id = "null";
         string seq_id = seq.id;
+
         if (parent)
         {
             parent.subs += seq;
@@ -314,11 +316,6 @@
             }
         }
             
-        out(indent = 2)
-        {
-            <xss:e v="seq_id"/>.parent_sequence = <xss:e v="parent_id"/>;
-        }
-                
         if (seq.auto_start)
         {
             out(indent = 2)
@@ -329,10 +326,14 @@
                 
         if (rendering_instance)
         {
-            
-            compiler.xss("instance.xss", seq);
+            compiler.xss("../common-js/instance.xss", seq);
         }
         
+        out()
+        {
+            <xss:e v="seq_id"/>.parent_sequence = <xss:e v="parent_id"/>;
+        }
+
         //we'll let our children fill in on what the want done
         seq.conditions      = [];
         seq.actions         = [];
@@ -342,7 +343,7 @@
         {
             generate_item(item, seq, rendering_instance);
         }
-        
+
         if (!seq.key_expressions.empty)
         {
             out(indent = 2)
@@ -399,7 +400,7 @@
         }
     }
             
-    method generate()
+    on render()
     {
         generate_sequence(seq, null, !rendering_class);
     }

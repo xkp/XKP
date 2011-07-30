@@ -1,0 +1,5 @@
+<module id="sequence" src="sequence.xs">
+    <types>
+        <class id="sequence" instantiator="instantiator.xss"/>
+    </types>
+</module>

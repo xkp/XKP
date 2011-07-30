@@ -106,28 +106,28 @@ namespace xkp
     {
       //expressions
       variant evaluate_expression(const str& src);
-      variant evaluate_xs_expression(const str& src, code_context& ctx);
+      variant evaluate_xs_expression(const str& src, code_context& ctx, fs::path file);
       bool    compile_expression(const str& src, expression& expr);
     
       //plain execute
-      variant execute_xs(const str& src, code_context& ctx);
+      variant execute_xs(const str& src, code_context& ctx, fs::path file);
       
       //plain compile
-      ByteCode compile_code(const str& src, code_context& ctx);
+      ByteCode compile_code(const str& src, code_context& ctx, fs::path file);
       
       //compile instance code
-      void compile_instance(const str& src, DynamicObject instance, code_context& ctx);
-      void compile_implicit_instance(const str& src, DynamicObject instance, code_context& ctx);
+      void compile_instance(const str& src, DynamicObject instance, code_context& ctx, fs::path file);
+      void compile_implicit_instance(const str& src, DynamicObject instance, code_context& ctx, fs::path file);
       
       //compile class code, the result types will be added to the context's type list
       //note these 2 functions will fail (via exception error) when there is mixed code
       //i.e instances mixed with classes. The next function down will handle that
-      void compile_class(const str& src, code_context& ctx);
+      void compile_class(const str& src, code_context& ctx, fs::path file);
       
       //compile high level xs from and into a context
       //means classes will be added to the type registry
       //and instances to the scope. This can and probably will change.
-      void compile(const str& src, code_context& ctx);
+      void compile(const str& src, code_context& ctx, fs::path file);
     };
     
   //an object wrapper

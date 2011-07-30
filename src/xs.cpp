@@ -42,9 +42,9 @@ variant xs_utils::evaluate_expression(const str& src)
     return eval.value();
   }
 
-variant xs_utils::evaluate_xs_expression(const str& src, code_context& ctx)
+variant xs_utils::evaluate_xs_expression(const str& src, code_context& ctx, fs::path file)
   {
-    return execute_xs("return " + src + ';', ctx);
+    return execute_xs("return " + src + ';', ctx, file);
   }
 
 bool xs_utils::compile_expression(const str& src, expression& expr)
@@ -54,7 +54,7 @@ bool xs_utils::compile_expression(const str& src, expression& expr)
   }
   
 //code_context
-ByteCode xs_utils::compile_code(const str& src, code_context& ctx)
+ByteCode xs_utils::compile_code(const str& src, code_context& ctx, fs::path file)
   {
     code_linker linker(ctx);
 
@@ -70,10 +70,12 @@ ByteCode xs_utils::compile_code(const str& src, code_context& ctx)
 
     code_.visit(&linker);
     
-    return linker.link();
+    ByteCode result = linker.link(file);
+    result->file = file;
+    return result;
   }
   
-variant xs_utils::execute_xs(const str& src, code_context& ctx)
+variant xs_utils::execute_xs(const str& src, code_context& ctx, fs::path file)
   {
     type_registry types;
     if (!ctx.types_)
@@ -101,12 +103,13 @@ variant xs_utils::execute_xs(const str& src, code_context& ctx)
     code_.visit(&linker);
     
     //and execute such deed
-    ByteCode dbc = linker.link();
+    ByteCode dbc = linker.link(file);
+    dbc->file = file;
     execution_context dec(dbc, ctx.this_);
     return dec.execute();
   }
 
-void xs_utils::compile_class(const str& src, code_context& ctx)
+void xs_utils::compile_class(const str& src, code_context& ctx, fs::path file)
   {
     xs_compiler  compiler;
     xs_container results;
@@ -117,12 +120,12 @@ void xs_utils::compile_class(const str& src, code_context& ctx)
         //assumes there are only classes in there
         //td: this is really ugly
         xs_class ci = results.get(i);
-        class_linker cl(ctx); 
+        class_linker cl(ctx, file); 
         cl.link(ci);
       }
   }
 
-void xs_utils::compile_instance(const str& src, DynamicObject instance, code_context& ctx) 
+void xs_utils::compile_instance(const str& src, DynamicObject instance, code_context& ctx, fs::path file) 
   {
     xs_compiler  compiler;
     xs_container results;
@@ -132,12 +135,12 @@ void xs_utils::compile_instance(const str& src, DynamicObject instance, code_con
       {
         //assumes there are only classes in there
         xs_instance ii = results.get(i);
-        instance_linker il(ctx, instance); 
+        instance_linker il(ctx, instance, file); 
         il.link(ii);
       }
   }
 
-void xs_utils::compile_implicit_instance(const str& src, DynamicObject instance, code_context& ctx) 
+void xs_utils::compile_implicit_instance(const str& src, DynamicObject instance, code_context& ctx, fs::path file) 
   {
     std::vector<str> dl;
     prepare_dsl(ctx, null, dl);
@@ -147,18 +150,18 @@ void xs_utils::compile_implicit_instance(const str& src, DynamicObject instance,
     
     compiler.compile_xs(src, results);
     
-    implicit_instance_linker il(ctx, instance); 
+    implicit_instance_linker il(ctx, instance, file); 
     il.link(results);
   }
 
-void xs_utils::compile(const str& src, code_context& ctx)
+void xs_utils::compile(const str& src, code_context& ctx, fs::path file)
   {
     xs_compiler  compiler;
     xs_container results;
     compiler.compile_xs(src, results);
     
     IEditableObject* output = variant_cast<IEditableObject*>(ctx.this_, null);
-    base_xs_linker linker(ctx, output);
+    base_xs_linker linker(ctx, file, output);
     results.visit( &linker );
   }
 

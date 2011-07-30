@@ -102,13 +102,14 @@ operator_type vm_native_op[] =
   };
 
 //execution_context
-execution_context::execution_context(ByteCode code, variant _this, param_list* args):
+execution_context::execution_context(ByteCode code, variant _this, param_list* args, fs::path file):
   code_(code),
   instructions_(code->instructions),
   constants_(code->constants),
   pc_(0),
   jump_(false),
-  this_(_this)
+  this_(_this),
+  file_(file)
   {
     stack_.resize(1024); //td: arbitrary, inefficient
     if (args)
@@ -123,8 +124,15 @@ execution_context::execution_context(ByteCode code, variant _this, param_list* a
       }
   }
 
+fs::path execution_context::file()
+  {
+    return code_->file;
+  }
+
 variant execution_context::execute()
   {
+    callstack_helper helper(this);
+
     size_t isz = instructions_.size();
 
     while(pc_ < isz)
@@ -690,5 +698,39 @@ variant code_executer::exec(void* instance, const param_list args)
 
     execution_context e(code_, this_, const_cast<param_list*>(&args));
     return e.execute();
+  }
+
+//vm
+vm& vm::instance()
+  {
+    static vm inst_;
+    return inst_;
+  }
+      
+void vm::enter(execution_context* ctx)
+  {
+    call_stack_.push(ctx);
+  }
+
+void vm::leave()
+  {
+    call_stack_.pop();
+  }
+
+void vm::reset()
+  {
+    while(!call_stack_.empty())
+      call_stack_.pop();
+  }
+
+call_stack& vm::state()
+  {
+    return call_stack_;
+  }
+
+fs::path vm::file()
+  {
+    execution_context* top = call_stack_.top();
+    return top->file();
   }
 

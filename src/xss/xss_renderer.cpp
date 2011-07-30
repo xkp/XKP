@@ -36,12 +36,13 @@ struct xss_code_renderer : item_renderer
         return str();
       }
 
-    void compile(const str& text, param_list* args, XSSContext ctx)
+    void compile(const str& text, param_list* args, XSSContext ctx, fs::path file)
       {
         xs_utils     xs;
         code_context code_ctx = ctx->get_compile_context();
 
-        code_  = xs.compile_code(text, code_ctx);
+        code_  = xs.compile_code(text, code_ctx, file);
+        code_->file = file;
       } 
     private:
       ByteCode code_;
@@ -68,7 +69,7 @@ struct xss_expression_renderer : item_renderer
         return result;
       }
 
-    void compile(const str& text, param_list* args, XSSContext ctx)
+    void compile(const str& text, param_list* args, XSSContext ctx, fs::path file)
       {
         expr_ = text;
         if (text.empty() && args)
@@ -85,7 +86,7 @@ struct xss_expression_renderer : item_renderer
         code_context code_ctx = ctx->get_compile_context();
 
         str code_str = "return " + expr_ + ";";
-        code_        = xs.compile_code(code_str, code_ctx);
+        code_        = xs.compile_code(code_str, code_ctx, file);
       } 
     private:
       ByteCode code_;
@@ -110,20 +111,44 @@ struct class_renderer : item_renderer
     virtual str render(XSSObject this_, param_list* args)
       {
         param_list pl;
-        instance_->dispatch_event(render_, args? *args : pl);
+        if (!args)
+          args = &pl;
+
+        //bind values
+        renderer_parameter_list::iterator pit = params_.begin();
+        renderer_parameter_list::iterator pnd = params_.end();
+
+        for(; pit != pnd; pit++)
+          {
+            dynamic_set(instance_, pit->id, args->get(pit->id));
+          }
+
+        instance_->dispatch_event(render_, *args);
 
         return str();
       }
 
-    void compile(const str& text, param_list* args, XSSContext ctx)
+    void compile(const str& text, param_list* args, XSSContext ctx, renderer_parameter_list& params, fs::path file)
       {
+        params_ = params;
+
         xs_utils xs;
 
-        //what we'll really compile is an instance, but xss:class sounder classier
+        //trickey, the xss parameters will be set as properties of the class, 
+        //so they are scope available
+        renderer_parameter_list::iterator pit = params.begin();
+        renderer_parameter_list::iterator pnd = params.end();
+
+        for(; pit != pnd; pit++)
+          {
+            dynamic_set(instance_, pit->id, variant());
+          }
+
         code_context code_ctx = ctx->get_compile_context();
         code_ctx.this_ = instance_;
-
-        xs.compile_implicit_instance(text, instance_, code_ctx);
+        
+        //what we'll really compile is an instance, but xss:class sounder classier
+        xs.compile_implicit_instance(text, instance_, code_ctx, file);
         render_ = instance_->event_id("render");
 
         if (render_ == 0)
@@ -137,6 +162,7 @@ struct class_renderer : item_renderer
     private:
       DynamicObject instance_;
       size_t        render_;
+      renderer_parameter_list params_;
   };
 
 struct file_renderer : item_renderer
@@ -195,7 +221,8 @@ struct file_renderer : item_renderer
 //xss_renderer
 xss_renderer::xss_renderer(XSSCompiler compiler, XSSContext context, fs::path xss_file):
   context_(new xss_context(context, xss_file.parent_path())),
-  compiler_(compiler)
+  compiler_(compiler),
+  file_(xss_file)
   {
     handlers_.insert(handler_pair("text",					  &xss_renderer::handle_text));
     handlers_.insert(handler_pair("xss:code",			  &xss_renderer::handle_code));
@@ -271,6 +298,11 @@ XSSContext xss_renderer::context()
     return context_;
   }
 
+fs::path xss_renderer::file()
+  {
+    return file_;
+  }
+
 void xss_renderer::handle_text(const str& text, param_list* args)
   {
     items_.push_back(ItemRenderer(new text_renderer(text)));
@@ -279,7 +311,7 @@ void xss_renderer::handle_text(const str& text, param_list* args)
 void xss_renderer::handle_code(const str& text, param_list* args)
   {
     xss_code_renderer* result = new xss_code_renderer();
-    result->compile(text, args, context_); 
+    result->compile(text, args, context_, file_); 
 
     items_.push_back(ItemRenderer(result));
   }
@@ -287,7 +319,7 @@ void xss_renderer::handle_code(const str& text, param_list* args)
 void xss_renderer::handle_expression(const str& text, param_list* args)
   {
     xss_expression_renderer* result = new xss_expression_renderer();
-    result->compile(text, args, context_); 
+    result->compile(text, args, context_, file_); 
 
     items_.push_back(ItemRenderer(result));
   }
@@ -295,7 +327,7 @@ void xss_renderer::handle_expression(const str& text, param_list* args)
 void xss_renderer::handle_class(const str& text, param_list* args)
   {
     class_renderer* result = new class_renderer();
-    result->compile(text, args, context_); 
+    result->compile(text, args, context_, params_, file_); 
 
     items_.push_back(ItemRenderer(result));
   }
@@ -360,7 +392,7 @@ void xss_renderer::handle_instance(const str& text, param_list* args)
 		xs_utils xs;
 
     code_context code_ctx = context_->get_compile_context();
-    xs.compile_implicit_instance(text, instance, code_ctx);
+    xs.compile_implicit_instance(text, instance, code_ctx, file_);
 
 		context_->register_symbol(RESOLVE_INSTANCE, id, instance);
   }

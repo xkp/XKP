@@ -1,0 +1,2 @@
+<xss:parameter id="obj"/>
+var <xss:e v="obj.output_id"/> = new ms.state.Sequence();

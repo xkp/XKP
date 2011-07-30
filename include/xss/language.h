@@ -94,6 +94,8 @@ struct lang_utils
     static int     operator_prec(operator_type op);
     static XSSType code_type(code& code, XSSContext ctx);
     static XSSType expr_type(expression& expr, XSSContext ctx);
+    static str wind(const std::vector<str> path);
+    static std::vector<str> unwind(const str& path);
 
     template <typename T>
     static str render_expression(expression& expr, XSSContext ctx)

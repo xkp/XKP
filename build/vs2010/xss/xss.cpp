@@ -80,16 +80,25 @@ int main(int argc, char* argv[])
     catch(xs_error xse)
       {
         succeeded = false;
+
         print_error(xse.data);
       }
     catch(xss_error xsse)
       {
         succeeded = false;
+
+        XSSRenderer renderer = compiler->current_renderer();
+        if (renderer)
+          {
+            str file = renderer->file().string();
+            xsse.data.add("file", file);
+          }
         print_error(xsse.data);
       }
     catch(runtime_error rte)
       {
         succeeded = false;
+
         print_error(rte.data);
       }
 		//catch(type_mismatch tm)

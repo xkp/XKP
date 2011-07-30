@@ -1,12 +1,10 @@
 
 on render_instances()
 {
-    for(var iii in instances)
-    {
-	}
-
+	compiler.log("Rendering jQuery...");
+    
 	//generate application code	
-    compiler.xss("instance.xss", application);
+	//compiler.xss("instance.xss", application);
 
 	//and then instances
     for(var i in instances)

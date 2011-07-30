@@ -12,6 +12,7 @@ const str SDupType("Duplicate type");
 const str SContextHasNoPath("Requesting path on a context without it");
 const str SDuplicateSymbol("A symbol with this name already exists");
 const str SEmptyArrayType("Arrays must have an inner type");
+const str SCannotResolve("Cannot resolve");
 
 str xss_utils::var_to_string(variant& v)
   {
@@ -65,6 +66,8 @@ xss_context::xss_context(XSSContext parent, fs::path path):
   code_scope_(),
   got_dsls_(false)
   {
+    code_types_.add_type<xss_object>("object");
+    code_types_.add_type<DynamicArray>("array");
   }
 
 XSSType xss_context::get_type(const str& type)
@@ -409,10 +412,80 @@ bool xss_context::resolve(const str& id, resolve_info& info)
     return parent_? parent_->resolve(id, info) : false;
   }
 
-variant xss_context::resolve_path(const std::vector<str>& path)
+variant xss_context::resolve_path(const std::vector<str>& path, XSSObject base, str& result)
   {
-    assert(false);
-    return variant();
+    XSSObject obj = base;
+    str inst_name;
+		bool first = true;
+    for(size_t idx = 0; idx < path.size(); idx++)
+      {
+        inst_name = path[idx];
+
+        resolve_info ri;
+				if (obj)
+					{
+            resolve_info left;
+            left.what  = RESOLVE_INSTANCE;
+            left.value = obj; 
+
+            ri.left = &left;
+
+            if (!resolve(inst_name, ri))
+              {
+                param_list error;
+                error.add("id", SContextError);
+                error.add("desc", SCannotResolve);
+                error.add("instance", result);
+
+                xss_throw(error);
+              }
+						
+            switch(ri.what)
+              {
+                case RESOLVE_PROPERTY:
+                  {
+						        XSSProperty prop	= ri.value;
+                    result += lang_->resolve_separator(obj) + prop->render_get();
+                    break;
+                  }
+                default:
+                  assert(false); //use case
+              }
+					}
+        else
+          {
+            if (!resolve(inst_name, ri))
+              {
+                param_list error;
+                error.add("id", SContextError);
+                error.add("desc", SCannotResolve);
+                error.add("instance", result);
+
+                xss_throw(error);
+              }
+						
+            switch(ri.what)
+              {
+                case RESOLVE_PROPERTY:
+                  {
+						        XSSProperty prop	= ri.value;
+                    result = lang_->resolve_separator(obj) + prop->render_get();
+                    break;
+                  }
+                
+                case RESOLVE_INSTANCE:
+                  {
+                    obj = ri.value;
+                    result = obj->output_id();
+                    break;
+                  }
+                default:
+                  assert(false); //use case
+              }
+          }
+      }
+
+		return obj;
   }
 
 void xss_context::register_symbol(RESOLVE_ITEM type, const str& id, variant symbol)
@@ -660,6 +733,11 @@ DynamicArray xss_object::events()
 void xss_object::set_id(const str& id)
   {
     id_ = id;
+  }
+
+void xss_object::set_output_id(const str& id)
+  {
+    output_id_ = id;
   }
 
 void xss_object::set_type_name(const str& id)
@@ -959,6 +1037,19 @@ str xss_property::render_value()
       }
 
     return xss_utils::var_to_string(value_);
+  }
+
+str xss_property::render_get()
+  {
+    str name = output_id();
+
+    str get_fn = variant_cast<str>(dynamic_get(this, "get_fn"), str()); 
+    if (!get_fn.empty())
+      return get_fn + "()";
+    else if (!get.empty())
+      return name + "_get()";
+
+    return name;
   }
 
 //xss_event

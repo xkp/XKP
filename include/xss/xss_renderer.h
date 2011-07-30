@@ -72,10 +72,12 @@ namespace xkp
         virtual void                      append(const str& what);
         virtual void                      append_at(const str& what, const str& marker);
         virtual XSSContext                context();
+        virtual fs::path                  file();
       private:
         XSSContext  context_;
         XSSCompiler compiler_;
         str         result_; //td: !!! makes the whole thing single threaded
+        fs::path    file_;
 
 			  //markers, this simplifies the xss code in ways it didnt expect
 			  struct marker_info

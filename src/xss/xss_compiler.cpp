@@ -44,6 +44,8 @@ const str SXSSNeedsFile("compiler.xss() needs a xss file to render");
 const str SInjectingEventsAtTheWrongTime("You must be rendering an application in order to inject events");
 const str SInjectingEventsOnNoRenderer("You must be rendering an application in order to inject events (#app)");
 const str SInjectRequiresAnEvent("You must pass an event name to compiler.inject()");
+const str SCannotParseExpression("Cannot parse expression");
+const str SInstanceNotFoundInIdiom("Instance not found in any idiom");
 
 //xss_application_renderer
 xss_application_renderer::xss_application_renderer(fs::path entry_point, Language lang, XSSCompiler compiler):
@@ -103,6 +105,31 @@ void xss_application_renderer::output_path(fs::path path)
 void xss_application_renderer::set_output_path(const str& path)
   {
     output_path_ = path;
+  }
+
+XSSModule xss_application_renderer::instance_idiom(XSSObject inst)
+  {
+    std::vector<XSSModule>::iterator it = modules_.begin();
+    std::vector<XSSModule>::iterator nd = modules_.end();
+    for(; it != nd; it++)
+      {
+        XSSModule mod = *it;
+        DynamicArray instances = mod->instances();
+        
+        std::vector<variant>::iterator rit = instances->ref_begin();
+        std::vector<variant>::iterator rnd = instances->ref_end();
+        for(; rit != rnd; rit++)
+          {
+            XSSObject robj = variant_cast<XSSObject>(*rit, XSSObject());
+            if (!robj)
+              continue;
+
+              if (robj == inst)
+                return mod;
+          }
+      }
+
+    return XSSModule();
   }
 
 void xss_application_renderer::set_target(const str& target)
@@ -165,6 +192,21 @@ pre_process_result xss_module::pre_process(XSSObject obj, XSSObject parent)
       }
 
     return PREPROCESS_KEEPGOING;
+  }
+
+DynamicArray xss_module::instances()
+  {
+    return instances_;
+  }
+
+fs::path xss_module::path()
+  {
+    return path_;
+  }
+
+void xss_module::set_path(fs::path p)
+  {
+    path_ = p;
   }
 
 void xss_module::register_instance(XSSObject obj)
@@ -297,8 +339,18 @@ void xss_compiler::xss(const param_list params)
     XSSRenderer r   = current_renderer();
     XSSContext  ctx = r->context();
 
-    fs::path path = ctx->path() / file_name;
-    XSSRenderer result = compile_xss_file(path, ctx);
+    //resolve file name
+    fs::path file(file_name);
+    if (!file.is_complete())
+      {
+        file = vm::instance().file();
+        if (file.empty())
+          file = ctx->path() / file_name;
+        else
+          file = file.parent_path() / file_name;
+      }
+
+    XSSRenderer result = compile_xss_file(file, ctx);
     
     //match the parameters, by order
     //td: !!! please get parameter names
@@ -317,9 +369,9 @@ void xss_compiler::xss(const param_list params)
 
       }
 
-    push_renderer(result);
     r->append(result->render(XSSObject(), &result_params)); //td: change dynamic methods to return a variant
-    pop_renderer();
+    //push_renderer(result);
+    //pop_renderer();
   }
 
 void xss_compiler::inject(const param_list params)
@@ -399,6 +451,128 @@ void xss_compiler::log(const param_list params)
       }
 	}
 
+bool xss_compiler::parse_expression(variant v)
+	{
+		if (!v.is<str>())
+			return false;
+
+		str s = variant_cast<str>(v, str());
+		xs_compiler compiler;
+		expression expr;
+		return compiler.compile_expression(s, expr);
+	}
+
+str xss_compiler::render_expression(const str& expr, XSSObject this_)
+	{
+		xs_utils	 xs;
+		expression e;
+		if (!xs.compile_expression(expr, e))
+			{
+				param_list error;
+				error.add("id", SProjectError);
+				error.add("desc", SCannotParseExpression);
+				error.add("expression", expr);
+
+				xss_throw(error);
+			}
+
+    XSSContext ctx  = current_context();
+    Language   lang = ctx->get_language();
+    
+    //compile
+    XSSContext my_ctx(new xss_context(ctx));
+		my_ctx->set_this(this_);
+
+    variant ev = lang->compile_expression(e, my_ctx);
+    IXSSRenderer* rend = variant_cast<IXSSRenderer*>(ev, null); assert(rend);
+
+    //and render
+		return rend->render(this_, null); 
+	}
+
+str xss_compiler::replace_this(const str& s, const str& this_)
+	{
+		str    result;
+		size_t curr = 0;
+		size_t pos = s.find("this");
+		while(pos != str::npos)
+			{
+				result += s.substr(curr, pos - curr) + this_;
+				curr = pos + 4;
+				pos = s.find("this", curr);
+			}
+
+		result += s.substr(curr, s.size() - curr);
+		return result;
+	}
+
+variant xss_compiler::resolve_property(const str& prop, variant parent)
+	{
+    XSSContext ctx = current_context();
+
+		XSSObject base;
+		str				path_str;
+    str       pth;
+
+		if (parent.is<str>())
+			{
+				str id = variant_cast<str>(parent, str());
+        base = ctx->resolve_path(lang_utils::unwind(id), XSSObject(), pth);
+				path_str = id;
+			}
+		else if (parent.is<XSSObject>())
+			base = parent;
+
+		std::vector<str> path = lang_utils::unwind(prop); assert(!path.empty());
+		str prop_name = path[path.size() - 1];
+		path.erase(path.end() - 1);
+
+		XSSObject obj = ctx->resolve_path(path, base, pth);
+		if (!obj)
+			return variant();
+
+		XSSProperty propobj = obj->get_property(prop_name);
+    XSSObject   result(new xss_object);
+
+		if (propobj)
+			result->add_property("prop", propobj);
+		else
+			result->add_property("prop", variant());
+
+		result->add_property("prop_name", prop_name);
+		result->add_property("path", pth);
+		result->add_property("obj", obj);
+
+		return result;
+	}
+
+str xss_compiler::renderer_file(const str& file)
+  {
+    XSSRenderer r = current_renderer();
+    fs::path    p = fs::system_complete(r->context()->path() / file);
+
+    return p.string();
+  }
+
+str xss_compiler::idiom_path(XSSObject obj, const str& file)
+  {
+    XSSContext             ctx = current_context();
+    XSSApplicationRenderer app = ctx->resolve("#app");
+
+    XSSModule idiom = app->instance_idiom(obj);
+    if (!idiom)
+      {
+        param_list error;
+        error.add("id", SProjectError);
+        error.add("desc", SInstanceNotFoundInIdiom);
+        error.add("object", obj->id());
+        xss_throw(error);
+      }
+
+    fs::path p = idiom->path() / file;
+    return p.string();
+  }
+
 void xss_compiler::push_renderer(XSSRenderer renderer)
   {
     renderers_.push(renderer);
@@ -411,7 +585,8 @@ void xss_compiler::pop_renderer()
 
 XSSRenderer xss_compiler::current_renderer()
   {
-    assert(!renderers_.empty());
+    if(renderers_.empty())
+      return XSSRenderer();
     return renderers_.top();
   }
 
@@ -522,6 +697,8 @@ XSSModule xss_compiler::read_module(const str& src, XSSApplicationRenderer app, 
     XSSModule result(new xss_module(app->context()));
     result->copy(module_data);
     
+    result->set_path(path.parent_path());
+    
     //read types
     read_types(module, app, result);
 
@@ -532,7 +709,8 @@ XSSModule xss_compiler::read_module(const str& src, XSSApplicationRenderer app, 
         xs_utils xs;
 
         code_context code_ctx = ctx->get_compile_context();
-        xs.compile_implicit_instance(load_file(ctx->path() / code_file), DynamicObject(result), code_ctx);
+        fs::path file = ctx->path() / code_file;
+        xs.compile_implicit_instance(load_file(file), DynamicObject(result), code_ctx, file);
       }
 
     return result;
@@ -998,7 +1176,7 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 			{
 				xs_instance& instance_ast = *iit;
 				str					 pth;
-				XSSObject		 instance_instance = ctx->resolve_path(instance_ast.id);
+				XSSObject		 instance_instance = ctx->resolve_path(instance_ast.id, XSSObject(), pth);
 
 				XSSContext ictx(new xss_context(ctx));
 				ictx->set_this(instance_instance);
@@ -1020,6 +1198,8 @@ void xss_compiler::compile_xs_file(fs::path file, xs_container& result)
 
 str xss_compiler::load_file(fs::path fname)
   {
+    fs::path scp = fs::system_complete(fname);
+    bool exists = fs::exists(fname);
     //td: please do this seriously
     std::ifstream ifs(fname.string().c_str());
 		if (!ifs.good())
@@ -1078,18 +1258,18 @@ void xss_compiler::pre_process(XSSApplicationRenderer renderer, XSSObject obj, X
         pre_process_result result = mod->pre_process(obj, parent); 
         if (result == PREPROCESS_HANDLED)
           return;
-
-        std::vector<variant> children_copy = obj->children()->ref(); //copy array, in case it gets modified
-        std::vector<variant>::iterator cit = children_copy.begin();
-        std::vector<variant>::iterator cnd = children_copy.end();
-
-        for(; cit != cnd; cit++)
-          {
-            XSSObject child = *cit;
-            pre_process(renderer, child, obj);
-          }
-
       }
+
+    std::vector<variant> children_copy = obj->children()->ref(); //copy array, in case it gets modified
+    std::vector<variant>::iterator cit = children_copy.begin();
+    std::vector<variant>::iterator cnd = children_copy.end();
+
+    for(; cit != cnd; cit++)
+      {
+        XSSObject child = *cit;
+        pre_process(renderer, child, obj);
+      }
+
   }
 
 void xss_compiler::run()
@@ -1121,3 +1301,11 @@ void xss_compiler::run()
           output_file(output_path_ / out_file, result);
       }
   }
+
+XSSContext xss_compiler::current_context()
+  {
+    XSSRenderer rend = current_renderer();
+    if (rend)
+      return rend->context();
+    return XSSContext();
+ }

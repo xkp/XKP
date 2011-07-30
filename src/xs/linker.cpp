@@ -205,9 +205,9 @@ code_linker::code_linker(code_context& context):
       }
   }
 
-ByteCode code_linker::link()
+ByteCode code_linker::link(fs::path file)
   {
-    return ByteCode( new byte_code(code_, constants_) );
+    return ByteCode( new byte_code(code_, constants_, file) );
   }
 
 void code_linker::link(ByteCode result)
@@ -1843,7 +1843,7 @@ DynamicObject base_xs_linker::resolve_instance(const str& name)
 
 struct decode_property
   {
-    decode_property(code_context& ctx, xs_property& info, DynamicObject output)
+    decode_property(code_context& ctx, xs_property& info, DynamicObject output, fs::path file)
       {
         itm.type  = info.type.empty()? null : ctx.types_->get_type(info.type);
         itm.flags = DYNAMIC_ACCESS;
@@ -1879,8 +1879,8 @@ struct decode_property
         if (!info.get.empty() && !info.set.empty())
           {
             //get & set
-            get_ref = ByteCode( new byte_code );
-            set_ref = ByteCode( new byte_code );
+            get_ref = ByteCode( new byte_code(file) );
+            set_ref = ByteCode( new byte_code(file) );
 
             get_code = info.get;
             set_code = info.set;
@@ -1894,7 +1894,7 @@ struct decode_property
             int idx = output->add_anonymous(value);
             itm.get = Getter( new anonymous_getter(idx) );
 
-            set_ref  = ByteCode( new byte_code );
+            set_ref  = ByteCode( new byte_code(file) );
             itm.set  = Setter( new code_setter(set_ref, idx) );
 
             set_code = info.set;
@@ -1902,7 +1902,7 @@ struct decode_property
         else if (!info.get.empty())
           {
             //read only
-            get_ref  = ByteCode( new byte_code );
+            get_ref  = ByteCode( new byte_code(file) );
             get_code = info.get;
             itm.get  = Getter( new code_getter(get_ref) );
           }
@@ -1981,8 +1981,8 @@ void base_xs_linker::property_(xs_property& info)
     if (!info.get.empty() && !info.set.empty())
       {
         //get & set
-        ByteCode get_code = ByteCode( new byte_code );
-        ByteCode set_code = ByteCode( new byte_code );
+        ByteCode get_code = ByteCode( new byte_code(file_) );
+        ByteCode set_code = ByteCode( new byte_code(file_) );
 
         itm.get   = Getter( new code_getter(get_code) );
         itm.set   = Setter( new code_setter(set_code) );
@@ -2000,7 +2000,7 @@ void base_xs_linker::property_(xs_property& info)
         int idx = output_->add_anonymous(value);
         itm.get = Getter( new anonymous_getter(idx) );
 
-        ByteCode set_code = ByteCode( new byte_code );
+        ByteCode set_code = ByteCode( new byte_code(file_) );
         itm.set           = Setter( new code_setter(set_code, idx) );
 
         link_item sli(set_code, info.set, ctx_.this_type);
@@ -2009,7 +2009,7 @@ void base_xs_linker::property_(xs_property& info)
     else if (!info.get.empty())
       {
         //read only
-        ByteCode get_code = ByteCode( new byte_code );
+        ByteCode get_code = ByteCode( new byte_code(file_) );
         itm.get = Getter( new code_getter(get_code) );
         link_item gli(get_code, info.get, ctx_.this_type);
         link_.push_back(gli);
@@ -2027,10 +2027,10 @@ void base_xs_linker::property_(xs_property& info)
 
 struct decode_method
   {
-    decode_method(xs_method& info, code_context& ctx)
+    decode_method(xs_method& info, code_context& ctx, fs::path file)
       {
         itm.flags = DYNAMIC_ACCESS;
-        bc        = ByteCode( new byte_code );
+        bc        = ByteCode( new byte_code(file) );
         itm.exec  = Executer( new code_executer(bc) );
         cde       = info.cde;
 
@@ -2078,7 +2078,7 @@ void base_xs_linker::method_(xs_method& info)
 
     schema_item itm;
     itm.flags          = DYNAMIC_ACCESS;
-    ByteCode exec_code = ByteCode( new byte_code );
+    ByteCode exec_code = ByteCode( new byte_code(file_) );
     itm.exec           = Executer( new code_executer(exec_code) );
 
     ParamList pl = ParamList(new param_list);
@@ -2170,7 +2170,7 @@ void base_xs_linker::event_(xs_event& info)
 
     schema_item itm;
     itm.flags          = DYNAMIC_ACCESS|EVENT;
-    ByteCode exec_code = ByteCode( new byte_code );
+    ByteCode exec_code = ByteCode( new byte_code(file_) );
     itm.get            = Getter( new const_getter((int)id) ); //td: declare uint
     itm.exec           = Executer( new code_executer(exec_code) );
 
@@ -2282,13 +2282,13 @@ void base_xs_linker::instance_(xs_instance& info)
         xs_throw(error);
       }
 
-    instance_linker il(ctx_, instance);
+    instance_linker il(ctx_, instance, file_);
     il.link(info);
   }
 
 void base_xs_linker::class_(xs_class& info)
   {
-    class_linker cl(ctx_);
+    class_linker cl(ctx_, file_);
     cl.link(info);
   }
 
@@ -2359,7 +2359,7 @@ void base_xs_linker::behaveas_(xs_implement_behaviour& info)
         code_linker cl(bind_ctx);
         info.cde.visit( &cl );
 
-        ByteCode bc = cl.link();
+        ByteCode bc = cl.link(file_);
         execution_context ec(bc, bind_ctx.this_);
         ec.execute();
       }
@@ -2369,7 +2369,7 @@ void base_xs_linker::behaveas_(xs_implement_behaviour& info)
     //so we'll stash then on a context
     editable_scope link_symbols;
     bind_ctx.types_ = ctx_.types_;
-    prelink_visitor plv(bind_ctx, &link_symbols, output_);
+    prelink_visitor plv(bind_ctx, &link_symbols, output_, file_);
     behaviour->privates().visit(&plv);
 
     //and before we're ready to finally link the code, we'll add
@@ -2387,7 +2387,7 @@ void base_xs_linker::behaveas_(xs_implement_behaviour& info)
     link_ctx.this_type = ctx_.this_type;
     link_ctx.scope_    = &code_scope;
 
-    base_xs_linker linker(link_ctx, editable_output_); //note the output is the actual object being behaved-assed
+    base_xs_linker linker(link_ctx, file_, editable_output_); //note the output is the actual object being behaved-assed
 
     linker.output_ = output_;
     linker.link(behaviour->publics());
@@ -2412,8 +2412,8 @@ void base_xs_linker::dsl_(dsl& info)
   }
 
 //class_linker
-class_linker::class_linker(code_context& ctx):
-  base_xs_linker(ctx),
+class_linker::class_linker(code_context& ctx, fs::path file):
+  base_xs_linker(ctx, file),
   result_(null)
   {
   }
@@ -2452,8 +2452,8 @@ void class_linker::link(xs_class& info)
   }
 
 //instance_linker
-instance_linker::instance_linker(code_context& ctx, DynamicObject instance):
-  base_xs_linker(ctx),
+instance_linker::instance_linker(code_context& ctx, DynamicObject instance, fs::path file):
+  base_xs_linker(ctx, file),
   instance_(instance)
   {
   }
@@ -2469,8 +2469,8 @@ void instance_linker::link(xs_instance& info)
   }
 
 //implicit_instance_linker
-implicit_instance_linker::implicit_instance_linker(code_context& ctx, DynamicObject instance):
-  base_xs_linker(ctx),
+implicit_instance_linker::implicit_instance_linker(code_context& ctx, DynamicObject instance, fs::path file):
+  base_xs_linker(ctx, file),
   instance_(instance)
   {
   }
@@ -2520,7 +2520,7 @@ void behaviour_linker::link(xs_behaviour& info)
 void prelink_visitor::property_(xs_property& info)
   {
     assert(editable_);
-    decode_property prop(ctx_, info, output_);
+    decode_property prop(ctx_, info, output_, file_);
 
     if (!prop.get_code.empty())
       {
@@ -2545,7 +2545,7 @@ void prelink_visitor::property_(xs_property& info)
 
 void prelink_visitor::method_(xs_method& info)
   {
-    decode_method meth(info, ctx_);
+    decode_method meth(info, ctx_, file_);
 
     pre_link pl;
     pl.bc   = meth.bc;

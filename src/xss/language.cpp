@@ -767,3 +767,37 @@ XSSType lang_utils::expr_type(expression& expr, XSSContext ctx)
 
     return result.get();
   }
+
+str lang_utils::wind(const std::vector<str> path)
+	{
+		str result;
+		for(size_t i = 0; i < path.size(); i++)
+			result += path[i] + '.';
+
+		if (!result.empty())
+			result.erase(result.end() - 1);
+
+		return result;
+	}
+
+std::vector<str> lang_utils::unwind(const str& path)
+	{
+		std::vector<str> result;
+		size_t pos = 0;
+		while(pos < path.size())
+			{
+				size_t last_pos = pos;
+				pos = path.find('.', pos);
+				if (pos != str::npos)
+					{
+						result.push_back(path.substr(last_pos, pos - last_pos));
+						pos++;
+					}
+				else
+					{
+						result.push_back(path.substr(last_pos, path.size() - last_pos));
+					}
+			}
+
+		return result;
+	}

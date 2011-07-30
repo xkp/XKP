@@ -48,6 +48,7 @@ namespace xkp
       virtual void                      append(const str& what)                       = 0;
       virtual void                      append_at(const str& what, const str& marker) = 0;
       virtual XSSContext                context()                                     = 0;
+      virtual fs::path                  file()                                        = 0;
     };
 
   //classes
@@ -64,6 +65,7 @@ namespace xkp
         fs::path   output_path();
         void       output_path(fs::path path);
         void       set_output_path(const str& path); 
+        XSSModule  instance_idiom(XSSObject inst);
       public:
         std::vector<XSSModule>& modules();
       private:
@@ -87,12 +89,16 @@ namespace xkp
         xss_module(XSSContext ctx);
       public:
         pre_process_result pre_process(XSSObject obj, XSSObject parent); 
+        DynamicArray       instances();
+        fs::path           path(); 
+        void               set_path(fs::path p); 
       public:
         //glue visibility
         DynamicArray instances_;
       private:
         XSSContext   ctx_;
         size_t       ev_pprocess_;
+        fs::path     path_; 
 
         void register_instance(XSSObject obj);
     };
@@ -110,11 +116,18 @@ namespace xkp
         void        xss(const param_list params);
         void        inject(const param_list params);
         void        log(const param_list params);
+        bool        parse_expression(variant v);
+        str         render_expression(const str& expr, XSSObject this_);
+        str         replace_this(const str& s, const str& this_);
+        variant     resolve_property(const str& prop, variant parent);
+        str         renderer_file(const str& file);
+        str         idiom_path(XSSObject obj, const str& file);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
         void        pop_renderer();
         XSSRenderer current_renderer();
+        XSSContext  current_context();
 		  private:
         std::vector<XSSApplicationRenderer> applications_;
         std::stack<XSSRenderer>             renderers_;
@@ -123,18 +136,18 @@ namespace xkp
         fs::path                            output_path_;
         XSSObject                           options_;
         
-        XSSObject read_project(fs::path xml_file);
-        void      read_application_types(std::vector<XSSObject> & applications);
-        XSSModule read_module(const str& src, XSSApplicationRenderer app, XSSObject module);
-        void      read_types(XSSObject module_data, XSSApplicationRenderer app, XSSModule module);
-        void      read_includes(XSSObject project_data);
-        void      read_include(fs::path def, fs::path src, XSSContext ctx);
-        void      read_application(const str& app_file);
-        void      compile_ast(xs_container& ast, XSSContext ctx);
-        bool      options(const str& name);
-        Language  get_language(const str& name);
-        void      pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent);
-        void      run();
+        XSSObject   read_project(fs::path xml_file);
+        void        read_application_types(std::vector<XSSObject> & applications);
+        XSSModule   read_module(const str& src, XSSApplicationRenderer app, XSSObject module);
+        void        read_types(XSSObject module_data, XSSApplicationRenderer app, XSSModule module);
+        void        read_includes(XSSObject project_data);
+        void        read_include(fs::path def, fs::path src, XSSContext ctx);
+        void        read_application(const str& app_file);
+        void        compile_ast(xs_container& ast, XSSContext ctx);
+        bool        options(const str& name);
+        Language    get_language(const str& name);
+        void        pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent);
+        void        run();
       private:
         //id gen
         typedef std::map<str, int> genid_list;
@@ -154,10 +167,17 @@ struct xss_compiler_schema : object_schema<xss_compiler>
   {
     virtual void declare()
       {
-        method_<str, 1>("genid",	 &xss_compiler::genid);
         dynamic_method_ ("xss",    &xss_compiler::xss);
         dynamic_method_ ("inject", &xss_compiler::inject);
         dynamic_method_ ("log",    &xss_compiler::log);
+
+        method_<str,      1>("genid",	            &xss_compiler::genid);
+        method_<bool,     1>("parse_expression",	&xss_compiler::parse_expression);
+        method_<str,      2>("render_expression", &xss_compiler::render_expression);
+        method_<str,	    2>("replace_this",			&xss_compiler::replace_this);
+        method_<variant,  2>("resolve_property",	&xss_compiler::resolve_property);
+        method_<str,      1>("renderer_file",	    &xss_compiler::renderer_file);
+        method_<str,      2>("idiom_path",	      &xss_compiler::idiom_path);
       }
   };
 

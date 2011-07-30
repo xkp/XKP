@@ -10,6 +10,10 @@
 #include "vm.h"
 #include "behaviour.h"
 
+#include <boost/filesystem.hpp>
+
+namespace fs = boost::filesystem;
+
 namespace xkp
 {
   //forwards
@@ -23,7 +27,7 @@ namespace xkp
       code_linker();
       code_linker(code_context& context);
 
-      ByteCode      link();
+      ByteCode      link(fs::path file);
       void          link(ByteCode result);
       void          link(byte_code* result);
       code_context& context();
@@ -141,9 +145,10 @@ namespace xkp
 
   struct base_xs_linker : xs_visitor
     {
-      base_xs_linker(code_context& ctx, IEditableObject* editable_output = null):
+      base_xs_linker(code_context& ctx, fs::path file, IEditableObject* editable_output = null):
         ctx_(ctx),
-        editable_output_(editable_output)
+        editable_output_(editable_output),
+        file_(file)
         {
           output_ = variant_cast<DynamicObject>(ctx_.this_, DynamicObject());
         }
@@ -186,11 +191,12 @@ namespace xkp
         code_context           ctx_;
         DynamicObject          output_;
         IEditableObject*       editable_output_;
+        fs::path               file_;
     };
 
   struct class_linker : base_xs_linker
     {
-      class_linker(code_context& ctx);
+      class_linker(code_context& ctx, fs::path file);
 
       void link(xs_class& info);
 
@@ -200,7 +206,7 @@ namespace xkp
 
   struct instance_linker : base_xs_linker
     {
-      instance_linker(code_context& ctx, DynamicObject instance);
+      instance_linker(code_context& ctx, DynamicObject instance, fs::path file);
 
       void link(xs_instance& info);
 
@@ -209,7 +215,7 @@ namespace xkp
 
   struct implicit_instance_linker : base_xs_linker
     {
-      implicit_instance_linker(code_context& ctx, DynamicObject instance);
+      implicit_instance_linker(code_context& ctx, DynamicObject instance, fs::path file);
 
       void link(xs_container& info);
 
@@ -229,10 +235,11 @@ namespace xkp
 
   struct prelink_visitor : base_xs_visitor
     {
-      prelink_visitor(code_context& ctx, IEditableObject* editable, DynamicObject output) :
+      prelink_visitor(code_context& ctx, IEditableObject* editable, DynamicObject output, fs::path file) :
         ctx_(ctx),
         editable_(editable),
-        output_(output)
+        output_(output),
+        file_(file)
         {
         }
 
@@ -254,6 +261,7 @@ namespace xkp
         code_context     ctx_;
         IEditableObject* editable_;
         DynamicObject    output_;
+        fs::path         file_;
     };
 
   struct name_collect_visitor : implemented_xs_visitor

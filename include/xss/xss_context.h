@@ -70,6 +70,7 @@ class xss_object : public editable_object<xss_object>,
 			DynamicArray	events();
 
       void set_id(const str& id);
+      void set_output_id(const str& id);
       void set_type_name(const str& id);
 		public:
       //misc
@@ -231,7 +232,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       variant resolve(const str& id, RESOLVE_ITEM item_type = RESOLVE_ANY);
       bool    resolve(const str& id, resolve_info& info);
       variant resolve(const str& id, XSSObject instance, RESOLVE_ITEM item_type = RESOLVE_ANY);
-      variant resolve_path(const std::vector<str>& path);
+      variant resolve_path(const std::vector<str>& path, XSSObject base, str& result);
       void    register_symbol(RESOLVE_ITEM type, const str& id, variant symbol);
     protected:
       typedef std::map<str, XSSType>  type_list;
@@ -284,6 +285,7 @@ class xss_property : public xss_object
 			XSSType	  type;
 
       str render_value();
+      str render_get();
 
 			//td: revise interface
 			//variant get_value();
@@ -331,10 +333,14 @@ struct xss_object_schema : editable_object_schema<T>
     virtual void declare()
       {
 				this->template property_<str>         ("id",          &T::id_);
+				this->template property_<str>         ("output_id",   &T::output_id, &T::set_output_id);
+				this->template property_<DynamicArray>("children",		&T::children_);
 				this->template property_<DynamicArray>("properties",  &T::properties_);
 				this->template property_<DynamicArray>("events",			&T::events_);
 				this->template property_<DynamicArray>("methods",		  &T::methods_);
 				this->template property_<DynamicArray>("children",		&T::children_);
+				this->template property_<str>         ("type_name",		&T::type_name_);
+				this->template property_<str>         ("class_name",	&T::type_name_);
 		}
   };
 

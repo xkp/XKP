@@ -1,0 +1,7 @@
+<application src="ms1.app.xs">
+    <sequence id="test_sequence">
+        <every t="0.3">
+            <run method="foo"/>
+        </every>            
+    </sequence>
+</application>
