@@ -12,6 +12,7 @@
 #include "xs/compiler.h"
 
 #include <boost/functional/hash.hpp>
+#include <iostream>
 
 using namespace xkp;
 
