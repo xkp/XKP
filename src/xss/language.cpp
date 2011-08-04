@@ -451,7 +451,7 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
 
 				case op_parameter:
           {
-						//do nothing
+						stack_.pop(); //pop parameter name
             break;
           }
 

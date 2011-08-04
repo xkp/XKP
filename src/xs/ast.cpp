@@ -42,7 +42,7 @@ const int operand_count[] =
     1, //op_call,
     2, //op_func_call
     1, //op_array,
-    0, //op_parameter
+    1, //op_parameter
   };
 
 //expression
@@ -70,7 +70,10 @@ void expression::push_operator(operator_type op)
 								{
 									operator_type ot = ii;
 									if (ot == op_parameter)
-										continue; //ignore
+                    {
+                      dot_pos--; //skip param name
+										  continue; 
+                    }
 
 									pop_count += operand_count[ot];
 								}
@@ -91,6 +94,8 @@ void expression::push_operator(operator_type op)
 									operator_type ot = ii;
 									found = ot == op_dot;
 								}
+              else
+                found = false;
 					}
 
 				if (found)

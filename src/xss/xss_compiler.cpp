@@ -748,6 +748,7 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
 
             XSSType type(new xss_type());
             type->set_id(type_data->id());
+            type->set_output_id(type_data->output_id());
             type->set_definition(type_data);
 
             str class_name = type_data->type_name();

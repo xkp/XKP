@@ -2,25 +2,6 @@
 
 
 <xss:code>
-
-//instantiate
-if (it.instantiator)
-{
-    //the instantiator file will be relative to its idiom (path wise)
-    //this call to xss happens relative to this file (instance.xss). 
-    //They might not be in the same place.
-    
-    string file = compiler.idiom_path(it, it.instantiator);
-    compiler.xss(file, it);
-}    
-else
-{
-    out()
-    {
-        var <xss:e value="it.output_id"/> = {};
-    }
-}
-
 //render properties
 for(var prop in it.properties)
 {
@@ -143,11 +124,11 @@ for(var mthd in it.methods)
 	}
 }
 
-//render events as functions provided by jquery
+//render events as functions
 for(var ev in it.events)
 {
 	//remember every event could be impemented multiple times
-    string ev_name = it.id + "." + ev.name;
+  string ev_name = it.id + "." + ev.name;
 	var    impls   = ev.impls;
 	var    evargs  = ev.args;
 		

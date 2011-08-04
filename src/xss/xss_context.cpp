@@ -567,6 +567,9 @@ void xss_object::copy(XSSObject obj)
     if (id_.empty())
       id_ = obj->id();
 
+    if (output_id_.empty())
+      output_id_ = obj->output_id_;
+
     if (type_name_.empty())
       type_name_ = obj->type_name();
 
@@ -667,6 +670,14 @@ bool xss_object::resolve(const str& name, schema_item& result)
 		if (editable_object<xss_object>::resolve(name, result))
 			return true;
     
+    XSSObject child = find(name);
+    if (child)
+      {
+        result.flags = 0;
+        result.get   = Getter( new const_getter(child) ); 
+        return true;
+      }
+
     variant value;
     bool    read_only = false;
     if (type_ && type_->has(name))

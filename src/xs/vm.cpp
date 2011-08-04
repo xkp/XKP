@@ -57,6 +57,7 @@ const char* vm_operator_name[] =
     "",     //op_func_call
     "",     //op_array,
     "",     //op_parameter
+    "",     //op_parameter_name
   };
 
 operator_type vm_native_op[] =
@@ -99,6 +100,7 @@ operator_type vm_native_op[] =
     op_not, //op_func_call
     op_not, //op_array,
     op_not, //op_parameter
+    op_not, //op_parameter_name
   };
 
 //execution_context
@@ -461,23 +463,29 @@ variant execution_context::execute()
                 variant caller;
 
 								if (i.data.call_data.invert)
-									{
-										caller = pop();
+								  caller = pop();
 
+                if (i.data.call_data.named_params)
+                  {
+										for(int p = 0; p < i.data.call_data.param_count; p++)
+											{
+												str param_name = variant_cast<str>(pop(), str()); 
+                        if (!param_name.empty())
+                          pl.add(param_name, pop());
+                        else
+                          pl.add(pop());
+											}
+                  }
+                else
+                  {
 										for(int p = 0; p < i.data.call_data.param_count; p++)
 											{
 												pl.add(pop());
 											}
 									}
-								else
-									{
-										for(int p = 0; p < i.data.call_data.param_count; p++)
-											{
-												pl.add(pop());
-											}
 
-										caller = pop();
-									}
+								if (!i.data.call_data.invert)
+								  caller = pop();
 
                 if (caller.empty())
                   {
@@ -507,9 +515,24 @@ variant execution_context::execute()
               {
                 Executer call = pop();
                 param_list pl;
-                for(int p = 0; p < i.data.call_data.param_count; p++)
+
+                if (i.data.call_data.named_params)
                   {
-                    pl.add(pop());
+										for(int p = 0; p < i.data.call_data.param_count; p++)
+											{
+												str param_name = variant_cast<str>(pop(), str()); 
+                        if (!param_name.empty())
+                          pl.add(param_name, pop());
+                        else
+                          pl.add(pop());
+											}
+                  }
+                else
+                  {
+                    for(int p = 0; p < i.data.call_data.param_count; p++)
+                      {
+                        pl.add(pop());
+                      }
                   }
 
                 void* caller_id;

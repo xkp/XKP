@@ -1,5 +1,4 @@
 <project entry_point="../idioms/mutant-state/sequence_debug.xss" language="js" target="ms1.app.xml">
-    <idiom src="../idioms/jquery/module.xml"/>
     <idiom src="../idioms/mutant-state/sequence.xml"/>
 </project>
            

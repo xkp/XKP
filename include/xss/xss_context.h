@@ -269,24 +269,24 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
 //they are also vm friendly, unlike the low level xs's ast.
 class xss_property : public xss_object
   {
-		public:
-			xss_property();
-			xss_property(const xss_property& other);
-			xss_property(const str& name, XSSType type, variant value, XSSObject _this_);
-			xss_property(const str& name, XSSType type, variant value, variant _get, variant _set, XSSObject _this_);
+	  public:
+		  xss_property();
+			  xss_property(const xss_property& other);
+			  xss_property(const str& name, XSSType type, variant value, XSSObject _this_);
+			  xss_property(const str& name, XSSType type, variant value, variant _get, variant _set, XSSObject _this_);
 
-			virtual void copy(XSSObject obj);
+			  virtual void copy(XSSObject obj);
 
-      variant   get;
-			variant   set;
-			size_t    flags;
-			XSSObject this_;
-			variant   value_;
-			XSSType	  type;
+        variant   get;
+			  variant   set;
+			  size_t    flags;
+			  XSSObject this_;
+			  variant   value_;
+			  XSSType	  type;
 
-      str render_value();
-      str render_get();
-      str	render_set(const str& value);
+        str render_value();
+        str render_get();
+        str	render_set(const str& value);
   };
 
 class xss_event : public xss_object
@@ -337,6 +337,9 @@ struct xss_object_schema : editable_object_schema<T>
 				this->template property_<DynamicArray>("children",		&T::children_);
 				this->template property_<str>         ("type_name",		&T::type_name_);
 				this->template property_<str>         ("class_name",	&T::type_name_);
+				this->template property_<XSSType>     ("type",        &T::type_);
+
+        this->template method_<XSSProperty, 1>("get_property", &T::get_property);
 		}
   };
 

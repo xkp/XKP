@@ -67,9 +67,10 @@ namespace xkp
       instruction(instruction_type _id, unsigned char param_count, bool is_dynamic, bool invert): 
         id(_id)
         {
-          data.call_data.is_dynamic  = is_dynamic;
-					data.call_data.invert			 = invert;
-          data.call_data.param_count = param_count;
+          data.call_data.is_dynamic   = is_dynamic;
+					data.call_data.invert			  = invert;
+          data.call_data.param_count  = param_count;
+          data.call_data.named_params = false;
         }
     
       instruction(instruction_type _id, bool is_dynamic, bool invert_set): 
@@ -85,9 +86,10 @@ namespace xkp
           
           struct __call_data
             {
-              bool     is_dynamic  : 1;
-              bool     invert			 : 1;
-              unsigned param_count : 14;
+              bool     is_dynamic   : 1;
+              bool     invert			  : 1;
+              bool     named_params : 1;
+              unsigned param_count  : 13;
             }call_data;
 
           struct __set_data

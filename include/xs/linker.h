@@ -54,7 +54,7 @@ namespace xkp
         int     add_instruction( instruction_type i );
         int     add_instruction( instruction_type i, short data );
         void    instruction_data( int idx, short data );
-        int     add_call(instruction_type i, unsigned char param_count, bool is_dynamic, bool invert = false);
+        int     add_call(instruction_type i, unsigned char param_count, bool is_dynamic, bool named_params, bool invert = false);
         int     add_call(variant caller, const str& name, int param_count, bool is_dynamic, bool invert = false);
 				int			add_set(bool is_dynamic, bool invert = false);
         int     add_anonymous_local();
@@ -128,6 +128,7 @@ namespace xkp
         schema*           array_type_; //td: proper type expectancy
         loop_stack        loops_;
 				bool							resolving_assigner_;
+        std::vector<str>  param_names_;
 
         void    resolve_value(variant& arg, schema** type = null);
         void    resolve_operator(operator_type op, variant arg1, variant arg2, bool* dont_assign);
@@ -136,6 +137,7 @@ namespace xkp
         void    resolve_assign(const variant& arg, bool invert_set = false);
         void    add_fixup( int idx, fixup_dest dest );
         schema* add_stack_lookup(const str& query, schema* type);
+        bool    has_parameter_names();
     };
 
   struct dsl_linker

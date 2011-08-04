@@ -74,6 +74,7 @@ const char* operator_name[] =
     "",     //op_func_call
     "",     //op_array,
     "",     //op_parameter
+    "",     //op_parameter_name
   };
 
 //just a very bad name
@@ -117,6 +118,7 @@ operator_type native_op[] =
     op_not, //op_func_call
     op_not, //op_array,
     op_not, //op_parameter
+    op_not, //op_parameter_name
   };
 
 struct array_evaluator : expr_evaluator
@@ -751,14 +753,21 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
 
         case op_call:
           {
-            constant    arg_count = arg1;
-            int         args      = arg_count.value;
+            constant    arg_count    = arg1;
+            int         args         = arg_count.value;
+            bool        named_params = has_parameter_names();
 
             //pop the arguments
             for(int i = 0; i < args; i++)
               {
                 variant arg = stack_.top(); stack_.pop();
                 resolve_value(arg);
+
+                if (named_params)
+                  {
+                    str param_name = param_names_[i];
+                    add_instruction(i_load_constant, add_constant(param_name));
+                  }
               }
 
             assert(!stack_.empty());
@@ -791,16 +800,17 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
             else
               assert(false);
 
-            add_call(i_call, args, is_dyamic);
+            add_call(i_call, args, is_dyamic, named_params);
             stack_.push( already_in_stack(result_type) );
             break;
           }
 
         case op_func_call:
           {
-            expression_identifier name      = arg1;
-            constant              arg_count = arg2;
-            int                   args      = arg_count.value;
+            expression_identifier name          = arg1;
+            constant              arg_count     = arg2;
+            int                   args          = arg_count.value;
+            bool                  named_params  = has_parameter_names();
 
             //simple functions can be either:
             // - instantiation
@@ -821,6 +831,12 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
                   {
                     variant arg = stack_.top(); stack_.pop();
                     resolve_value(arg);
+
+                    if (named_params)
+                      {
+                        str param_name = param_names_[i];
+                        add_instruction(i_load_constant, add_constant(param_name));
+                      }
                   }
 
                 add_instruction(i_load_constant, add_constant(instantiator));
@@ -834,10 +850,16 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
                   {
                     variant arg = stack_.top(); stack_.pop();
                     resolve_value(arg);
+
+                    if (named_params)
+                      {
+                        str param_name = param_names_[i];
+                        add_instruction(i_load_constant, add_constant(param_name));
+                      }
                   }
 
                 add_instruction(i_load_constant, add_constant(this_item.exec));
-                add_call(i_this_call, args, this_item.flags & DYNAMIC_ACCESS );
+                add_call(i_this_call, args, this_item.flags & DYNAMIC_ACCESS, named_params);
                 stack_.push( already_in_stack(this_item.type) );
               }
             else if (!context_.this_.empty() &&
@@ -850,10 +872,16 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
                   {
                     variant arg = stack_.top(); stack_.pop();
                     resolve_value(arg);
+
+                    if (named_params)
+                      {
+                        str param_name = param_names_[i];
+                        add_instruction(i_load_constant, add_constant(param_name));
+                      }
                   }
 
                 add_instruction(i_load_constant, add_constant(this_item.exec));
-                add_call(i_this_call, args, this_item.flags & DYNAMIC_ACCESS );
+                add_call(i_this_call, args, this_item.flags & DYNAMIC_ACCESS, named_params );
               }
             else if (context_.scope_ && context_.scope_->resolve(name.value, scope_call))
               {
@@ -865,10 +893,16 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
                   {
                     variant arg = stack_.top(); stack_.pop();
                     resolve_value(arg);
+
+                    if (named_params)
+                      {
+                        str param_name = param_names_[i];
+                        add_instruction(i_load_constant, add_constant(param_name));
+                      }
                   }
 
                 add_instruction(i_load_constant, add_constant(this_item.exec));
-                add_call(i_this_call, args, this_item.flags & DYNAMIC_ACCESS );
+                add_call(i_this_call, args, this_item.flags & DYNAMIC_ACCESS, named_params );
               }
             else
               {
@@ -884,6 +918,9 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
 
         case op_parameter:
           {
+            expression_identifier ei = arg1;
+            param_names_.insert(param_names_.begin(), ei.value);
+
             //this is neccessary to avoid hanging members (a.b) in a parameter list
             //what happens is the schema item for the getter stays in the stack waiting
             //to be a call. So if we receive this one we're good to call the getter
@@ -897,18 +934,6 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
                     stack_.pop();
                     stack_.push( already_in_stack(type) );
                   }
-								else if (arg.is<already_in_stack>())
-									{
-										//td: transitioning out
-										//already_in_stack ais = arg;
-										//int lv = register_variable("", ais.type, null);
-										//add_instruction(i_store, lv);
-
-										//arg = local_variable(lv, ais.type); //note the switcheroo
-
-										//stack_.pop();
-										//stack_.push( arg );
-									}
               }
             break;
           }
@@ -1176,13 +1201,19 @@ void code_linker::instruction_data( int idx, short data )
     code_[idx].data.value = data;
   }
 
-int code_linker::add_call( instruction_type i, unsigned char param_count, bool is_dynamic, bool invert )
+int code_linker::add_call( instruction_type i, unsigned char param_count, bool is_dynamic, bool named_params, bool invert )
   {
     assert(i == i_call || i == i_this_call);
 
+    if (named_params && !param_names_.empty())
+      assert(param_names_.size() == param_count);
+      
     instruction ii(i, param_count, is_dynamic, invert);
+    ii.data.call_data.named_params = named_params;
     code_.push_back(ii);
     pc_++;
+
+    param_names_.clear();
     return pc_ - 1;
   }
 
@@ -1196,6 +1227,8 @@ int code_linker::add_set(bool is_dynamic, bool invert)
 
 int code_linker::add_call(variant caller, const str& name, int param_count, bool is_dynamic, bool invert )
   {
+    param_names_.clear(); //td: deal with the use case
+
     schema* caller_type = true_type(caller);
     if (!caller_type)
       {
@@ -1245,6 +1278,20 @@ schema* code_linker::add_stack_lookup(const str& query, schema* type)
     expr.push_operator  ( op_dot                 );
 
     return link_expression(expr);
+  }
+
+bool code_linker::has_parameter_names()
+  {
+    std::vector<str>::iterator it = param_names_.begin();
+    std::vector<str>::iterator nd = param_names_.end();
+
+    for(; it != nd; it++)
+      { 
+        if (!it->empty())
+          return true;
+      }
+
+    return false;
   }
 
 int code_linker::register_variable(stmt_variable& info)
@@ -1626,7 +1673,7 @@ void code_linker::resolve_unary_operator(operator_type op, variant arg1, bool* d
               {
                 assert(custom_operator.exec);
                 add_instruction(i_load_constant, add_constant(custom_operator.exec));
-                add_call(i_call, 0, custom_operator.flags&DYNAMIC_ACCESS );
+                add_call(i_call, 0, false, custom_operator.flags&DYNAMIC_ACCESS );
                 stack_.push( already_in_stack(custom_operator.type) );
 
                 if (dont_assign)

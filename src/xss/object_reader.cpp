@@ -77,9 +77,9 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, b
                 //do nothing
               }
             else if (attr_name == "id")
-              {
-                result->set_id(attr_value);
-              }
+              result->set_id(attr_value);
+            else if (attr_name == "output_id")
+              result->set_output_id(attr_value);
             else
               {
                 bool found_prop = false;

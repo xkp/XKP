@@ -233,6 +233,7 @@ struct parameters_ : visitor_base<parameters_>
     expression_& expr;
     param_list   values;
     int          param_count;
+    str          curr_name; 
 
     //rule handlers
     void named_argument( TokenStruct* token, parsetree_visitor* visitor );
@@ -251,8 +252,9 @@ struct expression_ : visitor_base<expression_>
 
     void register_rules();
 
-    void parameter_added()
+    void parameter_added(const str& name)
       {
+        ctx_.push_identifier( name );
         ctx_.push_operator( op_parameter );
       }
 
@@ -386,7 +388,7 @@ bool parameters_::visit(TokenStruct* token, parsetree_visitor* visitor)
         //delegate on the expression
         param_count++;
         visitor->visit( token, expr);
-        expr.parameter_added();
+        expr.parameter_added(str());
       }
 
     return true;
@@ -404,6 +406,7 @@ void parameters_::named_argument( TokenStruct* token, parsetree_visitor* visitor
     values.add(param_name, value);
 
     visitor->visit( token->Tokens[2], expr );
+    expr.parameter_added(param_name);
     param_count++;
   }
 
