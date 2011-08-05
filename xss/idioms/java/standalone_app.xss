@@ -1,0 +1,73 @@
+// 
+// Java tests console
+// This source is generated with xss:xkp
+//
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class <xss:e value="application.name"> {
+
+	public static void main(String[] args) {
+	
+		<xss:code>
+			for(var evt in application.events)
+			{
+			}
+			
+			out(indent = 1)
+			{
+				<xss:e>application.events[0].</xss:e>
+			}
+		</xss:code>
+	
+		<xss:class>
+			method render_component(var cmp)
+			{
+				
+			}
+			
+			on render()
+			{
+				render_component(application);
+			}
+		</xss:class>
+	
+		<xss:code>
+			for(var cmp in application.children)
+			{
+				for(var mthd in cmp.methods)
+				{
+					out(indent = 1)
+					{
+						<xss:e v="mthd.type"/> <xss:e v="mthd.name"/>(<xss:e v="mthd.args.generate()"/>)
+						<xss:open_brace/>
+							<xss:e v="mthd.code.generate()"/>
+						<xss:close_brace/>
+					}
+				}
+				
+				out()
+				{
+					<xss:return/>
+				}
+
+				for(var evt in cmp.events)
+				{
+					for(var impl in evt.impls)
+					{
+						//<xss:e value="impl.generate()"/>
+						out(indent = 1)
+						{
+							void <xss:e v="evt.name"/>
+							<xss:open_brace/>
+								<xss:e value="impl.generate()"/>
+							<xss:close_brace/>
+						}
+					}
+				}
+				
+			}
+		</xss:code>
+	}
+}

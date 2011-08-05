@@ -1,0 +1,16 @@
+<xml>
+	<class id="application">
+		<properties>
+			<property id="title" type="string"/>
+		</properties>
+		<events>
+			<event id="create"/>
+		</events>
+	</class>
+	
+	<class id="classx">
+		<properties>
+			<property id="value" type="int"/>
+		</properties>
+	</class>
+</xml>

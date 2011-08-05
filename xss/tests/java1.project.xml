@@ -1,0 +1,1 @@
+<project 	name="JavaTest" 	entry_point="../idioms/java/standalone_app.xss" 	language="java" 	target="java1.app.xml" 	output="java.test1.java">		<path>		<output path="output"/>	</path>		<options option1="java.test"/>		<idiom src="../idioms/java/classes.xml"/></project>

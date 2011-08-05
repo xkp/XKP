@@ -6,6 +6,7 @@
 #include "xss/language.h"
 #include "xss/lang/debug.h"
 #include "xss/lang/js.h"
+#include "xss/lang/java.h"
 #include "xss/dsl_out.h"
 
 #include "xs/linker.h"
@@ -1251,6 +1252,8 @@ Language xss_compiler::get_language(const str& name)
     //look the other way ma
     if (name == "js")
       return Language(new js_lang());
+    else if (name == "java")
+      return Language(new java_lang());
     else if (name == "debug")
       return Language(new debug_language);
 
