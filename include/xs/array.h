@@ -94,6 +94,11 @@ namespace xkp
         {
         }
 
+      container& ref()
+        {
+          return *ref_;
+        }
+
       iterator begin()
         {
           if (ref_->empty())
@@ -162,10 +167,21 @@ namespace xkp
         {
           return ref_->at(idx);
         }
+
 			void remove(size_t idx)
 				{
 					ref_->erase(ref_->begin() + idx);
 				}
+
+      container::iterator ref_begin()
+        {
+          return ref_->begin();
+        }
+
+      container::iterator ref_end()
+        {
+          return ref_->end();
+        }
       private:
         schema* type_;
     };
@@ -257,6 +273,7 @@ namespace xkp
   //registry
   register_complete_type(dynamic_array,           dynamic_array_schema);
   register_type         (typed_iterator<variant>, typed_iterator_schema<variant> );
+  register_iterator     (variant);
 }
 
 #endif

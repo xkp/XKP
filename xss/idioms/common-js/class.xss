@@ -1,0 +1,38 @@
+<xss:parameter id="clazz"/>
+<xss:parameter id="renderer"/>
+
+<xss:code>
+    if (clazz.super)
+    {
+        out()
+        {
+            <xss:e v="clazz.output_id"/> = Class.create(<xss:e v="clazz.super.output_id"/>,
+        }
+    }
+    else
+    {
+        out()
+        {
+            <xss:e v="clazz.output_id"/> = Class.create(
+        }
+    }
+</xss:code>
+{
+    initialize: function($super)
+    {
+        $super();
+        
+        <xss:code>
+        if (renderer)
+        {
+            compiler.xss(renderer, clazz, rendering_class = true);
+        }
+        </xss:code>
+    },
+    <xss:code>
+    if (renderer)
+    {
+        compiler.xss(renderer, clazz, rendering_class = true);
+    }
+    </xss:code>
+});

@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>TITLE</title>
+<script type="text/javascript" src="jquery.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	<xss:code>
+	//generate application code	
+    compiler.xss("instance.xss", application);
+
+	//and then instances
+    for(var i in jquery.instances)
+    {
+        out()
+		{
+			<xss:file src="instance.xss" output="inline">
+				<parameter name="it" value="i"/>
+			</xss:file>
+		}
+    }
+    </xss:code>
+});
+</script>
+
+<style>
+</style>
+</head>
+
+<body>
+    <xss:class>
+    method tag_properties(var component)
+    {
+        string result = "";
+        if (component.id != "")
+        {
+            result = "id='" + component.id + "'";
+        }
+            
+        return result;
+    }
+    
+    method render_component(var component)
+    {
+        out()
+        {
+            <<xss:e value="component.tag_name"/> <xss:e value="tag_properties(component)"/>>
+        }
+        
+        if (component.insert_text)
+        {
+            out(dont_break = true)
+            {
+                <xss:e value="component.text"/> </<xss:e value="component.tag_name"/>>
+            }      
+        }
+        else //render children, recursively
+        {
+            if (component.children)
+            {
+                for(var child in component.children)
+                {
+                    render_component(child);
+                }
+            }
+            
+            //close the tag
+            out()
+            {
+                </<xss:e value="component.tag_name"/>>
+            }
+        }
+    }
+
+    on render()
+    {
+        //recursively generate child components
+		application.tag_name = "div";
+        render_component(application);
+    }
+    </xss:class>
+</body>
+</html>

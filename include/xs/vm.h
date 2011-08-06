@@ -8,6 +8,9 @@
 
 #include <map>
 #include <stack>
+#include <boost/filesystem.hpp>
+
+namespace fs = boost::filesystem;
 
 namespace xkp
 {
@@ -64,9 +67,10 @@ namespace xkp
       instruction(instruction_type _id, unsigned char param_count, bool is_dynamic, bool invert): 
         id(_id)
         {
-          data.call_data.is_dynamic  = is_dynamic;
-					data.call_data.invert			 = invert;
-          data.call_data.param_count = param_count;
+          data.call_data.is_dynamic   = is_dynamic;
+					data.call_data.invert			  = invert;
+          data.call_data.param_count  = param_count;
+          data.call_data.named_params = false;
         }
     
       instruction(instruction_type _id, bool is_dynamic, bool invert_set): 
@@ -82,9 +86,10 @@ namespace xkp
           
           struct __call_data
             {
-              bool     is_dynamic  : 1;
-              bool     invert			 : 1;
-              unsigned param_count : 14;
+              bool     is_dynamic   : 1;
+              bool     invert			  : 1;
+              bool     named_params : 1;
+              unsigned param_count  : 13;
             }call_data;
 
           struct __set_data
@@ -103,25 +108,32 @@ namespace xkp
     
   struct byte_code
     {
-      byte_code() {}
+      byte_code(fs::path _file):
+        file(_file)
+        {
+        }
 
-      byte_code( instruction_list& _instructions, constant_list& _constants):
+      byte_code( instruction_list& _instructions, constant_list& _constants, fs::path _file):
         instructions(_instructions),
-        constants(_constants)
+        constants(_constants),
+        file(_file)
         {
         }
         
       instruction_list instructions;
       constant_list    constants;
+      fs::path         file; 
     };
     
   typedef reference<byte_code> ByteCode;
     
   struct execution_context
     {
-      execution_context(ByteCode code, variant _this = variant(), param_list* args = null);
+      execution_context(ByteCode code, variant _this = variant(), param_list* args = null, fs::path file = fs::path());
     
-      variant execute();
+      variant  execute();
+      fs::path file();
+
       private:
         typedef std::vector<variant> frame_stack;
         typedef std::stack<variant>  operand_stack;
@@ -135,9 +147,11 @@ namespace xkp
         operand_stack     operands_;
         operator_registry operators_; //td: this is way too expensive
         variant           this_;
+        fs::path          file_;
         
         void    push(variant v);
         variant pop();
+
     };
     
   struct code_setter : setter   
@@ -173,6 +187,37 @@ namespace xkp
       variant value_;
     };
 
+  //singleton
+  typedef std::stack<execution_context*> call_stack;
+  
+  struct vm
+    {
+      static vm& instance();
+      
+      public:
+        void        enter(execution_context* ctx);
+        void        leave();
+        void        reset();
+        call_stack& state();
+        fs::path    file();
+        void        error();
+      private:
+        call_stack call_stack_;
+        bool       error_;
+    };
+
+  struct callstack_helper
+      {
+        callstack_helper(execution_context* ctx)
+          {
+            vm::instance().enter(ctx);
+          }
+
+        ~callstack_helper()
+          {
+            vm::instance().leave();
+          }
+      };
 }
 
 #endif

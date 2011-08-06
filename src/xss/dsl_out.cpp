@@ -3,6 +3,7 @@
 #include <xss/utils.h>
 #include <xss/utils.h>
 #include <xss/xss_error.h>
+#include <xss/xss_renderer.h>
 #include <xs/ast.h>
 
 #include <boost/algorithm/string.hpp>
@@ -14,34 +15,15 @@ using namespace xkp;
 //strings
 const str SInvalidTag("xss-tags");
 const str STypeMismatch("type-mismatch");
+const str SOut("out");
 
 const str SUnknownXSSTag("Using an unknown tag");
 const str SExpectingExpression("Expecting expression");
 const str SFileParameterMustHaveName("File parameters must have names");
 const str SUnexpectedTag("Unexpected tag");
-const str SFileMustHaveOutput("You must specify an output attribue on this tag");
-const str SFileMustHaveSource("You must specify an source attribue on this tag");
-
-enum part_type
-	{
-		PART_TEXT,
-		PART_EXPRESSION,
-		PART_FILE,
-	};
-
-struct part
-  {
-		part_type type;
-    int				dyn_idx;
-    str				text;
-
-    part(): dyn_idx(-1), type(PART_TEXT)																									{}
-    part(const str& txt): dyn_idx(-1), type(PART_TEXT), text(txt)													{}
-		part(int didx): dyn_idx(didx), type(PART_EXPRESSION)																	{}
-		part(part_type _type, const str& txt, int idx): dyn_idx(idx), type(_type), text(txt)	{}
-  };
-
-typedef std::vector<part> part_list;
+const str SExpectingOutputAttribute("You must specify an output attribue on an xss:file tag");
+const str SExpectingSourceAttribute("You must specify an source attribue on an xss:file tag");
+const str SCannotResolveContex("There is no xss context registered");
 
 struct file_parameter
 	{
@@ -53,6 +35,7 @@ struct file_parameter
 
 		str name;
 		str value;
+    int expr_idx;
 	};
 
 struct file_parser : xss_visitor
@@ -61,7 +44,7 @@ struct file_parser : xss_visitor
       {
 				if (tag == "text")
 					{
-						result += text;
+						//do nothing, only looking for parameters
 					}
 				else if (tag == "parameter")
 					{
@@ -95,379 +78,207 @@ struct file_parser : xss_visitor
 		std::vector<file_parameter> parameters;
 	};
 
-struct outfile_info
-	{
-		str source;
-		str output;
-		std::vector<file_parameter> parameters;
-		int param_offset;
-
-		outfile_info(str _source, str _output, std::vector<file_parameter>& _parameters, int _param_offset):
-			source(_source),
-			output(_output),
-			parameters(_parameters),
-			param_offset(_param_offset)
-			{
-			}
-	};
-
-struct xss_gather : xss_visitor
+struct out_expr_renderer : item_renderer
   {
-    public:
-      xss_gather(part_list& result, std::vector<outfile_info>& files, std::vector<str>& expressions) : result_(result), expressions_(expressions), files_(files) {}
-    public:
-      virtual void visit(const str& tag, const str& text, param_list* args)
-        {
-          if (tag == "text")
-            result_.push_back(part(text));
-          else  if (tag == "xss:quote")
-            {
-              result_.push_back(part('"' + text + '"'));
-            }
-          else if (tag == "xss:e")
-            {
-              str expr_text = text;
-              if (expr_text.empty() && args)
-                expr_text = variant_cast<str>(args->get("value"), "");
+    out_expr_renderer(int idx):
+      idx_(idx)
+      {
+      }
 
-							if (expr_text.empty() && args)
-                expr_text = variant_cast<str>(args->get("v"), "");
-
-              if (!expr_text.empty())
-                {
-                  result_.push_back(part(result_.size()));
-                  expressions_.push_back(expr_text);
-                }
-            }
-          else if (tag == "xss:open_brace")
-            {
-              result_.push_back(part("{"));
-            }
-          else if (tag == "xss:close_brace")
-            {
-              result_.push_back(part("}"));
-            }
-					else if (tag == "xss:return")
-						{
-							result_.push_back(part("\n"));
-						}
-          else if (tag == "xss:code")
-            {
-              //td: !!!
-              result_.push_back(part("code can not be embbeded in out"));
-            }
-					else if (tag == "xss:file")
-						{
-							//grab info
-							str output = variant_cast<str>(args->get("output"), str(""));
-							if (output.empty())
-								{
-									param_list error;
-									error.add("id", SInvalidTag);
-									error.add("desc", SFileMustHaveOutput);
-									error.add("tag", tag);
-									xss_throw(error);
-								}
-
-							str source = variant_cast<str>(args->get("src"), str(""));
-
-							//grab the parameters
-							file_parser fparser;
-							xss_parser	xparser;
-
-							xparser.register_tag("parameter");
-							xparser.parse(text, &fparser);
-
-							std::vector<file_parameter>::iterator it = fparser.parameters.begin();
-							std::vector<file_parameter>::iterator nd = fparser.parameters.end();
-
-							//register the parameters as expressions
-							int param_offset = expressions_.size() + 1; //account for indent
-							for(; it != nd; it++)
-								{
-									str value = it->value;
-									if (value.empty())
-										value = it->name;
-									expressions_.push_back(value);
-								}
-
-							//keep track of the parts
-							files_.push_back(outfile_info(source, output, fparser.parameters, param_offset));
-							result_.push_back(part(PART_FILE, fparser.result, files_.size() - 1));
-						}
-          else
-            {
-              param_list error;
-              error.add("id", SInvalidTag);
-              error.add("desc", SUnknownXSSTag);
-              error.add("tag", tag);
-              xss_throw(error);
-            }
-        }
+    virtual str render(XSSObject this_, param_list* args)
+      {
+        return xss_utils::var_to_string(args->get(idx_));
+      }
     private:
-      part_list&									result_;
-      std::vector<str>&						expressions_;
-      std::vector<outfile_info>&	files_;
+      int idx_;
   };
 
+struct out_file_renderer : item_renderer
+  {
+    out_file_renderer(XSSCompiler compiler, std::vector<file_parameter>& parameters):
+      compiler_(compiler)
+      {
+        std::vector<file_parameter>::iterator it = parameters.begin();
+        std::vector<file_parameter>::iterator nd = parameters.end();
+        for(; it != nd; it++)
+          { 
+            params_.insert(std::pair<str, int>(it->name, it->expr_idx));
+          }
+      }
+    
+    void compile(XSSContext ctx, param_list* args)
+      {
+		    output_ = variant_cast<str>(args->get("output"), str());
+		    str src	= variant_cast<str>(args->get("src"), str());
+
+		    if (output_.empty())
+			    {
+				    param_list error;
+				    error.add("id", SOut);
+				    error.add("desc", SExpectingOutputAttribute);
+				    xss_throw(error);
+			    }
+        
+		    if (src.empty())
+			    {
+				    param_list error;
+				    error.add("id", SOut);
+				    error.add("desc", SExpectingSourceAttribute);
+				    xss_throw(error);
+			    }
+
+        renderer_ = compiler_->compile_xss_file(src, ctx);
+      }
+
+    //item_renderer
+    virtual str render(XSSObject this_, param_list* args)
+      {
+        renderer_parameter_list& params = renderer_->params(); //td: check types
+        param_list file_params;
+        
+        //translate outside parameters into file parameters
+        renderer_parameter_list::iterator it = params.begin();
+        renderer_parameter_list::iterator nd = params.end();
+        for(; it != nd; it++)
+          {
+            std::map<str, int>::iterator pp = params_.find(it->id);
+            if (pp != params_.end())
+              file_params.add(it->id, args->get(pp->second));
+            else
+              file_params.add(it->id, variant());
+          }
+
+        str result = renderer_->render(XSSObject(), &file_params);
+        if (output_ != "inline")
+          {
+            compiler_->output_file(output_, result);
+            return str();
+          }
+
+        return result;
+      }
+    
+    private:
+      std::map<str, int> params_;
+      XSSRenderer        renderer_;
+      XSSCompiler        compiler_;
+      str                output_; 
+  };
+
+struct out_renderer : base_xss_renderer<out_renderer>
+  {
+    out_renderer(std::vector<str>& expressions, XSSCompiler compiler, XSSContext ctx):
+      expressions_(expressions),
+      compiler_(compiler),
+      ctx_(ctx)
+      {
+        handlers_.insert(handler_pair("text",			        &out_renderer::handle_text));
+        handlers_.insert(handler_pair("xss:e",		        &out_renderer::handle_expression));
+        handlers_.insert(handler_pair("xss:file",         &out_renderer::handle_file));
+        handlers_.insert(handler_pair("xss:open_brace",   &out_renderer::handle_open_brace));
+        handlers_.insert(handler_pair("xss:close_brace",  &out_renderer::handle_close_brace));
+      }
+
+    item_list items()
+      {
+        return items_;
+      }
+
+    void handle_text(const str& text, param_list* args)
+      {
+        items_.push_back(ItemRenderer(new text_renderer(text)));
+      }
+
+    void handle_expression(const str& text, param_list* args)
+      {
+        str expr_ = text;
+        if (text.empty() && args)
+          {
+            variant vv = args->get("value");
+            if (vv.empty())
+					    vv = args->get("v");
+
+            if (!vv.empty())
+              expr_ = variant_cast<str>(vv, "");
+          }
+
+        expressions_.push_back(expr_);
+        items_.push_back(ItemRenderer(new out_expr_renderer(expressions_.size() - 1)));
+      }
+
+    void handle_file(const str& text, param_list* args)
+      {
+				file_parser fparser;
+				xss_parser	xparser;
+
+				xparser.register_tag("parameter");
+				xparser.parse(text, &fparser);
+
+        std::vector<file_parameter>::iterator it = fparser.parameters.begin();
+        std::vector<file_parameter>::iterator nd = fparser.parameters.end();
+        for(; it != nd; it++)
+          {
+            expressions_.push_back(it->value);
+            it->expr_idx = expressions_.size() - 1;
+          }
+
+        out_file_renderer* result = new out_file_renderer(compiler_, fparser.parameters);
+        result->compile(ctx_, args);
+
+        items_.push_back(ItemRenderer(result));
+      }
+
+    void handle_open_brace(const str& text, param_list* args)
+      {
+        items_.push_back(ItemRenderer(new text_renderer("{")));
+      }
+
+    void handle_close_brace(const str& text, param_list* args)
+      {
+        items_.push_back(ItemRenderer(new text_renderer("}")));
+      }
+    private:
+      std::vector<str>& expressions_;
+      XSSCompiler       compiler_;
+      XSSContext        ctx_;
+  };
+
+//runtime object
 struct worker
   {
     public:
-      worker() : tab_(4) {}
-      worker(XSSProject project, part_list parts, std::vector<outfile_info> files, int tab, bool dont_break, str marker):
-        project_(project),
-        parts_(parts),
-				files_(files),
-        indent_(-1),
-        tab_(tab),
-				dont_break_(dont_break),
-				marker_(marker)
+      worker() {}
+      worker(XSSCompiler compiler, std::vector<ItemRenderer>& renderer, str marker):
+        compiler_(compiler),
+				marker_(marker),
+        renderer_(renderer)
         {
         }
     public:
       void generate(const param_list params)
         {
-					XSSGenerator gen = project_->generator();
+					str result;
+          param_list* args = const_cast<param_list*>(&params);
 
-          part_list::iterator it = parts_.begin();
-          part_list::iterator nd = parts_.end();
-
-          indent_ = params.get(params.size() - 1);
-
-          size_t param = params.size() - 2;
-          str    result;
+          std::vector<ItemRenderer>::iterator it = renderer_.begin();
+          std::vector<ItemRenderer>::iterator nd = renderer_.end();
           for(; it != nd; it++)
             {
-							switch(it->type)
-								{
-									case PART_TEXT:
-										{
-											result += it->text;
-											break;
-										}
-									case PART_EXPRESSION:
-										{
-											variant vv = params.get(param--);
-											if (vv.empty())
-												vv = str("null"); //td: this should be an error?
-
-											if (!vv.is<str>())
-												{
-													param_list pl;
-													variant    v;
-													if (dynamic_try_exec(vv, "generate", pl, v))
-														{
-															str ss = variant_cast<str>(v, str()); //td: error, maybe?
-															result += ss;
-															break;
-														}
-													else if (vv.is<bool>())
-														{
-															bool bb = vv;
-															if (bb)
-																result += "true";
-															else
-																result += "false";
-															break;
-														}
-												}
-
-											str expr_value = vv;
-											if (is_multi_line(expr_value))
-												{
-													//we'll try to keep the original indentation
-													str padding = last_padding(result);
-
-													//so we'll add the original padding to every line
-													std::vector<str> lines;
-													split_lines(expr_value, lines);
-
-													std::vector<str>::iterator lit = lines.begin();
-													std::vector<str>::iterator lnd = lines.end();
-													bool first = true;
-													for(; lit != lnd; lit++)
-														{
-															if (first)
-																first = false;
-															else
-																result += padding;
-
-															result += *lit;
-
-															if (!dont_break_)
-																result += '\n';
-														}
-												}
-											else
-												result += expr_value;
-
-											break;
-										}
-									case PART_FILE:
-										{
-											outfile_info& file_info = files_[it->dyn_idx];
-
-											str source = it->text;
-											bool got_src = false;
-											fs::path path = project_->current_context()->path_;
-											if (!file_info.source.empty())
-												{
-													got_src = true;
-													project_->push_file(file_info.source);
-
-													fs::path src_file = path / file_info.source;
-													source	 = project_->load_file(src_file.string());
-
-													path = src_file.parent_path();
-												}
-
-											//td: utilify this crap already, or something
-											XSSContext curr_ctx = project_->current_context();
-
-											XSSContext context(new xss_code_context(project_, project_->idiom, path));
-											xss_code_context& ctx = *context.get();
-
-											XSSGenerator gen(new xss_generator(context));
-											project_->push_generator(gen);
-
-											project_->prepare_context(ctx, gen);
-
-											std::vector<file_parameter>::iterator it = file_info.parameters.begin();
-											std::vector<file_parameter>::iterator nd = file_info.parameters.end();
-											int last = params.size() - 1;
-											int curr = 0;
-											for(; it != nd; it++, curr++)
-												{
-													param--;
-													variant vv = params.get(last - file_info.param_offset - curr);
-													ctx.scope_->register_symbol(it->name, vv);
-												}
-
-											str contents = project_->generate_xss(source, gen);
-
-											project_->pop_generator();
-											if (got_src)
-												project_->pop_file();
-
-											if (file_info.output == "inline")
-											{
-												result += contents;
-												//project_->generator()->append(result);
-											}
-											else
-												project_->output_file(file_info.output, contents);
-
-											break;
-										}
-								}
+              ItemRenderer ir = *it;
+              result += ir->render(XSSObject(), args);
             }
 
-          if (indent_ >= 0)
-            {
-              result = apply_indent(result, indent_);
-            }
-
-					if (marker_.empty())
-						gen->append(result);
+          XSSRenderer rr = compiler_->current_renderer();
+          if (marker_.empty())
+						rr->append(result);
 					else
-						gen->append_marker(marker_, result);
-        }
-
-      str apply_indent(const str& s, int indent)
-        {
-          str result;
-
-          std::vector<str> lines;
-          split_lines(s, lines);
-
-          std::vector<str>::iterator it = lines.begin();
-          std::vector<str>::iterator nd = lines.end();
-
-          //find out the minimum start position per line
-          //it will assume it is properly formatted
-          //from there on
-          size_t _min  = str::npos;
-
-          for(; it != nd; it++)
-            {
-              size_t _curr = 0;
-              bool   _counting = true;
-              str    line = *it;
-              for(size_t i = 0; i < line.length(); i++)
-                {
-                  char ch = line[i];
-                  switch(ch)
-                    {
-                      case ' ':
-                        {
-                          if (_counting)
-                            _curr++;
-                          break;
-                        }
-                      case '\t':
-                        {
-                          if (_counting)
-                            _curr += tab_;
-                          break;
-                        }
-                      default:
-                        {
-                          _counting = false;
-                        }
-                    }
-                }
-
-              if (_curr < _min)
-                _min = _curr;
-            }
-
-          //now delete that amont
-          it = lines.begin();
-          for(; it != nd; it++)
-            {
-              //find out the minimum start position per line
-              //it will assume it is properly formatted
-              //from there on
-              size_t _curr = 0;
-              size_t to_erase = 0;
-              str    curr_line = *it;
-              while(to_erase < curr_line.size() && _curr < _min)
-                {
-                  char ch = curr_line[to_erase];
-                  if (ch == ' ')
-                    _curr++;
-                  else if (ch == '\t')
-                    _curr += 4;
-                  else
-                    break;
-
-                  to_erase++;
-                }
-
-              curr_line.erase(0, to_erase);
-              if (!curr_line.empty())
-                {
-                  for(int i = 0; i < indent_*tab_; i++)
-                    curr_line.insert(0, " ");
-                }
-
-              result += curr_line;
-
-							if(!dont_break_ && !curr_line.empty())
-								result += '\n';
-            }
-
-          return result;
+						rr->append_at(result, marker_);
         }
 
     private:
-      XSSProject								project_;
-      int												indent_;
-      int												tab_;
-      part_list									parts_;
-			bool											dont_break_;
-			str												marker_;
-			std::vector<outfile_info> files_;
+      XSSCompiler								compiler_;
+			std::vector<ItemRenderer> renderer_;
+      str												marker_;
 
       std::vector<str> load_lines(const str& s)
         {
@@ -504,67 +315,7 @@ namespace xkp
 //out_linker
 void out_linker::link(dsl& info, code_linker& owner)
   {
-    int tab_size = 4;
-    bool dont_break = false;
-    bool do_break = false;
-		bool trim = false;
-
     std::vector<str> expressions;
-
-    //process parameters
-    variant    indent_value = info.params.get("indent");
-    expression indent_expr;
-    if (!indent_value.empty())
-      {
-        try
-          {
-            indent_expr = indent_value;
-          }
-        catch(...)
-          {
-            param_list error;
-            error.add("id", STypeMismatch);
-            error.add("desc", SExpectingExpression);
-            xss_throw(error);
-          }
-      }
-    else
-      {
-        //we'll always pass the value of indent dynamically (resolved at runtime)
-        //in this case the user did not especify an indent param, so we fake an expression
-        int default_indent   = -1;
-        indent_expr.push_operand(default_indent);
-      }
-
-    //td: utilify
-    variant tab_value = info.params.get("tab_size");
-    if (!tab_value.empty())
-      {
-        expression expr = tab_value;
-        tab_size = owner.evaluate_expression(expr); //td: only contants, lazy me
-      }
-
-    variant dont_break_v = info.params.get("dont_break");
-    if (!dont_break_v.empty())
-      {
-        expression expr = dont_break_v;
-        dont_break = owner.evaluate_expression(expr); //td: only contants, lazy me
-      }
-
-    variant do_break_v = info.params.get("do_break");
-    if (!do_break_v.empty())
-      {
-        expression expr = do_break_v;
-        do_break = owner.evaluate_expression(expr); //td: only contants, lazy me
-      }
-
-		variant trim_v = info.params.get("trim");
-    if (!trim_v.empty())
-      {
-        expression expr = trim_v;
-        trim = owner.evaluate_expression(expr); //td: only contants, lazy me
-      }
-
 		variant marker_v = info.params.get("marker");
 		str			marker;
 		if (!marker_v.empty())
@@ -574,40 +325,38 @@ void out_linker::link(dsl& info, code_linker& owner)
 			}
 
 		//process xss
-		part_list parts;
-		std::vector<outfile_info> files;
-		xss_gather gather(parts, files, expressions);
+    variant ctx_var;
+    if (!owner.context().scope_->resolve("#context", ctx_var))
+      {
+				param_list error;
+				error.add("id", SOut);
+				error.add("desc", SCannotResolveContex);
+				xss_throw(error);
+      }
+    
+    XSSContext ctx = ctx_var;
+
+    out_renderer renderer(expressions, compiler_, ctx);
 
     xss_parser parser;
     parser.register_tag("xss:e");
-    parser.register_tag("xss:code");
     parser.register_tag("xss:open_brace");
     parser.register_tag("xss:close_brace");
-		parser.register_tag("xss:return");
 		parser.register_tag("xss:file");
 
 		str to_parse = info.text;
-		if (trim)
-			boost::trim(to_parse);
-
-		if (do_break)
-				to_parse += '\n';
-
-		parser.parse(to_parse, &gather);
+		parser.parse(to_parse, &renderer);
 
     //now xs
     xs_utils xs;
 
     //create a safe reference to be inserted in the execution context later on
-		Worker wrk(new worker(project_, parts, files, tab_size, dont_break, marker));
+		Worker wrk(new worker(compiler_, renderer.items(), marker));
     owner.add_instruction(i_load_constant, owner.add_constant(wrk));
 
-    //and so we link the indent, after having the worker on
-    owner.link_expression(indent_expr);
-
-    //push the expression to be used as parameters
-    std::vector<str>::iterator it = expressions.begin();
-    std::vector<str>::iterator nd = expressions.end();
+    //push the expression to be used as parameters, push 'em in reverse order
+    std::vector<str>::reverse_iterator it = expressions.rbegin();
+    std::vector<str>::reverse_iterator nd = expressions.rend();
     for(; it != nd; it++)
       {
         expression expr;
@@ -618,6 +367,6 @@ void out_linker::link(dsl& info, code_linker& owner)
       }
 
     //for this call, remember the indent is always the forat parameter
-    owner.add_call(wrk, "generate", expressions.size() + 1, false);
+    owner.add_call(wrk, "generate", expressions.size(), false);
   }
 

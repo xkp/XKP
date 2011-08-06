@@ -1,0 +1,136 @@
+<xml>
+	<class id="meshable">
+        <parameters>
+		    <parameter property_name="materials"/>            				
+        </parameters>
+		<properties>
+            <property name="color"  set_fn="materials[ 0 ].color.setHex"/>
+			<property name="overdraw"/>
+			<property name="double_sided" real_name="doubleSided"/>
+		</properties>
+	</class>
+	
+	<class id="transform">
+		<properties>
+            <property name="x"/>
+			<property name="y"/>
+			<property name="z"/>
+		</properties>
+	</class>
+	
+	<class id="scale" super="transform"/>
+	
+	<class id="rotation" super="transform"/>
+	
+	<class id="position" super="transform"/>
+			
+	<class id="light">
+        <parameters>
+		    <parameter property_name="hex"/>            				
+        </parameters>
+	</class> 
+		
+	<class id="ambient_light" super="light" inst_class="THREE.AmbientLight"/>       
+	
+	<class id="directional_light" super="light" inst_class="THREE.DirectionalLight">
+        <parameters>		    
+            <parameter property_name="intensity"/>
+            <parameter property_name="distance"/>
+            <parameter property_name="cast_shadow" real_name="castShadow"/>  				
+        </parameters>		
+	</class>
+	
+	<class id="point_light" super="light" inst_class="THREE.PointLight">
+        <parameters>		    
+            <parameter property_name="intensity"/>
+            <parameter property_name="distance"/>           		
+        </parameters>		
+	</class>
+	
+    <class id="camera" inst_class="THREE.Camera">
+        <parameters>
+            <parameter property_name="fov"/>
+            <parameter property_name="aspect"/>
+            <parameter property_name="near"/>
+            <parameter property_name="far"/>     
+			<parameter property_name="target"/>  			
+        </parameters>		
+	</class>
+	
+	<class id="quake_camera" super="camera" inst_class="THREE.QuakeCamera">
+        <parameters>             			
+			<parameter property_name="movement_speed" real_name="movementSpeed"/>
+			<parameter property_name="look_speed" real_name="lookSpeed"/>
+			<parameter property_name="no_fly" real_name="noFly"/>
+			<parameter property_name="look_vertical" real_name="lookVertical"/>
+			<parameter property_name="auto_forward" real_name="autoForward"/>			
+        </parameters>		
+	</class>
+	
+	<class id="plane" super="meshable" inst_class="THREE.Plane">
+        <parameters>
+            <parameter property_name="width"/>
+            <parameter property_name="height"/>
+            <parameter property_name="segments_width" real_name="segmentsWidth"/>
+			<parameter property_name="segments_height" real_name="segmentsHeight"/>
+		</parameters>		
+	</class>
+	
+	<class id="cube" super="meshable" inst_class="THREE.Cube">
+        <parameters>
+            <parameter property_name="width"/>
+            <parameter property_name="height"/>
+            <parameter property_name="depth"/>      
+			<parameter property_name="segments_width" real_name="segmentsWidth"/>
+			<parameter property_name="segments_height" real_name="segmentsHeight"/>
+			<parameter property_name="segments_depth" real_name="segmentsDepth"/>
+			<parameter property_name="materials"/>
+			<parameter property_name="flipped"/>
+			<parameter property_name="sides"/>			
+        </parameters>		
+    </class>
+	
+	<class id="cylinder" super="meshable" inst_class="THREE.Cylinder">
+        <parameters>
+            <parameter property_name="numsegs"/>
+            <parameter property_name="toprad"/>
+            <parameter property_name="botrad"/>      
+			<parameter property_name="height"/>
+			<parameter property_name="topoffset"/>
+			<parameter property_name="bottomoffset"/>			
+		</parameters>		
+    </class>
+	
+	<class id="sphere" super="meshable" inst_class="THREE.Sphere">
+        <parameters>
+            <parameter property_name="radius"/>
+            <parameter property_name="segments_width" real_name="segmentsWidth"/>
+			<parameter property_name="segments_height" real_name="segmentsHeight"/>			
+		</parameters>		
+    </class>
+	
+	<class id="icosahedron" super="meshable" inst_class="THREE.Icosahedron">
+        <parameters>
+            <parameter property_name="subdivisions"/>			
+		</parameters>		
+    </class>
+	
+	<class id="particle" super="meshable" inst_class="THREE.Particle"/>
+    
+	<class id="scene" inst_class="THREE.Scene"/>	
+	
+	<class id="texture_cube" inst_class="THREE.ImageUtils.loadTextureCube">
+		<parameters>
+            <parameter property_name="array"/>
+		</parameters>
+	</class>
+	
+	<class id="bin_loader" inst_class="THREE.BinaryLoader">
+		<parameters>
+            <parameter property_name="model"/>
+			<parameter property_name="callback"/>			
+		</parameters>
+	</class>	
+	
+	<class id="application"/>
+</xml>

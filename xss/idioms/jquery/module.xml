@@ -1,0 +1,8 @@
+<module id="jquery" src="module.xs">
+    <types>
+        <class id="button" tag_name="button">
+            <property id="caption" type="string" set_fn="text" get_fn="text" include_text="true"/>
+            <property id="width" type="int" set_fn="width" get_fn="width" />
+        </class>
+    </types>
+</module>

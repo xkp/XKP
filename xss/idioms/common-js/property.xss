@@ -1,0 +1,105 @@
+<xss:parameter id="prop"/>
+<xss:parameter id="owner"/>
+<xss:parameter id="is_class"/>
+
+<xss:code>
+string prop_name = owner.output_id + "." + prop.name;
+
+if (prop.set && prop.get)
+{
+    out()
+    {
+        <xss:e value="prop_name"/>_get = function ()
+        {
+            <xss:e>prop.get.render()</xss:e>
+        };
+
+        <xss:e value="prop_name"/>_set = function (value)
+        {
+            <xss:e>prop.set.render()</xss:e>
+        };
+    }
+}
+else if (prop.set)
+{
+    out(indent = 0)
+    {
+        <xss:e value="prop_name"/> = <xss:e value="prop.render_value()"/>;
+
+        <xss:e value="prop_name"/>_set = function (value)
+        {
+            <xss:e value="prop_name"/> = value;
+            <xss:e value="prop.set.render()"/>
+        }
+    }
+}
+else if (prop.get)
+{
+    out(indent = 0)
+    {
+        <xss:e>prop.name</xss:e>_get = function ()
+        {
+            <xss:e>prop.get.render()</xss:e>
+        };
+    }
+}
+else
+{
+    //this is a plain property, unless the class specify otherwise
+    //we will also try to initialize it
+            
+    //but first we'll check arrays
+    string value;
+    if (prop.type.is_array)
+    {
+        value = compiler.genid('__a');
+        out()
+        {
+            var <xss:e v="value"/> = 
+            [
+        }
+
+        for(var obj in prop.value.children)
+        {
+            out()
+            {
+                <xss:file output="inline" src="object.xss">
+                    <parameter name="obj"/>
+                </xss:file>,
+            }
+        }
+
+        out()
+        {
+            ];
+        }
+    }
+    else if (prop.type.is_object)
+    {
+        value = compiler.xss("object.xss", obj = prop.value);
+    }
+    else
+    {
+        value = prop.render_value();
+    }
+                
+    if (value != null) //dont initialize empty values
+    {
+        if (prop.set_fn)
+        {
+            out(indent = 0)
+            {
+                <xss:e value="owner.output_id"/>.<xss:e value="prop.set_fn"/>(<xss:e>value</xss:e>);
+            }
+        }
+        else
+        {
+            out(indent = 0)
+            {
+                <xss:e value="prop_name"/> =  <xss:e>value</xss:e>;
+            }
+        }
+    }
+            
+}
+</xss:code>

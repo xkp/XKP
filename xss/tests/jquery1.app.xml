@@ -1,0 +1,5 @@
+<application>
+    <button id="btn1" caption="One button" width="100"/>
+    <button id="btn2" caption="Two button" width="100"/>
+    <button id="btn3" caption="Reset" width="100"/>
+</application>

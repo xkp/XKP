@@ -74,6 +74,7 @@ const char* operator_name[] =
     "",     //op_func_call
     "",     //op_array,
     "",     //op_parameter
+    "",     //op_parameter_name
   };
 
 //just a very bad name
@@ -117,6 +118,7 @@ operator_type native_op[] =
     op_not, //op_func_call
     op_not, //op_array,
     op_not, //op_parameter
+    op_not, //op_parameter_name
   };
 
 struct array_evaluator : expr_evaluator
@@ -205,9 +207,9 @@ code_linker::code_linker(code_context& context):
       }
   }
 
-ByteCode code_linker::link()
+ByteCode code_linker::link(fs::path file)
   {
-    return ByteCode( new byte_code(code_, constants_) );
+    return ByteCode( new byte_code(code_, constants_, file) );
   }
 
 void code_linker::link(ByteCode result)
@@ -219,6 +221,11 @@ void code_linker::link(byte_code* result)
   {
     result->instructions = code_;
     result->constants    = constants_;
+  }
+
+code_context& code_linker::context()
+  {
+    return context_;
   }
 
 void code_linker::if_(stmt_if& info)
@@ -746,14 +753,21 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
 
         case op_call:
           {
-            constant    arg_count = arg1;
-            int         args      = arg_count.value;
+            constant    arg_count    = arg1;
+            int         args         = arg_count.value;
+            bool        named_params = has_parameter_names();
 
             //pop the arguments
             for(int i = 0; i < args; i++)
               {
                 variant arg = stack_.top(); stack_.pop();
                 resolve_value(arg);
+
+                if (named_params)
+                  {
+                    str param_name = param_names_[i];
+                    add_instruction(i_load_constant, add_constant(param_name));
+                  }
               }
 
             assert(!stack_.empty());
@@ -786,16 +800,17 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
             else
               assert(false);
 
-            add_call(i_call, args, is_dyamic);
+            add_call(i_call, args, is_dyamic, named_params);
             stack_.push( already_in_stack(result_type) );
             break;
           }
 
         case op_func_call:
           {
-            expression_identifier name      = arg1;
-            constant              arg_count = arg2;
-            int                   args      = arg_count.value;
+            expression_identifier name          = arg1;
+            constant              arg_count     = arg2;
+            int                   args          = arg_count.value;
+            bool                  named_params  = has_parameter_names();
 
             //simple functions can be either:
             // - instantiation
@@ -816,6 +831,12 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
                   {
                     variant arg = stack_.top(); stack_.pop();
                     resolve_value(arg);
+
+                    if (named_params)
+                      {
+                        str param_name = param_names_[i];
+                        add_instruction(i_load_constant, add_constant(param_name));
+                      }
                   }
 
                 add_instruction(i_load_constant, add_constant(instantiator));
@@ -829,10 +850,16 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
                   {
                     variant arg = stack_.top(); stack_.pop();
                     resolve_value(arg);
+
+                    if (named_params)
+                      {
+                        str param_name = param_names_[i];
+                        add_instruction(i_load_constant, add_constant(param_name));
+                      }
                   }
 
                 add_instruction(i_load_constant, add_constant(this_item.exec));
-                add_call(i_this_call, args, this_item.flags & DYNAMIC_ACCESS );
+                add_call(i_this_call, args, this_item.flags & DYNAMIC_ACCESS, named_params);
                 stack_.push( already_in_stack(this_item.type) );
               }
             else if (!context_.this_.empty() &&
@@ -845,10 +872,16 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
                   {
                     variant arg = stack_.top(); stack_.pop();
                     resolve_value(arg);
+
+                    if (named_params)
+                      {
+                        str param_name = param_names_[i];
+                        add_instruction(i_load_constant, add_constant(param_name));
+                      }
                   }
 
                 add_instruction(i_load_constant, add_constant(this_item.exec));
-                add_call(i_this_call, args, this_item.flags & DYNAMIC_ACCESS );
+                add_call(i_this_call, args, this_item.flags & DYNAMIC_ACCESS, named_params );
               }
             else if (context_.scope_ && context_.scope_->resolve(name.value, scope_call))
               {
@@ -860,10 +893,16 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
                   {
                     variant arg = stack_.top(); stack_.pop();
                     resolve_value(arg);
+
+                    if (named_params)
+                      {
+                        str param_name = param_names_[i];
+                        add_instruction(i_load_constant, add_constant(param_name));
+                      }
                   }
 
                 add_instruction(i_load_constant, add_constant(this_item.exec));
-                add_call(i_this_call, args, this_item.flags & DYNAMIC_ACCESS );
+                add_call(i_this_call, args, this_item.flags & DYNAMIC_ACCESS, named_params );
               }
             else
               {
@@ -879,6 +918,9 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
 
         case op_parameter:
           {
+            expression_identifier ei = arg1;
+            param_names_.insert(param_names_.begin(), ei.value);
+
             //this is neccessary to avoid hanging members (a.b) in a parameter list
             //what happens is the schema item for the getter stays in the stack waiting
             //to be a call. So if we receive this one we're good to call the getter
@@ -892,18 +934,6 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
                     stack_.pop();
                     stack_.push( already_in_stack(type) );
                   }
-								else if (arg.is<already_in_stack>())
-									{
-										//td: transitioning out
-										//already_in_stack ais = arg;
-										//int lv = register_variable("", ais.type, null);
-										//add_instruction(i_store, lv);
-
-										//arg = local_variable(lv, ais.type); //note the switcheroo
-
-										//stack_.pop();
-										//stack_.push( arg );
-									}
               }
             break;
           }
@@ -1165,13 +1195,19 @@ void code_linker::instruction_data( int idx, short data )
     code_[idx].data.value = data;
   }
 
-int code_linker::add_call( instruction_type i, unsigned char param_count, bool is_dynamic, bool invert )
+int code_linker::add_call( instruction_type i, unsigned char param_count, bool is_dynamic, bool named_params, bool invert )
   {
     assert(i == i_call || i == i_this_call);
 
+    if (named_params && !param_names_.empty())
+      assert(param_names_.size() == param_count);
+      
     instruction ii(i, param_count, is_dynamic, invert);
+    ii.data.call_data.named_params = named_params;
     code_.push_back(ii);
     pc_++;
+
+    param_names_.clear();
     return pc_ - 1;
   }
 
@@ -1185,6 +1221,8 @@ int code_linker::add_set(bool is_dynamic, bool invert)
 
 int code_linker::add_call(variant caller, const str& name, int param_count, bool is_dynamic, bool invert )
   {
+    param_names_.clear(); //td: deal with the use case
+
     schema* caller_type = true_type(caller);
     if (!caller_type)
       {
@@ -1234,6 +1272,20 @@ schema* code_linker::add_stack_lookup(const str& query, schema* type)
     expr.push_operator  ( op_dot                 );
 
     return link_expression(expr);
+  }
+
+bool code_linker::has_parameter_names()
+  {
+    std::vector<str>::iterator it = param_names_.begin();
+    std::vector<str>::iterator nd = param_names_.end();
+
+    for(; it != nd; it++)
+      { 
+        if (!it->empty())
+          return true;
+      }
+
+    return false;
   }
 
 int code_linker::register_variable(stmt_variable& info)
@@ -1615,7 +1667,7 @@ void code_linker::resolve_unary_operator(operator_type op, variant arg1, bool* d
               {
                 assert(custom_operator.exec);
                 add_instruction(i_load_constant, add_constant(custom_operator.exec));
-                add_call(i_call, 0, custom_operator.flags&DYNAMIC_ACCESS );
+                add_call(i_call, 0, false, custom_operator.flags&DYNAMIC_ACCESS );
                 stack_.push( already_in_stack(custom_operator.type) );
 
                 if (dont_assign)
@@ -1832,7 +1884,7 @@ DynamicObject base_xs_linker::resolve_instance(const str& name)
 
 struct decode_property
   {
-    decode_property(code_context& ctx, xs_property& info, DynamicObject output)
+    decode_property(code_context& ctx, xs_property& info, DynamicObject output, fs::path file)
       {
         itm.type  = info.type.empty()? null : ctx.types_->get_type(info.type);
         itm.flags = DYNAMIC_ACCESS;
@@ -1868,8 +1920,8 @@ struct decode_property
         if (!info.get.empty() && !info.set.empty())
           {
             //get & set
-            get_ref = ByteCode( new byte_code );
-            set_ref = ByteCode( new byte_code );
+            get_ref = ByteCode( new byte_code(file) );
+            set_ref = ByteCode( new byte_code(file) );
 
             get_code = info.get;
             set_code = info.set;
@@ -1883,7 +1935,7 @@ struct decode_property
             int idx = output->add_anonymous(value);
             itm.get = Getter( new anonymous_getter(idx) );
 
-            set_ref  = ByteCode( new byte_code );
+            set_ref  = ByteCode( new byte_code(file) );
             itm.set  = Setter( new code_setter(set_ref, idx) );
 
             set_code = info.set;
@@ -1891,7 +1943,7 @@ struct decode_property
         else if (!info.get.empty())
           {
             //read only
-            get_ref  = ByteCode( new byte_code );
+            get_ref  = ByteCode( new byte_code(file) );
             get_code = info.get;
             itm.get  = Getter( new code_getter(get_ref) );
           }
@@ -1970,8 +2022,8 @@ void base_xs_linker::property_(xs_property& info)
     if (!info.get.empty() && !info.set.empty())
       {
         //get & set
-        ByteCode get_code = ByteCode( new byte_code );
-        ByteCode set_code = ByteCode( new byte_code );
+        ByteCode get_code = ByteCode( new byte_code(file_) );
+        ByteCode set_code = ByteCode( new byte_code(file_) );
 
         itm.get   = Getter( new code_getter(get_code) );
         itm.set   = Setter( new code_setter(set_code) );
@@ -1989,7 +2041,7 @@ void base_xs_linker::property_(xs_property& info)
         int idx = output_->add_anonymous(value);
         itm.get = Getter( new anonymous_getter(idx) );
 
-        ByteCode set_code = ByteCode( new byte_code );
+        ByteCode set_code = ByteCode( new byte_code(file_) );
         itm.set           = Setter( new code_setter(set_code, idx) );
 
         link_item sli(set_code, info.set, ctx_.this_type);
@@ -1998,7 +2050,7 @@ void base_xs_linker::property_(xs_property& info)
     else if (!info.get.empty())
       {
         //read only
-        ByteCode get_code = ByteCode( new byte_code );
+        ByteCode get_code = ByteCode( new byte_code(file_) );
         itm.get = Getter( new code_getter(get_code) );
         link_item gli(get_code, info.get, ctx_.this_type);
         link_.push_back(gli);
@@ -2016,10 +2068,10 @@ void base_xs_linker::property_(xs_property& info)
 
 struct decode_method
   {
-    decode_method(xs_method& info, code_context& ctx)
+    decode_method(xs_method& info, code_context& ctx, fs::path file)
       {
         itm.flags = DYNAMIC_ACCESS;
-        bc        = ByteCode( new byte_code );
+        bc        = ByteCode( new byte_code(file) );
         itm.exec  = Executer( new code_executer(bc) );
         cde       = info.cde;
 
@@ -2067,7 +2119,7 @@ void base_xs_linker::method_(xs_method& info)
 
     schema_item itm;
     itm.flags          = DYNAMIC_ACCESS;
-    ByteCode exec_code = ByteCode( new byte_code );
+    ByteCode exec_code = ByteCode( new byte_code(file_) );
     itm.exec           = Executer( new code_executer(exec_code) );
 
     ParamList pl = ParamList(new param_list);
@@ -2110,6 +2162,7 @@ void base_xs_linker::event_(xs_event& info)
     name.erase(name.end() - 1);
     if (!name.empty())
       {
+        assert(false); //td: !!! this is fffffffffffuuuuuuuuuuu 
         DynamicObject inst = resolve_instance(name);
         object = inst.get();
         target = variant_cast<IEditableObject*>(inst, null);
@@ -2149,12 +2202,17 @@ void base_xs_linker::event_(xs_event& info)
         xs_throw(error);
       }
 
-    int id = object->event_id(ev_name);
+    size_t id = object->event_id(ev_name);
+    if (id == 0)
+      {
+        //td: !!! revise this, it basically makes the event declarations absolote
+        id = target->register_event(ev_name);
+      }
 
     schema_item itm;
     itm.flags          = DYNAMIC_ACCESS|EVENT;
-    ByteCode exec_code = ByteCode( new byte_code );
-    itm.get            = Getter( new const_getter(id) );
+    ByteCode exec_code = ByteCode( new byte_code(file_) );
+    itm.get            = Getter( new const_getter((int)id) ); //td: declare uint
     itm.exec           = Executer( new code_executer(exec_code) );
 
     ParamList pl = ParamList(new param_list);
@@ -2265,13 +2323,13 @@ void base_xs_linker::instance_(xs_instance& info)
         xs_throw(error);
       }
 
-    instance_linker il(ctx_, instance);
+    instance_linker il(ctx_, instance, file_);
     il.link(info);
   }
 
 void base_xs_linker::class_(xs_class& info)
   {
-    class_linker cl(ctx_);
+    class_linker cl(ctx_, file_);
     cl.link(info);
   }
 
@@ -2342,7 +2400,7 @@ void base_xs_linker::behaveas_(xs_implement_behaviour& info)
         code_linker cl(bind_ctx);
         info.cde.visit( &cl );
 
-        ByteCode bc = cl.link();
+        ByteCode bc = cl.link(file_);
         execution_context ec(bc, bind_ctx.this_);
         ec.execute();
       }
@@ -2352,7 +2410,7 @@ void base_xs_linker::behaveas_(xs_implement_behaviour& info)
     //so we'll stash then on a context
     editable_scope link_symbols;
     bind_ctx.types_ = ctx_.types_;
-    prelink_visitor plv(bind_ctx, &link_symbols, output_);
+    prelink_visitor plv(bind_ctx, &link_symbols, output_, file_);
     behaviour->privates().visit(&plv);
 
     //and before we're ready to finally link the code, we'll add
@@ -2370,7 +2428,7 @@ void base_xs_linker::behaveas_(xs_implement_behaviour& info)
     link_ctx.this_type = ctx_.this_type;
     link_ctx.scope_    = &code_scope;
 
-    base_xs_linker linker(link_ctx, editable_output_); //note the output is the actual object being behaved-assed
+    base_xs_linker linker(link_ctx, file_, editable_output_); //note the output is the actual object being behaved-assed
 
     linker.output_ = output_;
     linker.link(behaviour->publics());
@@ -2395,8 +2453,8 @@ void base_xs_linker::dsl_(dsl& info)
   }
 
 //class_linker
-class_linker::class_linker(code_context& ctx):
-  base_xs_linker(ctx),
+class_linker::class_linker(code_context& ctx, fs::path file):
+  base_xs_linker(ctx, file),
   result_(null)
   {
   }
@@ -2435,8 +2493,8 @@ void class_linker::link(xs_class& info)
   }
 
 //instance_linker
-instance_linker::instance_linker(code_context& ctx, DynamicObject instance):
-  base_xs_linker(ctx),
+instance_linker::instance_linker(code_context& ctx, DynamicObject instance, fs::path file):
+  base_xs_linker(ctx, file),
   instance_(instance)
   {
   }
@@ -2452,8 +2510,8 @@ void instance_linker::link(xs_instance& info)
   }
 
 //implicit_instance_linker
-implicit_instance_linker::implicit_instance_linker(code_context& ctx, DynamicObject instance):
-  base_xs_linker(ctx),
+implicit_instance_linker::implicit_instance_linker(code_context& ctx, DynamicObject instance, fs::path file):
+  base_xs_linker(ctx, file),
   instance_(instance)
   {
   }
@@ -2503,7 +2561,7 @@ void behaviour_linker::link(xs_behaviour& info)
 void prelink_visitor::property_(xs_property& info)
   {
     assert(editable_);
-    decode_property prop(ctx_, info, output_);
+    decode_property prop(ctx_, info, output_, file_);
 
     if (!prop.get_code.empty())
       {
@@ -2528,7 +2586,7 @@ void prelink_visitor::property_(xs_property& info)
 
 void prelink_visitor::method_(xs_method& info)
   {
-    decode_method meth(info, ctx_);
+    decode_method meth(info, ctx_, file_);
 
     pre_link pl;
     pl.bc   = meth.bc;

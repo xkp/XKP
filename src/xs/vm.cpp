@@ -57,6 +57,7 @@ const char* vm_operator_name[] =
     "",     //op_func_call
     "",     //op_array,
     "",     //op_parameter
+    "",     //op_parameter_name
   };
 
 operator_type vm_native_op[] =
@@ -99,16 +100,18 @@ operator_type vm_native_op[] =
     op_not, //op_func_call
     op_not, //op_array,
     op_not, //op_parameter
+    op_not, //op_parameter_name
   };
 
 //execution_context
-execution_context::execution_context(ByteCode code, variant _this, param_list* args):
+execution_context::execution_context(ByteCode code, variant _this, param_list* args, fs::path file):
   code_(code),
   instructions_(code->instructions),
   constants_(code->constants),
   pc_(0),
   jump_(false),
-  this_(_this)
+  this_(_this),
+  file_(file)
   {
     stack_.resize(1024); //td: arbitrary, inefficient
     if (args)
@@ -123,8 +126,15 @@ execution_context::execution_context(ByteCode code, variant _this, param_list* a
       }
   }
 
+fs::path execution_context::file()
+  {
+    return code_->file;
+  }
+
 variant execution_context::execute()
   {
+    callstack_helper helper(this);
+
     size_t isz = instructions_.size();
 
     while(pc_ < isz)
@@ -453,23 +463,29 @@ variant execution_context::execute()
                 variant caller;
 
 								if (i.data.call_data.invert)
-									{
-										caller = pop();
+								  caller = pop();
 
+                if (i.data.call_data.named_params)
+                  {
+										for(int p = 0; p < i.data.call_data.param_count; p++)
+											{
+												str param_name = variant_cast<str>(pop(), str()); 
+                        if (!param_name.empty())
+                          pl.add(param_name, pop());
+                        else
+                          pl.add(pop());
+											}
+                  }
+                else
+                  {
 										for(int p = 0; p < i.data.call_data.param_count; p++)
 											{
 												pl.add(pop());
 											}
 									}
-								else
-									{
-										for(int p = 0; p < i.data.call_data.param_count; p++)
-											{
-												pl.add(pop());
-											}
 
-										caller = pop();
-									}
+								if (!i.data.call_data.invert)
+								  caller = pop();
 
                 if (caller.empty())
                   {
@@ -499,9 +515,24 @@ variant execution_context::execute()
               {
                 Executer call = pop();
                 param_list pl;
-                for(int p = 0; p < i.data.call_data.param_count; p++)
+
+                if (i.data.call_data.named_params)
                   {
-                    pl.add(pop());
+										for(int p = 0; p < i.data.call_data.param_count; p++)
+											{
+												str param_name = variant_cast<str>(pop(), str()); 
+                        if (!param_name.empty())
+                          pl.add(param_name, pop());
+                        else
+                          pl.add(pop());
+											}
+                  }
+                else
+                  {
+                    for(int p = 0; p < i.data.call_data.param_count; p++)
+                      {
+                        pl.add(pop());
+                      }
                   }
 
                 void* caller_id;
@@ -520,6 +551,8 @@ variant execution_context::execute()
               {
                 Getter  call   = pop();
                 variant caller = pop();
+
+                IDynamicObject* ooobbjjj = variant_cast<IDynamicObject*>(caller, null);
 
                 if (caller.empty())
                   {
@@ -679,8 +712,51 @@ code_executer::code_executer(ByteCode _code):
 
 variant code_executer::exec(void* instance, const param_list args)
   {
+    //we must obtain the actual type of instance, not IDynamicObject 
+    //but any class on top of it
     IDynamicObject* d = static_cast<IDynamicObject*>(instance);
-    execution_context e(code_, d, const_cast<param_list*>(&args));
+    schema* type = d->get_type();
+    variant this_; 
+    type->cast(d, type, this_);
+
+    execution_context e(code_, this_, const_cast<param_list*>(&args));
     return e.execute();
+  }
+
+//vm
+vm& vm::instance()
+  {
+    static vm inst_;
+    return inst_;
+  }
+      
+void vm::enter(execution_context* ctx)
+  {
+    call_stack_.push(ctx);
+  }
+
+void vm::leave()
+  {
+    call_stack_.pop();
+  }
+
+void vm::reset()
+  {
+    while(!call_stack_.empty())
+      call_stack_.pop();
+  }
+
+call_stack& vm::state()
+  {
+    return call_stack_;
+  }
+
+fs::path vm::file()
+  {
+    if (call_stack_.empty())
+      return fs::path();
+
+    execution_context* top = call_stack_.top();
+    return top->file();
   }
 

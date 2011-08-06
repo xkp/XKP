@@ -3,6 +3,7 @@
 #define XS_RUNTIME_ERROR_HH
 
 #include <base.h>
+#include <xs/vm.h>
 
 namespace xkp
 {
@@ -15,8 +16,9 @@ namespace xkp
       param_list data;
     };
     
-  inline void runtime_throw(const param_list data)
+  inline void runtime_throw(param_list data)
     {
+      data.add("file", vm::instance().file().string());
       throw runtime_error(data);
     }
 }

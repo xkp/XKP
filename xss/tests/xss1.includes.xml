@@ -1,0 +1,11 @@
+<classes>
+    <class id="test_class">
+        <property id="data" type="int" __value="40"/>
+    </class>
+
+    <class id="test_class_xml_only">
+        <property id="data" type="string" __value="40"/>
+    </class>
+</classes>
+           
+         

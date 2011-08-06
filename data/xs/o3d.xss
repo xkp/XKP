@@ -1,5 +1,0 @@
-<xss:platform name="o3d">
-	<application src="o3d/app.xss">
-		<singleton name="resources" src="o3d/resources.xss"/>
-	</application>
-</xss:platform>

@@ -1,1 +1,0 @@
-property counter = 0;

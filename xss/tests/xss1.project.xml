@@ -1,0 +1,5 @@
+<project entry_point="xss1.xss" language="debug" target="xss1.app.xml">
+    <include def="xss1.includes.xml" src="xss1.includes.xs"/>
+</project>
+           
+         

@@ -328,7 +328,10 @@
         }
                 
         if (rendering_instance)
-            compiler.render_instance(seq, "instance.xss", indent = 2);
+        {
+            
+            compiler.xss("instance.xss", seq);
+        }
         
         //we'll let our children fill in on what the want done
         seq.conditions      = [];

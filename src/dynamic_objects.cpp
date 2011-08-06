@@ -68,12 +68,16 @@ DynamicObject base_dynamic_object::resolve_instance(std::vector<str> name)
 
 size_t base_dynamic_object::event_id(const str& name)
   {
-    return class_->event_id( name );
+    if (class_)
+      return class_->event_id( name );
+    
+    return 0;
   }
 
 void base_dynamic_object::dispatch_event(size_t ev_id, param_list& args)
   {
-    class_->dispatch_event(this, ev_id, args);
+    if (class_)
+      class_->dispatch_event(this, ev_id, args);
   }
 
 //event_holder
@@ -83,24 +87,29 @@ bool event_holder::add_item(const str& name, schema_item& item)
       {
         int ev_id = item.get->get(null);
         events_.insert( event_pair(ev_id, item.exec) );
+        return true;
       }
     else if (item.flags & EVENT_DECL)
       {
-        boost::hash<std::string> string_hash;
-        size_t ev_id = string_hash(name);
-
-        event_decl_.insert(event_decl_pair(name, ev_id)); //td: isnt this redundant?
-
-        event_info ei(ev_id);
-        item.flags |= CONST;
-        item.get    = Getter( new const_getter(ei) );
-        return false;
-
+        add_event(name, item);
       }
-    else
-      return false;
 
-    return true;
+    return false;
+  }
+
+size_t event_holder::add_event(const str& name, schema_item& item)
+  {
+    boost::hash<std::string> string_hash;
+    size_t ev_id = string_hash(name);
+
+    event_decl_.insert(event_decl_pair(name, ev_id)); //td: isnt this redundant?
+
+    event_info ei(ev_id);
+
+    item.flags |= CONST;
+    item.get    = Getter( new const_getter(ei) );
+
+    return ev_id;
   }
 
 size_t event_holder::event_id(const str& name)
@@ -199,6 +208,15 @@ void base_editable_object::add_item(const str& name, schema_item& item)
       }
   }
 
+size_t base_editable_object::register_event(const str& name)
+  {
+    schema_item itm;
+    size_t result = event_holder::add_event(name, itm);
+    items_.insert( item_pair(name, itm) );
+
+    return result;
+  }
+
 //anonymous_setter
 void anonymous_setter::set(void* instance, const variant value)
   {
@@ -283,6 +301,12 @@ void dynamic_class_schema::add_item(const str& name, schema_item& item)
         indices_.insert(vmt_pair(name, vmt_.size()));
         vmt_.push_back(item);
       }
+  }
+
+size_t dynamic_class_schema::register_event(const str& name)
+  {
+    assert(false); //td: implement
+    return 0;
   }
 
 size_t dynamic_class_schema::event_id(const str& name)

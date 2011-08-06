@@ -1,0 +1,30 @@
+<application>
+    <resources>
+        <video_texture id="video_1">
+			<source src="textures/sintel.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'/>
+			<source src="textures/sintel.ogv" type='video/ogg; codecs="theora, vorbis"'/>
+        </video_texture>
+        
+		<basic_material id="video_material">
+            <canvas_texture src="video_1"/>
+        </basic_material>
+
+		<reflection_material id="video_reflection">
+            <canvas_texture src="video_1">
+                <linear_gradient whatever_data="0, 0, 0, 204"/>
+            </canvas_texture>
+        </reflection_material>
+    </resources>        
+    
+    <scene>
+        <plane id="plane_1" material="video_material" segments="4" overdraw="true">
+            <scale x="1.5"  y="1.5"  z="1.5"/>
+        </plane>
+            
+        <plane id="plane_2" material="video_reflection" double_side="true">
+            <scale x="1.5"  y="1.5"  z="1.5"/>
+            <position y="-306"/>
+            <rotation x="Math.PI"/>
+        </plane>
+    </scene>
+</application>

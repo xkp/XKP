@@ -46,7 +46,7 @@ namespace xkp
       op_call,              //34  
       op_func_call,         //35  
       op_array,             //36
-      op_parameter,         //37 //sort of a hack
+      op_parameter,         //37 
     };    
     
   struct operator_exec

@@ -1,0 +1,27 @@
+<xss:parameter id="obj"/>
+
+new <xss:e v="obj.type.output_id"/>(
+<xss:code>
+
+var params = obj.type.constructor_params;
+if (params)
+{
+    int i = 0;
+    for(var p in params.children)
+    {
+        if (p.constant)
+          out() {<xss:e v="p.constant"/>}
+        else if (p.property)
+          {
+            var prop = obj.get_property(p.property);
+            out() {<xss:e v="prop.render_value()"/>}
+          }
+        else 
+          out() {null}
+          
+        if (i < params.children.size - 1)
+          out() {,}
+    }
+}
+</xss:code>
+);

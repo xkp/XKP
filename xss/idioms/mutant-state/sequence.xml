@@ -1,0 +1,9 @@
+<module id="sequence" src="sequence.xs">
+    <types>
+        <class id="sequence" instantiator="instantiator.xss" output_id="ms.state.Sequence">
+            <constructor_params>
+                <param constant="g_sequence_manager"/>
+            </constructor_params>
+        </class>
+    </types>
+</module>
