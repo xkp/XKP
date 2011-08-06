@@ -121,6 +121,8 @@
     <ClCompile Include="..\..\..\src\xss\debug.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl_out.cpp" />
     <ClCompile Include="..\..\..\src\xss\language.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang\base.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang\java.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang\js.cpp" />
     <ClCompile Include="..\..\..\src\xss\object_reader.cpp" />
     <ClCompile Include="..\..\..\src\xss\xss_compiler.cpp" />

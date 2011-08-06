@@ -1,0 +1,89 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Test 3D</title>
+
+</head>
+
+<body>
+
+<script type="text/javascript" src="js/three/Three.js"></script>
+<script type="text/javascript" src="js/three/Stats.js"></script>
+<script type="text/javascript" src="js/three/RequestAnimationFrame.js"></script>
+
+
+<script type="text/javascript">		
+	
+var renderer = new THREE.CanvasRenderer();
+renderer.setSize( 1024, 720 );
+
+
+							var cube_materials = [];
+							cube_materials.push( new THREE.MeshBasicMaterial( {color:13223476,}  ));
+
+        cube_materials.push( new THREE.MeshBasicMaterial( {color:871680,}  ));
+
+        cube_materials.push( new THREE.MeshBasicMaterial( {color:21930,}  ));
+
+        cube_materials.push( new THREE.MeshBasicMaterial( {color:16711680,}  ));
+
+        cube_materials.push( new THREE.MeshBasicMaterial( {color:30481,}  ));
+
+        cube_materials.push( new THREE.MeshBasicMaterial( {color:4444444,}  ));
+
+        
+        
+							var plane_material = [];
+							plane_material.push( new THREE.MeshBasicMaterial( {color:14737632,}  ));
+
+        
+                    var face_material_1 = new THREE.MeshFaceMaterial();
+            var scene_1 = new THREE.Scene();
+            var camera_1 = new THREE.Camera(75,1.5,1,1000,null);
+            camera_1.position.y =  300;
+            camera_1.position.z =  500;
+        
+            var cube_1 = new THREE.Cube(200,200,200,null,null,null,cube_materials,null,null);
+
+                    var mesh_1 = new THREE.Mesh(cube_1,face_material_1);
+
+						scene_1.addObject(mesh_1);
+						            mesh_1.position.y =  150;
+            mesh_1.rotation.y =  150;
+        
+            var plane_1 = new THREE.Plane(200,200,null,null);
+
+                    var mesh_1 = new THREE.Mesh(plane_1,plane_material);
+
+						scene_1.addObject(mesh_1);
+						            mesh_1.rotation.x =  -1.57000005;
+            mesh_1.rotation.z =  150;
+        
+
+        
+                    var counter =  0;
+        
+
+document.body.appendChild( renderer.domElement );
+animate();
+
+function animate() {
+	requestAnimationFrame( animate );
+	render();
+}
+
+function render() {				
+	renderer.render( scene_1, camera_1 );
+}
+
+</script>
+
+</body>
+
+</html>
