@@ -158,6 +158,7 @@ struct ILanguage
     virtual str     resolve_this(XSSContext ctx)																			= 0;
     virtual str     resolve_separator(XSSObject lh = XSSObject())										  = 0;
     virtual bool    can_cast(XSSType left, XSSType right)                             = 0;
+    virtual void    init_context(XSSContext ctx)                                      = 0;
   };
 
 //resolver

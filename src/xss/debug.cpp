@@ -293,6 +293,10 @@ bool debug_language::can_cast(XSSType left, XSSType right)
     return true;
   }
 
+void debug_language::init_context(XSSContext ctx)
+  {
+  }
+
 //glue
 
 register_complete_type(code_renderer,       renderer_schema<code_renderer>);

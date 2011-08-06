@@ -159,7 +159,14 @@ struct lang_utils
 
 										    case VANILLA:
 											    {
-                            result = assign + " " + lang_utils::operator_string(op) + " " + value;
+                            XSSType type = ctx->resolve(assign, RESOLVE_TYPE);
+
+                            if ((op == op_plus_equal || op == op_minus_equal) && type->is_array())
+                              result = assign_renderer.array_operation(assign, value, op);
+                            else if (simple_assign && type->is_array() && !ai.data.empty())
+                              result = ai.data;
+                            else
+                              result = assign + " " + lang_utils::operator_string(op) + " " + value;
 												    break;
 											    }
 										    case XSS_RESOLVE:

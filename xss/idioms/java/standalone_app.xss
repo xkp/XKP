@@ -1,0 +1,32 @@
+// 
+// Java tests console
+// This source is generated with xss:xkp
+//
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class <xss:e value="application.name"/> {
+
+	public static void main(String[] args) {
+	
+		<xss:code>
+			compiler.xss("instance.xss", application);
+			
+			compiler.inject("render_instances");
+		</xss:code>
+	
+		<xss:class>
+			method render_component(var cmp)
+			{
+				
+			}
+			
+			on render()
+			{
+				compiler.log("ok2");
+				render_component(application);
+			}
+		</xss:class>
+	}
+}

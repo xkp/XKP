@@ -65,21 +65,7 @@ bool xss_parser::parse(const str& text, xss_visitor* visitor)
                   }
                 else if (!tag.closed)
                   {
-                    //find out one of our tags was found
-                    std::vector<str>::iterator it = tags_.begin();
-                    std::vector<str>::iterator nd = tags_.end();
-                    
-                    bool found = false;
-                    for(; it != nd; it++)
-                      {
-                        if (*it == tag.name)
-                          {
-                            found = true;
-                            break;
-                          }
-                      }
-                    
-                    if (found)
+                    if (registered_tag(tag.name))
                       {
                         if (ip > last_ip)
                           {
