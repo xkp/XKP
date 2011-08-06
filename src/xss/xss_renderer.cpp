@@ -14,6 +14,7 @@ const str SMarkerWithNoName("xss:marker must have a name attribute");
 const str SUnknownMarker("Unknown xss:marker");
 const str SUnnamedInstance("xss:instance must have an id");
 const str SUnnamedParameter("xss:parameter must have an id");
+const str SUnknownParameterType("xss:parameter must have a valid type");
 
 //text_renderer
 text_renderer::text_renderer(const str& text):
@@ -224,13 +225,13 @@ xss_renderer::xss_renderer(XSSCompiler compiler, XSSContext context, fs::path xs
   compiler_(compiler),
   file_(xss_file)
   {
-    handlers_.insert(handler_pair("text",					  &xss_renderer::handle_text));
-    handlers_.insert(handler_pair("xss:code",			  &xss_renderer::handle_code));
-    handlers_.insert(handler_pair("xss:e",				  &xss_renderer::handle_expression));
-    handlers_.insert(handler_pair("xss:class",		  &xss_renderer::handle_class));
-    handlers_.insert(handler_pair("xss:file",			  &xss_renderer::handle_file));
-    handlers_.insert(handler_pair("xss:marker",		  &xss_renderer::handle_marker));
-    handlers_.insert(handler_pair("xss:instance",	  &xss_renderer::handle_instance));
+    handlers_.insert(handler_pair("text",			&xss_renderer::handle_text));
+    handlers_.insert(handler_pair("xss:code",		&xss_renderer::handle_code));
+    handlers_.insert(handler_pair("xss:e",			&xss_renderer::handle_expression));
+    handlers_.insert(handler_pair("xss:class",		&xss_renderer::handle_class));
+    handlers_.insert(handler_pair("xss:file",		&xss_renderer::handle_file));
+    handlers_.insert(handler_pair("xss:marker",		&xss_renderer::handle_marker));
+    handlers_.insert(handler_pair("xss:instance",	&xss_renderer::handle_instance));
     handlers_.insert(handler_pair("xss:parameter",  &xss_renderer::handle_parameter));
   }
 
@@ -399,16 +400,30 @@ void xss_renderer::handle_instance(const str& text, param_list* args)
 
 void xss_renderer::handle_parameter(const str& text, param_list* args)
   {
-		str id = variant_cast<str>(args->get("id"), str());
-		if (id.empty())
-			{
-					param_list error;
-					error.add("id", SRenderer);
-					error.add("desc", SUnnamedParameter);
-					xss_throw(error);
-			}
-
-      //td: !!! grab type and default value
-      params_.push_back(renderer_parameter(id, XSSType(), str()));
-      context_->add_parameter(id, XSSType());
+    str id = variant_cast<str>(args->get("id"), str());
+    if (id.empty())
+	    {
+			    param_list error;
+			    error.add("id", SRenderer);
+			    error.add("desc", SUnnamedParameter);
+			    xss_throw(error);
+	    }
+    
+    XSSType type = context_->get_type("var");
+    str type_name = variant_cast<str>(args->get("type"), str());
+    if (!type_name.empty())
+      {
+        type = context_->get_type(type_name);
+        if (!type)
+	        {
+			      param_list error;
+			      error.add("id", SRenderer);
+			      error.add("desc", SUnknownParameterType);
+			      error.add("type", type_name);
+			      xss_throw(error);
+	        }
+      }
+    
+    params_.push_back(renderer_parameter(id, type, args->get("default")));
+    context_->add_parameter(id, XSSType());
   }

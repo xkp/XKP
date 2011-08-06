@@ -598,7 +598,7 @@ namespace detail
             if (it->second == idx)
               return it->first;
 
-          return "";
+          return str();
         }
 
       bool empty() const
@@ -609,6 +609,22 @@ namespace detail
       size_t size() const
         {
           return values_.size();
+        }
+
+      void set(size_t idx, variant value)
+        {
+          values_[idx] = value;
+        }
+
+      void set(size_t idx, const str& name, variant value)
+        {
+          name_container::const_iterator it = names_.find(name);
+          if (it == names_.end())
+            { 
+              names_.insert(std::pair<str, size_t>(name, idx));
+            }
+
+          values_[idx] = value;
         }
       private:
         typedef std::map<str, size_t> name_container;

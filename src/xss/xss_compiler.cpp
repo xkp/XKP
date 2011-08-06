@@ -68,8 +68,15 @@ xss_application_renderer::xss_application_renderer(fs::path entry_point, Languag
     context_->add_type("bool",   XSSType(new xss_type(type_schema<bool>())))->set_id("bool");
 
     XSSType variant_type(new xss_type());
+    variant_type->set_id("var");
     variant_type->as_variant();
     context_->add_type("var", variant_type);
+
+    XSSType object_type(new xss_type());
+    object_type->set_id("object");
+    object_type->as_variant();
+    object_type->as_object();
+    context_->add_type("object", object_type);
   }
 
 XSSContext xss_application_renderer::context()
@@ -133,6 +140,20 @@ XSSModule xss_application_renderer::instance_idiom(XSSObject inst)
     return XSSModule();
   }
 
+XSSModule xss_application_renderer::type_idiom(const str& type)
+  {
+    std::vector<XSSModule>::iterator it = modules_.begin();
+    std::vector<XSSModule>::iterator nd = modules_.end();
+    for(; it != nd; it++)
+      {
+        XSSModule mod = *it;
+        if (mod->has_type(type))
+          return mod;
+      }
+
+    return XSSModule();
+  }
+
 void xss_application_renderer::set_target(const str& target)
   {
     target_ = target;
@@ -151,7 +172,8 @@ xss_module::xss_module()
 
 xss_module::xss_module(XSSContext ctx):
   ctx_(ctx),
-  instances_(new dynamic_array)
+  instances_(new dynamic_array),
+  utypes_(new dynamic_array)
   {
     ev_pprocess_ = register_event("render");
     DYNAMIC_INHERITANCE(xss_module)
@@ -208,6 +230,34 @@ fs::path xss_module::path()
 void xss_module::set_path(fs::path p)
   {
     path_ = p;
+  }
+
+void xss_module::register_module_type(XSSType type)
+  {
+    type_list::iterator it = types_.find(type->id());
+    if (it != types_.end())
+			{
+				param_list error;
+				error.add("id", SProjectError);
+				error.add("desc", SDuplicateClassOnLibrary);
+				error.add("class", type->id());
+				error.add("module", id());
+				xss_throw(error);
+			}
+
+    types_.insert(type_list_pair(type->id(), type));
+  }
+
+void xss_module::register_user_type(XSSType type)
+  {
+    register_module_type(type);
+    utypes_->push_back(type);
+  }
+
+bool xss_module::has_type(const str& type)
+  {
+    type_list::iterator it = types_.find(type);
+    return it != types_.end();
   }
 
 void xss_module::register_instance(XSSObject obj)
@@ -353,26 +403,43 @@ void xss_compiler::xss(const param_list params)
 
     XSSRenderer result = compile_xss_file(file, ctx);
     
-    //match the parameters, by order
-    //td: !!! please get parameter names
+    //match the parameters
     renderer_parameter_list& result_args = result->params();
+    renderer_parameter_list::iterator it = result_args.begin();
+    renderer_parameter_list::iterator nd = result_args.end();
 
-    param_list result_params;
-    size_t     param_count = params.size() - 1;
-    for(size_t i = 0; i < result_args.size(); i++)
+    size_t     param_count = params.size();
+    size_t     curr_param  = 1; //the first parameter is taken
+    param_list result_params;   //what to pass to the xss
+    for(; it != nd; it++)
       {
-        variant value = i < param_count? 
-                          params.get(i + 1) : 
-                          variant(); 
-        
-        //td: check types
-        result_params.add(result_args[i].id, value);
+        if (params.has(it->id))
+          {
+            result_params.add(it->id, params.get(it->id));
+          }
+        else if (curr_param < param_count)
+          {
+            bool named;
+            do 
+              {
+                named = !params.get_name(curr_param).empty();
+                if (named)
+                  curr_param++;
+              }
+            while(named);
 
+            if (curr_param < param_count)
+              result_params.add(it->id, params.get(curr_param++));
+            else
+              result_params.add(it->id, it->default_value);
+          }
+        else
+          {
+            result_params.add(it->id, it->default_value);
+          }
       }
 
     r->append(result->render(XSSObject(), &result_params)); //td: change dynamic methods to return a variant
-    //push_renderer(result);
-    //pop_renderer();
   }
 
 void xss_compiler::inject(const param_list params)
@@ -430,7 +497,7 @@ void xss_compiler::log(const param_list params)
         str param_name = params.get_name(i);
         variant value  = params.get(i);
 
-        str string_value = variant_cast<str>(value, "");
+        str string_value = xss_utils::var_to_string(value);
 				if (string_value.empty())
 					{
             if (value.empty())
@@ -583,6 +650,14 @@ str xss_compiler::idiom_path(XSSObject obj, const str& file)
 
     fs::path p = idiom->path() / file;
     return p.string();
+  }
+
+str xss_compiler::full_path(const str& file)
+  {
+    fs::path pth = vm::instance().file();
+
+    fs::path file_pth = pth.parent_path() / file;
+    return file_pth.string();
   }
 
 void xss_compiler::push_renderer(XSSRenderer renderer)
@@ -768,7 +843,7 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
                 xss_throw(error);
               }
               
-
+            module->register_module_type(type);
             app->context()->add_type(type_name, type);
           }
       }    
@@ -806,13 +881,13 @@ void xss_compiler::read_includes(XSSObject project_data)
             XSSApplicationRenderer app = *it;
             if (app->target() == target || app->id() == inc_app)
               {
-                read_include(base_path_ / xml_file, base_path_ / src_file, app->context());
+                read_include(base_path_ / xml_file, base_path_ / src_file, app->context(), app);
               }
           }
 	    }
   }
 
-void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx)
+void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSApplicationRenderer app)
   {
     std::map<str, XSSObject> def_types;
     fs::path path;
@@ -902,6 +977,7 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx)
 					    }
 
 				    XSSType clazz(new xss_type());
+            clazz->set_id(cid);
             clazz->set_definition(def_class);
             clazz->set_super(super);
 
@@ -910,6 +986,10 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx)
 
 				    compile_ast(ci, ictx);
 
+            XSSModule module = app->type_idiom(ci.super);
+            if (module)
+              module->register_user_type(clazz);
+                        
             ctx->add_type(cid, clazz);
           }
 			}
@@ -937,6 +1017,10 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx)
 
             clazz->set_super(super_clazz);
           }
+
+        XSSModule module = app->type_idiom(super);
+        if (module)
+          module->register_user_type(clazz);
 
         ctx->add_type(it->first, clazz);
       }

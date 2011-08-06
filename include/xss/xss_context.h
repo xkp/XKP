@@ -62,7 +62,6 @@ class xss_object : public editable_object<xss_object>,
       str           output_id();
       str           type_name();
 			XSSType			  type();
-			void					set_type(XSSType type);
 			XSSObject			parent();
 			DynamicArray	children();
 			DynamicArray	properties();
@@ -72,6 +71,8 @@ class xss_object : public editable_object<xss_object>,
       void set_id(const str& id);
       void set_output_id(const str& id);
       void set_type_name(const str& id);
+
+			virtual void set_type(XSSType type);
 		public:
       //misc
       XSSObject              find(const str& what);
@@ -111,6 +112,7 @@ class xss_type : public xss_object
       void as_enum();
       void as_array(XSSType type);
       void as_variant();
+      void as_object();
     public:
       bool is_enum();
       bool is_array();
@@ -118,13 +120,14 @@ class xss_type : public xss_object
       bool is_native();
       bool is_variant();
     private:
-      XSSType super_;
       XSSType array_type_;
       schema* xs_type_;
       bool    is_enum_;
       bool    is_array_;
       bool    is_object_;
       bool    is_variant_;
+    public:
+      XSSType super_;
   };
 
 //the language interface
@@ -276,13 +279,13 @@ class xss_property : public xss_object
 			  xss_property(const str& name, XSSType type, variant value, variant _get, variant _set, XSSObject _this_);
 
 			  virtual void copy(XSSObject obj);
+			  virtual void set_type(XSSType type);
 
         variant   get;
 			  variant   set;
 			  size_t    flags;
 			  XSSObject this_;
 			  variant   value_;
-			  XSSType	  type;
 
         str render_value();
         str render_get();
@@ -310,8 +313,9 @@ class xss_method : public xss_object
 			xss_method(const xss_method& other);
 			xss_method(const str& _name, XSSType type, variant _args, variant _code);
 
+			virtual void set_type(XSSType type);
+
 			str     name;
-			XSSType	type;
 			variant args;
 			variant code;
   };
@@ -351,7 +355,9 @@ struct xss_type_schema : xss_object_schema<xss_type>
 
 				inherit_from<xss_object>();
 
-				readonly_property<bool>("is_enum",    &xss_type::is_enum);
+				property_<XSSType>("super", &xss_type::super_);
+				
+        readonly_property<bool>("is_enum",    &xss_type::is_enum);
 				readonly_property<bool>("is_array",   &xss_type::is_array);
 				readonly_property<bool>("is_object",  &xss_type::is_object);
 				readonly_property<bool>("is_native",  &xss_type::is_native);
@@ -382,7 +388,6 @@ struct xss_method_schema : xss_object_schema<xss_method>
 				inherit_from<xss_object>();
 
         property_("name", &xss_method::name);
-        property_("type", &xss_method::type);
         property_("args", &xss_method::args);
         property_("code", &xss_method::code);
       }
@@ -400,7 +405,6 @@ struct xss_property_schema : xss_object_schema<xss_property>
         property_("get",   &xss_property::get);
         property_("set",   &xss_property::set);
         property_("value", &xss_property::value_);
-        property_("type",  &xss_property::type);
 
         method_<str, 0>("render_value", &xss_property::render_value);
         method_<str, 0>("render_get",   &xss_property::render_get);

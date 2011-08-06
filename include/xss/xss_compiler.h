@@ -1,6 +1,8 @@
 #ifndef XSS_COMPILER_HH
 #define XSS_COMPILER_HH
 
+#include <map>
+
 #include <base.h>
 #include <schema.h>
 #include <dynamic_objects.h>
@@ -27,7 +29,7 @@ namespace xkp
   //interfaces
   struct renderer_parameter
     {
-      renderer_parameter(str _id, XSSType _type, str _default_value):
+      renderer_parameter(str _id, XSSType _type, variant _default_value):
         id(_id),
         type(_type),
         default_value(_default_value)
@@ -66,6 +68,7 @@ namespace xkp
         void       output_path(fs::path path);
         void       set_output_path(const str& path); 
         XSSModule  instance_idiom(XSSObject inst);
+        XSSModule  type_idiom(const str& type);
       public:
         std::vector<XSSModule>& modules();
       private:
@@ -92,15 +95,25 @@ namespace xkp
         DynamicArray       instances();
         fs::path           path(); 
         void               set_path(fs::path p); 
-      public:
-        //glue visibility
-        DynamicArray instances_;
+        void               register_module_type(XSSType type);
+        void               register_user_type(XSSType type);
+        bool               has_type(const str& type);
       private:
         XSSContext   ctx_;
         size_t       ev_pprocess_;
         fs::path     path_; 
 
         void register_instance(XSSObject obj);
+      private:
+        //types
+        typedef std::map<str, XSSType>  type_list;
+        typedef std::pair<str, XSSType> type_list_pair;
+
+        type_list types_;
+      public:
+        //glue visibility
+        DynamicArray instances_;
+        DynamicArray utypes_;
     };
 
   class xss_compiler : public boost::enable_shared_from_this<xss_compiler>
@@ -122,6 +135,7 @@ namespace xkp
         variant     resolve_property(const str& prop, variant parent);
         str         renderer_file(const str& file);
         str         idiom_path(XSSObject obj, const str& file);
+        str         full_path(const str& file);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -141,7 +155,7 @@ namespace xkp
         XSSModule   read_module(const str& src, XSSApplicationRenderer app, XSSObject module);
         void        read_types(XSSObject module_data, XSSApplicationRenderer app, XSSModule module);
         void        read_includes(XSSObject project_data);
-        void        read_include(fs::path def, fs::path src, XSSContext ctx);
+        void        read_include(fs::path def, fs::path src, XSSContext ctx, XSSApplicationRenderer app);
         void        read_application(const str& app_file);
         void        compile_ast(xs_container& ast, XSSContext ctx);
         bool        options(const str& name);
@@ -178,6 +192,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<variant,  2>("resolve_property",	&xss_compiler::resolve_property);
         method_<str,      1>("renderer_file",	    &xss_compiler::renderer_file);
         method_<str,      2>("idiom_path",	      &xss_compiler::idiom_path);
+        method_<str,      1>("full_path",	        &xss_compiler::full_path);
       }
   };
 
@@ -189,7 +204,8 @@ struct xss_module_schema : xss_object_schema<xss_module>
 
 				inherit_from<xss_object>();
 
-        property_("instances", &xss_module::instances_);
+        property_("instances",  &xss_module::instances_);
+        property_("user_types", &xss_module::utypes_);
       }
   };
 

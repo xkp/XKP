@@ -91,7 +91,7 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, b
                     if (prop)
                       {
                         found_prop = true;
-                        XSSProperty new_prop(new xss_property(prop->id(), prop->type, variant(), prop->get, prop->set, result));
+                        XSSProperty new_prop(new xss_property(prop->id(), prop->type(), variant(), prop->get, prop->set, result));
                         new_prop->copy(XSSObject(prop)); //sort of inefficient, but safe & consistent
                         new_prop->value_ = attribute_value(attr);
 

@@ -1,3 +1,6 @@
 <xss:code>
+compiler.inject("render_types");
+
+compiler.xss("../common-js/instance.xss", application);
 compiler.inject("render_instances");
 </xss:code>

@@ -1,133 +1,37 @@
 <xss:parameter id="clazz"/>
 <xss:parameter id="renderer"/>
 
-<xss:e v="clazz.output_id"/> = Class.create(<xss:e v="clazz.super.output_id"/>,
+<xss:code>
+    if (clazz.super)
+    {
+        compiler.log(clazz.super);
+        out()
+        {
+            <xss:e v="clazz.output_id"/> = Class.create(<xss:e v="clazz.super.output_id"/>,
+        }
+    }
+    else
+        out()
+        {
+            <xss:e v="clazz.output_id"/> = Class.create(
+        }
+</xss:code>
 {
     initialize: function($super)
     {
         $super();
         
         <xss:code>
-            if (renderer)
-              compiler.xss(renderer, clazz, true);
+        if (renderer)
+        {
+            compiler.xss(renderer, clazz, rendering_class = true);
+        }
         </xss:code>
     },
-
-<xss:code>
-
-//render properties
-for(var prop in clazz.properties)
-{
-    string prop_name = prop.name;
-
-    if (prop.set && prop.get)
+    <xss:code>
+    if (renderer)
     {
-        out(indent = 0)
-        {
-            <xss:e value="prop_name"/>_get : function ()
-            {
-                <xss:e>prop.get.generate()</xss:e>
-            },
-
-            <xss:e value="prop_name"/>_set : function (value)
-            {
-                <xss:e>prop.set.generate()</xss:e>
-            },
-        }
+        compiler.xss(renderer, clazz, rendering_class = true);
     }
-    else if (prop.set)
-    {
-        out(indent = 0)
-        {
-            <xss:e value="prop_name"/> : <xss:e value="prop.generate_value()"/>,
-
-            <xss:e value="prop_name"/>_set : function (value)
-            {
-                this.<xss:e value="prop_name"/> = value;
-                <xss:e value="prop.set.generate()"/>
-            },
-        }
-    }
-    else if (prop.get)
-    {
-        out(indent = 0)
-        {
-            <xss:e>prop.name</xss:e>_get : function ()
-            {
-                <xss:e>prop.get.generate()</xss:e>
-            },
-        }
-    }
-    else
-    {
-        //this is a plain property, unless the class specify otherwise
-        //we will also try to initialize it
-            
-        var value = compiler.evaluate_property(clazz, prop.name);
-        if (prop.set_fn)
-        {
-            if (value != null) //dont initialize empty values
-            {
-                out(indent = 0)
-                {
-                    <xss:e value="clazz.id"/>.<xss:e value="prop.set_fn"/>(<xss:e>prop.generate_value()</xss:e>);
-                }
-            }
-        }
-        else
-        {
-            if (value != null)
-            {
-                out(indent = 0)
-                {
-                    <xss:e value="prop_name"/> :  <xss:e>prop.generate_value()</xss:e>,
-                }
-            }
-        }
-    }
-}
-
-for(var mthd in clazz.methods)
-{
-    if (mthd.is_native)
-        continue;
-        
-	out(indent = 0)
-	{
-		<xss:e value="mthd.name"/> : function(<xss:e>mthd.args.generate()</xss:e>) 
-		{
-			<xss:e>mthd.code.generate()</xss:e>
-		},
-	}
-}
-
-//render events as functions provided by jquery
-for(var ev in clazz.events)
-{
-	//remember every event could be impemented multiple times
-    string ev_name = clazz.id + "." + ev.name;
-	var    impls   = ev.impls;
-	var    evargs  = ev.args;
-		
-	//generate functions
-	out(indent = 0)
-	{
-		<xss:e value="ev_name"/> : function()
-		<xss:open_brace/>    
-	}
-		
-    for(var evimpl in impls)
-	{
-		out(indent = 1)
-		{
-			<xss:e>evimpl.generate()</xss:e>
-		}
-	}
-
-	out(indent = 0)
-	{
-		<xss:close_brace/>,
-	}
-}
-</xss:code>
+    </xss:code>
 });

@@ -72,6 +72,11 @@ int main(int argc, char* argv[])
     catch(xs_error xse)
       {
         succeeded = false;
+        XSSRenderer rend = compiler->current_renderer();
+        if (rend && !xse.data.has("file"))
+          {
+            xse.data.add("file", rend->file().string());
+          }
 
         print_error(xse.data);
       }
