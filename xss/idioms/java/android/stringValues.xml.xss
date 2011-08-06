@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name"><xss:e value="application.title"/></string>
+<xss:code>
+
+	//allResources = object();
+	//appName = "new";
+	
+	//without this, console error with "Cannot assign" is dispatched when resCounter is assigned new value
+	int resCounter = 0;
+	
+	for(var inst in instances)
+	{
+		for(var prop in inst.properties)
+		{
+			if(prop.resource)
+			{
+				string strResName = "res" + resCounter++ as string;
+				object auxObj = object(
+					resId 	 = resCounter, 
+					resName  = strResName, 
+					cmpId 	 = inst.id, 
+					cmpRef	 = inst, 
+					propName = prop.name, 
+					propRef  = prop);
+				allResources += auxObj;
+				
+				prop.resourceName = strResName;
+				
+				out(indent = 1)
+				{
+					<<xss:e value="prop.type"/> name="<xss:e value="strResName"/>"><xss:e value="prop.value"/></<xss:e value="prop.type"/>>
+				}
+			}
+		}
+	}
+</xss:code>
+</resources>

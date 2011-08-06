@@ -1,0 +1,1 @@
+<xss:project>    <path generator="../../../idioms/cpp/qt/main.xss"          class_library="../../../idioms/cpp/qt/classes.xml"          source_path=""          output_path="../../../production/qt/"/>    <options gen_event_method="false"/>    <idiom class="cpp-idiom"/>		<application src="desktop_app.xml"/></xss:project>

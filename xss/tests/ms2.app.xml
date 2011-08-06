@@ -1,0 +1,4 @@
+<application src="ms1.app.xs">
+    <fade_in id="test_sequence"/>
+    <fade_in id="test_sequence1"/>
+</application>

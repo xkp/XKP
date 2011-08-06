@@ -753,6 +753,9 @@ call_stack& vm::state()
 
 fs::path vm::file()
   {
+    if (call_stack_.empty())
+      return fs::path();
+
     execution_context* top = call_stack_.top();
     return top->file();
   }

@@ -64,6 +64,12 @@
                 if (!rendering_instance)
                     path = compiler.replace_this(path, "this__"); 
                 
+                string assign = prop_name + " = value;"; 
+                if (prop)
+                {
+                    assign = prop.render_set('value');
+                }
+
                 out(indent = 2)
                 {
                     var <xss:e v="iid"/> = new ms.state.Interpolator(
@@ -71,7 +77,7 @@
                         default_interpolate,
                         function(value)
                         {
-                            <xss:e v="path"/>.<xss:e v="prop.render_set('value')"/>;
+                            <xss:e v="path"/>.<xss:e v="assign"/>;
                         },
                         [
                 }
@@ -267,15 +273,15 @@
     {
         string parent_id = "null";
         string seq_id = seq.output_id;
-        
-        out() {var <xss:e v="seq_id"/> =} compiler.xss("instantiator.xss", seq, hello = 34);
 
         if (parent)
-        {
             parent.subs += seq;
 
-            if (rendering_instance) //must distinguish between classes and instances
-                                    //rendering differs
+        if (rendering_instance)
+        {
+            //render instance
+            out() {var <xss:e v="seq_id"/> =} compiler.xss("instantiator.xss", seq);
+            if (parent)
             {
                 //build the instance chain
                 parent_id = parent.id;
@@ -294,26 +300,29 @@
                     <xss:e v="parent_id"/>.push(<xss:e v="seq.id"/>);
                 }
             }
-            else
+            
+            compiler.xss("../common-js/instance.xss", seq);
+        }
+        else
+        {
+            //render as class
+            if (parent)
             {
-                //rendering a class, this is going into the constructor
-                out(indent = 2)
+                out()
                 {
                     this.<xss:e v="seq.id"/> = new ms.state.Sequence();
                     this.push(this.<xss:e v="seq.id"/>);
                 }
             }
-        }
-        
-        if (!rendering_instance)
-        {
+
             seq_id = "this";
             out(indent = 2)
             {
                 var this__ = this;
             }
         }
-            
+        
+
         if (seq.auto_start)
         {
             out(indent = 2)
@@ -322,11 +331,6 @@
             }
         }
                 
-        if (rendering_instance)
-        {
-            compiler.xss("../common-js/instance.xss", seq);
-        }
-        
         out()
         {
             <xss:e v="seq_id"/>.parent_sequence = <xss:e v="parent_id"/>;

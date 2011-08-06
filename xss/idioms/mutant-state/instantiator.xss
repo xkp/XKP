@@ -1,12 +1,5 @@
 <xss:parameter id="obj"/>
 
-<xss:code>
-if (!obj.type)
-{
-    compiler.log("NO TYPE!!", obj.id);
-}
-</xss:code>
-
 new <xss:e v="obj.type.output_id"/>(
 <xss:code>
 

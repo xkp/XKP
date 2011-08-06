@@ -21,6 +21,7 @@ const str SProjectError("project");
 const str SCannotResolve("cannot-resolve");
 const str STypeMismatch("type-mismatch");
 const str SFileError("404");
+const str SIdiomError("idiom");
 
 const str SCannotReadModule("Unable to read module");
 const str SMustProvideEntryPointForApplicationType("Applications must provide an entry point");
@@ -305,7 +306,10 @@ XSSRenderer xss_compiler::compile_xss_file(const str& src_file, XSSContext ctx)
 
 XSSRenderer xss_compiler::compile_xss_file(fs::path src_file, XSSContext ctx)
   {
-    return compile_xss(load_file(src_file), ctx, src_file);
+    compiling_ = src_file;
+    XSSRenderer result = compile_xss(load_file(src_file), ctx, src_file);
+    compiling_ = fs::path();
+    return result;
   }
 
 XSSRenderer xss_compiler::compile_xss(const str& src, XSSContext ctx, fs::path path)
@@ -519,6 +523,25 @@ void xss_compiler::log(const param_list params)
       }
 	}
 
+void xss_compiler::error(const param_list params)
+  {
+    str desc;
+    if (!params.empty())
+      desc = variant_cast<str>(params.get(0), str());
+    
+		param_list error;
+		error.add("id", SIdiomError);
+		error.add("desc", desc);
+
+    for(size_t i = 1; i < params.size(); i++)
+    {
+		  str pname = params.get_name(i);
+      error.add(pname, params.get(i));
+    }
+
+		xss_throw(error);
+  }
+
 bool xss_compiler::parse_expression(variant v)
 	{
 		if (!v.is<str>())
@@ -588,8 +611,8 @@ variant xss_compiler::resolve_property(const str& prop, variant parent)
         base = ctx->resolve_path(lang_utils::unwind(id), XSSObject(), pth);
 				path_str = id;
 			}
-		else if (parent.is<XSSObject>())
-			base = parent;
+		else 
+			base = variant_cast<XSSObject>(parent, XSSObject());
 
 		std::vector<str> path = lang_utils::unwind(prop); assert(!path.empty());
 		str prop_name = path[path.size() - 1];
@@ -619,6 +642,7 @@ variant xss_compiler::resolve_property(const str& prop, variant parent)
 			result->add_property("prop", variant());
 
 		result->add_property("prop_name", prop_name);
+		result->add_property("request", prop);
 		result->add_property("path", pth);
 		result->add_property("obj", obj);
 
@@ -658,6 +682,11 @@ str xss_compiler::full_path(const str& file)
 
     fs::path file_pth = pth.parent_path() / file;
     return file_pth.string();
+  }
+
+fs::path xss_compiler::compiling()
+  {
+    return compiling_;
   }
 
 void xss_compiler::push_renderer(XSSRenderer renderer)

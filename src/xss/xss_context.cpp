@@ -440,12 +440,17 @@ variant xss_context::resolve_path(const std::vector<str>& path, XSSObject base, 
                 xss_throw(error);
               }
 						
+            if (!result.empty())
+              result += get_language()->resolve_separator(obj);
+
+            result += obj->output_id();
+            
             switch(ri.what)
               {
                 case RESOLVE_PROPERTY:
                   {
 						        XSSProperty prop	= ri.value;
-                    result += lang_->resolve_separator(obj) + prop->render_get();
+                    result += get_language()->resolve_separator(XSSObject(prop)) + prop->render_get();
                     break;
                   }
                 default:

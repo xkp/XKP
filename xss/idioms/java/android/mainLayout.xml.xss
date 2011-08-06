@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+<xss:code>
+	//this implementation should be recursively
+	for(var inst in instances)
+	{
+		if(inst.id != "application")
+		{
+			out(indent = 1)
+			{
+				<<xss:e value="inst.import"/> android:id="@+id/<xss:e value="inst.id"/>" 
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+			}
+			for(var prop in inst.properties)
+			{
+				if(prop.android_layout_name)
+				{
+					out(indent = 2)
+					{
+						android:<xss:e value="prop.android_layout_name"/>="@string/<xss:e value="prop.resourceName"/>"
+					}
+				}
+			}
+			out(indent = 2)
+			{
+				/>
+			}
+		}
+	}
+</xss:code>
+</LinearLayout>

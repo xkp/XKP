@@ -72,12 +72,31 @@ int main(int argc, char* argv[])
     catch(xs_error xse)
       {
         succeeded = false;
-        XSSRenderer rend = compiler->current_renderer();
-        if (rend && !xse.data.has("file"))
+        fs::path file;
+
+        if (xse.data.has("file"))
           {
-            xse.data.add("file", rend->file().string());
+            str ff = variant_cast<str>(xse.data.get("file"), str());
+            file = fs::path(ff);
+          }
+        else
+          {
+            fs::path compiling = compiler->compiling();
+            if (!compiling.empty())
+              file = compiling;
+            else
+              { 
+                XSSRenderer rend = compiler->current_renderer();
+                if (rend)
+                  {
+                    file = rend->file();
+                  }
+              }
           }
 
+        if (!file.empty())
+          std::cout << "Error at: " << file.string() << '\n';
+        
         print_error(xse.data);
       }
     catch(xss_error xsse)

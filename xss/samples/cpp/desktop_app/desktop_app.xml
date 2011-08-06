@@ -1,0 +1,14 @@
+<application source="desktop_app.xs" title="My first application" width="500" height="174">
+	<button id="pushButton_1" caption="Click me" x="110" y="30" width="75" height="23"/>
+	<button id="pushButton_2" caption="Change text" enabled="false" x="210" y="30" width="91" height="23"/>
+	<label id="label_1" caption="Here is the text" x="170" y="60" width="120" height="16"/>
+	
+	<div id="holder" x="130" y="80" width="300" height="60">
+		<label id="div_label_1" caption="Inside div holder" x="110" y="10" width="80" height="16"/>
+		<button id="pushButton_3" caption="--)" width="60" height="40" placement="Placement.right"/>
+		<button id="pushButton_4" caption="(--" width="60" height="40" placement="Placement.left"/>
+		<edit id="edtText" text="write me!" alignment="Alignment.right" x="90" y="30" width="130" height="23"/>
+	</div>
+
+	<button id="pushButton_5" caption="Button at Bottom of window" width="60" height="30" placement="Placement.bottom"/>
+</application>

@@ -129,6 +129,7 @@ namespace xkp
         void        xss(const param_list params);
         void        inject(const param_list params);
         void        log(const param_list params);
+        void        error(const param_list params);
         bool        parse_expression(variant v);
         str         render_expression(const str& expr, XSSObject this_);
         str         replace_this(const str& s, const str& this_);
@@ -136,6 +137,7 @@ namespace xkp
         str         renderer_file(const str& file);
         str         idiom_path(XSSObject obj, const str& file);
         str         full_path(const str& file);
+        fs::path    compiling();
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -148,6 +150,7 @@ namespace xkp
         fs::path                            base_path_;
         fs::path                            source_path_;
         fs::path                            output_path_;
+        fs::path                            compiling_;
         XSSObject                           options_;
         
         XSSObject   read_project(fs::path xml_file);
@@ -184,6 +187,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         dynamic_method_ ("xss",    &xss_compiler::xss);
         dynamic_method_ ("inject", &xss_compiler::inject);
         dynamic_method_ ("log",    &xss_compiler::log);
+        dynamic_method_ ("error",  &xss_compiler::error);
 
         method_<str,      1>("genid",	            &xss_compiler::genid);
         method_<bool,     1>("parse_expression",	&xss_compiler::parse_expression);
