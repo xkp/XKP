@@ -1,3 +1,3 @@
-<application title="Java Test Console" source="java1.app.xs">
+<application name="JavaTest" title="Java Test Console" source="java1.app.xs">
 	<classx id="instance1"/>
 </application>

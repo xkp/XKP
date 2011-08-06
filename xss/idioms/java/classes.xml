@@ -1,16 +1,19 @@
-<xml>
-	<class id="application">
-		<properties>
-			<property id="title" type="string"/>
-		</properties>
-		<events>
-			<event id="create"/>
-		</events>
-	</class>
-	
-	<class id="classx">
-		<properties>
-			<property id="value" type="int"/>
-		</properties>
-	</class>
-</xml>
+<module id="java" src="classes.xs">
+	<types>	
+		<class id="application">
+			<properties>
+				<property id="title" type="string"/>
+				<property id="name" type="string"/>
+			</properties>
+			<events>
+				<event id="create"/>
+			</events>
+		</class>
+		
+		<class id="classx">
+			<properties>
+				<property id="value" type="int"/>
+			</properties>
+		</class>
+	</types>
+</module>

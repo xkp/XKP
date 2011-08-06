@@ -6,19 +6,14 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class <xss:e value="application.name"> {
+public class <xss:e value="application.name"/> {
 
 	public static void main(String[] args) {
 	
 		<xss:code>
-			for(var evt in application.events)
-			{
-			}
+			compiler.xss("instance.xss", application);
 			
-			out(indent = 1)
-			{
-				<xss:e>application.events[0].</xss:e>
-			}
+			compiler.inject("render_instances");
 		</xss:code>
 	
 		<xss:class>
@@ -29,45 +24,9 @@ public class <xss:e value="application.name"> {
 			
 			on render()
 			{
+				compiler.log("ok2");
 				render_component(application);
 			}
 		</xss:class>
-	
-		<xss:code>
-			for(var cmp in application.children)
-			{
-				for(var mthd in cmp.methods)
-				{
-					out(indent = 1)
-					{
-						<xss:e v="mthd.type"/> <xss:e v="mthd.name"/>(<xss:e v="mthd.args.generate()"/>)
-						<xss:open_brace/>
-							<xss:e v="mthd.code.generate()"/>
-						<xss:close_brace/>
-					}
-				}
-				
-				out()
-				{
-					<xss:return/>
-				}
-
-				for(var evt in cmp.events)
-				{
-					for(var impl in evt.impls)
-					{
-						//<xss:e value="impl.generate()"/>
-						out(indent = 1)
-						{
-							void <xss:e v="evt.name"/>
-							<xss:open_brace/>
-								<xss:e value="impl.generate()"/>
-							<xss:close_brace/>
-						}
-					}
-				}
-				
-			}
-		</xss:code>
 	}
 }
