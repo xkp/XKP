@@ -108,6 +108,8 @@ class xss_type : public xss_object
       void    set_definition(XSSObject def);
       schema* native_type();
       XSSType array_type();
+      void    inherit();
+      XSSType get_super();
     public:
       void as_enum();
       void as_array(XSSType type);
@@ -356,8 +358,7 @@ struct xss_type_schema : xss_object_schema<xss_type>
 
 				inherit_from<xss_object>();
 
-				property_<XSSType>("super", &xss_type::super_);
-				
+				readonly_property<XSSType>("super",   &xss_type::get_super);
         readonly_property<bool>("is_enum",    &xss_type::is_enum);
 				readonly_property<bool>("is_array",   &xss_type::is_array);
 				readonly_property<bool>("is_object",  &xss_type::is_object);

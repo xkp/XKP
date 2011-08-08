@@ -114,6 +114,7 @@ namespace xkp
         //glue visibility
         DynamicArray instances_;
         DynamicArray utypes_;
+        DynamicArray all_types();
     };
 
   class xss_compiler : public boost::enable_shared_from_this<xss_compiler>
@@ -210,6 +211,8 @@ struct xss_module_schema : xss_object_schema<xss_module>
 
         property_("instances",  &xss_module::instances_);
         property_("user_types", &xss_module::utypes_);
+        
+        readonly_property<DynamicArray>("types", &xss_module::all_types);
       }
   };
 

@@ -1,0 +1,31 @@
+<xss:code>
+for(var i in application.children)
+{
+    if (i.some_array)
+    {
+        for(var j in i.some_array)
+        {
+            out()
+            {
+                <xss:e v="j.what"/>
+            }
+        }
+    }
+}
+
+for(var t in test_idiom.types)
+{
+    out() 
+    { 
+        <xss:e v="t.id"/> 
+    }
+
+    for(var e in t.events)
+    {
+        out() 
+        { 
+            <xss:e v="e.id"/> 
+        }
+    }
+}
+</xss:code>

@@ -49,6 +49,7 @@ const str SInjectingEventsOnNoRenderer("You must be rendering an application in 
 const str SInjectRequiresAnEvent("You must pass an event name to compiler.inject()");
 const str SCannotParseExpression("Cannot parse expression");
 const str SInstanceNotFoundInIdiom("Instance not found in any idiom");
+const str SUnknownImportClass("Trying to import an unknown class");
 
 //xss_application_renderer
 xss_application_renderer::xss_application_renderer(fs::path entry_point, Language lang, XSSCompiler compiler):
@@ -271,6 +272,20 @@ void xss_module::register_instance(XSSObject obj)
       }
 
     instances_->push_back(obj);
+  }
+
+DynamicArray xss_module::all_types()
+  {
+    DynamicArray result(new dynamic_array);
+    type_list::iterator it = types_.begin();
+    type_list::iterator nd = types_.end();
+
+    for(; it != nd; it++)
+      {
+        result->push_back(it->second);
+      }
+
+    return result;
   }
 
 //xss_compiler
@@ -851,15 +866,51 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
                 xss_throw(error);
               }
 
+            XSSType super;
+            if (type_data->has("super"))
+              {
+                str super_name = type_data->get<str>("super", str());
+                super = ctx->get_type(super_name);
+                if (!super)
+                  {
+                    param_list error;
+                    error.add("id", SProjectError);
+                    error.add("desc", SUnknownClass);
+                    error.add("class", super_name);
+                    xss_throw(error);
+                  }
+              }
+            
             XSSType type(new xss_type());
             type->set_id(type_data->id());
+            type->set_super(super);
             type->set_output_id(type_data->output_id());
             type->set_definition(type_data);
+            type->inherit();
 
             str class_name = type_data->type_name();
             if (class_name == "class")
               {
-                //nothing so far
+                //look for imports
+                XSSObjectList imports = type_data->find_by_class("import");
+                XSSObjectList::iterator it = imports.begin();
+                XSSObjectList::iterator nd = imports.end();
+
+                for(; it != nd; it++)
+                  {
+                    XSSObject import = *it;
+                    XSSType   itype  = ctx->get_type(import->id());
+                    if (!itype)
+                      {
+                        param_list error;
+                        error.add("id", SProjectError);
+                        error.add("desc", SUnknownImportClass);
+                        error.add("class", import->id());
+                        xss_throw(error);
+                      }
+
+                    type->copy(XSSObject(itype)); //td: will override, maybe not the desired effect
+                  }
               }
             else if (class_name == "enum")
               {

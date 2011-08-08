@@ -13,6 +13,7 @@ const str SContextHasNoPath("Requesting path on a context without it");
 const str SDuplicateSymbol("A symbol with this name already exists");
 const str SEmptyArrayType("Arrays must have an inner type");
 const str SCannotResolve("Cannot resolve");
+const str SArrayMismatch("An array has been declared that already exists on the super class as a non array");
 
 str xss_utils::var_to_string(variant& v)
   {
@@ -464,7 +465,7 @@ variant xss_context::resolve_path(const std::vector<str>& path, XSSObject base, 
                 param_list error;
                 error.add("id", SContextError);
                 error.add("desc", SCannotResolve);
-                error.add("instance", result);
+                error.add("instance", inst_name);
 
                 xss_throw(error);
               }
@@ -658,7 +659,7 @@ void xss_object::copy(XSSObject obj)
 
           virtual void item(const str& name, variant value)
             {
-              if (name == "type" || name == "super") //td: hate it
+              if (name == "type") 
                 return; 
               dynamic_set((IDynamicObject*)dest_, name, value);
             }
@@ -686,10 +687,13 @@ bool xss_object::resolve(const str& name, schema_item& result)
 
     variant value;
     bool    read_only = false;
-    if (type_ && type_->has(name))
+    if (type_)
       {
-        value = dynamic_get(type_, name);
-        read_only = true;
+        if (type_->has(name) || type_->find(name))
+          {
+            value = dynamic_get(type_, name);
+            read_only = true;
+          }
       }
 
 		//sponge-like
@@ -936,6 +940,55 @@ schema* xss_type::native_type()
 XSSType xss_type::array_type()
   {
     return array_type_;
+  }
+
+void xss_type::inherit()
+  {
+    if (!super_)
+      return;
+
+    //merge arrays
+    item_list::iterator it = items_.begin();
+    item_list::iterator nd = items_.end();
+
+    for(; it != nd; it++)
+      {
+        if (it->second.get)
+          {
+            variant value = it->second.get->get(this);
+
+            DynamicArray da = variant_cast<DynamicArray>(value, DynamicArray());
+            if (da)
+              {
+                DynamicArray sda = variant_cast<DynamicArray>(dynamic_get(super_, it->first), DynamicArray());
+                if (sda)
+                  {
+                    std::vector<variant>::iterator sit = sda->ref_begin();
+                    std::vector<variant>::iterator snd = sda->ref_end();
+
+                    for(; sit != snd; sit++)
+                      {
+                        XSSObject obj = variant_cast<XSSObject>(*sit, XSSObject());
+                        if (obj)
+                          {
+                            XSSObject cloner(new xss_object);
+                            cloner->copy(obj);
+                            da->push_back(cloner);
+                          }
+                        else
+                          da->push_back(*sit);
+                      }
+                  }
+              }
+          }
+      }
+
+    //td: merge children
+  }
+
+XSSType xss_type::get_super() 
+  {
+    return super_;
   }
 
 void xss_type::as_enum()

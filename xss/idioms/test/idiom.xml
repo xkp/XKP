@@ -1,0 +1,40 @@
+<module id="test_idiom">
+    <types>
+        <class id="t_arrays">
+            <array id="some_array">
+                <object what="something"/>
+            </array>
+        </class>
+        
+        <class id="t_arrays1" super="t_arrays">
+            <array id="some_array">
+                <object what="something2"/>
+            </array>
+        </class>
+
+        <class id="t_base_import">
+            <property id="title" type="string"/>
+            <property id="name" output_id="real_name" type="int" value="20"/>
+
+            <method id="run" output_id="real_run"/>
+            <event id="create" output_id="create"/>
+        </class>
+
+        <class id="t_mouse_import">
+            <event id="click" output_id="onClick"/>
+            <event id="up" output_id="onMouseUp"/>
+            <event id="down" output_id="create"/>
+        </class>
+
+        <class id="t_keyb_import">
+            <event id="click" output_id="onClick"/>
+            <event id="up" output_id="onMouseUp"/>
+            <event id="down" output_id="create"/>
+        </class>
+
+        <class id="t_derived_import" super="t_base_import">
+            <import id="t_mouse_import"/>
+            <import id="t_keyb_import"/>
+        </class>
+    </types>
+</module>

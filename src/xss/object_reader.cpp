@@ -11,6 +11,8 @@ const str SPropertyMustHaveName("Properties must have a name");
 const str SPropertyMustHaveType("Properties must have a type");
 const str SCannotParseXML("Invalid XML file");
 const str STypeNotFound("Cannot find type");
+const str SUnnamedArray("Arrays must have id");
+const str SPropertyTypeMismatch("Property type does not its value");
 
 //xss_object_reader
 xss_object_reader::xss_object_reader(XSSContext ctx):
@@ -163,77 +165,156 @@ bool xss_object_reader::special_node(TiXmlElement* node, XSSObject parent, XSSOb
     str type(ta? ta : "");
 
     if (class_name == "property")
-      {
-        variant value;
-        bool is_array = type == "array";
-        if (is_array)
-          {
-            XSSObjectList children = read_array(node);
-            
-            //convert to vm friendly
-            DynamicArray array_value(new dynamic_array);
-            XSSObjectList::iterator it = children.begin();
-            XSSObjectList::iterator nd = children.end();
-
-            for(; it != nd; it++)
-              {
-                array_value->push_back(*it);
-              }
-
-            value = array_value;
-          }
-        else
-          {
-            const char* av = node->Attribute("value"); 
-            str value_str(av? av : "");
-            if (!value_str.empty())
-              {
-                assert(false); //td: punting the type resolvation (sic) for later
-              }
-          }
-        
-        str name = node->Attribute("id")? str(node->Attribute("id")) : str();
-        if (name.empty())
-          {
-						param_list error;
-						error.add("id", SReaderError);
-						error.add("desc", SPropertyMustHaveName);
-						error.add("container", parent->id());
-
-						xss_throw(error);
-          }
-
-        if (type.empty())
-          {
-						param_list error;
-						error.add("id", SReaderError);
-						error.add("desc", SPropertyMustHaveType);
-						error.add("property name", name);
-						error.add("container", parent->id());
-
-						xss_throw(error);
-          }
-
-        XSSType xtype = ctx_? ctx_->get_type(type) : XSSType();
-        if (!xtype)
-          {
-            param_list error;
-            error.add("id", SReaderError);
-            error.add("desc", STypeNotFound);
-            error.add("type", type);
-            xss_throw(error);
-          }
-
-        XSSProperty prop(new xss_property(name, xtype, value, parent)); 
-
-        //grab the rest of the stuff
-        XSSObject surrogate = read_object(node, XSSObject(), false);
-        prop->copy(surrogate);
-
-        parent->properties()->push_back(prop); //td: check for existing properties
-
-        return true;
-      }
+      return read_property(node, type, parent, result);
+    else if (class_name == "method")
+      return read_method(node, type, parent, result);
+    else if (class_name == "event")
+      return read_event(node, type, parent, result);
+    else if (class_name == "array")
+      return read_array(node, type, parent, result);
 
     return false;
   }
+
+bool xss_object_reader::read_property(TiXmlElement* node, const str& type_name, XSSObject parent, XSSObject& result)
+  {
+    variant value;
+    bool is_array = type_name == "array";
+    if (is_array)
+      {
+        XSSObjectList children = read_array(node);
+            
+        //convert to vm friendly
+        DynamicArray array_value(new dynamic_array);
+        XSSObjectList::iterator it = children.begin();
+        XSSObjectList::iterator nd = children.end();
+
+        for(; it != nd; it++)
+          {
+            array_value->push_back(*it);
+          }
+
+        value = array_value;
+      }
+    else
+      {
+        //check for known values
+        const TiXmlAttribute* attr = node->FirstAttribute();
+	      while(attr)
+	        {
+	          if (attr->Name() == "value")
+              {
+                value = attribute_value(attr);
+                break;
+              }
+            
+            attr = attr->Next();
+          }
+      }
+        
+    str name = node->Attribute("id")? str(node->Attribute("id")) : str();
+    if (name.empty())
+      {
+				param_list error;
+				error.add("id", SReaderError);
+				error.add("desc", SPropertyMustHaveName);
+				error.add("container", parent->id());
+
+				xss_throw(error);
+      }
+
+    XSSType type;
+    if (type_name.empty())
+      {
+        if (!value.empty())
+          {
+            type = ctx_->get_type(value.get_schema());
+          }
+      }
+    else
+      {
+        type = ctx_->get_type(type_name);
+        if (!value.empty())
+          {
+            XSSType vtype = ctx_->get_type(value.get_schema());
+            if (type != vtype)
+              {
+				        param_list error;
+				        error.add("id", SReaderError);
+				        error.add("desc", SPropertyTypeMismatch);
+				        error.add("property name", name);
+				        error.add("container", parent->id());
+				        error.add("declared type", type->id());
+				        error.add("value type", vtype->id());
+				        xss_throw(error);
+              }
+          }
+      }
+
+    if (!type)
+      {
+				param_list error;
+				error.add("id", SReaderError);
+				error.add("desc", SPropertyMustHaveType);
+				error.add("property name", name);
+				error.add("container", parent->id());
+				xss_throw(error);
+      }
+
+    XSSProperty prop(new xss_property(name, type, value, parent)); 
+
+    //grab the rest of the stuff
+    XSSObject surrogate = read_object(node, XSSObject(), false);
+    prop->copy(surrogate);
+
+    parent->properties()->push_back(prop); //td: check for existing properties
+
+    return true;
+  }
+
+bool xss_object_reader::read_method(TiXmlElement* node, const str& type, XSSObject parent, XSSObject& result)
+  {
+    XSSMethod mthd(new xss_method);
+    XSSObject surrogate = read_object(node, XSSObject(), false);
+    mthd->copy(surrogate);
+
+    parent->methods()->push_back(mthd); //td: check for existing methods
+    return true;
+  }
+
+bool xss_object_reader::read_event(TiXmlElement* node, const str& type, XSSObject parent, XSSObject& result)
+  {
+    XSSEvent ev(new xss_event);
+    XSSObject surrogate = read_object(node, XSSObject(), false);
+    ev->copy(surrogate);
+
+    parent->events()->push_back(ev); //td: check for existing events
+    return true;
+  }
+
+bool xss_object_reader::read_array(TiXmlElement* node, const str& type, XSSObject parent, XSSObject& unused)
+  { 
+    const char* idd = node->Attribute("id");
+    if (!idd)
+      {
+				param_list error;
+				error.add("id", SReaderError);
+				error.add("desc", SUnnamedArray);
+
+				xss_throw(error);
+      }
+
+    str           id(idd);
+    DynamicArray  result(new dynamic_array);
+    XSSObjectList aa = read_array(node);
+
+    XSSObjectList::iterator it = aa.begin();
+    XSSObjectList::iterator nd = aa.end();
+
+    for(; it != nd; it++)
+      result->push_back(*it);
+
+    parent->add_property(id, result);
+    return true;
+  }
+
