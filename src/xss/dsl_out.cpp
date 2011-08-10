@@ -145,7 +145,7 @@ struct out_file_renderer : item_renderer
             if (pp != params_.end())
               file_params.add(it->id, args->get(pp->second));
             else
-              file_params.add(it->id, variant());
+              file_params.add(it->id, it->default_value);
           }
 
         str result = renderer_->render(XSSObject(), &file_params);

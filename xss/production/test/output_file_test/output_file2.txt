@@ -1,0 +1,4 @@
+
+Writing to: output_file_test/output_file2.txt
+Message: Foo Bar
+

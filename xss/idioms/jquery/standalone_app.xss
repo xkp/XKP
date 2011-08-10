@@ -9,14 +9,14 @@
 $(function() {
 	<xss:code>
 	//generate application code	
-    compiler.xss("instance.xss", application);
+    compiler.xss("../common-js/instance.xss", application);
 
 	//and then instances
     for(var i in jquery.instances)
     {
         out()
 		{
-			<xss:file src="instance.xss" output="inline">
+			<xss:file src="../common-js/instance.xss" output="inline">
 				<parameter name="it" value="i"/>
 			</xss:file>
 		}

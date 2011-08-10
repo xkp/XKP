@@ -50,6 +50,8 @@ const str SInjectRequiresAnEvent("You must pass an event name to compiler.inject
 const str SCannotParseExpression("Cannot parse expression");
 const str SInstanceNotFoundInIdiom("Instance not found in any idiom");
 const str SUnknownImportClass("Trying to import an unknown class");
+const str SCopyFileEmpty("A file was specified for copy without a file name");
+const str SXSSBadOutput("compiler.xss(output_file) does not accept empty strings");
 
 //xss_application_renderer
 xss_application_renderer::xss_application_renderer(fs::path entry_point, Language lang, XSSCompiler compiler):
@@ -312,6 +314,8 @@ void xss_compiler::build(fs::path xml)
     read_application(app_file);
 
     run();
+
+    copy_files(project_data);
   }
 
 XSSRenderer xss_compiler::compile_xss_file(const str& src_file, XSSContext ctx)
@@ -388,6 +392,32 @@ str xss_compiler::genid(const str& what)
 		return "__" + what + boost::lexical_cast<str>(aidx);
   }
 
+void xss_compiler::xss_args(const param_list params, param_list& result, fs::path& output_file)
+  {
+    for(size_t i = 0; i < params.size(); i++)
+      {
+        str     pname = params.get_name(i);
+        variant value = params.get(i);
+
+        if (pname == "output_file")
+          {
+            str vv = variant_cast<str>(value, str());
+            if (vv.empty())
+              {
+                param_list error;
+                error.add("id", SProjectError);
+                error.add("desc", SXSSBadOutput);
+                xss_throw(error);
+              }
+
+            output_file = output_path_ / vv;
+            continue;
+          }
+
+          result.add(pname, value);
+      }
+  }
+
 void xss_compiler::xss(const param_list params)
   {
     if (params.size() == 0)
@@ -407,10 +437,15 @@ void xss_compiler::xss(const param_list params)
         xss_throw(error);
       }
 
+    //grab options, leave the rest of the arguments intact
+    param_list my_args;
+    fs::path   the_output_file;
+    xss_args(params, my_args, the_output_file);
+
+    //resolve file name
     XSSRenderer r   = current_renderer();
     XSSContext  ctx = r->context();
 
-    //resolve file name
     fs::path file(file_name);
     if (!file.is_complete())
       {
@@ -428,28 +463,28 @@ void xss_compiler::xss(const param_list params)
     renderer_parameter_list::iterator it = result_args.begin();
     renderer_parameter_list::iterator nd = result_args.end();
 
-    size_t     param_count = params.size();
+    size_t     param_count = my_args.size();
     size_t     curr_param  = 1; //the first parameter is taken
     param_list result_params;   //what to pass to the xss
     for(; it != nd; it++)
       {
-        if (params.has(it->id))
+        if (my_args.has(it->id))
           {
-            result_params.add(it->id, params.get(it->id));
+            result_params.add(it->id, my_args.get(it->id));
           }
         else if (curr_param < param_count)
           {
             bool named;
             do 
               {
-                named = !params.get_name(curr_param).empty();
+                named = !my_args.get_name(curr_param).empty();
                 if (named)
                   curr_param++;
               }
             while(named);
 
             if (curr_param < param_count)
-              result_params.add(it->id, params.get(curr_param++));
+              result_params.add(it->id, my_args.get(curr_param++));
             else
               result_params.add(it->id, it->default_value);
           }
@@ -459,7 +494,10 @@ void xss_compiler::xss(const param_list params)
           }
       }
 
-    r->append(result->render(XSSObject(), &result_params)); //td: change dynamic methods to return a variant
+    if (the_output_file.empty())
+      r->append(result->render(XSSObject(), &result_params)); //td: change dynamic methods to return a variant
+    else
+      output_file(the_output_file, result->render(XSSObject(), &result_params));
   }
 
 void xss_compiler::inject(const param_list params)
@@ -1479,6 +1517,67 @@ void xss_compiler::run()
           std::cout << result;
         else
           output_file(output_path_ / out_file, result);
+      }
+  }
+
+void xss_compiler::copy_files(XSSObject project_data)
+  {
+    std::vector<XSSObject> files = project_data->find_by_class("output_file");
+    std::vector<XSSObject>::iterator it = files.begin();
+    std::vector<XSSObject>::iterator nd = files.end();
+
+    for(; it != nd; it++)
+      { 
+        XSSObject data = *it;
+        str src_file = data->get<str>("src",  str());
+        str dst_file = data->get<str>("dst", str());
+
+        if (src_file.empty())
+          {
+				    param_list error;
+				    error.add("id", SProjectError);
+				    error.add("desc", SCopyFileEmpty);
+
+				    xss_throw(error);
+          }
+
+        fs::path src = base_path_ / src_file;
+
+        if (!fs::exists(src))
+          {
+				    param_list error;
+				    error.add("id", SProjectError);
+				    error.add("desc", SFileNotFound);
+				    error.add("file", src.string());
+
+				    xss_throw(error);
+          }
+
+        //do output
+        fs::path dst = output_path_ / dst_file;
+        
+        fs::path dst_path = dst;
+        bool is_directory = dst_file[dst_file.size() - 1] == '/'; //td: !!!
+        if (!is_directory)
+          dst_path = dst.parent_path();
+        else 
+          dst /= src.filename();
+
+        bool do_copy = true;
+        if (fs::exists(dst))
+          {
+            std::time_t src_modified = boost::filesystem::last_write_time( src ) ;
+            std::time_t dst_modified = boost::filesystem::last_write_time( dst ) ;
+
+            do_copy = src_modified != dst_modified;
+          }
+
+        if (do_copy)
+          {
+            dst_path = fs::system_complete(dst_path);
+            fs::create_directories(dst_path);
+            fs::copy_file(src, dst, fs::copy_option::overwrite_if_exists);
+          }
       }
   }
 

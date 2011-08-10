@@ -280,7 +280,7 @@
         if (rendering_instance)
         {
             //render instance
-            out() {var <xss:e v="seq_id"/> =} compiler.xss("instantiator.xss", seq);
+            out() {var <xss:e v="seq_id"/> =} compiler.xss("../common-js/instantiator.xss", seq);
             if (parent)
             {
                 //build the instance chain

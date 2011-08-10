@@ -3,7 +3,9 @@
 <xss:parameter id="is_class"/>
 
 <xss:code>
-string prop_name = owner.output_id + "." + prop.name;
+string prop_name = prop.name;
+if (!is_class)
+    prop_name = owner.output_id + "." + prop_name;
 
 if (prop.set && prop.get)
 {

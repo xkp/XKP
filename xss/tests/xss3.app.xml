@@ -1,0 +1,4 @@
+<application>
+    <file_desc fname="output_file_test/output_file1.txt" message="Hello word"/>
+    <file_desc fname="output_file_test/output_file2.txt" message="Foo Bar"/>
+</application>

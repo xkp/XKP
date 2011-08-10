@@ -143,9 +143,6 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xss.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\xs\array.cpp">
       <Filter>Source Files\xs</Filter>
     </ClCompile>
@@ -220,6 +217,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\xss\lang\java.cpp">
       <Filter>Source Files\xss\lang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xss.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,0 +1,3 @@
+<xss:parameter id="fd"/>
+Writing to: <xss:e v="fd.fname"/>
+Message: <xss:e v="fd.message"/>

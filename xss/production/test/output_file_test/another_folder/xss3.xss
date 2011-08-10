@@ -1,0 +1,6 @@
+<xss:code>
+for(var fd in application.children)
+{
+    compiler.xss("xss3_1.xss", fd, output_file = fd.fname);
+}
+</xss:code>

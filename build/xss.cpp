@@ -1,5 +1,4 @@
 
-#include "stdafx.h"
 #include <iostream>
 #include <fstream>
 
@@ -51,7 +50,8 @@ void print_error(param_list data)
 int main(int argc, char* argv[])
   {
     char* fname = argv[1];
-		fs::path target(fname); 
+		fs::path target = fs::system_complete(fname);
+    
     if (!fs::exists(target))
       {
         param_list error;
@@ -103,12 +103,31 @@ int main(int argc, char* argv[])
       {
         succeeded = false;
 
-        XSSRenderer renderer = compiler->current_renderer();
-        if (renderer)
+        fs::path file;
+
+        if (xsse.data.has("file"))
           {
-            str file = renderer->file().string();
-            xsse.data.add("file", file);
+            str ff = variant_cast<str>(xsse.data.get("file"), str());
+            file = fs::path(ff);
           }
+        else
+          {
+            fs::path compiling = compiler->compiling();
+            if (!compiling.empty())
+              file = compiling;
+            else
+              { 
+                XSSRenderer rend = compiler->current_renderer();
+                if (rend)
+                  {
+                    file = rend->file();
+                  }
+              }
+          }
+
+        if (!file.empty())
+          std::cout << "Error at: " << file.string() << '\n';
+
         print_error(xsse.data);
       }
     catch(runtime_error rte)

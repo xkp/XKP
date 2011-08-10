@@ -1,0 +1,10 @@
+<project entry_point="xss3.xss" language="debug" target="xss3.app.xml">
+    <path>
+        <output path="../production/test"/>
+    </path>
+
+    <output_file src="xss3.xss" dst="output_file_test/another_folder/"/>
+    <output_file src="xss3.project.xml" dst="output_file_test/another_folder/another.project.xml"/>
+</project>
+           
+         

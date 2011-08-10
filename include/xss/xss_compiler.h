@@ -166,6 +166,8 @@ namespace xkp
         Language    get_language(const str& name);
         void        pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent);
         void        run();
+        void        copy_files(XSSObject project_data);
+        void        xss_args(const param_list params, param_list& result, fs::path& output_file);
       private:
         //id gen
         typedef std::map<str, int> genid_list;
