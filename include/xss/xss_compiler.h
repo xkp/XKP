@@ -104,6 +104,7 @@ namespace xkp
         fs::path     path_; 
 
         void register_instance(XSSObject obj);
+        bool one_of_us(XSSObject obj);
       private:
         //types
         typedef std::map<str, XSSType>  type_list;
@@ -167,7 +168,7 @@ namespace xkp
         void        pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent);
         void        run();
         void        copy_files(XSSObject project_data);
-        void        xss_args(const param_list params, param_list& result, fs::path& output_file);
+        void        xss_args(const param_list params, param_list& result, fs::path& output_file, str& marker);
       private:
         //id gen
         typedef std::map<str, int> genid_list;

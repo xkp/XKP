@@ -13,6 +13,10 @@
 #include "xs/compiler.h"
 
 #include <boost/functional/hash.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string.hpp>
+
 #include <iostream>
 
 using namespace xkp;
@@ -52,6 +56,7 @@ const str SInstanceNotFoundInIdiom("Instance not found in any idiom");
 const str SUnknownImportClass("Trying to import an unknown class");
 const str SCopyFileEmpty("A file was specified for copy without a file name");
 const str SXSSBadOutput("compiler.xss(output_file) does not accept empty strings");
+const str SEmptyMarker("compiler.xss(marker) does not accept empty strings");
 
 //xss_application_renderer
 xss_application_renderer::xss_application_renderer(fs::path entry_point, Language lang, XSSCompiler compiler):
@@ -198,27 +203,11 @@ pre_process_result xss_module::pre_process(XSSObject obj, XSSObject parent)
     //we'll add sort of an arbitrary logic here
     //the objects with types belonging to this module will be logged 
     //as intances. this can be used later in xss to render the proper instances
-    XSSObject types     = find("types");
-    str       type_name = obj->type_name();
-    bool      found     = false;
-    if (types)
+    if (one_of_us(obj))
       {
-        if (types->find(type_name))
-          {
-            found = true;
-            register_instance(obj);
-          }
+        register_instance(obj);
       }
-
-    if (!found)
-      {
-        XSSObject types = find("process_types");
-        if (types && types->find(type_name))
-          {
-            register_instance(obj);
-          }
-      }
-
+    
     return PREPROCESS_KEEPGOING;
   }
 
@@ -274,6 +263,21 @@ void xss_module::register_instance(XSSObject obj)
       }
 
     instances_->push_back(obj);
+  }
+
+bool xss_module::one_of_us(XSSObject obj)
+  {
+    XSSType obj_type = obj->type();
+    while(obj_type)
+      {
+        type_list::iterator it = types_.find(obj_type->id());
+        if (it != types_.end())
+          return true;
+
+        obj_type = obj_type->get_super();
+      }
+    
+    return false;
   }
 
 DynamicArray xss_module::all_types()
@@ -361,10 +365,32 @@ XSSRenderer xss_compiler::compile_xss(const str& src, XSSContext ctx, fs::path p
     return result;
   }
 
+str delete_blanks(const str& contents)
+  {
+    std::vector<str> strs;
+    boost::split(strs, contents, boost::is_any_of("\n"));
+
+    str result;
+
+    std::vector<str>::iterator it = strs.begin();
+    std::vector<str>::iterator nd = strs.end();
+    for(; it != nd; it++)
+      {
+        str line = *it;
+        boost::trim(line);
+        if (line.empty())
+          continue;
+
+        result += *it + '\n';
+      }
+
+    return result;
+  }
+
 void xss_compiler::output_file(const str& fname, const str& contents)
   {
     fs::path path = output_path_ / fname;
-    output_file(path, contents);
+    output_file(path, delete_blanks(contents));
   }
 
 void xss_compiler::output_file(fs::path fpath, const str& contents)
@@ -372,7 +398,7 @@ void xss_compiler::output_file(fs::path fpath, const str& contents)
     fs::create_directories(fpath.parent_path());
 
     std::ofstream ofs(fpath.string().c_str());
-    ofs << contents;
+    ofs << delete_blanks(contents);
     ofs.close();
   }
 
@@ -392,7 +418,7 @@ str xss_compiler::genid(const str& what)
 		return "__" + what + boost::lexical_cast<str>(aidx);
   }
 
-void xss_compiler::xss_args(const param_list params, param_list& result, fs::path& output_file)
+void xss_compiler::xss_args(const param_list params, param_list& result, fs::path& output_file, str& marker)
   {
     for(size_t i = 0; i < params.size(); i++)
       {
@@ -413,8 +439,22 @@ void xss_compiler::xss_args(const param_list params, param_list& result, fs::pat
             output_file = output_path_ / vv;
             continue;
           }
+        else if (pname == "marker")
+          {
+            str vv = variant_cast<str>(value, str());
+            if (vv.empty())
+              {
+                param_list error;
+                error.add("id", SProjectError);
+                error.add("desc", SEmptyMarker);
+                xss_throw(error);
+              }
 
-          result.add(pname, value);
+            marker = vv;
+            continue;
+          }
+
+        result.add(pname, value);
       }
   }
 
@@ -440,7 +480,8 @@ void xss_compiler::xss(const param_list params)
     //grab options, leave the rest of the arguments intact
     param_list my_args;
     fs::path   the_output_file;
-    xss_args(params, my_args, the_output_file);
+    str        marker; 
+    xss_args(params, my_args, the_output_file, marker);
 
     //resolve file name
     XSSRenderer r   = current_renderer();
@@ -495,7 +536,12 @@ void xss_compiler::xss(const param_list params)
       }
 
     if (the_output_file.empty())
-      r->append(result->render(XSSObject(), &result_params)); //td: change dynamic methods to return a variant
+      {
+        if (!marker.empty())
+          r->append_at(result->render(XSSObject(), &result_params), marker); 
+        else
+          r->append(result->render(XSSObject(), &result_params)); 
+      }
     else
       output_file(the_output_file, result->render(XSSObject(), &result_params));
   }

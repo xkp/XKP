@@ -78,7 +78,8 @@ class xss_object : public editable_object<xss_object>,
       XSSObject              find(const str& what);
       std::vector<XSSObject> find_by_class(const str& which);
       DynamicArray           get_event_impl(const str& event_name, XSSEvent& ev);
-		public:
+		  bool                   is_injected(const str& name);
+    public:
       //children management
 			void add_child(XSSObject obj);
       void remove_child(XSSObject obj);

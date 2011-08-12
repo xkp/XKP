@@ -1,4 +1,8 @@
-<project entry_point="../idioms/mutant-state/sequence_debug.xss" language="js" target="ms2.app.xml">
+<project entry_point="../idioms/mutant-state/sequence_debug.xss" language="js" target="ms2.app.xml" output="ms2.html">
+    <path>
+        <output path="../production/test"/>
+    </path>
+
     <idiom src="../idioms/mutant-state/sequence.xml"/>
     
     <include def="ms2.classes.xml" src="ms2.classes.xs"/>

@@ -10,7 +10,7 @@ const str SCannotEvaluate("Cannot evaluate expression");
 const str SClassMustHaveARenderEvent("xss:class must have a render event");
 const str SDuplicateMarker("Duplicate xss:marker");
 const str SExpectingOutputAttribute("xss:file must have an output attribute");
-const str SMarkerWithNoName("xss:marker must have a name attribute");
+const str SMarkerWithNoName("xss:marker must have an id");
 const str SUnknownMarker("Unknown xss:marker");
 const str SUnnamedInstance("xss:instance must have an id");
 const str SUnnamedParameter("xss:parameter must have an id");
@@ -291,7 +291,17 @@ void xss_renderer::append(const str& what)
 
 void xss_renderer::append_at(const str& what, const str& marker)
   {
-    assert(false); //td: 
+	  marker_map::iterator it = markers_.find(marker);
+    if (it != markers_.end())
+      {
+        it->second.value += what;
+      }
+    else
+      {
+				marker_info mi;
+        mi.value = what;
+				markers_.insert(marker_pair(marker, mi));
+      }
   }
 
 XSSContext xss_renderer::context()
@@ -343,7 +353,7 @@ void xss_renderer::handle_file(const str& text, param_list* args)
 
 void xss_renderer::handle_marker(const str& text, param_list* args)
   {
-		variant vname = args->get("name");
+		variant vname = args->get("id");
 		str name = variant_cast<str>(vname, str());
 		if (name.empty())
 			{

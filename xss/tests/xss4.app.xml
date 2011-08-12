@@ -1,0 +1,3 @@
+<application>
+    <object id="o1" show_before="Hello" show_after="World"/>
+</application>

@@ -51,6 +51,7 @@ namespace xkp
                                 //with implementing the (*)= operators properly, users of this flag
                                 //will tell the compiler not to perform an assigment after executing the operator
                                 //for instance, the += of an array.
+      INJECTED        = 0x100,  //this will be second, I guess... properties added at runtime
     };
 
   struct schema_item

@@ -1,0 +1,15 @@
+
+<xss:marker id="before"/>
+<xss:code>
+for(var i in application.children)
+{
+    out(marker="before")
+    {
+        Before? <xss:e v="i.show_before"/>
+    }
+
+    compiler.xss("xss4_1.xss", i, marker="after");
+}
+</xss:code>
+
+AFter! <xss:marker id="after"/>

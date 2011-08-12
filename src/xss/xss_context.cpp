@@ -674,7 +674,7 @@ void xss_object::copy(XSSObject obj)
 
 bool xss_object::resolve(const str& name, schema_item& result)
 	{
-		if (editable_object<xss_object>::resolve(name, result))
+    if (editable_object<xss_object>::resolve(name, result))
 			return true;
     
     XSSObject child = find(name);
@@ -687,7 +687,7 @@ bool xss_object::resolve(const str& name, schema_item& result)
 
     variant value;
     bool    read_only = false;
-    if (type_)
+    if (type_ && !type_->is_injected(name))
       {
         if (type_->has(name) || type_->find(name))
           {
@@ -696,11 +696,12 @@ bool xss_object::resolve(const str& name, schema_item& result)
           }
       }
 
-		//sponge-like
+		//sponge-like, items will be marked as "injected", which is synonym for
+    //properties that were added at run time. They are not inheritable
 		int idx      = add_anonymous(value);
 		result.get   = Getter( new anonymous_getter(idx) );
 		result.set   = !read_only? Setter( new anonymous_setter(idx) ) : Setter();
-		result.flags = DYNAMIC_ACCESS;
+		result.flags = DYNAMIC_ACCESS|INJECTED;
 
 		items_.insert( item_pair(name, result) );
 		return true;
@@ -840,6 +841,17 @@ DynamicArray xss_object::get_event_impl(const str& event_name, XSSEvent& ev)
 
     events_->push_back(ev);
     return ev->impls;
+  }
+
+bool xss_object::is_injected(const str& name)
+  {
+    item_list::iterator it = items_.find(name);    
+    if (it != items_.end())
+      {
+        return it->second.flags&INJECTED;
+      }
+
+    return false;
   }
 
 void xss_object::add_child(XSSObject obj)
