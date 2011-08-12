@@ -76,7 +76,7 @@ else
             ];
         }
     }
-    else if (prop.type.is_object)
+    else if (prop.type.is_object && prop.value)
     {
         value = compiler.xss("object.xss", obj = prop.value);
     }

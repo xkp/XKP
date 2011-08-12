@@ -796,6 +796,9 @@ void xss_object::set_type(XSSType type)
 
 XSSObject xss_object::find(const str& what)
   {
+    if (what.empty())
+      return XSSObject();
+    
     std::vector<variant>::iterator it = children_->ref_begin();
     std::vector<variant>::iterator nd = children_->ref_end();
 

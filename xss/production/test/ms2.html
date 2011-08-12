@@ -2,17 +2,18 @@
 <html>
 <head>
 <title></title>
-<script type="text/javascript" src="js/jquery-1.4.2.min.js" ></script>
-<script type="text/javascript" src="js/jquery.utils.js"></script>
-<script type="text/javascript" src="js/utils.js"></script>
-<script type="text/javascript" src="js/prototype.js"></script>
-<script type="text/javascript" src="js/ms/ms-ui.js"></script>
-<script type="text/javascript" src="js/ms/ms-streamer.js"></script>
-<script type="text/javascript" src="js/ms/ms-state.js"></script>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript">			
 var g_elapsed = -1;
 var g_delta = 0.0;
 var g_sequencer = new ms.state.Manager();
+var application = {}
 function default_interpolate(a, b, t)
 {
     return a + (b - a)*t;
@@ -48,10 +49,10 @@ function start(resolution)
                             fade_in.target.alpha = value;;
                         },
                         [
+                        {t: 0, value: 0},
                         {t: 1, value: 0.300000012},
-                        {t: 2, value: 1},
                         ]);
-                    this.addAction(null, "alpha", new ms.state.State(1, 2, ____i1));                    
+                    this.addAction(null, "alpha", new ms.state.State(0, 1, ____i1));                    
                     var ____i2 = new ms.state.Interpolator(
                         "alpha", 
                         default_interpolate,
@@ -64,81 +65,8 @@ function start(resolution)
                         {t: 2, value: 1},
                         ]);
                     this.addAction(null, "alpha", new ms.state.State(1, 2, ____i2));                    
-                    var ____i3 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            fade_in.target.alpha = value;;
-                        },
-                        [
-                        {t: 1, value: 0.300000012},
-                        {t: 2, value: 1},
-                        ]);
-                    this.addAction(null, "alpha", new ms.state.State(1, 2, ____i3));                    
-                    var ____i4 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            fade_in.target.alpha = value;;
-                        },
-                        [
-                        {t: 1, value: 0.300000012},
-                        {t: 2, value: 1},
-                        ]);
-                    this.addAction(null, "alpha", new ms.state.State(1, 2, ____i4));                    
     },
-                var this__ = this;
-            this.parent_sequence = null;
-                    var ____i5 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            fade_in.target.alpha = value;;
-                        },
-                        [
-                        {t: 1, value: 0.300000012},
-                        {t: 2, value: 1},
-                        ]);
-                    this.addAction(null, "alpha", new ms.state.State(1, 2, ____i5));                    
-                    var ____i6 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            fade_in.target.alpha = value;;
-                        },
-                        [
-                        {t: 1, value: 0.300000012},
-                        {t: 2, value: 1},
-                        ]);
-                    this.addAction(null, "alpha", new ms.state.State(1, 2, ____i6));                    
-                    var ____i7 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            fade_in.target.alpha = value;;
-                        },
-                        [
-                        {t: 1, value: 0.300000012},
-                        {t: 2, value: 1},
-                        ]);
-                    this.addAction(null, "alpha", new ms.state.State(1, 2, ____i7));                    
-                    var ____i8 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            fade_in.target.alpha = value;;
-                        },
-                        [
-                        {t: 1, value: 0.300000012},
-                        {t: 2, value: 1},
-                        ]);
-                    this.addAction(null, "alpha", new ms.state.State(1, 2, ____i8));                    
+                target =  null;
 });
                 application.target =  0;
 var test_sequence =

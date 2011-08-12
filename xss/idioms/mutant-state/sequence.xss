@@ -49,9 +49,12 @@
         if (!rendering_instance)
             seq_id = "this";
 
+        compiler.log(at.id);
+        
         float time = at.time;
         for(var itm in at.children)
         {
+            compiler.log(itm.class_name);
             if (itm.class_name == "animate")
             {
                 var prop_info = compiler.resolve_property(itm.property, seq);

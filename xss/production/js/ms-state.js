@@ -1,5 +1,44 @@
 "ms.state".namespace();
 
+ms.state.Manager = Class.create(
+{
+    initialize: function()
+    {
+		this.sequences = [];
+    },
+
+	add: function(sequence)
+	{
+		for(var i = 0; i < this.sequences.lenght; i++)
+		{
+			if (sequence == this.sequences[i])
+				return; //fail safe
+		}	
+
+		this.sequences.push(sequence);
+	},
+	
+	remove: function(sequence)
+	{
+		for(var i = 0; i < this.sequences.lenght; i++)
+		{
+			if (sequence == this.sequences[i])
+			{
+				this.sequences.remove(i);
+				return;
+			}
+		}	
+	},
+	
+	update: function(t, last)
+	{
+		for(var i = 0; i < this.sequences.lenght; i++)
+		{
+			this.sequences[i].update(t, last);
+		}
+	},	
+});
+
 ms.state.State = Class.create(
 {
     initialize: function(start, end, handler)
@@ -537,15 +576,23 @@ ms.state.Unit = Class.create(
 
 ms.state.Sequence = Class.create(
 {
-    initialize: function()
+    initialize: function(manager)
     {
 	    this.units = [];
         this.running = false;
         this.time = 0;
+		this.manager = manager;
+		this.parent = null;
     },
 
     start: function()
     {
+		if (this.running)
+			return;
+		
+		if (!this.parent) //top level
+			this.manager.add(this);
+
         this.running = true;
         this.time = 0;
         
@@ -557,6 +604,9 @@ ms.state.Sequence = Class.create(
     {
         this.running = false;
         this.time = 0;
+
+		if (!this.parent)	
+			this.manager.remove(this);
     },
 
     update: function(delta)

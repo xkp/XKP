@@ -1069,6 +1069,7 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
         for(; cit != cnd; cit++)
           {
             XSSObject clazz_data = *cit;
+
             str cid = clazz_data->id();
 
 						std::map<str, XSSObject>::iterator dcit = def_types.find(cid);

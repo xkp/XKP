@@ -1,5 +1,8 @@
 <xss:parameter id="clazz"/>
 <xss:parameter id="renderer"/>
+<xss:parameter id="property_renderer" default="property.xss"/>
+<xss:parameter id="method_renderer"   default="method.xss"/>
+<xss:parameter id="event_renderer"    default="event.xss"/>
 
 <xss:code>
     if (clazz.super)
@@ -30,9 +33,23 @@
         </xss:code>
     },
     <xss:code>
-    if (renderer)
+    for(var prop in clazz.properties)
     {
-        compiler.xss(renderer, clazz, rendering_class = true);
+        if (prop.dont_init)
+            continue;
+    
+        compiler.xss(property_renderer, prop, clazz, is_class = true);
+    }    
+
+    for(var mthd in clazz.methods)
+    {
+        compiler.xss(method_renderer, mthd, clazz, is_class = true);
+    }
+
+    //render events as functions
+    for(var ev in clazz.events)
+    {
+        compiler.xss(event_renderer, ev, clazz, is_class = true);
     }
     </xss:code>
 });
