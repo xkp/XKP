@@ -1,0 +1,5 @@
+<project entry_point="xss5.xss" language="debug" target="xss5.app.xml">
+    <idiom src="../idioms/test/idiom.xml"/>
+</project>
+           
+         

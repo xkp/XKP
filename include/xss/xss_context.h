@@ -71,6 +71,7 @@ class xss_object : public editable_object<xss_object>,
       void set_id(const str& id);
       void set_output_id(const str& id);
       void set_type_name(const str& id);
+      void set_parent(XSSObject parent);
 
 			virtual void set_type(XSSType type);
 		public:
@@ -92,7 +93,7 @@ class xss_object : public editable_object<xss_object>,
       str           output_id_;
       str           type_name_;
 			XSSType       type_;
-			XSSObject     parent_;
+			XSSObject     parent_; //td: !!! weaks
 			DynamicArray	children_;
 			DynamicArray	properties_;
 			DynamicArray	methods_;
@@ -346,6 +347,7 @@ struct xss_object_schema : editable_object_schema<T>
 				this->template property_<str>         ("type_name",		&T::type_name_);
 				this->template property_<str>         ("class_name",	&T::type_name_);
 				this->template property_<XSSType>     ("type",        &T::type_);
+				this->template property_<XSSObject>   ("parent",      &T::parent_);
 
         this->template method_<XSSProperty, 1>("get_property", &T::get_property);
 		}

@@ -9,7 +9,7 @@ ms.state.Manager = Class.create(
 
 	add: function(sequence)
 	{
-		for(var i = 0; i < this.sequences.lenght; i++)
+		for(var i = 0; i < this.sequences.length; i++)
 		{
 			if (sequence == this.sequences[i])
 				return; //fail safe
@@ -20,7 +20,7 @@ ms.state.Manager = Class.create(
 	
 	remove: function(sequence)
 	{
-		for(var i = 0; i < this.sequences.lenght; i++)
+		for(var i = 0; i < this.sequences.length; i++)
 		{
 			if (sequence == this.sequences[i])
 			{
@@ -32,7 +32,7 @@ ms.state.Manager = Class.create(
 	
 	update: function(t, last)
 	{
-		for(var i = 0; i < this.sequences.lenght; i++)
+		for(var i = 0; i < this.sequences.length; i++)
 		{
 			this.sequences[i].update(t, last);
 		}

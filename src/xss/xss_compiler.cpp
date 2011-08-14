@@ -681,16 +681,16 @@ str xss_compiler::render_expression(const str& expr, XSSObject this_)
 		return rend->render(this_, null); 
 	}
 
-str xss_compiler::replace_this(const str& s, const str& this_)
+str xss_compiler::replace_identifier(const str& s, const str& src, const str& dst)
 	{
 		str    result;
 		size_t curr = 0;
-		size_t pos = s.find("this");
+		size_t pos = s.find(src);
 		while(pos != str::npos)
 			{
-				result += s.substr(curr, pos - curr) + this_;
-				curr = pos + 4;
-				pos = s.find("this", curr);
+				result += s.substr(curr, pos - curr) + dst;
+				curr = pos + src.size();
+				pos = s.find(src, curr);
 			}
 
 		result += s.substr(curr, s.size() - curr);
@@ -728,6 +728,7 @@ variant xss_compiler::resolve_property(const str& prop, variant parent)
       {
         //try the global scope
         obj = ctx->resolve_path(path, XSSObject(), pth);
+        base = XSSObject();
       }
 
 		if (!obj)
@@ -745,6 +746,7 @@ variant xss_compiler::resolve_property(const str& prop, variant parent)
 		result->add_property("request", prop);
 		result->add_property("path", pth);
 		result->add_property("obj", obj);
+		result->add_property("global", (bool)base);
 
 		return result;
 	}

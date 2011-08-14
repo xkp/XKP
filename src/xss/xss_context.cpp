@@ -789,6 +789,12 @@ void xss_object::set_type_name(const str& id)
     type_name_ = id;
   }
 
+void xss_object::set_parent(XSSObject parent)
+  {
+    assert(!parent_);
+    parent_ = parent;
+  }
+
 void xss_object::set_type(XSSType type)
   {
     type_ = type;
@@ -859,6 +865,7 @@ bool xss_object::is_injected(const str& name)
 
 void xss_object::add_child(XSSObject obj)
   {
+    obj->set_parent(shared_from_this());
     children_->push_back(obj);
   }
 

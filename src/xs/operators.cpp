@@ -435,6 +435,18 @@ struct opexec_null1 : operator_exec
   {
     virtual variant exec(variant& arg1, variant& arg2)
       {
+        try 
+          {
+            DynamicObject obj = arg1;
+            if (!obj)
+              return true;
+            else
+              return false;
+          }
+        catch(type_mismatch)
+          {
+            //not an object
+          }
 				return arg1.empty();
       }
   };
@@ -443,6 +455,18 @@ struct opexec_null2 : operator_exec
   {
     virtual variant exec(variant& arg1, variant& arg2)
       {
+        try 
+          {
+            DynamicObject obj = arg2; //check for empty objects, which are null
+            if (!obj)
+              return true;
+            else
+              return false;
+          }
+        catch(type_mismatch)
+          {
+            //not an object
+          }
 				return arg2.empty();
       }
   };
@@ -451,6 +475,18 @@ struct opexec_notnull1 : operator_exec
   {
     virtual variant exec(variant& arg1, variant& arg2)
       {
+        try 
+          {
+            DynamicObject obj = arg1; 
+            if (obj)
+              return true;
+            else
+              return false;
+          }
+        catch(type_mismatch)
+          {
+            //not an object
+          }
 				return !arg1.empty();
       }
   };
@@ -459,6 +495,18 @@ struct opexec_notnull2 : operator_exec
   {
     virtual variant exec(variant& arg1, variant& arg2)
       {
+        try 
+          {
+            DynamicObject obj = arg2; 
+            if (obj)
+              return true;
+            else
+              return false;
+          }
+        catch(type_mismatch)
+          {
+            //not an object
+          }
 				return !arg2.empty();
       }
   };

@@ -21,7 +21,7 @@
 <script type="text/javascript">			
 var g_elapsed = -1;
 var g_delta = 0.0;
-var g_sequencer = new ms.state.Manager();
+var g_sequence_manager = new ms.state.Manager();
 
 var application = {}
 
@@ -43,7 +43,7 @@ function start(resolution)
 		
         g_elapsed = now; 
 
-		g_sequencer.update(g_delta);
+		g_sequence_manager.update(g_delta);
         window.setTimeout(update, resolution);  
 	}  
 	window.setTimeout(update, resolution);  

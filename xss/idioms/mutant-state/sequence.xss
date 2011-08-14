@@ -19,7 +19,7 @@
             info.interp = interp;
             
             if (!rendering_instance)
-                info.expr = compiler.replace_this(info.expr, "this__");
+                info.expr = compiler.replace_identifier(info.expr, owner_seq.id, "this__");
             
             owner_seq.key_expressions += info;
         }
@@ -33,7 +33,7 @@
             nfo.interp = interp;
             
             if (!rendering_instance)
-                nfo.expr = compiler.replace_this(nfo.expr, "this__");
+                nfo.expr = compiler.replace_identifier(nfo.expr, owner_seq.id, "this__");
 
             owner_seq.key_expressions += nfo;
         }
@@ -49,12 +49,9 @@
         if (!rendering_instance)
             seq_id = "this";
 
-        compiler.log(at.id);
-        
         float time = at.time;
         for(var itm in at.children)
         {
-            compiler.log(itm.class_name);
             if (itm.class_name == "animate")
             {
                 var prop_info = compiler.resolve_property(itm.property, seq);
@@ -65,7 +62,10 @@
                 string path      = prop_info.path;
                 
                 if (!rendering_instance)
-                    path = compiler.replace_this(path, "this__"); 
+                {
+                    if (!path_info.global)
+                        path = compiler.replace_identifier(path, seq.id, "this__"); 
+                }
                 
                 string assign = prop_name + " = value;"; 
                 if (prop)
@@ -94,14 +94,19 @@
                 else
                 {
                     //a simple from/to animation
-                    var start   = object();
-                    start.t     = 0;
-                    start.value = itm.from;
-                    
                     var end     = object();
                     end.t       = itm.in;
                     end.value   = itm.to;
                             
+                    var start   = object();
+                    start.t     = 0;
+                    start.value = itm.from;
+
+                    if (start.value == "@")
+                    {
+                        start.value = end.value;
+                    }    
+
                     keys = [start, end];
                 }
                         

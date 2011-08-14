@@ -1,5 +1,6 @@
 <module id="test_idiom">
     <types>
+        //testing arrays
         <class id="t_arrays">
             <array id="some_array">
                 <object what="something"/>
@@ -12,6 +13,7 @@
             </array>
         </class>
 
+        //testing imports
         <class id="t_base_import">
             <property id="title" type="string"/>
             <property id="name" output_id="real_name" type="int" value="20"/>
@@ -35,6 +37,15 @@
         <class id="t_derived_import" super="t_base_import">
             <import id="t_mouse_import"/>
             <import id="t_keyb_import"/>
+        </class>
+
+        //testing parent and nulls
+        <class id="t_xss5">
+            <property id="foo" type="string"/>
+        </class>
+
+        <class id="t_xss5_1" super="t_xss5">
+            <property id="bar" type="string"/>
         </class>
     </types>
 </module>

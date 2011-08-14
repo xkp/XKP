@@ -131,6 +131,24 @@ fs::path execution_context::file()
     return code_->file;
   }
 
+bool var2bool(variant v) //td: generalize
+  {
+    if (v.is<bool>())
+      return v;
+
+    try 
+      {
+        DynamicObject obj = v;
+        return obj? true : false;
+      }
+    catch(type_mismatch)
+      {
+        //not an object
+      }
+
+    return variant_cast<bool>(v, false);
+  }
+
 variant execution_context::execute()
   {
     callstack_helper helper(this);
@@ -152,7 +170,7 @@ variant execution_context::execute()
 
             case i_jump_if:
               {
-                bool control = pop();
+                bool control = var2bool(pop());
                 if (control)
                   {
                     pc_   = i.data.value;
@@ -163,7 +181,7 @@ variant execution_context::execute()
 
             case i_jump_if_not:
               {
-                bool control = variant_cast<bool>(pop(), false); //td: its bool or false
+                bool control = var2bool(pop());
                 if (!control)
                   {
                     pc_   = i.data.value;
