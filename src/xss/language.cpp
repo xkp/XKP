@@ -14,6 +14,7 @@ const str SIncompatibleIterator("Cannot find a suitable cast for iterator");
 const str SInconsistenReturnType("Inconsisten return type");
 const str SNotAnIterator("Expecting an iterable type");
 const str SUnknownType("Cannot resolve type");
+const str SUnknownTypeFromExpression("Cannot deduce type from assigned expression");
 
 //source_collector
 void source_collector::property_(xs_property& info)
@@ -62,7 +63,8 @@ void source_collector::dsl_(dsl& info)
 
 //code_type_resolver
 code_type_resolver::code_type_resolver(XSSContext ctx):
-  ctx_(new xss_context(ctx))
+  is_variant_(false), 
+  ctx_(ctx)
   {
   }
 
@@ -78,7 +80,7 @@ void code_type_resolver::variable_(stmt_variable& info)
   {
     XSSType xsti = ctx_->get_type(info.type);
     if (!xsti)
-      { 
+      {
         param_list error;
         error.add("id", SLinker);
         error.add("desc", SUnknownType);
@@ -90,11 +92,17 @@ void code_type_resolver::variable_(stmt_variable& info)
 			{
 				if (!info.value.empty())
 					{
-						expr_type_resolver typer(ctx_);
-						info.value.visit(&typer);
-
-            xsti = typer.get();    
+            xsti = lang_utils::expr_type(info.value, ctx_);
 					}
+
+        if (!xsti)
+          {
+            param_list error;
+            error.add("id", SLinker);
+            error.add("desc", SUnknownTypeFromExpression);
+            error.add("variable name", info.id);
+            xss_throw(error);
+          }
 
         if (xsti->is_variant())
           var_vars_.push_back(info.id);
@@ -103,10 +111,7 @@ void code_type_resolver::variable_(stmt_variable& info)
       {
         if (!info.value.empty())
           {
-            expr_type_resolver typer(ctx_);
-            info.value.visit(&typer);
-
-            xsti = typer.get();
+            xsti = lang_utils::expr_type(info.value, ctx_);
           }
       }
 
@@ -119,19 +124,14 @@ void code_type_resolver::return_(stmt_return& info)
 		if (is_variant_)
 			return;
 
-		expr_type_resolver typer(ctx_);
-		info.expr.visit(&typer);
+    XSSType xstype = lang_utils::expr_type(info.expr, ctx_);
 
-		XSSType xstype = typer.get();
     if (xstype)
       return_type_found(xstype);
   }
 
 void code_type_resolver::if_(stmt_if& info)
   {
-    code_type_resolver if_typer(ctx_);
-    info.if_code.visit(&if_typer);
-
     XSSType result = lang_utils::code_type(info.if_code, ctx_);
     if (result)
       return_type_found(result);
@@ -183,7 +183,10 @@ void code_type_resolver::iterfor_(stmt_iter_for& info)
       }
     else
       {
-        if (var_type != iterator_type->array_type())
+        XSSType& lt = var_type;
+        XSSType& rt = iterator_type->array_type();
+
+        if (lt != rt && !ctx_->get_language()->can_cast(lt, rt))
           {
             param_list error;
             error.add("id", SLinker);
@@ -193,12 +196,9 @@ void code_type_resolver::iterfor_(stmt_iter_for& info)
           }
       }
     
-    code_type_resolver typer(ctx_);
-    typer.register_var(info.id, var_type);
+    register_var(info.id, var_type);
+    XSSType result = lang_utils::code_type(info.for_code, ctx_);
 
-    info.for_code.visit(&typer);
-
-    XSSType result = typer.get();
     if (result)
       return_type_found(result);
   }
@@ -250,7 +250,7 @@ void code_type_resolver::expression_(stmt_expression& info)
                 if (lt->is_array())
                   {
                     XSSType lta = lt->array_type();
-                    if (lta != rt)
+                    if (lta != rt && !ctx_->get_language()->can_cast(lta, rt))
                       {
                         param_list error;
                         error.add("id", SLinker);
@@ -272,50 +272,85 @@ void code_type_resolver::expression_(stmt_expression& info)
                 //resolve type of right expression
                 XSSType rt = lang_utils::expr_type(es.right, ctx_);
 
-                //check if its assigning to a variable not previously assigned
-                variant value;
-                if (es.right.is_constant(value))
+                if (!rt)
+                  break; //render pure text
+
+                //resolve type of left expression
+                XSSType lt = lang_utils::expr_type(es.left, ctx_);
+
+                if ((!lt || lt->is_variant()) && !rt->is_variant())
                   {
-                    str var_name = variant_cast<str>(value, str());
-                    if (!var_name.empty())
+                    str ei_name;
+                    variant obj = lang_utils::object_expr(es.left, ctx_);
+
+                    if (obj.is<expression_identifier>())
                       {
-                        var_list::iterator it = var_vars_.begin();
-                        var_list::iterator nd = var_vars_.end();
-                        for(; it != nd; it++)
+                        expression_identifier ei = obj;
+                        ei_name = ei.value;
+
+                        if (!ei_name.empty())
                           {
-                            if (*it == var_name)
+                            bool nofound = true;
+                            var_list::iterator it = var_vars_.begin();
+                            var_list::iterator nd = var_vars_.end();
+                            for(; it != nd; it++)
                               {
-                                if (!rt->is_variant())
+                                if (*it == ei_name)
                                   {
                                     var_vars_.erase(it); //no need to check no mo
-                                    register_var(var_name, rt);
+                                    register_var(ei_name, rt);
+                                    lt = rt;
+                                    nofound = false;
+                                    break;
                                   }
-                                break;
+                              }
+
+                            if (nofound)
+                              {
+                                param_list error;
+                                error.add("id", SLinker);
+                                error.add("desc", SCannontResolve);
+                                error.add("identifier", ei_name);
+
+                                xss_throw(error);
                               }
                           }
                       }
+                    else
+                      {
+                        if (obj.is<XSSProperty>())
+                          {
+                            XSSProperty prop = variant_cast<XSSProperty>(obj, XSSProperty());
+
+                            if (prop)
+                              {
+                                prop->set_type(rt);
+                              }
+                          }
+
+                        lt = rt;
+                      }
                   }
 
-
-                //resolve type of left expression
-                XSSType lt = lang_utils::expr_type(es.right, ctx_);
+                if (!lt)
+                  break; //render pure text 
 
                 //check types
                 if (lt != rt && !lt->is_variant() && !rt->is_variant())
                   {
-                    if (ctx_->get_language()->can_cast(lt, rt))
-                          {
-                            param_list error;
-                            error.add("id", SLinker);
-                            error.add("desc", SCannotCast);
-                            error.add("left",  lt->id());
-                            error.add("right", rt->id());
+                    if (!ctx_->get_language()->can_cast(lt, rt))
+                      {
+                        param_list error;
+                        error.add("id", SLinker);
+                        error.add("desc", SCannotCast);
+                        error.add("left",  lt->id());
+                        error.add("right", rt->id());
 
-                            xss_throw(error);
-                          }
+                        xss_throw(error);
                       }
                   }
-					    }
+              }
+			    }
 	    }
   }
 
@@ -334,7 +369,7 @@ void code_type_resolver::register_var(const str&id, XSSType type)
 
 void code_type_resolver::return_type_found(XSSType type)
   {
-    if (!type->is_variant())
+    if (type->is_variant())
 			{
 				is_variant_ = true;
 				return;
@@ -458,7 +493,6 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
 				case op_index:
 					{
 						//td: warning
-						//is_variant_ = true;
             variant arg1 = stack_.top(); stack_.pop();
             variant arg2 = stack_.top(); stack_.pop();
 
@@ -579,9 +613,11 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
                 if (ctx_->resolve(arg1.value, right))
                   {
                     result = right.type;
-                    if (result->is_variant())
+                    if (!result || result->is_variant())
                       is_variant_ = true;
                   }
+                else
+                  is_variant_ = true;
               }
             else
               is_variant_ = true;
@@ -650,11 +686,74 @@ XSSType expr_type_resolver::resolve_type(variant var)
 		return result;
 	}
 
-variant expr_type_resolver::top_stack()
+//expr_object_resolver
+expr_object_resolver::expr_object_resolver(XSSContext ctx) : 
+  one_opnd_(true), 
+  ctx_(ctx)
   {
-    assert(stack_.size() == 1);
+  }
 
-    return stack_.top();
+variant expr_object_resolver::get()
+	{
+    variant result;
+
+		assert(stack_.size() <= 1);
+
+    if (stack_.size() == 1)
+      {
+        if (one_opnd_)
+          {
+            expression_identifier ei = stack_.top();
+            resolve_info info;
+            if (ctx_->resolve(ei.value, info))
+              {
+                result = info.value;
+              }
+            else
+              result = ei;
+          }
+        else
+          result = stack_.top();
+      }
+
+    return result;
+	}
+
+void expr_object_resolver::push(variant operand, bool top)
+	{
+		stack_.push(operand);
+	}
+
+void expr_object_resolver::exec_operator(operator_type op, int pop_count, int push_count, bool top)
+	{
+    one_opnd_ = false;
+
+		switch(op)
+			{
+				case op_dot:
+					{
+						expression_identifier arg1  = stack_.top(); stack_.pop();
+						expression_identifier arg2  = stack_.top(); stack_.pop();
+
+            variant result;
+            resolve_info left;
+            if (ctx_->resolve(arg2.value, left))
+              {
+                resolve_info right;
+                right.left = &left;
+                if (ctx_->resolve(arg1.value, right))
+                  {
+                    result = right.value;
+                  }
+              }
+
+            stack_.push(result);
+            break;
+					}
+
+        default:
+          assert(false);//trap other case
+      }
   }
 
 //td: !!! stop duplicating this array
@@ -763,6 +862,14 @@ XSSType lang_utils::code_type(code& code, XSSContext ctx)
 XSSType lang_utils::expr_type(expression& expr, XSSContext ctx)
   {
     expr_type_resolver result(ctx);
+    expr.visit(&result);
+
+    return result.get();
+  }
+
+variant lang_utils::object_expr(expression& expr, XSSContext ctx)
+  {
+    expr_object_resolver result(ctx);
     expr.visit(&result);
 
     return result.get();

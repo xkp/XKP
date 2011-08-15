@@ -1,4 +1,5 @@
 <xss:parameter id="ev"/>
+<xss:parameter id="it"/>
 <xss:parameter id="is_class"/>
 
 <xss:code>

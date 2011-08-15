@@ -1,0 +1,27 @@
+
+<xss:parameter id="e"/>
+
+<xss:code>
+	compiler.log("Rendering event: " + e.name);
+	
+	if(!e.implemented || !e.name)
+		continue;
+	
+	out(indent = 1)
+	{
+		private void <xss:e value="e.name"/> <xss:open_brace/>
+	}
+	
+	for(var impl in e.impls)
+	{
+		out(indent = 2)
+		{
+			<xss:e>impl.render()</xss:e>
+		}
+	}
+	
+	out(indent = 1)
+	{
+		<xss:close_brace/>
+	}
+</xss:code>

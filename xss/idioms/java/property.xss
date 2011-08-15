@@ -1,0 +1,65 @@
+
+<xss:parameter id="p"/>
+
+<xss:code>
+	compiler.log("Rendering property: " + p.id);
+
+	string prop_type = "Object";
+	
+	if(p.type != null)
+		prop_type = p.type.output_id;
+	
+	if(p.set && p.get)
+	{
+		out(indent = 1)
+		{
+			public <xss:e value="prop_type"/> <xss:e value="p.name"/>_get() <xss:open_brace/>
+				<xss:e>p.get.render()</xss:e>
+			<xss:close_brace/>
+			
+			public void <xss:e value="p.name"/>_set(<xss:e value="prop_type"/> value) <xss:open_brace/>
+				<xss:e>p.set.render()</xss:e>
+			</xss:close_brace/>
+		}
+	}
+	else
+	if(p.set)
+	{
+		out(indent = 1)
+		{
+			private <xss:e value="prop_type"/> <xss:e value="p.name"/> = <xss:e value="p.generate_value()"/>
+			
+			public void <xss:e value="p.name"/>_set(<xss:e value="prop_type"/> value) <xss:open_brace/>
+				<xss:e value="p.name"> = value;
+				<xss:e>p.set.render()</xss:e>
+			<xss:close_brace/>
+		}
+	}
+	else
+	if(p.get)
+	{
+		out(indent = 1)
+		{
+			public <xss:e value="prop_type"/> <xss:e value="p.name"/>_get() <xss:open_brace/>
+				<xss:e>p.get.render()</xss:e>
+			<xss:close_brace/>
+		}
+	}
+	else
+	{
+		if(p.set_fn == null && p.get_fn == null && 
+		   p.get_xss == null && p.set_xss == null)
+		{
+			out(dont_break = true, indent = 1)
+			{ 
+				private <xss:e value="prop_type"/> <xss:e value="p.name"/> }
+			
+			if(p.value)
+			{
+				out(dont_break = true) { = <xss:e value="p.value.render()"/> }
+			}
+			
+			out() {	; }
+		}
+	}
+</xss:code>

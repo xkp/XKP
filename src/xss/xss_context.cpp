@@ -1,6 +1,8 @@
 
 #include "xss/xss_context.h"
 #include "xss/xss_error.h"
+#include "xss/language.h"
+#include "xss/lang/base.h"
 
 using namespace xkp;
 
@@ -102,7 +104,10 @@ XSSType xss_context::get_type(schema* type)
 
 XSSType xss_context::get_array_type(XSSType type)
   {
-    str type_name = type->id();
+    str type_name = "";
+    if (type)
+      type_name = type->id();
+
     if (type_name.empty())
       {
         param_list error;
@@ -113,11 +118,10 @@ XSSType xss_context::get_array_type(XSSType type)
 
     str array_type_name = "array<" + type_name + ">"; //im gonna go basic on this one
 
-    type_list::iterator it = types_.find(array_type_name);
-    if (it != types_.end())
-      {
-        return it->second;
-      }
+    XSSType result = get_type(array_type_name);
+
+    if (result)
+      return result;
 
     //create it
     XSSType new_type(new xss_type);
@@ -325,8 +329,12 @@ bool xss_context::resolve(const str& id, resolve_info& info)
             if (inst)
               {
                 XSSProperty prop = inst->get_property(id);
-                if (!prop && inst->type())
-                  prop = inst->type()->get_property(id);
+                if (!prop)
+                  {
+                    XSSType type = inst->type();
+                    if (type)
+                      prop = type->get_property(id);
+                  }
                 
                 if (prop)
                   {
@@ -1118,11 +1126,6 @@ void xss_property::copy(XSSObject obj)
     xss_object::copy(obj);
   }
 
-void xss_property::set_type(XSSType type)
-  {
-    //ignore
-  }
-
 str xss_property::render_value()
   {
     if (value_.empty())
@@ -1180,6 +1183,30 @@ str	xss_property::render_set(const str& value)
 		return id_ + " = " + value;
   }
 
+XSSType xss_property::type()
+  {
+    if (!type_)
+      {
+        ICodeRenderer* icr = variant_cast<ICodeRenderer *>(get, null);
+
+        if (icr)
+          {
+            type_ = icr->type();
+          }
+        else
+          {
+            IExpressionRenderer *ier = variant_cast<IExpressionRenderer *>(value_, null);
+
+            if (ier)
+              {
+                type_ = ier->type();
+              }
+          }
+      }
+
+    return type_;
+  }
+
 //xss_event
 xss_event::xss_event():
   impls(new dynamic_array)
@@ -1214,24 +1241,34 @@ xss_method::xss_method()
   }
 
 xss_method::xss_method(const xss_method& other):
-	name(other.name),
-	args(other.args),
-  code(other.code)
+	name_(other.name_),
+	args_(other.args_),
+  code_(other.code_)
   {
     DYNAMIC_INHERITANCE(xss_method)
 	  type_ = other.type_;
   }
 
-xss_method::xss_method(const str& _name, XSSType _type, variant _args, variant _code):
-	name(_name),
-	args(_args),
-  code(_code)
+xss_method::xss_method(const str& name, XSSType type, variant args, variant code):
+	name_(name),
+	args_(args),
+  code_(code)
   {
     DYNAMIC_INHERITANCE(xss_method)
-	  type_ = _type;
+	  type_ = type;
   }
 
-void xss_method::set_type(XSSType type)
+XSSType xss_method::type()
   {
-    //do nothing
+    if (!type_)
+      {
+        ICodeRenderer* icr = variant_cast<ICodeRenderer *>(code_, null);
+
+        if (icr)
+          {
+            type_ = icr->type();
+          }
+      }
+
+    return type_;
   }

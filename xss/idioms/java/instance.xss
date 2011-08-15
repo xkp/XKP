@@ -1,115 +1,49 @@
+
 <xss:parameter id="it"/>
 
 <xss:code>
 	compiler.log("-- Rendering instance: " + it.id);
 	
-	compiler.log("Events size: " + it.properties.size);
+	compiler.log("Properties size: " + it.properties.size);
 	for(var p in it.properties)
 	{
-		compiler.log("Rendering property: " + p.id);
-		
-		string prop_type = "Object";
-		
-		if(p.type != null)
-			prop_type = p.type;
-		
-		if(p.set && p.get)
-		{
-			out(indent = 1)
-			{
-				public <xss:e value="prop_type"/> <xss:e value="p.name"/>_get() <xss:open_brace/>
-					<xss:e>p.get.render()</xss:e>
-				<xss:close_brace/>
-				
-				public void <xss:e value="p.name"/>_set(<xss:e value="prop_type"/> value) <xss:open_brace/>
-					<xss:e>p.set.render()</xss:e>
-				</xss:close_brace/>
-			}
-		}
-		else
-		if(p.set)
-		{
-			out(indent = 1)
-			{
-				private <xss:e value="prop_type"/> <xss:e value="p.name"/> = <xss:e value="p.generate_value()"/>
-				
-				public void <xss:e value="p.name"/>_set(<xss:e value="prop_type"/> value) <xss:open_brace/>
-					<xss:e value="p.name"> = value;
-					<xss:e>p.set.render()</xss:e>
-				<xss:close_brace/>
-			}
-		}
-		else
-		if(p.get)
-		{
-			out(indent = 1)
-			{
-				public <xss:e value="prop_type"/> <xss:e value="p.name"/>_get() <xss:open_brace/>
-					<xss:e>p.get.render()</xss:e>
-				<xss:close_brace/>
-			}
-		}
-		else
-		{
-			if(p.set_fn == null && p.get_fn == null && 
-			   p.get_xss == null && p.set_xss == null)
-			{
-				//var value = compiler.evaluate_property(it, p.name);
-				//if(value != null)
-				//{
-				//	value = p.generate_value();
-				//}
-				
-				out(dont_break = true, indent = 1)
-				{
-					private <xss:e value="p.type"/> <xss:e value="p.name"/>
-				}
-			}
-		}
+		compiler.xss("property.xss", p);
 	}
-
-	compiler.log("Events size: " + it.methods.size);
+	
+	compiler.log("Methods size: " + it.methods.size);
 	for(var m in it.methods)
 	{
-		compiler.log("Rendering method: " + m.id);
-		
-		string mthd_type = "void";
-		
-		if(m.type != "")
-			mthd_type = m.type;
-		
-		out(indent = 1)
-		{
-			public <xss:e value="mthd_type"/> <xss:e value="m.name"/>(<xss:e value="m.args.render()"/>) <xss:open_brace/>
-				<xss:e>m.code.render()</xss:e>
-			<xss:close_brace/>
-		}
+		compiler.xss("method.xss", m);
 	}
 	
 	compiler.log("Events size: " + it.events.size);
 	for(var e in it.events)
 	{
-		compiler.log("Rendering event: " + e.id);
+		//assert on xs/linker.cpp:1043, i dont know for what!
+		//compiler.xss("event.xss", e);
 		
-		if(!e.implemented || !e.id)
-			continue;
-		
-		out(indent = 1)
+	compiler.log("Rendering event: " + e.name);
+	
+	if(!e.implemented || !e.name)
+		continue;
+	
+	out(indent = 1)
+	{
+		private void <xss:e value="e.name"/> <xss:open_brace/>
+	}
+	
+	for(var impl in e.impls)
+	{
+		out(indent = 2)
 		{
-			private void <xss:e value="e.event_name"/><xss:e value="it.id"/>() <xss:open_brace/>
+			<xss:e>impl.render()</xss:e>
 		}
-		
-		for(var impl in e.impls)
-		{
-			out(indent = 2)
-			{
-				<xss:e>impl.render()</xss:e>
-			}
-		}
-		
-		out(indent = 1)
-		{
-			<xss:close_brace/>
-		}
+	}
+	
+	out(indent = 1)
+	{
+		<xss:close_brace/>
+	}
+	
 	}
 </xss:code>

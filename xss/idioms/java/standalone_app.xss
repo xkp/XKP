@@ -15,18 +15,5 @@ public class <xss:e value="application.name"/> {
 			
 			compiler.inject("render_instances");
 		</xss:code>
-	
-		<xss:class>
-			method render_component(var cmp)
-			{
-				
-			}
-			
-			on render()
-			{
-				compiler.log("ok2");
-				render_component(application);
-			}
-		</xss:class>
 	}
 }

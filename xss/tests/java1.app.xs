@@ -1,107 +1,159 @@
 on create()
 {
-	// how traduce this?
-	array <object> types = [
-		object(xs_type = "int", output_type = "Integer"),
-		object(xs_type = "float", output_type = "Double"),
-		object(xs_type = "string", output_type = "String")
-	];
+	// how traduce this to java?
+	//array <object> types = [
+	//	object(xs_type = "int", output_type = "Integer"),
+	//	object(xs_type = "float", output_type = "Double"),
+	//	object(xs_type = "string", output_type = "String")
+	//];
 	
 	//*********************
 	//* TESTS IMPLEMENTED *
 	//*********************
 
-	//[ok]: test property with assigned data type from classes
-	// 		and assign value of different data type, then
-	// 		assign property value to variant variable...
-	instance1.value = 20;
-	var ex1 = pbtn1.value;
-	var exp;
-	exp = value;
-	// and correct raise type mistmatch 
-	//pbtn1.value = "value";
+	//[ok]: raise redefined symbol
+	//var some_variable = "it's a variable test.";
+	//int some_variable;
+	
+	//[ok]: raise assign type mistmatch
+	//instance1.px_value = "value";
+	
+	//[ok]: raise unknown identifier
 	//value = "value";
-	
-	//[ok]: test some assigned object
-	object obj = [1, 2];
-	obj.setValue(j);
-	
-	//[ok]: test declaration of array type with assign, 
-	//      add, remove and reasign elements. Then
-	//		set the value of a element and resolve other one.
-	array<int> list = [1, 2, 3];
-	list += 4;
-	list -= 2;
-	for(int e in list)
-	{
-		System.out.println(e);
-	}
-	list = [5, 6, 7, 8];
-	list[0] = 2 * 3;
-	var itx = list[2];
 
-	int j = 20;
-	j = 5;
-	j = list[2];
+	//[ok]: raise cannot resolve operator + 'int' and 'var'
+	//int vi = 10;
+	//vi += 20 + somenotexistsobject.getValue();
+	
+	//[ok]: deduce type from assign variable declaration value
+	var v0 = 20;
+	var v1 = instance1.px_value;
+	var v2 = "string";
+	var v3 = 3.14;
+	var v4 = true;
+	
+	//[ok]: deduce type from assign value
+	var x0;
+	x0 = instance1.px_value;
+	var x1;
+	x1 = somenotexistsobject.px_value;
 
-	var i = 0;
-	i = 1;
-	i += j;
-	i -= 2;
+	//[*ok]: deduce property type from assign value
+	instance1.ps_value = x0;
+	var x2;
+	x2 = instance1.ps_value;
+
+	instance1.svalue = x0;
+	var x3;
+	x3 = instance1.svalue;
+
+	lvalue = x0;
+	var x4;
+	x4 = lvalue;
 	
-	int a = 10;
-	a += j + obj.getValue();
-	
-	//[ok]: test declaration of array variant with assign.
-	var adyn = [1, 2, 3];
-	adyn = [4, 5, 6, 7];
-	
-	//[ok]: test simple variant type with initialization
-	var w = 2;
-	
-	//[ok]: test simplest type cast 
+	//[ok]: simplest type cast 
 	int ivar = 100;
 	string svar = ivar as string;
 	float fval = svar as float;
 
-	//[ok]: test variant variable for resolve type 
-	// 		from returned method value and 
+	//[ok]: allow cast from int to float
+	int c0 = 2;
+	float c1 = 3.14;
+	c1 = c0;
+	
+	//[ok]: deduce array type from assign variable declaration value
+	object a0 = [1, 2];
+	a0.setValue(j);
+	
+	var a1 = [1, 2];
+	a1 = [3, 4, 5, 6, 7];
+	
+	var a2;
+	a2 = [1, 2, 3];
+	
+	//[ok]: typified array with add, remove a reassign elements
+	//      Then set new value of an element, resolve other one
+	//      and iterate array items.
+	array<int> list = [1, 2, 3];
+	
+	list += 4;
+	list -= 2;
+	
+	list = [5, 6, 7, 8];
+	
+	list[0] = 2 * 3;
+	var itx = list[2];
+	
+	for(int e in list)
+	{
+		System.out.println(e);
+	}
+	
+	
+    //[ok]: simple variable operations
+	int s0 = 20;
+	s0 = 5;
+	s0 = list[2];
+
+	var s1 = 0;
+	s1 = 1;
+	s1 += s0;
+	s1 -= 2;
+	
+	int s2 = s1 + s0;
+	int s3 = s1 * s2;
+	
+	if(s1 != 0)
+	{
+		int s4 = s3 / s1;
+	}
+	
+	//[ok]: if conditions with relational operators
+	int l1 = 2;
+	int l2 = 3;
+	int l3 = 3;
+	
+	if(l1 == l2 && l2 == l3)
+	{
+		System.out.println("equilateral");
+	}
+	else
+	if(l1 != l2 && l2 != l3 && l3 != l1)
+	{
+		System.out.println("scalene");
+	}
+	else
+	{
+		System.out.println("isosceles");
+	}
+	
+	//[ok]: resolve type of var from method return type
 	//		test operator op_func_call
 	var rmthd;
-	rmthd = test(10);
+	//rmthd = app_test(10);
 	var thd = application.app_test(2);
 
-	var mthd;
-	mthd = test(10); 						// 10; op_param; 'test'; 1; op_func_call;
-	mthd = pbtn1.test(10);					// 'pbtn1'; 'test'; op_dot_call; 10; op_param; 1; op_call;
-	mthd = pbtn1.test(10, "a", -2);			// 'pbtn1'; 'test'; op_dot_call; 10; op_param; "a"; op_param; -2; op_param; 3; op_call;
-	mthd = pbtn1.test(2 * 5, "b" + "a", 1);	//
-	
-	//[ok]: test variant variable for resolve type 
-	// 		from returned property value and 
-	//		test operator op_dot
-	var ex2;
-	ex2 = xvalue;
-	ex2 = pbtn1.xvalue;
-	var ex3 = application.yvalue;
+	//var mthd;
+	//mthd = test0(10); 						    // 10; op_param; 'test'; 1; op_func_call;
+	//mthd = instance1.test(10);					// 'instance1'; 'test'; op_dot_call; 10; op_param; 1; op_call;
+	//mthd = instance1.test(10, "a", -2);			// 'instance1'; 'test'; op_dot_call; 10; op_param; "a"; op_param; -2; op_param; 3; op_call;
+	//mthd = instance1.test(2 * 5, "b" + "a", 1);	//
 	
 	//[ok]: test assign property with a type 
 	//      and some resolved casts
-	application.yvalue = "new string";
-	xvalue = 20.2;
-	
-	//[ok]: allow cast from int to float
-	xvalue = 10;
-	
-	//[ok]: test redefined variable
-	//int v1;
+	//application.yvalue = "new string";
+	//xvalue = 20.2;
 }
 
 //console error with message: "'syntax error': error while compiling xs"
-//method pbtn1.testa()
+//method instance1.testa()
 
+property lvalue;
 property yvalue = "string v";
+property xvalue = ["value1", "value2", "value3"];
 
+//method default parameter exploit xss
+//method app_test(int value = 2)
 method app_test(int value)
 {
 	return "string value";
@@ -109,12 +161,11 @@ method app_test(int value)
 
 instance instance1
 {
-	//property xvalue : int = 28;
-	//property xvalue : string = "one string";
-	//property xvalue = "super string value";
 	property xvalue = 100.2;
 	
-	method test(int value)
+	property svalue;
+	
+	method test0(int value)
 	{
 		var a = value;
 		float b = 5;
@@ -122,5 +173,28 @@ instance instance1
 		return a * a;
 		//return "values";
 		//return application.app_test(2);
+	}
+	
+	method test1(int value)
+	{
+		float b = 5;
+		return b / 2;
+	}
+	
+	method test2(int value)
+	{
+		var a = value;
+		float b = 5;
+		return application.app_test(a * b);
+	}
+	
+	method test3(var value1)
+	{
+		return value1;
+	}
+	
+	method test4(value2)
+	{
+		return value2;
 	}
 }

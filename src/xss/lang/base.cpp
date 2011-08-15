@@ -21,18 +21,24 @@ base_code_renderer::base_code_renderer(const base_code_renderer& other):
   params_(other.params_),
   ctx_(other.ctx_),
   result_(other.result_),
-  expr_(other.expr_)
+  expr_(other.expr_),
+  indent_(other.indent_)
   {
   }
 
-base_code_renderer::base_code_renderer(code& cde, XSSContext ctx):
+base_code_renderer::base_code_renderer(code& cde, XSSContext ctx, int indent):
   code_(cde),
-  ctx_(new xss_context(ctx))
+  ctx_(new xss_context(ctx)),
+  indent_(indent)
   {
   }
 
 str base_code_renderer::render()
   {
+    //resolve types of code context
+    if (!type_)
+      type_ = lang_utils::code_type(code_, ctx_);
+
 		result_ = ""; //td: cache, not parallel
     code_.visit(this);
 
@@ -49,8 +55,7 @@ XSSType base_code_renderer::type()
 
 void base_code_renderer::if_(stmt_if& info)
   {
-    std::stringstream ss;
-    str ind = indent_str_;
+    indent_str_ = indent();
 
     add_line("if (" + render_expression(info.expr, ctx_) + ")");
     add_line("{");
@@ -64,16 +69,14 @@ void base_code_renderer::if_(stmt_if& info)
 					render_code(info.else_code);
 				add_line("}");
 			}
-
-    add_line(ss.str());
   }
 
 void base_code_renderer::variable_(stmt_variable& info)
   {
     std::stringstream ss;
-    str ind = indent_str_;
+    indent_str_ = indent();
 
-    ss << ind << "var " << info.id;
+    ss << "var " << info.id;
     if (!info.value.empty())
       ss << " = " << render_expression(info.value, ctx_);
 
@@ -84,8 +87,8 @@ void base_code_renderer::variable_(stmt_variable& info)
 
 void base_code_renderer::for_(stmt_for& info)
   {
-
     std::stringstream ss;
+    indent_str_ = indent();
 
     ss << "for(var " << info.init_variable.id << " = " << render_expression(info.init_variable.value, ctx_)
         << "; " << render_expression(info.cond_expr, ctx_)
@@ -100,24 +103,26 @@ void base_code_renderer::for_(stmt_for& info)
 void base_code_renderer::iterfor_(stmt_iter_for& info)
   {
     std::stringstream ss;
-    str ind = indent_str_;
+    indent_str_ = indent();
 
     str iterable_name = info.id + "_iterable";
     str iterator_name = info.id + "_iterator";
-    ss << ind << "var " << iterable_name << " = " << render_expression(info.iter_expr, ctx_) << ";\n";
-    ss << ind << "for(var " << iterator_name << " = 0; "
-        << iterator_name << " < " << iterable_name << ".length; "
-        << iterator_name << "++" << ")\n";
 
+    add_line("var " + iterable_name + " = " + render_expression(info.iter_expr, ctx_) + ";");
+    ss << "for(var " << iterator_name << " = 0; "
+        << iterator_name << " < " << iterable_name << ".length; "
+        << iterator_name << "++" << ")";
 		add_line(ss.str());
 		add_line("{");
-		add_line("  var " + info.id + " = " + iterable_name + "[" + iterator_name + "];");
+		add_line(indent_str_ + "var " + info.id + " = " + iterable_name + "[" + iterator_name + "];\n", false);
 			render_code(info.for_code);
 		add_line("}");
   }
 
 void base_code_renderer::while_(stmt_while& info)
   {
+    indent_str_ = indent();
+
     add_line("while(" + render_expression(info.expr, ctx_) + ")");
 		add_line("{");
 			render_code(info.while_code);
@@ -126,26 +131,34 @@ void base_code_renderer::while_(stmt_while& info)
 
 void base_code_renderer::break_()
   {
-		add_line("break;", true);
+    indent_str_ = indent();
+
+		add_line("break;");
   }
 
 void base_code_renderer::continue_()
   {
-		add_line("continue;", true);
+    indent_str_ = indent();
+
+		add_line("continue;");
   }
 
 void base_code_renderer::return_(stmt_return& info)
   {
+    indent_str_ = indent();
+
     if (info.expr.empty())
-      add_line("return;", true);
+      add_line("return;");
     else
-      add_line("return " + render_expression(info.expr, ctx_) + ";", true);
+      add_line("return " + render_expression(info.expr, ctx_) + ";");
   }
 
 void base_code_renderer::expression_(stmt_expression& info)
   {
+    indent_str_ = indent();
+
     str value = render_expression(info.expr, ctx_);
-    add_line(value + ";", true);
+    add_line(value + ";");
   }
 
 void base_code_renderer::dsl_(dsl& info)
@@ -157,6 +170,15 @@ void base_code_renderer::dispatch(stmt_dispatch& info)
   {
     assert(false); //td: ought to define what to do here, it would seem like the idiom would like
                     //to handle this
+  }
+
+str base_code_renderer::indent()
+  {
+    str result;
+    for(int i = 0; i < indent_; i++)
+      result += '\t';
+
+    return result;
   }
 
 void base_code_renderer::add_line(str line, bool trim)
@@ -337,6 +359,11 @@ str base_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
 							          result = obj->output_id();
                         break;
 				              }
+                    case RESOLVE_VARIABLE:
+                      {
+                        //do nothing
+                        break;
+                      }
                     default:
                       assert(false); //trap use case
                   }
@@ -487,15 +514,7 @@ str base_expr_renderer::get()
 
 XSSType base_expr_renderer::type()
   {
-    if (!type_)
-      {
-				expr_type_resolver typer(ctx_);
-				expr_.visit(&typer);
-
-				type_ = typer.get();
-      }
-
-    return type_;
+    return !type_ ? lang_utils::expr_type(expr_, ctx_) : type_;
   }
 
 void base_expr_renderer::push(variant operand, bool top)

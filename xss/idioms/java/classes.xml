@@ -1,19 +1,17 @@
 <module id="java" src="classes.xs">
 	<types>	
+	
+	<!--
 		<class id="application">
-			<properties>
-				<property id="title" type="string"/>
-				<property id="name" type="string"/>
-			</properties>
-			<events>
-				<event id="create"/>
-			</events>
+			<property id="title" type="string"/>
+			<property id="name" type="string"/>
+			<event id="create"/>
 		</class>
+	-->
 		
 		<class id="classx">
-			<properties>
-				<property id="value" type="int"/>
-			</properties>
+			<property id="px_value" type="int"/>
+			<property id="ps_value" type="var"/>
 		</class>
 	</types>
 </module>

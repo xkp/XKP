@@ -44,7 +44,7 @@ struct base_code_renderer : ICodeRenderer,
   {
     base_code_renderer();
     base_code_renderer(const base_code_renderer& other);
-    base_code_renderer(code& cde, XSSContext ctx);
+    base_code_renderer(code& cde, XSSContext ctx, int indent = 0);
 
     //ICodeRenderer
     virtual str     render();
@@ -72,7 +72,10 @@ struct base_code_renderer : ICodeRenderer,
     protected:
       code            code_;
       XSSContext      ctx_;
+      int             indent_;
       str             indent_str_;
+
+      str indent();
 
       void    add_line(str line, bool trim = true);
       virtual str render_expression(expression& expr, XSSContext ctx) = 0;
@@ -102,7 +105,7 @@ struct base_expr_renderer : IExpressionRenderer,
     //expression_visitor
     virtual void push(variant operand, bool top);
     virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top);
-    
+
     private:
       XSSType    type_;
 
@@ -134,6 +137,8 @@ struct base_args_renderer : public IArgumentRenderer
     protected:
       XSSContext      ctx_;
       param_list_decl args_;
+
+      virtual str render_expression(expression& expr, XSSContext ctx) = 0;
   };
 
 struct base_lang : public ILanguage
@@ -145,6 +150,35 @@ struct base_lang : public ILanguage
     virtual str     resolve_separator(XSSObject lh = XSSObject());
     virtual bool    can_cast(XSSType left, XSSType right);
     virtual void    init_context(XSSContext ctx);
+  };
+
+//interface glue
+template <typename T>
+struct renderer_code_schema : renderer_schema<T>
+  {
+    virtual void declare_base()
+      {
+        implements<ICodeRenderer>();
+
+        method_<XSSType, 0>("type", &T::type);
+
+        //maintain base implementations
+        renderer_schema<T>::declare_base();
+      }
+  };
+
+template <typename T>
+struct renderer_expr_schema : renderer_schema<T>
+  {
+    virtual void declare_base()
+      {
+        implements<IExpressionRenderer>();
+
+        method_<XSSType, 0>("type", &T::type);
+
+        //maintain base implememtations
+        renderer_schema<T>::declare_base();
+      }
   };
 
 }

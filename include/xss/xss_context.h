@@ -61,7 +61,6 @@ class xss_object : public editable_object<xss_object>,
       str           id();
       str           output_id();
       str           type_name();
-			XSSType			  type();
 			XSSObject			parent();
 			DynamicArray	children();
 			DynamicArray	properties();
@@ -73,7 +72,8 @@ class xss_object : public editable_object<xss_object>,
       void set_type_name(const str& id);
       void set_parent(XSSObject parent);
 
-			virtual void set_type(XSSType type);
+			virtual XSSType			   type();
+			virtual void           set_type(XSSType type);
 		public:
       //misc
       XSSObject              find(const str& what);
@@ -279,22 +279,22 @@ class xss_property : public xss_object
   {
 	  public:
 		  xss_property();
-			  xss_property(const xss_property& other);
-			  xss_property(const str& name, XSSType type, variant value, XSSObject _this_);
-			  xss_property(const str& name, XSSType type, variant value, variant _get, variant _set, XSSObject _this_);
+		  xss_property(const xss_property& other);
+		  xss_property(const str& name, XSSType type, variant value, XSSObject _this_);
+		  xss_property(const str& name, XSSType type, variant value, variant _get, variant _set, XSSObject _this_);
 
-			  virtual void copy(XSSObject obj);
-			  virtual void set_type(XSSType type);
+		  virtual void copy(XSSObject obj);
+			virtual XSSType type();
 
-        variant   get;
-			  variant   set;
-			  size_t    flags;
-			  XSSObject this_;
-			  variant   value_;
+      variant   get;
+		  variant   set;
+		  size_t    flags;
+		  XSSObject this_;
+		  variant   value_;
 
-        str render_value();
-        str render_get();
-        str	render_set(const str& value);
+      str render_value();
+      str render_get();
+      str	render_set(const str& value);
   };
 
 class xss_event : public xss_object
@@ -316,13 +316,13 @@ class xss_method : public xss_object
 		public:
 			xss_method();
 			xss_method(const xss_method& other);
-			xss_method(const str& _name, XSSType type, variant _args, variant _code);
+			xss_method(const str& name, XSSType type, variant args, variant code);
 
-			virtual void set_type(XSSType type);
+			virtual XSSType type();
 
-			str     name;
-			variant args;
-			variant code;
+			str     name_;
+			variant args_;
+			variant code_;
   };
 
 //utils
@@ -338,7 +338,7 @@ struct xss_object_schema : editable_object_schema<T>
     virtual void declare()
       {
 				this->template property_<str>         ("id",          &T::id_);
-				this->template property_<str>         ("output_id",   &T::output_id, &T::set_output_id);
+				this->template property_<str>         ("output_id",   &T::output_id,  &T::set_output_id);
 				this->template property_<DynamicArray>("children",		&T::children_);
 				this->template property_<DynamicArray>("properties",  &T::properties_);
 				this->template property_<DynamicArray>("events",			&T::events_);
@@ -346,7 +346,7 @@ struct xss_object_schema : editable_object_schema<T>
 				this->template property_<DynamicArray>("children",		&T::children_);
 				this->template property_<str>         ("type_name",		&T::type_name_);
 				this->template property_<str>         ("class_name",	&T::type_name_);
-				this->template property_<XSSType>     ("type",        &T::type_);
+        this->template property_<XSSType>     ("type",        &T::type,       &T::set_type);
 				this->template property_<XSSObject>   ("parent",      &T::parent_);
 
         this->template method_<XSSProperty, 1>("get_property", &T::get_property);
@@ -392,9 +392,9 @@ struct xss_method_schema : xss_object_schema<xss_method>
 
 				inherit_from<xss_object>();
 
-        property_("name", &xss_method::name);
-        property_("args", &xss_method::args);
-        property_("code", &xss_method::code);
+        property_("name", &xss_method::name_);
+        property_("args", &xss_method::args_);
+        property_("code", &xss_method::code_);
       }
   };
 

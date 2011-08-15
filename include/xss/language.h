@@ -23,10 +23,10 @@ namespace xkp
       virtual void dsl_(dsl& info);
       
       public:
-          std::vector<xs_property> properties;
-          std::vector<xs_method>   methods;
-          std::vector<xs_event>    events;
-          std::vector<xs_instance> instances;
+        std::vector<xs_property> properties;
+        std::vector<xs_method>   methods;
+        std::vector<xs_event>    events;
+        std::vector<xs_instance> instances;
     };
 
 struct code_type_resolver : code_visitor
@@ -52,7 +52,6 @@ struct code_type_resolver : code_visitor
 			bool				     is_variant_;
       XSSType          result_;
 
-      //unused variables
       typedef std::vector<str> var_list;
       var_list var_vars_;
 
@@ -65,7 +64,6 @@ struct expr_type_resolver : expression_visitor
     expr_type_resolver(XSSContext ctx);
 
 		XSSType get();
-    variant top_stack();
 
 		//expression_visitor
     virtual void push(variant operand, bool top);
@@ -80,12 +78,25 @@ struct expr_type_resolver : expression_visitor
 		  XSSContext				ctx_;
 
 		private:	
-      //CUBA
-      XSSType   result_xs_type_info;
-			XSSObject result_xss;
-
 			XSSType resolve_type(variant var);
-			//XSSObject resolve_xss_type(variant var);
+  };
+
+struct expr_object_resolver : expression_visitor
+  {
+    expr_object_resolver(XSSContext ctx);
+
+    variant get();
+
+    //expression_visitor
+    virtual void push(variant operand, bool top);
+    virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top);
+
+    private:
+      typedef std::stack<variant> expr_stack;
+
+      expr_stack stack_;
+      XSSContext ctx_;
+      bool       one_opnd_;
   };
 
 struct lang_utils
@@ -94,6 +105,7 @@ struct lang_utils
     static int     operator_prec(operator_type op);
     static XSSType code_type(code& code, XSSContext ctx);
     static XSSType expr_type(expression& expr, XSSContext ctx);
+    static variant object_expr(expression& expr, XSSContext ctx);
     static str wind(const std::vector<str> path);
     static std::vector<str> unwind(const str& path);
 
@@ -127,6 +139,7 @@ struct lang_utils
 								    //get the assigner
                     T assign_renderer(es.left, ctx);
 								    assign_info ai;
+                    ai.data = value;
 								    assign_renderer.assigner = &ai;
 
 								    es.left.visit(&assign_renderer);
@@ -159,14 +172,27 @@ struct lang_utils
 
 										    case VANILLA:
 											    {
-                            XSSType type = ctx->resolve(assign, RESOLVE_TYPE);
-
-                            if ((op == op_plus_equal || op == op_minus_equal) && type->is_array())
-                              result = assign_renderer.array_operation(assign, value, op);
-                            else if (simple_assign && type->is_array() && !ai.data.empty())
-                              result = ai.data;
+                            resolve_info ri;
+                            if (ctx->resolve(assign, ri))
+                              {
+                                if ((op == op_plus_equal || op == op_minus_equal) && ri.type->is_array())
+                                  {
+                                    result = assign_renderer.array_operation(assign, value, op);
+                                  }
+                                else if (simple_assign && ri.type->is_array() && !ai.data.empty())
+                                  {
+                                    result = ai.data;
+                                  }
+                                else
+                                  {
+                                    result = assign + " " + lang_utils::operator_string(op) + " " + value;
+                                  }
+                              }
                             else
-                              result = assign + " " + lang_utils::operator_string(op) + " " + value;
+                              {
+                                result = assign + " " + lang_utils::operator_string(op) + " " + value;
+                              }
+
 												    break;
 											    }
 										    case XSS_RESOLVE:

@@ -36,6 +36,9 @@ struct js_args_renderer : public base_args_renderer
     js_args_renderer(param_list_decl& params, XSSContext ctx);
 
     virtual str render();
+
+    protected:
+      virtual str render_expression(expression& expr, XSSContext ctx);
   };
 
 struct js_lang : public base_lang
@@ -46,7 +49,7 @@ struct js_lang : public base_lang
   };
 
 //glue
-struct js_code_renderer_schema : renderer_schema<js_code_renderer>
+struct js_code_renderer_schema : renderer_code_schema<js_code_renderer>
   {
     virtual void declare()
       {
@@ -55,7 +58,7 @@ struct js_code_renderer_schema : renderer_schema<js_code_renderer>
   };
 
 register_complete_type(js_code_renderer, js_code_renderer_schema);
-register_complete_type(js_expr_renderer, renderer_schema<js_expr_renderer>);
+register_complete_type(js_expr_renderer, renderer_expr_schema<js_expr_renderer>);
 register_complete_type(js_args_renderer, renderer_schema<js_args_renderer>);
 
 }

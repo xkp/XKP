@@ -63,7 +63,7 @@
                 
                 if (!rendering_instance)
                 {
-                    if (!path_info.global)
+					if (!prop_info.global)
                         path = compiler.replace_identifier(path, seq.id, "this__"); 
                 }
                 

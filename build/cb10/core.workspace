@@ -2,6 +2,5 @@
 <CodeBlocks_workspace_file>
 	<Workspace title="Workspace">
 		<Project filename="xss/xss.cbp" active="1" />
-		<Project filename="xss_test/xss_test.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

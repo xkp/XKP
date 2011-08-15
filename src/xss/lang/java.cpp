@@ -13,23 +13,38 @@ java_code_renderer::java_code_renderer():
 java_code_renderer::java_code_renderer(const java_code_renderer& other):
   base_code_renderer(other)
   {
+    Language lang = ctx_->get_language();
+    lang->init_context(ctx_);
   }
 
-java_code_renderer::java_code_renderer(code& cde, XSSContext ctx):
-  base_code_renderer(cde, ctx)
+java_code_renderer::java_code_renderer(code& cde, XSSContext ctx, int indent):
+  base_code_renderer(cde, ctx, indent)
   {
+    Language lang = ctx->get_language();
+    lang->init_context(ctx);
   }
 
 void java_code_renderer::variable_(stmt_variable& info)
   {
     //td: when declaration separated by comma appears
     //    implement loop section with this
-    XSSType type = ctx_->resolve(info.id, RESOLVE_TYPE);
-    str str_type = type->output_id();
+    str output_type;
+    resolve_info ri;
+    if (ctx_->resolve(info.id, ri))
+      {
+        XSSType type = ri.type;
+        output_type = type->output_id();
+      }
+    else
+      {
+        XSSType type = ctx_->get_type(info.type);
+        output_type = type->output_id();
+      }
 
     std::stringstream ss;
+    indent_str_ = indent();
 
-    ss << indent_str_ << str_type << " " << info.id;
+    ss << output_type << " " << info.id;
 
     if (!info.value.empty())
       ss << " = " << render_expression(info.value, ctx_);
@@ -43,35 +58,38 @@ void java_code_renderer::for_(stmt_for& info)
 	{
     //td: when declaration separated by comma appears
     //    implement loop section with this
-    XSSType type = ctx_->resolve(info.init_variable.id, RESOLVE_TYPE);
-    str str_type = type->output_id();
+    XSSType type = ctx_->get_type(info.init_variable.type);
+    str output_type = type->output_id();
 
     std::stringstream ss;
-    str iterable_declaration = str_type + " " + info.init_variable.id;
+    indent_str_ = indent();
+
+    str iterable_declaration = output_type + " " + info.init_variable.id;
     ss << "for(" << iterable_declaration << " = " << render_expression(info.init_variable.value, ctx_)
         << "; " << render_expression(info.cond_expr, ctx_)
         << "; " << render_expression(info.iter_expr, ctx_) << ")";
 
-    add_line(ss.str(), true);
-    add_line("{", true);
+    add_line(ss.str());
+    add_line("{");
 		  render_code(info.for_code);
-		add_line("}", true);
+		add_line("}");
 	}
 
 void java_code_renderer::iterfor_(stmt_iter_for& info)
 	{
-    XSSType type = ctx_->resolve(info.id, RESOLVE_TYPE);
-    str iterable_type = type->output_id();
+    XSSType type = ctx_->get_type(info.type.name);
+    str output_type = type->output_id();
 
     std::stringstream ss;
+    indent_str_ = indent();
 
-    ss << indent_str_ << "for(" << iterable_type << " " << info.id << " : "
-      << render_expression(info.iter_expr, ctx_) << ")\n";
+    ss << "for(" << output_type << " " << info.id << " : "
+      << render_expression(info.iter_expr, ctx_) << ")";
 
 		add_line(ss.str());
-		add_line("{", true);
+		add_line("{");
 			render_code(info.for_code);
-		add_line("}", true);
+		add_line("}");
 	}
 
 str java_code_renderer::render_expression(expression& expr, XSSContext ctx)
@@ -81,9 +99,11 @@ str java_code_renderer::render_expression(expression& expr, XSSContext ctx)
 
 str java_code_renderer::render_code(code& cde)
   {
-    java_code_renderer inner(cde, ctx_); 
+    java_code_renderer inner(cde, ctx_, indent_ + 1);
     str result = inner.render();
-    add_line(result);
+
+    add_line(result, false);
+
     return result;
   }
 
@@ -125,11 +145,12 @@ str java_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
               {
                 switch (si.what)
                   {
+                    case RESOLVE_VARIABLE:
                     case RESOLVE_PROPERTY:
                       {
-                        XSSProperty prop = si.value;
-										    result = prop->render_value();
-                        break;
+                        //XSSProperty prop = si.value;
+										    //result = prop->render_value();
+                        break; //do nothing
                       }
                     case RESOLVE_METHOD:
                       {
@@ -368,7 +389,19 @@ str java_args_renderer::render()
     param_list_decl::iterator nd = args_.end();
     for(; it != nd; it++)
       {
-        oss << it->type << " " << it->name << ","; //td: interface
+        XSSType type = ctx_->get_type(it->type);
+        
+        if (!type)
+          type = ctx_->get_type("var");
+
+        str output_type = type->output_id();
+
+        oss << output_type << " " << it->name;
+
+        if (!it->default_value.empty())
+          oss << " = " << render_expression(it->default_value, ctx_);
+
+        oss << ",";
       }
 
     str result = oss.str();
@@ -376,6 +409,11 @@ str java_args_renderer::render()
       result.erase(result.end() - 1);
 
     return result;
+  }
+
+str java_args_renderer::render_expression(expression& expr, XSSContext ctx)
+  {
+    return lang_utils::render_expression<java_expr_renderer>(expr, ctx);
   }
 
 //java_lang
@@ -394,17 +432,30 @@ variant java_lang::compile_args(param_list_decl& params, XSSContext ctx)
     return reference<java_args_renderer>(new java_args_renderer(params, ctx));
   }
 
+str java_lang::resolve_this(XSSContext ctx)
+  {
+    XSSObject sub = variant_cast<XSSObject>(ctx->resolve("#this", RESOLVE_CONST), XSSObject());
+    if (sub)
+      return sub->output_id();
+
+    return str();
+  }
+
 bool java_lang::can_cast(XSSType left, XSSType right)
   {
-    if (left->is_variant())
+    if (left->is_variant() || left->is_object())
        return true;
 
-    schema *left_native, *right_native;
+    schema *left_native = null;
+    schema *right_native = null;
+
     if (left->is_native() && right->is_native())
       {
         left_native = left->native_type();
         right_native = right->native_type();
       }
+    else
+      return false;
 
     if (left_native == type_schema<float>())
       {
@@ -425,13 +476,44 @@ bool java_lang::can_cast(XSSType left, XSSType right)
 void java_lang::init_context(XSSContext ctx)
   {
     XSSType type;
-    
+
+    //translate types
+    if (type = ctx->get_type("bool"))
+      type->set_output_id("Boolean");
+
     if (type = ctx->get_type("int"))
       type->set_output_id("Integer");
 
-    else if (type = ctx->get_type("string"))
+    if (type = ctx->get_type("string"))
       type->set_output_id("String");
 
+    if (type = ctx->get_type("float"))
+      type->set_output_id("Double");
 
-    assert(false); //td: translate types
+    if (type = ctx->get_type("object"))
+      type->set_output_id("Object");
+
+    if (type = ctx->get_type("var"))
+      type->set_output_id("Object");
+
+    if (type = ctx->get_type("array"))
+      type->set_output_id("ArrayList");
+
+    if (type = ctx->get_type("array<var>"))
+      type->set_output_id("ArrayList");
+
+    if (type = ctx->get_type("array<object>"))
+      type->set_output_id("ArrayList");
+
+    if (type = ctx->get_type("array<string>"))
+      type->set_output_id("ArrayList<String>");
+
+    if (type = ctx->get_type("array<int>"))
+      type->set_output_id("ArrayList<Integer>");
+
+    if (type = ctx->get_type("array<float>"))
+      type->set_output_id("ArrayList<Double>");
+
+    if (type = ctx->get_type("array<bool>"))
+      type->set_output_id("ArrayList<Boolean>");
   }

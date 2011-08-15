@@ -1,9 +1,0 @@
-<xml>
-	<class id="application"/>
-	
-	<class id="button">
-		<properties>
-			<property name="exploit" type="int"/>
-		</properties>
-	<class/>
-</xml>

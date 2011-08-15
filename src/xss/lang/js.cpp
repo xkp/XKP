@@ -94,6 +94,11 @@ str js_args_renderer::render()
     return result;
   }
 
+str js_args_renderer::render_expression(expression& expr, XSSContext ctx)
+  {
+    return lang_utils::render_expression<js_expr_renderer>(expr, ctx);
+  }
+
 //js_lang
 variant js_lang::compile_code(code& cde, param_list_decl& params, XSSContext ctx)
   {
