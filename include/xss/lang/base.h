@@ -68,6 +68,7 @@ struct base_code_renderer : ICodeRenderer,
       str             result_;
       str             expr_;
       XSSType         type_;
+      bool            return_type_;
 
     protected:
       code            code_;

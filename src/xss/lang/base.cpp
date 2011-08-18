@@ -22,14 +22,16 @@ base_code_renderer::base_code_renderer(const base_code_renderer& other):
   ctx_(other.ctx_),
   result_(other.result_),
   expr_(other.expr_),
-  indent_(other.indent_)
+  indent_(other.indent_),
+  return_type_(other.return_type_)
   {
   }
 
 base_code_renderer::base_code_renderer(code& cde, param_list_decl& params, XSSContext ctx, int indent):
   code_(cde),
   ctx_(new xss_context(ctx)),
-  indent_(indent)
+  indent_(indent),
+  return_type_(false)
   {
     //add arguments to context
     param_list_decl::iterator itb = params.begin();
@@ -62,8 +64,7 @@ base_code_renderer::base_code_renderer(code& cde, param_list_decl& params, XSSCo
 str base_code_renderer::render()
   {
     //resolve types of code context
-    if (!type_)
-      type_ = lang_utils::code_type(code_, ctx_);
+    type_ = type();
 
 		result_ = ""; //td: cache, not parallel
     code_.visit(this);
@@ -73,8 +74,11 @@ str base_code_renderer::render()
 
 XSSType base_code_renderer::type()
   {
-    if (!type_)
-      type_ = lang_utils::code_type(code_, ctx_);
+    if (!type_ && !return_type_)
+      {
+        type_ = lang_utils::code_type(code_, ctx_);
+        return_type_ = true;
+      }
     
     return type_;
   }

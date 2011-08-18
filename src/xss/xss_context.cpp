@@ -263,7 +263,7 @@ bool xss_context::resolve(const str& id, resolve_info& info)
         case RESOLVE_ANY:
           {
             any = true;
-            //fallthru                        
+            //fallthru
           }
         
         case RESOLVE_TYPE:
@@ -351,7 +351,12 @@ bool xss_context::resolve(const str& id, resolve_info& info)
             XSSObject obj = get_this();
             if (info.left)
               {
-                assert(info.left->what == RESOLVE_INSTANCE);
+                assert(
+                  info.left->what == RESOLVE_INSTANCE || 
+                    (info.left->what == RESOLVE_VARIABLE && 
+                      (info.left->type->is_object() || info.left->type->is_variant())
+                    )
+                  );
                 obj = info.left->value;
               }
             

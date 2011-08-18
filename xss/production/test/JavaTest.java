@@ -116,6 +116,13 @@ return application.app_test(a * b);
 		public Object test3(Object value) {
 			return value;
 		}
+		public void foo(Object obj) {
+			Boolean has_property = obj has "processed";
+if (!has_property)
+{
+	obj.processed = true;
+}
+		}
 	}
 	public static void main(String[] args) {
 		application.create();

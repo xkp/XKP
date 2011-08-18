@@ -456,13 +456,19 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
 					}
 
 				case op_not:
-				case op_typecheck:
-				case op_namecheck:
 					{
 						stack_.pop();
 						stack_.push(ctx_->get_type("bool"));
 						break;
 					}
+
+				case op_typecheck:
+				case op_namecheck:
+          {
+            stack_.pop(); stack_.pop();
+						stack_.push(ctx_->get_type("bool"));
+						break;
+          }
 
 				case op_equal:
 				case op_notequal:

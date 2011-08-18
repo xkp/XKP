@@ -199,5 +199,14 @@ instance instance1
 	method test3(value)
 	{
 		return value;
-	}	
+	}
+	
+	method foo(var obj)
+	{
+		bool has_property = obj has "processed"; //has it been here?
+		if (!has_property)
+		{
+			obj.processed = true; //now "has" would be true
+		}
+	}
 }
