@@ -10,7 +10,7 @@ struct js_code_renderer : public base_code_renderer
   {
     js_code_renderer();
     js_code_renderer(const js_code_renderer& other);
-    js_code_renderer(code& cde, XSSContext ctx);
+    js_code_renderer(code& cde, param_list_decl& params, XSSContext ctx);
 
     void set_this(variant this_);
 

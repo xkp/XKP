@@ -1300,6 +1300,17 @@ int code_linker::register_variable(const str& name, const str& type, expression*
     if (types_ && !type.empty())
       {
         var_type = types_->get_type(type);
+
+        if (!var_type && type != "var")
+          {
+            param_list error;
+            error.add("id", SUnknownIdentifier);
+            error.add("desc", SCannotResolveType);
+            error.add("type", type);
+            error.add("variable name", name);
+            xs_throw(error);
+          }
+
         assert(var_type || type == "var");
       }
 

@@ -26,11 +26,11 @@ enum assign_type
 
 struct assign_info
 	{
-		assign_info() : type(VANILLA), this_(false) {}
+		assign_info() : type(VANILLA), flag(false) {}
 
 		assign_type type;
 		str					data;
-		bool				this_;
+		bool				flag;
 	};
 
 struct capture_property
@@ -44,7 +44,7 @@ struct base_code_renderer : ICodeRenderer,
   {
     base_code_renderer();
     base_code_renderer(const base_code_renderer& other);
-    base_code_renderer(code& cde, XSSContext ctx, int indent = 0);
+    base_code_renderer(code& cde, param_list_decl& params, XSSContext ctx, int indent = 0);
 
     //ICodeRenderer
     virtual str     render();
@@ -150,6 +150,7 @@ struct base_lang : public ILanguage
     virtual str     resolve_separator(XSSObject lh = XSSObject());
     virtual bool    can_cast(XSSType left, XSSType right);
     virtual void    init_context(XSSContext ctx);
+    virtual XSSType resolve_array_type(XSSType type, const str& at_name, XSSContext ctx);
   };
 
 //interface glue
@@ -164,6 +165,10 @@ struct renderer_code_schema : renderer_schema<T>
 
         //maintain base implementations
         renderer_schema<T>::declare_base();
+      }
+
+    virtual void declare()
+      {
       }
   };
 

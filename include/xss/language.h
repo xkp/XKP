@@ -173,24 +173,21 @@ struct lang_utils
 										    case VANILLA:
 											    {
                             resolve_info ri;
+                            result = assign + " " + lang_utils::operator_string(op) + " " + value;
+
                             if (ctx->resolve(assign, ri))
                               {
-                                if ((op == op_plus_equal || op == op_minus_equal) && ri.type->is_array())
+                                if (ri.type && ri.type->is_array())
                                   {
-                                    result = assign_renderer.array_operation(assign, value, op);
+                                    if (op == op_plus_equal || op == op_minus_equal)
+                                      {
+                                        result = assign_renderer.array_operation(assign, value, op);
+                                      }
+                                    else if (simple_assign && ai.flag && !ai.data.empty())
+                                      {
+                                        result = ai.data;
+                                      }
                                   }
-                                else if (simple_assign && ri.type->is_array() && !ai.data.empty())
-                                  {
-                                    result = ai.data;
-                                  }
-                                else
-                                  {
-                                    result = assign + " " + lang_utils::operator_string(op) + " " + value;
-                                  }
-                              }
-                            else
-                              {
-                                result = assign + " " + lang_utils::operator_string(op) + " " + value;
                               }
 
 												    break;

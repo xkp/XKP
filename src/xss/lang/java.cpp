@@ -17,8 +17,8 @@ java_code_renderer::java_code_renderer(const java_code_renderer& other):
     lang->init_context(ctx_);
   }
 
-java_code_renderer::java_code_renderer(code& cde, XSSContext ctx, int indent):
-  base_code_renderer(cde, ctx, indent)
+java_code_renderer::java_code_renderer(code& cde, param_list_decl& params, XSSContext ctx, int indent):
+  base_code_renderer(cde, params, ctx, indent)
   {
     Language lang = ctx->get_language();
     lang->init_context(ctx);
@@ -99,7 +99,7 @@ str java_code_renderer::render_expression(expression& expr, XSSContext ctx)
 
 str java_code_renderer::render_code(code& cde)
   {
-    java_code_renderer inner(cde, ctx_, indent_ + 1);
+    java_code_renderer inner(cde, param_list_decl(), ctx_, indent_ + 1);
     str result = inner.render();
 
     add_line(result, false);
@@ -166,6 +166,12 @@ str java_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
 							          result = obj->output_id();
                         break;
 				              }
+                    case RESOLVE_TYPE:
+                      {
+                        XSSType type = si.value;
+                        result = "new " + type->output_id();
+                        break;
+                      }
                     default:
                       assert(false); //trap use case
                   }
@@ -349,9 +355,10 @@ void java_expr_renderer::exec_operator(operator_type op, int pop_count, int push
             if (assigner)
               {
 					      result << op1;
+
                 //enormous patch
-                assigner->data = op1 + ".set(" + op2 + ", " +
-                                 assigner->data + ")";
+                assigner->data = op1 + ".set(" + op2 + ", " + assigner->data + ")";
+                assigner->flag = true;
               }
             else
               result << op1 << ".get(" << op2 << ")";
@@ -419,7 +426,7 @@ str java_args_renderer::render_expression(expression& expr, XSSContext ctx)
 //java_lang
 variant java_lang::compile_code(code& cde, param_list_decl& params, XSSContext ctx)
   {
-    return reference<java_code_renderer>(new java_code_renderer(cde, ctx));
+    return reference<java_code_renderer>(new java_code_renderer(cde, params, ctx));
   }
 
 variant java_lang::compile_expression(expression expr, XSSContext ctx)
@@ -459,14 +466,12 @@ bool java_lang::can_cast(XSSType left, XSSType right)
 
     if (left_native == type_schema<float>())
       {
-        if (right_native == type_schema<double>() ||
-          right_native == type_schema<int>())
+        if (right_native == type_schema<double>())
           return true;
       }
     else if (left_native == type_schema<double>())
       {
-        if (right_native == type_schema<float>() ||
-          right_native == type_schema<int>())
+        if (right_native == type_schema<float>())
           return true;
       }
 
@@ -498,22 +503,23 @@ void java_lang::init_context(XSSContext ctx)
 
     if (type = ctx->get_type("array"))
       type->set_output_id("ArrayList");
+  }
 
-    if (type = ctx->get_type("array<var>"))
-      type->set_output_id("ArrayList");
+XSSType java_lang::resolve_array_type(XSSType type, const str& at_name, XSSContext ctx)
+  {
+    str outputid_type = type->output_id();
+    str new_outputid_type = "ArrayList<" + outputid_type + ">";
 
-    if (type = ctx->get_type("array<object>"))
-      type->set_output_id("ArrayList");
+    XSSType new_type(new xss_type);
+    new_type->set_id(at_name);
+    new_type->set_output_id(new_outputid_type);
+    new_type->as_array(type);
 
-    if (type = ctx->get_type("array<string>"))
-      type->set_output_id("ArrayList<String>");
+    //XSSProperty prop_size = XSSProperty(new xss_property("size", ctx->get_type("int"), variant(), XSSObject()));
+    //new_type->add_xss_property("size", prop_size);
 
-    if (type = ctx->get_type("array<int>"))
-      type->set_output_id("ArrayList<Integer>");
+    XSSMethod mthd = XSSMethod(new xss_method("size", ctx->get_type("int"), variant(), variant()));
+    new_type->register_method("size", mthd);
 
-    if (type = ctx->get_type("array<float>"))
-      type->set_output_id("ArrayList<Double>");
-
-    if (type = ctx->get_type("array<bool>"))
-      type->set_output_id("ArrayList<Boolean>");
+    return new_type;
   }

@@ -50,7 +50,7 @@ struct code_renderer : ICodeRenderer,
       {
       }
 
-    code_renderer(code& cde, XSSContext ctx, int indent = 0):
+    code_renderer(code& cde, param_list_decl& params, XSSContext ctx, int indent = 0):
       code_(cde),
       ctx_(ctx),
       indent_(indent)
@@ -211,7 +211,7 @@ struct code_renderer : ICodeRenderer,
 
       str render_code(code& cde)
         {
-          code_renderer cdr(cde, ctx_, indent_ + 1);
+          code_renderer cdr(cde, param_list_decl(), ctx_, indent_ + 1);
           return cdr.render();
         }
   };
@@ -265,7 +265,7 @@ struct param_list_renderer : public IArgumentRenderer
 //debug_language
 variant debug_language::compile_code(code& cde, param_list_decl& params, XSSContext ctx)
   {
-    return reference<code_renderer>(new code_renderer(cde, ctx));
+    return reference<code_renderer>(new code_renderer(cde, params, ctx));
   }
 
 variant debug_language::compile_expression(expression expr, XSSContext ctx)
@@ -295,6 +295,15 @@ bool debug_language::can_cast(XSSType left, XSSType right)
 
 void debug_language::init_context(XSSContext ctx)
   {
+  }
+
+XSSType debug_language::resolve_array_type(XSSType type, const str& at_name, XSSContext ctx)
+  {
+    XSSType new_type(new xss_type);
+    new_type->set_id(at_name);
+    new_type->as_array(type);
+
+    return new_type;
   }
 
 //glue

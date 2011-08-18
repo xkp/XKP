@@ -85,6 +85,10 @@ class xss_object : public editable_object<xss_object>,
 			void add_child(XSSObject obj);
       void remove_child(XSSObject obj);
 		public:
+      void register_property(const str& name, XSSProperty new_prop = XSSProperty());
+      void register_method(const str& name, XSSMethod new_mthd = XSSMethod());
+      void register_event_impl(const str& name, XSSEvent new_evt = XSSEvent());
+
 			XSSProperty           get_property(const str& name);
 			std::vector<XSSEvent> get_events(const str& name);
 			XSSMethod		          get_method(const str& name);
@@ -163,6 +167,7 @@ struct ILanguage
     virtual str     resolve_separator(XSSObject lh = XSSObject())										  = 0;
     virtual bool    can_cast(XSSType left, XSSType right)                             = 0;
     virtual void    init_context(XSSContext ctx)                                      = 0;
+    virtual XSSType resolve_array_type(XSSType type, const str& at_name, XSSContext ctx) = 0;
   };
 
 //resolver
@@ -304,7 +309,6 @@ class xss_event : public xss_object
 			xss_event(const xss_event& other);
 			xss_event(const str& name);
 
-			str          name;
 			DynamicArray impls;
 			variant			 args;
 
@@ -320,7 +324,6 @@ class xss_method : public xss_object
 
 			virtual XSSType type();
 
-			str     name_;
 			variant args_;
 			variant code_;
   };
@@ -378,7 +381,7 @@ struct xss_event_schema : xss_object_schema<xss_event>
 
 				inherit_from<xss_object>();
 
-        property_("name",  &xss_event::name);
+        property_("name",  &xss_event::id_);
         property_("impls", &xss_event::impls);
 				readonly_property<bool>("implemented", &xss_event::implemented);
       }
@@ -392,7 +395,7 @@ struct xss_method_schema : xss_object_schema<xss_method>
 
 				inherit_from<xss_object>();
 
-        property_("name", &xss_method::name_);
+        property_("name", &xss_method::id_);
         property_("args", &xss_method::args_);
         property_("code", &xss_method::code_);
       }

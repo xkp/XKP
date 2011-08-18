@@ -8,12 +8,28 @@ import java.util.Arrays;
 
 public class <xss:e value="application.name"/> {
 
+	<xss:code>
+		for(var i in java.instances)
+		{
+			out()
+			{
+				private static Class_<xss:e value="i.id"/> <xss:e value="i.id"/>;
+			}
+		}
+	</xss:code>
+
+	<xss:code>
+		compiler.xss("instance.xss", application);
+		
+		for(var i in java.instances)
+		{
+			compiler.xss("instance.xss", i);
+		}
+	</xss:code>
+
 	public static void main(String[] args) {
 	
-		<xss:code>
-			compiler.xss("instance.xss", application);
-			
-			compiler.inject("render_instances");
-		</xss:code>
+		application.create();
 	}
+	
 }

@@ -15,8 +15,8 @@ js_code_renderer::js_code_renderer(const js_code_renderer& other):
   {
   }
 
-js_code_renderer::js_code_renderer(code& cde, XSSContext ctx):
-  base_code_renderer(cde, ctx)
+js_code_renderer::js_code_renderer(code& cde, param_list_decl& params, XSSContext ctx):
+  base_code_renderer(cde, params, ctx)
   {
   }
 
@@ -33,7 +33,7 @@ str js_code_renderer::render_expression(expression& expr, XSSContext ctx)
 
 str js_code_renderer::render_code(code& cde)
   {
-    js_code_renderer inner(cde, ctx_); 
+    js_code_renderer inner(cde, param_list_decl(), ctx_); 
     str result = inner.render();
     add_line(result);
     return result;
@@ -102,7 +102,7 @@ str js_args_renderer::render_expression(expression& expr, XSSContext ctx)
 //js_lang
 variant js_lang::compile_code(code& cde, param_list_decl& params, XSSContext ctx)
   {
-    return reference<js_code_renderer>(new js_code_renderer(cde, ctx));
+    return reference<js_code_renderer>(new js_code_renderer(cde, params, ctx));
   }
 
 variant js_lang::compile_expression(expression expr, XSSContext ctx)

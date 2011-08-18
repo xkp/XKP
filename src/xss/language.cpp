@@ -15,6 +15,7 @@ const str SInconsistenReturnType("Inconsisten return type");
 const str SNotAnIterator("Expecting an iterable type");
 const str SUnknownType("Cannot resolve type");
 const str SUnknownTypeFromExpression("Cannot deduce type from assigned expression");
+const str SInconsistenExpressionType("Inconsisten type of expression assigned");
 
 //source_collector
 void source_collector::property_(xs_property& info)
@@ -88,11 +89,15 @@ void code_type_resolver::variable_(stmt_variable& info)
         xss_throw(error);
       }
 
+    XSSType value_type;
+    if (!info.value.empty())
+      value_type = lang_utils::expr_type(info.value, ctx_);
+
 		if (xsti->is_variant())
 			{
-				if (!info.value.empty())
+				if (value_type)
 					{
-            xsti = lang_utils::expr_type(info.value, ctx_);
+            xsti = value_type;
 					}
 
         if (!xsti)
@@ -107,11 +112,23 @@ void code_type_resolver::variable_(stmt_variable& info)
         if (xsti->is_variant())
           var_vars_.push_back(info.id);
 			}
-    else if (xsti->is_array())
+    else if (value_type && xsti != value_type)
       {
-        if (!info.value.empty())
+        // it's only success with an array declaration alone
+        // and it's neccesary to resolve the type of array
+        if (xsti->is_array())
           {
-            xsti = lang_utils::expr_type(info.value, ctx_);
+            xsti = value_type;
+          }
+        else
+          {
+            param_list error;
+            error.add("id", SLinker);
+            error.add("desc", SInconsistenExpressionType);
+            error.add("variable name", info.id);
+            error.add("type name declared", xsti->id());
+            error.add("type name resolved", value_type->id());
+            xss_throw(error);
           }
       }
 
@@ -318,6 +335,8 @@ void code_type_resolver::expression_(stmt_expression& info)
                       }
                     else
                       {
+                        //do nothing for now
+                        /*
                         if (obj.is<XSSProperty>())
                           {
                             XSSProperty prop = variant_cast<XSSProperty>(obj, XSSProperty());
@@ -327,7 +346,7 @@ void code_type_resolver::expression_(stmt_expression& info)
                                 prop->set_type(rt);
                               }
                           }
-
+                        */
                         lt = rt;
                       }
                   }
@@ -546,6 +565,17 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
 						schema* result = null;
 						size_t  idx;
 
+            if (!xstype1 || !xstype2)
+              {
+                param_list error;
+                error.add("id", SLinker);
+                error.add("desc", SCannontResolve);
+                //error.add("id", xstype1...);
+                //error.add("right", xstype2...);
+                xss_throw(error);
+                assert(false); //td:
+              }
+
             //handle native types, those combinable in xs
             if (operators_.get_operator_index(op, xstype1->native_type(), xstype2->native_type(), idx, &result) && result)
               {
@@ -643,13 +673,11 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
                       {
                         case RESOLVE_METHOD:
                           {
-                            assert(false);
                             XSSMethod mthd = right.value;
-                            //td: result = mthd->type();
+                            result = mthd->type();
                             break;
                           }
                       }
-
                   }
               }
 
