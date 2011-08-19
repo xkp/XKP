@@ -142,7 +142,8 @@ struct array_evaluator : expr_evaluator
 							}
 						case op_parameter:
 							{
-								assert(stack_.size() == 1);
+								assert(stack_.size() == 2);
+                stack_.pop();
 								variant val = stack_.top(); stack_.pop();
 								result->insert(val);
 								break;
@@ -1309,6 +1310,17 @@ int code_linker::register_variable(const str& name, const str& type, expression*
     if (types_ && !type.empty())
       {
         var_type = types_->get_type(type);
+
+        if (!var_type && type != "var")
+          {
+            param_list error;
+            error.add("id", SUnknownIdentifier);
+            error.add("desc", SCannotResolveType);
+            error.add("type", type);
+            error.add("variable name", name);
+            xs_throw(error);
+          }
+
         assert(var_type || type == "var");
       }
 

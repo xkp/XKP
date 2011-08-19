@@ -104,10 +104,7 @@ XSSType xss_context::get_type(schema* type)
 
 XSSType xss_context::get_array_type(XSSType type)
   {
-    str type_name = "";
-    if (type)
-      type_name = type->id();
-
+    str type_name = type->id();
     if (type_name.empty())
       {
         param_list error;
@@ -118,15 +115,15 @@ XSSType xss_context::get_array_type(XSSType type)
 
     str array_type_name = "array<" + type_name + ">"; //im gonna go basic on this one
 
-    XSSType result = get_type(array_type_name);
+    type_list::iterator it = types_.find(array_type_name);
+    if (it != types_.end())
+      {
+        return it->second;
+      }
 
-    if (result)
-      return result;
-
-    //create it
-    XSSType new_type(new xss_type);
-    new_type->set_id(array_type_name);
-    new_type->as_array(type);
+    //create it and register
+    XSSType new_type = get_language()->resolve_array_type(type, array_type_name, XSSContext(new xss_context(*this)));
+    add_type(array_type_name, new_type, true);
 
     return new_type;
   }
@@ -158,6 +155,7 @@ XSSType xss_context::add_type(const str& id, XSSType type, bool override_parent)
           }
       }
 
+    type->set_language(lang_);
     types_.insert(type_list_pair(id, type));
     return type;
   }
@@ -266,7 +264,7 @@ bool xss_context::resolve(const str& id, resolve_info& info)
         case RESOLVE_ANY:
           {
             any = true;
-            //fallthru                        
+            //fallthru
           }
         
         case RESOLVE_TYPE:
@@ -354,7 +352,12 @@ bool xss_context::resolve(const str& id, resolve_info& info)
             XSSObject obj = get_this();
             if (info.left)
               {
-                assert(info.left->what == RESOLVE_INSTANCE);
+                assert(
+                  info.left->what == RESOLVE_INSTANCE || 
+                    (info.left->what == RESOLVE_VARIABLE && 
+                      (info.left->type->is_object() || info.left->type->is_variant())
+                    )
+                  );
                 obj = info.left->value;
               }
             
@@ -449,17 +452,24 @@ variant xss_context::resolve_path(const std::vector<str>& path, XSSObject base, 
                 xss_throw(error);
               }
 						
-            if (!result.empty())
-              result += get_language()->resolve_separator(obj);
-
-            result += obj->output_id();
+            if (result.empty())
+              result = obj->output_id();
+            
+            result += get_language()->resolve_separator(obj);
             
             switch(ri.what)
               {
                 case RESOLVE_PROPERTY:
                   {
 						        XSSProperty prop	= ri.value;
-                    result += get_language()->resolve_separator(XSSObject(prop)) + prop->render_get();
+                    result += prop->render_get();
+                    break;
+                  }
+                case RESOLVE_INSTANCE:
+                  {
+                    XSSObject instance = ri.value;
+                    result = obj->output_id(); //td: how to resolve this path? what to ask the language?
+						        obj	= instance;
                     break;
                   }
                 default:
@@ -848,13 +858,13 @@ DynamicArray xss_object::get_event_impl(const str& event_name, XSSEvent& ev)
     for(size_t i = 0; i < events_->size(); i++)
       {
         ev = events_->at(i);
-        if (ev->name == event_name)
+        if (ev->id() == event_name)
           return ev->impls;
       }
 
     //not implemented, create
     ev = XSSEvent(new xss_event(event_name));
-    ev->name = event_name;
+    ev->set_id(event_name);
 
     events_->push_back(ev);
     return ev->impls;
@@ -929,6 +939,29 @@ XSSMethod xss_object::get_method(const str& name)
     return XSSMethod();
   }
 
+void xss_object::register_property(const str& name, XSSProperty new_prop)
+  {
+    XSSProperty prop = get_property(name);
+    if (!prop)
+      {
+        properties_->push_back(new_prop);
+      }
+  }
+
+void xss_object::register_method(const str &name, XSSMethod new_mthd)
+  {
+    XSSMethod mthd = get_method(name);
+    if (!mthd)
+      {
+        methods_->push_back(new_mthd);
+      }
+  }
+
+void xss_object::register_event_impl(const str &name, XSSEvent new_evt)
+  {
+    assert(false); //td:
+  }
+
 //xss_type
 xss_type::xss_type():
   xss_object(),
@@ -959,7 +992,8 @@ void xss_type::set_super(XSSType super)
 
 void xss_type::set_definition(XSSObject def)
   {
-    copy(def); 
+    if (def)
+      copy(def); 
   }
 
 schema* xss_type::native_type()
@@ -1070,6 +1104,16 @@ bool xss_type::is_variant()
     return is_variant_;
   }
 
+Language xss_type::get_language()
+  {
+    return lang_;
+  }
+
+void xss_type::set_language(Language lang)
+  {
+    lang_ = lang;
+  }
+
 //xss_property
 xss_property::xss_property():
 	flags(0)
@@ -1144,6 +1188,10 @@ str xss_property::render_value()
         return '"' + result + '"';
       }
 
+    XSSType prop_type = type();
+    if (prop_type)
+      return prop_type->get_language()->render_value(prop_type, value_);
+    
     return xss_utils::var_to_string(value_);
   }
 
@@ -1215,18 +1263,18 @@ xss_event::xss_event():
   }
 
 xss_event::xss_event(const xss_event& other):
-  name(other.name),
   impls(other.impls),
   args(other.args)
   {
     DYNAMIC_INHERITANCE(xss_event)
+    id_ = other.id_;
   }
 
 xss_event::xss_event(const str& _name):
-  impls(new dynamic_array),
-  name(_name)
+  impls(new dynamic_array)
   {
     DYNAMIC_INHERITANCE(xss_event)
+    id_ = _name;
   }
 
 bool xss_event::implemented()
@@ -1241,21 +1289,21 @@ xss_method::xss_method()
   }
 
 xss_method::xss_method(const xss_method& other):
-	name_(other.name_),
 	args_(other.args_),
   code_(other.code_)
   {
     DYNAMIC_INHERITANCE(xss_method)
 	  type_ = other.type_;
+    id_ = other.id_;
   }
 
 xss_method::xss_method(const str& name, XSSType type, variant args, variant code):
-	name_(name),
 	args_(args),
   code_(code)
   {
     DYNAMIC_INHERITANCE(xss_method)
 	  type_ = type;
+    id_ = name;
   }
 
 XSSType xss_method::type()

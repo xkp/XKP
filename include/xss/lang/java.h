@@ -10,7 +10,7 @@ struct java_code_renderer : public base_code_renderer
   {
     java_code_renderer();
     java_code_renderer(const java_code_renderer& other);
-    java_code_renderer(code& cde, XSSContext ctx, int indent = 0);
+    java_code_renderer(code& cde, param_list_decl& params, XSSContext ctx, int indent = 0);
 
     //code_visitor
     virtual void variable_(stmt_variable& info);
@@ -59,6 +59,7 @@ struct java_lang : public base_lang
     virtual str     resolve_this(XSSContext ctx);
     virtual bool    can_cast(XSSType left, XSSType right);
     virtual void    init_context(XSSContext ctx);
+    virtual XSSType resolve_array_type(XSSType type, const str& at_name, XSSContext ctx);
   };
 
 register_complete_type(java_code_renderer, renderer_code_schema<java_code_renderer>);

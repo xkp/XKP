@@ -1,14 +1,5 @@
 <module id="java" src="classes.xs">
 	<types>	
-	
-	<!--
-		<class id="application">
-			<property id="title" type="string"/>
-			<property id="name" type="string"/>
-			<event id="create"/>
-		</class>
-	-->
-		
 		<class id="classx">
 			<property id="px_value" type="int"/>
 			<property id="ps_value" type="var"/>

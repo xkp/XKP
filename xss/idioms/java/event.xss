@@ -4,24 +4,24 @@
 <xss:code>
 	compiler.log("Rendering event: " + e.name);
 	
-	if(!e.implemented || !e.name)
-		continue;
-	
-	out(indent = 1)
+	if(e.implemented && e.name)
 	{
-		private void <xss:e value="e.name"/> <xss:open_brace/>
-	}
-	
-	for(var impl in e.impls)
-	{
-		out(indent = 2)
+		out(indent = 1)
 		{
-			<xss:e>impl.render()</xss:e>
+			private void <xss:e value="e.name"/>() <xss:open_brace/>
 		}
-	}
-	
-	out(indent = 1)
-	{
-		<xss:close_brace/>
+		
+		for(var impl in e.impls)
+		{
+			out(indent = 2)
+			{
+				<xss:e>impl.render()</xss:e>
+			}
+		}
+		
+		out(indent = 1)
+		{
+			<xss:close_brace/>
+		}
 	}
 </xss:code>

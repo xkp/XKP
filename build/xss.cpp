@@ -49,6 +49,14 @@ void print_error(param_list data)
   
 int main(int argc, char* argv[])
   {
+    if (argc < 2)
+      {
+        std::cout << "Usage: xss [Project File]";
+        std::cin.get();
+        return 0;
+      }
+
+    int error_number = 0;
     char* fname = argv[1];
 		fs::path target = fs::system_complete(fname);
     
@@ -64,14 +72,13 @@ int main(int argc, char* argv[])
       
 		XSSCompiler compiler(new xss_compiler);
 
-    bool succeeded = true;
     try
       {
         compiler->build(target);
       }
     catch(xs_error xse)
       {
-        succeeded = false;
+        error_number = 1;
         fs::path file;
 
         if (xse.data.has("file"))
@@ -101,7 +108,7 @@ int main(int argc, char* argv[])
       }
     catch(xss_error xsse)
       {
-        succeeded = false;
+        error_number = 2;
 
         fs::path file;
 
@@ -132,18 +139,17 @@ int main(int argc, char* argv[])
       }
     catch(runtime_error rte)
       {
-        succeeded = false;
+        error_number = 3;
 
         print_error(rte.data);
       }
     
-    if (succeeded)
+    if (error_number == 0)
       {
         std::cout << "Success are greateful";
       }
       
     std::cin.get();
 	  
-	  return 0;
+	  return error_number;
   }
-

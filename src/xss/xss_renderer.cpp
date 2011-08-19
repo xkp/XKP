@@ -398,14 +398,15 @@ void xss_renderer::handle_instance(const str& text, param_list* args)
 					xss_throw(error);
 			}
 
-    DynamicObject instance(new xss_object);
+    XSSObject     obj(new xss_object);
+    DynamicObject instance(obj);
 
 		xs_utils xs;
 
     code_context code_ctx = context_->get_compile_context();
     xs.compile_implicit_instance(text, instance, code_ctx, file_);
 
-		context_->register_symbol(RESOLVE_INSTANCE, id, instance);
+		context_->register_symbol(RESOLVE_INSTANCE, id, obj);
   }
 
 void xss_renderer::handle_parameter(const str& text, param_list* args)

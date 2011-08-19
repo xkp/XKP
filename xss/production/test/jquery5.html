@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>TITLE</title>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript">
+$(function() {
+                btn1.text("One button");
+                btn1.width(100);
+	btn1.click(function()
+	{    
+		btn2.text("Clicked");
+btn1.text("Other Clicked");
+	});
+                btn2.text("Two button");
+                btn2.width(100);
+	btn2.click(function()
+	{    
+		btn1.text("Old value: " + application.target);
+application.target_set(300);
+	});
+                btn3.text("Reset");
+                btn3.width(100);
+	btn3.click(function()
+	{    
+		application.btn3.reset();
+	});
+});
+</script>
+<style>
+</style>
+</head>
+<body>
+            <div id='application'>
+            < id='btn1'>
+                </>
+            < id='btn2'>
+                </>
+            < id='btn3'>
+                </>
+                </div>
+            </body>
+</html>

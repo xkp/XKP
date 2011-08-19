@@ -92,36 +92,6 @@ xss_application_renderer::xss_application_renderer(fs::path entry_point, Languag
     array_type->set_id("array");
     array_type->as_array(XSSType(variant_type));
     context_->add_type("array", array_type)->set_id("array");
-
-    XSSType var_array_type(new xss_type());
-    var_array_type->set_id("array<var>");
-    var_array_type->as_array(XSSType(variant_type));
-    context_->add_type("array<var>", var_array_type)->set_id("array<var>");
-
-    XSSType obj_array_type(new xss_type());
-    obj_array_type->set_id("array<object>");
-    obj_array_type->as_array(XSSType(object_type));
-    context_->add_type("array<object>", obj_array_type)->set_id("array<object>");
-
-    XSSType str_array_type(new xss_type());
-    str_array_type->set_id("array<string>");
-    str_array_type->as_array(XSSType(context_->get_type("string")));
-    context_->add_type("array<string>", str_array_type)->set_id("array<string>");
-
-    XSSType int_array_type(new xss_type());
-    int_array_type->set_id("array<int>");
-    int_array_type->as_array(XSSType(context_->get_type("int")));
-    context_->add_type("array<int>", int_array_type)->set_id("array<int>");
-
-    XSSType float_array_type(new xss_type());
-    float_array_type->set_id("array<float>");
-    float_array_type->as_array(XSSType(context_->get_type("float")));
-    context_->add_type("array<float>", float_array_type)->set_id("array<float>");
-
-    XSSType bool_array_type(new xss_type());
-    bool_array_type->set_id("array<bool>");
-    bool_array_type->as_array(XSSType(context_->get_type("bool")));
-    context_->add_type("array<bool>", bool_array_type)->set_id("array<bool>");
   }
 
 XSSContext xss_application_renderer::context()
@@ -1099,7 +1069,7 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
         path = def;
 
         std::vector<XSSObject> classes_data;
-        read_object_array(def, classes_data);
+        read_object_array(def, ctx, classes_data);
 
         std::vector<XSSObject>::iterator cit = classes_data.begin(); 
         std::vector<XSSObject>::iterator cnd = classes_data.end(); 
@@ -1376,35 +1346,6 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
     std::vector<xs_method>::iterator mnd = gather.methods.end();
     for(; mit != mnd; mit++)
       {
-        XSSContext mctx(new xss_context(ctx));
-
-        //add arguments to context
-        param_list_decl::iterator itb = mit->args.begin();
-        param_list_decl::iterator ite = mit->args.end();
-        for(; itb != ite; itb++)
-          {
-            param_decl &param = *itb;
-            XSSType type;
-
-            if (param.type.empty())
-              {
-                if (!param.default_value.empty())
-                  {
-                    type = lang_utils::expr_type(param.default_value, mctx);
-                  }
-                else
-                  {
-                    type = mctx->get_type("var");
-                  }
-              }
-            else
-              {
-                type = mctx->get_type(param.type);
-              }
-
-            mctx->register_symbol(RESOLVE_VARIABLE, param.name, type);
-          }
-
         XSSType decl_type   = ctx->get_type(mit->type);
         XSSType return_type = decl_type;
 
@@ -1422,8 +1363,8 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 						xss_throw(error);
 					}
 
-				variant args = lang->compile_args(mit->args, mctx);             assert(!args.empty());
-				variant cde  = lang->compile_code(mit->cde, mit->args, mctx);   assert(!cde.empty());
+				variant args = lang->compile_args(mit->args, ctx);             assert(!args.empty());
+				variant cde  = lang->compile_code(mit->cde, mit->args, ctx);   assert(!cde.empty());
 
 				XSSMethod mthd(new xss_method(mit->name, return_type, args, cde));
         methods->push_back(mthd); //td: !!! inheritance!
@@ -1515,9 +1456,9 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 			}
 	}
 
-void xss_compiler::read_object_array(fs::path file, std::vector<XSSObject>& classes_data)
+void xss_compiler::read_object_array(fs::path file, XSSContext ctx, std::vector<XSSObject>& classes_data)
   {
-    xss_object_reader reader;
+    xss_object_reader reader(ctx);
     classes_data = reader.read_array(load_file(file)); 
   }
 

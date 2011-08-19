@@ -1,4 +1,4 @@
-property target
+property target : string
 {
 	btn2.caption = "target acquired " + value;
 	

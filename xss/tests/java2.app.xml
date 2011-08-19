@@ -1,0 +1,3 @@
+<application name="JavaTest2" title="Java Test Console" src="java2.app.xs">
+	<classx id="instance1"/>
+</application>

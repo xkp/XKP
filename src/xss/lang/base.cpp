@@ -22,22 +22,49 @@ base_code_renderer::base_code_renderer(const base_code_renderer& other):
   ctx_(other.ctx_),
   result_(other.result_),
   expr_(other.expr_),
-  indent_(other.indent_)
+  indent_(other.indent_),
+  return_type_(other.return_type_)
   {
   }
 
-base_code_renderer::base_code_renderer(code& cde, XSSContext ctx, int indent):
+base_code_renderer::base_code_renderer(code& cde, param_list_decl& params, XSSContext ctx, int indent):
   code_(cde),
   ctx_(new xss_context(ctx)),
-  indent_(indent)
+  indent_(indent),
+  return_type_(false)
   {
+    //add arguments to context
+    param_list_decl::iterator itb = params.begin();
+    param_list_decl::iterator ite = params.end();
+    for(; itb != ite; itb++)
+      {
+        param_decl &param = *itb;
+        XSSType type;
+
+        if (param.type.empty())
+          {
+            if (!param.default_value.empty())
+              {
+                type = lang_utils::expr_type(param.default_value, ctx_);
+              }
+            else
+              {
+                type = ctx_->get_type("var");
+              }
+          }
+        else
+          {
+            type = ctx_->get_type(param.type);
+          }
+
+        ctx_->register_symbol(RESOLVE_VARIABLE, param.name, type);
+      }
   }
 
 str base_code_renderer::render()
   {
     //resolve types of code context
-    if (!type_)
-      type_ = lang_utils::code_type(code_, ctx_);
+    type_ = type();
 
 		result_ = ""; //td: cache, not parallel
     code_.visit(this);
@@ -47,8 +74,11 @@ str base_code_renderer::render()
 
 XSSType base_code_renderer::type()
   {
-    if (!type_)
-      type_ = lang_utils::code_type(code_, ctx_);
+    if (!type_ && !return_type_)
+      {
+        type_ = lang_utils::code_type(code_, ctx_);
+        return_type_ = true;
+      }
     
     return type_;
   }
@@ -679,6 +709,17 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 					      }
 			      }
 
+            bool var_caller = false;
+            if (arg1.is<expression_identifier>())
+              {
+                expression_identifier left_ei = arg1;
+                resolve_info left_ri;
+                if (ctx_->resolve(left_ei.value, left_ri))
+                  {
+                    var_caller = left_ri.what == RESOLVE_VARIABLE;
+                  }
+              }
+
 						str separator = ctx_->get_language()->resolve_separator(caller);
             if (caller)
               {
@@ -734,7 +775,10 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                             str get_fn  = variant_cast<str>(dynamic_get(prop, "get_fn"), "");
                             str get_xss = variant_cast<str>(dynamic_get(prop, "get_xss"), "");
                             bool has_getter = prop && !prop->get.empty();
-                            str  result = caller->output_id() + separator;
+
+                            str result = caller->output_id() + separator;
+                            if (var_caller)
+                              result = caller_str + separator;
 
                             if (!get_xss.empty())
                               {
@@ -750,6 +794,15 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                             push_rendered(result, 0, prop);
 								            return;
                           }
+                        case RESOLVE_METHOD:
+                          {
+                            XSSMethod mthd = right.value;
+                            right_str = mthd->output_id();
+
+                            str result = caller_str + separator + right_str + "()";
+                            push_rendered(result, 0, mthd);
+								            return;
+                          }
                         default:
                           {
                             assert(false); //use case
@@ -759,7 +812,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
               }
 
             push_rendered(caller_str + separator + right_str, 0, variant());
-            return;
+            break;
           }
 
         case op_dot_call:
@@ -1037,4 +1090,18 @@ bool base_lang::can_cast(XSSType left, XSSType right)
 
 void base_lang::init_context(XSSContext ctx)
   {
+  }
+
+XSSType base_lang::resolve_array_type(XSSType type, const str& at_name, XSSContext ctx)
+  {
+    XSSType new_type(new xss_type);
+    new_type->set_id(at_name);
+    new_type->as_array(type);
+
+    return new_type;
+  }
+
+str base_lang::render_value(XSSType type, variant value)
+  {
+    return xss_utils::var_to_string(value);
   }

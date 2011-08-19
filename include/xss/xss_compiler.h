@@ -180,7 +180,7 @@ namespace xkp
         std::map<int, XSSRenderer> xss_cache;
 
         str   load_file(fs::path file);
-        void  read_object_array(fs::path file, std::vector<XSSObject>& classes_data);
+        void  read_object_array(fs::path file, XSSContext ctx, std::vector<XSSObject>& classes_data);
 		    void  compile_xs_file(fs::path file, xs_container& result);
 		};
 

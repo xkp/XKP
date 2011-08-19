@@ -1,0 +1,1 @@
+<project 	entry_point="../idioms/java/main.xss" 	language="java" 	target="java2.app.xml" >		<path>		<output path="../production/test/"/>	</path>		<options option1="java.test"/>		<idiom src="../idioms/java/classes.xml"/></project>
