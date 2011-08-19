@@ -1,0 +1,7 @@
+<application src="ms3.app.xs">
+    <resources>
+        <image src="images/img1.png"/>
+    </resources>
+    
+    <img id="img1" src="images/img1.png" x="100" y="100" width="100" height="100"/>
+</application>

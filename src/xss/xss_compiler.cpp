@@ -220,7 +220,7 @@ xss_module::xss_module(XSSContext ctx):
   instances_(new dynamic_array),
   utypes_(new dynamic_array)
   {
-    ev_pprocess_ = register_event("render");
+    ev_pprocess_ = register_event("pre_process");
     DYNAMIC_INHERITANCE(xss_module)
   }
 
@@ -229,7 +229,8 @@ pre_process_result xss_module::pre_process(XSSObject obj, XSSObject parent)
     XSSObject ev(new xss_object());
        
     param_list args;
-    args.add("ev", ev);
+    args.add("obj", obj);
+    args.add("ev",  ev);
     dispatch_event(ev_pprocess_, args);
 
     if (ev->get<bool>("final", false))

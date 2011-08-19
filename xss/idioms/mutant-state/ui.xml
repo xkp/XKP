@@ -1,0 +1,22 @@
+<module id="ui" src="ui.xs">
+    <types>
+        <class id="component" creation_function="newComponent">
+            <property id="x"       type="int"                       set_fn="set_x"      dont_init="true"/>
+            <property id="y"       type="int"                       set_fn="set_y"      dont_init="true"/>
+            <property id="width"   type="int"   get_fn="get_width"  set_fn="set_width"  dont_init="true"/>
+            <property id="height"  type="int"   get_fn="get_height" set_fn="set_height" dont_init="true"/>
+            <property id="count"   type="int"   get_fn="count"                          dont_init="true"/>
+            <property id="visible" type="bool"  get_fn="isVisible"  set_fn="setVisible"/>
+            <property id="alpha"   type="float" get_fn="get_alpha"  set_fn="alpha"/>
+        </class>
+
+        <class id="img" super="component" creation_function="newImage">
+            <constructor_params>
+                <parameter property="src"/>
+            </constructor_params>
+
+            <property id="src"   type="string" get_fn="write_only" set_fn="src"/>
+            <property id="image" type="object" get_fn="write_only" set_fn="image"/>
+        </class>
+    </types>
+</module>

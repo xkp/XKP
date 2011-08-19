@@ -1,0 +1,9 @@
+<module id="resources" src="resources.xs">
+    <types>
+        <class id="resources"/>
+        
+        <class id="image">
+            <property id="src"/>
+        </class>
+    </types>
+</module>

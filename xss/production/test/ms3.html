@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms/ms-state.js"></script>
+<script type="text/javascript">			
+var g_ui;
+var g_elapsed = -1;
+var g_delta = 0.0;
+var g_canvas;
+                application.target =  0;
+window.onload = function() 
+{
+	var drawingCanvas = document.getElementById("myCanvas");
+	g_canvas = drawingCanvas;
+	if (drawingCanvas && drawingCanvas.getContext)
+	{
+		var client =
+		{
+			width: ,
+			height: ,
+			canvas: drawingCanvas
+		};
+		var streamer = new ms.streamer.Streamer();
+		var ui = new ms.ui.Manager(client, streamer);
+		var resources = new ms.streamer.PackageContainer();
+		g_ui = ui;
+		ui.load_images(ui_images, function()
+		{
+			drawingCanvas.onmousemove = function(ev)
+			{
+				ui.mouse_move(ev.clientX, ev.clientY);                  
+			};
+			drawingCanvas.onmousedown = function(ev)
+			{
+				ui.mouse_down(ev.clientX, ev.clientY);                  
+			};
+			drawingCanvas.onmouseup = function(ev)
+			{
+				ui.mouse_up(ev.clientX, ev.clientY);                  
+			};
+            out()
+            {
+                if (application.init)
+                {
+                    application.init();
+                }
+            }
+			start();
+			ui.draw(drawingCanvas.getContext('2d'));
+		});
+	}
+}
+</script>
+</head>
+<body>
+	<canvas id="myCanvas" width="" height="">
+		<p>Your browser doesn't support canvas.</p>
+	</canvas>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<module id="threejs" src="module.xs">
+
+	<types>
+		
+		<class id="param_braces"/>
+		
+		<class id="composite_material" output_id="Array"/>
+		
+		<class id="basic_material" super="param_braces" output_id="THREE.MeshBasicMaterial">
+			<constructor_params>
+				<param property="color"/> 
+				<param property="map"/>
+				<param property="wireframe"/>
+				<param property="wireframe_linewidth"/>
+				<param property="opacity"/>
+				<param property="texture_src"/>				
+				<param property="shading"/>
+				<param property="vertex_colors"/>
+				<param property="env_map"/>
+				<param property="combine"/>
+				<param property="reflectivity"/>
+				<param property="shininess"/>
+				<param property="specular"/>
+				<param property="transparent"/>
+			</constructor_params>
+			<property id="color" type="string" dont_init="true"/> 
+			<property id="map" type="string" dont_init="true"/>
+			<property id="wireframe" type="string" dont_init="true"/>
+			<property id="wireframe_linewidth" type="string" real_id="wireframeLinewidth" dont_init="true"/>
+			<property id="opacity" type="string" dont_init="true"/>
+			<property id="texture_src" type="string" dont_init="true"/>				
+			<property id="shading" type="string" dont_init="true"/>
+			<property id="vertex_colors" type="string" real_id="vertexColors" dont_init="true"/>
+			<property id="env_map" type="string" real_id="envMap" dont_init="true"/>
+			<property id="combine" type="string" dont_init="true"/>
+			<property id="reflectivity" type="string" dont_init="true"/>
+			<property id="shininess" type="string" dont_init="true"/>
+			<property id="specular" type="string" dont_init="true"/>
+			<property id="transparent" type="string" dont_init="true"/>
+		</class>
+		
+		<class id="lambert_material" super="param_braces" output_id="THREE.MeshLambertMaterial">
+		<constructor_params>
+				<param property="color"/> 
+				<param property="map"/>
+				<param property="wireframe"/>
+				<param property="wireframe_linewidth"/>
+				<param property="opacity"/>
+				<param property="texture_src"/>				
+				<param property="shading"/>
+				<param property="vertex_colors"/>
+				<param property="env_map"/>
+				<param property="combine"/>
+				<param property="reflectivity"/>
+				<param property="shininess"/>
+				<param property="specular"/>
+				<param property="transparent"/>
+			</constructor_params>
+			<property id="color" type="string" dont_init="true"/> 
+			<property id="map" type="string" dont_init="true"/>
+			<property id="wireframe" type="string" dont_init="true"/>
+			<property id="wireframe_linewidth" type="string" real_id="wireframeLinewidth" dont_init="true"/>
+			<property id="opacity" type="string" dont_init="true"/>
+			<property id="texture_src" type="string" dont_init="true"/>				
+			<property id="shading" type="string" dont_init="true"/>
+			<property id="vertex_colors" type="string" real_id="vertexColors" dont_init="true"/>
+			<property id="env_map" type="string" real_id="envMap" dont_init="true"/>
+			<property id="combine" type="string" dont_init="true"/>
+			<property id="reflectivity" type="string" dont_init="true"/>
+			<property id="shininess" type="string" dont_init="true"/>
+			<property id="specular" type="string" dont_init="true"/>
+			<property id="transparent" type="string" dont_init="true"/>
+		</class>
+
+		<class id="phong_material" super="param_braces" output_id="THREE.MeshPhongMaterial">
+		<constructor_params>
+				<param property="color"/> 
+				<param property="map"/>
+				<param property="wireframe"/>
+				<param property="wireframe_linewidth"/>
+				<param property="opacity"/>
+				<param property="texture_src"/>				
+				<param property="shading"/>
+				<param property="vertex_colors"/>
+				<param property="env_map"/>
+				<param property="combine"/>
+				<param property="reflectivity"/>
+				<param property="shininess"/>
+				<param property="specular"/>
+				<param property="transparent"/>
+			</constructor_params>
+			<property id="color" type="string" dont_init="true"/> 
+			<property id="map" type="string" dont_init="true"/>
+			<property id="wireframe" type="string" dont_init="true"/>
+			<property id="wireframe_linewidth" type="string" real_id="wireframeLinewidth" dont_init="true"/>
+			<property id="opacity" type="string" dont_init="true"/>
+			<property id="texture_src" type="string" dont_init="true"/>				
+			<property id="shading" type="string" dont_init="true"/>
+			<property id="vertex_colors" type="string" real_id="vertexColors" dont_init="true"/>
+			<property id="env_map" type="string" real_id="envMap" dont_init="true"/>
+			<property id="combine" type="string" dont_init="true"/>
+			<property id="reflectivity" type="string" dont_init="true"/>
+			<property id="shininess" type="string" dont_init="true"/>
+			<property id="specular" type="string" dont_init="true"/>
+			<property id="transparent" type="string" dont_init="true"/>
+		</class>
+
+		<class id="normal_material" output_id="THREE.MeshNormalMaterial"/>
+
+		<class id="face_material" output_id="THREE.MeshFaceMaterial"/>
+		
+		<class id="sound" output_id="THREE.Sound">
+			<constructor_params>
+				<param property="sources"/> 
+				<param property="radius"/>
+				<param property="volume"/>
+				<param property="loop"/>				
+			</constructor_params>
+			<property id="sources" type="string" dont_init="true"/>
+			<property id="radius" type="string" dont_init="true"/>
+			<property id="volume" type="string" dont_init="true"/>
+			<property id="loop" type="string" dont_init="true"/>
+		</class>
+		
+		<class id="texture" output_id="THREE.Texture">
+			<constructor_params>
+				<param property="image"/> 								
+			</constructor_params>
+			<property id="image" type="string" dont_init="true"/>
+		</class>
+		
+		<class id="meshable">
+			<constructor_params>
+				<param property="materials"/>            				
+			</constructor_params>			
+            <property id="color" type="string" set_fn="materials[ 0 ].color.setHex"/>
+			<property id="overdraw" type="string"/>
+			<property id="double_sided" type="string" real_id="doubleSided"/>
+			<property id="materials" type="string" dont_init="true"/>			
+		</class>
+	
+		<class id="obj_container" output_id="THREE.Object3D"/>
+	
+		<class id="child"/>
+			
+		<class id="transform">		
+            <property id="x" type="string"/>
+			<property id="y" type="string"/>
+			<property id="z" type="string"/>		
+		</class>
+	
+		<class id="scale" super="transform"/>
+ 		<class id="rotation" super="transform"/>
+	 
+		<class id="position" super="transform"/>
+			
+			
+		<class id="light"/>    
+		
+		<class id="ambient_light" super="light" output_id="THREE.AmbientLight"/>       
+	
+		<class id="directional_light" super="light" output_id="THREE.DirectionalLight">
+			<constructor_params>
+				<param property="hex"/>
+				<param property="intensity"/>
+				<param property="distance"/>
+				<param property="cast_shadow" real_id="castShadow"/>  				
+			</constructor_params>
+				<property id="hex" type="string" dont_init="true"/>
+				<property id="intensity" type="string" dont_init="true"/>
+				<property id="distance" type="string" dont_init="true"/>
+				<property id="cast_shadow" real_id="castShadow" type="string" dont_init="true"/>
+		</class>
+	
+		<class id="point_light" super="light" output_id="THREE.PointLight">
+			<constructor_params>
+				<param property="hex"/>
+				<param property="intensity"/>
+				<param property="distance"/>           		
+			</constructor_params>
+				<property id="hex" type="string" dont_init="true"/>
+				<property id="intensity" type="string" dont_init="true"/>
+				<property id="distance" type="string" dont_init="true"/>
+		</class>
+	
+		<class id="camera" output_id="THREE.Camera">
+			<constructor_params>
+				<param property="hex"/>
+				<param property="fov"/>
+				<param property="aspect"/>
+				<param property="near"/>
+				<param property="far"/>     
+				<param property="target"/>  			
+			</constructor_params>
+			<property id="hex" type="string" dont_init="true"/> 
+			<property id="fov" type="string" dont_init="true"/>
+			<property id="aspect" type="string" dont_init="true"/>
+			<property id="near" type="string" dont_init="true"/>
+			<property id="far" type="string" dont_init="true"/>
+			<property id="target" type="string" dont_init="true"/>	
+		</class>
+	
+		<class id="quake_camera" super="param_braces" output_id="THREE.QuakeCamera">
+			<constructor_params> 
+				<param property="hex"/>
+				<param property="fov"/>
+				<param property="aspect"/>
+				<param property="near"/>
+				<param property="far"/>     
+				<param property="target"/> 
+				<param property="movement_speed" real_id="movementSpeed"/>
+				<param property="look_speed" real_id="lookSpeed"/>
+				<param property="no_fly" real_id="noFly"/>
+				<param property="look_vertical" real_id="lookVertical"/>
+				<param property="auto_forward" real_id="autoForward"/>			
+			</constructor_params>
+			<property id="hex" type="string" dont_init="true"/> 
+			<property id="fov" type="string" dont_init="true"/>
+			<property id="aspect" type="string" dont_init="true"/>
+			<property id="near" type="string" dont_init="true"/>
+			<property id="far" type="string" dont_init="true"/>
+			<property id="target" type="string" dont_init="true"/>
+			<property id="movement_speed" real_id="movementSpeed" type="string" dont_init="true"/> 
+			<property id="look_speed" real_id="lookSpeed" type="string" dont_init="true"/>
+			<property id="no_fly" real_id="noFly" type="string" dont_init="true"/>
+			<property id="look_vertical" real_id="lookVertical" type="string" dont_init="true"/>
+			<property id="auto_forward" real_id="autoForward" type="string" dont_init="true"/>
+		</class>
+	
+		<class id="plane" super="meshable" output_id="THREE.Plane">
+			<constructor_params>
+				<param property="width"/>
+				<param property="height"/>
+				<param property="segments_width" real_id="segmentsWidth"/>
+				<param property="segments_height" real_id="segmentsHeight"/>
+			</constructor_params>
+			<property id="width" type="string" dont_init="true"/>
+			<property id="height" type="string" dont_init="true"/>
+			<property id="segments_width" real_id="segmentsWidth" type="string" dont_init="true"/>
+			<property id="segments_height" real_id="segmentsHeight" type="string" dont_init="true"/>
+		</class>
+	
+		<class id="cube" super="meshable" output_id="THREE.Cube">
+			<constructor_params>
+				<param property="width"/>
+				<param property="height"/>
+				<param property="depth"/>      
+				<param property="segments_width" real_id="segmentsWidth"/>
+				<param property="segments_height" real_id="segmentsHeight"/>
+				<param property="segments_depth" real_id="segmentsDepth"/>
+				<param property="cube_materials"/>
+				<param property="flipped"/>
+				<param property="sides"/>			
+			</constructor_params>
+			<property id="width" type="string" dont_init="true"/> 
+			<property id="height" type="string" dont_init="true"/>
+			<property id="depth" type="string" dont_init="true"/>
+			<property id="segments_width" real_id="segmentsWidth" type="string" dont_init="true"/>
+			<property id="segments_height" real_id="segmentsHeight" type="string" dont_init="true"/>
+			<property id="segments_depth" real_id="segmentsDepth" type="string" dont_init="true"/>				
+			<property id="cube_materials" type="string" dont_init="true"/>
+			<property id="flipped" type="string" dont_init="true"/>
+			<property id="sides" type="string" dont_init="true"/>
+		</class>
+	
+		<class id="cylinder" super="meshable" output_id="THREE.Cylinder">
+			<constructor_params>
+				<param property="numsegs"/>
+				<param property="toprad"/>
+				<param property="botrad"/>      
+				<param property="height"/>
+				<param property="topoffset"/>
+				<param property="bottomoffset"/>			
+			</constructor_params>	
+			<property id="numsegs" type="string" dont_init="true"/> 
+			<property id="toprad" type="string" dont_init="true"/>
+			<property id="botrad" type="string" dont_init="true"/>
+			<property id="height" type="string" dont_init="true"/>
+			<property id="topoffset" type="string" dont_init="true"/>
+			<property id="bottomoffset" type="string" dont_init="true"/>	
+		</class>
+	
+		<class id="sphere" super="meshable" output_id="THREE.Sphere">
+			<constructor_params>
+				<param property="radius"/>
+				<param property="segments_width" real_id="segmentsWidth"/>
+				<param property="segments_height" real_id="segmentsHeight"/>			
+			</constructor_params>
+			<property id="radius" type="string" dont_init="true"/>
+			<property id="segments_width" real_id="segmentsWidth" type="string" dont_init="true"/>
+			<property id="segments_height" real_id="segmentsHeight" type="string" dont_init="true"/>
+		</class>
+	
+		<class id="icosahedron" super="meshable" output_id="THREE.Icosahedron">
+			<constructor_params>
+				<param property="subdivisions"/>			
+			</constructor_params>
+			<property id="subdivisions" type="string" dont_init="true"/>
+		</class>
+	
+		<class id="particle" super="meshable" output_id="THREE.Particle"/>
+    
+		<class id="scene" output_id="THREE.Scene"/>	
+	
+		<class id="texture_cube" output_id="THREE.ImageUtils.loadTextureCube">
+			<constructor_params>
+				<param property="array"/>
+			</constructor_params>
+			<property id="array" type="string" dont_init="true"/>
+		</class>
+	
+		<class id="bin_loader" output_id="THREE.BinaryLoader">
+			<constructor_params>
+				<param property="model"/>
+				<param property="callback"/>			
+			</constructor_params>
+			<property id="model" type="string" dont_init="true"/>
+			<property id="callback" type="string" dont_init="true"/>
+		</class>		
+		
+	</types>
+	
+</module>

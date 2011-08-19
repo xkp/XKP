@@ -138,6 +138,7 @@ namespace xkp
         variant     resolve_property(const str& prop, variant parent);
         str         renderer_file(const str& file);
         str         idiom_path(XSSObject obj, const str& file);
+        str         idiom_type_path(XSSObject obj, const str& file);
         str         full_path(const str& file);
         fs::path    compiling();
       public:

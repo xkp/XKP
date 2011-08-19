@@ -131,6 +131,24 @@ ms.streamer.Streamer = Class.create(
 		[
 		 	new ms.streamer.ImageLoader(this),
 		];
+        
+        this.packs = [];
+    },
+
+    register_package: function(id, pack)
+    {
+        this.packs.push({id:id, pack:pack});
+    },
+
+    get_package: function(id)
+    {
+        for(var i = 0; i < this.packs.length; i++ )
+        {
+            var itm = this.packs[i];
+            if (itm.id == id)
+                return itm.pack;
+        }
+        return null;
     },
 
     begin: function()
@@ -341,26 +359,3 @@ ms.streamer.Package = Class.create(
     },
 });
 
-ms.streamer.PackageContainer = Class.create(
-{
-    initialize: function()
-    {
-        this.items = [];
-    },
-
-    register: function(id, pack)
-    {
-        this.items.push({id:id, pack:pack});
-    },
-
-    get: function(id)
-    {
-        for(var i = 0; i < this.items.length; i++ )
-        {
-            var itm = this.items[i];
-            if (itm.id == id)
-                return itm.pack;
-        }
-        return null;
-    },
-});

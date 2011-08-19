@@ -167,9 +167,6 @@
     <ClCompile Include="..\..\..\src\xs\vm.cpp">
       <Filter>Source Files\xs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\debug.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\xss\dsl_out.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
@@ -220,6 +217,9 @@
     </ClCompile>
     <ClCompile Include="..\..\xss.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\lang\debug.cpp">
+      <Filter>Source Files\xss\lang</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

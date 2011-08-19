@@ -20,30 +20,30 @@
 	for(var e in it.events)
 	{
 		//assert on xs/linker.cpp:1043, i dont know for what!
-		//compiler.xss("event.xss", e);
+		compiler.xss("event.xss", e);
 		
-	compiler.log("Rendering event: " + e.name);
+	    compiler.log("Rendering event: " + e.name);
 	
-	if(!e.implemented || !e.name)
-		continue;
+	    if(!e.implemented || !e.name)
+		    continue;
 	
-	out(indent = 1)
-	{
-		private void <xss:e value="e.name"/> <xss:open_brace/>
-	}
+	    out(indent = 1)
+	    {
+		    private void <xss:e value="e.name"/> <xss:open_brace/>
+	    }
 	
-	for(var impl in e.impls)
-	{
-		out(indent = 2)
-		{
-			<xss:e>impl.render()</xss:e>
-		}
-	}
+	    for(var impl in e.impls)
+	    {
+		    out(indent = 2)
+		    {
+			    <xss:e>impl.render()</xss:e>
+		    }
+	    }
 	
-	out(indent = 1)
-	{
-		<xss:close_brace/>
-	}
+	    out(indent = 1)
+	    {
+		    <xss:close_brace/>
+	    }
 	
 	}
 </xss:code>

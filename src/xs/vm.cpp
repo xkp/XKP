@@ -525,6 +525,14 @@ variant execution_context::execute()
                 else
                   caller_id = caller.get_pointer();
 
+                if (!caller_id)
+                  {
+										param_list error;
+										error.add("id", SRuntime);
+										error.add("desc", SCallingNull);
+										runtime_throw(error);
+                  }
+
                 variant result = call->exec(caller_id, pl);
                 operands_.push( result );
                 break;
@@ -589,6 +597,14 @@ variant execution_context::execute()
                 else
                   caller_id = caller.get_pointer();
 
+                if (!caller_id)
+                  {
+										param_list error;
+										error.add("id", SRuntime);
+										error.add("desc", SCallingNull);
+										runtime_throw(error);
+                  }
+
                 variant result = call->get(caller_id);
                 operands_.push(result);
                 break;
@@ -618,6 +634,14 @@ variant execution_context::execute()
                   }
                 else
                   caller_id = caller.get_pointer();
+
+                if (!caller_id)
+                  {
+										param_list error;
+										error.add("id", SRuntime);
+										error.add("desc", SCallingNull);
+										runtime_throw(error);
+                  }
 
                 call->set(caller_id, value);
                 break;

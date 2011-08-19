@@ -1,5 +1,5 @@
 <xss:parameter id="seq"/>
-<xss:parameter id="rendering_class"/>
+<xss:parameter id="is_class"/>
 
 <xss:class>
     method resolve_key(key, key_value, key_index, owner_seq, prop_info, interp)
@@ -412,6 +412,6 @@
             
     on render()
     {
-        generate_sequence(seq, null, !rendering_class);
+        generate_sequence(seq, null, !is_class);
     }
 </xss:class>

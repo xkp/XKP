@@ -9,6 +9,7 @@
 using namespace xkp;
 
 //strings
+const str SLinker("linker");
 const str SOutOfContext("not-sure");
 const str SUnknownIdentifier("cannot-resolve");
 const str STypeMismatch("type-mismatch");
@@ -33,6 +34,7 @@ const str SBehaviourNotFound("Behaviour not found");
 const str STypeIsNotABehaviour("Expecting behaviour");
 const str SSuperclassNotFound("Superclass not found");
 const str SCannotResolveOperator("Cannot resolve operator");
+const str SUsingControlOutsideALoop("Using control statements (break, continue) outside a loop");
 
 const char* operator_name[] =
   {
@@ -1040,7 +1042,14 @@ void code_linker::link_code(code& cde, bool track, int continue_pc, int break_pc
 
     for(; it != nd; it++)
       {
-        assert(!loops_.empty()); //wha?
+        if(loops_.empty())
+          {
+            param_list error;
+            error.add("id", SLinker);
+            error.add("desc", SUsingControlOutsideALoop);
+            xs_throw(error);
+          }
+
 				std::pair<int, int> info = loops_.top();
 
 				int continue_address	= info.first >= 0? info.first : pc_ + abs(info.first) - 1;

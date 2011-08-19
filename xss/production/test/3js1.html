@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test 3D</title>
+<style type="text/css">
+	body{
+	background:#f0f0f0;
+	}
+</style>
+</head>
+<body>
+<script type="text/javascript" src="../js/three/Detector.js"></script>
+<script type="text/javascript" src="../js/three/Three.js"></script>
+<script type="text/javascript" src="../js/three/Stats.js"></script>
+<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<script type="text/javascript">		
+	var renderer = new THREE.CanvasRenderer();
+renderer.setSize( window.innerWidth, window.innerHeight );
+var application = this;
+function render() {
+renderer.clear();
+renderer.render( scene, camera );
+}
+	var cylinder_material = new THREE.MeshBasicMaterial({
+	color:Math.random() * 0xffffff
+	})
+;
+	var cube_material = new THREE.MeshBasicMaterial({
+	color:Math.random() * 0xffffff
+	})
+;
+var sphere_material = 
+new THREE.MeshNormalMaterial(
+);
+;
+var scene = 
+new THREE.Scene(
+);
+;
+var camera = 
+new THREE.Camera(
+75,1.5,1,3000);
+;
+	camera.position.z = 1000;
+;
+var light = 
+new THREE.DirectionalLight(
+1677);
+				;
+				scene.addLight(light)
+				;
+	light.position.y = 0.5;
+	light.position.z = 1;
+;
+				var cylinder_1 = new THREE.Mesh(	
+new THREE.Cylinder(
+200,100,100,500);
+				,cylinder_material);
+				scene.addObject(cylinder_1)
+				;
+	cylinder_1.rotation.x = 10;
+	cylinder_1.rotation.y = 10;
+;
+	cylinder_1.position.x = 600;
+;
+				var cube_1 = new THREE.Mesh(	
+new THREE.Cube(
+300,300,300);
+				,cube_material);
+				scene.addObject(cube_1)
+				;
+	cube_1.position.x = -600;
+	cube_1.position.y = -100;
+;
+	cube_1.rotation.x = 10;
+	cube_1.rotation.y = 10;
+;
+				var sphere_1 = new THREE.Mesh(	
+new THREE.Sphere(
+200,20,20);
+				,sphere_material);
+				scene.addObject(sphere_1)
+				;
+	sphere_1.position.x = -400;
+	sphere_1.position.y = 400;
+;
+var container = 
+new THREE.Object3D(
+);
+;
+				container.addChild(cube_1);
+				scene.addObject(container)
+				;
+				container.addChild(sphere_1);
+				scene.addObject(container)
+				;
+document.body.appendChild( renderer.domElement );
+animate();
+function animate() {
+	requestAnimationFrame( animate );
+	render();
+}
+</script>
+</body>
+</html>

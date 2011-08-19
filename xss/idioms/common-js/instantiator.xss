@@ -8,19 +8,27 @@ if (params)
 {
     int i = 0;
     for(var p in params.children)
-    {
-        if (p.constant)
-          out() {<xss:e v="p.constant"/>}
-        else if (p.property)
-          {
+    {			
+	    if (p.constant)
+		{
+			if(i > 0) 
+                out() {,}
+			
+            out() {<xss:e v="p.constant"/>}		 
+			i++;
+		}
+		else if (p.property)
+		{			
             var prop = obj.get_property(p.property);
-            out() {<xss:e v="prop.render_value()"/>}
-          }
-        else 
-          out() {null}
-          
-        if (i < params.children.size - 1)
-          out() {,}
+			if(prop != null)
+			{
+			    if(i > 0) 
+                    out() {,}
+			    
+                out() {<xss:e v="prop.render_value()"/>}			
+			    i++;
+			}
+		}			        
     }
 }
 </xss:code>

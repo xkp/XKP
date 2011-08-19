@@ -1,0 +1,10 @@
+<project entry_point="../idioms/mutant-state/ui_standalone.xss" language="js" target="ms3.app.xml" xoutput="ms3.html">
+    <path>
+        <output path="../production/test"/>
+    </path>
+
+    <idiom src="../idioms/mutant-state/ui.xml"/>
+    <idiom src="../idioms/mutant-state/resources.xml"/>
+</project>
+           
+         

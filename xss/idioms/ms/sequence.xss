@@ -328,10 +328,7 @@
         }
                 
         if (rendering_instance)
-        {
-            
-            compiler.xss("instance.xss", seq);
-        }
+            compiler.xss("../common-js/instance.xss", seq);
         
         //we'll let our children fill in on what the want done
         seq.conditions      = [];

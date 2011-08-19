@@ -3,6 +3,9 @@
 #include "xss/xss_context.h"
 #include "xss/xss_error.h"
 
+#include <boost/regex.hpp>
+
+
 using namespace xkp;
 
 const str SReaderError("reader");
@@ -140,21 +143,30 @@ XSSObjectList xss_object_reader::read_array(TiXmlElement* node)
 
 variant xss_object_reader::attribute_value(const TiXmlAttribute* attr)
   {
-    double dv;
-    if (attr->QueryDoubleValue(&dv) == TIXML_SUCCESS)
-      return (float)dv;
+    str value(attr->Value());
 
-		int iv;
-    if (attr->QueryIntValue(&iv) == TIXML_SUCCESS)
-      return iv;
+    static const boost::regex rfloat("^\\d*\\.\\d*$");
+    if (boost::regex_match(value, rfloat))    
+      {
+        double dv;
+        attr->QueryDoubleValue(&dv);
+        return (float)dv;
+      }
+
+    static const boost::regex rint("^\\d*$");
+    if (boost::regex_match(value, rint))    
+      {
+		    int iv;
+        if (attr->QueryIntValue(&iv) == TIXML_SUCCESS)
+          return iv;
+      }
       
-    str s(attr->Value());
-		if (s == "true")
+		if (value == "true")
 			return true;
-		else if (s == "false")
+		else if (value == "false")
 			return false;
 		
-		return s;
+		return value;
   }
 
 bool xss_object_reader::special_node(TiXmlElement* node, XSSObject parent, XSSObject& result)
