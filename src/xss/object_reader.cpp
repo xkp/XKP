@@ -87,7 +87,6 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, b
               result->set_output_id(attr_value);
             else
               {
-                bool found_prop = false;
                 if (type)
                   {
                     //if the type already contains this attribute's name
@@ -95,7 +94,6 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, b
                     XSSProperty prop = type->get_property(attr_name);
                     if (prop)
                       {
-                        found_prop = true;
                         XSSProperty new_prop(new xss_property(prop->id(), prop->type(), variant(), prop->get, prop->set, result));
                         new_prop->copy(XSSObject(prop)); //sort of inefficient, but safe & consistent
                         new_prop->value_ = attribute_value(attr);
@@ -104,8 +102,8 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, b
                       }
                   }
                 
-                if (!found_prop)
-                  result->add_property(attr_name, attribute_value(attr));
+                //add the value anyway
+                result->add_property(attr_name, attribute_value(attr));
               }
 
 	          attr = attr->Next();

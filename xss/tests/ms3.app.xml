@@ -1,7 +1,7 @@
-<application src="ms3.app.xs">
+<application src="ms3.app.xs" width="600" height="400">
     <resources>
         <image src="images/img1.png"/>
     </resources>
     
-    <img id="img1" src="images/img1.png" x="100" y="100" width="100" height="100"/>
+    <img id="img1" src="images/img1.png" x="100" y="100" width="20" height="20"/>
 </application>

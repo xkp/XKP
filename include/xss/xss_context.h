@@ -207,7 +207,8 @@ struct resolve_info
   {
     resolve_info():
       what(RESOLVE_ANY),
-      left(null)
+      left(null),
+      search_this(true)
       {
       }
 
@@ -215,6 +216,7 @@ struct resolve_info
     XSSType       type; 
     variant       value; 
     resolve_info* left;
+    bool          search_this;
   };
 
 struct symbol_data

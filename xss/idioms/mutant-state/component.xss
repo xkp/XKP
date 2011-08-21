@@ -4,9 +4,13 @@
     string cmp_id = cmp.id;
     if (!is_class)
     {
+        string parent_id = cmp.parent.id;
+        if (cmp.parent.id == "application")
+            parent_id = "g_ui_root";
+                
         out()
 	    {
-		    <xss:e value = "cmp_id"/> = <xss:e value = "cmp.parent.id"/>.<xss:e value = "cmp.creation_function"/>(
+		    <xss:e value = "cmp_id"/> = <xss:e value = "parent_id"/>.<xss:e value = "cmp.creation_function"/>(
 	    }
 
 	    if (cmp.parameters)
@@ -14,10 +18,12 @@
             for(int i = 0; i < cmp.parameters.size; i++)
 		    {
                 var param = cmp.parameters[i];
-			    out(dont_break = true, trim = true)
-			    {
-				    '<xss:e value="compiler.evaluate_property(cmp, param.property_name)"/>'
-                }
+                var prop = cmp.get_property(param.property_name);
+
+                if(prop != null)
+                    out() {<xss:e v="prop.render_value()"/>}			
+                else
+                    out() {null}			
 
                 if (i < cmp.parameters.size - 1)
                 {

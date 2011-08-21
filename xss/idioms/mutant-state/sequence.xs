@@ -25,6 +25,6 @@ on render_instances()
 	//and then instances
     for(var i in instances)
     {
-		compiler.xss("sequence.xss", i, false);
+		compiler.xss("sequence.xss", i, is_class = false);
     }
 }

@@ -20,10 +20,9 @@ js_code_renderer::js_code_renderer(code& cde, param_list_decl& params, XSSContex
   {
   }
 
-void js_code_renderer::set_this(variant this_)
+void js_code_renderer::use_this_id(bool value)
   {
-    ctx_->register_symbol(RESOLVE_CONST, "#this", this_); 
-    ctx_->set_this(variant_cast<XSSObject>(this_, XSSObject()));
+    ctx_->register_symbol(RESOLVE_CONST, "#use_this_id", value); 
   }
 
 str js_code_renderer::render_expression(expression& expr, XSSContext ctx)
@@ -113,4 +112,16 @@ variant js_lang::compile_expression(expression expr, XSSContext ctx)
 variant js_lang::compile_args(param_list_decl& params, XSSContext ctx)
   {
     return reference<js_args_renderer>(new js_args_renderer(params, ctx));
+  }
+
+str js_lang::resolve_this(XSSContext ctx)
+  {
+    bool use_id = variant_cast<bool>(ctx->resolve("#use_this_id", RESOLVE_CONST), false);
+    if (use_id)
+      {
+        XSSObject this_ = ctx->get_this(); assert(this_);
+        return this_->output_id();
+      }
+
+    return "this"; 
   }

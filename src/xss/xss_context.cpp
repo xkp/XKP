@@ -259,6 +259,13 @@ variant xss_context::resolve(const str& id, XSSObject instance, RESOLVE_ITEM ite
 bool xss_context::resolve(const str& id, resolve_info& info)
   {
     bool any = false; //kids, dont do this at home
+
+    bool search_this = info.search_this;
+    if (this_)
+      {
+          info.search_this = false;
+      }
+
     switch(info.what)
       {
         case RESOLVE_ANY:
@@ -290,19 +297,12 @@ bool xss_context::resolve(const str& id, resolve_info& info)
             XSSObject inst;
             if (info.left)
               inst = variant_cast<XSSObject>(info.left->value, XSSObject());
-            else
+            else if (search_this)
               inst = get_this();
               
             if (inst)
               {
                 XSSMethod mthd = inst->get_method(id);
-                if (!mthd)
-                  {
-                    XSSType type = inst->type();
-                    if (type)
-                      mthd = type->get_method(id);
-                  }
-                
                 if (mthd)
                   {
                     info.what = RESOLVE_METHOD;
@@ -321,19 +321,12 @@ bool xss_context::resolve(const str& id, resolve_info& info)
             XSSObject inst;
             if (info.left)
               inst = variant_cast<XSSObject>(info.left->value, XSSObject());
-            else
+            else if (search_this)
               inst = get_this();
               
             if (inst)
               {
                 XSSProperty prop = inst->get_property(id);
-                if (!prop)
-                  {
-                    XSSType type = inst->type();
-                    if (type)
-                      prop = type->get_property(id);
-                  }
-                
                 if (prop)
                   {
                     info.what = RESOLVE_PROPERTY;
@@ -349,7 +342,7 @@ bool xss_context::resolve(const str& id, resolve_info& info)
         
         case RESOLVE_CHILD:
           {
-            XSSObject obj = get_this();
+            XSSObject obj;
             if (info.left)
               {
                 assert(
@@ -360,6 +353,8 @@ bool xss_context::resolve(const str& id, resolve_info& info)
                   );
                 obj = info.left->value;
               }
+            else if (search_this)
+              obj = get_this();
             
             if (obj)
               {
@@ -679,7 +674,11 @@ void xss_object::copy(XSSObject obj)
             {
               if (name == "type") 
                 return; 
-              dynamic_set((IDynamicObject*)dest_, name, value);
+              
+              if (dest_->has(name))
+                dynamic_set((IDynamicObject*)dest_, name, value);
+              else
+                dest_->add_property(name, value);
             }
 
           private:
@@ -721,7 +720,7 @@ bool xss_object::resolve(const str& name, schema_item& result)
 		result.set   = !read_only? Setter( new anonymous_setter(idx) ) : Setter();
 		result.flags = DYNAMIC_ACCESS|INJECTED;
 
-		items_.insert( item_pair(name, result) );
+    items_.insert( item_pair(name, result) );
 		return true;
 	}
 
@@ -904,6 +903,9 @@ XSSProperty xss_object::get_property(const str& name)
           return prop;
       }
 
+    if (type_)   
+      return type_->get_property(name);
+
     return XSSProperty();
   }
 
@@ -935,6 +937,9 @@ XSSMethod xss_object::get_method(const str& name)
         if (mthd->id() == name)
           return mthd;
       }
+
+    if (type_)
+      return type_->get_method(name);
 
     return XSSMethod();
   }
@@ -988,6 +993,7 @@ xss_type::xss_type(schema* _xs_type):
 void xss_type::set_super(XSSType super)
   {
     super_ = super;
+    type_  = super;
   }
 
 void xss_type::set_definition(XSSObject def)

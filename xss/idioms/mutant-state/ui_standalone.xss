@@ -22,23 +22,43 @@ if (!application.ui_package)
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
 
-<script type="text/javascript" src="../js/ms/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
 
 <script type="text/javascript">			
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
 var g_canvas;
+var g_ui_root;
+var application = {};
+
+function start(resolution)  
+{  
+	var start = new Date().getTime();  
+	function update()  
+	{  
+		var now   = new Date().getTime();
+        if (g_elapsed < 0)
+            g_delta = 0; //first update
+        else
+		    g_delta  = now - g_elapsed;  
+		
+        g_elapsed = now; 
+              
+		var context = g_canvas.getContext('2d');
+		g_ui.update(g_delta, context);
+		window.setTimeout(update, resolution);  
+	}  
+	window.setTimeout(update, resolution);  
+}  
 
 <xss:marker id="variables"/>
 
 <xss:code>
 compiler.inject("render_types");
-
 compiler.xss("../common-js/instance.xss", application);
-compiler.inject("render_instances");
 </xss:code>
 
 window.onload = function() 
@@ -59,30 +79,22 @@ window.onload = function()
 		var ui = new ms.ui.Manager(client, streamer);
 		var resources = new ms.streamer.PackageContainer();
 		g_ui = ui;
+        g_ui_root = ui.root;
+
+        var ui_images = 
+        [
+            <xss:marker id="ui_images"/>
+        ];
 
 		<xss:code>
-		for(var res in application.resources)
+		for(var res in application.resources.children)
 		{
-            if (res.id == application.ui_package)
+            if (res.class_name != "package")
             {
                 //this is obviously a hack, but what the hell 
-                out()
+                out(marker = "ui_images")
                 {
-                    var ui_images = 
-                    [
-                }
-                
-                for(var uiImg in res.children)
-                {
-			        out(indent = 3, trim = true)
-			        {
-				        '<xss:e value="uiImg.src"/>',
-			        }
-                }
-
-                out()
-                {
-                    ];
+				    '<xss:e value="res.src"/>',
                 }
             }
             else
@@ -146,6 +158,12 @@ window.onload = function()
 			{
 				ui.mouse_up(ev.clientX, ev.clientY);                  
 			};
+
+            <xss:code>
+            //the instances are rendered after the basic resources has been loaded
+            //not good
+            compiler.inject("render_instances");
+            </xss:code>
 
             if (application.init)
             {

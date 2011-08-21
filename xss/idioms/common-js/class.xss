@@ -28,7 +28,7 @@
         <xss:code>
         if (renderer)
         {
-            compiler.xss(renderer, clazz, rendering_class = true);
+            compiler.xss(renderer, clazz, is_class = true);
         }
         </xss:code>
     },

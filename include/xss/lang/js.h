@@ -12,7 +12,7 @@ struct js_code_renderer : public base_code_renderer
     js_code_renderer(const js_code_renderer& other);
     js_code_renderer(code& cde, param_list_decl& params, XSSContext ctx);
 
-    void set_this(variant this_);
+    void use_this_id(bool value);
 
     protected:
       virtual str render_expression(expression& expr, XSSContext ctx);
@@ -46,6 +46,7 @@ struct js_lang : public base_lang
     virtual variant compile_code(code& cde, param_list_decl& params, XSSContext ctx);
     virtual variant compile_expression(expression expr, XSSContext ctx);
 		virtual variant compile_args(param_list_decl& params, XSSContext ctx);
+    virtual str     resolve_this(XSSContext ctx);
   };
 
 //glue
@@ -53,7 +54,7 @@ struct js_code_renderer_schema : renderer_code_schema<js_code_renderer>
   {
     virtual void declare()
       {
-        method_<void, 1>("set_this", &js_code_renderer::set_this);
+        method_<void, 1>("use_this_id", &js_code_renderer::use_this_id);
       }
   };
 

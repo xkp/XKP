@@ -608,12 +608,11 @@ void xss_compiler::log(const param_list params)
         variant value  = params.get(i);
 
         str string_value = xss_utils::var_to_string(value);
-				if (string_value.empty())
+				if (value.empty())
 					{
-            if (value.empty())
-              string_value = "null";
+            string_value = "null";
 					}
-				else
+				else if (string_value.empty())
 					{
 						XSSObject obj_value    = variant_cast<XSSObject>(value, XSSObject());
 
@@ -1434,7 +1433,7 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 
 				//let the idiom process implementations
 				XSSContext ictx(new xss_context(ctx));
-				ictx->set_this(actual_instance);
+				ictx->set_this(instance); //actual_instance
 						
         variant impl = lang->compile_code(it->cde, it->args, ictx);
 				impls->push_back(impl);

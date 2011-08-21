@@ -642,6 +642,7 @@ ms.ui.Image = Class.create(ms.ui.Component,
 
 	resized: function()
 	{
+        this.invalidate();
 	},
 
 	fill: function(f)

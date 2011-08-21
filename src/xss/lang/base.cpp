@@ -1071,10 +1071,6 @@ base_args_renderer::base_args_renderer(param_list_decl& params, XSSContext ctx):
 //base_lang
 str base_lang::resolve_this(XSSContext ctx)
   {
-    XSSObject sub = variant_cast<XSSObject>(ctx->resolve("#this", RESOLVE_CONST), XSSObject());
-    if (sub)
-      return sub->output_id();
-
     return "this"; 
   }
 
