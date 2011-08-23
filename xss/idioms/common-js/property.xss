@@ -4,45 +4,52 @@
 
 <xss:code>
 string prop_name = prop.name;
+string assign = ":";
+string separator = ",";
+
 if (!is_class)
+{
     prop_name = owner.output_id + "." + prop_name;
+    assign = "=";
+    separator = ";";
+}
 
 if (prop.set && prop.get)
 {
     out()
     {
-        <xss:e value="prop_name"/>_get = function ()
+        <xss:e value="prop_name"/>_get <xss:e value="assign"/> function ()
         {
             <xss:e>prop.get.render()</xss:e>
-        };
+        }<xss:e value="separator"/>
 
-        <xss:e value="prop_name"/>_set = function (value)
+        <xss:e value="prop_name"/>_set <xss:e value="assign"/> function (value)
         {
             <xss:e>prop.set.render()</xss:e>
-        };
+        }<xss:e value="separator"/>
     }
 }
 else if (prop.set)
 {
     out(indent = 0)
     {
-        <xss:e value="prop_name"/> = <xss:e value="prop.render_value()"/>;
+        <xss:e value="prop_name"/> <xss:e value="assign"/> <xss:e value="prop.render_value()"/><xss:e value="separator"/>
 
-        <xss:e value="prop_name"/>_set = function (value)
+        <xss:e value="prop_name"/>_set <xss:e value="assign"/> function (value)
         {
             <xss:e value="prop_name"/> = value;
             <xss:e value="prop.set.render()"/>
-        }
+        }<xss:e value="separator"/>
     }
 }
 else if (prop.get)
 {
     out(indent = 0)
     {
-        <xss:e>prop.name</xss:e>_get = function ()
+        <xss:e>prop.name</xss:e>_get <xss:e value="assign"/> function ()
         {
             <xss:e>prop.get.render()</xss:e>
-        };
+        }<xss:e value="separator"/>
     }
 }
 else
@@ -52,12 +59,15 @@ else
             
     //but first we'll check arrays
     string value;
+    if (!prop.type)
+        compiler.error("Properties must have a type");
+
     if (prop.type.is_array)
     {
         value = compiler.genid('__a');
         out()
         {
-            var <xss:e v="value"/> = 
+            var <xss:e v="value"/> <xss:e value="assign"/> 
             [
         }
 
@@ -98,7 +108,7 @@ else
         {
             out(indent = 0)
             {
-                <xss:e value="prop_name"/> =  <xss:e>value</xss:e>;
+                <xss:e value="prop_name"/> <xss:e value="assign"/> <xss:e>value</xss:e><xss:e value="separator"/>
             }
         }
     }

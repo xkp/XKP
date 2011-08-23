@@ -24,6 +24,7 @@ const str SUnexpectedTag("Unexpected tag");
 const str SExpectingOutputAttribute("You must specify an output attribue on an xss:file tag");
 const str SExpectingSourceAttribute("You must specify an source attribue on an xss:file tag");
 const str SCannotResolveContex("There is no xss context registered");
+const str SInvalidMarkerSource("Invalid marker source");
 
 struct file_parameter
 	{
@@ -248,9 +249,10 @@ struct worker
   {
     public:
       worker() {}
-      worker(XSSCompiler compiler, std::vector<ItemRenderer>& renderer, str marker):
+      worker(XSSCompiler compiler, std::vector<ItemRenderer>& renderer, str marker, MARKER_SOURCE marker_source):
         compiler_(compiler),
 				marker_(marker),
+        marker_source_(marker_source),
         renderer_(renderer)
         {
         }
@@ -272,13 +274,29 @@ struct worker
           if (marker_.empty())
 						rr->append(result);
 					else
-						rr->append_at(result, marker_);
+            {
+              switch (marker_source_)
+                {
+                  case MS_CURRENT: 
+                    {
+						          rr->append_at(result, marker_);
+                      break;
+                    }
+                  case MS_ENTRY:
+                    {
+                      XSSRenderer rentry = compiler_->entry_renderer();
+						          rentry->append_at(result, marker_);
+                      break;
+                    }
+                }
+            }
         }
 
     private:
       XSSCompiler								compiler_;
 			std::vector<ItemRenderer> renderer_;
       str												marker_;
+      MARKER_SOURCE             marker_source_;
 
       std::vector<str> load_lines(const str& s)
         {
@@ -324,6 +342,27 @@ void out_linker::link(dsl& info, code_linker& owner)
         marker = variant_cast<str>(owner.evaluate_expression(expr), str(""));
 			}
 
+		variant marker_source_v = info.params.get("marker_source");
+		MARKER_SOURCE	marker_source = MS_CURRENT;
+		if (!marker_source_v.empty())
+			{
+        expression expr = marker_source_v;
+        str ms = variant_cast<str>(owner.evaluate_expression(expr), str(""));
+        if (!ms.empty())
+          {
+            if (ms == "entry")
+              marker_source = MS_ENTRY;
+            else
+              {
+				        param_list error;
+				        error.add("id", SOut);
+				        error.add("desc", SInvalidMarkerSource);
+				        error.add("value", ms);
+				        xss_throw(error);
+              }
+          }
+			}
+
 		//process xss
     variant ctx_var;
     if (!owner.context().scope_->resolve("#context", ctx_var))
@@ -351,7 +390,7 @@ void out_linker::link(dsl& info, code_linker& owner)
     xs_utils xs;
 
     //create a safe reference to be inserted in the execution context later on
-		Worker wrk(new worker(compiler_, renderer.items(), marker));
+		Worker wrk(new worker(compiler_, renderer.items(), marker, marker_source));
     owner.add_instruction(i_load_constant, owner.add_constant(wrk));
 
     //push the expression to be used as parameters, push 'em in reverse order

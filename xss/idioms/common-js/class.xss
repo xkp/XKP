@@ -21,9 +21,39 @@
     }
 </xss:code>
 {
-    initialize: function($super)
+    initialize: function($super
+    <xss:code>
+        var c_params = clazz.constructor_params;
+        if (c_params)
+        {
+            for(var p in c_params)
+            {
+                out()
+                {
+                , <xss:e v="p.id"/>
+                }
+            }
+        }
+    </xss:code>
+    )
     {
-        $super();
+        $super(
+        <xss:code>
+            var c_params = null; 
+            if (clazz.super)
+                c_params = clazz.super.constructor_params;
+            if (c_params)
+            {
+                int idx = 0;
+                for(var p in c_params)
+                {
+                    if (idx > 0) out() {,}
+                    out() {<xss:e v="p.id"/>}
+                    idx++;
+                }
+            }
+        </xss:code>
+        );
         
         <xss:code>
         if (renderer)

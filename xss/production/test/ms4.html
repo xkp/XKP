@@ -10,15 +10,17 @@
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript">			
+var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
-var g_sequence_manager = new ms.state.Manager();
-var application = {}
-var test_sequence;var test_sequence1;
-function default_interpolate(a, b, t)
-{
-    return a + (b - a)*t;
-}
+var g_canvas;
+var g_ui_root;
+var application = {};
+		var g_sequence_manager = new ms.state.Manager();
+        function default_interpolate(a, b, t)
+        {
+            return a + (b - a)*t;
+        }
 function start(resolution)  
 {  
 	var start = new Date().getTime();  
@@ -31,10 +33,13 @@ function start(resolution)
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
 		g_sequence_manager.update(g_delta);
-        window.setTimeout(update, resolution);  
+		var context = g_canvas.getContext('2d');
+		g_ui.update(g_delta, context);
+		window.setTimeout(update, resolution);  
 	}  
 	window.setTimeout(update, resolution);  
 }  
+var fade1;
             fade_in = Class.create(ms.state.Sequence,
         {
     initialize: function($super
@@ -50,7 +55,7 @@ function start(resolution)
                         default_interpolate,
                         function(value)
                         {
-                            this__.alpha.alpha = value;;
+                            this__.target.alpha(value);
                         },
                         [
                         {t: 0, value: 0},
@@ -62,7 +67,7 @@ function start(resolution)
                         default_interpolate,
                         function(value)
                         {
-                            this__.alpha.alpha = value;;
+                            this__.target.alpha(value);
                         },
                         [
                         {t: 1, value: 0.300000012},
@@ -72,36 +77,71 @@ function start(resolution)
     },
                 target : null,
 });
-                application.target = 0;
-test_sequence =
+	application.init = function()
+	{    
+		fade1.target = img1;
+	};
+window.onload = function() 
+{
+	var drawingCanvas = document.getElementById("myCanvas");
+	g_canvas = drawingCanvas;
+	if (drawingCanvas && drawingCanvas.getContext)
+	{
+		var client =
+		{
+			width: 600,
+			height: 400,
+			canvas: drawingCanvas
+		};
+		var streamer = new ms.streamer.Streamer();
+		var ui = new ms.ui.Manager(client, streamer);
+		var resources = new ms.streamer.PackageContainer();
+		g_ui = ui;
+        g_ui_root = ui.root;
+        var ui_images = 
+        [
+				    'images/img1.png',
+        ];
+		ui.load_images(ui_images, function()
+		{
+			drawingCanvas.onmousemove = function(ev)
+			{
+				ui.mouse_move(ev.clientX, ev.clientY);                  
+			};
+			drawingCanvas.onmousedown = function(ev)
+			{
+				ui.mouse_down(ev.clientX, ev.clientY);                  
+			};
+			drawingCanvas.onmouseup = function(ev)
+			{
+				ui.mouse_up(ev.clientX, ev.clientY);                  
+			};
+		    img1 = g_ui_root.newImage(
+	    );
+                img1.src("images/img1.png");
+	img1.click = function()
+	{    
+		fade1.start();
+	};
+            img1.rect(100, 100, 50, 50);
+fade1 =
 new fade_in(
 g_sequence_manager);
-	test_sequence.display = function() 
-	{
-		console.log("test_sequence> Target: " + application.target);
-	};
-	test_sequence.switch_sequence = function() 
-	{
-		stop();
-test_sequence1.start();
-	};
-            test_sequence.parent_sequence = null;
-test_sequence1 =
-new fade_in(
-g_sequence_manager);
-	test_sequence1.display = function() 
-	{
-		console.log("test_sequence1> Target: " + application.target);
-	};
-	test_sequence1.switch_sequence = function() 
-	{
-		stop();
-test_sequence.start();
-	};
-            test_sequence1.parent_sequence = null;
-start();
+            fade1.parent_sequence = null;
+            if (application.init)
+            {
+                application.init();
+            }
+			start();
+			ui.draw(drawingCanvas.getContext('2d'));
+		});
+	}
+}
 </script>
 </head>
 <body>
+	<canvas id="myCanvas" width="600" height="400">
+		<p>Your browser doesn't support canvas.</p>
+	</canvas>
 </body>
 </html>

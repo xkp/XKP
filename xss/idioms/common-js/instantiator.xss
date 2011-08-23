@@ -12,7 +12,7 @@ var params = obj.type.constructor_params;
 if (params)
 {
     int i = 0;
-    for(var p in params.children)
+    for(var p in params)
     {			
 	    if (p.constant)
 		{

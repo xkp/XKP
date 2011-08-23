@@ -76,7 +76,8 @@ renderer.render( scene, camera );
 }
 
 <xss:code>
-	compiler.xss("inst_renderer.xss", threejs.instances);	
+	compiler.inject("render_instances");
+	compiler.xss("../common-js/instance.xss", application);
 </xss:code>
 
 document.body.appendChild( renderer.domElement );

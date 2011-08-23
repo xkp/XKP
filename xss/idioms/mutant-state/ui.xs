@@ -1,5 +1,5 @@
 
-on render_initialization()
+on render_initialization_unused_for_now()
 {
 	out()
 	{

@@ -63,9 +63,15 @@
                 
                 if (!rendering_instance)
                 {
-					if (!prop_info.global)
-                        path = compiler.replace_identifier(path, seq.id, "this__"); 
+					if (!prop_info.this_property)
+                        compiler.error("Sequence class targets must be properties");
+
+                    path = "this__." + path;
                 }
+                else if (prop_info.this_property)
+                {
+                    path = seq.id + "." + path;
+                }    
                 
                 string assign = prop_name + " = value;"; 
                 if (prop)
@@ -287,8 +293,11 @@
 
         if (rendering_instance)
         {
-            //render instance
-            out() {var <xss:e v="seq_id"/> =} compiler.xss("../common-js/instantiator.xss", seq);
+            //declare variable on the top level
+            out(marker = "variables", marker_source = "entry") {var <xss:e v="seq_id"/>;}
+
+            //initialize it here
+            out() {<xss:e v="seq_id"/> =} compiler.xss("../common-js/instantiator.xss", seq);
             if (parent)
             {
                 //build the instance chain

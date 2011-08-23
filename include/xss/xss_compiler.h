@@ -146,6 +146,7 @@ namespace xkp
         void        push_renderer(XSSRenderer renderer);
         void        pop_renderer();
         XSSRenderer current_renderer();
+        XSSRenderer entry_renderer();
         XSSContext  current_context();
 		  private:
         std::vector<XSSApplicationRenderer> applications_;
@@ -155,6 +156,7 @@ namespace xkp
         fs::path                            output_path_;
         fs::path                            compiling_;
         XSSObject                           options_;
+        XSSRenderer                         entry_;
         
         XSSObject   read_project(fs::path xml_file);
         void        read_application_types(std::vector<XSSObject> & applications);
@@ -169,7 +171,7 @@ namespace xkp
         void        pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent);
         void        run();
         void        copy_files(XSSObject project_data);
-        void        xss_args(const param_list params, param_list& result, fs::path& output_file, str& marker);
+        void        xss_args(const param_list params, param_list& result, fs::path& output_file, str& marker, MARKER_SOURCE& marker_source);
       private:
         //id gen
         typedef std::map<str, int> genid_list;

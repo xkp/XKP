@@ -10,6 +10,7 @@ for(var prop in it.properties)
     if (prop.dont_init)
         continue;
     
+    compiler.log("Rendering property " + prop.id);
     compiler.xss(property_renderer, prop, it, is_class = false);
 }    
 

@@ -369,7 +369,7 @@ str base_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
                     case RESOLVE_PROPERTY:
                       {
                         XSSProperty prop = si.value;
-										    result = prop->render_value();
+										    result = prop->render_get();
                         str this_str = lang->resolve_this(ctx_);
                         if (!this_str.empty())
                           result = this_str + separator + result; //otherwise it doesnt get translated

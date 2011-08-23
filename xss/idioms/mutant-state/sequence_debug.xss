@@ -25,6 +25,8 @@ var g_sequence_manager = new ms.state.Manager();
 
 var application = {}
 
+<xss:marker id="variables"/>
+
 function default_interpolate(a, b, t)
 {
     return a + (b - a)*t;

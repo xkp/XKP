@@ -1,8 +1,7 @@
-<xss:parameter id="instances"/>
+<xss:parameter id="i"/>
 
-<xss:code>
-	
-	for(var i in instances){		
+<xss:code>	
+		
 		if(i.type.super){
 			if(i.type.super.id == "param_braces"){
 				compiler.xss("p_braces_render.xss", i);
@@ -14,36 +13,32 @@
 				compiler.xss("../common-js/instantiator.xss", i);
 				out(){
 				,<xss:e v="i.materials"/>);
-				scene.addObject(<xss:e value = "i.id"/>)
+				scene.addObject(<xss:e value = "i.id"/>);
 				}
 			}else
-			if(i.type.super.id == "transform"){
+			if(i.type.super.id == "transformation"){
 				compiler.xss("transforming_renderer.xss", i);
 			}else
 			if(i.type.super.id == "light"){
 				out(){var <xss:e v="i.id"/> = }compiler.xss("../common-js/instantiator.xss", i);
 				out(){
 				;
-				scene.addLight(<xss:e value = "i.id"/>)
+				scene.addLight(<xss:e value = "i.id"/>);
 				}
+			}			
+		}else{		
+			if(i.id == "")
+				i.id = i.class_name;
+			out(){var <xss:e v="i.id"/> = }
+			compiler.xss("../common-js/instantiator.xss", i);			
+			if(i.class_name == "sound") out(){<xss:e v="i.id"/>.play();}		
 			}
-		}else{
-			if(i.class_name == "child"){
+		if(i.parent.class_name == "transform"){			
 				out(){
-				<xss:e v="i.parent.id"/>.addChild(<xss:e v="i.name"/>);
-				scene.addObject(<xss:e v="i.parent.id"/>)
+				<xss:e v="i.parent.id"/>.addChild(<xss:e v="i.id"/>);
+				scene.addObject(<xss:e v="i.parent.id"/>);
 				}
-			}else{
-				if(i.id == "")
-					i.id = i.class_name;
-				out(){var <xss:e v="i.id"/> = }
-				compiler.xss("../common-js/instantiator.xss", i);
 			}
-			if(i.class_name == "sound") out(){<xss:e v="i.id"/>.play()}
-		}
 		out(){;}
-		compiler.xss("../common-js/instance.xss", i);
-		
-	}
-	
+			
 </xss:code>

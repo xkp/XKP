@@ -57,6 +57,10 @@ const str SUnknownImportClass("Trying to import an unknown class");
 const str SCopyFileEmpty("A file was specified for copy without a file name");
 const str SXSSBadOutput("compiler.xss(output_file) does not accept empty strings");
 const str SEmptyMarker("compiler.xss(marker) does not accept empty strings");
+const str SEmptyMarkerSource("Empty marker source");
+const str SInvalidMarkerSource("Invalid marker source");
+const str SNotAnInstance("Expecting instance");
+const str SNotAProperty("Expecting property");
 
 //xss_application_renderer
 xss_application_renderer::xss_application_renderer(fs::path entry_point, Language lang, XSSCompiler compiler):
@@ -424,7 +428,7 @@ str xss_compiler::genid(const str& what)
 		return "__" + what + boost::lexical_cast<str>(aidx);
   }
 
-void xss_compiler::xss_args(const param_list params, param_list& result, fs::path& output_file, str& marker)
+void xss_compiler::xss_args(const param_list params, param_list& result, fs::path& output_file, str& marker, MARKER_SOURCE& marker_source)
   {
     for(size_t i = 0; i < params.size(); i++)
       {
@@ -459,6 +463,35 @@ void xss_compiler::xss_args(const param_list params, param_list& result, fs::pat
             marker = vv;
             continue;
           }
+        else if (pname == "marker_source")
+          {
+            str vv = variant_cast<str>(value, str());
+            if (vv.empty())
+              {
+                param_list error;
+                error.add("id", SProjectError);
+                error.add("desc", SEmptyMarkerSource);
+                xss_throw(error);
+              }
+            else if (vv == "entry")
+              {
+                marker_source = MS_ENTRY;
+              }
+            else if (vv == "current")
+              {
+                marker_source = MS_CURRENT;
+              }
+            else
+              {
+                param_list error;
+                error.add("id", SProjectError);
+                error.add("desc", SInvalidMarkerSource);
+                error.add("value", vv);
+                xss_throw(error);
+              }
+
+            continue;
+          }
 
         result.add(pname, value);
       }
@@ -484,10 +517,11 @@ void xss_compiler::xss(const param_list params)
       }
 
     //grab options, leave the rest of the arguments intact
-    param_list my_args;
-    fs::path   the_output_file;
-    str        marker; 
-    xss_args(params, my_args, the_output_file, marker);
+    param_list    my_args;
+    fs::path      the_output_file;
+    str           marker; 
+    MARKER_SOURCE marker_source = MS_CURRENT;
+    xss_args(params, my_args, the_output_file, marker, marker_source);
 
     //resolve file name
     XSSRenderer r   = current_renderer();
@@ -546,7 +580,22 @@ void xss_compiler::xss(const param_list params)
         if (!marker.empty())
           r->append_at(result->render(XSSObject(), &result_params), marker); 
         else
-          r->append(result->render(XSSObject(), &result_params)); 
+          {
+            switch (marker_source)
+              {
+                case MS_ENTRY:
+                  {
+                    assert(entry_);
+                    entry_->append(result->render(XSSObject(), &result_params)); 
+                    break;
+                  }
+                case MS_CURRENT:
+                  {
+                    r->append(result->render(XSSObject(), &result_params)); 
+                    break;
+                  }
+              }
+          }
       }
     else
       output_file(the_output_file, result->render(XSSObject(), &result_params));
@@ -705,53 +754,84 @@ str xss_compiler::replace_identifier(const str& s, const str& src, const str& ds
 variant xss_compiler::resolve_property(const str& prop, variant parent)
 	{
     XSSContext ctx = current_context();
-
-		XSSObject base;
-		str				path_str;
-    str       pth;
-
+    XSSObject  base;
+		str        path_str;
 		if (parent.is<str>())
 			{
-				str id = variant_cast<str>(parent, str());
-        base = ctx->resolve_path(lang_utils::unwind(id), XSSObject(), pth);
-				path_str = id;
+				str          parent_id = variant_cast<str>(parent, str());
+        resolve_info parent_ri;
+        parent_ri.search_this = false;
+        parent_ri.output      = &path_str;
+        if (ctx->resolve_path(lang_utils::unwind(parent_id), parent_ri))
+          {
+            if (parent_ri.what != RESOLVE_INSTANCE)
+              {
+                param_list error;
+                error.add("id", SProjectError);
+                error.add("desc", SNotAnInstance);
+                error.add("searching for", prop);
+                xss_throw(error);
+              }
+
+              base = parent_ri.value;
+          }
+        else
+          {
+            param_list error;
+            error.add("id", SProjectError);
+            error.add("desc", SCannotResolve);
+            error.add("what", prop);
+            xss_throw(error);
+          }
 			}
 		else 
 			base = variant_cast<XSSObject>(parent, XSSObject());
 
-		std::vector<str> path = lang_utils::unwind(prop); assert(!path.empty());
-		str prop_name = path[path.size() - 1];
-		path.erase(path.end() - 1);
+    ctx = XSSContext(new xss_context(ctx));
+    ctx->set_this(base);
 
-		XSSObject obj;
-
-    try
+    str path;
+    resolve_info ri;
+    resolve_info left;
+    ri.output = &path;
+    if (base)
       {
-        obj = ctx->resolve_path(path, base, pth);
-      }
-    catch(xss_error xsse)
-      {
-        //try the global scope
-        obj = ctx->resolve_path(path, XSSObject(), pth);
-        base = XSSObject();
+        left.what = RESOLVE_INSTANCE;
+        left.value = base;
+        ri.left = &left;
       }
 
-		if (!obj)
-			return variant();
-
-		XSSProperty propobj = obj->get_property(prop_name);
     XSSObject   result(new xss_object);
+    std::vector<str> prop_path = lang_utils::unwind(prop);
+		if (ctx->resolve_path(prop_path, ri))
+      {
+        if (ri.what != RESOLVE_PROPERTY)
+          {
+            param_list error;
+            error.add("id", SProjectError);
+            error.add("desc", SNotAProperty);
+            error.add("what", prop);
+            xss_throw(error);
+          }
+			  
+        XSSProperty prop = ri.value;
+        result->add_property("prop", prop);
+		    result->add_property("prop_name", prop->id());
 
-		if (propobj)
-			result->add_property("prop", propobj);
+        if (!path_str.empty())
+          {
+            path = path_str + ctx->get_language()->resolve_separator() + path;
+          }
+      }
 		else
-			result->add_property("prop", variant());
+      {
+			  result->add_property("prop", variant());
+			  result->add_property("prop_name", prop_path[prop_path.size() - 1]);
+      }
 
-		result->add_property("prop_name", prop_name);
 		result->add_property("request", prop);
-		result->add_property("path", pth);
-		result->add_property("obj", obj);
-		result->add_property("global", (bool)base);
+		result->add_property("path", path);
+    result->add_property("this_property", ri.found_this);
 
 		return result;
 	}
@@ -798,12 +878,18 @@ fs::path xss_compiler::compiling()
 
 void xss_compiler::push_renderer(XSSRenderer renderer)
   {
+    if (renderers_.empty())
+      entry_ = renderer;
+
     renderers_.push(renderer);
   }
 
 void xss_compiler::pop_renderer()
   {
     renderers_.pop();
+
+    if (renderers_.empty())
+      entry_ = XSSRenderer();
   }
 
 XSSRenderer xss_compiler::current_renderer()
@@ -811,6 +897,11 @@ XSSRenderer xss_compiler::current_renderer()
     if(renderers_.empty())
       return XSSRenderer();
     return renderers_.top();
+  }
+
+XSSRenderer xss_compiler::entry_renderer()
+  {
+    return entry_;
   }
 
 XSSObject xss_compiler::read_project(fs::path xml_file)
@@ -1314,10 +1405,15 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 					}
 
         variant value;
+        XSSType value_type;
         if (!pit->value.empty())
-          value = lang->compile_expression(pit->value, ctx);
+          {
+            value = lang->compile_expression(pit->value, ctx);
+            IExpressionRenderer* er = variant_cast<IExpressionRenderer*>(value, null); assert(er);
+            value_type = er->type();
+          }
 
-        XSSType prop_type = ctx->get_type(pit->type);
+        XSSType prop_type = value_type;
         if (!pit->type.empty())
           {
             prop_type = ctx->get_type(pit->type);
@@ -1330,13 +1426,14 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
                 xss_throw(error);
               }
           }
-        else
+
+        if (!prop_type)  
           {
-            //prop_type = ctx->get_type("var"); //td: undefined
-            prop_type = XSSType();
+            //we do not use empty types, a property without type is variant
+            prop_type = ctx->get_type("var");
           }
 
-        //assert(prop_type);
+        assert(prop_type);
 				XSSProperty new_prop(new xss_property(pit->name, prop_type, value, getter, setter, instance));
         properties->push_back(new_prop); //td: check types with class
       }
@@ -1446,12 +1543,27 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 		for(; iit != ind; iit++)
 			{
 				xs_instance& instance_ast = *iit;
-				str					 pth;
-				XSSObject		 instance_instance = ctx->resolve_path(instance_ast.id, XSSObject(), pth);
+        XSSObject instance_instance;
+				
+        resolve_info ri;
+        ri.what = RESOLVE_INSTANCE;
+        if (ctx->resolve_path(instance_ast.id, ri))
+          {
+            instance_instance = ri.value;
 
-				XSSContext ictx(new xss_context(ctx));
-				ictx->set_this(instance_instance);
-				compile_ast(instance_ast, ictx);
+				    XSSContext ictx(new xss_context(ctx));
+				    ictx->set_this(instance_instance);
+				    compile_ast(instance_ast, ictx);
+          }
+        else
+					{
+            param_list error;
+            error.add("id", SCannotResolve);
+            error.add("desc", SUnknownInstance);
+            error.add("instance", lang_utils::wind(instance_ast.id));
+
+            xss_throw(error);
+					}
 			}
 	}
 

@@ -1,7 +1,8 @@
-<application src="ms3.app.xs" width="600" height="400">
+<application src="ms4.app.xs" width="600" height="400">
     <resources>
         <image src="images/img1.png"/>
     </resources>
     
     <img id="img1" src="images/img1.png" x="100" y="100" width="50" height="50"/>
+    <fade_in id="fade1"/>
 </application>

@@ -34,6 +34,11 @@ var g_canvas;
 var g_ui_root;
 var application = {};
 
+<xss:code>
+    compiler.inject("render_initialization");
+</xss:code>
+
+
 function start(resolution)  
 {  
 	var start = new Date().getTime();  
@@ -47,6 +52,10 @@ function start(resolution)
 		
         g_elapsed = now; 
               
+        <xss:code>
+            compiler.inject("render_update");
+        </xss:code>
+
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
 		window.setTimeout(update, resolution);  

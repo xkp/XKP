@@ -1,4 +1,4 @@
-<xss:class entry_point="generate">
+<xss:class>
     method resolve_key(key, key_value, key_index, owner_seq, prop_info, interp)
     {
         //for good measure

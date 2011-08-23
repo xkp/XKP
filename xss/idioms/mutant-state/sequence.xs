@@ -4,6 +4,11 @@ on render_initialization()
 	out()
 	{
 		var g_sequence_manager = new ms.state.Manager();
+
+        function default_interpolate(a, b, t)
+        {
+            return a + (b - a)*t;
+        }
 	}
 }
 
@@ -27,4 +32,12 @@ on render_instances()
     {
 		compiler.xss("sequence.xss", i, is_class = false);
     }
+}
+
+on render_update()
+{
+	out()
+	{
+		g_sequence_manager.update(g_delta);
+	}
 }

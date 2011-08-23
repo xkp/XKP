@@ -26,12 +26,12 @@
 			<property id="color" type="string" dont_init="true"/> 
 			<property id="map" type="string" dont_init="true"/>
 			<property id="wireframe" type="string" dont_init="true"/>
-			<property id="wireframe_linewidth" type="string" real_id="wireframeLinewidth" dont_init="true"/>
+			<property id="wireframe_linewidth" type="string" output_id="wireframeLinewidth" dont_init="true"/>
 			<property id="opacity" type="string" dont_init="true"/>
 			<property id="texture_src" type="string" dont_init="true"/>				
 			<property id="shading" type="string" dont_init="true"/>
-			<property id="vertex_colors" type="string" real_id="vertexColors" dont_init="true"/>
-			<property id="env_map" type="string" real_id="envMap" dont_init="true"/>
+			<property id="vertex_colors" type="string" output_id="vertexColors" dont_init="true"/>
+			<property id="env_map" type="string" output_id="envMap" dont_init="true"/>
 			<property id="combine" type="string" dont_init="true"/>
 			<property id="reflectivity" type="string" dont_init="true"/>
 			<property id="shininess" type="string" dont_init="true"/>
@@ -59,12 +59,12 @@
 			<property id="color" type="string" dont_init="true"/> 
 			<property id="map" type="string" dont_init="true"/>
 			<property id="wireframe" type="string" dont_init="true"/>
-			<property id="wireframe_linewidth" type="string" real_id="wireframeLinewidth" dont_init="true"/>
+			<property id="wireframe_linewidth" type="string" output_id="wireframeLinewidth" dont_init="true"/>
 			<property id="opacity" type="string" dont_init="true"/>
 			<property id="texture_src" type="string" dont_init="true"/>				
 			<property id="shading" type="string" dont_init="true"/>
-			<property id="vertex_colors" type="string" real_id="vertexColors" dont_init="true"/>
-			<property id="env_map" type="string" real_id="envMap" dont_init="true"/>
+			<property id="vertex_colors" type="string" output_id="vertexColors" dont_init="true"/>
+			<property id="env_map" type="string" output_id="envMap" dont_init="true"/>
 			<property id="combine" type="string" dont_init="true"/>
 			<property id="reflectivity" type="string" dont_init="true"/>
 			<property id="shininess" type="string" dont_init="true"/>
@@ -92,12 +92,12 @@
 			<property id="color" type="string" dont_init="true"/> 
 			<property id="map" type="string" dont_init="true"/>
 			<property id="wireframe" type="string" dont_init="true"/>
-			<property id="wireframe_linewidth" type="string" real_id="wireframeLinewidth" dont_init="true"/>
+			<property id="wireframe_linewidth" type="string" output_id="wireframeLinewidth" dont_init="true"/>
 			<property id="opacity" type="string" dont_init="true"/>
 			<property id="texture_src" type="string" dont_init="true"/>				
 			<property id="shading" type="string" dont_init="true"/>
-			<property id="vertex_colors" type="string" real_id="vertexColors" dont_init="true"/>
-			<property id="env_map" type="string" real_id="envMap" dont_init="true"/>
+			<property id="vertex_colors" type="string" output_id="vertexColors" dont_init="true"/>
+			<property id="env_map" type="string" output_id="envMap" dont_init="true"/>
 			<property id="combine" type="string" dont_init="true"/>
 			<property id="reflectivity" type="string" dont_init="true"/>
 			<property id="shininess" type="string" dont_init="true"/>
@@ -135,24 +135,21 @@
 			</constructor_params>			
             <property id="color" type="string" set_fn="materials[ 0 ].color.setHex"/>
 			<property id="overdraw" type="string"/>
-			<property id="double_sided" type="string" real_id="doubleSided"/>
+			<property id="double_sided" type="string" output_id="doubleSided"/>
 			<property id="materials" type="string" dont_init="true"/>			
 		</class>
 	
-		<class id="obj_container" output_id="THREE.Object3D"/>
-	
-		<class id="child"/>
+		<class id="transform" output_id="THREE.Object3D"/>
 			
-		<class id="transform">		
+		<class id="transformation">		
             <property id="x" type="string"/>
 			<property id="y" type="string"/>
 			<property id="z" type="string"/>		
 		</class>
 	
-		<class id="scale" super="transform"/>
- 		<class id="rotation" super="transform"/>
-	 
-		<class id="position" super="transform"/>
+		<class id="scale" super="transformation"/>
+ 		<class id="rotation" super="transformation"/>	 
+		<class id="position" super="transformation"/>
 			
 			
 		<class id="light"/>    
@@ -164,12 +161,12 @@
 				<param property="hex"/>
 				<param property="intensity"/>
 				<param property="distance"/>
-				<param property="cast_shadow" real_id="castShadow"/>  				
+				<param property="cast_shadow" output_id="castShadow"/>  				
 			</constructor_params>
 				<property id="hex" type="string" dont_init="true"/>
 				<property id="intensity" type="string" dont_init="true"/>
 				<property id="distance" type="string" dont_init="true"/>
-				<property id="cast_shadow" real_id="castShadow" type="string" dont_init="true"/>
+				<property id="cast_shadow" output_id="castShadow" type="string" dont_init="true"/>
 		</class>
 	
 		<class id="point_light" super="light" output_id="THREE.PointLight">
@@ -208,11 +205,11 @@
 				<param property="near"/>
 				<param property="far"/>     
 				<param property="target"/> 
-				<param property="movement_speed" real_id="movementSpeed"/>
-				<param property="look_speed" real_id="lookSpeed"/>
-				<param property="no_fly" real_id="noFly"/>
-				<param property="look_vertical" real_id="lookVertical"/>
-				<param property="auto_forward" real_id="autoForward"/>			
+				<param property="movement_speed" output_id="movementSpeed"/>
+				<param property="look_speed" output_id="lookSpeed"/>
+				<param property="no_fly" output_id="noFly"/>
+				<param property="look_vertical" output_id="lookVertical"/>
+				<param property="auto_forward" output_id="autoForward"/>			
 			</constructor_params>
 			<property id="hex" type="string" dont_init="true"/> 
 			<property id="fov" type="string" dont_init="true"/>
@@ -220,24 +217,24 @@
 			<property id="near" type="string" dont_init="true"/>
 			<property id="far" type="string" dont_init="true"/>
 			<property id="target" type="string" dont_init="true"/>
-			<property id="movement_speed" real_id="movementSpeed" type="string" dont_init="true"/> 
-			<property id="look_speed" real_id="lookSpeed" type="string" dont_init="true"/>
-			<property id="no_fly" real_id="noFly" type="string" dont_init="true"/>
-			<property id="look_vertical" real_id="lookVertical" type="string" dont_init="true"/>
-			<property id="auto_forward" real_id="autoForward" type="string" dont_init="true"/>
+			<property id="movement_speed" output_id="movementSpeed" type="string" dont_init="true"/> 
+			<property id="look_speed" output_id="lookSpeed" type="string" dont_init="true"/>
+			<property id="no_fly" output_id="noFly" type="string" dont_init="true"/>
+			<property id="look_vertical" output_id="lookVertical" type="string" dont_init="true"/>
+			<property id="auto_forward" output_id="autoForward" type="string" dont_init="true"/>
 		</class>
 	
 		<class id="plane" super="meshable" output_id="THREE.Plane">
 			<constructor_params>
 				<param property="width"/>
 				<param property="height"/>
-				<param property="segments_width" real_id="segmentsWidth"/>
-				<param property="segments_height" real_id="segmentsHeight"/>
+				<param property="segments_width" output_id="segmentsWidth"/>
+				<param property="segments_height" output_id="segmentsHeight"/>
 			</constructor_params>
 			<property id="width" type="string" dont_init="true"/>
 			<property id="height" type="string" dont_init="true"/>
-			<property id="segments_width" real_id="segmentsWidth" type="string" dont_init="true"/>
-			<property id="segments_height" real_id="segmentsHeight" type="string" dont_init="true"/>
+			<property id="segments_width" output_id="segmentsWidth" type="string" dont_init="true"/>
+			<property id="segments_height" output_id="segmentsHeight" type="string" dont_init="true"/>
 		</class>
 	
 		<class id="cube" super="meshable" output_id="THREE.Cube">
@@ -245,9 +242,9 @@
 				<param property="width"/>
 				<param property="height"/>
 				<param property="depth"/>      
-				<param property="segments_width" real_id="segmentsWidth"/>
-				<param property="segments_height" real_id="segmentsHeight"/>
-				<param property="segments_depth" real_id="segmentsDepth"/>
+				<param property="segments_width" output_id="segmentsWidth"/>
+				<param property="segments_height" output_id="segmentsHeight"/>
+				<param property="segments_depth" output_id="segmentsDepth"/>
 				<param property="cube_materials"/>
 				<param property="flipped"/>
 				<param property="sides"/>			
@@ -255,9 +252,9 @@
 			<property id="width" type="string" dont_init="true"/> 
 			<property id="height" type="string" dont_init="true"/>
 			<property id="depth" type="string" dont_init="true"/>
-			<property id="segments_width" real_id="segmentsWidth" type="string" dont_init="true"/>
-			<property id="segments_height" real_id="segmentsHeight" type="string" dont_init="true"/>
-			<property id="segments_depth" real_id="segmentsDepth" type="string" dont_init="true"/>				
+			<property id="segments_width" output_id="segmentsWidth" type="string" dont_init="true"/>
+			<property id="segments_height" output_id="segmentsHeight" type="string" dont_init="true"/>
+			<property id="segments_depth" output_id="segmentsDepth" type="string" dont_init="true"/>				
 			<property id="cube_materials" type="string" dont_init="true"/>
 			<property id="flipped" type="string" dont_init="true"/>
 			<property id="sides" type="string" dont_init="true"/>
@@ -283,12 +280,12 @@
 		<class id="sphere" super="meshable" output_id="THREE.Sphere">
 			<constructor_params>
 				<param property="radius"/>
-				<param property="segments_width" real_id="segmentsWidth"/>
-				<param property="segments_height" real_id="segmentsHeight"/>			
+				<param property="segments_width" output_id="segmentsWidth"/>
+				<param property="segments_height" output_id="segmentsHeight"/>			
 			</constructor_params>
 			<property id="radius" type="string" dont_init="true"/>
-			<property id="segments_width" real_id="segmentsWidth" type="string" dont_init="true"/>
-			<property id="segments_height" real_id="segmentsHeight" type="string" dont_init="true"/>
+			<property id="segments_width" output_id="segmentsWidth" type="string" dont_init="true"/>
+			<property id="segments_height" output_id="segmentsHeight" type="string" dont_init="true"/>
 		</class>
 	
 		<class id="icosahedron" super="meshable" output_id="THREE.Icosahedron">

@@ -37,6 +37,13 @@ typedef reference<ICodeRenderer>	      CodeRenderer;
 typedef reference<IExpressionRenderer>  ExpressionRenderer;
 typedef reference<IArgumentRenderer>    ArgumentRenderer;
 
+//enums
+enum MARKER_SOURCE
+  {
+    MS_CURRENT,
+    MS_ENTRY
+  };
+
 //misc
 typedef std::vector<XSSObject> XSSObjectList;
 
@@ -208,15 +215,28 @@ struct resolve_info
     resolve_info():
       what(RESOLVE_ANY),
       left(null),
-      search_this(true)
+      search_this(true),
+      output(null),
+      found_this(false)
+      {
+      }
+
+    resolve_info(const resolve_info& other):
+      what(other.what),
+      left(other.left),
+      search_this(other.search_this),
+      output(null),
+      found_this(false)
       {
       }
 
     RESOLVE_ITEM  what;
     XSSType       type; 
-    variant       value; 
+    variant       value;
+    str*          output;  
     resolve_info* left;
     bool          search_this;
+    bool          found_this;
   };
 
 struct symbol_data
@@ -252,7 +272,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       variant resolve(const str& id, RESOLVE_ITEM item_type = RESOLVE_ANY);
       bool    resolve(const str& id, resolve_info& info);
       variant resolve(const str& id, XSSObject instance, RESOLVE_ITEM item_type = RESOLVE_ANY);
-      variant resolve_path(const std::vector<str>& path, XSSObject base, str& result);
+      bool    resolve_path(const std::vector<str>& path, resolve_info& info);
       void    register_symbol(RESOLVE_ITEM type, const str& id, variant symbol);
     protected:
       typedef std::map<str, XSSType>  type_list;

@@ -345,13 +345,26 @@ bool xss_context::resolve(const str& id, resolve_info& info)
             XSSObject obj;
             if (info.left)
               {
-                assert(
-                  info.left->what == RESOLVE_INSTANCE || 
-                    (info.left->what == RESOLVE_VARIABLE && 
-                      (info.left->type->is_object() || info.left->type->is_variant())
-                    )
-                  );
-                obj = info.left->value;
+                switch(info.left->what)
+                  {
+                    case RESOLVE_INSTANCE:
+                      {
+                        obj = info.left->value;
+                        break;
+                      }
+                    case RESOLVE_VARIABLE:
+                      {
+                        assert(info.left->type->is_object() || info.left->type->is_variant());
+                        obj = info.left->value;
+                        break;
+                      }
+                    default:
+                      {
+                        if (!any)
+                          return false; //td: is this an error condition?
+                      }
+                  }
+
               }
             else if (search_this)
               obj = get_this();
@@ -419,92 +432,115 @@ bool xss_context::resolve(const str& id, resolve_info& info)
     return parent_? parent_->resolve(id, info) : false;
   }
 
-variant xss_context::resolve_path(const std::vector<str>& path, XSSObject base, str& result)
+bool xss_context::resolve_path(const std::vector<str>& path, resolve_info& info)
   {
-    XSSObject obj = base;
-    str inst_name;
-		bool first = true;
-    for(size_t idx = 0; idx < path.size(); idx++)
+    std::vector<str>::const_iterator it = path.begin();
+    std::vector<str>::const_iterator nd = path.end();
+
+    Language lang = get_language();
+
+		//state
+    bool          first      = true;
+		bool          just_paste = false;
+    str           result; 
+    XSSProperty   curr_property;
+    XSSObject     curr_instance;
+
+    //resolvers, we'll keep copies
+    resolve_info  ri = info;
+    resolve_info  last;
+    if (info.left)
       {
-        inst_name = path[idx];
-
-        resolve_info ri;
-				if (obj)
-					{
-            resolve_info left;
-            left.what  = RESOLVE_INSTANCE;
-            left.value = obj; 
-
-            ri.left = &left;
-
-            if (!resolve(inst_name, ri))
-              {
-                param_list error;
-                error.add("id", SContextError);
-                error.add("desc", SCannotResolve);
-                error.add("instance", inst_name);
-
-                xss_throw(error);
-              }
-						
-            if (result.empty())
-              result = obj->output_id();
-            
-            result += get_language()->resolve_separator(obj);
-            
-            switch(ri.what)
-              {
-                case RESOLVE_PROPERTY:
-                  {
-						        XSSProperty prop	= ri.value;
-                    result += prop->render_get();
-                    break;
-                  }
-                case RESOLVE_INSTANCE:
-                  {
-                    XSSObject instance = ri.value;
-                    result = obj->output_id(); //td: how to resolve this path? what to ask the language?
-						        obj	= instance;
-                    break;
-                  }
-                default:
-                  assert(false); //use case
-              }
-					}
-        else
-          {
-            if (!resolve(inst_name, ri))
-              {
-                param_list error;
-                error.add("id", SContextError);
-                error.add("desc", SCannotResolve);
-                error.add("instance", inst_name);
-
-                xss_throw(error);
-              }
-						
-            switch(ri.what)
-              {
-                case RESOLVE_PROPERTY:
-                  {
-						        XSSProperty prop	= ri.value;
-                    result = lang_->resolve_separator(obj) + prop->render_get();
-                    break;
-                  }
-                
-                case RESOLVE_INSTANCE:
-                  {
-                    obj = ri.value;
-                    result = obj->output_id();
-                    break;
-                  }
-                default:
-                  assert(false); //use case
-              }
-          }
+        last = *info.left;
+        ri.left = &last;
       }
 
-		return obj;
+    for(; it != nd; it++)
+      {
+        str item = *it;
+        if (just_paste)
+          {
+            result += lang->resolve_separator() + item;
+            continue;
+          }
+        
+        if (!first)
+          ri.search_this = false;
+
+        bool is_last = (it + 1) == nd;
+
+        if (resolve(item, ri))
+          {
+            switch(ri.what)
+              {
+                case RESOLVE_INSTANCE:
+                  {
+                    curr_instance = ri.value;
+                    curr_property = XSSProperty();
+
+                    if (!is_last)
+                      {
+                        if (!first)
+                          result += lang->resolve_separator();
+                        result += curr_instance->output_id();
+                      }
+                    break;
+                  }
+                case RESOLVE_PROPERTY:
+                  {
+                    curr_instance = XSSObject();
+                    curr_property = ri.value;
+
+                    if (first)
+                      info.found_this = true;
+
+                    if (!is_last)
+                      {
+                        if (!first)
+                          result += lang->resolve_separator();
+                        result += curr_property->output_id();
+                      }
+                    break;
+                  }
+                default:
+                  {
+                    assert(false); //use case
+                  }
+              }
+
+            last = ri;
+            ri.left = &last;
+            ri.what = RESOLVE_ANY;
+          }
+        else
+          {
+            result = item;
+            just_paste = true;
+          }
+
+        if (first)
+          first = false;
+      }
+    
+    if (info.output)
+      *info.output = result;
+
+    if (curr_instance)
+      {
+        info.what  = RESOLVE_INSTANCE;
+        info.value = curr_instance;
+      }
+    else if (curr_property)
+      {
+        info.what  = RESOLVE_PROPERTY;
+        info.value = curr_property;
+      }
+    else
+      {
+        info.value = variant(); //just makin' sure
+      }
+
+    return !just_paste;
   }
 
 void xss_context::register_symbol(RESOLVE_ITEM type, const str& id, variant symbol)
