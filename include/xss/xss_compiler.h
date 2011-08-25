@@ -127,6 +127,7 @@ namespace xkp
 				XSSRenderer compile_xss(const str& src, XSSContext ctx, fs::path path = fs::path());
 			  void        output_file(const str& fname, const str& contents);
 			  void        output_file(fs::path fpath, const str& contents);
+        str         output_path();
         str         genid(const str& what);
         void        xss(const param_list params);
         void        inject(const param_list params);
@@ -148,6 +149,8 @@ namespace xkp
         XSSRenderer current_renderer();
         XSSRenderer entry_renderer();
         XSSContext  current_context();
+      public:
+        XSSObject                           options_;
 		  private:
         std::vector<XSSApplicationRenderer> applications_;
         std::stack<XSSRenderer>             renderers_;
@@ -155,7 +158,6 @@ namespace xkp
         fs::path                            source_path_;
         fs::path                            output_path_;
         fs::path                            compiling_;
-        XSSObject                           options_;
         XSSRenderer                         entry_;
         
         XSSObject   read_project(fs::path xml_file);
@@ -196,6 +198,8 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         dynamic_method_ ("log",    &xss_compiler::log);
         dynamic_method_ ("error",  &xss_compiler::error);
 
+        readonly_property<XSSObject>("options", &xss_compiler::options_);
+
         method_<str,      1>("genid",	            &xss_compiler::genid);
         method_<bool,     1>("parse_expression",	&xss_compiler::parse_expression);
         method_<str,      2>("render_expression", &xss_compiler::render_expression);
@@ -204,6 +208,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<str,      1>("renderer_file",	    &xss_compiler::renderer_file);
         method_<str,      2>("idiom_path",	      &xss_compiler::idiom_path);
         method_<str,      1>("full_path",	        &xss_compiler::full_path);
+        method_<str,      0>("output_path",       &xss_compiler::output_path);
       }
   };
 

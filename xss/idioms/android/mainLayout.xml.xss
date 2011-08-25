@@ -1,36 +1,149 @@
+<xss:parameter id="appName"/>
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<com.xkp.android.<xss:e value="appName"/>.XKPLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+    xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.<xss:e value="appName"/>" 
+    android:id="@+id/mainLayoutApplication" 
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
-<xss:code>
-	//this implementation should be recursively
-	for(var inst in instances)
+<xss:class>
+	on render()
 	{
-		if(inst.id != "application")
+		generate_view(application, null, 0);
+	}
+	
+	method generate_view(var view, var parent, int ind)
+	{
+		//ERROR: why i can use '!=' operator in view != application?
+		//       if(view != application)
+		
+		string strViewName = "";
+		if(view.xkpview)
+			strViewName = "com.xkp.android." + appName + ".";
+		
+		if(view.type)
+			strViewName += view.type.output_id;
+		
+		if(view.id != application.id)
 		{
-			out(indent = 1)
+			out(indent = ind)
 			{
-				<<xss:e value="inst.import"/> android:id="@+id/<xss:e value="inst.id"/>" 
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
+                <<xss:e value="strViewName"/><xss:e value="view.name"/> android:id="@+id/<xss:e value="view.id"/>"
 			}
-			for(var prop in inst.properties)
-			{
-				if(prop.android_layout_name)
-				{
-					out(indent = 2)
-					{
-						android:<xss:e value="prop.android_layout_name"/>="@string/<xss:e value="prop.resourceName"/>"
-					}
-				}
+		}
+		
+		generate_properties(view, ind + 1);
+		
+		out(indent = ind + 1)
+		{
+            >
+		}
+		
+		// generate all children recursively
+		if(view.children)
+		{
+			// customize problematic component
+			//TODO: implement condition equals to c/c++
+			//if(view.type && view.type.id == "replicator")
+			if(view.type) { if(view.type.id == "replicator")
+			
+				//TODO: each child of replicator that is assumed as template
+				//      these are outputs to xml layout file separated.
+				//      how make this?
+				for(var ch in view.children)
+					generate_view(ch, view, ind + 2);
+					
+				//TODO: the name of output file is a id of component
+				//TODO: the structure of this new xml layout file is:
+				//<?xml version="1.0" encoding="utf-8"?>
+				//<merge
+				//	xmlns:android="http://schemas.android.com/apk/res/android"
+				//	xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.switcher">
+				//  <!-- inside the view childs -->
+				//</merge>
 			}
-			out(indent = 2)
+			else
 			{
-				/>
+				for(var child in view.children)
+					generate_view(child, view, ind + 2);
+			}
+		}
+		
+		if(view.id != application.id)
+		{
+			out(indent = ind)
+			{
+                </<xss:e value="strViewName"/>>
 			}
 		}
 	}
-</xss:code>
-</LinearLayout>
+	
+	method generate_properties(var view, int ind)
+	{
+		for(var prop in view.properties)
+		{
+			//TRACE: log
+			//compiler.log(view.id + " - " + prop.name);
+			
+			if(prop.value == null && prop.default_value)
+			{
+				prop.value = prop.default_value;
+			}
+			
+			if(prop.value == null || prop.nolayout ||
+				prop.ns == null || prop.output_id == null)
+				continue;
+		
+			string assignValue;
+			
+			if(prop.res_type == "dimension")
+			{
+				assignValue = prop.value;
+				if(prop.value is int)
+					assignValue = prop.value + "px";
+			}
+			else
+			if(prop.res_type == "str_reference")
+			{
+				//TIPS: prop.strResourceName come from stringValues.xml.xss 
+				//      that is assigned with the correspond string
+				assignValue = "@string/" + prop.strResourceName;
+			} 
+			else
+			if(prop.res_type == "id_reference")
+			{
+				assignValue = "@+id/" + prop.value;
+			}
+			else
+			if(prop.type == "array")
+			{
+				//without this condition, an assert is dispatching
+				//TODO: implement array type
+				continue;
+			}
+			else
+			{
+				assignValue = prop.value;
+			}
+			
+			if(prop.id == "placement")
+			{
+				//TODO: fix enum translate of placement type/class
+				//compiler.breakpoint();
+				//var v = compiler.evaluate_property(view, prop.name);
+				
+				//var p = view.find_property(prop.name);
+				//var pvalue1 = p.generate_value();
+				//compiler.log(pvalue1);
+				//var pvalue2 = p.resolve_value();
+				//compiler.log(pvalue2);
+			}
+			
+			out(indent = ind)
+			{
+                <xss:e value="prop.ns"/>:<xss:e value="prop.output_id"/>="<xss:e value="assignValue"/>"
+			}
+		}
+	}
+</xss:class>
+</com.xkp.android.<xss:e value="appName"/>.XKPLayout>

@@ -60,6 +60,7 @@ struct java_lang : public base_lang
     virtual bool    can_cast(XSSType left, XSSType right);
     virtual void    init_context(XSSContext ctx);
     virtual XSSType resolve_array_type(XSSType type, const str& at_name, XSSContext ctx);
+    virtual str     render_value(XSSType type, variant value);
   };
 
 register_complete_type(java_code_renderer, renderer_code_schema<java_code_renderer>);

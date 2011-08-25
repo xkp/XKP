@@ -92,7 +92,7 @@ xss_application_renderer::xss_application_renderer(fs::path entry_point, Languag
     object_type->as_object();
     context_->add_type("object", object_type);
 
-    XSSType array_type(new xss_type());
+    XSSType array_type(new xss_type(type_schema<DynamicArray>()));
     array_type->set_id("array");
     array_type->as_array(XSSType(variant_type));
     context_->add_type("array", array_type)->set_id("array");
@@ -410,6 +410,11 @@ void xss_compiler::output_file(fs::path fpath, const str& contents)
     std::ofstream ofs(fpath.string().c_str());
     ofs << delete_blanks(contents);
     ofs.close();
+  }
+
+str xss_compiler::output_path()
+  {
+    return output_path_.string();
   }
 
 str xss_compiler::genid(const str& what)
@@ -973,6 +978,8 @@ void xss_compiler::read_application_types(std::vector<XSSObject> & applications)
         fs::path op = fs::path(app_data->get<str>("output", str()));
         app->output_path(op);
 
+        options_ = app_data->get<XSSObject>("options", XSSObject());
+
         //load modules 
         std::vector<XSSObject> modules = app_data->find_by_class("idiom");
         std::vector<XSSObject>::iterator it = modules.begin();
@@ -1530,7 +1537,8 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 
 				//let the idiom process implementations
 				XSSContext ictx(new xss_context(ctx));
-				ictx->set_this(instance); //actual_instance
+        ictx->set_this(actual_instance);
+				//ictx->set_this(instance); //actual_instance
 						
         variant impl = lang->compile_code(it->cde, it->args, ictx);
 				impls->push_back(impl);

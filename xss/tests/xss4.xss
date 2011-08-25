@@ -1,3 +1,4 @@
+<xss:marker id="before_zero"/>
 
 <xss:marker id="before"/>
 <xss:code>
@@ -13,3 +14,42 @@ for(var i in application.children)
 </xss:code>
 
 AFter! <xss:marker id="after"/>
+
+<xss:code>
+	array<string> arr_str = [];
+	//array<string> arr_str = [];
+	//array arr_str = [];
+	//var arr_str = [];
+	
+	var elements = ["1", "2", "3"];
+	for(var el in elements)
+	{
+		arr_str += el;
+	}
+</xss:code>
+
+<xss:code>
+	array<int> numbers = [1, 2, 3, 4, 5, 6];
+	for(var item in numbers)
+	{
+		int c = item / 2;
+		int r = item - c * 2;
+		
+		//implement module operator
+		//if(item % 2 == 0)
+		if(r == 0)
+		{
+			out(marker="after", marker="before_zero")
+			{
+				Even = <xss:e value="item"/>
+			}
+		}
+		else
+		{
+			out(marker="before")
+			{
+				Odd = <xss:e value="item"/>
+			}
+		}
+	}
+</xss:code>

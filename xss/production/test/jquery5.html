@@ -8,24 +8,24 @@
 $(function() {
                 btn1.text("One button");
                 btn1.width(100);
-	btn1.click(function()
+	btn1.click = function()
 	{    
 		btn2.text("Clicked");
 btn1.text("Other Clicked");
-	});
+	};
                 btn2.text("Two button");
                 btn2.width(100);
-	btn2.click(function()
+	btn2.click = function()
 	{    
 		btn1.text("Old value: " + application.target);
 application.target_set(300);
-	});
+	};
                 btn3.text("Reset");
                 btn3.width(100);
-	btn3.click(function()
+	btn3.click = function()
 	{    
-		application.btn3.reset();
-	});
+		application.reset();
+	};
 });
 </script>
 <style>
@@ -33,12 +33,12 @@ application.target_set(300);
 </head>
 <body>
             <div id='application'>
-            < id='btn1'>
-                </>
-            < id='btn2'>
-                </>
-            < id='btn3'>
-                </>
+            <button id='btn1'>
+                </button>
+            <button id='btn2'>
+                </button>
+            <button id='btn3'>
+                </button>
                 </div>
             </body>
 </html>

@@ -1,21 +1,26 @@
+<xss:parameter id="appName"/>
+<xss:parameter id="targetAPILevel"/>
+<xss:parameter id="appOutputPath"/>
 @echo off
 rem set JAVA_HOME = c:\Progra~1\Java\jdk1.6.0_22\
-rem set in Path = android-sdk-windows\tools; android-sdk-windows\platforms-tools;
+rem set PATH = %PATH%; ..\android-sdk-windows\tools; ..\android-sdk-windows\platforms-tools;
 rem set the base directory of android
 
 <xss:code>
 	string sdkBase = "d:/android/android-sdk-windows/";
-	string apiPlatform = sdkBase + "platforms/android-" + sdkVersion + "/android.jar";
-	//this commented line dispatch an assert error
-	//string apiPlatform = sdkBase + "platforms/android-" + sdkVersion as string + "/android.jar";
+	string apiPlatform = sdkBase + "platforms/android-" + targetAPILevel + "/android.jar";
+	
+	//ERROR: this commented line dispatch an assert
+	//string apiPlatform = sdkBase + "platforms/android-" + targetAPILevel as string + "/android.jar";
 
 	out(indent = 0)
 	{
-		aapt p -m -J <xss:e value="outputPath"/>src -M AndroidManifest.xml -S <xss:e value="outputPath"/>res -I <xss:e value="apiPlatform"/>
-		javac -encoding ascii -target 1.5 -d <xss:e value="outputPath"/>bin -bootclasspath <xss:e value="apiPlatform"/> <xss:e value="outputPath"/>src/com/xkp/android/<xss:e value="appName"/>/*.java
-		dx --dex --output=<xss:e value="outputPath"/>bin/classes.dex <xss:e value="outputPath"/>bin
-		aapt p -f -M AndroidManifest.xml -S <xss:e value="outputPath"/>res -I <xss:e value="apiPlatform"/> -F <xss:e value="outputPath"/>bin/output.ap_ 
-		apkbuilder <xss:e value="outputPath"/>bin/<xss:e value="appName"/>.apk -z <xss:e value="outputPath"/>bin/output.ap_ -f <xss:e value="outputPath"/>bin/classes.dex -rf <xss:e value="outputPath"/>src -rj <xss:e value="outputPath"/>libs
-		adb install -r <xss:e value="outputPath"/>bin/<xss:e value="appName"/>.apk
+        aapt p -m -J <xss:e value="appOutputPath"/>src -M AndroidManifest.xml -S <xss:e value="appOutputPath"/>res -I <xss:e value="apiPlatform"/>
+        javac -encoding ascii -target 1.5 -d <xss:e value="appOutputPath"/>bin -bootclasspath <xss:e value="apiPlatform"/> <xss:e value="appOutputPath"/>src/com/xkp/android/<xss:e value="appName"/>/*.java
+        dx --dex --output=<xss:e value="appOutputPath"/>bin/classes.dex <xss:e value="appOutputPath"/>bin
+        aapt p -f -M AndroidManifest.xml -S <xss:e value="appOutputPath"/>res -I <xss:e value="apiPlatform"/> -F <xss:e value="appOutputPath"/>bin/output.ap_ 
+        apkbuilder <xss:e value="appOutputPath"/>bin/<xss:e value="appName"/>.apk -z <xss:e value="appOutputPath"/>bin/output.ap_ -f <xss:e value="appOutputPath"/>bin/classes.dex -rf <xss:e value="appOutputPath"/>src -rj <xss:e value="appOutputPath"/>libs
+		
+        adb install -r <xss:e value="appOutputPath"/>bin/<xss:e value="appName"/>.apk
 	}
 </xss:code>

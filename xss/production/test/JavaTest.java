@@ -9,19 +9,19 @@ public class JavaTest {
 	private static class Class_application {
 				private Object lvalue 	; 
 				private String yvalue  = "string v" 	; 
-				private ArrayList<String> xvalue  = new ArrayList(Arrays.asList( new Object [] {"value1", "value2", "value3"} )) 	; 
+				private ArrayList<string> xvalue  = new ArrayList(Arrays.asList( new Object [] {"value1", "value2", "value3"} )) 	; 
 		public String app_test(Integer value) {
 			return "string value";
 		}
 			private void create() {
 				Object o = new Object(2);
 o.new_property = "value";
-o.other_new_property = 3.1400001;
+o.other_new_property = 3.140000;
 ArrayList<Object> types = new ArrayList(Arrays.asList( new Object [] {new Object("int", "Integer"), new Object("float", "Double"), new Object("string", "String")} ));
 Integer v0 = 20;
 Integer v1 = instance1.px_value;
 String v2 = "string";
-Double v3 = 3.1400001;
+Double v3 = 3.140000;
 Boolean v4 = true;
 Integer x0;
 x0 = instance1.px_value;
@@ -101,16 +101,16 @@ mthd = instance1.test0(2 * 5, "b" + "a", 1);
 				private Object svalue 	; 
 		public Double test0(Integer value) {
 			Integer a = value;
-Double b = 5;
+Double b = 5.000000;
 return a * b;
 		}
 		public Double test1(Integer value) {
-			Double b = 5;
+			Double b = 5.000000;
 return b / 2;
 		}
 		public String test2(Integer value) {
 			Integer a = value;
-Double b = 5;
+Double b = 5.000000;
 return application.app_test(a * b);
 		}
 		public Object test3(Object value) {
@@ -125,6 +125,6 @@ if (!has_property)
 		}
 	}
 	public static void main(String[] args) {
-		application.create();
-	}
+				application.create();
+				}
 }

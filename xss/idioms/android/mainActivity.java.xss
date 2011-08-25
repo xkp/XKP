@@ -1,27 +1,60 @@
-package com.xkp.android.SimpleTest;
+<xss:parameter id="appName"/>
+<xss:parameter id="imports"/>
+<xss:parameter id="interfaces"/>
+<xss:parameter id="events"/>
+<xss:parameter id="ev_args"/>
+package com.xkp.android.<xss:e value="appName"/>;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 <xss:code>
 	for(var imp in imports)
 	{
 		out(indent = 0)
 		{
-			import android.widget.<xss:e value="imp"/>;
+            import <xss:e value="imp"/>;
 		}
 	}
 </xss:code>
 
-public class ActSimpleTest extends Activity
+public class Act<xss:e value="appName"/> 
+                extends Activity
+<xss:code>
+	if(interfaces.size > 0)
+	{
+		out(dont_break = true, indent = 2)
+		{
+			implements <xss:e value="interfaces[0]"/>
+		}
+	}
+	
+	for(int i = 1; i < interfaces.size; i++)
+	{
+		var ifc = interfaces[i];
+		if(ifc != null)
+			out(dont_break = true, indent = 0)
+			{
+                , <xss:e value="ifc"/>
+			}
+	}
+</xss:code>
+
 {
 <xss:code>
-	for(var inst in instances)
+	for(var inst in android.instances)
 	{
-		if(inst.id && inst.id != "application")
+		if(inst.name == null)
+			continue;
+		
+		if(inst.id && inst.id != application.id)
 		{
 			out(indent = 1)
 			{
-				private <xss:e value="inst.import"/> priv<xss:e value="inst.id"/>;
+                private <xss:e value="inst.type.output_id"/> <xss:e value="inst.output_id"/>;
 			}
 		}
 	}
@@ -33,18 +66,111 @@ public class ActSimpleTest extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        bindViews();
+    }
 	
-<xss:code>	
-		for(var inst in instances)
+    private void bindViews() {
+<xss:code>
+	for(var inst in android.instances)
+	{
+		if(inst.id == null)
+			continue;
+		
+		if(inst.id && inst.id != application.id)
 		{
-			if(inst.id && inst.id != "application")
+			out(indent = 2)
+			{
+                this.<xss:e value="inst.output_id"/> = (<xss:e value="inst.type.output_id"/>) findViewById(R.id.<xss:e value="inst.id"/>);
+			}
+		}
+		
+		for(var e in inst.events)
+		{
+			if(e.interface && e.implemented)
 			{
 				out(indent = 2)
 				{
-					priv<xss:e value="inst.id"/> = (<xss:e value="inst.import"/>) findViewById(R.id.<xss:e value="inst.id"/>);
+                    this.<xss:e value="inst.output_id"/>.set<xss:e value="e.interface"/>(this);
 				}
 			}
 		}
+	}
 </xss:code>
     }
+	
+<xss:code>
+	if(events.size > 0)
+	{
+		for(int i = 0; i < events.size; i++)
+		{
+			//ERROR: this assign value dispatch console errors "Incompatible types assigning a local variable"
+			//string ev = events[i];
+			
+			string ev;
+            ev = events[i];
+			string args;
+            args = ev_args[i];
+			
+			//TODO: implements call to arguments from classes by event name
+			out(indent = 1)
+			{
+                @Override
+                public void <xss:e value="ev"/>(<xss:e value="args"/>) <xss:open_brace/>
+                    switch (v.getId()) <xss:open_brace/>
+			}
+			
+			for(var inst in android.instances)
+			{
+				for(var e in inst.events)
+				{
+					if(e.event_name == ev && e.implemented)
+					{
+						out(indent = 2)
+						{
+                            case R.id.<xss:e value="inst.id"/>:
+                                <xss:e value="ev"/><xss:e value="inst.id"/>();
+                                break;
+								
+						}
+					}
+				}
+			}
+			
+			out(indent = 1)
+			{
+                    <xss:close_brace/> //switch
+                <xss:close_brace/>
+				<xss:return/>
+			}
+		}
+	}
+</xss:code>
+<xss:code>	
+	for(var inst in android.instances)
+	{
+		if(inst.events)
+		{
+			for(var e in inst.events)
+			{
+				compiler.xss("../java/event.xss", e);
+			}
+		}
+		
+		if(inst.methods)
+		{
+			for(var m in inst.methods)
+			{
+				compiler.xss("../java/method.xss", m);
+			}
+		}
+		
+		if(inst.properties)
+		{
+			for(var p in inst.properties)
+			{
+				compiler.xss("../java/property.xss", p);
+			}
+		}
+	}
+</xss:code>
 }

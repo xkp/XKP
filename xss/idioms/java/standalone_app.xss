@@ -29,7 +29,25 @@ public class <xss:e value="application.name"/> {
 
 	public static void main(String[] args) {
 	
-		application.create();
+	<xss:code>
+		bool exists = false;
+		for(var e in application.events)
+		{
+			if(e.name == "create")
+			{
+				exists = true;
+				break;
+			}
+		}
+		
+		if(exists)
+		{
+			out()
+			{
+				application.create();
+			}
+		}
+	</xss:code>
 	}
 	
 }

@@ -85,8 +85,6 @@ XSSType base_code_renderer::type()
 
 void base_code_renderer::if_(stmt_if& info)
   {
-    indent_str_ = indent();
-
     add_line("if (" + render_expression(info.expr, ctx_) + ")");
     add_line("{");
 			render_code(info.if_code);
@@ -104,7 +102,6 @@ void base_code_renderer::if_(stmt_if& info)
 void base_code_renderer::variable_(stmt_variable& info)
   {
     std::stringstream ss;
-    indent_str_ = indent();
 
     ss << "var " << info.id;
     if (!info.value.empty())
@@ -118,7 +115,6 @@ void base_code_renderer::variable_(stmt_variable& info)
 void base_code_renderer::for_(stmt_for& info)
   {
     std::stringstream ss;
-    indent_str_ = indent();
 
     ss << "for(var " << info.init_variable.id << " = " << render_expression(info.init_variable.value, ctx_)
         << "; " << render_expression(info.cond_expr, ctx_)
@@ -133,7 +129,6 @@ void base_code_renderer::for_(stmt_for& info)
 void base_code_renderer::iterfor_(stmt_iter_for& info)
   {
     std::stringstream ss;
-    indent_str_ = indent();
 
     str iterable_name = info.id + "_iterable";
     str iterator_name = info.id + "_iterator";
@@ -151,8 +146,6 @@ void base_code_renderer::iterfor_(stmt_iter_for& info)
 
 void base_code_renderer::while_(stmt_while& info)
   {
-    indent_str_ = indent();
-
     add_line("while(" + render_expression(info.expr, ctx_) + ")");
 		add_line("{");
 			render_code(info.while_code);
@@ -161,22 +154,16 @@ void base_code_renderer::while_(stmt_while& info)
 
 void base_code_renderer::break_()
   {
-    indent_str_ = indent();
-
 		add_line("break;");
   }
 
 void base_code_renderer::continue_()
   {
-    indent_str_ = indent();
-
 		add_line("continue;");
   }
 
 void base_code_renderer::return_(stmt_return& info)
   {
-    indent_str_ = indent();
-
     if (info.expr.empty())
       add_line("return;");
     else
@@ -185,8 +172,6 @@ void base_code_renderer::return_(stmt_return& info)
 
 void base_code_renderer::expression_(stmt_expression& info)
   {
-    indent_str_ = indent();
-
     str value = render_expression(info.expr, ctx_);
     add_line(value + ";");
   }
@@ -213,6 +198,9 @@ str base_code_renderer::indent()
 
 void base_code_renderer::add_line(str line, bool trim)
   {
+    if (indent_ != indent_str_.size())
+      indent_str_ = indent();
+
     if (trim)
       {
         boost::trim(line);
@@ -348,6 +336,8 @@ str base_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
   {
     str result;
     int result_prec = 0;
+    Language lang = ctx_->get_language();
+
     if (operand.is<expression_identifier>())
       {
         expression_identifier ei = operand;
@@ -357,8 +347,6 @@ str base_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
           {
             //here we ought to resolve a single symbol (ex width = 10)
             //thid *could* belong to the "this" pointer
-
-            Language lang = ctx_->get_language();
             str separator = lang->resolve_separator();
 
             resolve_info si;
@@ -413,7 +401,8 @@ str base_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
       }
     else
       {
-        str opstr = variant_cast<str>(operand, str());
+        str opstr = lang->render_value(XSSType(), operand);
+
         if (opstr.empty())
           {
             assert(false); //td: determine if this is an error condition  
@@ -529,14 +518,11 @@ str base_expr_renderer::get()
         str ss = '"' + res + '"';
         return ss;
       }
-		else if (result.is<bool>())
-			{
-				bool rr = result;
-				if (rr)
-					return "true";
-				else
-					return "false";
-			}
+    else
+      {
+        str res = ctx_->get_language()->render_value(XSSType(), result);
+        return res;
+      }
 
     str to_string = result;
     return to_string;
@@ -781,9 +767,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                               result = caller_str + separator;
 
                             if (!get_xss.empty())
-                              {
-                                assert(false); //punt
-                              }
+                              result += get_xss;
                             else if (!get_fn.empty())
                               result += get_fn + "()";
                             else if (has_getter)

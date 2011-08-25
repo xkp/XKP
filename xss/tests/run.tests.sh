@@ -2,15 +2,21 @@
 
 LOG_FILENAME=result.log
 XSS_FILENAME=xss.exe
-MD5_CREATE=find ./ -type f -print0 | xargs -0 md5sum
+MD5_CREATE=`find ./ -type f -print0 | xargs -0 md5sum`
 MD5_VERIFY=md5sum -c ./ list.md5
 XSS_PATH=../../bin/Debug/
 OUT_PATH=../production/
 CHP_PATH=../tests/
 EXEC=$XSS_PATH$XSS_FILENAME
-PROJECTS_LIST=`ls | grep "\.project.xml"`
+#PROJECTS_LIST=`ls | grep "\.project.xml"`
 
 echo Running tests... Wait please! ;
+
+cc=0 ;
+for i in 1 2 3 4 5 ; do
+	cc=`expr $cc + 1` ;
+done
+echo $cc ;
 
 count=0 ;
 date +%c >> $LOG_FILENAME ;
