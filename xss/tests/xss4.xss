@@ -13,3 +13,14 @@ for(var i in application.children)
 </xss:code>
 
 AFter! <xss:marker id="after"/>
+
+After after 
+
+<xss:marker id="after_after"/>
+
+<xss:code>
+out(marker="after_after")
+{
+    The end?
+}
+</xss:code>

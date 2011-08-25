@@ -259,25 +259,35 @@ str xss_renderer::render(XSSObject this_, param_list* args)
         result_ += (*it)->render(XSSObject(), args);
       }
     
+    //sort markers by position
+    std::map<int, str> by_pos;
+
     marker_map::iterator mit = markers_.begin();
 		marker_map::iterator mnd = markers_.end();
 
 		for(; mit != mnd; mit++)
 			{
-				if (mit->second.idx >= 0)
+				if (mit->second.idx < 0)
 					{
-            int pos = positions[mit->second.idx];
-						result_.insert(result_.begin() + pos, mit->second.value.begin(), mit->second.value.end());
-            mit->second.value = str(); //reset
+            continue; //td: revise
+						//param_list error;
+						//error.add("id", SRenderer);
+						//error.add("desc", SUnknownMarker);
+						//error.add("name", mit->first);
+						//xss_throw(error);
 					}
-				else
-					{
-						param_list error;
-						error.add("id", SRenderer);
-						error.add("desc", SUnknownMarker);
-						error.add("name", mit->first);
-						xss_throw(error);
-					}
+
+        by_pos.insert(std::pair<int, str>(mit->second.idx, mit->second.value));
+        mit->second.value = str();
+      }
+
+    std::map<int, str>::reverse_iterator bit = by_pos.rbegin();
+    std::map<int, str>::reverse_iterator bnd = by_pos.rend();
+
+		for(; bit != bnd; bit++)
+			{
+        int pos = positions[bit->first];
+				result_.insert(result_.begin() + pos, bit->second.begin(), bit->second.end());
 			}
 
     compiler_->pop_renderer();

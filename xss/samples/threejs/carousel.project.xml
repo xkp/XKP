@@ -1,0 +1,3 @@
+<project entry_point="../idioms/threejs/app.xss" language="js" target="carousel.xml" output="../production/test/carousel.html">
+    <idiom src="../idioms/threejs/module.xml"/>
+</project>

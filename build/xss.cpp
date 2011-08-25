@@ -69,6 +69,14 @@ int main(int argc, char* argv[])
 
         return -1;
       }
+
+    bool wait = false;
+    if (argc > 2)
+      {
+        str param(argv[2]);
+        if (param == "wait")
+          wait = true;
+      }
       
 		XSSCompiler compiler(new xss_compiler);
 
@@ -149,7 +157,8 @@ int main(int argc, char* argv[])
         std::cout << "Success are greateful";
       }
       
-    std::cin.get();
+    if (wait)
+      std::cin.get();
 	  
 	  return error_number;
   }

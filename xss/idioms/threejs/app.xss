@@ -17,8 +17,9 @@
 <script type="text/javascript" src="../js/three/Three.js"></script>
 <script type="text/javascript" src="../js/three/Stats.js"></script>
 <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<xss:marker id="includes"/>
 
-<xss:marker id="body"/>
+<xss:marker id="html_body"/>
 
 <xss:code>
 if(application.background)
@@ -28,6 +29,7 @@ if(application.background)
 out(){
 <script type="text/javascript">		
 }
+
 if(application.renderer=="webgl")
 	out(){
 	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
@@ -35,48 +37,33 @@ if(application.renderer=="webgl")
 	}
 if(application.renderer=="canvas")
 	out(){
-	var renderer = new THREE.CanvasRenderer();
+	var renderer = new THREE.CanvasRenderer();	
 	}
-int sound_flag = 0; 
-if(application.resources)
-for(var res in application.resources.children){
-	if(res.class_name == "sound" && sound_flag == 0){
-		out(marker = "_sound"){
-		soundRenderer.render( scene, camera );
-		}
-		out(){	
-		soundRenderer = new THREE.SoundRenderer();		
-		document.body.appendChild( soundRenderer.domElement );
-		}		
-		sound_flag++;
-	}
-	if(res.class_name == "video"){
-		out(marker = "body"){	
-		<video id="<xss:e value = "res.id"/>" autoplay style="<xss:e value = "res.style"/>">
-		}
-		for(var child in res.children){
-			out(marker = "body"){	
-			<source src="<xss:e value = "child.src"/>" type='<xss:e value = "child.type"/>'>
-			}
-		}
-		out(marker = "body"){	
-		</video>
-		}
-	}
-}
 </xss:code>
 
+<xss:code>
+    compiler.inject("render_initialization");
+</xss:code>
+
+<xss:marker id="variables"/>
+
+<xss:code>
+compiler.inject("render_types");
+</xss:code>
+
+soundRenderer = new THREE.SoundRenderer();		
+document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( window.innerWidth, window.innerHeight );
-var application = this;
+var application = {};
 
 function render() {
 renderer.clear();
 renderer.render( scene, camera );
-<xss:marker id="_sound"/>	
+soundRenderer.render( scene, camera );
 }
 
 <xss:code>
-	compiler.inject("render_instances");
+	compiler.inject("render_instances");	
 	compiler.xss("../common-js/instance.xss", application);
 </xss:code>
 
@@ -85,6 +72,11 @@ animate();
 
 function animate() {
 	requestAnimationFrame( animate );
+
+    var g_delta = 1/30.0; //fix it with real delta, in seconds
+    <xss:code>
+        compiler.inject("render_update");
+    </xss:code>
 	render();
 }
 

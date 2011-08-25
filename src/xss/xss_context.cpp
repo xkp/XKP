@@ -1010,7 +1010,8 @@ xss_type::xss_type():
   is_enum_(false),
   is_array_(false),
   is_object_(true),
-  is_variant_(false)
+  is_variant_(false),
+  is_unresolved_(false)
   {
     DYNAMIC_INHERITANCE(xss_type)
   }
@@ -1021,7 +1022,8 @@ xss_type::xss_type(schema* _xs_type):
   is_enum_(false),
   is_array_(false),
   is_object_(false),
-  is_variant_(false)
+  is_variant_(false),
+  is_unresolved_(false)
   {
     DYNAMIC_INHERITANCE(xss_type)
   }
@@ -1121,6 +1123,11 @@ void xss_type::as_object()
     is_object_ = true;
   }
 
+void xss_type::as_unresolved()
+  {
+    is_unresolved_ = true;
+  }
+
 bool xss_type::is_enum()
   {
     return is_enum_;
@@ -1144,6 +1151,11 @@ bool xss_type::is_native()
 bool xss_type::is_variant()
   {
     return is_variant_;
+  }
+
+bool xss_type::is_unresolved()
+  {
+    return is_unresolved_;
   }
 
 Language xss_type::get_language()

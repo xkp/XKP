@@ -998,6 +998,8 @@ XSSModule xss_compiler::read_module(const str& src, XSSApplicationRenderer app, 
     XSSContext ctx(new xss_context(app->context(), path.parent_path()));
 
     xss_object_reader reader(ctx);
+    reader.enforce_types(false);
+
     XSSObject module_data = reader.read(load_file(path)); 
 
     if (!module_data)
@@ -1105,9 +1107,36 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
                 error.add("desc", SOnlyClassAndEnum);
                 xss_throw(error);
               }
-              
+            
+            //resolve the unresolved
+            XSSContext ctx = app->context();
+		        DynamicArray props = type->properties();
+		        std::vector<variant>::iterator pit = props->ref_begin();
+		        std::vector<variant>::iterator pnd = props->ref_end();
+
+            for(; pit != pnd; pit++)
+              {
+                XSSProperty prop     = *pit;
+                XSSType     old_type = prop->type();
+                if (old_type->is_unresolved())
+                  {
+                    XSSType new_type = ctx->get_type(old_type->id());
+                    if (!new_type)
+                      {
+                        param_list error;
+                        error.add("id", SProjectError);
+                        error.add("desc", SUnknownClass);
+                        error.add("class", old_type->id());
+                        xss_throw(error);
+                      }
+
+                      prop->set_type(new_type);
+                  }
+              }
+
+            //and register
             module->register_module_type(type);
-            app->context()->add_type(type_name, type);
+            ctx->add_type(type_name, type);
           }
       }    
   }

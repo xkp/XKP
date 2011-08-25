@@ -1,8 +1,6 @@
 <xss:parameter id="obj"/>
 <xss:code>
 
-if(obj.class_name == "quake_camera") obj.id = "camera";
-
 if(obj.parent.class_name == "composite_material"){
 	out(){
 	<xss:e v = "obj.parent.id"/>.push(new <xss:e v="obj.type.output_id"/>(<xss:open_brace/>
@@ -17,17 +15,19 @@ var params = obj.type.constructor_params;
 if (params)
 {
     int i = 0;
-    for(var p in params.children)
+    for(var p in params)
     {			
 			if (p.property)
 			{					
 				if(obj.get_property(p.property) != null)
 				{
 				var prop = obj.get_property(p.property);
-				if(i > 0) out() {,}
-				if(prop.output_id) out() {<xss:e v="prop.output_id"/>:<xss:e v="prop.value"/>}
-				else out() {<xss:e v="prop.id"/>:<xss:e v="prop.value"/>}			
-				i++;
+				if(prop.render_value() != "null"){
+					if(i > 0) out() {,}
+					if(prop.output_id) out() {<xss:e v="prop.output_id"/>:<xss:e v="prop.value"/>}
+					else out() {<xss:e v="prop.id"/>:<xss:e v="prop.value"/>}			
+					i++;
+				}
 				}
 			}			        
     }
@@ -35,11 +35,11 @@ if (params)
 
 if(obj.parent.class_name == "composite_material"){
 	out(){
-	<xss:close_brace/>))
+	<xss:close_brace/>));
 	}
 }else{
 	out(){
-	<xss:close_brace/>)
+	<xss:close_brace/>);
 	}
 }
 

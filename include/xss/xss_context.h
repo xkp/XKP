@@ -128,12 +128,14 @@ class xss_type : public xss_object
       void as_array(XSSType type);
       void as_variant();
       void as_object();
+      void as_unresolved();
     public:
       bool is_enum();
       bool is_array();
       bool is_object();
       bool is_native();
       bool is_variant();
+      bool is_unresolved();
     public:
       Language get_language();
       void     set_language(Language lang);
@@ -144,6 +146,7 @@ class xss_type : public xss_object
       bool    is_array_;
       bool    is_object_;
       bool    is_variant_;
+      bool    is_unresolved_;
     public:
       XSSType  super_;
       Language lang_;
