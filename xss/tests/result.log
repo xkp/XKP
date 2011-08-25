@@ -1,0 +1,1564 @@
+Mon Aug 22 22:52:50 2011
+===[ 3js1.project.xml ]================
+Success are greateful===[ 3js2.project.xml ]================
+Success are greateful===[ java1.project.xml ]================
+Log: -- Rendering instance: application
+Log: Properties size: 3
+Log: Rendering property: lvalue
+Log: Rendering property: yvalue
+Log: Rendering property: xvalue
+Log: Methods size: 1
+Log: Rendering method: app_test
+Log: Events size: 1
+Log: Rendering event: create
+Log: -- Rendering instance: instance1
+Log: Properties size: 2
+Log: Rendering property: xvalue
+Log: Rendering property: svalue
+Log: Methods size: 5
+Log: Rendering method: test0
+Log: Rendering method: test1
+Log: Rendering method: test2
+Log: Rendering method: test3
+Log: Rendering method: foo
+Log: Events size: 0
+
+Success are greateful===[ java2.project.xml ]================
+Log: -- Rendering instance: application
+Log: Properties size: 0
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: instance1
+Log: Properties size: 0
+Log: Methods size: 1
+Log: Rendering method: test0
+Log: Events size: 0
+
+Success are greateful===[ jquery1.project.xml ]================
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>TITLE</title>
+<script type="text/javascript" src="jquery.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	
+
+
+
+
+
+
+			
+
+
+
+
+
+
+
+
+
+                btn1.text("One button");
+            
+
+
+
+
+
+                btn1.width(whatever);
+            
+
+		
+			
+
+
+
+
+
+
+
+
+
+                btn2.text("Two button");
+            
+
+
+
+
+
+                btn2.width(whatever);
+            
+
+		
+			
+
+
+
+
+
+
+
+
+
+                btn3.text("Reset");
+            
+
+
+
+
+
+                btn3.width(whatever);
+            
+
+		});
+</script>
+
+<style>
+</style>
+</head>
+
+<body>
+    
+            <div id='application'>
+        
+            <button id='btn1'>
+        
+                </button>
+            
+            <button id='btn2'>
+        
+                </button>
+            
+            <button id='btn3'>
+        
+                </button>
+            
+                </div>
+            </body>
+</html>
+
+Success are greateful===[ jquery2.project.xml ]================
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery2.project.xml
+===[ jquery3.project.xml ]================
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery3.project.xml
+===[ jquery4.project.xml ]================
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery4.project.xml
+===[ jquery5.project.xml ]================
+Log: Rendering jQuery...
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery5.project.xml
+===[ ms1.project.xml ]================
+Log: Rendering Sequence Types...
+Log: Rendering Sequence...
+Success are greateful===[ ms2.project.xml ]================
+Log: Rendering Sequence Types...
+Log: Rendering Sequence...
+Success are greateful===[ ms3.project.xml ]================
+Log: Rendering UI Types...
+Log: Rendering UI...
+Success are greateful===[ ms4.project.xml ]================
+Log: Rendering UI Types...
+Log: Rendering Sequence Types...
+Log: Rendering UI...
+Log: Rendering Sequence...
+Success are greateful===[ ms5.project.xml ]================
+Log: Rendering UI Types...
+Log: Rendering Sequence Types...
+Log: Rendering UI...
+Log: Rendering Sequence...
+Success are greateful===[ xss1.project.xml ]================
+ERROR: Project:  xss1.project.xml
+===[ xss2.project.xml ]================
+
+                something
+            
+                something2
+            
+                something
+             
+        t_arrays 
+     
+        t_arrays1 
+     
+        t_base_import 
+     
+            create 
+         
+        t_derived_import 
+     
+            click 
+         
+            up 
+         
+            down 
+         
+            click 
+         
+            up 
+         
+            down 
+         
+        t_keyb_import 
+     
+            click 
+         
+            up 
+         
+            down 
+         
+        t_mouse_import 
+     
+            click 
+         
+            up 
+         
+            down 
+         
+        t_xss5 
+     
+        t_xss5_1 
+    
+Success are greateful===[ xss3.project.xml ]================
+
+Success are greateful===[ xss4.project.xml ]================
+
+
+        Before? Hello
+    
+
+AFter! 
+Is this after "After!"? World
+
+
+
+Success are greateful===[ xss5.project.xml ]================
+Log: application
+Log: null super
+Log: t1
+Log: t_xss5
+Log: application
+Log: t_xss5
+
+Success are greatefulMon Aug 22 22:55:25 2011
+===[ 3js1.project.xml ]================
+Success are greateful===[ 3js2.project.xml ]================
+Success are greateful===[ java1.project.xml ]================
+Log: -- Rendering instance: application
+Log: Properties size: 3
+Log: Rendering property: lvalue
+Log: Rendering property: yvalue
+Log: Rendering property: xvalue
+Log: Methods size: 1
+Log: Rendering method: app_test
+Log: Events size: 1
+Log: Rendering event: create
+Log: -- Rendering instance: instance1
+Log: Properties size: 2
+Log: Rendering property: xvalue
+Log: Rendering property: svalue
+Log: Methods size: 5
+Log: Rendering method: test0
+Log: Rendering method: test1
+Log: Rendering method: test2
+Log: Rendering method: test3
+Log: Rendering method: foo
+Log: Events size: 0
+
+Success are greateful===[ java2.project.xml ]================
+Log: -- Rendering instance: application
+Log: Properties size: 0
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: instance1
+Log: Properties size: 0
+Log: Methods size: 1
+Log: Rendering method: test0
+Log: Events size: 0
+
+Success are greateful===[ jquery1.project.xml ]================
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>TITLE</title>
+<script type="text/javascript" src="jquery.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	
+
+
+
+
+
+
+			
+
+
+
+
+
+
+
+
+
+                btn1.text("One button");
+            
+
+
+
+
+
+                btn1.width(whatever);
+            
+
+		
+			
+
+
+
+
+
+
+
+
+
+                btn2.text("Two button");
+            
+
+
+
+
+
+                btn2.width(whatever);
+            
+
+		
+			
+
+
+
+
+
+
+
+
+
+                btn3.text("Reset");
+            
+
+
+
+
+
+                btn3.width(whatever);
+            
+
+		});
+</script>
+
+<style>
+</style>
+</head>
+
+<body>
+    
+            <div id='application'>
+        
+            <button id='btn1'>
+        
+                </button>
+            
+            <button id='btn2'>
+        
+                </button>
+            
+            <button id='btn3'>
+        
+                </button>
+            
+                </div>
+            </body>
+</html>
+
+Success are greateful===[ jquery2.project.xml ]================
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery2.project.xml
+===[ jquery3.project.xml ]================
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery3.project.xml
+===[ jquery4.project.xml ]================
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery4.project.xml
+===[ jquery5.project.xml ]================
+Log: Rendering jQuery...
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery5.project.xml
+===[ ms1.project.xml ]================
+Log: Rendering Sequence Types...
+Log: Rendering Sequence...
+Success are greateful===[ ms2.project.xml ]================
+Log: Rendering Sequence Types...
+Log: Rendering Sequence...
+Success are greateful===[ ms3.project.xml ]================
+Log: Rendering UI Types...
+Log: Rendering UI...
+Success are greateful===[ ms4.project.xml ]================
+Log: Rendering UI Types...
+Log: Rendering Sequence Types...
+Log: Rendering UI...
+Log: Rendering Sequence...
+Success are greateful===[ ms5.project.xml ]================
+Log: Rendering UI Types...
+Log: Rendering Sequence Types...
+Log: Rendering UI...
+Log: Rendering Sequence...
+Success are greateful===[ xss1.project.xml ]================
+ERROR: Project:  xss1.project.xml
+===[ xss2.project.xml ]================
+
+                something
+            
+                something2
+            
+                something
+             
+        t_arrays 
+     
+        t_arrays1 
+     
+        t_base_import 
+     
+            create 
+         
+        t_derived_import 
+     
+            click 
+         
+            up 
+         
+            down 
+         
+            click 
+         
+            up 
+         
+            down 
+         
+        t_keyb_import 
+     
+            click 
+         
+            up 
+         
+            down 
+         
+        t_mouse_import 
+     
+            click 
+         
+            up 
+         
+            down 
+         
+        t_xss5 
+     
+        t_xss5_1 
+    
+Success are greateful===[ xss3.project.xml ]================
+
+Success are greateful===[ xss4.project.xml ]================
+
+
+        Before? Hello
+    
+
+AFter! 
+Is this after "After!"? World
+
+
+
+Success are greateful===[ xss5.project.xml ]================
+Log: application
+Log: null super
+Log: t1
+Log: t_xss5
+Log: application
+Log: t_xss5
+
+Success are greatefulMon Aug 22 22:56:36 2011
+===[ 3js1.project.xml ]================
+Success are greateful===[ 3js2.project.xml ]================
+Success are greateful===[ java1.project.xml ]================
+Log: -- Rendering instance: application
+Log: Properties size: 3
+Log: Rendering property: lvalue
+Log: Rendering property: yvalue
+Log: Rendering property: xvalue
+Log: Methods size: 1
+Log: Rendering method: app_test
+Log: Events size: 1
+Log: Rendering event: create
+Log: -- Rendering instance: instance1
+Log: Properties size: 2
+Log: Rendering property: xvalue
+Log: Rendering property: svalue
+Log: Methods size: 5
+Log: Rendering method: test0
+Log: Rendering method: test1
+Log: Rendering method: test2
+Log: Rendering method: test3
+Log: Rendering method: foo
+Log: Events size: 0
+
+Success are greateful===[ java2.project.xml ]================
+Log: -- Rendering instance: application
+Log: Properties size: 0
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: instance1
+Log: Properties size: 0
+Log: Methods size: 1
+Log: Rendering method: test0
+Log: Events size: 0
+
+Success are greateful===[ jquery1.project.xml ]================
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>TITLE</title>
+<script type="text/javascript" src="jquery.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	
+
+
+
+
+
+
+			
+
+
+
+
+
+
+
+
+
+                btn1.text("One button");
+            
+
+
+
+
+
+                btn1.width(whatever);
+            
+
+		
+			
+
+
+
+
+
+
+
+
+
+                btn2.text("Two button");
+            
+
+
+
+
+
+                btn2.width(whatever);
+            
+
+		
+			
+
+
+
+
+
+
+
+
+
+                btn3.text("Reset");
+            
+
+
+
+
+
+                btn3.width(whatever);
+            
+
+		});
+</script>
+
+<style>
+</style>
+</head>
+
+<body>
+    
+            <div id='application'>
+        
+            <button id='btn1'>
+        
+                </button>
+            
+            <button id='btn2'>
+        
+                </button>
+            
+            <button id='btn3'>
+        
+                </button>
+            
+                </div>
+            </body>
+</html>
+
+Success are greateful===[ jquery2.project.xml ]================
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery2.project.xml
+===[ jquery3.project.xml ]================
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery3.project.xml
+===[ jquery4.project.xml ]================
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery4.project.xml
+===[ jquery5.project.xml ]================
+Log: Rendering jQuery...
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery5.project.xml
+===[ ms1.project.xml ]================
+Log: Rendering Sequence Types...
+Log: Rendering Sequence...
+Success are greateful===[ ms2.project.xml ]================
+Log: Rendering Sequence Types...
+Log: Rendering Sequence...
+Success are greateful===[ ms3.project.xml ]================
+Log: Rendering UI Types...
+Log: Rendering UI...
+Success are greateful===[ ms4.project.xml ]================
+Log: Rendering UI Types...
+Log: Rendering Sequence Types...
+Log: Rendering UI...
+Log: Rendering Sequence...
+Success are greateful===[ ms5.project.xml ]================
+Log: Rendering UI Types...
+Log: Rendering Sequence Types...
+Log: Rendering UI...
+Log: Rendering Sequence...
+Success are greateful===[ xss1.project.xml ]================
+ERROR: Project:  xss1.project.xml
+===[ xss2.project.xml ]================
+
+                something
+            
+                something2
+            
+                something
+             
+        t_arrays 
+     
+        t_arrays1 
+     
+        t_base_import 
+     
+            create 
+         
+        t_derived_import 
+     
+            click 
+         
+            up 
+         
+            down 
+         
+            click 
+         
+            up 
+         
+            down 
+         
+        t_keyb_import 
+     
+            click 
+         
+            up 
+         
+            down 
+         
+        t_mouse_import 
+     
+            click 
+         
+            up 
+         
+            down 
+         
+        t_xss5 
+     
+        t_xss5_1 
+    
+Success are greateful===[ xss3.project.xml ]================
+
+Success are greateful===[ xss4.project.xml ]================
+
+
+        Before? Hello
+    
+
+AFter! 
+Is this after "After!"? World
+
+
+
+Success are greateful===[ xss5.project.xml ]================
+Log: application
+Log: null super
+Log: t1
+Log: t_xss5
+Log: application
+Log: t_xss5
+
+Success are greatefulMon Aug 22 23:04:18 2011
+===[ 3js1.project.xml ]================
+Success are greateful===[ 3js2.project.xml ]================
+Success are greateful===[ java1.project.xml ]================
+Log: -- Rendering instance: application
+Log: Properties size: 3
+Log: Rendering property: lvalue
+Log: Rendering property: yvalue
+Log: Rendering property: xvalue
+Log: Methods size: 1
+Log: Rendering method: app_test
+Log: Events size: 1
+Log: Rendering event: create
+Log: -- Rendering instance: instance1
+Log: Properties size: 2
+Log: Rendering property: xvalue
+Log: Rendering property: svalue
+Log: Methods size: 5
+Log: Rendering method: test0
+Log: Rendering method: test1
+Log: Rendering method: test2
+Log: Rendering method: test3
+Log: Rendering method: foo
+Log: Events size: 0
+
+Success are greateful===[ java2.project.xml ]================
+Log: -- Rendering instance: application
+Log: Properties size: 0
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: instance1
+Log: Properties size: 0
+Log: Methods size: 1
+Log: Rendering method: test0
+Log: Events size: 0
+
+Success are greateful===[ jquery1.project.xml ]================
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>TITLE</title>
+<script type="text/javascript" src="jquery.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	
+
+
+
+
+
+
+			
+
+
+
+
+
+
+
+
+
+                btn1.text("One button");
+            
+
+
+
+
+
+                btn1.width(whatever);
+            
+
+		
+			
+
+
+
+
+
+
+
+
+
+                btn2.text("Two button");
+            
+
+
+
+
+
+                btn2.width(whatever);
+            
+
+		
+			
+
+
+
+
+
+
+
+
+
+                btn3.text("Reset");
+            
+
+
+
+
+
+                btn3.width(whatever);
+            
+
+		});
+</script>
+
+<style>
+</style>
+</head>
+
+<body>
+    
+            <div id='application'>
+        
+            <button id='btn1'>
+        
+                </button>
+            
+            <button id='btn2'>
+        
+                </button>
+            
+            <button id='btn3'>
+        
+                </button>
+            
+                </div>
+            </body>
+</html>
+
+Success are greateful===[ jquery2.project.xml ]================
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery2.project.xml
+===[ jquery3.project.xml ]================
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery3.project.xml
+===[ jquery4.project.xml ]================
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery4.project.xml
+===[ jquery5.project.xml ]================
+Log: Rendering jQuery...
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery5.project.xml
+===[ ms1.project.xml ]================
+Log: Rendering Sequence Types...
+Log: Rendering Sequence...
+Success are greateful===[ ms2.project.xml ]================
+Log: Rendering Sequence Types...
+Log: Rendering Sequence...
+Success are greateful===[ ms3.project.xml ]================
+Log: Rendering UI Types...
+Log: Rendering UI...
+Success are greateful===[ ms4.project.xml ]================
+Log: Rendering UI Types...
+Log: Rendering Sequence Types...
+Log: Rendering UI...
+Log: Rendering Sequence...
+Success are greateful===[ ms5.project.xml ]================
+Log: Rendering UI Types...
+Log: Rendering Sequence Types...
+Log: Rendering UI...
+Log: Rendering Sequence...
+Success are greateful===[ xss1.project.xml ]================
+
+hello, darling
+this is Louis
+
+
+		Darling
+	
+		Im glad to see you back where you belong
+	
+
+            Thats all folks
+            It was a pleasure
+        Success are greateful===[ xss2.project.xml ]================
+
+                something
+            
+                something2
+            
+                something
+             
+        t_arrays 
+     
+        t_arrays1 
+     
+        t_base_import 
+     
+            create 
+         
+        t_derived_import 
+     
+            click 
+         
+            up 
+         
+            down 
+         
+            click 
+         
+            up 
+         
+            down 
+         
+        t_keyb_import 
+     
+            click 
+         
+            up 
+         
+            down 
+         
+        t_mouse_import 
+     
+            click 
+         
+            up 
+         
+            down 
+         
+        t_xss5 
+     
+        t_xss5_1 
+    
+Success are greateful===[ xss3.project.xml ]================
+
+Success are greateful===[ xss4.project.xml ]================
+
+
+        Before? Hello
+    
+
+AFter! 
+Is this after "After!"? World
+
+
+
+Success are greateful===[ xss5.project.xml ]================
+Log: application
+Log: null super
+Log: t1
+Log: t_xss5
+Log: application
+Log: t_xss5
+
+Success are greatefulMon Aug 22 23:11:26 2011
+===[ 3js1.project.xml ]================
+Success are greateful===[ 3js2.project.xml ]================
+Success are greateful===[ java1.project.xml ]================
+Log: -- Rendering instance: application
+Log: Properties size: 3
+Log: Rendering property: lvalue
+Log: Rendering property: yvalue
+Log: Rendering property: xvalue
+Log: Methods size: 1
+Log: Rendering method: app_test
+Log: Events size: 1
+Log: Rendering event: create
+Log: -- Rendering instance: instance1
+Log: Properties size: 2
+Log: Rendering property: xvalue
+Log: Rendering property: svalue
+Log: Methods size: 5
+Log: Rendering method: test0
+Log: Rendering method: test1
+Log: Rendering method: test2
+Log: Rendering method: test3
+Log: Rendering method: foo
+Log: Events size: 0
+
+Success are greateful===[ java2.project.xml ]================
+Log: -- Rendering instance: application
+Log: Properties size: 0
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: instance1
+Log: Properties size: 0
+Log: Methods size: 1
+Log: Rendering method: test0
+Log: Events size: 0
+
+Success are greateful===[ jquery1.project.xml ]================
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>TITLE</title>
+<script type="text/javascript" src="jquery.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	
+
+
+
+
+
+
+			
+
+
+
+
+
+
+
+
+
+                btn1.text("One button");
+            
+
+
+
+
+
+                btn1.width(whatever);
+            
+
+		
+			
+
+
+
+
+
+
+
+
+
+                btn2.text("Two button");
+            
+
+
+
+
+
+                btn2.width(whatever);
+            
+
+		
+			
+
+
+
+
+
+
+
+
+
+                btn3.text("Reset");
+            
+
+
+
+
+
+                btn3.width(whatever);
+            
+
+		});
+</script>
+
+<style>
+</style>
+</head>
+
+<body>
+    
+            <div id='application'>
+        
+            <button id='btn1'>
+        
+                </button>
+            
+            <button id='btn2'>
+        
+                </button>
+            
+            <button id='btn3'>
+        
+                </button>
+            
+                </div>
+            </body>
+</html>
+
+Success are greateful===[ jquery2.project.xml ]================
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery2.project.xml
+===[ jquery3.project.xml ]================
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery3.project.xml
+===[ jquery4.project.xml ]================
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery4.project.xml
+===[ jquery5.project.xml ]================
+Log: Rendering jQuery...
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery5.project.xml
+===[ ms1.project.xml ]================
+Log: Rendering Sequence Types...
+Log: Rendering Sequence...
+Success are greateful===[ ms2.project.xml ]================
+Log: Rendering Sequence Types...
+Log: Rendering Sequence...
+Success are greateful===[ ms3.project.xml ]================
+Log: Rendering UI Types...
+Log: Rendering UI...
+Success are greateful===[ ms4.project.xml ]================
+Log: Rendering UI Types...
+Log: Rendering Sequence Types...
+Log: Rendering UI...
+Log: Rendering Sequence...
+Success are greateful===[ ms5.project.xml ]================
+Log: Rendering UI Types...
+Log: Rendering Sequence Types...
+Log: Rendering UI...
+Log: Rendering Sequence...
+Success are greateful===[ xss1.project.xml ]================
+
+hello, darling
+this is Louis
+
+
+		Darling
+	
+		Im glad to see you back where you belong
+	
+
+            Thats all folks
+            It was a pleasure
+        Success are greateful===[ xss2.project.xml ]================
+
+                something
+            
+                something2
+            
+                something
+             
+        t_arrays 
+     
+        t_arrays1 
+     
+        t_base_import 
+     
+            create 
+         
+        t_derived_import 
+     
+            click 
+         
+            up 
+         
+            down 
+         
+            click 
+         
+            up 
+         
+            down 
+         
+        t_keyb_import 
+     
+            click 
+         
+            up 
+         
+            down 
+         
+        t_mouse_import 
+     
+            click 
+         
+            up 
+         
+            down 
+         
+        t_xss5 
+     
+        t_xss5_1 
+    
+Success are greateful===[ xss3.project.xml ]================
+
+Success are greateful===[ xss4.project.xml ]================
+
+
+        Before? Hello
+    
+
+AFter! 
+Is this after "After!"? World
+
+
+
+Success are greateful===[ xss5.project.xml ]================
+Log: application
+Log: null super
+Log: t1
+Log: t_xss5
+Log: application
+Log: t_xss5
+
+Success are greatefulMon Aug 22 23:12:28 2011
+===[ 3js1.project.xml ]================
+Success are greateful===[ 3js2.project.xml ]================
+Success are greateful===[ java1.project.xml ]================
+Log: -- Rendering instance: application
+Log: Properties size: 3
+Log: Rendering property: lvalue
+Log: Rendering property: yvalue
+Log: Rendering property: xvalue
+Log: Methods size: 1
+Log: Rendering method: app_test
+Log: Events size: 1
+Log: Rendering event: create
+Log: -- Rendering instance: instance1
+Log: Properties size: 2
+Log: Rendering property: xvalue
+Log: Rendering property: svalue
+Log: Methods size: 5
+Log: Rendering method: test0
+Log: Rendering method: test1
+Log: Rendering method: test2
+Log: Rendering method: test3
+Log: Rendering method: foo
+Log: Events size: 0
+
+Success are greateful===[ java2.project.xml ]================
+Log: -- Rendering instance: application
+Log: Properties size: 0
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: instance1
+Log: Properties size: 0
+Log: Methods size: 1
+Log: Rendering method: test0
+Log: Events size: 0
+
+Success are greateful===[ jquery1.project.xml ]================
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>TITLE</title>
+<script type="text/javascript" src="jquery.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	
+
+
+
+
+
+
+			
+
+
+
+
+
+
+
+
+
+                btn1.text("One button");
+            
+
+
+
+
+
+                btn1.width(whatever);
+            
+
+		
+			
+
+
+
+
+
+
+
+
+
+                btn2.text("Two button");
+            
+
+
+
+
+
+                btn2.width(whatever);
+            
+
+		
+			
+
+
+
+
+
+
+
+
+
+                btn3.text("Reset");
+            
+
+
+
+
+
+                btn3.width(whatever);
+            
+
+		});
+</script>
+
+<style>
+</style>
+</head>
+
+<body>
+    
+            <div id='application'>
+        
+            <button id='btn1'>
+        
+                </button>
+            
+            <button id='btn2'>
+        
+                </button>
+            
+            <button id='btn3'>
+        
+                </button>
+            
+                </div>
+            </body>
+</html>
+
+Success are greateful===[ jquery2.project.xml ]================
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery2.project.xml
+===[ jquery3.project.xml ]================
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery3.project.xml
+===[ jquery4.project.xml ]================
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery4.project.xml
+===[ jquery5.project.xml ]================
+Log: Rendering jQuery...
+Error at: C:/dev/XKP/xss/tests/../idioms/jquery/../common-js/event.xss
+Error [xss-linker] Unknown identifier
+identifier = caption
+ERROR: Project:  jquery5.project.xml
+===[ ms1.project.xml ]================
+Log: Rendering Sequence Types...
+Log: Rendering Sequence...
+Success are greateful===[ ms2.project.xml ]================
+Log: Rendering Sequence Types...
+Log: Rendering Sequence...
+Success are greateful===[ ms3.project.xml ]================
+Log: Rendering UI Types...
+Log: Rendering UI...
+Success are greateful===[ ms4.project.xml ]================
+Log: Rendering UI Types...
+Log: Rendering Sequence Types...
+Log: Rendering UI...
+Log: Rendering Sequence...
+Success are greateful===[ ms5.project.xml ]================
+Log: Rendering UI Types...
+Log: Rendering Sequence Types...
+Log: Rendering UI...
+Log: Rendering Sequence...
+Success are greateful===[ xss1.project.xml ]================
+
+hello, darling
+this is Louis
+
+
+		Darling
+	
+		Im glad to see you back where you belong
+	
+
+            Thats all folks
+            It was a pleasure
+        Success are greateful===[ xss2.project.xml ]================
+
+                something
+            
+                something2
+            
+                something
+             
+        t_arrays 
+     
+        t_arrays1 
+     
+        t_base_import 
+     
+            create 
+         
+        t_derived_import 
+     
+            click 
+         
+            up 
+         
+            down 
+         
+            click 
+         
+            up 
+         
+            down 
+         
+        t_keyb_import 
+     
+            click 
+         
+            up 
+         
+            down 
+         
+        t_mouse_import 
+     
+            click 
+         
+            up 
+         
+            down 
+         
+        t_xss5 
+     
+        t_xss5_1 
+    
+Success are greateful===[ xss3.project.xml ]================
+
+Success are greateful===[ xss4.project.xml ]================
+
+
+        Before? Hello
+    
+
+AFter! 
+Is this after "After!"? World
+
+
+
+Success are greateful===[ xss5.project.xml ]================
+Log: application
+Log: null super
+Log: t1
+Log: t_xss5
+Log: application
+Log: t_xss5
+
+Success are greateful

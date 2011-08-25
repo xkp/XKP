@@ -9,7 +9,7 @@ public class JavaTest {
 	private static class Class_application {
 				private Object lvalue 	; 
 				private String yvalue  = "string v" 	; 
-				private ArrayList<String> xvalue  = new ArrayList(Arrays.asList( new Object [] {"value1", "value2", "value3"} )) 	; 
+				private ArrayList<string> xvalue  = new ArrayList(Arrays.asList( new Object [] {"value1", "value2", "value3"} )) 	; 
 		public String app_test(Integer value) {
 			return "string value";
 		}

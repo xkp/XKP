@@ -436,17 +436,27 @@ ms.ui.Component = Class.create(
 
 	center: function(w, h)
 	{
-		this.rect((this.parent.w - w)/2, (this.parent.h - h)/2, w, h);
+		this.rect(this.parent.w/2 - w/2, this.parent.h/2 - h/2, w, h);
 	},
 
-	bottom: function(cmp, h)
+	bottom: function(h)
 	{
-		this.rect(cmp.x, cmp.y + cmp.h, cmp.w, h);
+		this.rect(0, this.parent.h - h, this.parent.w, h);
 	},
 
-	top: function(cmp, h)
+	top: function(h)
 	{
-		this.rect(cmp.x, cmp.y - h, cmp.w, h);
+		this.rect(0, 0, this.parent.w, h);
+	},
+
+	right: function(w)
+	{
+		this.rect(this.parent.w - w, 0, w, this.parent.h);
+	},
+
+	left: function(h)
+	{
+		this.rect(0, 0, w, this.parent.h);
 	},
 
 	hide: function()
@@ -768,6 +778,8 @@ ms.ui.Switch = Class.create(ms.ui.Component,
 
 	componentAdded: function(cmp)
 	{
+        cmp.rect(0, 0, this.w, this.h);
+
 		if (this.components.length == (this.active_ + 1))
 			cmp.show();
 		else

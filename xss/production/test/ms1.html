@@ -14,6 +14,7 @@ var g_elapsed = -1;
 var g_delta = 0.0;
 var g_sequence_manager = new ms.state.Manager();
 var application = {}
+var test_sequence;var test_sequence1;
 function default_interpolate(a, b, t)
 {
     return a + (b - a)*t;
@@ -34,8 +35,8 @@ function start(resolution)
 	}  
 	window.setTimeout(update, resolution);  
 }  
-                application.target =  0;
-var test_sequence =
+                application.target = 0;
+test_sequence =
 new ms.state.Sequence(
 g_sequence_manager);
 	test_sequence.display = function() 
@@ -59,7 +60,7 @@ test_sequence1.start();
                         default_interpolate,
                         function(value)
                         {
-                            application.target = value;
+                            application.target.target = value;;
                         },
                         [
                         {t: 0, value: 0.300000012},
@@ -71,7 +72,7 @@ test_sequence1.start();
                         default_interpolate,
                         function(value)
                         {
-                            application.target = value;
+                            application.target.target = value;;
                         },
                         [
                         {t: 3, value: 0.300000012},
@@ -83,7 +84,7 @@ test_sequence1.start();
                         default_interpolate,
                         function(value)
                         {
-                            application.target = value;
+                            application.target.target = value;;
                         },
                         [
                         {t: 5, value: 10},
@@ -97,7 +98,7 @@ test_sequence1.start();
                         test_sequence.switch_sequence();
                     }
                 }
-var test_sequence1 =
+test_sequence1 =
 new ms.state.Sequence(
 g_sequence_manager);
 	test_sequence1.display = function() 

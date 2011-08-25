@@ -1721,7 +1721,7 @@ bool code_linker::resolve_custom_operator(operator_type op, schema* type, bool i
 
     assert(custom_operator.exec);
     add_instruction(i_load_constant, add_constant(custom_operator.exec));
-		add_call(i_call, 1, custom_operator.flags&DYNAMIC_ACCESS, invert);
+		add_call(i_call, 1, custom_operator.flags&DYNAMIC_ACCESS, false, invert);
     stack_.push( already_in_stack(custom_operator.type) );
 
     if (dont_assign)

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript">			
+var g_ui;
+var g_elapsed = -1;
+var g_delta = 0.0;
+var g_canvas;
+var g_ui_root;
+var application = {};
+		var g_sequence_manager = new ms.state.Manager();
+        function default_interpolate(a, b, t)
+        {
+            return a + (b - a)*t;
+        }
+function start(resolution)  
+{  
+	var start = new Date().getTime();  
+	function update()  
+	{  
+		var now   = new Date().getTime();
+        if (g_elapsed < 0)
+            g_delta = 0; //first update
+        else
+		    g_delta  = now - g_elapsed;  
+        g_elapsed = now; 
+		g_sequence_manager.update(g_delta);
+		var context = g_canvas.getContext('2d');
+		g_ui.update(g_delta, context);
+		window.setTimeout(update, resolution);  
+	}  
+	window.setTimeout(update, resolution);  
+}  
+window.onload = function() 
+{
+	var drawingCanvas = document.getElementById("myCanvas");
+	g_canvas = drawingCanvas;
+	if (drawingCanvas && drawingCanvas.getContext)
+	{
+		var client =
+		{
+			width: 600,
+			height: 400,
+			canvas: drawingCanvas
+		};
+		var streamer = new ms.streamer.Streamer();
+		var ui = new ms.ui.Manager(client, streamer);
+		var resources = new ms.streamer.PackageContainer();
+		g_ui = ui;
+        g_ui_root = ui.root;
+        var ui_images = 
+        [
+				    'images/progress.full.png',
+				    'images/progress.empty.png',
+				    'images/smile_grin_48.png',
+				    'images/smile_sad_48.png',
+				    'images/arrow_down_green_48.png',
+				    'images/arrow_right_48.png',
+				    'images/arrow_right_green_48.png',
+				    'images/arrow_left_48.png',
+				    'images/arrow_left_green_48.png',
+        ];
+		ui.load_images(ui_images, function()
+		{
+			drawingCanvas.onmousemove = function(ev)
+			{
+				ui.mouse_move(ev.clientX, ev.clientY);                  
+			};
+			drawingCanvas.onmousedown = function(ev)
+			{
+				ui.mouse_down(ev.clientX, ev.clientY);                  
+			};
+			drawingCanvas.onmouseup = function(ev)
+			{
+				ui.mouse_up(ev.clientX, ev.clientY);                  
+			};
+		    main = g_ui_root.newSwitch(
+	    );
+                main.rect(0, 0, 600, 300);
+		    test1 = main.newComponent(
+	    );
+		    lbl1 = test1.newLabel(
+	    "Verdana");
+                lbl1.text("click button");
+                lbl1.position(50, 40);
+		    btn1 = test1.newButton(
+	    "images/smile_sad_48.png","images/smile_grin_48.png");
+ btn1.center(50, 50); 
+		    test2 = main.newComponent(
+	    );
+		    pb1 = test2.newProgressBar(
+	    );
+ pb1.center(150, 10); 
+		    btn3 = test2.newButton(
+	    "images/arrow_down_green_48.png","images/arrow_down_green_48.png");
+                btn3.rect(250, 210, 50, 50);
+		    test3 = main.newComponent(
+	    );
+		    ln1 = test3.newLine(
+	    );
+                ln1.set_x1(0);
+                ln1.set_y1(0);
+                ln1.set_x2(300);
+                ln1.set_y2(40);
+		    btnNext = g_ui_root.newButton(
+	    "images/arrow_right_green_48.png","images/arrow_right_48.png");
+                btnNext.rect(250, 300, 50, 50);
+		    btnPrev = g_ui_root.newButton(
+	    "images/arrow_left_green_48.png","images/arrow_left_48.png");
+                btnPrev.rect(300, 300, 50, 50);
+            if (application.init)
+            {
+                application.init();
+            }
+			start();
+			ui.draw(drawingCanvas.getContext('2d'));
+		});
+	}
+}
+</script>
+</head>
+<body>
+	<canvas id="myCanvas" width="600" height="400">
+		<p>Your browser doesn't support canvas.</p>
+	</canvas>
+</body>
+</html>

@@ -1,5 +1,6 @@
 
 #include "xss/lang/debug.h"
+#include "xss/lang/base.h"
 #include "xss/language.h"
 
 using namespace xkp;
@@ -313,6 +314,6 @@ str debug_language::render_value(XSSType type, variant value)
 
 //glue
 
-register_complete_type(code_renderer,       renderer_schema<code_renderer>);
-register_complete_type(expression_renderer, renderer_schema<expression_renderer>);
+register_complete_type(code_renderer,       renderer_code_schema<code_renderer>);
+register_complete_type(expression_renderer, renderer_expr_schema<expression_renderer>);
 register_complete_type(param_list_renderer, renderer_schema<param_list_renderer>);
