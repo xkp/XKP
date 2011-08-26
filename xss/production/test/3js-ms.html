@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test 3D</title>
+<style type="text/css">
+	body{
+	background:#f0f0f0;
+	}
+</style>
+</head>
+<body>
+<script type="text/javascript" src="../js/three/Detector.js"></script>
+<script type="text/javascript" src="../js/three/Three.js"></script>
+<script type="text/javascript" src="../js/three/Stats.js"></script>
+<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<script type="text/javascript">		
+	var renderer = new THREE.CanvasRenderer();	
+		var g_sequence_manager = new ms.state.Manager();
+        function default_interpolate(a, b, t)
+        {
+            return a + (b - a)*t;
+        }
+function start(resolution)  
+{  
+	var start = new Date().getTime();  
+	function update()  
+	{  
+		var now   = new Date().getTime();
+        if (g_elapsed < 0)
+            g_delta = 0; //first update
+        else
+		    g_delta  = now - g_elapsed;  
+        g_elapsed = now; 
+		g_sequence_manager.update(g_delta);
+		window.setTimeout(update, resolution);  
+	}  
+	window.setTimeout(updatvar anim_1;e, resolution);  
+}  
+            move_anim = Class.create(ms.state.Sequence,
+        {
+    initialize: function($super
+                , manager
+                    )
+    {
+        $super(
+        manager        );
+                var this__ = this;
+            this.parent_sequence = null;
+                    var ____i1 = new ms.state.Interpolator(
+                        "x", 
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.position.x.x = value;;
+                        },
+                        [
+                        {t: 0, value: 0},
+                        {t: 2, value: 100},
+                        ]);
+                    this.addAction(null, "x", new ms.state.State(0, 2, ____i1));                    
+                    var ____i2 = new ms.state.Interpolator(
+                        "x", 
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.position.x.x = value;;
+                        },
+                        [
+                        {t: 2, value: 100},
+                        {t: 6, value: 0},
+                        ]);
+                    this.addAction(null, "x", new ms.state.State(2, 6, ____i2));                    
+    },
+                target : null,
+});
+soundRenderer = new THREE.SoundRenderer();		
+document.body.appendChild( soundRenderer.domElement );
+renderer.setSize( window.innerWidth, window.innerHeight );
+var application = {};
+function render() {
+renderer.clear();
+renderer.render( scene, camera );
+soundRenderer.render( scene, camera );
+}
+	var cylinder_material = new THREE.MeshBasicMaterial({
+	color:Math.random() * 0xffffff
+	});
+var scene = 
+new THREE.Scene(
+);
+var camera = 
+new THREE.Camera(
+75,1.5,1,3000,null);
+	camera.position.z = 1000;
+var light = 
+new THREE.DirectionalLight(
+1677,null,null,null);
+				;
+				scene.addLight(light);
+	light.position.y = 0.5;
+	light.position.z = 1;
+				var cylinder_1_cylinder =
+new THREE.Cylinder(
+200,100,100,500,null,null);
+				var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder,
+				cylinder_material);
+				scene.addObject(cylinder_1);
+	cylinder_1.click = function()
+	{    
+		anim_1.start();
+	};
+	cylinder_1.rotation.x = 10;
+	cylinder_1.rotation.y = 10;
+	cylinder_1.position.x = 600;
+anim_1 =
+new move_anim(
+g_sequence_manager);
+            anim_1.parent_sequence = null;
+	application.init = function()
+	{    
+		anim_1.target = cylinder_1;
+	};
+document.body.appendChild( renderer.domElement );
+animate();
+function animate() {
+	requestAnimationFrame( animate );
+	render();
+}
+</script>
+</body>
+</html>

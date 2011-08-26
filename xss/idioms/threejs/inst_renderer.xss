@@ -2,22 +2,25 @@
 
 <xss:code>	
 		
-		if(i.type.super){
-			if(i.type.super.id == "param_braces"){
+		bool no_transformation = true;
+		if(i.type.super){			
+			if(i.type.super.id == "parameter_braces"){				
 				compiler.xss("p_braces_render.xss", i);
 			}else
 			if(i.type.super.id == "meshable"){
 				out(){
-				var <xss:e v="i.id"/> = new THREE.Mesh(	
+				var <xss:e v="i.id"/>_<xss:e v="i.class_name"/> =
 				}
 				compiler.xss("../common-js/instantiator.xss", i);
 				out(){
-				,<xss:e v="i.materials"/>);
+				var <xss:e v="i.id"/> = new THREE.Mesh(<xss:e v="i.id"/>_<xss:e v="i.class_name"/>,
+				<xss:e v="i.materials"/>);
 				scene.addObject(<xss:e value = "i.id"/>);
 				}
 			}else
 			if(i.type.super.id == "transformation"){
 				compiler.xss("transforming_renderer.xss", i);
+				no_transformation = false;
 			}else
 			if(i.type.super.id == "light"){
 				out(){var <xss:e v="i.id"/> = }compiler.xss("../common-js/instantiator.xss", i);
@@ -26,19 +29,16 @@
 				scene.addLight(<xss:e value = "i.id"/>);
 				}
 			}			
-		}else{		
-			if(i.id == "")
-				i.id = i.class_name;
+		}else{					
 			out(){var <xss:e v="i.id"/> = }
-			compiler.xss("../common-js/instantiator.xss", i);			
-			if(i.class_name == "sound") out(){<xss:e v="i.id"/>.play();}		
-			}
-		if(i.parent.class_name == "transform"){			
+			compiler.xss("../common-js/instantiator.xss", i);						
+			}		
+		if(i.parent.class_name == "transform" && no_transformation){			
 				out(){
 				<xss:e v="i.parent.id"/>.addChild(<xss:e v="i.id"/>);
 				scene.addObject(<xss:e v="i.parent.id"/>);
 				}
-			}
-		out(){;}
+			}		
+		if(i.class_name == "sound") out(){<xss:e v="i.id"/>.play();}
 			
 </xss:code>

@@ -14,9 +14,12 @@ namespace xkp
 			public:
 				XSSObject							 read(const str& xml);
 				std::vector<XSSObject> read_array(const str& xml);
+			public:
+        void enforce_types(bool value);
       private:
         XSSContext    ctx_;
         TiXmlDocument doc_;
+        bool          enforce_types_;
 
         void          parse_xml(const str& file);
         XSSObject     read_object(TiXmlElement* node, XSSObject parent, bool do_special);

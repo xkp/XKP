@@ -69,11 +69,17 @@ new THREE.Cylinder(
 	cylinder_1.position.x = 600;
 ;
                 .x = 600;
+var container = 
+new THREE.Object3D(
+);
+;
 				var cube_1 = new THREE.Mesh(	
 new THREE.Cube(
 );
 				,cube_material);
 				scene.addObject(cube_1);
+				container.addChild(cube_1);
+				scene.addObject(container);
 				;
 	cube_1.position.x = -600;
 	cube_1.position.y = -100;
@@ -90,17 +96,24 @@ new THREE.Sphere(
 );
 				,sphere_material);
 				scene.addObject(sphere_1);
+				container.addChild(sphere_1);
+				scene.addObject(container);
 				;
 	sphere_1.position.x = -400;
 	sphere_1.position.y = 400;
 ;
                 .x = "-400";
                 .y = 400;
-                application.foo = null;
-                application.numb = 3;
-	application.ok = function() 
+                application.foo = "qwerty";
+                application.s = 255;
+                application.hi = null;
+	application.add = function(a,b) 
 	{
-		this.numb++;
+		this.s = a + b;
+	};
+	application.click = function()
+	{    
+		application.foo = application.foo + " keyboard";
 	};
 document.body.appendChild( renderer.domElement );
 animate();

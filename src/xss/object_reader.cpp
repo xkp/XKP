@@ -11,7 +11,7 @@ using namespace xkp;
 const str SReaderError("reader");
 
 const str SPropertyMustHaveName("Properties must have a name");
-const str SPropertyMustHaveType("Properties must have a type");
+const str SPropertyMustHaveType("Properties must have a valid type");
 const str SCannotParseXML("Invalid XML file");
 const str STypeNotFound("Cannot find type");
 const str SUnnamedArray("Arrays must have id");
@@ -19,7 +19,8 @@ const str SPropertyTypeMismatch("Property type does not its value");
 
 //xss_object_reader
 xss_object_reader::xss_object_reader(XSSContext ctx):
-  ctx_(ctx)
+  ctx_(ctx),
+  enforce_types_(true)
   {
   }
 
@@ -35,6 +36,11 @@ std::vector<XSSObject> xss_object_reader::read_array(const str& xml)
 
     return read_array(doc_.RootElement());
 	}
+
+void xss_object_reader::enforce_types(bool value)
+  {
+    enforce_types_ = value;
+  }
 
 void xss_object_reader::parse_xml(const str& xml)
   {
@@ -263,12 +269,22 @@ bool xss_object_reader::read_property(TiXmlElement* node, const str& type_name, 
 
     if (!type)
       {
-				param_list error;
-				error.add("id", SReaderError);
-				error.add("desc", SPropertyMustHaveType);
-				error.add("property name", name);
-				error.add("container", parent->id());
-				xss_throw(error);
+        if (type_name.empty() || enforce_types_)
+          {
+				    param_list error;
+				    error.add("id", SReaderError);
+				    error.add("desc", SPropertyMustHaveType);
+				    error.add("property name", name);
+				    error.add("container", parent->id());
+				    xss_throw(error);
+          }
+        
+        //create an unresolved type
+        XSSType unresolved(new xss_type);
+        unresolved->set_id(type_name);
+        unresolved->as_unresolved();
+
+        type = unresolved;
       }
 
     XSSProperty prop(new xss_property(name, type, value, parent)); 

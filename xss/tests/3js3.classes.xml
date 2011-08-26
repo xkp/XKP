@@ -1,0 +1,10 @@
+<xss:classes>
+    <class id="move_anim" super="sequence">
+        <at time="0">
+            <animate property="target.position.x" from="0" to="100" in="2"/>
+        </at>
+        <at time="2">
+            <animate property="target.position.x" from="100" to="0" in="4"/>
+        </at>
+    </class>
+</xss:classes>

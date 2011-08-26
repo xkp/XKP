@@ -8,4 +8,19 @@ for(var inst in test_idiom.instances)
     else
         compiler.log("null super");
 }
+
+//testing arrays
+var a1 = ["a", "ab", "ba"];
+array<string> a2 = [];
+
+for(string s in a1)
+{
+    a2 += s;
+}
+    
+for(var s1 in a2)
+{
+    compiler.log(s1);
+}
+
 </xss:code>

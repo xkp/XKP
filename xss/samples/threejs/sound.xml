@@ -1,0 +1,41 @@
+<application src="sound.xs" title="Test 3D" renderer="webgl" background="#867">
+
+	<resources>	
+	
+		<lambert_material id="material_sphere1" color="16755200" shading="THREE.FlatShading"/>	
+		<lambert_material id="material_sphere2" color="16720384" shading="THREE.FlatShading"/>
+		<lambert_material id="material_wireframe" color="16755400" wireframe="true" wireframe_linewidth="1"/>		
+
+	</resources>
+	
+	<scene>	
+	
+		<quake_camera fov="50" aspect="1.5" near="1" far="10000" 
+					movement_speed="70" look_speed="0.05" no_fly="true" look_vertical="false">		
+			<position y="25"/>			
+		</quake_camera>
+		
+		<directional_light id="light" hex="16777215">
+			<position y="0.5" z="1"/>
+		</directional_light>
+		
+		<transform id="container_1">
+			<sphere id="sphere_1" radius="20" segments_width="32" segments_height="16" materials="material_sphere1"/>			
+			<sound id="sound_1" sources="sounds/358232_j_s_song.ogg" radius="275" volume="20" loop="true"/>
+			<position x="250" y="30"/>	
+		</transform>
+		
+		<transform id="container_2">
+			<sphere id="sphere_2" radius="20" segments_width="32" segments_height="16" materials="material_sphere2"/>			
+			<sound id="sound_2" sources="sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg" radius="275" volume="20" loop="true"/>
+			<position x="-250" y="30"/>	
+		</transform>
+		
+		<plane id="plane_1" width="1000" height="1000" segments_width="100" segments_height="100" materials="material_wireframe">
+			<position y="0.1"/>
+			<rotation x="-1.57"/>
+		</plane>		
+		
+	</scene>
+			
+</application>

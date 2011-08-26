@@ -10,6 +10,10 @@ public class JavaTest2 {
 	}
 	private static class Class_instance1 {
 		public Double test0(Integer value) {
+			Integer a = value;
+Double b = 5;
+return a * b;
+		public Double test0(Integer value) {
 			ArrayList xxx;
 Integer a = value;
 Double b = 5.000000;
