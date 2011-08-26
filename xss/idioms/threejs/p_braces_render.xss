@@ -24,8 +24,8 @@ if (params)
 				var prop = obj.get_property(p.property);
 				if(prop.render_value() != "null"){
 					if(i > 0) out() {,}
-					if(prop.output_id) out() {<xss:e v="prop.output_id"/>:<xss:e v="prop.value"/>}
-					else out() {<xss:e v="prop.id"/>:<xss:e v="prop.value"/>}			
+					if(prop.output_id) out() {<xss:e v="prop.output_id"/>:<xss:e v="prop.render_value()"/>}
+					else out() {<xss:e v="prop.id"/>:<xss:e v="prop.render_value()"/>}			
 					i++;
 				}
 				}

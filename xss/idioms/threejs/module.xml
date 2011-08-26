@@ -1,6 +1,18 @@
 <module id="threejs" src="module.xs">
 
 	<types>
+	
+		<class id="vector3d">		
+            <property id="x" type="float" />
+			<property id="y" type="float" />
+			<property id="z" type="float" />		
+		</class>
+		
+		<class id="transformation"/>
+		
+		<class id="position" super="transformation"/>
+		<class id="rotation" super="transformation"/>
+		<class id="scale" super="transformation"/>
 		
 		<class id="parameter_braces"/>
 		
@@ -121,43 +133,32 @@
 			<property id="volume" type="string" dont_init="true"/>
 			<property id="loop" type="string" dont_init="true"/>
 		</class>
-		
+				
 		<class id="texture" output_id="THREE.Texture">
 			<array id="constructor_params">
 				<parameter property="image"/> 								
 			</array>
 			<property id="image" type="string" dont_init="true"/>
 		</class>
-
-        <class id="vector3d">
-            <property id="x" type="float" dont_init="true"/>
-            <property id="y" type="float" dont_init="true"/>
-            <property id="z" type="float" dont_init="true"/>
-        </class>
-
-        <class id="meshable">						
+		
+		<class id="meshable">						
             <property id="color" type="string" set_fn="materials[ 0 ].color.setHex"/>
 			<property id="overdraw" type="string"/>
 			<property id="double_sided" type="string" output_id="doubleSided"/>
-			<property id="materials" type="string" dont_init="true"/>
-
-            <property id="position" type="vector3d" dont_init="true"/>
-        </class>
-	
-		<class id="transform" output_id="THREE.Object3D"/>
-			
-		<class id="transformation">		
-            <property id="x" type="string" dont_init="true"/>
-			<property id="y" type="string" dont_init="true"/>
-			<property id="z" type="string" dont_init="true"/>		
+			<property id="materials" type="string" dont_init="true"/>	
+				
+			<property id="position" type="vector3d" />
+			<property id="rotation" type="vector3d" />
+			<property id="scale" type="vector3d" />
 		</class>
 	
-		<class id="scale" super="transformation"/>
- 		<class id="rotation" super="transformation"/>	 
-		<class id="position" super="transformation"/>
-			
-			
-		<class id="light"/>    
+		<class id="transform" output_id="THREE.Object3D"/>
+						
+		<class id="light"> 
+			<property id="position" type="vector3d"/>
+			<property id="rotation" type="vector3d"/>
+			<property id="scale" type="vector3d"/>
+		</class>
 		
 		<class id="ambient_light" super="light" output_id="THREE.AmbientLight"/>       
 	
@@ -192,13 +193,15 @@
 				<parameter property="near"/>
 				<parameter property="far"/>     
 				<parameter property="target"/>  			
-			</array>
-			<property id="hex" type="string" /> 
+			</array>			
 			<property id="fov" type="string" dont_init="true"/>
 			<property id="aspect" type="string" dont_init="true"/>
 			<property id="near" type="string" dont_init="true"/>
 			<property id="far" type="string" dont_init="true"/>
-			<property id="target" type="string" dont_init="true"/>				
+			<property id="target" type="string" dont_init="true"/>	
+			<property id="position" type="vector3d"/>
+			<property id="rotation" type="vector3d"/>
+			<property id="scale" type="vector3d"/>
 		</class>
 	
 		<class id="quake_camera" super="parameter_braces" output_id="THREE.QuakeCamera">
@@ -226,6 +229,9 @@
 			<property id="no_fly" output_id="noFly" type="string" dont_init="true"/>
 			<property id="look_vertical" output_id="lookVertical" type="string" dont_init="true"/>
 			<property id="auto_forward" output_id="autoForward" type="string" dont_init="true"/>
+			<property id="position" type="vector3d"/>
+			<property id="rotation" type="vector3d"/>
+			<property id="scale" type="vector3d"/>
 		</class>
 	
 		<class id="plane" super="meshable" output_id="THREE.Plane">
@@ -278,7 +284,7 @@
 			<property id="botrad" type="string" dont_init="true"/>
 			<property id="height" type="string" dont_init="true"/>
 			<property id="topoffset" type="string" dont_init="true"/>
-			<property id="bottomoffset" type="string" dont_init="true"/>	
+			<property id="bottomoffset" type="string" dont_init="true"/>			
 		</class>
 	
 		<class id="sphere" super="meshable" output_id="THREE.Sphere">

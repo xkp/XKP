@@ -62,7 +62,7 @@ else
     if (!prop.type)
         compiler.error("Properties must have a type");
 
-    if (prop.type.is_array)
+    if (false) //prop.type.is_array
     {
         value = compiler.genid('__a');
         out()
@@ -71,7 +71,7 @@ else
             [
         }
 
-        for(var obj in prop.value.children)
+        for(var obj in prop.value)
         {
             out()
             {
