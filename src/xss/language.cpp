@@ -589,6 +589,9 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
               }
 						else
               {
+                is_variant_ = true; //td: fix
+
+                /*
                 param_list error;
                 error.add("id", SLinker);
                 error.add("desc", SCannontResolveOperator);
@@ -596,6 +599,7 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
                 error.add("left", xstype1->id());
                 error.add("right", xstype2->id());
                 xss_throw(error);
+                */
               }
 						break;
 					}
@@ -637,12 +641,27 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
 
 				case op_dot:
 					{
-						expression_identifier arg1  = stack_.top(); stack_.pop();
-						expression_identifier arg2  = stack_.top(); stack_.pop();
+            XSSType result = ctx_->get_type("var");
 
-            XSSType     result = ctx_->get_type("var");
+						expression_identifier arg1  = stack_.top(); stack_.pop();
+						
+            variant top = stack_.top(); stack_.pop();
             resolve_info left;
-            if (ctx_->resolve(arg2.value, left))
+            if (top.is<expression_identifier>())
+              {
+                expression_identifier arg2  = top; 
+
+                if (!ctx_->resolve(arg2.value, left))
+                  is_variant_ = true;
+              }
+            else if (top.is<XSSType>())
+              {
+                XSSType type = top;
+                left.what = RESOLVE_TYPE;
+                left.value = top;
+              }
+
+            if (!is_variant_)
               {
                 resolve_info right;
                 right.left = &left;
@@ -655,8 +674,6 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
                 else
                   is_variant_ = true;
               }
-            else
-              is_variant_ = true;
 
             stack_.push(result);
             break;

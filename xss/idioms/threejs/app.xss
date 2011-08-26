@@ -17,7 +17,13 @@
 <script type="text/javascript" src="../js/three/Three.js"></script>
 <script type="text/javascript" src="../js/three/Stats.js"></script>
 <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-<xss:marker id="includes"/>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
 
 <xss:marker id="html_body"/>
 
@@ -41,42 +47,54 @@ if(application.renderer=="canvas")
 	}
 </xss:code>
 
-<xss:code>
-    compiler.inject("render_initialization");
-</xss:code>
-
+var g_elapsed = -1;
+var g_delta = 0.0;			
 <xss:marker id="variables"/>
 
+var application = {};
+
 <xss:code>
-compiler.inject("render_types");
+    compiler.inject("render_initialization");	
 </xss:code>
 
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( window.innerWidth, window.innerHeight );
-var application = {};
 
 function render() {
 renderer.clear();
+
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+    g_delta = 0; //first update
+else
+g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+
+<xss:code>
+	compiler.inject("render_update");
+</xss:code>
+		
 renderer.render( scene, camera );
 soundRenderer.render( scene, camera );
 }
 
 <xss:code>
+	compiler.inject("render_types");
 	compiler.inject("render_instances");	
-	compiler.xss("../common-js/instance.xss", application);
+	compiler.xss("../common-ja/instance.xss", application);
 </xss:code>
+
+if (application.init)
+{
+	application.init();
+}
 
 document.body.appendChild( renderer.domElement );
 animate();
 
 function animate() {
 	requestAnimationFrame( animate );
-
-    var g_delta = 1/30.0; //fix it with real delta, in seconds
-    <xss:code>
-        compiler.inject("render_update");
-    </xss:code>
 	render();
 }
 

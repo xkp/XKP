@@ -11,7 +11,7 @@
 				out(){
 				var <xss:e v="i.id"/>_<xss:e v="i.class_name"/> =
 				}
-				compiler.xss("../common-js/instantiator.xss", i);
+				compiler.xss("../common-ja/instantiator.xss", i);
 				out(){
 				var <xss:e v="i.id"/> = new THREE.Mesh(<xss:e v="i.id"/>_<xss:e v="i.class_name"/>,
 				<xss:e v="i.materials"/>);
@@ -19,11 +19,11 @@
 				}
 			}else
 			if(i.type.super.id == "transformation"){
-				compiler.xss("transforming_renderer.xss", i);
+				compiler.xss("vector3d_renderer.xss", i);
 				no_transformation = false;
 			}else
 			if(i.type.super.id == "light"){
-				out(){var <xss:e v="i.id"/> = }compiler.xss("../common-js/instantiator.xss", i);
+				out(){var <xss:e v="i.id"/> = }compiler.xss("../common-ja/instantiator.xss", i);
 				out(){
 				;
 				scene.addLight(<xss:e value = "i.id"/>);
@@ -31,7 +31,7 @@
 			}			
 		}else{					
 			out(){var <xss:e v="i.id"/> = }
-			compiler.xss("../common-js/instantiator.xss", i);						
+			compiler.xss("../common-ja/instantiator.xss", i);						
 			}		
 		if(i.parent.class_name == "transform" && no_transformation){			
 				out(){
