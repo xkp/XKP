@@ -18,6 +18,7 @@
 #include <boost/algorithm/string.hpp>
 
 #include <iostream>
+#include <fstream>
 
 using namespace xkp;
 
@@ -71,7 +72,7 @@ xss_application_renderer::xss_application_renderer(fs::path entry_point, Languag
 
     //register default instances
     context_->register_symbol(RESOLVE_NATIVE, "compiler", compiler);
-    
+
     //register standard dsls
     context_->register_dsl("out", DslLinker(new out_linker(compiler)));
 
@@ -113,7 +114,7 @@ str xss_application_renderer::target()
   {
     return target_;
   }
-   
+
 fs::path xss_application_renderer::entry_point()
   {
     return filename_;
@@ -142,7 +143,7 @@ XSSModule xss_application_renderer::instance_idiom(XSSObject inst)
       {
         XSSModule mod = *it;
         DynamicArray instances = mod->instances();
-        
+
         std::vector<variant>::iterator rit = instances->ref_begin();
         std::vector<variant>::iterator rnd = instances->ref_end();
         for(; rit != rnd; rit++)
@@ -177,7 +178,7 @@ void xss_application_renderer::set_target(const str& target)
   {
     target_ = target;
   }
- 
+
 std::vector<XSSModule>& xss_application_renderer::modules()
   {
     return modules_;
@@ -201,7 +202,7 @@ xss_module::xss_module(XSSContext ctx):
 pre_process_result xss_module::pre_process(XSSObject obj, XSSObject parent)
   {
     XSSObject ev(new xss_object());
-       
+
     param_list args;
     args.add("obj", obj);
     args.add("ev",  ev);
@@ -211,13 +212,13 @@ pre_process_result xss_module::pre_process(XSSObject obj, XSSObject parent)
       return PREPROCESS_HANDLED; //canceled by user
 
     //we'll add sort of an arbitrary logic here
-    //the objects with types belonging to this module will be logged 
+    //the objects with types belonging to this module will be logged
     //as intances. this can be used later in xss to render the proper instances
     if (one_of_us(obj))
       {
         register_instance(obj);
       }
-    
+
     return PREPROCESS_KEEPGOING;
   }
 
@@ -286,7 +287,7 @@ bool xss_module::one_of_us(XSSObject obj)
 
         obj_type = obj_type->get_super();
       }
-    
+
     return false;
   }
 
@@ -311,7 +312,7 @@ void xss_compiler::build(fs::path xml)
     base_path_ = pp.parent_path();
 
     XSSObject project_data = read_project(xml);
-    
+
     //resolve path
     output_path_       = base_path_;
     XSSObject path_obj = project_data->find("path");
@@ -350,7 +351,7 @@ XSSRenderer xss_compiler::compile_xss(const str& src, XSSContext ctx, fs::path p
   {
     boost::hash<std::string> string_hash;
     int hash = string_hash(src);
-    
+
     std::map<int, XSSRenderer>::iterator it = xss_cache.find(hash);
     if (it != xss_cache.end())
       return it->second;
@@ -519,7 +520,7 @@ void xss_compiler::xss(const param_list params)
     //grab options, leave the rest of the arguments intact
     param_list    my_args;
     fs::path      the_output_file;
-    str           marker; 
+    str           marker;
     MARKER_SOURCE marker_source = MS_CURRENT;
     xss_args(params, my_args, the_output_file, marker, marker_source);
 
@@ -538,7 +539,7 @@ void xss_compiler::xss(const param_list params)
       }
 
     XSSRenderer result = compile_xss_file(file, ctx);
-    
+
     //match the parameters
     renderer_parameter_list& result_args = result->params();
     renderer_parameter_list::iterator it = result_args.begin();
@@ -556,7 +557,7 @@ void xss_compiler::xss(const param_list params)
         else if (curr_param < param_count)
           {
             bool named;
-            do 
+            do
               {
                 named = !my_args.get_name(curr_param).empty();
                 if (named)
@@ -578,7 +579,7 @@ void xss_compiler::xss(const param_list params)
     if (the_output_file.empty())
       {
         if (!marker.empty())
-          r->append_at(result->render(XSSObject(), &result_params), marker); 
+          r->append_at(result->render(XSSObject(), &result_params), marker);
         else
           {
             switch (marker_source)
@@ -586,12 +587,12 @@ void xss_compiler::xss(const param_list params)
                 case MS_ENTRY:
                   {
                     assert(entry_);
-                    entry_->append(result->render(XSSObject(), &result_params)); 
+                    entry_->append(result->render(XSSObject(), &result_params));
                     break;
                   }
                 case MS_CURRENT:
                   {
-                    r->append(result->render(XSSObject(), &result_params)); 
+                    r->append(result->render(XSSObject(), &result_params));
                     break;
                   }
               }
@@ -622,7 +623,7 @@ void xss_compiler::inject(const param_list params)
         error.add("desc", SInjectingEventsOnNoRenderer );
         xss_throw(error);
       }
-    
+
     //disptach events to all modules, aka injecting
     str evname = variant_cast<str>(params.get(0), str());
     if (evname.empty())
@@ -644,7 +645,7 @@ void xss_compiler::inject(const param_list params)
       {
         XSSModule mod = *it;
         size_t evid = mod->event_id(evname);
-        if (evid > 0) 
+        if (evid > 0)
           mod->dispatch_event(evid, pl);
       }
   }
@@ -682,7 +683,7 @@ void xss_compiler::error(const param_list params)
     str desc;
     if (!params.empty())
       desc = variant_cast<str>(params.get(0), str());
-    
+
 		param_list error;
 		error.add("id", SIdiomError);
 		error.add("desc", desc);
@@ -723,7 +724,7 @@ str xss_compiler::render_expression(const str& expr, XSSObject this_)
 
     XSSContext ctx  = current_context();
     Language   lang = ctx->get_language();
-    
+
     //compile
     XSSContext my_ctx(new xss_context(ctx));
 		my_ctx->set_this(this_);
@@ -732,7 +733,7 @@ str xss_compiler::render_expression(const str& expr, XSSObject this_)
     IXSSRenderer* rend = variant_cast<IXSSRenderer*>(ev, null); assert(rend);
 
     //and render
-		return rend->render(this_, null); 
+		return rend->render(this_, null);
 	}
 
 str xss_compiler::replace_identifier(const str& s, const str& src, const str& dst)
@@ -784,7 +785,7 @@ variant xss_compiler::resolve_property(const str& prop, variant parent)
             xss_throw(error);
           }
 			}
-		else 
+		else
 			base = variant_cast<XSSObject>(parent, XSSObject());
 
     ctx = XSSContext(new xss_context(ctx));
@@ -813,7 +814,7 @@ variant xss_compiler::resolve_property(const str& prop, variant parent)
             error.add("what", prop);
             xss_throw(error);
           }
-			  
+
         XSSProperty prop = ri.value;
         result->add_property("prop", prop);
 		    result->add_property("prop_name", prop->id());
@@ -915,7 +916,7 @@ XSSObject xss_compiler::read_project(fs::path xml_file)
         error.add("desc", SCannotReadProjectFile);
         xss_throw(error);
       }
-    
+
     //we need to find out how many different types of applications we'll be compiling
     //it would be able to load a single application type without the extra syntax
     std::vector<XSSObject> applications = project_data->find_by_class("application");
@@ -954,7 +955,7 @@ void xss_compiler::read_application_types(std::vector<XSSObject> & applications)
             error.add("desc", SMustProvideLanguageForApplicationType);
             xss_throw(error);
           }
-        
+
         Language lang = get_language(language_name);
         if (!lang)
           {
@@ -973,7 +974,7 @@ void xss_compiler::read_application_types(std::vector<XSSObject> & applications)
         fs::path op = fs::path(app_data->get<str>("output", str()));
         app->output_path(op);
 
-        //load modules 
+        //load modules
         std::vector<XSSObject> modules = app_data->find_by_class("idiom");
         std::vector<XSSObject>::iterator it = modules.begin();
         std::vector<XSSObject>::iterator nd = modules.end();
@@ -984,10 +985,10 @@ void xss_compiler::read_application_types(std::vector<XSSObject> & applications)
             str src = module->get<str>("src", str());
 
             XSSModule compiled = read_module(src, app, module);
-                
+
             app->register_module(compiled->id(), compiled);
           }
-        
+
         applications_.push_back(app);
       }
   }
@@ -1000,7 +1001,7 @@ XSSModule xss_compiler::read_module(const str& src, XSSApplicationRenderer app, 
     xss_object_reader reader(ctx);
     reader.enforce_types(false);
 
-    XSSObject module_data = reader.read(load_file(path)); 
+    XSSObject module_data = reader.read(load_file(path));
 
     if (!module_data)
       {
@@ -1012,9 +1013,9 @@ XSSModule xss_compiler::read_module(const str& src, XSSApplicationRenderer app, 
 
     XSSModule result(new xss_module(app->context()));
     result->copy(module_data);
-    
+
     result->set_path(path.parent_path());
-    
+
     //read types
     read_types(module, app, result);
 
@@ -1024,7 +1025,8 @@ XSSModule xss_compiler::read_module(const str& src, XSSApplicationRenderer app, 
       {
         xs_utils xs;
 
-        code_context code_ctx = ctx->get_compile_context();
+        code_context code_ctx;
+        code_ctx = ctx->get_compile_context();
         fs::path file = ctx->path() / code_file;
         xs.compile_implicit_instance(load_file(file), DynamicObject(result), code_ctx, file);
       }
@@ -1064,7 +1066,7 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
                     xss_throw(error);
                   }
               }
-            
+
             XSSType type(new xss_type());
             type->set_id(type_data->id());
             type->set_super(super);
@@ -1107,7 +1109,7 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
                 error.add("desc", SOnlyClassAndEnum);
                 xss_throw(error);
               }
-            
+
             //resolve the unresolved
             XSSContext ctx = app->context();
 		        DynamicArray props = type->properties();
@@ -1138,7 +1140,7 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
             module->register_module_type(type);
             ctx->add_type(type_name, type);
           }
-      }    
+      }
   }
 
 void xss_compiler::read_includes(XSSObject project_data)
@@ -1150,7 +1152,7 @@ void xss_compiler::read_includes(XSSObject project_data)
     for(; it != nd; it++)
       {
         XSSObject include  = *it;
-        str       xml_file = include->get<str>("def", str());  
+        str       xml_file = include->get<str>("def", str());
         str       src_file = include->get<str>("src", str());
         str       target   = include->get<str>("target", str());
         str       inc_app  = include->get<str>("application", str());
@@ -1164,7 +1166,7 @@ void xss_compiler::read_includes(XSSObject project_data)
             xss_throw(error);
           }
 
-        //the native types will be repeated across every application, 
+        //the native types will be repeated across every application,
         //a little pain now saves a lot of pain later
         std::vector<XSSApplicationRenderer>::iterator it = applications_.begin();
         std::vector<XSSApplicationRenderer>::iterator nd = applications_.end();
@@ -1190,8 +1192,8 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
         std::vector<XSSObject> classes_data;
         read_object_array(def, ctx, classes_data);
 
-        std::vector<XSSObject>::iterator cit = classes_data.begin(); 
-        std::vector<XSSObject>::iterator cnd = classes_data.end(); 
+        std::vector<XSSObject>::iterator cit = classes_data.begin();
+        std::vector<XSSObject>::iterator cnd = classes_data.end();
 
         for(; cit != cnd; cit++)
           {
@@ -1282,7 +1284,7 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
             XSSModule module = app->type_idiom(ci.super);
             if (module)
               module->register_user_type(clazz);
-                        
+
             ctx->add_type(cid, clazz);
           }
 			}
@@ -1330,12 +1332,12 @@ void xss_compiler::read_application(const str& app_file)
       }
 
     fs::path app_path = base_path_ / app_file;
-    
+
     //every application type will process a fresh copy of the application,
     //hence it will be parsed multiple times. A simple clone will save this operation
     //quite some ticks. Nonetheless I will do some minimal caching
     str          def           = load_file(app_path);
-    bool         code_compiled = false; 
+    bool         code_compiled = false;
     xs_container code;
 
     std::vector<XSSApplicationRenderer>::iterator it = applications_.begin();
@@ -1382,7 +1384,7 @@ void xss_compiler::read_application(const str& app_file)
 
         XSSContext code_ctx(new xss_context(app_renderer->context(), src_path));
         code_ctx->set_this(app_data);
-        
+
         compile_ast(code, code_ctx);
 
         //hook modules to the application
@@ -1392,7 +1394,8 @@ void xss_compiler::read_application(const str& app_file)
 
         for(; it != nd; it++)
           {
-            XSSObject module = *it;
+            XSSModule module = *it;
+            //XSSObject module = *it;
             dynamic_set(module, "application", app_data);
           }
       }
@@ -1456,7 +1459,7 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
               }
           }
 
-        if (!prop_type)  
+        if (!prop_type)
           {
             //we do not use empty types, a property without type is variant
             prop_type = ctx->get_type("var");
@@ -1560,7 +1563,7 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 				//let the idiom process implementations
 				XSSContext ictx(new xss_context(ctx));
 				ictx->set_this(instance); //actual_instance
-						
+
         variant impl = lang->compile_code(it->cde, it->args, ictx);
 				impls->push_back(impl);
 
@@ -1573,7 +1576,7 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 			{
 				xs_instance& instance_ast = *iit;
         XSSObject instance_instance;
-				
+
         resolve_info ri;
         ri.what = RESOLVE_INSTANCE;
         if (ctx->resolve_path(instance_ast.id, ri))
@@ -1599,7 +1602,7 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 void xss_compiler::read_object_array(fs::path file, XSSContext ctx, std::vector<XSSObject>& classes_data)
   {
     xss_object_reader reader(ctx);
-    classes_data = reader.read_array(load_file(file)); 
+    classes_data = reader.read_array(load_file(file));
   }
 
 void xss_compiler::compile_xs_file(fs::path file, xs_container& result)
@@ -1669,7 +1672,7 @@ void xss_compiler::pre_process(XSSApplicationRenderer renderer, XSSObject obj, X
     for(; it != nd; it++)
       {
         XSSModule mod = *it;
-        pre_process_result result = mod->pre_process(obj, parent); 
+        pre_process_result result = mod->pre_process(obj, parent);
         if (result == PREPROCESS_HANDLED)
           return;
       }
@@ -1694,7 +1697,7 @@ void xss_compiler::run()
     for(; it != nd; it++)
       {
         XSSApplicationRenderer app = *it;
-        fs::path target = app->entry_point(); 
+        fs::path target = app->entry_point();
         if (target.empty())
           {
 				    param_list error;
@@ -1723,7 +1726,7 @@ void xss_compiler::copy_files(XSSObject project_data)
     std::vector<XSSObject>::iterator nd = files.end();
 
     for(; it != nd; it++)
-      { 
+      {
         XSSObject data = *it;
         str src_file = data->get<str>("src",  str());
         str dst_file = data->get<str>("dst", str());
@@ -1751,12 +1754,12 @@ void xss_compiler::copy_files(XSSObject project_data)
 
         //do output
         fs::path dst = output_path_ / dst_file;
-        
+
         fs::path dst_path = dst;
         bool is_directory = dst_file[dst_file.size() - 1] == '/'; //td: !!!
         if (!is_directory)
           dst_path = dst.parent_path();
-        else 
+        else
           dst /= src.filename();
 
         bool do_copy = true;

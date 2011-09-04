@@ -79,7 +79,7 @@ XSSType base_code_renderer::type()
         type_ = lang_utils::code_type(code_, ctx_);
         return_type_ = true;
       }
-    
+
     return type_;
   }
 
@@ -416,7 +416,7 @@ str base_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
         str opstr = variant_cast<str>(operand, str());
         if (opstr.empty())
           {
-            assert(false); //td: determine if this is an error condition  
+            assert(false); //td: determine if this is an error condition
           }
 
         result = opstr;
@@ -694,7 +694,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 				case op_dot:
           {
             str caller_str = operand_to_string(arg1);
-            
+
             expression_identifier ei = arg2;
             str right_str  = ei.value;
 
@@ -705,7 +705,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 				      if (arg1.is<expression_identifier>())
 					      {
 						      expression_identifier ei = arg1;
-                  caller = variant_cast<XSSObject>(ctx_->resolve(ei.value, RESOLVE_ANY), XSSObject()); 
+                  caller = variant_cast<XSSObject>(ctx_->resolve(ei.value, RESOLVE_ANY), XSSObject());
 					      }
 			      }
 
@@ -726,14 +726,14 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 						    if (top && assigner)
 							    {
 								    str result = caller_str + separator + resolve_assigner(arg2, caller, assigner);
-                    push_rendered(result, op_prec, variant()); 
+                    push_rendered(result, op_prec, variant());
                     return;
 							    }
 
                 resolve_info left;
                 left.what  = RESOLVE_INSTANCE;
                 left.value = caller;
-                
+
                 resolve_info right;
                 right.left = &left;
 
@@ -1051,7 +1051,7 @@ str	base_expr_renderer::render_captured_property()
 		return rend->render(XSSObject(), null);
   }
 
-//base_args_renderer 
+//base_args_renderer
 base_args_renderer::base_args_renderer()
   {
   }
@@ -1071,7 +1071,7 @@ base_args_renderer::base_args_renderer(param_list_decl& params, XSSContext ctx):
 //base_lang
 str base_lang::resolve_this(XSSContext ctx)
   {
-    return "this"; 
+    return "this";
   }
 
 str base_lang::resolve_separator(XSSObject lh)

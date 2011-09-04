@@ -29,7 +29,7 @@ namespace xkp
         //xss_visitor
         virtual void visit(const str& tag, const str& text, param_list* args)
           {
-            handler_map::iterator it = handlers_.find(tag);
+            typename handler_map::iterator it = handlers_.find(tag);
             if (it != handlers_.end())
               {
                 T* this_ = dynamic_cast<T*>(this);
@@ -56,12 +56,12 @@ namespace xkp
         typedef std::vector<ItemRenderer> item_list;
 
         item_list   items_;
-    };                              
-  
+    };
 
-  class xss_renderer : public base_xss_renderer<xss_renderer>, 
+
+  class xss_renderer : public base_xss_renderer<xss_renderer>,
                        public IXSSRenderer,
-                       public boost::enable_shared_from_this<xss_renderer> 
+                       public boost::enable_shared_from_this<xss_renderer>
     {
       public:
         xss_renderer(XSSCompiler compiler, XSSContext ctx, fs::path xss_file);
@@ -107,7 +107,7 @@ namespace xkp
 			  void handle_instance(const str& text, param_list* args);
 			  void handle_parameter(const str& text, param_list* args);
     };
-  
+
   //standard renderers
   struct text_renderer : item_renderer
     {
