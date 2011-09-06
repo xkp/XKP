@@ -22,7 +22,7 @@ namespace xkp
         bool          enforce_types_;
 
         void          parse_xml(const str& file);
-        XSSObject     read_object(TiXmlElement* node, XSSObject parent, bool do_special);
+        XSSObject     read_object(TiXmlElement* node, XSSObject parent, bool do_special, XSSType force_type = XSSType());
         XSSObjectList read_array(TiXmlElement* node);
         variant       attribute_value(const TiXmlAttribute* attr);
         bool          special_node(TiXmlElement* node, XSSObject parent, XSSObject& result);

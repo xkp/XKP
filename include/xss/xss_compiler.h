@@ -51,6 +51,8 @@ namespace xkp
       virtual void                      append_at(const str& what, const str& marker) = 0;
       virtual XSSContext                context()                                     = 0;
       virtual fs::path                  file()                                        = 0;
+
+      virtual bool busy() = 0; //td:
     };
 
   //classes
@@ -179,7 +181,7 @@ namespace xkp
         genid_list genid_;
       private:
         //cache
-        std::map<int, XSSRenderer> xss_cache;
+        std::multimap<int, XSSRenderer> xss_cache;
 
         str   load_file(fs::path file);
         void  read_object_array(fs::path file, XSSContext ctx, std::vector<XSSObject>& classes_data);

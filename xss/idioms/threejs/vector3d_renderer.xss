@@ -1,0 +1,15 @@
+<xss:parameter id="obj"/>
+
+<xss:code>
+var p_name = obj.parent.id;
+if(obj.parent.id == "")
+	p_name = obj.parent.src;
+
+if(obj.x!=null) 
+out(){<xss:e value = "p_name"/>.<xss:e value = "obj.class_name"/>.x = <xss:e value = "obj.x"/>;}
+if(obj.y!=null) 
+out(){<xss:e value = "p_name"/>.<xss:e value = "obj.class_name"/>.y = <xss:e value = "obj.y"/>;}
+if(obj.z!=null) 
+out(){<xss:e value = "p_name"/>.<xss:e value = "obj.class_name"/>.z = <xss:e value = "obj.z"/>;}
+
+</xss:code>

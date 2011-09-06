@@ -1,0 +1,5 @@
+<application src="wax1.app.xs">
+    <page id="home" src="wax1.home.html"/>
+
+    <service id="upload" post="true"/>
+</application>

@@ -351,9 +351,20 @@ XSSRenderer xss_compiler::compile_xss(const str& src, XSSContext ctx, fs::path p
     boost::hash<std::string> string_hash;
     int hash = string_hash(src);
     
-    std::map<int, XSSRenderer>::iterator it = xss_cache.find(hash);
-    if (it != xss_cache.end())
-      return it->second;
+    std::multimap<int, XSSRenderer>::iterator it = xss_cache.find(hash);
+    while (it != xss_cache.end() && it->first == hash)
+      {
+        XSSRenderer rend = it->second;
+        if (!rend->busy())
+          {
+            //td: !!!!
+            //renderers cannot be reentered, so everytime the matching renderers
+            //are already being used a new one will be compiled. please fix result_ 
+            return rend;
+          }
+
+        it++;
+      }
 
     //keep cache
     xss_renderer* renderer = new xss_renderer(shared_from_this(), ctx, path);

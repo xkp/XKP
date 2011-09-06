@@ -58,7 +58,7 @@ void xss_object_reader::parse_xml(const str& xml)
       }
   }
 
-XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, bool do_special)
+XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, bool do_special, XSSType force_type)
   {
     XSSObject result(new xss_object());
 
@@ -73,6 +73,12 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, b
           class_name = node->Value();
 
         XSSType type = ctx_? ctx_->get_type(class_name) : XSSType();
+        if (force_type)
+          {
+            type = force_type;
+            class_name = force_type->output_id();
+          }
+        
         result->set_type(type);
         result->set_type_name(class_name);
 
@@ -116,11 +122,33 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, b
 	        }
 
         //children
-        TiXmlElement* child_node = node->FirstChildElement();
+        TiXmlElement* child_node  = node->FirstChildElement();
+        XSSType       result_type = result->type();
         while(child_node)
           {
-            XSSObject child = read_object(child_node, result, true);
-            result->add_child( child );
+            //special case where a child is a property of the object's type
+            bool handled = false;
+            if (result_type)
+              {
+                XSSProperty type_prop = result_type->get_property(child_node->Value());
+                if (type_prop)
+                  {
+                    handled = true;
+                    XSSObject child = read_object(child_node, result, true, type_prop->type());
+                    
+                    XSSProperty new_prop(new xss_property);
+                    new_prop->copy(XSSObject(type_prop));
+                    new_prop->value_ = child;
+
+                    result->properties()->push_back(new_prop);
+                  }
+              }
+
+            if (!handled)
+              {
+                XSSObject child = read_object(child_node, result, true);
+                result->add_child( child );
+              }
 
             child_node = child_node->NextSiblingElement();
           }

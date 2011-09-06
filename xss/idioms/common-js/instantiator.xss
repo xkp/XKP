@@ -29,9 +29,13 @@ if (params)
 			{
 			    if(i > 0) 
                     out() {,}
-			    
-                out() {<xss:e v="prop.render_value()"/>}			
-			    i++;
+					
+			    if(prop.use_plain_value)
+					out() {<xss:e v="prop.value"/>}
+				else
+					out() {<xss:e v="prop.render_value()"/>}
+				
+			    i++;				
 			}
 		}			        
     }

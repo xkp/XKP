@@ -2,6 +2,7 @@
 <xss:parameter id="property_renderer" default="property.xss"/>
 <xss:parameter id="method_renderer"   default="method.xss"/>
 <xss:parameter id="event_renderer"    default="event.xss"/>
+<xss:parameter id="alias"/>
 
 <xss:code>
 //render properties
@@ -10,7 +11,7 @@ for(var prop in it.properties)
     if (prop.dont_init)
         continue;
     
-    compiler.xss(property_renderer, prop, it, is_class = false);
+    compiler.xss(property_renderer, prop, it, is_class = false, alias = alias);
 }    
 
 for(var mthd in it.methods)

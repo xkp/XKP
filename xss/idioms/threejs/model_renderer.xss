@@ -1,0 +1,34 @@
+<xss:parameter id="obj"/>
+
+<xss:code>
+
+if(obj.parent.class_name == "resources"){
+	out(marker = "model_src", marker_source = "entry")
+		{
+			{id:'<xss:e v="obj.id"/>',src:'<xss:e value = "obj.src"/>'},
+		}
+}else{	
+	out(){
+	var <xss:e v="obj.src"/>;
+	var <xss:e v="obj.src"/>_loader = } compiler.xss("../common-js/instantiator.xss", obj);
+
+	out(){	
+		<xss:e value = "obj.src"/>_loader.load(
+		<xss:open_brace/>
+				model : get_model('<xss:e value = "obj.src"/>') , callback : function( geometry )
+			<xss:open_brace/>
+				<xss:e v="obj.src"/> = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
+	}
+				for(var child in obj.children){
+					compiler.xss("vector3d_renderer.xss", child);
+				}
+	out(){
+				scene.addObject(<xss:e v="obj.src"/>);
+			<xss:close_brace/> 
+		<xss:close_brace/> 
+	);	
+	}
+} 
+	
+</xss:code>
+	

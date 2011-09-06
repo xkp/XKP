@@ -223,7 +223,8 @@ struct file_renderer : item_renderer
 xss_renderer::xss_renderer(XSSCompiler compiler, XSSContext context, fs::path xss_file):
   context_(new xss_context(context, xss_file.parent_path())),
   compiler_(compiler),
-  file_(xss_file)
+  file_(xss_file),
+  busy_(false)
   {
     handlers_.insert(handler_pair("text",			&xss_renderer::handle_text));
     handlers_.insert(handler_pair("xss:code",		&xss_renderer::handle_code));
@@ -246,6 +247,9 @@ str xss_renderer::render(XSSObject this_, param_list* args)
     compiler_->push_renderer(me);
 
     //reset first
+    assert(!busy_);
+
+    busy_   = true;
     result_ = str();
 
 		//loop thru the compiled items
@@ -291,6 +295,8 @@ str xss_renderer::render(XSSObject this_, param_list* args)
 			}
 
     compiler_->pop_renderer();
+
+    busy_   = false;
     return result_;
   }
 
@@ -322,6 +328,11 @@ XSSContext xss_renderer::context()
 fs::path xss_renderer::file()
   {
     return file_;
+  }
+
+bool xss_renderer::busy()
+  {
+    return busy_;
   }
 
 void xss_renderer::handle_text(const str& text, param_list* args)

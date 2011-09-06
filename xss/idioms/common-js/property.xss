@@ -1,6 +1,7 @@
 <xss:parameter id="prop"/>
 <xss:parameter id="owner"/>
 <xss:parameter id="is_class"/>
+<xss:parameter id="alias"/>
 
 <xss:code>
 string prop_name = prop.name;
@@ -13,6 +14,11 @@ if (!is_class)
     assign = "=";
     separator = ";";
 }
+
+if (alias)
+{
+    prop_name = alias + "." + prop.name;
+}    
 
 if (prop.set && prop.get)
 {
@@ -88,7 +94,7 @@ else
     }
     else if (prop.type.is_object && prop.value)
     {
-        value = compiler.xss("object.xss", obj = prop.value);
+        compiler.xss("instance.xss", prop.value, alias = prop_name );
     }
     else
     {

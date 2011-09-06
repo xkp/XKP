@@ -22,7 +22,7 @@ if (params)
 				if(obj.get_property(p.property) != null)
 				{
 				var prop = obj.get_property(p.property);
-				if(prop.render_value() != "null"){
+				if(prop.value != null){
 					if(i > 0) out() {,}					
 					if(prop.output_id == "texture_src") 
 						out(){map:THREE.ImageUtils.loadTexture('<xss:e value = "prop.value"/>'),}

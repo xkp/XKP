@@ -1,0 +1,9 @@
+<project entry_point="../idioms/wax/server.xss" language="js" target="wax1.app.xml" output="wax1.html">
+    <path>
+        <output path="../production/test"/>
+    </path>
+
+    <idiom src="../idioms/wax/wax.xml"/>
+</project>
+           
+         

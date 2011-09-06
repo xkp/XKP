@@ -1,0 +1,27 @@
+var http = require("http");
+var url  = require("url");
+
+http.createServer(function(request, response) 
+{
+    var pathname = url.parse(request.url).pathname;
+
+    <xss:code>
+    for(var i in application.children)
+    {
+        compiler.out("if (pathname == " + i.id + ")");
+        compiler.out("{");
+
+        if (i.class_name == "page")
+        {
+            compiler.xss("page.xss", i);
+        }
+        else if (i.class_name == "service")
+        {
+            compiler.xss("service.xss", i);
+        }
+        else compiler.eror("Only pages and services are supported");
+
+        compiler.out("}");
+    }
+    </xss:code>
+}).listen(8888);

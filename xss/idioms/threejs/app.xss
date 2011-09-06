@@ -47,9 +47,16 @@ if(application.renderer=="canvas")
 	}
 </xss:code>
 
+var SCREEN_WIDTH = window.innerWidth;
+var SCREEN_HEIGHT = window.innerHeight;
 var g_elapsed = -1;
 var g_delta = 0.0;			
 <xss:marker id="variables"/>
+
+var threejs_models = 
+        [
+            <xss:marker id="model_src"/>
+        ];
 
 var application = {};
 
@@ -74,6 +81,8 @@ g_elapsed = now;
 <xss:code>
 	compiler.inject("render_update");
 </xss:code>
+
+<xss:marker id="render_function"/>
 		
 renderer.render( scene, camera );
 soundRenderer.render( scene, camera );
@@ -82,7 +91,7 @@ soundRenderer.render( scene, camera );
 <xss:code>
 	compiler.inject("render_types");
 	compiler.inject("render_instances");	
-	compiler.xss("../common-ja/instance.xss", application);
+	compiler.xss("../common-js/instance.xss", application, event_renderer = "../threejs/event.xss");
 </xss:code>
 
 if (application.init)
@@ -96,6 +105,17 @@ animate();
 function animate() {
 	requestAnimationFrame( animate );
 	render();
+}
+
+function get_model(model_id)
+{
+		for(var i = 0; i < this.threejs_models.length; i++)
+		{
+			var model = this.threejs_models[i];
+			if (model.id == model_id)
+				return model.src;
+		}
+		return null;
 }
 
 </script>

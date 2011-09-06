@@ -10,113 +10,47 @@
 		
 		<class id="transformation"/>
 		
-		<class id="position" super="transformation"/>
-		<class id="rotation" super="transformation"/>
-		<class id="scale" super="transformation"/>
-		
-		<class id="parameter_braces"/>
+		<class id="material">
+			<array id="constructor_params">
+				<parameter property="color"/> 
+				<parameter property="map"/>
+				<parameter property="wireframe"/>
+				<parameter property="wireframe_linewidth"/>
+				<parameter property="opacity"/>
+				<parameter property="texture_src"/>				
+				<parameter property="shading"/>
+				<parameter property="vertex_colors"/>
+				<parameter property="env_map"/>
+				<parameter property="combine"/>
+				<parameter property="reflectivity"/>
+				<parameter property="shininess"/>
+				<parameter property="specular"/>
+				<parameter property="transparent"/>
+			</array>
+			<property id="color" type="string" dont_init="true"/> 
+			<property id="map" type="string" dont_init="true"/>
+			<property id="wireframe" type="string" dont_init="true"/>
+			<property id="wireframe_linewidth" type="string" output_id="wireframeLinewidth" dont_init="true"/>
+			<property id="opacity" type="float" dont_init="true"/>
+			<property id="texture_src" type="string" dont_init="true"/>				
+			<property id="shading" type="string" dont_init="true"/>
+			<property id="vertex_colors" type="string" output_id="vertexColors" dont_init="true"/>
+			<property id="env_map" type="string" output_id="envMap" dont_init="true"/>
+			<property id="combine" type="string" dont_init="true"/>
+			<property id="reflectivity" type="string" dont_init="true"/>
+			<property id="shininess" type="string" dont_init="true"/>
+			<property id="specular" type="string" dont_init="true"/>
+			<property id="transparent" type="string" dont_init="true"/>
+		</class>
 		
 		<class id="composite_material" output_id="Array"/>
 		
-		<class id="basic_material" super="parameter_braces" output_id="THREE.MeshBasicMaterial">
-			<array id="constructor_params">
-				<parameter property="color"/> 
-				<parameter property="map"/>
-				<parameter property="wireframe"/>
-				<parameter property="wireframe_linewidth"/>
-				<parameter property="opacity"/>
-				<parameter property="texture_src"/>				
-				<parameter property="shading"/>
-				<parameter property="vertex_colors"/>
-				<parameter property="env_map"/>
-				<parameter property="combine"/>
-				<parameter property="reflectivity"/>
-				<parameter property="shininess"/>
-				<parameter property="specular"/>
-				<parameter property="transparent"/>
-			</array>
-			<property id="color" type="string" dont_init="true"/> 
-			<property id="map" type="string" dont_init="true"/>
-			<property id="wireframe" type="string" dont_init="true"/>
-			<property id="wireframe_linewidth" type="string" output_id="wireframeLinewidth" dont_init="true"/>
-			<property id="opacity" type="string" dont_init="true"/>
-			<property id="texture_src" type="string" dont_init="true"/>				
-			<property id="shading" type="string" dont_init="true"/>
-			<property id="vertex_colors" type="string" output_id="vertexColors" dont_init="true"/>
-			<property id="env_map" type="string" output_id="envMap" dont_init="true"/>
-			<property id="combine" type="string" dont_init="true"/>
-			<property id="reflectivity" type="string" dont_init="true"/>
-			<property id="shininess" type="string" dont_init="true"/>
-			<property id="specular" type="string" dont_init="true"/>
-			<property id="transparent" type="string" dont_init="true"/>
-		</class>
-		
-		<class id="lambert_material" super="parameter_braces" output_id="THREE.MeshLambertMaterial">
-			<array id="constructor_params">
-				<parameter property="color"/> 
-				<parameter property="map"/>
-				<parameter property="wireframe"/>
-				<parameter property="wireframe_linewidth"/>
-				<parameter property="opacity"/>
-				<parameter property="texture_src"/>				
-				<parameter property="shading"/>
-				<parameter property="vertex_colors"/>
-				<parameter property="env_map"/>
-				<parameter property="combine"/>
-				<parameter property="reflectivity"/>
-				<parameter property="shininess"/>
-				<parameter property="specular"/>
-				<parameter property="transparent"/>
-			</array>
-			<property id="color" type="string" dont_init="true"/> 
-			<property id="map" type="string" dont_init="true"/>
-			<property id="wireframe" type="string" dont_init="true"/>
-			<property id="wireframe_linewidth" type="string" output_id="wireframeLinewidth" dont_init="true"/>
-			<property id="opacity" type="string" dont_init="true"/>
-			<property id="texture_src" type="string" dont_init="true"/>				
-			<property id="shading" type="string" dont_init="true"/>
-			<property id="vertex_colors" type="string" output_id="vertexColors" dont_init="true"/>
-			<property id="env_map" type="string" output_id="envMap" dont_init="true"/>
-			<property id="combine" type="string" dont_init="true"/>
-			<property id="reflectivity" type="string" dont_init="true"/>
-			<property id="shininess" type="string" dont_init="true"/>
-			<property id="specular" type="string" dont_init="true"/>
-			<property id="transparent" type="string" dont_init="true"/>
-		</class>
-
-		<class id="phong_material" super="parameter_braces" output_id="THREE.MeshPhongMaterial">
-			<array id="constructor_params">
-				<parameter property="color"/> 
-				<parameter property="map"/>
-				<parameter property="wireframe"/>
-				<parameter property="wireframe_linewidth"/>
-				<parameter property="opacity"/>
-				<parameter property="texture_src"/>				
-				<parameter property="shading"/>
-				<parameter property="vertex_colors"/>
-				<parameter property="env_map"/>
-				<parameter property="combine"/>
-				<parameter property="reflectivity"/>
-				<parameter property="shininess"/>
-				<parameter property="specular"/>
-				<parameter property="transparent"/>
-			</array>
-			<property id="color" type="string" dont_init="true"/> 
-			<property id="map" type="string" dont_init="true"/>
-			<property id="wireframe" type="string" dont_init="true"/>
-			<property id="wireframe_linewidth" type="string" output_id="wireframeLinewidth" dont_init="true"/>
-			<property id="opacity" type="string" dont_init="true"/>
-			<property id="texture_src" type="string" dont_init="true"/>				
-			<property id="shading" type="string" dont_init="true"/>
-			<property id="vertex_colors" type="string" output_id="vertexColors" dont_init="true"/>
-			<property id="env_map" type="string" output_id="envMap" dont_init="true"/>
-			<property id="combine" type="string" dont_init="true"/>
-			<property id="reflectivity" type="string" dont_init="true"/>
-			<property id="shininess" type="string" dont_init="true"/>
-			<property id="specular" type="string" dont_init="true"/>
-			<property id="transparent" type="string" dont_init="true"/>
-		</class>
-
+		<class id="basic_material" super="material" output_id="THREE.MeshBasicMaterial" instantiator="param_in_obj.xss"/>
+				
+		<class id="lambert_material" super="material" output_id="THREE.MeshLambertMaterial" instantiator="param_in_obj.xss"/>
+			
+		<class id="phong_material" super="material" output_id="THREE.MeshPhongMaterial" instantiator="param_in_obj.xss"/>
+			
 		<class id="normal_material" output_id="THREE.MeshNormalMaterial"/>
 
 		<class id="face_material" output_id="THREE.MeshFaceMaterial"/>
@@ -142,11 +76,11 @@
 		</class>
 		
 		<class id="meshable">						
-            <property id="color" type="string" set_fn="materials[ 0 ].color.setHex"/>
+            <property id="color" type="string" set_fn="materials[ 0 ].color.setHex" not_use_q_marks="true"/>
+			<property id="opacity" type="float" output_id="materials[0].opacity" not_use_q_marks="true"/>
 			<property id="overdraw" type="string"/>
 			<property id="double_sided" type="string" output_id="doubleSided"/>
-			<property id="materials" type="string" dont_init="true"/>	
-				
+							
 			<property id="position" type="vector3d" />
 			<property id="rotation" type="vector3d" />
 			<property id="scale" type="vector3d" />
@@ -154,36 +88,39 @@
 	
 		<class id="transform" output_id="THREE.Object3D"/>
 						
-		<class id="light"> 
+		<class id="light"> 					
+			<property id="hex" type="string" dont_init="true"/>			
 			<property id="position" type="vector3d"/>
 			<property id="rotation" type="vector3d"/>
 			<property id="scale" type="vector3d"/>
 		</class>
 		
-		<class id="ambient_light" super="light" output_id="THREE.AmbientLight"/>       
-	
-		<class id="directional_light" super="light" output_id="THREE.DirectionalLight">
+		<class id="ambient_light" super="light" output_id="THREE.AmbientLight" instantiator="light_renderer.xss">
+			<array id="constructor_params">
+				<parameter property="hex"/>				 				
+			</array>
+		</class>
+		
+		<class id="directional_light" super="light" output_id="THREE.DirectionalLight" instantiator="light_renderer.xss">
 			<array id="constructor_params">
 				<parameter property="hex"/>
 				<parameter property="intensity"/>
 				<parameter property="distance"/>
-				<parameter property="cast_shadow" output_id="castShadow"/>  				
-			</array>
-				<property id="hex" type="string" dont_init="true"/>
-				<property id="intensity" type="string" dont_init="true"/>
-				<property id="distance" type="string" dont_init="true"/>
-				<property id="cast_shadow" output_id="castShadow" type="string" dont_init="true"/>
+				<parameter property="cast_shadow"/>  				
+			</array>				
+			<property id="intensity" type="string" dont_init="true"/>
+			<property id="distance" type="string" dont_init="true"/>
+			<property id="cast_shadow" output_id="castShadow" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="point_light" super="light" output_id="THREE.PointLight">
+		<class id="point_light" super="light" output_id="THREE.PointLight" instantiator="light_renderer.xss">
 			<array id="constructor_params">
 				<parameter property="hex"/>
 				<parameter property="intensity"/>
 				<parameter property="distance"/>           		
-			</array>
-				<property id="hex" type="string" dont_init="true"/>
-				<property id="intensity" type="string" dont_init="true"/>
-				<property id="distance" type="string" dont_init="true"/>
+			</array>				
+			<property id="intensity" type="string" dont_init="true"/>
+			<property id="distance" type="string" dont_init="true"/>
 		</class>
 	
 		<class id="camera" output_id="THREE.Camera">
@@ -204,21 +141,19 @@
 			<property id="scale" type="vector3d"/>
 		</class>
 	
-		<class id="quake_camera" super="parameter_braces" output_id="THREE.QuakeCamera">
-			<array id="constructor_params"> 
-				<parameter property="hex"/>
+		<class id="quake_camera" output_id="THREE.QuakeCamera" instantiator="param_in_obj.xss">
+			<array id="constructor_params"> 				
 				<parameter property="fov"/>
 				<parameter property="aspect"/>
 				<parameter property="near"/>
 				<parameter property="far"/>     
 				<parameter property="target"/> 
-				<parameter property="movement_speed" output_id="movementSpeed"/>
-				<parameter property="look_speed" output_id="lookSpeed"/>
-				<parameter property="no_fly" output_id="noFly"/>
-				<parameter property="look_vertical" output_id="lookVertical"/>
-				<parameter property="auto_forward" output_id="autoForward"/>			
-			</array>
-			<property id="hex" type="string" dont_init="true"/> 
+				<parameter property="movement_speed"/>
+				<parameter property="look_speed"/>
+				<parameter property="no_fly"/>
+				<parameter property="look_vertical"/>
+				<parameter property="auto_forward"/>			
+			</array>			
 			<property id="fov" type="string" dont_init="true"/>
 			<property id="aspect" type="string" dont_init="true"/>
 			<property id="near" type="string" dont_init="true"/>
@@ -234,12 +169,12 @@
 			<property id="scale" type="vector3d"/>
 		</class>
 	
-		<class id="plane" super="meshable" output_id="THREE.Plane">
+		<class id="plane" super="meshable" output_id="THREE.Plane" instantiator="mesh_renderer.xss">
 			<array id="constructor_params">
 				<parameter property="width"/>
 				<parameter property="height"/>
-				<parameter property="segments_width" output_id="segmentsWidth"/>
-				<parameter property="segments_height" output_id="segmentsHeight"/>
+				<parameter property="segments_width"/>
+				<parameter property="segments_height"/>
 			</array>
 			<property id="width" type="string" dont_init="true"/>
 			<property id="height" type="string" dont_init="true"/>
@@ -247,14 +182,14 @@
 			<property id="segments_height" output_id="segmentsHeight" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="cube" super="meshable" output_id="THREE.Cube">
+		<class id="cube" super="meshable" output_id="THREE.Cube" instantiator="mesh_renderer.xss">
 			<array id="constructor_params">
 				<parameter property="width"/>
 				<parameter property="height"/>
 				<parameter property="depth"/>      
-				<parameter property="segments_width" output_id="segmentsWidth"/>
-				<parameter property="segments_height" output_id="segmentsHeight"/>
-				<parameter property="segments_depth" output_id="segmentsDepth"/>
+				<parameter property="segments_width"/>
+				<parameter property="segments_height"/>
+				<parameter property="segments_depth"/>
 				<parameter property="cube_materials"/>
 				<parameter property="flipped"/>
 				<parameter property="sides"/>			
@@ -265,12 +200,12 @@
 			<property id="segments_width" output_id="segmentsWidth" type="string" dont_init="true"/>
 			<property id="segments_height" output_id="segmentsHeight" type="string" dont_init="true"/>
 			<property id="segments_depth" output_id="segmentsDepth" type="string" dont_init="true"/>				
-			<property id="cube_materials" type="string" dont_init="true"/>
+			<property id="cube_materials" type="string" dont_init="true" not_use_q_marks="true"/>
 			<property id="flipped" type="string" dont_init="true"/>
 			<property id="sides" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="cylinder" super="meshable" output_id="THREE.Cylinder">
+		<class id="cylinder" super="meshable" output_id="THREE.Cylinder" instantiator="mesh_renderer.xss">
 			<array id="constructor_params">
 				<parameter property="numsegs"/>
 				<parameter property="toprad"/>
@@ -287,25 +222,25 @@
 			<property id="bottomoffset" type="string" dont_init="true"/>			
 		</class>
 	
-		<class id="sphere" super="meshable" output_id="THREE.Sphere">
+		<class id="sphere" super="meshable" output_id="THREE.Sphere" instantiator="mesh_renderer.xss">
 			<array id="constructor_params">
 				<parameter property="radius"/>
-				<parameter property="segments_width" output_id="segmentsWidth"/>
-				<parameter property="segments_height" output_id="segmentsHeight"/>			
+				<parameter property="segments_width"/>
+				<parameter property="segments_height"/>			
 			</array>
 			<property id="radius" type="string" dont_init="true"/>
 			<property id="segments_width" output_id="segmentsWidth" type="string" dont_init="true"/>
 			<property id="segments_height" output_id="segmentsHeight" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="icosahedron" super="meshable" output_id="THREE.Icosahedron">
+		<class id="icosahedron" super="meshable" output_id="THREE.Icosahedron" instantiator="mesh_renderer.xss">
 			<array id="constructor_params">
 				<parameter property="subdivisions"/>			
 			</array>
-			<property id="subdivisions" type="string" dont_init="true"/>
+			<property id="subdivisions" type="string" dont_init="true" instantiator="mesh_renderer.xss"/>
 		</class>
 	
-		<class id="particle" super="meshable" output_id="THREE.Particle"/>
+		<class id="particle" super="meshable" output_id="THREE.Particle" instantiator="mesh_renderer.xss"/>
     
 		<class id="scene" output_id="THREE.Scene"/>	
 	
@@ -316,15 +251,9 @@
 			<property id="array" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="bin_loader" output_id="THREE.BinaryLoader">
-			<array id="constructor_params">
-				<parameter property="model"/>
-				<parameter property="callback"/>			
-			</array>
-			<property id="model" type="string" dont_init="true"/>
-			<property id="callback" type="string" dont_init="true"/>
-		</class>		
-		
+		<class id="bin_model" output_id="THREE.BinaryLoader" instantiator="model_renderer.xss"/>
+		<class id="json_model" output_id="THREE.JSONLoader" instantiator="model_renderer.xss"/>
+				
 	</types>
 	
 </module>

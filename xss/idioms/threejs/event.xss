@@ -1,0 +1,127 @@
+<xss:parameter id="ev"/>
+<xss:parameter id="it"/>
+<xss:parameter id="is_class"/>
+
+<xss:code>
+//remember every event could be impemented multiple times
+string ev_name = ev.name;
+var    impls   = ev.impls;
+var    evargs  = ev.args;
+if(ev_name == "init"){ 
+ev_name = it.id + "." + ev.name;	
+out(indent = 0)
+{
+<xss:e value="ev_name"/> = function()
+<xss:open_brace/>    
+}		
+for(var evimpl_init in impls)
+{    
+	evimpl_init.use_this_id(true);
+	out(indent = 1)
+	{
+		<xss:e>evimpl_init.render()</xss:e>
+	}
+}
+out(indent = 0)
+{
+	<xss:close_brace/>;
+}
+}else
+if(ev_name == "animate"){	
+	for(var evimpl_anim in impls){
+        evimpl_anim.use_this_id(true);
+		out(marker = "render_function", marker_source = "entry")
+		{
+		<xss:e>evimpl_anim.render()</xss:e>
+		}
+	}				
+}else 
+if(ev_name == "mousein" || ev_name == "mouseout"){
+	out(){
+	document.addEventListener( 'mousemove', <xss:e value="ev_name"/>_<xss:e value="it.id"/>, false );
+	function <xss:e value="ev_name"/>_<xss:e value="it.id"/> (event)
+	<xss:open_brace/>
+		event.preventDefault();
+		var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
+		projector = new THREE.Projector();
+		projector.unprojectVector( vector, camera );
+		var ray = new THREE.Ray( camera.position, vector.subSelf( camera.position ).normalize() );
+		var intersects = ray.intersectObject( <xss:e value="it.id"/> );
+	}
+	if(ev_name == "mousein"){
+		out(){
+		if ( intersects.length > 0 ) 
+		<xss:open_brace/>
+		}
+	}else{
+		out(){
+		if ( !intersects.length > 0 ) 
+		<xss:open_brace/>
+		}
+	}
+	for(var evimpl_mouse in impls){
+		evimpl_mouse.use_this_id(true);
+		out()
+		{
+		<xss:e>evimpl_mouse.render()</xss:e>
+		}
+	}
+	out()
+	{
+	    <xss:close_brace/>
+	<xss:close_brace/>
+	}	
+}else 
+if(ev_name == "keyup" || ev_name == "keydown"){
+	out(){
+	document.addEventListener( '<xss:e value="ev_name"/>', <xss:e value="ev_name"/>_<xss:e value="it.id"/>, false );
+	function <xss:e value="ev_name"/>_<xss:e value="it.id"/> (event)
+	<xss:open_brace/>   
+	var key_code = event.keyCode;
+	}
+	for(var evimpl_key in impls)
+		{
+			evimpl_key.use_this_id(true);
+			out()
+			{
+			<xss:e>evimpl_key.render()</xss:e>
+			}
+		}			
+	out()
+	{			     
+	<xss:close_brace/>
+	}
+}else{
+	out(){
+	document.addEventListener( '<xss:e value="ev_name"/>', <xss:e value="ev_name"/>_<xss:e value="it.id"/>, false );
+	function <xss:e value="ev_name"/>_<xss:e value="it.id"/> (event)
+	<xss:open_brace/>
+	var x = event.clientX;
+	var y = event.clientY;
+	}
+	if(it.id != "application"){
+		out(){
+		event.preventDefault();
+		var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
+		projector = new THREE.Projector();
+		projector.unprojectVector( vector, camera );
+		var ray = new THREE.Ray( camera.position, vector.subSelf( camera.position ).normalize() );
+		var intersects = ray.intersectObject( <xss:e value="it.id"/> );
+		if ( intersects.length > 0 ) 
+		<xss:open_brace/>   
+		}			
+	}
+	for(var evimpl in impls){
+		evimpl.use_this_id(true);
+		out()
+		{
+		<xss:e>evimpl.render()</xss:e>
+		}
+	}
+	if(it.id != "application") out(){<xss:close_brace/>}
+	out()
+	{
+	<xss:close_brace/>;
+	}
+}
+</xss:code>

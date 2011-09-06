@@ -70,14 +70,14 @@ window.onload = function()
 				ui.mouse_up(ev.clientX, ev.clientY);                  
 			};
 		    img1 = g_ui_root.newImage(
-	    );
+	    "images/img1.png");
                 img1.src("images/img1.png");
 	img1.click = function()
 	{    
 		img1.set_width(img1.get_width() + application.increment);
 img1.set_height(img1.get_height() + application.increment);
 	};
-            img1.rect(100, 100, 50, 50);
+                img1.rect(100, 100, 50, 50);
             if (application.init)
             {
                 application.init();
