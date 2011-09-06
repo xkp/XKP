@@ -1,0 +1,24 @@
+<xss:project>
+    <path generator="../../../../idioms/java/android/main.xss"
+          class_library="../../../../idioms/java/android/classes.xml"
+          source_path=""
+          output_path="../../../../production/android/Contacts/"/>
+
+	<!--
+		DOC: 'eclipse_project' option declare the structure of project exported
+		DOC: 'targetSdkVersion' is a SDK version of exported Android project
+		
+		TODO: tab character configuration with number of spaces for resolve indent problem
+		TODO: copy files .classpath, default.properties, res/values/attrs.xml
+		TODO: create folders libs, assets, lib, gen, res/drawable-* with files, 
+		      res/values/attrs, src/com/xkp...
+	-->
+	
+    <options gen_event_method="false" 
+	         eclipse_project="true" 
+			 targetSdkVersion="8"/> 
+
+    <idiom class="java-idiom"/>
+	
+	<application src="contacts.xml"/>
+</xss:project>

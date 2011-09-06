@@ -2,31 +2,30 @@
 
 <xss:marker id="before"/>
 <xss:code>
+
+out(marker = "inside")
+{
+	testing marker out there;
+}
+
 for(var i in application.children)
 {
     out(marker="before")
     {
         Before? <xss:e v="i.show_before"/>
     }
+	
+	//this lines no printed cuz marker "after" is not defined yet
+	out(marker="after")
+	{
+		<xss:e v="i.type.output_id"/>
+	}
 
     compiler.xss("xss4_1.xss", i, marker="after");
 }
 </xss:code>
 
 AFter! <xss:marker id="after"/>
-
-<xss:code>
-	array<string> arr_str = [];
-	//array<string> arr_str = [];
-	//array arr_str = [];
-	//var arr_str = [];
-	
-	var elements = ["1", "2", "3"];
-	for(var el in elements)
-	{
-		arr_str += el;
-	}
-</xss:code>
 
 <xss:code>
 	array<int> numbers = [1, 2, 3, 4, 5, 6];

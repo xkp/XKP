@@ -19,17 +19,17 @@
             <property id="name" output_id="real_name" type="int" value="20"/>
 
             <method id="run" output_id="real_run"/>
-            <event id="create" output_id="create"/>
+            <event id="create" output_id="create" interface="ICreate"/>
         </class>
 
         <class id="t_mouse_import">
-            <event id="click" output_id="onClick"/>
-            <event id="up" output_id="onMouseUp"/>
+            <event id="click" output_id="onClick" interface="IClick"/>
+            <event id="up" output_id="onMouseUp" interface="IMouseUp"/>
             <event id="down" output_id="create"/>
         </class>
 
         <class id="t_keyb_import">
-            <event id="click" output_id="onClick"/>
+            <event id="click" output_id="onClick" interface="IKeyClick"/>
             <event id="up" output_id="onMouseUp"/>
             <event id="down" output_id="create"/>
         </class>
@@ -38,6 +38,9 @@
             <import id="t_mouse_import"/>
             <import id="t_keyb_import"/>
         </class>
+		
+		<class id="t_super_derived" super="t_derived_import">
+		</class>
 
         //testing parent and nulls
         <class id="t_xss5">

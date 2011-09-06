@@ -1,8 +1,4 @@
 <xss:parameter id="appName"/>
-<xss:parameter id="imports"/>
-<xss:parameter id="interfaces"/>
-<xss:parameter id="events"/>
-<xss:parameter id="ev_args"/>
 package com.xkp.android.<xss:e value="appName"/>;
 
 import java.util.ArrayList;
@@ -11,35 +7,123 @@ import java.util.Arrays;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-<xss:code>
-	for(var imp in imports)
-	{
-		out(indent = 0)
-		{
-            import <xss:e value="imp"/>;
-		}
-	}
-</xss:code>
+<xss:marker id="imports"/>
 
 public class Act<xss:e value="appName"/> 
                 extends Activity
+				<xss:marker id="interfaces"/>
 <xss:code>
-	if(interfaces.size > 0)
-	{
-		out(dont_break = true, indent = 2)
-		{
-			implements <xss:e value="interfaces[0]"/>
-		}
-	}
+
+	//contents
+	array<string> imports    = [];
+	array<string> interfaces = [];
 	
-	for(int i = 1; i < interfaces.size; i++)
+	for(var inst in android.instances)
 	{
-		var ifc = interfaces[i];
-		if(ifc != null)
-			out(dont_break = true, indent = 0)
+		//find necessary imports without duplicates
+		if(inst.imports && !inst.xkpview)
+		{
+			//TIPS: live is hard; :)
+			//TODO: it's necessary to implement vector, stack, queue and set containers in vm
+			for(var i in inst.imports)
 			{
-                , <xss:e value="ifc"/>
+				bool found1 = false;
+				for(var imp in imports)
+				{
+					if(imp == i.import)
+					{
+						found1 = true;
+						break;
+					}
+				}
+				
+				if(!found1)
+				{
+					compiler.log("Adding import " + i.import);
+					imports += i.import;
+					
+					out(marker = "imports")
+					{
+						import <xss:e value="i.import"/>;
+					}
+				}
 			}
+		}
+	
+		//find necessary events interfaces without duplicates
+		bool firstTime = true;
+		for(var e in inst.events)
+		{
+			var a = e.interface;
+			compiler.log(e.interface);
+			
+			if(e.interface && e.implemented)
+			{
+				bool found2 = false;
+				for(var it in interfaces)
+				{
+					if(it == e.interface)
+					{
+						found2 = true;
+						break;
+					}
+				}
+				
+				if(!found2)
+				{
+					compiler.log("Adding interface " + e.interface);
+					interfaces += e.interface;
+					
+					if(firstTime)
+					{
+						out(dont_break = true, indent = 2, marker = "interfaces")
+						{
+							implements <xss:e value="e.interface"/>
+						}
+						
+						firstTime = false;
+					}
+					else
+					{
+						out(dont_break = true, indent = 0, marker = "interfaces")
+						{
+							, <xss:e value="e.interface"/>;
+						}
+					}
+					
+					//TODO: implements call to arguments from classes by event name
+					out(indent = 1, marker = "events")
+					{
+						@Override
+						public void <xss:e value="e.output_id"/>(<xss:e value="e.args"/>) <xss:open_brace/>
+							switch (v.getId()) <xss:open_brace/>
+					}
+					
+					for(var insti in android.instances)
+					{
+						for(var e_insti in insti.events)
+						{
+							if(e_insti.event_name == e.output_id && e_insti.implemented)
+							{
+								out(indent = 2, marker = "events")
+								{
+									case R.id.<xss:e value="insti.id"/>:
+										<xss:e value="e.output_id"/><xss:e value="insti.id"/>();
+										break;
+										
+								}
+							}
+						}
+					}
+					
+					out(indent = 1, marker = "events")
+					{
+							<xss:close_brace/> //switch
+						<xss:close_brace/>
+					}
+				}
+			}
+		}
 	}
 </xss:code>
 
@@ -98,53 +182,7 @@ public class Act<xss:e value="appName"/>
 </xss:code>
     }
 	
-<xss:code>
-	if(events.size > 0)
-	{
-		for(int i = 0; i < events.size; i++)
-		{
-			//ERROR: this assign value dispatch console errors "Incompatible types assigning a local variable"
-			//string ev = events[i];
-			
-			string ev;
-            ev = events[i];
-			string args;
-            args = ev_args[i];
-			
-			//TODO: implements call to arguments from classes by event name
-			out(indent = 1)
-			{
-                @Override
-                public void <xss:e value="ev"/>(<xss:e value="args"/>) <xss:open_brace/>
-                    switch (v.getId()) <xss:open_brace/>
-			}
-			
-			for(var inst in android.instances)
-			{
-				for(var e in inst.events)
-				{
-					if(e.event_name == ev && e.implemented)
-					{
-						out(indent = 2)
-						{
-                            case R.id.<xss:e value="inst.id"/>:
-                                <xss:e value="ev"/><xss:e value="inst.id"/>();
-                                break;
-								
-						}
-					}
-				}
-			}
-			
-			out(indent = 1)
-			{
-                    <xss:close_brace/> //switch
-                <xss:close_brace/>
-				<xss:return/>
-			}
-		}
-	}
-</xss:code>
+<xss:marker id="events"/>
 <xss:code>	
 	for(var inst in android.instances)
 	{

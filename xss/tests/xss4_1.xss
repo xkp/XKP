@@ -1,2 +1,4 @@
 <xss:parameter id="obj"/>
 Is this after "After!"? <xss:e v="obj.show_after"/>
+
+<xss:marker id="inside"/>
