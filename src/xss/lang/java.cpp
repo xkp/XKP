@@ -98,7 +98,8 @@ str java_code_renderer::render_expression(expression& expr, XSSContext ctx)
 
 str java_code_renderer::render_code(code& cde)
   {
-    java_code_renderer inner(cde, param_list_decl(), ctx_, indent_ + 1);
+    param_list_decl pld;
+    java_code_renderer inner(cde, pld, ctx_, indent_ + 1);
     str result = inner.render();
 
     add_line(result, false);
@@ -191,7 +192,7 @@ str java_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
         str opstr = lang->render_value(XSSType(), operand);
         if (opstr.empty())
           {
-            assert(false); //td: determine if this is an error condition  
+            assert(false); //td: determine if this is an error condition
           }
 
         result = opstr;
@@ -400,7 +401,7 @@ void java_expr_renderer::exec_operator(operator_type op, int pop_count, int push
       }
   }
 
-//java_args_renderer 
+//java_args_renderer
 java_args_renderer::java_args_renderer():
   base_args_renderer()
   {
@@ -425,7 +426,7 @@ str java_args_renderer::render()
     for(; it != nd; it++)
       {
         XSSType type = ctx_->get_type(it->type);
-        
+
         if (!type)
           type = ctx_->get_type("var");
 

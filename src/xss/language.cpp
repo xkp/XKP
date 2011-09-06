@@ -64,7 +64,7 @@ void source_collector::dsl_(dsl& info)
 
 //code_type_resolver
 code_type_resolver::code_type_resolver(XSSContext ctx):
-  is_variant_(false), 
+  is_variant_(false),
   ctx_(ctx)
   {
   }
@@ -174,7 +174,7 @@ void code_type_resolver::for_(stmt_for& info)
 
 void code_type_resolver::iterfor_(stmt_iter_for& info)
   {
-    XSSType var_type = ctx_->get_type(info.type.name); //td: use 
+    XSSType var_type = ctx_->get_type(info.type.name); //td: use
     if (!var_type)
       {
         param_list error;
@@ -193,15 +193,15 @@ void code_type_resolver::iterfor_(stmt_iter_for& info)
         error.add("type", iterator_type->id());
         xss_throw(error);
       }
-    
+
     if (var_type->is_variant())
       {
         var_type = iterator_type->array_type();
       }
     else
       {
-        XSSType& lt = var_type;
-        XSSType& rt = iterator_type->array_type();
+        XSSType lt = var_type;
+        XSSType rt = iterator_type->array_type();
 
         if (lt != rt && !ctx_->get_language()->can_cast(lt, rt))
           {
@@ -212,7 +212,7 @@ void code_type_resolver::iterfor_(stmt_iter_for& info)
             xss_throw(error);
           }
       }
-    
+
     register_var(info.id, var_type);
     XSSType result = lang_utils::code_type(info.for_code, ctx_);
 
@@ -352,7 +352,7 @@ void code_type_resolver::expression_(stmt_expression& info)
                   }
 
                 if (!lt)
-                  break; //render pure text 
+                  break; //render pure text
 
                 //check types
                 if (lt != rt && !lt->is_variant() && !rt->is_variant())
@@ -413,8 +413,8 @@ void code_type_resolver::return_type_found(XSSType type)
   }
 
 //expr_type_resolver
-expr_type_resolver::expr_type_resolver(XSSContext ctx) : 
-  is_variant_(false), 
+expr_type_resolver::expr_type_resolver(XSSContext ctx) :
+  is_variant_(false),
   ctx_(ctx)
   {
   }
@@ -644,12 +644,12 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
             XSSType result = ctx_->get_type("var");
 
 						expression_identifier arg1  = stack_.top(); stack_.pop();
-						
+
             variant top = stack_.top(); stack_.pop();
             resolve_info left;
             if (top.is<expression_identifier>())
               {
-                expression_identifier arg2  = top; 
+                expression_identifier arg2  = top;
 
                 if (!ctx_->resolve(arg2.value, left))
                   is_variant_ = true;
@@ -726,7 +726,7 @@ XSSType expr_type_resolver::resolve_type(variant var)
             return item.type;
           }
 			}
-		else if (var.is<XSSObject>()) 
+		else if (var.is<XSSObject>())
       {
         XSSObject obj = var;
         return obj->type();
@@ -738,8 +738,8 @@ XSSType expr_type_resolver::resolve_type(variant var)
 	}
 
 //expr_object_resolver
-expr_object_resolver::expr_object_resolver(XSSContext ctx) : 
-  one_opnd_(true), 
+expr_object_resolver::expr_object_resolver(XSSContext ctx) :
+  one_opnd_(true),
   ctx_(ctx)
   {
   }

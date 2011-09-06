@@ -17,22 +17,6 @@ struct already_rendered
     int precedence;
   };
 
-enum assign_type
-	{
-		VANILLA,
-		FN_CALL,
-		XSS_RESOLVE
-	};
-
-struct assign_info
-	{
-		assign_info() : type(VANILLA), flag(false) {}
-
-		assign_type type;
-		str					data;
-		bool				flag;
-	};
-
 struct capture_property
 	{
 		XSSProperty prop;
@@ -161,9 +145,9 @@ struct renderer_code_schema : renderer_schema<T>
   {
     virtual void declare_base()
       {
-        implements<ICodeRenderer>();
+        this->template implements<ICodeRenderer>();
 
-        method_<XSSType, 0>("type", &T::type);
+        this->template method_<XSSType, 0>("type", &T::type);
 
         //maintain base implementations
         renderer_schema<T>::declare_base();
@@ -179,9 +163,9 @@ struct renderer_expr_schema : renderer_schema<T>
   {
     virtual void declare_base()
       {
-        implements<IExpressionRenderer>();
+        this->template implements<IExpressionRenderer>();
 
-        method_<XSSType, 0>("type", &T::type);
+        this->template method_<XSSType, 0>("type", &T::type);
 
         //maintain base implememtations
         renderer_schema<T>::declare_base();

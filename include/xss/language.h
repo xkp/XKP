@@ -7,7 +7,7 @@
 
 namespace xkp
 {
-  
+
   //util
   struct source_collector :  xs_visitor
     {
@@ -21,13 +21,29 @@ namespace xkp
       virtual void behaviour_(xs_behaviour& info);
       virtual void behaveas_(xs_implement_behaviour& info);
       virtual void dsl_(dsl& info);
-      
+
       public:
         std::vector<xs_property> properties;
         std::vector<xs_method>   methods;
         std::vector<xs_event>    events;
         std::vector<xs_instance> instances;
     };
+
+enum assign_type
+	{
+		VANILLA,
+		FN_CALL,
+		XSS_RESOLVE
+	};
+
+struct assign_info
+	{
+		assign_info() : type(VANILLA), flag(false) {}
+
+		assign_type type;
+		str					data;
+		bool				flag;
+	};
 
 struct code_type_resolver : code_visitor
 	{
@@ -77,7 +93,7 @@ struct expr_type_resolver : expression_visitor
 		  operator_registry operators_;
 		  XSSContext				ctx_;
 
-		private:	
+		private:
 			XSSType resolve_type(variant var);
   };
 
@@ -227,7 +243,7 @@ struct lang_utils
 														    if (assign[i] == 39)
 															    assign[i] = '"';
 													    }
-                            
+
                             XSSContext assign_ctx(new xss_context(XSSContext()));
 												    assign_ctx->register_symbol(RESOLVE_CONST, "value",	value);
 												    assign_ctx->register_symbol(RESOLVE_CONST, "caller", getter);

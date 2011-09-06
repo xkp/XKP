@@ -28,6 +28,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-fpermissive" />
 					<Add option="-DNDEBUG" />
 					<Add option="-D_CONSOLE" />
 				</Compiler>
@@ -44,13 +45,16 @@
 			<Add option="-DBOOST_NO_MEMBER_TEMPLATE_FRIENDS" />
 			<Add option="-DBOOST_SYSTEM_NO_DEPRECATED" />
 			<Add directory="..\..\..\include" />
-			<Add directory="..\..\..\include\xs" />
-			<Add directory="..\..\..\include\xss" />
-			<Add directory="..\..\..\include\archive" />
 			<Add directory="..\..\..\third_party\tinyXml" />
 			<Add directory="..\..\..\third_party\jsoncpp\include" />
 			<Add directory="$(#boost_1_44)" />
 		</Compiler>
+		<Linker>
+			<Add library="libboost_system-mgw45-mt-1_44.a" />
+			<Add library="libboost_filesystem-mgw45-mt-1_44.a" />
+			<Add library="libboost_regex-mgw45-mt-1_44.a" />
+			<Add directory="$(#boost_1_44.lib)" />
+		</Linker>
 		<Unit filename="stdafx.cpp" />
 		<Unit filename="stdafx.h" />
 		<Unit filename="targetver.h" />
@@ -99,9 +103,9 @@
 		<Unit filename="..\..\..\src\xs\linker.cpp" />
 		<Unit filename="..\..\..\src\xs\operators.cpp" />
 		<Unit filename="..\..\..\src\xs\vm.cpp" />
-		<Unit filename="..\..\..\src\xss\debug.cpp" />
 		<Unit filename="..\..\..\src\xss\dsl_out.cpp" />
 		<Unit filename="..\..\..\src\xss\lang\base.cpp" />
+		<Unit filename="..\..\..\src\xss\lang\debug.cpp" />
 		<Unit filename="..\..\..\src\xss\lang\java.cpp" />
 		<Unit filename="..\..\..\src\xss\lang\js.cpp" />
 		<Unit filename="..\..\..\src\xss\language.cpp" />
