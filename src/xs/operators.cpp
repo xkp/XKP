@@ -354,6 +354,25 @@ struct as : operator_exec
       }
   };
 
+struct is : operator_exec
+  {
+    virtual variant exec(variant& arg1, variant& arg2)
+      {
+        schema* check_type = null;
+        schema* type = arg1.get_schema();
+
+        try
+          {
+            check_type = arg2;
+          }
+        catch(...)
+          {
+            return false;
+          }
+
+        return check_type == type;
+      }
+  };
 
 struct plus_str : operator_exec
   {
@@ -612,6 +631,9 @@ operator_registry::operator_registry()
 
 		//as
 		register_wildcard(op_typecast, null, null, new as() );
+
+    //is
+    register_wildcard(op_typecheck, null, null, new is() );
 
 		//defaults
 		register_default_operator(op_equal, new op_false());

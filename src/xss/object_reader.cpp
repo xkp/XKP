@@ -287,9 +287,9 @@ bool xss_object_reader::read_property(TiXmlElement* node, const str& type_name, 
 				        error.add("id", SReaderError);
 				        error.add("desc", SPropertyTypeMismatch);
 				        error.add("property name", name);
-				        error.add("container", parent->id());
-				        error.add("declared type", type->id());
-				        error.add("value type", vtype->id());
+                if (parent) error.add("container", parent->id());
+                if (type)   error.add("declared type", type->id());
+                if (vtype)  error.add("value type", vtype->id());
 				        xss_throw(error);
               }
           }

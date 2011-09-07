@@ -30,7 +30,7 @@ str xss_utils::var_to_string(variant& v)
         else
           return "false";
       }
-    
+
     return variant_cast<str>(v, str());
   }
 
@@ -193,12 +193,12 @@ code_context xss_context::get_compile_context()
   {
     code_scope_.set(shared_from_this());
     collect_dsl();
-    
+
     code_context result;
     result.types_  = &code_types_;
     result.scope_  = &code_scope_;
-    result.dsl_    = &dsls_; 
-    result.args_   = &args_; 
+    result.dsl_    = &dsls_;
+    result.args_   = &args_;
 
     return result;
   }
@@ -215,7 +215,7 @@ fs::path xss_context::path()
     error.add("id", SContextError);
     error.add("desc", SContextHasNoPath);
     xss_throw(error);
-    
+
     return fs::path();
   }
 
@@ -248,7 +248,7 @@ variant xss_context::resolve(const str& id, XSSObject instance, RESOLVE_ITEM ite
 
     resolve_info si;
     si.what  = item_type;
-    si.left = &left; 
+    si.left = &left;
 
     if (resolve(id, si))
       return si.value;
@@ -273,7 +273,7 @@ bool xss_context::resolve(const str& id, resolve_info& info)
             any = true;
             //fallthru
           }
-        
+
         case RESOLVE_TYPE:
           {
             if (!info.left)
@@ -299,7 +299,7 @@ bool xss_context::resolve(const str& id, resolve_info& info)
               inst = variant_cast<XSSObject>(info.left->value, XSSObject());
             else if (search_this)
               inst = get_this();
-              
+
             if (inst)
               {
                 XSSMethod mthd = inst->get_method(id);
@@ -310,8 +310,8 @@ bool xss_context::resolve(const str& id, resolve_info& info)
                     info.type = mthd->type();
                     return true;
                   }
-              }  
-              
+              }
+
             if (!any)
               return false;
           }
@@ -323,7 +323,7 @@ bool xss_context::resolve(const str& id, resolve_info& info)
               inst = variant_cast<XSSObject>(info.left->value, XSSObject());
             else if (search_this)
               inst = get_this();
-              
+
             if (inst)
               {
                 XSSProperty prop = inst->get_property(id);
@@ -334,12 +334,12 @@ bool xss_context::resolve(const str& id, resolve_info& info)
                     info.type = prop->type();
                     return true;
                   }
-              }  
-              
+              }
+
             if (!any)
               return false;
           }
-        
+
         case RESOLVE_CHILD:
           {
             XSSObject obj;
@@ -368,7 +368,7 @@ bool xss_context::resolve(const str& id, resolve_info& info)
               }
             else if (search_this)
               obj = get_this();
-            
+
             if (obj)
               {
                 XSSObject child = obj->find(id);
@@ -380,15 +380,15 @@ bool xss_context::resolve(const str& id, resolve_info& info)
                     return true;
                   }
               }
-            
+
             if (!any)
               break;
           }
       }
 
     if (info.left)
-      return false; 
-      
+      return false;
+
     //check globals now
     if (find_symbol(id, info))
       {
@@ -412,7 +412,7 @@ bool xss_context::resolve(const str& id, resolve_info& info)
                 info.type = prop->type();
                 break;
               }
-        
+
             case RESOLVE_VARIABLE:
               {
                 XSSType type = info.value;
@@ -425,7 +425,7 @@ bool xss_context::resolve(const str& id, resolve_info& info)
               //all done
               break;
           }
-          
+
         return true;
       }
 
@@ -442,7 +442,7 @@ bool xss_context::resolve_path(const std::vector<str>& path, resolve_info& info)
 		//state
     bool          first      = true;
 		bool          just_paste = false;
-    str           result; 
+    str           result;
     XSSProperty   curr_property;
     XSSObject     curr_instance;
 
@@ -463,7 +463,7 @@ bool xss_context::resolve_path(const std::vector<str>& path, resolve_info& info)
             result += lang->resolve_separator() + item;
             continue;
           }
-        
+
         if (!first)
           ri.search_this = false;
 
@@ -521,7 +521,7 @@ bool xss_context::resolve_path(const std::vector<str>& path, resolve_info& info)
         if (first)
           first = false;
       }
-    
+
     if (info.output)
       *info.output = result;
 
@@ -593,9 +593,10 @@ void xss_context::collect_dsl()
     if (parent_)
       {
         //aint the most efficient way
-        code_context pctx = parent_->get_compile_context();
-        dsl_list::iterator it = pctx.dsl_->begin();        
-        dsl_list::iterator nd = pctx.dsl_->end();        
+        code_context pctx;
+        pctx = parent_->get_compile_context();
+        dsl_list::iterator it = pctx.dsl_->begin();
+        dsl_list::iterator nd = pctx.dsl_->end();
 
         for(; it != nd; it++)
           {
@@ -633,7 +634,7 @@ void xss_object::copy(XSSObject obj)
         type_ = obj->type();
       }
 
-    
+
     //type information will not be copied, should it?
 		DynamicArray obj_children = obj->children();
 		std::vector<variant>::iterator it = obj_children->ref_begin();
@@ -645,8 +646,8 @@ void xss_object::copy(XSSObject obj)
         XSSObject my_child = find(obj_child->id());
         if (!my_child)
           my_child = XSSObject(new xss_object);
-        
-        my_child->copy(obj_child); 
+
+        my_child->copy(obj_child);
 
         children_->push_back(my_child);
       }
@@ -658,12 +659,12 @@ void xss_object::copy(XSSObject obj)
     for(; it != nd; it++)
       {
         XSSProperty obj_prop = *it;
-        
+
         XSSProperty my_prop = get_property(obj_prop->id());
         if (!my_prop)
           my_prop = XSSProperty(new xss_property);
-        
-        my_prop->copy(XSSObject(obj_prop)); 
+
+        my_prop->copy(XSSObject(obj_prop));
 
         properties_->push_back(my_prop);
       }
@@ -675,12 +676,12 @@ void xss_object::copy(XSSObject obj)
     for(; it != nd; it++)
       {
         XSSMethod obj_mthd = *it;
-        
+
         XSSMethod my_methd = get_method(obj_mthd->id());
         if (!my_methd)
           my_methd = XSSMethod(new xss_method);
-        
-        my_methd->copy(XSSObject(obj_mthd)); 
+
+        my_methd->copy(XSSObject(obj_mthd));
         methods_->push_back(my_methd);
       }
 
@@ -692,8 +693,8 @@ void xss_object::copy(XSSObject obj)
       {
         XSSEvent obj_ev = *it;
         XSSEvent my_ev = XSSEvent(new xss_event);
-        
-        my_ev->copy(XSSObject(obj_ev)); 
+
+        my_ev->copy(XSSObject(obj_ev));
         events_->push_back(my_ev);
       }
 
@@ -701,16 +702,16 @@ void xss_object::copy(XSSObject obj)
       struct copier : dynamic_visitor
         {
           copier(XSSObject src, xss_object* dest):
-            src_(src), 
+            src_(src),
             dest_(dest)
             {
             }
 
           virtual void item(const str& name, variant value)
             {
-              if (name == "type") 
-                return; 
-              
+              if (name == "type")
+                return;
+
               if (dest_->has(name))
                 dynamic_set((IDynamicObject*)dest_, name, value);
               else
@@ -729,12 +730,12 @@ bool xss_object::resolve(const str& name, schema_item& result)
 	{
     if (editable_object<xss_object>::resolve(name, result))
 			return true;
-    
+
     XSSObject child = find(name);
     if (child)
       {
         result.flags = 0;
-        result.get   = Getter( new const_getter(child) ); 
+        result.get   = Getter( new const_getter(child) );
         return true;
       }
 
@@ -857,7 +858,7 @@ XSSObject xss_object::find(const str& what)
   {
     if (what.empty())
       return XSSObject();
-    
+
     std::vector<variant>::iterator it = children_->ref_begin();
     std::vector<variant>::iterator nd = children_->ref_end();
 
@@ -874,7 +875,7 @@ XSSObject xss_object::find(const str& what)
 std::vector<XSSObject> xss_object::find_by_class(const str& which)
   {
     std::vector<XSSObject> result;
-    
+
     std::vector<variant>::iterator it = children_->ref_begin();
     std::vector<variant>::iterator nd = children_->ref_end();
 
@@ -899,6 +900,12 @@ DynamicArray xss_object::get_event_impl(const str& event_name, XSSEvent& ev)
 
     //not implemented, create
     ev = XSSEvent(new xss_event(event_name));
+    XSSEvent type_ev = type_? type_->get_event(event_name) : XSSEvent();
+    if (type_ev)
+      {
+        ev->copy(XSSObject(type_ev));
+      }
+
     ev->set_id(event_name);
 
     events_->push_back(ev);
@@ -907,7 +914,7 @@ DynamicArray xss_object::get_event_impl(const str& event_name, XSSEvent& ev)
 
 bool xss_object::is_injected(const str& name)
   {
-    item_list::iterator it = items_.find(name);    
+    item_list::iterator it = items_.find(name);
     if (it != items_.end())
       {
         return it->second.flags&INJECTED;
@@ -939,27 +946,29 @@ XSSProperty xss_object::get_property(const str& name)
           return prop;
       }
 
-    if (type_)   
+    if (type_)
       return type_->get_property(name);
 
     return XSSProperty();
   }
 
 
-std::vector<XSSEvent> xss_object::get_events(const str& name)
+XSSEvent xss_object::get_event(const str& name)
   {
     std::vector<variant>::iterator it = events_->ref_begin();
     std::vector<variant>::iterator nd = events_->ref_end();
 
-    std::vector<XSSEvent> result;
     for(; it != nd; it++)
       {
         XSSEvent ev = *it;
         if (ev->id() == name)
-          result.push_back(ev);
+          return ev;
       }
 
-    return result;
+    if (type_)
+      return type_->get_event(name);
+
+    return XSSEvent();
   }
 
 XSSMethod xss_object::get_method(const str& name)
@@ -1037,7 +1046,7 @@ void xss_type::set_super(XSSType super)
 void xss_type::set_definition(XSSObject def)
   {
     if (def)
-      copy(def); 
+      copy(def);
   }
 
 schema* xss_type::native_type()
@@ -1094,7 +1103,7 @@ void xss_type::inherit()
     //td: merge children
   }
 
-XSSType xss_type::get_super() 
+XSSType xss_type::get_super()
   {
     return super_;
   }
@@ -1208,6 +1217,11 @@ xss_property::xss_property(const str& _name, XSSType _type, variant _value, vari
 	  type_ = _type;
   }
 
+str xss_property::get_name()
+  {
+    return id_;
+  }
+
 void xss_property::copy(XSSObject obj)
   {
     xss_property* prop = dynamic_cast<xss_property*>(obj.get());
@@ -1245,7 +1259,7 @@ str xss_property::render_value()
     XSSType prop_type = type();
     if (prop_type)
       return prop_type->get_language()->render_value(prop_type, value_);
-    
+
     return xss_utils::var_to_string(value_);
   }
 
@@ -1253,7 +1267,7 @@ str xss_property::render_get()
   {
     str name = output_id();
 
-    str get_fn = variant_cast<str>(dynamic_get(this, "get_fn"), str()); 
+    str get_fn = variant_cast<str>(dynamic_get(this, "get_fn"), str());
     if (!get_fn.empty())
       return get_fn + "()";
     else if (!get.empty())
@@ -1282,7 +1296,7 @@ str	xss_property::render_set(const str& value)
 				return id_ + "_set(" + value + ')';
 			}
 
-		return id_ + " = " + value;
+		return output_id() + " = " + value;
   }
 
 XSSType xss_property::type()
@@ -1331,6 +1345,11 @@ xss_event::xss_event(const str& _name):
     id_ = _name;
   }
 
+str xss_event::get_name()
+  {
+    return id_;
+  }
+
 bool xss_event::implemented()
 	{
 		return impls->size() > 0;
@@ -1358,6 +1377,11 @@ xss_method::xss_method(const str& name, XSSType type, variant args, variant code
     DYNAMIC_INHERITANCE(xss_method)
 	  type_ = type;
     id_ = name;
+  }
+
+str xss_method::get_name()
+  {
+    return id_;
   }
 
 XSSType xss_method::type()

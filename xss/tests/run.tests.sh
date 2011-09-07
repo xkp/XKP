@@ -1,16 +1,27 @@
-#!/bin/bash 
+#!/bin/bash
 
 LOG_FILENAME=result.log
-XSS_FILENAME=xss.exe
-MD5_CREATE=find ./ -type f -print0 | xargs -0 md5sum
-MD5_VERIFY=md5sum -c ./ list.md5
-XSS_PATH=../../bin/Debug/
+#XSS_FILENAME=xss.exe
+XSS_FILENAME=xss
+#XSS_PATH=../../bin/Debug/
+XSS_PATH=../../bin/cb/release/
 OUT_PATH=../production/
 CHP_PATH=../tests/
-EXEC=$XSS_PATH$XSS_FILENAME
-PROJECTS_LIST=`ls | grep "\.project.xml"`
+#EXEC=$XSS_PATH$XSS_FILENAME
+#EXEC=$XSS_FILENAME$XSS_PATH
+EXEC=let "$XSS_FILENAME$XSS_PATH"
+#PROJECTS_LIST=`ls | grep "\.project.xml"`
+
+#MD5_CREATE=`find . -type f -print0 | xargs -0 md5sum`
+#MD5_VERIFY=`md5sum -c ./ list.md5`
 
 echo Running tests... Wait please! ;
+
+cc=0 ;
+for i in 1 2 3 4 5 ; do
+	cc=`expr $cc + 1` ;
+done
+echo $cc ;
 
 count=0 ;
 date +%c >> $LOG_FILENAME ;

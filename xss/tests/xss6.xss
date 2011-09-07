@@ -1,0 +1,20 @@
+<xss:code>
+for(var i in application.children)
+{
+	for(var ev in i.events)
+	{
+		out()
+		{
+			event id: <xss:e v="ev.id"/> event output_id: <xss:e v="ev.output_id"/>
+		}
+			
+		if(ev.interface)
+		{
+			out()
+			{
+				Interface: <xss:e v="ev.interface"/>
+			}
+		}
+	}
+}
+</xss:code>

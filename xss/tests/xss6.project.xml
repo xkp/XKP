@@ -1,4 +1,4 @@
-<project entry_point="xss2.xss" language="debug" target="xss2.app.xml">
+<project entry_point="xss6.xss" language="debug" target="xss6.app.xml">
     <options event_scope="instance"/>
     <idiom src="../idioms/test/idiom.xml"/>
 </project>

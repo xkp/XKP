@@ -1,0 +1,27 @@
+<project 
+	entry_point="../../../idioms/android/main.xss" 
+	language="java" 
+	target="simple.xml" >
+	
+	<path>
+		<output path="../../../production/android/"/>
+	</path>
+	
+	<!--
+		DOC: 'eclipse_project' option declare the structure of project exported
+		DOC: 'android_api_level' is a API level version of exported Android project
+		DOC: 'android_type_project' is a type of output project
+		
+		TODO: tab character configuration with number of spaces for resolve indent problem
+		TODO: copy files .classpath, default.properties, res/values/attrs.xml
+		TODO: create folders libs, assets, lib, gen, res/drawable-* with files
+	-->
+	
+	<options 
+		android_api_level="8" 
+		android_type_project="eclipse/ant/script" 
+		android_eclipse_project="true" 
+		android_ant_project="true"/>
+	
+	<idiom src="../../../idioms/android/classes.xml"/>
+</project>

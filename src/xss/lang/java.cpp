@@ -1,8 +1,13 @@
 
 #include <xss/lang/java.h>
 #include <xss/language.h>
+#include <xss/xss_error.h>
 
 using namespace xkp;
+
+const str SJavaLanguage("java-language");
+
+const str SUnknownType("Cannot resolve type");
 
 //java_code_renderer
 java_code_renderer::java_code_renderer():
@@ -42,8 +47,6 @@ void java_code_renderer::variable_(stmt_variable& info)
       }
 
     std::stringstream ss;
-    indent_str_ = indent();
-
     ss << output_type << " " << info.id;
 
     if (!info.value.empty())
@@ -62,8 +65,6 @@ void java_code_renderer::for_(stmt_for& info)
     str output_type = type->output_id();
 
     std::stringstream ss;
-    indent_str_ = indent();
-
     str iterable_declaration = output_type + " " + info.init_variable.id;
     ss << "for(" << iterable_declaration << " = " << render_expression(info.init_variable.value, ctx_)
         << "; " << render_expression(info.cond_expr, ctx_)
@@ -81,8 +82,6 @@ void java_code_renderer::iterfor_(stmt_iter_for& info)
     str output_type = type->output_id();
 
     std::stringstream ss;
-    indent_str_ = indent();
-
     ss << "for(" << output_type << " " << info.id << " : "
       << render_expression(info.iter_expr, ctx_) << ")";
 
@@ -99,7 +98,8 @@ str java_code_renderer::render_expression(expression& expr, XSSContext ctx)
 
 str java_code_renderer::render_code(code& cde)
   {
-    java_code_renderer inner(cde, param_list_decl(), ctx_, indent_ + 1);
+    param_list_decl pld;
+    java_code_renderer inner(cde, pld, ctx_, indent_ + 1);
     str result = inner.render();
 
     add_line(result, false);
@@ -127,6 +127,8 @@ str java_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
   {
     str result;
     int result_prec = 0;
+    Language lang = ctx_->get_language();
+
     if (operand.is<expression_identifier>())
       {
         expression_identifier ei = operand;
@@ -136,8 +138,6 @@ str java_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
           {
             //here we ought to resolve a single symbol (ex width = 10)
             //thid *could* belong to the "this" pointer
-
-            Language lang = ctx_->get_language();
             str separator = lang->resolve_separator();
 
             resolve_info si;
@@ -148,8 +148,6 @@ str java_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
                     case RESOLVE_VARIABLE:
                     case RESOLVE_PROPERTY:
                       {
-                        //XSSProperty prop = si.value;
-										    //result = prop->render_value();
                         break; //do nothing
                       }
                     case RESOLVE_METHOD:
@@ -191,10 +189,10 @@ str java_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
       }
     else
       {
-        str opstr = variant_cast<str>(operand, str());
+        str opstr = lang->render_value(XSSType(), operand);
         if (opstr.empty())
           {
-            assert(false); //td: determine if this is an error condition  
+            assert(false); //td: determine if this is an error condition
           }
 
         result = opstr;
@@ -235,6 +233,7 @@ void java_expr_renderer::exec_operator(operator_type op, int pop_count, int push
     switch(op)
       {
         // add here the operators that I'll customize
+        case op_typecheck:
         case op_index:
         case op_typecast:
         case op_array:
@@ -272,7 +271,6 @@ void java_expr_renderer::exec_operator(operator_type op, int pop_count, int push
         case op_mult:
         case op_divide:
         case op_mod:
-        case op_typecheck:
         case op_namecheck:
         case op_plus:
         case op_minus:
@@ -298,15 +296,46 @@ void java_expr_renderer::exec_operator(operator_type op, int pop_count, int push
             break;
           }
 
+        case op_typecheck:
+          {
+						str os1 = operand_to_string(arg1, XSSObject());
+
+            expression_identifier ei2 = arg2;
+            str os2 = ei2.value;
+            XSSType type = ctx_->resolve(os2, RESOLVE_TYPE);
+
+            if (!type)
+              {
+                param_list error;
+                error.add("id", SJavaLanguage);
+                error.add("desc", SUnknownType);
+                error.add("type", os2);
+                xss_throw(error);
+              }
+
+            std::stringstream ss;
+            ss << os1 << " instanceof " << type->output_id();
+
+            push_rendered(ss.str(), op_prec, variant());
+            break;
+          }
+
         case op_typecast:
           {
-            int p1;
-
-						str os1 = operand_to_string(arg1, XSSObject(), &p1);
+						str os1 = operand_to_string(arg1, XSSObject());
 
             expression_identifier ei2 = arg2;
             str os2 = ei2.value;
             XSSType totype = ctx_->resolve(os2, RESOLVE_TYPE);
+
+            if (!totype)
+              {
+                param_list error;
+                error.add("id", SJavaLanguage);
+                error.add("desc", SUnknownType);
+                error.add("type", os2);
+                xss_throw(error);
+              }
 
             std::stringstream ss;
             ss << totype->output_id() << ".valueOf(" << os1 << ")";
@@ -372,7 +401,7 @@ void java_expr_renderer::exec_operator(operator_type op, int pop_count, int push
       }
   }
 
-//java_args_renderer 
+//java_args_renderer
 java_args_renderer::java_args_renderer():
   base_args_renderer()
   {
@@ -397,7 +426,7 @@ str java_args_renderer::render()
     for(; it != nd; it++)
       {
         XSSType type = ctx_->get_type(it->type);
-        
+
         if (!type)
           type = ctx_->get_type("var");
 
@@ -522,4 +551,34 @@ XSSType java_lang::resolve_array_type(XSSType type, const str& at_name, XSSConte
     new_type->register_method("size", mthd);
 
     return new_type;
+  }
+
+str java_lang::render_value(XSSType type, variant value)
+  {
+    if (value.is<str>())
+      return variant_cast<str>(value, str());
+
+    if (value.is<bool>())
+      {
+        bool vv = value;
+        if (vv)
+          return "true";
+        else
+          return "false";
+      }
+
+    if (value.is<float>() || value.is<double>())
+      {
+        float f = value;
+
+        std::stringstream ss;
+        ss.setf(std::ios::fixed, std::ios::floatfield);
+        ss.precision(6);//td: ajust this value
+
+        ss << f;
+
+        return ss.str();
+      }
+    
+    return variant_cast<str>(value, str());
   }

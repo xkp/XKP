@@ -19,7 +19,7 @@
 #include "xss/xss_error.h"
 #include "xss/xss_compiler.h"
 
-#include "boost/filesystem.hpp" 
+#include "boost/filesystem.hpp"
 
 using namespace xkp;
 
@@ -31,22 +31,22 @@ void print_error(param_list data)
   {
     str id   = variant_cast<str>(data.get("id"), "");
     str desc = variant_cast<str>(data.get("desc"), "");
-    
+
     std::cout << "Error [" << id << "] " << desc << '\n';
-    
+
     for(size_t i = 0; i < data.size(); i++)
       {
         str name = data.get_name(i);
         if (name == "id" || name == "desc")
           continue;
-          
+
         variant value = data.get(i);
         str     value_str = variant_cast<str>(value, str("[cannot-resolve]"));
 
         std::cout << name << " = " << value_str << '\n';
       }
   }
-  
+
 int main(int argc, char* argv[])
   {
     if (argc < 2)
@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
     int error_number = 0;
     char* fname = argv[1];
 		fs::path target = fs::system_complete(fname);
-    
+
     if (!fs::exists(target))
       {
         param_list error;
@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
         if (param == "wait")
           wait = true;
       }
-      
+
 		XSSCompiler compiler(new xss_compiler);
 
     try
@@ -100,7 +100,7 @@ int main(int argc, char* argv[])
             if (!compiling.empty())
               file = compiling;
             else
-              { 
+              {
                 XSSRenderer rend = compiler->current_renderer();
                 if (rend)
                   {
@@ -111,7 +111,7 @@ int main(int argc, char* argv[])
 
         if (!file.empty())
           std::cout << "Error at: " << file.string() << '\n';
-        
+
         print_error(xse.data);
       }
     catch(xss_error xsse)
@@ -131,7 +131,7 @@ int main(int argc, char* argv[])
             if (!compiling.empty())
               file = compiling;
             else
-              { 
+              {
                 XSSRenderer rend = compiler->current_renderer();
                 if (rend)
                   {
@@ -151,14 +151,14 @@ int main(int argc, char* argv[])
 
         print_error(rte.data);
       }
-    
+
     if (error_number == 0)
       {
         std::cout << "Success are greateful";
       }
-      
+
     if (wait)
       std::cin.get();
-	  
+
 	  return error_number;
   }

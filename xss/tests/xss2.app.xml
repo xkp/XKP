@@ -1,4 +1,6 @@
-<application>
+<application src="xss2.app.xs" >
     <t_arrays id="t1"/>
     <t_arrays1 id="t2"/>
+	
+	<t_super_derived id="t3"/>
 </application>

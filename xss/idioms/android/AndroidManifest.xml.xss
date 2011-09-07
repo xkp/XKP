@@ -1,3 +1,7 @@
+<xss:parameter id="appName"/>
+<xss:parameter id="minAPILevel"/>
+<xss:parameter id="targetAPILevel"/>
+
 <?xml version="1.0" encoding="utf-8"?>
 <!-- 
 	Import XSS Licence here!
@@ -5,13 +9,12 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" 
       package="com.xkp.android.<xss:e value="appName"/>"
-	  android:versionCode="1"
-	  android:versionName="1.0"
-	  android:installLocation="auto">
+      android:versionCode="1"
+      android:versionName="1.0">
 
-    <uses-sdk android:minSdkVersion="<xss:e value="sdkVersion-1"/>" android:targetSdkVersion="<xss:e value="sdkVersion"/>"/>
+    <uses-sdk android:minSdkVersion="<xss:e value="minAPILevel"/>" android:targetSdkVersion="<xss:e value="targetAPILevel"/>"/>
 
-	<application android:label="@string/app_name" android:icon="@drawable/icon">
+    <application android:label="@string/app_name" android:icon="@drawable/icon">
         <activity android:name=".Act<xss:e value="appName"/>"
                   android:label="@string/app_name">
             <intent-filter>

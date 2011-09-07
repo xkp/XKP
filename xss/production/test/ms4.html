@@ -41,13 +41,14 @@ function start(resolution)
 }  
 var fade1;
             fade_in = Class.create(ms.state.Sequence,
-        {
+{
     initialize: function($super
                 , manager
-                    )
+    )
     {
         $super(
-        manager        );
+        manager
+        );
                 var this__ = this;
             this.parent_sequence = null;
                     var ____i1 = new ms.state.Interpolator(
@@ -126,7 +127,8 @@ window.onload = function()
                 img1.rect(100, 100, 50, 50);
 fade1 =
 new fade_in(
-g_sequence_manager);
+g_sequence_manager
+);
             fade1.parent_sequence = null;
             if (application.init)
             {

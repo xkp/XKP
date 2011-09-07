@@ -5,7 +5,7 @@
 
 using namespace xkp;
 
-struct expr_renderer : expression_visitor 
+struct expr_renderer : expression_visitor
   {
     expr_renderer(const str& indent):
       indent_(indent)
@@ -200,7 +200,7 @@ struct code_renderer : ICodeRenderer,
       str render_expression(expression& expr)
         {
           expr_ = str();
-          
+
           indent_++;
 
           str indent__ = indent();
@@ -212,7 +212,8 @@ struct code_renderer : ICodeRenderer,
 
       str render_code(code& cde)
         {
-          code_renderer cdr(cde, param_list_decl(), ctx_, indent_ + 1);
+          param_list_decl pld;
+          code_renderer cdr(cde, pld, ctx_, indent_ + 1);
           return cdr.render();
         }
   };
@@ -314,6 +315,9 @@ str debug_language::render_value(XSSType type, variant value)
 
 //glue
 
+namespace xkp
+{
 register_complete_type(code_renderer,       renderer_code_schema<code_renderer>);
 register_complete_type(expression_renderer, renderer_expr_schema<expression_renderer>);
 register_complete_type(param_list_renderer, renderer_schema<param_list_renderer>);
+}

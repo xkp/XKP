@@ -88,7 +88,8 @@ struct out_expr_renderer : item_renderer
 
     virtual str render(XSSObject this_, param_list* args)
       {
-        return xss_utils::var_to_string(args->get(idx_));
+        variant v = args->get(idx_);
+        return xss_utils::var_to_string(v);
       }
     private:
       int idx_;
@@ -102,11 +103,11 @@ struct out_file_renderer : item_renderer
         std::vector<file_parameter>::iterator it = parameters.begin();
         std::vector<file_parameter>::iterator nd = parameters.end();
         for(; it != nd; it++)
-          { 
+          {
             params_.insert(std::pair<str, int>(it->name, it->expr_idx));
           }
       }
-    
+
     void compile(XSSContext ctx, param_list* args)
       {
 		    output_ = variant_cast<str>(args->get("output"), str());
@@ -119,7 +120,7 @@ struct out_file_renderer : item_renderer
 				    error.add("desc", SExpectingOutputAttribute);
 				    xss_throw(error);
 			    }
-        
+
 		    if (src.empty())
 			    {
 				    param_list error;
@@ -136,7 +137,7 @@ struct out_file_renderer : item_renderer
       {
         renderer_parameter_list& params = renderer_->params(); //td: check types
         param_list file_params;
-        
+
         //translate outside parameters into file parameters
         renderer_parameter_list::iterator it = params.begin();
         renderer_parameter_list::iterator nd = params.end();
@@ -158,12 +159,12 @@ struct out_file_renderer : item_renderer
 
         return result;
       }
-    
+
     private:
       std::map<str, int> params_;
       XSSRenderer        renderer_;
       XSSCompiler        compiler_;
-      str                output_; 
+      str                output_;
   };
 
 struct out_renderer : base_xss_renderer<out_renderer>
@@ -277,7 +278,7 @@ struct worker
             {
               switch (marker_source_)
                 {
-                  case MS_CURRENT: 
+                  case MS_CURRENT:
                     {
 						          rr->append_at(result, marker_);
                       break;
@@ -372,7 +373,7 @@ void out_linker::link(dsl& info, code_linker& owner)
 				error.add("desc", SCannotResolveContex);
 				xss_throw(error);
       }
-    
+
     XSSContext ctx = ctx_var;
 
     out_renderer renderer(expressions, compiler_, ctx);
@@ -390,7 +391,8 @@ void out_linker::link(dsl& info, code_linker& owner)
     xs_utils xs;
 
     //create a safe reference to be inserted in the execution context later on
-		Worker wrk(new worker(compiler_, renderer.items(), marker, marker_source));
+    std::vector<ItemRenderer> ilist = renderer.items();
+		Worker wrk(new worker(compiler_, ilist, marker, marker_source));
     owner.add_instruction(i_load_constant, owner.add_constant(wrk));
 
     //push the expression to be used as parameters, push 'em in reverse order

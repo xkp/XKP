@@ -1,12 +1,25 @@
+<xss:marker id="before_zero"/>
 
 <xss:marker id="before"/>
 <xss:code>
+
+out(marker = "inside")
+{
+	testing marker out there;
+}
+
 for(var i in application.children)
 {
     out(marker="before")
     {
         Before? <xss:e v="i.show_before"/>
     }
+	
+	//this lines no printed cuz marker "after" is not defined yet
+	out(marker="after")
+	{
+		<xss:e v="i.type.output_id"/>
+	}
 
     compiler.xss("xss4_1.xss", i, marker="after");
 }
@@ -14,13 +27,28 @@ for(var i in application.children)
 
 AFter! <xss:marker id="after"/>
 
-After after 
-
-<xss:marker id="after_after"/>
-
 <xss:code>
-out(marker="after_after")
-{
-    The end?
-}
+	array<int> numbers = [1, 2, 3, 4, 5, 6];
+	for(var item in numbers)
+	{
+		int c = item / 2;
+		int r = item - c * 2;
+		
+		//implement module operator
+		//if(item % 2 == 0)
+		if(r == 0)
+		{
+			out(marker="after", marker="before_zero")
+			{
+				Even = <xss:e value="item"/>
+			}
+		}
+		else
+		{
+			out(marker="before")
+			{
+				Odd = <xss:e value="item"/>
+			}
+		}
+	}
 </xss:code>

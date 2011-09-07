@@ -59,7 +59,7 @@ class xss_object : public editable_object<xss_object>,
       virtual bool resolve(const str& name, schema_item& result);
 		public:
 			//accesors
-      template <typename T> 
+      template <typename T>
       T get(const str& what, T default_value)
         {
           return variant_cast<T>(dynamic_get(this, what), default_value);
@@ -96,9 +96,9 @@ class xss_object : public editable_object<xss_object>,
       void register_method(const str& name, XSSMethod new_mthd = XSSMethod());
       void register_event_impl(const str& name, XSSEvent new_evt = XSSEvent());
 
-			XSSProperty           get_property(const str& name);
-			std::vector<XSSEvent> get_events(const str& name);
-			XSSMethod		          get_method(const str& name);
+			XSSProperty get_property(const str& name);
+			XSSEvent    get_event(const str& name);
+			XSSMethod		get_method(const str& name);
     public:
       str           id_;
       str           output_id_;
@@ -111,7 +111,7 @@ class xss_object : public editable_object<xss_object>,
 			DynamicArray	events_;
 	};
 
-class xss_type : public xss_object  
+class xss_type : public xss_object
   {
     public:
       xss_type();
@@ -163,7 +163,7 @@ struct ICodeRenderer : public IRenderer
     virtual XSSType type() = 0;
   };
 
-struct IExpressionRenderer : public IRenderer 
+struct IExpressionRenderer : public IRenderer
   {
     virtual XSSType type() = 0;
   };
@@ -234,9 +234,9 @@ struct resolve_info
       }
 
     RESOLVE_ITEM  what;
-    XSSType       type; 
+    XSSType       type;
     variant       value;
-    str*          output;  
+    str*          output;
     resolve_info* left;
     bool          search_this;
     bool          found_this;
@@ -248,16 +248,16 @@ struct symbol_data
       type(_type),
       value(_value)
       {
-      } 
+      }
 
     RESOLVE_ITEM type;
-    variant      value; 
+    variant      value;
   };
 
 struct xss_context : boost::enable_shared_from_this<xss_context>
   {
     xss_context(XSSContext parent, fs::path path = fs::path());
-	  
+
     public:
       XSSType       get_type(const str& type);
       XSSType       get_type(schema* type);
@@ -281,19 +281,19 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       typedef std::map<str, XSSType>  type_list;
       typedef std::pair<str, XSSType> type_list_pair;
 
-			XSSContext parent_;	
+			XSSContext parent_;
       Language   lang_;
       XSSObject  this_;
       type_list  types_;
       fs::path   path_;
       param_list args_;
-      
+
       variant empty_type_value(RESOLVE_ITEM item_type);
     protected:
       //symbols
       typedef std::map<str, symbol_data>  symbol_list;
       typedef std::pair<str, symbol_data> symbol_list_pair;
-      
+
       symbol_list symbols_;
 
       bool find_symbol(const str& id, resolve_info& info);
@@ -302,7 +302,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       //a much better way will be to integrate the contexts, that'll be latter
       type_registry     code_types_;
       xss_context_scope code_scope_;
-      dsl_list          dsls_; 
+      dsl_list          dsls_;
 
       bool got_dsls_;
       void collect_dsl();
@@ -317,6 +317,8 @@ class xss_property : public xss_object
 		  xss_property(const xss_property& other);
 		  xss_property(const str& name, XSSType type, variant value, XSSObject _this_);
 		  xss_property(const str& name, XSSType type, variant value, variant _get, variant _set, XSSObject _this_);
+
+			str get_name();
 
 		  virtual void copy(XSSObject obj);
 			virtual XSSType type();
@@ -339,6 +341,8 @@ class xss_event : public xss_object
 			xss_event(const xss_event& other);
 			xss_event(const str& name);
 
+			str get_name();
+
 			DynamicArray impls;
 			variant			 args;
 
@@ -351,6 +355,8 @@ class xss_method : public xss_object
 			xss_method();
 			xss_method(const xss_method& other);
 			xss_method(const str& name, XSSType type, variant args, variant code);
+
+			str get_name();
 
 			virtual XSSType type();
 
@@ -411,7 +417,8 @@ struct xss_event_schema : xss_object_schema<xss_event>
 
 				inherit_from<xss_object>();
 
-        property_("name",  &xss_event::id_);
+        readonly_property<str>("name", &xss_event::get_name);
+
         property_("impls", &xss_event::impls);
 				readonly_property<bool>("implemented", &xss_event::implemented);
       }
@@ -425,7 +432,8 @@ struct xss_method_schema : xss_object_schema<xss_method>
 
 				inherit_from<xss_object>();
 
-        property_("name", &xss_method::id_);
+        readonly_property<str>("name", &xss_method::get_name);
+
         property_("args", &xss_method::args_);
         property_("code", &xss_method::code_);
       }
@@ -439,7 +447,8 @@ struct xss_property_schema : xss_object_schema<xss_property>
 
 				inherit_from<xss_object>();
 
-				property_("name",  &xss_property::id_);
+        readonly_property<str>("name", &xss_property::get_name);
+
         property_("get",   &xss_property::get);
         property_("set",   &xss_property::set);
         property_("value", &xss_property::value_);
@@ -464,9 +473,9 @@ struct renderer_schema : object_schema<T>
   {
     virtual void declare_base()
       {
-        implements<IRenderer>();
+        this->template implements<IRenderer>();
 
-        method_<str, 0>("render", &T::render);
+        this->template method_<str, 0>("render", &T::render);
       }
 
     virtual void declare()
