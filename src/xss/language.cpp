@@ -322,6 +322,8 @@ void code_type_resolver::expression_(stmt_expression& info)
                                   }
                               }
 
+                            //do nothing for now
+                            /*
                             if (nofound)
                               {
                                 param_list error;
@@ -331,6 +333,7 @@ void code_type_resolver::expression_(stmt_expression& info)
 
                                 xss_throw(error);
                               }
+                            */
                           }
                       }
                     else

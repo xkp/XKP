@@ -1,11 +1,11 @@
 <application name="SimpleTest" title="Simple Sample Android Application" src="simple.xs" width="300" height="200">
-    <label id="lblFirstName" caption="Enter firstname: " x="10" y="10" width="140" height="30"/>
-    <editbox id="edtFirstName" x="120" y="10" width="150" height="30"/>
+    <label id="lblFirstName" caption="Enter firstname: " x="10" y="20" width="140" height="40"/>
+    <editbox id="edtFirstName" x="120" y="10" width="150" height="40"/>
 	
-    <label id="lblLastName" caption="Enter lastname: " x="10" y="50" width="140" height="30"/>
-    <editbox id="edtLastName" x="120" y="50" width="150" height="30"/>
+    <label id="lblLastName" caption="Enter lastname: " x="10" y="70" width="140" height="40"/>
+    <editbox id="edtLastName" x="120" y="60" width="150" height="40"/>
 	
-    <button id="btnFullName" caption="Resolve FullName" x="10" y="90" width="100" height="33"/>
+    <button id="btnFullName" caption="Resolve FullName" x="40" y="110" width="200" height="43"/>
 	
-    <label id="lblFullName" caption="Your fullname is " x="10" y="130" width="200" height="30"/>
+    <label id="lblFullName" caption="Your fullname is " x="10" y="170" width="200" height="30"/>
 </application>

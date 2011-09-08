@@ -15,16 +15,16 @@
 	int minAPILevel = 4;
 	if(appOptions.android_api_level)
 	{
-		int apil = appOptions.android_api_level;
+		int apiL = appOptions.android_api_level;
 		
-		if(apil > minAPILevel && apil < 13)
+		if(apiL > minAPILevel && apiL < 13)
 		{
-			targetAPILevel = apil;
+			targetAPILevel = apiL;
 			compiler.log("API Level = " + targetAPILevel);
 		}
 		else
 		{
-			compiler.error("The number of Android API level version is not correct", android_api_level = apil);
+			compiler.error("The number of Android API level version is not correct", android_api_level = apiL);
 		}
 	}
 	
@@ -43,9 +43,6 @@
 	}
 	
 	string output_filename;
-	output_filename = appName + "/build.bat";
-	compiler.xss("build.bat.xss", output_file = output_filename, appName, targetAPILevel, appOutputPath);
-	
 	output_filename = appName + "/" + "AndroidManifest.xml";
 	compiler.xss("AndroidManifest.xml.xss", output_file = output_filename, appName, minAPILevel, targetAPILevel);
 	
@@ -73,12 +70,26 @@
 		compiler.xss("xkpSwitcher.java.xss", output_file = output_filename, appName);
 	}
 	
-	if(appOptions.android_eclipse_project)
+	if(appOptions.android_project_type == "eclipse")
 	{
-		//TODO: copy .project and .classpath files to output_path
-		// .project file should be change the third line on the 'name' tag
-		//ERROR: some incorrect indent don't facilitate the correct use of .project file
-		//       the big problem is with tab characters
+		output_filename = appName + "/" + ".project";
+		compiler.xss("eclipseProject.project.xss", output_file = output_filename, appName);
+	
+		output_filename = appName + "/" + ".classpath";
+		compiler.xss("eclipseProject.classpath.xss", output_file = output_filename);
+		
+		output_filename = appName + "/" + "default.properties";
+		compiler.xss("eclipseProject.default.prop.xss", output_file = output_filename, targetAPILevel);
+	}
+	else
+	if(appOptions.android_project_type == "script")
+	{
+		output_filename = appName + "/build.bat";
+		compiler.xss("build.bat.xss", output_file = output_filename, appName, targetAPILevel, appOutputPath);
+	}
+	else
+	{
+		compiler.error("Project type is not implemented", android_project_type = appOptions.android_project_type);
 	}
 
 </xss:code>

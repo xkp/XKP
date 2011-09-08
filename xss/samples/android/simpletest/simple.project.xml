@@ -8,20 +8,23 @@
 	</path>
 	
 	<!--
-		DOC: 'eclipse_project' option declare the structure of project exported
 		DOC: 'android_api_level' is a API level version of exported Android project
-		DOC: 'android_type_project' is a type of output project
+		DOC: 'android_project_type' is a type of output project that would be any of 
+			"eclipse", "ant" or "script" values
 		
 		TODO: tab character configuration with number of spaces for resolve indent problem
 		TODO: copy files .classpath, default.properties, res/values/attrs.xml
 		TODO: create folders libs, assets, lib, gen, res/drawable-* with files
 	-->
 	
+	<!--
+    <output_file src="copy.defaults/res/values/attrs.xml" dst="res/values/attrs.xml"/>
+	-->
+	
 	<options 
+		event_scope="instance" 
 		android_api_level="8" 
-		android_type_project="eclipse/ant/script" 
-		android_eclipse_project="true" 
-		android_ant_project="true"/>
+		android_project_type="eclipse"/>
 	
 	<idiom src="../../../idioms/android/classes.xml"/>
 </project>

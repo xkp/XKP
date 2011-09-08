@@ -22,7 +22,8 @@ for(var i in application.children)
 		{
 			out()
 			{
-				event id: <xss:e v="ev.id"/> event output_id: <xss:e v="ev.output_id"/>
+				event id: <xss:e v="ev.id"/>
+				event output_id: <xss:e v="ev.output_id"/>
 			}
 			
 			if(ev.interface)

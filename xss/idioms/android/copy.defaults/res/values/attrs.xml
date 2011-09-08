@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<declare-styleable name="XKPLayout">
+		<attr name="layout_x" format="dimension"/>
+		<attr name="layout_y" format="dimension"/>
+		<attr name="autosize_x" format="boolean"/>
+		<attr name="autosize_y" format="boolean"/>
+		<attr name="placement">
+			<enum name="PL_NONE"   value="0"/>
+			<enum name="PL_TOP"    value="1"/>
+			<enum name="PL_LEFT"   value="2"/>
+			<enum name="PL_RIGHT"  value="3"/>
+			<enum name="PL_BOTTOM" value="4"/>
+			<enum name="PL_CLIENT" value="5"/>
+			<enum name="PL_CENTER" value="6"/>
+		</attr>
+	</declare-styleable>
+</resources>

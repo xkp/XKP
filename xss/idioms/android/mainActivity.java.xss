@@ -20,6 +20,14 @@ public class Act<xss:e value="appName"/>
 	
 	for(var inst in android.instances)
 	{
+		if(inst.id && inst.id != application.id)
+		{
+			out(indent = 1, marker = "declarations")
+			{
+                private <xss:e value="inst.type.output_id"/> <xss:e value="inst.output_id"/>;
+			}
+		}
+		
 		//find necessary imports without duplicates
 		if(inst.imports && !inst.xkpview)
 		{
@@ -54,9 +62,6 @@ public class Act<xss:e value="appName"/>
 		bool firstTime = true;
 		for(var e in inst.events)
 		{
-			var a = e.interface;
-			compiler.log(e.interface);
-			
 			if(e.interface && e.implemented)
 			{
 				bool found2 = false;
@@ -103,7 +108,7 @@ public class Act<xss:e value="appName"/>
 					{
 						for(var e_insti in insti.events)
 						{
-							if(e_insti.event_name == e.output_id && e_insti.implemented)
+							if(e_insti.output_id == e.output_id && e_insti.implemented)
 							{
 								out(indent = 2, marker = "events")
 								{
@@ -128,21 +133,7 @@ public class Act<xss:e value="appName"/>
 </xss:code>
 
 {
-<xss:code>
-	for(var inst in android.instances)
-	{
-		if(inst.name == null)
-			continue;
-		
-		if(inst.id && inst.id != application.id)
-		{
-			out(indent = 1)
-			{
-                private <xss:e value="inst.type.output_id"/> <xss:e value="inst.output_id"/>;
-			}
-		}
-	}
-</xss:code>
+	<xss:marker id="declarations"/>
 
     /** Called when the activity is first created. */
     @Override
@@ -164,7 +155,7 @@ public class Act<xss:e value="appName"/>
 		{
 			out(indent = 2)
 			{
-                this.<xss:e value="inst.output_id"/> = (<xss:e value="inst.type.output_id"/>) findViewById(R.id.<xss:e value="inst.id"/>);
+                <xss:e value="inst.output_id"/> = (<xss:e value="inst.type.output_id"/>) findViewById(R.id.<xss:e value="inst.id"/>);
 			}
 		}
 		
@@ -174,7 +165,7 @@ public class Act<xss:e value="appName"/>
 			{
 				out(indent = 2)
 				{
-                    this.<xss:e value="inst.output_id"/>.set<xss:e value="e.interface"/>(this);
+                    <xss:e value="inst.output_id"/>.set<xss:e value="e.interface"/>(this);
 				}
 			}
 		}
@@ -190,7 +181,8 @@ public class Act<xss:e value="appName"/>
 		{
 			for(var e in inst.events)
 			{
-				compiler.xss("../java/event.xss", e);
+				string new_id = e.output_id + inst.id;
+				compiler.xss("../java/event.xss", e, new_id);
 			}
 		}
 		
