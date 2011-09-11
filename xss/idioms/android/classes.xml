@@ -36,6 +36,10 @@
 				set_xss="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setAutoSizeY" 
 				get_xss="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).getAutoSizeY()"/>
 			
+			<!-- 
+				The possible values of this property are View.VISIBLE, View.INVISIBLE and View.GONE
+			-->
+			<property id="visible" ns="android" type="int" set_fn="setVisibility" get_fn="getVisibility"/>
 			<property id="enabled" ns="android" type="bool" set_fn="setEnabled" get_fn="isEnabled"/>
 			
 			<!-- top, bottom, left, right, center_vertical, fill_vertical, center_horizontal, fill_horizontal, center, fill, clip_vertical, clip_horizontal-->

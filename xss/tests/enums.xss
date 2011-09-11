@@ -1,0 +1,46 @@
+<xss:code>
+	compiler.log("Rendering test with enum class...");
+	
+	//base path of source files are base path of idioms files...
+	compiler.copy(src = "enums.xss", dst = "..\production\enums.xss");
+	
+	for(var i in enum_idiom.instances)
+	{
+		out()
+		{
+			Instance: name = "<xss:e value="i.output_id"/>", type = "<xss:e value="i.type.output_id"/>"
+		}
+		
+		for(var p in i.properties)
+		{
+			out()
+			{
+				<xss:e value="p.output_id"/> = <xss:e value="p.value"/>
+			}
+		}
+		
+		for(var e in i.events)
+		{
+			if(e.implemented)
+			{
+				out()
+				{
+					void <xss:e value="e.output_id"/>() <xss:open_brace/>
+				}
+				
+				for(var impl in e.impls)
+				{
+					out()
+					{
+						<xss:e>impl.render()</xss:e>
+					}
+				}
+				
+				out()
+				{
+					<xss:close_brace/>
+				}
+			}
+		}
+	}
+</xss:code>

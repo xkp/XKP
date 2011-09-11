@@ -1,0 +1,45 @@
+<module id="enum_idiom">
+    <types>
+	
+        //testing enums class
+		<class id="visibility" enum="true" output_id="int" default_value="true">
+			<property id="true" type="int" output_id="View.VISIBLE"/>
+			<property id="false" type="int" output_id="View.INVISIBLE"/>
+			<property id="gone" type="int" output_id="View.GONE"/>
+		</class>
+		
+		<class id="placement" enum="true" output_id="Placement" default_value="none">
+			<property id="none" type="int" output_id="PL_NONE"/>
+			<property id="top" type="int" output_id="PL_TOP"/>
+			<property id="left" type="int" output_id="PL_LEFT"/>
+			<property id="right" type="int" output_id="PL_RIGHT"/>
+			<property id="bottom" type="int" output_id="PL_BOTTOM"/>
+			<property id="client" type="int" output_id="PL_CLIENT"/>
+			<property id="center" type="int" output_id="PL_CENTER"/>
+		</class>
+		
+		<class id="button" output_id="Button">
+			<property id="caption" output_id="property:text" type="string" 
+				set_fn="setText(<xss:e v='value'/>)" 
+				get_fn="text()"/>
+			<property id="width" output_id="property:layout_width" type="int" 
+				set_fn="layout(<xss:e v='caller'/>.getLeft(), <xss:e v='caller'/>.getTop(), <xss:e v='caller'/>.getLeft() + <xss:e v='value'/>, <xss:e v='caller'/>.getHeight())" 
+				get_fn="getWidth()"/>
+			<property id="height" output_id="property:layout_height" type="int" 
+				set_fn="layout(<xss:e v='caller'/>.getLeft(), <xss:e v='caller'/>.getTop(), <xss:e v='caller'/>.getLeft() + <xss:e v='value'/>, <xss:e v='caller'/>.getHeight())" 
+				get_fn="getHeight()"/>
+			<property id="visible" output_id="property:visible" type="visibility" 
+				set_fn="setVisibility(<xss:e v='value'/>)" 
+				get_fn="getVisibility()"/>
+			<property id="enabled" output_id="property:enabled" type="bool" 
+				set_fn="setEnabled(<xss:e v='value'/>)" 
+				get_fn="isEnabled()"/>
+			<property id="placement" output_id="xkp:placement" type="placement" 
+				set_fn="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setPlacement(<xss:e v='value'/>)" 
+				get_fn="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).getPlacement()"/>
+			
+			<event id="click" output_id="onClick" />
+		</class>
+		
+    </types>
+</module>
