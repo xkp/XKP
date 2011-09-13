@@ -2,7 +2,7 @@
 	compiler.log("Rendering test with enum class...");
 	
 	//base path of source files are base path of idioms files...
-	compiler.copy(src = "enums.xss", dst = "..\production\enums.xss");
+	//compiler.copy(src = "enums.xss", dst = "..\production\enums.xss");
 	
 	for(var i in enum_idiom.instances)
 	{
