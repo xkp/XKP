@@ -1,0 +1,18 @@
+<xss:classes>
+    <class id="move_anim" super="sequence">
+        <at time="0">
+            <animate property="target.position.x" from="0" to="600" in="2"/>
+        </at>
+        <at time="2">
+            <animate property="target.position.x" from="600" to="0" in="4"/>
+        </at>
+    </class>
+	 <class id="fade_anim" super="sequence">
+        <at time="0">
+            <animate property="target.opacity" from="1" to="0" in="2"/>
+        </at>
+        <at time="2">
+            <animate property="target.opacity" from="0" to="1" in="4"/>
+        </at>
+    </class>
+</xss:classes>

@@ -903,6 +903,56 @@ fs::path xss_compiler::compiling()
     return compiling_;
   }
 
+void xss_compiler::copy_file(const str& src_file, const str& dst_file)
+  {
+    if (src_file.empty())
+      {
+				param_list error;
+				error.add("id", SProjectError);
+				error.add("desc", SCopyFileEmpty);
+
+				xss_throw(error);
+      }
+
+    fs::path src = base_path_ / src_file;
+
+    if (!fs::exists(src))
+      {
+				param_list error;
+				error.add("id", SProjectError);
+				error.add("desc", SFileNotFound);
+				error.add("file", src.string());
+
+				xss_throw(error);
+      }
+
+    //do output
+    fs::path dst = output_path_ / dst_file;
+
+    fs::path dst_path = dst;
+    bool is_directory = dst_file[dst_file.size() - 1] == '/'; //td: !!!
+    if (!is_directory)
+      dst_path = dst.parent_path();
+    else
+      dst /= src.filename();
+
+    bool do_copy = true;
+    if (fs::exists(dst))
+      {
+        std::time_t src_modified = boost::filesystem::last_write_time( src ) ;
+        std::time_t dst_modified = boost::filesystem::last_write_time( dst ) ;
+
+        do_copy = src_modified != dst_modified;
+      }
+
+    if (do_copy)
+      {
+        dst_path = fs::system_complete(dst_path);
+        fs::create_directories(dst_path);
+        fs::copy_file(src, dst, fs::copy_option::overwrite_if_exists);
+      }
+  }
+
 void xss_compiler::push_renderer(XSSRenderer renderer)
   {
     if (renderers_.empty())

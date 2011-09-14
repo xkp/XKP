@@ -1,0 +1,9 @@
+<application src="" width="600" height="400">
+    <resources>
+        <!-- declare the images to be used
+		Available:  image -->
+    </resources>
+
+    <!-- describe your components
+		 Available:  div, switch, img, label, button, state_button, progress_bar, line -->
+</application>

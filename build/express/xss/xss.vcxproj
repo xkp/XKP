@@ -96,6 +96,7 @@
     <ClInclude Include="..\..\..\include\xss\language.h" />
     <ClInclude Include="..\..\..\include\xss\lang\debug.h" />
     <ClInclude Include="..\..\..\include\xss\lang\js.h" />
+    <ClInclude Include="..\..\..\include\xss\lang\waxjs.h" />
     <ClInclude Include="..\..\..\include\xss\object_reader.h" />
     <ClInclude Include="..\..\..\include\xss\utils.h" />
     <ClInclude Include="..\..\..\include\xss\xss_compiler.h" />
@@ -128,6 +129,7 @@
     <ClCompile Include="..\..\..\src\xss\lang\debug.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang\java.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang\js.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang\waxjs.cpp" />
     <ClCompile Include="..\..\..\src\xss\object_reader.cpp" />
     <ClCompile Include="..\..\..\src\xss\xss_compiler.cpp" />
     <ClCompile Include="..\..\..\src\xss\xss_context.cpp" />

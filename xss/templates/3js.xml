@@ -1,0 +1,21 @@
+<application src="3js.xs" title="" renderer="canvas" background="#FFFFFF">
+
+	<resources>	
+		<!-- declare materials, meshes, etc
+		Available:  basic_material, lambert_material, phong_material
+		-->
+	</resources>
+	
+	<scene>
+        <!-- describe your scene
+		Available:  camera, quake_camera, 
+                    ambient_light, directional_light, point_light 
+                    transform, cylinder, cube, plane, sphere, icosahedron 
+		-->
+        <camera id="sample_camera" fov="75" aspect="1.5" near="1" far="3000">
+			<position x="0" y="0" z="0"/>			
+		</camera>
+	</scene>
+			
+</application>
+

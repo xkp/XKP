@@ -144,6 +144,7 @@ namespace xkp
         str         idiom_type_path(XSSObject obj, const str& file);
         str         full_path(const str& file);
         fs::path    compiling();
+        void        copy_file(const str& src, const str& dst);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -212,6 +213,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<str,      2>("idiom_path",	      &xss_compiler::idiom_path);
         method_<str,      1>("full_path",	        &xss_compiler::full_path);
         method_<str,      0>("output_path",       &xss_compiler::output_path);
+        method_<void,     2>("copy_file",         &xss_compiler::copy_file);
       }
   };
 
