@@ -2,7 +2,7 @@
 	compiler.log("Rendering test with enum class...");
 	
 	//base path of source files are base path of idioms files...
-	compiler.copy_file(src = "enums.xss", dst = "..\production\enums.xss");
+	compiler.copy_file(src = "enums.xss", dst = "../production/enums.xss");
 	
 	for(var i in enum_idiom.instances)
 	{
@@ -13,8 +13,8 @@
 		
 		for(var p in i.properties)
 		{
-            if (!p.type.is_enum)
-                continue;
+			if (!p.type.is_enum)
+				continue;
 
 			out()
 			{
@@ -23,7 +23,7 @@
 		}
 		
 		/*
-        for(var e in i.events)
+		for(var e in i.events)
 		{
 			if(e.implemented)
 			{
