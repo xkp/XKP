@@ -8,7 +8,7 @@
 			<property id="gone" type="int" output_id="GONE"/>
 		</enum>
 		
-		<enum id="placement" enum="true" output_id="Placement" default_value="none">
+		<enum id="EPlacement" enum="true" output_id="Placement" default_value="none">
 			<property id="none" type="int" output_id="PL_NONE"/>
 			<property id="top" type="int" output_id="PL_TOP"/>
 			<property id="left" type="int" output_id="PL_LEFT"/>
