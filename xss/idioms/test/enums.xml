@@ -2,11 +2,11 @@
     <types>
 	
         //testing enums class
-		<class id="visibility" enum="true" output_id="int" default_value="true">
-			<property id="true" type="int" output_id="View.VISIBLE"/>
-			<property id="false" type="int" output_id="View.INVISIBLE"/>
-			<property id="gone" type="int" output_id="View.GONE"/>
-		</class>
+		<enum id="EVisibility" enum="true" output_id="View" default_value="true">
+			<property id="true" type="int" output_id="VISIBLE"/>
+			<property id="false" type="int" output_id="INVISIBLE"/>
+			<property id="gone" type="int" output_id="GONE"/>
+		</enum>
 		
 		<enum id="placement" enum="true" output_id="Placement" default_value="none">
 			<property id="none" type="int" output_id="PL_NONE"/>
@@ -28,13 +28,13 @@
 			<property id="height" output_id="property:layout_height" type="int" 
 				set_fn="layout(<xss:e v='caller'/>.getLeft(), <xss:e v='caller'/>.getTop(), <xss:e v='caller'/>.getLeft() + <xss:e v='value'/>, <xss:e v='caller'/>.getHeight())" 
 				get_fn="getHeight()"/>
-			<property id="visible" output_id="property:visible" type="visibility" 
+			<property id="visible" output_id="property:visible" type="EVisibility" 
 				set_fn="setVisibility(<xss:e v='value'/>)" 
 				get_fn="getVisibility()"/>
 			<property id="enabled" output_id="property:enabled" type="bool" 
 				set_fn="setEnabled(<xss:e v='value'/>)" 
 				get_fn="isEnabled()"/>
-			<property id="placement" output_id="xkp:placement" type="placement" 
+			<property id="placement" output_id="xkp:placement" type="EPlacement" 
 				set_fn="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setPlacement(<xss:e v='value'/>)" 
 				get_fn="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).getPlacement()"/>
 			

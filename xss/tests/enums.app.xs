@@ -1,20 +1,22 @@
 
 on btn.click()
 {
+	var pl = EPlacement.left;
+	
 	placement++;
 	
-	if(visible == true)
+	if(visible == EVisibility.true)
 	{
-		visible = false;
+		visible = EVisibility.false;
 	} 
 	else 
-	if(visible == false)
+	if(visible == EVisibility.false)
 	{
-		visible = gone;
+		visible = EVisibility.gone;
 	}
 	else
 	{
-		visible = true;
+		visible = EVisibility.true;
 	}
 	
 	enabled = !enabled;
