@@ -3,12 +3,10 @@
 	<types>
 	
 		<class id="vector3d">		
-            <property id="x" type="float" />
-			<property id="y" type="float" />
-			<property id="z" type="float" />		
-		</class>
-		
-		<class id="transformation"/>
+            <property id="x" type="float" use_plain_value="true"/>
+			<property id="y" type="float" use_plain_value="true"/>
+			<property id="z" type="float" use_plain_value="true"/>		
+		</class>	
 		
 		<class id="material">
 			<array id="constructor_params">
@@ -76,18 +74,22 @@
 		</class>
 		
 		<class id="meshable">						
-            <property id="color" type="string" set_fn="materials[ 0 ].color.setHex" not_use_q_marks="true"/>
-			<property id="opacity" type="float" output_id="materials[0].opacity" not_use_q_marks="true"/>
+            <property id="color" type="string" set_fn="materials[ 0 ].color.setHex" use_plain_value="true"/>
+			<property id="opacity" type="float" output_id="materials[0].opacity" use_plain_value="true"/>
 			<property id="overdraw" type="string"/>
 			<property id="double_sided" type="string" output_id="doubleSided"/>
 							
-			<property id="position" type="vector3d" />
-			<property id="rotation" type="vector3d" />
-			<property id="scale" type="vector3d" />
+			<property id="position" type="vector3d"/>
+			<property id="rotation" type="vector3d"/>
+			<property id="scale" type="vector3d"/>
 		</class>
 	
-		<class id="transform" output_id="THREE.Object3D"/>
-						
+		<class id="transform" output_id="THREE.Object3D">
+			<property id="position" type="vector3d"/>
+			<property id="rotation" type="vector3d"/>
+			<property id="scale" type="vector3d"/>
+		</class>
+				
 		<class id="light"> 					
 			<property id="hex" type="string" dont_init="true"/>			
 			<property id="position" type="vector3d"/>
@@ -123,7 +125,7 @@
 			<property id="distance" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="camera" output_id="THREE.Camera">
+		<class id="camera" output_id="THREE.Camera" instantiator="camera_renderer.xss">
 			<array id="constructor_params">				
 				<parameter property="fov"/>
 				<parameter property="aspect"/>
@@ -141,7 +143,7 @@
 			<property id="scale" type="vector3d"/>
 		</class>
 	
-		<class id="quake_camera" output_id="THREE.QuakeCamera" instantiator="param_in_obj.xss">
+		<class id="quake_camera" output_id="THREE.QuakeCamera" instantiator="camera_renderer.xss">
 			<array id="constructor_params"> 				
 				<parameter property="fov"/>
 				<parameter property="aspect"/>
@@ -200,7 +202,7 @@
 			<property id="segments_width" output_id="segmentsWidth" type="string" dont_init="true"/>
 			<property id="segments_height" output_id="segmentsHeight" type="string" dont_init="true"/>
 			<property id="segments_depth" output_id="segmentsDepth" type="string" dont_init="true"/>				
-			<property id="cube_materials" type="string" dont_init="true" not_use_q_marks="true"/>
+			<property id="cube_materials" type="string" dont_init="true" use_plain_value="true"/>
 			<property id="flipped" type="string" dont_init="true"/>
 			<property id="sides" type="string" dont_init="true"/>
 		</class>
@@ -251,9 +253,17 @@
 			<property id="array" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="bin_model" output_id="THREE.BinaryLoader" instantiator="model_renderer.xss"/>
-		<class id="json_model" output_id="THREE.JSONLoader" instantiator="model_renderer.xss"/>
-				
+		<class id="bin_model" output_id="THREE.BinaryLoader" dont_render="true" instantiator="model_renderer.xss">
+			<property id="position" type="vector3d"/>
+			<property id="rotation" type="vector3d"/>
+			<property id="scale" type="vector3d"/>
+		</class>
+		
+		<class id="json_model" output_id="THREE.JSONLoader" dont_render="true" instantiator="model_renderer.xss">
+			<property id="position" type="vector3d"/>
+			<property id="rotation" type="vector3d"/>
+			<property id="scale" type="vector3d"/>
+		</class>		
 	</types>
 	
 </module>

@@ -8,7 +8,7 @@
 			<property id="gone" type="int" output_id="View.GONE"/>
 		</class>
 		
-		<class id="placement" enum="true" output_id="Placement" default_value="none">
+		<enum id="placement" enum="true" output_id="Placement" default_value="none">
 			<property id="none" type="int" output_id="PL_NONE"/>
 			<property id="top" type="int" output_id="PL_TOP"/>
 			<property id="left" type="int" output_id="PL_LEFT"/>
@@ -16,7 +16,7 @@
 			<property id="bottom" type="int" output_id="PL_BOTTOM"/>
 			<property id="client" type="int" output_id="PL_CLIENT"/>
 			<property id="center" type="int" output_id="PL_CENTER"/>
-		</class>
+		</enum>
 		
 		<class id="button" output_id="Button">
 			<property id="caption" output_id="property:text" type="string" 

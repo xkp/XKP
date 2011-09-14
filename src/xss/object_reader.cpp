@@ -16,6 +16,7 @@ const str SCannotParseXML("Invalid XML file");
 const str STypeNotFound("Cannot find type");
 const str SUnnamedArray("Arrays must have id");
 const str SPropertyTypeMismatch("Property type does not its value");
+const str SInvalidEnum("Invalid enum");
 
 //xss_object_reader
 xss_object_reader::xss_object_reader(XSSContext ctx):
@@ -108,7 +109,33 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, b
                       {
                         XSSProperty new_prop(new xss_property(prop->id(), prop->type(), variant(), prop->get, prop->set, result));
                         new_prop->copy(XSSObject(prop)); //sort of inefficient, but safe & consistent
-                        new_prop->value_ = attribute_value(attr);
+                        
+                        XSSType prop_type = prop->type();
+                        if (prop_type->is_enum())
+                          {
+                            XSSProperty enum_prop = prop_type->get_property(attr_value);
+                            if (!enum_prop)
+                              {
+				                        param_list error;
+				                        error.add("id", SReaderError);
+				                        error.add("desc", SInvalidEnum);
+				                        error.add("enum type", prop_type->id());
+				                        error.add("value", attr_value);
+
+				                        xss_throw(error);
+                              }
+
+                            Language lang     = ctx_->get_language();
+                            str      expr_str = prop_type->id() + lang->resolve_separator() + attr_value;
+                            
+                            expression expr;
+                            xs_utils   xs; 
+                            xs.compile_expression(expr_str, expr);
+
+                            new_prop->value_ = lang->compile_expression(expr, ctx_);
+                          }
+                        else
+                          new_prop->value_ = attribute_value(attr);
 
                         result->properties()->push_back(new_prop);
                       }

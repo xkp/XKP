@@ -13,13 +13,17 @@
 		
 		for(var p in i.properties)
 		{
+            if (!p.type.is_enum)
+                continue;
+
 			out()
 			{
-				<xss:e value="p.output_id"/> = <xss:e value="p.value"/>
+				<xss:e value="p.output_id"/> = <xss:e value="p.render_value()"/>
 			}
 		}
 		
-		for(var e in i.events)
+		/*
+        for(var e in i.events)
 		{
 			if(e.implemented)
 			{
@@ -42,5 +46,6 @@
 				}
 			}
 		}
+        */
 	}
 </xss:code>

@@ -30,23 +30,28 @@ out(indent = 0)
 if(ev_name == "animate"){	
 	for(var evimpl_anim in impls){
         evimpl_anim.use_this_id(true);
-		out(marker = "render_function", marker_source = "entry")
+		out(marker = "animate_on_render", marker_source = "entry")
 		{
 		<xss:e>evimpl_anim.render()</xss:e>
 		}
 	}				
 }else 
+if(ev_name == "switch_cameras"){	
+	for(var evimpl_cam in impls){
+        evimpl_cam.use_this_id(true);
+		out(marker = "camera_on_render", marker_source = "entry")
+		{
+		<xss:e>evimpl_cam.render()</xss:e>
+		}
+	}				
+}else
 if(ev_name == "mousein" || ev_name == "mouseout"){
 	out(){
 	document.addEventListener( 'mousemove', <xss:e value="ev_name"/>_<xss:e value="it.id"/>, false );
 	function <xss:e value="ev_name"/>_<xss:e value="it.id"/> (event)
 	<xss:open_brace/>
 		event.preventDefault();
-		var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
-		projector = new THREE.Projector();
-		projector.unprojectVector( vector, camera );
-		var ray = new THREE.Ray( camera.position, vector.subSelf( camera.position ).normalize() );
-		var intersects = ray.intersectObject( <xss:e value="it.id"/> );
+		var intersects = get_intersects( event.clientX, event.clientY, <xss:e value="it.id"/>);
 	}
 	if(ev_name == "mousein"){
 		out(){
@@ -102,11 +107,7 @@ if(ev_name == "keyup" || ev_name == "keydown"){
 	if(it.id != "application"){
 		out(){
 		event.preventDefault();
-		var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
-		projector = new THREE.Projector();
-		projector.unprojectVector( vector, camera );
-		var ray = new THREE.Ray( camera.position, vector.subSelf( camera.position ).normalize() );
-		var intersects = ray.intersectObject( <xss:e value="it.id"/> );
+		var intersects = get_intersects( event.clientX, event.clientY, <xss:e value="it.id"/>);
 		if ( intersects.length > 0 ) 
 		<xss:open_brace/>   
 		}			

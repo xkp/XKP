@@ -1,0 +1,34 @@
+<application src="model_1.xs" title="Test 3D" renderer="webgl" background="#356">
+
+	<resources>
+		
+		<json_model id="female_model" src="model/female02/Female02_slim.js"/>		
+		<json_model id="male_model" src="model/male02/Male02_slim.js"/>
+		
+	</resources>
+	
+	<scene>	
+	
+		<camera id="camera_1" fov="75" aspect="1.5" near="1" far="100000">
+			<position z="500"/>            
+		</camera>
+		
+		<ambient_light id="a_ligth" hex="2232576"/>
+		
+		<directional_light id="d_ligth_1" hex="16772829">			
+            <position y="-70" z="100"/>            
+		</directional_light>
+				
+		<json_model src="male_model">
+			<position x="120"  y="-350" z="-350"/>
+			<scale x="4" y="4" z="4"/>
+		</json_model>		
+		
+		<json_model src="female_model">
+			<position x="-110"  y="-350" z="-350"/>
+			<scale x="4" y="4" z="4"/>
+		</json_model>
+
+	</scene>
+			
+</application>

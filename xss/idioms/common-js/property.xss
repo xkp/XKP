@@ -4,7 +4,7 @@
 <xss:parameter id="alias"/>
 
 <xss:code>
-string prop_name = prop.name;
+string prop_name = prop.output_id;
 string assign = ":";
 string separator = ",";
 
@@ -98,7 +98,10 @@ else
     }
     else
     {
-        value = prop.render_value();
+        if(prop.use_plain_value)
+					value = prop.value;
+				else
+					value = prop.render_value();
     }
                 
     if (value != null) //dont initialize empty values

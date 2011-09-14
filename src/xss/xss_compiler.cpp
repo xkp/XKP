@@ -953,6 +953,18 @@ void xss_compiler::copy_file(const str& src_file, const str& dst_file)
       }
   }
 
+void xss_compiler::out(variant w)
+  {
+    XSSRenderer rend = current_renderer();
+    rend->append(xss_utils::var_to_string(w));
+  }
+
+XSSType xss_compiler::get_type(const str& type)
+  {
+    XSSContext ctx = current_context();
+    return ctx->get_type(type);
+  }
+
 void xss_compiler::push_renderer(XSSRenderer renderer)
   {
     if (renderers_.empty())

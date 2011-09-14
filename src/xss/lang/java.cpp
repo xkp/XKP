@@ -167,7 +167,10 @@ str java_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
                     case RESOLVE_TYPE:
                       {
                         XSSType type = si.value;
-                        result = "new " + type->output_id();
+                        if (!type->is_enum())
+                          result = "new " + type->output_id();
+                        else
+                          result = type->output_id();
                         break;
                       }
                     default:

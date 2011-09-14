@@ -1,4 +1,7 @@
 <xss:parameter id="obj"/>
+<xss:parameter id="property_renderer" default="../common-js/property.xss"/>
+<xss:parameter id="method_renderer"   default="../common-js/method.xss"/>
+<xss:parameter id="event_renderer"    default="event.xss"/>
 
 <xss:code>
 
@@ -11,7 +14,7 @@ if(obj.parent.class_name == "resources"){
 	out(){
 	var <xss:e v="obj.src"/>;
 	var <xss:e v="obj.src"/>_loader = } compiler.xss("../common-js/instantiator.xss", obj);
-
+	obj.id = obj.src;
 	out(){	
 		<xss:e value = "obj.src"/>_loader.load(
 		<xss:open_brace/>
@@ -19,9 +22,13 @@ if(obj.parent.class_name == "resources"){
 			<xss:open_brace/>
 				<xss:e v="obj.src"/> = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
 	}
-				for(var child in obj.children){
-					compiler.xss("vector3d_renderer.xss", child);
-				}
+	//render properties
+	for(var prop in obj.properties)
+	{
+		if (prop.dont_init)
+			continue;    
+		compiler.xss(property_renderer, prop, obj, is_class = false);
+	}    			
 	out(){
 				scene.addObject(<xss:e v="obj.src"/>);
 			<xss:close_brace/> 
@@ -29,6 +36,14 @@ if(obj.parent.class_name == "resources"){
 	);	
 	}
 } 
-	
+for(var mthd in obj.methods)
+{
+    compiler.xss(method_renderer, mthd, obj, is_class = false);
+}
+
+//render events as functions
+for(var ev in obj.events)
+{
+    compiler.xss(event_renderer, ev, obj, is_class = false);
+}	
 </xss:code>
-	

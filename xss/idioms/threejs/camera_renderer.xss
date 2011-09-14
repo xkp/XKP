@@ -1,0 +1,14 @@
+<xss:parameter id="obj"/>
+
+<xss:code>
+	if(obj.class_name == "quake_camera")
+		compiler.xss("param_in_obj.xss", obj);
+	else
+	{
+		out(){var <xss:e v="obj.id"/> = }compiler.xss("../common-js/instantiator.xss", obj);	
+	}
+	out(marker = "camera_on_render", marker_source = "entry")
+		{
+		set_active_camera(<xss:e v="obj.id"/>);
+		}	
+</xss:code>

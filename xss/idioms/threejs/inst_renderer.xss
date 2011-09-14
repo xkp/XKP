@@ -1,22 +1,13 @@
 <xss:parameter id="i"/>
 
-<xss:code>	
-		bool no_transformation = true;
+<xss:code>			
 		if(i.instantiator)
 			compiler.xss(i.instantiator, i);
-		else{		
-		if(i.type.super){				
-			if(i.type.super.id == "transformation" && i.parent.class_name != "json_model"
-				&& i.parent.class_name != "bin_model"){
-				compiler.xss("vector3d_renderer.xss", i);
-				no_transformation = false;
-			}			
-		}else{					
+		else{						
 			out(){var <xss:e v="i.id"/> = }
 			compiler.xss("../common-js/instantiator.xss", i);						
-			}		
-		}
-		if(i.parent.class_name == "transform" && no_transformation){			
+			}	
+		if(i.parent.class_name == "transform"){			
 				out(){
 				<xss:e v="i.parent.id"/>.addChild(<xss:e v="i.id"/>);
 				scene.addObject(<xss:e v="i.parent.id"/>);

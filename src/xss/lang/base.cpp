@@ -738,7 +738,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                         case RESOLVE_PROPERTY:
                           {
                             XSSProperty prop = right.value;
-                            str out_id = prop->output_id();
+                            right_str = prop->output_id();
 
 						                if (prop->has("property_xss"))
 							                {
