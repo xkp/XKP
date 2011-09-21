@@ -2,7 +2,13 @@
 
 	<types>
 	
-		<class id="Placement" enum="true" as_expression="true" output_id="int" default_value="none">
+		<enum id="EVisibility" output_id="View" output_type="int" default_value="true">
+			<property id="true" type="int" output_id="VISIBLE"/>
+			<property id="false" type="int" output_id="INVISIBLE"/>
+			<property id="gone" type="int" output_id="GONE"/>
+		</enum>
+		
+		<enum id="EPlacement" output_id="XKPLayout" output_type="int" default_value="none">
 			<property id="none" type="int" output_id="PL_NONE"/>
 			<property id="top" type="int" output_id="PL_TOP"/>
 			<property id="left" type="int" output_id="PL_LEFT"/>
@@ -10,36 +16,33 @@
 			<property id="bottom" type="int" output_id="PL_BOTTOM"/>
 			<property id="client" type="int" output_id="PL_CLIENT"/>
 			<property id="center" type="int" output_id="PL_CENTER"/>
-		</class>
+		</enum>
 
 		<class id="IWidget">
 			<property id="x" output_id="layout_x" ns="xkp" type="int" res_type="dimension" 
-				set_xss="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setLeft" get_fn="getLeft"/>
+				property_xss_set="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setLeft" get_fn="getLeft"/>
 			<property id="y" output_id="layout_y" ns="xkp" type="int" res_type="dimension" 
-				set_xss="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setTop" get_fn="getTop"/>
+				property_xss_set="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setTop" get_fn="getTop"/>
 			
 			<!-- fill_parent == match_parent and wrap_content  -->
 			<!-- fill_parent is deprecated after android api 8 -->
 			<property id="width" output_id="layout_width" default_value="wrap_content" ns="android" type="int" res_type="dimension" 
-				set_xss="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setWidth" get_fn="getWidth"/>
+				property_xss_set="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setWidth" get_fn="getWidth"/>
 			<property id="height" output_id="layout_height" default_value="wrap_content" ns="android" type="int" res_type="dimension" 
-				set_xss="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setHeight" get_fn="getHeight"/>
+				property_xss_set="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setHeight" get_fn="getHeight"/>
 			
-			<property id="placement" ns="xkp" type="int" 
-				set_xss="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setPlacement" 
+			<property id="placement" ns="xkp" type="EPlacement" 
+				property_xss_set="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setPlacement" 
 				property_xss="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).getPlacement()"/>
 			
 			<property id="autosize_x" ns="xkp" type="bool" 
-				set_xss="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setAutoSizeX" 
-				get_xss="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).getAutoSizeX()"/>
+				property_xss_set="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setAutoSizeX" 
+				property_xss="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).getAutoSizeX()"/>
 			<property id="autosize_y" ns="xkp" type="bool" 
-				set_xss="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setAutoSizeY" 
-				get_xss="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).getAutoSizeY()"/>
+				property_xss_set="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setAutoSizeY" 
+				property_xss="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).getAutoSizeY()"/>
 			
-			<!-- 
-				The possible values of this property are View.VISIBLE, View.INVISIBLE and View.GONE
-			-->
-			<property id="visible" ns="android" type="int" set_fn="setVisibility" get_fn="getVisibility"/>
+			<property id="visible" ns="android" type="EVisibility" set_fn="setVisibility" get_fn="getVisibility"/>
 			<property id="enabled" ns="android" type="bool" set_fn="setEnabled" get_fn="isEnabled"/>
 			
 			<!-- top, bottom, left, right, center_vertical, fill_vertical, center_horizontal, fill_horizontal, center, fill, clip_vertical, clip_horizontal-->
@@ -127,7 +130,7 @@
 		<class id="holder" super="IWidget" xkpview="true" output_id="XKPLayout">
 		</class>
 		
-		<class id="div" super="holder">
+		<class id="div" super="holder" xkpview="true" output_id="XKPLayout">
 		</class>
 		
 		<class id="switcher" super="IWidget" xkpview="true" output_id="XKPSwitcher">

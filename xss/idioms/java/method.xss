@@ -2,6 +2,7 @@
 <xss:parameter id="m"/>
 
 <xss:code>
+	//TRACE: log
 	compiler.log("Rendering method: " + m.name);
 	
 	string mthd_type = "void";

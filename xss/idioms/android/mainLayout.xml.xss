@@ -28,7 +28,7 @@
 		{
 			out(indent = ind)
 			{
-                <<xss:e value="strViewName"/><xss:e value="view.name"/> android:id="@+id/<xss:e value="view.id"/>"
+                <<xss:e value="strViewName"/><xss:e value="view.name"/> android:id="@+id/<xss:e value="view.output_id"/>"
 			}
 		}
 		
@@ -42,27 +42,35 @@
 		// generate all children recursively
 		if(view.children)
 		{
-			// customize problematic component
-			//TODO: implement condition equals to c/c++
+			//TODO: in vm implement condition equals to c/c++,...
 			//if(view.type && view.type.id == "replicator")
-			if(view.type) { if(view.type.id == "replicator")
 			
-				//TODO: each child of replicator that is assumed as template
-				//      these are outputs to xml layout file separated.
-				//      how make this?
-				for(var ch in view.children)
-					generate_view(ch, view, ind + 2);
+			bool problematicView = false;
+			if(view.type)
+			{
+				// customize problematic component
+				if(view.type.id == "replicator")
+				{
+					//TODO: each child of replicator is assumed as template
+					//      these are outputs to xml layout file separated.
+					//      how make this?
+					for(var ch in view.children)
+						generate_view(ch, view, ind + 2);
+						
+					//TODO: the name of output file is a id of component
+					//TODO: the structure of this new xml layout file is:
+					//<?xml version="1.0" encoding="utf-8"?>
+					//<merge
+					//	xmlns:android="http://schemas.android.com/apk/res/android"
+					//	xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.switcher">
+					//  <!-- inside the view childs -->
+					//</merge>
 					
-				//TODO: the name of output file is a id of component
-				//TODO: the structure of this new xml layout file is:
-				//<?xml version="1.0" encoding="utf-8"?>
-				//<merge
-				//	xmlns:android="http://schemas.android.com/apk/res/android"
-				//	xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.switcher">
-				//  <!-- inside the view childs -->
-				//</merge>
+					problematicView = true;
+				}
 			}
-			else
+			
+			if(!problematicView)
 			{
 				for(var child in view.children)
 					generate_view(child, view, ind + 2);
@@ -83,17 +91,19 @@
 		for(var prop in view.properties)
 		{
 			//TRACE: log
-			//compiler.log(view.id + " - " + prop.name);
+			compiler.log("Generating xml layout. View: " + view.id + " - Property: " + prop.name);
+			compiler.log(prop.value);
 			
 			if(prop.value == null && prop.default_value)
 			{
 				prop.value = prop.default_value;
+				compiler.log(prop.value);
 			}
 			
 			if(prop.value == null || prop.nolayout ||
 				prop.ns == null || prop.output_id == null)
 				continue;
-		
+			
 			string assignValue;
 			
 			if(prop.res_type == "dimension")
@@ -129,14 +139,7 @@
 			if(prop.id == "placement")
 			{
 				//TODO: fix enum translate of placement type/class
-				//compiler.breakpoint();
-				//var v = compiler.evaluate_property(view, prop.name);
-				
-				//var p = view.find_property(prop.name);
-				//var pvalue1 = p.generate_value();
-				//compiler.log(pvalue1);
-				//var pvalue2 = p.resolve_value();
-				//compiler.log(pvalue2);
+				assignValue = prop.render_value();
 			}
 			
 			out(indent = ind)

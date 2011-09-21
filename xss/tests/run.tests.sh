@@ -23,6 +23,8 @@ for i in 1 2 3 4 5 ; do
 done
 echo $cc ;
 
+rm $LOG_FILENAME ;
+
 count=0 ;
 date +%c >> $LOG_FILENAME ;
 for proj in $PROJECTS_LIST ; do

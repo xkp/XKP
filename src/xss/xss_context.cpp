@@ -31,6 +31,17 @@ str xss_utils::var_to_string(variant& v)
           return "false";
       }
 
+    if (v.is<XSSObject>())
+      {
+        XSSObject obj = v;
+
+        str result = "null";
+        if (obj)
+          result = obj->id();
+
+        return result;
+      }
+
     return variant_cast<str>(v, str());
   }
 

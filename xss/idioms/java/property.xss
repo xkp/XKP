@@ -1,13 +1,18 @@
 
 <xss:parameter id="p"/>
+<xss:parameter id="iname"/>
 
 <xss:code>
+	//TRACE: log
 	compiler.log("Rendering property: " + p.id);
 
 	string prop_type = "Object";
-	
 	if(p.type != null)
 		prop_type = p.type.output_id;
+		
+	string inst_name = "";
+	if(iname)
+		inst_name = iname;
 	
 	if(p.set && p.get)
 	{
@@ -47,12 +52,19 @@
 	}
 	else
 	{
+		//TIP: live is hard 8^)
+		//     look at this enormous condition... :(
+		//TODO: reimplement set and get structure
+		
 		if(p.set_fn == null && p.get_fn == null && 
-		   p.get_xss == null && p.set_xss == null)
+		   p.get_xss == null && p.set_xss == null &&
+		   p.property_xss == null && p.property_xss_set == null)
 		{
+			p.output_id = "prop_" + inst_name + "_" + p.name;
 			out(dont_break = true, indent = 1)
-			{ 
-				private <xss:e value="prop_type"/> <xss:e value="p.name"/> }
+			{
+				private <xss:e value="prop_type"/> <xss:e value="p.output_id"/>
+			}
 			
 			if(p.value)
 			{

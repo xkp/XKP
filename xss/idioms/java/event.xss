@@ -3,6 +3,7 @@
 <xss:parameter id="new_ide"/>
 
 <xss:code>
+	//TRACE: log
 	compiler.log("Rendering event: " + e.name);
 	
 	string ev_id = e.output_id;

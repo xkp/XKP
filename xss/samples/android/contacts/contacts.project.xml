@@ -1,24 +1,30 @@
-<xss:project>
-    <path generator="../../../../idioms/java/android/main.xss"
-          class_library="../../../../idioms/java/android/classes.xml"
-          source_path=""
-          output_path="../../../../production/android/Contacts/"/>
-
+<project 
+	entry_point="../../../idioms/android/main.xss" 
+	language="java" 
+	target="contacts.xml" >
+	
+	<path>
+		<output path="../../../production/android/"/>
+	</path>
+	
 	<!--
-		DOC: 'eclipse_project' option declare the structure of project exported
-		DOC: 'targetSdkVersion' is a SDK version of exported Android project
+		DOC: 'android_api_level' is a API level version of exported Android project
+		DOC: 'android_project_type' is a type of output project that would be any of 
+			"eclipse", "ant" or "script" values
 		
 		TODO: tab character configuration with number of spaces for resolve indent problem
 		TODO: copy files .classpath, default.properties, res/values/attrs.xml
-		TODO: create folders libs, assets, lib, gen, res/drawable-* with files, 
-		      res/values/attrs, src/com/xkp...
+		TODO: create folders libs, assets, lib, gen, res/drawable-* with files
 	-->
 	
-    <options gen_event_method="false" 
-	         eclipse_project="true" 
-			 targetSdkVersion="8"/> 
-
-    <idiom class="java-idiom"/>
+	<!--
+    <output_file src="copy.defaults/res/values/attrs.xml" dst="res/values/attrs.xml"/>
+	-->
 	
-	<application src="contacts.xml"/>
-</xss:project>
+	<options 
+		event_scope="instance" 
+		android_api_level="8" 
+		android_project_type="eclipse"/>
+	
+	<idiom src="../../../idioms/android/classes.xml"/>
+</project>

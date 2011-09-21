@@ -1,28 +1,64 @@
 <xss:code>
 	compiler.log("Rendering test with enum class...");
 	
-	//base path of source files are base path of idioms files...
-	compiler.copy_file(src = "enums.xss", dst = "../production/enums.xss");
+	//base path must be an absolute
+	//before... base path of source files must be base path of idioms files...
 	
+	//ERROR: assertion failed: si.get, file /src/xs/linker.cpp, line 1576
+	//compiler.log(compiler.full_path("enums.xss"));
+	//compiler.copy_file(src = compiler.full_path("enums.xss"), dst = "../production/enums.xss");
+	
+	string srcf = compiler.full_path("enums.xss");
+	
+	compiler.copy_file(src = srcf, dst = "../production/enums.xss");
+	
+	for(var app_p in application.properties)
+	{
+		if(app_p.set_fn == null && app_p.get_fn == null && 
+		   app_p.get_xss == null && app_p.set_xss == null && 
+		   app_p.property_xss == null && app_p.property_xss_set == null)
+		{
+			app_p.output_id = "prop_" + application.output_id + "_" + app_p.name;
+			
+			compiler.log("property id: " + app_p.id);
+			compiler.log("property output_id: " + app_p.output_id);
+		}
+	}
+	
+	enum_idiom.instances += application;
 	for(var i in enum_idiom.instances)
 	{
+		string itype = "";
+		if(i.type)
+			itype = i.type.output_id;
+		
 		out()
 		{
-			Instance: name = "<xss:e value="i.output_id"/>", type = "<xss:e value="i.type.output_id"/>"
+			Instance: name = "<xss:e value="i.output_id"/>", type = "<xss:e value="itype"/>"
 		}
 		
 		for(var p in i.properties)
 		{
+			string etype = "(enum)";
 			if (!p.type.is_enum)
-				continue;
-
+				etype = "";
+			
 			out()
 			{
-				<xss:e value="p.output_id"/> = <xss:e value="p.render_value()"/>
+				<xss:e value="p.output_id"/><xss:e value="etype"/> = <xss:e value="p.render_value()"/>
+			}
+			
+			if(p.set_fn == null && p.get_fn == null && 
+			   p.get_xss == null && p.set_xss == null && 
+			   p.property_xss == null && p.property_xss_set == null)
+			{
+				p.output_id = "prop_" + i.output_id + "_" + p.name;
+				
+				compiler.log("property id: " + p.id);
+				compiler.log("property output_id: " + p.output_id);
 			}
 		}
 		
-		/*
 		for(var e in i.events)
 		{
 			if(e.implemented)
@@ -46,6 +82,5 @@
 				}
 			}
 		}
-        */
 	}
 </xss:code>

@@ -277,6 +277,25 @@ str base_expr_renderer::resolve_assigner(variant operand, XSSObject instance, as
 
     if (prop)
       {
+        if (prop->has("property_xss_set") && !dynamic_get(prop, "property_xss").empty())
+          {
+            capture_property_.prop = prop;
+            capture_property_.xss  = variant_cast<str>(dynamic_get(prop, "property_xss_set"), str());
+
+            for(size_t i = 0; i < capture_property_.xss.size(); i++)
+              {
+                if (capture_property_.xss[i] == '\'')
+	                capture_property_.xss[i] ='"';
+              }
+
+            push_rendered(operand_to_string(instance), 0, instance);
+
+						ai->type = FN_XSS_CALL;
+						ai->data = render_captured_property();
+
+            return ai->data;
+          }
+
         str set_fn = variant_cast<str>(dynamic_get(prop, "set_fn"), ""); //let the outside world determine
                                                                          //if a native function call shouls be made
 
@@ -488,7 +507,7 @@ str base_expr_renderer::get()
                     str this_str = lang->resolve_this(ctx_);
                     if (!this_str.empty())
                       {
-                        if (prop->has("property_xss"))
+                        if (prop->has("property_xss") && !dynamic_get(prop, "property_xss").empty())
                           {
                             capture_property_.prop = prop;
                             capture_property_.xss  = variant_cast<str>(dynamic_get(prop, "property_xss"), str());
@@ -503,8 +522,13 @@ str base_expr_renderer::get()
                             return render_captured_property();
                           }
 
-                        return this_str + separator + ei.value;
-						        }
+                        //return this_str + separator + ei.value;
+                        return this_str + separator + prop->output_id();
+						          }
+                    else
+                      {
+                        return prop->output_id();
+                      }
                     break;
                   }
               }
@@ -599,6 +623,11 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 										ss << ass << "(" << os << " " << op_str << " 1)";
 										break;
 									}
+                case FN_XSS_CALL:
+                  {
+								    ss << ass + "(" + os + ")";
+                    break;
+                  }
 								default:
 									assert(false); //use case trap
 							}
@@ -687,13 +716,13 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
             //and who may I say is calling
             XSSObject caller = get_instance(arg1);
 			      if (!caller)
-			      {
-				      if (arg1.is<expression_identifier>())
-					      {
-						      expression_identifier ei = arg1;
-                  caller = variant_cast<XSSObject>(ctx_->resolve(ei.value, RESOLVE_ANY), XSSObject());
-					      }
-			      }
+			        {
+				        if (arg1.is<expression_identifier>())
+					        {
+						        expression_identifier ei = arg1;
+                    caller = variant_cast<XSSObject>(ctx_->resolve(ei.value, RESOLVE_ANY), XSSObject());
+					        }
+			        }
 
             bool var_caller = false;
             if (arg1.is<expression_identifier>())
@@ -711,7 +740,17 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
               {
 						    if (top && assigner)
 							    {
-								    str result = caller_str + separator + resolve_assigner(arg2, caller, assigner);
+                    str result;
+                    str str_assigner = resolve_assigner(arg2, caller, assigner);
+
+                    if (assigner->type == VANILLA || assigner->type == FN_CALL)
+								      result = caller_str + separator + str_assigner;
+                    else
+                    if (assigner->type == FN_XSS_CALL)
+                      result = str_assigner;
+                    else
+                      assert(false);
+
                     push_rendered(result, op_prec, variant());
                     return;
 							    }
@@ -740,7 +779,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                             XSSProperty prop = right.value;
                             right_str = prop->output_id();
 
-						                if (prop->has("property_xss"))
+                            if (prop->has("property_xss") && !dynamic_get(prop, "property_xss").empty())
 							                {
 								                assert(!capturing_property_); //only a variable property per schema, please
 

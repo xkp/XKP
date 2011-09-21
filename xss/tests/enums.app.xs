@@ -1,25 +1,38 @@
 
-on btn.click()
+property sameName : string = "My owner is application.";
+
+instance btn
 {
-	var pl = EPlacement.left;
+	property sameName : string = "My owner is button 'btn'";
 	
-	placement++;
-	
-	if(visible == EVisibility.true)
+	on click()
 	{
-		visible = EVisibility.false;
-	} 
-	else 
-	if(visible == EVisibility.false)
-	{
-		visible = EVisibility.gone;
+		/*
+		var pl = EPlacement.left;
+		
+		placement++;
+		
+		if(visible == EVisibility.true)
+		{
+			visible = EVisibility.false;
+		} 
+		else 
+		if(visible == EVisibility.false)
+		{
+			visible = EVisibility.gone;
+		}
+		else
+		{
+			visible = EVisibility.true;
+		}
+		
+		enabled = !enabled;
+		
+		width = height * 2;
+		*/
+		//swap
+		var swp = application.sameName;
+		application.sameName = sameName;
+		sameName = swp;
 	}
-	else
-	{
-		visible = EVisibility.true;
-	}
-	
-	enabled = !enabled;
-	
-	width = height * 2;
 }

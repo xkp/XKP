@@ -1,12 +1,12 @@
-<application source="contacts.xs" name="Contacts" title="Contacts" width="300" height="400">
-	<div height="45" placement="Placement.top">
-		<button id="btnLeft" caption="About" width="120" placement="Placement.left"/>
-		<button id="btnRight" caption="Find contact" width="120" placement="Placement.right"/>
+<application name="Contacts" title="Contacts" src="contacts.xs" width="320" height="430">
+	<div height="45" placement="top">
+		<button id="btnLeft" caption="About" width="120" placement="left"/>
+		<button id="btnRight" caption="Find contact" width="120" placement="right"/>
 	</div>
 
-    <switcher id="swtStates" active="divAdd" placement="Placement.client">
+    <switcher id="swtStates" active="divAdd" placement="client">
 		
-        <div id="divAdd" placement="Placement.client">
+        <div id="divAdd" placement="client">
 			<label id="lblFullName" caption="Enter full name: " x="10" y="10" width="140" height="35"/>
 			<label id="lblPhone" caption="Enter phone number: " x="10" y="60" width="140" height="35"/>
 			
@@ -15,10 +15,10 @@
 			
 			<checkbox id="chkVerifier" caption="Check if contact exists " checked="true" x="10" y="120" width="250" height="40"/>
 
-            <button id="btnAddContact" caption="Add contact" height="40" placement="Placement.bottom"/>
+            <button id="btnAddContact" caption="Add contact" height="40" placement="bottom"/>
         </div>
 		
-		<div id="divFind" placement="Placement.client">
+		<div id="divFind" placement="client">
 			<label id="lblFindType" caption="Find by: " x="10" y="10" width="100" height="35"/>
 			<radiobutton id="rdbByName" caption="By Name: " checked="true" x="10" y="60" width="100" height="35"/>
 			<radiobutton id="rdbByPhone" caption="By Phone: " x="10" y="110" width="100" height="35"/>
@@ -27,10 +27,11 @@
 			<editbox id="edtCriterion" x="120" y="220" width="100" height="45"/>
 		</div>
 
-		<div id="divAbout" placement="Placement.client">
-			<label="lblName" caption="XKP Contacts" x="10" y="10" font.size="20"/>
-			<label="lblContact" caption="Emilio Santos" link="xkp.santos@gmail.com" x="10" y="50"/>
+		<div id="divAbout" placement="client">
+			<label id="lblName" caption="XKP Contacts" x="10" y="10" font.size="20"/>
+			<label id="lblContact" caption="Emilio Santos" link="xkp.santos@gmail.com" x="10" y="50"/>
 		</div>
+		
     </switcher>
 	
 </application>

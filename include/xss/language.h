@@ -33,6 +33,7 @@ enum assign_type
 	{
 		VANILLA,
 		FN_CALL,
+    FN_XSS_CALL,
 		XSS_RESOLVE
 	};
 
@@ -254,6 +255,14 @@ struct lang_utils
 												    result = renderer->render(XSSObject(), null);
 												    break;
 											    }
+
+										    case FN_XSS_CALL:
+											    {
+												    result = assign + "(" + value + ")";
+
+												    break;
+											    }
+
 										    default:
 											    assert(false); //trap use cases
 									    }
