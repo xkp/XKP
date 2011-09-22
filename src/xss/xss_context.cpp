@@ -885,7 +885,6 @@ void xss_object::query_properties_impl(query_info &info)
   {
     fs::path file;
     code_context cctx;
-    cctx.this_ = this;
 
     std::vector<variant>::iterator it = properties_->ref_begin();
     std::vector<variant>::iterator nd = properties_->ref_end();
@@ -900,6 +899,7 @@ void xss_object::query_properties_impl(query_info &info)
         if (info.expression != "*")
           {
             xs_utils xs;
+            cctx.this_ = prop;
             variant result = xs.evaluate_xs_expression(info.expression, cctx, file);
             addp = variant_cast<bool>(result, false);
           }

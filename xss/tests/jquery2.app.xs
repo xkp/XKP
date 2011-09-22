@@ -27,7 +27,7 @@ method reset(string s)
 on btn2.click()
 {
 	btn1.caption = "Old value: " + application.target;
-	application.target = 300;
+	target = 300;
 }
 
 on btn3.click()
