@@ -36,14 +36,13 @@ function start(resolution)
 	window.setTimeout(update, resolution);  
 }  
             fade_in = Class.create(ms.state.Sequence,
-{
+        {
     initialize: function($super
                 , manager
-    )
+                    )
     {
         $super(
-        manager
-        );
+        manager        );
                 var this__ = this;
             this.parent_sequence = null;
                     var ____i1 = new ms.state.Interpolator(
@@ -76,8 +75,7 @@ function start(resolution)
                 application.target = 0;
 test_sequence =
 new fade_in(
-g_sequence_manager
-);
+g_sequence_manager);
 	test_sequence.display = function() 
 	{
 		console.log("test_sequence> Target: " + application.target);
@@ -90,8 +88,7 @@ test_sequence1.start();
             test_sequence.parent_sequence = null;
 test_sequence1 =
 new fade_in(
-g_sequence_manager
-);
+g_sequence_manager);
 	test_sequence1.display = function() 
 	{
 		console.log("test_sequence1> Target: " + application.target);

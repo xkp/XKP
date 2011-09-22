@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<declare-styleable name="XKPLayout">
+		<attr name="layout_x" format="dimension"/>
+		<attr name="layout_y" format="dimension"/>
+		<attr name="autosize_x" format="boolean"/>
+		<attr name="autosize_y" format="boolean"/>
+		<attr name="placement">
+			<enum name="XKPLayout.PL_NONE"   value="0"/>
+			<enum name="XKPLayout.PL_TOP"    value="1"/>
+			<enum name="XKPLayout.PL_LEFT"   value="2"/>
+			<enum name="XKPLayout.PL_RIGHT"  value="3"/>
+			<enum name="XKPLayout.PL_BOTTOM" value="4"/>
+			<enum name="XKPLayout.PL_CLIENT" value="5"/>
+			<enum name="XKPLayout.PL_CENTER" value="6"/>
+		</attr>
+	</declare-styleable>
+		
+	<declare-styleable name="XKPSwitcher">
+		<attr name="current" format="reference"/>
+		<attr name="currentIndex" format="integer"/>
+	</declare-styleable>
+	
+	<declare-styleable name="XKPReplicator">
+		<attr name="template" format="reference"/>
+		<attr name="items" format="reference"/>
+		<attr name="data_source" format="reference"/>
+	</declare-styleable>
+</resources>

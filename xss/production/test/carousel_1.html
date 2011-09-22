@@ -43,7 +43,7 @@ else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
 		application.position_items();
-		set_active_camera();
+		set_active_camera(camera_1);
 }
 var materials = 
 new Array(
@@ -81,18 +81,46 @@ new Array(
 var scene = 
 new THREE.Scene(
 );
-var  = 
+var camera_1 = 
 new THREE.Camera(
 45,1.5,1,10000);
-                .position.x = 500;
-                .position.y = 500;
-                .position.z = 1000;
+                camera_1.position.x = 500;
+                camera_1.position.y = 500;
+                camera_1.position.z = 1000;
 	var img1_plane = 
 new THREE.Plane(
 128,164);
 	var img1 = new THREE.Mesh(img1_plane,
 	materials[0]);
 	scene.addObject(img1);
+	document.addEventListener( 'mousemove', mousein_img1, false );
+	function mousein_img1 (event)
+	{
+		event.preventDefault();
+		var intersects = get_intersects( event.clientX, event.clientY, img1);
+		if ( intersects.length > 0 ) 
+		{
+		img1.scale.x = 1.5;
+img1.scale.y = 1.5;
+img1_reflect.scale.x = 1.5;
+img1_reflect.scale.y = 1.5;
+img1_reflect.position.y = -196.800003;
+	    }
+	}
+	document.addEventListener( 'mousemove', mouseout_img1, false );
+	function mouseout_img1 (event)
+	{
+		event.preventDefault();
+		var intersects = get_intersects( event.clientX, event.clientY, img1);
+		if ( !intersects.length > 0 ) 
+		{
+		img1.scale.x = 1;
+img1.scale.y = 1;
+img1_reflect.scale.x = 1;
+img1_reflect.scale.y = 1;
+img1_reflect.position.y = -131.199997;
+	    }
+	}
 	var img1_reflect_plane = 
 new THREE.Plane(
 128,164);
@@ -109,6 +137,34 @@ new THREE.Plane(
 	var img2 = new THREE.Mesh(img2_plane,
 	materials[2]);
 	scene.addObject(img2);
+	document.addEventListener( 'mousemove', mousein_img2, false );
+	function mousein_img2 (event)
+	{
+		event.preventDefault();
+		var intersects = get_intersects( event.clientX, event.clientY, img2);
+		if ( intersects.length > 0 ) 
+		{
+		img2.scale.x = 1.5;
+img2.scale.y = 1.5;
+img2_reflect.scale.x = 1.5;
+img2_reflect.scale.y = 1.5;
+img2_reflect.position.y = -196.800003;
+	    }
+	}
+	document.addEventListener( 'mousemove', mouseout_img2, false );
+	function mouseout_img2 (event)
+	{
+		event.preventDefault();
+		var intersects = get_intersects( event.clientX, event.clientY, img2);
+		if ( !intersects.length > 0 ) 
+		{
+		img2.scale.x = 1;
+img2.scale.y = 1;
+img2_reflect.scale.x = 1;
+img2_reflect.scale.y = 1;
+img2_reflect.position.y = -131.199997;
+	    }
+	}
 	var img2_reflect_plane = 
 new THREE.Plane(
 128,164);
@@ -125,6 +181,34 @@ new THREE.Plane(
 	var img3 = new THREE.Mesh(img3_plane,
 	materials[4]);
 	scene.addObject(img3);
+	document.addEventListener( 'mousemove', mousein_img3, false );
+	function mousein_img3 (event)
+	{
+		event.preventDefault();
+		var intersects = get_intersects( event.clientX, event.clientY, img3);
+		if ( intersects.length > 0 ) 
+		{
+		img3.scale.x = 1.5;
+img3.scale.y = 1.5;
+img3_reflect.scale.x = 1.5;
+img3_reflect.scale.y = 1.5;
+img3_reflect.position.y = -196.800003;
+	    }
+	}
+	document.addEventListener( 'mousemove', mouseout_img3, false );
+	function mouseout_img3 (event)
+	{
+		event.preventDefault();
+		var intersects = get_intersects( event.clientX, event.clientY, img3);
+		if ( !intersects.length > 0 ) 
+		{
+		img3.scale.x = 1;
+img3.scale.y = 1;
+img3_reflect.scale.x = 1;
+img3_reflect.scale.y = 1;
+img3_reflect.position.y = -131.199997;
+	    }
+	}
 	var img3_reflect_plane = 
 new THREE.Plane(
 128,164);
@@ -141,6 +225,34 @@ new THREE.Plane(
 	var img4 = new THREE.Mesh(img4_plane,
 	materials[6]);
 	scene.addObject(img4);
+	document.addEventListener( 'mousemove', mousein_img4, false );
+	function mousein_img4 (event)
+	{
+		event.preventDefault();
+		var intersects = get_intersects( event.clientX, event.clientY, img4);
+		if ( intersects.length > 0 ) 
+		{
+		img4.scale.x = 1.5;
+img4.scale.y = 1.5;
+img4_reflect.scale.x = 1.5;
+img4_reflect.scale.y = 1.5;
+img4_reflect.position.y = -196.800003;
+	    }
+	}
+	document.addEventListener( 'mousemove', mouseout_img4, false );
+	function mouseout_img4 (event)
+	{
+		event.preventDefault();
+		var intersects = get_intersects( event.clientX, event.clientY, img4);
+		if ( !intersects.length > 0 ) 
+		{
+		img4.scale.x = 1;
+img4.scale.y = 1;
+img4_reflect.scale.x = 1;
+img4_reflect.scale.y = 1;
+img4_reflect.position.y = -131.199997;
+	    }
+	}
 	var img4_reflect_plane = 
 new THREE.Plane(
 128,164);
@@ -157,6 +269,34 @@ new THREE.Plane(
 	var img5 = new THREE.Mesh(img5_plane,
 	materials[8]);
 	scene.addObject(img5);
+	document.addEventListener( 'mousemove', mousein_img5, false );
+	function mousein_img5 (event)
+	{
+		event.preventDefault();
+		var intersects = get_intersects( event.clientX, event.clientY, img5);
+		if ( intersects.length > 0 ) 
+		{
+		img5.scale.x = 1.5;
+img5.scale.y = 1.5;
+img5_reflect.scale.x = 1.5;
+img5_reflect.scale.y = 1.5;
+img5_reflect.position.y = -196.800003;
+	    }
+	}
+	document.addEventListener( 'mousemove', mouseout_img5, false );
+	function mouseout_img5 (event)
+	{
+		event.preventDefault();
+		var intersects = get_intersects( event.clientX, event.clientY, img5);
+		if ( !intersects.length > 0 ) 
+		{
+		img5.scale.x = 1;
+img5.scale.y = 1;
+img5_reflect.scale.x = 1;
+img5_reflect.scale.y = 1;
+img5_reflect.position.y = -131.199997;
+	    }
+	}
 	var img5_reflect_plane = 
 new THREE.Plane(
 128,164);
@@ -169,7 +309,7 @@ new THREE.Plane(
                 img5_reflect.rotation.x = Math.PI;
                 application.angle = null;
                 application.start = 0;
-                application.speed = 0.200000003;
+                application.speed = 0.0199999996;
                 application.step = 2 * Math.PI / 5;
                 application.max_rotation = 2 * Math.PI;
                 application.img_array = [img1, img1_reflect, img2, img2_reflect, img3, img3_reflect, img4, img4_reflect, img5, img5_reflect];
@@ -187,6 +327,20 @@ this.img_array[i].position.x = 275 * Math.cos(this.angle);
 this.img_array[i + 1].position.x = 275 * Math.cos(this.angle);
 this.img_array[i].position.z = 275 * Math.sin(this.angle);
 this.img_array[i + 1].position.z = 275 * Math.sin(this.angle);
+}
+	};
+	document.addEventListener( 'mousemove', mousemove_application, false );
+	function mousemove_application (event)
+	{
+	var x = event.clientX;
+	var y = event.clientY;
+		if (x < window.innerWidth / 2)
+{
+application.speed = -0.200000003 * (window.innerWidth / 2 - x) / window.innerWidth / 2;
+}
+if (x > window.innerWidth / 2)
+{
+application.speed = -0.200000003 * (window.innerWidth / 2 - x) / window.innerWidth / 2;
 }
 	};
 if (application.init)

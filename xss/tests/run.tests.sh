@@ -1,32 +1,30 @@
 #!/bin/bash
 
-LOG_FILENAME=result.log
-#XSS_FILENAME=xss.exe
-XSS_FILENAME=xss
-#XSS_PATH=../../bin/Debug/
-XSS_PATH=../../bin/cb/release/
-OUT_PATH=../production/
-CHP_PATH=../tests/
-#EXEC=$XSS_PATH$XSS_FILENAME
-#EXEC=$XSS_FILENAME$XSS_PATH
-EXEC=let "$XSS_FILENAME$XSS_PATH"
-#PROJECTS_LIST=`ls | grep "\.project.xml"`
+# windows structure
+XSS_FILENAME=xss.exe
+XSS_PATH=../../bin/Debug/
 
-#MD5_CREATE=`find . -type f -print0 | xargs -0 md5sum`
-#MD5_VERIFY=`md5sum -c ./ list.md5`
+# linux structure
+#XSS_FILENAME=xss
+#XSS_PATH=../../bin/cb/release/
+
+LOG_FILENAME=../production/result.log
+OUT_PATH=../
+CHP_PATH=tests/
+
+MD5_CREATE=`find . -type f -print0 | xargs -0 md5sum`
+
+EXEC=$XSS_PATH$XSS_FILENAME
+
+PROJECTS_LIST=`ls | grep "\.project.xml"`
+
+test -f $LOG_FILENAME && rm $LOG_FILENAME ;
 
 echo Running tests... Wait please! ;
 
-cc=0 ;
-for i in 1 2 3 4 5 ; do
-	cc=`expr $cc + 1` ;
-done
-echo $cc ;
-
-rm $LOG_FILENAME ;
+#date +%c >> $LOG_FILENAME ;
 
 count=0 ;
-date +%c >> $LOG_FILENAME ;
 for proj in $PROJECTS_LIST ; do
 	echo "Executing project: " $proj ;
 	echo "===[" $proj "]================" >> $LOG_FILENAME ;
@@ -42,10 +40,21 @@ echo ;
 
 if [ "$count" -gt 0 ] ; then
 	echo "Fails" $count "tests." ;
-else
+
+#commented for now
+#else
+
 	echo "All tests executed OK!" ;
-	echo "Verifing hashes..." ;
+	
 	cd $OUT_PATH ;
-	$MD5_VERIFY ;
+	
+	if [ -f list.md5 ] ; then
+		echo "Verifing hashes..." ;
+		md5sum -c list.md5 ;
+	else
+		echo "Creating hashes..." ;
+		find ./production ./samples -type f -print0 | xargs -0 md5sum > list.md5
+	fi
+	
 	cd $CHP_PATH ;
 fi

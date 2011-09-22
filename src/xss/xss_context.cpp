@@ -865,6 +865,66 @@ void xss_object::set_type(XSSType type)
     type_ = type;
   }
 
+//struct xss_object::query_info
+void xss_object::query_info::add_property(XSSProperty prop)
+  {
+    if (has(prop))
+      return;
+
+    found.insert(std::pair<str, XSSProperty>(prop->id(), prop));
+    result->insert(prop);
+  }
+
+bool xss_object::query_info::has(XSSProperty prop)
+  {
+    return found.find(prop->id()) != found.end();
+  }
+
+//continue xss_object
+void xss_object::query_properties_impl(query_info &info)
+  {
+    fs::path file;
+    code_context cctx;
+    cctx.this_ = this;
+
+    std::vector<variant>::iterator it = properties_->ref_begin();
+    std::vector<variant>::iterator nd = properties_->ref_end();
+    for(; it != nd; it++)
+      {
+        XSSProperty prop = *it;
+
+        if (info.has(prop))
+          continue;
+
+        bool addp = true;
+        if (info.expression != "*")
+          {
+            xs_utils xs;
+            variant result = xs.evaluate_xs_expression(info.expression, cctx, file);
+            addp = variant_cast<bool>(result, false);
+          }
+
+        if (addp)
+          {
+            info.add_property(prop);
+          }
+      }
+
+    if (type_)
+      {
+        type_->query_properties_impl(info);
+      }
+  }
+
+DynamicArray xss_object::query_properties(const str& query)
+  {
+    query_info info(query);
+
+    query_properties_impl(info);
+
+    return info.result;
+  }
+
 XSSObject xss_object::find(const str& what)
   {
     if (what.empty())

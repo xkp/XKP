@@ -6,6 +6,26 @@
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript">
 $(function() {
+        application.target = null;
+        application.target_set = function (value)
+        {
+            application.target = value;
+            btn2.text("target acquired " + value);
+for(var i = 0; i < 20; i++)
+{
+btn2.width(btn2.width() + 10);
+if (btn2.width() > 200)
+{
+btn2.width(100);
+}
+}
+        };
+	application.reset = function(s) 
+	{
+		this.target_set(s);
+btn1.text("...");
+btn2.text("...");
+	};
                 btn1.text("One button");
                 btn1.width(100);
 	btn1.click = function()
@@ -26,7 +46,7 @@ application.target_set(300);
 	{    
 		application.reset();
 	};
-});
+		});
 </script>
 <style>
 </style>

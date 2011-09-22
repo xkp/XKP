@@ -7,9 +7,12 @@ import java.util.Arrays;
 public class JavaTest {
 				private static Class_instance1 instance1;
 	private static class Class_application {
-				private Object lvalue 	; 
-				private String yvalue  = "string v" 	; 
-				private ArrayList<string> xvalue  = new ArrayList(Arrays.asList( new Object [] {"value1", "value2", "value3"} )) 	; 
+				private Object prop__lvalue
+				; 
+				private String prop__yvalue
+			 = "string v" 	; 
+				private ArrayList<string> prop__xvalue
+			 = new ArrayList(Arrays.asList( new Object [] {"value1", "value2", "value3"} )) 	; 
 		public String app_test(Integer value) {
 			return "string value";
 		}
@@ -33,9 +36,9 @@ x2 = instance1.ps_value;
 instance1.svalue = x0;
 Object x3;
 x3 = instance1.svalue;
-lvalue = x0;
+prop__lvalue = x0;
 Object x4;
-x4 = lvalue;
+x4 = prop__lvalue;
 Integer ivar = 100;
 String svar = String.valueOf(ivar);
 Double fval = Double.valueOf(svar);
@@ -97,8 +100,10 @@ mthd = instance1.test0(2 * 5, "b" + "a", 1);
 			}
 	}
 	private static class Class_instance1 {
-				private Double xvalue  = 100.199997 	; 
-				private Object svalue 	; 
+				private Double prop__xvalue
+			 = 100.199997 	; 
+				private Object prop__svalue
+				; 
 		public Double test0(Integer value) {
 			Integer a = value;
 Double b = 5.000000;

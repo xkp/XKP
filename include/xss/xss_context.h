@@ -81,6 +81,22 @@ class xss_object : public editable_object<xss_object>,
 
 			virtual XSSType			   type();
 			virtual void           set_type(XSSType type);
+    public:
+      struct query_info
+        {
+          query_info(const str& expr): 
+            expression(expr), result(new dynamic_array) {}
+
+          void add_property(XSSProperty prop);
+          bool has(XSSProperty prop);
+
+          DynamicArray                result;
+          str                         expression;
+          std::map<str, XSSProperty>  found;
+        };
+
+      void                   query_properties_impl(query_info &info);
+      DynamicArray           query_properties(const str& query);
 		public:
       //misc
       XSSObject              find(const str& what);
@@ -388,7 +404,8 @@ struct xss_object_schema : editable_object_schema<T>
         this->template property_<XSSType>     ("type",        &T::type,       &T::set_type);
 				this->template property_<XSSObject>   ("parent",      &T::parent_);
 
-        this->template method_<XSSProperty, 1>("get_property", &T::get_property);
+        this->template method_<DynamicArray, 1>("query_properties", &T::query_properties);
+        this->template method_<XSSProperty, 1> ("get_property",     &T::get_property);
 		}
   };
 

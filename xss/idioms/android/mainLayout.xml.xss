@@ -88,7 +88,11 @@
 	
 	method generate_properties(var view, int ind)
 	{
-		for(var prop in view.properties)
+		//TODO: change query of property when fix results
+		var qproperty = view.query_properties("*");
+		
+		//for(var prop in view.properties)
+		for(var prop in qproperty)
 		{
 			//TRACE: log
 			compiler.log("Generating xml layout. View: " + view.id + " - Property: " + prop.name);

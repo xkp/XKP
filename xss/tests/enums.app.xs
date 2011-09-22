@@ -7,7 +7,6 @@ instance btn
 	
 	on click()
 	{
-		/*
 		var pl = EPlacement.left;
 		
 		placement++;
@@ -29,7 +28,7 @@ instance btn
 		enabled = !enabled;
 		
 		width = height * 2;
-		*/
+		
 		//swap
 		var swp = application.sameName;
 		application.sameName = sameName;

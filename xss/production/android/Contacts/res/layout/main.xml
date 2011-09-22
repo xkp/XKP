@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.xkp.android.Contacts.XKPLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+    xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.Contacts" 
+    android:id="@+id/mainLayoutApplication" 
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+            >
+                <com.xkp.android.Contacts.XKPLayout android:id="@+id/__div1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                <Button android:id="@+id/btnLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                </Button>
+                <Button android:id="@+id/btnRight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                </Button>
+                </com.xkp.android.Contacts.XKPLayout>
+                <com.xkp.android.Contacts.XKPSwitcher android:id="@+id/swtStates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                <com.xkp.android.Contacts.XKPLayout android:id="@+id/divAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                <TextView android:id="@+id/lblFullName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                </TextView>
+                <TextView android:id="@+id/lblPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                </TextView>
+                <EditText android:id="@+id/edtFullName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                </EditText>
+                <EditText android:id="@+id/edtPhoneNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                </EditText>
+                <CheckBox android:id="@+id/chkVerifier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                </CheckBox>
+                <Button android:id="@+id/btnAddContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                </Button>
+                </com.xkp.android.Contacts.XKPLayout>
+                <com.xkp.android.Contacts.XKPLayout android:id="@+id/divFind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                <TextView android:id="@+id/lblFindType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                </TextView>
+                <RadioButton android:id="@+id/rdbByName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                </RadioButton>
+                <RadioButton android:id="@+id/rdbByPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                </RadioButton>
+                <TextView android:id="@+id/lblCriterion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                </TextView>
+                <EditText android:id="@+id/edtCriterion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                </EditText>
+                </com.xkp.android.Contacts.XKPLayout>
+                <com.xkp.android.Contacts.XKPLayout android:id="@+id/divAbout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                <TextView android:id="@+id/lblName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                </TextView>
+                <TextView android:id="@+id/lblContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xkp:placement=""none""
+                android:visible="true"
+            >
+                </TextView>
+                </com.xkp.android.Contacts.XKPLayout>
+                </com.xkp.android.Contacts.XKPSwitcher>
+			</com.xkp.android.Contacts.XKPLayout>
