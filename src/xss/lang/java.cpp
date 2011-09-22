@@ -145,10 +145,11 @@ str java_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
               {
                 switch (si.what)
                   {
-                    case RESOLVE_VARIABLE:
                     case RESOLVE_PROPERTY:
                       {
-                        break; //do nothing
+                        XSSProperty prop = si.value;
+                        result = prop->output_id();
+                        break;
                       }
                     case RESOLVE_METHOD:
                       {
@@ -173,10 +174,21 @@ str java_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
                           result = type->output_id();
                         break;
                       }
+                    case RESOLVE_VARIABLE:
+                      {
+                        break; //do nothing
+                      }
                     default:
                       assert(false); //trap use case
                   }
               }
+          }
+        else
+          {
+            XSSProperty prop = parent->get_property(ei.value);
+
+            if (prop)
+              result = prop->output_id();
           }
       }
     else if (operand.is<already_rendered>())
@@ -558,18 +570,6 @@ XSSType java_lang::resolve_array_type(XSSType type, const str& at_name, XSSConte
 
 str java_lang::render_value(XSSType type, variant value)
   {
-    if (value.is<str>())
-      return variant_cast<str>(value, str());
-
-    if (value.is<bool>())
-      {
-        bool vv = value;
-        if (vv)
-          return "true";
-        else
-          return "false";
-      }
-
     if (value.is<float>() || value.is<double>())
       {
         float f = value;
@@ -582,6 +582,6 @@ str java_lang::render_value(XSSType type, variant value)
 
         return ss.str();
       }
-    
-    return variant_cast<str>(value, str());
+
+    return base_lang::render_value(type, value);
   }

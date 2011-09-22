@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.xkp.android.SimpleTest.XKPLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+    xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.SimpleTest" 
+    android:id="@+id/mainLayoutApplication" 
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+            >
+                <TextView android:id="@+id/lblFirstName"
+                android:text="@string/res0"
+                xkp:layout_x="10px"
+                xkp:layout_y="20px"
+                android:layout_width="140px"
+                android:layout_height="40px"
+            >
+                </TextView>
+                <EditText android:id="@+id/edtFirstName"
+                xkp:layout_x="120px"
+                xkp:layout_y="10px"
+                android:layout_width="150px"
+                android:layout_height="40px"
+            >
+                </EditText>
+                <TextView android:id="@+id/lblLastName"
+                android:text="@string/res1"
+                xkp:layout_x="10px"
+                xkp:layout_y="70px"
+                android:layout_width="140px"
+                android:layout_height="40px"
+            >
+                </TextView>
+                <EditText android:id="@+id/edtLastName"
+                xkp:layout_x="120px"
+                xkp:layout_y="60px"
+                android:layout_width="150px"
+                android:layout_height="40px"
+            >
+                </EditText>
+                <Button android:id="@+id/btnFullName"
+                android:text="@string/res2"
+                xkp:layout_x="40px"
+                xkp:layout_y="110px"
+                android:layout_width="200px"
+                android:layout_height="43px"
+            >
+                </Button>
+                <TextView android:id="@+id/lblFullName"
+                android:text="@string/res3"
+                xkp:layout_x="10px"
+                xkp:layout_y="170px"
+                android:layout_width="200px"
+                android:layout_height="30px"
+            >
+                </TextView>
+			</com.xkp.android.SimpleTest.XKPLayout>

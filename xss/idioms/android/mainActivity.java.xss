@@ -31,7 +31,7 @@ public class Act<xss:e value="appName"/>
 		//find necessary imports without duplicates
 		if(inst.imports && !inst.xkpview)
 		{
-			//TIPS: live is hard; :)
+			//TIPS: live is hard, and very long; :)
 			//TODO: it's necessary to implement vector, stack, queue and set containers in vm
 			for(var i in inst.imports)
 			{
@@ -174,9 +174,22 @@ public class Act<xss:e value="appName"/>
     }
 	
 <xss:marker id="events"/>
-<xss:code>	
+<xss:code>
+	//TIP: add application to android instances, 
+	//     i don't know is that is good
+	android.instances += application;
 	for(var inst in android.instances)
 	{
+		//TRACE: log
+		compiler.log("Instance " + inst.output_id + "...");
+		if(inst.properties)
+		{
+			for(var p in inst.properties)
+			{
+				compiler.xss("../java/property.xss", p, inst.output_id);
+			}
+		}
+		
 		if(inst.events)
 		{
 			for(var e in inst.events)
@@ -191,14 +204,6 @@ public class Act<xss:e value="appName"/>
 			for(var m in inst.methods)
 			{
 				compiler.xss("../java/method.xss", m);
-			}
-		}
-		
-		if(inst.properties)
-		{
-			for(var p in inst.properties)
-			{
-				compiler.xss("../java/property.xss", p);
 			}
 		}
 	}

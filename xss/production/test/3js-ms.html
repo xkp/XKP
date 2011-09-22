@@ -22,6 +22,7 @@
 <script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript">		
 	var renderer = new THREE.CanvasRenderer();	
+var active_camera;
 var SCREEN_WIDTH = window.innerWidth;
 var SCREEN_HEIGHT = window.innerHeight;
 var g_elapsed = -1;
@@ -48,8 +49,7 @@ else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
 		g_sequence_manager.update(g_delta);
-renderer.render( scene, camera );
-soundRenderer.render( scene, camera );
+		set_active_camera(camera_1);
 }
             move_anim = Class.create(ms.state.Sequence,
         {
@@ -131,20 +131,20 @@ soundRenderer.render( scene, camera );
 var scene = 
 new THREE.Scene(
 );
-var camera = 
+var camera_1 = 
 new THREE.Camera(
-75,1.5,1,3000,null);
-                camera.position.z = 1000;
+75,1.5,1,3000);
+                camera_1.position.z = 1000;
 var light = 
 new THREE.DirectionalLight(
-1677,null,null,null);
+1677);
 		;
 	scene.addLight(light);
                 light.position.y = 0.5;
                 light.position.z = 1;
 	var cylinder_1_cylinder = 
 new THREE.Cylinder(
-200,100,100,500,null,null);
+200,100,100,500);
 	var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder,
 	cylinder_material);
 	scene.addObject(cylinder_1);
@@ -156,11 +156,7 @@ new THREE.Cylinder(
 	var x = event.clientX;
 	var y = event.clientY;
 		event.preventDefault();
-		var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
-		projector = new THREE.Projector();
-		projector.unprojectVector( vector, camera );
-		var ray = new THREE.Ray( camera.position, vector.subSelf( camera.position ).normalize() );
-		var intersects = ray.intersectObject( cylinder_1 );
+		var intersects = get_intersects( event.clientX, event.clientY, cylinder_1);
 		if ( intersects.length > 0 ) 
 		{   
 		anim_1.start();
@@ -199,6 +195,21 @@ function get_model(model_id)
 				return model.src;
 		}
 		return null;
+}
+function set_active_camera(camera)
+{
+	renderer.render(scene, camera);
+	soundRenderer.render(scene, camera);
+	active_camera = camera;
+}
+function get_intersects( x, y, object)
+{
+	var vector = new THREE.Vector3( ( x / window.innerWidth ) * 2 - 1, - ( y / window.innerHeight ) * 2 + 1, 0.5 );
+	projector = new THREE.Projector();
+	projector.unprojectVector( vector, active_camera );
+	var ray = new THREE.Ray( active_camera.position, vector.subSelf( active_camera.position ).normalize() );
+	var intersects = ray.intersectObject( object );
+	return intersects;
 }
 </script>
 </body>

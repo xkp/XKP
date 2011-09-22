@@ -1,6 +1,6 @@
 <project entry_point="../idioms/jquery/standalone_app.xss" language="js" target="jquery2.app.xml" output="jquery4.html">
     <path>
-        <output path="output"/>
+        <output path="../production/test"/>
     </path>
     <idiom src="../idioms/jquery/module.xml"/>
 </project>

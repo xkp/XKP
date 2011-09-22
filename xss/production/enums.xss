@@ -1,29 +1,86 @@
 <xss:code>
 	compiler.log("Rendering test with enum class...");
 	
-	//base path of source files are base path of idioms files...
-	compiler.copy_file(src = "enums.xss", dst = "..\production\enums.xss");
+	//base path must be an absolute
+	//before... base path of source files must be base path of idioms files...
 	
+	//ERROR: assertion failed: si.get, file /src/xs/linker.cpp, line 1576
+	//compiler.log(compiler.full_path("enums.xss"));
+	//compiler.copy_file(src = compiler.full_path("enums.xss"), dst = "../production/enums.xss");
+	
+	string srcf = compiler.full_path("enums.xss");
+	
+	compiler.copy_file(src = srcf, dst = "../production/enums.xss");
+	
+	enum_idiom.instances += application;
 	for(var i in enum_idiom.instances)
 	{
+		string itype = "";
+		if(i.type)
+			itype = i.type.output_id;
+		
 		out()
 		{
-			Instance: name = "<xss:e value="i.output_id"/>", type = "<xss:e value="i.type.output_id"/>"
-		}
-		
-		for(var p in i.properties)
-		{
-            if (!p.type.is_enum)
-                continue;
-
-			out()
-			{
-				<xss:e value="p.output_id"/> = <xss:e value="p.render_value()"/>
-			}
+			Instance: name = "<xss:e value="i.output_id"/>", type = "<xss:e value="itype"/>"
 		}
 		
 		/*
-        for(var e in i.events)
+		for(var p in i.properties)
+		{
+			string etype = "(enum)";
+			if (!p.type.is_enum)
+				etype = "";
+			
+			out()
+			{
+				<xss:e value="p.output_id"/><xss:e value="etype"/> = <xss:e value="p.render_value()"/>
+			}
+			
+			if(p.set_fn == null && p.get_fn == null && 
+			   p.get_xss == null && p.set_xss == null && 
+			   p.property_xss == null && p.property_xss_set == null)
+			{
+				p.output_id = "prop_" + i.output_id + "_" + p.name;
+				
+				compiler.log("instance: '" + i.output_id + "' property id: '" + p.id + "' property output_id: '" + p.output_id + "'");
+			}
+		}
+		*/
+		
+		compiler.log("==[Begin properties query...]====");
+		string query = 
+			//"set_fn != 0"
+			//"*"
+			//"* == null"
+			"value == null"
+			;
+		var qprops = i.query_properties(query);
+		
+		for(var xp in qprops)
+		{
+			compiler.log("query property = " + xp.id);
+			compiler.log(xp.value);
+			
+			if(xp.value == null && xp.default_value)
+			{
+				compiler.log("default_value = " + xp.default_value);
+				xp.value = xp.default_value;
+			}
+			
+			var value = xp.value;
+			if(value == null)
+			{
+				compiler.log("rendering");
+				value = xp.render_value();
+			}
+			
+			//compiler.log("query property value = " + value);
+			compiler.log(value);
+		}
+		compiler.log("==[End properties query...]====");
+		
+		/*
+		for(var e in i.events)
 		{
 			if(e.implemented)
 			{
@@ -46,6 +103,6 @@
 				}
 			}
 		}
-        */
+		*/
 	}
 </xss:code>

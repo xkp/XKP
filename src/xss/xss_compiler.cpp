@@ -914,7 +914,8 @@ void xss_compiler::copy_file(const str& src_file, const str& dst_file)
 				xss_throw(error);
       }
 
-    fs::path src = base_path_ / src_file;
+    //fs::path src = base_path_ / src_file;
+    fs::path src = src_file;
 
     if (!fs::exists(src))
       {

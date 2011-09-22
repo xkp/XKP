@@ -74,65 +74,64 @@ public class XKPLayout extends ViewGroup {
 		        int childWidth = lp.origins.width();
 		        int childHeight = lp.origins.height();
 		        
-				Log.i("XKPLayout", "onMeasure => " + lp.placement);
-				Log.i("XKPLayout", "onMeasure => l:" + lp.origins.left + " t:" + lp.origins.top +
-						" r:" + lp.origins.right + " b:" + lp.origins.bottom);
+				Log.d("XKPLayout", "onMeasure => placement:  " + lp.placement);
+				Log.d("XKPLayout", "onMeasure => left:" + lp.origins.left + " top:" + lp.origins.top +
+						" right:" + lp.origins.right + " bottom:" + lp.origins.bottom);
 		        
-				switch (lp.placement)
-				{
-				case PL_NONE:
-					childWidth = lp.origins.width();
-					childHeight = lp.origins.height();
-					lp.x = lp.origins.left;
-					lp.y = lp.origins.top;
-					break;
-					
-				case PL_TOP:
-					childWidth = bounds.width();
-					childHeight = lp.origins.height();
-					lp.x = bounds.left;
-					lp.y = bounds.top;
-					bounds.top += childHeight;
-					break;
-					
-				case PL_BOTTOM:
-					childWidth = bounds.width();
-					childHeight = lp.origins.height();
-					lp.x = bounds.left;
-					lp.y = bounds.bottom - childHeight;
-					bounds.bottom -= childHeight;
-					break;
-					
-				case PL_LEFT:
-					childWidth = lp.origins.width();
-	                childHeight = bounds.height();
-					lp.x = bounds.left;
-					lp.y = bounds.top;
-					bounds.left += childWidth;
-	                break;
-	                
-				case PL_RIGHT:
-					childWidth = lp.origins.width();
-	                childHeight = bounds.height();
-					lp.x = bounds.right - childWidth;
-					lp.y = bounds.top;
-					bounds.right -= childWidth;
-					break;
-					
-				case PL_CLIENT:
-					childWidth = bounds.width();
-	                childHeight = bounds.height();
-					lp.x = bounds.left;
-					lp.y = bounds.top;
-	                break;
-	                
-				case PL_CENTER:
-					childWidth = lp.origins.width();
-	                childHeight = lp.origins.height();
-					lp.x = bounds.left + bounds.width() / 2 - childWidth / 2;
-					lp.y = bounds.top + bounds.height() / 2 - childHeight / 2;
-	                break;
-				}
+				switch (lp.placement) {
+					case PL_NONE:
+						childWidth = lp.origins.width();
+						childHeight = lp.origins.height();
+						lp.x = lp.origins.left;
+						lp.y = lp.origins.top;
+						break;
+						
+					case PL_TOP:
+						childWidth = bounds.width();
+						childHeight = lp.origins.height();
+						lp.x = bounds.left;
+						lp.y = bounds.top;
+						bounds.top += childHeight;
+						break;
+						
+					case PL_BOTTOM:
+						childWidth = bounds.width();
+						childHeight = lp.origins.height();
+						lp.x = bounds.left;
+						lp.y = bounds.bottom - childHeight;
+						bounds.bottom -= childHeight;
+						break;
+						
+					case PL_LEFT:
+						childWidth = lp.origins.width();
+		                childHeight = bounds.height();
+						lp.x = bounds.left;
+						lp.y = bounds.top;
+						bounds.left += childWidth;
+		                break;
+		                
+					case PL_RIGHT:
+						childWidth = lp.origins.width();
+		                childHeight = bounds.height();
+						lp.x = bounds.right - childWidth;
+						lp.y = bounds.top;
+						bounds.right -= childWidth;
+						break;
+						
+					case PL_CLIENT:
+						childWidth = bounds.width();
+		                childHeight = bounds.height();
+						lp.x = bounds.left;
+						lp.y = bounds.top;
+		                break;
+		                
+					case PL_CENTER:
+						childWidth = lp.origins.width();
+		                childHeight = lp.origins.height();
+						lp.x = bounds.left + bounds.width() / 2 - childWidth / 2;
+						lp.y = bounds.top + bounds.height() / 2 - childHeight / 2;
+		                break;
+				} //switch
 
 				child.measure(
 						MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.EXACTLY), 
@@ -171,7 +170,7 @@ public class XKPLayout extends ViewGroup {
 		
 		ViewParent v = getParent();
 		if (v != null) {
-			Log.i("XKPLayout", "onMeasure => " + v.toString());
+			Log.d("XKPLayout", "onMeasure => " + v.toString());
 			v.requestLayout();
 		}
     }
@@ -192,8 +191,8 @@ public class XKPLayout extends ViewGroup {
     			XKPLayout.LayoutParams lp =
 					(XKPLayout.LayoutParams) child.getLayoutParams();
 	
-				Log.i("XKPLayout", "onLayout => l:" + lp.origins.left + " t:" + lp.origins.top +
-						" r:" + lp.origins.right + " b:" + lp.origins.bottom);
+				Log.d("XKPLayout", "onLayout => left:" + lp.origins.left + " top:" + lp.origins.top +
+						" right:" + lp.origins.right + " bottom:" + lp.origins.bottom);
 				
 				int childLeft = mPaddingLeft + lp.x;
 				int childTop = mPaddingTop + lp.y;
@@ -327,13 +326,13 @@ public class XKPLayout extends ViewGroup {
 			
 			a.recycle();
 			
-			this.origins = new Rect(x, y, width, height);
+			this.origins = new Rect(x, y, x + width, y + height);
 			this.parentXkpLayout = layRef;
 			setPlacement(pl);
 			
-			Log.i("XKPLayout", "LayoutParams => x:" + x + " y:" + y +
+			Log.d("XKPLayout", "LayoutParams => x:" + x + " y:" + y +
 					" w:" + width + " h:" + height);
-			Log.i("XKPLayout", "LayoutParams => placement = " + pl);
+			Log.d("XKPLayout", "LayoutParams => placement = " + pl);
 		}
 		
 		public int getPlacement() {
@@ -379,6 +378,7 @@ public class XKPLayout extends ViewGroup {
 		
 		public void setLeft(int left) {
 			this.x = left;
+			this.origins.left = left;
 			
 			if (parentXkpLayout != null) {
 				parentXkpLayout.requestLayout();
@@ -387,6 +387,7 @@ public class XKPLayout extends ViewGroup {
 		
 		public void setTop(int top) {
 			this.y = top;
+			this.origins.top = top;
 			
 			if (parentXkpLayout != null) {
 				parentXkpLayout.requestLayout();
@@ -395,6 +396,7 @@ public class XKPLayout extends ViewGroup {
 		
 		public void setWidth(int width) {
 			this.width = width;
+			this.origins.right = this.origins.left + width; 
 			
 			if (parentXkpLayout != null) {
 				parentXkpLayout.requestLayout();
@@ -403,6 +405,7 @@ public class XKPLayout extends ViewGroup {
 		
 		public void setHeight(int height) {
 			this.height = height;
+			this.origins.bottom = this.origins.top + height; 
 			
 			if (parentXkpLayout != null) {
 				parentXkpLayout.requestLayout();
