@@ -1,6 +1,8 @@
-"ms.streamer".namespace();
+"ms.streamer".namespace( );
 
-var RESOURCE_IMAGE           = 0;
+var RESOURCE_IMAGE			 = 0;
+var RESOURCE_SOUND			 = 1;
+var RESOURCE_MODEL			 = 2;
 var MAX_SIMULTANEOUS_LOADERS = 3;
 
 function compare_loading(a, b)
@@ -73,8 +75,8 @@ ms.streamer.ImageLoader = Class.create(ms.streamer.Loader,
 
     load: function(resource)
     {
-    	var img = new Image(); 
-
+		var img = new Image(); 
+			
         var this_  = this;
         img.onload = function()
         {
@@ -82,6 +84,21 @@ ms.streamer.ImageLoader = Class.create(ms.streamer.Loader,
         };
 
         img.src = resource.asset;
+    }
+});
+
+ms.streamer.SoundLoader = Class.create(ms.streamer.Loader,
+{
+    initialize: function($super, streamer)
+    {
+		$super(streamer, RESOURCE_SOUND);
+    },
+
+    load: function(resource)
+    {
+    	
+		this_.on_loaded(resource, resource.data );
+       
     }
 });
 
@@ -130,6 +147,7 @@ ms.streamer.Streamer = Class.create(
 		this.loading_queues =
 		[
 		 	new ms.streamer.ImageLoader(this),
+			new ms.streamer.SoundLoader(this),
 		];
     },
 
@@ -287,6 +305,18 @@ ms.streamer.Package = Class.create(
         this.streamer = streamer;
         this.job      = null;
     },
+	
+	get_resource: function(id)
+	{
+        for(var i = 0; i < this.items.length; i++)
+        {
+            var item = this.items[i];
+            if (id == item.id)
+            {
+                return item; 
+            }
+        }
+	},
 
     load: function()
     {

@@ -6,7 +6,9 @@
             <property id="x" type="float" use_plain_value="true"/>
 			<property id="y" type="float" use_plain_value="true"/>
 			<property id="z" type="float" use_plain_value="true"/>		
-		</class>	
+		</class>
+
+		<class id="playing_sound" output_id="Array" instantiator="sound_renderer.xss"/>	
 		
 		<class id="material">
 			<array id="constructor_params">
@@ -38,7 +40,7 @@
 			<property id="reflectivity" type="string" dont_init="true"/>
 			<property id="shininess" type="string" dont_init="true"/>
 			<property id="specular" type="string" dont_init="true"/>
-			<property id="transparent" type="string" dont_init="true"/>
+			<property id="transparent" type="string" dont_init="true"/>			
 		</class>
 		
 		<class id="composite_material" output_id="Array"/>
@@ -52,25 +54,12 @@
 		<class id="normal_material" output_id="THREE.MeshNormalMaterial"/>
 
 		<class id="face_material" output_id="THREE.MeshFaceMaterial"/>
-		
-		<class id="sound" output_id="THREE.Sound">
-			<array id="constructor_params">
-				<parameter property="sources"/> 
-				<parameter property="radius"/>
-				<parameter property="volume"/>
-				<parameter property="loop"/>				
-			</array>
-			<property id="sources" type="string" dont_init="true"/>
-			<property id="radius" type="string" dont_init="true"/>
-			<property id="volume" type="string" dont_init="true"/>
-			<property id="loop" type="string" dont_init="true"/>
-		</class>
-				
+						
 		<class id="texture" output_id="THREE.Texture">
 			<array id="constructor_params">
-				<parameter property="image"/> 								
+				<parameter property="texture_src"/> 								
 			</array>
-			<property id="image" type="string" dont_init="true"/>
+			<property id="texture_src" type="string" dont_init="true"/>
 		</class>
 		
 		<class id="meshable">						
@@ -248,9 +237,9 @@
 	
 		<class id="texture_cube" output_id="THREE.ImageUtils.loadTextureCube">
 			<array id="constructor_params">
-				<parameter property="array"/>
+				<parameter property="img_array"/>
 			</array>
-			<property id="array" type="string" dont_init="true"/>
+			<property id="img_array" type="string" dont_init="true"/>
 		</class>
 	
 		<class id="bin_model" output_id="THREE.BinaryLoader" dont_render="true" instantiator="model_renderer.xss">

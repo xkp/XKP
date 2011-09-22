@@ -1,0 +1,13 @@
+<module id="resources" src="resources.xs">
+    <types>
+        
+        <class id="image" renderer="image.xss">
+            <property id="src" type="string"/>
+        </class>	
+		
+		<class id="sound" renderer="sound.xss">
+			<property id="src" type="string"/>			
+		</class>
+		
+    </types>
+</module>

@@ -12,6 +12,5 @@
 				<xss:e v="i.parent.id"/>.addChild(<xss:e v="i.id"/>);
 				scene.addObject(<xss:e v="i.parent.id"/>);
 				}
-			}		
-		if(i.class_name == "sound") out(){<xss:e v="i.id"/>.play();}
+			}				
 </xss:code>

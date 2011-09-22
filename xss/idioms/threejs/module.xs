@@ -7,7 +7,7 @@ on pre_process(obj)
 on render_instances()
 {	
 	for(var i in instances)
-    {
+    {			
 		compiler.xss("inst_renderer.xss", i);
 		if(!i.dont_render)
 			compiler.xss("../common-js/instance.xss", i, event_renderer = "../threejs/event.xss");

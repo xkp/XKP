@@ -50,6 +50,7 @@ var SCREEN_WIDTH = window.innerWidth;
 var SCREEN_HEIGHT = window.innerHeight;
 var g_elapsed = -1;
 var g_delta = 0.0;			
+
 <xss:marker id="variables"/>
 
 var threejs_models = 
@@ -60,8 +61,13 @@ var threejs_models =
 var application = {};
 
 <xss:code>
-    compiler.inject("render_initialization");	
+    compiler.inject("render_initialization");
 </xss:code>
+// --------RESOURCES---------
+<xss:code>
+    compiler.inject("render_resources");	
+</xss:code>
+// --------RESOURCES---------
 
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );

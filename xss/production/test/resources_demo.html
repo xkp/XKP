@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test 3D</title>
+<style type="text/css">
+	body{
+	}
+</style>
+</head>
+<body>
+<script type="text/javascript" src="../js/three/Detector.js"></script>
+<script type="text/javascript" src="../js/three/Three.js"></script>
+<script type="text/javascript" src="../js/three/Stats.js"></script>
+<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript">		
+	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+	var renderer = new THREE.WebGLRenderer( { antialias: true } );
+var active_camera;
+var SCREEN_WIDTH = window.innerWidth;
+var SCREEN_HEIGHT = window.innerHeight;
+var g_elapsed = -1;
+var g_delta = 0.0;			
+var threejs_models = 
+        [
+        ];
+var application = {};
+		var g_streamer = new ms.streamer.Streamer();
+	// --------RESOURCES---------
+        var def_package_items = [];
+                def_package_items.push(
+            {
+		id:"image_1",
+		resource_type:"RESOURCE_IMAGE",
+		src:"images/test1.png"
+});
+                def_package_items.push(
+            {
+		id:"image_2",
+		resource_type:"RESOURCE_IMAGE",
+		src:"images/test2.png"
+});
+                def_package_items.push(
+            {
+		id:"image_3",
+		resource_type:"RESOURCE_IMAGE",
+		src:"images/test3.png"
+});
+                def_package_items.push(
+            {
+		id:"image_4",
+		resource_type:"RESOURCE_IMAGE",
+		src:"images/test4.png"
+});
+                def_package_items.push(
+            {
+		id:"image_5",
+		resource_type:"RESOURCE_IMAGE",
+		src:"images/test5.png"
+});
+                def_package_items.push(
+            {
+		id:"image_6",
+		resource_type:"RESOURCE_IMAGE",
+		src:"images/test6.png"
+});
+                def_package_items.push(
+            {
+		id:"sound_1",
+		resource_type:"RESOURCE_SOUND",
+		src:"sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg"
+});
+        var g_startup_package = new ms.streamer.Package(g_streamer, def_package_items);		
+    // --------RESOURCES---------
+soundRenderer = new THREE.SoundRenderer();		
+document.body.appendChild( soundRenderer.domElement );
+renderer.setSize( window.innerWidth, window.innerHeight );
+function render() {
+renderer.clear();
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+    g_delta = 0; //first update
+else
+g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+		cube_1.rotation.y += (application.x_target_rotation - cube_1.rotation.y) * 0.0500000007;
+plane_1.rotation.z = cube_1.rotation.y;
+cube_1.rotation.x += (application.y_target_rotation - cube_1.rotation.x) * 0.0500000007;
+		set_active_camera(camera_1);
+}
+var materials = 
+new Array(
+);
+	materials.push(new THREE.MeshBasicMaterial({
+	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('image_1').src),
+	}));
+	materials.push(new THREE.MeshBasicMaterial({
+	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('image_2').src),
+	}));
+	materials.push(new THREE.MeshBasicMaterial({
+	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('image_3').src),
+	}));
+	materials.push(new THREE.MeshBasicMaterial({
+	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('image_4').src),
+	}));
+	materials.push(new THREE.MeshBasicMaterial({
+	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('image_5').src),
+	}));
+	materials.push(new THREE.MeshBasicMaterial({
+	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('image_6').src),
+	}));
+	var plane_material = new THREE.MeshBasicMaterial({
+	color:14737632
+	});
+var cube_faces = 
+new THREE.MeshFaceMaterial(
+);
+var scene = 
+new THREE.Scene(
+);
+var camera_1 = 
+new THREE.Camera(
+70,1.5,1,1000);
+                camera_1.position.y = 300;
+                camera_1.position.z = 500;
+	var cube_1_cube = 
+new THREE.Cube(
+200,200,200,1,1,1,materials);
+	var cube_1 = new THREE.Mesh(cube_1_cube,
+	cube_faces);
+	scene.addObject(cube_1);
+                cube_1.position.y = 150;
+	var plane_1_plane = 
+new THREE.Plane(
+200,200);
+	var plane_1 = new THREE.Mesh(plane_1_plane,
+	plane_material);
+	scene.addObject(plane_1);
+                plane_1.rotation.x = -1.57;
+	var sound_1 = new THREE.Sound(g_startup_package.get_resource('sound_1').src
+	,700,20,true
+	);
+	scene.addObject(sound_1);
+	sound_1.play();
+                application.x_target_rotation = 0;
+                application.x_target_rotation_on_mouse_down = 0;
+                application.mouse_x = 0;
+                application.mouse_x_on_mouse_down = 0;
+                application.y_target_rotation = 0;
+                application.y_target_rotation_on_mouse_down = 0;
+                application.mouse_y = 0;
+                application.mouse_y_on_mouse_down = 0;
+                application.window_half_x = window.innerWidth / 2;
+                application.window_half_y = window.innerHeight / 2;
+                application.is_mouse_down = false;
+	document.addEventListener( 'mousedown', mousedown_application, false );
+	function mousedown_application (event)
+	{
+	var x = event.clientX;
+	var y = event.clientY;
+		application.is_mouse_down = true;
+application.mouse_x_on_mouse_down = x - application.window_half_x;
+application.x_target_rotation_on_mouse_down = application.x_target_rotation;
+application.mouse_y_on_mouse_down = y - application.window_half_y;
+application.y_target_rotation_on_mouse_down = application.y_target_rotation;
+	};
+	document.addEventListener( 'mouseup', mouseup_application, false );
+	function mouseup_application (event)
+	{
+	var x = event.clientX;
+	var y = event.clientY;
+		application.is_mouse_down = false;
+	};
+	document.addEventListener( 'mousemove', mousemove_application, false );
+	function mousemove_application (event)
+	{
+	var x = event.clientX;
+	var y = event.clientY;
+		if (application.is_mouse_down)
+{
+application.mouse_x = x - application.window_half_x;
+application.x_target_rotation = application.x_target_rotation_on_mouse_down + (application.mouse_x - application.mouse_x_on_mouse_down) * 0.0199999996;
+application.mouse_y = y - application.window_half_y;
+application.y_target_rotation = application.y_target_rotation_on_mouse_down + (application.mouse_y - application.mouse_y_on_mouse_down) * 0.0199999996;
+}
+	};
+if (application.init)
+{
+	application.init();
+}
+document.body.appendChild( renderer.domElement );
+animate();
+function animate() {
+	requestAnimationFrame( animate );
+	render();
+}
+function get_model(model_id)
+{
+		for(var i = 0; i < this.threejs_models.length; i++)
+		{
+			var model = this.threejs_models[i];
+			if (model.id == model_id)
+				return model.src;
+		}
+		return null;
+}
+function set_active_camera(camera)
+{
+	renderer.render(scene, camera);
+	soundRenderer.render(scene, camera);
+	active_camera = camera;
+}
+function get_intersects( x, y, object)
+{
+	var vector = new THREE.Vector3( ( x / window.innerWidth ) * 2 - 1, - ( y / window.innerHeight ) * 2 + 1, 0.5 );
+	projector = new THREE.Projector();
+	projector.unprojectVector( vector, active_camera );
+	var ray = new THREE.Ray( active_camera.position, vector.subSelf( active_camera.position ).normalize() );
+	var intersects = ray.intersectObject( object );
+	return intersects;
+}
+</script>
+</body>
+</html>
