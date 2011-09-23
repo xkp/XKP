@@ -87,6 +87,7 @@ class xss_object : public editable_object<xss_object>,
           query_info(const str& expr): 
             expression(expr), result(new dynamic_array) {}
 
+          void register_property(XSSProperty prop);
           void add_property(XSSProperty prop);
           bool has(XSSProperty prop);
 
