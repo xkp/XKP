@@ -12,8 +12,6 @@ LOG_FILENAME=../production/result.log
 OUT_PATH=../
 CHP_PATH=tests/
 
-MD5_CREATE=`find . -type f -print0 | xargs -0 md5sum`
-
 EXEC=$XSS_PATH$XSS_FILENAME
 
 PROJECTS_LIST=`ls | grep "\.project.xml"`
@@ -53,7 +51,7 @@ if [ "$count" -gt 0 ] ; then
 		md5sum -c list.md5 ;
 	else
 		echo "Creating hashes..." ;
-		find ./production ./samples -type f -print0 | xargs -0 md5sum > list.md5
+		find ./production -type f -print0 | xargs -0 md5sum > list.md5
 	fi
 	
 	cd $CHP_PATH ;

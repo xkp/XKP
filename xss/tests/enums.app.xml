@@ -1,3 +1,3 @@
 <application name="EnumTest" title="Enums test" src="enums.app.xs">
-    <button id="btn" caption="Enums" width="200" height="43" visible="gone" enabled="false" placement="top"/>
+    <button id="btn" caption="Enums" width="200" height="43" enabled="false" placement="top"/>
 </application>

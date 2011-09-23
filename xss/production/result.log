@@ -22,47 +22,33 @@ Success are greateful===[ cube.project.xml ]================
 Log: Rendering 3js Types...
 Success are greateful===[ enums.project.xml ]================
 Log: Rendering test with enum class...
-Log: ==[Begin properties query...]====
-Log: query property = caption
-Log: Enums
-Log: Enums
-Log: query property = width
-Log: 200
-Log: 200
-Log: query property = height
-Log: 43
-Log: 43
-Log: query property = visible
-Log: 
-Log: 
-Log: query property = enabled
-Log: false
-Log: false
-Log: query property = placement
-Log: 
-Log: 
-Log: query property = sameName
-Log: 
-Log: 
-Log: query property = x
-Log: null
-Log: rendering
-Log: null
-Log: query property = y
-Log: null
-Log: rendering
-Log: null
-Log: ==[End properties query...]====
-Log: ==[Begin properties query...]====
-Log: query property = sameName
-Log: 
-Log: 
-Log: ==[End properties query...]====
+Log: instance: 'btn' property id: 'sameName' property output_id: 'prop_btn_sameName'
+Log: instance: 'application' property id: 'sameName' property output_id: 'prop_application_sameName'
 
 			Instance: name = "btn", type = "Button"
 		
+				property:text = "Enums"
+			
+				property:layout_width = 200
+			
+				property:layout_height = 43
+			
+				property:enabled = false
+			
+				property:placement(enum) = Placement.PL_TOP
+			
+				sameName = "My owner is button 'btn'"
+			
+				property:layout_x = 0
+			
+				property:layout_y = 0
+			
+				property:visible(enum) = "View.VISIBLE"
+			
 			Instance: name = "application", type = ""
 		
+				sameName = "My owner is application."
+			
 Success are greateful===[ java1.project.xml ]================
 Log: -- Rendering instance: application
 Log: Properties size: 3
@@ -614,6 +600,36 @@ Log: Rendering UI Types...
 Log: Rendering Sequence Types...
 Log: Rendering UI...
 Log: Rendering Sequence...
+Success are greateful===[ query_properties.project.xml ]================
+Log: Rendering test query_properties...
+Log: assigning default_value = 0
+Log: assigning default_value = 0
+Log: assigning default_value = EVisibility.true
+
+			Instance: name = "btn", type = "Button"
+		
+				property "caption" = "Enums"			
+				property "width" = 200			
+				property "height" = 43			
+				property "enabled" = false			
+				property "placement" = Placement.PL_TOP			
+				property "sameName" = "My owner is button 'btn'"			
+				property "x" = 0			
+				property "y" = 0			
+				property "visible" = "EVisibility.true"			
+			Instance: name = "application", type = ""
+		
+				property "sameName" = "My owner is application."			
+Success are greateful===[ resources_demo.project.xml ]================
+Log: Rendering Resources...
+Log: Rendering Resource...
+Log: Rendering Resource...
+Log: Rendering Resource...
+Log: Rendering Resource...
+Log: Rendering Resource...
+Log: Rendering Resource...
+Log: Rendering Resource...
+Log: Rendering 3js Types...
 Success are greateful===[ sound.project.xml ]================
 Log: Rendering 3js Types...
 Success are greateful===[ transform.project.xml ]================

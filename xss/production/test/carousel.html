@@ -31,6 +31,8 @@ var threejs_models =
         [
         ];
 var application = {};
+// --------RESOURCES---------
+// --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -49,34 +51,34 @@ var materials =
 new Array(
 );
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture('images/test1.png'),
+	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test1.png').src),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	opacity:0.200000003,map:THREE.ImageUtils.loadTexture('images/test1.png'),
+	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test1.png').src),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture('images/test2.png'),
+	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test2.png').src),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	opacity:0.200000003,map:THREE.ImageUtils.loadTexture('images/test2.png'),
+	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test2.png').src),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture('images/test3.png'),
+	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test3.png').src),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	opacity:0.200000003,map:THREE.ImageUtils.loadTexture('images/test3.png'),
+	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test3.png').src),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture('images/test4.png'),
+	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test4.png').src),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	opacity:0.200000003,map:THREE.ImageUtils.loadTexture('images/test4.png'),
+	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test4.png').src),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture('images/test5.png'),
+	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test5.png').src),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	opacity:0.200000003,map:THREE.ImageUtils.loadTexture('images/test5.png'),
+	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test5.png').src),
 	}));
 var scene = 
 new THREE.Scene(

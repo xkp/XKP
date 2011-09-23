@@ -2,13 +2,13 @@
 
 	<types>
 	
-		<enum id="EVisibility" output_id="View" output_type="int" default_value="true">
+		<enum id="EVisibility" output_id="View" output_type="int" default_value="EVisibility.true">
 			<property id="true" type="int" output_id="VISIBLE"/>
 			<property id="false" type="int" output_id="INVISIBLE"/>
 			<property id="gone" type="int" output_id="GONE"/>
 		</enum>
 		
-		<enum id="EPlacement" output_id="XKPLayout" output_type="int" default_value="none">
+		<enum id="EPlacement" output_id="XKPLayout" output_type="int" default_value="EPlacement.none">
 			<property id="none" type="int" output_id="PL_NONE"/>
 			<property id="top" type="int" output_id="PL_TOP"/>
 			<property id="left" type="int" output_id="PL_LEFT"/>
