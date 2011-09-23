@@ -1,26 +1,46 @@
+
 ===[ 3js-ms.project.xml ]================
+
 Log: Rendering 3js Types...
 Log: Rendering Sequence Types...
 Log: Rendering Sequence...
-Success are greateful===[ 3js1.project.xml ]================
+Success are greateful
+===[ 3js1.project.xml ]================
+
 Log: Rendering 3js Types...
-Success are greateful===[ 3js2.project.xml ]================
+Success are greateful
+===[ 3js2.project.xml ]================
+
 Log: Rendering 3js Types...
-Success are greateful===[ 3js3.project.xml ]================
+Success are greateful
+===[ 3js3.project.xml ]================
+
 Log: Rendering 3js Types...
 Log: Rendering Sequence Types...
 Log: Rendering Sequence...
-Success are greateful===[ 3js4.project.xml ]================
+Success are greateful
+===[ 3js4.project.xml ]================
+
 Log: Rendering 3js Types...
-Success are greateful===[ 3js5.project.xml ]================
+Success are greateful
+===[ 3js5.project.xml ]================
+
 Log: Rendering 3js Types...
-Success are greateful===[ cameras.project.xml ]================
+Success are greateful
+===[ cameras.project.xml ]================
+
 Log: Rendering 3js Types...
-Success are greateful===[ carousel_1.project.xml ]================
+Success are greateful
+===[ carousel_1.project.xml ]================
+
 Log: Rendering 3js Types...
-Success are greateful===[ cube.project.xml ]================
+Success are greateful
+===[ cube.project.xml ]================
+
 Log: Rendering 3js Types...
-Success are greateful===[ enums.project.xml ]================
+Success are greateful
+===[ enums.project.xml ]================
+
 Log: Rendering test with enum class...
 Log: instance: 'btn' property id: 'sameName' property output_id: 'prop_btn_sameName'
 Log: instance: 'application' property id: 'sameName' property output_id: 'prop_application_sameName'
@@ -49,7 +69,9 @@ Log: instance: 'application' property id: 'sameName' property output_id: 'prop_a
 		
 				sameName = "My owner is application."
 			
-Success are greateful===[ java1.project.xml ]================
+Success are greateful
+===[ java1.project.xml ]================
+
 Log: -- Rendering instance: application
 Log: Properties size: 3
 Log: Rendering property: lvalue
@@ -71,7 +93,9 @@ Log: Rendering method: test3
 Log: Rendering method: foo
 Log: Events size: 0
 
-Success are greateful===[ java2.project.xml ]================
+Success are greateful
+===[ java2.project.xml ]================
+
 Log: -- Rendering instance: application
 Log: Properties size: 0
 Log: Methods size: 0
@@ -82,7 +106,9 @@ Log: Methods size: 1
 Log: Rendering method: test0
 Log: Events size: 0
 
-Success are greateful===[ jquery1.project.xml ]================
+Success are greateful
+===[ jquery1.project.xml ]================
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -198,7 +224,9 @@ $(function() {
             </body>
 </html>
 
-Success are greateful===[ jquery2.project.xml ]================
+Success are greateful
+===[ jquery2.project.xml ]================
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -387,7 +415,9 @@ application.target_set(300);
             </body>
 </html>
 
-Success are greateful===[ jquery3.project.xml ]================
+Success are greateful
+===[ jquery3.project.xml ]================
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -576,31 +606,49 @@ application.target_set(300);
             </body>
 </html>
 
-Success are greateful===[ jquery4.project.xml ]================
-Success are greateful===[ jquery5.project.xml ]================
+Success are greateful
+===[ jquery4.project.xml ]================
+
+Success are greateful
+===[ jquery5.project.xml ]================
+
 Log: Rendering jQuery...
-Success are greateful===[ model_1.project.xml ]================
+Success are greateful
+===[ model_1.project.xml ]================
+
 Log: Rendering 3js Types...
-Success are greateful===[ ms1.project.xml ]================
+Success are greateful
+===[ ms1.project.xml ]================
+
 Log: Rendering Sequence Types...
 Log: Rendering Sequence...
-Success are greateful===[ ms2.project.xml ]================
+Success are greateful
+===[ ms2.project.xml ]================
+
 Log: Rendering Sequence Types...
 Log: Rendering Sequence...
-Success are greateful===[ ms3.project.xml ]================
+Success are greateful
+===[ ms3.project.xml ]================
+
 Log: Rendering UI Types...
 Log: Rendering UI...
-Success are greateful===[ ms4.project.xml ]================
+Success are greateful
+===[ ms4.project.xml ]================
+
 Log: Rendering UI Types...
 Log: Rendering Sequence Types...
 Log: Rendering UI...
 Log: Rendering Sequence...
-Success are greateful===[ ms5.project.xml ]================
+Success are greateful
+===[ ms5.project.xml ]================
+
 Log: Rendering UI Types...
 Log: Rendering Sequence Types...
 Log: Rendering UI...
 Log: Rendering Sequence...
-Success are greateful===[ query_properties.project.xml ]================
+Success are greateful
+===[ query_properties.project.xml ]================
+
 Log: Rendering test query_properties...
 Log: assigning default_value = 0
 Log: assigning default_value = 0
@@ -620,7 +668,9 @@ Log: assigning default_value = EVisibility.true
 			Instance: name = "application", type = ""
 		
 				property "sameName" = "My owner is application."			
-Success are greateful===[ resources_demo.project.xml ]================
+Success are greateful
+===[ resources_demo.project.xml ]================
+
 Log: Rendering Resources...
 Log: Rendering Resource...
 Log: Rendering Resource...
@@ -630,16 +680,24 @@ Log: Rendering Resource...
 Log: Rendering Resource...
 Log: Rendering Resource...
 Log: Rendering 3js Types...
-Success are greateful===[ sound.project.xml ]================
+Success are greateful
+===[ sound.project.xml ]================
+
 Log: Rendering 3js Types...
-Success are greateful===[ transform.project.xml ]================
+Success are greateful
+===[ transform.project.xml ]================
+
 Log: Rendering 3js Types...
-Success are greateful===[ wax1.project.xml ]================
+Success are greateful
+===[ wax1.project.xml ]================
+
 Error at: d:/xkp/xss/tests/../idioms/wax/wax.xml
 Error [404] File not found
 file = d:/xkp/xss/tests/../idioms/wax/wax.xml
 ERROR: Project:  wax1.project.xml
+
 ===[ xss1.project.xml ]================
+
 
 hello, darling
 this is Louis
@@ -652,7 +710,9 @@ this is Louis
 
             Thats all folks
             It was a pleasure
-        Success are greateful===[ xss2.project.xml ]================
+        Success are greateful
+===[ xss2.project.xml ]================
+
 
                 something
             
@@ -725,9 +785,13 @@ this is Louis
      
         t_xss5_1 
     
-Success are greateful===[ xss3.project.xml ]================
+Success are greateful
+===[ xss3.project.xml ]================
 
-Success are greateful===[ xss4.project.xml ]================
+
+Success are greateful
+===[ xss4.project.xml ]================
+
 
 				Even = 2
 			
@@ -756,7 +820,9 @@ Is this after "After!"? World
 
 
 
-Success are greateful===[ xss5.project.xml ]================
+Success are greateful
+===[ xss5.project.xml ]================
+
 Log: application
 Log: null super
 Log: t1
@@ -767,7 +833,9 @@ Log: a
 Log: ab
 Log: ba
 
-Success are greateful===[ xss6.project.xml ]================
+Success are greateful
+===[ xss6.project.xml ]================
+
 
 			event id: click event output_id: onClick
 		
