@@ -62,6 +62,8 @@ const str SEmptyMarkerSource("Empty marker source");
 const str SInvalidMarkerSource("Invalid marker source");
 const str SNotAnInstance("Expecting instance");
 const str SNotAProperty("Expecting property");
+const str SAliasMustHaveAliased("Alias types must have a 'aliased' attribute");
+const str SBadAliasType("Alias type not found");
 
 //xss_application_renderer
 xss_application_renderer::xss_application_renderer(fs::path entry_point, Language lang, XSSCompiler compiler):
@@ -842,8 +844,8 @@ variant xss_compiler::resolve_property(const str& prop, variant parent)
           }
 
         XSSProperty prop = ri.value;
-        result->add_property("prop", prop);
-		    result->add_property("prop_name", prop->id());
+        result->add_attribute("prop", prop);
+		    result->add_attribute("prop_name", prop->id());
 
         if (!path_str.empty())
           {
@@ -852,13 +854,13 @@ variant xss_compiler::resolve_property(const str& prop, variant parent)
       }
 		else
       {
-			  result->add_property("prop", variant());
-			  result->add_property("prop_name", prop_path[prop_path.size() - 1]);
+			  result->add_attribute("prop", variant());
+			  result->add_attribute("prop_name", prop_path[prop_path.size() - 1]);
       }
 
-		result->add_property("request", prop);
-		result->add_property("path", path);
-    result->add_property("this_property", ri.found_this);
+		result->add_attribute("request", prop);
+		result->add_attribute("path", path);
+    result->add_attribute("this_property", ri.found_this);
 
 		return result;
 	}
@@ -964,6 +966,16 @@ XSSType xss_compiler::get_type(const str& type)
   {
     XSSContext ctx = current_context();
     return ctx->get_type(type);
+  }
+
+XSSType xss_compiler::type_of(variant v)
+  {
+    XSSObject obj = variant_cast<XSSObject>(v, XSSObject());
+    if (obj)
+      return obj->type();
+    
+    XSSContext ctx = current_context();
+    return ctx->get_type(v.get_schema());
   }
 
 void xss_compiler::push_renderer(XSSRenderer renderer)
@@ -1166,6 +1178,7 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
             type->inherit();
 
             str class_name = type_data->type_name();
+            bool alias = false; 
             if (class_name == "class")
               {
                 //look for imports
@@ -1193,6 +1206,30 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
               {
                 type->as_enum();
               }
+            else if (class_name == "alias")
+              {
+                alias = true;
+                
+                str aliased = type->get<str>("aliased", str());
+                if (aliased.empty())
+                  { 
+                    param_list error;
+                    error.add("id", SProjectError);
+                    error.add("desc", SAliasMustHaveAliased);
+                    error.add("alias", type->id());
+                    xss_throw(error);
+                  }
+
+                type = ctx->get_type(aliased);
+                if (!type)
+                  { 
+                    param_list error;
+                    error.add("id", SProjectError);
+                    error.add("desc", SBadAliasType);
+                    error.add("type", aliased);
+                    xss_throw(error);
+                  }
+              }
             else
               {
                 param_list error;
@@ -1202,7 +1239,6 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
               }
 
             //resolve the unresolved
-            XSSContext ctx = app->context();
 		        DynamicArray props = type->properties();
 		        std::vector<variant>::iterator pit = props->ref_begin();
 		        std::vector<variant>::iterator pnd = props->ref_end();
@@ -1228,7 +1264,9 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
               }
 
             //and register
-            module->register_module_type(type);
+            if (!alias)
+              module->register_module_type(type);
+            
             ctx->add_type(type_name, type);
           }
       }
@@ -1460,7 +1498,9 @@ void xss_compiler::read_application(const str& app_file)
         //pre process, basically the application will be traversed and
         //notified to the application modules. From then on it is their business
         //the expected result is an application object ready for rendering.
+        current_app_ = app_renderer;
         pre_process(app_renderer, app_data, XSSObject());
+        current_app_.reset();
 
         str src = app_data->get<str>("src", str());
         fs::path src_path = base_path_ / src;
@@ -1879,5 +1919,9 @@ XSSContext xss_compiler::current_context()
     XSSRenderer rend = current_renderer();
     if (rend)
       return rend->context();
+
+    if (current_app_)
+      return current_app_->context();
+
     return XSSContext();
  }

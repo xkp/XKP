@@ -196,7 +196,7 @@ namespace xkp
           {
           }
 
-        void add_property(const str& name, variant value = variant())
+        void add_attribute(const str& name, variant value = variant())
           {
 						item_list::iterator it = items_.find(name);
 						if (it != items_.end())

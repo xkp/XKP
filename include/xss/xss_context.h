@@ -108,6 +108,7 @@ class xss_object : public editable_object<xss_object>,
 			void add_child(XSSObject obj);
       void remove_child(XSSObject obj);
 		public:
+      void add_property(const str& name, variant value, XSSType type);
       void register_property(const str& name, XSSProperty new_prop = XSSProperty());
       void register_method(const str& name, XSSMethod new_mthd = XSSMethod());
       void register_event_impl(const str& name, XSSEvent new_evt = XSSEvent());
@@ -345,9 +346,10 @@ class xss_property : public xss_object
 		  XSSObject this_;
 		  variant   value_;
 
-      str render_value();
-      str render_get();
-      str	render_set(const str& value);
+      void set_value(const variant value, XSSType type);
+      str  render_value();
+      str  render_get();
+      str	 render_set(const str& value);
   };
 
 class xss_event : public xss_object
@@ -406,6 +408,7 @@ struct xss_object_schema : editable_object_schema<T>
 
         this->template method_<DynamicArray, 1>("query_properties", &T::query_properties);
         this->template method_<XSSProperty, 1> ("get_property",     &T::get_property);
+        this->template method_<void, 3>        ("add_property",     &T::add_property);
 		}
   };
 

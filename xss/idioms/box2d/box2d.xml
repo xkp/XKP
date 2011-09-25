@@ -1,0 +1,11 @@
+<module id="box2d" src="box2d.xs">
+    <types>
+        <class id="physics_world"/>
+        
+        <class id="body">
+            
+        </class>
+        
+        <alias id="physics" aliased="body"/>
+    </types>
+</module>

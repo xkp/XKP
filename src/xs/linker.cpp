@@ -2405,7 +2405,7 @@ void base_xs_linker::behaveas_(xs_implement_behaviour& info)
     std::vector<str>::iterator nd = ncv.names.end();
     for(; it != nd; it++)
       {
-        bindings.add_property(*it);
+        bindings.add_attribute(*it);
       }
 
     code_context    bind_ctx;

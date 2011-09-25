@@ -16,6 +16,7 @@ const str SDuplicateSymbol("A symbol with this name already exists");
 const str SEmptyArrayType("Arrays must have an inner type");
 const str SCannotResolve("Cannot resolve");
 const str SArrayMismatch("An array has been declared that already exists on the super class as a non array");
+const str SPropertyAlreadyExists("Trying to add a property that already exists");
 
 str xss_utils::var_to_string(variant& v)
   {
@@ -726,7 +727,7 @@ void xss_object::copy(XSSObject obj)
               if (dest_->has(name))
                 dynamic_set((IDynamicObject*)dest_, name, value);
               else
-                dest_->add_property(name, value);
+                dest_->add_attribute(name, value);
             }
 
           private:
@@ -1060,6 +1061,41 @@ XSSMethod xss_object::get_method(const str& name)
     return XSSMethod();
   }
 
+void xss_object::add_property(const str& name, variant value, XSSType type)
+  {
+    XSSProperty result;
+    XSSProperty old_prop = get_property(name);
+    if (old_prop)
+      {
+        //we have the property, the logic is:
+        //if we (this) have already a value for it then that value will be replaced
+        //otherwise (when its inherited) a new property will be created wilth the incoming value
+        std::vector<variant>::iterator it = properties_->ref_begin();
+        std::vector<variant>::iterator nd = properties_->ref_end();
+
+        for(; it != nd; it++)
+          {
+            XSSProperty prop = *it;
+            if (prop->id() == name)
+              {
+                prop->set_value(value, type);
+                return;
+              }
+          }
+
+        //otherwise
+        result = XSSProperty(new xss_property());
+        result->copy(XSSObject(old_prop));
+        result->this_ = shared_from_this();
+        result->set_value(value, type);
+      }
+
+    if (!result)
+      result = XSSProperty(new xss_property(name, type, value, shared_from_this()));
+
+    properties_->push_back(result);
+  }
+
 void xss_object::register_property(const str& name, XSSProperty new_prop)
   {
     XSSProperty prop = get_property(name);
@@ -1307,6 +1343,12 @@ void xss_property::copy(XSSObject obj)
       }
 
     xss_object::copy(obj);
+  }
+
+void xss_property::set_value(const variant value, XSSType type)
+  {
+    value_ = value; //td: type checking
+    type_  = type;
   }
 
 str xss_property::render_value()

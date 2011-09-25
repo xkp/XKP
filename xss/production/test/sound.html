@@ -32,6 +32,8 @@ var threejs_models =
         [
         ];
 var application = {};
+// --------RESOURCES---------
+// --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -81,12 +83,6 @@ new THREE.Sphere(
 	scene.addObject(sphere_1);
 				container_1.addChild(sphere_1);
 				scene.addObject(container_1);
-var sound_1 = 
-new THREE.Sound(
-"sounds/358232_j_s_song.ogg",275,20,true);
-				container_1.addChild(sound_1);
-				scene.addObject(container_1);
-				sound_1.play();
 var container_2 = 
 new THREE.Object3D(
 );
@@ -100,12 +96,6 @@ new THREE.Sphere(
 	scene.addObject(sphere_2);
 				container_2.addChild(sphere_2);
 				scene.addObject(container_2);
-var sound_2 = 
-new THREE.Sound(
-"sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg",275,20,true);
-				container_2.addChild(sound_2);
-				scene.addObject(container_2);
-				sound_2.play();
 	var plane_1_plane = 
 new THREE.Plane(
 1000,1000,100,100);

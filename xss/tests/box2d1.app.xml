@@ -1,0 +1,10 @@
+<application src="box2d1.app.xs">
+    <physics_world gravity_x   = "1" id="myWorld"
+                   scale       = "30" 
+                   friction    = "0.5"
+                   density     = "1.0"
+                   restitution = "0.2"/>
+    
+    <body id="my_body" body_type="dynamic" shape="circle" radius="1.2" x="10" y="10"/>
+    <body id="floor"   body_type="static" shape="rect" x="10" y="15.13" width="20" height="2"/>
+</application>

@@ -142,7 +142,7 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, b
                   }
                 
                 //add the value anyway
-                result->add_property(attr_name, attribute_value(attr));
+                result->add_attribute(attr_name, attribute_value(attr));
               }
 
 	          attr = attr->Next();
@@ -395,7 +395,7 @@ bool xss_object_reader::read_array(TiXmlElement* node, const str& type, XSSObjec
     for(; it != nd; it++)
       result->push_back(*it);
 
-    parent->add_property(id, result);
+    parent->add_attribute(id, result);
     return true;
   }
 

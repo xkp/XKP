@@ -24,26 +24,9 @@ Success are greateful===[ enums.project.xml ]================
 Log: Rendering test with enum class...
 Log: ==[Begin properties query...]====
 Log: query property = caption
-Log: Enums
-Log: Enums
-Log: query property = width
-Log: 200
-Log: 200
-Log: query property = height
-Log: 43
-Log: 43
-Log: query property = visible
-Log: 
-Log: 
-Log: query property = enabled
-Log: false
-Log: false
-Log: query property = placement
-Log: 
-Log: 
-Log: query property = sameName
-Log: 
-Log: 
+Log: null
+Log: rendering
+Log: null
 Log: query property = x
 Log: null
 Log: rendering
@@ -52,11 +35,28 @@ Log: query property = y
 Log: null
 Log: rendering
 Log: null
+Log: query property = width
+Log: null
+Log: rendering
+Log: null
+Log: query property = height
+Log: null
+Log: rendering
+Log: null
+Log: query property = visible
+Log: null
+Log: default_value = 1
+Log: true
+Log: query property = enabled
+Log: null
+Log: rendering
+Log: null
+Log: query property = placement
+Log: null
+Log: default_value = none
+Log: none
 Log: ==[End properties query...]====
 Log: ==[Begin properties query...]====
-Log: query property = sameName
-Log: 
-Log: 
 Log: ==[End properties query...]====
 
 			Instance: name = "btn", type = "Button"
@@ -614,14 +614,24 @@ Log: Rendering UI Types...
 Log: Rendering Sequence Types...
 Log: Rendering UI...
 Log: Rendering Sequence...
+Success are greateful===[ resources_demo.project.xml ]================
+Log: Rendering Resources...
+Log: Rendering Resource...
+Log: Rendering Resource...
+Log: Rendering Resource...
+Log: Rendering Resource...
+Log: Rendering Resource...
+Log: Rendering Resource...
+Log: Rendering Resource...
+Log: Rendering 3js Types...
 Success are greateful===[ sound.project.xml ]================
 Log: Rendering 3js Types...
 Success are greateful===[ transform.project.xml ]================
 Log: Rendering 3js Types...
 Success are greateful===[ wax1.project.xml ]================
-Error at: d:/xkp/xss/tests/../idioms/wax/wax.xml
+Error at: c:/dev/xkp/xss/tests/../idioms/wax/wax.xml
 Error [404] File not found
-file = d:/xkp/xss/tests/../idioms/wax/wax.xml
+file = c:/dev/xkp/xss/tests/../idioms/wax/wax.xml
 ERROR: Project:  wax1.project.xml
 ===[ xss1.project.xml ]================
 

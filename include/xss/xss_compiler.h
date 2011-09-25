@@ -147,6 +147,7 @@ namespace xkp
         void        copy_file(const str& src, const str& dst);
         void        out(variant what);
         XSSType     get_type(const str& type);
+        XSSType     type_of(variant v);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -165,6 +166,7 @@ namespace xkp
         fs::path                            compiling_;
         XSSRenderer                         entry_;
         bool                                use_event_instance_;
+        XSSApplicationRenderer              current_app_;
         
         XSSObject   read_project(fs::path xml_file);
         void        read_application_types(std::vector<XSSObject> & applications);
@@ -218,6 +220,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<void,     2>("copy_file",         &xss_compiler::copy_file);
         method_<void,     1>("out",               &xss_compiler::out);
         method_<XSSType,  1>("get_type",          &xss_compiler::get_type);
+        method_<XSSType,  1>("type_of",           &xss_compiler::type_of);
       }
   };
 

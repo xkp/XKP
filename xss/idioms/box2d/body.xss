@@ -1,0 +1,90 @@
+<xss:parameter id="it"/>
+<xss:parameter id="template"/>
+
+<xss:class>
+
+    method basic_properties()
+    {
+        //fixture properties
+        var density = template.density;
+        if (it.density)
+            density = it.density;
+         
+        var friction = template.friction;
+        if (it.friction)
+            friction = it.friction;
+
+        var restitution = template.restitution;
+        if (it.restitution)
+            restitution = it.restitution;
+
+        //body type
+        var body_type = "";
+        if (!it.body_type)
+            compiler.error("Physics object must have a body type");
+
+        if (it.body_type == "static")
+            body_type = "b2Body.b2_staticBody";
+        else if (it.body_type == "kinematic")
+            body_type = "b2Body.b2_kinematicBody";
+        else if (it.body_type == "dynamic")
+            body_type = "b2Body.b2_dynamicBody";
+        else
+            compiler.error("Invalid body_type", object = it.id, body_type = it.body_type);
+
+        //output it all
+        out()
+        {
+             fixDef.density = <xss:e v="density"/>;
+             fixDef.friction = <xss:e v="friction"/>;
+             fixDef.restitution = <xss:e v="restitution"/>;
+             bodyDef.type = <xss:e v="body_type"/>;
+        }
+    }
+
+    method shape()
+    {
+        if (!it.shape)
+            compiler.error("Invalid bodies must have a shape", object = it.id);
+
+        if (it.shape == "rect")
+        {
+            out()
+            {
+                fixDef.shape = new b2PolygonShape;
+                fixDef.shape.SetAsBox(<xss:e v="it.width"/>, <xss:e v="it.height"/>);
+            }
+        }
+        else if (it.shape == "circle")
+        {
+            out()
+            {
+                fixDef.shape = new b2CircleShape(<xss:e v="it.radius"/>);
+            }
+        }
+        else
+            compiler.error("Invalid shape", object = it.id, shape = it.shape);
+    }
+
+    method position()
+    {
+        out()
+        {
+            bodyDef.position.Set(<xss:e v="it.x"/>, <xss:e v="it.y"/>);
+        }
+    }
+
+    on render()
+    {
+        basic_properties();
+        shape();
+        position();
+
+        //add the body into the world
+        out()
+        {
+            g_world.CreateBody(bodyDef).CreateFixture(fixDef);
+        }
+    }
+
+</xss:class>
