@@ -2,20 +2,35 @@
 
 	<types>
 	
-		<enum id="EVisibility" output_id="View" output_type="int" default_value="true">
-			<property id="true" type="int" output_id="VISIBLE"/>
-			<property id="false" type="int" output_id="INVISIBLE"/>
-			<property id="gone" type="int" output_id="GONE"/>
+		<enum id="EVisibility" output_id="View" output_type="int" default_value="visible">
+			<property id="true" type="int" output_id="VISIBLE" output_xml="visible"/>
+			<property id="false" type="int" output_id="INVISIBLE" output_xml="invisible"/>
+			<property id="gone" type="int" output_id="GONE" output_xml="gone"/>
+		</enum>
+		
+		<enum id="EGravity" output_id="Gravity" output_type="int" default_value="center">
+			<property id="top" type="int" output_id="TOP" output_xml="top"/>
+			<property id="bottom" type="int" output_id="BOTTOM" output_xml="bottom"/>
+			<property id="left" type="int" output_id="LEFT" output_xml="left"/>
+			<property id="right" type="int" output_id="RIGHT" output_xml="right"/>
+			<property id="center_vertical" type="int" output_id="CENTER_VERTICAL" output_xml="center_vertical"/>
+			<property id="fill_vertical" type="int" output_id="FILL_VERTICAL" output_xml="fill_vertical"/>
+			<property id="center_horizontal" type="int" output_id="CENTER_HORIZONTAL" output_xml="center_horizontal"/>
+			<property id="fill_horizontal" type="int" output_id="FILL_HORIZONTAL" output_xml="fill_horizontal"/>
+			<property id="center" type="int" output_id="CENTER" output_xml="center"/>
+			<property id="fill" type="int" output_id="FILL" output_xml="fill"/>
+			<property id="clip_vertical" type="int" output_id="CLIP_VERTICAL" output_xml="clip_vertical"/>
+			<property id="clip_horizontal" type="int" output_id="CLIP_HORIZONTAL" output_xml="clip_horizontal"/>
 		</enum>
 		
 		<enum id="EPlacement" output_id="XKPLayout" output_type="int" default_value="none">
-			<property id="none" type="int" output_id="PL_NONE"/>
-			<property id="top" type="int" output_id="PL_TOP"/>
-			<property id="left" type="int" output_id="PL_LEFT"/>
-			<property id="right" type="int" output_id="PL_RIGHT"/>
-			<property id="bottom" type="int" output_id="PL_BOTTOM"/>
-			<property id="client" type="int" output_id="PL_CLIENT"/>
-			<property id="center" type="int" output_id="PL_CENTER"/>
+			<property id="none" type="int" output_id="PL_NONE" output_xml="none"/>
+			<property id="top" type="int" output_id="PL_TOP" output_xml="top"/>
+			<property id="left" type="int" output_id="PL_LEFT" output_xml="left"/>
+			<property id="right" type="int" output_id="PL_RIGHT" output_xml="right"/>
+			<property id="bottom" type="int" output_id="PL_BOTTOM" output_xml="bottom"/>
+			<property id="client" type="int" output_id="PL_CLIENT" output_xml="client"/>
+			<property id="center" type="int" output_id="PL_CENTER" output_xml="center"/>
 		</enum>
 
 		<class id="IWidget">
@@ -59,7 +74,7 @@
 				<object import="android.view.View.OnClickListener"/>
 			</array>
 			
-			<event id="click" output_id="onClick" interface="OnClickListener" args="View v"/>
+			<event id="click" output_id="onClick" interface="OnClickListener" def_args="View v" set_handle="setOnClickListener" set_param_hnd="this"/>
 		</class>
 		
 		<class id="IChangeListener">
@@ -68,15 +83,15 @@
 				<object import="android.widget.CompoundButton.OnCheckedChangeListener"/>
 			</array>
 			
-			<event id="change" output_id="onCheckedChanged" interface="OnCheckedChangeListener" args="CompoundButton v, Boolean isChecked"/>
+			<event id="change" output_id="onCheckedChanged" interface="OnCheckedChangeListener" def_args="CompoundButton v, Boolean isChecked" set_handle="setOnCheckedChangeListener" set_param_hnd="this"/>
 		</class>
 		
 		<class id="IKeyDownListener">
-			<event id="keydown" output_id="onKey" interface="OnKeyListener" args="View v, int keyCode, KeyEvent event"/>
+			<event id="keydown" output_id="onKey" interface="OnKeyListener" def_args="View v, int keyCode, KeyEvent event" set_handle="setOnKeyListener" set_param_hnd="this"/>
 		</class>
 		
 		<class id="IDragListener">
-			<event id="drag" output_id="onDrag" interface="OnDragListener" args="View v, DragEvent event"/>
+			<event id="drag" output_id="onDrag" interface="OnDragListener" def_args="View v, DragEvent event" set_handle="setOnDragListener" set_param_hnd="this"/>
 		</class>
 			
 		<class id="ITextView" super="IWidget">
@@ -125,6 +140,23 @@
 			<array id="imports">
 				<object import="android.widget.ListView"/>
 			</array>
+		</class>
+		
+		<class id="img_gallery" super="IWidget" output_id="Gallery">
+			<array id="imports">
+				<object import="android.widget.Gallery"/>
+				<object import="android.widget.ImageView"/>
+				
+				<object import="android.widget.BaseAdapter"/>
+				<object import="android.content.Context"/>
+			</array>
+			
+			<array id="classes">
+				<object class_name="ImageAdapter.class.xss"/>
+			</array>
+			
+			<property id="spacing" ns="android" type="int" res_type="dimension" set_fn="setGravity" get_fn="getGravity"/>
+			<property id="images" ns="android" type="array" set_fn="fff" get_fn="fff" no_render="true"/>
 		</class>
 		
 		<class id="holder" super="IWidget" xkpview="true" output_id="XKPLayout">

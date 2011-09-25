@@ -758,10 +758,12 @@ str xss_compiler::render_expression(const str& expr, XSSObject this_)
 		my_ctx->set_this(this_);
 
     variant ev = lang->compile_expression(e, my_ctx);
-    IXSSRenderer* rend = variant_cast<IXSSRenderer*>(ev, null); assert(rend);
+    //IXSSRenderer* rend = variant_cast<IXSSRenderer*>(ev, null); assert(rend);
+    IExpressionRenderer* rend = variant_cast<IExpressionRenderer*>(ev, null); assert(rend);
 
     //and render
-		return rend->render(this_, null);
+		//return rend->render(this_, null);
+    return rend->render();
 	}
 
 str xss_compiler::replace_identifier(const str& s, const str& src, const str& dst)

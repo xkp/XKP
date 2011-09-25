@@ -24,12 +24,24 @@
 			Instance: name = "<xss:e value="i.output_id"/>", type = "<xss:e value="itype"/>"
 		}
 		
-		/*
-		for(var p in i.properties)
+		var qprops = i.query_properties("*");
+		for(var p in qprops)
 		{
 			string etype = "(enum)";
-			if (!p.type.is_enum)
+			if(!p.type.is_enum)
+			{
 				etype = "";
+			}
+			
+			if(p.value == null && p.default_value != null)
+			{
+				p.value = p.default_value;
+				
+				if(p.type.is_enum)
+				{
+					p.value = compiler.render_expression(p.default_value, p);
+				}
+			}
 			
 			out()
 			{
@@ -45,40 +57,6 @@
 				compiler.log("instance: '" + i.output_id + "' property id: '" + p.id + "' property output_id: '" + p.output_id + "'");
 			}
 		}
-		*/
-		
-		compiler.log("==[Begin properties query...]====");
-		string query = 
-			//"set_fn != 0"
-			//"*"
-			//"* == null"
-			"value == null"
-			;
-		var qprops = i.query_properties(query);
-		
-		for(var xp in qprops)
-		{
-			compiler.log("query property = " + xp.id);
-			compiler.log(xp.value);
-			
-			if(xp.value == null && xp.default_value)
-			{
-				compiler.log("default_value = " + xp.default_value);
-				xp.value = xp.default_value;
-			}
-			
-			var value = xp.value;
-			if(value == null)
-			{
-				compiler.log("rendering");
-				value = xp.render_value();
-			}
-			
-			//compiler.log("query property value = " + value);
-			compiler.log(value);
-		}
-		compiler.log("==[End properties query...]====");
-		
 		/*
 		for(var e in i.events)
 		{

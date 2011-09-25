@@ -872,8 +872,16 @@ void xss_object::query_info::add_property(XSSProperty prop)
     if (has(prop))
       return;
 
-    found.insert(std::pair<str, XSSProperty>(prop->id(), prop));
+    register_property(prop);
     result->insert(prop);
+  }
+
+void xss_object::query_info::register_property(XSSProperty prop)
+  {
+    if (has(prop))
+      return;
+
+    found.insert(std::pair<str, XSSProperty>(prop->id(), prop));
   }
 
 bool xss_object::query_info::has(XSSProperty prop)
@@ -908,6 +916,10 @@ void xss_object::query_properties_impl(query_info &info)
         if (addp)
           {
             info.add_property(prop);
+          }
+        else
+          {
+            info.register_property(prop);
           }
       }
 

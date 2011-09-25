@@ -1,5 +1,5 @@
 <application name="Contacts" title="Contacts" src="contacts.xs" width="320" height="430">
-	<div height="45" placement="top">
+	<div height="50" placement="top">
 		<button id="btnLeft" caption="About" width="120" placement="left"/>
 		<button id="btnRight" caption="Find contact" width="120" placement="right"/>
 	</div>

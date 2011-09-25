@@ -164,6 +164,7 @@ struct renderer_expr_schema : renderer_schema<T>
     virtual void declare_base()
       {
         this->template implements<IExpressionRenderer>();
+        //this->template implements<IXSSRenderer>();
 
         this->template method_<XSSType, 0>("type", &T::type);
 

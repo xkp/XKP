@@ -1,0 +1,61 @@
+<xss:class>
+	on render()
+	{
+		generate_instance(application, null);
+	}
+	
+	method generate_instance(var inst, var parent)
+	{
+		out()
+		{
+			instance id: <xss:e value="inst.id"/>
+		}
+		
+		var props = inst.query_properties("*");
+		for(var p in props)
+		{
+			if(p.no_render)
+			{
+				compiler.log("No rendering property " + p.id);
+				continue;
+			}
+			
+			out()
+			{
+				property id: <xss:e v="p.id"/> - output_id: <xss:e v="p.output_id"/>
+			}
+			
+			if(p.type.is_array)
+			{
+				render_array(p);
+			}
+			else
+			if(p.value)
+			{
+				out()
+				{
+					value = <xss:e>p.render_value()</xss:e>
+					namespace = <xss:e value="p.ns"/>
+				}
+			}
+		}
+		
+		if(inst.children)
+		{
+			for(var child in inst.children)
+				generate_instance(child, inst);
+		}
+	}
+	
+	method render_array(var prop)
+	{
+        for(var iii in prop.value) //la cosa es el value
+        {
+			out()
+			{
+				id = <xss:e value="iii.id"/>
+				value = <xss:e value="iii.value"/>
+			}
+        }
+	}
+</xss:class>

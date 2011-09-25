@@ -1,5 +1,8 @@
 #!/bin/bash
 
+ABS_PATH=$(dirname $0)
+cd $ABS_PATH
+
 # windows structure
 XSS_FILENAME=xss.exe
 XSS_PATH=../../bin/Debug/
@@ -12,22 +15,21 @@ LOG_FILENAME=../production/result.log
 OUT_PATH=../
 CHP_PATH=tests/
 
-MD5_CREATE=`find . -type f -print0 | xargs -0 md5sum`
-
 EXEC=$XSS_PATH$XSS_FILENAME
 
 PROJECTS_LIST=`ls | grep "\.project.xml"`
 
+# remove logfile if exists
 test -f $LOG_FILENAME && rm $LOG_FILENAME ;
-
-echo Running tests... Wait please! ;
 
 #date +%c >> $LOG_FILENAME ;
 
+# execute all tests projects and put result in logfile
 count=0 ;
+echo Running tests... Wait please! ;
 for proj in $PROJECTS_LIST ; do
 	echo "Executing project: " $proj ;
-	echo "===[" $proj "]================" >> $LOG_FILENAME ;
+	echo -e "\n===[" $proj "]================\n" >> $LOG_FILENAME ;
 	$EXEC $proj >> $LOG_FILENAME ;
 	result=$? ;
 	if [ "$result" -gt 0 ] ; then
@@ -53,7 +55,7 @@ if [ "$count" -gt 0 ] ; then
 		md5sum -c list.md5 ;
 	else
 		echo "Creating hashes..." ;
-		find ./production ./samples -type f -print0 | xargs -0 md5sum > list.md5
+		find ./production -type f -print0 | xargs -0 md5sum > list.md5
 	fi
 	
 	cd $CHP_PATH ;

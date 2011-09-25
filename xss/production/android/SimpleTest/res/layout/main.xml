@@ -12,6 +12,8 @@
                 xkp:layout_y="20px"
                 android:layout_width="140px"
                 android:layout_height="40px"
+                xkp:placement="XKPLayout.PL_NONE"
+                android:visible="View.VISIBLE"
             >
                 </TextView>
                 <EditText android:id="@+id/edtFirstName"
@@ -19,6 +21,8 @@
                 xkp:layout_y="10px"
                 android:layout_width="150px"
                 android:layout_height="40px"
+                xkp:placement="XKPLayout.PL_NONE"
+                android:visible="View.VISIBLE"
             >
                 </EditText>
                 <TextView android:id="@+id/lblLastName"
@@ -27,6 +31,8 @@
                 xkp:layout_y="70px"
                 android:layout_width="140px"
                 android:layout_height="40px"
+                xkp:placement="XKPLayout.PL_NONE"
+                android:visible="View.VISIBLE"
             >
                 </TextView>
                 <EditText android:id="@+id/edtLastName"
@@ -34,6 +40,8 @@
                 xkp:layout_y="60px"
                 android:layout_width="150px"
                 android:layout_height="40px"
+                xkp:placement="XKPLayout.PL_NONE"
+                android:visible="View.VISIBLE"
             >
                 </EditText>
                 <Button android:id="@+id/btnFullName"
@@ -42,6 +50,8 @@
                 xkp:layout_y="110px"
                 android:layout_width="200px"
                 android:layout_height="43px"
+                xkp:placement="XKPLayout.PL_NONE"
+                android:visible="View.VISIBLE"
             >
                 </Button>
                 <TextView android:id="@+id/lblFullName"
@@ -50,6 +60,8 @@
                 xkp:layout_y="170px"
                 android:layout_width="200px"
                 android:layout_height="30px"
+                xkp:placement="XKPLayout.PL_NONE"
+                android:visible="View.VISIBLE"
             >
                 </TextView>
 			</com.xkp.android.SimpleTest.XKPLayout>

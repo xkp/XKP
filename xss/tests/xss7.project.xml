@@ -1,0 +1,9 @@
+<project 
+	entry_point="xss7.xss" 
+	language="java" 
+	target="xss7.app.xml" >
+	
+	<options event_scope="instance" />
+	
+	<idiom src="../idioms/test/enums.xml" />
+</project>

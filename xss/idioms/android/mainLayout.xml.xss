@@ -95,16 +95,20 @@
 		for(var prop in qproperty)
 		{
 			//TRACE: log
-			compiler.log("Generating xml layout. View: " + view.id + " - Property: " + prop.name);
-			compiler.log(prop.value);
+			//compiler.log("Generating xml layout. View: " + view.id + " - Property: " + prop.name);
 			
-			if(prop.value == null && prop.default_value)
+			if(prop.value == null && prop.default_value != null)
 			{
 				prop.value = prop.default_value;
-				compiler.log(prop.value);
+				
+				if(prop.type.is_enum)
+				{
+					//prop.value = compiler.render_expression(prop.default_value, prop);
+					prop.value = prop.default_value;
+				}
 			}
 			
-			if(prop.value == null || prop.nolayout ||
+			if(prop.value == null || prop.no_layout || prop.no_render ||
 				prop.ns == null || prop.output_id == null)
 				continue;
 			
@@ -114,7 +118,9 @@
 			{
 				assignValue = prop.value;
 				if(prop.value is int)
+				{
 					assignValue = prop.value + "px";
+				}
 			}
 			else
 			if(prop.res_type == "str_reference")
@@ -122,7 +128,7 @@
 				//TIPS: prop.strResourceName come from stringValues.xml.xss 
 				//      that is assigned with the correspond string
 				assignValue = "@string/" + prop.strResourceName;
-			} 
+			}
 			else
 			if(prop.res_type == "id_reference")
 			{
@@ -133,17 +139,21 @@
 			{
 				//without this condition, an assert is dispatching
 				//TODO: implement array type
-				continue;
+				compiler.error("prop.type == array implement me");
+				//continue;
+			}
+			else
+			if(prop.type.is_enum)
+			{
+				assignValue = prop.value.output_xml;
 			}
 			else
 			{
 				assignValue = prop.value;
-			}
-			
-			if(prop.id == "placement")
-			{
-				//TODO: fix enum translate of placement type/class
-				assignValue = prop.render_value();
+				if(!(prop.value is string))
+				{
+					assignValue = prop.render_value();
+				}
 			}
 			
 			out(indent = ind)
