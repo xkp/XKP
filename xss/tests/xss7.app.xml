@@ -1,0 +1,12 @@
+<application name="ArrayType" title="XSS 7 Array Type">
+    <button id="btn" caption="ArrayType" width="200" height="43" enabled="false" placement="top">
+		<property id="states" type="array">
+			<string value="value0"/>
+			<string value="value1"/>
+			<object id="obj_" >
+				<int id="attr0" value="0"/>
+				<string id="attr1" value="v1"/>
+			</object>
+		</property>
+	</button>
+</application>

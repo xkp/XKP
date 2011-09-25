@@ -19,30 +19,33 @@
 		</enum>
 		
 		<class id="button" output_id="Button">
-			<property id="caption" output_id="property:text" type="string" 
+			<property id="caption" output_id="property:text" type="string" ns="android"
 				set_fn="setText(<xss:e v='value'/>)" 
 				get_fn="text()"/>
-			<property id="x" output_id="property:layout_x" type="int" default_value="0"
+			<property id="x" output_id="property:layout_x" type="int" default_value="0" ns="xkp"
 				set_fn="layout(<xss:e v='value'/>, <xss:e v='caller'/>.getTop(), <xss:e v='caller'/>.getRight(), <xss:e v='caller'/>.getBottom())" 
 				get_fn="getLeft()"/>
-			<property id="y" output_id="property:layout_y" type="int" default_value="0"
+			<property id="y" output_id="property:layout_y" type="int" default_value="0" ns="xkp"
 				set_fn="layout(<xss:e v='caller'/>.getLeft(), <xss:e v='value'/>, <xss:e v='caller'/>.getRight(), <xss:e v='caller'/>.getBottom())" 
 				get_fn="getTop()"/>
-			<property id="width" output_id="property:layout_width" type="int" 
+			<property id="width" output_id="property:layout_width" type="int" ns="android"
 				set_fn="layout(<xss:e v='caller'/>.getLeft(), <xss:e v='caller'/>.getTop(), <xss:e v='caller'/>.getLeft() + <xss:e v='value'/>, <xss:e v='caller'/>.getBottom())" 
 				get_fn="getWidth()"/>
-			<property id="height" output_id="property:layout_height" type="int" 
+			<property id="height" output_id="property:layout_height" type="int" ns="android"
 				set_fn="layout(<xss:e v='caller'/>.getLeft(), <xss:e v='caller'/>.getTop(), <xss:e v='caller'/>.getRight(), <xss:e v='caller'/>.getTop() + <xss:e v='value'/>)" 
 				get_fn="getHeight()"/>
-			<property id="visible" output_id="property:visible" type="EVisibility" 
+			<property id="visible" output_id="property:visible" type="EVisibility" ns="android"
 				set_fn="setVisibility(<xss:e v='value'/>)" 
 				get_fn="getVisibility()"/>
-			<property id="enabled" output_id="property:enabled" type="bool" 
+			<property id="enabled" output_id="property:enabled" type="bool" ns="android"
 				set_fn="setEnabled(<xss:e v='value'/>)" 
 				get_fn="isEnabled()"/>
-			<property id="placement" output_id="property:placement" type="EPlacement" 
+			<property id="placement" output_id="property:placement" type="EPlacement" ns="xkp"
 				set_fn="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setPlacement(<xss:e v='value'/>)" 
 				get_fn="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).getPlacement()"/>
+			<property id="states" output_id="property:states" type="array" ns="xkp" no_render="true"
+				set_fn="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setStates(<xss:e v='value'/>)" 
+				get_fn="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).getStates()"/>
 			
 			<event id="click" output_id="onClick" />
 		</class>

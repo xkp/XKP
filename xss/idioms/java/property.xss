@@ -9,10 +9,13 @@
 	string prop_type = "Object";
 	if(p.type != null)
 		prop_type = p.type.output_id;
-		
+	
 	string inst_name = "";
 	if(iname)
 		inst_name = iname;
+	
+	if(p.no_render)
+		return;
 	
 	if(p.set && p.get)
 	{

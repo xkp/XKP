@@ -103,11 +103,12 @@
 				
 				if(prop.type.is_enum)
 				{
-					prop.value = compiler.render_expression(prop.default_value, prop);
+					//prop.value = compiler.render_expression(prop.default_value, prop);
+					prop.value = prop.default_value;
 				}
 			}
 			
-			if(prop.value == null || prop.nolayout ||
+			if(prop.value == null || prop.no_layout || prop.no_render ||
 				prop.ns == null || prop.output_id == null)
 				continue;
 			
@@ -140,6 +141,11 @@
 				//TODO: implement array type
 				compiler.error("prop.type == array implement me");
 				//continue;
+			}
+			else
+			if(prop.type.is_enum)
+			{
+				assignValue = prop.value.output_xml;
 			}
 			else
 			{
