@@ -1195,6 +1195,26 @@ xss_type::xss_type(schema* _xs_type):
     DYNAMIC_INHERITANCE(xss_type)
   }
 
+bool xss_type::resolve(const str& name, schema_item& result)
+  {
+    if (is_enum_ && !has(name))
+      {
+        XSSProperty enum_item = get_property(name);
+        if (enum_item)
+          {
+		        int idx      = add_anonymous(enum_item);
+		        result.get   = Getter( new anonymous_getter(idx) );
+		        result.set   = Setter();
+		        result.flags = DYNAMIC_ACCESS;
+
+            items_.insert( item_pair(name, result) );
+		        return true;
+          }
+      }
+
+    return xss_object::resolve(name, result);
+  }
+
 void xss_type::set_super(XSSType super)
   {
     super_ = super;

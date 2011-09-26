@@ -35,7 +35,7 @@
 			else
 			{
 				var pp = compiler.evaluate_property(p);
-				compiler.log(p.id);
+				compiler.log("DEBUGING THIS: " + p.id);
 				compiler.log(pp);
 				//string xx = pp.output_xml;
 				//compiler.log(xx);

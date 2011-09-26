@@ -94,6 +94,7 @@
     <ClInclude Include="..\..\..\include\xs.h" />
     <ClInclude Include="..\..\..\include\xss\dsl_out.h" />
     <ClInclude Include="..\..\..\include\xss\language.h" />
+    <ClInclude Include="..\..\..\include\xss\lang\base.h" />
     <ClInclude Include="..\..\..\include\xss\lang\debug.h" />
     <ClInclude Include="..\..\..\include\xss\lang\js.h" />
     <ClInclude Include="..\..\..\include\xss\lang\waxjs.h" />

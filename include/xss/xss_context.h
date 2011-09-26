@@ -136,6 +136,9 @@ class xss_type : public xss_object
       xss_type();
       xss_type(schema* xs_type);
     public:
+      //xss_object
+      virtual bool resolve(const str& name, schema_item& result);
+    public:
       void    set_super(XSSType super);
       void    set_definition(XSSObject def);
       schema* native_type();

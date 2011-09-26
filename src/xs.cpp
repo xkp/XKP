@@ -50,22 +50,20 @@ variant xs_utils::evaluate_xs_expression(const str& src, code_context& ctx, fs::
 variant xs_utils::evaluate_xs_expression(const expression& src, code_context& ctx, fs::path file)
   {
     code cde;
-    stmt_variable var;
-
-    var.id = "____result";
-    var.value = src;
 
     stmt_return ret;
-    ret.expr.push_identifier(var.id);
+    ret.expr = src;
 
-    cde.add_statement(var);
     cde.add_statement(ret);
 
     code_linker linker(ctx);
     cde.visit(&linker);
     
-    ByteCode result = linker.link(file);
-    result->file = file;
+    ByteCode compiled = linker.link(file);
+    compiled->file = file;
+    
+    execution_context dec(compiled, ctx.this_);
+    variant result = dec.execute();
     return result;
   }
 
