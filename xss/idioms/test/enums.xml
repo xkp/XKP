@@ -2,22 +2,22 @@
     <types>
 	
         //testing enums class
-		<enum id="EVisibility" output_id="View" default_value="EVisibility.true">
-			<property id="true" type="int" output_id="VISIBLE"/>
-			<property id="false" type="int" output_id="INVISIBLE"/>
-			<property id="gone" type="int" output_id="GONE"/>
+		<enum id="EVisibility" output_id="View" output_type="int" default_value="visible">
+			<property id="true" type="int" output_id="VISIBLE" output_xml="visible"/>
+			<property id="false" type="int" output_id="INVISIBLE" output_xml="invisible"/>
+			<property id="gone" type="int" output_id="GONE" output_xml="gone"/>
 		</enum>
 		
-		<enum id="EPlacement" output_id="Placement" default_value="EPlacement.none">
-			<property id="none" type="int" output_id="PL_NONE"/>
-			<property id="top" type="int" output_id="PL_TOP"/>
-			<property id="left" type="int" output_id="PL_LEFT"/>
-			<property id="right" type="int" output_id="PL_RIGHT"/>
-			<property id="bottom" type="int" output_id="PL_BOTTOM"/>
-			<property id="client" type="int" output_id="PL_CLIENT"/>
-			<property id="center" type="int" output_id="PL_CENTER"/>
+		<enum id="EPlacement" output_id="XKPLayout" output_type="int" default_value="none">
+			<property id="none" type="int" output_id="PL_NONE" output_xml="none"/>
+			<property id="top" type="int" output_id="PL_TOP" output_xml="top"/>
+			<property id="left" type="int" output_id="PL_LEFT" output_xml="left"/>
+			<property id="right" type="int" output_id="PL_RIGHT" output_xml="right"/>
+			<property id="bottom" type="int" output_id="PL_BOTTOM" output_xml="bottom"/>
+			<property id="client" type="int" output_id="PL_CLIENT" output_xml="client"/>
+			<property id="center" type="int" output_id="PL_CENTER" output_xml="center"/>
 		</enum>
-		
+
 		<class id="button" output_id="Button">
 			<property id="caption" output_id="property:text" type="string" ns="android"
 				set_fn="setText(<xss:e v='value'/>)" 

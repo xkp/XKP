@@ -867,6 +867,16 @@ variant xss_compiler::resolve_property(const str& prop, variant parent)
 		return result;
 	}
 
+variant xss_compiler::evaluate_property(XSSProperty prop)
+  {
+    if (prop)
+      { 
+        return prop->eval(current_context());
+      }
+
+    return variant();
+  }
+
 str xss_compiler::renderer_file(const str& file)
   {
     XSSRenderer r = current_renderer();

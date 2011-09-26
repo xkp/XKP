@@ -238,6 +238,11 @@ struct expression_renderer : IExpressionRenderer
         return XSSType();
       }
 
+    virtual variant eval(XSSContext ctx)
+      {
+        return variant();
+      }
+
     virtual str render()
       {
         expr_renderer rend("");

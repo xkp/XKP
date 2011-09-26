@@ -85,6 +85,7 @@ struct base_expr_renderer : IExpressionRenderer,
 
     //IExpressionRenderer
     virtual XSSType type();
+    virtual variant eval(XSSContext ctx);
     virtual str     render() = 0;
 
     //expression_visitor

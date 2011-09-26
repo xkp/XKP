@@ -1465,7 +1465,13 @@ str	xss_property::render_set(const str& value)
 
 variant xss_property::eval(XSSContext ctx)
   {
-    //td: !!!
+    IExpressionRenderer *ier = variant_cast<IExpressionRenderer *>(value_, null);
+
+    if (ier)
+      {
+        return ier->eval(ctx);
+      }
+
     return variant();
   }
 

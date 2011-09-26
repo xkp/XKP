@@ -557,6 +557,14 @@ XSSType base_expr_renderer::type()
     return !type_ ? lang_utils::expr_type(expr_, ctx_) : type_;
   }
 
+variant base_expr_renderer::eval(XSSContext ctx)
+  {
+    fs::path file;
+    code_context cctx = ctx->get_compile_context();
+    xs_utils xs;
+    return xs.evaluate_xs_expression(expr_, cctx, file);
+  }
+
 void base_expr_renderer::push(variant operand, bool top)
   {
 		if (top && assigner)

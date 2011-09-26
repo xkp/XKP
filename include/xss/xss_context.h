@@ -185,6 +185,7 @@ struct ICodeRenderer : public IRenderer
 struct IExpressionRenderer : public IRenderer
   {
     virtual XSSType type() = 0;
+    virtual variant eval(XSSContext ctx) = 0;
   };
 
 struct IArgumentRenderer : public IRenderer
@@ -403,7 +404,6 @@ struct xss_object_schema : editable_object_schema<T>
 				this->template property_<DynamicArray>("properties",  &T::properties_);
 				this->template property_<DynamicArray>("events",			&T::events_);
 				this->template property_<DynamicArray>("methods",		  &T::methods_);
-				this->template property_<DynamicArray>("children",		&T::children_);
 				this->template property_<str>         ("type_name",		&T::type_name_);
 				this->template property_<str>         ("class_name",	&T::type_name_);
         this->template property_<XSSType>     ("type",        &T::type,       &T::set_type);
