@@ -107,10 +107,8 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, b
                     XSSProperty prop = type->get_property(attr_name);
                     if (prop)
                       {
-                        XSSProperty new_prop(new xss_property(prop->id(), prop->type(), variant(), prop->get, prop->set, result));
-                        new_prop->copy(XSSObject(prop)); //sort of inefficient, but safe & consistent
-                        
                         XSSType prop_type = prop->type();
+                        variant value;
                         if (prop_type->is_enum())
                           {
                             XSSProperty enum_prop = prop_type->get_property(attr_value);
@@ -132,12 +130,13 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, b
                             xs_utils   xs; 
                             xs.compile_expression(expr_str, expr);
 
-                            new_prop->value_ = lang->compile_expression(expr, ctx_);
+                            value = lang->compile_expression(expr, ctx_);
                           }
                         else
-                          new_prop->value_ = attribute_value(attr);
+                          value = attribute_value(attr);
 
-                        result->properties()->push_back(new_prop);
+                        
+                        result->add_property(attr_name, value, prop_type); //td: type checking
                       }
                   }
                 
@@ -174,7 +173,8 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, b
             if (!handled)
               {
                 XSSObject child = read_object(child_node, result, true);
-                result->add_child( child );
+                if (child)
+                  result->add_child( child );
               }
 
             child_node = child_node->NextSiblingElement();
@@ -249,6 +249,8 @@ bool xss_object_reader::special_node(TiXmlElement* node, XSSObject parent, XSSOb
 
 bool xss_object_reader::read_property(TiXmlElement* node, const str& type_name, XSSObject parent, XSSObject& result)
   {
+    result = XSSObject();
+
     variant value;
     bool is_array = type_name == "array";
     if (is_array)
@@ -348,13 +350,14 @@ bool xss_object_reader::read_property(TiXmlElement* node, const str& type_name, 
     XSSObject surrogate = read_object(node, XSSObject(), false);
     prop->copy(surrogate);
 
-    parent->properties()->push_back(prop); //td: check for existing properties
-
+    parent->add_property_(prop); 
     return true;
   }
 
 bool xss_object_reader::read_method(TiXmlElement* node, const str& type, XSSObject parent, XSSObject& result)
   {
+    result = XSSObject();
+
     XSSMethod mthd(new xss_method);
     XSSObject surrogate = read_object(node, XSSObject(), false);
     mthd->copy(surrogate);
@@ -365,6 +368,8 @@ bool xss_object_reader::read_method(TiXmlElement* node, const str& type, XSSObje
 
 bool xss_object_reader::read_event(TiXmlElement* node, const str& type, XSSObject parent, XSSObject& result)
   {
+    result = XSSObject();
+
     XSSEvent ev(new xss_event);
     XSSObject surrogate = read_object(node, XSSObject(), false);
     ev->copy(surrogate);
@@ -373,8 +378,10 @@ bool xss_object_reader::read_event(TiXmlElement* node, const str& type, XSSObjec
     return true;
   }
 
-bool xss_object_reader::read_array(TiXmlElement* node, const str& type, XSSObject parent, XSSObject& unused)
+bool xss_object_reader::read_array(TiXmlElement* node, const str& type, XSSObject parent, XSSObject& result)
   { 
+    result = XSSObject();
+
     const char* idd = node->Attribute("id");
     if (!idd)
       {
@@ -386,16 +393,16 @@ bool xss_object_reader::read_array(TiXmlElement* node, const str& type, XSSObjec
       }
 
     str           id(idd);
-    DynamicArray  result(new dynamic_array);
+    DynamicArray  my_result(new dynamic_array);
     XSSObjectList aa = read_array(node);
 
     XSSObjectList::iterator it = aa.begin();
     XSSObjectList::iterator nd = aa.end();
 
     for(; it != nd; it++)
-      result->push_back(*it);
+      my_result->push_back(*it);
 
-    parent->add_attribute(id, result);
+    parent->add_attribute(id, my_result);
     return true;
   }
 

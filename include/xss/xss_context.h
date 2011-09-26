@@ -109,6 +109,7 @@ class xss_object : public editable_object<xss_object>,
 			void add_child(XSSObject obj);
       void remove_child(XSSObject obj);
 		public:
+      void add_property_(XSSProperty prop);
       void add_property(const str& name, variant value, XSSType type);
       void register_property(const str& name, XSSProperty new_prop = XSSProperty());
       void register_method(const str& name, XSSMethod new_mthd = XSSMethod());
@@ -347,10 +348,11 @@ class xss_property : public xss_object
 		  XSSObject this_;
 		  variant   value_;
 
-      void set_value(const variant value, XSSType type);
-      str  render_value();
-      str  render_get();
-      str	 render_set(const str& value);
+      void    set_value(const variant value, XSSType type);
+      str     render_value();
+      str     render_get();
+      str	    render_set(const str& value);
+      variant eval(XSSContext ctx);
   };
 
 class xss_event : public xss_object

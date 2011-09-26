@@ -1073,6 +1073,45 @@ XSSMethod xss_object::get_method(const str& name)
     return XSSMethod();
   }
 
+void xss_object::add_property_(XSSProperty prop)
+  {
+    std::vector<variant>::iterator it = properties_->ref_begin();
+    std::vector<variant>::iterator nd = properties_->ref_end();
+
+    XSSProperty mine;
+    for(; it != nd; it++)
+      {
+        XSSProperty p = *it;
+        if (prop->id() == p->id())
+          {
+            mine = p;
+            break;
+          }
+      }
+
+    if (mine)
+      {
+        mine->set_value(prop->value_, prop->type());
+      }
+    else
+      {
+        //search the type
+        mine = get_property(prop->id());
+        if (mine)
+          {
+            XSSProperty mashup(new xss_property);
+            mashup->copy(XSSObject(mine));
+            mashup->copy(XSSObject(prop));
+            mashup->this_ = shared_from_this();
+            properties_->push_back(mashup);
+          }
+        else
+          {
+            properties_->push_back(prop);
+          }
+      }
+  }
+
 void xss_object::add_property(const str& name, variant value, XSSType type)
   {
     XSSProperty result;
@@ -1422,6 +1461,12 @@ str	xss_property::render_set(const str& value)
 			}
 
 		return output_id() + " = " + value;
+  }
+
+variant xss_property::eval(XSSContext ctx)
+  {
+    //td: !!!
+    return variant();
   }
 
 XSSType xss_property::type()

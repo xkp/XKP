@@ -9,6 +9,7 @@
 		out()
 		{
 			instance id: <xss:e value="inst.id"/>
+			instance class: <xss:e value="inst.class_name"/>
 		}
 		
 		var props = inst.query_properties("*");
@@ -23,6 +24,7 @@
 			out()
 			{
 				property id: <xss:e v="p.id"/> - output_id: <xss:e v="p.output_id"/>
+					namespace = <xss:e value="p.ns"/>
 			}
 			
 			if(p.type.is_array)
@@ -30,12 +32,11 @@
 				render_array(p);
 			}
 			else
-			if(p.value)
+			if(p.value != null)
 			{
 				out()
 				{
 					value = <xss:e>p.render_value()</xss:e>
-					namespace = <xss:e value="p.ns"/>
 				}
 			}
 		}
@@ -43,7 +44,9 @@
 		if(inst.children)
 		{
 			for(var child in inst.children)
-				generate_instance(child, inst);
+            {
+                generate_instance(child, inst);
+            }
 		}
 	}
 	
