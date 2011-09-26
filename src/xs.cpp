@@ -47,6 +47,28 @@ variant xs_utils::evaluate_xs_expression(const str& src, code_context& ctx, fs::
     return execute_xs("return " + src + ';', ctx, file);
   }
 
+variant xs_utils::evaluate_xs_expression(const expression& src, code_context& ctx, fs::path file)
+  {
+    code cde;
+    stmt_variable var;
+
+    var.id = "____result";
+    var.value = src;
+
+    stmt_return ret;
+    ret.expr.push_identifier(var.id);
+
+    cde.add_statement(var);
+    cde.add_statement(ret);
+
+    code_linker linker(ctx);
+    cde.visit(&linker);
+    
+    ByteCode result = linker.link(file);
+    result->file = file;
+    return result;
+  }
+
 bool xs_utils::compile_expression(const str& src, expression& expr)
   {
     xs_compiler c;

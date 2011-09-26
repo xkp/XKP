@@ -107,6 +107,7 @@ namespace xkp
       //expressions
       variant evaluate_expression(const str& src);
       variant evaluate_xs_expression(const str& src, code_context& ctx, fs::path file);
+      variant evaluate_xs_expression(const expression& src, code_context& ctx, fs::path file);
       bool    compile_expression(const str& src, expression& expr);
     
       //plain execute
