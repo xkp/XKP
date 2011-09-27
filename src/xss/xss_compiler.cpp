@@ -64,6 +64,8 @@ const str SNotAnInstance("Expecting instance");
 const str SNotAProperty("Expecting property");
 const str SAliasMustHaveAliased("Alias types must have a 'aliased' attribute");
 const str SBadAliasType("Alias type not found");
+const str SCannotCompileExpression("Cannot compile expression");
+
 
 //xss_application_renderer
 xss_application_renderer::xss_application_renderer(fs::path entry_point, Language lang, XSSCompiler compiler):
@@ -735,6 +737,26 @@ bool xss_compiler::parse_expression(variant v)
 		expression expr;
 		return compiler.compile_expression(s, expr);
 	}
+
+variant xss_compiler::compile_expression(const str& expr)
+  {
+    XSSContext ctx  = current_context();
+    Language   lang = ctx->get_language();
+
+    xs_utils   xs;
+    expression result;
+    if (!xs.compile_expression(expr, result))
+      {
+				param_list error;
+				error.add("id", SProjectError);
+				error.add("desc", SCannotCompileExpression);
+				error.add("expression", expr);
+
+				xss_throw(error);
+      }
+
+    return lang->compile_expression(result, ctx); 
+  }
 
 str xss_compiler::render_expression(const str& expr, XSSObject this_)
 	{

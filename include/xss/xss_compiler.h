@@ -136,6 +136,7 @@ namespace xkp
         void        log(const param_list params);
         void        error(const param_list params);
         bool        parse_expression(variant v);
+        variant     compile_expression(const str& expr);
         str         render_expression(const str& expr, XSSObject this_);
         str         replace_identifier(const str& s, const str& src, const str& dst);
         variant     resolve_property(const str& prop, variant parent);
