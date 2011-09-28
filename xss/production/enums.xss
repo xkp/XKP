@@ -27,6 +27,17 @@
 		var qprops = i.query_properties("*");
 		for(var p in qprops)
 		{
+			if(p.value == null && p.default_value != null)
+			{
+				p.value = p.default_value;
+				
+				if(p.type.is_enum)
+				{
+					//p.value = compiler.render_expression(p.default_value, p);
+					p.value = compiler.compile_expression(p.value);
+				}
+			}
+			
 			string etype = "(enum)";
 			if(!p.type.is_enum)
 			{
@@ -35,19 +46,12 @@
 			else
 			{
 				var pp = compiler.evaluate_property(p);
-				compiler.log("DEBUGING THIS: " + p.id);
-				compiler.log(pp);
-				//string xx = pp.output_xml;
-				//compiler.log(xx);
-			}
-			
-			if(p.value == null && p.default_value != null)
-			{
-				p.value = p.default_value;
+				//compiler.log("DEBUGING THIS: " + p.id);
+				//compiler.log(pp);
 				
-				if(p.type.is_enum)
+				if(pp has "output_xml")
 				{
-					p.value = compiler.render_expression(p.default_value, p);
+					compiler.log("output_xml: " + pp.output_xml);
 				}
 			}
 			

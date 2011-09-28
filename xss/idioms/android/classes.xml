@@ -2,13 +2,13 @@
 
 	<types>
 	
-		<enum id="EVisibility" output_id="View" output_type="int" default_value="visible">
+		<enum id="EVisibility" output_id="View" output_type="int" default_value="EVisibility.true">
 			<property id="true" type="int" output_id="VISIBLE" output_xml="visible"/>
 			<property id="false" type="int" output_id="INVISIBLE" output_xml="invisible"/>
 			<property id="gone" type="int" output_id="GONE" output_xml="gone"/>
 		</enum>
 		
-		<enum id="EGravity" output_id="Gravity" output_type="int" default_value="center">
+		<enum id="EGravity" output_id="Gravity" output_type="int" default_value="EGravity.center">
 			<property id="top" type="int" output_id="TOP" output_xml="top"/>
 			<property id="bottom" type="int" output_id="BOTTOM" output_xml="bottom"/>
 			<property id="left" type="int" output_id="LEFT" output_xml="left"/>
@@ -23,7 +23,7 @@
 			<property id="clip_horizontal" type="int" output_id="CLIP_HORIZONTAL" output_xml="clip_horizontal"/>
 		</enum>
 		
-		<enum id="EPlacement" output_id="XKPLayout" output_type="int" default_value="none">
+		<enum id="EPlacement" output_id="XKPLayout" output_type="int" default_value="EPlacement.none">
 			<property id="none" type="int" output_id="PL_NONE" output_xml="none"/>
 			<property id="top" type="int" output_id="PL_TOP" output_xml="top"/>
 			<property id="left" type="int" output_id="PL_LEFT" output_xml="left"/>
@@ -57,7 +57,7 @@
 				property_xss_set="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setAutoSizeY" 
 				property_xss="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).getAutoSizeY()"/>
 			
-			<property id="visible" ns="android" type="EVisibility" set_fn="setVisibility" get_fn="getVisibility"/>
+			<property id="visible" output_id="visibility" ns="android" type="EVisibility" set_fn="setVisibility" get_fn="getVisibility"/>
 			<property id="enabled" ns="android" type="bool" set_fn="setEnabled" get_fn="isEnabled"/>
 			
 			<!-- top, bottom, left, right, center_vertical, fill_vertical, center_horizontal, fill_horizontal, center, fill, clip_vertical, clip_horizontal-->
@@ -156,7 +156,7 @@
 			</array>
 			
 			<property id="spacing" ns="android" type="int" res_type="dimension" set_fn="setGravity" get_fn="getGravity"/>
-			<property id="images" ns="android" type="array" set_fn="fff" get_fn="fff" no_render="true"/>
+			<property id="images" ns="android" type="array" set_fn="fff" get_fn="fff" no_layout="true"/>
 		</class>
 		
 		<class id="holder" super="IWidget" xkpview="true" output_id="XKPLayout">

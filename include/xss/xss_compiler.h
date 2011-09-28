@@ -213,6 +213,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<str,      1>("genid",	            &xss_compiler::genid);
         method_<bool,     1>("parse_expression",	&xss_compiler::parse_expression);
         method_<str,      2>("render_expression", &xss_compiler::render_expression);
+        method_<variant,  1>("compile_expression",&xss_compiler::compile_expression);
         method_<str,	    3>("replace_identifier",&xss_compiler::replace_identifier);
         method_<variant,  2>("resolve_property",	&xss_compiler::resolve_property);
         method_<variant,  1>("evaluate_property", &xss_compiler::evaluate_property);

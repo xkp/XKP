@@ -7,40 +7,40 @@
     android:layout_height="fill_parent"
             >
                 <com.xkp.android.Contacts.XKPLayout android:id="@+id/__div1"
-                android:layout_height="45px"
-                xkp:placement="XKPLayout.PL_TOP"
+                android:layout_height="50px"
+                xkp:placement="top"
                 android:layout_width="wrap_content"
-                android:visible="View.VISIBLE"
+                android:visibility="visible"
             >
                 <Button android:id="@+id/btnLeft"
                 android:text="@string/res0"
                 android:layout_width="120px"
-                xkp:placement="XKPLayout.PL_LEFT"
+                xkp:placement="left"
                 android:layout_height="wrap_content"
-                android:visible="View.VISIBLE"
+                android:visibility="visible"
             >
                 </Button>
                 <Button android:id="@+id/btnRight"
                 android:text="@string/res1"
                 android:layout_width="120px"
-                xkp:placement="XKPLayout.PL_RIGHT"
+                xkp:placement="right"
                 android:layout_height="wrap_content"
-                android:visible="View.VISIBLE"
+                android:visibility="visible"
             >
                 </Button>
                 </com.xkp.android.Contacts.XKPLayout>
                 <com.xkp.android.Contacts.XKPSwitcher android:id="@+id/swtStates"
                 xkp:current="@+id/divAdd"
-                xkp:placement="XKPLayout.PL_CLIENT"
+                xkp:placement="client"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visible="View.VISIBLE"
+                android:visibility="visible"
             >
                 <com.xkp.android.Contacts.XKPLayout android:id="@+id/divAdd"
-                xkp:placement="XKPLayout.PL_CLIENT"
+                xkp:placement="client"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visible="View.VISIBLE"
+                android:visibility="visible"
             >
                 <TextView android:id="@+id/lblFullName"
                 android:text="@string/res2"
@@ -48,8 +48,8 @@
                 xkp:layout_y="10px"
                 android:layout_width="140px"
                 android:layout_height="35px"
-                xkp:placement="XKPLayout.PL_NONE"
-                android:visible="View.VISIBLE"
+                xkp:placement="none"
+                android:visibility="visible"
             >
                 </TextView>
                 <TextView android:id="@+id/lblPhone"
@@ -58,8 +58,8 @@
                 xkp:layout_y="60px"
                 android:layout_width="140px"
                 android:layout_height="35px"
-                xkp:placement="XKPLayout.PL_NONE"
-                android:visible="View.VISIBLE"
+                xkp:placement="none"
+                android:visibility="visible"
             >
                 </TextView>
                 <EditText android:id="@+id/edtFullName"
@@ -67,8 +67,8 @@
                 xkp:layout_y="5px"
                 android:layout_width="140px"
                 android:layout_height="45px"
-                xkp:placement="XKPLayout.PL_NONE"
-                android:visible="View.VISIBLE"
+                xkp:placement="none"
+                android:visibility="visible"
             >
                 </EditText>
                 <EditText android:id="@+id/edtPhoneNumber"
@@ -76,8 +76,8 @@
                 xkp:layout_y="55px"
                 android:layout_width="140px"
                 android:layout_height="45px"
-                xkp:placement="XKPLayout.PL_NONE"
-                android:visible="View.VISIBLE"
+                xkp:placement="none"
+                android:visibility="visible"
             >
                 </EditText>
                 <CheckBox android:id="@+id/chkVerifier"
@@ -87,24 +87,24 @@
                 xkp:layout_y="120px"
                 android:layout_width="250px"
                 android:layout_height="40px"
-                xkp:placement="XKPLayout.PL_NONE"
-                android:visible="View.VISIBLE"
+                xkp:placement="none"
+                android:visibility="visible"
             >
                 </CheckBox>
                 <Button android:id="@+id/btnAddContact"
                 android:text="@string/res5"
                 android:layout_height="40px"
-                xkp:placement="XKPLayout.PL_BOTTOM"
+                xkp:placement="bottom"
                 android:layout_width="wrap_content"
-                android:visible="View.VISIBLE"
+                android:visibility="visible"
             >
                 </Button>
                 </com.xkp.android.Contacts.XKPLayout>
                 <com.xkp.android.Contacts.XKPLayout android:id="@+id/divFind"
-                xkp:placement="XKPLayout.PL_CLIENT"
+                xkp:placement="client"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visible="View.VISIBLE"
+                android:visibility="visible"
             >
                 <TextView android:id="@+id/lblFindType"
                 android:text="@string/res6"
@@ -112,8 +112,8 @@
                 xkp:layout_y="10px"
                 android:layout_width="100px"
                 android:layout_height="35px"
-                xkp:placement="XKPLayout.PL_NONE"
-                android:visible="View.VISIBLE"
+                xkp:placement="none"
+                android:visibility="visible"
             >
                 </TextView>
                 <RadioButton android:id="@+id/rdbByName"
@@ -122,8 +122,8 @@
                 xkp:layout_y="60px"
                 android:layout_width="100px"
                 android:layout_height="35px"
-                xkp:placement="XKPLayout.PL_NONE"
-                android:visible="View.VISIBLE"
+                xkp:placement="none"
+                android:visibility="visible"
             >
                 </RadioButton>
                 <RadioButton android:id="@+id/rdbByPhone"
@@ -132,8 +132,8 @@
                 xkp:layout_y="110px"
                 android:layout_width="100px"
                 android:layout_height="35px"
-                xkp:placement="XKPLayout.PL_NONE"
-                android:visible="View.VISIBLE"
+                xkp:placement="none"
+                android:visibility="visible"
             >
                 </RadioButton>
                 <TextView android:id="@+id/lblCriterion"
@@ -142,8 +142,8 @@
                 xkp:layout_y="180px"
                 android:layout_width="100px"
                 android:layout_height="35px"
-                xkp:placement="XKPLayout.PL_NONE"
-                android:visible="View.VISIBLE"
+                xkp:placement="none"
+                android:visibility="visible"
             >
                 </TextView>
                 <EditText android:id="@+id/edtCriterion"
@@ -151,16 +151,16 @@
                 xkp:layout_y="220px"
                 android:layout_width="100px"
                 android:layout_height="45px"
-                xkp:placement="XKPLayout.PL_NONE"
-                android:visible="View.VISIBLE"
+                xkp:placement="none"
+                android:visibility="visible"
             >
                 </EditText>
                 </com.xkp.android.Contacts.XKPLayout>
                 <com.xkp.android.Contacts.XKPLayout android:id="@+id/divAbout"
-                xkp:placement="XKPLayout.PL_CLIENT"
+                xkp:placement="client"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visible="View.VISIBLE"
+                android:visibility="visible"
             >
                 <TextView android:id="@+id/lblName"
                 android:text="@string/res10"
@@ -168,8 +168,8 @@
                 xkp:layout_y="10px"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                xkp:placement="XKPLayout.PL_NONE"
-                android:visible="View.VISIBLE"
+                xkp:placement="none"
+                android:visibility="visible"
             >
                 </TextView>
                 <TextView android:id="@+id/lblContact"
@@ -178,8 +178,8 @@
                 xkp:layout_y="50px"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                xkp:placement="XKPLayout.PL_NONE"
-                android:visible="View.VISIBLE"
+                xkp:placement="none"
+                android:visibility="visible"
             >
                 </TextView>
                 </com.xkp.android.Contacts.XKPLayout>

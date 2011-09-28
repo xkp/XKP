@@ -88,10 +88,7 @@
 	
 	method generate_properties(var view, int ind)
 	{
-		//TODO: change query of property when fix results
 		var qproperty = view.query_properties("*");
-		
-		//for(var prop in view.properties)
 		for(var prop in qproperty)
 		{
 			//TRACE: log
@@ -104,19 +101,18 @@
 				if(prop.type.is_enum)
 				{
 					//prop.value = compiler.render_expression(prop.default_value, prop);
-					prop.value = prop.default_value;
+					prop.value = compiler.compile_expression(prop.value);
 				}
 			}
 			
-			if(prop.value == null || prop.no_layout || prop.no_render ||
+			if(prop.value == null || prop.no_layout ||
 				prop.ns == null || prop.output_id == null)
 				continue;
 			
-			string assignValue;
+			string assignValue = prop.value;
 			
 			if(prop.res_type == "dimension")
 			{
-				assignValue = prop.value;
 				if(prop.value is int)
 				{
 					assignValue = prop.value + "px";
@@ -135,21 +131,23 @@
 				assignValue = "@+id/" + prop.value;
 			}
 			else
-			if(prop.type == "array")
+			if(prop.type.is_array)
 			{
-				//without this condition, an assert is dispatching
-				//TODO: implement array type
-				compiler.error("prop.type == array implement me");
-				//continue;
+				render_array(prop.value);
+				continue;
 			}
 			else
 			if(prop.type.is_enum)
 			{
-				assignValue = prop.value.output_xml;
+				var eval_prop = compiler.evaluate_property(prop);
+				
+				if(eval_prop has "output_xml")
+				{
+					assignValue = eval_prop.output_xml;
+				}
 			}
 			else
 			{
-				assignValue = prop.value;
 				if(!(prop.value is string))
 				{
 					assignValue = prop.render_value();
@@ -159,6 +157,42 @@
 			out(indent = ind)
 			{
                 <xss:e value="prop.ns"/>:<xss:e value="prop.output_id"/>="<xss:e value="assignValue"/>"
+			}
+		}
+	}
+	
+	method render_array(var prop)
+	{
+		for(var pa in prop.value)
+		{
+			if(pa.type.is_object)
+			{
+				render_object(pa);
+				continue;
+			}
+			
+			out(indent = ind)
+			{
+				id = <xss:e value="pa.id"/> && type = <xss:e value="pa.type.id"/>
+				value = <xss:e value="pa.value"/>
+			}
+		}
+	}
+	
+	method render_object(var obj)
+	{
+		for(var po in obj.children)
+		{
+			if(po.type.is_array)
+			{
+				render_array(po);
+				continue;
+			}
+			
+			out(indent = ind)
+			{
+				id = <xss:e value="po.id"/> && type = <xss:e value="po.type.id"/>
+				value = <xss:e value="po.value"/>
 			}
 		}
 	}
