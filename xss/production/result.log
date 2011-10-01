@@ -730,6 +730,8 @@ this is Louis
             
                 something
             
+                something3
+            
 			instance id: t3
 		
 				event id: click
@@ -740,6 +742,8 @@ this is Louis
         t_arrays 
      
         t_arrays1 
+     
+        t_arrays2 
      
         t_base_import 
      
@@ -854,6 +858,14 @@ Success are greateful
 Success are greateful
 ===[ xss7.project.xml ]================
 
+Log: btn
+Log: null
+Log: btn
+Log: null
+Log: application
+Log: null
+Log: application
+Log: null
 
 			instance id: application
 			instance class: application
@@ -884,7 +896,7 @@ Success are greateful
 				property id: states - output_id: property:states
 					namespace = xkp
 			
-					** No render property states **
+					** No render property "states" **
 				
 			==[Begin rendering Array]======
 		
