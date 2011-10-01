@@ -93,7 +93,22 @@
 		<class id="IDragListener">
 			<event id="drag" output_id="onDrag" interface="OnDragListener" def_args="View v, DragEvent event" set_handle="setOnDragListener" set_param_hnd="this"/>
 		</class>
+		
+		<class id="IClassImageAdapter">
+			<array id="imports">
+				<object import="android.view.ViewGroup"/>
+				<object import="android.widget.ImageView"/>
+				<object import="android.widget.BaseAdapter"/>
+				<object import="android.content.Context"/>
+			</array>
 			
+			<array id="classes">
+				<object name="ImageAdapter" file_name="ImageAdapter.class.xss"/>
+			</array>
+			
+			<property id="adapter" no_layout="true" type="string" set_handle="setAdapter" set_param_hnd="new ImageAdapter(this)"/>
+		</class>
+		
 		<class id="ITextView" super="IWidget">
 			<property id="caption" output_id="text" ns="android" type="string" res_type="str_reference" set_fn="setText" get_fn="getText"/>
 			
@@ -145,18 +160,12 @@
 		<class id="img_gallery" super="IWidget" output_id="Gallery">
 			<array id="imports">
 				<object import="android.widget.Gallery"/>
-				<object import="android.widget.ImageView"/>
-				
-				<object import="android.widget.BaseAdapter"/>
-				<object import="android.content.Context"/>
-			</array>
-			
-			<array id="classes">
-				<object class_name="ImageAdapter.class.xss"/>
 			</array>
 			
 			<property id="spacing" ns="android" type="int" res_type="dimension" set_fn="setGravity" get_fn="getGravity"/>
-			<property id="images" ns="android" type="array" set_fn="fff" get_fn="fff" no_layout="true"/>
+			<property id="images" no_layout="true" type="array" res_type="array_imgs" set_fn="empty" get_fn="empty"/>
+			
+			<import id="IClassImageAdapter"/>
 		</class>
 		
 		<class id="holder" super="IWidget" xkpview="true" output_id="XKPLayout">
@@ -171,8 +180,8 @@
 		</class>
 		
 		<class id="replicator" super="IWidget" xkpview="true" output_id="XKPReplicator">
-			<property id="template" output_id="template" ns="xkp" type="string" res_type="id_reference"/>
-			<property id="items" output_id="items" ns="xkp" type="array"/>
+			<property id="template" output_id="template" ns="xkp" type="string" res_type="id_reference" set_fn="setTemplateResource" get_fn="getTemplateResource"/>
+			<property id="items" output_id="items" ns="xkp" type="array" set_fn="setItems" get_fn="getItems"/>
 		</class>
 		
 		<class id="image" super="IWidget" output_id="ImageView">

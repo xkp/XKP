@@ -77,6 +77,9 @@ xss_application_renderer::xss_application_renderer(fs::path entry_point, Languag
     //register default instances
     context_->register_symbol(RESOLVE_NATIVE, "compiler", compiler);
 
+    XSSString xss_str(new xss_string);
+    context_->register_symbol(RESOLVE_NATIVE, "String", xss_str);
+
     //register standard dsls
     context_->register_dsl("out", DslLinker(new out_linker(compiler)));
 
@@ -315,6 +318,8 @@ void xss_compiler::build(fs::path xml)
     fs::path pp = xml;
     base_path_ = pp.parent_path();
 
+    project_path_ = base_path_;
+
     XSSObject project_data = read_project(xml);
 
     //options
@@ -441,6 +446,11 @@ void xss_compiler::output_file(fs::path fpath, const str& contents)
 str xss_compiler::output_path()
   {
     return output_path_.string();
+  }
+
+str xss_compiler::project_path()
+  {
+    return project_path_.string();
   }
 
 str xss_compiler::genid(const str& what)
@@ -1959,3 +1969,30 @@ XSSContext xss_compiler::current_context()
 
     return XSSContext();
  }
+
+//xss_string
+int xss_string::size(const str& s)
+  {
+    return s.size();
+  }
+
+int xss_string::find(const str& s, const str& subs, int pos)
+  {
+    return s.find(subs, pos);
+  }
+
+bool xss_string::empty(const str& s)
+  {
+    return s.empty();
+  }
+
+str xss_string::erase(const str& s, int pos, int npos)
+  {
+    assert(false);
+    return s.substr(pos, npos);
+  }
+
+str xss_string::substr(const str& s, int pos, int npos)
+  {
+    return s.substr(pos, npos);
+  }

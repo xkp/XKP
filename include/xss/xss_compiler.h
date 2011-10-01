@@ -16,6 +16,7 @@ namespace xkp
 	class xss_application_renderer;
   class xss_module;
   class xss_compiler;
+  class xss_string;
 
   //interfaces
   struct IXSSRenderer;
@@ -24,6 +25,7 @@ namespace xkp
   typedef reference<xss_application_renderer> XSSApplicationRenderer;
   typedef reference<xss_module>               XSSModule;
   typedef reference<xss_compiler>             XSSCompiler;
+  typedef reference<xss_string>               XSSString;
   typedef reference<IXSSRenderer>             XSSRenderer;
 
   //interfaces
@@ -130,6 +132,7 @@ namespace xkp
 			  void        output_file(const str& fname, const str& contents);
 			  void        output_file(fs::path fpath, const str& contents);
         str         output_path();
+        str         project_path();
         str         genid(const str& what);
         void        xss(const param_list params);
         void        inject(const param_list params);
@@ -163,7 +166,7 @@ namespace xkp
         std::vector<XSSApplicationRenderer> applications_;
         std::stack<XSSRenderer>             renderers_;
         fs::path                            base_path_;
-        fs::path                            source_path_;
+        fs::path                            project_path_;
         fs::path                            output_path_;
         fs::path                            compiling_;
         XSSRenderer                         entry_;
@@ -198,6 +201,16 @@ namespace xkp
 		    void  compile_xs_file(fs::path file, xs_container& result);
 		};
 
+  class xss_string
+    {
+      public:
+        int  size(const str& s);
+        int  find(const str& s, const str& subs, int pos = 0);
+        bool empty(const str& s);
+        str  erase(const str& s, int pos = 0, int npos = 0);
+        str  substr(const str& s, int pos = 0, int npos = 0);
+    };
+
 //glue
 struct xss_compiler_schema : object_schema<xss_compiler>
   {
@@ -221,6 +234,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<str,      2>("idiom_path",	      &xss_compiler::idiom_path);
         method_<str,      1>("full_path",	        &xss_compiler::full_path);
         method_<str,      0>("output_path",       &xss_compiler::output_path);
+        method_<str,      0>("project_path",      &xss_compiler::project_path);
         method_<void,     2>("copy_file",         &xss_compiler::copy_file);
         method_<void,     1>("out",               &xss_compiler::out);
         method_<XSSType,  1>("get_type",          &xss_compiler::get_type);
@@ -243,8 +257,21 @@ struct xss_module_schema : xss_object_schema<xss_module>
       }
   };
 
+struct xss_string_schema : object_schema<xss_string>
+  {
+    virtual void declare()
+      {
+        method_<int,  1>("size",    &xss_string::size);
+        method_<int,  3>("find",    &xss_string::find);
+        method_<bool, 1>("empty",   &xss_string::empty);
+        method_<str,  3>("erase",   &xss_string::erase);
+        method_<str,  3>("substr",  &xss_string::substr);
+      }
+  };
+
   register_complete_type(xss_compiler,  xss_compiler_schema);
   register_complete_type(xss_module,    xss_module_schema);
+  register_complete_type(xss_string,    xss_string_schema);
 }
 
 

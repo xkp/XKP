@@ -17,6 +17,7 @@ public class Act<xss:e value="appName"/>
 	//contents
 	array<string> imports    = [];
 	array<string> interfaces = [];
+	array<string> classes	 = [];
 	
 	for(var inst in android.instances)
 	{
@@ -54,6 +55,32 @@ public class Act<xss:e value="appName"/>
 					{
 						import <xss:e value="i.import"/>;
 					}
+				}
+			}
+		}
+		
+		//find all classes without duplicates
+		if(inst.classes)
+		{
+			for(var c in inst.classes)
+			{
+				bool found3 = false;
+				for(var cla in classes)
+				{
+					if(cla == c.name)
+					{
+						found3 = true;
+						break;
+					}
+				}
+				
+				if(!found3)
+				{
+					compiler.log("Adding class " + c.name);
+					classes += c.name;
+					
+					string xss_file = "class.xss/" + c.file_name;
+					compiler.xss(xss_file, marker = "defined_class", appName, inst);
 				}
 			}
 		}
@@ -170,6 +197,18 @@ public class Act<xss:e value="appName"/>
 				out(indent = 2)
 				{
                     <xss:e value="inst.output_id"/>.<xss:e value="handler"/>(<xss:e value="e.set_param_hnd"/>);
+				}
+			}
+		}
+		
+		var qprops = inst.query_properties("*");
+		for(var p in qprops)
+		{
+			if(p.set_handle)
+			{
+				out(indent = 2)
+				{
+					<xss:e value="inst.output_id"/>.<xss:e value="p.set_handle"/>(<xss:e value="p.set_param_hnd"/>);
 				}
 			}
 		}

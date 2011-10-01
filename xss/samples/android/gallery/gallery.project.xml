@@ -1,7 +1,7 @@
 <project 
 	entry_point="../../../idioms/android/main.xss" 
 	language="java" 
-	target="simple.xml" >
+	target="gallery.xml" >
 	
 	<idiom src="../../../idioms/android/classes.xml"/>
 	

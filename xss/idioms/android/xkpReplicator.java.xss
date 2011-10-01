@@ -8,56 +8,65 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 public class XKPReplicator extends XKPLayout {
 	
-	static private final int ID_START = 0x7f0A0000;
+	// start id of new components created with replicator
+	static private final int 		ID_START = 0x7f0A0000;
+	// consecutive components id created with replicator
+	static private int 				mChildCount = ID_START;
 	
-	static private int mChildCount = ID_START;
+	protected OnItemAssigner 		mOnItemAssigner;
 	
-	protected OnItemAssigner mOnItemAssigner;
-	
-	private int mTemplateResource = 0;
-	private int mTemplateIndex;
-	private ArrayList<Template> mTemplates;
+	private int						mTemplateResource;
+	private Items				 	mItems;
 
 	public XKPReplicator(Context context) {
 		super(context);
-		
-		mTemplates = new ArrayList<Template>();
 	}
 
 	public XKPReplicator(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.XKPReplicator);
-        mTemplateResource = a.getResourceId(R.styleable.XKPReplicator_template, 0);
-        
-        a.recycle();
-        
-		mTemplates = new ArrayList<Template>();
-		
-		//for now
-		//mTemplateIndex = R.layout.template;
+		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.XKPReplicator);
+		mTemplateResource = a.getResourceId(R.styleable.XKPReplicator_template, 0);
+		a.recycle();
 	}
 	
-	public void setTemplateIndex(int index) {
-		mTemplateIndex = index;
+	// methods to handle templates
+	public int getTemplateResource() {
+		return mTemplateResource;
 	}
 	
-	public int getTemplateIndex() {
-		return mTemplateIndex;
+	public void setTemplateResource(int resource) {
+		mTemplateResource = resource;
+		updateTemplate();
 	}
 	
-	public void replicateTemplate(int index, int count) {
+	public void updateTemplate() {
 		LayoutInflater linflater = (LayoutInflater) this.getContext().
 			getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-		for(int i = 0; i < count; i++) {
-			View template = linflater.inflate(mTemplateIndex, this);
-			mChildCount++;
+		// this is very inefficient, 
+		// but live is hard and very long :)
+		this.removeAllViews();
+	
+		for(int i = 0; i < mItems.size(); i++, mChildCount++) {
+			View template = linflater.inflate(mTemplateResource, this);
 			template.setId(mChildCount);
+			assignItem(template);
 		}
+	}
+	
+	//method to handle items
+	public void setItems(Items items) {
+		mItems = items;
+		updateTemplate();
+	}
+	
+	public Items getItems() {
+		return mItems;
 	}
 	
 	public boolean assignItem(Object i) {
@@ -70,28 +79,64 @@ public class XKPReplicator extends XKPLayout {
 		return false;
 	}
 	
-    /**
-     * Register a callback to be invoked when one item is assigning.
-     *
-     * @param i The callback that will run
-     */
-    public void setOnItemAssigner(OnItemAssigner i) {
-        mOnItemAssigner = i;
-    }
+	public void setOnItemAssigner(OnItemAssigner i) {
+		mOnItemAssigner = i;
+	}
 
 	public interface OnItemAssigner {
-        /**
-         * Called when a item was assigned to a replicator.
-         *
-         * @param item The item that was assigned.
-         */
 		void OnAssign(Object item);
 	}
 	
-	public class Template {
-		public View view;
-		public int index;
-		public XKPLayout.LayoutParams params;
+	public Items generateItems() {
+		return new Items();
 	}
 	
+	public Items generateItems(Items items) {
+		return new Items(items);
+	}
+	
+	public static class Items {
+		private ArrayList<XKPObject> mItems;
+		
+		public Items() {
+			mItems = new ArrayList<XKPObject>();
+		}
+		
+		public Items(Items items) {
+			this.mItems = items.getItems();
+		}
+		
+		public void setItems(Items items) {
+			this.mItems = items.getItems();
+		}
+		
+		public void setItems(ArrayList<XKPObject> items) {
+			this.mItems = items;
+		}
+		
+		public void addItem(XKPObject object) {
+			this.mItems.add(object);
+		}
+		
+		public void deleteItem(int index) {
+			ArrayList<XKPObject> newList = new ArrayList<XKPObject>();
+			
+			for(int i = 0; i < mItems.size(); i++) {
+				if(i == index)
+					continue;
+				
+				newList.add(mItems.get(i));
+			}
+			
+			this.mItems = newList;
+		}
+		
+		public ArrayList<XKPObject> getItems() {
+			return mItems;
+		}
+
+		public int size() {
+			return this.mItems.size();
+		}
+	}
 }

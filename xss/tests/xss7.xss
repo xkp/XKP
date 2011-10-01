@@ -25,7 +25,7 @@
 			{
 				out()
 				{
-					** No render property <xss:e value="p.id"/> **
+					** No render property "<xss:e value="p.id"/>" **
 				}
 			}
 			
@@ -49,6 +49,16 @@
 			{
 				generate_instance(child, inst);
 			}
+		}
+		
+		compiler.log(inst.id);
+		compiler.log(inst.states);
+			
+		//another property array checks
+		if(inst has "states")
+		{
+			compiler.log(inst.id);
+			compiler.log(inst.states);
 		}
 	}
 	
