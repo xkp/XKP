@@ -25,7 +25,7 @@ if (params)
 				if(prop.value != null){
 					if(i > 0) out() {,}					
 					if(prop.output_id == "texture_src") 
-						out(){map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('<xss:e v="obj.texture_src"/>').src),}
+						out(){map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('<xss:e v="obj.texture_src"/>').asset),}
 					else
 						out() {<xss:e v="prop.output_id"/>:<xss:e v="prop.value"/>}
 					i++;

@@ -13,6 +13,7 @@
 <script type="text/javascript" src="../js/three/Three.js"></script>
 <script type="text/javascript" src="../js/three/Stats.js"></script>
 <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
@@ -28,9 +29,6 @@ var SCREEN_HEIGHT = window.innerHeight;
 var g_elapsed = -1;
 var g_delta = 0.0;			
 var anim_1;var fade_1;
-var threejs_models = 
-        [
-        ];
 var application = {};
 		var g_sequence_manager = new ms.state.Manager();
         function default_interpolate(a, b, t)
@@ -101,7 +99,7 @@ g_elapsed = now;
                 var this__ = this;
             this.parent_sequence = null;
                     var ____i3 = new ms.state.Interpolator(
-                        "opacity", 
+                        "alpha", 
                         default_interpolate,
                         function(value)
                         {
@@ -111,9 +109,9 @@ g_elapsed = now;
                         {t: 0, value: 1},
                         {t: 2, value: 0},
                         ]);
-                    this.addAction(null, "opacity", new ms.state.State(0, 2, ____i3));                    
+                    this.addAction(null, "alpha", new ms.state.State(0, 2, ____i3));                    
                     var ____i4 = new ms.state.Interpolator(
-                        "opacity", 
+                        "alpha", 
                         default_interpolate,
                         function(value)
                         {
@@ -123,7 +121,7 @@ g_elapsed = now;
                         {t: 2, value: 0},
                         {t: 6, value: 1},
                         ]);
-                    this.addAction(null, "opacity", new ms.state.State(2, 6, ____i4));                    
+                    this.addAction(null, "alpha", new ms.state.State(2, 6, ____i4));                    
     },
                 target : null,
 });
@@ -187,31 +185,6 @@ animate();
 function animate() {
 	requestAnimationFrame( animate );
 	render();
-}
-function get_model(model_id)
-{
-		for(var i = 0; i < this.threejs_models.length; i++)
-		{
-			var model = this.threejs_models[i];
-			if (model.id == model_id)
-				return model.src;
-		}
-		return null;
-}
-function set_active_camera(camera)
-{
-	renderer.render(scene, camera);
-	soundRenderer.render(scene, camera);
-	active_camera = camera;
-}
-function get_intersects( x, y, object)
-{
-	var vector = new THREE.Vector3( ( x / window.innerWidth ) * 2 - 1, - ( y / window.innerHeight ) * 2 + 1, 0.5 );
-	projector = new THREE.Projector();
-	projector.unprojectVector( vector, active_camera );
-	var ray = new THREE.Ray( active_camera.position, vector.subSelf( active_camera.position ).normalize() );
-	var intersects = ray.intersectObject( object );
-	return intersects;
 }
 </script>
 </body>

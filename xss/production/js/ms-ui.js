@@ -118,7 +118,7 @@ ms.ui.Manager = Class.create(
 
 	    return this.mouse_over != this.root;
 	},
-
+	
 	mouse_up: function(x, y)
 	{
 	    if (this.dragging)
@@ -234,6 +234,7 @@ ms.ui.Manager = Class.create(
     
     dirt_: [],
     backgroundFill: '#FFFFFF',
+    fill_background: true,
 
     findContainer: function(rect)
     {
@@ -307,8 +308,8 @@ ms.ui.Manager = Class.create(
 
             context.fillRect(rect.x, rect.y, rect.w, rect.h);
         }
-
-        for(var i = 0; i < to_draw.length; i++)
+		
+		for(var i = 0; i < to_draw.length; i++)
         {
             var cmp  = to_draw[i];
             var gpos = this.screen_pos(cmp.parent);
@@ -322,8 +323,11 @@ ms.ui.Manager = Class.create(
     draw: function(context)
     {
         //background
-        context.fillStyle = this.backgroundFill;
-        context.fillRect(this.root.x, this.root.y, this.root.w, this.root.h);
+        if (this.fill_background)
+        {
+            context.fillStyle = this.backgroundFill;
+            context.fillRect(this.root.x, this.root.y, this.root.w, this.root.h);
+        }
 
         this.root.draw(context, 0, 0);
     },
@@ -337,10 +341,11 @@ ms.ui.Component = Class.create(
 		this.components = [];
 		this.parent 	= parent;
 
-		this.x = 0; 
-        this.y = 0; 
-        this.w = 0;
-        this.h = 0;
+		this.x 			= 0; 
+        this.y 			= 0; 
+        this.w 			= 0;
+        this.h 			= 0;
+		this.rotation 	= 0;
 
         this.opacity = null; //this means, no opacity
 
@@ -366,6 +371,12 @@ ms.ui.Component = Class.create(
     alpha: function(value)
     {
         this.opacity = value;
+        this.invalidate();
+    },
+	
+	set_rotation: function(value)
+    {
+        this.rotation = value;
         this.invalidate();
     },
 
@@ -525,9 +536,18 @@ ms.ui.Component = Class.create(
 	},
 
 	contains: function(x, y)
-	{
-	    return (x >= this.x && x <= (this.x + this.w) &&
-	            y >= this.y && y <= (this.y + this.h));
+	{	
+		
+		var A_x = - this.w/2;
+		var A_y = - this.h/2;
+			
+		var ev_x = x - (this.x + this.w/2) - 8;
+		var ev_y = y - (this.y + this.h/2) - 8;
+		var ev_x_rotated = ev_x * Math.cos(-this.rotation) - ev_y * Math.sin(-this.rotation);
+		var ev_y_rotated = ev_x * Math.sin(-this.rotation) + ev_y * Math.cos(-this.rotation);
+		var result = (ev_x_rotated >= A_x && ev_x_rotated <= (A_x + this.w) && 
+				 ev_y_rotated >= A_y && ev_y_rotated <= (A_y + this.h));
+		return result;		
 	},
 
 	//child management
@@ -671,34 +691,39 @@ ms.ui.Image = Class.create(ms.ui.Component,
 	{
 	    this.texture = texture;
         this.invalidate();
-	},
-
-    draw: function($super, context, x, y)
+	},           
+                                  
+	draw: function($super, context, x, y)
     {
-        var old_alpha;
-        if (this.opacity != null)
+		var old_alpha;
+		
+		context.save();
+		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
+		context.rotate(this.rotation);
+		
+		if (this.opacity != null)
         {
             old_alpha = context.globalAlpha;
             context.globalAlpha = this.opacity;
         }
-
+		
         if (this.texture)
         {
-            context.drawImage(  this.texture, 
-                                this.x + x, this.y + y, 
-                                this.w, this.h);
+            context.drawImage(this.texture, - this.w/2, - this.h/2, this.w, this.h);
         }
         else if (this.fill_)
         {
             context.fillStyle = this.fill_;
-            context.fillRect(this.x + x, this.y + y, this.w, this.h);
+            context.fillRect(-this.w/2, -this.h/2, this.w, this.h);
         }
 
         if (this.opacity != null)
         {
             context.globalAlpha = old_alpha;
         }
-
+			
+		context.restore();  
+		
         $super(context);
     }
 });
@@ -764,10 +789,16 @@ ms.ui.Label = Class.create(ms.ui.Component,
 
     draw: function($super, context, x, y)
     {
+		context.save();
+		
+		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
+		context.rotate(this.rotation);
+		
         context.font = this.font;
         context.fillStyle = 'black'; //td:
-        context.fillText(this.value, this.x + x, this.y + y);
-
+        context.fillText(this.value, -this.w/2, -this.h/2);
+		
+		context.restore(); 
         $super(context);
     },
 });
@@ -849,6 +880,7 @@ ms.ui.Line = Class.create(ms.ui.Component,
 
     draw: function($super, context, x, y)
     {
+		
         context.fillStyle = this.fillStyle;
         context.beginPath();
         context.lineWidth = this.lineWidth;
@@ -856,6 +888,8 @@ ms.ui.Line = Class.create(ms.ui.Component,
         context.lineTo(x + this.x2, y + this.y2);
         context.stroke();
 
-        $super(context);
+		$super(context);
     },
 });
+
+		

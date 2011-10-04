@@ -34,6 +34,9 @@
     <Filter Include="Source Files\tinyxml">
       <UniqueIdentifier>{5baf33f3-b760-414f-a0c2-8c6771e6f09d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\jsoncpp">
+      <UniqueIdentifier>{37dc3cf7-4364-4fbc-abc5-cc838d30b5fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -229,6 +232,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\xss\lang\waxjs.cpp">
       <Filter>Source Files\xss\lang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\lib_json\json_reader.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\lib_json\json_value.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\lib_json\json_writer.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

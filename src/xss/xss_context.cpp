@@ -938,6 +938,11 @@ DynamicArray xss_object::query_properties(const str& query)
     return info.result;
   }
 
+bool xss_object::has_property(const str& prop)
+  {
+    return get_property(prop);
+  }
+
 XSSObject xss_object::find(const str& what)
   {
     if (what.empty())

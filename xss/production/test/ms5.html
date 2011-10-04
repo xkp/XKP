@@ -91,13 +91,16 @@ window.onload = function()
 	    );
 		    lbl1 = test1.newLabel(
 	    "Verdana");
+                lbl1.set_rotation("-0.2");
                 lbl1.text("click smiley");
                 lbl1.position(270, 200);
 		    btn1 = test1.newButton(
 	    "images/smile_sad_48.png","images/smile_grin_48.png");
+                btn1.set_rotation(0.200000003);
 	btn1.click = function()
 	{    
 		lbl1.text("Got " + application.clicks++ + " smileys");
+btn1.set_rotation(btn1.rotation + 0.200000003);
 	};
  btn1.center(50, 50); 
 		    test2 = main.newComponent(
@@ -123,6 +126,7 @@ window.onload = function()
                 btn3.rect(380, 115, 20, 20);
 		    lbl2 = test2.newLabel(
 	    "Verdana");
+                lbl2.set_rotation(0.200000003);
                 lbl2.text("click small arrows to adjust percentage");
                 lbl2.position(210, 200);
 		    btnNext = g_ui_root.newButton(
@@ -133,10 +137,12 @@ window.onload = function()
 {
 main.active(main.get_active() + 1);
 }
+btnNext.set_rotation(btnNext.rotation + 0.200000003);
 	};
-                btnNext.rect(320, 250, 50, 50);
+                btnNext.rect(320, 300, 100, 50);
 		    btnPrev = g_ui_root.newButton(
 	    "images/arrow_left_green_48.png","images/arrow_left_48.png");
+                btnPrev.set_rotation(0.400000006);
 	btnPrev.click = function()
 	{    
 		if (main.get_active() > 0)
@@ -144,7 +150,7 @@ main.active(main.get_active() + 1);
 main.active(main.get_active() - 1);
 }
 	};
-                btnPrev.rect(220, 250, 50, 50);
+                btnPrev.rect(220, 300, 50, 50);
             if (application.init)
             {
                 application.init();

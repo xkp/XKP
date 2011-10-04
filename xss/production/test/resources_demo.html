@@ -12,6 +12,7 @@
 <script type="text/javascript" src="../js/three/Three.js"></script>
 <script type="text/javascript" src="../js/three/Stats.js"></script>
 <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
@@ -27,9 +28,6 @@ var SCREEN_WIDTH = window.innerWidth;
 var SCREEN_HEIGHT = window.innerHeight;
 var g_elapsed = -1;
 var g_delta = 0.0;			
-var threejs_models = 
-        [
-        ];
 var application = {};
 		var g_streamer = new ms.streamer.Streamer();
 	// --------RESOURCES---------
@@ -37,46 +35,47 @@ var application = {};
                 def_package_items.push(
             {
 		id:"image_1",
-		resource_type:"RESOURCE_IMAGE",
+		resource_type:RESOURCE_IMAGE,
 		src:"images/test1.png"
 });
                 def_package_items.push(
             {
 		id:"image_2",
-		resource_type:"RESOURCE_IMAGE",
+		resource_type:RESOURCE_IMAGE,
 		src:"images/test2.png"
 });
                 def_package_items.push(
             {
 		id:"image_3",
-		resource_type:"RESOURCE_IMAGE",
+		resource_type:RESOURCE_IMAGE,
 		src:"images/test3.png"
 });
                 def_package_items.push(
             {
 		id:"image_4",
-		resource_type:"RESOURCE_IMAGE",
+		resource_type:RESOURCE_IMAGE,
 		src:"images/test4.png"
 });
                 def_package_items.push(
             {
 		id:"image_5",
-		resource_type:"RESOURCE_IMAGE",
+		resource_type:RESOURCE_IMAGE,
 		src:"images/test5.png"
 });
                 def_package_items.push(
             {
 		id:"image_6",
-		resource_type:"RESOURCE_IMAGE",
+		resource_type:RESOURCE_IMAGE,
 		src:"images/test6.png"
 });
                 def_package_items.push(
             {
-		id:"sound_1",
-		resource_type:"RESOURCE_SOUND",
+		id:"",
+		resource_type:RESOURCE_SOUND,
 		src:"sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg"
 });
-        var g_startup_package = new ms.streamer.Package(g_streamer, def_package_items);		
+        var g_startup_package = new ms.streamer.Package(g_streamer, def_package_items);	
+		g_startup_package.load();	
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
@@ -98,29 +97,26 @@ var materials =
 new Array(
 );
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('image_1').src),
+	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('image_1').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('image_2').src),
+	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('image_2').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('image_3').src),
+	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('image_3').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('image_4').src),
+	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('image_4').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('image_5').src),
+	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('image_5').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('image_6').src),
+	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('image_6').asset),
 	}));
 	var plane_material = new THREE.MeshBasicMaterial({
 	color:14737632
 	});
-var cube_faces = 
-new THREE.MeshFaceMaterial(
-);
 var scene = 
 new THREE.Scene(
 );
@@ -133,7 +129,7 @@ new THREE.Camera(
 new THREE.Cube(
 200,200,200,1,1,1,materials);
 	var cube_1 = new THREE.Mesh(cube_1_cube,
-	cube_faces);
+	new THREE.MeshFaceMaterial());
 	scene.addObject(cube_1);
                 cube_1.position.y = 150;
 	var plane_1_plane = 
@@ -143,11 +139,11 @@ new THREE.Plane(
 	plane_material);
 	scene.addObject(plane_1);
                 plane_1.rotation.x = -1.57;
-	var sound_1 = new THREE.Sound(g_startup_package.get_resource('sound_1').src
+	var sound_w_id_12 = new THREE.Sound(g_streamer.get_resource('sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg').asset
 	,700,20,true
 	);
-	scene.addObject(sound_1);
-	sound_1.play();
+	scene.addObject(sound_w_id_12);
+	sound_w_id_12.play();
                 application.x_target_rotation = 0;
                 application.x_target_rotation_on_mouse_down = 0;
                 application.mouse_x = 0;
@@ -199,31 +195,6 @@ animate();
 function animate() {
 	requestAnimationFrame( animate );
 	render();
-}
-function get_model(model_id)
-{
-		for(var i = 0; i < this.threejs_models.length; i++)
-		{
-			var model = this.threejs_models[i];
-			if (model.id == model_id)
-				return model.src;
-		}
-		return null;
-}
-function set_active_camera(camera)
-{
-	renderer.render(scene, camera);
-	soundRenderer.render(scene, camera);
-	active_camera = camera;
-}
-function get_intersects( x, y, object)
-{
-	var vector = new THREE.Vector3( ( x / window.innerWidth ) * 2 - 1, - ( y / window.innerHeight ) * 2 + 1, 0.5 );
-	projector = new THREE.Projector();
-	projector.unprojectVector( vector, active_camera );
-	var ray = new THREE.Ray( active_camera.position, vector.subSelf( active_camera.position ).normalize() );
-	var intersects = ray.intersectObject( object );
-	return intersects;
 }
 </script>
 </body>

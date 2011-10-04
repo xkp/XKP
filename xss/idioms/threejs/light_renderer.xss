@@ -1,6 +1,10 @@
 <xss:parameter id="obj"/>
+<xss:parameter id="index"/>
 
 <xss:code>	
+	if(obj.id == "")
+		obj.id = "light_w_id_"+index;
+
 	out(){var <xss:e v="obj.id"/> = }compiler.xss("../common-js/instantiator.xss", obj);
 	out(){
 		;

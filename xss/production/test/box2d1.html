@@ -111,10 +111,35 @@
                   mouseJoint = null;
                }
             }
-            g_world.Step(1 / 60, 10, 10);
-            g_world.DrawDebugData();
-            g_world.ClearForces();
-         };
+        g_world.Step(1 / 60, 10, 10);
+        g_world.DrawDebugData();
+        g_world.ClearForces();
+        //synch
+        var bb = g_world.GetBodyList();
+        while(bb)
+        {
+            if (!bb.IsActive())
+            {
+                bb = bb.GetNext();
+                continue;
+            }    
+            var angle = bb.GetAngle();
+            var pos   = bb.GetTransform().position;
+            
+            if (angle > 0)
+            {
+              console.log("Moved");
+            }
+            if (bb.xs_visual)
+            {
+                var x = pos.x*g_world_scale;
+                var y = pos.y*g_world_scale;
+                bb.visual.position(x, y);
+                bb.visual.rotation(angle);
+            }
+            bb = bb.GetNext();
+        }
+             };
          //helpers
          //http://js-tut.aardon.de/js-tut/tutorial/position.html
          function getElementPosition(element) {

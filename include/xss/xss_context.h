@@ -98,6 +98,7 @@ class xss_object : public editable_object<xss_object>,
 
       void                   query_properties_impl(query_info &info);
       DynamicArray           query_properties(const str& query);
+      bool                   has_property(const str& prop);
 		public:
       //misc
       XSSObject              find(const str& what);
@@ -415,6 +416,7 @@ struct xss_object_schema : editable_object_schema<T>
         this->template method_<DynamicArray, 1>("query_properties", &T::query_properties);
         this->template method_<XSSProperty, 1> ("get_property",     &T::get_property);
         this->template method_<void, 3>        ("add_property",     &T::add_property);
+        this->template method_<bool, 1>        ("has_property",     &T::has_property);
 		}
   };
 

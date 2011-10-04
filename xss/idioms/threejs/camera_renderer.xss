@@ -1,6 +1,11 @@
 <xss:parameter id="obj"/>
+<xss:parameter id="index"/>	
 
 <xss:code>
+
+	if(obj.id == "")
+		obj.id = "camera_w_id_"+index;
+		
 	if(obj.class_name == "quake_camera")
 		compiler.xss("param_in_obj.xss", obj);
 	else

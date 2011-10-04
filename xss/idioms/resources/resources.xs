@@ -37,6 +37,7 @@ on render_resources()
                 ];
                     
                 <xss:e v="res.id"/> = new ms.streamer.Package(streamer, <xss:e v="pack_id"/>);
+				<xss:e v="res.id"/>.load();	
                        
             }
                 
@@ -62,20 +63,18 @@ on render_resources()
 
     out()
     {
-        var g_startup_package = new ms.streamer.Package(g_streamer, def_package_items);		
+        var g_startup_package = new ms.streamer.Package(g_streamer, def_package_items);	
+		g_startup_package.load();	
     }
 }
 
 method render_resource(resource)
 {
-	compiler.log("Rendering Resource...");
-    var type = compiler.get_type(resource.class_name); 
+	var type = compiler.get_type(resource.class_name); 
     if (!type)
         compiler.error("Unknown resource type", type = resource.class_name);
 
-	if(type.renderer){		
-		compiler.out("{");
-		compiler.xss(type.renderer, resource);
-		compiler.out("}");
-	}    
+	compiler.out("{");
+	compiler.xss("renderer.xss", resource);
+	compiler.out("}");	    
 }

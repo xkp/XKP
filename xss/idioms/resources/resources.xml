@@ -1,11 +1,19 @@
 <module id="resources" src="resources.xs">
     <types>
         
-        <class id="image" renderer="image.xss">
+        <class id="image" resource_type="RESOURCE_IMAGE">
             <property id="src" type="string"/>
         </class>	
 		
-		<class id="sound" renderer="sound.xss">
+		<class id="sound" resource_type="RESOURCE_SOUND">
+			<property id="src" type="string"/>			
+		</class>
+		
+		<class id="json_model" resource_type="RESOURCE_JSON_MODEL">
+			<property id="src" type="string"/>			
+		</class>
+		
+		<class id="bin_model" resource_type="RESOURCE_BIN_MODEL">
 			<property id="src" type="string"/>			
 		</class>
 		

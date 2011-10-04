@@ -6,9 +6,9 @@
             <property id="x" type="float" use_plain_value="true"/>
 			<property id="y" type="float" use_plain_value="true"/>
 			<property id="z" type="float" use_plain_value="true"/>		
-		</class>
+		</class>		
 
-		<class id="playing_sound" output_id="Array" instantiator="sound_renderer.xss"/>	
+		<class id="playing_sound" instantiator="sound_renderer.xss"/>	
 		
 		<class id="material">
 			<array id="constructor_params">
@@ -16,7 +16,7 @@
 				<parameter property="map"/>
 				<parameter property="wireframe"/>
 				<parameter property="wireframe_linewidth"/>
-				<parameter property="opacity"/>
+				<parameter property="alpha"/>
 				<parameter property="texture_src"/>				
 				<parameter property="shading"/>
 				<parameter property="vertex_colors"/>
@@ -31,7 +31,7 @@
 			<property id="map" type="string" dont_init="true"/>
 			<property id="wireframe" type="string" dont_init="true"/>
 			<property id="wireframe_linewidth" type="string" output_id="wireframeLinewidth" dont_init="true"/>
-			<property id="opacity" type="float" dont_init="true"/>
+			<property id="alpha" type="float" dont_init="true" output_id="opacity"/>
 			<property id="texture_src" type="string" dont_init="true"/>				
 			<property id="shading" type="string" dont_init="true"/>
 			<property id="vertex_colors" type="string" output_id="vertexColors" dont_init="true"/>
@@ -52,8 +52,6 @@
 		<class id="phong_material" super="material" output_id="THREE.MeshPhongMaterial" instantiator="param_in_obj.xss"/>
 			
 		<class id="normal_material" output_id="THREE.MeshNormalMaterial"/>
-
-		<class id="face_material" output_id="THREE.MeshFaceMaterial"/>
 						
 		<class id="texture" output_id="THREE.Texture">
 			<array id="constructor_params">
@@ -62,11 +60,12 @@
 			<property id="texture_src" type="string" dont_init="true"/>
 		</class>
 		
-		<class id="meshable">						
+		<class id="object3d">						
             <property id="color" type="string" set_fn="materials[ 0 ].color.setHex" use_plain_value="true"/>
-			<property id="opacity" type="float" output_id="materials[0].opacity" use_plain_value="true"/>
+			<property id="alpha" type="float" output_id="materials[0].opacity" use_plain_value="true"/>
 			<property id="overdraw" type="string"/>
 			<property id="double_sided" type="string" output_id="doubleSided"/>
+			<property id="material" type="string" dont_init="true" use_plain_value="true"/>
 							
 			<property id="position" type="vector3d"/>
 			<property id="rotation" type="vector3d"/>
@@ -80,7 +79,7 @@
 		</class>
 				
 		<class id="light"> 					
-			<property id="hex" type="string" dont_init="true"/>			
+			<property id="color" type="string" dont_init="true"/>			
 			<property id="position" type="vector3d"/>
 			<property id="rotation" type="vector3d"/>
 			<property id="scale" type="vector3d"/>
@@ -88,13 +87,13 @@
 		
 		<class id="ambient_light" super="light" output_id="THREE.AmbientLight" instantiator="light_renderer.xss">
 			<array id="constructor_params">
-				<parameter property="hex"/>				 				
+				<parameter property="color"/>				 				
 			</array>
 		</class>
 		
 		<class id="directional_light" super="light" output_id="THREE.DirectionalLight" instantiator="light_renderer.xss">
 			<array id="constructor_params">
-				<parameter property="hex"/>
+				<parameter property="color"/>
 				<parameter property="intensity"/>
 				<parameter property="distance"/>
 				<parameter property="cast_shadow"/>  				
@@ -106,7 +105,7 @@
 	
 		<class id="point_light" super="light" output_id="THREE.PointLight" instantiator="light_renderer.xss">
 			<array id="constructor_params">
-				<parameter property="hex"/>
+				<parameter property="color"/>
 				<parameter property="intensity"/>
 				<parameter property="distance"/>           		
 			</array>				
@@ -139,10 +138,10 @@
 				<parameter property="near"/>
 				<parameter property="far"/>     
 				<parameter property="target"/> 
-				<parameter property="movement_speed"/>
+				<parameter property="speed"/>
 				<parameter property="look_speed"/>
 				<parameter property="no_fly"/>
-				<parameter property="look_vertical"/>
+				<parameter property="vertical"/>
 				<parameter property="auto_forward"/>			
 			</array>			
 			<property id="fov" type="string" dont_init="true"/>
@@ -150,89 +149,112 @@
 			<property id="near" type="string" dont_init="true"/>
 			<property id="far" type="string" dont_init="true"/>
 			<property id="target" type="string" dont_init="true"/>
-			<property id="movement_speed" output_id="movementSpeed" type="string" dont_init="true"/> 
+			<property id="speed" output_id="movementSpeed" type="string" dont_init="true"/> 
 			<property id="look_speed" output_id="lookSpeed" type="string" dont_init="true"/>
 			<property id="no_fly" output_id="noFly" type="string" dont_init="true"/>
-			<property id="look_vertical" output_id="lookVertical" type="string" dont_init="true"/>
+			<property id="vertical" output_id="lookVertical" type="string" dont_init="true"/>
 			<property id="auto_forward" output_id="autoForward" type="string" dont_init="true"/>
 			<property id="position" type="vector3d"/>
 			<property id="rotation" type="vector3d"/>
 			<property id="scale" type="vector3d"/>
 		</class>
 	
-		<class id="plane" super="meshable" output_id="THREE.Plane" instantiator="mesh_renderer.xss">
+		<class id="plane" super="object3d" output_id="THREE.Plane" instantiator="object3d_renderer.xss">
 			<array id="constructor_params">
 				<parameter property="width"/>
 				<parameter property="height"/>
-				<parameter property="segments_width"/>
-				<parameter property="segments_height"/>
+				<parameter property="x_segments"/>
+				<parameter property="y_segments"/>
 			</array>
 			<property id="width" type="string" dont_init="true"/>
 			<property id="height" type="string" dont_init="true"/>
-			<property id="segments_width" output_id="segmentsWidth" type="string" dont_init="true"/>
-			<property id="segments_height" output_id="segmentsHeight" type="string" dont_init="true"/>
+			<property id="x_segments" output_id="segmentsWidth" type="string" dont_init="true"/>
+			<property id="y_segments" output_id="segmentsHeight" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="cube" super="meshable" output_id="THREE.Cube" instantiator="mesh_renderer.xss">
+		<class id="cube" super="object3d" output_id="THREE.Cube" instantiator="object3d_renderer.xss">
 			<array id="constructor_params">
 				<parameter property="width"/>
 				<parameter property="height"/>
 				<parameter property="depth"/>      
-				<parameter property="segments_width"/>
-				<parameter property="segments_height"/>
-				<parameter property="segments_depth"/>
-				<parameter property="cube_materials"/>
+				<parameter property="x_segments"/>
+				<parameter property="y_segments"/>
+				<parameter property="z_segments"/>
+				<parameter property="material_array"/>	
 				<parameter property="flipped"/>
-				<parameter property="sides"/>			
+				<parameter property="sides"/>				
 			</array>
 			<property id="width" type="string" dont_init="true"/> 
 			<property id="height" type="string" dont_init="true"/>
 			<property id="depth" type="string" dont_init="true"/>
-			<property id="segments_width" output_id="segmentsWidth" type="string" dont_init="true"/>
-			<property id="segments_height" output_id="segmentsHeight" type="string" dont_init="true"/>
-			<property id="segments_depth" output_id="segmentsDepth" type="string" dont_init="true"/>				
-			<property id="cube_materials" type="string" dont_init="true" use_plain_value="true"/>
+			<property id="material_array" type="string" dont_init="true" use_plain_value="true"/>
+			<property id="x_segments" output_id="segmentsWidth" type="string" dont_init="true"/>
+			<property id="y_segments" output_id="segmentsHeight" type="string" dont_init="true"/>
+			<property id="z_segments" output_id="segmentsDepth" type="string" dont_init="true"/>				
 			<property id="flipped" type="string" dont_init="true"/>
 			<property id="sides" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="cylinder" super="meshable" output_id="THREE.Cylinder" instantiator="mesh_renderer.xss">
+		<class id="cylinder" super="object3d" output_id="THREE.Cylinder" instantiator="object3d_renderer.xss">
 			<array id="constructor_params">
-				<parameter property="numsegs"/>
-				<parameter property="toprad"/>
-				<parameter property="botrad"/>      
+				<parameter property="segments"/>
+				<parameter property="top_radius"/>
+				<parameter property="bottom_radius"/>      
 				<parameter property="height"/>
 				<parameter property="topoffset"/>
 				<parameter property="bottomoffset"/>			
 			</array>	
-			<property id="numsegs" type="string" dont_init="true"/> 
-			<property id="toprad" type="string" dont_init="true"/>
-			<property id="botrad" type="string" dont_init="true"/>
+			<property id="segments" type="string" dont_init="true"/> 
+			<property id="top_radius" type="string" dont_init="true"/>
+			<property id="bottom_radius" type="string" dont_init="true"/>
 			<property id="height" type="string" dont_init="true"/>
 			<property id="topoffset" type="string" dont_init="true"/>
 			<property id="bottomoffset" type="string" dont_init="true"/>			
 		</class>
 	
-		<class id="sphere" super="meshable" output_id="THREE.Sphere" instantiator="mesh_renderer.xss">
+		<class id="sphere" super="object3d" output_id="THREE.Sphere" instantiator="object3d_renderer.xss">
 			<array id="constructor_params">
 				<parameter property="radius"/>
-				<parameter property="segments_width"/>
-				<parameter property="segments_height"/>			
+				<parameter property="x_segments"/>
+				<parameter property="y_segments"/>			
 			</array>
 			<property id="radius" type="string" dont_init="true"/>
-			<property id="segments_width" output_id="segmentsWidth" type="string" dont_init="true"/>
-			<property id="segments_height" output_id="segmentsHeight" type="string" dont_init="true"/>
+			<property id="x_segments" output_id="segmentsWidth" type="string" dont_init="true"/>
+			<property id="y_segments" output_id="segmentsHeight" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="icosahedron" super="meshable" output_id="THREE.Icosahedron" instantiator="mesh_renderer.xss">
+		<class id="icosahedron" super="object3d" output_id="THREE.Icosahedron" instantiator="object3d_renderer.xss">
 			<array id="constructor_params">
 				<parameter property="subdivisions"/>			
 			</array>
-			<property id="subdivisions" type="string" dont_init="true" instantiator="mesh_renderer.xss"/>
+			<property id="subdivisions" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="particle" super="meshable" output_id="THREE.Particle" instantiator="mesh_renderer.xss"/>
-    
+		<class id="particle" instantiator="particle_renderer.xss">
+			<array id="constructor_params">
+				<parameter property="program"/>
+				<parameter property="color"/>					
+			</array>
+			<property id="program" type="string" dont_init="true" use_plain_value="true"/>
+			<property id="color" type="string" dont_init="true"/>
+			<property id="position" type="vector3d"/>
+			<property id="rotation" type="vector3d"/>
+			<property id="scale" type="vector3d"/>
+		</class>
+		
+		<class id="particle_system" instantiator="particle_renderer.xss">
+			<array id="constructor_params">
+				<parameter property="program"/>
+				<parameter property="color"/>
+				<parameter property="quantity"/>	
+				<parameter property="scale"/>
+			</array>
+			<property id="program" type="string" dont_init="true" use_plain_value="true"/>
+			<property id="color" type="string" dont_init="true"/>
+			<property id="quantity" type="string" dont_init="true"/>
+			<property id="scale" type="string" dont_init="true"/>			
+		</class>
+   
 		<class id="scene" output_id="THREE.Scene"/>	
 	
 		<class id="texture_cube" output_id="THREE.ImageUtils.loadTextureCube">
@@ -242,13 +264,7 @@
 			<property id="img_array" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="bin_model" output_id="THREE.BinaryLoader" dont_render="true" instantiator="model_renderer.xss">
-			<property id="position" type="vector3d"/>
-			<property id="rotation" type="vector3d"/>
-			<property id="scale" type="vector3d"/>
-		</class>
-		
-		<class id="json_model" output_id="THREE.JSONLoader" dont_render="true" instantiator="model_renderer.xss">
+		<class id="model" dont_render="true" instantiator="model_renderer.xss">
 			<property id="position" type="vector3d"/>
 			<property id="rotation" type="vector3d"/>
 			<property id="scale" type="vector3d"/>

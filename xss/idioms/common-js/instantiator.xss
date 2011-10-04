@@ -24,7 +24,7 @@ if (params)
 		}
 		else if (p.property)
 		{			
-            var prop = obj.get_property(p.property);
+            var prop = obj.get_property(p.property);			
 			if(prop.value != null)
 			{
 			    if(i > 0) 

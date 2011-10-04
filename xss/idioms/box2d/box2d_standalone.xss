@@ -8,10 +8,13 @@
    <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
    <script type="text/javascript">
       
+      function init() {
          <xss:code>
          compiler.inject("render_initialization");
          compiler.inject("render_instances");
          </xss:code>
+
+         <xss:marker id="variables"/>
 
          //setup debug draw
          var debugDraw = new b2DebugDraw();
@@ -97,9 +100,9 @@
                }
             }
          
-            g_world.Step(1 / 60, 10, 10);
-            g_world.DrawDebugData();
-            g_world.ClearForces();
+             <xss:code>
+             compiler.inject("render_update");
+             </xss:code>
          };
          
          //helpers

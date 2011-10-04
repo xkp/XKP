@@ -13,6 +13,7 @@
 <script type="text/javascript" src="../js/three/Three.js"></script>
 <script type="text/javascript" src="../js/three/Stats.js"></script>
 <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
@@ -27,12 +28,43 @@ var SCREEN_WIDTH = window.innerWidth;
 var SCREEN_HEIGHT = window.innerHeight;
 var g_elapsed = -1;
 var g_delta = 0.0;			
-var threejs_models = 
-        [
-        ];
 var application = {};
-// --------RESOURCES---------
-// --------RESOURCES---------
+		var g_streamer = new ms.streamer.Streamer();
+	// --------RESOURCES---------
+        var def_package_items = [];
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/test1.png"
+});
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/test2.png"
+});
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/test3.png"
+});
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/test4.png"
+});
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/test5.png"
+});
+        var g_startup_package = new ms.streamer.Package(g_streamer, def_package_items);	
+		g_startup_package.load();	
+    // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -51,34 +83,34 @@ var materials =
 new Array(
 );
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test1.png').src),
+	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test1.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test1.png').src),
+	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test1.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test2.png').src),
+	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test2.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test2.png').src),
+	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test2.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test3.png').src),
+	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test3.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test3.png').src),
+	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test3.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test4.png').src),
+	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test4.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test4.png').src),
+	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test4.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test5.png').src),
+	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test5.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_startup_package.get_resource('images/test5.png').src),
+	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test5.png').asset),
 	}));
 var scene = 
 new THREE.Scene(
@@ -354,31 +386,6 @@ animate();
 function animate() {
 	requestAnimationFrame( animate );
 	render();
-}
-function get_model(model_id)
-{
-		for(var i = 0; i < this.threejs_models.length; i++)
-		{
-			var model = this.threejs_models[i];
-			if (model.id == model_id)
-				return model.src;
-		}
-		return null;
-}
-function set_active_camera(camera)
-{
-	renderer.render(scene, camera);
-	soundRenderer.render(scene, camera);
-	active_camera = camera;
-}
-function get_intersects( x, y, object)
-{
-	var vector = new THREE.Vector3( ( x / window.innerWidth ) * 2 - 1, - ( y / window.innerHeight ) * 2 + 1, 0.5 );
-	projector = new THREE.Projector();
-	projector.unprojectVector( vector, active_camera );
-	var ray = new THREE.Ray( active_camera.position, vector.subSelf( active_camera.position ).normalize() );
-	var intersects = ray.intersectObject( object );
-	return intersects;
 }
 </script>
 </body>

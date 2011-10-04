@@ -13,6 +13,7 @@
 <script type="text/javascript" src="../js/three/Three.js"></script>
 <script type="text/javascript" src="../js/three/Stats.js"></script>
 <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
@@ -28,12 +29,25 @@ var SCREEN_WIDTH = window.innerWidth;
 var SCREEN_HEIGHT = window.innerHeight;
 var g_elapsed = -1;
 var g_delta = 0.0;			
-var threejs_models = 
-        [
-        ];
 var application = {};
-// --------RESOURCES---------
-// --------RESOURCES---------
+		var g_streamer = new ms.streamer.Streamer();
+	// --------RESOURCES---------
+        var def_package_items = [];
+                def_package_items.push(
+            {
+		id:"res_sound_1",
+		resource_type:RESOURCE_SOUND,
+		src:"sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg"
+});
+                def_package_items.push(
+            {
+		id:"res_sound_2",
+		resource_type:RESOURCE_SOUND,
+		src:"sounds/358232_j_s_song.ogg"
+});
+        var g_startup_package = new ms.streamer.Package(g_streamer, def_package_items);	
+		g_startup_package.load();	
+    // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -83,6 +97,13 @@ new THREE.Sphere(
 	scene.addObject(sphere_1);
 				container_1.addChild(sphere_1);
 				scene.addObject(container_1);
+	var sound_1 = new THREE.Sound(g_streamer.get_resource('res_sound_1').asset
+	,275,20,true
+	);
+	scene.addObject(sound_1);
+	sound_1.play();
+				container_1.addChild(sound_1);
+				scene.addObject(container_1);
 var container_2 = 
 new THREE.Object3D(
 );
@@ -95,6 +116,13 @@ new THREE.Sphere(
 	material_sphere2);
 	scene.addObject(sphere_2);
 				container_2.addChild(sphere_2);
+				scene.addObject(container_2);
+	var sound_2 = new THREE.Sound(g_streamer.get_resource('res_sound_2').asset
+	,275,20,true
+	);
+	scene.addObject(sound_2);
+	sound_2.play();
+				container_2.addChild(sound_2);
 				scene.addObject(container_2);
 	var plane_1_plane = 
 new THREE.Plane(
@@ -113,31 +141,6 @@ animate();
 function animate() {
 	requestAnimationFrame( animate );
 	render();
-}
-function get_model(model_id)
-{
-		for(var i = 0; i < this.threejs_models.length; i++)
-		{
-			var model = this.threejs_models[i];
-			if (model.id == model_id)
-				return model.src;
-		}
-		return null;
-}
-function set_active_camera(camera)
-{
-	renderer.render(scene, camera);
-	soundRenderer.render(scene, camera);
-	active_camera = camera;
-}
-function get_intersects( x, y, object)
-{
-	var vector = new THREE.Vector3( ( x / window.innerWidth ) * 2 - 1, - ( y / window.innerHeight ) * 2 + 1, 0.5 );
-	projector = new THREE.Projector();
-	projector.unprojectVector( vector, active_camera );
-	var ray = new THREE.Ray( active_camera.position, vector.subSelf( active_camera.position ).normalize() );
-	var intersects = ray.intersectObject( object );
-	return intersects;
 }
 </script>
 </body>

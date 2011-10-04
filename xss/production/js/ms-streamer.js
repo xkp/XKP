@@ -2,7 +2,8 @@
 
 var RESOURCE_IMAGE			 = 0;
 var RESOURCE_SOUND			 = 1;
-var RESOURCE_MODEL			 = 2;
+var RESOURCE_JSON_MODEL		 = 2;
+var RESOURCE_BIN_MODEL		 = 4;
 var MAX_SIMULTANEOUS_LOADERS = 3;
 
 function compare_loading(a, b)
@@ -96,9 +97,36 @@ ms.streamer.SoundLoader = Class.create(ms.streamer.Loader,
 
     load: function(resource)
     {
-    	
-		this_.on_loaded(resource, resource.data );
-       
+		var this_  = this;
+    	this_.on_loaded(resource, resource.data);        
+    }
+});
+
+ms.streamer.JSonModelLoader = Class.create(ms.streamer.Loader,
+{
+    initialize: function($super, streamer)
+    {
+		$super(streamer, RESOURCE_JSON_MODEL);
+    },
+
+    load: function(resource)
+    {
+		var this_  = this;
+    	this_.on_loaded(resource, resource.data);        
+    }
+});
+
+ms.streamer.BinModelLoader = Class.create(ms.streamer.Loader,
+{
+    initialize: function($super, streamer)
+    {
+		$super(streamer, RESOURCE_BIN_MODEL);
+    },
+
+    load: function(resource)
+    {
+		var this_  = this;
+    	this_.on_loaded(resource, resource.data);        
     }
 });
 
@@ -148,6 +176,8 @@ ms.streamer.Streamer = Class.create(
 		[
 		 	new ms.streamer.ImageLoader(this),
 			new ms.streamer.SoundLoader(this),
+			new ms.streamer.JSonModelLoader(this),
+			new ms.streamer.BinModelLoader(this),
 		];
     },
 
@@ -167,7 +197,23 @@ ms.streamer.Streamer = Class.create(
     {
     	this.progress = null;
     },
-
+	
+	get_resource: function(res_id)
+	{
+        for(var i = 0; i < this.resources.length; i++)
+        {
+            var res = this.resources[i];
+            if (res_id == res.id)
+            {
+                return res; 
+            }
+			if (res_id == res.asset)
+            {
+                return res; 
+            }
+        }
+	},
+	
     request: function(resources, listener, time)
     {
     	var req;
@@ -235,11 +281,13 @@ ms.streamer.Streamer = Class.create(
 		if (!result)
 		{
 			result =
-			{
-				asset:    resource.url,
-				loaded:   false,
-				requests: [],
-				progress: this.progress
+			{	
+				id:		  		resource.id, 	 
+				asset:    		resource.url,
+				type:  			resource.type,
+				loaded:   		false,
+				requests: 		[],
+				progress: 		this.progress
 			};
 
 			if (this.progress)
@@ -306,18 +354,6 @@ ms.streamer.Package = Class.create(
         this.job      = null;
     },
 	
-	get_resource: function(id)
-	{
-        for(var i = 0; i < this.items.length; i++)
-        {
-            var item = this.items[i];
-            if (id == item.id)
-            {
-                return item; 
-            }
-        }
-	},
-
     load: function()
     {
         if (this.state != STATE_UNLOADED)
@@ -327,8 +363,8 @@ ms.streamer.Package = Class.create(
         this.job = this.streamer.begin();
         var resources = [];
         for(var i = 0; i < this.items.length; i++)
-        {
-            resources.push({ type: RESOURCE_IMAGE, url: this.items[i].src});
+        {				
+			resources.push({id: this.items[i].id, type: this.items[i].resource_type, url: this.items[i].src});
         }
         
         this.streamer.request( resources, this );
@@ -339,7 +375,7 @@ ms.streamer.Package = Class.create(
 	{
         for(var i = 0; i < this.items.length; i++)
         {
-            var item = this.items[i];
+            var item = this.items[i];            
             if (res.asset == item.src)
             {
                 item.resource = data; 

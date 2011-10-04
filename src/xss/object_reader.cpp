@@ -5,6 +5,8 @@
 
 #include <boost/regex.hpp>
 
+#include <json/writer.h>
+#include <json/reader.h>
 
 using namespace xkp;
 
@@ -13,6 +15,7 @@ const str SReaderError("reader");
 const str SPropertyMustHaveName("Properties must have a name");
 const str SPropertyMustHaveType("Properties must have a valid type");
 const str SCannotParseXML("Invalid XML file");
+const str SCannotParseDef("Invalid Data file, make sure to provide a XML or json file");
 const str STypeNotFound("Cannot find type");
 const str SUnnamedArray("Arrays must have id");
 const str SPropertyTypeMismatch("Property type does not its value");
@@ -25,17 +28,30 @@ xss_object_reader::xss_object_reader(XSSContext ctx):
   {
   }
 
-XSSObject xss_object_reader::read(const str& xml)
+XSSObject xss_object_reader::read(const str& text)
 	{
-    parse_xml(xml);
-    return read_object(doc_.RootElement(), XSSObject(), true);
+    if (parse_xml(text))
+      return read_xml_object(doc_.RootElement(), XSSObject(), true);
+
+    if (parse_json(text))
+      return read_json_object(doc_.RootElement(), XSSObject(), true);
+
+		param_list error;
+		error.add("id", SReaderError);
+		error.add("desc", SCannotParseDef);
+		//error.add("error", str(doc_.ErrorDesc()));
+		//error.add("line", doc_.ErrorRow());
+		//error.add("column", doc_.ErrorCol());
+
+		xss_throw(error);
+    return XSSObject();
 	}
 
-std::vector<XSSObject> xss_object_reader::read_array(const str& xml)
+std::vector<XSSObject> xss_object_reader::read_array(const str& text)
 	{
-    parse_xml(xml);
+    parse_xml(text);
 
-    return read_array(doc_.RootElement());
+    return read_xml_array(doc_.RootElement());
 	}
 
 void xss_object_reader::enforce_types(bool value)
@@ -43,28 +59,71 @@ void xss_object_reader::enforce_types(bool value)
     enforce_types_ = value;
   }
 
-void xss_object_reader::parse_xml(const str& xml)
+void xss_object_reader::process_property(XSSObject result, XSSType type, const str& attr_name, variant attr_value)
   {
-    doc_.Parse(xml.c_str());
-    if (doc_.Error())
-      {
-				param_list error;
-				error.add("id", SReaderError);
-				error.add("desc", SCannotParseXML);
-				error.add("error", str(doc_.ErrorDesc()));
-				error.add("line", doc_.ErrorRow());
-				error.add("column", doc_.ErrorCol());
+    variant value = attr_value;
 
-				xss_throw(error);
+    //if the type already contains this attribute's name
+    //we'll simply assign its value, creating a property in the process
+    if (type)
+      {
+        XSSProperty prop = type->get_property(attr_name);
+        XSSType     prop_type;
+        if (prop)
+          {
+            prop_type = prop->type();
+            if (prop_type->is_enum())
+              {
+                XSSProperty enum_prop = prop_type->get_property(attr_value);
+                if (!enum_prop)
+                  {
+				            param_list error;
+				            error.add("id", SReaderError);
+				            error.add("desc", SInvalidEnum);
+				            error.add("enum type", prop_type->id());
+				            error.add("value", attr_value);
+
+				            xss_throw(error);
+                  }
+
+                Language lang      = ctx_->get_language();
+                str      value_str =  variant_cast<str>(attr_value, str());
+                str      expr_str  = prop_type->id() + lang->resolve_separator() + value_str;
+                          
+                expression expr;
+                xs_utils   xs; 
+                xs.compile_expression(expr_str, expr);
+
+                value = lang->compile_expression(expr, ctx_);
+              }
+
+            if (!prop_type)
+              prop_type = ctx_->get_type(value.get_schema());
+                      
+            result->add_property(attr_name, value, prop_type); //td: type checking
+          }
       }
+                
+    //add the value anyway
+    result->add_attribute(attr_name, value);
   }
 
-XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, bool do_special, XSSType force_type)
+void xss_object_reader::process_child(XSSObject child)
+  {
+  }
+
+bool xss_object_reader::parse_xml(const str& xml)
+  {
+    doc_.Parse(xml.c_str());
+    return !doc_.Error();
+  }
+
+XSSObject xss_object_reader::read_xml_object(TiXmlElement* node, XSSObject parent, bool do_special, XSSType force_type)
   {
     XSSObject result(new xss_object());
 
     str class_name = node->Value();
-    if (!do_special || !special_node(node, parent, result))
+    if (!do_special || !xml_special_node(node, parent, result))
       {
         //read class
         const char* cc = node->Attribute("class");
@@ -133,7 +192,7 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, b
                             value = lang->compile_expression(expr, ctx_);
                           }
                         else
-                          value = attribute_value(attr);
+                          value = xml_attribute_value(attr);
 
                         
                         result->add_property(attr_name, value, prop_type); //td: type checking
@@ -141,7 +200,7 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, b
                   }
                 
                 //add the value anyway
-                result->add_attribute(attr_name, attribute_value(attr));
+                result->add_attribute(attr_name, xml_attribute_value(attr));
               }
 
 	          attr = attr->Next();
@@ -160,7 +219,7 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, b
                 if (type_prop)
                   {
                     handled = true;
-                    XSSObject child = read_object(child_node, result, true, type_prop->type());
+                    XSSObject child = read_xml_object(child_node, result, true, type_prop->type());
                     
                     XSSProperty new_prop(new xss_property);
                     new_prop->copy(XSSObject(type_prop));
@@ -172,7 +231,7 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, b
 
             if (!handled)
               {
-                XSSObject child = read_object(child_node, result, true);
+                XSSObject child = read_xml_object(child_node, result, true);
                 if (child)
                   result->add_child( child );
               }
@@ -184,14 +243,14 @@ XSSObject xss_object_reader::read_object(TiXmlElement* node, XSSObject parent, b
     return result;
   }
 
-XSSObjectList xss_object_reader::read_array(TiXmlElement* node)
+XSSObjectList xss_object_reader::read_xml_array(TiXmlElement* node)
   {
     XSSObjectList result;
 
     TiXmlElement* child = node->FirstChildElement();
     while(child)
       {
-        XSSObject child_obj = read_object(child, XSSObject(), true);
+        XSSObject child_obj = read_xml_object(child, XSSObject(), true);
         result.push_back(child_obj);
 
         child = child->NextSiblingElement();
@@ -200,7 +259,7 @@ XSSObjectList xss_object_reader::read_array(TiXmlElement* node)
     return result;
   }
 
-variant xss_object_reader::attribute_value(const TiXmlAttribute* attr)
+variant xss_object_reader::xml_attribute_value(const TiXmlAttribute* attr)
   {
     str value(attr->Value());
 
@@ -228,7 +287,7 @@ variant xss_object_reader::attribute_value(const TiXmlAttribute* attr)
 		return value;
   }
 
-bool xss_object_reader::special_node(TiXmlElement* node, XSSObject parent, XSSObject& result)
+bool xss_object_reader::xml_special_node(TiXmlElement* node, XSSObject parent, XSSObject& result)
   {
     str class_name = node->Value();
     
@@ -236,18 +295,18 @@ bool xss_object_reader::special_node(TiXmlElement* node, XSSObject parent, XSSOb
     str type(ta? ta : "");
 
     if (class_name == "property")
-      return read_property(node, type, parent, result);
+      return read_xml_property(node, type, parent, result);
     else if (class_name == "method")
-      return read_method(node, type, parent, result);
+      return read_xml_method(node, type, parent, result);
     else if (class_name == "event")
-      return read_event(node, type, parent, result);
+      return read_xml_event(node, type, parent, result);
     else if (class_name == "array")
-      return read_array(node, type, parent, result);
+      return read_xml_array(node, type, parent, result);
 
     return false;
   }
 
-bool xss_object_reader::read_property(TiXmlElement* node, const str& type_name, XSSObject parent, XSSObject& result)
+bool xss_object_reader::read_xml_property(TiXmlElement* node, const str& type_name, XSSObject parent, XSSObject& result)
   {
     result = XSSObject();
 
@@ -255,7 +314,7 @@ bool xss_object_reader::read_property(TiXmlElement* node, const str& type_name, 
     bool is_array = type_name == "array";
     if (is_array)
       {
-        XSSObjectList children = read_array(node);
+        XSSObjectList children = read_xml_array(node);
             
         //convert to vm friendly
         DynamicArray array_value(new dynamic_array);
@@ -277,7 +336,7 @@ bool xss_object_reader::read_property(TiXmlElement* node, const str& type_name, 
 	        {
 	          if (attr->Name() == "value")
               {
-                value = attribute_value(attr);
+                value = xml_attribute_value(attr);
                 break;
               }
             
@@ -347,38 +406,38 @@ bool xss_object_reader::read_property(TiXmlElement* node, const str& type_name, 
     XSSProperty prop(new xss_property(name, type, value, parent)); 
 
     //grab the rest of the stuff
-    XSSObject surrogate = read_object(node, XSSObject(), false);
+    XSSObject surrogate = read_xml_object(node, XSSObject(), false);
     prop->copy(surrogate);
 
     parent->add_property_(prop); 
     return true;
   }
 
-bool xss_object_reader::read_method(TiXmlElement* node, const str& type, XSSObject parent, XSSObject& result)
+bool xss_object_reader::read_xml_method(TiXmlElement* node, const str& type, XSSObject parent, XSSObject& result)
   {
     result = XSSObject();
 
     XSSMethod mthd(new xss_method);
-    XSSObject surrogate = read_object(node, XSSObject(), false);
+    XSSObject surrogate = read_xml_object(node, XSSObject(), false);
     mthd->copy(surrogate);
 
     parent->methods()->push_back(mthd); //td: check for existing methods
     return true;
   }
 
-bool xss_object_reader::read_event(TiXmlElement* node, const str& type, XSSObject parent, XSSObject& result)
+bool xss_object_reader::read_xml_event(TiXmlElement* node, const str& type, XSSObject parent, XSSObject& result)
   {
     result = XSSObject();
 
     XSSEvent ev(new xss_event);
-    XSSObject surrogate = read_object(node, XSSObject(), false);
+    XSSObject surrogate = read_xml_object(node, XSSObject(), false);
     ev->copy(surrogate);
 
     parent->events()->push_back(ev); //td: check for existing events
     return true;
   }
 
-bool xss_object_reader::read_array(TiXmlElement* node, const str& type, XSSObject parent, XSSObject& result)
+bool xss_object_reader::read_xml_array(TiXmlElement* node, const str& type, XSSObject parent, XSSObject& result)
   { 
     result = XSSObject();
 
@@ -394,7 +453,7 @@ bool xss_object_reader::read_array(TiXmlElement* node, const str& type, XSSObjec
 
     str           id(idd);
     DynamicArray  my_result(new dynamic_array);
-    XSSObjectList aa = read_array(node);
+    XSSObjectList aa = read_xml_array(node);
 
     XSSObjectList::iterator it = aa.begin();
     XSSObjectList::iterator nd = aa.end();
@@ -403,6 +462,241 @@ bool xss_object_reader::read_array(TiXmlElement* node, const str& type, XSSObjec
       my_result->push_back(*it);
 
     parent->add_attribute(id, my_result);
+    return true;
+  }
+
+bool xss_object_reader::parse_json(const str& text)
+  {
+    Json::Reader r;
+    return r.parse(text, json_, false);
+  }
+
+XSSObject xss_object_reader::read_json_object(Json::Value node, XSSObject parent, bool do_special, XSSType force_type)
+  {
+    XSSObject result(new xss_object());
+
+    Json::Value jclass = node.get("class", Json::Value::null_value);
+    str         class_name = jclass.asString();
+    if (!do_special || !json_special_node(class_name, node, parent, result))
+      {
+        XSSType type = ctx_? ctx_->get_type(class_name) : XSSType();
+        if (force_type)
+          {
+            type = force_type;
+            class_name = force_type->output_id();
+          }
+        
+        result->set_type(type);
+        result->set_type_name(class_name);
+
+        //read properties
+        Json::Value::Members members = node.getMemberNames();
+        std::vector<Json::Value> children;
+
+        Json::Value::Members::iterator it = members.begin();
+        Json::Value::Members::iterator nd = members.end();
+        for(; it != nd; it++)
+          {
+            str attr_name = *it;
+            Json::Value attr = node.get(attr_name, Json::Value::null_value);
+            variant attr_value = json_attr_value(attr);
+
+            if (attr.isObject())
+              children.push_back(attr);
+            else
+              {
+                if (attr_name == "class")
+                  {
+                    //do nothing
+                  }
+                else if (attr_name == "id")
+                  result->set_id(attr.asString());
+                else if (attr_name == "output_id")
+                  result->set_output_id(attr.asString());
+                else 
+                  process_property(result, type, attr_name, attr_value);
+              }
+	        }
+
+        //children
+        std::vector<Json::Value>::iterator cit = children.begin();
+        std::vector<Json::Value>::iterator cnd = children.end();
+
+        XSSType result_type = result->type();
+        for(; cit != cnd; cit++)
+          {
+            XSSObject child = read_json_object(*cit, result, true);
+            process_child(child);
+
+            //bool handled = false;
+            //if (result_type)
+            //  {
+            //    XSSProperty type_prop = result_type->get_property(child_node->Value());
+            //    if (type_prop)
+            //      {
+            //        handled = true;
+            //        XSSObject child = read_xml_object(child_node, result, true, type_prop->type());
+            //        
+            //        XSSProperty new_prop(new xss_property);
+            //        new_prop->copy(XSSObject(type_prop));
+            //        new_prop->value_ = child;
+
+            //        result->properties()->push_back(new_prop);
+            //      }
+            //  }
+
+            //if (!handled)
+            //  {
+            //    XSSObject child = read_xml_object(child_node, result, true);
+            //    if (child)
+            //      result->add_child( child );
+            //  }
+          }
+
+      }
+
+    return result;
+  }
+
+bool xss_object_reader::json_special_node(const str& class_name, Json::Value node, XSSObject parent, XSSObject& result)
+  {
+    if (class_name == "property")
+      return read_json_property(node, parent, result);
+    else if (class_name == "method")
+      return read_json_method(node, parent, result);
+    else if (class_name == "event")
+      return read_json_event(node, parent, result);
+
+    return false;
+  }
+
+variant xss_object_reader::json_attr_value(Json::Value attr)
+  {
+    if (attr.isNull())
+      return variant();
+    else if (attr.isBool())
+      return attr.asBool();
+    else if (attr.isInt())
+      return attr.asInt();
+    else if (attr.isUInt())
+      return attr.asInt(); //td: do uints
+    else if (attr.isDouble())
+      return (float)attr.asDouble(); //td: do doubles
+    else if (attr.isString())
+      return attr.asString(); 
+    else if (attr.isArray())
+      {
+        assert(false); //punt
+      }
+    else
+      {
+        assert(attr.isObject()); 
+      }
+		
+    assert(false); //as fas as I know it shouldn't get here
+    return variant();
+  }
+
+bool xss_object_reader::read_json_property(Json::Value node, XSSObject parent, XSSObject& result)
+  {
+    result = XSSObject();
+
+    Json::Value jid    = node.get("id",    Json::Value::null_value);
+    Json::Value jvalue = node.get("value", Json::Value::null_value);
+    Json::Value jtype  = node.get("type",  Json::Value::null_value);
+
+    if (jid.empty())
+      {
+				param_list error;
+				error.add("id", SReaderError);
+				error.add("desc", SPropertyMustHaveName);
+				error.add("container", parent->id());
+
+				xss_throw(error);
+      }
+
+    XSSType type;
+    variant value = json_attr_value(jvalue);
+    str     name  = jid.asString();
+
+    if (jtype.empty())
+      {
+        if (!jvalue.empty())
+          {
+            type = ctx_->get_type(value.get_schema());
+          }
+      }
+    else
+      {
+        type = ctx_->get_type(jtype.asString());
+        if (!value.empty())
+          {
+            XSSType vtype = ctx_->get_type(value.get_schema());
+            if (type != vtype)
+              {
+				        param_list error;
+				        error.add("id", SReaderError);
+				        error.add("desc", SPropertyTypeMismatch);
+				        error.add("property name", name);
+                if (parent) error.add("container", parent->id());
+                if (type)   error.add("declared type", type->id());
+                if (vtype)  error.add("value type", vtype->id());
+				        xss_throw(error);
+              }
+          }
+      }
+
+    if (!type)
+      {
+        if (jtype.empty() || enforce_types_)
+          {
+				    param_list error;
+				    error.add("id", SReaderError);
+				    error.add("desc", SPropertyMustHaveType);
+				    error.add("property name", name);
+				    error.add("container", parent->id());
+				    xss_throw(error);
+          }
+        
+        //create an unresolved type
+        XSSType unresolved(new xss_type);
+        unresolved->set_id(jtype.asString());
+        unresolved->as_unresolved();
+
+        type = unresolved;
+      }
+
+    XSSProperty prop(new xss_property(name, type, value, parent)); 
+
+    //grab the rest of the stuff
+    XSSObject surrogate = read_json_object(node, XSSObject(), false);
+    prop->copy(surrogate);
+
+    parent->add_property_(prop); 
+    return true;
+  }
+
+bool xss_object_reader::read_json_method(Json::Value node, XSSObject parent, XSSObject& result)
+  {
+    result = XSSObject();
+
+    XSSMethod mthd(new xss_method);
+    XSSObject surrogate = read_json_object(node, XSSObject(), false);
+    mthd->copy(surrogate);
+
+    parent->methods()->push_back(mthd); //td: check for existing methods
+    return true;
+  }
+
+bool xss_object_reader::read_json_event(Json::Value node, XSSObject parent, XSSObject& result)
+  {
+    result = XSSObject();
+
+    XSSEvent ev(new xss_event);
+    XSSObject surrogate = read_json_object(node, XSSObject(), false);
+    ev->copy(surrogate);
+
+    parent->events()->push_back(ev); //td: check for existing events
     return true;
   }
 

@@ -2,6 +2,8 @@
 <xss:parameter id="template"/>
 
 <xss:class>
+    property world;
+    property visual_parent;
 
     method basic_properties()
     {
@@ -52,14 +54,39 @@
             out()
             {
                 fixDef.shape = new b2PolygonShape;
-                fixDef.shape.SetAsBox(<xss:e v="it.width"/>, <xss:e v="it.height"/>);
+            }
+
+            if (visual_parent)
+            {
+                out()
+                {
+                    fixDef.shape.SetAsBox(<xss:e v="visual_parent.output_id"/>.w, <xss:e v="visual_parent.output_id"/>.h);
+                }
+            }
+            else
+            {
+                out()
+                {
+                    fixDef.shape.SetAsBox(<xss:e v="it.width"/>, <xss:e v="it.height"/>);
+                }
             }
         }
         else if (it.shape == "circle")
         {
-            out()
+            if (visual_parent)
             {
-                fixDef.shape = new b2CircleShape(<xss:e v="it.radius"/>);
+                var id = visual_parent.output_id;
+                out()
+                {
+                    fixDef.shape = new b2CircleShape(Math.min(<xss:e v="id"/>.w, <xss:e v="id"/>.h)/(2*<xss:e v="world.scale"/>));
+                }
+            }
+            else
+            {
+                out()
+                {
+                    fixDef.shape = new b2CircleShape(<xss:e v="it.radius"/>);
+                }
             }
         }
         else
@@ -68,14 +95,45 @@
 
     method position()
     {
-        out()
+        if (visual_parent)
         {
-            bodyDef.position.Set(<xss:e v="it.x"/>, <xss:e v="it.y"/>);
+            var id = visual_parent.output_id;
+            out()
+            {
+                bodyDef.position.Set((<xss:e v="id"/>.x + <xss:e v="id"/>.w/2)/<xss:e v="world.scale"/>, 
+                                     (<xss:e v="id"/>.y + <xss:e v="id"/>.h/2)/<xss:e v="world.scale"/>);
+            }
         }
+        else
+            out()
+            {
+                bodyDef.position.Set(<xss:e v="it.x"/>, <xss:e v="it.y"/>);
+            }
+    }
+
+    private method foreign_parent(obj)
+    {
+        var foreing = obj.parent;
+        if (foreing)
+        {
+            if (foreing.has_property("x") &&
+                foreing.has_property("y") &&
+                foreing.has_property("width") &&
+                foreing.has_property("height"))
+            {
+                return foreing;
+            }
+
+        } 
+         
+        return null;
     }
 
     on render()
     {
+        world  = template;
+        visual_parent = foreign_parent(it);
+
         basic_properties();
         shape();
         position();
@@ -83,7 +141,17 @@
         //add the body into the world
         out()
         {
-            g_world.CreateBody(bodyDef).CreateFixture(fixDef);
+            current_body = g_world.CreateBody(bodyDef);
+            current_body.CreateFixture(fixDef);
+        }
+
+        if (visual_parent)
+        {
+            out()
+            {
+                <xss:e v="visual_parent.output_id"/>.physics = current_body;
+                current_body.host = <xss:e v="visual_parent.output_id"/>;
+            }
         }
     }
 

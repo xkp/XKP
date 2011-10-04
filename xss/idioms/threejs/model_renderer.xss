@@ -1,26 +1,25 @@
 <xss:parameter id="obj"/>
+<xss:parameter id="index"/>
 <xss:parameter id="property_renderer" default="../common-js/property.xss"/>
 <xss:parameter id="method_renderer"   default="../common-js/method.xss"/>
 <xss:parameter id="event_renderer"    default="event.xss"/>
 
 <xss:code>
-
-if(obj.parent.class_name == "resources"){
-	out(marker = "model_src", marker_source = "entry")
-		{
-			{id:'<xss:e v="obj.id"/>',src:'<xss:e value = "obj.src"/>'},
-		}
-}else{	
+	if(obj.id == "")
+		obj.id = "model_w_id_"+index;
+		
 	out(){
-	var <xss:e v="obj.src"/>;
-	var <xss:e v="obj.src"/>_loader = } compiler.xss("../common-js/instantiator.xss", obj);
-	obj.id = obj.src;
+	var <xss:e v="obj.id"/>;
+	var <xss:e v="obj.id"/>_loader = 
+	generate_model_loader(g_streamer.get_resource('<xss:e v="obj.src"/>').type);
+	} 
+	
 	out(){	
-		<xss:e value = "obj.src"/>_loader.load(
+		<xss:e value = "obj.id"/>_loader.load(
 		<xss:open_brace/>
-				model : get_model('<xss:e value = "obj.src"/>') , callback : function( geometry )
+				model : g_streamer.get_resource('<xss:e v="obj.src"/>').asset , callback : function( geometry )
 			<xss:open_brace/>
-				<xss:e v="obj.src"/> = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
+				<xss:e v="obj.id"/> = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
 	}
 	//render properties
 	for(var prop in obj.properties)
@@ -30,12 +29,12 @@ if(obj.parent.class_name == "resources"){
 		compiler.xss(property_renderer, prop, obj, is_class = false);
 	}    			
 	out(){
-				scene.addObject(<xss:e v="obj.src"/>);
+				scene.addObject(<xss:e v="obj.id"/>);
 			<xss:close_brace/> 
 		<xss:close_brace/> 
 	);	
 	}
-} 
+
 for(var mthd in obj.methods)
 {
     compiler.xss(method_renderer, mthd, obj, is_class = false);

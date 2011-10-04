@@ -6,6 +6,6 @@
             
         </class>
         
-        <alias id="physics" aliased="body"/>
+        <class id="physics" super="body"/>
     </types>
 </module>

@@ -54,7 +54,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);BOOST_NO_MEMBER_TEMPLATE_FRIENDS</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\dev\XKP\include;C:\dev\boost;C:\dev\boost\boost_1_44;C:\dev\XKP\third_party\tinyXml</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\dev\XKP\include;C:\dev\boost;C:\dev\boost\boost_1_44;C:\dev\XKP\third_party\tinyXml;C:\dev\XKP\third_party\jsoncpp\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -71,7 +71,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);BOOST_NO_MEMBER_TEMPLATE_FRIENDS</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\dev\XKP\include;C:\dev\boost;C:\dev\boost\boost_1_44;C:\dev\XKP\third_party\tinyXml</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\dev\XKP\include;C:\dev\boost;C:\dev\boost\boost_1_44;C:\dev\XKP\third_party\tinyxml;C:\dev\XKP\third_party\jsoncpp\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,6 +144,9 @@
     <ClCompile Include="..\..\..\src\xs\linker.cpp" />
     <ClCompile Include="..\..\..\src\xs\operators.cpp" />
     <ClCompile Include="..\..\..\src\xs\vm.cpp" />
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\lib_json\json_reader.cpp" />
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\lib_json\json_value.cpp" />
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\lib_json\json_writer.cpp" />
     <ClCompile Include="..\..\..\third_party\tinyXml\tinystr.cpp" />
     <ClCompile Include="..\..\..\third_party\tinyXml\tinyxml.cpp" />
     <ClCompile Include="..\..\..\third_party\tinyXml\tinyxmlerror.cpp" />

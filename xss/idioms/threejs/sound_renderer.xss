@@ -1,15 +1,18 @@
 <xss:parameter id="obj"/>
+<xss:parameter id="index"/>
 
 <xss:code>	
+	if(obj.id == "")
+		obj.id = "sound_w_id_"+index;
 	out(){
-	var <xss:e v="obj.src"/> = new THREE.Sound(g_startup_package.get_resource('<xss:e v="obj.src"/>').src
+	var <xss:e v="obj.id"/> = new THREE.Sound(g_streamer.get_resource('<xss:e v="obj.src"/>').asset
 	}
 	if(obj.radius != null) out(){,<xss:e v="obj.radius"/>}
 	if(obj.volume != null) out(){,<xss:e v="obj.volume"/>}
 	if(obj.loop != null) out(){,<xss:e v="obj.loop"/>}
 	out(){
 	);
-	scene.addObject(<xss:e v="obj.src"/>);
-	<xss:e v="obj.src"/>.play();
+	scene.addObject(<xss:e v="obj.id"/>);
+	<xss:e v="obj.id"/>.play();
 	}	
 </xss:code>
