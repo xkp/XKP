@@ -1,0 +1,10 @@
+<project entry_point="../idioms/ui/ui_standalone.xss" language="js" target="box2d2.app.xml" output="box2d2.html">
+    <path>
+        <output path="../production/test"/>
+    </path>
+
+    <idiom src="../idioms/ui/ui.xml"/>
+    <idiom src="../idioms/box2d/box2d.xml"/>
+</project>
+           
+         

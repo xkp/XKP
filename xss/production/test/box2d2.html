@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
+        <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
+<script type="text/javascript">			
+var g_ui;
+var g_elapsed = -1;
+var g_delta = 0.0;
+var g_canvas;
+var g_ui_root;
+var application = {};
+         var   b2Vec2 = Box2D.Common.Math.b2Vec2
+            ,  b2AABB = Box2D.Collision.b2AABB
+         	,	b2BodyDef = Box2D.Dynamics.b2BodyDef
+         	,	b2Body = Box2D.Dynamics.b2Body
+         	,	b2FixtureDef = Box2D.Dynamics.b2FixtureDef
+         	,	b2Fixture = Box2D.Dynamics.b2Fixture
+         	,	b2World = Box2D.Dynamics.b2World
+         	,	b2MassData = Box2D.Collision.Shapes.b2MassData
+         	,	b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape
+         	,	b2CircleShape = Box2D.Collision.Shapes.b2CircleShape
+         	,	b2DebugDraw = Box2D.Dynamics.b2DebugDraw
+            ,  b2MouseJointDef =  Box2D.Dynamics.Joints.b2MouseJointDef
+            ;
+         var g_world = new b2World(
+               new b2Vec2(0, 10)    //gravity
+            ,  true                 //allow sleep
+         );
+        var g_step_collisions = [];
+        var contactListener = new Box2D.Dynamics.b2ContactListener;
+        contactListener.BeginContact = function(contact, manifold) 
+        {
+            function get_collider(body)
+            {
+                if (body.host && ("collision" in body.host))
+                    return body.host;
+                return null;
+            }
+            var host1 = get_collider(contact.GetFixtureA().GetBody());
+            var host2 = get_collider(contact.GetFixtureB().GetBody());
+            if (host1)
+                g_step_collisions.push({host1: host1, host2:host2, contact: contact, manifold:manifold});
+            if (host2)
+                g_step_collisions.push({host1: host2, host2:host1, contact: contact, manifold:manifold});
+        };
+        g_world.SetContactListener(contactListener);
+        var g_world_scale = 30;
+        var fixDef = new b2FixtureDef;
+        var bodyDef = new b2BodyDef;
+function start(resolution)  
+{  
+	var start = new Date().getTime();  
+	function update()  
+	{  
+		var now   = new Date().getTime();
+        if (g_elapsed < 0)
+            g_delta = 0; //first update
+        else
+		    g_delta  = now - g_elapsed;  
+        g_elapsed = now; 
+        g_world.Step(1 / 60, 10, 10);
+        g_world.DrawDebugData();
+        g_world.ClearForces();
+        //process collisions
+        for(var i = 0; i < g_step_collisions.length; i++)
+        {
+            var info = g_step_collisions[i];
+            info.host1.collision(info.host2, info.contact, info.manifold);
+        }
+        g_step_collisions = [];
+        //process contacts
+        function get_contact_handler(body)
+        {
+            if (body.host && ("contact" in body.host))
+                return body.host;
+            return null;
+        }
+        var cc = g_world.GetContactList();
+        while(cc)
+        {
+            var host1 = get_contact_handler(cc.GetFixtureA().GetBody());
+            var host2 = get_contact_handler(cc.GetFixtureB().GetBody());
+            if (host1)
+                host1.contact(host2, cc);
+            if (host2)
+                host2.contact(host1, cc);
+            cc = cc.GetNext();
+        }
+        //synch
+        var bb = g_world.GetBodyList();
+        while(bb)
+        {
+            if (!bb.IsActive())
+            {
+                bb = bb.GetNext();
+                continue;
+            }    
+            var angle = bb.GetAngle();
+            var pos   = bb.GetTransform().position;
+            if (bb.host)
+            {
+                var x = pos.x*g_world_scale;
+                var y = pos.y*g_world_scale;
+                bb.host.position(x - bb.host.w/2, y - bb.host.h/2);
+                bb.host.set_rotation(angle);
+            }
+            bb = bb.GetNext();
+        }
+		var context = g_canvas.getContext('2d');
+		g_ui.update(g_delta, context);
+        window.setTimeout(update, resolution);  
+	}  
+	window.setTimeout(update, resolution);  
+}  
+window.onload = function() 
+{
+	var drawingCanvas = document.getElementById("myCanvas");
+	g_canvas = drawingCanvas;
+	if (drawingCanvas && drawingCanvas.getContext)
+	{
+		var client =
+		{
+			width: 600,
+			height: 400,
+			canvas: drawingCanvas
+		};
+		var streamer = new ms.streamer.Streamer();
+		var ui = new ms.ui.Manager(client, streamer);
+		var resources = new ms.streamer.PackageContainer();
+		g_ui = ui;
+        g_ui_root = ui.root;
+        var ui_images = 
+        [
+				    'images/smile_grin_48.png',
+				    'images/smile_sad_48.png',
+        ];
+		ui.load_images(ui_images, function()
+		{
+			drawingCanvas.onmousemove = function(ev)
+			{
+				ui.mouse_move(ev.clientX, ev.clientY);                  
+			};
+			drawingCanvas.onmousedown = function(ev)
+			{
+				ui.mouse_down(ev.clientX, ev.clientY);                  
+			};
+			drawingCanvas.onmouseup = function(ev)
+			{
+				ui.mouse_up(ev.clientX, ev.clientY);                  
+			};
+		    btn1 = g_ui_root.newButton(
+	    "images/smile_sad_48.png","images/smile_grin_48.png");
+                btn1.set_rotation(0.200000003);
+	btn1.collision = function()
+	{    
+		console.log("Collision!");
+	};
+                btn1.rect(200, 200, 50, 50);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_dynamicBody;
+                    fixDef.shape = new b2CircleShape(Math.min(btn1.w, btn1.h)/(2*30));
+                bodyDef.position.Set((btn1.x + btn1.w/2)/30, 
+                                     (btn1.y + btn1.h/2)/30);
+            current_body = g_world.CreateBody(bodyDef);
+            current_body.CreateFixture(fixDef);
+                btn1.physics = current_body;
+                current_body.host = btn1;
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_staticBody;
+                fixDef.shape = new b2PolygonShape;
+                    fixDef.shape.SetAsBox(20, 2);
+                bodyDef.position.Set(10, 15.1300001);
+            current_body = g_world.CreateBody(bodyDef);
+            current_body.CreateFixture(fixDef);
+            g_ui.fill_background = false; //td: cross idiom
+            var debugDraw = new b2DebugDraw();
+            var debugDrawCanvas = document.getElementById("myCanvas");
+            debugDraw.SetSprite(debugDrawCanvas.getContext("2d"));
+            debugDraw.SetDrawScale(30.0);
+            debugDraw.SetFillAlpha(0.5);
+            debugDraw.SetLineThickness(1.0);
+            debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
+            g_world.SetDebugDraw(debugDraw);
+            if (application.init)
+            {
+                application.init();
+            }
+			start();
+			ui.draw(drawingCanvas.getContext('2d'));
+		});
+	}
+}
+</script>
+</head>
+<body>
+	<canvas id="myCanvas" width="600" height="400">
+		<p>Your browser doesn't support canvas.</p>
+	</canvas>
+</body>
+</html>

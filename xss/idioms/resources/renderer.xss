@@ -1,0 +1,10 @@
+<xss:parameter id="res"/>
+
+<xss:code>	
+		out()
+		{
+		id:"<xss:e v="res.id"/>",
+		resource_type:<xss:e v="res.resource_type"/>,
+		src:"<xss:e v="res.src"/>"
+		}		
+</xss:code>

@@ -1,0 +1,104 @@
+<xss:parameter id="cmp"/>
+<xss:parameter id="is_class" default_value="false"/>
+<xss:code>
+    string cmp_id = cmp.id;
+    if (!is_class)
+    {
+        string parent_id = cmp.parent.id;
+        if (cmp.parent.id == "application")
+            parent_id = "g_ui_root";
+                
+        out()
+	    {
+		    <xss:e value = "cmp_id"/> = <xss:e value = "parent_id"/>.<xss:e value = "cmp.creation_function"/>(
+	    }
+
+	    if (cmp.constructor_params)
+        {
+            for(int i = 0; i < cmp.constructor_params.size; i++)
+		    {
+                var param = cmp.constructor_params[i];
+                var prop = cmp.get_property(param.property);
+
+                if(prop != null)
+                    out() {<xss:e v="prop.render_value()"/>}			
+                else
+                    out() {null}			
+
+                if (i < cmp.constructor_params.size - 1)
+                {
+                    out(dont_break = true) {,}
+                }
+		    }
+        }
+
+	    out() {);}
+        compiler.xss("../common-js/instance.xss", cmp);
+    }
+    else 
+        cmp_id = "this";
+
+    //position the component
+    if (cmp.placement)
+    {
+        if (cmp.placement == "client")
+        {
+            out() { <xss:e value="cmp_id"/>.client(); }
+        }    
+        else if (cmp.placement == "center")
+        {
+            if (cmp.width != null && cmp.height != null)
+                out() { <xss:e value="cmp_id"/>.center(<xss:e value="cmp.width"/>, <xss:e value="cmp.height"/>); }
+            else
+                compiler.error("Cannot position component centered (need [width, height])", component = cmp.id);
+        }
+        else if (cmp.placement == "bottom")
+        {
+            if (cmp.height != null)
+                out() { <xss:e value="cmp_id"/>.bottom(<<xss:e value="cmp.height"/>); }
+            else
+                compiler.error("Cannot position component bottom (need [height])", component = cmp.id);
+        }
+        else if (cmp.placement == "top")
+        {
+            if (cmp.height != null)
+                out() { <xss:e value="cmp_id"/>.top(<<xss:e value="cmp.height"/>); }
+            else
+                compiler.error("Cannot position component bottom (need [height])", component = cmp.id);
+        }
+        else if (cmp.placement == "right")
+        {
+            if (cmp.width != null)
+                out() { <xss:e value="cmp_id"/>.right(<<xss:e value="cmp.width"/>); }
+            else
+                compiler.error("Cannot position component right (need [width])", component = cmp.id);
+        }
+        else if (cmp.placement == "left")
+        {
+            if (cmp.height != null)
+                out() { <xss:e value="cmp_id"/>.left(<<xss:e value="cmp.height"/>); }
+            else
+                compiler.error("Cannot position component left (need [width])", component = cmp.id);
+        }
+        else
+            compiler.error("Invalid placement", placement= cmp.placement);
+    }
+    else
+    {
+        if (cmp.x != null && cmp.y != null && cmp.width != null && cmp.height != null)
+        {
+            out(indent = 0)
+            {
+                <xss:e value="cmp_id"/>.rect(<xss:e value="cmp.x"/>, <xss:e value="cmp.y"/>, <xss:e value="cmp.width"/>, <xss:e value="cmp.height"/>);
+            }
+        }
+        else if (cmp.x != null && cmp.y != null)
+        {
+            out(indent = 0)
+            {
+                <xss:e value="cmp_id"/>.position(<xss:e value="cmp.x"/>, <xss:e value="cmp.y"/>);
+            }
+        }
+    }
+
+</xss:code>

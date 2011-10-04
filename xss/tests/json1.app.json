@@ -1,0 +1,41 @@
+{
+    "src"    : "json1.app.xs",
+    "width"  : 600, 
+    "height" : 400,
+    
+    "resources":
+    {
+        "image": {"src": "images/progress.full.png"},
+        "image": {"src": "images/progress.empty.png"},
+        "image": {"src": "images/smile_grin_48.png"},
+        "image": {"src": "images/smile_sad_48.png"},
+        "image": {"src": "images/arrow_left.png"},
+        "image": {"src": "images/arrow_right.png"},
+        "image": {"src": "images/arrow_right.png"},
+        "image": {"src": "images/arrow_right_48.png"},
+        "image": {"src": "images/arrow_right_green_48.png"},
+        "image": {"src": "images/arrow_left_48.png"},
+        "image": {"src": "images/arrow_left_green_48.png"}
+    },
+
+    "switch":  { "id" : "main", "x": 0, "y": 0, "width":600, "height":250, 
+        "div": { "id" : "test1", 
+        
+            "label":  {"id": "lbl1", "x": 270, "y": 200, "rotation": -0.2, "font":"Verdana", "caption": "click smiley"},
+            "button": {"id": "btn1", "placement":"center", "rotation": 0.2, "width": 50, "height": 50, 
+                
+                "up":   "images/smile_sad_48.png",
+                "down": "images/smile_grin_48.png"
+            }
+        },
+
+        "div": { "id" : "test2", 
+            "progress_bar"  : { "id": "pb1", "placement": "center", "width": 150, "height": 10},
+            "img"           : { "id": "btn2", "x": 200, "y": 115, "width": 20, "height": 20, "src": "images/arrow_left.png" },
+            "img"           : { "id": "btn3", "x": 380, "y": 115, "width": 20, "height": 20, "src": "images/arrow_right.png" },
+            "label"         : { "id": "lbl2", "x": 210, "y": 200, "font": "Verdana", "rotation": 0.2, "caption": "click small arrows to adjust percentage"}
+        }
+    },
+    "button": {"id": "btnNext", "x": 320, "y": 250, "width": 50, "height":50, "up": "images/arrow_right_green_48.png", "down": "images/arrow_right_48.png"},
+    "button": {"id": "btnPrev", "x": 220, "y": 250, "width": 50, "height":50, "up": "images/arrow_right_green_48.png", "down": "images/arrow_right_48.png", "rotation": 0.4}
+}

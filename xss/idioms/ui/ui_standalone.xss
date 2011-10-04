@@ -1,0 +1,206 @@
+
+
+<xss:code>
+//preconditions
+if (!application.canvasElement)
+	application.canvasElement = "myCanvas";
+
+if (!application.ui_package)
+    application.ui_package = "ui_package";
+</xss:code>
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title><xss:e value = "application.title"/></title>
+
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
+
+<xss:code>
+    compiler.inject("render_jscripts");
+</xss:code>
+
+<script type="text/javascript">			
+var g_ui;
+var g_elapsed = -1;
+var g_delta = 0.0;
+var g_canvas;
+var g_ui_root;
+var application = {};
+
+<xss:code>
+    compiler.inject("render_initialization");
+</xss:code>
+
+
+function start(resolution)  
+{  
+	var start = new Date().getTime();  
+	function update()  
+	{  
+		var now   = new Date().getTime();
+        if (g_elapsed < 0)
+            g_delta = 0; //first update
+        else
+		    g_delta  = now - g_elapsed;  
+		
+        g_elapsed = now; 
+              
+        <xss:code>
+            compiler.inject("render_update");
+        </xss:code>
+
+		var context = g_canvas.getContext('2d');
+		g_ui.update(g_delta, context);
+
+        window.setTimeout(update, resolution);  
+	}  
+	window.setTimeout(update, resolution);  
+}  
+
+<xss:marker id="variables"/>
+
+<xss:code>
+compiler.inject("render_types");
+compiler.xss("../common-js/instance.xss", application);
+</xss:code>
+
+window.onload = function() 
+{
+	var drawingCanvas = document.getElementById("<xss:e value="application.canvasElement"/>");
+        
+	g_canvas = drawingCanvas;
+	if (drawingCanvas && drawingCanvas.getContext)
+	{
+		var client =
+		{
+			width: <xss:e value="application.width"/>,
+			height: <xss:e value="application.height"/>,
+			canvas: drawingCanvas
+		};
+            
+		var streamer = new ms.streamer.Streamer();
+		var ui = new ms.ui.Manager(client, streamer);
+		var resources = new ms.streamer.PackageContainer();
+		g_ui = ui;
+        g_ui_root = ui.root;
+
+        var ui_images = 
+        [
+            <xss:marker id="ui_images"/>
+        ];
+
+		<xss:code>
+		for(var res in application.resources.children)
+		{
+            if (res.class_name != "package")
+            {
+                //this is obviously a hack, but what the hell 
+                out(marker = "ui_images")
+                {
+				    '<xss:e value="res.src"/>',
+                }
+            }
+            else
+            {
+                //generate a standard resource package
+                out(marker = "variables")
+                {
+                    var <xss:e v="res.id"/>;
+                }
+                
+                //contents
+                string pack_id = compiler.genid("__p");
+                out()
+                {
+                    var <xss:e v="pack_id"/> = 
+                    [
+                }
+                
+                for(var resource in res.children)
+                {
+                    out()
+                    {
+                        {src: "<xss:e v="resource.src"/>"},
+                    }
+                }
+                
+                out()
+                {
+                    ];
+                    
+                    <xss:e v="res.id"/> = new ms.streamer.Package(streamer, <xss:e v="pack_id"/>);
+                    resources.register("<xss:e v="res.id"/>", <xss:e v="res.id"/>);            
+                }
+                
+                if (res.auto_load)
+                {
+                    out()
+                    {
+                        <xss:e v="res.id"/>.load();
+                    }
+                }
+                
+                
+            }
+		}
+        </xss:code>
+
+		ui.load_images(ui_images, function()
+		{
+			drawingCanvas.onmousemove = function(ev)
+			{
+				ui.mouse_move(ev.clientX, ev.clientY);                  
+			};
+
+			drawingCanvas.onmousedown = function(ev)
+			{
+				ui.mouse_down(ev.clientX, ev.clientY);                  
+			};
+
+			drawingCanvas.onmouseup = function(ev)
+			{
+				ui.mouse_up(ev.clientX, ev.clientY);                  
+			};
+
+            <xss:code>
+            //the instances are rendered after the basic resources has been loaded
+            //not good
+            compiler.inject("render_instances");
+            </xss:code>
+
+            if (application.init)
+            {
+                application.init();
+            }
+    
+			start();
+			ui.draw(drawingCanvas.getContext('2d'));
+		});
+	}
+}
+</script>
+
+</head>
+
+<body>
+
+	<canvas id="<xss:e value="application.canvasElement"/>" width="<xss:e value="application.width"/>" height="<xss:e value="application.height"/>">
+
+		<p>Your browser doesn't support canvas.</p>
+
+	</canvas>
+
+</body>
+
+</html>

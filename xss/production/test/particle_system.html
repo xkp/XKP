@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test 3D</title>
+<style type="text/css">
+	body{
+	background:#000000;
+	}
+</style>
+</head>
+<body>
+<script type="text/javascript" src="../js/three/Detector.js"></script>
+<script type="text/javascript" src="../js/three/Three.js"></script>
+<script type="text/javascript" src="../js/three/Stats.js"></script>
+<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/three/Utils.js"></script>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript">		
+	var renderer = new THREE.CanvasRenderer();	
+var active_camera;
+var SCREEN_WIDTH = window.innerWidth;
+var SCREEN_HEIGHT = window.innerHeight;
+var g_elapsed = -1;
+var g_delta = 0.0;			
+var application = {};
+// --------RESOURCES---------
+// --------RESOURCES---------
+soundRenderer = new THREE.SoundRenderer();		
+document.body.appendChild( soundRenderer.domElement );
+renderer.setSize( window.innerWidth, window.innerHeight );
+function render() {
+renderer.clear();
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+    g_delta = 0; //first update
+else
+g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+		camera_1.position.x += (application.mouse_x - camera_1.position.x) * 0.0500000007;
+camera_1.position.y += (-application.mouse_y - camera_1.position.y) * 0.0500000007;
+		set_active_camera(camera_1);
+}
+var scene = 
+new THREE.Scene(
+);
+var camera_1 = 
+new THREE.Camera(
+75,1.5,1,3000);
+                camera_1.position.z = 1000;
+		for ( var i = 0; i < 1000; i++ ) {
+			particle = new THREE.Particle( new THREE.ParticleCanvasMaterial( { color: Math.random() * 0x808008 + 0x808008, program: program_fill, } ) );
+				particle.position.x = 
+				default_interpolate(-400, 400, Math.random());
+				particle.position.y = 
+				default_interpolate(-400, 400, Math.random());
+				particle.position.z = 
+				default_interpolate(-400, 400, Math.random());
+			particle.scale.x = particle.scale.y = Math.random() * 10 + 5;
+			scene.addObject( particle );
+		}
+                application.mouse_x = null;
+                application.mouse_y = null;
+	document.addEventListener( 'mousemove', mousemove_application, false );
+	function mousemove_application (event)
+	{
+	var x = event.clientX;
+	var y = event.clientY;
+		application.mouse_x = x - window.innerWidth / 2;
+application.mouse_y = y - window.innerHeight / 2;
+	};
+if (application.init)
+{
+	application.init();
+}
+document.body.appendChild( renderer.domElement );
+animate();
+function animate() {
+	requestAnimationFrame( animate );
+	render();
+}
+</script>
+</body>
+</html>
