@@ -710,32 +710,72 @@ void xss_object::copy(XSSObject obj)
         events_->push_back(my_ev);
       }
 
-      //copy dynamic variables
-      struct copier : dynamic_visitor
-        {
-          copier(XSSObject src, xss_object* dest):
-            src_(src),
-            dest_(dest)
-            {
-            }
+    //copy dynamic variables
+    struct copier : dynamic_visitor
+      {
+        copier(XSSObject src, xss_object* dest):
+          src_(src),
+          dest_(dest)
+          {
+          }
 
-          virtual void item(const str& name, variant value)
-            {
-              if (name == "type")
-                return;
+        virtual void item(const str& name, variant value)
+          {
+            if (name == "type")
+              return;
 
-              if (dest_->has(name))
-                dynamic_set((IDynamicObject*)dest_, name, value);
-              else
-                dest_->add_attribute(name, value);
-            }
+            if (dest_->has(name))
+              {
+                schema_item result;
+                dest_->resolve(name, result);
 
-          private:
-            XSSObject   src_;
-            xss_object* dest_;
-        } copier_(obj, this);
+                if (result.type == type_schema<DynamicArray>())
+                  {
+                    //merge array
+                    if (result.get)
+                      {
+                        variant value = result.get->get(&(*dest_));
 
-      obj->visit(&copier_);
+                        DynamicArray da = variant_cast<DynamicArray>(value, DynamicArray());
+                        if (da)
+                          {
+                            DynamicArray obj_da = variant_cast<DynamicArray>(dynamic_get(src_, name), DynamicArray());
+                            if (obj_da)
+                              {
+                                std::vector<variant>::iterator objit = obj_da->ref_begin();
+                                std::vector<variant>::iterator objnd = obj_da->ref_end();
+
+                                for(; objit != objnd; objit++)
+                                  {
+                                    XSSObject nobj = variant_cast<XSSObject>(*objit, XSSObject());
+                                    if (nobj)
+                                      {
+                                        XSSObject cloner(new xss_object);
+                                        cloner->copy(nobj);
+                                        da->push_back(cloner);
+                                      }
+                                    else
+                                      da->push_back(*objit);
+                                  }
+                              }
+                          }
+                      }
+                  }
+                else
+                  {
+                    dynamic_set((IDynamicObject*)dest_, name, value);
+                  }
+              }
+            else
+              dest_->add_attribute(name, value);
+          }
+
+        private:
+          XSSObject   src_;
+          xss_object* dest_;
+      } copier_(obj, this);
+
+    obj->visit(&copier_);
   }
 
 bool xss_object::resolve(const str& name, schema_item& result)

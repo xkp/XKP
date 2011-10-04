@@ -6,11 +6,20 @@
                 <object what="something"/>
             </array>
         </class>
-        
+		
+		<class id="t_arrays2">
+            <array id="some_array">
+                <object what="something3"/>
+            </array>
+		</class>
+
+		//testing merge array from import and inherit
         <class id="t_arrays1" super="t_arrays">
             <array id="some_array">
                 <object what="something2"/>
             </array>
+			
+			<import id="t_arrays2"/>
         </class>
 
         //testing imports

@@ -2,13 +2,13 @@
     <types>
 	
         //testing enums class
-		<enum id="EVisibility" output_id="View" output_type="int" default_value="visible">
+		<enum id="EVisibility" output_id="View" output_type="int" default_value="EVisibility.true">
 			<property id="true" type="int" output_id="VISIBLE" output_xml="visible"/>
 			<property id="false" type="int" output_id="INVISIBLE" output_xml="invisible"/>
 			<property id="gone" type="int" output_id="GONE" output_xml="gone"/>
 		</enum>
 		
-		<enum id="EPlacement" output_id="XKPLayout" output_type="int" default_value="none">
+		<enum id="EPlacement" output_id="XKPLayout" output_type="int" default_value="EPlacement.none">
 			<property id="none" type="int" output_id="PL_NONE" output_xml="none"/>
 			<property id="top" type="int" output_id="PL_TOP" output_xml="top"/>
 			<property id="left" type="int" output_id="PL_LEFT" output_xml="left"/>

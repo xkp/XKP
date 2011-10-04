@@ -27,6 +27,11 @@ Success are greateful
 
 Log: Rendering 3js Types...
 Success are greateful
+===[ box2d1.project.xml ]================
+
+Log: my_body
+Log: floor
+Success are greateful
 ===[ cameras.project.xml ]================
 
 Log: Rendering 3js Types...
@@ -42,7 +47,9 @@ Success are greateful
 ===[ enums.project.xml ]================
 
 Log: Rendering test with enum class...
+Log: output_xml: top
 Log: instance: 'btn' property id: 'sameName' property output_id: 'prop_btn_sameName'
+Log: output_xml: visible
 Log: instance: 'application' property id: 'sameName' property output_id: 'prop_application_sameName'
 
 			Instance: name = "btn", type = "Button"
@@ -55,7 +62,7 @@ Log: instance: 'application' property id: 'sameName' property output_id: 'prop_a
 			
 				property:enabled = false
 			
-				property:placement(enum) = Placement.PL_TOP
+				property:placement(enum) = XKPLayout.PL_TOP
 			
 				sameName = "My owner is button 'btn'"
 			
@@ -63,7 +70,9 @@ Log: instance: 'application' property id: 'sameName' property output_id: 'prop_a
 			
 				property:layout_y = 0
 			
-				property:visible(enum) = "View.VISIBLE"
+				property:visible(enum) = View.VISIBLE
+			
+				property:states = 
 			
 			Instance: name = "application", type = ""
 		
@@ -660,11 +669,12 @@ Log: assigning default_value = EVisibility.true
 				property "width" = 200			
 				property "height" = 43			
 				property "enabled" = false			
-				property "placement" = Placement.PL_TOP			
+				property "placement" = XKPLayout.PL_TOP			
 				property "sameName" = "My owner is button 'btn'"			
 				property "x" = 0			
 				property "y" = 0			
 				property "visible" = "EVisibility.true"			
+				property "states" = 			
 			Instance: name = "application", type = ""
 		
 				property "sameName" = "My owner is application."			
@@ -720,6 +730,8 @@ this is Louis
             
                 something
             
+                something3
+            
 			instance id: t3
 		
 				event id: click
@@ -730,6 +742,8 @@ this is Louis
         t_arrays 
      
         t_arrays1 
+     
+        t_arrays2 
      
         t_base_import 
      
@@ -840,5 +854,77 @@ Success are greateful
 			event id: click event output_id: onClick
 		
 				Interface: IClick
+			
+Success are greateful
+===[ xss7.project.xml ]================
+
+Log: btn
+Log: null
+Log: btn
+Log: null
+Log: application
+Log: null
+Log: application
+Log: null
+
+			instance id: application
+			instance class: application
+		
+			instance id: btn
+			instance class: button
+		
+				property id: caption - output_id: property:text
+					namespace = android
+			
+					value = "ArrayType"				
+				property id: width - output_id: property:layout_width
+					namespace = android
+			
+					value = 200				
+				property id: height - output_id: property:layout_height
+					namespace = android
+			
+					value = 43				
+				property id: enabled - output_id: property:enabled
+					namespace = android
+			
+					value = false				
+				property id: placement - output_id: property:placement
+					namespace = xkp
+			
+					value = XKPLayout.PL_TOP				
+				property id: states - output_id: property:states
+					namespace = xkp
+			
+					** No render property "states" **
+				
+			==[Begin rendering Array]======
+		
+				id =  && type = string
+				value = value0
+			
+				id =  && type = string
+				value = value1
+			
+			==[Begin rendering Object]======
+		
+				id = attr0 && type = int
+				value = 0
+			
+				id = attr1 && type = string
+				value = v1
+			
+			==[End rendering Object]======
+		
+			==[End rendering Array]======
+		
+				property id: x - output_id: property:layout_x
+					namespace = xkp
+			
+				property id: y - output_id: property:layout_y
+					namespace = xkp
+			
+				property id: visible - output_id: property:visible
+					namespace = android
 			
 Success are greateful

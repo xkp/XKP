@@ -15,16 +15,18 @@
 		var props = inst.query_properties("*");
 		for(var p in props)
 		{
-			if(p.no_render)
-			{
-				compiler.log("No rendering property " + p.id);
-				continue;
-			}
-			
 			out()
 			{
 				property id: <xss:e v="p.id"/> - output_id: <xss:e v="p.output_id"/>
 					namespace = <xss:e value="p.ns"/>
+			}
+			
+			if(p.no_render)
+			{
+				out()
+				{
+					** No render property "<xss:e value="p.id"/>" **
+				}
 			}
 			
 			if(p.type.is_array)
@@ -44,21 +46,71 @@
 		if(inst.children)
 		{
 			for(var child in inst.children)
-            {
-                generate_instance(child, inst);
-            }
+			{
+				generate_instance(child, inst);
+			}
+		}
+		
+		compiler.log(inst.id);
+		compiler.log(inst.states);
+			
+		//another property array checks
+		if(inst has "states")
+		{
+			compiler.log(inst.id);
+			compiler.log(inst.states);
 		}
 	}
 	
 	method render_array(var prop)
 	{
-        for(var iii in prop.value) //la cosa es el value
-        {
+		out()
+		{
+			==[Begin rendering Array]======
+		}
+		for(var iii in prop.value)
+		{
+			if(iii.type.is_object)
+			{
+				render_object(iii);
+				continue;
+			}
+			
 			out()
 			{
-				id = <xss:e value="iii.id"/>
+				id = <xss:e value="iii.id"/> && type = <xss:e value="iii.type.id"/>
 				value = <xss:e value="iii.value"/>
 			}
-        }
+		}
+		out()
+		{
+			==[End rendering Array]======
+		}
+	}
+	
+	method render_object(var obj)
+	{
+		out()
+		{
+			==[Begin rendering Object]======
+		}
+		for(var jjj in obj.children)
+		{
+			if(jjj.type.is_array)
+			{
+				render_array(jjj);
+				continue;
+			}
+			
+			out()
+			{
+				id = <xss:e value="jjj.id"/> && type = <xss:e value="jjj.type.id"/>
+				value = <xss:e value="jjj.value"/>
+			}
+		}
+		out()
+		{
+			==[End rendering Object]======
+		}
 	}
 </xss:class>

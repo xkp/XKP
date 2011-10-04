@@ -75,7 +75,7 @@
 		string srcf = compiler.full_path("/copy.defaults" + f);
 		string dstf = appName + f;
 		
-		compiler.log("Copying deafult file " + srcf);
+		compiler.log("Copying default file: " + srcf);
 		
 		compiler.copy_file(src = srcf, dst = dstf);
 	}
@@ -87,6 +87,9 @@
 	{
 		output_filename = appName + "/src/com/xkp/android/" + appName + "/XKPReplicator.java";
 		compiler.xss("xkpReplicator.java.xss", output_file = output_filename, appName);
+		
+		output_filename = appName + "/src/com/xkp/android/" + appName + "/XKPObject.java";
+		compiler.xss("xkpObject.java.xss", output_file = output_filename, appName);
 	}
 	
 	if(bSwitcher)
