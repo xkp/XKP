@@ -29,42 +29,8 @@ var SCREEN_HEIGHT = window.innerHeight;
 var g_elapsed = -1;
 var g_delta = 0.0;			
 var application = {};
-		var g_streamer = new ms.streamer.Streamer();
-	// --------RESOURCES---------
-        var def_package_items = [];
-                def_package_items.push(
-            {
-		id:"",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test1.png"
-});
-                def_package_items.push(
-            {
-		id:"",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test2.png"
-});
-                def_package_items.push(
-            {
-		id:"",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test3.png"
-});
-                def_package_items.push(
-            {
-		id:"",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test4.png"
-});
-                def_package_items.push(
-            {
-		id:"",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test5.png"
-});
-        var g_startup_package = new ms.streamer.Package(g_streamer, def_package_items);	
-		g_startup_package.load();	
-    // --------RESOURCES---------
+// --------RESOURCES---------
+// --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -86,31 +52,31 @@ new Array(
 	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test1.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test1.png').asset),
+	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test1.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
 	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test2.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test2.png').asset),
+	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test2.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
 	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test3.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test3.png').asset),
+	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test3.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
 	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test4.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test4.png').asset),
+	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test4.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
 	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test5.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	opacity:0.200000003,map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test5.png').asset),
+	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test5.png').asset),
 	}));
 var scene = 
 new THREE.Scene(
@@ -125,7 +91,7 @@ new THREE.Camera(
 new THREE.Plane(
 128,164);
 	var img1 = new THREE.Mesh(img1_plane,
-	materials[0]);
+	);
 	scene.addObject(img1);
 	document.addEventListener( 'mousemove', mousein_img1, false );
 	function mousein_img1 (event)
@@ -159,7 +125,7 @@ img1_reflect.position.y = -131.199997;
 new THREE.Plane(
 128,164);
 	var img1_reflect = new THREE.Mesh(img1_reflect_plane,
-	materials[1]);
+	);
 	scene.addObject(img1_reflect);
                 img1_reflect.doubleSided = true;
                 img1_reflect.scale.y = 0.800000012;
@@ -169,7 +135,7 @@ new THREE.Plane(
 new THREE.Plane(
 128,164);
 	var img2 = new THREE.Mesh(img2_plane,
-	materials[2]);
+	);
 	scene.addObject(img2);
 	document.addEventListener( 'mousemove', mousein_img2, false );
 	function mousein_img2 (event)
@@ -203,7 +169,7 @@ img2_reflect.position.y = -131.199997;
 new THREE.Plane(
 128,164);
 	var img2_reflect = new THREE.Mesh(img2_reflect_plane,
-	materials[3]);
+	);
 	scene.addObject(img2_reflect);
                 img2_reflect.doubleSided = true;
                 img2_reflect.scale.y = 0.800000012;
@@ -213,7 +179,7 @@ new THREE.Plane(
 new THREE.Plane(
 128,164);
 	var img3 = new THREE.Mesh(img3_plane,
-	materials[4]);
+	);
 	scene.addObject(img3);
 	document.addEventListener( 'mousemove', mousein_img3, false );
 	function mousein_img3 (event)
@@ -247,7 +213,7 @@ img3_reflect.position.y = -131.199997;
 new THREE.Plane(
 128,164);
 	var img3_reflect = new THREE.Mesh(img3_reflect_plane,
-	materials[5]);
+	);
 	scene.addObject(img3_reflect);
                 img3_reflect.doubleSided = true;
                 img3_reflect.scale.y = 0.800000012;
@@ -257,7 +223,7 @@ new THREE.Plane(
 new THREE.Plane(
 128,164);
 	var img4 = new THREE.Mesh(img4_plane,
-	materials[6]);
+	);
 	scene.addObject(img4);
 	document.addEventListener( 'mousemove', mousein_img4, false );
 	function mousein_img4 (event)
@@ -291,7 +257,7 @@ img4_reflect.position.y = -131.199997;
 new THREE.Plane(
 128,164);
 	var img4_reflect = new THREE.Mesh(img4_reflect_plane,
-	materials[7]);
+	);
 	scene.addObject(img4_reflect);
                 img4_reflect.doubleSided = true;
                 img4_reflect.scale.y = 0.800000012;
@@ -301,7 +267,7 @@ new THREE.Plane(
 new THREE.Plane(
 128,164);
 	var img5 = new THREE.Mesh(img5_plane,
-	materials[8]);
+	);
 	scene.addObject(img5);
 	document.addEventListener( 'mousemove', mousein_img5, false );
 	function mousein_img5 (event)
@@ -335,7 +301,7 @@ img5_reflect.position.y = -131.199997;
 new THREE.Plane(
 128,164);
 	var img5_reflect = new THREE.Mesh(img5_reflect_plane,
-	materials[9]);
+	);
 	scene.addObject(img5_reflect);
                 img5_reflect.doubleSided = true;
                 img5_reflect.scale.y = 0.800000012;

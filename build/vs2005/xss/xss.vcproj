@@ -221,6 +221,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\third_party\jsoncpp\src\lib_json\json_reader.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\third_party\jsoncpp\src\lib_json\json_value.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\third_party\jsoncpp\src\lib_json\json_writer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\xss\language.cpp"
 				>
 			</File>
@@ -295,11 +307,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\xss\lang\base.h"
+				RelativePath="..\..\..\include\base.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\base.h"
+				RelativePath="..\..\..\include\xss\lang\base.h"
 				>
 			</File>
 			<File

@@ -27,7 +27,7 @@
             <property id="title" type="string"/>
             <property id="name" output_id="real_name" type="int" value="20"/>
 
-            <method id="run" output_id="real_run"/>
+            <method id="run" type="var" output_id="real_run"/>
             <event id="create" output_id="create" interface="ICreate"/>
         </class>
 

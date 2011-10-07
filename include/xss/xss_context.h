@@ -365,7 +365,7 @@ class xss_event : public xss_object
 		public:
 			xss_event();
 			xss_event(const xss_event& other);
-			xss_event(const str& name);
+			xss_event(const str& name, variant args);
 
 			str get_name();
 
@@ -447,6 +447,7 @@ struct xss_event_schema : xss_object_schema<xss_event>
 
         readonly_property<str>("name", &xss_event::get_name);
 
+        property_("args",  &xss_event::args);
         property_("impls", &xss_event::impls);
 				readonly_property<bool>("implemented", &xss_event::implemented);
       }

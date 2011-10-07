@@ -2,37 +2,116 @@
 
 	<types>
 	
+		<!-- ENUM declarations -->
 		<enum id="EVisibility" output_id="View" output_type="int" default_value="EVisibility.true">
-			<property id="true" type="int" output_id="VISIBLE" output_xml="visible"/>
-			<property id="false" type="int" output_id="INVISIBLE" output_xml="invisible"/>
-			<property id="gone" type="int" output_id="GONE" output_xml="gone"/>
+			<property id="true" type="EVisibility" output_id="VISIBLE" output_xml="visible"/>
+			<property id="false" type="EVisibility" output_id="INVISIBLE" output_xml="invisible"/>
+			<property id="gone" type="EVisibility" output_id="GONE" output_xml="gone"/>
 		</enum>
 		
 		<enum id="EGravity" output_id="Gravity" output_type="int" default_value="EGravity.center">
-			<property id="top" type="int" output_id="TOP" output_xml="top"/>
-			<property id="bottom" type="int" output_id="BOTTOM" output_xml="bottom"/>
-			<property id="left" type="int" output_id="LEFT" output_xml="left"/>
-			<property id="right" type="int" output_id="RIGHT" output_xml="right"/>
-			<property id="center_vertical" type="int" output_id="CENTER_VERTICAL" output_xml="center_vertical"/>
-			<property id="fill_vertical" type="int" output_id="FILL_VERTICAL" output_xml="fill_vertical"/>
-			<property id="center_horizontal" type="int" output_id="CENTER_HORIZONTAL" output_xml="center_horizontal"/>
-			<property id="fill_horizontal" type="int" output_id="FILL_HORIZONTAL" output_xml="fill_horizontal"/>
-			<property id="center" type="int" output_id="CENTER" output_xml="center"/>
-			<property id="fill" type="int" output_id="FILL" output_xml="fill"/>
-			<property id="clip_vertical" type="int" output_id="CLIP_VERTICAL" output_xml="clip_vertical"/>
-			<property id="clip_horizontal" type="int" output_id="CLIP_HORIZONTAL" output_xml="clip_horizontal"/>
+			<property id="top" type="EGravity" output_id="TOP" output_xml="top"/>
+			<property id="fill" type="EGravity" output_id="FILL" output_xml="fill"/>
+			<property id="left" type="EGravity" output_id="LEFT" output_xml="left"/>
+			<property id="right" type="EGravity" output_id="RIGHT" output_xml="right"/>
+			<property id="bottom" type="EGravity" output_id="BOTTOM" output_xml="bottom"/>
+			<property id="center" type="EGravity" output_id="CENTER" output_xml="center"/>
+			<property id="fill_vertical" type="EGravity" output_id="FILL_VERTICAL" output_xml="fill_vertical"/>
+			<property id="clip_vertical" type="EGravity" output_id="CLIP_VERTICAL" output_xml="clip_vertical"/>
+			<property id="center_vertical" type="EGravity" output_id="CENTER_VERTICAL" output_xml="center_vertical"/>
+			<property id="fill_horizontal" type="EGravity" output_id="FILL_HORIZONTAL" output_xml="fill_horizontal"/>
+			<property id="clip_horizontal" type="EGravity" output_id="CLIP_HORIZONTAL" output_xml="clip_horizontal"/>
+			<property id="center_horizontal" type="EGravity" output_id="CENTER_HORIZONTAL" output_xml="center_horizontal"/>
 		</enum>
 		
-		<enum id="EPlacement" output_id="XKPLayout" output_type="int" default_value="EPlacement.none">
-			<property id="none" type="int" output_id="PL_NONE" output_xml="none"/>
-			<property id="top" type="int" output_id="PL_TOP" output_xml="top"/>
-			<property id="left" type="int" output_id="PL_LEFT" output_xml="left"/>
-			<property id="right" type="int" output_id="PL_RIGHT" output_xml="right"/>
-			<property id="bottom" type="int" output_id="PL_BOTTOM" output_xml="bottom"/>
-			<property id="client" type="int" output_id="PL_CLIENT" output_xml="client"/>
-			<property id="center" type="int" output_id="PL_CENTER" output_xml="center"/>
+		<enum id="EActionMotionEvent" output_id="MotionEvent" output_type="int" default_value="-1">
+			<property id="cancel" type="EActionMotionEvent" output_id="ACTION_CANCEL" output_xml="cancel"/>
+			<property id="down" type="EActionMotionEvent" output_id="ACTION_DOWN" output_xml="down"/>
+			<property id="move" type="EActionMotionEvent" output_id="ACTION_MOVE" output_xml="move"/>
+			<property id="up" type="EActionMotionEvent" output_id="ACTION_UP" output_xml="up"/>
+			<!-- continue -->
+		</enum>
+		
+		<enum id="EPlacement" output_id="XKPLayout" type="int" output_type="int" default_value="EPlacement.none">
+			<property id="none" type="EPlacement" output_id="PL_NONE" output_xml="none"/>
+			<property id="top" type="EPlacement" output_id="PL_TOP" output_xml="top"/>
+			<property id="left" type="EPlacement" output_id="PL_LEFT" output_xml="left"/>
+			<property id="right" type="EPlacement" output_id="PL_RIGHT" output_xml="right"/>
+			<property id="bottom" type="EPlacement" output_id="PL_BOTTOM" output_xml="bottom"/>
+			<property id="client" type="EPlacement" output_id="PL_CLIENT" output_xml="client"/>
+			<property id="center" type="EPlacement" output_id="PL_CENTER" output_xml="center"/>
 		</enum>
 
+		<!-- EVENT declarations -->
+		<class id="IClickListener">
+			<array id="imports">
+				<object import="android.view.View.OnClickListener"/>
+			</array>
+			
+			<event id="click" output_id="onClick" interface="OnClickListener" def_args="View v" set_handle="setOnClickListener" set_param_hnd="this"/>
+		</class>
+		
+		<class id="IChangeListener">
+			<array id="imports">
+				<object import="android.widget.CompoundButton"/>
+				<object import="android.widget.CompoundButton.OnCheckedChangeListener"/>
+			</array>
+			
+			<event id="change" output_id="onCheckedChanged" interface="OnCheckedChangeListener" def_args="CompoundButton v, Boolean isChecked" set_handle="setOnCheckedChangeListener" set_param_hnd="this"/>
+		</class>
+		
+		<class id="IKeyDownListener">
+			<event id="keydown" output_id="onKey" interface="OnKeyListener" def_args="View v, int keyCode, KeyEvent event" set_handle="setOnKeyListener" set_param_hnd="this"/>
+		</class>
+		
+		<class id="IDragListener">
+			<event id="drag" output_id="onDrag" interface="OnDragListener" def_args="View v, DragEvent event" set_handle="setOnDragListener" set_param_hnd="this"/>
+		</class>
+		
+		<class id="ITouchListener">
+			<array id="imports">
+				<object import="android.view.MotionEvent"/>
+				<object import="android.view.View.OnTouchListener"/>
+			</array>
+			
+			<event id="touch" output_id="onTouch" interface="OnTouchListener" def_args="View v, MotionEvent ev" set_handle="setOnTouchListener" set_param_hnd="this"/>
+		</class>
+		
+		<!-- CLASS declarations -->
+		<class id="IClassImageAdapter">
+			<array id="imports">
+				<object import="android.view.ViewGroup"/>
+				<object import="android.widget.ImageView"/>
+				<object import="android.widget.BaseAdapter"/>
+				<object import="android.content.Context"/>
+			</array>
+			
+			<array id="classes">
+				<object name="ImageAdapter" file_name="ImageAdapter.class.xss"/>
+			</array>
+			
+			<property id="adapter" no_layout="true" type="string" set_handle="setAdapter" set_param_hnd="new ImageAdapter(this)"/>
+		</class>
+		
+		<class id="Math" no_layout="true">
+			<method id="max" type="double"/>
+			<method id="abs" type="double"/>
+			<method id="atan2" type="double"/>
+			
+			<property id="PI" output_id="PI" type="double"/>
+		</class>
+		
+		<class id="MotionEvent" no_layout="true">
+			<array id="imports">
+				<object import="android.view.MotionEvent"/>
+			</array>
+			
+			<method id="getAction" type="EActionMotionEvent"/>
+			<method id="getX" type="double"/>
+			<method id="getY" type="double"/>
+		</class>
+		
+		<!-- VIEW declarations -->
 		<class id="IWidget">
 			<property id="x" output_id="layout_x" ns="xkp" type="int" res_type="dimension" 
 				property_xss_set="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setLeft" get_fn="getLeft"/>
@@ -67,46 +146,6 @@
 			<property id="layout_margin" ns="android" type="int"/>
 			<property id="layout_weight" ns="android" type="float"/>
 			-->
-		</class>
-		
-		<class id="IClickListener">
-			<array id="imports">
-				<object import="android.view.View.OnClickListener"/>
-			</array>
-			
-			<event id="click" output_id="onClick" interface="OnClickListener" def_args="View v" set_handle="setOnClickListener" set_param_hnd="this"/>
-		</class>
-		
-		<class id="IChangeListener">
-			<array id="imports">
-				<object import="android.widget.CompoundButton"/>
-				<object import="android.widget.CompoundButton.OnCheckedChangeListener"/>
-			</array>
-			
-			<event id="change" output_id="onCheckedChanged" interface="OnCheckedChangeListener" def_args="CompoundButton v, Boolean isChecked" set_handle="setOnCheckedChangeListener" set_param_hnd="this"/>
-		</class>
-		
-		<class id="IKeyDownListener">
-			<event id="keydown" output_id="onKey" interface="OnKeyListener" def_args="View v, int keyCode, KeyEvent event" set_handle="setOnKeyListener" set_param_hnd="this"/>
-		</class>
-		
-		<class id="IDragListener">
-			<event id="drag" output_id="onDrag" interface="OnDragListener" def_args="View v, DragEvent event" set_handle="setOnDragListener" set_param_hnd="this"/>
-		</class>
-		
-		<class id="IClassImageAdapter">
-			<array id="imports">
-				<object import="android.view.ViewGroup"/>
-				<object import="android.widget.ImageView"/>
-				<object import="android.widget.BaseAdapter"/>
-				<object import="android.content.Context"/>
-			</array>
-			
-			<array id="classes">
-				<object name="ImageAdapter" file_name="ImageAdapter.class.xss"/>
-			</array>
-			
-			<property id="adapter" no_layout="true" type="string" set_handle="setAdapter" set_param_hnd="new ImageAdapter(this)"/>
 		</class>
 		
 		<class id="ITextView" super="IWidget">

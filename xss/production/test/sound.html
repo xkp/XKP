@@ -30,24 +30,8 @@ var SCREEN_HEIGHT = window.innerHeight;
 var g_elapsed = -1;
 var g_delta = 0.0;			
 var application = {};
-		var g_streamer = new ms.streamer.Streamer();
-	// --------RESOURCES---------
-        var def_package_items = [];
-                def_package_items.push(
-            {
-		id:"res_sound_1",
-		resource_type:RESOURCE_SOUND,
-		src:"sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg"
-});
-                def_package_items.push(
-            {
-		id:"res_sound_2",
-		resource_type:RESOURCE_SOUND,
-		src:"sounds/358232_j_s_song.ogg"
-});
-        var g_startup_package = new ms.streamer.Package(g_streamer, def_package_items);	
-		g_startup_package.load();	
-    // --------RESOURCES---------
+// --------RESOURCES---------
+// --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -74,12 +58,12 @@ var scene =
 new THREE.Scene(
 );
 	var camera_1 = new THREE.QuakeCamera({
-	fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly:true,lookVertical:false
+	fov:50,aspect:1.5,near:1,far:10000,lookSpeed:0.0500000007,noFly:true
 	});
                 camera_1.position.y = 25;
 var light = 
 new THREE.DirectionalLight(
-16777215);
+);
 		;
 	scene.addLight(light);
                 light.position.y = 0.5;
@@ -91,18 +75,11 @@ new THREE.Object3D(
                 container_1.position.y = 30;
 	var sphere_1_sphere = 
 new THREE.Sphere(
-20,32,16);
+20);
 	var sphere_1 = new THREE.Mesh(sphere_1_sphere,
-	material_sphere1);
+	);
 	scene.addObject(sphere_1);
 				container_1.addChild(sphere_1);
-				scene.addObject(container_1);
-	var sound_1 = new THREE.Sound(g_streamer.get_resource('res_sound_1').asset
-	,275,20,true
-	);
-	scene.addObject(sound_1);
-	sound_1.play();
-				container_1.addChild(sound_1);
 				scene.addObject(container_1);
 var container_2 = 
 new THREE.Object3D(
@@ -111,24 +88,17 @@ new THREE.Object3D(
                 container_2.position.y = 30;
 	var sphere_2_sphere = 
 new THREE.Sphere(
-20,32,16);
+20);
 	var sphere_2 = new THREE.Mesh(sphere_2_sphere,
-	material_sphere2);
+	);
 	scene.addObject(sphere_2);
 				container_2.addChild(sphere_2);
 				scene.addObject(container_2);
-	var sound_2 = new THREE.Sound(g_streamer.get_resource('res_sound_2').asset
-	,275,20,true
-	);
-	scene.addObject(sound_2);
-	sound_2.play();
-				container_2.addChild(sound_2);
-				scene.addObject(container_2);
 	var plane_1_plane = 
 new THREE.Plane(
-1000,1000,100,100);
+1000,1000);
 	var plane_1 = new THREE.Mesh(plane_1_plane,
-	material_wireframe);
+	);
 	scene.addObject(plane_1);
                 plane_1.position.y = 0.100000001;
                 plane_1.rotation.x = -1.57;

@@ -88,6 +88,7 @@ xss_application_renderer::xss_application_renderer(fs::path entry_point, Languag
     context_->add_type("int",    XSSType(new xss_type(type_schema<int>())))->set_id("int");
     context_->add_type("float",  XSSType(new xss_type(type_schema<float>())))->set_id("float");
     context_->add_type("bool",   XSSType(new xss_type(type_schema<bool>())))->set_id("bool");
+    context_->add_type("double", XSSType(new xss_type(type_schema<double>())))->set_id("double");
 
     XSSType variant_type(new xss_type());
     variant_type->set_id("var");
@@ -1282,7 +1283,13 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
                 xss_throw(error);
               }
 
-            //resolve the unresolved
+            //and register
+            if (!alias)
+              module->register_module_type(type);
+            
+            ctx->add_type(type_name, type);
+
+            //resolve the unresolved properties
 		        DynamicArray props = type->properties();
 		        std::vector<variant>::iterator pit = props->ref_begin();
 		        std::vector<variant>::iterator pnd = props->ref_end();
@@ -1307,11 +1314,30 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
                   }
               }
 
-            //and register
-            if (!alias)
-              module->register_module_type(type);
-            
-            ctx->add_type(type_name, type);
+            //resolve the unresolved methods
+            DynamicArray mthds = type->methods();
+		        std::vector<variant>::iterator mit = mthds->ref_begin();
+		        std::vector<variant>::iterator mnd = mthds->ref_end();
+
+            for(; mit != mnd; mit++)
+              {
+                XSSMethod mthd     = *mit;
+                XSSType   old_type = mthd->type();
+                if (old_type->is_unresolved())
+                  {
+                    XSSType new_type = ctx->get_type(old_type->id());
+                    if (!new_type)
+                      {
+                        param_list error;
+                        error.add("id", SProjectError);
+                        error.add("desc", SUnknownClass);
+                        error.add("class", old_type->id());
+                        xss_throw(error);
+                      }
+
+                      mthd->set_type(new_type);
+                  }
+              }
           }
       }
   }

@@ -68,16 +68,16 @@ new THREE.Camera(
                 camera_1.position.z = 1000;
 var light = 
 new THREE.DirectionalLight(
-1677);
+);
 		;
 	scene.addLight(light);
                 light.position.y = 0.5;
                 light.position.z = 1;
 	var cylinder_1_cylinder = 
 new THREE.Cylinder(
-200,100,100,500);
+500);
 	var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder,
-	cylinder_material);
+	);
 	scene.addObject(cylinder_1);
                 cylinder_1.rotation.x = 10;
                 cylinder_1.rotation.y = 10;
@@ -89,7 +89,7 @@ new THREE.Object3D(
 new THREE.Cube(
 300,300,300);
 	var cube_1 = new THREE.Mesh(cube_1_cube,
-	cube_material);
+	);
 	scene.addObject(cube_1);
 				container.addChild(cube_1);
 				scene.addObject(container);
@@ -99,9 +99,9 @@ new THREE.Cube(
                 cube_1.rotation.y = 10;
 	var sphere_1_sphere = 
 new THREE.Sphere(
-200,20,20);
+200);
 	var sphere_1 = new THREE.Mesh(sphere_1_sphere,
-	sphere_material);
+	);
 	scene.addObject(sphere_1);
 				container.addChild(sphere_1);
 				scene.addObject(container);

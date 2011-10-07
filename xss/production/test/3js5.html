@@ -13,6 +13,7 @@
 <script type="text/javascript" src="../js/three/Three.js"></script>
 <script type="text/javascript" src="../js/three/Stats.js"></script>
 <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
@@ -27,9 +28,6 @@ var SCREEN_WIDTH = window.innerWidth;
 var SCREEN_HEIGHT = window.innerHeight;
 var g_elapsed = -1;
 var g_delta = 0.0;			
-var threejs_models = 
-        [
-        ];
 var application = {};
 // --------RESOURCES---------
 // --------RESOURCES---------
@@ -70,16 +68,16 @@ new THREE.Camera(
                 cam1.position.z = 1000;
 var light = 
 new THREE.DirectionalLight(
-1677);
+);
 		;
 	scene.addLight(light);
                 light.position.y = 0.5;
                 light.position.z = 1;
 	var cylinder_1_cylinder = 
 new THREE.Cylinder(
-200,100,100,500);
+500);
 	var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder,
-	cylinder_material);
+	);
 	scene.addObject(cylinder_1);
                 cylinder_1.rotation.x = 10;
                 cylinder_1.rotation.y = 10;
@@ -91,7 +89,7 @@ new THREE.Object3D(
 new THREE.Cube(
 300,300,300);
 	var cube_1 = new THREE.Mesh(cube_1_cube,
-	cube_material);
+	);
 	scene.addObject(cube_1);
 				container.addChild(cube_1);
 				scene.addObject(container);
@@ -101,9 +99,9 @@ new THREE.Cube(
                 cube_1.rotation.y = 10;
 	var sphere_1_sphere = 
 new THREE.Sphere(
-200,20,20);
+200);
 	var sphere_1 = new THREE.Mesh(sphere_1_sphere,
-	sphere_material);
+	);
 	scene.addObject(sphere_1);
 				container.addChild(sphere_1);
 				scene.addObject(container);
@@ -175,31 +173,6 @@ animate();
 function animate() {
 	requestAnimationFrame( animate );
 	render();
-}
-function get_model(model_id)
-{
-		for(var i = 0; i < this.threejs_models.length; i++)
-		{
-			var model = this.threejs_models[i];
-			if (model.id == model_id)
-				return model.src;
-		}
-		return null;
-}
-function set_active_camera(camera)
-{
-	renderer.render(scene, camera);
-	soundRenderer.render(scene, camera);
-	active_camera = camera;
-}
-function get_intersects( x, y, object)
-{
-	var vector = new THREE.Vector3( ( x / window.innerWidth ) * 2 - 1, - ( y / window.innerHeight ) * 2 + 1, 0.5 );
-	projector = new THREE.Projector();
-	projector.unprojectVector( vector, active_camera );
-	var ray = new THREE.Ray( active_camera.position, vector.subSelf( active_camera.position ).normalize() );
-	var intersects = ray.intersectObject( object );
-	return intersects;
 }
 </script>
 </body>

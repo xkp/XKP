@@ -14,6 +14,7 @@ const str SReaderError("reader");
 
 const str SPropertyMustHaveName("Properties must have a name");
 const str SPropertyMustHaveType("Properties must have a valid type");
+const str SMethodMustHaveReturnType("Methods must have a valid return type");
 const str SCannotParseXML("Invalid XML file");
 const str SCannotParseDef("Invalid Data file, make sure to provide a XML or json file");
 const str STypeNotFound("Cannot find type");
@@ -420,6 +421,30 @@ bool xss_object_reader::read_xml_method(TiXmlElement* node, const str& type, XSS
     XSSMethod mthd(new xss_method);
     XSSObject surrogate = read_xml_object(node, XSSObject(), false);
     mthd->copy(surrogate);
+
+    XSSType ret_type = ctx_->get_type(type);
+
+    if (!ret_type)
+      {
+        if (type.empty())
+          {
+				    param_list error;
+				    error.add("id", SReaderError);
+				    error.add("desc", SMethodMustHaveReturnType);
+            error.add("method name", mthd->id());
+				    error.add("container", parent->id());
+				    xss_throw(error);
+          }
+        
+        //create an unresolved type
+        XSSType unresolved(new xss_type);
+        unresolved->set_id(type);
+        unresolved->as_unresolved();
+
+        ret_type = unresolved;
+      }
+
+    mthd->set_type(ret_type);
 
     parent->methods()->push_back(mthd); //td: check for existing methods
     return true;

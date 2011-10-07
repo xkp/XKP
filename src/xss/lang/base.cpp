@@ -10,6 +10,7 @@ const str SLanguage("language");
 
 const str SEmptyExpression("Empty expression");
 const str SAssignOperator("Assign operators can only be used as the base of an expression");
+const str SUnknownType("Cannot resolve type");
 
 //base_code_renderer
 base_code_renderer::base_code_renderer()
@@ -55,6 +56,15 @@ base_code_renderer::base_code_renderer(code& cde, param_list_decl& params, XSSCo
         else
           {
             type = ctx_->get_type(param.type);
+
+            if (!type)
+              {
+                param_list error;
+                error.add("id", SLanguage);
+                error.add("desc", SUnknownType);
+                error.add("type", param.type);
+                xss_throw(error);
+              }
           }
 
         ctx_->register_symbol(RESOLVE_VARIABLE, param.name, type);
