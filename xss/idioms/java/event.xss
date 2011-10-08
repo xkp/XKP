@@ -14,7 +14,7 @@
 	{
 		out(indent = 1)
 		{
-			private void <xss:e value="ev_id"/>() <xss:open_brace/>
+			private void <xss:e value="ev_id"/>(<xss:e>e.args.render()</xss:e>) <xss:open_brace/>
 		}
 		
 		for(var impl in e.impls)

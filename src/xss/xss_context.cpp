@@ -376,6 +376,7 @@ bool xss_context::resolve(const str& id, resolve_info& info)
                       }
                     case RESOLVE_VARIABLE:
                       {
+                        assert(info.left->type);
                         assert(info.left->type->is_object() || info.left->type->is_variant());
                         obj = info.left->value;
                         break;
@@ -1038,7 +1039,7 @@ DynamicArray xss_object::get_event_impl(const str& event_name, XSSEvent& ev)
       }
 
     //not implemented, create
-    ev = XSSEvent(new xss_event(event_name));
+    ev = XSSEvent(new xss_event(event_name, variant()));
     XSSEvent type_ev = type_? type_->get_event(event_name) : XSSEvent();
     if (type_ev)
       {
@@ -1589,7 +1590,7 @@ xss_event::xss_event(const xss_event& other):
     id_ = other.id_;
   }
 
-xss_event::xss_event(const str& _name):
+xss_event::xss_event(const str& _name, variant args):
   impls(new dynamic_array)
   {
     DYNAMIC_INHERITANCE(xss_event)

@@ -1,0 +1,3 @@
+<application name="TouchMe" title="Test Touch Event" src="touchme.xs" width="320" height="430">
+    <button id="btnTouchme" caption="Touch me or Drag me to edges!" width="120" height="120"/>
+</application>

@@ -11,11 +11,11 @@ const str SCannontResolveOperator("Cannot resolve operator");
 const str SCannontResolve("Unknown identifier");
 const str SCannotCast("Cannot find a suitable cast");
 const str SIncompatibleIterator("Cannot find a suitable cast for iterator");
-const str SInconsistenReturnType("Inconsisten return type");
+const str SInconsistentReturnType("Inconsistent return type");
 const str SNotAnIterator("Expecting an iterable type");
 const str SUnknownType("Cannot resolve type");
 const str SUnknownTypeFromExpression("Cannot deduce type from assigned expression");
-const str SInconsistenExpressionType("Inconsisten type of expression assigned");
+const str SInconsistentExpressionType("Inconsistent type of expression assigned");
 
 //source_collector
 void source_collector::property_(xs_property& info)
@@ -122,13 +122,17 @@ void code_type_resolver::variable_(stmt_variable& info)
           }
         else
           {
-            param_list error;
-            error.add("id", SLinker);
-            error.add("desc", SInconsistenExpressionType);
-            error.add("variable name", info.id);
-            error.add("type name declared", xsti->id());
-            error.add("type name resolved", value_type->id());
-            xss_throw(error);
+            Language lang = ctx_->get_language();
+            if (!lang->can_cast(xsti, value_type))
+              {
+                param_list error;
+                error.add("id", SLinker);
+                error.add("desc", SInconsistentExpressionType);
+                error.add("variable name", info.id);
+                error.add("type name declared", xsti->id());
+                error.add("type name resolved", value_type->id());
+                xss_throw(error);
+              }
           }
       }
 
@@ -407,7 +411,7 @@ void code_type_resolver::return_type_found(XSSType type)
           {
             param_list error;
             error.add("id", SLinker);
-            error.add("desc", SInconsistenReturnType);
+            error.add("desc", SInconsistentReturnType);
             error.add("code returns", result_->id());
             error.add("trying to return", type->id());
             xss_throw(error);

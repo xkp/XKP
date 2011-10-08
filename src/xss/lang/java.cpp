@@ -539,6 +539,9 @@ void java_lang::init_context(XSSContext ctx)
     if (type = ctx->get_type("float"))
       type->set_output_id("Double");
 
+    if (type = ctx->get_type("double"))
+      type->set_output_id("Double");
+
     if (type = ctx->get_type("object"))
       type->set_output_id("Object");
 
