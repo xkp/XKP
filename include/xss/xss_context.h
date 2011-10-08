@@ -198,15 +198,17 @@ struct IArgumentRenderer : public IRenderer
 
 struct ILanguage
   {
-    virtual variant compile_code(code& cde, param_list_decl& params, XSSContext ctx)	    = 0;
-    virtual variant compile_expression(expression expr, XSSContext ctx)							      = 0;
-		virtual variant compile_args(param_list_decl& params, XSSContext ctx)					        = 0;
-    virtual str     resolve_this(XSSContext ctx)																			    = 0;
-    virtual str     resolve_separator(XSSObject lh = XSSObject())										      = 0;
-    virtual bool    can_cast(XSSType left, XSSType right)                                 = 0;
-    virtual void    init_context(XSSContext ctx)                                          = 0;
-    virtual XSSType resolve_array_type(XSSType type, const str& at_name, XSSContext ctx)  = 0;
-    virtual str     render_value(XSSType type, variant value)                             = 0;
+    virtual variant compile_code(code& cde, param_list_decl& params, XSSContext ctx)	                = 0;
+    virtual variant compile_expression(expression expr, XSSContext ctx)							                  = 0;
+		virtual variant compile_args(param_list_decl& params, XSSContext ctx)					                    = 0;
+    virtual str     resolve_this(XSSContext ctx)																			                = 0;
+    virtual str     resolve_separator(XSSObject lh = XSSObject())										                  = 0;
+    virtual bool    can_cast(XSSType left, XSSType right)                                             = 0;
+    virtual void    init_context(XSSContext ctx)                                                      = 0;
+    virtual XSSType resolve_array_type(XSSType type, const str& at_name, XSSContext ctx)              = 0;
+    virtual str     render_value(XSSType type, variant value)                                         = 0;
+    virtual str     property_get(XSSProperty prop, const str& path, XSSContext ctx)                   = 0;
+    virtual str     property_set(XSSProperty prop, const str& path, const str& value, XSSContext ctx) = 0;
   };
 
 //resolver
@@ -295,6 +297,8 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       fs::path      path();
       void          register_dsl(const str& id, DslLinker dsl);
       void          add_parameter(const str& id, XSSType type);
+      void          set_args(param_list& args);
+      param_list&   get_args();
     public:
       variant resolve(const str& id, RESOLVE_ITEM item_type = RESOLVE_ANY);
       bool    resolve(const str& id, resolve_info& info);
@@ -355,8 +359,8 @@ class xss_property : public xss_object
 
       void    set_value(const variant value, XSSType type);
       str     render_value();
-      str     render_get();
-      str	    render_set(const str& value);
+      //str     render_get();
+      //str	    render_set(const str& value);
       variant eval(XSSContext ctx);
   };
 
@@ -482,8 +486,9 @@ struct xss_property_schema : xss_object_schema<xss_property>
         property_("value", &xss_property::value_);
 
         method_<str, 0>("render_value", &xss_property::render_value);
-        method_<str, 0>("render_get",   &xss_property::render_get);
-        method_<str, 1>("render_set",   &xss_property::render_set);
+        //td: !!! get rid of
+        //method_<str, 0>("render_get",   &xss_property::render_get);
+        //method_<str, 1>("render_set",   &xss_property::render_set);
       }
   };
 

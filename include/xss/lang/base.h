@@ -2,6 +2,7 @@
 #define XSS_LANG_BASE_H
 
 #include <xss/language.h>
+#include <xss/xss_context.h>
 
 namespace xkp{
 
@@ -138,6 +139,9 @@ struct base_lang : public ILanguage
     virtual void    init_context(XSSContext ctx);
     virtual XSSType resolve_array_type(XSSType type, const str& at_name, XSSContext ctx);
     virtual str     render_value(XSSType type, variant value);
+
+    protected:
+      void compile_property(XSSProperty prop, XSSContext ctx);
   };
 
 //interface glue

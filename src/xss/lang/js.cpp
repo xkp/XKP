@@ -1,8 +1,15 @@
 
 #include <xss/lang/js.h>
 #include <xss/language.h>
+#include <xss/xss_compiler.h>
+#include <xss/xss_error.h>
 
 using namespace xkp;
+
+const str SLanguage("language");
+
+const str SWriteOnlyProperty("Trying to acces write only property");
+const str SReadOnlyProperty("Trying to acces read only property");
 
 //js_code_renderer
 js_code_renderer::js_code_renderer():
@@ -126,3 +133,75 @@ str js_lang::resolve_this(XSSContext ctx)
 
     return "this";
   }
+
+str js_lang::property_get(XSSProperty prop, const str& path, XSSContext ctx)
+  {
+    compile_property(prop, ctx);
+    XSSObject get = prop->find("get");
+    if (get)
+      {
+        XSSRenderer rend   = XSSObject(prop)->get<XSSRenderer>("#get_renderer", XSSRenderer());
+        bool        global = get->get<bool>("global", false);
+
+        param_list params;
+        params.add("path", path);
+        str result = rend->render(XSSObject(), &params);
+        return global? result : path + "." + result;
+      }
+    else
+      {
+        XSSObject set = prop->find("set");
+        if (set)
+          {
+            //read only, set but no get
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", SReadOnlyProperty);
+            error.add("property", prop->id());
+            xss_throw(error);
+          }
+        else
+          {
+            return path + "." + prop->output_id();
+          }
+      }
+
+    return str();
+  }
+
+str js_lang::property_set(XSSProperty prop, const str& path, const str& value, XSSContext ctx)
+  {
+    compile_property(prop, ctx);
+    XSSObject set = prop->find("set");
+    if (set)
+      {
+        XSSRenderer rend   = XSSObject(prop)->get<XSSRenderer>("#set_renderer", XSSRenderer());
+        bool        global = set->get<bool>("global", false);
+
+        param_list params;
+        params.add("path", path);
+        params.add("value", value);
+
+        str result = rend->render(XSSObject(), &params);
+        return global? result : path + "." + result;
+      }
+    else
+      {
+        XSSObject get = prop->find("get");
+        if (get)
+          {
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", SWriteOnlyProperty);
+            error.add("property", prop->id());
+            xss_throw(error);
+          }
+        else
+          {
+            return path + "." + prop->output_id() + " = " + value;
+          }
+      }
+
+    return str();
+  }
+

@@ -59,5 +59,20 @@
         <class id="t_xss5_1" super="t_xss5">
             <property id="bar" type="string"/>
         </class>
+
+        //testing property set and get
+        <class id="t_xss8">
+            <property id="foo" type="int"/>
+
+            <property id="bar" type="string">
+                <get text="get_bar()"/>
+                <set text="set_bar({value})"/>
+            </property>
+
+            <property id="complex" type="string">
+                <set text="set_complex({path}, {value})" global="true"/>
+            </property>
+        </class>
+
     </types>
 </module>

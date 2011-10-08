@@ -92,6 +92,7 @@
     <ClInclude Include="..\..\..\include\serial.h" />
     <ClInclude Include="..\..\..\include\types.h" />
     <ClInclude Include="..\..\..\include\xs.h" />
+    <ClInclude Include="..\..\..\include\xss\brace_parseer.h" />
     <ClInclude Include="..\..\..\include\xss\dsl_out.h" />
     <ClInclude Include="..\..\..\include\xss\language.h" />
     <ClInclude Include="..\..\..\include\xss\lang\base.h" />
@@ -124,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\dynamic_objects.cpp" />
     <ClCompile Include="..\..\..\src\xs.cpp" />
+    <ClCompile Include="..\..\..\src\xss\brace_parser.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl_out.cpp" />
     <ClCompile Include="..\..\..\src\xss\language.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang\base.cpp" />

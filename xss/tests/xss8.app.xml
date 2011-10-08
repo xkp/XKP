@@ -1,0 +1,4 @@
+<application src="xss8.app.xs" >
+	<t_xss8 id="t1" foo="//"/>
+    <t_xss8 id="t2" bar="**"/>
+</application>

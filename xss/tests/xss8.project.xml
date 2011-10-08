@@ -1,0 +1,6 @@
+<project entry_point="xss8.xss" language="js" target="xss8.app.xml">
+    <options event_scope="instance"/>
+    <idiom src="../idioms/test/idiom.xml"/>
+</project>
+           
+         

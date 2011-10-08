@@ -3,15 +3,10 @@
 #define XSS_PARSER_HH
 
 #include <base.h>
+#include "xss_compiler.h"
 
 namespace xkp
 {
-  class xss_visitor
-  {
-    public:
-      virtual void visit(const str& tag, const str& text, param_list* args) = 0;
-  };
-  
   namespace detail
   {
     struct tag_info

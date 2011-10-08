@@ -147,6 +147,9 @@
     <ClInclude Include="..\..\..\include\xss\lang\base.h">
       <Filter>Header Files\xss\lang</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\brace_parseer.h">
+      <Filter>Header Files\xss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -241,6 +244,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\third_party\jsoncpp\src\lib_json\json_writer.cpp">
       <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\brace_parser.cpp">
+      <Filter>Source Files\xss</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

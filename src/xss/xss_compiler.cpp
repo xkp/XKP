@@ -1022,6 +1022,22 @@ XSSType xss_compiler::type_of(variant v)
     return ctx->get_type(v.get_schema());
   }
 
+str xss_compiler::property_set(XSSProperty prop, const str& path, const str& value)
+  {
+    XSSContext ctx  = current_context();
+    Language   lang = ctx->get_language();
+    
+    return lang->property_set(prop, path, value, ctx); 
+  }
+
+str xss_compiler::property_get(XSSProperty prop, const str& path)
+  {
+    XSSContext ctx  = current_context();
+    Language   lang = ctx->get_language();
+    
+    return lang->property_get(prop, path, ctx); 
+  }
+
 void xss_compiler::push_renderer(XSSRenderer renderer)
   {
     if (renderers_.empty())

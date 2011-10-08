@@ -47,6 +47,8 @@ struct js_lang : public base_lang
     virtual variant compile_expression(expression expr, XSSContext ctx);
 		virtual variant compile_args(param_list_decl& params, XSSContext ctx);
     virtual str     resolve_this(XSSContext ctx);
+    virtual str     property_get(XSSProperty prop, const str& path, XSSContext ctx);
+    virtual str     property_set(XSSProperty prop, const str& path, const str& value, XSSContext ctx);
   };
 
 //glue

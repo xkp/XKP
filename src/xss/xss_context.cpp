@@ -241,6 +241,16 @@ void xss_context::add_parameter(const str& id, XSSType type)
     args_.add(id, variant()); //td: !!! parameter types
   }
 
+void xss_context::set_args(param_list& args)
+  {
+    args_ = args;
+  }
+
+param_list& xss_context::get_args()
+  {
+    return args_;
+  }
+
 variant xss_context::resolve(const str& id, RESOLVE_ITEM item_type)
   {
     resolve_info si;
@@ -1492,41 +1502,41 @@ str xss_property::render_value()
     return xss_utils::var_to_string(value_);
   }
 
-str xss_property::render_get()
-  {
-    str name = output_id();
-
-    str get_fn = variant_cast<str>(dynamic_get(this, "get_fn"), str());
-    if (!get_fn.empty())
-      return get_fn + "()";
-    else if (!get.empty())
-      return name + "_get()";
-
-    return name;
-  }
-
-str	xss_property::render_set(const str& value)
-	{
-    str set_fn = variant_cast<str>(dynamic_get(this, "set_fn"), ""); //let the outside world determine
-                                                                      //if a native function call shouls be made
-
-    str set_xss = variant_cast<str>(dynamic_get(this, "set_xss"), ""); //such world can request to parse xss
-
-		if (!set_xss.empty())
-			{
-				assert(false); //td:
-			}
-		else if (!set_fn.empty())
-      {
-				return set_fn + '(' + value + ')';
-      }
-    else if (!set.empty())
-			{
-				return id_ + "_set(" + value + ')';
-			}
-
-		return output_id() + " = " + value;
-  }
+//str xss_property::render_get()
+//  {
+//    str name = output_id();
+//
+//    str get_fn = variant_cast<str>(dynamic_get(this, "get_fn"), str());
+//    if (!get_fn.empty())
+//      return get_fn + "()";
+//    else if (!get.empty())
+//      return name + "_get()";
+//
+//    return name;
+//  }
+//
+//str	xss_property::render_set(const str& value)
+//	{
+//    str set_fn = variant_cast<str>(dynamic_get(this, "set_fn"), ""); //let the outside world determine
+//                                                                      //if a native function call shouls be made
+//
+//    str set_xss = variant_cast<str>(dynamic_get(this, "set_xss"), ""); //such world can request to parse xss
+//
+//		if (!set_xss.empty())
+//			{
+//				assert(false); //td:
+//			}
+//		else if (!set_fn.empty())
+//      {
+//				return set_fn + '(' + value + ')';
+//      }
+//    else if (!set.empty())
+//			{
+//				return id_ + "_set(" + value + ')';
+//			}
+//
+//		return output_id() + " = " + value;
+//  }
 
 variant xss_property::eval(XSSContext ctx)
   {

@@ -585,3 +585,13 @@ str java_lang::render_value(XSSType type, variant value)
 
     return base_lang::render_value(type, value);
   }
+
+str java_lang::property_get(XSSProperty prop, const str& path, XSSContext ctx)
+  {
+    return "Implement java_lang::property_get!";
+  }
+
+str java_lang::property_set(XSSProperty prop, const str& path, const str& value, XSSContext ctx)
+  {
+    return "Implement java_lang::property_set!";
+  }

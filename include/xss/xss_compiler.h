@@ -57,6 +57,12 @@ namespace xkp
       virtual bool busy() = 0; //td:
     };
 
+  class xss_visitor
+    {
+      public:
+        virtual void visit(const str& tag, const str& text, param_list* args) = 0;
+    };
+  
   //classes
 	class xss_application_renderer : public xss_object
     {
@@ -153,6 +159,8 @@ namespace xkp
         void        out(variant what);
         XSSType     get_type(const str& type);
         XSSType     type_of(variant v);
+        str         property_set(XSSProperty prop, const str& path, const str& value);
+        str         property_get(XSSProperty prop, const str& path);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -239,6 +247,8 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<void,     1>("out",               &xss_compiler::out);
         method_<XSSType,  1>("get_type",          &xss_compiler::get_type);
         method_<XSSType,  1>("type_of",           &xss_compiler::type_of);
+        method_<str,      3>("property_set",      &xss_compiler::property_set);
+        method_<str,      2>("property_get",      &xss_compiler::property_get);
       }
   };
 

@@ -318,6 +318,16 @@ str debug_language::render_value(XSSType type, variant value)
     return "whatever";
   }
 
+str debug_language::property_get(XSSProperty prop, const str& path, XSSContext ctx)
+  {
+    return "I do";
+  }
+
+str debug_language::property_set(XSSProperty prop, const str& path, const str& value, XSSContext ctx)
+  {
+    return "what I want";
+  }
+
 //glue
 
 namespace xkp

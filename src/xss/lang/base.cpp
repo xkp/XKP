@@ -1,6 +1,9 @@
 
 #include <xss/lang/base.h>
+#include <xss/xss_parser.h>
 #include <xss/xss_error.h>
+#include <xss/brace_parser.h>
+#include <xss/xss_renderer.h>
 
 #include <boost/algorithm/string.hpp>
 
@@ -10,6 +13,22 @@ const str SLanguage("language");
 
 const str SEmptyExpression("Empty expression");
 const str SAssignOperator("Assign operators can only be used as the base of an expression");
+const str SGetNeedsText("Property.get expects a 'text' attribute");
+const str SSetNeedsText("Property.set expects a 'text' attribute");
+
+//utils
+XSSRenderer compile_braces(const str& text, XSSContext ctx)
+  {
+    brace_parser parser;
+    XSSCompiler  compiler = ctx->resolve("compiler");
+
+    xss_renderer* result = new xss_renderer(compiler, ctx, fs::path());
+    result->context()->set_args(ctx->get_args());
+
+    parser.parse(text, result);
+
+    return XSSRenderer(result);
+  }
 
 //base_code_renderer
 base_code_renderer::base_code_renderer()
@@ -376,7 +395,7 @@ str base_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
                     case RESOLVE_PROPERTY:
                       {
                         XSSProperty prop = si.value;
-										    result = prop->render_get();
+										    //result = prop->render_get();
                         str this_str = lang->resolve_this(ctx_);
                         if (!this_str.empty())
                           result = this_str + separator + result; //otherwise it doesnt get translated
@@ -1131,4 +1150,49 @@ XSSType base_lang::resolve_array_type(XSSType type, const str& at_name, XSSConte
 str base_lang::render_value(XSSType type, variant value)
   {
     return xss_utils::var_to_string(value);
+  }
+
+void base_lang::compile_property(XSSProperty prop, XSSContext ctx)
+  {
+    XSSObject get = prop->find("get");
+    XSSObject set = prop->find("set");
+
+    if (get)
+      {
+        str text = get->get<str>("text", str());
+        if (text.empty())
+          {
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", SGetNeedsText);
+            error.add("property", prop->id());
+            xss_throw(error);
+          }
+
+        XSSContext my_ctx(new xss_context(ctx));
+        my_ctx->add_parameter("path", ctx->get_type("string"));
+
+        XSSRenderer rend = compile_braces(text, my_ctx);
+        prop->add_attribute("#get_renderer", rend);
+      }
+
+    if (set)
+      {
+        str text = set->get<str>("text", str());
+        if (text.empty())
+          {
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", SSetNeedsText);
+            error.add("property", prop->id());
+            xss_throw(error);
+          }
+
+        XSSContext my_ctx(new xss_context(ctx));
+        my_ctx->add_parameter("path",  ctx->get_type("string"));
+        my_ctx->add_parameter("value", ctx->get_type("string"));
+
+        XSSRenderer rend = compile_braces(text, my_ctx);
+        prop->add_attribute("#set_renderer", rend);
+      }
   }
