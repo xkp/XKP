@@ -809,6 +809,99 @@ void expr_object_resolver::exec_operator(operator_type op, int pop_count, int pu
       }
   }
 
+//expression_analizer
+expression_analizer::expression_analizer():
+  is_identifier_(false),
+  is_constant_(false),
+  is_property_(false)
+  {
+  }
+
+void expression_analizer::analyze(expression& expr, XSSContext ctx)
+  {
+    if (expr.size() == 1)
+      {
+        variant value = expr.pop_first();
+        if (value.is<expression_identifier>())
+          {
+            expression_identifier ei = value;
+
+            is_identifier_ = true;
+            identifier_    = ei.value;
+          }
+        else
+          {
+            is_constant_ = true;
+            constant_ = value;
+          }
+      }
+    else
+      {
+        operator_type op;
+        expr.top_operator(op);
+
+        switch(op)
+          {
+            case op_dot:
+              {
+                is_property_ = true;
+
+                expression_splitter es(op);
+                expr.visit(&es);
+
+                path_ = es.left;
+
+                expression_identifier ei = es.right.pop_first();
+                property_name_ = ei.value; 
+
+                XSSObject   instance = lang_utils::object_expr(path_, ctx);
+                if (instance)
+                  property_ = instance->get_property(property_name_);
+                else
+                  {
+                    XSSType path_type = lang_utils::expr_type(path_, ctx);
+                    if (path_type)
+                      property_ = path_type->get_property(property_name_);
+                  }
+
+                break;
+              }
+            default:
+              assert(false); //more test cases later
+          }
+      }
+  }
+
+bool expression_analizer::is_property()
+  {
+    return is_property_;
+  }
+
+bool expression_analizer::is_identifier()
+  {
+    return is_identifier_;
+  }
+
+XSSProperty expression_analizer::get_property()
+  {
+    return property_;
+  }
+
+expression& expression_analizer::get_path()
+  {
+    return path_;
+  }
+
+str expression_analizer::property_name()
+  {
+    return property_name_;
+  }
+
+str expression_analizer::get_identifier()
+  {
+    return identifier_;
+  }
+
 //td: !!! stop duplicating this array
 const char* operator_str[] =
   {
@@ -961,3 +1054,4 @@ std::vector<str> lang_utils::unwind(const str& path)
 
 		return result;
 	}
+

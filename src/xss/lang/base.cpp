@@ -267,6 +267,8 @@ base_expr_renderer::base_expr_renderer(expression& expr, XSSContext ctx):
 
 str base_expr_renderer::resolve_assigner(variant operand, XSSObject instance, assign_info* ai)
   {
+    //td: !!! clutter
+
 		XSSProperty prop;
 		str					result;
 
@@ -405,10 +407,7 @@ str base_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
                     case RESOLVE_PROPERTY:
                       {
                         XSSProperty prop = si.value;
-										    //result = prop->render_get();
-                        str this_str = lang->resolve_this(ctx_);
-                        if (!this_str.empty())
-                          result = this_str + separator + result; //otherwise it doesnt get translated
+                        result = lang->property_get(prop, lang->resolve_this(ctx_), ctx_);
                         break;
                       }
                     case RESOLVE_METHOD:
@@ -497,24 +496,25 @@ str base_expr_renderer::get()
 			{
 				Language lang = ctx_->get_language();
         str separator = lang->resolve_separator();
+        expression_identifier ei = result;
 
-				expression_identifier ei = result;
-				if (assigner)
-					{
-            //resolve asign
-            resolve_info si;
-						if (ctx_->resolve(ei.value, si))
-              {
-						    str ass = resolve_assigner(si.value, ctx_->get_this(), assigner);
-						    str result = lang->resolve_this(ctx_);
-						    if (result.empty())
-							    return ass;
+				//td: clutter
+				//if (assigner)
+				//	{
+    //        //resolve asign
+    //        resolve_info si;
+				//		if (ctx_->resolve(ei.value, si))
+    //          {
+				//		    str ass = resolve_assigner(si.value, ctx_->get_this(), assigner);
+				//		    str result = lang->resolve_this(ctx_);
+				//		    if (result.empty())
+				//			    return ass;
 
-						    return result + separator + ass;
-              }
+				//		    return result + separator + ass;
+    //          }
 
-              return ei.value; //td: not sure at all
-					}
+    //          return ei.value; //td: not sure at all
+				//	}
 
         //
         resolve_info si;
@@ -533,32 +533,35 @@ str base_expr_renderer::get()
                 case RESOLVE_PROPERTY:
                   {
                     XSSProperty prop = si.value;
-                    str this_str = lang->resolve_this(ctx_);
-                    if (!this_str.empty())
-                      {
-                        if (prop->has("property_xss") && !dynamic_get(prop, "property_xss").empty())
-                          {
-                            capture_property_.prop = prop;
-                            capture_property_.xss  = variant_cast<str>(dynamic_get(prop, "property_xss"), str());
+                    return lang->property_get(prop, lang->resolve_this(ctx_), ctx_);
 
-                            for(int i = 0; i < capture_property_.xss.size(); i++)
-                              {
-                                if (capture_property_.xss[i] == '\'')
-                                  capture_property_.xss[i] ='"';
-                              }
+                    //td: !!! clutter
+                //    str this_str = lang->resolve_this(ctx_);
+                //    if (!this_str.empty())
+                //      {
+                //        if (prop->has("property_xss") && !dynamic_get(prop, "property_xss").empty())
+                //          {
+                //            capture_property_.prop = prop;
+                //            capture_property_.xss  = variant_cast<str>(dynamic_get(prop, "property_xss"), str());
 
-                            push_rendered(this_str, 0, prop);
-                            return render_captured_property();
-                          }
+                //            for(int i = 0; i < capture_property_.xss.size(); i++)
+                //              {
+                //                if (capture_property_.xss[i] == '\'')
+                //                  capture_property_.xss[i] ='"';
+                //              }
 
-                        //return this_str + separator + ei.value;
-                        return this_str + separator + prop->output_id();
-						          }
-                    else
-                      {
-                        return prop->output_id();
-                      }
-                    break;
+                //            push_rendered(this_str, 0, prop);
+                //            return render_captured_property();
+                //          }
+
+                //        //return this_str + separator + ei.value;
+                //        return this_str + separator + prop->output_id();
+						          //}
+                //    else
+                //      {
+                //        return prop->output_id();
+                //      }
+                //    break;
                   }
               }
           }
@@ -745,6 +748,8 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 
 				case op_dot:
           {
+            Language lang = ctx_->get_language();
+
             str caller_str = operand_to_string(arg1);
 
             expression_identifier ei = arg2;
@@ -775,23 +780,6 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 						str separator = ctx_->get_language()->resolve_separator(caller);
             if (caller)
               {
-						    if (top && assigner)
-							    {
-                    str result;
-                    str str_assigner = resolve_assigner(arg2, caller, assigner);
-
-                    if (assigner->type == VANILLA || assigner->type == FN_CALL)
-								      result = caller_str + separator + str_assigner;
-                    else
-                    if (assigner->type == FN_XSS_CALL)
-                      result = str_assigner;
-                    else
-                      assert(false);
-
-                    push_rendered(result, op_prec, variant());
-                    return;
-							    }
-
                 resolve_info left;
                 left.what  = RESOLVE_INSTANCE;
                 left.value = caller;
@@ -814,45 +802,49 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                         case RESOLVE_PROPERTY:
                           {
                             XSSProperty prop = right.value;
-                            right_str = prop->output_id();
+                            push_rendered(lang->property_get(prop, caller_str, ctx_), 0, prop);
+                            return;
 
-                            if (prop->has("property_xss") && !dynamic_get(prop, "property_xss").empty())
-							                {
-								                assert(!capturing_property_); //only a variable property per schema, please
+                            //td: !!! clutter
+                    //        right_str = prop->output_id();
 
-								                capture_property_.prop = prop;
-								                capture_property_.xss  = variant_cast<str>(dynamic_get(prop, "property_xss"), str());
+                    //        if (prop->has("property_xss") && !dynamic_get(prop, "property_xss").empty())
+							             //   {
+								            //    assert(!capturing_property_); //only a variable property per schema, please
 
-								                for(size_t i = 0; i < capture_property_.xss.size(); i++)
-									                {
-										                if (capture_property_.xss[i] == '\'')
-											                capture_property_.xss[i] ='"';
-									                }
+								            //    capture_property_.prop = prop;
+								            //    capture_property_.xss  = variant_cast<str>(dynamic_get(prop, "property_xss"), str());
 
-                                push_rendered(operand_to_string(arg1), 0, prop);
-                                push_rendered(render_captured_property(), op_prec, prop);
-                                return;
-							                }
+								            //    for(size_t i = 0; i < capture_property_.xss.size(); i++)
+									           //     {
+										          //      if (capture_property_.xss[i] == '\'')
+											         //       capture_property_.xss[i] ='"';
+									           //     }
 
-                            str get_fn  = variant_cast<str>(dynamic_get(prop, "get_fn"), "");
-                            str get_xss = variant_cast<str>(dynamic_get(prop, "get_xss"), "");
-                            bool has_getter = prop && !prop->get.empty();
+                    //            push_rendered(operand_to_string(arg1), 0, prop);
+                    //            push_rendered(render_captured_property(), op_prec, prop);
+                    //            return;
+							             //   }
 
-                            str result = caller->output_id() + separator;
-                            if (var_caller)
-                              result = caller_str + separator;
+                    //        str get_fn  = variant_cast<str>(dynamic_get(prop, "get_fn"), "");
+                    //        str get_xss = variant_cast<str>(dynamic_get(prop, "get_xss"), "");
+                    //        bool has_getter = prop && !prop->get.empty();
 
-                            if (!get_xss.empty())
-                              result += get_xss;
-                            else if (!get_fn.empty())
-                              result += get_fn + "()";
-                            else if (has_getter)
-                              result += right_str + "_get()";
-                            else
-                              result += right_str;
+                    //        str result = caller->output_id() + separator;
+                    //        if (var_caller)
+                    //          result = caller_str + separator;
 
-                            push_rendered(result, 0, prop);
-								            return;
+                    //        if (!get_xss.empty())
+                    //          result += get_xss;
+                    //        else if (!get_fn.empty())
+                    //          result += get_fn + "()";
+                    //        else if (has_getter)
+                    //          result += right_str + "_get()";
+                    //        else
+                    //          result += right_str;
+
+                    //        push_rendered(result, 0, prop);
+								            //return;
                           }
                         case RESOLVE_METHOD:
                           {
@@ -921,11 +913,13 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                 XSSProperty prop = get_property(arg);
                 if (prop)
                   {
-                    str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), "");
-                    if (!get_fn.empty())
-                      sarg = get_fn + "()";
-                    else if (!prop->get.empty())
-                      sarg = sarg + "_get()";
+                    assert(false); //when does this happen?
+                    //td: !!! clutter
+                    //str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), "");
+                    //if (!get_fn.empty())
+                    //  sarg = get_fn + "()";
+                    //else if (!prop->get.empty())
+                    //  sarg = sarg + "_get()";
                   }
 
                 params.push_back(sarg);
@@ -967,11 +961,13 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                 XSSProperty prop = get_property(arg);
                 if (prop)
                   {
-                    str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), "");
-                    if (!get_fn.empty())
-                      sarg = get_fn + "()";
-                    else if (!prop->get.empty())
-                      sarg = sarg + "_get()";
+                    assert(false); //when does this happen?
+                    //td: !!! clutter
+                    //str get_fn = variant_cast<str>(dynamic_get(prop, "get_fn"), "");
+                    //if (!get_fn.empty())
+                    //  sarg = get_fn + "()";
+                    //else if (!prop->get.empty())
+                    //  sarg = sarg + "_get()";
                   }
 
                 params.push_back(sarg);

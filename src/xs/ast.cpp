@@ -122,6 +122,11 @@ bool expression::empty()
   {
     return stack_.empty();
   }
+
+size_t expression::size()
+  {
+    return stack_.size();
+  }
   
 void expression::visit(expression_visitor* v)
   {

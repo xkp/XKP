@@ -4,6 +4,7 @@
 #include "xs/compiler.h"
 #include "xss_context.h"
 #include "xss_compiler.h"
+#include "xss_error.h"
 
 namespace xkp
 {
@@ -116,6 +117,29 @@ struct expr_object_resolver : expression_visitor
       bool       one_opnd_;
   };
 
+struct expression_analizer
+  {
+    expression_analizer();
+
+    void        analyze(expression& expr, XSSContext ctx);
+    bool        is_property();
+    bool        is_identifier();
+    XSSProperty get_property();
+    expression& get_path();
+    str         property_name();
+    str         get_identifier();
+
+    private:
+      bool        is_identifier_;
+      bool        is_constant_;
+      bool        is_property_;
+      str         identifier_;
+      variant     constant_;
+      expression  path_;
+      str         property_name_; 
+      XSSProperty property_;
+  };
+
 struct lang_utils
 	{
     static str     operator_string(operator_type op);
@@ -125,7 +149,7 @@ struct lang_utils
     static variant object_expr(expression& expr, XSSContext ctx);
     static str wind(const std::vector<str> path);
     static std::vector<str> unwind(const str& path);
-
+    
     template <typename T>
     static str render_expression(expression& expr, XSSContext ctx)
       {
@@ -153,121 +177,125 @@ struct lang_utils
 
 								    str value = value_renderer.get();
 
-								    //get the assigner
-                    T assign_renderer(es.left, ctx);
-								    assign_info ai;
-                    ai.data = value;
-								    assign_renderer.assigner = &ai;
+                    //do assigning 
+                    return render_assignment<T>(es.left, op, ctx, value);
 
-								    es.left.visit(&assign_renderer);
+								    //td: !!!! clutter
+                    ////get the assigner
+            //        T assign_renderer(es.left, ctx);
+								    //assign_info ai;
+            //        ai.data = value;
+								    //assign_renderer.assigner = &ai;
 
-								    str assign = assign_renderer.get();
+								    //es.left.visit(&assign_renderer);
 
-								    str result;
-								    switch(ai.type)
-									    {
-										    case FN_CALL:
-											    {
-												    if (simple_assign)
-													    result = assign + "(" + value + ")";
-												    else
-													    {
-														    //we need to resolve the getter as well for *= operators
-                                T getter(es.left, ctx);
-														    es.left.visit(&getter);
+								    //str assign = assign_renderer.get();
 
-														    //this is lame
-                                str op_str = lang_utils::operator_string(op);
+								    //str result;
+								    //switch(ai.type)
+									   // {
+										  //  case FN_CALL:
+											 //   {
+												//    if (simple_assign)
+												//	    result = assign + "(" + value + ")";
+												//    else
+												//	    {
+												//		    //we need to resolve the getter as well for *= operators
+            //                    T getter(es.left, ctx);
+												//		    es.left.visit(&getter);
 
-														    assert(op_str.size() > 1);
-														    op_str.erase(op_str.end() - 1);
+												//		    //this is lame
+            //                    str op_str = lang_utils::operator_string(op);
 
-														    result = assign + "(" + getter.get() + " " + op_str + " " + value + ")";
-													    }
-												    break;
-											    }
+												//		    assert(op_str.size() > 1);
+												//		    op_str.erase(op_str.end() - 1);
 
-										    case VANILLA:
-											    {
-                            resolve_info ri;
-                            result = assign + " " + lang_utils::operator_string(op) + " " + value;
+												//		    result = assign + "(" + getter.get() + " " + op_str + " " + value + ")";
+												//	    }
+												//    break;
+											 //   }
 
-                            if (ctx->resolve(assign, ri))
-                              {
-                                if (ri.type && ri.type->is_array())
-                                  {
-                                    if (op == op_plus_equal || op == op_minus_equal)
-                                      {
-                                        result = assign_renderer.array_operation(assign, value, op);
-                                      }
-                                    else if (simple_assign && ai.flag && !ai.data.empty())
-                                      {
-                                        result = ai.data;
-                                      }
-                                  }
-                              }
+										  //  case VANILLA:
+											 //   {
+            //                resolve_info ri;
+            //                result = assign + " " + lang_utils::operator_string(op) + " " + value;
 
-												    break;
-											    }
-										    case XSS_RESOLVE:
-											    {
-                            T getter_(es.left, ctx);
-												    es.left.visit(&getter_);
-												    str getter = getter_.get();
+            //                if (ctx->resolve(assign, ri))
+            //                  {
+            //                    if (ri.type && ri.type->is_array())
+            //                      {
+            //                        if (op == op_plus_equal || op == op_minus_equal)
+            //                          {
+            //                            result = assign_renderer.array_operation(assign, value, op);
+            //                          }
+            //                        else if (simple_assign && ai.flag && !ai.data.empty())
+            //                          {
+            //                            result = ai.data;
+            //                          }
+            //                      }
+            //                  }
 
-												    if (!simple_assign)
-													    {
-                                str op_str = lang_utils::operator_string(op);
-														    assert(op_str.size() > 1);
-														    op_str.erase(op_str.end() - 1);
+												//    break;
+											 //   }
+										  //  case XSS_RESOLVE:
+											 //   {
+            //                T getter_(es.left, ctx);
+												//    es.left.visit(&getter_);
+												//    str getter = getter_.get();
 
-														    value = getter + " " + op_str + " " + value;
-													    }
+												//    if (!simple_assign)
+												//	    {
+            //                    str op_str = lang_utils::operator_string(op);
+												//		    assert(op_str.size() > 1);
+												//		    op_str.erase(op_str.end() - 1);
 
-														//lets find out if the getter is a single word (like "width") or a composite (like "object.width")
-														//if composite we'll get rid of the last accesor (width) to get the actual accesor
+												//		    value = getter + " " + op_str + " " + value;
+												//	    }
 
-														Language lang = ctx->get_language();
-														str separator = lang->resolve_separator();
-														size_t last_dot = getter.find_last_of(separator);
-												    if (last_dot != str::npos)
-													    {
-														    size_t count = getter.size() - last_dot + 1;
-														    getter.erase(getter.end() - count, getter.end());
-													    }
-												    else
-															getter = lang->resolve_this(ctx);
+												//		//lets find out if the getter is a single word (like "width") or a composite (like "object.width")
+												//		//if composite we'll get rid of the last accesor (width) to get the actual accesor
 
-												    //replace quotes, life is hard
-												    for(size_t i = 0; i < assign.size(); i++)
-													    {
-														    if (assign[i] == 39)
-															    assign[i] = '"';
-													    }
+												//		Language lang = ctx->get_language();
+												//		str separator = lang->resolve_separator();
+												//		size_t last_dot = getter.find_last_of(separator);
+												//    if (last_dot != str::npos)
+												//	    {
+												//		    size_t count = getter.size() - last_dot + 1;
+												//		    getter.erase(getter.end() - count, getter.end());
+												//	    }
+												//    else
+												//			getter = lang->resolve_this(ctx);
 
-                            XSSContext assign_ctx(new xss_context(XSSContext()));
-												    assign_ctx->register_symbol(RESOLVE_CONST, "value",	value);
-												    assign_ctx->register_symbol(RESOLVE_CONST, "caller", getter);
+												//    //replace quotes, life is hard
+												//    for(size_t i = 0; i < assign.size(); i++)
+												//	    {
+												//		    if (assign[i] == 39)
+												//			    assign[i] = '"';
+												//	    }
 
-												    XSSCompiler compiler = ctx->resolve("compiler");
-                            XSSRenderer renderer = compiler->compile_xss(assign, assign_ctx);
+            //                XSSContext assign_ctx(new xss_context(XSSContext()));
+												//    assign_ctx->register_symbol(RESOLVE_CONST, "value",	value);
+												//    assign_ctx->register_symbol(RESOLVE_CONST, "caller", getter);
 
-												    result = renderer->render(XSSObject(), null);
-												    break;
-											    }
+												//    XSSCompiler compiler = ctx->resolve("compiler");
+            //                XSSRenderer renderer = compiler->compile_xss(assign, assign_ctx);
 
-										    case FN_XSS_CALL:
-											    {
-												    result = assign + "(" + value + ")";
+												//    result = renderer->render(XSSObject(), null);
+												//    break;
+											 //   }
 
-												    break;
-											    }
+										  //  case FN_XSS_CALL:
+											 //   {
+												//    result = assign + "(" + value + ")";
 
-										    default:
-											    assert(false); //trap use cases
-									    }
+												//    break;
+											 //   }
 
-								    return result;
+										  //  default:
+											 //   assert(false); //trap use cases
+									   // }
+
+								    //return result;
 							    }
 					    }
 			    }
@@ -276,6 +304,64 @@ struct lang_utils
         expr.visit(&er);
 
         return er.get();
+      }
+
+    template <typename T>
+    static str render_assignment(expression& ass, operator_type op, XSSContext ctx, const str& value)
+      {
+        expression_analizer anal;
+        anal.analyze(ass, ctx);
+
+        Language lang = ctx->get_language();
+        if (anal.is_identifier())
+          {
+            //simpler case, a = value;
+            resolve_info ri;
+            str          it = anal.get_identifier();
+            if (ctx->resolve(it, ri))
+              {
+                switch (ri.what)
+                  {
+                    case RESOLVE_PROPERTY:
+                      {
+                        XSSProperty prop = ri.value;
+
+                        return lang->property_set(prop, lang->resolve_this(ctx), value, ctx);
+                      }
+
+                    case RESOLVE_VARIABLE:
+                      {
+                        return lang->render_asignment(str(), it, value);
+                      }
+                    default:
+                      assert(false);
+                  }
+              }
+          }
+        else if (anal.is_property())
+          {
+            XSSProperty prop = anal.get_property();
+            expression& path = anal.get_path();
+
+            str path_str = lang_utils::render_expression<T>(path, ctx);
+            if (prop)
+              {
+                return lang->property_set(prop, path_str, value, ctx);
+              }
+            else
+              {
+                //could't be resolved, so we'll let the language deal with that
+                return lang->render_asignment(path_str, anal.property_name(), value);
+              }
+          }
+
+        //what is it you're assigning?
+        param_list error;
+        error.add("id", str("Language"));
+        error.add("desc", str("Invalid assign"));
+
+        xss_throw(error);
+        return str();
       }
 	};
 

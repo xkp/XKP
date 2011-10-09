@@ -28,10 +28,11 @@ namespace xkp
   struct expression
     {
       public:
-        void push_operator(operator_type op);
-        void push_operand(variant op);
-        void push_identifier(const str& id);
-        bool empty();
+        void   push_operator(operator_type op);
+        void   push_operand(variant op);
+        void   push_identifier(const str& id);
+        bool   empty();
+        size_t size();
       public:
         void visit(expression_visitor* v);
         bool is_constant(variant& value);

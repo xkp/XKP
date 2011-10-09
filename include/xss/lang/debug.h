@@ -21,6 +21,7 @@ namespace xkp
         virtual str     render_value(XSSType type, variant value);
         virtual str     property_get(XSSProperty prop, const str& path, XSSContext ctx);
         virtual str     property_set(XSSProperty prop, const str& path, const str& value, XSSContext ctx);
+        virtual str     render_asignment(const str& path, const str& prop, const str& value);
     };
 }
 

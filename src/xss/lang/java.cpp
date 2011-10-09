@@ -598,3 +598,9 @@ str java_lang::property_set(XSSProperty prop, const str& path, const str& value,
   {
     return "Implement java_lang::property_set!";
   }
+
+str java_lang::render_asignment(const str& path, const str& prop, const str& value)
+  {
+    return "Implement java_lang::render_asignment!";
+  }
+

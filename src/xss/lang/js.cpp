@@ -205,3 +205,9 @@ str js_lang::property_set(XSSProperty prop, const str& path, const str& value, X
     return str();
   }
 
+str js_lang::render_asignment(const str& path, const str& prop, const str& value)
+  {
+    if (path.empty())
+      return prop + " = " + value;
+    return path + "." + prop + " = " + value;
+  }
