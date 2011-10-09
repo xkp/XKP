@@ -309,7 +309,7 @@ struct lang_utils
     template <typename T>
     static str render_assignment(expression& ass, operator_type op, XSSContext ctx, const str& value)
       {
-        expression_analizer anal;
+        expression_analizer anal; 
         anal.analyze(ass, ctx);
 
         Language lang = ctx->get_language();
@@ -320,22 +320,36 @@ struct lang_utils
             str          it = anal.get_identifier();
             if (ctx->resolve(it, ri))
               {
+                str path = lang->resolve_this(ctx); 
                 switch (ri.what)
                   {
                     case RESOLVE_PROPERTY:
                       {
                         XSSProperty prop = ri.value;
-
-                        return lang->property_set(prop, lang->resolve_this(ctx), value, ctx);
+                        if (op != op_assign)
+                          return assign_operator(op, prop, path, value, ctx);
+                        return lang->property_set(prop, path, value, ctx);
                       }
 
                     case RESOLVE_VARIABLE:
                       {
+                        if (op != op_assign)
+                          {
+                            str aop = check_array_op(op, XSSProperty(), ri.value, it, value, ctx);
+                            if (!aop.empty())
+                              return aop;
+
+                            return it + " " + operator_string(op) + " " + value;
+                          }
                         return lang->render_asignment(str(), it, value);
                       }
                     default:
                       assert(false);
                   }
+              }
+            else
+              {
+                unresolved_assigner(it);
               }
           }
         else if (anal.is_property())
@@ -346,23 +360,31 @@ struct lang_utils
             str path_str = lang_utils::render_expression<T>(path, ctx);
             if (prop)
               {
+                if (op != op_assign)
+                    return assign_operator(op, prop, path_str, value, ctx);
+
                 return lang->property_set(prop, path_str, value, ctx);
               }
             else
               {
                 //could't be resolved, so we'll let the language deal with that
+                if (op != op_assign)
+                  return path_str + lang->resolve_separator() + anal.property_name() + " " + operator_string(op) + " " + value;
                 return lang->render_asignment(path_str, anal.property_name(), value);
               }
           }
 
         //what is it you're assigning?
-        param_list error;
-        error.add("id", str("Language"));
-        error.add("desc", str("Invalid assign"));
-
-        xss_throw(error);
+        invalid_assign();
         return str();
       }
+
+    private:
+      static void invalid_assign();
+      static void unresolved_assigner(const str& id);
+      static str  assign_operator(operator_type op, XSSProperty prop, const str& path, const str& value, XSSContext ctx);
+      static str  check_array_op(operator_type op, XSSProperty prop, XSSType type, const str& path, const str& value, XSSContext ctx);
+
 	};
 
 }

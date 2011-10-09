@@ -16,6 +16,55 @@ const str SAssignOperator("Assign operators can only be used as the base of an e
 const str SGetNeedsText("Property.get expects a 'text' attribute");
 const str SSetNeedsText("Property.set expects a 'text' attribute");
 const str SUnknownType("Cannot resolve type");
+const str SCannotCast("Cannot cast variable value");
+
+struct variable_gather : code_visitor
+  {
+    variable_gather(XSSContext ctx):
+      ctx_(ctx)
+      {
+      }
+
+      virtual void variable_(stmt_variable& info)
+        {
+          XSSType result = ctx_->get_type(info.type);
+          XSSType value  = result;
+
+          if (!info.value.empty())
+            value = lang_utils::expr_type(info.value, ctx_);
+
+          if (value != result)
+            {
+              if (result->is_variant())
+                result = value;
+              else
+                {
+                  param_list error;
+                  error.add("id", SLanguage);
+                  error.add("desc", SCannotCast);
+                  error.add("var type", result->id());
+                  error.add("value type", value->id());
+                  xss_throw(error);
+                }
+            }
+
+          ctx_->register_symbol(RESOLVE_VARIABLE, info.id, result);
+        }
+
+      virtual void if_(stmt_if& info)                 {}
+      virtual void for_(stmt_for& info)               {}
+      virtual void iterfor_(stmt_iter_for& info)      {}
+      virtual void while_(stmt_while& info)           {}
+      virtual void break_()                           {}
+      virtual void continue_()                        {}
+      virtual void return_(stmt_return& info)         {}
+      virtual void expression_(stmt_expression& info) {}
+      virtual void dsl_(dsl& info)                    {}
+      virtual void dispatch(stmt_dispatch& info)      {}
+
+    private:
+      XSSContext ctx_;
+  };
 
 //utils
 XSSRenderer compile_braces(const str& text, XSSContext ctx)
@@ -88,6 +137,10 @@ base_code_renderer::base_code_renderer(code& cde, param_list_decl& params, XSSCo
 
         ctx_->register_symbol(RESOLVE_VARIABLE, param.name, type);
       }
+
+    //register our variables into the context
+    variable_gather vars(ctx_);
+    cde.visit(&vars);
   }
 
 str base_code_renderer::render()
@@ -638,41 +691,56 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
         case op_dec:
         case op_inc:
           {
-						assign_info ai;
-						str ass = resolve_assigner(arg1, XSSObject(), &ai);
+						int         prec;
+            Language    lang = ctx_->get_language();
+            XSSProperty prop = get_property(arg1);
+            str         os   = operand_to_string(arg1, XSSObject(), &prec);
+            str         path = lang->expression_path(os);
 
-						int prec;
-            str os = operand_to_string(arg1, XSSObject(), &prec);
+            str result; 
+            if (prop)
+              {
+								str op_str = lang_utils::operator_string(op);
+								op_str.erase(op_str.end() - 1); //now this is too much fun
 
-						std::stringstream ss;
-						switch (ai.type)
-							{
-								case VANILLA:
-									{
-										if (op_prec < prec)
-											ss << "(" << os << ")" << lang_utils::operator_string(op);
-										else
-											ss << os << lang_utils::operator_string(op);
-										break;
-									}
-								case FN_CALL:
-									{
-										str op_str = lang_utils::operator_string(op);
-										op_str.erase(op_str.end() - 1); //now this is too much fun
+                result = lang->property_get(prop, path, ctx_);
+                result = lang->property_set(prop, path, result + " " + op_str + " 1", ctx_);
+              }
+            else 
+              result = os + lang_utils::operator_string(op);
 
-										ss << ass << "(" << os << " " << op_str << " 1)";
-										break;
-									}
-                case FN_XSS_CALL:
-                  {
-								    ss << ass + "(" + os + ")";
-                    break;
-                  }
-								default:
-									assert(false); //use case trap
-							}
+            push_rendered(result, op_prec, arg1.get_schema());
+						
+            //td: !!! clutter
+            //std::stringstream ss;
+						//switch (ai.type)
+						//	{
+						//		case VANILLA:
+						//			{
+						//				if (op_prec < prec)
+						//					ss << "(" << os << ")" << lang_utils::operator_string(op);
+						//				else
+						//					ss << os << lang_utils::operator_string(op);
+						//				break;
+						//			}
+						//		case FN_CALL:
+						//			{
+						//				str op_str = lang_utils::operator_string(op);
+						//				op_str.erase(op_str.end() - 1); //now this is too much fun
 
-            push_rendered(ss.str(), op_prec, arg1.get_schema());
+						//				ss << ass << "(" << os << " " << op_str << " 1)";
+						//				break;
+						//			}
+      //          case FN_XSS_CALL:
+      //            {
+						//		    ss << ass + "(" + os + ")";
+      //              break;
+      //            }
+						//		default:
+						//			assert(false); //use case trap
+						//	}
+
+      //      push_rendered(ss.str(), op_prec, arg1.get_schema());
             break;
           }
 

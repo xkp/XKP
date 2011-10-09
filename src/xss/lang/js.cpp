@@ -211,3 +211,24 @@ str js_lang::render_asignment(const str& path, const str& prop, const str& value
       return prop + " = " + value;
     return path + "." + prop + " = " + value;
   }
+
+str js_lang::expression_path(const str& expr )
+  {
+    size_t pos = expr.find_last_of(".");
+    if (pos != str::npos)
+      {
+        return str(expr.begin(), expr.begin() + pos);
+      }
+    return str();
+  }
+
+str js_lang::array_operation(operator_type op, const str& arr, const str& value, XSSContext ctx)
+  {
+    if (op == op_plus_equal)
+      return arr + ".push(" + value + ")";
+    else if (op == op_minus_equal)
+      return arr + ".erase(" + value + ")";
+
+    assert(false); //only this operators are supported, is this a valid use case?
+    return str();
+  }

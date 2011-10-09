@@ -1684,6 +1684,37 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 
         assert(prop_type);
 				XSSProperty new_prop(new xss_property(pit->name, prop_type, value, getter, setter, instance));
+
+        //setup gets and sets
+        XSSObject gget(new xss_object); gget->set_id("get");
+        XSSObject sset(new xss_object); sset->set_id("set");
+        if (!getter.empty() && !setter.empty())
+          {
+            gget->add_attribute("text", pit->name + "_get()");
+            sset->add_attribute("text", pit->name + "_set({value})");
+          }
+        else if (!getter.empty())
+          {
+            gget->add_attribute("text", pit->name + "_get()");
+            sset.reset();
+          }
+        else if (!setter.empty())
+          {
+            gget->add_attribute("text", pit->name);
+            sset->add_attribute("text", pit->name + "_set({value})");
+          }
+        else
+          {
+            gget.reset();
+            sset.reset();
+          }
+
+        if (gget) 
+          new_prop->add_child(gget);
+
+        if (sset) 
+          new_prop->add_child(sset);
+
         properties->push_back(new_prop); //td: check types with class
       }
 

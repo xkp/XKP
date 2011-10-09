@@ -16,6 +16,8 @@ const str SNotAnIterator("Expecting an iterable type");
 const str SUnknownType("Cannot resolve type");
 const str SUnknownTypeFromExpression("Cannot deduce type from assigned expression");
 const str SInconsistentExpressionType("Inconsistent type of expression assigned");
+const str SInvalidAssign("Invalid assign");
+const str SCannotResolveAssign("Cannot resolve assign identifier");
 
 //source_collector
 void source_collector::property_(xs_property& info)
@@ -65,7 +67,7 @@ void source_collector::dsl_(dsl& info)
 //code_type_resolver
 code_type_resolver::code_type_resolver(XSSContext ctx):
   is_variant_(false),
-  ctx_(ctx)
+  ctx_(new xss_context(ctx))
   {
   }
 
@@ -268,7 +270,7 @@ void code_type_resolver::expression_(stmt_expression& info)
                 XSSType lt = lang_utils::expr_type(es.left, ctx_);
                 XSSType rt = lang_utils::expr_type(es.right, ctx_);
 
-                if (lt->is_array())
+                if (lt && lt->is_array())
                   {
                     XSSType lta = lt->array_type();
                     if (lta != rt && !ctx_->get_language()->can_cast(lta, rt))
@@ -557,7 +559,7 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
                   }
 							}
 
-            XSSType result = ctx_->get_array_type(arr_type);
+            XSSType result = arr_type? ctx_->get_array_type(arr_type) : ctx_->get_type("array");
             stack_.push(result);
             break;
           }
@@ -1055,3 +1057,59 @@ std::vector<str> lang_utils::unwind(const str& path)
 		return result;
 	}
 
+void lang_utils::invalid_assign()
+  {
+    param_list error;
+    error.add("id", SLinker);
+    error.add("desc", SInvalidAssign);
+
+    xss_throw(error);
+  }
+
+void lang_utils::unresolved_assigner(const str& id)
+  {
+    param_list error;
+    error.add("id", SLinker);
+    error.add("desc", SCannotResolveAssign);
+    error.add("identifier", id);
+
+    xss_throw(error);
+  }
+
+str lang_utils::check_array_op(operator_type op, XSSProperty prop, XSSType type, const str& path, const str& value, XSSContext ctx)
+  {
+    Language lang = ctx->get_language();
+
+    if (op == op_plus_equal || op == op_minus_equal)
+      {
+        if (!type)
+          type = prop->type();
+
+        if (type && type->is_array())
+          {
+            str left;
+            if (prop)
+              left = lang->property_get(prop, path, ctx);
+            else
+              left = path;
+            return lang->array_operation(op, left, value, ctx);
+          }
+      }
+
+    return str();
+  }
+
+str lang_utils::assign_operator(operator_type op, XSSProperty prop, const str& path, const str& value, XSSContext ctx)
+  {
+    Language  lang = ctx->get_language();
+    XSSType   type = prop->type();
+    str       aop  = check_array_op(op, prop, prop->type(), path, value, ctx);
+    
+    if (!aop.empty())
+      return aop;
+
+    str op_str = operator_string(op);
+    op_str.erase(op_str.end() - 1);
+    str vv = lang->property_get(prop, path, ctx) + " " + op_str + " " + value;
+    return lang->property_set(prop, path, vv, ctx);
+  }

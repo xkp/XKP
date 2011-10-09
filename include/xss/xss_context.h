@@ -198,18 +198,20 @@ struct IArgumentRenderer : public IRenderer
 
 struct ILanguage
   {
-    virtual variant compile_code(code& cde, param_list_decl& params, XSSContext ctx)	                = 0;
-    virtual variant compile_expression(expression expr, XSSContext ctx)							                  = 0;
-		virtual variant compile_args(param_list_decl& params, XSSContext ctx)					                    = 0;
-    virtual str     resolve_this(XSSContext ctx)																			                = 0;
-    virtual str     resolve_separator(XSSObject lh = XSSObject())										                  = 0;
-    virtual bool    can_cast(XSSType left, XSSType right)                                             = 0;
-    virtual void    init_context(XSSContext ctx)                                                      = 0;
-    virtual XSSType resolve_array_type(XSSType type, const str& at_name, XSSContext ctx)              = 0;
-    virtual str     render_value(XSSType type, variant value)                                         = 0;
-    virtual str     property_get(XSSProperty prop, const str& path, XSSContext ctx)                   = 0;
-    virtual str     property_set(XSSProperty prop, const str& path, const str& value, XSSContext ctx) = 0;
-    virtual str     render_asignment(const str& path, const str& prop, const str& value)              = 0;
+    virtual variant compile_code(code& cde, param_list_decl& params, XSSContext ctx)	                  = 0;
+    virtual variant compile_expression(expression expr, XSSContext ctx)							                    = 0;
+		virtual variant compile_args(param_list_decl& params, XSSContext ctx)					                      = 0;
+    virtual str     resolve_this(XSSContext ctx)																			                  = 0;
+    virtual str     resolve_separator(XSSObject lh = XSSObject())										                    = 0;
+    virtual bool    can_cast(XSSType left, XSSType right)                                               = 0;
+    virtual void    init_context(XSSContext ctx)                                                        = 0;
+    virtual XSSType resolve_array_type(XSSType type, const str& at_name, XSSContext ctx)                = 0;
+    virtual str     render_value(XSSType type, variant value)                                           = 0;
+    virtual str     property_get(XSSProperty prop, const str& path, XSSContext ctx)                     = 0;
+    virtual str     property_set(XSSProperty prop, const str& path, const str& value, XSSContext ctx)   = 0;
+    virtual str     render_asignment(const str& path, const str& prop, const str& value)                = 0;
+    virtual str     expression_path(const str& expr )                                                   = 0;
+    virtual str     array_operation(operator_type op, const str& arr, const str& value, XSSContext ctx) = 0;
   };
 
 //resolver

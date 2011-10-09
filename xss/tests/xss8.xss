@@ -1,16 +1,6 @@
 <xss:code>
 for(var i in application.children)
 {
-	for(var prop in i.properties)
-	{
-		out()
-		{
-            property id: <xss:e v="prop.id"/>
-			property get: <xss:e v="compiler.property_get(prop, 'this')"/>
-			property set: <xss:e v="compiler.property_set(prop, 'that', '20')"/>
-		}
-	}
-
 	for(var mthd in i.methods)
 	{
 		out()

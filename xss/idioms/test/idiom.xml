@@ -72,6 +72,11 @@
             <property id="complex" type="string">
                 <set text="set_complex({path}, {value})" global="true"/>
             </property>
+
+            <property id="some_int" type="int">
+                <get text="get_some_int()"/>
+                <set text="set_some_int({path}, {value})" global="true"/>
+            </property>
         </class>
 
     </types>

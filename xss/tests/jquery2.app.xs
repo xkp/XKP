@@ -13,7 +13,7 @@ property target : string
 on btn1.click()
 {
 	btn2.caption = "Clicked";
-	caption = "Other Clicked";
+	btn1.caption = "Other Clicked";
 }
 
 method reset(string s)

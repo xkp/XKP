@@ -14,12 +14,7 @@ $(function() {
 	//and then instances
     for(var i in jquery.instances)
     {
-        out()
-		{
-			<xss:file src="../common-js/instance.xss" output="inline">
-				<parameter name="it" value="i"/>
-			</xss:file>
-		}
+        compiler.xss("../common-js/instance.xss", i);
     }
     </xss:code>
 });

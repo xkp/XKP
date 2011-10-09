@@ -333,6 +333,16 @@ str debug_language::render_asignment(const str& path, const str& prop, const str
     return "why am I still here?";
   }
 
+str debug_language::expression_path(const str& expr )
+  {
+    return "there is no path";
+  }
+
+str debug_language::array_operation(operator_type op, const str& arr, const str& value, XSSContext ctx)
+  {
+    return "no rhyme";
+  }
+  
 //glue
 
 namespace xkp

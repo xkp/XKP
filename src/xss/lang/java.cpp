@@ -604,3 +604,15 @@ str java_lang::render_asignment(const str& path, const str& prop, const str& val
     return "Implement java_lang::render_asignment!";
   }
 
+str java_lang::expression_path(const str& expr)
+  {
+    return "Implement java_lang::expression_path!";
+  }
+
+str java_lang::array_operation(operator_type op, const str& arr, const str& value, XSSContext ctx)
+  {
+    return "Implement java_lang::array_operation!";
+  }
+
+
+
