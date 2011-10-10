@@ -2,50 +2,95 @@
     <types>
 	
         //testing enums class
-		<enum id="EVisibility" output_id="View" output_type="int" default_value="EVisibility.true">
-			<property id="true" type="int" output_id="VISIBLE" output_xml="visible"/>
-			<property id="false" type="int" output_id="INVISIBLE" output_xml="invisible"/>
-			<property id="gone" type="int" output_id="GONE" output_xml="gone"/>
+		<enum id="EVisibility" output_id="int" default_value="EVisibility.true">
+			<property id="true" type="int" output_xml="visible">
+				<get text="View.VISIBLE" global="true"/>
+			</property>
+			
+			<property id="false" type="int" output_xml="invisible">
+				<get text="View.INVISIBLE" global="true"/>
+			</property>
+			
+			<property id="gone" type="int" output_xml="gone">
+				<get text="View.GONE" global="true"/>
+			</property>
 		</enum>
 		
-		<enum id="EPlacement" output_id="XKPLayout" output_type="int" default_value="EPlacement.none">
-			<property id="none" type="int" output_id="PL_NONE" output_xml="none"/>
-			<property id="top" type="int" output_id="PL_TOP" output_xml="top"/>
-			<property id="left" type="int" output_id="PL_LEFT" output_xml="left"/>
-			<property id="right" type="int" output_id="PL_RIGHT" output_xml="right"/>
-			<property id="bottom" type="int" output_id="PL_BOTTOM" output_xml="bottom"/>
-			<property id="client" type="int" output_id="PL_CLIENT" output_xml="client"/>
-			<property id="center" type="int" output_id="PL_CENTER" output_xml="center"/>
+		<enum id="EPlacement" output_id="int" default_value="EPlacement.none">
+			<property id="none" type="int" output_xml="none">
+				<get text="XKPLayout.PL_NONE" global="true"/>
+			</property>
+			
+			<property id="top" type="int" output_xml="top">
+				<get text="XKPLayout.PL_TOP" global="true"/>
+			</property>
+			
+			<property id="left" type="int" output_xml="left">
+				<get text="XKPLayout.PL_LEFT" global="true"/>
+			</property>
+			
+			<property id="right" type="int" output_xml="right">
+				<get text="XKPLayout.PL_RIGHT" global="true"/>
+			</property>
+			
+			<property id="bottom" type="int" output_xml="bottom">
+				<get text="XKPLayout.PL_BOTTOM" global="true"/>
+			</property>
+			
+			<property id="client" type="int" output_xml="client">
+				<get text="XKPLayout.PL_CLIENT" global="true"/>
+			</property>
+			
+			<property id="center" type="int" output_xml="center">
+				<get text="XKPLayout.PL_CENTER" global="true"/>
+			</property>
 		</enum>
 
 		<class id="button" output_id="Button">
-			<property id="caption" output_id="property:text" type="string" ns="android"
-				set_fn="setText(<xss:e v='value'/>)" 
-				get_fn="text()"/>
-			<property id="x" output_id="property:layout_x" type="int" default_value="0" ns="xkp"
-				set_fn="layout(<xss:e v='value'/>, <xss:e v='caller'/>.getTop(), <xss:e v='caller'/>.getRight(), <xss:e v='caller'/>.getBottom())" 
-				get_fn="getLeft()"/>
-			<property id="y" output_id="property:layout_y" type="int" default_value="0" ns="xkp"
-				set_fn="layout(<xss:e v='caller'/>.getLeft(), <xss:e v='value'/>, <xss:e v='caller'/>.getRight(), <xss:e v='caller'/>.getBottom())" 
-				get_fn="getTop()"/>
-			<property id="width" output_id="property:layout_width" type="int" ns="android"
-				set_fn="layout(<xss:e v='caller'/>.getLeft(), <xss:e v='caller'/>.getTop(), <xss:e v='caller'/>.getLeft() + <xss:e v='value'/>, <xss:e v='caller'/>.getBottom())" 
-				get_fn="getWidth()"/>
-			<property id="height" output_id="property:layout_height" type="int" ns="android"
-				set_fn="layout(<xss:e v='caller'/>.getLeft(), <xss:e v='caller'/>.getTop(), <xss:e v='caller'/>.getRight(), <xss:e v='caller'/>.getTop() + <xss:e v='value'/>)" 
-				get_fn="getHeight()"/>
-			<property id="visible" output_id="property:visible" type="EVisibility" ns="android"
-				set_fn="setVisibility(<xss:e v='value'/>)" 
-				get_fn="getVisibility()"/>
-			<property id="enabled" output_id="property:enabled" type="bool" ns="android"
-				set_fn="setEnabled(<xss:e v='value'/>)" 
-				get_fn="isEnabled()"/>
-			<property id="placement" output_id="property:placement" type="EPlacement" ns="xkp"
-				set_fn="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setPlacement(<xss:e v='value'/>)" 
-				get_fn="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).getPlacement()"/>
-			<property id="states" output_id="property:states" type="array" ns="xkp" no_render="true"
-				set_fn="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setStates(<xss:e v='value'/>)" 
-				get_fn="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).getStates()"/>
+			<property id="caption" output_id="property:text" type="string" ns="android">
+				<set text="setText({value})"/>
+				<get text="text()"/>
+			</property>
+			
+			<property id="x" output_id="property:layout_x" type="int" default_value="0" ns="xkp">
+				<set text="layout({value}, {path}.getTop(), {path}.getRight(), {path}.getBottom())"/>
+				<get text="getLeft()"/>
+			</property>
+			
+			<property id="y" output_id="property:layout_y" type="int" default_value="0" ns="xkp">
+				<set text="layout({path}.getLeft(), {value}, {path}.getRight(), {path}.getBottom())"/>
+				<get text="getTop()"/>
+			</property>
+			
+			<property id="width" output_id="property:layout_width" type="int" ns="android">
+				<set text="layout({path}.getLeft(), {path}.getTop(), {path}.getLeft() + {value}, {path}.getBottom())"/>
+				<get text="getWidth()"/>
+			</property>
+			
+			<property id="height" output_id="property:layout_height" type="int" ns="android">
+				<set text="layout({path}.getLeft(), {path}.getTop(), {path}.getRight(), {path}.getTop() + {value})"/>
+				<get text="getHeight()"/>
+			</property>
+			
+			<property id="visible" output_id="property:visible" type="EVisibility" ns="android">
+				<set text="setVisibility({value})"/>
+				<get text="getVisibility()"/>
+			</property>
+			
+			<property id="enabled" output_id="property:enabled" type="bool" ns="android">
+				<set text="setEnabled({value})"/>
+				<get text="isEnabled()"/>
+			</property>
+			
+			<property id="placement" output_id="property:placement" type="EPlacement" ns="xkp">
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setPlacement({value})" global="true"/>
+				<get text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).getPlacement()" global="true"/>
+			</property>
+			
+			<property id="states" output_id="property:states" type="array" ns="xkp" no_render="true">
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setStates({value})" global="true"/>
+				<get text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).getStates()" global="true"/>
+			</property>
 			
 			<event id="click" output_id="onClick" />
 		</class>

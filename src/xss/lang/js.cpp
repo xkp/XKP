@@ -6,7 +6,7 @@
 
 using namespace xkp;
 
-const str SLanguage("language");
+const str SJSLanguage("js-language");
 
 const str SWriteOnlyProperty("Trying to acces write only property");
 const str SReadOnlyProperty("Trying to acces read only property");
@@ -155,7 +155,7 @@ str js_lang::property_get(XSSProperty prop, const str& path, XSSContext ctx)
           {
             //read only, set but no get
             param_list error;
-            error.add("id", SLanguage);
+            error.add("id", SJSLanguage);
             error.add("desc", SReadOnlyProperty);
             error.add("property", prop->id());
             xss_throw(error);
@@ -191,7 +191,7 @@ str js_lang::property_set(XSSProperty prop, const str& path, const str& value, X
         if (get)
           {
             param_list error;
-            error.add("id", SLanguage);
+            error.add("id", SJSLanguage);
             error.add("desc", SWriteOnlyProperty);
             error.add("property", prop->id());
             xss_throw(error);

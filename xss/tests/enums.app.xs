@@ -7,7 +7,7 @@ instance btn
 	
 	on click()
 	{
-		var pl = EPlacement.left;
+		EPlacement pl = EPlacement.left;
 		
 		placement++;
 		

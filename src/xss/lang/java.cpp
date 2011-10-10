@@ -8,6 +8,8 @@ using namespace xkp;
 const str SJavaLanguage("java-language");
 
 const str SUnknownType("Cannot resolve type");
+const str SWriteOnlyProperty("Trying to acces write only property");
+const str SReadOnlyProperty("Trying to acces read only property");
 
 //java_code_renderer
 java_code_renderer::java_code_renderer():
@@ -148,7 +150,8 @@ str java_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
                     case RESOLVE_PROPERTY:
                       {
                         XSSProperty prop = si.value;
-                        result = prop->output_id();
+                        //result = prop->output_id();
+                        result = lang->property_get(prop, lang->resolve_this(ctx_), ctx_);
                         break;
                       }
                     case RESOLVE_METHOD:
@@ -205,6 +208,7 @@ str java_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
     else
       {
         str opstr = lang->render_value(XSSType(), operand);
+
         if (opstr.empty())
           {
             assert(false); //td: determine if this is an error condition
@@ -217,7 +221,7 @@ str java_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
     return result;
   }
 
-str java_expr_renderer::array_operation(const str &left, const str &right, operator_type op)
+str java_expr_renderer::array_operation(const str &left, const str &right, operator_type op) //td: erase me and all inherits virtual methods
   {
     str result = left + " " + lang_utils::operator_string(op) + " " + right;
 
@@ -589,29 +593,104 @@ str java_lang::render_value(XSSType type, variant value)
     return base_lang::render_value(type, value);
   }
 
+//td: verify repeated codes, and do defaults methods on language
 str java_lang::property_get(XSSProperty prop, const str& path, XSSContext ctx)
   {
-    return "Implement java_lang::property_get!";
+    compile_property(prop, ctx);
+    XSSObject get = prop->find("get");
+    if (get)
+      {
+        XSSRenderer rend   = XSSObject(prop)->get<XSSRenderer>("#get_renderer", XSSRenderer());
+        bool        global = get->get<bool>("global", false);
+
+        param_list params;
+        params.add("path", path);
+        str result = rend->render(XSSObject(), &params);
+        return global? result : path + "." + result;
+      }
+    else
+      {
+        XSSObject set = prop->find("set");
+        if (set)
+          {
+            //read only, set but no get
+            param_list error;
+            error.add("id", SJavaLanguage);
+            error.add("desc", SReadOnlyProperty);
+            error.add("property", prop->id());
+            xss_throw(error);
+          }
+        else
+          {
+            return path + "." + prop->output_id();
+          }
+      }
+
+    return str();
   }
 
 str java_lang::property_set(XSSProperty prop, const str& path, const str& value, XSSContext ctx)
   {
-    return "Implement java_lang::property_set!";
+    compile_property(prop, ctx);
+    XSSObject set = prop->find("set");
+    if (set)
+      {
+        XSSRenderer rend   = XSSObject(prop)->get<XSSRenderer>("#set_renderer", XSSRenderer());
+        bool        global = set->get<bool>("global", false);
+
+        param_list params;
+        params.add("path", path);
+        params.add("value", value);
+
+        str result = rend->render(XSSObject(), &params);
+        return global? result : path + "." + result;
+      }
+    else
+      {
+        XSSObject get = prop->find("get");
+        if (get)
+          {
+            param_list error;
+            error.add("id", SJavaLanguage);
+            error.add("desc", SWriteOnlyProperty);
+            error.add("property", prop->id());
+            xss_throw(error);
+          }
+        else
+          {
+            return path + "." + prop->output_id() + " = " + value;
+          }
+      }
+
+    return str();
   }
 
 str java_lang::render_asignment(const str& path, const str& prop, const str& value)
   {
-    return "Implement java_lang::render_asignment!";
+    if (path.empty())
+      return prop + " = " + value;
+    return path + "." + prop + " = " + value;
   }
 
 str java_lang::expression_path(const str& expr)
   {
-    return "Implement java_lang::expression_path!";
+    size_t pos = expr.find_last_of(".");
+    if (pos != str::npos)
+      {
+        return str(expr.begin(), expr.begin() + pos);
+      }
+    return str();
   }
 
 str java_lang::array_operation(operator_type op, const str& arr, const str& value, XSSContext ctx)
   {
-    return "Implement java_lang::array_operation!";
+    if (op == op_plus_equal)
+      return arr + ".add(" + value + ")";
+    else if (op == op_minus_equal)
+      return arr + ".remove(" + value + ")"; //td: verify correct object erase
+
+    assert(false); //only this operators are supported, is this a valid use case?
+    return str();
   }
 
 

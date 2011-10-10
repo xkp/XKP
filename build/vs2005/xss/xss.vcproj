@@ -193,6 +193,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\xss\brace_parser.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\xs\compiler.cpp"
 				>
 			</File>
@@ -316,6 +320,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\xs\behaviour.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\xss\brace_parser.h"
 				>
 			</File>
 			<File

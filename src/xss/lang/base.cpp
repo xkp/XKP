@@ -38,6 +38,7 @@ struct variable_gather : code_visitor
               if (result->is_variant())
                 result = value;
               else
+              if (!ctx_->get_language()->can_cast(result, value))
                 {
                   param_list error;
                   error.add("id", SLanguage);

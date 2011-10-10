@@ -1,9 +1,6 @@
 <xss:code>
 	compiler.log("Rendering test with enum class...");
 	
-	//base path must be an absolute
-	//before... base path of source files must be base path of idioms files...
-	
 	//ERROR: assertion failed: si.get, file /src/xs/linker.cpp, line 1576
 	//compiler.log(compiler.full_path("enums.xss"));
 	//compiler.copy_file(src = compiler.full_path("enums.xss"), dst = "../production/enums.xss");
@@ -15,6 +12,7 @@
 	enum_idiom.instances += application;
 	for(var i in enum_idiom.instances)
 	{
+		/*
 		string itype = "";
 		if(i.type)
 			itype = i.type.output_id;
@@ -46,8 +44,6 @@
 			else
 			{
 				var pp = compiler.evaluate_property(p);
-				//compiler.log("DEBUGING THIS: " + p.id);
-				//compiler.log(pp);
 				
 				if(pp has "output_xml")
 				{
@@ -66,10 +62,14 @@
 			{
 				p.output_id = "prop_" + i.output_id + "_" + p.name;
 				
-				compiler.log("instance: '" + i.output_id + "' property id: '" + p.id + "' property output_id: '" + p.output_id + "'");
+				//compiler.log("instance: '" + i.output_id + "' property id: '" + p.id + "' + output_id: '" + p.output_id + "'");
 			}
 		}
-		/*
+		*/
+		
+		//compiler.xss("../idioms/java/instance.xss", i);
+		
+		
 		for(var e in i.events)
 		{
 			if(e.implemented)
@@ -93,6 +93,6 @@
 				}
 			}
 		}
-		*/
+		
 	}
 </xss:code>

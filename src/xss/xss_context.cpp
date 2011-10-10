@@ -605,7 +605,7 @@ bool xss_context::find_symbol(const str& id, resolve_info& info)
         return true;
       }
 
-      return false;
+    return false;
   }
 
 void xss_context::collect_dsl()
