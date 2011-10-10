@@ -78,9 +78,19 @@ else
                 
     if (value != null) //dont initialize empty values
     {
-        out()
+        if (is_class)
         {
-            <xss:e v="compiler.property_set(prop, owner.output_id, value)"/>
+            out()
+            {
+                <xss:e>prop.name</xss:e> <xss:e value="assign"/> <xss:e value="value"/>,
+            }
+        }
+        else
+        {
+            out()
+            {
+                <xss:e v="compiler.property_set(prop, owner.output_id, value)"/>
+            }
         }
     }
             

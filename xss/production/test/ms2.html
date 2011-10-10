@@ -50,7 +50,7 @@ function start(resolution)
                         default_interpolate,
                         function(value)
                         {
-                            this__.alpha.alpha = value;;
+                            this__.this.target.alpha = value;
                         },
                         [
                         {t: 0, value: 0},
@@ -62,7 +62,7 @@ function start(resolution)
                         default_interpolate,
                         function(value)
                         {
-                            this__.alpha.alpha = value;;
+                            this__.this.target.alpha = value;
                         },
                         [
                         {t: 1, value: 0.300000012},
@@ -72,7 +72,7 @@ function start(resolution)
     },
                 target : null,
 });
-                application.target = 0;
+                application.target = 0
 test_sequence =
 new fade_in(
 g_sequence_manager);

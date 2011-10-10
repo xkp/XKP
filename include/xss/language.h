@@ -124,6 +124,7 @@ struct expression_analizer
     void        analyze(expression& expr, XSSContext ctx);
     bool        is_property();
     bool        is_identifier();
+    bool        this_property();
     XSSProperty get_property();
     expression& get_path();
     str         property_name();
@@ -133,6 +134,7 @@ struct expression_analizer
       bool        is_identifier_;
       bool        is_constant_;
       bool        is_property_;
+      bool        this_property_;
       str         identifier_;
       variant     constant_;
       expression  path_;

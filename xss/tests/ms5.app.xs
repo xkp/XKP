@@ -16,7 +16,8 @@ on btnPrev.click()
 
 on btn1.click()
 {
-    lbl1.caption = "Got " + clicks++ + " smileys";
+    clicks++;
+    lbl1.caption = "Got " + clicks + " smileys";
 	btn1.rotation += 0.2;
 }
 

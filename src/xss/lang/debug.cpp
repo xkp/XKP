@@ -343,6 +343,11 @@ str debug_language::array_operation(operator_type op, const str& arr, const str&
     return "no rhyme";
   }
   
+str debug_language::render_expression(expression& expr, XSSContext ctx)
+  {
+    return "no goal";
+  }
+
 //glue
 
 namespace xkp

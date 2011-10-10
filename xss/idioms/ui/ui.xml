@@ -1,14 +1,44 @@
 <module id="ui" src="ui.xs">
     <types>
         <class id="component">
-            <property id="x"        type="int"                       set_fn="set_x"          dont_init="true"/>
-            <property id="y"        type="int"                       set_fn="set_y"          dont_init="true"/>
-			<property id="rotation" type="float"                     set_fn="set_rotation"/>
-            <property id="width"    type="int"   get_fn="get_width"  set_fn="set_width"      dont_init="true"/>
-            <property id="height"   type="int"   get_fn="get_height" set_fn="set_height"     dont_init="true"/>
-            <property id="count"    type="int"   get_fn="count"                              dont_init="true"/>
-            <property id="visible"  type="bool"  get_fn="isVisible"  set_fn="setVisible"/>
-            <property id="alpha"    type="float" get_fn="get_alpha"  set_fn="alpha"/>
+            <property id="x" type="int" dont_init="true">
+                <get text="x"/>
+                <set text="set_x({value})"/>
+            </property>
+
+            <property id="y" type="int" dont_init="true">
+                <get text="y"/>
+                <set text="set_y({value})"/>
+            </property>
+
+            <property id="rotation" type="float">
+                <get text="rotation"/>
+                <set text="set_rotation({value})"/>
+            </property>
+
+            <property id="width" type="int" dont_init="true">
+                <get text="get_width()"/>
+                <set text="set_width({value})"/>
+            </property>
+
+            <property id="height" type="int">
+                <get text="get_height()"/>
+                <set text="set_height({value})"/>
+            </property>
+
+            <property id="count" type="int" dont_init="true">
+                <get text="count()"/>
+            </property>
+
+            <property id="visible" type="bool">
+                <get text="isVisible()"/>
+                <set text="setVisible({value})"/>
+            </property>
+
+            <property id="alpha" type="float">
+                <get text="get_alpha()"/>
+                <set text="alpha({value})"/>
+            </property>
         </class>
 
         <class id="div" super="component" creation_function="newComponent">
@@ -19,8 +49,13 @@
                 <parameter property="src"/>
             </array>
 
-            <property id="src"   type="string" get_fn="write_only" set_fn="src"/>
-            <property id="image" type="object" get_fn="write_only" set_fn="image"/>
+            <property id="src" type="string">
+                <set text="src({value})"/>
+            </property>
+
+            <property id="image" type="object">
+                <set text="image({value})"/>
+            </property>
         </class>
 
         <class id="button" super="component" creation_function="newButton">
@@ -44,25 +79,62 @@
             <array id="constructor_params">
                 <parameter property="font"/>
             </array>
-            <property id="font" type="string" set_fn="font" get_fn="font" dont_init="true"/>
-            <property id="caption" type="string" set_fn="text" get_fn="text"/>
+
+            <property id="font" type="string" dont_init="true">
+                <get text="font()"/>
+                <set text="font({value})"/>
+            </property>
+
+            <property id="caption" type="string">
+                <get text="text()"/>
+                <set text="text({value})"/>
+            </property>
         </class>
 
         <class id="progress_bar" super="component" creation_function="newProgressBar">
-            <property id="value" type="int" set_fn="value" get_fn="get_value"/>
+            <property id="value" type="int">
+                <get text="get_value()"/>
+                <set text="value({value})"/>
+            </property>
         </class>
 
         <class id="switch" super="component" creation_function="newSwitch">
-            <property id="active" type="int" set_fn="active" get_fn="get_active"/>
+            <property id="active" type="int">
+                <get text="get_active()"/>
+                <set text="active({value})"/>
+            </property>
         </class>
 
         <class id="line" super="component" creation_function="newLine">
-            <property id="x1"         type="float"  set_fn="set_x1"/>
-            <property id="x2"         type="float"  set_fn="set_x2"/>
-            <property id="y1"         type="float"  set_fn="set_y1"/>
-            <property id="y2"         type="float"  set_fn="set_y2"/>
-            <property id="lineWidth"  type="float"  set_fn="set_lineWidth"/>
-            <property id="lineCap"    type="string" set_fn="set_lineCap"/>
+            <property id="x1" type="float">
+                <get text="x1"/>
+                <set text="set_x1({value})"/>
+            </property>
+
+            <property id="x2" type="float">
+                <get text="x2"/>
+                <set text="set_x2({value})"/>
+            </property>
+
+            <property id="y1" type="float">
+                <get text="y1"/>
+                <set text="set_y1({value})"/>
+            </property>
+
+            <property id="y2" type="float">
+                <get text="y2"/>
+                <set text="set_y2({value})"/>
+            </property>
+
+            <property id="lineWidth"  type="float">
+                <get text="lineWidth"/>
+                <set text="set_lineWidth({value})"/>
+            </property>
+            
+            <property id="lineCap" type="string" set_fn="set_lineCap">
+                <get text="lineCap"/>
+                <set text="set_lineCap({value})"/>
+            </property>
         </class>
     </types>
 </module>

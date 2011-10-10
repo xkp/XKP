@@ -1467,6 +1467,23 @@ void xss_property::copy(XSSObject obj)
 			  flags = prop->flags;
 			  this_ = prop->this_;
 			  value_ = prop->value_;
+
+        XSSObject get = obj->find("get");
+        XSSObject set = obj->find("set");
+
+        if (get) 
+          {
+            XSSObject cpy(new xss_object);
+            cpy->copy(get);
+            add_child(cpy);
+          }
+        
+        if (set) 
+          {
+            XSSObject cpy(new xss_object);
+            cpy->copy(set);
+            add_child(cpy);
+          }
       }
 
     xss_object::copy(obj);

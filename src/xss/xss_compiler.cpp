@@ -817,6 +817,7 @@ str xss_compiler::replace_identifier(const str& s, const str& src, const str& ds
 
 variant xss_compiler::resolve_property(const str& prop, variant parent)
 	{
+    //td: !!! clutter
     XSSContext ctx = current_context();
     XSSObject  base;
 		str        path_str;
@@ -1037,6 +1038,45 @@ str xss_compiler::property_get(XSSProperty prop, const str& path)
     Language   lang = ctx->get_language();
     
     return lang->property_get(prop, path, ctx); 
+  }
+
+XSSObject xss_compiler::analyze_expression(const str& expr, variant this_)
+  {
+    XSSObject result(new xss_object);
+    
+    xs_utils   xs;
+    expression e;
+    if (!xs.compile_expression(expr, e))
+      {
+        result->add_attribute("error", SCannotCompileExpression);
+      }
+    else
+      {
+        XSSContext ctx    = current_context();
+        XSSObject  this__ = variant_cast<XSSObject>(this_, XSSObject()); 
+        if (this__)
+          {
+            ctx = XSSContext(new xss_context(ctx));
+            ctx->set_this(this__);
+          }
+
+        expression_analizer ea;
+        ea.analyze(e, ctx);
+
+        result->add_attribute("is_property", ea.is_property());
+        result->add_attribute("is_identifier", ea.is_identifier());
+        result->add_attribute("property", ea.get_property());
+        result->add_attribute("property_name", ea.property_name());
+        result->add_attribute("identifier", ea.get_identifier());
+        result->add_attribute("this_property", ea.this_property());
+
+        Language lang = ctx->get_language();
+        str path_str = lang->render_expression(ea.get_path(), ctx);
+
+        result->add_attribute("path", path_str);
+      }
+
+    return result;
   }
 
 void xss_compiler::push_renderer(XSSRenderer renderer)
