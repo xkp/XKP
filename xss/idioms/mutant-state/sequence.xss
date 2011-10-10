@@ -54,29 +54,30 @@
         {
             if (itm.class_name == "animate")
             {
-                var prop_info = compiler.resolve_property(itm.property, seq);
+                var prop_info = compiler.analyze_expression(itm.property, seq);
 
-                var    prop      = prop_info.prop;
-                string prop_name = prop_info.prop_name;
+                var    prop      = prop_info.property;
+                string prop_name = prop_info.property_name;
                 string iid       = compiler.genid('__i');
                 string path      = prop_info.path;
                 
+                compiler.log(prop_info.property_name);
                 if (!rendering_instance)
                 {
 					if (!prop_info.this_property)
                         compiler.error("Sequence class targets must be properties");
 
-                    path = "this__." + path;
+                    path = compiler.replace_identifier(path, "this.", "this__.");
                 }
                 else if (prop_info.this_property)
                 {
                     path = seq.id + "." + path;
                 }    
                 
-                string assign = prop_name + " = value;"; 
+                string assign = path + "." + prop_name + " = value"; 
                 if (prop)
                 {
-                    assign = prop.render_set('value');
+                    assign = compiler.property_set(prop, path, 'value');
                 }
 
                 out(indent = 2)
@@ -86,7 +87,7 @@
                         default_interpolate,
                         function(value)
                         {
-                            <xss:e v="path"/>.<xss:e v="assign"/>;
+                            <xss:e v="assign"/>;
                         },
                         [
                 }

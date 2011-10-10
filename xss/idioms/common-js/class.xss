@@ -67,7 +67,7 @@
     {
         if (prop.dont_init)
             continue;
-    
+        
         compiler.xss(property_renderer, prop, clazz, is_class = true);
     }    
 

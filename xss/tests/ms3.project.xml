@@ -1,9 +1,9 @@
-<project entry_point="../idioms/mutant-state/ui_standalone.xss" language="js" target="ms3.app.xml" output="ms3.html">
+<project entry_point="../idioms/ui/ui_standalone.xss" language="js" target="ms3.app.xml" output="ms3.html">
     <path>
         <output path="../production/test"/>
     </path>
 
-    <idiom src="../idioms/mutant-state/ui.xml"/>
+    <idiom src="../idioms/ui/ui.xml"/>
 </project>
            
          

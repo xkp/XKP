@@ -1226,6 +1226,13 @@ str base_lang::render_value(XSSType type, variant value)
     return xss_utils::var_to_string(value);
   }
 
+str base_lang::render_expression(expression& expr, XSSContext ctx)
+  {
+    variant              vv   = compile_expression(expr, ctx);
+    IExpressionRenderer* rend = vv;
+    return rend->render();
+  }
+
 void base_lang::compile_property(XSSProperty prop, XSSContext ctx)
   {
     XSSObject get = prop->find("get");

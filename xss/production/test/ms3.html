@@ -29,11 +29,11 @@ function start(resolution)
         g_elapsed = now; 
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-		window.setTimeout(update, resolution);  
+        window.setTimeout(update, resolution);  
 	}  
 	window.setTimeout(update, resolution);  
 }  
-                application.increment = 10;
+                application.increment = 10
 window.onload = function() 
 {
 	var drawingCanvas = document.getElementById("myCanvas");
@@ -71,7 +71,8 @@ window.onload = function()
 			};
 		    img1 = g_ui_root.newImage(
 	    "images/img1.png");
-                img1.src("images/img1.png");
+                img1.src("images/img1.png")
+                img1.set_height(50)
 	img1.click = function()
 	{    
 		img1.set_width(img1.get_width() + application.increment);

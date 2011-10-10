@@ -815,7 +815,8 @@ void expr_object_resolver::exec_operator(operator_type op, int pop_count, int pu
 expression_analizer::expression_analizer():
   is_identifier_(false),
   is_constant_(false),
-  is_property_(false)
+  is_property_(false),
+  this_property_(false)
   {
   }
 
@@ -830,6 +831,21 @@ void expression_analizer::analyze(expression& expr, XSSContext ctx)
 
             is_identifier_ = true;
             identifier_    = ei.value;
+
+            resolve_info ri;
+            if (ctx->resolve(identifier_, ri))
+              {
+                switch (ri.what)
+                  {
+                    case RESOLVE_PROPERTY:
+                      {
+                        this_property_ = true;
+                        is_property_   = true;
+                        property_      = ri.value; 
+                        break;
+                      }
+                  }
+              }
           }
         else
           {
@@ -866,6 +882,14 @@ void expression_analizer::analyze(expression& expr, XSSContext ctx)
                       property_ = path_type->get_property(property_name_);
                   }
 
+                //get info on the start of the chain
+                expression_identifier vf = expr.first();
+                resolve_info ri;
+                if (ctx->resolve(vf.value, ri))
+                  {
+                    if (ri.what == RESOLVE_PROPERTY)
+                      this_property_ = true;
+                  }
                 break;
               }
             default:
@@ -882,6 +906,11 @@ bool expression_analizer::is_property()
 bool expression_analizer::is_identifier()
   {
     return is_identifier_;
+  }
+
+bool expression_analizer::this_property()
+  {
+    return this_property_;
   }
 
 XSSProperty expression_analizer::get_property()

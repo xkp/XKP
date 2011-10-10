@@ -35,7 +35,7 @@ function start(resolution)
 	}  
 	window.setTimeout(update, resolution);  
 }  
-                application.target = 0;
+            application.target = 0
 test_sequence =
 new ms.state.Sequence(
 g_sequence_manager);
@@ -60,7 +60,7 @@ test_sequence1.start();
                         default_interpolate,
                         function(value)
                         {
-                            application.target.target = value;;
+                            application.target = value;
                         },
                         [
                         {t: 0, value: 0.300000012},
@@ -72,7 +72,7 @@ test_sequence1.start();
                         default_interpolate,
                         function(value)
                         {
-                            application.target.target = value;;
+                            application.target = value;
                         },
                         [
                         {t: 3, value: 0.300000012},
@@ -84,7 +84,7 @@ test_sequence1.start();
                         default_interpolate,
                         function(value)
                         {
-                            application.target.target = value;;
+                            application.target = value;
                         },
                         [
                         {t: 5, value: 10},

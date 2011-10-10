@@ -128,6 +128,11 @@ size_t expression::size()
     return stack_.size();
   }
   
+variant expression::first()
+  {
+    return stack_[0];
+  }
+
 void expression::visit(expression_visitor* v)
   {
     expr_stack::iterator it = stack_.begin();

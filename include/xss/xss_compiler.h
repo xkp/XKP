@@ -161,6 +161,7 @@ namespace xkp
         XSSType     type_of(variant v);
         str         property_set(XSSProperty prop, const str& path, const str& value);
         str         property_get(XSSProperty prop, const str& path);
+        XSSObject   analyze_expression(const str& expr, variant this_);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -231,24 +232,25 @@ struct xss_compiler_schema : object_schema<xss_compiler>
 
         readonly_property<XSSObject>("options", &xss_compiler::options_);
 
-        method_<str,      1>("genid",	            &xss_compiler::genid);
-        method_<bool,     1>("parse_expression",	&xss_compiler::parse_expression);
-        method_<str,      2>("render_expression", &xss_compiler::render_expression);
-        method_<variant,  1>("compile_expression",&xss_compiler::compile_expression);
-        method_<str,	    3>("replace_identifier",&xss_compiler::replace_identifier);
-        method_<variant,  2>("resolve_property",	&xss_compiler::resolve_property);
-        method_<variant,  1>("evaluate_property", &xss_compiler::evaluate_property);
-        method_<str,      1>("renderer_file",	    &xss_compiler::renderer_file);
-        method_<str,      2>("idiom_path",	      &xss_compiler::idiom_path);
-        method_<str,      1>("full_path",	        &xss_compiler::full_path);
-        method_<str,      0>("output_path",       &xss_compiler::output_path);
-        method_<str,      0>("project_path",      &xss_compiler::project_path);
-        method_<void,     2>("copy_file",         &xss_compiler::copy_file);
-        method_<void,     1>("out",               &xss_compiler::out);
-        method_<XSSType,  1>("get_type",          &xss_compiler::get_type);
-        method_<XSSType,  1>("type_of",           &xss_compiler::type_of);
-        method_<str,      3>("property_set",      &xss_compiler::property_set);
-        method_<str,      2>("property_get",      &xss_compiler::property_get);
+        method_<str,        1>("genid",	              &xss_compiler::genid);
+        method_<bool,       1>("parse_expression",	  &xss_compiler::parse_expression);
+        method_<str,        2>("render_expression",   &xss_compiler::render_expression);
+        method_<variant,    1>("compile_expression",  &xss_compiler::compile_expression);
+        method_<str,	      3>("replace_identifier",  &xss_compiler::replace_identifier);
+        method_<variant,    2>("resolve_property",	  &xss_compiler::resolve_property);
+        method_<variant,    1>("evaluate_property",   &xss_compiler::evaluate_property);
+        method_<str,        1>("renderer_file",	      &xss_compiler::renderer_file);
+        method_<str,        2>("idiom_path",	        &xss_compiler::idiom_path);
+        method_<str,        1>("full_path",	          &xss_compiler::full_path);
+        method_<str,        0>("output_path",         &xss_compiler::output_path);
+        method_<str,        0>("project_path",        &xss_compiler::project_path);
+        method_<void,       2>("copy_file",           &xss_compiler::copy_file);
+        method_<void,       1>("out",                 &xss_compiler::out);
+        method_<XSSType,    1>("get_type",            &xss_compiler::get_type);
+        method_<XSSType,    1>("type_of",             &xss_compiler::type_of);
+        method_<str,        3>("property_set",        &xss_compiler::property_set);
+        method_<str,        2>("property_get",        &xss_compiler::property_get);
+        method_<XSSObject,  2>("analyze_expression",  &xss_compiler::analyze_expression);
       }
   };
 

@@ -139,6 +139,7 @@ struct base_lang : public ILanguage
     virtual void    init_context(XSSContext ctx);
     virtual XSSType resolve_array_type(XSSType type, const str& at_name, XSSContext ctx);
     virtual str     render_value(XSSType type, variant value);
+    virtual str     render_expression(expression& expr, XSSContext ctx);
 
     protected:
       void compile_property(XSSProperty prop, XSSContext ctx);
