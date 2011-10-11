@@ -331,7 +331,7 @@ void java_expr_renderer::exec_operator(operator_type op, int pop_count, int push
             std::stringstream ss;
             ss << os1 << " instanceof " << type->output_id();
 
-            push_rendered(ss.str(), op_prec, variant());
+            push_rendered(ss.str(), op_prec, variant(), os1);
             break;
           }
 
@@ -355,7 +355,7 @@ void java_expr_renderer::exec_operator(operator_type op, int pop_count, int push
             std::stringstream ss;
             ss << totype->output_id() << ".valueOf(" << os1 << ")";
 
-            push_rendered(ss.str(), op_prec, variant());
+            push_rendered(ss.str(), op_prec, variant(), os1);
             break;
           }
 
@@ -407,7 +407,7 @@ void java_expr_renderer::exec_operator(operator_type op, int pop_count, int push
             else
               result << op1 << ".get(" << op2 << ")";
 
-            push_rendered(result.str(), op_prec, variant());
+            push_rendered(result.str(), op_prec, variant(), op1);
             break;
           }
 

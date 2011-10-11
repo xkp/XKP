@@ -77,6 +77,11 @@
                 <get text="get_some_int()"/>
                 <set text="set_some_int({path}, {value})" global="true"/>
             </property>
+
+            <property id="more_complex" type="int">
+                <get text="get_more({path}).complex()" global="true"/>
+                <set text="set_more({path}).complex({value})" global="true"/>
+            </property>
         </class>
 
     </types>
