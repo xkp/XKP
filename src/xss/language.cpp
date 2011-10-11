@@ -301,7 +301,7 @@ void code_type_resolver::expression_(stmt_expression& info)
                 //resolve type of left expression
                 XSSType lt = lang_utils::expr_type(es.left, ctx_);
 
-                if ((!lt || lt->is_variant()) && !rt->is_variant())
+                if ((!lt || (lt->is_variant()) && !rt->is_variant()))
                   {
                     str ei_name;
                     variant obj = lang_utils::object_expr(es.left, ctx_);
@@ -760,9 +760,9 @@ variant expr_object_resolver::get()
           {
             expression_identifier ei = stack_.top();
             resolve_info info;
-            if (ctx_->resolve(ei.value, info))
+            if (ctx_->resolve(ei.value, info) && (info.what != RESOLVE_VARIABLE))
               {
-                result = info.value;
+                  result = info.value;
               }
             else
               result = ei;

@@ -20,6 +20,13 @@ instance t1
         console.log("Something");
     }
 
+    method check_type()
+    {
+        var a;
+        a = 1;
+        return a;
+    }
+
     method foobar(int v)
     {
         foo = t2.foo + "++";

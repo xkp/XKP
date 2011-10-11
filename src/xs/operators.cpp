@@ -65,11 +65,12 @@ struct type_register<T1, T2, E, 0, 0>
 //now type collections
 struct numerical_types
   {
-    static const int size = 3;
+    static const int size = 4;
 
-    typedef int   type1;
-    typedef float type2;
-    typedef long  type3;
+    typedef int    type1;
+    typedef float  type2;
+    typedef long   type3;
+    typedef double type4;
   };
 
 struct integral_types
