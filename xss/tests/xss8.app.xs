@@ -36,5 +36,8 @@ instance t1
 
         writable = read_only + simple + mixed;
         mixed = writable;
+
+        more_complex++;
+        t2.more_complex--;
     }
 }

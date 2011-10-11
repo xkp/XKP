@@ -16,6 +16,7 @@ struct already_rendered
     str     value;
     variant object;
     int precedence;
+    str path;
   };
 
 struct capture_property
@@ -109,7 +110,7 @@ struct base_expr_renderer : IExpressionRenderer,
 			bool							capturing_property_;
 			capture_property	capture_property_;
 
-      void push_rendered(str value, int prec, variant object);
+      void push_rendered(str value, int prec, variant object, const str& path = str());
 			str	 render_captured_property();
   };
 

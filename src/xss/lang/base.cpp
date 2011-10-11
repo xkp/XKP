@@ -17,6 +17,8 @@ const str SGetNeedsText("Property.get expects a 'text' attribute");
 const str SSetNeedsText("Property.set expects a 'text' attribute");
 const str SUnknownType("Cannot resolve type");
 const str SCannotCast("Cannot cast variable value");
+const str SIncrementOperatorOnlyTop("Increment operators cannot be used as part of an expression");
+
 
 struct variable_gather : code_visitor
   {
@@ -326,114 +328,115 @@ str base_expr_renderer::resolve_assigner(variant operand, XSSObject instance, as
 		XSSProperty prop;
 		str					result;
 
-    XSSObject caller = get_instance(operand);
-    Language  lang   = ctx_->get_language();
-    str separator    = lang->resolve_separator(caller);
+  //  XSSObject caller = get_instance(operand);
+  //  Language  lang   = ctx_->get_language();
+  //  str separator    = lang->resolve_separator(caller);
 
-		bool use_this = false;
-    if (operand.is<expression_identifier>())
-			{
-				expression_identifier ei = operand;
-				if (instance)
-          prop = ctx_->resolve(ei.value, instance, RESOLVE_PROPERTY);
-        else
-          {
-            use_this = true;
-            prop = ctx_->resolve(ei.value, RESOLVE_PROPERTY);
-          }
-			}
-		else if (operand.is<already_rendered>())
-			{
-				already_rendered ar = operand;
-				result = ar.value;
+		//bool use_this = false;
+  //  if (operand.is<expression_identifier>())
+		//	{
+		//		expression_identifier ei = operand;
+		//		if (instance)
+  //        prop = ctx_->resolve(ei.value, instance, RESOLVE_PROPERTY);
+  //      else
+  //        {
+  //          use_this = true;
+  //          prop = ctx_->resolve(ei.value, RESOLVE_PROPERTY);
+  //        }
+		//	}
+		//else if (operand.is<already_rendered>())
+		//	{
+		//		already_rendered ar = operand;
+		//		result = ar.value;
 
-				//here comes the hacky hoo
-        size_t last_dot = result.find_last_of(separator);
-				if (last_dot != str::npos)
-					{
-						size_t count = result.size() - last_dot;
-						result.erase(result.end() - count, result.end());
-					}
+		//		//here comes the hacky hoo
+  //      size_t last_dot = result.find_last_of(separator);
+		//		if (last_dot != str::npos)
+		//			{
+		//				size_t count = result.size() - last_dot;
+		//				result.erase(result.end() - count, result.end());
+		//			}
 
-				prop = variant_cast<XSSProperty>(ar.object, XSSProperty());
-			}
-    else if (operand.is<XSSProperty>())
-      prop = operand;
+		//		prop = variant_cast<XSSProperty>(ar.object, XSSProperty());
+		//	}
+  //  else if (operand.is<XSSProperty>())
+  //    prop = operand;
 
-    if (prop)
-      {
-        if (prop->has("property_xss_set") && !dynamic_get(prop, "property_xss").empty())
-          {
-            capture_property_.prop = prop;
-            capture_property_.xss  = variant_cast<str>(dynamic_get(prop, "property_xss_set"), str());
+  //  if (prop)
+  //    {
+  //      if (prop->has("property_xss_set") && !dynamic_get(prop, "property_xss").empty())
+  //        {
+  //          capture_property_.prop = prop;
+  //          capture_property_.xss  = variant_cast<str>(dynamic_get(prop, "property_xss_set"), str());
 
-            for(size_t i = 0; i < capture_property_.xss.size(); i++)
-              {
-                if (capture_property_.xss[i] == '\'')
-	                capture_property_.xss[i] ='"';
-              }
+  //          for(size_t i = 0; i < capture_property_.xss.size(); i++)
+  //            {
+  //              if (capture_property_.xss[i] == '\'')
+	 //               capture_property_.xss[i] ='"';
+  //            }
 
-            push_rendered(operand_to_string(instance), 0, instance);
+  //          push_rendered(operand_to_string(instance), 0, instance);
 
-						ai->type = FN_XSS_CALL;
-						ai->data = render_captured_property();
+		//				ai->type = FN_XSS_CALL;
+		//				ai->data = render_captured_property();
 
-            return ai->data;
-          }
+  //          return ai->data;
+  //        }
 
-        str set_fn = variant_cast<str>(dynamic_get(prop, "set_fn"), ""); //let the outside world determine
-                                                                         //if a native function call shouls be made
+  //      str set_fn = variant_cast<str>(dynamic_get(prop, "set_fn"), ""); //let the outside world determine
+  //                                                                       //if a native function call shouls be made
 
-        str set_xss = variant_cast<str>(dynamic_get(prop, "set_xss"), ""); //such world can request to parse xss
+  //      str set_xss = variant_cast<str>(dynamic_get(prop, "set_xss"), ""); //such world can request to parse xss
 
-				if (!set_xss.empty())
-					{
-						ai->type = XSS_RESOLVE;
-						ai->data = set_xss;
+		//		if (!set_xss.empty())
+		//			{
+		//				ai->type = XSS_RESOLVE;
+		//				ai->data = set_xss;
 
-						if (result.empty())
-							return set_xss;
-						else
-              return result + separator + set_xss;
-					}
-				else if (!set_fn.empty())
-          {
-						ai->type = FN_CALL;
-						if (result.empty())
-              {
-							  if (use_this)
-                  {
-                    str this_str = lang->resolve_this(ctx_);
-                    if (!this_str.empty())
-                      return this_str + separator + set_fn;
-                  }
-                return set_fn;
-              }
-						else
-              return result + separator + set_fn;
-          }
-        else if (!prop->set.empty())
-					{
-						ai->type = FN_CALL;
-						if (result.empty())
-              {
-                str fn_call = prop->output_id() + "_set";
-							  if (use_this)
-                  {
-                    str this_str = lang->resolve_this(ctx_);
-                    if (!this_str.empty())
-                      return this_str + separator + fn_call;
-                  }
+		//				if (result.empty())
+		//					return set_xss;
+		//				else
+  //            return result + separator + set_xss;
+		//			}
+		//		else if (!set_fn.empty())
+  //        {
+		//				ai->type = FN_CALL;
+		//				if (result.empty())
+  //            {
+		//					  if (use_this)
+  //                {
+  //                  str this_str = lang->resolve_this(ctx_);
+  //                  if (!this_str.empty())
+  //                    return this_str + separator + set_fn;
+  //                }
+  //              return set_fn;
+  //            }
+		//				else
+  //            return result + separator + set_fn;
+  //        }
+  //      else if (!prop->set.empty())
+		//			{
+		//				ai->type = FN_CALL;
+		//				if (result.empty())
+  //            {
+  //              str fn_call = prop->output_id() + "_set";
+		//					  if (use_this)
+  //                {
+  //                  str this_str = lang->resolve_this(ctx_);
+  //                  if (!this_str.empty())
+  //                    return this_str + separator + fn_call;
+  //                }
 
-							  return fn_call;
-              }
-						else
-              return result + separator + prop->id() + "_set";
-					}
-      }
+		//					  return fn_call;
+  //            }
+		//				else
+  //            return result + separator + prop->id() + "_set";
+		//			}
+  //    }
 
-		ai->type = VANILLA;
-		return operand_to_string(operand, instance, null);
+		//ai->type = VANILLA;
+		//return operand_to_string(operand, instance, null);
+    return str();
   }
 
 str base_expr_renderer::operand_to_string(variant operand, XSSObject parent, int* prec)
@@ -653,12 +656,13 @@ variant base_expr_renderer::eval(XSSContext ctx)
 
 void base_expr_renderer::push(variant operand, bool top)
   {
-		if (top && assigner)
-			{
-				str ass = resolve_assigner(operand, XSSObject(), assigner);
-				push_rendered(ass, 0, operand.get_schema());
-        return;
-			}
+    //td: clutter
+		//if (top && assigner)
+		//	{
+		//		str ass = resolve_assigner(operand, XSSObject(), assigner);
+		//		push_rendered(ass, 0, operand.get_schema());
+  //      return;
+		//	}
 
     stack_.push(operand);
   }
@@ -692,11 +696,32 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
         case op_dec:
         case op_inc:
           {
+            if (!top)
+              {
+						    param_list error;
+						    error.add("id", SLanguage);
+						    error.add("desc", SIncrementOperatorOnlyTop);
+
+						    xss_throw(error);
+              }
+
 						int         prec;
             Language    lang = ctx_->get_language();
             XSSProperty prop = get_property(arg1);
             str         os   = operand_to_string(arg1, XSSObject(), &prec);
-            str         path = lang->expression_path(os);
+
+            //find the path
+            str path;
+            if (arg1.is<already_rendered>())
+              {
+                already_rendered ar = arg1;
+                path = ar.path;
+              }
+            else if (prop)
+              {
+                //no path on a property, must belong to this
+                path = lang->resolve_this(ctx_);
+              }
 
             str result; 
             if (prop)
@@ -710,7 +735,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
             else 
               result = os + lang_utils::operator_string(op);
 
-            push_rendered(result, op_prec, arg1.get_schema());
+            push_rendered(result, op_prec, arg1.get_schema(), path);
 						
             //td: !!! clutter
             //std::stringstream ss;
@@ -758,7 +783,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
             else
               ss << lang_utils::operator_string(op) << os;
 
-            push_rendered(ss.str(), op_prec, arg1.get_schema());
+            push_rendered(ss.str(), op_prec, arg1.get_schema(), os);
             break;
           }
 
@@ -865,13 +890,13 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                         case RESOLVE_INSTANCE:
                           {
                             XSSObject obj = right.value;
-                            push_rendered(caller->output_id() + separator + obj->output_id(), 0, obj);
+                            push_rendered(caller->output_id() + separator + obj->output_id(), 0, obj, caller->output_id());
                             return;
                           }
                         case RESOLVE_PROPERTY:
                           {
                             XSSProperty prop = right.value;
-                            push_rendered(lang->property_get(prop, caller_str, ctx_), 0, prop);
+                            push_rendered(lang->property_get(prop, caller_str, ctx_), 0, prop, caller_str);
                             return;
 
                             //td: !!! clutter
@@ -921,7 +946,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                             right_str = mthd->output_id();
 
                             str result = caller_str + separator + right_str + "()";
-                            push_rendered(result, 0, mthd);
+                            push_rendered(result, 0, mthd, caller_str);
 								            return;
                           }
                         default:
@@ -932,7 +957,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                   }
               }
 
-            push_rendered(caller_str + separator + right_str, 0, variant());
+            push_rendered(caller_str + separator + right_str, 0, variant(), caller_str);
             break;
           }
 
@@ -955,7 +980,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 					    }
 
             ss << opnd1 << "." << opnd2;
-            push_rendered(ss.str(), op_prec, variant());
+            push_rendered(ss.str(), op_prec, variant(), opnd1);
             break;
           }
 
@@ -1008,7 +1033,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 
             result << ")";
 
-            push_rendered(result.str(), op_prec, variant()); //td: we could find out the type here or something
+            push_rendered(result.str(), op_prec, variant(), caller); //td: we could find out the type here or something
             break;
           }
 
@@ -1059,7 +1084,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
             variant top = stack_.top(); stack_.pop();
             str caller = operand_to_string(top);
 
-            push_rendered(caller + result.str(), op_prec, variant()); //td: we could find out the type here or something
+            push_rendered(caller + result.str(), op_prec, variant(), caller); //td: we could find out the type here or something
             break;
           }
 
@@ -1100,8 +1125,9 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
         case op_index:
           {
             std::stringstream result;
-						result << operand_to_string(arg1) << "[" << operand_to_string(arg2) << "]";
-            push_rendered(result.str(), op_prec, variant());
+            str os1 = operand_to_string(arg1);
+						result << os1 << "[" << operand_to_string(arg2) << "]";
+            push_rendered(result.str(), op_prec, variant(), os1);
             break;
           }
 
@@ -1150,12 +1176,13 @@ XSSProperty base_expr_renderer::get_property(variant v)
     return XSSProperty();
   }
 
-void base_expr_renderer::push_rendered(str value, int prec, variant object)
+void base_expr_renderer::push_rendered(str value, int prec, variant object, const str& path)
   {
     already_rendered ar;
     ar.object = object;
     ar.value = value;
     ar.precedence = prec;
+    ar.path = path;
 
     stack_.push(ar);
   }
