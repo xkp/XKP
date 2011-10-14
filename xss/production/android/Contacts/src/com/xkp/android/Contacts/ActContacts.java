@@ -8,6 +8,7 @@ import android.view.View;
 						import android.view.View.OnClickListener;
 						import android.widget.TextView;
 						import android.widget.EditText;
+						import android.widget.CheckBox;
 						import android.widget.CompoundButton;
 						import android.widget.CompoundButton.OnCheckedChangeListener;
 						import android.widget.RadioButton;
@@ -100,22 +101,21 @@ btnLeft.setText(application.getSwitchText(swtStates.getDisplayedChild() + 1));
 			}
 			private void onCheckedChangedchkVerifier() {
 			}
-				private ArrayList prop_application_swtTabsTexts
-			 = new ArrayList(Arrays.asList( new Object [] {"Add contact", "Find contact", "About"} )) 	; 
+			private ArrayList prop_application_swtTabsTexts = new ArrayList(Arrays.asList( new Object [] {"Add contact", "Find contact", "About"} ));
 			private void creationapplication() {
 			}
 		public String getSwitchText(Integer idx) {
 			if (idx < 0)
 {
-	idx = prop_application_swtTabsTexts.size;
+	idx = this.prop_application_swtTabsTexts.size;
 }
 else
 {
-	if (idx >= prop_application_swtTabsTexts.size)
+	if (idx >= this.prop_application_swtTabsTexts.size)
 	{
-		idx = idx % prop_application_swtTabsTexts.size;
+		idx = idx % this.prop_application_swtTabsTexts.size;
 	}
 }
-return prop_application_swtTabsTexts.get(idx);
+return this.prop_application_swtTabsTexts.get(idx);
 		}
 }

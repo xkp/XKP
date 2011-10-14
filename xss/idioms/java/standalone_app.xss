@@ -19,8 +19,7 @@ public class <xss:e value="application.name"/> {
 	</xss:code>
 
 	<xss:code>
-		compiler.xss("instance.xss", application);
-		
+		java.instances += application;
 		for(var i in java.instances)
 		{
 			compiler.xss("instance.xss", i);

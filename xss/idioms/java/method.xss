@@ -7,19 +7,12 @@
 	
 	string mthd_type = "void";
 	
-	//ERROR: console error: "Cannot resolve operator" !=
-	//if(m.type != "")
-	//	mthd_type = m.type;
-	
 	if(m.type != null)
 		mthd_type = m.type.output_id;
 	
-	//dispatch an assert
-	//compiler.log("method return type: " + m.type);
-	
 	out(indent = 1)
 	{
-		public <xss:e value="mthd_type"/> <xss:e value="m.name"/>(<xss:e value="m.args.render()"/>) <xss:open_brace/>
+		public <xss:e>mthd_type</xss:e> <xss:e>m.name</xss:e>(<xss:e>m.args.render()</xss:e>) <xss:open_brace/>
 			<xss:e>m.code.render()</xss:e>
 		<xss:close_brace/>
 	}

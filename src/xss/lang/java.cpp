@@ -20,15 +20,11 @@ java_code_renderer::java_code_renderer():
 java_code_renderer::java_code_renderer(const java_code_renderer& other):
   base_code_renderer(other)
   {
-    Language lang = ctx_->get_language();
-    lang->init_context(ctx_);
   }
 
 java_code_renderer::java_code_renderer(code& cde, param_list_decl& params, XSSContext ctx, int indent):
   base_code_renderer(cde, params, ctx, indent)
   {
-    Language lang = ctx->get_language();
-    lang->init_context(ctx);
   }
 
 void java_code_renderer::variable_(stmt_variable& info)
@@ -150,7 +146,6 @@ str java_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
                     case RESOLVE_PROPERTY:
                       {
                         XSSProperty prop = si.value;
-                        //result = prop->output_id();
                         result = lang->property_get(prop, lang->resolve_this(ctx_), ctx_);
                         break;
                       }
@@ -170,8 +165,17 @@ str java_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
 				              }
                     case RESOLVE_TYPE:
                       {
+                        //td: specialize on exec_operator op_dot, op_dot_call
+                        str prop_name = "static";
                         XSSType type = si.value;
-                        if (!type->is_enum())
+
+                        bool static_mthd = false;
+                        if (type->has(prop_name) || type->find(prop_name))
+                          {
+                            static_mthd = type->get<bool>(prop_name, false);
+                          }
+
+                        if (!type->is_enum() && !static_mthd)
                           result = "new " + type->output_id();
                         else
                           result = type->output_id();
@@ -493,7 +497,12 @@ str java_lang::resolve_this(XSSContext ctx)
     if (sub)
       return sub->output_id();
 
-    return str();
+    return "this";
+    //XSSObject ths = ctx->get_this();
+    //if (ths)
+    //  return ths->output_id();
+
+    //return str();
   }
 
 bool java_lang::can_cast(XSSType left, XSSType right)
@@ -501,25 +510,34 @@ bool java_lang::can_cast(XSSType left, XSSType right)
     if (left->is_variant() || left->is_object())
        return true;
 
-    schema *left_native = null;
-    schema *right_native = null;
+    schema *tleft = null;
+    schema *tright = null;
 
     if (left->is_native() && right->is_native())
       {
-        left_native = left->native_type();
-        right_native = right->native_type();
+        tleft = left->native_type();
+        tright = right->native_type();
+      }
+    else
+    if (left->is_array() && right->is_array())
+      {
+        if (left->array_type()->is_variant())
+          return true;
+
+        tleft = left->array_type()->native_type();
+        tright = right->array_type()->native_type();
       }
     else
       return false;
 
-    if (left_native == type_schema<float>())
+    if (tleft == type_schema<float>())
       {
-        if (right_native == type_schema<double>())
+        if (tright == type_schema<double>())
           return true;
       }
-    else if (left_native == type_schema<double>())
+    else if (tleft == type_schema<double>())
       {
-        if (right_native == type_schema<float>())
+        if (tright == type_schema<float>())
           return true;
       }
 
@@ -665,7 +683,7 @@ str java_lang::property_set(XSSProperty prop, const str& path, const str& value,
     return str();
   }
 
-str java_lang::render_asignment(const str& path, const str& prop, const str& value)
+str java_lang::render_assignment(const str& path, const str& prop, const str& value)
   {
     if (path.empty())
       return prop + " = " + value;
@@ -679,7 +697,7 @@ str java_lang::expression_path(const str& expr)
       {
         return str(expr.begin(), expr.begin() + pos);
       }
-    return str();
+    return expr;
   }
 
 str java_lang::array_operation(operator_type op, const str& arr, const str& value, XSSContext ctx)

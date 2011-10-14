@@ -3,43 +3,117 @@
 	<types>
 	
 		<!-- ENUM declarations -->
-		<enum id="EVisibility" output_id="View" output_type="int" default_value="EVisibility.true">
-			<property id="true" type="EVisibility" output_id="VISIBLE" output_xml="visible"/>
-			<property id="false" type="EVisibility" output_id="INVISIBLE" output_xml="invisible"/>
-			<property id="gone" type="EVisibility" output_id="GONE" output_xml="gone"/>
+		<enum id="EVisibility" output_id="int" default_value="EVisibility.true">
+			<property id="true" type="EVisibility" output_id="VISIBLE" output_xml="visible">
+				<get text="View.VISIBLE" global="true"/>
+			</property>
+			
+			<property id="false" type="EVisibility" output_id="INVISIBLE" output_xml="invisible">
+				<get text="View.INVISIBLE" global="true"/>
+			</property>
+			
+			<property id="gone" type="EVisibility" output_id="GONE" output_xml="gone">
+				<get text="View.GONE" global="true"/>
+			</property>
 		</enum>
 		
-		<enum id="EGravity" output_id="Gravity" output_type="int" default_value="EGravity.center">
-			<property id="top" type="EGravity" output_id="TOP" output_xml="top"/>
-			<property id="fill" type="EGravity" output_id="FILL" output_xml="fill"/>
-			<property id="left" type="EGravity" output_id="LEFT" output_xml="left"/>
-			<property id="right" type="EGravity" output_id="RIGHT" output_xml="right"/>
-			<property id="bottom" type="EGravity" output_id="BOTTOM" output_xml="bottom"/>
-			<property id="center" type="EGravity" output_id="CENTER" output_xml="center"/>
-			<property id="fill_vertical" type="EGravity" output_id="FILL_VERTICAL" output_xml="fill_vertical"/>
-			<property id="clip_vertical" type="EGravity" output_id="CLIP_VERTICAL" output_xml="clip_vertical"/>
-			<property id="center_vertical" type="EGravity" output_id="CENTER_VERTICAL" output_xml="center_vertical"/>
-			<property id="fill_horizontal" type="EGravity" output_id="FILL_HORIZONTAL" output_xml="fill_horizontal"/>
-			<property id="clip_horizontal" type="EGravity" output_id="CLIP_HORIZONTAL" output_xml="clip_horizontal"/>
-			<property id="center_horizontal" type="EGravity" output_id="CENTER_HORIZONTAL" output_xml="center_horizontal"/>
+		<enum id="EGravity" output_id="Gravity" default_value="EGravity.center">
+			<property id="top" type="EGravity" output_id="TOP" output_xml="top">
+				<get text="Gravity.TOP" global="true"/>
+			</property>
+			
+			<property id="fill" type="EGravity" output_id="FILL" output_xml="fill">
+				<get text="Gravity.FILL" global="true"/>
+			</property>
+			
+			<property id="left" type="EGravity" output_id="LEFT" output_xml="left">
+				<get text="Gravity.LEFT" global="true"/>
+			</property>
+			
+			<property id="right" type="EGravity" output_id="RIGHT" output_xml="right">
+				<get text="Gravity.RIGHT" global="true"/>
+			</property>
+			
+			<property id="bottom" type="EGravity" output_id="BOTTOM" output_xml="bottom">
+				<get text="Gravity.BOTTOM" global="true"/>
+			</property>
+			
+			<property id="center" type="EGravity" output_id="CENTER" output_xml="center">
+				<get text="Gravity.CENTER" global="true"/>
+			</property>
+			
+			<property id="fill_vertical" type="EGravity" output_id="FILL_VERTICAL" output_xml="fill_vertical">
+				<get text="Gravity.FILL_VERTICAL" global="true"/>
+			</property>
+			
+			<property id="clip_vertical" type="EGravity" output_id="CLIP_VERTICAL" output_xml="clip_vertical">
+				<get text="Gravity.CLIP_VERTICAL" global="true"/>
+			</property>
+			
+			<property id="center_vertical" type="EGravity" output_id="CENTER_VERTICAL" output_xml="center_vertical">
+				<get text="Gravity.CENTER_VERTICAL" global="true"/>
+			</property>
+			
+			<property id="fill_horizontal" type="EGravity" output_id="FILL_HORIZONTAL" output_xml="fill_horizontal">
+				<get text="Gravity.FILL_HORIZONTAL" global="true"/>
+			</property>
+			
+			<property id="clip_horizontal" type="EGravity" output_id="CLIP_HORIZONTAL" output_xml="clip_horizontal">
+				<get text="Gravity.CLIP_HORIZONTAL" global="true"/>
+			</property>
+			
+			<property id="center_horizontal" type="EGravity" output_id="CENTER_HORIZONTAL" output_xml="center_horizontal">
+				<get text="Gravity.CENTER_HORIZONTAL" global="true"/>
+			</property>
 		</enum>
 		
-		<enum id="EActionMotionEvent" output_id="MotionEvent" output_type="int" default_value="-1">
-			<property id="cancel" type="EActionMotionEvent" output_id="ACTION_CANCEL" output_xml="cancel"/>
-			<property id="down" type="EActionMotionEvent" output_id="ACTION_DOWN" output_xml="down"/>
-			<property id="move" type="EActionMotionEvent" output_id="ACTION_MOVE" output_xml="move"/>
-			<property id="up" type="EActionMotionEvent" output_id="ACTION_UP" output_xml="up"/>
+		<enum id="EActionMotionEvent" output_id="int" default_value="-1">
+			<property id="up" type="EActionMotionEvent" output_id="ACTION_UP" output_xml="up">
+				<get text="MotionEvent.ACTION_UP" global="true"/>
+			</property>
+			
+			<property id="move" type="EActionMotionEvent" output_id="ACTION_MOVE" output_xml="move">
+				<get text="MotionEvent.ACTION_MOVE" global="true"/>
+			</property>
+			
+			<property id="down" type="EActionMotionEvent" output_id="ACTION_DOWN" output_xml="down">
+				<get text="MotionEvent.ACTION_DOWN" global="true"/>
+			</property>
+			
+			<property id="cancel" type="EActionMotionEvent" output_id="ACTION_CANCEL" output_xml="cancel">
+				<get text="MotionEvent.ACTION_CANCEL" global="true"/>
+			</property>
 			<!-- continue -->
 		</enum>
 		
-		<enum id="EPlacement" output_id="XKPLayout" type="int" output_type="int" default_value="EPlacement.none">
-			<property id="none" type="EPlacement" output_id="PL_NONE" output_xml="none"/>
-			<property id="top" type="EPlacement" output_id="PL_TOP" output_xml="top"/>
-			<property id="left" type="EPlacement" output_id="PL_LEFT" output_xml="left"/>
-			<property id="right" type="EPlacement" output_id="PL_RIGHT" output_xml="right"/>
-			<property id="bottom" type="EPlacement" output_id="PL_BOTTOM" output_xml="bottom"/>
-			<property id="client" type="EPlacement" output_id="PL_CLIENT" output_xml="client"/>
-			<property id="center" type="EPlacement" output_id="PL_CENTER" output_xml="center"/>
+		<enum id="EPlacement" output_id="int" default_value="EPlacement.none">
+			<property id="none" type="EPlacement" output_id="PL_NONE" output_xml="none">
+				<get text="XKPLayout.PL_NONE" global="true"/>
+			</property>
+			
+			<property id="top" type="EPlacement" output_id="PL_TOP" output_xml="top">
+				<get text="XKPLayout.PL_TOP" global="true"/>
+			</property>
+			
+			<property id="left" type="EPlacement" output_id="PL_LEFT" output_xml="left">
+				<get text="XKPLayout.PL_LEFT" global="true"/>
+			</property>
+			
+			<property id="right" type="EPlacement" output_id="PL_RIGHT" output_xml="right">
+				<get text="XKPLayout.PL_RIGHT" global="true"/>
+			</property>
+			
+			<property id="bottom" type="EPlacement" output_id="PL_BOTTOM" output_xml="bottom">
+				<get text="XKPLayout.PL_BOTTOM" global="true"/>
+			</property>
+			
+			<property id="client" type="EPlacement" output_id="PL_CLIENT" output_xml="client">
+				<get text="XKPLayout.PL_CLIENT" global="true"/>
+			</property>
+			
+			<property id="center" type="EPlacement" output_id="PL_CENTER" output_xml="center">
+				<get text="XKPLayout.PL_CENTER" global="true"/>
+			</property>
 		</enum>
 
 		<!-- EVENT declarations -->
@@ -93,7 +167,7 @@
 			<property id="adapter" no_layout="true" type="string" set_handle="setAdapter" set_param_hnd="new ImageAdapter(this)"/>
 		</class>
 		
-		<class id="Math" no_layout="true">
+		<class id="Math" no_layout="true" static="true">
 			<method id="max" type="double"/>
 			<method id="abs" type="double"/>
 			<method id="atan2" type="double"/>
@@ -113,43 +187,69 @@
 		
 		<!-- VIEW declarations -->
 		<class id="IWidget">
-			<property id="x" output_id="layout_x" ns="xkp" type="int" res_type="dimension" 
-				property_xss_set="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setLeft" get_fn="getLeft"/>
-			<property id="y" output_id="layout_y" ns="xkp" type="int" res_type="dimension" 
-				property_xss_set="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setTop" get_fn="getTop"/>
+			<property id="x" type="int" output_id="layout_x" ns="xkp" res_type="dimension">
+				<get text="getLeft()"/> 
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setLeft({value})" global="true"/>
+			</property>
 			
-			<!-- fill_parent == match_parent and wrap_content  -->
+			<property id="y" type="int" output_id="layout_y" ns="xkp" res_type="dimension">
+				<get text="getTop()"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setTop({value})" global="true"/>
+			</property>
+			
+			<!-- fill_parent == match_parent, wrap_content  -->
 			<!-- fill_parent is deprecated after android api 8 -->
-			<property id="width" output_id="layout_width" default_value="wrap_content" ns="android" type="int" res_type="dimension" 
-				property_xss_set="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setWidth" get_fn="getWidth"/>
-			<property id="height" output_id="layout_height" default_value="wrap_content" ns="android" type="int" res_type="dimension" 
-				property_xss_set="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setHeight" get_fn="getHeight"/>
+			<property id="width" type="int" output_id="layout_width" ns="android" res_type="dimension" default_value="wrap_content">
+				<get text="getWidth()"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setWidth({value})" global="true"/>
+			</property>
 			
-			<property id="placement" ns="xkp" type="EPlacement" 
-				property_xss_set="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setPlacement" 
-				property_xss="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).getPlacement()"/>
+			<property id="height" type="int" output_id="layout_height" ns="android" res_type="dimension" default_value="wrap_content">
+				<get text="getHeight"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setHeight({value})" global="true"/>
+			</property>
 			
-			<property id="autosize_x" ns="xkp" type="bool" 
-				property_xss_set="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setAutoSizeX" 
-				property_xss="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).getAutoSizeX()"/>
-			<property id="autosize_y" ns="xkp" type="bool" 
-				property_xss_set="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).setAutoSizeY" 
-				property_xss="((XKPLayout.LayoutParams) <xss:e v='path'/>.getLayoutParams()).getAutoSizeY()"/>
+			<property id="placement" type="EPlacement" ns="xkp">
+				<get text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).getPlacement()" global="true"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setPlacement({value})" global="true"/>
+			</property>
 			
-			<property id="visible" output_id="visibility" ns="android" type="EVisibility" set_fn="setVisibility" get_fn="getVisibility"/>
-			<property id="enabled" ns="android" type="bool" set_fn="setEnabled" get_fn="isEnabled"/>
+			<property id="autosize_x" type="bool" ns="xkp">
+				<get text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).getAutoSizeX()" global="true"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setAutoSizeX({value})" global="true"/>
+			</property>
 			
-			<!-- top, bottom, left, right, center_vertical, fill_vertical, center_horizontal, fill_horizontal, center, fill, clip_vertical, clip_horizontal-->
+			<property id="autosize_y" type="bool" ns="xkp">
+				<get text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).getAutoSizeY()" global="true"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setAutoSizeY({value})" global="true"/>
+			</property>
+			
+			<property id="visible" type="EVisibility" output_id="visibility" ns="android">
+				<get text="getVisibility()"/>
+				<set text="setVisibility({value})"/>
+			</property>
+			
+			<property id="enabled" type="bool" ns="android">
+				<get text="isEnabled()"/>
+				<set text="setEnabled({value})"/>
+			</property>
+			
+			<property id="gravity" type="EGravity" output_id="layout_gravity" ns="android">
+				<get text="getGravity()"/>
+				<set text="setGravity({value})"/>
+			</property>
+			
 			<!--
-			<property id="layout_gravity" ns="android" type="enum"/>
-			
 			<property id="layout_margin" ns="android" type="int"/>
 			<property id="layout_weight" ns="android" type="float"/>
 			-->
 		</class>
 		
 		<class id="ITextView" super="IWidget">
-			<property id="caption" output_id="text" ns="android" type="string" res_type="str_reference" set_fn="setText" get_fn="getText"/>
+			<property id="caption" type="string" output_id="text" ns="android" res_type="str_reference">
+				<get text="getText()"/>
+				<set text="setText({value})"/>
+			</property>
 			
 			<import id="IClickListener"/>
 		</class>
@@ -171,7 +271,10 @@
 				<object import="android.widget.CheckBox"/>
 			</array>
 			
-			<property id="checked" type="bool" ns="android" set_fn="setChecked" get_fn="isChecked"/>
+			<property id="checked" type="bool" ns="android">
+				<get text="isChecked()"/>
+				<set text="setChecked({value})"/>
+			</property>
 			
 			<import id="IChangeListener"/>
 		</class>
@@ -187,7 +290,10 @@
 				<object import="android.widget.EditText"/>
 			</array>
 			
-			<property id="text" ns="android" type="string" res_type="str_reference" set_fn="setText" get_xss="getText().toString()"/>
+			<property id="text" type="string" ns="android" res_type="str_reference">
+				<get text="getText().toString()"/>
+				<set text="setText({value})"/>
+			</property>
 		</class>
 		
 		<class id="listbox" super="IWidget" output_id="ListView">
@@ -201,8 +307,15 @@
 				<object import="android.widget.Gallery"/>
 			</array>
 			
-			<property id="spacing" ns="android" type="int" res_type="dimension" set_fn="setGravity" get_fn="getGravity"/>
-			<property id="images" no_layout="true" type="array" res_type="array_imgs" set_fn="empty" get_fn="empty"/>
+			<property id="spacing" type="int" ns="android" res_type="dimension">
+				<get text="getGravity()"/>
+				<set text="setGravity({value})"/>
+			</property>
+			
+			<property id="images" type="array" no_layout="true" res_type="array_imgs">
+				<get text="empty()"/>
+				<set text="empty({value})"/>
+			</property>
 			
 			<import id="IClassImageAdapter"/>
 		</class>
@@ -214,13 +327,27 @@
 		</class>
 		
 		<class id="switcher" super="IWidget" xkpview="true" output_id="XKPSwitcher">
-			<property id="active" output_id="current" ns="xkp" type="string" res_type="id_reference" set_fn="setDisplayedChildByName" get_fn="getDisplayedChildByName"/>
-			<property id="active_index" output_id="currentIndex" ns="xkp" type="int" set_fn="setDisplayedChild" get_fn="getDisplayedChild"/>
+			<property id="active" type="string" output_id="current" ns="xkp" res_type="id_reference">
+				<get text="getDisplayedChildByName()"/>
+				<set text="setDisplayedChildByName({value})"/>
+			</property>
+			
+			<property id="active_index" type="int" output_id="currentIndex" ns="xkp">
+				<get text="getDisplayedChild()"/>
+				<set text="setDisplayedChild({value})"/>
+			</property>
 		</class>
 		
 		<class id="replicator" super="IWidget" xkpview="true" output_id="XKPReplicator">
-			<property id="template" output_id="template" ns="xkp" type="string" res_type="id_reference" set_fn="setTemplateResource" get_fn="getTemplateResource"/>
-			<property id="items" output_id="items" ns="xkp" type="array" set_fn="setItems" get_fn="getItems"/>
+			<property id="template" type="string" output_id="template" ns="xkp" res_type="id_reference">
+				<set text="setTemplateResource({value})"/>
+				<get text="getTemplateResource()"/>
+			</property>
+			
+			<property id="items" type="array" output_id="items" ns="xkp">
+				<set text="setItems({value})"/>
+				<get text="getItems()"/>
+			</property>
 		</class>
 		
 		<class id="image" super="IWidget" output_id="ImageView">

@@ -22,7 +22,8 @@ ERROR: Project:  3js3.project.xml
 ===[ 3js4.project.xml ]================
 
 Log: Rendering 3js Types...
-Success are greateful
+ERROR: Project:  3js4.project.xml
+
 ===[ 3js5.project.xml ]================
 
 Log: Rendering 3js Types...
@@ -47,7 +48,8 @@ Success are greateful
 ===[ carousel_1.project.xml ]================
 
 Log: Rendering 3js Types...
-Success are greateful
+ERROR: Project:  carousel_1.project.xml
+
 ===[ cube.project.xml ]================
 
 Log: Rendering 3js Types...
@@ -55,49 +57,54 @@ Success are greateful
 ===[ enums.project.xml ]================
 
 Log: Rendering test with enum class...
-Log: output_xml: top
-Log: instance: 'btn' property id: 'sameName' property output_id: 'prop_btn_sameName'
-Log: output_xml: visible
-Log: instance: 'application' property id: 'sameName' property output_id: 'prop_application_sameName'
+Log: output_xml: top && output_id: PL_TOP
+Log: output_xml: visible && output_id: VISIBLE
 
 			Instance: name = "btn", type = "Button"
 		
-				property:text = "Enums"
-			
-				property:layout_width = 200
-			
-				property:layout_height = 43
-			
-				property:enabled = false
-			
-				property:placement(enum) = XKPLayout.PL_TOP
-			
-				sameName = "My owner is button 'btn'"
-			
-				property:layout_x = 0
-			
-				property:layout_y = 0
-			
-				property:visible(enum) = View.VISIBLE
-			
-				property:states = 
-			
+				property:text = "Enums"			
+				property:layout_width = 200			
+				property:layout_height = 43			
+				property:enabled = false			
+				property:placement(enum) = XKPLayout.PL_TOP			
+				sameName = "My owner is button 'btn'"			
+				property:layout_x = 0			
+				property:layout_y = 0			
+				property:visible(enum) = View.VISIBLE			
+				property:states = 			
+					void onClick() {
+				
+						int pl = XKPLayout.PL_LEFT;
+((XKPLayout.LayoutParams) this.getLayoutParams()).setPlacement(((XKPLayout.LayoutParams) this.getLayoutParams()).getPlacement() + 1);
+if (this.getVisibility() == View.VISIBLE)
+{
+	this.setVisibility(View.INVISIBLE);
+}
+else
+{
+	if (this.getVisibility() == View.INVISIBLE)
+	{
+		this.setVisibility(View.GONE);
+	}
+	else
+	{
+		this.setVisibility(View.VISIBLE);
+	}
+}
+this.setEnabled(!this.isEnabled());
+this.layout(this.getLeft(), this.getTop(), this.getLeft() + this.getHeight() * 2, this.getBottom());
+String swp = application.sameName;
+application.sameName = this.prop_btn_sameName;
+this.prop_btn_sameName = swp;
+					
+					}
+				
 			Instance: name = "application", type = ""
 		
-				sameName = "My owner is application."
-			
+				sameName = "My owner is application."			
 Success are greateful
 ===[ java1.project.xml ]================
 
-Log: -- Rendering instance: application
-Log: Properties size: 3
-Log: Rendering property: lvalue
-Log: Rendering property: yvalue
-Log: Rendering property: xvalue
-Log: Methods size: 1
-Log: Rendering method: app_test
-Log: Events size: 1
-Log: Rendering event: create
 Log: -- Rendering instance: instance1
 Log: Properties size: 2
 Log: Rendering property: xvalue
@@ -109,20 +116,80 @@ Log: Rendering method: test2
 Log: Rendering method: test3
 Log: Rendering method: foo
 Log: Events size: 0
+Log: -- Rendering instance: application
+Log: Properties size: 3
+Log: Rendering property: lvalue
+Log: Rendering property: yvalue
+Log: Rendering property: xvalue
+Log: Methods size: 1
+Log: Rendering method: app_test
+Log: Events size: 1
+Log: Rendering event: create
 
 Success are greateful
 ===[ java2.project.xml ]================
 
-Log: -- Rendering instance: application
-Log: Properties size: 0
-Log: Methods size: 0
-Log: Events size: 0
 Log: -- Rendering instance: instance1
 Log: Properties size: 0
 Log: Methods size: 1
 Log: Rendering method: test0
 Log: Events size: 0
+Log: -- Rendering instance: application
+Log: Properties size: 0
+Log: Methods size: 0
+Log: Events size: 0
 
+Success are greateful
+===[ java3.project.xml ]================
+
+
+			public Integer check_type() {
+				Integer a;
+a = 1;
+Object b;
+this.typing = a;
+return a;
+			}
+		
+			public String foobar(Integer v) {
+				this.foo = t2.foo + 10;
+t2.set_bar(this.foo + this.get_bar() + "++");
+set_complex(this, t2.get_bar() + this.get_bar() + this.foo + "--");
+set_some_int(this, this.get_some_int() - 1);
+set_some_int(t2, t2.get_some_int() + 1);
+set_some_int(this, this.get_some_int() + 20);
+set_more(this).complex(get_more(this).complex() + 1);
+set_more(t2).complex(get_more(t2).complex() - 1);
+ArrayList arr = new ArrayList(Arrays.asList( new Object [] {} ));
+arr.add(10);
+this.writable_set(this.read_only_get() + this.simple + this.mixed_get());
+this.mixed_set(this.writable);
+return this.get_bar();
+			}
+		
+				private Integer typing;
+			
+				private Integer simple = 50;
+			
+				public Object read_only_get() {
+					return 10.000000;
+				}
+			
+				private Object writable;
+				
+				public void writable_set(Object value) {
+					writable = value;
+					console.log(value);
+				}
+			
+				public Object mixed_get() {
+					return 10;
+				}
+				
+				public void mixed_set(Object value) {
+					console.log("Something");
+				}
+			
 Success are greateful
 ===[ jquery1.project.xml ]================
 
@@ -143,7 +210,6 @@ $(function() {
 
 
 
-			
 
 
 
@@ -155,7 +221,7 @@ $(function() {
 
 
 
-                btn1.text("One button");
+                btn1.text("One button")
             
 
 
@@ -163,23 +229,7 @@ $(function() {
 
 
 
-                btn1.width(whatever);
-            
-
-		
-			
-
-
-
-
-
-
-
-
-
-
-
-                btn2.text("Two button");
+                btn1.width(100)
             
 
 
@@ -187,11 +237,6 @@ $(function() {
 
 
 
-                btn2.width(whatever);
-            
-
-		
-			
 
 
 
@@ -199,11 +244,7 @@ $(function() {
 
 
 
-
-
-
-
-                btn3.text("Reset");
+                btn2.text("Two button")
             
 
 
@@ -211,10 +252,33 @@ $(function() {
 
 
 
-                btn3.width(whatever);
+                btn2.width(100)
             
 
-		});
+
+
+
+
+
+
+
+
+
+
+
+
+                btn3.text("Reset")
+            
+
+
+
+
+
+
+                btn3.width(100)
+            
+
+});
 </script>
 
 <style>
@@ -296,7 +360,6 @@ btn2.text("...");
 
 
 
-			
 
 
 
@@ -308,7 +371,7 @@ btn2.text("...");
 
 
 
-                btn1.text("One button");
+                btn1.text("One button")
             
 
 
@@ -316,7 +379,7 @@ btn2.text("...");
 
 
 
-                btn1.width(100);
+                btn1.width(100)
             
 
 
@@ -327,13 +390,11 @@ btn2.text("...");
 	{    
 
 		btn2.text("Clicked");
-caption = "Other Clicked";
+btn1.text("Other Clicked");
 	
 	};
 
 
-		
-			
 
 
 
@@ -345,7 +406,8 @@ caption = "Other Clicked";
 
 
 
-                btn2.text("Two button");
+
+                btn2.text("Two button")
             
 
 
@@ -353,7 +415,7 @@ caption = "Other Clicked";
 
 
 
-                btn2.width(100);
+                btn2.width(100)
             
 
 
@@ -369,8 +431,6 @@ application.target_set(300);
 	};
 
 
-		
-			
 
 
 
@@ -382,7 +442,8 @@ application.target_set(300);
 
 
 
-                btn3.text("Reset");
+
+                btn3.text("Reset")
             
 
 
@@ -390,7 +451,7 @@ application.target_set(300);
 
 
 
-                btn3.width(100);
+                btn3.width(100)
             
 
 
@@ -405,7 +466,7 @@ application.target_set(300);
 	};
 
 
-		});
+});
 </script>
 
 <style>
@@ -487,7 +548,6 @@ btn2.text("...");
 
 
 
-			
 
 
 
@@ -499,7 +559,7 @@ btn2.text("...");
 
 
 
-                btn1.text("One button");
+                btn1.text("One button")
             
 
 
@@ -507,7 +567,7 @@ btn2.text("...");
 
 
 
-                btn1.width(100);
+                btn1.width(100)
             
 
 
@@ -518,13 +578,11 @@ btn2.text("...");
 	{    
 
 		btn2.text("Clicked");
-caption = "Other Clicked";
+btn1.text("Other Clicked");
 	
 	};
 
 
-		
-			
 
 
 
@@ -536,7 +594,8 @@ caption = "Other Clicked";
 
 
 
-                btn2.text("Two button");
+
+                btn2.text("Two button")
             
 
 
@@ -544,7 +603,7 @@ caption = "Other Clicked";
 
 
 
-                btn2.width(100);
+                btn2.width(100)
             
 
 
@@ -560,8 +619,6 @@ application.target_set(300);
 	};
 
 
-		
-			
 
 
 
@@ -573,7 +630,8 @@ application.target_set(300);
 
 
 
-                btn3.text("Reset");
+
+                btn3.text("Reset")
             
 
 
@@ -581,7 +639,7 @@ application.target_set(300);
 
 
 
-                btn3.width(100);
+                btn3.width(100)
             
 
 
@@ -596,7 +654,7 @@ application.target_set(300);
 	};
 
 
-		});
+});
 </script>
 
 <style>
@@ -645,10 +703,15 @@ ERROR: Project:  model_1.project.xml
 
 Log: Rendering Sequence Types...
 Log: Rendering Sequence...
+Log: target
+Log: target
+Log: target
 Success are greateful
 ===[ ms2.project.xml ]================
 
 Log: Rendering Sequence Types...
+Log: alpha
+Log: alpha
 Log: Rendering Sequence...
 Success are greateful
 ===[ ms3.project.xml ]================
@@ -660,6 +723,8 @@ Success are greateful
 
 Log: Rendering UI Types...
 Log: Rendering Sequence Types...
+Log: alpha
+Log: alpha
 Log: Rendering UI...
 Log: Rendering Sequence...
 Success are greateful
@@ -805,6 +870,8 @@ this is Louis
         t_xss5 
      
         t_xss5_1 
+     
+        t_xss8 
     
 Success are greateful
 ===[ xss3.project.xml ]================
@@ -934,4 +1001,37 @@ Log: null
 				property id: visible - output_id: property:visible
 					namespace = android
 			
+Success are greateful
+===[ xss8.project.xml ]================
+
+
+            method id: check_type
+			code: 
+			var a;
+a = 1;
+return a;
+
+		
+            method id: foobar
+			code: 
+			this.foo = t2.foo + "++";
+t2.set_bar(this.foo + this.get_bar() + "++");
+set_complex(this, t2.get_bar() + this.get_bar() + this.foo + "--");
+set_some_int(this, this.get_some_int() - 1);
+set_some_int(t2, t2.get_some_int() + 1);
+set_some_int(this, this.get_some_int() + 20);
+var arr = [];
+arr.push(10);
+this.writable_set(this.read_only_get() + this.simple + this.mixed_get());
+this.mixed_set(this.writable);
+set_more(this).complex(get_more(this).complex() + 1);
+set_more(t2).complex(get_more(t2).complex() - 1);
+
+		
+Success are greateful
+===[ xss9.project.xml ]================
+
+
+					classy.mthd_1(classy.mthd_2(3));
+				
 Success are greateful

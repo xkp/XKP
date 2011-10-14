@@ -15,59 +15,241 @@ const str SEmptyExpression("Empty expression");
 const str SAssignOperator("Assign operators can only be used as the base of an expression");
 const str SGetNeedsText("Property.get expects a 'text' attribute");
 const str SSetNeedsText("Property.set expects a 'text' attribute");
+const str SCannontResolve("Unknown identifier");
 const str SUnknownType("Cannot resolve type");
+const str SUnknownTypeFromExpression("Cannot deduce type from assigned expression");
 const str SCannotCast("Cannot cast variable value");
 const str SIncrementOperatorOnlyTop("Increment operators cannot be used as part of an expression");
 
-
-struct variable_gather : code_visitor
+//variable_gather
+variable_gather::variable_gather(XSSContext ctx):
+  ctx_(ctx)
   {
-    variable_gather(XSSContext ctx):
-      ctx_(ctx)
+  }
+
+void variable_gather::variable_(stmt_variable& info)
+  {
+    XSSType result = ctx_->get_type(info.type);
+    if (!result)
       {
+        param_list error;
+        error.add("id", SLanguage);
+        error.add("desc", SUnknownType);
+        error.add("var name", info.id);
+        error.add("type", info.type);
+        xss_throw(error);
       }
 
-      virtual void variable_(stmt_variable& info)
-        {
-          XSSType result = ctx_->get_type(info.type);
-          XSSType value  = result;
+    XSSType value  = result;
 
-          if (!info.value.empty())
-            value = lang_utils::expr_type(info.value, ctx_);
+    if (!info.value.empty())
+      value = lang_utils::expr_type(info.value, ctx_);
 
-          if (value != result)
-            {
-              if (result->is_variant())
+    if (value != result)
+      {
+        if (result->is_variant())
+          {
+            result = value;
+            if (!result)
+              {
+                param_list error;
+                error.add("id", SLanguage);
+                error.add("desc", SUnknownTypeFromExpression);
+                error.add("var name", info.id);
+                xss_throw(error);
+              }
+          }
+        else
+        if (ctx_->get_language()->can_cast(result, value))
+          {
+            if (result->is_array() && result->array_type()->is_variant())
+              {
                 result = value;
-              else
-              if (!ctx_->get_language()->can_cast(result, value))
-                {
-                  param_list error;
-                  error.add("id", SLanguage);
-                  error.add("desc", SCannotCast);
-                  error.add("var type", result->id());
-                  error.add("value type", value->id());
-                  xss_throw(error);
-                }
-            }
+              }
+          }
+        else
+          {
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", SCannotCast);
+            error.add("var name", info.id);
+            error.add("var type", result->id());
+            error.add("value type", value->id());
+            xss_throw(error);
+          }
+      }
 
-          ctx_->register_symbol(RESOLVE_VARIABLE, info.id, result);
-        }
+    if (result->is_variant())
+      var_vars_.push_back(info.id);
+    else
+      ctx_->register_symbol(RESOLVE_VARIABLE, info.id, result);
+  }
 
-      virtual void if_(stmt_if& info)                 {}
-      virtual void for_(stmt_for& info)               {}
-      virtual void iterfor_(stmt_iter_for& info)      {}
-      virtual void while_(stmt_while& info)           {}
-      virtual void break_()                           {}
-      virtual void continue_()                        {}
-      virtual void return_(stmt_return& info)         {}
-      virtual void expression_(stmt_expression& info) {}
-      virtual void dsl_(dsl& info)                    {}
-      virtual void dispatch(stmt_dispatch& info)      {}
+void variable_gather::if_(stmt_if& info)
+  {
+    lang_utils::var_gatherer(info.if_code, ctx_);
 
-    private:
-      XSSContext ctx_;
-  };
+    if (!info.else_code.empty())
+			{
+        lang_utils::var_gatherer(info.else_code, ctx_);
+			}
+  }
+
+void variable_gather::for_(stmt_for& info)
+  {
+    variable_gather vg(ctx_);
+    vg.variable_(info.init_variable);
+
+    lang_utils::var_gatherer(info.for_code, ctx_);
+  }
+
+void variable_gather::iterfor_(stmt_iter_for& info)
+  {
+    XSSType result = ctx_->get_type(info.type.name);
+    if (!result)
+      {
+        param_list error;
+        error.add("id", SLanguage);
+        error.add("desc", SUnknownType);
+        error.add("var name", info.id);
+        error.add("type", info.type);
+        xss_throw(error);
+      }
+
+    ctx_->register_symbol(RESOLVE_VARIABLE, info.id, result);
+
+    lang_utils::var_gatherer(info.for_code, ctx_);
+  }
+
+void variable_gather::while_(stmt_while& info)
+  {
+    lang_utils::var_gatherer(info.while_code, ctx_);
+  }
+
+void variable_gather::expression_(stmt_expression& info)
+  {
+    expression& expr = info.expr;
+
+    operator_type op;
+    if (expr.top_operator(op))
+	    {
+		    switch(op)
+			    {
+            case op_minus_equal:
+            case op_mult_equal:
+            case op_div_equal:
+            case op_shift_right_equal:
+            case op_shift_left_equal:
+					    {
+                break;
+              }
+
+            case op_plus_equal:
+              {
+						    expression_splitter es(op);
+						    expr.visit(&es);
+
+                //resolve type of right expression
+                XSSType lt = lang_utils::expr_type(es.left, ctx_);
+                XSSType rt = lang_utils::expr_type(es.right, ctx_);
+
+                if (lt && lt->is_array())
+                  {
+                    XSSType lta = lt->array_type();
+                    if (lta != rt && !ctx_->get_language()->can_cast(lta, rt))
+                      {
+                        param_list error;
+                        error.add("id", SLanguage);
+                        error.add("desc", SCannotCast);
+                        error.add("left",  lta->id());
+                        error.add("right", rt->id());
+                        xss_throw(error);
+                      }
+                  }
+                break;
+              }
+
+				    case op_assign:
+					    {
+						    expression_splitter es(op);
+						    expr.visit(&es);
+
+                //resolve type of right expression
+                XSSType rt = lang_utils::expr_type(es.right, ctx_);
+
+                if (!rt) break; //render pure text
+
+                //resolve type of left expression
+                XSSType lt = lang_utils::expr_type(es.left, ctx_);
+
+                if ((!lt || (lt->is_variant()) && !rt->is_variant()))
+                  {
+                    variant obj = lang_utils::object_expr(es.left, ctx_);
+
+                    if (obj.is<expression_identifier>())
+                      {
+                        expression_identifier ei = obj;
+                        str ei_name = ei.value;
+
+                        if (!ei_name.empty())
+                          {
+                            bool found = false;
+                            var_list::iterator it = var_vars_.begin();
+                            var_list::iterator nd = var_vars_.end();
+                            for(; it != nd; it++)
+                              {
+                                if (*it == ei_name)
+                                  {
+                                    var_vars_.erase(it); //no need to check no mo
+                                    ctx_->register_symbol(RESOLVE_VARIABLE, ei_name, rt);
+                                    found = true;
+                                    break;
+                                  }
+                              }
+
+                            if (!found)
+                              {
+                                param_list error;
+                                error.add("id", SLanguage);
+                                error.add("desc", SCannontResolve);
+                                error.add("identifier", ei_name);
+                                xss_throw(error);
+                              }
+                          }
+                      }
+                    else
+                    if (obj.is<XSSProperty>())
+                      {
+                        XSSProperty prop = variant_cast<XSSProperty>(obj, XSSProperty());
+
+                        if (prop)
+                          {
+                            prop->set_type(rt);
+                          }
+                      }
+
+                    lt = rt;
+                  }
+
+                if (!lt) break; //render pure text
+
+                //check types
+                if (lt != rt && !lt->is_variant() && !rt->is_variant())
+                  {
+                    if (!ctx_->get_language()->can_cast(lt, rt))
+                      {
+                        param_list error;
+                        error.add("id", SLanguage);
+                        error.add("desc", SCannotCast);
+                        error.add("left",  lt->id());
+                        error.add("right", rt->id());
+                        xss_throw(error);
+                      }
+                  }
+              }
+			    }
+	    }
+  }
 
 //utils
 XSSRenderer compile_braces(const str& text, XSSContext ctx)
@@ -97,6 +279,8 @@ base_code_renderer::base_code_renderer(const base_code_renderer& other):
   indent_(other.indent_),
   return_type_(other.return_type_)
   {
+    Language lang = ctx_->get_language();
+    lang->init_context(ctx_);
   }
 
 base_code_renderer::base_code_renderer(code& cde, param_list_decl& params, XSSContext ctx, int indent):
@@ -105,6 +289,9 @@ base_code_renderer::base_code_renderer(code& cde, param_list_decl& params, XSSCo
   indent_(indent),
   return_type_(false)
   {
+    Language lang = ctx_->get_language();
+    lang->init_context(ctx_);
+
     //add arguments to context
     param_list_decl::iterator itb = params.begin();
     param_list_decl::iterator ite = params.end();
@@ -311,6 +498,8 @@ base_expr_renderer::base_expr_renderer(const base_expr_renderer& other):
   ctx_(other.ctx_),
   expr_(other.expr_)
   {
+    Language lang = ctx_->get_language();
+    lang->init_context(ctx_);
   }
 
 base_expr_renderer::base_expr_renderer(expression& expr, XSSContext ctx):
@@ -319,6 +508,8 @@ base_expr_renderer::base_expr_renderer(expression& expr, XSSContext ctx):
   ctx_(ctx),
   expr_(expr)
   {
+    Language lang = ctx_->get_language();
+    lang->init_context(ctx_);
   }
 
 str base_expr_renderer::resolve_assigner(variant operand, XSSObject instance, assign_info* ai)

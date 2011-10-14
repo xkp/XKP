@@ -59,23 +59,23 @@ new THREE.Scene(
 var camera_w_id_4 = 
 new THREE.Camera(
 75,1.5,1,3000);
-                camera_w_id_4.position.z = 1000;
+                .z = 1000
 var light = 
 new THREE.DirectionalLight(
 );
 		;
 	scene.addLight(light);
-                light.position.y = 0.5;
-                light.position.z = 1;
+                .y = 0.5
+                .z = 1
 	var cylinder_1_cylinder = 
 new THREE.Cylinder(
 500);
 	var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder,
 	);
 	scene.addObject(cylinder_1);
-                cylinder_1.rotation.x = 10;
-                cylinder_1.rotation.y = 10;
-                cylinder_1.position.x = 600;
+                .x = 10
+                .y = 10
+                .x = 600
 var container = 
 new THREE.Object3D(
 );
@@ -87,10 +87,10 @@ new THREE.Cube(
 	scene.addObject(cube_1);
 				container.addChild(cube_1);
 				scene.addObject(container);
-                cube_1.position.x = -600;
-                cube_1.position.y = -100;
-                cube_1.rotation.x = 10;
-                cube_1.rotation.y = 10;
+                .x = -600
+                .y = -100
+                .x = 10
+                .y = 10
 	var sphere_1_sphere = 
 new THREE.Sphere(
 200);
@@ -99,11 +99,11 @@ new THREE.Sphere(
 	scene.addObject(sphere_1);
 				container.addChild(sphere_1);
 				scene.addObject(container);
-                sphere_1.position.x = -400;
-                sphere_1.position.y = 400;
-                application.foo = "qwerty";
-                application.s = 255;
-                application.hi = null;
+                .x = -400
+                .y = 400
+                application.foo = "qwerty"
+                application.s = 255
+                application.hi = null
 	application.add = function(a,b) 
 	{
 		this.s = a + b;

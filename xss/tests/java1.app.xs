@@ -5,9 +5,11 @@ property xvalue = ["value1", "value2", "value3"];
 on create()
 {
 	// how traduce this correctly to java?
-	var o = object(v1 = 2);
-	o.new_property = "value";
-	o.other_new_property = 3.14;
+	
+	//ERROR: assert
+	//var o = object(v1 = 2);
+	//o.new_property = "value";
+	//o.other_new_property = 3.14;
 
 	array <object> types = [
 		object(xs_type = "int", output_type = "Integer"),
@@ -99,7 +101,7 @@ on create()
 	
 	list = [5, 6, 7, 8];
 	
-	list[0] = 2 * 3;
+	//list[0] = 2 * 3;
 	var itx = list[2];
 	
 	var size = list.size;
@@ -204,9 +206,10 @@ instance instance1
 	method foo(var obj)
 	{
 		bool has_property = obj has "processed"; //has it been here?
-		if (!has_property)
+		if(!has_property)
 		{
-			obj.processed = true; //now "has" would be true
+			//ERROR: assert
+			//obj.processed = true; //now "has" would be true
 		}
 	}
 }

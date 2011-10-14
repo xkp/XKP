@@ -32,16 +32,17 @@ instance btnTouchme
 		else
 		if(action == EActionMotionEvent.up)
 		{
-			//ERROR: operators double not defined
-			//double delthaX = currentX - mStartX;
-			//double delthaY = currentY - mStartY;
-			double delthaX = 0.0;
-			double delthaY = 0.0;
+			double delthaX = currentX - mStartX;
+			double delthaY = currentY - mStartY;
 			
 			double angle = Math.atan2(delthaY, delthaX);
 			if(angle < 0) angle += 2 * Math.PI;
 			
-			double max_deltha = Math.max(Math.abs(delthaX), Math.abs(delthaY));
+			//ERROR: op_dot is not replaced for op_dot_call correctly inside others expressions
+			//double max_deltha = Math.max(Math.abs(delthaX), Math.abs(delthaY));
+			double abs_delthaX = Math.abs(delthaX);
+			double abs_delthaY = Math.abs(delthaY);
+			double max_deltha = Math.max(abs_delthaX, abs_delthaY);
 			
 			if(max_deltha < MAX_DELTHA / 10) 
 			{

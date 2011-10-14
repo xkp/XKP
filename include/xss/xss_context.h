@@ -209,7 +209,7 @@ struct ILanguage
     virtual str     render_value(XSSType type, variant value)                                           = 0;
     virtual str     property_get(XSSProperty prop, const str& path, XSSContext ctx)                     = 0;
     virtual str     property_set(XSSProperty prop, const str& path, const str& value, XSSContext ctx)   = 0;
-    virtual str     render_asignment(const str& path, const str& prop, const str& value)                = 0;
+    virtual str     render_assignment(const str& path, const str& prop, const str& value)                = 0;
     virtual str     expression_path(const str& expr )                                                   = 0;
     virtual str     array_operation(operator_type op, const str& arr, const str& value, XSSContext ctx) = 0;
     virtual str     render_expression(expression& expr, XSSContext ctx)                                 = 0;

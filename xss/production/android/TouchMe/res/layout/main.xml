@@ -12,6 +12,7 @@
                 android:layout_height="120px"
                 xkp:placement="none"
                 android:visibility="visible"
+                android:layout_gravity="center"
             >
                 </Button>
 			</com.xkp.android.TouchMe.XKPLayout>

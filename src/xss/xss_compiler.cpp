@@ -1755,6 +1755,9 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
         if (sset) 
           new_prop->add_child(sset);
 
+        //mark all xs properties
+        new_prop->add_attribute("user_defined", true);
+
         properties->push_back(new_prop); //td: check types with class
       }
 

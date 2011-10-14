@@ -49,31 +49,29 @@ struct assign_info
 
 struct code_type_resolver : code_visitor
 	{
-		code_type_resolver(XSSContext ctx);
+		code_type_resolver(XSSContext ctx, code cde);
 
 		XSSType get();
 
 		//code_visitor
-    virtual void variable_(stmt_variable& info);
     virtual void return_(stmt_return& info);
 		virtual void if_(stmt_if& info);
     virtual void for_(stmt_for& info);
     virtual void iterfor_(stmt_iter_for& info);
     virtual void while_(stmt_while& info);
-    virtual void break_();
-    virtual void continue_();
-    virtual void expression_(stmt_expression& info);
-    virtual void dsl_(dsl& info);
-    virtual void dispatch(stmt_dispatch& info);
+
+    virtual void expression_(stmt_expression& info)   {}
+    virtual void variable_(stmt_variable& info)       {}
+    virtual void break_()                             {}
+    virtual void continue_()                          {}
+    virtual void dsl_(dsl& info)                      {}
+    virtual void dispatch(stmt_dispatch& info)        {}
 		private:
+      code             cde_;
 			XSSContext	     ctx_;
 			bool				     is_variant_;
       XSSType          result_;
 
-      typedef std::vector<str> var_list;
-      var_list var_vars_;
-
-      void register_var(const str&id, XSSType type);
       void return_type_found(XSSType type);
 	};
 
@@ -148,6 +146,7 @@ struct lang_utils
     static int     operator_prec(operator_type op);
     static XSSType code_type(code& code, XSSContext ctx);
     static XSSType expr_type(expression& expr, XSSContext ctx);
+    static void    var_gatherer(code& cde, XSSContext ctx);
     static variant object_expr(expression& expr, XSSContext ctx);
     static str wind(const std::vector<str> path);
     static std::vector<str> unwind(const str& path);
@@ -343,7 +342,7 @@ struct lang_utils
 
                             return it + " " + operator_string(op) + " " + value;
                           }
-                        return lang->render_asignment(str(), it, value);
+                        return lang->render_assignment(str(), it, value);
                       }
                     default:
                       assert(false);
@@ -372,7 +371,7 @@ struct lang_utils
                 //could't be resolved, so we'll let the language deal with that
                 if (op != op_assign)
                   return path_str + lang->resolve_separator() + anal.property_name() + " " + operator_string(op) + " " + value;
-                return lang->render_asignment(path_str, anal.property_name(), value);
+                return lang->render_assignment(path_str, anal.property_name(), value);
               }
           }
 

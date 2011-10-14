@@ -6,6 +6,9 @@
 	//TRACE: log
 	compiler.log("Rendering property: " + p.id);
 
+	if(!p.user_defined || p.no_render)
+		return;
+	
 	string prop_type = "Object";
 	if(p.type != null)
 		prop_type = p.type.output_id;
@@ -13,21 +16,27 @@
 	string inst_name = "";
 	if(iname)
 		inst_name = iname;
+		
+	p.output_id = "prop_" + inst_name + "_" + p.name;
 	
-	if(p.no_render)
-		return;
+	string rend_value = "";
+	if(p.value)
+	{
+		var value = p.render_value();
+		rend_value = " = " + value;
+	}
 	
 	if(p.set && p.get)
 	{
 		out(indent = 1)
 		{
-			public <xss:e value="prop_type"/> <xss:e value="p.name"/>_get() <xss:open_brace/>
+			public <xss:e>prop_type</xss:e> <xss:e>p.output_id</xss:e>_get() <xss:open_brace/>
 				<xss:e>p.get.render()</xss:e>
 			<xss:close_brace/>
 			
-			public void <xss:e value="p.name"/>_set(<xss:e value="prop_type"/> value) <xss:open_brace/>
+			public void <xss:e>p.output_id</xss:e>_set(<xss:e>prop_type</xss:e> value) <xss:open_brace/>
 				<xss:e>p.set.render()</xss:e>
-			</xss:close_brace/>
+			<xss:close_brace/>
 		}
 	}
 	else
@@ -35,10 +44,10 @@
 	{
 		out(indent = 1)
 		{
-			private <xss:e value="prop_type"/> <xss:e value="p.name"/> = <xss:e value="p.generate_value()"/>
+			private <xss:e>prop_type</xss:e> <xss:e>p.output_id</xss:e><xss:e>rend_value</xss:e>;
 			
-			public void <xss:e value="p.name"/>_set(<xss:e value="prop_type"/> value) <xss:open_brace/>
-				<xss:e value="p.name"> = value;
+			public void <xss:e>p.output_id</xss:e>_set(<xss:e>prop_type</xss:e> value) <xss:open_brace/>
+				<xss:e>p.output_id</xss:e> = value;
 				<xss:e>p.set.render()</xss:e>
 			<xss:close_brace/>
 		}
@@ -46,35 +55,22 @@
 	else
 	if(p.get)
 	{
+		//if(p.get.type)
+		//	compiler.log(p.get.type.output_id);
+		//var type = p.get.type;
+		
 		out(indent = 1)
 		{
-			public <xss:e value="prop_type"/> <xss:e value="p.name"/>_get() <xss:open_brace/>
+			public <xss:e>prop_type</xss:e> <xss:e>p.output_id</xss:e>_get() <xss:open_brace/>
 				<xss:e>p.get.render()</xss:e>
 			<xss:close_brace/>
 		}
 	}
 	else
 	{
-		//TIP: live is hard 8^)
-		//     look at this enormous condition... :(
-		//TODO: reimplement set and get structure
-		
-		if(p.set_fn == null && p.get_fn == null && 
-		   p.get_xss == null && p.set_xss == null &&
-		   p.property_xss == null && p.property_xss_set == null)
+		out(indent = 1)
 		{
-			p.output_id = "prop_" + inst_name + "_" + p.name;
-			out(dont_break = true, indent = 1)
-			{
-				private <xss:e value="prop_type"/> <xss:e value="p.output_id"/>
-			}
-			
-			if(p.value)
-			{
-				out(dont_break = true) { = <xss:e value="p.value.render()"/> }
-			}
-			
-			out() {	; }
+			private <xss:e>prop_type</xss:e> <xss:e>p.output_id</xss:e><xss:e>rend_value</xss:e>;
 		}
 	}
 </xss:code>

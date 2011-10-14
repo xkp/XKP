@@ -8,7 +8,7 @@ instance btn
 	on click()
 	{
 		EPlacement pl = EPlacement.left;
-		
+
 		placement++;
 		
 		if(visible == EVisibility.true)

@@ -1,0 +1,28 @@
+<xss:code>
+for(var i in application.children)
+{
+	if(i.methods)
+	{
+		for(var m in i.methods)
+		{
+			compiler.xss("../idioms/java/method.xss", m);
+		}
+	}
+	
+	if(i.events)
+	{
+		for(var e in i.events)
+		{
+			compiler.xss("../idioms/java/event.xss", e);
+		}
+	}
+
+	if(i.properties)
+	{
+		for(var p in i.properties)
+		{
+			compiler.xss("../idioms/java/property.xss", p);
+		}
+	}
+}
+</xss:code>

@@ -311,11 +311,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\base.h"
+				RelativePath="..\..\..\include\xss\lang\base.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\xss\lang\base.h"
+				RelativePath="..\..\..\include\base.h"
 				>
 			</File>
 			<File
@@ -360,6 +360,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\xss\lang\js.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\third_party\jsoncpp\include\json\json.h"
 				>
 			</File>
 			<File

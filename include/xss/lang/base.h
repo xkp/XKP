@@ -6,6 +6,7 @@
 
 namespace xkp{
 
+
 //expression rendering
 struct already_rendered
   {
@@ -24,6 +25,30 @@ struct capture_property
 		XSSProperty prop;
 		str					xss;
 	};
+
+struct variable_gather : code_visitor
+  {
+    variable_gather(XSSContext ctx);
+
+    //code_visitor
+    virtual void variable_(stmt_variable& info);
+    virtual void if_(stmt_if& info);
+    virtual void for_(stmt_for& info);
+    virtual void iterfor_(stmt_iter_for& info);
+    virtual void while_(stmt_while& info);
+    virtual void expression_(stmt_expression& info);
+
+    virtual void return_(stmt_return& info)           {}
+    virtual void break_()                             {}
+    virtual void continue_()                          {}
+    virtual void dsl_(dsl& info)                      {}
+    virtual void dispatch(stmt_dispatch& info)        {}
+
+    private:
+      typedef std::vector<str> var_list;
+      var_list        var_vars_;
+      XSSContext      ctx_;
+  };
 
 struct base_code_renderer : ICodeRenderer,
                             code_visitor

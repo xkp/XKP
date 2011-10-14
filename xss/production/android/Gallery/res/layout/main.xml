@@ -12,6 +12,7 @@
                 android:spacing="5px"
                 xkp:placement="center"
                 android:visibility="visible"
+                android:layout_gravity="center"
             >
                 </Gallery>
 			</com.xkp.android.Gallery.XKPLayout>

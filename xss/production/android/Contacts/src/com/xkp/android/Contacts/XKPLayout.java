@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 public class XKPLayout extends ViewGroup {
+	private static final boolean DEBUG = false;
 	// this padding values is for now
 	// it's necessary to know where there from
 	private static final int mPaddingLeft = 0;
@@ -57,9 +58,11 @@ public class XKPLayout extends ViewGroup {
 					lp.origins.bottom = lp.origins.top + child.getMeasuredHeight();
 		        int childWidth = lp.origins.width();
 		        int childHeight = lp.origins.height();
-				Log.d("XKPLayout", "onMeasure => placement:  " + lp.placement);
-				Log.d("XKPLayout", "onMeasure => left:" + lp.origins.left + " top:" + lp.origins.top +
-						" right:" + lp.origins.right + " bottom:" + lp.origins.bottom);
+		        if(DEBUG) {
+					Log.d("XKPLayout", "onMeasure => placement:  " + lp.placement);
+					Log.d("XKPLayout", "onMeasure => left:" + lp.origins.left + " top:" + lp.origins.top +
+							" right:" + lp.origins.right + " bottom:" + lp.origins.bottom);
+		        }
 				switch (lp.placement) {
 					case PL_NONE:
 						childWidth = lp.origins.width();
@@ -111,18 +114,20 @@ public class XKPLayout extends ViewGroup {
 				child.measure(
 						MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.EXACTLY), 
 						MeasureSpec.makeMeasureSpec(childHeight, MeasureSpec.EXACTLY));
-				if (mXKPLayoutParams.autosize_x) {
-					if (bounds.left + child.getWidth() > widthLayout) {
-						maxWidth = Math.max(maxWidth, bounds.left + child.getWidth());
+				if(mXKPLayoutParams instanceof XKPLayout.LayoutParams) { 
+					if (mXKPLayoutParams.autosize_x) {
+						if (bounds.left + child.getWidth() > widthLayout) {
+							maxWidth = Math.max(maxWidth, bounds.left + child.getWidth());
+						}
 					}
-				}
-				if (mXKPLayoutParams.autosize_y) {
-					if (bounds.top + child.getHeight() > heightLayout) {
-						maxHeight = Math.max(maxHeight, bounds.top + child.getHeight());
+					if (mXKPLayoutParams.autosize_y) {
+						if (bounds.top + child.getHeight() > heightLayout) {
+							maxHeight = Math.max(maxHeight, bounds.top + child.getHeight());
+						}
 					}
 				}
     		}
-    	}
+    	} //for
 		// Account for padding too
 		maxWidth += mPaddingLeft + mPaddingRight;
 		maxHeight += mPaddingTop + mPaddingBottom;
@@ -138,7 +143,9 @@ public class XKPLayout extends ViewGroup {
 		setMeasuredDimension(resvSizeW, resvSizeH);
 		ViewParent v = getParent();
 		if (v != null) {
-			Log.d("XKPLayout", "onMeasure => " + v.toString());
+			if(DEBUG) {
+				Log.d("XKPLayout", "onMeasure => " + v.toString());
+			}
 			v.requestLayout();
 		}
     }
@@ -154,8 +161,10 @@ public class XKPLayout extends ViewGroup {
     		if (child.getVisibility() != GONE) {
     			XKPLayout.LayoutParams lp =
 					(XKPLayout.LayoutParams) child.getLayoutParams();
-				Log.d("XKPLayout", "onLayout => left:" + lp.origins.left + " top:" + lp.origins.top +
-						" right:" + lp.origins.right + " bottom:" + lp.origins.bottom);
+    			if(DEBUG) {
+					Log.d("XKPLayout", "onLayout => left:" + lp.origins.left + " top:" + lp.origins.top +
+							" right:" + lp.origins.right + " bottom:" + lp.origins.bottom);
+    			}
 				int childLeft = mPaddingLeft + lp.x;
 				int childTop = mPaddingTop + lp.y;
 				child.layout(childLeft, childTop,
@@ -275,9 +284,11 @@ public class XKPLayout extends ViewGroup {
 			this.origins = new Rect(x, y, x + width, y + height);
 			this.parentXkpLayout = layRef;
 			setPlacement(pl);
-			Log.d("XKPLayout", "LayoutParams => x:" + x + " y:" + y +
-					" w:" + width + " h:" + height);
-			Log.d("XKPLayout", "LayoutParams => placement = " + pl);
+			if(DEBUG) {
+				Log.d("XKPLayout", "LayoutParams => x:" + x + " y:" + y +
+						" w:" + width + " h:" + height);
+				Log.d("XKPLayout", "LayoutParams => placement = " + pl);
+			}
 		}
 		public int getPlacement() {
 			return placement;

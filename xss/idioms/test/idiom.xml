@@ -82,6 +82,8 @@
                 <get text="get_more({path}).complex()" global="true"/>
                 <set text="set_more({path}).complex({value})" global="true"/>
             </property>
+			
+			<import id="t_mouse_import"/>
         </class>
 
     </types>

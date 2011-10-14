@@ -3,93 +3,93 @@
 	
         //testing enums class
 		<enum id="EVisibility" output_id="int" default_value="EVisibility.true">
-			<property id="true" type="int" output_xml="visible">
+			<property id="true" type="EVisibility" output_id="VISIBLE" output_xml="visible">
 				<get text="View.VISIBLE" global="true"/>
 			</property>
 			
-			<property id="false" type="int" output_xml="invisible">
+			<property id="false" type="EVisibility" output_id="INVISIBLE" output_xml="invisible">
 				<get text="View.INVISIBLE" global="true"/>
 			</property>
 			
-			<property id="gone" type="int" output_xml="gone">
+			<property id="gone" type="EVisibility" output_id="GONE" output_xml="gone">
 				<get text="View.GONE" global="true"/>
 			</property>
 		</enum>
 		
 		<enum id="EPlacement" output_id="int" default_value="EPlacement.none">
-			<property id="none" type="int" output_xml="none">
+			<property id="none" type="EPlacement" output_id="PL_NONE" output_xml="none">
 				<get text="XKPLayout.PL_NONE" global="true"/>
 			</property>
 			
-			<property id="top" type="int" output_xml="top">
+			<property id="top" type="EPlacement" output_id="PL_TOP" output_xml="top">
 				<get text="XKPLayout.PL_TOP" global="true"/>
 			</property>
 			
-			<property id="left" type="int" output_xml="left">
+			<property id="left" type="EPlacement" output_id="PL_LEFT" output_xml="left">
 				<get text="XKPLayout.PL_LEFT" global="true"/>
 			</property>
 			
-			<property id="right" type="int" output_xml="right">
+			<property id="right" type="EPlacement" output_id="PL_RIGHT" output_xml="right">
 				<get text="XKPLayout.PL_RIGHT" global="true"/>
 			</property>
 			
-			<property id="bottom" type="int" output_xml="bottom">
+			<property id="bottom" type="EPlacement" output_id="PL_BOTTOM" output_xml="bottom">
 				<get text="XKPLayout.PL_BOTTOM" global="true"/>
 			</property>
 			
-			<property id="client" type="int" output_xml="client">
+			<property id="client" type="EPlacement" output_id="PL_CLIENT" output_xml="client">
 				<get text="XKPLayout.PL_CLIENT" global="true"/>
 			</property>
 			
-			<property id="center" type="int" output_xml="center">
+			<property id="center" type="EPlacement" output_id="PL_CENTER" output_xml="center">
 				<get text="XKPLayout.PL_CENTER" global="true"/>
 			</property>
 		</enum>
 
 		<class id="button" output_id="Button">
 			<property id="caption" output_id="property:text" type="string" ns="android">
-				<set text="setText({value})"/>
 				<get text="text()"/>
+				<set text="setText({value})"/>
 			</property>
 			
 			<property id="x" output_id="property:layout_x" type="int" default_value="0" ns="xkp">
-				<set text="layout({value}, {path}.getTop(), {path}.getRight(), {path}.getBottom())"/>
 				<get text="getLeft()"/>
+				<set text="layout({value}, {path}.getTop(), {path}.getRight(), {path}.getBottom())"/>
 			</property>
 			
 			<property id="y" output_id="property:layout_y" type="int" default_value="0" ns="xkp">
-				<set text="layout({path}.getLeft(), {value}, {path}.getRight(), {path}.getBottom())"/>
 				<get text="getTop()"/>
+				<set text="layout({path}.getLeft(), {value}, {path}.getRight(), {path}.getBottom())"/>
 			</property>
 			
 			<property id="width" output_id="property:layout_width" type="int" ns="android">
-				<set text="layout({path}.getLeft(), {path}.getTop(), {path}.getLeft() + {value}, {path}.getBottom())"/>
 				<get text="getWidth()"/>
+				<set text="layout({path}.getLeft(), {path}.getTop(), {path}.getLeft() + {value}, {path}.getBottom())"/>
 			</property>
 			
 			<property id="height" output_id="property:layout_height" type="int" ns="android">
-				<set text="layout({path}.getLeft(), {path}.getTop(), {path}.getRight(), {path}.getTop() + {value})"/>
 				<get text="getHeight()"/>
+				<set text="layout({path}.getLeft(), {path}.getTop(), {path}.getRight(), {path}.getTop() + {value})"/>
 			</property>
 			
 			<property id="visible" output_id="property:visible" type="EVisibility" ns="android">
-				<set text="setVisibility({value})"/>
 				<get text="getVisibility()"/>
+				<set text="setVisibility({value})"/>
 			</property>
 			
 			<property id="enabled" output_id="property:enabled" type="bool" ns="android">
-				<set text="setEnabled({value})"/>
 				<get text="isEnabled()"/>
+				<set text="setEnabled({value})"/>
 			</property>
 			
 			<property id="placement" output_id="property:placement" type="EPlacement" ns="xkp">
-				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setPlacement({value})" global="true"/>
 				<get text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).getPlacement()" global="true"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setPlacement({value})" global="true"/>
 			</property>
 			
 			<property id="states" output_id="property:states" type="array" ns="xkp" no_render="true">
-				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setStates({value})" global="true"/>
 				<get text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).getStates()" global="true"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setStates({value})" global="true"/>
 			</property>
 			
 			<event id="click" output_id="onClick" />

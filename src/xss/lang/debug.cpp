@@ -328,7 +328,7 @@ str debug_language::property_set(XSSProperty prop, const str& path, const str& v
     return "what I want";
   }
 
-str debug_language::render_asignment(const str& path, const str& prop, const str& value)
+str debug_language::render_assignment(const str& path, const str& prop, const str& value)
   {
     return "why am I still here?";
   }

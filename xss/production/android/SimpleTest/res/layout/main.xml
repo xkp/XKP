@@ -14,6 +14,7 @@
                 android:layout_height="40px"
                 xkp:placement="none"
                 android:visibility="visible"
+                android:layout_gravity="center"
             >
                 </TextView>
                 <EditText android:id="@+id/edtFirstName"
@@ -23,6 +24,7 @@
                 android:layout_height="40px"
                 xkp:placement="none"
                 android:visibility="visible"
+                android:layout_gravity="center"
             >
                 </EditText>
                 <TextView android:id="@+id/lblLastName"
@@ -33,6 +35,7 @@
                 android:layout_height="40px"
                 xkp:placement="none"
                 android:visibility="visible"
+                android:layout_gravity="center"
             >
                 </TextView>
                 <EditText android:id="@+id/edtLastName"
@@ -42,6 +45,7 @@
                 android:layout_height="40px"
                 xkp:placement="none"
                 android:visibility="visible"
+                android:layout_gravity="center"
             >
                 </EditText>
                 <Button android:id="@+id/btnFullName"
@@ -52,6 +56,7 @@
                 android:layout_height="43px"
                 xkp:placement="none"
                 android:visibility="visible"
+                android:layout_gravity="center"
             >
                 </Button>
                 <TextView android:id="@+id/lblFullName"
@@ -62,6 +67,7 @@
                 android:layout_height="30px"
                 xkp:placement="none"
                 android:visibility="visible"
+                android:layout_gravity="center"
             >
                 </TextView>
 			</com.xkp.android.SimpleTest.XKPLayout>

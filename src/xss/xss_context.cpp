@@ -127,10 +127,16 @@ XSSType xss_context::get_array_type(XSSType type)
 
     str array_type_name = "array<" + type_name + ">"; //im gonna go basic on this one
 
-    type_list::iterator it = types_.find(array_type_name);
-    if (it != types_.end())
+    resolve_info ri;
+    if (resolve(array_type_name, ri))
       {
-        return it->second;
+        if (ri.value.is<XSSType>())
+          {
+            XSSType type = ri.value;
+            return type;
+          }
+        else
+          assert(false); //what's that
       }
 
     //create it and register
