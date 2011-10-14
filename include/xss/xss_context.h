@@ -213,6 +213,8 @@ struct ILanguage
     virtual str     expression_path(const str& expr )                                                   = 0;
     virtual str     array_operation(operator_type op, const str& arr, const str& value, XSSContext ctx) = 0;
     virtual str     render_expression(expression& expr, XSSContext ctx)                                 = 0;
+    virtual str     instantiate(XSSType type, DynamicArray params)                                      = 0;
+    
   };
 
 //resolver

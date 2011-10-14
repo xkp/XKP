@@ -141,6 +141,7 @@ struct base_lang : public ILanguage
     virtual XSSType resolve_array_type(XSSType type, const str& at_name, XSSContext ctx);
     virtual str     render_value(XSSType type, variant value);
     virtual str     render_expression(expression& expr, XSSContext ctx);
+    virtual str     instantiate(XSSType type, DynamicArray params);
 
     protected:
       void compile_property(XSSProperty prop, XSSContext ctx);
@@ -154,14 +155,10 @@ struct renderer_code_schema : renderer_schema<T>
       {
         this->template implements<ICodeRenderer>();
 
-        this->template method_<XSSType, 0>("type", &T::type);
+        this->template readonly_property<XSSType>("type", &T::type);
 
         //maintain base implementations
         renderer_schema<T>::declare_base();
-      }
-
-    virtual void declare()
-      {
       }
   };
 
@@ -173,7 +170,7 @@ struct renderer_expr_schema : renderer_schema<T>
         this->template implements<IExpressionRenderer>();
         //this->template implements<IXSSRenderer>();
 
-        this->template method_<XSSType, 0>("type", &T::type);
+        this->template readonly_property<XSSType>("type", &T::type);
 
         //maintain base implememtations
         renderer_schema<T>::declare_base();

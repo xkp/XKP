@@ -348,6 +348,11 @@ str debug_language::render_expression(expression& expr, XSSContext ctx)
     return "no goal";
   }
 
+str debug_language::instantiate(XSSType type, DynamicArray params)
+  {
+    return "only instances";
+  }
+
 //glue
 
 namespace xkp

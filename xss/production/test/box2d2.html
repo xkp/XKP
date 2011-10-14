@@ -120,6 +120,9 @@ function start(resolution)
 	}  
 	window.setTimeout(update, resolution);  
 }  
+	application.blah = function(x,y,z) 
+	{
+			};
 window.onload = function() 
 {
 	var drawingCanvas = document.getElementById("myCanvas");
@@ -158,8 +161,9 @@ window.onload = function()
 			};
 		    btn1 = g_ui_root.newButton(
 	    "images/smile_sad_48.png","images/smile_grin_48.png");
-                btn1.set_rotation(0.200000003);
-	btn1.collision = function()
+                btn1.set_rotation(0.200000003)
+                btn1.set_height(50)
+	btn1.collision = function(other)
 	{    
 		console.log("Collision!");
 	};

@@ -84,5 +84,18 @@
             </property>
         </class>
 
+        <class id="t_xss9_1">
+            <constructor_params>
+                <parameter id="cparam" constant="myManager"/>
+                <parameter id="r1" runtime="true"/>
+                <parameter id="r2" runtime="true" property="hello"/>
+            </constructor_params>
+            
+            <property id="hello" type="string" value="world"/>
+        </class>
+
+        <class id="t_xss9_2">
+            
+        </class>
     </types>
 </module>
