@@ -1,0 +1,3 @@
+<application name="XSS10" title="Test Render Expression" src="xss10.app.xs">
+	<classx id="instance1"/>
+</application>

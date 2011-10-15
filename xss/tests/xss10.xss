@@ -1,0 +1,25 @@
+<xss:code>
+	bool flag = true;
+	if(flag == true)
+	{
+		flag = false;
+		compiler.log("Inside condition flag...");
+	}
+
+	for(var i in application.children)
+	{
+		for(var ev in i.events)
+		{
+			if(ev.implemented)
+			{
+				for(var impl in ev.impls)
+				{
+					out()
+					{
+						<xss:e>impl.render()</xss:e>
+					}
+				}
+			}
+		}
+	}
+</xss:code>

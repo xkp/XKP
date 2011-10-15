@@ -26,8 +26,8 @@ void brace_parser::parse(const str& what, xss_visitor* visitor)
     };
 
     std::vector<indices> items;
-    bool                 expecting_closed = false; 
-    size_t               idx              = 0; 
+    bool                 expecting_closed = false;
+    size_t               idx              = 0;
     for(size_t i = 0; i < what.size(); i++)
       {
         char c = what[i];
@@ -49,7 +49,7 @@ void brace_parser::parse(const str& what, xss_visitor* visitor)
 
     std::vector<indices>::iterator it = items.begin();
     std::vector<indices>::iterator nd = items.end();
-    
+
     idx = 0;
     for(; it != nd; it++)
       {

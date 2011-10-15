@@ -3,6 +3,13 @@
 		<class id="classx">
 			<property id="px_value" type="int"/>
 			<property id="ps_value" type="var"/>
+			
+			<method id="mthd_1" type="int"/>
+		</class>
+		
+		<class id="classy">
+			<method id="mthd_1" type="int"/>
+			<method id="mthd_2" type="int"/>
 		</class>
 	</types>
 </module>

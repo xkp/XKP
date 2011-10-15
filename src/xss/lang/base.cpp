@@ -914,7 +914,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                 path = lang->resolve_this(ctx_);
               }
 
-            str result; 
+            str result;
             if (prop)
               {
 								str op_str = lang_utils::operator_string(op);
@@ -923,11 +923,11 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                 result = lang->property_get(prop, path, ctx_);
                 result = lang->property_set(prop, path, result + " " + op_str + " 1", ctx_);
               }
-            else 
+            else
               result = os + lang_utils::operator_string(op);
 
             push_rendered(result, op_prec, arg1.get_schema(), path);
-						
+
             //td: !!! clutter
             //std::stringstream ss;
 						//switch (ai.type)
