@@ -558,6 +558,7 @@ void expr_object_resolver::push(variant operand, bool top)
 void expr_object_resolver::exec_operator(operator_type op, int pop_count, int push_count, bool top)
 	{
     one_opnd_ = false;
+    variant result;
 
 		switch(op)
 			{
@@ -566,7 +567,6 @@ void expr_object_resolver::exec_operator(operator_type op, int pop_count, int pu
 						expression_identifier arg1  = stack_.top(); stack_.pop();
 						expression_identifier arg2  = stack_.top(); stack_.pop();
 
-            variant result;
             resolve_info left;
             if (ctx_->resolve(arg2.value, left))
               {
@@ -581,6 +581,20 @@ void expr_object_resolver::exec_operator(operator_type op, int pop_count, int pu
             stack_.push(result);
             break;
 					}
+        case op_index:
+          {
+            int index = stack_.top(); stack_.pop();
+            expression_identifier arg2 = stack_.top(); stack_.pop();
+
+            resolve_info left;
+            if (ctx_->resolve(arg2.value, left))
+              {
+                result = left.value;
+              }
+
+            stack_.push(result);
+            break;
+          }
 
         default:
           assert(false);//trap other case

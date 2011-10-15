@@ -1430,7 +1430,9 @@ void xss_compiler::read_includes(XSSObject project_data)
             XSSApplicationRenderer app = *it;
             if (app->target() == target || app->id() == inc_app)
               {
-                read_include(base_path_ / xml_file, base_path_ / src_file, app->context(), app);
+                fs::path def_path = xml_file.empty()? fs::path() : base_path_ / xml_file;
+                fs::path src_path = src_file.empty()? fs::path() : base_path_ / src_file;
+                read_include(def_path, src_path, app->context(), app);
               }
           }
 	    }
@@ -1505,7 +1507,7 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
 						XSSType super;
 				    if (!ci.super.empty())
 					    {
-                str def_super = def_class->get<str>("super", str());
+                str def_super = def_class? def_class->get<str>("super", str()) : str();
                 if (!def_super.empty() && def_super != ci.super)
 							    {
 								    param_list error;

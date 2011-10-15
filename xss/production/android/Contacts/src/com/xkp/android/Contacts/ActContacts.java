@@ -107,15 +107,15 @@ btnLeft.setText(application.getSwitchText(swtStates.getDisplayedChild() + 1));
 		public String getSwitchText(Integer idx) {
 			if (idx < 0)
 {
-	idx = this.prop_application_swtTabsTexts.size;
+	idx = application.prop_application_swtTabsTexts.size;
 }
 else
 {
-	if (idx >= this.prop_application_swtTabsTexts.size)
+	if (idx >= application.prop_application_swtTabsTexts.size)
 	{
-		idx = idx % this.prop_application_swtTabsTexts.size;
+		idx = idx % application.prop_application_swtTabsTexts.size;
 	}
 }
-return this.prop_application_swtTabsTexts.get(idx);
+return application.prop_application_swtTabsTexts.get(idx);
 		}
 }

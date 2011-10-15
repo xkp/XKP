@@ -20,6 +20,9 @@ const str SUnknownType("Cannot resolve type");
 const str SUnknownTypeFromExpression("Cannot deduce type from assigned expression");
 const str SCannotCast("Cannot cast variable value");
 const str SIncrementOperatorOnlyTop("Increment operators cannot be used as part of an expression");
+const str SCannotResolveParam("Cannot resolve constructor parameter");
+const str SCannotResolveCtorProperty("Cannot resolve constructor property");
+const str STooManyParamsInCtor("Too many params in constructor");
 
 //variable_gather
 variable_gather::variable_gather(XSSContext ctx):
@@ -677,6 +680,12 @@ str base_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
                         //do nothing
                         break;
                       }
+                    case RESOLVE_TYPE:
+                      {
+                        XSSType type = si.value;
+                        result = type->id();
+                        break;
+                      }
                     default:
                       assert(false); //trap use case
                   }
@@ -1224,7 +1233,46 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 
             result << ")";
 
-            push_rendered(result.str(), op_prec, variant(), caller); //td: we could find out the type here or something
+            XSSType instantiation = ctx_->get_type(caller);
+            if (instantiation)
+              {
+                //grab parameter info
+                //td: types
+                DynamicArray info(new dynamic_array);
+                std::vector<str>::iterator pit = params.begin();
+                std::vector<str>::iterator pnd = params.end();
+                for(; pit != pnd; pit++)
+                  {
+                    XSSObject param_info(new xss_object());
+                    param_info->add_attribute("value", *pit);
+
+                    info->push_back(param_info);
+                  }
+
+                XSSObject type(instantiation);
+                str xss = type->get<str>("instantiator", str());
+                if (!xss.empty())
+                  {
+                    //prepare rendering parameters
+                    param_list args;
+                    args.add("type", instantiation);
+                    args.add("args", info);
+
+                    XSSCompiler compiler = ctx_->resolve("compiler");
+                    XSSContext  ctx(new xss_context(ctx_));
+                    XSSRenderer rend = compiler->compile_xss_file(xss, ctx);
+                    str         res  = rend->render(XSSObject(), &args); 
+                    push_rendered(res, op_prec, variant());
+                  }
+                else
+                  {
+                    Language lang = ctx_->get_language();
+                    str      lr = lang->instantiate(instantiation, info);
+                    push_rendered(lr, op_prec, variant(), caller); 
+                  }
+              }
+            else
+              push_rendered(result.str(), op_prec, variant(), caller); //td: we could find out the type here or something
             break;
           }
 
@@ -1261,6 +1309,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 			      std::vector<str>::reverse_iterator pit = params.rbegin();
 			      std::vector<str>::reverse_iterator pnd = params.rend();
 			      int i = 0;
+
 			      for(; pit != pnd; pit++, i++)
 			        {
   				      result << *pit;
@@ -1450,6 +1499,93 @@ str base_lang::render_expression(expression& expr, XSSContext ctx)
     variant              vv   = compile_expression(expr, ctx);
     IExpressionRenderer* rend = vv;
     return rend->render();
+  }
+
+str base_lang::instantiate(XSSType type, DynamicArray params)
+  {
+    str       class_name  = type->output_id();
+    XSSObject ctor_params = type->find("constructor_params");
+    
+    std::stringstream ss;
+    ss << "new " << class_name << "(";
+    if (ctor_params)
+      {
+        std::vector<XSSObject> args = ctor_params->find_by_class("parameter");
+        std::vector<XSSObject>::iterator it = args.begin();
+        std::vector<XSSObject>::iterator nd = args.end();
+
+        bool   first = true;
+        size_t curr  = 0;
+        for(; it != nd; it ++)
+          {
+            str       value;
+            XSSObject p = *it;
+            str       constant = p->get<str> ("constant", str());
+            str       prperty  = p->get<str> ("property", str());
+            bool      runtime  = p->get<bool>("runtime",  false);
+            if (!constant.empty())  
+              {
+                value = constant;
+              }
+            else if (runtime)
+              {
+                if (curr < params->size())
+                  {
+                    XSSObject param_value = params->at(curr++);
+                              value       = param_value->get<str>("value", str()); assert(!value.empty());
+                  }
+              }
+
+            if (value.empty())
+              {
+                if (prperty.empty())
+                  {
+                    param_list error;
+                    error.add("id", SLanguage);
+                    error.add("desc", SCannotResolveParam);
+                    error.add("type", type->id());
+                    error.add("parameter", p->id());
+                    xss_throw(error);
+                  }                
+
+                XSSProperty prop = type->get_property(prperty);
+                if (!prop)
+                  {
+                    param_list error;
+                    error.add("id", SLanguage);
+                    error.add("desc", SCannotResolveCtorProperty);
+                    error.add("type", type->id());
+                    error.add("property", prperty);
+                    xss_throw(error);
+                  }                
+
+                value = prop->render_value();
+              }
+
+            if (first)
+              first = false;
+            else
+              ss << ", ";
+
+            ss << value;
+          }
+      }
+    else
+      {
+        if (params->size() > 0)
+          {
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", STooManyParamsInCtor);
+            error.add("type", type->id());
+            error.add("expected", 0);
+            error.add("got", (int)params->size());
+            xss_throw(error);
+          }
+      }
+
+    ss << ")";
+    return ss.str();
   }
 
 void base_lang::compile_property(XSSProperty prop, XSSContext ctx)

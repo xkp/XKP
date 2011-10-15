@@ -493,16 +493,16 @@ variant java_lang::compile_args(param_list_decl& params, XSSContext ctx)
 
 str java_lang::resolve_this(XSSContext ctx)
   {
-    XSSObject sub = variant_cast<XSSObject>(ctx->resolve("#this", RESOLVE_CONST), XSSObject());
-    if (sub)
-      return sub->output_id();
+    //XSSObject sub = variant_cast<XSSObject>(ctx->resolve("#this", RESOLVE_CONST), XSSObject());
+    //if (sub)
+    //  return sub->output_id();
 
-    return "this";
-    //XSSObject ths = ctx->get_this();
-    //if (ths)
-    //  return ths->output_id();
+    //return "this";
+    XSSObject ths = ctx->get_this();
+    if (ths)
+      return ths->output_id();
 
-    //return str();
+    return str();
   }
 
 bool java_lang::can_cast(XSSType left, XSSType right)

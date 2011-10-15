@@ -35,15 +35,15 @@ Double currentX = ev.getX();
 Double currentY = ev.getY();
 if (action == MotionEvent.ACTION_DOWN)
 {
-	this.prop_btnTouchme_mStartX = currentX;
-	this.prop_btnTouchme_mStartY = currentY;
+	btnTouchme.prop_btnTouchme_mStartX = currentX;
+	btnTouchme.prop_btnTouchme_mStartY = currentY;
 }
 else
 {
 	if (action == MotionEvent.ACTION_UP)
 	{
-		Double delthaX = currentX - this.prop_btnTouchme_mStartX;
-		Double delthaY = currentY - this.prop_btnTouchme_mStartY;
+		Double delthaX = currentX - btnTouchme.prop_btnTouchme_mStartX;
+		Double delthaY = currentY - btnTouchme.prop_btnTouchme_mStartY;
 		Double angle = Math.atan2(delthaY, delthaX);
 		if (angle < 0)
 		{
@@ -52,31 +52,31 @@ else
 		Double abs_delthaX = Math.abs(delthaX);
 		Double abs_delthaY = Math.abs(delthaY);
 		Double max_deltha = Math.max(abs_delthaX, abs_delthaY);
-		if (max_deltha < this.prop_btnTouchme_MAX_DELTHA / 10)
+		if (max_deltha < btnTouchme.prop_btnTouchme_MAX_DELTHA / 10)
 		{
 			((XKPLayout.LayoutParams) btnTouchme.getLayoutParams()).setPlacement(pl);
 			return;
 		}
 		else
 		{
-			if (max_deltha < this.prop_btnTouchme_MAX_DELTHA)
+			if (max_deltha < btnTouchme.prop_btnTouchme_MAX_DELTHA)
 			{
 				return;
 			}
 		}
-		if (angle >= this.prop_btnTouchme_FIRST_QUATER && angle <= this.prop_btnTouchme_SECOND_QUATER)
+		if (angle >= btnTouchme.prop_btnTouchme_FIRST_QUATER && angle <= btnTouchme.prop_btnTouchme_SECOND_QUATER)
 		{
 			pl = XKPLayout.PL_TOP;
 		}
 		else
 		{
-			if (angle >= this.prop_btnTouchme_SECOND_QUATER && angle <= this.prop_btnTouchme_THIRD_QUATER)
+			if (angle >= btnTouchme.prop_btnTouchme_SECOND_QUATER && angle <= btnTouchme.prop_btnTouchme_THIRD_QUATER)
 			{
 				pl = XKPLayout.PL_LEFT;
 			}
 			else
 			{
-				if (angle >= this.prop_btnTouchme_THIRD_QUATER && angle <= this.prop_btnTouchme_FOURTH_QUATER)
+				if (angle >= btnTouchme.prop_btnTouchme_THIRD_QUATER && angle <= btnTouchme.prop_btnTouchme_FOURTH_QUATER)
 				{
 					pl = XKPLayout.PL_BOTTOM;
 				}
@@ -86,7 +86,7 @@ else
 				}
 			}
 		}
-		((XKPLayout.LayoutParams) this.getLayoutParams()).setPlacement(pl);
+		((XKPLayout.LayoutParams) btnTouchme.getLayoutParams()).setPlacement(pl);
 	}
 }
 			}

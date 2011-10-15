@@ -1,0 +1,15 @@
+<xss:code>
+for(var mthd in application.methods)
+{
+    var type = mthd.code.type;
+    if (type)
+    {
+        compiler.log("Return type: " + type.id);
+    }
+    
+	out()
+	{
+		<xss:e v="mthd.code.render()"/>
+	}
+}
+</xss:code>

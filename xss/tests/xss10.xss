@@ -1,4 +1,6 @@
 <xss:code>
+	compiler.log(11 % 2);
+
 	bool flag = true;
 	if(flag == true)
 	{
@@ -21,5 +23,7 @@
 				}
 			}
 		}
+		
 	}
+	
 </xss:code>

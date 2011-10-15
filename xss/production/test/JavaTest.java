@@ -7,10 +7,8 @@ import java.util.Arrays;
 public class JavaTest {
 				private static Class_instance1 instance1;
 	private static class Class_instance1 {
-				private Double prop__xvalue
-			 = 100.199997 	; 
-				private Object prop__svalue
-				; 
+			private Double prop__xvalue = 100.199997;
+			private Object prop__svalue;
 		public Double test0(Integer value) {
 			Integer a = value;
 Double b = 5.000000;
@@ -36,12 +34,9 @@ if (!has_property)
 		}
 	}
 	private static class Class_application {
-				private Integer prop__lvalue
-				; 
-				private String prop__yvalue
-			 = "string v" 	; 
-				private ArrayList<String> prop__xvalue
-			 = new ArrayList(Arrays.asList( new Object [] {"value1", "value2", "value3"} )) 	; 
+			private Integer prop__lvalue;
+			private String prop__yvalue = "string v";
+			private ArrayList<String> prop__xvalue = new ArrayList(Arrays.asList( new Object [] {"value1", "value2", "value3"} ));
 		public String app_test(Integer value) {
 			return "string value";
 		}
@@ -62,9 +57,9 @@ x2 = instance1.ps_value;
 instance1.prop__svalue = x0;
 Object x3;
 x3 = instance1.prop__svalue;
-this.prop__lvalue = x0;
+application.prop__lvalue = x0;
 Integer x4;
-x4 = this.prop__lvalue;
+x4 = application.prop__lvalue;
 Integer ivar = 100;
 String svar = String.valueOf(ivar);
 Double fval = Double.valueOf(svar);
@@ -116,8 +111,8 @@ else
 	}
 }
 String rmthd;
-rmthd = this.app_test(10);
-String thd = application.this.app_test(2);
+rmthd = application.app_test(10);
+String thd = application.app_test(2);
 Object mthd;
 mthd = instance1.test0(10);
 mthd = instance1.test0(10, "a", -2);

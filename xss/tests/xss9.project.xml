@@ -1,0 +1,8 @@
+<project entry_point="xss9.xss" language="js" target="xss9.app.xml">
+    <include src="xss9.classes.xs"/>
+
+    <options event_scope="instance"/>
+    <idiom src="../idioms/test/idiom.xml"/>
+</project>
+           
+         

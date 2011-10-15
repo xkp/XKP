@@ -75,27 +75,27 @@ Log: output_xml: visible && output_id: VISIBLE
 					void onClick() {
 				
 						int pl = XKPLayout.PL_LEFT;
-((XKPLayout.LayoutParams) this.getLayoutParams()).setPlacement(((XKPLayout.LayoutParams) this.getLayoutParams()).getPlacement() + 1);
-if (this.getVisibility() == View.VISIBLE)
+((XKPLayout.LayoutParams) btn.getLayoutParams()).setPlacement(((XKPLayout.LayoutParams) btn.getLayoutParams()).getPlacement() + 1);
+if (btn.getVisibility() == View.VISIBLE)
 {
-	this.setVisibility(View.INVISIBLE);
+	btn.setVisibility(View.INVISIBLE);
 }
 else
 {
-	if (this.getVisibility() == View.INVISIBLE)
+	if (btn.getVisibility() == View.INVISIBLE)
 	{
-		this.setVisibility(View.GONE);
+		btn.setVisibility(View.GONE);
 	}
 	else
 	{
-		this.setVisibility(View.VISIBLE);
+		btn.setVisibility(View.VISIBLE);
 	}
 }
-this.setEnabled(!this.isEnabled());
-this.layout(this.getLeft(), this.getTop(), this.getLeft() + this.getHeight() * 2, this.getBottom());
+btn.setEnabled(!btn.isEnabled());
+btn.layout(btn.getLeft(), btn.getTop(), btn.getLeft() + btn.getHeight() * 2, btn.getBottom());
 String swp = application.sameName;
-application.sameName = this.prop_btn_sameName;
-this.prop_btn_sameName = swp;
+application.sameName = btn.prop_btn_sameName;
+btn.prop_btn_sameName = swp;
 					
 					}
 				
@@ -142,54 +142,122 @@ Log: Events size: 0
 Success are greateful
 ===[ java3.project.xml ]================
 
+Log: Rendering method: check_type
+Log: Rendering method: foobar
+Log: Rendering event: click
+Log: Rendering property: foo
+Log: Rendering property: typing
+Log: Rendering property: simple
+Log: Rendering property: read_only
+Log: Rendering property: writable
+Log: Rendering property: mixed
+Log: Rendering property: bar
 
-			public Integer check_type() {
-				Integer a;
+
+
+
+		public Integer check_type() {
+			Integer a;
 a = 1;
 Object b;
-this.typing = a;
+t1.typing = a;
 return a;
-			}
-		
-			public String foobar(Integer v) {
-				this.foo = t2.foo + 10;
-t2.set_bar(this.foo + this.get_bar() + "++");
-set_complex(this, t2.get_bar() + this.get_bar() + this.foo + "--");
-set_some_int(this, this.get_some_int() - 1);
+		}
+	
+
+
+
+
+		public String foobar(Integer v) {
+			t1.foo = t2.foo + 10;
+t2.set_bar(t1.foo + t1.get_bar() + "++");
+set_complex(t1, t2.get_bar() + t1.get_bar() + this.foo + "--");
+set_some_int(t1, t1.get_some_int() - 1);
 set_some_int(t2, t2.get_some_int() + 1);
-set_some_int(this, this.get_some_int() + 20);
-set_more(this).complex(get_more(this).complex() + 1);
+set_some_int(t1, t1.get_some_int() + 20);
+set_more(t1).complex(get_more(t1).complex() + 1);
 set_more(t2).complex(get_more(t2).complex() - 1);
 ArrayList arr = new ArrayList(Arrays.asList( new Object [] {} ));
 arr.add(10);
-this.writable_set(this.read_only_get() + this.simple + this.mixed_get());
-this.mixed_set(this.writable);
-return this.get_bar();
+t1.writable_set(t1.read_only_get() + t1.simple + t1.mixed_get());
+t1.mixed_set(t1.writable);
+return t1.get_bar();
+		}
+	
+
+
+
+
+
+			private void onClick() {
+		
+				ArrayList<Object> list = new ArrayList(Arrays.asList( new Object [] {1, 2, "item", 3.140000, "vowel"} ));
+for(Object i : list)
+{
+	System.out.println(i);
+}
+			
 			}
 		
-				private Integer typing;
+
+
+
+
+
+
+
+
+
+
+			private Integer prop__typing;
+		
+
+
+
+
+
+			private Integer prop__simple = 50;
+		
+
+
+
+
+
+			public Double prop__read_only_get() {
+				return 10.000000;
+			}
+		
+
+
+
+
+
+			private Object prop__writable;
 			
-				private Integer simple = 50;
+			public void prop__writable_set(Object value) {
+				prop__writable = value;
+				console.log(value);
+			}
+		
+
+
+
+
+
+			public Integer prop__mixed_get() {
+				return 10;
+			}
 			
-				public Object read_only_get() {
-					return 10.000000;
-				}
-			
-				private Object writable;
-				
-				public void writable_set(Object value) {
-					writable = value;
-					console.log(value);
-				}
-			
-				public Object mixed_get() {
-					return 10;
-				}
-				
-				public void mixed_set(Object value) {
-					console.log("Something");
-				}
-			
+			public void prop__mixed_set(Object value) {
+				console.log("Something");
+			}
+		
+
+
+
+
+
+
 Success are greateful
 ===[ jquery1.project.xml ]================
 
@@ -793,6 +861,20 @@ this is Louis
             Thats all folks
             It was a pleasure
         Success are greateful
+===[ xss10.project.xml ]================
+
+
+						new classy.mthd_1()(new classy.mthd_2(3));
+new classy.instance1.mthd_1(2);
+Boolean flag = true;
+if (flag == true)
+{
+	flag = false;
+}
+ArrayList a;
+a.add(2);
+					
+Success are greateful
 ===[ xss2.project.xml ]================
 
 
@@ -872,6 +954,20 @@ this is Louis
         t_xss5_1 
      
         t_xss8 
+     
+            id: click output_id: onClick
+        
+				Interface: IClick
+			 
+            id: up output_id: onMouseUp
+        
+				Interface: IMouseUp
+			 
+            id: down output_id: create
+         
+        t_xss9_1 
+     
+        t_xss9_2 
     
 Success are greateful
 ===[ xss3.project.xml ]================
@@ -1031,7 +1127,12 @@ set_more(t2).complex(get_more(t2).complex() - 1);
 Success are greateful
 ===[ xss9.project.xml ]================
 
+Log: Return type: t_xss9_2
 
-					classy.mthd_1(classy.mthd_2(3));
-				
+		var a = new t_xss9_1(myManager, 10, null);
+var b = new t_xss9_1(myManager, 20, 10);
+var c = new t_xss9_2();
+return c;
+
+	
 Success are greateful

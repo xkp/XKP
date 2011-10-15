@@ -12,6 +12,11 @@
 	string prop_type = "Object";
 	if(p.type != null)
 		prop_type = p.type.output_id;
+		
+	string ret_type = prop_type;
+	if(p.get)
+		if(p.get.type)
+			ret_type = p.get.type.output_id;
 	
 	string inst_name = "";
 	if(iname)
@@ -30,7 +35,7 @@
 	{
 		out(indent = 1)
 		{
-			public <xss:e>prop_type</xss:e> <xss:e>p.output_id</xss:e>_get() <xss:open_brace/>
+			public <xss:e>ret_type</xss:e> <xss:e>p.output_id</xss:e>_get() <xss:open_brace/>
 				<xss:e>p.get.render()</xss:e>
 			<xss:close_brace/>
 			
@@ -55,13 +60,9 @@
 	else
 	if(p.get)
 	{
-		//if(p.get.type)
-		//	compiler.log(p.get.type.output_id);
-		//var type = p.get.type;
-		
 		out(indent = 1)
 		{
-			public <xss:e>prop_type</xss:e> <xss:e>p.output_id</xss:e>_get() <xss:open_brace/>
+			public <xss:e>ret_type</xss:e> <xss:e>p.output_id</xss:e>_get() <xss:open_brace/>
 				<xss:e>p.get.render()</xss:e>
 			<xss:close_brace/>
 		}

@@ -3,6 +3,7 @@
 		<class id="classx">
 			<property id="px_value" type="int"/>
 			<property id="ps_value" type="var"/>
+			<property id="arr" type="array"/>
 			
 			<method id="mthd_1" type="int"/>
 		</class>
