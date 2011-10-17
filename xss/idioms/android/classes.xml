@@ -243,6 +243,8 @@
 			<property id="layout_margin" ns="android" type="int"/>
 			<property id="layout_weight" ns="android" type="float"/>
 			-->
+			
+			<import id="ITouchListener"/>
 		</class>
 		
 		<class id="ITextView" super="IWidget">

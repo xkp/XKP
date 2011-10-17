@@ -7,6 +7,7 @@ import java.util.Arrays;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+
 <xss:marker id="imports"/>
 
 public class Act<xss:e value="appName"/> 
@@ -21,6 +22,8 @@ public class Act<xss:e value="appName"/>
 	
 	for(var inst in android.instances)
 	{
+		//TRACE: log
+		//compiler.log("View: " + inst.id);
 		if(inst.id && inst.id != application.id)
 		{
 			out(indent = 1, marker = "declarations")
@@ -36,6 +39,8 @@ public class Act<xss:e value="appName"/>
 			//TODO: it's necessary to implement vector, stack, queue and set containers in vm
 			for(var i in inst.imports)
 			{
+				//TRACE: log
+				//compiler.log("Import: " + i.import);
 				bool found1 = false;
 				for(var imp in imports)
 				{

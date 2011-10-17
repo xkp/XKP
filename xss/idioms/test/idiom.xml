@@ -3,8 +3,11 @@
         //testing arrays
         <class id="t_arrays">
             <array id="some_array">
+                <object what="something_"/>
                 <object what="something"/>
             </array>
+			
+			<event id="touch" />
         </class>
 		
 		<class id="t_arrays2">
@@ -21,6 +24,18 @@
 			
 			<import id="t_arrays2"/>
         </class>
+		
+		<class id="t_arrays3">
+			<property id="test_1" type="string"/>
+			
+			<import id="t_arrays"/>
+		</class>
+		
+		<class id="t_super_merged" super="t_arrays3">
+			<property id="test_2" type="string"/>
+			
+			<import id="t_arrays2"/>
+		</class>
 
         //testing imports
         <class id="t_base_import">

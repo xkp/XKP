@@ -119,7 +119,7 @@ struct base_expr_renderer : IExpressionRenderer,
     virtual void push(variant operand, bool top);
     virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top);
 
-    private:
+    protected:
       XSSType    type_;
 
       XSSObject   get_instance(variant v);

@@ -3,4 +3,6 @@
     <t_arrays1 id="t2"/>
 	
 	<t_super_derived id="t3"/>
+	
+	<t_super_merged id="t4"/>
 </application>

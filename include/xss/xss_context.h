@@ -357,11 +357,14 @@ class xss_property : public xss_object
 		  virtual void copy(XSSObject obj);
 			virtual XSSType type();
 
-      variant   get;
-		  variant   set;
+      variant   get_;
+		  variant   set_;
 		  size_t    flags;
 		  XSSObject this_;
 		  variant   value_;
+
+      XSSObject get_get();
+      XSSObject get_set();
 
       void    set_value(const variant value, XSSType type);
       str     render_value();
@@ -488,9 +491,12 @@ struct xss_property_schema : xss_object_schema<xss_property>
 
         readonly_property<str>("name", &xss_property::get_name);
 
-        property_("get",   &xss_property::get);
-        property_("set",   &xss_property::set);
+        property_("get",   &xss_property::get_);
+        property_("set",   &xss_property::set_);
         property_("value", &xss_property::value_);
+
+        readonly_property<XSSObject>("get_", &xss_property::get_get);
+        readonly_property<XSSObject>("set_", &xss_property::get_set);
 
         method_<str, 0>("render_value", &xss_property::render_value);
         //td: !!! get rid of

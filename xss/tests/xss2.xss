@@ -1,23 +1,23 @@
 <xss:code>
 for(var i in application.children)
 {
-    if (i.some_array)
-    {
-        for(var j in i.some_array)
-        {
-            out()
-            {
-                <xss:e v="j.what"/>
-            }
-        }
-    }
+	out()
+	{
+		instance id: <xss:e v="i.id"/>
+	}
+	
+	if (i.some_array)
+	{
+		for(var j in i.some_array)
+		{
+			out()
+			{
+				<xss:e v="j.what"/>
+			}
+		}
+	}
 	else
 	{
-		out()
-		{
-			instance id: <xss:e v="i.id"/>
-		}
-		
 		for(var ev in i.events)
 		{
 			out()
@@ -39,17 +39,17 @@ for(var i in application.children)
 
 for(var t in test_idiom.types)
 {
-    out() 
-    { 
-        <xss:e v="t.id"/> 
-    }
+	out()
+	{
+		<xss:e v="t.id"/> 
+	}
 
-    for(var e in t.events)
-    {
-        out() 
-        { 
-            id: <xss:e v="e.id"/> output_id: <xss:e v="e.output_id"/>
-        }
+	for(var e in t.events)
+	{
+		out()
+		{
+			id: <xss:e v="e.id"/> output_id: <xss:e v="e.output_id"/>
+		}
 		
 		if(e.interface)
 		{
@@ -58,6 +58,6 @@ for(var t in test_idiom.types)
 				Interface: <xss:e v="e.interface"/>
 			}
 		}
-    }
+	}
 }
 </xss:code>
