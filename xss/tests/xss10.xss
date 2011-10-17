@@ -2,6 +2,7 @@
 	//ERROR: td: !!
 	//compiler.log(11 % 2);
 
+    compiler.log("De bug in");
 	bool flag = true;
 	if(flag == true)
 	{

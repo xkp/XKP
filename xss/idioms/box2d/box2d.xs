@@ -74,17 +74,19 @@ on render_types()
 	compiler.log("BOX2D: Not Yet Rendering Types...");
 }
 
-on render_instances()
+on render_instances(var target)
 {
     if (!world)
         compiler.error("Box2d requires a physics_world object");
+    
+    if (!target)
+        target = instances;
 
-    for(var i in instances)
+    for(var i in target)
     {
         if (i.class_name == "physics_world")
           continue;
 
-        compiler.log(i.id);
 		compiler.xss("body.xss", i, world);
     }
 

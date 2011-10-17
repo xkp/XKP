@@ -17,6 +17,7 @@ if (!is_class)
 
 if (alias)
 {
+    compiler.log(alias);
     prop_name = alias + "." + prop.name;
 }    
 
@@ -66,6 +67,7 @@ else
 
     if (prop.type.is_object && prop.value)
     {
+        compiler.log(prop.id);
         compiler.xss("instance.xss", prop.value, alias = prop_name );
     }
     else
@@ -82,14 +84,18 @@ else
         {
             out()
             {
-                <xss:e>prop.name</xss:e> <xss:e value="assign"/> <xss:e value="value"/>,
+                <xss:e value="prop_name"/> <xss:e value="assign"/> <xss:e value="value"/>,
             }
         }
         else
         {
+            string path = owner.output_id;
+            if (alias)
+                path = alias;
+                
             out()
             {
-                <xss:e v="compiler.property_set(prop, owner.output_id, value)"/>
+                <xss:e v="compiler.property_set(prop, path, value)"/>
             }
         }
     }

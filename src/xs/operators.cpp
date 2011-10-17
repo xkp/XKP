@@ -597,7 +597,9 @@ operator_registry::operator_registry()
     //string operators
     register_operator(op_plus, type_schema<str>(), type_schema<str>(), new add_<str, str>() );
     register_operator(op_equal, type_schema<str>(), type_schema<str>(), new equal_<str, str>() );
+    register_operator(op_equal, type_schema<bool>(), type_schema<bool>(), new equal_<bool, bool>() );
     register_operator(op_notequal, type_schema<str>(), type_schema<str>(), new notequal_<str, str>() );
+    register_operator(op_notequal, type_schema<bool>(), type_schema<bool>(), new notequal_<bool, bool>() );
     combine_types<string_types, numerical_types, add_str_number>(*this, op_plus);
     combine_types<numerical_types, string_types, add_number_str>(*this, op_plus);
 

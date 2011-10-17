@@ -520,6 +520,7 @@ XSSType expr_type_resolver::resolve_type(variant var)
 //expr_object_resolver
 expr_object_resolver::expr_object_resolver(XSSContext ctx) :
   one_opnd_(true),
+  not_found_(false),
   ctx_(ctx)
   {
   }
@@ -527,6 +528,8 @@ expr_object_resolver::expr_object_resolver(XSSContext ctx) :
 variant expr_object_resolver::get()
 	{
     variant result;
+    if (not_found_)  
+      return result;
 
 		assert(stack_.size() <= 1);
 
@@ -557,6 +560,9 @@ void expr_object_resolver::push(variant operand, bool top)
 
 void expr_object_resolver::exec_operator(operator_type op, int pop_count, int push_count, bool top)
 	{
+    if (not_found_)
+      return;
+
     one_opnd_ = false;
     variant result;
 
@@ -564,11 +570,35 @@ void expr_object_resolver::exec_operator(operator_type op, int pop_count, int pu
 			{
 				case op_dot:
 					{
-						expression_identifier arg1  = stack_.top(); stack_.pop();
-						expression_identifier arg2  = stack_.top(); stack_.pop();
+						expression_identifier arg1 = stack_.top(); stack_.pop();
+						variant v2 = stack_.top(); stack_.pop();
 
             resolve_info left;
-            if (ctx_->resolve(arg2.value, left))
+            bool         found = true; 
+            if (v2.is<expression_identifier>())
+              {
+                expression_identifier arg2 = v2;
+                if (!ctx_->resolve(arg2.value, left))
+                  {
+                    found = false;
+                  }
+              }
+            else if (v2.is<XSSProperty>())
+              {
+                left.what = RESOLVE_PROPERTY;
+                left.value = (XSSProperty)v2;
+              }
+            else if (v2.is<XSSType>())
+              {
+                left.what = RESOLVE_TYPE;
+                left.value = (XSSType)v2;
+              }            
+            else 
+              {
+                found = false;
+              }            
+            
+            if (found)
               {
                 resolve_info right;
                 right.left = &left;
@@ -577,19 +607,46 @@ void expr_object_resolver::exec_operator(operator_type op, int pop_count, int pu
                     result = right.value;
                   }
               }
+            else not_found_ = true;
 
             stack_.push(result);
             break;
 					}
         case op_index:
           {
-            int index = stack_.top(); stack_.pop();
+            stack_.pop();
             expression_identifier arg2 = stack_.top(); stack_.pop();
 
             resolve_info left;
             if (ctx_->resolve(arg2.value, left))
               {
-                result = left.value;
+                switch (left.what)
+                  {
+                    case RESOLVE_PROPERTY:
+                      {
+                        XSSProperty prop      = left.value;
+                        XSSType     prop_type = prop->type();
+                        
+                        if (prop_type->is_array())
+                          result = prop_type->array_type();
+                        else
+                          assert(false); //td: throw
+                        break;
+                      }
+                    case RESOLVE_VARIABLE:
+                      {
+                        XSSType var_type = left.value;
+                        if (var_type->is_array())
+                          result = var_type->array_type();
+                        else
+                          assert(false); //td: throw
+                      }
+                    default:
+                      {
+                        assert(false); //use case
+                        result = left.value;
+                      }
+                  }
               }
 
             stack_.push(result);
@@ -597,7 +654,14 @@ void expr_object_resolver::exec_operator(operator_type op, int pop_count, int pu
           }
 
         default:
-          assert(false);//trap other case
+          {
+            //we'll ignore this stuff for the time being
+            for(int i = 0; i < pop_count; i++)
+              stack_.pop();
+
+            for(int i = 0; i < push_count; i++)
+              stack_.push(variant());
+          }
       }
   }
 
@@ -662,7 +726,7 @@ void expression_analizer::analyze(expression& expr, XSSContext ctx)
                 expression_identifier ei = es.right.pop_first();
                 property_name_ = ei.value; 
 
-                XSSObject   instance = lang_utils::object_expr(path_, ctx);
+                XSSObject   instance = variant_cast<XSSObject>(lang_utils::object_expr(path_, ctx), XSSObject());
                 if (instance)
                   property_ = instance->get_property(property_name_);
                 else

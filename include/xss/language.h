@@ -113,6 +113,7 @@ struct expr_object_resolver : expression_visitor
       expr_stack stack_;
       XSSContext ctx_;
       bool       one_opnd_;
+      bool       not_found_;
   };
 
 struct expression_analizer
@@ -180,123 +181,6 @@ struct lang_utils
 
                     //do assigning 
                     return render_assignment<T>(es.left, op, ctx, value);
-
-								    //td: !!!! clutter
-                    ////get the assigner
-            //        T assign_renderer(es.left, ctx);
-								    //assign_info ai;
-            //        ai.data = value;
-								    //assign_renderer.assigner = &ai;
-
-								    //es.left.visit(&assign_renderer);
-
-								    //str assign = assign_renderer.get();
-
-								    //str result;
-								    //switch(ai.type)
-									   // {
-										  //  case FN_CALL:
-											 //   {
-												//    if (simple_assign)
-												//	    result = assign + "(" + value + ")";
-												//    else
-												//	    {
-												//		    //we need to resolve the getter as well for *= operators
-            //                    T getter(es.left, ctx);
-												//		    es.left.visit(&getter);
-
-												//		    //this is lame
-            //                    str op_str = lang_utils::operator_string(op);
-
-												//		    assert(op_str.size() > 1);
-												//		    op_str.erase(op_str.end() - 1);
-
-												//		    result = assign + "(" + getter.get() + " " + op_str + " " + value + ")";
-												//	    }
-												//    break;
-											 //   }
-
-										  //  case VANILLA:
-											 //   {
-            //                resolve_info ri;
-            //                result = assign + " " + lang_utils::operator_string(op) + " " + value;
-
-            //                if (ctx->resolve(assign, ri))
-            //                  {
-            //                    if (ri.type && ri.type->is_array())
-            //                      {
-            //                        if (op == op_plus_equal || op == op_minus_equal)
-            //                          {
-            //                            result = assign_renderer.array_operation(assign, value, op);
-            //                          }
-            //                        else if (simple_assign && ai.flag && !ai.data.empty())
-            //                          {
-            //                            result = ai.data;
-            //                          }
-            //                      }
-            //                  }
-
-												//    break;
-											 //   }
-										  //  case XSS_RESOLVE:
-											 //   {
-            //                T getter_(es.left, ctx);
-												//    es.left.visit(&getter_);
-												//    str getter = getter_.get();
-
-												//    if (!simple_assign)
-												//	    {
-            //                    str op_str = lang_utils::operator_string(op);
-												//		    assert(op_str.size() > 1);
-												//		    op_str.erase(op_str.end() - 1);
-
-												//		    value = getter + " " + op_str + " " + value;
-												//	    }
-
-												//		//lets find out if the getter is a single word (like "width") or a composite (like "object.width")
-												//		//if composite we'll get rid of the last accesor (width) to get the actual accesor
-
-												//		Language lang = ctx->get_language();
-												//		str separator = lang->resolve_separator();
-												//		size_t last_dot = getter.find_last_of(separator);
-												//    if (last_dot != str::npos)
-												//	    {
-												//		    size_t count = getter.size() - last_dot + 1;
-												//		    getter.erase(getter.end() - count, getter.end());
-												//	    }
-												//    else
-												//			getter = lang->resolve_this(ctx);
-
-												//    //replace quotes, life is hard
-												//    for(size_t i = 0; i < assign.size(); i++)
-												//	    {
-												//		    if (assign[i] == 39)
-												//			    assign[i] = '"';
-												//	    }
-
-            //                XSSContext assign_ctx(new xss_context(XSSContext()));
-												//    assign_ctx->register_symbol(RESOLVE_CONST, "value",	value);
-												//    assign_ctx->register_symbol(RESOLVE_CONST, "caller", getter);
-
-												//    XSSCompiler compiler = ctx->resolve("compiler");
-            //                XSSRenderer renderer = compiler->compile_xss(assign, assign_ctx);
-
-												//    result = renderer->render(XSSObject(), null);
-												//    break;
-											 //   }
-
-										  //  case FN_XSS_CALL:
-											 //   {
-												//    result = assign + "(" + value + ")";
-
-												//    break;
-											 //   }
-
-										  //  default:
-											 //   assert(false); //trap use cases
-									   // }
-
-								    //return result;
 							    }
 					    }
 			    }
