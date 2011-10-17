@@ -102,7 +102,6 @@ struct base_expr_renderer : IExpressionRenderer,
     base_expr_renderer(expression& expr, XSSContext ctx);
 
     //interface, verbatim from 0.8, got to keep it working
-    virtual str resolve_assigner(variant operand, XSSObject instance, assign_info* ai);
     virtual str operand_to_string(variant operand, XSSObject parent = XSSObject(), int* prec = null);
     virtual str array_operation(const str& left, const str& right, operator_type op);
     virtual str get();

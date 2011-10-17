@@ -815,92 +815,6 @@ str xss_compiler::replace_identifier(const str& s, const str& src, const str& ds
 		return result;
 	}
 
-variant xss_compiler::resolve_property(const str& prop, variant parent)
-	{
-    //td: !!! clutter
-    XSSContext ctx = current_context();
-    XSSObject  base;
-		str        path_str;
-		if (parent.is<str>())
-			{
-				str          parent_id = variant_cast<str>(parent, str());
-        resolve_info parent_ri;
-        parent_ri.search_this = false;
-        parent_ri.output      = &path_str;
-        if (ctx->resolve_path(lang_utils::unwind(parent_id), parent_ri))
-          {
-            if (parent_ri.what != RESOLVE_INSTANCE)
-              {
-                param_list error;
-                error.add("id", SProjectError);
-                error.add("desc", SNotAnInstance);
-                error.add("searching for", prop);
-                xss_throw(error);
-              }
-
-              base = parent_ri.value;
-          }
-        else
-          {
-            param_list error;
-            error.add("id", SProjectError);
-            error.add("desc", SCannotResolve);
-            error.add("what", prop);
-            xss_throw(error);
-          }
-			}
-		else
-			base = variant_cast<XSSObject>(parent, XSSObject());
-
-    ctx = XSSContext(new xss_context(ctx));
-    ctx->set_this(base);
-
-    str path;
-    resolve_info ri;
-    resolve_info left;
-    ri.output = &path;
-    if (base)
-      {
-        left.what = RESOLVE_INSTANCE;
-        left.value = base;
-        ri.left = &left;
-      }
-
-    XSSObject   result(new xss_object);
-    std::vector<str> prop_path = lang_utils::unwind(prop);
-		if (ctx->resolve_path(prop_path, ri))
-      {
-        if (ri.what != RESOLVE_PROPERTY)
-          {
-            param_list error;
-            error.add("id", SProjectError);
-            error.add("desc", SNotAProperty);
-            error.add("what", prop);
-            xss_throw(error);
-          }
-
-        XSSProperty prop = ri.value;
-        result->add_attribute("prop", prop);
-		    result->add_attribute("prop_name", prop->id());
-
-        if (!path_str.empty())
-          {
-            path = path_str + ctx->get_language()->resolve_separator() + path;
-          }
-      }
-		else
-      {
-			  result->add_attribute("prop", variant());
-			  result->add_attribute("prop_name", prop_path[prop_path.size() - 1]);
-      }
-
-		result->add_attribute("request", prop);
-		result->add_attribute("path", path);
-    result->add_attribute("this_property", ri.found_this);
-
-		return result;
-	}
-
 variant xss_compiler::evaluate_property(XSSProperty prop)
   {
     if (prop)
@@ -1535,6 +1449,7 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
 
 				    XSSContext ictx(new xss_context(ctx, path.parent_path()));
 				    ictx->set_this(XSSObject(clazz));
+            ictx->add_type(cid, clazz);
 
 				    compile_ast(ci, ictx);
 

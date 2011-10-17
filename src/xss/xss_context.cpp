@@ -1281,6 +1281,35 @@ void xss_type::set_super(XSSType super)
   {
     super_ = super;
     type_  = super;
+
+    if (super_)
+      {
+        //copy construction parameters
+        XSSObject my_ctor = find("constructor_params");
+        XSSObject theirs  = super->find("constructor_params");
+
+        if (theirs)
+          {
+            if (!my_ctor)
+              {
+                my_ctor = XSSObject(new xss_object);
+                my_ctor->set_id("constructor_params");
+
+                add_child(my_ctor);
+              }
+
+            std::vector<variant>::iterator rit = theirs->children()->ref_begin();
+            std::vector<variant>::iterator rnd = theirs->children()->ref_end();
+            for(; rit != rnd; rit++)
+              {
+                XSSObject robj = variant_cast<XSSObject>(*rit, XSSObject());
+                if (!robj)
+                  continue;
+            
+                my_ctor->add_child(robj);
+              }
+          }
+      }
   }
 
 void xss_type::set_definition(XSSObject def)
@@ -1525,43 +1554,6 @@ str xss_property::render_value()
 
     return xss_utils::var_to_string(value_);
   }
-
-//td: !!! clutter
-//str xss_property::render_get()
-//  {
-//    str name = output_id();
-//
-//    str get_fn = variant_cast<str>(dynamic_get(this, "get_fn"), str());
-//    if (!get_fn.empty())
-//      return get_fn + "()";
-//    else if (!get.empty())
-//      return name + "_get()";
-//
-//    return name;
-//  }
-//
-//str	xss_property::render_set(const str& value)
-//	{
-//    str set_fn = variant_cast<str>(dynamic_get(this, "set_fn"), ""); //let the outside world determine
-//                                                                      //if a native function call shouls be made
-//
-//    str set_xss = variant_cast<str>(dynamic_get(this, "set_xss"), ""); //such world can request to parse xss
-//
-//		if (!set_xss.empty())
-//			{
-//				assert(false); //td:
-//			}
-//		else if (!set_fn.empty())
-//      {
-//				return set_fn + '(' + value + ')';
-//      }
-//    else if (!set.empty())
-//			{
-//				return id_ + "_set(" + value + ')';
-//			}
-//
-//		return output_id() + " = " + value;
-//  }
 
 variant xss_property::eval(XSSContext ctx)
   {

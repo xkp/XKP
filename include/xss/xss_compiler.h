@@ -148,7 +148,6 @@ namespace xkp
         variant     compile_expression(const str& expr);
         str         render_expression(const str& expr, XSSObject this_);
         str         replace_identifier(const str& s, const str& src, const str& dst);
-        variant     resolve_property(const str& prop, variant parent);
         variant     evaluate_property(XSSProperty prop);
         str         renderer_file(const str& file);
         str         idiom_path(XSSObject obj, const str& file);
@@ -237,7 +236,6 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<str,        2>("render_expression",   &xss_compiler::render_expression);
         method_<variant,    1>("compile_expression",  &xss_compiler::compile_expression);
         method_<str,	      3>("replace_identifier",  &xss_compiler::replace_identifier);
-        method_<variant,    2>("resolve_property",	  &xss_compiler::resolve_property);
         method_<variant,    1>("evaluate_property",   &xss_compiler::evaluate_property);
         method_<str,        1>("renderer_file",	      &xss_compiler::renderer_file);
         method_<str,        2>("idiom_path",	        &xss_compiler::idiom_path);

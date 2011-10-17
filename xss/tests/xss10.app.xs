@@ -23,7 +23,7 @@ instance instance1
 		//a[0] = 4;
 		
 		//ERROR 5: assert exploit
-		//object o;
-		//o.prop = 2;
+		object o;
+		o.prop = 2;
 	}
 }
