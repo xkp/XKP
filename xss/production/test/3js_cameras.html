@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test 3D</title>
+<style type="text/css">
+	body{
+	background:#867;
+	}
+</style>
+</head>
+<body>
+<script type="text/javascript" src="../js/three/Detector.js"></script>
+<script type="text/javascript" src="../js/three/Three.js"></script>
+<script type="text/javascript" src="../js/three/Stats.js"></script>
+<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/three/Utils.js"></script>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript">		
+	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+	var renderer = new THREE.WebGLRenderer( { antialias: true } );
+var active_camera;
+var g_elapsed = -1;
+var g_delta = 0.0;			
+var application = {};
+// --------RESOURCES---------
+// --------RESOURCES---------
+soundRenderer = new THREE.SoundRenderer();		
+document.body.appendChild( soundRenderer.domElement );
+renderer.setSize( window.innerWidth, window.innerHeight );
+function render() {
+renderer.clear();
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+    g_delta = 0; //first update
+else
+g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+		set_active_camera(camera_1);
+		set_active_camera(camera_2);
+		if (application.is_ctrl_down)
+{
+set_active_camera(camera_1);
+}
+else
+{
+set_active_camera(camera_2);
+}
+}
+	var material_sphere1 = new THREE.MeshLambertMaterial({
+	color:Math.random() * 0xffffff,shading:flat_shading
+	});
+	var material_sphere2 = new THREE.MeshLambertMaterial({
+	color:Math.random() * 0xffffff,shading:flat_shading
+	});
+	var material_wireframe = new THREE.MeshLambertMaterial({
+	color:16755400,wireframe:true
+	});
+	var cylinder_material = new THREE.MeshLambertMaterial({
+	color:Math.random() * 0xffffff,shading:flat_shading
+	});
+	var cylinder1_material = new THREE.MeshLambertMaterial({
+	color:Math.random() * 0xffffff,shading:flat_shading
+	});
+	var cube_material = new THREE.MeshLambertMaterial({
+	color:Math.random() * 0xffffff,shading:flat_shading
+	});
+	var cube1_material = new THREE.MeshLambertMaterial({
+	color:Math.random() * 0xffffff,shading:flat_shading
+	});
+var scene = 
+new THREE.Scene(
+);
+	var camera_1 = new THREE.QuakeCamera({
+	fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly:true,lookVertical:false
+	});
+                camera_1.position.x = -250
+                camera_1.position.y = 25
+var camera_2 = 
+new THREE.Camera(
+50,1.5,1,10000);
+                camera_2.position.x = -250
+                camera_2.position.y = 25
+var light = 
+new THREE.DirectionalLight(
+16777215);
+		;
+	scene.addLight(light);
+                light.position.y = 0.5
+                light.position.z = 1
+	var sphere_1_sphere = 
+new THREE.Sphere(
+20,32,16);
+	var sphere_1 = new THREE.Mesh(sphere_1_sphere,
+	material_sphere1);
+	scene.addObject(sphere_1);
+                sphere_1.position.x = 250
+                sphere_1.position.y = 30
+	var sphere_2_sphere = 
+new THREE.Sphere(
+20,32,16);
+	var sphere_2 = new THREE.Mesh(sphere_2_sphere,
+	material_sphere2);
+	scene.addObject(sphere_2);
+                sphere_2.position.x = -250
+                sphere_2.position.y = 30
+	var cylinder_1_cylinder = 
+new THREE.Cylinder(
+20,10,10,50);
+	var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder,
+	cylinder_material);
+	scene.addObject(cylinder_1);
+                cylinder_1.rotation.x = 10
+                cylinder_1.rotation.y = 10
+                cylinder_1.position.x = 100
+                cylinder_1.position.y = 30
+                cylinder_1.position.z = 100
+	var cylinder_2_cylinder = 
+new THREE.Cylinder(
+20,10,10,50);
+	var cylinder_2 = new THREE.Mesh(cylinder_2_cylinder,
+	cylinder1_material);
+	scene.addObject(cylinder_2);
+                cylinder_2.rotation.x = 10
+                cylinder_2.rotation.y = 10
+                cylinder_2.position.x = -100
+                cylinder_2.position.y = 30
+                cylinder_2.position.z = 100
+	var cube_1_cube = 
+new THREE.Cube(
+30,30,30);
+	var cube_1 = new THREE.Mesh(cube_1_cube,
+	cube_material);
+	scene.addObject(cube_1);
+                cube_1.position.x = -100
+                cube_1.position.y = 30
+                cube_1.position.z = -100
+                cube_1.rotation.x = 10
+                cube_1.rotation.y = 10
+	var cube_2_cube = 
+new THREE.Cube(
+30,30,30);
+	var cube_2 = new THREE.Mesh(cube_2_cube,
+	cube1_material);
+	scene.addObject(cube_2);
+                cube_2.position.x = 100
+                cube_2.position.y = 30
+                cube_2.position.z = -100
+                cube_2.rotation.x = 10
+                cube_2.rotation.y = 10
+	var plane_1_plane = 
+new THREE.Plane(
+1000,1000,100,100);
+	var plane_1 = new THREE.Mesh(plane_1_plane,
+	material_wireframe);
+	scene.addObject(plane_1);
+                plane_1.position.y = 0.100000001
+                plane_1.rotation.x = -1.57
+                application.is_ctrl_down = false
+                application.is_shift_down = false
+	document.addEventListener( 'keydown', keydown_application, false );
+	function keydown_application (event)
+	{   
+	var key_code = event.keyCode;
+			if (key_code == SHIFT)
+{
+application.is_shift_down = true;
+application.is_ctrl_down = false;
+}
+if (key_code == CTRL)
+{
+application.is_ctrl_down = true;
+application.is_shift_down = false;
+}
+	}
+if (application.init)
+{
+	application.init();
+}
+document.body.appendChild( renderer.domElement );
+animate();
+function animate() {
+	requestAnimationFrame( animate );
+	render();
+}
+</script>
+</body>
+</html>

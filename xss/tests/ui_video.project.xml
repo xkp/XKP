@@ -1,0 +1,11 @@
+<project entry_point="../idioms/ui/ui_standalone.xss" language="js" target="ui_video.app.xml" output="ui_video.html">
+    <path>
+        <output path="../production/test"/>
+    </path>
+
+    <idiom src="../idioms/ui/ui.xml"/>
+    <idiom src="../idioms/mutant-state/sequence.xml"/>
+	
+</project>
+           
+         

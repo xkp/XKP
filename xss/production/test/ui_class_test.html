@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript">			
+var g_ui;
+var g_elapsed = -1;
+var g_delta = 0.0;
+var g_canvas;
+var g_ui_root;
+var application = {};
+		var streamer = new ms.streamer.Streamer();
+        var def_package_items = [];
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/img1.png"
+});
+        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
+		g_startup_package.load();	
+function start(resolution)  
+{  
+	var start = new Date().getTime();  
+	function update()  
+	{  
+		var now   = new Date().getTime();
+        if (g_elapsed < 0)
+            g_delta = 0; //first update
+        else
+		    g_delta  = now - g_elapsed;  
+        g_elapsed = now; 
+		var context = g_canvas.getContext('2d');
+		g_ui.update(g_delta, context);
+        window.setTimeout(update, resolution);  
+	}  
+	window.setTimeout(update, resolution);  
+}  
+            my_image = Class.create(ms.ui.Image,
+        {
+    initialize: function($super
+                , src
+                    )
+    {
+        $super(
+        src        );
+    },
+                x_pos : null,
+                y_pos : null,
+                img2 : null,
+	traslate : function() 
+	{
+		this.x += 5;
+this.y += 5;
+this.set_rotation(this.rotation + 0.200000003);
+	},
+	click : function()
+	{    
+		this.x_pos = this.x;
+this.y_pos = this.y;
+this.traslate();
+this.img2 = new my_image("images/img1.png");
+this.img2.rect(this.x_pos + 50, this.y_pos - 50, 50, 50);
+	},
+});
+                application.test = null
+                application.x_pos = 100
+                application.y_pos = 100
+                application.X_MAX = 600
+                application.Y_MAX = 400
+                application.img2 = null
+	application.init = function()
+	{    
+		application.test = 1;
+	};
+window.onload = function() 
+{
+	var Sound = new ms.ui.Sound();
+	var drawingCanvas = document.getElementById("myCanvas");
+	g_canvas = drawingCanvas;
+	if (drawingCanvas && drawingCanvas.getContext)
+	{
+		var client =
+		{
+			width: 600,
+			height: 400,
+			canvas: drawingCanvas
+		};
+		var ui = new ms.ui.Manager(client, streamer);
+		g_ui = ui;
+        g_ui_root = ui.root;
+			drawingCanvas.onmousemove = function(ev)
+			{
+				ui.mouse_move(ev.clientX, ev.clientY);                  
+			};
+			drawingCanvas.onmousedown = function(ev)
+			{
+				ui.mouse_down(ev.clientX, ev.clientY);                  
+			};
+			drawingCanvas.onmouseup = function(ev)
+			{
+				ui.mouse_up(ev.clientX, ev.clientY);                  
+			};
+			document.onkeydown = function(ev)
+			{
+				ui.key_down(ev.keyCode);                  
+			};
+			document.onkeyup = function(ev)
+			{
+				ui.key_up(ev.keyCode);                  
+			};
+			document.onkeypress = function(ev)
+			{
+				ui.key_press(ev.keyCode);                  
+			};
+		    img1 = new ms.ui.Image( 
+	    "images/img1.png",g_ui_root.manager, g_ui_root);
+                img1.src("images/img1.png")
+                img1.set_height(50)
+	img1.click = function()
+	{    
+		if (application.x_pos >= application.X_MAX - 110)
+{
+application.x_pos = 0;
+}
+application.x_pos = application.x_pos + 60;
+if (application.y_pos >= application.Y_MAX - 110)
+{
+application.y_pos = 0;
+}
+application.y_pos = application.y_pos + 60;
+img1.set_rotation(img1.rotation + 0.200000003);
+img1.set_x(img1.x + 5);
+img1.set_y(img1.y + 5);
+application.img2 = new my_image("images/img1.png");
+application.img2.rect(application.x_pos, application.y_pos, 50, 50);
+	};
+                img1.rect(100, 100, 50, 50);
+            if (application.init)
+            {
+                application.init();
+            }
+			start();
+			ui.draw(drawingCanvas.getContext('2d'));		
+	}
+}
+</script>
+</head>
+<body>
+	<canvas id="myCanvas" width="600" height="400">
+		<p>Your browser doesn't support canvas.</p>
+	</canvas>
+	<audio id="sounds" preload> 
+	Your browser does not support the audio element.
+	</audio>
+</body>
+</html>

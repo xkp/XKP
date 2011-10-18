@@ -1,0 +1,3 @@
+<application width="600" height="400">    
+    <video src="video/sintel.mp4" loop="true" autoplay="true"/>
+</application>

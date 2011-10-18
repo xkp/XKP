@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript">			
+var g_ui;
+var g_elapsed = -1;
+var g_delta = 0.0;
+var g_canvas;
+var g_ui_root;
+var application = {};
+		var streamer = new ms.streamer.Streamer();
+        var def_package_items = [];
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/stop.png"
+});
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/stop_over.png"
+});
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/bomb.png"
+});
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/AK-47.png"
+});
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_SOUND,
+		src:"sounds/explosion.mp3"
+});
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_SOUND,
+		src:"sounds/shoots.mp3"
+});
+        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
+		g_startup_package.load();	
+function start(resolution)  
+{  
+	var start = new Date().getTime();  
+	function update()  
+	{  
+		var now   = new Date().getTime();
+        if (g_elapsed < 0)
+            g_delta = 0; //first update
+        else
+		    g_delta  = now - g_elapsed;  
+        g_elapsed = now; 
+		var context = g_canvas.getContext('2d');
+		g_ui.update(g_delta, context);
+        window.setTimeout(update, resolution);  
+	}  
+	window.setTimeout(update, resolution);  
+}  
+window.onload = function() 
+{
+	var Sound = new ms.ui.Sound();
+	var drawingCanvas = document.getElementById("myCanvas");
+	g_canvas = drawingCanvas;
+	if (drawingCanvas && drawingCanvas.getContext)
+	{
+		var client =
+		{
+			width: 600,
+			height: 400,
+			canvas: drawingCanvas
+		};
+		var ui = new ms.ui.Manager(client, streamer);
+		g_ui = ui;
+        g_ui_root = ui.root;
+			drawingCanvas.onmousemove = function(ev)
+			{
+				ui.mouse_move(ev.clientX, ev.clientY);                  
+			};
+			drawingCanvas.onmousedown = function(ev)
+			{
+				ui.mouse_down(ev.clientX, ev.clientY);                  
+			};
+			drawingCanvas.onmouseup = function(ev)
+			{
+				ui.mouse_up(ev.clientX, ev.clientY);                  
+			};
+			document.onkeydown = function(ev)
+			{
+				ui.key_down(ev.keyCode);                  
+			};
+			document.onkeyup = function(ev)
+			{
+				ui.key_up(ev.keyCode);                  
+			};
+			document.onkeypress = function(ev)
+			{
+				ui.key_press(ev.keyCode);                  
+			};
+		    lbl1 = new ms.ui.Label( 
+	    "Verdana",g_ui_root.manager, g_ui_root);
+                lbl1.text("click to create a new instance of a sound")
+                lbl1.position(220, 190);
+		    btnExplosion = new ms.ui.Button( 
+	    "images/bomb.png","images/bomb.png",g_ui_root.manager, g_ui_root);
+                btnExplosion.set_height(50)
+	btnExplosion.click = function()
+	{    
+		Sound.play("sounds/explosion.mp3");
+	};
+                btnExplosion.rect(290, 220, 50, 50);
+		    btnShoots = new ms.ui.Button( 
+	    "images/AK-47.png","images/AK-47.png",g_ui_root.manager, g_ui_root);
+                btnShoots.set_height(100)
+	btnShoots.click = function()
+	{    
+		Sound.play("sounds/shoots.mp3");
+	};
+                btnShoots.rect(275, 300, 100, 100);
+            if (application.init)
+            {
+                application.init();
+            }
+			start();
+			ui.draw(drawingCanvas.getContext('2d'));		
+	}
+}
+</script>
+</head>
+<body>
+	<canvas id="myCanvas" width="600" height="400">
+		<p>Your browser doesn't support canvas.</p>
+	</canvas>
+	<audio id="sounds" preload> 
+			<source src = streamer.get_resource('sounds/explosion.mp3').asset/>			
+			<source src = streamer.get_resource('sounds/shoots.mp3').asset/>			
+	Your browser does not support the audio element.
+	</audio>
+</body>
+</html>

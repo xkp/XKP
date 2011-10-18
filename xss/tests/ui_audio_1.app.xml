@@ -1,0 +1,15 @@
+<application src="ui_audio_1.app.xs" width="600" height="400">
+    <resources>
+        <image src="images/stop.png"/>
+		<image src="images/stop_over.png"/>
+		<image src="images/bomb.png"/>
+		<image src="images/AK-47.png"/>
+		<audio src="sounds/explosion.mp3"/>
+		<audio src="sounds/shoots.mp3"/>
+    </resources>
+
+	<label id="lbl1" x="220" y="190" font="Verdana" caption="click to create a new instance of a sound"/>
+    <button id="btnExplosion" x="290" y="220" width="50" height="50" up="images/bomb.png" down="images/bomb.png"/>
+    <button id="btnShoots" x="275" y="300" width="100" height="100" up="images/AK-47.png" down="images/AK-47.png"/>
+    
+</application>

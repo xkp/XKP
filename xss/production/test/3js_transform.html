@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test 3D</title>
+<style type="text/css">
+	body{
+	background:#f0f0f0;
+	}
+</style>
+</head>
+<body>
+<script type="text/javascript" src="../js/three/Detector.js"></script>
+<script type="text/javascript" src="../js/three/Three.js"></script>
+<script type="text/javascript" src="../js/three/Stats.js"></script>
+<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/three/Utils.js"></script>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript">		
+	var renderer = new THREE.CanvasRenderer();	
+var active_camera;
+var g_elapsed = -1;
+var g_delta = 0.0;			
+var application = {};
+// --------RESOURCES---------
+// --------RESOURCES---------
+soundRenderer = new THREE.SoundRenderer();		
+document.body.appendChild( soundRenderer.domElement );
+renderer.setSize( window.innerWidth, window.innerHeight );
+function render() {
+renderer.clear();
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+    g_delta = 0; //first update
+else
+g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+		if (application.is_ctrl_down)
+{
+application.theta = application.theta + application.mouse_x * 3;
+}
+camera_1.position.x = 1400 * Math.sin(application.theta * Math.PI / 360);
+camera_1.position.z = 1400 * Math.cos(application.theta * Math.PI / 360);
+		set_active_camera(camera_1);
+}
+	var cylinder_material = new THREE.MeshBasicMaterial({
+	color:Math.random() * 0xffffff
+	});
+	var cube_material = new THREE.MeshBasicMaterial({
+	color:Math.random() * 0xffffff
+	});
+var sphere_material = 
+new THREE.MeshNormalMaterial(
+);
+var scene = 
+new THREE.Scene(
+);
+var camera_1 = 
+new THREE.Camera(
+75,1.5,1,3000);
+                camera_1.position.z = 1000
+var light = 
+new THREE.DirectionalLight(
+1677);
+		;
+	scene.addLight(light);
+                light.position.y = 0.5
+                light.position.z = 1
+	var cylinder_1_cylinder = 
+new THREE.Cylinder(
+200,100,100,500);
+	var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder,
+	cylinder_material);
+	scene.addObject(cylinder_1);
+                cylinder_1.rotation.x = 10
+                cylinder_1.rotation.y = 10
+                cylinder_1.position.x = 600
+var container = 
+new THREE.Object3D(
+);
+	var cube_1_cube = 
+new THREE.Cube(
+300,300,300);
+	var cube_1 = new THREE.Mesh(cube_1_cube,
+	cube_material);
+	scene.addObject(cube_1);
+				container.addChild(cube_1);
+				scene.addObject(container);
+                cube_1.position.x = -600
+                cube_1.position.y = -100
+                cube_1.rotation.x = 10
+                cube_1.rotation.y = 10
+	var sphere_1_sphere = 
+new THREE.Sphere(
+200,20,20);
+	var sphere_1 = new THREE.Mesh(sphere_1_sphere,
+	sphere_material);
+	scene.addObject(sphere_1);
+				container.addChild(sphere_1);
+				scene.addObject(container);
+                sphere_1.position.x = -400
+                sphere_1.position.y = 400
+                application.is_shift_down = false
+                application.is_ctrl_down = false
+                application.theta = 45
+                application.mouse_x = null
+                application.mouse_y = null
+	document.addEventListener( 'mousemove', mousemove_application, false );
+	function mousemove_application (event)
+	{
+	var x = event.clientX;
+	var y = event.clientY;
+		application.mouse_x = x / window.innerWidth * 2 - 1;
+application.mouse_y = -(y / window.innerHeight) * 2 + 1;
+if (application.is_shift_down)
+{
+container.rotation.x = container.rotation.x + 0.0199999996;
+container.rotation.y = container.rotation.y + 0.0199999996;
+container.rotation.z = container.rotation.z + 0.0199999996;
+}
+else
+{
+if (application.is_ctrl_down)
+{
+}
+else
+{
+cylinder_1.rotation.x = cylinder_1.rotation.x + 0.0199999996;
+cylinder_1.rotation.y = cylinder_1.rotation.y + 0.0199999996;
+cylinder_1.rotation.z = cylinder_1.rotation.z + 0.0199999996;
+}
+}
+	};
+	document.addEventListener( 'keydown', keydown_application, false );
+	function keydown_application (event)
+	{   
+	var key_code = event.keyCode;
+			if (key_code == SHIFT)
+{
+application.is_shift_down = true;
+}
+if (key_code == CTRL)
+{
+application.is_ctrl_down = true;
+}
+	}
+	document.addEventListener( 'keyup', keyup_application, false );
+	function keyup_application (event)
+	{   
+	var key_code = event.keyCode;
+			if (key_code == SHIFT)
+{
+application.is_shift_down = false;
+}
+if (key_code == CTRL)
+{
+application.is_ctrl_down = false;
+}
+	}
+if (application.init)
+{
+	application.init();
+}
+document.body.appendChild( renderer.domElement );
+animate();
+function animate() {
+	requestAnimationFrame( animate );
+	render();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<application src="3js_cube_img.xs" title="Test 3D" renderer="webgl">
+
+	<resources>	
+	
+		<image id="image_1" src="images/test1.png"/>
+		<image id="image_2" src="images/test2.png"/>
+		<image id="image_3" src="images/test3.png"/>
+		<image id="image_4" src="images/test4.png"/>
+		<image id="image_5" src="images/test5.png"/>
+		<image id="image_6" src="images/test6.png"/>
+		<audio src="sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg"/>
+
+	</resources>
+	
+	<materials>
+	
+		<composite_material id="materials">
+			<basic_material texture_src="image_1"/>
+			<basic_material texture_src="image_2"/>
+			<basic_material texture_src="image_3"/>
+			<basic_material texture_src="image_4"/>
+			<basic_material texture_src="image_5"/>
+			<basic_material texture_src="image_6"/>
+		</composite_material>
+		<basic_material id="plane_material" color="14737632"/>		
+		
+	</materials>
+	
+	<scene>			
+		
+		<camera id="camera_1" fov="70" aspect="1.5" near="1" far="1000">
+			<position y="300" z="500"/>			
+		</camera>
+			
+		<cube id="cube_1" width="200" height="200" depth="200" x_segments="1" 
+				y_segments="1" z_segments="1" material="materials">			
+			<position y="150"/>			
+		</cube>
+		
+		<plane id="plane_1" width="200" height="200" material="plane_material">
+			<rotation x="-1.57"/>		
+		</plane>
+		
+		<playing_sound src="sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg" radius="700" volume="20" loop="true"/>
+				
+	</scene>
+	
+</application>
