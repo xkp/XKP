@@ -19,8 +19,8 @@
 		for(var xcp in xc.properties)
 		{
 			//xcp.output_id = "prop_" + xc.output_id + "_" + xcp.name;
-			compiler.log("prop:" + xcp.output_id);
 			
+			compiler.log("prop:" + xcp.output_id);
 			if(xcp.get_)
 			{
 				compiler.log("get: " + xcp.get_.text);

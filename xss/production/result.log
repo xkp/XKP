@@ -8,10 +8,48 @@ ERROR: Project:  3js-ms.project.xml
 ===[ 3js1.project.xml ]================
 
 Log: Rendering 3js Types...
+Log: position
+Log: camera_w_id_4.position
+Log: position
+Log: light.position
+Log: light.position
+Log: rotation
+Log: cylinder_1.rotation
+Log: cylinder_1.rotation
+Log: position
+Log: cylinder_1.position
+Log: position
+Log: cube_1.position
+Log: cube_1.position
+Log: rotation
+Log: cube_1.rotation
+Log: cube_1.rotation
+Log: position
+Log: sphere_1.position
+Log: sphere_1.position
 Success are greateful
 ===[ 3js2.project.xml ]================
 
 Log: Rendering 3js Types...
+Log: position
+Log: camera_w_id_4.position
+Log: position
+Log: light.position
+Log: light.position
+Log: rotation
+Log: cylinder_1.rotation
+Log: cylinder_1.rotation
+Log: position
+Log: cylinder_1.position
+Log: position
+Log: cube_1.position
+Log: cube_1.position
+Log: rotation
+Log: cube_1.rotation
+Log: cube_1.rotation
+Log: position
+Log: sphere_1.position
+Log: sphere_1.position
 Success are greateful
 ===[ 3js3.project.xml ]================
 
@@ -22,37 +60,172 @@ ERROR: Project:  3js3.project.xml
 ===[ 3js4.project.xml ]================
 
 Log: Rendering 3js Types...
-ERROR: Project:  3js4.project.xml
-
+Log: position
+Log: camera_w_id_12.position
+Log: camera_w_id_12.position
+Log: camera_w_id_12.position
+Log: scale
+Log: img1_reflect.scale
+Log: position
+Log: img1_reflect.position
+Log: rotation
+Log: img1_reflect.rotation
+Log: scale
+Log: img2_reflect.scale
+Log: position
+Log: img2_reflect.position
+Log: rotation
+Log: img2_reflect.rotation
+Log: scale
+Log: img3_reflect.scale
+Log: position
+Log: img3_reflect.position
+Log: rotation
+Log: img3_reflect.rotation
+Log: scale
+Log: img4_reflect.scale
+Log: position
+Log: img4_reflect.position
+Log: rotation
+Log: img4_reflect.rotation
+Log: scale
+Log: img5_reflect.scale
+Log: position
+Log: img5_reflect.position
+Log: rotation
+Log: img5_reflect.rotation
+Success are greateful
 ===[ 3js5.project.xml ]================
 
 Log: Rendering 3js Types...
+Log: position
+Log: cam1.position
+Log: position
+Log: light.position
+Log: light.position
+Log: rotation
+Log: cylinder_1.rotation
+Log: cylinder_1.rotation
+Log: position
+Log: cylinder_1.position
+Log: position
+Log: cube_1.position
+Log: cube_1.position
+Log: rotation
+Log: cube_1.rotation
+Log: cube_1.rotation
+Log: position
+Log: sphere_1.position
+Log: sphere_1.position
 Success are greateful
 ===[ box2d1.project.xml ]================
 
-Log: my_body
-Log: floor
 Success are greateful
 ===[ box2d2.project.xml ]================
 
 Log: Rendering UI Types...
 Log: BOX2D: Not Yet Rendering Types...
 Log: Rendering UI...
-Log: 
-Log: floor
 Success are greateful
 ===[ cameras.project.xml ]================
 
 Log: Rendering 3js Types...
+Log: position
+Log: camera_1.position
+Log: camera_1.position
+Log: position
+Log: camera_2.position
+Log: camera_2.position
+Log: position
+Log: light.position
+Log: light.position
+Log: position
+Log: sphere_1.position
+Log: sphere_1.position
+Log: position
+Log: sphere_2.position
+Log: sphere_2.position
+Log: rotation
+Log: cylinder_1.rotation
+Log: cylinder_1.rotation
+Log: position
+Log: cylinder_1.position
+Log: cylinder_1.position
+Log: cylinder_1.position
+Log: rotation
+Log: cylinder_2.rotation
+Log: cylinder_2.rotation
+Log: position
+Log: cylinder_2.position
+Log: cylinder_2.position
+Log: cylinder_2.position
+Log: position
+Log: cube_1.position
+Log: cube_1.position
+Log: cube_1.position
+Log: rotation
+Log: cube_1.rotation
+Log: cube_1.rotation
+Log: position
+Log: cube_2.position
+Log: cube_2.position
+Log: cube_2.position
+Log: rotation
+Log: cube_2.rotation
+Log: cube_2.rotation
+Log: position
+Log: plane_1.position
+Log: rotation
+Log: plane_1.rotation
 Success are greateful
 ===[ carousel_1.project.xml ]================
 
 Log: Rendering 3js Types...
-ERROR: Project:  carousel_1.project.xml
-
+Log: position
+Log: camera_1.position
+Log: camera_1.position
+Log: camera_1.position
+Log: scale
+Log: img1_reflect.scale
+Log: position
+Log: img1_reflect.position
+Log: rotation
+Log: img1_reflect.rotation
+Log: scale
+Log: img2_reflect.scale
+Log: position
+Log: img2_reflect.position
+Log: rotation
+Log: img2_reflect.rotation
+Log: scale
+Log: img3_reflect.scale
+Log: position
+Log: img3_reflect.position
+Log: rotation
+Log: img3_reflect.rotation
+Log: scale
+Log: img4_reflect.scale
+Log: position
+Log: img4_reflect.position
+Log: rotation
+Log: img4_reflect.rotation
+Log: scale
+Log: img5_reflect.scale
+Log: position
+Log: img5_reflect.position
+Log: rotation
+Log: img5_reflect.rotation
+Success are greateful
 ===[ cube.project.xml ]================
 
 Log: Rendering 3js Types...
+Log: position
+Log: camera_1.position
+Log: camera_1.position
+Log: position
+Log: cube_1.position
+Log: rotation
+Log: plane_1.rotation
 Success are greateful
 ===[ enums.project.xml ]================
 
@@ -76,26 +249,26 @@ Log: output_xml: visible && output_id: VISIBLE
 				
 						int pl = XKPLayout.PL_LEFT;
 ((XKPLayout.LayoutParams) btn.getLayoutParams()).setPlacement(((XKPLayout.LayoutParams) btn.getLayoutParams()).getPlacement() + 1);
-if (btn.getVisibility() == View.VISIBLE)
+if (prop_btn_visible == VISIBLE_get())
 {
 	btn.setVisibility(View.INVISIBLE);
 }
 else
 {
-	if (btn.getVisibility() == View.INVISIBLE)
+	if (prop_btn_visible == INVISIBLE_get())
 	{
-		btn.setVisibility(View.GONE);
+		btn.prop_btn_visible_set(View.GONE);
 	}
 	else
 	{
-		btn.setVisibility(View.VISIBLE);
+		btn.prop_btn_visible_set(VISIBLE_get());
 	}
 }
-btn.setEnabled(!btn.isEnabled());
-btn.layout(btn.getLeft(), btn.getTop(), btn.getLeft() + btn.getHeight() * 2, btn.getBottom());
-String swp = application.sameName;
-application.sameName = btn.prop_btn_sameName;
-btn.prop_btn_sameName = swp;
+btn.setEnabled(!prop_btn_enabled);
+btn.layout(btn.getLeft(), btn.getTop(), btn.getLeft() + prop_btn_height * 2, btn.getBottom());
+String swp = sameName;
+sameName = prop_btn_sameName;
+prop_btn_sameName = swp;
 					
 					}
 				
@@ -160,7 +333,7 @@ Log: Rendering property: bar
 			Integer a;
 a = 1;
 Object b;
-t1.typing = a;
+typing = a;
 return a;
 		}
 	
@@ -170,17 +343,17 @@ return a;
 
 		public String foobar(Integer v) {
 			t1.foo = t2.foo + 10;
-t2.set_bar(t1.foo + t1.get_bar() + "++");
-set_complex(t1, t2.get_bar() + t1.get_bar() + this.foo + "--");
+t2.set_bar(foo + bar + "++");
+set_complex(t1, t2.get_bar() + bar + this.foo + "--");
 set_some_int(t1, t1.get_some_int() - 1);
-set_some_int(t2, t2.get_some_int() + 1);
-set_some_int(t1, t1.get_some_int() + 20);
+some_int_set(t2.some_int_get() + 1);
+some_int_set(t1.some_int_get() + 20);
 set_more(t1).complex(get_more(t1).complex() + 1);
-set_more(t2).complex(get_more(t2).complex() - 1);
+more_complex_set(more_complex_get() - 1);
 ArrayList arr = new ArrayList(Arrays.asList( new Object [] {} ));
 arr.add(10);
-t1.writable_set(t1.read_only_get() + t1.simple + t1.mixed_get());
-t1.mixed_set(t1.writable);
+writable_set(read_only + simple + mixed);
+mixed_set(writable);
 return t1.get_bar();
 		}
 	
@@ -830,14 +1003,55 @@ Success are greateful
 
 Log: Rendering Resources...
 Log: Rendering 3js Types...
+Log: position
+Log: camera_1.position
+Log: camera_1.position
+Log: position
+Log: cube_1.position
+Log: rotation
+Log: plane_1.rotation
 Success are greateful
 ===[ sound.project.xml ]================
 
 Log: Rendering 3js Types...
+Log: position
+Log: camera_1.position
+Log: position
+Log: light.position
+Log: light.position
+Log: position
+Log: container_1.position
+Log: container_1.position
+Log: position
+Log: container_2.position
+Log: container_2.position
+Log: position
+Log: plane_1.position
+Log: rotation
+Log: plane_1.rotation
 Success are greateful
 ===[ transform.project.xml ]================
 
 Log: Rendering 3js Types...
+Log: position
+Log: camera_1.position
+Log: position
+Log: light.position
+Log: light.position
+Log: rotation
+Log: cylinder_1.rotation
+Log: cylinder_1.rotation
+Log: position
+Log: cylinder_1.position
+Log: position
+Log: cube_1.position
+Log: cube_1.position
+Log: rotation
+Log: cube_1.rotation
+Log: cube_1.rotation
+Log: position
+Log: sphere_1.position
+Log: sphere_1.position
 Success are greateful
 ===[ wax1.project.xml ]================
 
@@ -863,112 +1077,228 @@ this is Louis
         Success are greateful
 ===[ xss10.project.xml ]================
 
+Log: De bug in
+Log: Inside condition flag...
+Log: instance: it1
+Log: prop:getting
+Log: get: getting_get()
+Log: instance: it2
+Log: prop:getting
+Log: get: getting_get()
+Log: prop:setting
+Log: get: setting
+Log: set: setting_set({value})
+Log: instance: application
+Log: prop:counter
+Log: Instance it1...
+Log: Rendering property: getting
+Log: Rendering event: create
+Log: Instance it2...
+Log: Rendering property: getting
+Log: Rendering property: setting
+Log: Rendering event: click
+Log: Rendering method: returning
+Log: Instance application...
+Log: Rendering property: counter
 
-						new classy.mthd_1()(new classy.mthd_2(3));
-new classy.instance1.mthd_1(2);
-Boolean flag = true;
-if (flag == true)
+			== Instance it1 ==
+		
+
+
+
+
+			public Integer prop_it1_getting_get() {
+				return counter * 10;
+			}
+		
+
+
+
+
+
+			private void event_it1_create() {
+		
+				counter = prop_it1_getting;
+Object o;
+o.prop = 2;
+			
+			}
+		
+
+			== Instance it2 ==
+		
+
+
+
+
+			public Integer prop_it2_getting_get() {
+				return counter / 10;
+			}
+		
+
+
+
+
+
+			private Object prop_it2_setting;
+			
+			public void prop_it2_setting_set(Object value) {
+				prop_it2_setting = value;
+				counter = value + prop_it2_getting;
+			}
+		
+
+
+
+
+
+			private void event_it2_click() {
+		
+				prop_it2_setting;
+			
+			}
+		
+
+
+
+
+		public Integer returning() {
+			it1.mthd_1();
+if (it1.size > it2.size)
 {
-	flag = false;
+	return counter;
 }
-ArrayList a;
-a.add(2);
-					
+else
+{
+	return 0;
+}
+		}
+	
+
+			== Instance application ==
+		
+
+
+
+
+			private Integer prop_application_counter = 0;
+		
+
 Success are greateful
 ===[ xss2.project.xml ]================
 
 
-                something
-            
-                something2
-            
-                something
-            
-                something3
-            
-			instance id: t3
-		
+		instance id: t1
+	
+				something_
+			
+				something
+			
+		instance id: t2
+	
+				something2
+			
+				something_
+			
+				something
+			
+				something3
+			
+		instance id: t3
+	
 				event id: click
 				event output_id: onClick
 			
 					Interface: IClick
-				 
-        t_arrays 
-     
-        t_arrays1 
-     
-        t_arrays2 
-     
-        t_base_import 
-     
-            id: create output_id: create
-        
+				
+		instance id: t4
+	
+				something3
+			
+		t_arrays 
+	
+			id: touch output_id: touch
+		
+		t_arrays1 
+	
+		t_arrays2 
+	
+		t_arrays3 
+	
+			id: touch output_id: touch
+		
+		t_base_import 
+	
+			id: create output_id: create
+		
 				Interface: ICreate
-			 
-        t_derived_import 
-     
-            id: click output_id: onClick
-        
+			
+		t_derived_import 
+	
+			id: click output_id: onClick
+		
 				Interface: IClick
-			 
-            id: up output_id: onMouseUp
-        
+			
+			id: up output_id: onMouseUp
+		
 				Interface: IMouseUp
-			 
-            id: down output_id: create
-         
-            id: click output_id: onClick
-        
+			
+			id: down output_id: create
+		
+			id: click output_id: onClick
+		
 				Interface: IKeyClick
-			 
-            id: up output_id: onMouseUp
-         
-            id: down output_id: create
-         
-        t_keyb_import 
-     
-            id: click output_id: onClick
-        
+			
+			id: up output_id: onMouseUp
+		
+			id: down output_id: create
+		
+		t_keyb_import 
+	
+			id: click output_id: onClick
+		
 				Interface: IKeyClick
-			 
-            id: up output_id: onMouseUp
-         
-            id: down output_id: create
-         
-        t_mouse_import 
-     
-            id: click output_id: onClick
-        
+			
+			id: up output_id: onMouseUp
+		
+			id: down output_id: create
+		
+		t_mouse_import 
+	
+			id: click output_id: onClick
+		
 				Interface: IClick
-			 
-            id: up output_id: onMouseUp
-        
+			
+			id: up output_id: onMouseUp
+		
 				Interface: IMouseUp
-			 
-            id: down output_id: create
-         
-        t_super_derived 
-     
-        t_xss5 
-     
-        t_xss5_1 
-     
-        t_xss8 
-     
-            id: click output_id: onClick
-        
+			
+			id: down output_id: create
+		
+		t_super_derived 
+	
+		t_super_merged 
+	
+		t_xss5 
+	
+		t_xss5_1 
+	
+		t_xss8 
+	
+			id: click output_id: onClick
+		
 				Interface: IClick
-			 
-            id: up output_id: onMouseUp
-        
+			
+			id: up output_id: onMouseUp
+		
 				Interface: IMouseUp
-			 
-            id: down output_id: create
-         
-        t_xss9_1 
-     
-        t_xss9_2 
-    
+			
+			id: down output_id: create
+		
+		t_xss9_1 
+	
+		t_xss9_2 
+	
 Success are greateful
 ===[ xss3.project.xml ]================
 

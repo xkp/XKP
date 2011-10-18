@@ -84,9 +84,9 @@ new THREE.Scene(
 var camera_1 = 
 new THREE.Camera(
 45,1.5,1,10000);
-                camera_1.position.x = 500;
-                camera_1.position.y = 500;
-                camera_1.position.z = 1000;
+                camera_1.position.x = 500
+                camera_1.position.y = 500
+                camera_1.position.z = 1000
 	var img1_plane = 
 new THREE.Plane(
 128,164);
@@ -127,10 +127,10 @@ new THREE.Plane(
 	var img1_reflect = new THREE.Mesh(img1_reflect_plane,
 	);
 	scene.addObject(img1_reflect);
-                img1_reflect.doubleSided = true;
-                img1_reflect.scale.y = 0.800000012;
-                img1_reflect.position.y = -131.2;
-                img1_reflect.rotation.x = Math.PI;
+                img1_reflect.doubleSided = true
+                img1_reflect.scale.y = 0.800000012
+                img1_reflect.position.y = -131.2
+                img1_reflect.rotation.x = Math.PI
 	var img2_plane = 
 new THREE.Plane(
 128,164);
@@ -171,10 +171,10 @@ new THREE.Plane(
 	var img2_reflect = new THREE.Mesh(img2_reflect_plane,
 	);
 	scene.addObject(img2_reflect);
-                img2_reflect.doubleSided = true;
-                img2_reflect.scale.y = 0.800000012;
-                img2_reflect.position.y = -131.2;
-                img2_reflect.rotation.x = Math.PI;
+                img2_reflect.doubleSided = true
+                img2_reflect.scale.y = 0.800000012
+                img2_reflect.position.y = -131.2
+                img2_reflect.rotation.x = Math.PI
 	var img3_plane = 
 new THREE.Plane(
 128,164);
@@ -215,10 +215,10 @@ new THREE.Plane(
 	var img3_reflect = new THREE.Mesh(img3_reflect_plane,
 	);
 	scene.addObject(img3_reflect);
-                img3_reflect.doubleSided = true;
-                img3_reflect.scale.y = 0.800000012;
-                img3_reflect.position.y = -131.2;
-                img3_reflect.rotation.x = Math.PI;
+                img3_reflect.doubleSided = true
+                img3_reflect.scale.y = 0.800000012
+                img3_reflect.position.y = -131.2
+                img3_reflect.rotation.x = Math.PI
 	var img4_plane = 
 new THREE.Plane(
 128,164);
@@ -259,10 +259,10 @@ new THREE.Plane(
 	var img4_reflect = new THREE.Mesh(img4_reflect_plane,
 	);
 	scene.addObject(img4_reflect);
-                img4_reflect.doubleSided = true;
-                img4_reflect.scale.y = 0.800000012;
-                img4_reflect.position.y = -131.2;
-                img4_reflect.rotation.x = Math.PI;
+                img4_reflect.doubleSided = true
+                img4_reflect.scale.y = 0.800000012
+                img4_reflect.position.y = -131.2
+                img4_reflect.rotation.x = Math.PI
 	var img5_plane = 
 new THREE.Plane(
 128,164);
@@ -303,19 +303,19 @@ new THREE.Plane(
 	var img5_reflect = new THREE.Mesh(img5_reflect_plane,
 	);
 	scene.addObject(img5_reflect);
-                img5_reflect.doubleSided = true;
-                img5_reflect.scale.y = 0.800000012;
-                img5_reflect.position.y = -131.2;
-                img5_reflect.rotation.x = Math.PI;
-                application.angle = null;
-                application.start = 0;
-                application.speed = 0.0199999996;
-                application.step = 2 * Math.PI / 5;
-                application.max_rotation = 2 * Math.PI;
-                application.img_array = [img1, img1_reflect, img2, img2_reflect, img3, img3_reflect, img4, img4_reflect, img5, img5_reflect];
+                img5_reflect.doubleSided = true
+                img5_reflect.scale.y = 0.800000012
+                img5_reflect.position.y = -131.2
+                img5_reflect.rotation.x = Math.PI
+                application.angle = null
+                application.start = 0
+                application.speed = 0.0199999996
+                application.step = 2 * Math.PI / 5
+                application.max_rotation = 2 * Math.PI
+                application.img_array = [img1, img1_reflect, img2, img2_reflect, img3, img3_reflect, img4, img4_reflect, img5, img5_reflect]
 	application.position_items = function() 
 	{
-		this.start += this.speed;
+		this.start = this.start + this.speed;
 if (this.start > this.max_rotation)
 {
 this.start = 0;
