@@ -1216,6 +1216,22 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
 
                     type->copy(XSSObject(itype)); //td: will override, maybe not the desired effect
                   }
+
+                //and constructor parameters
+                XSSObject ctor_args = type_data->find("constructor_params");  
+                if (ctor_args)
+                  {
+                    DynamicArray mine = type->ctor_args();
+
+                    XSSObjectList args = ctor_args->find_by_class("parameter");
+                    it = args.begin();
+                    nd = args.end();
+
+                    for(; it != nd; it++)
+                      {
+                        mine->push_back(*it);
+                      }
+                  }
               }
             else if (class_name == "enum")
               {

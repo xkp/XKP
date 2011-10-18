@@ -47,8 +47,6 @@ if(application.renderer=="canvas")
 </xss:code>
 
 var active_camera;
-var SCREEN_WIDTH = window.innerWidth;
-var SCREEN_HEIGHT = window.innerHeight;
 var g_elapsed = -1;
 var g_delta = 0.0;			
 

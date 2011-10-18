@@ -41,13 +41,13 @@
             </property>
         </class>
 
-        <class id="div" super="component" creation_function="newComponent">
+        <class id="div" super="component" output_id="ms.ui.Component">
         </class>
 
-        <class id="img" super="component" creation_function="newImage">
-            <array id="constructor_params">
-                <parameter property="src"/>
-            </array>
+        <class id="img" super="component" output_id="ms.ui.Image">
+            <constructor_params>
+                <parameter property="src" runtime="true"/>
+            </constructor_params>
 
             <property id="src" type="string">
                 <set text="src({value})"/>
@@ -58,27 +58,30 @@
             </property>
         </class>
 
-        <class id="button" super="component" creation_function="newButton">
-            <array id="constructor_params">
+        <class id="button" super="component" output_id="ms.ui.Button">
+            <constructor_params>
                 <parameter property="up"/>
                 <parameter property="down"/>
-            </array>
+            </constructor_params>
             
             <property id="up"   type="string" dont_init="true"/>
             <property id="down" type="string" dont_init="true"/>
         </class>
 
-        <class id="state_button" super="component" creation_function="newStateButton">
-            <array id="constructor_params">
+        <class id="state_button" super="component" output_id="ms.ui.StateButton">
+            <constructor_params>
                 <parameter property="up"/>
                 <parameter property="down"/>
-            </array>
+            </constructor_params>
+			
+			<property id="up"   type="string" dont_init="true"/>
+            <property id="down" type="string" dont_init="true"/>
         </class>
 
-        <class id="label" super="component" creation_function="newLabel">
-            <array id="constructor_params">
+        <class id="label" super="component" output_id="ms.ui.Label">
+            <constructor_params>
                 <parameter property="font"/>
-            </array>
+            </constructor_params>
 
             <property id="font" type="string" dont_init="true">
                 <get text="font()"/>
@@ -91,21 +94,25 @@
             </property>
         </class>
 
-        <class id="progress_bar" super="component" creation_function="newProgressBar">
-            <property id="value" type="int">
+        <class id="progress_bar" super="component" output_id="ms.ui.ProgressBar">
+            <constructor_params>
+                <parameter property="images"/>
+            </constructor_params>
+			<property id="images" type="string"/>
+			<property id="value" type="int">
                 <get text="get_value()"/>
                 <set text="value({value})"/>
             </property>
         </class>
 
-        <class id="switch" super="component" creation_function="newSwitch">
+        <class id="switch" super="component" output_id="ms.ui.Switch">
             <property id="active" type="int">
                 <get text="get_active()"/>
                 <set text="active({value})"/>
             </property>
         </class>
 
-        <class id="line" super="component" creation_function="newLine">
+        <class id="line" super="component" output_id="ms.ui.Line">
             <property id="x1" type="float">
                 <get text="x1"/>
                 <set text="set_x1({value})"/>
@@ -131,10 +138,26 @@
                 <set text="set_lineWidth({value})"/>
             </property>
             
-            <property id="lineCap" type="string" set_fn="set_lineCap">
+            <property id="lineCap" type="string">
                 <get text="lineCap"/>
                 <set text="set_lineCap({value})"/>
             </property>
         </class>
+		
+		<class id="sound" renderer="audio_renderer.xss">
+            <property id="src"  type="string"/>
+			<property id="play" type="bool"/>
+        </class>
+		
+		<class id="video" renderer="video_renderer.xss">
+            <property id="src"        type="string"/>
+            <property id="loop"       type="bool"/>
+            <property id="controls"   type="bool"/>
+            <property id="autoplay"   type="bool"/> 
+			<property id="audio"      type="bool"/>
+			<property id="width"      type="bool"/>
+			<property id="height"     type="bool"/>
+        </class>
+		
     </types>
 </module>

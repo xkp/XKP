@@ -5,8 +5,9 @@
 <xss:parameter id="event_renderer"    default="event.xss"/>
 
 <xss:code>
+
     if (clazz.super)
-    {
+    {	
         out()
         {
             <xss:e v="clazz.output_id"/> = Class.create(<xss:e v="clazz.super.output_id"/>,
@@ -27,8 +28,9 @@
         if (c_params)
         {
             for(var p in c_params)
-            {
-                out()
+            {	
+				if (p.property) p.id = p.property;
+				out()
                 {
                 , <xss:e v="p.id"/>
                 }
@@ -38,16 +40,17 @@
     )
     {
         $super(
-        <xss:code>
+        <xss:code>			
             var c_params = null; 
             if (clazz.super)
                 c_params = clazz.super.constructor_params;
             if (c_params)
-            {
-                int idx = 0;
+            {				
+                int idx = 0;				
                 for(var p in c_params)
                 {
-                    if (idx > 0) out() {,}
+					if (p.property) p.id = p.property;
+					if (idx > 0) out() {,}
                     out() {<xss:e v="p.id"/>}
                     idx++;
                 }
@@ -67,7 +70,7 @@
     {
         if (prop.dont_init)
             continue;
-        
+    
         compiler.xss(property_renderer, prop, clazz, is_class = true);
     }    
 

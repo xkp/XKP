@@ -1232,85 +1232,69 @@ str base_lang::render_expression(expression& expr, XSSContext ctx)
 
 str base_lang::instantiate(XSSType type, DynamicArray params)
   {
-    str       class_name  = type->output_id();
-    XSSObject ctor_params = type->find("constructor_params");
+    str          class_name  = type->output_id();
+    DynamicArray ctor_params = type->ctor_args();
     
     std::stringstream ss;
     ss << "new " << class_name << "(";
-    if (ctor_params)
+    
+    std::vector<variant>::iterator it = ctor_params->ref_begin();
+    std::vector<variant>::iterator nd = ctor_params->ref_end();
+
+    bool   first = true;
+    size_t curr  = 0;
+    for(; it != nd; it ++)
       {
-        std::vector<XSSObject> args = ctor_params->find_by_class("parameter");
-        std::vector<XSSObject>::iterator it = args.begin();
-        std::vector<XSSObject>::iterator nd = args.end();
-
-        bool   first = true;
-        size_t curr  = 0;
-        for(; it != nd; it ++)
+        str       value;
+        XSSObject p = *it;
+        str       constant = p->get<str> ("constant", str());
+        str       prperty  = p->get<str> ("property", str());
+        bool      runtime  = p->get<bool>("runtime",  false);
+        if (!constant.empty())  
           {
-            str       value;
-            XSSObject p = *it;
-            str       constant = p->get<str> ("constant", str());
-            str       prperty  = p->get<str> ("property", str());
-            bool      runtime  = p->get<bool>("runtime",  false);
-            if (!constant.empty())  
-              {
-                value = constant;
-              }
-            else if (runtime)
-              {
-                if (curr < params->size())
-                  {
-                    XSSObject param_value = params->at(curr++);
-                              value       = param_value->get<str>("value", str()); assert(!value.empty());
-                  }
-              }
-
-            if (value.empty())
-              {
-                if (prperty.empty())
-                  {
-                    param_list error;
-                    error.add("id", SLanguage);
-                    error.add("desc", SCannotResolveParam);
-                    error.add("type", type->id());
-                    error.add("parameter", p->id());
-                    xss_throw(error);
-                  }                
-
-                XSSProperty prop = type->get_property(prperty);
-                if (!prop)
-                  {
-                    param_list error;
-                    error.add("id", SLanguage);
-                    error.add("desc", SCannotResolveCtorProperty);
-                    error.add("type", type->id());
-                    error.add("property", prperty);
-                    xss_throw(error);
-                  }                
-
-                value = prop->render_value();
-              }
-
-            if (first)
-              first = false;
-            else
-              ss << ", ";
-
-            ss << value;
+            value = constant;
           }
-      }
-    else
-      {
-        if (params->size() > 0)
+        else if (runtime)
           {
-            param_list error;
-            error.add("id", SLanguage);
-            error.add("desc", STooManyParamsInCtor);
-            error.add("type", type->id());
-            error.add("expected", 0);
-            error.add("got", (int)params->size());
-            xss_throw(error);
+            if (curr < params->size())
+              {
+                XSSObject param_value = params->at(curr++);
+                          value       = param_value->get<str>("value", str()); assert(!value.empty());
+              }
           }
+
+        if (value.empty())
+          {
+            if (prperty.empty())
+              {
+                param_list error;
+                error.add("id", SLanguage);
+                error.add("desc", SCannotResolveParam);
+                error.add("type", type->id());
+                error.add("parameter", p->id());
+                xss_throw(error);
+              }                
+
+            XSSProperty prop = type->get_property(prperty);
+            if (!prop)
+              {
+                param_list error;
+                error.add("id", SLanguage);
+                error.add("desc", SCannotResolveCtorProperty);
+                error.add("type", type->id());
+                error.add("property", prperty);
+                xss_throw(error);
+              }                
+
+            value = prop->render_value();
+          }
+
+        if (first)
+          first = false;
+        else
+          ss << ", ";
+
+        ss << value;
       }
 
     ss << ")";

@@ -150,7 +150,7 @@
             out()
             {
                 <xss:e v="visual_parent.output_id"/>.physics = current_body;
-                current_body.host = <xss:e v="visual_parent.output_id"/>;
+                current_body.xs_visual = <xss:e v="visual_parent.output_id"/>;
             }
         }
     }

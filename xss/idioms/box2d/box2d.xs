@@ -40,32 +40,9 @@ on render_initialization()
             ,  true                 //allow sleep
          );
 
-        var g_step_collisions = [];
-
-        var contactListener = new Box2D.Dynamics.b2ContactListener;
-        contactListener.BeginContact = function(contact, manifold) 
-        {
-            function get_collider(body)
-            {
-                if (body.host && ("collision" in body.host))
-                    return body.host;
-                return null;
-            }
-
-            var host1 = get_collider(contact.GetFixtureA().GetBody());
-            var host2 = get_collider(contact.GetFixtureB().GetBody());
-
-            if (host1)
-                g_step_collisions.push({host1: host1, host2:host2, contact: contact, manifold:manifold});
-                
-            if (host2)
-                g_step_collisions.push({host1: host2, host2:host1, contact: contact, manifold:manifold});
-        };
-        g_world.SetContactListener(contactListener);
-
-        var g_world_scale = <xss:e v="world.scale"/>;
-        var fixDef = new b2FixtureDef;
-        var bodyDef = new b2BodyDef;
+         var g_world_scale = <xss:e v="world.scale"/>;
+         var fixDef = new b2FixtureDef;
+         var bodyDef = new b2BodyDef;
 	}
 }
 
@@ -74,19 +51,17 @@ on render_types()
 	compiler.log("BOX2D: Not Yet Rendering Types...");
 }
 
-on render_instances(var target)
+on render_instances()
 {
     if (!world)
         compiler.error("Box2d requires a physics_world object");
-    
-    if (!target)
-        target = instances;
 
-    for(var i in target)
+    for(var i in instances)
     {
         if (i.class_name == "physics_world")
           continue;
 
+        compiler.log(i.id);
 		compiler.xss("body.xss", i, world);
     }
 
@@ -116,37 +91,6 @@ on render_update()
         g_world.DrawDebugData();
         g_world.ClearForces();
 
-        //process collisions
-        for(var i = 0; i < g_step_collisions.length; i++)
-        {
-            var info = g_step_collisions[i];
-            info.host1.collision(info.host2, info.contact, info.manifold);
-        }
-        g_step_collisions = [];
-
-        //process contacts
-        function get_contact_handler(body)
-        {
-            if (body.host && ("contact" in body.host))
-                return body.host;
-            return null;
-        }
-
-        var cc = g_world.GetContactList();
-        while(cc)
-        {
-            var host1 = get_contact_handler(cc.GetFixtureA().GetBody());
-            var host2 = get_contact_handler(cc.GetFixtureB().GetBody());
-
-            if (host1)
-                host1.contact(host2, cc);
-
-            if (host2)
-                host2.contact(host1, cc);
-
-            cc = cc.GetNext();
-        }
-
         //synch
         var bb = g_world.GetBodyList();
         while(bb)
@@ -160,12 +104,12 @@ on render_update()
             var angle = bb.GetAngle();
             var pos   = bb.GetTransform().position;
 
-            if (bb.host)
+            if (bb.xs_visual)
             {
                 var x = pos.x*g_world_scale;
                 var y = pos.y*g_world_scale;
-                bb.host.position(x - bb.host.w/2, y - bb.host.h/2);
-                bb.host.set_rotation(angle);
+                bb.xs_visual.position(x - bb.xs_visual.w/2, y - bb.xs_visual.h/2);
+                bb.xs_visual.set_rotation(angle);
             }
 
             bb = bb.GetNext();

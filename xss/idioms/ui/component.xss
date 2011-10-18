@@ -10,29 +10,28 @@
                 
         out()
 	    {
-		    <xss:e value = "cmp_id"/> = <xss:e value = "parent_id"/>.<xss:e value = "cmp.creation_function"/>(
+		    <xss:e value = "cmp_id"/> = new <xss:e value = "cmp.type.output_id"/>( 
 	    }
 
-	    if (cmp.constructor_params)
+	    var type = cmp.type;
+        if (type.constructor_params)
         {
-            for(int i = 0; i < cmp.constructor_params.size; i++)
-		    {
-                var param = cmp.constructor_params[i];
-                var prop = cmp.get_property(param.property);
-
+            for(int i = 0; i < type.constructor_params.size; i++)
+		    {				
+                var param = type.constructor_params[i];
+                var prop = cmp.get_property(param.property);					
                 if(prop != null)
                     out() {<xss:e v="prop.render_value()"/>}			
                 else
-                    out() {null}			
-
-                if (i < cmp.constructor_params.size - 1)
-                {
-                    out(dont_break = true) {,}
-                }
+                    out() {null}	    
+				out(dont_break = true) {,}
 		    }
         }
-
-	    out() {);}
+		
+	    out() {<xss:e value = "parent_id"/>.manager, <xss:e value = "parent_id"/>);}
+		if(cmp.type.output_id == "ms.ui.Component"){
+			out() {<xss:e v="cmp.id"/>.mouse_thru = true;}			
+		}
         compiler.xss("../common-js/instance.xss", cmp);
     }
     else 

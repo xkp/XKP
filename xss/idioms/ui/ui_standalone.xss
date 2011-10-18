@@ -40,6 +40,7 @@ var application = {};
 
 <xss:code>
     compiler.inject("render_initialization");
+	compiler.inject("render_resources");
 </xss:code>
 
 
@@ -77,6 +78,7 @@ compiler.xss("../common-js/instance.xss", application);
 
 window.onload = function() 
 {
+	var Sound = new ms.ui.Sound();
 	var drawingCanvas = document.getElementById("<xss:e value="application.canvasElement"/>");
         
 	g_canvas = drawingCanvas;
@@ -88,76 +90,12 @@ window.onload = function()
 			height: <xss:e value="application.height"/>,
 			canvas: drawingCanvas
 		};
-            
-		var streamer = new ms.streamer.Streamer();
+            							
 		var ui = new ms.ui.Manager(client, streamer);
-		var resources = new ms.streamer.PackageContainer();
+		
 		g_ui = ui;
         g_ui_root = ui.root;
-
-        var ui_images = 
-        [
-            <xss:marker id="ui_images"/>
-        ];
-
-		<xss:code>
-		for(var res in application.resources.children)
-		{
-            if (res.class_name != "package")
-            {
-                //this is obviously a hack, but what the hell 
-                out(marker = "ui_images")
-                {
-				    '<xss:e value="res.src"/>',
-                }
-            }
-            else
-            {
-                //generate a standard resource package
-                out(marker = "variables")
-                {
-                    var <xss:e v="res.id"/>;
-                }
-                
-                //contents
-                string pack_id = compiler.genid("__p");
-                out()
-                {
-                    var <xss:e v="pack_id"/> = 
-                    [
-                }
-                
-                for(var resource in res.children)
-                {
-                    out()
-                    {
-                        {src: "<xss:e v="resource.src"/>"},
-                    }
-                }
-                
-                out()
-                {
-                    ];
-                    
-                    <xss:e v="res.id"/> = new ms.streamer.Package(streamer, <xss:e v="pack_id"/>);
-                    resources.register("<xss:e v="res.id"/>", <xss:e v="res.id"/>);            
-                }
-                
-                if (res.auto_load)
-                {
-                    out()
-                    {
-                        <xss:e v="res.id"/>.load();
-                    }
-                }
-                
-                
-            }
-		}
-        </xss:code>
-
-		ui.load_images(ui_images, function()
-		{
+     	
 			drawingCanvas.onmousemove = function(ev)
 			{
 				ui.mouse_move(ev.clientX, ev.clientY);                  
@@ -172,10 +110,23 @@ window.onload = function()
 			{
 				ui.mouse_up(ev.clientX, ev.clientY);                  
 			};
+			
+			document.onkeydown = function(ev)
+			{
+				ui.key_down(ev.keyCode);                  
+			};
+			
+			document.onkeyup = function(ev)
+			{
+				ui.key_up(ev.keyCode);                  
+			};
+			
+			document.onkeypress = function(ev)
+			{
+				ui.key_press(ev.keyCode);                  
+			};
 
             <xss:code>
-            //the instances are rendered after the basic resources has been loaded
-            //not good
             compiler.inject("render_instances");
             </xss:code>
 
@@ -185,8 +136,7 @@ window.onload = function()
             }
     
 			start();
-			ui.draw(drawingCanvas.getContext('2d'));
-		});
+			ui.draw(drawingCanvas.getContext('2d'));		
 	}
 }
 </script>
@@ -200,6 +150,13 @@ window.onload = function()
 		<p>Your browser doesn't support canvas.</p>
 
 	</canvas>
+	
+	<audio id="sounds" preload> 
+		<xss:marker id="audio_resources"/>	
+	Your browser does not support the audio element.
+	</audio>
+		
+	<xss:marker id="html_body"/>
 
 </body>
 

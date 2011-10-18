@@ -4,25 +4,32 @@
 
 <xss:code>
 //remember every event could be impemented multiple times
-string ev_name = it.id + "." + ev.name;
+
+string ev_name = ev.output_id;
+string assign = ":";
+string separator = ",";
+
+if (!is_class)
+{
+    ev_name = it.output_id + "." + ev_name;
+    assign = "=";
+    separator = ";";
+}
+
 var    impls   = ev.impls;
 var    evargs  = ev.args;
 		
-if (!evargs)
-{
-    compiler.log("NO ARGS");
-}
-
 //generate functions
 out(indent = 0)
 {
-	<xss:e value="ev_name"/> = function(<xss:e v="evargs.render()"/>)
+	<xss:e value="ev_name"/> <xss:e value="assign"/> function(<xss:e value="evargs.render()"/>)
 	<xss:open_brace/>    
 }
 		
 for(var evimpl in impls)
 {
-    evimpl.use_this_id(true);
+	if(!is_class)
+		evimpl.use_this_id(true);
 	out(indent = 1)
 	{
 		<xss:e>evimpl.render()</xss:e>
@@ -31,6 +38,6 @@ for(var evimpl in impls)
 
 out(indent = 0)
 {
-	<xss:close_brace/>;
+	<xss:close_brace/><xss:e value="separator"/>
 }
 </xss:code>

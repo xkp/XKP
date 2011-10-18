@@ -3,12 +3,22 @@
 <xss:parameter id="is_class"/>
 
 <xss:code>
-string mthd_name = owner.id + "." + mthd.name;
+string mthd_name = mthd.output_id;
+string assign = ":";
+string separator = ",";
+
+if (!is_class)
+{
+    mthd_name = owner.output_id + "." + mthd_name;
+    assign = "=";
+    separator = ";";
+}
+
 out(indent = 0)
 {
-	<xss:e value="mthd_name"/> = function(<xss:e>mthd.args.render()</xss:e>) 
+	<xss:e value="mthd_name"/> <xss:e value="assign"/> function(<xss:e>mthd.args.render()</xss:e>) 
 	{
 		<xss:e>mthd.code.render()</xss:e>
-	};
+	}<xss:e value="separator"/>
 }
 </xss:code>

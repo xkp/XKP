@@ -24,8 +24,6 @@
 <script type="text/javascript">		
 	var renderer = new THREE.CanvasRenderer();	
 var active_camera;
-var SCREEN_WIDTH = window.innerWidth;
-var SCREEN_HEIGHT = window.innerHeight;
 var g_elapsed = -1;
 var g_delta = 0.0;			
 var anim_1;var fade_1;
@@ -134,22 +132,22 @@ new THREE.Scene(
 var camera_1 = 
 new THREE.Camera(
 75,1.5,1,3000);
-                camera_1.position.z = 1000;
+                camera_1.position.z = 1000
 var light = 
 new THREE.DirectionalLight(
 1677);
 		;
 	scene.addLight(light);
-                light.position.y = 0.5;
-                light.position.z = 1;
+                light.position.y = 0.5
+                light.position.z = 1
 	var cylinder_1_cylinder = 
 new THREE.Cylinder(
 200,100,100,500);
 	var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder,
 	cylinder_material);
 	scene.addObject(cylinder_1);
-                cylinder_1.rotation.x = 10;
-                cylinder_1.rotation.y = 10;
+                cylinder_1.rotation.x = 10
+                cylinder_1.rotation.y = 10
 	document.addEventListener( 'click', click_cylinder_1, false );
 	function click_cylinder_1 (event)
 	{

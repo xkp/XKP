@@ -61,7 +61,9 @@
 		</class>
 		
 		<class id="object3d">						
-            <property id="color" type="string" set_fn="materials[ 0 ].color.setHex" use_plain_value="true"/>
+            <property id="color" type="string" use_plain_value="true">
+				<set text="materials[ 0 ].color.setHex({value})"/>
+            </property>
 			<property id="alpha" type="float" output_id="materials[0].opacity" use_plain_value="true"/>
 			<property id="overdraw" type="string"/>
 			<property id="double_sided" type="string" output_id="doubleSided"/>

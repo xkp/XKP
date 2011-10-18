@@ -5,7 +5,7 @@
             <property id="src" type="string"/>
         </class>	
 		
-		<class id="sound" resource_type="RESOURCE_SOUND">
+		<class id="audio" resource_type="RESOURCE_SOUND">
 			<property id="src" type="string"/>			
 		</class>
 		

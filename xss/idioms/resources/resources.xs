@@ -3,7 +3,7 @@ on render_initialization()
 {
 	out()
 	{
-		var g_streamer = new ms.streamer.Streamer();
+		var streamer = new ms.streamer.Streamer();
 	}
 }
 
@@ -63,7 +63,7 @@ on render_resources()
 
     out()
     {
-        var g_startup_package = new ms.streamer.Package(g_streamer, def_package_items);	
+        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
     }
 }

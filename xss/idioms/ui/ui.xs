@@ -22,7 +22,10 @@ on render_instances()
 	compiler.log("Rendering UI...");
 	
     for(var i in instances)
-    {
-		compiler.xss("component.xss", i, false);
+    {		
+		if(i.renderer)
+			compiler.xss(i.renderer, i);			
+		else
+			compiler.xss("component.xss", i, false);
     }
 }

@@ -282,7 +282,8 @@ ms.streamer.Streamer = Class.create(
 		{
 			result =
 			{	
-				id:		  		resource.id, 	 
+				id:		  		resource.id, 
+				data:		  	resource.data, 
 				asset:    		resource.url,
 				type:  			resource.type,
 				loaded:   		false,

@@ -1240,7 +1240,8 @@ xss_type::xss_type():
   is_array_(false),
   is_object_(true),
   is_variant_(false),
-  is_unresolved_(false)
+  is_unresolved_(false),
+  ctor_args_(new dynamic_array)
   {
     DYNAMIC_INHERITANCE(xss_type)
   }
@@ -1252,7 +1253,8 @@ xss_type::xss_type(schema* _xs_type):
   is_array_(false),
   is_object_(false),
   is_variant_(false),
-  is_unresolved_(false)
+  is_unresolved_(false),
+  ctor_args_(new dynamic_array)
   {
     DYNAMIC_INHERITANCE(xss_type)
   }
@@ -1285,28 +1287,33 @@ void xss_type::set_super(XSSType super)
     if (super_)
       {
         //copy construction parameters
-        XSSObject my_ctor = find("constructor_params");
-        XSSObject theirs  = super->find("constructor_params");
+        DynamicArray super_args = super_->ctor_args();
 
-        if (theirs)
+        if (super_args->size() > 0)
           {
-            if (!my_ctor)
-              {
-                my_ctor = XSSObject(new xss_object);
-                my_ctor->set_id("constructor_params");
+            DynamicArray copy = ctor_args_;
+            ctor_args_  = DynamicArray(new dynamic_array);
 
-                add_child(my_ctor);
-              }
-
-            std::vector<variant>::iterator rit = theirs->children()->ref_begin();
-            std::vector<variant>::iterator rnd = theirs->children()->ref_end();
-            for(; rit != rnd; rit++)
+            std::vector<variant>::iterator it = super_args->ref_begin();
+            std::vector<variant>::iterator nd = super_args->ref_end();
+            for(; it != nd; it++)
               {
-                XSSObject robj = variant_cast<XSSObject>(*rit, XSSObject());
+                XSSObject robj = variant_cast<XSSObject>(*it, XSSObject());
                 if (!robj)
                   continue;
             
-                my_ctor->add_child(robj);
+                ctor_args_->push_back(robj);
+              }
+
+            it = copy->ref_begin();
+            nd = copy->ref_end();
+            for(; it != nd; it++)
+              {
+                XSSObject robj = variant_cast<XSSObject>(*it, XSSObject());
+                if (!robj)
+                  continue;
+            
+                ctor_args_->push_back(robj);
               }
           }
       }
@@ -1375,6 +1382,11 @@ void xss_type::inherit()
 XSSType xss_type::get_super()
   {
     return super_;
+  }
+
+DynamicArray xss_type::ctor_args()
+  {
+    return ctor_args_;
   }
 
 void xss_type::as_enum()

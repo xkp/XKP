@@ -140,12 +140,13 @@ class xss_type : public xss_object
       //xss_object
       virtual bool resolve(const str& name, schema_item& result);
     public:
-      void    set_super(XSSType super);
-      void    set_definition(XSSObject def);
-      schema* native_type();
-      XSSType array_type();
-      void    inherit();
-      XSSType get_super();
+      void         set_super(XSSType super);
+      void         set_definition(XSSObject def);
+      schema*      native_type();
+      XSSType      array_type();
+      void         inherit();
+      XSSType      get_super();
+      DynamicArray ctor_args();
     public:
       void as_enum();
       void as_array(XSSType type);
@@ -171,8 +172,9 @@ class xss_type : public xss_object
       bool    is_variant_;
       bool    is_unresolved_;
     public:
-      XSSType  super_;
-      Language lang_;
+      XSSType      super_;
+      Language     lang_;
+      DynamicArray ctor_args_;
   };
 
 //the language interface
@@ -444,6 +446,8 @@ struct xss_type_schema : xss_object_schema<xss_type>
 				readonly_property<bool>("is_object",  &xss_type::is_object);
 				readonly_property<bool>("is_native",  &xss_type::is_native);
 				readonly_property<bool>("is_variant", &xss_type::is_variant);
+
+				readonly_property<DynamicArray>("constructor_params", &xss_type::ctor_args);
       }
   };
 
