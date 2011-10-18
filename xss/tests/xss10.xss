@@ -1,4 +1,5 @@
 <xss:code>
+	//ERROR: td: !!
 	//compiler.log(11 % 2);
 
     compiler.log("De bug in");
@@ -9,22 +10,80 @@
 		compiler.log("Inside condition flag...");
 	}
 
-	for(var i in application.children)
+	java.instances += application;
+	
+	// setting output_id
+	for(var xc in java.instances)
 	{
-		for(var ev in i.events)
+		compiler.log("instance: " + xc.output_id);
+		for(var xcp in xc.properties)
 		{
-			if(ev.implemented)
+			//xcp.output_id = "prop_" + xc.output_id + "_" + xcp.name;
+			
+			compiler.log("prop:" + xcp.output_id);
+			if(xcp.get_)
 			{
-				for(var impl in ev.impls)
-				{
-					out()
-					{
-						<xss:e>impl.render()</xss:e>
-					}
-				}
+				compiler.log("get: " + xcp.get_.text);
+				var g = xcp.get_;
+				g.text = "prop_" + xc.output_id + "_" + xcp.name;
+			}
+			
+			if(xcp.set_)
+			{
+				compiler.log("set: " + xcp.set_.text);
+				var s = xcp.set_;
+				s.text = "prop_" + xc.output_id + "_" + xcp.name;
 			}
 		}
 		
+		for(var xce in xc.events)
+		{
+			xce.output_id = "event_" + xc.output_id + "_" + xce.name;
+		}
+		
+		for(var xcm in xc.methods)
+		{
+			xcm.output_id = "mthd_" + xc.output_id + "_" + xcm.name;
+		}
+	}
+	
+	for(var i in java.instances)
+	{
+		//TRACE: log
+		compiler.log("Instance " + i.output_id + "...");
+		
+		out()
+		{
+			== Instance <xss:e>i.output_id</xss:e> ==
+		}
+		
+		if(i.properties)
+		{
+			for(var p in i.properties)
+			{
+				compiler.xss("../idioms/java/property.xss", p, i.output_id);
+			}
+		}
+		
+		if(i.events)
+		{
+			for(var e in i.events)
+			{
+				//string new_id = e.output_id + i.id;
+				//compiler.xss("../idioms/java/event.xss", e, new_id);
+				compiler.xss("../idioms/java/event.xss", e);
+			}
+		}
+		
+		if(i.methods)
+		{
+			for(var m in i.methods)
+			{
+				compiler.xss("../idioms/java/method.xss", m);
+			}
+		}
+		
+		//compiler.xss("../idioms/java/instance.xss", i);
 	}
 	
 </xss:code>

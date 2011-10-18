@@ -4,13 +4,20 @@
 			<property id="px_value" type="int"/>
 			<property id="ps_value" type="var"/>
 			<property id="arr" type="array"/>
+			<property id="size" type="int"/>
 			
 			<method id="mthd_1" type="int"/>
+			
+			<event id="create"/>
 		</class>
 		
 		<class id="classy">
+			<property id="size" type="int"/>
+			
 			<method id="mthd_1" type="int"/>
 			<method id="mthd_2" type="int"/>
+			
+			<event id="click"/>
 		</class>
 	</types>
 </module>

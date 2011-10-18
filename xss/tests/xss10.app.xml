@@ -1,3 +1,4 @@
 <application name="XSS10" title="Test Render Expression" src="xss10.app.xs">
-	<classx id="instance1"/>
+	<classx id="it1"/>
+	<classy id="it2"/>
 </application>

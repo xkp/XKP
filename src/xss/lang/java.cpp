@@ -146,7 +146,8 @@ str java_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
                     case RESOLVE_PROPERTY:
                       {
                         XSSProperty prop = si.value;
-                        result = lang->property_get(prop, lang->resolve_this(ctx_), ctx_);
+                        result = prop->output_id();
+                        //result = lang->property_get(prop, lang->resolve_this(ctx_), ctx_);
                         break;
                       }
                     case RESOLVE_METHOD:
@@ -256,6 +257,7 @@ void java_expr_renderer::exec_operator(operator_type op, int pop_count, int push
     switch(op)
       {
         // add here the operators that I'll customize
+        case op_dot_call:
         case op_typecheck:
         case op_index:
         case op_typecast:
@@ -309,13 +311,37 @@ void java_expr_renderer::exec_operator(operator_type op, int pop_count, int push
         case op_or:
 
         case op_call:
-        case op_dot_call:
         case op_func_call:
         case op_parameter:
 				case op_dot:
           {
             // execute exec_operator of base class with the same parameters
             base_expr_renderer::exec_operator(op, pop_count, push_count, top);
+            break;
+          }
+
+        case op_dot_call:
+          {
+            std::stringstream ss;
+
+            str opnd1 = operand_to_string(arg1);
+
+            XSSObject inst = get_instance(arg1);
+            str opnd2 = operand_to_string(arg2, inst);
+
+						str separator = ctx_->get_language()->resolve_separator();
+
+				    //here comes the hacky hoo
+            size_t first_dot = opnd2.find_first_of(separator);
+				    if (first_dot != str::npos)
+					    {
+						    str str_this = opnd2.substr(0, first_dot);
+                if (str_this == opnd1)
+                  opnd2.erase(0, first_dot + 1);
+					    }
+
+            ss << opnd1 << "." << opnd2;
+            push_rendered(ss.str(), op_prec, variant(), opnd1);
             break;
           }
 
@@ -616,15 +642,21 @@ str java_lang::property_get(XSSProperty prop, const str& path, XSSContext ctx)
   {
     compile_property(prop, ctx);
     XSSObject get = prop->find("get");
+    bool user_def = prop->get<bool>("user_defined", false);
+
     if (get)
       {
         XSSRenderer rend   = XSSObject(prop)->get<XSSRenderer>("#get_renderer", XSSRenderer());
         bool        global = get->get<bool>("global", false);
 
+        str g = get->get<str>("text", str());
+        get->add_attribute("text", prop->output_id() + "_get()");
+        g = get->get<str>("text", str());
+
         param_list params;
         params.add("path", path);
         str result = rend->render(XSSObject(), &params);
-        return global? result : path + "." + result;
+        return global || user_def ? result : path + "." + result;
       }
     else
       {
@@ -640,7 +672,12 @@ str java_lang::property_get(XSSProperty prop, const str& path, XSSContext ctx)
           }
         else
           {
-            return path + "." + prop->output_id();
+            str result = "";
+
+            if (!user_def)
+              result = path + ".";
+
+            return result + prop->output_id();
           }
       }
 
@@ -651,17 +688,21 @@ str java_lang::property_set(XSSProperty prop, const str& path, const str& value,
   {
     compile_property(prop, ctx);
     XSSObject set = prop->find("set");
+    bool user_def = prop->get<bool>("user_defined", false);
+
     if (set)
       {
         XSSRenderer rend   = XSSObject(prop)->get<XSSRenderer>("#set_renderer", XSSRenderer());
         bool        global = set->get<bool>("global", false);
+
+        set->add_attribute("text", prop->output_id() + "_set({value})");
 
         param_list params;
         params.add("path", path);
         params.add("value", value);
 
         str result = rend->render(XSSObject(), &params);
-        return global? result : path + "." + result;
+        return global || user_def ? result : path + "." + result;
       }
     else
       {
@@ -676,7 +717,12 @@ str java_lang::property_set(XSSProperty prop, const str& path, const str& value,
           }
         else
           {
-            return path + "." + prop->output_id() + " = " + value;
+            str result = "";
+
+            if (!user_def)
+              result = path + ".";
+
+            return result + prop->output_id() + " = " + value;
           }
       }
 
@@ -710,6 +756,3 @@ str java_lang::array_operation(operator_type op, const str& arr, const str& valu
     assert(false); //only this operators are supported, is this a valid use case?
     return str();
   }
-
-
-

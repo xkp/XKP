@@ -1467,8 +1467,8 @@ xss_property::xss_property():
 
 xss_property::xss_property(const xss_property& other):
   xss_object(other),
-	get(other.get),
-	set(other.set),
+	get_(other.get_),
+	set_(other.set_),
 	flags(other.flags),
 	this_(other.this_),
 	value_(other.value_)
@@ -1488,8 +1488,8 @@ xss_property::xss_property(const str& _name, XSSType _type, variant _value, XSSO
   }
 
 xss_property::xss_property(const str& _name, XSSType _type, variant _value, variant _get, variant _set, XSSObject _this_):
-	get(_get),
-	set(_set),
+	get_(_get),
+	set_(_set),
 	this_(_this_),
 	value_(_value)
   {
@@ -1509,8 +1509,8 @@ void xss_property::copy(XSSObject obj)
     //XSSProperty prop = variant_cast<XSSProperty>(obj, XSSProperty());
     if (prop)
       {
-        get = prop->get;
-			  set = prop->set;
+        get_ = prop->get_;
+			  set_ = prop->set_;
 			  flags = prop->flags;
 			  this_ = prop->this_;
 			  value_ = prop->value_;
@@ -1534,6 +1534,16 @@ void xss_property::copy(XSSObject obj)
       }
 
     xss_object::copy(obj);
+  }
+
+XSSObject xss_property::get_get()
+  {
+    return find("get");
+  }
+
+XSSObject xss_property::get_set()
+  {
+    return find("set");
   }
 
 void xss_property::set_value(const variant value, XSSType type)
@@ -1583,7 +1593,7 @@ XSSType xss_property::type()
   {
     if (!type_)
       {
-        ICodeRenderer* icr = variant_cast<ICodeRenderer *>(get, null);
+        ICodeRenderer* icr = variant_cast<ICodeRenderer *>(get_, null);
 
         if (icr)
           {
