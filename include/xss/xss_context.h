@@ -65,6 +65,12 @@ class xss_object : public editable_object<xss_object>,
           return variant_cast<T>(dynamic_get(this, what), default_value);
         }
 
+      template <typename T>
+      void set(const str& what, T value)
+        {
+          dynamic_set(this, what, value);
+        }
+
       str           id();
       str           output_id();
       str           type_name();

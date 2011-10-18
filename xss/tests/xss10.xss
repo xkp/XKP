@@ -25,7 +25,7 @@
 			{
 				compiler.log("get: " + xcp.get_.text);
 				var g = xcp.get_;
-				g.text = "prop_" + xc.output_id + "_" + xcp.name;
+				g.text = "WHAT UP DOUGH";
 			}
 			
 			if(xcp.set_)

@@ -5,6 +5,7 @@
 #include <xss/brace_parser.h>
 #include <xss/xss_renderer.h>
 
+#include <boost/functional/hash.hpp>
 #include <boost/algorithm/string.hpp>
 
 using namespace xkp;
@@ -1318,11 +1319,25 @@ void base_lang::compile_property(XSSProperty prop, XSSContext ctx)
             xss_throw(error);
           }
 
-        XSSContext my_ctx(new xss_context(ctx));
-        my_ctx->add_parameter("path", ctx->get_type("string"));
+        boost::hash<std::string> string_hash;
+        int  hash       = string_hash(text);
+        int  stored     = prop->get("#get_renderer_hash", 0); 
+        bool do_compile = true;
+        if (stored != 0)
+          {
+            do_compile = stored != hash;
+          }
+        
+        if (do_compile)
+          {
+            prop->set("#get_renderer_hash", hash); 
 
-        XSSRenderer rend = compile_braces(text, my_ctx);
-        prop->add_attribute("#get_renderer", rend);
+            XSSContext my_ctx(new xss_context(ctx));
+            my_ctx->add_parameter("path", ctx->get_type("string"));
+
+            XSSRenderer rend = compile_braces(text, my_ctx);
+            prop->add_attribute("#get_renderer", rend);
+          }
       }
 
     if (set)
@@ -1337,11 +1352,25 @@ void base_lang::compile_property(XSSProperty prop, XSSContext ctx)
             xss_throw(error);
           }
 
-        XSSContext my_ctx(new xss_context(ctx));
-        my_ctx->add_parameter("path",  ctx->get_type("string"));
-        my_ctx->add_parameter("value", ctx->get_type("string"));
+        boost::hash<std::string> string_hash;
+        int  hash       = string_hash(text);
+        int  stored     = prop->get("#set_renderer_hash", 0); 
+        bool do_compile = true;
+        if (stored != 0)
+          {
+            do_compile = stored != hash;
+          }
+        
+        if (do_compile)
+          {
+            prop->set("#set_renderer_hash", hash); 
 
-        XSSRenderer rend = compile_braces(text, my_ctx);
-        prop->add_attribute("#set_renderer", rend);
+            XSSContext my_ctx(new xss_context(ctx));
+            my_ctx->add_parameter("path",  ctx->get_type("string"));
+            my_ctx->add_parameter("value", ctx->get_type("string"));
+
+            XSSRenderer rend = compile_braces(text, my_ctx);
+            prop->add_attribute("#set_renderer", rend);
+          }
       }
   }
