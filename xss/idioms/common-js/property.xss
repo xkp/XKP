@@ -16,8 +16,7 @@ if (!is_class)
 }
 
 if (alias)
-{
-    compiler.log(alias);
+{    
     prop_name = alias + "." + prop.name;
 }    
 
@@ -66,8 +65,7 @@ else
         compiler.error("Properties must have a type");
 
     if (prop.type.is_object && prop.value)
-    {
-        compiler.log(prop.id);
+    {        
         compiler.xss("instance.xss", prop.value, alias = prop_name );
     }
     else

@@ -11,7 +11,9 @@ if(obj.parent.class_name == "composite_material"){
 	}
 }
 
-var params = obj.type.constructor_params;
+var type = obj.type;
+var params = type.constructor_params;
+
 if (params)
 {
     int i = 0;

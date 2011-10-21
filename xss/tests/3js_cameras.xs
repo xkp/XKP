@@ -1,12 +1,12 @@
 property is_ctrl_down = false;
 property is_shift_down = false;
 
-on keydown(){
-	if(key_code == SHIFT) {
+on keydown(keycode){
+	if(keycode == SHIFT) {
 		is_shift_down = true;
 		is_ctrl_down = false;
 	}
-	if(key_code == CTRL) {
+	if(keycode == CTRL) {
 		is_ctrl_down = true;
 		is_shift_down = false;
 	}

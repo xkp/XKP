@@ -21,7 +21,7 @@ on img1.click()
     img1.rotation += 0.2;
 	img1.x += 5;
 	img1.y += 5;
-	img2 = my_image(src = "images/img1.png");
+	img2 = my_image("images/img1.png");
 	img2.rect(x_pos,y_pos,50,50);
 }
 

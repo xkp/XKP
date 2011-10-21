@@ -23,19 +23,18 @@
 <script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript">		
 	var renderer = new THREE.CanvasRenderer();	
+var ui;
 var active_camera;
-var SCREEN_WIDTH = window.innerWidth;
-var SCREEN_HEIGHT = window.innerHeight;
 var g_elapsed = -1;
-var g_delta = 0.0;			
+var g_delta = 0.0;	
+var drawingCanvas = renderer.domElement;
 var application = {};
 // --------RESOURCES---------
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setSize( window.innerWidth,window.innerHeight );
 function render() {
-renderer.clear();
 var now   = new Date().getTime();
 if (g_elapsed < 0)
     g_delta = 0; //first update
@@ -49,34 +48,34 @@ var materials =
 new Array(
 );
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test1.png').asset),
+	map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test1.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test1.png').asset),
+	map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test1.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test2.png').asset),
+	map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test2.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test2.png').asset),
+	map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test2.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test3.png').asset),
+	map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test3.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test3.png').asset),
+	map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test3.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test4.png').asset),
+	map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test4.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test4.png').asset),
+	map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test4.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test5.png').asset),
+	map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test5.png').asset),
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(g_streamer.get_resource('images/test5.png').asset),
+	map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test5.png').asset),
 	}));
 var scene = 
 new THREE.Scene(
@@ -189,6 +188,12 @@ this.img_array[i].position.z = 275 * Math.sin(this.angle);
 this.img_array[i + 1].position.z = 275 * Math.sin(this.angle);
 }
 	};
+if(ui)
+{
+	ui.load_resources(function(){		
+		g_ui.fill_background = false;
+	});
+}
 if (application.init)
 {
 	application.init();
@@ -196,8 +201,12 @@ if (application.init)
 document.body.appendChild( renderer.domElement );
 animate();
 function animate() {
+	if(ui)
+		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
 	requestAnimationFrame( animate );
 	render();
+	if(ui)
+		ui.draw(drawingCanvas.getContext('2d'));
 }
 </script>
 </body>

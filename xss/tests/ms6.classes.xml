@@ -1,0 +1,6 @@
+<xs>
+    <class id="ms6" super="div" width="50" height="100">
+        <button id="btn1" placement="top" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png"/>
+        <button id="btn2" placement="client" height="50" up="images/smile_grin_48.png" down="images/smile_sad_48.png"/>
+    </class>
+</xs>

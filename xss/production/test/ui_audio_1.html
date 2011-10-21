@@ -9,13 +9,25 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
-<script type="text/javascript">			
+<script type="text/javascript">	
+var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+		if(drawingCanvas){
+			var client =
+			{
+				width: 600,
+				height: 400,
+				canvas: drawingCanvas
+			};
+			var ui = new ms.ui.Manager(client, streamer);
+			var g_ui = ui;
+			var g_ui_root = ui.root;
+		}
 		var streamer = new ms.streamer.Streamer();
         var def_package_items = [];
                 def_package_items.push(
@@ -76,8 +88,8 @@ function start(resolution)
 window.onload = function() 
 {
 	var Sound = new ms.ui.Sound();
-	var drawingCanvas = document.getElementById("myCanvas");
-	g_canvas = drawingCanvas;
+	drawingCanvas = document.getElementById("myCanvas");
+    g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
 	{
 		var client =
@@ -89,30 +101,20 @@ window.onload = function()
 		var ui = new ms.ui.Manager(client, streamer);
 		g_ui = ui;
         g_ui_root = ui.root;
-			drawingCanvas.onmousemove = function(ev)
-			{
-				ui.mouse_move(ev.clientX, ev.clientY);                  
-			};
-			drawingCanvas.onmousedown = function(ev)
-			{
-				ui.mouse_down(ev.clientX, ev.clientY);                  
-			};
-			drawingCanvas.onmouseup = function(ev)
-			{
-				ui.mouse_up(ev.clientX, ev.clientY);                  
-			};
-			document.onkeydown = function(ev)
-			{
-				ui.key_down(ev.keyCode);                  
-			};
-			document.onkeyup = function(ev)
-			{
-				ui.key_up(ev.keyCode);                  
-			};
-			document.onkeypress = function(ev)
-			{
-				ui.key_press(ev.keyCode);                  
-			};
+     	ui.load_resources(function()
+		{
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX, ev.clientY);                  
+	};	
 		    lbl1 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
                 lbl1.text("click to create a new instance of a sound")
@@ -133,12 +135,25 @@ window.onload = function()
 		Sound.play("sounds/shoots.mp3");
 	};
                 btnShoots.rect(275, 300, 100, 100);
+			document.onkeydown = function(ev)
+			{
+				ui.keydown(ev.keyCode);                  
+			};
+			document.onkeyup = function(ev)
+			{
+				ui.keyup(ev.keyCode);                  
+			};
+			document.onkeypress = function(ev)
+			{
+				ui.keypress(ev.keyCode);                  
+			};
             if (application.init)
             {
                 application.init();
             }
 			start();
-			ui.draw(drawingCanvas.getContext('2d'));		
+			ui.draw(drawingCanvas.getContext('2d'));
+		});
 	}
 }
 </script>

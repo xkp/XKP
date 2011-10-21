@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Test 3D</title>
+<title>3js-ui</title>
 <style type="text/css">
 	body{
 	}
@@ -21,8 +21,7 @@
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript">		
-	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-	var renderer = new THREE.WebGLRenderer( { antialias: true } );
+	var renderer = new THREE.CanvasRenderer();	
 var ui;
 var active_camera;
 var g_elapsed = -1;
@@ -30,50 +29,37 @@ var g_delta = 0.0;
 var drawingCanvas = renderer.domElement;
 var application = {};
 		var streamer = new ms.streamer.Streamer();
+		if(drawingCanvas){
+			var client =
+			{
+				width: 600,
+				height: 600,
+				canvas: drawingCanvas
+			};
+			var ui = new ms.ui.Manager(client, streamer);
+			var g_ui = ui;
+			var g_ui_root = ui.root;
+		}
 	// --------RESOURCES---------
         var def_package_items = [];
                 def_package_items.push(
             {
-		id:"image_1",
+		id:"",
 		resource_type:RESOURCE_IMAGE,
-		src:"images/test1.png"
+		src:"images/smile_grin_48.png"
 });
                 def_package_items.push(
             {
-		id:"image_2",
+		id:"",
 		resource_type:RESOURCE_IMAGE,
-		src:"images/test2.png"
-});
-                def_package_items.push(
-            {
-		id:"image_3",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test3.png"
-});
-                def_package_items.push(
-            {
-		id:"image_4",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test4.png"
-});
-                def_package_items.push(
-            {
-		id:"image_5",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test5.png"
-});
-                def_package_items.push(
-            {
-		id:"image_6",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test6.png"
+		src:"images/smile_sad_48.png"
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( window.innerWidth,window.innerHeight );
+renderer.setSize( 600,600 );
 function render() {
 var now   = new Date().getTime();
 if (g_elapsed < 0)
@@ -90,22 +76,22 @@ var materials =
 new Array(
 );
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_1').asset),
+	color:Math.random() * 0xffffff
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_2').asset),
+	color:Math.random() * 0xffffff
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_3').asset),
+	color:Math.random() * 0xffffff
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_4').asset),
+	color:Math.random() * 0xffffff
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_5').asset),
+	color:Math.random() * 0xffffff
 	}));
 	materials.push(new THREE.MeshBasicMaterial({
-	map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_6').asset),
+	color:Math.random() * 0xffffff
 	}));
 	var plane_material = new THREE.MeshBasicMaterial({
 	color:14737632
@@ -120,23 +106,18 @@ new THREE.Camera(
                 camera_1.position.z = 500
 	var cube_1_cube = 
 new THREE.Cube(
-200,200,200);
+200,200,200,1,1,1,materials);
 	var cube_1 = new THREE.Mesh(cube_1_cube,
-	);
+	new THREE.MeshFaceMaterial());
 	scene.addObject(cube_1);
                 cube_1.position.y = 150
 	var plane_1_plane = 
 new THREE.Plane(
 200,200);
 	var plane_1 = new THREE.Mesh(plane_1_plane,
-	);
+	plane_material);
 	scene.addObject(plane_1);
                 plane_1.rotation.x = -1.57
-	var sound_w_id_12 = new THREE.Sound(streamer.get_resource('sound_1').asset
-	,700,20,true
-	);
-	scene.addObject(sound_w_id_12);
-	sound_w_id_12.play();
                 application.x_target_rotation = 0
                 application.x_target_rotation_on_mouse_down = 0
                 application.mouse_x = 0
@@ -148,6 +129,7 @@ new THREE.Plane(
                 application.window_half_x = window.innerWidth / 2
                 application.window_half_y = window.innerHeight / 2
                 application.is_mouse_down = false
+                application.clicks = 1
 	document.addEventListener( 'mousedown', mousedown_application, false );
 	function mousedown_application (event)
 	{
@@ -179,9 +161,68 @@ application.mouse_y = y - application.window_half_y;
 application.y_target_rotation = application.y_target_rotation_on_mouse_down + (application.mouse_y - application.mouse_y_on_mouse_down) * 0.0199999996;
 }
 	};
+	document.addEventListener( 'keydown', keydown_application, false );
+	function keydown_application (event)
+	{   
+	var keycode = event.keyCode;
+			if (btn1.isVisible())
+{
+if (keycode == LEFT_ARROW)
+{
+btn1.set_x(btn1.x - 2);
+}
+if (keycode == RIGHT_ARROW)
+{
+btn1.set_x(btn1.x + 2);
+}
+if (keycode == UP_ARROW)
+{
+btn1.set_y(btn1.y - 2);
+}
+if (keycode == DOWN_ARROW)
+{
+btn1.set_y(btn1.y + 2);
+}
+}
+	}
 if(ui)
 {
 	ui.load_resources(function(){		
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX, ev.clientY);                  
+	};	
+		    lbl0 = new ms.ui.Label( 
+	    "Verdana",g_ui_root.manager, g_ui_root);
+                lbl0.text("click smile to count")
+                lbl0.position(240, 75);
+		    btn1 = new ms.ui.Button( 
+	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
+                btn1.set_rotation(0.200000003)
+                btn1.set_height(50)
+	btn1.click = function()
+	{    
+		lbl0.text("Got " + application.clicks + " smileys");
+btn1.set_rotation(btn1.rotation + 0.200000003);
+application.clicks = application.clicks + 1;
+	};
+ btn1.center(50, 50); 
+		    lbl1 = new ms.ui.Label( 
+	    "Verdana",g_ui_root.manager, g_ui_root);
+                lbl1.text("use arrows to move smile and")
+                lbl1.position(240, 400);
+		    lbl2 = new ms.ui.Label( 
+	    "Verdana",g_ui_root.manager, g_ui_root);
+                lbl2.text("drag mouse to spin the cube")
+                lbl2.position(240, 420);
 		g_ui.fill_background = false;
 	});
 }
@@ -193,7 +234,7 @@ document.body.appendChild( renderer.domElement );
 animate();
 function animate() {
 	if(ui)
-		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
+		drawingCanvas.getContext('2d').clearRect(0,0,600,600);
 	requestAnimationFrame( animate );
 	render();
 	if(ui)

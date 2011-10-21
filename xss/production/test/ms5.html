@@ -9,13 +9,25 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
-<script type="text/javascript">			
+<script type="text/javascript">	
+var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+		if(drawingCanvas){
+			var client =
+			{
+				width: 600,
+				height: 400,
+				canvas: drawingCanvas
+			};
+			var ui = new ms.ui.Manager(client, streamer);
+			var g_ui = ui;
+			var g_ui_root = ui.root;
+		}
 		var g_sequence_manager = new ms.state.Manager();
         function default_interpolate(a, b, t)
         {
@@ -42,8 +54,9 @@ function start(resolution)
                 application.clicks = 0
 window.onload = function() 
 {
-	var drawingCanvas = document.getElementById("myCanvas");
-	g_canvas = drawingCanvas;
+	var Sound = new ms.ui.Sound();
+	drawingCanvas = document.getElementById("myCanvas");
+    g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
 	{
 		var client =
@@ -52,51 +65,36 @@ window.onload = function()
 			height: 400,
 			canvas: drawingCanvas
 		};
-		var streamer = new ms.streamer.Streamer();
 		var ui = new ms.ui.Manager(client, streamer);
-		var resources = new ms.streamer.PackageContainer();
 		g_ui = ui;
         g_ui_root = ui.root;
-        var ui_images = 
-        [
-				    'images/progress.full.png',
-				    'images/progress.empty.png',
-				    'images/smile_grin_48.png',
-				    'images/smile_sad_48.png',
-				    'images/arrow_left.png',
-				    'images/arrow_right.png',
-				    'images/arrow_right_48.png',
-				    'images/arrow_right_green_48.png',
-				    'images/arrow_left_48.png',
-				    'images/arrow_left_green_48.png',
-        ];
-		ui.load_images(ui_images, function()
+     	ui.load_resources(function()
 		{
-			drawingCanvas.onmousemove = function(ev)
-			{
-				ui.mouse_move(ev.clientX, ev.clientY);                  
-			};
-			drawingCanvas.onmousedown = function(ev)
-			{
-				ui.mouse_down(ev.clientX, ev.clientY);                  
-			};
-			drawingCanvas.onmouseup = function(ev)
-			{
-				ui.mouse_up(ev.clientX, ev.clientY);                  
-			};
-		    main = g_ui_root.newSwitch(
-	    );
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX, ev.clientY);                  
+	};	
+		    main = new ms.ui.Switch( 
+	    g_ui_root.manager, g_ui_root);
                 main.set_height(250)
                 main.rect(0, 0, 600, 250);
-		    test1 = main.newComponent(
-	    );
-		    lbl1 = test1.newLabel(
-	    "Verdana");
+		    test1 = new ms.ui.Component( 
+	    main.manager, main);test1.mouse_thru = true;
+		    lbl1 = new ms.ui.Label( 
+	    "Verdana",test1.manager, test1);
                 lbl1.set_rotation("-0.2")
                 lbl1.text("click smiley")
                 lbl1.position(270, 200);
-		    btn1 = test1.newButton(
-	    "images/smile_sad_48.png","images/smile_grin_48.png");
+		    btn1 = new ms.ui.Button( 
+	    "images/smile_sad_48.png","images/smile_grin_48.png",test1.manager, test1);
                 btn1.set_rotation(0.200000003)
                 btn1.set_height(50)
 	btn1.click = function()
@@ -106,14 +104,14 @@ lbl1.text("Got " + application.clicks + " smileys");
 btn1.set_rotation(btn1.rotation + 0.200000003);
 	};
  btn1.center(50, 50); 
-		    test2 = main.newComponent(
-	    );
-		    pb1 = test2.newProgressBar(
-	    );
+		    test2 = new ms.ui.Component( 
+	    main.manager, main);test2.mouse_thru = true;
+		    pb1 = new ms.ui.ProgressBar( 
+	    null,test2.manager, test2);
                 pb1.set_height(10)
  pb1.center(150, 10); 
-		    btn2 = test2.newImage(
-	    "images/arrow_left.png");
+		    btn2 = new ms.ui.Image( 
+	    "images/arrow_left.png",test2.manager, test2);
                 btn2.set_height(20)
                 btn2.src("images/arrow_left.png")
 	btn2.click = function()
@@ -121,8 +119,8 @@ btn1.set_rotation(btn1.rotation + 0.200000003);
 		pb1.value(pb1.get_value() - 1);
 	};
                 btn2.rect(200, 115, 20, 20);
-		    btn3 = test2.newImage(
-	    "images/arrow_right.png");
+		    btn3 = new ms.ui.Image( 
+	    "images/arrow_right.png",test2.manager, test2);
                 btn3.set_height(20)
                 btn3.src("images/arrow_right.png")
 	btn3.click = function()
@@ -130,13 +128,13 @@ btn1.set_rotation(btn1.rotation + 0.200000003);
 		pb1.value(pb1.get_value() + 1);
 	};
                 btn3.rect(380, 115, 20, 20);
-		    lbl2 = test2.newLabel(
-	    "Verdana");
+		    lbl2 = new ms.ui.Label( 
+	    "Verdana",test2.manager, test2);
                 lbl2.set_rotation(0.200000003)
                 lbl2.text("click small arrows to adjust percentage")
                 lbl2.position(210, 200);
-		    btnNext = g_ui_root.newButton(
-	    "images/arrow_right_green_48.png","images/arrow_right_48.png");
+		    btnNext = new ms.ui.Button( 
+	    "images/arrow_right_green_48.png","images/arrow_right_48.png",g_ui_root.manager, g_ui_root);
                 btnNext.set_height(50)
 	btnNext.click = function()
 	{    
@@ -147,8 +145,8 @@ main.active(main.get_active() + 1);
 btnNext.set_rotation(btnNext.rotation + 0.200000003);
 	};
                 btnNext.rect(320, 300, 100, 50);
-		    btnPrev = g_ui_root.newButton(
-	    "images/arrow_left_green_48.png","images/arrow_left_48.png");
+		    btnPrev = new ms.ui.Button( 
+	    "images/arrow_left_green_48.png","images/arrow_left_48.png",g_ui_root.manager, g_ui_root);
                 btnPrev.set_rotation(0.400000006)
                 btnPrev.set_height(50)
 	btnPrev.click = function()
@@ -159,6 +157,18 @@ main.active(main.get_active() - 1);
 }
 	};
                 btnPrev.rect(220, 300, 50, 50);
+			document.onkeydown = function(ev)
+			{
+				ui.keydown(ev.keyCode);                  
+			};
+			document.onkeyup = function(ev)
+			{
+				ui.keyup(ev.keyCode);                  
+			};
+			document.onkeypress = function(ev)
+			{
+				ui.keypress(ev.keyCode);                  
+			};
             if (application.init)
             {
                 application.init();
@@ -174,5 +184,8 @@ main.active(main.get_active() - 1);
 	<canvas id="myCanvas" width="600" height="400">
 		<p>Your browser doesn't support canvas.</p>
 	</canvas>
+	<audio id="sounds" preload> 
+	Your browser does not support the audio element.
+	</audio>
 </body>
 </html>

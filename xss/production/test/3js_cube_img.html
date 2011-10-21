@@ -23,9 +23,11 @@
 <script type="text/javascript">		
 	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 	var renderer = new THREE.WebGLRenderer( { antialias: true } );
+var ui;
 var active_camera;
 var g_elapsed = -1;
-var g_delta = 0.0;			
+var g_delta = 0.0;	
+var drawingCanvas = renderer.domElement;
 var application = {};
 		var streamer = new ms.streamer.Streamer();
 	// --------RESOURCES---------
@@ -77,9 +79,8 @@ var application = {};
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setSize( window.innerWidth,window.innerHeight );
 function render() {
-renderer.clear();
 var now   = new Date().getTime();
 if (g_elapsed < 0)
     g_delta = 0; //first update
@@ -184,6 +185,12 @@ application.mouse_y = y - application.window_half_y;
 application.y_target_rotation = application.y_target_rotation_on_mouse_down + (application.mouse_y - application.mouse_y_on_mouse_down) * 0.0199999996;
 }
 	};
+if(ui)
+{
+	ui.load_resources(function(){		
+		g_ui.fill_background = false;
+	});
+}
 if (application.init)
 {
 	application.init();
@@ -191,8 +198,12 @@ if (application.init)
 document.body.appendChild( renderer.domElement );
 animate();
 function animate() {
+	if(ui)
+		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
 	requestAnimationFrame( animate );
 	render();
+	if(ui)
+		ui.draw(drawingCanvas.getContext('2d'));
 }
 </script>
 </body>

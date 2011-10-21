@@ -1,51 +1,26 @@
-
-
-<xss:code>
-//preconditions
-if (!application.canvasElement)
-	application.canvasElement = "myCanvas";
-
-if (!application.ui_package)
-    application.ui_package = "ui_package";
-</xss:code>
-
 <!DOCTYPE html>
-
 <html>
-
 <head>
-
-<title><xss:e value = "application.title"/></title>
-
+<title></title>
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
-
-<xss:code>
-    compiler.inject("render_jscripts");
-</xss:code>
-
-<script type="text/javascript">	
-
-var drawingCanvas;		
+<script type="text/javascript">			
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
-		
-<xss:code>
-    compiler.inject("render_initialization");
-	compiler.inject("render_resources");
-</xss:code>
-
-
+		var g_sequence_manager = new ms.state.Manager();
+        function default_interpolate(a, b, t)
+        {
+            return a + (b - a)*t;
+        }
 function start(resolution)  
 {  
 	var start = new Date().getTime();  
@@ -56,96 +31,85 @@ function start(resolution)
             g_delta = 0; //first update
         else
 		    g_delta  = now - g_elapsed;  
-		
         g_elapsed = now; 
-              
-        <xss:code>
-            compiler.inject("render_update");
-        </xss:code>
-
+		g_sequence_manager.update(g_delta);
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-
         window.setTimeout(update, resolution);  
 	}  
 	window.setTimeout(update, resolution);  
 }  
-
-<xss:marker id="variables"/>
-
-<xss:code>
-compiler.inject("render_types");
-compiler.xss("../common-js/instance.xss", application);
-</xss:code>
-
+            ms6 = Class.create(ms.ui.Component,
+        {
+    initialize: function($super
+        )
+    {
+        $super(
+                );
+    },
+    });
 window.onload = function() 
 {
 	var Sound = new ms.ui.Sound();
-	drawingCanvas = document.getElementById("<xss:e value="application.canvasElement"/>");
-    g_canvas = drawingCanvas;
-	
+	var drawingCanvas = document.getElementById("myCanvas");
+	g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
 	{
 		var client =
 		{
-			width: <xss:e value="application.width"/>,
-			height: <xss:e value="application.height"/>,
+			width: 600,
+			height: 400,
 			canvas: drawingCanvas
 		};
-            							
 		var ui = new ms.ui.Manager(client, streamer);
-		
 		g_ui = ui;
         g_ui_root = ui.root;
      	ui.load_resources(function()
 		{
-            <xss:code>
-			compiler.inject("render_ui_instances");    
-			compiler.inject("render_instances");            
-            </xss:code>
-			
+			drawingCanvas.onmousemove = function(ev)
+			{
+				ui.mouse_move(ev.clientX, ev.clientY);                  
+			};
+			drawingCanvas.onmousedown = function(ev)
+			{
+				ui.mouse_down(ev.clientX, ev.clientY);                  
+			};
+			drawingCanvas.onmouseup = function(ev)
+			{
+				ui.mouse_up(ev.clientX, ev.clientY);                  
+			};
 			document.onkeydown = function(ev)
 			{
-				ui.keydown(ev.keyCode);                  
+				ui.key_down(ev.keyCode);                  
 			};
 			document.onkeyup = function(ev)
 			{
-				ui.keyup(ev.keyCode);                  
+				ui.key_up(ev.keyCode);                  
 			};
 			document.onkeypress = function(ev)
 			{
-				ui.keypress(ev.keyCode);                  
+				ui.key_press(ev.keyCode);                  
 			};
-
+		    ms61 = new ms6( 
+	    g_ui_root.manager, g_ui_root);
+                ms61.rect(100, 100, 50, 100);
             if (application.init)
             {
                 application.init();
             }
-    
 			start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});
 	}
 }
 </script>
-
 </head>
-
 <body>
-
-	<canvas id="<xss:e value="application.canvasElement"/>" width="<xss:e value="application.width"/>" height="<xss:e value="application.height"/>">
-
+	<canvas id="myCanvas" width="600" height="400">
 		<p>Your browser doesn't support canvas.</p>
-
 	</canvas>
-	
 	<audio id="sounds" preload> 
-		<xss:marker id="audio_resources"/>	
 	Your browser does not support the audio element.
 	</audio>
-		
-	<xss:marker id="html_body"/>
-
 </body>
-
 </html>

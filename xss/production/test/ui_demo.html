@@ -110,9 +110,11 @@ function start(resolution)
 	window.setTimeout(update, resolution);  
 }  
                 application.clicks = 0
-	application.key_down = function(keycode)
+	application.keydown = function(keycode)
 	{    
-		if (keycode == LEFT_ARROW)
+		if (btn1.isVisible())
+{
+if (keycode == LEFT_ARROW)
 {
 btn1.set_x(btn1.x - 2);
 }
@@ -127,6 +129,7 @@ btn1.set_y(btn1.y - 2);
 if (keycode == DOWN_ARROW)
 {
 btn1.set_y(btn1.y + 2);
+}
 }
 	};
 window.onload = function() 

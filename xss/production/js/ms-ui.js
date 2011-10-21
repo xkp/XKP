@@ -20,29 +20,60 @@ ms.ui.Manager = Class.create(
 		this.keyb_ev = this.root;
 
 	},	
+	
+	//Resource handling
+	load_resources: function(callback)
+	{
+		var resources = [];
+		for(var i = 0; i < this.streamer.resources.length; i++)
+		{
+			var res = this.streamer.resources[i];
+			if(!res.loaded)
+				resources.push({ type: res.type, url: res.asset});			
+		}
+
+		if (resources.length > 0)
+		{
+			var this_ = this;
+			var stream_client =
+			{
+				resource_loaded: function(res, data)
+				{					
+				},
+
+				finished_loading: function()
+				{
+					callback();
+				}
+			};
+
+			this.streamer.request(resources, stream_client);
+		}
+		else callback();
+	},
 
 	//Keyboard managemet
-	key_down: function(keycode)
+	keydown: function(keycode)
 	{
-	    if ('key_down' in application)
+	    if ('keydown' in application)
 	    {
-			application.key_down(keycode);
+			application.keydown(keycode);
 	    }	    
 	},
 	
-	key_up: function(keycode)
+	keyup: function(keycode)
 	{
-	    if ('key_up' in application)
+	    if ('keyup' in application)
 	    {
-	        application.key_up(keycode);
+	        application.keyup(keycode);
 	    }	    
 	},
 	
-	key_press: function(keycode)
+	keypress: function(keycode)
 	{
-	    if ('key_press' in application)
+	    if ('keypress' in application)
 	    {
-	        application.key_press(keycode);
+	        application.keypress(keycode);
 	    }	    
 	},
 	
@@ -52,7 +83,7 @@ ms.ui.Manager = Class.create(
 	    this.dragging = true;
 	},
 
-	mouse_move: function(x, y)
+	mousemove: function(x, y)
 	{
 	    if (this.dragging)
 	    {
@@ -68,19 +99,19 @@ ms.ui.Manager = Class.create(
 
 	    if (over != this.mouse_over)
 	    {
-	    	if ('mouse_out' in this.mouse_over)
-	            this.mouse_over.mouse_out(this.mouse_over);
+	    	if ('mouseout' in this.mouse_over)
+	            this.mouse_over.mouseout(this.mouse_over);
 
-	        if ('mouse_in' in over)
+	        if ('mousein' in over)
 	        {
-	            over.mouse_in( over );
+	            over.mousein( over );
 	        }
 
 	        this.mouse_over = over;
 	    }
 
-	    if ('mouse_move' in over)
-	        over.mouse_move(x, y, over);
+	    if ('mousemove' in over)
+	        over.mousemove(x, y, over);
 
 	    this.lastx = x;
 	    this.lasty = y;
@@ -88,9 +119,9 @@ ms.ui.Manager = Class.create(
 	    return this.mouse_over != this.root;
 	},
 
-	mouse_down: function(x, y)
+	mousedown: function(x, y)
 	{
-	    if ('mouse_down' in this.mouse_over)
+	    if ('mousedown' in this.mouse_over)
 	    {
 	        this.mouse_over.mouse_down(x, y);
 	    }
@@ -98,7 +129,7 @@ ms.ui.Manager = Class.create(
 	    return this.mouse_over != this.root;
 	},
 	
-	mouse_up: function(x, y)
+	mouseup: function(x, y)
 	{
 	    if (this.dragging)
 	    {
@@ -108,7 +139,7 @@ ms.ui.Manager = Class.create(
 	        return true;
 	    }
 
-	    if ('mouse_up' in this.mouse_over)
+	    if ('mouseup' in this.mouse_over)
 	    {
 	        this.mouse_over.mouse_up(x, y);
 	    }
@@ -714,12 +745,12 @@ ms.ui.Button = Class.create(ms.ui.Component,
 		var normal_texture = streamer.get_resource(normal).data;
 		var over_texture   = streamer.get_resource(over).data;	
 		
-		this.mouse_in = function()
+		this.mousein = function()
 	    {
 	        this.image.image(over_texture);
 	    }
 
-	    this.mouse_out = function()
+	    this.mouseout = function()
 	    {
 	        this.image.image(normal_texture);
 	    }		

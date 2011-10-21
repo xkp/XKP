@@ -19,19 +19,19 @@ on mousemove(){
 		cylinder_1.rotation.z += 0.02;
 	}
 }
-on keydown(){
-	if(key_code == SHIFT) {
+on keydown(keycode){
+	if(keycode == SHIFT) {
 		is_shift_down = true;
 	}
-	if(key_code == CTRL) {
+	if(keycode == CTRL) {
 		is_ctrl_down = true;
 	}
 }
 on keyup(){
-	if(key_code == SHIFT) {
+	if(keycode == SHIFT) {
 		is_shift_down = false;
 	}
-	if(key_code == CTRL) {
+	if(keycode == CTRL) {
 		is_ctrl_down = false;
 	}
 }

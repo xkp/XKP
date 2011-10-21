@@ -23,17 +23,18 @@
 <script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript">		
 	var renderer = new THREE.CanvasRenderer();	
+var ui;
 var active_camera;
 var g_elapsed = -1;
-var g_delta = 0.0;			
+var g_delta = 0.0;	
+var drawingCanvas = renderer.domElement;
 var application = {};
 // --------RESOURCES---------
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setSize( window.innerWidth,window.innerHeight );
 function render() {
-renderer.clear();
 var now   = new Date().getTime();
 if (g_elapsed < 0)
     g_delta = 0; //first update
@@ -59,6 +60,12 @@ new THREE.Camera(
                 particle_1.scale.x = 5
                 particle_1.scale.y = 5
                 particle_1.scale.z = 5
+if(ui)
+{
+	ui.load_resources(function(){		
+		g_ui.fill_background = false;
+	});
+}
 if (application.init)
 {
 	application.init();
@@ -66,8 +73,12 @@ if (application.init)
 document.body.appendChild( renderer.domElement );
 animate();
 function animate() {
+	if(ui)
+		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
 	requestAnimationFrame( animate );
 	render();
+	if(ui)
+		ui.draw(drawingCanvas.getContext('2d'));
 }
 </script>
 </body>

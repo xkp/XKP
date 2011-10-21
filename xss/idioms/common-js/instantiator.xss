@@ -8,12 +8,14 @@ if (!obj.type)
 new <xss:e v="obj.type.output_id"/>(
 <xss:code>
 
-var params = obj.type.constructor_params;
-if (params)
+var type = obj.type;
+
+if (type.constructor_params)           
 {
     int i = 0;
-    for(var p in params)
-    {			
+    for(int j = 0; j < type.constructor_params.size; j++)
+    {		
+		var p = type.constructor_params[j];
 	    if (p.constant)
 		{
 			if(i > 0) 
