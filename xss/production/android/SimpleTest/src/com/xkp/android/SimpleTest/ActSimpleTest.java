@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 						import android.widget.TextView;
+						import android.view.MotionEvent;
+						import android.view.View.OnTouchListener;
 						import android.view.View.OnClickListener;
 						import android.widget.EditText;
 						import android.widget.Button;
@@ -42,6 +44,7 @@ public class ActSimpleTest
 										onClickbtnFullName();
 										break;
 							} //switch
+							return true;
 						}
 			private void onClickbtnFullName() {
 				String fullname = edtFirstName.getText().toString() + " " + edtLastName.getText().toString();

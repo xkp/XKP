@@ -117,30 +117,30 @@ Log: output_xml: visible && output_id: VISIBLE
 				
 						int pl = XKPLayout.PL_LEFT;
 ((XKPLayout.LayoutParams) btn.getLayoutParams()).setPlacement(((XKPLayout.LayoutParams) btn.getLayoutParams()).getPlacement() + 1);
-if (prop_btn_visible == VISIBLE_get())
+if (btn.getVisibility() == View.VISIBLE)
 {
 	btn.setVisibility(View.INVISIBLE);
 }
 else
 {
-	if (prop_btn_visible == INVISIBLE_get())
+	if (btn.getVisibility() == View.INVISIBLE)
 	{
-		btn.prop_btn_visible_set(View.GONE);
+		btn.setVisibility(View.GONE);
 	}
 	else
 	{
-		btn.prop_btn_visible_set(VISIBLE_get());
+		btn.setVisibility(View.VISIBLE);
 	}
 }
-btn.setEnabled(!prop_btn_enabled);
-btn.layout(btn.getLeft(), btn.getTop(), btn.getLeft() + prop_btn_height * 2, btn.getBottom());
+btn.setEnabled(!btn.isEnabled());
+btn.layout(btn.getLeft(), btn.getTop(), btn.getLeft() + btn.getHeight() * 2, btn.getBottom());
 String swp = sameName;
 sameName = prop_btn_sameName;
 prop_btn_sameName = swp;
 					
 					}
 				
-			Instance: name = "application", type = ""
+			Instance: name = "application", type = "Application"
 		
 				sameName = "My owner is application."			
 Success are greateful
@@ -211,17 +211,17 @@ return a;
 
 		public String foobar(Integer v) {
 			t1.foo = t2.foo + 10;
-t2.set_bar(foo + bar + "++");
-set_complex(t1, t2.get_bar() + bar + this.foo + "--");
+t2.set_bar(t1.foo + t1.get_bar() + "++");
+set_complex(t1, t2.get_bar() + t1.get_bar() + this.foo + "--");
 set_some_int(t1, t1.get_some_int() - 1);
-some_int_set(t2.some_int_get() + 1);
-some_int_set(t1.some_int_get() + 20);
+set_some_int(t2, t2.get_some_int() + 1);
+set_some_int(t1, t1.get_some_int() + 20);
 set_more(t1).complex(get_more(t1).complex() + 1);
-more_complex_set(more_complex_get() - 1);
+set_more(t2).complex(get_more(t2).complex() - 1);
 ArrayList arr = new ArrayList(Arrays.asList( new Object [] {} ));
 arr.add(10);
-writable_set(read_only + simple + mixed);
-mixed_set(writable);
+writable_set(read_only_get() + simple + mixed_get());
+mixed_set(writable_get());
 return t1.get_bar();
 		}
 	
@@ -264,7 +264,7 @@ for(Object i : list)
 
 
 
-			public Double prop__read_only_get() {
+			public Float prop__read_only_get() {
 				return 10.000000;
 			}
 		
@@ -804,6 +804,16 @@ Success are greateful
 
 Log: Rendering jQuery...
 Success are greateful
+===[ jseq1.project.xml ]================
+
+Log: Rendering Sequence Types...
+Log: Rendering Sequence...
+Log: Oh noes... a PROPERTY
+Error at: d:/xkp/xss/tests/../idioms/java-seq/sequence.xss
+Error [idiom] Sequences expect a property to modify
+expression = app.target
+ERROR: Project:  jseq1.project.xml
+
 ===[ json1.project.xml ]================
 
 ERROR: Project:  json1.project.xml
@@ -873,7 +883,7 @@ Log: assigning default_value = EVisibility.true
 				property "y" = 0			
 				property "visible" = "EVisibility.true"			
 				property "states" = 			
-			Instance: name = "application", type = ""
+			Instance: name = "application", type = "Application"
 		
 				property "sameName" = "My owner is application."			
 Success are greateful
@@ -930,9 +940,9 @@ Log: Rendering Sequence...
 Success are greateful
 ===[ wax1.project.xml ]================
 
-Error at: c:/dev/xkp/xss/tests/../idioms/wax/wax.xml
+Error at: d:/xkp/xss/tests/../idioms/wax/wax.xml
 Error [404] File not found
-file = c:/dev/xkp/xss/tests/../idioms/wax/wax.xml
+file = d:/xkp/xss/tests/../idioms/wax/wax.xml
 ERROR: Project:  wax1.project.xml
 
 ===[ xss1.project.xml ]================
@@ -952,20 +962,9 @@ this is Louis
         Success are greateful
 ===[ xss10.project.xml ]================
 
-Log: De bug in
-Log: Inside condition flag...
 Log: instance: it1
-Log: prop:getting
-Log: get: getting_get()
 Log: instance: it2
-Log: prop:counter
-Log: prop:getting
-Log: get: getting_get()
-Log: prop:setting
-Log: get: setting
-Log: set: setting_set({value})
 Log: instance: application
-Log: prop:counter
 Log: Instance it1...
 Log: Rendering property: getting
 Log: Rendering event: create
@@ -985,7 +984,7 @@ Log: Rendering property: counter
 
 
 			public Integer prop_it1_getting_get() {
-				return counter * 10;
+				return prop_application_counter * 10;
 			}
 		
 
@@ -995,7 +994,12 @@ Log: Rendering property: counter
 
 			private void event_it1_create() {
 		
-				counter = WHAT UP DOUGH;
+				prop_application_counter = prop_it1_getting_get();
+int boole = Bool.falsest;
+if (boole == Bool.truest)
+{
+	print("never occur");
+}
 			
 			}
 		
@@ -1014,7 +1018,7 @@ Log: Rendering property: counter
 
 
 			public Integer prop_it2_getting_get() {
-				return counter / 10;
+				return prop_application_counter / 10;
 			}
 		
 
@@ -1026,7 +1030,8 @@ Log: Rendering property: counter
 			
 			public void prop_it2_setting_set(Object value) {
 				prop_it2_setting = value;
-				prop_it2_counter = value + prop_it2_getting;
+				prop_it2_counter = value + prop_it2_getting_get();
+it2.mthd_1();
 			}
 		
 
@@ -1036,7 +1041,7 @@ Log: Rendering property: counter
 
 			private void event_it2_click() {
 		
-				prop_it2_setting;
+				prop_it2_setting_set(prop_it1_getting_get() - 12);
 			
 			}
 		
@@ -1046,9 +1051,10 @@ Log: Rendering property: counter
 
 		public Integer returning() {
 			it1.mthd_1();
-if (it1.size > it2.size)
+if (it1.size() > it2.size())
 {
-	return counter;
+	it1.setSize(it2.size());
+	return prop_application_counter;
 }
 else
 {
@@ -1066,6 +1072,14 @@ else
 			private Integer prop_application_counter = 0;
 		
 
+Success are greateful
+===[ xss11.project.xml ]================
+
+
+		Math.sin(PI);
+String foo = Singleton.get_foo();
+
+	
 Success are greateful
 ===[ xss2.project.xml ]================
 
@@ -1095,6 +1109,12 @@ Success are greateful
 				
 		instance id: t4
 	
+				exploit
+			
+				something_
+			
+				something
+			
 				something3
 			
 		t_arrays 
