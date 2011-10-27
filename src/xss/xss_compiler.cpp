@@ -58,6 +58,7 @@ const str SUnknownImportClass("Trying to import an unknown class");
 const str SCopyFileEmpty("A file was specified for copy without a file name");
 const str SXSSBadOutput("compiler.xss(output_file) does not accept empty strings");
 const str SEmptyMarker("compiler.xss(marker) does not accept empty strings");
+const str SContextParamOnlyTypes("compiler.xss(context) expects a type");
 const str SEmptyMarkerSource("Empty marker source");
 const str SInvalidMarkerSource("Invalid marker source");
 const str SNotAnInstance("Expecting instance");
@@ -218,14 +219,6 @@ pre_process_result xss_module::pre_process(XSSObject obj, XSSObject parent)
 
     if (ev->get<bool>("final", false))
       return PREPROCESS_HANDLED; //canceled by user
-
-    //we'll add sort of an arbitrary logic here
-    //the objects with types belonging to this module will be logged
-    //as intances. this can be used later in xss to render the proper instances
-    if (one_of_us(obj))
-      {
-        register_instance(obj);
-      }
 
     return PREPROCESS_KEEPGOING;
   }
@@ -470,7 +463,7 @@ str xss_compiler::genid(const str& what)
 		return "__" + what + boost::lexical_cast<str>(aidx);
   }
 
-void xss_compiler::xss_args(const param_list params, param_list& result, fs::path& output_file, str& marker, MARKER_SOURCE& marker_source)
+void xss_compiler::xss_args(const param_list params, param_list& result, fs::path& output_file, str& marker, MARKER_SOURCE& marker_source, XSSContext& ctx)
   {
     for(size_t i = 0; i < params.size(); i++)
       {
@@ -534,6 +527,20 @@ void xss_compiler::xss_args(const param_list params, param_list& result, fs::pat
 
             continue;
           }
+        else if (pname == "context")
+          {
+            XSSType only_types_for_now = variant_cast<XSSType>(value, XSSType());
+            if (!only_types_for_now)
+              {
+                param_list error;
+                error.add("id", SProjectError);
+                error.add("desc", SContextParamOnlyTypes);
+                xss_throw(error);
+              }
+            
+            ctx = only_types_for_now->context();  
+            continue;
+          }
 
         result.add(pname, value);
       }
@@ -563,21 +570,26 @@ void xss_compiler::xss(const param_list params)
     fs::path      the_output_file;
     str           marker;
     MARKER_SOURCE marker_source = MS_CURRENT;
-    xss_args(params, my_args, the_output_file, marker, marker_source);
+    XSSContext    ctx;
+
+    xss_args(params, my_args, the_output_file, marker, marker_source, ctx);
 
     //resolve file name
-    XSSRenderer r   = current_renderer();
-    XSSContext  ctx = r->context();
+    XSSRenderer r    = current_renderer();
+    XSSContext  rctx = r->context();
 
     fs::path file(file_name);
     if (!file.is_complete())
       {
         file = vm::instance().file();
         if (file.empty())
-          file = ctx->path() / file_name;
+          file = rctx->path() / file_name;
         else
           file = file.parent_path() / file_name;
       }
+
+    if (!ctx)
+      ctx = rctx;
 
     XSSRenderer result = compile_xss_file(file, ctx);
 
@@ -838,7 +850,7 @@ str xss_compiler::idiom_path(XSSObject obj, const str& file)
     XSSContext             ctx = current_context();
     XSSApplicationRenderer app = ctx->resolve("#app");
 
-    XSSModule idiom = app->instance_idiom(obj);
+    XSSModule idiom = app->type_idiom(obj->type_name());  //instance_idiom(obj);
     if (!idiom)
       {
         param_list error;
@@ -983,6 +995,9 @@ XSSObject xss_compiler::analyze_expression(const str& expr, variant this_)
         result->add_attribute("property_name", ea.property_name());
         result->add_attribute("identifier", ea.get_identifier());
         result->add_attribute("this_property", ea.this_property());
+        result->add_attribute("first", ea.get_first());
+        result->add_attribute("first_string", ea.first_string());
+        result->add_attribute("first_property", ea.first_property());
 
         Language lang = ctx->get_language();
         str path_str = lang->render_expression(ea.get_path(), ctx);
@@ -1137,6 +1152,9 @@ XSSModule xss_compiler::read_module(const str& src, XSSApplicationRenderer app, 
     //read types
     read_types(module, app, result);
 
+    //read instances, these will act as singletons
+    read_instances(module, app, result);
+
 		//and code, if present
     str code_file = module_data->get<str>("src", str());
     if (!code_file.empty())
@@ -1150,6 +1168,21 @@ XSSModule xss_compiler::read_module(const str& src, XSSApplicationRenderer app, 
       }
 
     return result;
+  }
+
+void xss_compiler::read_instances(XSSObject module_data, XSSApplicationRenderer app, XSSModule module)
+  {
+    XSSObjectList instances = module->find_by_class("instance");
+    XSSContext ctx   = app->context();
+
+    XSSObjectList::iterator it = instances.begin();
+    XSSObjectList::iterator nd = instances.end();
+
+    for(; it != nd; it++)
+      {
+        XSSObject singleton = *it;
+        ctx->register_symbol(RESOLVE_INSTANCE, singleton->id(), singleton);
+      }
   }
 
 void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app, XSSModule module)
@@ -1467,9 +1500,50 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
 				    ictx->set_this(XSSObject(clazz));
             ictx->add_type(cid, clazz);
 
-				    compile_ast(ci, ictx);
+            //we must preprocess the type data looking for instances
+            struct type_proprocessor : IPreprocessHandler
+              {
+                virtual void handle(XSSObject obj, XSSModule mod)
+                  {
+                    if (root == obj)
+                      return; //do not register the class
+
+                    str obj_id = obj->id();
+                    if (!obj_id.empty())
+                      ctx->register_symbol(RESOLVE_INSTANCE, obj_id, obj);
+                    
+                    if (module == mod)
+                      target->register_instance(obj);
+                    else
+                      target->register_foreign_instance(obj);
+                  }
+
+                XSSContext  ctx;
+                XSSObject   root;
+                XSSType     target;
+                XSSModule   module;
+
+              } pre_processor;
 
             XSSModule module = app->type_idiom(ci.super);
+            if (def_class)
+              {
+                pre_processor.ctx    = ictx; 
+                pre_processor.root   = def_class; 
+                pre_processor.target = clazz;
+                pre_processor.module = module;
+
+                current_app_ = app;
+                pre_process(app, def_class, XSSObject(), &pre_processor);
+                current_app_.reset();
+              }
+            
+				    //then compile the code
+            compile_ast(ci, ictx);
+
+            clazz->set_context(ictx);
+
+            //then we register
             if (module)
               module->register_user_type(clazz);
 
@@ -1557,8 +1631,17 @@ void xss_compiler::read_application(const str& app_file)
         //pre process, basically the application will be traversed and
         //notified to the application modules. From then on it is their business
         //the expected result is an application object ready for rendering.
+        struct app_proprocessor : IPreprocessHandler
+          {
+            virtual void handle(XSSObject obj, XSSModule module)
+              {
+                if (module->one_of_us(obj))
+                  module->register_instance(obj);
+              }
+          } pre_processor;
+
         current_app_ = app_renderer;
-        pre_process(app_renderer, app_data, XSSObject());
+        pre_process(app_renderer, app_data, XSSObject(), &pre_processor);
         current_app_.reset();
 
         str src = app_data->get<str>("src", str());
@@ -1569,7 +1652,15 @@ void xss_compiler::read_application(const str& app_file)
             code_compiled = true;
           }
 
+        //create an empty type for application
+        //td: think it through
+        XSSType app_type(new xss_type);
+        app_type->set_id("Application"); 
+
         app_data->set_id("application");
+        app_data->set_type(app_type);
+
+        app_renderer->context()->add_type("Application", app_type);
         app_renderer->context()->register_symbol(RESOLVE_INSTANCE, "application", app_data);
 
         XSSContext code_ctx(new xss_context(app_renderer->context(), src_path));
@@ -1585,7 +1676,6 @@ void xss_compiler::read_application(const str& app_file)
         for(; it != nd; it++)
           {
             XSSModule module = *it;
-            //XSSObject module = *it;
             dynamic_set(module, "application", app_data);
           }
       }
@@ -1888,7 +1978,7 @@ Language xss_compiler::get_language(const str& name)
     return Language();
   }
 
-void xss_compiler::pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent)
+void xss_compiler::pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent, IPreprocessHandler* handler)
   {
     str type = obj->type_name();
 
@@ -1900,6 +1990,9 @@ void xss_compiler::pre_process(XSSApplicationRenderer renderer, XSSObject obj, X
       {
         XSSModule mod = *it;
         pre_process_result result = mod->pre_process(obj, parent);
+        if (handler && mod->one_of_us(obj))
+          handler->handle(obj, mod);
+
         if (result == PREPROCESS_HANDLED)
           return;
       }
@@ -1911,7 +2004,7 @@ void xss_compiler::pre_process(XSSApplicationRenderer renderer, XSSObject obj, X
     for(; cit != cnd; cit++)
       {
         XSSObject child = *cit;
-        pre_process(renderer, child, obj);
+        pre_process(renderer, child, obj, handler);
       }
 
   }

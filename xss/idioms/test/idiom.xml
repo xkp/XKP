@@ -119,5 +119,14 @@
         <class id="t_xss9_2">
             
         </class>
+        
+        //testing global instances
     </types>
+
+    <instance id="i_xss11" output_id="Singleton">
+        <property id="foo" type="string">
+            <get text="get_foo()"/>
+            <set text="Math.sin(PI)" global="true"/>
+        </property>
+    </instance>
 </module>

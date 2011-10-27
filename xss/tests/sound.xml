@@ -20,18 +20,18 @@
 		</directional_light>
 		
 		<transform id="container_1">
-			<sphere id="sphere_1" radius="20" segments_width="32" segments_height="16" materials="material_sphere1"/>			
+			<sphere id="sphere_1" radius="20" segments_width="32" segments_height="16" material="material_sphere1"/>			
 			<sound id="sound_1" sources="sounds/358232_j_s_song.ogg" radius="275" volume="20" loop="true"/>
 			<position x="250" y="30"/>	
 		</transform>
 		
 		<transform id="container_2">
-			<sphere id="sphere_2" radius="20" segments_width="32" segments_height="16" materials="material_sphere2"/>			
+			<sphere id="sphere_2" radius="20" segments_width="32" segments_height="16" material="material_sphere2"/>			
 			<sound id="sound_2" sources="sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg" radius="275" volume="20" loop="true"/>
 			<position x="-250" y="30"/>	
 		</transform>
 		
-		<plane id="plane_1" width="1000" height="1000" segments_width="100" segments_height="100" materials="material_wireframe">
+		<plane id="plane_1" width="1000" height="1000" segments_width="100" segments_height="100" material="material_wireframe">
 			<position y="0.1"/>
 			<rotation x="-1.57"/>
 		</plane>		

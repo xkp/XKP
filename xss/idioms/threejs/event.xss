@@ -4,6 +4,7 @@
 
 <xss:code>
 //remember every event could be impemented multiple times
+
 string ev_name = ev.name;
 var    impls   = ev.impls;
 var    evargs  = ev.args;
@@ -82,7 +83,7 @@ if(ev_name == "keyup" || ev_name == "keydown"){
 	document.addEventListener( '<xss:e value="ev_name"/>', <xss:e value="ev_name"/>_<xss:e value="it.id"/>, false );
 	function <xss:e value="ev_name"/>_<xss:e value="it.id"/> (event)
 	<xss:open_brace/>   
-	var key_code = event.keyCode;
+	var keycode = event.keyCode;
 	}
 	for(var evimpl_key in impls)
 		{

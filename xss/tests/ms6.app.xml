@@ -1,0 +1,9 @@
+<application src="ms6.app.xs" width="600" height="400">
+    <resources>
+        <image src="images/smile_grin_48.png"/>
+        <image src="images/smile_sad_48.png"/>
+    </resources>
+    
+    <ms6 id="ms61" x="100" y="100"/>
+    <ms6 id="ms62" x="200" y="100"/>
+</application>

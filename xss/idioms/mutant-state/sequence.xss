@@ -1,5 +1,6 @@
 <xss:parameter id="seq"/>
 <xss:parameter id="is_class"/>
+<xss:parameter id="path"/>
 
 <xss:class>
     method resolve_key(key, key_value, key_index, owner_seq, prop_info, interp)
@@ -45,9 +46,11 @@
     
     method generate_at(at, seq, rendering_instance)
     {
-        var seq_id = seq.id;
+        var seq_id = seq.output_id;
         if (!rendering_instance)
             seq_id = "this";
+        else if (path)
+            seq_id = path + "." + seq_id;
 
         float time = at.time;
         for(var itm in at.children)
@@ -61,7 +64,6 @@
                 string iid       = compiler.genid('__i');
                 string path      = prop_info.path;
                 
-                compiler.log(prop_info.property_name);
                 if (!rendering_instance)
                 {
 					if (!prop_info.this_property)
@@ -288,14 +290,18 @@
     {
         string parent_id = "null";
         string seq_id = seq.output_id;
-
+        
+        if (path)
+          seq_id = path + "." + seq_id;
+            
         if (parent)
             parent.subs += seq;
 
         if (rendering_instance)
         {
-            //declare variable on the top level
-            out(marker = "variables", marker_source = "entry") {var <xss:e v="seq_id"/>;}
+            //declare variable on the top level if no path is supplied, could be confusing
+            if (!path)
+                out(marker = "variables", marker_source = "entry") {var <xss:e v="seq_id"/>;}
 
             //initialize it here
             out() {<xss:e v="seq_id"/> =} compiler.xss("../common-js/instantiator.xss", seq);

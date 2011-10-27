@@ -30,14 +30,16 @@ if (!application.ui_package)
     compiler.inject("render_jscripts");
 </xss:code>
 
-<script type="text/javascript">			
+<script type="text/javascript">	
+
+var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
-
+		
 <xss:code>
     compiler.inject("render_initialization");
 	compiler.inject("render_resources");
@@ -79,9 +81,9 @@ compiler.xss("../common-js/instance.xss", application);
 window.onload = function() 
 {
 	var Sound = new ms.ui.Sound();
-	var drawingCanvas = document.getElementById("<xss:e value="application.canvasElement"/>");
-        
-	g_canvas = drawingCanvas;
+	drawingCanvas = document.getElementById("<xss:e value="application.canvasElement"/>");
+    g_canvas = drawingCanvas;
+	
 	if (drawingCanvas && drawingCanvas.getContext)
 	{
 		var client =
@@ -95,40 +97,25 @@ window.onload = function()
 		
 		g_ui = ui;
         g_ui_root = ui.root;
-     	
-			drawingCanvas.onmousemove = function(ev)
-			{
-				ui.mouse_move(ev.clientX, ev.clientY);                  
-			};
-
-			drawingCanvas.onmousedown = function(ev)
-			{
-				ui.mouse_down(ev.clientX, ev.clientY);                  
-			};
-
-			drawingCanvas.onmouseup = function(ev)
-			{
-				ui.mouse_up(ev.clientX, ev.clientY);                  
-			};
+     	ui.load_resources(function()
+		{
+            <xss:code>
+			compiler.inject("render_ui_instances");    
+			compiler.inject("render_instances");            
+            </xss:code>
 			
 			document.onkeydown = function(ev)
 			{
-				ui.key_down(ev.keyCode);                  
+				ui.keydown(ev.keyCode);                  
 			};
-			
 			document.onkeyup = function(ev)
 			{
-				ui.key_up(ev.keyCode);                  
+				ui.keyup(ev.keyCode);                  
 			};
-			
 			document.onkeypress = function(ev)
 			{
-				ui.key_press(ev.keyCode);                  
+				ui.keypress(ev.keyCode);                  
 			};
-
-            <xss:code>
-            compiler.inject("render_instances");
-            </xss:code>
 
             if (application.init)
             {
@@ -136,7 +123,8 @@ window.onload = function()
             }
     
 			start();
-			ui.draw(drawingCanvas.getContext('2d'));		
+			ui.draw(drawingCanvas.getContext('2d'));
+		});
 	}
 }
 </script>

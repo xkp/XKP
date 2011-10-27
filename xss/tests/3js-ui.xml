@@ -1,0 +1,47 @@
+<application src="3js-ui.xs" width="600" height="600" title="3js-ui" renderer="canvas">
+
+	<resources>
+	
+		<image src="images/smile_grin_48.png"/>
+        <image src="images/smile_sad_48.png"/>
+		
+	</resources>
+		
+	<materials>	
+	
+		<composite_material id="materials">
+			<basic_material color="Math.random() * 0xffffff"/>
+			<basic_material color="Math.random() * 0xffffff"/>
+			<basic_material color="Math.random() * 0xffffff"/>
+			<basic_material color="Math.random() * 0xffffff"/>
+			<basic_material color="Math.random() * 0xffffff"/>
+			<basic_material color="Math.random() * 0xffffff"/>
+		</composite_material>
+		
+		<basic_material id="plane_material" color="14737632"/>
+				
+	</materials>
+	
+	<scene>	
+	
+		<camera id="camera_1" fov="70" aspect="1.5" near="1" far="1000">
+			<position y="300" z="500"/>			
+		</camera>
+			
+		<cube id="cube_1" width="200" height="200" depth="200" x_segments="1" 
+				y_segments="1" z_segments="1" material="materials">			
+			<position y="150"/>			
+		</cube>
+		
+		<plane id="plane_1" width="200" height="200" material="plane_material">
+			<rotation x="-1.57"/>		
+		</plane>		
+		
+	</scene>
+	
+	<label id="lbl0" x="240" y="75" font="Verdana" caption="click smile to count"/>
+	<button id="btn1" placement="center" rotation="0.2" width="50" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png"/>
+	<label id="lbl1" x="240" y="400" font="Verdana" caption="use arrows to move smile and"/>
+	<label id="lbl2" x="240" y="420" font="Verdana" caption="drag mouse to spin the cube"/>
+	
+</application>

@@ -27,6 +27,12 @@
 <script type="text/javascript" src="../js/ms-state.js"></script>
 
 <xss:code>
+
+if(!application.width) 
+	application.width = "window.innerWidth";
+if(!application.height) 
+	application.height = "window.innerHeight";
+	
 if(application.background)
 	out(marker = "css_style"){
 	background:<xss:e value = "application.background"/>;
@@ -46,9 +52,11 @@ if(application.renderer=="canvas")
 	}
 </xss:code>
 
+var ui;
 var active_camera;
 var g_elapsed = -1;
-var g_delta = 0.0;			
+var g_delta = 0.0;	
+var drawingCanvas = renderer.domElement;
 
 <xss:marker id="variables"/>
 
@@ -65,10 +73,9 @@ var application = {};
 
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setSize( <xss:e value="application.width"/>,<xss:e value="application.height"/> );
 
 function render() {
-renderer.clear();
 
 var now   = new Date().getTime();
 if (g_elapsed < 0)
@@ -93,17 +100,31 @@ g_elapsed = now;
 	compiler.xss("../common-js/instance.xss", application, event_renderer = "../threejs/event.xss");
 </xss:code>
 
+if(ui)
+{
+	ui.load_resources(function(){		
+		<xss:code>		
+			compiler.inject("render_ui_instances");			
+		</xss:code>		
+		g_ui.fill_background = false;
+	});
+}
+
 if (application.init)
 {
 	application.init();
 }
-
+	
 document.body.appendChild( renderer.domElement );
 animate();
 
 function animate() {
+	if(ui)
+		drawingCanvas.getContext('2d').clearRect(0,0,<xss:e value="application.width"/>,<xss:e value="application.height"/>);
 	requestAnimationFrame( animate );
 	render();
+	if(ui)
+		ui.draw(drawingCanvas.getContext('2d'));
 }
 
 </script>

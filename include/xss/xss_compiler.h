@@ -62,6 +62,11 @@ namespace xkp
       public:
         virtual void visit(const str& tag, const str& text, param_list* args) = 0;
     };
+
+  struct IPreprocessHandler
+    {
+      virtual void handle(XSSObject obj, XSSModule module) = 0;
+    };
   
   //classes
 	class xss_application_renderer : public xss_object
@@ -108,13 +113,12 @@ namespace xkp
         void               register_module_type(XSSType type);
         void               register_user_type(XSSType type);
         bool               has_type(const str& type);
+        void               register_instance(XSSObject obj);
+        bool               one_of_us(XSSObject obj);
       private:
         XSSContext   ctx_;
         size_t       ev_pprocess_;
         fs::path     path_; 
-
-        void register_instance(XSSObject obj);
-        bool one_of_us(XSSObject obj);
       private:
         //types
         typedef std::map<str, XSSType>  type_list;
@@ -185,16 +189,17 @@ namespace xkp
         void        read_application_types(std::vector<XSSObject> & applications);
         XSSModule   read_module(const str& src, XSSApplicationRenderer app, XSSObject module);
         void        read_types(XSSObject module_data, XSSApplicationRenderer app, XSSModule module);
+        void        read_instances(XSSObject module_data, XSSApplicationRenderer app, XSSModule module);
         void        read_includes(XSSObject project_data);
         void        read_include(fs::path def, fs::path src, XSSContext ctx, XSSApplicationRenderer app);
         void        read_application(const str& app_file);
         void        compile_ast(xs_container& ast, XSSContext ctx);
         bool        options(const str& name);
         Language    get_language(const str& name);
-        void        pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent);
+        void        pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent, IPreprocessHandler* handler);
         void        run();
         void        copy_files(XSSObject project_data);
-        void        xss_args(const param_list params, param_list& result, fs::path& output_file, str& marker, MARKER_SOURCE& marker_source);
+        void        xss_args(const param_list params, param_list& result, fs::path& output_file, str& marker, MARKER_SOURCE& marker_source, XSSContext& ctx);
       private:
         //id gen
         typedef std::map<str, int> genid_list;

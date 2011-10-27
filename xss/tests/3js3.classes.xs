@@ -1,4 +1,4 @@
 class move_anim : sequence
 {
-	property target : meshable;
+	property target : object3d;
 }

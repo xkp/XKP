@@ -39,6 +39,7 @@ namespace xkp
         bool is_constant(variant& value);
 				bool top_operator(operator_type& op);
 				variant pop_first();
+        variant last();
         variant pop();
 				void clear();
       private:

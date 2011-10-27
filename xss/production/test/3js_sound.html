@@ -24,9 +24,11 @@
 <script type="text/javascript">		
 	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 	var renderer = new THREE.WebGLRenderer( { antialias: true } );
+var ui;
 var active_camera;
 var g_elapsed = -1;
-var g_delta = 0.0;			
+var g_delta = 0.0;	
+var drawingCanvas = renderer.domElement;
 var application = {};
 		var streamer = new ms.streamer.Streamer();
 	// --------RESOURCES---------
@@ -48,9 +50,8 @@ var application = {};
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setSize( window.innerWidth,window.innerHeight );
 function render() {
-renderer.clear();
 var now   = new Date().getTime();
 if (g_elapsed < 0)
     g_delta = 0; //first update
@@ -74,25 +75,24 @@ new THREE.Scene(
 	var camera_1 = new THREE.QuakeCamera({
 	fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly:true,lookVertical:false
 	});
-                camera_1.position.y = 25
+                camera_1.position.y = 25;
 var light = 
 new THREE.DirectionalLight(
 16777215);
 		;
 	scene.addLight(light);
-                light.position.y = 0.5
-                light.position.z = 1
+                light.position.y = 0.5;
+                light.position.z = 1;
 var container_1 = 
 new THREE.Object3D(
 );
-                container_1.position.x = 250
-                container_1.position.y = 30
-	var sphere_1_sphere = 
+                container_1.position.x = 250;
+                container_1.position.y = 30;
+	    var sphere_1_sphere = 
 new THREE.Sphere(
 20,32,16);
-	var sphere_1 = new THREE.Mesh(sphere_1_sphere,
-	material_sphere1);
-	scene.addObject(sphere_1);
+	    var sphere_1 = new THREE.Mesh(sphere_1_sphere, material_sphere1);
+	    scene.addObject(sphere_1);
 				container_1.addChild(sphere_1);
 				scene.addObject(container_1);
 	var sound_1 = new THREE.Sound(streamer.get_resource('res_sound_1').asset
@@ -105,14 +105,13 @@ new THREE.Sphere(
 var container_2 = 
 new THREE.Object3D(
 );
-                container_2.position.x = -250
-                container_2.position.y = 30
-	var sphere_2_sphere = 
+                container_2.position.x = -250;
+                container_2.position.y = 30;
+	    var sphere_2_sphere = 
 new THREE.Sphere(
 20,32,16);
-	var sphere_2 = new THREE.Mesh(sphere_2_sphere,
-	material_sphere2);
-	scene.addObject(sphere_2);
+	    var sphere_2 = new THREE.Mesh(sphere_2_sphere, material_sphere2);
+	    scene.addObject(sphere_2);
 				container_2.addChild(sphere_2);
 				scene.addObject(container_2);
 	var sound_2 = new THREE.Sound(streamer.get_resource('res_sound_2').asset
@@ -122,14 +121,19 @@ new THREE.Sphere(
 	sound_2.play();
 				container_2.addChild(sound_2);
 				scene.addObject(container_2);
-	var plane_1_plane = 
+	    var plane_1_plane = 
 new THREE.Plane(
 1000,1000,100,100);
-	var plane_1 = new THREE.Mesh(plane_1_plane,
-	material_wireframe);
-	scene.addObject(plane_1);
-                plane_1.position.y = 0.100000001
-                plane_1.rotation.x = -1.57
+	    var plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
+	    scene.addObject(plane_1);
+                plane_1.position.y = 0.100000001;
+                plane_1.rotation.x = -1.57;
+if(ui)
+{
+	ui.load_resources(function(){		
+		g_ui.fill_background = false;
+	});
+}
 if (application.init)
 {
 	application.init();
@@ -137,8 +141,12 @@ if (application.init)
 document.body.appendChild( renderer.domElement );
 animate();
 function animate() {
+	if(ui)
+		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
 	requestAnimationFrame( animate );
 	render();
+	if(ui)
+		ui.draw(drawingCanvas.getContext('2d'));
 }
 </script>
 </body>

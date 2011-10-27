@@ -1,12 +1,24 @@
 <xss:parameter id="cmp"/>
 <xss:parameter id="is_class" default_value="false"/>
+<xss:parameter id="path"/>
+
 <xss:code>
-    string cmp_id = cmp.id;
+    string cmp_id = cmp.output_id;
+    
+    if (path)
+        cmp_id = path + "." + cmp_id;
+        
+    if (is_class)
+        cmp_id = "this";
+        
     if (!is_class)
     {
-        string parent_id = cmp.parent.id;
-        if (cmp.parent.id == "application")
+        string parent_id = cmp.parent.output_id;
+        if (parent_id == "application")
             parent_id = "g_ui_root";
+            
+        if (path)
+            parent_id = path;   
                 
         out()
 	    {
@@ -19,23 +31,29 @@
             for(int i = 0; i < type.constructor_params.size; i++)
 		    {				
                 var param = type.constructor_params[i];
-                var prop = cmp.get_property(param.property);					
-                if(prop != null)
-                    out() {<xss:e v="prop.render_value()"/>}			
-                else
-                    out() {null}	    
-				out(dont_break = true) {,}
+                string param_value;
+                if (param.constant)
+                    param_value = param.constant;
+                else if (param.property)
+                {
+                    var prop = cmp.get_property(param.property);					
+                    if(prop != null)
+                        out() {<xss:e v="prop.render_value()"/>}			
+                    else
+                        out() {null}	    
+                }    
+				
+                out(dont_break = true) {,}
 		    }
         }
 		
-	    out() {<xss:e value = "parent_id"/>.manager, <xss:e value = "parent_id"/>);}
+	    
+        out() {<xss:e value = "parent_id"/>.manager, <xss:e value = "parent_id"/>);}
 		if(cmp.type.output_id == "ms.ui.Component"){
 			out() {<xss:e v="cmp.id"/>.mouse_thru = true;}			
 		}
-        compiler.xss("../common-js/instance.xss", cmp);
+        compiler.xss("../common-js/instance.xss", cmp, path = path);
     }
-    else 
-        cmp_id = "this";
 
     //position the component
     if (cmp.placement)
@@ -54,28 +72,28 @@
         else if (cmp.placement == "bottom")
         {
             if (cmp.height != null)
-                out() { <xss:e value="cmp_id"/>.bottom(<<xss:e value="cmp.height"/>); }
+                out() { <xss:e value="cmp_id"/>.bottom(<xss:e value="cmp.height"/>); }
             else
                 compiler.error("Cannot position component bottom (need [height])", component = cmp.id);
         }
         else if (cmp.placement == "top")
         {
             if (cmp.height != null)
-                out() { <xss:e value="cmp_id"/>.top(<<xss:e value="cmp.height"/>); }
+                out() { <xss:e value="cmp_id"/>.top(<xss:e value="cmp.height"/>); }
             else
                 compiler.error("Cannot position component bottom (need [height])", component = cmp.id);
         }
         else if (cmp.placement == "right")
         {
             if (cmp.width != null)
-                out() { <xss:e value="cmp_id"/>.right(<<xss:e value="cmp.width"/>); }
+                out() { <xss:e value="cmp_id"/>.right(<xss:e value="cmp.width"/>); }
             else
                 compiler.error("Cannot position component right (need [width])", component = cmp.id);
         }
         else if (cmp.placement == "left")
         {
             if (cmp.height != null)
-                out() { <xss:e value="cmp_id"/>.left(<<xss:e value="cmp.height"/>); }
+                out() { <xss:e value="cmp_id"/>.left(<xss:e value="cmp.height"/>); }
             else
                 compiler.error("Cannot position component left (need [width])", component = cmp.id);
         }
@@ -96,6 +114,13 @@
             out(indent = 0)
             {
                 <xss:e value="cmp_id"/>.position(<xss:e value="cmp.x"/>, <xss:e value="cmp.y"/>);
+            }
+        }
+        else if (cmp.width != null && cmp.height != null)
+        {
+            out(indent = 0)
+            {
+                <xss:e value="cmp_id"/>.size(<xss:e value="cmp.width"/>, <xss:e value="cmp.height"/>);
             }
         }
     }

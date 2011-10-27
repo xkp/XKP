@@ -3,16 +3,25 @@
 
 <xss:code>	
 		
-	if(obj.id == "")
-		obj.id = "mesh_w_id_"+index;
+	if(obj.output_id == "")
+    {
+		obj.output_id = "mesh_w_id_"+index;
+		//copiler.error("Unnamed instance");
+    }
+    
+    if (!obj.material)
+        compiler.error("Object3d requires a material", object = obj.id);
 		
-	out(){
-	var <xss:e v="obj.id"/>_<xss:e v="obj.class_name"/> = 
+	out()
+    {
+	    var <xss:e v="obj.output_id"/>_<xss:e v="obj.class_name"/> = 
 	}
+    
 	compiler.xss("../common-js/instantiator.xss", obj);
-	out(){
-	var <xss:e v="obj.id"/> = new THREE.Mesh(<xss:e v="obj.id"/>_<xss:e v="obj.class_name"/>,
-	<xss:e v="obj.material"/>);
-	scene.addObject(<xss:e value = "obj.id"/>);
+	
+    out()
+    {
+	    var <xss:e v="obj.id"/> = new THREE.Mesh(<xss:e v="obj.id"/>_<xss:e v="obj.class_name"/>, <xss:e v="obj.material"/>);
+	    scene.addObject(<xss:e value = "obj.id"/>);
 	}	
 </xss:code>

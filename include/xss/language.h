@@ -128,6 +128,9 @@ struct expression_analizer
     expression& get_path();
     str         property_name();
     str         get_identifier();
+    variant     get_first();
+    str         first_string();
+    bool        first_property();
 
     private:
       bool        is_identifier_;
@@ -139,6 +142,9 @@ struct expression_analizer
       expression  path_;
       str         property_name_; 
       XSSProperty property_;
+      variant     first_;
+      str         first_string_;
+      bool        first_property_;
   };
 
 struct lang_utils

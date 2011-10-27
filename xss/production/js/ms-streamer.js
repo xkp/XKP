@@ -1,4 +1,4 @@
-"ms.streamer".namespace( );
+"ms.streamer".namespace();
 
 var RESOURCE_IMAGE			 = 0;
 var RESOURCE_SOUND			 = 1;
@@ -198,6 +198,17 @@ ms.streamer.Streamer = Class.create(
     	this.progress = null;
     },
 	
+	all_loaded: function()
+	{
+        for(var i = 0; i < this.resources.length; i++)
+        {
+            var res = this.resources[i];
+            if(!res.loaded)
+				return false
+        }
+		return true;
+	},
+	
 	get_resource: function(res_id)
 	{
         for(var i = 0; i < this.resources.length; i++)
@@ -282,8 +293,7 @@ ms.streamer.Streamer = Class.create(
 		{
 			result =
 			{	
-				id:		  		resource.id, 
-				data:		  	resource.data, 
+				id:		  		resource.id, 	 
 				asset:    		resource.url,
 				type:  			resource.type,
 				loaded:   		false,
@@ -367,10 +377,27 @@ ms.streamer.Package = Class.create(
         {				
 			resources.push({id: this.items[i].id, type: this.items[i].resource_type, url: this.items[i].src});
         }
-        
-        this.streamer.request( resources, this );
+		
+       	this.streamer.request( resources, this );
+			
         this.streamer.end();    
     },
+	
+	get_item: function(item_id)
+	{
+        for(var i = 0; i < this.items.length; i++)
+        {
+            var item = this.items[i];
+            if (item_id == item.id)
+            {
+                return item; 
+            }
+			if (item_id == item.src)
+            {
+                return item; 
+            }
+        }
+	},
 
 	resource_loaded: function(res, data)
 	{

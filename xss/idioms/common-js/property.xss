@@ -1,7 +1,7 @@
 <xss:parameter id="prop"/>
 <xss:parameter id="owner"/>
 <xss:parameter id="is_class"/>
-<xss:parameter id="alias"/>
+<xss:parameter id="path"/>
 
 <xss:code>
 string prop_name = prop.output_id;
@@ -15,10 +15,9 @@ if (!is_class)
     separator = ";";
 }
 
-if (alias)
-{
-    compiler.log(alias);
-    prop_name = alias + "." + prop.name;
+if (path)
+{    
+    prop_name = path + "." + prop_name;
 }    
 
 if (prop.set && prop.get)
@@ -66,9 +65,8 @@ else
         compiler.error("Properties must have a type");
 
     if (prop.type.is_object && prop.value)
-    {
-        compiler.log(prop.id);
-        compiler.xss("instance.xss", prop.value, alias = prop_name );
+    {        
+        compiler.xss("instance.xss", prop.value, path = prop_name );
     }
     else
     {
@@ -89,13 +87,17 @@ else
         }
         else
         {
-            string path = owner.output_id;
-            if (alias)
-                path = alias;
-                
+            if (!path)
+                path = owner.output_id;
+            else
+            {
+                if (owner.output_id != "")
+                    path = path + "." + owner.output_id;
+            }
+             
             out()
             {
-                <xss:e v="compiler.property_set(prop, path, value)"/>
+                <xss:e v="compiler.property_set(prop, path, value)"/>;
             }
         }
     }

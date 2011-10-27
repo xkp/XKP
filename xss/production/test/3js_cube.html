@@ -23,17 +23,18 @@
 <script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript">		
 	var renderer = new THREE.CanvasRenderer();	
+var ui;
 var active_camera;
 var g_elapsed = -1;
-var g_delta = 0.0;			
+var g_delta = 0.0;	
+var drawingCanvas = renderer.domElement;
 var application = {};
 // --------RESOURCES---------
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setSize( window.innerWidth,window.innerHeight );
 function render() {
-renderer.clear();
 var now   = new Date().getTime();
 if (g_elapsed < 0)
     g_delta = 0; //first update
@@ -75,33 +76,31 @@ new THREE.Scene(
 var camera_1 = 
 new THREE.Camera(
 70,1.5,1,1000);
-                camera_1.position.y = 300
-                camera_1.position.z = 500
-	var cube_1_cube = 
+                camera_1.position.y = 300;
+                camera_1.position.z = 500;
+	    var cube_1_cube = 
 new THREE.Cube(
 200,200,200,1,1,1,materials);
-	var cube_1 = new THREE.Mesh(cube_1_cube,
-	new THREE.MeshFaceMaterial());
-	scene.addObject(cube_1);
-                cube_1.position.y = 150
-	var plane_1_plane = 
+	    var cube_1 = new THREE.Mesh(cube_1_cube, new THREE.MeshFaceMaterial());
+	    scene.addObject(cube_1);
+                cube_1.position.y = 150;
+	    var plane_1_plane = 
 new THREE.Plane(
 200,200);
-	var plane_1 = new THREE.Mesh(plane_1_plane,
-	plane_material);
-	scene.addObject(plane_1);
-                plane_1.rotation.x = -1.57
-                application.x_target_rotation = 0
-                application.x_target_rotation_on_mouse_down = 0
-                application.mouse_x = 0
-                application.mouse_x_on_mouse_down = 0
-                application.y_target_rotation = 0
-                application.y_target_rotation_on_mouse_down = 0
-                application.mouse_y = 0
-                application.mouse_y_on_mouse_down = 0
-                application.window_half_x = window.innerWidth / 2
-                application.window_half_y = window.innerHeight / 2
-                application.is_mouse_down = false
+	    var plane_1 = new THREE.Mesh(plane_1_plane, plane_material);
+	    scene.addObject(plane_1);
+                plane_1.rotation.x = -1.57;
+                application.x_target_rotation = 0;
+                application.x_target_rotation_on_mouse_down = 0;
+                application.mouse_x = 0;
+                application.mouse_x_on_mouse_down = 0;
+                application.y_target_rotation = 0;
+                application.y_target_rotation_on_mouse_down = 0;
+                application.mouse_y = 0;
+                application.mouse_y_on_mouse_down = 0;
+                application.window_half_x = window.innerWidth / 2;
+                application.window_half_y = window.innerHeight / 2;
+                application.is_mouse_down = false;
 	document.addEventListener( 'mousedown', mousedown_application, false );
 	function mousedown_application (event)
 	{
@@ -133,6 +132,12 @@ application.mouse_y = y - application.window_half_y;
 application.y_target_rotation = application.y_target_rotation_on_mouse_down + (application.mouse_y - application.mouse_y_on_mouse_down) * 0.0199999996;
 }
 	};
+if(ui)
+{
+	ui.load_resources(function(){		
+		g_ui.fill_background = false;
+	});
+}
 if (application.init)
 {
 	application.init();
@@ -140,8 +145,12 @@ if (application.init)
 document.body.appendChild( renderer.domElement );
 animate();
 function animate() {
+	if(ui)
+		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
 	requestAnimationFrame( animate );
 	render();
+	if(ui)
+		ui.draw(drawingCanvas.getContext('2d'));
 }
 </script>
 </body>

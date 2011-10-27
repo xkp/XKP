@@ -1,6 +1,6 @@
 <module id="ui" src="ui.xs">
     <types>
-        <class id="component">
+        <class id="component" renderer="component.xss">
             <property id="x" type="int" dont_init="true">
                 <get text="x"/>
                 <set text="set_x({value})"/>
@@ -60,8 +60,8 @@
 
         <class id="button" super="component" output_id="ms.ui.Button">
             <constructor_params>
-                <parameter property="up"/>
-                <parameter property="down"/>
+                <parameter property="up" runtime="true"/>
+                <parameter property="down" runtime="true"/>
             </constructor_params>
             
             <property id="up"   type="string" dont_init="true"/>
@@ -70,8 +70,8 @@
 
         <class id="state_button" super="component" output_id="ms.ui.StateButton">
             <constructor_params>
-                <parameter property="up"/>
-                <parameter property="down"/>
+                <parameter property="up" runtime="true"/>
+                <parameter property="down" runtime="true"/>
             </constructor_params>
 			
 			<property id="up"   type="string" dont_init="true"/>
@@ -80,7 +80,7 @@
 
         <class id="label" super="component" output_id="ms.ui.Label">
             <constructor_params>
-                <parameter property="font"/>
+                <parameter property="font" runtime="true"/>
             </constructor_params>
 
             <property id="font" type="string" dont_init="true">
@@ -96,7 +96,7 @@
 
         <class id="progress_bar" super="component" output_id="ms.ui.ProgressBar">
             <constructor_params>
-                <parameter property="images"/>
+                <parameter property="images" runtime="true"/>
             </constructor_params>
 			<property id="images" type="string"/>
 			<property id="value" type="int">
@@ -145,7 +145,7 @@
         </class>
 		
 		<class id="sound" renderer="audio_renderer.xss">
-            <property id="src"  type="string"/>
+            <property id="src"  type="string" runtime="true"/>
 			<property id="play" type="bool"/>
         </class>
 		

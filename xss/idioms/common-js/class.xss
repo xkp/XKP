@@ -24,7 +24,7 @@
 {
     initialize: function($super
     <xss:code>
-        var c_params = clazz.constructor_params;
+        var c_params = clazz.type.constructor_params;
         if (c_params)
         {
             for(var p in c_params)
@@ -36,14 +36,13 @@
                 }
             }
         }
-    </xss:code>
-    )
+    </xss:code>)
     {
         $super(
         <xss:code>			
             var c_params = null; 
             if (clazz.super)
-                c_params = clazz.super.constructor_params;
+                c_params = clazz.super.constructor_params;							
             if (c_params)
             {				
                 int idx = 0;				
@@ -62,6 +61,29 @@
         if (renderer)
         {
             compiler.xss(renderer, clazz, is_class = true);
+        }
+
+        for(var inst in clazz.instances)
+        {
+            string inst_renderer = inst.type.renderer;
+            if (!inst_renderer)
+            {
+                compiler.error("Class not rendereable", class_name = inst.type_name);
+            }    
+            
+            //create a variable so the code inside doesn't have to 'this.'
+            out()
+            {
+                var <xss:e v="inst.output_id"/>;
+            }
+            
+            string path = compiler.idiom_path(inst, inst_renderer);
+            compiler.xss(path, inst, path = "this");
+
+            out()
+            {
+                <xss:e v="inst.output_id"/> = this.<xss:e v="inst.output_id"/>;
+            }
         }
         </xss:code>
     },

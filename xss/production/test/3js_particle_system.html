@@ -23,17 +23,18 @@
 <script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript">		
 	var renderer = new THREE.CanvasRenderer();	
+var ui;
 var active_camera;
 var g_elapsed = -1;
-var g_delta = 0.0;			
+var g_delta = 0.0;	
+var drawingCanvas = renderer.domElement;
 var application = {};
 // --------RESOURCES---------
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setSize( window.innerWidth,window.innerHeight );
 function render() {
-renderer.clear();
 var now   = new Date().getTime();
 if (g_elapsed < 0)
     g_delta = 0; //first update
@@ -50,7 +51,7 @@ new THREE.Scene(
 var camera_1 = 
 new THREE.Camera(
 75,1.5,1,3000);
-                camera_1.position.z = 1000
+                camera_1.position.z = 1000;
 		for ( var i = 0; i < 1000; i++ ) {
 			particle = new THREE.Particle( new THREE.ParticleCanvasMaterial( { color: Math.random() * 0x808008 + 0x808008, program: program_fill, } ) );
 				particle.position.x = 
@@ -62,8 +63,8 @@ new THREE.Camera(
 			particle.scale.x = particle.scale.y = Math.random() * 10 + 5;
 			scene.addObject( particle );
 		}
-                application.mouse_x = null
-                application.mouse_y = null
+                application.mouse_x = null;
+                application.mouse_y = null;
 	document.addEventListener( 'mousemove', mousemove_application, false );
 	function mousemove_application (event)
 	{
@@ -72,6 +73,12 @@ new THREE.Camera(
 		application.mouse_x = x - window.innerWidth / 2;
 application.mouse_y = y - window.innerHeight / 2;
 	};
+if(ui)
+{
+	ui.load_resources(function(){		
+		g_ui.fill_background = false;
+	});
+}
 if (application.init)
 {
 	application.init();
@@ -79,8 +86,12 @@ if (application.init)
 document.body.appendChild( renderer.domElement );
 animate();
 function animate() {
+	if(ui)
+		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
 	requestAnimationFrame( animate );
 	render();
+	if(ui)
+		ui.draw(drawingCanvas.getContext('2d'));
 }
 </script>
 </body>

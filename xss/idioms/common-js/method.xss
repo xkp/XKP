@@ -1,6 +1,7 @@
 <xss:parameter id="mthd"/>
 <xss:parameter id="owner"/>
 <xss:parameter id="is_class"/>
+<xss:parameter id="path"/>
 
 <xss:code>
 string mthd_name = mthd.output_id;
@@ -13,6 +14,9 @@ if (!is_class)
     assign = "=";
     separator = ";";
 }
+
+if (path)
+    mthd_name = path + "." + mthd_name;
 
 out(indent = 0)
 {

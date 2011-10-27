@@ -9,18 +9,40 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
-<script type="text/javascript">			
+<script type="text/javascript">	
+var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+		if(drawingCanvas){
+			var client =
+			{
+				width: 600,
+				height: 400,
+				canvas: drawingCanvas
+			};
+			var ui = new ms.ui.Manager(client, streamer);
+			var g_ui = ui;
+			var g_ui_root = ui.root;
+		}
 		var g_sequence_manager = new ms.state.Manager();
         function default_interpolate(a, b, t)
         {
             return a + (b - a)*t;
         }
+		var streamer = new ms.streamer.Streamer();
+        var def_package_items = [];
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/img1.png"
+});
+        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
+		g_startup_package.load();	
 function start(resolution)  
 {  
 	var start = new Date().getTime();  
@@ -44,7 +66,7 @@ var fade1;
         {
     initialize: function($super
                 , manager
-                    )
+                )
     {
         $super(
         manager        );
@@ -83,8 +105,9 @@ var fade1;
 	};
 window.onload = function() 
 {
-	var drawingCanvas = document.getElementById("myCanvas");
-	g_canvas = drawingCanvas;
+	var Sound = new ms.ui.Sound();
+	drawingCanvas = document.getElementById("myCanvas");
+    g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
 	{
 		var client =
@@ -93,33 +116,27 @@ window.onload = function()
 			height: 400,
 			canvas: drawingCanvas
 		};
-		var streamer = new ms.streamer.Streamer();
 		var ui = new ms.ui.Manager(client, streamer);
-		var resources = new ms.streamer.PackageContainer();
 		g_ui = ui;
         g_ui_root = ui.root;
-        var ui_images = 
-        [
-				    'images/img1.png',
-        ];
-		ui.load_images(ui_images, function()
+     	ui.load_resources(function()
 		{
-			drawingCanvas.onmousemove = function(ev)
-			{
-				ui.mouse_move(ev.clientX, ev.clientY);                  
-			};
-			drawingCanvas.onmousedown = function(ev)
-			{
-				ui.mouse_down(ev.clientX, ev.clientY);                  
-			};
-			drawingCanvas.onmouseup = function(ev)
-			{
-				ui.mouse_up(ev.clientX, ev.clientY);                  
-			};
-		    img1 = g_ui_root.newImage(
-	    "images/img1.png");
-                img1.src("images/img1.png")
-                img1.set_height(50)
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX, ev.clientY);                  
+	};	
+		    img1 = new ms.ui.Image( 
+	    "images/img1.png",g_ui_root.manager, g_ui_root);
+                img1.src("images/img1.png");
+                img1.set_height(50);
 	img1.click = function()
 	{    
 		fade1.start();
@@ -129,6 +146,18 @@ fade1 =
 new fade_in(
 g_sequence_manager);
             fade1.parent_sequence = null;
+			document.onkeydown = function(ev)
+			{
+				ui.keydown(ev.keyCode);                  
+			};
+			document.onkeyup = function(ev)
+			{
+				ui.keyup(ev.keyCode);                  
+			};
+			document.onkeypress = function(ev)
+			{
+				ui.keypress(ev.keyCode);                  
+			};
             if (application.init)
             {
                 application.init();
@@ -144,5 +173,8 @@ g_sequence_manager);
 	<canvas id="myCanvas" width="600" height="400">
 		<p>Your browser doesn't support canvas.</p>
 	</canvas>
+	<audio id="sounds" preload> 
+	Your browser does not support the audio element.
+	</audio>
 </body>
 </html>

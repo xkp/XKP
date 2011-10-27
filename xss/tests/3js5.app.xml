@@ -18,19 +18,19 @@
             <position y="0.5" z="1"/>
         </directional_light>
 
-        <cylinder id="cylinder_1" numsegs="200" toprad="100" botrad="100" height="500" materials="cylinder_material">
+        <cylinder id="cylinder_1" numsegs="200" toprad="100" botrad="100" height="500" material="cylinder_material">
             <rotation x="10" y="10"/>
             <position x="600"/>
         </cylinder>
 
         <transform id="container">
 
-            <cube id="cube_1" width="300" height="300" depth="300" materials="cube_material">
+            <cube id="cube_1" width="300" height="300" depth="300" material="cube_material">
                 <position x="-600" y="-100"/>
                 <rotation x="10" y="10"/>
             </cube>
 
-            <sphere id="sphere_1" radius="200" segments_width="20" segments_height="20" materials="sphere_material">
+            <sphere id="sphere_1" radius="200" segments_width="20" segments_height="20" material="sphere_material">
                 <position x="-400" y="400"/>
             </sphere>
 

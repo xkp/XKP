@@ -23,19 +23,18 @@
 <script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript">		
 	var renderer = new THREE.CanvasRenderer();	
+var ui;
 var active_camera;
-var SCREEN_WIDTH = window.innerWidth;
-var SCREEN_HEIGHT = window.innerHeight;
 var g_elapsed = -1;
-var g_delta = 0.0;			
+var g_delta = 0.0;	
+var drawingCanvas = renderer.domElement;
 var application = {};
 // --------RESOURCES---------
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setSize( window.innerWidth,window.innerHeight );
 function render() {
-renderer.clear();
 var now   = new Date().getTime();
 if (g_elapsed < 0)
     g_delta = 0; //first update
@@ -59,47 +58,50 @@ new THREE.Scene(
 var camera_w_id_4 = 
 new THREE.Camera(
 75,1.5,1,3000);
-                camera_w_id_4.position.z = 1000
+                camera_w_id_4.position.z = 1000;
 var light = 
 new THREE.DirectionalLight(
 );
 		;
 	scene.addLight(light);
-                light.position.y = 0.5
-                light.position.z = 1
-	var cylinder_1_cylinder = 
+                light.position.y = 0.5;
+                light.position.z = 1;
+	    var cylinder_1_cylinder = 
 new THREE.Cylinder(
 500);
-	var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder,
-	);
-	scene.addObject(cylinder_1);
-                cylinder_1.rotation.x = 10
-                cylinder_1.rotation.y = 10
-                cylinder_1.position.x = 600
-	var cube_1_cube = 
+	    var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
+	    scene.addObject(cylinder_1);
+                cylinder_1.rotation.x = 10;
+                cylinder_1.rotation.y = 10;
+                cylinder_1.position.x = 600;
+	    var cube_1_cube = 
 new THREE.Cube(
 300,300,300);
-	var cube_1 = new THREE.Mesh(cube_1_cube,
-	);
-	scene.addObject(cube_1);
-                cube_1.position.x = -600
-                cube_1.position.y = -100
-                cube_1.rotation.x = 10
-                cube_1.rotation.y = 10
-	var sphere_1_sphere = 
+	    var cube_1 = new THREE.Mesh(cube_1_cube, cube_material);
+	    scene.addObject(cube_1);
+                cube_1.position.x = -600;
+                cube_1.position.y = -100;
+                cube_1.rotation.x = 10;
+                cube_1.rotation.y = 10;
+	    var sphere_1_sphere = 
 new THREE.Sphere(
 200);
-	var sphere_1 = new THREE.Mesh(sphere_1_sphere,
-	);
-	scene.addObject(sphere_1);
-                sphere_1.position.x = -400
-                sphere_1.position.y = 400
-                application.foo = null
-                application.numb = 3
+	    var sphere_1 = new THREE.Mesh(sphere_1_sphere, sphere_material);
+	    scene.addObject(sphere_1);
+                sphere_1.position.x = -400;
+                sphere_1.position.y = 400;
+                application.foo = null;
+                application.numb = 3;
 	application.ok = function() 
 	{
 		this.numb = this.numb + 1;
 	};
+if(ui)
+{
+	ui.load_resources(function(){		
+		g_ui.fill_background = false;
+	});
+}
 if (application.init)
 {
 	application.init();
@@ -107,8 +109,12 @@ if (application.init)
 document.body.appendChild( renderer.domElement );
 animate();
 function animate() {
+	if(ui)
+		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
 	requestAnimationFrame( animate );
 	render();
+	if(ui)
+		ui.draw(drawingCanvas.getContext('2d'));
 }
 </script>
 </body>

@@ -1,231 +1,99 @@
 
 ===[ 3js-ms.project.xml ]================
 
-Error [project] Cannot find type
-type = meshable
-ERROR: Project:  3js-ms.project.xml
+Log: Rendering 3js Types...
+Log: Rendering Sequence Types...
+Log: Rendering Sequence...
+Success are greateful
+===[ 3js-ui.project.xml ]================
 
+Log: Rendering Resources...
+Log: Rendering 3js Types...
+Log: Rendering UI Types...
+Log: Rendering UI...
+Success are greateful
 ===[ 3js1.project.xml ]================
 
 Log: Rendering 3js Types...
-Log: position
-Log: camera_w_id_4.position
-Log: position
-Log: light.position
-Log: light.position
-Log: rotation
-Log: cylinder_1.rotation
-Log: cylinder_1.rotation
-Log: position
-Log: cylinder_1.position
-Log: position
-Log: cube_1.position
-Log: cube_1.position
-Log: rotation
-Log: cube_1.rotation
-Log: cube_1.rotation
-Log: position
-Log: sphere_1.position
-Log: sphere_1.position
 Success are greateful
 ===[ 3js2.project.xml ]================
 
 Log: Rendering 3js Types...
-Log: position
-Log: camera_w_id_4.position
-Log: position
-Log: light.position
-Log: light.position
-Log: rotation
-Log: cylinder_1.rotation
-Log: cylinder_1.rotation
-Log: position
-Log: cylinder_1.position
-Log: position
-Log: cube_1.position
-Log: cube_1.position
-Log: rotation
-Log: cube_1.rotation
-Log: cube_1.rotation
-Log: position
-Log: sphere_1.position
-Log: sphere_1.position
 Success are greateful
 ===[ 3js3.project.xml ]================
 
-Error [project] Cannot find type
-type = meshable
-ERROR: Project:  3js3.project.xml
-
+Log: Rendering 3js Types...
+Log: Rendering Sequence Types...
+Log: Rendering Sequence...
+Success are greateful
 ===[ 3js4.project.xml ]================
 
 Log: Rendering 3js Types...
-Log: position
-Log: camera_w_id_12.position
-Log: camera_w_id_12.position
-Log: camera_w_id_12.position
-Log: scale
-Log: img1_reflect.scale
-Log: position
-Log: img1_reflect.position
-Log: rotation
-Log: img1_reflect.rotation
-Log: scale
-Log: img2_reflect.scale
-Log: position
-Log: img2_reflect.position
-Log: rotation
-Log: img2_reflect.rotation
-Log: scale
-Log: img3_reflect.scale
-Log: position
-Log: img3_reflect.position
-Log: rotation
-Log: img3_reflect.rotation
-Log: scale
-Log: img4_reflect.scale
-Log: position
-Log: img4_reflect.position
-Log: rotation
-Log: img4_reflect.rotation
-Log: scale
-Log: img5_reflect.scale
-Log: position
-Log: img5_reflect.position
-Log: rotation
-Log: img5_reflect.rotation
 Success are greateful
 ===[ 3js5.project.xml ]================
 
 Log: Rendering 3js Types...
-Log: position
-Log: cam1.position
-Log: position
-Log: light.position
-Log: light.position
-Log: rotation
-Log: cylinder_1.rotation
-Log: cylinder_1.rotation
-Log: position
-Log: cylinder_1.position
-Log: position
-Log: cube_1.position
-Log: cube_1.position
-Log: rotation
-Log: cube_1.rotation
-Log: cube_1.rotation
-Log: position
-Log: sphere_1.position
-Log: sphere_1.position
+Success are greateful
+===[ 3js_cameras.project.xml ]================
+
+Log: Rendering 3js Types...
+Success are greateful
+===[ 3js_carousel.project.xml ]================
+
+Log: Rendering Resources...
+Log: Rendering 3js Types...
+Success are greateful
+===[ 3js_cube.project.xml ]================
+
+Log: Rendering 3js Types...
+Success are greateful
+===[ 3js_cube_img.project.xml ]================
+
+Log: Rendering Resources...
+Log: Rendering 3js Types...
+Success are greateful
+===[ 3js_model.project.xml ]================
+
+Log: Rendering Resources...
+Log: Rendering 3js Types...
+Success are greateful
+===[ 3js_particle.project.xml ]================
+
+Log: Rendering 3js Types...
+Success are greateful
+===[ 3js_particle_system.project.xml ]================
+
+Log: Rendering 3js Types...
+Success are greateful
+===[ 3js_sound.project.xml ]================
+
+Log: Rendering Resources...
+Log: Rendering 3js Types...
+Success are greateful
+===[ 3js_transform.project.xml ]================
+
+Log: Rendering 3js Types...
 Success are greateful
 ===[ box2d1.project.xml ]================
 
 Success are greateful
 ===[ box2d2.project.xml ]================
 
+Log: Rendering Resources...
 Log: Rendering UI Types...
-Log: BOX2D: Not Yet Rendering Types...
 Log: Rendering UI...
 Success are greateful
 ===[ cameras.project.xml ]================
 
 Log: Rendering 3js Types...
-Log: position
-Log: camera_1.position
-Log: camera_1.position
-Log: position
-Log: camera_2.position
-Log: camera_2.position
-Log: position
-Log: light.position
-Log: light.position
-Log: position
-Log: sphere_1.position
-Log: sphere_1.position
-Log: position
-Log: sphere_2.position
-Log: sphere_2.position
-Log: rotation
-Log: cylinder_1.rotation
-Log: cylinder_1.rotation
-Log: position
-Log: cylinder_1.position
-Log: cylinder_1.position
-Log: cylinder_1.position
-Log: rotation
-Log: cylinder_2.rotation
-Log: cylinder_2.rotation
-Log: position
-Log: cylinder_2.position
-Log: cylinder_2.position
-Log: cylinder_2.position
-Log: position
-Log: cube_1.position
-Log: cube_1.position
-Log: cube_1.position
-Log: rotation
-Log: cube_1.rotation
-Log: cube_1.rotation
-Log: position
-Log: cube_2.position
-Log: cube_2.position
-Log: cube_2.position
-Log: rotation
-Log: cube_2.rotation
-Log: cube_2.rotation
-Log: position
-Log: plane_1.position
-Log: rotation
-Log: plane_1.rotation
 Success are greateful
 ===[ carousel_1.project.xml ]================
 
 Log: Rendering 3js Types...
-Log: position
-Log: camera_1.position
-Log: camera_1.position
-Log: camera_1.position
-Log: scale
-Log: img1_reflect.scale
-Log: position
-Log: img1_reflect.position
-Log: rotation
-Log: img1_reflect.rotation
-Log: scale
-Log: img2_reflect.scale
-Log: position
-Log: img2_reflect.position
-Log: rotation
-Log: img2_reflect.rotation
-Log: scale
-Log: img3_reflect.scale
-Log: position
-Log: img3_reflect.position
-Log: rotation
-Log: img3_reflect.rotation
-Log: scale
-Log: img4_reflect.scale
-Log: position
-Log: img4_reflect.position
-Log: rotation
-Log: img4_reflect.rotation
-Log: scale
-Log: img5_reflect.scale
-Log: position
-Log: img5_reflect.position
-Log: rotation
-Log: img5_reflect.rotation
 Success are greateful
 ===[ cube.project.xml ]================
 
 Log: Rendering 3js Types...
-Log: position
-Log: camera_1.position
-Log: camera_1.position
-Log: position
-Log: cube_1.position
-Log: rotation
-Log: plane_1.rotation
 Success are greateful
 ===[ enums.project.xml ]================
 
@@ -439,7 +307,7 @@ Success are greateful
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>TITLE</title>
-<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.js"></script>
 
 <script type="text/javascript">
 $(function() {
@@ -462,7 +330,7 @@ $(function() {
 
 
 
-                btn1.text("One button")
+                btn1.text("One button");
             
 
 
@@ -470,30 +338,7 @@ $(function() {
 
 
 
-                btn1.width(100)
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-                btn2.text("Two button")
-            
-
-
-
-
-
-
-                btn2.width(100)
+                btn1.width(100);
             
 
 
@@ -508,7 +353,7 @@ $(function() {
 
 
 
-                btn3.text("Reset")
+                btn2.text("Two button");
             
 
 
@@ -516,7 +361,30 @@ $(function() {
 
 
 
-                btn3.width(100)
+                btn2.width(100);
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+                btn3.text("Reset");
+            
+
+
+
+
+
+
+                btn3.width(100);
             
 
 });
@@ -554,7 +422,7 @@ Success are greateful
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>TITLE</title>
-<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.js"></script>
 
 <script type="text/javascript">
 $(function() {
@@ -592,6 +460,7 @@ btn2.width(100);
 
 
 
+
 	application.reset = function(s) 
 	{
 		this.target_set(s);
@@ -611,8 +480,7 @@ btn2.text("...");
 
 
 
-
-                btn1.text("One button")
+                btn1.text("One button");
             
 
 
@@ -620,8 +488,9 @@ btn2.text("...");
 
 
 
-                btn1.width(100)
+                btn1.width(100);
             
+
 
 
 
@@ -648,7 +517,7 @@ btn1.text("Other Clicked");
 
 
 
-                btn2.text("Two button")
+                btn2.text("Two button");
             
 
 
@@ -656,8 +525,9 @@ btn1.text("Other Clicked");
 
 
 
-                btn2.width(100)
+                btn2.width(100);
             
+
 
 
 
@@ -684,7 +554,7 @@ application.target_set(300);
 
 
 
-                btn3.text("Reset")
+                btn3.text("Reset");
             
 
 
@@ -692,8 +562,9 @@ application.target_set(300);
 
 
 
-                btn3.width(100)
+                btn3.width(100);
             
+
 
 
 
@@ -742,7 +613,7 @@ Success are greateful
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>TITLE</title>
-<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.js"></script>
 
 <script type="text/javascript">
 $(function() {
@@ -780,6 +651,7 @@ btn2.width(100);
 
 
 
+
 	application.reset = function(s) 
 	{
 		this.target_set(s);
@@ -799,8 +671,7 @@ btn2.text("...");
 
 
 
-
-                btn1.text("One button")
+                btn1.text("One button");
             
 
 
@@ -808,8 +679,9 @@ btn2.text("...");
 
 
 
-                btn1.width(100)
+                btn1.width(100);
             
+
 
 
 
@@ -836,7 +708,7 @@ btn1.text("Other Clicked");
 
 
 
-                btn2.text("Two button")
+                btn2.text("Two button");
             
 
 
@@ -844,8 +716,9 @@ btn1.text("Other Clicked");
 
 
 
-                btn2.width(100)
+                btn2.width(100);
             
+
 
 
 
@@ -872,7 +745,7 @@ application.target_set(300);
 
 
 
-                btn3.text("Reset")
+                btn3.text("Reset");
             
 
 
@@ -880,8 +753,9 @@ application.target_set(300);
 
 
 
-                btn3.width(100)
+                btn3.width(100);
             
+
 
 
 
@@ -944,33 +818,37 @@ ERROR: Project:  model_1.project.xml
 
 Log: Rendering Sequence Types...
 Log: Rendering Sequence...
-Log: target
-Log: target
-Log: target
 Success are greateful
 ===[ ms2.project.xml ]================
 
 Log: Rendering Sequence Types...
-Log: alpha
-Log: alpha
 Log: Rendering Sequence...
 Success are greateful
 ===[ ms3.project.xml ]================
 
+Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
 Success are greateful
 ===[ ms4.project.xml ]================
 
+Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering Sequence Types...
-Log: alpha
-Log: alpha
 Log: Rendering UI...
 Log: Rendering Sequence...
 Success are greateful
 ===[ ms5.project.xml ]================
 
+Log: Rendering Resources...
+Log: Rendering UI Types...
+Log: Rendering Sequence Types...
+Log: Rendering UI...
+Log: Rendering Sequence...
+Success are greateful
+===[ ms6.project.xml ]================
+
+Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering Sequence Types...
 Log: Rendering UI...
@@ -1003,61 +881,58 @@ Success are greateful
 
 Log: Rendering Resources...
 Log: Rendering 3js Types...
-Log: position
-Log: camera_1.position
-Log: camera_1.position
-Log: position
-Log: cube_1.position
-Log: rotation
-Log: plane_1.rotation
 Success are greateful
 ===[ sound.project.xml ]================
 
 Log: Rendering 3js Types...
-Log: position
-Log: camera_1.position
-Log: position
-Log: light.position
-Log: light.position
-Log: position
-Log: container_1.position
-Log: container_1.position
-Log: position
-Log: container_2.position
-Log: container_2.position
-Log: position
-Log: plane_1.position
-Log: rotation
-Log: plane_1.rotation
 Success are greateful
 ===[ transform.project.xml ]================
 
 Log: Rendering 3js Types...
-Log: position
-Log: camera_1.position
-Log: position
-Log: light.position
-Log: light.position
-Log: rotation
-Log: cylinder_1.rotation
-Log: cylinder_1.rotation
-Log: position
-Log: cylinder_1.position
-Log: position
-Log: cube_1.position
-Log: cube_1.position
-Log: rotation
-Log: cube_1.rotation
-Log: cube_1.rotation
-Log: position
-Log: sphere_1.position
-Log: sphere_1.position
+Success are greateful
+===[ ui.project.xml ]================
+
+Log: Rendering Resources...
+Log: Rendering UI Types...
+Log: Rendering UI...
+Success are greateful
+===[ ui_audio.project.xml ]================
+
+Log: Rendering Resources...
+Log: Rendering UI Types...
+Log: Rendering UI...
+Success are greateful
+===[ ui_audio_1.project.xml ]================
+
+Log: Rendering Resources...
+Log: Rendering UI Types...
+Log: Rendering UI...
+Success are greateful
+===[ ui_class_test.project.xml ]================
+
+Log: Rendering Resources...
+Log: Rendering UI Types...
+Log: Rendering UI...
+Success are greateful
+===[ ui_demo.project.xml ]================
+
+Log: Rendering Resources...
+Log: Rendering UI Types...
+Log: Rendering UI...
+Success are greateful
+===[ ui_video.project.xml ]================
+
+Log: Rendering Resources...
+Log: Rendering UI Types...
+Log: Rendering Sequence Types...
+Log: Rendering UI...
+Log: Rendering Sequence...
 Success are greateful
 ===[ wax1.project.xml ]================
 
-Error at: d:/xkp/xss/tests/../idioms/wax/wax.xml
+Error at: c:/dev/xkp/xss/tests/../idioms/wax/wax.xml
 Error [404] File not found
-file = d:/xkp/xss/tests/../idioms/wax/wax.xml
+file = c:/dev/xkp/xss/tests/../idioms/wax/wax.xml
 ERROR: Project:  wax1.project.xml
 
 ===[ xss1.project.xml ]================
@@ -1083,6 +958,7 @@ Log: instance: it1
 Log: prop:getting
 Log: get: getting_get()
 Log: instance: it2
+Log: prop:counter
 Log: prop:getting
 Log: get: getting_get()
 Log: prop:setting
@@ -1094,6 +970,7 @@ Log: Instance it1...
 Log: Rendering property: getting
 Log: Rendering event: create
 Log: Instance it2...
+Log: Rendering property: counter
 Log: Rendering property: getting
 Log: Rendering property: setting
 Log: Rendering event: click
@@ -1118,15 +995,20 @@ Log: Rendering property: counter
 
 			private void event_it1_create() {
 		
-				counter = prop_it1_getting;
-Object o;
-o.prop = 2;
+				counter = WHAT UP DOUGH;
 			
 			}
 		
 
 			== Instance it2 ==
 		
+
+
+
+
+			private Integer prop_it2_counter = 0;
+		
+
 
 
 
@@ -1144,7 +1026,7 @@ o.prop = 2;
 			
 			public void prop_it2_setting_set(Object value) {
 				prop_it2_setting = value;
-				counter = value + prop_it2_getting;
+				prop_it2_counter = value + prop_it2_getting;
 			}
 		
 
