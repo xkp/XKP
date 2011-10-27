@@ -68,7 +68,7 @@ new THREE.Scene(
 var camera_1 = 
 new THREE.Camera(
 75,1.5,1,100000);
-                camera_1.position.z = 500
+                camera_1.position.z = 500;
 var a_ligth = 
 new THREE.AmbientLight(
 2232576);
@@ -79,8 +79,8 @@ new THREE.DirectionalLight(
 16772829);
 		;
 	scene.addLight(d_ligth_1);
-                d_ligth_1.position.y = -70
-                d_ligth_1.position.z = 100
+                d_ligth_1.position.y = -70;
+                d_ligth_1.position.z = 100;
 	var male_model;
 	var male_model_loader = 
 	generate_model_loader(streamer.get_resource('model/male02/Male02_slim.js').type);
@@ -89,12 +89,12 @@ new THREE.DirectionalLight(
 				model : streamer.get_resource('model/male02/Male02_slim.js').asset , callback : function( geometry )
 			{
 				male_model = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
-                male_model.position.x = 120
-                male_model.position.y = -350
-                male_model.position.z = -350
-                male_model.scale.x = 4
-                male_model.scale.y = 4
-                male_model.scale.z = 4
+                male_model.position.x = 120;
+                male_model.position.y = -350;
+                male_model.position.z = -350;
+                male_model.scale.x = 4;
+                male_model.scale.y = 4;
+                male_model.scale.z = 4;
 				scene.addObject(male_model);
 			} 
 		} 
@@ -119,12 +119,12 @@ new THREE.DirectionalLight(
 				model : streamer.get_resource('model_1').asset , callback : function( geometry )
 			{
 				female_model = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
-                female_model.position.x = -110
-                female_model.position.y = -350
-                female_model.position.z = -350
-                female_model.scale.x = 4
-                female_model.scale.y = 4
-                female_model.scale.z = 4
+                female_model.position.x = -110;
+                female_model.position.y = -350;
+                female_model.position.z = -350;
+                female_model.scale.x = 4;
+                female_model.scale.y = 4;
+                female_model.scale.z = 4;
 				scene.addObject(female_model);
 			} 
 		} 
@@ -141,8 +141,8 @@ new THREE.DirectionalLight(
 		female_model.position.x = female_model.position.x - 10;
 		}
 	};
-                application.mouse_x = null
-                application.mouse_y = null
+                application.mouse_x = null;
+                application.mouse_y = null;
 	document.addEventListener( 'mousemove', mousemove_application, false );
 	function mousemove_application (event)
 	{

@@ -102,34 +102,32 @@ new THREE.Scene(
 var camera_1 = 
 new THREE.Camera(
 70,1.5,1,1000);
-                camera_1.position.y = 300
-                camera_1.position.z = 500
-	var cube_1_cube = 
+                camera_1.position.y = 300;
+                camera_1.position.z = 500;
+	    var cube_1_cube = 
 new THREE.Cube(
 200,200,200,1,1,1,materials);
-	var cube_1 = new THREE.Mesh(cube_1_cube,
-	new THREE.MeshFaceMaterial());
-	scene.addObject(cube_1);
-                cube_1.position.y = 150
-	var plane_1_plane = 
+	    var cube_1 = new THREE.Mesh(cube_1_cube, new THREE.MeshFaceMaterial());
+	    scene.addObject(cube_1);
+                cube_1.position.y = 150;
+	    var plane_1_plane = 
 new THREE.Plane(
 200,200);
-	var plane_1 = new THREE.Mesh(plane_1_plane,
-	plane_material);
-	scene.addObject(plane_1);
-                plane_1.rotation.x = -1.57
-                application.x_target_rotation = 0
-                application.x_target_rotation_on_mouse_down = 0
-                application.mouse_x = 0
-                application.mouse_x_on_mouse_down = 0
-                application.y_target_rotation = 0
-                application.y_target_rotation_on_mouse_down = 0
-                application.mouse_y = 0
-                application.mouse_y_on_mouse_down = 0
-                application.window_half_x = window.innerWidth / 2
-                application.window_half_y = window.innerHeight / 2
-                application.is_mouse_down = false
-                application.clicks = 1
+	    var plane_1 = new THREE.Mesh(plane_1_plane, plane_material);
+	    scene.addObject(plane_1);
+                plane_1.rotation.x = -1.57;
+                application.x_target_rotation = 0;
+                application.x_target_rotation_on_mouse_down = 0;
+                application.mouse_x = 0;
+                application.mouse_x_on_mouse_down = 0;
+                application.y_target_rotation = 0;
+                application.y_target_rotation_on_mouse_down = 0;
+                application.mouse_y = 0;
+                application.mouse_y_on_mouse_down = 0;
+                application.window_half_x = window.innerWidth / 2;
+                application.window_half_y = window.innerHeight / 2;
+                application.is_mouse_down = false;
+                application.clicks = 1;
 	document.addEventListener( 'mousedown', mousedown_application, false );
 	function mousedown_application (event)
 	{
@@ -202,12 +200,12 @@ if(ui)
 	};	
 		    lbl0 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
-                lbl0.text("click smile to count")
+                lbl0.text("click smile to count");
                 lbl0.position(240, 75);
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
-                btn1.set_rotation(0.200000003)
-                btn1.set_height(50)
+                btn1.set_rotation(0.200000003);
+                btn1.set_height(50);
 	btn1.click = function()
 	{    
 		lbl0.text("Got " + application.clicks + " smileys");
@@ -217,11 +215,11 @@ application.clicks = application.clicks + 1;
  btn1.center(50, 50); 
 		    lbl1 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
-                lbl1.text("use arrows to move smile and")
+                lbl1.text("use arrows to move smile and");
                 lbl1.position(240, 400);
 		    lbl2 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
-                lbl2.text("drag mouse to spin the cube")
+                lbl2.text("drag mouse to spin the cube");
                 lbl2.position(240, 420);
 		g_ui.fill_background = false;
 	});

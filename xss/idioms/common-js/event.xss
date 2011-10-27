@@ -1,6 +1,7 @@
 <xss:parameter id="ev"/>
 <xss:parameter id="it"/>
 <xss:parameter id="is_class"/>
+<xss:parameter id="path"/>
 
 <xss:code>
 //remember every event could be impemented multiple times
@@ -15,6 +16,9 @@ if (!is_class)
     assign = "=";
     separator = ";";
 }
+
+if (path)
+    ev_name = path + "." + ev_name;
 
 var    impls   = ev.impls;
 var    evargs  = ev.args;

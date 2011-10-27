@@ -670,7 +670,8 @@ expression_analizer::expression_analizer():
   is_identifier_(false),
   is_constant_(false),
   is_property_(false),
-  this_property_(false)
+  this_property_(false),
+  first_property_(false)
   {
   }
 
@@ -722,6 +723,22 @@ void expression_analizer::analyze(expression& expr, XSSContext ctx)
                 expr.visit(&es);
 
                 path_ = es.left;
+                
+                //resolve 
+                expression_identifier first_ei = path_.last();
+                first_string_ = first_ei.value; //td: !!! []
+
+                resolve_info fri;
+                if (ctx->resolve(first_ei.value, fri))
+                  {
+                    switch(fri.what)
+                      {
+                        case RESOLVE_INSTANCE: break; 
+                        case RESOLVE_PROPERTY: first_property_ = true; break; 
+                        default : assert(false); //catch
+                      }
+                    first_ = fri.value;
+                  }
 
                 expression_identifier ei = es.right.pop_first();
                 property_name_ = ei.value; 
@@ -785,6 +802,21 @@ str expression_analizer::property_name()
 str expression_analizer::get_identifier()
   {
     return identifier_;
+  }
+
+variant expression_analizer::get_first()
+  {
+    return first_;
+  }
+
+str expression_analizer::first_string()
+  {
+    return first_string_;
+  }
+
+bool expression_analizer::first_property()
+  {
+    return first_property_;
   }
 
 //td: !!! stop duplicating this array

@@ -33,6 +33,70 @@ var application = {};
         {
             return a + (b - a)*t;
         }
+		var streamer = new ms.streamer.Streamer();
+        var def_package_items = [];
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/progress.full.png"
+});
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/progress.empty.png"
+});
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/smile_grin_48.png"
+});
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/smile_sad_48.png"
+});
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/arrow_left.png"
+});
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/arrow_right.png"
+});
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/arrow_right_48.png"
+});
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/arrow_right_green_48.png"
+});
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/arrow_left_48.png"
+});
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/arrow_left_green_48.png"
+});
+        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
+		g_startup_package.load();	
 function start(resolution)  
 {  
 	var start = new Date().getTime();  
@@ -51,7 +115,7 @@ function start(resolution)
 	}  
 	window.setTimeout(update, resolution);  
 }  
-                application.clicks = 0
+                application.clicks = 0;
 window.onload = function() 
 {
 	var Sound = new ms.ui.Sound();
@@ -84,19 +148,19 @@ window.onload = function()
 	};	
 		    main = new ms.ui.Switch( 
 	    g_ui_root.manager, g_ui_root);
-                main.set_height(250)
+                main.set_height(250);
                 main.rect(0, 0, 600, 250);
 		    test1 = new ms.ui.Component( 
 	    main.manager, main);test1.mouse_thru = true;
 		    lbl1 = new ms.ui.Label( 
 	    "Verdana",test1.manager, test1);
-                lbl1.set_rotation("-0.2")
-                lbl1.text("click smiley")
+                lbl1.set_rotation("-0.2");
+                lbl1.text("click smiley");
                 lbl1.position(270, 200);
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",test1.manager, test1);
-                btn1.set_rotation(0.200000003)
-                btn1.set_height(50)
+                btn1.set_rotation(0.200000003);
+                btn1.set_height(50);
 	btn1.click = function()
 	{    
 		application.clicks = application.clicks + 1;
@@ -108,12 +172,12 @@ btn1.set_rotation(btn1.rotation + 0.200000003);
 	    main.manager, main);test2.mouse_thru = true;
 		    pb1 = new ms.ui.ProgressBar( 
 	    null,test2.manager, test2);
-                pb1.set_height(10)
+                pb1.set_height(10);
  pb1.center(150, 10); 
 		    btn2 = new ms.ui.Image( 
 	    "images/arrow_left.png",test2.manager, test2);
-                btn2.set_height(20)
-                btn2.src("images/arrow_left.png")
+                btn2.set_height(20);
+                btn2.src("images/arrow_left.png");
 	btn2.click = function()
 	{    
 		pb1.value(pb1.get_value() - 1);
@@ -121,8 +185,8 @@ btn1.set_rotation(btn1.rotation + 0.200000003);
                 btn2.rect(200, 115, 20, 20);
 		    btn3 = new ms.ui.Image( 
 	    "images/arrow_right.png",test2.manager, test2);
-                btn3.set_height(20)
-                btn3.src("images/arrow_right.png")
+                btn3.set_height(20);
+                btn3.src("images/arrow_right.png");
 	btn3.click = function()
 	{    
 		pb1.value(pb1.get_value() + 1);
@@ -130,12 +194,12 @@ btn1.set_rotation(btn1.rotation + 0.200000003);
                 btn3.rect(380, 115, 20, 20);
 		    lbl2 = new ms.ui.Label( 
 	    "Verdana",test2.manager, test2);
-                lbl2.set_rotation(0.200000003)
-                lbl2.text("click small arrows to adjust percentage")
+                lbl2.set_rotation(0.200000003);
+                lbl2.text("click small arrows to adjust percentage");
                 lbl2.position(210, 200);
 		    btnNext = new ms.ui.Button( 
 	    "images/arrow_right_green_48.png","images/arrow_right_48.png",g_ui_root.manager, g_ui_root);
-                btnNext.set_height(50)
+                btnNext.set_height(50);
 	btnNext.click = function()
 	{    
 		if (main.get_active() < main.count() - 1)
@@ -147,8 +211,8 @@ btnNext.set_rotation(btnNext.rotation + 0.200000003);
                 btnNext.rect(320, 300, 100, 50);
 		    btnPrev = new ms.ui.Button( 
 	    "images/arrow_left_green_48.png","images/arrow_left_48.png",g_ui_root.manager, g_ui_root);
-                btnPrev.set_rotation(0.400000006)
-                btnPrev.set_height(50)
+                btnPrev.set_rotation(0.400000006);
+                btnPrev.set_height(50);
 	btnPrev.click = function()
 	{    
 		if (main.get_active() > 0)

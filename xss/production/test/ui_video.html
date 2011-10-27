@@ -33,6 +33,10 @@ var application = {};
         {
             return a + (b - a)*t;
         }
+		var streamer = new ms.streamer.Streamer();
+        var def_package_items = [];
+        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
+		g_startup_package.load();	
 function start(resolution)  
 {  
 	var start = new Date().getTime();  

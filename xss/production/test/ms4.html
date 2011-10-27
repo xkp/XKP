@@ -33,6 +33,16 @@ var application = {};
         {
             return a + (b - a)*t;
         }
+		var streamer = new ms.streamer.Streamer();
+        var def_package_items = [];
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/img1.png"
+});
+        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
+		g_startup_package.load();	
 function start(resolution)  
 {  
 	var start = new Date().getTime();  
@@ -56,7 +66,7 @@ var fade1;
         {
     initialize: function($super
                 , manager
-                    )
+                )
     {
         $super(
         manager        );
@@ -125,8 +135,8 @@ window.onload = function()
 	};	
 		    img1 = new ms.ui.Image( 
 	    "images/img1.png",g_ui_root.manager, g_ui_root);
-                img1.src("images/img1.png")
-                img1.set_height(50)
+                img1.src("images/img1.png");
+                img1.set_height(50);
 	img1.click = function()
 	{    
 		fade1.start();

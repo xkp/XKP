@@ -13,6 +13,7 @@
 <script type="text/javascript" src="../js/three/Three.js"></script>
 <script type="text/javascript" src="../js/three/Stats.js"></script>
 <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
@@ -22,15 +23,12 @@
 <script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript">		
 	var renderer = new THREE.CanvasRenderer();	
+var ui;
 var active_camera;
-var SCREEN_WIDTH = window.innerWidth;
-var SCREEN_HEIGHT = window.innerHeight;
 var g_elapsed = -1;
-var g_delta = 0.0;			
+var g_delta = 0.0;	
+var drawingCanvas = renderer.domElement;
 var anim_1;
-var threejs_models = 
-        [
-        ];
 var application = {};
 		var g_sequence_manager = new ms.state.Manager();
         function default_interpolate(a, b, t)
@@ -41,9 +39,8 @@ var application = {};
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setSize( window.innerWidth,window.innerHeight );
 function render() {
-renderer.clear();
 var now   = new Date().getTime();
 if (g_elapsed < 0)
     g_delta = 0; //first update
@@ -51,13 +48,13 @@ else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
 		g_sequence_manager.update(g_delta);
-		set_active_camera();
+		set_active_camera(camera_w_id_2);
 }
             move_anim = Class.create(ms.state.Sequence,
         {
     initialize: function($super
                 , manager
-                    )
+                )
     {
         $super(
         manager        );
@@ -96,23 +93,22 @@ g_elapsed = now;
 var scene = 
 new THREE.Scene(
 );
-var  = 
+var camera_w_id_2 = 
 new THREE.Camera(
 75,1.5,1,3000);
-                .position.z = 1000;
+                camera_w_id_2.position.z = 1000;
 var light = 
 new THREE.DirectionalLight(
-1677);
+);
 		;
 	scene.addLight(light);
                 light.position.y = 0.5;
                 light.position.z = 1;
-	var cylinder_1_cylinder = 
+	    var cylinder_1_cylinder = 
 new THREE.Cylinder(
-200,100,100,500);
-	var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder,
-	cylinder_material);
-	scene.addObject(cylinder_1);
+500);
+	    var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
+	    scene.addObject(cylinder_1);
                 cylinder_1.rotation.x = 10;
                 cylinder_1.rotation.y = 10;
                 cylinder_1.position.x = 600;
@@ -136,6 +132,12 @@ application.init = function()
 {    
 		anim_1.target = cylinder_1;
 	};
+if(ui)
+{
+	ui.load_resources(function(){		
+		g_ui.fill_background = false;
+	});
+}
 if (application.init)
 {
 	application.init();
@@ -143,33 +145,12 @@ if (application.init)
 document.body.appendChild( renderer.domElement );
 animate();
 function animate() {
+	if(ui)
+		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
 	requestAnimationFrame( animate );
 	render();
-}
-function get_model(model_id)
-{
-		for(var i = 0; i < this.threejs_models.length; i++)
-		{
-			var model = this.threejs_models[i];
-			if (model.id == model_id)
-				return model.src;
-		}
-		return null;
-}
-function set_active_camera(camera)
-{
-	renderer.render(scene, camera);
-	soundRenderer.render(scene, camera);
-	active_camera = camera;
-}
-function get_intersects( x, y, object)
-{
-	var vector = new THREE.Vector3( ( x / window.innerWidth ) * 2 - 1, - ( y / window.innerHeight ) * 2 + 1, 0.5 );
-	projector = new THREE.Projector();
-	projector.unprojectVector( vector, active_camera );
-	var ray = new THREE.Ray( active_camera.position, vector.subSelf( active_camera.position ).normalize() );
-	var intersects = ray.intersectObject( object );
-	return intersects;
+	if(ui)
+		ui.draw(drawingCanvas.getContext('2d'));
 }
 </script>
 </body>

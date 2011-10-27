@@ -1,6 +1,6 @@
 <module id="ui" src="ui.xs">
     <types>
-        <class id="component">
+        <class id="component" renderer="component.xss">
             <property id="x" type="int" dont_init="true">
                 <get text="x"/>
                 <set text="set_x({value})"/>

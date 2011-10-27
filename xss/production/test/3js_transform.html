@@ -64,53 +64,50 @@ new THREE.Scene(
 var camera_1 = 
 new THREE.Camera(
 75,1.5,1,3000);
-                camera_1.position.z = 1000
+                camera_1.position.z = 1000;
 var light = 
 new THREE.DirectionalLight(
 1677);
 		;
 	scene.addLight(light);
-                light.position.y = 0.5
-                light.position.z = 1
-	var cylinder_1_cylinder = 
+                light.position.y = 0.5;
+                light.position.z = 1;
+	    var cylinder_1_cylinder = 
 new THREE.Cylinder(
 200,100,100,500);
-	var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder,
-	cylinder_material);
-	scene.addObject(cylinder_1);
-                cylinder_1.rotation.x = 10
-                cylinder_1.rotation.y = 10
-                cylinder_1.position.x = 600
+	    var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
+	    scene.addObject(cylinder_1);
+                cylinder_1.rotation.x = 10;
+                cylinder_1.rotation.y = 10;
+                cylinder_1.position.x = 600;
 var container = 
 new THREE.Object3D(
 );
-	var cube_1_cube = 
+	    var cube_1_cube = 
 new THREE.Cube(
 300,300,300);
-	var cube_1 = new THREE.Mesh(cube_1_cube,
-	cube_material);
-	scene.addObject(cube_1);
+	    var cube_1 = new THREE.Mesh(cube_1_cube, cube_material);
+	    scene.addObject(cube_1);
 				container.addChild(cube_1);
 				scene.addObject(container);
-                cube_1.position.x = -600
-                cube_1.position.y = -100
-                cube_1.rotation.x = 10
-                cube_1.rotation.y = 10
-	var sphere_1_sphere = 
+                cube_1.position.x = -600;
+                cube_1.position.y = -100;
+                cube_1.rotation.x = 10;
+                cube_1.rotation.y = 10;
+	    var sphere_1_sphere = 
 new THREE.Sphere(
 200,20,20);
-	var sphere_1 = new THREE.Mesh(sphere_1_sphere,
-	sphere_material);
-	scene.addObject(sphere_1);
+	    var sphere_1 = new THREE.Mesh(sphere_1_sphere, sphere_material);
+	    scene.addObject(sphere_1);
 				container.addChild(sphere_1);
 				scene.addObject(container);
-                sphere_1.position.x = -400
-                sphere_1.position.y = 400
-                application.is_shift_down = false
-                application.is_ctrl_down = false
-                application.theta = 45
-                application.mouse_x = null
-                application.mouse_y = null
+                sphere_1.position.x = -400;
+                sphere_1.position.y = 400;
+                application.is_shift_down = false;
+                application.is_ctrl_down = false;
+                application.theta = 45;
+                application.mouse_x = null;
+                application.mouse_y = null;
 	document.addEventListener( 'mousemove', mousemove_application, false );
 	function mousemove_application (event)
 	{

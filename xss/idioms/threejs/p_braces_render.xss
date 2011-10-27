@@ -6,6 +6,8 @@ if(obj.parent.class_name == "composite_material"){
 	<xss:e v = "obj.parent.id"/>.push(new <xss:e v="obj.type.output_id"/>(<xss:open_brace/>
 	}
 }else{
+
+    compiler.log("here? " + obj.type.output_id);
 	out(){
 	var <xss:e v = "obj.id"/> = new <xss:e v="obj.type.output_id"/>(<xss:open_brace/>
 	}

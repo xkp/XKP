@@ -51,7 +51,7 @@ new THREE.Scene(
 var camera_1 = 
 new THREE.Camera(
 75,1.5,1,3000);
-                camera_1.position.z = 1000
+                camera_1.position.z = 1000;
 		for ( var i = 0; i < 1000; i++ ) {
 			particle = new THREE.Particle( new THREE.ParticleCanvasMaterial( { color: Math.random() * 0x808008 + 0x808008, program: program_fill, } ) );
 				particle.position.x = 
@@ -63,8 +63,8 @@ new THREE.Camera(
 			particle.scale.x = particle.scale.y = Math.random() * 10 + 5;
 			scene.addObject( particle );
 		}
-                application.mouse_x = null
-                application.mouse_y = null
+                application.mouse_x = null;
+                application.mouse_y = null;
 	document.addEventListener( 'mousemove', mousemove_application, false );
 	function mousemove_application (event)
 	{

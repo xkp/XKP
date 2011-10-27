@@ -13,7 +13,7 @@
 			<position y="0.5" z="1"/>
 		</directional_light>
 		
-		<cylinder id="cylinder_1" numsegs="200" toprad="100" botrad="100" height="500" materials="cylinder_material">
+		<cylinder id="cylinder_1" numsegs="200" toprad="100" botrad="100" height="500" material="cylinder_material">
 			<rotation x="10" y="10"/>
 			<position x="600"/>
 		</cylinder>		

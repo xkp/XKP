@@ -59,7 +59,7 @@ function start(resolution)
         {
     initialize: function($super
                 , src
-                    )
+                )
     {
         $super(
         src        );
@@ -82,12 +82,12 @@ this.img2 = new my_image("images/img1.png");
 this.img2.rect(this.x_pos + 50, this.y_pos - 50, 50, 50);
 	},
 });
-                application.test = null
-                application.x_pos = 100
-                application.y_pos = 100
-                application.X_MAX = 600
-                application.Y_MAX = 400
-                application.img2 = null
+                application.test = null;
+                application.x_pos = 100;
+                application.y_pos = 100;
+                application.X_MAX = 600;
+                application.Y_MAX = 400;
+                application.img2 = null;
 	application.init = function()
 	{    
 		application.test = 1;
@@ -124,8 +124,8 @@ window.onload = function()
 	};	
 		    img1 = new ms.ui.Image( 
 	    "images/img1.png",g_ui_root.manager, g_ui_root);
-                img1.src("images/img1.png")
-                img1.set_height(50)
+                img1.src("images/img1.png");
+                img1.set_height(50);
 	img1.click = function()
 	{    
 		if (application.x_pos >= application.X_MAX - 110)

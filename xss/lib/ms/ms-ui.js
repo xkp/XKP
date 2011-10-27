@@ -1,4 +1,3 @@
-
 "ms.ui".namespace();
 
 ms.ui.Manager = Class.create(
@@ -16,22 +15,21 @@ ms.ui.Manager = Class.create(
 	    this.dragging 	= false;
 	    this.lastx 		= 0;
 	    this.lasty 		= 0;
+		
+		//keyboard handling
+		this.keyb_ev = this.root;
 
-	    //texture, keep references to make our life easier
-	    this.images = [];
-	},
-
+	},	
+	
 	//Resource handling
-	load_images: function(images, callback)
+	load_resources: function(callback)
 	{
 		var resources = [];
-		for(var i = 0; i < images.length; i++)
+		for(var i = 0; i < this.streamer.resources.length; i++)
 		{
-			var img = images[i];
-			if (this.get_image(img) == null)
-			{
-				resources.push({ type: RESOURCE_IMAGE, url: img});
-			}
+			var res = this.streamer.resources[i];
+			if(!res.loaded)
+				resources.push({ type: res.type, url: res.asset});			
 		}
 
 		if (resources.length > 0)
@@ -40,8 +38,7 @@ ms.ui.Manager = Class.create(
 			var stream_client =
 			{
 				resource_loaded: function(res, data)
-				{
-					this_.images.push({url: res.asset, texture: data});
+				{					
 				},
 
 				finished_loading: function()
@@ -55,25 +52,38 @@ ms.ui.Manager = Class.create(
 		else callback();
 	},
 
-	get_image: function(image)
+	//Keyboard managemet
+	keydown: function(keycode)
 	{
-		for(var i = 0; i < this.images.length; i++)
-		{
-			var img = this.images[i];
-			if (img.url == image)
-				return img.texture;
-		}
-
-		return null;
+	    if ('keydown' in application)
+	    {
+			application.keydown(keycode);
+	    }	    
 	},
-
+	
+	keyup: function(keycode)
+	{
+	    if ('keyup' in application)
+	    {
+	        application.keyup(keycode);
+	    }	    
+	},
+	
+	keypress: function(keycode)
+	{
+	    if ('keypress' in application)
+	    {
+	        application.keypress(keycode);
+	    }	    
+	},
+	
 	//Mouse managemet
 	drag: function()
 	{
 	    this.dragging = true;
 	},
 
-	mouse_move: function(x, y)
+	mousemove: function(x, y)
 	{
 	    if (this.dragging)
 	    {
@@ -89,19 +99,19 @@ ms.ui.Manager = Class.create(
 
 	    if (over != this.mouse_over)
 	    {
-	    	if ('mouse_out' in this.mouse_over)
-	            this.mouse_over.mouse_out(this.mouse_over);
+	    	if ('mouseout' in this.mouse_over)
+	            this.mouse_over.mouseout(this.mouse_over);
 
-	        if ('mouse_in' in over)
+	        if ('mousein' in over)
 	        {
-	            over.mouse_in( over );
+	            over.mousein( over );
 	        }
 
 	        this.mouse_over = over;
 	    }
 
-	    if ('mouse_move' in over)
-	        over.mouse_move(x, y, over);
+	    if ('mousemove' in over)
+	        over.mousemove(x, y, over);
 
 	    this.lastx = x;
 	    this.lasty = y;
@@ -109,9 +119,9 @@ ms.ui.Manager = Class.create(
 	    return this.mouse_over != this.root;
 	},
 
-	mouse_down: function(x, y)
+	mousedown: function(x, y)
 	{
-	    if ('mouse_down' in this.mouse_over)
+	    if ('mousedown' in this.mouse_over)
 	    {
 	        this.mouse_over.mouse_down(x, y);
 	    }
@@ -119,7 +129,7 @@ ms.ui.Manager = Class.create(
 	    return this.mouse_over != this.root;
 	},
 	
-	mouse_up: function(x, y)
+	mouseup: function(x, y)
 	{
 	    if (this.dragging)
 	    {
@@ -129,7 +139,7 @@ ms.ui.Manager = Class.create(
 	        return true;
 	    }
 
-	    if ('mouse_up' in this.mouse_over)
+	    if ('mouseup' in this.mouse_over)
 	    {
 	        this.mouse_over.mouse_up(x, y);
 	    }
@@ -152,7 +162,6 @@ ms.ui.Manager = Class.create(
 
             p = p.parent;
         }
-
         return result;
     },
 
@@ -337,15 +346,18 @@ ms.ui.Component = Class.create(
 {
 	initialize: function(manager, parent)
 	{
+		if(manager == null) manager = g_ui_root.manager;
+		if(parent == null) parent = g_ui_root;
+		
 		this.manager    = manager;
 		this.components = [];
-		this.parent 	= parent;
-
+		this.parent 	= parent;		
+		
 		this.x 			= 0; 
         this.y 			= 0; 
         this.w 			= 0;
         this.h 			= 0;
-		this.rotation 	= 0;
+		this.rotation 	= 0;		
 
         this.opacity = null; //this means, no opacity
 
@@ -365,11 +377,16 @@ ms.ui.Component = Class.create(
 
     get_alpha: function()
     {
+        if (this.opacity == null)
+            return 1.0;
         return this.opacity;
     },
 
     alpha: function(value)
     {
+        if (value < 0)
+            value = 0;
+
         this.opacity = value;
         this.invalidate();
     },
@@ -377,7 +394,7 @@ ms.ui.Component = Class.create(
 	set_rotation: function(value)
     {
         this.rotation = value;
-        this.invalidate();
+        this.positioned();
     },
 
 	rect: function(x, y, w, h)
@@ -571,103 +588,18 @@ ms.ui.Component = Class.create(
                 cmp.draw(context, this.x + x, this.y + y);
             }
         }
-    },
-
-	//factory
-	newComponent: function()
-	{
-		var result = new ms.ui.Component(this.manager, this);
-		result.mouse_thru = true;
-		return result;
-	},
-
-	newImage: function(image)
-	{
-		var img = this.manager.get_image(image);
-		if (image && !img && image != 'null')
-			throw "Image " + image + " not loaded";
-
-		return new ms.ui.Image(this.manager, this, img);
-	},
-
-	newProgressBar: function(images)
-	{
-		if (!images)
-		{
-			images = ['images/progress.empty.png', 'images/progress.full.png'];
-		}
-
-		return new ms.ui.ProgressBar(this.manager, this, images[0], images[1]);
-	},
-
-	newLabel: function(font)
-	{
-		return new ms.ui.Label(this.manager, this, font);
-	},
-
-    newButton: function(normal, over)
-    {
-		var result = this.newImage(normal);
-
-		var normal_texture = this.manager.get_image(normal);
-		var over_texture   = this.manager.get_image(over);
-
-	    result.mouse_in = function()
-	    {
-	        this.image(over_texture);
-	    }
-
-	    result.mouse_out = function()
-	    {
-	        this.image(normal_texture);
-	    }
-
-	    return result;
-    },
-
-    newStateButton: function(up, down)
-    {
-		var result = this.newImage(up);
-
-		var up_texture   = this.manager.get_image(up);
-		var down_texture = this.manager.get_image(down);
-
-		result.down  = false;
-	    result.click = function()
-	    {
-	    	this.down 			 = !this.down;
-	    	this.image(this.down? down_texture : up_texture);
-
-	    	if (this.change)
-	    		this.change(this.down);
-	    }
-
-	    result.state = function(down)
-	    {
-	    	this.down 			 = down;
-	    	this.image(this.down? down_texture : up_texture);
-	    }
-
-	    return result;
-    },
-
-    newSwitch: function()
-    {
-		return new ms.ui.Switch(this.manager, this);
-    },
-
-    newLine: function()
-    {
-		return new ms.ui.Line(this.manager, this);
-    },
+    },	
 });
 
 ms.ui.Image = Class.create(ms.ui.Component,
-{
-	initialize: function($super, manager, parent, texture)
-	{
-		$super(manager, parent);
-	    this.texture = texture;
+{	
+	initialize: function($super, image, manager, parent)
+	{				
+		$super(manager, parent);		
+		var texture = streamer.get_resource(image).data;
+		if (image && !texture && image != 'null')
+			throw "Image " + image + " not loaded";		
+	    this.texture = texture;		
 	},
 
 	resized: function()
@@ -683,7 +615,7 @@ ms.ui.Image = Class.create(ms.ui.Component,
 
     src: function(image)
     {
-	    this.texture = this.manager.get_image(image);
+	    this.texture = streamer.get_resource(image).data;
         this.invalidate();
     },
 
@@ -706,13 +638,6 @@ ms.ui.Image = Class.create(ms.ui.Component,
             old_alpha = context.globalAlpha;
             context.globalAlpha = this.opacity;
         }
-		
-		// ESTAS SON LAS LINEAS QUE HAY QUE QUITAR / AQUI EMPIEZA
-		
-		context.fillStyle = 'cyan';
-        context.fillRect(-this.w/2, -this.h/2, this.w, this.h);
-		
-		// ESTAS SON LAS LINEAS QUE HAY QUE QUITAR / HASTA AQUI
 		
         if (this.texture)
         {
@@ -737,12 +662,17 @@ ms.ui.Image = Class.create(ms.ui.Component,
 
 ms.ui.ProgressBar = Class.create(ms.ui.Component,
 {
-	initialize: function($super, manager, parent, empty, full)
+	initialize: function($super , images, manager, parent)
 	{
 		$super(manager, parent);
-		this.left    = this.newImage(full);
-		this.right   = this.newImage(empty);
+		if (!images)
+		{
+			images = ['images/progress.empty.png', 'images/progress.full.png'];
+		}		
+		this.left    = new ms.ui.Image(images[1], this.manager, this);
+		this.right   = new ms.ui.Image(images[0], this.manager, this);
 		this.percent = 0;
+		this.resized();
 	},
 
 	value: function(val)
@@ -764,7 +694,7 @@ ms.ui.ProgressBar = Class.create(ms.ui.Component,
 
 	resized: function()
 	{
-	    var ww = this.w*(this.percent/100);
+		var ww = this.w*(this.percent/100);
 	    this.left.rect(0, 0, ww, this.h);
 	    this.right.rect(ww, 0, this.w - ww, this.h);
 	}
@@ -772,7 +702,7 @@ ms.ui.ProgressBar = Class.create(ms.ui.Component,
 
 ms.ui.Label = Class.create(ms.ui.Component,
 {
-	initialize: function($super, manager, parent, font)
+	initialize: function($super, font, manager, parent)
 	{
 		$super(manager, parent);
 	    this.font = font;
@@ -808,6 +738,45 @@ ms.ui.Label = Class.create(ms.ui.Component,
 		context.restore(); 
         $super(context);
     },
+});
+
+ms.ui.Button = Class.create(ms.ui.Image,
+{
+	initialize: function($super, normal, over, manager, parent)
+	{
+		$super(normal, manager, parent);
+		
+		var normal_texture = streamer.get_resource(normal).data;
+		var over_texture   = streamer.get_resource(over).data;	
+		
+		this.mousein = function()
+	    {
+	        this.image(over_texture);
+	    }
+
+	    this.mouseout = function()
+	    {
+	        this.image(normal_texture);
+	    }		
+	},
+});
+
+ms.ui.StateButton = Class.create(ms.ui.Image,
+{
+	initialize: function($super, up, down, manager, parent)
+	{
+		$super(up, manager, parent);
+		
+		var up_texture 		= streamer.get_resource(up).data;
+		var down_texture   	= streamer.get_resource(down).data;
+		
+		this.down = false;		
+		this.click = function()
+	    {
+	        this.down  = !this.down;
+			this.image(this.down? down_texture : up_texture);
+	    }	    	
+	},
 });
 
 ms.ui.Switch = Class.create(ms.ui.Component,
@@ -898,5 +867,17 @@ ms.ui.Line = Class.create(ms.ui.Component,
 		$super(context);
     },
 });
+
+ms.ui.Sound = Class.create(
+{
+	play: function(src)
+	{
+		var audioElement = 	document.createElement('audio');
+		audioElement.volume = 0.5;
+		audioElement.setAttribute('src', src);	
+		audioElement.play();
+	},
+});
+
 
 		

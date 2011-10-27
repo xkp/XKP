@@ -48,7 +48,6 @@ on render_initialization()
 
 on render_types()
 {
-	compiler.log("BOX2D: Not Yet Rendering Types...");
 }
 
 on render_instances()
@@ -61,7 +60,6 @@ on render_instances()
         if (i.class_name == "physics_world")
           continue;
 
-        compiler.log(i.id);
 		compiler.xss("body.xss", i, world);
     }
 

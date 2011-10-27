@@ -153,6 +153,10 @@ class xss_type : public xss_object
       void         inherit();
       XSSType      get_super();
       DynamicArray ctor_args();
+      void         register_instance(XSSObject obj);
+      void         register_foreign_instance(XSSObject obj);
+      XSSContext   context();
+      void         set_context(XSSContext ctx);
     public:
       void as_enum();
       void as_array(XSSType type);
@@ -172,15 +176,19 @@ class xss_type : public xss_object
     private:
       XSSType array_type_;
       schema* xs_type_;
-      bool    is_enum_;
-      bool    is_array_;
-      bool    is_object_;
-      bool    is_variant_;
-      bool    is_unresolved_;
+      bool        is_enum_;
+      bool        is_array_;
+      bool        is_object_;
+      bool        is_variant_;
+      bool        is_unresolved_;
+      XSSContext  ctx_;
     public:
       XSSType      super_;
       Language     lang_;
       DynamicArray ctor_args_;
+      DynamicArray all_instances_;
+      DynamicArray local_instances_;
+      DynamicArray foreign_instances_;
   };
 
 //the language interface
@@ -455,6 +463,7 @@ struct xss_type_schema : xss_object_schema<xss_type>
 				readonly_property<bool>("is_object",  &xss_type::is_object);
 				readonly_property<bool>("is_native",  &xss_type::is_native);
 				readonly_property<bool>("is_variant", &xss_type::is_variant);
+				readonly_property<DynamicArray>("instances", &xss_type::all_instances_);
 
 				readonly_property<DynamicArray>("constructor_params", &xss_type::ctor_args);
       }
@@ -509,9 +518,6 @@ struct xss_property_schema : xss_object_schema<xss_property>
         readonly_property<XSSObject>("set_", &xss_property::get_set);
 
         method_<str, 0>("render_value", &xss_property::render_value);
-        //td: !!! get rid of
-        //method_<str, 0>("render_get",   &xss_property::render_get);
-        //method_<str, 1>("render_set",   &xss_property::render_set);
       }
   };
 

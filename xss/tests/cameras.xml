@@ -28,35 +28,35 @@
 		</directional_light>
 		
 		
-		<sphere id="sphere_1" radius="20" segments_width="32" segments_height="16" materials="material_sphere1">			
+		<sphere id="sphere_1" radius="20" segments_width="32" segments_height="16" material="material_sphere1">			
 			<position x="250" y="30"/>	
 		</sphere>
 		
-		<sphere id="sphere_2" radius="20" segments_width="32" segments_height="16" materials="material_sphere2">	
+		<sphere id="sphere_2" radius="20" segments_width="32" segments_height="16" material="material_sphere2">	
 			<position x="-250" y="30"/>	
 		</sphere>
 		
-		<cylinder id="cylinder_1" numsegs="20" toprad="10" botrad="10" height="50" materials="cylinder_material">
+		<cylinder id="cylinder_1" numsegs="20" toprad="10" botrad="10" height="50" material="cylinder_material">
 			<rotation x="10" y="10"/>
 			<position x="100" y="30" z="100"/>
 		</cylinder>	
 		
-		<cylinder id="cylinder_2" numsegs="20" toprad="10" botrad="10" height="50" materials="cylinder1_material">
+		<cylinder id="cylinder_2" numsegs="20" toprad="10" botrad="10" height="50" material="cylinder1_material">
 			<rotation x="10" y="10"/>
 			<position x="-100" y="30" z="100"/>
 		</cylinder>
 		
-		<cube id="cube_1" width="30" height="30" depth="30" materials="cube_material">			
+		<cube id="cube_1" width="30" height="30" depth="30" material="cube_material">			
 			<position x="-100" y="30" z="-100"/>
 			<rotation x="10" y="10"/>
 		</cube>
 		
-		<cube id="cube_2" width="30" height="30" depth="30" materials="cube1_material">			
+		<cube id="cube_2" width="30" height="30" depth="30" material="cube1_material">			
 			<position x="100" y="30" z="-100"/>
 			<rotation x="10" y="10"/>
 		</cube>
 		
-		<plane id="plane_1" width="1000" height="1000" segments_width="100" segments_height="100" materials="material_wireframe">
+		<plane id="plane_1" width="1000" height="1000" segments_width="100" segments_height="100" material="material_wireframe">
 			<position y="0.1"/>
 			<rotation x="-1.57"/>
 		</plane>		

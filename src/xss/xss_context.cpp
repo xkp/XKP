@@ -1241,7 +1241,10 @@ xss_type::xss_type():
   is_object_(true),
   is_variant_(false),
   is_unresolved_(false),
-  ctor_args_(new dynamic_array)
+  ctor_args_(new dynamic_array),
+  all_instances_(new dynamic_array),
+  local_instances_(new dynamic_array),
+  foreign_instances_(new dynamic_array)
   {
     DYNAMIC_INHERITANCE(xss_type)
   }
@@ -1254,7 +1257,10 @@ xss_type::xss_type(schema* _xs_type):
   is_object_(false),
   is_variant_(false),
   is_unresolved_(false),
-  ctor_args_(new dynamic_array)
+  ctor_args_(new dynamic_array),
+  all_instances_(new dynamic_array),
+  local_instances_(new dynamic_array),
+  foreign_instances_(new dynamic_array)
   {
     DYNAMIC_INHERITANCE(xss_type)
   }
@@ -1387,6 +1393,28 @@ XSSType xss_type::get_super()
 DynamicArray xss_type::ctor_args()
   {
     return ctor_args_;
+  }
+
+void xss_type::register_instance(XSSObject obj)
+  {
+    all_instances_->push_back(obj);
+    local_instances_->push_back(obj);
+  }
+
+void xss_type::register_foreign_instance(XSSObject obj)
+  {
+    all_instances_->push_back(obj);
+    foreign_instances_->push_back(obj);
+  }
+
+XSSContext xss_type::context()
+  {
+    return ctx_;
+  }
+
+void xss_type::set_context(XSSContext ctx)
+  {
+    ctx_ = ctx;
   }
 
 void xss_type::as_enum()

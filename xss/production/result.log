@@ -3,10 +3,6 @@
 
 Log: Rendering 3js Types...
 Log: Rendering Sequence Types...
-Log: x
-Log: x
-Log: alpha
-Log: alpha
 Log: Rendering Sequence...
 Success are greateful
 ===[ 3js-ui.project.xml ]================
@@ -26,10 +22,10 @@ Log: Rendering 3js Types...
 Success are greateful
 ===[ 3js3.project.xml ]================
 
-Error [project] Cannot find type
-type = meshable
-ERROR: Project:  3js3.project.xml
-
+Log: Rendering 3js Types...
+Log: Rendering Sequence Types...
+Log: Rendering Sequence...
+Success are greateful
 ===[ 3js4.project.xml ]================
 
 Log: Rendering 3js Types...
@@ -80,17 +76,12 @@ Log: Rendering 3js Types...
 Success are greateful
 ===[ box2d1.project.xml ]================
 
-Log: my_body
-Log: floor
 Success are greateful
 ===[ box2d2.project.xml ]================
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
-Log: BOX2D: Not Yet Rendering Types...
 Log: Rendering UI...
-Log: 
-Log: floor
 Success are greateful
 ===[ cameras.project.xml ]================
 
@@ -316,7 +307,7 @@ Success are greateful
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>TITLE</title>
-<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.js"></script>
 
 <script type="text/javascript">
 $(function() {
@@ -339,7 +330,7 @@ $(function() {
 
 
 
-                btn1.text("One button")
+                btn1.text("One button");
             
 
 
@@ -347,30 +338,7 @@ $(function() {
 
 
 
-                btn1.width(100)
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-                btn2.text("Two button")
-            
-
-
-
-
-
-
-                btn2.width(100)
+                btn1.width(100);
             
 
 
@@ -385,7 +353,7 @@ $(function() {
 
 
 
-                btn3.text("Reset")
+                btn2.text("Two button");
             
 
 
@@ -393,7 +361,30 @@ $(function() {
 
 
 
-                btn3.width(100)
+                btn2.width(100);
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+                btn3.text("Reset");
+            
+
+
+
+
+
+
+                btn3.width(100);
             
 
 });
@@ -431,7 +422,7 @@ Success are greateful
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>TITLE</title>
-<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.js"></script>
 
 <script type="text/javascript">
 $(function() {
@@ -469,6 +460,7 @@ btn2.width(100);
 
 
 
+
 	application.reset = function(s) 
 	{
 		this.target_set(s);
@@ -488,7 +480,7 @@ btn2.text("...");
 
 
 
-                btn1.text("One button")
+                btn1.text("One button");
             
 
 
@@ -496,8 +488,9 @@ btn2.text("...");
 
 
 
-                btn1.width(100)
+                btn1.width(100);
             
+
 
 
 
@@ -524,7 +517,7 @@ btn1.text("Other Clicked");
 
 
 
-                btn2.text("Two button")
+                btn2.text("Two button");
             
 
 
@@ -532,8 +525,9 @@ btn1.text("Other Clicked");
 
 
 
-                btn2.width(100)
+                btn2.width(100);
             
+
 
 
 
@@ -560,7 +554,7 @@ application.target_set(300);
 
 
 
-                btn3.text("Reset")
+                btn3.text("Reset");
             
 
 
@@ -568,8 +562,9 @@ application.target_set(300);
 
 
 
-                btn3.width(100)
+                btn3.width(100);
             
+
 
 
 
@@ -618,7 +613,7 @@ Success are greateful
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>TITLE</title>
-<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.js"></script>
 
 <script type="text/javascript">
 $(function() {
@@ -656,6 +651,7 @@ btn2.width(100);
 
 
 
+
 	application.reset = function(s) 
 	{
 		this.target_set(s);
@@ -675,7 +671,7 @@ btn2.text("...");
 
 
 
-                btn1.text("One button")
+                btn1.text("One button");
             
 
 
@@ -683,8 +679,9 @@ btn2.text("...");
 
 
 
-                btn1.width(100)
+                btn1.width(100);
             
+
 
 
 
@@ -711,7 +708,7 @@ btn1.text("Other Clicked");
 
 
 
-                btn2.text("Two button")
+                btn2.text("Two button");
             
 
 
@@ -719,8 +716,9 @@ btn1.text("Other Clicked");
 
 
 
-                btn2.width(100)
+                btn2.width(100);
             
+
 
 
 
@@ -747,7 +745,7 @@ application.target_set(300);
 
 
 
-                btn3.text("Reset")
+                btn3.text("Reset");
             
 
 
@@ -755,8 +753,9 @@ application.target_set(300);
 
 
 
-                btn3.width(100)
+                btn3.width(100);
             
+
 
 
 
@@ -819,33 +818,29 @@ ERROR: Project:  model_1.project.xml
 
 Log: Rendering Sequence Types...
 Log: Rendering Sequence...
-Log: target
-Log: target
-Log: target
 Success are greateful
 ===[ ms2.project.xml ]================
 
 Log: Rendering Sequence Types...
-Log: alpha
-Log: alpha
 Log: Rendering Sequence...
 Success are greateful
 ===[ ms3.project.xml ]================
 
+Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
 Success are greateful
 ===[ ms4.project.xml ]================
 
+Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering Sequence Types...
-Log: alpha
-Log: alpha
 Log: Rendering UI...
 Log: Rendering Sequence...
 Success are greateful
 ===[ ms5.project.xml ]================
 
+Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering Sequence Types...
 Log: Rendering UI...
@@ -853,10 +848,12 @@ Log: Rendering Sequence...
 Success are greateful
 ===[ ms6.project.xml ]================
 
-Error [cannot-resolve] Instance not found
-instance = btn1
-ERROR: Project:  ms6.project.xml
-
+Log: Rendering Resources...
+Log: Rendering UI Types...
+Log: Rendering Sequence Types...
+Log: Rendering UI...
+Log: Rendering Sequence...
+Success are greateful
 ===[ query_properties.project.xml ]================
 
 Log: Rendering test query_properties...
@@ -925,6 +922,7 @@ Log: Rendering UI...
 Success are greateful
 ===[ ui_video.project.xml ]================
 
+Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering Sequence Types...
 Log: Rendering UI...
@@ -932,9 +930,9 @@ Log: Rendering Sequence...
 Success are greateful
 ===[ wax1.project.xml ]================
 
-Error at: C:/dev/XKP/xss/tests/../idioms/wax/wax.xml
+Error at: c:/dev/xkp/xss/tests/../idioms/wax/wax.xml
 Error [404] File not found
-file = C:/dev/XKP/xss/tests/../idioms/wax/wax.xml
+file = c:/dev/xkp/xss/tests/../idioms/wax/wax.xml
 ERROR: Project:  wax1.project.xml
 
 ===[ xss1.project.xml ]================

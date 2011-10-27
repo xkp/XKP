@@ -25,7 +25,7 @@ if (type.constructor_params)
 			i++;
 		}
 		else if (p.property)
-		{			
+		{		
             var prop = obj.get_property(p.property);			
 			if(prop.value != null)
 			{

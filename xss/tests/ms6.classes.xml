@@ -1,6 +1,12 @@
 <xs>
     <class id="ms6" super="div" width="50" height="100">
+        <sequence id="anim1">
+            <at time="0">
+                <animate property="btn1.alpha" from="1" to="0" in="10.5"/>
+            </at>
+        </sequence>
+
         <button id="btn1" placement="top" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png"/>
-        <button id="btn2" placement="client" height="50" up="images/smile_grin_48.png" down="images/smile_sad_48.png"/>
+        <button id="btn2" placement="bottom" height="50" up="images/smile_grin_48.png" down="images/smile_sad_48.png"/>
     </class>
 </xs>

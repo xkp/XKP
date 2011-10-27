@@ -28,6 +28,16 @@ var application = {};
 			var g_ui = ui;
 			var g_ui_root = ui.root;
 		}
+		var streamer = new ms.streamer.Streamer();
+        var def_package_items = [];
+                def_package_items.push(
+            {
+		id:"",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/img1.png"
+});
+        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
+		g_startup_package.load();	
 function start(resolution)  
 {  
 	var start = new Date().getTime();  
@@ -45,7 +55,7 @@ function start(resolution)
 	}  
 	window.setTimeout(update, resolution);  
 }  
-                application.increment = 10
+                application.increment = 10;
 window.onload = function() 
 {
 	var Sound = new ms.ui.Sound();
@@ -78,8 +88,8 @@ window.onload = function()
 	};	
 		    img1 = new ms.ui.Image( 
 	    "images/img1.png",g_ui_root.manager, g_ui_root);
-                img1.src("images/img1.png")
-                img1.set_height(50)
+                img1.src("images/img1.png");
+                img1.set_height(50);
 	img1.click = function()
 	{    
 		img1.set_width(img1.get_width() + application.increment);

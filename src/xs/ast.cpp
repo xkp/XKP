@@ -185,6 +185,11 @@ variant expression::pop_first()
 		return result;
 	}
 
+variant expression::last()
+  {
+    return stack_.front();
+  }
+
 variant expression::pop()
 	{
 		assert(!stack_.empty());

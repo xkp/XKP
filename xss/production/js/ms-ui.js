@@ -377,11 +377,16 @@ ms.ui.Component = Class.create(
 
     get_alpha: function()
     {
+        if (this.opacity == null)
+            return 1.0;
         return this.opacity;
     },
 
     alpha: function(value)
     {
+        if (value < 0)
+            value = 0;
+
         this.opacity = value;
         this.invalidate();
     },
@@ -735,39 +740,32 @@ ms.ui.Label = Class.create(ms.ui.Component,
     },
 });
 
-ms.ui.Button = Class.create(ms.ui.Component,
+ms.ui.Button = Class.create(ms.ui.Image,
 {
 	initialize: function($super, normal, over, manager, parent)
 	{
-		$super(manager, parent);
-		this.image = new ms.ui.Image( normal, this.manager, this.parent );		
+		$super(normal, manager, parent);
 		
 		var normal_texture = streamer.get_resource(normal).data;
 		var over_texture   = streamer.get_resource(over).data;	
 		
 		this.mousein = function()
 	    {
-	        this.image.image(over_texture);
+	        this.image(over_texture);
 	    }
 
 	    this.mouseout = function()
 	    {
-	        this.image.image(normal_texture);
+	        this.image(normal_texture);
 	    }		
-	},
-	positioned: function()
-	{
-		this.image.rotation = this.rotation;
-	    this.image.rect(this.x, this.y, this.w, this.h);
 	},
 });
 
-ms.ui.StateButton = Class.create(ms.ui.Component,
+ms.ui.StateButton = Class.create(ms.ui.Image,
 {
 	initialize: function($super, up, down, manager, parent)
 	{
-		$super(manager, parent);
-		this.image = new ms.ui.Image(up, this.manager, this.parent);		
+		$super(up, manager, parent);
 		
 		var up_texture 		= streamer.get_resource(up).data;
 		var down_texture   	= streamer.get_resource(down).data;
@@ -776,13 +774,8 @@ ms.ui.StateButton = Class.create(ms.ui.Component,
 		this.click = function()
 	    {
 	        this.down  = !this.down;
-			this.image.image(this.down? down_texture : up_texture);
+			this.image(this.down? down_texture : up_texture);
 	    }	    	
-	},
-	positioned: function()
-	{
-		this.image.rotation = this.rotation;
-	    this.image.rect(this.x, this.y, this.w, this.h);
 	},
 });
 
