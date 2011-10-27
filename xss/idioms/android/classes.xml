@@ -148,7 +148,7 @@
 				<object import="android.view.View.OnTouchListener"/>
 			</array>
 			
-			<event id="touch" output_id="onTouch" interface="OnTouchListener" def_args="View v, MotionEvent ev" set_handle="setOnTouchListener" set_param_hnd="this"/>
+			<event id="touch" output_id="onTouch" interface="OnTouchListener" return_type="boolean" def_args="View v, MotionEvent ev" param_mthd="ev" set_handle="setOnTouchListener" set_param_hnd="this"/>
 		</class>
 		
 		<!-- CLASS declarations -->
@@ -168,8 +168,8 @@
 		</class>
 		
 		<class id="Math" no_layout="true" static="true">
-			<method id="max" type="double"/>
-			<method id="abs" type="double"/>
+			<method id="max" type="float"/>
+			<method id="abs" type="float"/>
 			<method id="atan2" type="double"/>
 			
 			<property id="PI" output_id="PI" type="double"/>
@@ -181,8 +181,8 @@
 			</array>
 			
 			<method id="getAction" type="EActionMotionEvent"/>
-			<method id="getX" type="double"/>
-			<method id="getY" type="double"/>
+			<method id="getX" type="float"/>
+			<method id="getY" type="float"/>
 		</class>
 		
 		<!-- VIEW declarations -->

@@ -128,11 +128,15 @@ public class Act<xss:e value="appName"/>
 						}
 					}
 					
+					string ret_type = "void";
+					if(e.return_type)
+						ret_type = e.return_type;
+					
 					//TODO: implements call to arguments from classes by event name
 					out(indent = 1, marker = "events")
 					{
 						@Override
-						public void <xss:e value="e.output_id"/>(<xss:e value="e.def_args"/>) <xss:open_brace/>
+						public <xss:e value="ret_type"/> <xss:e value="e.output_id"/>(<xss:e value="e.def_args"/>) <xss:open_brace/>
 							switch (v.getId()) <xss:open_brace/>
 					}
 					
@@ -145,7 +149,7 @@ public class Act<xss:e value="appName"/>
 								out(indent = 2, marker = "events")
 								{
 									case R.id.<xss:e value="insti.id"/>:
-										<xss:e value="e.output_id"/><xss:e value="insti.id"/>();
+										<xss:e value="e.output_id"/><xss:e value="insti.id"/>(<xss:e value="e.param_mthd"/>);
 										break;
 										
 								}
@@ -156,6 +160,8 @@ public class Act<xss:e value="appName"/>
 					out(indent = 1, marker = "events")
 					{
 							<xss:close_brace/> //switch
+							
+							return true;
 						<xss:close_brace/>
 					}
 				}

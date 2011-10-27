@@ -11,6 +11,12 @@ instance it1
 	{
 		application.counter = getting;
 		
+		EBoolean boole = EBoolean.false;
+		if(boole == EBoolean.true)
+		{
+			print("never occur");
+		}
+		
 		//ERROR 1:
 		//classy.mthd_1( classy.mthd_2( 3 ) );
 		//classy.mthd_1( 2 );
@@ -37,6 +43,7 @@ instance it2
 	property setting
 	{
 		counter = value + getting;
+		mthd_1();
 	}
 	
 	method returning()
@@ -45,6 +52,7 @@ instance it2
 		
 		if (it1.size > it2.size) 
 		{
+			it1.size = size;
 			return application.counter;
 		} 
 		else 
@@ -55,6 +63,6 @@ instance it2
 	
 	on click()
 	{
-		setting = getting - 12;
+		setting = it1.getting - 12;
 	}
 }

@@ -638,6 +638,106 @@ void xss_context::collect_dsl()
       got_dsls_ = true;
   }
 
+//copy dynamic variables
+struct copier : dynamic_visitor
+  {
+    copier(XSSObject src, xss_object* dest):
+      src_(src),
+      dest_(dest)
+      {
+      }
+
+    virtual void item(const str& name, variant value)
+      {
+        if (name == "type")
+          return;
+
+        if (dest_->has(name))
+          {
+            schema_item result;
+            dest_->resolve(name, result);
+
+            if (result.type == type_schema<DynamicArray>())
+              {
+                //merge array
+                if (result.get)
+                  {
+                    variant value = result.get->get(&(*dest_));
+
+                    DynamicArray da = variant_cast<DynamicArray>(value, DynamicArray());
+                    if (da)
+                      {
+                        DynamicArray obj_da = variant_cast<DynamicArray>(dynamic_get(src_, name), DynamicArray());
+                        if (obj_da)
+                          {
+                            std::vector<variant>::iterator objit = obj_da->ref_begin();
+                            std::vector<variant>::iterator objnd = obj_da->ref_end();
+
+                            for(; objit != objnd; objit++)
+                              {
+                                XSSObject nobj = variant_cast<XSSObject>(*objit, XSSObject());
+                                if (nobj)
+                                  {
+                                    XSSObject cloner(new xss_object);
+                                    cloner->copy(nobj);
+                                    da->push_back(cloner);
+                                  }
+                                else
+                                  da->push_back(*objit);
+                              }
+                          }
+                      }
+                  }
+              }
+            else
+              {
+                dynamic_set((IDynamicObject*)dest_, name, value);
+              }
+          }
+        else
+          {
+            if (value.is<DynamicArray>())
+              {
+                //some duplicate codes, but,... live is hard :) 
+                //td: in next iteration fix this
+                DynamicArray dest_da(new dynamic_array()); 
+                dest_->add_attribute(name, dest_da);
+
+                if (dest_da)
+                  {
+                    DynamicArray src_da = variant_cast<DynamicArray>(dynamic_get(src_, name), DynamicArray());
+                    if (src_da)
+                      {
+                        std::vector<variant>::iterator srcit = src_da->ref_begin();
+                        std::vector<variant>::iterator srcnd = src_da->ref_end();
+
+                        for(; srcit != srcnd; srcit++)
+                          {
+                            XSSObject new_obj = variant_cast<XSSObject>(*srcit, XSSObject());
+                            if (new_obj)
+                              {
+                                XSSObject cloner(new xss_object);
+                                cloner->copy(new_obj);
+                                dest_da->push_back(cloner);
+                              }
+                            else
+                              dest_da->push_back(*srcit);
+                          }
+                      }
+                  }
+              }
+            else
+              {
+                dest_->add_attribute(name, value);
+              }
+          }
+      }
+
+    private:
+      XSSObject   src_;
+      xss_object* dest_;
+  };
+
 //xss_object
 xss_object::xss_object():
 	children_(new dynamic_array),
@@ -662,7 +762,6 @@ void xss_object::copy(XSSObject obj)
       {
         type_ = obj->type();
       }
-
 
     //type information will not be copied, should it?
 		DynamicArray obj_children = obj->children();
@@ -727,72 +826,8 @@ void xss_object::copy(XSSObject obj)
         events_->push_back(my_ev);
       }
 
-    //copy dynamic variables
-    struct copier : dynamic_visitor
-      {
-        copier(XSSObject src, xss_object* dest):
-          src_(src),
-          dest_(dest)
-          {
-          }
-
-        virtual void item(const str& name, variant value)
-          {
-            if (name == "type")
-              return;
-
-            if (dest_->has(name))
-              {
-                schema_item result;
-                dest_->resolve(name, result);
-
-                if (result.type == type_schema<DynamicArray>())
-                  {
-                    //merge array
-                    if (result.get)
-                      {
-                        variant value = result.get->get(&(*dest_));
-
-                        DynamicArray da = variant_cast<DynamicArray>(value, DynamicArray());
-                        if (da)
-                          {
-                            DynamicArray obj_da = variant_cast<DynamicArray>(dynamic_get(src_, name), DynamicArray());
-                            if (obj_da)
-                              {
-                                std::vector<variant>::iterator objit = obj_da->ref_begin();
-                                std::vector<variant>::iterator objnd = obj_da->ref_end();
-
-                                for(; objit != objnd; objit++)
-                                  {
-                                    XSSObject nobj = variant_cast<XSSObject>(*objit, XSSObject());
-                                    if (nobj)
-                                      {
-                                        XSSObject cloner(new xss_object);
-                                        cloner->copy(nobj);
-                                        da->push_back(cloner);
-                                      }
-                                    else
-                                      da->push_back(*objit);
-                                  }
-                              }
-                          }
-                      }
-                  }
-                else
-                  {
-                    dynamic_set((IDynamicObject*)dest_, name, value);
-                  }
-              }
-            else
-              dest_->add_attribute(name, value);
-          }
-
-        private:
-          XSSObject   src_;
-          xss_object* dest_;
-      } copier_(obj, this);
-
-    obj->visit(&copier_);
+    copier cp(obj, this);
+    obj->visit(&cp);
   }
 
 bool xss_object::resolve(const str& name, schema_item& result)
@@ -1340,43 +1375,8 @@ void xss_type::inherit()
     if (!super_)
       return;
 
-    //merge arrays
-    item_list::iterator it = items_.begin();
-    item_list::iterator nd = items_.end();
-
-    for(; it != nd; it++)
-      {
-        if (it->second.get)
-          {
-            variant value = it->second.get->get(this);
-
-            DynamicArray da = variant_cast<DynamicArray>(value, DynamicArray());
-            if (da)
-              {
-                DynamicArray sda = variant_cast<DynamicArray>(dynamic_get(super_, it->first), DynamicArray());
-                if (sda)
-                  {
-                    std::vector<variant>::iterator sit = sda->ref_begin();
-                    std::vector<variant>::iterator snd = sda->ref_end();
-
-                    for(; sit != snd; sit++)
-                      {
-                        XSSObject obj = variant_cast<XSSObject>(*sit, XSSObject());
-                        if (obj)
-                          {
-                            XSSObject cloner(new xss_object);
-                            cloner->copy(obj);
-                            da->push_back(cloner);
-                          }
-                        else
-                          da->push_back(*sit);
-                      }
-                  }
-              }
-          }
-      }
-
-    //td: merge children
+    copier cp(XSSObject(super_), this);
+    super_->visit(&cp);
   }
 
 XSSType xss_type::get_super()
