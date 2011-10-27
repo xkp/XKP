@@ -1,0 +1,9 @@
+<project entry_point="../idioms/java-seq/sequence_debug.xss" language="java" target="jseq1.app.xml" output="jseq1.java">
+    <path>
+        <output path="../production/test"/>
+    </path>
+
+    <idiom src="../idioms/java-seq/sequence.xml"/>
+</project>
+           
+         

@@ -1,0 +1,1 @@
+<project 	entry_point="xss9.xss" 	language="java" 	target="xss11.app.xml" >		<options event_scope="instance" />		<idiom src="../idioms/test/idiom.xml" /></project>
