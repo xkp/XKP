@@ -1,9 +1,0 @@
-<project entry_point="../idioms/threejs/app.xss" language="js" target="resources_demo.xml" output="resources_demo.html">
-    <path>
-        <output path="../production/test"/>
-    </path>
-
-    <idiom src="../idioms/threejs/module.xml"/>
-	<idiom src="../idioms/resources/resources.xml"/>
-    
-</project>

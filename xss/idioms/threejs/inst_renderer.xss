@@ -1,9 +1,9 @@
 <xss:parameter id="i"/>
-<xss:parameter id="index"/>
+
 
 <xss:code>
 		if(i.instantiator)
-			compiler.xss(i.instantiator, i, index);
+			compiler.xss(i.instantiator, i);
 		else{						
 			out(){var <xss:e v="i.id"/> = }
 			compiler.xss("../common-js/instantiator.xss", i);						

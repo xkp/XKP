@@ -1,9 +1,6 @@
 <xss:parameter id="obj"/>
-<xss:parameter id="index"/>
 
 <xss:code>	
-	if(obj.id == "")
-		obj.id = "sound_w_id_"+index;
 	out(){
 	var <xss:e v="obj.id"/> = new THREE.Sound(streamer.get_resource('<xss:e v="obj.src"/>').asset
 	}

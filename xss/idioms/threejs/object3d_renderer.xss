@@ -1,15 +1,8 @@
 <xss:parameter id="obj"/>
-<xss:parameter id="index"/>
 
 <xss:code>	
 		
-	if(obj.output_id == "")
-    {
-		obj.output_id = "mesh_w_id_"+index;
-		//copiler.error("Unnamed instance");
-    }
-    
-    if (!obj.material)
+	if (!obj.material)
         compiler.error("Object3d requires a material", object = obj.id);
 		
 	out()

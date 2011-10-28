@@ -1,13 +1,10 @@
 <xss:parameter id="obj"/>
-<xss:parameter id="index"/>
 <xss:parameter id="property_renderer" default="../common-js/property.xss"/>
 <xss:parameter id="method_renderer"   default="../common-js/method.xss"/>
 <xss:parameter id="event_renderer"    default="event.xss"/>
 
 <xss:code>
-	if(obj.id == "")
-		obj.id = "model_w_id_"+index;
-		
+	
 	out(){
 	var <xss:e v="obj.id"/>;
 	var <xss:e v="obj.id"/>_loader = 

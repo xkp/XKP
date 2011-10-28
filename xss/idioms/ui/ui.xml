@@ -41,6 +41,8 @@
             </property>
         </class>
 
+		<class id="self_drawn" super="component" output_id="ms.ui.SelfDrawn"/>
+		
         <class id="div" super="component" output_id="ms.ui.Component">
         </class>
 

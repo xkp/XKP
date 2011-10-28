@@ -70,7 +70,7 @@ var application = {};
 });
                 def_package_items.push(
             {
-		id:"",
+		id:"__audio1",
 		resource_type:RESOURCE_SOUND,
 		src:"sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg"
 });
@@ -136,11 +136,11 @@ new THREE.Plane(
 	    var plane_1 = new THREE.Mesh(plane_1_plane, plane_material);
 	    scene.addObject(plane_1);
                 plane_1.rotation.x = -1.57;
-	var sound_w_id_12 = new THREE.Sound(streamer.get_resource('sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg').asset
+	var __playing_sound1 = new THREE.Sound(streamer.get_resource('sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg').asset
 	,700,20,true
 	);
-	scene.addObject(sound_w_id_12);
-	sound_w_id_12.play();
+	scene.addObject(__playing_sound1);
+	__playing_sound1.play();
                 application.x_target_rotation = 0;
                 application.x_target_rotation_on_mouse_down = 0;
                 application.mouse_x = 0;

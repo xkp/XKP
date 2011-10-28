@@ -1,3 +1,8 @@
+on pre_process(obj)
+{
+	if(obj.id == '')
+		obj.id = compiler.genid(obj.class_name);
+}
 
 on render_initialization()
 {

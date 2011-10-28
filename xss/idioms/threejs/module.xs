@@ -14,19 +14,19 @@ on pre_process(obj)
 			obj.add_property("material_array", value, value_type);
 			obj.material = "new THREE.MeshFaceMaterial()";				
 		}
-	}
+	}	
+	if(obj.id == '')
+		obj.id = compiler.genid(obj.class_name);
 }
 
 on render_instances()
 {	
-	int index = 0;		
 	for(var i in instances)
     {		
-		compiler.xss("inst_renderer.xss", i, index);
+		compiler.xss("inst_renderer.xss", i);
 		if(!i.dont_render)
 			compiler.xss("../common-js/instance.xss", i, event_renderer = "../threejs/event.xss");
-		index++;
-    }
+	}
 }
 
 on render_types()

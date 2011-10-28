@@ -733,7 +733,8 @@ void expression_analizer::analyze(expression& expr, XSSContext ctx)
                   {
                     switch(fri.what)
                       {
-                        case RESOLVE_INSTANCE: break; 
+                        case RESOLVE_INSTANCE: 
+                        case RESOLVE_VARIABLE: break; 
                         case RESOLVE_PROPERTY: first_property_ = true; break; 
                         default : assert(false); //catch
                       }

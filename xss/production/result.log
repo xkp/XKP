@@ -12,28 +12,6 @@ Log: Rendering 3js Types...
 Log: Rendering UI Types...
 Log: Rendering UI...
 Success are greateful
-===[ 3js1.project.xml ]================
-
-Log: Rendering 3js Types...
-Success are greateful
-===[ 3js2.project.xml ]================
-
-Log: Rendering 3js Types...
-Success are greateful
-===[ 3js3.project.xml ]================
-
-Log: Rendering 3js Types...
-Log: Rendering Sequence Types...
-Log: Rendering Sequence...
-Success are greateful
-===[ 3js4.project.xml ]================
-
-Log: Rendering 3js Types...
-Success are greateful
-===[ 3js5.project.xml ]================
-
-Log: Rendering 3js Types...
-Success are greateful
 ===[ 3js_cameras.project.xml ]================
 
 Log: Rendering 3js Types...
@@ -83,18 +61,6 @@ Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
 Success are greateful
-===[ cameras.project.xml ]================
-
-Log: Rendering 3js Types...
-Success are greateful
-===[ carousel_1.project.xml ]================
-
-Log: Rendering 3js Types...
-Success are greateful
-===[ cube.project.xml ]================
-
-Log: Rendering 3js Types...
-Success are greateful
 ===[ enums.project.xml ]================
 
 Log: Rendering test with enum class...
@@ -140,7 +106,7 @@ prop_btn_sameName = swp;
 					
 					}
 				
-			Instance: name = "application", type = ""
+			Instance: name = "application", type = "Application"
 		
 				sameName = "My owner is application."			
 Success are greateful
@@ -804,15 +770,19 @@ Success are greateful
 
 Log: Rendering jQuery...
 Success are greateful
+===[ jseq1.project.xml ]================
+
+Log: Rendering Sequence Types...
+Log: Rendering Sequence...
+Log: Oh noes... a PROPERTY
+Error at: c:/dev/xkp/xss/tests/../idioms/java-seq/sequence.xss
+Error [idiom] Sequences expect a property to modify
+expression = app.target
+ERROR: Project:  jseq1.project.xml
+
 ===[ json1.project.xml ]================
 
 ERROR: Project:  json1.project.xml
-
-===[ model_1.project.xml ]================
-
-Error [cannot-resolve] Instance not found
-instance = female_model
-ERROR: Project:  model_1.project.xml
 
 ===[ ms1.project.xml ]================
 
@@ -873,28 +843,9 @@ Log: assigning default_value = EVisibility.true
 				property "y" = 0			
 				property "visible" = "EVisibility.true"			
 				property "states" = 			
-			Instance: name = "application", type = ""
+			Instance: name = "application", type = "Application"
 		
 				property "sameName" = "My owner is application."			
-Success are greateful
-===[ resources_demo.project.xml ]================
-
-Log: Rendering Resources...
-Log: Rendering 3js Types...
-Success are greateful
-===[ sound.project.xml ]================
-
-Log: Rendering 3js Types...
-Success are greateful
-===[ transform.project.xml ]================
-
-Log: Rendering 3js Types...
-Success are greateful
-===[ ui.project.xml ]================
-
-Log: Rendering Resources...
-Log: Rendering UI Types...
-Log: Rendering UI...
 Success are greateful
 ===[ ui_audio.project.xml ]================
 
@@ -920,6 +871,12 @@ Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
 Success are greateful
+===[ ui_selfdrawn.project.xml ]================
+
+Error [cannot-resolve] Instance not found
+instance = sd1
+ERROR: Project:  ui_selfdrawn.project.xml
+
 ===[ ui_video.project.xml ]================
 
 Log: Rendering Resources...
@@ -1066,6 +1023,14 @@ else
 			private Integer prop_application_counter = 0;
 		
 
+Success are greateful
+===[ xss11.project.xml ]================
+
+
+		Math.sin(PI);
+String foo = Singleton.get_foo();
+
+	
 Success are greateful
 ===[ xss2.project.xml ]================
 
