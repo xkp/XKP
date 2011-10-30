@@ -146,8 +146,7 @@ str java_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
                     case RESOLVE_PROPERTY:
                       {
                         XSSProperty prop = si.value;
-                        result = prop->output_id();
-                        //result = lang->property_get(prop, lang->resolve_this(ctx_), ctx_);
+                        result = lang->property_get(prop, lang->resolve_this(ctx_), ctx_);
                         break;
                       }
                     case RESOLVE_METHOD:
@@ -585,7 +584,7 @@ void java_lang::init_context(XSSContext ctx)
       type->set_output_id("String");
 
     if (type = ctx->get_type("float"))
-      type->set_output_id("Double");
+      type->set_output_id("Float");
 
     if (type = ctx->get_type("double"))
       type->set_output_id("Double");
@@ -640,18 +639,18 @@ str java_lang::render_value(XSSType type, variant value)
 //td: verify repeated codes, and do defaults methods on language
 str java_lang::property_get(XSSProperty prop, const str& path, XSSContext ctx)
   {
-    compile_property(prop, ctx);
     XSSObject get = prop->find("get");
     bool user_def = prop->get<bool>("user_defined", false);
 
     if (get)
       {
+        if (user_def)
+          get->add_attribute("text", prop->output_id() + "_get()");
+
+        compile_property(prop, ctx);
+
         XSSRenderer rend   = XSSObject(prop)->get<XSSRenderer>("#get_renderer", XSSRenderer());
         bool        global = get->get<bool>("global", false);
-
-        str g = get->get<str>("text", str());
-        get->add_attribute("text", prop->output_id() + "_get()");
-        g = get->get<str>("text", str());
 
         param_list params;
         params.add("path", path);
@@ -686,16 +685,18 @@ str java_lang::property_get(XSSProperty prop, const str& path, XSSContext ctx)
 
 str java_lang::property_set(XSSProperty prop, const str& path, const str& value, XSSContext ctx)
   {
-    compile_property(prop, ctx);
     XSSObject set = prop->find("set");
     bool user_def = prop->get<bool>("user_defined", false);
 
     if (set)
       {
+        if (user_def)
+          set->add_attribute("text", prop->output_id() + "_set({value})");
+
+        compile_property(prop, ctx);
+
         XSSRenderer rend   = XSSObject(prop)->get<XSSRenderer>("#set_renderer", XSSRenderer());
         bool        global = set->get<bool>("global", false);
-
-        set->add_attribute("text", prop->output_id() + "_set({value})");
 
         param_list params;
         params.add("path", path);

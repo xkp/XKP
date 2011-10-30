@@ -1,0 +1,17 @@
+<application src="box2d3.app.xs" width="600" height="400">
+    <physics_world gravity_x   = "1" id="myWorld" debug_draw="true"
+                   scale       = "30" 
+                   friction    = "0.5"
+                   density     = "1.0"
+                   restitution = "0.2"/>
+
+    <resources>
+        <image src="images/smile_grin_48.png"/>
+    </resources>
+
+    <smiley_ball id="sm1" x="100" y="0" rotation="0" width="50" height="50"/>
+    
+    <spawner id="sp1" x="300" y="100" rotation="3" auto_start="true" frequency="1" creator_class="smiley_ball" velocity="10"/>
+    
+    <body id="floor" body_type="static" shape="rect" x="10" y="15.13" width="20" height="2"/>
+</application>

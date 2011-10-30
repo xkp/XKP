@@ -7,20 +7,20 @@ import java.util.Arrays;
 public class JavaTest {
 				private static Class_instance1 instance1;
 	private static class Class_instance1 {
-			private Double prop__xvalue = 100.199997;
+			private Float prop__xvalue = 100.199997;
 			private Object prop__svalue;
-		public Double test0(Integer value) {
+		public Float test0(Integer value) {
 			Integer a = value;
-Double b = 5.000000;
+Float b = 5.000000;
 return a * b;
 		}
-		public Double test1(Integer value) {
-			Double b = 5.000000;
+		public Float test1(Integer value) {
+			Float b = 5.000000;
 return b / 2;
 		}
 		public String test2(Integer value) {
 			Integer a = value;
-Double b = 5.000000;
+Float b = 5.000000;
 return application.app_test(a * b);
 		}
 		public Object test3(Object value) {
@@ -45,7 +45,7 @@ if (!has_property)
 Integer v0 = 20;
 Integer v1 = instance1.px_value;
 String v2 = "string";
-Double v3 = 3.140000;
+Float v3 = 3.140000;
 Boolean v4 = true;
 Integer x0;
 x0 = instance1.px_value;
@@ -62,7 +62,7 @@ Integer x4;
 x4 = prop__lvalue;
 Integer ivar = 100;
 String svar = String.valueOf(ivar);
-Double fval = Double.valueOf(svar);
+Float fval = Float.valueOf(svar);
 ArrayList<Integer> a0 = new ArrayList(Arrays.asList( new Object [] {1, 2} ));
 a0.setValue(j);
 ArrayList<Integer> a1 = new ArrayList(Arrays.asList( new Object [] {1, 2} ));

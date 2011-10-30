@@ -6,8 +6,8 @@ instance btnTouchme
 	property THIRD_QUATER	: double = 5 * Math.PI / 4;
 	property FOURTH_QUATER 	: double = 7 * Math.PI / 4;
 	
-	property mStartX 		: double;
-	property mStartY 		: double;
+	property mStartX 		: float;
+	property mStartY 		: float;
 
 	on touch(MotionEvent ev)
 	{
@@ -15,13 +15,16 @@ instance btnTouchme
 		
 		EPlacement pl = EPlacement.center;
 		
+		float currentX = ev.getX();
+		
+		//TODO: well, i need to output something like this
+		//float currentY = getWindowManager().getDefaultDisplay().getHeight() - ev.getY();
+
 		//Display display = getWindowManager().getDefaultDisplay();
 		//int dispHeight = display.getHeight();
+		//float currentY = dispHeight - ev.getY();
 		
-		double currentX = ev.getX();
-		//double currentY = dispHeight - ev.getY();
-		//double currentY = getWindowManager().getDefaultDisplay().getHeight() - ev.getY();
-		double currentY = ev.getY();
+		float currentY = ev.getY();
 
 		//TODO: when implement switch structure control?
 		if(action == EActionMotionEvent.down)
@@ -32,17 +35,18 @@ instance btnTouchme
 		else
 		if(action == EActionMotionEvent.up)
 		{
-			double delthaX = currentX - mStartX;
-			double delthaY = currentY - mStartY;
+			float delthaX = currentX - mStartX;
+			float delthaY = currentY - mStartY;
 			
 			double angle = Math.atan2(delthaY, delthaX);
 			if(angle < 0) angle += 2 * Math.PI;
 			
 			//ERROR: op_dot is not replaced for op_dot_call correctly inside others expressions
-			//double max_deltha = Math.max(Math.abs(delthaX), Math.abs(delthaY));
-			double abs_delthaX = Math.abs(delthaX);
-			double abs_delthaY = Math.abs(delthaY);
-			double max_deltha = Math.max(abs_delthaX, abs_delthaY);
+			//float max_deltha = Math.max(Math.abs(delthaX), Math.abs(delthaY));
+			
+			float abs_delthaX = Math.abs(delthaX);
+			float abs_delthaY = Math.abs(delthaY);
+			float max_deltha = Math.max(abs_delthaX, abs_delthaY);
 			
 			if(max_deltha < MAX_DELTHA / 10) 
 			{

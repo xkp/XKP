@@ -516,8 +516,21 @@ ms.ui.Component = Class.create(
 		return this.visible_;
 	},
 
-	positioned: function() {this.invalidate()},
-	resized: 	function() {this.invalidate()},
+	positioned: function() 
+    {
+        if (this.moved)
+        {
+            this.moved(this);
+        }
+
+        this.invalidate()
+    },
+	
+    resized: function() 
+    {
+        this.invalidate()
+    },
+
     visible_:   true,
 
     invalidate: function()
@@ -613,14 +626,21 @@ ms.ui.Image = Class.create(ms.ui.Component,
         this.invalidate();
 	},
 
+    src: function()
+    {
+        return this.source;
+    },
+
     src: function(image)
     {
+        this.source = image;
 	    this.texture = streamer.get_resource(image).data;
         this.invalidate();
     },
 
 	image: function(texture)
 	{
+        this.source = "";
 	    this.texture = texture;
         this.invalidate();
 	},           

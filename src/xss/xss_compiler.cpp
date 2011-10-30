@@ -1008,6 +1008,39 @@ XSSObject xss_compiler::analyze_expression(const str& expr, variant this_)
     return result;
   }
 
+bool xss_compiler::is_type(variant v)
+  {
+    if (v.is<XSSType>())
+      return true;
+
+    XSSObject obj = variant_cast<XSSObject>(v, XSSObject());
+    if (!obj)
+      return false;
+
+    XSSContext ctx = current_context();
+    return ctx->get_type(obj->id());
+  }
+
+str xss_compiler::instantiate(variant v)
+  {
+    XSSType   type = variant_cast<XSSType>(v, XSSType());
+    XSSObject instance;
+    if (!type)
+      {
+        instance = variant_cast<XSSObject>(v, XSSObject());
+        if (instance)
+          {
+            type = instance->type();
+          }
+      }
+
+    XSSContext ctx  = current_context();
+    Language   lang = ctx->get_language();
+
+    str result = lang->instantiate(type, instance, DynamicArray());
+    return result;
+  }
+
 void xss_compiler::push_renderer(XSSRenderer renderer)
   {
     if (renderers_.empty())

@@ -48,9 +48,27 @@
                 int idx = 0;				
                 for(var p in c_params)
                 {
-					if (p.property) p.id = p.property;
-					if (idx > 0) out() {,}
-                    out() {<xss:e v="p.id"/>}
+                    string param_str = p.id;
+                    
+					if (p.property)
+                    {
+                        param_str = p.property;
+                        
+                        var clazz_prop = clazz.get_property(p.property); 
+                        if (clazz_prop)
+                        {
+                            compiler.log("GOT PROP ");
+                            if (clazz_prop.value)
+                            {
+                                param_str = param_str + "? " + param_str + " : " + clazz_prop.render_value();
+                                compiler.log("PARAM STRING: " + param_str);
+                            }
+                        }
+                    }
+					
+                    if (idx > 0) out() {,}
+                    
+                    out() {<xss:e v="param_str"/>}
                     idx++;
                 }
             }

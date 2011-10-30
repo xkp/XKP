@@ -52,6 +52,7 @@
             </constructor_params>
 
             <property id="src" type="string">
+                <get text="src()"/>
                 <set text="src({value})"/>
             </property>
 

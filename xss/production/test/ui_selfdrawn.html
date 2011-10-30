@@ -30,66 +30,6 @@ var application = {};
 		}
 		var streamer = new ms.streamer.Streamer();
         var def_package_items = [];
-                def_package_items.push(
-            {
-		id:"__image1",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/progress.full.png"
-});
-                def_package_items.push(
-            {
-		id:"__image2",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/progress.empty.png"
-});
-                def_package_items.push(
-            {
-		id:"__image3",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_grin_48.png"
-});
-                def_package_items.push(
-            {
-		id:"__image4",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_sad_48.png"
-});
-                def_package_items.push(
-            {
-		id:"__image5",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_left.png"
-});
-                def_package_items.push(
-            {
-		id:"__image6",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_right.png"
-});
-                def_package_items.push(
-            {
-		id:"__image7",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_right_48.png"
-});
-                def_package_items.push(
-            {
-		id:"__image8",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_right_green_48.png"
-});
-                def_package_items.push(
-            {
-		id:"__image9",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_left_48.png"
-});
-                def_package_items.push(
-            {
-		id:"__image10",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_left_green_48.png"
-});
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
 function start(resolution)  
@@ -109,29 +49,6 @@ function start(resolution)
 	}  
 	window.setTimeout(update, resolution);  
 }  
-                application.clicks = 0;
-	application.keydown = function(keycode)
-	{    
-		if (btn1.isVisible())
-{
-if (keycode == LEFT_ARROW)
-{
-btn1.set_x(btn1.x - 2);
-}
-if (keycode == RIGHT_ARROW)
-{
-btn1.set_x(btn1.x + 2);
-}
-if (keycode == UP_ARROW)
-{
-btn1.set_y(btn1.y - 2);
-}
-if (keycode == DOWN_ARROW)
-{
-btn1.set_y(btn1.y + 2);
-}
-}
-	};
 window.onload = function() 
 {
 	var Sound = new ms.ui.Sound();
@@ -162,40 +79,16 @@ window.onload = function()
 	{
 		ui.mouseup(ev.clientX, ev.clientY);                  
 	};	
-		    __label1 = new ms.ui.Label( 
-	    "Verdana",g_ui_root.manager, g_ui_root);
-                __label1.text("use arrows to move smile");
-                __label1.position(240, 75);
-		    lbl1 = new ms.ui.Label( 
-	    "Verdana",g_ui_root.manager, g_ui_root);
-                lbl1.text("click smiley");
-                lbl1.position(250, 90);
-		    btn1 = new ms.ui.Button( 
-	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
-                btn1.set_rotation(0.200000003);
-                btn1.set_height(50);
-	btn1.click = function()
-	{    
-		lbl1.text("Got " + application.clicks + " smileys");
-btn1.set_rotation(btn1.rotation + 0.200000003);
-application.clicks = application.clicks + 1;
-	};
-                btn1.rect(270, 100, 50, 50);
-		    stateBtn = new ms.ui.StateButton( 
-	    "images/smile_grin_48.png","images/smile_sad_48.png",g_ui_root.manager, g_ui_root);
-                stateBtn.set_rotation("-0.4");
-                stateBtn.set_height(50);
-                stateBtn.rect(270, 200, 50, 50);
-		    lbl3 = new ms.ui.Label( 
-	    "Verdana",g_ui_root.manager, g_ui_root);
-                lbl3.text("this smile is a state button, click it");
-                lbl3.position(330, 240);
 		    sd1 = new ms.ui.SelfDrawn( 
 	    g_ui_root.manager, g_ui_root);
                 sd1.set_height(300);
+	sd1.reset = function() 
+	{
+			};
 	sd1.paint = function(context)
 	{    
-		context.fillStyle = "cyan";
+		sd1.reset();
+context.fillStyle = "cyan";
 context.fillRect(-100, -100, 200, 200);
 context.fillStyle = "green";
 context.beginPath();

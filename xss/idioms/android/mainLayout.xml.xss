@@ -6,6 +6,8 @@
     android:id="@+id/mainLayoutApplication" 
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+	xkp:placement="client"
+	
 <xss:class>
 	on render()
 	{
@@ -115,7 +117,8 @@
 			{
 				if(prop.value is int)
 				{
-					assignValue = prop.value + "px";
+					//assignValue = prop.value + "px";
+					assignValue = prop.value + "dp";
 				}
 			}
 			else

@@ -348,7 +348,7 @@ str debug_language::render_expression(expression& expr, XSSContext ctx)
     return "no goal";
   }
 
-str debug_language::instantiate(XSSType type, DynamicArray params)
+str debug_language::instantiate(XSSType type, XSSObject instance, DynamicArray params)
   {
     return "only instances";
   }

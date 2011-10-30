@@ -165,6 +165,8 @@ namespace xkp
         str         property_set(XSSProperty prop, const str& path, const str& value);
         str         property_get(XSSProperty prop, const str& path);
         XSSObject   analyze_expression(const str& expr, variant this_);
+        bool        is_type(variant v);
+        str         instantiate(variant v);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -254,6 +256,8 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<str,        3>("property_set",        &xss_compiler::property_set);
         method_<str,        2>("property_get",        &xss_compiler::property_get);
         method_<XSSObject,  2>("analyze_expression",  &xss_compiler::analyze_expression);
+        method_<bool,       1>("is_type",             &xss_compiler::is_type);
+        method_<str,        1>("instantiate",         &xss_compiler::instantiate);
       }
   };
 

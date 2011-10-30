@@ -1,21 +1,6 @@
 <application src="ui_selfdrawn.xs" width="600" height="600">
     <resources>
-        <image src="images/progress.full.png"/>
-        <image src="images/progress.empty.png"/>
-        <image src="images/smile_grin_48.png"/>
-        <image src="images/smile_sad_48.png"/>
-        <image src="images/arrow_left.png"/>
-        <image src="images/arrow_right.png"/>
-        <image src="images/arrow_right_48.png"/>
-        <image src="images/arrow_right_green_48.png"/>
-        <image src="images/arrow_left_48.png"/>
-        <image src="images/arrow_left_green_48.png"/>
     </resources>
 
-    <label x="240" y="75" font="Verdana" caption="use arrows to move smile"/>
-    <label id="lbl1" x="250" y="90" font="Verdana" caption="click smiley"/>
-    <button id="btn1" x="270" y="100" rotation="0.2" width="50" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png"/>
-    <state_button id="stateBtn" x="270" y="200" rotation="-0.4" width="50" height="50" up="images/smile_grin_48.png" down="images/smile_sad_48.png"/>
-	<label id="lbl3" x="330" y="240" font="Verdana" caption="this smile is a state button, click it"/>
 	<self_drawn id="sd1" x="0" y="300" width="600" height="300"/>
 </application>

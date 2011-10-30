@@ -516,8 +516,21 @@ ms.ui.Component = Class.create(
 		return this.visible_;
 	},
 
-	positioned: function() {this.invalidate()},
-	resized: 	function() {this.invalidate()},
+	positioned: function() 
+    {
+        if (this.moved)
+        {
+            this.moved(this);
+        }
+
+        this.invalidate()
+    },
+	
+    resized: function() 
+    {
+        this.invalidate()
+    },
+
     visible_:   true,
 
     invalidate: function()
@@ -613,14 +626,21 @@ ms.ui.Image = Class.create(ms.ui.Component,
         this.invalidate();
 	},
 
+    src: function()
+    {
+        return this.source;
+    },
+
     src: function(image)
     {
+        this.source = image;
 	    this.texture = streamer.get_resource(image).data;
         this.invalidate();
     },
 
 	image: function(texture)
 	{
+        this.source = "";
 	    this.texture = texture;
         this.invalidate();
 	},           
@@ -866,6 +886,43 @@ ms.ui.Line = Class.create(ms.ui.Component,
 
 		$super(context);
     },
+});
+
+ms.ui.SelfDrawn = Class.create(ms.ui.Component,
+{	
+	initialize: function($super, manager, parent)
+	{				
+		$super(manager, parent);		
+	},
+
+	draw: function($super, context, x, y)
+    {
+		var old_alpha;
+		
+		context.save();
+		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
+		context.rotate(this.rotation);
+		
+		if (this.opacity != null)
+        {
+            old_alpha = context.globalAlpha;
+            context.globalAlpha = this.opacity;
+        }
+		
+        if('paint' in this)
+		{
+			this.paint(context);	
+		}
+		
+        if (this.opacity != null)
+        {
+            context.globalAlpha = old_alpha;
+        }
+			
+		context.restore();  
+		
+        $super(context);
+    }
 });
 
 ms.ui.Sound = Class.create(

@@ -1010,7 +1010,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                 else
                   {
                     Language lang = ctx_->get_language();
-                    str      lr = lang->instantiate(instantiation, info);
+                    str      lr = lang->instantiate(instantiation, XSSObject(), info);
                     push_rendered(lr, op_prec, variant(), caller); 
                   }
               }
@@ -1231,7 +1231,7 @@ str base_lang::render_expression(expression& expr, XSSContext ctx)
     return rend->render();
   }
 
-str base_lang::instantiate(XSSType type, DynamicArray params)
+str base_lang::instantiate(XSSType type, XSSObject instance, DynamicArray params)
   {
     str          class_name  = type->output_id();
     DynamicArray ctor_params = type->ctor_args();
@@ -1255,7 +1255,7 @@ str base_lang::instantiate(XSSType type, DynamicArray params)
           {
             value = constant;
           }
-        else if (runtime)
+        else if (runtime && params)
           {
             if (curr < params->size())
               {
@@ -1276,7 +1276,13 @@ str base_lang::instantiate(XSSType type, DynamicArray params)
                 xss_throw(error);
               }                
 
-            XSSProperty prop = type->get_property(prperty);
+
+            XSSProperty prop; 
+            if (instance)
+              prop = instance->get_property(prperty);
+            else
+              prop = type->get_property(prperty);
+            
             if (!prop)
               {
                 param_list error;

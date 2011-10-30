@@ -134,6 +134,18 @@ XSSObject xss_object_reader::read_xml_object(TiXmlElement* node, XSSObject paren
           class_name = node->Value();
 
         XSSType type = ctx_? ctx_->get_type(class_name) : XSSType();
+
+        if (!type && class_name == "class")
+          {
+            //when reading types, look for the super class as "type"
+            const char* cc = node->Attribute("super");
+            if (cc)
+              {
+                type = ctx_? ctx_->get_type(cc) : XSSType();
+              }
+          }
+
+
         if (force_type)
           {
             type = force_type;
@@ -141,7 +153,7 @@ XSSObject xss_object_reader::read_xml_object(TiXmlElement* node, XSSObject paren
           }
         
         result->set_type(type);
-        result->set_type_name(class_name);
+        result->set_type_name(type? type->id() : class_name);
 
         //read properties
         const TiXmlAttribute* attr = node->FirstAttribute();
