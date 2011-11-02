@@ -51,8 +51,7 @@ var application = {};
 		g_startup_package.load();	
 function start(resolution)  
 {  
-	var start = new Date().getTime();  
-	function update()  
+	function updater()  
 	{  
 		var now   = new Date().getTime();
         if (g_elapsed < 0)
@@ -63,9 +62,9 @@ function start(resolution)
 		g_sequence_manager.update(g_delta);
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-        window.setTimeout(update, resolution);  
-	}  
-	window.setTimeout(update, resolution);  
+        window.setTimeout(updater, resolution);  
+	}
+	window.setTimeout(updater, resolution);  
 }  
             ms6 = Class.create(ms.ui.Component,
         {
@@ -128,7 +127,8 @@ anim1.start();
  this.btn2.bottom(50); 
                 btn2 = this.btn2;
                 },
-    });
+                height : 100,
+});
 window.onload = function() 
 {
 	var Sound = new ms.ui.Sound();
@@ -181,7 +181,7 @@ window.onload = function()
             {
                 application.init();
             }
-			start();
+            start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});
 	}

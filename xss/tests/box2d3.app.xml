@@ -7,11 +7,12 @@
 
     <resources>
         <image src="images/smile_grin_48.png"/>
+        <image src="images/stone-12.jpg"/>
     </resources>
 
-    <smiley_ball id="sm1" x="100" y="0" rotation="0" width="50" height="50"/>
-    
     <spawner id="sp1" x="300" y="100" rotation="3" auto_start="true" frequency="1" creator_class="smiley_ball" velocity="10"/>
-    
-    <body id="floor" body_type="static" shape="rect" x="10" y="15.13" width="20" height="2"/>
+
+    <wall x="0" y="390" width="600" height="40"/>
+    <wall x="590" y="250" width="10" height="140"/>
+    <wall x="0" y="250" width="10" height="140" />
 </application>

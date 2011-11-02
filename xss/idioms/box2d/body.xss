@@ -62,20 +62,22 @@
                 fixDef.shape = new b2PolygonShape;
             }
 
-            if (visual_parent)
+            if (it.width != null && it.height != null)
             {
                 out()
                 {
-                    fixDef.shape.SetAsBox(<xss:e v="visual_parent"/>.w, <xss:e v="visual_parent"/>.h);
+                    fixDef.shape.SetAsBox(<xss:e v="it.width"/>/(2*g_world_scale), <xss:e v="it.height"/>/(2*g_world_scale));
+                }
+            }
+            else if (visual_parent)
+            {
+                out()
+                {
+                    fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
                 }
             }
             else
-            {
-                out()
-                {
-                    fixDef.shape.SetAsBox(<xss:e v="it.width"/>, <xss:e v="it.height"/>);
-                }
-            }
+                compiler.error("Rect shapes mush have [width, height] or a visual parent");
         }
         else if (it.shape == "circle")
         {
@@ -90,7 +92,7 @@
             {
                 out()
                 {
-                    fixDef.shape = new b2CircleShape(Math.min(<xss:e v="visual_parent"/>.w, <xss:e v="visual_parent"/>.h)/(2*g_world_scale));
+                    fixDef.shape = new b2CircleShape(Math.min(cmp.w, cmp.h)/(2*g_world_scale));
                 }
             }
             else
@@ -108,8 +110,7 @@
         {
             out()
             {
-                bodyDef.position.Set((<xss:e v="visual_parent"/>.x + <xss:e v="visual_parent"/>.w/2)/g_world_scale,
-                                     (<xss:e v="visual_parent"/>.y + <xss:e v="visual_parent"/>.h/2)/g_world_scale);
+                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
             }
         }
         else
@@ -160,8 +161,18 @@
         else 
             visual_parent = null;
             
-        compiler.log(visual_parent);
-
+        if (visual_parent)
+        {
+            //must wrap this in a function so the box 2d objects are created on resize
+            out()
+            {
+                <xss:e v="visual_parent"/>.ev_resized = function(cmp) 
+                <xss:open_brace/>
+                    if (cmp.physics)
+                        g_world.DestroyBody(cmp.physics);
+            }
+        }
+        
         basic_properties();
         shape();
         position();
@@ -177,11 +188,18 @@
         {
             out()
             {
-                <xss:e v="visual_parent"/>.physics = current_body;
-                <xss:e v="visual_parent"/>.moved = update_body_position;
+                cmp.physics = current_body;
+                cmp.moved = update_body_position;
                 
-                current_body.host = <xss:e v="visual_parent"/>;
+                current_body.host = cmp;
+                <xss:close_brace/>
+                
+                if (<xss:e v="visual_parent"/>.w > 0 && <xss:e v="visual_parent"/>.h > 0)
+                {
+                    <xss:e v="visual_parent"/>.ev_resized(<xss:e v="visual_parent"/>);
+                }
             }
+            
         }
     }
 

@@ -89,6 +89,9 @@ ms.arcade.Spawner = Class.create(
     {
         var result = this.creator();
         result.position(this.x, this.y);
+
+        if (!result.physics)
+            result.ev_resized(result);
         
         var vx = this.velocity*Math.sin(this.rotation);
         var vy = this.velocity*Math.cos(this.rotation);

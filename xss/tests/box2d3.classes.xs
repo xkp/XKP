@@ -6,3 +6,7 @@ class smiley_ball : img
         //console.log("Collidey");
     }
 }
+
+class wall : img
+{
+}

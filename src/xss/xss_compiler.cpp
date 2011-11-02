@@ -1529,7 +1529,8 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
             clazz->set_definition(def_class);
             clazz->set_super(super);
 
-				    XSSContext ictx(new xss_context(ctx, path.parent_path()));
+				    
+            XSSContext ictx(new xss_context(ctx, path.parent_path()));
 				    ictx->set_this(XSSObject(clazz));
             ictx->add_type(cid, clazz);
 

@@ -123,6 +123,7 @@ class xss_object : public editable_object<xss_object>,
       void register_event_impl(const str& name, XSSEvent new_evt = XSSEvent());
 
 			XSSProperty get_property(const str& name);
+      XSSProperty get_shallow_property(const str& name);
 			XSSEvent    get_event(const str& name);
 			XSSMethod		get_method(const str& name);
     public:

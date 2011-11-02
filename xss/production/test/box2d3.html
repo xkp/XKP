@@ -90,6 +90,12 @@ var application = {};
 		resource_type:RESOURCE_IMAGE,
 		src:"images/smile_grin_48.png"
 });
+                def_package_items.push(
+            {
+		id:"__image2",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/stone-12.jpg"
+});
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
 function start(resolution)  
@@ -169,18 +175,26 @@ function start(resolution)
         src? src : "images/smile_grin_48.png"        );
                 this.size(50, 50);
                 var __physics1;
+                this.ev_resized = function(cmp) 
+                {
+                    if (cmp.physics)
+                        g_world.DestroyBody(cmp.physics);
              fixDef.density = 1;
              fixDef.friction = 0.5;
              fixDef.restitution = 0.200000003;
              bodyDef.type = b2Body.b2_dynamicBody;
                     fixDef.shape = new b2CircleShape(21.5/g_world_scale);
-                bodyDef.position.Set((this.x + this.w/2)/g_world_scale,
-                                     (this.y + this.h/2)/g_world_scale);
+                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
             current_body = g_world.CreateBody(bodyDef);
             current_body.CreateFixture(fixDef);
-                this.physics = current_body;
-                this.moved = update_body_position;
-                current_body.host = this;
+                cmp.physics = current_body;
+                cmp.moved = update_body_position;
+                current_body.host = cmp;
+                }
+                if (this.w > 0 && this.h > 0)
+                {
+                    this.ev_resized(this);
+                }
                 __physics1 = this.__physics1;
                 },
                 src : "images/smile_grin_48.png",
@@ -188,6 +202,40 @@ function start(resolution)
 	collision : function(who)
 	{    
 	},
+});
+            wall = Class.create(ms.ui.Image,
+        {
+    initialize: function($super
+                , src
+                )
+    {
+        $super(
+        src? src : "images/stone-12.jpg"        );
+                var __physics2;
+                this.ev_resized = function(cmp) 
+                {
+                    if (cmp.physics)
+                        g_world.DestroyBody(cmp.physics);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_staticBody;
+                fixDef.shape = new b2PolygonShape;
+                    fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
+                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);
+            current_body.CreateFixture(fixDef);
+                cmp.physics = current_body;
+                cmp.moved = update_body_position;
+                current_body.host = cmp;
+                }
+                if (this.w > 0 && this.h > 0)
+                {
+                    this.ev_resized(this);
+                }
+                __physics2 = this.__physics2;
+                },
+                src : "images/stone-12.jpg",
 });
 window.onload = function() 
 {
@@ -219,11 +267,18 @@ window.onload = function()
 	{
 		ui.mouseup(ev.clientX, ev.clientY);                  
 	};	
-		    sm1 = new smiley_ball( 
-	    "images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
-                sm1.set_rotation(0);
-                sm1.set_height(50);
-                sm1.rect(100, 0, 50, 50);
+		    __wall1 = new wall( 
+	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+                __wall1.set_height(40);
+                __wall1.rect(0, 390, 600, 40);
+		    __wall2 = new wall( 
+	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+                __wall2.set_height(140);
+                __wall2.rect(590, 250, 10, 140);
+		    __wall3 = new wall( 
+	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+                __wall3.set_height(140);
+                __wall3.rect(0, 250, 10, 140);
         sp1 = new ms.arcade.Spawner(g_spawner_manager, 300, 100, 3, 1, 10);
                 sp1.x = 300;
                 sp1.y = 100;
@@ -235,15 +290,6 @@ window.onload = function()
             return new smiley_ball("images/smile_grin_48.png");
         }
             sp1.start();
-             fixDef.density = 1;
-             fixDef.friction = 0.5;
-             fixDef.restitution = 0.200000003;
-             bodyDef.type = b2Body.b2_staticBody;
-                fixDef.shape = new b2PolygonShape;
-                    fixDef.shape.SetAsBox(20, 2);
-                bodyDef.position.Set(10, 15.1300001);
-            current_body = g_world.CreateBody(bodyDef);
-            current_body.CreateFixture(fixDef);
             g_ui.fill_background = false; //td: cross idiom
             var debugDraw = new b2DebugDraw();
             var debugDrawCanvas = document.getElementById("myCanvas");

@@ -34,8 +34,7 @@ var application = {};
 		g_startup_package.load();	
 function start(resolution)  
 {  
-	var start = new Date().getTime();  
-	function update()  
+	function updater()  
 	{  
 		var now   = new Date().getTime();
         if (g_elapsed < 0)
@@ -45,9 +44,9 @@ function start(resolution)
         g_elapsed = now; 
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-        window.setTimeout(update, resolution);  
-	}  
-	window.setTimeout(update, resolution);  
+        window.setTimeout(updater, resolution);  
+	}
+	window.setTimeout(updater, resolution);  
 }  
 window.onload = function() 
 {
@@ -114,7 +113,7 @@ context.stroke();
             {
                 application.init();
             }
-			start();
+            start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});
 	}

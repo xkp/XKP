@@ -528,6 +528,11 @@ ms.ui.Component = Class.create(
 	
     resized: function() 
     {
+        if (this.ev_resized)
+        {
+            this.ev_resized(this);
+        }
+
         this.invalidate()
     },
 
@@ -613,11 +618,6 @@ ms.ui.Image = Class.create(ms.ui.Component,
 		if (image && !texture && image != 'null')
 			throw "Image " + image + " not loaded";		
 	    this.texture = texture;		
-	},
-
-	resized: function()
-	{
-        this.invalidate();
 	},
 
 	fill: function(f)

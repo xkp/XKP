@@ -788,13 +788,26 @@ void xss_object::copy(XSSObject obj)
       {
         XSSProperty obj_prop = *it;
 
-        XSSProperty my_prop = get_property(obj_prop->id());
-        if (!my_prop)
-          my_prop = XSSProperty(new xss_property);
+        XSSProperty my_prop = get_shallow_property(obj_prop->id());
+        bool        add     = true;
+        if (my_prop)
+          {
+            add = false;
+            my_prop->copy(XSSObject(obj_prop));
+          }
+        else
+          {
+            my_prop = XSSProperty(new xss_property);
+            
+            XSSProperty type_prop = get_property(obj_prop->id());
+            if (type_prop)
+                my_prop->copy(XSSObject(type_prop));
 
-        my_prop->copy(XSSObject(obj_prop));
-
-        properties_->push_back(my_prop);
+            my_prop->copy(XSSObject(obj_prop));
+          }
+        
+        if (add)
+          properties_->push_back(my_prop);
       }
 
 		DynamicArray obj_methods = obj->methods();
@@ -1133,6 +1146,20 @@ XSSProperty xss_object::get_property(const str& name)
     return XSSProperty();
   }
 
+XSSProperty xss_object::get_shallow_property(const str& name)
+  {
+    std::vector<variant>::iterator it = properties_->ref_begin();
+    std::vector<variant>::iterator nd = properties_->ref_end();
+
+    for(; it != nd; it++)
+      {
+        XSSProperty prop = *it;
+        if (prop->id() == name)
+          return prop;
+      }
+
+    return XSSProperty();
+  }
 
 XSSEvent xss_object::get_event(const str& name)
   {
