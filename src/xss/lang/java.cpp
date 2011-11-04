@@ -300,14 +300,15 @@ void java_expr_renderer::exec_operator(operator_type op, int pop_count, int push
         case op_minus:
         case op_shift_right:
         case op_shift_left:
+
+        case op_and:
+        case op_or:
         case op_equal:
         case op_notequal:
         case op_gt:
         case op_lt:
         case op_ge:
         case op_le:
-        case op_and:
-        case op_or:
 
         case op_call:
         case op_func_call:
@@ -636,7 +637,46 @@ str java_lang::render_value(XSSType type, variant value)
     return base_lang::render_value(type, value);
   }
 
-//td: verify repeated codes, and do defaults methods on language
+bool java_lang::custom_operator(XSSType lt, XSSType rt, str l, str r, operator_type op, str& res)
+  {
+    if (!lt || !rt)
+      return false;
+
+    if (lt->id() == rt->id() && lt->id() == "string")
+      {
+        switch (op)
+        {
+          case op_notequal:
+            {
+              res += "!";
+            }
+          case op_equal:
+            {
+              res += l + ".equals(" + r + ")";
+              break;
+            }
+          case op_gt:
+          case op_lt:
+          case op_ge:
+          case op_le:
+          case op_and:
+          case op_or:
+            {
+              res += l + ".compareTo(" + r + ") " + lang_utils::operator_string(op) + " 0";
+              break;
+            }
+          default:
+            return false;
+        }
+
+        return true;
+      }
+    else
+      res = l + " " + lang_utils::operator_string(op) + " " + r;
+
+    return false;
+  }
+
 str java_lang::property_get(XSSProperty prop, const str& path, XSSContext ctx)
   {
     XSSObject get = prop->find("get");

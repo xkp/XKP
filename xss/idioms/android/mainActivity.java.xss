@@ -159,9 +159,19 @@ public class Act<xss:e value="appName"/>
 					
 					out(indent = 1, marker = "events")
 					{
-							<xss:close_brace/> //switch
-							
+						<xss:close_brace/> //switch
+					}
+					
+					if(ret_type == "boolean")
+					{
+						out(indent = 1, marker = "events")
+						{
 							return true;
+						}
+					}
+					
+					out(indent = 1, marker = "events")
+					{
 						<xss:close_brace/>
 					}
 				}

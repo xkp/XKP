@@ -79,7 +79,7 @@
         <class id="t_xss5_1" super="t_xss5">
             <property id="bar" type="string"/>
         </class>
-
+		
         //testing property set and get
         <class id="t_xss8">
             <property id="foo" type="int"/>
@@ -120,9 +120,9 @@
             
         </class>
         
-        //testing global instances
     </types>
 
+	//testing global instances
     <instance id="i_xss11" output_id="Singleton">
         <property id="foo" type="string">
             <get text="get_foo()"/>

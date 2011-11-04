@@ -433,15 +433,18 @@ bool xss_object_reader::read_xml_method(TiXmlElement* node, const str& type, XSS
 				    error.add("desc", SMethodMustHaveReturnType);
             error.add("method name", mthd->id());
 				    error.add("container", parent->id());
-				    xss_throw(error);
-          }
-        
-        //create an unresolved type
-        XSSType unresolved(new xss_type);
-        unresolved->set_id(type);
-        unresolved->as_unresolved();
 
-        ret_type = unresolved;
+				    //xss_throw(error);
+          }
+        else
+          {
+            //create an unresolved type
+            XSSType unresolved(new xss_type);
+            unresolved->set_id(type);
+            unresolved->as_unresolved();
+
+            ret_type = unresolved;
+          }
       }
 
     mthd->set_type(ret_type);

@@ -15,16 +15,12 @@ instance btnTouchme
 		
 		EPlacement pl = EPlacement.center;
 		
+		Display display = appManager.getDefaultDisplay();
+		int dispWidth  = display.getWidth();
+		int dispHeight = display.getHeight();
+		
 		float currentX = ev.getX();
-		
-		//TODO: well, i need to output something like this
-		//float currentY = getWindowManager().getDefaultDisplay().getHeight() - ev.getY();
-
-		//Display display = getWindowManager().getDefaultDisplay();
-		//int dispHeight = display.getHeight();
-		//float currentY = dispHeight - ev.getY();
-		
-		float currentY = ev.getY();
+		float currentY = dispHeight - ev.getY();
 
 		//TODO: when implement switch structure control?
 		if(action == EActionMotionEvent.down)

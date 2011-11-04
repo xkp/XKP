@@ -1,5 +1,5 @@
 <application name="Gallery" title="Image Gallery" src="gallery.xs" width="320" height="430">
-	<img_gallery id="gallery" width="320" height="100" spacing="5" placement="center">
+	<imagegallery id="gallery" width="320" height="120" spacing="5" placement="center">
 		<property id="images" type="array">
 			<string value="photos/gallery_photo_1.jpg"/>
 			<string value="photos/gallery_photo_2.jpg"/>
@@ -10,5 +10,5 @@
 			<string value="photos/gallery_photo_7.jpg"/>
 			<string value="photos/gallery_photo_8.jpg"/>
 		</property>
-	</img_gallery>
+	</imagegallery>
 </application>

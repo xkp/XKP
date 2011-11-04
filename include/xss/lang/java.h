@@ -66,6 +66,7 @@ struct java_lang : public base_lang
     virtual str     render_assignment(const str& path, const str& prop, const str& value);
     virtual str     expression_path(const str& expr );
     virtual str     array_operation(operator_type op, const str& arr, const str& value, XSSContext ctx);
+    virtual bool    custom_operator(XSSType lt, XSSType rt, str l, str r, operator_type op, str& res);
   };
 
 register_complete_type(java_code_renderer, renderer_code_schema<java_code_renderer>);

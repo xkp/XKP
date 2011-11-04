@@ -92,9 +92,6 @@ struct expr_type_resolver : expression_visitor
 		  bool							is_variant_;
 		  operator_registry operators_;
 		  XSSContext				ctx_;
-
-		private:
-			XSSType resolve_type(variant var);
   };
 
 struct expr_object_resolver : expression_visitor
@@ -153,6 +150,7 @@ struct lang_utils
     static int     operator_prec(operator_type op);
     static XSSType code_type(code& code, XSSContext ctx);
     static XSSType expr_type(expression& expr, XSSContext ctx);
+    static XSSType resolve_type(variant var, XSSContext ctx);
     static void    var_gatherer(code& cde, XSSContext ctx);
     static variant object_expr(expression& expr, XSSContext ctx);
     static str wind(const std::vector<str> path);

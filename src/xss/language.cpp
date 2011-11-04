@@ -212,7 +212,7 @@ XSSType expr_type_resolver::get()
 		assert(stack_.size() <= 1);
 
     if (stack_.size() == 1)
-		  return resolve_type(stack_.top());
+      return lang_utils::resolve_type(stack_.top(), ctx_);
 
     return ctx_->get_type("void");
 	}
@@ -236,7 +236,7 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
 				case op_unary_minus:
 					{
 						variant top = stack_.top(); stack_.pop();
-						stack_.push(resolve_type(top));
+            stack_.push(lang_utils::resolve_type(top, ctx_));
 						break;
 					}
 
@@ -307,7 +307,7 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
             variant arg2 = stack_.top(); stack_.pop();
 
             XSSType result = ctx_->get_type("var");
-            XSSType xsti = resolve_type(arg2);
+            XSSType xsti = lang_utils::resolve_type(arg2, ctx_);
 
             if (xsti->is_array())
               result = xsti->array_type();
@@ -325,7 +325,7 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
             for(int i = 0; i < arg_count; i++)
 							{
 								variant opnd = stack_.top(); stack_.pop();
-								XSSType opnd_type = resolve_type(opnd);
+                XSSType opnd_type = lang_utils::resolve_type(opnd, ctx_);
                 if (arr_type != opnd_type)
                   {
                     if (arr_type)
@@ -351,8 +351,8 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
 						variant arg2 = stack_.top(); stack_.pop();
 						variant arg1 = stack_.top(); stack_.pop();
 
-						XSSType xstype1 = resolve_type(arg1);
-						XSSType xstype2 = resolve_type(arg2);
+            XSSType xstype1 = lang_utils::resolve_type(arg1, ctx_);
+            XSSType xstype2 = lang_utils::resolve_type(arg2, ctx_);
 						schema* result = null;
 						size_t  idx;
 
@@ -488,33 +488,6 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
             break;
           }
 			} // switch
-	}
-
-XSSType expr_type_resolver::resolve_type(variant var)
-	{
-		XSSType result;
-
-		if (var.is<XSSType>())
-			return var;
-		else if (var.is<expression_identifier>())
-			{
-				expression_identifier ei = var;
-
-        resolve_info item;
-        if (ctx_->resolve(ei.value, item))
-          {
-            return item.type;
-          }
-			}
-		else if (var.is<XSSObject>())
-      {
-        XSSObject obj = var;
-        return obj->type();
-      }
-    else
-      result = ctx_->get_type(var.get_schema());
-
-		return result;
 	}
 
 //expr_object_resolver
@@ -928,6 +901,48 @@ XSSType lang_utils::expr_type(expression& expr, XSSContext ctx)
     expr.visit(&result);
 
     return result.get();
+  }
+
+XSSType lang_utils::resolve_type(variant var, XSSContext ctx)
+  {
+		XSSType result;
+
+		if (var.is<XSSType>())
+			return var;
+		else if (var.is<expression_identifier>())
+			{
+				expression_identifier ei = var;
+
+        resolve_info item;
+        if (ctx->resolve(ei.value, item))
+          {
+            return item.type;
+          }
+			}
+    else if (var.is<already_rendered>())
+      {
+        already_rendered ar = var;
+        return resolve_type(ar.object, ctx);
+      }
+    else if (var.is<XSSProperty>())
+      {
+        XSSProperty prop = var;
+        return prop->type();
+      }
+    else if (var.is<XSSMethod>())
+      {
+        XSSMethod mthd = var;
+        return mthd->type();
+      }
+		else if (var.is<XSSObject>())
+      {
+        XSSObject obj = var;
+        return obj->type();
+      }
+    else
+      result = ctx->get_type(var.get_schema());
+
+		return result;
   }
 
 void lang_utils::var_gatherer(code& cde, XSSContext ctx)

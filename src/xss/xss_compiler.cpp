@@ -1342,7 +1342,7 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
               {
                 XSSMethod mthd     = *mit;
                 XSSType   old_type = mthd->type();
-                if (old_type->is_unresolved())
+                if (old_type && old_type->is_unresolved())
                   {
                     XSSType new_type = ctx->get_type(old_type->id());
                     if (!new_type)

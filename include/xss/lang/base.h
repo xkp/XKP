@@ -166,6 +166,7 @@ struct base_lang : public ILanguage
     virtual str     render_value(XSSType type, variant value);
     virtual str     render_expression(expression& expr, XSSContext ctx);
     virtual str     instantiate(XSSType type, DynamicArray params);
+    virtual bool    custom_operator(XSSType lt, XSSType rt, str l, str r, operator_type op, str& res);
 
     protected:
       void compile_property(XSSProperty prop, XSSContext ctx);

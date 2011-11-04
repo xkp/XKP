@@ -353,6 +353,13 @@ str debug_language::instantiate(XSSType type, DynamicArray params)
     return "only instances";
   }
 
+bool debug_language::custom_operator(XSSType lt, XSSType rt, str l, str r, operator_type op, str& res)
+  {
+    res = "custom operator";
+
+    return false;
+  }
+
 //glue
 
 namespace xkp

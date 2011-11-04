@@ -86,6 +86,87 @@
 			<!-- continue -->
 		</enum>
 		
+		<enum id="EActionDragEvent" output_id="int" default_value="-1">
+			<property id="started" type="EActionDragEvent" output_id="ACTION_DRAG_STARTED" output_xml="started">
+				<get text="DragEvent.ACTION_DRAG_STARTED" global="true"/>
+			</property>
+			
+			<property id="entered" type="EActionDragEvent" output_id="ACTION_DRAG_ENTERED" output_xml="entered">
+				<get text="DragEvent.ACTION_DRAG_ENTERED" global="true"/>
+			</property>
+			
+			<property id="location" type="EActionDragEvent" output_id="ACTION_DRAG_LOCATION" output_xml="location">
+				<get text="DragEvent.ACTION_DRAG_LOCATION" global="true"/>
+			</property>
+			
+			<property id="exited" type="EActionDragEvent" output_id="ACTION_DRAG_EXITED" output_xml="exited">
+				<get text="DragEvent.ACTION_DRAG_EXITED" global="true"/>
+			</property>
+			
+			<property id="drop" type="EActionDragEvent" output_id="ACTION_DROP" output_xml="drop">
+				<get text="DragEvent.ACTION_DROP" global="true"/>
+			</property>
+			
+			<property id="ended" type="EActionDragEvent" output_id="ACTION_DRAG_ENDED" output_xml="ended">
+				<get text="DragEvent.ACTION_DRAG_ENDED" global="true"/>
+			</property>
+		</enum>
+		
+		<enum id="EDirection" output_id="int" default_value="-1">
+			<property id="up" type="EDirection" output_id="FOCUS_UP">
+				<get text="View.FOCUS_UP" global="true"/>
+			</property>
+			
+			<property id="down" type="EDirection" output_id="FOCUS_DOWN">
+				<get text="View.FOCUS_DOWN" global="true"/>
+			</property>
+			
+			<property id="left" type="EDirection" output_id="FOCUS_LEFT">
+				<get text="View.FOCUS_LEFT" global="true"/>
+			</property>
+			
+			<property id="right" type="EDirection" output_id="FOCUS_RIGHT">
+				<get text="View.FOCUS_RIGHT" global="true"/>
+			</property>
+		</enum>
+		
+		<enum id="EScaleType" output_id="int" default_value="-1">
+			<property id="matrix" type="EScaleType" output_id="ScaleType.MATRIX" output_xml="matrix">
+				<get text="ScaleType.MATRIX" global="true"/>
+			</property>
+			
+			<property id="fitXY" type="EScaleType" output_id="ScaleType.FIT_XY" output_xml="fitXY">
+				<get text="ScaleType.FIT_XY" global="true"/>
+			</property>
+			
+			<property id="fitStart" type="EScaleType" output_id="ScaleType.FIT_START" output_xml="fitStart">
+				<get text="ScaleType.FIT_START" global="true"/>
+			</property>
+			
+			<property id="fitCenter" type="EScaleType" output_id="ScaleType.FIT_CENTER" output_xml="fitCenter">
+				<get text="ScaleType.FIT_CENTER" global="true"/>
+			</property>
+			
+			<property id="fitEnd" type="EScaleType" output_id="ScaleType.FIT_END" output_xml="fitEnd">
+				<get text="ScaleType.FIT_END" global="true"/>
+			</property>
+			
+			<property id="center" type="EScaleType" output_id="ScaleType.CENTER" output_xml="center">
+				<get text="ScaleType.CENTER" global="true"/>
+			</property>
+			
+			<property id="centerCrop" type="EScaleType" output_id="ScaleType.CENTER_CROP" output_xml="centerCrop">
+				<get text="ScaleType.CENTER_CROP" global="true"/>
+			</property>
+			
+			<property id="centerInside" type="EScaleType" output_id="ScaleType.CENTER_INSIDE" output_xml="centerInside">
+				<get text="ScaleType.CENTER_INSIDE" global="true"/>
+			</property>
+		</enum>
+		
+		<enum id="EProgressStyle">
+		</enum>
+		
 		<enum id="EPlacement" output_id="int" default_value="EPlacement.none">
 			<property id="none" type="EPlacement" output_id="PL_NONE" output_xml="none">
 				<get text="XKPLayout.PL_NONE" global="true"/>
@@ -125,6 +206,22 @@
 			<event id="click" output_id="onClick" interface="OnClickListener" def_args="View v" set_handle="setOnClickListener" set_param_hnd="this"/>
 		</class>
 		
+		<class id="ILongClickListener">
+			<array id="imports">
+				<object import="android.view.View.OnLongClickListener"/>
+			</array>
+			
+			<event id="longclick" output_id="onLongClick" interface="OnLongClickListener" def_args="View v" set_handle="setOnLongClickListener" set_param_hnd="this"/>
+		</class>
+		
+		<class id="IFocusChangeListener">
+			<array id="imports">
+				<object import="android.view.View.OnFocusChangeListener"/>
+			</array>
+			
+			<event id="focuschange" output_id="onFocusChange" interface="OnFocusChangeListener" def_args="View v, Boolean hasFocus" set_handle="setOnFocusChangeListener" set_param_hnd="this"/>
+		</class>
+		
 		<class id="IChangeListener">
 			<array id="imports">
 				<object import="android.widget.CompoundButton"/>
@@ -134,12 +231,44 @@
 			<event id="change" output_id="onCheckedChanged" interface="OnCheckedChangeListener" def_args="CompoundButton v, Boolean isChecked" set_handle="setOnCheckedChangeListener" set_param_hnd="this"/>
 		</class>
 		
-		<class id="IKeyDownListener">
-			<event id="keydown" output_id="onKey" interface="OnKeyListener" def_args="View v, int keyCode, KeyEvent event" set_handle="setOnKeyListener" set_param_hnd="this"/>
+		<class id="IKeyListener">
+			<array id="imports">
+				<object import="android.view.View.OnKeyListener"/>
+			</array>
+			
+			<event id="key" output_id="onKey" interface="OnKeyListener" return_type="boolean" def_args="View v, int keyCode, KeyEvent event" set_handle="setOnKeyListener" set_param_hnd="this"/>
 		</class>
 		
-		<class id="IDragListener">
+		<class id="IKeyDownListener">
+			<array id="imports">
+				<object import="android.view.View.OnKeyListener"/>
+			</array>
+			
+			<event id="keydown" output_id="onKeyDown" return_type="boolean" def_args="int keyCode, KeyEvent event"/>
+		</class>
+		
+		<class id="IKeyLongPressListener">
+			<event id="longkey" output_id="onKeyLongPress" return_type="boolean" def_args="int keyCode, KeyEvent event"/>
+		</class>
+		
+		<class id="IKeyMultipleListener">
+			<event id="keymultiple" output_id="onKeyMultiple" return_type="boolean" def_args="int keyCode, int repeatCount, KeyEvent event"/>
+		</class>
+		
+		<class id="IKeyUpListener">
+			<event id="keyup" output_id="onKeyUp" return_type="boolean" def_args="int keyCode, KeyEvent event"/>
+		</class>
+		
+		<class id="IDragListener" api_level="11">
+			<array id="imports">
+				<object import="android.view.View.OnDragListener"/>
+			</array>
+			
 			<event id="drag" output_id="onDrag" interface="OnDragListener" def_args="View v, DragEvent event" set_handle="setOnDragListener" set_param_hnd="this"/>
+		</class>
+		
+		<class id="IDragEventListener" api_level="11">
+			<event id="dragE" output_id="onDragEvent" interface="OnDragListener" def_args="DragEvent event"/>
 		</class>
 		
 		<class id="ITouchListener">
@@ -181,6 +310,23 @@
 			</array>
 			
 			<method id="getAction" type="EActionMotionEvent"/>
+			<method id="getX" type="float"/>
+			<method id="getY" type="float"/>
+		</class>
+		
+		<class id="Display" no_layout="true">
+			<array id="imports">
+				<object import="android.view.Display"/>
+			</array>
+			
+			<method id="getWidth" type="int"/>
+			<method id="getHeight" type="int"/>
+		</class>
+		
+		<!-- After API Level 11 -->
+		<class id="DragEvent" no_layout="true">
+			<method id="getAction" type="EActionDragEvent"/>
+			<method id="getResult" type="bool"/>
 			<method id="getX" type="float"/>
 			<method id="getY" type="float"/>
 		</class>
@@ -234,9 +380,24 @@
 				<set text="setEnabled({value})"/>
 			</property>
 			
-			<property id="gravity" type="EGravity" output_id="layout_gravity" ns="android">
+			<property id="gravity" type="EGravity" output_id="gravity" ns="android">
 				<get text="getGravity()"/>
 				<set text="setGravity({value})"/>
+			</property>
+			
+			<property id="clickable" type="bool" ns="android">
+				<get text="isClickable()"/>
+				<set text="setClickable({value})"/>
+			</property>
+			
+			<property id="long_clickable" type="bool" output_id="longClickable" ns="android">
+				<get text="isLongClickable()"/>
+				<set text="setLongClickable({value})"/>
+			</property>
+			
+			<property id="focusable" type="bool" ns="android">
+				<get text="isFocusable()"/>
+				<set text="setFocusable({value})"/>
 			</property>
 			
 			<!--
@@ -244,16 +405,116 @@
 			<property id="layout_weight" ns="android" type="float"/>
 			-->
 			
+			<method id="is_touch_mode" type="bool" output_id="isInTouchMode"/>
+			<method id="is_focused" type="bool" output_id="isFocused"/>
+			<method id="is_selected" type="bool" output_id="isSelected"/>
+			<method id="click" type="bool" output_id="performClick"/>
+			<method id="longclick" type="bool" output_id="performLongClick"/>
+			<method id="request_focus" type="bool" output_id="requestFocus"/>
+			<!--<array id="args">
+					<object param_type="EDirection" param_name="direction"/>
+				</array>
+			</method>-->
+			<method id="set_selected" output_id="setSelected"/>
+			<!--<array id="args">
+					<object param_type="bool" param_name="selected"/>
+				</array>
+			</method>-->
+			<method id="show_menu" type="bool" output_id="showContextMenu"/>
+			
+			<event id="draw" output_id="onDraw"/>
+			
+			<import id="IClickListener"/>
+			<import id="ILongClickListener"/>
 			<import id="ITouchListener"/>
+			<!--<import id="IDragListener"/>
+			<import id="IDragEventListener"/>-->
+			<import id="IKeyListener"/>
+			<import id="IKeyDownListener"/>
+			<import id="IKeyLongPressListener"/>
+			<import id="IKeyMultipleListener"/>
+			<import id="IKeyUpListener"/>
+			<import id="IFocusChangeListener"/>
 		</class>
 		
 		<class id="ITextView" super="IWidget">
+			<array id="imports">
+				<object import="android.text.method.KeyListener"/>
+			</array>
+			
 			<property id="caption" type="string" output_id="text" ns="android" res_type="str_reference">
 				<get text="getText()"/>
 				<set text="setText({value})"/>
 			</property>
 			
-			<import id="IClickListener"/>
+			<property id="cursor_visible" type="bool" output_id="cursorVisible" ns="android">
+				<get text="getCursorVisible()"/>
+				<set text="setCursorVisible({value})"/>
+			</property>
+			
+			<property id="hint" type="string" ns="android" res_type="str_refence">
+				<get text="getHint()"/>
+				<set text="setHint({value})"/>
+			</property>
+			
+			<property id="text_color" type="int" output_id="textColor" ns="android">
+				<get text="getTextColor()"/>
+				<set text="setTextColor({value})"/>
+			</property>
+			
+			<property id="text_selectable" type="bool" output_id="textIsSelectable" ns="android">
+				<get text="isTextSelectable()"/>
+				<set text="setTextIsSelectable({value})"/>
+			</property>
+			
+			<property id="links_clickeable" type="bool" output_id="linksClickable" ns="android">
+				<get text="getLinksClickable()"/>
+				<set text="setLinksClickable({value})"/>
+			</property>
+			
+			<property id="lines" type="int" ns="android">
+				<get text="getLineCount()"/>
+				<set text="setLines({value})"/>
+			</property>
+			
+			<property id="max_lines" type="int" output_id="maxLines" ns="android">
+				<get text="getLineCount()"/>
+				<set text="setLines({value})"/>
+			</property>
+			
+			<property id="max_height" type="int" output_id="maxHeight" ns="android">
+				<get text="getMaxHeight()"/>
+				<set text="setMaxHeight({value})"/>
+			</property>
+			
+			<property id="max_width" type="int" output_id="maxWidth" ns="android">
+				<get text="getMaxWidth()"/>
+				<set text="setMaxWidth({value})"/>
+			</property>
+			
+			<property id="min_height" type="int" output_id="minHeight" ns="android">
+				<get text="getMinHeight()"/>
+				<set text="setMinHeight({value})"/>
+			</property>
+			
+			<property id="min_width" type="int" output_id="minWidth" ns="android">
+				<get text="getMinWidth()"/>
+				<set text="setMinWidth({value})"/>
+			</property>
+			
+			<event id="keydown" output_id="onKeyDown" interface="KeyListener" return_type="boolean" def_args="View view, Editable text, int keyCode, KeyEvent event" set_handle="setKeyListener" set_param_hnd="this"/>
+			<event id="keyother" output_id="onKeyOther" interface="KeyListener" return_type="boolean" def_args="View view, Editable text, KeyEvent event" set_handle="setKeyListener" set_param_hnd="this"/>
+			<event id="keyup" output_id="onKeyUp" interface="KeyListener" return_type="boolean" def_args="View view, Editable text, int keyCode, KeyEvent event" set_handle="setKeyListener" set_param_hnd="this"/>
+		
+			<method id="append"/>
+			<!--<array id="args">
+					<object param_type="CharSequence" param_name="text"/>
+				</array>
+			</method>-->
+			<method id="selection_end" type="int" output_id="getSelectionEnd" />
+			<method id="selection_start" type="int" output_id="getSelectionStart"/>
+			<method id="has_selection" type="bool" output_id="hasSelection"/>
+			<method id="length" type="int"/>
 		</class>
 		
 		<class id="label" super="ITextView" output_id="TextView">
@@ -278,6 +539,8 @@
 				<set text="setChecked({value})"/>
 			</property>
 			
+			<method id="toggle" ns="android"/>
+			
 			<import id="IChangeListener"/>
 		</class>
 		
@@ -285,6 +548,15 @@
 			<array id="imports">
 				<object import="android.widget.RadioButton"/>
 			</array>
+			
+			<property id="checked" type="bool" ns="android">
+				<get text="isChecked()"/>
+				<set text="setChecked({value})"/>
+			</property>
+			
+			<method id="toggle"/>
+			
+			<import id="IChangeListener"/>
 		</class>
 		
 		<class id="editbox" super="IWidget" output_id="EditText">
@@ -296,15 +568,265 @@
 				<get text="getText().toString()"/>
 				<set text="setText({value})"/>
 			</property>
+			
+			<method id="select_all" output_id="selectAll"/>
+			<method id="select" output_id="setSelection"/>
+			<!--<array id="args">
+					<object param_type="int" param_name="start"/>
+					<object param_type="int" param_name="stop"/>
+				</array>
+			</method>-->
+		</class>
+		
+		<class id="image" super="IWidget" output_id="ImageView">
+			<array id="imports">
+				<object import="android.widget.ImageView"/>
+			</array>
+			
+			<property id="source" type="string" output_id="src" ns="android" res_type="drawable">
+				<set text="setImageResource({value})"/> <!-- param type is int, because resource is an identifier -->
+			</property>
+			
+			<property id="scale" type="EScaleType" output_id="scaleType" ns="android">
+				<get text="getScaleType()"/>
+				<set text="setScaleType({value})"/>
+			</property>
+			
+			<method id="set_alpha" output_id="setAlpha"/>
+			<method id="set_bitmap" output_id="setImageBitmap"/>
+			<!--<array id="args">
+					<object param_type="Bitmap" param_name="bm"/>
+				</array>
+			</method>-->
+			<method id="set_matrix" output_id="setImageMatrix"/>
+			<!--<array id="args">
+					<object param_type="Matrix" param_name="matrix"/>
+				</array>
+			</method>-->
+		</class>
+		
+		<class id="imagebutton" super="image" output_id="ImageButton">
+			<array id="imports">
+				<object import="android.widget.ImageButton"/>
+			</array>
+		</class>
+		
+		<class id="togglebutton" super="ITextView" output_id="ToggleButton">
+			<array id="imports">
+				<object import="android.widget.ToggleButton"/>
+			</array>
+			
+			<property id="textoff" type="string" output_id="textOff" ns="android">
+				<get text="getTextOff().toString()"/>
+				<set text="setTextOff({value})"/>
+			</property>
+			
+			<property id="texton" type="string" output_id="textOn" ns="android">
+				<get text="getTextOn().toString()"/>
+				<set text="setTextOn({value})"/>
+			</property>
+			
+			<method id="checked" output_id="setChecked"/>
+			<!--<array id="args">
+					<object param_type="boolean" param_name="checked"/>
+				</array>
+			</method>-->
+		</class>
+		
+		<class id="radiogroup" super="IWidget" output_id="RadioGroup">
+			<array id="imports">
+				<object import="android.widget.RadioGroup"/>
+				<object import="android.widget.RadioGroup.OnCheckedChangeListener"/>
+			</array>
+			
+			<method id="add_cmp" output_id="addView"/>
+			<!--<array id="args">
+					<object param_type="View" param_name="child"/>
+					<object param_type="int" param_name="index"/>
+					<object param_type="ViewGroup.LayoutParams" param_name="params"/>
+				</array>
+			</method>-->
+			<method id="check"/>
+			<!--<array id="args">
+					<object param_type="int" param_name="id"/>
+				</array>
+			</method>-->
+			<method id="clear_check" output_id="clearCheck"/>
+			<method id="selected" output_id="getCheckedRadioButtonId"/>
+			
+			<event id="change" output_id="onCheckedChanged" interface="OnCheckedChangeListener" def_args="RadioGroup group, int checkedId" set_handle="setOnCheckedChangeListener" set_param_hnd="this"/>
+		</class>
+		
+		<class id="progressbar" super="IWidget" output_id="ProgressBar">
+			<array id="imports">
+				<object import="android.widget.ProgressBar"/>
+			</array>
+			
+			<property id="max" type="int" ns="android">
+				<get text="getMax()"/>
+				<set text="setMax({value})"/>
+			</property>
+			
+			<property id="progress" type="int" ns="android">
+				<get text="getProgress()"/>
+				<set text="setProgress({value})"/>
+			</property>
+			
+			<property id="secondaryProgress" type="int" ns="android">
+				<get text="getSecundaryProgress()"/>
+				<set text="setSecundaryProgress({value})"/>
+			</property>
+			
+			<property id="style" type="EProgressStyle" no_layout="true">
+				<get text="getStyle()"/>
+				<set text="setStyle({value})"/>
+			</property>
+			
+			<method id="inc_1" output_id="incrementProgressBy"/>
+			<!--<array id="args">
+					<object param_type="int" param_name="diff"/>
+				</array>
+			</method>-->
+			<method id="inc_2" output_id="incrementSecondaryProgressBy"/>
+			<!--<array id="args">
+					<object param_type="int" param_name="diff"/>
+				</array>
+			</method>-->
+			<method id="indeterminate" type="bool" output_id="isIndeterminate"/>
+			<method id="set_indeterminate" output_id="setIndeterminate"/>
+			<!--<array id="args">
+					<object param_type="boolean" param_name="indeterminate"/>
+				</array>
+			</method>-->
+		</class>
+		
+		<class id="seekbar" super="progressbar" output_id="SeekBar">
+			<array id="imports">
+				<object import="android.widget.SeekBar"/>
+				<object import="android.widget.SeekBar.OnSeekBarChangeListener"/>
+			</array>
+			
+			<event id="progresschanged" output_id="onProgressChanged" interface="SeekBar.OnSeekBarChangeListener" def_args="SeekBar seekBar, int progress, boolean fromUser" set_handle="setOnSeekBarChangeListener" set_param_hnd="this"/>
+			<event id="starttracking" output_id="onStartTrackingTouch" interface="SeekBar.OnSeekBarChangeListener" def_args="SeekBar seekBar" set_handle="setOnSeekBarChangeListener" set_param_hnd="this"/>
+			<event id="stoptracking" output_id="onStopTrackingTouch" interface="SeekBar.OnSeekBarChangeListener" def_args="SeekBar seekBar" set_handle="setOnSeekBarChangeListener" set_param_hnd="this"/>
+		</class>
+		
+		<!-- td: define a custom property (maybe "container") for all container components -->
+		<class id="scroller" super="IWidget" output_id="ScrollView">
+			<array id="imports">
+				<object import="android.widget.ScrollView"/>
+			</array>
+			
+			<property id="fillviewport" type="bool" output_id="fillViewport" ns="android">
+				<get text="isFillViewport()"/>
+				<set text="setFillViewport({value})"/>
+			</property>
+			
+			<property id="smooth" type="bool" no_layout="true">
+				<get text="isSmoothScrollingEnabled()"/>
+				<set text="setSmoothScrollingEnabled({value})"/>
+			</property>
+			
+			<method id="add_cmp" output_id="addView"/>
+			<!--<array id="args">
+					<object param_type="View" param_name="child"/>
+					<object param_type="int" param_name="index"/>
+					<object param_type="ViewGroup.LayoutParams" param_name="params"/>
+				</array>
+			</method>-->
+			<method id="draw"/>
+			<!--<array id="args">
+					<object param_type="Canvas" param_name="canvas"/>
+				</array>
+			</method>-->
+			<method id="fling"/>
+			<!--<array id="args">
+					<object param_type="int" param_name="velocityY"/>
+				</array>
+			</method>-->
+			<method id="fullscroll" type="bool" output_id="fullScroll"/>
+			<!-- the scroll direction: FOCUS_UP to go the top of the view or FOCUS_DOWN to go the bottom -->
+			<!--<array id="args">
+					<object param_type="int" param_name="direction"/>
+				</array>
+			</method>-->
+			<method id="pagescroll" type="bool" output_id="pageScroll"/>
+			<!-- the scroll direction: FOCUS_UP to go one page up or FOCUS_DOWN to go one page down -->
+			<!--<array id="args">
+					<object param_type="int" param_name="direction"/>
+				</array>
+			</method>-->
+			<method id="max_scroll_amount" type="int" output_id="getMaxScrollAmount"/>
+		</class>
+		
+		<class id="tabhost" super="IWidget" output_id="TabHost">
+			<array id="imports">
+				<object import="android.widget.TabHost"/>
+				<object import="android.widget.TabHost.TabSpec"/>
+				<object import="android.widget.TabHost.TabContentFactory"/>
+				<object import="android.widget.TabHost.OnTabChangeListener"/>
+			</array>
+			
+			<method id="add_tab" output_id="addTab"/>
+			<!--<array id="args">
+					<object param_type="TabHost.TabSpec" param_name="tabSpec"/>
+				</array>
+			</method>-->
+			<method id="clear" output_id="clearAllTabs"/>
+			
+			<property id="current_byid" type="int" no_layout="true">
+				<get text="getCurrentTab()"/>
+				<set text="setCurrentTab({value})"/>
+			</property>
+			
+			<property id="current_bytag" type="string" no_layout="true">
+				<get text="getCurrentTabTag()"/>
+				<set text="setCurrentTabByTag({value})"/>
+			</property>
+			
+			<method id="currenttab" type="IWidget" output_id="getCurrentTabView"/>
+			<method id="newtab" type="" output_id="newTabSpec"/>
+			<!--<array id="args">
+					<object param_type="string" param_name="tag"/>
+				</array>
+			</method>-->
+			<method id="setup"/>
+			
+			<event id="changed" output_id="onTabChanged" interface="TabHost.OnTabChangeListener" def_args="String tabid" set_handle="setOnTabChangedListener" set_param_hnd="this"/>
+		</class>
+		
+		<class id="spinner" super="IWidget" output_id="Spinner">
+			<array id="imports">
+				<object import="android.widget.Spinner"/>
+				<object import="android.widget.AdapterView.OnItemClickListener"/>
+			</array>
+			
+			<event id="itemclick" output_id="onItemClick" interface="AdapterView.OnItemClickListener" def_args="AdapterView parent, View view, int position, long id" set_handle="setOnItemClickListener" set_param_hnd="this"/>
+			<event id="click" output_id="onClick" interface="OnClickListener" def_args="DialogInterface dialog, int which" set_handle="setOnClickListener" set_param_hnd="this"/>
+			
+			<property id="prompt" type="string" ns="android" res_type="str_reference">
+				<get text="getPrompt()"/>
+				<set text="setPrompt({value})"/>
+			</property>
+			
+			<property id="items" type="array" no_layout="true" res_type="array_str">
+				<get text="getItems()"/>
+				<set text="setItems({value})"/>
+			</property>
 		</class>
 		
 		<class id="listbox" super="IWidget" output_id="ListView">
 			<array id="imports">
 				<object import="android.widget.ListView"/>
 			</array>
+			
+			<property id="items" type="array" no_layout="true" res_type="array_objs">
+				<get text="getItems()"/>
+				<set text="setItems({value})"/>
+			</property>
 		</class>
 		
-		<class id="img_gallery" super="IWidget" output_id="Gallery">
+		<class id="imagegallery" super="IWidget" output_id="Gallery">
 			<array id="imports">
 				<object import="android.widget.Gallery"/>
 			</array>
@@ -342,20 +864,20 @@
 		
 		<class id="replicator" super="IWidget" xkpview="true" output_id="XKPReplicator">
 			<property id="template" type="string" output_id="template" ns="xkp" res_type="id_reference">
-				<set text="setTemplateResource({value})"/>
 				<get text="getTemplateResource()"/>
+				<set text="setTemplateResource({value})"/>
 			</property>
 			
 			<property id="items" type="array" output_id="items" ns="xkp">
-				<set text="setItems({value})"/>
 				<get text="getItems()"/>
+				<set text="setItems({value})"/>
 			</property>
 		</class>
 		
-		<class id="image" super="IWidget" output_id="ImageView">
-			<property id="source" output_id="src" ns="android" type="string" res_type="drawable"/>
-		</class>
-		
 	</types>
+	
+    <instance id="appManager" output_id="getWindowManager()">
+		<method id="getDefaultDisplay" type="Display"/>
+    </instance>
 	
 </module>
