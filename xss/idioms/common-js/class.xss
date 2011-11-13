@@ -81,6 +81,8 @@
 
         for(var inst in clazz.instances)
         {
+            compiler.log(inst.id);
+            
             string inst_renderer = inst.type.renderer;
             if (!inst_renderer)
             {
@@ -101,26 +103,33 @@
                 <xss:e v="inst.output_id"/> = this.<xss:e v="inst.output_id"/>;
             }
         }
+        
+        //render properties
+        for(var prop in clazz.properties)
+        {
+            if (prop.dont_init)
+                continue;
+    
+            compiler.xss(property_renderer, prop, clazz, is_class = true, path = "this");
+        }    
+
+        for(var mthd in clazz.methods)
+        {
+            compiler.xss(method_renderer, mthd, clazz, is_class = true, path = "this");
+        }
+
+        //render events as functions
+        for(var ev in clazz.events)
+        {
+            compiler.xss(event_renderer, ev, clazz, is_class = true, path = "this");
+        }
+        
+        //provide a way to initialize stuff
+        out()
+        {
+            if (this.init)
+                this.init();
+        }
         </xss:code>
     },
-    <xss:code>
-    for(var prop in clazz.properties)
-    {
-        if (prop.dont_init)
-            continue;
-    
-        compiler.xss(property_renderer, prop, clazz, is_class = true);
-    }    
-
-    for(var mthd in clazz.methods)
-    {
-        compiler.xss(method_renderer, mthd, clazz, is_class = true);
-    }
-
-    //render events as functions
-    for(var ev in clazz.events)
-    {
-        compiler.xss(event_renderer, ev, clazz, is_class = true);
-    }
-    </xss:code>
 });

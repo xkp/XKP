@@ -5,8 +5,8 @@
 
 <xss:code>
 string prop_name = prop.output_id;
-string assign = ":";
-string separator = ",";
+string assign = "=";
+string separator = ";";
 
 if (!is_class)
 {
@@ -82,7 +82,7 @@ else
         {
             out()
             {
-                <xss:e value="prop_name"/> <xss:e value="assign"/> <xss:e value="value"/>,
+                <xss:e value="prop_name"/> <xss:e value="assign"/> <xss:e value="value"/>;
             }
         }
         else

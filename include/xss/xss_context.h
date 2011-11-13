@@ -231,6 +231,7 @@ struct ILanguage
     virtual str     array_operation(operator_type op, const str& arr, const str& value, XSSContext ctx) = 0;
     virtual str     render_expression(expression& expr, XSSContext ctx)                                 = 0;
     virtual str     instantiate(XSSType type, XSSObject instance, DynamicArray params)                  = 0;
+    virtual bool    render_operator(operator_type op, const str& left, const str& right, str& result)   = 0;
     
   };
 

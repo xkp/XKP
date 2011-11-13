@@ -353,6 +353,11 @@ str debug_language::instantiate(XSSType type, XSSObject instance, DynamicArray p
     return "only instances";
   }
 
+bool debug_language::render_operator(operator_type op, const str& left, const str& right, str& result)
+  {
+    return false;
+  }
+
 //glue
 
 namespace xkp

@@ -102,6 +102,15 @@
         }
         else
             compiler.error("Invalid shape", object = it.id, shape = it.shape);
+            
+        bool isSensor = it.sensor;
+        if (isSensor == null)
+            isSensor = false;
+            
+        out()
+        {
+            fixDef.isSensor = <xss:e v="isSensor"/>;
+        }
     }
 
     method position()
@@ -198,6 +207,16 @@
                 {
                     <xss:e v="visual_parent"/>.ev_resized(<xss:e v="visual_parent"/>);
                 }
+                
+                <xss:e v="visual_parent"/>.RemoveFromWorld = function(keep_visual) 
+                {
+                    g_world.DestroyBody(<xss:e v="visual_parent"/>.physics);
+                    if (!keep_visual)
+                    {
+                        <xss:e v="visual_parent"/>.parent.removeComponent(<xss:e v="visual_parent"/>);
+                    }
+                }
+                
             }
             
         }

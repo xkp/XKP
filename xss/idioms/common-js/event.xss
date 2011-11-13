@@ -7,8 +7,8 @@
 //remember every event could be impemented multiple times
 
 string ev_name = ev.output_id;
-string assign = ":";
-string separator = ",";
+string assign = "=";
+string separator = ";";
 
 if (!is_class)
 {
@@ -34,6 +34,7 @@ for(var evimpl in impls)
 {
 	if(!is_class)
 		evimpl.use_this_id(true);
+        
 	out(indent = 1)
 	{
 		<xss:e>evimpl.render()</xss:e>

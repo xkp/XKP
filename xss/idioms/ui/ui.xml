@@ -21,7 +21,7 @@
                 <set text="set_width({value})"/>
             </property>
 
-            <property id="height" type="int">
+            <property id="height" type="int" dont_init="true">
                 <get text="get_height()"/>
                 <set text="set_height({value})"/>
             </property>
@@ -51,7 +51,7 @@
                 <parameter property="src" runtime="true"/>
             </constructor_params>
 
-            <property id="src" type="string">
+            <property id="src" type="string" dont_init="true">
                 <get text="src()"/>
                 <set text="src({value})"/>
             </property>

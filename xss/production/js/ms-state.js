@@ -24,7 +24,7 @@ ms.state.Manager = Class.create(
 		{
 			if (sequence == this.sequences[i])
 			{
-				this.sequences.remove(i);
+				this.sequences.splice(i, 1);
 				return;
 			}
 		}	
@@ -583,6 +583,7 @@ ms.state.Sequence = Class.create(
         this.time = 0;
 		this.manager = manager;
 		this.parent = null;
+        this.just_started = false;
     },
 
     start: function()
@@ -595,9 +596,7 @@ ms.state.Sequence = Class.create(
 
         this.running = true;
         this.time = 0;
-        
-        if (this.on_start)
-            this.on_start();
+        this.just_started = true;
     },
 
     stop: function()
@@ -613,9 +612,24 @@ ms.state.Sequence = Class.create(
     {
         if (this.running)
         {
+            if (this.just_started)
+            {
+                this.just_started = false;
+                if (this.on_start)
+                    this.on_start();
+            }
+
+            var d = delta/1000.0;
             var pt = this.time;
-            this.time += delta/1000.0;
+
+            if (this.tick)
+                this.tick(d, pt);
+
+            this.time += d;
             this.seek(this.time, pt);
+
+            if (this.on_update)
+                this.on_update(delta, this.time);
         }
     },
 

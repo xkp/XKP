@@ -280,6 +280,20 @@ void xss_module::register_instance(XSSObject obj)
 bool xss_module::one_of_us(XSSObject obj)
   {
     XSSType obj_type = obj->type();
+    if (!obj_type)
+      {
+        //td: !!! some objects cannot be bound at loading time (happens on classes)
+        //so their type must be bound, this should happen as an independent process
+        //not in this hacky ho method
+        str tt = obj->type_name();
+        type_list::iterator it = types_.find(tt);
+        if (it != types_.end())
+          {
+            obj->set_type(it->second);
+            return true;
+          }
+      }
+
     while(obj_type)
       {
         type_list::iterator it = types_.find(obj_type->id());
@@ -1434,9 +1448,52 @@ void xss_compiler::read_includes(XSSObject project_data)
 	    }
   }
 
+void xss_compiler::preprocess_type(XSSType clazz, XSSObject def_class, const str& super, XSSContext ctx, XSSApplicationRenderer app)
+  {
+    struct type_proprocessor : IPreprocessHandler
+      {
+        virtual void handle(XSSObject obj, XSSModule mod)
+          {
+            if (root == obj)
+              return; //do not register the class
+
+            str obj_id = obj->id();
+            if (!obj_id.empty())
+              ctx->register_symbol(RESOLVE_INSTANCE, obj_id, obj);
+                    
+            if (module == mod)
+              target->register_instance(obj);
+            else
+              target->register_foreign_instance(obj);
+          }
+
+        XSSContext  ctx;
+        XSSObject   root;
+        XSSType     target;
+        XSSModule   module;
+
+      } pre_processor;
+
+    XSSModule module = app->type_idiom(super);
+    if (def_class)
+      {
+        pre_processor.ctx    = ctx; 
+        pre_processor.root   = def_class; 
+        pre_processor.target = clazz;
+        pre_processor.module = module;
+
+        current_app_ = app;
+        pre_process(app, def_class, XSSObject(), &pre_processor);
+        current_app_.reset();
+      }
+  }
+
 void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSApplicationRenderer app)
   {
-    std::map<str, XSSObject> def_types;
+    std::map<str, int>     def_types;
+    std::vector<XSSType>   classes;
+    std::vector<XSSObject> classdefs;
+
     fs::path path;
     if (!def.empty())
       {
@@ -1452,9 +1509,10 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
           {
             XSSObject clazz_data = *cit;
 
-            str cid = clazz_data->id();
+            str cid   = clazz_data->id();
+            str super = clazz_data->get<str>("super", str());
 
-						std::map<str, XSSObject>::iterator dcit = def_types.find(cid);
+						std::map<str, int>::iterator dcit = def_types.find(cid);
 						if (dcit != def_types.end())
 							{
 								param_list error;
@@ -1464,7 +1522,19 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
 								xss_throw(error);
 							}
 
-						def_types.insert(std::pair<str, XSSObject>(cid, clazz_data));
+            def_types.insert(std::pair<str, int>(cid, classdefs.size()));
+						classdefs.push_back(clazz_data);
+
+				    XSSType clazz(new xss_type());
+            clazz->set_id(cid);
+						classes.push_back(clazz);
+
+            //register early
+            XSSModule module = app->type_idiom(super);
+            if (module)
+              module->register_user_type(clazz);
+
+            ctx->add_type(cid, clazz);
           }
       }
 
@@ -1476,6 +1546,8 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
         xs_container results;
 		    compile_xs_file(src, results);
 
+        //first we ought to register the type before processing
+        std::vector<xs_class> source_classes;
         for(size_t i = 0; i < results.size(); i++)
           {
 				    variant vv = results.get(i);
@@ -1488,19 +1560,51 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
 						    xss_throw(error);
 					    }
 
-				    xs_class ci  = vv;
-            str      cid = ci.name;
+            source_classes.push_back(vv);
+
+				    xs_class& ci  = source_classes.back();
+            str       cid = ci.name;
 
             //look for a declaration on the xml file
             XSSObject def_class;
-            std::map<str, XSSObject>::iterator dtit = def_types.find(cid);
-            if (dtit != def_types.end())
+            XSSObject clazz;
+            std::map<str, int>::iterator dtit = def_types.find(cid);
+            if (dtit == def_types.end())
               {
-                def_class = dtit->second;
-                def_types.erase(dtit);
+				        XSSType clazz(new xss_type());
+                clazz->set_id(cid);
+
+                def_types.insert(std::pair<str, int>(cid, classdefs.size()));
+						    classdefs.push_back(XSSObject());
+						    classes.push_back(clazz);
+
+                //register early
+                XSSModule module = app->type_idiom(ci.super);
+                if (module)
+                  module->register_user_type(clazz);
+
+                ctx->add_type(cid, clazz);
               }
+          }
+
+        //we start by processing the classes that have some code
+        std::vector<xs_class>::iterator sit = source_classes.begin();
+        std::vector<xs_class>::iterator snd = source_classes.end();
+        for(; sit != snd; sit++)
+          {
+				    xs_class& ci  = *sit;
+
+            //lookup the classes
+            std::map<str, int>::iterator dcit = def_types.find(ci.name); assert(dcit != def_types.end());
+            XSSObject def_class = classdefs[dcit->second];
+						XSSType   clazz     = classes[dcit->second];
+
+            //mark it as handled
+            def_types.erase(dcit);
 
 						XSSType super;
+            XSSContext ictx(new xss_context(ctx, path.parent_path()));
+
 				    if (!ci.super.empty())
 					    {
                 str def_super = def_class? def_class->get<str>("super", str()) : str();
@@ -1524,76 +1628,29 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
 							    }
 					    }
 
-				    XSSType clazz(new xss_type());
-            clazz->set_id(cid);
             clazz->set_definition(def_class);
             clazz->set_super(super);
-
-				    
-            XSSContext ictx(new xss_context(ctx, path.parent_path()));
+            clazz->set_context(ictx);
 				    ictx->set_this(XSSObject(clazz));
-            ictx->add_type(cid, clazz);
-
-            //we must preprocess the type data looking for instances
-            struct type_proprocessor : IPreprocessHandler
-              {
-                virtual void handle(XSSObject obj, XSSModule mod)
-                  {
-                    if (root == obj)
-                      return; //do not register the class
-
-                    str obj_id = obj->id();
-                    if (!obj_id.empty())
-                      ctx->register_symbol(RESOLVE_INSTANCE, obj_id, obj);
-                    
-                    if (module == mod)
-                      target->register_instance(obj);
-                    else
-                      target->register_foreign_instance(obj);
-                  }
-
-                XSSContext  ctx;
-                XSSObject   root;
-                XSSType     target;
-                XSSModule   module;
-
-              } pre_processor;
-
-            XSSModule module = app->type_idiom(ci.super);
-            if (def_class)
-              {
-                pre_processor.ctx    = ictx; 
-                pre_processor.root   = def_class; 
-                pre_processor.target = clazz;
-                pre_processor.module = module;
-
-                current_app_ = app;
-                pre_process(app, def_class, XSSObject(), &pre_processor);
-                current_app_.reset();
-              }
+            
+            preprocess_type(clazz, def_class, ci.super, ictx, app);
             
 				    //then compile the code
             compile_ast(ci, ictx);
-
-            clazz->set_context(ictx);
-
-            //then we register
-            if (module)
-              module->register_user_type(clazz);
-
-            ctx->add_type(cid, clazz);
           }
 			}
 
     //process the left over classes
-    std::map<str, XSSObject>::iterator it = def_types.begin();
-    std::map<str, XSSObject>::iterator nd = def_types.end();
+    std::map<str, int>::iterator it = def_types.begin();
+    std::map<str, int>::iterator nd = def_types.end();
     for(; it != nd; it++)
       {
-				XSSType clazz(new xss_type());
-        clazz->set_definition(it->second);
+        XSSObject def_class = classdefs[it->second];
+				XSSType   clazz     = classes[it->second];
+        
+        clazz->set_definition(def_class);
 
-        str super = it->second->get<str>("super", str());
+        str super = def_class->get<str>("super", str());
         if (!super.empty())
           {
             XSSType super_clazz = ctx->get_type(super);
@@ -1609,11 +1666,10 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
             clazz->set_super(super_clazz);
           }
 
-        XSSModule module = app->type_idiom(super);
-        if (module)
-          module->register_user_type(clazz);
-
-        ctx->add_type(it->first, clazz);
+        XSSContext ictx(new xss_context(ctx, path.parent_path()));
+        preprocess_type(clazz, def_class, super, ictx, app);
+        
+        clazz->set_context(ictx);
       }
   }
 

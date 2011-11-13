@@ -1,0 +1,14 @@
+<project entry_point="../idioms/ui/ui_standalone.xss" language="js" target="box2d4.app.xml" output="box2d4.html">
+    <path>
+        <output path="../production/test"/>
+    </path>
+
+    <idiom src="../idioms/ui/ui.xml"/>
+	<idiom src="../idioms/resources/resources.xml"/>
+    <idiom src="../idioms/box2d/box2d.xml"/>
+    <idiom src="../idioms/mutant-state/sequence.xml"/>
+
+    <include def="box2d4.classes.xml" src="box2d4.classes.xs"/>
+</project>
+           
+         

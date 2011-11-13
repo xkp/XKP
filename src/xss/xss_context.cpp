@@ -968,7 +968,33 @@ void xss_object::set_parent(XSSObject parent)
 
 void xss_object::set_type(XSSType type)
   {
-    type_ = type;
+    bool typeless = !type_;
+    type_         = type;
+
+    if (typeless && type)
+      {
+        //shit, binding... long story short there is lag 
+        //between obtaining a type and being loaded.
+        //So some properties values may have been set
+        //this code accounts for that
+        item_list::iterator it = items_.begin();
+        item_list::iterator nd = items_.end();
+        for(; it != nd; it++)
+          {
+            str         prop_name = it->first;
+            XSSProperty prop      = get_property(prop_name);
+
+            if (prop)
+              {
+                Getter get = it->second.get;
+                if (!get)
+                  continue; // ?
+
+                variant value = get->get(this);
+                add_property(prop_name, value, prop->type());
+              }
+          }
+      }
   }
 
 //struct xss_object::query_info

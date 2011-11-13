@@ -275,8 +275,7 @@ XSSObjectList xss_object_reader::read_xml_array(TiXmlElement* node)
 variant xss_object_reader::xml_attribute_value(const TiXmlAttribute* attr)
   {
     str value(attr->Value());
-
-    static const boost::regex rfloat("^\\d*\\.\\d*$");
+    static const boost::regex rfloat("^[+-]?\\d*\\.\\d*$");
     if (boost::regex_match(value, rfloat))    
       {
         double dv;
@@ -284,7 +283,9 @@ variant xss_object_reader::xml_attribute_value(const TiXmlAttribute* attr)
         return (float)dv;
       }
 
-    static const boost::regex rint("^\\d*$");
+    //static const boost::regex rint("^\\d*$");
+    static const boost::regex rint("^[+-]?\\d+$");
+    
     if (boost::regex_match(value, rint))    
       {
 		    int iv;

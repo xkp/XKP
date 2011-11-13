@@ -14,7 +14,14 @@ ms.arcade.SpawnManager = Class.create(
 	
 	remove: function(spawner)
 	{
-        throw {unimplemented: true};
+        for(var i =0; i < this.spawners.length; i++)
+        {
+            if (this.spawners[i] == spawner)
+            {
+                this.spawners.splice(i, 1);
+                return;
+            }
+        }
 	},
 
     update: function(elapsed)
@@ -27,7 +34,6 @@ ms.arcade.SpawnManager = Class.create(
                 spawner.waiting += elapsed;
                 if (spawner.waiting > spawner.next)
                 {
-                    console.log(spawner.waiting);
                     //calculate next tick
                     spawner.waiting = 0;
 
@@ -44,10 +50,7 @@ ms.arcade.SpawnManager = Class.create(
                     }
 
                     //check spawnage
-                    var spawned = spawner.spawn();
-
-                    //and add it
-                    g_ui_root.addComponent(spawned); //td: cross idiom
+                    spawner.spawn();
                 }
             }
         }
@@ -67,7 +70,7 @@ ms.arcade.Spawner = Class.create(
         this.frequency  = frequency? frequency : 1.0;
         this.next       = 0;
         this.rotation   = rotation? rotation : 0;
-        this.velocity   = velocity? velocity : 1;
+        this.velocity   = velocity? velocity : 0;
 	},	
 
     start: function()
@@ -88,13 +91,24 @@ ms.arcade.Spawner = Class.create(
     spawn: function()
     {
         var result = this.creator();
-        result.position(this.x, this.y);
+
+        var x = this.x;
+        var y = this.y;
+        var r = this.rotation;
+        if (this.parent)
+        {
+            x += this.parent.x;
+            y += this.parent.y;
+            r += this.parent.rotation;
+        }
+
+        result.position(x, y);
 
         if (!result.physics)
             result.ev_resized(result);
         
-        var vx = this.velocity*Math.sin(this.rotation);
-        var vy = this.velocity*Math.cos(this.rotation);
+        var vx = this.velocity*Math.sin(r);
+        var vy = this.velocity*Math.cos(r);
 
         var vel = new Box2D.Common.Math.b2Vec2(vx, vy);
         result.physics.SetLinearVelocity(vel);

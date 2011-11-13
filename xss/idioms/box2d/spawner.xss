@@ -29,6 +29,19 @@
         }
     }
     
+    if (it.parent.id != "application")
+    {
+        string visual_parent = it.parent.output_id;
+        
+        if (compiler.is_type(it.parent))
+            visual_parent = "this";
+
+        out()
+        {
+            <xss:e v="id"/>.parent = <xss:e v="visual_parent"/>;
+        }
+    }
+
     if (it.auto_start)
     {
         out()

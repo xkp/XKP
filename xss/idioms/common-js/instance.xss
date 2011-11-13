@@ -24,4 +24,5 @@ for(var ev in it.events)
 {
     compiler.xss(event_renderer, ev, it, is_class = false, path = path);
 }
+
 </xss:code>

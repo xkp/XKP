@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
+        <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
+        <script type="text/javascript" src="../js/ms-spawner.js"></script>
+<script type="text/javascript">	
+var drawingCanvas;		
+var g_ui;
+var g_elapsed = -1;
+var g_delta = 0.0;
+var g_canvas;
+var g_ui_root;
+var application = {};
+var Sound = new ms.ui.Sound();
+		if(drawingCanvas){
+			var client =
+			{
+				width: 600,
+				height: 400,
+				canvas: drawingCanvas
+			};
+			var ui = new ms.ui.Manager(client, streamer);
+			var g_ui = ui;
+			var g_ui_root = ui.root;
+		}
+		var streamer = new ms.streamer.Streamer();
+        var   b2Vec2 = Box2D.Common.Math.b2Vec2
+        ,  b2AABB = Box2D.Collision.b2AABB
+        ,  b2Mat22 = Box2D.Common.Math.b2Mat22
+        ,	b2BodyDef = Box2D.Dynamics.b2BodyDef
+        ,	b2Body = Box2D.Dynamics.b2Body
+        ,	b2FixtureDef = Box2D.Dynamics.b2FixtureDef
+        ,	b2Fixture = Box2D.Dynamics.b2Fixture
+        ,	b2World = Box2D.Dynamics.b2World
+        ,	b2MassData = Box2D.Collision.Shapes.b2MassData
+        ,	b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape
+        ,	b2CircleShape = Box2D.Collision.Shapes.b2CircleShape
+        ,	b2DebugDraw = Box2D.Dynamics.b2DebugDraw
+        ,  b2MouseJointDef =  Box2D.Dynamics.Joints.b2MouseJointDef
+        , b2Transform = Box2D.Common.Math.b2Transform
+        ;
+        var g_world = new b2World(
+            new b2Vec2(0, 0)    //gravity
+        ,  true                 //allow sleep
+        );
+        var g_spawner_manager = new ms.arcade.SpawnManager();
+        var g_step_collisions = [];
+        var contactListener = new Box2D.Dynamics.b2ContactListener;
+        contactListener.BeginContact = function(contact, manifold) 
+        {
+            function get_collider(body)
+            {
+                if (body.host && ("collision" in body.host))
+                    return body.host;
+                return null;
+            }
+            var host1 = get_collider(contact.GetFixtureA().GetBody());
+            var host2 = get_collider(contact.GetFixtureB().GetBody());
+            if (host1)
+                g_step_collisions.push({host1: host1, host2:contact.GetFixtureB().GetBody().host, contact: contact, manifold:manifold});
+            if (host2)
+                g_step_collisions.push({host1: host2, host2:contact.GetFixtureA().GetBody().host, contact: contact, manifold:manifold});
+        };
+        g_world.SetContactListener(contactListener);
+        var g_world_scale = 30;
+        var fixDef = new b2FixtureDef;
+        var bodyDef = new b2BodyDef;
+        function update_body_position(host)
+        {
+            var me = host.physics;
+            if (me.xs_updating)
+                return;
+            var pos = new b2Vec2((host.x + host.w/2)/g_world_scale, (host.y + host.h/2)/g_world_scale);
+            var rot = new b2Mat22();
+            rot.Set(host.rotation);
+            var xform = new b2Transform(pos, rot);
+            me.SetTransform(xform);
+        }
+		var g_sequence_manager = new ms.state.Manager();
+        function default_interpolate(a, b, t)
+        {
+            return a + (b - a)*t;
+        }
+        var def_package_items = [];
+                def_package_items.push(
+            {
+		id:"__image1",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/smile_sad_48.png"
+});
+                def_package_items.push(
+            {
+		id:"__image2",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/smile_grin_48.png"
+});
+                def_package_items.push(
+            {
+		id:"__image3",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/stone-12.jpg"
+});
+                def_package_items.push(
+            {
+		id:"__image4",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/bomb.png"
+});
+                def_package_items.push(
+            {
+		id:"__audio1",
+		resource_type:RESOURCE_SOUND,
+		src:"sounds/boom.wav"
+});
+        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
+		g_startup_package.load();	
+function start(resolution)  
+{  
+	function updater()  
+	{  
+		var now   = new Date().getTime();
+        if (g_elapsed < 0)
+            g_delta = 0; //first update
+        else
+		    g_delta  = now - g_elapsed;  
+        g_elapsed = now; 
+        g_world.Step(1 / 60, 10, 10);
+        g_world.DrawDebugData();
+        g_world.ClearForces();
+        g_spawner_manager.update(g_delta);
+        //process collisions
+        for(var i = 0; i < g_step_collisions.length; i++)
+        {
+            var info = g_step_collisions[i];
+            info.host1.collision(info.host2, info.contact, info.manifold);
+        }
+        g_step_collisions = [];
+        //process contacts
+        function get_contact_handler(body)
+        {
+            if (body.host && ("contact" in body.host))
+                return body.host;
+            return null;
+        }
+        var cc = g_world.GetContactList();
+        while(cc)
+        {
+            var host1 = get_contact_handler(cc.GetFixtureA().GetBody());
+            var host2 = get_contact_handler(cc.GetFixtureB().GetBody());
+            if (host1)
+                host1.contact(host2, cc);
+            if (host2)
+                host2.contact(host1, cc);
+            cc = cc.GetNext();
+        }
+        //synch
+        var bb = g_world.GetBodyList();
+        while(bb)
+        {
+            if (!bb.IsActive())
+            {
+                bb = bb.GetNext();
+                continue;
+            }    
+            var angle = bb.GetAngle();
+            var pos   = bb.GetTransform().position;
+            if (bb.host)
+            {
+                var x = pos.x*g_world_scale;
+                var y = pos.y*g_world_scale;
+                bb.host.xs_updating = true;
+                bb.host.position(x - bb.host.w/2, y - bb.host.h/2);
+                bb.host.set_rotation(angle);
+                bb.host.xs_updating = false;
+            }
+            bb = bb.GetNext();
+        }
+		g_sequence_manager.update(g_delta);
+		var context = g_canvas.getContext('2d');
+		g_ui.update(g_delta, context);
+        window.setTimeout(updater, resolution);  
+	}
+	window.setTimeout(updater, resolution);  
+}  
+            bad_guy = Class.create(ms.ui.Image,
+        {
+    initialize: function($super
+                , src
+                )
+    {
+        $super(
+        src? src : "images/smile_sad_48.png"        );
+                this.size(60, 60);
+                var __physics2;
+                this.ev_resized = function(cmp) 
+                {
+                    if (cmp.physics)
+                        g_world.DestroyBody(cmp.physics);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_dynamicBody;
+                    fixDef.shape = new b2CircleShape(Math.min(cmp.w, cmp.h)/(2*g_world_scale));
+            fixDef.isSensor = false;
+                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);
+            current_body.CreateFixture(fixDef);
+                cmp.physics = current_body;
+                cmp.moved = update_body_position;
+                current_body.host = cmp;
+                }
+                if (this.w > 0 && this.h > 0)
+                {
+                    this.ev_resized(this);
+                }
+                this.RemoveFromWorld = function(keep_visual) 
+                {
+                    g_world.DestroyBody(this.physics);
+                    if (!keep_visual)
+                    {
+                        this.parent.removeComponent(this);
+                    }
+                }
+                __physics2 = this.__physics2;
+                var cannon;
+        this.cannon = new ms.arcade.Spawner(g_spawner_manager, 20, 60, 0, 1, 2);
+                this.cannon.x = 20;
+                this.cannon.y = 60;
+                this.cannon.rotation = 0;
+                this.cannon.frequency = 1;
+                this.cannon.velocity = 2;
+        this.cannon.creator = function()
+        {
+            return new bullet("images/bomb.png");
+        }
+            this.cannon.parent = this;
+            this.cannon.start();
+                cannon = this.cannon;
+                var move_around;
+this.move_around =
+new move_action(
+g_sequence_manager);
+                this.move_around.start();
+            this.move_around.parent_sequence = null;
+                move_around = this.move_around;
+                var fade_out;
+this.fade_out =
+new ms.state.Sequence(
+g_sequence_manager);
+                this.fade_out.target = null;
+            this.fade_out.parent_sequence = null;
+                    var ____i1 = new ms.state.Interpolator(
+                        "alpha", 
+                        default_interpolate,
+                        function(value)
+                        {
+                            fade_out.target.alpha(value);
+                        },
+                        [
+                        {t: 0, value: 1},
+                        {t: 3, value: 0},
+                        ]);
+                    this.fade_out.addAction(null, "alpha", new ms.state.State(0, 3, ____i1));                    
+                fade_out = this.fade_out;
+	this.init = function()
+	{    
+		move_around.target = this;
+fade_out.target = this;
+	};
+	this.collision = function(who)
+	{    
+		if (who instanceof bad_guy)
+{
+this.RemoveFromWorld(true);
+cannon.stop();
+fade_out.start();
+}
+	};
+            if (this.init)
+                this.init();
+            },
+});
+            good_guy = Class.create(ms.ui.Image,
+        {
+    initialize: function($super
+                , src
+                )
+    {
+        $super(
+        src? src : "images/smile_grin_48.png"        );
+                this.size(30, 30);
+                var __physics3;
+                this.ev_resized = function(cmp) 
+                {
+                    if (cmp.physics)
+                        g_world.DestroyBody(cmp.physics);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_dynamicBody;
+                    fixDef.shape = new b2CircleShape(Math.min(cmp.w, cmp.h)/(2*g_world_scale));
+            fixDef.isSensor = true;
+                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);
+            current_body.CreateFixture(fixDef);
+                cmp.physics = current_body;
+                cmp.moved = update_body_position;
+                current_body.host = cmp;
+                }
+                if (this.w > 0 && this.h > 0)
+                {
+                    this.ev_resized(this);
+                }
+                this.RemoveFromWorld = function(keep_visual) 
+                {
+                    g_world.DestroyBody(this.physics);
+                    if (!keep_visual)
+                    {
+                        this.parent.removeComponent(this);
+                    }
+                }
+                __physics3 = this.__physics3;
+                var move_around;
+this.move_around =
+new move_action(
+g_sequence_manager);
+                this.move_around.vx = 0;
+                this.move_around.vy = 0;
+                this.move_around.start();
+            this.move_around.parent_sequence = null;
+                move_around = this.move_around;
+	this.init = function()
+	{    
+		move_around.target = this;
+	};
+	this.collision = function()
+	{    
+	};
+            if (this.init)
+                this.init();
+            },
+});
+            bullet = Class.create(ms.ui.Image,
+        {
+    initialize: function($super
+                , src
+                )
+    {
+        $super(
+        src? src : "images/bomb.png"        );
+                this.size(20, 20);
+                var __physics1;
+                this.ev_resized = function(cmp) 
+                {
+                    if (cmp.physics)
+                        g_world.DestroyBody(cmp.physics);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_dynamicBody;
+                    fixDef.shape = new b2CircleShape(Math.min(cmp.w, cmp.h)/(2*g_world_scale));
+            fixDef.isSensor = false;
+                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);
+            current_body.CreateFixture(fixDef);
+                cmp.physics = current_body;
+                cmp.moved = update_body_position;
+                current_body.host = cmp;
+                }
+                if (this.w > 0 && this.h > 0)
+                {
+                    this.ev_resized(this);
+                }
+                this.RemoveFromWorld = function(keep_visual) 
+                {
+                    g_world.DestroyBody(this.physics);
+                    if (!keep_visual)
+                    {
+                        this.parent.removeComponent(this);
+                    }
+                }
+                __physics1 = this.__physics1;
+	this.collision = function(who)
+	{    
+		if (who instanceof floor)
+{
+this.RemoveFromWorld();
+}
+	};
+            if (this.init)
+                this.init();
+            },
+});
+            floor = Class.create(ms.ui.Image,
+        {
+    initialize: function($super
+                , src
+                )
+    {
+        $super(
+        src? src : "images/stone-12.jpg"        );
+                var __physics4;
+                this.ev_resized = function(cmp) 
+                {
+                    if (cmp.physics)
+                        g_world.DestroyBody(cmp.physics);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_staticBody;
+                fixDef.shape = new b2PolygonShape;
+                    fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
+            fixDef.isSensor = false;
+                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);
+            current_body.CreateFixture(fixDef);
+                cmp.physics = current_body;
+                cmp.moved = update_body_position;
+                current_body.host = cmp;
+                }
+                if (this.w > 0 && this.h > 0)
+                {
+                    this.ev_resized(this);
+                }
+                this.RemoveFromWorld = function(keep_visual) 
+                {
+                    g_world.DestroyBody(this.physics);
+                    if (!keep_visual)
+                    {
+                        this.parent.removeComponent(this);
+                    }
+                }
+                __physics4 = this.__physics4;
+            if (this.init)
+                this.init();
+            },
+});
+            move_action = Class.create(ms.state.Sequence,
+        {
+    initialize: function($super
+                , manager
+                )
+    {
+        $super(
+        manager        );
+                var this__ = this;
+            this.parent_sequence = null;
+                this.speed = 130;
+                this.vx = Math.random();
+                this.vy = Math.random();
+                this.target = null;
+	this.tick = function(delta)
+	{    
+		this.target.set_x(this.target.x + this.vx * this.speed * delta);
+this.target.set_y(this.target.y + this.vy * this.speed * delta);
+if (this.target.x < 10 || this.target.x > 570)
+{
+this.vx = this.vx * -1;
+}
+if (this.target.y < 10 || this.target.y > 200)
+{
+this.vy = this.vy * -1;
+}
+	};
+            if (this.init)
+                this.init();
+            },
+});
+	application.keydown = function(keycode)
+	{    
+		if (keycode == LEFT_ARROW)
+{
+hero.move_around.vx = -1;
+}
+if (keycode == RIGHT_ARROW)
+{
+hero.move_around.vx = 1;
+}
+	};
+	application.keyup = function(keycode)
+	{    
+		if (keycode == LEFT_ARROW && hero.move_around.vx < 0)
+{
+hero.move_around.vx = 0;
+}
+if (keycode == RIGHT_ARROW && hero.move_around.vx > 0)
+{
+hero.move_around.vx = 0;
+}
+	};
+window.onload = function() 
+{
+	drawingCanvas = document.getElementById("myCanvas");
+    g_canvas = drawingCanvas;
+	if (drawingCanvas && drawingCanvas.getContext)
+	{
+		var client =
+		{
+			width: 600,
+			height: 400,
+			canvas: drawingCanvas
+		};
+		var ui = new ms.ui.Manager(client, streamer);
+		g_ui = ui;
+        g_ui_root = ui.root;
+     	ui.load_resources(function()
+		{
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX, ev.clientY);                  
+	};	
+		    hero = new good_guy( 
+	    "images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
+	hero.collision = function()
+	{    
+		game_over.setVisible(true);
+hero.move_around.stop();
+hero.src("images/smile_sad_48.png");
+	};
+                hero.rect(300, 350, 30, 30);
+		    __floor1 = new floor( 
+	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+                __floor1.rect(0, 390, 600, 40);
+		    game_over = new ms.ui.Label( 
+	    "40pt Calibri",g_ui_root.manager, g_ui_root);
+                game_over.setVisible(false);
+                game_over.text("GAME OVER");
+                game_over.position(220, 200);
+        sp1 = new ms.arcade.Spawner(g_spawner_manager, 300, 100, null, 3, null);
+                sp1.x = 300;
+                sp1.y = 100;
+                sp1.frequency = 3;
+        sp1.creator = function()
+        {
+            return new bad_guy("images/smile_sad_48.png");
+        }
+            sp1.start();
+			document.onkeydown = function(ev)
+			{
+				ui.keydown(ev.keyCode);                  
+			};
+			document.onkeyup = function(ev)
+			{
+				ui.keyup(ev.keyCode);                  
+			};
+			document.onkeypress = function(ev)
+			{
+				ui.keypress(ev.keyCode);                  
+			};
+            if (application.init)
+            {
+                application.init();
+            }
+            start();
+			ui.draw(drawingCanvas.getContext('2d'));
+		});
+	}
+}
+</script>
+</head>
+<body>
+	<canvas id="myCanvas" width="600" height="400">
+		<p>Your browser doesn't support canvas.</p>
+	</canvas>
+	<audio id="sounds" preload> 
+			<source src = streamer.get_resource('sounds/boom.wav').asset/>			
+	Your browser does not support the audio element.
+	</audio>
+</body>
+</html>

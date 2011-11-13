@@ -596,6 +596,16 @@ ms.ui.Component = Class.create(
 	{
 	},
 
+    removeComponent: function(cmp)
+    {
+        var idx = this.components.indexOf(cmp); 
+        if (idx!=-1) 
+        {
+            this.components.splice(idx, 1); 
+            this.invalidate();
+        }
+    },
+
     draw: function(context, x, y)
     {
         for(var i = 0; i < this.components.length; i++)
@@ -613,8 +623,14 @@ ms.ui.Image = Class.create(ms.ui.Component,
 {	
 	initialize: function($super, image, manager, parent)
 	{				
-		$super(manager, parent);		
-		var texture = streamer.get_resource(image).data;
+		$super(manager, parent);
+        
+        var resource = streamer.get_resource(image);
+        
+        if (!resource)
+            throw "Unknow resource: " + image;
+         		
+		var texture = resource.data;
 		if (image && !texture && image != 'null')
 			throw "Image " + image + " not loaded";		
 	    this.texture = texture;		
@@ -874,9 +890,24 @@ ms.ui.Line = Class.create(ms.ui.Component,
         this.invalidate();
     },
 
+    positioned: function($super)
+    {
+        $super();
+	    this.x1 = this.x;
+	    this.y1 = this.y;
+	    this.x2 = this.x + this.w;
+	    this.y2 = this.y + this.h;
+    },
+
+    resized: function($super)
+    {
+        $super();
+	    this.x2 = this.x + this.w;
+	    this.y2 = this.y + this.h;
+    },
+
     draw: function($super, context, x, y)
     {
-		
         context.fillStyle = this.fillStyle;
         context.beginPath();
         context.lineWidth = this.lineWidth;

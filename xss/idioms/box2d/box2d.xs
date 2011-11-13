@@ -20,6 +20,15 @@ on render_jscripts()
 
 on render_initialization()
 {
+    var gx = 0;
+    var gy = 0;
+
+    if (world.gravity_x)
+        gx = world.gravity_x;
+
+    if (world.gravity_y)
+        gy = world.gravity_y;
+
 	out()
 	{
         var   b2Vec2 = Box2D.Common.Math.b2Vec2
@@ -39,7 +48,7 @@ on render_initialization()
         ;
          
         var g_world = new b2World(
-            new b2Vec2(0, 10)    //gravity
+            new b2Vec2(<xss:e v="gx"/>, <xss:e v="gy"/>)    //gravity
         ,  true                 //allow sleep
         );
 
@@ -61,10 +70,10 @@ on render_initialization()
             var host2 = get_collider(contact.GetFixtureB().GetBody());
 
             if (host1)
-                g_step_collisions.push({host1: host1, host2:host2, contact: contact, manifold:manifold});
+                g_step_collisions.push({host1: host1, host2:contact.GetFixtureB().GetBody().host, contact: contact, manifold:manifold});
                 
             if (host2)
-                g_step_collisions.push({host1: host2, host2:host1, contact: contact, manifold:manifold});
+                g_step_collisions.push({host1: host2, host2:contact.GetFixtureA().GetBody().host, contact: contact, manifold:manifold});
         };
         g_world.SetContactListener(contactListener);
 

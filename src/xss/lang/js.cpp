@@ -32,6 +32,11 @@ void js_code_renderer::use_this_id(bool value)
     ctx_->register_symbol(RESOLVE_CONST, "#use_this_id", value);
   }
 
+void js_code_renderer::force_this(bool value)
+  {
+    ctx_->register_symbol(RESOLVE_CONST, "#force_this", value);
+  }
+
 str js_code_renderer::render_expression(expression& expr, XSSContext ctx)
   {
     return lang_utils::render_expression<js_expr_renderer>(expr, ctx);
@@ -231,4 +236,14 @@ str js_lang::array_operation(operator_type op, const str& arr, const str& value,
 
     assert(false); //only this operators are supported, is this a valid use case?
     return str();
+  }
+
+bool js_lang::render_operator(operator_type op, const str& left, const str& right, str& result)
+  {
+    if (op == op_typecheck)
+      {
+        result = left + " instanceof " + right;
+        return true;
+      }
+    return false;
   }

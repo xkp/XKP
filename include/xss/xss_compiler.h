@@ -202,6 +202,7 @@ namespace xkp
         void        run();
         void        copy_files(XSSObject project_data);
         void        xss_args(const param_list params, param_list& result, fs::path& output_file, str& marker, MARKER_SOURCE& marker_source, XSSContext& ctx);
+        void        preprocess_type(XSSType clazz, XSSObject def_class, const str& super, XSSContext ctx, XSSApplicationRenderer app);
       private:
         //id gen
         typedef std::map<str, int> genid_list;

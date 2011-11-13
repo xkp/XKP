@@ -26,10 +26,12 @@
         }
         else if (key_value == "@") //convention over configuration
         {
+            compiler.log(prop_info.property);
+        
             //same deal, only this time we'll assign the current value 
             //kinda neat
             var nfo = object();
-            nfo.expr = prop_info.path + "." + prop_info.prop.render_get();
+            nfo.expr = compiler.property_get(prop_info.property, prop_info.path);
             nfo.idx  = key_index;
             nfo.interp = interp;
             
@@ -73,7 +75,7 @@
                 }
                 else if (prop_info.this_property)
                 {
-                    path = seq.id + "." + path;
+                    path = compiler.replace_identifier(path, "this.", seq.id + ".");
                 }    
                 
                 string assign = path + "." + prop_name + " = value"; 
@@ -111,11 +113,6 @@
                     start.t     = 0;
                     start.value = itm.from;
 
-                    if (start.value == "@")
-                    {
-                        start.value = end.value;
-                    }    
-
                     keys = [start, end];
                 }
                         
@@ -128,8 +125,11 @@
                         length = key.t; 
                             
                     key.t += time;
-                    resolve_key(key, key.value, idx, seq, prop_info, iid);                    
+                    resolve_key(key, key.value, idx, seq, prop_info, iid);       
                     
+                    if (key.value == null)
+                        key.value = "null";
+                        
                     out(indent = 4)
                     {
                         {t: <xss:e v="key.t"/>, value: <xss:e v="key.value"/>},
@@ -252,7 +252,7 @@
         }
     }
     
-    method generate_when_actions(array actions, seq_id)
+    method generate_when_actions(array actions, seq_id, seq)
     {
         for(var action in actions)
         {
@@ -260,16 +260,16 @@
             {
                 if (action.method)
                 {
-                    out(indent = 3) 
+                    out() 
                     {
-                        <xss:e v="seq_id"/>.<xss:e v="action.method"/>();
+                        <xss:e v="seq.id"/>.<xss:e v="action.method"/>();
                     }
                 }
                 else if (action.sequence)
                 {
-                    out(indent = 2, marker = "conditions") 
+                    out() 
                     {
-                        <xss:e v="seq_id"/>.<xss:e v="action.sequence"/>.start();
+                        <xss:e v="seq.id"/>.<xss:e v="action.sequence"/>.start();
                     }
                 }
                 else
@@ -325,7 +325,7 @@
                 }
             }
             
-            compiler.xss("../common-js/instance.xss", seq);
+            compiler.xss("../common-js/instance.xss", seq, path = path);
         }
         else
         {
@@ -378,6 +378,7 @@
                 <xss:open_brace/>
             }
             
+            compiler.log(seq.key_expressions.size);
             for(var key_xpr in seq.key_expressions)
             {
                 out(indent=3)
@@ -404,6 +405,8 @@
             int cond_idx = 0;
             for(var cond in seq.conditions)
             {
+                cond = compiler.render_expression(cond, seq);
+
                 out(indent = 3)
                 {
                     if (<xss:e v="cond"/>)
@@ -411,7 +414,7 @@
                 }
                 
                 var action_list = seq.actions[cond_idx]; cond_idx++;
-                generate_when_actions(action_list, seq_id);
+                generate_when_actions(action_list, seq_id, seq);
                 
                 out(indent = 2)
                 {

@@ -13,6 +13,7 @@ struct js_code_renderer : public base_code_renderer
     js_code_renderer(code& cde, param_list_decl& params, XSSContext ctx);
 
     void use_this_id(bool value);
+    void force_this(bool value);
 
     protected:
       virtual str render_expression(expression& expr, XSSContext ctx);
@@ -52,6 +53,7 @@ struct js_lang : public base_lang
     virtual str     render_assignment(const str& path, const str& prop, const str& value);
     virtual str     expression_path(const str& expr );
     virtual str     array_operation(operator_type op, const str& arr, const str& value, XSSContext ctx);
+    virtual bool    render_operator(operator_type op, const str& left, const str& right, str& result);
   };
 
 //glue
@@ -60,6 +62,7 @@ struct js_code_renderer_schema : renderer_code_schema<js_code_renderer>
     virtual void declare()
       {
         method_<void, 1>("use_this_id", &js_code_renderer::use_this_id);
+        method_<void, 1>("force_this", &js_code_renderer::force_this);
       }
   };
 

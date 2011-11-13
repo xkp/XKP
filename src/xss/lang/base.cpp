@@ -831,9 +831,19 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
             if (op_prec < p2)
               os2 = "(" + os2 + ")";
 
-            std::stringstream ss;
-            ss << os1 << " " << lang_utils::operator_string(op) << " " << os2;
-            push_rendered(ss.str(), op_prec, variant());
+            Language lang = ctx_->get_language();
+
+            str result;
+            if (lang->render_operator(op, os1, os2, result))
+              {
+                push_rendered(result, op_prec, variant());
+              }
+            else
+              {
+                std::stringstream ss;
+                ss << os1 << " " << lang_utils::operator_string(op) << " " << os2;
+                push_rendered(ss.str(), op_prec, variant());
+              }
             break;
           }
 
@@ -1306,6 +1316,11 @@ str base_lang::instantiate(XSSType type, XSSObject instance, DynamicArray params
 
     ss << ")";
     return ss.str();
+  }
+
+bool base_lang::render_operator(operator_type op, const str& left, const str& right, str& result)
+  {
+    return false;
   }
 
 void base_lang::compile_property(XSSProperty prop, XSSContext ctx)

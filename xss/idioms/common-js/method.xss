@@ -5,8 +5,8 @@
 
 <xss:code>
 string mthd_name = mthd.output_id;
-string assign = ":";
-string separator = ",";
+string assign = "=";
+string separator = ";";
 
 if (!is_class)
 {

@@ -17,6 +17,7 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
 			{
@@ -126,12 +127,12 @@ anim1.start();
 	};
  this.btn2.bottom(50); 
                 btn2 = this.btn2;
-                },
-                height : 100,
+            if (this.init)
+                this.init();
+            },
 });
 window.onload = function() 
 {
-	var Sound = new ms.ui.Sound();
 	drawingCanvas = document.getElementById("myCanvas");
     g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
