@@ -353,8 +353,9 @@ str debug_language::instantiate(XSSType type, XSSObject instance, DynamicArray p
     return "only instances";
   }
 
-bool debug_language::render_operator(operator_type op, const str& left, const str& right, str& result)
+bool debug_language::custom_operator(XSSType lt, XSSType rt, str l, str r, operator_type op, str& res)
   {
+    res = "custom operator";
     return false;
   }
 

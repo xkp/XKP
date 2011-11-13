@@ -825,21 +825,24 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 						str os1 = operand_to_string(arg1, XSSObject(), &p1);
             str os2 = operand_to_string(arg2, XSSObject(), &p2); //td: resolve properties and stuff
 
-            if (op_prec < p1)
-              os1 = "(" + os1 + ")";
-
-            if (op_prec < p2)
-              os2 = "(" + os2 + ")";
+            XSSType xstype1 = lang_utils::resolve_type(arg1, ctx_);
+            XSSType xstype2 = lang_utils::resolve_type(arg2, ctx_);
 
             Language lang = ctx_->get_language();
 
             str result;
-            if (lang->render_operator(op, os1, os2, result))
+            if (lang->custom_operator(xstype1, xstype2, os1, os2, op, result))
               {
                 push_rendered(result, op_prec, variant());
               }
             else
               {
+                if (op_prec < p1)
+                  os1 = "(" + os1 + ")";
+
+                if (op_prec < p2)
+                  os2 = "(" + os2 + ")";
+
                 std::stringstream ss;
                 ss << os1 << " " << lang_utils::operator_string(op) << " " << os2;
                 push_rendered(ss.str(), op_prec, variant());
@@ -1318,7 +1321,7 @@ str base_lang::instantiate(XSSType type, XSSObject instance, DynamicArray params
     return ss.str();
   }
 
-bool base_lang::render_operator(operator_type op, const str& left, const str& right, str& result)
+bool base_lang::custom_operator(XSSType lt, XSSType rt, str l, str r, operator_type op, str& res)
   {
     return false;
   }

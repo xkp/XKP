@@ -5,9 +5,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 						import android.widget.Button;
+						import android.text.method.KeyListener;
+						import android.view.View.OnClickListener;
+						import android.view.View.OnLongClickListener;
 						import android.view.MotionEvent;
 						import android.view.View.OnTouchListener;
-						import android.view.View.OnClickListener;
+						import android.view.View.OnKeyListener;
+						import android.view.View.OnFocusChangeListener;
 public class ActTouchMe 
                 extends Activity
 							implements OnTouchListener
@@ -31,7 +35,7 @@ public class ActTouchMe
 									case R.id.btnTouchme:
 										onTouchbtnTouchme(ev);
 										break;
-							} //switch
+						} //switch
 							return true;
 						}
 			private Double prop_btnTouchme_MAX_DELTHA = 80.000000;
@@ -44,8 +48,11 @@ public class ActTouchMe
 			private void onTouchbtnTouchme(MotionEvent ev) {
 				int action = ev.getAction();
 int pl = XKPLayout.PL_CENTER;
+Display display = getWindowManager().getDefaultDisplay();
+Integer dispWidth = display.getWidth();
+Integer dispHeight = display.getHeight();
 Float currentX = ev.getX();
-Float currentY = ev.getY();
+Float currentY = dispHeight - ev.getY();
 if (action == MotionEvent.ACTION_DOWN)
 {
 	prop_btnTouchme_mStartX = currentX;

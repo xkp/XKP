@@ -238,11 +238,11 @@ str js_lang::array_operation(operator_type op, const str& arr, const str& value,
     return str();
   }
 
-bool js_lang::render_operator(operator_type op, const str& left, const str& right, str& result)
+bool js_lang::custom_operator(XSSType lt, XSSType rt, str l, str r, operator_type op, str& res)
   {
     if (op == op_typecheck)
       {
-        result = left + " instanceof " + right;
+        res = l + " instanceof " + r;
         return true;
       }
     return false;

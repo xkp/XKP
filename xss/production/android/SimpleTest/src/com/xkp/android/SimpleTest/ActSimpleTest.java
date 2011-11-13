@@ -5,9 +5,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 						import android.widget.TextView;
+						import android.text.method.KeyListener;
+						import android.view.View.OnClickListener;
+						import android.view.View.OnLongClickListener;
 						import android.view.MotionEvent;
 						import android.view.View.OnTouchListener;
-						import android.view.View.OnClickListener;
+						import android.view.View.OnKeyListener;
+						import android.view.View.OnFocusChangeListener;
 						import android.widget.EditText;
 						import android.widget.Button;
 public class ActSimpleTest 
@@ -20,6 +24,7 @@ public class ActSimpleTest
                 private EditText edtLastName;
                 private Button btnFullName;
                 private TextView lblFullName;
+                private EditText edtContainer;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -36,6 +41,7 @@ public class ActSimpleTest
                 btnFullName = (Button) findViewById(R.id.btnFullName);
                     btnFullName.setOnClickListener(this);
                 lblFullName = (TextView) findViewById(R.id.lblFullName);
+                edtContainer = (EditText) findViewById(R.id.edtContainer);
 			    }
 						@Override
 						public void onClick(View v) {
@@ -43,18 +49,18 @@ public class ActSimpleTest
 									case R.id.btnFullName:
 										onClickbtnFullName();
 										break;
-							} //switch
-							return true;
+						} //switch
 						}
 			private void onClickbtnFullName() {
 				String fullname = edtFirstName.getText().toString() + " " + edtLastName.getText().toString();
-if (fullname != " ")
+if (!fullname.equals(" "))
 {
-	lblFullName.setText("Your fullname is " + fullname);
+	lblFullName.setText("Your full name is " + fullname);
 }
 else
 {
-	lblFullName.setText("Your fullname is EMPTY!");
+	lblFullName.setText("Your full name is EMPTY!");
 }
+edtContainer.append(lblFullName.getText());
 			}
 }
