@@ -63,7 +63,7 @@ test_sequence1.start();
                             application.target = value;
                         },
                         [
-                        {t: 0, value: 0.300000012},
+                        {t: 0, value: null},
                         {t: 3, value: 0.300000012},
                         ]);
                     test_sequence.addAction(null, "target", new ms.state.State(0, 3, ____i1));                    
@@ -91,6 +91,10 @@ test_sequence1.start();
                         {t: 15, value: 10000},
                         ]);
                     test_sequence.addAction(null, "target", new ms.state.State(5, 15, ____i3));                    
+                test_sequence.on_start = function()
+                {
+                    ____i1.keys[0].value = application.target;
+                }
                 test_sequence.on_update = function(elapsed, last)
                 {
                     if (application.target > 5000)

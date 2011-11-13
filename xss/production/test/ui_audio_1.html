@@ -17,6 +17,7 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
 			{
@@ -70,8 +71,7 @@ var application = {};
 		g_startup_package.load();	
 function start(resolution)  
 {  
-	var start = new Date().getTime();  
-	function update()  
+	function updater()  
 	{  
 		var now   = new Date().getTime();
         if (g_elapsed < 0)
@@ -81,13 +81,12 @@ function start(resolution)
         g_elapsed = now; 
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-        window.setTimeout(update, resolution);  
-	}  
-	window.setTimeout(update, resolution);  
+        window.setTimeout(updater, resolution);  
+	}
+	window.setTimeout(updater, resolution);  
 }  
 window.onload = function() 
 {
-	var Sound = new ms.ui.Sound();
 	drawingCanvas = document.getElementById("myCanvas");
     g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
@@ -121,7 +120,6 @@ window.onload = function()
                 lbl1.position(220, 190);
 		    btnExplosion = new ms.ui.Button( 
 	    "images/bomb.png","images/bomb.png",g_ui_root.manager, g_ui_root);
-                btnExplosion.set_height(50);
 	btnExplosion.click = function()
 	{    
 		Sound.play("sounds/explosion.mp3");
@@ -129,7 +127,6 @@ window.onload = function()
                 btnExplosion.rect(290, 220, 50, 50);
 		    btnShoots = new ms.ui.Button( 
 	    "images/AK-47.png","images/AK-47.png",g_ui_root.manager, g_ui_root);
-                btnShoots.set_height(100);
 	btnShoots.click = function()
 	{    
 		Sound.play("sounds/shoots.mp3");
@@ -151,7 +148,7 @@ window.onload = function()
             {
                 application.init();
             }
-			start();
+            start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});
 	}

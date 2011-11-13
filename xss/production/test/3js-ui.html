@@ -115,7 +115,7 @@ new THREE.Plane(
 200,200);
 	    var plane_1 = new THREE.Mesh(plane_1_plane, plane_material);
 	    scene.addObject(plane_1);
-                plane_1.rotation.x = -1.57;
+                plane_1.rotation.x = -1.57000005;
                 application.x_target_rotation = 0;
                 application.x_target_rotation_on_mouse_down = 0;
                 application.mouse_x = 0;
@@ -205,7 +205,6 @@ if(ui)
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
                 btn1.set_rotation(0.200000003);
-                btn1.set_height(50);
 	btn1.click = function()
 	{    
 		lbl0.text("Got " + application.clicks + " smileys");

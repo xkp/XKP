@@ -84,8 +84,10 @@ g_elapsed = now;
                         {t: 6, value: 0},
                         ]);
                     this.addAction(null, "x", new ms.state.State(2, 6, ____i2));                    
-    },
-                target : null,
+                this.target = null;
+            if (this.init)
+                this.init();
+            },
 });
             fade_anim = Class.create(ms.state.Sequence,
         {
@@ -121,8 +123,10 @@ g_elapsed = now;
                         {t: 6, value: 1},
                         ]);
                     this.addAction(null, "alpha", new ms.state.State(2, 6, ____i4));                    
-    },
-                target : null,
+                this.target = null;
+            if (this.init)
+                this.init();
+            },
 });
 	var cylinder_material = new THREE.MeshBasicMaterial({
 	color:Math.random() * 0xffffff

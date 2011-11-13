@@ -17,6 +17,7 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
 			{
@@ -94,8 +95,7 @@ var application = {};
 		g_startup_package.load();	
 function start(resolution)  
 {  
-	var start = new Date().getTime();  
-	function update()  
+	function updater()  
 	{  
 		var now   = new Date().getTime();
         if (g_elapsed < 0)
@@ -105,9 +105,9 @@ function start(resolution)
         g_elapsed = now; 
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-        window.setTimeout(update, resolution);  
-	}  
-	window.setTimeout(update, resolution);  
+        window.setTimeout(updater, resolution);  
+	}
+	window.setTimeout(updater, resolution);  
 }  
                 application.clicks = 0;
 	application.keydown = function(keycode)
@@ -134,7 +134,6 @@ btn1.set_y(btn1.y + 2);
 	};
 window.onload = function() 
 {
-	var Sound = new ms.ui.Sound();
 	drawingCanvas = document.getElementById("myCanvas");
     g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
@@ -164,7 +163,6 @@ window.onload = function()
 	};	
 		    main = new ms.ui.Switch( 
 	    g_ui_root.manager, g_ui_root);
-                main.set_height(250);
                 main.rect(0, 0, 600, 250);
 		    test1 = new ms.ui.Component( 
 	    main.manager, main);test1.mouse_thru = true;
@@ -174,13 +172,12 @@ window.onload = function()
                 lbl0.position(240, 75);
 		    lbl1 = new ms.ui.Label( 
 	    "Verdana",test1.manager, test1);
-                lbl1.set_rotation("-0.2");
+                lbl1.set_rotation(-0.200000003);
                 lbl1.text("click smiley");
                 lbl1.position(270, 200);
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",test1.manager, test1);
                 btn1.set_rotation(0.200000003);
-                btn1.set_height(50);
 	btn1.click = function()
 	{    
 		lbl1.text("Got " + application.clicks + " smileys");
@@ -192,12 +189,9 @@ application.clicks = application.clicks + 1;
 	    main.manager, main);test2.mouse_thru = true;
 		    pb1 = new ms.ui.ProgressBar( 
 	    null,test2.manager, test2);
-                pb1.set_height(10);
  pb1.center(150, 10); 
 		    btn2 = new ms.ui.Image( 
 	    "images/arrow_left.png",test2.manager, test2);
-                btn2.set_height(20);
-                btn2.src("images/arrow_left.png");
 	btn2.click = function()
 	{    
 		pb1.value(pb1.get_value() - 1);
@@ -205,8 +199,6 @@ application.clicks = application.clicks + 1;
                 btn2.rect(200, 115, 20, 20);
 		    btn3 = new ms.ui.Image( 
 	    "images/arrow_right.png",test2.manager, test2);
-                btn3.set_height(20);
-                btn3.src("images/arrow_right.png");
 	btn3.click = function()
 	{    
 		pb1.value(pb1.get_value() + 1);
@@ -219,7 +211,6 @@ application.clicks = application.clicks + 1;
                 lbl2.position(210, 200);
 		    btnNext = new ms.ui.Button( 
 	    "images/arrow_right_green_48.png","images/arrow_right_48.png",g_ui_root.manager, g_ui_root);
-                btnNext.set_height(50);
 	btnNext.click = function()
 	{    
 		if (main.get_active() < main.count() - 1)
@@ -233,7 +224,6 @@ btnNext.set_rotation(btnNext.rotation + 0.200000003);
 		    btnPrev = new ms.ui.Button( 
 	    "images/arrow_left_green_48.png","images/arrow_left_48.png",g_ui_root.manager, g_ui_root);
                 btnPrev.set_rotation(0.400000006);
-                btnPrev.set_height(50);
 	btnPrev.click = function()
 	{    
 		if (main.get_active() > 0)
@@ -244,8 +234,7 @@ main.active(main.get_active() - 1);
                 btnPrev.rect(220, 300, 50, 50);
 		    stateBtn = new ms.ui.StateButton( 
 	    "images/smile_grin_48.png","images/smile_sad_48.png",g_ui_root.manager, g_ui_root);
-                stateBtn.set_rotation("-0.4");
-                stateBtn.set_height(50);
+                stateBtn.set_rotation(-0.400000006);
                 stateBtn.rect(270, 400, 50, 50);
 		    lbl3 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
@@ -267,7 +256,7 @@ main.active(main.get_active() - 1);
             {
                 application.init();
             }
-			start();
+            start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});
 	}

@@ -1,5 +1,6 @@
 <application src="box2d3.app.xs" width="600" height="400">
-    <physics_world gravity_x   = "1" id="myWorld" debug_draw="true"
+    <physics_world id="myWorld" debug_draw="true"
+                   gravity_y   = "10"
                    scale       = "30" 
                    friction    = "0.5"
                    density     = "1.0"

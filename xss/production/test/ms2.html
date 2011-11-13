@@ -69,8 +69,10 @@ function start(resolution)
                         {t: 2, value: 1},
                         ]);
                     this.addAction(null, "alpha", new ms.state.State(1, 2, ____i2));                    
-    },
-                target : null,
+                this.target = null;
+            if (this.init)
+                this.init();
+            },
 });
                 application.target = 0;
 test_sequence =

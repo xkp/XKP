@@ -17,6 +17,7 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
 			{
@@ -50,7 +51,6 @@ function start(resolution)
 }  
 window.onload = function() 
 {
-	var Sound = new ms.ui.Sound();
 	drawingCanvas = document.getElementById("myCanvas");
     g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
@@ -80,7 +80,6 @@ window.onload = function()
 	};	
 		    sd1 = new ms.ui.SelfDrawn( 
 	    g_ui_root.manager, g_ui_root);
-                sd1.set_height(300);
 	sd1.reset = function() 
 	{
 			};

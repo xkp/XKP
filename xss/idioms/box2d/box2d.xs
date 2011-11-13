@@ -14,7 +14,14 @@ on render_jscripts()
 	out()
 	{
         <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
-        <script type="text/javascript" src="../js/ms-spawner.js"></script>
+    }
+
+    if (!application.noSpawner)
+    {
+	    out()
+	    {
+            <script type="text/javascript" src="../js/ms-spawner.js"></script>
+        }
     }
 }
 
@@ -51,9 +58,18 @@ on render_initialization()
             new b2Vec2(<xss:e v="gx"/>, <xss:e v="gy"/>)    //gravity
         ,  true                 //allow sleep
         );
+    }
 
-        var g_spawner_manager = new ms.arcade.SpawnManager();
+    if (!application.noSpawner)
+    {
+	    out()
+	    {
+            var g_spawner_manager = new ms.arcade.SpawnManager();
+        }
+    }
 
+	out()
+	{
         var g_step_collisions = [];
 
         var contactListener = new Box2D.Dynamics.b2ContactListener;
@@ -143,9 +159,18 @@ on render_update()
         g_world.Step(1 / 60, 10, 10);
         g_world.DrawDebugData();
         g_world.ClearForces();
+    }
 
-        g_spawner_manager.update(g_delta);
+    if (!application.noSpawner)
+    {
+	    out()
+	    {
+            g_spawner_manager.update(g_delta);
+        }
+    }
 
+	out()
+	{
         //process collisions
         for(var i = 0; i < g_step_collisions.length; i++)
         {

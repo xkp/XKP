@@ -10,7 +10,7 @@
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
         <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
-        <script type="text/javascript" src="../js/ms-spawner.js"></script>
+            <script type="text/javascript" src="../js/ms-spawner.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -19,6 +19,7 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
 			{
@@ -50,7 +51,7 @@ var application = {};
             new b2Vec2(0, 10)    //gravity
         ,  true                 //allow sleep
         );
-        var g_spawner_manager = new ms.arcade.SpawnManager();
+            var g_spawner_manager = new ms.arcade.SpawnManager();
         var g_step_collisions = [];
         var contactListener = new Box2D.Dynamics.b2ContactListener;
         contactListener.BeginContact = function(contact, manifold) 
@@ -64,9 +65,9 @@ var application = {};
             var host1 = get_collider(contact.GetFixtureA().GetBody());
             var host2 = get_collider(contact.GetFixtureB().GetBody());
             if (host1)
-                g_step_collisions.push({host1: host1, host2:host2, contact: contact, manifold:manifold});
+                g_step_collisions.push({host1: host1, host2:contact.GetFixtureB().GetBody().host, contact: contact, manifold:manifold});
             if (host2)
-                g_step_collisions.push({host1: host2, host2:host1, contact: contact, manifold:manifold});
+                g_step_collisions.push({host1: host2, host2:contact.GetFixtureA().GetBody().host, contact: contact, manifold:manifold});
         };
         g_world.SetContactListener(contactListener);
         var g_world_scale = 30;
@@ -111,7 +112,7 @@ function start(resolution)
         g_world.Step(1 / 60, 10, 10);
         g_world.DrawDebugData();
         g_world.ClearForces();
-        g_spawner_manager.update(g_delta);
+            g_spawner_manager.update(g_delta);
         //process collisions
         for(var i = 0; i < g_step_collisions.length; i++)
         {
@@ -184,6 +185,7 @@ function start(resolution)
              fixDef.restitution = 0.200000003;
              bodyDef.type = b2Body.b2_dynamicBody;
                     fixDef.shape = new b2CircleShape(21.5/g_world_scale);
+            fixDef.isSensor = false;
                 bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
             current_body = g_world.CreateBody(bodyDef);
             current_body.CreateFixture(fixDef);
@@ -195,13 +197,21 @@ function start(resolution)
                 {
                     this.ev_resized(this);
                 }
+                this.RemoveFromWorld = function(keep_visual) 
+                {
+                    g_world.DestroyBody(this.physics);
+                    if (!keep_visual)
+                    {
+                        this.parent.removeComponent(this);
+                    }
+                }
                 __physics1 = this.__physics1;
-                },
-                src : "images/smile_grin_48.png",
-                height : 50,
-	collision : function(who)
+	this.collision = function(who)
 	{    
-	},
+	};
+            if (this.init)
+                this.init();
+            },
 });
             wall = Class.create(ms.ui.Image,
         {
@@ -222,6 +232,7 @@ function start(resolution)
              bodyDef.type = b2Body.b2_staticBody;
                 fixDef.shape = new b2PolygonShape;
                     fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
+            fixDef.isSensor = false;
                 bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
             current_body = g_world.CreateBody(bodyDef);
             current_body.CreateFixture(fixDef);
@@ -233,13 +244,21 @@ function start(resolution)
                 {
                     this.ev_resized(this);
                 }
+                this.RemoveFromWorld = function(keep_visual) 
+                {
+                    g_world.DestroyBody(this.physics);
+                    if (!keep_visual)
+                    {
+                        this.parent.removeComponent(this);
+                    }
+                }
                 __physics2 = this.__physics2;
-                },
-                src : "images/stone-12.jpg",
+            if (this.init)
+                this.init();
+            },
 });
 window.onload = function() 
 {
-	var Sound = new ms.ui.Sound();
 	drawingCanvas = document.getElementById("myCanvas");
     g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
@@ -269,15 +288,12 @@ window.onload = function()
 	};	
 		    __wall1 = new wall( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
-                __wall1.set_height(40);
                 __wall1.rect(0, 390, 600, 40);
 		    __wall2 = new wall( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
-                __wall2.set_height(140);
                 __wall2.rect(590, 250, 10, 140);
 		    __wall3 = new wall( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
-                __wall3.set_height(140);
                 __wall3.rect(0, 250, 10, 140);
         sp1 = new ms.arcade.Spawner(g_spawner_manager, 300, 100, 3, 1, 10);
                 sp1.x = 300;

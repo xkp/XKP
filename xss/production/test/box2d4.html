@@ -10,7 +10,7 @@
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
         <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
-        <script type="text/javascript" src="../js/ms-spawner.js"></script>
+            <script type="text/javascript" src="../js/ms-spawner.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -51,7 +51,7 @@ var Sound = new ms.ui.Sound();
             new b2Vec2(0, 0)    //gravity
         ,  true                 //allow sleep
         );
-        var g_spawner_manager = new ms.arcade.SpawnManager();
+            var g_spawner_manager = new ms.arcade.SpawnManager();
         var g_step_collisions = [];
         var contactListener = new Box2D.Dynamics.b2ContactListener;
         contactListener.BeginContact = function(contact, manifold) 
@@ -135,7 +135,7 @@ function start(resolution)
         g_world.Step(1 / 60, 10, 10);
         g_world.DrawDebugData();
         g_world.ClearForces();
-        g_spawner_manager.update(g_delta);
+            g_spawner_manager.update(g_delta);
         //process collisions
         for(var i = 0; i < g_step_collisions.length; i++)
         {
