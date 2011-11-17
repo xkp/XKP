@@ -388,6 +388,11 @@ bool code::empty()
     return statements_.empty();
   }
 
+variant& code::get_stament(int idx)
+  {
+    return statements_[idx];
+  }
+
 //xs_container
 void xs_container::visit(xs_visitor* visitor)
   {

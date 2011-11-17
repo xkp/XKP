@@ -1,0 +1,12 @@
+<xss:parameter id="obj"/>
+
+<xss:code>
+if (!obj.type)
+    compiler.error("Object must have type in order to instantiate", object = obj.id);
+</xss:code>
+
+create_<xss:e v="obj.type.output_id"/>(
+<xss:code>
+compiler.xss("../common-js/constructor_args.xss", obj);
+</xss:code>
+);

@@ -26,8 +26,6 @@
         }
         else if (key_value == "@") //convention over configuration
         {
-            compiler.log(prop_info.property);
-        
             //same deal, only this time we'll assign the current value 
             //kinda neat
             var nfo = object();
@@ -378,7 +376,6 @@
                 <xss:open_brace/>
             }
             
-            compiler.log(seq.key_expressions.size);
             for(var key_xpr in seq.key_expressions)
             {
                 out(indent=3)

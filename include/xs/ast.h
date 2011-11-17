@@ -101,9 +101,10 @@ struct expression_splitter : expression_visitor
   struct code
     {
       public:
-        void add_statement(variant st);
-        void visit(code_visitor* visitor);
-        bool empty();
+        void     add_statement(variant st);
+        void     visit(code_visitor* visitor);
+        bool     empty();
+        variant& get_stament(int idx);
       private:
         typedef std::vector<variant> statement_list;
 

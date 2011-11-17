@@ -793,6 +793,16 @@ bool expression_analizer::first_property()
     return first_property_;
   }
 
+bool expression_analizer::is_call()
+  {
+    return is_call_;
+  }
+
+XSSMethod expression_analizer::method()
+  {
+    return method_;
+  }
+
 //td: !!! stop duplicating this array
 const char* operator_str[] =
   {
