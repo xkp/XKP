@@ -338,18 +338,18 @@ new THREE.Plane(
                 application.img_array = [img1, img1_reflect, img2, img2_reflect, img3, img3_reflect, img4, img4_reflect, img5, img5_reflect];
 	application.position_items = function() 
 	{
-		this.start = this.start + this.speed;
-if (this.start > this.max_rotation)
+		application.start = application.start + application.speed;
+if (application.start > application.max_rotation)
 {
-this.start = 0;
+application.start = 0;
 }
 for(var i = 0; i < 10; i += 2)
 {
-this.angle = this.start + i * this.step;
-this.img_array[i].position.x = 275 * Math.cos(this.angle);
-this.img_array[i + 1].position.x = 275 * Math.cos(this.angle);
-this.img_array[i].position.z = 275 * Math.sin(this.angle);
-this.img_array[i + 1].position.z = 275 * Math.sin(this.angle);
+application.angle = application.start + i * application.step;
+application.img_array[i].position.x = 275 * Math.cos(application.angle);
+application.img_array[i + 1].position.x = 275 * Math.cos(application.angle);
+application.img_array[i].position.z = 275 * Math.sin(application.angle);
+application.img_array[i + 1].position.z = 275 * Math.sin(application.angle);
 }
 	};
 	document.addEventListener( 'mousemove', mousemove_application, false );

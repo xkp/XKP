@@ -43,6 +43,54 @@
 
 		<class id="self_drawn" super="component" output_id="ms.ui.SelfDrawn"/>
 		
+		<class id="clip_area" super="component" output_id="ms.ui.ClipArea">
+			<constructor_params>
+                <parameter property="form" runtime="true"/>
+            </constructor_params>
+
+            <property id="form" type="string"/>                
+		</class>
+		
+		<class id="rectangle" super="component" output_id="ms.ui.Rectangle">
+			<constructor_params>
+                <parameter property="fill" runtime="true"/>
+				<parameter property="stroke" runtime="true"/>
+				<parameter property="line_width" runtime="true"/>
+            </constructor_params>
+
+            <property id="fill" type="string" dont_init="true"/>
+			<property id="stroke" type="string" dont_init="true"/>
+			<property id="line_width" type="int" dont_init="true"/>
+		</class>
+		
+		<class id="polygon" super="component" output_id="ms.ui.Path">
+			<constructor_params>
+                <parameter property="fill" runtime="true"/>
+				<parameter property="stroke" runtime="true"/>
+				<parameter property="line_width" runtime="true"/>
+            </constructor_params>
+
+            <property id="fill" type="string" dont_init="true"/>
+			<property id="stroke" type="string" dont_init="true"/>
+			<property id="line_width" type="int" dont_init="true"/>
+		</class>
+		
+		<class id="path_point" renderer="path_renderer.xss"/>
+		
+		<class id="circle" super="component" output_id="ms.ui.Circle">
+			<constructor_params>
+                <parameter property="fill" runtime="true"/>
+				<parameter property="stroke" runtime="true"/>
+				<parameter property="line_width" runtime="true"/>
+				<parameter property="radius" runtime="true"/>
+            </constructor_params>
+
+            <property id="fill" type="string" dont_init="true"/>
+			<property id="stroke" type="string" dont_init="true"/>
+			<property id="line_width" type="int" dont_init="true"/>
+			<property id="radius" type="string" dont_init="true"/>
+		</class>
+		
         <class id="div" super="component" output_id="ms.ui.Component">
         </class>
 

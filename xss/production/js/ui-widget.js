@@ -1,24 +1,24 @@
-"ms.ui".namespace();
+"ui.widget".namespace();
 
-ms.ui.Manager = Class.create(
+ui.widget.Manager = Class.create(
 {
 	initialize: function(client, streamer)
 	{
 		this.streamer = streamer;
 
 	    //setup our components
-	    this.root = new ms.ui.Component(this);
+	    this.root = new ui.widget.Component(this);
 	    this.root.rect(0, 0, client.width, client.height);
 
 	    //mouse handling
-	    this.mouse_over = this.root;
+	    this.mouse_over 	= this.root;
 	    this.dragging 		= false;
 		this.mouse_pressed	= false;
-	    this.lastx 		= 0;
-	    this.lasty 		= 0;
-
+	    this.lastx 			= 0;
+	    this.lasty 			= 0;
+				
 	},	
-
+	
 	//Resource handling
 	load_resources: function(callback)
 	{
@@ -58,7 +58,7 @@ ms.ui.Manager = Class.create(
 			application.keydown(keycode);
 	    }	    
 	},
-
+	
 	keyup: function(keycode)
 	{
 	    if ('keyup' in application)
@@ -66,7 +66,7 @@ ms.ui.Manager = Class.create(
 	        application.keyup(keycode);
 	    }	    
 	},
-
+	
 	keypress: function(keycode)
 	{
 	    if ('keypress' in application)
@@ -74,12 +74,10 @@ ms.ui.Manager = Class.create(
 	        application.keypress(keycode);
 	    }	    
 	},
-
-	//Mouse managemet
 	
 	mousemove: function(x, y)
 	{
-	    if(this.mouse_pressed)
+		if(this.mouse_pressed)
 			this.dragging = true;
 	    if (this.dragging)
 	    {
@@ -120,13 +118,13 @@ ms.ui.Manager = Class.create(
 	{
 	    if ('mousedown' in this.mouse_over)
 	    {
-	        this.mouse_over.mousedown(x, y);
+	        this.mouse_over.mouse_down(x, y);
 	    }
-		this.mouse_pressed = true;
-
+		
+	    this.mouse_pressed = true;
 	    return this.mouse_over != this.root;
 	},
-
+	
 	mouseup: function(x, y)
 	{
 		this.mouse_pressed = false;
@@ -134,19 +132,18 @@ ms.ui.Manager = Class.create(
 	    {
 	        this.dragging = false;
 	        if ('dragend' in this.mouse_over)
-	            this.mouse_over.dragend(x, y);
-	        return true;
+	            this.mouse_over.dragend(x, y);	
+			return true;
 	    }
 
 	    if ('mouseup' in this.mouse_over)
 	    {
-	        this.mouse_over.mouseup(x, y);
+	        this.mouse_over.mouse_up(x, y);
 	    }
 	    else if ('click' in this.mouse_over)
 	    {
 	        this.mouse_over.click();
 	    }
-
 	    return this.mouse_over != this.root;
 	},
 
@@ -316,7 +313,7 @@ ms.ui.Manager = Class.create(
 
             context.fillRect(rect.x, rect.y, rect.w, rect.h);
         }
-
+		
 		for(var i = 0; i < to_draw.length; i++)
         {
             var cmp  = to_draw[i];
@@ -341,17 +338,17 @@ ms.ui.Manager = Class.create(
     },
 });
 
-ms.ui.Component = Class.create(
+ui.widget.Component = Class.create(
 {
 	initialize: function(manager, parent)
 	{
 		if(manager == null) manager = g_ui_root.manager;
 		if(parent == null) parent = g_ui_root;
-
+		
 		this.manager    = manager;
 		this.components = [];
 		this.parent 	= parent;		
-
+		
 		this.x 			= 0; 
         this.y 			= 0; 
         this.w 			= 0;
@@ -361,7 +358,7 @@ ms.ui.Component = Class.create(
         this.opacity = null; //this means, no opacity
 
 		if (parent)
-			parent.addComponent(this);
+			parent.addComponent(this);		
 	},
 
     count: function()
@@ -389,7 +386,7 @@ ms.ui.Component = Class.create(
         this.opacity = value;
         this.invalidate();
     },
-
+	
 	set_rotation: function(value)
     {
         this.rotation = value;
@@ -490,7 +487,7 @@ ms.ui.Component = Class.create(
 	{
         if (this.visible_)
             this.invalidate();
-
+		
         this.visible_ = false;
 	},
 
@@ -524,14 +521,9 @@ ms.ui.Component = Class.create(
 
         this.invalidate()
     },
-
+	
     resized: function() 
     {
-        if (this.ev_resized)
-        {
-            this.ev_resized(this);
-        }
-
         this.invalidate()
     },
 
@@ -571,10 +563,10 @@ ms.ui.Component = Class.create(
 
 	contains: function(x, y)
 	{	
-
+		
 		var A_x = - this.w/2;
 		var A_y = - this.h/2;
-
+			
 		var ev_x = x - (this.x + this.w/2) - 8;
 		var ev_y = y - (this.y + this.h/2) - 8;
 		var ev_x_rotated = ev_x * Math.cos(-this.rotation) - ev_y * Math.sin(-this.rotation);
@@ -595,19 +587,9 @@ ms.ui.Component = Class.create(
 	{
 	},
 
-    removeComponent: function(cmp)
-    {
-        var idx = this.components.indexOf(cmp); 
-        if (idx!=-1) 
-        {
-            this.components.splice(idx, 1); 
-            this.invalidate();
-        }
-    },
-
     draw: function(context, x, y)
     {
-        var clip_inside = true;
+		var clip_inside = true;
 		for(var i = 0; i < this.components.length; i++)
         {	
 			var cmp = this.components[i];
@@ -621,7 +603,7 @@ ms.ui.Component = Class.create(
 		}		
 		for(var i = 0; i < this.components.length; i++)
         {			
-            var cmp = this.components[i];	
+            var cmp = this.components[i];			
             if (cmp.isVisible())
             {
                 cmp.draw(context, this.x + x, this.y + y);
@@ -632,503 +614,18 @@ ms.ui.Component = Class.create(
     },	
 });
 
-ms.ui.Image = Class.create(ms.ui.Component,
-{	
-	initialize: function($super, image, manager, parent)
-	{				
-		$super(manager, parent);
-        
-        var resource = streamer.get_resource(image);
-        
-        if (!resource)
-            throw "Unknow resource: " + image;
-         		
-		var texture = resource.data;
-		if (image && !texture && image != 'null')
-			throw "Image " + image + " not loaded";		
-	    this.texture = texture;		
-	},
-
-	fill: function(f)
-	{
-        this.fill_ = f;
-        this.invalidate();
-	},
-
-    src: function()
-    {
-        return this.source;
-    },
-
-    src: function(image)
-    {
-        this.source = image;
-	    this.texture = streamer.get_resource(image).data;
-        this.invalidate();
-    },
-
-	image: function(texture)
-	{
-        this.source = "";
-	    this.texture = texture;
-        this.invalidate();
-	},           
-                                  
-	draw: function($super, context, x, y)
-    {
-		var old_alpha;
-
-		context.save();
-		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
-		context.rotate(this.rotation);
-
-		if (this.opacity != null)
-        {
-            old_alpha = context.globalAlpha;
-            context.globalAlpha = this.opacity;
-        }
-
-        if (this.texture)
-        {
-            context.drawImage(this.texture, - this.w/2, - this.h/2, this.w, this.h);
-        }
-        else if (this.fill_)
-        {
-            context.fillStyle = this.fill_;
-            context.fillRect(-this.w/2, -this.h/2, this.w, this.h);
-        }
-
-        if (this.opacity != null)
-        {
-            context.globalAlpha = old_alpha;
-        }
-
-		context.restore();  
-
-        $super(context);
-    }
-});
-
-ms.ui.ProgressBar = Class.create(ms.ui.Component,
-{
-	initialize: function($super , images, manager, parent)
-	{
-		$super(manager, parent);
-		if (!images)
-		{
-			images = ['images/progress.empty.png', 'images/progress.full.png'];
-		}		
-		this.left    = new ms.ui.Image(images[1], this.manager, this);
-		this.right   = new ms.ui.Image(images[0], this.manager, this);
-		this.percent = 0;
-		this.resized();
-	},
-
-	value: function(val)
-	{
-		if (val < 0)
-			val = 0;
-
-		if (val > 100)
-			val = 100;
-
-		this.percent = val;
-		this.resized();
-	},
-
-    get_value: function()
-    {
-        return this.percent;
-    },
-
-	resized: function()
-	{
-		var ww = this.w*(this.percent/100);
-	    this.left.rect(0, 0, ww, this.h);
-	    this.right.rect(ww, 0, this.w - ww, this.h);
-	}
-});
-
-ms.ui.Label = Class.create(ms.ui.Component,
-{
-	initialize: function($super, font, manager, parent)
-	{
-		$super(manager, parent);
-	    this.font = font;
-	    this.value = "";
-	},
-
-	text: function(text)
-	{
-		this.value = text;
-		this.manager.invalidate_all(); //td: do extents!!!
-	},
-
-	resized: function()
-	{
-	},
-
-	extents: function()
-	{
-        //td:
-	},
-
-    draw: function($super, context, x, y)
-    {
-		context.save();
-
-		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
-		context.rotate(this.rotation);
-
-        context.font = this.font;
-        context.fillStyle = 'black'; //td:
-        context.fillText(this.value, -this.w/2, -this.h/2);
-
-		context.restore(); 
-        $super(context);
-    },
-});
-
-ms.ui.Button = Class.create(ms.ui.Image,
-{
-	initialize: function($super, normal, over, manager, parent)
-	{
-		$super(normal, manager, parent);
-
-		var normal_texture = streamer.get_resource(normal).data;
-		var over_texture   = streamer.get_resource(over).data;	
-
-		this.mousein = function()
-	    {
-	        this.image(over_texture);
-	    }
-
-	    this.mouseout = function()
-	    {
-	        this.image(normal_texture);
-	    }		
-	},
-});
-
-ms.ui.StateButton = Class.create(ms.ui.Image,
-{
-	initialize: function($super, up, down, manager, parent)
-	{
-		$super(up, manager, parent);
-
-		var up_texture 		= streamer.get_resource(up).data;
-		var down_texture   	= streamer.get_resource(down).data;
-
-		this.down = false;		
-		this.click = function()
-	    {
-	        this.down  = !this.down;
-			this.image(this.down? down_texture : up_texture);
-	    }	    	
-	},
-});
-
-ms.ui.Switch = Class.create(ms.ui.Component,
-{
-	active_: 0,
-
-	componentAdded: function(cmp)
-	{
-        cmp.rect(0, 0, this.w, this.h);
-
-		if (this.components.length == (this.active_ + 1))
-			cmp.show();
-		else
-			cmp.hide();
-	},
-
-	active: function( idx )
-	{
-		if (idx == this.active_)
-			return;
-
-		this.components[this.active_].hide();
-
-		this.active_ = idx;
-
-		this.components[this.active_].show();
-
-        this.invalidate();
-	},
-
-    get_active: function()
-    {
-        return this.active_;
-    },
-});
-
-ms.ui.Line = Class.create(ms.ui.Component,
-{
-	initialize: function($super, manager, parent)
-	{
-		$super(manager, parent);
-	    this.x1         = 0;
-	    this.y1         = 0;
-	    this.x2         = 0;
-	    this.y2         = 0;
-        this.lineWidth  = 2;
-        this.lineCap    = '';
-        this.fillStyle  = 'black'
-	},
-
-	coords: function(x1, y1, x2, y2)
-	{
-	    this.x1         = x1;
-	    this.y1         = y1;
-	    this.x2         = x2;
-	    this.y2         = y2; 
-
-		this.invalidate(); //td: do extents!!!
-	},
-
-    set_x1: function(v) { this.coords(v, this.y1, this.x2, this.y2); },
-    set_x2: function(v) { this.coords(this.x1, this.y1, v, this.y2); },
-    set_y1: function(v) { this.coords(this.x1, v, this.x2, this.y2); },
-    set_y2: function(v) { this.coords(this.x1, this.y1, this.x2, v); },
-
-    set_lineWidth: function(v) 
-    {
-        this.lineWidth = v;
-        this.invalidate();
-    },
-
-    set_lineCap: function(v) 
-    {
-        this.lineCap = v;
-        this.invalidate();
-    },
-
-    positioned: function($super)
-    {
-        $super();
-	    this.x1 = this.x;
-	    this.y1 = this.y;
-	    this.x2 = this.x + this.w;
-	    this.y2 = this.y + this.h;
-    },
-
-    resized: function($super)
-    {
-        $super();
-	    this.x2 = this.x + this.w;
-	    this.y2 = this.y + this.h;
-    },
-
-    draw: function($super, context, x, y)
-    {
-        context.fillStyle = this.fillStyle;
-        context.beginPath();
-        context.lineWidth = this.lineWidth;
-        context.moveTo(x + this.x1, y + this.y1);
-        context.lineTo(x + this.x2, y + this.y2);
-        context.stroke();
-
-		$super(context);
-    },
-});
-
-ms.ui.SelfDrawn = Class.create(ms.ui.Component,
+ui.widget.TextView = Class.create(ui.widget.Component,
 {	
 	initialize: function($super, manager, parent)
-	{				
-		$super(manager, parent);		
-	},
-
-	draw: function($super, context, x, y)
-    {
-		var old_alpha;
-
-		context.save();
-		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
-		context.rotate(this.rotation);
-		context.translate(-this.w/2, -this.h/2);
-
-		if (this.opacity != null)
-        {
-            old_alpha = context.globalAlpha;
-            context.globalAlpha = this.opacity;
-        }
-
-        if('paint' in this)
-		{
-			this.paint(context);	
-		}
-
-        if (this.opacity != null)
-        {
-            context.globalAlpha = old_alpha;
-        }
-
-		context.restore();  
-
-        $super(context);
-    }
-});
-
-ms.ui.ClipArea = Class.create(ms.ui.Component,
-{	
-	initialize: function($super, form, manager, parent)
-	{				
-		$super(manager, parent);
-		this.clip = true;
-		this.form = form;
-	},	
-	draw: function($super, context, x, y)
 	{
-		context.beginPath();
-		if(this.form == "rect")				
-			context.rect(this.x + x, this.y + y, this.w, this.h);					
-		else
-			context.arc(this.x + x + this.w/2, this.y + y + this.h/2, 
-						this.w/2, 0, Math.PI*2, true); 
-		context.clip();
-	}
-});
-
-ms.ui.Rectangle = Class.create(ms.ui.Component,
-{	
-	initialize: function($super, fill, stroke, line_width, manager, parent)
-	{				
 		$super(manager, parent);
-		this.fill = fill;
-		this.stroke = stroke;
-		this.line_width = line_width;
-	},	
-	draw: function($super, context, x, y)
-	{		
-		context.save();
-		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
-		context.rotate(this.rotation);
-		context.beginPath();		
-		if (this.opacity != null)
-        {
-            old_alpha = context.globalAlpha;
-            context.globalAlpha = this.opacity;
-        }		
-		context.rect(-this.w/2, -this.h/2, this.w, this.h);					
+	},
+	draw: function(context, x, y)
+    {
 		
-		if(this.line_width){
-			context.lineWidth = this.line_width;			
-		}		
-		if(this.fill){
-			context.fillStyle = this.fill;
-			context.fill();
-		}		
-		if(this.stroke){
-			context.strokeStyle = this.stroke;
-			context.stroke();
-		}		
-		if (this.opacity != null)
-        {
-            context.globalAlpha = old_alpha;
-        }			
-		context.restore();		
-        $super(context);
-	}
+    },	
 });
 
 
-ms.ui.Circle = Class.create(ms.ui.Component,
-{	
-	initialize: function($super, fill, stroke, line_width, radius, manager, parent)
-	{				
-		$super(manager, parent);
-		this.fill = fill;
-		this.stroke = stroke;
-		this.line_width = line_width;
-		this.w = 2*radius;
-		this.h = 2*radius
-	},	
-	draw: function($super, context, x, y)
-	{	
-		context.beginPath();
-		if (this.opacity != null)
-        {
-            old_alpha = context.globalAlpha;
-            context.globalAlpha = this.opacity;
-        }		
-		context.arc(this.x + x + this.w/2, this.y + y + this.h/2, this.w/2, 0, Math.PI*2, true); 				
-		if(this.line_width){
-			context.lineWidth = this.line_width;			
-		}		
-		if(this.fill){
-			context.fillStyle = this.fill;
-			context.fill();
-		}		
-		if(this.stroke){
-			context.strokeStyle = this.stroke;
-			context.stroke();
-		}		
-		if (this.opacity != null)
-        {
-            context.globalAlpha = old_alpha;
-        }
-		$super(context);
-	}
-});
 
-ms.ui.Path = Class.create(ms.ui.Component,
-{	
-	initialize: function($super, fill, stroke, line_width, manager, parent)
-	{				
-		$super(manager, parent);
-		this.fill = fill;
-		this.stroke = stroke;
-		this.line_width = line_width;
-		this.points = [];
-	},	
-	draw: function($super, context, x, y)
-	{		
-		context.save();
-		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
-		context.rotate(this.rotation);
-		context.beginPath();		
-		if (this.opacity != null)
-        {
-            old_alpha = context.globalAlpha;
-            context.globalAlpha = this.opacity;
-        }		
-		for(var i = 0; i < this.points.length; i++)
-        {	
-			var point = this.points[i];
-			if(i<0)
-				context.moveTo(point.x, point.y);
-			context.lineTo(point.x, point.y);						
-		}		
-		if(this.line_width){
-			context.lineWidth = this.line_width;			
-		}		
-		if(this.fill){
-			context.fillStyle = this.fill;
-			context.fill();
-		}		
-		if(this.stroke){
-			context.strokeStyle = this.stroke;
-			context.stroke();
-		}		
-		if (this.opacity != null)
-        {
-            context.globalAlpha = old_alpha;
-        }			
-		context.restore();		
-        $super(context);
-	}
-});
-
-ms.ui.Sound = Class.create(
-{
-	play: function(src)
-	{
-		var audioElement = 	document.createElement('audio');
-		audioElement.volume = 0.5;
-		audioElement.setAttribute('src', src);	
-		audioElement.play();
-	},
-});
-
-
+		

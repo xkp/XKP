@@ -5,12 +5,14 @@
 <xss:code>
     string cmp_id = cmp.output_id;
     
+	compiler.log(path);
     if (path)
         cmp_id = path + "." + cmp_id;
         
     if (is_class)
         cmp_id = "this";
         
+	compiler.log("Here");
     if (!is_class)
     {
         string parent_id = cmp.parent.output_id;
@@ -25,7 +27,7 @@
 		    <xss:e value = "cmp_id"/> = new <xss:e value = "cmp.type.output_id"/>( 
 	    }
 
-	    var type = cmp.type;
+        var type = cmp.type;
         if (type.constructor_params)
         {
             for(int i = 0; i < type.constructor_params.size; i++)
@@ -47,9 +49,8 @@
 		    }
         }
 		
-	    
         out() {<xss:e value = "parent_id"/>.manager, <xss:e value = "parent_id"/>);}
-		if(cmp.type.output_id == "ms.ui.Component"){
+		if(cmp.type.output_id == "ms.ui.Component" || cmp.type.output_id == "ms.ui.ClipArea"){
 			out() {<xss:e v="cmp.id"/>.mouse_thru = true;}			
 		}
         compiler.xss("../common-js/instance.xss", cmp, path = path);
@@ -125,4 +126,5 @@
         }
     }
 
+	compiler.log("And There");
 </xss:code>

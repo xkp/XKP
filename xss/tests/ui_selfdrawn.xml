@@ -2,5 +2,5 @@
     <resources>
     </resources>
 
-	<self_drawn id="sd1" x="0" y="300" width="600" height="300"/>
+	<self_drawn id="sd1" x="200" y="300" width="600" height="300"/>
 </application>

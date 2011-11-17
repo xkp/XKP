@@ -6,12 +6,12 @@ ms.arcade.SpawnManager = Class.create(
 	{
 		this.spawners = [];
 	},	
-	
+
 	add: function(spawner)
 	{
         this.spawners.push(spawner);
 	},
-	
+
 	remove: function(spawner)
 	{
         for(var i =0; i < this.spawners.length; i++)
@@ -116,4 +116,3 @@ ms.arcade.Spawner = Class.create(
         return result;
     },
 });
-

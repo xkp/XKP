@@ -11,6 +11,18 @@ Log: Rendering Resources...
 Log: Rendering 3js Types...
 Log: Rendering UI Types...
 Log: Rendering UI...
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
 Success are greateful
 ===[ 3js_cameras.project.xml ]================
 
@@ -20,6 +32,17 @@ Success are greateful
 
 Log: Rendering Resources...
 Log: Rendering 3js Types...
+Success are greateful
+===[ 3js_class_test.project.xml ]================
+
+Log: Rendering Resources...
+Log: Rendering UI Types...
+Log: c:/dev/xkp/xss/tests/../idioms/ui/component.xss
+Log: null
+Log: Here
+Log: And There
+Log: my_image
+Log: Rendering UI...
 Success are greateful
 ===[ 3js_cube.project.xml ]================
 
@@ -60,29 +83,65 @@ Success are greateful
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
+Log: null
+Log: Here
+Log: And There
 Success are greateful
 ===[ box2d3.project.xml ]================
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
-Log: __physics1
-Log: __physics2
+Log: c:/dev/xkp/xss/tests/../idioms/ui/component.xss
+Log: null
+Log: Here
+Log: And There
+Log: smiley_ball
 Log: Rendering UI...
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
 Success are greateful
 ===[ box2d4.project.xml ]================
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
-Log: __physics2
-Log: cannon
-Log: move_around
-Log: fade_out
-Log: __physics3
-Log: move_around
-Log: __physics1
-Log: __physics4
+Log: c:/dev/xkp/xss/tests/../idioms/ui/component.xss
+Log: null
+Log: Here
+Log: And There
+Log: bad_guy
+Log: c:/dev/xkp/xss/tests/../idioms/ui/component.xss
+Log: null
+Log: Here
+Log: And There
+Log: good_guy
+Log: c:/dev/xkp/xss/tests/../idioms/ui/component.xss
+Log: null
+Log: Here
+Log: And There
+Log: bullet
+Log: c:/dev/xkp/xss/tests/../idioms/ui/component.xss
+Log: null
+Log: Here
+Log: And There
+Log: floor
 Log: Rendering Sequence Types...
 Log: Rendering UI...
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
 Log: Rendering Sequence...
 Success are greateful
 ===[ enums.project.xml ]================
@@ -453,7 +512,7 @@ btn2.width(100);
 
 	application.reset = function(s) 
 	{
-		this.target_set(s);
+		application.target_set(s);
 btn1.text("...");
 btn2.text("...");
 	};
@@ -644,7 +703,7 @@ btn2.width(100);
 
 	application.reset = function(s) 
 	{
-		this.target_set(s);
+		application.target_set(s);
 btn1.text("...");
 btn2.text("...");
 	};
@@ -812,8 +871,6 @@ ERROR: Project:  json1.project.xml
 
 Log: Rendering Sequence Types...
 Log: Rendering Sequence...
-Log: Object with id: target
-Log: 1
 Success are greateful
 ===[ ms2.project.xml ]================
 
@@ -825,6 +882,9 @@ Success are greateful
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
+Log: null
+Log: Here
+Log: And There
 Success are greateful
 ===[ ms4.project.xml ]================
 
@@ -832,6 +892,9 @@ Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering Sequence Types...
 Log: Rendering UI...
+Log: null
+Log: Here
+Log: And There
 Log: Rendering Sequence...
 Success are greateful
 ===[ ms5.project.xml ]================
@@ -840,17 +903,64 @@ Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering Sequence Types...
 Log: Rendering UI...
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
 Log: Rendering Sequence...
 Success are greateful
 ===[ ms6.project.xml ]================
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
-Log: anim1
-Log: btn1
-Log: btn2
+Log: c:/dev/xkp/xss/tests/../idioms/ui/component.xss
+Log: null
+Log: Here
+Log: And There
+Log: this
+Log: Here
+Log: And There
+Log: this
+Log: Here
+Log: And There
+Log: ms6
 Log: Rendering Sequence Types...
 Log: Rendering UI...
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
 Log: Rendering Sequence...
 Success are greateful
 ===[ query_properties.project.xml ]================
@@ -881,30 +991,197 @@ Success are greateful
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
 Success are greateful
 ===[ ui_audio_1.project.xml ]================
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
 Success are greateful
 ===[ ui_class_test.project.xml ]================
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
+Log: c:/dev/xkp/xss/tests/../idioms/ui/component.xss
+Log: null
+Log: Here
+Log: And There
+Log: my_image
 Log: Rendering UI...
+Log: null
+Log: Here
+Log: And There
+Success are greateful
+===[ ui_cliparea.project.xml ]================
+
+Log: Rendering Resources...
+Log: Rendering UI Types...
+Log: Rendering UI...
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
 Success are greateful
 ===[ ui_demo.project.xml ]================
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Success are greateful
+===[ ui_drag.project.xml ]================
+
+Log: Rendering Resources...
+Log: Rendering UI Types...
+Log: Rendering UI...
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Success are greateful
+===[ ui_figures.project.xml ]================
+
+Log: Rendering Resources...
+Log: Rendering UI Types...
+Log: Rendering UI...
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
+Log: null
+Log: Here
+Log: And There
 Success are greateful
 ===[ ui_selfdrawn.project.xml ]================
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
+Log: null
+Log: Here
+Log: And There
 Success are greateful
 ===[ ui_video.project.xml ]================
 

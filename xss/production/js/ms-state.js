@@ -17,7 +17,7 @@ ms.state.Manager = Class.create(
 
 		this.sequences.push(sequence);
 	},
-	
+
 	remove: function(sequence)
 	{
 		for(var i = 0; i < this.sequences.length; i++)
@@ -29,7 +29,7 @@ ms.state.Manager = Class.create(
 			}
 		}	
 	},
-	
+
 	update: function(t, last)
 	{
 		for(var i = 0; i < this.sequences.length; i++)
@@ -590,7 +590,7 @@ ms.state.Sequence = Class.create(
     {
 		if (this.running)
 			return;
-		
+
 		if (!this.parent) //top level
 			this.manager.add(this);
 
@@ -694,7 +694,7 @@ ms.state.Sequence = Class.create(
 
 		return channel.value(time);
 	},
-	
+
 	get_handler: function(owner, channel, time)
 	{
 		time = time || 0;
@@ -702,23 +702,23 @@ ms.state.Sequence = Class.create(
 		var channel_unit = this.get_channel(owner, channel, true);
 		if (!channel_unit)
 			 return null;
-		
+
 		var state = channel_unit.get_state(time);
 		if (!state)
 			 return null;
 
 		return state.handler;
 	},
-	
+
 	get_handlers: function(owner, channel, start, end)
 	{
 		var channel_unit = this.get_channel(owner, channel, true);
 		if (!channel_unit)
 			 return [];
-		
+
 		var states = channel_unit.get_states(start, end);
 		var result = [];
-		
+
 		for(var i = 0; i < states.length; i++)
 		{
 			result.push(states[i].handler);
@@ -883,7 +883,7 @@ ms.state.Interpolator = Class.create(ms.state.Handler,
     {
         return this.channel;
     },
-	
+
     split: function(start, end)	
     {
         alert("TO IMPLEMENT: splitting iterpolators")
@@ -893,7 +893,7 @@ ms.state.Interpolator = Class.create(ms.state.Handler,
     {   
         throw("TO IMPLEMENT: mixing iterpolators")
     },
-	
+
 	update: function(t)				
     {
         if (!this.keys || this.keys.length < 2)
@@ -932,7 +932,7 @@ ms.state.Caller = Class.create(ms.state.Handler,
     {
         return null;
     },
-	
+
     split: function(start, end)	
     {
         throw("Invalid state, there is no reason to split a caller")
@@ -942,7 +942,7 @@ ms.state.Caller = Class.create(ms.state.Handler,
     {   
         throw("Invalid state, there is no reason to mix a caller")
     },
-	
+
 	update: function(t)				
     {
         this.fn();
@@ -962,7 +962,7 @@ ms.state.Every = Class.create(ms.state.Handler,
     {
         return null;
     },
-	
+
 	update: function(t, pt)				
     {
         this.wait -= (t - pt);
