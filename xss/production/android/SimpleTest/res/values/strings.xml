@@ -2,7 +2,10 @@
 <resources>
     <string name="app_name">Simple Sample Android Application</string>
 					<string name="res0">Enter forename: </string>
-					<string name="res1">Enter surname: </string>
-					<string name="res2">Resolve Full Name</string>
-					<string name="res3">Your full name is </string>
+					<string name="res1">Your first name</string>
+					<string name="res2">Enter surname: </string>
+					<string name="res3">Your last name</string>
+					<string name="res4">Resolve Full Name</string>
+					<string name="res5">Your full name is </string>
+					<string name="res6">Container</string>
 				</resources>

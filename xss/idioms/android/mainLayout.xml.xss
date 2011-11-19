@@ -1,11 +1,11 @@
 <xss:parameter id="appName"/>
 <?xml version="1.0" encoding="utf-8"?>
 <com.xkp.android.<xss:e value="appName"/>.XKPLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android" 
-    xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.<xss:e value="appName"/>" 
-    android:id="@+id/mainLayoutApplication" 
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android" 
+	xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.<xss:e value="appName"/>" 
+	android:id="@+id/mainLayoutApplication" 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
 	xkp:placement="client"
 	
 <xss:class>
@@ -30,7 +30,7 @@
 		{
 			out(indent = ind)
 			{
-                <<xss:e value="strViewName"/><xss:e value="view.name"/> android:id="@+id/<xss:e value="view.output_id"/>"
+				<<xss:e value="strViewName"/><xss:e value="view.name"/> android:id="@+id/<xss:e value="view.output_id"/>"
 			}
 		}
 		
@@ -38,7 +38,7 @@
 		
 		out(indent = ind + 1)
 		{
-            >
+			>
 		}
 		
 		// generate all children recursively
@@ -56,8 +56,8 @@
 					//TODO: each child of replicator is assumed as template
 					//      these are outputs to xml layout file separated.
 					//      how make this?
-					for(var ch in view.children)
-						generate_view(ch, view, ind + 2);
+					for(var ch1 in view.children)
+						generate_view(ch1, view, ind + 2);
 						
 					//TODO: the name of output file is a id of component
 					//TODO: the structure of this new xml layout file is:
@@ -67,6 +67,41 @@
 					//	xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.switcher">
 					//  <!-- inside the view childs -->
 					//</merge>
+					
+					problematicView = true;
+				}
+				else
+				if(view.type.id == "tabcontrol")
+				{
+					out(indent = ind + 1)
+					{
+						<LinearLayout
+							android:orientation="vertical"
+							android:layout_width="fill_parent"
+							android:layout_height="fill_parent"
+							android:padding="5dp"
+							>
+							<TabWidget
+								android:id="@android:id/tabs"
+								android:layout_width="fill_parent"
+								android:layout_height="wrap_content" 
+								>
+							</TabWidget>
+							<FrameLayout
+								android:id="@android:id/tabcontent"
+								android:layout_width="fill_parent"
+								android:layout_height="fill_parent"
+								>
+					}
+					
+					for(var ch2 in view.children)
+						generate_view(ch2, view, ind + 4);
+					
+					out(indent = ind + 1)
+					{
+							</FrameLayout>
+						</LinearLayout>
+					}
 					
 					problematicView = true;
 				}
@@ -83,7 +118,7 @@
 		{
 			out(indent = ind)
 			{
-                </<xss:e value="strViewName"/>>
+				</<xss:e value="strViewName"/>>
 			}
 		}
 	}
@@ -134,6 +169,32 @@
 				assignValue = "@+id/" + prop.value;
 			}
 			else
+			if(prop.res_type == "drawable")
+			{
+				//TIP: stupid stripped string... live is hard :(
+				string project_path = compiler.project_path() + "/";
+				string output_path = appName + "/res/drawable/";
+				
+				string simg = prop.value;
+				int sz = String.size(simg);
+				
+				int pos = String.find_last(simg, "/");
+				int rpos = pos + 1;
+				int npos = sz - pos - 1;
+				string fn_img = String.substr(simg, rpos, npos);
+				
+				string srcf = project_path + prop.value;
+				string dstf = output_path + fn_img;
+				
+				//coping resource
+				compiler.log("Copying resource file " + srcf);
+				compiler.copy_file(src = srcf, dst = dstf);
+				
+				sz = String.size(fn_img);
+				pos = String.find_last(fn_img, ".");
+				assignValue = "@drawable/" + String.substr(fn_img, 0, pos);
+			}
+			else
 			if(prop.type.is_array)
 			{
 				render_array(prop.value);
@@ -157,9 +218,18 @@
 				}
 			}
 			
+			string ns = prop.ns;
+			if(ns != "")
+			{
+				//ERROR: if i do this:
+				//		ns += ":";
+				//		the colon is pushed before 'ns' string
+				ns = ns + ":";
+			}
+			
 			out(indent = ind)
 			{
-                <xss:e value="prop.ns"/>:<xss:e value="prop.output_id"/>="<xss:e value="assignValue"/>"
+				<xss:e value="ns"/><xss:e value="prop.output_id"/>="<xss:e value="assignValue"/>"
 			}
 		}
 	}

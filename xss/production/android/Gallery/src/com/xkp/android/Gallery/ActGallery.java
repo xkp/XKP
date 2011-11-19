@@ -5,16 +5,20 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 						import android.widget.Gallery;
+						import android.view.View.OnClickListener;
+						import android.view.View.OnLongClickListener;
 						import android.view.MotionEvent;
 						import android.view.View.OnTouchListener;
+						import android.view.View.OnKeyListener;
+						import android.view.View.OnFocusChangeListener;
 						import android.view.ViewGroup;
 						import android.widget.ImageView;
 						import android.widget.BaseAdapter;
 						import android.content.Context;
 public class ActGallery 
-                extends Activity
+				extends Activity
 {
-                private Gallery gallery;
+				private Gallery gallery;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -24,9 +28,9 @@ public class ActGallery
         bindViews();
     }
     private void bindViews() {
-                gallery = (Gallery) findViewById(R.id.gallery);
+				gallery = (Gallery) findViewById(R.id.gallery);
 					gallery.setAdapter(new ImageAdapter(this));
-				    }
+					}
 	public class ImageAdapter extends BaseAdapter {
 		private static final int ITEM_WIDTH = 236;
 		private static final int ITEM_HEIGHT = 188;

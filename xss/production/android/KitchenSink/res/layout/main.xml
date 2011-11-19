@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.xkp.android.KitchenSink.XKPLayout 
+	xmlns:android="http://schemas.android.com/apk/res/android" 
+	xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.KitchenSink" 
+	android:id="@+id/mainLayoutApplication" 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	xkp:placement="client"
+			>
+				<TabHost android:id="@+id/kitchen"
+				xkp:placement="client"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+						<LinearLayout
+							android:orientation="vertical"
+							android:layout_width="fill_parent"
+							android:layout_height="fill_parent"
+							android:padding="5dp"
+							>
+							<TabWidget
+								android:id="@android:id/tabs"
+								android:layout_width="fill_parent"
+								android:layout_height="wrap_content" 
+								>
+							</TabWidget>
+							<FrameLayout
+								android:id="@android:id/tabcontent"
+								android:layout_width="fill_parent"
+								android:layout_height="fill_parent"
+								>
+				<com.xkp.android.KitchenSink.XKPLayout android:id="@+id/__div1"
+				android:padding="5dp"
+				xkp:placement="client"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				<Button android:id="@+id/btn1"
+				xkp:layout_x="0dp"
+				xkp:layout_y="0dp"
+				android:text="@string/res0"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</Button>
+				<ToggleButton android:id="@+id/toggle1"
+				xkp:layout_x="130dp"
+				xkp:layout_y="0dp"
+				android:textOn="@string/res1"
+				android:textOff="@string/res2"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</ToggleButton>
+				<ImageButton android:id="@+id/imgbtn1"
+				xkp:layout_x="240dp"
+				xkp:layout_y="0dp"
+				android:src="@drawable/dialog"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</ImageButton>
+				<TextView android:id="@+id/lbl1"
+				xkp:layout_x="0dp"
+				xkp:layout_y="56dp"
+				android:text="@string/res3"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</TextView>
+				<EditText android:id="@+id/edit1"
+				xkp:layout_x="115dp"
+				xkp:layout_y="50dp"
+				android:layout_width="180dp"
+				android:hint="@string/res4"
+				android:layout_height="wrap_content"
+			>
+				</EditText>
+				<CheckBox android:id="@+id/chkb1"
+				xkp:layout_x="0dp"
+				xkp:layout_y="100dp"
+				android:text="@string/res5"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</CheckBox>
+				</com.xkp.android.KitchenSink.XKPLayout>
+				<ScrollView android:id="@+id/__scroller1"
+				android:padding="5dp"
+				xkp:placement="client"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				<RadioGroup android:id="@+id/rdgTab3"
+				android:orientation="vertical"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				<RadioButton android:id="@+id/radio1"
+				android:text="@string/res6"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</RadioButton>
+				<RadioButton android:id="@+id/radio2"
+				android:text="@string/res7"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</RadioButton>
+				<RadioButton android:id="@+id/radio3"
+				android:text="@string/res8"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</RadioButton>
+				<RadioButton android:id="@+id/radio4"
+				android:text="@string/res9"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</RadioButton>
+				<RadioButton android:id="@+id/radio5"
+				android:text="@string/res10"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</RadioButton>
+				<RadioButton android:id="@+id/radio6"
+				android:text="@string/res11"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</RadioButton>
+				<RadioButton android:id="@+id/radio7"
+				android:text="@string/res12"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</RadioButton>
+				<RadioButton android:id="@+id/radio8"
+				android:text="@string/res13"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</RadioButton>
+				<RadioButton android:id="@+id/radio9"
+				android:text="@string/res14"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</RadioButton>
+				</RadioGroup>
+				</ScrollView>
+				<ScrollView android:id="@+id/__scroller2"
+				android:padding="5dp"
+				xkp:placement="client"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				<ImageView android:id="@+id/img1"
+				android:src="@drawable/emulator"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</ImageView>
+				</ScrollView>
+				<com.xkp.android.KitchenSink.XKPLayout android:id="@+id/__div2"
+				android:padding="5dp"
+				xkp:placement="client"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				<ProgressBar android:id="@+id/prgbar1"
+				xkp:layout_x="0dp"
+				xkp:layout_y="0dp"
+				style="?android:attr/progressBarStyleSmall"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</ProgressBar>
+				<ProgressBar android:id="@+id/prgbar2"
+				xkp:layout_x="70dp"
+				xkp:layout_y="0dp"
+				style="?android:attr/progressBarStyle"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</ProgressBar>
+				<ProgressBar android:id="@+id/prgbar3"
+				xkp:layout_x="180dp"
+				xkp:layout_y="0dp"
+				style="?android:attr/progressBarStyleLarge"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</ProgressBar>
+				<ProgressBar android:id="@+id/prgbar4"
+				xkp:layout_x="0dp"
+				xkp:layout_y="100dp"
+				android:layout_width="200dp"
+				android:max="100"
+				android:progress="60"
+				android:secondaryProgress="30"
+				style="?android:attr/progressBarStyleHorizontal"
+				android:layout_height="wrap_content"
+			>
+				</ProgressBar>
+				<SeekBar android:id="@+id/seekb1"
+				xkp:layout_x="0dp"
+				xkp:layout_y="150dp"
+				android:layout_width="200dp"
+				android:max="200"
+				android:progress="60"
+				android:secondaryProgress="30"
+				style="?android:attr/progressBarStyleHorizontal"
+				android:layout_height="wrap_content"
+			>
+				</SeekBar>
+				</com.xkp.android.KitchenSink.XKPLayout>
+							</FrameLayout>
+						</LinearLayout>
+				</TabHost>
+			</com.xkp.android.KitchenSink.XKPLayout>

@@ -17,6 +17,7 @@ namespace xkp
   class xss_module;
   class xss_compiler;
   class xss_string;
+  class xss_math;
 
   //interfaces
   struct IXSSRenderer;
@@ -26,6 +27,7 @@ namespace xkp
   typedef reference<xss_module>               XSSModule;
   typedef reference<xss_compiler>             XSSCompiler;
   typedef reference<xss_string>               XSSString;
+  typedef reference<xss_math>                 XSSMath;
   typedef reference<IXSSRenderer>             XSSRenderer;
 
   //interfaces
@@ -222,9 +224,17 @@ namespace xkp
       public:
         int  size(const str& s);
         int  find(const str& s, const str& subs, int pos = 0);
+        int  find_last(const str& s, const str& subs);
         bool empty(const str& s);
         str  erase(const str& s, int pos = 0, int npos = 0);
         str  substr(const str& s, int pos = 0, int npos = 0);
+    };
+
+  class xss_math
+    {
+      public:
+        double max(double v1, double v2);
+        double min(double v1, double v2);
     };
 
 //glue
@@ -281,17 +291,28 @@ struct xss_string_schema : object_schema<xss_string>
   {
     virtual void declare()
       {
-        method_<int,  1>("size",    &xss_string::size);
-        method_<int,  3>("find",    &xss_string::find);
-        method_<bool, 1>("empty",   &xss_string::empty);
-        method_<str,  3>("erase",   &xss_string::erase);
-        method_<str,  3>("substr",  &xss_string::substr);
+        method_<int,  1>("size",      &xss_string::size);
+        method_<int,  3>("find",      &xss_string::find);
+        method_<int,  2>("find_last", &xss_string::find_last);
+        method_<bool, 1>("empty",     &xss_string::empty);
+        method_<str,  3>("erase",     &xss_string::erase);
+        method_<str,  3>("substr",    &xss_string::substr);
+      }
+  };
+
+struct xss_math_schema : object_schema<xss_math>
+  {
+    virtual void declare()
+      {
+        method_<double, 2>("max", &xss_math::max);
+        method_<double, 2>("min", &xss_math::min);
       }
   };
 
   register_complete_type(xss_compiler,  xss_compiler_schema);
   register_complete_type(xss_module,    xss_module_schema);
   register_complete_type(xss_string,    xss_string_schema);
+  register_complete_type(xss_math,      xss_math_schema);
 }
 
 

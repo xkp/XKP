@@ -1,4 +1,4 @@
-package com.xkp.android.SimpleTest;
+package com.xkp.android.KitchenSink;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Rect;

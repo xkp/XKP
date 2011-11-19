@@ -13,10 +13,10 @@ import android.view.View;
 						import android.view.View.OnKeyListener;
 						import android.view.View.OnFocusChangeListener;
 public class ActTouchMe 
-                extends Activity
+				extends Activity
 							implements OnTouchListener
 {
-                private Button btnTouchme;
+				private Button btnTouchme;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -26,9 +26,9 @@ public class ActTouchMe
         bindViews();
     }
     private void bindViews() {
-                btnTouchme = (Button) findViewById(R.id.btnTouchme);
-                    btnTouchme.setOnTouchListener(this);
-				    }
+				btnTouchme = (Button) findViewById(R.id.btnTouchme);
+					btnTouchme.setOnTouchListener(this);
+					}
 						@Override
 						public boolean onTouch(View v, MotionEvent ev) {
 							switch (v.getId()) {
