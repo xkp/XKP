@@ -3,7 +3,7 @@
 	<types>
 	
 		<!-- ENUM declarations -->
-		<enum id="EVisibility" output_id="int" default_value="EVisibility.true">
+		<enum id="EVisibility" output_id="int">
 			<property id="true" type="EVisibility" output_id="VISIBLE" output_xml="visible">
 				<get text="View.VISIBLE" global="true"/>
 			</property>
@@ -17,7 +17,7 @@
 			</property>
 		</enum>
 		
-		<enum id="EGravity" output_id="Gravity" default_value="EGravity.center">
+		<enum id="EGravity" output_id="Gravity">
 			<property id="top" type="EGravity" output_id="TOP" output_xml="top">
 				<get text="Gravity.TOP" global="true"/>
 			</property>
@@ -67,7 +67,17 @@
 			</property>
 		</enum>
 		
-		<enum id="EActionMotionEvent" output_id="int" default_value="-1">
+		<enum id="EOrientation" output_id="int" default="EOrientation.vertical">
+			<property id="vertical" type="EOrientation" output_id="VERTICAL" output_xml="vertical">
+				<get text="LinearLayout.VERTICAL" global="true"/>
+			</property>
+			
+			<property id="horizontal" type="EOrientation" output_id="HORIZONTAL" output_xml="horizontal">
+				<get text="LinearLayout.HORIZONTAL" global="true"/>
+			</property>
+		</enum>
+		
+		<enum id="EActionMotionEvent" output_id="int">
 			<property id="up" type="EActionMotionEvent" output_id="ACTION_UP" output_xml="up">
 				<get text="MotionEvent.ACTION_UP" global="true"/>
 			</property>
@@ -86,7 +96,7 @@
 			<!-- continue -->
 		</enum>
 		
-		<enum id="EActionDragEvent" output_id="int" default_value="-1">
+		<enum id="EActionDragEvent" output_id="int">
 			<property id="started" type="EActionDragEvent" output_id="ACTION_DRAG_STARTED" output_xml="started">
 				<get text="DragEvent.ACTION_DRAG_STARTED" global="true"/>
 			</property>
@@ -112,7 +122,7 @@
 			</property>
 		</enum>
 		
-		<enum id="EDirection" output_id="int" default_value="-1">
+		<enum id="EDirection" output_id="int">
 			<property id="up" type="EDirection" output_id="FOCUS_UP">
 				<get text="View.FOCUS_UP" global="true"/>
 			</property>
@@ -130,7 +140,7 @@
 			</property>
 		</enum>
 		
-		<enum id="EScaleType" output_id="int" default_value="-1">
+		<enum id="EScaleType" output_id="int">
 			<property id="matrix" type="EScaleType" output_id="ScaleType.MATRIX" output_xml="matrix">
 				<get text="ScaleType.MATRIX" global="true"/>
 			</property>
@@ -164,10 +174,14 @@
 			</property>
 		</enum>
 		
-		<enum id="EProgressStyle">
+		<enum id="EProgressStyle" output_id="int" default_value="EProgressStyle.horizontal">
+			<property id="small" type="EProgressStyle" output_xml="?android:attr/progressBarStyleSmall"/>
+			<property id="normal" type="EProgressStyle" output_xml="?android:attr/progressBarStyle"/>
+			<property id="large" type="EProgressStyle" output_xml="?android:attr/progressBarStyleLarge"/>
+			<property id="horizontal" type="EProgressStyle" output_xml="?android:attr/progressBarStyleHorizontal"/>
 		</enum>
 		
-		<enum id="EPlacement" output_id="int" default_value="EPlacement.none">
+		<enum id="EPlacement" output_id="int">
 			<property id="none" type="EPlacement" output_id="PL_NONE" output_xml="none">
 				<get text="XKPLayout.PL_NONE" global="true"/>
 			</property>
@@ -297,6 +311,7 @@
 		</class>
 		
 		<class id="Math" no_layout="true" static="true">
+			<method id="min" type="float"/>
 			<method id="max" type="float"/>
 			<method id="abs" type="float"/>
 			<method id="atan2" type="double"/>
@@ -400,6 +415,30 @@
 				<set text="setFocusable({value})"/>
 			</property>
 			
+			<property id="padding" type="int" ns="android" res_type="dimension">
+				<set text="setPadding({value}, {value}, {value}, {value})"/>
+			</property>
+			
+			<property id="paddingLeft" type="int" ns="android">
+				<get text="getPaddingLeft()"/>
+				<set text="setPadding({value}, getPaddingTop(), getPaddingRight(), getPaddingBottom())"/>
+			</property>
+			
+			<property id="paddingTop" type="int" ns="android">
+				<get text="getPaddingTop()"/>
+				<set text="setPadding(getPaddingLeft(), {value}, getPaddingRight(), getPaddingBottom())"/>
+			</property>
+			
+			<property id="paddingRight" type="int" ns="android">
+				<get text="getPaddingRight()"/>
+				<set text="setPadding(getPaddingLeft(), getPaddingTop(), {value}, getPaddingBottom())"/>
+			</property>
+			
+			<property id="paddingBottom" type="int" ns="android">
+				<get text="getPaddingBottom()"/>
+				<set text="setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), {value})"/>
+			</property>
+			
 			<!--
 			<property id="layout_margin" ns="android" type="int"/>
 			<property id="layout_weight" ns="android" type="float"/>
@@ -452,7 +491,7 @@
 				<set text="setCursorVisible({value})"/>
 			</property>
 			
-			<property id="hint" type="string" ns="android" res_type="str_refence">
+			<property id="hint" type="string" ns="android" res_type="str_reference">
 				<get text="getHint()"/>
 				<set text="setHint({value})"/>
 			</property>
@@ -559,7 +598,7 @@
 			<import id="IChangeListener"/>
 		</class>
 		
-		<class id="editbox" super="IWidget" output_id="EditText">
+		<class id="editbox" super="ITextView" output_id="EditText">
 			<array id="imports">
 				<object import="android.widget.EditText"/>
 			</array>
@@ -616,12 +655,12 @@
 				<object import="android.widget.ToggleButton"/>
 			</array>
 			
-			<property id="textoff" type="string" output_id="textOff" ns="android">
+			<property id="text_off" type="string" output_id="textOff" ns="android" res_type="str_reference">
 				<get text="getTextOff().toString()"/>
 				<set text="setTextOff({value})"/>
 			</property>
 			
-			<property id="texton" type="string" output_id="textOn" ns="android">
+			<property id="text_on" type="string" output_id="textOn" ns="android" res_type="str_reference">
 				<get text="getTextOn().toString()"/>
 				<set text="setTextOn({value})"/>
 			</property>
@@ -638,6 +677,12 @@
 				<object import="android.widget.RadioGroup"/>
 				<object import="android.widget.RadioGroup.OnCheckedChangeListener"/>
 			</array>
+			
+			<!-- i added this property cuz RadioGroup inherits from LinearLayout -->
+			<property id="orientation" type="EOrientation" ns="android">
+				<get text="getOrientation()"/>
+				<set text="setOrientation({value})"/>
+			</property>
 			
 			<method id="add_cmp" output_id="addView"/>
 			<!--<array id="args">
@@ -672,14 +717,12 @@
 				<set text="setProgress({value})"/>
 			</property>
 			
-			<property id="secondaryProgress" type="int" ns="android">
+			<property id="secondary_progress" type="int" output_id="secondaryProgress" ns="android">
 				<get text="getSecundaryProgress()"/>
 				<set text="setSecundaryProgress({value})"/>
 			</property>
 			
-			<property id="style" type="EProgressStyle" no_layout="true">
-				<get text="getStyle()"/>
-				<set text="setStyle({value})"/>
+			<property id="style" type="EProgressStyle" ns="">
 			</property>
 			
 			<method id="inc_1" output_id="incrementProgressBy"/>
@@ -759,13 +802,28 @@
 			<method id="max_scroll_amount" type="int" output_id="getMaxScrollAmount"/>
 		</class>
 		
-		<class id="tabhost" super="IWidget" output_id="TabHost">
+		<class id="tabcontrol" super="IWidget" output_id="TabHost">
 			<array id="imports">
+				<object import="android.view.ViewGroup"/> 						<!-- script in utils need this -->
 				<object import="android.widget.TabHost"/>
 				<object import="android.widget.TabHost.TabSpec"/>
 				<object import="android.widget.TabHost.TabContentFactory"/>
 				<object import="android.widget.TabHost.OnTabChangeListener"/>
 			</array>
+			
+			<property id="tabs" type="array" no_layout="true">
+				<set text="util.setupTabHost(R.id.{path}, {value})" global="true"/>
+			</property>
+			
+			<property id="current_by_id" type="int" no_layout="true">
+				<get text="getCurrentTab()"/>
+				<set text="setCurrentTab({value})"/>
+			</property>
+			
+			<property id="current_by_tag" type="string" no_layout="true">
+				<get text="getCurrentTabTag()"/>
+				<set text="setCurrentTabByTag({value})"/>
+			</property>
 			
 			<method id="add_tab" output_id="addTab"/>
 			<!--<array id="args">
@@ -773,24 +831,16 @@
 				</array>
 			</method>-->
 			<method id="clear" output_id="clearAllTabs"/>
-			
-			<property id="current_byid" type="int" no_layout="true">
-				<get text="getCurrentTab()"/>
-				<set text="setCurrentTab({value})"/>
-			</property>
-			
-			<property id="current_bytag" type="string" no_layout="true">
-				<get text="getCurrentTabTag()"/>
-				<set text="setCurrentTabByTag({value})"/>
-			</property>
-			
-			<method id="currenttab" type="IWidget" output_id="getCurrentTabView"/>
+			<method id="current_tab" type="IWidget" output_id="getCurrentTabView"/>
 			<method id="newtab" type="" output_id="newTabSpec"/>
 			<!--<array id="args">
 					<object param_type="string" param_name="tag"/>
 				</array>
 			</method>-->
-			<method id="setup"/>
+			
+			<!-- TODO: do array this objects -->
+			<object id="utils" file_name="setupTabHost.util.xss"/>
+			<object id="inits" file_name="TabHost.init.xss"/>
 			
 			<event id="changed" output_id="onTabChanged" interface="TabHost.OnTabChangeListener" def_args="String tabid" set_handle="setOnTabChangedListener" set_param_hnd="this"/>
 		</class>
@@ -820,10 +870,22 @@
 				<object import="android.widget.ListView"/>
 			</array>
 			
-			<property id="items" type="array" no_layout="true" res_type="array_objs">
+			<property id="items" type="array" output_id="entries" res_type="array_objs">
 				<get text="getItems()"/>
 				<set text="setItems({value})"/>
 			</property>
+			
+			<property id="dividerHeight" type="int" ns="android">
+				<get text="getDividerHeight()"/>
+				<set text="setDividerHeight({value})"/>
+			</property>
+			
+			<method id="max_scroll_amount" type="int" output_id="getMaxScrollAmount"/>
+			<method id="set_selection" output_id="setSelection"/>
+			<!--<array id="args">
+					<object param_type="int" param_name="position"/>
+				</array>
+			</method>-->
 		</class>
 		
 		<class id="imagegallery" super="IWidget" output_id="Gallery">

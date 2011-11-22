@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kitchen Sink</string>
+					<string name="res0">Standard button</string>
+					<string name="res1">=Activado=</string>
+					<string name="res2">=Desactivado=</string>
+					<string name="res3">Simple Labeled</string>
+					<string name="res4">Empty EditText!</string>
+					<string name="res5">Checking all boxes</string>
+					<string name="res6">First radiobutton inside radiogroup</string>
+					<string name="res7">Second radiobutton inside radiogroup</string>
+					<string name="res8">Third radiobutton inside radiogroup</string>
+					<string name="res9">Fourth radiobutton inside radiogroup</string>
+					<string name="res10">Fifth radiobutton inside radiogroup</string>
+					<string name="res11">Sixth radiobutton inside radiogroup</string>
+					<string name="res12">Seventh radiobutton inside radiogroup</string>
+					<string name="res13">Eighth radiobutton inside radiogroup</string>
+					<string name="res14">Ninth radiobutton inside radiogroup</string>
+				</resources>

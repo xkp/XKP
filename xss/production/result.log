@@ -858,7 +858,7 @@ Success are greateful
 Log: Rendering Sequence Types...
 Log: Rendering Sequence...
 Log: Oh noes... a PROPERTY
-Error at: c:/dev/xkp/xss/tests/../idioms/java-seq/sequence.xss
+Error at: d:/xkp/xss/tests/../idioms/java-seq/sequence.xss
 Error [idiom] Sequences expect a property to modify
 expression = app.target
 ERROR: Project:  jseq1.project.xml
@@ -1193,9 +1193,9 @@ Log: Rendering Sequence...
 Success are greateful
 ===[ wax1.project.xml ]================
 
-Error at: c:/dev/xkp/xss/tests/../idioms/wax/wax.xml
+Error at: d:/xkp/xss/tests/../idioms/wax/wax.xml
 Error [404] File not found
-file = c:/dev/xkp/xss/tests/../idioms/wax/wax.xml
+file = d:/xkp/xss/tests/../idioms/wax/wax.xml
 ERROR: Project:  wax1.project.xml
 
 ===[ xss1.project.xml ]================
@@ -1333,6 +1333,20 @@ Success are greateful
 String foo = Singleton.get_foo();
 
 	
+Success are greateful
+===[ xss12.project.xml ]================
+
+Log: PRE_PROCESS:  application
+Log: PRE_PROCESS: i1 i_xss12
+
+					private void click() {
+				
+						Display disp;
+Integer w = disp.getWidth();
+Integer h = disp.getHeight();
+					
+					}
+				
 Success are greateful
 ===[ xss2.project.xml ]================
 

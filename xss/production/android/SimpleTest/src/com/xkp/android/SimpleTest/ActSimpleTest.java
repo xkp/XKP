@@ -15,16 +15,16 @@ import android.view.View;
 						import android.widget.EditText;
 						import android.widget.Button;
 public class ActSimpleTest 
-                extends Activity
+				extends Activity
 							implements OnClickListener
 {
-                private TextView lblFirstName;
-                private EditText edtFirstName;
-                private TextView lblLastName;
-                private EditText edtLastName;
-                private Button btnFullName;
-                private TextView lblFullName;
-                private EditText edtContainer;
+				private TextView lblFirstName;
+				private EditText edtFirstName;
+				private TextView lblLastName;
+				private EditText edtLastName;
+				private Button btnFullName;
+				private TextView lblFullName;
+				private EditText edtContainer;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -34,15 +34,15 @@ public class ActSimpleTest
         bindViews();
     }
     private void bindViews() {
-                lblFirstName = (TextView) findViewById(R.id.lblFirstName);
-                edtFirstName = (EditText) findViewById(R.id.edtFirstName);
-                lblLastName = (TextView) findViewById(R.id.lblLastName);
-                edtLastName = (EditText) findViewById(R.id.edtLastName);
-                btnFullName = (Button) findViewById(R.id.btnFullName);
-                    btnFullName.setOnClickListener(this);
-                lblFullName = (TextView) findViewById(R.id.lblFullName);
-                edtContainer = (EditText) findViewById(R.id.edtContainer);
-			    }
+				lblFirstName = (TextView) findViewById(R.id.lblFirstName);
+				edtFirstName = (EditText) findViewById(R.id.edtFirstName);
+				lblLastName = (TextView) findViewById(R.id.lblLastName);
+				edtLastName = (EditText) findViewById(R.id.edtLastName);
+				btnFullName = (Button) findViewById(R.id.btnFullName);
+					btnFullName.setOnClickListener(this);
+				lblFullName = (TextView) findViewById(R.id.lblFullName);
+				edtContainer = (EditText) findViewById(R.id.edtContainer);
+				}
 						@Override
 						public void onClick(View v) {
 							switch (v.getId()) {
@@ -61,6 +61,6 @@ else
 {
 	lblFullName.setText("Your full name is EMPTY!");
 }
-edtContainer.append(lblFullName.getText());
+edtContainer.append(lblFullName.getText() + "\n");
 			}
 }

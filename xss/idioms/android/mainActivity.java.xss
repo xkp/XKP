@@ -11,7 +11,7 @@ import android.view.View;
 <xss:marker id="imports"/>
 
 public class Act<xss:e value="appName"/> 
-                extends Activity
+				extends Activity
 				<xss:marker id="interfaces"/>
 <xss:code>
 
@@ -19,6 +19,8 @@ public class Act<xss:e value="appName"/>
 	array<string> imports    = [];
 	array<string> interfaces = [];
 	array<string> classes	 = [];
+	
+	bool class_utils = false;
 	
 	for(var inst in android.instances)
 	{
@@ -28,7 +30,7 @@ public class Act<xss:e value="appName"/>
 		{
 			out(indent = 1, marker = "declarations")
 			{
-                private <xss:e value="inst.type.output_id"/> <xss:e value="inst.output_id"/>;
+				private <xss:e value="inst.type.output_id"/> <xss:e value="inst.output_id"/>;
 			}
 		}
 		
@@ -88,6 +90,28 @@ public class Act<xss:e value="appName"/>
 					compiler.xss(xss_file, marker = "defined_class", appName, inst);
 				}
 			}
+		}
+		
+		if(inst.utils)
+		{
+			if(!class_utils)
+			{
+				out(indent = 2, marker = "declarations")
+				{
+					XKPUtils util = new XKPUtils();
+				}
+				
+				out(indent = 2, marker = "defined_class_util")
+				{
+					public class XKPUtils <xss:open_brace/>
+				}
+				
+				class_utils = true;
+			}
+			
+			object util = inst.utils;
+			string util_file = "class.xss/" + util.file_name;
+			compiler.xss(util_file, marker = "defined_class_util");
 		}
 	
 		//find necessary events interfaces without duplicates
@@ -178,6 +202,14 @@ public class Act<xss:e value="appName"/>
 			}
 		}
 	}
+	
+	if(class_utils)
+	{
+		out(indent = 2, marker = "defined_class_util")
+		{
+			<xss:close_brace/>
+		}
+	}
 </xss:code>
 
 {
@@ -203,7 +235,7 @@ public class Act<xss:e value="appName"/>
 		{
 			out(indent = 2)
 			{
-                <xss:e value="inst.output_id"/> = (<xss:e value="inst.type.output_id"/>) findViewById(R.id.<xss:e value="inst.id"/>);
+				<xss:e value="inst.output_id"/> = (<xss:e value="inst.type.output_id"/>) findViewById(R.id.<xss:e value="inst.output_id"/>);
 			}
 		}
 		
@@ -217,7 +249,7 @@ public class Act<xss:e value="appName"/>
 				
 				out(indent = 2)
 				{
-                    <xss:e value="inst.output_id"/>.<xss:e value="handler"/>(<xss:e value="e.set_param_hnd"/>);
+					<xss:e value="inst.output_id"/>.<xss:e value="handler"/>(<xss:e value="e.set_param_hnd"/>);
 				}
 			}
 		}
@@ -233,9 +265,16 @@ public class Act<xss:e value="appName"/>
 				}
 			}
 		}
+		
+		if(inst.inits)
+		{
+			object init = inst.inits;
+			string util_file = "class.xss/" + init.file_name;
+			compiler.xss(util_file, it = inst);
+		}
 	}
 </xss:code>
-    }
+	}
 	
 <xss:marker id="events"/>
 <xss:code>
@@ -274,4 +313,5 @@ public class Act<xss:e value="appName"/>
 </xss:code>
 
 <xss:marker id="defined_class"/>
+<xss:marker id="defined_class_util"/>
 }

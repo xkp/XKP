@@ -7,5 +7,5 @@ on btnFullName.click()
 	else
 		lblFullName.caption = "Your full name is EMPTY!";
 	
-	edtContainer.append(lblFullName.caption);
+	edtContainer.append(lblFullName.caption + "\n");
 }

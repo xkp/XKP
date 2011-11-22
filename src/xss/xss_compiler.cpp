@@ -82,6 +82,9 @@ xss_application_renderer::xss_application_renderer(fs::path entry_point, Languag
     XSSString xss_str(new xss_string);
     context_->register_symbol(RESOLVE_NATIVE, "String", xss_str);
 
+    XSSMath xss_mth(new xss_math);
+    context_->register_symbol(RESOLVE_NATIVE, "XSSMath", xss_mth);
+
     //register standard dsls
     context_->register_dsl("out", DslLinker(new out_linker(compiler)));
 
@@ -2216,6 +2219,11 @@ int xss_string::find(const str& s, const str& subs, int pos)
     return s.find(subs, pos);
   }
 
+int xss_string::find_last(const str& s, const str& subs)
+  {
+    return s.find_last_of(subs);
+  }
+
 bool xss_string::empty(const str& s)
   {
     return s.empty();
@@ -2230,4 +2238,15 @@ str xss_string::erase(const str& s, int pos, int npos)
 str xss_string::substr(const str& s, int pos, int npos)
   {
     return s.substr(pos, npos);
+  }
+
+//xss_math
+double xss_math::max(double v1, double v2)
+  {
+    return std::max(v1, v2);
+  }
+
+double xss_math::min(double v1, double v2)
+  {
+    return std::min(v1, v2);
   }
