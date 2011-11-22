@@ -257,6 +257,13 @@ void expression_splitter::exec_operator(operator_type op, int pop_count, int pus
 	{
 		if (op == divider_ && top)
 			{
+        if (op == op_call)
+          {
+            int p_count = result_[positions_.top() - 1];
+            for(int i = 0; i < p_count; i++)
+              positions_.pop();
+          }
+
         assert(positions_.size() == 2);
         positions_.pop();
         int left_pos = positions_.top(); 
@@ -286,7 +293,6 @@ void expression_splitter::exec_operator(operator_type op, int pop_count, int pus
             case op_array:
 				      pop_count += (int)result_.back();
               break;
-            case op_call:
             case op_func_call:
 				      pop_count += (int)result_.back();
               break;
@@ -294,8 +300,16 @@ void expression_splitter::exec_operator(operator_type op, int pop_count, int pus
               pop_count++;
               break;
             case op_dot_call:
-              record = false; //it will be followed by a op_call
-              break;
+              {
+                pop_count = 1;
+                record = false;
+                break;
+              }
+            case op_call:
+              {
+                pop_count += (int)result_.back() + 1; //dot_call
+                break;
+              }
           }
 
         for(int i = 0; i < pop_count; i++)
@@ -391,6 +405,18 @@ bool code::empty()
 variant& code::get_stament(int idx)
   {
     return statements_[idx];
+  }
+
+void code::cut(int idx, code& result)
+  {
+    for(int i = idx; i < statements_.size(); i++)
+      result.add_statement(statements_[i]);
+  }
+
+void code::range(int from, int to, code& result)
+  {
+    for(int i = from; i < to; i++)
+      result.add_statement(statements_[i]);
   }
 
 //xs_container

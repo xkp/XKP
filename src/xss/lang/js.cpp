@@ -44,8 +44,11 @@ str js_code_renderer::render_expression(expression& expr, XSSContext ctx)
 
 str js_code_renderer::render_code(code& cde)
   {
+    XSSContext ctx(new xss_context(ctx_));
+    lang_utils::var_gatherer(cde, ctx);
+
     param_list_decl pld;
-    js_code_renderer inner(cde, pld, ctx_);
+    js_code_renderer inner(cde, pld, ctx);
     str result = inner.render();
     add_line(result);
     return result;

@@ -30,6 +30,8 @@ struct variable_gather : code_visitor
   {
     variable_gather(XSSContext ctx);
 
+    void apply();
+
     //code_visitor
     virtual void variable_(stmt_variable& info);
     virtual void if_(stmt_if& info);

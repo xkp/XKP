@@ -31,6 +31,18 @@ variable_gather::variable_gather(XSSContext ctx):
   {
   }
 
+void variable_gather::apply()
+  {
+    XSSType var_type = ctx_->get_type("var");
+
+    var_list::iterator it = var_vars_.begin();
+    var_list::iterator nd = var_vars_.end();
+    for(; it != nd; it++)
+      {
+        ctx_->register_symbol(RESOLVE_VARIABLE, *it, var_type);
+      }
+  }
+
 void variable_gather::variable_(stmt_variable& info)
   {
     XSSType result = ctx_->get_type(info.type);

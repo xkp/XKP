@@ -6,6 +6,7 @@
 #include "xss/language.h"
 #include "xss/lang/debug.h"
 #include "xss/lang/js.h"
+#include "xss/lang/waxjs.h"
 #include "xss/lang/java.h"
 #include "xss/dsl_out.h"
 
@@ -2064,6 +2065,8 @@ Language xss_compiler::get_language(const str& name)
       return Language(new java_lang());
     else if (name == "debug")
       return Language(new debug_language);
+    else if (name == "waxjs")
+      return Language(new waxjs_lang);
 
     return Language();
   }

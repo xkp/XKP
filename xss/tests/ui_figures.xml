@@ -18,5 +18,4 @@
 	
 	<state_button id="stateBtn" x="270" y="200" rotation="-0.4" width="50" height="50" up="images/smile_grin_48.png" down="images/smile_sad_48.png"/>
 	<label id="lbl3" x="330" y="240" font="Verdana" caption="this smile is a state button, click it"/>
-	
 </application>

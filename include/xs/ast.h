@@ -105,6 +105,8 @@ struct expression_splitter : expression_visitor
         void     visit(code_visitor* visitor);
         bool     empty();
         variant& get_stament(int idx);
+        void     cut(int idx, code& result);
+        void     range(int from, int to, code& result);
       private:
         typedef std::vector<variant> statement_list;
 
