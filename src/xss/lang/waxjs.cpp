@@ -322,7 +322,7 @@ str waxjs_code_renderer::split_if(CodeSplit fork)
 
         if (!stmnt.else_code.empty())
           {
-            result << "else\n{\n";
+            result << "\nelse\n{\n";
 
             result << split_and_render(stmnt.else_code);
         
@@ -372,7 +372,7 @@ str waxjs_code_renderer::split_if(CodeSplit fork)
 
 str waxjs_code_renderer::split_variable(CodeSplit fork)
   {
-    stmt_variable stmnt = fork->target.get_stament(fork->split_idx);
+    stmt_variable stmnt = fork->target.get_stament(fork->split_idx - 1);
     
     code after_var;
     fork->target.cut(fork->split_idx, after_var);
@@ -389,7 +389,7 @@ str waxjs_code_renderer::split_variable(CodeSplit fork)
 
 str waxjs_code_renderer::split_expression(CodeSplit fork)
   {
-    stmt_expression stmnt = fork->target.get_stament(fork->split_idx);
+    stmt_expression stmnt = fork->target.get_stament(fork->split_idx - 1);
 
     operator_type op;
     bool assign = false;
@@ -408,6 +408,8 @@ str waxjs_code_renderer::split_expression(CodeSplit fork)
                 assign = true;
                 break;
               }
+            case op_call:
+              break;
             default:
               assert(false);
           }
@@ -425,11 +427,11 @@ str waxjs_code_renderer::split_expression(CodeSplit fork)
         expression_splitter es(op);
         stmnt.expr.visit(&es);
         result << render_expression(es.left, ctx_) << " " << lang_utils::operator_string(op) << " return_value;";
-        split_and_render(after_expr);
+        result << split_and_render(after_expr);
       }
     else
       {
-        split_and_render(after_expr);
+        result << split_and_render(after_expr);
       }
     
     result << "\n});\n";
@@ -437,7 +439,7 @@ str waxjs_code_renderer::split_expression(CodeSplit fork)
     return result.str();
   }
 
-str waxjs_code_renderer::split_and_render(code& c)
+str waxjs_code_renderer::split_and_render(code& c, std::vector<str>& add)
   {
     wax_splitter splitter(ctx_, c);
     c.visit(&splitter);
@@ -451,7 +453,7 @@ str waxjs_code_renderer::split_and_render(code& c)
 
 str waxjs_code_renderer::split_method(XSSMethod method)
   {
-    return str("Here goes a method");
+    return str("method(function(return_value)");
   }
 
 //method whatever()

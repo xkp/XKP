@@ -20,7 +20,7 @@ method foo()
     }
 
     var x = 10;
-    textwax.bar();
+    testwax.bar();
 
     return x;
 }

@@ -4,16 +4,16 @@ import java.util.Arrays;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-						import android.widget.TextView;
-						import android.text.method.KeyListener;
-						import android.view.View.OnClickListener;
-						import android.view.View.OnLongClickListener;
-						import android.view.MotionEvent;
-						import android.view.View.OnTouchListener;
-						import android.view.View.OnKeyListener;
-						import android.view.View.OnFocusChangeListener;
-						import android.widget.EditText;
-						import android.widget.Button;
+import android.widget.TextView;
+import android.text.method.KeyListener;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.view.MotionEvent;
+import android.view.View.OnTouchListener;
+import android.view.View.OnKeyListener;
+import android.view.View.OnFocusChangeListener;
+import android.widget.EditText;
+import android.widget.Button;
 public class ActSimpleTest 
 				extends Activity
 							implements OnClickListener

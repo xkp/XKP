@@ -133,5 +133,7 @@
     //was
     <instance id="testwax">
         <method id="bar" asynch="true"/>
+        <method id="foo_bar" asynch="true"/>
+        <method id="bar_foo" asynch="true"/>
     </instance>
 </module>

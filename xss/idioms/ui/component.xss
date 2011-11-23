@@ -5,14 +5,12 @@
 <xss:code>
     string cmp_id = cmp.output_id;
     
-	compiler.log(path);
     if (path)
         cmp_id = path + "." + cmp_id;
         
     if (is_class)
         cmp_id = "this";
         
-	compiler.log("Here");
     if (!is_class)
     {
         string parent_id = cmp.parent.output_id;
@@ -125,6 +123,4 @@
             }
         }
     }
-
-	compiler.log("And There");
 </xss:code>

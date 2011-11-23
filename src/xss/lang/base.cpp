@@ -61,7 +61,7 @@ void variable_gather::variable_(stmt_variable& info)
     if (!info.value.empty())
       value = lang_utils::expr_type(info.value, ctx_);
 
-    if (value != result)
+    if (value && value != result)
       {
         if (result->is_variant())
           {

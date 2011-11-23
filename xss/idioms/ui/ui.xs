@@ -32,9 +32,7 @@ on render_types()
     {
         var full_path = compiler.full_path("component.xss");
 		
-        compiler.log(full_path);
         compiler.xss("../common-js/class.xss", ut, renderer = full_path, context = ut);
-        compiler.log(ut.id);
     }
 }
 

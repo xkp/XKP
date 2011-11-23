@@ -48,7 +48,7 @@ struct waxjs_code_renderer : public js_code_renderer
       str split_if(CodeSplit fork);
       str split_variable(CodeSplit fork);
       str split_expression(CodeSplit fork);
-      str split_and_render(code& c);
+      str split_and_render(code& c, std::vector<str>& add);
       str split_method(XSSMethod method);
   };
 
