@@ -10,7 +10,7 @@
         <image src="images/stone-12.jpg"/>
     </resources>
 
-    <spawner id="sp1" x="300" y="100" rotation="3" auto_start="true" frequency="1" creator_class="smiley_ball" velocity="10"/>
+    <spawner id="sp1" x="300" y="100" rotation="171" auto_start="true" frequency="1" creator_class="smiley_ball" velocity="10"/>
 
     <img x="0" y="390" width="600" height="40" src="images/stone-12.jpg">
         <physics body_type="static" shape="rect"/>

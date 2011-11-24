@@ -251,10 +251,10 @@ window.onload = function()
 		    __img3 = new ms.ui.Image( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
                 __img3.rect(0, 350, 10, 40);
-        sp1 = new ms.arcade.Spawner(g_spawner_manager, 300, 100, 3, 1, 10);
+        sp1 = new ms.arcade.Spawner(g_spawner_manager, 300, 100, 1, 10);
                 sp1.x = 300;
                 sp1.y = 100;
-                sp1.rotation = 3;
+                sp1.set_rotation(171);
                 sp1.frequency = 1;
                 sp1.velocity = 10;
         sp1.creator = function()

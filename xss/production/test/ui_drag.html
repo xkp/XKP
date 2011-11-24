@@ -101,11 +101,11 @@ window.onload = function()
                 lbl1.position(250, 90);
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
-                btn1.set_rotation(0.200000003);
+                btn1.set_rotation(10);
 	btn1.click = function()
 	{    
 		lbl1.text("Got " + application.clicks + " smileys");
-btn1.set_rotation(btn1.rotation + 0.200000003);
+btn1.set_rotation(btn1.get_rotation() + 10);
 application.clicks = application.clicks + 1;
 	};
 	btn1.drag = function(x,y)
@@ -116,7 +116,7 @@ btn1.set_y(y - btn1.h / 2);
                 btn1.rect(270, 100, 50, 50);
 		    stateBtn = new ms.ui.StateButton( 
 	    "images/smile_grin_48.png","images/smile_sad_48.png",g_ui_root.manager, g_ui_root);
-                stateBtn.set_rotation(-0.400000006);
+                stateBtn.set_rotation(-45);
                 stateBtn.rect(270, 200, 50, 50);
 		    lbl3 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);

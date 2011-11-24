@@ -8,7 +8,7 @@ class my_image : img
 	{
 		this.x += 5;
 		this.y += 5;
-		this.set_rotation(this.rotation + 0.200000003);
+		this.set_rotation(this.rotation + 10);
 	}
 	
 	on click()

@@ -8,15 +8,15 @@ on mousemove(){
 	mouse_x = ( x / window.innerWidth ) * 2 - 1;
 	mouse_y = - ( y / window.innerHeight ) * 2 + 1;
 	if(is_shift_down){
-		container.rotation.x += 0.02;
-		container.rotation.y += 0.02;
-		container.rotation.z += 0.02;
+		container.rotation.x += 0.5;
+		container.rotation.y += 0.5;
+		container.rotation.z += 0.5;
 	}else if(is_ctrl_down){
 		
 	}else{
-		cylinder_1.rotation.x += 0.02;
-		cylinder_1.rotation.y += 0.02;
-		cylinder_1.rotation.z += 0.02;
+		cylinder_1.rotation.x += 0.5;
+		cylinder_1.rotation.y += 0.5;
+		cylinder_1.rotation.z += 0.5;
 	}
 }
 on keydown(keycode){

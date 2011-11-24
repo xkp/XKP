@@ -7,7 +7,7 @@
         <move_action id="move_around" auto_start="true"/>
         <sequence id="fade_out">
             <at time="0">
-                <animate property="target.alpha" from="1" to="0" in="3"/>
+                <animate property="target.alpha" from="100" to="0" in="3"/>
             </at>
         </sequence>
     </class>

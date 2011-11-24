@@ -59,7 +59,7 @@ ms.arcade.SpawnManager = Class.create(
 
 ms.arcade.Spawner = Class.create(
 {
-	initialize: function(manager, x, y, rotation, frequency, velocity)
+	initialize: function(manager, x, y, frequency, velocity)
 	{
 		this.x          = x;
         this.y          = y;
@@ -69,10 +69,20 @@ ms.arcade.Spawner = Class.create(
         this.waiting    = 0;
         this.frequency  = frequency? frequency : 1.0;
         this.next       = 0;
-        this.rotation   = rotation? rotation : 0;
+        this.rotation   = 0;
         this.velocity   = velocity? velocity : 0;
 	},	
 
+	set_rotation: function(value)
+    {
+        this.rotation = value * Math.PI/180;        
+    },
+	
+	get_rotation: function()
+	{
+		return this.rotation * 180/Math.PI;
+	},
+	
     start: function()
     {
         if (!this.active)
@@ -94,12 +104,12 @@ ms.arcade.Spawner = Class.create(
 
         var x = this.x;
         var y = this.y;
-        var r = this.rotation;
+        var r = this.get_rotation();
         if (this.parent)
         {
             x += this.parent.x;
             y += this.parent.y;
-            r += this.parent.rotation;
+            r += this.parent.get_rotation();
         }
 
         result.position(x, y);

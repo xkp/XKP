@@ -21,6 +21,6 @@ method foo()
 
     var x = 10;
     testwax.bar();
-
+    
     return x;
 }

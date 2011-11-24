@@ -23,7 +23,7 @@
 <script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript">		
 	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-	var renderer = new THREE.WebGLRenderer( { antialias: true } );
+	var renderer = new THREE.WebGLRenderer( { antialias: false } );
 var ui;
 var active_camera;
 var g_elapsed = -1;
@@ -53,32 +53,32 @@ else
 set_active_camera(camera_2);
 }
 }
-	var material_sphere1 = new THREE.MeshLambertMaterial({
-	color:Math.random() * 0xffffff,shading:flat_shading
+var material_sphere1 = new THREE.MeshLambertMaterial({
+color:Math.random() * 0xffffff,shading:flat_shading
 	});
-	var material_sphere2 = new THREE.MeshLambertMaterial({
-	color:Math.random() * 0xffffff,shading:flat_shading
+var material_sphere2 = new THREE.MeshLambertMaterial({
+color:Math.random() * 0xffffff,shading:flat_shading
 	});
-	var material_wireframe = new THREE.MeshLambertMaterial({
-	color:16755400,wireframe:true
+var material_wireframe = new THREE.MeshLambertMaterial({
+color:16755400,wireframe:true
 	});
-	var cylinder_material = new THREE.MeshLambertMaterial({
-	color:Math.random() * 0xffffff,shading:flat_shading
+var cylinder_material = new THREE.MeshLambertMaterial({
+color:Math.random() * 0xffffff,shading:flat_shading
 	});
-	var cylinder1_material = new THREE.MeshLambertMaterial({
-	color:Math.random() * 0xffffff,shading:flat_shading
+var cylinder1_material = new THREE.MeshLambertMaterial({
+color:Math.random() * 0xffffff,shading:flat_shading
 	});
-	var cube_material = new THREE.MeshLambertMaterial({
-	color:Math.random() * 0xffffff,shading:flat_shading
+var cube_material = new THREE.MeshLambertMaterial({
+color:Math.random() * 0xffffff,shading:flat_shading
 	});
-	var cube1_material = new THREE.MeshLambertMaterial({
-	color:Math.random() * 0xffffff,shading:flat_shading
+var cube1_material = new THREE.MeshLambertMaterial({
+color:Math.random() * 0xffffff,shading:flat_shading
 	});
 var scene = 
 new THREE.Scene(
 );
-	var camera_1 = new THREE.QuakeCamera({
-	fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly:true,lookVertical:false
+var camera_1 = new THREE.QuakeCamera({
+fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly:true,lookVertical:false
 	});
                 camera_1.position.x = -250;
                 camera_1.position.y = 25;
@@ -113,8 +113,8 @@ new THREE.Cylinder(
 20,10,10,50);
 	    var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
 	    scene.addObject(cylinder_1);
-                cylinder_1.rotation.x = 10;
-                cylinder_1.rotation.y = 10;
+                rotation_x(cylinder_1.rotation, 212);
+                rotation_y(cylinder_1.rotation, 212);
                 cylinder_1.position.x = 100;
                 cylinder_1.position.y = 30;
                 cylinder_1.position.z = 100;
@@ -123,8 +123,8 @@ new THREE.Cylinder(
 20,10,10,50);
 	    var cylinder_2 = new THREE.Mesh(cylinder_2_cylinder, cylinder1_material);
 	    scene.addObject(cylinder_2);
-                cylinder_2.rotation.x = 10;
-                cylinder_2.rotation.y = 10;
+                rotation_x(cylinder_2.rotation, 212);
+                rotation_y(cylinder_2.rotation, 212);
                 cylinder_2.position.x = -100;
                 cylinder_2.position.y = 30;
                 cylinder_2.position.z = 100;
@@ -136,8 +136,8 @@ new THREE.Cube(
                 cube_1.position.x = -100;
                 cube_1.position.y = 30;
                 cube_1.position.z = -100;
-                cube_1.rotation.x = 10;
-                cube_1.rotation.y = 10;
+                rotation_x(cube_1.rotation, 212);
+                rotation_y(cube_1.rotation, 212);
 	    var cube_2_cube = 
 new THREE.Cube(
 30,30,30);
@@ -146,15 +146,15 @@ new THREE.Cube(
                 cube_2.position.x = 100;
                 cube_2.position.y = 30;
                 cube_2.position.z = -100;
-                cube_2.rotation.x = 10;
-                cube_2.rotation.y = 10;
+                rotation_x(cube_2.rotation, 212);
+                rotation_y(cube_2.rotation, 212);
 	    var plane_1_plane = 
 new THREE.Plane(
 1000,1000,100,100);
 	    var plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    scene.addObject(plane_1);
                 plane_1.position.y = 0.100000001;
-                plane_1.rotation.x = -1.57000005;
+                rotation_x(plane_1.rotation, -90);
                 application.is_ctrl_down = false;
                 application.is_shift_down = false;
 	document.addEventListener( 'keydown', keydown_application, false );

@@ -1,14 +1,8 @@
 <xss:parameter id="obj"/>
 <xss:code>
 
-if(obj.parent.class_name == "composite_material"){
-	out(){
-	<xss:e v = "obj.parent.id"/>.push(new <xss:e v="obj.type.output_id"/>(<xss:open_brace/>
-	}
-}else{
-	out(){
-	var <xss:e v = "obj.id"/> = new <xss:e v="obj.type.output_id"/>(<xss:open_brace/>
-	}
+out(){
+var <xss:e v = "obj.id"/> = new <xss:e v="obj.type.output_id"/>(<xss:open_brace/>
 }
 
 var type = obj.type;
@@ -37,14 +31,13 @@ if (params)
     }
 }
 
-if(obj.parent.class_name == "composite_material"){
-	out(){
-	<xss:close_brace/>));
-	}
-}else{
-	out(){
+out(){
 	<xss:close_brace/>);
 	}
-}
+	
+if(obj.parent.class_name == "composite_material")
+	out(){
+	<xss:e v = "obj.parent.id"/>.push(<xss:e v = "obj.id"/>);
+	}
 
 </xss:code>

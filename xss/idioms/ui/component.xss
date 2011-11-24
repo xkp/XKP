@@ -25,7 +25,7 @@
 		    <xss:e value = "cmp_id"/> = new <xss:e value = "cmp.type.output_id"/>( 
 	    }
 
-        var type = cmp.type;
+	    var type = cmp.type;
         if (type.constructor_params)
         {
             for(int i = 0; i < type.constructor_params.size; i++)
@@ -47,6 +47,7 @@
 		    }
         }
 		
+	    
         out() {<xss:e value = "parent_id"/>.manager, <xss:e value = "parent_id"/>);}
 		if(cmp.type.output_id == "ms.ui.Component" || cmp.type.output_id == "ms.ui.ClipArea"){
 			out() {<xss:e v="cmp.id"/>.mouse_thru = true;}			
@@ -123,4 +124,5 @@
             }
         }
     }
+
 </xss:code>

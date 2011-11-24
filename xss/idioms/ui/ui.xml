@@ -12,7 +12,7 @@
             </property>
 
             <property id="rotation" type="float">
-                <get text="rotation"/>
+                <get text="get_rotation()"/>
                 <set text="set_rotation({value})"/>
             </property>
 
@@ -63,7 +63,7 @@
 			<property id="line_width" type="int" dont_init="true"/>
 		</class>
 		
-		<class id="polygon" super="component" output_id="ms.ui.Path">
+		<class id="polygon" super="component" output_id="ms.ui.Polygon">
 			<constructor_params>
                 <parameter property="fill" runtime="true"/>
 				<parameter property="stroke" runtime="true"/>
@@ -75,20 +75,22 @@
 			<property id="line_width" type="int" dont_init="true"/>
 		</class>
 		
-		<class id="path_point" renderer="path_renderer.xss"/>
+		<class id="polygon_point" renderer="path_renderer.xss"/>
 		
 		<class id="circle" super="component" output_id="ms.ui.Circle">
 			<constructor_params>
                 <parameter property="fill" runtime="true"/>
 				<parameter property="stroke" runtime="true"/>
-				<parameter property="line_width" runtime="true"/>
-				<parameter property="radius" runtime="true"/>
+				<parameter property="line_width" runtime="true"/>									
             </constructor_params>
 
             <property id="fill" type="string" dont_init="true"/>
 			<property id="stroke" type="string" dont_init="true"/>
 			<property id="line_width" type="int" dont_init="true"/>
-			<property id="radius" type="string" dont_init="true"/>
+			<property id="radius" type="int">
+				<get text="getRadius()"/>
+				<set text="setRadius({value})"/>
+			</property>
 		</class>
 		
         <class id="div" super="component" output_id="ms.ui.Component">

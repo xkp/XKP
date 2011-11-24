@@ -40,7 +40,7 @@
 		
 		<plane id="plane_1" width="1000" height="1000" x_segments="100" y_segments="100" material="material_wireframe">
 			<position y="0.1"/>
-			<rotation x="-1.57"/>
+			<rotation x="-90"/>
 		</plane>		
 		
 	</scene>

@@ -5,7 +5,7 @@ on btnNext.click()
     if (main.active < main.count - 1)
         main.active++;
 	btnNext.x ++;
-	btnNext.rotation += 0.2;
+	btnNext.rotation += 10;
 }
 
 on btnPrev.click()
@@ -18,7 +18,7 @@ on btn1.click()
 {
 	
 	lbl1.caption = "Got " + clicks + " smileys";
-	btn1.rotation += 0.2;
+	btn1.rotation += 10;
 	clicks++;
 	
 }

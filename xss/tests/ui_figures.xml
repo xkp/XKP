@@ -5,17 +5,16 @@
     </resources>
 
 	<div id="div1" x="0" y="0" width="400" height="200">
-		<circle id="c1" x="100" y="60" radius="100" afill="cyan" stroke="black" line_width="5"/>
-		<rectangle id="r1" x="200" y="200" width="100" height="150" rotation="-0.2" aalpha="0.6" fill="green"/>
-		<polygon id="p1" fill="pink" stroke="brown" line_width="3" alpha="0.4">
-			<path_point x="270" y="300"/>
-			<path_point x="300" y="250"/>
-			<path_point x="390" y="200"/>
-			<path_point x="350" y="400"/>
-			<path_point x="270" y="300"/>
+		<circle id="c1" x="50" y="50" radius="60" fill="cyan" stroke="black" line_width="3"/>
+		<rectangle id="r1" x="200" y="50" width="60" height="90" rotation="-30" alpha="60" fill="green"/>
+		<polygon id="p1" fill="pink" stroke="brown" line_width="3" alpha="40">
+			<polygon_point id="point1" x="300" y="300"/>
+			<polygon_point id="point2" x="300" y="250"/>
+			<polygon_point id="point3" x="390" y="200"/>
+			<polygon_point id="point4" x="350" y="400"/>			
 		</polygon>
 	</div>
 	
-	<state_button id="stateBtn" x="270" y="200" rotation="-0.4" width="50" height="50" up="images/smile_grin_48.png" down="images/smile_sad_48.png"/>
-	<label id="lbl3" x="330" y="240" font="Verdana" caption="this smile is a state button, click it"/>
+	<button id="btn" x="270" y="200" rotation="45" width="50" height="50" up="images/smile_grin_48.png" down="images/smile_sad_48.png"/>
+		
 </application>

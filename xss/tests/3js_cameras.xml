@@ -37,28 +37,28 @@
 		</sphere>
 		
 		<cylinder id="cylinder_1" segments="20" top_radius="10" bottom_radius="10" height="50" material="cylinder_material">
-			<rotation x="10" y="10"/>
+			<rotation x="212" y="212"/>
 			<position x="100" y="30" z="100"/>
 		</cylinder>	
 		
 		<cylinder id="cylinder_2" segments="20" top_radius="10" bottom_radius="10" height="50" material="cylinder1_material">
-			<rotation x="10" y="10"/>
+			<rotation x="212" y="212"/>
 			<position x="-100" y="30" z="100"/>
 		</cylinder>
 		
 		<cube id="cube_1" width="30" height="30" depth="30" material="cube_material">			
 			<position x="-100" y="30" z="-100"/>
-			<rotation x="10" y="10"/>
+			<rotation x="212" y="212"/>
 		</cube>
 		
 		<cube id="cube_2" width="30" height="30" depth="30" material="cube1_material">			
 			<position x="100" y="30" z="-100"/>
-			<rotation x="10" y="10"/>
+			<rotation x="212" y="212"/>
 		</cube>
 		
 		<plane id="plane_1" width="1000" height="1000" x_segments="100" y_segments="100" material="material_wireframe">
 			<position y="0.1"/>
-			<rotation x="-1.57"/>
+			<rotation x="-90"/>
 		</plane>		
 		
 	</scene>

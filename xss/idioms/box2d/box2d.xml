@@ -8,8 +8,7 @@
             <constructor_params>
                 <parameter constant="g_spawner_manager"/>
                 <parameter property="x" runtime="true"/>
-                <parameter property="y" runtime="true"/>
-                <parameter property="rotation" runtime="true"/>
+                <parameter property="y" runtime="true"/>                
                 <parameter property="frequency" runtime="true"/>
                 <parameter property="velocity" runtime="true"/>
             </constructor_params>
@@ -17,7 +16,10 @@
             <property id="x" type="int"/>
             <property id="y" type="int"/>
             <property id="frequency" type="float"/>
-            <property id="rotation" type="float"/>
+            <property id="rotation" type="float">
+                <get text="get_rotation()"/>
+                <set text="set_rotation({value})"/>
+            </property>
             <property id="velocity" type="float"/>
         </class>
 

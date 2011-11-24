@@ -3,9 +3,9 @@
         <output path="../production/test"/>
     </path>
 
-    <include def="ui_class_test.classes.xml" src="ui_class_test.classes.xs"/>
+    <include def="3js_class_test.classes.xml" src="3js_class_test.classes.xs"/>
 
-    <idiom src="../idioms/ui/ui.xml"/>
+    <idiom src="../idioms/threejs/module.xml"/>
 	<idiom src="../idioms/resources/resources.xml"/>
 </project>
            

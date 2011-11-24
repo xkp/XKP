@@ -385,16 +385,21 @@ ms.ui.Component = Class.create(
     {
         if (value < 0)
             value = 0;
-
-        this.opacity = value;
+		
+        this.opacity = value/100;
         this.invalidate();
     },
 
 	set_rotation: function(value)
     {
-        this.rotation = value;
-        this.positioned();
+        this.rotation = value * Math.PI/180;
+        this.invalidate();
     },
+	
+	get_rotation: function()
+	{
+		return this.rotation*180/Math.PI;
+	},
 
 	rect: function(x, y, w, h)
 	{
@@ -999,6 +1004,9 @@ ms.ui.Rectangle = Class.create(ms.ui.Component,
 		this.stroke = stroke;
 		this.line_width = line_width;
 	},	
+	resized: function()
+	{
+	},
 	draw: function($super, context, x, y)
 	{		
 		context.save();
@@ -1035,15 +1043,23 @@ ms.ui.Rectangle = Class.create(ms.ui.Component,
 
 ms.ui.Circle = Class.create(ms.ui.Component,
 {	
-	initialize: function($super, fill, stroke, line_width, radius, manager, parent)
+	initialize: function($super, fill, stroke, line_width, manager, parent)
 	{				
 		$super(manager, parent);
 		this.fill = fill;
 		this.stroke = stroke;
-		this.line_width = line_width;
-		this.w = 2*radius;
-		this.h = 2*radius
+		this.line_width = line_width;		
 	},	
+	setRadius: function( value )
+	{					
+		this.w = 2 * value;
+		this.h = 2 * value;
+		this.invalidate();
+	},	
+	getRadius: function()
+	{					
+		return this.w / 2;
+	},
 	draw: function($super, context, x, y)
 	{	
 		context.beginPath();
@@ -1072,7 +1088,7 @@ ms.ui.Circle = Class.create(ms.ui.Component,
 	}
 });
 
-ms.ui.Path = Class.create(ms.ui.Component,
+ms.ui.Polygon = Class.create(ms.ui.Component,
 {	
 	initialize: function($super, fill, stroke, line_width, manager, parent)
 	{				
@@ -1081,7 +1097,29 @@ ms.ui.Path = Class.create(ms.ui.Component,
 		this.stroke = stroke;
 		this.line_width = line_width;
 		this.points = [];
-	},	
+	},
+	setPointbyIndex: function(index, x, y)
+	{					
+		for(var i = 0; i < this.points.length; i++)
+        {				
+			if(index == i){
+				this.points[i].x = x;
+				this.points[i].y = y;
+			}				
+		}
+		this.invalidate();
+	},
+	setPointbyId: function(id, x, y)
+	{					
+		for(var i = 0; i < this.points.length; i++)
+        {				
+			if(this.points[i].id == id){
+				this.points[i].x = x;
+				this.points[i].y = y;
+			}				
+		}
+		this.invalidate();
+	},
 	draw: function($super, context, x, y)
 	{		
 		context.save();
@@ -1099,7 +1137,8 @@ ms.ui.Path = Class.create(ms.ui.Component,
 			if(i<0)
 				context.moveTo(point.x, point.y);
 			context.lineTo(point.x, point.y);						
-		}		
+		}
+		context.closePath();		
 		if(this.line_width){
 			context.lineWidth = this.line_width;			
 		}		

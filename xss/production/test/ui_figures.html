@@ -61,6 +61,8 @@ function start(resolution)
 	}
 	window.setTimeout(updater, resolution);  
 }  
+                application.x = null;
+                application.y = null;
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -94,28 +96,51 @@ window.onload = function()
 	    g_ui_root.manager, g_ui_root);div1.mouse_thru = true;
                 div1.rect(0, 0, 400, 200);
 		    c1 = new ms.ui.Circle( 
-	    null,"black",5,100,div1.manager, div1);
-                c1.position(100, 60);
+	    "cyan","black",3,div1.manager, div1);
+                c1.setRadius(60);
+	c1.click = function()
+	{    
+		c1.setRadius(c1.getRadius() + 1);
+	};
+                c1.position(50, 50);
 		    r1 = new ms.ui.Rectangle( 
 	    "green",null,null,div1.manager, div1);
-                r1.set_rotation(-0.200000003);
-                r1.rect(200, 200, 100, 150);
-		    p1 = new ms.ui.Path( 
+                r1.set_rotation(-30);
+                r1.alpha(60);
+	r1.click = function()
+	{    
+		r1.set_x(r1.x + 5);
+r1.set_y(r1.y + 5);
+	};
+                r1.rect(200, 50, 60, 90);
+		    p1 = new ms.ui.Polygon( 
 	    "pink","brown",3,div1.manager, div1);
-                p1.alpha(0.400000006);
-		p1.points.push({x:270 , y:300});
-		p1.points.push({x:300 , y:250});
-		p1.points.push({x:390 , y:200});
-		p1.points.push({x:350 , y:400});
-		p1.points.push({x:270 , y:300});
-		    stateBtn = new ms.ui.StateButton( 
+                p1.alpha(40);
+		p1.points.push({id:"point1", x:300, y:300});
+		p1.points.push({id:"point2", x:300, y:250});
+		p1.points.push({id:"point3", x:390, y:200});
+		p1.points.push({id:"point4", x:350, y:400});
+		    btn = new ms.ui.Button( 
 	    "images/smile_grin_48.png","images/smile_sad_48.png",g_ui_root.manager, g_ui_root);
-                stateBtn.set_rotation(-0.400000006);
-                stateBtn.rect(270, 200, 50, 50);
-		    lbl3 = new ms.ui.Label( 
-	    "Verdana",g_ui_root.manager, g_ui_root);
-                lbl3.text("this smile is a state button, click it");
-                lbl3.position(330, 240);
+                btn.set_rotation(45);
+	btn.click = function()
+	{    
+		for(var i = 0; i < 4; i++)
+{
+if (i % 2 == 0)
+{
+application.x = p1.points[i].x + 5;
+application.y = p1.points[i].y + 5;
+}
+else
+{
+application.x = p1.points[i].x - 5;
+application.y = p1.points[i].y - 5;
+}
+p1.setPointbyIndex(i, application.x, application.y);
+}
+	};
+                btn.rect(270, 200, 50, 50);
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  

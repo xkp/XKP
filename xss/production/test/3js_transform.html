@@ -49,11 +49,11 @@ camera_1.position.x = 1400 * Math.sin(application.theta * Math.PI / 360);
 camera_1.position.z = 1400 * Math.cos(application.theta * Math.PI / 360);
 		set_active_camera(camera_1);
 }
-	var cylinder_material = new THREE.MeshBasicMaterial({
-	color:Math.random() * 0xffffff
+var cylinder_material = new THREE.MeshBasicMaterial({
+color:Math.random() * 0xffffff
 	});
-	var cube_material = new THREE.MeshBasicMaterial({
-	color:Math.random() * 0xffffff
+var cube_material = new THREE.MeshBasicMaterial({
+color:Math.random() * 0xffffff
 	});
 var sphere_material = 
 new THREE.MeshNormalMaterial(
@@ -77,8 +77,8 @@ new THREE.Cylinder(
 200,100,100,500);
 	    var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
 	    scene.addObject(cylinder_1);
-                cylinder_1.rotation.x = 10;
-                cylinder_1.rotation.y = 10;
+                set_rotation_x(cylinder_1.rotation, 70);
+                set_rotation_y(cylinder_1.rotation, 70);
                 cylinder_1.position.x = 600;
 var container = 
 new THREE.Object3D(
@@ -92,8 +92,8 @@ new THREE.Cube(
 				scene.addObject(container);
                 cube_1.position.x = -600;
                 cube_1.position.y = -100;
-                cube_1.rotation.x = 10;
-                cube_1.rotation.y = 10;
+                set_rotation_x(cube_1.rotation, 70);
+                set_rotation_y(cube_1.rotation, 70);
 	    var sphere_1_sphere = 
 new THREE.Sphere(
 200,20,20);
@@ -117,9 +117,9 @@ new THREE.Sphere(
 application.mouse_y = -(y / window.innerHeight) * 2 + 1;
 if (application.is_shift_down)
 {
-container.rotation.x = container.rotation.x + 0.0199999996;
-container.rotation.y = container.rotation.y + 0.0199999996;
-container.rotation.z = container.rotation.z + 0.0199999996;
+set_rotation_x(container.rotation, get_rotation_x(container.rotation) + 0.5);
+set_rotation_y(container.rotation, get_rotation_y(container.rotation) + 0.5);
+set_rotation_z(container.rotation, get_rotation_z(container.rotation) + 0.5);
 }
 else
 {
@@ -128,9 +128,9 @@ if (application.is_ctrl_down)
 }
 else
 {
-cylinder_1.rotation.x = cylinder_1.rotation.x + 0.0199999996;
-cylinder_1.rotation.y = cylinder_1.rotation.y + 0.0199999996;
-cylinder_1.rotation.z = cylinder_1.rotation.z + 0.0199999996;
+set_rotation_x(cylinder_1.rotation, get_rotation_x(cylinder_1.rotation) + 0.5);
+set_rotation_y(cylinder_1.rotation, get_rotation_y(cylinder_1.rotation) + 0.5);
+set_rotation_z(cylinder_1.rotation, get_rotation_z(cylinder_1.rotation) + 0.5);
 }
 }
 	};

@@ -880,6 +880,11 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 						        expression_identifier ei = arg1;
                     caller = variant_cast<XSSObject>(ctx_->resolve(ei.value, RESOLVE_ANY), XSSObject());
 					        }
+                else if (arg1.is<already_rendered>())
+                  {
+                    already_rendered ar = arg1;
+                    caller = variant_cast<XSSObject>(ar.object, XSSObject());
+                  }
 			        }
 
             bool var_caller = false;

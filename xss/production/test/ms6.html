@@ -17,7 +17,6 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
-var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
 			{
@@ -52,7 +51,8 @@ var Sound = new ms.ui.Sound();
 		g_startup_package.load();	
 function start(resolution)  
 {  
-	function updater()  
+	var start = new Date().getTime();  
+	function update()  
 	{  
 		var now   = new Date().getTime();
         if (g_elapsed < 0)
@@ -63,9 +63,9 @@ function start(resolution)
 		g_sequence_manager.update(g_delta);
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-        window.setTimeout(updater, resolution);  
-	}
-	window.setTimeout(updater, resolution);  
+        window.setTimeout(update, resolution);  
+	}  
+	window.setTimeout(update, resolution);  
 }  
             ms6 = Class.create(ms.ui.Component,
         {
@@ -96,6 +96,7 @@ g_sequence_manager);
                 var btn1;
 		    this.btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",this.manager, this);
+                this.btn1.set_height(50);
 	this.btn1.click = function()
 	{    
 		if (btn2.get_alpha() > 0)
@@ -112,6 +113,7 @@ btn2.alpha(1);
                 var btn2;
 		    this.btn2 = new ms.ui.Button( 
 	    "images/smile_grin_48.png","images/smile_sad_48.png",this.manager, this);
+                this.btn2.set_height(50);
 	this.btn2.click = function()
 	{    
 		if (anim1.running)
@@ -125,12 +127,11 @@ anim1.start();
 	};
  this.btn2.bottom(50); 
                 btn2 = this.btn2;
-            if (this.init)
-                this.init();
-            },
-});
+                },
+    });
 window.onload = function() 
 {
+	var Sound = new ms.ui.Sound();
 	drawingCanvas = document.getElementById("myCanvas");
     g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
@@ -180,7 +181,7 @@ window.onload = function()
             {
                 application.init();
             }
-            start();
+			start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});
 	}

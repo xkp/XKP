@@ -246,6 +246,7 @@ waxjs_code_renderer::waxjs_code_renderer()
   }
 
 waxjs_code_renderer::waxjs_code_renderer(const waxjs_code_renderer& other):
+  compiler_(other.compiler_),
   js_code_renderer(other)
   {
   }
@@ -253,6 +254,7 @@ waxjs_code_renderer::waxjs_code_renderer(const waxjs_code_renderer& other):
 waxjs_code_renderer::waxjs_code_renderer(code& cde, param_list_decl& params, XSSContext ctx):
   js_code_renderer(cde, params, ctx)
   {
+    compiler_ = variant_cast<XSSCompiler>(ctx->resolve("compiler"), XSSCompiler()); assert(compiler_);
   }
 
 str waxjs_code_renderer::render()
@@ -262,53 +264,73 @@ str waxjs_code_renderer::render()
 
     CodeSplit fork = splitter.get();
     if (!fork)
-      {
         return render_code(code_);
-      }
     
-    str result = render_split(fork);
+    str result = render_split(fork, CodeSplit());
     return result;
   }
 
-str waxjs_code_renderer::render_split(CodeSplit fork)
+str waxjs_code_renderer::render_split(CodeSplit fork, CodeSplit parent)
   {
+    if (parent)
+      {
+        //update the split call list
+        fork->add.insert(fork->add.begin(), parent->add.begin(), parent->add.end());
+      }
+
+    std::ostringstream result;
+
     int split_idx = fork->split_idx - 1;
 
+    //render the code before the split
     code pre_split;
     fork->target.range(0, split_idx, pre_split);
-    str pre = render_code(pre_split);
+    result << render_code(pre_split);
 
+    //render the after code as a function, will be called on splits
+    std::ostringstream code_after;
+    str                split_name;
+
+    code after_wards;
+    fork->target.cut(fork->split_idx, after_wards);
+    
+    bool has_code_after = !after_wards.empty();    
+
+    if (has_code_after)
+      {
+        split_name = compiler_->genid("callback");
+        code_after << "function " << split_name << "() \n{\n";
+        code_after << split_and_render(after_wards, fork);
+        code_after << "\n}\n";
+
+        split_name += "();\n";
+        fork->add.insert(fork->add.begin(), split_name);
+      }
+
+    //then split
     variant& st = fork->target.get_stament(split_idx);
     if (st.is<stmt_if>())
       {
-        return pre + split_if(fork);
+        result << code_after.str() << split_if(fork);
       }
     else if (st.is<stmt_variable>())
       {
-        return pre + split_variable(fork);
+        result << split_variable(fork, code_after.str());
       }
     else if (st.is<stmt_expression>())
       {
-        return pre + split_expression(fork);
+        result << code_after.str() << split_expression(fork);
       }
     else
       {
         assert(false);
       }
-      return pre;
+      return result.str();
   }
 
 str waxjs_code_renderer::split_if(CodeSplit fork)
   {
     std::ostringstream result;
-    
-    //the code following the if must happen later, so we render it on its own function
-    code after_if;
-    fork->target.cut(fork->split_idx, after_if);
-    
-    result << "function after_if( return_function ) \n{\n";
-    result << split_and_render(after_if);
-    result << "\n}\n";
     
     stmt_if stmnt = fork->target.get_stament(fork->split_idx - 1);
     if (fork->split_on_if)
@@ -316,17 +338,13 @@ str waxjs_code_renderer::split_if(CodeSplit fork)
         result << "\nif (" << render_expression(stmnt.expr, ctx_) << ")";
         result << "\n{";
 
-        result << render_split(fork->split_code);
-        
-        result << "after_if(return_function);\n}";
+        result << render_split(fork->split_code, fork);
 
         if (!stmnt.else_code.empty())
           {
             result << "\nelse\n{\n";
-
-            result << split_and_render(stmnt.else_code);
-        
-            result << "after_if(return_function);\n}";
+            result << split_and_render(stmnt.else_code, fork);
+            result << "\n}";
           }
       }
     else if (fork->split_on_else)
@@ -336,10 +354,9 @@ str waxjs_code_renderer::split_if(CodeSplit fork)
 
         render_code(stmnt.if_code); 
         
-        result << "after_if(return_function);\n}";
+        result << after_code(fork) << "\n}";
         result << "else\n{\n";
-        result << render_split(fork->split_code);
-        result << "after_if(return_function);\n}";
+        result << render_split(fork->split_code, fork);
       }
     else
       {
@@ -349,20 +366,19 @@ str waxjs_code_renderer::split_if(CodeSplit fork)
         result << "\n{\n";
         result << "if (return_value)";
         result << "\n{\n";
-        result << split_and_render(stmnt.if_code);
-        result << "after_if(return_function);";
+
+        result << split_and_render(stmnt.if_code, fork);
+
         result << "\n}";
 
         if (!stmnt.else_code.empty())
           {
             result << "else\n{\n";
-
-            result << split_and_render(stmnt.else_code);
-        
-            result << "after_if(return_function);\n}";
+            result << split_and_render(stmnt.else_code, fork);
+            result << "\n}";
           }
         else
-            result << "after_if(return_function);\n";
+            result << after_code(fork);
 
         result << "\n});\n";
       }
@@ -370,18 +386,37 @@ str waxjs_code_renderer::split_if(CodeSplit fork)
     return result.str();
   }
 
-str waxjs_code_renderer::split_variable(CodeSplit fork)
+str waxjs_code_renderer::after_code(CodeSplit fork)
+  {
+    std::ostringstream result;
+
+    std::vector<str>::iterator it = fork->add.begin();
+    std::vector<str>::iterator nd = fork->add.end();
+    for(; it != nd; it++)
+      {
+        result <<  "\n" << *it;
+      }
+
+    return result.str();
+  }
+
+str waxjs_code_renderer::split_variable(CodeSplit fork, const str& code_after)
   {
     stmt_variable stmnt = fork->target.get_stament(fork->split_idx - 1);
     
-    code after_var;
-    fork->target.cut(fork->split_idx, after_var);
+    //code after_var;
+    //fork->target.cut(fork->split_idx, after_var);
 
     std::ostringstream result;
+    result << "var " << stmnt.id << ";\n";
+    result << code_after;
     result << split_method(fork->method);
     result << "\n{\n";
-    result << "var " << stmnt.id << " = return_value;";
-    result << split_and_render(after_var);
+    result << stmnt.id << " = return_value;";
+    
+    result << after_code(fork);
+
+    //result << split_and_render(after_var, fork->add);
     result << "\n});\n";
 
     return result.str();
@@ -415,8 +450,8 @@ str waxjs_code_renderer::split_expression(CodeSplit fork)
           }
       }
 
-    code after_expr;
-    fork->target.cut(fork->split_idx, after_expr);
+    //code after_expr;
+    //fork->target.cut(fork->split_idx, after_expr);
 
     std::ostringstream result;
     result << split_method(fork->method);
@@ -427,11 +462,14 @@ str waxjs_code_renderer::split_expression(CodeSplit fork)
         expression_splitter es(op);
         stmnt.expr.visit(&es);
         result << render_expression(es.left, ctx_) << " " << lang_utils::operator_string(op) << " return_value;";
-        result << split_and_render(after_expr);
+
+        result << after_code(fork);
+        //result << split_and_render(after_expr, fork->add);
       }
     else
       {
-        result << split_and_render(after_expr);
+        result << after_code(fork);
+        //result << split_and_render(after_expr, fork->add); //td: ! remove when working
       }
     
     result << "\n});\n";
@@ -439,21 +477,31 @@ str waxjs_code_renderer::split_expression(CodeSplit fork)
     return result.str();
   }
 
-str waxjs_code_renderer::split_and_render(code& c, std::vector<str>& add)
+str waxjs_code_renderer::split_and_render(code& c, CodeSplit parent)
   {
     wax_splitter splitter(ctx_, c);
     c.visit(&splitter);
 
     CodeSplit fork = splitter.get();
     if (fork)
-      return render_split(fork);
+      return render_split(fork, parent);
 
-    return render_code(c); 
+    //no split, just render the code and call the splits
+    std::ostringstream result;
+    result << render_code(c); 
+
+    if (parent)
+      result << after_code(parent); 
+    
+    return result.str();
   }
 
 str waxjs_code_renderer::split_method(XSSMethod method)
   {
-    return str("method(function(return_value)");
+    std::ostringstream result;
+    result << method->output_id() << "(function(return_value)";
+
+    return result.str();
   }
 
 //method whatever()

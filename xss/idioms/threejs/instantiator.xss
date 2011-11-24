@@ -7,6 +7,6 @@ if (!obj.type)
 
 create_<xss:e v="obj.type.output_id"/>(
 <xss:code>
-compiler.xss("../common-js/constructor_args.xss", obj);
+compiler.xss("constructor_args.xss", obj);
 </xss:code>
 );

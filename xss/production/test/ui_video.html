@@ -17,7 +17,6 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
-var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
 			{
@@ -40,7 +39,8 @@ var Sound = new ms.ui.Sound();
 		g_startup_package.load();	
 function start(resolution)  
 {  
-	function updater()  
+	var start = new Date().getTime();  
+	function update()  
 	{  
 		var now   = new Date().getTime();
         if (g_elapsed < 0)
@@ -51,12 +51,13 @@ function start(resolution)
 		g_sequence_manager.update(g_delta);
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-        window.setTimeout(updater, resolution);  
-	}
-	window.setTimeout(updater, resolution);  
+        window.setTimeout(update, resolution);  
+	}  
+	window.setTimeout(update, resolution);  
 }  
 window.onload = function() 
 {
+	var Sound = new ms.ui.Sound();
 	drawingCanvas = document.getElementById("myCanvas");
     g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
@@ -100,7 +101,7 @@ window.onload = function()
             {
                 application.init();
             }
-            start();
+			start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});
 	}

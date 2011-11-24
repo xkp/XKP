@@ -27,6 +27,8 @@ struct code_split
 
     bool      split_on_if;
     bool      split_on_else;
+
+    std::vector<str> add;
   };
 
 struct waxjs_lang : public js_lang
@@ -42,14 +44,17 @@ struct waxjs_code_renderer : public js_code_renderer
 
     //ICodeRenderer
     virtual str render();
-    
+
     private:
-      str render_split(CodeSplit fork);
+      XSSCompiler compiler_;
+
+      str render_split(CodeSplit fork, CodeSplit parent);
       str split_if(CodeSplit fork);
-      str split_variable(CodeSplit fork);
+      str split_variable(CodeSplit fork, const str& code_after);
       str split_expression(CodeSplit fork);
-      str split_and_render(code& c, std::vector<str>& add);
+      str split_and_render(code& c, CodeSplit parent);
       str split_method(XSSMethod method);
+      str after_code(CodeSplit fork);
   };
 
 register_complete_type(waxjs_code_renderer, renderer_schema<waxjs_code_renderer>);

@@ -31,8 +31,7 @@ on render_types()
     for(var ut in user_types)
     {
         var full_path = compiler.full_path("component.xss");
-		
-        compiler.xss("../common-js/class.xss", ut, renderer = full_path, context = ut);
+		compiler.xss("../common-js/class.xss", ut, renderer = full_path, context = ut);
     }
 }
 

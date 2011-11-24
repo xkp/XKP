@@ -3,7 +3,7 @@ property clicks = 0;
 on btn1.click()   
 {	
 	lbl1.caption = "Got " + clicks + " smileys";
-	btn1.rotation += 0.2;
+	btn1.rotation += 10;
 	clicks++;	
 }
 

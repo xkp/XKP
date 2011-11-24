@@ -265,7 +265,7 @@ g_sequence_manager);
                             fade_out.target.alpha(value);
                         },
                         [
-                        {t: 0, value: 1},
+                        {t: 0, value: 100},
                         {t: 3, value: 0},
                         ]);
                     this.fade_out.addAction(null, "alpha", new ms.state.State(0, 3, ____i1));                    
@@ -393,7 +393,6 @@ g_sequence_manager);
 		if (who instanceof floor)
 {
 this.RemoveFromWorld();
-Sound.play("sounds/boom.wav");
 }
 	};
             if (this.init)
