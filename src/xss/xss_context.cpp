@@ -1109,6 +1109,22 @@ std::vector<XSSObject> xss_object::find_by_class(const str& which)
     return result;
   }
 
+DynamicArray xss_object::find_by_type(const str& which)
+  {
+    DynamicArray result(new dynamic_array);
+    std::vector<variant>::iterator it = children_->ref_begin();
+    std::vector<variant>::iterator nd = children_->ref_end();
+
+    for(; it != nd; it++)
+      {
+        XSSObject child = *it;
+        if (child->type_name() == which)
+          result->push_back(child);
+      }
+
+    return result;
+  }
+
 DynamicArray xss_object::get_event_impl(const str& event_name, XSSEvent& ev)
   {
     for(size_t i = 0; i < events_->size(); i++)
@@ -1768,4 +1784,16 @@ XSSType xss_method::type()
       }
 
     return type_;
+  }
+
+variant xss_method::code()
+  {
+    return code_;
+  }
+
+void xss_method::add_parameter(const str& name)
+  {
+    IArgumentRenderer* args = variant_cast<IArgumentRenderer*>(args_, null);
+    if (args)
+      args->add(name, XSSType()); //td: type
   }

@@ -1,16 +1,18 @@
 <xss:parameter id="it"/>
-<xss:parameter id="service_name"/>
 
 <xss:code>
-var mthd = it.get_method(service_name);
+    
+compiler.log("HERE");
+
+var service_name = it.id;    
+var mthd = application.get_method(service_name);
+
 if (!mthd)
     compiler.error("Service implementor not found", name = service_name);
 
-mthd.code.return_json(true);
-compiler.out(mthd.code.render());
-
 out()
 {
+    <xss:e v="mthd.code.render()"/>
     request.end();
     return;    
 }

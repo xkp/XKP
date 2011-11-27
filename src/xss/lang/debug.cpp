@@ -263,6 +263,11 @@ struct param_list_renderer : public IArgumentRenderer
       {
       }
 
+    virtual void add(const str& name, XSSType type)
+      {
+        //yeah right
+      }
+
     virtual str render()
       {
         return "I WILL WRITE THIS CODE LATER, sincerely";

@@ -1,5 +1,5 @@
 <application src="box2d3.app.xs" width="600" height="400">
-    <physics_world gravity_x   = "1" id="myWorld" debug_draw="true"
+    <physics_world gravity_y   = "10" id="myWorld" debug_draw="true"
                    scale       = "30" 
                    friction    = "0.5"
                    density     = "1.0"
@@ -10,7 +10,7 @@
         <image src="images/stone-12.jpg"/>
     </resources>
 
-    <spawner id="sp1" x="300" y="100" rotation="171" auto_start="true" frequency="1" creator_class="smiley_ball" velocity="10"/>
+    <spawner id="sp1" x="300" y="100" rotation="90" auto_start="true" frequency="1" creator_class="smiley_ball" velocity="3"/>
 
     <img x="0" y="390" width="600" height="40" src="images/stone-12.jpg">
         <physics body_type="static" shape="rect"/>

@@ -48,7 +48,7 @@ var Sound = new ms.ui.Sound();
         , b2Transform = Box2D.Common.Math.b2Transform
         ;
         var g_world = new b2World(
-            new b2Vec2(1, 0)    //gravity
+            new b2Vec2(0, 10)    //gravity
         ,  true                 //allow sleep
         );
             var g_spawner_manager = new ms.arcade.SpawnManager();
@@ -155,7 +155,7 @@ function start(resolution)
                 var y = pos.y*g_world_scale;
                 bb.host.xs_updating = true;
                 bb.host.position(x - bb.host.w/2, y - bb.host.h/2);
-                bb.host.set_rotation(angle);
+                bb.host.set_rotation(angle*180/Math.PI);
                 bb.host.xs_updating = false;
             }
             bb = bb.GetNext();
@@ -251,12 +251,12 @@ window.onload = function()
 		    __img3 = new ms.ui.Image( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
                 __img3.rect(0, 350, 10, 40);
-        sp1 = new ms.arcade.Spawner(g_spawner_manager, 300, 100, 1, 10);
+        sp1 = new ms.arcade.Spawner(g_spawner_manager, 300, 100, 1, 3);
                 sp1.x = 300;
                 sp1.y = 100;
-                sp1.set_rotation(171);
+                sp1.set_rotation(90);
                 sp1.frequency = 1;
-                sp1.velocity = 10;
+                sp1.velocity = 3;
         sp1.creator = function()
         {
             return new smiley_ball("images/smile_grin_48.png");

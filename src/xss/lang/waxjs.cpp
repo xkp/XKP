@@ -5,6 +5,7 @@ using namespace xkp;
 const str SLanguage("language");
 
 const str SCannotForkOnIteration("Cannot perform asynchronic operations inside loops");
+const str SCodeAfterReturn("Unreachable code");
 
 #define CHECK_ACTIVE  if (found_) return; curr_++;
 
@@ -14,8 +15,14 @@ struct wax_splitter : code_visitor
       ctx_(ctx),
       found_(false),
       curr_(0),
-      code_(_code)
+      code_(_code),
+      maybe_(false)
       {
+      }
+
+    bool maybe()
+      {
+        return maybe_;
       }
 
     virtual void if_(stmt_if& info)
@@ -119,6 +126,12 @@ struct wax_splitter : code_visitor
     virtual void return_(stmt_return& info)
       {
         CHECK_ACTIVE
+
+        XSSMethod mthd;
+        if (forked(info.expr, mthd))
+          {
+            cut(mthd);
+          }
       }
 
     virtual void expression_(stmt_expression& info)
@@ -153,6 +166,7 @@ struct wax_splitter : code_visitor
       XSSContext ctx_;
       CodeSplit  result_;
       code&      code_;
+      bool       maybe_;
 
       bool forked(expression& expr, XSSMethod& result)
         {
@@ -194,6 +208,33 @@ struct wax_splitter : code_visitor
                     {
                       result = mthd;
                     }
+                  else
+                    {
+                      //need to check for local methods that might have not been checked for 
+                      //splittage
+
+                      IRenderer*           rend = variant_cast<IRenderer*>(mthd->code(), null);
+                      waxjs_code_renderer* wcr  = dynamic_cast<waxjs_code_renderer*>(rend);
+                      
+                      if (wcr)
+                        {
+                          //one of us
+                          if (wcr->check_fork(mthd))
+                            {
+                              if (wcr->forked())
+                                {
+                                  result = mthd;
+                                  return true;
+                                }
+                            }
+                          else
+                            {
+                              maybe_ = true;
+                              result = mthd;
+                              return true;
+                            }
+                        }
+                    }
                   return asynch;
                 }
             }
@@ -234,6 +275,23 @@ struct wax_splitter : code_visitor
         }
   };    
 
+struct waxjs_internal_renderer : public js_code_renderer
+  {
+      waxjs_internal_renderer(code& cde, param_list_decl& params, XSSContext ctx) : 
+        js_code_renderer(cde, params, ctx)
+        {
+        }
+
+      virtual void return_(stmt_return& info)
+        {
+          std::ostringstream result;
+          result << "\n" << "return_function(" << render_expression(info.expr, ctx_) << ");";
+          result << "\n" << "return true;";
+          
+          add_line(result.str());
+        }
+  };
+
 //waxjs_lang
 variant waxjs_lang::compile_code(code& cde, param_list_decl& params, XSSContext ctx)
   {
@@ -241,33 +299,105 @@ variant waxjs_lang::compile_code(code& cde, param_list_decl& params, XSSContext 
   }
 
 //waxjs_code_renderer
-waxjs_code_renderer::waxjs_code_renderer()
+waxjs_code_renderer::waxjs_code_renderer():
+  checked_(false)
   {
   }
 
 waxjs_code_renderer::waxjs_code_renderer(const waxjs_code_renderer& other):
+  checked_(false),
   compiler_(other.compiler_),
-  js_code_renderer(other)
+  base_code_renderer(other)
   {
   }
 
 waxjs_code_renderer::waxjs_code_renderer(code& cde, param_list_decl& params, XSSContext ctx):
-  js_code_renderer(cde, params, ctx)
+  checked_(false),
+  base_code_renderer(cde, params, ctx)
   {
     compiler_ = variant_cast<XSSCompiler>(ctx->resolve("compiler"), XSSCompiler()); assert(compiler_);
   }
 
 str waxjs_code_renderer::render()
   {
-    wax_splitter splitter(ctx_, code_);
-    code_.visit(&splitter);
+    CodeSplit fork = fork_;
+    if (!checked_)
+      {
+        wax_splitter splitter(ctx_, code_);
+        code_.visit(&splitter);
+        fork = splitter.get();
+        fork_ = fork;
+      }
 
-    CodeSplit fork = splitter.get();
     if (!fork)
         return render_code(code_);
     
-    str result = render_split(fork, CodeSplit());
-    return result;
+    //pre render
+    lang_utils::var_gatherer(code_, ctx_);
+    
+    //check for goodies
+    bool is_service = false;
+    if (owner_)
+      is_service = owner_->get<bool>("wax_service", false);
+
+    std::ostringstream result;
+
+    if (is_service)
+      result << render_service();
+
+    result << render_split(fork, CodeSplit());
+    return result.str();
+  }
+
+bool waxjs_code_renderer::check_fork(variant owner)
+  {
+    if (checked_)
+      return true;
+
+    checked_ = true;
+    wax_splitter splitter(ctx_, code_);
+    code_.visit(&splitter);
+    fork_ = splitter.get();
+
+    if (fork_)
+      {
+        XSSMethod mthd = variant_cast<XSSMethod>(owner, XSSMethod());
+        if (mthd)
+          mthd->add_property("asynch", true, XSSType());
+      }
+
+    if (splitter.maybe())
+      {
+        checked_ = false;
+        return false;
+      }
+
+    return true;
+  }
+
+bool waxjs_code_renderer::forked()
+  {
+    return fork_;
+  }
+
+void waxjs_code_renderer::use_this_id(bool value)
+  {
+    ctx_->register_symbol(RESOLVE_CONST, "#use_this_id", value);
+  }
+
+str waxjs_code_renderer::render_expression(expression& expr, XSSContext ctx)
+  {
+    return lang_utils::render_expression<js_expr_renderer>(expr, ctx);
+  }
+
+str waxjs_code_renderer::render_code(code& cde)
+  {
+    XSSContext ctx(new xss_context(ctx_));
+    lang_utils::var_gatherer(cde, ctx);
+
+    param_list_decl pld;
+    waxjs_internal_renderer inner(cde, pld, ctx);
+    return inner.render();
   }
 
 str waxjs_code_renderer::render_split(CodeSplit fork, CodeSplit parent)
@@ -303,7 +433,7 @@ str waxjs_code_renderer::render_split(CodeSplit fork, CodeSplit parent)
         code_after << split_and_render(after_wards, fork);
         code_after << "\n}\n";
 
-        split_name += "();\n";
+        split_name += "()";
         fork->add.insert(fork->add.begin(), split_name);
       }
 
@@ -320,6 +450,18 @@ str waxjs_code_renderer::render_split(CodeSplit fork, CodeSplit parent)
     else if (st.is<stmt_expression>())
       {
         result << code_after.str() << split_expression(fork);
+      }
+    else if (st.is<stmt_return>())
+      {
+        if (has_code_after)
+          {
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", SCodeAfterReturn);
+            xss_throw(error);
+          }
+
+        result << split_return(fork);
       }
     else
       {
@@ -352,11 +494,12 @@ str waxjs_code_renderer::split_if(CodeSplit fork)
         result << "\nif (" << render_expression(stmnt.expr, ctx_) << ")";
         result << "\n{";
 
-        render_code(stmnt.if_code); 
+        result << render_code(stmnt.if_code); 
         
         result << after_code(fork) << "\n}";
         result << "else\n{\n";
         result << render_split(fork->split_code, fork);
+        result << "\n}";
       }
     else
       {
@@ -380,7 +523,7 @@ str waxjs_code_renderer::split_if(CodeSplit fork)
         else
             result << after_code(fork);
 
-        result << "\n});\n";
+        result << "\n});";
       }
 
     return result.str();
@@ -392,11 +535,28 @@ str waxjs_code_renderer::after_code(CodeSplit fork)
 
     std::vector<str>::iterator it = fork->add.begin();
     std::vector<str>::iterator nd = fork->add.end();
-    for(; it != nd; it++)
+
+    size_t sz = fork->add.size();
+    size_t i  = 0;
+    for(; it != nd; it++, i++)
       {
-        result <<  "\n" << *it;
+        result <<  "\n";
+        if (i < sz - 1)
+          result << "if (" << *it << ")\nreturn;"; 
+        else
+          result << *it << ";";
       }
 
+    return result.str();
+  }
+
+str waxjs_code_renderer::render_service()
+  {
+    std::ostringstream result;
+    result << "\nfunction return_function(return_value)";
+    result << "\n{";
+    result << "\nreqest.append(to_jason(return_value))";
+    result << "\n}";
     return result.str();
   }
 
@@ -404,19 +564,13 @@ str waxjs_code_renderer::split_variable(CodeSplit fork, const str& code_after)
   {
     stmt_variable stmnt = fork->target.get_stament(fork->split_idx - 1);
     
-    //code after_var;
-    //fork->target.cut(fork->split_idx, after_var);
-
     std::ostringstream result;
     result << "var " << stmnt.id << ";\n";
     result << code_after;
     result << split_method(fork->method);
     result << "\n{\n";
     result << stmnt.id << " = return_value;";
-    
     result << after_code(fork);
-
-    //result << split_and_render(after_var, fork->add);
     result << "\n});\n";
 
     return result.str();
@@ -450,9 +604,6 @@ str waxjs_code_renderer::split_expression(CodeSplit fork)
           }
       }
 
-    //code after_expr;
-    //fork->target.cut(fork->split_idx, after_expr);
-
     std::ostringstream result;
     result << split_method(fork->method);
     result << "\n{\n";
@@ -464,15 +615,24 @@ str waxjs_code_renderer::split_expression(CodeSplit fork)
         result << render_expression(es.left, ctx_) << " " << lang_utils::operator_string(op) << " return_value;";
 
         result << after_code(fork);
-        //result << split_and_render(after_expr, fork->add);
       }
     else
-      {
-        result << after_code(fork);
-        //result << split_and_render(after_expr, fork->add); //td: ! remove when working
-      }
+      result << after_code(fork);
     
-    result << "\n});\n";
+    result << "\n});";
+
+    return result.str();
+  }
+
+str waxjs_code_renderer::split_return(CodeSplit fork)
+  {
+    stmt_return stmnt = fork->target.get_stament(fork->split_idx - 1);
+
+    std::ostringstream result;
+    result << split_method(fork->method);
+    result << "\n{\n";
+    result << "return_function(return_value);";
+    result << "\n});";
 
     return result.str();
   }
@@ -503,52 +663,3 @@ str waxjs_code_renderer::split_method(XSSMethod method)
 
     return result.str();
   }
-
-//method whatever()
-  //{
-  //  var x = 3;
-  //  if (delayed())
-  //  {
-  //    ....
-  //  }
-
-  //  var y = delayed();
-
-  //  if (y > 3)
-  //  {
-  //    x = delayed();
-  //  }
-
-  //  return x + y;
-  //}
-
-  //function whatever(return_fn)
-  //{
-  //  var x = 3;
-  //  delayed(function(result){
-  //    if (result)
-  //    {
-  //      ...
-  //    }
-
-  //    delayed(function(result){
-  //      var y = result;
-
-  //      function after_if()
-  //      {
-  //        return_fn(x + y); 
-  //      }
-
-  //      if (y > 3)
-  //      {
-  //        delayed(function(result){
-  //          x = result;
-  //          after_if();
-  //        });
-  //        return;
-  //      }
-
-  //      after_if();
-  //    });
-  //  });  
-  //}

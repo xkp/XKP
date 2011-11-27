@@ -1,5 +1,10 @@
 var http = require("http");
 var url  = require("url");
+var application = {};
+
+<xss:code>
+compiler.xss("../common-js/instance.xss", application);
+</xss:code>
 
 http.createServer(function(request, response) 
 {
@@ -17,9 +22,9 @@ http.createServer(function(request, response)
         }
         else if (i.class_name == "service")
         {
-            compiler.xss("service.xss", i);
+            //compiler.xss("service.xss", i);
         }
-        else compiler.eror("Only pages and services are supported");
+        else compiler.error("Only pages and services are supported", found = i.class_name);
 
         compiler.out("}");
     }

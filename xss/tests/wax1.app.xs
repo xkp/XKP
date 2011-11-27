@@ -1,4 +1,3 @@
-
 method foo()
 {
     if (testwax.bar(10, 12))

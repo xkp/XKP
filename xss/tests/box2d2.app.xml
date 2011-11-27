@@ -1,5 +1,5 @@
 <application src="box2d2.app.xs" width="600" height="400">
-    <physics_world gravity_x   = "1" id="myWorld" debug_draw="true"
+    <physics_world gravity_y   = "10" id="myWorld" debug_draw="true"
                    scale       = "30" 
                    friction    = "0.5"
                    density     = "1.0"
@@ -10,8 +10,11 @@
         <image src="images/smile_sad_48.png"/>
     </resources>
 
-    <button id="btn1" x="200" y="200" rotation="0.2" width="50" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png">
+    <button id="btn1" x="200" y="200" rotation="90" width="50" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png">
         <physics body_type="dynamic" shape="circle" radius="1.2" x="10" y="10"/>
     </button>
-    <body id="floor" body_type="static" shape="rect" x="10" y="15.13" width="20" height="2"/>
+
+    <img x="0" y="390" width="600" height="40" src="images/stone-12.jpg">
+        <physics body_type="static" shape="rect"/>
+    </img>
 </application>

@@ -1011,6 +1011,12 @@ XSSType lang_utils::resolve_type(variant var, XSSContext ctx)
 
 void lang_utils::var_gatherer(code& cde, XSSContext ctx)
   {
+    bool already = variant_cast<bool>(ctx->resolve("#var_gatherer"), false);
+    if (already)
+      return;
+    
+    ctx->register_symbol(RESOLVE_CONST, "#var_gatherer", true);
+
     variable_gather vg(ctx);
     cde.visit(&vg);
     vg.apply();

@@ -737,7 +737,7 @@ void xss_compiler::log(const param_list params)
 					{
 						XSSObject obj_value    = variant_cast<XSSObject>(value, XSSObject());
 
-						str	obj_id;
+            str	obj_id;
 						if (obj_value)
 							{
 								obj_id = variant_cast<str>(dynamic_get(obj_value, "id"), str(""));
@@ -1722,22 +1722,6 @@ void xss_compiler::read_application(const str& app_file)
               }
           }
 
-        //pre process, basically the application will be traversed and
-        //notified to the application modules. From then on it is their business
-        //the expected result is an application object ready for rendering.
-        struct app_proprocessor : IPreprocessHandler
-          {
-            virtual void handle(XSSObject obj, XSSModule module)
-              {
-                if (module->one_of_us(obj))
-                  module->register_instance(obj);
-              }
-          } pre_processor;
-
-        current_app_ = app_renderer;
-        pre_process(app_renderer, app_data, XSSObject(), &pre_processor);
-        current_app_.reset();
-
         str src = app_data->get<str>("src", str());
         fs::path src_path = base_path_ / src;
         if (!src.empty() && !code_compiled)
@@ -1761,6 +1745,22 @@ void xss_compiler::read_application(const str& app_file)
         code_ctx->set_this(app_data);
 
         compile_ast(code, code_ctx);
+
+        //pre process, basically the application will be traversed and
+        //notified to the application modules. From then on it is their business
+        //the expected result is an application object ready for rendering.
+        struct app_proprocessor : IPreprocessHandler
+          {
+            virtual void handle(XSSObject obj, XSSModule module)
+              {
+                if (module->one_of_us(obj))
+                  module->register_instance(obj);
+              }
+          } pre_processor;
+
+        current_app_ = app_renderer;
+        pre_process(app_renderer, app_data, XSSObject(), &pre_processor);
+        current_app_.reset();
 
         //hook modules to the application
         std::vector<XSSModule> modules = app_renderer->modules();

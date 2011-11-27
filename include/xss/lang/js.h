@@ -68,7 +68,7 @@ struct js_code_renderer_schema : renderer_code_schema<js_code_renderer>
 
 register_complete_type(js_code_renderer, js_code_renderer_schema);
 register_complete_type(js_expr_renderer, renderer_expr_schema<js_expr_renderer>);
-register_complete_type(js_args_renderer, renderer_schema<js_args_renderer>);
+register_complete_type(js_args_renderer, renderer_args_schema<js_args_renderer>);
 
 }
 #endif

@@ -345,8 +345,7 @@ base_code_renderer::base_code_renderer(code& cde, param_list_decl& params, XSSCo
       }
 
     //register our variables into the context
-    variable_gather vars(ctx_);
-    cde.visit(&vars);
+    lang_utils::var_gatherer(code_, ctx_);
   }
 
 str base_code_renderer::render()
@@ -1218,6 +1217,11 @@ base_args_renderer::base_args_renderer(param_list_decl& params, XSSContext ctx):
   args_(params),
   ctx_(ctx)
   {
+  }
+
+void base_args_renderer::add(const str& name, XSSType type)
+  {
+    extra_.push_back(std::pair<str, XSSType>(name, type));
   }
 
 //base_lang
