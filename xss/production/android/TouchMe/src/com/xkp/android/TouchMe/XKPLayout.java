@@ -1,4 +1,4 @@
-package com.xkp.android.KitchenSink;
+package com.xkp.android.TouchMe;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Rect;

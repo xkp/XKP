@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<com.xkp.android.Contacts.XKPLayout 
+				xmlns:android="http://schemas.android.com/apk/res/android" 
+				xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.Contacts" 
+				android:id="@+id/application" 
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				xkp:placement="client"
+			>
+				<com.xkp.android.Contacts.XKPLayout android:id="@+id/__div1"
+				android:layout_height="50dp"
+				xkp:placement="top"
+				android:layout_width="wrap_content"
+			>
+				<Button android:id="@+id/btnLeft"
+				android:text="@string/res0"
+				android:layout_width="120dp"
+				xkp:placement="left"
+				android:layout_height="wrap_content"
+			>
+				</Button>
+				<Button android:id="@+id/btnRight"
+				android:text="@string/res1"
+				android:layout_width="120dp"
+				xkp:placement="right"
+				android:layout_height="wrap_content"
+			>
+				</Button>
+				</com.xkp.android.Contacts.XKPLayout>
+				<com.xkp.android.Contacts.XKPSwitcher android:id="@+id/swtStates"
+				xkp:current="@+id/divAdd"
+				xkp:placement="client"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				<com.xkp.android.Contacts.XKPLayout android:id="@+id/divAdd"
+				xkp:placement="client"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				<TextView android:id="@+id/lblFullName"
+				android:text="@string/res2"
+				xkp:layout_x="10dp"
+				xkp:layout_y="10dp"
+				android:layout_width="140dp"
+				android:layout_height="35dp"
+			>
+				</TextView>
+				<TextView android:id="@+id/lblPhone"
+				android:text="@string/res3"
+				xkp:layout_x="10dp"
+				xkp:layout_y="60dp"
+				android:layout_width="140dp"
+				android:layout_height="35dp"
+			>
+				</TextView>
+				<EditText android:id="@+id/edtFullName"
+				xkp:layout_x="160dp"
+				xkp:layout_y="5dp"
+				android:layout_width="140dp"
+				android:layout_height="45dp"
+			>
+				</EditText>
+				<EditText android:id="@+id/edtPhoneNumber"
+				xkp:layout_x="160dp"
+				xkp:layout_y="55dp"
+				android:layout_width="140dp"
+				android:layout_height="45dp"
+			>
+				</EditText>
+				<CheckBox android:id="@+id/chkVerifier"
+				android:text="@string/res4"
+				android:checked="true"
+				xkp:layout_x="10dp"
+				xkp:layout_y="120dp"
+				android:layout_width="250dp"
+				android:layout_height="40dp"
+			>
+				</CheckBox>
+				<Button android:id="@+id/btnAddContact"
+				android:text="@string/res5"
+				android:layout_height="40dp"
+				xkp:placement="bottom"
+				android:layout_width="wrap_content"
+			>
+				</Button>
+				</com.xkp.android.Contacts.XKPLayout>
+				<com.xkp.android.Contacts.XKPLayout android:id="@+id/divFind"
+				xkp:placement="client"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				<TextView android:id="@+id/lblFindType"
+				android:text="@string/res6"
+				xkp:layout_x="10dp"
+				xkp:layout_y="10dp"
+				android:layout_width="100dp"
+				android:layout_height="35dp"
+			>
+				</TextView>
+				<RadioButton android:id="@+id/rdbByName"
+				android:text="@string/res7"
+				android:checked="true"
+				xkp:layout_x="10dp"
+				xkp:layout_y="60dp"
+				android:layout_width="100dp"
+				android:layout_height="35dp"
+			>
+				</RadioButton>
+				<RadioButton android:id="@+id/rdbByPhone"
+				android:text="@string/res8"
+				xkp:layout_x="10dp"
+				xkp:layout_y="110dp"
+				android:layout_width="100dp"
+				android:layout_height="35dp"
+			>
+				</RadioButton>
+				<TextView android:id="@+id/lblCriterion"
+				android:text="@string/res9"
+				xkp:layout_x="10dp"
+				xkp:layout_y="180dp"
+				android:layout_width="100dp"
+				android:layout_height="35dp"
+			>
+				</TextView>
+				<EditText android:id="@+id/edtCriterion"
+				xkp:layout_x="120dp"
+				xkp:layout_y="220dp"
+				android:layout_width="100dp"
+				android:layout_height="45dp"
+			>
+				</EditText>
+				</com.xkp.android.Contacts.XKPLayout>
+				<com.xkp.android.Contacts.XKPLayout android:id="@+id/divAbout"
+				xkp:placement="client"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				<TextView android:id="@+id/lblName"
+				android:text="@string/res10"
+				xkp:layout_x="10dp"
+				xkp:layout_y="10dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</TextView>
+				<TextView android:id="@+id/lblContact"
+				android:text="@string/res11"
+				xkp:layout_x="10dp"
+				xkp:layout_y="50dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</TextView>
+				</com.xkp.android.Contacts.XKPLayout>
+				</com.xkp.android.Contacts.XKPSwitcher>
+			</com.xkp.android.Contacts.XKPLayout>

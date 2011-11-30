@@ -273,6 +273,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\xss\lang\waxjs.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\xs.cpp"
 				>
 			</File>
@@ -311,11 +315,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\xss\lang\base.h"
+				RelativePath="..\..\..\include\base.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\base.h"
+				RelativePath="..\..\..\include\xss\lang\base.h"
 				>
 			</File>
 			<File
@@ -420,6 +424,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\xs\vm.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\xss\lang\waxjs.h"
 				>
 			</File>
 			<File
