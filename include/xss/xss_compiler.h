@@ -157,7 +157,7 @@ namespace xkp
         variant     evaluate_property(XSSProperty prop);
         str         renderer_file(const str& file);
         str         idiom_path(XSSObject obj, const str& file);
-        str         idiom_type_path(XSSObject obj, const str& file);
+        fs::path    type_path(const str& type_name);
         str         full_path(const str& file);
         fs::path    compiling();
         void        copy_file(const str& src, const str& dst);

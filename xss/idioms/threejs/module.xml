@@ -23,7 +23,7 @@
             </property>		
 		</class>		
 
-		<class id="playing_sound" instantiator="sound_renderer.xss"/>	
+		<class id="playing_sound" renderer="sound_renderer.xss"/>	
 		
 		<class id="material">
 			<constructor_params>
@@ -61,11 +61,11 @@
 		
 		<class id="composite_material" output_id="Array"/>
 		
-		<class id="basic_material" super="material" output_id="THREE.MeshBasicMaterial" instantiator="param_in_obj.xss"/>
+		<class id="basic_material" super="material" output_id="THREE.MeshBasicMaterial" renderer="param_in_obj.xss"/>
 				
-		<class id="lambert_material" super="material" output_id="THREE.MeshLambertMaterial" instantiator="param_in_obj.xss"/>
+		<class id="lambert_material" super="material" output_id="THREE.MeshLambertMaterial" renderer="param_in_obj.xss"/>
 			
-		<class id="phong_material" super="material" output_id="THREE.MeshPhongMaterial" instantiator="param_in_obj.xss"/>
+		<class id="phong_material" super="material" output_id="THREE.MeshPhongMaterial" renderer="param_in_obj.xss"/>
 			
 		<class id="normal_material" output_id="THREE.MeshNormalMaterial"/>
 						
@@ -76,9 +76,17 @@
 			<property id="texture_src" type="string" dont_init="true"/>
 		</class>
 		
-		<class id="object3d">						
+		<class id="object3d">			
             <property id="color" type="string" use_plain_value="true">
 				<set text="materials[ 0 ].color.setHex({value})"/>
+            </property>
+			<property id="texture" type="string" use_plain_value="true">
+				<set text="materials[ 0 ] = new THREE.MeshBasicMaterial({
+						map:THREE.ImageUtils.loadTexture(streamer.get_resource({value}).asset),
+						})"/>
+            </property>
+			<property id="material" type="string" use_plain_value="true">
+				<set text="materials[ 0 ] = {value}"/>
             </property>
 			<property id="alpha" type="float" use_plain_value="true">	
 				<get text="alpha"/>
@@ -94,6 +102,14 @@
 		</class>
 	
 		<class id="transform" output_id="THREE.Object3D">
+			<property id="texture" type="string" use_plain_value="true">
+				<set text="children[0].materials[ 0 ] = new THREE.MeshBasicMaterial({
+						map:THREE.ImageUtils.loadTexture(streamer.get_resource({value}).asset),
+						})"/>
+            </property>
+			<property id="material" type="string" use_plain_value="true">
+				<set text="children[0].materials[ 0 ] = {value}"/>
+            </property>
 			<property id="position" type="vector3d"/>
 			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>
@@ -106,13 +122,13 @@
 			<property id="scale" type="vector3d"/>
 		</class>
 		
-		<class id="ambient_light" super="light" output_id="THREE.AmbientLight" instantiator="light_renderer.xss">
+		<class id="ambient_light" super="light" output_id="THREE.AmbientLight" renderer="light_renderer.xss">
 			<constructor_params>
 				<parameter property="color"/>				 				
 			</constructor_params>
 		</class>
 		
-		<class id="directional_light" super="light" output_id="THREE.DirectionalLight" instantiator="light_renderer.xss">
+		<class id="directional_light" super="light" output_id="THREE.DirectionalLight" renderer="light_renderer.xss">
 			<constructor_params>
 				<parameter property="color"/>
 				<parameter property="intensity"/>
@@ -124,7 +140,7 @@
 			<property id="cast_shadow" output_id="castShadow" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="point_light" super="light" output_id="THREE.PointLight" instantiator="light_renderer.xss">
+		<class id="point_light" super="light" output_id="THREE.PointLight" renderer="light_renderer.xss">
 			<constructor_params>
 				<parameter property="color"/>
 				<parameter property="intensity"/>
@@ -134,7 +150,7 @@
 			<property id="distance" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="camera" output_id="THREE.Camera" instantiator="camera_renderer.xss">
+		<class id="camera" output_id="THREE.Camera" renderer="camera_renderer.xss">
 			<constructor_params>				
 				<parameter property="fov"/>
 				<parameter property="aspect"/>
@@ -152,7 +168,7 @@
 			<property id="scale" type="vector3d"/>
 		</class>
 	
-		<class id="quake_camera" output_id="THREE.QuakeCamera" instantiator="camera_renderer.xss">
+		<class id="quake_camera" output_id="THREE.QuakeCamera" renderer="camera_renderer.xss">
 			<constructor_params> 				
 				<parameter property="fov"/>
 				<parameter property="aspect"/>
@@ -180,7 +196,7 @@
 			<property id="scale" type="vector3d"/>
 		</class>
 	
-		<class id="plane" super="object3d" output_id="THREE.Plane" instantiator="object3d_renderer.xss">
+		<class id="plane" super="object3d" output_id="THREE.Plane" renderer="object3d_renderer.xss">
 			<constructor_params>
 				<parameter property="width"/>
 				<parameter property="height"/>
@@ -193,7 +209,7 @@
 			<property id="y_segments" output_id="segmentsHeight" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="cube" super="object3d" output_id="THREE.Cube" instantiator="object3d_renderer.xss">
+		<class id="cube" super="object3d" output_id="THREE.Cube" renderer="object3d_renderer.xss">
 			<constructor_params>
 				<parameter property="width"/>
 				<parameter property="height"/>
@@ -216,7 +232,7 @@
 			<property id="sides" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="cylinder" super="object3d" output_id="THREE.Cylinder" instantiator="object3d_renderer.xss">
+		<class id="cylinder" super="object3d" output_id="THREE.Cylinder" renderer="object3d_renderer.xss">
 			<constructor_params>
 				<parameter property="segments"/>
 				<parameter property="top_radius"/>
@@ -233,7 +249,7 @@
 			<property id="bottomoffset" type="string" dont_init="true"/>			
 		</class>
 	
-		<class id="sphere" super="object3d" output_id="THREE.Sphere" instantiator="object3d_renderer.xss">
+		<class id="sphere" super="object3d" output_id="THREE.Sphere" renderer="object3d_renderer.xss">
 			<constructor_params>
 				<parameter property="radius"/>
 				<parameter property="x_segments"/>
@@ -244,14 +260,14 @@
 			<property id="y_segments" output_id="segmentsHeight" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="icosahedron" super="object3d" output_id="THREE.Icosahedron" instantiator="object3d_renderer.xss">
+		<class id="icosahedron" super="object3d" output_id="THREE.Icosahedron" renderer="object3d_renderer.xss">
 			<constructor_params>
 				<parameter property="subdivisions"/>			
 			</constructor_params>
 			<property id="subdivisions" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="particle" instantiator="particle_renderer.xss">
+		<class id="particle" renderer="particle_renderer.xss">
 			<constructor_params>
 				<parameter property="program"/>
 				<parameter property="color"/>					
@@ -263,7 +279,7 @@
 			<property id="scale" type="vector3d"/>
 		</class>
 		
-		<class id="particle_system" instantiator="particle_renderer.xss">
+		<class id="particle_system" renderer="particle_renderer.xss">
 			<constructor_params>
 				<parameter property="program"/>
 				<parameter property="color"/>
@@ -285,7 +301,7 @@
 			<property id="img_array" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="model" dont_render="true" instantiator="model_renderer.xss">
+		<class id="model" dont_render="true" renderer="model_renderer.xss">
 			<property id="position" type="vector3d"/>
 			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>

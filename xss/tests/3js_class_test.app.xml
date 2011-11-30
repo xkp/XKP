@@ -1,3 +1,12 @@
-<application src="3js_class_test.app.xs" width="600" height="400">    
-    
+<application src="3js_class_test.app.xs" renderer="canvas" width="600" height="400">    
+    <resources>		
+		<image src="images/test1.png"/>		
+	</resources>
+		
+	<scene>		 
+		<camera id="camera_1" fov="45" aspect="1.5" near="1" far="10000">
+			<position x="500" y="500" z="1000"/>			
+		</camera>		
+	</scene>
+	
 </application>

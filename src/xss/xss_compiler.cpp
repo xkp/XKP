@@ -882,6 +882,16 @@ str xss_compiler::idiom_path(XSSObject obj, const str& file)
     return p.string();
   }
 
+fs::path xss_compiler::type_path(const str& type_name)
+  {
+    XSSContext             ctx = current_context();
+    XSSApplicationRenderer app = ctx->resolve("#app");
+    XSSModule idiom = app->type_idiom(type_name);
+    if (idiom)
+      return idiom->path();
+    return fs::path();
+  }
+
 str xss_compiler::full_path(const str& file)
   {
     fs::path pth = vm::instance().file();
@@ -1741,7 +1751,7 @@ void xss_compiler::read_application(const str& app_file)
         app_renderer->context()->add_type("Application", app_type);
         app_renderer->context()->register_symbol(RESOLVE_INSTANCE, "application", app_data);
 
-        XSSContext code_ctx(new xss_context(app_renderer->context(), src_path));
+        XSSContext code_ctx(new xss_context(app_renderer->context(), src_path.parent_path()));
         code_ctx->set_this(app_data);
 
         //must collect the instances in the scope

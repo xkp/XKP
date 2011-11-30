@@ -81,6 +81,11 @@ xss_context::xss_context(XSSContext parent, fs::path path):
   code_scope_(),
   got_dsls_(false)
   {
+    if (!path.empty())
+      {
+        str debug("xxxx");
+      }
+
     code_types_.add_type<xss_object>("object");
     code_types_.add_type<DynamicArray>("array");
   }

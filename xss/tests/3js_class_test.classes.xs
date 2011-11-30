@@ -1,4 +1,7 @@
-class my_sphere : sphere
+class my_plane : transform
 {	
-	
+	property image
+	{
+		real_plane.texture = value;
+	}
 }

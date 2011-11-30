@@ -1,9 +1,8 @@
 <xss:parameter id="obj"/>
 
-<xss:code>	
-		
+<xss:code>			
 	if (!obj.material)
-        compiler.error("Object3d requires a material", object = obj.id);
+        obj.material = "null";
 		
 	out()
     {
