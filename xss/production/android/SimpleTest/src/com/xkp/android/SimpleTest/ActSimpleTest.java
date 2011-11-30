@@ -25,7 +25,6 @@ public class ActSimpleTest
 				private Button btnFullName;
 				private TextView lblFullName;
 				private EditText edtContainer;
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -61,6 +60,6 @@ else
 {
 	lblFullName.setText("Your full name is EMPTY!");
 }
-edtContainer.append(lblFullName.getText() + "\n");
+edtContainer.append(lblFullName.getText().toString() + "\n");
 			}
 }

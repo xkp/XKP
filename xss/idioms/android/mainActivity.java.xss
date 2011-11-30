@@ -215,7 +215,6 @@ public class Act<xss:e value="appName"/>
 {
 	<xss:marker id="declarations"/>
 
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -283,32 +282,7 @@ public class Act<xss:e value="appName"/>
 	android.instances += application;
 	for(var inst in android.instances)
 	{
-		//TRACE: log
-		compiler.log("Instance " + inst.output_id + "...");
-		if(inst.properties)
-		{
-			for(var p in inst.properties)
-			{
-				compiler.xss("../java/property.xss", p, inst.output_id);
-			}
-		}
-		
-		if(inst.events)
-		{
-			for(var e in inst.events)
-			{
-				string new_id = e.output_id + inst.id;
-				compiler.xss("../java/event.xss", e, new_id);
-			}
-		}
-		
-		if(inst.methods)
-		{
-			for(var m in inst.methods)
-			{
-				compiler.xss("../java/method.xss", m);
-			}
-		}
+		compiler.xss("../java/instance.xss", it = inst);
 	}
 </xss:code>
 

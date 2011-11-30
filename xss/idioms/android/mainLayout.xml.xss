@@ -1,17 +1,27 @@
+<xss:parameter id="clazz"/>
 <xss:parameter id="appName"/>
+
 <?xml version="1.0" encoding="utf-8"?>
-<com.xkp.android.<xss:e value="appName"/>.XKPLayout 
-	xmlns:android="http://schemas.android.com/apk/res/android" 
-	xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.<xss:e value="appName"/>" 
-	android:id="@+id/mainLayoutApplication" 
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	xkp:placement="client"
-	
+<xss:code>
+	if(!compiler.is_type(clazz))
+	{
+		out(indent = 0)
+		{
+			<com.xkp.android.<xss:e value="appName"/>.XKPLayout 
+				xmlns:android="http://schemas.android.com/apk/res/android" 
+				xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.<xss:e value="appName"/>" 
+				android:id="@+id/<xss:e value="clazz.output_id"/>" 
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				xkp:placement="client"
+		}
+	}
+</xss:code>
+
 <xss:class>
 	on render()
 	{
-		generate_view(application, null, 0);
+		generate_view(clazz, null, 0);
 	}
 	
 	method generate_view(var view, var parent, int ind)
@@ -30,10 +40,18 @@
 		{
 			out(indent = ind)
 			{
-				<<xss:e value="strViewName"/><xss:e value="view.name"/> android:id="@+id/<xss:e value="view.output_id"/>"
+				<<xss:e value="strViewName"/> android:id="@+id/<xss:e value="view.output_id"/>"
 			}
 		}
 		
+		if(!view.parent && compiler.is_type(view))
+		{
+			out(indent = ind)
+			{
+				xmlns:android="http://schemas.android.com/apk/res/android" 
+				xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.<xss:e value="appName"/>" 
+			}
+		}
 		generate_properties(view, ind + 1);
 		
 		out(indent = ind + 1)
@@ -129,7 +147,7 @@
 		for(var prop in qproperty)
 		{
 			//TRACE: log
-			//compiler.log("Generating xml layout. View: " + view.id + " - Property: " + prop.name);
+			//compiler.log("Generating xml layout. View: " + view.id + " - Property: " + prop.id);
 			
 			if(prop.value == null && prop.default_value != null)
 			{
@@ -171,7 +189,7 @@
 			else
 			if(prop.res_type == "drawable")
 			{
-				//TIP: stupid stripped string... live is hard :(
+				//TIPS: stupid stripped string... live is hard :(
 				string project_path = compiler.project_path() + "/";
 				string output_path = appName + "/res/drawable/";
 				
@@ -270,4 +288,13 @@
 		}
 	}
 </xss:class>
-</com.xkp.android.<xss:e value="appName"/>.XKPLayout>
+
+<xss:code>
+	if(!compiler.is_type(clazz))
+	{
+		out(indent = 0)
+		{
+			</com.xkp.android.<xss:e value="appName"/>.XKPLayout>
+		}
+	}
+</xss:code>

@@ -63,7 +63,6 @@ public class ActKitchenSink
 				private ProgressBar prgbar3;
 				private ProgressBar prgbar4;
 				private SeekBar seekb1;
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -119,6 +118,17 @@ public class ActKitchenSink
 				spec.setIndicator(tab);
 				tabh.addTab(spec);
 			}
+		}
+		void setResourceImageView(int id, String resource) {
+			int rpos = resource.lastIndexOf("/");
+			String n_res = resource.substring(rpos + 1);
+			rpos = n_res.lastIndexOf(".");
+			String res = n_res.substring(0, rpos - 1);
+			int resId = getResources().getIdentifier(
+							res, "drawable", 
+							getContext().getPackageName());
+			ImageView img = (ImageView) findViewById(id);
+			img.setImageResource(resId);
 		}
 			}
 }

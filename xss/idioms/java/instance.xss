@@ -1,27 +1,24 @@
 <xss:parameter id="it"/>
 
-	private static class Class_<xss:e value="it.id"/> {
+<xss:code>
+	compiler.log("-- Rendering instance: " + it.id);
 	
-	<xss:code>
-		compiler.log("-- Rendering instance: " + it.id);
-		
-		compiler.log("Properties size: " + it.properties.size);
-		for(var p in it.properties)
-		{
-			compiler.xss("property.xss", p);
-		}
-		
-		compiler.log("Methods size: " + it.methods.size);
-		for(var m in it.methods)
-		{
-			compiler.xss("method.xss", m);
-		}
-		
-		compiler.log("Events size: " + it.events.size);
-		for(var e in it.events)
-		{
-			compiler.xss("event.xss", e);
-		}
-	</xss:code>
-
+	compiler.log("Properties size: " + it.properties.size);
+	for(var p in it.properties)
+	{
+		compiler.xss("property.xss", p = p, iname = it.output_id);
 	}
+	
+	compiler.log("Methods size: " + it.methods.size);
+	for(var m in it.methods)
+	{
+		compiler.xss("method.xss", m = m, iname = it.output_id);
+	}
+	
+	compiler.log("Events size: " + it.events.size);
+	for(var e in it.events)
+	{
+		string new_id = e.output_id + it.id;
+		compiler.xss("event.xss", e = e, new_id = new_id);
+	}
+</xss:code>

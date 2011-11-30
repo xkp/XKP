@@ -1,4 +1,69 @@
 <xss:code>
+for(var ut in test_idiom.user_types)
+{
+	out()
+	{
+		class <xss:e value="ut.id"/> : <xss:e value="ut.super.id"/>
+		childrens <xss:e value="ut.children.size"/>
+	}
+	
+	for(var p_ut in ut.properties)
+	{
+		out()
+		{
+			property <xss:e value="p_ut.output_id"/>
+		}
+	}
+	
+	for(var m_ut in ut.methods)
+	{
+		out()
+		{
+			method <xss:e value="m_ut.output_id"/>
+		}
+	}
+	
+	for(var inst in ut.instances)
+	{
+		out()
+		{
+			instance <xss:e value="inst.output_id"/> <xss:open_brace/>
+			properties <xss:e value="inst.properties.size"/>
+			methods <xss:e value="inst.methods.size"/>
+			events <xss:e value="inst.events.size"/>
+		}
+		
+		for(var p in inst.properties)
+		{
+			out()
+			{
+				property <xss:e value="p.output_id"/>
+			}
+		}
+		
+		for(var e in inst.events)
+		{
+			out()
+			{
+				event <xss:e value="e.output_id"/>
+			}
+		}
+		
+		for(var m in inst.methods)
+		{
+			out()
+			{
+				method <xss:e value="m.output_id"/>
+			}
+		}
+		
+		out()
+		{
+			<xss:close_brace/>
+		}
+	}
+}
+
 for(var mthd in application.methods)
 {
     var type = mthd.code.type;

@@ -8,13 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 public class XKPLayout extends ViewGroup {
-	private static final boolean DEBUG = false;
-	// this padding values is for now
-	// it's necessary to know where there from
-	private static final int mPaddingLeft = 0;
-	private static final int mPaddingRight = 0;
-	private static final int mPaddingTop = 0;
-	private static final int mPaddingBottom = 0;
+	private static final boolean DEBUG = true;
+	private int mPaddingLeft = 0;
+	private int mPaddingRight = 0;
+	private int mPaddingTop = 0;
+	private int mPaddingBottom = 0;
 	public static final int PL_NONE   = 0;
 	public static final int PL_TOP    = 1;
 	public static final int PL_LEFT   = 2;
@@ -27,14 +25,23 @@ public class XKPLayout extends ViewGroup {
 	private XKPLayout.LayoutParams mXKPLayoutParams;
 	public XKPLayout(Context context) {
 		super(context);
+		updatePadding();
 	}
 	public XKPLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		mXKPLayoutParams = (XKPLayout.LayoutParams) generateLayoutParams(attrs);
+		updatePadding();
 	}
 	public XKPLayout(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		mXKPLayoutParams = (XKPLayout.LayoutParams) generateLayoutParams(attrs);
+		updatePadding();
+	}
+	private void updatePadding() {
+		mPaddingLeft = getPaddingLeft();
+		mPaddingTop = getPaddingTop();
+		mPaddingRight = getPaddingRight();
+		mPaddingBottom = getPaddingBottom();
 	}
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -42,9 +49,13 @@ public class XKPLayout extends ViewGroup {
 		int heightLayout = MeasureSpec.getSize(heightMeasureSpec);
 		int maxWidth = widthLayout;
 		int maxHeight = heightLayout;
+		// Account for padding too
+		maxWidth += mPaddingLeft - mPaddingRight;
+		maxHeight += mPaddingTop - mPaddingBottom;
 		// Find out how big everyone wants to be
 		measureChildren(widthMeasureSpec, heightMeasureSpec);
-		Rect bounds = new Rect(0, 0, widthLayout, heightLayout);
+		//Rect bounds = new Rect(0, 0, widthLayout, heightLayout);
+		Rect bounds = new Rect(mPaddingLeft, mPaddingTop, maxWidth, maxHeight);
         final int childCount = getChildCount();
     	for(int i = 0; i < childCount; ++i) {
     		final View child = getChildAt(i);
@@ -53,9 +64,9 @@ public class XKPLayout extends ViewGroup {
 					= (XKPLayout.LayoutParams) child.getLayoutParams();
 				// update origins dimensions 
 				if (lp.origins.right < 0)
-					lp.origins.right = lp.origins.left + child.getMeasuredWidth();
+					lp.origins.right = lp.origins.left + mPaddingLeft + child.getMeasuredWidth() - mPaddingRight;
 				if (lp.origins.bottom < 0)
-					lp.origins.bottom = lp.origins.top + child.getMeasuredHeight();
+					lp.origins.bottom = lp.origins.top + mPaddingTop + child.getMeasuredHeight() - mPaddingBottom;
 		        int childWidth = lp.origins.width();
 		        int childHeight = lp.origins.height();
 		        if(DEBUG) {
@@ -126,11 +137,10 @@ public class XKPLayout extends ViewGroup {
 						}
 					}
 				}
+				maxWidth = Math.max(maxWidth, childWidth);
+				maxHeight = Math.max(maxHeight, childHeight);
     		}
     	} //for
-		// Account for padding too
-		maxWidth += mPaddingLeft + mPaddingRight;
-		maxHeight += mPaddingTop + mPaddingBottom;
 		// Check against minimum height and width
 		maxWidth = Math.max(maxWidth, getSuggestedMinimumWidth());
 		maxHeight = Math.max(maxHeight, getSuggestedMinimumHeight());
@@ -148,6 +158,9 @@ public class XKPLayout extends ViewGroup {
 			}
 			v.requestLayout();
 		}
+    }
+	public String toString() {
+		return "com.xkp.android.XKPLayout";
     }
 	@Override
 	protected ViewGroup.LayoutParams generateDefaultLayoutParams() {

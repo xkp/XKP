@@ -1,6 +1,6 @@
 
 <xss:parameter id="p"/>
-<xss:parameter id="iname"/>
+<xss:parameter id="iname" default=""/>
 
 <xss:code>
 	//TRACE: log
@@ -9,7 +9,8 @@
 	if(!p.user_defined || p.no_render)
 		return;
 	
-	string prop_type = "Object";
+	string obj_type = "Object";
+	string prop_type = obj_type;
 	if(p.type != null)
 		prop_type = p.type.output_id;
 		
@@ -17,12 +18,12 @@
 	if(p.get)
 		if(p.get.type)
 			ret_type = p.get.type.output_id;
+			
+	if(ret_type == obj_type)
+		if(prop_type != obj_type)
+			ret_type = prop_type;
 	
-	string inst_name = "";
-	if(iname)
-		inst_name = iname;
-		
-	p.output_id = "prop_" + inst_name + "_" + p.name;
+	p.output_id = "prop_" + iname + "_" + p.name;
 	
 	string rend_value = "";
 	if(p.value)

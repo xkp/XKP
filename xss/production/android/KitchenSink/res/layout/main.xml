@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.xkp.android.KitchenSink.XKPLayout 
-	xmlns:android="http://schemas.android.com/apk/res/android" 
-	xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.KitchenSink" 
-	android:id="@+id/mainLayoutApplication" 
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	xkp:placement="client"
+			<com.xkp.android.KitchenSink.XKPLayout 
+				xmlns:android="http://schemas.android.com/apk/res/android" 
+				xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.KitchenSink" 
+				android:id="@+id/application" 
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				xkp:placement="client"
 			>
 				<TabHost android:id="@+id/kitchen"
 				xkp:placement="client"

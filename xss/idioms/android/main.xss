@@ -57,6 +57,9 @@
 	output_filename = appName + "/src/com/xkp/android/" + appName + "/XKPLayout.java";
 	compiler.xss("xkpLayout.java.xss", output_file = output_filename, appName);
 	
+	string output_path = appName + "/src/com/xkp/android/" + appName + "/";
+	compiler.inject("render_types", path = output_path, appName = appName);
+	
 	output_filename = appName + "/res/values/strings.xml";
 	compiler.xss("stringValues.xml.xss", output_file = output_filename);
 	
@@ -81,7 +84,7 @@
 	}
 	
 	output_filename = appName + "/res/layout/main.xml";
-	compiler.xss("mainLayout.xml.xss", output_file = output_filename, appName);
+	compiler.xss("mainLayout.xml.xss", output_file = output_filename, appName, clazz = application);
 	
 	if(bReplicator)
 	{

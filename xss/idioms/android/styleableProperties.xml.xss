@@ -1,0 +1,37 @@
+<xss:parameter id="clazz"/>
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<declare-styleable name="<xss:e value="clazz.output_id"/>">
+<xss:code>
+	for(var prop in clazz.properties)
+	{
+		if(!prop.set || !prop.type)
+			continue;
+		
+		string format = "reference";
+		if(prop.type.id == "string")
+		{
+			format = "reference|string";
+		} else
+		if(prop.type.id == "int")
+		{
+			format = "integer";
+		} else
+		if(prop.type.id == "bool")
+		{
+			format = "boolean";
+		} else
+		if(prop.type.id == "float")
+		{
+			format = "float";
+		}
+		
+		out()
+		{
+			<attr name="<xss:e value="prop.id"/>" format="<xss:e value="format"/>"/>
+		}
+	}
+</xss:code>
+	</declare-styleable>
+</resources>
