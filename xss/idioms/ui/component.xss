@@ -49,7 +49,7 @@
 		
 	    
         out() {<xss:e value = "parent_id"/>.manager, <xss:e value = "parent_id"/>);}
-		if(cmp.type.output_id == "ms.ui.Component"){
+		if(cmp.type.output_id == "ms.ui.Component" || cmp.type.output_id == "ms.ui.ClipArea"){
 			out() {<xss:e v="cmp.id"/>.mouse_thru = true;}			
 		}
         compiler.xss("../common-js/instance.xss", cmp, path = path);

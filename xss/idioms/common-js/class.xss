@@ -81,8 +81,6 @@
 
         for(var inst in clazz.instances)
         {
-            compiler.log(inst.id);
-            
             string inst_renderer = inst.type.renderer;
             if (!inst_renderer)
             {

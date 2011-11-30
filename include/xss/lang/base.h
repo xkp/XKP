@@ -30,6 +30,8 @@ struct variable_gather : code_visitor
   {
     variable_gather(XSSContext ctx);
 
+    void apply();
+
     //code_visitor
     virtual void variable_(stmt_variable& info);
     virtual void if_(stmt_if& info);
@@ -144,11 +146,16 @@ struct base_args_renderer : public IArgumentRenderer
     base_args_renderer(const base_args_renderer& other);
     base_args_renderer(param_list_decl& params, XSSContext ctx);
 
-    virtual str render() = 0;
+    //IArgumentRenderer
+    virtual str  render() = 0;
+    virtual void add(const str& name, XSSType type);
 
     protected:
+      typedef std::vector<std::pair<str, XSSType>> extra_arg_list;
+
       XSSContext      ctx_;
       param_list_decl args_;
+      extra_arg_list  extra_;
 
       virtual str render_expression(expression& expr, XSSContext ctx) = 0;
   };
@@ -201,5 +208,16 @@ struct renderer_expr_schema : renderer_schema<T>
       }
   };
 
+template <typename T>
+struct renderer_args_schema : renderer_schema<T>
+  {
+    virtual void declare_base()
+      {
+        this->template implements<IArgumentRenderer>();
+
+        //maintain base implememtations
+        renderer_schema<T>::declare_base();
+      }
+  };
 }
 #endif

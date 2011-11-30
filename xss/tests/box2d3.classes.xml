@@ -2,8 +2,4 @@
     <class id="smiley_ball" super="img" src="images/smile_grin_48.png" width="50" height="50">
         <physics body_type="dynamic" shape="circle" radius="21.5"/>
     </class>
-
-    <class id="wall" super="img" src="images/stone-12.jpg">
-        <physics body_type="static" shape="rect"/>
-    </class>
 </xs>

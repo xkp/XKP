@@ -25,14 +25,14 @@ on mouseup(){
 on mousemove(x, y){
 	if(is_mouse_down){
 		mouse_x = x - window_half_x;
-		x_target_rotation = x_target_rotation_on_mouse_down + ( mouse_x - mouse_x_on_mouse_down ) * 0.02;
+		x_target_rotation = x_target_rotation_on_mouse_down + ( mouse_x - mouse_x_on_mouse_down ) * 0.3;
 		mouse_y = y - window_half_y;
-		y_target_rotation = y_target_rotation_on_mouse_down + ( mouse_y - mouse_y_on_mouse_down ) * 0.02;
+		y_target_rotation = y_target_rotation_on_mouse_down + ( mouse_y - mouse_y_on_mouse_down ) * 0.3;
 	}
 }
 
 on animate(){
-	cube_1.rotation.y += ( x_target_rotation - cube_1.rotation.y ) * 0.05;
+	cube_1.rotation.y += ( x_target_rotation - cube_1.rotation.y ) * 0.2;
 	plane_1.rotation.z = cube_1.rotation.y;
-	cube_1.rotation.x += ( y_target_rotation - cube_1.rotation.x ) * 0.05;
+	cube_1.rotation.x += ( y_target_rotation - cube_1.rotation.x ) * 0.2;
 }

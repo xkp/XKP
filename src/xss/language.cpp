@@ -737,6 +737,27 @@ void expression_analizer::analyze(expression& expr, XSSContext ctx)
                   }
                 break;
               }
+            case op_call:
+              {
+                XSSObject instance;
+                analyze_path(expr, op, ctx, method_name_, instance);
+                if (instance)
+                    method_ = instance->get_method(method_name_);
+                
+                is_call_ = true;
+                break;
+              }
+            case op_func_call:
+              {
+                XSSObject             instance = ctx->get_this();
+                expression_identifier ei       = expr.first();
+                method_name_                   = ei.value;
+                if (instance)
+                    method_ = instance->get_method(method_name_);
+                
+                is_call_ = true;
+                break;
+              }
             default:
               assert(false); //more test cases later
           }
@@ -791,6 +812,59 @@ str expression_analizer::first_string()
 bool expression_analizer::first_property()
   {
     return first_property_;
+  }
+
+bool expression_analizer::is_call()
+  {
+    return is_call_;
+  }
+
+XSSMethod expression_analizer::method()
+  {
+    return method_;
+  }
+
+str expression_analizer::method_name()
+  {
+    return method_name_;
+  }
+
+void expression_analizer::analyze_path(expression& expr, operator_type op, XSSContext ctx, str& last_id, XSSObject& instance)
+  {
+    expression_splitter es(op);
+    expr.visit(&es);
+
+    path_    = es.left;
+    instance = variant_cast<XSSObject>(lang_utils::object_expr(path_, ctx), XSSObject());
+                
+    //resolve 
+    expression_identifier first_ei = path_.last();
+    first_string_ = first_ei.value; //td: !!! []
+
+    resolve_info fri;
+    if (ctx->resolve(first_ei.value, fri))
+      {
+        switch(fri.what)
+          {
+            case RESOLVE_INSTANCE: 
+            case RESOLVE_VARIABLE: break; 
+            case RESOLVE_PROPERTY: first_property_ = true; break; 
+            default : assert(false); //catch
+          }
+        first_ = fri.value;
+      }
+
+    expression_identifier ei = es.right.pop_first();
+    last_id = ei.value; 
+
+    //get info on the start of the chain
+    expression_identifier vf = expr.first();
+    resolve_info ri;
+    if (ctx->resolve(vf.value, ri))
+      {
+        if (ri.what == RESOLVE_PROPERTY)
+          this_property_ = true;
+      }
   }
 
 //td: !!! stop duplicating this array
@@ -948,8 +1022,17 @@ XSSType lang_utils::resolve_type(variant var, XSSContext ctx)
 
 void lang_utils::var_gatherer(code& cde, XSSContext ctx)
   {
+    resolve_info ri;
+    ri.shallow = true;
+
+    if (ctx->resolve("#var_gatherer", ri))
+      return;
+    
+    ctx->register_symbol(RESOLVE_CONST, "#var_gatherer", true);
+
     variable_gather vg(ctx);
     cde.visit(&vg);
+    vg.apply();
   }
 
 variant lang_utils::object_expr(expression& expr, XSSContext ctx)

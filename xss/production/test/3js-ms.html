@@ -104,7 +104,7 @@ g_elapsed = now;
                         default_interpolate,
                         function(value)
                         {
-                            this__.target.materials[0].opacity = value;
+                            set_object_alpha(this__.target, value);
                         },
                         [
                         {t: 0, value: 1},
@@ -116,7 +116,7 @@ g_elapsed = now;
                         default_interpolate,
                         function(value)
                         {
-                            this__.target.materials[0].opacity = value;
+                            set_object_alpha(this__.target, value);
                         },
                         [
                         {t: 2, value: 0},
@@ -128,8 +128,8 @@ g_elapsed = now;
                 this.init();
             },
 });
-	var cylinder_material = new THREE.MeshBasicMaterial({
-	color:Math.random() * 0xffffff
+var cylinder_material = new THREE.MeshBasicMaterial({
+color:Math.random() * 0xffffff
 	});
 var scene = 
 new THREE.Scene(
@@ -150,8 +150,8 @@ new THREE.Cylinder(
 200,100,100,500);
 	    var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
 	    scene.addObject(cylinder_1);
-                cylinder_1.rotation.x = 10;
-                cylinder_1.rotation.y = 10;
+                set_rotation_x(cylinder_1.rotation, 10);
+                set_rotation_y(cylinder_1.rotation, 10);
 	document.addEventListener( 'click', click_cylinder_1, false );
 	function click_cylinder_1 (event)
 	{

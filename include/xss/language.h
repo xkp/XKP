@@ -128,12 +128,16 @@ struct expression_analizer
     variant     get_first();
     str         first_string();
     bool        first_property();
+    bool        is_call();
+    XSSMethod   method();
+    str         method_name();
 
     private:
       bool        is_identifier_;
       bool        is_constant_;
       bool        is_property_;
       bool        this_property_;
+      bool        is_call_;
       str         identifier_;
       variant     constant_;
       expression  path_;
@@ -142,6 +146,10 @@ struct expression_analizer
       variant     first_;
       str         first_string_;
       bool        first_property_;
+      XSSMethod   method_;
+      str         method_name_;
+
+      void analyze_path(expression& expr, operator_type op, XSSContext ctx, str& last_id, XSSObject& instance);
   };
 
 struct lang_utils

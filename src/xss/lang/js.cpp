@@ -44,8 +44,11 @@ str js_code_renderer::render_expression(expression& expr, XSSContext ctx)
 
 str js_code_renderer::render_code(code& cde)
   {
+    XSSContext ctx(new xss_context(ctx_));
+    lang_utils::var_gatherer(cde, ctx);
+
     param_list_decl pld;
-    js_code_renderer inner(cde, pld, ctx_);
+    js_code_renderer inner(cde, pld, ctx);
     str result = inner.render();
     add_line(result);
     return result;
@@ -94,16 +97,31 @@ str js_args_renderer::render()
 
     param_list_decl::iterator it = args_.begin();
     param_list_decl::iterator nd = args_.end();
+
+    bool first = true;
     for(; it != nd; it++)
       {
-        oss << it->name << ","; //td: interface
+        if (first)
+          first = false;
+        else
+          oss << ",";
+
+        oss << it->name; 
       }
 
-    str result = oss.str();
-    if (!result.empty())
-      result.erase(result.end() - 1);
+    extra_arg_list::iterator eit = extra_.begin();
+    extra_arg_list::iterator end = extra_.end();
+    for(; eit != end; eit++)
+      {
+        if (first)
+          first = false;
+        else
+          oss << ",";
 
-    return result;
+        oss << eit->first; 
+      }
+
+    return oss.str();
   }
 
 str js_args_renderer::render_expression(expression& expr, XSSContext ctx)

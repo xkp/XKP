@@ -18,6 +18,9 @@ if (!is_class)
 if (path)
     mthd_name = path + "." + mthd_name;
 
+if(!is_class)
+	mthd.code.use_this_id(true);
+	
 out(indent = 0)
 {
 	<xss:e value="mthd_name"/> <xss:e value="assign"/> function(<xss:e>mthd.args.render()</xss:e>) 

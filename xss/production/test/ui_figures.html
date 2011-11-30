@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript">	
+var drawingCanvas;		
+var g_ui;
+var g_elapsed = -1;
+var g_delta = 0.0;
+var g_canvas;
+var g_ui_root;
+var application = {};
+var Sound = new ms.ui.Sound();
+		if(drawingCanvas){
+			var client =
+			{
+				width: 600,
+				height: 600,
+				canvas: drawingCanvas
+			};
+			var ui = new ms.ui.Manager(client, streamer);
+			var g_ui = ui;
+			var g_ui_root = ui.root;
+		}
+		var streamer = new ms.streamer.Streamer();
+        var def_package_items = [];
+                def_package_items.push(
+            {
+		id:"__image1",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/smile_grin_48.png"
+});
+                def_package_items.push(
+            {
+		id:"__image2",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/smile_sad_48.png"
+});
+        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
+		g_startup_package.load();	
+function start(resolution)  
+{  
+	function updater()  
+	{  
+		var now   = new Date().getTime();
+        if (g_elapsed < 0)
+            g_delta = 0; //first update
+        else
+		    g_delta  = now - g_elapsed;  
+        g_elapsed = now; 
+		var context = g_canvas.getContext('2d');
+		g_ui.update(g_delta, context);
+        window.setTimeout(updater, resolution);  
+	}
+	window.setTimeout(updater, resolution);  
+}  
+                application.x = null;
+                application.y = null;
+window.onload = function() 
+{
+	drawingCanvas = document.getElementById("myCanvas");
+    g_canvas = drawingCanvas;
+	if (drawingCanvas && drawingCanvas.getContext)
+	{
+		var client =
+		{
+			width: 600,
+			height: 600,
+			canvas: drawingCanvas
+		};
+		var ui = new ms.ui.Manager(client, streamer);
+		g_ui = ui;
+        g_ui_root = ui.root;
+     	ui.load_resources(function()
+		{
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX, ev.clientY);                  
+	};	
+		    div1 = new ms.ui.Component( 
+	    g_ui_root.manager, g_ui_root);div1.mouse_thru = true;
+                div1.rect(0, 0, 400, 200);
+		    c1 = new ms.ui.Circle( 
+	    "cyan","black",3,div1.manager, div1);
+                c1.setRadius(60);
+	c1.click = function()
+	{    
+		c1.setRadius(c1.getRadius() + 1);
+	};
+                c1.position(50, 50);
+		    r1 = new ms.ui.Rectangle( 
+	    "green",null,null,div1.manager, div1);
+                r1.set_rotation(-30);
+                r1.alpha(60);
+	r1.click = function()
+	{    
+		r1.set_x(r1.x + 5);
+r1.set_y(r1.y + 5);
+	};
+                r1.rect(200, 50, 60, 90);
+		    p1 = new ms.ui.Polygon( 
+	    "pink","brown",3,div1.manager, div1);
+                p1.alpha(40);
+		p1.points.push({id:"point1", x:300, y:300});
+		p1.points.push({id:"point2", x:300, y:250});
+		p1.points.push({id:"point3", x:390, y:200});
+		p1.points.push({id:"point4", x:350, y:400});
+		    btn = new ms.ui.Button( 
+	    "images/smile_grin_48.png","images/smile_sad_48.png",g_ui_root.manager, g_ui_root);
+                btn.set_rotation(45);
+	btn.click = function()
+	{    
+		for(var i = 0; i < 4; i++)
+{
+if (i % 2 == 0)
+{
+application.x = p1.points[i].x + 5;
+application.y = p1.points[i].y + 5;
+}
+else
+{
+application.x = p1.points[i].x - 5;
+application.y = p1.points[i].y - 5;
+}
+p1.setPointbyIndex(i, application.x, application.y);
+}
+	};
+                btn.rect(270, 200, 50, 50);
+			document.onkeydown = function(ev)
+			{
+				ui.keydown(ev.keyCode);                  
+			};
+			document.onkeyup = function(ev)
+			{
+				ui.keyup(ev.keyCode);                  
+			};
+			document.onkeypress = function(ev)
+			{
+				ui.keypress(ev.keyCode);                  
+			};
+            if (application.init)
+            {
+                application.init();
+            }
+            start();
+			ui.draw(drawingCanvas.getContext('2d'));
+		});
+	}
+}
+</script>
+</head>
+<body>
+	<canvas id="myCanvas" width="600" height="600">
+		<p>Your browser doesn't support canvas.</p>
+	</canvas>
+	<audio id="sounds" preload> 
+	Your browser does not support the audio element.
+	</audio>
+</body>
+</html>

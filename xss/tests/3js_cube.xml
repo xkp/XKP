@@ -3,7 +3,7 @@
 	<materials>	
 	
 		<composite_material id="materials">
-			<basic_material color="Math.random() * 0xffffff"/>
+			<basic_material color="Math.random() * 0xffffff" alpha="20"/>
 			<basic_material color="Math.random() * 0xffffff"/>
 			<basic_material color="Math.random() * 0xffffff"/>
 			<basic_material color="Math.random() * 0xffffff"/>
@@ -27,7 +27,7 @@
 		</cube>
 		
 		<plane id="plane_1" width="200" height="200" material="plane_material">
-			<rotation x="-1.57"/>		
+			<rotation x="-90"/>		
 		</plane>
 		
 	</scene>

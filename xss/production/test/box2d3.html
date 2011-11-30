@@ -155,7 +155,7 @@ function start(resolution)
                 var y = pos.y*g_world_scale;
                 bb.host.xs_updating = true;
                 bb.host.position(x - bb.host.w/2, y - bb.host.h/2);
-                bb.host.set_rotation(angle);
+                bb.host.set_rotation(angle*180/Math.PI);
                 bb.host.xs_updating = false;
             }
             bb = bb.GetNext();
@@ -213,50 +213,6 @@ function start(resolution)
                 this.init();
             },
 });
-            wall = Class.create(ms.ui.Image,
-        {
-    initialize: function($super
-                , src
-                )
-    {
-        $super(
-        src? src : "images/stone-12.jpg"        );
-                var __physics2;
-                this.ev_resized = function(cmp) 
-                {
-                    if (cmp.physics)
-                        g_world.DestroyBody(cmp.physics);
-             fixDef.density = 1;
-             fixDef.friction = 0.5;
-             fixDef.restitution = 0.200000003;
-             bodyDef.type = b2Body.b2_staticBody;
-                fixDef.shape = new b2PolygonShape;
-                    fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
-            fixDef.isSensor = false;
-                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
-            current_body = g_world.CreateBody(bodyDef);
-            current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;
-                cmp.moved = update_body_position;
-                current_body.host = cmp;
-                }
-                if (this.w > 0 && this.h > 0)
-                {
-                    this.ev_resized(this);
-                }
-                this.RemoveFromWorld = function(keep_visual) 
-                {
-                    g_world.DestroyBody(this.physics);
-                    if (!keep_visual)
-                    {
-                        this.parent.removeComponent(this);
-                    }
-                }
-                __physics2 = this.__physics2;
-            if (this.init)
-                this.init();
-            },
-});
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -286,26 +242,116 @@ window.onload = function()
 	{
 		ui.mouseup(ev.clientX, ev.clientY);                  
 	};	
-		    __wall1 = new wall( 
+		    __img1 = new ms.ui.Image( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
-                __wall1.rect(0, 390, 600, 40);
-		    __wall2 = new wall( 
+                __img1.rect(0, 390, 600, 40);
+		    __img2 = new ms.ui.Image( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
-                __wall2.rect(590, 250, 10, 140);
-		    __wall3 = new wall( 
+                __img2.rect(590, 350, 10, 40);
+		    __img3 = new ms.ui.Image( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
-                __wall3.rect(0, 250, 10, 140);
-        sp1 = new ms.arcade.Spawner(g_spawner_manager, 300, 100, 3, 1, 10);
+                __img3.rect(0, 350, 10, 40);
+        sp1 = new ms.arcade.Spawner(g_spawner_manager, 300, 100, 1, 3);
                 sp1.x = 300;
                 sp1.y = 100;
-                sp1.rotation = 3;
+                sp1.set_rotation(90);
                 sp1.frequency = 1;
-                sp1.velocity = 10;
+                sp1.velocity = 3;
         sp1.creator = function()
         {
             return new smiley_ball("images/smile_grin_48.png");
         }
             sp1.start();
+                __img1.ev_resized = function(cmp) 
+                {
+                    if (cmp.physics)
+                        g_world.DestroyBody(cmp.physics);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_staticBody;
+                fixDef.shape = new b2PolygonShape;
+                    fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
+            fixDef.isSensor = false;
+                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);
+            current_body.CreateFixture(fixDef);
+                cmp.physics = current_body;
+                cmp.moved = update_body_position;
+                current_body.host = cmp;
+                }
+                if (__img1.w > 0 && __img1.h > 0)
+                {
+                    __img1.ev_resized(__img1);
+                }
+                __img1.RemoveFromWorld = function(keep_visual) 
+                {
+                    g_world.DestroyBody(__img1.physics);
+                    if (!keep_visual)
+                    {
+                        __img1.parent.removeComponent(__img1);
+                    }
+                }
+                __img2.ev_resized = function(cmp) 
+                {
+                    if (cmp.physics)
+                        g_world.DestroyBody(cmp.physics);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_staticBody;
+                fixDef.shape = new b2PolygonShape;
+                    fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
+            fixDef.isSensor = false;
+                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);
+            current_body.CreateFixture(fixDef);
+                cmp.physics = current_body;
+                cmp.moved = update_body_position;
+                current_body.host = cmp;
+                }
+                if (__img2.w > 0 && __img2.h > 0)
+                {
+                    __img2.ev_resized(__img2);
+                }
+                __img2.RemoveFromWorld = function(keep_visual) 
+                {
+                    g_world.DestroyBody(__img2.physics);
+                    if (!keep_visual)
+                    {
+                        __img2.parent.removeComponent(__img2);
+                    }
+                }
+                __img3.ev_resized = function(cmp) 
+                {
+                    if (cmp.physics)
+                        g_world.DestroyBody(cmp.physics);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_staticBody;
+                fixDef.shape = new b2PolygonShape;
+                    fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
+            fixDef.isSensor = false;
+                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);
+            current_body.CreateFixture(fixDef);
+                cmp.physics = current_body;
+                cmp.moved = update_body_position;
+                current_body.host = cmp;
+                }
+                if (__img3.w > 0 && __img3.h > 0)
+                {
+                    __img3.ev_resized(__img3);
+                }
+                __img3.RemoveFromWorld = function(keep_visual) 
+                {
+                    g_world.DestroyBody(__img3.physics);
+                    if (!keep_visual)
+                    {
+                        __img3.parent.removeComponent(__img3);
+                    }
+                }
             g_ui.fill_background = false; //td: cross idiom
             var debugDraw = new b2DebugDraw();
             var debugDrawCanvas = document.getElementById("myCanvas");

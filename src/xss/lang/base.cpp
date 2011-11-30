@@ -31,6 +31,18 @@ variable_gather::variable_gather(XSSContext ctx):
   {
   }
 
+void variable_gather::apply()
+  {
+    XSSType var_type = ctx_->get_type("var");
+
+    var_list::iterator it = var_vars_.begin();
+    var_list::iterator nd = var_vars_.end();
+    for(; it != nd; it++)
+      {
+        ctx_->register_symbol(RESOLVE_VARIABLE, *it, var_type);
+      }
+  }
+
 void variable_gather::variable_(stmt_variable& info)
   {
     XSSType result = ctx_->get_type(info.type);
@@ -49,7 +61,7 @@ void variable_gather::variable_(stmt_variable& info)
     if (!info.value.empty())
       value = lang_utils::expr_type(info.value, ctx_);
 
-    if (value != result)
+    if (value && value != result)
       {
         if (result->is_variant())
           {
@@ -333,8 +345,7 @@ base_code_renderer::base_code_renderer(code& cde, param_list_decl& params, XSSCo
       }
 
     //register our variables into the context
-    variable_gather vars(ctx_);
-    cde.visit(&vars);
+    lang_utils::var_gatherer(code_, ctx_);
   }
 
 str base_code_renderer::render()
@@ -868,6 +879,11 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 						        expression_identifier ei = arg1;
                     caller = variant_cast<XSSObject>(ctx_->resolve(ei.value, RESOLVE_ANY), XSSObject());
 					        }
+                else if (arg1.is<already_rendered>())
+                  {
+                    already_rendered ar = arg1;
+                    caller = variant_cast<XSSObject>(ar.object, XSSObject());
+                  }
 			        }
 
             bool var_caller = false;
@@ -1201,6 +1217,11 @@ base_args_renderer::base_args_renderer(param_list_decl& params, XSSContext ctx):
   args_(params),
   ctx_(ctx)
   {
+  }
+
+void base_args_renderer::add(const str& name, XSSType type)
+  {
+    extra_.push_back(std::pair<str, XSSType>(name, type));
   }
 
 //base_lang

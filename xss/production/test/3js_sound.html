@@ -23,7 +23,7 @@
 <script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript">		
 	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-	var renderer = new THREE.WebGLRenderer( { antialias: true } );
+	var renderer = new THREE.WebGLRenderer( { antialias: false } );
 var ui;
 var active_camera;
 var g_elapsed = -1;
@@ -60,20 +60,20 @@ g_delta  = now - g_elapsed;
 g_elapsed = now; 
 		set_active_camera(camera_1);
 }
-	var material_sphere1 = new THREE.MeshLambertMaterial({
-	color:16755200,shading:THREE.FlatShading
+var material_sphere1 = new THREE.MeshLambertMaterial({
+color:16755200,shading:THREE.FlatShading
 	});
-	var material_sphere2 = new THREE.MeshLambertMaterial({
-	color:16720384,shading:THREE.FlatShading
+var material_sphere2 = new THREE.MeshLambertMaterial({
+color:16720384,shading:THREE.FlatShading
 	});
-	var material_wireframe = new THREE.MeshLambertMaterial({
-	color:16755400,wireframe:true
+var material_wireframe = new THREE.MeshLambertMaterial({
+color:16755400,wireframe:true
 	});
 var scene = 
 new THREE.Scene(
 );
-	var camera_1 = new THREE.QuakeCamera({
-	fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly:true,lookVertical:false
+var camera_1 = new THREE.QuakeCamera({
+fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly:true,lookVertical:false
 	});
                 camera_1.position.y = 25;
 var light = 
@@ -127,7 +127,7 @@ new THREE.Plane(
 	    var plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    scene.addObject(plane_1);
                 plane_1.position.y = 0.100000001;
-                plane_1.rotation.x = -1.57000005;
+                set_rotation_x(plane_1.rotation, -90);
 if(ui)
 {
 	ui.load_resources(function(){		

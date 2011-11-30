@@ -97,12 +97,6 @@ var Sound = new ms.ui.Sound();
 		resource_type:RESOURCE_IMAGE,
 		src:"images/smile_sad_48.png"
 });
-                def_package_items.push(
-            {
-		id:"__image3",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/stone-12.jpg"
-});
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
 function start(resolution)  
@@ -161,7 +155,7 @@ function start(resolution)
                 var y = pos.y*g_world_scale;
                 bb.host.xs_updating = true;
                 bb.host.position(x - bb.host.w/2, y - bb.host.h/2);
-                bb.host.set_rotation(angle);
+                bb.host.set_rotation(angle*180/Math.PI);
                 bb.host.xs_updating = false;
             }
             bb = bb.GetNext();
@@ -203,11 +197,11 @@ window.onload = function()
 	};	
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
-                btn1.set_rotation(0.200000003);
+                btn1.set_rotation(90);
                 btn1.rect(200, 200, 50, 50);
-		    floor = new ms.ui.Image( 
+		    __img1 = new ms.ui.Image( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
-                floor.rect(0, 390, 600, 40);
+                __img1.rect(0, 390, 600, 40);
                 btn1.ev_resized = function(cmp) 
                 {
                     if (cmp.physics)
@@ -216,7 +210,7 @@ window.onload = function()
              fixDef.friction = 0.5;
              fixDef.restitution = 0.200000003;
              bodyDef.type = b2Body.b2_dynamicBody;
-                    fixDef.shape = new b2CircleShape(Math.min(cmp.w, cmp.h)/(2*g_world_scale));
+                    fixDef.shape = new b2CircleShape(1.20000005/g_world_scale);
             fixDef.isSensor = false;
                 bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
             current_body = g_world.CreateBody(bodyDef);
@@ -237,7 +231,7 @@ window.onload = function()
                         btn1.parent.removeComponent(btn1);
                     }
                 }
-                floor.ev_resized = function(cmp) 
+                __img1.ev_resized = function(cmp) 
                 {
                     if (cmp.physics)
                         g_world.DestroyBody(cmp.physics);
@@ -255,16 +249,16 @@ window.onload = function()
                 cmp.moved = update_body_position;
                 current_body.host = cmp;
                 }
-                if (floor.w > 0 && floor.h > 0)
+                if (__img1.w > 0 && __img1.h > 0)
                 {
-                    floor.ev_resized(floor);
+                    __img1.ev_resized(__img1);
                 }
-                floor.RemoveFromWorld = function(keep_visual) 
+                __img1.RemoveFromWorld = function(keep_visual) 
                 {
-                    g_world.DestroyBody(floor.physics);
+                    g_world.DestroyBody(__img1.physics);
                     if (!keep_visual)
                     {
-                        floor.parent.removeComponent(floor);
+                        __img1.parent.removeComponent(__img1);
                     }
                 }
             g_ui.fill_background = false; //td: cross idiom

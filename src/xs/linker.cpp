@@ -720,7 +720,7 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
 							str xxx("set breakpoint here");
 						}
 
-            if (type && type != type_schema<empty_type>())
+            if (type && type != type_schema<empty_type>() && type != type_schema<variant>())
               {
                 schema_item si;
                 if (type->resolve(ei.value, si))

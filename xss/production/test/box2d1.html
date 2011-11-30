@@ -25,7 +25,7 @@
         , b2Transform = Box2D.Common.Math.b2Transform
         ;
         var g_world = new b2World(
-            new b2Vec2(0, 10)    //gravity
+            new b2Vec2(1, 0)    //gravity
         ,  true                 //allow sleep
         );
         var g_step_collisions = [];
@@ -74,20 +74,11 @@
              fixDef.restitution = 0.200000003;
              bodyDef.type = b2Body.b2_staticBody;
                 fixDef.shape = new b2PolygonShape;
-                    fixDef.shape.SetAsBox(600/(2*g_world_scale), 40/(2*g_world_scale));
+                    fixDef.shape.SetAsBox(20/(2*g_world_scale), 2/(2*g_world_scale));
             fixDef.isSensor = false;
-                bodyDef.position.Set(0, 390);
+                bodyDef.position.Set(10, 15.1300001);
             current_body = g_world.CreateBody(bodyDef);
             current_body.CreateFixture(fixDef);
-            g_ui.fill_background = false; //td: cross idiom
-            var debugDraw = new b2DebugDraw();
-            var debugDrawCanvas = document.getElementById("canvas");
-            debugDraw.SetSprite(debugDrawCanvas.getContext("2d"));
-            debugDraw.SetDrawScale(30.0);
-            debugDraw.SetFillAlpha(0.5);
-            debugDraw.SetLineThickness(1.0);
-            debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
-            g_world.SetDebugDraw(debugDraw);
          //setup debug draw
          var debugDraw = new b2DebugDraw();
 			debugDraw.SetSprite(document.getElementById("canvas").getContext("2d"));
@@ -202,7 +193,7 @@
                 var y = pos.y*g_world_scale;
                 bb.host.xs_updating = true;
                 bb.host.position(x - bb.host.w/2, y - bb.host.h/2);
-                bb.host.set_rotation(angle);
+                bb.host.set_rotation(angle*180/Math.PI);
                 bb.host.xs_updating = false;
             }
             bb = bb.GetNext();

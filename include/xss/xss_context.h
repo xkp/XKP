@@ -109,6 +109,7 @@ class xss_object : public editable_object<xss_object>,
       //misc
       XSSObject              find(const str& what);
       std::vector<XSSObject> find_by_class(const str& which);
+      DynamicArray           find_by_type(const str& which);
       DynamicArray           get_event_impl(const str& event_name, XSSEvent& ev);
 		  bool                   is_injected(const str& name);
     public:
@@ -211,6 +212,7 @@ struct IExpressionRenderer : public IRenderer
 
 struct IArgumentRenderer : public IRenderer
   {
+    virtual void add(const str& name, XSSType type) = 0;
   };
 
 struct ILanguage
@@ -269,7 +271,8 @@ struct resolve_info
       left(null),
       search_this(true),
       output(null),
-      found_this(false)
+      found_this(false),
+      shallow(false)
       {
       }
 
@@ -278,7 +281,8 @@ struct resolve_info
       left(other.left),
       search_this(other.search_this),
       output(null),
-      found_this(false)
+      found_this(false),
+      shallow(false)
       {
       }
 
@@ -289,6 +293,7 @@ struct resolve_info
     resolve_info* left;
     bool          search_this;
     bool          found_this;
+    bool          shallow;
   };
 
 struct symbol_data
@@ -412,8 +417,11 @@ class xss_method : public xss_object
 			xss_method(const xss_method& other);
 			xss_method(const str& name, XSSType type, variant args, variant code);
 
-			str get_name();
+			str     get_name();
+      variant code();
+      void    add_parameter(const str& name);
 
+      //xss_object
 			virtual XSSType type();
 
 			variant args_;
@@ -447,6 +455,8 @@ struct xss_object_schema : editable_object_schema<T>
         this->template method_<XSSProperty, 1> ("get_property",     &T::get_property);
         this->template method_<void, 3>        ("add_property",     &T::add_property);
         this->template method_<bool, 1>        ("has_property",     &T::has_property);
+        this->template method_<XSSMethod, 1>   ("get_method",       &T::get_method);
+        this->template method_<DynamicArray, 1>("find_by_type",     &T::find_by_type);
 		}
   };
 
@@ -498,6 +508,8 @@ struct xss_method_schema : xss_object_schema<xss_method>
 
         property_("args", &xss_method::args_);
         property_("code", &xss_method::code_);
+
+        method_<void, 1>("add_parameter", &xss_method::add_parameter);
       }
   };
 

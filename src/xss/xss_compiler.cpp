@@ -6,6 +6,7 @@
 #include "xss/language.h"
 #include "xss/lang/debug.h"
 #include "xss/lang/js.h"
+#include "xss/lang/waxjs.h"
 #include "xss/lang/java.h"
 #include "xss/dsl_out.h"
 
@@ -736,7 +737,7 @@ void xss_compiler::log(const param_list params)
 					{
 						XSSObject obj_value    = variant_cast<XSSObject>(value, XSSObject());
 
-						str	obj_id;
+            str	obj_id;
 						if (obj_value)
 							{
 								obj_id = variant_cast<str>(dynamic_get(obj_value, "id"), str(""));
@@ -1721,22 +1722,6 @@ void xss_compiler::read_application(const str& app_file)
               }
           }
 
-        //pre process, basically the application will be traversed and
-        //notified to the application modules. From then on it is their business
-        //the expected result is an application object ready for rendering.
-        struct app_proprocessor : IPreprocessHandler
-          {
-            virtual void handle(XSSObject obj, XSSModule module)
-              {
-                if (module->one_of_us(obj))
-                  module->register_instance(obj);
-              }
-          } pre_processor;
-
-        current_app_ = app_renderer;
-        pre_process(app_renderer, app_data, XSSObject(), &pre_processor);
-        current_app_.reset();
-
         str src = app_data->get<str>("src", str());
         fs::path src_path = base_path_ / src;
         if (!src.empty() && !code_compiled)
@@ -1759,7 +1744,25 @@ void xss_compiler::read_application(const str& app_file)
         XSSContext code_ctx(new xss_context(app_renderer->context(), src_path));
         code_ctx->set_this(app_data);
 
+        //must collect the instances in the scope
+        struct app_proprocessor : IPreprocessHandler
+          {
+            virtual void handle(XSSObject obj, XSSModule module)
+              {
+                if (module->one_of_us(obj))
+                  module->register_instance(obj);
+              }
+          } pre_processor;
+
+        current_app_ = app_renderer;
+        pre_process(app_renderer, app_data, XSSObject(), &pre_processor, true);
+
+        //then compile
         compile_ast(code, code_ctx);
+        
+        //then invoke the pre_Process event
+        pre_process(app_renderer, app_data, XSSObject(), null);
+        current_app_.reset();
 
         //hook modules to the application
         std::vector<XSSModule> modules = app_renderer->modules();
@@ -2067,11 +2070,13 @@ Language xss_compiler::get_language(const str& name)
       return Language(new java_lang());
     else if (name == "debug")
       return Language(new debug_language);
+    else if (name == "waxjs")
+      return Language(new waxjs_lang);
 
     return Language();
   }
 
-void xss_compiler::pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent, IPreprocessHandler* handler)
+void xss_compiler::pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent, IPreprocessHandler* handler, bool exclude_module)
   {
     str type = obj->type_name();
 
@@ -2082,7 +2087,7 @@ void xss_compiler::pre_process(XSSApplicationRenderer renderer, XSSObject obj, X
     for(; it != nd; it++)
       {
         XSSModule mod = *it;
-        pre_process_result result = mod->pre_process(obj, parent);
+        pre_process_result result = exclude_module? PREPROCESS_KEEPGOING : mod->pre_process(obj, parent);
         if (handler && mod->one_of_us(obj))
           handler->handle(obj, mod);
 
@@ -2097,7 +2102,7 @@ void xss_compiler::pre_process(XSSApplicationRenderer renderer, XSSObject obj, X
     for(; cit != cnd; cit++)
       {
         XSSObject child = *cit;
-        pre_process(renderer, child, obj, handler);
+        pre_process(renderer, child, obj, handler, exclude_module);
       }
 
   }

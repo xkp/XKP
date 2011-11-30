@@ -1,0 +1,12 @@
+<project entry_point="../idioms/ui/ui_standalone.xss" language="js" target="3js_class_test.app.xml" output="3js_class_test.html">
+    <path>
+        <output path="../production/test"/>
+    </path>
+
+    <include def="3js_class_test.classes.xml" src="3js_class_test.classes.xs"/>
+
+    <idiom src="../idioms/threejs/module.xml"/>
+	<idiom src="../idioms/resources/resources.xml"/>
+</project>
+           
+         

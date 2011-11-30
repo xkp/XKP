@@ -172,16 +172,16 @@ window.onload = function()
                 lbl0.position(240, 75);
 		    lbl1 = new ms.ui.Label( 
 	    "Verdana",test1.manager, test1);
-                lbl1.set_rotation(-0.200000003);
+                lbl1.set_rotation(-15);
                 lbl1.text("click smiley");
                 lbl1.position(270, 200);
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",test1.manager, test1);
-                btn1.set_rotation(0.200000003);
+                btn1.set_rotation(15);
 	btn1.click = function()
 	{    
 		lbl1.text("Got " + application.clicks + " smileys");
-btn1.set_rotation(btn1.rotation + 0.200000003);
+btn1.set_rotation(btn1.get_rotation() + 10);
 application.clicks = application.clicks + 1;
 	};
  btn1.center(50, 50); 
@@ -206,7 +206,7 @@ application.clicks = application.clicks + 1;
                 btn3.rect(380, 115, 20, 20);
 		    lbl2 = new ms.ui.Label( 
 	    "Verdana",test2.manager, test2);
-                lbl2.set_rotation(0.200000003);
+                lbl2.set_rotation(15);
                 lbl2.text("click small arrows to adjust percentage");
                 lbl2.position(210, 200);
 		    btnNext = new ms.ui.Button( 
@@ -218,12 +218,12 @@ application.clicks = application.clicks + 1;
 main.active(main.get_active() + 1);
 }
 btnNext.set_x(btnNext.x + 1);
-btnNext.set_rotation(btnNext.rotation + 0.200000003);
+btnNext.set_rotation(btnNext.get_rotation() + 10);
 	};
                 btnNext.rect(320, 300, 100, 50);
 		    btnPrev = new ms.ui.Button( 
 	    "images/arrow_left_green_48.png","images/arrow_left_48.png",g_ui_root.manager, g_ui_root);
-                btnPrev.set_rotation(0.400000006);
+                btnPrev.set_rotation(45);
 	btnPrev.click = function()
 	{    
 		if (main.get_active() > 0)
@@ -234,7 +234,7 @@ main.active(main.get_active() - 1);
                 btnPrev.rect(220, 300, 50, 50);
 		    stateBtn = new ms.ui.StateButton( 
 	    "images/smile_grin_48.png","images/smile_sad_48.png",g_ui_root.manager, g_ui_root);
-                stateBtn.set_rotation(-0.400000006);
+                stateBtn.set_rotation(-45);
                 stateBtn.rect(270, 400, 50, 50);
 		    lbl3 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);

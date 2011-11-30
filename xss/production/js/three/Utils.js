@@ -5,6 +5,46 @@ function set_active_camera( camera )
 	active_camera = camera;
 }
 
+function set_object_alpha( path, value )
+{
+	path.materials[0].opacity = value / 100;
+}
+
+function set_material_alpha( path, value )
+{
+	path.opacity = value / 100;
+}
+
+function set_rotation_x( path, value )
+{
+	path.x = value * Math.PI/180;	
+}
+
+function set_rotation_y( path, value )
+{
+	path.y = value * Math.PI/180;
+}
+
+function set_rotation_z( path, value )
+{
+	path.z = value * Math.PI/180;
+}
+
+function get_rotation_x(path)
+{
+	return path.x * 180 / Math.PI;	
+}
+
+function get_rotation_y(path)
+{
+	return path.y * 180 / Math.PI;	
+}
+
+function get_rotation_z(path)
+{
+	return path.z * 180 / Math.PI;	
+}
+
 function default_interpolate(a, b, t)
 {
     return a + (b - a)*t;

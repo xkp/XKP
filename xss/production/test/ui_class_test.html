@@ -70,7 +70,7 @@ function start(resolution)
 	{
 		this.x += 5;
 this.y += 5;
-this.set_rotation(this.rotation + 0.200000003);
+this.set_rotation(this.rotation + 10);
 	};
 	this.click = function()
 	{    
@@ -137,7 +137,7 @@ if (application.y_pos >= application.Y_MAX - 110)
 application.y_pos = 0;
 }
 application.y_pos = application.y_pos + 60;
-img1.set_rotation(img1.rotation + 0.200000003);
+img1.set_rotation(img1.get_rotation() + 10);
 img1.set_x(img1.x + 5);
 img1.set_y(img1.y + 5);
 application.img2 = new my_image("images/img1.png");

@@ -178,7 +178,7 @@ function start(resolution)
                 var y = pos.y*g_world_scale;
                 bb.host.xs_updating = true;
                 bb.host.position(x - bb.host.w/2, y - bb.host.h/2);
-                bb.host.set_rotation(angle);
+                bb.host.set_rotation(angle*180/Math.PI);
                 bb.host.xs_updating = false;
             }
             bb = bb.GetNext();
@@ -231,10 +231,10 @@ function start(resolution)
                 }
                 __physics2 = this.__physics2;
                 var cannon;
-        this.cannon = new ms.arcade.Spawner(g_spawner_manager, 20, 60, 0, 1, 2);
+        this.cannon = new ms.arcade.Spawner(g_spawner_manager, 20, 60, 1, 2);
                 this.cannon.x = 20;
                 this.cannon.y = 60;
-                this.cannon.rotation = 0;
+                this.cannon.set_rotation(0);
                 this.cannon.frequency = 1;
                 this.cannon.velocity = 2;
         this.cannon.creator = function()
@@ -265,7 +265,7 @@ g_sequence_manager);
                             fade_out.target.alpha(value);
                         },
                         [
-                        {t: 0, value: 1},
+                        {t: 0, value: 100},
                         {t: 3, value: 0},
                         ]);
                     this.fade_out.addAction(null, "alpha", new ms.state.State(0, 3, ____i1));                    
@@ -542,7 +542,7 @@ hero.src("images/smile_sad_48.png");
                 game_over.setVisible(false);
                 game_over.text("GAME OVER");
                 game_over.position(220, 200);
-        sp1 = new ms.arcade.Spawner(g_spawner_manager, 300, 100, null, 3, null);
+        sp1 = new ms.arcade.Spawner(g_spawner_manager, 300, 100, 3, null);
                 sp1.x = 300;
                 sp1.y = 100;
                 sp1.frequency = 3;

@@ -6,6 +6,21 @@
             <property id="x" type="float" use_plain_value="true"/>
 			<property id="y" type="float" use_plain_value="true"/>
 			<property id="z" type="float" use_plain_value="true"/>		
+		</class>
+
+		<class id="rotation_class">		
+            <property id="x" type="float" use_plain_value="true">	
+				<get text="get_rotation_x({path})" global = "true"/>
+				<set text="set_rotation_x({path}, {value})" global = "true"/>
+            </property>
+			<property id="y" type="float" use_plain_value="true">	
+				<get text="get_rotation_y({path})" global = "true"/>
+				<set text="set_rotation_y({path}, {value})" global = "true"/>
+            </property>
+			<property id="z" type="float" use_plain_value="true">	
+				<get text="get_rotation_z({path})" global = "true"/>
+				<set text="set_rotation_z({path}, {value})" global = "true"/>
+            </property>		
 		</class>		
 
 		<class id="playing_sound" instantiator="sound_renderer.xss"/>	
@@ -16,7 +31,6 @@
 				<parameter property="map"/>
 				<parameter property="wireframe"/>
 				<parameter property="wireframe_linewidth"/>
-				<parameter property="alpha"/>
 				<parameter property="texture_src"/>				
 				<parameter property="shading"/>
 				<parameter property="vertex_colors"/>
@@ -31,7 +45,9 @@
 			<property id="map" type="string" dont_init="true"/>
 			<property id="wireframe" type="string" dont_init="true"/>
 			<property id="wireframe_linewidth" type="string" output_id="wireframeLinewidth" dont_init="true"/>
-			<property id="alpha" type="float" dont_init="true" output_id="opacity"/>
+			<property id="alpha" type="float" use_plain_value="true">
+				<set text="set_material_alpha({path}, {value})" global = "true"/>
+            </property>
 			<property id="texture_src" type="string" dont_init="true"/>				
 			<property id="shading" type="string" dont_init="true"/>
 			<property id="vertex_colors" type="string" output_id="vertexColors" dont_init="true"/>
@@ -64,26 +80,29 @@
             <property id="color" type="string" use_plain_value="true">
 				<set text="materials[ 0 ].color.setHex({value})"/>
             </property>
-			<property id="alpha" type="float" output_id="materials[0].opacity" use_plain_value="true"/>
+			<property id="alpha" type="float" use_plain_value="true">	
+				<get text="alpha"/>
+				<set text="set_object_alpha({path}, {value})" global = "true"/>
+            </property>
 			<property id="overdraw" type="string"/>
 			<property id="double_sided" type="string" output_id="doubleSided"/>
 			<property id="material" type="string" dont_init="true" use_plain_value="true"/>
 							
 			<property id="position" type="vector3d"/>
-			<property id="rotation" type="vector3d"/>
+			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>
 		</class>
 	
 		<class id="transform" output_id="THREE.Object3D">
 			<property id="position" type="vector3d"/>
-			<property id="rotation" type="vector3d"/>
+			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>
 		</class>
 				
 		<class id="light"> 					
 			<property id="color" type="string" dont_init="true"/>			
 			<property id="position" type="vector3d"/>
-			<property id="rotation" type="vector3d"/>
+			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>
 		</class>
 		
@@ -129,7 +148,7 @@
 			<property id="far" type="string" dont_init="true"/>
 			<property id="target" type="string" dont_init="true"/>	
 			<property id="position" type="vector3d"/>
-			<property id="rotation" type="vector3d"/>
+			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>
 		</class>
 	
@@ -157,7 +176,7 @@
 			<property id="vertical" output_id="lookVertical" type="string" dont_init="true"/>
 			<property id="auto_forward" output_id="autoForward" type="string" dont_init="true"/>
 			<property id="position" type="vector3d"/>
-			<property id="rotation" type="vector3d"/>
+			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>
 		</class>
 	
@@ -240,7 +259,7 @@
 			<property id="program" type="string" dont_init="true" use_plain_value="true"/>
 			<property id="color" type="string" dont_init="true"/>
 			<property id="position" type="vector3d"/>
-			<property id="rotation" type="vector3d"/>
+			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>
 		</class>
 		
@@ -268,7 +287,7 @@
 	
 		<class id="model" dont_render="true" instantiator="model_renderer.xss">
 			<property id="position" type="vector3d"/>
-			<property id="rotation" type="vector3d"/>
+			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>
 		</class>		
 	</types>
