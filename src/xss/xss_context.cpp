@@ -458,6 +458,10 @@ bool xss_context::resolve(const str& id, resolve_info& info)
         return true;
       }
 
+    
+    if (info.shallow)
+      return false;
+
     return parent_? parent_->resolve(id, info) : false;
   }
 

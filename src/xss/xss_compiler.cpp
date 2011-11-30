@@ -1744,11 +1744,7 @@ void xss_compiler::read_application(const str& app_file)
         XSSContext code_ctx(new xss_context(app_renderer->context(), src_path));
         code_ctx->set_this(app_data);
 
-        compile_ast(code, code_ctx);
-
-        //pre process, basically the application will be traversed and
-        //notified to the application modules. From then on it is their business
-        //the expected result is an application object ready for rendering.
+        //must collect the instances in the scope
         struct app_proprocessor : IPreprocessHandler
           {
             virtual void handle(XSSObject obj, XSSModule module)
@@ -1759,7 +1755,13 @@ void xss_compiler::read_application(const str& app_file)
           } pre_processor;
 
         current_app_ = app_renderer;
-        pre_process(app_renderer, app_data, XSSObject(), &pre_processor);
+        pre_process(app_renderer, app_data, XSSObject(), &pre_processor, true);
+
+        //then compile
+        compile_ast(code, code_ctx);
+        
+        //then invoke the pre_Process event
+        pre_process(app_renderer, app_data, XSSObject(), null);
         current_app_.reset();
 
         //hook modules to the application
@@ -2074,7 +2076,7 @@ Language xss_compiler::get_language(const str& name)
     return Language();
   }
 
-void xss_compiler::pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent, IPreprocessHandler* handler)
+void xss_compiler::pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent, IPreprocessHandler* handler, bool exclude_module)
   {
     str type = obj->type_name();
 
@@ -2085,7 +2087,7 @@ void xss_compiler::pre_process(XSSApplicationRenderer renderer, XSSObject obj, X
     for(; it != nd; it++)
       {
         XSSModule mod = *it;
-        pre_process_result result = mod->pre_process(obj, parent);
+        pre_process_result result = exclude_module? PREPROCESS_KEEPGOING : mod->pre_process(obj, parent);
         if (handler && mod->one_of_us(obj))
           handler->handle(obj, mod);
 
@@ -2100,7 +2102,7 @@ void xss_compiler::pre_process(XSSApplicationRenderer renderer, XSSObject obj, X
     for(; cit != cnd; cit++)
       {
         XSSObject child = *cit;
-        pre_process(renderer, child, obj, handler);
+        pre_process(renderer, child, obj, handler, exclude_module);
       }
 
   }

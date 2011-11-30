@@ -54,9 +54,10 @@ bar(function(return_value)
 {
 if (return_value)
 {
-return_function(application.util1());
-return true;
-__callback3();
+util1(function(return_value)
+{
+return_function(return_value);
+});
 }else
 {
 bar_foo(function(return_value)

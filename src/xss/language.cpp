@@ -747,6 +747,17 @@ void expression_analizer::analyze(expression& expr, XSSContext ctx)
                 is_call_ = true;
                 break;
               }
+            case op_func_call:
+              {
+                XSSObject             instance = ctx->get_this();
+                expression_identifier ei       = expr.first();
+                method_name_                   = ei.value;
+                if (instance)
+                    method_ = instance->get_method(method_name_);
+                
+                is_call_ = true;
+                break;
+              }
             default:
               assert(false); //more test cases later
           }
@@ -1011,8 +1022,10 @@ XSSType lang_utils::resolve_type(variant var, XSSContext ctx)
 
 void lang_utils::var_gatherer(code& cde, XSSContext ctx)
   {
-    bool already = variant_cast<bool>(ctx->resolve("#var_gatherer"), false);
-    if (already)
+    resolve_info ri;
+    ri.shallow = true;
+
+    if (ctx->resolve("#var_gatherer", ri))
       return;
     
     ctx->register_symbol(RESOLVE_CONST, "#var_gatherer", true);

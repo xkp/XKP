@@ -162,7 +162,7 @@ window.onload = function()
 	{    
 		application.clicks = application.clicks + 1;
 lbl1.text("Got " + application.clicks + " smileys");
-btn1.set_rotation(btn1.rotation + 0.200000003);
+btn1.set_rotation(btn1.get_rotation() + 0.200000003);
 	};
  btn1.center(50, 50); 
 		    test2 = new ms.ui.Component( 
@@ -197,7 +197,7 @@ btn1.set_rotation(btn1.rotation + 0.200000003);
 {
 main.active(main.get_active() + 1);
 }
-btnNext.set_rotation(btnNext.rotation + 0.200000003);
+btnNext.set_rotation(btnNext.get_rotation() + 0.200000003);
 	};
                 btnNext.rect(320, 300, 100, 50);
 		    btnPrev = new ms.ui.Button( 

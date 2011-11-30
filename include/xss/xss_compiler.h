@@ -200,7 +200,7 @@ namespace xkp
         void        compile_ast(xs_container& ast, XSSContext ctx);
         bool        options(const str& name);
         Language    get_language(const str& name);
-        void        pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent, IPreprocessHandler* handler);
+        void        pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent, IPreprocessHandler* handler, bool exclude_module = false);
         void        run();
         void        copy_files(XSSObject project_data);
         void        xss_args(const param_list params, param_list& result, fs::path& output_file, str& marker, MARKER_SOURCE& marker_source, XSSContext& ctx);

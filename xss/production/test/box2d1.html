@@ -193,7 +193,7 @@
                 var y = pos.y*g_world_scale;
                 bb.host.xs_updating = true;
                 bb.host.position(x - bb.host.w/2, y - bb.host.h/2);
-                bb.host.set_rotation(angle);
+                bb.host.set_rotation(angle*180/Math.PI);
                 bb.host.xs_updating = false;
             }
             bb = bb.GetNext();

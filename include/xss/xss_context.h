@@ -271,7 +271,8 @@ struct resolve_info
       left(null),
       search_this(true),
       output(null),
-      found_this(false)
+      found_this(false),
+      shallow(false)
       {
       }
 
@@ -280,7 +281,8 @@ struct resolve_info
       left(other.left),
       search_this(other.search_this),
       output(null),
-      found_this(false)
+      found_this(false),
+      shallow(false)
       {
       }
 
@@ -291,6 +293,7 @@ struct resolve_info
     resolve_info* left;
     bool          search_this;
     bool          found_this;
+    bool          shallow;
   };
 
 struct symbol_data

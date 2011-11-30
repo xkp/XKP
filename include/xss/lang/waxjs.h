@@ -20,10 +20,11 @@ struct code_split
       {
       }
 
-    code      target; //td: !!! reference 
-    int       split_idx;
-    CodeSplit split_code;
-    XSSMethod method;
+    code       target; //td: !!! reference 
+    int        split_idx;
+    CodeSplit  split_code;
+    XSSMethod  method;
+    XSSContext context;
 
     bool      split_on_if;
     bool      split_on_else;
@@ -45,6 +46,7 @@ struct waxjs_code_renderer : public base_code_renderer
     bool check_fork(variant owner);
     bool forked();
     void use_this_id(bool value);
+    str  render_plain_code(code& cde, XSSContext ctx);
 
     //ICodeRenderer
     virtual str render();

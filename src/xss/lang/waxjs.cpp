@@ -178,6 +178,8 @@ struct wax_splitter : code_visitor
               case op_dot:
               case op_call:
                 break; //path like expression, handled below
+              case op_func_call:
+                break;
               case op_assign:
               case op_plus_equal:
               case op_minus_equal:
@@ -332,9 +334,6 @@ str waxjs_code_renderer::render()
     if (!fork)
         return render_code(code_);
     
-    //pre render
-    lang_utils::var_gatherer(code_, ctx_);
-    
     //check for goodies
     bool is_service = false;
     if (owner_)
@@ -396,6 +395,15 @@ str waxjs_code_renderer::render_code(code& cde)
     lang_utils::var_gatherer(cde, ctx);
 
     param_list_decl pld;
+    js_code_renderer inner(cde, pld, ctx);
+    str result = inner.render();
+    add_line(result);
+    return result;
+  }
+
+str waxjs_code_renderer::render_plain_code(code& cde, XSSContext ctx)
+  {
+    param_list_decl pld;
     waxjs_internal_renderer inner(cde, pld, ctx);
     return inner.render();
   }
@@ -408,6 +416,14 @@ str waxjs_code_renderer::render_split(CodeSplit fork, CodeSplit parent)
         fork->add.insert(fork->add.begin(), parent->add.begin(), parent->add.end());
       }
 
+    //pre render, get access to variables
+    if (!fork->context)
+      {
+        XSSContext parent_ctx = parent && parent->context? parent->context : ctx_;
+        fork->context = XSSContext(new xss_context(parent_ctx));
+        lang_utils::var_gatherer(fork->target, fork->context);
+      }
+
     std::ostringstream result;
 
     int split_idx = fork->split_idx - 1;
@@ -415,7 +431,7 @@ str waxjs_code_renderer::render_split(CodeSplit fork, CodeSplit parent)
     //render the code before the split
     code pre_split;
     fork->target.range(0, split_idx, pre_split);
-    result << render_code(pre_split);
+    result << render_plain_code(pre_split, fork->context);
 
     //render the after code as a function, will be called on splits
     std::ostringstream code_after;
@@ -494,7 +510,7 @@ str waxjs_code_renderer::split_if(CodeSplit fork)
         result << "\nif (" << render_expression(stmnt.expr, ctx_) << ")";
         result << "\n{";
 
-        result << render_code(stmnt.if_code); 
+        result << render_plain_code(stmnt.if_code, fork->context);
         
         result << after_code(fork) << "\n}";
         result << "else\n{\n";
@@ -648,7 +664,12 @@ str waxjs_code_renderer::split_and_render(code& c, CodeSplit parent)
 
     //no split, just render the code and call the splits
     std::ostringstream result;
-    result << render_code(c); 
+
+    XSSContext parent_ctx = parent && parent->context? parent->context : ctx_;
+    XSSContext ctx(new xss_context(parent_ctx));
+    lang_utils::var_gatherer(c, ctx);
+
+    result << render_plain_code(c, ctx);
 
     if (parent)
       result << after_code(parent); 

@@ -11,18 +11,6 @@ Log: Rendering Resources...
 Log: Rendering 3js Types...
 Log: Rendering UI Types...
 Log: Rendering UI...
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
 Success are greateful
 ===[ 3js_cameras.project.xml ]================
 
@@ -36,14 +24,13 @@ Success are greateful
 ===[ 3js_class_test.project.xml ]================
 
 Log: Rendering Resources...
-Log: Rendering UI Types...
-Log: c:/dev/xkp/xss/tests/../idioms/ui/component.xss
-Log: null
-Log: Here
-Log: And There
-Log: my_image
-Log: Rendering UI...
-Success are greateful
+Log: Rendering 3js Types...
+Error at: c:/dev/xkp/xss/tests/../idioms/threejs/class.xss
+Error [syntax-error] Error while compiling xs
+line = 21
+column = 23
+ERROR: Project:  3js_class_test.project.xml
+
 ===[ 3js_cube.project.xml ]================
 
 Log: Rendering 3js Types...
@@ -83,65 +70,19 @@ Success are greateful
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
-Log: null
-Log: Here
-Log: And There
 Success are greateful
 ===[ box2d3.project.xml ]================
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
-Log: c:/dev/xkp/xss/tests/../idioms/ui/component.xss
-Log: null
-Log: Here
-Log: And There
-Log: smiley_ball
 Log: Rendering UI...
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
 Success are greateful
 ===[ box2d4.project.xml ]================
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
-Log: c:/dev/xkp/xss/tests/../idioms/ui/component.xss
-Log: null
-Log: Here
-Log: And There
-Log: bad_guy
-Log: c:/dev/xkp/xss/tests/../idioms/ui/component.xss
-Log: null
-Log: Here
-Log: And There
-Log: good_guy
-Log: c:/dev/xkp/xss/tests/../idioms/ui/component.xss
-Log: null
-Log: Here
-Log: And There
-Log: bullet
-Log: c:/dev/xkp/xss/tests/../idioms/ui/component.xss
-Log: null
-Log: Here
-Log: And There
-Log: floor
 Log: Rendering Sequence Types...
 Log: Rendering UI...
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
 Log: Rendering Sequence...
 Success are greateful
 ===[ enums.project.xml ]================
@@ -246,7 +187,7 @@ Log: Rendering property: bar
 
 
 
-		public Integer check_type() {
+		public Object check_type() {
 			Integer a;
 a = 1;
 Object b;
@@ -858,7 +799,7 @@ Success are greateful
 Log: Rendering Sequence Types...
 Log: Rendering Sequence...
 Log: Oh noes... a PROPERTY
-Error at: d:/xkp/xss/tests/../idioms/java-seq/sequence.xss
+Error at: c:/dev/xkp/xss/tests/../idioms/java-seq/sequence.xss
 Error [idiom] Sequences expect a property to modify
 expression = app.target
 ERROR: Project:  jseq1.project.xml
@@ -882,9 +823,6 @@ Success are greateful
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
-Log: null
-Log: Here
-Log: And There
 Success are greateful
 ===[ ms4.project.xml ]================
 
@@ -892,9 +830,6 @@ Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering Sequence Types...
 Log: Rendering UI...
-Log: null
-Log: Here
-Log: And There
 Log: Rendering Sequence...
 Success are greateful
 ===[ ms5.project.xml ]================
@@ -903,64 +838,14 @@ Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering Sequence Types...
 Log: Rendering UI...
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
 Log: Rendering Sequence...
 Success are greateful
 ===[ ms6.project.xml ]================
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
-Log: c:/dev/xkp/xss/tests/../idioms/ui/component.xss
-Log: null
-Log: Here
-Log: And There
-Log: this
-Log: Here
-Log: And There
-Log: this
-Log: Here
-Log: And There
-Log: ms6
 Log: Rendering Sequence Types...
 Log: Rendering UI...
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
 Log: Rendering Sequence...
 Success are greateful
 ===[ query_properties.project.xml ]================
@@ -991,197 +876,48 @@ Success are greateful
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
 Success are greateful
 ===[ ui_audio_1.project.xml ]================
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
 Success are greateful
 ===[ ui_class_test.project.xml ]================
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
-Log: c:/dev/xkp/xss/tests/../idioms/ui/component.xss
-Log: null
-Log: Here
-Log: And There
-Log: my_image
 Log: Rendering UI...
-Log: null
-Log: Here
-Log: And There
 Success are greateful
 ===[ ui_cliparea.project.xml ]================
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
 Success are greateful
 ===[ ui_demo.project.xml ]================
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
 Success are greateful
 ===[ ui_drag.project.xml ]================
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
 Success are greateful
 ===[ ui_figures.project.xml ]================
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
-Log: null
-Log: Here
-Log: And There
 Success are greateful
 ===[ ui_selfdrawn.project.xml ]================
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
-Log: null
-Log: Here
-Log: And There
 Success are greateful
 ===[ ui_video.project.xml ]================
 
@@ -1193,11 +929,77 @@ Log: Rendering Sequence...
 Success are greateful
 ===[ wax1.project.xml ]================
 
-Error at: d:/xkp/xss/tests/../idioms/wax/wax.xml
-Error [404] File not found
-file = d:/xkp/xss/tests/../idioms/wax/wax.xml
-ERROR: Project:  wax1.project.xml
 
+		method: foo
+        code: function __callback1() 
+{
+var x = 10;
+function __callback2() 
+{
+return_function(x);
+return true;
+
+}
+bar(function(return_value)
+{
+
+__callback2();
+});
+}
+bar(function(return_value)
+{
+if (return_value)
+{
+var c;
+function __callback3() 
+{
+function __callback4() 
+{
+
+if (c < 20)
+{return_function(c);
+return true;
+
+__callback1();
+}else
+{
+c += 20;
+bar_foo(function(return_value)
+{
+return_function(return_value);
+});
+}
+}
+foo_bar(function(return_value)
+{
+c += return_value;
+if (__callback4())
+return;
+__callback1();
+});
+}
+foo_bar(function(return_value)
+{
+c = return_value;
+if (__callback3())
+return;
+__callback1();
+});
+
+}else
+{
+bar_foo(function(return_value)
+{
+
+__callback1();
+});
+}
+});
+	
+Success are greateful
+===[ wax2.project.xml ]================
+
+Success are greateful
 ===[ xss1.project.xml ]================
 
 
@@ -1333,20 +1135,6 @@ Success are greateful
 String foo = Singleton.get_foo();
 
 	
-Success are greateful
-===[ xss12.project.xml ]================
-
-Log: PRE_PROCESS:  application
-Log: PRE_PROCESS: i1 i_xss12
-
-					private void click() {
-				
-						Display disp;
-Integer w = disp.getWidth();
-Integer h = disp.getHeight();
-					
-					}
-				
 Success are greateful
 ===[ xss2.project.xml ]================
 
