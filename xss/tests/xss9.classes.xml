@@ -1,0 +1,5 @@
+<xs>
+    <class id="test_class2" super="t_xss9_2">
+        <t_base_import id="base"/>
+    </class>
+</xs>

@@ -1,5 +1,6 @@
 
 <xss:parameter id="m"/>
+<xss:parameter id="iname" default=""/>
 
 <xss:code>
 	//TRACE: log
@@ -9,10 +10,12 @@
 	
 	if(m.type != null)
 		mthd_type = m.type.output_id;
+		
+	m.output_id = "mthd_" + iname + "_" + m.name;
 	
 	out(indent = 1)
 	{
-		public <xss:e>mthd_type</xss:e> <xss:e>m.name</xss:e>(<xss:e>m.args.render()</xss:e>) <xss:open_brace/>
+		public <xss:e>mthd_type</xss:e> <xss:e>m.output_id</xss:e>(<xss:e>m.args.render()</xss:e>) <xss:open_brace/>
 			<xss:e>m.code.render()</xss:e>
 		<xss:close_brace/>
 	}

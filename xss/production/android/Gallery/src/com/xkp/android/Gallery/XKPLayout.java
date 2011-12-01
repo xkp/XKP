@@ -159,12 +159,13 @@ public class XKPLayout extends ViewGroup {
 			v.requestLayout();
 		}
     }
+	@Override
 	public String toString() {
 		return "com.xkp.android.XKPLayout";
     }
 	@Override
 	protected ViewGroup.LayoutParams generateDefaultLayoutParams() {
-		return new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 0, 0);
+		return new LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 0, 0);
 	}
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {

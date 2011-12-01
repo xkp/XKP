@@ -1,27 +1,45 @@
 <xss:parameter id="it"/>
 
-	private static class Class_<xss:e value="it.id"/> {
+<xss:code>
+	bool type = compiler.is_type(it) == true;
 	
-	<xss:code>
-		compiler.log("-- Rendering instance: " + it.id);
-		
-		compiler.log("Properties size: " + it.properties.size);
-		for(var p in it.properties)
+	string str_rend = "instance";
+	if(type)
+		str_rend = "class";
+	
+	compiler.log("-- Rendering " + str_rend + ": " + it.id);
+	
+	compiler.log("Properties size: " + it.properties.size);
+	for(var p in it.properties)
+	{
+		//TIPS: it's a very hacky hoo,... 
+		//      i set that all object's properties have yours parent pointing to this;
+		//      it doing that when a user defined class render yours properties,
+		//      these are not repeated when an instance of this class is rendering
+		if(p.parent)
 		{
-			compiler.xss("property.xss", p);
+			//compiler.log("p.parent " + p.parent.id);
+			if(p.parent.type)
+			{
+				//compiler.log("p.parent.type " + p.parent.type.id);
+				//compiler.log(p.parent.type.user_defined);
+				continue;
+			}
 		}
 		
-		compiler.log("Methods size: " + it.methods.size);
-		for(var m in it.methods)
-		{
-			compiler.xss("method.xss", m);
-		}
-		
-		compiler.log("Events size: " + it.events.size);
-		for(var e in it.events)
-		{
-			compiler.xss("event.xss", e);
-		}
-	</xss:code>
-
+		compiler.xss("property.xss", p = p, iname = it.output_id);
 	}
+	
+	compiler.log("Methods size: " + it.methods.size);
+	for(var m in it.methods)
+	{
+		compiler.xss("method.xss", m = m, iname = it.output_id);
+	}
+	
+	compiler.log("Events size: " + it.events.size);
+	for(var e in it.events)
+	{
+		string new_id = e.output_id + it.id;
+		compiler.xss("event.xss", e = e, new_id = new_id);
+	}
+</xss:code>

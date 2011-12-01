@@ -1,0 +1,14 @@
+<application name="Characters" title="List of Characters" src="characters.xs">
+
+	<!--
+	<resources>
+		<img id="img01" source="resources/image.png"/>
+		<audio id="aud01" source="resources/audio.ogg"/>
+		<video id="vid01" source="resources/video.3gp"/>
+	</resources>
+	-->
+
+	<character id="aladdin" name="Aladdin" surname="Allababa Prince" employment="Professor of Steal" placement="top"/>
+	<character id="pluto" name="Pluto" surname="Disney Cartoons" employment="Bones eater" placement="top"/>
+	<character id="mickey" name="Mickey" surname="Disney Cartoons?" employment="A mouse that ..." placement="top"/>
+</application>

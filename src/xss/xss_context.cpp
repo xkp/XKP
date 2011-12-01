@@ -1319,6 +1319,9 @@ void xss_object::add_property(const str& name, variant value, XSSType type)
     if (!result)
       result = XSSProperty(new xss_property(name, type, value, shared_from_this()));
 
+    //do 'this' of xss_object the parent of property
+    result->set_parent(XSSObject(this));
+
     properties_->push_back(result);
   }
 

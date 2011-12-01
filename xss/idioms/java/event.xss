@@ -1,20 +1,16 @@
 
 <xss:parameter id="e"/>
-<xss:parameter id="new_ide"/>
+<xss:parameter id="new_id" default="e.output_id"/>
 
 <xss:code>
 	//TRACE: log
 	compiler.log("Rendering event: " + e.name);
 	
-	string ev_id = e.output_id;
-	if(new_ide)
-		ev_id = new_ide;
-	
 	if(e.implemented && e.name)
 	{
 		out(indent = 1)
 		{
-			private void <xss:e>ev_id</xss:e>(<xss:e>e.args.render()</xss:e>) <xss:open_brace/>
+			private void <xss:e>new_id</xss:e>(<xss:e>e.args.render()</xss:e>) <xss:open_brace/>
 		}
 		
 		for(var impl in e.impls)

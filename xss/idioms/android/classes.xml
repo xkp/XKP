@@ -1,4 +1,4 @@
-<module id="android">
+<module id="android" src="classes.xs">
 
 	<types>
 	
@@ -366,7 +366,7 @@
 			</property>
 			
 			<property id="height" type="int" output_id="layout_height" ns="android" res_type="dimension" default_value="wrap_content">
-				<get text="getHeight"/>
+				<get text="getHeight()"/>
 				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setHeight({value})" global="true"/>
 			</property>
 			
@@ -482,7 +482,7 @@
 			</array>
 			
 			<property id="caption" type="string" output_id="text" ns="android" res_type="str_reference">
-				<get text="getText()"/>
+				<get text="getText().toString()"/>
 				<set text="setText({value})"/>
 			</property>
 			
@@ -623,7 +623,8 @@
 			</array>
 			
 			<property id="source" type="string" output_id="src" ns="android" res_type="drawable">
-				<set text="setImageResource({value})"/> <!-- param type is int, because resource is an identifier -->
+				<!-- <set text="setImageResource({value})"/>  param type is int, because resource is an identifier -->
+				<set text="util.setResourceImageView(R.id.{path}, {value})" global="true"/>
 			</property>
 			
 			<property id="scale" type="EScaleType" output_id="scaleType" ns="android">
@@ -642,6 +643,9 @@
 					<object param_type="Matrix" param_name="matrix"/>
 				</array>
 			</method>-->
+			
+			<!-- TODO: do array this objects -->
+			<object id="utils" file_name="setResourceImageView.util.xss"/>
 		</class>
 		
 		<class id="imagebutton" super="image" output_id="ImageButton">
