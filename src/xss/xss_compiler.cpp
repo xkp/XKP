@@ -1538,6 +1538,9 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
             if (module)
               module->register_user_type(clazz);
 
+            //mark as defined user type
+            clazz->add_attribute("user_defined", true);
+
             ctx->add_type(cid, clazz);
           }
       }
@@ -1586,6 +1589,9 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
                 XSSModule module = app->type_idiom(ci.super);
                 if (module)
                   module->register_user_type(clazz);
+
+                //mark as defined user type
+                clazz->add_attribute("user_defined", true);
 
                 ctx->add_type(cid, clazz);
               }

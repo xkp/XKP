@@ -312,7 +312,7 @@ import android.view.LayoutInflater;
 	
 	compiler.xss("../java/instance.xss", it = clazz);
 	
-	//TODO: include all this to another xss file with only structure, maybe to 'styeleableProperties.xml.xss'
+	//TODO: include all this to another xss file with only structure, maybe to 'styleableProperties.xml.xss'
 	for(var prop in clazz.properties)
 	{
 		if(!prop.set || !prop.type)

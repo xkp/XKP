@@ -7,22 +7,31 @@
 				android:layout_height="fill_parent"
 				xkp:placement="client"
 			>
-				<character android:id="@+id/aladdin"
+				<com.xkp.android.Characters.character android:id="@+id/aladdin"
+				xkp:name="Aladdin"
+				xkp:surname="Allababa Prince"
+				xkp:employment="Professor of Steal"
 				xkp:placement="top"
 				android:layout_width="320dp"
 				android:layout_height="100dp"
 			>
-				</character>
-				<character android:id="@+id/pluto"
+				</com.xkp.android.Characters.character>
+				<com.xkp.android.Characters.character android:id="@+id/pluto"
+				xkp:name="Pluto"
+				xkp:surname="Disney Cartoons"
+				xkp:employment="Bones eater"
 				xkp:placement="top"
 				android:layout_width="320dp"
 				android:layout_height="100dp"
 			>
-				</character>
-				<character android:id="@+id/mickey"
+				</com.xkp.android.Characters.character>
+				<com.xkp.android.Characters.character android:id="@+id/mickey"
+				xkp:name="Mickey"
+				xkp:surname="Disney Cartoons?"
+				xkp:employment="A mouse that ..."
 				xkp:placement="top"
 				android:layout_width="320dp"
 				android:layout_height="100dp"
 			>
-				</character>
+				</com.xkp.android.Characters.character>
 			</com.xkp.android.Characters.XKPLayout>

@@ -30,7 +30,7 @@
 		//       if(view != application)
 		
 		string strViewName = "";
-		if(view.xkpview)
+		if(view.xkpview || view.type.user_defined)
 			strViewName = "com.xkp.android." + appName + ".";
 		
 		if(view.type)
@@ -159,7 +159,18 @@
 					prop.value = compiler.compile_expression(prop.value);
 				}
 			}
-			
+					
+			if(prop.parent)
+			{
+				if(prop.parent.type)
+				{
+					if(prop.parent.type.user_defined)
+					{
+						prop.ns = "xkp";
+					}
+				}
+			}
+
 			if(prop.value == null || prop.no_layout ||
 				prop.ns == null || prop.output_id == null)
 				continue;

@@ -1,11 +1,32 @@
 <xss:parameter id="it"/>
 
 <xss:code>
-	compiler.log("-- Rendering instance: " + it.id);
+	bool type = compiler.is_type(it) == true;
+	
+	string str_rend = "instance";
+	if(type)
+		str_rend = "class";
+	
+	compiler.log("-- Rendering " + str_rend + ": " + it.id);
 	
 	compiler.log("Properties size: " + it.properties.size);
 	for(var p in it.properties)
 	{
+		//TIPS: it's a very hacky hoo,... 
+		//      i set that all object's properties have yours parent pointing to this;
+		//      it doing that when a user defined class render yours properties,
+		//      these are not repeated when an instance of this class is rendering
+		if(p.parent)
+		{
+			//compiler.log("p.parent " + p.parent.id);
+			if(p.parent.type)
+			{
+				//compiler.log("p.parent.type " + p.parent.type.id);
+				//compiler.log(p.parent.type.user_defined);
+				continue;
+			}
+		}
+		
 		compiler.xss("property.xss", p = p, iname = it.output_id);
 	}
 	
