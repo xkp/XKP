@@ -47,9 +47,11 @@
 			bReplicator = true;
 	}
 	
+	//inject idiom events
 	compiler.inject("render_types", app = appName);
 	compiler.inject("render_instances", app = appName);
 	
+	//render project files
 	string output_filename;
 	output_filename = appName + "/" + "AndroidManifest.xml";
 	compiler.xss("AndroidManifest.xml.xss", output_file = output_filename, appName, minAPILevel, targetAPILevel);
@@ -85,7 +87,6 @@
 	
 	output_filename = appName + "/res/layout/main.xml";
 	compiler.xss("layout.xml.xss", output_file = output_filename, appName, clazz = application);
-	compiler.xss("  bout.xml.xss", output_file = output_filename, appName, clazz = application);
 	
 	if(bReplicator)
 	{

@@ -29,7 +29,18 @@
 		//ERROR: why i can use '!=' operator in view != application?
 		//       if(view != application)
 		
+		//TRACE: log
+		//compiler.log("id: " + view.id + " idiom: " + view.idiom);
+		
 		if(view == null || view.no_layout || view.no_render)
+			return;
+		
+		string idiom = "";
+		if(view.idiom)
+			idiom = view.idiom.id;
+		
+		//ERROR: operator "!=" is not implement with operand null & string
+		if(view.id != application.id && idiom != "android")
 			return;
 		
 		string strViewName = "";
@@ -59,6 +70,7 @@
 				xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.<xss:e value="appName"/>" 
 			}
 		}
+		
 		generate_properties(view, ind + 1);
 		
 		out(indent = ind + 1)
