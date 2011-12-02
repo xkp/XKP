@@ -77,12 +77,12 @@ ms.arcade.Spawner = Class.create(
     {
         this.rotation = value * Math.PI/180;        
     },
-	
+
 	get_rotation: function()
 	{
 		return this.rotation * 180/Math.PI;
 	},
-	
+
     start: function()
     {
         if (!this.active)

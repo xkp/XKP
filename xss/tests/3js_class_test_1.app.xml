@@ -1,10 +1,10 @@
-<application src="3js_class_test.app.xs" renderer="canvas" width="600" height="400">    
+<application src="3js_class_test_1.app.xs" renderer="canvas" width="600" height="400">    
     <resources>		
 		<image src="images/test1.png"/>
 		<image src="images/test2.png"/>
 		<image src="images/test3.png"/>
 		<image src="images/test4.png"/>
-		<image src="images/test5.png"/>	
+		<image src="images/test5.png"/>
 	</resources>
 		
 	<scene>		 

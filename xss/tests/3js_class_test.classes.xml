@@ -1,5 +1,5 @@
 <xss:classes>
     <class id="my_plane" super="transform">
-		<plane id="real_plane" width="128" height="164"/>
+		<plane id="img_plane" width="128" height="164"/>		
 	</class>
 </xss:classes>

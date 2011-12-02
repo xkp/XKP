@@ -198,15 +198,15 @@
 	
 		<class id="plane" super="object3d" output_id="THREE.Plane" renderer="object3d_renderer.xss">
 			<constructor_params>
-				<parameter property="width"/>
-				<parameter property="height"/>
+				<parameter property="width" runtime="true"/>
+				<parameter property="height" runtime="true"/>
 				<parameter property="x_segments"/>
 				<parameter property="y_segments"/>
 			</constructor_params>
 			<property id="width" type="string" dont_init="true"/>
 			<property id="height" type="string" dont_init="true"/>
-			<property id="x_segments" output_id="segmentsWidth" type="string" dont_init="true"/>
-			<property id="y_segments" output_id="segmentsHeight" type="string" dont_init="true"/>
+			<property id="x_segments" output_id="segmentsWidth" type="string" dont_init="true" default_value="1"/>
+			<property id="y_segments" output_id="segmentsHeight" type="string" dont_init="true" default_value="1"/>
 		</class>
 	
 		<class id="cube" super="object3d" output_id="THREE.Cube" renderer="object3d_renderer.xss">

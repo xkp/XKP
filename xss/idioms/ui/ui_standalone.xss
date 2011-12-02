@@ -138,11 +138,6 @@ window.onload = function()
 		<p>Your browser doesn't support canvas.</p>
 
 	</canvas>
-	
-	<audio id="sounds" preload> 
-		<xss:marker id="audio_resources"/>	
-	Your browser does not support the audio element.
-	</audio>
 		
 	<xss:marker id="html_body"/>
 

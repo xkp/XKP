@@ -2,6 +2,6 @@ class my_plane : transform
 {	
 	property image
 	{
-		real_plane.texture = value;
+		my_plane.texture = value;
 	}
 }

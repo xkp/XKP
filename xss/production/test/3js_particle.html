@@ -60,6 +60,16 @@ new THREE.Camera(
                 particle_1.scale.x = 5;
                 particle_1.scale.y = 5;
                 particle_1.scale.z = 5;
+	document.addEventListener( 'mousemove', mousemove_application, false );
+	function mousemove_application (event)
+	{
+	var x = event.clientX;
+	var y = event.clientY;
+		particle_1.scale.x = particle_1.scale.x + 0.0500000007;
+particle_1.scale.y = particle_1.scale.y + 0.0500000007;
+particle_1.scale.z = particle_1.scale.z + 0.0500000007;
+		particle_1.position.x = particle_1.position.x + 0.5;
+	};
 if(ui)
 {
 	ui.load_resources(function(){		

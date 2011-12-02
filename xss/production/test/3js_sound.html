@@ -95,6 +95,7 @@ new THREE.Sphere(
 	    scene.addObject(sphere_1);
 				container_1.addChild(sphere_1);
 				scene.addObject(container_1);
+                sphere_1.materials[ 0 ] = material_sphere1;
 	var sound_1 = new THREE.Sound(streamer.get_resource('res_sound_1').asset
 	,275,20,true
 	);
@@ -114,6 +115,7 @@ new THREE.Sphere(
 	    scene.addObject(sphere_2);
 				container_2.addChild(sphere_2);
 				scene.addObject(container_2);
+                sphere_2.materials[ 0 ] = material_sphere2;
 	var sound_2 = new THREE.Sound(streamer.get_resource('res_sound_2').asset
 	,275,20,true
 	);
@@ -126,6 +128,7 @@ new THREE.Plane(
 1000,1000,100,100);
 	    var plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    scene.addObject(plane_1);
+                plane_1.materials[ 0 ] = material_wireframe;
                 plane_1.position.y = 0.100000001;
                 set_rotation_x(plane_1.rotation, -90);
 if(ui)

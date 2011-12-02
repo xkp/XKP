@@ -77,23 +77,21 @@ g_elapsed = now;
 		set_active_camera(camera_1);
 }
         function create_my_plane(
-     ) {  		
-		var my_plane = new THREE.Object3D();		
+    width,height,x_segments,y_segments ) { 
+            var my_plane;
+	    var my_plane_plane = 
+new THREE.Plane(
+width,height,x_segments,y_segments);
+	    var my_plane = new THREE.Mesh(my_plane_plane, null);
+	    scene.addObject(my_plane);
         my_plane.image = null;
         my_plane.image_set = function (value)
         {
             my_plane.image = value;
-            my_plane.children[0].materials[ 0 ] = new THREE.MeshBasicMaterial({
+            this.materials[ 0 ] = new THREE.MeshBasicMaterial({
 						map:THREE.ImageUtils.loadTexture(streamer.get_resource(value).asset),
 						});
         };
-            var img_plane;
-	    var img_plane_plane = 
-new THREE.Plane(
-128,164);
-	    var img_plane = new THREE.Mesh(img_plane_plane, null);
-	    scene.addObject(img_plane);
-            my_plane.addChild(img_plane);
         return my_plane;
         }
 var scene = 
@@ -116,6 +114,7 @@ application.i = 0;
 }
 var plane_1 = 
 create_my_plane(
+200,260,1,1
 );
 ;
 plane_1.image_set(application.img_array[application.i]);
