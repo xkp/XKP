@@ -279,6 +279,9 @@ void xss_module::register_instance(XSSObject obj)
       }
 
     instances_->push_back(obj);
+
+    XSSObject mod(shared_from_this());
+    dynamic_set(obj, "idiom", mod);
   }
 
 bool xss_module::one_of_us(XSSObject obj)
@@ -1475,6 +1478,7 @@ void xss_compiler::preprocess_type(XSSType clazz, XSSObject def_class, const str
             if (!obj_id.empty())
               ctx->register_symbol(RESOLVE_INSTANCE, obj_id, obj);
                     
+            dynamic_set(target, "idiom", mod);
             if (module == mod)
               target->register_instance(obj);
             else
