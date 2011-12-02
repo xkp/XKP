@@ -1,4 +1,4 @@
-<project entry_point="../idioms/ui/ui_standalone.xss" language="js" target="3js_class_test.app.xml" output="3js_class_test.html">
+<project entry_point="../idioms/threejs/app.xss" language="js" target="3js_class_test.app.xml" output="3js_class_test.html">
     <path>
         <output path="../production/test"/>
     </path>

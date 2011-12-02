@@ -7,61 +7,12 @@
 				android:layout_height="fill_parent"
 				xkp:placement="client"
 			>
-				<TextView android:id="@+id/lblFirstName"
+				<Button android:id="@+id/btn1"
 				android:text="@string/res0"
-				xkp:layout_x="10dp"
-				xkp:layout_y="20dp"
-				android:layout_width="140dp"
-				android:layout_height="40dp"
-			>
-				</TextView>
-				<EditText android:id="@+id/edtFirstName"
-				android:hint="@string/res1"
-				xkp:layout_x="120dp"
-				xkp:layout_y="10dp"
-				android:layout_width="160dp"
-				android:layout_height="40dp"
-			>
-				</EditText>
-				<TextView android:id="@+id/lblLastName"
-				android:text="@string/res2"
-				xkp:layout_x="10dp"
-				xkp:layout_y="70dp"
-				android:layout_width="140dp"
-				android:layout_height="40dp"
-			>
-				</TextView>
-				<EditText android:id="@+id/edtLastName"
-				android:hint="@string/res3"
-				xkp:layout_x="120dp"
-				xkp:layout_y="60dp"
-				android:layout_width="160dp"
-				android:layout_height="40dp"
-			>
-				</EditText>
-				<Button android:id="@+id/btnFullName"
-				android:text="@string/res4"
 				xkp:layout_x="40dp"
 				xkp:layout_y="110dp"
-				android:layout_width="200dp"
+				android:layout_width="100dp"
 				android:layout_height="43dp"
 			>
 				</Button>
-				<TextView android:id="@+id/lblFullName"
-				android:text="@string/res5"
-				xkp:layout_x="10dp"
-				xkp:layout_y="170dp"
-				android:layout_width="300dp"
-				android:layout_height="25dp"
-			>
-				</TextView>
-				<EditText android:id="@+id/edtContainer"
-				android:hint="@string/res6"
-				xkp:layout_x="10dp"
-				xkp:layout_y="210dp"
-				android:layout_width="300dp"
-				android:layout_height="100dp"
-				android:lines="6"
-			>
-				</EditText>
 			</com.xkp.android.SimpleTest.XKPLayout>

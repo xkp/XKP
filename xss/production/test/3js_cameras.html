@@ -99,6 +99,7 @@ new THREE.Sphere(
 20,32,16);
 	    var sphere_1 = new THREE.Mesh(sphere_1_sphere, material_sphere1);
 	    scene.addObject(sphere_1);
+                sphere_1.materials[ 0 ] = material_sphere1;
                 sphere_1.position.x = 250;
                 sphere_1.position.y = 30;
 	    var sphere_2_sphere = 
@@ -106,6 +107,7 @@ new THREE.Sphere(
 20,32,16);
 	    var sphere_2 = new THREE.Mesh(sphere_2_sphere, material_sphere2);
 	    scene.addObject(sphere_2);
+                sphere_2.materials[ 0 ] = material_sphere2;
                 sphere_2.position.x = -250;
                 sphere_2.position.y = 30;
 	    var cylinder_1_cylinder = 
@@ -113,6 +115,7 @@ new THREE.Cylinder(
 20,10,10,50);
 	    var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
 	    scene.addObject(cylinder_1);
+                cylinder_1.materials[ 0 ] = cylinder_material;
                 set_rotation_x(cylinder_1.rotation, 212);
                 set_rotation_y(cylinder_1.rotation, 212);
                 cylinder_1.position.x = 100;
@@ -123,6 +126,7 @@ new THREE.Cylinder(
 20,10,10,50);
 	    var cylinder_2 = new THREE.Mesh(cylinder_2_cylinder, cylinder1_material);
 	    scene.addObject(cylinder_2);
+                cylinder_2.materials[ 0 ] = cylinder1_material;
                 set_rotation_x(cylinder_2.rotation, 212);
                 set_rotation_y(cylinder_2.rotation, 212);
                 cylinder_2.position.x = -100;
@@ -133,6 +137,7 @@ new THREE.Cube(
 30,30,30);
 	    var cube_1 = new THREE.Mesh(cube_1_cube, cube_material);
 	    scene.addObject(cube_1);
+                cube_1.materials[ 0 ] = cube_material;
                 cube_1.position.x = -100;
                 cube_1.position.y = 30;
                 cube_1.position.z = -100;
@@ -143,6 +148,7 @@ new THREE.Cube(
 30,30,30);
 	    var cube_2 = new THREE.Mesh(cube_2_cube, cube1_material);
 	    scene.addObject(cube_2);
+                cube_2.materials[ 0 ] = cube1_material;
                 cube_2.position.x = 100;
                 cube_2.position.y = 30;
                 cube_2.position.z = -100;
@@ -153,6 +159,7 @@ new THREE.Plane(
 1000,1000,100,100);
 	    var plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    scene.addObject(plane_1);
+                plane_1.materials[ 0 ] = material_wireframe;
                 plane_1.position.y = 0.100000001;
                 set_rotation_x(plane_1.rotation, -90);
                 application.is_ctrl_down = false;

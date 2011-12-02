@@ -40,7 +40,7 @@
 	</scene>
 	
 	<label id="lbl0" x="240" y="75" font="Verdana" caption="click smile to count"/>
-	<button id="btn1" placement="center" rotation="0.2" width="50" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png"/>
+	<button id="btn1" placement="center" rotation="15" width="50" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png"/>
 	<label id="lbl1" x="240" y="400" font="Verdana" caption="use arrows to move smile and"/>
 	<label id="lbl2" x="240" y="420" font="Verdana" caption="drag mouse to spin the cube"/>
 	

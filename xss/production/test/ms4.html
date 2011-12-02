@@ -17,7 +17,6 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
-var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
 			{
@@ -46,7 +45,8 @@ var Sound = new ms.ui.Sound();
 		g_startup_package.load();	
 function start(resolution)  
 {  
-	function updater()  
+	var start = new Date().getTime();  
+	function update()  
 	{  
 		var now   = new Date().getTime();
         if (g_elapsed < 0)
@@ -57,9 +57,9 @@ function start(resolution)
 		g_sequence_manager.update(g_delta);
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-        window.setTimeout(updater, resolution);  
-	}
-	window.setTimeout(updater, resolution);  
+        window.setTimeout(update, resolution);  
+	}  
+	window.setTimeout(update, resolution);  
 }  
 var fade1;
             fade_in = Class.create(ms.state.Sequence,
@@ -96,10 +96,8 @@ var fade1;
                         {t: 2, value: 1},
                         ]);
                     this.addAction(null, "alpha", new ms.state.State(1, 2, ____i2));                    
-                this.target = null;
-            if (this.init)
-                this.init();
-            },
+    },
+                target : null,
 });
 	application.init = function()
 	{    
@@ -107,6 +105,7 @@ var fade1;
 	};
 window.onload = function() 
 {
+	var Sound = new ms.ui.Sound();
 	drawingCanvas = document.getElementById("myCanvas");
     g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
@@ -136,6 +135,8 @@ window.onload = function()
 	};	
 		    img1 = new ms.ui.Image( 
 	    "images/img1.png",g_ui_root.manager, g_ui_root);
+                img1.src("images/img1.png");
+                img1.set_height(50);
 	img1.click = function()
 	{    
 		fade1.start();
@@ -161,7 +162,7 @@ g_sequence_manager);
             {
                 application.init();
             }
-            start();
+			start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});
 	}

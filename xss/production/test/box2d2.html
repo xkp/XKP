@@ -197,11 +197,8 @@ window.onload = function()
 	};	
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
-                btn1.set_rotation(90);
+                btn1.set_rotation(0.200000003);
                 btn1.rect(200, 200, 50, 50);
-		    __img1 = new ms.ui.Image( 
-	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
-                __img1.rect(0, 390, 600, 40);
                 btn1.ev_resized = function(cmp) 
                 {
                     if (cmp.physics)
@@ -231,36 +228,16 @@ window.onload = function()
                         btn1.parent.removeComponent(btn1);
                     }
                 }
-                __img1.ev_resized = function(cmp) 
-                {
-                    if (cmp.physics)
-                        g_world.DestroyBody(cmp.physics);
              fixDef.density = 1;
              fixDef.friction = 0.5;
              fixDef.restitution = 0.200000003;
              bodyDef.type = b2Body.b2_staticBody;
                 fixDef.shape = new b2PolygonShape;
-                    fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
+                    fixDef.shape.SetAsBox(20/(2*g_world_scale), 2/(2*g_world_scale));
             fixDef.isSensor = false;
-                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
+                bodyDef.position.Set(10, 15.1300001);
             current_body = g_world.CreateBody(bodyDef);
             current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;
-                cmp.moved = update_body_position;
-                current_body.host = cmp;
-                }
-                if (__img1.w > 0 && __img1.h > 0)
-                {
-                    __img1.ev_resized(__img1);
-                }
-                __img1.RemoveFromWorld = function(keep_visual) 
-                {
-                    g_world.DestroyBody(__img1.physics);
-                    if (!keep_visual)
-                    {
-                        __img1.parent.removeComponent(__img1);
-                    }
-                }
             g_ui.fill_background = false; //td: cross idiom
             var debugDraw = new b2DebugDraw();
             var debugDrawCanvas = document.getElementById("myCanvas");
@@ -297,8 +274,5 @@ window.onload = function()
 	<canvas id="myCanvas" width="600" height="400">
 		<p>Your browser doesn't support canvas.</p>
 	</canvas>
-	<audio id="sounds" preload> 
-	Your browser does not support the audio element.
-	</audio>
 </body>
 </html>

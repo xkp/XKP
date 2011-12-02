@@ -1,12 +1,6 @@
 <xss:parameter id="res"/>
 
-<xss:code>
-		if(res.resource_type == "RESOURCE_SOUND")
-			out(marker = "audio_resources", marker_source = "entry")
-			{
-			<source src = streamer.get_resource('<xss:e v="res.src"/>').asset/>			
-			}
-			
+<xss:code>		
 		out()
 		{
 		id:"<xss:e v="res.id"/>",

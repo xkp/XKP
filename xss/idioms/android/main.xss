@@ -85,6 +85,7 @@
 	
 	output_filename = appName + "/res/layout/main.xml";
 	compiler.xss("layout.xml.xss", output_file = output_filename, appName, clazz = application);
+	compiler.xss("  bout.xml.xss", output_file = output_filename, appName, clazz = application);
 	
 	if(bReplicator)
 	{

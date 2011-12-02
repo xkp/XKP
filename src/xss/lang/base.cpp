@@ -1011,8 +1011,8 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                 //grab parameter info
                 //td: types
                 DynamicArray info(new dynamic_array);
-                std::vector<str>::iterator pit = params.begin();
-                std::vector<str>::iterator pnd = params.end();
+                std::vector<str>::reverse_iterator pit = params.rbegin();
+                std::vector<str>::reverse_iterator pnd = params.rend();
                 for(; pit != pnd; pit++)
                   {
                     XSSObject param_info(new xss_object());
@@ -1031,7 +1031,9 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                     args.add("args", info);
 
                     XSSCompiler compiler = ctx_->resolve("compiler");
-                    XSSContext  ctx(new xss_context(ctx_));
+                    fs::path type_path   = compiler->type_path(caller);
+
+                    XSSContext  ctx(new xss_context(ctx_, type_path));
                     XSSRenderer rend = compiler->compile_xss_file(xss, ctx);
                     str         res  = rend->render(XSSObject(), &args); 
                     push_rendered(res, op_prec, variant());
