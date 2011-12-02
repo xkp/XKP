@@ -29,12 +29,19 @@
 		//ERROR: why i can use '!=' operator in view != application?
 		//       if(view != application)
 		
+		if(view == null || view.no_layout || view.no_render)
+			return;
+		
 		string strViewName = "";
-		if(view.xkpview || view.type.user_defined)
+		if(view.xkpview)
 			strViewName = "com.xkp.android." + appName + ".";
 		
 		if(view.type)
+		{
+			if(view.type.user_defined)
+				strViewName = "com.xkp.android." + appName + ".";
 			strViewName += view.type.output_id;
+		}
 		
 		if(view.id != application.id)
 		{

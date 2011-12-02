@@ -1,9 +1,9 @@
 package com.xkp.android.Contacts;
 import java.util.ArrayList;
 import java.util.Arrays;
-import android.app.Activity;
-import android.os.Bundle;
 import android.view.View;
+			import android.app.Activity;
+			import android.os.Bundle;
 						import android.widget.Button;
 						import android.text.method.KeyListener;
 						import android.view.View.OnClickListener;
@@ -18,8 +18,8 @@ import android.view.View;
 						import android.widget.CompoundButton;
 						import android.widget.CompoundButton.OnCheckedChangeListener;
 						import android.widget.RadioButton;
-public class ActContacts 
-				extends Activity
+		public class ActContacts 
+						extends Activity
 							implements OnClickListener
 							implements OnCheckedChangeListener
 {
@@ -43,14 +43,13 @@ public class ActContacts
 				private XKPLayout divAbout;
 				private TextView lblName;
 				private TextView lblContact;
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        bindViews();
-    }
-    private void bindViews() {
+			@Override
+			public void onCreate(Bundle savedInstanceState) {
+				super.onCreate(savedInstanceState);
+				setContentView(R.layout.main);
+				bindViews();
+			}
+			private void bindViews() {
 				__div1 = (XKPLayout) findViewById(R.id.__div1);
 				btnLeft = (Button) findViewById(R.id.btnLeft);
 					btnLeft.setOnClickListener(this);
@@ -74,7 +73,7 @@ public class ActContacts
 				divAbout = (XKPLayout) findViewById(R.id.divAbout);
 				lblName = (TextView) findViewById(R.id.lblName);
 				lblContact = (TextView) findViewById(R.id.lblContact);
-				}
+	}
 						@Override
 						public void onClick(View v) {
 							switch (v.getId()) {

@@ -1,20 +1,57 @@
+<xss:parameter id="clazz"/>
 <xss:parameter id="appName"/>
+<xss:parameter id="is_type" default="false"/>
+
 package com.xkp.android.<xss:e value="appName"/>;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import android.app.Activity;
-import android.os.Bundle;
 import android.view.View;
-
+<xss:code>
+	if(is_type)
+	{
+		out(indent = 0)
+		{
+			import android.content.Context;
+			import android.content.res.TypedArray;
+			import android.util.AttributeSet;
+			import android.view.LayoutInflater;
+		}
+	} else
+	{
+		out(indent = 0)
+		{
+			import android.app.Activity;
+			import android.os.Bundle;
+		}
+	}
+</xss:code>
 <xss:marker id="imports"/>
 
-public class Act<xss:e value="appName"/> 
-				extends Activity
-				<xss:marker id="interfaces"/>
 <xss:code>
+	string class_name = "";
+	string cextends = "";
+	if(is_type)
+	{
+		class_name = clazz.output_id;
+		if(clazz.super)
+			cextends = "extends " + clazz.super.output_id;
+	} else
+	{
+		class_name = "Act" + appName;
+		cextends = "extends Activity";
+	}
+	
+	out(indent = 0)
+	{
+		public class <xss:e value="class_name"/> 
+						<xss:e value="cextends"/>
+	}
+</xss:code>
+						<xss:marker id="interfaces"/>
 
+<xss:code>
 	//contents
 	array<string> imports    = [];
 	array<string> interfaces = [];
@@ -22,10 +59,14 @@ public class Act<xss:e value="appName"/>
 	
 	bool class_utils = false;
 	
-	for(var inst in android.instances)
+	for(var inst in clazz.instances)
 	{
 		//TRACE: log
 		//compiler.log("View: " + inst.id);
+
+		if(inst.no_script || inst.no_render)
+			continue;
+		
 		if(inst.id && inst.id != application.id)
 		{
 			out(indent = 1, marker = "declarations")
@@ -55,7 +96,7 @@ public class Act<xss:e value="appName"/>
 				
 				if(!found1)
 				{
-					compiler.log("Adding import " + i.import);
+					compiler.log("Adding import " + i.import + " on " + clazz.id);
 					imports += i.import;
 					
 					out(marker = "imports")
@@ -83,7 +124,7 @@ public class Act<xss:e value="appName"/>
 				
 				if(!found3)
 				{
-					compiler.log("Adding class " + c.name);
+					compiler.log("Adding class " + c.name + " on " + clazz.id);
 					classes += c.name;
 					
 					string xss_file = "class.xss/" + c.file_name;
@@ -132,7 +173,7 @@ public class Act<xss:e value="appName"/>
 				
 				if(!found2)
 				{
-					compiler.log("Adding interface " + e.interface);
+					compiler.log("Adding interface " + e.interface + " on " + clazz.id);
 					interfaces += e.interface;
 					
 					if(firstTime)
@@ -164,7 +205,7 @@ public class Act<xss:e value="appName"/>
 							switch (v.getId()) <xss:open_brace/>
 					}
 					
-					for(var insti in android.instances)
+					for(var insti in clazz.instances)
 					{
 						for(var e_insti in insti.events)
 						{
@@ -214,27 +255,53 @@ public class Act<xss:e value="appName"/>
 
 {
 	<xss:marker id="declarations"/>
-
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        bindViews();
-    }
-	
-    private void bindViews() {
 <xss:code>
-	for(var inst in android.instances)
+	string prefix = "";
+	if(is_type)
 	{
-		if(inst.id == null)
+		out(indent = 0)
+		{
+			public <xss:e value="clazz.output_id"/>(Context context) <xss:open_brace/>
+				this(context, null);
+			<xss:close_brace/>
+			
+			public <xss:e value="clazz.output_id"/>(Context context, AttributeSet attrs) <xss:open_brace/>
+				super(context, attrs);
+				
+				LayoutInflater li = (LayoutInflater) context.
+					getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				
+				// link xml file with inflater
+				View root = li.inflate(R.layout.<xss:e value="clazz.output_id"/>, this);
+				
+				// and with all views
+		}
+		prefix = "root.";
+	} else
+	{
+		out(indent = 0)
+		{
+			@Override
+			public void onCreate(Bundle savedInstanceState) <xss:open_brace/>
+				super.onCreate(savedInstanceState);
+				setContentView(R.layout.main);
+				bindViews();
+			<xss:close_brace/>
+			
+			private void bindViews() <xss:open_brace/>
+		}
+	}
+
+	for(var inst in clazz.instances)
+	{
+		if(inst.id == null || inst.no_script || inst.no_render)
 			continue;
 		
 		if(inst.id && inst.id != application.id)
 		{
 			out(indent = 2)
 			{
-				<xss:e value="inst.output_id"/> = (<xss:e value="inst.type.output_id"/>) findViewById(R.id.<xss:e value="inst.output_id"/>);
+				<xss:e value="inst.output_id"/> = (<xss:e value="inst.type.output_id"/>) <xss:e value="prefix"/>findViewById(R.id.<xss:e value="inst.output_id"/>);
 			}
 		}
 		
@@ -272,17 +339,92 @@ public class Act<xss:e value="appName"/>
 			compiler.xss(util_file, it = inst);
 		}
 	}
+	
+	if(is_type)
+	{
+		out(indent = 0)
+		{
+			TypedArray ta = context.obtainStyledAttributes(
+					attrs, R.styleable.<xss:e value="clazz.output_id"/>);
+		}
+	}
+</xss:code>
+			<xss:marker id="set_property_value"/>
+<xss:code>
+	if(is_type)
+	{
+		out(indent = 0)
+		{
+			ta.recycle();
+		}
+	}
 </xss:code>
 	}
-	
+
 <xss:marker id="events"/>
 <xss:code>
-	//TIP: add application to android instances, 
-	//     i don't know is that is good
-	android.instances += application;
-	for(var inst in android.instances)
+	if(is_type)
 	{
-		compiler.xss("../java/instance.xss", it = inst);
+		compiler.log("Custom class " + clazz.output_id + "...");
+	} else
+	{
+		clazz.instances += application;
+	}
+	
+	for(var i in clazz.instances)
+	{
+		compiler.xss("../java/instance.xss", it = i);
+	}
+	
+	if(is_type)
+	{
+		compiler.xss("../java/instance.xss", it = clazz);
+		
+		//TODO: include all this to another xss file with only structure, maybe to 'styleableProperties.xml.xss'
+		for(var prop in clazz.properties)
+		{
+			if(!prop.set || !prop.type)
+				continue;
+				
+			string method_set = prop.output_id + "_set";
+			string style_name = "R.styleable." + clazz.output_id + "_" + prop.id;
+			string get_function = "";
+			string more_params = "";
+			
+			if(prop.type.id == "string")
+			{
+				get_function = "getString";
+			} else
+			if(prop.type.id == "int")
+			{
+				get_function = "getInteger";
+				more_params = ", 0";
+			} else
+			if(prop.type.id == "bool")
+			{
+				get_function = "getBoolean";
+				more_params = ", false";
+			} else
+			if(prop.type.id == "float")
+			{
+				get_function = "getFloat";
+				more_params = ", 0.0";
+			} else
+			{
+				get_function = "getResourceId";
+				more_params = ", 0";
+			}
+			
+			string func_resrc = "ta." + get_function;
+			
+			out(marker = "set_property_value")
+			{
+				<xss:e value="method_set"/>(<xss:e value="func_resrc"/>(<xss:e value="style_name"/><xss:e value="more_params"/>));
+			}
+		}
+		
+		string output_filename = appName + "/res/values/" + clazz.id + "Style.xml";
+		compiler.xss("styleableProperties.xml.xss", output_file = output_filename, clazz = clazz);
 	}
 </xss:code>
 

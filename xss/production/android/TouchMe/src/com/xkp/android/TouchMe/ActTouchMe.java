@@ -1,9 +1,9 @@
 package com.xkp.android.TouchMe;
 import java.util.ArrayList;
 import java.util.Arrays;
-import android.app.Activity;
-import android.os.Bundle;
 import android.view.View;
+			import android.app.Activity;
+			import android.os.Bundle;
 						import android.widget.Button;
 						import android.text.method.KeyListener;
 						import android.view.View.OnClickListener;
@@ -12,22 +12,21 @@ import android.view.View;
 						import android.view.View.OnTouchListener;
 						import android.view.View.OnKeyListener;
 						import android.view.View.OnFocusChangeListener;
-public class ActTouchMe 
-				extends Activity
+		public class ActTouchMe 
+						extends Activity
 							implements OnTouchListener
 {
 				private Button btnTouchme;
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        bindViews();
-    }
-    private void bindViews() {
+			@Override
+			public void onCreate(Bundle savedInstanceState) {
+				super.onCreate(savedInstanceState);
+				setContentView(R.layout.main);
+				bindViews();
+			}
+			private void bindViews() {
 				btnTouchme = (Button) findViewById(R.id.btnTouchme);
 					btnTouchme.setOnTouchListener(this);
-					}
+	}
 						@Override
 						public boolean onTouch(View v, MotionEvent ev) {
 							switch (v.getId()) {

@@ -1,9 +1,9 @@
 package com.xkp.android.Gallery;
 import java.util.ArrayList;
 import java.util.Arrays;
-import android.app.Activity;
-import android.os.Bundle;
 import android.view.View;
+			import android.app.Activity;
+			import android.os.Bundle;
 						import android.widget.Gallery;
 						import android.view.View.OnClickListener;
 						import android.view.View.OnLongClickListener;
@@ -15,21 +15,20 @@ import android.view.View;
 						import android.widget.ImageView;
 						import android.widget.BaseAdapter;
 						import android.content.Context;
-public class ActGallery 
-				extends Activity
+		public class ActGallery 
+						extends Activity
 {
 				private Gallery gallery;
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        bindViews();
-    }
-    private void bindViews() {
+			@Override
+			public void onCreate(Bundle savedInstanceState) {
+				super.onCreate(savedInstanceState);
+				setContentView(R.layout.main);
+				bindViews();
+			}
+			private void bindViews() {
 				gallery = (Gallery) findViewById(R.id.gallery);
 					gallery.setAdapter(new ImageAdapter(this));
-					}
+	}
 	public class ImageAdapter extends BaseAdapter {
 		private static final int ITEM_WIDTH = 236;
 		private static final int ITEM_HEIGHT = 188;

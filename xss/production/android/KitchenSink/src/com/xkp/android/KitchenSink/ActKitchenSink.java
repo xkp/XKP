@@ -1,9 +1,9 @@
 package com.xkp.android.KitchenSink;
 import java.util.ArrayList;
 import java.util.Arrays;
-import android.app.Activity;
-import android.os.Bundle;
 import android.view.View;
+			import android.app.Activity;
+			import android.os.Bundle;
 						import android.view.ViewGroup;
 						import android.widget.TabHost;
 						import android.widget.TabHost.TabSpec;
@@ -32,8 +32,8 @@ import android.view.View;
 						import android.widget.ProgressBar;
 						import android.widget.SeekBar;
 						import android.widget.SeekBar.OnSeekBarChangeListener;
-public class ActKitchenSink 
-				extends Activity
+		public class ActKitchenSink 
+						extends Activity
 {
 				private TabHost kitchen;
 					XKPUtils util = new XKPUtils();
@@ -63,14 +63,13 @@ public class ActKitchenSink
 				private ProgressBar prgbar3;
 				private ProgressBar prgbar4;
 				private SeekBar seekb1;
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        bindViews();
-    }
-    private void bindViews() {
+			@Override
+			public void onCreate(Bundle savedInstanceState) {
+				super.onCreate(savedInstanceState);
+				setContentView(R.layout.main);
+				bindViews();
+			}
+			private void bindViews() {
 				kitchen = (TabHost) findViewById(R.id.kitchen);
 					ArrayList tabs = new ArrayList(Arrays.asList( new String [] {				"Buttons?"							, "Radios"							, "Image"							, "ProgressBars"						} ));        util.setupTabHost(R.id.kitchen, tabs);
 				__div1 = (XKPLayout) findViewById(R.id.__div1);
@@ -99,7 +98,7 @@ public class ActKitchenSink
 				prgbar3 = (ProgressBar) findViewById(R.id.prgbar3);
 				prgbar4 = (ProgressBar) findViewById(R.id.prgbar4);
 				seekb1 = (SeekBar) findViewById(R.id.seekb1);
-				}
+	}
 					public class XKPUtils {
 						void setupTabHost(int id, ArrayList<String> tabs) {
 			TabHost tabh = (TabHost) findViewById(id);

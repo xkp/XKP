@@ -1,12 +1,12 @@
 <application name="Characters" title="List of Characters" src="characters.xs">
 
-	<!--
 	<resources>
-		<img id="img01" source="resources/image.png"/>
-		<audio id="aud01" source="resources/audio.ogg"/>
-		<video id="vid01" source="resources/video.3gp"/>
+		<res_image id="i_aladdin" src="resources/aladdin.png"/>
+		<res_image id="i_mickey" src="resources/mickey.png"/>
+		<res_image id="i_pluto" src="resources/pluto.png"/>
+		<res_audio id="aud01" src="resources/audio.ogg"/>
+		<res_video id="vid01" src="resources/video.3gp"/>
 	</resources>
-	-->
 
 	<character id="aladdin" name="Aladdin" surname="Allababa Prince" employment="Professor of Steal" placement="top"/>
 	<character id="pluto" name="Pluto" surname="Disney Cartoons" employment="Bones eater" placement="top"/>

@@ -7,7 +7,7 @@
 			
 			int resId = getResources().getIdentifier(
 							res, "drawable", 
-							getContext().getPackageName());
+							getBaseContext().getPackageName());
 			
 			ImageView img = (ImageView) findViewById(id);
 			img.setImageResource(resId);

@@ -47,15 +47,15 @@
 			bReplicator = true;
 	}
 	
-	string output_filename;
-	string output_path = appName + "/src/com/xkp/android/" + appName + "/";
-	compiler.inject("render_types", path = output_path, appName = appName);
+	compiler.inject("render_types", app = appName);
+	compiler.inject("render_instances", app = appName);
 	
+	string output_filename;
 	output_filename = appName + "/" + "AndroidManifest.xml";
 	compiler.xss("AndroidManifest.xml.xss", output_file = output_filename, appName, minAPILevel, targetAPILevel);
 	
 	output_filename = appName + "/src/com/xkp/android/" + appName + "/Act" + appName + ".java";
-	compiler.xss("mainActivity.java.xss", output_file = output_filename, appName);
+	compiler.xss("script.java.xss", output_file = output_filename, clazz = android, appName = appName, is_type = false);
 	
 	output_filename = appName + "/src/com/xkp/android/" + appName + "/XKPLayout.java";
 	compiler.xss("xkpLayout.java.xss", output_file = output_filename, appName);
@@ -84,7 +84,7 @@
 	}
 	
 	output_filename = appName + "/res/layout/main.xml";
-	compiler.xss("mainLayout.xml.xss", output_file = output_filename, appName, clazz = application);
+	compiler.xss("layout.xml.xss", output_file = output_filename, appName, clazz = application);
 	
 	if(bReplicator)
 	{

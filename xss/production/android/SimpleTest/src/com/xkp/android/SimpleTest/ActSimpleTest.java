@@ -1,9 +1,9 @@
 package com.xkp.android.SimpleTest;
 import java.util.ArrayList;
 import java.util.Arrays;
-import android.app.Activity;
-import android.os.Bundle;
 import android.view.View;
+			import android.app.Activity;
+			import android.os.Bundle;
 						import android.widget.TextView;
 						import android.text.method.KeyListener;
 						import android.view.View.OnClickListener;
@@ -14,8 +14,8 @@ import android.view.View;
 						import android.view.View.OnFocusChangeListener;
 						import android.widget.EditText;
 						import android.widget.Button;
-public class ActSimpleTest 
-				extends Activity
+		public class ActSimpleTest 
+						extends Activity
 							implements OnClickListener
 {
 				private TextView lblFirstName;
@@ -25,14 +25,13 @@ public class ActSimpleTest
 				private Button btnFullName;
 				private TextView lblFullName;
 				private EditText edtContainer;
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        bindViews();
-    }
-    private void bindViews() {
+			@Override
+			public void onCreate(Bundle savedInstanceState) {
+				super.onCreate(savedInstanceState);
+				setContentView(R.layout.main);
+				bindViews();
+			}
+			private void bindViews() {
 				lblFirstName = (TextView) findViewById(R.id.lblFirstName);
 				edtFirstName = (EditText) findViewById(R.id.edtFirstName);
 				lblLastName = (TextView) findViewById(R.id.lblLastName);
@@ -41,7 +40,7 @@ public class ActSimpleTest
 					btnFullName.setOnClickListener(this);
 				lblFullName = (TextView) findViewById(R.id.lblFullName);
 				edtContainer = (EditText) findViewById(R.id.edtContainer);
-				}
+	}
 						@Override
 						public void onClick(View v) {
 							switch (v.getId()) {

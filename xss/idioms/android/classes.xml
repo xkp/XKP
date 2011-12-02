@@ -940,6 +940,21 @@
 			</property>
 		</class>
 		
+		<class id="resources" no_render="true">
+		</class>
+		
+		<class id="res_image" no_render="true">
+			<property id="src" type="string"/>
+		</class>
+		
+		<class id="res_audio" no_render="true">
+			<property id="src" type="string"/>
+		</class>
+		
+		<class id="res_video" no_render="true">
+			<property id="src" type="string"/>
+		</class>
+		
 	</types>
 	
     <instance id="appManager" output_id="getWindowManager()">
