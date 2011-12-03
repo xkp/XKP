@@ -337,7 +337,9 @@ str waxjs_code_renderer::render()
     //check for goodies
     bool is_service = false;
     if (owner_)
-      is_service = owner_->get<bool>("wax_service", false);
+      {
+        is_service = owner_->get<bool>("wax_service", false);
+      }
 
     std::ostringstream result;
 
