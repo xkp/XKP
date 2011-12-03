@@ -1471,6 +1471,9 @@ void xss_compiler::preprocess_type(XSSType clazz, XSSObject def_class, const str
       {
         virtual void handle(XSSObject obj, XSSModule mod)
           {
+            if (mod->one_of_us(obj))
+              dynamic_set(obj, "idiom", mod);
+
             if (root == obj)
               return; //do not register the class
 
@@ -1478,9 +1481,6 @@ void xss_compiler::preprocess_type(XSSType clazz, XSSObject def_class, const str
             if (!obj_id.empty())
               ctx->register_symbol(RESOLVE_INSTANCE, obj_id, obj);
                     
-            if (mod->one_of_us(obj))
-              dynamic_set(obj, "idiom", mod);
-            
             if (module == mod)
               target->register_instance(obj);
             else
