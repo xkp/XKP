@@ -334,11 +334,14 @@
         if (rendering_instance)
         {
             //declare variable on the top level
+            //td: generate fields on the class
             out(marker = "variables", marker_source = "entry") {Sequence <xss:e v="seq_id"/>;}
 
             //initialize it here
             out() {<xss:e v="seq_id"/> =} compiler.xss("../common-js/instantiator.xss", seq);
-            if (parent)//duda cuando pasa esto?
+            
+            if (parent) //duda cuando pasa esto?
+                        //cuando hay una sequencia anidada
             {
                 //build the instance chain
                 parent_id = parent.id;
