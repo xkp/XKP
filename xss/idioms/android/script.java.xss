@@ -286,6 +286,7 @@ import android.view.View;
 				super.onCreate(savedInstanceState);
 				setContentView(R.layout.main);
 				bindViews();
+				initInstances();
 			<xss:close_brace/>
 			
 			private void bindViews() <xss:open_brace/>
@@ -361,6 +362,13 @@ import android.view.View;
 </xss:code>
 	}
 
+	void initInstances() {
+<xss:code>
+	// render instances of other idioms
+	compiler.inject("render_instances", app = appName);
+</xss:code>
+	}
+	
 <xss:marker id="events"/>
 <xss:code>
 	if(is_type)

@@ -4,8 +4,10 @@
 		<res_image id="i_aladdin" src="resources/aladdin.png"/>
 		<res_image id="i_mickey" src="resources/mickey.png"/>
 		<res_image id="i_pluto" src="resources/pluto.png"/>
-		<res_audio id="aud01" src="resources/audio.ogg"/>
-		<res_video id="vid01" src="resources/video.3gp"/>
+		<res_audio id="a_audio1" src="resources/audio1.ogg"/>
+		<res_audio id="a_audio2" src="resources/audio2.ogg"/>
+		<res_video id="v_mickey" src="resources/mickey.3gp"/>
+		<res_video id="v_pluto" src="resources/pluto.3gp"/>
 	</resources>
 
 	<character id="aladdin" name="Aladdin" surname="Allababa Prince" employment="Professor of Steal" placement="top"/>

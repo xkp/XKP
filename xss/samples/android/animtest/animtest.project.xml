@@ -20,6 +20,6 @@
 	
 	<options 
 		event_scope="instance" 
-		android_api_level="8" 
+		android_api_level="4" 
 		android_project_type="eclipse"/>
 </project>

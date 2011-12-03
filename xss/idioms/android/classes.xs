@@ -5,7 +5,7 @@ on render_instances(app)
 
 on render_types(app)
 {
-	compiler.log("Rendering Android Types...");
+	compiler.log("Begin Rendering Android Types...");
 
     for(var ut in user_types)
     {
@@ -15,4 +15,6 @@ on render_types(app)
 		output_filename = app + "/res/layout/" + ut.output_id + ".xml";
 		compiler.xss("layout.xml.xss", output_file = output_filename, clazz = ut, appName = app);
     }
+	
+	compiler.log("End Rendering Android Types...");
 }

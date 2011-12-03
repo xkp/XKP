@@ -11,13 +11,13 @@
 	if(application.name)
 		appName = application.name;
 	
-	int targetAPILevel = 8;
-	int minAPILevel = 4;
+	int targetAPILevel = 6;
+	int minAPILevel = 3;
 	if(appOptions.android_api_level)
 	{
 		int apiL = appOptions.android_api_level;
 		
-		if(apiL > minAPILevel && apiL < 13)
+		if(apiL >= minAPILevel && apiL < 13)
 		{
 			targetAPILevel = apiL;
 			compiler.log("API Level = " + targetAPILevel);
@@ -49,7 +49,6 @@
 	
 	//inject idiom events
 	compiler.inject("render_types", app = appName);
-	compiler.inject("render_instances", app = appName);
 	
 	//render project files
 	string output_filename;

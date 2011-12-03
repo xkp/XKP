@@ -4,6 +4,7 @@
 	target="characters.xml" >
 	
 	<idiom src="../../../idioms/android/classes.xml"/>
+	<idiom src="../../../idioms/android/resources.xml"/>
 	
 	<path>
 		<output path="../../../production/android/"/>
@@ -19,7 +20,7 @@
 	
 	<options 
 		event_scope="instance" 
-		android_api_level="8" 
+		android_api_level="4" 
 		android_project_type="eclipse"/>
 
 	<include def="characters.classes.xml" src="characters.classes.xs"/>

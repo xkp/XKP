@@ -622,10 +622,12 @@
 				<object import="android.widget.ImageView"/>
 			</array>
 			
+			<!-- these two properties ('source' & 'res_id') are mutually exclusive -->
 			<property id="source" type="string" output_id="src" ns="android" res_type="drawable">
 				<!-- <set text="setImageResource({value})"/>  param type is int, because resource is an identifier -->
 				<set text="util.setResourceImageView(R.id.{path}, {value})" global="true"/>
 			</property>
+			<property id="res_id" type="string" no_render="true" res_type="drawable"/>
 			
 			<property id="scale" type="EScaleType" output_id="scaleType" ns="android">
 				<get text="getScaleType()"/>
@@ -940,6 +942,7 @@
 			</property>
 		</class>
 		
+		<!--
 		<class id="resources" no_render="true">
 		</class>
 		
@@ -954,6 +957,7 @@
 		<class id="res_video" no_render="true">
 			<property id="src" type="string"/>
 		</class>
+		-->
 		
 	</types>
 	

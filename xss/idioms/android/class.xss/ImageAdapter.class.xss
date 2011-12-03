@@ -11,6 +11,8 @@
 
 		private final Integer[] mImageIds = {
 <xss:code>
+	compiler.error("ImageAdapter.class.xss", "TODO: resource images");
+	
 	string project_path = compiler.project_path() + "/";
 	string output_path = appName + "/res/drawable/";
 	
@@ -28,7 +30,7 @@
 			string simg = img.value;
 			int sz = String.size(simg);
 			
-			int pos = String.find(simg, "/", 0);
+			int pos = String.find_last(simg, "\\/", 0);
 			int rpos = pos + 1;
 			int npos = sz - pos - 1;
 			string fn_img = String.substr(simg, rpos, npos);
@@ -46,7 +48,7 @@
 			compiler.copy_file(src = srcf, dst = dstf);
 			
 			sz = String.size(fn_img);
-			pos = String.find(fn_img, ".", 0);
+			pos = String.find_last(fn_img, ".", 0);
 			string n_img = String.substr(fn_img, 0, pos);
 			
 			string comma = ",";

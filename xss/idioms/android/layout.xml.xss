@@ -29,15 +29,15 @@
 		//ERROR: why i can use '!=' operator in view != application?
 		//       if(view != application)
 		
-		//TRACE: log
-		//compiler.log("id: " + view.id + " idiom: " + view.idiom);
-		
-		if(view == null || view.no_layout || view.no_render)
-			return;
-		
 		string idiom = "";
 		if(view.idiom)
 			idiom = view.idiom.id;
+		
+		//TRACE: log
+		compiler.log("id: " + view.id + " idiom: " + idiom);
+		
+		if(view == null || view.no_layout || view.no_render)
+			return;
 		
 		//ERROR: operator "!=" is not implement with operand null & string
 		if(view.id != application.id && idiom != "android")
@@ -190,7 +190,7 @@
 				}
 			}
 
-			if(prop.value == null || prop.no_layout ||
+			if(prop.value == null || prop.no_layout || prop.no_render ||
 				prop.ns == null || prop.output_id == null)
 				continue;
 			
@@ -217,16 +217,16 @@
 				assignValue = "@+id/" + prop.value;
 			}
 			else
-			if(prop.res_type == "drawable")
+			if(prop.res_type == "drawable" || prop.res_type == "raw")
 			{
 				//TIPS: stupid stripped string... live is hard :(
 				string project_path = compiler.project_path() + "/";
-				string output_path = appName + "/res/drawable/";
+				string output_path = appName + "/res/" + prop.res_type + "/";
 				
 				string simg = prop.value;
 				int sz = String.size(simg);
 				
-				int pos = String.find_last(simg, "/");
+				int pos = String.find_last(simg, "\\/");
 				int rpos = pos + 1;
 				int npos = sz - pos - 1;
 				string fn_img = String.substr(simg, rpos, npos);
@@ -240,7 +240,7 @@
 				
 				sz = String.size(fn_img);
 				pos = String.find_last(fn_img, ".");
-				assignValue = "@drawable/" + String.substr(fn_img, 0, pos);
+				assignValue = "@" + prop.res_type + "/" + String.substr(fn_img, 0, pos);
 			}
 			else
 			if(prop.type.is_array)

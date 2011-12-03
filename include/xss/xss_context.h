@@ -455,10 +455,11 @@ struct xss_object_schema : editable_object_schema<T>
         this->template method_<XSSProperty, 1> ("get_property",     &T::get_property);
         this->template method_<void, 3>        ("add_property",     &T::add_property);
         this->template method_<bool, 1>        ("has_property",     &T::has_property);
+        this->template method_<void, 1>        ("add_child",        &T::add_child);
         this->template method_<XSSMethod, 1>   ("get_method",       &T::get_method);
         this->template method_<DynamicArray, 1>("find_by_type",     &T::find_by_type);
         this->template method_<XSSObject, 1>   ("find",             &T::find);
-		}
+		  }
   };
 
 struct xss_type_schema : xss_object_schema<xss_type>
