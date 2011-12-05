@@ -289,6 +289,12 @@ struct worker
 						          rentry->append_at(result, marker_);
                       break;
                     }
+                  case MS_PREVIOUS:
+                    {
+                      XSSRenderer rentry = compiler_->previous_renderer();
+						          rentry->append_at(result, marker_);
+                      break;
+                    }
                 }
             }
         }
@@ -353,6 +359,8 @@ void out_linker::link(dsl& info, code_linker& owner)
           {
             if (ms == "entry")
               marker_source = MS_ENTRY;
+            else if (ms == "previous")
+              marker_source = MS_PREVIOUS;
             else
               {
 				        param_list error;

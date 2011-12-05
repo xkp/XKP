@@ -350,24 +350,24 @@
 		<class id="IWidget">
 			<property id="x" type="int" output_id="layout_x" ns="xkp" res_type="dimension">
 				<get text="getLeft()"/> 
-				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setLeft({value})" global="true"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setLeft((int){value})" global="true"/>
 			</property>
 			
 			<property id="y" type="int" output_id="layout_y" ns="xkp" res_type="dimension">
 				<get text="getTop()"/>
-				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setTop({value})" global="true"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setTop((int){value})" global="true"/>
 			</property>
 			
 			<!-- fill_parent == match_parent, wrap_content  -->
 			<!-- fill_parent is deprecated after android api 8 -->
 			<property id="width" type="int" output_id="layout_width" ns="android" res_type="dimension" default_value="wrap_content">
 				<get text="getWidth()"/>
-				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setWidth({value})" global="true"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setWidth((int){value})" global="true"/>
 			</property>
 			
 			<property id="height" type="int" output_id="layout_height" ns="android" res_type="dimension" default_value="wrap_content">
 				<get text="getHeight()"/>
-				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setHeight({value})" global="true"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setHeight((int){value})" global="true"/>
 			</property>
 			
 			<property id="placement" type="EPlacement" ns="xkp">

@@ -1095,6 +1095,14 @@ XSSRenderer xss_compiler::current_renderer()
     return renderers_.top();
   }
 
+XSSRenderer xss_compiler::previous_renderer()
+  {
+    if (renderers_.size() < 2)
+      return XSSRenderer();
+
+    return renderers_._Get_container().at(renderers_.size() - 2);
+  }
+
 XSSRenderer xss_compiler::entry_renderer()
   {
     return entry_;

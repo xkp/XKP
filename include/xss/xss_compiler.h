@@ -174,6 +174,7 @@ namespace xkp
         void        push_renderer(XSSRenderer renderer);
         void        pop_renderer();
         XSSRenderer current_renderer();
+        XSSRenderer previous_renderer();
         XSSRenderer entry_renderer();
         XSSContext  current_context();
       public:

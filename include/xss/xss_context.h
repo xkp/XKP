@@ -41,7 +41,8 @@ typedef reference<IArgumentRenderer>    ArgumentRenderer;
 enum MARKER_SOURCE
   {
     MS_CURRENT,
-    MS_ENTRY
+    MS_PREVIOUS,
+    MS_ENTRY,
   };
 
 //misc

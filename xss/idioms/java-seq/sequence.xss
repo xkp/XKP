@@ -96,15 +96,16 @@
                 if (!prop)
                     compiler.error("Sequences expect a property to modify", expression = itm.property); 
                     
+                var prop_type = prop.type.output_id;
                 out(indent = 2)
                 {
 					//<xss:e v="prop_name"/>
                    Interpolator <xss:e v="iid"/> = new Interpolator();
 				   <xss:e v="iid"/>.setTarget(<xss:e v="path"/>);//sin la prop
-				   <xss:e v="iid"/>.setAssign(new Assign(<xss:e v="first_type"/>){
+				   <xss:e v="iid"/>.setAssign(new Assign(){
 								public void execute(Object t,double value){
 								<xss:e v="first_type"/> <xss:e v="first_name"/> = (<xss:e v="first_type"/>)t;
-								<xss:e v="first_name"/>.<xss:e v="compiler.property_set(prop, path, 'value')"/>;
+								<xss:e v="compiler.property_set(prop, path, 'value')"/>;
 								}
 								});
 				   <xss:e v="iid"/>.defaultInterpolator(default_interpolate);	
@@ -333,12 +334,11 @@
 
         if (rendering_instance)
         {
-            //declare variable on the top level
-            //td: generate fields on the class
-            out(marker = "variables", marker_source = "entry") {Sequence <xss:e v="seq_id"/>;}
+            //declare object field
+            out(marker = "declarations", marker_source = "previous") {private Sequence <xss:e v="seq_id"/>;}
 
             //initialize it here
-            out() {<xss:e v="seq_id"/> =} compiler.xss("../common-js/instantiator.xss", seq);
+            out() {<xss:e v="seq_id"/> = new Sequence();}
             
             if (parent) //duda cuando pasa esto?
                         //cuando hay una sequencia anidada
@@ -356,30 +356,15 @@
                 seq_id = parent_id + "." + seq.id;
                 out(indent = 2)
                 {
-                    <xss:e v="seq_id"/> = new ms.state.Sequence();
                     <xss:e v="parent_id"/>.push(<xss:e v="seq.id"/>);
                 }
             }
             
-            compiler.xss("../common-js/instance.xss", seq);
+            compiler.xss("../java/instance.xss", seq);
         }
         else
         {
-            //render as class
-            if (parent)
-            {
-                out()
-                {
-                    this.<xss:e v="seq.id"/> = new ms.state.Sequence();
-                    this.push(this.<xss:e v="seq.id"/>);
-                }
-            }
-
-            seq_id = "this";
-            out(indent = 2)
-            {
-                var this__ = this;
-            }
+            compiler.error("Sequence classes not implemented?");
         }
         
 

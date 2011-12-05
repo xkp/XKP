@@ -16,6 +16,7 @@ import android.view.View;
 						extends Activity
 {
 				private Button btn1;
+			Sequence anim1;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -27,17 +28,15 @@ import android.view.View;
 				btn1 = (Button) findViewById(R.id.btn1);
 	}
 	void initInstances() {
-anim1 =
-new ms.state.Sequence(
-);
+anim1 = new Sequence();
             anim1.parent_sequence = null;
 					//x
                    Interpolator ____i1 = new Interpolator();
 				   ____i1.setTarget(btn1);//sin la prop
-				   ____i1.setAssign(new Assign(Button){
+				   ____i1.setAssign(new Assign(){
 								public void execute(Object t,double value){
 								Button btn1 = (Button)t;
-								btn1.((XKPLayout.LayoutParams) btn1.getLayoutParams()).setLeft(value);
+								((XKPLayout.LayoutParams) btn1.getLayoutParams()).setLeft((int)value);
 								}
 								});
 				   ____i1.defaultInterpolator(default_interpolate);	
