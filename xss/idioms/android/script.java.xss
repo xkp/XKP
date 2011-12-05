@@ -362,12 +362,23 @@ import android.view.View;
 </xss:code>
 	}
 
-	void initInstances() {
 <xss:code>
 	// render instances of other idioms
-	compiler.inject("render_instances", app = appName);
-</xss:code>
+	if(!is_type)
+	{
+		out(indent = 0)
+		{
+			void initInstances() <xss:open_brace/>
+		}
+	
+		compiler.inject("render_instances", app = appName);
+	
+		out(indent = 0)
+		{
+			<xss:close_brace/>
+		}
 	}
+</xss:code>
 	
 <xss:marker id="events"/>
 <xss:code>

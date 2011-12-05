@@ -3,11 +3,11 @@
 			String n_res = resource.substring(rpos + 1);
 			
 			rpos = n_res.lastIndexOf(".");
-			String res = n_res.substring(0, rpos - 1);
+			String res = n_res.substring(0, rpos);
 			
 			int resId = getResources().getIdentifier(
 							res, "drawable", 
-							getBaseContext().getPackageName());
+							getContext().getPackageName());
 			
 			ImageView img = (ImageView) findViewById(id);
 			img.setImageResource(resId);

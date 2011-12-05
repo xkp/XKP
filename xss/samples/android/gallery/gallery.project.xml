@@ -4,6 +4,7 @@
 	target="gallery.xml" >
 	
 	<idiom src="../../../idioms/android/classes.xml"/>
+	<idiom src="../../../idioms/android/resources.xml"/>
 	
 	<path>
 		<output path="../../../production/android/"/>

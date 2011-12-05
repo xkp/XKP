@@ -34,7 +34,7 @@
 			idiom = view.idiom.id;
 		
 		//TRACE: log
-		compiler.log("id: " + view.id + " idiom: " + idiom);
+		//compiler.log("id: " + view.id + " idiom: " + idiom);
 		
 		if(view == null || view.no_layout || view.no_render)
 			return;
@@ -216,6 +216,23 @@
 			{
 				assignValue = "@+id/" + prop.value;
 			}
+			//TODO: like classes.xml idiom on property res_id of image view
+			/*else
+			if(prop.res_type == "resource")
+			{
+				string assign = "UNKNOW RESOURCE";
+				
+				for(var i in android_resources.instances)
+				{
+					if(i.id == prop.value)
+					{
+						assign = i.assignValue;
+						break;
+					}
+				}
+				
+				assignValue = assign;
+			}*/
 			else
 			if(prop.res_type == "drawable" || prop.res_type == "raw")
 			{
@@ -231,14 +248,14 @@
 				int npos = sz - pos - 1;
 				string fn_img = String.substr(simg, rpos, npos);
 				
-				string srcf = project_path + prop.value;
-				string dstf = output_path + fn_img;
+				//string srcf = project_path + prop.value;
+				//string dstf = output_path + fn_img;
 				
+				//TIPS: for now, file are copy in resources idioms
 				//coping resource
-				compiler.log("Copying resource file " + srcf);
-				compiler.copy_file(src = srcf, dst = dstf);
+				//compiler.log("Copying resource file " + srcf);
+				//compiler.copy_file(src = srcf, dst = dstf);
 				
-				sz = String.size(fn_img);
 				pos = String.find_last(fn_img, ".");
 				assignValue = "@" + prop.res_type + "/" + String.substr(fn_img, 0, pos);
 			}

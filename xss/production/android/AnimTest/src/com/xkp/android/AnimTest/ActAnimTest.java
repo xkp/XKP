@@ -26,23 +26,6 @@ import android.view.View;
 			private void bindViews() {
 				btn1 = (Button) findViewById(R.id.btn1);
 	}
-	void initInstances() {
-anim1 =
-new ms.state.Sequence(
-);
-            anim1.parent_sequence = null;
-					//x
-                   Interpolator ____i1 = new Interpolator();
-				   ____i1.setTarget(btn1);//sin la prop
-				   ____i1.setAssign(new Assign(Button){
-								public void execute(Object t,double value){
-								Button btn1 = (Button)t;
-								btn1.((XKPLayout.LayoutParams) btn1.getLayoutParams()).setLeft(value);
-								}
-								});
-				   ____i1.defaultInterpolator(default_interpolate);	
-						____i1.addKey(0, 0);
-						____i1.addKey(3, 200);
-				anim1.addHandler(____i1);
-	}
+			void initInstances() {
+			}
 }

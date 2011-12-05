@@ -24,11 +24,14 @@ import android.view.View;
 				super.onCreate(savedInstanceState);
 				setContentView(R.layout.main);
 				bindViews();
+				initInstances();
 			}
 			private void bindViews() {
 				gallery = (Gallery) findViewById(R.id.gallery);
 					gallery.setAdapter(new ImageAdapter(this));
 	}
+			void initInstances() {
+			}
 	public class ImageAdapter extends BaseAdapter {
 		private static final int ITEM_WIDTH = 236;
 		private static final int ITEM_HEIGHT = 188;

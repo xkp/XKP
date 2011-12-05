@@ -4,5 +4,6 @@
 			<attr name="name" format="reference|string"/>
 			<attr name="surname" format="reference|string"/>
 			<attr name="employment" format="reference|string"/>
+			<attr name="img_src" format="reference|string"/>
 			</declare-styleable>
 </resources>
