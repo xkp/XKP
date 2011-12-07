@@ -2,10 +2,6 @@ package com.xkp.android.Characters;
 import java.util.ArrayList;
 import java.util.Arrays;
 import android.view.View;
-			import android.content.Context;
-			import android.content.res.TypedArray;
-			import android.util.AttributeSet;
-			import android.view.LayoutInflater;
 						import android.widget.ImageView;
 						import android.view.View.OnClickListener;
 						import android.view.View.OnLongClickListener;
@@ -15,6 +11,10 @@ import android.view.View;
 						import android.view.View.OnFocusChangeListener;
 						import android.widget.TextView;
 						import android.text.method.KeyListener;
+			import android.content.Context;
+			import android.content.res.TypedArray;
+			import android.util.AttributeSet;
+			import android.view.LayoutInflater;
 		public class character 
 						extends XKPLayout
 {
