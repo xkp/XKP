@@ -3,6 +3,27 @@ var url  = require("url");
 var application = {};
 
 <xss:code>
+//preprocess pages so a method gets added
+//to the application per page
+
+array<object> pages = application.find_by_type("page");
+for(var page in pages)
+{
+    var events = page.get_events("render");
+    if (events.size == 0)
+        compiler.error("web pages expect a render event");
+
+    if (events.size > 1)
+        compiler.error("web pages expect a single render event");
+
+    var code  = events[0];
+
+    //TODO: wax    
+    var methd = wax.compile(code);
+    application.add_method(page.id, methd);
+}
+
+//render 'em
 compiler.xss("../common-js/instance.xss", application);
 </xss:code>
 
@@ -13,16 +34,12 @@ http.createServer(function(request, response)
     <xss:code>
     for(var i in application.children)
     {
-        compiler.out("if (pathname == " + i.id + ")");
+        compiler.out("if (pathname == '" + i.id + "')");
         compiler.out("{");
 
-        if (i.class_name == "page")
+        if (i.class_name == "page" || i.class_name == "service")
         {
-            compiler.xss("page.xss", i);
-        }
-        else if (i.class_name == "service")
-        {
-            //compiler.xss("service.xss", i);
+            compiler.out(i.id + "(request);");
         }
         else compiler.error("Only pages and services are supported", found = i.class_name);
 

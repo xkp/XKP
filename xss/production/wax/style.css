@@ -1,0 +1,167 @@
+* { 
+ padding: 0;
+ margin: 0;
+}
+body {
+ font-family: "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
+ font-size: 13px;
+ background: #333;
+}
+a {
+ color: #fff;
+ text-decoration: none;
+ border-bottom: 1px #D0EB6A solid;
+}
+a:hover {
+ color: #fff;
+ border-bottom: 1px #D0EB6A dashed;
+}
+#wrapper { 
+ margin: 0 auto;
+ width: 922px;
+}
+#header {
+ color: #fff;
+ width: 900px;
+ float: left;
+ padding: 10px;
+ height: 100px;
+ margin: 10px 0px 5px 0px;
+ background: #333;
+ border: 1px solid #393939;
+}
+#strap {
+ float: left;
+ width: 900px;
+ color: gray;
+ padding: 10px;
+ margin: 0px 0px 5px 0px;
+ background: #333;
+ border: 1px solid #393939;
+ text-align: center;
+}
+#navigation { 
+ color: #fff;
+ border: 1px solid #393939;
+ background: #333;
+ margin: 0px 5px 5px 0px;
+ padding: 10px;
+ height: 350px;
+ width: 195px;
+ float: left;
+}
+#content { 
+ float: right;
+ color: #ccc;
+ border: 1px solid #393939;
+ background: #333;
+ margin: 0px 0px 5px 0px;
+ padding: 10px;
+ height: 350px;
+ width: 678px;
+ display: inline;
+ position: relative;
+}
+#footer {
+ float: left;
+ width: 900px;
+ color: gray;
+ padding: 10px;
+ margin: 0px 0px 5px 0px;
+ background: #333;
+ border: 1px solid #393939;
+ text-align: center;
+}
+#menu {
+ background: #333;
+ float: left;
+ list-style: none;
+ margin: 0;
+ padding: 0;
+ width: 15em;
+}
+#menu li {
+ font: 13px "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
+ margin: 0;
+ padding: 0;
+}
+#menu a {
+ background: #333;
+ border-bottom: 1px solid #393939;
+ color: #ccc;
+ display: block;
+ margin: 0;
+ padding: 8px 12px;
+ text-decoration: none;
+}
+#menu a:hover {
+ background: #D0EB6A url("images/hover.gif") left center no-repeat;
+ color: #000;
+ padding-bottom: 8px;
+}
+#followers {
+ background: #333;
+ float: left;
+ list-style: none;
+ margin: 0;
+ padding: 0;
+ width: 15em;
+}
+#followers li {
+ font: 13px "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
+ margin: 0;
+ padding: 0;
+}
+#followers a {
+ background: #333;
+ border-bottom: 1px solid #393939;
+ color: #ccc;
+ display: block;
+ margin: 0;
+ padding: 8px 12px;
+ text-decoration: none;
+}
+#followers a:hover {
+ background: #D0EB6A url("images/hover.gif") left center no-repeat;
+ color: #000;
+ padding-bottom: 8px;
+}
+#followees {
+ background: #333;
+ float: left;
+ list-style: none;
+ margin: 0;
+ padding: 0;
+ width: 15em;
+}
+#followees li {
+ font: 13px "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
+ margin: 0;
+ padding: 0;
+}
+#followees a {
+ background: #333;
+ border-bottom: 1px solid #393939;
+ color: #ccc;
+ display: block;
+ margin: 0;
+ padding: 8px 12px;
+ text-decoration: none;
+}
+#followees a:hover {
+ background: #D0EB6A url("images/hover.gif") left center no-repeat;
+ color: #000;
+ padding-bottom: 8px;
+}
+h1 { 
+ font: bold 1.9em "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
+ color: #D0EB6A; 
+ padding: 0; 
+ margin: 0;
+}
+h2 { 
+ font: 1.2em "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
+ padding: 0; 
+ margin: 0; 
+ color: gray; 
+}	

@@ -37,6 +37,11 @@ void js_code_renderer::force_this(bool value)
     ctx_->register_symbol(RESOLVE_CONST, "#force_this", value);
   }
 
+void js_code_renderer::this_string(const str& value)
+  {
+    ctx_->register_symbol(RESOLVE_CONST, "#this_string", value);
+  }
+
 str js_code_renderer::render_expression(expression& expr, XSSContext ctx)
   {
     return lang_utils::render_expression<js_expr_renderer>(expr, ctx);
@@ -153,6 +158,10 @@ str js_lang::resolve_this(XSSContext ctx)
         XSSObject this_ = ctx->get_this(); assert(this_);
         return this_->output_id();
       }
+    
+    str this_string = variant_cast<str>(ctx->resolve("#this_string", RESOLVE_CONST), str());        
+    if (!this_string.empty())
+      return this_string;
 
     return "this";
   }

@@ -53,7 +53,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);BOOST_NO_MEMBER_TEMPLATE_FRIENDS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);BOOST_NO_MEMBER_TEMPLATE_FRIENDS;BOOST_NO_STATIC_ASSERT</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\dev\XKP\include;C:\dev\boost;C:\dev\boost\boost_1_44;C:\dev\XKP\third_party\tinyXml;C:\dev\XKP\third_party\jsoncpp\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -94,6 +94,7 @@
     <ClInclude Include="..\..\..\include\xs.h" />
     <ClInclude Include="..\..\..\include\xss\brace_parseer.h" />
     <ClInclude Include="..\..\..\include\xss\dsl_out.h" />
+    <ClInclude Include="..\..\..\include\xss\html_parser.h" />
     <ClInclude Include="..\..\..\include\xss\language.h" />
     <ClInclude Include="..\..\..\include\xss\lang\base.h" />
     <ClInclude Include="..\..\..\include\xss\lang\debug.h" />
@@ -127,6 +128,7 @@
     <ClCompile Include="..\..\..\src\xs.cpp" />
     <ClCompile Include="..\..\..\src\xss\brace_parser.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl_out.cpp" />
+    <ClCompile Include="..\..\..\src\xss\html_parser.cpp" />
     <ClCompile Include="..\..\..\src\xss\language.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang\base.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang\debug.cpp" />

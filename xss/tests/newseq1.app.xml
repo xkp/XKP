@@ -1,0 +1,16 @@
+<application src="newseq1.app.xs" width="600" height="400">
+    <resources>
+        <image src="images/img1.png"/>
+    </resources>
+    
+    <img id="img1" src="images/img1.png" x="100" y="100" width="50" height="50"/>
+    
+    <sequence id="fade_in">
+        <at time="0">
+            <animate property="img1.alpha" from="0" to="30" in="1"/>
+        </at>
+        <at time="1">
+            <animate property="img1.alpha" from="30" to="100" in="2"/>
+        </at>
+    </sequence>
+</application>

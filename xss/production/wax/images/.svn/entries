@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="37"
+   name=""
+   committed-date="2009-10-12T16:25:40.780765Z"
+   url="https://xkprt.svn.sourceforge.net/svnroot/xkprt/T5/projects/twootter/htmls/images"
+   last-author="emsantos"
+   kind="dir"
+   revision="109"/>
+<entry
+   committed-rev="37"
+   name="Thumbs.db"
+   text-time="2007-10-28T19:44:24.000000Z"
+   committed-date="2009-10-12T16:25:40.780765Z"
+   checksum="710f4998862c77fd3f5839bf80152b27"
+   last-author="emsantos"
+   kind="file"
+   prop-time="2009-10-12T16:24:30.203000Z"/>
+<entry
+   committed-rev="37"
+   name="hover.gif"
+   text-time="2008-02-17T22:16:22.000000Z"
+   committed-date="2009-10-12T16:25:40.780765Z"
+   checksum="b33aa9f0fab8d7b64aa5841fab384ae8"
+   last-author="emsantos"
+   kind="file"
+   prop-time="2009-10-12T16:24:30.195000Z"/>
+<entry
+   committed-rev="37"
+   name="seperator.gif"
+   text-time="2007-09-18T22:06:22.000000Z"
+   committed-date="2009-10-12T16:25:40.780765Z"
+   checksum="5391971d534eb97d4a4bf816a00fdedb"
+   last-author="emsantos"
+   kind="file"
+   prop-time="2009-10-12T16:24:30.199000Z"/>
+</wc-entries>

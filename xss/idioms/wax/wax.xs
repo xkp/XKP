@@ -36,5 +36,13 @@ on pre_process(obj)
             if (code.forked)
                 methd.add_parameter("return_function");
         }
+
+        //get the pages
+        array<object> pages = obj.find_by_type("page");
+
+        for(object page in pages)
+        {
+            
+        }
     }
 }

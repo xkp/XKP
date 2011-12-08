@@ -14,6 +14,7 @@ struct js_code_renderer : public base_code_renderer
 
     void use_this_id(bool value);
     void force_this(bool value);
+    void this_string(const str& value);
 
     protected:
       virtual str render_expression(expression& expr, XSSContext ctx);
@@ -63,6 +64,7 @@ struct js_code_renderer_schema : renderer_code_schema<js_code_renderer>
       {
         method_<void, 1>("use_this_id", &js_code_renderer::use_this_id);
         method_<void, 1>("force_this", &js_code_renderer::force_this);
+        method_<void, 1>("this_string", &js_code_renderer::this_string);
       }
   };
 

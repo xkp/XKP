@@ -336,15 +336,21 @@ str waxjs_code_renderer::render()
     
     //check for goodies
     bool is_service = false;
+    bool is_page = false;
+    
     if (owner_)
       {
         is_service = owner_->get<bool>("wax_service", false);
+        is_page = owner_->get<bool>("wax_page", false);
       }
 
     std::ostringstream result;
 
     if (is_service)
       result << render_service();
+
+    if (is_page)
+      result << render_page();
 
     result << render_split(fork, CodeSplit());
     return result.str();
@@ -565,6 +571,16 @@ str waxjs_code_renderer::after_code(CodeSplit fork)
           result << *it << ";";
       }
 
+    return result.str();
+  }
+
+str waxjs_code_renderer::render_page()
+  {
+    std::ostringstream result;
+    result << "\nfunction return_function(return_value)";
+    result << "\n{";
+    result << "\nreqest.append(contents);";
+    result << "\n}";
     return result.str();
   }
 

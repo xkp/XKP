@@ -69,6 +69,7 @@ struct waxjs_code_renderer : public base_code_renderer
       str split_method(XSSMethod method);
       str after_code(CodeSplit fork);
       str render_service();
+      str render_page();
     public:
       XSSMethod owner_;
   };
