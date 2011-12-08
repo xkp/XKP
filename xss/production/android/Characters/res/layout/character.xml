@@ -4,5 +4,37 @@
 				xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.Characters" 
 				android:layout_width="320dp"
 				android:layout_height="100dp"
+				android:padding="2dp"
 			>
+				<ImageView android:id="@+id/picture"
+				xkp:layout_x="0dp"
+				xkp:layout_y="0dp"
+				android:layout_width="100dp"
+				android:layout_height="100dp"
+			>
+				</ImageView>
+				<TextView android:id="@+id/lname"
+				xkp:layout_x="105dp"
+				xkp:layout_y="0dp"
+				android:layout_width="200dp"
+				android:gravity="center_vertical"
+				android:layout_height="wrap_content"
+			>
+				</TextView>
+				<TextView android:id="@+id/lsurname"
+				xkp:layout_x="105dp"
+				xkp:layout_y="30dp"
+				android:layout_width="200dp"
+				android:gravity="center_vertical"
+				android:layout_height="wrap_content"
+			>
+				</TextView>
+				<TextView android:id="@+id/lemployment"
+				xkp:layout_x="105dp"
+				xkp:layout_y="60dp"
+				android:layout_width="200dp"
+				android:gravity="center_vertical"
+				android:layout_height="wrap_content"
+			>
+				</TextView>
 				</com.xkp.android.Characters.XKPLayout>

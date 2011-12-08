@@ -48,6 +48,7 @@ import android.view.View;
 				super.onCreate(savedInstanceState);
 				setContentView(R.layout.main);
 				bindViews();
+				initInstances();
 			}
 			private void bindViews() {
 				__div1 = (XKPLayout) findViewById(R.id.__div1);
@@ -74,6 +75,8 @@ import android.view.View;
 				lblName = (TextView) findViewById(R.id.lblName);
 				lblContact = (TextView) findViewById(R.id.lblContact);
 	}
+			void initInstances() {
+			}
 						@Override
 						public void onClick(View v) {
 							switch (v.getId()) {

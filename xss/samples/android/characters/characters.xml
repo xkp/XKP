@@ -10,7 +10,25 @@
 		<res_video id="v_pluto" src="resources/pluto.3gp"/>
 	</resources>
 
-	<character id="aladdin" name="Aladdin" surname="Allababa Prince" employment="Professor of Steal" placement="top"/>
-	<character id="pluto" name="Pluto" surname="Disney Cartoons" employment="Bones eater" placement="top"/>
-	<character id="mickey" name="Mickey" surname="Disney Cartoons?" employment="A mouse that ..." placement="top"/>
+	<character id="aladdin" 
+		name="Aladdin" 
+		surname="Allababa Prince" 
+		employment="Professor of Steal" 
+		img_src="resources/aladdin.png" 
+		placement="top" />
+	
+	<character id="mickey" 
+		name="Mickey" 
+		surname="Disney Cartoons?" 
+		employment="A mouse that ..." 
+		img_src="resources/mickey.png" 
+		placement="top"/>
+	
+	<character id="pluto" 
+		name="Pluto" 
+		surname="Disney Cartoons" 
+		employment="Bones eater" 
+		img_src="resources/pluto.png" 
+		placement="top"/>
+	
 </application>

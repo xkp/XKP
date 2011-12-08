@@ -24,6 +24,11 @@ class character : div
 		lemployment.caption = value;
 	}
 	
+	property img_src : string 
+	{
+		picture.src = value;
+	}
+	
 	method foo()
 	{
 		name = "foo";
@@ -35,11 +40,6 @@ class character : div
 	}
 
 	/*
-	property img_src : string 
-	{
-		//picture.source = value;
-	}
-	
 	instance picture
 	{
 		on click()

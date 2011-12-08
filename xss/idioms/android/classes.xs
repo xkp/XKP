@@ -5,10 +5,26 @@ on render_instances(app)
 
 on render_types(app)
 {
-	compiler.log("Begin Rendering Android Types...");
+	compiler.log("### Begin Rendering Android Types...");
 
+	//compiler.log(this.id);
+	//compiler.log(this.user_types.size);
     for(var ut in user_types)
     {
+		// set idiom to custom clazz with instances
+		ut.idiom = this;
+		//compiler.log("type: " + ut.id);
+		for(var it in ut.instances)
+		{
+			//compiler.log("instance: " + it.id);
+			it.idiom = this;
+		}
+		for(var ch in ut.children)
+		{
+			//compiler.log("child: " + ch.id);
+			ch.idiom = this;
+		}
+		
 		string output_filename = app + "/src/com/xkp/android/" + app + "/" + ut.output_id + ".java";
 		compiler.xss("script.java.xss", output_file = output_filename, clazz = ut, appName = app, is_type = true);
 	
@@ -16,5 +32,53 @@ on render_types(app)
 		compiler.xss("layout.xml.xss", output_file = output_filename, clazz = ut, appName = app);
     }
 	
-	compiler.log("End Rendering Android Types...");
+	compiler.log("### End Rendering Android Types...");
+}
+
+on render_imports(clazz)
+{
+	compiler.log("### Begin Rendering Android Imports...");
+
+	array<string> imports    = [];
+	for(var inst in clazz.instances)
+	{
+		//TRACE: log
+		//compiler.log("View: " + inst.id);
+		if(inst.no_script || inst.no_render)
+			continue;
+		
+		//find necessary imports without duplicates
+		if(inst.imports && !inst.xkpview)
+		{
+			//TIPS: live is hard, and very long; :)
+			//TODO: it's necessary to implement vector, stack, queue and set containers in vm
+			for(var i in inst.imports)
+			{
+				//TRACE: log
+				//compiler.log("Import: " + i.import);
+				bool found1 = false;
+				for(var imp in imports)
+				{
+					if(imp == i.import)
+					{
+						found1 = true;
+						break;
+					}
+				}
+				
+				if(!found1)
+				{
+					compiler.log("Adding import " + i.import + " on " + clazz.id);
+					imports += i.import;
+					
+					out(indent = 0)
+					{
+						import <xss:e value="i.import"/>;
+					}
+				}
+			}
+		}
+	}
+	
+	compiler.log("### End Rendering Android Imports...");
 }

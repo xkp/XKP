@@ -8,17 +8,20 @@ import android.view.View;
 						extends Activity
 {
 				private character aladdin;
-				private character pluto;
 				private character mickey;
+				private character pluto;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
 				setContentView(R.layout.main);
 				bindViews();
+				initInstances();
 			}
 			private void bindViews() {
 				aladdin = (character) findViewById(R.id.aladdin);
-				pluto = (character) findViewById(R.id.pluto);
 				mickey = (character) findViewById(R.id.mickey);
+				pluto = (character) findViewById(R.id.pluto);
 	}
+			void initInstances() {
+			}
 }

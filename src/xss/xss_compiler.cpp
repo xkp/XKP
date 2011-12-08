@@ -1488,7 +1488,9 @@ void xss_compiler::preprocess_type(XSSType clazz, XSSObject def_class, const str
             str obj_id = obj->id();
             if (!obj_id.empty())
               ctx->register_symbol(RESOLVE_INSTANCE, obj_id, obj);
-                    
+
+            dynamic_set(target, "idiom", mod);
+
             if (module == mod)
               target->register_instance(obj);
             else

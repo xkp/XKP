@@ -11,8 +11,6 @@
 
 		private final Integer[] mImageIds = {
 <xss:code>
-	compiler.error("ImageAdapter.class.xss", "TODO: resource images");
-	
 	string project_path = compiler.project_path() + "/";
 	string output_path = appName + "/res/drawable/";
 	
@@ -40,14 +38,14 @@
 			//string fn_img = String.substr(simg, sz - pos - 1, pos + 1);
 			
 			//build path files
-			string srcf = project_path + img.value;
-			string dstf = output_path + fn_img;
+			//string srcf = project_path + img.value;
+			//string dstf = output_path + fn_img;
 			
+			//TIPS: for now, file are copy in resources idioms
 			//copy file
-			compiler.log("Copying resource file " + srcf);
-			compiler.copy_file(src = srcf, dst = dstf);
+			//compiler.log("Copying resource file " + srcf);
+			//compiler.copy_file(src = srcf, dst = dstf);
 			
-			sz = String.size(fn_img);
 			pos = String.find_last(fn_img, ".", 0);
 			string n_img = String.substr(fn_img, 0, pos);
 			

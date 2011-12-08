@@ -68,6 +68,7 @@ import android.view.View;
 				super.onCreate(savedInstanceState);
 				setContentView(R.layout.main);
 				bindViews();
+				initInstances();
 			}
 			private void bindViews() {
 				kitchen = (TabHost) findViewById(R.id.kitchen);
@@ -99,6 +100,8 @@ import android.view.View;
 				prgbar4 = (ProgressBar) findViewById(R.id.prgbar4);
 				seekb1 = (SeekBar) findViewById(R.id.seekb1);
 	}
+			void initInstances() {
+			}
 					public class XKPUtils {
 						void setupTabHost(int id, ArrayList<String> tabs) {
 			TabHost tabh = (TabHost) findViewById(id);
@@ -122,7 +125,7 @@ import android.view.View;
 			int rpos = resource.lastIndexOf("/");
 			String n_res = resource.substring(rpos + 1);
 			rpos = n_res.lastIndexOf(".");
-			String res = n_res.substring(0, rpos - 1);
+			String res = n_res.substring(0, rpos);
 			int resId = getResources().getIdentifier(
 							res, "drawable", 
 							getContext().getPackageName());

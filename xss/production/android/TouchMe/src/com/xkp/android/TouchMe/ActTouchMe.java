@@ -22,11 +22,14 @@ import android.view.View;
 				super.onCreate(savedInstanceState);
 				setContentView(R.layout.main);
 				bindViews();
+				initInstances();
 			}
 			private void bindViews() {
 				btnTouchme = (Button) findViewById(R.id.btnTouchme);
 					btnTouchme.setOnTouchListener(this);
 	}
+			void initInstances() {
+			}
 						@Override
 						public boolean onTouch(View v, MotionEvent ev) {
 							switch (v.getId()) {

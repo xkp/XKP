@@ -9,6 +9,8 @@ import java.util.Arrays;
 
 import android.view.View;
 <xss:code>
+	compiler.inject("render_imports", clazz = clazz);
+	
 	if(is_type)
 	{
 		out(indent = 0)
@@ -53,7 +55,6 @@ import android.view.View;
 
 <xss:code>
 	//contents
-	array<string> imports    = [];
 	array<string> interfaces = [];
 	array<string> classes	 = [];
 	
@@ -72,38 +73,6 @@ import android.view.View;
 			out(indent = 1, marker = "declarations")
 			{
 				private <xss:e value="inst.type.output_id"/> <xss:e value="inst.output_id"/>;
-			}
-		}
-		
-		//find necessary imports without duplicates
-		if(inst.imports && !inst.xkpview)
-		{
-			//TIPS: live is hard, and very long; :)
-			//TODO: it's necessary to implement vector, stack, queue and set containers in vm
-			for(var i in inst.imports)
-			{
-				//TRACE: log
-				//compiler.log("Import: " + i.import);
-				bool found1 = false;
-				for(var imp in imports)
-				{
-					if(imp == i.import)
-					{
-						found1 = true;
-						break;
-					}
-				}
-				
-				if(!found1)
-				{
-					compiler.log("Adding import " + i.import + " on " + clazz.id);
-					imports += i.import;
-					
-					out(marker = "imports")
-					{
-						import <xss:e value="i.import"/>;
-					}
-				}
 			}
 		}
 		
@@ -362,12 +331,23 @@ import android.view.View;
 </xss:code>
 	}
 
-	void initInstances() {
 <xss:code>
 	// render instances of other idioms
-	compiler.inject("render_instances", app = appName);
-</xss:code>
+	if(!is_type)
+	{
+		out(indent = 0)
+		{
+			void initInstances() <xss:open_brace/>
+		}
+	
+		compiler.inject("render_instances", app = appName);
+	
+		out(indent = 0)
+		{
+			<xss:close_brace/>
+		}
 	}
+</xss:code>
 	
 <xss:marker id="events"/>
 <xss:code>
