@@ -1,0 +1,222 @@
+<idioms>
+	<idiom id="js-ui"/>
+	<idiom id="android"/>
+</idioms>
+
+<components>
+	//included in only one idiom
+	<component>
+		[self_drawn(js-ui)]
+			<description: />
+			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
+
+	<component>
+		[clip_area(js-ui)]
+			<description: />
+			<constructor_params(js-ui): form />
+			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
+			<properties(js-ui): form />
+
+	<component>
+		[rectangle(js-ui)]
+			<description: />
+			<constructor_params(js-ui): fill, stroke, line_width />
+			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
+			<properties(js-ui): fill, stroke, line_width />
+
+	<component>
+		[polygon(js-ui)]
+			<description: />
+			<constructor_params(js-ui): fill, stroke, line_width />
+			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
+			<properties(js-ui): fill, stroke, line_width />
+
+	<component>
+		[polygon_point(js-ui)]
+			<description: />
+
+	<component>
+		[circle(js-ui)]
+			<description: />
+			<constructor_params(js-ui): fill, stroke, line_width />
+			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
+			<properties(js-ui): fill, stroke, line_width, radius />
+
+	<component>
+		[line(js-ui)]
+			<description: />
+			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
+			<properties(js-ui): x1, y1, x2, y2, lineWidth, lineCap />
+
+	<component>
+		[sound(js-ui)]
+			<description: />
+			<properties(js-ui): src, play />
+
+	<component>
+		[video(js-ui)]
+			<description: />
+			<properties(js-ui): src, loop, controls, autoplay, audio, width, height />
+
+	<component>
+		[radiobutton(android)]
+			<description: />
+			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
+			<properties(android): caption, cursor_visible, hint, text_color, text_selectable, links_clickeable, lines, max_lines, max_height, max_width, min_height, min_width />
+			<properties(android): checked />
+			<methods(android): toggle />
+
+	<component>
+		[editbox(android)]
+			<description: />
+			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
+			<properties(android): caption, cursor_visible, hint, text_color, text_selectable, links_clickeable, lines, max_lines, max_height, max_width, min_height, min_width />
+			<properties(android): text />
+			<methods(android): select_all, select />
+
+	<component>
+		[imagebutton=image(android)]
+			<description: />
+			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
+			<properties(android): src, scale />
+			<methods(android): set_alpha, set_bitmap />
+
+	<component>
+		[togglebutton(android)]
+			<description: />
+			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
+			<properties(android): caption, cursor_visible, hint, text_color, text_selectable, links_clickeable, lines, max_lines, max_height, max_width, min_height, min_width />
+			<properties(android): text_off, text_on />
+			<methods(android): checked />
+
+	<component>
+		[radiogroup(android)]
+			<description: />
+			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
+			<properties(android): orientation />
+			<methods(android): add_cmp, check, clear_check, selected />
+
+	<component>
+		[seekbar=progressbar(android)]
+			<description: />
+			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
+			<properties(android): max, progress, secondary_progress, style />
+			<methods(android): inc_1, inc_2, indeterminate, set_indeterminate />
+
+	<component>
+		[scroller(android)]
+			<description: />
+			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
+			<properties(android): fillviewport, smooth />
+			<methods(android): add_cmp, draw, fling, fullscroll, pagescroll, max_scroll_amount />
+
+	<component>
+		[tabcontrol(android)]
+			<description: />
+			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
+			<properties(android): tabs, current_by_id, current_by_tag />
+			<methods(android): add_tab, clear, current_tab, newtab />
+
+	<component>
+		[spinner(android)]
+			<description: />
+			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
+			<properties(android): prompt, items />
+
+	<component>
+		[listbox(android)]
+			<description: />
+			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
+			<properties(android): items, dividerHeight />
+			<methods(android): max_scroll_amount, set_selection />
+
+	<component>
+		[imagegallery(android)]
+			<description: />
+			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
+			<properties(android): spacing, images />
+
+	<component>
+		[replicator(android)]
+			<description: />
+			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
+			<properties(android): template, items />
+
+	//included in all idioms
+	<component>
+		[div(js-ui, android)]
+			<description: />
+			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
+			
+			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
+			<methods(android): is_touch_mode, is_focused, is_selected, click, longclick, request_focus, set_selected, show_menu />
+			<events(android): draw />
+
+	<component>
+		[img(js-ui) image(android)]
+			<description: />
+			<constructor_params(js-ui): src />
+			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
+			<properties(js-ui): src, image />
+			
+			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
+			<properties(android): src, scale />
+			<methods(android): set_alpha, set_bitmap />
+
+	<component>
+		[button(js-ui, android)]
+			<description: />
+			<constructor_params(js-ui): up, down />
+			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
+			<properties(js-ui): up, down />
+			
+			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
+			<properties(android): caption, cursor_visible, hint, text_color, text_selectable, links_clickeable, lines, max_lines, max_height, max_width, min_height, min_width />
+			<methods(android): append, selection_end, selection_start, has_selection, length />
+			<events(android): keydown, keyup />
+
+	<component>
+		[state_button(js-ui) checkbox(android)]
+			<description: />
+			<constructor_params(js-ui): up, down />
+			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
+			<properties(js-ui): up, down />
+			
+			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
+			<properties(android): caption, cursor_visible, hint, text_color, text_selectable, links_clickeable, lines, max_lines, max_height, max_width, min_height, min_width />
+			<properties(android): checked />
+			<methods(android): toggle />
+
+	<component>
+		[label(js-ui, android)]
+			<description: />
+			<constructor_params(js-ui): font />
+			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
+			<properties(js-ui): font, caption />
+			
+			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
+			<properties(android): caption, cursor_visible, hint, text_color, text_selectable, links_clickeable, lines, max_lines, max_height, max_width, min_height, min_width />
+
+	<component>
+		[progress_bar(js-ui) progressbar(android)]
+			<description: />
+			<constructor_params(js-ui): images />
+			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
+			<properties(js-ui): images />
+			
+			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
+			<properties(android): max, progress, secondary_progress, style />
+			<methods(android): inc_1, inc_2, indeterminate, set_indeterminate />
+
+	<component>
+		[switch(js-ui) switcher(android)]
+			<description: />
+			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
+			<properties(js-ui): active />
+			
+			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
+			<properties(android): active, active_index />
+
+</components>
+
+
