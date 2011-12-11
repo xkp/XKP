@@ -1173,6 +1173,7 @@ void xss_compiler::read_application_types(std::vector<XSSObject> & applications)
         XSSApplicationRenderer app(new xss_application_renderer(path, lang, shared_from_this()));
 
         app->context()->register_symbol(RESOLVE_CONST, "#app", app);
+        register_language_objects(language_name, app->context());
 
         fs::path op = fs::path(app_data->get<str>("output", str()));
         app->output_path(op);
@@ -2106,6 +2107,15 @@ Language xss_compiler::get_language(const str& name)
       return Language(new waxjs_lang);
 
     return Language();
+  }
+
+void xss_compiler::register_language_objects(const str& language_name, XSSContext context)
+  {
+    if (language_name == "waxjs")
+      {
+        WaxUtils wax(new wax_utils(shared_from_this()));
+        context->register_symbol(RESOLVE_CONST, "wax_compiler", wax);
+      }
   }
 
 void xss_compiler::pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent, IPreprocessHandler* handler, bool exclude_module)

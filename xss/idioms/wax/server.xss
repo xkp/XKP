@@ -9,7 +9,7 @@ var application = {};
 array<object> pages = application.find_by_type("page");
 for(var page in pages)
 {
-    var events = page.get_events("render");
+    var events = page.get_event_code("render");
     if (events.size == 0)
         compiler.error("web pages expect a render event");
 
@@ -19,7 +19,7 @@ for(var page in pages)
     var code  = events[0];
 
     //TODO: wax    
-    var methd = wax.compile(code);
+    var methd = wax_compiler.compile_page(page, code);
     application.add_method(page.id, methd);
 }
 

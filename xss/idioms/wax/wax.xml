@@ -1,4 +1,5 @@
 <module id="wax" src="wax.xs">
     <types>
+        <class id="page"/>
     </types>
 </module>

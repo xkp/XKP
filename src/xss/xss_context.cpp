@@ -1157,6 +1157,18 @@ DynamicArray xss_object::get_event_impl(const str& event_name, XSSEvent& ev)
     return ev->impls;
   }
 
+DynamicArray xss_object::get_event_code(const str& event_name)
+  {
+    for(size_t i = 0; i < events_->size(); i++)
+      {
+        XSSEvent ev = events_->at(i);
+        if (ev->id() == event_name)
+          return ev->impls;
+      }
+    
+    return DynamicArray(new dynamic_array);
+  }
+
 bool xss_object::is_injected(const str& name)
   {
     item_list::iterator it = items_.find(name);
@@ -1166,6 +1178,11 @@ bool xss_object::is_injected(const str& name)
       }
 
     return false;
+  }
+
+void xss_object::add_method(const str& event_name, XSSMethod m)
+  {
+    assert(false);
   }
 
 void xss_object::add_child(XSSObject obj)

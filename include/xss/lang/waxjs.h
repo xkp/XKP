@@ -74,6 +74,29 @@ struct waxjs_code_renderer : public base_code_renderer
       XSSMethod owner_;
   };
 
+struct wax_utils
+  {
+    wax_utils() 
+      {
+      }
+
+    wax_utils(XSSCompiler compiler):
+      compiler_(compiler)
+      {
+      }
+
+    XSSMethod compile_page(XSSObject page, variant code)
+      {
+        assert(false);
+        return XSSMethod();
+      }
+
+    private:
+      XSSCompiler compiler_;
+  };
+
+typedef reference<wax_utils> WaxUtils;
+
 //glue
 struct waxjs_code_renderer_schema : renderer_code_schema<waxjs_code_renderer>
   {
@@ -86,7 +109,16 @@ struct waxjs_code_renderer_schema : renderer_code_schema<waxjs_code_renderer>
       }
   };
 
+struct wax_utils_schema : object_schema<wax_utils>
+  {
+    virtual void declare()
+      {
+        method_<XSSMethod, 2>("compile_page", &wax_utils::compile_page);
+      }
+  };
+
 register_complete_type(waxjs_code_renderer, waxjs_code_renderer_schema);
+register_complete_type(wax_utils, wax_utils_schema);
 
 }
 

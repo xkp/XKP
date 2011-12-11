@@ -201,6 +201,7 @@ namespace xkp
         void        compile_ast(xs_container& ast, XSSContext ctx);
         bool        options(const str& name);
         Language    get_language(const str& name);
+        void        register_language_objects(const str& language_name, XSSContext context);
         void        pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent, IPreprocessHandler* handler, bool exclude_module = false);
         void        run();
         void        copy_files(XSSObject project_data);

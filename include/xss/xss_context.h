@@ -112,7 +112,9 @@ class xss_object : public editable_object<xss_object>,
       std::vector<XSSObject> find_by_class(const str& which);
       DynamicArray           find_by_type(const str& which);
       DynamicArray           get_event_impl(const str& event_name, XSSEvent& ev);
+      DynamicArray           get_event_code(const str& event_name);
 		  bool                   is_injected(const str& name);
+      void                   add_method(const str& event_name, XSSMethod m);
     public:
       //children management
 			void add_child(XSSObject obj);
@@ -458,8 +460,11 @@ struct xss_object_schema : editable_object_schema<T>
         this->template method_<bool, 1>        ("has_property",     &T::has_property);
         this->template method_<void, 1>        ("add_child",        &T::add_child);
         this->template method_<XSSMethod, 1>   ("get_method",       &T::get_method);
+        this->template method_<void, 2>        ("add_method",       &T::add_method);
         this->template method_<DynamicArray, 1>("find_by_type",     &T::find_by_type);
         this->template method_<XSSObject, 1>   ("find",             &T::find);
+        this->template method_<DynamicArray, 1>("get_event_code",   &T::get_event_code);
+        
 		  }
   };
 
