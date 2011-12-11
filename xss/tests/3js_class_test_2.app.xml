@@ -1,0 +1,9 @@
+<application src="3js_class_test_2.app.xs" renderer="canvas" width="600" height="400">    
+    		
+	<scene>		 
+		<camera id="camera_1" fov="75" aspect="1.5" near="1" far="3000">
+			<position z="1000"/>			
+		</camera>		
+	</scene>
+	
+</application>
