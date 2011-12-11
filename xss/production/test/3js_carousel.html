@@ -21,6 +21,9 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">		
 	var renderer = new THREE.CanvasRenderer();	
 var ui;
@@ -29,6 +32,7 @@ var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var application = {};
+application.events = new ms.event.EventHolder();
 		var streamer = new ms.streamer.Streamer();
 	// --------RESOURCES---------
         var def_package_items = [];
@@ -75,8 +79,9 @@ if (g_elapsed < 0)
 else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
-		application.position_items();
+application.events.dispatch("animate", []);	
 		set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
 }
 var materials = 
 new Array(
@@ -140,41 +145,31 @@ new THREE.Plane(
 128,164);
 	    var img1 = new THREE.Mesh(img1_plane, materials[0]);
 	    scene.addObject(img1);
-                img1.materials[ 0 ] = materials[0];
-	document.addEventListener( 'mousemove', mousein_img1, false );
-	function mousein_img1 (event)
-	{
-		event.preventDefault();
-		var intersects = get_intersects( event.clientX, event.clientY, img1);
-		if ( intersects.length > 0 ) 
-		{
+		img1.events = new ms.event.EventHolder();
+	img1.events.addListener("mousein", function()
+	{    
 		img1.scale.x = 1.5;
 img1.scale.y = 1.5;
 img1_reflect.scale.x = 1.5;
 img1_reflect.scale.y = 1.5;
 img1_reflect.position.y = -196.800003;
-	    }
 	}
-	document.addEventListener( 'mousemove', mouseout_img1, false );
-	function mouseout_img1 (event)
-	{
-		event.preventDefault();
-		var intersects = get_intersects( event.clientX, event.clientY, img1);
-		if ( !intersects.length > 0 ) 
-		{
+	);
+	img1.events.addListener("mouseout", function()
+	{    
 		img1.scale.x = 1;
 img1.scale.y = 1;
 img1_reflect.scale.x = 1;
 img1_reflect.scale.y = 1;
 img1_reflect.position.y = -131.199997;
-	    }
 	}
+	);
 	    var img1_reflect_plane = 
 new THREE.Plane(
 128,164);
 	    var img1_reflect = new THREE.Mesh(img1_reflect_plane, materials[1]);
 	    scene.addObject(img1_reflect);
-                img1_reflect.materials[ 0 ] = materials[1];
+		img1_reflect.events = new ms.event.EventHolder();
                 img1_reflect.doubleSided = true;
                 img1_reflect.scale.y = 0.800000012;
                 img1_reflect.position.y = -131.199997;
@@ -184,41 +179,31 @@ new THREE.Plane(
 128,164);
 	    var img2 = new THREE.Mesh(img2_plane, materials[2]);
 	    scene.addObject(img2);
-                img2.materials[ 0 ] = materials[2];
-	document.addEventListener( 'mousemove', mousein_img2, false );
-	function mousein_img2 (event)
-	{
-		event.preventDefault();
-		var intersects = get_intersects( event.clientX, event.clientY, img2);
-		if ( intersects.length > 0 ) 
-		{
+		img2.events = new ms.event.EventHolder();
+	img2.events.addListener("mousein", function()
+	{    
 		img2.scale.x = 1.5;
 img2.scale.y = 1.5;
 img2_reflect.scale.x = 1.5;
 img2_reflect.scale.y = 1.5;
 img2_reflect.position.y = -196.800003;
-	    }
 	}
-	document.addEventListener( 'mousemove', mouseout_img2, false );
-	function mouseout_img2 (event)
-	{
-		event.preventDefault();
-		var intersects = get_intersects( event.clientX, event.clientY, img2);
-		if ( !intersects.length > 0 ) 
-		{
+	);
+	img2.events.addListener("mouseout", function()
+	{    
 		img2.scale.x = 1;
 img2.scale.y = 1;
 img2_reflect.scale.x = 1;
 img2_reflect.scale.y = 1;
 img2_reflect.position.y = -131.199997;
-	    }
 	}
+	);
 	    var img2_reflect_plane = 
 new THREE.Plane(
 128,164);
 	    var img2_reflect = new THREE.Mesh(img2_reflect_plane, materials[3]);
 	    scene.addObject(img2_reflect);
-                img2_reflect.materials[ 0 ] = materials[3];
+		img2_reflect.events = new ms.event.EventHolder();
                 img2_reflect.doubleSided = true;
                 img2_reflect.scale.y = 0.800000012;
                 img2_reflect.position.y = -131.199997;
@@ -228,41 +213,31 @@ new THREE.Plane(
 128,164);
 	    var img3 = new THREE.Mesh(img3_plane, materials[4]);
 	    scene.addObject(img3);
-                img3.materials[ 0 ] = materials[4];
-	document.addEventListener( 'mousemove', mousein_img3, false );
-	function mousein_img3 (event)
-	{
-		event.preventDefault();
-		var intersects = get_intersects( event.clientX, event.clientY, img3);
-		if ( intersects.length > 0 ) 
-		{
+		img3.events = new ms.event.EventHolder();
+	img3.events.addListener("mousein", function()
+	{    
 		img3.scale.x = 1.5;
 img3.scale.y = 1.5;
 img3_reflect.scale.x = 1.5;
 img3_reflect.scale.y = 1.5;
 img3_reflect.position.y = -196.800003;
-	    }
 	}
-	document.addEventListener( 'mousemove', mouseout_img3, false );
-	function mouseout_img3 (event)
-	{
-		event.preventDefault();
-		var intersects = get_intersects( event.clientX, event.clientY, img3);
-		if ( !intersects.length > 0 ) 
-		{
+	);
+	img3.events.addListener("mouseout", function()
+	{    
 		img3.scale.x = 1;
 img3.scale.y = 1;
 img3_reflect.scale.x = 1;
 img3_reflect.scale.y = 1;
 img3_reflect.position.y = -131.199997;
-	    }
 	}
+	);
 	    var img3_reflect_plane = 
 new THREE.Plane(
 128,164);
 	    var img3_reflect = new THREE.Mesh(img3_reflect_plane, materials[5]);
 	    scene.addObject(img3_reflect);
-                img3_reflect.materials[ 0 ] = materials[5];
+		img3_reflect.events = new ms.event.EventHolder();
                 img3_reflect.doubleSided = true;
                 img3_reflect.scale.y = 0.800000012;
                 img3_reflect.position.y = -131.199997;
@@ -272,41 +247,31 @@ new THREE.Plane(
 128,164);
 	    var img4 = new THREE.Mesh(img4_plane, materials[6]);
 	    scene.addObject(img4);
-                img4.materials[ 0 ] = materials[6];
-	document.addEventListener( 'mousemove', mousein_img4, false );
-	function mousein_img4 (event)
-	{
-		event.preventDefault();
-		var intersects = get_intersects( event.clientX, event.clientY, img4);
-		if ( intersects.length > 0 ) 
-		{
+		img4.events = new ms.event.EventHolder();
+	img4.events.addListener("mousein", function()
+	{    
 		img4.scale.x = 1.5;
 img4.scale.y = 1.5;
 img4_reflect.scale.x = 1.5;
 img4_reflect.scale.y = 1.5;
 img4_reflect.position.y = -196.800003;
-	    }
 	}
-	document.addEventListener( 'mousemove', mouseout_img4, false );
-	function mouseout_img4 (event)
-	{
-		event.preventDefault();
-		var intersects = get_intersects( event.clientX, event.clientY, img4);
-		if ( !intersects.length > 0 ) 
-		{
+	);
+	img4.events.addListener("mouseout", function()
+	{    
 		img4.scale.x = 1;
 img4.scale.y = 1;
 img4_reflect.scale.x = 1;
 img4_reflect.scale.y = 1;
 img4_reflect.position.y = -131.199997;
-	    }
 	}
+	);
 	    var img4_reflect_plane = 
 new THREE.Plane(
 128,164);
 	    var img4_reflect = new THREE.Mesh(img4_reflect_plane, materials[7]);
 	    scene.addObject(img4_reflect);
-                img4_reflect.materials[ 0 ] = materials[7];
+		img4_reflect.events = new ms.event.EventHolder();
                 img4_reflect.doubleSided = true;
                 img4_reflect.scale.y = 0.800000012;
                 img4_reflect.position.y = -131.199997;
@@ -316,41 +281,31 @@ new THREE.Plane(
 128,164);
 	    var img5 = new THREE.Mesh(img5_plane, materials[8]);
 	    scene.addObject(img5);
-                img5.materials[ 0 ] = materials[8];
-	document.addEventListener( 'mousemove', mousein_img5, false );
-	function mousein_img5 (event)
-	{
-		event.preventDefault();
-		var intersects = get_intersects( event.clientX, event.clientY, img5);
-		if ( intersects.length > 0 ) 
-		{
+		img5.events = new ms.event.EventHolder();
+	img5.events.addListener("mousein", function()
+	{    
 		img5.scale.x = 1.5;
 img5.scale.y = 1.5;
 img5_reflect.scale.x = 1.5;
 img5_reflect.scale.y = 1.5;
 img5_reflect.position.y = -196.800003;
-	    }
 	}
-	document.addEventListener( 'mousemove', mouseout_img5, false );
-	function mouseout_img5 (event)
-	{
-		event.preventDefault();
-		var intersects = get_intersects( event.clientX, event.clientY, img5);
-		if ( !intersects.length > 0 ) 
-		{
+	);
+	img5.events.addListener("mouseout", function()
+	{    
 		img5.scale.x = 1;
 img5.scale.y = 1;
 img5_reflect.scale.x = 1;
 img5_reflect.scale.y = 1;
 img5_reflect.position.y = -131.199997;
-	    }
 	}
+	);
 	    var img5_reflect_plane = 
 new THREE.Plane(
 128,164);
 	    var img5_reflect = new THREE.Mesh(img5_reflect_plane, materials[9]);
 	    scene.addObject(img5_reflect);
-                img5_reflect.materials[ 0 ] = materials[9];
+		img5_reflect.events = new ms.event.EventHolder();
                 img5_reflect.doubleSided = true;
                 img5_reflect.scale.y = 0.800000012;
                 img5_reflect.position.y = -131.199997;
@@ -377,11 +332,13 @@ application.img_array[i].position.z = 275 * Math.sin(application.angle);
 application.img_array[i + 1].position.z = 275 * Math.sin(application.angle);
 }
 	};
-	document.addEventListener( 'mousemove', mousemove_application, false );
-	function mousemove_application (event)
-	{
-	var x = event.clientX;
-	var y = event.clientY;
+	application.events.addListener("animate", function()
+	{    
+		application.position_items();
+	}
+	);
+	application.events.addListener("mousemove", function(x,y)
+	{    
 		if (x < window.innerWidth / 2)
 {
 application.speed = -0.200000003 * (window.innerWidth / 2 - x) / window.innerWidth / 2;
@@ -390,13 +347,39 @@ if (x > window.innerWidth / 2)
 {
 application.speed = -0.200000003 * (window.innerWidth / 2 - x) / window.innerWidth / 2;
 }
-	};
+	}
+	);
 if(ui)
 {
 	ui.load_resources(function(){		
 		g_ui.fill_background = false;
 	});
 }
+var event_manager = new ms.event.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(ev.keyCode);                  
+};
 if (application.init)
 {
 	application.init();

@@ -536,7 +536,11 @@ str base_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
     if (operand.is<expression_identifier>())
       {
         expression_identifier ei = operand;
-        result = ei.value;
+
+        if (ei.value == "this")
+          result = lang->resolve_this(ctx_);
+        else  
+          result = ei.value;
 
         if (!parent)
           {

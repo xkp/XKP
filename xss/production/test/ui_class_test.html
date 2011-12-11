@@ -9,6 +9,9 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -17,6 +20,7 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
@@ -63,23 +67,26 @@ function start(resolution)
     {
         $super(
         src        );
+        this.events = new ms.event.EventHolder(); 
                 this.x_pos = null;
                 this.y_pos = null;
                 this.img2 = null;
 	this.traslate = function() 
 	{
-		this.x += 5;
-this.y += 5;
-this.set_rotation(this.rotation + 10);
+		this.set_x(this.x + 5);
+this.set_y(this.y + 5);
+this.set_rotation(this.get_rotation() + 10);
 	};
-	this.click = function()
+	var ev_parent = this;
+	this.events.addListener("click", function()
 	{    
-		this.x_pos = this.x;
-this.y_pos = this.y;
-this.traslate();
-this.img2 = new my_image("images/img1.png");
-this.img2.rect(this.x_pos + 50, this.y_pos - 50, 50, 50);
-	};
+		ev_parent.x_pos = ev_parent.x;
+ev_parent.y_pos = ev_parent.y;
+ev_parent.traslate();
+ev_parent.img2 = new my_image("images/img1.png");
+ev_parent.img2.rect(ev_parent.x_pos + 50, ev_parent.y_pos - 50, 50, 50);
+	}
+	);
             if (this.init)
                 this.init();
             },
@@ -90,8 +97,8 @@ this.img2.rect(this.x_pos + 50, this.y_pos - 50, 50, 50);
                 application.X_MAX = 600;
                 application.Y_MAX = 400;
                 application.img2 = null;
-	application.init = function()
-	{    
+	application.init = function() 
+	{
 		application.test = 1;
 	};
 window.onload = function() 
@@ -125,7 +132,8 @@ window.onload = function()
 	};	
 		    img1 = new ms.ui.Image( 
 	    "images/img1.png",g_ui_root.manager, g_ui_root);
-	img1.click = function()
+	var ev_parent = this;
+	img1.events.addListener("click", function()
 	{    
 		if (application.x_pos >= application.X_MAX - 110)
 {
@@ -142,7 +150,8 @@ img1.set_x(img1.x + 5);
 img1.set_y(img1.y + 5);
 application.img2 = new my_image("images/img1.png");
 application.img2.rect(application.x_pos, application.y_pos, 50, 50);
-	};
+	}
+	);
                 img1.rect(100, 100, 50, 50);
 			document.onkeydown = function(ev)
 			{
@@ -171,8 +180,5 @@ application.img2.rect(application.x_pos, application.y_pos, 50, 50);
 	<canvas id="myCanvas" width="600" height="400">
 		<p>Your browser doesn't support canvas.</p>
 	</canvas>
-	<audio id="sounds" preload> 
-	Your browser does not support the audio element.
-	</audio>
 </body>
 </html>

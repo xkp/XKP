@@ -9,6 +9,9 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -17,6 +20,7 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
@@ -120,17 +124,19 @@ window.onload = function()
                 lbl1.position(220, 190);
 		    btnExplosion = new ms.ui.Button( 
 	    "images/bomb.png","images/bomb.png",g_ui_root.manager, g_ui_root);
-	btnExplosion.click = function()
+	btnExplosion.events.addListener("click", function()
 	{    
 		Sound.play("sounds/explosion.mp3");
-	};
+	}
+	);
                 btnExplosion.rect(290, 220, 50, 50);
 		    btnShoots = new ms.ui.Button( 
 	    "images/AK-47.png","images/AK-47.png",g_ui_root.manager, g_ui_root);
-	btnShoots.click = function()
+	btnShoots.events.addListener("click", function()
 	{    
 		Sound.play("sounds/shoots.mp3");
-	};
+	}
+	);
                 btnShoots.rect(275, 300, 100, 100);
 			document.onkeydown = function(ev)
 			{

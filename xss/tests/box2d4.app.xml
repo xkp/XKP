@@ -14,7 +14,7 @@
     </resources>
 
     <spawner id="sp1" x="300" y="100" auto_start="true" frequency="3" creator_class="bad_guy"/>
-    <good_guy id="hero" x="300" y="350"/>
+    <good_guy id="hero" x="200" y="350"/>
     <floor x="0" y="390" width="600" height="40"/>
     <label id="game_over" x="220" y="200" visible="false" font="40pt Calibri" caption="GAME OVER"/>
 </application>

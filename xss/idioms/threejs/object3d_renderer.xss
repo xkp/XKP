@@ -2,7 +2,7 @@
 
 <xss:code>			
 	if (!obj.material)
-        obj.material = "null";
+        obj.material = "new THREE.MeshBasicMaterial()";
 		
 	out()
     {
@@ -15,5 +15,6 @@
     {
 	    var <xss:e v="obj.id"/> = new THREE.Mesh(<xss:e v="obj.id"/>_<xss:e v="obj.class_name"/>, <xss:e v="obj.material"/>);
 	    scene.addObject(<xss:e value = "obj.id"/>);
+		<xss:e v="obj.id"/>.events = new ms.event.EventHolder();
 	}	
 </xss:code>

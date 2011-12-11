@@ -175,7 +175,7 @@
             //must wrap this in a function so the box 2d objects are created on resize
             out()
             {
-                <xss:e v="visual_parent"/>.ev_resized = function(cmp) 
+				<xss:e v="visual_parent"/>.events.addListener('resized', function(cmp)
                 <xss:open_brace/>
                     if (cmp.physics)
                         g_world.DestroyBody(cmp.physics);
@@ -198,14 +198,15 @@
             out()
             {
                 cmp.physics = current_body;
-                cmp.moved = update_body_position;
+                cmp.events.addListener('moved', update_body_position);
                 
                 current_body.host = cmp;
                 <xss:close_brace/>
+				);
                 
                 if (<xss:e v="visual_parent"/>.w > 0 && <xss:e v="visual_parent"/>.h > 0)
                 {
-                    <xss:e v="visual_parent"/>.ev_resized(<xss:e v="visual_parent"/>);
+					<xss:e v="visual_parent"/>.events.dispatch("ev_resized", [<xss:e v="visual_parent"/>]);                     
                 }
                 
                 <xss:e v="visual_parent"/>.RemoveFromWorld = function(keep_visual) 

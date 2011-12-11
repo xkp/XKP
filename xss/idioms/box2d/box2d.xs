@@ -77,7 +77,7 @@ on render_initialization()
         {
             function get_collider(body)
             {
-                if (body.host && ("collision" in body.host))
+                if (body.host && ("collision" in body.host.events))
                     return body.host;
                 return null;
             }
@@ -175,14 +175,14 @@ on render_update()
         for(var i = 0; i < g_step_collisions.length; i++)
         {
             var info = g_step_collisions[i];
-            info.host1.collision(info.host2, info.contact, info.manifold);
+			info.host1.events.dispatch("collision", [info.host2, info.contact, info.manifold]);             
         }
         g_step_collisions = [];
 
         //process contacts
         function get_contact_handler(body)
         {
-            if (body.host && ("contact" in body.host))
+            if (body.host && ("contact" in body.host.events))
                 return body.host;
             return null;
         }

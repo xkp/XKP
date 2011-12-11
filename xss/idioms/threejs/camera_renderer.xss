@@ -8,7 +8,7 @@
 	{
 		out(){var <xss:e v="obj.id"/> = }compiler.xss("../common-js/instantiator.xss", obj);	
 	}
-	out(marker = "camera_on_render", marker_source = "entry")
+	out(marker = "render_function", marker_source = "entry")
 		{
 		set_active_camera(<xss:e v="obj.id"/>);
 		}	

@@ -20,6 +20,9 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">		
 	var renderer = new THREE.CanvasRenderer();	
 var ui;
@@ -28,6 +31,7 @@ var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var application = {};
+application.events = new ms.event.EventHolder();
 		var streamer = new ms.streamer.Streamer();
 	// --------RESOURCES---------
         var def_package_items = [];
@@ -74,11 +78,13 @@ if (g_elapsed < 0)
 else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
+application.events.dispatch("animate", []);	
 		set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
 }
         function create_my_plane(
      ) {  		
-		var my_plane = new THREE.Object3D();		
+			var my_plane = new THREE.Object3D();		
         my_plane.image = null;
         my_plane.image_set = function (value)
         {
@@ -91,8 +97,9 @@ g_elapsed = now;
 	    var img_plane_plane = 
 new THREE.Plane(
 128,164);
-	    var img_plane = new THREE.Mesh(img_plane_plane, null);
+	    var img_plane = new THREE.Mesh(img_plane_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(img_plane);
+		img_plane.events = new ms.event.EventHolder();
             my_plane.addChild(img_plane);
         return my_plane;
         }
@@ -105,11 +112,8 @@ new THREE.Camera(
                 camera_1.position.z = 1000;
                 application.img_array = ["images/test1.png", "images/test2.png", "images/test3.png", "images/test4.png", "images/test5.png"];
                 application.i = 0;
-	document.addEventListener( 'click', click_application, false );
-	function click_application (event)
-	{
-	var x = event.clientX;
-	var y = event.clientY;
+	application.events.addListener("click", function(x,y)
+	{    
 		if (application.i == 5)
 {
 application.i = 0;
@@ -123,13 +127,39 @@ plane_1.position.x = x;
 plane_1.position.y = y;
 scene.addObject(plane_1);
 application.i = application.i + 1;
-	};
+	}
+	);
 if(ui)
 {
 	ui.load_resources(function(){		
 		g_ui.fill_background = false;
 	});
 }
+var event_manager = new ms.event.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(ev.keyCode);                  
+};
 if (application.init)
 {
 	application.init();

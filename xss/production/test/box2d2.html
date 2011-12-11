@@ -9,6 +9,9 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
         <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
             <script type="text/javascript" src="../js/ms-spawner.js"></script>
 <script type="text/javascript">	
@@ -19,6 +22,7 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
@@ -117,7 +121,7 @@ function start(resolution)
         for(var i = 0; i < g_step_collisions.length; i++)
         {
             var info = g_step_collisions[i];
-            info.host1.collision(info.host2, info.contact, info.manifold);
+			info.host1.events.dispatch("collision", [info.host2, info.contact, info.manifold]);             
         }
         g_step_collisions = [];
         //process contacts
@@ -199,7 +203,7 @@ window.onload = function()
 	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
                 btn1.set_rotation(0.200000003);
                 btn1.rect(200, 200, 50, 50);
-                btn1.ev_resized = function(cmp) 
+				btn1.events.addListener('ev_resized', function(cmp)
                 {
                     if (cmp.physics)
                         g_world.DestroyBody(cmp.physics);
@@ -216,9 +220,10 @@ window.onload = function()
                 cmp.moved = update_body_position;
                 current_body.host = cmp;
                 }
+				);
                 if (btn1.w > 0 && btn1.h > 0)
                 {
-                    btn1.ev_resized(btn1);
+					btn1.events.dispatch("ev_resized", [btn1]);                     
                 }
                 btn1.RemoveFromWorld = function(keep_visual) 
                 {

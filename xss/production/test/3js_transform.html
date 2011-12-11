@@ -21,6 +21,9 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">		
 	var renderer = new THREE.CanvasRenderer();	
 var ui;
@@ -29,6 +32,7 @@ var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var application = {};
+application.events = new ms.event.EventHolder();
 // --------RESOURCES---------
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
@@ -41,13 +45,9 @@ if (g_elapsed < 0)
 else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
-		if (application.is_ctrl_down)
-{
-application.theta = application.theta + application.mouse_x * 3;
-}
-camera_1.position.x = 1400 * Math.sin(application.theta * Math.PI / 360);
-camera_1.position.z = 1400 * Math.cos(application.theta * Math.PI / 360);
+application.events.dispatch("animate", []);	
 		set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
 }
 var cylinder_material = new THREE.MeshBasicMaterial({
 color:Math.random() * 0xffffff
@@ -77,6 +77,7 @@ new THREE.Cylinder(
 200,100,100,500);
 	    var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
 	    scene.addObject(cylinder_1);
+		cylinder_1.events = new ms.event.EventHolder();
                 set_rotation_x(cylinder_1.rotation, 70);
                 set_rotation_y(cylinder_1.rotation, 70);
                 cylinder_1.position.x = 600;
@@ -88,6 +89,7 @@ new THREE.Cube(
 300,300,300);
 	    var cube_1 = new THREE.Mesh(cube_1_cube, cube_material);
 	    scene.addObject(cube_1);
+		cube_1.events = new ms.event.EventHolder();
 				container.addChild(cube_1);
 				scene.addObject(container);
                 cube_1.position.x = -600;
@@ -99,6 +101,7 @@ new THREE.Sphere(
 200,20,20);
 	    var sphere_1 = new THREE.Mesh(sphere_1_sphere, sphere_material);
 	    scene.addObject(sphere_1);
+		sphere_1.events = new ms.event.EventHolder();
 				container.addChild(sphere_1);
 				scene.addObject(container);
                 sphere_1.position.x = -400;
@@ -108,11 +111,8 @@ new THREE.Sphere(
                 application.theta = 45;
                 application.mouse_x = null;
                 application.mouse_y = null;
-	document.addEventListener( 'mousemove', mousemove_application, false );
-	function mousemove_application (event)
-	{
-	var x = event.clientX;
-	var y = event.clientY;
+	application.events.addListener("mousemove", function(x,y)
+	{    
 		application.mouse_x = x / window.innerWidth * 2 - 1;
 application.mouse_y = -(y / window.innerHeight) * 2 + 1;
 if (application.is_shift_down)
@@ -133,12 +133,11 @@ set_rotation_y(cylinder_1.rotation, get_rotation_y(cylinder_1.rotation) + 0.5);
 set_rotation_z(cylinder_1.rotation, get_rotation_z(cylinder_1.rotation) + 0.5);
 }
 }
-	};
-	document.addEventListener( 'keydown', keydown_application, false );
-	function keydown_application (event)
-	{   
-	var keycode = event.keyCode;
-			if (keycode == SHIFT)
+	}
+	);
+	application.events.addListener("keydown", function(keycode)
+	{    
+		if (keycode == SHIFT)
 {
 application.is_shift_down = true;
 }
@@ -147,11 +146,10 @@ if (keycode == CTRL)
 application.is_ctrl_down = true;
 }
 	}
-	document.addEventListener( 'keyup', keyup_application, false );
-	function keyup_application (event)
-	{   
-	var keycode = event.keyCode;
-			if (keycode == SHIFT)
+	);
+	application.events.addListener("keyup", function(keycode)
+	{    
+		if (keycode == SHIFT)
 {
 application.is_shift_down = false;
 }
@@ -160,12 +158,48 @@ if (keycode == CTRL)
 application.is_ctrl_down = false;
 }
 	}
+	);
+	application.events.addListener("animate", function()
+	{    
+		if (application.is_ctrl_down)
+{
+application.theta = application.theta + application.mouse_x * 3;
+}
+camera_1.position.x = 1400 * Math.sin(application.theta * Math.PI / 360);
+camera_1.position.z = 1400 * Math.cos(application.theta * Math.PI / 360);
+	}
+	);
 if(ui)
 {
 	ui.load_resources(function(){		
 		g_ui.fill_background = false;
 	});
 }
+var event_manager = new ms.event.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(ev.keyCode);                  
+};
 if (application.init)
 {
 	application.init();

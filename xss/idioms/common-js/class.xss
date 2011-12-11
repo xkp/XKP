@@ -72,7 +72,7 @@
             }
         </xss:code>
         );
-        
+        this.events = new ms.event.EventHolder(); 
         <xss:code>
         if (renderer)
         {

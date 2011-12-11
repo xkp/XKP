@@ -8,12 +8,8 @@ var type = obj.type;
 if (type.constructor_params)           
 {
     int i = 0;
-    int curr_arg = 0; //la cosa es que en args vienen los parametros de la llamada (200, 260)
-                      //pero al parecer necesita mas (segments?) entonces nada, lo que yo hago en c++
-                      //es marcar los parametros que tu quieres en el constructor como "runtime"
-                      //cuando es uno runtime se saca de los argumentos que se pasaron. Cualquier cosa me dices
-                      //aqui hay que pensar esto un poco
-                      
+    int curr_arg = 0; 
+	
     for(int j = 0; j < type.constructor_params.size; j++)
     {		
 		var p = type.constructor_params[j];
@@ -28,43 +24,33 @@ if (type.constructor_params)
 		else if (p.property)
 		{		
             if (p.runtime)
-            {
-			    if(i > 0) 
+            {				
+                if (curr_arg >= args.size)
+				{
+                    //compiler.error("Insuficient parameters");					
+				}
+                else
+				{	
+				if(i > 0) 
                 {
                     out() {,}
                 }
-
-                if (curr_arg >= args.size)
-                    compiler.error("Insuficient parameters");
-                
                 string runtime_value = args[curr_arg].value;
                 out() {<xss:e v="runtime_value"/>}
                 curr_arg++;
                 i++;
+				}
             }
             else
-            {
-                //aca lo que recibes es un tipo, no un objeto, asi que con esto
-                //estarias buscando los valores por defecto, es esa la idea?
-                
+            {                               
                 var prop = obj.get_property(p.property);			
 			    if(prop.value != null)
-			    {
-			        if(i > 0) 
-                        out() {,}
-					
+			    {							
 			        if (prop.default_value)
-                    {
-					        out() {<xss:e v="prop.default_value"/>}
-                    }
-                    else
-                    {
-                        if(prop.use_plain_value)
-					        out() {<xss:e v="prop.value"/>}
-				        else
-					        out() {<xss:e v="prop.render_value()"/>}
-                    }
-				
+                    {	
+						if(i > 0) out() {,}
+						out() {<xss:e v="prop.default_value"/>}
+                    }								
 			        i++;				
 			    }
             }

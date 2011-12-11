@@ -1,13 +1,12 @@
 <xss:parameter id="i"/>
 
-
 <xss:code>
 		if(i.renderer)
 			compiler.xss(i.renderer, i);
 		else{						
 			out(){var <xss:e v="i.id"/> = }
 			compiler.xss("../common-js/instantiator.xss", i);						
-			}	
+			}		
 		if(i.parent.class_name == "transform"){			
 				out(){
 				<xss:e v="i.parent.id"/>.addChild(<xss:e v="i.id"/>);

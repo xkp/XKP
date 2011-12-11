@@ -9,6 +9,9 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -17,6 +20,7 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
@@ -62,7 +66,7 @@ function start(resolution)
 	window.setTimeout(updater, resolution);  
 }  
                 application.clicks = 0;
-	application.keydown = function(keycode)
+	application.events.addListener("keydown", function(keycode)
 	{    
 		if (ca1.isVisible())
 {
@@ -102,7 +106,8 @@ if (keycode == S)
 ca2.set_y(ca2.y + 2);
 }
 }
-	};
+	}
+	);
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -154,12 +159,13 @@ window.onload = function()
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",div1.manager, div1);
                 btn1.set_rotation(10);
-	btn1.click = function()
+	btn1.events.addListener("click", function()
 	{    
 		lbl1.text("Got " + application.clicks + " smileys");
 btn1.set_rotation(btn1.get_rotation() + 10);
 application.clicks = application.clicks + 1;
-	};
+	}
+	);
                 btn1.rect(90, 100, 50, 50);
 		    btn2 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",div1.manager, div1);
@@ -200,8 +206,5 @@ application.clicks = application.clicks + 1;
 	<canvas id="myCanvas" width="600" height="600">
 		<p>Your browser doesn't support canvas.</p>
 	</canvas>
-	<audio id="sounds" preload> 
-	Your browser does not support the audio element.
-	</audio>
 </body>
 </html>

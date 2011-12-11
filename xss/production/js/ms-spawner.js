@@ -115,7 +115,7 @@ ms.arcade.Spawner = Class.create(
         result.position(x, y);
 
         if (!result.physics)
-            result.ev_resized(result);
+            result.events.dispatch("resized", [result]);
         
         var vx = this.velocity*Math.sin(r);
         var vy = this.velocity*Math.cos(r);

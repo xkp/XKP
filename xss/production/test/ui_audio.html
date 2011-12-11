@@ -9,6 +9,9 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -17,6 +20,7 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
@@ -169,23 +173,25 @@ window.onload = function()
                 lbl1.position(220, 190);
 		    btnSound1 = new ms.ui.Button( 
 	    "images/sound_2.png","images/sound_2.png",g_ui_root.manager, g_ui_root);
-	btnSound1.click = function()
+	btnSound1.events.addListener("click", function()
 	{    
 		sound_1.pause();
 sound_1.currentTime = 0;
 application.curr_sound = sound_2;
 application.curr_sound.play();
-	};
+	}
+	);
                 btnSound1.rect(275, 210, 50, 10);
 		    btnSound2 = new ms.ui.Button( 
 	    "images/sound_1.png","images/sound_1.png",g_ui_root.manager, g_ui_root);
-	btnSound2.click = function()
+	btnSound2.events.addListener("click", function()
 	{    
 		sound_2.pause();
 sound_2.currentTime = 0;
 application.curr_sound = sound_1;
 application.curr_sound.play();
-	};
+	}
+	);
                 btnSound2.rect(275, 240, 50, 10);
 		    volume_bar = new ms.ui.ProgressBar( 
 	    null,g_ui_root.manager, g_ui_root);
@@ -193,19 +199,21 @@ application.curr_sound.play();
                 volume_bar.rect(225, 120, 150, 10);
 		    btn1 = new ms.ui.Image( 
 	    "images/arrow_left.png",g_ui_root.manager, g_ui_root);
-	btn1.click = function()
+	btn1.events.addListener("click", function()
 	{    
 		volume_bar.value(volume_bar.get_value() - 10);
 application.curr_sound.volume -= 0.100000001;
-	};
+	}
+	);
                 btn1.rect(200, 115, 20, 20);
 		    btn2 = new ms.ui.Image( 
 	    "images/arrow_right.png",g_ui_root.manager, g_ui_root);
-	btn2.click = function()
+	btn2.events.addListener("click", function()
 	{    
 		volume_bar.value(volume_bar.get_value() + 10);
 application.curr_sound.volume += 0.100000001;
-	};
+	}
+	);
                 btn2.rect(380, 115, 20, 20);
 		    lbl3 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
@@ -213,25 +221,28 @@ application.curr_sound.volume += 0.100000001;
                 lbl3.position(220, 100);
 		    btnPlay = new ms.ui.Button( 
 	    "images/play.png","images/play_over.png",g_ui_root.manager, g_ui_root);
-	btnPlay.click = function()
+	btnPlay.events.addListener("click", function()
 	{    
 		application.curr_sound.play();
-	};
+	}
+	);
                 btnPlay.rect(175, 300, 50, 50);
 		    btnPause = new ms.ui.Button( 
 	    "images/pause.png","images/pause_over.png",g_ui_root.manager, g_ui_root);
-	btnPause.click = function()
+	btnPause.events.addListener("click", function()
 	{    
 		application.curr_sound.pause();
-	};
+	}
+	);
                 btnPause.rect(275, 300, 50, 50);
 		    btnStop = new ms.ui.Button( 
 	    "images/stop.png","images/stop_over.png",g_ui_root.manager, g_ui_root);
-	btnStop.click = function()
+	btnStop.events.addListener("click", function()
 	{    
 		application.curr_sound.pause();
 application.curr_sound.currentTime = 0;
-	};
+	}
+	);
                 btnStop.rect(375, 300, 50, 50);
 	var sound_1 = 
 	document.createElement('audio');
@@ -267,10 +278,5 @@ application.curr_sound.currentTime = 0;
 	<canvas id="myCanvas" width="600" height="400">
 		<p>Your browser doesn't support canvas.</p>
 	</canvas>
-	<audio id="sounds" preload> 
-			<source src = streamer.get_resource('sounds/358232_j_s_song.ogg').asset/>			
-			<source src = streamer.get_resource('sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg').asset/>			
-	Your browser does not support the audio element.
-	</audio>
 </body>
 </html>

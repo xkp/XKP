@@ -9,6 +9,9 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
         <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
             <script type="text/javascript" src="../js/ms-spawner.js"></script>
 <script type="text/javascript">	
@@ -19,6 +22,7 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
@@ -58,7 +62,7 @@ var Sound = new ms.ui.Sound();
         {
             function get_collider(body)
             {
-                if (body.host && ("collision" in body.host))
+                if (body.host && ("collision" in body.host.events))
                     return body.host;
                 return null;
             }
@@ -140,13 +144,13 @@ function start(resolution)
         for(var i = 0; i < g_step_collisions.length; i++)
         {
             var info = g_step_collisions[i];
-            info.host1.collision(info.host2, info.contact, info.manifold);
+			info.host1.events.dispatch("collision", [info.host2, info.contact, info.manifold]);             
         }
         g_step_collisions = [];
         //process contacts
         function get_contact_handler(body)
         {
-            if (body.host && ("contact" in body.host))
+            if (body.host && ("contact" in body.host.events))
                 return body.host;
             return null;
         }
@@ -198,9 +202,10 @@ function start(resolution)
     {
         $super(
         src? src : "images/smile_sad_48.png"        );
+        this.events = new ms.event.EventHolder(); 
                 this.size(60, 60);
                 var __physics2;
-                this.ev_resized = function(cmp) 
+				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
                         g_world.DestroyBody(cmp.physics);
@@ -214,12 +219,13 @@ function start(resolution)
             current_body = g_world.CreateBody(bodyDef);
             current_body.CreateFixture(fixDef);
                 cmp.physics = current_body;
-                cmp.moved = update_body_position;
+                cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
+				);
                 if (this.w > 0 && this.h > 0)
                 {
-                    this.ev_resized(this);
+					this.events.dispatch("ev_resized", [this]);                     
                 }
                 this.RemoveFromWorld = function(keep_visual) 
                 {
@@ -270,20 +276,22 @@ g_sequence_manager);
                         ]);
                     this.fade_out.addAction(null, "alpha", new ms.state.State(0, 3, ____i1));                    
                 fade_out = this.fade_out;
-	this.init = function()
-	{    
+	this.init = function() 
+	{
 		move_around.target = this;
 fade_out.target = this;
 	};
-	this.collision = function(who)
+	var ev_parent = this;
+	this.events.addListener("collision", function(who)
 	{    
 		if (who instanceof bad_guy)
 {
-this.RemoveFromWorld(true);
+ev_parent.RemoveFromWorld(true);
 cannon.stop();
 fade_out.start();
 }
-	};
+	}
+	);
             if (this.init)
                 this.init();
             },
@@ -296,9 +304,10 @@ fade_out.start();
     {
         $super(
         src? src : "images/smile_grin_48.png"        );
+        this.events = new ms.event.EventHolder(); 
                 this.size(30, 30);
                 var __physics3;
-                this.ev_resized = function(cmp) 
+				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
                         g_world.DestroyBody(cmp.physics);
@@ -312,12 +321,13 @@ fade_out.start();
             current_body = g_world.CreateBody(bodyDef);
             current_body.CreateFixture(fixDef);
                 cmp.physics = current_body;
-                cmp.moved = update_body_position;
+                cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
+				);
                 if (this.w > 0 && this.h > 0)
                 {
-                    this.ev_resized(this);
+					this.events.dispatch("ev_resized", [this]);                     
                 }
                 this.RemoveFromWorld = function(keep_visual) 
                 {
@@ -337,13 +347,15 @@ g_sequence_manager);
                 this.move_around.start();
             this.move_around.parent_sequence = null;
                 move_around = this.move_around;
-	this.init = function()
-	{    
+	this.init = function() 
+	{
 		move_around.target = this;
 	};
-	this.collision = function()
+	var ev_parent = this;
+	this.events.addListener("collision", function()
 	{    
-	};
+	}
+	);
             if (this.init)
                 this.init();
             },
@@ -356,9 +368,10 @@ g_sequence_manager);
     {
         $super(
         src? src : "images/bomb.png"        );
+        this.events = new ms.event.EventHolder(); 
                 this.size(20, 20);
                 var __physics1;
-                this.ev_resized = function(cmp) 
+				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
                         g_world.DestroyBody(cmp.physics);
@@ -372,12 +385,13 @@ g_sequence_manager);
             current_body = g_world.CreateBody(bodyDef);
             current_body.CreateFixture(fixDef);
                 cmp.physics = current_body;
-                cmp.moved = update_body_position;
+                cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
+				);
                 if (this.w > 0 && this.h > 0)
                 {
-                    this.ev_resized(this);
+					this.events.dispatch("ev_resized", [this]);                     
                 }
                 this.RemoveFromWorld = function(keep_visual) 
                 {
@@ -388,13 +402,15 @@ g_sequence_manager);
                     }
                 }
                 __physics1 = this.__physics1;
-	this.collision = function(who)
+	var ev_parent = this;
+	this.events.addListener("collision", function(who)
 	{    
 		if (who instanceof floor)
 {
-this.RemoveFromWorld();
+ev_parent.RemoveFromWorld();
 }
-	};
+	}
+	);
             if (this.init)
                 this.init();
             },
@@ -407,8 +423,9 @@ this.RemoveFromWorld();
     {
         $super(
         src? src : "images/stone-12.jpg"        );
+        this.events = new ms.event.EventHolder(); 
                 var __physics4;
-                this.ev_resized = function(cmp) 
+				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
                         g_world.DestroyBody(cmp.physics);
@@ -423,12 +440,13 @@ this.RemoveFromWorld();
             current_body = g_world.CreateBody(bodyDef);
             current_body.CreateFixture(fixDef);
                 cmp.physics = current_body;
-                cmp.moved = update_body_position;
+                cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
+				);
                 if (this.w > 0 && this.h > 0)
                 {
-                    this.ev_resized(this);
+					this.events.dispatch("ev_resized", [this]);                     
                 }
                 this.RemoveFromWorld = function(keep_visual) 
                 {
@@ -451,30 +469,34 @@ this.RemoveFromWorld();
     {
         $super(
         manager        );
+        this.events = new ms.event.EventHolder(); 
                 var this__ = this;
             this.parent_sequence = null;
                 this.speed = 130;
                 this.vx = Math.random();
                 this.vy = Math.random();
                 this.target = null;
-	this.tick = function(delta)
+	var ev_parent = this;
+	this.events.addListener("tick", function(delta)
 	{    
-		this.target.set_x(this.target.x + this.vx * this.speed * delta);
-this.target.set_y(this.target.y + this.vy * this.speed * delta);
-if (this.target.x < 10 || this.target.x > 570)
+		ev_parent.target.set_x(ev_parent.target.x + ev_parent.vx * ev_parent.speed * delta);
+ev_parent.target.set_y(ev_parent.target.y + ev_parent.vy * ev_parent.speed * delta);
+if (ev_parent.target.x < 10 || ev_parent.target.x > 570)
 {
-this.vx = this.vx * -1;
+ev_parent.vx = ev_parent.vx * -1;
 }
-if (this.target.y < 10 || this.target.y > 200)
+if (ev_parent.target.y < 10 || ev_parent.target.y > 200)
 {
-this.vy = this.vy * -1;
+ev_parent.vy = ev_parent.vy * -1;
 }
-	};
+	}
+	);
             if (this.init)
                 this.init();
             },
 });
-	application.keydown = function(keycode)
+	var ev_parent = this;
+	application.events.addListener("keydown", function(keycode)
 	{    
 		if (keycode == LEFT_ARROW)
 {
@@ -484,8 +506,10 @@ if (keycode == RIGHT_ARROW)
 {
 hero.move_around.vx = 1;
 }
-	};
-	application.keyup = function(keycode)
+	}
+	);
+	var ev_parent = this;
+	application.events.addListener("keyup", function(keycode)
 	{    
 		if (keycode == LEFT_ARROW && hero.move_around.vx < 0)
 {
@@ -495,7 +519,8 @@ if (keycode == RIGHT_ARROW && hero.move_around.vx > 0)
 {
 hero.move_around.vx = 0;
 }
-	};
+	}
+	);
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -527,13 +552,15 @@ window.onload = function()
 	};	
 		    hero = new good_guy( 
 	    "images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
-	hero.collision = function()
+	var ev_parent = this;
+	hero.events.addListener("collision", function()
 	{    
 		game_over.setVisible(true);
 hero.move_around.stop();
 hero.src("images/smile_sad_48.png");
-	};
-                hero.rect(300, 350, 30, 30);
+	}
+	);
+                hero.rect(200, 350, 30, 30);
 		    __floor1 = new floor( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
                 __floor1.rect(0, 390, 600, 40);

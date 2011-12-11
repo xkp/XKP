@@ -9,6 +9,9 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
         <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
             <script type="text/javascript" src="../js/ms-spawner.js"></script>
 <script type="text/javascript">	
@@ -19,6 +22,7 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
@@ -58,7 +62,7 @@ var Sound = new ms.ui.Sound();
         {
             function get_collider(body)
             {
-                if (body.host && ("collision" in body.host))
+                if (body.host && ("collision" in body.host.events))
                     return body.host;
                 return null;
             }
@@ -117,13 +121,13 @@ function start(resolution)
         for(var i = 0; i < g_step_collisions.length; i++)
         {
             var info = g_step_collisions[i];
-            info.host1.collision(info.host2, info.contact, info.manifold);
+			info.host1.events.dispatch("collision", [info.host2, info.contact, info.manifold]);             
         }
         g_step_collisions = [];
         //process contacts
         function get_contact_handler(body)
         {
-            if (body.host && ("contact" in body.host))
+            if (body.host && ("contact" in body.host.events))
                 return body.host;
             return null;
         }
@@ -174,9 +178,10 @@ function start(resolution)
     {
         $super(
         src? src : "images/smile_grin_48.png"        );
+        this.events = new ms.event.EventHolder(); 
                 this.size(50, 50);
                 var __physics1;
-                this.ev_resized = function(cmp) 
+				this.events.addListener('ev_resized', function(cmp)
                 {
                     if (cmp.physics)
                         g_world.DestroyBody(cmp.physics);
@@ -193,9 +198,10 @@ function start(resolution)
                 cmp.moved = update_body_position;
                 current_body.host = cmp;
                 }
+				);
                 if (this.w > 0 && this.h > 0)
                 {
-                    this.ev_resized(this);
+					this.events.dispatch("ev_resized", [this]);                     
                 }
                 this.RemoveFromWorld = function(keep_visual) 
                 {
@@ -206,9 +212,11 @@ function start(resolution)
                     }
                 }
                 __physics1 = this.__physics1;
-	this.collision = function(who)
+	var ev_parent = this;
+	this.events.addListener("collision", function(who)
 	{    
-	};
+	}
+	);
             if (this.init)
                 this.init();
             },
@@ -262,7 +270,7 @@ window.onload = function()
             return new smiley_ball("images/smile_grin_48.png");
         }
             sp1.start();
-                __img1.ev_resized = function(cmp) 
+				__img1.events.addListener('ev_resized', function(cmp)
                 {
                     if (cmp.physics)
                         g_world.DestroyBody(cmp.physics);
@@ -280,9 +288,10 @@ window.onload = function()
                 cmp.moved = update_body_position;
                 current_body.host = cmp;
                 }
+				);
                 if (__img1.w > 0 && __img1.h > 0)
                 {
-                    __img1.ev_resized(__img1);
+					__img1.events.dispatch("ev_resized", [__img1]);                     
                 }
                 __img1.RemoveFromWorld = function(keep_visual) 
                 {
@@ -292,7 +301,7 @@ window.onload = function()
                         __img1.parent.removeComponent(__img1);
                     }
                 }
-                __img2.ev_resized = function(cmp) 
+				__img2.events.addListener('ev_resized', function(cmp)
                 {
                     if (cmp.physics)
                         g_world.DestroyBody(cmp.physics);
@@ -310,9 +319,10 @@ window.onload = function()
                 cmp.moved = update_body_position;
                 current_body.host = cmp;
                 }
+				);
                 if (__img2.w > 0 && __img2.h > 0)
                 {
-                    __img2.ev_resized(__img2);
+					__img2.events.dispatch("ev_resized", [__img2]);                     
                 }
                 __img2.RemoveFromWorld = function(keep_visual) 
                 {
@@ -322,7 +332,7 @@ window.onload = function()
                         __img2.parent.removeComponent(__img2);
                     }
                 }
-                __img3.ev_resized = function(cmp) 
+				__img3.events.addListener('ev_resized', function(cmp)
                 {
                     if (cmp.physics)
                         g_world.DestroyBody(cmp.physics);
@@ -340,9 +350,10 @@ window.onload = function()
                 cmp.moved = update_body_position;
                 current_body.host = cmp;
                 }
+				);
                 if (__img3.w > 0 && __img3.h > 0)
                 {
-                    __img3.ev_resized(__img3);
+					__img3.events.dispatch("ev_resized", [__img3]);                     
                 }
                 __img3.RemoveFromWorld = function(keep_visual) 
                 {

@@ -37,7 +37,7 @@ class bad_guy : img
         property target : bad_guy;
     }
 
-    on init()
+    method init()
     {
         move_around.target = this;
         fade_out.target = this;
@@ -56,7 +56,7 @@ class bad_guy : img
 
 class good_guy : img
 {
-    on init()
+    method init()
     {
         move_around.target = this;
     }

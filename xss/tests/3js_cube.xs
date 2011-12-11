@@ -11,24 +11,17 @@ property window_half_y = window.innerHeight / 2;
 property is_mouse_down = false;
 
 on mousedown(x, y){
-	is_mouse_down = true;
 	mouse_x_on_mouse_down = x - window_half_x;
 	x_target_rotation_on_mouse_down = x_target_rotation;
 	mouse_y_on_mouse_down = y - window_half_y;
 	y_target_rotation_on_mouse_down = y_target_rotation;
 }
 
-on mouseup(){
-	is_mouse_down = false;
-}
-
-on mousemove(x, y){
-	if(is_mouse_down){
-		mouse_x = x - window_half_x;
-		x_target_rotation = x_target_rotation_on_mouse_down + ( mouse_x - mouse_x_on_mouse_down ) * 0.3;
-		mouse_y = y - window_half_y;
-		y_target_rotation = y_target_rotation_on_mouse_down + ( mouse_y - mouse_y_on_mouse_down ) * 0.3;
-	}
+on drag(x, y){	
+	mouse_x = x - window_half_x;
+	x_target_rotation = x_target_rotation_on_mouse_down + ( mouse_x - mouse_x_on_mouse_down ) * 0.3;
+	mouse_y = y - window_half_y;
+	y_target_rotation = y_target_rotation_on_mouse_down + ( mouse_y - mouse_y_on_mouse_down ) * 0.3;	
 }
 
 on animate(){

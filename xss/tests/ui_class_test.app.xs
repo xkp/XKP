@@ -5,7 +5,7 @@ property X_MAX = 600;
 property Y_MAX = 400;
 property img2;
 
-on init()
+method init()
 {
     test = 1;
 }

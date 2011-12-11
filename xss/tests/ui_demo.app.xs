@@ -15,12 +15,14 @@ on btnPrev.click()
 }
 
 on btn1.click()   
-{
-	
+{	
 	lbl1.caption = "Got " + clicks + " smileys";
-	btn1.rotation += 10;
-	clicks++;
-	
+	clicks++;	
+}
+
+on btn1.mousedown()   
+{		
+	btn1.rotation += 50;	
 }
 
 on btn2.click()

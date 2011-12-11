@@ -6,15 +6,15 @@ class my_image : img
 	
 	method traslate()
 	{
-		this.x += 5;
-		this.y += 5;
-		this.set_rotation(this.rotation + 10);
+		x += 5;
+		y += 5;
+		rotation += 10;
 	}
 	
 	on click()
 	{
-		x_pos = this.x;
-		y_pos = this.y;
+		x_pos = x;
+		y_pos = y;
 		
 		traslate();
 		img2 = my_image(src = "images/img1.png");

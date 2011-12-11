@@ -45,7 +45,7 @@ instance sd1
 		}
 	}
 	
-	on paint(context)
+	method paint(context)
 	{
 		ctx = context;
 		window.canvasTimer = window.setInterval(draw_all, 100);

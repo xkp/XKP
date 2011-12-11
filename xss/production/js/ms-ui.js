@@ -53,26 +53,17 @@ ms.ui.Manager = Class.create(
 	//Keyboard managemet
 	keydown: function(keycode)
 	{
-	    if ('keydown' in application)
-	    {
-			application.keydown(keycode);
-	    }	    
+	    application.events.dispatch("keydown", [keycode]);    
 	},
 
 	keyup: function(keycode)
 	{
-	    if ('keyup' in application)
-	    {
-	        application.keyup(keycode);
-	    }	    
+	    application.events.dispatch("keyup", [keycode]);    
 	},
 
 	keypress: function(keycode)
 	{
-	    if ('keypress' in application)
-	    {
-	        application.keypress(keycode);
-	    }	    
+	    application.events.dispatch("keypress", [keycode]);    
 	},
 
 	//Mouse managemet
@@ -83,8 +74,8 @@ ms.ui.Manager = Class.create(
 			this.dragging = true;
 	    if (this.dragging)
 	    {
-			if ('drag' in this.mouse_over)
-				this.mouse_over.drag(x , y);
+			
+			this.mouse_over.events.dispatch("drag", [x, y]);
 	        this.lastx = x;
 	        this.lasty = y;
 	        return true;
@@ -96,19 +87,15 @@ ms.ui.Manager = Class.create(
 
 	    if (over != this.mouse_over)
 	    {
-	    	if ('mouseout' in this.mouse_over)
-	            this.mouse_over.mouseout(this.mouse_over);
+	    	this.mouse_over.events.dispatch("mouseout", [this.mouse_over]);
 
-	        if ('mousein' in over)
-	        {
-	            over.mousein( over );
-	        }
+	        over.events.dispatch("mousein", [over]);
 
 	        this.mouse_over = over;
 	    }
 
-	    if ('mousemove' in over)
-	        over.mousemove(x, y, over);
+	    
+	    over.events.dispatch("mousemove", [x, y, over]);
 
 	    this.lastx = x;
 	    this.lasty = y;
@@ -118,10 +105,8 @@ ms.ui.Manager = Class.create(
 
 	mousedown: function(x, y)
 	{
-	    if ('mousedown' in this.mouse_over)
-	    {
-	        this.mouse_over.mousedown(x, y);
-	    }
+	    this.mouse_over.events.dispatch("mousedown", [x, y]);
+	    
 		this.mouse_pressed = true;
 
 	    return this.mouse_over != this.root;
@@ -133,19 +118,14 @@ ms.ui.Manager = Class.create(
 	    if (this.dragging)
 	    {
 	        this.dragging = false;
-	        if ('dragend' in this.mouse_over)
-	            this.mouse_over.dragend(x, y);
+	        
+	        this.mouse_over.events.dispatch("dragend", [x, y]);
 	        return true;
 	    }
-
-	    if ('mouseup' in this.mouse_over)
-	    {
-	        this.mouse_over.mouseup(x, y);
-	    }
-	    else if ('click' in this.mouse_over)
-	    {
-	        this.mouse_over.click();
-	    }
+	    
+	    this.mouse_over.events.dispatch("mouseup", [x, y]);
+	    	    
+	    this.mouse_over.events.dispatch("click", []);	   
 
 	    return this.mouse_over != this.root;
 	},
@@ -350,7 +330,8 @@ ms.ui.Component = Class.create(
 
 		this.manager    = manager;
 		this.components = [];
-		this.parent 	= parent;		
+		this.parent 	= parent;	
+		this.events = new ms.event.EventHolder();
 
 		this.x 			= 0; 
         this.y 			= 0; 
@@ -522,21 +503,13 @@ ms.ui.Component = Class.create(
 
 	positioned: function() 
     {
-        if (this.moved)
-        {
-            this.moved(this);
-        }
-
+        this.events.dispatch("moved", [this]);
         this.invalidate()
     },
 
     resized: function() 
     {
-        if (this.ev_resized)
-        {
-            this.ev_resized(this);
-        }
-
+        this.events.dispatch("resized", [this]);
         this.invalidate()
     },
 
@@ -802,17 +775,17 @@ ms.ui.Button = Class.create(ms.ui.Image,
 
 		var normal_texture = streamer.get_resource(normal).data;
 		var over_texture   = streamer.get_resource(over).data;	
-
-		this.mousein = function()
-	    {
-	        this.image(over_texture);
-	    }
-
-	    this.mouseout = function()
-	    {
-	        this.image(normal_texture);
-	    }		
-	},
+		var ev_parent = this;
+		this.events.addListener('mousein', function()
+		{
+			ev_parent.image(over_texture);
+		});	
+		this.events.addListener('mouseout', function()
+		{
+			ev_parent.image(normal_texture);
+		});
+				
+	},	
 });
 
 ms.ui.StateButton = Class.create(ms.ui.Image,
@@ -825,12 +798,14 @@ ms.ui.StateButton = Class.create(ms.ui.Image,
 		var down_texture   	= streamer.get_resource(down).data;
 
 		this.down = false;		
-		this.click = function()
-	    {
-	        this.down  = !this.down;
-			this.image(this.down? down_texture : up_texture);
-	    }	    	
-	},
+		var ev_parent = this;		
+		this.events.addListener('click', function()
+		{
+			ev_parent.down  = !ev_parent.down;
+			ev_parent.image(ev_parent.down? down_texture : up_texture);
+		});
+		
+	},	
 });
 
 ms.ui.Switch = Class.create(ms.ui.Component,
@@ -1169,5 +1144,7 @@ ms.ui.Sound = Class.create(
 		audioElement.play();
 	},
 });
+
+
 
 

@@ -21,6 +21,9 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">		
 	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 	var renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -30,6 +33,7 @@ var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var application = {};
+application.events = new ms.event.EventHolder();
 // --------RESOURCES---------
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
@@ -42,16 +46,10 @@ if (g_elapsed < 0)
 else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
+application.events.dispatch("animate", []);	
 		set_active_camera(camera_1);
 		set_active_camera(camera_2);
-		if (application.is_ctrl_down)
-{
-set_active_camera(camera_1);
-}
-else
-{
-set_active_camera(camera_2);
-}
+application.events.dispatch("switch_cameras", []);
 }
 var material_sphere1 = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading
@@ -99,7 +97,7 @@ new THREE.Sphere(
 20,32,16);
 	    var sphere_1 = new THREE.Mesh(sphere_1_sphere, material_sphere1);
 	    scene.addObject(sphere_1);
-                sphere_1.materials[ 0 ] = material_sphere1;
+		sphere_1.events = new ms.event.EventHolder();
                 sphere_1.position.x = 250;
                 sphere_1.position.y = 30;
 	    var sphere_2_sphere = 
@@ -107,7 +105,7 @@ new THREE.Sphere(
 20,32,16);
 	    var sphere_2 = new THREE.Mesh(sphere_2_sphere, material_sphere2);
 	    scene.addObject(sphere_2);
-                sphere_2.materials[ 0 ] = material_sphere2;
+		sphere_2.events = new ms.event.EventHolder();
                 sphere_2.position.x = -250;
                 sphere_2.position.y = 30;
 	    var cylinder_1_cylinder = 
@@ -115,7 +113,7 @@ new THREE.Cylinder(
 20,10,10,50);
 	    var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
 	    scene.addObject(cylinder_1);
-                cylinder_1.materials[ 0 ] = cylinder_material;
+		cylinder_1.events = new ms.event.EventHolder();
                 set_rotation_x(cylinder_1.rotation, 212);
                 set_rotation_y(cylinder_1.rotation, 212);
                 cylinder_1.position.x = 100;
@@ -126,7 +124,7 @@ new THREE.Cylinder(
 20,10,10,50);
 	    var cylinder_2 = new THREE.Mesh(cylinder_2_cylinder, cylinder1_material);
 	    scene.addObject(cylinder_2);
-                cylinder_2.materials[ 0 ] = cylinder1_material;
+		cylinder_2.events = new ms.event.EventHolder();
                 set_rotation_x(cylinder_2.rotation, 212);
                 set_rotation_y(cylinder_2.rotation, 212);
                 cylinder_2.position.x = -100;
@@ -137,7 +135,7 @@ new THREE.Cube(
 30,30,30);
 	    var cube_1 = new THREE.Mesh(cube_1_cube, cube_material);
 	    scene.addObject(cube_1);
-                cube_1.materials[ 0 ] = cube_material;
+		cube_1.events = new ms.event.EventHolder();
                 cube_1.position.x = -100;
                 cube_1.position.y = 30;
                 cube_1.position.z = -100;
@@ -148,7 +146,7 @@ new THREE.Cube(
 30,30,30);
 	    var cube_2 = new THREE.Mesh(cube_2_cube, cube1_material);
 	    scene.addObject(cube_2);
-                cube_2.materials[ 0 ] = cube1_material;
+		cube_2.events = new ms.event.EventHolder();
                 cube_2.position.x = 100;
                 cube_2.position.y = 30;
                 cube_2.position.z = -100;
@@ -159,16 +157,14 @@ new THREE.Plane(
 1000,1000,100,100);
 	    var plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    scene.addObject(plane_1);
-                plane_1.materials[ 0 ] = material_wireframe;
+		plane_1.events = new ms.event.EventHolder();
                 plane_1.position.y = 0.100000001;
                 set_rotation_x(plane_1.rotation, -90);
                 application.is_ctrl_down = false;
                 application.is_shift_down = false;
-	document.addEventListener( 'keydown', keydown_application, false );
-	function keydown_application (event)
-	{   
-	var keycode = event.keyCode;
-			if (keycode == SHIFT)
+	application.events.addListener("keydown", function(keycode)
+	{    
+		if (keycode == SHIFT)
 {
 application.is_shift_down = true;
 application.is_ctrl_down = false;
@@ -179,12 +175,50 @@ application.is_ctrl_down = true;
 application.is_shift_down = false;
 }
 	}
+	);
+	application.events.addListener("switch_cameras", function()
+	{    
+		if (application.is_ctrl_down)
+{
+set_active_camera(camera_1);
+}
+else
+{
+set_active_camera(camera_2);
+}
+	}
+	);
 if(ui)
 {
 	ui.load_resources(function(){		
 		g_ui.fill_background = false;
 	});
 }
+var event_manager = new ms.event.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(ev.keyCode);                  
+};
 if (application.init)
 {
 	application.init();

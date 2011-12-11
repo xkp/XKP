@@ -21,6 +21,9 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">		
 	var renderer = new THREE.CanvasRenderer();	
 var ui;
@@ -29,6 +32,7 @@ var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var application = {};
+application.events = new ms.event.EventHolder();
 // --------RESOURCES---------
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
@@ -41,7 +45,9 @@ if (g_elapsed < 0)
 else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
+application.events.dispatch("animate", []);	
 		set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
 }
 var scene = 
 new THREE.Scene(
@@ -60,22 +66,45 @@ new THREE.Camera(
                 particle_1.scale.x = 5;
                 particle_1.scale.y = 5;
                 particle_1.scale.z = 5;
-	document.addEventListener( 'mousemove', mousemove_application, false );
-	function mousemove_application (event)
-	{
-	var x = event.clientX;
-	var y = event.clientY;
+	application.events.addListener("mousemove", function()
+	{    
 		particle_1.scale.x = particle_1.scale.x + 0.0500000007;
 particle_1.scale.y = particle_1.scale.y + 0.0500000007;
 particle_1.scale.z = particle_1.scale.z + 0.0500000007;
 		particle_1.position.x = particle_1.position.x + 0.5;
-	};
+	}
+	);
 if(ui)
 {
 	ui.load_resources(function(){		
 		g_ui.fill_background = false;
 	});
 }
+var event_manager = new ms.event.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(ev.keyCode);                  
+};
 if (application.init)
 {
 	application.init();

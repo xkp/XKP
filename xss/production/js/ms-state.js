@@ -584,6 +584,7 @@ ms.state.Sequence = Class.create(
 		this.manager = manager;
 		this.parent = null;
         this.just_started = false;
+        this.events = new ms.event.EventHolder(); 
     },
 
     start: function()
@@ -597,6 +598,8 @@ ms.state.Sequence = Class.create(
         this.running = true;
         this.time = 0;
         this.just_started = true;
+
+        this.events.dispatch("star", [this]);
     },
 
     stop: function()
@@ -606,6 +609,8 @@ ms.state.Sequence = Class.create(
 
 		if (!this.parent)	
 			this.manager.remove(this);
+
+        this.events.dispatch("stop", [this]);
     },
 
     update: function(delta)
@@ -622,8 +627,7 @@ ms.state.Sequence = Class.create(
             var d = delta/1000.0;
             var pt = this.time;
 
-            if (this.tick)
-                this.tick(d, pt);
+            this.events.dispatch("tick", [d, pt]);
 
             this.time += d;
             this.seek(this.time, pt);

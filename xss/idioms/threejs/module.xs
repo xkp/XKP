@@ -25,7 +25,7 @@ on render_instances()
     {		
 		compiler.xss("inst_renderer.xss", i);
 		if(!i.dont_render)
-			compiler.xss("../common-js/instance.xss", i, event_renderer = "../threejs/event.xss");
+			compiler.xss("../common-js/instance.xss", i);
 	}
 }
 

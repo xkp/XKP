@@ -4,29 +4,24 @@
 <xss:parameter id="path"/>
 
 <xss:code>
-//remember every event could be impemented multiple times
+//remember every event could be implemented multiple times
 
 string ev_name = ev.output_id;
 string assign = "=";
 string separator = ";";
 
-if (!is_class)
-{
-    ev_name = it.output_id + "." + ev_name;
-    assign = "=";
-    separator = ";";
-}
-
-if (path)
-    ev_name = path + "." + ev_name;
-
-var    impls   = ev.impls;
-var    evargs  = ev.args;
+var    impls  	= ev.impls;
+var    evargs 	= ev.args;
+string ev_parent = 	it.output_id;
 		
 //generate functions
+if(is_class)
+	ev_parent = "this";	
+
 out(indent = 0)
 {
-	<xss:e value="ev_name"/> <xss:e value="assign"/> function(<xss:e value="evargs.render()"/>)
+	var ev_parent = this;
+	<xss:e value="ev_parent"/>.events.addListener("<xss:e value="ev_name"/>", function(<xss:e value="evargs.render()"/>)
 	<xss:open_brace/>    
 }
 		
@@ -34,6 +29,8 @@ for(var evimpl in impls)
 {
 	if(!is_class)
 		evimpl.use_this_id(true);
+	else
+		evimpl.this_string("ev_parent");
         
 	out(indent = 1)
 	{
@@ -43,6 +40,7 @@ for(var evimpl in impls)
 
 out(indent = 0)
 {
-	<xss:close_brace/><xss:e value="separator"/>
+	<xss:close_brace/>
+	)<xss:e value="separator"/>
 }
 </xss:code>

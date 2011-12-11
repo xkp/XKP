@@ -84,10 +84,7 @@
 				<set text="materials[ 0 ] = new THREE.MeshBasicMaterial({
 						map:THREE.ImageUtils.loadTexture(streamer.get_resource({value}).asset),
 						})"/>
-            </property>
-			<property id="material" type="string" use_plain_value="true">
-				<set text="materials[ 0 ] = {value}"/>
-            </property>
+            </property>			
 			<property id="alpha" type="float" use_plain_value="true">	
 				<get text="alpha"/>
 				<set text="set_object_alpha({path}, {value})" global = "true"/>
@@ -101,7 +98,7 @@
 			<property id="scale" type="vector3d"/>
 		</class>
 	
-		<class id="transform" output_id="THREE.Object3D">
+		<class id="transform" output_id="THREE.Object3D" heritable="true">
 			<property id="texture" type="string" use_plain_value="true">
 				<set text="children[0].materials[ 0 ] = new THREE.MeshBasicMaterial({
 						map:THREE.ImageUtils.loadTexture(streamer.get_resource({value}).asset),
@@ -196,30 +193,30 @@
 			<property id="scale" type="vector3d"/>
 		</class>
 	
-		<class id="plane" super="object3d" output_id="THREE.Plane" renderer="object3d_renderer.xss">
+		<class id="plane" super="object3d" output_id="THREE.Plane" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
 				<parameter property="width" runtime="true"/>
 				<parameter property="height" runtime="true"/>
-				<parameter property="x_segments"/>
-				<parameter property="y_segments"/>
+				<parameter property="x_segments" runtime="true"/>
+				<parameter property="y_segments" runtime="true"/>
 			</constructor_params>
 			<property id="width" type="string" dont_init="true"/>
 			<property id="height" type="string" dont_init="true"/>
-			<property id="x_segments" output_id="segmentsWidth" type="string" dont_init="true" default_value="1"/>
-			<property id="y_segments" output_id="segmentsHeight" type="string" dont_init="true" default_value="1"/>
+			<property id="x_segments" output_id="segmentsWidth" type="string" dont_init="true"/>
+			<property id="y_segments" output_id="segmentsHeight" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="cube" super="object3d" output_id="THREE.Cube" renderer="object3d_renderer.xss">
+		<class id="cube" super="object3d" output_id="THREE.Cube" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
-				<parameter property="width"/>
-				<parameter property="height"/>
-				<parameter property="depth"/>      
-				<parameter property="x_segments"/>
-				<parameter property="y_segments"/>
-				<parameter property="z_segments"/>
-				<parameter property="material_array"/>	
-				<parameter property="flipped"/>
-				<parameter property="sides"/>				
+				<parameter property="width" runtime="true"/>
+				<parameter property="height" runtime="true"/>
+				<parameter property="depth" runtime="true"/>      
+				<parameter property="x_segments" runtime="true"/>
+				<parameter property="y_segments" runtime="true"/>
+				<parameter property="z_segments" runtime="true"/>
+				<parameter property="material_array" runtime="true"/>	
+				<parameter property="flipped" runtime="true"/>
+				<parameter property="sides" runtime="true"/>				
 			</constructor_params>
 			<property id="width" type="string" dont_init="true"/> 
 			<property id="height" type="string" dont_init="true"/>
@@ -232,14 +229,14 @@
 			<property id="sides" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="cylinder" super="object3d" output_id="THREE.Cylinder" renderer="object3d_renderer.xss">
+		<class id="cylinder" super="object3d" output_id="THREE.Cylinder" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
-				<parameter property="segments"/>
-				<parameter property="top_radius"/>
-				<parameter property="bottom_radius"/>      
-				<parameter property="height"/>
-				<parameter property="topoffset"/>
-				<parameter property="bottomoffset"/>			
+				<parameter property="segments" runtime="true"/>
+				<parameter property="top_radius" runtime="true"/>
+				<parameter property="bottom_radius" runtime="true"/>      
+				<parameter property="height" runtime="true"/>
+				<parameter property="topoffset" runtime="true"/>
+				<parameter property="bottomoffset" runtime="true"/>			
 			</constructor_params>	
 			<property id="segments" type="string" dont_init="true"/> 
 			<property id="top_radius" type="string" dont_init="true"/>
@@ -249,28 +246,28 @@
 			<property id="bottomoffset" type="string" dont_init="true"/>			
 		</class>
 	
-		<class id="sphere" super="object3d" output_id="THREE.Sphere" renderer="object3d_renderer.xss">
+		<class id="sphere" super="object3d" output_id="THREE.Sphere" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
-				<parameter property="radius"/>
-				<parameter property="x_segments"/>
-				<parameter property="y_segments"/>			
+				<parameter property="radius" runtime="true"/>
+				<parameter property="x_segments" runtime="true"/>
+				<parameter property="y_segments" runtime="true"/>			
 			</constructor_params>
 			<property id="radius" type="string" dont_init="true"/>
 			<property id="x_segments" output_id="segmentsWidth" type="string" dont_init="true"/>
 			<property id="y_segments" output_id="segmentsHeight" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="icosahedron" super="object3d" output_id="THREE.Icosahedron" renderer="object3d_renderer.xss">
+		<class id="icosahedron" super="object3d" output_id="THREE.Icosahedron" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
-				<parameter property="subdivisions"/>			
+				<parameter property="subdivisions" runtime="true"/>			
 			</constructor_params>
 			<property id="subdivisions" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="particle" renderer="particle_renderer.xss">
+		<class id="particle" renderer="particle_renderer.xss" heritable="true">
 			<constructor_params>
-				<parameter property="program"/>
-				<parameter property="color"/>					
+				<parameter property="program" runtime="true"/>
+				<parameter property="color" runtime="true"/>					
 			</constructor_params>
 			<property id="program" type="string" dont_init="true" use_plain_value="true"/>
 			<property id="color" type="string" dont_init="true"/>
@@ -279,12 +276,12 @@
 			<property id="scale" type="vector3d"/>
 		</class>
 		
-		<class id="particle_system" renderer="particle_renderer.xss">
+		<class id="particle_system" renderer="particle_renderer.xss" heritable="true">
 			<constructor_params>
-				<parameter property="program"/>
-				<parameter property="color"/>
-				<parameter property="quantity"/>	
-				<parameter property="scale"/>
+				<parameter property="program" runtime="true"/>
+				<parameter property="color" runtime="true"/>
+				<parameter property="quantity" runtime="true"/>	
+				<parameter property="scale" runtime="true"/>
 			</constructor_params>
 			<property id="program" type="string" dont_init="true" use_plain_value="true"/>
 			<property id="color" type="string" dont_init="true"/>

@@ -6,6 +6,9 @@
       <canvas id="canvas" width="600" height="400" style="background-color:#333333;" ></canvas>
    </body>
     <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
+	<script type="text/javascript" src="../js/ms-event.js"></script>
+	<script type="text/javascript" src="../js/keys.js"></script>
+	<script type="text/javascript" src="../js/colors.js"></script>
     <script type="text/javascript">
       var g_ui = {};     
       function init() {

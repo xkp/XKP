@@ -4,7 +4,7 @@ property theta = 45;
 property mouse_x;
 property mouse_y;
 
-on mousemove(){
+on mousemove(x, y){
 	mouse_x = ( x / window.innerWidth ) * 2 - 1;
 	mouse_y = - ( y / window.innerHeight ) * 2 + 1;
 	if(is_shift_down){
@@ -27,7 +27,7 @@ on keydown(keycode){
 		is_ctrl_down = true;
 	}
 }
-on keyup(){
+on keyup(keycode){
 	if(keycode == SHIFT) {
 		is_shift_down = false;
 	}

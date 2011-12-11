@@ -9,6 +9,9 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -17,6 +20,7 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
@@ -121,8 +125,8 @@ if (sd1.i >= sd1.degrees)
 sd1.i = 0;
 }
 	};
-	sd1.paint = function(context)
-	{    
+	sd1.paint = function(context) 
+	{
 		sd1.ctx = context;
 window.canvasTimer = window.setInterval(sd1.draw_all, 100);
 	};
@@ -154,8 +158,5 @@ window.canvasTimer = window.setInterval(sd1.draw_all, 100);
 	<canvas id="myCanvas" width="600" height="600">
 		<p>Your browser doesn't support canvas.</p>
 	</canvas>
-	<audio id="sounds" preload> 
-	Your browser does not support the audio element.
-	</audio>
 </body>
 </html>

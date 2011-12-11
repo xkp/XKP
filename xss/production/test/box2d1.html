@@ -6,6 +6,9 @@
       <canvas id="canvas" width="600" height="400" style="background-color:#333333;" ></canvas>
    </body>
     <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
+	<script type="text/javascript" src="../js/ms-event.js"></script>
+	<script type="text/javascript" src="../js/keys.js"></script>
+	<script type="text/javascript" src="../js/colors.js"></script>
     <script type="text/javascript">
       var g_ui = {};     
       function init() {
@@ -155,7 +158,7 @@
         for(var i = 0; i < g_step_collisions.length; i++)
         {
             var info = g_step_collisions[i];
-            info.host1.collision(info.host2, info.contact, info.manifold);
+			info.host1.events.dispatch("collision", [info.host2, info.contact, info.manifold]);             
         }
         g_step_collisions = [];
         //process contacts
