@@ -1,4 +1,4 @@
-<application src="3js_class_test.app.xs" renderer="canvas" width="600" height="400">    
+<application src="3js_class_test.app.xs" renderer="canvas" width="600" height="400" background="SeaShell">    
     <resources>		
 		<image src="images/test1.png"/>
 		<image src="images/test2.png"/>

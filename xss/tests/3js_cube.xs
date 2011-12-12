@@ -6,8 +6,8 @@ property y_target_rotation = 0;
 property y_target_rotation_on_mouse_down = 0;
 property mouse_y = 0;
 property mouse_y_on_mouse_down = 0;
-property window_half_x = window.innerWidth / 2;
-property window_half_y = window.innerHeight / 2;
+property window_half_x = app_width / 2;
+property window_half_y = app_height / 2;
 property is_mouse_down = false;
 
 on mousedown(x, y){

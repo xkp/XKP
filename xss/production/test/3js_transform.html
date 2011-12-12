@@ -4,7 +4,7 @@
 <title>Test 3D</title>
 <style type="text/css">
 	body{
-	background:#f0f0f0;
+	background:FloralWhite;
 	}
 </style>
 </head>
@@ -31,13 +31,15 @@ var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
 var application = {};
 application.events = new ms.event.EventHolder();
 // --------RESOURCES---------
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( window.innerWidth,window.innerHeight );
+renderer.setSize( app_width, app_height );
 function render() {
 var now   = new Date().getTime();
 if (g_elapsed < 0)
@@ -67,7 +69,7 @@ new THREE.Camera(
                 camera_1.position.z = 1000;
 var light = 
 new THREE.DirectionalLight(
-1677);
+Ivory);
 		;
 	scene.addLight(light);
                 light.position.y = 0.5;
@@ -111,10 +113,11 @@ new THREE.Sphere(
                 application.theta = 45;
                 application.mouse_x = null;
                 application.mouse_y = null;
+	var ev_parent = this;
 	application.events.addListener("mousemove", function(x,y)
 	{    
-		application.mouse_x = x / window.innerWidth * 2 - 1;
-application.mouse_y = -(y / window.innerHeight) * 2 + 1;
+		application.mouse_x = x / app_width * 2 - 1;
+application.mouse_y = -(y / app_height) * 2 + 1;
 if (application.is_shift_down)
 {
 set_rotation_x(container.rotation, get_rotation_x(container.rotation) + 0.5);
@@ -135,6 +138,7 @@ set_rotation_z(cylinder_1.rotation, get_rotation_z(cylinder_1.rotation) + 0.5);
 }
 	}
 	);
+	var ev_parent = this;
 	application.events.addListener("keydown", function(keycode)
 	{    
 		if (keycode == SHIFT)
@@ -147,6 +151,7 @@ application.is_ctrl_down = true;
 }
 	}
 	);
+	var ev_parent = this;
 	application.events.addListener("keyup", function(keycode)
 	{    
 		if (keycode == SHIFT)
@@ -159,6 +164,7 @@ application.is_ctrl_down = false;
 }
 	}
 	);
+	var ev_parent = this;
 	application.events.addListener("animate", function()
 	{    
 		if (application.is_ctrl_down)

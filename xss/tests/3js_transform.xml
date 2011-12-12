@@ -1,4 +1,4 @@
-<application src="3js_transform.xs" title="Test 3D" renderer="canvas" background="#f0f0f0">
+<application src="3js_transform.xs" title="Test 3D" renderer="canvas" background="FloralWhite">
 
 	<materials>	
 	
@@ -14,7 +14,7 @@
 			<position z="1000"/>			
 		</camera>
 		
-		<directional_light id="light" color="1677">
+		<directional_light id="light" color="Ivory">
 			<position y="0.5" z="1"/>
 		</directional_light>
 		

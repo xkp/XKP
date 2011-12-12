@@ -5,8 +5,8 @@ property mouse_x;
 property mouse_y;
 
 on mousemove(x, y){
-	mouse_x = ( x / window.innerWidth ) * 2 - 1;
-	mouse_y = - ( y / window.innerHeight ) * 2 + 1;
+	mouse_x = ( x / app_width ) * 2 - 1;
+	mouse_y = - ( y / app_height ) * 2 + 1;
 	if(is_shift_down){
 		container.rotation.x += 0.5;
 		container.rotation.y += 0.5;

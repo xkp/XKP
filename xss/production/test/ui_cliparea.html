@@ -66,6 +66,7 @@ function start(resolution)
 	window.setTimeout(updater, resolution);  
 }  
                 application.clicks = 0;
+	var ev_parent = this;
 	application.events.addListener("keydown", function(keycode)
 	{    
 		if (ca1.isVisible())
@@ -159,6 +160,7 @@ window.onload = function()
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",div1.manager, div1);
                 btn1.set_rotation(10);
+	var ev_parent = this;
 	btn1.events.addListener("click", function()
 	{    
 		lbl1.text("Got " + application.clicks + " smileys");

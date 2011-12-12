@@ -1,4 +1,4 @@
-<application src="3js_model.xs" title="Test 3D" background="#356" renderer="webgl">
+<application src="3js_model.xs" title="Test 3D" background="RoyalBlue" renderer="webgl">
 
 	<resources>	
 	
@@ -13,9 +13,9 @@
 			<position z="500"/>            
 		</camera>
 		
-		<ambient_light id="a_ligth" color="2232576"/>
+		<ambient_light id="a_ligth" color="Salmon"/>
 		
-		<directional_light id="d_ligth_1" color="16772829">			
+		<directional_light id="d_ligth_1" color="Ivory">			
             <position y="-70" z="100"/>            
 		</directional_light>
 				

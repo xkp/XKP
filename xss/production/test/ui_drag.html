@@ -106,6 +106,7 @@ window.onload = function()
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
                 btn1.set_rotation(10);
+	var ev_parent = this;
 	btn1.events.addListener("click", function()
 	{    
 		lbl1.text("Got " + application.clicks + " smileys");
@@ -113,6 +114,7 @@ btn1.set_rotation(btn1.get_rotation() + 10);
 application.clicks = application.clicks + 1;
 	}
 	);
+	var ev_parent = this;
 	btn1.events.addListener("drag", function(x,y)
 	{    
 		btn1.set_x(x - btn1.w / 2);

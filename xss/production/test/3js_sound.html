@@ -4,7 +4,7 @@
 <title>Test 3D</title>
 <style type="text/css">
 	body{
-	background:#867;
+	background:SlateGray;
 	}
 </style>
 </head>
@@ -32,6 +32,8 @@ var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
 var application = {};
 application.events = new ms.event.EventHolder();
 		var streamer = new ms.streamer.Streamer();
@@ -54,7 +56,7 @@ application.events = new ms.event.EventHolder();
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( window.innerWidth,window.innerHeight );
+renderer.setSize( app_width, app_height );
 function render() {
 var now   = new Date().getTime();
 if (g_elapsed < 0)
@@ -67,13 +69,13 @@ application.events.dispatch("animate", []);
 application.events.dispatch("switch_cameras", []);
 }
 var material_sphere1 = new THREE.MeshLambertMaterial({
-color:16755200,shading:THREE.FlatShading
+color:Green,shading:THREE.FlatShading
 	});
 var material_sphere2 = new THREE.MeshLambertMaterial({
-color:16720384,shading:THREE.FlatShading
+color:Yellow,shading:THREE.FlatShading
 	});
 var material_wireframe = new THREE.MeshLambertMaterial({
-color:16755400,wireframe:true
+color:MediumSlateBlue ,wireframe:true
 	});
 var scene = 
 new THREE.Scene(
@@ -84,7 +86,7 @@ fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly
                 camera_1.position.y = 25;
 var light = 
 new THREE.DirectionalLight(
-16777215);
+White);
 		;
 	scene.addLight(light);
                 light.position.y = 0.5;

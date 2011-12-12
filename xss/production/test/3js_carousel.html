@@ -4,7 +4,7 @@
 <title>Test 3D</title>
 <style type="text/css">
 	body{
-	background:#785;
+	background:Black;
 	}
 </style>
 </head>
@@ -31,6 +31,8 @@ var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
 var application = {};
 application.events = new ms.event.EventHolder();
 		var streamer = new ms.streamer.Streamer();
@@ -71,7 +73,7 @@ application.events = new ms.event.EventHolder();
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( window.innerWidth,window.innerHeight );
+renderer.setSize( app_width, app_height );
 function render() {
 var now   = new Date().getTime();
 if (g_elapsed < 0)
@@ -146,6 +148,7 @@ new THREE.Plane(
 	    var img1 = new THREE.Mesh(img1_plane, materials[0]);
 	    scene.addObject(img1);
 		img1.events = new ms.event.EventHolder();
+	var ev_parent = this;
 	img1.events.addListener("mousein", function()
 	{    
 		img1.scale.x = 1.5;
@@ -155,6 +158,7 @@ img1_reflect.scale.y = 1.5;
 img1_reflect.position.y = -196.800003;
 	}
 	);
+	var ev_parent = this;
 	img1.events.addListener("mouseout", function()
 	{    
 		img1.scale.x = 1;
@@ -180,6 +184,7 @@ new THREE.Plane(
 	    var img2 = new THREE.Mesh(img2_plane, materials[2]);
 	    scene.addObject(img2);
 		img2.events = new ms.event.EventHolder();
+	var ev_parent = this;
 	img2.events.addListener("mousein", function()
 	{    
 		img2.scale.x = 1.5;
@@ -189,6 +194,7 @@ img2_reflect.scale.y = 1.5;
 img2_reflect.position.y = -196.800003;
 	}
 	);
+	var ev_parent = this;
 	img2.events.addListener("mouseout", function()
 	{    
 		img2.scale.x = 1;
@@ -214,6 +220,7 @@ new THREE.Plane(
 	    var img3 = new THREE.Mesh(img3_plane, materials[4]);
 	    scene.addObject(img3);
 		img3.events = new ms.event.EventHolder();
+	var ev_parent = this;
 	img3.events.addListener("mousein", function()
 	{    
 		img3.scale.x = 1.5;
@@ -223,6 +230,7 @@ img3_reflect.scale.y = 1.5;
 img3_reflect.position.y = -196.800003;
 	}
 	);
+	var ev_parent = this;
 	img3.events.addListener("mouseout", function()
 	{    
 		img3.scale.x = 1;
@@ -248,6 +256,7 @@ new THREE.Plane(
 	    var img4 = new THREE.Mesh(img4_plane, materials[6]);
 	    scene.addObject(img4);
 		img4.events = new ms.event.EventHolder();
+	var ev_parent = this;
 	img4.events.addListener("mousein", function()
 	{    
 		img4.scale.x = 1.5;
@@ -257,6 +266,7 @@ img4_reflect.scale.y = 1.5;
 img4_reflect.position.y = -196.800003;
 	}
 	);
+	var ev_parent = this;
 	img4.events.addListener("mouseout", function()
 	{    
 		img4.scale.x = 1;
@@ -282,6 +292,7 @@ new THREE.Plane(
 	    var img5 = new THREE.Mesh(img5_plane, materials[8]);
 	    scene.addObject(img5);
 		img5.events = new ms.event.EventHolder();
+	var ev_parent = this;
 	img5.events.addListener("mousein", function()
 	{    
 		img5.scale.x = 1.5;
@@ -291,6 +302,7 @@ img5_reflect.scale.y = 1.5;
 img5_reflect.position.y = -196.800003;
 	}
 	);
+	var ev_parent = this;
 	img5.events.addListener("mouseout", function()
 	{    
 		img5.scale.x = 1;
@@ -332,20 +344,22 @@ application.img_array[i].position.z = 275 * Math.sin(application.angle);
 application.img_array[i + 1].position.z = 275 * Math.sin(application.angle);
 }
 	};
+	var ev_parent = this;
 	application.events.addListener("animate", function()
 	{    
 		application.position_items();
 	}
 	);
+	var ev_parent = this;
 	application.events.addListener("mousemove", function(x,y)
 	{    
-		if (x < window.innerWidth / 2)
+		if (x < app_width / 2)
 {
-application.speed = -0.200000003 * (window.innerWidth / 2 - x) / window.innerWidth / 2;
+application.speed = -0.200000003 * (app_width / 2 - x) / app_width / 2;
 }
-if (x > window.innerWidth / 2)
+if (x > app_width / 2)
 {
-application.speed = -0.200000003 * (window.innerWidth / 2 - x) / window.innerWidth / 2;
+application.speed = -0.200000003 * (app_width / 2 - x) / app_width / 2;
 }
 	}
 	);

@@ -124,6 +124,7 @@ window.onload = function()
                 lbl1.position(220, 190);
 		    btnExplosion = new ms.ui.Button( 
 	    "images/bomb.png","images/bomb.png",g_ui_root.manager, g_ui_root);
+	var ev_parent = this;
 	btnExplosion.events.addListener("click", function()
 	{    
 		Sound.play("sounds/explosion.mp3");
@@ -132,6 +133,7 @@ window.onload = function()
                 btnExplosion.rect(290, 220, 50, 50);
 		    btnShoots = new ms.ui.Button( 
 	    "images/AK-47.png","images/AK-47.png",g_ui_root.manager, g_ui_root);
+	var ev_parent = this;
 	btnShoots.events.addListener("click", function()
 	{    
 		Sound.play("sounds/shoots.mp3");

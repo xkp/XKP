@@ -113,7 +113,7 @@
 		</class>
 				
 		<class id="light"> 					
-			<property id="color" type="string" dont_init="true"/>			
+			<property id="color" type="string" dont_init="true" use_plain_value="true"/>			
 			<property id="position" type="vector3d"/>
 			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>

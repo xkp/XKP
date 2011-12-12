@@ -27,11 +27,11 @@ method position_items(){
 
 on mousemove(var x, var y){
 	
-	if (x < window.innerWidth/2){
-		speed = -(0.2) * ( window.innerWidth/2 - x) / ( window.innerWidth/2);
+	if (x < app_width/2){
+		speed = -(0.2) * ( app_width/2 - x) / ( app_width/2);
 	}
-	if (x > window.innerWidth/2){
-		speed = -(0.2) * ( window.innerWidth/2 - x) / ( window.innerWidth/2);
+	if (x > app_width/2){
+		speed = -(0.2) * ( app_width/2 - x) / ( app_width/2);
 	}
 }
 

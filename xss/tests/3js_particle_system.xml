@@ -1,4 +1,4 @@
-<application src="3js_particle_system.xs" title="Test 3D" renderer="canvas" background="#000000">
+<application src="3js_particle_system.xs" title="Test 3D" renderer="canvas" background="Black">
 	
 	<scene>	
 	

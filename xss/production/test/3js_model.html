@@ -4,7 +4,7 @@
 <title>Test 3D</title>
 <style type="text/css">
 	body{
-	background:#356;
+	background:RoyalBlue;
 	}
 </style>
 </head>
@@ -21,15 +21,21 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">		
 	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-	var renderer = new THREE.WebGLRenderer( { antialias: true } );
+	var renderer = new THREE.WebGLRenderer( { antialias: false } );
 var ui;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
 var application = {};
+application.events = new ms.event.EventHolder();
 		var streamer = new ms.streamer.Streamer();
 	// --------RESOURCES---------
         var def_package_items = [];
@@ -50,7 +56,7 @@ var application = {};
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( window.innerWidth,window.innerHeight );
+renderer.setSize( app_width, app_height );
 function render() {
 var now   = new Date().getTime();
 if (g_elapsed < 0)
@@ -58,9 +64,9 @@ if (g_elapsed < 0)
 else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
-		camera_1.position.x = camera_1.position.x + (application.mouse_x - camera_1.position.x) * 0.0500000007;
-camera_1.position.y = camera_1.position.y + (-application.mouse_y - camera_1.position.y) * 0.0500000007;
+application.events.dispatch("animate", []);	
 		set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
 }
 var scene = 
 new THREE.Scene(
@@ -71,12 +77,12 @@ new THREE.Camera(
                 camera_1.position.z = 500;
 var a_ligth = 
 new THREE.AmbientLight(
-2232576);
+Salmon);
 		;
 	scene.addLight(a_ligth);
 var d_ligth_1 = 
 new THREE.DirectionalLight(
-16772829);
+Ivory);
 		;
 	scene.addLight(d_ligth_1);
                 d_ligth_1.position.y = -70;
@@ -99,18 +105,12 @@ new THREE.DirectionalLight(
 			} 
 		} 
 	);	
-	document.addEventListener( 'click', click_male_model, false );
-	function click_male_model (event)
-	{
-	var x = event.clientX;
-	var y = event.clientY;
-		event.preventDefault();
-		var intersects = get_intersects( event.clientX, event.clientY, male_model);
-		if ( intersects.length > 0 ) 
-		{   
+	var ev_parent = this;
+	male_model.events.addListener("click", function()
+	{    
 		male_model.position.x = male_model.position.x + 10;
-		}
-	};
+	}
+	);
 	var female_model;
 	var female_model_loader = 
 	generate_model_loader(streamer.get_resource('model_1').type);
@@ -129,34 +129,59 @@ new THREE.DirectionalLight(
 			} 
 		} 
 	);	
-	document.addEventListener( 'click', click_female_model, false );
-	function click_female_model (event)
-	{
-	var x = event.clientX;
-	var y = event.clientY;
-		event.preventDefault();
-		var intersects = get_intersects( event.clientX, event.clientY, female_model);
-		if ( intersects.length > 0 ) 
-		{   
+	var ev_parent = this;
+	female_model.events.addListener("click", function()
+	{    
 		female_model.position.x = female_model.position.x - 10;
-		}
-	};
+	}
+	);
                 application.mouse_x = null;
                 application.mouse_y = null;
-	document.addEventListener( 'mousemove', mousemove_application, false );
-	function mousemove_application (event)
-	{
-	var x = event.clientX;
-	var y = event.clientY;
-		application.mouse_x = x - window.innerWidth / 2;
-application.mouse_y = y - window.innerHeight / 2;
-	};
+	var ev_parent = this;
+	application.events.addListener("animate", function()
+	{    
+		camera_1.position.x = camera_1.position.x + (application.mouse_x - camera_1.position.x) * 0.0500000007;
+camera_1.position.y = camera_1.position.y + (-application.mouse_y - camera_1.position.y) * 0.0500000007;
+	}
+	);
+	var ev_parent = this;
+	application.events.addListener("mousemove", function(x,y)
+	{    
+		application.mouse_x = x - app_width / 2;
+application.mouse_y = y - app_height / 2;
+	}
+	);
 if(ui)
 {
 	ui.load_resources(function(){		
 		g_ui.fill_background = false;
 	});
 }
+var event_manager = new ms.event.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(ev.keyCode);                  
+};
 if (application.init)
 {
 	application.init();

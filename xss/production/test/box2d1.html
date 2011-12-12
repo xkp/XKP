@@ -37,7 +37,7 @@
         {
             function get_collider(body)
             {
-                if (body.host && ("collision" in body.host))
+                if (body.host && ("collision" in body.host.events))
                     return body.host;
                 return null;
             }
@@ -164,7 +164,7 @@
         //process contacts
         function get_contact_handler(body)
         {
-            if (body.host && ("contact" in body.host))
+            if (body.host && ("contact" in body.host.events))
                 return body.host;
             return null;
         }

@@ -22,7 +22,7 @@
 			<basic_material texture_src="image_5"/>
 			<basic_material texture_src="image_6"/>
 		</composite_material>
-		<basic_material id="plane_material" color="14737632"/>		
+		<basic_material id="plane_material" color="Grey" alpha="50"/>		
 		
 	</materials>
 	

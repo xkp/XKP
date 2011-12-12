@@ -4,7 +4,7 @@
 <title>Test 3D</title>
 <style type="text/css">
 	body{
-	background:#f0f0f0;
+	background:FloralWhite;
 	}
 </style>
 </head>
@@ -31,6 +31,8 @@ var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
 var anim_1;var fade_1;
 var application = {};
 application.events = new ms.event.EventHolder();
@@ -43,7 +45,7 @@ application.events = new ms.event.EventHolder();
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( window.innerWidth,window.innerHeight );
+renderer.setSize( app_width, app_height );
 function render() {
 var now   = new Date().getTime();
 if (g_elapsed < 0)
@@ -64,6 +66,7 @@ application.events.dispatch("switch_cameras", []);
     {
         $super(
         manager        );
+        this.events = new ms.event.EventHolder(); 
                 var this__ = this;
             this.parent_sequence = null;
                     var ____i1 = new ms.state.Interpolator(
@@ -103,6 +106,7 @@ application.events.dispatch("switch_cameras", []);
     {
         $super(
         manager        );
+        this.events = new ms.event.EventHolder(); 
                 var this__ = this;
             this.parent_sequence = null;
                     var ____i3 = new ms.state.Interpolator(
@@ -159,6 +163,7 @@ new THREE.Cylinder(
 		cylinder_1.events = new ms.event.EventHolder();
                 set_rotation_x(cylinder_1.rotation, 10);
                 set_rotation_y(cylinder_1.rotation, 10);
+	var ev_parent = this;
 	cylinder_1.events.addListener("click", function()
 	{    
 		anim_1.start();

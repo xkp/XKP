@@ -4,7 +4,7 @@
 <title>Test 3D</title>
 <style type="text/css">
 	body{
-	background:#f0f0f0;
+	background:Peru;
 	}
 </style>
 </head>
@@ -31,13 +31,15 @@ var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
 var application = {};
 application.events = new ms.event.EventHolder();
 // --------RESOURCES---------
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( window.innerWidth,window.innerHeight );
+renderer.setSize( app_width, app_height );
 function render() {
 var now   = new Date().getTime();
 if (g_elapsed < 0)
@@ -66,6 +68,7 @@ new THREE.Camera(
                 particle_1.scale.x = 5;
                 particle_1.scale.y = 5;
                 particle_1.scale.z = 5;
+	var ev_parent = this;
 	application.events.addListener("mousemove", function()
 	{    
 		particle_1.scale.x = particle_1.scale.x + 0.0500000007;

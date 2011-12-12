@@ -1,4 +1,4 @@
-<application src="3js_carousel.xs" title="Test 3D" renderer="canvas" background="#785">
+<application src="3js_carousel.xs" title="Test 3D" renderer="canvas" background="Black">
 	
 	<resources>	
 	

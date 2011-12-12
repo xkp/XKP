@@ -5,7 +5,7 @@ class my_cylinder : cylinder
 		color = value;
 	}
 	on mousein(){
-		color = Fuchsia;
+		color = LightGreen;
 	}
 	on mouseout(){
 		color = Red;

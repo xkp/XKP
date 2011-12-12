@@ -102,6 +102,7 @@ window.onload = function()
 		    c1 = new ms.ui.Circle( 
 	    "cyan","black",3,div1.manager, div1);
                 c1.setRadius(60);
+	var ev_parent = this;
 	c1.events.addListener("click", function()
 	{    
 		c1.setRadius(c1.getRadius() + 1);
@@ -112,6 +113,7 @@ window.onload = function()
 	    "green",null,null,div1.manager, div1);
                 r1.set_rotation(-30);
                 r1.alpha(60);
+	var ev_parent = this;
 	r1.events.addListener("click", function()
 	{    
 		r1.set_x(r1.x + 5);
@@ -129,6 +131,7 @@ r1.set_y(r1.y + 5);
 		    btn = new ms.ui.Button( 
 	    "images/smile_grin_48.png","images/smile_sad_48.png",g_ui_root.manager, g_ui_root);
                 btn.set_rotation(45);
+	var ev_parent = this;
 	btn.events.addListener("click", function()
 	{    
 		for(var i = 0; i < 4; i++)

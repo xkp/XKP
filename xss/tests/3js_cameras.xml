@@ -1,10 +1,10 @@
-<application src="3js_cameras.xs" title="Test 3D" renderer="webgl" background="#867">
+<application src="3js_cameras.xs" title="Test 3D" renderer="webgl" background="SlateGray">
 
 	<materials>	
 	
 		<lambert_material id="material_sphere1" color="Math.random() * 0xffffff" shading="flat_shading"/>	
 		<lambert_material id="material_sphere2" color="Math.random() * 0xffffff" shading="flat_shading"/>
-		<lambert_material id="material_wireframe" color="16755400" wireframe="true"/>
+		<lambert_material id="material_wireframe" color="MediumSlateBlue" wireframe="true"/>
 		<lambert_material id="cylinder_material" color="Math.random() * 0xffffff" shading="flat_shading"/>
 		<lambert_material id="cylinder1_material" color="Math.random() * 0xffffff" shading="flat_shading"/>
 		<lambert_material id="cube_material" color="Math.random() * 0xffffff" shading="flat_shading"/>

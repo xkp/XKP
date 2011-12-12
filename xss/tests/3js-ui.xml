@@ -18,7 +18,7 @@
 			<basic_material color="Math.random() * 0xffffff"/>
 		</composite_material>
 		
-		<basic_material id="plane_material" color="14737632"/>
+		<basic_material id="plane_material" color="Grey" alpha="50"/>
 				
 	</materials>
 	

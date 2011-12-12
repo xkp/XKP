@@ -7,8 +7,8 @@ on animate(){
 }
 
 on mousemove(x,y){
-	mouse_x = ( x - window.innerWidth/2 );
-	mouse_y = ( y - window.innerHeight/2 );
+	mouse_x = ( x - app_width/2 );
+	mouse_y = ( y - app_height/2 );
 }
 
 	

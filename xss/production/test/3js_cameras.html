@@ -4,7 +4,7 @@
 <title>Test 3D</title>
 <style type="text/css">
 	body{
-	background:#867;
+	background:SlateGray;
 	}
 </style>
 </head>
@@ -32,13 +32,15 @@ var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
 var application = {};
 application.events = new ms.event.EventHolder();
 // --------RESOURCES---------
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( window.innerWidth,window.innerHeight );
+renderer.setSize( app_width, app_height );
 function render() {
 var now   = new Date().getTime();
 if (g_elapsed < 0)
@@ -58,7 +60,7 @@ var material_sphere2 = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading
 	});
 var material_wireframe = new THREE.MeshLambertMaterial({
-color:16755400,wireframe:true
+color:MediumSlateBlue,wireframe:true
 	});
 var cylinder_material = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading
@@ -162,6 +164,7 @@ new THREE.Plane(
                 set_rotation_x(plane_1.rotation, -90);
                 application.is_ctrl_down = false;
                 application.is_shift_down = false;
+	var ev_parent = this;
 	application.events.addListener("keydown", function(keycode)
 	{    
 		if (keycode == SHIFT)
@@ -176,6 +179,7 @@ application.is_shift_down = false;
 }
 	}
 	);
+	var ev_parent = this;
 	application.events.addListener("switch_cameras", function()
 	{    
 		if (application.is_ctrl_down)

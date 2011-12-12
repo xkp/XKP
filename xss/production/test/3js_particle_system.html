@@ -4,7 +4,7 @@
 <title>Test 3D</title>
 <style type="text/css">
 	body{
-	background:#000000;
+	background:Black;
 	}
 </style>
 </head>
@@ -31,13 +31,15 @@ var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
 var application = {};
 application.events = new ms.event.EventHolder();
 // --------RESOURCES---------
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( window.innerWidth,window.innerHeight );
+renderer.setSize( app_width, app_height );
 function render() {
 var now   = new Date().getTime();
 if (g_elapsed < 0)
@@ -69,16 +71,18 @@ new THREE.Camera(
 		}
                 application.mouse_x = null;
                 application.mouse_y = null;
+	var ev_parent = this;
 	application.events.addListener("animate", function()
 	{    
 		camera_1.position.x = camera_1.position.x + (application.mouse_x - camera_1.position.x) * 0.0500000007;
 camera_1.position.y = camera_1.position.y + (-application.mouse_y - camera_1.position.y) * 0.0500000007;
 	}
 	);
+	var ev_parent = this;
 	application.events.addListener("mousemove", function(x,y)
 	{    
-		application.mouse_x = x - window.innerWidth / 2;
-application.mouse_y = y - window.innerHeight / 2;
+		application.mouse_x = x - app_width / 2;
+application.mouse_y = y - app_height / 2;
 	}
 	);
 if(ui)

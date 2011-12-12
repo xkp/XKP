@@ -206,7 +206,7 @@
                 
                 if (<xss:e v="visual_parent"/>.w > 0 && <xss:e v="visual_parent"/>.h > 0)
                 {
-					<xss:e v="visual_parent"/>.events.dispatch("ev_resized", [<xss:e v="visual_parent"/>]);                     
+					<xss:e v="visual_parent"/>.events.dispatch("resized", [<xss:e v="visual_parent"/>]);                     
                 }
                 
                 <xss:e v="visual_parent"/>.RemoveFromWorld = function(keep_visual) 

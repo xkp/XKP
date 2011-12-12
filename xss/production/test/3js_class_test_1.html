@@ -30,6 +30,8 @@ var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
+var app_width = 600;
+var app_height = 400;
 var application = {};
 application.events = new ms.event.EventHolder();
 		var streamer = new ms.streamer.Streamer();
@@ -70,7 +72,7 @@ application.events = new ms.event.EventHolder();
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( 600,400 );
+renderer.setSize( app_width, app_height );
 function render() {
 var now   = new Date().getTime();
 if (g_elapsed < 0)
@@ -110,6 +112,7 @@ new THREE.Camera(
                 camera_1.position.z = 1000;
                 application.img_array = ["images/test1.png", "images/test2.png", "images/test3.png", "images/test4.png", "images/test5.png"];
                 application.i = 0;
+	var ev_parent = this;
 	application.events.addListener("click", function(x,y)
 	{    
 		if (application.i == 5)

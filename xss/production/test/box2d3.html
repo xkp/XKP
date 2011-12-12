@@ -181,7 +181,7 @@ function start(resolution)
         this.events = new ms.event.EventHolder(); 
                 this.size(50, 50);
                 var __physics1;
-				this.events.addListener('ev_resized', function(cmp)
+				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
                         g_world.DestroyBody(cmp.physics);
@@ -195,7 +195,7 @@ function start(resolution)
             current_body = g_world.CreateBody(bodyDef);
             current_body.CreateFixture(fixDef);
                 cmp.physics = current_body;
-                cmp.moved = update_body_position;
+                cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
 				);
@@ -270,7 +270,7 @@ window.onload = function()
             return new smiley_ball("images/smile_grin_48.png");
         }
             sp1.start();
-				__img1.events.addListener('ev_resized', function(cmp)
+				__img1.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
                         g_world.DestroyBody(cmp.physics);
@@ -285,7 +285,7 @@ window.onload = function()
             current_body = g_world.CreateBody(bodyDef);
             current_body.CreateFixture(fixDef);
                 cmp.physics = current_body;
-                cmp.moved = update_body_position;
+                cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
 				);
@@ -301,7 +301,7 @@ window.onload = function()
                         __img1.parent.removeComponent(__img1);
                     }
                 }
-				__img2.events.addListener('ev_resized', function(cmp)
+				__img2.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
                         g_world.DestroyBody(cmp.physics);
@@ -316,7 +316,7 @@ window.onload = function()
             current_body = g_world.CreateBody(bodyDef);
             current_body.CreateFixture(fixDef);
                 cmp.physics = current_body;
-                cmp.moved = update_body_position;
+                cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
 				);
@@ -332,7 +332,7 @@ window.onload = function()
                         __img2.parent.removeComponent(__img2);
                     }
                 }
-				__img3.events.addListener('ev_resized', function(cmp)
+				__img3.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
                         g_world.DestroyBody(cmp.physics);
@@ -347,7 +347,7 @@ window.onload = function()
             current_body = g_world.CreateBody(bodyDef);
             current_body.CreateFixture(fixDef);
                 cmp.physics = current_body;
-                cmp.moved = update_body_position;
+                cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
 				);
