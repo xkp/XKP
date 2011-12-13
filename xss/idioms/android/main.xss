@@ -71,7 +71,18 @@
 		"/res/drawable-hdpi/icon.png",
 		"/assets/.empty",
 		"/bin/.empty",
-		"/gen/.empty"
+		"/gen/.empty",
+		"/src/xkp/android/lib/Caller.java",
+		"/src/xkp/android/lib/Assign.java",
+		"/src/xkp/android/lib/Every.java",
+		"/src/xkp/android/lib/Handler.java",
+		"/src/xkp/android/lib/IExecutable.java",
+		"/src/xkp/android/lib/Interpolator.java",
+		"/src/xkp/android/lib/Interpolators.java",
+		"/src/xkp/android/lib/Key.java",
+		"/src/xkp/android/lib/Manager.java",
+		"/src/xkp/android/lib/OnUpdate.java",
+		"/src/xkp/android/lib/Sequence.java"
 	];
 	
 	for(string f in files)

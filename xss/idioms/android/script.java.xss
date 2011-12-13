@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import android.view.View;
+import xkp.android.lib.*;
 <xss:code>
 	compiler.inject("render_imports", clazz = clazz);
 	
@@ -255,6 +256,7 @@ import android.view.View;
 				super.onCreate(savedInstanceState);
 				setContentView(R.layout.main);
 				bindViews();
+				initModules();
 				initInstances();
 			<xss:close_brace/>
 			
@@ -337,6 +339,18 @@ import android.view.View;
 	{
 		out(indent = 0)
 		{
+			void initModules() <xss:open_brace/>
+		}
+	
+		compiler.inject("render_initialization", app = appName);
+	
+		out(indent = 0)
+		{
+			<xss:close_brace/>
+		}
+
+		out(indent = 0)
+		{
 			void initInstances() <xss:open_brace/>
 		}
 	
@@ -346,7 +360,7 @@ import android.view.View;
 		{
 			<xss:close_brace/>
 		}
-	}
+    }
 </xss:code>
 	
 <xss:marker id="events"/>
