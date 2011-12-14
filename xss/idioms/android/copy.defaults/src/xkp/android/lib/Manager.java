@@ -84,7 +84,7 @@ public  class Manager
 
         public void run() 
         {
-            owner_.update(owner_.frequence);
+            owner_.update(owner_.frequence*1000);
         }
 
         private Manager owner_;
