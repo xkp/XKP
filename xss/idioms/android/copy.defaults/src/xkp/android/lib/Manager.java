@@ -64,11 +64,11 @@ public  class Manager
     public IInterpolator interpolator(String typename)
     {
     	if (typename.equals("Integer"))
-    		return new NumericInterpolator<Integer>();	
+    		return new IntInterpolator();	
     	if (typename.equals("Float"))
-    		return new NumericInterpolator<Float>();	
+    		return new DoubleInterpolator();	
     	if (typename.equals("Double"))
-    		return new NumericInterpolator<Double>();
+    		return new DoubleInterpolator();
     	
     	return null;
     }

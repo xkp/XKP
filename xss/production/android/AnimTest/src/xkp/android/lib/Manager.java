@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -17,7 +19,10 @@ import java.util.TimerTask;
 public  class Manager 
 {
     private static Manager _instance;
+    
  
+    public double frequence = 1/30.0;
+    
     private Manager() 
     {  
     }
@@ -32,7 +37,7 @@ public  class Manager
         return _instance;
     }
 
-    public ArrayList sequences= new ArrayList();
+    public ArrayList<Sequence> sequences= new ArrayList<Sequence>();
     
     public void add(Sequence sequence)
     {
@@ -51,9 +56,21 @@ public  class Manager
     {
         for(int i = 0; i < this.sequences.size(); i++)
 		{
-		    Sequence seq=   (Sequence)this.sequences.get(i);
-                        seq.update(t);
+		    Sequence seq = (Sequence)this.sequences.get(i);
+            seq.update(t);
 		}
+    }
+    
+    public IInterpolator interpolator(String typename)
+    {
+    	if (typename.equals("Integer"))
+    		return new IntInterpolator();	
+    	if (typename.equals("Float"))
+    		return new DoubleInterpolator();	
+    	if (typename.equals("Double"))
+    		return new DoubleInterpolator();
+    	
+    	return null;
     }
 
     private Timer timer;
@@ -62,20 +79,21 @@ public  class Manager
     {
         public UpdateTask(Manager owner)
         {
-            owner_ = ownmer;
+            owner_ = owner;
         }
 
         public void run() 
         {
-            owner_.update(owner_.frequence);
+            owner_.update(owner_.frequence*1000);
         }
 
         private Manager owner_;
     }
-  }
+
     public void start(double freq)
     {
+    	frequence = freq;
         timer = new Timer();
-        timer.schedule(new UpdateTask(), 0, freq * 1000); //subsequent rate
+        timer.schedule(new UpdateTask(this), 0, (long)(freq * 1000)); 
     }
 }

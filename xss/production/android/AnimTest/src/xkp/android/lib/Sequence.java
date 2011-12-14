@@ -22,7 +22,7 @@ public class Sequence {
     public double time=0;
     public Sequence parent= null;
 
-    public Sequence(Manager man)
+    public Sequence()
     {
     }
 
