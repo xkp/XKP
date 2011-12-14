@@ -56,7 +56,7 @@ public  class Manager
     {
         for(int i = 0; i < this.sequences.size(); i++)
 		{
-		    Sequence seq = this.sequences.get(i);
+		    Sequence seq = (Sequence)this.sequences.get(i);
             seq.update(t);
 		}
     }
@@ -64,11 +64,11 @@ public  class Manager
     public IInterpolator interpolator(String typename)
     {
     	if (typename.equals("Integer"))
-    		return new NumericInterpolator<Integer>();	
+    		return new IntInterpolator();	
     	if (typename.equals("Float"))
-    		return new NumericInterpolator<Float>();	
+    		return new DoubleInterpolator();	
     	if (typename.equals("Double"))
-    		return new NumericInterpolator<Double>();
+    		return new DoubleInterpolator();
     	
     	return null;
     }
@@ -85,7 +85,7 @@ public  class Manager
         @Override
 		public void run() 
         {
-            owner_.update(owner_.frequence);
+            owner_.update(owner_.frequence*1000);
         }
 
         private Manager owner_;
