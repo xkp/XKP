@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class Interpolator extends Handler
 {
-    public Interpolators interpolator;
+    public IInterpolator interpolator;
     public Assign        assign;
     public ArrayList     keys = new ArrayList();
     
@@ -29,7 +29,8 @@ public class Interpolator extends Handler
         keys.add(key1);
     }
     
-    public void update(double t,double pt)  
+    @Override
+	public void update(double t,double pt)  
     {
         if (keys.isEmpty()|| this.keys.size() < 2)
             return; //fail
@@ -43,7 +44,7 @@ public class Interpolator extends Handler
             {
                 double tt = (t - k1.t)/(k2.t - k1.t);
                 //double value = this.interpolate(k1.value, k2.value, tt);
-                double value = this.interpolator.interpolate(k1.value, k2.value, tt);
+                Object value = this.interpolator.interpolate(k1.value, k2.value, tt);
                 this.assign.execute(target, value);
                 break;
             }
@@ -55,7 +56,7 @@ public class Interpolator extends Handler
         this.assign=a;
     }
     
-    public void defaultInterpolator(Interpolators i)
+    public void defaultInterpolator(IInterpolator i)
     {
         this.interpolator=i;
     }

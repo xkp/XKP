@@ -9,8 +9,9 @@ package xkp.android.lib;
  *
  * @author Adrian
  */
-public class Assign {
- public void execute(Object o,double value){
-
- }
+public class Assign 
+{
+	 public void execute(Object o, Object value)
+	 {
+	 }
 }

@@ -1,7 +1,6 @@
 package xkp.android.lib;
 
 import java.util.ArrayList;
-import java.util.Timer;
 
 /*
  * To change this template, choose Tools | Templates
@@ -22,7 +21,7 @@ public class Sequence {
     public double time=0;
     public Sequence parent= null;
 
-    public Sequence(Manager man)
+    public Sequence()
     {
     }
 

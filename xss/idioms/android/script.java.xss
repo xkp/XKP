@@ -170,7 +170,6 @@ import xkp.android.lib.*;
 					//TODO: implements call to arguments from classes by event name
 					out(indent = 1, marker = "events")
 					{
-						@Override
 						public <xss:e value="ret_type"/> <xss:e value="e.output_id"/>(<xss:e value="e.def_args"/>) <xss:open_brace/>
 							switch (v.getId()) <xss:open_brace/>
 					}

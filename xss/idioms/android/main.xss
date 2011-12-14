@@ -78,11 +78,12 @@
 		"/src/xkp/android/lib/Handler.java",
 		"/src/xkp/android/lib/IExecutable.java",
 		"/src/xkp/android/lib/Interpolator.java",
-		"/src/xkp/android/lib/Interpolators.java",
+		"/src/xkp/android/lib/IInterpolator.java",
 		"/src/xkp/android/lib/Key.java",
 		"/src/xkp/android/lib/Manager.java",
 		"/src/xkp/android/lib/OnUpdate.java",
-		"/src/xkp/android/lib/Sequence.java"
+		"/src/xkp/android/lib/Sequence.java",
+		"/src/xkp/android/lib/NumericInterpolator.java"
 	];
 	
 	for(string f in files)
@@ -98,6 +99,8 @@
 	output_filename = appName + "/res/layout/main.xml";
 	compiler.xss("layout.xml.xss", output_file = output_filename, appName, clazz = application);
 	
+	//TODO: implement these two components (replicator & switch) with script for component like this
+	//      maybe with a property inside components
 	if(bReplicator)
 	{
 		output_filename = appName + "/src/com/xkp/android/" + appName + "/XKPReplicator.java";
