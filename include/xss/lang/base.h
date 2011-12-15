@@ -59,6 +59,8 @@ struct base_code_renderer : ICodeRenderer,
     base_code_renderer(const base_code_renderer& other);
     base_code_renderer(code& cde, param_list_decl& params, XSSContext ctx, int indent = 0);
 
+    code& get_code();
+
     //ICodeRenderer
     virtual str     render();
     virtual XSSType type();

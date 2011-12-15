@@ -348,6 +348,11 @@ base_code_renderer::base_code_renderer(code& cde, param_list_decl& params, XSSCo
     lang_utils::var_gatherer(code_, ctx_);
   }
 
+code& base_code_renderer::get_code()
+  {
+    return code_;
+  }
+
 str base_code_renderer::render()
   {
     //resolve types of code context

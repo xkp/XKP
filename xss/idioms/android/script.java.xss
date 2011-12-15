@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import android.view.View;
-import xkp.android.lib.*;
 <xss:code>
 	compiler.inject("render_imports", clazz = clazz);
 	
@@ -257,6 +256,7 @@ import xkp.android.lib.*;
 				bindViews();
 				initModules();
 				initInstances();
+                Start();
 			<xss:close_brace/>
 			
 			private void bindViews() <xss:open_brace/>
@@ -339,13 +339,13 @@ import xkp.android.lib.*;
 		out(indent = 0)
 		{
 			void initModules() <xss:open_brace/>
-		}
-	
-		compiler.inject("render_initialization", app = appName);
-	
-		out(indent = 0)
-		{
-			<xss:close_brace/>
+    }
+
+    compiler.inject("render_initialization", app = appName);
+
+    out(indent = 0)
+    {
+    <xss:close_brace/>
 		}
 
 		out(indent = 0)
@@ -361,7 +361,37 @@ import xkp.android.lib.*;
 		}
     }
 </xss:code>
-	
+
+private double update_freq = 1/30.0;
+
+private void Update()
+{
+    runOnUiThread(new Runnable() 
+    {
+		public void run() 
+        {
+            double delta = update_freq;
+            <xss:code>
+                compiler.inject("render_update");
+            </xss:code>
+        }
+	});
+};
+        
+private void Start()
+{
+    Timer timer = new Timer();
+    timer.schedule(new TimerTask() 
+    {
+		@Override
+		public void run() 
+        {
+            Update();
+		} 
+        
+    }, 0, (long)(update_freq * 1000)); 
+}
+
 <xss:marker id="events"/>
 <xss:code>
 	if(is_type)

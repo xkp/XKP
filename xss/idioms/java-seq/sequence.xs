@@ -1,9 +1,11 @@
 
 on render_initialization()
 {
-	out()
+	out(marker="imports")
 	{
-        Manager.getInstance().start(1/30.0);
+        import java.util.Timer;
+        import java.util.TimerTask;
+        import xkp.android.lib.*;
 	}
 }
 
@@ -33,6 +35,6 @@ on render_update()
 {
 	out()
 	{
-		g_sequence_manager.update(g_delta);
+		Manager.getInstance().update(delta);
 	}
 }

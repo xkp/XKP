@@ -7,8 +7,19 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+						import android.widget.Button;
+						import android.text.method.KeyListener;
+						import android.view.View.OnClickListener;
+						import android.view.View.OnLongClickListener;
+						import android.view.MotionEvent;
+						import android.view.View.OnTouchListener;
+						import android.view.View.OnKeyListener;
+						import android.view.View.OnFocusChangeListener;
+			import android.app.Activity;
+			import android.os.Bundle;
+        import java.util.Timer;
+        import java.util.TimerTask;
+        import xkp.android.lib.*;
 		public class ActAnimTest 
 						extends Activity
 							implements OnClickListener
@@ -22,14 +33,14 @@ import android.widget.Button;
 				bindViews();
 				initModules();
 				initInstances();
+                Start();
 			}
 			private void bindViews() {
 				btn1 = (Button) findViewById(R.id.btn1);
 					btn1.setOnClickListener(this);
 	}
 			void initModules() {
-        Manager.getInstance().start(1/30.0);
-			}
+    }
 			void initInstances() {
 anim1 = new Sequence();
             anim1.parent_sequence = null;
@@ -52,6 +63,31 @@ anim1 = new Sequence();
 						____i1.addKey(3, 200);
 				anim1.addHandler(____i1);
 			}
+private double update_freq = 1/30.0;
+private void Update()
+{
+    runOnUiThread(new Runnable() 
+    {
+		public void run() 
+        {
+            double delta = update_freq;
+		Manager.getInstance().update(delta);
+	        }
+	});
+};
+private void Start()
+{
+    Timer timer = new Timer();
+    timer.schedule(new TimerTask() 
+    {
+		@Override
+		public void run() 
+        {
+            Update();
+		} 
+    }, 0, (long)(update_freq * 1000)); 
+}
+						@Override
 						public void onClick(View v) {
 							switch (v.getId()) {
 									case R.id.btn1:

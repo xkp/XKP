@@ -72,28 +72,4 @@ public  class Manager
     	
     	return null;
     }
-
-    private Timer timer;
-
-    class UpdateTask extends TimerTask 
-    {
-        public UpdateTask(Manager owner)
-        {
-            owner_ = owner;
-        }
-
-        public void run() 
-        {
-            owner_.update(owner_.frequence*1000);
-        }
-
-        private Manager owner_;
-    }
-
-    public void start(double freq)
-    {
-    	frequence = freq;
-        timer = new Timer();
-        timer.schedule(new UpdateTask(this), 0, (long)(freq * 1000)); 
-    }
 }

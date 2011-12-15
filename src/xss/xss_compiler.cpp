@@ -1072,6 +1072,12 @@ str xss_compiler::instantiate(variant v)
     return result;
   }
 
+str xss_compiler::file(fs::path path)
+  {
+    fs::path pp = app_path_ / path;
+    return load_file(pp);
+  }
+
 void xss_compiler::push_renderer(XSSRenderer renderer)
   {
     if (renderers_.empty())
@@ -1720,12 +1726,12 @@ void xss_compiler::read_application(const str& app_file)
         xss_throw(error);
       }
 
-    fs::path app_path = base_path_ / app_file;
+    app_path_ = base_path_ / app_file;
 
     //every application type will process a fresh copy of the application,
     //hence it will be parsed multiple times. A simple clone will save this operation
     //quite some ticks. Nonetheless I will do some minimal caching
-    str          def           = load_file(app_path);
+    str          def           = load_file(app_path_);
     bool         code_compiled = false;
     xs_container code;
 

@@ -76,20 +76,10 @@ struct waxjs_code_renderer : public base_code_renderer
 
 struct wax_utils
   {
-    wax_utils() 
-      {
-      }
+    wax_utils(); 
+    wax_utils(XSSCompiler compiler);
 
-    wax_utils(XSSCompiler compiler):
-      compiler_(compiler)
-      {
-      }
-
-    XSSMethod compile_page(XSSObject page, variant code)
-      {
-        assert(false);
-        return XSSMethod();
-      }
+    XSSMethod compile_page(XSSObject page, variant code);
 
     private:
       XSSCompiler compiler_;

@@ -169,6 +169,7 @@ namespace xkp
         XSSObject   analyze_expression(const str& expr, variant this_);
         bool        is_type(variant v);
         str         instantiate(variant v);
+        str         file(fs::path path);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -185,6 +186,7 @@ namespace xkp
         fs::path                            base_path_;
         fs::path                            project_path_;
         fs::path                            output_path_;
+        fs::path                            app_path_;
         fs::path                            compiling_;
         XSSRenderer                         entry_;
         bool                                use_event_instance_;
