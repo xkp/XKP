@@ -33,8 +33,17 @@ namespace xkp
         }
     };
     
-  typedef std::vector<tag> tag_list;
-  
+  struct tag_list
+    {
+      typedef std::vector<tag>::iterator iterator;
+      
+      iterator begin();
+      iterator end();
+      void     push_back(const tag t); 
+      private:
+        std::vector<tag> tags_;
+    };
+
   //content iterators
   typedef str::iterator iterator_t;
 

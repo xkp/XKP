@@ -27,6 +27,22 @@
 using namespace xkp;
 using namespace boost::spirit::classic;
 
+//tag_list
+tag_list::iterator tag_list::begin()  
+  {
+    return tags_.begin();
+  }
+
+tag_list::iterator tag_list::end()
+  {
+    return tags_.end();
+  }
+
+void tag_list::push_back(const tag t)
+  {
+    tags_.push_back(t);
+  }
+
 //an extremely simple html parser, at this point the htmls to be used are expected to
 //be correct, so we'll keep an intermediate representation of the tags
 

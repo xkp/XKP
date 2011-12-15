@@ -1,4 +1,5 @@
 #include <xss/lang/waxjs.h>
+#include <xss/html_parser.h>
 
 using namespace xkp;
 
@@ -6,6 +7,7 @@ const str SLanguage("language");
 
 const str SCannotForkOnIteration("Cannot perform asynchronic operations inside loops");
 const str SCodeAfterReturn("Unreachable code");
+const str SBadHTML("Errors parsing html");
 
 #define CHECK_ACTIVE  if (found_) return; curr_++;
 
@@ -702,3 +704,76 @@ str waxjs_code_renderer::split_method(XSSMethod method)
 
     return result.str();
   }
+
+//wax_utils
+wax_utils::wax_utils() 
+  {
+  }
+
+wax_utils::wax_utils(XSSCompiler compiler):
+  compiler_(compiler)
+  {
+  }
+
+XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
+  {
+  //  //do the html thing
+  //  str page_data = page->get<str>("src", str()); 
+  //  str html_text = compiler_->file(page_data);
+  //  html_parser parser;
+  //  tag_list    tags;
+  //  if (!parser.parse(html_text, tags))
+  //    {
+  //      param_list error;
+  //      error.add("id", SLanguage);
+  //      error.add("desc", SBadHTML);
+  //      error.add("file", page_data);
+  //      xss_throw(error);
+  //    }
+
+  //  //grab the code
+  //  waxjs_code_renderer* cr = variant_cast<waxjs_code_renderer*>(code_renderer, null); assert(cr);
+  //  
+  //  //create a method to be rendered later
+  //  str page_id = page->get<str>("id", str()); 
+  //  XSSMethod result(new xss_method(page_id, XSSType(), variant(), code_renderer));
+  //  result->add_attribute("asynch",   true);
+  //  result->add_attribute("wax_page", true);
+
+  //  //here comes tricky, every registered element will get its own instance
+  //  //then the code will be analyzed to find the changes intended for the html
+  //  XSSContext ctx(new xss_context(compiler_->current_context()));
+  //  DynamicArray elements = page->children();
+		//std::vector<variant>::iterator it = elements->ref_begin();
+		//std::vector<variant>::iterator nd = elements->ref_end();
+
+  //  //std::map<int, >
+  //  for(; it != nd; it++)
+  //    {
+  //      XSSObject elem = *it;
+  //      str       eid  = elem->id();
+  //      Object45  symbol(new object_45);
+
+
+  //      //let the script know
+  //      ctx->register_symbol(RESOLVE_INSTANCE, eid, symbol);
+  //    }
+
+  //  //then, masterfully I must say, I just have to apply any 
+  //  //serious visitor and the properties the user intends to modify
+  //  //get attached to our 45
+
+  //  //in this case we just inquire the return type
+  //  code& cde = cr->get_code();
+  //  
+  //  code_type_resolver tr(ctx, cde);
+  //  cde.visit(&tr);
+
+  //  //wait, not over yet... now we must split the html along the modifiers,
+  //  //and generate the the oh sweet code.
+
+
+  //  return result;
+    return XSSMethod();
+  }
+
