@@ -29,8 +29,7 @@ public class Interpolator extends Handler
         keys.add(key1);
     }
     
-    @Override
-	public void update(double t,double pt)  
+    public void update(double t,double pt)  
     {
         if (keys.isEmpty()|| this.keys.size() < 2)
             return; //fail

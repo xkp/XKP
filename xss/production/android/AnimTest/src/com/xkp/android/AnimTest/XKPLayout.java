@@ -336,11 +336,12 @@ public class XKPLayout extends ViewGroup {
 			}
 		}
 		public void setLeft(int left) {
-			Log.d("setLeft", "inside");
+			Log.d("XKPLayout.Log", String.valueOf(left));
 			this.x = left;
 			this.origins.left = left;
 			if (parentXkpLayout != null) {
 				parentXkpLayout.requestLayout();
+				parentXkpLayout.invalidate();
 			}
 		}
 		public void setTop(int top) {

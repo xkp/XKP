@@ -79,12 +79,12 @@
 		"/src/xkp/android/lib/IExecutable.java",
 		"/src/xkp/android/lib/Interpolator.java",
 		"/src/xkp/android/lib/IntInterpolator.java",
+		"/src/xkp/android/lib/IInterpolator.java",
 		"/src/xkp/android/lib/DoubleInterpolator.java",
 		"/src/xkp/android/lib/Key.java",
 		"/src/xkp/android/lib/Manager.java",
 		"/src/xkp/android/lib/OnUpdate.java",
-		"/src/xkp/android/lib/Sequence.java",
-		"/src/xkp/android/lib/NumericInterpolator.java"
+		"/src/xkp/android/lib/Sequence.java"
 	];
 	
 	for(string f in files)

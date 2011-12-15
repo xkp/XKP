@@ -82,8 +82,7 @@ public  class Manager
             owner_ = owner;
         }
 
-        @Override
-		public void run() 
+        public void run() 
         {
             owner_.update(owner_.frequence*1000);
         }
