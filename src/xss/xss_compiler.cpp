@@ -1106,7 +1106,9 @@ XSSRenderer xss_compiler::previous_renderer()
     if (renderers_.size() < 2)
       return XSSRenderer();
 
-    return renderers_._Get_container().at(renderers_.size() - 2);
+    // compile error C2039: '_Get_container' : is not a member of 'std::stack<_Ty>'
+    //return renderers_._Get_container().at(renderers_.size() - 2);
+    return renderers_.c.at(renderers_.size() - 2);
   }
 
 XSSRenderer xss_compiler::entry_renderer()
