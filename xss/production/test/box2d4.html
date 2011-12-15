@@ -225,7 +225,7 @@ function start(resolution)
 				);
                 if (this.w > 0 && this.h > 0)
                 {
-					this.events.dispatch("ev_resized", [this]);                     
+					this.events.dispatch("resized", [this]);                     
                 }
                 this.RemoveFromWorld = function(keep_visual) 
                 {
@@ -327,7 +327,7 @@ fade_out.start();
 				);
                 if (this.w > 0 && this.h > 0)
                 {
-					this.events.dispatch("ev_resized", [this]);                     
+					this.events.dispatch("resized", [this]);                     
                 }
                 this.RemoveFromWorld = function(keep_visual) 
                 {
@@ -391,7 +391,7 @@ g_sequence_manager);
 				);
                 if (this.w > 0 && this.h > 0)
                 {
-					this.events.dispatch("ev_resized", [this]);                     
+					this.events.dispatch("resized", [this]);                     
                 }
                 this.RemoveFromWorld = function(keep_visual) 
                 {
@@ -446,7 +446,7 @@ ev_parent.RemoveFromWorld();
 				);
                 if (this.w > 0 && this.h > 0)
                 {
-					this.events.dispatch("ev_resized", [this]);                     
+					this.events.dispatch("resized", [this]);                     
                 }
                 this.RemoveFromWorld = function(keep_visual) 
                 {

@@ -1,11 +1,6 @@
 package com.xkp.android.AnimTest;
-import xkp.android.lib.Assign;
-import xkp.android.lib.Interpolator;
-import xkp.android.lib.Manager;
-import xkp.android.lib.Sequence;
-import android.app.Activity;
-import android.os.Bundle;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.Arrays;
 import android.view.View;
 						import android.widget.Button;
 						import android.text.method.KeyListener;
@@ -50,12 +45,7 @@ anim1 = new Sequence();
 				   ____i1.setAssign(new Assign(){
 								public void execute(Object t,Object value){
 								Button btn1 = (Button)t;
-								//Log.d("execute", "value = " + value.toString());
-								Integer i = (Integer)value;
-								int ii = (int) i;
-								((XKPLayout.LayoutParams) btn1.getLayoutParams()).setLeft(ii);
-								//((XKPLayout.LayoutParams) btn1.getLayoutParams()).setLeft((Integer)value);
-								//Log.d("execute", "after");
+								((XKPLayout.LayoutParams) btn1.getLayoutParams()).setLeft((Integer)value);
 								}
 								});
 				   ____i1.defaultInterpolator(Manager.getInstance().interpolator("Integer"));	
@@ -87,7 +77,6 @@ private void Start()
 		} 
     }, 0, (long)(update_freq * 1000)); 
 }
-						@Override
 						public void onClick(View v) {
 							switch (v.getId()) {
 									case R.id.btn1:
@@ -96,10 +85,6 @@ private void Start()
 						} //switch
 						}
 			private void onClickbtn1() {
-				
-				//for(Object v = new Object({2, 3});
 				anim1.start();
-				Log.d("execute", "click = " + String.valueOf(btn1.getLeft()));
-				((XKPLayout.LayoutParams) btn1.getLayoutParams()).setLeft(btn1.getLeft());
 			}
 }

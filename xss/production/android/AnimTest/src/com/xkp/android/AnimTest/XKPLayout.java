@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 public class XKPLayout extends ViewGroup {
-	private static final boolean DEBUG = true;
+	//private static final boolean DEBUG = true;
 	private int mPaddingLeft = 0;
 	private int mPaddingRight = 0;
 	private int mPaddingTop = 0;
@@ -336,12 +336,10 @@ public class XKPLayout extends ViewGroup {
 			}
 		}
 		public void setLeft(int left) {
-			Log.d("XKPLayout.Log", String.valueOf(left));
 			this.x = left;
 			this.origins.left = left;
 			if (parentXkpLayout != null) {
 				parentXkpLayout.requestLayout();
-				parentXkpLayout.invalidate();
 			}
 		}
 		public void setTop(int top) {

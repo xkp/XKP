@@ -45,6 +45,29 @@ import android.view.View;
 				prop_character_img_src_set(ta.getString(R.styleable.character_img_src));
 			ta.recycle();
 			}
+private double update_freq = 1/30.0;
+private void Update()
+{
+    runOnUiThread(new Runnable() 
+    {
+		public void run() 
+        {
+            double delta = update_freq;
+                    }
+	});
+};
+private void Start()
+{
+    Timer timer = new Timer();
+    timer.schedule(new TimerTask() 
+    {
+		@Override
+		public void run() 
+        {
+            Update();
+		} 
+    }, 0, (long)(update_freq * 1000)); 
+}
 			public String prop_character_name_get() {
 				return lname.getText().toString();
 			}

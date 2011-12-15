@@ -63,7 +63,7 @@ public class Sequence {
 		}
           }
             double pt = this.time;
-            this.time += t/1000.0;
+            this.time += t;
             
             for(int i = 0; i < this.handlers.size(); i++)
 		{

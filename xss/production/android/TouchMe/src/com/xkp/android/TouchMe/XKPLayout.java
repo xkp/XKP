@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 public class XKPLayout extends ViewGroup {
-	private static final boolean DEBUG = true;
+	//private static final boolean DEBUG = true;
 	private int mPaddingLeft = 0;
 	private int mPaddingRight = 0;
 	private int mPaddingTop = 0;

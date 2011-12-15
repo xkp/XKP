@@ -2,8 +2,6 @@ package com.xkp.android.Contacts;
 import java.util.ArrayList;
 import java.util.Arrays;
 import android.view.View;
-			import android.app.Activity;
-			import android.os.Bundle;
 						import android.widget.Button;
 						import android.text.method.KeyListener;
 						import android.view.View.OnClickListener;
@@ -18,6 +16,8 @@ import android.view.View;
 						import android.widget.CompoundButton;
 						import android.widget.CompoundButton.OnCheckedChangeListener;
 						import android.widget.RadioButton;
+			import android.app.Activity;
+			import android.os.Bundle;
 		public class ActContacts 
 						extends Activity
 							implements OnClickListener
@@ -48,7 +48,9 @@ import android.view.View;
 				super.onCreate(savedInstanceState);
 				setContentView(R.layout.main);
 				bindViews();
+				initModules();
 				initInstances();
+                Start();
 			}
 			private void bindViews() {
 				__div1 = (XKPLayout) findViewById(R.id.__div1);
@@ -75,9 +77,33 @@ import android.view.View;
 				lblName = (TextView) findViewById(R.id.lblName);
 				lblContact = (TextView) findViewById(R.id.lblContact);
 	}
+			void initModules() {
+    }
 			void initInstances() {
 			}
-						@Override
+private double update_freq = 1/30.0;
+private void Update()
+{
+    runOnUiThread(new Runnable() 
+    {
+		public void run() 
+        {
+            double delta = update_freq;
+                    }
+	});
+};
+private void Start()
+{
+    Timer timer = new Timer();
+    timer.schedule(new TimerTask() 
+    {
+		@Override
+		public void run() 
+        {
+            Update();
+		} 
+    }, 0, (long)(update_freq * 1000)); 
+}
 						public void onClick(View v) {
 							switch (v.getId()) {
 									case R.id.btnLeft:
@@ -88,7 +114,6 @@ import android.view.View;
 										break;
 						} //switch
 						}
-						@Override
 						public void onCheckedChanged(CompoundButton v, Boolean isChecked) {
 							switch (v.getId()) {
 									case R.id.chkVerifier:

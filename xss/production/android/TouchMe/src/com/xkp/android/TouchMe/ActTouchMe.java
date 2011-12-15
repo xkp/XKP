@@ -2,8 +2,6 @@ package com.xkp.android.TouchMe;
 import java.util.ArrayList;
 import java.util.Arrays;
 import android.view.View;
-			import android.app.Activity;
-			import android.os.Bundle;
 						import android.widget.Button;
 						import android.text.method.KeyListener;
 						import android.view.View.OnClickListener;
@@ -12,6 +10,8 @@ import android.view.View;
 						import android.view.View.OnTouchListener;
 						import android.view.View.OnKeyListener;
 						import android.view.View.OnFocusChangeListener;
+			import android.app.Activity;
+			import android.os.Bundle;
 		public class ActTouchMe 
 						extends Activity
 							implements OnTouchListener
@@ -22,15 +22,41 @@ import android.view.View;
 				super.onCreate(savedInstanceState);
 				setContentView(R.layout.main);
 				bindViews();
+				initModules();
 				initInstances();
+                Start();
 			}
 			private void bindViews() {
 				btnTouchme = (Button) findViewById(R.id.btnTouchme);
 					btnTouchme.setOnTouchListener(this);
 	}
+			void initModules() {
+    }
 			void initInstances() {
 			}
-						@Override
+private double update_freq = 1/30.0;
+private void Update()
+{
+    runOnUiThread(new Runnable() 
+    {
+		public void run() 
+        {
+            double delta = update_freq;
+                    }
+	});
+};
+private void Start()
+{
+    Timer timer = new Timer();
+    timer.schedule(new TimerTask() 
+    {
+		@Override
+		public void run() 
+        {
+            Update();
+		} 
+    }, 0, (long)(update_freq * 1000)); 
+}
 						public boolean onTouch(View v, MotionEvent ev) {
 							switch (v.getId()) {
 									case R.id.btnTouchme:

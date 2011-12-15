@@ -9,6 +9,9 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -17,6 +20,7 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
@@ -158,12 +162,14 @@ window.onload = function()
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",test1.manager, test1);
                 btn1.set_rotation(0.200000003);
-	btn1.click = function()
+	var ev_parent = this;
+	btn1.events.addListener("click", function()
 	{    
 		application.clicks = application.clicks + 1;
 lbl1.text("Got " + application.clicks + " smileys");
 btn1.set_rotation(btn1.get_rotation() + 0.200000003);
-	};
+	}
+	);
  btn1.center(50, 50); 
 		    test2 = new ms.ui.Component( 
 	    main.manager, main);test2.mouse_thru = true;
@@ -172,17 +178,21 @@ btn1.set_rotation(btn1.get_rotation() + 0.200000003);
  pb1.center(150, 10); 
 		    btn2 = new ms.ui.Image( 
 	    "images/arrow_left.png",test2.manager, test2);
-	btn2.click = function()
+	var ev_parent = this;
+	btn2.events.addListener("click", function()
 	{    
 		pb1.value(pb1.get_value() - 1);
-	};
+	}
+	);
                 btn2.rect(200, 115, 20, 20);
 		    btn3 = new ms.ui.Image( 
 	    "images/arrow_right.png",test2.manager, test2);
-	btn3.click = function()
+	var ev_parent = this;
+	btn3.events.addListener("click", function()
 	{    
 		pb1.value(pb1.get_value() + 1);
-	};
+	}
+	);
                 btn3.rect(380, 115, 20, 20);
 		    lbl2 = new ms.ui.Label( 
 	    "Verdana",test2.manager, test2);
@@ -191,25 +201,29 @@ btn1.set_rotation(btn1.get_rotation() + 0.200000003);
                 lbl2.position(210, 200);
 		    btnNext = new ms.ui.Button( 
 	    "images/arrow_right_green_48.png","images/arrow_right_48.png",g_ui_root.manager, g_ui_root);
-	btnNext.click = function()
+	var ev_parent = this;
+	btnNext.events.addListener("click", function()
 	{    
 		if (main.get_active() < main.count() - 1)
 {
 main.active(main.get_active() + 1);
 }
 btnNext.set_rotation(btnNext.get_rotation() + 0.200000003);
-	};
+	}
+	);
                 btnNext.rect(320, 300, 100, 50);
 		    btnPrev = new ms.ui.Button( 
 	    "images/arrow_left_green_48.png","images/arrow_left_48.png",g_ui_root.manager, g_ui_root);
                 btnPrev.set_rotation(0.400000006);
-	btnPrev.click = function()
+	var ev_parent = this;
+	btnPrev.events.addListener("click", function()
 	{    
 		if (main.get_active() > 0)
 {
 main.active(main.get_active() - 1);
 }
-	};
+	}
+	);
                 btnPrev.rect(220, 300, 50, 50);
 			document.onkeydown = function(ev)
 			{
@@ -238,8 +252,5 @@ main.active(main.get_active() - 1);
 	<canvas id="myCanvas" width="600" height="400">
 		<p>Your browser doesn't support canvas.</p>
 	</canvas>
-	<audio id="sounds" preload> 
-	Your browser does not support the audio element.
-	</audio>
 </body>
 </html>

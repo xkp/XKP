@@ -1,83 +1,741 @@
 
-===[ 3js-ms.project.xml ]================
+===[ animtest.project.xml ]================
+
+Log: Rendering Android project...
+Log: API Level = 4
+Log: ### Begin Rendering Android Types...
+Log: ### End Rendering Android Types...
+Log: Rendering Sequence Types...
+Log: ### Begin Rendering Android Imports...
+Log: Adding import android.widget.Button on android
+Log: Adding import android.text.method.KeyListener on android
+Log: Adding import android.view.View.OnClickListener on android
+Log: Adding import android.view.View.OnLongClickListener on android
+Log: Adding import android.view.MotionEvent on android
+Log: Adding import android.view.View.OnTouchListener on android
+Log: Adding import android.view.View.OnKeyListener on android
+Log: Adding import android.view.View.OnFocusChangeListener on android
+Log: ### End Rendering Android Imports...
+Log: Adding interface OnClickListener on android
+Log: Rendering Sequence...
+Log: -- Rendering instance: anim1
+Log: Properties size: 0
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: btn1
+Log: Properties size: 5
+Log: Methods size: 0
+Log: Events size: 1
+Log: Rendering event: click
+Log: -- Rendering instance: application
+Log: Properties size: 0
+Log: Methods size: 0
+Log: Events size: 0
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/values/attrs.xml
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/assets/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/bin/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/gen/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/src/xkp/android/lib/Caller.java
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/src/xkp/android/lib/Assign.java
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/src/xkp/android/lib/Every.java
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/src/xkp/android/lib/Handler.java
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/src/xkp/android/lib/IExecutable.java
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/src/xkp/android/lib/Interpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/src/xkp/android/lib/IntInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/src/xkp/android/lib/IInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/src/xkp/android/lib/DoubleInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/src/xkp/android/lib/Key.java
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/src/xkp/android/lib/Manager.java
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/src/xkp/android/lib/OnUpdate.java
+Log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/src/xkp/android/lib/Sequence.java
+
+Success are greateful
+===[ characters.project.xml ]================
+
+Log: Rendering Android project...
+Log: API Level = 4
+Log: ### Begin Rendering Android Types...
+Log: ### Begin Rendering Android Imports...
+Log: Adding import android.widget.ImageView on character
+Log: Adding import android.view.View.OnClickListener on character
+Log: Adding import android.view.View.OnLongClickListener on character
+Log: Adding import android.view.MotionEvent on character
+Log: Adding import android.view.View.OnTouchListener on character
+Log: Adding import android.view.View.OnKeyListener on character
+Log: Adding import android.view.View.OnFocusChangeListener on character
+Log: Adding import android.widget.TextView on character
+Log: Adding import android.text.method.KeyListener on character
+Log: ### End Rendering Android Imports...
+Log: Custom class character...
+Log: -- Rendering instance: picture
+Log: Properties size: 4
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: lname
+Log: Properties size: 4
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: lsurname
+Log: Properties size: 4
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: lemployment
+Log: Properties size: 4
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering class: character
+Log: Properties size: 8
+Log: Rendering property: width
+Log: Rendering property: height
+Log: Rendering property: padding
+Log: Rendering property: img_src
+Log: Rendering property: name
+Log: Rendering property: surname
+Log: Rendering property: employment
+Log: Rendering property: img_src
+Log: Methods size: 2
+Log: Rendering method: foo
+Log: Rendering method: bar
+Log: Events size: 0
+Log: ### End Rendering Android Types...
+Log: ### Begin Rendering Android Imports...
+Log: ### End Rendering Android Imports...
+Log: Begin Rendering Resources Instances...
+Log: Copying resource file d:/xkp/xss/samples/android/characters/resources/aladdin.png
+Log: Copying resource file d:/xkp/xss/samples/android/characters/resources/mickey.png
+Log: Copying resource file d:/xkp/xss/samples/android/characters/resources/pluto.png
+Log: Copying resource file d:/xkp/xss/samples/android/characters/resources/audio1.ogg
+Log: Copying resource file d:/xkp/xss/samples/android/characters/resources/audio2.ogg
+Log: Copying resource file d:/xkp/xss/samples/android/characters/resources/mickey.3gp
+Log: Copying resource file d:/xkp/xss/samples/android/characters/resources/pluto.3gp
+Log: End Rendering Resources Instances...
+Log: -- Rendering instance: aladdin
+Log: Properties size: 5
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: mickey
+Log: Properties size: 5
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: pluto
+Log: Properties size: 5
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: application
+Log: Properties size: 0
+Log: Methods size: 0
+Log: Events size: 0
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/values/attrs.xml
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/assets/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/bin/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/gen/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/src/xkp/android/lib/Caller.java
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/src/xkp/android/lib/Assign.java
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/src/xkp/android/lib/Every.java
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/src/xkp/android/lib/Handler.java
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/src/xkp/android/lib/IExecutable.java
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/src/xkp/android/lib/Interpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/src/xkp/android/lib/IntInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/src/xkp/android/lib/IInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/src/xkp/android/lib/DoubleInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/src/xkp/android/lib/Key.java
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/src/xkp/android/lib/Manager.java
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/src/xkp/android/lib/OnUpdate.java
+Log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/src/xkp/android/lib/Sequence.java
+
+Success are greateful
+===[ contacts.project.xml ]================
+
+Log: Rendering Android project...
+Log: API Level = 4
+Log: ### Begin Rendering Android Types...
+Log: ### End Rendering Android Types...
+Log: ### Begin Rendering Android Imports...
+Log: Adding import android.widget.Button on android
+Log: Adding import android.text.method.KeyListener on android
+Log: Adding import android.view.View.OnClickListener on android
+Log: Adding import android.view.View.OnLongClickListener on android
+Log: Adding import android.view.MotionEvent on android
+Log: Adding import android.view.View.OnTouchListener on android
+Log: Adding import android.view.View.OnKeyListener on android
+Log: Adding import android.view.View.OnFocusChangeListener on android
+Log: Adding import android.widget.TextView on android
+Log: Adding import android.widget.EditText on android
+Log: Adding import android.widget.CheckBox on android
+Log: Adding import android.widget.CompoundButton on android
+Log: Adding import android.widget.CompoundButton.OnCheckedChangeListener on android
+Log: Adding import android.widget.RadioButton on android
+Log: ### End Rendering Android Imports...
+Log: Adding interface OnClickListener on android
+Log: Adding interface OnCheckedChangeListener on android
+Log: -- Rendering instance: 
+Log: Properties size: 2
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: btnLeft
+Log: Properties size: 3
+Log: Methods size: 0
+Log: Events size: 1
+Log: Rendering event: click
+Log: -- Rendering instance: btnRight
+Log: Properties size: 3
+Log: Methods size: 0
+Log: Events size: 1
+Log: Rendering event: click
+Log: -- Rendering instance: swtStates
+Log: Properties size: 2
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: divAdd
+Log: Properties size: 1
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: lblFullName
+Log: Properties size: 5
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: lblPhone
+Log: Properties size: 5
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: edtFullName
+Log: Properties size: 4
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: edtPhoneNumber
+Log: Properties size: 4
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: chkVerifier
+Log: Properties size: 6
+Log: Methods size: 0
+Log: Events size: 1
+Log: Rendering event: change
+Log: -- Rendering instance: btnAddContact
+Log: Properties size: 3
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: divFind
+Log: Properties size: 1
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: lblFindType
+Log: Properties size: 5
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: rdbByName
+Log: Properties size: 6
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: rdbByPhone
+Log: Properties size: 5
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: lblCriterion
+Log: Properties size: 5
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: edtCriterion
+Log: Properties size: 4
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: divAbout
+Log: Properties size: 1
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: lblName
+Log: Properties size: 3
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: lblContact
+Log: Properties size: 3
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: application
+Log: Properties size: 1
+Log: Rendering property: swtTabsTexts
+Log: Methods size: 1
+Log: Rendering method: getSwitchText
+Log: Events size: 1
+Log: Rendering event: creation
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/values/attrs.xml
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/assets/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/bin/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/gen/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/lib/Caller.java
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/lib/Assign.java
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/lib/Every.java
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/lib/Handler.java
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/lib/IExecutable.java
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/lib/Interpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/lib/IntInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/lib/IInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/lib/DoubleInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/lib/Key.java
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/lib/Manager.java
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/lib/OnUpdate.java
+Log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/lib/Sequence.java
+
+Success are greateful
+===[ gallery.project.xml ]================
+
+Log: Rendering Android project...
+Log: API Level = 4
+Log: ### Begin Rendering Android Types...
+Log: ### End Rendering Android Types...
+Log: ### Begin Rendering Android Imports...
+Log: Adding import android.widget.Gallery on android
+Log: Adding import android.view.View.OnClickListener on android
+Log: Adding import android.view.View.OnLongClickListener on android
+Log: Adding import android.view.MotionEvent on android
+Log: Adding import android.view.View.OnTouchListener on android
+Log: Adding import android.view.View.OnKeyListener on android
+Log: Adding import android.view.View.OnFocusChangeListener on android
+Log: Adding import android.view.ViewGroup on android
+Log: Adding import android.widget.ImageView on android
+Log: Adding import android.widget.BaseAdapter on android
+Log: Adding import android.content.Context on android
+Log: ### End Rendering Android Imports...
+Log: Adding class ImageAdapter on android
+Log: Begin Rendering Resources Instances...
+Log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_1.jpg
+Log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_2.jpg
+Log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_3.jpg
+Log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_4.jpg
+Log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_5.jpg
+Log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_6.jpg
+Log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_7.jpg
+Log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_8.jpg
+Log: End Rendering Resources Instances...
+Log: -- Rendering instance: gallery
+Log: Properties size: 5
+Log: Rendering property: images
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: application
+Log: Properties size: 0
+Log: Methods size: 0
+Log: Events size: 0
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/values/attrs.xml
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/assets/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/bin/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/gen/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/src/xkp/android/lib/Caller.java
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/src/xkp/android/lib/Assign.java
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/src/xkp/android/lib/Every.java
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/src/xkp/android/lib/Handler.java
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/src/xkp/android/lib/IExecutable.java
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/src/xkp/android/lib/Interpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/src/xkp/android/lib/IntInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/src/xkp/android/lib/IInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/src/xkp/android/lib/DoubleInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/src/xkp/android/lib/Key.java
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/src/xkp/android/lib/Manager.java
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/src/xkp/android/lib/OnUpdate.java
+Log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/src/xkp/android/lib/Sequence.java
+
+Success are greateful
+===[ kitchensink.project.xml ]================
+
+Log: Rendering Android project...
+Log: API Level = 4
+Log: ### Begin Rendering Android Types...
+Log: ### End Rendering Android Types...
+Log: ### Begin Rendering Android Imports...
+Log: Adding import android.view.ViewGroup on android
+Log: Adding import android.widget.TabHost on android
+Log: Adding import android.widget.TabHost.TabSpec on android
+Log: Adding import android.widget.TabHost.TabContentFactory on android
+Log: Adding import android.widget.TabHost.OnTabChangeListener on android
+Log: Adding import android.view.View.OnClickListener on android
+Log: Adding import android.view.View.OnLongClickListener on android
+Log: Adding import android.view.MotionEvent on android
+Log: Adding import android.view.View.OnTouchListener on android
+Log: Adding import android.view.View.OnKeyListener on android
+Log: Adding import android.view.View.OnFocusChangeListener on android
+Log: Adding import android.widget.Button on android
+Log: Adding import android.text.method.KeyListener on android
+Log: Adding import android.widget.ToggleButton on android
+Log: Adding import android.widget.ImageButton on android
+Log: Adding import android.widget.ImageView on android
+Log: Adding import android.widget.TextView on android
+Log: Adding import android.widget.EditText on android
+Log: Adding import android.widget.CheckBox on android
+Log: Adding import android.widget.CompoundButton on android
+Log: Adding import android.widget.CompoundButton.OnCheckedChangeListener on android
+Log: Adding import android.widget.ScrollView on android
+Log: Adding import android.widget.RadioGroup on android
+Log: Adding import android.widget.RadioGroup.OnCheckedChangeListener on android
+Log: Adding import android.widget.RadioButton on android
+Log: Adding import android.widget.ProgressBar on android
+Log: Adding import android.widget.SeekBar on android
+Log: Adding import android.widget.SeekBar.OnSeekBarChangeListener on android
+Log: ### End Rendering Android Imports...
+Log: Begin Rendering Resources Instances...
+Log: Copying resource file d:/xkp/xss/samples/android/kitchensink/images/dialog.png
+Log: Copying resource file d:/xkp/xss/samples/android/kitchensink/images/emulator.png
+Log: End Rendering Resources Instances...
+Log: -- Rendering instance: kitchen
+Log: Properties size: 2
+Log: Rendering property: tabs
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: 
+Log: Properties size: 2
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: btn1
+Log: Properties size: 3
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: toggle1
+Log: Properties size: 4
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: imgbtn1
+Log: Properties size: 3
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: lbl1
+Log: Properties size: 3
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: edit1
+Log: Properties size: 4
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: chkb1
+Log: Properties size: 3
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: 
+Log: Properties size: 2
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: rdgTab3
+Log: Properties size: 1
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: radio1
+Log: Properties size: 1
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: radio2
+Log: Properties size: 1
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: radio3
+Log: Properties size: 1
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: radio4
+Log: Properties size: 1
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: radio5
+Log: Properties size: 1
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: radio6
+Log: Properties size: 1
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: radio7
+Log: Properties size: 1
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: radio8
+Log: Properties size: 1
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: radio9
+Log: Properties size: 1
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: 
+Log: Properties size: 2
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: img1
+Log: Properties size: 1
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: 
+Log: Properties size: 2
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: prgbar1
+Log: Properties size: 3
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: prgbar2
+Log: Properties size: 3
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: prgbar3
+Log: Properties size: 3
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: prgbar4
+Log: Properties size: 7
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: seekb1
+Log: Properties size: 6
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: application
+Log: Properties size: 0
+Log: Methods size: 0
+Log: Events size: 0
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/values/attrs.xml
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/assets/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/bin/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/gen/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/src/xkp/android/lib/Caller.java
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/src/xkp/android/lib/Assign.java
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/src/xkp/android/lib/Every.java
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/src/xkp/android/lib/Handler.java
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/src/xkp/android/lib/IExecutable.java
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/src/xkp/android/lib/Interpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/src/xkp/android/lib/IntInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/src/xkp/android/lib/IInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/src/xkp/android/lib/DoubleInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/src/xkp/android/lib/Key.java
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/src/xkp/android/lib/Manager.java
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/src/xkp/android/lib/OnUpdate.java
+Log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/src/xkp/android/lib/Sequence.java
+
+Success are greateful
+===[ simple.project.xml ]================
+
+Log: Rendering Android project...
+Log: API Level = 4
+Log: ### Begin Rendering Android Types...
+Log: ### End Rendering Android Types...
+Log: ### Begin Rendering Android Imports...
+Log: Adding import android.widget.TextView on android
+Log: Adding import android.text.method.KeyListener on android
+Log: Adding import android.view.View.OnClickListener on android
+Log: Adding import android.view.View.OnLongClickListener on android
+Log: Adding import android.view.MotionEvent on android
+Log: Adding import android.view.View.OnTouchListener on android
+Log: Adding import android.view.View.OnKeyListener on android
+Log: Adding import android.view.View.OnFocusChangeListener on android
+Log: Adding import android.widget.EditText on android
+Log: Adding import android.widget.Button on android
+Log: ### End Rendering Android Imports...
+Log: Adding interface OnClickListener on android
+Log: -- Rendering instance: lblFirstName
+Log: Properties size: 5
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: edtFirstName
+Log: Properties size: 5
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: lblLastName
+Log: Properties size: 5
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: edtLastName
+Log: Properties size: 5
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: btnFullName
+Log: Properties size: 5
+Log: Methods size: 0
+Log: Events size: 1
+Log: Rendering event: click
+Log: -- Rendering instance: lblFullName
+Log: Properties size: 5
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: edtContainer
+Log: Properties size: 6
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: application
+Log: Properties size: 0
+Log: Methods size: 0
+Log: Events size: 0
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/values/attrs.xml
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/assets/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/bin/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/gen/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/src/xkp/android/lib/Caller.java
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/src/xkp/android/lib/Assign.java
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/src/xkp/android/lib/Every.java
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/src/xkp/android/lib/Handler.java
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/src/xkp/android/lib/IExecutable.java
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/src/xkp/android/lib/Interpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/src/xkp/android/lib/IntInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/src/xkp/android/lib/IInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/src/xkp/android/lib/DoubleInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/src/xkp/android/lib/Key.java
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/src/xkp/android/lib/Manager.java
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/src/xkp/android/lib/OnUpdate.java
+Log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/src/xkp/android/lib/Sequence.java
+
+Success are greateful
+===[ touchme.project.xml ]================
+
+Log: Rendering Android project...
+Log: API Level = 4
+Log: ### Begin Rendering Android Types...
+Log: ### End Rendering Android Types...
+Log: ### Begin Rendering Android Imports...
+Log: Adding import android.widget.Button on android
+Log: Adding import android.text.method.KeyListener on android
+Log: Adding import android.view.View.OnClickListener on android
+Log: Adding import android.view.View.OnLongClickListener on android
+Log: Adding import android.view.MotionEvent on android
+Log: Adding import android.view.View.OnTouchListener on android
+Log: Adding import android.view.View.OnKeyListener on android
+Log: Adding import android.view.View.OnFocusChangeListener on android
+Log: ### End Rendering Android Imports...
+Log: Adding interface OnTouchListener on android
+Log: -- Rendering instance: btnTouchme
+Log: Properties size: 11
+Log: Rendering property: MAX_DELTHA
+Log: Rendering property: FIRST_QUATER
+Log: Rendering property: SECOND_QUATER
+Log: Rendering property: THIRD_QUATER
+Log: Rendering property: FOURTH_QUATER
+Log: Rendering property: mStartX
+Log: Rendering property: mStartY
+Log: Methods size: 0
+Log: Events size: 1
+Log: Rendering event: touch
+Log: -- Rendering instance: application
+Log: Properties size: 0
+Log: Methods size: 0
+Log: Events size: 0
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/values/attrs.xml
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/assets/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/bin/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/gen/.empty
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/src/xkp/android/lib/Caller.java
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/src/xkp/android/lib/Assign.java
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/src/xkp/android/lib/Every.java
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/src/xkp/android/lib/Handler.java
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/src/xkp/android/lib/IExecutable.java
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/src/xkp/android/lib/Interpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/src/xkp/android/lib/IntInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/src/xkp/android/lib/IInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/src/xkp/android/lib/DoubleInterpolator.java
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/src/xkp/android/lib/Key.java
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/src/xkp/android/lib/Manager.java
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/src/xkp/android/lib/OnUpdate.java
+Log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/src/xkp/android/lib/Sequence.java
+
+Success are greateful
+===[ 3js-ms.project.xml ]================(Tests)
 
 Log: Rendering 3js Types...
 Log: Rendering Sequence Types...
 Log: Rendering Sequence...
 Success are greateful
-===[ 3js-ui.project.xml ]================
+===[ 3js-ui.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering 3js Types...
 Log: Rendering UI Types...
 Log: Rendering UI...
 Success are greateful
-===[ 3js_cameras.project.xml ]================
+===[ 3js_cameras.project.xml ]================(Tests)
 
 Log: Rendering 3js Types...
 Success are greateful
-===[ 3js_carousel.project.xml ]================
+===[ 3js_carousel.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering 3js Types...
 Success are greateful
-===[ 3js_class_test.project.xml ]================
+===[ 3js_class_test.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering 3js Types...
-Error at: c:/dev/xkp/xss/tests/../idioms/threejs/class.xss
-Error [syntax-error] Error while compiling xs
-line = 21
-column = 23
 ERROR: Project:  3js_class_test.project.xml
 
-===[ 3js_cube.project.xml ]================
-
-Log: Rendering 3js Types...
-Success are greateful
-===[ 3js_cube_img.project.xml ]================
+===[ 3js_class_test_1.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering 3js Types...
 Success are greateful
-===[ 3js_model.project.xml ]================
+===[ 3js_class_test_2.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering 3js Types...
 Success are greateful
-===[ 3js_particle.project.xml ]================
+===[ 3js_cube.project.xml ]================(Tests)
 
 Log: Rendering 3js Types...
 Success are greateful
-===[ 3js_particle_system.project.xml ]================
-
-Log: Rendering 3js Types...
-Success are greateful
-===[ 3js_sound.project.xml ]================
+===[ 3js_cube_img.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering 3js Types...
 Success are greateful
-===[ 3js_transform.project.xml ]================
+===[ 3js_model.project.xml ]================(Tests)
+
+Log: Rendering Resources...
+Log: Rendering 3js Types...
+Success are greateful
+===[ 3js_particle.project.xml ]================(Tests)
 
 Log: Rendering 3js Types...
 Success are greateful
-===[ box2d1.project.xml ]================
+===[ 3js_particle_system.project.xml ]================(Tests)
+
+Log: Rendering 3js Types...
+Success are greateful
+===[ 3js_sound.project.xml ]================(Tests)
+
+Log: Rendering Resources...
+Log: Rendering 3js Types...
+Success are greateful
+===[ 3js_transform.project.xml ]================(Tests)
+
+Log: Rendering 3js Types...
+Success are greateful
+===[ box2d1.project.xml ]================(Tests)
 
 Success are greateful
-===[ box2d2.project.xml ]================
+===[ box2d2.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
 Success are greateful
-===[ box2d3.project.xml ]================
+===[ box2d3.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
 Success are greateful
-===[ box2d4.project.xml ]================
+===[ box2d4.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
@@ -85,7 +743,7 @@ Log: Rendering Sequence Types...
 Log: Rendering UI...
 Log: Rendering Sequence...
 Success are greateful
-===[ enums.project.xml ]================
+===[ enums.project.xml ]================(Tests)
 
 Log: Rendering test with enum class...
 Log: output_xml: top && output_id: PL_TOP
@@ -134,7 +792,7 @@ prop_btn_sameName = swp;
 		
 				sameName = "My owner is application."			
 Success are greateful
-===[ java1.project.xml ]================
+===[ java1.project.xml ]================(Tests)
 
 Log: -- Rendering instance: instance1
 Log: Properties size: 2
@@ -158,7 +816,7 @@ Log: Events size: 1
 Log: Rendering event: create
 
 Success are greateful
-===[ java2.project.xml ]================
+===[ java2.project.xml ]================(Tests)
 
 Log: -- Rendering instance: instance1
 Log: Properties size: 0
@@ -171,7 +829,7 @@ Log: Methods size: 0
 Log: Events size: 0
 
 Success are greateful
-===[ java3.project.xml ]================
+===[ java3.project.xml ]================(Tests)
 
 Log: Rendering method: check_type
 Log: Rendering method: foobar
@@ -187,7 +845,8 @@ Log: Rendering property: bar
 
 
 
-		public Object check_type() {
+
+		public Object mthd__check_type() {
 			Integer a;
 a = 1;
 Object b;
@@ -199,7 +858,8 @@ return a;
 
 
 
-		public String foobar(Integer v) {
+
+		public String mthd__foobar(Integer v) {
 			t1.foo = t2.foo + 10;
 t2.set_bar(t1.foo + t1.get_bar() + "++");
 set_complex(t1, t2.get_bar() + t1.get_bar() + this.foo + "--");
@@ -220,7 +880,7 @@ return t1.get_bar();
 
 
 
-			private void onClick() {
+			private void e.output_id() {
 		
 				ArrayList<Object> list = new ArrayList(Arrays.asList( new Object [] {1, 2, "item", 3.140000, "vowel"} ));
 for(Object i : list)
@@ -290,7 +950,7 @@ for(Object i : list)
 
 
 Success are greateful
-===[ jquery1.project.xml ]================
+===[ jquery1.project.xml ]================(Tests)
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -405,198 +1065,7 @@ $(function() {
 </html>
 
 Success are greateful
-===[ jquery2.project.xml ]================
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>TITLE</title>
-<script type="text/javascript" src="../js/jquery.js"></script>
-
-<script type="text/javascript">
-$(function() {
-	
-
-
-
-
-
-
-
-
-
-
-
-        application.target = null;
-
-        application.target_set = function (value)
-        {
-            application.target = value;
-            btn2.text("target acquired " + value);
-for(var i = 0; i < 20; i++)
-{
-btn2.width(btn2.width() + 10);
-if (btn2.width() > 200)
-{
-btn2.width(100);
-}
-}
-
-        };
-    
-
-
-
-
-
-
-	application.reset = function(s) 
-	{
-		application.target_set(s);
-btn1.text("...");
-btn2.text("...");
-	};
-
-
-
-
-
-
-
-
-
-
-
-
-
-                btn1.text("One button");
-            
-
-
-
-
-
-
-                btn1.width(100);
-            
-
-
-
-
-
-
-	btn1.click = function()
-	{    
-
-		btn2.text("Clicked");
-btn1.text("Other Clicked");
-	
-	};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                btn2.text("Two button");
-            
-
-
-
-
-
-
-                btn2.width(100);
-            
-
-
-
-
-
-
-	btn2.click = function()
-	{    
-
-		btn1.text("Old value: " + application.target);
-application.target_set(300);
-	
-	};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                btn3.text("Reset");
-            
-
-
-
-
-
-
-                btn3.width(100);
-            
-
-
-
-
-
-
-	btn3.click = function()
-	{    
-
-		application.reset();
-	
-	};
-
-
-});
-</script>
-
-<style>
-</style>
-</head>
-
-<body>
-    
-            <div id='application'>
-        
-            <button id='btn1'>
-        
-                </button>
-            
-            <button id='btn2'>
-        
-                </button>
-            
-            <button id='btn3'>
-        
-                </button>
-            
-                </div>
-            </body>
-</html>
-
-Success are greateful
-===[ jquery3.project.xml ]================
+===[ jquery2.project.xml ]================(Tests)
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -677,13 +1146,15 @@ btn2.text("...");
 
 
 
-	btn1.click = function()
+	var ev_parent = this;
+	btn1.events.addListener("click", function()
 	{    
 
 		btn2.text("Clicked");
 btn1.text("Other Clicked");
 	
-	};
+	}
+	);
 
 
 
@@ -714,13 +1185,15 @@ btn1.text("Other Clicked");
 
 
 
-	btn2.click = function()
+	var ev_parent = this;
+	btn2.events.addListener("click", function()
 	{    
 
 		btn1.text("Old value: " + application.target);
 application.target_set(300);
 	
-	};
+	}
+	);
 
 
 
@@ -751,12 +1224,14 @@ application.target_set(300);
 
 
 
-	btn3.click = function()
+	var ev_parent = this;
+	btn3.events.addListener("click", function()
 	{    
 
 		application.reset();
 	
-	};
+	}
+	);
 
 
 });
@@ -787,52 +1262,250 @@ application.target_set(300);
 </html>
 
 Success are greateful
-===[ jquery4.project.xml ]================
+===[ jquery3.project.xml ]================(Tests)
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>TITLE</title>
+<script type="text/javascript" src="../js/jquery.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	
+
+
+
+
+
+
+
+
+
+
+
+        application.target = null;
+
+        application.target_set = function (value)
+        {
+            application.target = value;
+            btn2.text("target acquired " + value);
+for(var i = 0; i < 20; i++)
+{
+btn2.width(btn2.width() + 10);
+if (btn2.width() > 200)
+{
+btn2.width(100);
+}
+}
+
+        };
+    
+
+
+
+
+
+
+	application.reset = function(s) 
+	{
+		application.target_set(s);
+btn1.text("...");
+btn2.text("...");
+	};
+
+
+
+
+
+
+
+
+
+
+
+
+
+                btn1.text("One button");
+            
+
+
+
+
+
+
+                btn1.width(100);
+            
+
+
+
+
+
+
+	var ev_parent = this;
+	btn1.events.addListener("click", function()
+	{    
+
+		btn2.text("Clicked");
+btn1.text("Other Clicked");
+	
+	}
+	);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                btn2.text("Two button");
+            
+
+
+
+
+
+
+                btn2.width(100);
+            
+
+
+
+
+
+
+	var ev_parent = this;
+	btn2.events.addListener("click", function()
+	{    
+
+		btn1.text("Old value: " + application.target);
+application.target_set(300);
+	
+	}
+	);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                btn3.text("Reset");
+            
+
+
+
+
+
+
+                btn3.width(100);
+            
+
+
+
+
+
+
+	var ev_parent = this;
+	btn3.events.addListener("click", function()
+	{    
+
+		application.reset();
+	
+	}
+	);
+
+
+});
+</script>
+
+<style>
+</style>
+</head>
+
+<body>
+    
+            <div id='application'>
+        
+            <button id='btn1'>
+        
+                </button>
+            
+            <button id='btn2'>
+        
+                </button>
+            
+            <button id='btn3'>
+        
+                </button>
+            
+                </div>
+            </body>
+</html>
 
 Success are greateful
-===[ jquery5.project.xml ]================
+===[ jquery4.project.xml ]================(Tests)
+
+Success are greateful
+===[ jquery5.project.xml ]================(Tests)
 
 Log: Rendering jQuery...
 Success are greateful
-===[ jseq1.project.xml ]================
+===[ jseq1.project.xml ]================(Tests)
 
 Log: Rendering Sequence Types...
 Log: Rendering Sequence...
+Log: -- Rendering instance: test_sequence
+Log: Properties size: 0
+Log: Methods size: 0
+Log: Events size: 0
+Log: -- Rendering instance: test_sequence1
+Log: Properties size: 1
+Log: Rendering property: app
+Log: Methods size: 0
+Log: Events size: 0
 Log: Oh noes... a PROPERTY
-Error at: c:/dev/xkp/xss/tests/../idioms/java-seq/sequence.xss
+Error at: d:/xkp/xss/tests/../idioms/java-seq/sequence.xss
 Error [idiom] Sequences expect a property to modify
 expression = app.target
 ERROR: Project:  jseq1.project.xml
 
-===[ json1.project.xml ]================
+===[ json1.project.xml ]================(Tests)
 
 ERROR: Project:  json1.project.xml
 
-===[ ms1.project.xml ]================
+===[ ms1.project.xml ]================(Tests)
 
 Log: Rendering Sequence Types...
 Log: Rendering Sequence...
 Success are greateful
-===[ ms2.project.xml ]================
+===[ ms2.project.xml ]================(Tests)
 
 Log: Rendering Sequence Types...
 Log: Rendering Sequence...
 Success are greateful
-===[ ms3.project.xml ]================
+===[ ms3.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
 Success are greateful
-===[ ms4.project.xml ]================
-
-Log: Rendering Resources...
-Log: Rendering UI Types...
-Log: Rendering Sequence Types...
-Log: Rendering UI...
-Log: Rendering Sequence...
-Success are greateful
-===[ ms5.project.xml ]================
+===[ ms4.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
@@ -840,7 +1513,7 @@ Log: Rendering Sequence Types...
 Log: Rendering UI...
 Log: Rendering Sequence...
 Success are greateful
-===[ ms6.project.xml ]================
+===[ ms5.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
@@ -848,7 +1521,23 @@ Log: Rendering Sequence Types...
 Log: Rendering UI...
 Log: Rendering Sequence...
 Success are greateful
-===[ query_properties.project.xml ]================
+===[ ms6.project.xml ]================(Tests)
+
+Log: Rendering Resources...
+Log: Rendering UI Types...
+Log: Rendering Sequence Types...
+Log: Rendering UI...
+Log: Rendering Sequence...
+Success are greateful
+===[ newseq1.project.xml ]================(Tests)
+
+Log: Rendering Resources...
+Log: Rendering UI Types...
+Log: Rendering Sequence Types...
+Log: Rendering UI...
+Log: Rendering Sequence...
+Success are greateful
+===[ query_properties.project.xml ]================(Tests)
 
 Log: Rendering test query_properties...
 Log: assigning default_value = 0
@@ -871,55 +1560,55 @@ Log: assigning default_value = EVisibility.true
 		
 				property "sameName" = "My owner is application."			
 Success are greateful
-===[ ui_audio.project.xml ]================
+===[ ui_audio.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
 Success are greateful
-===[ ui_audio_1.project.xml ]================
+===[ ui_audio_1.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
 Success are greateful
-===[ ui_class_test.project.xml ]================
+===[ ui_class_test.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
 Success are greateful
-===[ ui_cliparea.project.xml ]================
+===[ ui_cliparea.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
 Success are greateful
-===[ ui_demo.project.xml ]================
+===[ ui_demo.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
 Success are greateful
-===[ ui_drag.project.xml ]================
+===[ ui_drag.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
 Success are greateful
-===[ ui_figures.project.xml ]================
+===[ ui_figures.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
 Success are greateful
-===[ ui_selfdrawn.project.xml ]================
+===[ ui_selfdrawn.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
 Log: Rendering UI...
 Success are greateful
-===[ ui_video.project.xml ]================
+===[ ui_video.project.xml ]================(Tests)
 
 Log: Rendering Resources...
 Log: Rendering UI Types...
@@ -927,7 +1616,7 @@ Log: Rendering Sequence Types...
 Log: Rendering UI...
 Log: Rendering Sequence...
 Success are greateful
-===[ wax1.project.xml ]================
+===[ wax1.project.xml ]================(Tests)
 
 
 		method: foo
@@ -997,10 +1686,14 @@ __callback1();
 });
 	
 Success are greateful
-===[ wax2.project.xml ]================
+===[ wax2.project.xml ]================(Tests)
 
 Success are greateful
-===[ xss1.project.xml ]================
+===[ wax3.project.xml ]================(Tests)
+
+ERROR: Project:  wax3.project.xml
+
+===[ xss1.project.xml ]================(Tests)
 
 
 hello, darling
@@ -1015,7 +1708,7 @@ this is Louis
             Thats all folks
             It was a pleasure
         Success are greateful
-===[ xss10.project.xml ]================
+===[ xss10.project.xml ]================(Tests)
 
 Log: instance: it1
 Log: instance: it2
@@ -1047,7 +1740,7 @@ Log: Rendering property: counter
 
 
 
-			private void event_it1_create() {
+			private void e.output_id() {
 		
 				prop_application_counter = prop_it1_getting_get();
 int boole = Bool.falsest;
@@ -1094,7 +1787,7 @@ it2.mthd_1();
 
 
 
-			private void event_it2_click() {
+			private void e.output_id() {
 		
 				prop_it2_setting_set(prop_it1_getting_get() - 12);
 			
@@ -1104,7 +1797,8 @@ it2.mthd_1();
 
 
 
-		public Integer returning() {
+
+		public Integer mthd__returning() {
 			it1.mthd_1();
 if (it1.size() > it2.size())
 {
@@ -1128,7 +1822,7 @@ else
 		
 
 Success are greateful
-===[ xss11.project.xml ]================
+===[ xss11.project.xml ]================(Tests)
 
 
 		Math.sin(PI);
@@ -1136,7 +1830,49 @@ String foo = Singleton.get_foo();
 
 	
 Success are greateful
-===[ xss2.project.xml ]================
+===[ xss12.project.xml ]================(Tests)
+
+Log: properties size: 0
+Log: methods size: 0
+Log: events size: 0
+Log: children size: 1
+
+		FROM render_instances on xss12_idiom (1)
+	
+			INSTANCE: i1
+		
+		FROM render_instances on xss12_idiom (2)
+	
+			INSTANCE: 
+		
+			INSTANCE: i2
+		
+		Rendering User Types on xss12.idiom (1)...
+	
+		Rendering User Types on xss12.idiom (2)...
+	
+			[instance: i1]
+		
+			[instance: application]
+		
+					private void click() {
+				
+						Display disp;
+Integer w = disp.getWidth();
+Integer h = disp.getHeight();
+					
+					}
+				
+			instance id= "i1" idiom= "xss12_idiom1"
+		
+			instance id= "application" idiom= ""
+		
+			instance id= "" idiom= "xss12_idiom2"
+		
+			instance id= "i2" idiom= "xss12_idiom2"
+		
+Success are greateful
+===[ xss2.project.xml ]================(Tests)
 
 
 		instance id: t1
@@ -1257,11 +1993,11 @@ Success are greateful
 		t_xss9_2 
 	
 Success are greateful
-===[ xss3.project.xml ]================
+===[ xss3.project.xml ]================(Tests)
 
 
 Success are greateful
-===[ xss4.project.xml ]================
+===[ xss4.project.xml ]================(Tests)
 
 
 				Even = 2
@@ -1292,7 +2028,7 @@ Is this after "After!"? World
 
 
 Success are greateful
-===[ xss5.project.xml ]================
+===[ xss5.project.xml ]================(Tests)
 
 Log: application
 Log: null super
@@ -1305,7 +2041,7 @@ Log: ab
 Log: ba
 
 Success are greateful
-===[ xss6.project.xml ]================
+===[ xss6.project.xml ]================(Tests)
 
 
 			event id: click event output_id: onClick
@@ -1313,7 +2049,7 @@ Success are greateful
 				Interface: IClick
 			
 Success are greateful
-===[ xss7.project.xml ]================
+===[ xss7.project.xml ]================(Tests)
 
 Log: btn
 Log: null
@@ -1385,7 +2121,7 @@ Log: null
 					namespace = android
 			
 Success are greateful
-===[ xss8.project.xml ]================
+===[ xss8.project.xml ]================(Tests)
 
 
             method id: check_type
@@ -1412,12 +2148,40 @@ set_more(t2).complex(get_more(t2).complex() - 1);
 
 		
 Success are greateful
-===[ xss9.project.xml ]================
+===[ xss9.project.xml ]================(Tests)
 
 Log: Return type: t_xss9_2
 
+		class test_class2 : t_xss9_2
+		childrens 1
+	
+			property some_prop
+		
+			method foo
+		
+			instance base {
+			properties 1
+			methods 1
+			events 1
+		
+				property collect
+			
+				event create
+			
+				method bar
+			
+			}
+		
+		class test_class : t_xss9_1
+		childrens 0
+	
+		class test_class1 : t_xss9_2
+		childrens 0
+	
+			property some_prop
+		
 		var a = new t_xss9_1(myManager, 10, null);
-var b = new t_xss9_1(myManager, 20, 10);
+var b = new t_xss9_1(myManager, 10, 20);
 var c = new t_xss9_2();
 return c;
 

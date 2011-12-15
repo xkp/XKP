@@ -62,7 +62,7 @@ var Sound = new ms.ui.Sound();
         {
             function get_collider(body)
             {
-                if (body.host && ("collision" in body.host))
+                if (body.host && ("collision" in body.host.events))
                     return body.host;
                 return null;
             }
@@ -127,7 +127,7 @@ function start(resolution)
         //process contacts
         function get_contact_handler(body)
         {
-            if (body.host && ("contact" in body.host))
+            if (body.host && ("contact" in body.host.events))
                 return body.host;
             return null;
         }
@@ -203,7 +203,7 @@ window.onload = function()
 	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
                 btn1.set_rotation(0.200000003);
                 btn1.rect(200, 200, 50, 50);
-				btn1.events.addListener('ev_resized', function(cmp)
+				btn1.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
                         g_world.DestroyBody(cmp.physics);
@@ -217,13 +217,13 @@ window.onload = function()
             current_body = g_world.CreateBody(bodyDef);
             current_body.CreateFixture(fixDef);
                 cmp.physics = current_body;
-                cmp.moved = update_body_position;
+                cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
 				);
                 if (btn1.w > 0 && btn1.h > 0)
                 {
-					btn1.events.dispatch("ev_resized", [btn1]);                     
+					btn1.events.dispatch("resized", [btn1]);                     
                 }
                 btn1.RemoveFromWorld = function(keep_visual) 
                 {

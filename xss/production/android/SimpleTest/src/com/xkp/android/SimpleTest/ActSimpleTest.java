@@ -2,8 +2,6 @@ package com.xkp.android.SimpleTest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import android.view.View;
-			import android.app.Activity;
-			import android.os.Bundle;
 						import android.widget.TextView;
 						import android.text.method.KeyListener;
 						import android.view.View.OnClickListener;
@@ -14,6 +12,8 @@ import android.view.View;
 						import android.view.View.OnFocusChangeListener;
 						import android.widget.EditText;
 						import android.widget.Button;
+			import android.app.Activity;
+			import android.os.Bundle;
 		public class ActSimpleTest 
 						extends Activity
 							implements OnClickListener
@@ -30,7 +30,9 @@ import android.view.View;
 				super.onCreate(savedInstanceState);
 				setContentView(R.layout.main);
 				bindViews();
+				initModules();
 				initInstances();
+                Start();
 			}
 			private void bindViews() {
 				lblFirstName = (TextView) findViewById(R.id.lblFirstName);
@@ -42,9 +44,33 @@ import android.view.View;
 				lblFullName = (TextView) findViewById(R.id.lblFullName);
 				edtContainer = (EditText) findViewById(R.id.edtContainer);
 	}
+			void initModules() {
+    }
 			void initInstances() {
 			}
-						@Override
+private double update_freq = 1/30.0;
+private void Update()
+{
+    runOnUiThread(new Runnable() 
+    {
+		public void run() 
+        {
+            double delta = update_freq;
+                    }
+	});
+};
+private void Start()
+{
+    Timer timer = new Timer();
+    timer.schedule(new TimerTask() 
+    {
+		@Override
+		public void run() 
+        {
+            Update();
+		} 
+    }, 0, (long)(update_freq * 1000)); 
+}
 						public void onClick(View v) {
 							switch (v.getId()) {
 									case R.id.btnFullName:

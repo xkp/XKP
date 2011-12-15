@@ -2,8 +2,6 @@ package com.xkp.android.KitchenSink;
 import java.util.ArrayList;
 import java.util.Arrays;
 import android.view.View;
-			import android.app.Activity;
-			import android.os.Bundle;
 						import android.view.ViewGroup;
 						import android.widget.TabHost;
 						import android.widget.TabHost.TabSpec;
@@ -32,6 +30,8 @@ import android.view.View;
 						import android.widget.ProgressBar;
 						import android.widget.SeekBar;
 						import android.widget.SeekBar.OnSeekBarChangeListener;
+			import android.app.Activity;
+			import android.os.Bundle;
 		public class ActKitchenSink 
 						extends Activity
 {
@@ -68,7 +68,9 @@ import android.view.View;
 				super.onCreate(savedInstanceState);
 				setContentView(R.layout.main);
 				bindViews();
+				initModules();
 				initInstances();
+                Start();
 			}
 			private void bindViews() {
 				kitchen = (TabHost) findViewById(R.id.kitchen);
@@ -100,8 +102,33 @@ import android.view.View;
 				prgbar4 = (ProgressBar) findViewById(R.id.prgbar4);
 				seekb1 = (SeekBar) findViewById(R.id.seekb1);
 	}
+			void initModules() {
+    }
 			void initInstances() {
 			}
+private double update_freq = 1/30.0;
+private void Update()
+{
+    runOnUiThread(new Runnable() 
+    {
+		public void run() 
+        {
+            double delta = update_freq;
+                    }
+	});
+};
+private void Start()
+{
+    Timer timer = new Timer();
+    timer.schedule(new TimerTask() 
+    {
+		@Override
+		public void run() 
+        {
+            Update();
+		} 
+    }, 0, (long)(update_freq * 1000)); 
+}
 					public class XKPUtils {
 						void setupTabHost(int id, ArrayList<String> tabs) {
 			TabHost tabh = (TabHost) findViewById(id);

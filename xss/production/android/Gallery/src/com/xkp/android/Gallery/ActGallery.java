@@ -2,8 +2,6 @@ package com.xkp.android.Gallery;
 import java.util.ArrayList;
 import java.util.Arrays;
 import android.view.View;
-			import android.app.Activity;
-			import android.os.Bundle;
 						import android.widget.Gallery;
 						import android.view.View.OnClickListener;
 						import android.view.View.OnLongClickListener;
@@ -15,6 +13,8 @@ import android.view.View;
 						import android.widget.ImageView;
 						import android.widget.BaseAdapter;
 						import android.content.Context;
+			import android.app.Activity;
+			import android.os.Bundle;
 		public class ActGallery 
 						extends Activity
 {
@@ -24,14 +24,41 @@ import android.view.View;
 				super.onCreate(savedInstanceState);
 				setContentView(R.layout.main);
 				bindViews();
+				initModules();
 				initInstances();
+                Start();
 			}
 			private void bindViews() {
 				gallery = (Gallery) findViewById(R.id.gallery);
 					gallery.setAdapter(new ImageAdapter(this));
 	}
+			void initModules() {
+    }
 			void initInstances() {
 			}
+private double update_freq = 1/30.0;
+private void Update()
+{
+    runOnUiThread(new Runnable() 
+    {
+		public void run() 
+        {
+            double delta = update_freq;
+                    }
+	});
+};
+private void Start()
+{
+    Timer timer = new Timer();
+    timer.schedule(new TimerTask() 
+    {
+		@Override
+		public void run() 
+        {
+            Update();
+		} 
+    }, 0, (long)(update_freq * 1000)); 
+}
 	public class ImageAdapter extends BaseAdapter {
 		private static final int ITEM_WIDTH = 236;
 		private static final int ITEM_HEIGHT = 188;

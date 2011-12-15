@@ -201,7 +201,7 @@ function start(resolution)
 				);
                 if (this.w > 0 && this.h > 0)
                 {
-					this.events.dispatch("ev_resized", [this]);                     
+					this.events.dispatch("resized", [this]);                     
                 }
                 this.RemoveFromWorld = function(keep_visual) 
                 {
@@ -291,7 +291,7 @@ window.onload = function()
 				);
                 if (__img1.w > 0 && __img1.h > 0)
                 {
-					__img1.events.dispatch("ev_resized", [__img1]);                     
+					__img1.events.dispatch("resized", [__img1]);                     
                 }
                 __img1.RemoveFromWorld = function(keep_visual) 
                 {
@@ -322,7 +322,7 @@ window.onload = function()
 				);
                 if (__img2.w > 0 && __img2.h > 0)
                 {
-					__img2.events.dispatch("ev_resized", [__img2]);                     
+					__img2.events.dispatch("resized", [__img2]);                     
                 }
                 __img2.RemoveFromWorld = function(keep_visual) 
                 {
@@ -353,7 +353,7 @@ window.onload = function()
 				);
                 if (__img3.w > 0 && __img3.h > 0)
                 {
-					__img3.events.dispatch("ev_resized", [__img3]);                     
+					__img3.events.dispatch("resized", [__img3]);                     
                 }
                 __img3.RemoveFromWorld = function(keep_visual) 
                 {
