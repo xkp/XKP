@@ -1074,7 +1074,7 @@ str xss_compiler::instantiate(variant v)
 
 str xss_compiler::file(fs::path path)
   {
-    fs::path pp = app_path_ / path;
+    fs::path pp = app_path_.parent_path() / path;
     return load_file(pp);
   }
 

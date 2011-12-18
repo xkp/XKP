@@ -421,7 +421,24 @@ bool xss_context::resolve(const str& id, resolve_info& info)
       }
 
     if (info.left)
-      return false;
+      {
+        switch(info.left->what)
+          {
+            case RESOLVE_INSTANCE:
+              {
+                XSSObject obj = info.left->value; 
+                schema_item sitm;
+                if (obj->resolve(id, sitm))
+                  {
+                    info.what  = RESOLVE_NATIVE;
+                    info.type  = XSSType();
+                    info.value = sitm;
+                    return true;
+                  }
+              }
+            default: return false;
+          }
+      }
 
     //check globals now
     if (find_symbol(id, info))
@@ -1180,9 +1197,9 @@ bool xss_object::is_injected(const str& name)
     return false;
   }
 
-void xss_object::add_method(const str& event_name, XSSMethod m)
+void xss_object::add_method(const str& name, XSSMethod m)
   {
-    assert(false);
+    methods_->push_back(m); //td: check for it not existing
   }
 
 void xss_object::add_child(XSSObject obj)

@@ -979,9 +979,7 @@ ms.ui.Rectangle = Class.create(ms.ui.Component,
 		this.stroke = stroke;
 		this.line_width = line_width;
 	},	
-	resized: function()
-	{
-	},
+
 	draw: function($super, context, x, y)
 	{		
 		context.save();

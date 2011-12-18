@@ -40,6 +40,8 @@ namespace xkp
       iterator begin();
       iterator end();
       void     push_back(const tag t); 
+      int      find(const str& id);
+      tag&     get(int idx);
       private:
         std::vector<tag> tags_;
     };
