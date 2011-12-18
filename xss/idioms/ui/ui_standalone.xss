@@ -68,13 +68,14 @@ function start(resolution)
         <xss:code>
             compiler.inject("render_update");
         </xss:code>
+		
+		<xss:marker id="update"/>
 
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
 
         window.setTimeout(updater, resolution);  
-	}
-    
+	}    
 	window.setTimeout(updater, resolution);  
 }  
 

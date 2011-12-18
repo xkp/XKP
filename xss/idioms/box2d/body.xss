@@ -1,30 +1,42 @@
 <xss:parameter id="it"/>
-<xss:parameter id="template"/>
+<xss:parameter id="world"/>
 
-<xss:class>
-    property world;
+<xss:class>    
     property visual_parent : string;
-
+	
     method basic_properties()
     {
-        //fixture properties
+		compiler.log(it.output_id);
+		//fixture properties
         var density = 1.0;
         if (it.density)
             density = it.density;
-        else if (template)
-            density = template.density;
+        else if (world)
+            density = world.density;
          
         var friction = 0.5;
         if (it.friction)
             friction = it.friction;
-        else if (template)
-            density = template.friction;
+        else if (world)
+            friction = world.friction;
 
         var restitution = 0.2; 
         if (it.restitution)
             restitution = it.restitution;
-        else if (template)
-            density = template.restitution;
+        else if (world)
+            restitution = world.restitution;
+		
+		var angular_damping;		
+		if (it.angular_damping)
+            angular_damping = it.angular_damping;
+		else if (world)
+			angular_damping = world.angular_damping;
+			
+		var linear_damping;
+		if (it.linear_damping)
+            linear_damping = it.linear_damping;	
+		else if (world)
+			linear_damping = world.linear_damping;
 
         //body type
         var body_type = "";
@@ -41,13 +53,22 @@
             compiler.error("Invalid body_type", object = it.id, body_type = it.body_type);
 
         //output it all
+		if(angular_damping)
+		{
+			out(){bodyDef.angularDamping = <xss:e v="angular_damping"/>;}
+		}
+		if(linear_damping)
+		{
+			out(){bodyDef.linearDamping = <xss:e v="linear_damping"/>;}
+		}		
         out()
         {
              fixDef.density = <xss:e v="density"/>;
              fixDef.friction = <xss:e v="friction"/>;
              fixDef.restitution = <xss:e v="restitution"/>;
+			 
              bodyDef.type = <xss:e v="body_type"/>;
-        }
+        }		
     }
 
     method shape()
@@ -157,7 +178,7 @@
 
     on render()
     {
-        world  = template;
+        world  = world;
         var vp = foreign_parent(it);
         
         if (vp)

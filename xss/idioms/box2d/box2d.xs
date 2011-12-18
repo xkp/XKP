@@ -13,7 +13,7 @@ on render_jscripts()
 {
 	out()
 	{
-        <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
+        <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script> 		<script type="text/javascript" src="../js/ms-joint.js"></script> 
     }
 
     if (!application.noSpawner)
@@ -50,14 +50,22 @@ on render_initialization()
         ,	b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape
         ,	b2CircleShape = Box2D.Collision.Shapes.b2CircleShape
         ,	b2DebugDraw = Box2D.Dynamics.b2DebugDraw
-        ,  b2MouseJointDef =  Box2D.Dynamics.Joints.b2MouseJointDef
-        , b2Transform = Box2D.Common.Math.b2Transform
+        ,  	b2MouseJointDef =  Box2D.Dynamics.Joints.b2MouseJointDef
+        , 	b2Transform = Box2D.Common.Math.b2Transform
+		,	b2RevoluteJointDef = Box2D.Dynamics.Joints.b2RevoluteJointDef
+		,	b2Joint = Box2D.Dynamics.Joints.b2Joint
+		,	b2PrismaticJointDef = Box2D.Dynamics.Joints.b2PrismaticJointDef
+		,	b2PulleyJointDef = Box2D.Dynamics.Joints.b2PulleyJointDef
+		,	b2WeldJointDef = Box2D.Dynamics.Joints.b2WeldJointDef
+		,	b2LineJointDef = Box2D.Dynamics.Joints.b2LineJointDef
+		,	b2DistanceJointDef = Box2D.Dynamics.Joints.b2DistanceJointDef
         ;
          
         var g_world = new b2World(
             new b2Vec2(<xss:e v="gx"/>, <xss:e v="gy"/>)    //gravity
         ,  true                 //allow sleep
         );
+		var physics_utils = new ms.joint.Utils();
     }
 
     if (!application.noSpawner)
@@ -130,8 +138,10 @@ on render_instances()
         string renderer = i.type.renderer;
         if (renderer)
 		    compiler.xss(renderer, i, world = world);
-        else
-            compiler.xss("body.xss", i, world);
+        else{
+            out(){<xss:e v="i.id"/> = }compiler.xss("../common-js/instantiator.xss", i);
+			compiler.xss("../common-js/instance.xss", i);
+		}
     }
 
     //setup debug draw

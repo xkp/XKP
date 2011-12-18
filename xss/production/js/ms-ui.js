@@ -52,17 +52,35 @@ ms.ui.Manager = Class.create(
 
 	//Keyboard managemet
 	keydown: function(keycode)
-	{
+	{	
+		for(var i = 0; i < this.root.components.length; i++)
+        {			
+            var cmp = this.root.components[i];	
+			if(cmp.physics)
+				cmp.physics.SetAwake(true);
+        }		
 	    application.events.dispatch("keydown", [keycode]);    
 	},
 
 	keyup: function(keycode)
 	{
+		for(var i = 0; i < this.root.components.length; i++)
+        {			
+            var cmp = this.root.components[i];	
+			if(cmp.physics)
+				cmp.physics.SetAwake(true);
+        }	
 	    application.events.dispatch("keyup", [keycode]);    
 	},
 
 	keypress: function(keycode)
 	{
+		for(var i = 0; i < this.root.components.length; i++)
+        {			
+            var cmp = this.root.components[i];	
+			if(cmp.physics)
+				cmp.physics.SetAwake(true);
+        }	
 	    application.events.dispatch("keypress", [keycode]);    
 	},
 
@@ -70,6 +88,9 @@ ms.ui.Manager = Class.create(
 	
 	mousemove: function(x, y)
 	{
+		if(this.mouse_over.physics)
+			this.mouse_over.physics.SetAwake(true);
+			
 	    if(this.mouse_pressed)
 			this.dragging = true;
 	    if (this.dragging)
@@ -105,6 +126,9 @@ ms.ui.Manager = Class.create(
 
 	mousedown: function(x, y)
 	{
+		if(this.mouse_over.physics)
+			this.mouse_over.physics.SetAwake(true);
+		
 	    this.mouse_over.events.dispatch("mousedown", [x, y]);
 	    
 		this.mouse_pressed = true;
@@ -114,6 +138,9 @@ ms.ui.Manager = Class.create(
 
 	mouseup: function(x, y)
 	{
+		if(this.mouse_over.physics)
+			this.mouse_over.physics.SetAwake(true);
+			
 		this.mouse_pressed = false;
 	    if (this.dragging)
 	    {
@@ -316,7 +343,6 @@ ms.ui.Manager = Class.create(
             context.fillStyle = this.backgroundFill;
             context.fillRect(this.root.x, this.root.y, this.root.w, this.root.h);
         }
-
         this.root.draw(context, 0, 0);
     },
 });
@@ -979,7 +1005,6 @@ ms.ui.Rectangle = Class.create(ms.ui.Component,
 		this.stroke = stroke;
 		this.line_width = line_width;
 	},	
-
 	draw: function($super, context, x, y)
 	{		
 		context.save();

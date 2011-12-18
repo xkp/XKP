@@ -1,6 +1,12 @@
 <module id="box2d" src="box2d.xs">
     <types>
-        <class id="physics_world"/>
+        <class id="physics_world" renderer="body.xss">
+			<property id="density" type="float" dont_init="true"/>
+			<property id="friction" type="float" dont_init="true"/>
+            <property id="restitution" type="float" dont_init="true"/>
+            <property id="angular_damping" type="float" dont_init="true"/>
+			<property id="linear_damping" type="float" dont_init="true"/>
+		</class>
         
         <class id="body" renderer="body.xss"/>
 
@@ -22,7 +28,169 @@
             </property>
             <property id="velocity" type="float"/>
         </class>
+		
+		<class id="distance_joint" output_id="ms.joint.DistanceJoint">
+            <constructor_params>
+                <parameter property="body_a" runtime="true"/>
+                <parameter property="body_b" runtime="true"/>
+                <parameter property="anchor_a" runtime="true"/>                
+                <parameter property="anchor_b" runtime="true"/>                
+            </constructor_params>
 
-        <class id="physics" super="body"/>
+            <property id="body_a" type="string" use_plain_value="true" dont_init="true"/>
+            <property id="body_b" type="string" use_plain_value="true" dont_init="true"/>
+            <property id="anchor_a" type="string" use_plain_value="true" dont_init="true"/>            
+            <property id="anchor_b" type="string" use_plain_value="true" dont_init="true"/>
+			<property id="damping_ratio" type="float">
+				<get text="joint_def.dampingRatio"/>
+                <set text="damping_ratio({value})"/>
+            </property>
+			<property id="length" type="int">
+				<get text="joint_def.length"/>
+                <set text="length({value})"/>
+            </property>
+			<property id="frequency" type="float">
+				<get text="joint_def.frequency"/>
+                <set text="frequency({value})"/>
+            </property>
+        </class>		
+		
+		<class id="revolute_joint" output_id="ms.joint.RevoluteJoint">
+            <constructor_params>
+                <parameter property="body_a" runtime="true"/>
+                <parameter property="body_b" runtime="true"/>
+                <parameter property="anchor" runtime="true"/>                            
+            </constructor_params>
+
+            <property id="body_a" type="string" use_plain_value="true" dont_init="true"/>
+            <property id="body_b" type="string" use_plain_value="true" dont_init="true"/>
+            <property id="anchor" type="string" use_plain_value="true" dont_init="true"/>
+			<property id="enable_limit" type="string" use_plain_value="true">
+				<get text="joint_def.enableLimit"/>
+                <set text="enable_limit({value})"/>
+            </property>
+			<property id="enable_motor" type="string" use_plain_value="true">
+				<get text="joint_def.enableMotor"/>
+                <set text="enable_motor({value})"/>
+            </property>
+			<property id="lower_angle" type="float">
+				<get text="get_lower_angle()"/>
+                <set text="set_lower_angle({value})"/>
+            </property>
+			<property id="upper_angle" type="float">
+				<get text="get_upper_angle()"/>
+                <set text="set_upper_angle({value})"/>
+            </property>
+			<property id="reference_angle" type="float">
+				<get text="get_reference_angle()"/>
+                <set text="set_reference_angle({value})"/>
+            </property>
+			<property id="motor_speed" type="float">
+				<get text="joint_def.motorSpeed"/>
+                <set text="motor_speed({value})"/>
+            </property>
+			<property id="max_motor_torque" type="float">
+				<get text="joint_def.maxMotorTorque"/>
+                <set text="max_motor_torque({value})"/>
+            </property>
+        </class>
+		
+		<class id="prismatic_joint" output_id="ms.joint.PrismaticJoint">
+            <constructor_params>
+                <parameter property="body_a" runtime="true"/>
+                <parameter property="body_b" runtime="true"/>
+                <parameter property="anchor" runtime="true"/>                
+                <parameter property="axis" runtime="true"/>                
+            </constructor_params>
+
+            <property id="body_a" type="string" use_plain_value="true" dont_init="true"/>
+            <property id="body_b" type="string" use_plain_value="true" dont_init="true"/>
+            <property id="anchor" type="string" use_plain_value="true" dont_init="true"/>            
+            <property id="axis" type="string" use_plain_value="true" dont_init="true"/>
+			<property id="enable_limit" type="string" use_plain_value="true">
+				<get text="joint_def.enableLimit"/>
+                <set text="enable_limit({value})"/>
+            </property>
+			<property id="enable_motor" type="string" use_plain_value="true">
+				<get text="joint_def.enableMotor"/>
+                <set text="enable_motor({value})"/>
+            </property>
+			<property id="motor_speed" type="float">
+				<get text="joint_def.motorSpeed"/>
+                <set text="motor_speed({value})"/>
+            </property>
+			<property id="max_motor_force" type="float">
+				<get text="joint_def.maxMotorForce"/>
+                <set text="max_motor_force({value})"/>
+            </property>
+			<property id="lower_translation" type="float">
+				<get text="joint_def.lowerTranslation"/>
+                <set text="lower_translation({value})"/>
+            </property>
+			<property id="upper_translation" type="float">
+				<get text="joint_def.upperTranslation"/>
+                <set text="upper_translation({value})"/>
+            </property>
+			<property id="reference_angle" type="float">
+				<get text="get_reference_angle()"/>
+                <set text="set_reference_angle({value})"/>
+            </property>
+        </class>
+		
+		<class id="pulley_joint" output_id="ms.joint.PulleyJoint">
+            <constructor_params>
+                <parameter property="body_a" runtime="true"/>
+                <parameter property="body_b" runtime="true"/>
+				<parameter property="ground_a" runtime="true"/>                
+                <parameter property="ground_b" runtime="true"/> 
+                <parameter property="anchor_a" runtime="true"/>                
+                <parameter property="anchor_b" runtime="true"/>                
+            </constructor_params>
+
+            <property id="body_a" type="string" use_plain_value="true" dont_init="true"/>
+            <property id="body_b" type="string" use_plain_value="true" dont_init="true"/>
+			<property id="ground_a" type="string" use_plain_value="true" dont_init="true"/>
+            <property id="ground_b" type="string" use_plain_value="true" dont_init="true"/>			
+            <property id="anchor_a" type="string" use_plain_value="true" dont_init="true"/>            
+            <property id="anchor_b" type="string" use_plain_value="true" dont_init="true"/>
+			<property id="ratio" type="float">
+				<get text="joint_def.ratio"/>
+                <set text="ratio({value})"/>
+            </property>
+			<property id="length_a" type="float">
+				<get text="joint_def.lengthA"/>
+                <set text="length_a({value})"/>
+            </property>
+			<property id="length_b" type="float">
+				<get text="joint_def.lengthB"/>
+                <set text="length_b({value})"/>
+            </property>
+			<property id="max_length_a" type="float">
+				<get text="joint_def.maxLengthA"/>
+                <set text="max_length_a({value})"/>
+            </property>
+			<property id="max_length_b" type="float">
+				<get text="joint_def.maxLengthB"/>
+                <set text="max_length_b({value})"/>
+            </property>
+        </class>	
+		
+		<class id="weld_joint" output_id="ms.joint.WeldJoint">
+            <constructor_params>
+                <parameter property="body_a" runtime="true"/>
+                <parameter property="body_b" runtime="true"/>
+                <parameter property="anchor" runtime="true"/>                               
+            </constructor_params>
+
+            <property id="body_a" type="string" use_plain_value="true" dont_init="true"/>
+            <property id="body_b" type="string" use_plain_value="true" dont_init="true"/>
+            <property id="anchor" type="string" use_plain_value="true" dont_init="true"/> 
+			<property id="reference_angle" type="float">
+				<get text="get_reference_angle()"/>
+                <set text="set_reference_angle({value})"/>
+            </property>
+        </class>
+		
+        <class id="physics" super="body" renderer="body.xss"/>
     </types>
 </module>

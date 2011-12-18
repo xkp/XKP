@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
+        <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script> 		<script type="text/javascript" src="../js/ms-joint.js"></script> 
+            <script type="text/javascript" src="../js/ms-spawner.js"></script>
+<script type="text/javascript">	
+var drawingCanvas;		
+var g_ui;
+var g_elapsed = -1;
+var g_delta = 0.0;
+var g_canvas;
+var g_ui_root;
+var application = {};
+application.events = new ms.event.EventHolder();
+var Sound = new ms.ui.Sound();
+		if(drawingCanvas){
+			var client =
+			{
+				width: 800,
+				height: 600,
+				canvas: drawingCanvas
+			};
+			var ui = new ms.ui.Manager(client, streamer);
+			var g_ui = ui;
+			var g_ui_root = ui.root;
+		}
+		var streamer = new ms.streamer.Streamer();
+        var   b2Vec2 = Box2D.Common.Math.b2Vec2
+        ,  b2AABB = Box2D.Collision.b2AABB
+        ,  b2Mat22 = Box2D.Common.Math.b2Mat22
+        ,	b2BodyDef = Box2D.Dynamics.b2BodyDef
+        ,	b2Body = Box2D.Dynamics.b2Body
+        ,	b2FixtureDef = Box2D.Dynamics.b2FixtureDef
+        ,	b2Fixture = Box2D.Dynamics.b2Fixture
+        ,	b2World = Box2D.Dynamics.b2World
+        ,	b2MassData = Box2D.Collision.Shapes.b2MassData
+        ,	b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape
+        ,	b2CircleShape = Box2D.Collision.Shapes.b2CircleShape
+        ,	b2DebugDraw = Box2D.Dynamics.b2DebugDraw
+        ,  	b2MouseJointDef =  Box2D.Dynamics.Joints.b2MouseJointDef
+        , 	b2Transform = Box2D.Common.Math.b2Transform
+		,	b2RevoluteJointDef = Box2D.Dynamics.Joints.b2RevoluteJointDef
+		,	b2Joint = Box2D.Dynamics.Joints.b2Joint
+		,	b2PrismaticJointDef = Box2D.Dynamics.Joints.b2PrismaticJointDef
+		,	b2PulleyJointDef = Box2D.Dynamics.Joints.b2PulleyJointDef
+		,	b2WeldJointDef = Box2D.Dynamics.Joints.b2WeldJointDef
+		,	b2LineJointDef = Box2D.Dynamics.Joints.b2LineJointDef
+		,	b2DistanceJointDef = Box2D.Dynamics.Joints.b2DistanceJointDef
+        ;
+        var g_world = new b2World(
+            new b2Vec2(0, 0)    //gravity
+        ,  true                 //allow sleep
+        );
+		var physics_utils = new ms.joint.Utils();
+            var g_spawner_manager = new ms.arcade.SpawnManager();
+        var g_step_collisions = [];
+        var contactListener = new Box2D.Dynamics.b2ContactListener;
+        contactListener.BeginContact = function(contact, manifold) 
+        {
+            function get_collider(body)
+            {
+                if (body.host && ("collision" in body.host.events))
+                    return body.host;
+                return null;
+            }
+            var host1 = get_collider(contact.GetFixtureA().GetBody());
+            var host2 = get_collider(contact.GetFixtureB().GetBody());
+            if (host1)
+                g_step_collisions.push({host1: host1, host2:contact.GetFixtureB().GetBody().host, contact: contact, manifold:manifold});
+            if (host2)
+                g_step_collisions.push({host1: host2, host2:contact.GetFixtureA().GetBody().host, contact: contact, manifold:manifold});
+        };
+        g_world.SetContactListener(contactListener);
+        var g_world_scale = 30;
+        var fixDef = new b2FixtureDef;
+        var bodyDef = new b2BodyDef;
+        function update_body_position(host)
+        {
+            var me = host.physics;
+            if (me.xs_updating)
+                return;
+            var pos = new b2Vec2((host.x + host.w/2)/g_world_scale, (host.y + host.h/2)/g_world_scale);
+            var rot = new b2Mat22();
+            rot.Set(host.rotation);
+            var xform = new b2Transform(pos, rot);
+            me.SetTransform(xform);
+        }
+        var def_package_items = [];
+                def_package_items.push(
+            {
+		id:"__image1",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/car.png"
+});
+                def_package_items.push(
+            {
+		id:"__image2",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/wheel.png"
+});
+                def_package_items.push(
+            {
+		id:"__image3",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/box.png"
+});
+        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
+		g_startup_package.load();	
+function start(resolution)  
+{  
+	function updater()  
+	{  
+		var now   = new Date().getTime();
+        if (g_elapsed < 0)
+            g_delta = 0; //first update
+        else
+		    g_delta  = now - g_elapsed;  
+        g_elapsed = now; 
+        g_world.Step(1 / 60, 10, 10);
+        g_world.DrawDebugData();
+        g_world.ClearForces();
+            g_spawner_manager.update(g_delta);
+        //process collisions
+        for(var i = 0; i < g_step_collisions.length; i++)
+        {
+            var info = g_step_collisions[i];
+			info.host1.events.dispatch("collision", [info.host2, info.contact, info.manifold]);             
+        }
+        g_step_collisions = [];
+        //process contacts
+        function get_contact_handler(body)
+        {
+            if (body.host && ("contact" in body.host.events))
+                return body.host;
+            return null;
+        }
+        var cc = g_world.GetContactList();
+        while(cc)
+        {
+            var host1 = get_contact_handler(cc.GetFixtureA().GetBody());
+            var host2 = get_contact_handler(cc.GetFixtureB().GetBody());
+            if (host1)
+                host1.contact(host2, cc);
+            if (host2)
+                host2.contact(host1, cc);
+            cc = cc.GetNext();
+        }
+        //synch
+        var bb = g_world.GetBodyList();
+        while(bb)
+        {
+            if (!bb.IsActive())
+            {
+                bb = bb.GetNext();
+                continue;
+            }    
+            var angle = bb.GetAngle();
+            var pos   = bb.GetTransform().position;
+            if (bb.host)
+            {
+                var x = pos.x*g_world_scale;
+                var y = pos.y*g_world_scale;
+                bb.host.xs_updating = true;
+                bb.host.position(x - bb.host.w/2, y - bb.host.h/2);
+                bb.host.set_rotation(angle*180/Math.PI);
+                bb.host.xs_updating = false;
+            }
+            bb = bb.GetNext();
+        }
+			application.update_car();
+		var context = g_canvas.getContext('2d');
+		g_ui.update(g_delta, context);
+        window.setTimeout(updater, resolution);  
+	}    
+	window.setTimeout(updater, resolution);  
+}  
+            car = Class.create(ms.ui.Image,
+        {
+    initialize: function($super
+                , src
+                )
+    {
+        $super(
+        src? src : "images/car.png"        );
+        this.events = new ms.event.EventHolder(); 
+                this.size(50, 100);
+                var __physics2;
+				this.events.addListener('resized', function(cmp)
+                {
+                    if (cmp.physics)
+                        g_world.DestroyBody(cmp.physics);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_dynamicBody;
+                fixDef.shape = new b2PolygonShape;
+                    fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
+            fixDef.isSensor = false;
+                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);
+            current_body.CreateFixture(fixDef);
+                cmp.physics = current_body;
+                cmp.events.addListener('moved', update_body_position);
+                current_body.host = cmp;
+                }
+				);
+                if (this.w > 0 && this.h > 0)
+                {
+					this.events.dispatch("resized", [this]);                     
+                }
+                this.RemoveFromWorld = function(keep_visual) 
+                {
+                    g_world.DestroyBody(this.physics);
+                    if (!keep_visual)
+                    {
+                        this.parent.removeComponent(this);
+                    }
+                }
+                __physics2 = this.__physics2;
+            if (this.init)
+                this.init();
+            },
+});
+            wheel = Class.create(ms.ui.Image,
+        {
+    initialize: function($super
+                , src
+                )
+    {
+        $super(
+        src? src : "images/wheel.png"        );
+        this.events = new ms.event.EventHolder(); 
+                this.size(10, 20);
+                var __physics3;
+				this.events.addListener('resized', function(cmp)
+                {
+                    if (cmp.physics)
+                        g_world.DestroyBody(cmp.physics);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_dynamicBody;
+                fixDef.shape = new b2PolygonShape;
+                    fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
+            fixDef.isSensor = false;
+                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);
+            current_body.CreateFixture(fixDef);
+                cmp.physics = current_body;
+                cmp.events.addListener('moved', update_body_position);
+                current_body.host = cmp;
+                }
+				);
+                if (this.w > 0 && this.h > 0)
+                {
+					this.events.dispatch("resized", [this]);                     
+                }
+                this.RemoveFromWorld = function(keep_visual) 
+                {
+                    g_world.DestroyBody(this.physics);
+                    if (!keep_visual)
+                    {
+                        this.parent.removeComponent(this);
+                    }
+                }
+                __physics3 = this.__physics3;
+            if (this.init)
+                this.init();
+            },
+});
+            box = Class.create(ms.ui.Image,
+        {
+    initialize: function($super
+                , src
+                )
+    {
+        $super(
+        src? src : "images/box.png"        );
+        this.events = new ms.event.EventHolder(); 
+                this.size(100, 100);
+                var __physics1;
+				this.events.addListener('resized', function(cmp)
+                {
+                    if (cmp.physics)
+                        g_world.DestroyBody(cmp.physics);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_dynamicBody;
+                fixDef.shape = new b2PolygonShape;
+                    fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
+            fixDef.isSensor = false;
+                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);
+            current_body.CreateFixture(fixDef);
+                cmp.physics = current_body;
+                cmp.events.addListener('moved', update_body_position);
+                current_body.host = cmp;
+                }
+				);
+                if (this.w > 0 && this.h > 0)
+                {
+					this.events.dispatch("resized", [this]);                     
+                }
+                this.RemoveFromWorld = function(keep_visual) 
+                {
+                    g_world.DestroyBody(this.physics);
+                    if (!keep_visual)
+                    {
+                        this.parent.removeComponent(this);
+                    }
+                }
+                __physics1 = this.__physics1;
+            if (this.init)
+                this.init();
+            },
+});
+            my_body = Class.create(ms.ui.Image,
+        {
+    initialize: function($super
+                , src
+                )
+    {
+        $super(
+        src        );
+        this.events = new ms.event.EventHolder(); 
+	var ev_parent = this;
+	this.events.addListener("collision", function(who)
+	{    
+	}
+	);
+            if (this.init)
+                this.init();
+            },
+});
+                application.steering_angle = 0;
+                application.max_steer_angle = 60;
+                application.steer_speed = 0.00999999978;
+                application.engine_speed = 0;
+                application.engine_on = false;
+                application.direction = null;
+                application.mspeed = null;
+                application.velocity = null;
+                application.sideways_axis = null;
+                application.local_point = null;
+                application.gear = null;
+	application.start_engine = function() 
+	{
+		application.engine_on = true;
+application.engine_speed = -1 * application.gear * 0.800000012;
+	};
+	application.stop_engine = function() 
+	{
+		application.engine_on = false;
+application.engine_speed = 0;
+	};
+	application.update_car = function() 
+	{
+		application.kill_orthogonal_velocity(left_wheel.physics);
+application.kill_orthogonal_velocity(right_wheel.physics);
+application.kill_orthogonal_velocity(left_rear_wheel.physics);
+application.kill_orthogonal_velocity(right_rear_wheel.physics);
+application.direction = right_wheel.physics.GetTransform().R.col2.Copy();
+application.direction.Multiply(application.engine_speed);
+right_wheel.physics.ApplyForce(application.direction, right_wheel.physics.GetPosition());
+application.direction = left_wheel.physics.GetTransform().R.col2.Copy();
+application.direction.Multiply(application.engine_speed);
+left_wheel.physics.ApplyForce(application.direction, left_wheel.physics.GetPosition());
+application.direction = right_rear_wheel.physics.GetTransform().R.col2.Copy();
+application.direction.Multiply(application.engine_speed);
+right_rear_wheel.physics.ApplyForce(application.direction, right_rear_wheel.physics.GetPosition());
+application.direction = left_rear_wheel.physics.GetTransform().R.col2.Copy();
+application.direction.Multiply(application.engine_speed);
+left_rear_wheel.physics.ApplyForce(application.direction, left_rear_wheel.physics.GetPosition());
+application.mspeed = application.steering_angle - right_wheel_joint.joint.GetJointAngle();
+right_wheel_joint.joint.SetMotorSpeed(application.mspeed * application.steer_speed);
+application.mspeed = application.steering_angle - left_wheel_joint.joint.GetJointAngle();
+left_wheel_joint.joint.SetMotorSpeed(application.mspeed * application.steer_speed);
+	};
+	application.kill_orthogonal_velocity = function(b) 
+	{
+		application.local_point = physics_utils.box2d_vector(0, 0);
+application.velocity = b.GetLinearVelocityFromLocalPoint(application.local_point);
+application.sideways_axis = b.GetTransform().R.col2.Copy();
+application.sideways_axis.Multiply(application.velocity.x * application.sideways_axis.x + application.velocity.y * application.sideways_axis.y);
+b.SetLinearVelocity(application.sideways_axis);
+	};
+	var ev_parent = this;
+	application.events.addListener("keydown", function(keycode)
+	{    
+		if (keycode == LEFT_ARROW)
+{
+application.steering_angle = -1 * application.max_steer_angle;
+application.steer_speed = 0.00999999978;
+}
+if (keycode == RIGHT_ARROW)
+{
+application.steering_angle = application.max_steer_angle;
+application.steer_speed = 0.00999999978;
+}
+if (keycode == UP_ARROW)
+{
+application.gear = 1;
+application.start_engine();
+}
+if (keycode == DOWN_ARROW)
+{
+application.gear = -1;
+application.start_engine();
+}
+	}
+	);
+	var ev_parent = this;
+	application.events.addListener("keyup", function(keycode)
+	{    
+		if (keycode == DOWN_ARROW || keycode == UP_ARROW)
+{
+application.stop_engine();
+}
+if (keycode == RIGHT_ARROW || keycode == LEFT_ARROW)
+{
+application.steering_angle = 0;
+application.steer_speed = 1;
+}
+	}
+	);
+window.onload = function() 
+{
+	drawingCanvas = document.getElementById("myCanvas");
+    g_canvas = drawingCanvas;
+	if (drawingCanvas && drawingCanvas.getContext)
+	{
+		var client =
+		{
+			width: 800,
+			height: 600,
+			canvas: drawingCanvas
+		};
+		var ui = new ms.ui.Manager(client, streamer);
+		g_ui = ui;
+        g_ui_root = ui.root;
+     	ui.load_resources(function()
+		{
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX, ev.clientY);                  
+	};	
+		    car_1 = new car( 
+	    "images/car.png",g_ui_root.manager, g_ui_root);
+                car_1.rect(300, 200, 50, 100);
+		    right_wheel = new wheel( 
+	    "images/wheel.png",g_ui_root.manager, g_ui_root);
+                right_wheel.rect(345, 220, 10, 20);
+		    right_rear_wheel = new wheel( 
+	    "images/wheel.png",g_ui_root.manager, g_ui_root);
+                right_rear_wheel.rect(345, 260, 10, 20);
+		    left_wheel = new wheel( 
+	    "images/wheel.png",g_ui_root.manager, g_ui_root);
+                left_wheel.rect(295, 220, 10, 20);
+		    left_rear_wheel = new wheel( 
+	    "images/wheel.png",g_ui_root.manager, g_ui_root);
+                left_rear_wheel.rect(295, 260, 10, 20);
+		    box_1 = new box( 
+	    "images/box.png",g_ui_root.manager, g_ui_root);
+                box_1.rect(400, 300, 100, 100);
+		    box_2 = new box( 
+	    "images/box.png",g_ui_root.manager, g_ui_root);
+                box_2.rect(400, 100, 100, 100);
+		    box_3 = new box( 
+	    "images/box.png",g_ui_root.manager, g_ui_root);
+                box_3.rect(200, 300, 100, 100);
+		    box_4 = new box( 
+	    "images/box.png",g_ui_root.manager, g_ui_root);
+                box_4.rect(100, 100, 100, 100);
+right_wheel_joint = 
+new ms.joint.RevoluteJoint(
+car_1.physics,right_wheel.physics,physics_utils.physics_center(right_wheel));
+                right_wheel_joint.enable_motor(1);
+                right_wheel_joint.max_motor_torque(100000);
+                right_wheel_joint.enable_limit(1);
+                right_wheel_joint.set_lower_angle(-60);
+                right_wheel_joint.set_upper_angle(60);
+left_wheel_joint = 
+new ms.joint.RevoluteJoint(
+car_1.physics,left_wheel.physics,physics_utils.physics_center(left_wheel));
+                left_wheel_joint.enable_motor(1);
+                left_wheel_joint.max_motor_torque(100000);
+                left_wheel_joint.enable_limit(1);
+                left_wheel_joint.set_lower_angle(-60);
+                left_wheel_joint.set_upper_angle(60);
+right_rear_wheel_joint = 
+new ms.joint.PrismaticJoint(
+car_1.physics,right_rear_wheel.physics,physics_utils.physics_center(right_rear_wheel),physics_utils.box2d_vector(1, 0));
+                right_rear_wheel_joint.enable_limit(1);
+                right_rear_wheel_joint.lower_translation(0);
+                right_rear_wheel_joint.upper_translation(0);
+left_rear_wheel_joint = 
+new ms.joint.PrismaticJoint(
+car_1.physics,left_rear_wheel.physics,physics_utils.physics_center(left_rear_wheel),physics_utils.box2d_vector(1, 0));
+                left_rear_wheel_joint.enable_limit(1);
+                left_rear_wheel_joint.lower_translation(0);
+                left_rear_wheel_joint.upper_translation(0);
+			document.onkeydown = function(ev)
+			{
+				ui.keydown(ev.keyCode);                  
+			};
+			document.onkeyup = function(ev)
+			{
+				ui.keyup(ev.keyCode);                  
+			};
+			document.onkeypress = function(ev)
+			{
+				ui.keypress(ev.keyCode);                  
+			};
+            if (application.init)
+            {
+                application.init();
+            }
+            start();
+			ui.draw(drawingCanvas.getContext('2d'));
+		});
+	}
+}
+</script>
+</head>
+<body>
+	<canvas id="myCanvas" width="800" height="600">
+		<p>Your browser doesn't support canvas.</p>
+	</canvas>
+</body>
+</html>

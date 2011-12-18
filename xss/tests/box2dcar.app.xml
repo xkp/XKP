@@ -1,0 +1,45 @@
+<application src="box2dcar.app.xs" width="800" height="600">
+    <physics_world  id = "myWorld"
+					scale       = "30" 
+					friction    = "0.0" 
+					density     = "1.0" 
+					restitution = "0.2"	 
+					linear_damping = "0.0" 
+					angular_damping = "0.0"					
+				   />
+    <resources>
+        <image src="images/car.png"/>
+        <image src="images/wheel.png"/>
+        <image src="images/box.png"/>       
+    </resources>
+    
+    <car id="car_1" x="300" y="200"/>
+	<wheel id="right_wheel" x="345" y="220"/>
+	<wheel id="right_rear_wheel" x="345" y="260"/>
+	<wheel id="left_wheel" x="295" y="220"/>
+	<wheel id="left_rear_wheel" x="295" y="260"/>
+	
+	<box id="box_1" x="400" y="300"/>
+	<box id="box_2" x="400" y="100"/>
+	<box id="box_3" x="200" y="300"/>
+	<box id="box_4" x="100" y="100"/>
+	
+	<revolute_joint id="right_wheel_joint"	body_a="car_1.physics" body_b="right_wheel.physics" 
+						anchor="physics_utils.physics_center(right_wheel)"
+						enable_motor="true" max_motor_torque="100000" enable_limit="true"
+						lower_angle="-60" upper_angle="60"
+						/>
+	<revolute_joint id="left_wheel_joint"	body_a="car_1.physics" body_b="left_wheel.physics" 
+						anchor="physics_utils.physics_center(left_wheel)" 
+						enable_motor="true" max_motor_torque="100000" enable_limit="true"
+						lower_angle="-60" upper_angle="60"
+						/>
+	<prismatic_joint id="right_rear_wheel_joint"	body_a="car_1.physics" body_b="right_rear_wheel.physics" 
+						anchor="physics_utils.physics_center(right_rear_wheel)" axis="physics_utils.box2d_vector(1, 0)"
+						enable_limit="true" lower_translation="0" upper_translation="0"
+						/>	
+	<prismatic_joint id="left_rear_wheel_joint"	body_a="car_1.physics" body_b="left_rear_wheel.physics" 
+						anchor="physics_utils.physics_center(left_rear_wheel)" axis="physics_utils.box2d_vector(1, 0)"
+						enable_limit="true" lower_translation="0" upper_translation="0"
+						/>
+</application>

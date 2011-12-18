@@ -14,7 +14,6 @@
 
     <class id="good_guy" super="img" src="images/smile_grin_48.png" width="30" height="30">
         <physics body_type="dynamic" sensor="true" shape="circle" aradius="21.5"/>
-
         <move_action id="move_around" vx="0" vy="0" auto_start="true"/>
     </class>
 
