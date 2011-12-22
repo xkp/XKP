@@ -1005,8 +1005,27 @@ ms.ui.Rectangle = Class.create(ms.ui.Component,
 		this.stroke = stroke;
 		this.line_width = line_width;
 	},	
+	resized: function()
+	{
+	},
+	set_fill: function(value)
+	{
+		this.fill = value;
+		this.invalidate();
+	},
+	set_stroke: function(value)
+	{
+		this.stroke = value;
+		this.invalidate();
+	},
+	set_line_width: function(value)
+	{
+		this.line_width = value;
+		this.invalidate();
+	},
 	draw: function($super, context, x, y)
 	{		
+		old_line_width = context.lineWidth;
 		context.save();
 		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
 		context.rotate(this.rotation);
@@ -1033,7 +1052,8 @@ ms.ui.Rectangle = Class.create(ms.ui.Component,
         {
             context.globalAlpha = old_alpha;
         }			
-		context.restore();		
+		context.restore();
+		context.lineWidth = old_line_width;		
         $super(context);
 	}
 });
@@ -1048,18 +1068,34 @@ ms.ui.Circle = Class.create(ms.ui.Component,
 		this.stroke = stroke;
 		this.line_width = line_width;		
 	},	
-	setRadius: function( value )
+	set_radius: function( value )
 	{					
 		this.w = 2 * value;
 		this.h = 2 * value;
 		this.invalidate();
 	},	
-	getRadius: function()
+	get_radius: function()
 	{					
 		return this.w / 2;
 	},
+	set_fill: function(value)
+	{
+		this.fill = value;
+		this.invalidate();
+	},
+	set_stroke: function(value)
+	{
+		this.stroke = value;
+		this.invalidate();
+	},
+	set_line_width: function(value)
+	{
+		this.line_width = value;
+		this.invalidate();
+	},
 	draw: function($super, context, x, y)
 	{	
+		old_line_width = context.lineWidth;
 		context.beginPath();
 		if (this.opacity != null)
         {
@@ -1082,6 +1118,7 @@ ms.ui.Circle = Class.create(ms.ui.Component,
         {
             context.globalAlpha = old_alpha;
         }
+		context.lineWidth = old_line_width;
 		$super(context);
 	}
 });
@@ -1095,6 +1132,21 @@ ms.ui.Polygon = Class.create(ms.ui.Component,
 		this.stroke = stroke;
 		this.line_width = line_width;
 		this.points = [];
+	},
+	set_fill: function(value)
+	{
+		this.fill = value;
+		this.invalidate();
+	},
+	set_stroke: function(value)
+	{
+		this.stroke = value;
+		this.invalidate();
+	},
+	set_line_width: function(value)
+	{
+		this.line_width = value;
+		this.invalidate();
 	},
 	setPointbyIndex: function(index, x, y)
 	{					
@@ -1123,7 +1175,8 @@ ms.ui.Polygon = Class.create(ms.ui.Component,
 		context.save();
 		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
 		context.rotate(this.rotation);
-		context.beginPath();		
+		context.beginPath();	
+		old_line_width = context.lineWidth;
 		if (this.opacity != null)
         {
             old_alpha = context.globalAlpha;
@@ -1152,7 +1205,8 @@ ms.ui.Polygon = Class.create(ms.ui.Component,
         {
             context.globalAlpha = old_alpha;
         }			
-		context.restore();		
+		context.restore();
+		context.lineWidth = old_line_width;
         $super(context);
 	}
 });

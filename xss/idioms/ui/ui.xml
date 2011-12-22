@@ -58,9 +58,18 @@
 				<parameter property="line_width" runtime="true"/>
             </constructor_params>
 
-            <property id="fill" type="string" dont_init="true"/>
-			<property id="stroke" type="string" dont_init="true"/>
-			<property id="line_width" type="int" dont_init="true"/>
+            <property id="fill" type="string" dont_init="true">
+				<get text="fill"/>
+                <set text="set_fill({value})"/>
+			</property>
+			<property id="stroke" type="string" dont_init="true">
+				<get text="stroke"/>
+                <set text="set_stroke({value})"/>
+			</property>
+			<property id="line_width" type="int" dont_init="true">
+				<get text="line_width"/>
+                <set text="set_line_width({value})"/>
+			</property>
 		</class>
 		
 		<class id="polygon" super="component" output_id="ms.ui.Polygon">
@@ -70,9 +79,18 @@
 				<parameter property="line_width" runtime="true"/>
             </constructor_params>
 
-            <property id="fill" type="string" dont_init="true"/>
-			<property id="stroke" type="string" dont_init="true"/>
-			<property id="line_width" type="int" dont_init="true"/>
+            <property id="fill" type="string" dont_init="true">
+				<get text="fill"/>
+                <set text="set_fill({value})"/>
+			</property>
+			<property id="stroke" type="string" dont_init="true">
+				<get text="stroke"/>
+                <set text="set_stroke({value})"/>
+			</property>
+			<property id="line_width" type="int" dont_init="true">
+				<get text="line_width"/>
+                <set text="set_line_width({value})"/>
+			</property>
 		</class>
 		
 		<class id="polygon_point" renderer="path_renderer.xss"/>
@@ -84,12 +102,21 @@
 				<parameter property="line_width" runtime="true"/>									
             </constructor_params>
 
-            <property id="fill" type="string" dont_init="true"/>
-			<property id="stroke" type="string" dont_init="true"/>
-			<property id="line_width" type="int" dont_init="true"/>
+            <property id="fill" type="string" dont_init="true">
+				<get text="fill"/>
+                <set text="set_fill({value})"/>
+			</property>
+			<property id="stroke" type="string" dont_init="true">
+				<get text="stroke"/>
+                <set text="set_stroke({value})"/>
+			</property>
+			<property id="line_width" type="int" dont_init="true">
+				<get text="line_width"/>
+                <set text="set_line_width({value})"/>
+			</property>
 			<property id="radius" type="int">
-				<get text="getRadius()"/>
-				<set text="setRadius({value})"/>
+				<get text="get_radius()"/>
+				<set text="set_radius({value})"/>
 			</property>
 		</class>
 		

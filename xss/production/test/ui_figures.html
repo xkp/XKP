@@ -62,7 +62,7 @@ function start(resolution)
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
-	}
+	}    
 	window.setTimeout(updater, resolution);  
 }  
                 application.x = null;
@@ -101,11 +101,11 @@ window.onload = function()
                 div1.rect(0, 0, 400, 200);
 		    c1 = new ms.ui.Circle( 
 	    "cyan","black",3,div1.manager, div1);
-                c1.setRadius(60);
+                c1.set_radius(60);
 	var ev_parent = this;
 	c1.events.addListener("click", function()
 	{    
-		c1.setRadius(c1.getRadius() + 1);
+		c1.set_line_width(c1.line_width + 1);
 	}
 	);
                 c1.position(50, 50);
@@ -116,8 +116,7 @@ window.onload = function()
 	var ev_parent = this;
 	r1.events.addListener("click", function()
 	{    
-		r1.set_x(r1.x + 5);
-r1.set_y(r1.y + 5);
+		r1.set_stroke("brown");
 	}
 	);
                 r1.rect(200, 50, 60, 90);

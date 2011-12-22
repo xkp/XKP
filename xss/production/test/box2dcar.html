@@ -62,7 +62,14 @@ var Sound = new ms.ui.Sound();
             new b2Vec2(0, 0)    //gravity
         ,  true                 //allow sleep
         );
-		var physics_utils = new ms.joint.Utils();
+		var g_physics_data = 
+		{
+			friction: 0,
+			density: 1,
+			restitution: 0.200000003,
+			angular_damping: 0,
+			linear_damping: 0,
+		}; 
             var g_spawner_manager = new ms.arcade.SpawnManager();
         var g_step_collisions = [];
         var contactListener = new Box2D.Dynamics.b2ContactListener;
@@ -200,9 +207,15 @@ function start(resolution)
                 {
                     if (cmp.physics)
                         g_world.DestroyBody(cmp.physics);
-             fixDef.density = 1;
-             fixDef.friction = 0.5;
-             fixDef.restitution = 0.200000003;
+			if(g_physics_data.angular_damping)
+				bodyDef.angularDamping = g_physics_data.angular_damping;
+			if(g_physics_data.linear_damping)
+				bodyDef.linearDamping = g_physics_data.linear_damping;
+			fixDef.density = 0.239999995;
+			if(g_physics_data.friction)
+				fixDef.friction = g_physics_data.friction;
+			if(g_physics_data.restitution)
+				fixDef.restitution = g_physics_data.restitution;
              bodyDef.type = b2Body.b2_dynamicBody;
                 fixDef.shape = new b2PolygonShape;
                     fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
@@ -247,9 +260,16 @@ function start(resolution)
                 {
                     if (cmp.physics)
                         g_world.DestroyBody(cmp.physics);
-             fixDef.density = 1;
-             fixDef.friction = 0.5;
-             fixDef.restitution = 0.200000003;
+			if(g_physics_data.angular_damping)
+				bodyDef.angularDamping = g_physics_data.angular_damping;
+			if(g_physics_data.linear_damping)
+				bodyDef.linearDamping = g_physics_data.linear_damping;
+			if(g_physics_data.density)
+				fixDef.density = g_physics_data.density;
+			if(g_physics_data.friction)
+				fixDef.friction = g_physics_data.friction;
+			if(g_physics_data.restitution)
+				fixDef.restitution = g_physics_data.restitution;
              bodyDef.type = b2Body.b2_dynamicBody;
                 fixDef.shape = new b2PolygonShape;
                     fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
@@ -294,9 +314,16 @@ function start(resolution)
                 {
                     if (cmp.physics)
                         g_world.DestroyBody(cmp.physics);
-             fixDef.density = 1;
-             fixDef.friction = 0.5;
-             fixDef.restitution = 0.200000003;
+			if(g_physics_data.angular_damping)
+				bodyDef.angularDamping = g_physics_data.angular_damping;
+			if(g_physics_data.linear_damping)
+				bodyDef.linearDamping = g_physics_data.linear_damping;
+			if(g_physics_data.density)
+				fixDef.density = g_physics_data.density;
+			if(g_physics_data.friction)
+				fixDef.friction = g_physics_data.friction;
+			if(g_physics_data.restitution)
+				fixDef.restitution = g_physics_data.restitution;
              bodyDef.type = b2Body.b2_dynamicBody;
                 fixDef.shape = new b2PolygonShape;
                     fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
@@ -383,14 +410,14 @@ right_rear_wheel.physics.ApplyForce(application.direction, right_rear_wheel.phys
 application.direction = left_rear_wheel.physics.GetTransform().R.col2.Copy();
 application.direction.Multiply(application.engine_speed);
 left_rear_wheel.physics.ApplyForce(application.direction, left_rear_wheel.physics.GetPosition());
-application.mspeed = application.steering_angle - right_wheel_joint.joint.GetJointAngle();
+application.mspeed = application.steering_angle - right_wheel_joint.get_joint_angle() * 0.100000001;
 right_wheel_joint.joint.SetMotorSpeed(application.mspeed * application.steer_speed);
-application.mspeed = application.steering_angle - left_wheel_joint.joint.GetJointAngle();
+application.mspeed = application.steering_angle - left_wheel_joint.get_joint_angle() * 0.100000001;
 left_wheel_joint.joint.SetMotorSpeed(application.mspeed * application.steer_speed);
 	};
 	application.kill_orthogonal_velocity = function(b) 
 	{
-		application.local_point = physics_utils.box2d_vector(0, 0);
+		application.local_point = NONE_AXIS;
 application.velocity = b.GetLinearVelocityFromLocalPoint(application.local_point);
 application.sideways_axis = b.GetTransform().R.col2.Copy();
 application.sideways_axis.Multiply(application.velocity.x * application.sideways_axis.x + application.velocity.y * application.sideways_axis.y);
@@ -493,32 +520,32 @@ window.onload = function()
                 box_4.rect(100, 100, 100, 100);
 right_wheel_joint = 
 new ms.joint.RevoluteJoint(
-car_1.physics,right_wheel.physics,physics_utils.physics_center(right_wheel));
-                right_wheel_joint.enable_motor(1);
-                right_wheel_joint.max_motor_torque(100000);
-                right_wheel_joint.enable_limit(1);
+car_1,right_wheel);
+                right_wheel_joint.joint.EnableMotor(1);
+                right_wheel_joint.joint.SetMaxMotorTorque(100000);
+                right_wheel_joint.joint.EnableLimit(1);
                 right_wheel_joint.set_lower_angle(-60);
                 right_wheel_joint.set_upper_angle(60);
 left_wheel_joint = 
 new ms.joint.RevoluteJoint(
-car_1.physics,left_wheel.physics,physics_utils.physics_center(left_wheel));
-                left_wheel_joint.enable_motor(1);
-                left_wheel_joint.max_motor_torque(100000);
-                left_wheel_joint.enable_limit(1);
+car_1,left_wheel);
+                left_wheel_joint.joint.EnableMotor(1);
+                left_wheel_joint.joint.SetMaxMotorTorque(100000);
+                left_wheel_joint.joint.EnableLimit(1);
                 left_wheel_joint.set_lower_angle(-60);
                 left_wheel_joint.set_upper_angle(60);
 right_rear_wheel_joint = 
 new ms.joint.PrismaticJoint(
-car_1.physics,right_rear_wheel.physics,physics_utils.physics_center(right_rear_wheel),physics_utils.box2d_vector(1, 0));
-                right_rear_wheel_joint.enable_limit(1);
-                right_rear_wheel_joint.lower_translation(0);
-                right_rear_wheel_joint.upper_translation(0);
+car_1,right_rear_wheel,X_AXIS);
+                right_rear_wheel_joint.joint.EnableLimit(1);
+                right_rear_wheel_joint.set_lower_limit(0);
+                right_rear_wheel_joint.set_upper_limit(0);
 left_rear_wheel_joint = 
 new ms.joint.PrismaticJoint(
-car_1.physics,left_rear_wheel.physics,physics_utils.physics_center(left_rear_wheel),physics_utils.box2d_vector(1, 0));
-                left_rear_wheel_joint.enable_limit(1);
-                left_rear_wheel_joint.lower_translation(0);
-                left_rear_wheel_joint.upper_translation(0);
+car_1,left_rear_wheel,X_AXIS);
+                left_rear_wheel_joint.joint.EnableLimit(1);
+                left_rear_wheel_joint.set_lower_limit(0);
+                left_rear_wheel_joint.set_upper_limit(0);
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  

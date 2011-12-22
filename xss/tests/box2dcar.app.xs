@@ -88,23 +88,22 @@ method update_car()
 	//Steering
 	
 	//max speed - current speed , should be the motor speed , so when max speed reached , speed = 0;
-	mspeed = steering_angle - right_wheel_joint.joint.GetJointAngle();
-	right_wheel_joint.joint.SetMotorSpeed(mspeed * steer_speed);
+	mspeed = steering_angle - right_wheel_joint.joint_angle * 0.1;
+	right_wheel_joint.motor_speed = mspeed * steer_speed;
 	
-	mspeed = steering_angle - left_wheel_joint.joint.GetJointAngle();
-	left_wheel_joint.joint.SetMotorSpeed(mspeed * steer_speed);	
-	
+	mspeed = steering_angle - left_wheel_joint.joint_angle * 0.1;
+	left_wheel_joint.motor_speed = mspeed * steer_speed;	
 }
 
 method kill_orthogonal_velocity(b)
 {
-	local_point = physics_utils.box2d_vector(0,0);
+	local_point = NONE_AXIS;
 	velocity = b.GetLinearVelocityFromLocalPoint(local_point);
 
 	sideways_axis = b.GetTransform().R.col2.Copy();
 
 	//multiply vector with a constant;
-	sideways_axis.Multiply( velocity.x*sideways_axis.x + velocity.y*sideways_axis.y) ;
+	sideways_axis.Multiply(velocity.x*sideways_axis.x + velocity.y*sideways_axis.y) ;
 
 	b.SetLinearVelocity(sideways_axis); 
 }

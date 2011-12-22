@@ -9,6 +9,9 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -17,25 +20,37 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
 			{
-				width: 600,
-				height: 400,
+				width: 1000,
+				height: 1000,
 				canvas: drawingCanvas
 			};
 			var ui = new ms.ui.Manager(client, streamer);
 			var g_ui = ui;
 			var g_ui_root = ui.root;
 		}
+		var g_sequence_manager = new ms.state.Manager();
+        function default_interpolate(a, b, t)
+        {
+            return a + (b - a)*t;
+        }
 		var streamer = new ms.streamer.Streamer();
         var def_package_items = [];
                 def_package_items.push(
             {
 		id:"__image1",
 		resource_type:RESOURCE_IMAGE,
-		src:"images/img1.png"
+		src:"images/smile_grin_48.png"
+});
+                def_package_items.push(
+            {
+		id:"__image2",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/test2.png"
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
@@ -49,12 +64,14 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
+		g_sequence_manager.update(g_delta);
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
-	}
+	}    
 	window.setTimeout(updater, resolution);  
 }  
+var s1;
                 application.increment = 10;
 window.onload = function() 
 {
@@ -64,8 +81,8 @@ window.onload = function()
 	{
 		var client =
 		{
-			width: 600,
-			height: 400,
+			width: 1000,
+			height: 1000,
 			canvas: drawingCanvas
 		};
 		var ui = new ms.ui.Manager(client, streamer);
@@ -85,14 +102,68 @@ window.onload = function()
 	{
 		ui.mouseup(ev.clientX, ev.clientY);                  
 	};	
+		    rr1 = new ms.ui.Rectangle( 
+	    "black",null,null,g_ui_root.manager, g_ui_root);
+                rr1.rect(70, 30, 100, 3);
+		    r1 = new ms.ui.Rectangle( 
+	    "black",null,null,g_ui_root.manager, g_ui_root);
+                r1.rect(120, 20, 3, 0);
+		    r2 = new ms.ui.Rectangle( 
+	    "black",null,null,g_ui_root.manager, g_ui_root);
+                r2.rect(40, 140, 103, 3);
+		    r3 = new ms.ui.Rectangle( 
+	    "black",null,null,g_ui_root.manager, g_ui_root);
+                r3.rect(20, 20, 3, 103);
+		    c1 = new ms.ui.Circle( 
+	    null,"black",20,g_ui_root.manager, g_ui_root);
+                c1.setRadius(60);
+                c1.position(35, 35);
+		    c2 = new ms.ui.Circle( 
+	    null,"black",10,g_ui_root.manager, g_ui_root);
+                c2.setRadius(60);
+                c2.position(75, 350);
 		    img1 = new ms.ui.Image( 
-	    "images/img1.png",g_ui_root.manager, g_ui_root);
-	img1.click = function()
+	    "images/test2.png",g_ui_root.manager, g_ui_root);
+	var ev_parent = this;
+	img1.events.addListener("click", function()
 	{    
 		img1.set_width(img1.get_width() + application.increment);
 img1.set_height(img1.get_height() + application.increment);
-	};
-                img1.rect(100, 100, 50, 50);
+	}
+	);
+                img1.rect(100, 100, 130, 130);
+		    img2 = new ms.ui.Image( 
+	    "images/test2.png",g_ui_root.manager, g_ui_root);
+                img2.rect(300, 300, 80, 80);
+s1 =
+new ms.state.Sequence(
+g_sequence_manager);
+                s1.start();
+            s1.parent_sequence = null;
+                    var ____i1 = new ms.state.Interpolator(
+                        "radius", 
+                        default_interpolate,
+                        function(value)
+                        {
+                            c2.setRadius(value);
+                        },
+                        [
+                        {t: 0, value: 0},
+                        {t: 20, value: 50},
+                        ]);
+                    s1.addAction(null, "radius", new ms.state.State(0, 20, ____i1));                    
+                    var ____i2 = new ms.state.Interpolator(
+                        "height", 
+                        default_interpolate,
+                        function(value)
+                        {
+                            r1.set_height(value);
+                        },
+                        [
+                        {t: 3, value: 0},
+                        {t: 6, value: 100},
+                        ]);
+                    s1.addAction(null, "height", new ms.state.State(3, 6, ____i2));                    
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -117,11 +188,8 @@ img1.set_height(img1.get_height() + application.increment);
 </script>
 </head>
 <body>
-	<canvas id="myCanvas" width="600" height="400">
+	<canvas id="myCanvas" width="1000" height="1000">
 		<p>Your browser doesn't support canvas.</p>
 	</canvas>
-	<audio id="sounds" preload> 
-	Your browser does not support the audio element.
-	</audio>
 </body>
 </html>

@@ -61,8 +61,7 @@ var Sound = new ms.ui.Sound();
         var g_world = new b2World(
             new b2Vec2(0, 3)    //gravity
         ,  true                 //allow sleep
-        );
-		var physics_utils = new ms.joint.Utils();
+        );		
             var g_spawner_manager = new ms.arcade.SpawnManager();
         var g_step_collisions = [];
         var contactListener = new Box2D.Dynamics.b2ContactListener;
@@ -343,14 +342,21 @@ btn1.set_y(y - btn1.h / 2);
                 btn1.rect(300, 250, 50, 50);
 		    btn2 = new my_body( 
 	    "images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
+	var ev_parent = this;
+	btn2.events.addListener("drag", function(x,y)
+	{    
+		btn2.set_x(x - btn1.w / 2);
+btn2.set_y(y - btn1.h / 2);
+	}
+	);
                 btn2.rect(100, 250, 50, 50);
 		    __floor1 = new floor( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
                 __floor1.rect(0, 390, 600, 40);
 __distance_joint1 = 
 new ms.joint.DistanceJoint(
-btn1.physics,btn2.physics,physics_utils.physics_center(btn1),physics_utils.physics_center(btn2));
-                __distance_joint1.length(5);
+btn1,btn2);
+                __distance_joint1.joint.SetLength(5);
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  

@@ -15,9 +15,7 @@
     
     <my_body id="btn1" x="300" y="250"/>
 	<my_body id="btn2" x="100" y="250"/>
-	<distance_joint body_a="btn1.physics" body_b="btn2.physics" anchor_a="physics_utils.physics_center(btn1)" anchor_b="physics_utils.physics_center(btn2)"
-					length = "5"
-					/>
+	<distance_joint body_a="btn1" body_b="btn2"	length = "5"/>
     <floor x="0" y="390" width="600" height="40"/>
     
 </application>

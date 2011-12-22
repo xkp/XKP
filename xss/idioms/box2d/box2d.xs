@@ -65,7 +65,15 @@ on render_initialization()
             new b2Vec2(<xss:e v="gx"/>, <xss:e v="gy"/>)    //gravity
         ,  true                 //allow sleep
         );
-		var physics_utils = new ms.joint.Utils();
+		var g_physics_data = 
+		{
+			friction: <xss:e v="world.friction"/>,
+			density: <xss:e v="world.density"/>,
+			restitution: <xss:e v="world.restitution"/>,
+			angular_damping: <xss:e v="world.angular_damping"/>,
+			linear_damping: <xss:e v="world.linear_damping"/>,
+		}; 
+
     }
 
     if (!application.noSpawner)
