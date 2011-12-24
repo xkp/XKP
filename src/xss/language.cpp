@@ -501,7 +501,7 @@ expr_object_resolver::expr_object_resolver(XSSContext ctx) :
 variant expr_object_resolver::get()
 	{
     variant result;
-    if (not_found_)  
+    if (not_found_)
       return result;
 
 		assert(stack_.size() <= 1);
@@ -547,7 +547,7 @@ void expr_object_resolver::exec_operator(operator_type op, int pop_count, int pu
 						variant v2 = stack_.top(); stack_.pop();
 
             resolve_info left;
-            bool         found = true; 
+            bool         found = true;
             if (v2.is<expression_identifier>())
               {
                 expression_identifier arg2 = v2;
@@ -559,18 +559,22 @@ void expr_object_resolver::exec_operator(operator_type op, int pop_count, int pu
             else if (v2.is<XSSProperty>())
               {
                 left.what = RESOLVE_PROPERTY;
-                left.value = (XSSProperty)v2;
+                XSSProperty prop = variant_cast<XSSProperty>(v2, XSSProperty());
+                assert(prop);
+                left.value = prop;
               }
             else if (v2.is<XSSType>())
               {
                 left.what = RESOLVE_TYPE;
-                left.value = (XSSType)v2;
-              }            
-            else 
+                XSSType type = variant_cast<XSSType>(v2, XSSType());
+                assert(type);
+                left.value = type;
+              }
+            else
               {
                 found = false;
-              }            
-            
+              }
+
             if (found)
               {
                 resolve_info right;
@@ -599,7 +603,7 @@ void expr_object_resolver::exec_operator(operator_type op, int pop_count, int pu
                       {
                         XSSProperty prop      = left.value;
                         XSSType     prop_type = prop->type();
-                        
+
                         if (prop_type->is_array())
                           result = prop_type->array_type();
                         else
@@ -669,7 +673,7 @@ void expression_analizer::analyze(expression& expr, XSSContext ctx)
                       {
                         this_property_ = true;
                         is_property_   = true;
-                        property_      = ri.value; 
+                        property_      = ri.value;
                         break;
                       }
                   }
@@ -696,8 +700,8 @@ void expression_analizer::analyze(expression& expr, XSSContext ctx)
                 expr.visit(&es);
 
                 path_ = es.left;
-                
-                //resolve 
+
+                //resolve
                 expression_identifier first_ei = path_.last();
                 first_string_ = first_ei.value; //td: !!! []
 
@@ -706,16 +710,16 @@ void expression_analizer::analyze(expression& expr, XSSContext ctx)
                   {
                     switch(fri.what)
                       {
-                        case RESOLVE_INSTANCE: 
-                        case RESOLVE_VARIABLE: break; 
-                        case RESOLVE_PROPERTY: first_property_ = true; break; 
+                        case RESOLVE_INSTANCE:
+                        case RESOLVE_VARIABLE: break;
+                        case RESOLVE_PROPERTY: first_property_ = true; break;
                         default : assert(false); //catch
                       }
                     first_ = fri.value;
                   }
 
                 expression_identifier ei = es.right.pop_first();
-                property_name_ = ei.value; 
+                property_name_ = ei.value;
 
                 XSSObject   instance = variant_cast<XSSObject>(lang_utils::object_expr(path_, ctx), XSSObject());
                 if (instance)
@@ -743,7 +747,7 @@ void expression_analizer::analyze(expression& expr, XSSContext ctx)
                 analyze_path(expr, op, ctx, method_name_, instance);
                 if (instance)
                     method_ = instance->get_method(method_name_);
-                
+
                 is_call_ = true;
                 break;
               }
@@ -754,7 +758,7 @@ void expression_analizer::analyze(expression& expr, XSSContext ctx)
                 method_name_                   = ei.value;
                 if (instance)
                     method_ = instance->get_method(method_name_);
-                
+
                 is_call_ = true;
                 break;
               }
@@ -836,8 +840,8 @@ void expression_analizer::analyze_path(expression& expr, operator_type op, XSSCo
 
     path_    = es.left;
     instance = variant_cast<XSSObject>(lang_utils::object_expr(path_, ctx), XSSObject());
-                
-    //resolve 
+
+    //resolve
     expression_identifier first_ei = path_.last();
     first_string_ = first_ei.value; //td: !!! []
 
@@ -846,16 +850,16 @@ void expression_analizer::analyze_path(expression& expr, operator_type op, XSSCo
       {
         switch(fri.what)
           {
-            case RESOLVE_INSTANCE: 
-            case RESOLVE_VARIABLE: break; 
-            case RESOLVE_PROPERTY: first_property_ = true; break; 
+            case RESOLVE_INSTANCE:
+            case RESOLVE_VARIABLE: break;
+            case RESOLVE_PROPERTY: first_property_ = true; break;
             default : assert(false); //catch
           }
         first_ = fri.value;
       }
 
     expression_identifier ei = es.right.pop_first();
-    last_id = ei.value; 
+    last_id = ei.value;
 
     //get info on the start of the chain
     expression_identifier vf = expr.first();
@@ -1027,7 +1031,7 @@ void lang_utils::var_gatherer(code& cde, XSSContext ctx)
 
     if (ctx->resolve("#var_gatherer", ri))
       return;
-    
+
     ctx->register_symbol(RESOLVE_CONST, "#var_gatherer", true);
 
     variable_gather vg(ctx);
@@ -1124,7 +1128,7 @@ str lang_utils::assign_operator(operator_type op, XSSProperty prop, const str& p
     Language  lang = ctx->get_language();
     XSSType   type = prop->type();
     str       aop  = check_array_op(op, prop, prop->type(), path, value, ctx);
-    
+
     if (!aop.empty())
       return aop;
 

@@ -544,7 +544,7 @@ str base_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
 
         if (ei.value == "this")
           result = lang->resolve_this(ctx_);
-        else  
+        else
           result = ei.value;
 
         if (!parent)
@@ -705,7 +705,8 @@ XSSType base_expr_renderer::type()
 variant base_expr_renderer::eval(XSSContext ctx)
   {
     fs::path file;
-    code_context cctx = ctx->get_compile_context();
+    code_context cctx;
+    cctx = ctx->get_compile_context();
     xs_utils xs;
     return xs.evaluate_xs_expression(expr_, cctx, file);
   }
@@ -1044,14 +1045,14 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 
                     XSSContext  ctx(new xss_context(ctx_, type_path));
                     XSSRenderer rend = compiler->compile_xss_file(xss, ctx);
-                    str         res  = rend->render(XSSObject(), &args); 
+                    str         res  = rend->render(XSSObject(), &args);
                     push_rendered(res, op_prec, variant());
                   }
                 else
                   {
                     Language lang = ctx_->get_language();
                     str      lr = lang->instantiate(instantiation, XSSObject(), info);
-                    push_rendered(lr, op_prec, variant(), caller); 
+                    push_rendered(lr, op_prec, variant(), caller);
                   }
               }
             else
@@ -1280,10 +1281,10 @@ str base_lang::instantiate(XSSType type, XSSObject instance, DynamicArray params
   {
     str          class_name  = type->output_id();
     DynamicArray ctor_params = type->ctor_args();
-    
+
     std::stringstream ss;
     ss << "new " << class_name << "(";
-    
+
     std::vector<variant>::iterator it = ctor_params->ref_begin();
     std::vector<variant>::iterator nd = ctor_params->ref_end();
 
@@ -1296,7 +1297,7 @@ str base_lang::instantiate(XSSType type, XSSObject instance, DynamicArray params
         str       constant = p->get<str> ("constant", str());
         str       prperty  = p->get<str> ("property", str());
         bool      runtime  = p->get<bool>("runtime",  false);
-        if (!constant.empty())  
+        if (!constant.empty())
           {
             value = constant;
           }
@@ -1319,15 +1320,15 @@ str base_lang::instantiate(XSSType type, XSSObject instance, DynamicArray params
                 error.add("type", type->id());
                 error.add("parameter", p->id());
                 xss_throw(error);
-              }                
+              }
 
 
-            XSSProperty prop; 
+            XSSProperty prop;
             if (instance)
               prop = instance->get_property(prperty);
             else
               prop = type->get_property(prperty);
-            
+
             if (!prop)
               {
                 param_list error;
@@ -1336,7 +1337,7 @@ str base_lang::instantiate(XSSType type, XSSObject instance, DynamicArray params
                 error.add("type", type->id());
                 error.add("property", prperty);
                 xss_throw(error);
-              }                
+              }
 
             value = prop->render_value();
           }
@@ -1377,16 +1378,16 @@ void base_lang::compile_property(XSSProperty prop, XSSContext ctx)
 
         boost::hash<std::string> string_hash;
         int  hash       = string_hash(text);
-        int  stored     = prop->get("#get_renderer_hash", 0); 
+        int  stored     = prop->get("#get_renderer_hash", 0);
         bool do_compile = true;
         if (stored != 0)
           {
             do_compile = stored != hash;
           }
-        
+
         if (do_compile)
           {
-            prop->set("#get_renderer_hash", hash); 
+            prop->set("#get_renderer_hash", hash);
 
             XSSContext my_ctx(new xss_context(ctx));
             my_ctx->add_parameter("path", ctx->get_type("string"));
@@ -1410,16 +1411,16 @@ void base_lang::compile_property(XSSProperty prop, XSSContext ctx)
 
         boost::hash<std::string> string_hash;
         int  hash       = string_hash(text);
-        int  stored     = prop->get("#set_renderer_hash", 0); 
+        int  stored     = prop->get("#set_renderer_hash", 0);
         bool do_compile = true;
         if (stored != 0)
           {
             do_compile = stored != hash;
           }
-        
+
         if (do_compile)
           {
-            prop->set("#set_renderer_hash", hash); 
+            prop->set("#set_renderer_hash", hash);
 
             XSSContext my_ctx(new xss_context(ctx));
             my_ctx->add_parameter("path",  ctx->get_type("string"));

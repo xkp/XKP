@@ -439,6 +439,16 @@
 				<set text="setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), {value})"/>
 			</property>
 			
+			<property id="alpha" type="float" ns="android" api_level="11">
+				<get text="getAlpha()"/>
+				<set text="setAlpha({value})"/>
+			</property>
+			
+			<property id="rotation" type="float" ns="android" api_level="11">
+				<get text="getRotation()"/>
+				<set text="setRotation({value})"/>
+			</property>
+			
 			<!--
 			<property id="layout_margin" ns="android" type="int"/>
 			<property id="layout_weight" ns="android" type="float"/>

@@ -46,7 +46,7 @@ namespace xkp
     };
 
   typedef std::vector<renderer_parameter> renderer_parameter_list;
-  
+
   struct IXSSRenderer
     {
       virtual renderer_parameter_list&  params()                                      = 0;
@@ -69,7 +69,7 @@ namespace xkp
     {
       virtual void handle(XSSObject obj, XSSModule module) = 0;
     };
-  
+
   //classes
 	class xss_application_renderer : public xss_object
     {
@@ -78,12 +78,12 @@ namespace xkp
       public:
         XSSContext context();
         void       register_module(const str& id, XSSModule module);
-        str        target(); 
-        void       set_target(const str& target); 
-        fs::path   entry_point(); 
+        str        target();
+        void       set_target(const str& target);
+        fs::path   entry_point();
         fs::path   output_path();
         void       output_path(fs::path path);
-        void       set_output_path(const str& path); 
+        void       set_output_path(const str& path);
         XSSModule  instance_idiom(XSSObject inst);
         XSSModule  type_idiom(const str& type);
       public:
@@ -95,7 +95,7 @@ namespace xkp
         XSSContext             context_;
         std::vector<XSSModule> modules_;
     };
-  
+
   enum pre_process_result
     {
       PREPROCESS_HANDLED,
@@ -108,10 +108,10 @@ namespace xkp
         xss_module();
         xss_module(XSSContext ctx);
       public:
-        pre_process_result pre_process(XSSObject obj, XSSObject parent); 
+        pre_process_result pre_process(XSSObject obj, XSSObject parent);
         DynamicArray       instances();
-        fs::path           path(); 
-        void               set_path(fs::path p); 
+        fs::path           path();
+        void               set_path(fs::path p);
         void               register_module_type(XSSType type);
         void               register_user_type(XSSType type);
         bool               has_type(const str& type);
@@ -120,7 +120,7 @@ namespace xkp
       private:
         XSSContext   ctx_;
         size_t       ev_pprocess_;
-        fs::path     path_; 
+        fs::path     path_;
       private:
         //types
         typedef std::map<str, XSSType>  type_list;
@@ -182,7 +182,7 @@ namespace xkp
         XSSObject                           options_;
 		  private:
         std::vector<XSSApplicationRenderer> applications_;
-        std::stack<XSSRenderer>             renderers_;
+        std::vector<XSSRenderer>            renderers_;
         fs::path                            base_path_;
         fs::path                            project_path_;
         fs::path                            output_path_;
@@ -191,7 +191,7 @@ namespace xkp
         XSSRenderer                         entry_;
         bool                                use_event_instance_;
         XSSApplicationRenderer              current_app_;
-        
+
         XSSObject   read_project(fs::path xml_file);
         void        read_application_types(std::vector<XSSObject> & applications);
         XSSModule   read_module(const str& src, XSSApplicationRenderer app, XSSObject module);
@@ -212,7 +212,7 @@ namespace xkp
       private:
         //id gen
         typedef std::map<str, int> genid_list;
-        
+
         genid_list genid_;
       private:
         //cache
@@ -286,7 +286,7 @@ struct xss_module_schema : xss_object_schema<xss_module>
 
         property_("instances",  &xss_module::instances_);
         property_("user_types", &xss_module::utypes_);
-        
+
         readonly_property<DynamicArray>("types", &xss_module::all_types);
       }
   };

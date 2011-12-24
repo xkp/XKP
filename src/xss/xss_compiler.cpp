@@ -385,7 +385,7 @@ XSSRenderer xss_compiler::compile_xss(const str& src, XSSContext ctx, fs::path p
   {
     boost::hash<std::string> string_hash;
     int hash = string_hash(src);
-    
+
     std::multimap<int, XSSRenderer>::iterator it = xss_cache.find(hash);
     while (it != xss_cache.end() && it->first == hash)
       {
@@ -394,7 +394,7 @@ XSSRenderer xss_compiler::compile_xss(const str& src, XSSContext ctx, fs::path p
           {
             //td: !!!!
             //renderers cannot be reentered, so everytime the matching renderers
-            //are already being used a new one will be compiled. please fix result_ 
+            //are already being used a new one will be compiled. please fix result_
             return rend;
           }
 
@@ -558,8 +558,8 @@ void xss_compiler::xss_args(const param_list params, param_list& result, fs::pat
                 error.add("desc", SContextParamOnlyTypes);
                 xss_throw(error);
               }
-            
-            ctx = only_types_for_now->context();  
+
+            ctx = only_types_for_now->context();
             continue;
           }
 
@@ -799,7 +799,7 @@ variant xss_compiler::compile_expression(const str& expr)
 				xss_throw(error);
       }
 
-    return lang->compile_expression(result, ctx); 
+    return lang->compile_expression(result, ctx);
   }
 
 str xss_compiler::render_expression(const str& expr, XSSObject this_)
@@ -851,7 +851,7 @@ str xss_compiler::replace_identifier(const str& s, const str& src, const str& ds
 variant xss_compiler::evaluate_property(XSSProperty prop)
   {
     if (prop)
-      { 
+      {
         return prop->eval(current_context());
       }
 
@@ -976,7 +976,7 @@ XSSType xss_compiler::type_of(variant v)
     XSSObject obj = variant_cast<XSSObject>(v, XSSObject());
     if (obj)
       return obj->type();
-    
+
     XSSContext ctx = current_context();
     return ctx->get_type(v.get_schema());
   }
@@ -985,22 +985,22 @@ str xss_compiler::property_set(XSSProperty prop, const str& path, const str& val
   {
     XSSContext ctx  = current_context();
     Language   lang = ctx->get_language();
-    
-    return lang->property_set(prop, path, value, ctx); 
+
+    return lang->property_set(prop, path, value, ctx);
   }
 
 str xss_compiler::property_get(XSSProperty prop, const str& path)
   {
     XSSContext ctx  = current_context();
     Language   lang = ctx->get_language();
-    
-    return lang->property_get(prop, path, ctx); 
+
+    return lang->property_get(prop, path, ctx);
   }
 
 XSSObject xss_compiler::analyze_expression(const str& expr, variant this_)
   {
     XSSObject result(new xss_object);
-    
+
     xs_utils   xs;
     expression e;
     if (!xs.compile_expression(expr, e))
@@ -1010,7 +1010,7 @@ XSSObject xss_compiler::analyze_expression(const str& expr, variant this_)
     else
       {
         XSSContext ctx    = current_context();
-        XSSObject  this__ = variant_cast<XSSObject>(this_, XSSObject()); 
+        XSSObject  this__ = variant_cast<XSSObject>(this_, XSSObject());
         if (this__)
           {
             ctx = XSSContext(new xss_context(ctx));
@@ -1083,12 +1083,12 @@ void xss_compiler::push_renderer(XSSRenderer renderer)
     if (renderers_.empty())
       entry_ = renderer;
 
-    renderers_.push(renderer);
+    renderers_.push_back(renderer);
   }
 
 void xss_compiler::pop_renderer()
   {
-    renderers_.pop();
+    renderers_.pop_back();
 
     if (renderers_.empty())
       entry_ = XSSRenderer();
@@ -1098,7 +1098,7 @@ XSSRenderer xss_compiler::current_renderer()
   {
     if(renderers_.empty())
       return XSSRenderer();
-    return renderers_.top();
+    return renderers_.back();
   }
 
 XSSRenderer xss_compiler::previous_renderer()
@@ -1106,9 +1106,7 @@ XSSRenderer xss_compiler::previous_renderer()
     if (renderers_.size() < 2)
       return XSSRenderer();
 
-    // compile error C2039: '_Get_container' : is not a member of 'std::stack<_Ty>'
-    //return renderers_._Get_container().at(renderers_.size() - 2);
-    return renderers_.c.at(renderers_.size() - 2);
+    return renderers_.at(renderers_.size() - 2);
   }
 
 XSSRenderer xss_compiler::entry_renderer()
@@ -1188,7 +1186,7 @@ void xss_compiler::read_application_types(std::vector<XSSObject> & applications)
 
         options_ = app_data->get<XSSObject>("options", XSSObject());
 
-        //load modules 
+        //load modules
         std::vector<XSSObject> modules = app_data->find_by_class("idiom");
         std::vector<XSSObject>::iterator it = modules.begin();
         std::vector<XSSObject>::iterator nd = modules.end();
@@ -1307,7 +1305,7 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
             type->inherit();
 
             str class_name = type_data->type_name();
-            bool alias = false; 
+            bool alias = false;
             if (class_name == "class")
               {
                 //look for imports
@@ -1332,7 +1330,7 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
                   }
 
                 //and constructor parameters
-                XSSObject ctor_args = type_data->find("constructor_params");  
+                XSSObject ctor_args = type_data->find("constructor_params");
                 if (ctor_args)
                   {
                     DynamicArray mine = type->ctor_args();
@@ -1354,10 +1352,10 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
             else if (class_name == "alias")
               {
                 alias = true;
-                
+
                 str aliased = type->get<str>("aliased", str());
                 if (aliased.empty())
-                  { 
+                  {
                     param_list error;
                     error.add("id", SProjectError);
                     error.add("desc", SAliasMustHaveAliased);
@@ -1367,7 +1365,7 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
 
                 type = ctx->get_type(aliased);
                 if (!type)
-                  { 
+                  {
                     param_list error;
                     error.add("id", SProjectError);
                     error.add("desc", SBadAliasType);
@@ -1386,7 +1384,7 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
             //and register
             if (!alias)
               module->register_module_type(type);
-            
+
             ctx->add_type(type_name, type);
 
             //resolve the unresolved properties
@@ -1516,8 +1514,8 @@ void xss_compiler::preprocess_type(XSSType clazz, XSSObject def_class, const str
     XSSModule module = app->type_idiom(super);
     if (def_class)
       {
-        pre_processor.ctx    = ctx; 
-        pre_processor.root   = def_class; 
+        pre_processor.ctx    = ctx;
+        pre_processor.root   = def_class;
         pre_processor.target = clazz;
         pre_processor.module = module;
 
@@ -1677,9 +1675,9 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
             clazz->set_super(super);
             clazz->set_context(ictx);
 				    ictx->set_this(XSSObject(clazz));
-            
+
             preprocess_type(clazz, def_class, ci.super, ictx, app);
-            
+
 				    //then compile the code
             compile_ast(ci, ictx);
           }
@@ -1692,7 +1690,7 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
       {
         XSSObject def_class = classdefs[it->second];
 				XSSType   clazz     = classes[it->second];
-        
+
         clazz->set_definition(def_class);
 
         str super = def_class->get<str>("super", str());
@@ -1713,7 +1711,7 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
 
         XSSContext ictx(new xss_context(ctx, path.parent_path()));
         preprocess_type(clazz, def_class, super, ictx, app);
-        
+
         clazz->set_context(ictx);
       }
   }
@@ -1774,7 +1772,7 @@ void xss_compiler::read_application(const str& app_file)
         //create an empty type for application
         //td: think it through
         XSSType app_type(new xss_type);
-        app_type->set_id("Application"); 
+        app_type->set_id("Application");
 
         app_data->set_id("application");
         app_data->set_type(app_type);
@@ -1800,7 +1798,7 @@ void xss_compiler::read_application(const str& app_file)
 
         //then compile
         compile_ast(code, code_ctx);
-        
+
         //then invoke the pre_Process event
         pre_process(app_renderer, app_data, XSSObject(), null);
         current_app_.reset();
@@ -1909,10 +1907,10 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
             sset.reset();
           }
 
-        if (gget) 
+        if (gget)
           new_prop->add_child(gget);
 
-        if (sset) 
+        if (sset)
           new_prop->add_child(sset);
 
         //mark all xs properties
@@ -2016,7 +2014,7 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
         if (use_event_instance_)
           ictx->set_this(actual_instance);
         else
-				  ictx->set_this(instance); 
+				  ictx->set_this(instance);
 
         variant impl = lang->compile_code(it->cde, it->args, ictx);
 				impls->push_back(impl);
