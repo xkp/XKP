@@ -69,4 +69,4 @@ __callback3();
 http.createServer(function(request, response) 
 {
     var pathname = url.parse(request.url).pathname;
-    if (pathname == service1){}}).listen(8888);
+    if (pathname == 'service1'){application.service1(request, response);}}).listen(8888);

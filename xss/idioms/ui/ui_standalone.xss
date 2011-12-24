@@ -124,10 +124,7 @@ window.onload = function()
 				ui.keypress(ev.keyCode);                  
 			};
 
-            if (application.init)
-            {
-                application.init();
-            }
+            application.events.dispatch("init", []);
     
             start();
 			ui.draw(drawingCanvas.getContext('2d'));

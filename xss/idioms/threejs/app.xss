@@ -142,10 +142,7 @@ document.onkeypress = function(ev)
 	event_manager.keypress(ev.keyCode);                  
 };
 
-if (application.init)
-{
-	application.init();
-}
+application.events.dispatch("init", []);
 	
 document.body.appendChild( renderer.domElement );
 animate();

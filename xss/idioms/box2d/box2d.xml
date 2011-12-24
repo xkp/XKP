@@ -1,6 +1,12 @@
 <module id="box2d" src="box2d.xs">
     <types>
-        <class id="physics_world" renderer="body.xss"/>			
+        <class id="physics_world" renderer="body.xss">
+			<property id="density" type="float" dont_init="true"/>
+			<property id="friction" type="float" dont_init="true"/>
+            <property id="restitution" type="float" dont_init="true"/>
+            <property id="angular_damping" type="float" dont_init="true"/>
+			<property id="linear_damping" type="float" dont_init="true"/>
+		</class>
         
         <class id="body" renderer="body.xss"/>
 

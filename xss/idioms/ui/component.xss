@@ -10,6 +10,8 @@
         
     if (is_class)
         cmp_id = "this";
+    else
+        out(marker = "variables", marker_source = "entry") {var <xss:e v="cmp.output_id"/>;}
         
     if (!is_class)
     {
@@ -50,9 +52,9 @@
 	    
         out() {<xss:e value = "parent_id"/>.manager, <xss:e value = "parent_id"/>);}
 		if(cmp.type.output_id == "ms.ui.Component" || cmp.type.output_id == "ms.ui.ClipArea"){
-			out() {<xss:e v="cmp.id"/>.mouse_thru = true;}			
+			out() {<xss:e v="cmp_id"/>.mouse_thru = true;}			
 		}
-        compiler.xss("../common-js/instance.xss", cmp, path = path);
+        compiler.xss("../common-js/instance.xss", cmp, path = path, var_value = cmp_id);
     }
 
     //position the component

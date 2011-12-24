@@ -3,16 +3,40 @@
 
 <xss:class>    
     property visual_parent : string;
-	property world;
+	
     method basic_properties()
-    {			
-		//fixture properties        
-		var density = it.density;        
-        var friction = it.friction;       
-        var restitution = it.restitution;        		
-		var angular_damping = it.angular_damping;			
-		var linear_damping = it.linear_damping;	
+    {
+		//fixture properties
+        var density = 1.0;
+        if (it.density)
+            density = it.density;
+        else if (world)
+            density = world.density;
+         
+        var friction = 0.5;
+        if (it.friction)
+            friction = it.friction;
+        else if (world)
+            friction = world.friction;
+
+        var restitution = 0.2; 
+        if (it.restitution)
+            restitution = it.restitution;
+        else if (world)
+            restitution = world.restitution;
 		
+		var angular_damping;		
+		if (it.angular_damping)
+            angular_damping = it.angular_damping;
+		else if (world)
+			angular_damping = world.angular_damping;
+			
+		var linear_damping;
+		if (it.linear_damping)
+            linear_damping = it.linear_damping;	
+		else if (world)
+			linear_damping = world.linear_damping;
+
         //body type
         var body_type = "";
         if (!it.body_type)
@@ -28,49 +52,20 @@
             compiler.error("Invalid body_type", object = it.id, body_type = it.body_type);
 
         //output it all
-		if(angular_damping != null){
+		if(angular_damping)
+		{
 			out(){bodyDef.angularDamping = <xss:e v="angular_damping"/>;}
-		}else{	
-			out(){
-			if(g_physics_data.angular_damping)
-				bodyDef.angularDamping = g_physics_data.angular_damping;
-			}
 		}
-		if(linear_damping != null){
+		if(linear_damping)
+		{
 			out(){bodyDef.linearDamping = <xss:e v="linear_damping"/>;}
-		}else{	
-			out(){
-			if(g_physics_data.linear_damping)
-				bodyDef.linearDamping = g_physics_data.linear_damping;
-			}
 		}		
-		if(density != null){
-			out(){fixDef.density = <xss:e v="density"/>;}
-		}else{	
-			out(){
-			if(g_physics_data.density)
-				fixDef.density = g_physics_data.density;
-			}
-		}
-		if(friction != null){
-			out(){fixDef.friction = <xss:e v="friction"/>;}
-		}else{	
-			out(){
-			if(g_physics_data.friction)
-				fixDef.friction = g_physics_data.friction;
-			}
-		}
-		if(restitution != null){
-			out(){fixDef.restitution = <xss:e v="restitution"/>;}
-		}else{	
-			out(){
-			if(g_physics_data.restitution)
-				fixDef.restitution = g_physics_data.restitution;
-			}
-		}
-			 
         out()
-        {             
+        {
+             fixDef.density = <xss:e v="density"/>;
+             fixDef.friction = <xss:e v="friction"/>;
+             fixDef.restitution = <xss:e v="restitution"/>;
+			 
              bodyDef.type = <xss:e v="body_type"/>;
         }		
     }

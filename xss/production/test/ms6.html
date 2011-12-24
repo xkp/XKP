@@ -9,6 +9,9 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -17,6 +20,8 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+application.events = new ms.event.EventHolder();
+var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
 			{
@@ -51,8 +56,7 @@ var application = {};
 		g_startup_package.load();	
 function start(resolution)  
 {  
-	var start = new Date().getTime();  
-	function update()  
+	function updater()  
 	{  
 		var now   = new Date().getTime();
         if (g_elapsed < 0)
@@ -63,9 +67,9 @@ function start(resolution)
 		g_sequence_manager.update(g_delta);
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-        window.setTimeout(update, resolution);  
-	}  
-	window.setTimeout(update, resolution);  
+        window.setTimeout(updater, resolution);  
+	}    
+	window.setTimeout(updater, resolution);  
 }  
             ms6 = Class.create(ms.ui.Component,
         {
@@ -74,11 +78,12 @@ function start(resolution)
     {
         $super(
                 );
+        this.events = new ms.event.EventHolder(); 
                 this.size(50, 100);
-                var anim1;
 this.anim1 =
 new ms.state.Sequence(
 g_sequence_manager);
+        var anim1 = this.anim1;
             this.anim1.parent_sequence = null;
                     var ____i1 = new ms.state.Interpolator(
                         "alpha", 
@@ -88,33 +93,32 @@ g_sequence_manager);
                             btn1.alpha(value);
                         },
                         [
-                        {t: 0, value: 1},
+                        {t: 0, value: 100},
                         {t: 10.5, value: 0},
                         ]);
                     this.anim1.addAction(null, "alpha", new ms.state.State(0, 10.5, ____i1));                    
-                anim1 = this.anim1;
-                var btn1;
 		    this.btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",this.manager, this);
-                this.btn1.set_height(50);
-	this.btn1.click = function()
+        var btn1 = this.btn1;
+	var ev_parent = this;
+	btn1.events.addListener("click", function()
 	{    
 		if (btn2.get_alpha() > 0)
 {
-btn2.alpha(btn2.get_alpha() - 0.100000001);
+btn2.alpha(btn2.get_alpha() - 5);
 }
 else
 {
-btn2.alpha(1);
+btn2.alpha(100);
 }
-	};
+	}
+	);
  this.btn1.top(50); 
-                btn1 = this.btn1;
-                var btn2;
 		    this.btn2 = new ms.ui.Button( 
 	    "images/smile_grin_48.png","images/smile_sad_48.png",this.manager, this);
-                this.btn2.set_height(50);
-	this.btn2.click = function()
+        var btn2 = this.btn2;
+	var ev_parent = this;
+	btn2.events.addListener("click", function()
 	{    
 		if (anim1.running)
 {
@@ -124,14 +128,15 @@ else
 {
 anim1.start();
 }
-	};
+	}
+	);
  this.btn2.bottom(50); 
-                btn2 = this.btn2;
-                },
-    });
+            if (this.init)
+                this.init();
+            },
+});
 window.onload = function() 
 {
-	var Sound = new ms.ui.Sound();
 	drawingCanvas = document.getElementById("myCanvas");
     g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
@@ -161,9 +166,11 @@ window.onload = function()
 	};	
 		    ms61 = new ms6( 
 	    g_ui_root.manager, g_ui_root);
+        var ms61 = ms61;
                 ms61.rect(100, 100, 50, 100);
 		    ms62 = new ms6( 
 	    g_ui_root.manager, g_ui_root);
+        var ms62 = ms62;
                 ms62.rect(200, 100, 50, 100);
 			document.onkeydown = function(ev)
 			{
@@ -181,7 +188,7 @@ window.onload = function()
             {
                 application.init();
             }
-			start();
+            start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});
 	}
@@ -192,8 +199,5 @@ window.onload = function()
 	<canvas id="myCanvas" width="600" height="400">
 		<p>Your browser doesn't support canvas.</p>
 	</canvas>
-	<audio id="sounds" preload> 
-	Your browser does not support the audio element.
-	</audio>
 </body>
 </html>

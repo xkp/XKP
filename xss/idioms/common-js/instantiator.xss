@@ -37,8 +37,8 @@ if (type.constructor_params)
 				else
 					out() {<xss:e v="prop.render_value()"/>}
 				
-			    i++;				
-			}
+			    i++;			
+			}			
 		}			        
     }
 }

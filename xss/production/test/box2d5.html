@@ -12,7 +12,8 @@
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
-        <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script> 		<script type="text/javascript" src="../js/ms-joint.js"></script> 
+        <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script> 
+		<script type="text/javascript" src="../js/ms-joint.js"></script> 
             <script type="text/javascript" src="../js/ms-spawner.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
@@ -193,7 +194,6 @@ function start(resolution)
         src? src : "images/smile_grin_48.png"        );
         this.events = new ms.event.EventHolder(); 
                 this.size(50, 50);
-                var __physics1;
 				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
@@ -224,7 +224,6 @@ function start(resolution)
                         this.parent.removeComponent(this);
                     }
                 }
-                __physics1 = this.__physics1;
 	var ev_parent = this;
 	this.events.addListener("collision", function(who)
 	{    
@@ -243,7 +242,6 @@ function start(resolution)
         $super(
         src? src : "images/stone-12.jpg"        );
         this.events = new ms.event.EventHolder(); 
-                var __physics2;
 				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
@@ -275,32 +273,10 @@ function start(resolution)
                         this.parent.removeComponent(this);
                     }
                 }
-                __physics2 = this.__physics2;
             if (this.init)
                 this.init();
             },
 });
-	var ev_parent = this;
-	application.events.addListener("keydown", function(keycode)
-	{    
-		if (keycode == LEFT_ARROW)
-{
-btn1.set_x(btn1.x - 5);
-}
-if (keycode == RIGHT_ARROW)
-{
-btn1.set_x(btn1.x + 5);
-}
-if (keycode == UP_ARROW)
-{
-btn1.set_y(btn1.y - 5);
-}
-if (keycode == DOWN_ARROW)
-{
-btn1.set_y(btn1.y + 5);
-}
-	}
-	);
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -332,6 +308,7 @@ window.onload = function()
 	};	
 		    btn1 = new my_body( 
 	    "images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
+        var btn1 = btn1;
 	var ev_parent = this;
 	btn1.events.addListener("drag", function(x,y)
 	{    
@@ -342,6 +319,7 @@ btn1.set_y(y - btn1.h / 2);
                 btn1.rect(300, 250, 50, 50);
 		    btn2 = new my_body( 
 	    "images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
+        var btn2 = btn2;
 	var ev_parent = this;
 	btn2.events.addListener("drag", function(x,y)
 	{    
@@ -352,11 +330,33 @@ btn2.set_y(y - btn1.h / 2);
                 btn2.rect(100, 250, 50, 50);
 		    __floor1 = new floor( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+        var __floor1 = __floor1;
                 __floor1.rect(0, 390, 600, 40);
 __distance_joint1 = 
 new ms.joint.DistanceJoint(
 btn1,btn2);
                 __distance_joint1.joint.SetLength(5);
+	var ev_parent = this;
+	application.events.addListener("keydown", function(keycode)
+	{    
+		if (keycode == LEFT_ARROW)
+{
+btn1.set_x(btn1.x - 5);
+}
+if (keycode == RIGHT_ARROW)
+{
+btn1.set_x(btn1.x + 5);
+}
+if (keycode == UP_ARROW)
+{
+btn1.set_y(btn1.y - 5);
+}
+if (keycode == DOWN_ARROW)
+{
+btn1.set_y(btn1.y + 5);
+}
+	}
+	);
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  

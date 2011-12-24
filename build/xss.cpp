@@ -56,7 +56,6 @@ int main(int argc, char* argv[])
         return 0;
       }
 
-    int error_number = 0;
     char* fname = argv[1];
 		fs::path target = fs::system_complete(fname);
 
@@ -71,15 +70,30 @@ int main(int argc, char* argv[])
       }
 
     bool wait = false;
-    if (argc > 2)
+    bool json_out = false;
+    for(int i = 2; i < argc; i++)
       {
-        str param(argv[2]);
+        str param(argv[i]);
         if (param == "wait")
           wait = true;
+        else if (param == "json")
+          json_out = true;
       }
 
-		XSSCompiler compiler(new xss_compiler);
+    //setup output
+    ConsoleOutput console;
+    JsonOutput    json; 
 
+    ICompilerOutput* out = &console;
+    if (json_out)
+      out = &json;
+		
+    XSSCompiler compiler(new xss_compiler(out));
+
+    //handle errors 
+    int        error_number = 0;
+    param_list error;
+    
     try
       {
         compiler->build(target);
@@ -109,10 +123,9 @@ int main(int argc, char* argv[])
               }
           }
 
+        error = xse.data;
         if (!file.empty())
-          std::cout << "Error at: " << file.string() << '\n';
-
-        print_error(xse.data);
+          error.add("file", file.string());
       }
     catch(xss_error xsse)
       {
@@ -140,22 +153,25 @@ int main(int argc, char* argv[])
               }
           }
 
+        error = xsse.data;
         if (!file.empty())
-          std::cout << "Error at: " << file.string() << '\n';
-
-        print_error(xsse.data);
+          error.add("file", file.string());
       }
     catch(runtime_error rte)
       {
         error_number = 3;
 
-        print_error(rte.data);
+        error = rte.data;
       }
 
     if (error_number == 0)
-      {
-        std::cout << "Success are greateful";
-      }
+        out->success();
+    else
+        out->error(error);
+
+    str out_str = out->string();
+    if (!out_str.empty())
+      std::cout << out_str; //"Success are greateful";
 
     if (wait)
       std::cin.get();

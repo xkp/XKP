@@ -28,24 +28,30 @@ btn2.text("...");
 	};
                 btn1.text("One button");
                 btn1.width(100);
-	btn1.click = function()
+	var ev_parent = this;
+	btn1.events.addListener("click", function()
 	{    
 		btn2.text("Clicked");
 btn1.text("Other Clicked");
-	};
+	}
+	);
                 btn2.text("Two button");
                 btn2.width(100);
-	btn2.click = function()
+	var ev_parent = this;
+	btn2.events.addListener("click", function()
 	{    
 		btn1.text("Old value: " + application.target);
 application.target_set(300);
-	};
+	}
+	);
                 btn3.text("Reset");
                 btn3.width(100);
-	btn3.click = function()
+	var ev_parent = this;
+	btn3.events.addListener("click", function()
 	{    
 		application.reset();
-	};
+	}
+	);
 });
 </script>
 <style>

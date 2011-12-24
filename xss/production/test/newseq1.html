@@ -9,6 +9,9 @@
 <script type="text/javascript" src="../js/ms-ui.js"></script>
 <script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -17,6 +20,7 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
@@ -58,7 +62,7 @@ function start(resolution)
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
-	}
+	}    
 	window.setTimeout(updater, resolution);  
 }  
 var fade_in;
@@ -93,14 +97,18 @@ window.onload = function()
 	};	
 		    img1 = new ms.ui.Image( 
 	    "images/img1.png",g_ui_root.manager, g_ui_root);
-	img1.click = function()
+        var img1 = img1;
+	var ev_parent = this;
+	img1.events.addListener("click", function()
 	{    
 		fade_in.start();
-	};
+	}
+	);
                 img1.rect(100, 100, 50, 50);
 fade_in =
 new ms.state.Sequence(
 g_sequence_manager);
+        var fade_in = fade_in;
             fade_in.parent_sequence = null;
                     var ____i1 = new ms.state.Interpolator(
                         "alpha", 

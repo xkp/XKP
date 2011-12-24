@@ -32,6 +32,7 @@ var g_delta = 0.0;
 var drawingCanvas = renderer.domElement;
 var app_width = 600;
 var app_height = 600;
+var lbl0;var btn1;var lbl1;var lbl2;
 var application = {};
 application.events = new ms.event.EventHolder();
 		var streamer = new ms.streamer.Streamer();
@@ -209,10 +210,12 @@ if(ui)
 	};	
 		    lbl0 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
+        lbl0 = lbl0;
                 lbl0.text("click smile to count");
                 lbl0.position(240, 75);
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
+        btn1 = btn1;
                 btn1.set_rotation(15);
 	var ev_parent = this;
 	btn1.events.addListener("click", function()
@@ -225,10 +228,12 @@ application.clicks = application.clicks + 1;
  btn1.center(50, 50); 
 		    lbl1 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
+        lbl1 = lbl1;
                 lbl1.text("use arrows to move smile and");
                 lbl1.position(240, 400);
 		    lbl2 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
+        lbl2 = lbl2;
                 lbl2.text("drag mouse to spin the cube");
                 lbl2.position(240, 420);
 		g_ui.fill_background = false;

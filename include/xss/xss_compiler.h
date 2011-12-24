@@ -10,6 +10,8 @@
 
 #include "xss_context.h"
 
+#include <json/writer.h>
+
 namespace xkp
 {
   //forwards
@@ -134,8 +136,43 @@ namespace xkp
         DynamicArray all_types();
     };
 
+  //output handling
+  class ICompilerOutput
+    {
+      public:
+        virtual void out(const str& cat, const str& text, param_list* params) = 0;
+        virtual void success()                                                = 0;
+        virtual void error(param_list& data)                                  = 0;
+        virtual str  string()                                                 = 0; 
+    };
+
+  class ConsoleOutput : public ICompilerOutput
+    {
+      public:
+        virtual void out(const str& cat, const str& text, param_list* params);
+        virtual void success();
+        virtual void error(param_list& data);
+        virtual str  string(); 
+    };
+
+  class JsonOutput : public ICompilerOutput
+    {
+      public:
+        JsonOutput();
+      public:
+        virtual void out(const str& cat, const str& text, param_list* params);
+        virtual void success();
+        virtual void error(param_list& data);
+        virtual str  string(); 
+      private:
+        Json::Value json_;
+    };
+
   class xss_compiler : public boost::enable_shared_from_this<xss_compiler>
 		{
+      public:
+        xss_compiler();
+        xss_compiler(ICompilerOutput* out);
       public:
         void        build(fs::path xml);
 				XSSRenderer compile_xss_file(const str& src_file, XSSContext ctx);
@@ -179,8 +216,9 @@ namespace xkp
         XSSRenderer entry_renderer();
         XSSContext  current_context();
       public:
-        XSSObject                           options_;
+        XSSObject options_;
 		  private:
+        ICompilerOutput*                    out_;
         std::vector<XSSApplicationRenderer> applications_;
         std::stack<XSSRenderer>             renderers_;
         fs::path                            base_path_;

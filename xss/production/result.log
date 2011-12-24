@@ -1,96 +1,147 @@
 
 ===[ 3js-ms.project.xml ]================
 
-Log: Rendering 3js Types...
-Log: Rendering Sequence Types...
-Log: Rendering Sequence...
+
+log: Rendering 3js Types...
+log: Rendering Sequence Types...
+log: Rendering Sequence...
 Success are greateful
 ===[ 3js-ui.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering 3js Types...
-Log: Rendering UI Types...
-Log: Rendering UI...
+
+log: Rendering Resources...
+log: Rendering 3js Types...
+log: Rendering UI Types...
+log: Rendering UI...
 Success are greateful
 ===[ 3js_cameras.project.xml ]================
 
-Log: Rendering 3js Types...
+
+log: Rendering 3js Types...
 Success are greateful
 ===[ 3js_carousel.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering 3js Types...
+
+log: Rendering Resources...
+log: Rendering 3js Types...
 Success are greateful
 ===[ 3js_class_test.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering 3js Types...
-Error at: c:/dev/xkp/xss/tests/../idioms/threejs/class.xss
-Error [syntax-error] Error while compiling xs
-line = 21
-column = 23
-ERROR: Project:  3js_class_test.project.xml
 
+log: Rendering Resources...
+log: Rendering 3js Types...
+Success are greateful
+===[ 3js_class_test_1.project.xml ]================
+
+
+log: Rendering Resources...
+log: Rendering 3js Types...
+Success are greateful
+===[ 3js_class_test_2.project.xml ]================
+
+
+log: Rendering Resources...
+log: Rendering 3js Types...
+Success are greateful
 ===[ 3js_cube.project.xml ]================
 
-Log: Rendering 3js Types...
+
+log: Rendering 3js Types...
 Success are greateful
 ===[ 3js_cube_img.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering 3js Types...
+
+log: Rendering Resources...
+log: Rendering 3js Types...
 Success are greateful
 ===[ 3js_model.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering 3js Types...
+
+log: Rendering Resources...
+log: Rendering 3js Types...
 Success are greateful
 ===[ 3js_particle.project.xml ]================
 
-Log: Rendering 3js Types...
+
+log: Rendering 3js Types...
 Success are greateful
 ===[ 3js_particle_system.project.xml ]================
 
-Log: Rendering 3js Types...
+
+log: Rendering 3js Types...
 Success are greateful
 ===[ 3js_sound.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering 3js Types...
+
+log: Rendering Resources...
+log: Rendering 3js Types...
 Success are greateful
 ===[ 3js_transform.project.xml ]================
 
-Log: Rendering 3js Types...
+
+log: Rendering 3js Types...
 Success are greateful
 ===[ box2d1.project.xml ]================
+
 
 Success are greateful
 ===[ box2d2.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering UI Types...
-Log: Rendering UI...
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering UI...
 Success are greateful
 ===[ box2d3.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering UI Types...
-Log: Rendering UI...
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: body.xss
+log: Rendering UI...
 Success are greateful
 ===[ box2d4.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering UI Types...
-Log: Rendering Sequence Types...
-Log: Rendering UI...
-Log: Rendering Sequence...
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: body.xss
+log: spawner.xss
+log: sequence.xss
+log: sequence.xss
+log: body.xss
+log: sequence.xss
+log: body.xss
+log: body.xss
+log: Rendering Sequence Types...
+log: Rendering UI...
+log: Rendering Sequence...
+Success are greateful
+===[ box2d5.project.xml ]================
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: body.xss
+log: body.xss
+log: Rendering UI...
+Success are greateful
+===[ box2dcar.project.xml ]================
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: body.xss
+log: body.xss
+log: body.xss
+log: Rendering UI...
 Success are greateful
 ===[ enums.project.xml ]================
 
-Log: Rendering test with enum class...
-Log: output_xml: top && output_id: PL_TOP
-Log: output_xml: visible && output_id: VISIBLE
 
+log: Rendering test with enum class...
+log: output_xml: top && output_id: PL_TOP
+log: output_xml: visible && output_id: VISIBLE
 			Instance: name = "btn", type = "Button"
 		
 				property:text = "Enums"			
@@ -133,61 +184,65 @@ prop_btn_sameName = swp;
 			Instance: name = "application", type = "Application"
 		
 				sameName = "My owner is application."			
+
 Success are greateful
 ===[ java1.project.xml ]================
 
-Log: -- Rendering instance: instance1
-Log: Properties size: 2
-Log: Rendering property: xvalue
-Log: Rendering property: svalue
-Log: Methods size: 5
-Log: Rendering method: test0
-Log: Rendering method: test1
-Log: Rendering method: test2
-Log: Rendering method: test3
-Log: Rendering method: foo
-Log: Events size: 0
-Log: -- Rendering instance: application
-Log: Properties size: 3
-Log: Rendering property: lvalue
-Log: Rendering property: yvalue
-Log: Rendering property: xvalue
-Log: Methods size: 1
-Log: Rendering method: app_test
-Log: Events size: 1
-Log: Rendering event: create
+
+log: -- Rendering instance: instance1
+log: Properties size: 2
+log: Rendering property: xvalue
+log: Rendering property: svalue
+log: Methods size: 5
+log: Rendering method: test0
+log: Rendering method: test1
+log: Rendering method: test2
+log: Rendering method: test3
+log: Rendering method: foo
+log: Events size: 0
+log: -- Rendering instance: application
+log: Properties size: 3
+log: Rendering property: lvalue
+log: Rendering property: yvalue
+log: Rendering property: xvalue
+log: Methods size: 1
+log: Rendering method: app_test
+log: Events size: 1
+log: Rendering event: create
 
 Success are greateful
 ===[ java2.project.xml ]================
 
-Log: -- Rendering instance: instance1
-Log: Properties size: 0
-Log: Methods size: 1
-Log: Rendering method: test0
-Log: Events size: 0
-Log: -- Rendering instance: application
-Log: Properties size: 0
-Log: Methods size: 0
-Log: Events size: 0
+
+log: -- Rendering instance: instance1
+log: Properties size: 0
+log: Methods size: 1
+log: Rendering method: test0
+log: Events size: 0
+log: -- Rendering instance: application
+log: Properties size: 0
+log: Methods size: 0
+log: Events size: 0
 
 Success are greateful
 ===[ java3.project.xml ]================
 
-Log: Rendering method: check_type
-Log: Rendering method: foobar
-Log: Rendering event: click
-Log: Rendering property: foo
-Log: Rendering property: typing
-Log: Rendering property: simple
-Log: Rendering property: read_only
-Log: Rendering property: writable
-Log: Rendering property: mixed
-Log: Rendering property: bar
+
+log: Rendering method: check_type
+log: Rendering method: foobar
+log: Rendering event: click
+log: Rendering property: foo
+log: Rendering property: typing
+log: Rendering property: simple
+log: Rendering property: read_only
+log: Rendering property: writable
+log: Rendering property: mixed
+log: Rendering property: bar
 
 
 
 
-		public Object check_type() {
+		public Object mthd__check_type() {
 			Integer a;
 a = 1;
 Object b;
@@ -199,7 +254,8 @@ return a;
 
 
 
-		public String foobar(Integer v) {
+
+		public String mthd__foobar(Integer v) {
 			t1.foo = t2.foo + 10;
 t2.set_bar(t1.foo + t1.get_bar() + "++");
 set_complex(t1, t2.get_bar() + t1.get_bar() + this.foo + "--");
@@ -220,7 +276,7 @@ return t1.get_bar();
 
 
 
-			private void onClick() {
+			private void e.output_id() {
 		
 				ArrayList<Object> list = new ArrayList(Arrays.asList( new Object [] {1, 2, "item", 3.140000, "vowel"} ));
 for(Object i : list)
@@ -289,6 +345,7 @@ for(Object i : list)
 
 
 
+
 Success are greateful
 ===[ jquery1.project.xml ]================
 
@@ -320,6 +377,8 @@ $(function() {
 
 
 
+
+
                 btn1.text("One button");
             
 
@@ -343,6 +402,7 @@ $(function() {
 
 
 
+
                 btn2.text("Two button");
             
 
@@ -353,6 +413,7 @@ $(function() {
 
                 btn2.width(100);
             
+
 
 
 
@@ -403,6 +464,7 @@ $(function() {
                 </div>
             </body>
 </html>
+
 
 Success are greateful
 ===[ jquery2.project.xml ]================
@@ -428,6 +490,7 @@ $(function() {
 
 
 
+
         application.target = null;
 
         application.target_set = function (value)
@@ -470,6 +533,7 @@ btn2.text("...");
 
 
 
+
                 btn1.text("One button");
             
 
@@ -486,13 +550,16 @@ btn2.text("...");
 
 
 
-	btn1.click = function()
+	var ev_parent = this;
+	btn1.events.addListener("click", function()
 	{    
 
 		btn2.text("Clicked");
 btn1.text("Other Clicked");
 	
-	};
+	}
+	);
+
 
 
 
@@ -523,13 +590,16 @@ btn1.text("Other Clicked");
 
 
 
-	btn2.click = function()
+	var ev_parent = this;
+	btn2.events.addListener("click", function()
 	{    
 
 		btn1.text("Old value: " + application.target);
 application.target_set(300);
 	
-	};
+	}
+	);
+
 
 
 
@@ -560,12 +630,14 @@ application.target_set(300);
 
 
 
-	btn3.click = function()
+	var ev_parent = this;
+	btn3.events.addListener("click", function()
 	{    
 
 		application.reset();
 	
-	};
+	}
+	);
 
 
 });
@@ -594,6 +666,7 @@ application.target_set(300);
                 </div>
             </body>
 </html>
+
 
 Success are greateful
 ===[ jquery3.project.xml ]================
@@ -619,6 +692,7 @@ $(function() {
 
 
 
+
         application.target = null;
 
         application.target_set = function (value)
@@ -661,6 +735,7 @@ btn2.text("...");
 
 
 
+
                 btn1.text("One button");
             
 
@@ -677,13 +752,16 @@ btn2.text("...");
 
 
 
-	btn1.click = function()
+	var ev_parent = this;
+	btn1.events.addListener("click", function()
 	{    
 
 		btn2.text("Clicked");
 btn1.text("Other Clicked");
 	
-	};
+	}
+	);
+
 
 
 
@@ -714,13 +792,16 @@ btn1.text("Other Clicked");
 
 
 
-	btn2.click = function()
+	var ev_parent = this;
+	btn2.events.addListener("click", function()
 	{    
 
 		btn1.text("Old value: " + application.target);
 application.target_set(300);
 	
-	};
+	}
+	);
+
 
 
 
@@ -751,12 +832,14 @@ application.target_set(300);
 
 
 
-	btn3.click = function()
+	var ev_parent = this;
+	btn3.events.addListener("click", function()
 	{    
 
 		application.reset();
 	
-	};
+	}
+	);
 
 
 });
@@ -786,75 +869,106 @@ application.target_set(300);
             </body>
 </html>
 
+
 Success are greateful
 ===[ jquery4.project.xml ]================
+
 
 Success are greateful
 ===[ jquery5.project.xml ]================
 
-Log: Rendering jQuery...
+
+log: Rendering jQuery...
 Success are greateful
 ===[ jseq1.project.xml ]================
 
-Log: Rendering Sequence Types...
-Log: Rendering Sequence...
-Log: Oh noes... a PROPERTY
-Error at: c:/dev/xkp/xss/tests/../idioms/java-seq/sequence.xss
-Error [idiom] Sequences expect a property to modify
-expression = app.target
-ERROR: Project:  jseq1.project.xml
+
+log: Rendering Sequence Types...
+log: Rendering Sequence...
+log: -- Rendering instance: test_sequence
+log: Properties size: 0
+log: Methods size: 0
+log: Events size: 0
+log: -- Rendering instance: test_sequence1
+log: Properties size: 1
+log: Rendering property: app
+log: Methods size: 0
+log: Events size: 0
+log: Oh noes... a PROPERTYError [idiom] Sequences expect a property to modify
+2314expression = app.target2314file = c:/dev/xkp/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
 
 ===[ json1.project.xml ]================
 
-ERROR: Project:  json1.project.xml
+Error [reader] Invalid XML file
+2314xml error = Error document empty.2314line = 02314column = 02314file = c:/dev/xkp/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
 
 ===[ ms1.project.xml ]================
 
-Log: Rendering Sequence Types...
-Log: Rendering Sequence...
+
+log: Rendering Sequence Types...
+log: Rendering Sequence...
 Success are greateful
 ===[ ms2.project.xml ]================
 
-Log: Rendering Sequence Types...
-Log: Rendering Sequence...
+
+log: Rendering Sequence Types...
+log: Rendering Sequence...
 Success are greateful
 ===[ ms3.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering UI Types...
-Log: Rendering UI...
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering Sequence Types...
+log: Rendering UI...
+log: Rendering Sequence...
 Success are greateful
 ===[ ms4.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering UI Types...
-Log: Rendering Sequence Types...
-Log: Rendering UI...
-Log: Rendering Sequence...
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering Sequence Types...
+log: Rendering UI...
+log: Rendering Sequence...
 Success are greateful
 ===[ ms5.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering UI Types...
-Log: Rendering Sequence Types...
-Log: Rendering UI...
-Log: Rendering Sequence...
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering Sequence Types...
+log: Rendering UI...
+log: Rendering Sequence...
 Success are greateful
 ===[ ms6.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering UI Types...
-Log: Rendering Sequence Types...
-Log: Rendering UI...
-Log: Rendering Sequence...
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: sequence.xss
+log: component.xss
+log: component.xss
+log: Rendering Sequence Types...
+log: Rendering UI...
+log: Rendering Sequence...
+Success are greateful
+===[ newseq1.project.xml ]================
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering Sequence Types...
+log: Rendering UI...
+log: Rendering Sequence...
 Success are greateful
 ===[ query_properties.project.xml ]================
 
-Log: Rendering test query_properties...
-Log: assigning default_value = 0
-Log: assigning default_value = 0
-Log: assigning default_value = EVisibility.true
 
+log: Rendering test query_properties...
+log: assigning default_value = 0
+log: assigning default_value = 0
+log: assigning default_value = EVisibility.true
 			Instance: name = "btn", type = "Button"
 		
 				property "caption" = "Enums"			
@@ -870,62 +984,79 @@ Log: assigning default_value = EVisibility.true
 			Instance: name = "application", type = "Application"
 		
 				property "sameName" = "My owner is application."			
+
 Success are greateful
 ===[ ui_audio.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering UI Types...
-Log: Rendering UI...
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering UI...
 Success are greateful
 ===[ ui_audio_1.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering UI Types...
-Log: Rendering UI...
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering UI...
 Success are greateful
 ===[ ui_class_test.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering UI Types...
-Log: Rendering UI...
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering UI...
 Success are greateful
 ===[ ui_cliparea.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering UI Types...
-Log: Rendering UI...
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering UI...
 Success are greateful
 ===[ ui_demo.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering UI Types...
-Log: Rendering UI...
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering UI...
 Success are greateful
 ===[ ui_drag.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering UI Types...
-Log: Rendering UI...
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering UI...
 Success are greateful
 ===[ ui_figures.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering UI Types...
-Log: Rendering UI...
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering UI...
 Success are greateful
 ===[ ui_selfdrawn.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering UI Types...
-Log: Rendering UI...
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering UI...
+Success are greateful
+===[ ui_sprite.project.xml ]================
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering UI...
 Success are greateful
 ===[ ui_video.project.xml ]================
 
-Log: Rendering Resources...
-Log: Rendering UI Types...
-Log: Rendering Sequence Types...
-Log: Rendering UI...
-Log: Rendering Sequence...
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering Sequence Types...
+log: Rendering UI...
+log: Rendering Sequence...
 Success are greateful
 ===[ wax1.project.xml ]================
 
@@ -996,8 +1127,14 @@ __callback1();
 }
 });
 	
+
 Success are greateful
 ===[ wax2.project.xml ]================
+
+
+Success are greateful
+===[ wax3.project.xml ]================
+
 
 Success are greateful
 ===[ xss1.project.xml ]================
@@ -1014,24 +1151,25 @@ this is Louis
 
             Thats all folks
             It was a pleasure
-        Success are greateful
+        
+Success are greateful
 ===[ xss10.project.xml ]================
 
-Log: instance: it1
-Log: instance: it2
-Log: instance: application
-Log: Instance it1...
-Log: Rendering property: getting
-Log: Rendering event: create
-Log: Instance it2...
-Log: Rendering property: counter
-Log: Rendering property: getting
-Log: Rendering property: setting
-Log: Rendering event: click
-Log: Rendering method: returning
-Log: Instance application...
-Log: Rendering property: counter
 
+log: instance: it1
+log: instance: it2
+log: instance: application
+log: Instance it1...
+log: Rendering property: getting
+log: Rendering event: create
+log: Instance it2...
+log: Rendering property: counter
+log: Rendering property: getting
+log: Rendering property: setting
+log: Rendering event: click
+log: Rendering method: returning
+log: Instance application...
+log: Rendering property: counter
 			== Instance it1 ==
 		
 
@@ -1047,7 +1185,7 @@ Log: Rendering property: counter
 
 
 
-			private void event_it1_create() {
+			private void e.output_id() {
 		
 				prop_application_counter = prop_it1_getting_get();
 int boole = Bool.falsest;
@@ -1094,7 +1232,7 @@ it2.mthd_1();
 
 
 
-			private void event_it2_click() {
+			private void e.output_id() {
 		
 				prop_it2_setting_set(prop_it1_getting_get() - 12);
 			
@@ -1104,7 +1242,8 @@ it2.mthd_1();
 
 
 
-		public Integer returning() {
+
+		public Integer mthd__returning() {
 			it1.mthd_1();
 if (it1.size() > it2.size())
 {
@@ -1127,6 +1266,7 @@ else
 			private Integer prop_application_counter = 0;
 		
 
+
 Success are greateful
 ===[ xss11.project.xml ]================
 
@@ -1135,6 +1275,7 @@ Success are greateful
 String foo = Singleton.get_foo();
 
 	
+
 Success are greateful
 ===[ xss2.project.xml ]================
 
@@ -1256,8 +1397,10 @@ Success are greateful
 	
 		t_xss9_2 
 	
+
 Success are greateful
 ===[ xss3.project.xml ]================
+
 
 
 Success are greateful
@@ -1291,18 +1434,20 @@ Is this after "After!"? World
 
 
 
+
 Success are greateful
 ===[ xss5.project.xml ]================
 
-Log: application
-Log: null super
-Log: t1
-Log: t_xss5
-Log: application
-Log: t_xss5
-Log: a
-Log: ab
-Log: ba
+
+log: application
+log: null super
+log: t1
+log: t_xss5
+log: application
+log: t_xss5
+log: a
+log: ab
+log: ba
 
 Success are greateful
 ===[ xss6.project.xml ]================
@@ -1312,18 +1457,19 @@ Success are greateful
 		
 				Interface: IClick
 			
+
 Success are greateful
 ===[ xss7.project.xml ]================
 
-Log: btn
-Log: null
-Log: btn
-Log: null
-Log: application
-Log: null
-Log: application
-Log: null
 
+log: btn
+log: null
+log: btn
+log: null
+log: application
+log: null
+log: application
+log: null
 			instance id: application
 			instance class: application
 		
@@ -1384,6 +1530,7 @@ Log: null
 				property id: visible - output_id: property:visible
 					namespace = android
 			
+
 Success are greateful
 ===[ xss8.project.xml ]================
 
@@ -1411,15 +1558,45 @@ set_more(this).complex(get_more(this).complex() + 1);
 set_more(t2).complex(get_more(t2).complex() - 1);
 
 		
+
 Success are greateful
 ===[ xss9.project.xml ]================
 
-Log: Return type: t_xss9_2
 
+log: Return type: t_xss9_2
+		class test_class2 : t_xss9_2
+		childrens 1
+	
+			property some_prop
+		
+			method foo
+		
+			instance base {
+			properties 1
+			methods 1
+			events 1
+		
+				property collect
+			
+				event create
+			
+				method bar
+			
+			}
+		
+		class test_class : t_xss9_1
+		childrens 0
+	
+		class test_class1 : t_xss9_2
+		childrens 0
+	
+			property some_prop
+		
 		var a = new t_xss9_1(myManager, 10, null);
-var b = new t_xss9_1(myManager, 20, 10);
+var b = new t_xss9_1(myManager, 10, 20);
 var c = new t_xss9_2();
 return c;
 
 	
+
 Success are greateful

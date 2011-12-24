@@ -4,9 +4,9 @@ class ms6 : div
     on btn1.click()
     {
         if (btn2.alpha > 0)
-            btn2.alpha -= 0.1;
+            btn2.alpha -= 5;
         else
-            btn2.alpha = 1;
+            btn2.alpha = 100;
     }
 
     on btn2.click()

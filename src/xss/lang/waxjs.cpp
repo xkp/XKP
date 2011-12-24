@@ -800,6 +800,8 @@ XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
     //here comes tricky, every registered element will get its own instance
     //then the code will be analyzed to find the changes intended for the html
     XSSContext ctx(new xss_context(compiler_->current_context()));
+    ctx->search_native(true); //looks important...
+
     DynamicArray elements = page->children();
 		std::vector<variant>::iterator it = elements->ref_begin();
 		std::vector<variant>::iterator nd = elements->ref_end();

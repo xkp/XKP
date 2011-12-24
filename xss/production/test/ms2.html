@@ -43,6 +43,7 @@ function start(resolution)
     {
         $super(
         manager        );
+        this.events = new ms.event.EventHolder(); 
                 var this__ = this;
             this.parent_sequence = null;
                     var ____i1 = new ms.state.Interpolator(
@@ -78,6 +79,7 @@ function start(resolution)
 test_sequence =
 new fade_in(
 g_sequence_manager);
+        var test_sequence = test_sequence;
 	test_sequence.display = function() 
 	{
 		console.log("test_sequence> Target: " + application.target);
@@ -91,6 +93,7 @@ test_sequence1.start();
 test_sequence1 =
 new fade_in(
 g_sequence_manager);
+        var test_sequence1 = test_sequence1;
 	test_sequence1.display = function() 
 	{
 		console.log("test_sequence1> Target: " + application.target);

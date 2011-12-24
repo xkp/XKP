@@ -6,41 +6,38 @@ import java.util.ArrayList;
 import java.util.Arrays;
 public class JavaTest {
 				private static Class_instance1 instance1;
-	private static class Class_instance1 {
-			private Float prop__xvalue = 100.199997;
-			private Object prop__svalue;
-		public Float test0(Integer value) {
+			private Float prop_instance1_xvalue = 100.199997;
+			private Object prop_instance1_svalue;
+		public Float mthd_instance1_test0(Integer value) {
 			Integer a = value;
 Float b = 5.000000;
 return a * b;
 		}
-		public Float test1(Integer value) {
+		public Float mthd_instance1_test1(Integer value) {
 			Float b = 5.000000;
 return b / 2;
 		}
-		public String test2(Integer value) {
+		public String mthd_instance1_test2(Integer value) {
 			Integer a = value;
 Float b = 5.000000;
 return application.app_test(a * b);
 		}
-		public Object test3(Object value) {
+		public Object mthd_instance1_test3(Object value) {
 			return value;
 		}
-		public void foo(Object obj) {
+		public void mthd_instance1_foo(Object obj) {
 			Boolean has_property = obj has "processed";
 if (!has_property)
 {
 }
 		}
-	}
-	private static class Class_application {
-			private Integer prop__lvalue;
-			private String prop__yvalue = "string v";
-			private ArrayList<String> prop__xvalue = new ArrayList(Arrays.asList( new Object [] {"value1", "value2", "value3"} ));
-		public String app_test(Integer value) {
+			private Integer prop_application_lvalue;
+			private String prop_application_yvalue = "string v";
+			private ArrayList<String> prop_application_xvalue = new ArrayList(Arrays.asList( new Object [] {"value1", "value2", "value3"} ));
+		public String mthd_application_app_test(Integer value) {
 			return "string value";
 		}
-			private void create() {
+			private void createapplication() {
 				ArrayList<Object> types = new ArrayList(Arrays.asList( new Object [] {new Object("int", "Integer"), new Object("float", "Double"), new Object("string", "String")} ));
 Integer v0 = 20;
 Integer v1 = instance1.px_value;
@@ -54,12 +51,12 @@ x1 = somenotexistsobject.px_value;
 instance1.ps_value = x0;
 Integer x2;
 x2 = instance1.ps_value;
-prop__svalue = x0;
+prop_instance1_svalue = x0;
 Object x3;
-x3 = prop__svalue;
-prop__lvalue = x0;
+x3 = prop_instance1_svalue;
+prop_application_lvalue = x0;
 Integer x4;
-x4 = prop__lvalue;
+x4 = prop_application_lvalue;
 Integer ivar = 100;
 String svar = String.valueOf(ivar);
 Float fval = Float.valueOf(svar);
@@ -118,7 +115,6 @@ mthd = instance1.test0(10);
 mthd = instance1.test0(10, "a", -2);
 mthd = instance1.test0(2 * 5, "b" + "a", 1);
 			}
-	}
 	public static void main(String[] args) {
 				application.create();
 				}

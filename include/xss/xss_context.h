@@ -330,6 +330,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       void          add_parameter(const str& id, XSSType type);
       void          set_args(param_list& args);
       param_list&   get_args();
+      void          search_native(bool enabled);
     public:
       variant resolve(const str& id, RESOLVE_ITEM item_type = RESOLVE_ANY);
       bool    resolve(const str& id, resolve_info& info);
@@ -346,6 +347,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       type_list  types_;
       fs::path   path_;
       param_list args_;
+      bool       search_native_;
 
       variant empty_type_value(RESOLVE_ITEM item_type);
     protected:

@@ -384,8 +384,8 @@ ms.ui.Component = Class.create(
     get_alpha: function()
     {
         if (this.opacity == null)
-            return 1.0;
-        return this.opacity;
+            return 100;
+        return this.opacity*100;
     },
 
     alpha: function(value)
@@ -1209,6 +1209,81 @@ ms.ui.Polygon = Class.create(ms.ui.Component,
 		context.lineWidth = old_line_width;
         $super(context);
 	}
+});
+
+ms.ui.SpriteSheet = Class.create(ms.ui.Component,
+{	
+	initialize: function($super, src, frame_width, frame_height, manager, parent)
+	{				
+		$super(manager, parent);
+		this.sprite = streamer.get_resource(src).data;	
+		this.w = frame_width;
+		this.h = frame_height;		
+		this.sprite.frame_count = 0;		
+		this.sprite.current_step = 0;		
+		this.array = [];			
+	},	
+	draw: function($super, context, x, y)
+	{	
+		if(this.curr_sprite){
+			var old_alpha;
+
+			context.save();
+			context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
+			context.rotate(this.rotation);
+
+			if (this.opacity != null)
+			{
+				old_alpha = context.globalAlpha;
+				context.globalAlpha = this.opacity;
+			}		
+			context.drawImage(this.sprite, 
+						this.w * (this.sprite.frame_count + this.curr_sprite.frame_col), 
+						this.h * this.curr_sprite.frame_row, 
+						this.w, this.h, 
+						- this.w/2, - this.h/2, 
+						this.w, this.h);
+			
+			if (this.opacity != null)
+			{
+				context.globalAlpha = old_alpha;
+			}
+
+			context.restore();  		
+			$super(context);
+		}		
+	},
+	animate: function(id)
+	{
+		if(!this.curr_sprite)
+			this.curr_sprite = this.get_sprite_by_id(id);		
+		if(!this.curr_sprite.is_locked){
+			this.curr_sprite = this.get_sprite_by_id(id);
+		}				
+		this.curr_sprite.is_locked = this.curr_sprite.lock;				
+		if(this.sprite.current_step < this.curr_sprite.step){
+			this.sprite.current_step++;			
+		}else{						
+			if(this.sprite.frame_count < this.curr_sprite.frames - 1) 
+				{ this.sprite.frame_count++; } 
+			else{ 
+				this.curr_sprite.is_locked = false;
+				if(this.curr_sprite.loop)
+					{ this.sprite.frame_count = 0; } 
+			}
+			this.sprite.current_step = 0;
+			this.invalidate();
+		}		
+	},
+	get_sprite_by_id: function (id)
+	{
+		for(var i = 0; i < this.array.length; i++)
+        {	
+			if(this.array[i].id == id)
+				return this.array[i];
+		}
+		throw "Unknown sprite: " + id;		
+	},
 });
 
 ms.ui.Sound = Class.create(

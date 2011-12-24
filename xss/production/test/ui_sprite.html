@@ -39,13 +39,31 @@ var Sound = new ms.ui.Sound();
             {
 		id:"__image1",
 		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_grin_48.png"
+		src:"images/monster_running.jpg"
 });
                 def_package_items.push(
             {
 		id:"__image2",
 		resource_type:RESOURCE_IMAGE,
+		src:"images/monster_idle.jpg"
+});
+                def_package_items.push(
+            {
+		id:"__image3",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/smile_grin_48.png"
+});
+                def_package_items.push(
+            {
+		id:"__image4",
+		resource_type:RESOURCE_IMAGE,
 		src:"images/smile_sad_48.png"
+});
+                def_package_items.push(
+            {
+		id:"__image5",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/AzuCola_Chars.png"
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
@@ -59,6 +77,15 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
+			girl.animate("g_idle");
+if (application.key_press)
+{
+monster.animate("m_running");
+}
+else
+{
+monster.animate("m_idle");
+}
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
@@ -94,47 +121,110 @@ window.onload = function()
 	{
 		ui.mouseup(ev.clientX, ev.clientY);                  
 	};	
-		    __label1 = new ms.ui.Label( 
-	    "Verdana",g_ui_root.manager, g_ui_root);
-        var __label1 = __label1;
-                __label1.text("drag the smile to move it");
-                __label1.position(240, 75);
+		    girl = new ms.ui.SpriteSheet( 
+	    "images/AzuCola_Chars.png",46,67,g_ui_root.manager, g_ui_root);
+        var girl = girl;
+	var ev_parent = this;
+	girl.events.addListener("click", function()
+	{    
+		girl.animate("g_down");
+	}
+	);
+                girl.position(400, 200);
+		girl.array.push({id: "g_down", 
+										frames: 5, 
+										frame_row: 1,
+										frame_col: 10,
+										loop: true,
+										step: 40,
+										lock: true										
+										});
+		girl.array.push({id: "g_idle", 
+										frames: 7, 
+										frame_row: 1,
+										frame_col: 0,
+										loop: true,
+										step: 40,
+										lock: false										
+										});
+		    monster = new ms.ui.SpriteSheet( 
+	    "images/monster_running.jpg",64,64,g_ui_root.manager, g_ui_root);
+        var monster = monster;
+                monster.position(200, 200);
+		monster.array.push({id: "m_running", 
+										frames: 10, 
+										frame_row: 0,
+										frame_col: 0,
+										loop: true,
+										step: 30,
+										lock: false										
+										});
+		monster.array.push({id: "m_idle", 
+										frames: 1, 
+										frame_row: 0,
+										frame_col: 0,
+										loop: true,
+										step: 30,
+										lock: false										
+										});
 		    lbl1 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
         var lbl1 = lbl1;
+                lbl1.set_rotation(-15);
                 lbl1.text("click smiley");
-                lbl1.position(250, 90);
+                lbl1.position(200, 200);
+		    lbl2 = new ms.ui.Label( 
+	    "Verdana",g_ui_root.manager, g_ui_root);
+        var lbl2 = lbl2;
+                lbl2.text("press left and right arrows to walk the monster");
+                lbl2.position(100, 100);
+		    lbl3 = new ms.ui.Label( 
+	    "Verdana",g_ui_root.manager, g_ui_root);
+        var lbl3 = lbl3;
+                lbl3.text("click the girl to crash her down");
+                lbl3.position(100, 150);
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
         var btn1 = btn1;
-                btn1.set_rotation(10);
+                btn1.set_rotation(15);
 	var ev_parent = this;
 	btn1.events.addListener("click", function()
 	{    
 		lbl1.text("Got " + application.clicks + " smileys");
-btn1.set_rotation(btn1.get_rotation() + 10);
 application.clicks = application.clicks + 1;
 	}
 	);
+                btn1.rect(300, 300, 50, 50);
+                application.clicks = 1;
+                application.key_press = false;
 	var ev_parent = this;
-	btn1.events.addListener("drag", function(x,y)
+	application.events.addListener("keydown", function(keycode)
 	{    
-		btn1.set_x(x - btn1.w / 2);
-btn1.set_y(y - btn1.h / 2);
+		if (keycode == LEFT_ARROW)
+{
+application.key_press = true;
+monster.set_x(monster.x - 1);
+}
+if (keycode == RIGHT_ARROW)
+{
+application.key_press = true;
+monster.set_x(monster.x + 1);
+}
 	}
 	);
-                btn1.rect(270, 100, 50, 50);
-		    stateBtn = new ms.ui.StateButton( 
-	    "images/smile_grin_48.png","images/smile_sad_48.png",g_ui_root.manager, g_ui_root);
-        var stateBtn = stateBtn;
-                stateBtn.set_rotation(-45);
-                stateBtn.rect(270, 200, 50, 50);
-		    lbl3 = new ms.ui.Label( 
-	    "Verdana",g_ui_root.manager, g_ui_root);
-        var lbl3 = lbl3;
-                lbl3.text("this smile is a state button, click it");
-                lbl3.position(330, 240);
-                application.clicks = 0;
+	var ev_parent = this;
+	application.events.addListener("keyup", function(keycode)
+	{    
+		if (keycode == LEFT_ARROW)
+{
+application.key_press = false;
+}
+if (keycode == RIGHT_ARROW)
+{
+application.key_press = false;
+}
+	}
+	);
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  

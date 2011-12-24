@@ -50,7 +50,7 @@ function start(resolution)
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
-	}
+	}    
 	window.setTimeout(updater, resolution);  
 }  
 window.onload = function() 
@@ -84,6 +84,7 @@ window.onload = function()
 	};	
 		    sd1 = new ms.ui.SelfDrawn( 
 	    g_ui_root.manager, g_ui_root);
+        var sd1 = sd1;
                 sd1.ctx = null;
                 sd1.x = 50;
                 sd1.y = 50;

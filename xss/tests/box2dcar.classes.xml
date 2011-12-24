@@ -1,6 +1,6 @@
 <xs>
     <class id="car" super="img" src="images/car.png" width="50" height="100">
-        <physics body_type="dynamic" shape="rect" density="0.24"/>        
+        <physics body_type="dynamic" shape="rect"/>        
     </class>   
 
     <class id="wheel" super="img" src="images/wheel.png" width="10" height="20">

@@ -5,7 +5,7 @@ on pre_process(obj)
 {
     if (obj.class_name == "physics_world")
     {
-        world = obj; //td: test for dups
+        world = obj; //td: test for dups		
     }
 }
 
@@ -13,7 +13,8 @@ on render_jscripts()
 {
 	out()
 	{
-        <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script> 		<script type="text/javascript" src="../js/ms-joint.js"></script> 
+        <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script> 
+		<script type="text/javascript" src="../js/ms-joint.js"></script> 
     }
 
     if (!application.noSpawner)
@@ -64,16 +65,7 @@ on render_initialization()
         var g_world = new b2World(
             new b2Vec2(<xss:e v="gx"/>, <xss:e v="gy"/>)    //gravity
         ,  true                 //allow sleep
-        );
-		var g_physics_data = 
-		{
-			friction: <xss:e v="world.friction"/>,
-			density: <xss:e v="world.density"/>,
-			restitution: <xss:e v="world.restitution"/>,
-			angular_damping: <xss:e v="world.angular_damping"/>,
-			linear_damping: <xss:e v="world.linear_damping"/>,
-		}; 
-
+        );		
     }
 
     if (!application.noSpawner)

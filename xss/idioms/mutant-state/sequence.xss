@@ -323,7 +323,7 @@
                 }
             }
             
-            compiler.xss("../common-js/instance.xss", seq, path = path);
+            compiler.xss("../common-js/instance.xss", seq, path = path, var_value = seq_id);
         }
         else
         {

@@ -1,0 +1,25 @@
+<application src="ui_sprite.xs" width="600" height="600">
+    <resources>
+        <image src="images/monster_running.jpg"/> 
+		<image src="images/monster_idle.jpg"/> 
+		<image src="images/smile_grin_48.png"/>
+        <image src="images/smile_sad_48.png"/>
+		<image src="images/AzuCola_Chars.png"/>
+    </resources>
+	
+	<sprite_sheet id="girl" x="400" y="200" src="images/AzuCola_Chars.png" frame_width="46" frame_height="67">
+		<sprite id="g_down"  frames="5" frame_row="1" frame_col="10" step="40" lock="true"/>
+		<sprite id="g_idle" frames="7" frame_row="1" frame_col="0" step="40"/>
+	</sprite_sheet> 
+	
+	<sprite_sheet id="monster" x="200" y="200" src="images/monster_running.jpg" frame_width="64" frame_height="64">
+		<sprite id="m_running" frames="10" frame_row="0" frame_col="0" step="30"/>
+		<sprite id="m_idle" frames="1" frame_row="0" frame_col="0" step="30"/>
+	</sprite_sheet> 
+		
+    <label id="lbl1" x="200" y="200" rotation="-15" font="Verdana" caption="click smiley"/>
+	<label id="lbl2" x="100" y="100" font="Verdana" caption="press left and right arrows to walk the monster"/>
+	<label id="lbl3" x="100" y="150" font="Verdana" caption="click the girl to crash her down"/>
+    <button id="btn1" x="300" y="300" rotation="15" width="50" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png"/>
+		
+</application>

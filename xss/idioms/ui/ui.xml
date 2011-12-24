@@ -51,6 +51,19 @@
             <property id="form" type="string"/>                
 		</class>
 		
+		<class id="sprite_sheet" super="component" output_id="ms.ui.SpriteSheet">
+			<constructor_params>
+                <parameter property="src" runtime="true"/>
+				<parameter property="frame_width" runtime="true"/>
+				<parameter property="frame_height" runtime="true"/>						
+            </constructor_params>
+            <property id="src" type="string" dont_init="true"/> 
+			<property id="frame_width" type="int" dont_init="true"/>
+			<property id="frame_height" type="int" dont_init="true"/>						
+		</class>
+		
+		<class id="sprite" renderer="sprite_renderer.xss"/>
+		
 		<class id="rectangle" super="component" output_id="ms.ui.Rectangle">
 			<constructor_params>
                 <parameter property="fill" runtime="true"/>

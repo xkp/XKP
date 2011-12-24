@@ -2,7 +2,7 @@
     <class id="ms6" super="div" width="50" height="100">
         <sequence id="anim1">
             <at time="0">
-                <animate property="btn1.alpha" from="1" to="0" in="10.5"/>
+                <animate property="btn1.alpha" from="100" to="0" in="10.5"/>
             </at>
         </sequence>
 

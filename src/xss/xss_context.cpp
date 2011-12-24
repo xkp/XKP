@@ -79,13 +79,9 @@ xss_context::xss_context(XSSContext parent, fs::path path):
   parent_(parent),
   path_(path),
   code_scope_(),
-  got_dsls_(false)
+  got_dsls_(false),
+  search_native_(false)
   {
-    if (!path.empty())
-      {
-        str debug("xxxx");
-      }
-
     code_types_.add_type<xss_object>("object");
     code_types_.add_type<DynamicArray>("array");
   }
@@ -262,6 +258,11 @@ param_list& xss_context::get_args()
     return args_;
   }
 
+void xss_context::search_native(bool enabled)
+  {
+    search_native_ = enabled;
+  }
+
 variant xss_context::resolve(const str& id, RESOLVE_ITEM item_type)
   {
     resolve_info si;
@@ -422,22 +423,25 @@ bool xss_context::resolve(const str& id, resolve_info& info)
 
     if (info.left)
       {
-        switch(info.left->what)
+        if (search_native_)
           {
-            case RESOLVE_INSTANCE:
+            switch(info.left->what)
               {
-                XSSObject obj = info.left->value; 
-                schema_item sitm;
-                if (obj->resolve(id, sitm))
+                case RESOLVE_INSTANCE:
                   {
-                    info.what  = RESOLVE_NATIVE;
-                    info.type  = XSSType();
-                    info.value = sitm;
-                    return true;
+                    XSSObject obj = info.left->value; 
+                    schema_item sitm;
+                    if (obj->resolve(id, sitm))
+                      {
+                        info.what  = RESOLVE_NATIVE;
+                        info.type  = XSSType();
+                        info.value = sitm;
+                        return true;
+                      }
                   }
               }
-            default: return false;
           }
+        return false;
       }
 
     //check globals now

@@ -33,18 +33,22 @@ XSSObject xss_object_reader::read(const str& text)
 	{
     if (parse_xml(text))
       return read_xml_object(doc_.RootElement(), XSSObject(), true);
+    else
+      {
+        //td: finish json
+		    param_list error;
+		    error.add("id", SReaderError);
+		    error.add("desc", SCannotParseXML);
+		    error.add("xml error", str(doc_.ErrorDesc()));
+		    error.add("line", doc_.ErrorRow());
+		    error.add("column", doc_.ErrorCol());
+
+		    xss_throw(error);
+      }
 
     if (parse_json(text))
       return read_json_object(doc_.RootElement(), XSSObject(), true);
 
-		param_list error;
-		error.add("id", SReaderError);
-		error.add("desc", SCannotParseDef);
-		//error.add("error", str(doc_.ErrorDesc()));
-		//error.add("line", doc_.ErrorRow());
-		//error.add("column", doc_.ErrorCol());
-
-		xss_throw(error);
     return XSSObject();
 	}
 
