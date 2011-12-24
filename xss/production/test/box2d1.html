@@ -24,13 +24,20 @@
         ,	b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape
         ,	b2CircleShape = Box2D.Collision.Shapes.b2CircleShape
         ,	b2DebugDraw = Box2D.Dynamics.b2DebugDraw
-        ,  b2MouseJointDef =  Box2D.Dynamics.Joints.b2MouseJointDef
-        , b2Transform = Box2D.Common.Math.b2Transform
+        ,  	b2MouseJointDef =  Box2D.Dynamics.Joints.b2MouseJointDef
+        , 	b2Transform = Box2D.Common.Math.b2Transform
+		,	b2RevoluteJointDef = Box2D.Dynamics.Joints.b2RevoluteJointDef
+		,	b2Joint = Box2D.Dynamics.Joints.b2Joint
+		,	b2PrismaticJointDef = Box2D.Dynamics.Joints.b2PrismaticJointDef
+		,	b2PulleyJointDef = Box2D.Dynamics.Joints.b2PulleyJointDef
+		,	b2WeldJointDef = Box2D.Dynamics.Joints.b2WeldJointDef
+		,	b2LineJointDef = Box2D.Dynamics.Joints.b2LineJointDef
+		,	b2DistanceJointDef = Box2D.Dynamics.Joints.b2DistanceJointDef
         ;
         var g_world = new b2World(
             new b2Vec2(0, 5)    //gravity
         ,  true                 //allow sleep
-        );
+        );		
         var g_step_collisions = [];
         var contactListener = new Box2D.Dynamics.b2ContactListener;
         contactListener.BeginContact = function(contact, manifold) 

@@ -1,6 +1,6 @@
 <application src="wax3.app.xs">
     
-    <page id="home" src="twootter.html">
+    <page id="home" src="twotter.html">
         <element id="user_name" />
         
         <replicator id="followers">

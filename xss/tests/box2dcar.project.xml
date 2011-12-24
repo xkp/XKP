@@ -1,0 +1,13 @@
+<project entry_point="../idioms/ui/ui_standalone.xss" language="js" target="box2dcar.app.xml" output="box2dcar.html">
+    <path>
+        <output path="../production/test"/>
+    </path>
+
+    <idiom src="../idioms/ui/ui.xml"/>
+	<idiom src="../idioms/resources/resources.xml"/>
+    <idiom src="../idioms/box2d/box2d.xml"/>
+	
+    <include def="box2dcar.classes.xml" src="box2dcar.classes.xs"/>
+</project>
+           
+         

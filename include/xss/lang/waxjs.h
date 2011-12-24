@@ -3,6 +3,7 @@
 #define WAX_JS_HH
 
 #include <xss/lang/js.h>
+#include <xss/html_parser.h>
 
 namespace xkp{
 
@@ -83,6 +84,9 @@ struct wax_utils
 
     private:
       XSSCompiler compiler_;
+
+      bool custom_modifier(XSSObject obj, const str& modifier, tag_list& tags, tag& t);
+      str  render_html_text(const str& text);
   };
 
 typedef reference<wax_utils> WaxUtils;

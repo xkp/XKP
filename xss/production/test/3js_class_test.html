@@ -92,9 +92,7 @@ application.events.dispatch("switch_cameras", []);
         my_plane.image_set = function (value)
         {
             my_plane.image = value;
-            my_plane.children[0].materials[ 0 ] = new THREE.MeshBasicMaterial({
-						map:THREE.ImageUtils.loadTexture(streamer.get_resource(value).asset),
-						});
+            this.texture = value;
         };
             var img_plane;
 	    var img_plane_plane = 

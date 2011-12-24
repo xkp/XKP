@@ -12,6 +12,7 @@
 
 #include "xs/linker.h"
 #include "xs/compiler.h"
+#include "xs/xs_error.h"
 
 #include <boost/functional/hash.hpp>
 #include <boost/algorithm/string/split.hpp>
@@ -327,7 +328,145 @@ DynamicArray xss_module::all_types()
     return result;
   }
 
+//ConsoleOutput
+void ConsoleOutput::out(const str& cat, const str& text, param_list* params)
+  {
+    std::cout << '\n' << cat << ": " << text;
+    if (params)
+      {
+        for(int i = 0; i < params->size(); i++)
+          {
+            std::cout << '\n\t' << params->get_name(i) << " = " << xss_utils::var_to_string(params->get(i));
+          }
+      }
+  }
+
+void ConsoleOutput::success()
+  {
+    std::cout  << '\n' << "Success are greateful";
+  }
+
+void ConsoleOutput::error(param_list& data)
+  {
+    str id   = variant_cast<str>(data.get("id"), "");
+    str desc = variant_cast<str>(data.get("desc"), "");
+
+    std::cout << "Error [" << id << "] " << desc << '\n';
+
+    for(size_t i = 0; i < data.size(); i++)
+      {
+        str name = data.get_name(i);
+        if (name == "id" || name == "desc")
+          continue;
+
+        variant value = data.get(i);
+        str     value_str = xss_utils::var_to_string(value);
+
+        std::cout  << '\n\t' << name << " = " << value_str;
+      }
+  }
+
+str ConsoleOutput::string()
+  {
+    return str();
+  }
+
+//JsonOutput
+JsonOutput::JsonOutput():
+  json_(Json::arrayValue)
+  {
+  }
+
+void JsonOutput::out(const str& cat, const str& text, param_list* params)
+  {
+    Json::Value item(Json::objectValue);
+    item["type"] = cat;
+    item["text"] = text;
+
+    if (params)
+      {
+        Json::Value jparams(Json::arrayValue);
+        item["params"] = jparams;
+        
+        for(int i = 0; i < params->size(); i++)
+          {
+            str name   = params->get_name(i);
+            jparams[name] = xss_utils::var_to_string(params->get(i));
+          }
+      }
+
+    json_.append(item);
+  }
+
+void JsonOutput::success()
+  {
+    Json::Value item(Json::objectValue);
+    item["type"] = "msg";
+    item["text"] = "Success are greateful";
+
+    json_.append(item);
+  }
+
+void JsonOutput::error(param_list& data)
+  {
+    str id   = variant_cast<str>(data.get("id"), "");
+    str desc = variant_cast<str>(data.get("desc"), "");
+    str file = variant_cast<str>(data.get("file"), "");
+    int line = variant_cast<int>(data.get("line"), 0);
+    int col  = variant_cast<int>(data.get("column"), 0);
+
+    Json::Value item(Json::objectValue);
+    item["type"] = "error";
+    item["text"] = "[" + id + "] " + desc;
+    item["line"] = line; 
+    item["column"] = col; 
+    item["filepath"] = file; 
+
+    Json::Value jparams(Json::arrayValue);
+    for(size_t i = 0; i < data.size(); i++)
+      {
+        str name = data.get_name(i);
+        if (name == "id"   || 
+            name == "desc" || 
+            name == "file" || 
+            name == "line" || 
+            name == "column")
+          continue;
+
+        variant value = data.get(i);
+        str     value_str = xss_utils::var_to_string(value);
+
+        Json::Value jparam(Json::objectValue);
+        jparam["id"]    = name;
+        jparam["value"] = value_str;
+
+        jparams.append(jparam);
+      }
+
+    if (jparams.size() > 0)
+      item["params"] = jparams;
+    
+    json_.append(item);
+  }
+
+str JsonOutput::string()
+  {
+    Json::StyledWriter jw;
+    str result = jw.write(json_);
+    return result;
+  }
+
 //xss_compiler
+xss_compiler::xss_compiler()
+  {
+    assert(false);
+  }
+
+xss_compiler::xss_compiler(ICompilerOutput* out):
+  out_(out)
+  {
+  }
+
 void xss_compiler::build(fs::path xml)
   {
     fs::path pp = xml;
@@ -748,7 +887,7 @@ void xss_compiler::log(const param_list params)
 							}
 					}
 
-				std::cout << "Log: " << string_value << '\n';
+				out_->out("log", string_value, null);
       }
 	}
 
@@ -1074,7 +1213,7 @@ str xss_compiler::instantiate(variant v)
 
 str xss_compiler::file(fs::path path)
   {
-    fs::path pp = app_path_ / path;
+    fs::path pp = app_path_.parent_path() / path;
     return load_file(pp);
   }
 
@@ -1117,7 +1256,18 @@ XSSRenderer xss_compiler::entry_renderer()
 XSSObject xss_compiler::read_project(fs::path xml_file)
   {
     xss_object_reader reader;
-    XSSObject project_data = reader.read(load_file(xml_file));
+    XSSObject project_data;
+    
+    try
+      {
+        project_data = reader.read(load_file(xml_file));
+      }
+    catch(xss_error xss)
+      {
+        xss.data.add("file", xml_file.string());
+        throw xss;
+      }  
+
     if (!project_data)
       {
         param_list error;
@@ -1213,7 +1363,16 @@ XSSModule xss_compiler::read_module(const str& src, XSSApplicationRenderer app, 
     xss_object_reader reader(ctx);
     reader.enforce_types(false);
 
-    XSSObject module_data = reader.read(load_file(path));
+    XSSObject module_data;
+    try
+      {
+        module_data = reader.read(load_file(path));
+      }
+    catch(xss_error xss)
+      {
+        xss.data.add("file", path.string());
+        throw xss;
+      }  
 
     if (!module_data)
       {
@@ -1744,7 +1903,16 @@ void xss_compiler::read_application(const str& app_file)
 
         //read the application
         xss_object_reader reader(app_renderer->context());
-        XSSObject app_data = reader.read(def);
+        XSSObject app_data;
+        try
+          {
+            app_data = reader.read(def);
+          }
+        catch(xss_error xss)
+          {
+            xss.data.add("file", app_path_.string());
+            throw xss;
+          }  
 
         //make sure we match the app's target
         str target = app_renderer->target();
@@ -2054,13 +2222,29 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 void xss_compiler::read_object_array(fs::path file, XSSContext ctx, std::vector<XSSObject>& classes_data)
   {
     xss_object_reader reader(ctx);
-    classes_data = reader.read_array(load_file(file));
+    try
+      {
+        classes_data = reader.read_array(load_file(file));
+      }
+    catch(xss_error xss)
+      {
+        xss.data.add("file", file.string());
+        throw xss;
+      }  
   }
 
 void xss_compiler::compile_xs_file(fs::path file, xs_container& result)
   {
     xs_compiler compiler;
-		compiler.compile_xs(load_file(file.string()), result); //td: errors
+		try
+      {
+        compiler.compile_xs(load_file(file.string()), result); //td: errors
+      }
+    catch(xs_error xse)
+      {
+        xse.data.add("file", file.string());
+        throw xse;
+      }
   }
 
 str xss_compiler::load_file(fs::path fname)

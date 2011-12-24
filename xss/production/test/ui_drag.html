@@ -62,10 +62,9 @@ function start(resolution)
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
-	}
+	}    
 	window.setTimeout(updater, resolution);  
 }  
-                application.clicks = 0;
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -97,14 +96,17 @@ window.onload = function()
 	};	
 		    __label1 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
+        var __label1 = __label1;
                 __label1.text("drag the smile to move it");
                 __label1.position(240, 75);
 		    lbl1 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
+        var lbl1 = lbl1;
                 lbl1.text("click smiley");
                 lbl1.position(250, 90);
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
+        var btn1 = btn1;
                 btn1.set_rotation(10);
 	var ev_parent = this;
 	btn1.events.addListener("click", function()
@@ -124,12 +126,15 @@ btn1.set_y(y - btn1.h / 2);
                 btn1.rect(270, 100, 50, 50);
 		    stateBtn = new ms.ui.StateButton( 
 	    "images/smile_grin_48.png","images/smile_sad_48.png",g_ui_root.manager, g_ui_root);
+        var stateBtn = stateBtn;
                 stateBtn.set_rotation(-45);
                 stateBtn.rect(270, 200, 50, 50);
 		    lbl3 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
+        var lbl3 = lbl3;
                 lbl3.text("this smile is a state button, click it");
                 lbl3.position(330, 240);
+                application.clicks = 0;
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  

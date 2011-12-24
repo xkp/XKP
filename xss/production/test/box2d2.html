@@ -12,7 +12,8 @@
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
-        <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
+        <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script> 
+		<script type="text/javascript" src="../js/ms-joint.js"></script> 
             <script type="text/javascript" src="../js/ms-spawner.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
@@ -48,13 +49,20 @@ var Sound = new ms.ui.Sound();
         ,	b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape
         ,	b2CircleShape = Box2D.Collision.Shapes.b2CircleShape
         ,	b2DebugDraw = Box2D.Dynamics.b2DebugDraw
-        ,  b2MouseJointDef =  Box2D.Dynamics.Joints.b2MouseJointDef
-        , b2Transform = Box2D.Common.Math.b2Transform
+        ,  	b2MouseJointDef =  Box2D.Dynamics.Joints.b2MouseJointDef
+        , 	b2Transform = Box2D.Common.Math.b2Transform
+		,	b2RevoluteJointDef = Box2D.Dynamics.Joints.b2RevoluteJointDef
+		,	b2Joint = Box2D.Dynamics.Joints.b2Joint
+		,	b2PrismaticJointDef = Box2D.Dynamics.Joints.b2PrismaticJointDef
+		,	b2PulleyJointDef = Box2D.Dynamics.Joints.b2PulleyJointDef
+		,	b2WeldJointDef = Box2D.Dynamics.Joints.b2WeldJointDef
+		,	b2LineJointDef = Box2D.Dynamics.Joints.b2LineJointDef
+		,	b2DistanceJointDef = Box2D.Dynamics.Joints.b2DistanceJointDef
         ;
         var g_world = new b2World(
             new b2Vec2(0, 10)    //gravity
         ,  true                 //allow sleep
-        );
+        );		
             var g_spawner_manager = new ms.arcade.SpawnManager();
         var g_step_collisions = [];
         var contactListener = new Box2D.Dynamics.b2ContactListener;
@@ -167,7 +175,7 @@ function start(resolution)
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
-	}
+	}    
 	window.setTimeout(updater, resolution);  
 }  
 window.onload = function() 
@@ -201,6 +209,7 @@ window.onload = function()
 	};	
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
+        var btn1 = btn1;
                 btn1.set_rotation(0.200000003);
                 btn1.rect(200, 200, 50, 50);
 				btn1.events.addListener('resized', function(cmp)

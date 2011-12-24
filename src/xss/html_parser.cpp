@@ -43,6 +43,33 @@ void tag_list::push_back(const tag t)
     tags_.push_back(t);
   }
 
+int tag_list::find(const str& id)
+  {
+    std::vector<tag>::iterator it = tags_.begin();
+    std::vector<tag>::iterator nd = tags_.end();
+
+    int tag_index = 0;
+    for(; it != nd; it++, tag_index++)
+      {
+        prop_list::iterator pit = it->props.begin();
+        prop_list::iterator pnd = it->props.end();
+        for(; pit != pnd; pit++)
+          {
+            if (pit->first == "id" && pit->second == id)
+              {
+                return tag_index;
+              }
+          }
+      }
+
+    return -1;
+  }
+
+tag& tag_list::get(int idx)
+  {
+    return tags_[idx];
+  }
+
 //an extremely simple html parser, at this point the htmls to be used are expected to
 //be correct, so we'll keep an intermediate representation of the tags
 
@@ -71,7 +98,7 @@ struct html_context
     void property_name(const str& name)   { propname_ = name; }
     void property_value(const str& value) 
       { 
-        current_.add_prop( propname_, value ); 
+        current_.add_prop( propname_, value.substr(1, value.size() - 2) ); 
       }
   };
 

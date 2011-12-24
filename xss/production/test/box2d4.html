@@ -12,7 +12,8 @@
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
-        <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
+        <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script> 
+		<script type="text/javascript" src="../js/ms-joint.js"></script> 
             <script type="text/javascript" src="../js/ms-spawner.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
@@ -48,13 +49,20 @@ var Sound = new ms.ui.Sound();
         ,	b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape
         ,	b2CircleShape = Box2D.Collision.Shapes.b2CircleShape
         ,	b2DebugDraw = Box2D.Dynamics.b2DebugDraw
-        ,  b2MouseJointDef =  Box2D.Dynamics.Joints.b2MouseJointDef
-        , b2Transform = Box2D.Common.Math.b2Transform
+        ,  	b2MouseJointDef =  Box2D.Dynamics.Joints.b2MouseJointDef
+        , 	b2Transform = Box2D.Common.Math.b2Transform
+		,	b2RevoluteJointDef = Box2D.Dynamics.Joints.b2RevoluteJointDef
+		,	b2Joint = Box2D.Dynamics.Joints.b2Joint
+		,	b2PrismaticJointDef = Box2D.Dynamics.Joints.b2PrismaticJointDef
+		,	b2PulleyJointDef = Box2D.Dynamics.Joints.b2PulleyJointDef
+		,	b2WeldJointDef = Box2D.Dynamics.Joints.b2WeldJointDef
+		,	b2LineJointDef = Box2D.Dynamics.Joints.b2LineJointDef
+		,	b2DistanceJointDef = Box2D.Dynamics.Joints.b2DistanceJointDef
         ;
         var g_world = new b2World(
             new b2Vec2(0, 0)    //gravity
         ,  true                 //allow sleep
-        );
+        );		
             var g_spawner_manager = new ms.arcade.SpawnManager();
         var g_step_collisions = [];
         var contactListener = new Box2D.Dynamics.b2ContactListener;
@@ -191,9 +199,10 @@ function start(resolution)
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
-	}
+	}    
 	window.setTimeout(updater, resolution);  
 }  
+var hero;var __floor1;var game_over;
             bad_guy = Class.create(ms.ui.Image,
         {
     initialize: function($super
@@ -204,7 +213,6 @@ function start(resolution)
         src? src : "images/smile_sad_48.png"        );
         this.events = new ms.event.EventHolder(); 
                 this.size(60, 60);
-                var __physics2;
 				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
@@ -235,9 +243,8 @@ function start(resolution)
                         this.parent.removeComponent(this);
                     }
                 }
-                __physics2 = this.__physics2;
-                var cannon;
         this.cannon = new ms.arcade.Spawner(g_spawner_manager, 20, 60, 1, 2);
+        cannon = this.cannon;
                 this.cannon.x = 20;
                 this.cannon.y = 60;
                 this.cannon.set_rotation(0);
@@ -249,18 +256,16 @@ function start(resolution)
         }
             this.cannon.parent = this;
             this.cannon.start();
-                cannon = this.cannon;
-                var move_around;
 this.move_around =
 new move_action(
 g_sequence_manager);
+        move_around = this.move_around;
                 this.move_around.start();
             this.move_around.parent_sequence = null;
-                move_around = this.move_around;
-                var fade_out;
 this.fade_out =
 new ms.state.Sequence(
 g_sequence_manager);
+        fade_out = this.fade_out;
                 this.fade_out.target = null;
             this.fade_out.parent_sequence = null;
                     var ____i1 = new ms.state.Interpolator(
@@ -275,7 +280,6 @@ g_sequence_manager);
                         {t: 3, value: 0},
                         ]);
                     this.fade_out.addAction(null, "alpha", new ms.state.State(0, 3, ____i1));                    
-                fade_out = this.fade_out;
 	this.init = function() 
 	{
 		move_around.target = this;
@@ -306,7 +310,6 @@ fade_out.start();
         src? src : "images/smile_grin_48.png"        );
         this.events = new ms.event.EventHolder(); 
                 this.size(30, 30);
-                var __physics3;
 				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
@@ -337,16 +340,14 @@ fade_out.start();
                         this.parent.removeComponent(this);
                     }
                 }
-                __physics3 = this.__physics3;
-                var move_around;
 this.move_around =
 new move_action(
 g_sequence_manager);
+        move_around = this.move_around;
                 this.move_around.vx = 0;
                 this.move_around.vy = 0;
                 this.move_around.start();
             this.move_around.parent_sequence = null;
-                move_around = this.move_around;
 	this.init = function() 
 	{
 		move_around.target = this;
@@ -370,7 +371,6 @@ g_sequence_manager);
         src? src : "images/bomb.png"        );
         this.events = new ms.event.EventHolder(); 
                 this.size(20, 20);
-                var __physics1;
 				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
@@ -401,13 +401,13 @@ g_sequence_manager);
                         this.parent.removeComponent(this);
                     }
                 }
-                __physics1 = this.__physics1;
 	var ev_parent = this;
 	this.events.addListener("collision", function(who)
 	{    
 		if (who instanceof floor)
 {
 ev_parent.RemoveFromWorld();
+Sound.play("sounds/boom.wav");
 }
 	}
 	);
@@ -424,7 +424,6 @@ ev_parent.RemoveFromWorld();
         $super(
         src? src : "images/stone-12.jpg"        );
         this.events = new ms.event.EventHolder(); 
-                var __physics4;
 				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
@@ -456,7 +455,6 @@ ev_parent.RemoveFromWorld();
                         this.parent.removeComponent(this);
                     }
                 }
-                __physics4 = this.__physics4;
             if (this.init)
                 this.init();
             },
@@ -552,6 +550,7 @@ window.onload = function()
 	};	
 		    hero = new good_guy( 
 	    "images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
+        hero = hero;
 	var ev_parent = this;
 	hero.events.addListener("collision", function()
 	{    
@@ -563,13 +562,16 @@ hero.src("images/smile_sad_48.png");
                 hero.rect(300, 350, 30, 30);
 		    __floor1 = new floor( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+        __floor1 = __floor1;
                 __floor1.rect(0, 390, 600, 40);
 		    game_over = new ms.ui.Label( 
 	    "40pt Calibri",g_ui_root.manager, g_ui_root);
+        game_over = game_over;
                 game_over.setVisible(false);
                 game_over.text("GAME OVER");
                 game_over.position(220, 200);
         sp1 = new ms.arcade.Spawner(g_spawner_manager, 300, 100, 3, null);
+        sp1 = sp1;
                 sp1.x = 300;
                 sp1.y = 100;
                 sp1.frequency = 3;

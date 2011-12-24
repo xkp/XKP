@@ -1,5 +1,6 @@
 #include <xss/lang/waxjs.h>
-#include <xss/html_parser.h>
+
+#include <boost/algorithm/string/replace.hpp>
 
 using namespace xkp;
 
@@ -8,6 +9,7 @@ const str SLanguage("language");
 const str SCannotForkOnIteration("Cannot perform asynchronic operations inside loops");
 const str SCodeAfterReturn("Unreachable code");
 const str SBadHTML("Errors parsing html");
+const str SMissingHTMLTag("Missing declared tag");
 
 #define CHECK_ACTIVE  if (found_) return; curr_++;
 
@@ -333,9 +335,6 @@ str waxjs_code_renderer::render()
         fork_ = fork;
       }
 
-    if (!fork)
-        return render_code(code_);
-    
     //check for goodies
     bool is_service = false;
     bool is_page = false;
@@ -354,7 +353,14 @@ str waxjs_code_renderer::render()
     if (is_page)
       result << render_page();
 
-    result << render_split(fork, CodeSplit());
+    if (!fork)
+      result << render_code(code_);
+    else
+      result << render_split(fork, CodeSplit());
+    
+    if (is_page)
+      result << "\nreturn_function();";
+
     return result.str();
   }
 
@@ -578,10 +584,14 @@ str waxjs_code_renderer::after_code(CodeSplit fork)
 
 str waxjs_code_renderer::render_page()
   {
+    str pre_code = owner_->get<str>("pre_code", str());
+    str rf       = owner_->get<str>("return_function", str());
+
     std::ostringstream result;
-    result << "\nfunction return_function(return_value)";
+    result << pre_code << "\n";
+    result << "\nfunction return_function()";
     result << "\n{";
-    result << "\nreqest.append(contents);";
+    result << "\n" << rf;
     result << "\n}";
     return result.str();
   }
@@ -715,65 +725,220 @@ wax_utils::wax_utils(XSSCompiler compiler):
   {
   }
 
+class object_45 : public xss_object
+  {
+		public:
+      object_45(){}
+		public:
+      //IDinamicObject
+      virtual bool resolve(const str& name, schema_item& result)
+        {
+          if (!has(name))
+            {
+              std::vector<str>::iterator it = modifiers_.begin();
+              std::vector<str>::iterator nd = modifiers_.end();
+
+              for(; it != nd; it++)
+                {
+                  if (*it == name)
+                    return false;
+                }
+
+              modifiers_.push_back(name);
+              return false;
+            }
+
+          return xss_object::resolve(name, result);
+        }
+    public:
+      bool modified()
+        {
+          return !modifiers_.empty();
+        }
+
+      std::vector<str>& modifiers()
+        {
+          return modifiers_;
+        }
+    private:
+      std::vector<str> modifiers_;
+  };
+
+typedef reference<object_45> Object45; 
+
 XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
   {
-  //  //do the html thing
-  //  str page_data = page->get<str>("src", str()); 
-  //  str html_text = compiler_->file(page_data);
-  //  html_parser parser;
-  //  tag_list    tags;
-  //  if (!parser.parse(html_text, tags))
-  //    {
-  //      param_list error;
-  //      error.add("id", SLanguage);
-  //      error.add("desc", SBadHTML);
-  //      error.add("file", page_data);
-  //      xss_throw(error);
-  //    }
+    //do the html thing
+    str page_data = page->get<str>("src", str()); 
+    str html_text = compiler_->file(page_data);
+    html_parser parser;
+    tag_list    tags;
+    if (!parser.parse(html_text, tags))
+      {
+        param_list error;
+        error.add("id", SLanguage);
+        error.add("desc", SBadHTML);
+        error.add("file", page_data);
+        xss_throw(error);
+      }
 
-  //  //grab the code
-  //  waxjs_code_renderer* cr = variant_cast<waxjs_code_renderer*>(code_renderer, null); assert(cr);
-  //  
-  //  //create a method to be rendered later
-  //  str page_id = page->get<str>("id", str()); 
-  //  XSSMethod result(new xss_method(page_id, XSSType(), variant(), code_renderer));
-  //  result->add_attribute("asynch",   true);
-  //  result->add_attribute("wax_page", true);
+    //grab the code
+    waxjs_code_renderer* cr = variant_cast<waxjs_code_renderer*>(code_renderer, null); assert(cr);
 
-  //  //here comes tricky, every registered element will get its own instance
-  //  //then the code will be analyzed to find the changes intended for the html
-  //  XSSContext ctx(new xss_context(compiler_->current_context()));
-  //  DynamicArray elements = page->children();
-		//std::vector<variant>::iterator it = elements->ref_begin();
-		//std::vector<variant>::iterator nd = elements->ref_end();
+    js_args_renderer* args = new js_args_renderer();
+    args->add("request",  XSSType());
+    args->add("response", XSSType());
+    
+    //create a method to be rendered later
+    str page_id = page->get<str>("id", str()); 
+    XSSMethod result(new xss_method(page_id, XSSType(), reference<js_args_renderer>(args), code_renderer));
+    result->add_attribute("asynch",   true);
+    result->add_attribute("wax_page", true);
 
-  //  //std::map<int, >
-  //  for(; it != nd; it++)
-  //    {
-  //      XSSObject elem = *it;
-  //      str       eid  = elem->id();
-  //      Object45  symbol(new object_45);
+    cr->owner_ = result;
 
+    //here comes tricky, every registered element will get its own instance
+    //then the code will be analyzed to find the changes intended for the html
+    XSSContext ctx(new xss_context(compiler_->current_context()));
+    ctx->search_native(true); //looks important...
 
-  //      //let the script know
-  //      ctx->register_symbol(RESOLVE_INSTANCE, eid, symbol);
-  //    }
+    DynamicArray elements = page->children();
+		std::vector<variant>::iterator it = elements->ref_begin();
+		std::vector<variant>::iterator nd = elements->ref_end();
 
-  //  //then, masterfully I must say, I just have to apply any 
-  //  //serious visitor and the properties the user intends to modify
-  //  //get attached to our 45
+    std::vector<Object45> items;
+    std::vector<int>      tag_idxs;
+    std::map<int, int>    sort;
+    for(; it != nd; it++)
+      {
+        Object45  obj(new object_45);
+        XSSObject elem = *it;
+        str       eid  = elem->id();
+        int       idx  = tags.find(eid);
 
-  //  //in this case we just inquire the return type
-  //  code& cde = cr->get_code();
-  //  
-  //  code_type_resolver tr(ctx, cde);
-  //  cde.visit(&tr);
+        obj->set_id(eid);
+        if (idx < 0)
+          {
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", SMissingHTMLTag);
+            error.add("tag", eid);
+            xss_throw(error);
+          }
 
-  //  //wait, not over yet... now we must split the html along the modifiers,
-  //  //and generate the the oh sweet code.
+        tag_idxs.push_back(idx);
+        items.push_back(obj);
 
+        tag& tt = tags.get(idx);
+        sort.insert(std::pair<int, int>(tt.start, items.size()));
 
-  //  return result;
-    return XSSMethod();
+        //let the script know
+        ctx->register_symbol(RESOLVE_INSTANCE, eid, obj);
+      }
+
+    //then, masterfully I must say, I just have to apply any 
+    //serious visitor and the properties the user intends to modify
+    //get attached to our 45
+
+    //in this case we just inquire the return type
+    code& cde = cr->get_code();
+    
+    code_type_resolver tr(ctx, cde);
+    cde.visit(&tr);
+
+    //wait, not over yet... now we must split the html along the modifiers,
+    //and generate the the oh sweet code.
+    std::map<int, int>::iterator sit = sort.begin();
+    std::map<int, int>::iterator snd = sort.end();
+
+    size_t             curr = 0;
+    std::ostringstream return_function;
+    std::ostringstream declarations;
+
+    for(; sit != snd; sit++)
+      {
+        int      idx = sit->second - 1;
+        tag&     tt  = tags.get(tag_idxs[idx]);
+        Object45 obj = items[idx];
+
+        if (obj->modified())
+          {
+            declarations << "var " << obj->id() << " = {};\n";
+
+            //it has been touched by the user, otherwise just leave it as it was
+            return_function << render_html_text(html_text.substr(curr, tt.start - curr));
+
+            std::vector<str>& modifiers = obj->modifiers();
+            prop_list         pl        = tt.props;
+
+            std::vector<str>::iterator mit = modifiers.begin();
+            std::vector<str>::iterator mnd = modifiers.end();
+            for(; mit != mnd; mit++)
+              {
+                str modifier = *mit;
+
+                //delete from the property list if it was there
+                prop_list::iterator plit = pl.find(modifier);
+                if (plit != pl.end())
+                    pl.erase(plit);
+                
+                if (!custom_modifier(XSSObject(obj), modifier, tags, tt))
+                  {
+                    //add the runtime value as an attribute
+                    return_function << "response.write(\"<" << tt.tag_name << " " << modifier << " = \");\n";
+                    return_function << "response.write('\\\"' + " << obj->id() << "." << modifier << " + '\\\"' );\n";
+                    return_function << "response.write(\"";
+
+                    prop_list::iterator pit = pl.begin();
+                    prop_list::iterator pnd = pl.end();
+
+                    for(; pit != pnd; pit++)
+                      {
+                        return_function << pit->first << " = \\\"" << pit->second << "\\\"";
+                      }
+
+                    return_function << "\");\n";
+                  }
+              }
+          }
+
+        curr = tt.close;
+      }
+
+    return_function << render_html_text(html_text.substr(curr, html_text.size() - curr));
+
+    result->add_attribute("pre_code",        declarations.str());
+    result->add_attribute("return_function", return_function.str());
+    return result;
   }
 
+bool wax_utils::custom_modifier(XSSObject obj, const str& modifier, tag_list& tags, tag& t)
+  {
+    if (obj->has("replicator") && modifier == "items")
+      {
+
+      }
+
+    return false;
+  }
+
+str wax_utils::render_html_text(const str& text)
+  {
+    str result = text;
+    boost::replace_all (result, "\n", "\\n");
+    boost::replace_all (result, "\"", "\\\"");
+    return "response.write(\"" + result + "\");\n";
+  }
+
+//glue
+struct object_45_schema : xss_object_schema<object_45>
+  {
+    virtual void declare()
+      {
+				xss_object_schema<object_45>::declare();
+
+				inherit_from<xss_object>();
+      }
+  };
+
+register_complete_type(object_45, object_45_schema);

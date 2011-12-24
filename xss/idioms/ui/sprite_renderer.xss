@@ -1,0 +1,17 @@
+<xss:parameter id="obj"/>
+
+<xss:code>	
+	if(!obj.loop) obj.loop = true;
+	if(!obj.step) obj.step = 4;
+	if(!obj.lock) obj.lock = false;
+	out(){
+		<xss:e value="obj.parent.id"/>.array.push({id: "<xss:e value="obj.id"/>", 
+										frames: <xss:e value="obj.frames"/>, 
+										frame_row: <xss:e value="obj.frame_row"/>,
+										frame_col: <xss:e value="obj.frame_col"/>,
+										loop: <xss:e value="obj.loop"/>,
+										step: <xss:e value="obj.step"/>,
+										lock: <xss:e value="obj.lock"/>										
+										});
+	}	
+</xss:code>

@@ -62,10 +62,10 @@ function start(resolution)
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
-	}
+	}    
 	window.setTimeout(updater, resolution);  
 }  
-var fade1;
+var img1;var fade1;
             fade_in = Class.create(ms.state.Sequence,
         {
     initialize: function($super
@@ -86,7 +86,7 @@ var fade1;
                         },
                         [
                         {t: 0, value: 0},
-                        {t: 1, value: 0.300000012},
+                        {t: 1, value: 30},
                         ]);
                     this.addAction(null, "alpha", new ms.state.State(0, 1, ____i1));                    
                     var ____i2 = new ms.state.Interpolator(
@@ -97,8 +97,8 @@ var fade1;
                             this__.target.alpha(value);
                         },
                         [
-                        {t: 1, value: 0.300000012},
-                        {t: 2, value: 1},
+                        {t: 1, value: 30},
+                        {t: 2, value: 100},
                         ]);
                     this.addAction(null, "alpha", new ms.state.State(1, 2, ____i2));                    
                 this.target = null;
@@ -143,6 +143,7 @@ window.onload = function()
 	};	
 		    img1 = new ms.ui.Image( 
 	    "images/img1.png",g_ui_root.manager, g_ui_root);
+        img1 = img1;
 	var ev_parent = this;
 	img1.events.addListener("click", function()
 	{    
@@ -153,6 +154,7 @@ window.onload = function()
 fade1 =
 new fade_in(
 g_sequence_manager);
+        fade1 = fade1;
             fade1.parent_sequence = null;
 			document.onkeydown = function(ev)
 			{
@@ -166,10 +168,7 @@ g_sequence_manager);
 			{
 				ui.keypress(ev.keyCode);                  
 			};
-            if (application.init)
-            {
-                application.init();
-            }
+            application.events.dispatch("init", []);
             start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});

@@ -1546,8 +1546,8 @@ bool xs_compiler::compile_xs(const str& code_str, xs_container& result)
         param_list error;
         error.add("id", SCompilerError);
         error.add("desc", SErrorCompiling);
-        error.add("line", root->Line);
-        error.add("column", root->Column);
+        error.add("line", (int)root->Line);
+        error.add("column", (int)root->Column);
         xs_throw(error);
       }
 

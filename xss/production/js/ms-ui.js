@@ -52,17 +52,35 @@ ms.ui.Manager = Class.create(
 
 	//Keyboard managemet
 	keydown: function(keycode)
-	{
+	{	
+		for(var i = 0; i < this.root.components.length; i++)
+        {			
+            var cmp = this.root.components[i];	
+			if(cmp.physics)
+				cmp.physics.SetAwake(true);
+        }		
 	    application.events.dispatch("keydown", [keycode]);    
 	},
 
 	keyup: function(keycode)
 	{
+		for(var i = 0; i < this.root.components.length; i++)
+        {			
+            var cmp = this.root.components[i];	
+			if(cmp.physics)
+				cmp.physics.SetAwake(true);
+        }	
 	    application.events.dispatch("keyup", [keycode]);    
 	},
 
 	keypress: function(keycode)
 	{
+		for(var i = 0; i < this.root.components.length; i++)
+        {			
+            var cmp = this.root.components[i];	
+			if(cmp.physics)
+				cmp.physics.SetAwake(true);
+        }	
 	    application.events.dispatch("keypress", [keycode]);    
 	},
 
@@ -70,6 +88,9 @@ ms.ui.Manager = Class.create(
 	
 	mousemove: function(x, y)
 	{
+		if(this.mouse_over.physics)
+			this.mouse_over.physics.SetAwake(true);
+			
 	    if(this.mouse_pressed)
 			this.dragging = true;
 	    if (this.dragging)
@@ -105,6 +126,9 @@ ms.ui.Manager = Class.create(
 
 	mousedown: function(x, y)
 	{
+		if(this.mouse_over.physics)
+			this.mouse_over.physics.SetAwake(true);
+		
 	    this.mouse_over.events.dispatch("mousedown", [x, y]);
 	    
 		this.mouse_pressed = true;
@@ -114,6 +138,9 @@ ms.ui.Manager = Class.create(
 
 	mouseup: function(x, y)
 	{
+		if(this.mouse_over.physics)
+			this.mouse_over.physics.SetAwake(true);
+			
 		this.mouse_pressed = false;
 	    if (this.dragging)
 	    {
@@ -316,7 +343,6 @@ ms.ui.Manager = Class.create(
             context.fillStyle = this.backgroundFill;
             context.fillRect(this.root.x, this.root.y, this.root.w, this.root.h);
         }
-
         this.root.draw(context, 0, 0);
     },
 });
@@ -358,8 +384,8 @@ ms.ui.Component = Class.create(
     get_alpha: function()
     {
         if (this.opacity == null)
-            return 1.0;
-        return this.opacity;
+            return 100;
+        return this.opacity*100;
     },
 
     alpha: function(value)
@@ -982,8 +1008,24 @@ ms.ui.Rectangle = Class.create(ms.ui.Component,
 	resized: function()
 	{
 	},
+	set_fill: function(value)
+	{
+		this.fill = value;
+		this.invalidate();
+	},
+	set_stroke: function(value)
+	{
+		this.stroke = value;
+		this.invalidate();
+	},
+	set_line_width: function(value)
+	{
+		this.line_width = value;
+		this.invalidate();
+	},
 	draw: function($super, context, x, y)
 	{		
+		old_line_width = context.lineWidth;
 		context.save();
 		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
 		context.rotate(this.rotation);
@@ -1010,7 +1052,8 @@ ms.ui.Rectangle = Class.create(ms.ui.Component,
         {
             context.globalAlpha = old_alpha;
         }			
-		context.restore();		
+		context.restore();
+		context.lineWidth = old_line_width;		
         $super(context);
 	}
 });
@@ -1025,18 +1068,34 @@ ms.ui.Circle = Class.create(ms.ui.Component,
 		this.stroke = stroke;
 		this.line_width = line_width;		
 	},	
-	setRadius: function( value )
+	set_radius: function( value )
 	{					
 		this.w = 2 * value;
 		this.h = 2 * value;
 		this.invalidate();
 	},	
-	getRadius: function()
+	get_radius: function()
 	{					
 		return this.w / 2;
 	},
+	set_fill: function(value)
+	{
+		this.fill = value;
+		this.invalidate();
+	},
+	set_stroke: function(value)
+	{
+		this.stroke = value;
+		this.invalidate();
+	},
+	set_line_width: function(value)
+	{
+		this.line_width = value;
+		this.invalidate();
+	},
 	draw: function($super, context, x, y)
 	{	
+		old_line_width = context.lineWidth;
 		context.beginPath();
 		if (this.opacity != null)
         {
@@ -1059,6 +1118,7 @@ ms.ui.Circle = Class.create(ms.ui.Component,
         {
             context.globalAlpha = old_alpha;
         }
+		context.lineWidth = old_line_width;
 		$super(context);
 	}
 });
@@ -1072,6 +1132,21 @@ ms.ui.Polygon = Class.create(ms.ui.Component,
 		this.stroke = stroke;
 		this.line_width = line_width;
 		this.points = [];
+	},
+	set_fill: function(value)
+	{
+		this.fill = value;
+		this.invalidate();
+	},
+	set_stroke: function(value)
+	{
+		this.stroke = value;
+		this.invalidate();
+	},
+	set_line_width: function(value)
+	{
+		this.line_width = value;
+		this.invalidate();
 	},
 	setPointbyIndex: function(index, x, y)
 	{					
@@ -1100,7 +1175,8 @@ ms.ui.Polygon = Class.create(ms.ui.Component,
 		context.save();
 		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
 		context.rotate(this.rotation);
-		context.beginPath();		
+		context.beginPath();	
+		old_line_width = context.lineWidth;
 		if (this.opacity != null)
         {
             old_alpha = context.globalAlpha;
@@ -1129,9 +1205,85 @@ ms.ui.Polygon = Class.create(ms.ui.Component,
         {
             context.globalAlpha = old_alpha;
         }			
-		context.restore();		
+		context.restore();
+		context.lineWidth = old_line_width;
         $super(context);
 	}
+});
+
+ms.ui.SpriteSheet = Class.create(ms.ui.Component,
+{	
+	initialize: function($super, src, frame_width, frame_height, manager, parent)
+	{				
+		$super(manager, parent);
+		this.sprite = streamer.get_resource(src).data;	
+		this.w = frame_width;
+		this.h = frame_height;		
+		this.sprite.frame_count = 0;		
+		this.sprite.current_step = 0;		
+		this.array = [];			
+	},	
+	draw: function($super, context, x, y)
+	{	
+		if(this.curr_sprite){
+			var old_alpha;
+
+			context.save();
+			context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
+			context.rotate(this.rotation);
+
+			if (this.opacity != null)
+			{
+				old_alpha = context.globalAlpha;
+				context.globalAlpha = this.opacity;
+			}		
+			context.drawImage(this.sprite, 
+						this.w * (this.sprite.frame_count + this.curr_sprite.frame_col), 
+						this.h * this.curr_sprite.frame_row, 
+						this.w, this.h, 
+						- this.w/2, - this.h/2, 
+						this.w, this.h);
+			
+			if (this.opacity != null)
+			{
+				context.globalAlpha = old_alpha;
+			}
+
+			context.restore();  		
+			$super(context);
+		}		
+	},
+	animate: function(id)
+	{
+		if(!this.curr_sprite)
+			this.curr_sprite = this.get_sprite_by_id(id);		
+		if(!this.curr_sprite.is_locked){
+			this.curr_sprite = this.get_sprite_by_id(id);
+		}				
+		this.curr_sprite.is_locked = this.curr_sprite.lock;				
+		if(this.sprite.current_step < this.curr_sprite.step){
+			this.sprite.current_step++;			
+		}else{						
+			if(this.sprite.frame_count < this.curr_sprite.frames - 1) 
+				{ this.sprite.frame_count++; } 
+			else{ 
+				this.curr_sprite.is_locked = false;
+				if(this.curr_sprite.loop)
+					{ this.sprite.frame_count = 0; } 
+			}
+			this.sprite.current_step = 0;
+			this.invalidate();
+		}		
+	},
+	get_sprite_by_id: function (id)
+	{
+		for(var i = 0; i < this.array.length; i++)
+        {	
+			if(this.array[i].id == id)
+				return this.array[i];
+		}
+		throw "Unknown sprite: " + id;		
+	},
 });
 
 ms.ui.Sound = Class.create(

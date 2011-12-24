@@ -11,7 +11,7 @@
         <xss:e v="id"/> = <xss:e v="compiler.instantiate(it)"/>;
     }
 
-    compiler.xss("../common-js/instance.xss", it, path=path);
+    compiler.xss("../common-js/instance.xss", it, path = path, var_value = id);
 
     string creator_class = it.creator_class;
     if (!creator_class)

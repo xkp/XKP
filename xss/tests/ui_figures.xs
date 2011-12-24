@@ -15,11 +15,10 @@ on btn.click(){
 }
 
 on r1.click(){
-	r1.x +=5;
-	r1.y +=5;	
+	r1.stroke = "brown";		
 }
 
 on c1.click(){		
-	c1.radius ++;
+	c1.line_width ++;
 }
 

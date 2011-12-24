@@ -79,13 +79,9 @@ xss_context::xss_context(XSSContext parent, fs::path path):
   parent_(parent),
   path_(path),
   code_scope_(),
-  got_dsls_(false)
+  got_dsls_(false),
+  search_native_(false)
   {
-    if (!path.empty())
-      {
-        str debug("xxxx");
-      }
-
     code_types_.add_type<xss_object>("object");
     code_types_.add_type<DynamicArray>("array");
   }
@@ -262,6 +258,11 @@ param_list& xss_context::get_args()
     return args_;
   }
 
+void xss_context::search_native(bool enabled)
+  {
+    search_native_ = enabled;
+  }
+
 variant xss_context::resolve(const str& id, RESOLVE_ITEM item_type)
   {
     resolve_info si;
@@ -421,7 +422,27 @@ bool xss_context::resolve(const str& id, resolve_info& info)
       }
 
     if (info.left)
-      return false;
+      {
+        if (search_native_)
+          {
+            switch(info.left->what)
+              {
+                case RESOLVE_INSTANCE:
+                  {
+                    XSSObject obj = info.left->value; 
+                    schema_item sitm;
+                    if (obj->resolve(id, sitm))
+                      {
+                        info.what  = RESOLVE_NATIVE;
+                        info.type  = XSSType();
+                        info.value = sitm;
+                        return true;
+                      }
+                  }
+              }
+          }
+        return false;
+      }
 
     //check globals now
     if (find_symbol(id, info))
@@ -1180,9 +1201,9 @@ bool xss_object::is_injected(const str& name)
     return false;
   }
 
-void xss_object::add_method(const str& event_name, XSSMethod m)
+void xss_object::add_method(const str& name, XSSMethod m)
   {
-    assert(false);
+    methods_->push_back(m); //td: check for it not existing
   }
 
 void xss_object::add_child(XSSObject obj)
