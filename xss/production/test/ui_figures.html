@@ -65,6 +65,9 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var div1;var c1;var r1;var p1;var btn;
+                application.x = null;
+                application.y = null;
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -96,11 +99,11 @@ window.onload = function()
 	};	
 		    div1 = new ms.ui.Component( 
 	    g_ui_root.manager, g_ui_root);div1.mouse_thru = true;
-        var div1 = div1;
+        div1 = div1;
                 div1.rect(0, 0, 400, 200);
 		    c1 = new ms.ui.Circle( 
 	    "cyan","black",3,div1.manager, div1);
-        var c1 = c1;
+        c1 = c1;
                 c1.set_radius(60);
 	var ev_parent = this;
 	c1.events.addListener("click", function()
@@ -111,7 +114,7 @@ window.onload = function()
                 c1.position(50, 50);
 		    r1 = new ms.ui.Rectangle( 
 	    "green",null,null,div1.manager, div1);
-        var r1 = r1;
+        r1 = r1;
                 r1.set_rotation(-30);
                 r1.alpha(60);
 	var ev_parent = this;
@@ -123,7 +126,7 @@ window.onload = function()
                 r1.rect(200, 50, 60, 90);
 		    p1 = new ms.ui.Polygon( 
 	    "pink","brown",3,div1.manager, div1);
-        var p1 = p1;
+        p1 = p1;
                 p1.alpha(40);
 		p1.points.push({id:"point1", x:300, y:300});
 		p1.points.push({id:"point2", x:300, y:250});
@@ -131,7 +134,7 @@ window.onload = function()
 		p1.points.push({id:"point4", x:350, y:400});
 		    btn = new ms.ui.Button( 
 	    "images/smile_grin_48.png","images/smile_sad_48.png",g_ui_root.manager, g_ui_root);
-        var btn = btn;
+        btn = btn;
                 btn.set_rotation(45);
 	var ev_parent = this;
 	btn.events.addListener("click", function()
@@ -153,8 +156,6 @@ p1.setPointbyIndex(i, application.x, application.y);
 	}
 	);
                 btn.rect(270, 200, 50, 50);
-                application.x = null;
-                application.y = null;
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -167,10 +168,7 @@ p1.setPointbyIndex(i, application.x, application.y);
 			{
 				ui.keypress(ev.keyCode);                  
 			};
-            if (application.init)
-            {
-                application.init();
-            }
+            application.events.dispatch("init", []);
             start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});

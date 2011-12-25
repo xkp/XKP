@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-				<com.xkp.android.Characters.XKPLayout android:id="@+id/character"
+				<xkp.android.Characters.XKPLayout android:id="@+id/character"
 				xmlns:android="http://schemas.android.com/apk/res/android" 
-				xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.Characters" 
+				xmlns:xkp="http://schemas.android.com/apk/res/xkp.android.Characters" 
 				android:layout_width="320dp"
 				android:layout_height="100dp"
 				android:padding="2dp"
@@ -37,4 +37,4 @@
 				android:layout_height="wrap_content"
 			>
 				</TextView>
-				</com.xkp.android.Characters.XKPLayout>
+				</xkp.android.Characters.XKPLayout>

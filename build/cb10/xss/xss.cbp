@@ -117,6 +117,7 @@
 		<Unit filename="..\..\..\src\xss\lang\waxjs.cpp" />
 		<Unit filename="..\..\..\src\xss\language.cpp" />
 		<Unit filename="..\..\..\src\xss\object_reader.cpp" />
+		<Unit filename="..\..\..\src\xss\utils.cpp" />
 		<Unit filename="..\..\..\src\xss\xss_compiler.cpp" />
 		<Unit filename="..\..\..\src\xss\xss_context.cpp" />
 		<Unit filename="..\..\..\src\xss\xss_parser.cpp" />

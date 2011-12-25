@@ -53,6 +53,7 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var sd1;
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -84,7 +85,7 @@ window.onload = function()
 	};	
 		    sd1 = new ms.ui.SelfDrawn( 
 	    g_ui_root.manager, g_ui_root);
-        var sd1 = sd1;
+        sd1 = sd1;
                 sd1.ctx = null;
                 sd1.x = 50;
                 sd1.y = 50;
@@ -144,10 +145,7 @@ window.canvasTimer = window.setInterval(sd1.draw_all, 100);
 			{
 				ui.keypress(ev.keyCode);                  
 			};
-            if (application.init)
-            {
-                application.init();
-            }
+            application.events.dispatch("init", []);
             start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});

@@ -89,6 +89,7 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var lbl1;var btnExplosion;var btnShoots;
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -120,12 +121,12 @@ window.onload = function()
 	};	
 		    lbl1 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
-        var lbl1 = lbl1;
+        lbl1 = lbl1;
                 lbl1.text("click to create a new instance of a sound");
                 lbl1.position(220, 190);
 		    btnExplosion = new ms.ui.Button( 
 	    "images/bomb.png","images/bomb.png",g_ui_root.manager, g_ui_root);
-        var btnExplosion = btnExplosion;
+        btnExplosion = btnExplosion;
 	var ev_parent = this;
 	btnExplosion.events.addListener("click", function()
 	{    
@@ -135,7 +136,7 @@ window.onload = function()
                 btnExplosion.rect(290, 220, 50, 50);
 		    btnShoots = new ms.ui.Button( 
 	    "images/AK-47.png","images/AK-47.png",g_ui_root.manager, g_ui_root);
-        var btnShoots = btnShoots;
+        btnShoots = btnShoots;
 	var ev_parent = this;
 	btnShoots.events.addListener("click", function()
 	{    
@@ -155,10 +156,7 @@ window.onload = function()
 			{
 				ui.keypress(ev.keyCode);                  
 			};
-            if (application.init)
-            {
-                application.init();
-            }
+            application.events.dispatch("init", []);
             start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});

@@ -71,6 +71,7 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var btn1;var btn2;var ms61;var ms62;
             ms6 = Class.create(ms.ui.Component,
         {
     initialize: function($super
@@ -83,7 +84,7 @@ function start(resolution)
 this.anim1 =
 new ms.state.Sequence(
 g_sequence_manager);
-        var anim1 = this.anim1;
+        anim1 = this.anim1;
             this.anim1.parent_sequence = null;
                     var ____i1 = new ms.state.Interpolator(
                         "alpha", 
@@ -99,7 +100,7 @@ g_sequence_manager);
                     this.anim1.addAction(null, "alpha", new ms.state.State(0, 10.5, ____i1));                    
 		    this.btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",this.manager, this);
-        var btn1 = this.btn1;
+        btn1 = this.btn1;
 	var ev_parent = this;
 	btn1.events.addListener("click", function()
 	{    
@@ -116,7 +117,7 @@ btn2.alpha(100);
  this.btn1.top(50); 
 		    this.btn2 = new ms.ui.Button( 
 	    "images/smile_grin_48.png","images/smile_sad_48.png",this.manager, this);
-        var btn2 = this.btn2;
+        btn2 = this.btn2;
 	var ev_parent = this;
 	btn2.events.addListener("click", function()
 	{    
@@ -166,11 +167,11 @@ window.onload = function()
 	};	
 		    ms61 = new ms6( 
 	    g_ui_root.manager, g_ui_root);
-        var ms61 = ms61;
+        ms61 = ms61;
                 ms61.rect(100, 100, 50, 100);
 		    ms62 = new ms6( 
 	    g_ui_root.manager, g_ui_root);
-        var ms62 = ms62;
+        ms62 = ms62;
                 ms62.rect(200, 100, 50, 100);
 			document.onkeydown = function(ev)
 			{
@@ -184,10 +185,7 @@ window.onload = function()
 			{
 				ui.keypress(ev.keyCode);                  
 			};
-            if (application.init)
-            {
-                application.init();
-            }
+            application.events.dispatch("init", []);
             start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});

@@ -336,7 +336,8 @@ void ConsoleOutput::out(const str& cat, const str& text, param_list* params)
       {
         for(int i = 0; i < params->size(); i++)
           {
-            std::cout << '\n\t' << params->get_name(i) << " = " << xss_utils::var_to_string(params->get(i));
+            variant param = params->get(i);
+            std::cout << '\n\t' << params->get_name(i) << " = " << xss_utils::var_to_string(param);
           }
       }
   }
@@ -387,11 +388,12 @@ void JsonOutput::out(const str& cat, const str& text, param_list* params)
       {
         Json::Value jparams(Json::arrayValue);
         item["params"] = jparams;
-        
+
         for(int i = 0; i < params->size(); i++)
           {
             str name   = params->get_name(i);
-            jparams[name] = xss_utils::var_to_string(params->get(i));
+            variant param = params->get(i);
+            jparams[name] = xss_utils::var_to_string(param);
           }
       }
 
@@ -418,18 +420,18 @@ void JsonOutput::error(param_list& data)
     Json::Value item(Json::objectValue);
     item["type"] = "error";
     item["text"] = "[" + id + "] " + desc;
-    item["line"] = line; 
-    item["column"] = col; 
-    item["filepath"] = file; 
+    item["line"] = line;
+    item["column"] = col;
+    item["filepath"] = file;
 
     Json::Value jparams(Json::arrayValue);
     for(size_t i = 0; i < data.size(); i++)
       {
         str name = data.get_name(i);
-        if (name == "id"   || 
-            name == "desc" || 
-            name == "file" || 
-            name == "line" || 
+        if (name == "id"   ||
+            name == "desc" ||
+            name == "file" ||
+            name == "line" ||
             name == "column")
           continue;
 
@@ -445,7 +447,7 @@ void JsonOutput::error(param_list& data)
 
     if (jparams.size() > 0)
       item["params"] = jparams;
-    
+
     json_.append(item);
   }
 
@@ -1257,7 +1259,7 @@ XSSObject xss_compiler::read_project(fs::path xml_file)
   {
     xss_object_reader reader;
     XSSObject project_data;
-    
+
     try
       {
         project_data = reader.read(load_file(xml_file));
@@ -1266,7 +1268,7 @@ XSSObject xss_compiler::read_project(fs::path xml_file)
       {
         xss.data.add("file", xml_file.string());
         throw xss;
-      }  
+      }
 
     if (!project_data)
       {
@@ -1372,7 +1374,7 @@ XSSModule xss_compiler::read_module(const str& src, XSSApplicationRenderer app, 
       {
         xss.data.add("file", path.string());
         throw xss;
-      }  
+      }
 
     if (!module_data)
       {
@@ -1912,7 +1914,7 @@ void xss_compiler::read_application(const str& app_file)
           {
             xss.data.add("file", app_path_.string());
             throw xss;
-          }  
+          }
 
         //make sure we match the app's target
         str target = app_renderer->target();
@@ -2230,7 +2232,7 @@ void xss_compiler::read_object_array(fs::path file, XSSContext ctx, std::vector<
       {
         xss.data.add("file", file.string());
         throw xss;
-      }  
+      }
   }
 
 void xss_compiler::compile_xs_file(fs::path file, xs_container& result)

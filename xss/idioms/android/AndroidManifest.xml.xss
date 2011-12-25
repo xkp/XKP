@@ -1,4 +1,5 @@
 <xss:parameter id="appName"/>
+<xss:parameter id="base_name_space"/>
 <xss:parameter id="minAPILevel"/>
 <xss:parameter id="targetAPILevel"/>
 
@@ -8,7 +9,7 @@
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" 
-      package="com.xkp.android.<xss:e value="appName"/>"
+      package="<xss:e value="base_name_space"/>.<xss:e value="appName"/>"
       android:versionCode="1"
       android:versionName="1.0">
 

@@ -65,7 +65,7 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var fade_in;
+var img1;var fade_in;
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -97,7 +97,7 @@ window.onload = function()
 	};	
 		    img1 = new ms.ui.Image( 
 	    "images/img1.png",g_ui_root.manager, g_ui_root);
-        var img1 = img1;
+        img1 = img1;
 	var ev_parent = this;
 	img1.events.addListener("click", function()
 	{    
@@ -108,7 +108,7 @@ window.onload = function()
 fade_in =
 new ms.state.Sequence(
 g_sequence_manager);
-        var fade_in = fade_in;
+        fade_in = fade_in;
             fade_in.parent_sequence = null;
                     var ____i1 = new ms.state.Interpolator(
                         "alpha", 
@@ -146,10 +146,7 @@ g_sequence_manager);
 			{
 				ui.keypress(ev.keyCode);                  
 			};
-            if (application.init)
-            {
-                application.init();
-            }
+            application.events.dispatch("init", []);
             start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});

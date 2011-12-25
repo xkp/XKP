@@ -184,6 +184,7 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var btn1;var btn2;var __floor1;
             my_body = Class.create(ms.ui.Image,
         {
     initialize: function($super
@@ -277,6 +278,27 @@ function start(resolution)
                 this.init();
             },
 });
+	var ev_parent = this;
+	application.events.addListener("keydown", function(keycode)
+	{    
+		if (keycode == LEFT_ARROW)
+{
+btn1.set_x(btn1.x - 5);
+}
+if (keycode == RIGHT_ARROW)
+{
+btn1.set_x(btn1.x + 5);
+}
+if (keycode == UP_ARROW)
+{
+btn1.set_y(btn1.y - 5);
+}
+if (keycode == DOWN_ARROW)
+{
+btn1.set_y(btn1.y + 5);
+}
+	}
+	);
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -308,7 +330,7 @@ window.onload = function()
 	};	
 		    btn1 = new my_body( 
 	    "images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
-        var btn1 = btn1;
+        btn1 = btn1;
 	var ev_parent = this;
 	btn1.events.addListener("drag", function(x,y)
 	{    
@@ -319,7 +341,7 @@ btn1.set_y(y - btn1.h / 2);
                 btn1.rect(300, 250, 50, 50);
 		    btn2 = new my_body( 
 	    "images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
-        var btn2 = btn2;
+        btn2 = btn2;
 	var ev_parent = this;
 	btn2.events.addListener("drag", function(x,y)
 	{    
@@ -330,33 +352,12 @@ btn2.set_y(y - btn1.h / 2);
                 btn2.rect(100, 250, 50, 50);
 		    __floor1 = new floor( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
-        var __floor1 = __floor1;
+        __floor1 = __floor1;
                 __floor1.rect(0, 390, 600, 40);
 __distance_joint1 = 
 new ms.joint.DistanceJoint(
 btn1,btn2);
                 __distance_joint1.joint.SetLength(5);
-	var ev_parent = this;
-	application.events.addListener("keydown", function(keycode)
-	{    
-		if (keycode == LEFT_ARROW)
-{
-btn1.set_x(btn1.x - 5);
-}
-if (keycode == RIGHT_ARROW)
-{
-btn1.set_x(btn1.x + 5);
-}
-if (keycode == UP_ARROW)
-{
-btn1.set_y(btn1.y - 5);
-}
-if (keycode == DOWN_ARROW)
-{
-btn1.set_y(btn1.y + 5);
-}
-	}
-	);
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -369,10 +370,7 @@ btn1.set_y(btn1.y + 5);
 			{
 				ui.keypress(ev.keyCode);                  
 			};
-            if (application.init)
-            {
-                application.init();
-            }
+            application.events.dispatch("init", []);
             start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});

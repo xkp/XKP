@@ -71,7 +71,8 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var s1;
+var rr1;var r1;var r2;var r3;var c1;var c2;var img1;var img2;var s1;
+                application.increment = 10;
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -103,33 +104,33 @@ window.onload = function()
 	};	
 		    rr1 = new ms.ui.Rectangle( 
 	    "black",null,null,g_ui_root.manager, g_ui_root);
-        var rr1 = rr1;
+        rr1 = rr1;
                 rr1.rect(70, 30, 100, 3);
 		    r1 = new ms.ui.Rectangle( 
 	    "black",null,null,g_ui_root.manager, g_ui_root);
-        var r1 = r1;
+        r1 = r1;
                 r1.rect(120, 20, 3, 0);
 		    r2 = new ms.ui.Rectangle( 
 	    "black",null,null,g_ui_root.manager, g_ui_root);
-        var r2 = r2;
+        r2 = r2;
                 r2.rect(40, 140, 103, 3);
 		    r3 = new ms.ui.Rectangle( 
 	    "black",null,null,g_ui_root.manager, g_ui_root);
-        var r3 = r3;
+        r3 = r3;
                 r3.rect(20, 20, 3, 103);
 		    c1 = new ms.ui.Circle( 
 	    null,"black",20,g_ui_root.manager, g_ui_root);
-        var c1 = c1;
+        c1 = c1;
                 c1.set_radius(60);
                 c1.position(35, 35);
 		    c2 = new ms.ui.Circle( 
 	    null,"black",10,g_ui_root.manager, g_ui_root);
-        var c2 = c2;
+        c2 = c2;
                 c2.set_radius(60);
                 c2.position(75, 350);
 		    img1 = new ms.ui.Image( 
 	    "images/test2.png",g_ui_root.manager, g_ui_root);
-        var img1 = img1;
+        img1 = img1;
 	var ev_parent = this;
 	img1.events.addListener("click", function()
 	{    
@@ -140,12 +141,12 @@ img1.set_height(img1.get_height() + application.increment);
                 img1.rect(100, 100, 130, 130);
 		    img2 = new ms.ui.Image( 
 	    "images/test2.png",g_ui_root.manager, g_ui_root);
-        var img2 = img2;
+        img2 = img2;
                 img2.rect(300, 300, 80, 80);
 s1 =
 new ms.state.Sequence(
 g_sequence_manager);
-        var s1 = s1;
+        s1 = s1;
                 s1.start();
             s1.parent_sequence = null;
                     var ____i1 = new ms.state.Interpolator(
@@ -172,7 +173,6 @@ g_sequence_manager);
                         {t: 6, value: 100},
                         ]);
                     s1.addAction(null, "height", new ms.state.State(3, 6, ____i2));                    
-                application.increment = 10;
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -185,10 +185,7 @@ g_sequence_manager);
 			{
 				ui.keypress(ev.keyCode);                  
 			};
-            if (application.init)
-            {
-                application.init();
-            }
+            application.events.dispatch("init", []);
             start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});

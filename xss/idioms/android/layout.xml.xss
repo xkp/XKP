@@ -1,5 +1,6 @@
 <xss:parameter id="clazz"/>
 <xss:parameter id="appName"/>
+<xss:parameter id="base_name_space"/>
 
 <?xml version="1.0" encoding="utf-8"?>
 <xss:code>
@@ -7,9 +8,9 @@
 	{
 		out(indent = 0)
 		{
-			<com.xkp.android.<xss:e value="appName"/>.XKPLayout 
+			<<xss:e value="base_name_space"/>.<xss:e value="appName"/>.XKPLayout 
 				xmlns:android="http://schemas.android.com/apk/res/android" 
-				xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.<xss:e value="appName"/>" 
+				xmlns:xkp="http://schemas.android.com/apk/res/<xss:e value="base_name_space"/>.<xss:e value="appName"/>" 
 				android:id="@+id/<xss:e value="clazz.output_id"/>" 
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
@@ -45,12 +46,12 @@
 		
 		string strViewName = "";
 		if(view.xkpview)
-			strViewName = "com.xkp.android." + appName + ".";
+			strViewName = base_name_space + "." + appName + ".";
 		
 		if(view.type)
 		{
 			if(view.type.user_defined)
-				strViewName = "com.xkp.android." + appName + ".";
+				strViewName = base_name_space + "." + appName + ".";
 			strViewName += view.type.output_id;
 		}
 		
@@ -67,7 +68,7 @@
 			out(indent = ind)
 			{
 				xmlns:android="http://schemas.android.com/apk/res/android" 
-				xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.<xss:e value="appName"/>" 
+				xmlns:xkp="http://schemas.android.com/apk/res/<xss:e value="base_name_space"/>.<xss:e value="appName"/>" 
 			}
 		}
 		
@@ -101,7 +102,7 @@
 					//<?xml version="1.0" encoding="utf-8"?>
 					//<merge
 					//	xmlns:android="http://schemas.android.com/apk/res/android"
-					//	xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.switcher">
+					//	xmlns:xkp="http://schemas.android.com/apk/res/<xss:e value="base_name_space"/>.switcher">
 					//  <!-- inside the view childs -->
 					//</merge>
 					
@@ -341,7 +342,7 @@
 	{
 		out(indent = 0)
 		{
-			</com.xkp.android.<xss:e value="appName"/>.XKPLayout>
+			</<xss:e value="base_name_space"/>.<xss:e value="appName"/>.XKPLayout>
 		}
 	}
 </xss:code>

@@ -137,6 +137,8 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var lbl1;var btnSound1;var btnSound2;var volume_bar;var btn1;var btn2;var lbl3;var btnPlay;var btnPause;var btnStop;
+                application.curr_sound = null;
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -168,12 +170,12 @@ window.onload = function()
 	};	
 		    lbl1 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
-        var lbl1 = lbl1;
+        lbl1 = lbl1;
                 lbl1.text("click the sound you want to listen");
                 lbl1.position(220, 190);
 		    btnSound1 = new ms.ui.Button( 
 	    "images/sound_2.png","images/sound_2.png",g_ui_root.manager, g_ui_root);
-        var btnSound1 = btnSound1;
+        btnSound1 = btnSound1;
 	var ev_parent = this;
 	btnSound1.events.addListener("click", function()
 	{    
@@ -186,7 +188,7 @@ application.curr_sound.play();
                 btnSound1.rect(275, 210, 50, 10);
 		    btnSound2 = new ms.ui.Button( 
 	    "images/sound_1.png","images/sound_1.png",g_ui_root.manager, g_ui_root);
-        var btnSound2 = btnSound2;
+        btnSound2 = btnSound2;
 	var ev_parent = this;
 	btnSound2.events.addListener("click", function()
 	{    
@@ -199,12 +201,12 @@ application.curr_sound.play();
                 btnSound2.rect(275, 240, 50, 10);
 		    volume_bar = new ms.ui.ProgressBar( 
 	    null,g_ui_root.manager, g_ui_root);
-        var volume_bar = volume_bar;
+        volume_bar = volume_bar;
                 volume_bar.value(50);
                 volume_bar.rect(225, 120, 150, 10);
 		    btn1 = new ms.ui.Image( 
 	    "images/arrow_left.png",g_ui_root.manager, g_ui_root);
-        var btn1 = btn1;
+        btn1 = btn1;
 	var ev_parent = this;
 	btn1.events.addListener("click", function()
 	{    
@@ -215,7 +217,7 @@ application.curr_sound.volume -= 0.100000001;
                 btn1.rect(200, 115, 20, 20);
 		    btn2 = new ms.ui.Image( 
 	    "images/arrow_right.png",g_ui_root.manager, g_ui_root);
-        var btn2 = btn2;
+        btn2 = btn2;
 	var ev_parent = this;
 	btn2.events.addListener("click", function()
 	{    
@@ -226,12 +228,12 @@ application.curr_sound.volume += 0.100000001;
                 btn2.rect(380, 115, 20, 20);
 		    lbl3 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
-        var lbl3 = lbl3;
+        lbl3 = lbl3;
                 lbl3.text("click small arrows to adjust volume");
                 lbl3.position(220, 100);
 		    btnPlay = new ms.ui.Button( 
 	    "images/play.png","images/play_over.png",g_ui_root.manager, g_ui_root);
-        var btnPlay = btnPlay;
+        btnPlay = btnPlay;
 	var ev_parent = this;
 	btnPlay.events.addListener("click", function()
 	{    
@@ -241,7 +243,7 @@ application.curr_sound.volume += 0.100000001;
                 btnPlay.rect(175, 300, 50, 50);
 		    btnPause = new ms.ui.Button( 
 	    "images/pause.png","images/pause_over.png",g_ui_root.manager, g_ui_root);
-        var btnPause = btnPause;
+        btnPause = btnPause;
 	var ev_parent = this;
 	btnPause.events.addListener("click", function()
 	{    
@@ -251,7 +253,7 @@ application.curr_sound.volume += 0.100000001;
                 btnPause.rect(275, 300, 50, 50);
 		    btnStop = new ms.ui.Button( 
 	    "images/stop.png","images/stop_over.png",g_ui_root.manager, g_ui_root);
-        var btnStop = btnStop;
+        btnStop = btnStop;
 	var ev_parent = this;
 	btnStop.events.addListener("click", function()
 	{    
@@ -267,7 +269,6 @@ application.curr_sound.currentTime = 0;
 	var sound_2 = 
 	document.createElement('audio');
 	sound_2.setAttribute('src', 'sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg');	
-                application.curr_sound = null;
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -280,10 +281,7 @@ application.curr_sound.currentTime = 0;
 			{
 				ui.keypress(ev.keyCode);                  
 			};
-            if (application.init)
-            {
-                application.init();
-            }
+            application.events.dispatch("init", []);
             start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});
