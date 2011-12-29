@@ -135,7 +135,7 @@ void code_type_resolver::iterfor_(stmt_iter_for& info)
       }
 
     XSSType iterator_type = lang_utils::expr_type(info.iter_expr, ctx_);
-    if (!iterator_type->is_array())
+    if (!iterator_type->is_array() && !iterator_type->is_variant())
       {
         param_list error;
         error.add("id", SLinker);

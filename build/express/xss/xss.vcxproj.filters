@@ -37,6 +37,12 @@
     <Filter Include="Source Files\jsoncpp">
       <UniqueIdentifier>{37dc3cf7-4364-4fbc-abc5-cc838d30b5fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\xss\dsl">
+      <UniqueIdentifier>{9e056248-1afc-4080-a639-95333cab9580}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\xss\dsl">
+      <UniqueIdentifier>{e4ab7b61-edf1-4726-aa88-87b23f859a41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -153,6 +159,9 @@
     <ClInclude Include="..\..\..\include\xss\html_parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\dsl\sql.h">
+      <Filter>Header Files\xss\dsl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -253,6 +262,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\xss\html_parser.cpp">
       <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\dsl\sql.cpp">
+      <Filter>Source Files\xss\dsl</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
