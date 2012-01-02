@@ -25,6 +25,7 @@ var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
+		var streamer = new ms.streamer.Streamer();
 		if(drawingCanvas){
 			var client =
 			{
@@ -172,12 +173,14 @@ function start(resolution)
             }
             bb = bb.GetNext();
         }
+		application.events.dispatch("updates", []);	
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var __img1;var __img2;var __img3;
             smiley_ball = Class.create(ms.ui.Image,
         {
     initialize: function($super
@@ -199,9 +202,10 @@ function start(resolution)
                     fixDef.shape = new b2CircleShape(21.5/g_world_scale);
             fixDef.isSensor = false;
                 bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
-            current_body = g_world.CreateBody(bodyDef);
+            current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;
+			current_body.mouse_joint = true;
+                cmp.physics = current_body;			
                 cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
@@ -258,18 +262,18 @@ window.onload = function()
 	};	
 		    __img1 = new ms.ui.Image( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
-        var __img1 = __img1;
+        __img1 = __img1;
                 __img1.rect(0, 390, 600, 40);
 		    __img2 = new ms.ui.Image( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
-        var __img2 = __img2;
+        __img2 = __img2;
                 __img2.rect(590, 350, 10, 40);
 		    __img3 = new ms.ui.Image( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
-        var __img3 = __img3;
+        __img3 = __img3;
                 __img3.rect(0, 350, 10, 40);
         sp1 = new ms.arcade.Spawner(g_spawner_manager, 100, 100, 1, 1);
-        var sp1 = sp1;
+        sp1 = sp1;
                 sp1.x = 100;
                 sp1.y = 100;
                 sp1.set_rotation(95);
@@ -292,9 +296,9 @@ window.onload = function()
                     fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
             fixDef.isSensor = false;
                 bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
-            current_body = g_world.CreateBody(bodyDef);
+            current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;
+                cmp.physics = current_body;			
                 cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
@@ -323,9 +327,9 @@ window.onload = function()
                     fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
             fixDef.isSensor = false;
                 bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
-            current_body = g_world.CreateBody(bodyDef);
+            current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;
+                cmp.physics = current_body;			
                 cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
@@ -354,9 +358,9 @@ window.onload = function()
                     fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
             fixDef.isSensor = false;
                 bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
-            current_body = g_world.CreateBody(bodyDef);
+            current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;
+                cmp.physics = current_body;			
                 cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
@@ -394,10 +398,7 @@ window.onload = function()
 			{
 				ui.keypress(ev.keyCode);                  
 			};
-            if (application.init)
-            {
-                application.init();
-            }
+            application.events.dispatch("init", []);
             start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});

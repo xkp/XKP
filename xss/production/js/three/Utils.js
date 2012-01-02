@@ -5,14 +5,32 @@ function set_active_camera( camera )
 	active_camera = camera;
 }
 
-function set_object_alpha( path, value )
+function set_transform_image( path, value )
 {
-	path.materials[0].opacity = value / 100;
+	for(var i = 0; i < path.children.length; i++)
+	{
+		var child = path.children[i];		
+		child.materials[ 0 ].map = THREE.ImageUtils.loadTexture(streamer.get_resource(value).asset);	
+	}	
+}
+
+function set_transform_material( path, value )
+{
+	for(var i = 0; i < path.children.length; i++)
+	{
+		var child = path.children[i];
+		child.materials[ 0 ] = value;		
+	}	
+}
+
+function set_object_alpha( path, value )
+{	         
+	path.materials[0].opacity = value / 100;	
 }
 
 function set_material_alpha( path, value )
-{
-	path.opacity = value / 100;
+{	         
+	path.opacity = value / 100;	
 }
 
 function set_rotation_x( path, value )

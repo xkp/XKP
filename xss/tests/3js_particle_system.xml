@@ -1,5 +1,7 @@
 <application src="3js_particle_system.xs" title="Test 3D" renderer="canvas" background="Black">
 	
+	<label id="lbl0" x="350" y="50" color="White" font="12px Verdana" caption="Move mouse over the scene to control the camera's rotation"/>
+	
 	<scene>	
 	
 		<camera id="camera_1" fov="75" aspect="1.5" near="1" far="3000">

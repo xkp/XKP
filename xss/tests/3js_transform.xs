@@ -35,7 +35,7 @@ on keyup(keycode){
 		is_ctrl_down = false;
 	}
 }
-on animate(){
+on updates(){
 	if ( is_ctrl_down ) {
 		theta += mouse_x * 3;
 	}

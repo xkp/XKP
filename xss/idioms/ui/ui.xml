@@ -163,12 +163,12 @@
 
         <class id="state_button" super="component" output_id="ms.ui.StateButton">
             <constructor_params>
-                <parameter property="up" runtime="true"/>
-                <parameter property="down" runtime="true"/>
+                <parameter property="active" runtime="true"/>
+                <parameter property="inactive" runtime="true"/>
             </constructor_params>
 			
-			<property id="up"   type="string" dont_init="true"/>
-            <property id="down" type="string" dont_init="true"/>
+			<property id="active"   type="string" dont_init="true"/>
+            <property id="inactive" type="string" dont_init="true"/>
         </class>
 
         <class id="label" super="component" output_id="ms.ui.Label">
@@ -185,6 +185,12 @@
                 <get text="text()"/>
                 <set text="text({value})"/>
             </property>
+			
+			<property id="color" type="string" use_plain_value="true">
+                <get text="color"/>
+                <set text="set_color({value})"/>
+            </property>
+			
         </class>
 
         <class id="progress_bar" super="component" output_id="ms.ui.ProgressBar">

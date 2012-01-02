@@ -1,6 +1,6 @@
 <xs>
     <class id="my_body" super="img" src="images/smile_grin_48.png" width="50" height="50">
-        <physics body_type="dynamic" shape="circle" radius="21.5"/>        
+        <physics body_type="dynamic" shape="circle" radius="21.5" mouse_joint="true"/>        
     </class>   
 
     <class id="floor" super="img" src="images/stone-12.jpg">

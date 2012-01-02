@@ -8,6 +8,7 @@ on render_initialization()
 {
 	out()
 	{	
+		var streamer = new ms.streamer.Streamer();
 		if(drawingCanvas){
 			var client =
 			{
@@ -39,7 +40,7 @@ on render_ui_instances()
 {
 	compiler.log("Rendering UI...");
 	
-	out(){
+	out(){	
 	drawingCanvas.onmousemove = function(ev)
 	{
 		ui.mousemove(ev.clientX, ev.clientY);                  

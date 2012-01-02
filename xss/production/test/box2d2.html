@@ -25,6 +25,7 @@ var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
+		var streamer = new ms.streamer.Streamer();
 		if(drawingCanvas){
 			var client =
 			{
@@ -172,12 +173,14 @@ function start(resolution)
             }
             bb = bb.GetNext();
         }
+		application.events.dispatch("updates", []);	
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var btn1;
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -209,7 +212,7 @@ window.onload = function()
 	};	
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
-        var btn1 = btn1;
+        btn1 = btn1;
                 btn1.set_rotation(0.200000003);
                 btn1.rect(200, 200, 50, 50);
 				btn1.events.addListener('resized', function(cmp)
@@ -223,9 +226,9 @@ window.onload = function()
                     fixDef.shape = new b2CircleShape(1.20000005/g_world_scale);
             fixDef.isSensor = false;
                 bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
-            current_body = g_world.CreateBody(bodyDef);
+            current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;
+                cmp.physics = current_body;			
                 cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
@@ -250,7 +253,7 @@ window.onload = function()
                     fixDef.shape.SetAsBox(20/(2*g_world_scale), 2/(2*g_world_scale));
             fixDef.isSensor = false;
                 bodyDef.position.Set(10, 15.1300001);
-            current_body = g_world.CreateBody(bodyDef);
+            current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
             g_ui.fill_background = false; //td: cross idiom
             var debugDraw = new b2DebugDraw();
@@ -273,10 +276,7 @@ window.onload = function()
 			{
 				ui.keypress(ev.keyCode);                  
 			};
-            if (application.init)
-            {
-                application.init();
-            }
+            application.events.dispatch("init", []);
             start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});

@@ -8,7 +8,7 @@
 		<image id="image_4" src="images/test4.png"/>
 		<image id="image_5" src="images/test5.png"/>
 		<image id="image_6" src="images/test6.png"/>
-		<audio src="sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg"/>
+		<audio src="sounds/forest.wav"/>
 
 	</resources>
 	
@@ -26,6 +26,8 @@
 		
 	</materials>
 	
+	<label id="lbl0" x="200" y="75" font="12px Verdana" caption="Drag mouse to spin the cube"/>
+	
 	<scene>			
 		
 		<camera id="camera_1" fov="70" aspect="1.5" near="1" far="1000">
@@ -41,7 +43,7 @@
 			<rotation x="-90"/>		
 		</plane>
 		
-		<playing_sound src="sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg" radius="700" volume="20" loop="true"/>
+		<playing_sound src="sounds/forest.wav" radius="700" volume="20" loop="true"/>
 				
 	</scene>
 	

@@ -9,7 +9,7 @@
 	<label id="lbl1" x="250" y="90" font="Verdana" caption="click smiley"/>
 	<button id="btn1" x="270" y="100" rotation="10" width="50" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png"/>		
 		
-	<state_button id="stateBtn" x="270" y="200" rotation="-45" width="50" height="50" up="images/smile_grin_48.png" down="images/smile_sad_48.png"/>
+	<state_button id="stateBtn" x="270" y="200" rotation="-45" width="50" height="50" active="images/smile_grin_48.png" inactive="images/smile_sad_48.png"/>
 	<label id="lbl3" x="330" y="240" font="Verdana" caption="this smile is a state button, click it"/>
 	
 </application>

@@ -1,3 +1,5 @@
 <project entry_point="../idioms/threejs/app.xss" language="js" target="3js_cube.xml" output="../production/test/3js_cube.html">
+
+	<idiom src="../idioms/ui/ui.xml"/>
     <idiom src="../idioms/threejs/module.xml"/>
 </project>

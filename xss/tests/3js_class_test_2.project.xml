@@ -5,6 +5,7 @@
 
     <include def="3js_class_test_2.classes.xml" src="3js_class_test_2.classes.xs"/>
 
+	<idiom src="../idioms/ui/ui.xml"/>
     <idiom src="../idioms/threejs/module.xml"/>
 	<idiom src="../idioms/resources/resources.xml"/>
 </project>

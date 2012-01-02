@@ -8,6 +8,10 @@
 		
 	</materials>
 	
+	<label id="lbl0" x="240" y="75" font="12px Verdana" caption="Move mouse over the scene to rotate the cylinder"/>
+	<label id="lbl1" x="240" y="100" font="12px Verdana" caption="While pressing SHIFT the transform node will be rotated"/>
+	<label id="lbl2" x="240" y="125" font="12px Verdana" caption="While pressing CTRL the camera will be rotated horizontally"/>
+	
 	<scene>	
 	
 		<camera id="camera_1" fov="75" aspect="1.5" near="1" far="3000">

@@ -15,6 +15,8 @@
 				
 	</materials>
 	
+	<label id="lbl0" x="200" y="75" font="12px Verdana" caption="Drag to spin the cube"/>
+	
 	<scene>	
 	
 		<camera id="camera_1" fov="70" aspect="1.5" near="1" far="1000">

@@ -14,17 +14,6 @@ var    impls  	= ev.impls;
 var    evargs 	= ev.args;
 string ev_parent = 	it.output_id;
 
-if(ev_name == "update"){
-	for(var ev_impl in impls)
-	{	
-		ev_impl.use_this_id(true);	        
-		out(marker = "update", marker_source = "entry", indent = 1)
-		{
-			<xss:e>ev_impl.render()</xss:e>
-		}
-	}
-	
-}else{	
 //generate functions
 if(is_class)
 	ev_parent = "this";	
@@ -54,5 +43,5 @@ out(indent = 0)
 	<xss:close_brace/>
 	)<xss:e value="separator"/>
 }
-}
+
 </xss:code>

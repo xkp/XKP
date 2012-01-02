@@ -35,6 +35,8 @@ LEFT_ARROW	= 37;
 UP_ARROW	= 38;		
 RIGHT_ARROW	= 39;		
 DOWN_ARROW	= 40;
-CTRL 		= 17;		
+CTRL 		= 17;
+NUMPAD_PLUS		= 107;
+NUMPAD_MINUS	=109;
 
 // Key code definitions END

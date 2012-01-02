@@ -1,0 +1,68 @@
+<application src="ui_kitchen_sink.app.xs" width="600" height="600">
+    <resources>
+        <image src="images/progress.full.png"/>
+        <image src="images/progress.empty.png"/>
+        <image src="images/smile_grin_48.png"/>
+        <image src="images/smile_sad_48.png"/>
+        <image src="images/arrow_left.png"/>
+        <image src="images/arrow_right.png"/>
+        <image src="images/arrow_right_48.png"/>
+        <image src="images/arrow_right_green_48.png"/>
+        <image src="images/arrow_left_48.png"/>
+        <image src="images/arrow_left_green_48.png"/>
+		<image src="images/monster.png"/> 
+		<image src="images/AzuCola_Chars.png"/> 
+    </resources>
+
+    <switch id="main" x="0" y="0" width="600" height="450">
+        <div id="test1">
+			<label id="title0" x="50" y="50" font="12px Verdana" caption="This screen shows some buttons (1/4)"/>
+			<label id="lbl0" x="240" y="175" font="Verdana" caption="Use keyboard arrows to move the first smiley"/>
+            <label id="lbl1" x="330" y="220" font="Verdana" caption="Click this smiley to count"/>
+            <button id="btn1" x="270" y="200" width="50" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png"/>
+			<state_button id="stateBtn" x="270" y="300" width="50" height="50" active="images/smile_grin_48.png" inactive="images/smile_sad_48.png"/>
+			<label id="lbl3" x="330" y="340" font="Verdana" caption="This smiley is a state button, click it"/>
+        </div>
+        <div id="test2">
+			<label id="title1" x="50" y="50" font="12px Verdana" caption="This screen shows a percentage or progress bar and a sprite sheet animation (2/4)"/>
+            <progress_bar id="pb1" x="225" y="120" width="150" height="10"/>
+            <img id="btn2" x="200" y="115" width="20" height="20" src="images/arrow_left.png"/>
+            <img id="btn3" x="380" y="115" width="20" height="20" src="images/arrow_right.png"/>
+            <label id="lbl2" x="210" y="200" font="Verdana" caption="Click small arrows to adjust percentage"/>
+			<label id="lbl7" x="210" y="270" font="11px Verdana" caption="Press left arrow on your keyboard to walk the zombie"/>
+			<sprite_sheet id="monster" x="300" y="300" src="images/monster.png" frame_width="64" frame_height="64">
+				<sprite id="m_running" frames="10" frame_row="0" frame_col="0" step="30"/>
+				<sprite id="m_idle" frames="10" frame_row="1" frame_col="0" step="30"/>
+			</sprite_sheet> 
+        </div>
+		<div id="test3">
+			<label id="title2" x="50" y="50" font="12px Verdana" caption="This screen shows a lot of figures (3/4)"/> 
+			<circle id="c1" x="70" y="70" radius="60" fill="cyan" stroke="black" line_width="3"/>
+			<rectangle id="r1" x="300" y="100" width="60" height="90" rotation="-30" alpha="60" fill="green"/>
+			<polygon id="p1" fill="pink" stroke="brown" line_width="3" alpha="40">
+				<polygon_point id="point1" x="300" y="300"/>
+				<polygon_point id="point2" x="300" y="250"/>
+				<polygon_point id="point3" x="210" y="230"/>
+				<polygon_point id="point4" x="250" y="300"/>			
+			</polygon>
+			<button id="btn5" x="400" y="200" width="50" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png"/>
+			<label id="lbl4" x="50" y="400" font="11px Verdana" caption="Click the circle pressing NUMPAD + or NUMPAD - to increment or decrement its linewidth"/>
+			<label id="lbl5" x="50" y="420" font="11px Verdana" caption="Greeny the drunked rectangle rotates like the other components, test it!!!"/>
+			<label id="lbl6" x="50" y="440" font="11px Verdana" caption="Click the smiley to deformate the pink polygon"/>
+        </div>
+		<div id="test4">
+			<label id="title3" x="50" y="50" font="12px Verdana" caption="This screen shows two intersected clip area components with diferent forms (4/4)"/>
+			<label id="inst0" x="70" y="70" font="12px Verdana" caption="Use arrows to move the rect and WASD to move the circle"/>
+			<div id="clips">
+				<clip_area id="ca1" x="90" y="100" width="200" height="220" form="rect"/>				
+				<img id="back_img" x="0" y="0" width="500" height="500" src="images/AzuCola_Chars.png"/>
+				<clip_area id="ca2" x="100" y="160" width="200" height="200" form="circle"/>
+			</div>
+        </div>
+    </switch>
+	<label id="inst1" x="50" y="480" font="12px Verdana" caption="Click on this arrows to change the screen"/>
+	<label id="inst2" x="50" y="500" font="12px Verdana" caption="Use NUMPAD + or NUMPAD - keys with click over a component to rotate it"/>
+	<label id="inst3" x="50" y="520" font="12px Verdana" caption="Use CTRL + mouse drag over a component to drag it"/>
+    <button id="btnNext" x="320" y="550" width="50" height="50" up="images/arrow_right_green_48.png" down="images/arrow_right_48.png"/>
+    <button id="btnPrev" x="220" y="550" width="50" height="50" up="images/arrow_left_green_48.png" down="images/arrow_left_48.png"/>    
+</application>

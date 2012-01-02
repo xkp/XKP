@@ -12,8 +12,8 @@
         <image src="images/arrow_right.png"/>
 		<image src="images/sound_2.png"/>
 		<image src="images/sound_1.png"/>
-		<audio src="sounds/358232_j_s_song.ogg"/>
-		<audio src="sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg"/>
+		<audio src="sounds/applauselong.wav"/>
+		<audio src="sounds/forest.wav"/>
     </resources>
 
 	<label id="lbl1" x="220" y="190" font="Verdana" caption="click the sound you want to listen"/>
@@ -29,7 +29,7 @@
     <button id="btnPause" x="275" y="300" width="50" height="50" up="images/pause.png" down="images/pause_over.png"/>
     <button id="btnStop" x="375" y="300" width="50" height="50" up="images/stop.png" down="images/stop_over.png"/>
 
-	<sound id="sound_1" play="true" src="sounds/358232_j_s_song.ogg"/>
-	<sound id="sound_2" src="sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg"/>
+	<sound id="sound_1" play="true" src="sounds/forest.wav"/>
+	<sound id="sound_2" src="sounds/applauselong.wav"/>
 	
 </application>

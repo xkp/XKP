@@ -22,6 +22,7 @@ var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
+		var streamer = new ms.streamer.Streamer();
 		if(drawingCanvas){
 			var client =
 			{
@@ -39,29 +40,23 @@ var Sound = new ms.ui.Sound();
             {
 		id:"__image1",
 		resource_type:RESOURCE_IMAGE,
-		src:"images/monster_running.jpg"
+		src:"images/monster.png"
 });
                 def_package_items.push(
             {
 		id:"__image2",
 		resource_type:RESOURCE_IMAGE,
-		src:"images/monster_idle.jpg"
+		src:"images/smile_grin_48.png"
 });
                 def_package_items.push(
             {
 		id:"__image3",
 		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_grin_48.png"
-});
-                def_package_items.push(
-            {
-		id:"__image4",
-		resource_type:RESOURCE_IMAGE,
 		src:"images/smile_sad_48.png"
 });
                 def_package_items.push(
             {
-		id:"__image5",
+		id:"__image4",
 		resource_type:RESOURCE_IMAGE,
 		src:"images/AzuCola_Chars.png"
 });
@@ -77,21 +72,49 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
-			girl.animate("g_idle");
-if (application.key_press)
-{
-monster.animate("m_running");
-}
-else
-{
-monster.animate("m_idle");
-}
+		application.events.dispatch("updates", []);	
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var girl;var monster;var lbl1;var lbl2;var lbl3;var btn1;
+                application.clicks = 1;
+                application.key_press = false;
+	var ev_parent = this;
+	application.events.addListener("keydown", function(keycode)
+	{    
+		if (keycode == LEFT_ARROW)
+{
+application.key_press = true;
+}
+	}
+	);
+	var ev_parent = this;
+	application.events.addListener("keyup", function(keycode)
+	{    
+		if (keycode == LEFT_ARROW)
+{
+application.key_press = false;
+}
+	}
+	);
+	var ev_parent = this;
+	application.events.addListener("updates", function()
+	{    
+		girl.animate("g_idle");
+if (application.key_press)
+{
+monster.animate("m_running");
+monster.set_x(monster.x - 0.200000003);
+}
+else
+{
+monster.animate("m_idle");
+}
+	}
+	);
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -123,7 +146,7 @@ window.onload = function()
 	};	
 		    girl = new ms.ui.SpriteSheet( 
 	    "images/AzuCola_Chars.png",46,67,g_ui_root.manager, g_ui_root);
-        var girl = girl;
+        girl = girl;
 	var ev_parent = this;
 	girl.events.addListener("click", function()
 	{    
@@ -148,8 +171,8 @@ window.onload = function()
 										lock: false										
 										});
 		    monster = new ms.ui.SpriteSheet( 
-	    "images/monster_running.jpg",64,64,g_ui_root.manager, g_ui_root);
-        var monster = monster;
+	    "images/monster.png",64,64,g_ui_root.manager, g_ui_root);
+        monster = monster;
                 monster.position(200, 200);
 		monster.array.push({id: "m_running", 
 										frames: 10, 
@@ -160,8 +183,8 @@ window.onload = function()
 										lock: false										
 										});
 		monster.array.push({id: "m_idle", 
-										frames: 1, 
-										frame_row: 0,
+										frames: 10, 
+										frame_row: 1,
 										frame_col: 0,
 										loop: true,
 										step: 30,
@@ -169,23 +192,23 @@ window.onload = function()
 										});
 		    lbl1 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
-        var lbl1 = lbl1;
+        lbl1 = lbl1;
                 lbl1.set_rotation(-15);
                 lbl1.text("click smiley");
                 lbl1.position(200, 200);
 		    lbl2 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
-        var lbl2 = lbl2;
-                lbl2.text("press left and right arrows to walk the monster");
+        lbl2 = lbl2;
+                lbl2.text("press left arrow to walk the monster");
                 lbl2.position(100, 100);
 		    lbl3 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
-        var lbl3 = lbl3;
+        lbl3 = lbl3;
                 lbl3.text("click the girl to crash her down");
                 lbl3.position(100, 150);
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
-        var btn1 = btn1;
+        btn1 = btn1;
                 btn1.set_rotation(15);
 	var ev_parent = this;
 	btn1.events.addListener("click", function()
@@ -195,36 +218,6 @@ application.clicks = application.clicks + 1;
 	}
 	);
                 btn1.rect(300, 300, 50, 50);
-                application.clicks = 1;
-                application.key_press = false;
-	var ev_parent = this;
-	application.events.addListener("keydown", function(keycode)
-	{    
-		if (keycode == LEFT_ARROW)
-{
-application.key_press = true;
-monster.set_x(monster.x - 1);
-}
-if (keycode == RIGHT_ARROW)
-{
-application.key_press = true;
-monster.set_x(monster.x + 1);
-}
-	}
-	);
-	var ev_parent = this;
-	application.events.addListener("keyup", function(keycode)
-	{    
-		if (keycode == LEFT_ARROW)
-{
-application.key_press = false;
-}
-if (keycode == RIGHT_ARROW)
-{
-application.key_press = false;
-}
-	}
-	);
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -237,10 +230,7 @@ application.key_press = false;
 			{
 				ui.keypress(ev.keyCode);                  
 			};
-            if (application.init)
-            {
-                application.init();
-            }
+            application.events.dispatch("init", []);
             start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});

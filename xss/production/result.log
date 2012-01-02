@@ -2,9 +2,11 @@
 ===[ 3js-ms.project.xml ]================
 
 
+log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering Sequence Types...
 log: Rendering Sequence...
+log: Rendering UI...
 Success are greateful
 ===[ 3js-ui.project.xml ]================
 
@@ -23,7 +25,9 @@ Success are greateful
 
 
 log: Rendering Resources...
+log: Rendering UI Types...
 log: Rendering 3js Types...
+log: Rendering UI...
 Success are greateful
 ===[ 3js_class_test.project.xml ]================
 
@@ -35,18 +39,24 @@ Success are greateful
 
 
 log: Rendering Resources...
+log: Rendering UI Types...
 log: Rendering 3js Types...
+log: Rendering UI...
 Success are greateful
 ===[ 3js_class_test_2.project.xml ]================
 
 
 log: Rendering Resources...
+log: Rendering UI Types...
 log: Rendering 3js Types...
+log: Rendering UI...
 Success are greateful
 ===[ 3js_cube.project.xml ]================
 
 
+log: Rendering UI Types...
 log: Rendering 3js Types...
+log: Rendering UI...
 Success are greateful
 ===[ 3js_cube_img.project.xml ]================
 
@@ -68,7 +78,9 @@ Success are greateful
 ===[ 3js_particle_system.project.xml ]================
 
 
+log: Rendering UI Types...
 log: Rendering 3js Types...
+log: Rendering UI...
 Success are greateful
 ===[ 3js_sound.project.xml ]================
 
@@ -79,7 +91,9 @@ Success are greateful
 ===[ 3js_transform.project.xml ]================
 
 
+log: Rendering UI Types...
 log: Rendering 3js Types...
+log: Rendering UI...
 Success are greateful
 ===[ box2d1.project.xml ]================
 
@@ -895,12 +909,18 @@ log: Rendering property: app
 log: Methods size: 0
 log: Events size: 0
 log: Oh noes... a PROPERTYError [idiom] Sequences expect a property to modify
-2314expression = app.target2314file = c:/dev/xkp/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
+
+	expression = app.target
+	file = c:/dev/xkp/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
 
 ===[ json1.project.xml ]================
 
 Error [reader] Invalid XML file
-2314xml error = Error document empty.2314line = 02314column = 02314file = c:/dev/xkp/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
+
+	xml error = Error document empty.
+	line = 0
+	column = 0
+	file = c:/dev/xkp/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
 
 ===[ ms1.project.xml ]================
 
@@ -1035,6 +1055,13 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
 Success are greateful
+===[ ui_kitchen_sink.project.xml ]================
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering UI...
+Success are greateful
 ===[ ui_selfdrawn.project.xml ]================
 
 
@@ -1134,6 +1161,10 @@ Success are greateful
 
 Success are greateful
 ===[ wax3.project.xml ]================
+
+
+Success are greateful
+===[ wax4.project.xml ]================
 
 
 Success are greateful

@@ -22,6 +22,7 @@ var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
+		var streamer = new ms.streamer.Streamer();
 		if(drawingCanvas){
 			var client =
 			{
@@ -53,12 +54,14 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
+		application.events.dispatch("updates", []);	
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var img1;
             my_image = Class.create(ms.ui.Image,
         {
     initialize: function($super
@@ -91,6 +94,16 @@ ev_parent.img2.rect(ev_parent.x_pos + 50, ev_parent.y_pos - 50, 50, 50);
                 this.init();
             },
 });
+                application.test = null;
+                application.x_pos = 100;
+                application.y_pos = 100;
+                application.X_MAX = 600;
+                application.Y_MAX = 400;
+                application.img2 = null;
+	application.init = function() 
+	{
+		application.test = 1;
+	};
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -122,7 +135,7 @@ window.onload = function()
 	};	
 		    img1 = new ms.ui.Image( 
 	    "images/img1.png",g_ui_root.manager, g_ui_root);
-        var img1 = img1;
+        img1 = img1;
 	var ev_parent = this;
 	img1.events.addListener("click", function()
 	{    
@@ -144,16 +157,6 @@ application.img2.rect(application.x_pos, application.y_pos, 50, 50);
 	}
 	);
                 img1.rect(100, 100, 50, 50);
-                application.test = null;
-                application.x_pos = 100;
-                application.y_pos = 100;
-                application.X_MAX = 600;
-                application.Y_MAX = 400;
-                application.img2 = null;
-	application.init = function() 
-	{
-		application.test = 1;
-	};
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -166,10 +169,7 @@ application.img2.rect(application.x_pos, application.y_pos, 50, 50);
 			{
 				ui.keypress(ev.keyCode);                  
 			};
-            if (application.init)
-            {
-                application.init();
-            }
+            application.events.dispatch("init", []);
             start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});

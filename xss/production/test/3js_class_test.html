@@ -81,13 +81,14 @@ if (g_elapsed < 0)
 else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
-application.events.dispatch("animate", []);	
+application.events.dispatch("updates", []);	
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
         function create_my_plane(
      ) {  		
-			var my_plane = new THREE.Object3D();		
+			var my_plane = new THREE.Object3D();
+			my_plane.events = new ms.event.EventHolder();
         my_plane.image = null;
         my_plane.image_set = function (value)
         {
@@ -122,7 +123,7 @@ application.i = 0;
 }
 var plane_1 = 
 create_my_plane(
-);
+)
 ;
 plane_1.image_set(application.img_array[application.i]);
 plane_1.position.x = x;
@@ -162,10 +163,7 @@ document.onkeypress = function(ev)
 {
 	event_manager.keypress(ev.keyCode);                  
 };
-if (application.init)
-{
-	application.init();
-}
+application.events.dispatch("init", []);
 document.body.appendChild( renderer.domElement );
 animate();
 function animate() {

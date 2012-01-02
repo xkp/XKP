@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript">	
+var drawingCanvas;		
+var g_ui;
+var g_elapsed = -1;
+var g_delta = 0.0;
+var g_canvas;
+var g_ui_root;
+var application = {};
+application.events = new ms.event.EventHolder();
+var Sound = new ms.ui.Sound();
+		var streamer = new ms.streamer.Streamer();
+		if(drawingCanvas){
+			var client =
+			{
+				width: 600,
+				height: 600,
+				canvas: drawingCanvas
+			};
+			var ui = new ms.ui.Manager(client, streamer);
+			var g_ui = ui;
+			var g_ui_root = ui.root;
+		}
+		var streamer = new ms.streamer.Streamer();
+        var def_package_items = [];
+                def_package_items.push(
+            {
+		id:"__image1",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/progress.full.png"
+});
+                def_package_items.push(
+            {
+		id:"__image2",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/progress.empty.png"
+});
+                def_package_items.push(
+            {
+		id:"__image3",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/smile_grin_48.png"
+});
+                def_package_items.push(
+            {
+		id:"__image4",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/smile_sad_48.png"
+});
+                def_package_items.push(
+            {
+		id:"__image5",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/arrow_left.png"
+});
+                def_package_items.push(
+            {
+		id:"__image6",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/arrow_right.png"
+});
+                def_package_items.push(
+            {
+		id:"__image7",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/arrow_right_48.png"
+});
+                def_package_items.push(
+            {
+		id:"__image8",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/arrow_right_green_48.png"
+});
+                def_package_items.push(
+            {
+		id:"__image9",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/arrow_left_48.png"
+});
+                def_package_items.push(
+            {
+		id:"__image10",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/arrow_left_green_48.png"
+});
+                def_package_items.push(
+            {
+		id:"__image11",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/monster.png"
+});
+                def_package_items.push(
+            {
+		id:"__image12",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/AzuCola_Chars.png"
+});
+        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
+		g_startup_package.load();	
+function start(resolution)  
+{  
+	function updater()  
+	{  
+		var now   = new Date().getTime();
+        if (g_elapsed < 0)
+            g_delta = 0; //first update
+        else
+		    g_delta  = now - g_elapsed;  
+        g_elapsed = now; 
+		application.events.dispatch("updates", []);	
+		var context = g_canvas.getContext('2d');
+		g_ui.update(g_delta, context);
+        window.setTimeout(updater, resolution);  
+	}    
+	window.setTimeout(updater, resolution);  
+}  
+var main;var test1;var title0;var lbl0;var lbl1;var btn1;var stateBtn;var lbl3;var test2;var title1;var pb1;var btn2;var btn3;var lbl2;var lbl7;var monster;var test3;var title2;var c1;var r1;var p1;var btn5;var lbl4;var lbl5;var lbl6;var test4;var title3;var inst0;var clips;var ca1;var back_img;var ca2;var inst1;var inst2;var inst3;var btnNext;var btnPrev;
+                application.clicks = 0;
+                application.do_rotation_plus = false;
+                application.do_rotation_minus = false;
+                application.do_drag = false;
+                application.px = null;
+                application.py = null;
+                application.left_key_down = false;
+	var ev_parent = this;
+	application.events.addListener("keydown", function(keycode)
+	{    
+		if (btn1.isVisible())
+{
+if (keycode == LEFT_ARROW)
+{
+btn1.set_x(btn1.x - 2);
+application.left_key_down = true;
+}
+if (keycode == RIGHT_ARROW)
+{
+btn1.set_x(btn1.x + 2);
+}
+if (keycode == UP_ARROW)
+{
+btn1.set_y(btn1.y - 2);
+}
+if (keycode == DOWN_ARROW)
+{
+btn1.set_y(btn1.y + 2);
+}
+}
+if (ca1.isVisible())
+{
+if (keycode == LEFT_ARROW)
+{
+ca1.set_x(ca1.x - 2);
+}
+if (keycode == RIGHT_ARROW)
+{
+ca1.set_x(ca1.x + 2);
+}
+if (keycode == UP_ARROW)
+{
+ca1.set_y(ca1.y - 2);
+}
+if (keycode == DOWN_ARROW)
+{
+ca1.set_y(ca1.y + 2);
+}
+}
+if (ca2.isVisible())
+{
+if (keycode == A)
+{
+ca2.set_x(ca2.x - 2);
+}
+if (keycode == D)
+{
+ca2.set_x(ca2.x + 2);
+}
+if (keycode == W)
+{
+ca2.set_y(ca2.y - 2);
+}
+if (keycode == S)
+{
+ca2.set_y(ca2.y + 2);
+}
+}
+if (keycode == NUMPAD_PLUS)
+{
+application.do_rotation_plus = true;
+}
+if (keycode == NUMPAD_MINUS)
+{
+application.do_rotation_minus = true;
+}
+if (keycode == CTRL)
+{
+application.do_drag = true;
+}
+	}
+	);
+	var ev_parent = this;
+	application.events.addListener("keyup", function(keycode)
+	{    
+		if (keycode == LEFT_ARROW)
+{
+application.left_key_down = false;
+}
+if (keycode == NUMPAD_PLUS)
+{
+application.do_rotation_plus = false;
+}
+if (keycode == NUMPAD_MINUS)
+{
+application.do_rotation_minus = false;
+}
+if (keycode == CTRL)
+{
+application.do_drag = false;
+}
+	}
+	);
+	var ev_parent = this;
+	application.events.addListener("updates", function()
+	{    
+		if (application.left_key_down)
+{
+monster.animate("m_running");
+monster.set_x(monster.x - 0.200000003);
+}
+else
+{
+monster.animate("m_idle");
+}
+	}
+	);
+window.onload = function() 
+{
+	drawingCanvas = document.getElementById("myCanvas");
+    g_canvas = drawingCanvas;
+	if (drawingCanvas && drawingCanvas.getContext)
+	{
+		var client =
+		{
+			width: 600,
+			height: 600,
+			canvas: drawingCanvas
+		};
+		var ui = new ms.ui.Manager(client, streamer);
+		g_ui = ui;
+        g_ui_root = ui.root;
+     	ui.load_resources(function()
+		{
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX, ev.clientY);                  
+	};	
+		    main = new ms.ui.Switch( 
+	    g_ui_root.manager, g_ui_root);
+        main = main;
+                main.rect(0, 0, 600, 450);
+		    test1 = new ms.ui.Component( 
+	    main.manager, main);test1.mouse_thru = true;
+        test1 = test1;
+		    title0 = new ms.ui.Label( 
+	    "12px Verdana",test1.manager, test1);
+        title0 = title0;
+                title0.text("This screen shows some buttons (1/4)");
+                title0.position(50, 50);
+		    lbl0 = new ms.ui.Label( 
+	    "Verdana",test1.manager, test1);
+        lbl0 = lbl0;
+                lbl0.text("Use keyboard arrows to move the first smiley");
+                lbl0.position(240, 175);
+		    lbl1 = new ms.ui.Label( 
+	    "Verdana",test1.manager, test1);
+        lbl1 = lbl1;
+                lbl1.text("Click this smiley to count");
+                lbl1.position(330, 220);
+		    btn1 = new ms.ui.Button( 
+	    "images/smile_sad_48.png","images/smile_grin_48.png",test1.manager, test1);
+        btn1 = btn1;
+	var ev_parent = this;
+	btn1.events.addListener("click", function()
+	{    
+		if (application.do_rotation_plus)
+{
+btn1.set_rotation(btn1.get_rotation() + 5);
+}
+if (application.do_rotation_minus)
+{
+btn1.set_rotation(btn1.get_rotation() - 5);
+}
+lbl1.text("Got " + application.clicks + " smileys");
+application.clicks = application.clicks + 1;
+	}
+	);
+	var ev_parent = this;
+	btn1.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+btn1.set_x(x - btnNext.w / 2);
+btn1.set_y(y - btnNext.h / 2);
+}
+	}
+	);
+                btn1.rect(270, 200, 50, 50);
+		    stateBtn = new ms.ui.StateButton( 
+	    "images/smile_grin_48.png","images/smile_sad_48.png",test1.manager, test1);
+        stateBtn = stateBtn;
+	var ev_parent = this;
+	stateBtn.events.addListener("click", function()
+	{    
+		if (stateBtn.active)
+{
+lbl3.text("Wow I'm happy !!!");
+}
+else
+{
+lbl3.text("Bad I'm sad... Click again on me");
+}
+if (application.do_rotation_plus)
+{
+stateBtn.set_rotation(stateBtn.get_rotation() + 5);
+}
+if (application.do_rotation_minus)
+{
+stateBtn.set_rotation(stateBtn.get_rotation() - 5);
+}
+	}
+	);
+	var ev_parent = this;
+	stateBtn.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+stateBtn.set_x(x - btnNext.w / 2);
+stateBtn.set_y(y - btnNext.h / 2);
+}
+	}
+	);
+                stateBtn.rect(270, 300, 50, 50);
+		    lbl3 = new ms.ui.Label( 
+	    "Verdana",test1.manager, test1);
+        lbl3 = lbl3;
+                lbl3.text("This smiley is a state button, click it");
+                lbl3.position(330, 340);
+		    test2 = new ms.ui.Component( 
+	    main.manager, main);test2.mouse_thru = true;
+        test2 = test2;
+		    title1 = new ms.ui.Label( 
+	    "12px Verdana",test2.manager, test2);
+        title1 = title1;
+                title1.text("This screen shows a percentage or progress bar and a sprite sheet animation (2/4)");
+                title1.position(50, 50);
+		    pb1 = new ms.ui.ProgressBar( 
+	    null,test2.manager, test2);
+        pb1 = pb1;
+                pb1.rect(225, 120, 150, 10);
+		    btn2 = new ms.ui.Image( 
+	    "images/arrow_left.png",test2.manager, test2);
+        btn2 = btn2;
+	var ev_parent = this;
+	btn2.events.addListener("click", function()
+	{    
+		if (application.do_rotation_plus)
+{
+btn2.set_rotation(btn2.get_rotation() + 5);
+}
+if (application.do_rotation_minus)
+{
+btn2.set_rotation(btn2.get_rotation() - 5);
+}
+pb1.value(pb1.get_value() - 1);
+	}
+	);
+	var ev_parent = this;
+	btn2.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+btn2.set_x(x - btnNext.w / 2);
+btn2.set_y(y - btnNext.h / 2);
+}
+	}
+	);
+                btn2.rect(200, 115, 20, 20);
+		    btn3 = new ms.ui.Image( 
+	    "images/arrow_right.png",test2.manager, test2);
+        btn3 = btn3;
+	var ev_parent = this;
+	btn3.events.addListener("click", function()
+	{    
+		if (application.do_rotation_plus)
+{
+btn3.set_rotation(btn3.get_rotation() + 5);
+}
+if (application.do_rotation_minus)
+{
+btn3.set_rotation(btn3.get_rotation() - 5);
+}
+pb1.value(pb1.get_value() + 1);
+	}
+	);
+	var ev_parent = this;
+	btn3.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+btn3.set_x(x - btnNext.w / 2);
+btn3.set_y(y - btnNext.h / 2);
+}
+	}
+	);
+                btn3.rect(380, 115, 20, 20);
+		    lbl2 = new ms.ui.Label( 
+	    "Verdana",test2.manager, test2);
+        lbl2 = lbl2;
+                lbl2.text("Click small arrows to adjust percentage");
+                lbl2.position(210, 200);
+		    lbl7 = new ms.ui.Label( 
+	    "11px Verdana",test2.manager, test2);
+        lbl7 = lbl7;
+                lbl7.text("Press left arrow on your keyboard to walk the zombie");
+                lbl7.position(210, 270);
+		    monster = new ms.ui.SpriteSheet( 
+	    "images/monster.png",64,64,test2.manager, test2);
+        monster = monster;
+                monster.position(300, 300);
+		monster.array.push({id: "m_running", 
+										frames: 10, 
+										frame_row: 0,
+										frame_col: 0,
+										loop: true,
+										step: 30,
+										lock: false										
+										});
+		monster.array.push({id: "m_idle", 
+										frames: 10, 
+										frame_row: 1,
+										frame_col: 0,
+										loop: true,
+										step: 30,
+										lock: false										
+										});
+		    test3 = new ms.ui.Component( 
+	    main.manager, main);test3.mouse_thru = true;
+        test3 = test3;
+		    title2 = new ms.ui.Label( 
+	    "12px Verdana",test3.manager, test3);
+        title2 = title2;
+                title2.text("This screen shows a lot of figures (3/4)");
+                title2.position(50, 50);
+		    c1 = new ms.ui.Circle( 
+	    "cyan","black",3,test3.manager, test3);
+        c1 = c1;
+                c1.set_radius(60);
+	var ev_parent = this;
+	c1.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+c1.set_x(x - c1.w / 2);
+c1.set_y(y - c1.h / 2);
+}
+	}
+	);
+	var ev_parent = this;
+	c1.events.addListener("click", function()
+	{    
+		if (application.do_rotation_plus)
+{
+c1.set_line_width(c1.line_width + 1);
+}
+if (application.do_rotation_minus)
+{
+c1.set_line_width(c1.line_width - 1);
+}
+	}
+	);
+                c1.position(70, 70);
+		    r1 = new ms.ui.Rectangle( 
+	    "green",null,null,test3.manager, test3);
+        r1 = r1;
+                r1.set_rotation(-30);
+                r1.alpha(60);
+	var ev_parent = this;
+	r1.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+r1.set_x(x - r1.w / 2);
+r1.set_y(y - r1.h / 2);
+}
+	}
+	);
+	var ev_parent = this;
+	r1.events.addListener("click", function()
+	{    
+		r1.set_stroke("brown");
+if (application.do_rotation_plus)
+{
+r1.set_rotation(r1.get_rotation() + 5);
+}
+if (application.do_rotation_minus)
+{
+r1.set_rotation(r1.get_rotation() - 5);
+}
+	}
+	);
+                r1.rect(300, 100, 60, 90);
+		    p1 = new ms.ui.Polygon( 
+	    "pink","brown",3,test3.manager, test3);
+        p1 = p1;
+                p1.alpha(40);
+		p1.points.push({id:"point1", x:300, y:300});
+		p1.points.push({id:"point2", x:300, y:250});
+		p1.points.push({id:"point3", x:210, y:230});
+		p1.points.push({id:"point4", x:250, y:300});
+		    btn5 = new ms.ui.Button( 
+	    "images/smile_sad_48.png","images/smile_grin_48.png",test3.manager, test3);
+        btn5 = btn5;
+	var ev_parent = this;
+	btn5.events.addListener("click", function()
+	{    
+		for(var i = 0; i < 4; i++)
+{
+if (i % 2 == 0)
+{
+application.px = p1.points[i].x + 5;
+application.py = p1.points[i].y + 5;
+}
+else
+{
+application.px = p1.points[i].x - 5;
+application.py = p1.points[i].y - 5;
+}
+p1.setPointbyIndex(i, application.px, application.py);
+}
+if (application.do_rotation_plus)
+{
+btn5.set_rotation(btn5.get_rotation() + 5);
+}
+if (application.do_rotation_minus)
+{
+btn5.set_rotation(btn5.get_rotation() - 5);
+}
+	}
+	);
+	var ev_parent = this;
+	btn5.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+btn5.set_x(x - btn5.w / 2);
+btn5.set_y(y - btn5.h / 2);
+}
+	}
+	);
+                btn5.rect(400, 200, 50, 50);
+		    lbl4 = new ms.ui.Label( 
+	    "11px Verdana",test3.manager, test3);
+        lbl4 = lbl4;
+                lbl4.text("Click the circle pressing NUMPAD + or NUMPAD - to increment or decrement its linewidth");
+                lbl4.position(50, 400);
+		    lbl5 = new ms.ui.Label( 
+	    "11px Verdana",test3.manager, test3);
+        lbl5 = lbl5;
+                lbl5.text("Greeny the drunked rectangle rotates like the other components, test it!!!");
+                lbl5.position(50, 420);
+		    lbl6 = new ms.ui.Label( 
+	    "11px Verdana",test3.manager, test3);
+        lbl6 = lbl6;
+                lbl6.text("Click the smiley to deformate the pink polygon");
+                lbl6.position(50, 440);
+		    test4 = new ms.ui.Component( 
+	    main.manager, main);test4.mouse_thru = true;
+        test4 = test4;
+		    title3 = new ms.ui.Label( 
+	    "12px Verdana",test4.manager, test4);
+        title3 = title3;
+                title3.text("This screen shows two intersected clip area components with diferent forms (4/4)");
+                title3.position(50, 50);
+		    inst0 = new ms.ui.Label( 
+	    "12px Verdana",test4.manager, test4);
+        inst0 = inst0;
+                inst0.text("Use arrows to move the rect and WASD to move the circle");
+                inst0.position(70, 70);
+		    clips = new ms.ui.Component( 
+	    test4.manager, test4);clips.mouse_thru = true;
+        clips = clips;
+		    ca1 = new ms.ui.ClipArea( 
+	    "rect",clips.manager, clips);ca1.mouse_thru = true;
+        ca1 = ca1;
+                ca1.form = "rect";
+                ca1.rect(90, 100, 200, 220);
+		    back_img = new ms.ui.Image( 
+	    "images/AzuCola_Chars.png",clips.manager, clips);
+        back_img = back_img;
+                back_img.rect(0, 0, 500, 500);
+		    ca2 = new ms.ui.ClipArea( 
+	    "circle",clips.manager, clips);ca2.mouse_thru = true;
+        ca2 = ca2;
+                ca2.form = "circle";
+                ca2.rect(100, 160, 200, 200);
+		    inst1 = new ms.ui.Label( 
+	    "12px Verdana",g_ui_root.manager, g_ui_root);
+        inst1 = inst1;
+                inst1.text("Click on this arrows to change the screen");
+                inst1.position(50, 480);
+		    inst2 = new ms.ui.Label( 
+	    "12px Verdana",g_ui_root.manager, g_ui_root);
+        inst2 = inst2;
+                inst2.text("Use NUMPAD + or NUMPAD - keys with click over a component to rotate it");
+                inst2.position(50, 500);
+		    inst3 = new ms.ui.Label( 
+	    "12px Verdana",g_ui_root.manager, g_ui_root);
+        inst3 = inst3;
+                inst3.text("Use CTRL + mouse drag over a component to drag it");
+                inst3.position(50, 520);
+		    btnNext = new ms.ui.Button( 
+	    "images/arrow_right_green_48.png","images/arrow_right_48.png",g_ui_root.manager, g_ui_root);
+        btnNext = btnNext;
+	var ev_parent = this;
+	btnNext.events.addListener("click", function()
+	{    
+		if (application.do_rotation_plus)
+{
+btnNext.set_rotation(btnNext.get_rotation() + 5);
+}
+if (application.do_rotation_minus)
+{
+btnNext.set_rotation(btnNext.get_rotation() - 5);
+}
+if (main.get_active() < main.count() - 1)
+{
+main.active(main.get_active() + 1);
+}
+	}
+	);
+	var ev_parent = this;
+	btnNext.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+btnNext.set_x(x - btnNext.w / 2);
+btnNext.set_y(y - btnNext.h / 2);
+}
+	}
+	);
+                btnNext.rect(320, 550, 50, 50);
+		    btnPrev = new ms.ui.Button( 
+	    "images/arrow_left_green_48.png","images/arrow_left_48.png",g_ui_root.manager, g_ui_root);
+        btnPrev = btnPrev;
+	var ev_parent = this;
+	btnPrev.events.addListener("click", function()
+	{    
+		if (application.do_rotation_plus)
+{
+btnPrev.set_rotation(btnPrev.get_rotation() + 5);
+}
+if (application.do_rotation_minus)
+{
+btnPrev.set_rotation(btnPrev.get_rotation() - 5);
+}
+if (main.get_active() > 0)
+{
+main.active(main.get_active() - 1);
+}
+	}
+	);
+	var ev_parent = this;
+	btnPrev.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+btnPrev.set_x(x - btnPrev.w / 2);
+btnPrev.set_y(y - btnPrev.h / 2);
+}
+	}
+	);
+                btnPrev.rect(220, 550, 50, 50);
+			document.onkeydown = function(ev)
+			{
+				ui.keydown(ev.keyCode);                  
+			};
+			document.onkeyup = function(ev)
+			{
+				ui.keyup(ev.keyCode);                  
+			};
+			document.onkeypress = function(ev)
+			{
+				ui.keypress(ev.keyCode);                  
+			};
+            application.events.dispatch("init", []);
+            start();
+			ui.draw(drawingCanvas.getContext('2d'));
+		});
+	}
+}
+</script>
+</head>
+<body>
+	<canvas id="myCanvas" width="600" height="600">
+		<p>Your browser doesn't support canvas.</p>
+	</canvas>
+</body>
+</html>

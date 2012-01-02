@@ -22,6 +22,7 @@ var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
+		var streamer = new ms.streamer.Streamer();
 		if(drawingCanvas){
 			var client =
 			{
@@ -107,12 +108,39 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
+		application.events.dispatch("updates", []);	
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var main;var test1;var lbl0;var lbl1;var btn1;var test2;var pb1;var btn2;var btn3;var lbl2;var btnNext;var btnPrev;var stateBtn;var lbl3;
+                application.clicks = 0;
+	var ev_parent = this;
+	application.events.addListener("keydown", function(keycode)
+	{    
+		if (btn1.isVisible())
+{
+if (keycode == LEFT_ARROW)
+{
+btn1.set_x(btn1.x - 2);
+}
+if (keycode == RIGHT_ARROW)
+{
+btn1.set_x(btn1.x + 2);
+}
+if (keycode == UP_ARROW)
+{
+btn1.set_y(btn1.y - 2);
+}
+if (keycode == DOWN_ARROW)
+{
+btn1.set_y(btn1.y + 2);
+}
+}
+	}
+	);
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -144,25 +172,25 @@ window.onload = function()
 	};	
 		    main = new ms.ui.Switch( 
 	    g_ui_root.manager, g_ui_root);
-        var main = main;
+        main = main;
                 main.rect(0, 0, 600, 250);
 		    test1 = new ms.ui.Component( 
 	    main.manager, main);test1.mouse_thru = true;
-        var test1 = test1;
+        test1 = test1;
 		    lbl0 = new ms.ui.Label( 
 	    "Verdana",test1.manager, test1);
-        var lbl0 = lbl0;
+        lbl0 = lbl0;
                 lbl0.text("use arrows to move smile");
                 lbl0.position(240, 75);
 		    lbl1 = new ms.ui.Label( 
 	    "Verdana",test1.manager, test1);
-        var lbl1 = lbl1;
+        lbl1 = lbl1;
                 lbl1.set_rotation(-15);
                 lbl1.text("click smiley");
                 lbl1.position(270, 200);
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",test1.manager, test1);
-        var btn1 = btn1;
+        btn1 = btn1;
                 btn1.set_rotation(15);
 	var ev_parent = this;
 	btn1.events.addListener("click", function()
@@ -180,14 +208,14 @@ application.clicks = application.clicks + 1;
  btn1.center(50, 50); 
 		    test2 = new ms.ui.Component( 
 	    main.manager, main);test2.mouse_thru = true;
-        var test2 = test2;
+        test2 = test2;
 		    pb1 = new ms.ui.ProgressBar( 
 	    null,test2.manager, test2);
-        var pb1 = pb1;
+        pb1 = pb1;
  pb1.center(150, 10); 
 		    btn2 = new ms.ui.Image( 
 	    "images/arrow_left.png",test2.manager, test2);
-        var btn2 = btn2;
+        btn2 = btn2;
 	var ev_parent = this;
 	btn2.events.addListener("click", function()
 	{    
@@ -197,7 +225,7 @@ application.clicks = application.clicks + 1;
                 btn2.rect(200, 115, 20, 20);
 		    btn3 = new ms.ui.Image( 
 	    "images/arrow_right.png",test2.manager, test2);
-        var btn3 = btn3;
+        btn3 = btn3;
 	var ev_parent = this;
 	btn3.events.addListener("click", function()
 	{    
@@ -207,13 +235,13 @@ application.clicks = application.clicks + 1;
                 btn3.rect(380, 115, 20, 20);
 		    lbl2 = new ms.ui.Label( 
 	    "Verdana",test2.manager, test2);
-        var lbl2 = lbl2;
+        lbl2 = lbl2;
                 lbl2.set_rotation(15);
                 lbl2.text("click small arrows to adjust percentage");
                 lbl2.position(210, 200);
 		    btnNext = new ms.ui.Button( 
 	    "images/arrow_right_green_48.png","images/arrow_right_48.png",g_ui_root.manager, g_ui_root);
-        var btnNext = btnNext;
+        btnNext = btnNext;
 	var ev_parent = this;
 	btnNext.events.addListener("click", function()
 	{    
@@ -228,7 +256,7 @@ btnNext.set_rotation(btnNext.get_rotation() + 10);
                 btnNext.rect(320, 300, 100, 50);
 		    btnPrev = new ms.ui.Button( 
 	    "images/arrow_left_green_48.png","images/arrow_left_48.png",g_ui_root.manager, g_ui_root);
-        var btnPrev = btnPrev;
+        btnPrev = btnPrev;
                 btnPrev.set_rotation(45);
 	var ev_parent = this;
 	btnPrev.events.addListener("click", function()
@@ -242,39 +270,14 @@ main.active(main.get_active() - 1);
                 btnPrev.rect(220, 300, 50, 50);
 		    stateBtn = new ms.ui.StateButton( 
 	    "images/smile_grin_48.png","images/smile_sad_48.png",g_ui_root.manager, g_ui_root);
-        var stateBtn = stateBtn;
+        stateBtn = stateBtn;
                 stateBtn.set_rotation(-45);
                 stateBtn.rect(270, 400, 50, 50);
 		    lbl3 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
-        var lbl3 = lbl3;
+        lbl3 = lbl3;
                 lbl3.text("this smile is a state button, click it");
                 lbl3.position(330, 440);
-                application.clicks = 0;
-	var ev_parent = this;
-	application.events.addListener("keydown", function(keycode)
-	{    
-		if (btn1.isVisible())
-{
-if (keycode == LEFT_ARROW)
-{
-btn1.set_x(btn1.x - 2);
-}
-if (keycode == RIGHT_ARROW)
-{
-btn1.set_x(btn1.x + 2);
-}
-if (keycode == UP_ARROW)
-{
-btn1.set_y(btn1.y - 2);
-}
-if (keycode == DOWN_ARROW)
-{
-btn1.set_y(btn1.y + 2);
-}
-}
-	}
-	);
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -287,10 +290,7 @@ btn1.set_y(btn1.y + 2);
 			{
 				ui.keypress(ev.keyCode);                  
 			};
-            if (application.init)
-            {
-                application.init();
-            }
+            application.events.dispatch("init", []);
             start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});

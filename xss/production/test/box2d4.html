@@ -25,6 +25,7 @@ var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
+		var streamer = new ms.streamer.Streamer();
 		if(drawingCanvas){
 			var client =
 			{
@@ -118,11 +119,23 @@ var Sound = new ms.ui.Sound();
             {
 		id:"__image3",
 		resource_type:RESOURCE_IMAGE,
-		src:"images/stone-12.jpg"
+		src:"images/sound_on.png"
 });
                 def_package_items.push(
             {
 		id:"__image4",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/sound_off.png"
+});
+                def_package_items.push(
+            {
+		id:"__image5",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/stone-12.jpg"
+});
+                def_package_items.push(
+            {
+		id:"__image6",
 		resource_type:RESOURCE_IMAGE,
 		src:"images/bomb.png"
 });
@@ -196,13 +209,14 @@ function start(resolution)
             bb = bb.GetNext();
         }
 		g_sequence_manager.update(g_delta);
+		application.events.dispatch("updates", []);	
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var hero;var __floor1;var game_over;
+var sound;var hero;var __floor1;var game_over;
             bad_guy = Class.create(ms.ui.Image,
         {
     initialize: function($super
@@ -224,9 +238,9 @@ var hero;var __floor1;var game_over;
                     fixDef.shape = new b2CircleShape(Math.min(cmp.w, cmp.h)/(2*g_world_scale));
             fixDef.isSensor = false;
                 bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
-            current_body = g_world.CreateBody(bodyDef);
+            current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;
+                cmp.physics = current_body;			
                 cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
@@ -321,9 +335,9 @@ fade_out.start();
                     fixDef.shape = new b2CircleShape(Math.min(cmp.w, cmp.h)/(2*g_world_scale));
             fixDef.isSensor = true;
                 bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
-            current_body = g_world.CreateBody(bodyDef);
+            current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;
+                cmp.physics = current_body;			
                 cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
@@ -382,9 +396,9 @@ g_sequence_manager);
                     fixDef.shape = new b2CircleShape(Math.min(cmp.w, cmp.h)/(2*g_world_scale));
             fixDef.isSensor = false;
                 bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
-            current_body = g_world.CreateBody(bodyDef);
+            current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;
+                cmp.physics = current_body;			
                 cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
@@ -407,7 +421,10 @@ g_sequence_manager);
 		if (who instanceof floor)
 {
 ev_parent.RemoveFromWorld();
+if (sound.active)
+{
 Sound.play("sounds/boom.wav");
+}
 }
 	}
 	);
@@ -436,9 +453,9 @@ Sound.play("sounds/boom.wav");
                     fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
             fixDef.isSensor = false;
                 bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
-            current_body = g_world.CreateBody(bodyDef);
+            current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;
+                cmp.physics = current_body;			
                 cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
@@ -548,6 +565,10 @@ window.onload = function()
 	{
 		ui.mouseup(ev.clientX, ev.clientY);                  
 	};	
+		    sound = new ms.ui.StateButton( 
+	    "images/sound_on.png","images/sound_off.png",g_ui_root.manager, g_ui_root);
+        sound = sound;
+                sound.rect(50, 50, 50, 50);
 		    hero = new good_guy( 
 	    "images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
         hero = hero;
@@ -592,10 +613,7 @@ hero.src("images/smile_sad_48.png");
 			{
 				ui.keypress(ev.keyCode);                  
 			};
-            if (application.init)
-            {
-                application.init();
-            }
+            application.events.dispatch("init", []);
             start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});

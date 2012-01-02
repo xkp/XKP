@@ -78,7 +78,7 @@ application.events = new ms.event.EventHolder();
             {
 		id:"__audio1",
 		resource_type:RESOURCE_SOUND,
-		src:"sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg"
+		src:"sounds/forest.wav"
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
@@ -93,7 +93,7 @@ if (g_elapsed < 0)
 else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
-application.events.dispatch("animate", []);	
+application.events.dispatch("updates", []);	
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
@@ -150,7 +150,7 @@ new THREE.Plane(
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
                 set_rotation_x(plane_1.rotation, -90);
-	var __playing_sound1 = new THREE.Sound(streamer.get_resource('sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg').asset
+	var __playing_sound1 = new THREE.Sound(streamer.get_resource('sounds/forest.wav').asset
 	,700,20,true
 	);
 	scene.addObject(__playing_sound1);
@@ -185,7 +185,7 @@ application.y_target_rotation = application.y_target_rotation_on_mouse_down + (a
 	}
 	);
 	var ev_parent = this;
-	application.events.addListener("animate", function()
+	application.events.addListener("updates", function()
 	{    
 		set_rotation_y(cube_1.rotation, get_rotation_y(cube_1.rotation) + (application.x_target_rotation - get_rotation_y(cube_1.rotation)) * 0.200000003);
 set_rotation_z(plane_1.rotation, get_rotation_y(cube_1.rotation));
@@ -223,10 +223,7 @@ document.onkeypress = function(ev)
 {
 	event_manager.keypress(ev.keyCode);                  
 };
-if (application.init)
-{
-	application.init();
-}
+application.events.dispatch("init", []);
 document.body.appendChild( renderer.domElement );
 animate();
 function animate() {

@@ -48,7 +48,7 @@ if (g_elapsed < 0)
 else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
-application.events.dispatch("animate", []);	
+application.events.dispatch("updates", []);	
 		set_active_camera(camera_1);
 		set_active_camera(camera_2);
 application.events.dispatch("switch_cameras", []);
@@ -162,27 +162,20 @@ new THREE.Plane(
 		plane_1.events = new ms.event.EventHolder();
                 plane_1.position.y = 0.100000001;
                 set_rotation_x(plane_1.rotation, -90);
-                application.is_ctrl_down = false;
-                application.is_shift_down = false;
+                application.is_quake_camera = false;
 	var ev_parent = this;
-	application.events.addListener("keydown", function(keycode)
+	application.events.addListener("keyup", function(keycode)
 	{    
 		if (keycode == SHIFT)
 {
-application.is_shift_down = true;
-application.is_ctrl_down = false;
-}
-if (keycode == CTRL)
-{
-application.is_ctrl_down = true;
-application.is_shift_down = false;
+application.is_quake_camera = !application.is_quake_camera;
 }
 	}
 	);
 	var ev_parent = this;
 	application.events.addListener("switch_cameras", function()
 	{    
-		if (application.is_ctrl_down)
+		if (application.is_quake_camera)
 {
 set_active_camera(camera_1);
 }
@@ -223,10 +216,7 @@ document.onkeypress = function(ev)
 {
 	event_manager.keypress(ev.keyCode);                  
 };
-if (application.init)
-{
-	application.init();
-}
+application.events.dispatch("init", []);
 document.body.appendChild( renderer.domElement );
 animate();
 function animate() {

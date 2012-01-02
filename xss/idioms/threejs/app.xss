@@ -63,7 +63,6 @@ var drawingCanvas = renderer.domElement;
 var app_width = <xss:e value="application.width"/>;
 var app_height = <xss:e value="application.height"/>;
 <xss:marker id="variables"/>
-
 var application = {};
 application.events = new ms.event.EventHolder();
 
@@ -93,7 +92,7 @@ g_elapsed = now;
 	compiler.inject("render_update");
 </xss:code>
 
-application.events.dispatch("animate", []);	
+application.events.dispatch("updates", []);	
 <xss:marker id="render_function"/>	
 application.events.dispatch("switch_cameras", []);
 

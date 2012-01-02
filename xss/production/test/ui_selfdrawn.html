@@ -22,6 +22,7 @@ var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
+		var streamer = new ms.streamer.Streamer();
 		if(drawingCanvas){
 			var client =
 			{
@@ -47,12 +48,14 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
+		application.events.dispatch("updates", []);	
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var sd1;
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -84,7 +87,7 @@ window.onload = function()
 	};	
 		    sd1 = new ms.ui.SelfDrawn( 
 	    g_ui_root.manager, g_ui_root);
-        var sd1 = sd1;
+        sd1 = sd1;
                 sd1.ctx = null;
                 sd1.x = 50;
                 sd1.y = 50;
@@ -144,10 +147,7 @@ window.canvasTimer = window.setInterval(sd1.draw_all, 100);
 			{
 				ui.keypress(ev.keyCode);                  
 			};
-            if (application.init)
-            {
-                application.init();
-            }
+            application.events.dispatch("init", []);
             start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});

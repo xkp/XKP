@@ -64,7 +64,7 @@ if (g_elapsed < 0)
 else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
-application.events.dispatch("animate", []);	
+application.events.dispatch("updates", []);	
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
@@ -182,10 +182,7 @@ document.onkeypress = function(ev)
 {
 	event_manager.keypress(ev.keyCode);                  
 };
-if (application.init)
-{
-	application.init();
-}
+application.events.dispatch("init", []);
 document.body.appendChild( renderer.domElement );
 animate();
 function animate() {

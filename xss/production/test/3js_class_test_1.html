@@ -32,8 +32,21 @@ var g_delta = 0.0;
 var drawingCanvas = renderer.domElement;
 var app_width = 600;
 var app_height = 400;
+var lbl0;
 var application = {};
 application.events = new ms.event.EventHolder();
+		var streamer = new ms.streamer.Streamer();
+		if(drawingCanvas){
+			var client =
+			{
+				width: 600,
+				height: 400,
+				canvas: drawingCanvas
+			};
+			var ui = new ms.ui.Manager(client, streamer);
+			var g_ui = ui;
+			var g_ui_root = ui.root;
+		}
 		var streamer = new ms.streamer.Streamer();
 	// --------RESOURCES---------
         var def_package_items = [];
@@ -80,7 +93,7 @@ if (g_elapsed < 0)
 else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
-application.events.dispatch("animate", []);	
+application.events.dispatch("updates", []);	
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
@@ -97,9 +110,7 @@ width,height,x_segments,y_segments);
         my_plane.image_set = function (value)
         {
             my_plane.image = value;
-            this.materials[ 0 ] = new THREE.MeshBasicMaterial({
-						map:THREE.ImageUtils.loadTexture(streamer.get_resource(value).asset),
-						});
+            this.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource(value).asset);
         };
         return my_plane;
         }
@@ -122,7 +133,7 @@ application.i = 0;
 var plane_1 = 
 create_my_plane(
 200,260
-);
+)
 ;
 plane_1.image_set(application.img_array[application.i]);
 plane_1.position.x = x;
@@ -134,6 +145,23 @@ application.i = application.i + 1;
 if(ui)
 {
 	ui.load_resources(function(){		
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX, ev.clientY);                  
+	};	
+		    lbl0 = new ms.ui.Label( 
+	    "12px Verdana",g_ui_root.manager, g_ui_root);
+        lbl0 = lbl0;
+                lbl0.text("Click wherever to create a randomly positioned plane");
+                lbl0.position(200, 75);
 		g_ui.fill_background = false;
 	});
 }
@@ -162,10 +190,7 @@ document.onkeypress = function(ev)
 {
 	event_manager.keypress(ev.keyCode);                  
 };
-if (application.init)
-{
-	application.init();
-}
+application.events.dispatch("init", []);
 document.body.appendChild( renderer.domElement );
 animate();
 function animate() {

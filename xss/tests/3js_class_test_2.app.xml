@@ -1,5 +1,8 @@
 <application src="3js_class_test_2.app.xs" renderer="canvas" width="600" height="400">    
-    		
+    
+	<label id="lbl0" x="200" y="75" font="12px Verdana" caption="Click anywhere to create a randomly positioned cylinder"/>
+	<label id="lbl1" x="200" y="100" font="12px Verdana" caption="Mouse over a cylinder changes its color"/>
+	
 	<scene>		 
 		<camera id="camera_1" fov="75" aspect="1.5" near="1" far="3000">
 			<position z="1000"/>			

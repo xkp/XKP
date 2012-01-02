@@ -43,13 +43,13 @@ application.events = new ms.event.EventHolder();
             {
 		id:"res_sound_1",
 		resource_type:RESOURCE_SOUND,
-		src:"sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg"
+		src:"sounds/applauselong.wav"
 });
                 def_package_items.push(
             {
 		id:"res_sound_2",
 		resource_type:RESOURCE_SOUND,
-		src:"sounds/358232_j_s_song.ogg"
+		src:"sounds/forest.wav"
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
@@ -64,7 +64,7 @@ if (g_elapsed < 0)
 else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
-application.events.dispatch("animate", []);	
+application.events.dispatch("updates", []);	
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
@@ -94,6 +94,7 @@ White);
 var container_1 = 
 new THREE.Object3D(
 );
+container_1.events = new ms.event.EventHolder();
                 container_1.position.x = 250;
                 container_1.position.y = 30;
 	    var sphere_1_sphere = 
@@ -114,6 +115,7 @@ new THREE.Sphere(
 var container_2 = 
 new THREE.Object3D(
 );
+container_2.events = new ms.event.EventHolder();
                 container_2.position.x = -250;
                 container_2.position.y = 30;
 	    var sphere_2_sphere = 
@@ -170,10 +172,7 @@ document.onkeypress = function(ev)
 {
 	event_manager.keypress(ev.keyCode);                  
 };
-if (application.init)
-{
-	application.init();
-}
+application.events.dispatch("init", []);
 document.body.appendChild( renderer.domElement );
 animate();
 function animate() {
