@@ -1,11 +1,11 @@
 
-on render_initialization()
+on render_initialization(clazz, bns)
 {
-	out(marker="imports")
+	out(marker = "imports")
 	{
         import java.util.Timer;
         import java.util.TimerTask;
-        import xkp.android.lib.*;
+        import <xss:e value="bns"/>.libs.Sequence.*;
 	}
 }
 
@@ -36,5 +36,76 @@ on render_update()
 	out()
 	{
 		Manager.getInstance().update(delta);
+	}
+}
+
+on copy_default_files(app, bns, plibs)
+{
+	array<string> files = [
+		"Caller.java",
+		"Assign.java",
+		"Every.java",
+		"Handler.java",
+		"IExecutable.java",
+		"Interpolator.java",
+		"IntInterpolator.java",
+		"IInterpolator.java",
+		"DoubleInterpolator.java",
+		"Key.java",
+		"Manager.java",
+		"OnUpdate.java",
+		"Sequence.java"
+	];
+	
+	string ns = bns + ".libs.Sequence";
+	for(string f in files)
+	{
+		string srcf = compiler.full_path("/libs/" + f);
+		string dstf = plibs + "Sequence/" + f;
+		
+		compiler.log("Rendering default file: " + srcf);
+		
+		compiler.xss(srcf, output_file = dstf, ns = ns);
+	}
+}
+
+on render_idiom_scripts()
+{
+	out(indent = 0)
+	{
+		private double update_freq = 1/30.0;
+
+		private void Update() <xss:open_brace/>
+			runOnUiThread(new Runnable() <xss:open_brace/>
+				public void run() <xss:open_brace/>
+					double delta = update_freq;
+	}
+	
+						compiler.inject("render_update");
+	
+	out(indent = 0)
+	{
+				<xss:close_brace/>
+			<xss:close_brace/>);
+		<xss:close_brace/>;
+	}
+	
+	out(indent = 0)
+	{
+		private void Start() <xss:open_brace/>
+			Timer timer = new Timer();
+			timer.schedule(new TimerTask() <xss:open_brace/>
+				@Override
+				public void run() <xss:open_brace/>
+					Update();
+				<xss:close_brace/>
+				
+			<xss:close_brace/>, 0, (long)(update_freq * 1000)); 
+		<xss:close_brace/>
+	}
+	
+	out(indent = 0, marker = "callers")
+	{
+		Start();
 	}
 }

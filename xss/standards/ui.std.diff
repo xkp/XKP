@@ -82,12 +82,12 @@
 			<methods(android): set_alpha, set_bitmap />
 
 	<component>
-		[togglebutton(android)]
+		[checkbox(android)]
 			<description: />
 			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
 			<properties(android): caption, cursor_visible, hint, text_color, text_selectable, links_clickeable, lines, max_lines, max_height, max_width, min_height, min_width />
-			<properties(android): text_off, text_on />
-			<methods(android): checked />
+			<properties(android): checked />
+			<methods(android): toggle />
 
 	<component>
 		[radiogroup(android)]
@@ -176,7 +176,7 @@
 			<events(android): keydown, keyup />
 
 	<component>
-		[state_button(js-ui) checkbox(android)]
+		[state_button(js-ui) togglebutton(android)]
 			<description: />
 			<constructor_params(js-ui): up, down />
 			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
@@ -184,8 +184,9 @@
 			
 			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
 			<properties(android): caption, cursor_visible, hint, text_color, text_selectable, links_clickeable, lines, max_lines, max_height, max_width, min_height, min_width />
-			<properties(android): checked />
-			<methods(android): toggle />
+			<properties(android): text_off, text_on />
+			<methods(android): checked />
+
 
 	<component>
 		[label(js-ui, android)]

@@ -300,6 +300,8 @@
             //declare variable on the top level if no path is supplied, could be confusing
             if (!path)
                 out(marker = "variables", marker_source = "entry") {var <xss:e v="seq_id"/>;}
+            else if (!parent)
+                out() {var <xss:e v="seq.output_id"/>;}
 
             //initialize it here
             out() {<xss:e v="seq_id"/> =} compiler.xss("../common-js/instantiator.xss", seq);

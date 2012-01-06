@@ -10,8 +10,22 @@
         
     if (is_class)
         cmp_id = "this";
+    else if (compiler.application_object(cmp))
+    {
+        out(marker = "variables", marker_source = "entry") 
+        {
+            var <xss:e v="cmp.output_id"/>;
+        }
+    }
     else
-        out(marker = "variables", marker_source = "entry") {var <xss:e v="cmp.output_id"/>;}
+    {
+        compiler.log("AQUI");
+        //this is an instance being compiled inside a class, dont do anything global
+        out() 
+        {
+            var <xss:e v="cmp.output_id"/>;
+        }
+    }
         
     if (!is_class)
     {
@@ -99,8 +113,8 @@
             else
                 compiler.error("Cannot position component left (need [width])", component = cmp.id);
         }
-        else
-            compiler.error("Invalid placement", placement= cmp.placement);
+        //else if (cmp.placement != "")
+        //    compiler.error("Invalid placement", placement= cmp.placement);
     }
     else
     {

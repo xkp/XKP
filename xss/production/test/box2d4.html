@@ -216,7 +216,10 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var sound;var hero;var __floor1;var game_over;
+            var sound;
+            var hero;
+            var __floor1;
+            var game_over;
             bad_guy = Class.create(ms.ui.Image,
         {
     initialize: function($super
@@ -270,13 +273,13 @@ var sound;var hero;var __floor1;var game_over;
         }
             this.cannon.parent = this;
             this.cannon.start();
-this.move_around =
+var move_around;this.move_around =
 new move_action(
 g_sequence_manager);
         move_around = this.move_around;
                 this.move_around.start();
             this.move_around.parent_sequence = null;
-this.fade_out =
+var fade_out;this.fade_out =
 new ms.state.Sequence(
 g_sequence_manager);
         fade_out = this.fade_out;
@@ -354,7 +357,7 @@ fade_out.start();
                         this.parent.removeComponent(this);
                     }
                 }
-this.move_around =
+var move_around;this.move_around =
 new move_action(
 g_sequence_manager);
         move_around = this.move_around;

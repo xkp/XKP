@@ -33,7 +33,9 @@ var g_delta = 0.0;
 var drawingCanvas = renderer.domElement;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
-var lbl0;var lbl1;var lbl2;
+            var lbl0;
+            var lbl1;
+            var lbl2;
 var application = {};
 application.events = new ms.event.EventHolder();
 		var streamer = new ms.streamer.Streamer();
@@ -207,17 +209,17 @@ if(ui)
 		    lbl0 = new ms.ui.Label( 
 	    "12px Verdana",g_ui_root.manager, g_ui_root);
         lbl0 = lbl0;
-                lbl0.text("Move mouse to rotate the cylinder");
+                lbl0.text("Move mouse over the scene to rotate the cylinder");
                 lbl0.position(240, 75);
 		    lbl1 = new ms.ui.Label( 
 	    "12px Verdana",g_ui_root.manager, g_ui_root);
         lbl1 = lbl1;
-                lbl1.text("Move mouse pressing SHIFT to rotate the transform");
+                lbl1.text("While pressing SHIFT the transform node will be rotated");
                 lbl1.position(240, 100);
 		    lbl2 = new ms.ui.Label( 
 	    "12px Verdana",g_ui_root.manager, g_ui_root);
         lbl2 = lbl2;
-                lbl2.text("Move mouse pressing CTRL to rotate the camera horizontally");
+                lbl2.text("While pressing CTRL the camera will be rotated horizontally");
                 lbl2.position(240, 125);
 		g_ui.fill_background = false;
 	});

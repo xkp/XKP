@@ -7,6 +7,7 @@
 	var appOptions = compiler.options;
 	string appOutputPath = compiler.output_path();
 	
+	string base_name_space = "xkp.android";
 	string appName = "DefaultAndroidApplication";
 	if(application.name)
 		appName = application.name;
@@ -48,69 +49,44 @@
 	}
 	
 	//inject idiom events
-	compiler.inject("render_types", app = appName);
+	compiler.inject("render_types", app = appName, bns = base_name_space);
 	
 	//render project files
 	string output_filename;
 	output_filename = appName + "/" + "AndroidManifest.xml";
-	compiler.xss("AndroidManifest.xml.xss", output_file = output_filename, appName, minAPILevel, targetAPILevel);
+	compiler.xss("AndroidManifest.xml.xss", output_file = output_filename, appName, base_name_space, minAPILevel, targetAPILevel);
 	
-	output_filename = appName + "/src/com/xkp/android/" + appName + "/Act" + appName + ".java";
-	compiler.xss("script.java.xss", output_file = output_filename, clazz = android, appName = appName, is_type = false);
+	output_filename = appName + "/src/xkp/android/" + appName + "/Act" + appName + ".java";
+	compiler.xss("script.java.xss", output_file = output_filename, clazz = android, appName = appName, base_name_space = base_name_space, is_type = false);
 	
-	output_filename = appName + "/src/com/xkp/android/" + appName + "/XKPLayout.java";
-	compiler.xss("xkpLayout.java.xss", output_file = output_filename, appName);
+	output_filename = appName + "/src/xkp/android/" + appName + "/XKPLayout.java";
+	compiler.xss("xkpLayout.java.xss", output_file = output_filename, appName = appName, base_name_space = base_name_space);
 	
 	output_filename = appName + "/res/values/strings.xml";
 	compiler.xss("stringValues.xml.xss", output_file = output_filename);
 	
-	array<string> files = [
-		"/res/values/attrs.xml",
-		"/res/drawable-ldpi/icon.png",
-		"/res/drawable-mdpi/icon.png",
-		"/res/drawable-hdpi/icon.png",
-		"/assets/.empty",
-		"/bin/.empty",
-		"/gen/.empty",
-		"/src/xkp/android/lib/Caller.java",
-		"/src/xkp/android/lib/Assign.java",
-		"/src/xkp/android/lib/Every.java",
-		"/src/xkp/android/lib/Handler.java",
-		"/src/xkp/android/lib/IExecutable.java",
-		"/src/xkp/android/lib/Interpolator.java",
-		"/src/xkp/android/lib/IntInterpolator.java",
-		"/src/xkp/android/lib/DoubleInterpolator.java",
-		"/src/xkp/android/lib/Key.java",
-		"/src/xkp/android/lib/Manager.java",
-		"/src/xkp/android/lib/OnUpdate.java",
-		"/src/xkp/android/lib/Sequence.java"
-	];
-	
-	for(string f in files)
-	{
-		string srcf = compiler.full_path("/copy.defaults" + f);
-		string dstf = appName + f;
-		
-		compiler.log("Copying default file: " + srcf);
-		
-		compiler.copy_file(src = srcf, dst = dstf);
-	}
+	//inject copy of default files events
+	string path_libs = "/src/xkp/android/libs/";
+	string abs_path_libs = appName + path_libs;
+	compiler.inject("copy_default_files", app = appName, bns = base_name_space, plibs = abs_path_libs);
 	
 	output_filename = appName + "/res/layout/main.xml";
-	compiler.xss("layout.xml.xss", output_file = output_filename, appName, clazz = application);
+	compiler.xss("layout.xml.xss", output_file = output_filename, appName = appName, base_name_space = base_name_space, clazz = application);
 	
+	//TODO: implement these two components (replicator & switch) with script for component like this
+	//      maybe with a property inside components
 	if(bReplicator)
 	{
-		output_filename = appName + "/src/com/xkp/android/" + appName + "/XKPReplicator.java";
+		output_filename = appName + "/src/xkp/android/" + appName + "/XKPReplicator.java";
 		compiler.xss("xkpReplicator.java.xss", output_file = output_filename, appName);
 		
-		output_filename = appName + "/src/com/xkp/android/" + appName + "/XKPObject.java";
+		output_filename = appName + "/src/xkp/android/" + appName + "/XKPObject.java";
 		compiler.xss("xkpObject.java.xss", output_file = output_filename, appName);
 	}
 	
 	if(bSwitcher)
 	{
-		output_filename = appName + "/src/com/xkp/android/" + appName + "/XKPSwitcher.java";
+		output_filename = appName + "/src/xkp/android/" + appName + "/XKPSwitcher.java";
 		compiler.xss("xkpSwitcher.java.xss", output_file = output_filename, appName);
 	}
 	

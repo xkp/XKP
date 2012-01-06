@@ -7,7 +7,7 @@ rem set PATH = %PATH%; ..\android-sdk-windows\tools; ..\android-sdk-windows\plat
 rem set the base directory of android
 
 <xss:code>
-	string sdkBase = "d:/android/android-sdk-windows/";
+	string sdkBase = "d:/android/sdk/";
 	string apiPlatform = sdkBase + "platforms/android-" + targetAPILevel + "/android.jar";
 	
 	//ERROR: this commented line dispatch an assert
@@ -16,7 +16,7 @@ rem set the base directory of android
 	out(indent = 0)
 	{
         aapt p -m -J <xss:e value="appOutputPath"/>src -M AndroidManifest.xml -S <xss:e value="appOutputPath"/>res -I <xss:e value="apiPlatform"/>
-        javac -encoding ascii -target 1.5 -d <xss:e value="appOutputPath"/>bin -bootclasspath <xss:e value="apiPlatform"/> <xss:e value="appOutputPath"/>src/com/xkp/android/<xss:e value="appName"/>/*.java
+        javac -encoding ascii -target 1.5 -d <xss:e value="appOutputPath"/>bin -bootclasspath <xss:e value="apiPlatform"/> <xss:e value="appOutputPath"/>src/xkp/android/<xss:e value="appName"/>/*.java
         dx --dex --output=<xss:e value="appOutputPath"/>bin/classes.dex <xss:e value="appOutputPath"/>bin
         aapt p -f -M AndroidManifest.xml -S <xss:e value="appOutputPath"/>res -I <xss:e value="apiPlatform"/> -F <xss:e value="appOutputPath"/>bin/output.ap_ 
         apkbuilder <xss:e value="appOutputPath"/>bin/<xss:e value="appName"/>.apk -z <xss:e value="appOutputPath"/>bin/output.ap_ -f <xss:e value="appOutputPath"/>bin/classes.dex -rf <xss:e value="appOutputPath"/>src -rj <xss:e value="appOutputPath"/>libs

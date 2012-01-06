@@ -1,5 +1,7 @@
 <xss:parameter id="appName"/>
-package com.xkp.android.<xss:e value="appName"/>;
+<xss:parameter id="base_name_space"/>
+
+package <xss:e value="base_name_space"/>.<xss:e value="appName"/>;
 
 import android.content.Context;
 import android.content.res.TypedArray;

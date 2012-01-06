@@ -7,9 +7,9 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="..\..\..\bin\cb\debug\xss" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="..\..\..\bin\cb\debug\" />
-				<Option object_output="..\..\..\bin\cb\debug\obj\" />
+				<Option output="..\..\..\bin\debug\xss" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="..\..\..\bin\debug\" />
+				<Option object_output="..\..\..\bin\debug\obj\" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Option parameters="../../../xss/samples/java/native/console.project.xml" />
@@ -21,9 +21,9 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="..\..\..\bin\cb\release\xss" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="..\..\..\bin\cb\release\" />
-				<Option object_output="..\..\..\bin\cb\release\obj" />
+				<Option output="..\..\..\bin\release\xss" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="..\..\..\bin\release\" />
+				<Option object_output="..\..\..\bin\release\obj" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -40,6 +40,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
+			<Add option="-fpermissive" />
 			<Add option="-DUNICODE" />
 			<Add option="-DTIXML_USE_STL" />
 			<Add option="-DBOOST_NO_MEMBER_TEMPLATE_FRIENDS" />
@@ -50,9 +51,9 @@
 			<Add directory="$(#boost_1_44)" />
 		</Compiler>
 		<Linker>
-			<Add library="libboost_system-mgw45-mt-1_44.a" />
-			<Add library="libboost_filesystem-mgw45-mt-1_44.a" />
-			<Add library="libboost_regex-mgw45-mt-1_44.a" />
+			<Add library="libboost_system$(#boost_1_44.suffix).a" />
+			<Add library="libboost_filesystem$(#boost_1_44.suffix).a" />
+			<Add library="libboost_regex$(#boost_1_44.suffix).a" />
 			<Add directory="$(#boost_1_44.lib)" />
 		</Linker>
 		<Unit filename="stdafx.cpp" />
@@ -80,6 +81,7 @@
 		<Unit filename="..\..\..\include\xs\xs_error.h" />
 		<Unit filename="..\..\..\include\xss\brace_parser.h" />
 		<Unit filename="..\..\..\include\xss\dsl_out.h" />
+		<Unit filename="..\..\..\include\xss\html_parser.h" />
 		<Unit filename="..\..\..\include\xss\lang\base.h" />
 		<Unit filename="..\..\..\include\xss\lang\debug.h" />
 		<Unit filename="..\..\..\include\xss\lang\java.h" />
@@ -107,6 +109,7 @@
 		<Unit filename="..\..\..\src\xs\vm.cpp" />
 		<Unit filename="..\..\..\src\xss\brace_parser.cpp" />
 		<Unit filename="..\..\..\src\xss\dsl_out.cpp" />
+		<Unit filename="..\..\..\src\xss\html_parser.cpp" />
 		<Unit filename="..\..\..\src\xss\lang\base.cpp" />
 		<Unit filename="..\..\..\src\xss\lang\debug.cpp" />
 		<Unit filename="..\..\..\src\xss\lang\java.cpp" />
@@ -114,6 +117,7 @@
 		<Unit filename="..\..\..\src\xss\lang\waxjs.cpp" />
 		<Unit filename="..\..\..\src\xss\language.cpp" />
 		<Unit filename="..\..\..\src\xss\object_reader.cpp" />
+		<Unit filename="..\..\..\src\xss\utils.cpp" />
 		<Unit filename="..\..\..\src\xss\xss_compiler.cpp" />
 		<Unit filename="..\..\..\src\xss\xss_context.cpp" />
 		<Unit filename="..\..\..\src\xss\xss_parser.cpp" />

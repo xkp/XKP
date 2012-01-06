@@ -73,7 +73,7 @@
     method shape()
     {
         if (!it.shape)
-            compiler.error("Invalid bodies must have a shape", object = it.id);
+            compiler.error("Invalid, bodies must have a shape", object = it.id);
 
         if (it.shape == "rect")
         {

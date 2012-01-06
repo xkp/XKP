@@ -4,27 +4,27 @@
 
 using namespace xkp;
 
+struct indices
+{
+  indices(size_t _start, size_t _end):
+    start(_start),
+    end(_end)
+    {
+    }
+
+  indices(const indices& other):
+    start(other.start),
+    end(other.end)
+    {
+    }
+
+  size_t start;
+  size_t end;
+};
+
 //brace_parser
 void brace_parser::parse(const str& what, xss_visitor* visitor)
   {
-    struct indices
-    {
-      indices(size_t _start, size_t _end):
-        start(_start),
-        end(_end)
-        {
-        }
-
-      indices(const indices& other):
-        start(other.start),
-        end(other.end)
-        {
-        }
-
-      size_t start;
-      size_t end;
-    };
-
     std::vector<indices> items;
     bool                 expecting_closed = false;
     size_t               idx              = 0;

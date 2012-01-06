@@ -7,8 +7,23 @@
             <property id="angular_damping" type="float" dont_init="true"/>
 			<property id="linear_damping" type="float" dont_init="true"/>
 		</class>
-        
-        <class id="body" renderer="body.xss"/>
+
+        <class id="body" renderer="body.xss">
+            <property id="density"  type="float" dont_init="true"/>
+            <property id="friction" type="float" dont_init="true"/>
+            <property id="restitution" type="float" dont_init="true"/>
+            <property id="angular_damping" type="float" dont_init="true"/>
+            <property id="linear_damping" type="float" dont_init="true"/>
+            <property id="body_type" type="string" dont_init="true"/>
+            <property id="shape" type="string" dont_init="true"/>
+            <property id="sensor" type="bool" dont_init="true"/>
+            <property id="x" type="float" dont_init="true"/>
+            <property id="y" type="float" dont_init="true"/>
+            <property id="width" type="float" dont_init="true"/>
+            <property id="height" type="float" dont_init="true"/>
+            <property id="radius" type="float" dont_init="true"/>
+            <property id="rotation" type="float" dont_init="true"/>
+        </class>
 
         <class id="spawner" output_id="ms.arcade.Spawner" renderer="spawner.xss">
             <constructor_params>

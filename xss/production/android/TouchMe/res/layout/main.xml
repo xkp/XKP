@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-			<com.xkp.android.TouchMe.XKPLayout 
+			<xkp.android.TouchMe.XKPLayout 
 				xmlns:android="http://schemas.android.com/apk/res/android" 
-				xmlns:xkp="http://schemas.android.com/apk/res/com.xkp.android.TouchMe" 
+				xmlns:xkp="http://schemas.android.com/apk/res/xkp.android.TouchMe" 
 				android:id="@+id/application" 
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
@@ -14,4 +14,4 @@
 				xkp:placement="center"
 			>
 				</Button>
-			</com.xkp.android.TouchMe.XKPLayout>
+			</xkp.android.TouchMe.XKPLayout>

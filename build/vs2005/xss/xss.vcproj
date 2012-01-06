@@ -217,6 +217,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\xss\html_parser.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\xss\lang\java.cpp"
 				>
 			</File>
@@ -315,11 +319,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\base.h"
+				RelativePath="..\..\..\include\xss\lang\base.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\xss\lang\base.h"
+				RelativePath="..\..\..\include\base.h"
 				>
 			</File>
 			<File
@@ -356,6 +360,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\xs\grammar.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\xss\html_parser.h"
 				>
 			</File>
 			<File

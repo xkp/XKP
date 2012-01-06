@@ -153,7 +153,7 @@ struct base_args_renderer : public IArgumentRenderer
     virtual void add(const str& name, XSSType type);
 
     protected:
-      typedef std::vector<std::pair<str, XSSType>> extra_arg_list;
+      typedef std::vector< std::pair<str, XSSType> > extra_arg_list;
 
       XSSContext      ctx_;
       param_list_decl args_;

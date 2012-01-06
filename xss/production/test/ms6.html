@@ -73,7 +73,8 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var btn1;var btn2;var ms61;var ms62;
+            var ms61;
+            var ms62;
             ms6 = Class.create(ms.ui.Component,
         {
     initialize: function($super
@@ -83,7 +84,7 @@ var btn1;var btn2;var ms61;var ms62;
                 );
         this.events = new ms.event.EventHolder(); 
                 this.size(50, 100);
-this.anim1 =
+var anim1;this.anim1 =
 new ms.state.Sequence(
 g_sequence_manager);
         anim1 = this.anim1;
@@ -100,6 +101,7 @@ g_sequence_manager);
                         {t: 10.5, value: 0},
                         ]);
                     this.anim1.addAction(null, "alpha", new ms.state.State(0, 10.5, ____i1));                    
+            var btn1;
 		    this.btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",this.manager, this);
         btn1 = this.btn1;
@@ -117,6 +119,7 @@ btn2.alpha(100);
 	}
 	);
  this.btn1.top(50); 
+            var btn2;
 		    this.btn2 = new ms.ui.Button( 
 	    "images/smile_grin_48.png","images/smile_sad_48.png",this.manager, this);
         btn2 = this.btn2;
