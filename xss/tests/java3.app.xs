@@ -37,6 +37,8 @@ instance t1
 	
     method foobar(int v)
     {
+		t3.run();
+		
         foo = t2.foo + 10;
         t2.bar = foo + bar + "++";
         complex = t2.bar + bar + this.foo + "--";

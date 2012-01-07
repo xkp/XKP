@@ -27,26 +27,51 @@ on render_types(app, bns)
 		}
 		
 		string output_filename = app + "/src/xkp/android/" + app + "/" + ut.output_id + ".java";
-		compiler.xss("script.java.xss", output_file = output_filename, clazz = ut, appName = app, base_name_space = bns, is_type = true);
+		compiler.xss("script.java.xss", output_file = output_filename, clazz = ut, appName = app, base_namespace = bns, is_type = true);
 	
 		output_filename = app + "/res/layout/" + ut.output_id + ".xml";
-		compiler.xss("layout.xml.xss", output_file = output_filename, clazz = ut, appName = app, base_name_space = bns);
+		compiler.xss("layout.xml.xss", output_file = output_filename, clazz = ut, appName = app, base_namespace = bns);
     }
 	
 	compiler.log("### End Rendering Android Types...");
 }
 
-on render_type_initialization(clazz)
+on render_type_initialization(clazz, bns, app)
 {
 	render_imports(clazz);
 }
 
-on render_initialization(clazz)
+on render_initialization(clazz, bns, app)
 {
-	render_imports(clazz);
+	render_imports(clazz, bns);
+	
+	// render xkp widget files
+	for(var inst in clazz.instances)
+	{
+		if(!inst.xkp_files)
+			continue;
+		
+		for(var file in inst.xkp_files)
+		{
+			string src_path = file.src_path;
+			string src_filename = file.src_filename;
+			string dst_path = file.dst_path;
+			string dst_filename = file.dst_filename;
+			
+			if(!dst_path) dst_path = src_path;
+			if(!dst_filename) dst_filename = src_filename;
+			
+			string srcf = compiler.full_path("/copy.defaults" + src_path + src_filename);
+			string dstf = app + dst_path + dst_filename;
+			
+			compiler.log("Rendering widget file: " + srcf);
+			
+			compiler.xss(src = srcf, output_file = dstf, appName = app, base_namespace = bns);
+		}
+	}
 }
 
-method render_imports(clazz)
+method render_imports(clazz, bns)
 {
 	compiler.log("### Begin Rendering Android Imports...");
 
@@ -60,7 +85,7 @@ method render_imports(clazz)
 			continue;
 		
 		//find necessary imports without duplicates
-		if(inst.imports && !inst.xkpview)
+		if(inst.imports)
 		{
 			//TIPS: live is hard, and very long; :)
 			//TODO: it's necessary to implement vector, stack, queue and set containers in vm
@@ -69,9 +94,9 @@ method render_imports(clazz)
 				//TRACE: log
 				//compiler.log("Import: " + i.import);
 				bool found1 = false;
-				for(var imp in imports)
+				for(var imp1 in imports)
 				{
-					if(imp == i.import)
+					if(imp1 == i.import)
 					{
 						found1 = true;
 						break;
@@ -90,6 +115,35 @@ method render_imports(clazz)
 				}
 			}
 		}
+		else
+		if(inst.sub_ns)
+		{
+			string import = bns + "." + inst.sub_ns + "." + inst.type.output_type;
+			
+			//TIPS: live is hard, and very long; :)
+			//TODO: it's necessary to implement vector, stack, queue and set containers in vm
+			//TODO: repeated below script... :(  reimplement this!
+			bool found2 = false;
+			for(var imp2 in imports)
+			{
+				if(imp2 == import)
+				{
+					found2 = true;
+					break;
+				}
+			}
+			
+			if(!found2)
+			{
+				compiler.log("Adding import " + import + " on " + clazz.id);
+				imports += import;
+				
+				out(indent = 0, marker = "imports")
+				{
+					import <xss:e value="import"/>;
+				}
+			}
+		}
 	}
 	
 	compiler.log("### End Rendering Android Imports...");
@@ -97,8 +151,10 @@ method render_imports(clazz)
 
 on copy_default_files(app, bns, plibs)
 {
-	array<string> files = [
-		"/res/values/attrs.xml",
+	// file list for copy
+	array<string> cp_files = [
+		"/res/values/colors.xml",
+		"/res/values/styleable_XKPLayout.xml",
 		"/res/drawable/icon.png",
 		"/res/drawable-ldpi/icon.png",
 		"/res/drawable-mdpi/icon.png",
@@ -108,14 +164,29 @@ on copy_default_files(app, bns, plibs)
 		"/gen/.empty"
 	];
 	
-	for(string f in files)
+	for(string f1 in cp_files)
 	{
-		string srcf = compiler.full_path("/copy.defaults" + f);
-		string dstf = app + f;
+		string srcf1 = compiler.full_path("/copy.defaults" + f1);
+		string dstf1 = app + f1;
 		
-		compiler.log("Copying default file: " + srcf);
+		compiler.log("Copying default file: " + srcf1);
 		
-		compiler.copy_file(src = srcf, dst = dstf);
+		compiler.copy_file(src = srcf1, dst = dstf1);
+	}
+	
+	// file list for render
+	array<string> res_files = [
+		"/src/xkp/android/libs/Layout/XKPLayout.java"
+	];
+	
+	for(string f2 in res_files)
+	{
+		string srcf2 = compiler.full_path("/copy.defaults" + f2);
+		string dstf2 = app + f2;
+		
+		compiler.log("Rendering default file: " + srcf2);
+		
+		compiler.xss(src = srcf2, output_file = dstf2, appName = app, base_namespace = bns);
 	}
 }
 

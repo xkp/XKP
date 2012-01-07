@@ -64,18 +64,18 @@
     <img id="img3" x="300" y="300" width="200" height="200"/>
 
     <!--And their frames, made by individual lines-->
-    <line id="ln1"  x1 ="20" y1="40" x2 ="40" y2="140" lineWidth="1"/>
-    <line id="ln2"  x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
-    <line id="ln3"  x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
-    <line id="ln4"  x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
-    <line id="ln5"  x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
-    <line id="ln6"  x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
-    <line id="ln7"  x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
-    <line id="ln8"  x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
-    <line id="ln9"  x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
-    <line id="ln10" x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
-    <line id="ln11" x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
-    <line id="ln12" x1 ="20" y1="40" x2 ="20" y2="140" lineWidth="1"/>
+    <line id="ln1"  x1 ="20" y1="40" x2 ="40" y2="140" line_width="1"/>
+    <line id="ln2"  x1 ="20" y1="40" x2 ="20" y2="140" line_width="1"/>
+    <line id="ln3"  x1 ="20" y1="40" x2 ="20" y2="140" line_width="1"/>
+    <line id="ln4"  x1 ="20" y1="40" x2 ="20" y2="140" line_width="1"/>
+    <line id="ln5"  x1 ="20" y1="40" x2 ="20" y2="140" line_width="1"/>
+    <line id="ln6"  x1 ="20" y1="40" x2 ="20" y2="140" line_width="1"/>
+    <line id="ln7"  x1 ="20" y1="40" x2 ="20" y2="140" line_width="1"/>
+    <line id="ln8"  x1 ="20" y1="40" x2 ="20" y2="140" line_width="1"/>
+    <line id="ln9"  x1 ="20" y1="40" x2 ="20" y2="140" line_width="1"/>
+    <line id="ln10" x1 ="20" y1="40" x2 ="20" y2="140" line_width="1"/>
+    <line id="ln11" x1 ="20" y1="40" x2 ="20" y2="140" line_width="1"/>
+    <line id="ln12" x1 ="20" y1="40" x2 ="20" y2="140" line_width="1"/>
         
     <!--One animation per image-->
     <frame_anim id="anim1"/>

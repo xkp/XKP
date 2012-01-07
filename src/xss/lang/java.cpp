@@ -192,10 +192,34 @@ str java_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
           }
         else
           {
-            XSSProperty prop = parent->get_property(ei.value);
+            resolve_info left;
+            left.value = parent;
 
-            if (prop)
-              result = prop->output_id();
+            resolve_info right;
+            right.left = &left;
+            if (ctx_->resolve(ei.value, right))
+              {
+                switch (right.what)
+                  {
+                    case RESOLVE_PROPERTY:
+                      {
+                        XSSProperty prop = parent->get_property(ei.value);
+                        if (prop)
+                          result = prop->output_id();
+                        break;
+                      }
+                    case RESOLVE_METHOD:
+                      {
+                        XSSMethod mthd = parent->get_method(ei.value);
+                        if (mthd)
+                          result = mthd->output_id();
+                        break;
+                      }
+                      
+                    default:
+                      assert(false); //trap use case
+                  }
+              }
           }
       }
     else if (operand.is<already_rendered>())

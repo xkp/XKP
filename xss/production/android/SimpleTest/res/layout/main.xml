@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-			<xkp.android.SimpleTest.XKPLayout 
+			<xkp.android.libs.Layout.XKPLayout 
 				xmlns:android="http://schemas.android.com/apk/res/android" 
 				xmlns:xkp="http://schemas.android.com/apk/res/xkp.android.SimpleTest" 
 				android:id="@+id/application" 
@@ -64,4 +64,4 @@
 				android:lines="6"
 			>
 				</EditText>
-			</xkp.android.SimpleTest.XKPLayout>
+			</xkp.android.libs.Layout.XKPLayout>

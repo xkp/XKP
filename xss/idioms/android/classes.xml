@@ -181,6 +181,20 @@
 			<property id="horizontal" type="EProgressStyle" output_xml="?android:attr/progressBarStyleHorizontal"/>
 		</enum>
 		
+		<enum id="EClipForm" output_id="int">
+			<property id="rect" type="EClipForm" output_id="FRM_RECT" output_xml="rect">
+				<get text="XKPClip.FRM_RECT" global="true"/>
+			</property>
+			
+			<property id="circle" type="EClipForm" output_id="FRM_CIRCLE" output_xml="circle">
+				<get text="XKPClip.FRM_CIRCLE" global="true"/>
+			</property>
+			
+			<property id="polygon" type="EClipForm" output_id="FRM_POLYGON" output_xml="polygon">
+				<get text="XKPClip.FRM_POLYGON" global="true"/>
+			</property>
+		</enum>
+		
 		<enum id="EPlacement" output_id="int">
 			<property id="none" type="EPlacement" output_id="PL_NONE" output_xml="none">
 				<get text="XKPLayout.PL_NONE" global="true"/>
@@ -218,6 +232,14 @@
 			</array>
 			
 			<event id="click" output_id="onClick" interface="OnClickListener" def_args="View v" set_handle="setOnClickListener" set_param_hnd="this"/>
+		</class>
+		
+		<class id="IClickInsideFigureListener">
+			<array id="imports">
+				<object import="xkp.android.libs.Graphic.XKPGraphics.OnClickInsideFigureListener"/>
+			</array>
+			
+			<event id="click" output_id="onClickInsideFigure" interface="OnClickInsideFigureListener" def_args="View v" set_handle="setOnClickInsideFigureListener" set_param_hnd="this"/>
 		</class>
 		
 		<class id="ILongClickListener">
@@ -506,7 +528,7 @@
 				<set text="setHint({value})"/>
 			</property>
 			
-			<property id="text_color" type="int" output_id="textColor" ns="android">
+			<property id="text_color" type="int" output_id="textColor" ns="android" res_type="color_reference">
 				<get text="getTextColor()"/>
 				<set text="setTextColor({value})"/>
 			</property>
@@ -658,8 +680,9 @@
 				</array>
 			</method>-->
 			
-			<!-- TODO: do array this objects -->
-			<object id="utils" file_name="setResourceImageView.util.xss"/>
+			<array id="utils">
+				<object name="setResourceImageView" file_name="setResourceImageView.util.xss"/>
+			</array>
 		</class>
 		
 		<class id="imagebutton" super="image" output_id="ImageButton">
@@ -856,9 +879,15 @@
 				</array>
 			</method>-->
 			
-			<!-- TODO: do array this objects -->
-			<object id="utils" file_name="setupTabHost.util.xss"/>
-			<object id="inits" file_name="TabHost.init.xss"/>
+			<array id="utils">
+				<object name="setupTabHost" file_name="setupTabHost.util.xss"/>
+			</array>
+			
+			<array id="inits">
+				<object name="tabHost" file_name="TabHost.init.xss"/>
+			</array>
+			
+			<object id="def_layout" file_name="TabHost.layout.xss"/>
 			
 			<event id="changed" output_id="onTabChanged" interface="TabHost.OnTabChangeListener" def_args="String tabid" set_handle="setOnTabChangedListener" set_param_hnd="this"/>
 		</class>
@@ -924,13 +953,18 @@
 			<import id="IClassImageAdapter"/>
 		</class>
 		
-		<class id="holder" super="IWidget" xkpview="true" output_id="XKPLayout">
+		<class id="holder" super="IWidget" sub_ns="libs.Layout" output_id="XKPLayout">
 		</class>
 		
-		<class id="div" super="holder" xkpview="true" output_id="XKPLayout">
+		<class id="div" super="holder" sub_ns="libs.Layout" output_id="XKPLayout">
 		</class>
 		
-		<class id="switcher" super="IWidget" xkpview="true" output_id="XKPSwitcher">
+		<class id="switcher" super="IWidget" sub_ns="libs.Widget" output_id="XKPSwitcher">
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Widget/" src_filename="XKPSwitcher.java"/>
+				<object src_path="/res/values/" src_filename="styleable_XKPSwitcher.xml"/>
+			</array>
+			
 			<property id="active" type="string" output_id="current" ns="xkp" res_type="id_reference">
 				<get text="getDisplayedChildByName()"/>
 				<set text="setDisplayedChildByName({value})"/>
@@ -942,7 +976,13 @@
 			</property>
 		</class>
 		
-		<class id="replicator" super="IWidget" xkpview="true" output_id="XKPReplicator">
+		<class id="replicator" super="IWidget" sub_ns="libs.Widget" output_id="XKPReplicator">
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Widget/" src_filename="XKPReplicator.java"/>
+				<object src_path="/src/xkp/android/libs/Widget/" src_filename="XKPObject.java"/>
+				<object src_path="/res/values/" src_filename="styleable_XKPReplicator.xml"/>
+			</array>
+			
 			<property id="template" type="string" output_id="template" ns="xkp" res_type="id_reference">
 				<get text="getTemplateResource()"/>
 				<set text="setTemplateResource({value})"/>
@@ -952,24 +992,213 @@
 				<get text="getItems()"/>
 				<set text="setItems({value})"/>
 			</property>
+			
+			<object id="def_layout" file_name="XKPReplicator.layout.xss"/>
 		</class>
 		
-		<!--
-		<class id="resources" no_render="true">
+		<!-- GRAPHIC declarations -->
+		<class id="IGraphic">
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Graphic/" src_filename="XKPGraphics.java"/>
+				<object src_path="/res/values/" src_filename="styleable_XKPGraphics.xml"/>
+			</array>
+			
+			<property id="x1" type="int" output_id="pos_x1" ns="xkp" res_type="dimension">
+				<get text="getX1()"/> 
+				<set text="setX1({value})"/>
+			</property>
+			
+			<property id="y1" type="int" output_id="pos_y1" ns="xkp" res_type="dimension">
+				<get text="getY1()"/>
+				<set text="setY1({value})"/>
+			</property>
+			
+			<property id="x2" type="int" output_id="pos_x2" ns="xkp" res_type="dimension">
+				<get text="getX2()"/>
+				<set text="setX2({value})"/>
+			</property>
+			
+			<property id="y2" type="int" output_id="pos_y2" ns="xkp" res_type="dimension">
+				<get text="getY2()"/>
+				<set text="setY2({value})"/>
+			</property>
+			
+			<property id="x" type="int" output_id="pos_x1" ns="xkp" res_type="dimension">
+				<get text="getX1()"/> 
+				<set text="setX1({value})"/>
+			</property>
+			
+			<property id="y" type="int" output_id="pos_y1" ns="xkp" res_type="dimension">
+				<get text="getY1()"/>
+				<set text="setY1({value})"/>
+			</property>
+			
+			<property id="width" type="int" output_id="pos_width" ns="xkp" res_type="dimension">
+				<get text="getFigureWidth()"/>
+				<set text="setFigureWidth({value})"/>
+			</property>
+			
+			<property id="height" type="int" output_id="pos_height" ns="xkp" res_type="dimension">
+				<get text="getFigureHeight()"/>
+				<set text="setFigureHeight({value})"/>
+			</property>
+			
+			<property id="line_width" type="int" ns="xkp" res_type="dimension">
+				<get text="getLineWidth()"/>
+				<set text="setLineWidth({value})"/>
+			</property>
+			
+			<property id="stroke" type="string" output_id="stroke_color" ns="xkp" res_type="color_reference">
+				<get text="getStrokeColor()"/>
+				<set text="setStrokeColor({value})"/>
+			</property>
+			
+			<property id="fill" type="string" output_id="fill_color" ns="xkp" res_type="color_reference">
+				<get text="getFillColor()"/>
+				<set text="setFillColor({value})"/>
+			</property>
+			
+			<property id="_width" type="int" output_id="layout_width" ns="android" res_type="dimension" default_value="wrap_content">
+				<get text="getWidth()"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setWidth((Integer){value})" global="true"/>
+			</property>
+			
+			<property id="_height" type="int" output_id="layout_height" ns="android" res_type="dimension" default_value="wrap_content">
+				<get text="getHeight()"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setHeight((Integer){value})" global="true"/>
+			</property>
+			
+			<property id="placement" type="EPlacement" ns="xkp">
+				<get text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).getPlacement()" global="true"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setPlacement({value})" global="true"/>
+			</property>
+			
+			<property id="autosize_x" type="bool" ns="xkp">
+				<get text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).getAutoSizeX()" global="true"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setAutoSizeX({value})" global="true"/>
+			</property>
+			
+			<property id="autosize_y" type="bool" ns="xkp">
+				<get text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).getAutoSizeY()" global="true"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setAutoSizeY({value})" global="true"/>
+			</property>
+			
+			<property id="visible" type="EVisibility" output_id="visibility" ns="android">
+				<get text="getVisibility()"/>
+				<set text="setVisibility({value})"/>
+			</property>
+			
+			<property id="enabled" type="bool" ns="android">
+				<get text="isEnabled()"/>
+				<set text="setEnabled({value})"/>
+			</property>
+			
+			<property id="alpha" type="float" ns="android" api_level="11">
+				<get text="getAlpha()"/>
+				<set text="setAlpha({value})"/>
+			</property>
+			
+			<property id="rotation" type="float" ns="android" api_level="11">
+				<get text="getRotation()"/>
+				<set text="setRotation({value})"/>
+			</property>
+			
+			<import id="IClickInsideFigureListener"/>
 		</class>
 		
-		<class id="res_image" no_render="true">
-			<property id="src" type="string"/>
+		<class id="rectangle" super="IGraphic" sub_ns="libs.Graphic" output_id="XKPRectangle">
+			<array id="imports">
+				<object import="xkp.android.libs.Graphic.XKPRectangle"/>
+			</array>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Graphic/" src_filename="XKPRectangle.java"/>
+			</array>
 		</class>
 		
-		<class id="res_audio" no_render="true">
-			<property id="src" type="string"/>
+		<class id="line" super="IGraphic" sub_ns="libs.Graphic" output_id="XKPLine">
+			<array id="imports">
+				<object import="xkp.android.libs.Graphic.XKPLine"/>
+			</array>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Graphic/" src_filename="XKPLine.java"/>
+			</array>
 		</class>
 		
-		<class id="res_video" no_render="true">
-			<property id="src" type="string"/>
+		<class id="circle" super="IGraphic" sub_ns="libs.Graphic" output_id="XKPCircle">
+			<array id="imports">
+				<object import="xkp.android.libs.Graphic.XKPCircle"/>
+			</array>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Graphic/" src_filename="XKPCircle.java"/>
+				<object src_path="/res/values/" src_filename="styleable_XKPCircle.xml"/>
+			</array>
+			
+			<property id="radius" type="int" output_id="radius" ns="xkp" res_type="dimension">
+				<get text="getRadius()"/>
+				<set text="setRadius({value})"/>
+			</property>
 		</class>
-		-->
+		
+		<class id="polygon" super="IGraphic" sub_ns="libs.Graphic" output_id="XKPPolygon">
+			<array id="imports">
+				<object import="xkp.android.libs.Graphic.XKPPolygon"/>
+			</array>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Graphic/" src_filename="XKPPolygon.java"/>
+			</array>
+			
+			<property id="points_count" type="int" no_layout="true">
+				<get text="getPointsCount()"/>
+			</property>
+			
+			<method id="get_point_x" type="int" output_id="getPointX"/>
+			<method id="get_point_y" type="int" output_id="getPointY"/>
+			<method id="set_point_x" type="int" output_id="setPointX"/>
+			<method id="set_point_y" type="int" output_id="setPointY"/>
+			
+			<method id="setPointbyIndex" output_id="setPoint"/>
+			
+			<array id="inits">
+				<object name="polygon" file_name="XKPPolygon.init.xss"/>
+			</array>
+			
+			<object id="def_layout" file_name="XKPPolygon.layout.xss"/>
+		</class>
+		
+		<class id="polygon_point" no_render="true">
+			<property id="x" type="int"/>
+			<property id="y" type="int"/>
+		</class>
+		
+		<class id="point" super="IGraphic" sub_ns="libs.Graphic" output_id="XKPPoint">
+			<array id="imports">
+				<object import="xkp.android.libs.Graphic.XKPPoint"/>
+			</array>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Graphic/" src_filename="XKPPoint.java"/>
+			</array>
+		</class>
+		
+		<class id="clip_area" super="IGraphic" sub_ns="libs.Graphic" output_id="XKPClip">
+			<array id="imports">
+				<object import="xkp.android.libs.Graphic.XKPClip"/>
+			</array>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Graphic/" src_filename="XKPClip.java"/>
+				<object src_path="/res/values/" src_filename="styleable_XKPClip.xml"/>
+			</array>
+			
+			<property id="form" type="EClipForm" output_id="form" ns="xkp">
+				<get text="getForm()"/>
+				<set text="setForm({value})"/>
+			</property>
+		</class>
 		
 	</types>
 	

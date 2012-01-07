@@ -46,7 +46,7 @@
 		[line(js-ui)]
 			<description: />
 			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
-			<properties(js-ui): x1, y1, x2, y2, lineWidth, lineCap />
+			<properties(js-ui): x1, y1, x2, y2, line_width, lineCap />
 
 	<component>
 		[sound(js-ui)]

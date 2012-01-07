@@ -1,9 +1,9 @@
 <xss:parameter id="clazz"/>
 <xss:parameter id="appName"/>
-<xss:parameter id="base_name_space"/>
+<xss:parameter id="base_namespace"/>
 <xss:parameter id="is_type" default="false"/>
 
-package <xss:e value="base_name_space"/>.<xss:e value="appName"/>;
+package <xss:e value="base_namespace"/>.<xss:e value="appName"/>;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +28,8 @@ import android.view.View;
 		}
 	}
 </xss:code>
+
+import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 <xss:marker id="imports"/>
 
 <xss:code>
@@ -56,6 +58,7 @@ import android.view.View;
 	//contents
 	array<string> interfaces = [];
 	array<string> classes	 = [];
+	array<string> utils		 = [];
 	
 	bool class_utils = false;
 	
@@ -118,9 +121,27 @@ import android.view.View;
 				class_utils = true;
 			}
 			
-			object util = inst.utils;
-			string util_file = "class.xss/" + util.file_name;
-			compiler.xss(util_file, marker = "defined_class_util");
+			for(var util in inst.utils)
+			{
+				bool found4 = false;
+				for(var utl in utils)
+				{
+					if(utl == util.name)
+					{
+						found4 = true;
+						break;
+					}
+				}
+				
+				if(!found4)
+				{
+					compiler.log("Adding method " + util.name +" to XKPUtil static class.");
+					utils += util.name;
+					
+					string util_file = "class.xss/" + util.file_name;
+					compiler.xss(util_file, marker = "defined_class_util");
+				}
+			}
 		}
 	
 		//find necessary events interfaces without duplicates
@@ -304,9 +325,11 @@ import android.view.View;
 		
 		if(inst.inits)
 		{
-			object init = inst.inits;
-			string util_file = "class.xss/" + init.file_name;
-			compiler.xss(util_file, it = inst);
+			for(var init in inst.inits)
+			{
+				string init_file = "class.xss/" + init.file_name;
+				compiler.xss(init_file, it = inst);
+			}
 		}
 	}
 	
@@ -339,7 +362,7 @@ void initCallers() {
 	// render instances of other idioms
 	if(!is_type)
 	{
-		compiler.inject("render_initialization", clazz = clazz, bns = base_name_space);
+		compiler.inject("render_initialization", clazz = clazz, bns = base_namespace, app = appName);
 		
 		out(indent = 0)
 		{
@@ -355,7 +378,7 @@ void initCallers() {
     }
 	else
 	{
-		compiler.inject("render_type_initialization", clazz = clazz, bnd = base_name_space);
+		compiler.inject("render_type_initialization", clazz = clazz, bnd = base_namespace, app = appName);
 	}
 	
 	// render other idiom scripts

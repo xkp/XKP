@@ -6,6 +6,7 @@ import android.view.View;
 			import android.content.res.TypedArray;
 			import android.util.AttributeSet;
 			import android.view.LayoutInflater;
+import xkp.android.libs.Layout.XKPLayout;
 						import android.widget.ImageView;
 						import android.view.View.OnClickListener;
 						import android.view.View.OnLongClickListener;

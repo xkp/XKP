@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<xkp.android.libs.Layout.XKPLayout 
+				xmlns:android="http://schemas.android.com/apk/res/android" 
+				xmlns:xkp="http://schemas.android.com/apk/res/xkp.android.Figures2D" 
+				android:id="@+id/application" 
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				xkp:placement="client"
+			>
+				<xkp.android.libs.Layout.XKPLayout android:id="@+id/div1"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				<xkp.android.libs.Graphic.XKPCircle android:id="@+id/c1"
+				xkp:pos_x1="150dp"
+				xkp:pos_y1="200dp"
+				xkp:radius="60dp"
+				xkp:fill_color="@color/cyan"
+				xkp:stroke_color="@color/yellow"
+				xkp:line_width="3dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</xkp.android.libs.Graphic.XKPCircle>
+				<xkp.android.libs.Graphic.XKPRectangle android:id="@+id/r1"
+				xkp:pos_x1="200dp"
+				xkp:pos_y1="50dp"
+				xkp:pos_width="60dp"
+				xkp:pos_height="90dp"
+				xkp:fill_color="@color/green"
+				xkp:stroke_color="@color/white"
+				xkp:line_width="5dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</xkp.android.libs.Graphic.XKPRectangle>
+				<xkp.android.libs.Graphic.XKPPolygon android:id="@+id/p1"
+				xkp:fill_color="@color/pink"
+				xkp:stroke_color="@color/brown"
+				xkp:line_width="3dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</xkp.android.libs.Graphic.XKPPolygon>
+				</xkp.android.libs.Layout.XKPLayout>
+			</xkp.android.libs.Layout.XKPLayout>

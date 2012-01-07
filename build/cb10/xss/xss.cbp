@@ -12,7 +12,7 @@
 				<Option object_output="..\..\..\bin\debug\obj\" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="../../../xss/samples/java/native/console.project.xml" />
+				<Option parameters="../../xss/tests/java3.project.xml" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-D_DEBUG" />

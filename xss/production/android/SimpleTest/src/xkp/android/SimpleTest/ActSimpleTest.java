@@ -4,6 +4,7 @@ import java.util.Arrays;
 import android.view.View;
 			import android.app.Activity;
 			import android.os.Bundle;
+import xkp.android.libs.Layout.XKPLayout;
 						import android.widget.TextView;
 						import android.text.method.KeyListener;
 						import android.view.View.OnClickListener;

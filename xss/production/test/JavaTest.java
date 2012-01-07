@@ -109,11 +109,11 @@ else
 }
 String rmthd;
 rmthd = application.app_test(10);
-String thd = application.app_test(2);
+String thd = application.mthd_application_app_test(2);
 Object mthd;
-mthd = instance1.test0(10);
-mthd = instance1.test0(10, "a", -2);
-mthd = instance1.test0(2 * 5, "b" + "a", 1);
+mthd = instance1.mthd_instance1_test0(10);
+mthd = instance1.mthd_instance1_test0(10, "a", -2);
+mthd = instance1.mthd_instance1_test0(2 * 5, "b" + "a", 1);
 			}
 	public static void main(String[] args) {
 				application.create();

@@ -1,0 +1,24 @@
+<project 
+	entry_point="../../../idioms/android/main.xss" 
+	language="java" 
+	target="figures2d.xml" >
+	
+	<idiom src="../../../idioms/android/classes.xml"/>
+	
+	<path>
+		<output path="../../../production/android/"/>
+	</path>
+	
+	<!--
+		DOC: 'android_api_level' is a API level version of exported Android project
+		DOC: 'android_project_type' is a type of output project that would be any of 
+			"eclipse", "ant" or "script" values
+		
+		TODO: tab character configuration with number of spaces for resolve indent problem
+	-->
+	
+	<options 
+		event_scope="instance" 
+		android_api_level="4" 
+		android_project_type="eclipse"/>
+</project>

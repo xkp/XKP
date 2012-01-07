@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-			<xkp.android.KitchenSink.XKPLayout 
+			<xkp.android.libs.Layout.XKPLayout 
 				xmlns:android="http://schemas.android.com/apk/res/android" 
 				xmlns:xkp="http://schemas.android.com/apk/res/xkp.android.KitchenSink" 
 				android:id="@+id/application" 
@@ -12,24 +12,23 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 			>
-						<LinearLayout
-							android:orientation="vertical"
-							android:layout_width="fill_parent"
-							android:layout_height="fill_parent"
-							android:padding="5dp"
-							>
-							<TabWidget
-								android:id="@android:id/tabs"
-								android:layout_width="fill_parent"
-								android:layout_height="wrap_content" 
-								>
-							</TabWidget>
-							<FrameLayout
-								android:id="@android:id/tabcontent"
-								android:layout_width="fill_parent"
-								android:layout_height="fill_parent"
-								>
-				<xkp.android.KitchenSink.XKPLayout android:id="@+id/__div1"
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:padding="5dp"
+				>
+				<TabWidget
+					android:id="@android:id/tabs"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content" 
+					/>
+				<FrameLayout
+					android:id="@android:id/tabcontent"
+					android:layout_width="fill_parent"
+					android:layout_height="fill_parent"
+					>
+				<xkp.android.libs.Layout.XKPLayout android:id="@+id/__div1"
 				android:padding="5dp"
 				xkp:placement="client"
 				android:layout_width="wrap_content"
@@ -84,7 +83,7 @@
 				android:layout_height="wrap_content"
 			>
 				</CheckBox>
-				</xkp.android.KitchenSink.XKPLayout>
+				</xkp.android.libs.Layout.XKPLayout>
 				<ScrollView android:id="@+id/__scroller1"
 				android:padding="5dp"
 				xkp:placement="client"
@@ -165,7 +164,7 @@
 			>
 				</ImageView>
 				</ScrollView>
-				<xkp.android.KitchenSink.XKPLayout android:id="@+id/__div2"
+				<xkp.android.libs.Layout.XKPLayout android:id="@+id/__div2"
 				android:padding="5dp"
 				xkp:placement="client"
 				android:layout_width="wrap_content"
@@ -217,8 +216,8 @@
 				android:layout_height="wrap_content"
 			>
 				</SeekBar>
-				</xkp.android.KitchenSink.XKPLayout>
-							</FrameLayout>
-						</LinearLayout>
+				</xkp.android.libs.Layout.XKPLayout>
+				</FrameLayout>
+			</LinearLayout>
 				</TabHost>
-			</xkp.android.KitchenSink.XKPLayout>
+			</xkp.android.libs.Layout.XKPLayout>

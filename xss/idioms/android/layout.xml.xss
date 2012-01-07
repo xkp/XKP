@@ -1,6 +1,6 @@
 <xss:parameter id="clazz"/>
 <xss:parameter id="appName"/>
-<xss:parameter id="base_name_space"/>
+<xss:parameter id="base_namespace"/>
 
 <?xml version="1.0" encoding="utf-8"?>
 <xss:code>
@@ -8,9 +8,9 @@
 	{
 		out(indent = 0)
 		{
-			<<xss:e value="base_name_space"/>.<xss:e value="appName"/>.XKPLayout 
+			<<xss:e value="base_namespace"/>.libs.Layout.XKPLayout 
 				xmlns:android="http://schemas.android.com/apk/res/android" 
-				xmlns:xkp="http://schemas.android.com/apk/res/<xss:e value="base_name_space"/>.<xss:e value="appName"/>" 
+				xmlns:xkp="http://schemas.android.com/apk/res/<xss:e value="base_namespace"/>.<xss:e value="appName"/>" 
 				android:id="@+id/<xss:e value="clazz.output_id"/>" 
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
@@ -45,13 +45,13 @@
 			return;
 		
 		string strViewName = "";
-		if(view.xkpview)
-			strViewName = base_name_space + "." + appName + ".";
+		if(view.sub_ns)
+			strViewName = base_namespace + "." + view.sub_ns + ".";
 		
 		if(view.type)
 		{
 			if(view.type.user_defined)
-				strViewName = base_name_space + "." + appName + ".";
+				strViewName = base_namespace + "." + appName + ".";
 			strViewName += view.type.output_id;
 		}
 		
@@ -68,7 +68,7 @@
 			out(indent = ind)
 			{
 				xmlns:android="http://schemas.android.com/apk/res/android" 
-				xmlns:xkp="http://schemas.android.com/apk/res/<xss:e value="base_name_space"/>.<xss:e value="appName"/>" 
+				xmlns:xkp="http://schemas.android.com/apk/res/<xss:e value="base_namespace"/>.<xss:e value="appName"/>" 
 			}
 		}
 		
@@ -79,77 +79,20 @@
 			>
 		}
 		
-		// generate all children recursively
+		if(view.def_layout)
+		{
+			object customLayout = view.def_layout;
+			string customLayout_file = "class.xss/" + customLayout.file_name;
+			compiler.xss(customLayout_file, view = view, caller = this, ind = ind);
+			// how return a value from this xss?
+			// when value is returned, it determine if render view.children...
+		}
+		else
 		if(view.children)
 		{
-			//TODO: in vm implement condition equals to c/c++,...
-			//if(view.type && view.type.id == "replicator")
-			
-			bool problematicView = false;
-			if(view.type)
-			{
-				// customize problematic component
-				if(view.type.id == "replicator")
-				{
-					//TODO: each child of replicator is assumed as template
-					//      these are outputs to xml layout file separated.
-					//      how make this?
-					for(var ch1 in view.children)
-						generate_view(ch1, view, ind + 2);
-						
-					//TODO: the name of output file is a id of component
-					//TODO: the structure of this new xml layout file is:
-					//<?xml version="1.0" encoding="utf-8"?>
-					//<merge
-					//	xmlns:android="http://schemas.android.com/apk/res/android"
-					//	xmlns:xkp="http://schemas.android.com/apk/res/<xss:e value="base_name_space"/>.switcher">
-					//  <!-- inside the view childs -->
-					//</merge>
-					
-					problematicView = true;
-				}
-				else
-				if(view.type.id == "tabcontrol")
-				{
-					out(indent = ind + 1)
-					{
-						<LinearLayout
-							android:orientation="vertical"
-							android:layout_width="fill_parent"
-							android:layout_height="fill_parent"
-							android:padding="5dp"
-							>
-							<TabWidget
-								android:id="@android:id/tabs"
-								android:layout_width="fill_parent"
-								android:layout_height="wrap_content" 
-								>
-							</TabWidget>
-							<FrameLayout
-								android:id="@android:id/tabcontent"
-								android:layout_width="fill_parent"
-								android:layout_height="fill_parent"
-								>
-					}
-					
-					for(var ch2 in view.children)
-						generate_view(ch2, view, ind + 4);
-					
-					out(indent = ind + 1)
-					{
-							</FrameLayout>
-						</LinearLayout>
-					}
-					
-					problematicView = true;
-				}
-			}
-			
-			if(!problematicView)
-			{
-				for(var child in view.children)
-					generate_view(child, view, ind + 2);
-			}
+			// generate all children recursively
+			for(var child in view.children)
+				generate_view(child, view, ind + 2);
 		}
 		
 		if(view.id != application.id)
@@ -217,23 +160,18 @@
 			{
 				assignValue = "@+id/" + prop.value;
 			}
-			//TODO: like classes.xml idiom on property res_id of image view
-			/*else
-			if(prop.res_type == "resource")
+			else
+			if(prop.res_type == "color_reference")
 			{
-				string assign = "UNKNOW RESOURCE";
-				
-				for(var i in android_resources.instances)
+				if(prop.value is int)
 				{
-					if(i.id == prop.value)
-					{
-						assign = i.assignValue;
-						break;
-					}
+					assignValue = "#" + prop.value;
 				}
-				
-				assignValue = assign;
-			}*/
+				else
+				{
+					assignValue = "@color/" + prop.value;
+				}
+			}
 			else
 			if(prop.res_type == "drawable" || prop.res_type == "raw")
 			{
@@ -248,14 +186,6 @@
 				int rpos = pos + 1;
 				int npos = sz - pos - 1;
 				string fn_img = String.substr(simg, rpos, npos);
-				
-				//string srcf = project_path + prop.value;
-				//string dstf = output_path + fn_img;
-				
-				//TIPS: for now, file are copy in resources idioms
-				//coping resource
-				//compiler.log("Copying resource file " + srcf);
-				//compiler.copy_file(src = srcf, dst = dstf);
 				
 				pos = String.find_last(fn_img, ".");
 				assignValue = "@" + prop.res_type + "/" + String.substr(fn_img, 0, pos);
@@ -342,7 +272,7 @@
 	{
 		out(indent = 0)
 		{
-			</<xss:e value="base_name_space"/>.<xss:e value="appName"/>.XKPLayout>
+			</<xss:e value="base_namespace"/>.libs.Layout.XKPLayout>
 		}
 	}
 </xss:code>

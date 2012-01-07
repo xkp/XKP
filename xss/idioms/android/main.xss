@@ -7,7 +7,7 @@
 	var appOptions = compiler.options;
 	string appOutputPath = compiler.output_path();
 	
-	string base_name_space = "xkp.android";
+	string base_namespace = "xkp.android";
 	string appName = "DefaultAndroidApplication";
 	if(application.name)
 		appName = application.name;
@@ -29,67 +29,38 @@
 		}
 	}
 	
-	bool bSwitcher = false;
-	bool bReplicator = false;
-	
 	for(var inst in android.instances)
 	{
-		string id = inst.id;
-		if(id == "")
-			id = compiler.genid(inst.type.id);
+		string new_output_id = inst.id;
+		if(new_output_id == "")
+			new_output_id = compiler.genid(inst.type.id);
 		
-		//inst.output_id = "priv_" + id;
-		inst.output_id = id;
-		
-		if(inst.type.id == "switcher")
-			bSwitcher = true;
-		
-		if(inst.type.id == "replicator")
-			bReplicator = true;
+		inst.output_id = new_output_id;
 	}
 	
-	//inject idiom events
-	compiler.inject("render_types", app = appName, bns = base_name_space);
+	//inject idiom event for render types
+	compiler.inject("render_types", app = appName, bns = base_namespace);
 	
 	//render project files
 	string output_filename;
 	output_filename = appName + "/" + "AndroidManifest.xml";
-	compiler.xss("AndroidManifest.xml.xss", output_file = output_filename, appName, base_name_space, minAPILevel, targetAPILevel);
+	compiler.xss("AndroidManifest.xml.xss", output_file = output_filename, appName, base_namespace, minAPILevel, targetAPILevel);
 	
 	output_filename = appName + "/src/xkp/android/" + appName + "/Act" + appName + ".java";
-	compiler.xss("script.java.xss", output_file = output_filename, clazz = android, appName = appName, base_name_space = base_name_space, is_type = false);
-	
-	output_filename = appName + "/src/xkp/android/" + appName + "/XKPLayout.java";
-	compiler.xss("xkpLayout.java.xss", output_file = output_filename, appName = appName, base_name_space = base_name_space);
+	compiler.xss("script.java.xss", output_file = output_filename, clazz = android, appName = appName, base_namespace = base_namespace, is_type = false);
 	
 	output_filename = appName + "/res/values/strings.xml";
 	compiler.xss("stringValues.xml.xss", output_file = output_filename);
 	
-	//inject copy of default files events
+	//inject idiom event for copy default files
 	string path_libs = "/src/xkp/android/libs/";
 	string abs_path_libs = appName + path_libs;
-	compiler.inject("copy_default_files", app = appName, bns = base_name_space, plibs = abs_path_libs);
+	compiler.inject("copy_default_files", app = appName, bns = base_namespace, plibs = abs_path_libs);
 	
 	output_filename = appName + "/res/layout/main.xml";
-	compiler.xss("layout.xml.xss", output_file = output_filename, appName = appName, base_name_space = base_name_space, clazz = application);
+	compiler.xss("layout.xml.xss", output_file = output_filename, appName = appName, base_namespace = base_namespace, clazz = application);
 	
-	//TODO: implement these two components (replicator & switch) with script for component like this
-	//      maybe with a property inside components
-	if(bReplicator)
-	{
-		output_filename = appName + "/src/xkp/android/" + appName + "/XKPReplicator.java";
-		compiler.xss("xkpReplicator.java.xss", output_file = output_filename, appName);
-		
-		output_filename = appName + "/src/xkp/android/" + appName + "/XKPObject.java";
-		compiler.xss("xkpObject.java.xss", output_file = output_filename, appName);
-	}
-	
-	if(bSwitcher)
-	{
-		output_filename = appName + "/src/xkp/android/" + appName + "/XKPSwitcher.java";
-		compiler.xss("xkpSwitcher.java.xss", output_file = output_filename, appName);
-	}
-	
+	// appOptions.android_project_type = enum {eclipse, script, ant, others, ...}
 	if(appOptions.android_project_type == "eclipse")
 	{
 		output_filename = appName + "/" + ".project";

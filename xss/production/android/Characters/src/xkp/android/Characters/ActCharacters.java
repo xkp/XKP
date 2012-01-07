@@ -4,6 +4,7 @@ import java.util.Arrays;
 import android.view.View;
 			import android.app.Activity;
 			import android.os.Bundle;
+import xkp.android.libs.Layout.XKPLayout;
 		public class ActCharacters 
 						extends Activity
 {

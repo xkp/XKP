@@ -32,7 +32,8 @@ log: -- Rendering instance: application
 log: Properties size: 0
 log: Methods size: 0
 log: Events size: 0
-log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/values/attrs.xml
+log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/values/colors.xml
+log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
 log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/drawable/icon.png
 log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
 log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
@@ -40,6 +41,7 @@ log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/a
 log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/assets/.empty
 log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/bin/.empty
 log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/gen/.empty
+log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
 log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Caller.java
 log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Assign.java
 log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Every.java
@@ -61,6 +63,7 @@ Success are greateful
 log: Rendering Android project...
 log: API Level = 4
 log: ### Begin Rendering Android Types...
+log: Adding method setResourceImageView to XKPUtil static class.
 log: ### Begin Rendering Android Imports...
 log: Adding import android.widget.ImageView on character
 log: Adding import android.view.View.OnClickListener on character
@@ -131,7 +134,8 @@ log: -- Rendering instance: application
 log: Properties size: 0
 log: Methods size: 0
 log: Events size: 0
-log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/values/attrs.xml
+log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/values/colors.xml
+log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
 log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/drawable/icon.png
 log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
 log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
@@ -139,6 +143,7 @@ log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms
 log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/assets/.empty
 log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/bin/.empty
 log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/gen/.empty
+log: Rendering default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
 
 Success are greateful
 ===[ contacts.project.xml ]================
@@ -151,14 +156,14 @@ log: ### End Rendering Android Types...
 log: Adding interface OnClickListener on android
 log: Adding interface OnCheckedChangeListener on android
 log: ### Begin Rendering Android Imports...
-log: Adding import android.widget.Button on android
-log: Adding import android.text.method.KeyListener on android
 log: Adding import android.view.View.OnClickListener on android
 log: Adding import android.view.View.OnLongClickListener on android
 log: Adding import android.view.MotionEvent on android
 log: Adding import android.view.View.OnTouchListener on android
 log: Adding import android.view.View.OnKeyListener on android
 log: Adding import android.view.View.OnFocusChangeListener on android
+log: Adding import android.widget.Button on android
+log: Adding import android.text.method.KeyListener on android
 log: Adding import android.widget.TextView on android
 log: Adding import android.widget.EditText on android
 log: Adding import android.widget.CheckBox on android
@@ -166,6 +171,8 @@ log: Adding import android.widget.CompoundButton on android
 log: Adding import android.widget.CompoundButton.OnCheckedChangeListener on android
 log: Adding import android.widget.RadioButton on android
 log: ### End Rendering Android Imports...
+log: Rendering widget file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/libs/Widget/XKPSwitcher.java
+log: Rendering widget file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/values/styleable_XKPSwitcher.xml
 log: -- Rendering instance: 
 log: Properties size: 2
 log: Methods size: 0
@@ -256,7 +263,8 @@ log: Methods size: 1
 log: Rendering method: getSwitchText
 log: Events size: 1
 log: Rendering event: creation
-log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/values/attrs.xml
+log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/values/colors.xml
+log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
 log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/drawable/icon.png
 log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
 log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
@@ -264,6 +272,88 @@ log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/a
 log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/assets/.empty
 log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/bin/.empty
 log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/gen/.empty
+log: Rendering default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
+
+Success are greateful
+===[ figures2d.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: ### Begin Rendering Android Types...
+log: ### End Rendering Android Types...
+log: Adding interface OnClickInsideFigureListener on android
+log: ### Begin Rendering Android Imports...
+log: Adding import android.view.View.OnClickListener on android
+log: Adding import android.view.View.OnLongClickListener on android
+log: Adding import android.view.MotionEvent on android
+log: Adding import android.view.View.OnTouchListener on android
+log: Adding import android.view.View.OnKeyListener on android
+log: Adding import android.view.View.OnFocusChangeListener on android
+log: Adding import xkp.android.libs.Graphic.XKPCircle on android
+log: Adding import xkp.android.libs.Graphic.XKPGraphics.OnClickInsideFigureListener on android
+log: Adding import xkp.android.libs.Graphic.XKPRectangle on android
+log: Adding import xkp.android.libs.Graphic.XKPPolygon on android
+log: ### End Rendering Android Imports...
+log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Graphic/XKPCircle.java
+log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/values/styleable_XKPCircle.xml
+log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Graphic/XKPGraphics.java
+log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/values/styleable_XKPGraphics.xml
+log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Graphic/XKPRectangle.java
+log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Graphic/XKPGraphics.java
+log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/values/styleable_XKPGraphics.xml
+log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Graphic/XKPPolygon.java
+log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Graphic/XKPGraphics.java
+log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/values/styleable_XKPGraphics.xml
+log: -- Rendering instance: div1
+log: Properties size: 0
+log: Methods size: 0
+log: Events size: 0
+log: -- Rendering instance: c1
+log: Properties size: 6
+log: Methods size: 0
+log: Events size: 1
+log: Rendering event: click
+log: -- Rendering instance: r1
+log: Properties size: 7
+log: Methods size: 0
+log: Events size: 1
+log: Rendering event: click
+log: -- Rendering instance: p1
+log: Properties size: 3
+log: Methods size: 0
+log: Events size: 1
+log: Rendering event: click
+log: -- Rendering instance: point1
+log: Properties size: 2
+log: Methods size: 0
+log: Events size: 0
+log: -- Rendering instance: point2
+log: Properties size: 2
+log: Methods size: 0
+log: Events size: 0
+log: -- Rendering instance: point3
+log: Properties size: 2
+log: Methods size: 0
+log: Events size: 0
+log: -- Rendering instance: point4
+log: Properties size: 2
+log: Methods size: 0
+log: Events size: 0
+log: -- Rendering instance: application
+log: Properties size: 0
+log: Methods size: 0
+log: Events size: 0
+log: Copying default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/values/colors.xml
+log: Copying default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
+log: Copying default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/drawable/icon.png
+log: Copying default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
+log: Copying default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
+log: Copying default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
+log: Copying default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/assets/.empty
+log: Copying default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/bin/.empty
+log: Copying default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/gen/.empty
+log: Rendering default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
 
 Success are greateful
 ===[ gallery.project.xml ]================
@@ -306,7 +396,8 @@ log: -- Rendering instance: application
 log: Properties size: 0
 log: Methods size: 0
 log: Events size: 0
-log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/values/attrs.xml
+log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/values/colors.xml
+log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
 log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/drawable/icon.png
 log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
 log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
@@ -314,6 +405,7 @@ log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/an
 log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/assets/.empty
 log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/bin/.empty
 log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/gen/.empty
+log: Rendering default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
 
 Success are greateful
 ===[ kitchensink.project.xml ]================
@@ -323,6 +415,8 @@ log: Rendering Android project...
 log: API Level = 4
 log: ### Begin Rendering Android Types...
 log: ### End Rendering Android Types...
+log: Adding method setupTabHost to XKPUtil static class.
+log: Adding method setResourceImageView to XKPUtil static class.
 log: ### Begin Rendering Android Imports...
 log: Adding import android.view.ViewGroup on android
 log: Adding import android.widget.TabHost on android
@@ -470,7 +564,8 @@ log: -- Rendering instance: application
 log: Properties size: 0
 log: Methods size: 0
 log: Events size: 0
-log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/values/attrs.xml
+log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/values/colors.xml
+log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
 log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/drawable/icon.png
 log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
 log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
@@ -478,6 +573,7 @@ log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idiom
 log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/assets/.empty
 log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/bin/.empty
 log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/gen/.empty
+log: Rendering default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
 
 Success are greateful
 ===[ simple.project.xml ]================
@@ -533,7 +629,8 @@ log: -- Rendering instance: application
 log: Properties size: 0
 log: Methods size: 0
 log: Events size: 0
-log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/values/attrs.xml
+log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/values/colors.xml
+log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
 log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/drawable/icon.png
 log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
 log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
@@ -541,6 +638,7 @@ log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms
 log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/assets/.empty
 log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/bin/.empty
 log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/gen/.empty
+log: Rendering default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
 
 Success are greateful
 ===[ touchme.project.xml ]================
@@ -577,7 +675,8 @@ log: -- Rendering instance: application
 log: Properties size: 0
 log: Methods size: 0
 log: Events size: 0
-log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/values/attrs.xml
+log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/values/colors.xml
+log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
 log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/drawable/icon.png
 log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
 log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
@@ -585,6 +684,7 @@ log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/an
 log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/assets/.empty
 log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/bin/.empty
 log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/gen/.empty
+log: Rendering default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
 
 Success are greateful
 ===[ 3js-ms.project.xml ]================(Tests)
@@ -844,7 +944,8 @@ return a;
 
 
 		public String mthd__foobar(Integer v) {
-			t1.foo = t2.foo + 10;
+			t3.real_run();
+t1.foo = t2.foo + 10;
 t2.set_bar(t1.foo + t1.get_bar() + "++");
 set_complex(t1, t2.get_bar() + t1.get_bar() + this.foo + "--");
 set_some_int(t1, t1.get_some_int() - 1);
@@ -1483,12 +1584,12 @@ log: Rendering property: app
 log: Methods size: 0
 log: Events size: 0
 log: Oh noes... a PROPERTYError [idiom] Sequences expect a property to modify
-2569expression = app.target2569file = d:/xkp/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
+2314expression = app.target2314file = d:/xkp/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
 
 ===[ json1.project.xml ]================(Tests)
 
 Error [reader] Invalid XML file
-2569xml error = Error document empty.2569line = 02569column = 02569file = d:/xkp/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
+2314xml error = Error document empty.2314line = 02314column = 02314file = d:/xkp/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
 
 ===[ ms1.project.xml ]================(Tests)
 

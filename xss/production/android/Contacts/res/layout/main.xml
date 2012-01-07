@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-			<xkp.android.Contacts.XKPLayout 
+			<xkp.android.libs.Layout.XKPLayout 
 				xmlns:android="http://schemas.android.com/apk/res/android" 
 				xmlns:xkp="http://schemas.android.com/apk/res/xkp.android.Contacts" 
 				android:id="@+id/application" 
@@ -7,7 +7,7 @@
 				android:layout_height="fill_parent"
 				xkp:placement="client"
 			>
-				<xkp.android.Contacts.XKPLayout android:id="@+id/__div1"
+				<xkp.android.libs.Layout.XKPLayout android:id="@+id/__div1"
 				android:layout_height="50dp"
 				xkp:placement="top"
 				android:layout_width="wrap_content"
@@ -26,14 +26,14 @@
 				android:layout_height="wrap_content"
 			>
 				</Button>
-				</xkp.android.Contacts.XKPLayout>
-				<xkp.android.Contacts.XKPSwitcher android:id="@+id/swtStates"
+				</xkp.android.libs.Layout.XKPLayout>
+				<xkp.android.libs.Widget.XKPSwitcher android:id="@+id/swtStates"
 				xkp:current="@+id/divAdd"
 				xkp:placement="client"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 			>
-				<xkp.android.Contacts.XKPLayout android:id="@+id/divAdd"
+				<xkp.android.libs.Layout.XKPLayout android:id="@+id/divAdd"
 				xkp:placement="client"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -84,8 +84,8 @@
 				android:layout_width="wrap_content"
 			>
 				</Button>
-				</xkp.android.Contacts.XKPLayout>
-				<xkp.android.Contacts.XKPLayout android:id="@+id/divFind"
+				</xkp.android.libs.Layout.XKPLayout>
+				<xkp.android.libs.Layout.XKPLayout android:id="@+id/divFind"
 				xkp:placement="client"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -130,8 +130,8 @@
 				android:layout_height="45dp"
 			>
 				</EditText>
-				</xkp.android.Contacts.XKPLayout>
-				<xkp.android.Contacts.XKPLayout android:id="@+id/divAbout"
+				</xkp.android.libs.Layout.XKPLayout>
+				<xkp.android.libs.Layout.XKPLayout android:id="@+id/divAbout"
 				xkp:placement="client"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -152,6 +152,6 @@
 				android:layout_height="wrap_content"
 			>
 				</TextView>
-				</xkp.android.Contacts.XKPLayout>
-				</xkp.android.Contacts.XKPSwitcher>
-			</xkp.android.Contacts.XKPLayout>
+				</xkp.android.libs.Layout.XKPLayout>
+				</xkp.android.libs.Widget.XKPSwitcher>
+			</xkp.android.libs.Layout.XKPLayout>

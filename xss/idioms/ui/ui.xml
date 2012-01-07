@@ -226,7 +226,7 @@
                 <set text="set_y2({value})"/>
             </property>
 
-            <property id="lineWidth"  type="float">
+            <property id="line_width"  type="float">
                 <get text="lineWidth"/>
                 <set text="set_lineWidth({value})"/>
             </property>

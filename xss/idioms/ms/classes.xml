@@ -70,7 +70,7 @@
             <property name="x2"         type="float"  set_fn="set_x2"/>
             <property name="y1"         type="float"  set_fn="set_y1"/>
             <property name="y2"         type="float"  set_fn="set_y2"/>
-            <property name="lineWidth"  type="float"  set_fn="set_lineWidth"/>
+            <property name="line_width"  type="float"  set_fn="set_lineWidth"/>
             <property name="lineCap"    type="string" set_fn="set_lineCap"/>
         </properties>
     </class>
