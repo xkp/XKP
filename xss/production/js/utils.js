@@ -1,3 +1,5 @@
+var canvas_position = {x: 8, y: 8};
+
 function importjs(dir, file) {
 	var bodyID = document.getElementsByTagName("body")[0];
 	var newScript = document.createElement('script');

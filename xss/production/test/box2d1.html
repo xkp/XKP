@@ -77,7 +77,7 @@
                     fixDef.shape = new b2CircleShape(20/g_world_scale);
             fixDef.isSensor = false;
                 bodyDef.position.Set(10, 10);
-            current_body = g_world.CreateBody(bodyDef);
+            current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
              fixDef.density = 1;
              fixDef.friction = 0.5;
@@ -87,7 +87,7 @@
                     fixDef.shape.SetAsBox(20/(2*g_world_scale), 2/(2*g_world_scale));
             fixDef.isSensor = false;
                 bodyDef.position.Set(10, 15.1300001);
-            current_body = g_world.CreateBody(bodyDef);
+            current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
          //setup debug draw
          var debugDraw = new b2DebugDraw();

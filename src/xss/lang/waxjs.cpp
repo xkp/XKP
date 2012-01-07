@@ -1,4 +1,5 @@
 #include <xss/lang/waxjs.h>
+#include <xss/dsl/sql.h>
 
 #include <boost/algorithm/string/replace.hpp>
 
@@ -10,6 +11,7 @@ const str SCannotForkOnIteration("Cannot perform asynchronic operations inside l
 const str SCodeAfterReturn("Unreachable code");
 const str SBadHTML("Errors parsing html");
 const str SMissingHTMLTag("Missing declared tag");
+const str SUnknownDSL("Unkown dsl");
 
 #define CHECK_ACTIVE  if (found_) return; curr_++;
 
@@ -151,7 +153,21 @@ struct wax_splitter : code_visitor
 
     virtual void dsl_(dsl& info)
       {
-        assert(false); //not yet
+        CHECK_ACTIVE
+
+        XSSDSL dsl = ctx_->get_xss_dsl(info.name);
+        if (!dsl)
+          {
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", SUnknownDSL);
+            error.add("dsl", info.name);
+            xss_throw(error);
+          }
+
+        bool asynch = XSSObject(dsl)->get<bool>("asynch", false);
+        if (asynch)
+          cut(XSSMethod());
       }
 
     virtual void dispatch(stmt_dispatch& info)
@@ -299,6 +315,11 @@ struct waxjs_internal_renderer : public js_code_renderer
   };
 
 //waxjs_lang
+void waxjs_lang::init_application_context(XSSContext ctx)
+  {
+    ctx->register_xss_dsl("sql", XSSDSL(new dsl_sql));
+  }
+
 variant waxjs_lang::compile_code(code& cde, param_list_decl& params, XSSContext ctx)
   {
     return reference<waxjs_code_renderer>(new waxjs_code_renderer(cde, params, ctx));
@@ -495,6 +516,10 @@ str waxjs_code_renderer::render_split(CodeSplit fork, CodeSplit parent)
 
         result << split_return(fork);
       }
+    else if (st.is<dsl>())
+      {
+        result << split_dsl(fork, split_name);
+      }
     else
       {
         assert(false);
@@ -668,6 +693,25 @@ str waxjs_code_renderer::split_expression(CodeSplit fork)
     result << "\n});";
 
     return result.str();
+  }
+
+str waxjs_code_renderer::split_dsl(CodeSplit fork, const str& callback)
+  {
+    dsl dd = fork->target.get_stament(fork->split_idx - 1);
+    XSSDSL dsl = ctx_->get_xss_dsl(dd.name);
+    if (!dsl)
+      {
+        param_list error;
+        error.add("id", SLanguage);
+        error.add("desc", SUnknownDSL);
+        error.add("dsl", dd.name);
+        xss_throw(error);
+      }
+
+    XSSContext ctx(new xss_context(ctx_));
+    ctx->register_symbol(RESOLVE_CONST, "#wax_callback", callback);
+
+    return dsl->render(dd, ctx);
   }
 
 str waxjs_code_renderer::split_return(CodeSplit fork)

@@ -337,7 +337,7 @@ void ConsoleOutput::out(const str& cat, const str& text, param_list* params)
         for(int i = 0; i < params->size(); i++)
           {
             variant param = params->get(i);
-            std::cout << '\n\t' << params->get_name(i) << " = " << xss_utils::var_to_string(param);
+            std::cout << "\n\t" << params->get_name(i) << " = " << xss_utils::var_to_string(param);
           }
       }
   }
@@ -352,7 +352,7 @@ void ConsoleOutput::error(param_list& data)
     str id   = variant_cast<str>(data.get("id"), "");
     str desc = variant_cast<str>(data.get("desc"), "");
 
-    std::cout << "Error [" << id << "] " << desc << '\n';
+    std::cout  << "\nError [" << id << "] " << desc;
 
     for(size_t i = 0; i < data.size(); i++)
       {
@@ -363,7 +363,7 @@ void ConsoleOutput::error(param_list& data)
         variant value = data.get(i);
         str     value_str = xss_utils::var_to_string(value);
 
-        std::cout  << '\n\t' << name << " = " << value_str;
+        std::cout  << "\n\t" << name << " = " << value_str;
       }
   }
 
@@ -1219,6 +1219,18 @@ str xss_compiler::file(fs::path path)
     return load_file(pp);
   }
 
+bool xss_compiler::application_object(XSSObject obj)
+  {
+    XSSObject p = obj->parent();
+    while (p)
+      {
+        if (p->id() == "application")
+          return true;
+        p = p->parent();
+      }
+    return false;
+  }
+
 void xss_compiler::push_renderer(XSSRenderer renderer)
   {
     if (renderers_.empty())
@@ -1745,7 +1757,7 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
           path = src;
 
         xs_container results;
-		    compile_xs_file(src, results);
+		    compile_xs_file(src, results, ctx);
 
         //first we ought to register the type before processing
         std::vector<xs_class> source_classes;
@@ -1904,7 +1916,11 @@ void xss_compiler::read_application(const str& app_file)
         XSSApplicationRenderer app_renderer = *it;
 
         //read the application
-        xss_object_reader reader(app_renderer->context());
+        XSSContext ctx  = app_renderer->context();
+        Language   lang = ctx->get_language();
+        lang->init_application_context(ctx);
+
+        xss_object_reader reader(ctx);
         XSSObject app_data;
         try
           {
@@ -1935,7 +1951,7 @@ void xss_compiler::read_application(const str& app_file)
         fs::path src_path = base_path_ / src;
         if (!src.empty() && !code_compiled)
           {
-		        compile_xs_file(src_path, code);
+		        compile_xs_file(src_path, code, ctx);
             code_compiled = true;
           }
 
@@ -2235,9 +2251,12 @@ void xss_compiler::read_object_array(fs::path file, XSSContext ctx, std::vector<
       }
   }
 
-void xss_compiler::compile_xs_file(fs::path file, xs_container& result)
+void xss_compiler::compile_xs_file(fs::path file, xs_container& result, XSSContext ctx)
   {
-    xs_compiler compiler;
+    std::vector<str> dsls;
+    ctx->collect_xss_dsls(dsls);
+
+    xs_compiler compiler(dsls);
 		try
       {
         compiler.compile_xs(load_file(file.string()), result); //td: errors

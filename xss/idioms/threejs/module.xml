@@ -78,12 +78,10 @@
 		
 		<class id="object3d">			
             <property id="color" type="string" use_plain_value="true">
-				<set text="materials[ 0 ].color.setHex({value})"/>
+				<set text="materials[0].color.setHex({value})"/>
             </property>
 			<property id="texture" type="string" use_plain_value="true">
-				<set text="materials[ 0 ] = new THREE.MeshBasicMaterial({
-						map:THREE.ImageUtils.loadTexture(streamer.get_resource({value}).asset),
-						})"/>
+				<set text="materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource({value}).asset)"/>
             </property>			
 			<property id="alpha" type="float" use_plain_value="true">	
 				<get text="alpha"/>
@@ -100,12 +98,10 @@
 	
 		<class id="transform" output_id="THREE.Object3D" heritable="true">
 			<property id="texture" type="string" use_plain_value="true">
-				<set text="children[0].materials[ 0 ] = new THREE.MeshBasicMaterial({
-						map:THREE.ImageUtils.loadTexture(streamer.get_resource({value}).asset),
-						})"/>
+				<set text="set_transform_image({path}, {value})" global = "true"/>
             </property>
 			<property id="material" type="string" use_plain_value="true">
-				<set text="children[0].materials[ 0 ] = {value}"/>
+				<set text="set_transform_material({path}, {value})" global = "true"/>
             </property>
 			<property id="position" type="vector3d"/>
 			<property id="rotation" type="rotation_class"/>

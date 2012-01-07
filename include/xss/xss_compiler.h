@@ -207,6 +207,7 @@ namespace xkp
         bool        is_type(variant v);
         str         instantiate(variant v);
         str         file(fs::path path);
+        bool        application_object(XSSObject obj);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -258,7 +259,7 @@ namespace xkp
 
         str   load_file(fs::path file);
         void  read_object_array(fs::path file, XSSContext ctx, std::vector<XSSObject>& classes_data);
-		    void  compile_xs_file(fs::path file, xs_container& result);
+		    void  compile_xs_file(fs::path file, xs_container& result, XSSContext ctx);
 		};
 
   class xss_string
@@ -311,6 +312,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<XSSObject,  2>("analyze_expression",  &xss_compiler::analyze_expression);
         method_<bool,       1>("is_type",             &xss_compiler::is_type);
         method_<str,        1>("instantiate",         &xss_compiler::instantiate);
+        method_<bool,       1>("application_object", &xss_compiler::application_object);
       }
   };
 

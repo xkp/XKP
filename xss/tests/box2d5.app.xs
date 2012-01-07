@@ -1,14 +1,9 @@
 
-on btn1.drag(x, y)
+on mouse_drag()
 {
-	btn1.x = x - btn1.w/2;
-	btn1.y = y - btn1.h/2;
+	
 }
-on btn2.drag(x, y)
-{
-	btn2.x = x - btn1.w/2;
-	btn2.y = y - btn1.h/2;
-}
+
 on keydown(keycode)
 {
 	if (keycode == LEFT_ARROW)

@@ -1,19 +1,13 @@
-property is_ctrl_down = false;
-property is_shift_down = false;
+property is_quake_camera = false;
 
-on keydown(keycode){
+on keyup(keycode){
 	if(keycode == SHIFT) {
-		is_shift_down = true;
-		is_ctrl_down = false;
-	}
-	if(keycode == CTRL) {
-		is_ctrl_down = true;
-		is_shift_down = false;
-	}
+		is_quake_camera = !is_quake_camera;
+	}	
 }
 
 on switch_cameras(){
-	if ( is_ctrl_down ) 
+	if ( is_quake_camera ) 
 	{
 		set_active_camera( camera_1 );			
 	}else

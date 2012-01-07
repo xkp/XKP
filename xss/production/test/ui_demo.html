@@ -22,6 +22,7 @@ var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
+		var streamer = new ms.streamer.Streamer();
 		if(drawingCanvas){
 			var client =
 			{
@@ -107,13 +108,27 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
+		application.events.dispatch("updates", []);	
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var main;var test1;var lbl0;var lbl1;var btn1;var test2;var pb1;var btn2;var btn3;var lbl2;var btnNext;var btnPrev;var stateBtn;var lbl3;
+            var main;
+            var test1;
+            var lbl0;
+            var lbl1;
+            var btn1;
+            var test2;
+            var pb1;
+            var btn2;
+            var btn3;
+            var lbl2;
+            var btnNext;
+            var btnPrev;
+            var stateBtn;
+            var lbl3;
                 application.clicks = 0;
 	var ev_parent = this;
 	application.events.addListener("keydown", function(keycode)

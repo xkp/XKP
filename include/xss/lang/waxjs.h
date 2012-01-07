@@ -35,8 +35,9 @@ struct code_split
 
 struct waxjs_lang : public js_lang
   {
+    virtual void    init_application_context(XSSContext ctx);
     virtual variant compile_code(code& cde, param_list_decl& params, XSSContext ctx);
-  };
+};
 
 struct waxjs_code_renderer : public base_code_renderer
   {
@@ -65,6 +66,7 @@ struct waxjs_code_renderer : public base_code_renderer
       str split_if(CodeSplit fork);
       str split_variable(CodeSplit fork, const str& code_after);
       str split_expression(CodeSplit fork);
+      str split_dsl(CodeSplit fork, const str& callback);
       str split_return(CodeSplit fork);
       str split_and_render(code& c, CodeSplit parent);
       str split_method(XSSMethod method);

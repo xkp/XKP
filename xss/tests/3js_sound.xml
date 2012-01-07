@@ -2,8 +2,8 @@
 
 	<resources>	
 	
-		<audio id="res_sound_1" src="sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg"/>
-		<audio id="res_sound_2" src="sounds/358232_j_s_song.ogg"/>
+		<audio id="res_sound_1" src="sounds/applauselong.wav"/>
+		<audio id="res_sound_2" src="sounds/forest.wav"/>
 
 	</resources>
 

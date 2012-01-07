@@ -17,6 +17,7 @@ const str SEmptyArrayType("Arrays must have an inner type");
 const str SCannotResolve("Cannot resolve");
 const str SArrayMismatch("An array has been declared that already exists on the super class as a non array");
 const str SPropertyAlreadyExists("Trying to add a property that already exists");
+const str SDupDSL("Duplicate dsl");
 
 str xss_utils::var_to_string(variant& v)
   {
@@ -241,6 +242,46 @@ fs::path xss_context::path()
 void xss_context::register_dsl(const str& id, DslLinker dsl)
   {
     dsls_.insert(dsl_list_pair(id, dsl));
+  }
+
+void xss_context::register_xss_dsl(const str& id, XSSDSL dsl)
+  {
+    xss_dsl_list::iterator it = xss_dsls_.find(id);
+    if (it != xss_dsls_.end())
+      {
+        param_list error;
+        error.add("id", SContextError);
+        error.add("desc", SDupDSL);
+        error.add("dsl", id);
+        xss_throw(error);
+      }
+
+    xss_dsls_.insert(xss_dsl_pair(id, dsl));
+  }
+
+XSSDSL xss_context::get_xss_dsl(const str& id)
+  {
+    xss_dsl_list::iterator it = xss_dsls_.find(id);
+    if (it != xss_dsls_.end())
+      return it->second;
+
+    if (parent_)
+      return parent_->get_xss_dsl(id);
+
+    return XSSDSL();
+  }
+
+void xss_context::collect_xss_dsls(std::vector<str>& dsls)
+  {
+    xss_dsl_list::iterator it = xss_dsls_.begin();
+    xss_dsl_list::iterator nd = xss_dsls_.end();
+    for(; it != nd; it++)
+      {
+        dsls.push_back(it->first);          
+      }
+
+    if (parent_)
+      parent_->collect_xss_dsls(dsls);
   }
 
 void xss_context::add_parameter(const str& id, XSSType type)

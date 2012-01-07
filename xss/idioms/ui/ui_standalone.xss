@@ -44,6 +44,7 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+
 application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
 		
@@ -69,7 +70,7 @@ function start(resolution)
             compiler.inject("render_update");
         </xss:code>
 		
-		<xss:marker id="update"/>
+		application.events.dispatch("updates", []);	
 
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);

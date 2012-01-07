@@ -25,6 +25,7 @@ var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
+		var streamer = new ms.streamer.Streamer();
 		if(drawingCanvas){
 			var client =
 			{
@@ -172,13 +173,16 @@ function start(resolution)
             }
             bb = bb.GetNext();
         }
+		application.events.dispatch("updates", []);	
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var __img1;var __img2;var __img3;
+            var __img1;
+            var __img2;
+            var __img3;
             smiley_ball = Class.create(ms.ui.Image,
         {
     initialize: function($super
@@ -200,9 +204,10 @@ var __img1;var __img2;var __img3;
                     fixDef.shape = new b2CircleShape(21.5/g_world_scale);
             fixDef.isSensor = false;
                 bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
-            current_body = g_world.CreateBody(bodyDef);
+            current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;
+			current_body.mouse_joint = true;
+                cmp.physics = current_body;			
                 cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
@@ -293,9 +298,9 @@ window.onload = function()
                     fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
             fixDef.isSensor = false;
                 bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
-            current_body = g_world.CreateBody(bodyDef);
+            current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;
+                cmp.physics = current_body;			
                 cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
@@ -324,9 +329,9 @@ window.onload = function()
                     fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
             fixDef.isSensor = false;
                 bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
-            current_body = g_world.CreateBody(bodyDef);
+            current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;
+                cmp.physics = current_body;			
                 cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
@@ -355,9 +360,9 @@ window.onload = function()
                     fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
             fixDef.isSensor = false;
                 bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
-            current_body = g_world.CreateBody(bodyDef);
+            current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;
+                cmp.physics = current_body;			
                 cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }

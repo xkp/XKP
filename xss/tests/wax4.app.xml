@@ -1,0 +1,3 @@
+<application src="wax4.app.xs">
+    <service id="service1"/>
+</application>

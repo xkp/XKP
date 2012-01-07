@@ -24,6 +24,7 @@ const str SIncrementOperatorOnlyTop("Increment operators cannot be used as part 
 const str SCannotResolveParam("Cannot resolve constructor parameter");
 const str SCannotResolveCtorProperty("Cannot resolve constructor property");
 const str STooManyParamsInCtor("Too many params in constructor");
+const str SUnknownDSL("Unkown dsl");
 
 //variable_gather
 variable_gather::variable_gather(XSSContext ctx):
@@ -470,7 +471,17 @@ void base_code_renderer::expression_(stmt_expression& info)
 
 void base_code_renderer::dsl_(dsl& info)
   {
-		assert(false); //td: there is some stuff to implement here... later
+    XSSDSL dsl = ctx_->get_xss_dsl(info.name);
+    if (!dsl)
+      {
+        param_list error;
+        error.add("id", SLanguage);
+        error.add("desc", SUnknownDSL);
+        error.add("dsl", info.name);
+        xss_throw(error);
+      }
+
+    dsl->render(info, ctx_);
   }
 
 void base_code_renderer::dispatch(stmt_dispatch& info)
@@ -1253,6 +1264,10 @@ bool base_lang::can_cast(XSSType left, XSSType right)
   }
 
 void base_lang::init_context(XSSContext ctx)
+  {
+  }
+
+void base_lang::init_application_context(XSSContext ctx)
   {
   }
 

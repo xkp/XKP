@@ -6,7 +6,9 @@
 		<image src="images/test4.png"/>
 		<image src="images/test5.png"/>
 	</resources>
-		
+
+	<label id="lbl0" x="200" y="75" font="12px Verdana" caption="Click anywhere to create a randomly positioned plane"/>
+	
 	<scene>		 
 		<camera id="camera_1" fov="45" aspect="1.5" near="1" far="10000">
 			<position z="1000"/>			

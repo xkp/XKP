@@ -22,6 +22,7 @@ var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
+		var streamer = new ms.streamer.Streamer();
 		if(drawingCanvas){
 			var client =
 			{
@@ -59,13 +60,18 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
+		application.events.dispatch("updates", []);	
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var div1;var c1;var r1;var p1;var btn;
+            var div1;
+            var c1;
+            var r1;
+            var p1;
+            var btn;
                 application.x = null;
                 application.y = null;
 window.onload = function() 

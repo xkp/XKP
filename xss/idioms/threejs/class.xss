@@ -35,7 +35,8 @@
 	if(super_transform)
 		out() 
 		{ 		
-			var <xss:e v="clazz.id"/> = new THREE.Object3D();		
+			var <xss:e v="clazz.id"/> = new THREE.Object3D();
+			<xss:e v="clazz.id"/>.events = new ms.event.EventHolder();
 		}
 	else{
 		string clazz_renderer = clazz.type.renderer;
@@ -52,7 +53,7 @@
 	}
     compiler.xss("../common-js/instance.xss", clazz);    
     for(var inst in clazz.instances)
-    {
+    {		
         string inst_renderer = inst.type.renderer;
         if (!inst_renderer)
         {
@@ -64,6 +65,8 @@
         }            
         string inst_path = compiler.idiom_path(inst, inst_renderer);
         compiler.xss(inst_path, inst);
+		if(!inst.dont_render)
+			compiler.xss("../common-js/instance.xss", inst);
         out()
         {
             <xss:e v="clazz.id"/>.addChild(<xss:e v="inst.output_id"/>);

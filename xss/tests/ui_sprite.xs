@@ -14,31 +14,23 @@ on girl.click()
 
 on keydown(keycode)
 {
-	if(keycode == LEFT_ARROW){
-		key_press = true;
-		monster.x -= 1;					
-	}
-	if(keycode == RIGHT_ARROW){	
-		key_press = true;
-		monster.x += 1;							
-	}
+	if(keycode == LEFT_ARROW)
+		key_press = true;		
 }
 
 on keyup(keycode)
 {
-	if(keycode == LEFT_ARROW){
+	if(keycode == LEFT_ARROW)
 		key_press = false;		
-	}
-	if(keycode == RIGHT_ARROW){
-		key_press = false;				
-	}
 }
 
-on update()
+on updates()
 {	
 	girl.animate("g_idle");	
-	if(key_press)
+	if(key_press){
 		monster.animate("m_running");
+		monster.x -= 0.2;
+	}
 	else
 		monster.animate("m_idle");
 }

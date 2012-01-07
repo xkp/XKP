@@ -93,6 +93,7 @@
     <ClInclude Include="..\..\..\include\types.h" />
     <ClInclude Include="..\..\..\include\xs.h" />
     <ClInclude Include="..\..\..\include\xss\brace_parseer.h" />
+    <ClInclude Include="..\..\..\include\xss\dsl\sql.h" />
     <ClInclude Include="..\..\..\include\xss\dsl_out.h" />
     <ClInclude Include="..\..\..\include\xss\html_parser.h" />
     <ClInclude Include="..\..\..\include\xss\language.h" />
@@ -127,6 +128,7 @@
     <ClCompile Include="..\..\..\src\dynamic_objects.cpp" />
     <ClCompile Include="..\..\..\src\xs.cpp" />
     <ClCompile Include="..\..\..\src\xss\brace_parser.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\sql.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl_out.cpp" />
     <ClCompile Include="..\..\..\src\xss\html_parser.cpp" />
     <ClCompile Include="..\..\..\src\xss\language.cpp" />

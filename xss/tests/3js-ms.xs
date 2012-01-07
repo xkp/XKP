@@ -1,4 +1,4 @@
-method init()
+on init()
 {
     anim_1.target = cylinder_1;
 	fade_1.target = cylinder_1;		

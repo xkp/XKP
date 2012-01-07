@@ -11,7 +11,7 @@
 		<lambert_material id="cube1_material" color="Math.random() * 0xffffff" shading="flat_shading"/>
 
 	</materials>
-	
+		
 	<scene>	
 	
 		<quake_camera id="camera_1" fov="50" aspect="1.5" near="1" far="10000" 

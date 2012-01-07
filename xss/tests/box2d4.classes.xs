@@ -25,7 +25,8 @@ class bullet : img
         if (who is floor)
         {
             this.RemoveFromWorld();
-	        Sound.play("sounds/boom.wav");
+			if(sound.active)
+				Sound.play("sounds/boom.wav");
         }
     }
 }

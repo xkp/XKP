@@ -25,6 +25,7 @@ var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
+		var streamer = new ms.streamer.Streamer();
 		if(drawingCanvas){
 			var client =
 			{
@@ -178,13 +179,16 @@ function start(resolution)
             }
             bb = bb.GetNext();
         }
+		application.events.dispatch("updates", []);	
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var btn1;var btn2;var __floor1;
+            var btn1;
+            var btn2;
+            var __floor1;
             my_body = Class.create(ms.ui.Image,
         {
     initialize: function($super
@@ -206,9 +210,10 @@ var btn1;var btn2;var __floor1;
                     fixDef.shape = new b2CircleShape(21.5/g_world_scale);
             fixDef.isSensor = false;
                 bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
-            current_body = g_world.CreateBody(bodyDef);
+            current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;
+			current_body.mouse_joint = true;
+                cmp.physics = current_body;			
                 cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
@@ -255,9 +260,9 @@ var btn1;var btn2;var __floor1;
                     fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
             fixDef.isSensor = false;
                 bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
-            current_body = g_world.CreateBody(bodyDef);
+            current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;
+                cmp.physics = current_body;			
                 cmp.events.addListener('moved', update_body_position);
                 current_body.host = cmp;
                 }
@@ -278,6 +283,11 @@ var btn1;var btn2;var __floor1;
                 this.init();
             },
 });
+	var ev_parent = this;
+	application.events.addListener("mouse_drag", function()
+	{    
+	}
+	);
 	var ev_parent = this;
 	application.events.addListener("keydown", function(keycode)
 	{    
@@ -331,24 +341,10 @@ window.onload = function()
 		    btn1 = new my_body( 
 	    "images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
         btn1 = btn1;
-	var ev_parent = this;
-	btn1.events.addListener("drag", function(x,y)
-	{    
-		btn1.set_x(x - btn1.w / 2);
-btn1.set_y(y - btn1.h / 2);
-	}
-	);
                 btn1.rect(300, 250, 50, 50);
 		    btn2 = new my_body( 
 	    "images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
         btn2 = btn2;
-	var ev_parent = this;
-	btn2.events.addListener("drag", function(x,y)
-	{    
-		btn2.set_x(x - btn1.w / 2);
-btn2.set_y(y - btn1.h / 2);
-	}
-	);
                 btn2.rect(100, 250, 50, 50);
 		    __floor1 = new floor( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);

@@ -16,14 +16,14 @@ ms.event.EventHolder = Class.create(
         if (handlerList)
         {
             for(var i = 0; i < handlerList.length; i++)
-                handlerList[i].apply(this, eventData);
-        }
+				handlerList[i].apply(this, eventData);
+		}
     },
 });
 
 ms.event.ThreeEventManager = Class.create(
 {
-	initialize: function()
+	initialize: function()     
 	{		
 		this.intersects = [];
 		this.dragging 		= false;
@@ -31,6 +31,8 @@ ms.event.ThreeEventManager = Class.create(
 	},		
 	mouseup: function(x, y)
 	{
+		x = x - canvas_position.x;
+		y = y - canvas_position.y;
 		this.mouse_pressed = false;
 	    if (this.dragging)
 	    {
@@ -49,6 +51,8 @@ ms.event.ThreeEventManager = Class.create(
 	},	
 	mousedown: function(x, y)
 	{
+		x = x - canvas_position.x;
+		y = y - canvas_position.y;
 		this.mouse_pressed = true;
 		application.events.dispatch("mousedown", [x, y]); 
 		if(this.intersects.length > 0)
@@ -56,7 +60,12 @@ ms.event.ThreeEventManager = Class.create(
 	},	
 	mousemove: function(x, y)
 	{
+		x = x - canvas_position.x;
+		y = y - canvas_position.y;
 		this.intersects = this.get_3js_intersects(x, y);
+		if(this.intersects.length > 0)			
+			if(!(this.intersects[0].object.parent instanceof THREE.Scene))
+				this.intersects[0].object = this.intersects[0].object.parent;
 		if(this.mouse_pressed)
 			this.dragging = true;
 	    if (this.dragging)
@@ -70,7 +79,7 @@ ms.event.ThreeEventManager = Class.create(
 		objects = scene.objects;		
 		for ( i = 0; i < objects.length; i++ ) {
 				object = objects[i];
-				if ( object instanceof THREE.Mesh) 
+				if (object.events) 
 					object.events.dispatch("mouseout", [x, y]);
 		}
 		if(this.intersects.length > 0){
@@ -95,7 +104,7 @@ ms.event.ThreeEventManager = Class.create(
 
 	get_3js_intersects: function(x, y){
 		this.intersects = [];
-		var vector = new THREE.Vector3( ( (x-8) / app_width ) * 2 - 1, - ( (y-8) / app_height ) * 2 + 1, 0.5 );
+		var vector = new THREE.Vector3( ( x / app_width ) * 2 - 1, - ( y / app_height ) * 2 + 1, 0.5 );
 		projector = new THREE.Projector();
 		projector.unprojectVector( vector, active_camera );
 		var ray = new THREE.Ray( active_camera.position, vector.subSelf( active_camera.position ).normalize() );

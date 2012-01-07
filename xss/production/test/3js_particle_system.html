@@ -33,9 +33,22 @@ var g_delta = 0.0;
 var drawingCanvas = renderer.domElement;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
+            var lbl0;
 var application = {};
 application.events = new ms.event.EventHolder();
-// --------RESOURCES---------
+		var streamer = new ms.streamer.Streamer();
+		if(drawingCanvas){
+			var client =
+			{
+				width: window.innerWidth,
+				height: window.innerHeight,
+				canvas: drawingCanvas
+			};
+			var ui = new ms.ui.Manager(client, streamer);
+			var g_ui = ui;
+			var g_ui_root = ui.root;
+		}
+	// --------RESOURCES---------
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
@@ -47,7 +60,7 @@ if (g_elapsed < 0)
 else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
-application.events.dispatch("animate", []);	
+application.events.dispatch("updates", []);	
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
@@ -72,7 +85,7 @@ new THREE.Camera(
                 application.mouse_x = null;
                 application.mouse_y = null;
 	var ev_parent = this;
-	application.events.addListener("animate", function()
+	application.events.addListener("updates", function()
 	{    
 		camera_1.position.x = camera_1.position.x + (application.mouse_x - camera_1.position.x) * 0.0500000007;
 camera_1.position.y = camera_1.position.y + (-application.mouse_y - camera_1.position.y) * 0.0500000007;
@@ -88,6 +101,24 @@ application.mouse_y = y - app_height / 2;
 if(ui)
 {
 	ui.load_resources(function(){		
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX, ev.clientY);                  
+	};	
+		    lbl0 = new ms.ui.Label( 
+	    "12px Verdana",g_ui_root.manager, g_ui_root);
+        lbl0 = lbl0;
+                lbl0.set_color(White);
+                lbl0.text("Move mouse over the scene to control the camera's rotation");
+                lbl0.position(350, 50);
 		g_ui.fill_background = false;
 	});
 }

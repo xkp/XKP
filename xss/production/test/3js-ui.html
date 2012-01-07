@@ -32,9 +32,13 @@ var g_delta = 0.0;
 var drawingCanvas = renderer.domElement;
 var app_width = 600;
 var app_height = 600;
-var lbl0;var btn1;var lbl1;var lbl2;
+            var lbl0;
+            var btn1;
+            var lbl1;
+            var lbl2;
 var application = {};
 application.events = new ms.event.EventHolder();
+		var streamer = new ms.streamer.Streamer();
 		var streamer = new ms.streamer.Streamer();
 		if(drawingCanvas){
 			var client =
@@ -74,7 +78,7 @@ if (g_elapsed < 0)
 else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
-application.events.dispatch("animate", []);	
+application.events.dispatch("updates", []);	
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
@@ -162,7 +166,7 @@ application.y_target_rotation = application.y_target_rotation_on_mouse_down + (a
 	}
 	);
 	var ev_parent = this;
-	application.events.addListener("animate", function()
+	application.events.addListener("updates", function()
 	{    
 		set_rotation_y(cube_1.rotation, get_rotation_y(cube_1.rotation) + (application.x_target_rotation - get_rotation_y(cube_1.rotation)) * 0.200000003);
 set_rotation_z(plane_1.rotation, get_rotation_y(cube_1.rotation));
@@ -211,7 +215,7 @@ if(ui)
 		    lbl0 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
         lbl0 = lbl0;
-                lbl0.text("click smile to count");
+                lbl0.text("Click smile to count");
                 lbl0.position(240, 75);
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
@@ -229,12 +233,12 @@ application.clicks = application.clicks + 1;
 		    lbl1 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
         lbl1 = lbl1;
-                lbl1.text("use arrows to move smile and");
+                lbl1.text("Use arrows to move smile");
                 lbl1.position(240, 400);
 		    lbl2 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
         lbl2 = lbl2;
-                lbl2.text("drag mouse to spin the cube");
+                lbl2.text("Drag mouse to spin the cube");
                 lbl2.position(240, 420);
 		g_ui.fill_background = false;
 	});

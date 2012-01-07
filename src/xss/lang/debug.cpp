@@ -309,6 +309,10 @@ void debug_language::init_context(XSSContext ctx)
   {
   }
 
+void debug_language::init_application_context(XSSContext ctx)
+  {
+  }
+
 XSSType debug_language::resolve_array_type(XSSType type, const str& at_name, XSSContext ctx)
   {
     XSSType new_type(new xss_type);

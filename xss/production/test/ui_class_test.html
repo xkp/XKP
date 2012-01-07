@@ -22,6 +22,7 @@ var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
+		var streamer = new ms.streamer.Streamer();
 		if(drawingCanvas){
 			var client =
 			{
@@ -53,13 +54,14 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
+		application.events.dispatch("updates", []);	
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var img1;
+            var img1;
             my_image = Class.create(ms.ui.Image,
         {
     initialize: function($super

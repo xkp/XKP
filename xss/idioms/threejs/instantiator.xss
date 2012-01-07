@@ -5,4 +5,4 @@ create_<xss:e v="type.id"/>(
 <xss:code>
 compiler.xss("constructor_args.xss", type, args);
 </xss:code>
-);
+)

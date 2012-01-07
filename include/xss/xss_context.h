@@ -17,6 +17,7 @@ class   xss_event;
 class   xss_method;
 struct  xss_context;
 class		xss_type;
+class   xss_dsl;
 
 //interfaces
 struct ILanguage;
@@ -32,6 +33,7 @@ typedef reference<xss_context>	        XSSContext;
 typedef reference<xss_event>		        XSSEvent;
 typedef reference<xss_method>		        XSSMethod;
 typedef reference<xss_type>		          XSSType;
+typedef reference<xss_dsl>		          XSSDSL;
 typedef reference<ILanguage>		        Language;
 typedef reference<ICodeRenderer>	      CodeRenderer;
 typedef reference<IExpressionRenderer>  ExpressionRenderer;
@@ -196,6 +198,12 @@ class xss_type : public xss_object
       DynamicArray foreign_instances_;
   };
 
+class xss_dsl : public xss_object
+  {
+    public:
+      virtual str render(dsl& info, XSSContext ctx) = 0;
+  };
+
 //the language interface
 struct IRenderer
   {
@@ -226,7 +234,8 @@ struct ILanguage
     virtual str     resolve_this(XSSContext ctx)																			                  = 0;
     virtual str     resolve_separator(XSSObject lh = XSSObject())										                    = 0;
     virtual bool    can_cast(XSSType left, XSSType right)                                               = 0;
-    virtual void    init_context(XSSContext ctx)                                                        = 0;
+    virtual void    init_context(XSSContext ctx)                                                        = 0; //td: !!!
+    virtual void    init_application_context(XSSContext ctx)                                            = 0;
     virtual XSSType resolve_array_type(XSSType type, const str& at_name, XSSContext ctx)                = 0;
     virtual str     render_value(XSSType type, variant value)                                           = 0;
     virtual str     property_get(XSSProperty prop, const str& path, XSSContext ctx)                     = 0;
@@ -327,6 +336,9 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       code_context  get_compile_context();
       fs::path      path();
       void          register_dsl(const str& id, DslLinker dsl);
+      void          register_xss_dsl(const str& id, XSSDSL dsl);
+      XSSDSL        get_xss_dsl(const str& id);
+      void          collect_xss_dsls(std::vector<str>& dsls);
       void          add_parameter(const str& id, XSSType type);
       void          set_args(param_list& args);
       param_list&   get_args();
@@ -367,6 +379,12 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
 
       bool got_dsls_;
       void collect_dsl();
+    protected:  
+      //XSS dsls, they are different than code dsls
+      typedef std::map<str, XSSDSL>  xss_dsl_list;
+      typedef std::pair<str, XSSDSL> xss_dsl_pair;
+
+      xss_dsl_list xss_dsls_;
   };
 
 //these are basically copies of their xs counterpart, but offer xss stuff, like generating

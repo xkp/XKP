@@ -33,9 +33,23 @@ var g_delta = 0.0;
 var drawingCanvas = renderer.domElement;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
+            var lbl0;
+            var lbl1;
 var application = {};
 application.events = new ms.event.EventHolder();
 		var streamer = new ms.streamer.Streamer();
+		var streamer = new ms.streamer.Streamer();
+		if(drawingCanvas){
+			var client =
+			{
+				width: window.innerWidth,
+				height: window.innerHeight,
+				canvas: drawingCanvas
+			};
+			var ui = new ms.ui.Manager(client, streamer);
+			var g_ui = ui;
+			var g_ui_root = ui.root;
+		}
 	// --------RESOURCES---------
         var def_package_items = [];
                 def_package_items.push(
@@ -81,58 +95,55 @@ if (g_elapsed < 0)
 else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
-application.events.dispatch("animate", []);	
+application.events.dispatch("updates", []);	
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var materials = 
-new Array(
-);
-var __basic_material1 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test1.png').asset),
-	});
-	materials.push(__basic_material1);
-var __basic_material2 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test1.png').asset),
-	});
-	materials.push(__basic_material2);
-                set_material_alpha(__basic_material2, 20);
-var __basic_material3 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test2.png').asset),
-	});
-	materials.push(__basic_material3);
-var __basic_material4 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test2.png').asset),
-	});
-	materials.push(__basic_material4);
-                set_material_alpha(__basic_material4, 20);
-var __basic_material5 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test3.png').asset),
-	});
-	materials.push(__basic_material5);
-var __basic_material6 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test3.png').asset),
-	});
-	materials.push(__basic_material6);
-                set_material_alpha(__basic_material6, 20);
-var __basic_material7 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test4.png').asset),
-	});
-	materials.push(__basic_material7);
-var __basic_material8 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test4.png').asset),
-	});
-	materials.push(__basic_material8);
-                set_material_alpha(__basic_material8, 20);
-var __basic_material9 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test5.png').asset),
-	});
-	materials.push(__basic_material9);
-var __basic_material10 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/test5.png').asset),
-	});
-	materials.push(__basic_material10);
-                set_material_alpha(__basic_material10, 20);
+        function create_my_plane(
+     ) {  		
+			var my_plane = new THREE.Object3D();
+			my_plane.events = new ms.event.EventHolder();
+	my_plane.set_image = function(value) 
+	{
+		set_transform_image(my_plane, value);
+	};
+	var ev_parent = this;
+	my_plane.events.addListener("mousein", function()
+	{    
+		my_plane.scale.x = 1.5;
+my_plane.scale.y = 1.5;
+	}
+	);
+	var ev_parent = this;
+	my_plane.events.addListener("mouseout", function()
+	{    
+		my_plane.scale.x = 1;
+my_plane.scale.y = 1;
+	}
+	);
+            var img_plane;
+	    var img_plane_plane = 
+new THREE.Plane(
+128,164);
+	    var img_plane = new THREE.Mesh(img_plane_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(img_plane);
+		img_plane.events = new ms.event.EventHolder();
+            my_plane.addChild(img_plane);
+            var img_reflect;
+	    var img_reflect_plane = 
+new THREE.Plane(
+128,164);
+	    var img_reflect = new THREE.Mesh(img_reflect_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(img_reflect);
+		img_reflect.events = new ms.event.EventHolder();
+                img_reflect.doubleSided = true;
+                set_object_alpha(img_reflect, 40);
+                img_reflect.scale.y = 0.800000012;
+                img_reflect.position.y = -131.199997;
+                set_rotation_x(img_reflect.rotation, 180);
+            my_plane.addChild(img_reflect);
+        return my_plane;
+        }
 var scene = 
 new THREE.Scene(
 );
@@ -142,192 +153,13 @@ new THREE.Camera(
                 camera_1.position.x = 500;
                 camera_1.position.y = 500;
                 camera_1.position.z = 1000;
-	    var img1_plane = 
-new THREE.Plane(
-128,164);
-	    var img1 = new THREE.Mesh(img1_plane, materials[0]);
-	    scene.addObject(img1);
-		img1.events = new ms.event.EventHolder();
-	var ev_parent = this;
-	img1.events.addListener("mousein", function()
-	{    
-		img1.scale.x = 1.5;
-img1.scale.y = 1.5;
-img1_reflect.scale.x = 1.5;
-img1_reflect.scale.y = 1.5;
-img1_reflect.position.y = -196.800003;
-	}
-	);
-	var ev_parent = this;
-	img1.events.addListener("mouseout", function()
-	{    
-		img1.scale.x = 1;
-img1.scale.y = 1;
-img1_reflect.scale.x = 1;
-img1_reflect.scale.y = 1;
-img1_reflect.position.y = -131.199997;
-	}
-	);
-	    var img1_reflect_plane = 
-new THREE.Plane(
-128,164);
-	    var img1_reflect = new THREE.Mesh(img1_reflect_plane, materials[1]);
-	    scene.addObject(img1_reflect);
-		img1_reflect.events = new ms.event.EventHolder();
-                img1_reflect.doubleSided = true;
-                img1_reflect.scale.y = 0.800000012;
-                img1_reflect.position.y = -131.199997;
-                set_rotation_x(img1_reflect.rotation, 180);
-	    var img2_plane = 
-new THREE.Plane(
-128,164);
-	    var img2 = new THREE.Mesh(img2_plane, materials[2]);
-	    scene.addObject(img2);
-		img2.events = new ms.event.EventHolder();
-	var ev_parent = this;
-	img2.events.addListener("mousein", function()
-	{    
-		img2.scale.x = 1.5;
-img2.scale.y = 1.5;
-img2_reflect.scale.x = 1.5;
-img2_reflect.scale.y = 1.5;
-img2_reflect.position.y = -196.800003;
-	}
-	);
-	var ev_parent = this;
-	img2.events.addListener("mouseout", function()
-	{    
-		img2.scale.x = 1;
-img2.scale.y = 1;
-img2_reflect.scale.x = 1;
-img2_reflect.scale.y = 1;
-img2_reflect.position.y = -131.199997;
-	}
-	);
-	    var img2_reflect_plane = 
-new THREE.Plane(
-128,164);
-	    var img2_reflect = new THREE.Mesh(img2_reflect_plane, materials[3]);
-	    scene.addObject(img2_reflect);
-		img2_reflect.events = new ms.event.EventHolder();
-                img2_reflect.doubleSided = true;
-                img2_reflect.scale.y = 0.800000012;
-                img2_reflect.position.y = -131.199997;
-                set_rotation_x(img2_reflect.rotation, 180);
-	    var img3_plane = 
-new THREE.Plane(
-128,164);
-	    var img3 = new THREE.Mesh(img3_plane, materials[4]);
-	    scene.addObject(img3);
-		img3.events = new ms.event.EventHolder();
-	var ev_parent = this;
-	img3.events.addListener("mousein", function()
-	{    
-		img3.scale.x = 1.5;
-img3.scale.y = 1.5;
-img3_reflect.scale.x = 1.5;
-img3_reflect.scale.y = 1.5;
-img3_reflect.position.y = -196.800003;
-	}
-	);
-	var ev_parent = this;
-	img3.events.addListener("mouseout", function()
-	{    
-		img3.scale.x = 1;
-img3.scale.y = 1;
-img3_reflect.scale.x = 1;
-img3_reflect.scale.y = 1;
-img3_reflect.position.y = -131.199997;
-	}
-	);
-	    var img3_reflect_plane = 
-new THREE.Plane(
-128,164);
-	    var img3_reflect = new THREE.Mesh(img3_reflect_plane, materials[5]);
-	    scene.addObject(img3_reflect);
-		img3_reflect.events = new ms.event.EventHolder();
-                img3_reflect.doubleSided = true;
-                img3_reflect.scale.y = 0.800000012;
-                img3_reflect.position.y = -131.199997;
-                set_rotation_x(img3_reflect.rotation, 180);
-	    var img4_plane = 
-new THREE.Plane(
-128,164);
-	    var img4 = new THREE.Mesh(img4_plane, materials[6]);
-	    scene.addObject(img4);
-		img4.events = new ms.event.EventHolder();
-	var ev_parent = this;
-	img4.events.addListener("mousein", function()
-	{    
-		img4.scale.x = 1.5;
-img4.scale.y = 1.5;
-img4_reflect.scale.x = 1.5;
-img4_reflect.scale.y = 1.5;
-img4_reflect.position.y = -196.800003;
-	}
-	);
-	var ev_parent = this;
-	img4.events.addListener("mouseout", function()
-	{    
-		img4.scale.x = 1;
-img4.scale.y = 1;
-img4_reflect.scale.x = 1;
-img4_reflect.scale.y = 1;
-img4_reflect.position.y = -131.199997;
-	}
-	);
-	    var img4_reflect_plane = 
-new THREE.Plane(
-128,164);
-	    var img4_reflect = new THREE.Mesh(img4_reflect_plane, materials[7]);
-	    scene.addObject(img4_reflect);
-		img4_reflect.events = new ms.event.EventHolder();
-                img4_reflect.doubleSided = true;
-                img4_reflect.scale.y = 0.800000012;
-                img4_reflect.position.y = -131.199997;
-                set_rotation_x(img4_reflect.rotation, 180);
-	    var img5_plane = 
-new THREE.Plane(
-128,164);
-	    var img5 = new THREE.Mesh(img5_plane, materials[8]);
-	    scene.addObject(img5);
-		img5.events = new ms.event.EventHolder();
-	var ev_parent = this;
-	img5.events.addListener("mousein", function()
-	{    
-		img5.scale.x = 1.5;
-img5.scale.y = 1.5;
-img5_reflect.scale.x = 1.5;
-img5_reflect.scale.y = 1.5;
-img5_reflect.position.y = -196.800003;
-	}
-	);
-	var ev_parent = this;
-	img5.events.addListener("mouseout", function()
-	{    
-		img5.scale.x = 1;
-img5.scale.y = 1;
-img5_reflect.scale.x = 1;
-img5_reflect.scale.y = 1;
-img5_reflect.position.y = -131.199997;
-	}
-	);
-	    var img5_reflect_plane = 
-new THREE.Plane(
-128,164);
-	    var img5_reflect = new THREE.Mesh(img5_reflect_plane, materials[9]);
-	    scene.addObject(img5_reflect);
-		img5_reflect.events = new ms.event.EventHolder();
-                img5_reflect.doubleSided = true;
-                img5_reflect.scale.y = 0.800000012;
-                img5_reflect.position.y = -131.199997;
-                set_rotation_x(img5_reflect.rotation, 180);
                 application.angle = null;
                 application.start = 0;
                 application.speed = 0.0199999996;
                 application.step = 2 * Math.PI / 5;
                 application.max_rotation = 2 * Math.PI;
-                application.img_array = [img1, img1_reflect, img2, img2_reflect, img3, img3_reflect, img4, img4_reflect, img5, img5_reflect];
+                application.img_array = ["images/test1.png", "images/test2.png", "images/test3.png", "images/test4.png", "images/test5.png"];
+                application.plane_array = [];
 	application.position_items = function() 
 	{
 		application.start = application.start + application.speed;
@@ -335,37 +167,73 @@ if (application.start > application.max_rotation)
 {
 application.start = 0;
 }
-for(var i = 0; i < 10; i += 2)
+for(var i = 0; i < 5; i++)
 {
 application.angle = application.start + i * application.step;
-application.img_array[i].position.x = 275 * Math.cos(application.angle);
-application.img_array[i + 1].position.x = 275 * Math.cos(application.angle);
-application.img_array[i].position.z = 275 * Math.sin(application.angle);
-application.img_array[i + 1].position.z = 275 * Math.sin(application.angle);
+application.plane_array[i].position.x = 275 * Math.cos(application.angle);
+application.plane_array[i].position.z = 275 * Math.sin(application.angle);
 }
 	};
 	var ev_parent = this;
-	application.events.addListener("animate", function()
+	application.events.addListener("updates", function()
 	{    
 		application.position_items();
 	}
 	);
 	var ev_parent = this;
+	application.events.addListener("init", function()
+	{    
+		for(var i = 0; i < 5; i++)
+{
+application.plane_array.push(
+create_my_plane(
+)
+);
+application.plane_array[i].set_image(application.img_array[i]);
+scene.addObject(application.plane_array[i]);
+}
+	}
+	);
+	var ev_parent = this;
 	application.events.addListener("mousemove", function(x,y)
 	{    
-		if (x < app_width / 2)
+		if (x < window.innerWidth / 2)
 {
-application.speed = -0.200000003 * (app_width / 2 - x) / app_width / 2;
+application.speed = -0.200000003 * (window.innerWidth / 2 - x) / window.innerWidth / 2;
 }
-if (x > app_width / 2)
+if (x > window.innerWidth / 2)
 {
-application.speed = -0.200000003 * (app_width / 2 - x) / app_width / 2;
+application.speed = -0.200000003 * (window.innerWidth / 2 - x) / window.innerWidth / 2;
 }
 	}
 	);
 if(ui)
 {
 	ui.load_resources(function(){		
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX, ev.clientY);                  
+	};	
+		    lbl0 = new ms.ui.Label( 
+	    "15px Verdana",g_ui_root.manager, g_ui_root);
+        lbl0 = lbl0;
+                lbl0.set_color(Ivory);
+                lbl0.text("Move mouse over the scene to control the carousel's rotation");
+                lbl0.position(150, 75);
+		    lbl1 = new ms.ui.Label( 
+	    "15px Verdana",g_ui_root.manager, g_ui_root);
+        lbl1 = lbl1;
+                lbl1.set_color(Ivory);
+                lbl1.text("Mouse over the images will select them");
+                lbl1.position(175, 100);
 		g_ui.fill_background = false;
 	});
 }

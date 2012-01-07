@@ -82,20 +82,22 @@ ms.ui.Manager = Class.create(
 				cmp.physics.SetAwake(true);
         }	
 	    application.events.dispatch("keypress", [keycode]);    
-	},
-
-	//Mouse managemet
+	},	
 	
+	//Mouse management
 	mousemove: function(x, y)
 	{
-		if(this.mouse_over.physics)
+		x = x - canvas_position.x;
+		y = y - canvas_position.y;
+		if(this.mouse_over.physics){
 			this.mouse_over.physics.SetAwake(true);
-			
+			if(this.mouse_over.physics.mouse_joint)
+				this.create_mouse_joint(x, y, this.mouse_over.physics);			
+		}	
 	    if(this.mouse_pressed)
 			this.dragging = true;
 	    if (this.dragging)
-	    {
-			
+	    {			
 			this.mouse_over.events.dispatch("drag", [x, y]);
 	        this.lastx = x;
 	        this.lasty = y;
@@ -123,9 +125,11 @@ ms.ui.Manager = Class.create(
 
 	    return this.mouse_over != this.root;
 	},
-
+	
 	mousedown: function(x, y)
 	{
+		x = x - canvas_position.x;
+		y = y - canvas_position.y;
 		if(this.mouse_over.physics)
 			this.mouse_over.physics.SetAwake(true);
 		
@@ -138,6 +142,8 @@ ms.ui.Manager = Class.create(
 
 	mouseup: function(x, y)
 	{
+		x = x - canvas_position.x;
+		y = y - canvas_position.y;
 		if(this.mouse_over.physics)
 			this.mouse_over.physics.SetAwake(true);
 			
@@ -155,6 +161,28 @@ ms.ui.Manager = Class.create(
 	    this.mouse_over.events.dispatch("click", []);	   
 
 	    return this.mouse_over != this.root;
+	},
+	
+	create_mouse_joint: function(x, y, body){
+		var handledMouseX = x  / 30;
+		var handledMouseY = y  / 30;
+		if(this.mouse_pressed && (!this.mouseJoint)) {
+			var md = new b2MouseJointDef();
+            md.bodyA = g_world.GetGroundBody();
+            md.bodyB = body;
+            md.target.Set(handledMouseX, handledMouseY);
+            md.collideConnected = true;
+            md.maxForce = 300.0 * body.GetMass();
+            this.mouseJoint = g_world.CreateJoint(md);
+        }
+        if(this.mouseJoint) {
+           if(this.mouse_pressed) {
+              this.mouseJoint.SetTarget(new b2Vec2(handledMouseX, handledMouseY));
+           } else {
+              g_world.DestroyJoint(this.mouseJoint);
+              this.mouseJoint = null;
+           }
+        }	
 	},
 
     screen_pos: function(cmp)
@@ -579,8 +607,8 @@ ms.ui.Component = Class.create(
 		var A_x = - this.w/2;
 		var A_y = - this.h/2;
 
-		var ev_x = x - (this.x + this.w/2) - 8;
-		var ev_y = y - (this.y + this.h/2) - 8;
+		var ev_x = x - (this.x + this.w/2);
+		var ev_y = y - (this.y + this.h/2);
 		var ev_x_rotated = ev_x * Math.cos(-this.rotation) - ev_y * Math.sin(-this.rotation);
 		var ev_y_rotated = ev_x * Math.sin(-this.rotation) + ev_y * Math.cos(-this.rotation);
 		var result = (ev_x_rotated >= A_x && ev_x_rotated <= (A_x + this.w) && 
@@ -760,12 +788,19 @@ ms.ui.Label = Class.create(ms.ui.Component,
 		$super(manager, parent);
 	    this.font = font;
 	    this.value = "";
+		this.color_value = 'black';
 	},
 
 	text: function(text)
 	{
 		this.value = text;
 		this.manager.invalidate_all(); //td: do extents!!!
+	},
+	
+	set_color: function(value)
+	{
+		this.color_value = value;	
+		this.manager.invalidate_all();
 	},
 
 	resized: function()
@@ -785,7 +820,7 @@ ms.ui.Label = Class.create(ms.ui.Component,
 		context.rotate(this.rotation);
 
         context.font = this.font;
-        context.fillStyle = 'black'; //td:
+		context.fillStyle = this.color_value; //td:
         context.fillText(this.value, -this.w/2, -this.h/2);
 
 		context.restore(); 
@@ -816,19 +851,19 @@ ms.ui.Button = Class.create(ms.ui.Image,
 
 ms.ui.StateButton = Class.create(ms.ui.Image,
 {
-	initialize: function($super, up, down, manager, parent)
+	initialize: function($super, active, inactive, manager, parent)
 	{
-		$super(up, manager, parent);
+		$super(active, manager, parent);
 
-		var up_texture 		= streamer.get_resource(up).data;
-		var down_texture   	= streamer.get_resource(down).data;
+		var active_texture 		= streamer.get_resource(active).data;
+		var inactive_texture   	= streamer.get_resource(inactive).data;
 
-		this.down = false;		
+		this.active = true;		
 		var ev_parent = this;		
 		this.events.addListener('click', function()
-		{
-			ev_parent.down  = !ev_parent.down;
-			ev_parent.image(ev_parent.down? down_texture : up_texture);
+		{		
+			ev_parent.active  = !ev_parent.active;
+			ev_parent.image(ev_parent.active? active_texture : inactive_texture);
 		});
 		
 	},	
@@ -1132,6 +1167,8 @@ ms.ui.Polygon = Class.create(ms.ui.Component,
 		this.stroke = stroke;
 		this.line_width = line_width;
 		this.points = [];
+		this.xmax = 0;
+		this.ymax = 0;
 	},
 	set_fill: function(value)
 	{
@@ -1184,7 +1221,7 @@ ms.ui.Polygon = Class.create(ms.ui.Component,
         }		
 		for(var i = 0; i < this.points.length; i++)
         {	
-			var point = this.points[i];
+			var point = this.points[i];			
 			if(i<0)
 				context.moveTo(point.x, point.y);
 			context.lineTo(point.x, point.y);						

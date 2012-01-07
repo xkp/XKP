@@ -3,7 +3,7 @@
         <output path="../production/test"/>
     </path>
 
-    <idiom src="../idioms/threejs/module.xml"/>
+	<idiom src="../idioms/threejs/module.xml"/>
 	<idiom src="../idioms/resources/resources.xml"/>
     
 </project>

@@ -22,6 +22,7 @@ var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
 var Sound = new ms.ui.Sound();
+		var streamer = new ms.streamer.Streamer();
 		if(drawingCanvas){
 			var client =
 			{
@@ -111,13 +112,13 @@ var Sound = new ms.ui.Sound();
             {
 		id:"__audio1",
 		resource_type:RESOURCE_SOUND,
-		src:"sounds/358232_j_s_song.ogg"
+		src:"sounds/applauselong.wav"
 });
                 def_package_items.push(
             {
 		id:"__audio2",
 		resource_type:RESOURCE_SOUND,
-		src:"sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg"
+		src:"sounds/forest.wav"
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
@@ -131,13 +132,23 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
+		application.events.dispatch("updates", []);	
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var lbl1;var btnSound1;var btnSound2;var volume_bar;var btn1;var btn2;var lbl3;var btnPlay;var btnPause;var btnStop;
+            var lbl1;
+            var btnSound1;
+            var btnSound2;
+            var volume_bar;
+            var btn1;
+            var btn2;
+            var lbl3;
+            var btnPlay;
+            var btnPause;
+            var btnStop;
                 application.curr_sound = null;
 window.onload = function() 
 {
@@ -264,11 +275,11 @@ application.curr_sound.currentTime = 0;
                 btnStop.rect(375, 300, 50, 50);
 	var sound_1 = 
 	document.createElement('audio');
-	sound_1.setAttribute('src', 'sounds/358232_j_s_song.ogg');	
+	sound_1.setAttribute('src', 'sounds/forest.wav');	
 	sound_1.play();
 	var sound_2 = 
 	document.createElement('audio');
-	sound_2.setAttribute('src', 'sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg');	
+	sound_2.setAttribute('src', 'sounds/applauselong.wav');	
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  

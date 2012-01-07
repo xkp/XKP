@@ -5,7 +5,7 @@
     property visual_parent : string;
 	
     method basic_properties()
-    {
+    {			
 		//fixture properties
         var density = 1.0;
         if (it.density)
@@ -73,7 +73,7 @@
     method shape()
     {
         if (!it.shape)
-            compiler.error("Invalid bodies must have a shape", object = it.id);
+            compiler.error("Invalid, bodies must have a shape", object = it.id);
 
         if (it.shape == "rect")
         {
@@ -209,15 +209,21 @@
         //add the body into the world
         out()
         {
-            current_body = g_world.CreateBody(bodyDef);
+            current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
         }
-
+		
+		if(it.mouse_joint)
+			out()
+			{
+			current_body.mouse_joint = <xss:e v="it.mouse_joint"/>;
+			}
+			
         if (visual_parent)
         {
             out()
             {
-                cmp.physics = current_body;
+                cmp.physics = current_body;			
                 cmp.events.addListener('moved', update_body_position);
                 
                 current_body.host = cmp;

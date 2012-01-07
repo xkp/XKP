@@ -171,6 +171,7 @@ struct base_lang : public ILanguage
     virtual str     resolve_separator(XSSObject lh = XSSObject());
     virtual bool    can_cast(XSSType left, XSSType right);
     virtual void    init_context(XSSContext ctx);
+    virtual void    init_application_context(XSSContext ctx);
     virtual XSSType resolve_array_type(XSSType type, const str& at_name, XSSContext ctx);
     virtual str     render_value(XSSType type, variant value);
     virtual str     render_expression(expression& expr, XSSContext ctx);
