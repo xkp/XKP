@@ -18,23 +18,18 @@
             info.idx  = key_index;
             info.interp = interp;
             
-            if (!rendering_instance)
-                info.expr = compiler.replace_identifier(info.expr, owner_seq.id, "this__");
-            
             owner_seq.key_expressions += info;
         }
         else if (key_value == "@") //convention over configuration
         {
             //same deal, only this time we'll assign the current value 
             //kinda neat
+            
             var nfo = object();
-            nfo.expr = prop_info.path + "." + prop_info.prop.render_get();
+            nfo.expr = compiler.property_get(prop_info.property, prop_info.path);
             nfo.idx  = key_index;
             nfo.interp = interp;
             
-            if (!rendering_instance)
-                nfo.expr = compiler.replace_identifier(nfo.expr, owner_seq.id, "this__");
-
             owner_seq.key_expressions += nfo;
         }
         else //assume constants
@@ -100,15 +95,14 @@
                 out(indent = 2)
                 {
 					//<xss:e v="prop_name"/>
-                   Interpolator <xss:e v="iid"/> = new Interpolator();
-				   <xss:e v="iid"/>.setTarget(<xss:e v="path"/>);//sin la prop
-				   <xss:e v="iid"/>.setAssign(new Assign(){
-								public void execute(Object t,Object value){
-								<xss:e v="first_type"/> <xss:e v="first_name"/> = (<xss:e v="first_type"/>)t;
-								<xss:e v="compiler.property_set(prop, path, 'value')"/>;
-								}
-								});
-				   <xss:e v="iid"/>.defaultInterpolator(Manager.getInstance().interpolator("<xss:e v="prop_type"/>"));	
+                   final Interpolator <xss:e v="iid"/> = new Interpolator();
+				   <xss:e v="iid"/>.setAssigner(new Assign(){
+	                    public void put(Object value)
+	                    {
+						    <xss:e v="compiler.property_set(prop, path, 'value')"/>;
+	                    }
+				   });
+				   <xss:e v="iid"/>.setInterpolator(Manager.getInstance().interpolator("<xss:e v="prop_type"/>"));	
                 }
                         
                 //generate keys
@@ -128,11 +122,6 @@
                     start.t     = 0;
                     start.value = itm.from;
 
-                    if (start.value == "@")
-                    {
-                        start.value = end.value;
-                    }    
-
                     keys = [start, end];
                 }
                         
@@ -147,9 +136,13 @@
                     key.t += time;
                     resolve_key(key, key.value, idx, seq, prop_info, iid);                    
                     
+                    var key_value = key.value;
+                    if (key_value == null)
+                      key_value = "null";
+                      
                     out(indent = 4)
                     {
-						<xss:e v="iid"/>.addKey(<xss:e v="key.t"/>, <xss:e v="key.value"/>);
+						<xss:e v="iid"/>.addKey(<xss:e v="key.t"/>, <xss:e v="key_value"/>);
                        
                     }
                     
@@ -339,6 +332,8 @@
 
             //initialize it here
             out() {<xss:e v="seq_id"/> = new Sequence();}
+            if (seq.loop)
+                out() {<xss:e v="seq_id"/>.setLoop(true);}
             
             if (parent) //duda cuando pasa esto?
                         //cuando hay una sequencia anidada
@@ -360,7 +355,7 @@
                 }
             }
             
-            compiler.xss("../java/instance.xss", seq);
+            compiler.xss("../java/instance.xss", seq, event_renderer = "event.xss");
         }
         else
         {
@@ -378,7 +373,7 @@
                 
         out()
         {
-            <xss:e v="seq_id"/>.parent_sequence = <xss:e v="parent_id"/>;
+            <xss:e v="seq_id"/>.setParent(<xss:e v="parent_id"/>);
         }
 
         //we'll let our children fill in on what the want done
@@ -395,21 +390,24 @@
         {
             out(indent = 2)
             {
-                <xss:e v="seq_id"/>.on_start = function()
+                <xss:e v="seq_id"/>.events.addListener("start",  new EventHolder.Implementor() 
                 <xss:open_brace/>
+	                public void call(Object ev) 
+                    <xss:open_brace/>
             }
             
             for(var key_xpr in seq.key_expressions)
             {
                 out(indent=3)
                 {
-                    <xss:e v="key_xpr.interp"/>.keys[<xss:e v="key_xpr.idx"/>].value = <xss:e v="key_xpr.expr"/>;
+                    <xss:e v="key_xpr.interp"/>.setKeyValue(<xss:e v="key_xpr.idx"/>, <xss:e v="key_xpr.expr"/>);
                 }
             }
             
             out(indent = 2)
             {
                 <xss:close_brace/>
+                <xss:close_brace/>);
             }
         }
 

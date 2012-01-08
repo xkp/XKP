@@ -7,11 +7,13 @@ package xkp.android.libs.Sequence;
  *
  * @author Adrian
  */
-public class Key {
-double t;
-double value;
-public Key(double t,double value){
-    this.t=t;
-    this.value=value;
-}
+public class Key 
+{
+    double t;
+    Object value;
+    public Key(double t, Object value)
+    {
+        this.t     = t;
+        this.value = value;
+    }
 }

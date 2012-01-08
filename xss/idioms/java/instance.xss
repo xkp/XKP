@@ -1,4 +1,5 @@
 <xss:parameter id="it"/>
+<xss:parameter id="event_renderer"/>
 
 <xss:code>
 	bool type = compiler.is_type(it) == true;
@@ -39,7 +40,11 @@
 	compiler.log("Events size: " + it.events.size);
 	for(var e in it.events)
 	{
-		string new_id = e.output_id + it.id;
-		compiler.xss("event.xss", e = e, new_id = new_id);
+        string renderer_path = "event.xss";
+        if (event_renderer)
+            renderer_path = compiler.idiom_path(it, event_renderer);
+
+        string new_id = e.output_id + it.id;
+		compiler.xss(renderer_path, e = e, it = it, new_id = new_id);
 	}
 </xss:code>

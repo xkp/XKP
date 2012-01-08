@@ -8,36 +8,31 @@ import java.util.ArrayList;
  *
  * @author Adrian
  */
-public class Every extends Handler{
-  public ArrayList fn=new ArrayList();
-  double freq;
-  double wait;
-   public Every(double frequency){
-     freq=frequency;    
-     wait=frequency;
- }
-  public void addCaller(Caller function){
-     fn.add(function);
- }
-    @Override
- public void update(double t, double pt)
+public class Every implements Handler
+{
+	public Every(double frequency)
+	{
+		this.freq_ = frequency;    
+		this.wait_ = frequency;
+   	}
+   	public void addCaller(Runnable caller)
+	{
+   		this.callers_.add(caller);
+	}
+   	public boolean update(double t, double pt)
     {
-     if(!this.OnUpdate.isEmpty()){
-         for(int i=0;i<this.OnUpdate.size();i++){
-            OnUpdate w=(OnUpdate)this.OnUpdate.get(i);
-             w.execute();
-         }
-        }
-        this.wait -= (t - pt);
-        if (this.wait < 0)
+    	this.wait_ -= (t - pt);
+        if (this.wait_ < 0)
         {
-            this.wait = this.freq;
-           for(int i=0;i<fn.size();i++){
-            Caller c=(Caller)fn.get(i);
-           c.update(t, pt);}
-        }
+        	this.wait_ = this.freq_;
+        	for(Runnable r : this.callers_)
+        	{
+        		r.run();
+       		}
+       	}
+        return false;
     }
-    public void setTarget(Object obj){
-        this.target=obj;
-    }
+	private ArrayList<Runnable> callers_  = new ArrayList<Runnable>();
+	private double 				freq_;
+	private double 				wait_;
 }

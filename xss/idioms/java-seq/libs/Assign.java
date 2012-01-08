@@ -10,7 +10,7 @@ package <xss:e value="ns"/>;
  */
 public class Assign 
 {
-	 public void execute(Object o, Object value)
+	 public void put(Object value)
 	 {
 	 }
 }

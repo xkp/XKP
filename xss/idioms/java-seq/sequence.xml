@@ -1,9 +1,10 @@
 <module id="sequence" src="sequence.xs">
     <types>
-        <class id="sequence" instantiator="instantiator.xss" output_id="ms.state.Sequence">
-            <array id="constructor_params">
-                <param id="manager" constant="g_sequence_manager"/>
-            </array>
+        <class id="sequence">
+            <property id="loop" type="bool">
+                <get text="getLoop()"/>
+                <set text="setLoop({value})"/>
+            </property>
         </class>
     </types>
 </module>
