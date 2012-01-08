@@ -119,7 +119,7 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
                 }
                 });
 anim3 = new Sequence();anim3.setLoop(true);
-		public void stop_anim3() {
+		public void mthd_anim3_stop_anim3() {
 			stop();
 		}
                 anim3.start();

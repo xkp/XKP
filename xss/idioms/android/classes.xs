@@ -5,12 +5,18 @@ on pre_process(obj)
 
 	// flatting properties
 	for(var p in obj.properties)
+	{
+		if(p.parent)
+			if(p.parent.type)
+				continue;
+		
 		if(p.user_defined)
 			p.output_id = "prop_" + obj.output_id + "_" + p.name;
+	}
 	
 	// flatting methods
 	for(var m in obj.methods)
-		if(p.user_defined)
+		if(m.user_defined)
 			m.output_id = "mthd_" + obj.output_id + "_" + m.name;
 }
 
