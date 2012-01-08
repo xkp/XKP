@@ -18,14 +18,19 @@ public class XKPLine extends XKPGraphics {
 	public XKPLine(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		
-		mPathShape.reset();
-		mPathShape.moveTo(mX1, mY1);
-		mPathShape.lineTo(mX2, mY2);
+		updateShapePosition();
 		
 		RectF bounds = new RectF();
 		mPathShape.computeBounds(bounds, true);
 		
 		mDrawable = new ShapeDrawable(new PathShape(mPathShape, bounds.width(), bounds.height()));
 		mDrawable.setBounds(0, 0, (int) bounds.width(), (int) bounds.height());
+	}
+	
+	@Override
+	protected void updateShapePosition() {
+		mPathShape.reset();
+		mPathShape.moveTo(mX1, mY1);
+		mPathShape.lineTo(mX2, mY2);
 	}
 }
