@@ -279,8 +279,8 @@
     }
     
     method generate_when_actions(array actions, seq_id)
-    {	string inumb = compiler.genid('__numb');
-		string iexec = compiler.genid('__ie');
+    {	
+        string inumb = compiler.genid('__numb');
         for(var action in actions)
         {
             if (action.class_name == "run")
@@ -289,10 +289,7 @@
                 {
                     out(indent = 3) 
                     {
-						int <xss:e v="inumb"/>=<xss:e v="seq_id"/>.methods.indexOf(<xss:e v="action.method"/>);
-						IExecutable <xss:e v="iexec"/>=(IExecutable)<xss:e v="seq_id"/>.methods.get(<xss:e v="inumb"/>);
-						<xss:e v="iexec"/>.execute();
-                        
+						<xss:e v="seq_id"/>.<xss:e v="action.method"/>();
                     }
                 }
                 else if (action.sequence)
@@ -300,7 +297,6 @@
                     out(indent = 2) 
                     {
                         <xss:e v="action.sequence"/>.start();
-						//esto no pincha como lo tienes lo cambie 
                     }
                 }
                 else
@@ -415,9 +411,10 @@
         {
             out(indent = 2)
             {
-                <xss:e v="seq_id"/>.addOnUpdate(new OnUpdate()<xss:open_brace/>
-				public void execute()
+                <xss:e v="seq_id"/>.events.addListener("update",  new EventHolder.Implementor() 
                 <xss:open_brace/>
+	                public void call(Object ev) 
+                    <xss:open_brace/>
             }
             
             //check the conditions described on the when clause
@@ -442,9 +439,7 @@
             out(indent = 2)
             {
                 <xss:close_brace/>
-			<xss:close_brace/>);
-			
-				
+			    <xss:close_brace/>);
             }
         }
     }

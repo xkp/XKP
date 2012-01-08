@@ -1,3 +1,6 @@
+
+property click_count = 0;
+
 on btn1.click()
 {
     anim1.start();
@@ -6,6 +9,16 @@ on btn1.click()
 on btn2.click()
 {
     btn2.x = 40;
+}
+
+on btn3.click()
+{
+    click_count++;
+    if (click_count == 4)
+    {
+        click_count = 0;
+        anim3.start();
+    }
 }
 
 on anim1.start()
@@ -27,4 +40,12 @@ on anim1.stop()
 on anim2.stop()
 {
     lbl2.caption = "Button 2 Stopped";
+}
+
+instance anim3
+{
+    method stop_anim3()
+    {
+        stop();
+    }
 }

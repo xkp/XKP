@@ -1,6 +1,6 @@
 <module id="sequence" src="sequence.xs">
     <types>
-        <class id="sequence">
+        <class id="sequence" event_scope="application">
             <property id="loop" type="bool">
                 <get text="getLoop()"/>
                 <set text="setLoop({value})"/>

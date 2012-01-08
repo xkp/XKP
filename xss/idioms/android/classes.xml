@@ -572,7 +572,7 @@
 			</array>
 		</class>
 		
-		<class id="button" super="ITextView" output_id="Button">
+		<class id="button" super="ITextView" output_id="Button" event_scope="application">
 			<array id="imports">
 				<object import="android.widget.Button"/>
 			</array>

@@ -27,5 +27,8 @@
         <at time="1.5">
             <animate property="btn3.x" from="200" to="40" in="1.5"/>
         </at>
+        <when expr="application.click_count == 3">
+            <run method="stop_anim3"/>
+        </when>
     </sequence>
 </application>

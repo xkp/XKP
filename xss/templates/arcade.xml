@@ -1,0 +1,9 @@
+<application src="" width="600" height="400">
+    <physics_world scale       = "30"
+                   friction    = "0.5"
+                   density     = "1.0"
+                   restitution = "0.2"/>
+
+    <resources>
+    </resources>
+</application>

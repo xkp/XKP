@@ -27,6 +27,7 @@ import android.view.View;
 				private Button btn2;
 				private Button btn3;
 			private Sequence anim1;private Sequence anim2;private Sequence anim3;
+    ActAnimTest application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -44,11 +45,13 @@ import android.view.View;
 				btn2 = (Button) findViewById(R.id.btn2);
 					btn2.setOnClickListener(this);
 				btn3 = (Button) findViewById(R.id.btn3);
+					btn3.setOnClickListener(this);
 	}
 void initCallers() {
 		Start();
 }
 			void initInstances() {
+                application = this;
 anim1 = new Sequence();
 anim1.events.addListener("start", new EventHolder.Implementor() 
 {
@@ -115,6 +118,9 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
                 }
                 });
 anim3 = new Sequence();anim3.setLoop(true);
+		public void mthd_anim3_stop_anim3() {
+			stop();
+		}
                 anim3.start();
             anim3.setParent(null);
 					//x
@@ -141,6 +147,16 @@ anim3 = new Sequence();anim3.setLoop(true);
 						____i4.addKey(1.5, 200);
 						____i4.addKey(3, 40);
 				anim3.addHandler(____i4);
+                anim3.events.addListener("update",  new EventHolder.Implementor() 
+                {
+	                public void call(Object ev) 
+                    {
+                    if (application.click_count == 3)
+                    {
+						anim3.stop_anim3();
+                    }
+                }
+			    });
 			}
 		private double update_freq = 1/30.0;
 		private void Update() {
@@ -168,6 +184,9 @@ anim3 = new Sequence();anim3.setLoop(true);
 									case R.id.btn2:
 										onClickbtn2();
 										break;
+									case R.id.btn3:
+										onClickbtn3();
+										break;
 						} //switch
 						}
 			private void onClickbtn1() {
@@ -176,4 +195,13 @@ anim3 = new Sequence();anim3.setLoop(true);
 			private void onClickbtn2() {
 				((XKPLayout.LayoutParams) btn2.getLayoutParams()).setLeft((Integer)40);
 			}
+			private void onClickbtn3() {
+				click_count = click_count + 1;
+if (click_count == 4)
+{
+	click_count = 0;
+	anim3.start();
+}
+			}
+			private Integer prop_application_click_count = 0;
 }
