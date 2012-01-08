@@ -278,7 +278,7 @@
         }
     }
     
-    method generate_when_actions(array actions, seq_id)
+    method generate_when_actions(seq, array actions, seq_id)
     {	
         string inumb = compiler.genid('__numb');
         for(var action in actions)
@@ -287,9 +287,13 @@
             {
                 if (action.method)
                 {
+                    var mthd = seq.get_method(action.method);
+                    if (!mthd)
+                        compiler.error("when tag found an invalid method");
+                        
                     out(indent = 3) 
                     {
-						<xss:e v="seq_id"/>.<xss:e v="action.method"/>();
+						<xss:e v="mthd.output_id"/>();
                     }
                 }
                 else if (action.sequence)
@@ -331,8 +335,7 @@
             if (seq.loop)
                 out() {<xss:e v="seq_id"/>.setLoop(true);}
             
-            if (parent) //duda cuando pasa esto?
-                        //cuando hay una sequencia anidada
+            if (parent)
             {
                 //build the instance chain
                 parent_id = parent.id;
@@ -351,7 +354,8 @@
                 }
             }
             
-            compiler.xss("../java/instance.xss", seq, event_renderer = "event.xss");
+            compiler.xss("../java/instance.xss", seq, marker = "declarations", marker_source="previous", render_events = false);
+            compiler.xss("../java/instance.xss", seq, event_renderer = "event.xss", render_properties = false, render_methods = false);
         }
         else
         {
@@ -429,7 +433,7 @@
                 }
                 
                 var action_list = seq.actions[cond_idx]; cond_idx++;
-                generate_when_actions(action_list, seq_id);
+                generate_when_actions(seq, action_list, seq_id);
                 
                 out(indent = 2)
                 {

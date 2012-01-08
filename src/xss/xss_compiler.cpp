@@ -648,6 +648,9 @@ void xss_compiler::xss_args(const param_list params, param_list& result, fs::pat
           }
         else if (pname == "marker")
           {
+            if (value.empty())
+              continue;
+
             str vv = variant_cast<str>(value, str());
             if (vv.empty())
               {
@@ -671,13 +674,11 @@ void xss_compiler::xss_args(const param_list params, param_list& result, fs::pat
                 xss_throw(error);
               }
             else if (vv == "entry")
-              {
                 marker_source = MS_ENTRY;
-              }
             else if (vv == "current")
-              {
                 marker_source = MS_CURRENT;
-              }
+            else if (vv == "previous")
+              marker_source = MS_PREVIOUS;
             else
               {
                 param_list error;
@@ -791,30 +792,41 @@ void xss_compiler::xss(const param_list params)
           }
       }
 
+    str render_result = result->render(XSSObject(), &result_params);
     if (the_output_file.empty())
       {
-        if (!marker.empty())
-          r->append_at(result->render(XSSObject(), &result_params), marker);
-        else
+        switch (marker_source)
           {
-            switch (marker_source)
+            case MS_CURRENT:
               {
-                case MS_ENTRY:
-                  {
-                    assert(entry_);
-                    entry_->append(result->render(XSSObject(), &result_params));
-                    break;
-                  }
-                case MS_CURRENT:
-                  {
-                    r->append(result->render(XSSObject(), &result_params));
-                    break;
-                  }
+                if (marker.empty())
+						      r->append(render_result);
+                else
+						      r->append_at(render_result, marker);
+                break;
+              }
+            case MS_ENTRY:
+              {
+                XSSRenderer rentry = entry_renderer();
+                if (marker.empty())
+						      rentry->append(render_result);
+                else
+						      rentry->append_at(render_result, marker);
+                break;
+              }
+            case MS_PREVIOUS:
+              {
+                XSSRenderer rentry = previous_renderer();
+                if (marker.empty())
+						      rentry->append(render_result);
+                else
+						      rentry->append_at(render_result, marker);
+                break;
               }
           }
       }
     else
-      output_file(the_output_file, result->render(XSSObject(), &result_params));
+      output_file(the_output_file, render_result);
   }
 
 void xss_compiler::inject(const param_list params)

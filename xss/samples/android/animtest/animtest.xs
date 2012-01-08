@@ -44,6 +44,12 @@ on anim2.stop()
 
 instance anim3
 {
+    property test_prop = 3;
+    property test_prop1
+    {
+        stop_anim3();
+    }
+
     method stop_anim3()
     {
         stop();

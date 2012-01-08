@@ -5,6 +5,8 @@
                 <get text="getLoop()"/>
                 <set text="setLoop({value})"/>
             </property>
+
+            <method id="stop"/>
         </class>
     </types>
 </module>
