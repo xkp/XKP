@@ -11,44 +11,6 @@
 			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
 
 	<component>
-		[clip_area(js-ui)]
-			<description: />
-			<constructor_params(js-ui): form />
-			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
-			<properties(js-ui): form />
-
-	<component>
-		[rectangle(js-ui)]
-			<description: />
-			<constructor_params(js-ui): fill, stroke, line_width />
-			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
-			<properties(js-ui): fill, stroke, line_width />
-
-	<component>
-		[polygon(js-ui)]
-			<description: />
-			<constructor_params(js-ui): fill, stroke, line_width />
-			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
-			<properties(js-ui): fill, stroke, line_width />
-
-	<component>
-		[polygon_point(js-ui)]
-			<description: />
-
-	<component>
-		[circle(js-ui)]
-			<description: />
-			<constructor_params(js-ui): fill, stroke, line_width />
-			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
-			<properties(js-ui): fill, stroke, line_width, radius />
-
-	<component>
-		[line(js-ui)]
-			<description: />
-			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
-			<properties(js-ui): x1, y1, x2, y2, line_width, lineCap />
-
-	<component>
 		[sound(js-ui)]
 			<description: />
 			<properties(js-ui): src, play />
@@ -75,7 +37,7 @@
 			<methods(android): select_all, select />
 
 	<component>
-		[imagebutton=image(android)]
+		[imagebutton=img(android)]
 			<description: />
 			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
 			<properties(android): src, scale />
@@ -142,7 +104,60 @@
 			<properties(android): x, y, width, height, placement, autosize_x, autosize_y, visible, enabled, gravity, clickeable, long_clickable, focusable, padding, paddingLeft, paddingTop, paddingRight, paddingBottom />
 			<properties(android): template, items />
 
-	//included in all idioms
+	//included in the two idioms
+	<component>
+		[rectangle(js-ui, android)]
+			<description: />
+			<constructor_params(js-ui): fill, stroke, line_width />
+			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
+			<properties(js-ui): fill, stroke, line_width />
+			
+			<properties(android): x1, y1, x2, y2, x, y, width, height, line_width, fill, stroke, placement, autosize_x, autosize_y, visible, enabled, alpha, rotate />
+
+	<component>
+		[polygon(js-ui, android)]
+			<description: />
+			<constructor_params(js-ui): fill, stroke, line_width />
+			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
+			<properties(js-ui): fill, stroke, line_width />
+
+			<properties(android): x1, y1, x2, y2, x, y, width, height, line_width, fill, stroke, placement, autosize_x, autosize_y, visible, enabled, alpha, rotate />
+			<properties(android): points_count />
+			
+	<component>
+		[polygon_point(js-ui, android)]
+			<description: />
+			
+			<properties(android): x, y />
+
+	<component>
+		[circle(js-ui, android)]
+			<description: />
+			<constructor_params(js-ui): fill, stroke, line_width />
+			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
+			<properties(js-ui): fill, stroke, line_width, radius />
+			
+			<properties(android): x1, y1, x2, y2, x, y, width, height, line_width, fill, stroke, placement, autosize_x, autosize_y, visible, enabled, alpha, rotate />
+			<properties(android): radius />
+
+	<component>
+		[line(js-ui, android)]
+			<description: />
+			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
+			<properties(js-ui): x1, y1, x2, y2, line_width, lineCap />
+			
+			<properties(android): x1, y1, x2, y2, x, y, width, height, line_width, fill, stroke, placement, autosize_x, autosize_y, visible, enabled, alpha, rotate />
+
+	<component>
+		[clip_area(js-ui, android)]
+			<description: />
+			<constructor_params(js-ui): form />
+			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
+			<properties(js-ui): form />
+
+			<properties(android): x1, y1, x2, y2, x, y, width, height, line_width, fill, stroke, placement, autosize_x, autosize_y, visible, enabled, alpha, rotate />
+			<properties(android): form />
+			
 	<component>
 		[div(js-ui, android)]
 			<description: />
@@ -153,7 +168,7 @@
 			<events(android): draw />
 
 	<component>
-		[img(js-ui) image(android)]
+		[img(js-ui, android)]
 			<description: />
 			<constructor_params(js-ui): src />
 			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />
@@ -199,7 +214,7 @@
 			<properties(android): caption, cursor_visible, hint, text_color, text_selectable, links_clickeable, lines, max_lines, max_height, max_width, min_height, min_width />
 
 	<component>
-		[progress_bar(js-ui) progressbar(android)]
+		[progress_bar(js-ui, android)]
 			<description: />
 			<constructor_params(js-ui): images />
 			<properties(js-ui): x, y, rotation, width, height, count, visible, alpha />

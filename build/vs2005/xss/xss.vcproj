@@ -257,6 +257,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\xss\dsl\sql.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\third_party\tinyXml\tinystr.cpp"
 				>
 			</File>
@@ -319,11 +323,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\xss\lang\base.h"
+				RelativePath="..\..\..\include\base.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\base.h"
+				RelativePath="..\..\..\include\xss\lang\base.h"
 				>
 			</File>
 			<File
@@ -412,6 +416,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\serial.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\xss\dsl\sql.h"
 				>
 			</File>
 			<File

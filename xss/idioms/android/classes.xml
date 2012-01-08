@@ -649,7 +649,7 @@
 			</method>-->
 		</class>
 		
-		<class id="image" super="IWidget" output_id="ImageView">
+		<class id="img" super="IWidget" output_id="ImageView">
 			<array id="imports">
 				<object import="android.widget.ImageView"/>
 			</array>
@@ -743,7 +743,7 @@
 			<event id="change" output_id="onCheckedChanged" interface="OnCheckedChangeListener" def_args="RadioGroup group, int checkedId" set_handle="setOnCheckedChangeListener" set_param_hnd="this"/>
 		</class>
 		
-		<class id="progressbar" super="IWidget" output_id="ProgressBar">
+		<class id="progress_bar" super="IWidget" output_id="ProgressBar">
 			<array id="imports">
 				<object import="android.widget.ProgressBar"/>
 			</array>
@@ -784,7 +784,7 @@
 			</method>-->
 		</class>
 		
-		<class id="seekbar" super="progressbar" output_id="SeekBar">
+		<class id="seekbar" super="progress_bar" output_id="SeekBar">
 			<array id="imports">
 				<object import="android.widget.SeekBar"/>
 				<object import="android.widget.SeekBar.OnSeekBarChangeListener"/>

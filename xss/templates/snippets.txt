@@ -1,0 +1,325 @@
+[Snippets]
+
+
+(UI)
+
+:div
+
+<div id="" x="0" y="0" width="100" height="100" placement="">
+</div>
+
+:img
+
+<img id="" src="{Resource Name}" x="0" y="0" width="100" height="100"/>
+
+:label
+
+<label id="" x="0" y="0" font="{CSS Font}" caption="{Enter Caption}"/>
+
+:sound
+
+<sound id="" src="{Resource Name}" play="true"/>
+
+:video
+
+<video id="" src="{Resource Name}" loop="true" autoplay="true"/>
+
+:button
+
+<button id="" x="0" y="0" width="50" height="50" up="{Resource Name}" down="{Resource Name}">
+
+:state_button
+
+<state_button id="" x="0" y="0" width="50" height="50" active="{Resource Name}" inactive="{Resource Name}"/>
+
+:progress_bar
+
+<progress_bar id="" x="0" y="0" width="50" height="50" value="50"/>
+
+:switch
+
+<switch id="" active="0" x="0" y="0" width="100" height="100">
+</switch>
+
+:circle
+
+<circle id="" x="0" y="0" radius="50" fill="gray" stroke="black" line_width="1"/>
+
+:rectangle
+
+<rectangle id="" x="0" y="0" width="50" height="50" fill="gray" stroke="black" line_width="1"/>
+
+:polygon
+
+<polygon id="" x="0" y="0" fill="gray" stroke="black" line_width="1">
+	<polygon_point id="" x="0"  y="0"/>
+	<polygon_point id="" x="50" y="0"/>
+	<polygon_point id="" x="50" y="50"/>
+	<polygon_point id="" x="0"  y="0"/>
+</polygon>
+
+:self_drawn
+
+<self_drawn id="" x="0" y="0" width="100" height="100"/>
+
+:clip_area
+
+<clip_area id="" x="0" y="0" width="100" height="100" form="rect"/>
+
+-TODO
+sprite_sheet
+sprite
+
+
+(3JS Canvas)
+
+:transform
+
+<transform id="">
+    <position x="0" y="0" z="0"/>	
+    <rotation x="0" y="0" z="0"/>	
+    <scale    x="1" y="1" z="1"/>	
+</transform>
+
+:plane
+
+<plane id="" width="100" height="100" x_segments="1" y_segments="1" material="{Resource Name}">
+    <position x="0" y="0" z="0"/>	
+    <rotation x="0" y="0" z="0"/>	
+    <scale    x="1" y="1" z="1"/>	
+</plane>
+
+:cube
+
+<cube id="" width="100" height="100" depth="100" x_segments="1" y_segments="1" z_segments="1" material="{Resource Name}">			
+    <position x="0" y="0" z="0"/>	
+    <rotation x="0" y="0" z="0"/>	
+    <scale    x="1" y="1" z="1"/>	
+</cube>
+
+:cylinder
+
+<cylinder id="" segments="50" top_radius="100" bottom_radius="100" height="100" material="{Resource Name}">
+    <position x="0" y="0" z="0"/>	
+    <rotation x="0" y="0" z="0"/>	
+    <scale    x="1" y="1" z="1"/>	
+</cylinder>		
+
+:sphere
+
+<sphere id="" radius="100" x_segments="50" y_segments="50" material="{Resource Name}">			
+    <position x="0" y="0" z="0"/>	
+    <rotation x="0" y="0" z="0"/>	
+    <scale    x="1" y="1" z="1"/>	
+</sphere>
+
+:composite_material
+
+<composite_material id="">
+    <!--{Material List}-->
+</composite_material>
+
+:basic_material
+
+<basic_material id="" color="gray" texture_src="{Resource Name}" alpha="100"/>
+
+:ambient_light
+
+<ambient_light id="" color="gray"/>
+
+:directional_light
+
+<directional_light id="" color="gray">
+    <position x="0" y="0" z="0"/>	
+    <rotation x="0" y="0" z="0"/>	
+</directional_light>
+
+:camera
+
+<camera id="" fov="75" aspect="1.5" near="1" far="3000">
+    <position x="0" y="0" z="0"/>	
+    <rotation x="0" y="0" z="0"/>	
+</camera>
+
+:quake_camera
+
+<quake_camera id="" fov="75" aspect="1.5" near="1" far="10000" speed="70" look_speed="0.05" no_fly="true" vertical="false">		
+    <position x="0" y="0" z="0"/>	
+    <rotation x="0" y="0" z="0"/>	
+</quake_camera>
+
+-TODO
+icosahedron
+playing_sound
+material
+normal_material
+texture
+texture_cube
+light
+point_light
+particle
+particle_system
+
+
+(3JS WebGL)
+
+//+= 3JS Canvas
+
+:model
+
+<model id="" src="{Resource Name}">
+    <position x="0" y="0" z="0"/>	
+    <rotation x="0" y="0" z="0"/>	
+    <scale    x="1" y="1" z="1"/>	
+</model>		
+
+:lambert_material
+
+<lambert_material id="" color="gray"/>	
+
+-TODO
+phong_material
+
+
+(Box2d)
+
+:physics
+
+<physics body_type="static" shape="rect" sensor="false"/>
+
+:spawner
+
+<spawner id="" x="0" y="0" rotation="0" auto_start="true" frequency="1" creator_class="{Class Name}" velocity="1"/>
+
+:distance_joint
+
+<distance_joint id="" body_a="{Body ID}" body_b="{Body ID}"	length="5"/>
+
+:revolute_joint
+
+<revolute_joint id="" body_a="{Body ID}" body_b="{Body ID}"						
+				enable_motor="false" max_motor_torque="100000" 
+                enable_limit="false" lower_angle="-60" upper_angle="60"/>
+
+:prismatic_joint
+
+<prismatic_joint id="" body_a="{Body ID}" body_b="{Body ID}" axis="X_AXIS"
+				enable_limit="false" lower_translation="0" upper_translation="0"/>	
+
+-TODO
+body
+pulley_joint
+weld_joint
+
+
+(Android)
+
+:div
+
+<div id="" x="0" y="0" width="200" height="200" placement="none">
+</div>
+
+:holder
+
+<holder id="" x="0" y="0" width="200" height="200" placement="none">
+</holder>
+
+:button
+
+<button id="" x="0" y="0" width="60" height="30" placement="none"/>
+
+:img
+
+<img id="" src="{Resource Name}" x="0" y="0" width="100" height="100" placement="none"/>
+
+:label
+
+<label id="" x="0" y="0" caption="{Enter Caption}" placement="none"/>
+
+:editbox
+
+<editbox id="" x="0" y="0" width="180" height="50" text="{Enter Caption}" hint="{Enter Hint}" placement="none"/>
+
+:checkbox
+
+<checkbox id="" x="0" y="0" width="100" height="30" caption="{Enter Caption}" placement="none"/>
+
+:radiogroup
+
+<radiogroup id="" x="0" y="0" width="100" height="200" orientation="vertical" placement="none">
+</radiogroup>
+
+:radiobutton
+
+<radiobutton id="" x="0" y="0" width="100" height="30" caption="{Enter Caption}" placement="none"/>
+
+:togglebutton
+
+<togglebutton id="" x="0" y="0" width="50" height="30" text_on="{Enter Caption}" text_off="{Enter Caption}" placement="none"/>
+
+:progress_bar
+
+<progress_bar id="" x="0" y="0" width="60" height="20" progress="50" max="100" style="horizontal" placement="none"/>
+
+:seekbar
+
+<seekbar id="" x="0" y="0" width="200" height="30" max="100" progress="60"/>
+
+:switcher
+
+<switcher id="" active_index="0" x="0" y="0" width="100" height="100" placement="none">
+</switcher>
+
+:scroller
+
+<scroller id="" x="0" y="0" width="100" height="200" padding="5" placement="none">
+</scroller>
+
+:tabcontrol
+
+<tabcontrol id="" x="0" y="0" widht="200" height="200" placement="none">
+	<property id="tabs" type="array">
+		<string value="{Enter Caption}"/>
+		<string value="{Enter Caption}"/>
+		<string value="{Enter Caption}"/>
+	</property>
+</tabcontrol>
+
+:circle
+
+<circle id="" x="60" y="60" radius="50" fill="red" stroke="white" line_width="2"/>
+
+:rectangle
+
+<rectangle id="" x="0" y="0" width="50" height="50" fill="brow" stroke="white" line_width="2"/>
+
+:line
+
+<line id="" x="0" y="0" width="50" height="50" fill="brow" stroke="white" line_width="2"/>
+
+:point
+
+<point id="" x="0" y="0" fill="brow" stroke="white" line_width="2"/>
+
+:polygon
+
+<polygon id="" x="0" y="0" fill="pink" stroke="white" line_width="2">
+	<polygon_point id="" x="50"  y="20"/>
+	<polygon_point id="" x="20" y="50"/>
+	<polygon_point id="" x="100" y="70"/>
+</polygon>
+
+:clip_area
+
+<clip_area id="" x="0" y="0" width="100" height="100" form="rect"/>
+
+-TODO
+imagebutton=img
+spinner
+listbox
+imagegallery
+replicator
+sound
+video
+self_drawn
+

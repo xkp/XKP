@@ -1,0 +1,13 @@
+<application name="{Enter Project Name}" title="{Enter Title}" src="android.xs">
+
+	<resources>
+        <!-- declare the images, audios and videos to be used
+			Availables: res_image, res_audio, res_video -->
+	</resources>
+
+    <!-- describe your components
+		Availables: div, holder, switcher, img, label, button, checkbox, editbox, radiobutton, radiogroup, 
+					togglebutton, progress_bar, seekbar, scroller, tabcontrol, 
+					line, point, rectangle, circle, polygon, clip_area -->
+
+</application>

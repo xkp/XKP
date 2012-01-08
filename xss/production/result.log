@@ -32,27 +32,6 @@ log: -- Rendering instance: application
 log: Properties size: 0
 log: Methods size: 0
 log: Events size: 0
-log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/values/attrs.xml
-log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/drawable/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/assets/.empty
-log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/bin/.empty
-log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/gen/.empty
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Caller.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Assign.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Every.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Handler.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/IExecutable.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Interpolator.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/IntInterpolator.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/IInterpolator.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/DoubleInterpolator.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Key.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Manager.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/OnUpdate.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Sequence.java
 log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/values/colors.xml
 log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
 log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/drawable/icon.png
@@ -131,13 +110,13 @@ log: ### End Rendering Android Types...
 log: ### Begin Rendering Android Imports...
 log: ### End Rendering Android Imports...
 log: Begin Rendering Resources Instances...
-log: Copying resource file c:/dev/xkp/xss/samples/android/characters/resources/aladdin.png
-log: Copying resource file c:/dev/xkp/xss/samples/android/characters/resources/mickey.png
-log: Copying resource file c:/dev/xkp/xss/samples/android/characters/resources/pluto.png
-log: Copying resource file c:/dev/xkp/xss/samples/android/characters/resources/audio1.ogg
-log: Copying resource file c:/dev/xkp/xss/samples/android/characters/resources/audio2.ogg
-log: Copying resource file c:/dev/xkp/xss/samples/android/characters/resources/mickey.3gp
-log: Copying resource file c:/dev/xkp/xss/samples/android/characters/resources/pluto.3gp
+log: Copying resource file d:/xkp/xss/samples/android/characters/resources/aladdin.png
+log: Copying resource file d:/xkp/xss/samples/android/characters/resources/mickey.png
+log: Copying resource file d:/xkp/xss/samples/android/characters/resources/pluto.png
+log: Copying resource file d:/xkp/xss/samples/android/characters/resources/audio1.ogg
+log: Copying resource file d:/xkp/xss/samples/android/characters/resources/audio2.ogg
+log: Copying resource file d:/xkp/xss/samples/android/characters/resources/mickey.3gp
+log: Copying resource file d:/xkp/xss/samples/android/characters/resources/pluto.3gp
 log: End Rendering Resources Instances...
 log: -- Rendering instance: aladdin
 log: Properties size: 5
@@ -399,14 +378,14 @@ log: Adding import android.widget.BaseAdapter on android
 log: Adding import android.content.Context on android
 log: ### End Rendering Android Imports...
 log: Begin Rendering Resources Instances...
-log: Copying resource file c:/dev/xkp/xss/samples/android/gallery/photos/gallery_photo_1.jpg
-log: Copying resource file c:/dev/xkp/xss/samples/android/gallery/photos/gallery_photo_2.jpg
-log: Copying resource file c:/dev/xkp/xss/samples/android/gallery/photos/gallery_photo_3.jpg
-log: Copying resource file c:/dev/xkp/xss/samples/android/gallery/photos/gallery_photo_4.jpg
-log: Copying resource file c:/dev/xkp/xss/samples/android/gallery/photos/gallery_photo_5.jpg
-log: Copying resource file c:/dev/xkp/xss/samples/android/gallery/photos/gallery_photo_6.jpg
-log: Copying resource file c:/dev/xkp/xss/samples/android/gallery/photos/gallery_photo_7.jpg
-log: Copying resource file c:/dev/xkp/xss/samples/android/gallery/photos/gallery_photo_8.jpg
+log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_1.jpg
+log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_2.jpg
+log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_3.jpg
+log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_4.jpg
+log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_5.jpg
+log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_6.jpg
+log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_7.jpg
+log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_8.jpg
 log: End Rendering Resources Instances...
 log: -- Rendering instance: gallery
 log: Properties size: 5
@@ -469,8 +448,8 @@ log: Adding import android.widget.SeekBar on android
 log: Adding import android.widget.SeekBar.OnSeekBarChangeListener on android
 log: ### End Rendering Android Imports...
 log: Begin Rendering Resources Instances...
-log: Copying resource file c:/dev/xkp/xss/samples/android/kitchensink/images/dialog.png
-log: Copying resource file c:/dev/xkp/xss/samples/android/kitchensink/images/emulator.png
+log: Copying resource file d:/xkp/xss/samples/android/kitchensink/images/dialog.png
+log: Copying resource file d:/xkp/xss/samples/android/kitchensink/images/emulator.png
 log: End Rendering Resources Instances...
 log: -- Rendering instance: kitchen
 log: Properties size: 2
@@ -1618,14 +1597,19 @@ log: Properties size: 1
 log: Rendering property: app
 log: Methods size: 0
 log: Events size: 0
-log: Oh noes... a PROPERTYError [idiom] Sequences expect a property to modify
-2314expression = app.target2314file = d:/xkp/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
+log: Oh noes... a PROPERTY
+Error [idiom] Sequences expect a property to modify
+	expression = app.target
+	file = d:/xkp/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
 
 ===[ json1.project.xml ]================(Tests)
 
 
 Error [reader] Invalid XML file
-2314xml error = Error document empty.2314line = 02314column = 02314file = d:/xkp/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
+	xml error = Error document empty.
+	line = 0
+	column = 0
+	file = d:/xkp/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
 
 ===[ ms1.project.xml ]================(Tests)
 
@@ -2013,6 +1997,49 @@ Success are greateful
 String foo = Singleton.get_foo();
 
 	
+
+Success are greateful
+===[ xss12.project.xml ]================(Tests)
+
+
+log: properties size: 0
+log: methods size: 0
+log: events size: 0
+log: children size: 1
+		FROM render_instances on xss12_idiom (1)
+	
+			INSTANCE: i1
+		
+		FROM render_instances on xss12_idiom (2)
+	
+			INSTANCE: 
+		
+			INSTANCE: i2
+		
+		Rendering User Types on xss12.idiom (1)...
+	
+		Rendering User Types on xss12.idiom (2)...
+	
+			[instance: i1]
+		
+			[instance: application]
+		
+					private void click() {
+				
+						Display disp;
+Integer w = disp.getWidth();
+Integer h = disp.getHeight();
+					
+					}
+				
+			instance id= "i1" idiom= "xss12_idiom1"
+		
+			instance id= "application" idiom= ""
+		
+			instance id= "" idiom= "xss12_idiom2"
+		
+			instance id= "i2" idiom= "xss12_idiom2"
+		
 
 Success are greateful
 ===[ xss2.project.xml ]================(Tests)

@@ -37,14 +37,14 @@
 		</scroller>
 		
 		<scroller padding="5" placement="client">
-			<image id="img1" src="images/emulator.png"/>
+			<img id="img1" src="images/emulator.png"/>
 		</scroller>
 		
 		<div padding="5" placement="client">
-			<progressbar id="prgbar1" x="0" y="0" style="small"/>
-			<progressbar id="prgbar2" x="70" y="0" style="normal"/>
-			<progressbar id="prgbar3" x="180" y="0" style="large"/>
-			<progressbar id="prgbar4" x="0" y="100" width="200" max="100" progress="60" secondary_progress="30" style="horizontal"/>
+			<progress_bar id="prgbar1" x="0" y="0" style="small"/>
+			<progress_bar id="prgbar2" x="70" y="0" style="normal"/>
+			<progress_bar id="prgbar3" x="180" y="0" style="large"/>
+			<progress_bar id="prgbar4" x="0" y="100" width="200" max="100" progress="60" secondary_progress="30" style="horizontal"/>
 			<seekbar id="seekb1" x="0" y="150" width="200" max="200" progress="60" secondary_progress="30"/>
 		</div>
 	</tabcontrol>

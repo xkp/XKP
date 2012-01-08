@@ -1,6 +1,6 @@
 <xs>
     <class id="character" super="div" width="320" height="100" padding="2">
-		<image id="picture" x="0" y="0" width="100" height="100"/>
+		<img id="picture" x="0" y="0" width="100" height="100"/>
         <label id="lname" x="105" y="0" width="200" gravity="center_vertical"/>
         <label id="lsurname" x="105" y="30" width="200" gravity="center_vertical"/>
         <label id="lemployment" x="105" y="60" width="200" gravity="center_vertical"/>
