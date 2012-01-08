@@ -27,7 +27,18 @@ import xkp.android.libs.Layout.XKPLayout;
 				private Button btn1;
 				private Button btn2;
 				private Button btn3;
-			private Sequence anim1;private Sequence anim2;private Sequence anim3;
+			private Sequence anim1;
+private Sequence anim2;
+private Sequence anim3;
+			private Integer prop_anim3_test_prop = 3;
+			private Object prop_anim3_test_prop1;
+			public void prop_anim3_test_prop1_set(Object value) {
+				prop_anim3_test_prop1 = value;
+				anim3.stop_anim3();
+			}
+		public void mthd_anim3_stop_anim3() {
+			anim3.stop();
+		}
 	ActAnimTest application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
@@ -119,9 +130,6 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
                 }
                 });
 anim3 = new Sequence();anim3.setLoop(true);
-		public void mthd_anim3_stop_anim3() {
-			stop();
-		}
                 anim3.start();
             anim3.setParent(null);
 					//x
@@ -154,7 +162,7 @@ anim3 = new Sequence();anim3.setLoop(true);
                     {
                     if (prop_application_click_count == 3)
                     {
-						anim3.stop_anim3();
+						mthd_anim3_stop_anim3();
                     }
                 }
 			    });
