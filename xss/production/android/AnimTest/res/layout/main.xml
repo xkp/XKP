@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-			<xkp.android.libs.Layout.XKPLayout 
+			<xkp.android.AnimTest.XKPLayout 
 				xmlns:android="http://schemas.android.com/apk/res/android" 
 				xmlns:xkp="http://schemas.android.com/apk/res/xkp.android.AnimTest" 
 				android:id="@+id/application" 
@@ -7,12 +7,52 @@
 				android:layout_height="fill_parent"
 				xkp:placement="client"
 			>
-				<Button android:id="@+id/btn1"
+				<TextView android:id="@+id/lbl1"
 				android:text="@string/res0"
+				xkp:layout_x="10dp"
+				xkp:layout_y="10dp"
+				android:layout_width="140dp"
+				android:layout_height="35dp"
+			>
+				</TextView>
+				<TextView android:id="@+id/lbl2"
+				android:text="@string/res1"
+				xkp:layout_x="10dp"
+				xkp:layout_y="30dp"
+				android:layout_width="140dp"
+				android:layout_height="35dp"
+			>
+				</TextView>
+				<TextView android:id="@+id/lbl3"
+				android:text="@string/res2"
+				xkp:layout_x="10dp"
+				xkp:layout_y="50dp"
+				android:layout_width="140dp"
+				android:layout_height="35dp"
+			>
+				</TextView>
+				<Button android:id="@+id/btn1"
+				android:text="@string/res3"
 				xkp:layout_x="40dp"
 				xkp:layout_y="110dp"
 				android:layout_width="100dp"
 				android:layout_height="43dp"
 			>
 				</Button>
-			</xkp.android.libs.Layout.XKPLayout>
+				<Button android:id="@+id/btn2"
+				android:text="@string/res4"
+				xkp:layout_x="40dp"
+				xkp:layout_y="160dp"
+				android:layout_width="100dp"
+				android:layout_height="45dp"
+			>
+				</Button>
+				<Button android:id="@+id/btn3"
+				android:text="@string/res5"
+				xkp:layout_x="40dp"
+				xkp:layout_y="210dp"
+				android:layout_width="100dp"
+				android:layout_height="47dp"
+			>
+				</Button>
+			</xkp.android.AnimTest.XKPLayout>

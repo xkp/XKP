@@ -243,6 +243,7 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 
 {
 	<xss:marker id="declarations"/>
+    <xss:e value="'Act' + appName"/> application;
 <xss:code>
 	// build instance or type constructors
 	string prefix = "";
@@ -367,6 +368,7 @@ void initCallers() {
 		out(indent = 0)
 		{
 			void initInstances() <xss:open_brace/>
+                application = this;
 		}
 		
 		compiler.inject("render_instances", app = appName);

@@ -42,7 +42,6 @@ on render_update()
 on copy_default_files(app, bns, plibs)
 {
 	array<string> files = [
-		"Caller.java",
 		"Assign.java",
 		"Every.java",
 		"Handler.java",
@@ -54,7 +53,9 @@ on copy_default_files(app, bns, plibs)
 		"Key.java",
 		"Manager.java",
 		"OnUpdate.java",
-		"Sequence.java"
+		"Sequence.java",
+        "EventHolder.java",
+        "SequenceUpdateEvent.java"
 	];
 	
 	string ns = bns + ".libs.Sequence";

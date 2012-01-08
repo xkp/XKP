@@ -286,6 +286,9 @@
             
     method generate_sequence(seq, parent, rendering_instance)
     {
+        compiler.log("PINGAAAAAAAAAAA");
+        compiler.log(seq.loop);
+    
         string parent_id = "null";
         string seq_id = seq.output_id;
         
@@ -305,6 +308,10 @@
 
             //initialize it here
             out() {<xss:e v="seq_id"/> =} compiler.xss("../common-js/instantiator.xss", seq);
+            
+            if (seq.loop)
+                out() {<xss:e v="seq_id"/>.setLoop(true);}
+            
             if (parent)
             {
                 //build the instance chain

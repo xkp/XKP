@@ -2197,7 +2197,17 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 
 				//let the idiom process implementations
 				XSSContext ictx(new xss_context(ctx));
-        if (use_event_instance_)
+
+        bool use_event_instance = use_event_instance_;
+        XSSObject ai_type = actual_instance->type();
+        if (ai_type->has("event_scope"))
+          {
+            //the class wants to use its own event scope
+            str event_scope = ai_type->get<str>("event_scope", str("application"));
+            use_event_instance = event_scope != "application";
+          }
+
+        if (use_event_instance)
           ictx->set_this(actual_instance);
         else
 				  ictx->set_this(instance);

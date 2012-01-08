@@ -1,11 +1,34 @@
 <application name="AnimTest" title="Testing sequences" src="animtest.xs" width="320" height="430">
 
+    <label id="lbl1" caption="Button 1 Stopped" x="10" y="10" width="140" height="35"/>
+    <label id="lbl2" caption="Button 2 Stopped" x="10" y="30" width="140" height="35"/>
+    <label id="lbl3" caption="Button 3 Looping..." x="10" y="50" width="140" height="35"/>
+
     <button id="btn1" caption="Foo, bar" x="40" y="110" width="100" height="43"/>
+    <button id="btn2" caption="Bar, Foo" x="40" y="160" width="100" height="45"/>
+    <button id="btn3" caption="Boo, Far" x="40" y="210" width="100" height="47"/>
 
     <sequence id="anim1">
         <at time="0">
-            <animate property="btn1.x" from="0" to="200" in="3"/>
+            <animate property="btn1.x" from="40" to="200" in="1"/>
         </at>
     </sequence>
 
+    <sequence id="anim2">
+        <at time="0">
+            <animate property="btn2.x" from="@" to="btn1.x" in="2"/>
+        </at>
+    </sequence>
+
+    <sequence id="anim3" loop="true" auto_start="true">
+        <at time="0">
+            <animate property="btn3.x" from="40" to="200" in="1.5"/>
+        </at>
+        <at time="1.5">
+            <animate property="btn3.x" from="200" to="40" in="1.5"/>
+        </at>
+        <when expr="application.click_count == 3">
+            <run method="stop_anim3"/>
+        </when>
+    </sequence>
 </application>

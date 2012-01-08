@@ -1,0 +1,18 @@
+<xss:parameter id="e"/>
+<xss:parameter id="it"/>
+
+<xss:e v="it.output_id"/>.events.addListener("<xss:e v="e.id"/>", new EventHolder.Implementor() 
+{
+	public void call(Object ev) 
+	{
+        <xss:code>
+		for(var impl in e.impls)
+		{
+			out(indent = 2)
+			{
+				<xss:e>impl.render()</xss:e>
+			}
+		}
+        </xss:code>
+	}
+});

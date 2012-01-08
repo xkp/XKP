@@ -3,12 +3,17 @@
  * and open the template in the editor.
  */
 package xkp.android.libs.Sequence;
-import java.util.ArrayList;
 /**
  *
  * @author Adrian
  */
-public interface Handler 
+public class SequenceUpdateEvent
 {
-	public boolean update(double t, double pt);
+	public double time;
+	public double delta;
+	public SequenceUpdateEvent(double t, double d)
+    {
+    	time  = t;
+    	delta = d;
+    }
 }

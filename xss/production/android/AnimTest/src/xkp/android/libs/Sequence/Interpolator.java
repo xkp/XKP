@@ -8,44 +8,48 @@ import java.util.ArrayList;
  *
  * @author Adrian
  */
-public class Interpolator extends Handler
+public class Interpolator implements Handler
 {
-    public IInterpolator interpolator;
-    public Assign        assign;
-    public ArrayList     keys = new ArrayList();
-    public void setTarget(Object obj)
+	public Interpolator()
+	{
+	}
+    public void setAssigner(Assign assign)
     {
-        this.target = obj;
+        this.assign_ = assign;
     }
-    public void addKey(double t, double value)
+    public void setInterpolator(IInterpolator interpolator)
     {
-        Key key1=new Key(t,value);
-        keys.add(key1);
+        this.interpolator_ = interpolator;
     }
-    public void update(double t,double pt)  
+    public void addKey(double t, Object value)
     {
-        if (keys.isEmpty()|| this.keys.size() < 2)
-            return; //fail
-        for(int i = 1; i < this.keys.size(); i++)
+        this.keys_.add(new Key(t, value));
+    }
+    public void setKeyValue(int index, Object value)
+    {
+        Key k = this.keys_.get(index);
+        k.value = value;
+    }
+    public boolean update(double t, double pt)  
+    {
+        if (this.keys_.size() < 2)
+            return true; //finished
+        for(int i = 1; i < this.keys_.size(); i++)
         {
-            Key k1 = (Key)this.keys.get(i-1);
-            Key k2 = (Key)this.keys.get(i);
+            Key k1 = this.keys_.get(i-1);
+            Key k2 = this.keys_.get(i);
             if (k1.t <= t && k2.t > t)
             {
                 double tt = (t - k1.t)/(k2.t - k1.t);
                 //double value = this.interpolate(k1.value, k2.value, tt);
-                Object value = this.interpolator.interpolate(k1.value, k2.value, tt);
-                this.assign.execute(target, value);
-                break;
+                Object value = this.interpolator_.interpolate(k1.value, k2.value, tt);
+                this.assign_.put(value);
+                return false;
             }
         }
+        return true; //finished
     }
-    public void setAssign(Assign a)
-    {
-        this.assign=a;
-    }
-    public void defaultInterpolator(IInterpolator i)
-    {
-        this.interpolator=i;
-    }
+    private IInterpolator  interpolator_;
+    private Assign         assign_;
+    public 	ArrayList<Key> keys_ = new ArrayList<Key>();
 }

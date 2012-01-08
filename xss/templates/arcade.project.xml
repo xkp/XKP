@@ -1,0 +1,10 @@
+<project entry_point="../idioms/ui/ui_standalone.xss" language="js" target="" output="">
+    <path>
+        <output path="../production/test"/>
+    </path>
+
+    <idiom src="../idioms/ui/ui.xml"/>
+    <idiom src="../idioms/resources/resources.xml"/>
+    <idiom src="../idioms/box2d/box2d.xml"/>
+    <idiom src="../idioms/mutant-state/sequence.xml"/>
+</project>
