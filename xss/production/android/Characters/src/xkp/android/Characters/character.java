@@ -24,6 +24,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				private TextView lname;
 				private TextView lsurname;
 				private TextView lemployment;
+	ActCharacters application;
 			public character(Context context) {
 				this(context, null);
 			}
@@ -40,42 +41,42 @@ import xkp.android.libs.Layout.XKPLayout;
 				lemployment = (TextView) root.findViewById(R.id.lemployment);
 			TypedArray ta = context.obtainStyledAttributes(
 					attrs, R.styleable.character);
-				prop_character_name_set(ta.getString(R.styleable.character_name));
-				prop_character_surname_set(ta.getString(R.styleable.character_surname));
-				prop_character_employment_set(ta.getString(R.styleable.character_employment));
-				prop_character_img_src_set(ta.getString(R.styleable.character_img_src));
+				name_set(ta.getString(R.styleable.character_name));
+				surname_set(ta.getString(R.styleable.character_surname));
+				employment_set(ta.getString(R.styleable.character_employment));
+				img_src_set(ta.getString(R.styleable.character_img_src));
 			ta.recycle();
 			}
 void initCallers() {
 }
-			public String prop_character_name_get() {
+			public String name_get() {
 				return lname.getText().toString();
 			}
-			public void prop_character_name_set(String value) {
+			public void name_set(String value) {
 				lname.setText(value);
 			}
-			public String prop_character_surname_get() {
+			public String surname_get() {
 				return lsurname.getText().toString();
 			}
-			public void prop_character_surname_set(String value) {
+			public void surname_set(String value) {
 				lsurname.setText(value);
 			}
-			public String prop_character_employment_get() {
+			public String employment_get() {
 				return lemployment.getText().toString();
 			}
-			public void prop_character_employment_set(String value) {
+			public void employment_set(String value) {
 				lemployment.setText(value);
 			}
-			private String prop_character_img_src;
-			public void prop_character_img_src_set(String value) {
-				prop_character_img_src = value;
+			private String img_src;
+			public void img_src_set(String value) {
+				img_src = value;
 				util.setResourceImageView(R.id.picture, value);
 			}
-		public void mthd_character_foo() {
-			prop_character_name_set("foo");
+		public void foo() {
+			name_set("foo");
 		}
-		public void mthd_character_bar() {
-			prop_character_surname_set("bar");
+		public void bar() {
+			surname_set("bar");
 		}
 					public class XKPUtils {
 						void setResourceImageView(int id, String resource) {

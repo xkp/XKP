@@ -40,11 +40,11 @@
 	compiler.log("Events size: " + it.events.size);
 	for(var e in it.events)
 	{
-        string renderer_path = "event.xss";
-        if (event_renderer)
-            renderer_path = compiler.idiom_path(it, event_renderer);
+		string renderer_path = "event.xss";
+		if(event_renderer)
+			renderer_path = compiler.idiom_path(it, event_renderer);
 
-        string new_id = e.output_id + it.id;
+		string new_id = e.output_id + it.id;
 		compiler.xss(renderer_path, e = e, it = it, new_id = new_id);
 	}
 </xss:code>

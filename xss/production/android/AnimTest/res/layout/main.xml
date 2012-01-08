@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-			<xkp.android.AnimTest.XKPLayout 
+			<xkp.android.libs.Layout.XKPLayout 
 				xmlns:android="http://schemas.android.com/apk/res/android" 
 				xmlns:xkp="http://schemas.android.com/apk/res/xkp.android.AnimTest" 
 				android:id="@+id/application" 
@@ -55,4 +55,4 @@
 				android:layout_height="47dp"
 			>
 				</Button>
-			</xkp.android.AnimTest.XKPLayout>
+			</xkp.android.libs.Layout.XKPLayout>

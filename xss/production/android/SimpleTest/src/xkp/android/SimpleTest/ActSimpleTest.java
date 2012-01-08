@@ -26,6 +26,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				private Button btnFullName;
 				private TextView lblFullName;
 				private EditText edtContainer;
+	ActSimpleTest application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -47,6 +48,7 @@ import xkp.android.libs.Layout.XKPLayout;
 void initCallers() {
 }
 			void initInstances() {
+				application = this;
 			}
 						public void onClick(View v) {
 							switch (v.getId()) {

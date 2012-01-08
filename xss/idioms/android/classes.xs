@@ -1,3 +1,19 @@
+on pre_process(obj)
+{
+	if(obj.id == "")
+		obj.output_id = compiler.genid(obj.class_name);
+
+	// flatting properties
+	for(var p in obj.properties)
+		if(p.user_defined)
+			p.output_id = "prop_" + obj.output_id + "_" + p.name;
+	
+	// flatting methods
+	for(var m in obj.methods)
+		if(p.user_defined)
+			m.output_id = "mthd_" + obj.output_id + "_" + m.name;
+}
+
 on render_instances(app)
 {
 

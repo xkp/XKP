@@ -64,6 +64,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				private ProgressBar prgbar3;
 				private ProgressBar prgbar4;
 				private SeekBar seekb1;
+	ActKitchenSink application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -105,6 +106,7 @@ import xkp.android.libs.Layout.XKPLayout;
 void initCallers() {
 }
 			void initInstances() {
+				application = this;
 			}
 					public class XKPUtils {
 						void setupTabHost(int id, ArrayList<String> tabs) {

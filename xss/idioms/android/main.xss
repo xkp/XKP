@@ -29,15 +29,6 @@
 		}
 	}
 	
-	for(var inst in android.instances)
-	{
-		string new_output_id = inst.id;
-		if(new_output_id == "")
-			new_output_id = compiler.genid(inst.type.id);
-		
-		inst.output_id = new_output_id;
-	}
-	
 	//inject idiom event for render types
 	compiler.inject("render_types", app = appName, bns = base_namespace);
 	

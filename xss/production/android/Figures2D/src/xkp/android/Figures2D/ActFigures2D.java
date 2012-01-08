@@ -23,6 +23,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				private XKPCircle c1;
 				private XKPRectangle r1;
 				private XKPPolygon p1;
+	ActFigures2D application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -47,6 +48,7 @@ import xkp.android.libs.Layout.XKPLayout;
 void initCallers() {
 }
 			void initInstances() {
+				application = this;
 			}
 						public void onClickInsideFigure(View v) {
 							switch (v.getId()) {

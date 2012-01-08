@@ -2130,6 +2130,10 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 				variant cde  = lang->compile_code(mit->cde, mit->args, ctx);   assert(!cde.empty());
 
 				XSSMethod mthd(new xss_method(mit->name, return_type, args, cde));
+
+        //mark all xs methods
+        mthd->add_attribute("user_defined", true);
+
         methods->push_back(mthd); //td: !!! inheritance!
       }
 
@@ -2199,7 +2203,7 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 				XSSContext ictx(new xss_context(ctx));
 
         bool use_event_instance = use_event_instance_;
-        XSSObject ai_type = actual_instance->type();
+        XSSObject ai_type(actual_instance->type());
         if (ai_type->has("event_scope"))
           {
             //the class wants to use its own event scope

@@ -421,9 +421,10 @@
             int cond_idx = 0;
             for(var cond in seq.conditions)
             {
+				string rend_cond = compiler.render_expression(cond, seq);
                 out(indent = 3)
                 {
-                    if (<xss:e v="cond"/>)
+                    if (<xss:e v="rend_cond"/>)
                     <xss:open_brace/>
                 }
                 

@@ -20,6 +20,7 @@ import xkp.android.libs.Layout.XKPLayout;
 						extends Activity
 {
 				private Gallery gallery;
+	ActGallery application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -35,6 +36,7 @@ import xkp.android.libs.Layout.XKPLayout;
 void initCallers() {
 }
 			void initInstances() {
+				application = this;
 			}
 	public class ImageAdapter extends BaseAdapter {
 		private static final int ITEM_WIDTH = 236;

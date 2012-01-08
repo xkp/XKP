@@ -9,7 +9,7 @@ log: ### End Rendering Android Types...
 log: Rendering Sequence Types...
 log: Adding interface OnClickListener on android
 log: ### Begin Rendering Android Imports...
-log: Adding import android.widget.Button on android
+log: Adding import android.widget.TextView on android
 log: Adding import android.text.method.KeyListener on android
 log: Adding import android.view.View.OnClickListener on android
 log: Adding import android.view.View.OnLongClickListener on android
@@ -17,10 +17,32 @@ log: Adding import android.view.MotionEvent on android
 log: Adding import android.view.View.OnTouchListener on android
 log: Adding import android.view.View.OnKeyListener on android
 log: Adding import android.view.View.OnFocusChangeListener on android
+log: Adding import android.widget.Button on android
 log: ### End Rendering Android Imports...
 log: Rendering Sequence...
 log: -- Rendering instance: anim1
 log: Properties size: 0
+log: Methods size: 0
+log: Events size: 2
+log: -- Rendering instance: anim2
+log: Properties size: 0
+log: Methods size: 0
+log: Events size: 2
+log: -- Rendering instance: anim3
+log: Properties size: 1
+log: Methods size: 1
+log: Rendering method: stop_anim3
+log: Events size: 0
+log: -- Rendering instance: lbl1
+log: Properties size: 5
+log: Methods size: 0
+log: Events size: 0
+log: -- Rendering instance: lbl2
+log: Properties size: 5
+log: Methods size: 0
+log: Events size: 0
+log: -- Rendering instance: lbl3
+log: Properties size: 5
 log: Methods size: 0
 log: Events size: 0
 log: -- Rendering instance: btn1
@@ -28,8 +50,19 @@ log: Properties size: 5
 log: Methods size: 0
 log: Events size: 1
 log: Rendering event: click
+log: -- Rendering instance: btn2
+log: Properties size: 5
+log: Methods size: 0
+log: Events size: 1
+log: Rendering event: click
+log: -- Rendering instance: btn3
+log: Properties size: 5
+log: Methods size: 0
+log: Events size: 1
+log: Rendering event: click
 log: -- Rendering instance: application
-log: Properties size: 0
+log: Properties size: 1
+log: Rendering property: click_count
 log: Methods size: 0
 log: Events size: 0
 log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/values/colors.xml
@@ -42,7 +75,6 @@ log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/a
 log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/bin/.empty
 log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/gen/.empty
 log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Caller.java
 log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Assign.java
 log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Every.java
 log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Handler.java
@@ -55,6 +87,8 @@ log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms
 log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Manager.java
 log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/OnUpdate.java
 log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Sequence.java
+log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/EventHolder.java
+log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/SequenceUpdateEvent.java
 
 Success are greateful
 ===[ characters.project.xml ]================
@@ -693,7 +727,15 @@ Success are greateful
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering Sequence Types...
+log: PINGAAAAAAAAAAA
+log: null
+log: PINGAAAAAAAAAAA
+log: null
 log: Rendering Sequence...
+log: PINGAAAAAAAAAAA
+log: null
+log: PINGAAAAAAAAAAA
+log: null
 log: Rendering UI...
 Success are greateful
 ===[ 3js-ui.project.xml ]================(Tests)
@@ -810,12 +852,20 @@ log: Rendering UI Types...
 log: body.xss
 log: spawner.xss
 log: sequence.xss
+log: PINGAAAAAAAAAAA
+log: null
 log: sequence.xss
+log: PINGAAAAAAAAAAA
+log: null
 log: body.xss
 log: sequence.xss
+log: PINGAAAAAAAAAAA
+log: null
 log: body.xss
 log: body.xss
 log: Rendering Sequence Types...
+log: PINGAAAAAAAAAAA
+log: null
 log: Rendering UI...
 log: Rendering Sequence...
 Success are greateful
@@ -944,7 +994,7 @@ log: Rendering property: bar
 
 
 
-		public Object mthd__check_type() {
+		public Object check_type() {
 			Integer a;
 a = 1;
 Object b;
@@ -957,7 +1007,7 @@ return a;
 
 
 
-		public String mthd__foobar(Integer v) {
+		public String foobar(Integer v) {
 			t3.real_run();
 t1.foo = t2.foo + 10;
 t2.set_bar(t1.foo + t1.get_bar() + "++");
@@ -999,21 +1049,21 @@ for(Object i : list)
 
 
 
-			private Integer prop__typing;
+			private Integer typing;
 		
 
 
 
 
 
-			private Integer prop__simple = 50;
+			private Integer simple = 50;
 		
 
 
 
 
 
-			public Float prop__read_only_get() {
+			public Float read_only_get() {
 				return 10.000000;
 			}
 		
@@ -1022,10 +1072,10 @@ for(Object i : list)
 
 
 
-			private Object prop__writable;
+			private Object writable;
 			
-			public void prop__writable_set(Object value) {
-				prop__writable = value;
+			public void writable_set(Object value) {
+				writable = value;
 				console.log(value);
 			}
 		
@@ -1034,11 +1084,11 @@ for(Object i : list)
 
 
 
-			public Integer prop__mixed_get() {
+			public Integer mixed_get() {
 				return 10;
 			}
 			
-			public void prop__mixed_set(Object value) {
+			public void mixed_set(Object value) {
 				console.log("Something");
 			}
 		
@@ -1616,12 +1666,22 @@ Error [reader] Invalid XML file
 
 log: Rendering Sequence Types...
 log: Rendering Sequence...
+log: PINGAAAAAAAAAAA
+log: null
+log: PINGAAAAAAAAAAA
+log: null
 Success are greateful
 ===[ ms2.project.xml ]================(Tests)
 
 
 log: Rendering Sequence Types...
+log: PINGAAAAAAAAAAA
+log: null
 log: Rendering Sequence...
+log: PINGAAAAAAAAAAA
+log: null
+log: PINGAAAAAAAAAAA
+log: null
 Success are greateful
 ===[ ms3.project.xml ]================(Tests)
 
@@ -1631,6 +1691,8 @@ log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
 log: Rendering Sequence...
+log: PINGAAAAAAAAAAA
+log: null
 Success are greateful
 ===[ ms4.project.xml ]================(Tests)
 
@@ -1638,8 +1700,12 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
+log: PINGAAAAAAAAAAA
+log: null
 log: Rendering UI...
 log: Rendering Sequence...
+log: PINGAAAAAAAAAAA
+log: null
 Success are greateful
 ===[ ms5.project.xml ]================(Tests)
 
@@ -1656,6 +1722,8 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: sequence.xss
+log: PINGAAAAAAAAAAA
+log: null
 log: component.xss
 log: AQUI
 log: component.xss
@@ -1672,6 +1740,8 @@ log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
 log: Rendering Sequence...
+log: PINGAAAAAAAAAAA
+log: null
 Success are greateful
 ===[ query_properties.project.xml ]================(Tests)
 
@@ -1965,7 +2035,7 @@ it2.mthd_1();
 
 
 
-		public Integer mthd__returning() {
+		public Integer mthd_it2_returning() {
 			it1.mthd_1();
 if (it1.size() > it2.size())
 {

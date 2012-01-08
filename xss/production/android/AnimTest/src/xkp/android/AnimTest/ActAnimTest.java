@@ -4,6 +4,7 @@ import java.util.Arrays;
 import android.view.View;
 			import android.app.Activity;
 			import android.os.Bundle;
+import xkp.android.libs.Layout.XKPLayout;
 						import android.widget.TextView;
 						import android.text.method.KeyListener;
 						import android.view.View.OnClickListener;
@@ -27,7 +28,7 @@ import android.view.View;
 				private Button btn2;
 				private Button btn3;
 			private Sequence anim1;private Sequence anim2;private Sequence anim3;
-    ActAnimTest application;
+	ActAnimTest application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -51,7 +52,7 @@ void initCallers() {
 		Start();
 }
 			void initInstances() {
-                application = this;
+				application = this;
 anim1 = new Sequence();
 anim1.events.addListener("start", new EventHolder.Implementor() 
 {
@@ -118,7 +119,7 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
                 }
                 });
 anim3 = new Sequence();anim3.setLoop(true);
-		public void mthd_anim3_stop_anim3() {
+		public void stop_anim3() {
 			stop();
 		}
                 anim3.start();
@@ -151,7 +152,7 @@ anim3 = new Sequence();anim3.setLoop(true);
                 {
 	                public void call(Object ev) 
                     {
-                    if (application.click_count == 3)
+                    if (prop_application_click_count == 3)
                     {
 						anim3.stop_anim3();
                     }
@@ -196,10 +197,10 @@ anim3 = new Sequence();anim3.setLoop(true);
 				((XKPLayout.LayoutParams) btn2.getLayoutParams()).setLeft((Integer)40);
 			}
 			private void onClickbtn3() {
-				click_count = click_count + 1;
-if (click_count == 4)
+				prop_application_click_count = prop_application_click_count + 1;
+if (prop_application_click_count == 4)
 {
-	click_count = 0;
+	prop_application_click_count = 0;
 	anim3.start();
 }
 			}

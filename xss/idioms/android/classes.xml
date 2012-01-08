@@ -685,7 +685,7 @@
 			</array>
 		</class>
 		
-		<class id="imagebutton" super="image" output_id="ImageButton">
+		<class id="imagebutton" super="img" output_id="ImageButton">
 			<array id="imports">
 				<object import="android.widget.ImageButton"/>
 			</array>

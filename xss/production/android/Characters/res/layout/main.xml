@@ -8,9 +8,9 @@
 				xkp:placement="client"
 			>
 				<xkp.android.Characters.character android:id="@+id/aladdin"
-				xkp:name="Aladdin"
-				xkp:surname="Allababa Prince"
-				xkp:employment="Professor of Steal"
+				xkp:prop_aladdin_name="Aladdin"
+				xkp:prop_aladdin_surname="Allababa Prince"
+				xkp:prop_aladdin_employment="Professor of Steal"
 				xkp:img_src="@drawable/aladdin"
 				xkp:placement="top"
 				android:layout_width="320dp"
@@ -19,9 +19,9 @@
 			>
 				</xkp.android.Characters.character>
 				<xkp.android.Characters.character android:id="@+id/mickey"
-				xkp:name="Mickey"
-				xkp:surname="Disney Cartoons?"
-				xkp:employment="A mouse that ..."
+				xkp:prop_mickey_name="Mickey"
+				xkp:prop_mickey_surname="Disney Cartoons?"
+				xkp:prop_mickey_employment="A mouse that ..."
 				xkp:img_src="@drawable/mickey"
 				xkp:placement="top"
 				android:layout_width="320dp"
@@ -30,9 +30,9 @@
 			>
 				</xkp.android.Characters.character>
 				<xkp.android.Characters.character android:id="@+id/pluto"
-				xkp:name="Pluto"
-				xkp:surname="Disney Cartoons"
-				xkp:employment="Bones eater"
+				xkp:prop_pluto_name="Pluto"
+				xkp:prop_pluto_surname="Disney Cartoons"
+				xkp:prop_pluto_employment="Bones eater"
 				xkp:img_src="@drawable/pluto"
 				xkp:placement="top"
 				android:layout_width="320dp"

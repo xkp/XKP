@@ -10,8 +10,6 @@
 	
 	if(m.type != null)
 		mthd_type = m.type.output_id;
-		
-	m.output_id = "mthd_" + iname + "_" + m.name;
 	
 	out(indent = 1)
 	{

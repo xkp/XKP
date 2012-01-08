@@ -23,8 +23,6 @@
 		if(prop_type != obj_type)
 			ret_type = prop_type;
 	
-	p.output_id = "prop_" + iname + "_" + p.name;
-	
 	string rend_value = "";
 	if(p.value)
 	{

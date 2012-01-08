@@ -18,6 +18,7 @@ import xkp.android.libs.Layout.XKPLayout;
 							implements OnTouchListener
 {
 				private Button btnTouchme;
+	ActTouchMe application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -33,6 +34,7 @@ import xkp.android.libs.Layout.XKPLayout;
 void initCallers() {
 }
 			void initInstances() {
+				application = this;
 			}
 						public boolean onTouch(View v, MotionEvent ev) {
 							switch (v.getId()) {

@@ -44,6 +44,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				private XKPLayout divAbout;
 				private TextView lblName;
 				private TextView lblContact;
+	ActContacts application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -80,6 +81,7 @@ import xkp.android.libs.Layout.XKPLayout;
 void initCallers() {
 }
 			void initInstances() {
+				application = this;
 			}
 						public void onClick(View v) {
 							switch (v.getId()) {
@@ -100,13 +102,13 @@ void initCallers() {
 						}
 			private void onClickbtnLeft() {
 				swtStates.setDisplayedChild(swtStates.getDisplayedChild() - 1);
-btnLeft.setText(application.getSwitchText(swtStates.getDisplayedChild() - 1));
-Integer x = ((XKPLayout.LayoutParams) btnLeft.getLayoutParams()).getPlacement();
+btnLeft.setText(application.mthd_application_getSwitchText(swtStates.getDisplayedChild() - 1));
+int x = ((XKPLayout.LayoutParams) btnLeft.getLayoutParams()).getPlacement();
 ((XKPLayout.LayoutParams) btnLeft.getLayoutParams()).setPlacement(XKPLayout.PL_LEFT);
 			}
 			private void onClickbtnRight() {
 				swtStates.setDisplayedChild(swtStates.getDisplayedChild() + 1);
-btnLeft.setText(application.getSwitchText(swtStates.getDisplayedChild() + 1));
+btnLeft.setText(application.mthd_application_getSwitchText(swtStates.getDisplayedChild() + 1));
 			}
 			private void onCheckedChangedchkVerifier() {
 			}

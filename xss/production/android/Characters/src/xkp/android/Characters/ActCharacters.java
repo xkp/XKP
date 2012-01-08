@@ -11,6 +11,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				private character aladdin;
 				private character mickey;
 				private character pluto;
+	ActCharacters application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -27,5 +28,6 @@ import xkp.android.libs.Layout.XKPLayout;
 void initCallers() {
 }
 			void initInstances() {
+				application = this;
 			}
 }
