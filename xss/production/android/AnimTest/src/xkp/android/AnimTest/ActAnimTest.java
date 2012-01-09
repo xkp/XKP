@@ -30,12 +30,11 @@ import xkp.android.libs.Layout.XKPLayout;
 			private Sequence anim1;
 private Sequence anim2;
 private Sequence anim3;
-			private Integer prop_anim3_test_prop = 3;
-			private Object prop_anim3_test_prop1;
-			public void prop_anim3_test_prop1_set(Object value) {
-				prop_anim3_test_prop1 = value;
-				anim3.stop_anim3();
-			}
+			private Integer prop_anim3_clicks = 0;
+		public void mthd_anim3_update_button() {
+			prop_anim3_clicks = prop_anim3_clicks + 1;
+btn3.setText(String.valueOf(prop_anim3_clicks));
+		}
 		public void mthd_anim3_stop_anim3() {
 			anim3.stop();
 		}
@@ -92,7 +91,7 @@ anim2.start();
 				   ____i1.setInterpolator(Manager.getInstance().interpolator("Integer"));	
 						____i1.addKey(0, 40);
 						____i1.addKey(1, 200);
-				anim1.addHandler(____i1);
+				    anim1.addHandler(____i1);
 anim2 = new Sequence();
 anim2.events.addListener("start", new EventHolder.Implementor() 
 {
@@ -120,7 +119,7 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
 				   ____i2.setInterpolator(Manager.getInstance().interpolator("Integer"));	
 						____i2.addKey(0, null);
 						____i2.addKey(2, null);
-				anim2.addHandler(____i2);
+				    anim2.addHandler(____i2);
                 anim2.events.addListener("start",  new EventHolder.Implementor() 
                 {
 	                public void call(Object ev) 
@@ -132,6 +131,15 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
 anim3 = new Sequence();anim3.setLoop(true);
                 anim3.start();
             anim3.setParent(null);
+            Every ____h1 = new Every(3);
+						____h1.addCaller(new Runnable() 
+                        {
+                            public void run() 
+                            {
+                                mthd_anim3_update_button();
+                            }
+                        });
+			anim3.addHandler(____h1);
 					//x
                    final Interpolator ____i3 = new Interpolator();
 				   ____i3.setAssigner(new Assign(){
@@ -143,7 +151,7 @@ anim3 = new Sequence();anim3.setLoop(true);
 				   ____i3.setInterpolator(Manager.getInstance().interpolator("Integer"));	
 						____i3.addKey(0, 40);
 						____i3.addKey(1.5, 200);
-				anim3.addHandler(____i3);
+				    anim3.addHandler(____i3);
 					//x
                    final Interpolator ____i4 = new Interpolator();
 				   ____i4.setAssigner(new Assign(){
@@ -155,7 +163,7 @@ anim3 = new Sequence();anim3.setLoop(true);
 				   ____i4.setInterpolator(Manager.getInstance().interpolator("Integer"));	
 						____i4.addKey(1.5, 200);
 						____i4.addKey(3, 40);
-				anim3.addHandler(____i4);
+				    anim3.addHandler(____i4);
                 anim3.events.addListener("update",  new EventHolder.Implementor() 
                 {
 	                public void call(Object ev) 

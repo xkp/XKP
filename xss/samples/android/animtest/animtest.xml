@@ -21,12 +21,18 @@
     </sequence>
 
     <sequence id="anim3" loop="true" auto_start="true">
+        <every t="3">
+            <run method="update_button"/>
+        </every>
+        
         <at time="0">
             <animate property="btn3.x" from="40" to="200" in="1.5"/>
         </at>
+        
         <at time="1.5">
             <animate property="btn3.x" from="200" to="40" in="1.5"/>
         </at>
+        
         <when expr="application.click_count == 3">
             <run method="stop_anim3"/>
         </when>

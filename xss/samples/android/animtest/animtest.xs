@@ -44,10 +44,12 @@ on anim2.stop()
 
 instance anim3
 {
-    property test_prop = 3;
-    property test_prop1
+    property clicks = 0;
+
+    method update_button()
     {
-        stop_anim3();
+        clicks++;
+        btn3.caption = clicks as string;
     }
 
     method stop_anim3()

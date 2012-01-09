@@ -42,9 +42,10 @@ on render_update()
 on copy_default_files(app, bns, plibs)
 {
 	array<string> files = [
+		"Handler.java",
+		"Caller.java",
 		"Assign.java",
 		"Every.java",
-		"Handler.java",
 		"IExecutable.java",
 		"Interpolator.java",
 		"IntInterpolator.java",

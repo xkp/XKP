@@ -69,7 +69,6 @@
                     path = seq.id + "." + path;
                 }    
                 
-                //ESC: aca las cosas que vas a necesitar, este es el nombre del primer integrante de la cadena (button1 en button1.x)
                 string first_name = prop_info.first_string;
                 string first_type = "";
                 
@@ -81,10 +80,6 @@
                 else
                     compiler.error("Cannot resolve expression", expression = itm.property); 
                     
-                //hasta aqui todo pincha bastante bien para la primera sequencia del test, hay un problema con 
-                //la segunda, que usa una propiedad, aca vas a tener que pasarle el this al assign y castear a sequence o algo de eso
-                //yo no te quitaria la diversion... en fin, lo que necesitas:
-                
                 if (prop_info.first_property)   
                     compiler.log("Oh noes... a PROPERTY");
 
@@ -148,54 +143,57 @@
                     
                     idx++;
                 }
-				out(indent = 2)
-                    {
-				<xss:e v="seq_id "/>.addHandler(<xss:e v="iid"/>);
-					}
+				
+                out(indent = 2)
+                {
+				    <xss:e v="seq_id "/>.addHandler(<xss:e v="iid"/>);
+				}
                 
             }
             else if (itm.class_name == "run")
             {
                 if (itm.method)
                 {
+                    var mthd = seq.get_method(itm.method);
+                    if (!mthd)
+                        compiler.error("run tag got an invalid method", methd = itm.method);
+                    
                     string mid = compiler.genid('__m');
-					string inumb = compiler.genid('__numb');
-					string iexec = compiler.genid('__ie');
-
-                    string mid_caller = seq.id;
-                    if (!rendering_instance)
-                        mid_caller = "this__"; 
+                    string mid_caller = seq.output_id;
                         
                     out(indent = 2)
                     {
-						 int <xss:e v="inumb"/>=<xss:e v="mid_caller"/>.methods.indexOf(<xss:e v="itm.method"/>);
-						 IExecutable <xss:e v="iexec"/>=(IExecutable)<xss:e v="mid_caller"/>.methods.get(<xss:e v="inumb"/>);
-                        Caller <xss:e v="mid"/> = new Caller(<xss:e v="iexec"/>);
-						<xss:e v="mid"/>.setExecTime(<xss:e v="time"/> );
-						<xss:e v="mid_caller"/>.addHandler(<xss:e v="mid"/>);
-                        
+                        Caller <xss:e v="mid"/> = new Caller(<xss:e v="time"/>);
+						<xss:e v="mid"/>.setCaller(new Runnable() 
+                        {
+                            public void run() 
+                            {
+                                <xss:e v="mthd.output_id"/>();
+                            }
+                        });
+                        <xss:e v="mid_caller"/>.addHandler(<xss:e v="mid"/>);
 					}
                 }
                 else if (itm.sequence)
                 {
 					string seq_caller = seq.id;
-                    if (!rendering_instance)
-                        mid_caller = "this__"; 
                     string sid = compiler.genid('__s');
                     out(indent = 2)
                     {
-                        Caller <xss:e v="sid"/> = new Caller(new IExecutable(){
-							public void execute(){
-								<xss:e v="itm.sequence"/>.start();
-								}
-							});
-						<xss:e v="sid"/>.setExecTime(<xss:e v="time"/> );
-						<xss:e v="seq_caller"/>.addHandler(<xss:e v="sid"/>);
+                        Caller <xss:e v="sid"/> = new Caller(<xss:e v="time"/>);
+						<xss:e v="sid"/>.setCaller(new Runnable() 
+                        {
+                            public void run() 
+                            {
+                                <xss:e v="seq_caller"/>.start();
+                            }
+                        });
+                        <xss:e v="mid_caller"/>.addHandler(<xss:e v="sid"/>);
                     }
                 }
                 else
                 {
-                    //td: error
+                    compiler.error("run tag only supports method and sequence in this context");
                 }
             }
         }
@@ -218,34 +216,41 @@
         out()
         {
             Every <xss:e v="aid"/> = new Every(<xss:e v="itm.t"/>);
-			Caller <xss:e v="cal"/>=new Caller(new IExecutable()<xss:open_brace/>
-				public void execute()<xss:open_brace/>
         }
-        string inumb = compiler.genid('__numb');
-		string iexec = compiler.genid('__ie');
-        string caller = seq.id;
-        if (!rendering_instance)
-            caller = "this__"; 
 
+        string caller = seq.id;
         for(var child in itm.children)
         {
             if (child.class_name == "run") 
             {
                 if (child.method)
                 {
+                    var mthd = seq.get_method(child.method);
+                    if (!mthd)
+                        compiler.error("run tag got an invalid method", methd = itm.method);
+                    
                     out()
                     {
-						int <xss:e v="inumb"/>=<xss:e v="caller"/>.methods.indexOf(<xss:e v="child.method"/>);
-						IExecutable <xss:e v="iexec"/>=(IExecutable)<xss:e v="caller"/>.methods.get(<xss:e v="inumb"/>);
-						<xss:e v="iexec"/>.execute();
-                        
+						<xss:e v="aid"/>.addCaller(new Runnable() 
+                        {
+                            public void run() 
+                            {
+                                <xss:e v="mthd.output_id"/>();
+                            }
+                        });
                     }
                 }
                 else if (child.sequence)
                 {
                     out()
                     {
-                         <xss:e v="child.sequence"/>.start();
+						<xss:e v="aid"/>.addCaller(new Runnable() 
+                        {
+                            public void run() 
+                            {
+                                <xss:e v="child.sequence"/>.start();
+                            }
+                        });
                     }
                 }
                 else compiler.log("WARNING: 'run' needs 'method' or 'sequence'");
@@ -255,11 +260,7 @@
 
         out()
         {
-            <xss:close_brace/>
-			
-		<xss:close_brace/>);
-			<xss:e v="aid"/> .addCaller(<xss:e v="cal"/>);
-                               
+			<xss:e v="caller"/>.addHandler(<xss:e v="aid"/>);
         }
     }
             
