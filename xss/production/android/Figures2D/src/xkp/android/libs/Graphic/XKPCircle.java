@@ -18,12 +18,18 @@ public class XKPCircle extends XKPGraphics {
 				attrs, R.styleable.XKPCircle);
 		mRadius = ta.getDimensionPixelOffset(R.styleable.XKPCircle_radius, 1);
 		ta.recycle();
-		mPathShape.reset();
-		mPathShape.addCircle(mX1, mY1, mRadius, Direction.CCW);
+		updateShapePosition();
 		RectF bounds = new RectF();
 		mPathShape.computeBounds(bounds, true);
 		mDrawable = new ShapeDrawable(new PathShape(mPathShape, bounds.width(), bounds.height()));
 		mDrawable.setBounds(0, 0, (int) bounds.width(), (int) bounds.height());
+	}
+	@Override
+	protected void updateShapePosition() {
+		if(mRadius != null) {
+			mPathShape.reset();
+			mPathShape.addCircle(mX1, mY1, mRadius, Direction.CCW);
+		}
 	}
 	public void setRadius(Integer radius) {
 		this.mRadius = radius;

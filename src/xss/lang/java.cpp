@@ -151,10 +151,16 @@ str java_expr_renderer::operand_to_string(variant operand, XSSObject parent, int
                       }
                     case RESOLVE_METHOD:
                       {
-								        XSSMethod mthd     = si.value;
-                        str       this_str = lang->resolve_this(ctx_);
-                        if (!this_str.empty())
-                          result = this_str + separator + ei.value; //otherwise it doesnt get translated
+								        XSSMethod mthd = si.value;
+                        bool user_defined = mthd->get<bool>("user_defined", false);
+                        if (user_defined)
+                          result = mthd->output_id();
+                        else
+                          {
+                            str this_str = lang->resolve_this(ctx_);
+                            if (!this_str.empty())
+                              result = this_str + separator + ei.value; //otherwise it doesnt get translated
+                          }
                         break;
                       }
                     case RESOLVE_INSTANCE:

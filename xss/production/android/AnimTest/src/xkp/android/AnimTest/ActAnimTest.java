@@ -34,7 +34,7 @@ private Sequence anim3;
 			private Object prop_anim3_test_prop1;
 			public void prop_anim3_test_prop1_set(Object value) {
 				prop_anim3_test_prop1 = value;
-				anim3.stop_anim3();
+				mthd_anim3_stop_anim3();
 			}
 		public void mthd_anim3_stop_anim3() {
 			anim3.stop();
