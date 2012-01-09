@@ -108,7 +108,7 @@ else
 	}
 }
 String rmthd;
-rmthd = application.app_test(10);
+rmthd = mthd_application_app_test(10);
 String thd = application.mthd_application_app_test(2);
 Object mthd;
 mthd = instance1.mthd_instance1_test0(10);

@@ -204,6 +204,8 @@ public class XKPGraphics extends View {
 	public String getStringStyle() {
 		return "TODO";
 	}
+	protected void updateShapePosition() {
+	}
 	public void setPosition(Integer x1, Integer y1, Integer x2, Integer y2) {
 		mX1 = x1;
 		mY1 = y1;
@@ -216,6 +218,7 @@ public class XKPGraphics extends View {
 		mDY = Math.abs(mY2 - mY1);
 		if(mDX == 0) mDX = 1;
 		if(mDY == 0) mDY = 1;
+		updateShapePosition();
 		invalidate();
 	}
 	public void setPosition(Integer x1, Integer y1) {

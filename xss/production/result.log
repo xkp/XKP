@@ -23,15 +23,20 @@ log: Rendering Sequence...
 log: -- Rendering instance: anim1
 log: Properties size: 0
 log: Methods size: 0
+log: -- Rendering instance: anim1
 log: Events size: 2
 log: -- Rendering instance: anim2
 log: Properties size: 0
 log: Methods size: 0
+log: -- Rendering instance: anim2
 log: Events size: 2
 log: -- Rendering instance: anim3
-log: Properties size: 1
+log: Properties size: 3
+log: Rendering property: test_prop
+log: Rendering property: test_prop1
 log: Methods size: 1
 log: Rendering method: stop_anim3
+log: -- Rendering instance: anim3
 log: Events size: 0
 log: -- Rendering instance: lbl1
 log: Properties size: 5
@@ -967,7 +972,8 @@ Success are greateful
 
 
 log: -- Rendering instance: instance1
-log: Properties size: 0
+log: Properties size: 1
+log: Rendering property: writable
 log: Methods size: 1
 log: Rendering method: test0
 log: Events size: 0
@@ -1076,7 +1082,8 @@ for(Object i : list)
 			
 			public void writable_set(Object value) {
 				writable = value;
-				console.log(value);
+				check_type();
+console.log(value);
 			}
 		
 
@@ -1641,15 +1648,9 @@ log: Rendering Sequence...
 log: -- Rendering instance: test_sequence
 log: Properties size: 0
 log: Methods size: 0
+log: -- Rendering instance: test_sequence
 log: Events size: 0
-log: -- Rendering instance: test_sequence1
-log: Properties size: 1
-log: Rendering property: app
-log: Methods size: 0
-log: Events size: 0
-log: Oh noes... a PROPERTY
-Error [idiom] Sequences expect a property to modify
-	expression = app.target
+Error [idiom] when tag found an invalid method
 	file = d:/xkp/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
 
 ===[ json1.project.xml ]================(Tests)

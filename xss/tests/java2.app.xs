@@ -1,5 +1,11 @@
 instance application.instance1
 {
+    property writable
+    {
+		test0(2);
+        console.log(value);
+    }
+
 	method test0(int value)
 	{
         array<int> xxx;

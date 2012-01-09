@@ -30,13 +30,15 @@ import xkp.android.libs.Layout.XKPLayout;
 			private Sequence anim1;
 private Sequence anim2;
 private Sequence anim3;
-			private Integer prop_anim3_clicks = 0;
-		public void mthd_anim3_update_button() {
-			prop_anim3_clicks = prop_anim3_clicks + 1;
-btn3.setText(String.valueOf(prop_anim3_clicks));
-		}
 		public void mthd_anim3_stop_anim3() {
-			anim3.stop();
+			lbl3.setText("Button 3 Stopped");
+anim3.stop();
+		}
+private Sequence anim4;
+			private Integer prop_anim4_clicks = 0;
+		public void mthd_anim4_update_button() {
+			prop_anim4_clicks = prop_anim4_clicks + 1;
+btn3.setText(String.valueOf(prop_anim4_clicks));
 		}
 	ActAnimTest application;
 			@Override
@@ -131,15 +133,6 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
 anim3 = new Sequence();anim3.setLoop(true);
                 anim3.start();
             anim3.setParent(null);
-            Every ____h1 = new Every(3);
-						____h1.addCaller(new Runnable() 
-                        {
-                            public void run() 
-                            {
-                                mthd_anim3_update_button();
-                            }
-                        });
-			anim3.addHandler(____h1);
 					//x
                    final Interpolator ____i3 = new Interpolator();
 				   ____i3.setAssigner(new Assign(){
@@ -174,6 +167,24 @@ anim3 = new Sequence();anim3.setLoop(true);
                     }
                 }
 			    });
+anim4 = new Sequence();
+anim4.events.addListener("update", new EventHolder.Implementor() 
+{
+	public void call(Object ev) 
+	{
+								}
+});
+                anim4.start();
+            anim4.setParent(null);
+            Every ____h1 = new Every(1);
+						____h1.addCaller(new Runnable() 
+                        {
+                            public void run() 
+                            {
+                                mthd_anim4_update_button();
+                            }
+                        });
+			anim4.addHandler(____h1);
 			}
 		private double update_freq = 1/30.0;
 		private void Update() {

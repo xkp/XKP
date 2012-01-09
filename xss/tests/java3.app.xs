@@ -12,6 +12,7 @@ instance t1
 
     property writable
     {
+		check_type();
         console.log(value);
     }
 

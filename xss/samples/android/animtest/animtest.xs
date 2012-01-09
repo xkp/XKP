@@ -44,6 +44,15 @@ on anim2.stop()
 
 instance anim3
 {
+    method stop_anim3()
+    {
+        lbl3.caption = "Button 3 Stopped";
+        stop();
+    }
+}
+
+instance anim4
+{
     property clicks = 0;
 
     method update_button()
@@ -52,8 +61,7 @@ instance anim3
         btn3.caption = clicks as string;
     }
 
-    method stop_anim3()
+    on update(ev)
     {
-        stop();
     }
 }

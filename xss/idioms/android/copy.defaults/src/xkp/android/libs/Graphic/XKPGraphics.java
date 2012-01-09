@@ -269,6 +269,9 @@ public class XKPGraphics extends View {
 		return "TODO";
 	}
 	
+	protected void updateShapePosition() {
+	}
+	
 	public void setPosition(Integer x1, Integer y1, Integer x2, Integer y2) {
 		
 		mX1 = x1;
@@ -287,6 +290,8 @@ public class XKPGraphics extends View {
 		
 		if(mDX == 0) mDX = 1;
 		if(mDY == 0) mDY = 1;
+		
+		updateShapePosition();
 		
 		invalidate();
 	}
