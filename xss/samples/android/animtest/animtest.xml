@@ -33,10 +33,4 @@
             <run method="stop_anim3"/>
         </when>
     </sequence>
-
-    <sequence id="anim4" auto_start="true">
-        <every t="1">
-            <run method="update_button"/>
-        </every>
-    </sequence>
 </application>

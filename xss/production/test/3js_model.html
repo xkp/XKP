@@ -2,13 +2,13 @@
 <html>
 <head>
 <title>Test 3D</title>
+</head>
+<body>
 <style type="text/css">
 	body{
 	background:RoyalBlue;
 	}
 </style>
-</head>
-<body>
 <script type="text/javascript" src="../js/three/Detector.js"></script>
 <script type="text/javascript" src="../js/three/Three.js"></script>
 <script type="text/javascript" src="../js/three/Stats.js"></script>
@@ -25,8 +25,7 @@
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">		
-	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-	var renderer = new THREE.WebGLRenderer( { antialias: false } );
+var renderer = new THREE.CanvasRenderer();	
 var ui;
 var active_camera;
 var g_elapsed = -1;
@@ -41,15 +40,21 @@ application.events = new ms.event.EventHolder();
         var def_package_items = [];
                 def_package_items.push(
             {
-		id:"model_1",
-		resource_type:RESOURCE_JSON_MODEL,
-		src:"model/female02/Female02_slim.js"
+		id:				"model_1",
+		resource_type:	RESOURCE_JSON_MODEL,
+		src:			"model/female02/Female02_slim.js",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__json_model1",
-		resource_type:RESOURCE_JSON_MODEL,
-		src:"model/male02/Male02_slim.js"
+		id:				"__json_model1",
+		resource_type:	RESOURCE_JSON_MODEL,
+		src:			"model/male02/Male02_slim.js",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
@@ -74,6 +79,7 @@ new THREE.Scene(
 var camera_1 = 
 new THREE.Camera(
 75,1.5,1,100000);
+		active_camera = camera_1;
                 camera_1.position.z = 500;
 var a_ligth = 
 new THREE.AmbientLight(
@@ -111,6 +117,7 @@ Ivory);
 		male_model.position.x = male_model.position.x + 10;
 	}
 	);
+		application.are_obj_events = true;
 	var female_model;
 	var female_model_loader = 
 	generate_model_loader(streamer.get_resource('model_1').type);
@@ -135,6 +142,7 @@ Ivory);
 		female_model.position.x = female_model.position.x - 10;
 	}
 	);
+		application.are_obj_events = true;
                 application.mouse_x = null;
                 application.mouse_y = null;
 	var ev_parent = this;

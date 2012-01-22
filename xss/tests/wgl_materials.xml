@@ -1,0 +1,48 @@
+<application src="wgl_materials.xs" title="Test 3D" background="Black">
+	
+	<materials>
+	
+		<basic_material id="material_wireframe" color="Ivory" wireframe="true"/>
+		
+		<composite_material id="all_in_one">		
+			<lambert_material id="material_sphere1" color="0xdddddd" shading="flat_shading"/>
+			<phong_material id="material_sphere2" ambient="0x030303" color="0xdddddd" 
+							specular="0x009900" shininess="30" shading="flat_shading"/>
+			<normal_material id="material_sphere3"/>
+			<basic_material id="material_sphere4" color="0x665500" blending="additive_blending"/>
+			<lambert_material id="material_sphere5" color="0xdddddd" shading="smooth_shading"/>
+			<phong_material id="material_sphere6" ambient="0x030303" color="0xdddddd" 
+							specular="0x009900" shininess="30" shading="smooth_shading"/>
+			<normal_material id="material_sphere7" shading="smooth_shading"/>
+			<basic_material id="material_sphere8" color="0xffaa00" wireframe="true"/>
+			<depth_material id="material_sphere9"/>			
+		</composite_material>
+		
+		<basic_material id="material_particle" color="White"/>
+		
+	</materials>
+	
+	<scene>		
+	
+		<camera id="camera_1" fov="45" aspect="1.5" near="1" far="2000">
+			<position z="800" y="200"/>			
+		</camera>			
+		
+		<ambient_light id="amb_light_1" color="0x202020"/>
+		
+		<directional_light id="dir_light_1" color="Math.random() * 0xffffff">
+			<position x="Math.random() - 0.5" y="Math.random() - 0.5" z="Math.random() - 0.5"/>
+		</directional_light>
+		
+		<sphere id="particle_1" radius="4" x_segments="8" y_segments="8"material="material_particle"/>			
+			
+		<point_light id="point_light_1" color="White" intensity="1"/>
+		
+		<plane id="plane_1" width="1000" height="1000" x_segments="100" y_segments="100" material="material_wireframe">
+			<position y="-70"/>
+			<rotation x="-90"/>
+		</plane>			
+				
+	</scene>
+			
+</application>

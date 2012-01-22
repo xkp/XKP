@@ -12,6 +12,7 @@ on btn.click(){
 		}
 		p1.setPointbyIndex(i, x, y);		
 	}
+	line1.line_width ++;
 }
 
 on r1.click(){

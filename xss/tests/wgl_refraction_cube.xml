@@ -1,0 +1,26 @@
+<application src="wgl_refraction_cube.xs" title="Test 3D" background="Black">
+
+	<resources>
+		<texture_cube 	id="t_cube1"
+						posx="images/cube/skybox/px.jpg" negx="images/cube/skybox/nx.jpg"
+						posy="images/cube/skybox/py.jpg" negy="images/cube/skybox/ny.jpg"
+						posz="images/cube/skybox/pz.jpg" negz="images/cube/skybox/nz.jpg"
+						mapping="refraction_mapping"
+		/>
+	</resources>
+
+	<materials>		
+		<lambert_material id="material_sphere1" color="White" env_map="t_cube1" refraction_ratio="0.95"/>		
+	</materials>
+	
+	<scene>		
+	
+		<camera id="camera_1" fov="60" aspect="1.5" near="1" far="100000">
+			<position z="3200"/>			
+		</camera>	
+
+		<panorama_cube size="100000" texture_cube="t_cube1"/>				
+		
+	</scene>
+			
+</application>

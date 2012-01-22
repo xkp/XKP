@@ -6,6 +6,7 @@
                 <set text="setLoop({value})"/>
             </property>
 
+            <property id="target" type="var"/>
             <method id="stop"/>
         </class>
     </types>

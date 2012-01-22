@@ -5,14 +5,15 @@
 <head>
 
 <title><xss:e value = "application.title"/></title>
+
+</head>
+
+<body>
 <style type="text/css">
 	body{
 	 <xss:marker id="css_style"/>
 	}
 </style>
-</head>
-
-<body>
 <script type="text/javascript" src="../js/three/Detector.js"></script>
 <script type="text/javascript" src="../js/three/Three.js"></script>
 <script type="text/javascript" src="../js/three/Stats.js"></script>
@@ -43,18 +44,10 @@ if(application.background)
 out(){
 <script type="text/javascript">		
 }
-
-if(application.renderer=="webgl")
-	out(){
-	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-	var renderer = new THREE.WebGLRenderer( { antialias: false } );
-	}
-if(application.renderer=="canvas")
-	out(){
-	var renderer = new THREE.CanvasRenderer();	
-	}
+	
 </xss:code>
 
+var renderer = new THREE.CanvasRenderer();	
 var ui;
 var active_camera;
 var g_elapsed = -1;

@@ -1,4 +1,4 @@
-<application src="3js-ms.xs" title="Test 3D" renderer="canvas" background="FloralWhite">
+<application src="3js-ms.xs" title="Test 3D" background="FloralWhite">
 
 	<materials>	
 	

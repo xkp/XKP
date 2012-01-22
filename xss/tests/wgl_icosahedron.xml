@@ -1,0 +1,54 @@
+<application src="wgl_icosahedron.xs" title="Test 3D">
+
+	<resources>		
+		<image src="images/shadow.png"/>		
+	</resources>
+
+	<materials>	
+	
+		<lambert_material id="mat_1" color="Math.random() * 0xffffff"/>
+		<lambert_material id="mat_2" color="Math.random() * 0xffffff"/>
+		<lambert_material id="mat_3" color="Math.random() * 0xffffff"/>
+		
+		<basic_material id="shadow_mat" src="images/shadow.png"/>
+				
+	</materials>	
+	
+	<scene>	
+	
+		<camera id="camera_1" fov="40" aspect="1.5" near="1" far="10000">
+			<position z="1800"/>			
+		</camera>
+			
+		<icosahedron id="icosahedron_1" subdivisions="1" material="mat_1">			
+			<position x="-450"/>
+			<scale x="200" y="200" z="200"/>
+		</icosahedron>
+		
+		<icosahedron id="icosahedron_2" subdivisions="1" material="mat_2">			
+			<scale x="200" y="200" z="200"/>
+		</icosahedron>
+		
+		<icosahedron id="icosahedron_3" subdivisions="1" material="mat_3">			
+			<position x="450"/>
+			<scale x="200" y="200" z="200"/>
+		</icosahedron>
+		
+		<plane id="plane_1" width="300" height="300" material="shadow_mat">
+			<rotation x="-90"/>
+			<position x="-450" y="-250"/>
+		</plane>
+		
+		<plane id="plane_2" width="300" height="300" material="shadow_mat">
+			<rotation x="-90"/>
+			<position y="-250"/>
+		</plane>
+		
+		<plane id="plane_3" width="300" height="300" material="shadow_mat">
+			<rotation x="-90"/>
+			<position x="450" y="-250"/>
+		</plane>
+		
+	</scene>
+			
+</application>

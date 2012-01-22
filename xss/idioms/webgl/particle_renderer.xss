@@ -1,0 +1,30 @@
+<xss:parameter id="obj"/>
+
+<xss:code>
+	if(obj.class_name == "particle"){
+		out(){
+			var <xss:e v="obj.id"/> = new THREE.Particle( 
+			new THREE.ParticleCanvasMaterial( 
+			{ color: <xss:e v="obj.color"/>, program: <xss:e v="obj.program"/>, } 
+			) );	
+			scene.addObject( <xss:e v="obj.id"/> );	
+		}		
+	}else{
+		out(){
+		for ( var i = 0; i < <xss:e v="obj.quantity"/>; i++ ) <xss:open_brace/>
+			particle = new THREE.Particle( new THREE.ParticleCanvasMaterial( { color: <xss:e v="obj.color"/>, program: <xss:e v="obj.program"/>, } ) );
+		
+		}
+		for(var p_child in obj.children){
+			out(){
+				particle.position.<xss:e v="p_child.class_name"/> = 
+				default_interpolate(<xss:e v="p_child.begin"/>, <xss:e v="p_child.end"/>, Math.random());
+			}
+		}			
+		out(){
+			particle.scale.x = particle.scale.y = <xss:e v="obj.scale"/>;
+			scene.addObject( particle );
+		<xss:close_brace/>
+		}
+	}
+</xss:code>

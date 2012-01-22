@@ -38,6 +38,24 @@
         }
     }
     
+    method get_target_info(seq, expr)
+    {
+        var type = null;
+        if (seq.target)
+        {
+            var oo = null; //td: compiler.get_instance(seq.target);
+            if (oo)
+                type = oo;
+        }
+        else if (seq.target_type)
+            type = compiler.get_type(seq.target_type);
+        
+        if (!type)
+            compiler.error("Sequence target (or its type) cannot be resolved", expression = expr); 
+        
+        return compiler.analyze_expression(itm.property, this_ = seq);
+    }
+    
     method generate_at(at, seq, rendering_instance)
     {
         var seq_id = seq.id;
@@ -49,7 +67,15 @@
         {
             if (itm.class_name == "animate")
             {
-                var prop_info = compiler.analyze_expression(itm.property, seq);
+                var prop_info = compiler.analyze_expression(itm.property, this_ = seq);
+                if (!prop_info.property)
+                {
+                    //td: !!!
+                    //if (prop_info.first_string == "target")
+                    //    prop_info = get_target_info(seq, itm.property);
+                    //else
+                        compiler.error("Sequences expect a property to modify", expression = itm.property); 
+                }
 
                 var    prop      = prop_info.property;
                 string prop_name = prop_info.property_name;
@@ -83,9 +109,6 @@
                 if (prop_info.first_property)   
                     compiler.log("Oh noes... a PROPERTY");
 
-                if (!prop)
-                    compiler.error("Sequences expect a property to modify", expression = itm.property); 
-                    
                 var prop_type = prop.type.output_id;
                 out(indent = 2)
                 {

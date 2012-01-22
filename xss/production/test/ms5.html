@@ -38,68 +38,98 @@ var Sound = new ms.ui.Sound();
         function default_interpolate(a, b, t)
         {
             return a + (b - a)*t;
-        }
+        }		
 		var streamer = new ms.streamer.Streamer();
         var def_package_items = [];
                 def_package_items.push(
             {
-		id:"__image1",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/progress.full.png"
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/progress.full.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image2",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/progress.empty.png"
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/progress.empty.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image3",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_grin_48.png"
+		id:				"__image3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/smile_grin_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image4",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_sad_48.png"
+		id:				"__image4",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/smile_sad_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image5",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_left.png"
+		id:				"__image5",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/arrow_left.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image6",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_right.png"
+		id:				"__image6",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/arrow_right.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image7",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_right_48.png"
+		id:				"__image7",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/arrow_right_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image8",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_right_green_48.png"
+		id:				"__image8",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/arrow_right_green_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image9",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_left_48.png"
+		id:				"__image9",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/arrow_left_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image10",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_left_green_48.png"
+		id:				"__image10",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/arrow_left_green_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
@@ -121,17 +151,7 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-            var main;
-            var test1;
-            var lbl1;
-            var btn1;
-            var test2;
-            var pb1;
-            var btn2;
-            var btn3;
-            var lbl2;
-            var btnNext;
-            var btnPrev;
+var main;var test1;var lbl1;var btn1;var test2;var pb1;var btn2;var btn3;var lbl2;var btnNext;var btnPrev;
                 application.clicks = 0;
 window.onload = function() 
 {
@@ -187,6 +207,7 @@ lbl1.text("Got " + application.clicks + " smileys");
 btn1.set_rotation(btn1.get_rotation() + 0.200000003);
 	}
 	);
+		application.are_obj_events = true;
  btn1.center(50, 50); 
 		    test2 = new ms.ui.Component( 
 	    main.manager, main);test2.mouse_thru = true;
@@ -204,6 +225,7 @@ btn1.set_rotation(btn1.get_rotation() + 0.200000003);
 		pb1.value(pb1.get_value() - 1);
 	}
 	);
+		application.are_obj_events = true;
                 btn2.rect(200, 115, 20, 20);
 		    btn3 = new ms.ui.Image( 
 	    "images/arrow_right.png",test2.manager, test2);
@@ -214,6 +236,7 @@ btn1.set_rotation(btn1.get_rotation() + 0.200000003);
 		pb1.value(pb1.get_value() + 1);
 	}
 	);
+		application.are_obj_events = true;
                 btn3.rect(380, 115, 20, 20);
 		    lbl2 = new ms.ui.Label( 
 	    "Verdana",test2.manager, test2);
@@ -234,6 +257,7 @@ main.active(main.get_active() + 1);
 btnNext.set_rotation(btnNext.get_rotation() + 0.200000003);
 	}
 	);
+		application.are_obj_events = true;
                 btnNext.rect(320, 300, 100, 50);
 		    btnPrev = new ms.ui.Button( 
 	    "images/arrow_left_green_48.png","images/arrow_left_48.png",g_ui_root.manager, g_ui_root);
@@ -248,6 +272,7 @@ main.active(main.get_active() - 1);
 }
 	}
 	);
+		application.are_obj_events = true;
                 btnPrev.rect(220, 300, 50, 50);
 			document.onkeydown = function(ev)
 			{

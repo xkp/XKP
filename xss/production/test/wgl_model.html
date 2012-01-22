@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test 3D</title>
+</head>
+<body>
+<style type="text/css">
+	body{
+	background:RoyalBlue;
+	}
+</style>
+<script type="text/javascript" src="../js/three/Detector.js"></script>
+<script type="text/javascript" src="../js/three/Three.js"></script>
+<script type="text/javascript" src="../js/three/Stats.js"></script>
+<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/three/Utils.js"></script>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript">		
+if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+var renderer = new THREE.WebGLRenderer( { antialias: false } );
+var active_camera;
+var g_elapsed = -1;
+var g_delta = 0.0;	
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
+var application = {};
+application.events = new ms.event.EventHolder();
+		var streamer = new ms.streamer.Streamer();
+	// --------RESOURCES---------
+        var def_package_items = [];
+                def_package_items.push(
+            {
+		id:				"model_1",
+		resource_type:	RESOURCE_JSON_MODEL,
+		src:			"model/female02/Female02_slim.js",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                def_package_items.push(
+            {
+		id:				"__json_model1",
+		resource_type:	RESOURCE_JSON_MODEL,
+		src:			"model/male02/Male02_slim.js",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
+		g_startup_package.load();	
+    // --------RESOURCES---------
+soundRenderer = new THREE.SoundRenderer();		
+document.body.appendChild( soundRenderer.domElement );
+renderer.setSize( app_width, app_height );
+function render() {
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+    g_delta = 0; //first update
+else
+g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+application.events.dispatch("updates", []);	
+		set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+var scene = 
+new THREE.Scene(
+);
+var camera_1 = 
+new THREE.Camera(
+75,1.5,1,100000);
+		active_camera = camera_1;
+                camera_1.position.z = 500;
+var a_ligth = 
+new THREE.AmbientLight(
+Salmon);
+		;
+	scene.addLight(a_ligth);
+var d_ligth_1 = 
+new THREE.DirectionalLight(
+Ivory);
+		;
+	scene.addLight(d_ligth_1);
+                d_ligth_1.position.y = -70;
+                d_ligth_1.position.z = 100;
+	var male_model;
+	var male_model_loader = 
+	generate_model_loader(streamer.get_resource('model/male02/Male02_slim.js').type);
+		male_model_loader.load(
+		{
+				model : streamer.get_resource('model/male02/Male02_slim.js').asset , callback : function( geometry )
+			{
+				male_model = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
+                male_model.position.x = 120;
+                male_model.position.y = -350;
+                male_model.position.z = -350;
+                male_model.scale.x = 4;
+                male_model.scale.y = 4;
+                male_model.scale.z = 4;
+				scene.addObject(male_model);
+			} 
+		} 
+	);	
+	var ev_parent = this;
+	male_model.events.addListener("click", function()
+	{    
+		male_model.position.x = male_model.position.x + 10;
+	}
+	);
+		application.are_obj_events = true;
+	var female_model;
+	var female_model_loader = 
+	generate_model_loader(streamer.get_resource('model_1').type);
+		female_model_loader.load(
+		{
+				model : streamer.get_resource('model_1').asset , callback : function( geometry )
+			{
+				female_model = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
+                female_model.position.x = -110;
+                female_model.position.y = -350;
+                female_model.position.z = -350;
+                female_model.scale.x = 4;
+                female_model.scale.y = 4;
+                female_model.scale.z = 4;
+				scene.addObject(female_model);
+			} 
+		} 
+	);	
+	var ev_parent = this;
+	female_model.events.addListener("click", function()
+	{    
+		female_model.position.x = female_model.position.x - 10;
+	}
+	);
+		application.are_obj_events = true;
+                application.mouse_x = null;
+                application.mouse_y = null;
+	var ev_parent = this;
+	application.events.addListener("animate", function()
+	{    
+		camera_1.position.x = camera_1.position.x + (application.mouse_x - camera_1.position.x) * 0.0500000007;
+camera_1.position.y = camera_1.position.y + (-application.mouse_y - camera_1.position.y) * 0.0500000007;
+	}
+	);
+	var ev_parent = this;
+	application.events.addListener("mousemove", function(x,y)
+	{    
+		application.mouse_x = x - app_width / 2;
+application.mouse_y = y - app_height / 2;
+	}
+	);
+var event_manager = new ms.event.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(ev.keyCode);                  
+};
+application.events.dispatch("init", []);
+document.body.appendChild( renderer.domElement );
+animate();
+function animate() {	
+	requestAnimationFrame( animate );
+	render();	
+}
+</script>
+</body>
+</html>

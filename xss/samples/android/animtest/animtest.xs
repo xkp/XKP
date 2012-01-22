@@ -51,6 +51,7 @@ instance anim3
     }
 }
 
+/*
 instance anim4
 {
     property clicks = 0;
@@ -65,3 +66,4 @@ instance anim4
     {
     }
 }
+*/

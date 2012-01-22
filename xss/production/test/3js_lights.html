@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test 3D</title>
+</head>
+<body>
+<style type="text/css">
+	body{
+	background:Black;
+	}
+</style>
+<script type="text/javascript" src="../js/three/Detector.js"></script>
+<script type="text/javascript" src="../js/three/Three.js"></script>
+<script type="text/javascript" src="../js/three/Stats.js"></script>
+<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/three/Utils.js"></script>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript">		
+var renderer = new THREE.CanvasRenderer();	
+var ui;
+var active_camera;
+var g_elapsed = -1;
+var g_delta = 0.0;	
+var drawingCanvas = renderer.domElement;
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
+var application = {};
+application.events = new ms.event.EventHolder();
+		var streamer = new ms.streamer.Streamer();
+		if(drawingCanvas){
+			var client =
+			{
+				width: window.innerWidth,
+				height: window.innerHeight,
+				canvas: drawingCanvas
+			};
+			var ui = new ms.ui.Manager(client, streamer);
+			var g_ui = ui;
+			var g_ui_root = ui.root;
+		}
+	// --------RESOURCES---------
+// --------RESOURCES---------
+soundRenderer = new THREE.SoundRenderer();		
+document.body.appendChild( soundRenderer.domElement );
+renderer.setSize( app_width, app_height );
+function render() {
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+    g_delta = 0; //first update
+else
+g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+application.events.dispatch("updates", []);	
+		set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+var material_sphere1 = new THREE.MeshLambertMaterial({
+color:White,shading:flat_shading
+	});
+var scene = 
+new THREE.Scene(
+);
+var camera_1 = 
+new THREE.Camera(
+65,1.5,1,1000);
+                camera_1.position.z = 100;
+var amb_light_1 = 
+new THREE.AmbientLight(
+MidnightBlue);
+		;
+	scene.addLight(amb_light_1);
+var light1 = 
+new THREE.PointLight(
+Red,1,50);
+		;
+	scene.addLight(light1);
+var light2 = 
+new THREE.PointLight(
+Lime,1,50);
+		;
+	scene.addLight(light2);
+var light3 = 
+new THREE.PointLight(
+Yellow,1,50);
+		;
+	scene.addLight(light3);
+			var particle1 = new THREE.Particle( 
+			new THREE.ParticleCanvasMaterial( 
+			{ color: Red, program: program_fill, } 
+			) );	
+			scene.addObject( particle1 );	
+                particle1.scale.x = 0.5;
+                particle1.scale.y = 0.5;
+                particle1.scale.z = 0.5;
+			var particle2 = new THREE.Particle( 
+			new THREE.ParticleCanvasMaterial( 
+			{ color: Lime, program: program_fill, } 
+			) );	
+			scene.addObject( particle2 );	
+                particle2.scale.x = 0.5;
+                particle2.scale.y = 0.5;
+                particle2.scale.z = 0.5;
+			var particle3 = new THREE.Particle( 
+			new THREE.ParticleCanvasMaterial( 
+			{ color: Yellow, program: program_fill, } 
+			) );	
+			scene.addObject( particle3 );	
+                particle3.scale.x = 0.5;
+                particle3.scale.y = 0.5;
+                particle3.scale.z = 0.5;
+	    var sphere1_sphere = 
+new THREE.Sphere(
+20,32,16);
+	    var sphere1 = new THREE.Mesh(sphere1_sphere, material_sphere1);
+	    scene.addObject(sphere1);
+		sphere1.events = new ms.event.EventHolder();
+                application.time = null;
+	var ev_parent = this;
+	application.events.addListener("updates", function()
+	{    
+		application.time = g_elapsed * 0.000500000024;
+set_rotation_y(sphere1.rotation, get_rotation_y(sphere1.rotation) - 0.5);
+set_rotation_x(sphere1.rotation, get_rotation_x(sphere1.rotation) - 0.5);
+particle1.position.x = Math.sin(application.time * 0.699999988) * 30;
+particle1.position.y = Math.cos(application.time * 0.5) * 40;
+particle1.position.z = Math.cos(application.time * 0.300000012) * 30;
+light1.position.x = particle1.position.x;
+light1.position.y = particle1.position.y;
+light1.position.z = particle1.position.z;
+particle2.position.x = Math.cos(application.time * 0.300000012) * 30;
+particle2.position.y = Math.sin(application.time * 0.5) * 40;
+particle2.position.z = Math.sin(application.time * 0.699999988) * 30;
+light2.position.x = particle2.position.x;
+light2.position.y = particle2.position.y;
+light2.position.z = particle2.position.z;
+particle3.position.x = Math.sin(application.time * 0.699999988) * 30;
+particle3.position.y = Math.cos(application.time * 0.300000012) * 40;
+particle3.position.z = Math.sin(application.time * 0.5) * 30;
+light3.position.x = particle3.position.x;
+light3.position.y = particle3.position.y;
+light3.position.z = particle3.position.z;
+	}
+	);
+if(ui)
+{
+	ui.load_resources(function(){		
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX, ev.clientY);                  
+	};	
+		g_ui.fill_background = false;
+	});
+}
+var event_manager = new ms.event.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(ev.keyCode);                  
+};
+application.events.dispatch("init", []);
+document.body.appendChild( renderer.domElement );
+animate();
+function animate() {
+	if(ui)
+		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
+	requestAnimationFrame( animate );
+	render();
+	if(ui)
+		ui.draw(drawingCanvas.getContext('2d'));
+}
+</script>
+</body>
+</html>

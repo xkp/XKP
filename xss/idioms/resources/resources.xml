@@ -1,6 +1,8 @@
 <module id="resources" src="resources.xs">
     <types>
         
+		<class id="package" renderer="package_renderer.xss"/>
+		
         <class id="image" resource_type="RESOURCE_IMAGE">
             <property id="src" type="string"/>
         </class>	
@@ -15,6 +17,19 @@
 		
 		<class id="bin_model" resource_type="RESOURCE_BIN_MODEL">
 			<property id="src" type="string"/>			
+		</class>
+		
+		<class id="sprite_sheet" resource_type="RESOURCE_SPRITE">
+			<property id="src" type="string"/>
+			<property id="frame_width" type="int"/>
+			<property id="frame_height" type="int"/>
+		</class>
+		
+		<class id="animation" resource_type="RESOURCE_ANIMATION" renderer="animation_renderer.xss">
+			<property id="frame_row" type="int"/>
+			<property id="frame_col" type="int"/>
+			<property id="frames" type="int"/>
+			<property id="step" type="int"/>
 		</class>
 		
     </types>

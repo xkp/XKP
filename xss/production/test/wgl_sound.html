@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test 3D</title>
+</head>
+<body>
+<style type="text/css">
+	body{
+	background:SlateGray;
+	}
+</style>
+<script type="text/javascript" src="../js/three/Detector.js"></script>
+<script type="text/javascript" src="../js/three/Three.js"></script>
+<script type="text/javascript" src="../js/three/Stats.js"></script>
+<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/three/Utils.js"></script>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript">		
+if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+var renderer = new THREE.WebGLRenderer( { antialias: false } );
+var active_camera;
+var g_elapsed = -1;
+var g_delta = 0.0;	
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
+var application = {};
+application.events = new ms.event.EventHolder();
+		var streamer = new ms.streamer.Streamer();
+	// --------RESOURCES---------
+        var def_package_items = [];
+                def_package_items.push(
+            {
+		id:				"res_sound_1",
+		resource_type:	RESOURCE_SOUND,
+		src:			"sounds/applauselong.wav",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                def_package_items.push(
+            {
+		id:				"res_sound_2",
+		resource_type:	RESOURCE_SOUND,
+		src:			"sounds/forest.wav",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
+		g_startup_package.load();	
+    // --------RESOURCES---------
+soundRenderer = new THREE.SoundRenderer();		
+document.body.appendChild( soundRenderer.domElement );
+renderer.setSize( app_width, app_height );
+function render() {
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+    g_delta = 0; //first update
+else
+g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+application.events.dispatch("updates", []);	
+		set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+var material_sphere1 = new THREE.MeshLambertMaterial({
+color:Green,shading:flat_shading
+	});
+var material_sphere2 = new THREE.MeshLambertMaterial({
+color:Yellow,shading:flat_shading
+	});
+var material_wireframe = new THREE.MeshLambertMaterial({
+color:MediumSlateBlue ,wireframe:true
+	});
+var scene = 
+new THREE.Scene(
+);
+var camera_1 = new THREE.QuakeCamera({
+fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly:true,lookVertical:false
+	});
+		active_camera = camera_1;
+                camera_1.position.y = 25;
+var light = 
+new THREE.DirectionalLight(
+White);
+		;
+	scene.addLight(light);
+                light.position.y = 0.5;
+                light.position.z = 1;
+var container_1 = 
+new THREE.Object3D(
+);
+container_1.events = new ms.event.EventHolder();
+                container_1.position.x = 250;
+                container_1.position.y = 30;
+	    var sphere_1_sphere = 
+new THREE.Sphere(
+20,32,16);
+	    var sphere_1 = new THREE.Mesh(sphere_1_sphere, material_sphere1);
+	    scene.addObject(sphere_1);
+		sphere_1.events = new ms.event.EventHolder();
+				container_1.addChild(sphere_1);
+				scene.addObject(container_1);
+	var sound_1 = new THREE.Sound(streamer.get_resource('res_sound_1').asset
+	,275,20,true
+	);
+	scene.addObject(sound_1);
+	sound_1.play();
+				container_1.addChild(sound_1);
+				scene.addObject(container_1);
+var container_2 = 
+new THREE.Object3D(
+);
+container_2.events = new ms.event.EventHolder();
+                container_2.position.x = -250;
+                container_2.position.y = 30;
+	    var sphere_2_sphere = 
+new THREE.Sphere(
+20,32,16);
+	    var sphere_2 = new THREE.Mesh(sphere_2_sphere, material_sphere2);
+	    scene.addObject(sphere_2);
+		sphere_2.events = new ms.event.EventHolder();
+				container_2.addChild(sphere_2);
+				scene.addObject(container_2);
+	var sound_2 = new THREE.Sound(streamer.get_resource('res_sound_2').asset
+	,275,20,true
+	);
+	scene.addObject(sound_2);
+	sound_2.play();
+				container_2.addChild(sound_2);
+				scene.addObject(container_2);
+	    var plane_1_plane = 
+new THREE.Plane(
+1000,1000,100,100);
+	    var plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
+	    scene.addObject(plane_1);
+		plane_1.events = new ms.event.EventHolder();
+                plane_1.position.y = 0.100000001;
+                set_rotation_x(plane_1.rotation, -90);
+var event_manager = new ms.event.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(ev.keyCode);                  
+};
+application.events.dispatch("init", []);
+document.body.appendChild( renderer.domElement );
+animate();
+function animate() {	
+	requestAnimationFrame( animate );
+	render();	
+}
+</script>
+</body>
+</html>

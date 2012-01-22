@@ -100,21 +100,39 @@ var Sound = new ms.ui.Sound();
         var def_package_items = [];
                 def_package_items.push(
             {
-		id:"__image1",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/car.png"
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/car.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image2",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/wheel.png"
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/wheel.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image3",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/box.png"
+		id:				"__image3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/box.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                def_package_items.push(
+            {
+		id:				"__image4",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/stone-12.jpg",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
@@ -186,15 +204,7 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-            var car_1;
-            var right_wheel;
-            var right_rear_wheel;
-            var left_wheel;
-            var left_rear_wheel;
-            var box_1;
-            var box_2;
-            var box_3;
-            var box_4;
+var car_1;var right_wheel;var right_rear_wheel;var left_wheel;var left_rear_wheel;var box_1;var box_2;var box_3;var box_4;var __floor1;var __floor2;var __floor3;var __floor4;var __label1;
             car = Class.create(ms.ui.Image,
         {
     initialize: function($super
@@ -226,7 +236,7 @@ function start(resolution)
 				);
                 if (this.w > 0 && this.h > 0)
                 {
-					this.events.dispatch("resized", [this]);                     
+					this.events.dispatch("resized", [this]);          
                 }
                 this.RemoveFromWorld = function(keep_visual) 
                 {
@@ -271,7 +281,7 @@ function start(resolution)
 				);
                 if (this.w > 0 && this.h > 0)
                 {
-					this.events.dispatch("resized", [this]);                     
+					this.events.dispatch("resized", [this]);          
                 }
                 this.RemoveFromWorld = function(keep_visual) 
                 {
@@ -316,7 +326,51 @@ function start(resolution)
 				);
                 if (this.w > 0 && this.h > 0)
                 {
-					this.events.dispatch("resized", [this]);                     
+					this.events.dispatch("resized", [this]);          
+                }
+                this.RemoveFromWorld = function(keep_visual) 
+                {
+                    g_world.DestroyBody(this.physics);
+                    if (!keep_visual)
+                    {
+                        this.parent.removeComponent(this);
+                    }
+                }
+            if (this.init)
+                this.init();
+            },
+});
+            floor = Class.create(ms.ui.Image,
+        {
+    initialize: function($super
+                , src
+                )
+    {
+        $super(
+        src? src : "images/stone-12.jpg"        );
+        this.events = new ms.event.EventHolder(); 
+				this.events.addListener('resized', function(cmp)
+                {
+                    if (cmp.physics)
+                        g_world.DestroyBody(cmp.physics);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_staticBody;
+                fixDef.shape = new b2PolygonShape;
+                    fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
+            fixDef.isSensor = false;
+                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);			
+            current_body.CreateFixture(fixDef);
+                cmp.physics = current_body;			
+                cmp.events.addListener('moved', update_body_position);
+                current_body.host = cmp;
+                }
+				);
+                if (this.w > 0 && this.h > 0)
+                {
+					this.events.dispatch("resized", [this]);          
                 }
                 this.RemoveFromWorld = function(keep_visual) 
                 {
@@ -344,6 +398,7 @@ function start(resolution)
 	{    
 	}
 	);
+		application.are_obj_events = true;
             if (this.init)
                 this.init();
             },
@@ -394,8 +449,7 @@ left_wheel_joint.joint.SetMotorSpeed(application.mspeed * application.steer_spee
 	};
 	application.kill_orthogonal_velocity = function(b) 
 	{
-		application.local_point = NONE_AXIS;
-application.velocity = b.GetLinearVelocityFromLocalPoint(application.local_point);
+		application.velocity = b.GetLinearVelocityFromLocalPoint(create_2d_vector(0, 0));
 application.sideways_axis = b.GetTransform().R.col2.Copy();
 application.sideways_axis.Multiply(application.velocity.x * application.sideways_axis.x + application.velocity.y * application.sideways_axis.y);
 b.SetLinearVelocity(application.sideways_axis);
@@ -440,7 +494,7 @@ application.steer_speed = 1;
 	}
 	);
 	var ev_parent = this;
-	application.events.addListener("update", function()
+	application.events.addListener("updates", function()
 	{    
 		application.update_car();
 	}
@@ -510,6 +564,27 @@ window.onload = function()
 	    "images/box.png",g_ui_root.manager, g_ui_root);
         box_4 = box_4;
                 box_4.rect(100, 100, 100, 100);
+		    __floor1 = new floor( 
+	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+        __floor1 = __floor1;
+                __floor1.rect(0, 590, 800, 10);
+		    __floor2 = new floor( 
+	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+        __floor2 = __floor2;
+                __floor2.rect(0, 0, 10, 600);
+		    __floor3 = new floor( 
+	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+        __floor3 = __floor3;
+                __floor3.rect(0, 0, 800, 10);
+		    __floor4 = new floor( 
+	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+        __floor4 = __floor4;
+                __floor4.rect(790, 0, 10, 600);
+		    __label1 = new ms.ui.Label( 
+	    "11px Verdana",g_ui_root.manager, g_ui_root);
+        __label1 = __label1;
+                __label1.text("Use arrow keys to drive the car");
+                __label1.position(100, 75);
 right_wheel_joint = 
 new ms.joint.RevoluteJoint(
 car_1,right_wheel);
@@ -528,13 +603,13 @@ car_1,left_wheel);
                 left_wheel_joint.set_upper_angle(60);
 right_rear_wheel_joint = 
 new ms.joint.PrismaticJoint(
-car_1,right_rear_wheel,X_AXIS);
+car_1,right_rear_wheel,1,0);
                 right_rear_wheel_joint.joint.EnableLimit(1);
                 right_rear_wheel_joint.set_lower_limit(0);
                 right_rear_wheel_joint.set_upper_limit(0);
 left_rear_wheel_joint = 
 new ms.joint.PrismaticJoint(
-car_1,left_rear_wheel,X_AXIS);
+car_1,left_rear_wheel,1,0);
                 left_rear_wheel_joint.joint.EnableLimit(1);
                 left_rear_wheel_joint.set_lower_limit(0);
                 left_rear_wheel_joint.set_upper_limit(0);

@@ -1,9 +1,12 @@
 <html>
    <head>
-      <title>Box2dWeb Demo</title>
+      <title></title>
    </head>
    <body onload="init();">
-      <canvas id="canvas" width="600" height="400" style="background-color:#333333;" ></canvas>
+    <canvas id="canvas" 	width=600 
+							height=600
+							style="background-color:DarkRed;" >
+	</canvas>
    </body>
     <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
 	<script type="text/javascript" src="../js/ms-event.js"></script>
@@ -76,7 +79,45 @@
              bodyDef.type = b2Body.b2_dynamicBody;
                     fixDef.shape = new b2CircleShape(20/g_world_scale);
             fixDef.isSensor = false;
-                bodyDef.position.Set(10, 10);
+                bodyDef.position.Set((290 + 40/2)/g_world_scale, (300 + 40/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);			
+            current_body.CreateFixture(fixDef);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_dynamicBody;
+                fixDef.shape = new b2PolygonShape;
+                    fixDef.shape.SetAsBox(20/g_world_scale, 30/g_world_scale);
+            fixDef.isSensor = false;
+                bodyDef.position.Set((300 + 20/2)/g_world_scale, (240 + 30/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);			
+            current_body.CreateFixture(fixDef);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_dynamicBody;
+                    fixDef.shape = new b2CircleShape(30/g_world_scale);
+            fixDef.isSensor = false;
+                bodyDef.position.Set((130 + 60/2)/g_world_scale, (120 + 60/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);			
+            current_body.CreateFixture(fixDef);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_dynamicBody;
+                fixDef.shape = new b2PolygonShape;
+                    fixDef.shape.SetAsBox(50/g_world_scale, 20/g_world_scale);
+            fixDef.isSensor = false;
+                bodyDef.position.Set((150 + 50/2)/g_world_scale, (180 + 20/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);			
+            current_body.CreateFixture(fixDef);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_dynamicBody;
+                    fixDef.shape = new b2CircleShape(10/g_world_scale);
+            fixDef.isSensor = false;
+                bodyDef.position.Set((200 + 20/2)/g_world_scale, (400 + 20/2)/g_world_scale);
             current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
              fixDef.density = 1;
@@ -84,9 +125,39 @@
              fixDef.restitution = 0.200000003;
              bodyDef.type = b2Body.b2_staticBody;
                 fixDef.shape = new b2PolygonShape;
-                    fixDef.shape.SetAsBox(20/(2*g_world_scale), 2/(2*g_world_scale));
+                    fixDef.shape.SetAsBox(10/g_world_scale, 600/g_world_scale);
             fixDef.isSensor = false;
-                bodyDef.position.Set(10, 15.1300001);
+                bodyDef.position.Set((0 + 10/2)/g_world_scale, (0 + 600/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);			
+            current_body.CreateFixture(fixDef);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_staticBody;
+                fixDef.shape = new b2PolygonShape;
+                    fixDef.shape.SetAsBox(600/g_world_scale, 10/g_world_scale);
+            fixDef.isSensor = false;
+                bodyDef.position.Set((0 + 600/2)/g_world_scale, (0 + 10/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);			
+            current_body.CreateFixture(fixDef);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_staticBody;
+                fixDef.shape = new b2PolygonShape;
+                    fixDef.shape.SetAsBox(10/g_world_scale, 600/g_world_scale);
+            fixDef.isSensor = false;
+                bodyDef.position.Set((590 + 10/2)/g_world_scale, (10 + 600/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);			
+            current_body.CreateFixture(fixDef);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_staticBody;
+                fixDef.shape = new b2PolygonShape;
+                    fixDef.shape.SetAsBox(600/g_world_scale, 10/g_world_scale);
+            fixDef.isSensor = false;
+                bodyDef.position.Set((10 + 600/2)/g_world_scale, (590 + 10/2)/g_world_scale);
             current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
          //setup debug draw
@@ -209,8 +280,6 @@
             bb = bb.GetNext();
         }
              };
-         //helpers
-         //http://js-tut.aardon.de/js-tut/tutorial/position.html
          function getElementPosition(element) {
             var elem=element, tagname="", x=0, y=0;
             while((typeof(elem) == "object") && (typeof(elem.tagName) != "undefined")) {

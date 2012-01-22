@@ -1,4 +1,4 @@
-<application src="box2d5.app.xs" width="600" height="400">
+<application src="box2d5.app.xs" width="600" height="600">
     <physics_world id="myWorld"
                    scale       = "30" 
                    friction    = "0.5"
@@ -10,12 +10,37 @@
     <resources>
         <image src="images/smile_sad_48.png"/>
         <image src="images/smile_grin_48.png"/>
-        <image src="images/stone-12.jpg"/>       
+        <image src="images/stone-12.jpg"/> 
+		<image src="images/img1.png"/> 
     </resources>
     
-    <my_body id="btn1" x="300" y="250"/>
-	<my_body id="btn2" x="100" y="250"/>
+	<label x="200" y="75" font="11px Verdana" caption="The happy and sad smileys are connected. Will be?"/>
+	<label x="200" y="95" font="11px Verdana" caption="Try to move any of them with the mouse"/>
+	
+	<label x="50" y="135" font="11px Verdana" caption="Some faces are happy because they are linked but can rotate freely...(distance joint)"/>
+	<label x="50" y="155" font="11px Verdana" caption="Others are sad because they are glued together and have no free will...(weld joint)"/>
+	
+	<label x="50" y="175" font="11px Verdana" caption="The two cameras are connected with a pulley joint. Test it !!!"/>
+	
+    <body_1 id="btn1" x="200" y="250"/>
+	<body_1 id="btn2" x="100" y="250"/>
 	<distance_joint body_a="btn1" body_b="btn2"	length = "5"/>
-    <floor x="0" y="390" width="600" height="40"/>
+	
+	<body_2 id="btn3" x="400" y="250"/>
+	<body_2 id="btn4" x="300" y="250"/>
+	<weld_joint body_a="btn3" body_b="btn4"/>
+	
+	<body_3 id="btn5" x="15" y="100"/>
+	<body_3 id="btn6" x="500" y="500"/>
+	<pulley_joint 	body_a="btn5" body_b="btn6"
+					ground_xa="100" ground_ya="100"
+					ground_xb="500" ground_yb="500"
+					ratio="1"
+	/>
+	
+    <floor x="0" y="590" width="600" height="10"/>
+	<floor x="0" y="0" width="10" height="600"/>
+	<floor x="0" y="0" width="600" height="10"/>
+	<floor x="590" y="0" width="10" height="600"/>
     
 </application>

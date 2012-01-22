@@ -1,0 +1,5 @@
+<project entry_point="../idioms/webgl/app.xss" language="js" target="wgl_materials.xml" output="../production/test/wgl_materials.html">
+
+	<include def="wgl_materials.classes.xml" src="wgl_materials.classes.xs"/>
+	<idiom src="../idioms/webgl/module.xml"/>
+</project>

@@ -38,14 +38,17 @@ var Sound = new ms.ui.Sound();
         function default_interpolate(a, b, t)
         {
             return a + (b - a)*t;
-        }
+        }		
 		var streamer = new ms.streamer.Streamer();
         var def_package_items = [];
                 def_package_items.push(
             {
-		id:"__image1",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/img1.png"
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/img1.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
@@ -67,8 +70,7 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-            var img1;
-        var fade_in;
+var img1;var fade_in;
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -107,6 +109,7 @@ window.onload = function()
 		fade_in.start();
 	}
 	);
+		application.are_obj_events = true;
                 img1.rect(100, 100, 50, 50);
 fade_in =
 new ms.state.Sequence(

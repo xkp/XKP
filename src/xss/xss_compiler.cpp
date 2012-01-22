@@ -30,6 +30,7 @@ const str SCannotResolve("cannot-resolve");
 const str STypeMismatch("type-mismatch");
 const str SFileError("404");
 const str SIdiomError("idiom");
+const str SCompiler("compiler");
 
 const str SCannotReadModule("Unable to read module");
 const str SMustProvideEntryPointForApplicationType("Applications must provide an entry point");
@@ -68,7 +69,7 @@ const str SNotAProperty("Expecting property");
 const str SAliasMustHaveAliased("Alias types must have a 'aliased' attribute");
 const str SBadAliasType("Alias type not found");
 const str SCannotCompileExpression("Cannot compile expression");
-
+const str SAnalyzeExpectsExpression("Expression expected");
 
 //xss_application_renderer
 xss_application_renderer::xss_application_renderer(fs::path entry_point, Language lang, XSSCompiler compiler):
@@ -1150,8 +1151,18 @@ str xss_compiler::property_get(XSSProperty prop, const str& path)
     return lang->property_get(prop, path, ctx);
   }
 
-XSSObject xss_compiler::analyze_expression(const str& expr, variant this_)
+XSSObject xss_compiler::analyze_expression(const param_list params)
   {
+    //get expression
+    str expr = variant_cast<str>(params.get(0), str());
+    if (expr.empty())
+      {
+        param_list error;
+        error.add("id", SCompiler);
+        error.add("desc", SAnalyzeExpectsExpression);
+        xss_throw(error);
+      }
+
     XSSObject result(new xss_object);
 
     xs_utils   xs;
@@ -1162,6 +1173,18 @@ XSSObject xss_compiler::analyze_expression(const str& expr, variant this_)
       }
     else
       {
+        XSSObject this_;
+
+        //process rest of the params
+        for(int i = 0; i < params.size(); i++)
+          {
+            str pname = params.get_name(i);
+            if (pname == "this_")
+              {
+                this_ = variant_cast<XSSObject>(params.get(i), XSSObject());
+              }
+          }
+
         XSSContext ctx    = current_context();
         XSSObject  this__ = variant_cast<XSSObject>(this_, XSSObject());
         if (this__)

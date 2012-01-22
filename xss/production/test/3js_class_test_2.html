@@ -2,12 +2,12 @@
 <html>
 <head>
 <title></title>
+</head>
+<body>
 <style type="text/css">
 	body{
 	}
 </style>
-</head>
-<body>
 <script type="text/javascript" src="../js/three/Detector.js"></script>
 <script type="text/javascript" src="../js/three/Three.js"></script>
 <script type="text/javascript" src="../js/three/Stats.js"></script>
@@ -24,7 +24,7 @@
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">		
-	var renderer = new THREE.CanvasRenderer();	
+var renderer = new THREE.CanvasRenderer();	
 var ui;
 var active_camera;
 var g_elapsed = -1;
@@ -32,8 +32,7 @@ var g_delta = 0.0;
 var drawingCanvas = renderer.domElement;
 var app_width = 600;
 var app_height = 400;
-            var lbl0;
-            var lbl1;
+var lbl0;var lbl1;
 var application = {};
 application.events = new ms.event.EventHolder();
 		var streamer = new ms.streamer.Streamer();
@@ -89,12 +88,14 @@ segments,top_radius,bottom_radius,height,topoffset,bottomoffset);
 		my_cylinder.materials[0].color.setHex(LightGreen);
 	}
 	);
+		application.are_obj_events = true;
 	var ev_parent = this;
 	my_cylinder.events.addListener("mouseout", function()
 	{    
 		my_cylinder.materials[0].color.setHex(Red);
 	}
 	);
+		application.are_obj_events = true;
         return my_cylinder;
         }
 var scene = 
@@ -138,12 +139,12 @@ if(ui)
 		    lbl0 = new ms.ui.Label( 
 	    "12px Verdana",g_ui_root.manager, g_ui_root);
         lbl0 = lbl0;
-                lbl0.text("Click anywhere to create a randomly positioned cylinder");
+                lbl0.text("Click wherever to create a randomly positioned cylinder");
                 lbl0.position(200, 75);
 		    lbl1 = new ms.ui.Label( 
 	    "12px Verdana",g_ui_root.manager, g_ui_root);
         lbl1 = lbl1;
-                lbl1.text("Mouse over a cylinder changes its color");
+                lbl1.text("Pass the mouse over a cylinder to change its color");
                 lbl1.position(200, 100);
 		g_ui.fill_background = false;
 	});

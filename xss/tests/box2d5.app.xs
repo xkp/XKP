@@ -1,9 +1,4 @@
 
-on mouse_drag()
-{
-	
-}
-
 on keydown(keycode)
 {
 	if (keycode == LEFT_ARROW)

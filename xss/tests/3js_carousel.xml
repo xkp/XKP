@@ -1,4 +1,4 @@
-<application src="3js_carousel.xs" title="Test 3D" renderer="canvas" background="Black">
+<application src="3js_carousel.xs" title="Test 3D" background="Black">
 	
 	<resources>		
 		<image src="images/test1.png"/>
@@ -8,8 +8,8 @@
 		<image src="images/test5.png"/>		
 	</resources>
 		
-	<label id="lbl0" x="150" y="75" color="Ivory" font="15px Verdana" caption="Move mouse over the scene to control the carousel's rotation"/>
-	<label id="lbl1" x="175" y="100" color="Ivory" font="15px Verdana" caption="Mouse over the images will select them"/>
+	<label id="" x="150" y="75" color="Ivory" font="15px Verdana" caption="Move mouse to control the carousel movement"/>
+	<label id="lbl1" x="175" y="100" color="Ivory" font="15px Verdana" caption="Put the mouse over an image to zoom it"/>
 	
 	<scene>	
 	

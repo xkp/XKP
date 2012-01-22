@@ -57,7 +57,7 @@
         {
             if (itm.class_name == "animate")
             {
-                var prop_info = compiler.analyze_expression(itm.property, seq);
+                var prop_info = compiler.analyze_expression(itm.property, this_ = seq);
 
                 var    prop      = prop_info.property;
                 string prop_name = prop_info.property_name;
@@ -286,9 +286,6 @@
             
     method generate_sequence(seq, parent, rendering_instance)
     {
-        compiler.log("PINGAAAAAAAAAAA");
-        compiler.log(seq.loop);
-    
         string parent_id = "null";
         string seq_id = seq.output_id;
         
@@ -303,15 +300,9 @@
             //declare variable on the top level if no path is supplied, could be confusing
             if (!path)
                 out(marker = "variables", marker_source = "entry") {var <xss:e v="seq_id"/>;}
-            else if (!parent)
-                out() {var <xss:e v="seq.output_id"/>;}
 
             //initialize it here
             out() {<xss:e v="seq_id"/> =} compiler.xss("../common-js/instantiator.xss", seq);
-            
-            if (seq.loop)
-                out() {<xss:e v="seq_id"/>.setLoop(true);}
-            
             if (parent)
             {
                 //build the instance chain

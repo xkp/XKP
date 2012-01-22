@@ -102,3 +102,6 @@ var program_stroke = function ( context )
 }
 
 var flat_shading = THREE.FlatShading;
+var smooth_shading = THREE.SmoothShading;
+var refraction_mapping = new THREE.CubeRefractionMapping();
+var additive_blending = THREE.AdditiveBlending;

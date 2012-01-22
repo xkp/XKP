@@ -1,9 +1,12 @@
 <html>
    <head>
-      <title>Box2dWeb Demo</title>
+      <title><xss:e value = "application.title"/></title>
    </head>
    <body onload="init();">
-      <canvas id="canvas" width="600" height="400" style="background-color:#333333;" ></canvas>
+    <canvas id="canvas" 	width=<xss:e value = "application.width"/> 
+							height=<xss:e value = "application.height"/>
+							style="background-color:<xss:e value = "application.background"/>;" >
+	</canvas>
    </body>
     <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
 	<script type="text/javascript" src="../js/ms-event.js"></script>
@@ -111,9 +114,6 @@
              </xss:code>
          };
          
-         //helpers
-         
-         //http://js-tut.aardon.de/js-tut/tutorial/position.html
          function getElementPosition(element) {
             var elem=element, tagname="", x=0, y=0;
            

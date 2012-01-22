@@ -203,7 +203,7 @@ namespace xkp
         XSSType     type_of(variant v);
         str         property_set(XSSProperty prop, const str& path, const str& value);
         str         property_get(XSSProperty prop, const str& path);
-        XSSObject   analyze_expression(const str& expr, variant this_);
+        XSSObject   analyze_expression(const param_list params);
         bool        is_type(variant v);
         str         instantiate(variant v);
         str         file(fs::path path);
@@ -289,6 +289,8 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         dynamic_method_ ("inject", &xss_compiler::inject);
         dynamic_method_ ("log",    &xss_compiler::log);
         dynamic_method_ ("error",  &xss_compiler::error);
+        
+        dynamic_function_<XSSObject>("analyze_expression",  &xss_compiler::analyze_expression);
 
         readonly_property<XSSObject>("options", &xss_compiler::options_);
 
@@ -309,7 +311,6 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<XSSType,    1>("type_of",             &xss_compiler::type_of);
         method_<str,        3>("property_set",        &xss_compiler::property_set);
         method_<str,        2>("property_get",        &xss_compiler::property_get);
-        method_<XSSObject,  2>("analyze_expression",  &xss_compiler::analyze_expression);
         method_<bool,       1>("is_type",             &xss_compiler::is_type);
         method_<str,        1>("instantiate",         &xss_compiler::instantiate);
         method_<bool,       1>("application_object", &xss_compiler::application_object);

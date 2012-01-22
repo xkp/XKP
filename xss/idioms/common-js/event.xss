@@ -44,4 +44,10 @@ out(indent = 0)
 	)<xss:e value="separator"/>
 }
 
+if(it.id != "application")
+	out()
+	{
+		application.are_obj_events = true;
+	}
+
 </xss:code>

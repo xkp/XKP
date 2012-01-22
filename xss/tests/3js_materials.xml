@@ -1,0 +1,50 @@
+<application src="3js_materials.xs" title="Test 3D" background="Black">
+	
+	<resources>		
+		<image src="images/land_ocean_ice_cloud.jpg"/>		
+	</resources>
+	
+	<materials>	
+		<basic_material id="material_wireframe" color="Ivory" wireframe="true"/>
+		
+		<composite_material id="all_in_one">	
+		
+			<basic_material color="0x00ffff" wireframe="true"/>
+			<basic_material color="0xff0000" blending="additive_blending"/>
+			<lambert_material color="White" shading="flat_shading"/>
+			<lambert_material color="White" shading="smooth_shading"/>
+			<depth_material/>
+			<normal_material/>
+			<basic_material src="images/land_ocean_ice_cloud.jpg"/>
+			<lambert_material src="images/land_ocean_ice_cloud.jpg"/>	
+			
+		</composite_material>		
+		
+	</materials>
+	
+	<scene>		
+	
+		<camera id="camera_1" fov="45" aspect="1.5" near="1" far="2000">
+			<position z="800" y="200"/>			
+		</camera>			
+		
+		<ambient_light id="amb_light_1" color="0x202020"/>
+		
+		<directional_light id="dir_light_1" color="Math.random() * 0xffffff">
+			<position x="Math.random() - 0.5" y="Math.random() - 0.5" z="Math.random() - 0.5"/>
+		</directional_light>
+		
+		<particle id="particle_1" program="program_fill" color="White">			
+			<scale x="5" y="5" z="5"/>						
+		</particle>
+		
+		<point_light id="point_light_1" color="White" intensity="1"/>
+		
+		<plane id="plane_1" width="1000" height="1000" x_segments="100" y_segments="100" material="material_wireframe">
+			<position y="-70"/>
+			<rotation x="-90"/>
+		</plane>		
+				
+	</scene>
+			
+</application>

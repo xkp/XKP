@@ -2,13 +2,13 @@
 <html>
 <head>
 <title>Test 3D</title>
+</head>
+<body>
 <style type="text/css">
 	body{
 	background:Black;
 	}
 </style>
-</head>
-<body>
 <script type="text/javascript" src="../js/three/Detector.js"></script>
 <script type="text/javascript" src="../js/three/Three.js"></script>
 <script type="text/javascript" src="../js/three/Stats.js"></script>
@@ -25,7 +25,7 @@
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">		
-	var renderer = new THREE.CanvasRenderer();	
+var renderer = new THREE.CanvasRenderer();	
 var ui;
 var active_camera;
 var g_elapsed = -1;
@@ -33,8 +33,7 @@ var g_delta = 0.0;
 var drawingCanvas = renderer.domElement;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
-            var lbl0;
-            var lbl1;
+var __label1;var lbl1;
 var application = {};
 application.events = new ms.event.EventHolder();
 		var streamer = new ms.streamer.Streamer();
@@ -54,33 +53,48 @@ application.events = new ms.event.EventHolder();
         var def_package_items = [];
                 def_package_items.push(
             {
-		id:"__image1",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test1.png"
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test1.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image2",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test2.png"
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test2.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image3",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test3.png"
+		id:				"__image3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test3.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image4",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test4.png"
+		id:				"__image4",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test4.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image5",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test5.png"
+		id:				"__image5",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test5.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
@@ -114,6 +128,7 @@ application.events.dispatch("switch_cameras", []);
 my_plane.scale.y = 1.5;
 	}
 	);
+		application.are_obj_events = true;
 	var ev_parent = this;
 	my_plane.events.addListener("mouseout", function()
 	{    
@@ -121,6 +136,7 @@ my_plane.scale.y = 1.5;
 my_plane.scale.y = 1;
 	}
 	);
+		application.are_obj_events = true;
             var img_plane;
 	    var img_plane_plane = 
 new THREE.Plane(
@@ -222,17 +238,17 @@ if(ui)
 	{
 		ui.mouseup(ev.clientX, ev.clientY);                  
 	};	
-		    lbl0 = new ms.ui.Label( 
+		    __label1 = new ms.ui.Label( 
 	    "15px Verdana",g_ui_root.manager, g_ui_root);
-        lbl0 = lbl0;
-                lbl0.set_color(Ivory);
-                lbl0.text("Move mouse over the scene to control the carousel's rotation");
-                lbl0.position(150, 75);
+        __label1 = __label1;
+                __label1.set_color(Ivory);
+                __label1.text("Move mouse to control the carousel movement");
+                __label1.position(150, 75);
 		    lbl1 = new ms.ui.Label( 
 	    "15px Verdana",g_ui_root.manager, g_ui_root);
         lbl1 = lbl1;
                 lbl1.set_color(Ivory);
-                lbl1.text("Mouse over the images will select them");
+                lbl1.text("Put the mouse over an image to zoom it");
                 lbl1.position(175, 100);
 		g_ui.fill_background = false;
 	});

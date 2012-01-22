@@ -1,0 +1,5 @@
+<project entry_point="../idioms/webgl/app.xss" language="js" target="wgl_refraction_cube.xml" output="../production/test/wgl_refraction_cube.html">
+
+	<include def="wgl_refraction.classes.xml" src="wgl_refraction.classes.xs"/>
+	<idiom src="../idioms/webgl/module.xml"/>
+</project>

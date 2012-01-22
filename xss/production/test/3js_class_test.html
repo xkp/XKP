@@ -2,13 +2,13 @@
 <html>
 <head>
 <title></title>
+</head>
+<body>
 <style type="text/css">
 	body{
 	background:SeaShell;
 	}
 </style>
-</head>
-<body>
 <script type="text/javascript" src="../js/three/Detector.js"></script>
 <script type="text/javascript" src="../js/three/Three.js"></script>
 <script type="text/javascript" src="../js/three/Stats.js"></script>
@@ -25,7 +25,7 @@
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">		
-	var renderer = new THREE.CanvasRenderer();	
+var renderer = new THREE.CanvasRenderer();	
 var ui;
 var active_camera;
 var g_elapsed = -1;
@@ -40,33 +40,48 @@ application.events = new ms.event.EventHolder();
         var def_package_items = [];
                 def_package_items.push(
             {
-		id:"__image1",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test1.png"
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test1.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image2",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test2.png"
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test2.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image3",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test3.png"
+		id:				"__image3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test3.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image4",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test4.png"
+		id:				"__image4",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test4.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image5",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test5.png"
+		id:				"__image5",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test5.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	

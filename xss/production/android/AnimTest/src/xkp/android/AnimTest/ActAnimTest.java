@@ -34,12 +34,6 @@ private Sequence anim3;
 			lbl3.setText("Button 3 Stopped");
 anim3.stop();
 		}
-private Sequence anim4;
-			private Integer prop_anim4_clicks = 0;
-		public void mthd_anim4_update_button() {
-			prop_anim4_clicks = prop_anim4_clicks + 1;
-btn3.setText(String.valueOf(prop_anim4_clicks));
-		}
 	ActAnimTest application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
@@ -167,24 +161,6 @@ anim3 = new Sequence();anim3.setLoop(true);
                     }
                 }
 			    });
-anim4 = new Sequence();
-anim4.events.addListener("update", new EventHolder.Implementor() 
-{
-	public void call(Object ev) 
-	{
-								}
-});
-                anim4.start();
-            anim4.setParent(null);
-            Every ____h1 = new Every(1);
-						____h1.addCaller(new Runnable() 
-                        {
-                            public void run() 
-                            {
-                                mthd_anim4_update_button();
-                            }
-                        });
-			anim4.addHandler(____h1);
 			}
 		private double update_freq = 1/30.0;
 		private void Update() {

@@ -2,13 +2,13 @@
 <html>
 <head>
 <title>Test 3D</title>
+</head>
+<body>
 <style type="text/css">
 	body{
 	background:SlateGray;
 	}
 </style>
-</head>
-<body>
 <script type="text/javascript" src="../js/three/Detector.js"></script>
 <script type="text/javascript" src="../js/three/Three.js"></script>
 <script type="text/javascript" src="../js/three/Stats.js"></script>
@@ -25,8 +25,7 @@
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">		
-	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-	var renderer = new THREE.WebGLRenderer( { antialias: false } );
+var renderer = new THREE.CanvasRenderer();	
 var ui;
 var active_camera;
 var g_elapsed = -1;
@@ -49,7 +48,6 @@ else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
 application.events.dispatch("updates", []);	
-		set_active_camera(camera_1);
 		set_active_camera(camera_2);
 application.events.dispatch("switch_cameras", []);
 }
@@ -77,11 +75,6 @@ color:Math.random() * 0xffffff,shading:flat_shading
 var scene = 
 new THREE.Scene(
 );
-var camera_1 = new THREE.QuakeCamera({
-fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly:true,lookVertical:false
-	});
-                camera_1.position.x = -250;
-                camera_1.position.y = 25;
 var camera_2 = 
 new THREE.Camera(
 50,1.5,1,10000);

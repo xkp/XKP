@@ -1,0 +1,5 @@
+<project entry_point="../idioms/webgl/app.xss" language="js" target="wgl_reflection_cube.xml" output="../production/test/wgl_reflection_cube.html">
+
+	<include def="wgl_reflection.classes.xml" src="wgl_reflection.classes.xs"/>
+	<idiom src="../idioms/webgl/module.xml"/>
+</project>

@@ -38,13 +38,13 @@ ms.event.ThreeEventManager = Class.create(
 	    {
 	        this.dragging = false;
 	        application.events.dispatch("dragend", [x, y]);
-			if(this.intersects.length > 0)
+			if(this.intersects.length > 0 && this.intersects[0].object.events)
 				this.intersects[0].object.events.dispatch("dragend", [x, y]);
 	        return true;
 	    }
 		application.events.dispatch("mouseup", [x, y]);
 		application.events.dispatch("click", [x, y]); 
-		if(this.intersects.length > 0){
+		if(this.intersects.length > 0 && this.intersects[0].object.events){
 			this.intersects[0].object.events.dispatch("mouseup", [x, y]);	
 			this.intersects[0].object.events.dispatch("click", [x, y]);		
 		}
@@ -55,7 +55,7 @@ ms.event.ThreeEventManager = Class.create(
 		y = y - canvas_position.y;
 		this.mouse_pressed = true;
 		application.events.dispatch("mousedown", [x, y]); 
-		if(this.intersects.length > 0)
+		if(this.intersects.length > 0 && this.intersects[0].object.events)
 			this.intersects[0].object.events.dispatch("mousedown", [x, y]);		
 	},	
 	mousemove: function(x, y)
@@ -71,7 +71,7 @@ ms.event.ThreeEventManager = Class.create(
 	    if (this.dragging)
 	    {
 			application.events.dispatch("drag", [x, y]);
-			if(this.intersects.length > 0)
+			if(this.intersects.length > 0 && this.intersects[0].object.events)
 				this.intersects[0].object.events.dispatch("drag", [x, y]);
 	        return true;
 	    }
@@ -82,7 +82,7 @@ ms.event.ThreeEventManager = Class.create(
 				if (object.events) 
 					object.events.dispatch("mouseout", [x, y]);
 		}
-		if(this.intersects.length > 0){
+		if(this.intersects.length > 0 && this.intersects[0].object.events){
 			this.intersects[0].object.events.dispatch("mousemove", [x, y]);
 			this.intersects[0].object.events.dispatch("mousein", [x, y]);			
 		}				
@@ -103,13 +103,16 @@ ms.event.ThreeEventManager = Class.create(
 	},
 
 	get_3js_intersects: function(x, y){
-		this.intersects = [];
-		var vector = new THREE.Vector3( ( x / app_width ) * 2 - 1, - ( y / app_height ) * 2 + 1, 0.5 );
-		projector = new THREE.Projector();
-		projector.unprojectVector( vector, active_camera );
-		var ray = new THREE.Ray( active_camera.position, vector.subSelf( active_camera.position ).normalize() );
-		var intersects = ray.intersectScene( scene );	
-		return intersects;
+		if(application.are_obj_events){
+			this.intersects = [];
+			var vector = new THREE.Vector3( ( x / app_width ) * 2 - 1, - ( y / app_height ) * 2 + 1, 0.5 );
+			projector = new THREE.Projector();
+			projector.unprojectVector( vector, active_camera );
+			var ray = new THREE.Ray( active_camera.position, vector.subSelf( active_camera.position ).normalize() );
+			var intersects = ray.intersectScene( scene );	
+			return intersects;
+		}
+		return [];
 	}
 });
 

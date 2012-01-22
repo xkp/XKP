@@ -38,28 +38,124 @@ var Sound = new ms.ui.Sound();
         var def_package_items = [];
                 def_package_items.push(
             {
-		id:"__image1",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/monster.png"
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/smile_grin_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image2",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_grin_48.png"
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/smile_sad_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image3",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_sad_48.png"
+		id:				"monster_sheet",
+		resource_type:	RESOURCE_SPRITE,
+		src:			"images/monster.png",
+		frame_width:	64,
+		frame_height:	64,
+		animations:		[]
 });
+		for(var i = 0; i < def_package_items.length; i++)
+        {						
+			if(def_package_items[i].id == "monster_sheet")
+				def_package_items[i].animations.push
+				({
+					id:			"m_running",
+					frame_row:	0,
+					frame_col:	0,
+					frames:		9,
+					step:		20
+				});
+		}		
+		for(var i = 0; i < def_package_items.length; i++)
+        {						
+			if(def_package_items[i].id == "monster_sheet")
+				def_package_items[i].animations.push
+				({
+					id:			"m_idle",
+					frame_row:	1,
+					frame_col:	0,
+					frames:		10,
+					step:		20
+				});
+		}		
                 def_package_items.push(
             {
-		id:"__image4",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/AzuCola_Chars.png"
+		id:				"azucola_sheet",
+		resource_type:	RESOURCE_SPRITE,
+		src:			"images/AzuCola_Trans.png",
+		frame_width:	46,
+		frame_height:	67,
+		animations:		[]
 });
+		for(var i = 0; i < def_package_items.length; i++)
+        {						
+			if(def_package_items[i].id == "azucola_sheet")
+				def_package_items[i].animations.push
+				({
+					id:			"g1_down",
+					frame_row:	1,
+					frame_col:	10,
+					frames:		5,
+					step:		30
+				});
+		}		
+		for(var i = 0; i < def_package_items.length; i++)
+        {						
+			if(def_package_items[i].id == "azucola_sheet")
+				def_package_items[i].animations.push
+				({
+					id:			"g1_idle",
+					frame_row:	1,
+					frame_col:	0,
+					frames:		7,
+					step:		40
+				});
+		}		
+		for(var i = 0; i < def_package_items.length; i++)
+        {						
+			if(def_package_items[i].id == "azucola_sheet")
+				def_package_items[i].animations.push
+				({
+					id:			"g1_jump",
+					frame_row:	1,
+					frame_col:	17,
+					frames:		4,
+					step:		20
+				});
+		}		
+		for(var i = 0; i < def_package_items.length; i++)
+        {						
+			if(def_package_items[i].id == "azucola_sheet")
+				def_package_items[i].animations.push
+				({
+					id:			"g2_cry",
+					frame_row:	14,
+					frame_col:	9,
+					frames:		3,
+					step:		40
+				});
+		}		
+		for(var i = 0; i < def_package_items.length; i++)
+        {						
+			if(def_package_items[i].id == "azucola_sheet")
+				def_package_items[i].animations.push
+				({
+					id:			"g2_idle",
+					frame_row:	14,
+					frame_col:	0,
+					frames:		6,
+					step:		40
+				});
+		}		
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
 function start(resolution)  
@@ -79,19 +175,14 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-            var girl;
-            var monster;
-            var lbl1;
-            var lbl2;
-            var lbl3;
-            var btn1;
-                application.clicks = 1;
+var monster;var girl1;var girl2;var lbl1;var lbl2;var lbl3;
                 application.key_press = false;
 	var ev_parent = this;
 	application.events.addListener("keydown", function(keycode)
 	{    
 		if (keycode == LEFT_ARROW)
 {
+monster.set_animation("m_running");
 application.key_press = true;
 }
 	}
@@ -101,6 +192,7 @@ application.key_press = true;
 	{    
 		if (keycode == LEFT_ARROW)
 {
+monster.set_animation("m_idle");
 application.key_press = false;
 }
 	}
@@ -108,15 +200,9 @@ application.key_press = false;
 	var ev_parent = this;
 	application.events.addListener("updates", function()
 	{    
-		girl.animate("g_idle");
-if (application.key_press)
+		if (application.key_press)
 {
-monster.animate("m_running");
 monster.set_x(monster.x - 0.200000003);
-}
-else
-{
-monster.animate("m_idle");
 }
 	}
 	);
@@ -149,80 +235,57 @@ window.onload = function()
 	{
 		ui.mouseup(ev.clientX, ev.clientY);                  
 	};	
-		    girl = new ms.ui.SpriteSheet( 
-	    "images/AzuCola_Chars.png",46,67,g_ui_root.manager, g_ui_root);
-        girl = girl;
-	var ev_parent = this;
-	girl.events.addListener("click", function()
-	{    
-		girl.animate("g_down");
-	}
-	);
-                girl.position(400, 200);
-		girl.array.push({id: "g_down", 
-										frames: 5, 
-										frame_row: 1,
-										frame_col: 10,
-										loop: true,
-										step: 40,
-										lock: true										
-										});
-		girl.array.push({id: "g_idle", 
-										frames: 7, 
-										frame_row: 1,
-										frame_col: 0,
-										loop: true,
-										step: 40,
-										lock: false										
-										});
-		    monster = new ms.ui.SpriteSheet( 
-	    "images/monster.png",64,64,g_ui_root.manager, g_ui_root);
+		    monster = new ms.ui.Sprite( 
+	    "monster_sheet",g_ui_root.manager, g_ui_root);
         monster = monster;
+                monster.set_animation("m_idle");
                 monster.position(200, 200);
-		monster.array.push({id: "m_running", 
-										frames: 10, 
-										frame_row: 0,
-										frame_col: 0,
-										loop: true,
-										step: 30,
-										lock: false										
-										});
-		monster.array.push({id: "m_idle", 
-										frames: 10, 
-										frame_row: 1,
-										frame_col: 0,
-										loop: true,
-										step: 30,
-										lock: false										
-										});
-		    lbl1 = new ms.ui.Label( 
-	    "Verdana",g_ui_root.manager, g_ui_root);
-        lbl1 = lbl1;
-                lbl1.set_rotation(-15);
-                lbl1.text("click smiley");
-                lbl1.position(200, 200);
-		    lbl2 = new ms.ui.Label( 
-	    "Verdana",g_ui_root.manager, g_ui_root);
-        lbl2 = lbl2;
-                lbl2.text("press left arrow to walk the monster");
-                lbl2.position(100, 100);
-		    lbl3 = new ms.ui.Label( 
-	    "Verdana",g_ui_root.manager, g_ui_root);
-        lbl3 = lbl3;
-                lbl3.text("click the girl to crash her down");
-                lbl3.position(100, 150);
-		    btn1 = new ms.ui.Button( 
-	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
-        btn1 = btn1;
-                btn1.set_rotation(15);
+		    girl1 = new ms.ui.Sprite( 
+	    "azucola_sheet",g_ui_root.manager, g_ui_root);
+        girl1 = girl1;
+                girl1.set_animation("g1_idle");
 	var ev_parent = this;
-	btn1.events.addListener("click", function()
+	girl1.events.addListener("click", function()
 	{    
-		lbl1.text("Got " + application.clicks + " smileys");
-application.clicks = application.clicks + 1;
+		girl1.set_animation("g1_down");
+girl1.set_lock(true);
+girl1.set_animation("g1_jump");
+girl1.set_lock(true);
+girl1.set_animation("g1_idle");
 	}
 	);
-                btn1.rect(300, 300, 50, 50);
+		application.are_obj_events = true;
+                girl1.position(300, 200);
+		    girl2 = new ms.ui.Sprite( 
+	    "azucola_sheet",g_ui_root.manager, g_ui_root);
+        girl2 = girl2;
+                girl2.set_animation("g2_idle");
+	var ev_parent = this;
+	girl2.events.addListener("click", function()
+	{    
+		girl2.set_animation("g2_cry");
+girl2.set_bounce(true);
+girl2.set_lock(true);
+girl2.set_animation("g2_idle");
+	}
+	);
+		application.are_obj_events = true;
+                girl2.position(400, 200);
+		    lbl1 = new ms.ui.Label( 
+	    "12px Verdana",g_ui_root.manager, g_ui_root);
+        lbl1 = lbl1;
+                lbl1.text("Press left arrow to walk the monster");
+                lbl1.position(100, 100);
+		    lbl2 = new ms.ui.Label( 
+	    "12px Verdana",g_ui_root.manager, g_ui_root);
+        lbl2 = lbl2;
+                lbl2.text("Click the blond girl to crash her down and jump later (testing animation queue)");
+                lbl2.position(100, 120);
+		    lbl3 = new ms.ui.Label( 
+	    "12px Verdana",g_ui_root.manager, g_ui_root);
+        lbl3 = lbl3;
+                lbl3.text("Click the triguena girl to make her cry (testing animation bounce)");
+                lbl3.position(100, 140);
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  

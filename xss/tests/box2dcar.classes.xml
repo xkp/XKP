@@ -10,4 +10,9 @@
 	 <class id="box" super="img" src="images/box.png" width="100" height="100">
         <physics body_type="dynamic" shape="rect"/>
     </class>
+	
+	<class id="floor" super="img" src="images/stone-12.jpg">
+        <physics body_type="static" shape="rect"/>
+    </class>
+	
 </xs>

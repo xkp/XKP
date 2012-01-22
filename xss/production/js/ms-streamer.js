@@ -3,7 +3,8 @@
 var RESOURCE_IMAGE			 = 0;
 var RESOURCE_SOUND			 = 1;
 var RESOURCE_JSON_MODEL		 = 2;
-var RESOURCE_BIN_MODEL		 = 4;
+var RESOURCE_BIN_MODEL		 = 3;
+var RESOURCE_SPRITE		 	 = 4;
 var MAX_SIMULTANEOUS_LOADERS = 3;
 
 function compare_loading(a, b)
@@ -130,6 +131,26 @@ ms.streamer.BinModelLoader = Class.create(ms.streamer.Loader,
     }
 });
 
+ms.streamer.SpriteLoader = Class.create(ms.streamer.Loader,
+{
+    initialize: function($super, streamer)
+    {
+		$super(streamer, RESOURCE_SPRITE);
+    },
+
+    load: function(resource)
+    {
+		var img = new Image(); 
+			
+        var this_  = this;
+        img.onload = function()
+        {
+    	    this_.on_loaded(resource, img);
+        };
+        img.src = resource.asset;
+    }
+});
+
 ms.streamer.StreamProgress = Class.create(
 {
 	initialize: function()
@@ -178,6 +199,7 @@ ms.streamer.Streamer = Class.create(
 			new ms.streamer.SoundLoader(this),
 			new ms.streamer.JSonModelLoader(this),
 			new ms.streamer.BinModelLoader(this),
+			new ms.streamer.SpriteLoader(this),
 		];
     },
 
@@ -298,7 +320,10 @@ ms.streamer.Streamer = Class.create(
 				type:  			resource.type,
 				loaded:   		false,
 				requests: 		[],
-				progress: 		this.progress
+				progress: 		this.progress,
+				frame_width:	resource.frame_width,
+				frame_height:	resource.frame_height,
+				animations:		resource.animations
 			};
 
 			if (this.progress)
@@ -375,7 +400,10 @@ ms.streamer.Package = Class.create(
         var resources = [];
         for(var i = 0; i < this.items.length; i++)
         {				
-			resources.push({id: this.items[i].id, type: this.items[i].resource_type, url: this.items[i].src});
+			resources.push({id: this.items[i].id, type: this.items[i].resource_type, url: this.items[i].src,
+								frame_width: this.items[i].frame_width, frame_height: this.items[i].frame_height,
+								animations: this.items[i].animations
+								});
         }
 		
        	this.streamer.request( resources, this );
@@ -456,5 +484,13 @@ ms.streamer.PackageContainer = Class.create(
                 return itm.pack;
         }
         return null;
+    },
+});
+
+ms.streamer.SpriteSheet = Class.create(
+{
+    initialize: function()
+    {
+        
     },
 });
