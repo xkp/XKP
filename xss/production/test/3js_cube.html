@@ -2,12 +2,12 @@
 <html>
 <head>
 <title>Test 3D</title>
+</head>
+<body>
 <style type="text/css">
 	body{
 	}
 </style>
-</head>
-<body>
 <script type="text/javascript" src="../js/three/Detector.js"></script>
 <script type="text/javascript" src="../js/three/Three.js"></script>
 <script type="text/javascript" src="../js/three/Stats.js"></script>
@@ -24,7 +24,7 @@
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">		
-	var renderer = new THREE.CanvasRenderer();	
+var renderer = new THREE.CanvasRenderer();	
 var ui;
 var active_camera;
 var g_elapsed = -1;
@@ -32,7 +32,7 @@ var g_delta = 0.0;
 var drawingCanvas = renderer.domElement;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
-            var lbl0;
+var lbl0;
 var application = {};
 application.events = new ms.event.EventHolder();
 		var streamer = new ms.streamer.Streamer();
@@ -100,6 +100,7 @@ new THREE.Scene(
 var camera_1 = 
 new THREE.Camera(
 70,1.5,1,1000);
+		active_camera = camera_1;
                 camera_1.position.y = 300;
                 camera_1.position.z = 500;
 	    var cube_1_cube = 
@@ -170,7 +171,7 @@ if(ui)
 		    lbl0 = new ms.ui.Label( 
 	    "12px Verdana",g_ui_root.manager, g_ui_root);
         lbl0 = lbl0;
-                lbl0.text("Drag to spin the cube");
+                lbl0.text("Drag mouse to spin the cube");
                 lbl0.position(200, 75);
 		g_ui.fill_background = false;
 	});

@@ -1,0 +1,32 @@
+<xss:parameter id="obj"/>
+
+<xss:code>
+	if(obj.class_name == "texture_cube")
+	{
+		out(){
+		var urls = ["<xss:e v="obj.posx"/>", "<xss:e v="obj.negx"/>",
+					"<xss:e v="obj.posy"/>", "<xss:e v="obj.negy"/>",
+					"<xss:e v="obj.posz"/>", "<xss:e v="obj.negz"/>" ];		
+		}	
+		if(obj.mapping)
+			out(){
+			var <xss:e v="obj.id"/> = THREE.ImageUtils.loadTextureCube( urls, <xss:e v="obj.mapping"/>);
+			}
+		else
+			out(){
+			var <xss:e v="obj.id"/> = THREE.ImageUtils.loadTextureCube( urls );
+			}
+	}
+	else
+	{
+		out(){		
+		THREE.SceneUtils.addPanoramaCubeWebGL( 
+									scene,
+									<xss:e v="obj.size"/>, 
+									<xss:e v="obj.texture_cube"/> 
+									);		
+		}		
+	}
+</xss:code>
+
+

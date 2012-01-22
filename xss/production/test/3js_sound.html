@@ -2,13 +2,13 @@
 <html>
 <head>
 <title>Test 3D</title>
+</head>
+<body>
 <style type="text/css">
 	body{
 	background:SlateGray;
 	}
 </style>
-</head>
-<body>
 <script type="text/javascript" src="../js/three/Detector.js"></script>
 <script type="text/javascript" src="../js/three/Three.js"></script>
 <script type="text/javascript" src="../js/three/Stats.js"></script>
@@ -25,8 +25,7 @@
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">		
-	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-	var renderer = new THREE.WebGLRenderer( { antialias: false } );
+var renderer = new THREE.CanvasRenderer();	
 var ui;
 var active_camera;
 var g_elapsed = -1;
@@ -41,15 +40,21 @@ application.events = new ms.event.EventHolder();
         var def_package_items = [];
                 def_package_items.push(
             {
-		id:"res_sound_1",
-		resource_type:RESOURCE_SOUND,
-		src:"sounds/applauselong.wav"
+		id:				"res_sound_1",
+		resource_type:	RESOURCE_SOUND,
+		src:			"sounds/applauselong.wav",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"res_sound_2",
-		resource_type:RESOURCE_SOUND,
-		src:"sounds/forest.wav"
+		id:				"res_sound_2",
+		resource_type:	RESOURCE_SOUND,
+		src:			"sounds/forest.wav",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
@@ -65,7 +70,6 @@ else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
 application.events.dispatch("updates", []);	
-		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
 var material_sphere1 = new THREE.MeshLambertMaterial({
@@ -80,10 +84,6 @@ color:MediumSlateBlue ,wireframe:true
 var scene = 
 new THREE.Scene(
 );
-var camera_1 = new THREE.QuakeCamera({
-fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly:true,lookVertical:false
-	});
-                camera_1.position.y = 25;
 var light = 
 new THREE.DirectionalLight(
 White);
@@ -105,13 +105,6 @@ new THREE.Sphere(
 		sphere_1.events = new ms.event.EventHolder();
 				container_1.addChild(sphere_1);
 				scene.addObject(container_1);
-	var sound_1 = new THREE.Sound(streamer.get_resource('res_sound_1').asset
-	,275,20,true
-	);
-	scene.addObject(sound_1);
-	sound_1.play();
-				container_1.addChild(sound_1);
-				scene.addObject(container_1);
 var container_2 = 
 new THREE.Object3D(
 );
@@ -125,13 +118,6 @@ new THREE.Sphere(
 	    scene.addObject(sphere_2);
 		sphere_2.events = new ms.event.EventHolder();
 				container_2.addChild(sphere_2);
-				scene.addObject(container_2);
-	var sound_2 = new THREE.Sound(streamer.get_resource('res_sound_2').asset
-	,275,20,true
-	);
-	scene.addObject(sound_2);
-	sound_2.play();
-				container_2.addChild(sound_2);
 				scene.addObject(container_2);
 	    var plane_1_plane = 
 new THREE.Plane(

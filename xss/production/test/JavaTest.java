@@ -8,24 +8,24 @@ public class JavaTest {
 				private static Class_instance1 instance1;
 			private Float prop_instance1_xvalue = 100.199997;
 			private Object prop_instance1_svalue;
-		public Float mthd_instance1_test0(Integer value) {
+		public Float test0(Integer value) {
 			Integer a = value;
 Float b = 5.000000;
 return a * b;
 		}
-		public Float mthd_instance1_test1(Integer value) {
+		public Float test1(Integer value) {
 			Float b = 5.000000;
 return b / 2;
 		}
-		public String mthd_instance1_test2(Integer value) {
+		public String test2(Integer value) {
 			Integer a = value;
 Float b = 5.000000;
-return application.mthd_application_app_test(a * b);
+return application.app_test(a * b);
 		}
-		public Object mthd_instance1_test3(Object value) {
+		public Object test3(Object value) {
 			return value;
 		}
-		public void mthd_instance1_foo(Object obj) {
+		public void foo(Object obj) {
 			Boolean has_property = obj has "processed";
 if (!has_property)
 {
@@ -34,7 +34,7 @@ if (!has_property)
 			private Integer prop_application_lvalue;
 			private String prop_application_yvalue = "string v";
 			private ArrayList<String> prop_application_xvalue = new ArrayList(Arrays.asList( new Object [] {"value1", "value2", "value3"} ));
-		public String mthd_application_app_test(Integer value) {
+		public String app_test(Integer value) {
 			return "string value";
 		}
 			private void createapplication() {
@@ -108,12 +108,12 @@ else
 	}
 }
 String rmthd;
-rmthd = mthd_application_app_test(10);
-String thd = application.mthd_application_app_test(2);
+rmthd = application.app_test(10);
+String thd = application.app_test(2);
 Object mthd;
-mthd = instance1.mthd_instance1_test0(10);
-mthd = instance1.mthd_instance1_test0(10, "a", -2);
-mthd = instance1.mthd_instance1_test0(2 * 5, "b" + "a", 1);
+mthd = instance1.test0(10);
+mthd = instance1.test0(10, "a", -2);
+mthd = instance1.test0(2 * 5, "b" + "a", 1);
 			}
 	public static void main(String[] args) {
 				application.create();

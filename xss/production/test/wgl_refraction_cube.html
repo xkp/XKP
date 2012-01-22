@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test 3D</title>
+</head>
+<body>
+<style type="text/css">
+	body{
+	background:Black;
+	}
+</style>
+<script type="text/javascript" src="../js/three/Detector.js"></script>
+<script type="text/javascript" src="../js/three/Three.js"></script>
+<script type="text/javascript" src="../js/three/Stats.js"></script>
+<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/three/Utils.js"></script>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript">		
+if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+var renderer = new THREE.WebGLRenderer( { antialias: false } );
+var active_camera;
+var g_elapsed = -1;
+var g_delta = 0.0;	
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
+var application = {};
+application.events = new ms.event.EventHolder();
+// --------RESOURCES---------
+// --------RESOURCES---------
+soundRenderer = new THREE.SoundRenderer();		
+document.body.appendChild( soundRenderer.domElement );
+renderer.setSize( app_width, app_height );
+function render() {
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+    g_delta = 0; //first update
+else
+g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+application.events.dispatch("updates", []);	
+		set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+        function create_my_sphere(
+    radius,x_segments,y_segments ) { 
+            var my_sphere;
+	    var my_sphere_sphere = 
+new THREE.Sphere(
+radius,x_segments,y_segments);
+	    var my_sphere = new THREE.Mesh(my_sphere_sphere, new THREE.MeshBasicMaterial());
+	    scene.addObject(my_sphere);
+		my_sphere.events = new ms.event.EventHolder();
+        my_sphere.mat = null;
+        my_sphere.mat_set = function (value)
+        {
+            my_sphere.mat = value;
+            this.materials[0] = value;
+        };
+        return my_sphere;
+        }
+		var urls = ["images/cube/skybox/px.jpg", "images/cube/skybox/nx.jpg",
+					"images/cube/skybox/py.jpg", "images/cube/skybox/ny.jpg",
+					"images/cube/skybox/pz.jpg", "images/cube/skybox/nz.jpg" ];		
+			var t_cube1 = THREE.ImageUtils.loadTextureCube( urls, refraction_mapping);
+var material_sphere1 = new THREE.MeshLambertMaterial({
+color:White,envMap:t_cube1,refractionRatio:0.949999988
+	});
+var scene = 
+new THREE.Scene(
+);
+var camera_1 = 
+new THREE.Camera(
+60,1.5,1,100000);
+		active_camera = camera_1;
+                camera_1.position.z = 3200;
+		THREE.SceneUtils.addPanoramaCubeWebGL( 
+									scene,
+									100000, 
+									t_cube1 
+									);		
+                application.mouse_x = null;
+                application.mouse_y = null;
+                application.spheres = [];
+                application.timer = null;
+	var ev_parent = this;
+	application.events.addListener("init", function()
+	{    
+		for(var i = 0; i < 200; i++)
+{
+var sphere_1 = 
+create_my_sphere(
+100,32,16
+)
+;
+sphere_1.mat_set(material_sphere1);
+sphere_1.position.x = Math.random() * 10000 - 5000;
+sphere_1.position.y = Math.random() * 10000 - 5000;
+sphere_1.position.z = Math.random() * 10000 - 5000;
+sphere_1.scale.x = Math.random() * 3 + 1;
+sphere_1.scale.y = sphere_1.scale.x;
+sphere_1.scale.z = sphere_1.scale.x;
+application.spheres.push(sphere_1);
+scene.addObject(sphere_1);
+}
+	}
+	);
+	var ev_parent = this;
+	application.events.addListener("updates", function()
+	{    
+		application.timer = g_elapsed * 9.99999975e-005;
+camera_1.position.x = camera_1.position.x + (application.mouse_x - camera_1.position.x) * 0.0500000007;
+camera_1.position.y = camera_1.position.y + (-application.mouse_y - camera_1.position.y) * 0.0500000007;
+for(var i = 0; i < application.spheres.length; i++)
+{
+var sphere = application.spheres[i];
+sphere.position.x = 5000 * Math.cos(application.timer + i);
+sphere.position.y = 5000 * Math.sin(application.timer + i * 1.10000002);
+}
+	}
+	);
+	var ev_parent = this;
+	application.events.addListener("mousemove", function(x,y)
+	{    
+		application.mouse_x = (x - window.innerWidth / 2) * 10;
+application.mouse_y = (y - window.innerHeight / 2) * 10;
+	}
+	);
+var event_manager = new ms.event.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(ev.keyCode);                  
+};
+application.events.dispatch("init", []);
+document.body.appendChild( renderer.domElement );
+animate();
+function animate() {	
+	requestAnimationFrame( animate );
+	render();	
+}
+</script>
+</body>
+</html>

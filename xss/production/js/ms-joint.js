@@ -46,9 +46,10 @@ ms.joint.RevoluteJoint = Class.create(
 
 ms.joint.PrismaticJoint = Class.create(
 {
-	initialize: function(body_a , body_b, axis)
+	initialize: function(body_a , body_b, x, y)
 	{
 		this.joint_def = new b2PrismaticJointDef();
+		axis = new Box2D.Common.Math.b2Vec2(x, y);
 		this.joint_def.Initialize(body_a.physics , body_b.physics, body_b.physics.GetWorldCenter(), axis);	
 		this.joint = g_world.CreateJoint(this.joint_def);
 	},	
@@ -64,9 +65,11 @@ ms.joint.PrismaticJoint = Class.create(
 
 ms.joint.PulleyJoint = Class.create(
 {
-	initialize: function(body_a , body_b, ground_a, ground_b, ratio)
+	initialize: function(body_a , body_b, ground_xa, ground_ya, ground_xb, ground_yb, ratio)
 	{
 		this.joint_def = new b2PulleyJointDef();
+		ground_a = new Box2D.Common.Math.b2Vec2(ground_xa, ground_ya);
+		ground_b = new Box2D.Common.Math.b2Vec2(ground_xb, ground_yb);
 		this.joint_def.Initialize(body_a.physics , body_b.physics, ground_a, ground_b, body_a.physics.GetWorldCenter(), body_b.physics.GetWorldCenter(), ratio);	
 		this.joint = g_world.CreateJoint(this.joint_def);
 	},	
@@ -82,10 +85,10 @@ ms.joint.WeldJoint = Class.create(
 	},	
 });
 
-X_AXIS = new Box2D.Common.Math.b2Vec2(1, 0);
-Y_AXIS = new Box2D.Common.Math.b2Vec2(0, 1);
-BOTH_AXIS = new Box2D.Common.Math.b2Vec2(1, 1);
-NONE_AXIS = new Box2D.Common.Math.b2Vec2(0, 0);
+function create_2d_vector(x, y)
+{
+	return new Box2D.Common.Math.b2Vec2(x, y);
+}
 
 
 		

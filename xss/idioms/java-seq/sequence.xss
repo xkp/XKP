@@ -43,7 +43,7 @@
         var type = null;
         if (seq.target)
         {
-            var oo = compiler.get_instance(seq.target);
+            var oo = null; //td: compiler.get_instance(seq.target);
             if (oo)
                 type = oo;
         }
@@ -53,7 +53,7 @@
         if (!type)
             compiler.error("Sequence target (or its type) cannot be resolved", expression = expr); 
         
-        return compiler.analyze_expression(itm.property, seq);
+        return compiler.analyze_expression(itm.property, this_ = seq);
     }
     
     method generate_at(at, seq, rendering_instance)
@@ -67,12 +67,13 @@
         {
             if (itm.class_name == "animate")
             {
-                var prop_info = compiler.analyze_expression(itm.property, seq);
-                if (!prop_info.prop)
+                var prop_info = compiler.analyze_expression(itm.property, this_ = seq);
+                if (!prop_info.property)
                 {
-                    if (prop_info.first_string == "target")
-                        prop_info = get_target_info(seq, itm.property);
-                    else
+                    //td: !!!
+                    //if (prop_info.first_string == "target")
+                    //    prop_info = get_target_info(seq, itm.property);
+                    //else
                         compiler.error("Sequences expect a property to modify", expression = itm.property); 
                 }
 

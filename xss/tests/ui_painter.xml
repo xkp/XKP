@@ -1,0 +1,10 @@
+<application src="ui_painter.xs" width="600" height="600">
+    <resources>
+		<image src="images/smile_grin_48.png"/>
+        <image src="images/smile_sad_48.png"/>
+    </resources>
+
+	<label x="200" y="200" font="12px Verdana" caption="Here we can see the painter"/>
+	
+	<painter id="painter_1" x="200" y="300" width="600" height="300"/>	
+</application>

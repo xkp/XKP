@@ -86,7 +86,7 @@
             {
                 out()
                 {
-                    fixDef.shape.SetAsBox(<xss:e v="it.width"/>/(2*g_world_scale), <xss:e v="it.height"/>/(2*g_world_scale));
+                    fixDef.shape.SetAsBox(<xss:e v="it.width"/>/g_world_scale, <xss:e v="it.height"/>/g_world_scale);
                 }
             }
             else if (visual_parent)
@@ -146,13 +146,26 @@
         {
             var x  = it.x;
             var y  = it.y;
+			var w  = 0;
+			var h  = 0;
+			
+			if(it.radius)
+			{
+				w  = it.radius * 2;
+				h  = it.radius * 2;				
+			}
+			else
+			{
+				w  = it.width;
+				h  = it.height;
+			}
 
             if (!x) x = 0;
             if (!y) y = 0;
 
             out()
             {
-                bodyDef.position.Set(<xss:e v="x"/>, <xss:e v="y"/>);
+                bodyDef.position.Set((<xss:e v="x"/> + <xss:e v="w"/>/2)/g_world_scale, (<xss:e v="y"/> + <xss:e v="h"/>/2)/g_world_scale);
             }
         }
     }
@@ -170,8 +183,7 @@
                 return foreing;
             }
 
-        } 
-         
+        }         
         return null;
     }
 
@@ -232,7 +244,7 @@
                 
                 if (<xss:e v="visual_parent"/>.w > 0 && <xss:e v="visual_parent"/>.h > 0)
                 {
-					<xss:e v="visual_parent"/>.events.dispatch("resized", [<xss:e v="visual_parent"/>]);                     
+					<xss:e v="visual_parent"/>.events.dispatch("resized", [<xss:e v="visual_parent"/>]);          
                 }
                 
                 <xss:e v="visual_parent"/>.RemoveFromWorld = function(keep_visual) 

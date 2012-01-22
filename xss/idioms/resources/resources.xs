@@ -1,10 +1,15 @@
+on pre_process(obj)
+{
+	if(obj.id == '')
+		obj.id = compiler.genid(obj.class_name);
+}
 
 on render_initialization()
 {
 	out()
 	{
 		var streamer = new ms.streamer.Streamer();
-	}
+	}	
 }
 
 on render_resources()
@@ -17,8 +22,12 @@ on render_resources()
     }
 
     for(var res in instances)
-    {			
-        if (res.class_name == "package")
+    {	
+		if(res.renderer)
+		{
+			compiler.xss(res.renderer, res);
+		}
+		else if (res.class_name == "package")
         {
             string pack_id = compiler.genid("__p");
             out()
@@ -39,8 +48,7 @@ on render_resources()
                 <xss:e v="res.id"/> = new ms.streamer.Package(streamer, <xss:e v="pack_id"/>);
 				<xss:e v="res.id"/>.load();	
                        
-            }
-                
+            }                
             if (res.auto_load)
             {
                 out()
@@ -57,10 +65,8 @@ on render_resources()
             }
             render_resource(res);
             compiler.out(");");
-        }
-		
+        }		
     }
-
     out()
     {
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
@@ -73,7 +79,6 @@ method render_resource(resource)
 	var type = compiler.get_type(resource.class_name); 
     if (!type)
         compiler.error("Unknown resource type", type = resource.class_name);
-
 	compiler.out("{");
 	compiler.xss("renderer.xss", resource);
 	compiler.out("}");	    

@@ -1,0 +1,25 @@
+<application src="wgl_reflection_cube.xs" title="Test 3D" background="Black">
+
+	<resources>
+		<texture_cube 	id="t_cube1"
+						posx="images/cube/pisa/px.png" negx="images/cube/pisa/nx.png"
+						posy="images/cube/pisa/py.png" negy="images/cube/pisa/ny.png"
+						posz="images/cube/pisa/pz.png" negz="images/cube/pisa/nz.png"
+		/>
+	</resources>
+
+	<materials>		
+		<lambert_material id="material_sphere1" color="White" env_map="t_cube1"/>			
+	</materials>
+	
+	<scene>		
+	
+		<camera id="camera_1" fov="60" aspect="1.5" near="1" far="100000">
+			<position z="3200"/>			
+		</camera>	
+
+		<panorama_cube size="100000" texture_cube="t_cube1"/>		
+		
+	</scene>
+			
+</application>

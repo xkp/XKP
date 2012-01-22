@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test 3D</title>
+</head>
+<body>
+<style type="text/css">
+	body{
+	}
+</style>
+<script type="text/javascript" src="../js/three/Detector.js"></script>
+<script type="text/javascript" src="../js/three/Three.js"></script>
+<script type="text/javascript" src="../js/three/Stats.js"></script>
+<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/three/Utils.js"></script>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript">		
+if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+var renderer = new THREE.WebGLRenderer( { antialias: false } );
+var active_camera;
+var g_elapsed = -1;
+var g_delta = 0.0;	
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
+var application = {};
+application.events = new ms.event.EventHolder();
+		var streamer = new ms.streamer.Streamer();
+	// --------RESOURCES---------
+        var def_package_items = [];
+                def_package_items.push(
+            {
+		id:				"image_1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test1.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                def_package_items.push(
+            {
+		id:				"image_2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test2.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                def_package_items.push(
+            {
+		id:				"image_3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test3.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                def_package_items.push(
+            {
+		id:				"image_4",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test4.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                def_package_items.push(
+            {
+		id:				"image_5",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test5.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                def_package_items.push(
+            {
+		id:				"image_6",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test6.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                def_package_items.push(
+            {
+		id:				"__audio1",
+		resource_type:	RESOURCE_SOUND,
+		src:			"sounds/forest.wav",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
+		g_startup_package.load();	
+    // --------RESOURCES---------
+soundRenderer = new THREE.SoundRenderer();		
+document.body.appendChild( soundRenderer.domElement );
+renderer.setSize( app_width, app_height );
+function render() {
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+    g_delta = 0; //first update
+else
+g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+application.events.dispatch("updates", []);	
+		set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+var materials = 
+new Array(
+);
+var __basic_material1 = new THREE.MeshBasicMaterial({
+map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_1').asset),
+	});
+	materials.push(__basic_material1);
+var __basic_material2 = new THREE.MeshBasicMaterial({
+map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_2').asset),
+	});
+	materials.push(__basic_material2);
+var __basic_material3 = new THREE.MeshBasicMaterial({
+map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_3').asset),
+	});
+	materials.push(__basic_material3);
+var __basic_material4 = new THREE.MeshBasicMaterial({
+map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_4').asset),
+	});
+	materials.push(__basic_material4);
+var __basic_material5 = new THREE.MeshBasicMaterial({
+map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_5').asset),
+	});
+	materials.push(__basic_material5);
+var __basic_material6 = new THREE.MeshBasicMaterial({
+map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_6').asset),
+	});
+	materials.push(__basic_material6);
+var plane_material = new THREE.MeshBasicMaterial({
+color:Grey
+	});
+                set_material_alpha(plane_material, 50);
+var scene = 
+new THREE.Scene(
+);
+var camera_1 = 
+new THREE.Camera(
+70,1.5,1,1000);
+		active_camera = camera_1;
+                camera_1.position.y = 300;
+                camera_1.position.z = 500;
+	    var cube_1_cube = 
+new THREE.Cube(
+200,200,200,1,1,1,materials);
+	    var cube_1 = new THREE.Mesh(cube_1_cube, new THREE.MeshFaceMaterial());
+	    scene.addObject(cube_1);
+		cube_1.events = new ms.event.EventHolder();
+                cube_1.position.y = 150;
+	    var plane_1_plane = 
+new THREE.Plane(
+200,200);
+	    var plane_1 = new THREE.Mesh(plane_1_plane, plane_material);
+	    scene.addObject(plane_1);
+		plane_1.events = new ms.event.EventHolder();
+                set_rotation_x(plane_1.rotation, -90);
+	var __sound_3d1 = new THREE.Sound(streamer.get_resource('sounds/forest.wav').asset
+	,700,20,true
+	);
+	scene.addObject(__sound_3d1);
+	__sound_3d1.play();
+                application.x_target_rotation = 0;
+                application.x_target_rotation_on_mouse_down = 0;
+                application.mouse_x = 0;
+                application.mouse_x_on_mouse_down = 0;
+                application.y_target_rotation = 0;
+                application.y_target_rotation_on_mouse_down = 0;
+                application.mouse_y = 0;
+                application.mouse_y_on_mouse_down = 0;
+                application.window_half_x = app_width / 2;
+                application.window_half_y = app_height / 2;
+                application.is_mouse_down = false;
+	var ev_parent = this;
+	application.events.addListener("mousedown", function(x,y)
+	{    
+		application.mouse_x_on_mouse_down = x - application.window_half_x;
+application.x_target_rotation_on_mouse_down = application.x_target_rotation;
+application.mouse_y_on_mouse_down = y - application.window_half_y;
+application.y_target_rotation_on_mouse_down = application.y_target_rotation;
+	}
+	);
+	var ev_parent = this;
+	application.events.addListener("drag", function(x,y)
+	{    
+		application.mouse_x = x - application.window_half_x;
+application.x_target_rotation = application.x_target_rotation_on_mouse_down + (application.mouse_x - application.mouse_x_on_mouse_down) * 0.300000012;
+application.mouse_y = y - application.window_half_y;
+application.y_target_rotation = application.y_target_rotation_on_mouse_down + (application.mouse_y - application.mouse_y_on_mouse_down) * 0.300000012;
+	}
+	);
+	var ev_parent = this;
+	application.events.addListener("updates", function()
+	{    
+		set_rotation_y(cube_1.rotation, get_rotation_y(cube_1.rotation) + (application.x_target_rotation - get_rotation_y(cube_1.rotation)) * 0.200000003);
+set_rotation_z(plane_1.rotation, get_rotation_y(cube_1.rotation));
+set_rotation_x(cube_1.rotation, get_rotation_x(cube_1.rotation) + (application.y_target_rotation - get_rotation_x(cube_1.rotation)) * 0.200000003);
+	}
+	);
+var event_manager = new ms.event.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(ev.keyCode);                  
+};
+application.events.dispatch("init", []);
+document.body.appendChild( renderer.domElement );
+animate();
+function animate() {	
+	requestAnimationFrame( animate );
+	render();	
+}
+</script>
+</body>
+</html>

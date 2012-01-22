@@ -7,7 +7,10 @@ if (!application.canvasElement)
 
 if (!application.ui_package)
     application.ui_package = "ui_package";
+
 </xss:code>
+
+
 
 <!DOCTYPE html>
 
@@ -137,7 +140,6 @@ window.onload = function()
 </head>
 
 <body>
-
 	<canvas id="<xss:e value="application.canvasElement"/>" width="<xss:e value="application.width"/>" height="<xss:e value="application.height"/>">
 
 		<p>Your browser doesn't support canvas.</p>

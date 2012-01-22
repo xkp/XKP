@@ -1,24 +1,31 @@
-<application src="ui_sprite.xs" width="600" height="600">
+<application src="ui_sprite.xs" width="600" height="600" background="MediumSlateBlue">
     <resources>
-        <image src="images/monster.png"/> 		
-		<image src="images/smile_grin_48.png"/>
+        <image src="images/smile_grin_48.png"/>
         <image src="images/smile_sad_48.png"/>
-		<image src="images/AzuCola_Chars.png"/>
-    </resources>
+				
+		<sprite_sheet id="monster_sheet" src="images/monster.png" frame_width="64" frame_height="64">
+			<animation id="m_running" frame_row="0" frame_col="0" frames="9" step="20"/>
+			<animation id="m_idle" frame_row="1" frame_col="0" frames="10" step="20"/>
+		</sprite_sheet> 	
+
+		<sprite_sheet id="azucola_sheet" src="images/AzuCola_Trans.png" frame_width="46" frame_height="67">
+			<animation id="g1_down"  frames="5" frame_row="1" frame_col="10" step="30"/>
+			<animation id="g1_idle" frames="7" frame_row="1" frame_col="0" step="40"/>
+			<animation id="g1_jump" frames="4" frame_row="1" frame_col="17" step="20"/>
+			<animation id="g2_cry"  frames="3" frame_row="14" frame_col="9" step="40"/>
+			<animation id="g2_idle" frames="6" frame_row="14" frame_col="0" step="40"/>	
+		</sprite_sheet>
+			
+	</resources>	
 	
-	<sprite_sheet id="girl" x="400" y="200" src="images/AzuCola_Chars.png" frame_width="46" frame_height="67">
-		<sprite id="g_down"  frames="5" frame_row="1" frame_col="10" step="40" lock="true"/>
-		<sprite id="g_idle" frames="7" frame_row="1" frame_col="0" step="40"/>
-	</sprite_sheet> 
+	<sprite id="monster" x="200" y="200" sheet="monster_sheet" animation="m_idle"/>	
 	
-	<sprite_sheet id="monster" x="200" y="200" src="images/monster.png" frame_width="64" frame_height="64">
-		<sprite id="m_running" frames="10" frame_row="0" frame_col="0" step="30"/>
-		<sprite id="m_idle" frames="10" frame_row="1" frame_col="0" step="30"/>
-	</sprite_sheet> 
-		
-    <label id="lbl1" x="200" y="200" rotation="-15" font="Verdana" caption="click smiley"/>
-	<label id="lbl2" x="100" y="100" font="Verdana" caption="press left arrow to walk the monster"/>
-	<label id="lbl3" x="100" y="150" font="Verdana" caption="click the girl to crash her down"/>
-    <button id="btn1" x="300" y="300" rotation="15" width="50" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png"/>
-		
+	<sprite id="girl1" x="300" y="200" sheet="azucola_sheet" animation="g1_idle"/>
+
+	<sprite id="girl2" x="400" y="200" sheet="azucola_sheet" animation="g2_idle"/>	
+	
+	<label id="lbl1" x="100" y="100" font="12px Verdana" caption="Press left arrow to walk the monster"/>	
+	<label id="lbl2" x="100" y="120" font="12px Verdana" caption="Click the blond girl to crash her down and jump later (testing animation queue)"/>
+	<label id="lbl3" x="100" y="140" font="12px Verdana" caption="Click the triguena girl to make her cry (testing animation bounce)"/>
+	
 </application>

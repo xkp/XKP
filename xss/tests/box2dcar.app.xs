@@ -43,7 +43,7 @@ on keyup(keycode)
 	}	
 }
 
-on update(){
+on updates(){
 	update_car();
 }
 
@@ -96,9 +96,8 @@ method update_car()
 }
 
 method kill_orthogonal_velocity(b)
-{
-	local_point = NONE_AXIS;
-	velocity = b.GetLinearVelocityFromLocalPoint(local_point);
+{	
+	velocity = b.GetLinearVelocityFromLocalPoint(create_2d_vector(0, 0));
 
 	sideways_axis = b.GetTransform().R.col2.Copy();
 

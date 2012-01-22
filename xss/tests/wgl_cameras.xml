@@ -1,0 +1,66 @@
+<application src="wgl_cameras.xs" title="Test 3D" background="SlateGray">
+
+	<materials>	
+	
+		<lambert_material id="material_sphere1" color="Math.random() * 0xffffff" shading="flat_shading"/>	
+		<lambert_material id="material_sphere2" color="Math.random() * 0xffffff" shading="flat_shading"/>
+		<lambert_material id="material_wireframe" color="MediumSlateBlue" wireframe="true"/>
+		<lambert_material id="cylinder_material" color="Math.random() * 0xffffff" shading="flat_shading"/>
+		<lambert_material id="cylinder1_material" color="Math.random() * 0xffffff" shading="flat_shading"/>
+		<lambert_material id="cube_material" color="Math.random() * 0xffffff" shading="flat_shading"/>
+		<lambert_material id="cube1_material" color="Math.random() * 0xffffff" shading="flat_shading"/>
+
+	</materials>
+		
+	<scene>	
+	
+		<quake_camera id="camera_1" fov="50" aspect="1.5" near="1" far="10000" 
+					speed="70" look_speed="0.05" no_fly="true" vertical="false">		
+			<position x="-250" y="25"/>			
+		</quake_camera>
+		
+		<camera id="camera_2" fov="50" aspect="1.5" near="1" far="10000">					
+			<position x="-250" y="25"/>			
+		</camera>
+		
+		<directional_light id="light" color="16777215">
+			<position y="0.5" z="1"/>
+		</directional_light>
+		
+		
+		<sphere id="sphere_1" radius="20" x_segments="32" y_segments="16" material="material_sphere1">			
+			<position x="250" y="30"/>	
+		</sphere>
+		
+		<sphere id="sphere_2" radius="20" x_segments="32" y_segments="16" material="material_sphere2">	
+			<position x="-250" y="30"/>	
+		</sphere>
+		
+		<cylinder id="cylinder_1" segments="20" top_radius="10" bottom_radius="10" height="50" material="cylinder_material">
+			<rotation x="212" y="212"/>
+			<position x="100" y="30" z="100"/>
+		</cylinder>	
+		
+		<cylinder id="cylinder_2" segments="20" top_radius="10" bottom_radius="10" height="50" material="cylinder1_material">
+			<rotation x="212" y="212"/>
+			<position x="-100" y="30" z="100"/>
+		</cylinder>
+		
+		<cube id="cube_1" width="30" height="30" depth="30" material="cube_material">			
+			<position x="-100" y="30" z="-100"/>
+			<rotation x="212" y="212"/>
+		</cube>
+		
+		<cube id="cube_2" width="30" height="30" depth="30" material="cube1_material">			
+			<position x="100" y="30" z="-100"/>
+			<rotation x="212" y="212"/>
+		</cube>
+		
+		<plane id="plane_1" width="1000" height="1000" x_segments="100" y_segments="100" material="material_wireframe">
+			<position y="0.1"/>
+			<rotation x="-90"/>
+		</plane>		
+		
+	</scene>
+			
+</application>

@@ -1,0 +1,80 @@
+<xss:parameter id="clazz"/>
+
+<xss:code>	
+    clazz.instantiator = "instantiator.xss";
+	bool super_transform = false;
+    out()
+    {
+        function create_<xss:e v="clazz.id"/>(
+    }    
+    var c_params = null; 
+            if (clazz.super){
+                c_params = clazz.super.constructor_params;
+				if(!clazz.super.heritable){
+					compiler.error("Ancestor class not heritable", class_name = clazz.super.output_id);
+				}
+				if(clazz.super.id == "transform")
+					super_transform = true;
+			}
+            if (c_params)
+            {				
+                int idx = 0;				
+                for(var p in c_params)
+                {
+					if (p.property) p.id = p.property;
+                    string param_str = p.id;					
+                    if (idx > 0) out() {,}                    
+                    out() {<xss:e v="param_str"/>}
+					var value_type = compiler.type_of(idx);
+					clazz.add_property(param_str, param_str, value_type);
+					clazz.get_property(param_str).use_plain_value = true;
+                    idx++;
+                }
+            }    
+    out() { ) <xss:open_brace/> }
+	if(super_transform)
+		out() 
+		{ 		
+			var <xss:e v="clazz.id"/> = new THREE.Object3D();
+			<xss:e v="clazz.id"/>.events = new ms.event.EventHolder();
+		}
+	else{
+		string clazz_renderer = clazz.type.renderer;
+        if (!clazz_renderer)
+        {
+            compiler.error("Class not rendereable", class_name = clazz.type_name);
+        }                
+        out()
+        {
+            var <xss:e v="clazz.output_id"/>;
+        }            
+        string clazz_path = compiler.idiom_path(clazz, clazz_renderer);
+        compiler.xss(clazz_path, clazz);		
+	}
+    compiler.xss("../common-js/instance.xss", clazz);    
+    for(var inst in clazz.instances)
+    {		
+        string inst_renderer = inst.type.renderer;
+        if (!inst_renderer)
+        {
+            compiler.error("Class not rendereable", class_name = inst.type_name);
+        }                
+        out()
+        {
+            var <xss:e v="inst.output_id"/>;
+        }            
+        string inst_path = compiler.idiom_path(inst, inst_renderer);
+        compiler.xss(inst_path, inst);
+		if(!inst.dont_render)
+			compiler.xss("../common-js/instance.xss", inst);
+        out()
+        {
+            <xss:e v="clazz.id"/>.addChild(<xss:e v="inst.output_id"/>);
+        }        
+    }    
+    out()
+    {
+        return <xss:e v="clazz.id"/>;
+        <xss:close_brace/>
+    }
+</xss:code>

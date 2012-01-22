@@ -1,6 +1,6 @@
-<application src="3js_particle_system.xs" title="Test 3D" renderer="canvas" background="Black">
+<application src="3js_particle_system.xs" title="Test 3D" background="Black">
 	
-	<label id="lbl0" x="350" y="50" color="White" font="12px Verdana" caption="Move mouse over the scene to control the camera's rotation"/>
+	<label id="lbl0" x="350" y="50" color="White" font="12px Verdana" caption="Move the mouse to rotate the camera"/>
 	
 	<scene>	
 	
@@ -8,7 +8,8 @@
 			<position z="1000"/>			
 		</camera>
 			
-		<particle_system color="Math.random() * 0x808008 + 0x808008" program="program_fill" quantity="1000" scale="Math.random() * 10 + 5">	
+		<particle_system color="Math.random() * 0x808008 + 0x808008" program="program_fill" 
+						 quantity="1000" scale="Math.random() * 10 + 5">	
 			<x begin="-400" end="400"/>
 			<y begin="-400" end="400"/>
 			<z begin="-400" end="400"/>

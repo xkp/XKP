@@ -19,83 +19,11 @@ log: Adding import android.view.View.OnKeyListener on android
 log: Adding import android.view.View.OnFocusChangeListener on android
 log: Adding import android.widget.Button on android
 log: ### End Rendering Android Imports...
-log: Rendering Sequence...
-log: -- Rendering instance: anim1
-log: Properties size: 0
-log: Methods size: 0
-log: -- Rendering instance: anim1
-log: Events size: 2
-log: -- Rendering instance: anim2
-log: Properties size: 0
-log: Methods size: 0
-log: -- Rendering instance: anim2
-log: Events size: 2
-log: -- Rendering instance: anim3
-log: Properties size: 3
-log: Rendering property: test_prop
-log: Rendering property: test_prop1
-log: Methods size: 1
-log: Rendering method: stop_anim3
-log: -- Rendering instance: anim3
-log: Events size: 0
-log: -- Rendering instance: lbl1
-log: Properties size: 5
-log: Methods size: 0
-log: Events size: 0
-log: -- Rendering instance: lbl2
-log: Properties size: 5
-log: Methods size: 0
-log: Events size: 0
-log: -- Rendering instance: lbl3
-log: Properties size: 5
-log: Methods size: 0
-log: Events size: 0
-log: -- Rendering instance: btn1
-log: Properties size: 5
-log: Methods size: 0
-log: Events size: 1
-log: Rendering event: click
-log: -- Rendering instance: btn2
-log: Properties size: 5
-log: Methods size: 0
-log: Events size: 1
-log: Rendering event: click
-log: -- Rendering instance: btn3
-log: Properties size: 5
-log: Methods size: 0
-log: Events size: 1
-log: Rendering event: click
-log: -- Rendering instance: application
-log: Properties size: 1
-log: Rendering property: click_count
-log: Methods size: 0
-log: Events size: 0
-log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/values/colors.xml
-log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
-log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/drawable/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/assets/.empty
-log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/bin/.empty
-log: Copying default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/gen/.empty
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Assign.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Every.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Handler.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/IExecutable.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Interpolator.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/IntInterpolator.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/IInterpolator.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/DoubleInterpolator.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Key.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Manager.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/OnUpdate.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Sequence.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/EventHolder.java
-log: Rendering default file: d:/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/SequenceUpdateEvent.java
+log: Rendering Sequence...Error [project] Invalid marker source
 
-Success are greateful
+	value = previous
+	file = c:/dev/XKP/xss/samples/android/animtest/../../../idioms/java-seq/sequence.xssERROR: Project:  animtest.project.xml
+
 ===[ characters.project.xml ]================
 
 
@@ -149,13 +77,13 @@ log: ### End Rendering Android Types...
 log: ### Begin Rendering Android Imports...
 log: ### End Rendering Android Imports...
 log: Begin Rendering Resources Instances...
-log: Copying resource file d:/xkp/xss/samples/android/characters/resources/aladdin.png
-log: Copying resource file d:/xkp/xss/samples/android/characters/resources/mickey.png
-log: Copying resource file d:/xkp/xss/samples/android/characters/resources/pluto.png
-log: Copying resource file d:/xkp/xss/samples/android/characters/resources/audio1.ogg
-log: Copying resource file d:/xkp/xss/samples/android/characters/resources/audio2.ogg
-log: Copying resource file d:/xkp/xss/samples/android/characters/resources/mickey.3gp
-log: Copying resource file d:/xkp/xss/samples/android/characters/resources/pluto.3gp
+log: Copying resource file c:/dev/XKP/xss/samples/android/characters/resources/aladdin.png
+log: Copying resource file c:/dev/XKP/xss/samples/android/characters/resources/mickey.png
+log: Copying resource file c:/dev/XKP/xss/samples/android/characters/resources/pluto.png
+log: Copying resource file c:/dev/XKP/xss/samples/android/characters/resources/audio1.ogg
+log: Copying resource file c:/dev/XKP/xss/samples/android/characters/resources/audio2.ogg
+log: Copying resource file c:/dev/XKP/xss/samples/android/characters/resources/mickey.3gp
+log: Copying resource file c:/dev/XKP/xss/samples/android/characters/resources/pluto.3gp
 log: End Rendering Resources Instances...
 log: -- Rendering instance: aladdin
 log: Properties size: 5
@@ -173,16 +101,16 @@ log: -- Rendering instance: application
 log: Properties size: 0
 log: Methods size: 0
 log: Events size: 0
-log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/values/colors.xml
-log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
-log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/drawable/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/assets/.empty
-log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/bin/.empty
-log: Copying default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/gen/.empty
-log: Rendering default file: d:/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
+log: Copying default file: c:/dev/XKP/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/values/colors.xml
+log: Copying default file: c:/dev/XKP/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
+log: Copying default file: c:/dev/XKP/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/drawable/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/characters/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/characters/../../../idioms/android/copy.defaults/assets/.empty
+log: Copying default file: c:/dev/XKP/xss/samples/android/characters/../../../idioms/android/copy.defaults/bin/.empty
+log: Copying default file: c:/dev/XKP/xss/samples/android/characters/../../../idioms/android/copy.defaults/gen/.empty
+log: Rendering default file: c:/dev/XKP/xss/samples/android/characters/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
 
 Success are greateful
 ===[ contacts.project.xml ]================
@@ -210,8 +138,8 @@ log: Adding import android.widget.CompoundButton on android
 log: Adding import android.widget.CompoundButton.OnCheckedChangeListener on android
 log: Adding import android.widget.RadioButton on android
 log: ### End Rendering Android Imports...
-log: Rendering widget file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/libs/Widget/XKPSwitcher.java
-log: Rendering widget file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/values/styleable_XKPSwitcher.xml
+log: Rendering widget file: c:/dev/XKP/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/libs/Widget/XKPSwitcher.java
+log: Rendering widget file: c:/dev/XKP/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/values/styleable_XKPSwitcher.xml
 log: -- Rendering instance: 
 log: Properties size: 2
 log: Methods size: 0
@@ -302,16 +230,16 @@ log: Methods size: 1
 log: Rendering method: getSwitchText
 log: Events size: 1
 log: Rendering event: creation
-log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/values/colors.xml
-log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
-log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/drawable/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/assets/.empty
-log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/bin/.empty
-log: Copying default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/gen/.empty
-log: Rendering default file: d:/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
+log: Copying default file: c:/dev/XKP/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/values/colors.xml
+log: Copying default file: c:/dev/XKP/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
+log: Copying default file: c:/dev/XKP/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/drawable/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/contacts/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/contacts/../../../idioms/android/copy.defaults/assets/.empty
+log: Copying default file: c:/dev/XKP/xss/samples/android/contacts/../../../idioms/android/copy.defaults/bin/.empty
+log: Copying default file: c:/dev/XKP/xss/samples/android/contacts/../../../idioms/android/copy.defaults/gen/.empty
+log: Rendering default file: c:/dev/XKP/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
 
 Success are greateful
 ===[ figures2d.project.xml ]================
@@ -334,16 +262,16 @@ log: Adding import xkp.android.libs.Graphic.XKPGraphics.OnClickInsideFigureListe
 log: Adding import xkp.android.libs.Graphic.XKPRectangle on android
 log: Adding import xkp.android.libs.Graphic.XKPPolygon on android
 log: ### End Rendering Android Imports...
-log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Graphic/XKPCircle.java
-log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/values/styleable_XKPCircle.xml
-log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Graphic/XKPGraphics.java
-log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/values/styleable_XKPGraphics.xml
-log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Graphic/XKPRectangle.java
-log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Graphic/XKPGraphics.java
-log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/values/styleable_XKPGraphics.xml
-log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Graphic/XKPPolygon.java
-log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Graphic/XKPGraphics.java
-log: Rendering widget file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/values/styleable_XKPGraphics.xml
+log: Rendering widget file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Graphic/XKPCircle.java
+log: Rendering widget file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/values/styleable_XKPCircle.xml
+log: Rendering widget file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Graphic/XKPGraphics.java
+log: Rendering widget file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/values/styleable_XKPGraphics.xml
+log: Rendering widget file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Graphic/XKPRectangle.java
+log: Rendering widget file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Graphic/XKPGraphics.java
+log: Rendering widget file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/values/styleable_XKPGraphics.xml
+log: Rendering widget file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Graphic/XKPPolygon.java
+log: Rendering widget file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Graphic/XKPGraphics.java
+log: Rendering widget file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/values/styleable_XKPGraphics.xml
 log: -- Rendering instance: div1
 log: Properties size: 0
 log: Methods size: 0
@@ -383,16 +311,16 @@ log: -- Rendering instance: application
 log: Properties size: 0
 log: Methods size: 0
 log: Events size: 0
-log: Copying default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/values/colors.xml
-log: Copying default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
-log: Copying default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/drawable/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/assets/.empty
-log: Copying default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/bin/.empty
-log: Copying default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/gen/.empty
-log: Rendering default file: d:/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
+log: Copying default file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/values/colors.xml
+log: Copying default file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
+log: Copying default file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/drawable/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/assets/.empty
+log: Copying default file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/bin/.empty
+log: Copying default file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/gen/.empty
+log: Rendering default file: c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
 
 Success are greateful
 ===[ gallery.project.xml ]================
@@ -417,14 +345,14 @@ log: Adding import android.widget.BaseAdapter on android
 log: Adding import android.content.Context on android
 log: ### End Rendering Android Imports...
 log: Begin Rendering Resources Instances...
-log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_1.jpg
-log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_2.jpg
-log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_3.jpg
-log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_4.jpg
-log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_5.jpg
-log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_6.jpg
-log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_7.jpg
-log: Copying resource file d:/xkp/xss/samples/android/gallery/photos/gallery_photo_8.jpg
+log: Copying resource file c:/dev/XKP/xss/samples/android/gallery/photos/gallery_photo_1.jpg
+log: Copying resource file c:/dev/XKP/xss/samples/android/gallery/photos/gallery_photo_2.jpg
+log: Copying resource file c:/dev/XKP/xss/samples/android/gallery/photos/gallery_photo_3.jpg
+log: Copying resource file c:/dev/XKP/xss/samples/android/gallery/photos/gallery_photo_4.jpg
+log: Copying resource file c:/dev/XKP/xss/samples/android/gallery/photos/gallery_photo_5.jpg
+log: Copying resource file c:/dev/XKP/xss/samples/android/gallery/photos/gallery_photo_6.jpg
+log: Copying resource file c:/dev/XKP/xss/samples/android/gallery/photos/gallery_photo_7.jpg
+log: Copying resource file c:/dev/XKP/xss/samples/android/gallery/photos/gallery_photo_8.jpg
 log: End Rendering Resources Instances...
 log: -- Rendering instance: gallery
 log: Properties size: 5
@@ -435,16 +363,16 @@ log: -- Rendering instance: application
 log: Properties size: 0
 log: Methods size: 0
 log: Events size: 0
-log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/values/colors.xml
-log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
-log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/drawable/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/assets/.empty
-log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/bin/.empty
-log: Copying default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/gen/.empty
-log: Rendering default file: d:/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
+log: Copying default file: c:/dev/XKP/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/values/colors.xml
+log: Copying default file: c:/dev/XKP/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
+log: Copying default file: c:/dev/XKP/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/drawable/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/gallery/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/gallery/../../../idioms/android/copy.defaults/assets/.empty
+log: Copying default file: c:/dev/XKP/xss/samples/android/gallery/../../../idioms/android/copy.defaults/bin/.empty
+log: Copying default file: c:/dev/XKP/xss/samples/android/gallery/../../../idioms/android/copy.defaults/gen/.empty
+log: Rendering default file: c:/dev/XKP/xss/samples/android/gallery/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
 
 Success are greateful
 ===[ kitchensink.project.xml ]================
@@ -487,8 +415,8 @@ log: Adding import android.widget.SeekBar on android
 log: Adding import android.widget.SeekBar.OnSeekBarChangeListener on android
 log: ### End Rendering Android Imports...
 log: Begin Rendering Resources Instances...
-log: Copying resource file d:/xkp/xss/samples/android/kitchensink/images/dialog.png
-log: Copying resource file d:/xkp/xss/samples/android/kitchensink/images/emulator.png
+log: Copying resource file c:/dev/XKP/xss/samples/android/kitchensink/images/dialog.png
+log: Copying resource file c:/dev/XKP/xss/samples/android/kitchensink/images/emulator.png
 log: End Rendering Resources Instances...
 log: -- Rendering instance: kitchen
 log: Properties size: 2
@@ -603,16 +531,16 @@ log: -- Rendering instance: application
 log: Properties size: 0
 log: Methods size: 0
 log: Events size: 0
-log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/values/colors.xml
-log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
-log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/drawable/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/assets/.empty
-log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/bin/.empty
-log: Copying default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/gen/.empty
-log: Rendering default file: d:/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
+log: Copying default file: c:/dev/XKP/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/values/colors.xml
+log: Copying default file: c:/dev/XKP/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
+log: Copying default file: c:/dev/XKP/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/drawable/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/assets/.empty
+log: Copying default file: c:/dev/XKP/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/bin/.empty
+log: Copying default file: c:/dev/XKP/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/gen/.empty
+log: Rendering default file: c:/dev/XKP/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
 
 Success are greateful
 ===[ simple.project.xml ]================
@@ -668,16 +596,16 @@ log: -- Rendering instance: application
 log: Properties size: 0
 log: Methods size: 0
 log: Events size: 0
-log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/values/colors.xml
-log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
-log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/drawable/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/assets/.empty
-log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/bin/.empty
-log: Copying default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/gen/.empty
-log: Rendering default file: d:/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
+log: Copying default file: c:/dev/XKP/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/values/colors.xml
+log: Copying default file: c:/dev/XKP/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
+log: Copying default file: c:/dev/XKP/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/drawable/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/assets/.empty
+log: Copying default file: c:/dev/XKP/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/bin/.empty
+log: Copying default file: c:/dev/XKP/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/gen/.empty
+log: Rendering default file: c:/dev/XKP/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
 
 Success are greateful
 ===[ touchme.project.xml ]================
@@ -714,16 +642,16 @@ log: -- Rendering instance: application
 log: Properties size: 0
 log: Methods size: 0
 log: Events size: 0
-log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/values/colors.xml
-log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
-log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/drawable/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
-log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/assets/.empty
-log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/bin/.empty
-log: Copying default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/gen/.empty
-log: Rendering default file: d:/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
+log: Copying default file: c:/dev/XKP/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/values/colors.xml
+log: Copying default file: c:/dev/XKP/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/values/styleable_XKPLayout.xml
+log: Copying default file: c:/dev/XKP/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/drawable/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/drawable-ldpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/drawable-mdpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/touchme/../../../idioms/android/copy.defaults/res/drawable-hdpi/icon.png
+log: Copying default file: c:/dev/XKP/xss/samples/android/touchme/../../../idioms/android/copy.defaults/assets/.empty
+log: Copying default file: c:/dev/XKP/xss/samples/android/touchme/../../../idioms/android/copy.defaults/bin/.empty
+log: Copying default file: c:/dev/XKP/xss/samples/android/touchme/../../../idioms/android/copy.defaults/gen/.empty
+log: Rendering default file: c:/dev/XKP/xss/samples/android/touchme/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
 
 Success are greateful
 ===[ 3js-ms.project.xml ]================(Tests)
@@ -732,15 +660,7 @@ Success are greateful
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering Sequence Types...
-log: PINGAAAAAAAAAAA
-log: null
-log: PINGAAAAAAAAAAA
-log: null
 log: Rendering Sequence...
-log: PINGAAAAAAAAAAA
-log: null
-log: PINGAAAAAAAAAAA
-log: null
 log: Rendering UI...
 Success are greateful
 ===[ 3js-ui.project.xml ]================(Tests)
@@ -794,6 +714,19 @@ log: Rendering 3js Types...
 log: Rendering UI...
 Success are greateful
 ===[ 3js_cube_img.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering 3js Types...
+Success are greateful
+===[ 3js_lights.project.xml ]================(Tests)
+
+
+log: Rendering UI Types...
+log: Rendering 3js Types...
+log: Rendering UI...
+Success are greateful
+===[ 3js_materials.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
@@ -857,20 +790,12 @@ log: Rendering UI Types...
 log: body.xss
 log: spawner.xss
 log: sequence.xss
-log: PINGAAAAAAAAAAA
-log: null
 log: sequence.xss
-log: PINGAAAAAAAAAAA
-log: null
 log: body.xss
 log: sequence.xss
-log: PINGAAAAAAAAAAA
-log: null
 log: body.xss
 log: body.xss
 log: Rendering Sequence Types...
-log: PINGAAAAAAAAAAA
-log: null
 log: Rendering UI...
 log: Rendering Sequence...
 Success are greateful
@@ -881,6 +806,8 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: body.xss
 log: body.xss
+log: body.xss
+log: body.xss
 log: Rendering UI...
 Success are greateful
 ===[ box2dcar.project.xml ]================(Tests)
@@ -888,6 +815,7 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering UI Types...
+log: body.xss
 log: body.xss
 log: body.xss
 log: body.xss
@@ -972,8 +900,7 @@ Success are greateful
 
 
 log: -- Rendering instance: instance1
-log: Properties size: 1
-log: Rendering property: writable
+log: Properties size: 0
 log: Methods size: 1
 log: Rendering method: test0
 log: Events size: 0
@@ -1014,8 +941,7 @@ return a;
 
 
 		public String foobar(Integer v) {
-			t3.real_run();
-t1.foo = t2.foo + 10;
+			t1.foo = t2.foo + 10;
 t2.set_bar(t1.foo + t1.get_bar() + "++");
 set_complex(t1, t2.get_bar() + t1.get_bar() + this.foo + "--");
 set_some_int(t1, t1.get_some_int() - 1);
@@ -1082,8 +1008,7 @@ for(Object i : list)
 			
 			public void writable_set(Object value) {
 				writable = value;
-				check_type();
-console.log(value);
+				console.log(value);
 			}
 		
 
@@ -1320,6 +1245,8 @@ btn1.text("Other Clicked");
 	}
 	);
 
+		application.are_obj_events = true;
+	
 
 
 
@@ -1360,6 +1287,8 @@ application.target_set(300);
 	}
 	);
 
+		application.are_obj_events = true;
+	
 
 
 
@@ -1399,6 +1328,8 @@ application.target_set(300);
 	}
 	);
 
+		application.are_obj_events = true;
+	
 
 });
 </script>
@@ -1522,6 +1453,8 @@ btn1.text("Other Clicked");
 	}
 	);
 
+		application.are_obj_events = true;
+	
 
 
 
@@ -1562,6 +1495,8 @@ application.target_set(300);
 	}
 	);
 
+		application.are_obj_events = true;
+	
 
 
 
@@ -1601,6 +1536,8 @@ application.target_set(300);
 	}
 	);
 
+		application.are_obj_events = true;
+	
 
 });
 </script>
@@ -1644,45 +1581,31 @@ Success are greateful
 
 
 log: Rendering Sequence Types...
-log: Rendering Sequence...
-log: -- Rendering instance: test_sequence
-log: Properties size: 0
-log: Methods size: 0
-log: -- Rendering instance: test_sequence
-log: Events size: 0
-Error [idiom] when tag found an invalid method
-	file = d:/xkp/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
+log: Rendering Sequence...Error [project] Invalid marker source
+
+	value = previous
+	file = c:/dev/XKP/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
 
 ===[ json1.project.xml ]================(Tests)
 
-
 Error [reader] Invalid XML file
+
 	xml error = Error document empty.
 	line = 0
 	column = 0
-	file = d:/xkp/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
+	file = c:/dev/XKP/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
 
 ===[ ms1.project.xml ]================(Tests)
 
 
 log: Rendering Sequence Types...
 log: Rendering Sequence...
-log: PINGAAAAAAAAAAA
-log: null
-log: PINGAAAAAAAAAAA
-log: null
 Success are greateful
 ===[ ms2.project.xml ]================(Tests)
 
 
 log: Rendering Sequence Types...
-log: PINGAAAAAAAAAAA
-log: null
 log: Rendering Sequence...
-log: PINGAAAAAAAAAAA
-log: null
-log: PINGAAAAAAAAAAA
-log: null
 Success are greateful
 ===[ ms3.project.xml ]================(Tests)
 
@@ -1692,8 +1615,6 @@ log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
 log: Rendering Sequence...
-log: PINGAAAAAAAAAAA
-log: null
 Success are greateful
 ===[ ms4.project.xml ]================(Tests)
 
@@ -1701,12 +1622,8 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
-log: PINGAAAAAAAAAAA
-log: null
 log: Rendering UI...
 log: Rendering Sequence...
-log: PINGAAAAAAAAAAA
-log: null
 Success are greateful
 ===[ ms5.project.xml ]================(Tests)
 
@@ -1723,12 +1640,8 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: sequence.xss
-log: PINGAAAAAAAAAAA
-log: null
 log: component.xss
-log: AQUI
 log: component.xss
-log: AQUI
 log: Rendering Sequence Types...
 log: Rendering UI...
 log: Rendering Sequence...
@@ -1741,8 +1654,6 @@ log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
 log: Rendering Sequence...
-log: PINGAAAAAAAAAAA
-log: null
 Success are greateful
 ===[ query_properties.project.xml ]================(Tests)
 
@@ -1824,13 +1735,19 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
 Success are greateful
-===[ ui_selfdrawn.project.xml ]================(Tests)
+===[ ui_painter.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
 Success are greateful
+===[ ui_selfdrawn.project.xml ]================(Tests)
+
+Error [cannot-resolve] Instance not found
+
+	instance = sd1ERROR: Project:  ui_selfdrawn.project.xml
+
 ===[ ui_sprite.project.xml ]================(Tests)
 
 
@@ -1929,6 +1846,50 @@ Success are greateful
 ===[ wax4.project.xml ]================(Tests)
 
 
+Success are greateful
+===[ wgl_cameras.project.xml ]================(Tests)
+
+
+log: Rendering 3js Types...
+Success are greateful
+===[ wgl_cube_img.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering 3js Types...
+Success are greateful
+===[ wgl_icosahedron.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering 3js Types...
+Success are greateful
+===[ wgl_materials.project.xml ]================(Tests)
+
+
+log: Rendering 3js Types...
+Success are greateful
+===[ wgl_model.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering 3js Types...
+Success are greateful
+===[ wgl_reflection_cube.project.xml ]================(Tests)
+
+
+log: Rendering 3js Types...
+Success are greateful
+===[ wgl_refraction_cube.project.xml ]================(Tests)
+
+
+log: Rendering 3js Types...
+Success are greateful
+===[ wgl_sound.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering 3js Types...
 Success are greateful
 ===[ xss1.project.xml ]================(Tests)
 
@@ -2068,49 +2029,6 @@ Success are greateful
 String foo = Singleton.get_foo();
 
 	
-
-Success are greateful
-===[ xss12.project.xml ]================(Tests)
-
-
-log: properties size: 0
-log: methods size: 0
-log: events size: 0
-log: children size: 1
-		FROM render_instances on xss12_idiom (1)
-	
-			INSTANCE: i1
-		
-		FROM render_instances on xss12_idiom (2)
-	
-			INSTANCE: 
-		
-			INSTANCE: i2
-		
-		Rendering User Types on xss12.idiom (1)...
-	
-		Rendering User Types on xss12.idiom (2)...
-	
-			[instance: i1]
-		
-			[instance: application]
-		
-					private void click() {
-				
-						Display disp;
-Integer w = disp.getWidth();
-Integer h = disp.getHeight();
-					
-					}
-				
-			instance id= "i1" idiom= "xss12_idiom1"
-		
-			instance id= "application" idiom= ""
-		
-			instance id= "" idiom= "xss12_idiom2"
-		
-			instance id= "i2" idiom= "xss12_idiom2"
-		
 
 Success are greateful
 ===[ xss2.project.xml ]================(Tests)

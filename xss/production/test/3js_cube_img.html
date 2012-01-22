@@ -2,12 +2,12 @@
 <html>
 <head>
 <title>Test 3D</title>
+</head>
+<body>
 <style type="text/css">
 	body{
 	}
 </style>
-</head>
-<body>
 <script type="text/javascript" src="../js/three/Detector.js"></script>
 <script type="text/javascript" src="../js/three/Three.js"></script>
 <script type="text/javascript" src="../js/three/Stats.js"></script>
@@ -24,8 +24,7 @@
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">		
-	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-	var renderer = new THREE.WebGLRenderer( { antialias: false } );
+var renderer = new THREE.CanvasRenderer();	
 var ui;
 var active_camera;
 var g_elapsed = -1;
@@ -40,45 +39,66 @@ application.events = new ms.event.EventHolder();
         var def_package_items = [];
                 def_package_items.push(
             {
-		id:"image_1",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test1.png"
+		id:				"image_1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test1.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"image_2",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test2.png"
+		id:				"image_2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test2.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"image_3",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test3.png"
+		id:				"image_3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test3.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"image_4",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test4.png"
+		id:				"image_4",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test4.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"image_5",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test5.png"
+		id:				"image_5",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test5.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"image_6",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/test6.png"
+		id:				"image_6",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test6.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__audio1",
-		resource_type:RESOURCE_SOUND,
-		src:"sounds/forest.wav"
+		id:				"__audio1",
+		resource_type:	RESOURCE_SOUND,
+		src:			"sounds/forest.wav",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
@@ -101,27 +121,21 @@ var materials =
 new Array(
 );
 var __basic_material1 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_1').asset),
 	});
 	materials.push(__basic_material1);
 var __basic_material2 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_2').asset),
 	});
 	materials.push(__basic_material2);
 var __basic_material3 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_3').asset),
 	});
 	materials.push(__basic_material3);
 var __basic_material4 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_4').asset),
 	});
 	materials.push(__basic_material4);
 var __basic_material5 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_5').asset),
 	});
 	materials.push(__basic_material5);
 var __basic_material6 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_6').asset),
 	});
 	materials.push(__basic_material6);
 var plane_material = new THREE.MeshBasicMaterial({
@@ -150,11 +164,6 @@ new THREE.Plane(
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
                 set_rotation_x(plane_1.rotation, -90);
-	var __playing_sound1 = new THREE.Sound(streamer.get_resource('sounds/forest.wav').asset
-	,700,20,true
-	);
-	scene.addObject(__playing_sound1);
-	__playing_sound1.play();
                 application.x_target_rotation = 0;
                 application.x_target_rotation_on_mouse_down = 0;
                 application.mouse_x = 0;

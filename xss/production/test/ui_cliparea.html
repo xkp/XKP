@@ -38,15 +38,21 @@ var Sound = new ms.ui.Sound();
         var def_package_items = [];
                 def_package_items.push(
             {
-		id:"__image1",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_grin_48.png"
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/smile_grin_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image2",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_sad_48.png"
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/smile_sad_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
@@ -67,15 +73,7 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-            var div1;
-            var ca1;
-            var __label1;
-            var lbl1;
-            var ca2;
-            var btn1;
-            var btn2;
-            var stateBtn;
-            var lbl3;
+var div1;var ca1;var __label1;var lbl1;var ca2;var btn1;var btn2;var stateBtn;var lbl3;
                 application.clicks = 0;
 	var ev_parent = this;
 	application.events.addListener("keydown", function(keycode)
@@ -154,9 +152,8 @@ window.onload = function()
         div1 = div1;
                 div1.rect(150, 0, 400, 200);
 		    ca1 = new ms.ui.ClipArea( 
-	    "rect",div1.manager, div1);ca1.mouse_thru = true;
+	    null,div1.manager, div1);ca1.mouse_thru = true;
         ca1 = ca1;
-                ca1.form = "rect";
                 ca1.rect(90, 60, 100, 120);
 		    __label1 = new ms.ui.Label( 
 	    "Verdana",div1.manager, div1);
@@ -169,9 +166,8 @@ window.onload = function()
                 lbl1.text("click smiley");
                 lbl1.position(100, 90);
 		    ca2 = new ms.ui.ClipArea( 
-	    "circle",div1.manager, div1);ca2.mouse_thru = true;
+	    null,div1.manager, div1);ca2.mouse_thru = true;
         ca2 = ca2;
-                ca2.form = "circle";
                 ca2.rect(100, 60, 100, 100);
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",div1.manager, div1);
@@ -185,6 +181,7 @@ btn1.set_rotation(btn1.get_rotation() + 10);
 application.clicks = application.clicks + 1;
 	}
 	);
+		application.are_obj_events = true;
                 btn1.rect(90, 100, 50, 50);
 		    btn2 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",div1.manager, div1);

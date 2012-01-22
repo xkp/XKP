@@ -38,76 +38,136 @@ var Sound = new ms.ui.Sound();
         var def_package_items = [];
                 def_package_items.push(
             {
-		id:"__image1",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/progress.full.png"
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/progress.full.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image2",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/progress.empty.png"
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/progress.empty.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image3",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_grin_48.png"
+		id:				"__image3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/smile_grin_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image4",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_sad_48.png"
+		id:				"__image4",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/smile_sad_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image5",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_left.png"
+		id:				"__image5",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/arrow_left.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image6",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_right.png"
+		id:				"__image6",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/arrow_right.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image7",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_right_48.png"
+		id:				"__image7",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/arrow_right_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image8",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_right_green_48.png"
+		id:				"__image8",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/arrow_right_green_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image9",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_left_48.png"
+		id:				"__image9",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/arrow_left_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image10",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_left_green_48.png"
+		id:				"__image10",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/arrow_left_green_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image11",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/monster.png"
+		id:				"__image11",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/AzuCola_Trans.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image12",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/AzuCola_Chars.png"
+		id:				"monster_sheet",
+		resource_type:	RESOURCE_SPRITE,
+		src:			"images/monster.png",
+		frame_width:	64,
+		frame_height:	64,
+		animations:		[]
 });
+		for(var i = 0; i < def_package_items.length; i++)
+        {						
+			if(def_package_items[i].id == "monster_sheet")
+				def_package_items[i].animations.push
+				({
+					id:			"m_running",
+					frame_row:	0,
+					frame_col:	0,
+					frames:		9,
+					step:		20
+				});
+		}		
+		for(var i = 0; i < def_package_items.length; i++)
+        {						
+			if(def_package_items[i].id == "monster_sheet")
+				def_package_items[i].animations.push
+				({
+					id:			"m_idle",
+					frame_row:	1,
+					frame_col:	0,
+					frames:		10,
+					step:		20
+				});
+		}		
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
 function start(resolution)  
@@ -127,43 +187,7 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-            var main;
-            var test1;
-            var title0;
-            var lbl0;
-            var lbl1;
-            var btn1;
-            var stateBtn;
-            var lbl3;
-            var test2;
-            var title1;
-            var pb1;
-            var btn2;
-            var btn3;
-            var lbl2;
-            var lbl7;
-            var monster;
-            var test3;
-            var title2;
-            var c1;
-            var r1;
-            var p1;
-            var btn5;
-            var lbl4;
-            var lbl5;
-            var lbl6;
-            var test4;
-            var title3;
-            var inst0;
-            var clips;
-            var ca1;
-            var back_img;
-            var ca2;
-            var inst1;
-            var inst2;
-            var inst3;
-            var btnNext;
-            var btnPrev;
+var main;var test1;var title0;var lbl0;var lbl1;var btn1;var stateBtn;var lbl3;var test2;var title1;var pb1;var btn2;var btn3;var lbl2;var lbl7;var monster;var test3;var title2;var c1;var r1;var p1;var line1;var lbl4;var lbl5;var lbl6;var btn5;var test4;var title3;var inst0;var clips;var ca1;var back_img;var ca2;var inst1;var inst2;var inst3;var btnNext;var btnPrev;
                 application.clicks = 0;
                 application.do_rotation_plus = false;
                 application.do_rotation_minus = false;
@@ -179,6 +203,7 @@ function start(resolution)
 if (keycode == LEFT_ARROW)
 {
 btn1.set_x(btn1.x - 2);
+monster.set_animation("m_running");
 application.left_key_down = true;
 }
 if (keycode == RIGHT_ARROW)
@@ -252,6 +277,7 @@ application.do_drag = true;
 		if (keycode == LEFT_ARROW)
 {
 application.left_key_down = false;
+monster.set_animation("m_idle");
 }
 if (keycode == NUMPAD_PLUS)
 {
@@ -272,12 +298,7 @@ application.do_drag = false;
 	{    
 		if (application.left_key_down)
 {
-monster.animate("m_running");
 monster.set_x(monster.x - 0.200000003);
-}
-else
-{
-monster.animate("m_idle");
 }
 	}
 	);
@@ -350,6 +371,7 @@ lbl1.text("Got " + application.clicks + " smileys");
 application.clicks = application.clicks + 1;
 	}
 	);
+		application.are_obj_events = true;
 	var ev_parent = this;
 	btn1.events.addListener("drag", function(x,y)
 	{    
@@ -360,6 +382,7 @@ btn1.set_y(y - btnNext.h / 2);
 }
 	}
 	);
+		application.are_obj_events = true;
                 btn1.rect(270, 200, 50, 50);
 		    stateBtn = new ms.ui.StateButton( 
 	    "images/smile_grin_48.png","images/smile_sad_48.png",test1.manager, test1);
@@ -385,6 +408,7 @@ stateBtn.set_rotation(stateBtn.get_rotation() - 5);
 }
 	}
 	);
+		application.are_obj_events = true;
 	var ev_parent = this;
 	stateBtn.events.addListener("drag", function(x,y)
 	{    
@@ -395,6 +419,7 @@ stateBtn.set_y(y - btnNext.h / 2);
 }
 	}
 	);
+		application.are_obj_events = true;
                 stateBtn.rect(270, 300, 50, 50);
 		    lbl3 = new ms.ui.Label( 
 	    "Verdana",test1.manager, test1);
@@ -430,6 +455,7 @@ btn2.set_rotation(btn2.get_rotation() - 5);
 pb1.value(pb1.get_value() - 1);
 	}
 	);
+		application.are_obj_events = true;
 	var ev_parent = this;
 	btn2.events.addListener("drag", function(x,y)
 	{    
@@ -440,6 +466,7 @@ btn2.set_y(y - btnNext.h / 2);
 }
 	}
 	);
+		application.are_obj_events = true;
                 btn2.rect(200, 115, 20, 20);
 		    btn3 = new ms.ui.Image( 
 	    "images/arrow_right.png",test2.manager, test2);
@@ -458,6 +485,7 @@ btn3.set_rotation(btn3.get_rotation() - 5);
 pb1.value(pb1.get_value() + 1);
 	}
 	);
+		application.are_obj_events = true;
 	var ev_parent = this;
 	btn3.events.addListener("drag", function(x,y)
 	{    
@@ -468,6 +496,7 @@ btn3.set_y(y - btnNext.h / 2);
 }
 	}
 	);
+		application.are_obj_events = true;
                 btn3.rect(380, 115, 20, 20);
 		    lbl2 = new ms.ui.Label( 
 	    "Verdana",test2.manager, test2);
@@ -479,26 +508,11 @@ btn3.set_y(y - btnNext.h / 2);
         lbl7 = lbl7;
                 lbl7.text("Press left arrow on your keyboard to walk the zombie");
                 lbl7.position(210, 270);
-		    monster = new ms.ui.SpriteSheet( 
-	    "images/monster.png",64,64,test2.manager, test2);
+		    monster = new ms.ui.Sprite( 
+	    "monster_sheet",test2.manager, test2);
         monster = monster;
+                monster.set_animation("m_idle");
                 monster.position(300, 300);
-		monster.array.push({id: "m_running", 
-										frames: 10, 
-										frame_row: 0,
-										frame_col: 0,
-										loop: true,
-										step: 30,
-										lock: false										
-										});
-		monster.array.push({id: "m_idle", 
-										frames: 10, 
-										frame_row: 1,
-										frame_col: 0,
-										loop: true,
-										step: 30,
-										lock: false										
-										});
 		    test3 = new ms.ui.Component( 
 	    main.manager, main);test3.mouse_thru = true;
         test3 = test3;
@@ -521,6 +535,7 @@ c1.set_y(y - c1.h / 2);
 }
 	}
 	);
+		application.are_obj_events = true;
 	var ev_parent = this;
 	c1.events.addListener("click", function()
 	{    
@@ -534,6 +549,7 @@ c1.set_line_width(c1.line_width - 1);
 }
 	}
 	);
+		application.are_obj_events = true;
                 c1.position(70, 70);
 		    r1 = new ms.ui.Rectangle( 
 	    "green",null,null,test3.manager, test3);
@@ -550,6 +566,7 @@ r1.set_y(y - r1.h / 2);
 }
 	}
 	);
+		application.are_obj_events = true;
 	var ev_parent = this;
 	r1.events.addListener("click", function()
 	{    
@@ -564,22 +581,28 @@ r1.set_rotation(r1.get_rotation() - 5);
 }
 	}
 	);
+		application.are_obj_events = true;
                 r1.rect(300, 100, 60, 90);
 		    p1 = new ms.ui.Polygon( 
 	    "pink","brown",3,test3.manager, test3);
         p1 = p1;
                 p1.alpha(40);
-		p1.points.push({id:"point1", x:300, y:300});
-		p1.points.push({id:"point2", x:300, y:250});
-		p1.points.push({id:"point3", x:210, y:230});
-		p1.points.push({id:"point4", x:250, y:300});
-		    btn5 = new ms.ui.Button( 
-	    "images/smile_sad_48.png","images/smile_grin_48.png",test3.manager, test3);
-        btn5 = btn5;
 	var ev_parent = this;
-	btn5.events.addListener("click", function()
+	p1.events.addListener("click", function()
 	{    
-		for(var i = 0; i < 4; i++)
+		if (application.do_rotation_plus)
+{
+p1.set_rotation(p1.get_rotation() + 5);
+}
+else
+{
+if (application.do_rotation_minus)
+{
+p1.set_rotation(p1.get_rotation() - 5);
+}
+else
+{
+for(var i = 0; i < 4; i++)
 {
 if (i % 2 == 0)
 {
@@ -593,7 +616,44 @@ application.py = p1.points[i].y - 5;
 }
 p1.setPointbyIndex(i, application.px, application.py);
 }
-if (application.do_rotation_plus)
+}
+}
+	}
+	);
+		application.are_obj_events = true;
+		p1.points.push({id:"point1", x:300, y:300});
+		p1.points.push({id:"point2", x:300, y:250});
+		p1.points.push({id:"point3", x:210, y:230});
+		p1.points.push({id:"point4", x:250, y:300});
+		    line1 = new ms.ui.Line( 
+	    test3.manager, test3);
+        line1 = line1;
+                line1.set_x1(500);
+                line1.set_y1(50);
+                line1.set_x2(500);
+                line1.set_y2(300);
+		    lbl4 = new ms.ui.Label( 
+	    "11px Verdana",test3.manager, test3);
+        lbl4 = lbl4;
+                lbl4.text("Click the circle pressing NUMPAD + or NUMPAD - to increment or decrement its linewidth");
+                lbl4.position(50, 400);
+		    lbl5 = new ms.ui.Label( 
+	    "11px Verdana",test3.manager, test3);
+        lbl5 = lbl5;
+                lbl5.text("Greeny the drunked rectangle and Pinky the polygon rotates like the other components, test it!!!");
+                lbl5.position(50, 420);
+		    lbl6 = new ms.ui.Label( 
+	    "11px Verdana",test3.manager, test3);
+        lbl6 = lbl6;
+                lbl6.text("Click the smiley to increment the black line width");
+                lbl6.position(50, 440);
+		    btn5 = new ms.ui.Button( 
+	    "images/smile_sad_48.png","images/smile_grin_48.png",test3.manager, test3);
+        btn5 = btn5;
+	var ev_parent = this;
+	btn5.events.addListener("click", function()
+	{    
+		if (application.do_rotation_plus)
 {
 btn5.set_rotation(btn5.get_rotation() + 5);
 }
@@ -601,8 +661,10 @@ if (application.do_rotation_minus)
 {
 btn5.set_rotation(btn5.get_rotation() - 5);
 }
+line1.set_lineWidth(line1.lineWidth + 1);
 	}
 	);
+		application.are_obj_events = true;
 	var ev_parent = this;
 	btn5.events.addListener("drag", function(x,y)
 	{    
@@ -613,22 +675,8 @@ btn5.set_y(y - btn5.h / 2);
 }
 	}
 	);
+		application.are_obj_events = true;
                 btn5.rect(400, 200, 50, 50);
-		    lbl4 = new ms.ui.Label( 
-	    "11px Verdana",test3.manager, test3);
-        lbl4 = lbl4;
-                lbl4.text("Click the circle pressing NUMPAD + or NUMPAD - to increment or decrement its linewidth");
-                lbl4.position(50, 400);
-		    lbl5 = new ms.ui.Label( 
-	    "11px Verdana",test3.manager, test3);
-        lbl5 = lbl5;
-                lbl5.text("Greeny the drunked rectangle rotates like the other components, test it!!!");
-                lbl5.position(50, 420);
-		    lbl6 = new ms.ui.Label( 
-	    "11px Verdana",test3.manager, test3);
-        lbl6 = lbl6;
-                lbl6.text("Click the smiley to deformate the pink polygon");
-                lbl6.position(50, 440);
 		    test4 = new ms.ui.Component( 
 	    main.manager, main);test4.mouse_thru = true;
         test4 = test4;
@@ -648,16 +696,16 @@ btn5.set_y(y - btn5.h / 2);
 		    ca1 = new ms.ui.ClipArea( 
 	    "rect",clips.manager, clips);ca1.mouse_thru = true;
         ca1 = ca1;
-                ca1.form = "rect";
+                ca1.shape = "rect";
                 ca1.rect(90, 100, 200, 220);
 		    back_img = new ms.ui.Image( 
-	    "images/AzuCola_Chars.png",clips.manager, clips);
+	    "images/AzuCola_Trans.png",clips.manager, clips);
         back_img = back_img;
                 back_img.rect(0, 0, 500, 500);
 		    ca2 = new ms.ui.ClipArea( 
 	    "circle",clips.manager, clips);ca2.mouse_thru = true;
         ca2 = ca2;
-                ca2.form = "circle";
+                ca2.shape = "circle";
                 ca2.rect(100, 160, 200, 200);
 		    inst1 = new ms.ui.Label( 
 	    "12px Verdana",g_ui_root.manager, g_ui_root);
@@ -694,6 +742,7 @@ main.active(main.get_active() + 1);
 }
 	}
 	);
+		application.are_obj_events = true;
 	var ev_parent = this;
 	btnNext.events.addListener("drag", function(x,y)
 	{    
@@ -704,6 +753,7 @@ btnNext.set_y(y - btnNext.h / 2);
 }
 	}
 	);
+		application.are_obj_events = true;
                 btnNext.rect(320, 550, 50, 50);
 		    btnPrev = new ms.ui.Button( 
 	    "images/arrow_left_green_48.png","images/arrow_left_48.png",g_ui_root.manager, g_ui_root);
@@ -725,6 +775,7 @@ main.active(main.get_active() - 1);
 }
 	}
 	);
+		application.are_obj_events = true;
 	var ev_parent = this;
 	btnPrev.events.addListener("drag", function(x,y)
 	{    
@@ -735,6 +786,7 @@ btnPrev.set_y(y - btnPrev.h / 2);
 }
 	}
 	);
+		application.are_obj_events = true;
                 btnPrev.rect(220, 550, 50, 50);
 			document.onkeydown = function(ev)
 			{

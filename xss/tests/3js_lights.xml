@@ -1,0 +1,39 @@
+<application src="3js_lights.xs" title="Test 3D" background="Black">
+
+	<resources>
+		
+	</resources>
+
+	<materials>		
+		<lambert_material id="material_sphere1" color="White" shading="flat_shading"/>			
+	</materials>
+	
+	<scene>	
+	
+		<camera id="camera_1" fov="65" aspect="1.5" near="1" far="1000">
+			<position z="100"/>			
+		</camera>
+		
+		<ambient_light id="amb_light_1" color="MidnightBlue"/>
+		
+		<point_light id="light1" color="Red" intensity="1" distance="50"/>
+		<point_light id="light2" color="Lime" intensity="1" distance="50"/>
+		<point_light id="light3" color="Yellow" intensity="1" distance="50"/>
+		
+		<particle id="particle1" program="program_fill" color="Red">			
+			<scale x="0.5" y="0.5" z="0.5"/>						
+		</particle>
+			
+		<particle id="particle2" program="program_fill" color="Lime">			
+			<scale x="0.5" y="0.5" z="0.5"/>						
+		</particle>
+		
+		<particle id="particle3" program="program_fill" color="Yellow">			
+			<scale x="0.5" y="0.5" z="0.5"/>						
+		</particle>
+		
+		<sphere id="sphere1" radius="20" x_segments="32" y_segments="16" material="material_sphere1"/>	
+						
+	</scene>
+			
+</application>

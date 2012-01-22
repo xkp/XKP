@@ -41,28 +41,38 @@
             </property>
         </class>
 
-		<class id="self_drawn" super="component" output_id="ms.ui.SelfDrawn"/>
+		<class id="painter" super="component" output_id="ms.ui.Painter"/>
 		
 		<class id="clip_area" super="component" output_id="ms.ui.ClipArea">
 			<constructor_params>
-                <parameter property="form" runtime="true"/>
+                <parameter property="shape" runtime="true"/>
             </constructor_params>
 
-            <property id="form" type="string"/>                
+            <property id="shape" type="string"/>                
 		</class>
-		
-		<class id="sprite_sheet" super="component" output_id="ms.ui.SpriteSheet">
+
+		<class id="sprite" super="component" output_id="ms.ui.Sprite">
 			<constructor_params>
-                <parameter property="src" runtime="true"/>
-				<parameter property="frame_width" runtime="true"/>
-				<parameter property="frame_height" runtime="true"/>						
+                <parameter property="sheet" runtime="true"/>				
             </constructor_params>
-            <property id="src" type="string" dont_init="true"/> 
-			<property id="frame_width" type="int" dont_init="true"/>
-			<property id="frame_height" type="int" dont_init="true"/>						
-		</class>
-		
-		<class id="sprite" renderer="sprite_renderer.xss"/>
+            <property id="sheet" type="string" dont_init="true"/> 
+			<property id="animation" type="string">
+				<get text="animation"/>
+                <set text="set_animation({value})"/>
+            </property>
+			<property id="loop" type="bool">
+				<get text="loop"/>
+                <set text="set_loop({value})"/>
+            </property>			
+			<property id="bounce" type="bool">
+				<get text="bounce"/>
+                <set text="set_bounce({value})"/>
+            </property>
+			<property id="lock" type="bool">
+				<get text="lock"/>
+                <set text="set_lock({value})"/>
+            </property>
+		</class>	
 		
 		<class id="rectangle" super="component" output_id="ms.ui.Rectangle">
 			<constructor_params>
@@ -237,7 +247,7 @@
                 <set text="set_lineWidth({value})"/>
             </property>
             
-            <property id="lineCap" type="string">
+            <property id="line_cap" type="string">
                 <get text="lineCap"/>
                 <set text="set_lineCap({value})"/>
             </property>

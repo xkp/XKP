@@ -30,7 +30,7 @@ var Sound = new ms.ui.Sound();
 			var client =
 			{
 				width: 600,
-				height: 400,
+				height: 600,
 				canvas: drawingCanvas
 			};
 			var ui = new ms.ui.Manager(client, streamer);
@@ -100,21 +100,39 @@ var Sound = new ms.ui.Sound();
         var def_package_items = [];
                 def_package_items.push(
             {
-		id:"__image1",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_sad_48.png"
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/smile_sad_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image2",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_grin_48.png"
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/smile_grin_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image3",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/stone-12.jpg"
+		id:				"__image3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/stone-12.jpg",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                def_package_items.push(
+            {
+		id:				"__image4",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/img1.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
@@ -186,10 +204,8 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-            var btn1;
-            var btn2;
-            var __floor1;
-            my_body = Class.create(ms.ui.Image,
+var __label1;var __label2;var __label3;var __label4;var __label5;var btn1;var btn2;var btn3;var btn4;var btn5;var btn6;var __floor1;var __floor2;var __floor3;var __floor4;
+            body_1 = Class.create(ms.ui.Image,
         {
     initialize: function($super
                 , src
@@ -220,7 +236,7 @@ function start(resolution)
 				);
                 if (this.w > 0 && this.h > 0)
                 {
-					this.events.dispatch("resized", [this]);                     
+					this.events.dispatch("resized", [this]);          
                 }
                 this.RemoveFromWorld = function(keep_visual) 
                 {
@@ -230,11 +246,97 @@ function start(resolution)
                         this.parent.removeComponent(this);
                     }
                 }
-	var ev_parent = this;
-	this.events.addListener("collision", function(who)
-	{    
-	}
-	);
+            if (this.init)
+                this.init();
+            },
+});
+            body_2 = Class.create(ms.ui.Image,
+        {
+    initialize: function($super
+                , src
+                )
+    {
+        $super(
+        src? src : "images/smile_sad_48.png"        );
+        this.events = new ms.event.EventHolder(); 
+                this.size(50, 50);
+				this.events.addListener('resized', function(cmp)
+                {
+                    if (cmp.physics)
+                        g_world.DestroyBody(cmp.physics);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_dynamicBody;
+                    fixDef.shape = new b2CircleShape(21.5/g_world_scale);
+            fixDef.isSensor = false;
+                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);			
+            current_body.CreateFixture(fixDef);
+			current_body.mouse_joint = true;
+                cmp.physics = current_body;			
+                cmp.events.addListener('moved', update_body_position);
+                current_body.host = cmp;
+                }
+				);
+                if (this.w > 0 && this.h > 0)
+                {
+					this.events.dispatch("resized", [this]);          
+                }
+                this.RemoveFromWorld = function(keep_visual) 
+                {
+                    g_world.DestroyBody(this.physics);
+                    if (!keep_visual)
+                    {
+                        this.parent.removeComponent(this);
+                    }
+                }
+            if (this.init)
+                this.init();
+            },
+});
+            body_3 = Class.create(ms.ui.Image,
+        {
+    initialize: function($super
+                , src
+                )
+    {
+        $super(
+        src? src : "images/img1.png"        );
+        this.events = new ms.event.EventHolder(); 
+                this.size(50, 50);
+				this.events.addListener('resized', function(cmp)
+                {
+                    if (cmp.physics)
+                        g_world.DestroyBody(cmp.physics);
+             fixDef.density = 1;
+             fixDef.friction = 0.5;
+             fixDef.restitution = 0.200000003;
+             bodyDef.type = b2Body.b2_dynamicBody;
+                fixDef.shape = new b2PolygonShape;
+                    fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
+            fixDef.isSensor = false;
+                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
+            current_body = g_world.CreateBody(bodyDef);			
+            current_body.CreateFixture(fixDef);
+			current_body.mouse_joint = true;
+                cmp.physics = current_body;			
+                cmp.events.addListener('moved', update_body_position);
+                current_body.host = cmp;
+                }
+				);
+                if (this.w > 0 && this.h > 0)
+                {
+					this.events.dispatch("resized", [this]);          
+                }
+                this.RemoveFromWorld = function(keep_visual) 
+                {
+                    g_world.DestroyBody(this.physics);
+                    if (!keep_visual)
+                    {
+                        this.parent.removeComponent(this);
+                    }
+                }
             if (this.init)
                 this.init();
             },
@@ -269,7 +371,7 @@ function start(resolution)
 				);
                 if (this.w > 0 && this.h > 0)
                 {
-					this.events.dispatch("resized", [this]);                     
+					this.events.dispatch("resized", [this]);          
                 }
                 this.RemoveFromWorld = function(keep_visual) 
                 {
@@ -283,11 +385,25 @@ function start(resolution)
                 this.init();
             },
 });
+            my_body = Class.create(ms.ui.Image,
+        {
+    initialize: function($super
+                , src
+                )
+    {
+        $super(
+        src        );
+        this.events = new ms.event.EventHolder(); 
 	var ev_parent = this;
-	application.events.addListener("mouse_drag", function()
+	this.events.addListener("collision", function(who)
 	{    
 	}
 	);
+		application.are_obj_events = true;
+            if (this.init)
+                this.init();
+            },
+});
 	var ev_parent = this;
 	application.events.addListener("keydown", function(keycode)
 	{    
@@ -318,7 +434,7 @@ window.onload = function()
 		var client =
 		{
 			width: 600,
-			height: 400,
+			height: 600,
 			canvas: drawingCanvas
 		};
 		var ui = new ms.ui.Manager(client, streamer);
@@ -338,22 +454,81 @@ window.onload = function()
 	{
 		ui.mouseup(ev.clientX, ev.clientY);                  
 	};	
-		    btn1 = new my_body( 
+		    __label1 = new ms.ui.Label( 
+	    "11px Verdana",g_ui_root.manager, g_ui_root);
+        __label1 = __label1;
+                __label1.text("The happy and sad smileys are connected. Will be?");
+                __label1.position(200, 75);
+		    __label2 = new ms.ui.Label( 
+	    "11px Verdana",g_ui_root.manager, g_ui_root);
+        __label2 = __label2;
+                __label2.text("Try to move any of them with the mouse");
+                __label2.position(200, 95);
+		    __label3 = new ms.ui.Label( 
+	    "11px Verdana",g_ui_root.manager, g_ui_root);
+        __label3 = __label3;
+                __label3.text("Some faces are happy because they are linked but can rotate freely...(distance joint)");
+                __label3.position(50, 135);
+		    __label4 = new ms.ui.Label( 
+	    "11px Verdana",g_ui_root.manager, g_ui_root);
+        __label4 = __label4;
+                __label4.text("Others are sad because they are glued together and have no free will...(weld joint)");
+                __label4.position(50, 155);
+		    __label5 = new ms.ui.Label( 
+	    "11px Verdana",g_ui_root.manager, g_ui_root);
+        __label5 = __label5;
+                __label5.text("The two cameras are connected with a pulley joint. Test it !!!");
+                __label5.position(50, 175);
+		    btn1 = new body_1( 
 	    "images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
         btn1 = btn1;
-                btn1.rect(300, 250, 50, 50);
-		    btn2 = new my_body( 
+                btn1.rect(200, 250, 50, 50);
+		    btn2 = new body_1( 
 	    "images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
         btn2 = btn2;
                 btn2.rect(100, 250, 50, 50);
+		    btn3 = new body_2( 
+	    "images/smile_sad_48.png",g_ui_root.manager, g_ui_root);
+        btn3 = btn3;
+                btn3.rect(400, 250, 50, 50);
+		    btn4 = new body_2( 
+	    "images/smile_sad_48.png",g_ui_root.manager, g_ui_root);
+        btn4 = btn4;
+                btn4.rect(300, 250, 50, 50);
+		    btn5 = new body_3( 
+	    "images/img1.png",g_ui_root.manager, g_ui_root);
+        btn5 = btn5;
+                btn5.rect(15, 100, 50, 50);
+		    btn6 = new body_3( 
+	    "images/img1.png",g_ui_root.manager, g_ui_root);
+        btn6 = btn6;
+                btn6.rect(500, 500, 50, 50);
 		    __floor1 = new floor( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
         __floor1 = __floor1;
-                __floor1.rect(0, 390, 600, 40);
+                __floor1.rect(0, 590, 600, 10);
+		    __floor2 = new floor( 
+	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+        __floor2 = __floor2;
+                __floor2.rect(0, 0, 10, 600);
+		    __floor3 = new floor( 
+	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+        __floor3 = __floor3;
+                __floor3.rect(0, 0, 600, 10);
+		    __floor4 = new floor( 
+	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+        __floor4 = __floor4;
+                __floor4.rect(590, 0, 10, 600);
 __distance_joint1 = 
 new ms.joint.DistanceJoint(
 btn1,btn2);
                 __distance_joint1.joint.SetLength(5);
+__weld_joint1 = 
+new ms.joint.WeldJoint(
+btn3,btn4);
+__pulley_joint1 = 
+new ms.joint.PulleyJoint(
+btn5,btn6,100,100,500,500,1);
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -375,7 +550,7 @@ btn1,btn2);
 </script>
 </head>
 <body>
-	<canvas id="myCanvas" width="600" height="400">
+	<canvas id="myCanvas" width="600" height="600">
 		<p>Your browser doesn't support canvas.</p>
 	</canvas>
 </body>

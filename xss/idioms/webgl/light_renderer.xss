@@ -1,0 +1,9 @@
+<xss:parameter id="obj"/>
+
+<xss:code>	
+	out(){var <xss:e v="obj.id"/> = }compiler.xss("../common-js/instantiator.xss", obj);
+	out(){
+		;
+	scene.addLight(<xss:e value = "obj.id"/>);
+	}			
+</xss:code>

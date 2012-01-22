@@ -773,11 +773,12 @@ ms.ui.ProgressBar = Class.create(ms.ui.Component,
         return this.percent;
     },
 
-	resized: function()
+	resized: function($super)
 	{
 		var ww = this.w*(this.percent/100);
 	    this.left.rect(0, 0, ww, this.h);
 	    this.right.rect(ww, 0, this.w - ww, this.h);
+        $super();
 	}
 });
 
@@ -801,10 +802,6 @@ ms.ui.Label = Class.create(ms.ui.Component,
 	{
 		this.color_value = value;	
 		this.manager.invalidate_all();
-	},
-
-	resized: function()
-	{
 	},
 
 	extents: function()
@@ -962,18 +959,19 @@ ms.ui.Line = Class.create(ms.ui.Component,
 
     draw: function($super, context, x, y)
     {
+		old_line_width = context.lineWidth;
         context.fillStyle = this.fillStyle;
         context.beginPath();
         context.lineWidth = this.lineWidth;
         context.moveTo(x + this.x1, y + this.y1);
         context.lineTo(x + this.x2, y + this.y2);
         context.stroke();
-
+		context.lineWidth = old_line_width;
 		$super(context);
     },
 });
 
-ms.ui.SelfDrawn = Class.create(ms.ui.Component,
+ms.ui.Painter = Class.create(ms.ui.Component,
 {	
 	initialize: function($super, manager, parent)
 	{				
@@ -1013,16 +1011,16 @@ ms.ui.SelfDrawn = Class.create(ms.ui.Component,
 
 ms.ui.ClipArea = Class.create(ms.ui.Component,
 {	
-	initialize: function($super, form, manager, parent)
+	initialize: function($super, shape, manager, parent)
 	{				
 		$super(manager, parent);
 		this.clip = true;
-		this.form = form;
+		this.shape = shape;
 	},	
 	draw: function($super, context, x, y)
 	{
 		context.beginPath();
-		if(this.form == "rect")				
+		if(this.shape == "rect")				
 			context.rect(this.x + x, this.y + y, this.w, this.h);					
 		else
 			context.arc(this.x + x + this.w/2, this.y + y + this.h/2, 
@@ -1040,24 +1038,25 @@ ms.ui.Rectangle = Class.create(ms.ui.Component,
 		this.stroke = stroke;
 		this.line_width = line_width;
 	},	
-	resized: function()
-	{
-	},
+
 	set_fill: function(value)
 	{
 		this.fill = value;
 		this.invalidate();
 	},
+
 	set_stroke: function(value)
 	{
 		this.stroke = value;
 		this.invalidate();
 	},
+
 	set_line_width: function(value)
 	{
 		this.line_width = value;
 		this.invalidate();
 	},
+
 	draw: function($super, context, x, y)
 	{		
 		old_line_width = context.lineWidth;
@@ -1167,8 +1166,10 @@ ms.ui.Polygon = Class.create(ms.ui.Component,
 		this.stroke = stroke;
 		this.line_width = line_width;
 		this.points = [];
-		this.xmax = 0;
-		this.ymax = 0;
+		this.x = window.innerWidth;
+		this.y = window.innerHeight;
+		this.w = 0;
+		this.h = 0;
 	},
 	set_fill: function(value)
 	{
@@ -1191,7 +1192,7 @@ ms.ui.Polygon = Class.create(ms.ui.Component,
         {				
 			if(index == i){
 				this.points[i].x = x;
-				this.points[i].y = y;
+				this.points[i].y = y;				
 			}				
 		}
 		this.invalidate();
@@ -1209,8 +1210,26 @@ ms.ui.Polygon = Class.create(ms.ui.Component,
 	},
 	draw: function($super, context, x, y)
 	{		
-		context.save();
-		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
+		for(var i = 0; i < this.points.length; i++)
+        {	
+			var point = this.points[i];			
+			if(point.x < this.x)
+				this.x = point.x;
+			if(point.y < this.y)
+				this.y = point.y;
+		}		
+		for(var i = 0; i < this.points.length; i++)
+        {	
+			var point = this.points[i];			
+			if(point.x - this.x > this.w)
+				this.w = point.x - this.x;
+			if(point.y - this.y > this.h)
+				this.h = point.y - this.y;			
+		}
+		context.save();		
+		offset_x = this.x + this.w/2;
+		offset_y = this.y + this.h/2;
+		context.translate(offset_x, offset_y);
 		context.rotate(this.rotation);
 		context.beginPath();	
 		old_line_width = context.lineWidth;
@@ -1223,8 +1242,8 @@ ms.ui.Polygon = Class.create(ms.ui.Component,
         {	
 			var point = this.points[i];			
 			if(i<0)
-				context.moveTo(point.x, point.y);
-			context.lineTo(point.x, point.y);						
+				context.moveTo(point.x - offset_x, point.y - offset_y);
+			context.lineTo(point.x - offset_x, point.y - offset_y);						
 		}
 		context.closePath();		
 		if(this.line_width){
@@ -1248,21 +1267,54 @@ ms.ui.Polygon = Class.create(ms.ui.Component,
 	}
 });
 
-ms.ui.SpriteSheet = Class.create(ms.ui.Component,
+ms.ui.Sprite = Class.create(ms.ui.Component,
 {	
-	initialize: function($super, src, frame_width, frame_height, manager, parent)
+	initialize: function($super, sheet, manager, parent)
 	{				
 		$super(manager, parent);
-		this.sprite = streamer.get_resource(src).data;	
-		this.w = frame_width;
-		this.h = frame_height;		
-		this.sprite.frame_count = 0;		
-		this.sprite.current_step = 0;		
-		this.array = [];			
+		this.sheet = streamer.get_resource(sheet);
+		this.image = this.sheet.data;
+		this.w = this.sheet.frame_width;
+		this.h = this.sheet.frame_height;		
+		this.frame_count = 0;		
+		this.current_step = 0;
+		this.loop = true;
+		this.bounce = false;		
+		this.anim_queue = [];		
+	},
+	set_animation: function(value)
+	{
+		for(var i = 0; i < this.sheet.animations.length; i++)
+        {	
+			if(this.sheet.animations[i].id == value){
+				this.anim_queue.unshift(this.sheet.animations[i]);				
+				return 0;
+			}
+		}
+		throw "Unknown sheet: " + value;			
 	},	
+	set_loop: function(value)
+	{
+		if(value)
+			this.bounce = false;
+		this.loop = value;		
+	},
+	set_bounce: function(value)
+	{
+		if(value)
+			this.loop = false;
+		this.bounce = value;		
+	},
+	set_lock: function(value)
+	{
+		var temp = this.anim_queue.shift();
+		temp.is_locked = true;
+		this.anim_queue.unshift(temp);
+	},
 	draw: function($super, context, x, y)
 	{	
-		if(this.curr_sprite){
+		if(this.curr_anim)
+		{
 			var old_alpha;
 
 			context.save();
@@ -1274,9 +1326,9 @@ ms.ui.SpriteSheet = Class.create(ms.ui.Component,
 				old_alpha = context.globalAlpha;
 				context.globalAlpha = this.opacity;
 			}		
-			context.drawImage(this.sprite, 
-						this.w * (this.sprite.frame_count + this.curr_sprite.frame_col), 
-						this.h * this.curr_sprite.frame_row, 
+			context.drawImage(this.image, 
+						this.w * (this.frame_count + this.curr_anim.frame_col), 
+						this.h * this.curr_anim.frame_row, 
 						this.w, this.h, 
 						- this.w/2, - this.h/2, 
 						this.w, this.h);
@@ -1284,43 +1336,58 @@ ms.ui.SpriteSheet = Class.create(ms.ui.Component,
 			if (this.opacity != null)
 			{
 				context.globalAlpha = old_alpha;
-			}
-
-			context.restore();  		
-			$super(context);
-		}		
-	},
-	animate: function(id)
-	{
-		if(!this.curr_sprite)
-			this.curr_sprite = this.get_sprite_by_id(id);		
-		if(!this.curr_sprite.is_locked){
-			this.curr_sprite = this.get_sprite_by_id(id);
-		}				
-		this.curr_sprite.is_locked = this.curr_sprite.lock;				
-		if(this.sprite.current_step < this.curr_sprite.step){
-			this.sprite.current_step++;			
-		}else{						
-			if(this.sprite.frame_count < this.curr_sprite.frames - 1) 
-				{ this.sprite.frame_count++; } 
-			else{ 
-				this.curr_sprite.is_locked = false;
-				if(this.curr_sprite.loop)
-					{ this.sprite.frame_count = 0; } 
-			}
-			this.sprite.current_step = 0;
-			this.invalidate();
-		}		
-	},
-	get_sprite_by_id: function (id)
-	{
-		for(var i = 0; i < this.array.length; i++)
-        {	
-			if(this.array[i].id == id)
-				return this.array[i];
+			}				
+			context.restore();			
+			$super(context);				
 		}
-		throw "Unknown sprite: " + id;		
+		this.animate();
 	},
+	animate: function()
+	{	
+		if(!this.curr_anim)
+		{
+			if(this.anim_queue.length != 0)
+			{
+				this.curr_anim = this.anim_queue.pop();
+				this.frame_count = 0;
+			}
+		}
+		if(!this.curr_anim.is_locked && this.anim_queue.length != 0){
+			var temp_anim = this.anim_queue.pop();
+			if(temp_anim != this.curr_anim)
+			{
+				this.frame_count = 0;
+				this.curr_anim = temp_anim;
+			}
+		}						
+		if(this.current_step < this.curr_anim.step){
+			this.current_step++;			
+		}else{			
+			if(this.frame_count > 0 && this.decrement)
+				{ this.frame_count--; }			
+			else if(this.frame_count < this.curr_anim.frames - 1 && !this.decrement) 
+				{ this.frame_count++; } 
+			else{				
+				if(this.bounce)
+				{
+					if(this.frame_count == this.curr_anim.frames - 1)
+					{
+						this.decrement = true;						
+					}
+					if(this.frame_count == 0)
+					{
+						this.decrement = false;
+						this.curr_anim.is_locked = false;
+					}
+				}else
+					this.curr_anim.is_locked = false;
+				if(this.loop)
+					{ this.frame_count = 0; } 
+			}
+			this.current_step = 0;			
+		}
+		this.invalidate();
+	},	
 });
 
 ms.ui.Sound = Class.create(

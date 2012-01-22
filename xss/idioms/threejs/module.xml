@@ -23,15 +23,14 @@
             </property>		
 		</class>		
 
-		<class id="playing_sound" renderer="sound_renderer.xss"/>	
+		<class id="sound_3d" renderer="sound_renderer.xss"/>	
 		
 		<class id="material">
 			<constructor_params>
 				<parameter property="color"/> 
-				<parameter property="map"/>
 				<parameter property="wireframe"/>
 				<parameter property="wireframe_linewidth"/>
-				<parameter property="texture_src"/>				
+				<parameter property="src"/>				
 				<parameter property="shading"/>
 				<parameter property="vertex_colors"/>
 				<parameter property="env_map"/>
@@ -40,15 +39,17 @@
 				<parameter property="shininess"/>
 				<parameter property="specular"/>
 				<parameter property="transparent"/>
+				<parameter property="refraction_ratio"/>
+				<parameter property="ambient"/>
+				<parameter property="blending"/>
 			</constructor_params>
-			<property id="color" type="string" dont_init="true"/> 
-			<property id="map" type="string" dont_init="true"/>
+			<property id="color" type="string" dont_init="true"/> 			
 			<property id="wireframe" type="string" dont_init="true"/>
 			<property id="wireframe_linewidth" type="string" output_id="wireframeLinewidth" dont_init="true"/>
-			<property id="alpha" type="float" use_plain_value="true">
+			<property id="alpha" type="float">
 				<set text="set_material_alpha({path}, {value})" global = "true"/>
-            </property>
-			<property id="texture_src" type="string" dont_init="true"/>				
+            </property>			
+			<property id="src" type="string" dont_init="true"/>				
 			<property id="shading" type="string" dont_init="true"/>
 			<property id="vertex_colors" type="string" output_id="vertexColors" dont_init="true"/>
 			<property id="env_map" type="string" output_id="envMap" dont_init="true"/>
@@ -56,7 +57,10 @@
 			<property id="reflectivity" type="string" dont_init="true"/>
 			<property id="shininess" type="string" dont_init="true"/>
 			<property id="specular" type="string" dont_init="true"/>
-			<property id="transparent" type="string" dont_init="true"/>			
+			<property id="transparent" type="string" dont_init="true"/>	
+			<property id="refraction_ratio" type="float"/>
+			<property id="ambient" type="string" dont_init="true"/>
+			<property id="blending" type="string" dont_init="true"/>
 		</class>
 		
 		<class id="composite_material" output_id="Array"/>
@@ -67,15 +71,10 @@
 			
 		<class id="phong_material" super="material" output_id="THREE.MeshPhongMaterial" renderer="param_in_obj.xss"/>
 			
-		<class id="normal_material" output_id="THREE.MeshNormalMaterial"/>
-						
-		<class id="texture" output_id="THREE.Texture">
-			<constructor_params>
-				<parameter property="texture_src"/> 								
-			</constructor_params>
-			<property id="texture_src" type="string" dont_init="true"/>
-		</class>
+		<class id="normal_material" super="material" output_id="THREE.MeshNormalMaterial" renderer="param_in_obj.xss"/>
 		
+		<class id="depth_material" super="material" output_id="THREE.MeshDepthMaterial" renderer="param_in_obj.xss"/>
+						
 		<class id="object3d">			
             <property id="color" type="string" use_plain_value="true">
 				<set text="materials[0].color.setHex({value})"/>
@@ -89,7 +88,10 @@
             </property>
 			<property id="overdraw" type="string"/>
 			<property id="double_sided" type="string" output_id="doubleSided"/>
-			<property id="material" type="string" dont_init="true" use_plain_value="true"/>
+			
+			<property id="material" type="string" use_plain_value="true" dont_init="true">
+				<set text="materials[0] = {value}"/>
+            </property>
 							
 			<property id="position" type="vector3d"/>
 			<property id="rotation" type="rotation_class"/>
@@ -159,35 +161,7 @@
 			<property id="position" type="vector3d"/>
 			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>
-		</class>
-	
-		<class id="quake_camera" output_id="THREE.QuakeCamera" renderer="camera_renderer.xss">
-			<constructor_params> 				
-				<parameter property="fov"/>
-				<parameter property="aspect"/>
-				<parameter property="near"/>
-				<parameter property="far"/>     
-				<parameter property="target"/> 
-				<parameter property="speed"/>
-				<parameter property="look_speed"/>
-				<parameter property="no_fly"/>
-				<parameter property="vertical"/>
-				<parameter property="auto_forward"/>			
-			</constructor_params>			
-			<property id="fov" type="string" dont_init="true"/>
-			<property id="aspect" type="string" dont_init="true"/>
-			<property id="near" type="string" dont_init="true"/>
-			<property id="far" type="string" dont_init="true"/>
-			<property id="target" type="string" dont_init="true"/>
-			<property id="speed" output_id="movementSpeed" type="string" dont_init="true"/> 
-			<property id="look_speed" output_id="lookSpeed" type="string" dont_init="true"/>
-			<property id="no_fly" output_id="noFly" type="string" dont_init="true"/>
-			<property id="vertical" output_id="lookVertical" type="string" dont_init="true"/>
-			<property id="auto_forward" output_id="autoForward" type="string" dont_init="true"/>
-			<property id="position" type="vector3d"/>
-			<property id="rotation" type="rotation_class"/>
-			<property id="scale" type="vector3d"/>
-		</class>
+		</class>	
 	
 		<class id="plane" super="object3d" output_id="THREE.Plane" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
@@ -271,7 +245,7 @@
 			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>
 		</class>
-		
+				
 		<class id="particle_system" renderer="particle_renderer.xss" heritable="true">
 			<constructor_params>
 				<parameter property="program" runtime="true"/>
@@ -285,20 +259,8 @@
 			<property id="scale" type="string" dont_init="true"/>			
 		</class>
    
-		<class id="scene" output_id="THREE.Scene"/>	
-	
-		<class id="texture_cube" output_id="THREE.ImageUtils.loadTextureCube">
-			<constructor_params>
-				<parameter property="img_array"/>
-			</constructor_params>
-			<property id="img_array" type="string" dont_init="true"/>
-		</class>
-	
-		<class id="model" dont_render="true" renderer="model_renderer.xss">
-			<property id="position" type="vector3d"/>
-			<property id="rotation" type="rotation_class"/>
-			<property id="scale" type="vector3d"/>
-		</class>		
+		<class id="scene" output_id="THREE.Scene"/>		
+				
 	</types>
 	
 </module>

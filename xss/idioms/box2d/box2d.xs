@@ -7,6 +7,8 @@ on pre_process(obj)
     {
         world = obj; //td: test for dups		
     }
+	if(obj.id == '')
+		obj.id = compiler.genid(obj.class_name);
 }
 
 on render_jscripts()

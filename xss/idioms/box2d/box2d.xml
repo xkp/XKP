@@ -108,12 +108,14 @@
             <constructor_params>
                 <parameter property="body_a"/>
                 <parameter property="body_b"/>                           
-                <parameter property="axis"/>                
+                <parameter property="x"/>  
+				<parameter property="y"/>				
             </constructor_params>
 
             <property id="body_a" type="string" use_plain_value="true" dont_init="true"/>
             <property id="body_b" type="string" use_plain_value="true" dont_init="true"/>                      
-            <property id="axis" type="string" use_plain_value="true" dont_init="true"/>
+            <property id="x" type="int" use_plain_value="true" dont_init="true"/>
+			<property id="y" type="int" use_plain_value="true" dont_init="true"/>			
 			<property id="enable_limit" type="string" use_plain_value="true">
 				<get text="joint.IsLimitEnabled()"/>
                 <set text="joint.EnableLimit({value})"/>
@@ -144,15 +146,19 @@
             <constructor_params>
                 <parameter property="body_a"/>
                 <parameter property="body_b"/>
-				<parameter property="ground_a"/>                
-                <parameter property="ground_b"/>  
+				<parameter property="ground_xa"/> 
+				<parameter property="ground_ya"/>
+                <parameter property="ground_xb"/>				                
+                <parameter property="ground_yb"/>
 				<parameter property="ratio"/> 
             </constructor_params>
 
             <property id="body_a" type="string" use_plain_value="true" dont_init="true"/>
             <property id="body_b" type="string" use_plain_value="true" dont_init="true"/>
-			<property id="ground_a" type="string" use_plain_value="true" dont_init="true"/>
-            <property id="ground_b" type="string" use_plain_value="true" dont_init="true"/>	
+			<property id="ground_xa" type="int" use_plain_value="true" dont_init="true"/>
+			<property id="ground_ya" type="int" use_plain_value="true" dont_init="true"/>
+            <property id="ground_xb" type="int" use_plain_value="true" dont_init="true"/>			
+            <property id="ground_yb" type="int" use_plain_value="true" dont_init="true"/>	
             <property id="ratio" type="float" dont_init="true"/>	
         </class>	
 		

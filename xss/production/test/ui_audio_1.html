@@ -38,39 +38,57 @@ var Sound = new ms.ui.Sound();
         var def_package_items = [];
                 def_package_items.push(
             {
-		id:"__image1",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/stop.png"
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/stop.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image2",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/stop_over.png"
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/stop_over.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image3",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/bomb.png"
+		id:				"__image3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/bomb.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image4",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/AK-47.png"
+		id:				"__image4",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/AK-47.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__audio1",
-		resource_type:RESOURCE_SOUND,
-		src:"sounds/explosion.mp3"
+		id:				"__audio1",
+		resource_type:	RESOURCE_SOUND,
+		src:			"sounds/explosion.mp3",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__audio2",
-		resource_type:RESOURCE_SOUND,
-		src:"sounds/shoots.mp3"
+		id:				"__audio2",
+		resource_type:	RESOURCE_SOUND,
+		src:			"sounds/shoots.mp3",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
@@ -91,9 +109,7 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-            var lbl1;
-            var btnExplosion;
-            var btnShoots;
+var lbl1;var btnExplosion;var btnShoots;
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -137,6 +153,7 @@ window.onload = function()
 		Sound.play("sounds/explosion.mp3");
 	}
 	);
+		application.are_obj_events = true;
                 btnExplosion.rect(290, 220, 50, 50);
 		    btnShoots = new ms.ui.Button( 
 	    "images/AK-47.png","images/AK-47.png",g_ui_root.manager, g_ui_root);
@@ -147,6 +164,7 @@ window.onload = function()
 		Sound.play("sounds/shoots.mp3");
 	}
 	);
+		application.are_obj_events = true;
                 btnShoots.rect(275, 300, 100, 100);
 			document.onkeydown = function(ev)
 			{

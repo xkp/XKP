@@ -100,15 +100,21 @@ var Sound = new ms.ui.Sound();
         var def_package_items = [];
                 def_package_items.push(
             {
-		id:"__image1",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_grin_48.png"
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/smile_grin_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image2",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_sad_48.png"
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/smile_sad_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
@@ -180,7 +186,7 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-            var btn1;
+var btn1;
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -235,7 +241,7 @@ window.onload = function()
 				);
                 if (btn1.w > 0 && btn1.h > 0)
                 {
-					btn1.events.dispatch("resized", [btn1]);                     
+					btn1.events.dispatch("resized", [btn1]);          
                 }
                 btn1.RemoveFromWorld = function(keep_visual) 
                 {
@@ -250,9 +256,9 @@ window.onload = function()
              fixDef.restitution = 0.200000003;
              bodyDef.type = b2Body.b2_staticBody;
                 fixDef.shape = new b2PolygonShape;
-                    fixDef.shape.SetAsBox(20/(2*g_world_scale), 2/(2*g_world_scale));
+                    fixDef.shape.SetAsBox(20/g_world_scale, 2/g_world_scale);
             fixDef.isSensor = false;
-                bodyDef.position.Set(10, 15.1300001);
+                bodyDef.position.Set((10 + 20/2)/g_world_scale, (15.1300001 + 2/2)/g_world_scale);
             current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
             g_ui.fill_background = false; //td: cross idiom

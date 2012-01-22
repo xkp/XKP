@@ -33,13 +33,4 @@
             <run method="stop_anim3"/>
         </when>
     </sequence>
-
-    <sequence id="anim4" auto_start="true" target="btn2">
-        <every t="1">
-            <run method="update_button"/>
-        </every>
-        <at t="0">
-            <animate property="target.height" from="47" to="57" in="3"/>
-        </at>
-    </sequence>
 </application>

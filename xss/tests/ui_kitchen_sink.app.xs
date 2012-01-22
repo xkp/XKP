@@ -125,6 +125,7 @@ on keydown(keycode)
 	if(btn1.isVisible()){
 		if(keycode == LEFT_ARROW){
 			btn1.x -= 2;
+			monster.animation = "m_running";
 			left_key_down = true;
 		}
 		if(keycode == RIGHT_ARROW)
@@ -172,8 +173,11 @@ on keydown(keycode)
 
 on keyup(keycode)
 {
-	if(keycode == LEFT_ARROW)			
-		left_key_down = false;	
+	if(keycode == LEFT_ARROW)
+	{			
+		left_key_down = false;
+		monster.animation = "m_idle";	
+	}
 	if(keycode == NUMPAD_PLUS)
 		do_rotation_plus = false;
 	if(keycode == NUMPAD_MINUS)
@@ -182,21 +186,12 @@ on keyup(keycode)
 		do_drag = false;
 }
 
-on btn5.click(){
-	for(var i = 0; i < 4; i++ ){
-		if(i%2 == 0){
-			px = p1.points[i].x + 5;
-			py = p1.points[i].y + 5;
-		}else{
-			px = p1.points[i].x - 5;
-			py = p1.points[i].y - 5;
-		}
-		p1.setPointbyIndex(i, px, py);		
-	}
+on btn5.click(){	
 	if(do_rotation_plus)
 		btn5.rotation += 5;
 	if(do_rotation_minus)
 		btn5.rotation -= 5;
+	line1.line_width ++;
 }
 
 on btn5.drag(x, y)
@@ -241,14 +236,28 @@ on c1.click(){
 		c1.line_width --;	
 }
 
+on p1.click(){
+	if(do_rotation_plus)
+		p1.rotation += 5;
+	else if(do_rotation_minus)
+		p1.rotation -= 5;
+	else 
+	for(var i = 0; i < 4; i++ ){
+		if(i%2 == 0){
+			px = p1.points[i].x + 5;
+			py = p1.points[i].y + 5;
+		}else{
+			px = p1.points[i].x - 5;
+			py = p1.points[i].y - 5;
+		}
+		p1.setPointbyIndex(i, px, py);		
+	}
+}
+
 on updates()
 {	
-	if(left_key_down){
-		monster.animate("m_running");
-		monster.x -= 0.2;
-	}
-	else
-		monster.animate("m_idle");
+	if(left_key_down)
+		monster.x -= 0.2;	
 }
 
 

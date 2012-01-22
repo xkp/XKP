@@ -38,9 +38,12 @@ var Sound = new ms.ui.Sound();
         var def_package_items = [];
                 def_package_items.push(
             {
-		id:"__image1",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/img1.png"
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/img1.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
@@ -61,7 +64,7 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-            var img1;
+var img1;
             my_image = Class.create(ms.ui.Image,
         {
     initialize: function($super
@@ -90,6 +93,7 @@ ev_parent.img2 = new my_image("images/img1.png");
 ev_parent.img2.rect(ev_parent.x_pos + 50, ev_parent.y_pos - 50, 50, 50);
 	}
 	);
+		application.are_obj_events = true;
             if (this.init)
                 this.init();
             },
@@ -156,6 +160,7 @@ application.img2 = new my_image("images/img1.png");
 application.img2.rect(application.x_pos, application.y_pos, 50, 50);
 	}
 	);
+		application.are_obj_events = true;
                 img1.rect(100, 100, 50, 50);
 			document.onkeydown = function(ev)
 			{

@@ -1,4 +1,4 @@
-<application src="3js_cube.xs" title="Test 3D" renderer="canvas">
+<application src="3js_cube.xs" title="Test 3D">
 
 	<materials>	
 	
@@ -15,7 +15,7 @@
 				
 	</materials>
 	
-	<label id="lbl0" x="200" y="75" font="12px Verdana" caption="Drag to spin the cube"/>
+	<label id="lbl0" x="200" y="75" font="12px Verdana" caption="Drag mouse to spin the cube"/>
 	
 	<scene>	
 	

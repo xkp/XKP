@@ -1,4 +1,4 @@
-<application src="3js_class_test_1.app.xs" renderer="canvas" width="600" height="400">    
+<application src="3js_class_test_1.app.xs" width="600" height="400">    
     <resources>		
 		<image src="images/test1.png"/>
 		<image src="images/test2.png"/>
@@ -7,7 +7,7 @@
 		<image src="images/test5.png"/>
 	</resources>
 
-	<label id="lbl0" x="200" y="75" font="12px Verdana" caption="Click anywhere to create a randomly positioned plane"/>
+	<label id="lbl0" x="200" y="75" font="12px Verdana" caption="Click wherever to create a randomly positioned plane"/>
 	
 	<scene>		 
 		<camera id="camera_1" fov="45" aspect="1.5" near="1" far="10000">

@@ -1,5 +1,4 @@
 <application src="java3.app.xs" >
 	<t_xss8 id="t1" foo="2"/>
     <t_xss8 id="t2" bar="**"/>
-	<t_super_derived id="t3"/>
 </application>

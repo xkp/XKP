@@ -10,22 +10,8 @@
         
     if (is_class)
         cmp_id = "this";
-    else if (compiler.application_object(cmp))
-    {
-        out(marker = "variables", marker_source = "entry") 
-        {
-            var <xss:e v="cmp.output_id"/>;
-        }
-    }
     else
-    {
-        compiler.log("AQUI");
-        //this is an instance being compiled inside a class, dont do anything global
-        out() 
-        {
-            var <xss:e v="cmp.output_id"/>;
-        }
-    }
+        out(marker = "variables", marker_source = "entry") {var <xss:e v="cmp.output_id"/>;}
         
     if (!is_class)
     {

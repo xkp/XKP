@@ -1,0 +1,48 @@
+<application src="wgl_sound.xs" title="Test 3D" background="SlateGray">
+
+	<resources>	
+	
+		<audio id="res_sound_1" src="sounds/applauselong.wav"/>
+		<audio id="res_sound_2" src="sounds/forest.wav"/>
+
+	</resources>
+
+	<materials>	
+	
+		<lambert_material id="material_sphere1" color="Green" shading="flat_shading"/>	
+		<lambert_material id="material_sphere2" color="Yellow" shading="flat_shading"/>
+		<lambert_material id="material_wireframe" color="MediumSlateBlue " wireframe="true"/>		
+
+	</materials>
+	
+	<scene>	
+	
+		<quake_camera id="camera_1" fov="50" aspect="1.5" near="1" far="10000" 
+					speed="70" look_speed="0.05" no_fly="true" vertical="false">		
+			<position y="25"/>			
+		</quake_camera>
+		
+		<directional_light id="light" color="White">
+			<position y="0.5" z="1"/>
+		</directional_light>
+		
+		<transform id="container_1">
+			<sphere id="sphere_1" radius="20" x_segments="32" y_segments="16" material="material_sphere1"/>			
+			<sound_3d id="sound_1" src="res_sound_1" radius="275" volume="20" loop="true"/>
+			<position x="250" y="30"/>	
+		</transform>
+		
+		<transform id="container_2">
+			<sphere id="sphere_2" radius="20" x_segments="32" y_segments="16" material="material_sphere2"/>			
+			<sound_3d id="sound_2" src="res_sound_2" radius="275" volume="20" loop="true"/>
+			<position x="-250" y="30"/>	
+		</transform>
+		
+		<plane id="plane_1" width="1000" height="1000" x_segments="100" y_segments="100" material="material_wireframe">
+			<position y="0.1"/>
+			<rotation x="-90"/>
+		</plane>		
+		
+	</scene>
+			
+</application>

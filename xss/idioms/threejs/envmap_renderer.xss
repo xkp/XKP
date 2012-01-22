@@ -1,0 +1,14 @@
+<xss:parameter id="obj"/>
+
+<xss:code>
+
+	out(){
+		var urls = ["<xss:e v="obj.posx"/>", "<xss:e v="obj.negx"/>",
+					"<xss:e v="obj.posy"/>", "<xss:e v="obj.negy"/>",
+					"<xss:e v="obj.posz"/>", "<xss:e v="obj.negz"/>" ];
+		var <xss:e v="obj.id"/> = THREE.ImageUtils.loadTextureCube( urls );
+	}		
+	
+</xss:code>
+
+

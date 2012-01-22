@@ -2,13 +2,13 @@
 <html>
 <head>
 <title>Test 3D</title>
+</head>
+<body>
 <style type="text/css">
 	body{
 	background:FloralWhite;
 	}
 </style>
-</head>
-<body>
 <script type="text/javascript" src="../js/three/Detector.js"></script>
 <script type="text/javascript" src="../js/three/Three.js"></script>
 <script type="text/javascript" src="../js/three/Stats.js"></script>
@@ -25,7 +25,7 @@
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
 <script type="text/javascript">		
-	var renderer = new THREE.CanvasRenderer();	
+var renderer = new THREE.CanvasRenderer();	
 var ui;
 var active_camera;
 var g_elapsed = -1;
@@ -33,8 +33,7 @@ var g_delta = 0.0;
 var drawingCanvas = renderer.domElement;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
-var anim_1;var fade_1;
-            var lbl0;
+var anim_1;var fade_1;var lbl0;
 var application = {};
 application.events = new ms.event.EventHolder();
 		var streamer = new ms.streamer.Streamer();
@@ -53,7 +52,7 @@ application.events = new ms.event.EventHolder();
         function default_interpolate(a, b, t)
         {
             return a + (b - a)*t;
-        }
+        }		
 	// --------RESOURCES---------
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
@@ -183,6 +182,7 @@ new THREE.Cylinder(
 fade_1.start();
 	}
 	);
+		application.are_obj_events = true;
 anim_1 =
 new move_anim(
 g_sequence_manager);

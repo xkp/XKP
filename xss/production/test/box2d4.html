@@ -101,49 +101,70 @@ var Sound = new ms.ui.Sound();
         function default_interpolate(a, b, t)
         {
             return a + (b - a)*t;
-        }
+        }		
         var def_package_items = [];
                 def_package_items.push(
             {
-		id:"__image1",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_sad_48.png"
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/smile_sad_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image2",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_grin_48.png"
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/smile_grin_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image3",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/sound_on.png"
+		id:				"__image3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/sound_on.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image4",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/sound_off.png"
+		id:				"__image4",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/sound_off.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image5",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/stone-12.jpg"
+		id:				"__image5",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/stone-12.jpg",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__image6",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/bomb.png"
+		id:				"__image6",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/bomb.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
                 def_package_items.push(
             {
-		id:"__audio1",
-		resource_type:RESOURCE_SOUND,
-		src:"sounds/boom.wav"
+		id:				"__audio1",
+		resource_type:	RESOURCE_SOUND,
+		src:			"sounds/boom.wav",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
         var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
 		g_startup_package.load();	
@@ -216,10 +237,7 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-            var sound;
-            var hero;
-            var __floor1;
-            var game_over;
+var sound;var hero;var __floor1;var game_over;
             bad_guy = Class.create(ms.ui.Image,
         {
     initialize: function($super
@@ -250,7 +268,7 @@ function start(resolution)
 				);
                 if (this.w > 0 && this.h > 0)
                 {
-					this.events.dispatch("resized", [this]);                     
+					this.events.dispatch("resized", [this]);          
                 }
                 this.RemoveFromWorld = function(keep_visual) 
                 {
@@ -273,13 +291,13 @@ function start(resolution)
         }
             this.cannon.parent = this;
             this.cannon.start();
-var move_around;this.move_around =
+this.move_around =
 new move_action(
 g_sequence_manager);
         move_around = this.move_around;
                 this.move_around.start();
             this.move_around.parent_sequence = null;
-var fade_out;this.fade_out =
+this.fade_out =
 new ms.state.Sequence(
 g_sequence_manager);
         fade_out = this.fade_out;
@@ -313,6 +331,7 @@ fade_out.start();
 }
 	}
 	);
+		application.are_obj_events = true;
             if (this.init)
                 this.init();
             },
@@ -347,7 +366,7 @@ fade_out.start();
 				);
                 if (this.w > 0 && this.h > 0)
                 {
-					this.events.dispatch("resized", [this]);                     
+					this.events.dispatch("resized", [this]);          
                 }
                 this.RemoveFromWorld = function(keep_visual) 
                 {
@@ -357,7 +376,7 @@ fade_out.start();
                         this.parent.removeComponent(this);
                     }
                 }
-var move_around;this.move_around =
+this.move_around =
 new move_action(
 g_sequence_manager);
         move_around = this.move_around;
@@ -374,6 +393,7 @@ g_sequence_manager);
 	{    
 	}
 	);
+		application.are_obj_events = true;
             if (this.init)
                 this.init();
             },
@@ -408,7 +428,7 @@ g_sequence_manager);
 				);
                 if (this.w > 0 && this.h > 0)
                 {
-					this.events.dispatch("resized", [this]);                     
+					this.events.dispatch("resized", [this]);          
                 }
                 this.RemoveFromWorld = function(keep_visual) 
                 {
@@ -431,6 +451,7 @@ Sound.play("sounds/boom.wav");
 }
 	}
 	);
+		application.are_obj_events = true;
             if (this.init)
                 this.init();
             },
@@ -465,7 +486,7 @@ Sound.play("sounds/boom.wav");
 				);
                 if (this.w > 0 && this.h > 0)
                 {
-					this.events.dispatch("resized", [this]);                     
+					this.events.dispatch("resized", [this]);          
                 }
                 this.RemoveFromWorld = function(keep_visual) 
                 {
@@ -509,6 +530,7 @@ ev_parent.vy = ev_parent.vy * -1;
 }
 	}
 	);
+		application.are_obj_events = true;
             if (this.init)
                 this.init();
             },
@@ -583,6 +605,7 @@ hero.move_around.stop();
 hero.src("images/smile_sad_48.png");
 	}
 	);
+		application.are_obj_events = true;
                 hero.rect(300, 350, 30, 30);
 		    __floor1 = new floor( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
