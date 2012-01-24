@@ -1,40 +1,48 @@
-// 
-// Java tests console
-// This source is generated with xss:xkp
-//
 import java.util.ArrayList;
 import java.util.Arrays;
-public class JavaTest {
-				private static Class_instance1 instance1;
-			private Float prop_instance1_xvalue = 100.199997;
+public class JavaTest1 {
+			private Float prop_instance1_xvalue = 100.199997f;
 			private Object prop_instance1_svalue;
-		public Float test0(Integer value) {
-			Integer a = value;
-Float b = 5.000000;
-return a * b;
+			private Object prop_instance1_typing;
+			private Integer prop_instance1_simple = 50;
+			public Float prop_instance1_read_only_get() {
+				return 10.000000f;
+			}
+			private Object prop_instance1_writable;
+			public void prop_instance1_writable_set(Object value) {
+				prop_instance1_writable = value;
+				System.out.println(value);
+			}
+			public Integer prop_instance1_mixed_get() {
+				return 10;
+			}
+			public void prop_instance1_mixed_set(Object value) {
+				System.out.println("Something");
+			}
+		public Object mthd_instance1_test0(Integer value) {
+			ArrayList xxx;
+Integer a = value;
+Float b = 5.000000f;
+Integer c = 2;
+Float d = 3.140000f;
+return a * b - xxx.get(c);
 		}
-		public Float test1(Integer value) {
-			Float b = 5.000000;
+		public Float mthd_instance1_test1(Integer value) {
+			Float b = 5.000000f;
 return b / 2;
 		}
-		public String test2(Integer value) {
+		public String mthd_instance1_test2(Integer value) {
 			Integer a = value;
-Float b = 5.000000;
-return application.app_test(a * b);
+Float b = 5.000000f;
+return mthd_application_app_test(a * b);
 		}
-		public Object test3(Object value) {
+		public Object mthd_instance1_test3(Object value) {
 			return value;
-		}
-		public void foo(Object obj) {
-			Boolean has_property = obj has "processed";
-if (!has_property)
-{
-}
 		}
 			private Integer prop_application_lvalue;
 			private String prop_application_yvalue = "string v";
 			private ArrayList<String> prop_application_xvalue = new ArrayList(Arrays.asList( new Object [] {"value1", "value2", "value3"} ));
-		public String app_test(Integer value) {
+		public String mthd_application_app_test(Integer value) {
 			return "string value";
 		}
 			private void createapplication() {
@@ -42,8 +50,9 @@ if (!has_property)
 Integer v0 = 20;
 Integer v1 = instance1.px_value;
 String v2 = "string";
-Float v3 = 3.140000;
+Float v3 = 3.140000f;
 Boolean v4 = true;
+Object v5 = prop_instance1_xvalue;
 Integer x0;
 x0 = instance1.px_value;
 Object x1;
@@ -61,7 +70,6 @@ Integer ivar = 100;
 String svar = String.valueOf(ivar);
 Float fval = Float.valueOf(svar);
 ArrayList<Integer> a0 = new ArrayList(Arrays.asList( new Object [] {1, 2} ));
-a0.setValue(j);
 ArrayList<Integer> a1 = new ArrayList(Arrays.asList( new Object [] {1, 2} ));
 a1 = new ArrayList(Arrays.asList( new Object [] {3, 4, 5, 6, 7} ));
 ArrayList<Integer> a2;
@@ -108,12 +116,10 @@ else
 	}
 }
 String rmthd;
-rmthd = application.app_test(10);
-String thd = application.app_test(2);
+rmthd = mthd_application_app_test(10);
+String thd = mthd_application_app_test(2);
 Object mthd;
-mthd = instance1.test0(10);
-mthd = instance1.test0(10, "a", -2);
-mthd = instance1.test0(2 * 5, "b" + "a", 1);
+mthd = mthd_instance1_test0(10);
 			}
 	public static void main(String[] args) {
 				application.create();

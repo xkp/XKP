@@ -51,6 +51,7 @@ on create()
 	var v2 = "string";
 	var v3 = 3.14;
 	var v4 = true;
+	var v5 = instance1.xvalue;
 	
 	
 	//[ok]: deduce type from assign value
@@ -82,7 +83,6 @@ on create()
 	
 	//[ok]: deduce array type from assign variable declaration value
 	object a0 = [1, 2];
-	a0.setValue(j);
 	
 	var a1 = [1, 2];
 	a1 = [3, 4, 5, 6, 7];
@@ -162,9 +162,9 @@ on create()
 	// 'instance1'; 'test0'; op_dot_call; 10; op_param; 1; op_call;
 	mthd = instance1.test0(10);
 	// 'instance1'; 'test0'; op_dot_call; 10; op_param; "a"; op_param; -2; op_param; 3; op_call;
-	mthd = instance1.test0(10, "a", -2);
+	//mthd = instance1.test0(10, "a", -2);
 	// 'instance1'; 'test0'; op_dot_call; 2; 5; op_mult; op_param; "b"; "a"; op_plus; op_param; 1; op_param; 3; op_call;
-	mthd = instance1.test0(2 * 5, "b" + "a", 1);
+	//mthd = instance1.test0(2 * 5, "b" + "a", 1);
 }
 
 method app_test(int value)
@@ -180,9 +180,13 @@ instance instance1
 	
 	method test0(int value)
 	{
+        array<int> xxx;
+		
 		var a = value;
 		float b = 5.0;
-		return a * b;
+		int c = 2;
+		var d = 3.14;
+		return a * b - xxx[c];
 	}
 	
 	method test1(int value)
@@ -203,6 +207,29 @@ instance instance1
 		return value;
 	}
 	
+	property typing;
+	
+    property simple = 50;
+
+    property read_only = 
+    {
+        return 10.0;
+    }
+
+    property writable
+    {
+        System.out.println(value);
+    }
+
+    property mixed = 
+    {
+        return 10;
+    }
+    {
+        System.out.println("Something");
+    }
+	
+	/*
 	method foo(var obj)
 	{
 		bool has_property = obj has "processed"; //has it been here?
@@ -212,4 +239,5 @@ instance instance1
 			//obj.processed = true; //now "has" would be true
 		}
 	}
+	*/
 }

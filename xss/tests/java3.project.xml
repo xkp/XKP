@@ -1,9 +1,0 @@
-<project 
-	entry_point="java3.xss" 
-	language="java" 
-	target="java3.app.xml" >
-	
-	<options event_scope="instance"/>
-	
-	<idiom src="../idioms/test/idiom.xml"/>
-</project> 

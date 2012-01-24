@@ -361,6 +361,7 @@ void java_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 
 						str separator = ctx_->get_language()->resolve_separator();
 
+            /*
 				    //here comes the hacky hoo
             size_t first_dot = opnd2.find_first_of(separator);
 				    if (first_dot != str::npos)
@@ -369,8 +370,43 @@ void java_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                 if (str_this == opnd1)
                   opnd2.erase(0, first_dot + 1);
 					    }
+            */
 
-            ss << opnd1 << "." << opnd2;
+            if (inst)
+              {
+                resolve_info left;
+                left.what  = RESOLVE_INSTANCE;
+                left.value = inst;
+
+                resolve_info right;
+                right.left = &left;
+
+                expression_identifier ei = arg2;
+                if (ctx_->resolve(ei.value, right))
+                  {
+                    switch(right.what)
+                      {
+                        case RESOLVE_METHOD:
+                          {
+                            XSSMethod mthd = right.value;
+                            bool user_def = mthd->get<bool>("user_defined", false);
+
+                            if (user_def && mthd->output_id() != mthd->id())
+                              {
+                                ss << mthd->output_id();
+                                push_rendered(ss.str(), op_prec, variant(), opnd1);
+                                return;
+                              }
+
+                            break;
+                          }
+                        default:
+                          assert(false); //td:
+                      }
+                  }
+              }
+
+            ss << opnd1 << separator << opnd2;
             push_rendered(ss.str(), op_prec, variant(), opnd1);
             break;
           }
@@ -657,9 +693,9 @@ str java_lang::render_value(XSSType type, variant value)
 
         std::stringstream ss;
         ss.setf(std::ios::fixed, std::ios::floatfield);
-        ss.precision(6);//td: ajust this value
+        ss.precision(6); //td: ajust this value
 
-        ss << f;
+        ss << f << "f";
 
         return ss.str();
       }

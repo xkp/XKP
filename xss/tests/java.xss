@@ -1,0 +1,38 @@
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class <xss:e value="application.name"/> {
+
+<xss:code>
+	var allinstances = test_idiom.instances;
+	allinstances += application;
+	
+	for(var i in allinstances)
+	{
+		if(i.methods)
+		{
+			for(var m in i.methods)
+			{
+				compiler.xss("../idioms/java/method.xss", m);
+			}
+		}
+		
+		if(i.events)
+		{
+			for(var e in i.events)
+			{
+				compiler.xss("../idioms/java/event.xss", e);
+			}
+		}
+
+		if(i.properties)
+		{
+			for(var p in i.properties)
+			{
+				compiler.xss("../idioms/java/property.xss", p);
+			}
+		}
+	}
+</xss:code>
+}

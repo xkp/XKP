@@ -1,3 +1,4 @@
+
 on pre_process(obj)
 {
 	// LOG:
@@ -30,6 +31,7 @@ on render_instances()
 {
 	compiler.log("Rendering Java instances...");
 	
+	instances += application;
 	for(var i in instances)
 	{
 		compiler.xss("instance.xss", i);

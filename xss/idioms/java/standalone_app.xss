@@ -1,7 +1,3 @@
-// 
-// Java tests console
-// This source is generated with xss:xkp
-//
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,21 +5,7 @@ import java.util.Arrays;
 public class <xss:e value="application.name"/> {
 
 	<xss:code>
-		for(var i in java.instances)
-		{
-			out()
-			{
-				private static Class_<xss:e value="i.id"/> <xss:e value="i.id"/>;
-			}
-		}
-	</xss:code>
-
-	<xss:code>
-		java.instances += application;
-		for(var i in java.instances)
-		{
-			compiler.xss("instance.xss", i);
-		}
+		compiler.inject("render_instances");
 	</xss:code>
 
 	public static void main(String[] args) {
@@ -48,5 +30,4 @@ public class <xss:e value="application.name"/> {
 		}
 	</xss:code>
 	}
-	
 }

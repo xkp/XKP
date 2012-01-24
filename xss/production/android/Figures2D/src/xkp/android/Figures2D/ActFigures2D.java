@@ -76,15 +76,15 @@ void initCallers() {
 	Integer new_y;
 	if (i % 2 == 0)
 	{
-		new_x = p1.get_point_x(i) + 5;
-		new_y = p1.get_point_y(i) + 5;
+		new_x = p1.getPointX(i) + 5;
+		new_y = p1.getPointY(i) + 5;
 	}
 	else
 	{
-		new_x = p1.get_point_x(i) - 5;
-		new_y = p1.get_point_y(i) - 5;
+		new_x = p1.getPointX(i) - 5;
+		new_y = p1.getPointY(i) - 5;
 	}
-	p1.setPointbyIndex(i, new_x, new_y);
+	p1.setPoint(i, new_x, new_y);
 }
 			}
 }
