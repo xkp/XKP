@@ -73,6 +73,7 @@ namespace xkp
         virtual void                      append_at(const str& what, const str& marker);
         virtual XSSContext                context();
         virtual fs::path                  file();
+        virtual str                       get();
         virtual bool                      busy();
       private:
         XSSContext  context_;

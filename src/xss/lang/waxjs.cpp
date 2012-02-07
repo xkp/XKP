@@ -518,7 +518,7 @@ str waxjs_code_renderer::render_split(CodeSplit fork, CodeSplit parent)
       }
     else if (st.is<dsl>())
       {
-        result << split_dsl(fork, split_name);
+        result << code_after.str() << split_dsl(fork, split_name);
       }
     else
       {
@@ -960,7 +960,7 @@ bool wax_utils::custom_modifier(XSSObject obj, const str& modifier, tag_list& ta
   {
     if (obj->has("replicator") && modifier == "items")
       {
-
+        //td: !!! replicator
       }
 
     return false;

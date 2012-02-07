@@ -162,6 +162,9 @@
     <ClInclude Include="..\..\..\include\xss\dsl\sql.h">
       <Filter>Header Files\xss\dsl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\dsl\generic_assign.h">
+      <Filter>Header Files\xss\dsl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -264,6 +267,9 @@
       <Filter>Source Files\xss</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\xss\dsl\sql.cpp">
+      <Filter>Source Files\xss\dsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\dsl\generic_assign.cpp">
       <Filter>Source Files\xss\dsl</Filter>
     </ClCompile>
   </ItemGroup>

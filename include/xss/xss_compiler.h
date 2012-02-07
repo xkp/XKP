@@ -57,6 +57,7 @@ namespace xkp
       virtual void                      append_at(const str& what, const str& marker) = 0;
       virtual XSSContext                context()                                     = 0;
       virtual fs::path                  file()                                        = 0;
+      virtual str                       get()                                         = 0;
 
       virtual bool busy() = 0; //td:
     };
@@ -208,6 +209,7 @@ namespace xkp
         str         instantiate(variant v);
         str         file(fs::path path);
         bool        application_object(XSSObject obj);
+        XSSModule   idiom_by_class(const str& class_name);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);

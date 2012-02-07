@@ -1266,6 +1266,11 @@ bool xss_compiler::application_object(XSSObject obj)
     return false;
   }
 
+XSSModule xss_compiler::idiom_by_class(const str& class_name)
+  {
+    return current_app_->type_idiom(class_name);
+  }
+
 void xss_compiler::push_renderer(XSSRenderer renderer)
   {
     if (renderers_.empty())
@@ -1722,14 +1727,13 @@ void xss_compiler::preprocess_type(XSSType clazz, XSSObject def_class, const str
     XSSModule module = app->type_idiom(super);
     if (def_class)
       {
+        assert(app == current_app_);
         pre_processor.ctx    = ctx;
         pre_processor.root   = def_class;
         pre_processor.target = clazz;
         pre_processor.module = module;
 
-        current_app_ = app;
         pre_process(app, def_class, XSSObject(), &pre_processor);
-        current_app_.reset();
       }
   }
 
@@ -1949,6 +1953,7 @@ void xss_compiler::read_application(const str& app_file)
     for(; it != nd; it++)
       {
         XSSApplicationRenderer app_renderer = *it;
+        current_app_ = app_renderer;
 
         //read the application
         XSSContext ctx  = app_renderer->context();
@@ -2014,7 +2019,6 @@ void xss_compiler::read_application(const str& app_file)
               }
           } pre_processor;
 
-        current_app_ = app_renderer;
         pre_process(app_renderer, app_data, XSSObject(), &pre_processor, true);
 
         //then compile
@@ -2417,6 +2421,8 @@ void xss_compiler::run()
     for(; it != nd; it++)
       {
         XSSApplicationRenderer app = *it;
+        current_app_ = app;
+
         fs::path target = app->entry_point();
         if (target.empty())
           {

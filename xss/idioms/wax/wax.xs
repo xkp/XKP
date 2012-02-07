@@ -21,6 +21,10 @@ on pre_process(obj)
                 if (service.id == methd.id)
                 {
                     is_service = true;
+                    methd.add_parameter("request");
+                    methd.add_parameter("response");
+
+                    //td: !!! params
                     break;
                 }
             }

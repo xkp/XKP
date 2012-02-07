@@ -333,6 +333,11 @@ fs::path xss_renderer::file()
     return file_;
   }
 
+str  xss_renderer::get()
+  {
+    return result_;
+  }
+
 bool xss_renderer::busy()
   {
     return busy_;

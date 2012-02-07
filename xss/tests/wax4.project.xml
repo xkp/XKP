@@ -4,6 +4,7 @@
     </path>
 
     <idiom src="../idioms/wax/wax.xml"/>
+    <idiom src="../idioms/wax/node-mysql.xml"/>
     <idiom src="../idioms/test/idiom.xml"/>
 </project>
 

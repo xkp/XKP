@@ -1,8 +1,6 @@
 <xss:parameter id="it"/>
 
 <xss:code>
-    
-compiler.log("HERE");
 
 var service_name = it.id;    
 var mthd = application.get_method(service_name);
