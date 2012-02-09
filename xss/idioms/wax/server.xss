@@ -1,5 +1,9 @@
 var http = require("http");
 var url  = require("url");
+<xss:code>
+    compiler.inject("render_initialization");
+</xss:code>
+
 var application = {};
 
 <xss:code>

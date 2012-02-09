@@ -253,27 +253,6 @@ struct expression_renderer : IExpressionRenderer
       expression expr_;
   };
 
-struct param_list_renderer : public IArgumentRenderer
-  {
-    param_list_renderer()
-      {
-      }
-
-    param_list_renderer(param_list_decl& params)
-      {
-      }
-
-    virtual void add(const str& name, XSSType type)
-      {
-        //yeah right
-      }
-
-    virtual str render()
-      {
-        return "I WILL WRITE THIS CODE LATER, sincerely";
-      }
-  };
-
 //debug_language
 variant debug_language::compile_code(code& cde, param_list_decl& params, XSSContext ctx)
   {
@@ -287,7 +266,7 @@ variant debug_language::compile_expression(expression expr, XSSContext ctx)
 
 variant debug_language::compile_args(param_list_decl& params, XSSContext ctx)
   {
-    return reference<param_list_renderer>(new param_list_renderer(params));
+    return variant(); //reference<param_list_renderer>(new param_list_renderer(params));
   }
 
 str debug_language::resolve_this(XSSContext ctx)
@@ -374,5 +353,4 @@ namespace xkp
 {
 register_complete_type(code_renderer,       renderer_code_schema<code_renderer>);
 register_complete_type(expression_renderer, renderer_expr_schema<expression_renderer>);
-register_complete_type(param_list_renderer, renderer_schema<param_list_renderer>);
 }

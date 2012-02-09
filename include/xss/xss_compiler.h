@@ -89,6 +89,7 @@ namespace xkp
         void       set_output_path(const str& path);
         XSSModule  instance_idiom(XSSObject inst);
         XSSModule  type_idiom(const str& type);
+        XSSModule  get_idiom(const str& id);
       public:
         std::vector<XSSModule>& modules();
       private:
@@ -210,6 +211,7 @@ namespace xkp
         str         file(fs::path path);
         bool        application_object(XSSObject obj);
         XSSModule   idiom_by_class(const str& class_name);
+        XSSModule   idiom_by_id(const str& id);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);

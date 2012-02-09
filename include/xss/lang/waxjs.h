@@ -73,6 +73,7 @@ struct waxjs_code_renderer : public base_code_renderer
       str after_code(CodeSplit fork);
       str render_service();
       str render_page();
+      str render_parameters();
     public:
       XSSMethod owner_;
   };
@@ -83,6 +84,7 @@ struct wax_utils
     wax_utils(XSSCompiler compiler);
 
     XSSMethod compile_page(XSSObject page, variant code);
+    void      pre_process_args(XSSMethod methd);
 
     private:
       XSSCompiler compiler_;
@@ -109,7 +111,8 @@ struct wax_utils_schema : object_schema<wax_utils>
   {
     virtual void declare()
       {
-        method_<XSSMethod, 2>("compile_page", &wax_utils::compile_page);
+        method_<XSSMethod, 2>("compile_page",      &wax_utils::compile_page);
+        method_<void, 1>     ("pre_process_args",  &wax_utils::pre_process_args);
       }
   };
 

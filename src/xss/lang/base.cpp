@@ -1247,6 +1247,11 @@ void base_args_renderer::add(const str& name, XSSType type)
     extra_.push_back(std::pair<str, XSSType>(name, type));
   }
 
+param_list_decl& base_args_renderer::get()
+  {
+    return args_;
+  }
+
 //base_lang
 str base_lang::resolve_this(XSSContext ctx)
   {

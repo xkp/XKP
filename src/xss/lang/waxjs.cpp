@@ -1,5 +1,6 @@
 #include <xss/lang/waxjs.h>
 #include <xss/dsl/sql.h>
+#include <xss/dsl/shell.h>
 
 #include <boost/algorithm/string/replace.hpp>
 
@@ -312,12 +313,25 @@ struct waxjs_internal_renderer : public js_code_renderer
           
           add_line(result.str());
         }
+
+      virtual str render_code(code& cde)
+        {
+          XSSContext ctx(new xss_context(ctx_));
+          lang_utils::var_gatherer(cde, ctx);
+
+          param_list_decl pld;
+          waxjs_internal_renderer inner(cde, pld, ctx);
+          str result = inner.render();
+          add_line(result);
+          return result;
+        }
   };
 
 //waxjs_lang
 void waxjs_lang::init_application_context(XSSContext ctx)
   {
     ctx->register_xss_dsl("sql", XSSDSL(new dsl_sql));
+    ctx->register_xss_dsl("shell", XSSDSL(new dsl_shell));
   }
 
 variant waxjs_lang::compile_code(code& cde, param_list_decl& params, XSSContext ctx)
@@ -373,6 +387,9 @@ str waxjs_code_renderer::render()
 
     if (is_page)
       result << render_page();
+
+    if (is_service || is_page)
+      result << render_parameters();
 
     if (!fork)
       result << render_code(code_);
@@ -431,9 +448,7 @@ str waxjs_code_renderer::render_code(code& cde)
     XSSContext ctx(new xss_context(ctx_));
     lang_utils::var_gatherer(cde, ctx);
 
-    param_list_decl pld;
-    js_code_renderer inner(cde, pld, ctx);
-    str result = inner.render();
+    str result = render_plain_code(cde, ctx);
     add_line(result);
     return result;
   }
@@ -621,12 +636,34 @@ str waxjs_code_renderer::render_page()
     return result.str();
   }
 
+str waxjs_code_renderer::render_parameters()
+  {
+    std::ostringstream result;
+
+    DynamicArray params = variant_cast<DynamicArray>(dynamic_get(owner_, "#wax_parameters"), DynamicArray());
+    if (params)
+      {
+        result << "\nvar __params = url.parse(request.url, true).query;";
+
+        std::vector<variant>::iterator it = params->ref_begin();
+        std::vector<variant>::iterator nd = params->ref_end();
+
+        for(; it != nd; it++)
+          {
+            str param = variant_cast<str>(*it, str()); assert(!param.empty());
+            result << "\nvar " << param << " = __params." << param << ";";
+          }
+      }
+
+      return result.str();
+  }
+
 str waxjs_code_renderer::render_service()
   {
     std::ostringstream result;
     result << "\nfunction return_function(return_value)";
     result << "\n{";
-    result << "\nreqest.append(to_jason(return_value))";
+    result << "\nreqest.end(JSON.stringify(return_value))";
     result << "\n}";
     return result.str();
   }
@@ -954,6 +991,38 @@ XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
     result->add_attribute("pre_code",        declarations.str());
     result->add_attribute("return_function", return_function.str());
     return result;
+  }
+
+void wax_utils::pre_process_args(XSSMethod methd)
+  {
+    IArgumentRenderer* rend = variant_cast<IArgumentRenderer*>(methd->get_parameters(), null); assert(rend);
+    
+    //copy arguments and nuke
+    param_list_decl args = rend->get();
+    rend->get().clear();
+
+    //add standard service/page parameters
+    param_decl pd;
+    pd.name = "response";
+    pd.type = "object";
+
+    rend->get().push_back(pd);
+
+    pd.name = "request";
+    rend->get().push_back(pd);
+
+    //remember the original ones
+    DynamicArray wax_args(new dynamic_array);
+
+    param_list_decl::iterator it = args.begin();
+    param_list_decl::iterator nd = args.end();
+
+    for(; it != nd; it++)
+      {
+         wax_args->push_back(it->name);
+      }
+
+    methd->add_attribute("#wax_parameters", wax_args);
   }
 
 bool wax_utils::custom_modifier(XSSObject obj, const str& modifier, tag_list& tags, tag& t)

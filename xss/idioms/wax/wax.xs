@@ -21,10 +21,6 @@ on pre_process(obj)
                 if (service.id == methd.id)
                 {
                     is_service = true;
-                    methd.add_parameter("request");
-                    methd.add_parameter("response");
-
-                    //td: !!! params
                     break;
                 }
             }
@@ -32,6 +28,7 @@ on pre_process(obj)
             if (is_service)
             {
                 methd.wax_service = true;
+                wax_compiler.pre_process_args(methd);
                 continue;
             }
 

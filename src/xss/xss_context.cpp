@@ -1888,3 +1888,8 @@ void xss_method::add_parameter(const str& name)
     if (args)
       args->add(name, XSSType()); //td: type
   }
+
+variant& xss_method::get_parameters()
+  {
+    return args_;
+  }

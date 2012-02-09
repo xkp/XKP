@@ -26,13 +26,16 @@
 #include <boost/spirit/include/classic_push_front_actor.hpp>
 #include <boost/spirit/include/classic_actor.hpp>
 #include <boost/algorithm/string/replace.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
 
 using namespace xkp;
 using namespace boost::spirit::classic;
 
 const str SLanguage("language");
 
-const str SCannotParseSQL("Cannot parse sql text, rtfm");
+const str SCannotParseAssign("Cannot parse a simple assign text, rtfm");
+const str SDSLNeedsIdiom("A registered dsl needs an idiom to be included");
 
 //an extremely simple html parser, at this point the htmls to be used are expected to
 //be correct, so we'll keep an intermediate representation of the tags
@@ -146,6 +149,81 @@ struct assign_grammar : grammar<assign_grammar>
     };
   };
 
+class ga_renderer
+  {
+    public:
+      void parse(const str& text)
+        {
+          std::vector<str> params;
+          boost::split(params, text, boost::is_any_of("@"));
+          
+          //first one is plain text
+          params_.push_back(str());
+          texts_.push_back(params[0]);
+
+          //ignore it
+          params.erase(params.begin());
+
+          std::vector<str>::iterator it = params.begin();
+          std::vector<str>::iterator nd = params.end();
+          for(; it != nd; it++)
+            {
+              str line = *it;
+              str::iterator pit = line.begin();
+              str::iterator pnd = line.end();
+              
+              bool found = false;
+              for(; pit != pnd; pit++)
+                {
+                  if (!boost::is_alpha()(*pit) && !boost::is_digit()(*pit))
+                    {
+                      params_.push_back(str(line.begin(), pit));
+                      texts_.push_back(str(pit, line.end()));
+                      found = true;
+                      break;
+                    }
+                }
+
+              if (!found)
+                {
+                  params_.push_back(line);
+                  texts_.push_back(str());
+                }
+            }
+        }
+      
+      str render_as_expr()
+        {
+          std::ostringstream result;
+          bool first = true;
+          for(size_t i = 0; i < texts_.size(); i++)
+            {
+              if (first)
+                first = false;
+              else
+                result << " + ";
+
+              str text  = texts_[i];
+              str param = params_[i];
+
+              boost::replace_all (text, "\n", "\\n");
+              boost::replace_all (text, "\"", "\\\"");
+
+              if (!param.empty())
+                result << param << " + ";
+
+              result << "\"" << text << "\""; 
+            }
+
+          return result.str();
+        }
+
+      private:
+        std::vector<str> texts_;
+        std::vector<str> params_;
+    };
+
+//dsl_generic_assign
 str dsl_generic_assign::render(dsl& info, XSSContext ctx)
   {
     //do the parsing
@@ -168,7 +246,7 @@ str dsl_generic_assign::render(dsl& info, XSSContext ctx)
         //td: line/column
         param_list error;
         error.add("id", SLanguage);
-        error.add("desc", SCannotParseSQL);
+        error.add("desc", SCannotParseAssign);
         error.add("text", info.text);
         xss_throw(error);
       }
@@ -181,8 +259,11 @@ str dsl_generic_assign::render(dsl& info, XSSContext ctx)
     XSSModule idiom = get_idiom(compiler, ctx);
     if (!idiom)
       {
-        //td: error
-        assert(false);        
+        param_list error;
+        error.add("id", SLanguage);
+        error.add("desc", SDSLNeedsIdiom);
+        error.add("dsl", info.name);
+        xss_throw(error);
       }
 
     //convert the tags into xs objects
@@ -193,7 +274,14 @@ str dsl_generic_assign::render(dsl& info, XSSContext ctx)
     for(; it != nd; it++)
       {
         XSSObject tag(new xss_object);
-        tag->add_attribute("text", it->text);
+        
+        if (!it->variable.empty())
+          tag->add_attribute("variable", it->variable);
+        
+        reference<ga_renderer> rend(new ga_renderer);
+        rend->parse(it->text);
+
+        tag->add_attribute("text", rend);
 
         tags->push_back(tag);
       }
@@ -218,3 +306,16 @@ str dsl_generic_assign::render(dsl& info, XSSContext ctx)
     compiler->pop_renderer();
     return renderer->get();
   }
+
+//glue
+struct ga_renderer_schema : object_schema<ga_renderer>
+  {
+    virtual void declare()
+      {
+        method_<str, 0>("render_as_expr", &ga_renderer::render_as_expr);
+      }
+  };
+
+register_complete_type(ga_renderer, ga_renderer_schema);
+
+

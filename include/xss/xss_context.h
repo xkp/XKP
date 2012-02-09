@@ -223,7 +223,8 @@ struct IExpressionRenderer : public IRenderer
 
 struct IArgumentRenderer : public IRenderer
   {
-    virtual void add(const str& name, XSSType type) = 0;
+    virtual void             add(const str& name, XSSType type) = 0;
+    virtual param_list_decl& get()                              = 0;
   };
 
 struct ILanguage
@@ -440,9 +441,10 @@ class xss_method : public xss_object
 			xss_method(const xss_method& other);
 			xss_method(const str& name, XSSType type, variant args, variant code);
 
-			str     get_name();
-      variant code();
-      void    add_parameter(const str& name);
+			str      get_name();
+      variant  code();
+      void     add_parameter(const str& name);
+      variant& get_parameters(); 
 
       //xss_object
 			virtual XSSType type();

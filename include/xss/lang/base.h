@@ -149,8 +149,9 @@ struct base_args_renderer : public IArgumentRenderer
     base_args_renderer(param_list_decl& params, XSSContext ctx);
 
     //IArgumentRenderer
-    virtual str  render() = 0;
-    virtual void add(const str& name, XSSType type);
+    virtual str              render() = 0;
+    virtual void             add(const str& name, XSSType type);
+    virtual param_list_decl& get();
 
     protected:
       typedef std::vector< std::pair<str, XSSType> > extra_arg_list;

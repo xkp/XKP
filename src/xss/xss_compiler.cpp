@@ -189,6 +189,20 @@ XSSModule xss_application_renderer::type_idiom(const str& type)
     return XSSModule();
   }
 
+XSSModule xss_application_renderer::get_idiom(const str& id)
+  {
+    std::vector<XSSModule>::iterator it = modules_.begin();
+    std::vector<XSSModule>::iterator nd = modules_.end();
+    for(; it != nd; it++)
+      {
+        XSSModule mod = *it;
+        if (mod->id() == id)
+          return mod;
+      }
+
+    return XSSModule();
+  }
+
 void xss_application_renderer::set_target(const str& target)
   {
     target_ = target;
@@ -1269,6 +1283,11 @@ bool xss_compiler::application_object(XSSObject obj)
 XSSModule xss_compiler::idiom_by_class(const str& class_name)
   {
     return current_app_->type_idiom(class_name);
+  }
+
+XSSModule xss_compiler::idiom_by_id(const str& id)
+  {
+    return current_app_->get_idiom(id);
   }
 
 void xss_compiler::push_renderer(XSSRenderer renderer)

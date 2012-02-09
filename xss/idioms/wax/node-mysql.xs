@@ -1,10 +1,19 @@
+on render_initialization()
+{
+    out()
+    {
+        var mysql  = require("mysql");
+    }
+}
 
 method render_statement(sts, idx, callback)
 {
-    var st = sts[idx];
+    var    st       = sts[idx];
+    string var_name = compiler.genid("query");
     out()
     {
-        this.query("<xss:e v="st.text"/>").execute(function(error, rows, cols) <xss:open_brace/>
+        var <xss:e v="var_name"/> = <xss:e v="st.text.render_as_expr()"/>;
+        this.query(<xss:e v="var_name"/>).execute(function(error, rows, cols) <xss:open_brace/>
     }
 
     if (st.variable)

@@ -265,6 +265,14 @@ str js_lang::array_operation(operator_type op, const str& arr, const str& value,
     return str();
   }
 
+str js_lang::instantiate(XSSType type, XSSObject instance, DynamicArray params)
+  {
+    if (type->id() == "object")
+      return "{}";
+
+    return base_lang::instantiate(type, instance, params);
+  }
+
 bool js_lang::custom_operator(XSSType lt, XSSType rt, str l, str r, operator_type op, str& res)
   {
     if (op == op_typecheck)
