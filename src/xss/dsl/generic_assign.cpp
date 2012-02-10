@@ -101,6 +101,7 @@ struct no_variable : public __action
     
     void operator()( iterator_t begin, iterator_t end ) const 
       { 
+        ctx_.variable = "";
         ctx_.add(assign_tag(str(), str(begin, end))); 
       }
   };
@@ -128,16 +129,20 @@ struct assign_grammar : grammar<assign_grammar>
         {
           ident_r   = lexeme_d[ +chset_p("A-Za-z0-9_-") ];
           text_r    = *(anychar_p - (';' | end_p) );
-          assign_r  =  *( (   ident_r       [variable(self.ctx)]
-                          >> "=" >> text_r  [inner(self.ctx)]
-                          >> (';' 
-                              | end_p       [end_parse(self.ctx)]
-                             ) 
+          assign_r  =  *( (   ident_r         [variable(self.ctx)]
+                          >>  "=" >> text_r   [inner(self.ctx)]
+                          >>  (';' 
+                              | end_p         [end_parse(self.ctx)]
+                              ) 
                           )
                           |
-                          ( text_r          [no_variable(self.ctx)])
+                          (   text_r          [no_variable(self.ctx)]
+                          >>  (';' 
+                              | end_p         [end_parse(self.ctx)]
+                              ) 
+                          )
                        )
-                   >>  end_p; 
+                   >>  end_p                  [end_parse(self.ctx)]; 
           
         }
 

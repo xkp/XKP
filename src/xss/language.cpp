@@ -617,6 +617,7 @@ void expr_object_resolver::exec_operator(operator_type op, int pop_count, int pu
                           result = var_type->array_type();
                         else
                           assert(false); //td: throw
+                        break;
                       }
                     default:
                       {

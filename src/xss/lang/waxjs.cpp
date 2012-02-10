@@ -75,7 +75,7 @@ struct wax_splitter : code_visitor
         CHECK_ACTIVE
         
         XSSMethod mthd;
-        if (forked(info.cond_expr, mthd) || forked(info.iter_expr, mthd))
+        if (forked(info.cond_expr, mthd) || forked(info.iter_expr, mthd) || forked(info.init_expr, mthd))
           {
             param_list error;
             error.add("id", SLanguage);
@@ -84,9 +84,10 @@ struct wax_splitter : code_visitor
             xss_throw(error);
           }
 
-        if (forked(info.init_expr, mthd))
+        CodeSplit result;
+        if (forked(info.for_code, result))
           {
-            cut(mthd);
+            cut(result);
           }
       }
 
@@ -103,6 +104,12 @@ struct wax_splitter : code_visitor
             error.add("comment", str("dont get cute"));
             xss_throw(error);
           }
+
+        CodeSplit result;
+        if (forked(info.for_code, result))
+          {
+            cut(result);
+          }
       }
 
     virtual void while_(stmt_while& info)
@@ -117,6 +124,12 @@ struct wax_splitter : code_visitor
             error.add("desc", SCannotForkOnIteration);
             error.add("comment", str("dont get cute"));
             xss_throw(error);
+          }
+
+        CodeSplit result;
+        if (forked(info.while_code, result))
+          {
+            cut(result);
           }
       }
 
@@ -494,7 +507,7 @@ str waxjs_code_renderer::render_split(CodeSplit fork, CodeSplit parent)
     
     bool has_code_after = !after_wards.empty();    
 
-    if (has_code_after)
+    if (has_code_after || !fork->add.empty())
       {
         split_name = compiler_->genid("callback");
         code_after << "function " << split_name << "() \n{\n";
@@ -535,6 +548,18 @@ str waxjs_code_renderer::render_split(CodeSplit fork, CodeSplit parent)
       {
         result << code_after.str() << split_dsl(fork, split_name);
       }
+    else if (st.is<stmt_for>())
+      {
+        result << code_after.str() << split_for(fork, split_name);
+      }
+    else if (st.is<stmt_iter_for>())
+      {
+        result << code_after.str() << split_iter_for(fork, split_name);
+      }
+    else if (st.is<stmt_while>())
+      {
+        result << code_after.str() << split_while(fork, split_name);
+      }
     else
       {
         assert(false);
@@ -551,8 +576,8 @@ str waxjs_code_renderer::split_if(CodeSplit fork)
       {
         result << "\nif (" << render_expression(stmnt.expr, ctx_) << ")";
         result << "\n{";
-
         result << render_split(fork->split_code, fork);
+        result << "\n}";
 
         if (!stmnt.else_code.empty())
           {
@@ -568,8 +593,8 @@ str waxjs_code_renderer::split_if(CodeSplit fork)
 
         result << render_plain_code(stmnt.if_code, fork->context);
         
-        result << after_code(fork) << "\n}";
-        result << "else\n{\n";
+        result << "\n" << after_code(fork) << "\n}";
+        result << "\nelse\n{\n";
         result << render_split(fork->split_code, fork);
         result << "\n}";
       }
@@ -578,19 +603,19 @@ str waxjs_code_renderer::split_if(CodeSplit fork)
         //last use case, the split happens on the if expression, 
         //the key to the algo here is that code gets split only once
         result << split_method(fork->method);
-        result << "\n{\n";
-        result << "if (return_value)";
-        result << "\n{\n";
+        result << "\n{";
+        result << "\n\tif (return_value)";
+        result << "\n\t{\n";
 
         result << split_and_render(stmnt.if_code, fork);
 
-        result << "\n}";
+        result << "\n\t}\n";
 
         if (!stmnt.else_code.empty())
           {
-            result << "else\n{\n";
+            result << "\n\telse\n{\n";
             result << split_and_render(stmnt.else_code, fork);
-            result << "\n}";
+            result << "\n\t}";
           }
         else
             result << after_code(fork);
@@ -614,7 +639,7 @@ str waxjs_code_renderer::after_code(CodeSplit fork)
       {
         result <<  "\n";
         if (i < sz - 1)
-          result << "if (" << *it << ")\nreturn;"; 
+          result << "if (" << *it << ")\nreturn true;"; 
         else
           result << *it << ";";
       }
@@ -760,6 +785,142 @@ str waxjs_code_renderer::split_return(CodeSplit fork)
     result << "\n{\n";
     result << "return_function(return_value);";
     result << "\n});";
+
+    return result.str();
+  }
+
+str waxjs_code_renderer::split_for(CodeSplit fork, const str& callback)
+  {
+    stmt_for stmnt = fork->target.get_stament(fork->split_idx - 1);
+
+    std::ostringstream result;
+
+    if (stmnt.init_variable.empty())
+      result << "\n" << render_expression(stmnt.init_expr, ctx_) << ";";
+    else
+      {
+        result << "\nvar " << stmnt.init_variable.id;
+        if (!stmnt.init_variable.value.empty())
+          result << " = " << render_expression(stmnt.init_variable.value, ctx_);
+        result << ";";
+      }
+    
+    //add a function to check do the loop iteration
+    str cond_cb = compiler_->genid("for_cond");
+    str iter_cb = compiler_->genid("for_iter");
+    str code_cb = compiler_->genid("for_code");
+
+    //replace the callback in the stack by our condition, 
+    //this will be the hook for loop continuation
+    if (!fork->add.empty())
+      fork->add.erase(fork->add.end() - 1);    
+    fork->add.push_back(iter_cb + "()");
+
+    //render the parts of the for as functions
+    result << "function " << code_cb << "()";
+    result << "\n{\n";
+    result << render_split(fork->split_code, fork);
+    result << "\n}";
+
+    result << "function " << iter_cb << "()";
+    result << "\n{\n";
+    result << "\n\t" << render_expression(stmnt.iter_expr, ctx_) << ';';
+    result << "\n\t" << cond_cb << "();";
+    result << "\n}\n";
+
+    result << "function " << cond_cb << "()";
+    result << "\n{";
+    result << "\n\tif (" << render_expression(stmnt.cond_expr, ctx_) << ")";
+    result << "\n\t" << code_cb << "();";
+    result << "\n\telse";
+    result << "\n\t" << callback << ";";
+    result << "\n}\n";
+
+    result << "\n" << cond_cb << "();\n";
+
+    return result.str();
+  }
+
+str waxjs_code_renderer::split_iter_for(CodeSplit fork, const str& callback)
+  {
+    stmt_iter_for stmnt = fork->target.get_stament(fork->split_idx - 1);
+
+    std::ostringstream result;
+
+    str iterable_name = stmnt.id + "_iterable";
+    str iterator_name = stmnt.id + "_iterator";
+
+    result << "\nvar " << iterable_name << " = " << render_expression(stmnt.iter_expr, ctx_) << ";";
+    result << "\nvar " << iterator_name << " = 0;";
+    
+    //add a function to check do the loop iteration
+    str cond_cb = compiler_->genid("for_cond");
+    str iter_cb = compiler_->genid("for_iter");
+    str code_cb = compiler_->genid("for_code");
+
+    //replace the callback in the stack by our condition, 
+    //this will be the hook for loop continuation
+    if (!fork->add.empty())
+      fork->add.erase(fork->add.end() - 1);    
+    fork->add.push_back(iter_cb + "()");
+
+    //render the parts of the for as functions
+    result << "\nfunction " << code_cb << "()";
+    result << "\n{\n";
+    result << "\n\tvar " << stmnt.id << " = " << iterable_name << "[" << iterator_name << "]" << ';';
+    result << render_split(fork->split_code, fork);
+    result << "\n}";
+
+    result << "\nfunction " << iter_cb << "()";
+    result << "\n{\n";
+    result << "\n\t" << iterator_name << "++;";
+    result << "\n\t" << cond_cb << "();";
+    result << "\n}\n";
+
+    result << "\nfunction " << cond_cb << "()";
+    result << "\n{";
+    result << "\n\tif (" << iterator_name << " < " << iterable_name << ".length" << ")";
+    result << "\n\t" << code_cb << "();";
+    result << "\n\telse";
+    result << "\n\t" << callback << ";";
+    result << "\n}\n";
+
+    result << "\n" << cond_cb << "();\n";
+
+    return result.str();
+  }
+
+str waxjs_code_renderer::split_while(CodeSplit fork, const str& callback)
+  {
+    stmt_while stmnt = fork->target.get_stament(fork->split_idx - 1);
+
+    std::ostringstream result;
+
+    //add a function to check do the loop iteration
+    str cond_cb = compiler_->genid("while_cond");
+    str code_cb = compiler_->genid("while_code");
+
+    //replace the callback in the stack by our condition, 
+    //this will be the hook for loop continuation
+    if (!fork->add.empty())
+      fork->add.erase(fork->add.end() - 1);    
+    fork->add.push_back(cond_cb + "()");
+
+    //render the parts of the for as functions
+    result << "\nfunction " << code_cb << "()";
+    result << "\n{\n";
+    result << render_split(fork->split_code, fork);
+    result << "\n}";
+
+    result << "\nfunction " << cond_cb << "()";
+    result << "\n{";
+    result << "\n\tif (" << render_expression(stmnt.expr, ctx_) << ")";
+    result << "\n\t" << code_cb << "();";
+    result << "\n\telse";
+    result << "\n\t" << callback << ";";
+    result << "\n}\n";
+
+    result << "\n" << cond_cb << "();\n";
 
     return result.str();
   }

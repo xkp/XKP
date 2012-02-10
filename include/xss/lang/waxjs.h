@@ -68,6 +68,9 @@ struct waxjs_code_renderer : public base_code_renderer
       str split_expression(CodeSplit fork);
       str split_dsl(CodeSplit fork, const str& callback);
       str split_return(CodeSplit fork);
+      str split_for(CodeSplit fork, const str& callback);
+      str split_iter_for(CodeSplit fork, const str& callback);
+      str split_while(CodeSplit fork, const str& callback);
       str split_and_render(code& c, CodeSplit parent);
       str split_method(XSSMethod method);
       str after_code(CodeSplit fork);

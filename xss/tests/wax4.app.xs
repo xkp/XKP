@@ -1,34 +1,50 @@
-method service1(int limit2)
+method service1(string file)
 {
-    var data;
-    int limit = 20;
-
+    array data;
     sql()
     {
         data =  SELECT  * 
-                FROM    DataTable
-                WHERE   Column > @limit AND
-                        OtherColumn < @limit2
+                FROM    Registry
+                WHERE   file = @file AND
+                        visited = 0
     }    
 
+    int count = 0;
     for(var d in data)
     {
-        d.Column -= limit;
+        string curr_file = d.file;
+        count += d.views;
+        shell()
+        {
+            git commit @curr_file
+        }
+
+        sql()
+        {
+            INSERT INTO Registry(file_name, visited)
+            VALUES              (@file, 1)
+        }
+
+        if (count > 5)
+        {
+            while (count > 0)
+            {
+                shell()
+                {
+                    git mark @curr_file @count
+                }
+
+                count--;
+            }
+        }
+        else 
+        {
+            object result = object();
+            result.desc   = "Not enough views";
+            result.status = "suspended";
+            return result;
+        }    
     }
 
-    array<string> lines; 
-    shell()
-    {   
-        lines = git status
-    }
-
-    if (lines[1] != "ok")
-    {
-        object error = object();
-        error.rejected = true;
-        error.reason = "git failed";
-        return error;
-    }    
-
-    return data;
+    return true;
 }
