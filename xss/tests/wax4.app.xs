@@ -19,6 +19,8 @@ method service1(string file)
             git commit @curr_file
         }
 
+        count--;
+
         sql()
         {
             INSERT INTO Registry(file_name, visited)
@@ -43,7 +45,7 @@ method service1(string file)
             result.desc   = "Not enough views";
             result.status = "suspended";
             return result;
-        }    
+        } 
     }
 
     return true;

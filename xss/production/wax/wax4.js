@@ -9,7 +9,6 @@ application.service1 = function(response,request)
     {
         reqest.end(JSON.stringify(return_value))
     }
-    
     var __params = url.parse(request.url, true).query;
     var file = __params.file;var data;
     function __callback1() 
@@ -20,7 +19,7 @@ application.service1 = function(response,request)
             return_function(true);
             return true;
         }
-        
+
         var d_iterable = data;
         var d_iterator = 0;
         function __for_code1()
@@ -28,41 +27,29 @@ application.service1 = function(response,request)
 	        var d = d_iterable[d_iterator];
             var curr_file = d.file;
             count += d.views;
-            
-            function __callback3() //shell
+            function __callback3() 
             {
-                function __callback4() //sql
+                count--;
+                function __callback4() 
                 {
                     function __callback5() 
                     {
                         __for_iter1();
                     }
-                    
+
                     if (count > 5)
                     {
-                        function __callback6() 
-                        {
-                            if (__callback5())
-                                return true;
-                            __for_iter1();
-                        }
-                        
                         function __while_code1()
                         {
-                            function __callback7() 
+                            function __callback6() 
                             {
                                 count--;
-                                if (__callback6())
-                                    return true;
-                                if (__callback5())
-                                    return true;
                                 __while_cond1();
                             }
-                            
                             var __cmd1 = "git mark " + curr + "_file " + count + "";
                             child_process.exec(__cmd1, function(error, stdout, stderr)
                             {
-                                __callback7();
+                                __callback6();
                             });
                         }
                         
@@ -71,7 +58,7 @@ application.service1 = function(response,request)
 	                        if (count > 0)
 	                            __while_code1();
 	                        else
-	                            __callback6();
+	                            __callback5();
                         }
                         
                         __while_cond1();
@@ -83,13 +70,8 @@ application.service1 = function(response,request)
                         result.status = "suspended";
                         return_function(result);
                         return true;
-                        
-                        if (__callback5())
-                            return true;
-                        __for_iter1();
                     }
                 }
-                
                 new mysql.Database({
                     hostname: 'localhost', 
                     user: 'user', 

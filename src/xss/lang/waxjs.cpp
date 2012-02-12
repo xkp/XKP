@@ -475,12 +475,6 @@ str waxjs_code_renderer::render_plain_code(code& cde, XSSContext ctx)
 
 str waxjs_code_renderer::render_split(CodeSplit fork, CodeSplit parent)
   {
-    if (parent)
-      {
-        //update the split call list
-        fork->add.insert(fork->add.begin(), parent->add.begin(), parent->add.end());
-      }
-
     //pre render, get access to variables
     if (!fork->context)
       {
@@ -500,29 +494,34 @@ str waxjs_code_renderer::render_split(CodeSplit fork, CodeSplit parent)
 
     //render the after code as a function, will be called on splits
     std::ostringstream code_after;
-    str                split_name;
+    str                split_callback;
 
     code after_wards;
     fork->target.cut(fork->split_idx, after_wards);
     
     bool has_code_after = !after_wards.empty();    
 
-    if (has_code_after || !fork->add.empty())
+    if (has_code_after || !fork->hook.empty())
       {
-        split_name = compiler_->genid("callback");
-        code_after << "function " << split_name << "() \n{\n";
-        code_after << split_and_render(after_wards, fork);
-        code_after << "\n}\n";
+        split_callback = compiler_->genid("callback");
 
-        split_name += "()";
-        fork->add.insert(fork->add.begin(), split_name);
+        code_after << "function " << split_callback << "() \n{\n";
+
+        bool split;
+        code_after << split_and_render(after_wards, fork, split_callback, &split);
+        if (!split && !fork->hook.empty())
+          code_after << fork->hook << "();";
+
+        code_after << "\n}\n";
       }
+    else if (!fork->callback.empty())
+      split_callback = fork->callback;
 
     //then split
     variant& st = fork->target.get_stament(split_idx);
     if (st.is<stmt_if>())
       {
-        result << code_after.str() << split_if(fork);
+        result << code_after.str() << split_if(fork, split_callback);
       }
     else if (st.is<stmt_variable>())
       {
@@ -546,19 +545,19 @@ str waxjs_code_renderer::render_split(CodeSplit fork, CodeSplit parent)
       }
     else if (st.is<dsl>())
       {
-        result << code_after.str() << split_dsl(fork, split_name);
+        result << code_after.str() << split_dsl(fork, split_callback);
       }
     else if (st.is<stmt_for>())
       {
-        result << code_after.str() << split_for(fork, split_name);
+        result << code_after.str() << split_for(fork, split_callback);
       }
     else if (st.is<stmt_iter_for>())
       {
-        result << code_after.str() << split_iter_for(fork, split_name);
+        result << code_after.str() << split_iter_for(fork, split_callback);
       }
     else if (st.is<stmt_while>())
       {
-        result << code_after.str() << split_while(fork, split_name);
+        result << code_after.str() << split_while(fork, split_callback);
       }
     else
       {
@@ -567,8 +566,11 @@ str waxjs_code_renderer::render_split(CodeSplit fork, CodeSplit parent)
       return result.str();
   }
 
-str waxjs_code_renderer::split_if(CodeSplit fork)
+str waxjs_code_renderer::split_if(CodeSplit fork, const str& callback)
   {
+    if (fork->split_code)
+      fork->split_code->callback = callback;
+
     std::ostringstream result;
     
     stmt_if stmnt = fork->target.get_stament(fork->split_idx - 1);
@@ -593,7 +595,7 @@ str waxjs_code_renderer::split_if(CodeSplit fork)
 
         result << render_plain_code(stmnt.if_code, fork->context);
         
-        result << "\n" << after_code(fork) << "\n}";
+        result << "\n" << render_callback(fork) << "\n}";
         result << "\nelse\n{\n";
         result << render_split(fork->split_code, fork);
         result << "\n}";
@@ -618,7 +620,7 @@ str waxjs_code_renderer::split_if(CodeSplit fork)
             result << "\n\t}";
           }
         else
-            result << after_code(fork);
+            result << render_callback(fork);
 
         result << "\n});";
       }
@@ -626,25 +628,12 @@ str waxjs_code_renderer::split_if(CodeSplit fork)
     return result.str();
   }
 
-str waxjs_code_renderer::after_code(CodeSplit fork)
+str waxjs_code_renderer::render_callback(CodeSplit fork)
   {
-    std::ostringstream result;
+    if (!fork || fork->callback.empty())
+      return str();
 
-    std::vector<str>::iterator it = fork->add.begin();
-    std::vector<str>::iterator nd = fork->add.end();
-
-    size_t sz = fork->add.size();
-    size_t i  = 0;
-    for(; it != nd; it++, i++)
-      {
-        result <<  "\n";
-        if (i < sz - 1)
-          result << "if (" << *it << ")\nreturn true;"; 
-        else
-          result << *it << ";";
-      }
-
-    return result.str();
+    return fork->callback + "()";
   }
 
 str waxjs_code_renderer::render_page()
@@ -703,7 +692,7 @@ str waxjs_code_renderer::split_variable(CodeSplit fork, const str& code_after)
     result << split_method(fork->method);
     result << "\n{\n";
     result << stmnt.id << " = return_value;";
-    result << after_code(fork);
+    result << render_callback(fork);
     result << "\n});\n";
 
     return result.str();
@@ -747,10 +736,10 @@ str waxjs_code_renderer::split_expression(CodeSplit fork)
         stmnt.expr.visit(&es);
         result << render_expression(es.left, ctx_) << " " << lang_utils::operator_string(op) << " return_value;";
 
-        result << after_code(fork);
+        result << render_callback(fork);
       }
     else
-      result << after_code(fork);
+      result << render_callback(fork);
     
     result << "\n});";
 
@@ -771,7 +760,7 @@ str waxjs_code_renderer::split_dsl(CodeSplit fork, const str& callback)
       }
 
     XSSContext ctx(new xss_context(ctx_));
-    ctx->register_symbol(RESOLVE_CONST, "#wax_callback", callback);
+    ctx->register_symbol(RESOLVE_CONST, "#wax_callback", callback + "()");
 
     return dsl->render(dd, ctx);
   }
@@ -812,28 +801,27 @@ str waxjs_code_renderer::split_for(CodeSplit fork, const str& callback)
 
     //replace the callback in the stack by our condition, 
     //this will be the hook for loop continuation
-    if (!fork->add.empty())
-      fork->add.erase(fork->add.end() - 1);    
-    fork->add.push_back(iter_cb + "()");
+    fork->split_code->hook = iter_cb;
 
     //render the parts of the for as functions
-    result << "function " << code_cb << "()";
-    result << "\n{\n";
-    result << render_split(fork->split_code, fork);
-    result << "\n}";
-
     result << "function " << iter_cb << "()";
     result << "\n{\n";
     result << "\n\t" << render_expression(stmnt.iter_expr, ctx_) << ';';
     result << "\n\t" << cond_cb << "();";
     result << "\n}\n";
 
+    result << "function " << code_cb << "()";
+    result << "\n{\n";
+    result << render_split(fork->split_code, fork);
+    result << "\n}";
+
+
     result << "function " << cond_cb << "()";
     result << "\n{";
     result << "\n\tif (" << render_expression(stmnt.cond_expr, ctx_) << ")";
     result << "\n\t" << code_cb << "();";
     result << "\n\telse";
-    result << "\n\t" << callback << ";";
+    result << "\n\t" << callback << "();";
     result << "\n}\n";
 
     result << "\n" << cond_cb << "();\n";
@@ -860,9 +848,7 @@ str waxjs_code_renderer::split_iter_for(CodeSplit fork, const str& callback)
 
     //replace the callback in the stack by our condition, 
     //this will be the hook for loop continuation
-    if (!fork->add.empty())
-      fork->add.erase(fork->add.end() - 1);    
-    fork->add.push_back(iter_cb + "()");
+    fork->split_code->hook = iter_cb;
 
     //render the parts of the for as functions
     result << "\nfunction " << code_cb << "()";
@@ -882,7 +868,7 @@ str waxjs_code_renderer::split_iter_for(CodeSplit fork, const str& callback)
     result << "\n\tif (" << iterator_name << " < " << iterable_name << ".length" << ")";
     result << "\n\t" << code_cb << "();";
     result << "\n\telse";
-    result << "\n\t" << callback << ";";
+    result << "\n\t" << callback << "();";
     result << "\n}\n";
 
     result << "\n" << cond_cb << "();\n";
@@ -902,9 +888,7 @@ str waxjs_code_renderer::split_while(CodeSplit fork, const str& callback)
 
     //replace the callback in the stack by our condition, 
     //this will be the hook for loop continuation
-    if (!fork->add.empty())
-      fork->add.erase(fork->add.end() - 1);    
-    fork->add.push_back(cond_cb + "()");
+    fork->split_code->hook = cond_cb;
 
     //render the parts of the for as functions
     result << "\nfunction " << code_cb << "()";
@@ -917,7 +901,7 @@ str waxjs_code_renderer::split_while(CodeSplit fork, const str& callback)
     result << "\n\tif (" << render_expression(stmnt.expr, ctx_) << ")";
     result << "\n\t" << code_cb << "();";
     result << "\n\telse";
-    result << "\n\t" << callback << ";";
+    result << "\n\t" << callback << "();";
     result << "\n}\n";
 
     result << "\n" << cond_cb << "();\n";
@@ -925,14 +909,23 @@ str waxjs_code_renderer::split_while(CodeSplit fork, const str& callback)
     return result.str();
   }
 
-str waxjs_code_renderer::split_and_render(code& c, CodeSplit parent)
+str waxjs_code_renderer::split_and_render(code& c, CodeSplit parent, const str& callback, bool* split)
   {
     wax_splitter splitter(ctx_, c);
     c.visit(&splitter);
 
     CodeSplit fork = splitter.get();
+    if (split)
+      *split = fork;
+
     if (fork)
-      return render_split(fork, parent);
+      {
+        fork->hook = parent? parent->hook : str();
+        fork->callback = callback;
+        if (callback.empty())
+          fork->callback = parent->callback;
+        return render_split(fork, parent);
+      }
 
     //no split, just render the code and call the splits
     std::ostringstream result;
@@ -943,8 +936,8 @@ str waxjs_code_renderer::split_and_render(code& c, CodeSplit parent)
 
     result << render_plain_code(c, ctx);
 
-    if (parent)
-      result << after_code(parent); 
+    //if (parent)
+    //  result << render_callback(parent); 
     
     return result.str();
   }

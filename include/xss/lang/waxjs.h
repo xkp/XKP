@@ -26,11 +26,11 @@ struct code_split
     CodeSplit  split_code;
     XSSMethod  method;
     XSSContext context;
+    str        callback;
+    str        hook;
 
     bool      split_on_if;
     bool      split_on_else;
-
-    std::vector<str> add;
   };
 
 struct waxjs_lang : public js_lang
@@ -63,7 +63,7 @@ struct waxjs_code_renderer : public base_code_renderer
       CodeSplit   fork_;
 
       str render_split(CodeSplit fork, CodeSplit parent);
-      str split_if(CodeSplit fork);
+      str split_if(CodeSplit fork, const str& callback);
       str split_variable(CodeSplit fork, const str& code_after);
       str split_expression(CodeSplit fork);
       str split_dsl(CodeSplit fork, const str& callback);
@@ -71,9 +71,9 @@ struct waxjs_code_renderer : public base_code_renderer
       str split_for(CodeSplit fork, const str& callback);
       str split_iter_for(CodeSplit fork, const str& callback);
       str split_while(CodeSplit fork, const str& callback);
-      str split_and_render(code& c, CodeSplit parent);
+      str split_and_render(code& c, CodeSplit parent, const str& callback = str(), bool* split = null);
       str split_method(XSSMethod method);
-      str after_code(CodeSplit fork);
+      str render_callback(CodeSplit fork);
       str render_service();
       str render_page();
       str render_parameters();
