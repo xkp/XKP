@@ -1,6 +1,7 @@
 
 #include "xss/xss_renderer.h"
 #include "xss/xss_error.h"
+#include "xss/html_parser.h"
 
 using namespace xkp;
 
@@ -15,6 +16,8 @@ const str SUnknownMarker("Unknown xss:marker");
 const str SUnnamedInstance("xss:instance must have an id");
 const str SUnnamedParameter("xss:parameter must have an id");
 const str SUnknownParameterType("xss:parameter must have a valid type");
+const str SBadHTML("Invalid html file");
+const str SInvalidTag("HTML tag not found");
 
 //text_renderer
 text_renderer::text_renderer(const str& text):
@@ -468,3 +471,104 @@ void xss_renderer::handle_parameter(const str& text, param_list* args)
     params_.push_back(renderer_parameter(id, type, args->get("default")));
     context_->add_parameter(id, XSSType());
   }
+
+//html_renderer
+html_renderer::html_renderer(XSSCompiler compiler, XSSContext ctx, fs::path xss_file, const str& html_file):
+  xss_renderer(compiler, ctx, xss_file),
+  template_(html_file)
+  {
+  }
+
+void html_renderer::visit(const str& tag, const str& text, param_list* args)
+  {
+    if (tag == "text")
+      return; //ignore text, we'll provide 
+
+    xss_renderer::visit(tag, text, args);
+  }
+
+str html_renderer::render(XSSObject this_, param_list* args)
+  {
+    str content = xss_renderer::render(this_, args);
+
+    XSSCompiler compiler = context_->resolve("compiler");
+    str html_text = compiler_->file(template_);
+    
+    html_parser parser;
+    tag_list    tags;
+    if (!parser.parse(html_text, tags))
+      {
+        param_list error;
+        error.add("id", SRenderer);
+        error.add("desc", SBadHTML);
+        error.add("file", template_);
+        xss_throw(error);
+      }
+
+    //now the old dance, mix & match
+    typedef std::map<int, str>  mixmatch;
+    typedef std::pair<int, str> mixmatch_pair;
+
+    mixmatch m;
+
+    tag_map::iterator tit = tasks_.begin();
+    tag_map::iterator tnd = tasks_.end();
+
+    for(; tit != tnd; tit++)
+      {
+        int tidx = tags.find(tit->first);
+        if (tidx < 0)
+          {
+            param_list error;
+            error.add("id", SRenderer);
+            error.add("desc", SInvalidTag);
+            error.add("tag", tit->first);
+            xss_throw(error);
+          }
+
+        m.insert(mixmatch_pair(tidx, tit->second));
+      }
+
+    std::ostringstream result;
+
+    //spit it out
+    mixmatch::iterator it   = m.begin();
+    mixmatch::iterator nd   = m.end();
+    size_t             curr = 0;
+
+    for(; it != nd; it++)
+      {
+        tag t = tags.get(it->first);
+        if (t.closes)
+          {
+            param_list error;
+            error.add("id", SRenderer);
+            error.add("desc", SInvalidTag);
+            error.add("tag", t.tag_name);
+            xss_throw(error);
+          }
+        
+        result << str(html_text.begin() + curr, html_text.begin() + t.close + 1);
+        result << it->second;
+        
+        curr = t.close + 1;
+      }
+
+    result << str(html_text.begin() + curr, html_text.end());
+    return result.str();
+  }
+
+void html_renderer::append(const str& what)
+  {
+    content_ += what;
+  }
+
+void html_renderer::append_at(const str& what, const str& marker)
+  {
+    tag_map::iterator it = tasks_.find(marker);
+    if (it == tasks_.end())
+      tasks_.insert(tag_map_pair(marker, what));
+    else
+      it->second += what;
+  }
+

@@ -1,0 +1,2 @@
+<xss:parameter id="it"/>
+Hey, here is <xss:e v="it.marker"/>

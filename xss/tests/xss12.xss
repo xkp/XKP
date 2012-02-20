@@ -1,0 +1,3 @@
+<xss:code>
+    compiler.xss("xss12_1.xss", html_template="xss12.html");
+</xss:code>

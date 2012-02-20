@@ -177,9 +177,9 @@ namespace xkp
         xss_compiler(ICompilerOutput* out);
       public:
         void        build(fs::path xml);
-				XSSRenderer compile_xss_file(const str& src_file, XSSContext ctx);
-				XSSRenderer compile_xss_file(fs::path src_file, XSSContext ctx);
-				XSSRenderer compile_xss(const str& src, XSSContext ctx, fs::path path = fs::path());
+				XSSRenderer compile_xss_file(const str& src_file, XSSContext ctx, const str& html_template = str());
+				XSSRenderer compile_xss_file(fs::path src_file, XSSContext ctx, const str& html_template = str());
+				XSSRenderer compile_xss(const str& src, XSSContext ctx, fs::path path = fs::path(), const str& html_template = str());
 			  void        output_file(const str& fname, const str& contents);
 			  void        output_file(fs::path fpath, const str& contents);
         str         output_path();
@@ -250,7 +250,7 @@ namespace xkp
         void        pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent, IPreprocessHandler* handler, bool exclude_module = false);
         void        run();
         void        copy_files(XSSObject project_data);
-        void        xss_args(const param_list params, param_list& result, fs::path& output_file, str& marker, MARKER_SOURCE& marker_source, XSSContext& ctx);
+        void        xss_args(const param_list params, param_list& result, fs::path& output_file, str& marker, MARKER_SOURCE& marker_source, XSSContext& ctx, str& html_template);
         void        preprocess_type(XSSType clazz, XSSObject def_class, const str& super, XSSContext ctx, XSSApplicationRenderer app);
       private:
         //id gen

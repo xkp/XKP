@@ -75,7 +75,7 @@ namespace xkp
         virtual fs::path                  file();
         virtual str                       get();
         virtual bool                      busy();
-      private:
+      protected:
         XSSContext  context_;
         XSSCompiler compiler_;
         str         result_; //td: !!! makes the whole thing single threaded
@@ -109,6 +109,28 @@ namespace xkp
 			  void handle_marker(const str& text, param_list* args);
 			  void handle_instance(const str& text, param_list* args);
 			  void handle_parameter(const str& text, param_list* args);
+    };
+
+  class html_renderer : public xss_renderer
+    {
+      public:
+        html_renderer(XSSCompiler compiler, XSSContext ctx, fs::path xss_file, const str& html_file);
+
+      public:
+        //base_xss_renderer
+        virtual void visit(const str& tag, const str& text, param_list* args);
+      public:
+        //xss_renderer
+        virtual str  render(XSSObject this_, param_list* args);
+        virtual void append(const str& what);
+        virtual void append_at(const str& what, const str& marker);
+      private:
+        typedef std::map<str, str>  tag_map;
+        typedef std::pair<str, str> tag_map_pair;
+
+        str     template_;
+        str     content_;
+        tag_map tasks_;
     };
 
   //standard renderers

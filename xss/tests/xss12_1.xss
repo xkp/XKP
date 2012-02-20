@@ -1,0 +1,10 @@
+
+This should not appear in the output
+
+<xss:code>
+    for(var it in application.children)
+    {
+        compiler.log(it.marker);
+        compiler.xss("xss12_2.xss", it, marker = it.marker);
+    }
+</xss:code>

@@ -523,21 +523,21 @@ void xss_compiler::build(fs::path xml)
     copy_files(project_data);
   }
 
-XSSRenderer xss_compiler::compile_xss_file(const str& src_file, XSSContext ctx)
+XSSRenderer xss_compiler::compile_xss_file(const str& src_file, XSSContext ctx, const str& html_template)
   {
     fs::path path = ctx->path() / src_file;
     return compile_xss(load_file(path), ctx, path);
   }
 
-XSSRenderer xss_compiler::compile_xss_file(fs::path src_file, XSSContext ctx)
+XSSRenderer xss_compiler::compile_xss_file(fs::path src_file, XSSContext ctx, const str& html_template)
   {
     compiling_ = src_file;
-    XSSRenderer result = compile_xss(load_file(src_file), ctx, src_file);
+    XSSRenderer result = compile_xss(load_file(src_file), ctx, src_file, html_template);
     compiling_ = fs::path();
     return result;
   }
 
-XSSRenderer xss_compiler::compile_xss(const str& src, XSSContext ctx, fs::path path)
+XSSRenderer xss_compiler::compile_xss(const str& src, XSSContext ctx, fs::path path, const str& html_template)
   {
     boost::hash<std::string> string_hash;
     int hash = string_hash(src);
@@ -557,9 +557,26 @@ XSSRenderer xss_compiler::compile_xss(const str& src, XSSContext ctx, fs::path p
         it++;
       }
 
+    //determine the type of renderer
+    xss_visitor* visitor;
+    XSSRenderer  result;
+
+    if (html_template.empty())
+      {
+        xss_renderer* renderer = new xss_renderer(shared_from_this(), ctx, path);
+        result = XSSRenderer(renderer);
+        
+        visitor = renderer;
+      }
+    else
+      {
+        html_renderer* renderer = new html_renderer(shared_from_this(), ctx, path, html_template);
+        result = XSSRenderer(renderer);
+        
+        visitor = renderer;
+      }
+
     //keep cache
-    xss_renderer* renderer = new xss_renderer(shared_from_this(), ctx, path);
-    XSSRenderer result(renderer);
     xss_cache.insert(std::pair<int, XSSRenderer>(hash, result));
 
     //do the rendering
@@ -572,7 +589,7 @@ XSSRenderer xss_compiler::compile_xss(const str& src, XSSContext ctx, fs::path p
     parser.register_tag("xss:instance");
     parser.register_tag("xss:parameter");
 
-		parser.parse(src, renderer);
+		parser.parse(src, visitor);
 
     return result;
   }
@@ -640,7 +657,7 @@ str xss_compiler::genid(const str& what)
 		return "__" + what + boost::lexical_cast<str>(aidx);
   }
 
-void xss_compiler::xss_args(const param_list params, param_list& result, fs::path& output_file, str& marker, MARKER_SOURCE& marker_source, XSSContext& ctx)
+void xss_compiler::xss_args(const param_list params, param_list& result, fs::path& output_file, str& marker, MARKER_SOURCE& marker_source, XSSContext& ctx, str& html_template)
   {
     for(size_t i = 0; i < params.size(); i++)
       {
@@ -719,6 +736,11 @@ void xss_compiler::xss_args(const param_list params, param_list& result, fs::pat
             ctx = only_types_for_now->context();
             continue;
           }
+        else if (pname == "html_template")
+          {
+            html_template = variant_cast<str>(value, str());
+            continue;
+          }
 
         result.add(pname, value);
       }
@@ -749,8 +771,9 @@ void xss_compiler::xss(const param_list params)
     str           marker;
     MARKER_SOURCE marker_source = MS_CURRENT;
     XSSContext    ctx;
+    str           html_template;
 
-    xss_args(params, my_args, the_output_file, marker, marker_source, ctx);
+    xss_args(params, my_args, the_output_file, marker, marker_source, ctx, html_template);
 
     //resolve file name
     XSSRenderer r    = current_renderer();
@@ -769,7 +792,7 @@ void xss_compiler::xss(const param_list params)
     if (!ctx)
       ctx = rctx;
 
-    XSSRenderer result = compile_xss_file(file, ctx);
+    XSSRenderer result = compile_xss_file(file, ctx, html_template);
 
     //match the parameters
     renderer_parameter_list& result_args = result->params();
