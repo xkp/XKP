@@ -1,10 +1,13 @@
 
 <xss:parameter id="e"/>
-<xss:parameter id="new_id" default="e.output_id"/>
+<xss:parameter id="new_id"/>
 
 <xss:code>
 	//TRACE: log
 	compiler.log("Rendering event: " + e.name);
+	
+	if(new_id == null)
+		new_id = e.output_id;
 	
 	if(e.implemented && e.name)
 	{

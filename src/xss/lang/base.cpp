@@ -687,6 +687,11 @@ str base_expr_renderer::get()
                     XSSProperty prop = si.value;
                     return lang->property_get(prop, lang->resolve_this(ctx_), ctx_);
                   }
+                case RESOLVE_INSTANCE:
+                  {
+                    XSSObject obj = si.value;
+                    return obj->output_id();
+                  }
               }
           }
 
@@ -906,17 +911,6 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                     caller = variant_cast<XSSObject>(ar.object, XSSObject());
                   }
 			        }
-
-            bool var_caller = false;
-            if (arg1.is<expression_identifier>())
-              {
-                expression_identifier left_ei = arg1;
-                resolve_info left_ri;
-                if (ctx_->resolve(left_ei.value, left_ri))
-                  {
-                    var_caller = left_ri.what == RESOLVE_VARIABLE;
-                  }
-              }
 
 						str separator = ctx_->get_language()->resolve_separator(caller);
             if (caller)

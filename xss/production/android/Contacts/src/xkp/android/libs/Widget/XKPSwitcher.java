@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import xkp.android.libs.Layout.XKPLayout;
+import xkp.android.Contacts.R;
 public class XKPSwitcher extends XKPLayout {
 	private int mCurrentChild = 0;
 	private int mResCurrentChild = 0;

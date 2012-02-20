@@ -10,14 +10,15 @@ on creation()
 
 method getSwitchText(int idx) : string
 {
+	var swtTabsSize = swtTabsTexts.size;
 	if(idx < 0)
 	{
-		idx = swtTabsTexts.size;
+		idx = swtTabsSize;
 	}
 	else
-	if(idx >= swtTabsTexts.size)
+	if(idx >= swtTabsSize)
 	{
-		idx = idx % swtTabsTexts.size;
+		idx = idx % swtTabsSize;
 	}
 	
 	return swtTabsTexts[idx];
@@ -45,4 +46,3 @@ on chkVerifier.change()
 {
 	
 }
-

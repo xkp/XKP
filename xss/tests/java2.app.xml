@@ -1,3 +1,4 @@
-<application name="JavaTest2" title="Java Test Console" src="java2.app.xs">
-	<classx id="instance1"/>
+<application src="java2.app.xs" name="JavaTest2">
+	<t_xss8 id="t1" foo="2"/>
+	<t_xss8 id="t2" bar="**"/>
 </application>
