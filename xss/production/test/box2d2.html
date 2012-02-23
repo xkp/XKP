@@ -256,9 +256,9 @@ window.onload = function()
              fixDef.restitution = 0.200000003;
              bodyDef.type = b2Body.b2_staticBody;
                 fixDef.shape = new b2PolygonShape;
-                    fixDef.shape.SetAsBox(20/g_world_scale, 2/g_world_scale);
+                    fixDef.shape.SetAsBox(400/g_world_scale, 2/g_world_scale);
             fixDef.isSensor = false;
-                bodyDef.position.Set((10 + 20/2)/g_world_scale, (15.1300001 + 2/2)/g_world_scale);
+                bodyDef.position.Set((0 + 400/2)/g_world_scale, (380 + 2/2)/g_world_scale);
             current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
             g_ui.fill_background = false; //td: cross idiom
