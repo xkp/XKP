@@ -1785,6 +1785,8 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
     std::vector<XSSType>   classes;
     std::vector<XSSObject> classdefs;
 
+    current_app_ = app;
+
     fs::path path;
     if (!def.empty())
       {
