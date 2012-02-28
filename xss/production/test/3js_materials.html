@@ -9,21 +9,18 @@
 	background:Black;
 	}
 </style>
-<script type="text/javascript" src="../js/three/Detector.js"></script>
-<script type="text/javascript" src="../js/three/Three.js"></script>
-<script type="text/javascript" src="../js/three/Stats.js"></script>
-<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/three/Three.js"></script>
+		<script type="text/javascript" src="../js/three/Stats.js"></script>
+		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+		<script type="text/javascript" src="../js/three/Utils.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui;
@@ -37,8 +34,8 @@ var application = {};
 application.events = new ms.event.EventHolder();
 		var streamer = new ms.streamer.Streamer();
 	// --------RESOURCES---------
-        var def_package_items = [];
-                def_package_items.push(
+        var global_package_items = [];
+                global_package_items.push(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -47,8 +44,8 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });
-        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
-		g_startup_package.load();	
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
@@ -123,8 +120,8 @@ new THREE.Scene(
 var camera_1 = 
 new THREE.Camera(
 45,1.5,1,2000);
-                camera_1.position.z = 800;
-                camera_1.position.y = 200;
+            camera_1.position.z = 800;
+            camera_1.position.y = 200;
 var amb_light_1 = 
 new THREE.AmbientLight(
 0x202020);
@@ -135,17 +132,17 @@ new THREE.DirectionalLight(
 Math.random() * 0xffffff);
 		;
 	scene.addLight(dir_light_1);
-                dir_light_1.position.x = Math.random() - 0.5;
-                dir_light_1.position.y = Math.random() - 0.5;
-                dir_light_1.position.z = Math.random() - 0.5;
+            dir_light_1.position.x = Math.random() - 0.5;
+            dir_light_1.position.y = Math.random() - 0.5;
+            dir_light_1.position.z = Math.random() - 0.5;
 			var particle_1 = new THREE.Particle( 
 			new THREE.ParticleCanvasMaterial( 
 			{ color: White, program: program_fill, } 
 			) );	
 			scene.addObject( particle_1 );	
-                particle_1.scale.x = 5;
-                particle_1.scale.y = 5;
-                particle_1.scale.z = 5;
+            particle_1.scale.x = 5;
+            particle_1.scale.y = 5;
+            particle_1.scale.z = 5;
 var point_light_1 = 
 new THREE.PointLight(
 White,1);
@@ -157,10 +154,10 @@ new THREE.Plane(
 	    var plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
-                plane_1.position.y = -70;
-                set_rotation_x(plane_1.rotation, -90);
-                application.timer = null;
-                application.objects = [];
+            plane_1.position.y = -70;
+            set_rotation_x(plane_1.rotation, -90);
+            application.timer = null;
+            application.objects = [];
 	var ev_parent = this;
 	application.events.addListener("init", function()
 	{    
@@ -243,7 +240,7 @@ function animate() {
 	render();
 	if(ui)
 		ui.draw(drawingCanvas.getContext('2d'));
-}
+	}
 </script>
 </body>
 </html>

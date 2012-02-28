@@ -11,7 +11,7 @@ on pre_process(obj)
 		obj.id = compiler.genid(obj.class_name);
 }
 
-on render_jscripts()
+on render_js_includes()
 {
 	out()
 	{

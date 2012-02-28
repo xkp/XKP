@@ -1,4 +1,5 @@
-property key_press = false;
+property left_key_press = false;
+property right_key_press = false;
 
 on girl1.click()
 {
@@ -21,8 +22,15 @@ on keydown(keycode)
 {
 	if(keycode == LEFT_ARROW)
 	{
-		monster.animation = "m_running";	
-		key_press = true;
+		monster.animation = "m_run_l";
+		mario.animation = "mario_run_l";
+		left_key_press = true;
+	}
+	if(keycode == RIGHT_ARROW)
+	{
+		monster.animation = "m_run_d";
+		mario.animation = "mario_run_r";
+		right_key_press = true;
 	}
 }
 
@@ -30,15 +38,34 @@ on keyup(keycode)
 {
 	if(keycode == LEFT_ARROW)
 	{
-		monster.animation = "m_idle";	
-		key_press = false;
-	}		
+		monster.animation = "m_idle";
+		mario.animation = "m_stop_l";
+		mario.lock = true;
+		mario.animation = "m_idle_l";
+		left_key_press = false;
+	}	
+	if(keycode == RIGHT_ARROW)
+	{
+		monster.animation = "m_idle";
+		mario.animation = "m_stop_r";
+		mario.lock = true;
+		mario.animation = "m_idle_r";
+		right_key_press = false;
+	}	
 }
 
 on updates()
 {		
-	if(key_press)		
-		monster.x -= 0.2;		
+	if(left_key_press)
+	{
+		monster.x -= 0.2;	
+		mario.x -= 0.2;	
+	}
+	if(right_key_press)
+	{		
+		monster.x += 0.2;
+		mario.x += 0.2;	
+	}
 }
 
 

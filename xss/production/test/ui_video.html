@@ -6,12 +6,11 @@
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -21,28 +20,158 @@ var g_canvas;
 var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
-var Sound = new ms.ui.Sound();
-		var streamer = new ms.streamer.Streamer();
+var SoundUtils = new ms.ui.SoundUtils();
 		if(drawingCanvas){
 			var client =
 			{
-				width: 600,
-				height: 400,
+				width: 800,
+				height: 600,
 				canvas: drawingCanvas
 			};
+            var streamer = new ms.streamer.Streamer();							
 			var ui = new ms.ui.Manager(client, streamer);
 			var g_ui = ui;
 			var g_ui_root = ui.root;
 		}
-		var g_sequence_manager = new ms.state.Manager();
-        function default_interpolate(a, b, t)
-        {
-            return a + (b - a)*t;
-        }		
 		var streamer = new ms.streamer.Streamer();
-        var def_package_items = [];
-        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
-		g_startup_package.load();	
+        var global_package_items = [];
+                global_package_items.push(
+            {
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/stop.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/pause.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/play_over.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image4",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/stop_over.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image5",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/pause_over.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image6",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/play.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image7",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/stop.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image8",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/pause.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image9",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/minus.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image10",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/plus.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image11",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/rota_left.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image12",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/rota_right.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image13",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/sound_on.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image14",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/sound_off.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__video1",
+		resource_type:	RESOURCE_VIDEO,
+		src:			"video/sintel.mp4",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
 function start(resolution)  
 {  
 	function updater()  
@@ -53,7 +182,6 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
-		g_sequence_manager.update(g_delta);
 		application.events.dispatch("updates", []);	
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
@@ -61,6 +189,13 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var v;var lbl1;var btnVolUp;var btnVolDown;var btnMute;var lbl2;var btnPlay;var btnPause;var btnStop;var lbl3;var btnRotLeft;var btnRotRight;
+	var ev_parent = this;
+	application.events.addListener("init", function()
+	{    
+		v.play();
+	}
+	);
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -69,8 +204,8 @@ window.onload = function()
 	{
 		var client =
 		{
-			width: 600,
-			height: 400,
+			width: 800,
+			height: 600,
 			canvas: drawingCanvas
 		};
 		var ui = new ms.ui.Manager(client, streamer);
@@ -90,6 +225,143 @@ window.onload = function()
 	{
 		ui.mouseup(ev.clientX, ev.clientY);                  
 	};	
+		    v = new ms.ui.Video( 
+	    "video/sintel.mp4",g_ui_root.manager, g_ui_root);
+        v = v;
+            v.set_x(50);
+            v.set_y(50);
+            v.set_width(400);
+            v.set_height(200);
+		    lbl1 = new ms.ui.Label( 
+	    "Verdana",g_ui_root.manager, g_ui_root);
+        lbl1 = lbl1;
+            lbl1.set_x(40);
+            lbl1.set_y(300);
+            lbl1.text("Volume controls");
+		    btnVolUp = new ms.ui.Image( 
+	    "images/plus.png",g_ui_root.manager, g_ui_root);
+        btnVolUp = btnVolUp;
+            btnVolUp.set_x(20);
+            btnVolUp.set_y(320);
+            btnVolUp.set_width(30);
+            btnVolUp.set_height(30);
+	var ev_parent = this;
+	btnVolUp.events.addListener("click", function()
+	{    
+		v.volume += 0.100000001;
+	}
+	);
+		application.are_obj_events = true;
+		    btnVolDown = new ms.ui.Image( 
+	    "images/minus.png",g_ui_root.manager, g_ui_root);
+        btnVolDown = btnVolDown;
+            btnVolDown.set_x(60);
+            btnVolDown.set_y(320);
+            btnVolDown.set_width(30);
+            btnVolDown.set_height(30);
+	var ev_parent = this;
+	btnVolDown.events.addListener("click", function()
+	{    
+		v.volume -= 0.100000001;
+	}
+	);
+		application.are_obj_events = true;
+		    btnMute = new ms.ui.StateButton( 
+	    "images/sound_on.png","images/sound_off.png",g_ui_root.manager, g_ui_root);
+        btnMute = btnMute;
+            btnMute.set_x(100);
+            btnMute.set_y(320);
+            btnMute.set_width(30);
+            btnMute.set_height(30);
+	var ev_parent = this;
+	btnMute.events.addListener("click", function()
+	{    
+		v.mute();
+	}
+	);
+		application.are_obj_events = true;
+		    lbl2 = new ms.ui.Label( 
+	    "Verdana",g_ui_root.manager, g_ui_root);
+        lbl2 = lbl2;
+            lbl2.set_x(200);
+            lbl2.set_y(300);
+            lbl2.text("Playback controls");
+		    btnPlay = new ms.ui.Button( 
+	    "images/play.png","images/play_over.png",g_ui_root.manager, g_ui_root);
+        btnPlay = btnPlay;
+            btnPlay.set_x(180);
+            btnPlay.set_y(315);
+            btnPlay.set_width(40);
+            btnPlay.set_height(40);
+	var ev_parent = this;
+	btnPlay.events.addListener("click", function()
+	{    
+		v.play();
+	}
+	);
+		application.are_obj_events = true;
+		    btnPause = new ms.ui.Button( 
+	    "images/pause.png","images/pause_over.png",g_ui_root.manager, g_ui_root);
+        btnPause = btnPause;
+            btnPause.set_x(220);
+            btnPause.set_y(315);
+            btnPause.set_width(40);
+            btnPause.set_height(40);
+	var ev_parent = this;
+	btnPause.events.addListener("click", function()
+	{    
+		v.pause();
+	}
+	);
+		application.are_obj_events = true;
+		    btnStop = new ms.ui.Button( 
+	    "images/stop.png","images/stop_over.png",g_ui_root.manager, g_ui_root);
+        btnStop = btnStop;
+            btnStop.set_x(260);
+            btnStop.set_y(315);
+            btnStop.set_width(40);
+            btnStop.set_height(40);
+	var ev_parent = this;
+	btnStop.events.addListener("click", function()
+	{    
+		v.stop();
+	}
+	);
+		application.are_obj_events = true;
+		    lbl3 = new ms.ui.Label( 
+	    "Verdana",g_ui_root.manager, g_ui_root);
+        lbl3 = lbl3;
+            lbl3.set_x(360);
+            lbl3.set_y(300);
+            lbl3.text("Rotation controls");
+		    btnRotLeft = new ms.ui.Image( 
+	    "images/rota_left.png",g_ui_root.manager, g_ui_root);
+        btnRotLeft = btnRotLeft;
+            btnRotLeft.set_x(365);
+            btnRotLeft.set_y(320);
+            btnRotLeft.set_width(30);
+            btnRotLeft.set_height(30);
+	var ev_parent = this;
+	btnRotLeft.events.addListener("click", function()
+	{    
+		v.set_rotation(v.get_rotation() - 10);
+	}
+	);
+		application.are_obj_events = true;
+		    btnRotRight = new ms.ui.Image( 
+	    "images/rota_right.png",g_ui_root.manager, g_ui_root);
+        btnRotRight = btnRotRight;
+            btnRotRight.set_x(405);
+            btnRotRight.set_y(320);
+            btnRotRight.set_width(30);
+            btnRotRight.set_height(30);
+	var ev_parent = this;
+	btnRotRight.events.addListener("click", function()
+	{    
+		v.set_rotation(v.get_rotation() + 10);
+	}
+	);
+		application.are_obj_events = true;
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -110,16 +382,8 @@ window.onload = function()
 }
 </script>
 </head>
-<body>
-	<canvas id="myCanvas" width="600" height="400">
-		<p>Your browser doesn't support canvas.</p>
-	</canvas>
-	<video 
-	autoplay
-	loop
-	preload> 
-	<source src="video/sintel.mp4"/>		
-	Your browser does not support the video element.
-	</video>
+<body>	
+	<canvas id="myCanvas" width="800" height="600"
+		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
 </body>
 </html>

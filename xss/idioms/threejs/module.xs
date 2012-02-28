@@ -19,14 +19,48 @@ on pre_process(obj)
 		obj.id = compiler.genid(obj.class_name);
 }
 
+on render_js_includes()
+{
+	out()
+	{
+		<script type="text/javascript" src="../js/three/Three.js"></script>
+		<script type="text/javascript" src="../js/three/Stats.js"></script>
+		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+		<script type="text/javascript" src="../js/three/Utils.js"></script>
+	}
+}
+
 on render_instances()
 {	
-	for(var i in instances)
+	for(int i = 0; i < instances.size; i++)
     {		
-		compiler.xss("inst_renderer.xss", i);
-		if(!i.dont_render)
-			compiler.xss("../common-js/instance.xss", i);
-	}
+		var inst = instances[i];
+		if(inst.wait_for_package)
+		{			
+			out()
+			{				
+				<xss:e v="inst.wait_for_package"/>.events.addListener("loaded", function()
+				<xss:open_brace/>				
+			}
+			compiler.xss("inst_renderer.xss", inst);
+			if(!inst.dont_render)
+				compiler.xss("../common-js/instance.xss", inst);
+			for(var child in inst.children)
+			{
+				compiler.xss("inst_renderer.xss", child);
+				if(!child.dont_render)
+					compiler.xss("../common-js/instance.xss", child);
+				i++;
+			}
+			out(){<xss:close_brace/>);}
+		}
+		else
+		{
+			compiler.xss("inst_renderer.xss", inst);
+			if(!inst.dont_render)
+				compiler.xss("../common-js/instance.xss", inst);
+		}
+    }	
 }
 
 on render_types()

@@ -9,21 +9,18 @@
 	background:SlateGray;
 	}
 </style>
-<script type="text/javascript" src="../js/three/Detector.js"></script>
-<script type="text/javascript" src="../js/three/Three.js"></script>
-<script type="text/javascript" src="../js/three/Stats.js"></script>
-<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/three/Three.js"></script>
+		<script type="text/javascript" src="../js/three/Stats.js"></script>
+		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+		<script type="text/javascript" src="../js/three/Utils.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui;
@@ -37,27 +34,27 @@ var application = {};
 application.events = new ms.event.EventHolder();
 		var streamer = new ms.streamer.Streamer();
 	// --------RESOURCES---------
-        var def_package_items = [];
-                def_package_items.push(
+        var global_package_items = [];
+                global_package_items.push(
             {
 		id:				"res_sound_1",
-		resource_type:	RESOURCE_SOUND,
+		resource_type:	RESOURCE_AUDIO,
 		src:			"sounds/applauselong.wav",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"res_sound_2",
-		resource_type:	RESOURCE_SOUND,
+		resource_type:	RESOURCE_AUDIO,
 		src:			"sounds/forest.wav",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
 });
-        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
-		g_startup_package.load();	
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
@@ -89,14 +86,14 @@ new THREE.DirectionalLight(
 White);
 		;
 	scene.addLight(light);
-                light.position.y = 0.5;
-                light.position.z = 1;
+            light.position.y = 0.5;
+            light.position.z = 1;
 var container_1 = 
 new THREE.Object3D(
 );
 container_1.events = new ms.event.EventHolder();
-                container_1.position.x = 250;
-                container_1.position.y = 30;
+            container_1.position.x = 250;
+            container_1.position.y = 30;
 	    var sphere_1_sphere = 
 new THREE.Sphere(
 20,32,16);
@@ -109,8 +106,8 @@ var container_2 =
 new THREE.Object3D(
 );
 container_2.events = new ms.event.EventHolder();
-                container_2.position.x = -250;
-                container_2.position.y = 30;
+            container_2.position.x = -250;
+            container_2.position.y = 30;
 	    var sphere_2_sphere = 
 new THREE.Sphere(
 20,32,16);
@@ -125,8 +122,8 @@ new THREE.Plane(
 	    var plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
-                plane_1.position.y = 0.100000001;
-                set_rotation_x(plane_1.rotation, -90);
+            plane_1.position.y = 0.100000001;
+            set_rotation_x(plane_1.rotation, -90);
 if(ui)
 {
 	ui.load_resources(function(){		
@@ -168,7 +165,7 @@ function animate() {
 	render();
 	if(ui)
 		ui.draw(drawingCanvas.getContext('2d'));
-}
+	}
 </script>
 </body>
 </html>

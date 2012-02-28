@@ -1,0 +1,9 @@
+<xss:classes>
+    <class id="idle_anim" super="sequence">
+        <at time="0">
+            <animate property="target.x" from="target.x" to="Math.random()*(20)+(target.x-10)" in="2"/>
+            <animate property="target.y" from="target.y" to="Math.random()*(20)+(target.y-10)" in="2"/>
+            <animate property="target.rotation" from="target.rotation" to="Math.random()*10-5" in="2"/>
+        </at>
+    </class>
+</xss:classes>

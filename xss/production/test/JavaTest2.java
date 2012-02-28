@@ -24,7 +24,7 @@ mixed_set(writable_get());
 return t1.get_bar();
 		}
 			private void onClick() {
-				ArrayList<Object> list = new ArrayList(Arrays.asList( new Object [] {1, 2, "item", 3.140000f, "vowel"} ));
+				ArrayList<Object> list = new ArrayList(Arrays.asList( new Object [] {1, 2, "item", 3.140000, "vowel"} ));
 for(Object i : list)
 {
 	System.out.println(i);
@@ -33,7 +33,7 @@ for(Object i : list)
 			private Integer typing;
 			private Integer simple = 50;
 			public Float read_only_get() {
-				return 10.000000f;
+				return 10.000000;
 			}
 			private Object writable;
 			public void writable_set(Object value) {

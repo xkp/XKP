@@ -29,7 +29,7 @@
     <button id="btnPause" x="275" y="300" width="50" height="50" up="images/pause.png" down="images/pause_over.png"/>
     <button id="btnStop" x="375" y="300" width="50" height="50" up="images/stop.png" down="images/stop_over.png"/>
 
-	<sound id="sound_1" play="true" src="sounds/forest.wav"/>
+	<sound id="sound_1" src="sounds/forest.wav" loop="false"/>
 	<sound id="sound_2" src="sounds/applauselong.wav"/>
 	
 </application>

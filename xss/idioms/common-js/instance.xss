@@ -25,6 +25,7 @@ for(var prop in it.properties)
     compiler.xss(property_renderer, prop, it, is_class = false, path = path);
 }    
 
+//render methods
 for(var mthd in it.methods)
 {
     compiler.xss(method_renderer, mthd, it, is_class = false, path = path);

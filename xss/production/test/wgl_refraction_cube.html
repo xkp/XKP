@@ -9,20 +9,18 @@
 	background:Black;
 	}
 </style>
-<script type="text/javascript" src="../js/three/Detector.js"></script>
-<script type="text/javascript" src="../js/three/Three.js"></script>
-<script type="text/javascript" src="../js/three/Stats.js"></script>
-<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/three/Three.js"></script>
+		<script type="text/javascript" src="../js/three/Stats.js"></script>
+		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+		<script type="text/javascript" src="../js/three/Utils.js"></script>
+		<script type="text/javascript" src="../js/three/Detector.js"></script>
 <script type="text/javascript">		
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 var renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -80,16 +78,16 @@ var camera_1 =
 new THREE.Camera(
 60,1.5,1,100000);
 		active_camera = camera_1;
-                camera_1.position.z = 3200;
+            camera_1.position.z = 3200;
 		THREE.SceneUtils.addPanoramaCubeWebGL( 
 									scene,
 									100000, 
 									t_cube1 
 									);		
-                application.mouse_x = null;
-                application.mouse_y = null;
-                application.spheres = [];
-                application.timer = null;
+            application.mouse_x = null;
+            application.mouse_y = null;
+            application.spheres = [];
+            application.timer = null;
 	var ev_parent = this;
 	application.events.addListener("init", function()
 	{    

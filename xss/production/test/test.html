@@ -1,0 +1,213 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Test 3D</title>
+
+</head>
+
+<body>
+
+<script type="text/javascript" src="../js/three/Detector.js"></script>
+<script type="text/javascript" src="../js/three/Three.js"></script>
+<script type="text/javascript" src="../js/three/Stats.js"></script>
+<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+
+
+<script type="text/javascript">		
+
+if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+
+var application = this;
+
+function render() {	
+	renderer.render( scene_1, camera_1 );
+}
+	
+var renderer = new THREE.WebGLRenderer( {antialias:true} );
+renderer.setSize( window.innerWidth, window.innerHeight );
+
+var program_fill = function ( context ) {
+					context.beginPath();
+					context.arc( 0, 0, 1, 0, Math.PI * 2, true );
+					context.closePath();
+					context.fill();
+				}
+var program_stroke = function ( context ) {
+					context.beginPath();
+					context.arc( 0, 0, 1, 0, Math.PI * 2, true );
+					context.closePath();
+					context.stroke();
+				}
+
+
+							var materials = [];
+							materials.push( new THREE.MeshLambertMaterial( {color:Math.random() * 0xffffff,}  ));
+
+        materials.push( new THREE.MeshLambertMaterial( {color:Math.random() * 0xffffff,}  ));
+
+        materials.push( new THREE.MeshLambertMaterial( {color:Math.random() * 0xffffff,}  ));
+
+        
+        
+							var shadow_material = [];
+							shadow_material.push( new THREE.MeshBasicMaterial( {map:THREE.ImageUtils.loadTexture( 'images/shadow.png' ),}  ));
+
+        
+                    var scene_1 = new THREE.Scene();
+            var camera_1 = new THREE.Camera(40,1.5,1,10000,null);
+            camera_1.position.z =  1800;
+        
+            var icosahedron_1 = new THREE.Icosahedron(1);
+
+                    var mesh_1 = new THREE.Mesh(icosahedron_1,materials[0]);
+
+						scene_1.addObject(mesh_1);
+						            mesh_1.position.x =  -450;
+            mesh_1.scale.x =  200;
+            mesh_1.scale.y =  200;
+            mesh_1.scale.z =  200;
+        	document.addEventListener( 'mousemove', mousein_mesh_1, false );
+        	function mousein_mesh_1 (event)
+        	{    
+        					
+        					event.preventDefault();
+        					var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
+        					projector = new THREE.Projector();
+        					projector.unprojectVector( vector, camera_1 );
+        					var ray = new THREE.Ray( camera_1.position, vector.subSelf( camera_1.position ).normalize() );
+        					var intersects = ray.intersectObject( mesh_1 );
+        					if ( intersects.length > 0 ) 
+        					{   
+        					
+        					mesh_1.rotation.x += 0.0199999996;
+        					mesh_1.rotation.y += 0.0199999996;
+        					mesh_1.rotation.z += 0.0199999996;
+        					
+        			     }
+        				}
+        				
+            var mesh_2 = new THREE.Mesh(icosahedron_1,materials[1]);
+
+						scene_1.addObject(mesh_2);
+						            mesh_2.scale.x =  200;
+            mesh_2.scale.y =  200;
+            mesh_2.scale.z =  200;
+        	document.addEventListener( 'mousemove', mousein_mesh_2, false );
+        	function mousein_mesh_2 (event)
+        	{    
+        					
+        					event.preventDefault();
+        					var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
+        					projector = new THREE.Projector();
+        					projector.unprojectVector( vector, camera_1 );
+        					var ray = new THREE.Ray( camera_1.position, vector.subSelf( camera_1.position ).normalize() );
+        					var intersects = ray.intersectObject( mesh_2 );
+        					if ( intersects.length > 0 ) 
+        					{   
+        					
+        					mesh_2.rotation.x += 0.0199999996;
+        					mesh_2.rotation.y += 0.0199999996;
+        					mesh_2.rotation.z += 0.0199999996;
+        					
+        			     }
+        				}
+        				
+            var mesh_3 = new THREE.Mesh(icosahedron_1,materials[2]);
+
+						scene_1.addObject(mesh_3);
+						            mesh_3.position.x =  450;
+            mesh_3.scale.x =  200;
+            mesh_3.scale.y =  200;
+            mesh_3.scale.z =  200;
+        	document.addEventListener( 'mousemove', mousein_mesh_3, false );
+        	function mousein_mesh_3 (event)
+        	{    
+        					
+        					event.preventDefault();
+        					var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
+        					projector = new THREE.Projector();
+        					projector.unprojectVector( vector, camera_1 );
+        					var ray = new THREE.Ray( camera_1.position, vector.subSelf( camera_1.position ).normalize() );
+        					var intersects = ray.intersectObject( mesh_3 );
+        					if ( intersects.length > 0 ) 
+        					{   
+        					
+        					mesh_3.rotation.x += 0.0199999996;
+        					mesh_3.rotation.y += 0.0199999996;
+        					mesh_3.rotation.z += 0.0199999996;
+        					
+        			     }
+        				}
+        				
+            var shadow_plane = new THREE.Plane(300,300,1,1);
+
+                    var shadow_mesh = new THREE.Mesh(shadow_plane,shadow_material);
+
+						scene_1.addObject(shadow_mesh);
+						            shadow_mesh.position.x =  -450;
+            shadow_mesh.position.y =  -250;
+            shadow_mesh.rotation.x =  -1.57000005;
+        
+            var shadow_mesh = new THREE.Mesh(shadow_plane,shadow_material);
+
+						scene_1.addObject(shadow_mesh);
+						            shadow_mesh.position.y =  -250;
+            shadow_mesh.rotation.x =  -1.57000005;
+        
+            var shadow_mesh = new THREE.Mesh(shadow_plane,shadow_material);
+
+						scene_1.addObject(shadow_mesh);
+						            shadow_mesh.position.x =  450;
+            shadow_mesh.position.y =  -250;
+            shadow_mesh.rotation.x =  -1.57000005;
+        
+            var light_1 = new THREE.DirectionalLight(16777215,null,null,null);
+
+						scene_1.addLight(light_1);
+						            light_1.position.x =  0;
+            light_1.position.y =  0;
+            light_1.position.z =  1;
+        
+
+                    var mouseX =  0;
+            var mouseY =  0;
+        	document.addEventListener( 'mousemove', mousemove_application, false );
+        	function mousemove_application (event)
+        	{    
+        
+        				var x = event.clientX;
+        				var y = event.clientY;
+        			
+        					application.mouseX = x - window.innerWidth / 2;
+        					application.mouseY = y - window.innerHeight / 2;
+        					
+        			};
+        			
+        			function render() {   
+        			
+        					camera_1.position.x += (application.mouseX - camera_1.position.x) * 0.0500000007;
+        					camera_1.position.y += (-application.mouseY - camera_1.position.y) * 0.0500000007;
+        					
+        			renderer.render( scene_1, camera_1 );
+        			}
+        			
+
+document.body.appendChild( renderer.domElement );
+animate();
+
+function animate() {
+	requestAnimationFrame( animate );
+	render();
+}
+
+</script>
+
+</body>
+
+</html>

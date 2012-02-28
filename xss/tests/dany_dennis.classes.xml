@@ -1,0 +1,21 @@
+<xss:classes>
+    <class id="idle_anim" super="sequence">
+        <at time="0">
+            <animate property="target.position.x" from="target.position.x" to="Math.random()*(300+400)-400" in="10"/>
+            <animate property="target.position.y" from="target.position.y" to="Math.random()*(200+150)-150" in="10"/>
+            <animate property="target.rotation.x" from="target.rotation.x" to="Math.random()*60-30" in="10"/>
+            <animate property="target.rotation.y" from="target.rotation.y" to="Math.random()*60-30" in="10"/>
+            <animate property="target.rotation.z" from="target.rotation.z" to="Math.random()*60-30" in="10"/>
+            <animate property="target.alpha" from="target.alpha" to="100" in="5"/>
+        </at>
+    </class>
+    <class id="pic_out" super="sequence">
+        <at time="0">
+            <animate property="target.x" 	from="target.x" to="332" in="3"/>
+            <animate property="target.y" 	from="target.y" to="219" in="3"/>
+            <animate property="target.width" 	from="target.width" to="target.width/3" in="3"/>
+            <animate property="target.height" 	from="target.height" to="target.height/3" in="3"/>
+            <animate property="target.alpha" 	from="target.alpha" to="0" in="3"/>           
+        </at>
+    </class>
+</xss:classes>
