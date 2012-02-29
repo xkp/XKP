@@ -173,6 +173,19 @@ struct expression_splitter : expression_visitor
       expression expr;
     };
     
+  struct switch_section
+    {
+      std::vector<expression> cases;
+      code                    case_code;
+    };
+
+  struct stmt_switch
+    {
+      expression                  expr;
+      std::vector<switch_section> sections;
+      code                        default_code;
+    };
+
   struct dsl
     {
       str        name;

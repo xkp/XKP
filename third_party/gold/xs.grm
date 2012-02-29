@@ -200,7 +200,7 @@ Comment End = '*/'
         |   for      '(' <For Init Opt> ';' <For Condition Opt> ';' <For Iterator Opt> ')' <Statement>
         |   for     '(' <Type> Identifier in <Expression> ')' <Statement>  
         |   while    '(' <Expression> ')' <Statement>
-        |   switch   '(' <Expression> ')' '{' <Switch Sections Opt> '}'
+        |   switch   '(' <Switch Header> ')' '{' <Switch Sections Opt> '}'
         |   dispatch <Qualified ID> '(' <Arg List Opt> ')' ';'
         |   break ';'
         |   continue ';'
@@ -219,6 +219,10 @@ Comment End = '*/'
 <Variable Declarator>
         ::= Identifier
          |  Identifier '=' <Expression>
+
+<Switch Header>
+        ::= <Expression>
+         |  !Nothing
 
 <Switch Sections Opt>
         ::= <Switch Sections Opt> <Switch Section>
