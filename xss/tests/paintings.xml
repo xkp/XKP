@@ -1,0 +1,176 @@
+<application title="danydenis.com" src="paintings.xs" width="1000" height="800">
+    <resources>        
+		<image src="images/pictures/banner.png"/> 	
+		<image src="images/pictures/lens_d1.png"/>
+		<image src="images/pictures/lens_d2.png"/>
+		<image src="images/pictures/facebook.png"/>
+		<image src="images/pictures/twitter.png"/>		
+		
+		<package id="art_pack">
+			<image src="images/pictures/art.png"/>
+			<image id="a1" src="images/pictures/Arte/a1.jpg"/>
+			<image id="a2" src="images/pictures/Arte/a2.jpg"/>
+			<image id="a3" src="images/pictures/Arte/a3.jpg"/>
+			<image id="a4" src="images/pictures/Arte/a4.jpg"/>
+			<image id="a5" src="images/pictures/Arte/a5.jpg"/>
+			<image id="a6" src="images/pictures/Arte/a6.jpg"/>
+			<image id="a7" src="images/pictures/Arte/a7.jpg"/>
+			<image id="a8" src="images/pictures/Arte/a8.jpg"/>
+		</package>
+		<package id="forms_pack">
+			<image src="images/pictures/forms.png"/>
+			<image id="f1" src="images/pictures/Formas/f1.jpg"/>
+			<image id="f2" src="images/pictures/Formas/f2.jpg"/>
+			<image id="f3" src="images/pictures/Formas/f3.jpg"/>
+			<image id="f4" src="images/pictures/Formas/f4.jpg"/>
+			<image id="f5" src="images/pictures/Formas/f5.jpg"/>
+			<image id="f6" src="images/pictures/Formas/f6.jpg"/>
+			<image id="f7" src="images/pictures/Formas/f7.jpg"/>
+			<image id="f8" src="images/pictures/Formas/f8.jpg"/>		
+		</package>
+		<package id="times_pack">
+			<image src="images/pictures/times.png"/>
+			<image id="t1" src="images/pictures/Tiempos/t1.jpg"/>
+			<image id="t2" src="images/pictures/Tiempos/t2.jpg"/>
+			<image id="t3" src="images/pictures/Tiempos/t3.jpg"/>
+			<image id="t4" src="images/pictures/Tiempos/t4.jpg"/>
+			<image id="t5" src="images/pictures/Tiempos/t5.jpg"/>
+			<image id="t6" src="images/pictures/Tiempos/t6.jpg"/>
+			<image id="t7" src="images/pictures/Tiempos/t7.jpg"/>			
+		</package>
+    </resources>
+  			
+	<ripple_effect id="liquid" x="0" y="0" width="1000" height="800" alpha="80">
+		<linear_gradient x1="0" y1="0" x2="1000" y2="800">
+			<color_stop offset="0.0" color="black"/>
+			<color_stop offset="1.0" color="black"/>
+		</linear_gradient>
+	</ripple_effect>
+	
+	<div id="art_div" wait_for_package="art_pack" alpha="0" x="30" y="100" width="200" height="200">        
+        <img id="art1" x="0" y="30" width="48" height="48" src="a1"/>  
+		<img id="art2" x="135" y="30" width="44.7" height="60.4" src="a2"/>
+		<img id="art3" x="55" y="40" width="49.1" height="48" src="a3"/>
+		<img id="art4" x="10" y="145" width="60.4" height="42.8" src="a4"/>
+		<img id="art5" x="80" y="145" width="60.4" height="44.5" src="a5"/>
+		<img id="art6" x="15" y="95" width="60.4" height="27.6" src="a6"/>
+		<img id="art7" x="150" y="130" width="29.2" height="60.4" src="a7"/>
+		<img id="art8" x="110" y="75" width="23.4" height="60.4" src="a8"/>
+        <img id="art" x="65" y="0" width="79" height="24" src="images/pictures/art.png"/>
+    </div>
+	
+	<div id="forms_div" wait_for_package="forms_pack" alpha="0" x="300" y="100" width="200" height="200">        
+        <img id="forms1" x="0" y="28" width="70" height="46.6" src="f1"/>  
+		<img id="forms2" x="0" y="90" width="70" height="46.6" src="f2"/>
+		<img id="forms3" x="70" y="70" width="70" height="46.6" src="f3"/>
+		<img id="forms4" x="120" y="26" width="60.4" height="40.2" src="f4"/>
+		<img id="forms5" x="75" y="120" width="70" height="46.6" src="f5"/>
+		<img id="forms6" x="145" y="80" width="70" height="46.6" src="f6"/>
+		<img id="forms7" x="120" y="170" width="70" height="46.6" src="f7"/>
+		<img id="forms8" x="3" y="160" width="70" height="46.6" src="f8"/>
+        <img id="forms" x="47.5" y="0" width="85" height="23" src="images/pictures/forms.png"/>
+    </div>
+	
+	<div id="times_div" wait_for_package="times_pack" alpha="0" x="570" y="100" width="200" height="200">        
+        <img id="times1" x="0" y="28" width="70" height="46.6" src="t1"/>  
+		<img id="times2" x="0" y="90" width="70" height="46.6" src="t2"/>
+		<img id="times3" x="140" y="26" width="70" height="46.6" src="t3"/>
+		<img id="times4" x="78" y="35" width="46.6" height="70" src="t4"/>
+		<img id="times5" x="75" y="110" width="70" height="46.6" src="t5"/>
+		<img id="times6" x="120" y="162" width="70" height="46.6" src="t6"/>
+		<img id="times7" x="3" y="160" width="70" height="46.6" src="t7"/>		
+        <img id="times" x="38.75" y="0" width="98" height="26" src="images/pictures/times.png"/>
+    </div>
+	
+	<img id="banner" x="15" y="10" width="231" height="28" alpha="0" src="images/pictures/banner.png"/>	
+	
+	<img id="lens1" x="225" y="225" width="250" height="250" alpha="0" src="images/pictures/lens_d1.png"/>
+	<img id="lens2" x="220" y="220" width="260" height="260" alpha="0" src="images/pictures/lens_d2.png"/>
+	
+	<img id="facebook" x="750" y="4" width="31" height="31" alpha="0" src="images/pictures/facebook.png"/>
+	<img id="twitter" x="800" y="4" width="31" height="31" alpha="0" src="images/pictures/twitter.png"/>
+	
+    <line id="linetop" x1="5" y1="40" x2="5" y2="40" alpha="60" color="white"/>
+	
+	<line id="line1" x1="200" y1="200" x2="200" y2="200" alpha="60" color="white"/>
+	<line id="line2" x1="500" y1="200" x2="500" y2="200" alpha="60" color="white"/>
+	<line id="line3" x1="500" y1="500" x2="500" y2="500" alpha="60" color="white"/>
+	<line id="line4" x1="200" y1="500" x2="200" y2="500" alpha="60" color="white"/>
+	
+	<idle_anim id="idle_anim_1"/>
+	<idle_anim id="idle_anim_2"/>
+	<idle_anim id="idle_anim_3"/>
+	<idle_anim id="idle_anim_4"/>
+	<idle_anim id="idle_anim_5"/>
+	<idle_anim id="idle_anim_6"/>
+	<idle_anim id="idle_anim_7"/>
+	<idle_anim id="idle_anim_8"/>
+	<idle_anim id="idle_anim_9"/>
+	<idle_anim id="idle_anim_10"/>
+	<idle_anim id="idle_anim_11"/>
+	<idle_anim id="idle_anim_12"/>
+	<idle_anim id="idle_anim_13"/>
+	<idle_anim id="idle_anim_14"/>
+	<idle_anim id="idle_anim_15"/>
+	<idle_anim id="idle_anim_16"/>
+	<idle_anim id="idle_anim_17"/>
+	<idle_anim id="idle_anim_18"/>
+	<idle_anim id="idle_anim_19"/>
+	<idle_anim id="idle_anim_20"/>
+	<idle_anim id="idle_anim_21"/>
+	<idle_anim id="idle_anim_22"/>
+	<idle_anim id="idle_anim_23"/>
+	
+	<sequence id="idle_anim_seq">
+		<every t="2">
+			<run method="animate_all"/>
+		</every>
+	</sequence>
+	
+	<sequence id="init_anim" auto_start="true">
+        <at time="0">
+            <animate property="banner.alpha" from="0" to="100" in="2"/>
+			<animate property="linetop.x2" from="5" to="850" in="2"/>
+			<animate property="line1.x2" from="200" to="500" in="2"/>
+			<animate property="line2.y2" from="200" to="500" in="2"/>
+			<animate property="line3.x2" from="500" to="200" in="2"/>
+			<animate property="line4.y2" from="500" to="200" in="2"/>
+			<animate property="lens1.alpha" from="0" to="100" in="2"/>
+			<animate property="lens2.alpha" from="0" to="100" in="2"/>			
+        </at>
+		<at time="2">            
+			<animate property="lens1.rotation" from="0" to="45" in="1"/>
+			<animate property="lens2.rotation" from="0" to="-45" in="1"/>			
+        </at>
+		<at time="3">            
+			<animate property="lens1.rotation" from="45" to="-45" in="2"/>
+			<animate property="lens2.rotation" from="-45" to="45" in="2"/>
+        </at>
+		<at time="5">            
+			<animate property="lens1.rotation" from="-45" to="0" in="1"/>
+			<animate property="lens2.rotation" from="45" to="0" in="1"/>
+        </at>
+		<at time="6">
+			<animate property="lens1.x" from="225" to="700" in="2"/>
+			<animate property="lens1.y" from="225" to="2" in="2"/>
+			<animate property="lens1.width" from="250" to="31" in="2"/>
+			<animate property="lens1.height" from="250" to="31" in="2"/>
+			<animate property="lens2.x" from="220" to="699" in="2"/>
+			<animate property="lens2.y" from="220" to="1" in="2"/>
+			<animate property="lens2.width" from="260" to="32" in="2"/>
+			<animate property="lens2.height" from="260" to="32" in="2"/>
+			<animate property="facebook.alpha" from="0" to="100" in="2"/>
+			<animate property="twitter.alpha" from="0" to="100" in="2"/>
+			<animate property="line1.alpha" from="60" to="0" in="2"/>
+			<animate property="line2.alpha" from="60" to="0" in="2"/>
+			<animate property="line3.alpha" from="60" to="0" in="2"/>
+			<animate property="line4.alpha" from="60" to="0" in="2"/>			
+        </at>
+		<at time="8">            
+			<animate property="art_div.alpha" from="0" to="80" in="2"/>
+			<animate property="forms_div.alpha" from="0" to="80" in="2"/>
+			<animate property="times_div.alpha" from="0" to="80" in="2"/>
+        </at>
+	</sequence> 	
+	
+</application>

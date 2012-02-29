@@ -10,13 +10,11 @@ string separator = ";";
 
 if (!is_class)
 {
-    prop_name = owner.output_id + "." + prop_name;
-    assign = "=";
-    separator = ";";
+    prop_name = owner.output_id + "." + prop_name;    
 }
 
 if (path && prop_name != "rotation")
-{    
+{
     prop_name = path + "." + prop_name;
 }    
 
@@ -77,15 +75,8 @@ else
     }
                 
     if (value != null) //dont initialize empty values
-    {
-        if (is_class)
-        {
-            out()
-            {
-                <xss:e value="prop_name"/> <xss:e value="assign"/> <xss:e value="value"/>;
-            }
-        }
-        else
+    {        
+        if (!is_class)
         {
             if (!path)
                 path = owner.output_id;
@@ -94,12 +85,13 @@ else
                 if (owner.output_id != "")
                     path = path + "." + owner.output_id;
             }
+		}
              
-            out()
-            {
-                <xss:e v="compiler.property_set(prop, path, value)"/>;
-            }
+        out()
+        {
+            <xss:e v="compiler.property_set(prop, path, value)"/>;
         }
+        
     }
             
 }

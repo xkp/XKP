@@ -8,20 +8,19 @@
 	body{
 	}
 </style>
-<script type="text/javascript" src="../js/three/Detector.js"></script>
-<script type="text/javascript" src="../js/three/Three.js"></script>
-<script type="text/javascript" src="../js/three/Stats.js"></script>
-<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/three/Three.js"></script>
+		<script type="text/javascript" src="../js/three/Stats.js"></script>
+		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+		<script type="text/javascript" src="../js/three/Utils.js"></script>
+		<script type="text/javascript" src="../js/three/Detector.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript">		
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 var renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -34,8 +33,8 @@ var application = {};
 application.events = new ms.event.EventHolder();
 		var streamer = new ms.streamer.Streamer();
 	// --------RESOURCES---------
-        var def_package_items = [];
-                def_package_items.push(
+        var global_package_items = [];
+                global_package_items.push(
             {
 		id:				"image_1",
 		resource_type:	RESOURCE_IMAGE,
@@ -44,7 +43,7 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"image_2",
 		resource_type:	RESOURCE_IMAGE,
@@ -53,7 +52,7 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"image_3",
 		resource_type:	RESOURCE_IMAGE,
@@ -62,7 +61,7 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"image_4",
 		resource_type:	RESOURCE_IMAGE,
@@ -71,7 +70,7 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"image_5",
 		resource_type:	RESOURCE_IMAGE,
@@ -80,7 +79,7 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"image_6",
 		resource_type:	RESOURCE_IMAGE,
@@ -89,17 +88,17 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__audio1",
-		resource_type:	RESOURCE_SOUND,
+		resource_type:	RESOURCE_AUDIO,
 		src:			"sounds/forest.wav",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
 });
-        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
-		g_startup_package.load();	
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
@@ -145,7 +144,7 @@ map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_6').asset),
 var plane_material = new THREE.MeshBasicMaterial({
 color:Grey
 	});
-                set_material_alpha(plane_material, 50);
+            set_material_alpha(plane_material, 50);
 var scene = 
 new THREE.Scene(
 );
@@ -153,38 +152,38 @@ var camera_1 =
 new THREE.Camera(
 70,1.5,1,1000);
 		active_camera = camera_1;
-                camera_1.position.y = 300;
-                camera_1.position.z = 500;
+            camera_1.position.y = 300;
+            camera_1.position.z = 500;
 	    var cube_1_cube = 
 new THREE.Cube(
 200,200,200,1,1,1,materials);
 	    var cube_1 = new THREE.Mesh(cube_1_cube, new THREE.MeshFaceMaterial());
 	    scene.addObject(cube_1);
 		cube_1.events = new ms.event.EventHolder();
-                cube_1.position.y = 150;
+            cube_1.position.y = 150;
 	    var plane_1_plane = 
 new THREE.Plane(
 200,200);
 	    var plane_1 = new THREE.Mesh(plane_1_plane, plane_material);
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
-                set_rotation_x(plane_1.rotation, -90);
+            set_rotation_x(plane_1.rotation, -90);
 	var __sound_3d1 = new THREE.Sound(streamer.get_resource('sounds/forest.wav').asset
 	,700,20,true
 	);
 	scene.addObject(__sound_3d1);
 	__sound_3d1.play();
-                application.x_target_rotation = 0;
-                application.x_target_rotation_on_mouse_down = 0;
-                application.mouse_x = 0;
-                application.mouse_x_on_mouse_down = 0;
-                application.y_target_rotation = 0;
-                application.y_target_rotation_on_mouse_down = 0;
-                application.mouse_y = 0;
-                application.mouse_y_on_mouse_down = 0;
-                application.window_half_x = app_width / 2;
-                application.window_half_y = app_height / 2;
-                application.is_mouse_down = false;
+            application.x_target_rotation = 0;
+            application.x_target_rotation_on_mouse_down = 0;
+            application.mouse_x = 0;
+            application.mouse_x_on_mouse_down = 0;
+            application.y_target_rotation = 0;
+            application.y_target_rotation_on_mouse_down = 0;
+            application.mouse_y = 0;
+            application.mouse_y_on_mouse_down = 0;
+            application.window_half_x = app_width / 2;
+            application.window_half_y = app_height / 2;
+            application.is_mouse_down = false;
 	var ev_parent = this;
 	application.events.addListener("mousedown", function(x,y)
 	{    

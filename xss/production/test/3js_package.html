@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test 3D</title>
+</head>
+<body>
+<style type="text/css">
+	body{
+	background:Black;
+	}
+</style>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/three/Three.js"></script>
+		<script type="text/javascript" src="../js/three/Stats.js"></script>
+		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+		<script type="text/javascript" src="../js/three/Utils.js"></script>
+<script type="text/javascript">		
+var renderer = new THREE.CanvasRenderer();	
+var ui;
+var active_camera;
+var g_elapsed = -1;
+var g_delta = 0.0;	
+var drawingCanvas = renderer.domElement;
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
+var __label1;
+var application = {};
+application.events = new ms.event.EventHolder();
+		var streamer = new ms.streamer.Streamer();
+		if(drawingCanvas){
+			var client =
+			{
+				width: window.innerWidth,
+				height: window.innerHeight,
+				canvas: drawingCanvas
+			};
+            var streamer = new ms.streamer.Streamer();							
+			var ui = new ms.ui.Manager(client, streamer);
+			var g_ui = ui;
+			var g_ui_root = ui.root;
+		}
+	// --------RESOURCES---------
+        var global_package_items = [];
+                global_package_items.push(
+            {
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test1.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test2.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test3.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+				var pack_1 = new ms.streamer.Package(streamer);
+                pack_1.add_item(
+            {
+		id:				"__image4",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test4.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                pack_1.add_item(
+            {
+		id:				"__image5",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test5.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
+    // --------RESOURCES---------
+soundRenderer = new THREE.SoundRenderer();		
+document.body.appendChild( soundRenderer.domElement );
+renderer.setSize( app_width, app_height );
+function render() {
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+    g_delta = 0; //first update
+else
+g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+application.events.dispatch("updates", []);	
+		set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+var scene = 
+new THREE.Scene(
+);
+var camera_1 = 
+new THREE.Camera(
+45,1.5,1,10000);
+            camera_1.position.x = 500;
+            camera_1.position.y = 500;
+            camera_1.position.z = 1000;
+	    var plane_1_plane = 
+new THREE.Plane(
+128,164);
+	    var plane_1 = new THREE.Mesh(plane_1_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(plane_1);
+		plane_1.events = new ms.event.EventHolder();
+            plane_1.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/test1.png").asset);
+            plane_1.position.x = 100;
+            plane_1.position.y = 100;
+	    var plane_2_plane = 
+new THREE.Plane(
+128,164);
+	    var plane_2 = new THREE.Mesh(plane_2_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(plane_2);
+		plane_2.events = new ms.event.EventHolder();
+            plane_2.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/test2.png").asset);
+            plane_2.position.x = 300;
+            plane_2.position.y = 100;
+	    var plane_3_plane = 
+new THREE.Plane(
+128,164);
+	    var plane_3 = new THREE.Mesh(plane_3_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(plane_3);
+		plane_3.events = new ms.event.EventHolder();
+            plane_3.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/test3.png").asset);
+            plane_3.position.x = 100;
+            plane_3.position.y = 300;
+				pack_1.events.addListener("loaded", function()
+				{				
+var container = 
+new THREE.Object3D(
+);
+container.events = new ms.event.EventHolder();
+	    var plane_4_plane = 
+new THREE.Plane(
+128,164);
+	    var plane_4 = new THREE.Mesh(plane_4_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(plane_4);
+		plane_4.events = new ms.event.EventHolder();
+				container.addChild(plane_4);
+				scene.addObject(container);
+            plane_4.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/test4.png").asset);
+            plane_4.position.x = -100;
+	    var plane_5_plane = 
+new THREE.Plane(
+128,164);
+	    var plane_5 = new THREE.Mesh(plane_5_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(plane_5);
+		plane_5.events = new ms.event.EventHolder();
+				container.addChild(plane_5);
+				scene.addObject(container);
+            plane_5.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/test5.png").asset);
+            plane_5.position.x = -400;
+});
+	var ev_parent = this;
+	application.events.addListener("click", function()
+	{    
+		pack_1.load();
+	}
+	);
+if(ui)
+{
+	ui.load_resources(function(){		
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX, ev.clientY);                  
+	};	
+		    __label1 = new ms.ui.Label( 
+	    "15px Verdana",g_ui_root.manager, g_ui_root);
+        __label1 = __label1;
+            __label1.set_x(150);
+            __label1.set_y(75);
+            __label1.set_color(Ivory);
+            __label1.text("Press click to load the package");
+		g_ui.fill_background = false;
+	});
+}
+var event_manager = new ms.event.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(ev.keyCode);                  
+};
+application.events.dispatch("init", []);
+document.body.appendChild( renderer.domElement );
+animate();
+function animate() {
+	if(ui)
+		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
+	requestAnimationFrame( animate );
+	render();
+	if(ui)
+		ui.draw(drawingCanvas.getContext('2d'));
+	}
+</script>
+</body>
+</html>

@@ -1,10 +1,11 @@
 "ms.streamer".namespace();
 
 var RESOURCE_IMAGE			 = 0;
-var RESOURCE_SOUND			 = 1;
+var RESOURCE_AUDIO			 = 1;
 var RESOURCE_JSON_MODEL		 = 2;
 var RESOURCE_BIN_MODEL		 = 3;
 var RESOURCE_SPRITE		 	 = 4;
+var RESOURCE_VIDEO			 = 5;
 var MAX_SIMULTANEOUS_LOADERS = 3;
 
 function compare_loading(a, b)
@@ -89,17 +90,35 @@ ms.streamer.ImageLoader = Class.create(ms.streamer.Loader,
     }
 });
 
-ms.streamer.SoundLoader = Class.create(ms.streamer.Loader,
+ms.streamer.AudioLoader = Class.create(ms.streamer.Loader,
 {
     initialize: function($super, streamer)
     {
-		$super(streamer, RESOURCE_SOUND);
+		$super(streamer, RESOURCE_AUDIO);
     },
 
     load: function(resource)
     {
+		var audio = document.createElement('audio');		
 		var this_  = this;
-    	this_.on_loaded(resource, resource.data);        
+		this_.on_loaded(resource, audio);  
+		audio.setAttribute('src', resource.asset);
+    }
+});
+
+ms.streamer.VideoLoader = Class.create(ms.streamer.Loader,
+{
+    initialize: function($super, streamer)
+    {
+		$super(streamer, RESOURCE_VIDEO);
+    },
+
+    load: function(resource)
+    {
+		var video = document.createElement('video');		
+		var this_  = this;		 				
+		this_.on_loaded(resource, video);
+		video.setAttribute('src', resource.asset);
     }
 });
 
@@ -196,10 +215,11 @@ ms.streamer.Streamer = Class.create(
 		this.loading_queues =
 		[
 		 	new ms.streamer.ImageLoader(this),
-			new ms.streamer.SoundLoader(this),
+			new ms.streamer.AudioLoader(this),			
 			new ms.streamer.JSonModelLoader(this),
 			new ms.streamer.BinModelLoader(this),
 			new ms.streamer.SpriteLoader(this),
+			new ms.streamer.VideoLoader(this),
 		];
     },
 
@@ -384,11 +404,18 @@ ms.streamer.Package = Class.create(
 {
     initialize: function(streamer, items)
     {
-        this.items    = items? items : [];
-        this.state    = STATE_UNLOADED;
-        this.streamer = streamer;
-        this.job      = null;
+        this.items 		= items? items : [];
+        this.state    	= STATE_UNLOADED;
+        this.streamer 	= streamer;
+        this.job		= null;
+		this.events		= new ms.event.EventHolder();
     },
+	
+	add_item: function(item)
+	{
+		this.items.push(item);
+		this.state  = STATE_UNLOADED;
+	},
 	
     load: function()
     {
@@ -441,6 +468,7 @@ ms.streamer.Package = Class.create(
 
     finished_loading: function()
     {
+		this.events.dispatch("loaded", []); 
     },
 
     progress: function()
@@ -484,13 +512,5 @@ ms.streamer.PackageContainer = Class.create(
                 return itm.pack;
         }
         return null;
-    },
-});
-
-ms.streamer.SpriteSheet = Class.create(
-{
-    initialize: function()
-    {
-        
     },
 });

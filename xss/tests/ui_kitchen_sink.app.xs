@@ -5,6 +5,7 @@ property do_drag = false;
 property px;
 property py;
 property left_key_down = false;
+property right_key_down = false;
 
 on btnNext.click()
 {
@@ -125,12 +126,14 @@ on keydown(keycode)
 	if(btn1.isVisible()){
 		if(keycode == LEFT_ARROW){
 			btn1.x -= 2;
-			monster.animation = "m_running";
+			monster.animation = "m_run_l";			
 			left_key_down = true;
 		}
-		if(keycode == RIGHT_ARROW)
+		if(keycode == RIGHT_ARROW){
 			btn1.x += 2;
-		
+			monster.animation = "m_run_d";
+			right_key_down = true;
+		}
 		if(keycode == UP_ARROW)
 			btn1.y -= 2;
 		
@@ -176,6 +179,11 @@ on keyup(keycode)
 	if(keycode == LEFT_ARROW)
 	{			
 		left_key_down = false;
+		monster.animation = "m_idle";	
+	}
+	if(keycode == RIGHT_ARROW)
+	{			
+		right_key_down = false;
 		monster.animation = "m_idle";	
 	}
 	if(keycode == NUMPAD_PLUS)
@@ -257,7 +265,9 @@ on p1.click(){
 on updates()
 {	
 	if(left_key_down)
-		monster.x -= 0.2;	
+		monster.x -= 0.2;
+	if(right_key_down)
+		monster.x += 0.2;	
 }
 
 

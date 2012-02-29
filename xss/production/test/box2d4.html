@@ -6,15 +6,15 @@
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
         <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script> 
 		<script type="text/javascript" src="../js/ms-joint.js"></script> 
             <script type="text/javascript" src="../js/ms-spawner.js"></script>
+        <script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -24,8 +24,7 @@ var g_canvas;
 var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
-var Sound = new ms.ui.Sound();
-		var streamer = new ms.streamer.Streamer();
+var SoundUtils = new ms.ui.SoundUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -33,6 +32,7 @@ var Sound = new ms.ui.Sound();
 				height: 400,
 				canvas: drawingCanvas
 			};
+            var streamer = new ms.streamer.Streamer();							
 			var ui = new ms.ui.Manager(client, streamer);
 			var g_ui = ui;
 			var g_ui_root = ui.root;
@@ -102,8 +102,8 @@ var Sound = new ms.ui.Sound();
         {
             return a + (b - a)*t;
         }		
-        var def_package_items = [];
-                def_package_items.push(
+        var global_package_items = [];
+                global_package_items.push(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -112,7 +112,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
@@ -121,7 +121,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
@@ -130,7 +130,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
@@ -139,7 +139,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image5",
 		resource_type:	RESOURCE_IMAGE,
@@ -148,7 +148,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image6",
 		resource_type:	RESOURCE_IMAGE,
@@ -157,17 +157,17 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__audio1",
-		resource_type:	RESOURCE_SOUND,
+		resource_type:	RESOURCE_AUDIO,
 		src:			"sounds/boom.wav",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
 });
-        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
-		g_startup_package.load();	
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
 function start(resolution)  
 {  
 	function updater()  
@@ -247,7 +247,6 @@ var sound;var hero;var __floor1;var game_over;
         $super(
         src? src : "images/smile_sad_48.png"        );
         this.events = new ms.event.EventHolder(); 
-                this.size(60, 60);
 				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
@@ -280,11 +279,11 @@ var sound;var hero;var __floor1;var game_over;
                 }
         this.cannon = new ms.arcade.Spawner(g_spawner_manager, 20, 60, 1, 2);
         cannon = this.cannon;
-                this.cannon.x = 20;
-                this.cannon.y = 60;
-                this.cannon.set_rotation(0);
-                this.cannon.frequency = 1;
-                this.cannon.velocity = 2;
+            this.cannon.x = 20;
+            this.cannon.y = 60;
+            this.cannon.set_rotation(0);
+            this.cannon.frequency = 1;
+            this.cannon.velocity = 2;
         this.cannon.creator = function()
         {
             return new bullet("images/bomb.png");
@@ -301,7 +300,7 @@ this.fade_out =
 new ms.state.Sequence(
 g_sequence_manager);
         fade_out = this.fade_out;
-                this.fade_out.target = null;
+            this.fade_out.target = null;
             this.fade_out.parent_sequence = null;
                     var ____i1 = new ms.state.Interpolator(
                         "alpha", 
@@ -315,6 +314,8 @@ g_sequence_manager);
                         {t: 3, value: 0},
                         ]);
                     this.fade_out.addAction(null, "alpha", new ms.state.State(0, 3, ____i1));                    
+            this.set_width(60);
+            this.set_height(60);
 	this.init = function() 
 	{
 		move_around.target = this;
@@ -345,7 +346,6 @@ fade_out.start();
         $super(
         src? src : "images/smile_grin_48.png"        );
         this.events = new ms.event.EventHolder(); 
-                this.size(30, 30);
 				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
@@ -380,10 +380,12 @@ this.move_around =
 new move_action(
 g_sequence_manager);
         move_around = this.move_around;
-                this.move_around.vx = 0;
-                this.move_around.vy = 0;
+            this.move_around.vx = 0;
+            this.move_around.vy = 0;
                 this.move_around.start();
             this.move_around.parent_sequence = null;
+            this.set_width(30);
+            this.set_height(30);
 	this.init = function() 
 	{
 		move_around.target = this;
@@ -407,7 +409,6 @@ g_sequence_manager);
         $super(
         src? src : "images/bomb.png"        );
         this.events = new ms.event.EventHolder(); 
-                this.size(20, 20);
 				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
@@ -438,6 +439,8 @@ g_sequence_manager);
                         this.parent.removeComponent(this);
                     }
                 }
+            this.set_width(20);
+            this.set_height(20);
 	var ev_parent = this;
 	this.events.addListener("collision", function(who)
 	{    
@@ -446,7 +449,7 @@ g_sequence_manager);
 ev_parent.RemoveFromWorld();
 if (sound.active)
 {
-Sound.play("sounds/boom.wav");
+SoundUtils.play("sounds/boom.wav");
 }
 }
 	}
@@ -511,10 +514,10 @@ Sound.play("sounds/boom.wav");
         this.events = new ms.event.EventHolder(); 
                 var this__ = this;
             this.parent_sequence = null;
-                this.speed = 130;
-                this.vx = Math.random();
-                this.vy = Math.random();
-                this.target = null;
+            this.speed = 130;
+            this.vx = Math.random();
+            this.vy = Math.random();
+            this.target = null;
 	var ev_parent = this;
 	this.events.addListener("tick", function(delta)
 	{    
@@ -593,10 +596,15 @@ window.onload = function()
 		    sound = new ms.ui.StateButton( 
 	    "images/sound_on.png","images/sound_off.png",g_ui_root.manager, g_ui_root);
         sound = sound;
-                sound.rect(50, 50, 50, 50);
+            sound.set_x(50);
+            sound.set_y(50);
+            sound.set_width(50);
+            sound.set_height(50);
 		    hero = new good_guy( 
 	    "images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
         hero = hero;
+            hero.set_x(300);
+            hero.set_y(350);
 	var ev_parent = this;
 	hero.events.addListener("collision", function()
 	{    
@@ -606,22 +614,25 @@ hero.src("images/smile_sad_48.png");
 	}
 	);
 		application.are_obj_events = true;
-                hero.rect(300, 350, 30, 30);
 		    __floor1 = new floor( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
         __floor1 = __floor1;
-                __floor1.rect(0, 390, 600, 40);
+            __floor1.set_x(0);
+            __floor1.set_y(390);
+            __floor1.set_width(600);
+            __floor1.set_height(40);
 		    game_over = new ms.ui.Label( 
 	    "40pt Calibri",g_ui_root.manager, g_ui_root);
         game_over = game_over;
-                game_over.setVisible(false);
-                game_over.text("GAME OVER");
-                game_over.position(220, 200);
+            game_over.set_x(220);
+            game_over.set_y(200);
+            game_over.setVisible(false);
+            game_over.text("GAME OVER");
         sp1 = new ms.arcade.Spawner(g_spawner_manager, 300, 100, 3, null);
         sp1 = sp1;
-                sp1.x = 300;
-                sp1.y = 100;
-                sp1.frequency = 3;
+            sp1.x = 300;
+            sp1.y = 100;
+            sp1.frequency = 3;
         sp1.creator = function()
         {
             return new bad_guy("images/smile_sad_48.png");
@@ -647,9 +658,8 @@ hero.src("images/smile_sad_48.png");
 }
 </script>
 </head>
-<body>
-	<canvas id="myCanvas" width="600" height="400">
-		<p>Your browser doesn't support canvas.</p>
-	</canvas>
+<body>	
+	<canvas id="myCanvas" width="600" height="400"
+		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
 </body>
 </html>

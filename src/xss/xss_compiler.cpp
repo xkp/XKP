@@ -1781,6 +1781,8 @@ void xss_compiler::preprocess_type(XSSType clazz, XSSObject def_class, const str
 
 void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSApplicationRenderer app)
   {
+    current_app_ = app;
+
     std::map<str, int>     def_types;
     std::vector<XSSType>   classes;
     std::vector<XSSObject> classdefs;

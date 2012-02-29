@@ -79,11 +79,11 @@
             <property id="color" type="string" use_plain_value="true">
 				<set text="materials[0].color.setHex({value})"/>
             </property>
-			<property id="texture" type="string" use_plain_value="true">
+			<property id="texture" type="string">
 				<set text="materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource({value}).asset)"/>
             </property>			
 			<property id="alpha" type="float" use_plain_value="true">	
-				<get text="alpha"/>
+				<get text="get_object_alpha({path})" global = "true"/>
 				<set text="set_object_alpha({path}, {value})" global = "true"/>
             </property>
 			<property id="overdraw" type="string"/>

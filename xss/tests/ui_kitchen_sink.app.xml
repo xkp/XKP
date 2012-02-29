@@ -11,9 +11,11 @@
         <image src="images/arrow_left_48.png"/>
         <image src="images/arrow_left_green_48.png"/>
 		<image src="images/AzuCola_Trans.png"/>
+		<image src="images/box.png"/>
 
 		<sprite_sheet id="monster_sheet" src="images/monster.png" frame_width="64" frame_height="64">
-			<animation id="m_running" frame_row="0" frame_col="0" frames="9" step="20"/>
+			<animation id="m_run_l" frame_row="0" frame_col="0" frames="10" step="20"/>
+			<animation id="m_run_d" frame_row="2" frame_col="9" frames="10" step="20" right_to_left="true"/>
 			<animation id="m_idle" frame_row="1" frame_col="0" frames="10" step="20"/>
 		</sprite_sheet> 
 			
@@ -34,7 +36,7 @@
             <img id="btn2" x="200" y="115" width="20" height="20" src="images/arrow_left.png"/>
             <img id="btn3" x="380" y="115" width="20" height="20" src="images/arrow_right.png"/>
             <label id="lbl2" x="210" y="200" font="Verdana" caption="Click small arrows to adjust percentage"/>
-			<label id="lbl7" x="210" y="270" font="11px Verdana" caption="Press left arrow on your keyboard to walk the zombie"/>
+			<label id="lbl7" x="210" y="270" font="11px Verdana" caption="Press arrows on your keyboard to walk the zombie"/>
 			<sprite id="monster" x="300" y="300" sheet="monster_sheet" animation="m_idle"/>			
         </div>
 		<div id="test3">
@@ -47,7 +49,7 @@
 				<polygon_point id="point3" x="210" y="230"/>
 				<polygon_point id="point4" x="250" y="300"/>			
 			</polygon>
-			<line id="line1" x1="500" y1="50" x2="500" y2="300"/>
+			<line id="line1" x1="500" y1="50" x2="500" y2="300" color="red"/>
 			<label id="lbl4" x="50" y="400" font="11px Verdana" caption="Click the circle pressing NUMPAD + or NUMPAD - to increment or decrement its linewidth"/>
 			<label id="lbl5" x="50" y="420" font="11px Verdana" caption="Greeny the drunked rectangle and Pinky the polygon rotates like the other components, test it!!!"/>
 			<label id="lbl6" x="50" y="440" font="11px Verdana" caption="Click the smiley to increment the black line width"/>
@@ -63,9 +65,11 @@
 			</div>
         </div>
     </switch>
+	
 	<label id="inst1" x="50" y="480" font="12px Verdana" caption="Click on this arrows to change the screen"/>
 	<label id="inst2" x="50" y="500" font="12px Verdana" caption="Use NUMPAD + or NUMPAD - keys with click over a component to rotate it"/>
 	<label id="inst3" x="50" y="520" font="12px Verdana" caption="Use CTRL + mouse drag over a component to drag it"/>
     <button id="btnNext" x="320" y="550" width="50" height="50" up="images/arrow_right_green_48.png" down="images/arrow_right_48.png"/>
     <button id="btnPrev" x="220" y="550" width="50" height="50" up="images/arrow_left_green_48.png" down="images/arrow_left_48.png"/>    
+		
 </application>

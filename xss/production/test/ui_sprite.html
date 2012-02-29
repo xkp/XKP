@@ -6,12 +6,11 @@
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -21,8 +20,7 @@ var g_canvas;
 var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
-var Sound = new ms.ui.Sound();
-		var streamer = new ms.streamer.Streamer();
+var SoundUtils = new ms.ui.SoundUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -30,13 +28,14 @@ var Sound = new ms.ui.Sound();
 				height: 600,
 				canvas: drawingCanvas
 			};
+            var streamer = new ms.streamer.Streamer();							
 			var ui = new ms.ui.Manager(client, streamer);
 			var g_ui = ui;
 			var g_ui_root = ui.root;
 		}
 		var streamer = new ms.streamer.Streamer();
-        var def_package_items = [];
-                def_package_items.push(
+        var global_package_items = [];
+                global_package_items.push(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -45,7 +44,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
@@ -54,7 +53,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"monster_sheet",
 		resource_type:	RESOURCE_SPRITE,
@@ -63,31 +62,133 @@ var Sound = new ms.ui.Sound();
 		frame_height:	64,
 		animations:		[]
 });
-		for(var i = 0; i < def_package_items.length; i++)
+		for(var i = 0; i < global_package_items.length; i++)
         {						
-			if(def_package_items[i].id == "monster_sheet")
-				def_package_items[i].animations.push
+			if(global_package_items[i].id == "monster_sheet")
+				global_package_items[i].animations.push
 				({
-					id:			"m_running",
+					id:			"m_run_l",
 					frame_row:	0,
 					frame_col:	0,
-					frames:		9,
-					step:		20
+					frames:		10,
+					step:		20,
+					right_to_left:		false
 				});
 		}		
-		for(var i = 0; i < def_package_items.length; i++)
+		for(var i = 0; i < global_package_items.length; i++)
         {						
-			if(def_package_items[i].id == "monster_sheet")
-				def_package_items[i].animations.push
+			if(global_package_items[i].id == "monster_sheet")
+				global_package_items[i].animations.push
+				({
+					id:			"m_run_d",
+					frame_row:	2,
+					frame_col:	9,
+					frames:		10,
+					step:		20,
+					right_to_left:		true
+				});
+		}		
+		for(var i = 0; i < global_package_items.length; i++)
+        {						
+			if(global_package_items[i].id == "monster_sheet")
+				global_package_items[i].animations.push
 				({
 					id:			"m_idle",
 					frame_row:	1,
 					frame_col:	0,
 					frames:		10,
-					step:		20
+					step:		20,
+					right_to_left:		false
 				});
 		}		
-                def_package_items.push(
+                global_package_items.push(
+            {
+		id:				"mario_sheet",
+		resource_type:	RESOURCE_SPRITE,
+		src:			"images/mario_luigi.png",
+		frame_width:	30,
+		frame_height:	45,
+		animations:		[]
+});
+		for(var i = 0; i < global_package_items.length; i++)
+        {						
+			if(global_package_items[i].id == "mario_sheet")
+				global_package_items[i].animations.push
+				({
+					id:			"m_idle_r",
+					frame_row:	0,
+					frame_col:	2,
+					frames:		1,
+					step:		0,
+					right_to_left:		false
+				});
+		}		
+		for(var i = 0; i < global_package_items.length; i++)
+        {						
+			if(global_package_items[i].id == "mario_sheet")
+				global_package_items[i].animations.push
+				({
+					id:			"m_idle_l",
+					frame_row:	2,
+					frame_col:	23,
+					frames:		1,
+					step:		0,
+					right_to_left:		false
+				});
+		}		
+		for(var i = 0; i < global_package_items.length; i++)
+        {						
+			if(global_package_items[i].id == "mario_sheet")
+				global_package_items[i].animations.push
+				({
+					id:			"mario_run_r",
+					frame_row:	0,
+					frame_col:	3,
+					frames:		2,
+					step:		40,
+					right_to_left:		false
+				});
+		}		
+		for(var i = 0; i < global_package_items.length; i++)
+        {						
+			if(global_package_items[i].id == "mario_sheet")
+				global_package_items[i].animations.push
+				({
+					id:			"mario_run_l",
+					frame_row:	2,
+					frame_col:	22,
+					frames:		2,
+					step:		40,
+					right_to_left:		true
+				});
+		}		
+		for(var i = 0; i < global_package_items.length; i++)
+        {						
+			if(global_package_items[i].id == "mario_sheet")
+				global_package_items[i].animations.push
+				({
+					id:			"m_stop_r",
+					frame_row:	0,
+					frame_col:	5,
+					frames:		1,
+					step:		50,
+					right_to_left:		false
+				});
+		}		
+		for(var i = 0; i < global_package_items.length; i++)
+        {						
+			if(global_package_items[i].id == "mario_sheet")
+				global_package_items[i].animations.push
+				({
+					id:			"m_stop_l",
+					frame_row:	2,
+					frame_col:	20,
+					frames:		1,
+					step:		50,
+					right_to_left:		false
+				});
+		}		
+                global_package_items.push(
             {
 		id:				"azucola_sheet",
 		resource_type:	RESOURCE_SPRITE,
@@ -96,68 +197,73 @@ var Sound = new ms.ui.Sound();
 		frame_height:	67,
 		animations:		[]
 });
-		for(var i = 0; i < def_package_items.length; i++)
+		for(var i = 0; i < global_package_items.length; i++)
         {						
-			if(def_package_items[i].id == "azucola_sheet")
-				def_package_items[i].animations.push
+			if(global_package_items[i].id == "azucola_sheet")
+				global_package_items[i].animations.push
 				({
 					id:			"g1_down",
 					frame_row:	1,
 					frame_col:	10,
 					frames:		5,
-					step:		30
+					step:		30,
+					right_to_left:		false
 				});
 		}		
-		for(var i = 0; i < def_package_items.length; i++)
+		for(var i = 0; i < global_package_items.length; i++)
         {						
-			if(def_package_items[i].id == "azucola_sheet")
-				def_package_items[i].animations.push
+			if(global_package_items[i].id == "azucola_sheet")
+				global_package_items[i].animations.push
 				({
 					id:			"g1_idle",
 					frame_row:	1,
 					frame_col:	0,
 					frames:		7,
-					step:		40
+					step:		40,
+					right_to_left:		false
 				});
 		}		
-		for(var i = 0; i < def_package_items.length; i++)
+		for(var i = 0; i < global_package_items.length; i++)
         {						
-			if(def_package_items[i].id == "azucola_sheet")
-				def_package_items[i].animations.push
+			if(global_package_items[i].id == "azucola_sheet")
+				global_package_items[i].animations.push
 				({
 					id:			"g1_jump",
 					frame_row:	1,
 					frame_col:	17,
 					frames:		4,
-					step:		20
+					step:		20,
+					right_to_left:		false
 				});
 		}		
-		for(var i = 0; i < def_package_items.length; i++)
+		for(var i = 0; i < global_package_items.length; i++)
         {						
-			if(def_package_items[i].id == "azucola_sheet")
-				def_package_items[i].animations.push
+			if(global_package_items[i].id == "azucola_sheet")
+				global_package_items[i].animations.push
 				({
 					id:			"g2_cry",
 					frame_row:	14,
 					frame_col:	9,
 					frames:		3,
-					step:		40
+					step:		40,
+					right_to_left:		false
 				});
 		}		
-		for(var i = 0; i < def_package_items.length; i++)
+		for(var i = 0; i < global_package_items.length; i++)
         {						
-			if(def_package_items[i].id == "azucola_sheet")
-				def_package_items[i].animations.push
+			if(global_package_items[i].id == "azucola_sheet")
+				global_package_items[i].animations.push
 				({
 					id:			"g2_idle",
 					frame_row:	14,
 					frame_col:	0,
 					frames:		6,
-					step:		40
+					step:		40,
+					right_to_left:		false
 				});
 		}		
-        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
-		g_startup_package.load();	
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
 function start(resolution)  
 {  
 	function updater()  
@@ -175,15 +281,23 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var monster;var girl1;var girl2;var lbl1;var lbl2;var lbl3;
-                application.key_press = false;
+var monster;var girl1;var girl2;var mario;var lbl1;var lbl2;var lbl3;
+            application.left_key_press = false;
+            application.right_key_press = false;
 	var ev_parent = this;
 	application.events.addListener("keydown", function(keycode)
 	{    
 		if (keycode == LEFT_ARROW)
 {
-monster.set_animation("m_running");
-application.key_press = true;
+monster.set_animation("m_run_l");
+mario.set_animation("mario_run_l");
+application.left_key_press = true;
+}
+if (keycode == RIGHT_ARROW)
+{
+monster.set_animation("m_run_d");
+mario.set_animation("mario_run_r");
+application.right_key_press = true;
 }
 	}
 	);
@@ -193,16 +307,33 @@ application.key_press = true;
 		if (keycode == LEFT_ARROW)
 {
 monster.set_animation("m_idle");
-application.key_press = false;
+mario.set_animation("m_stop_l");
+mario.set_lock(true);
+mario.set_animation("m_idle_l");
+application.left_key_press = false;
+}
+if (keycode == RIGHT_ARROW)
+{
+monster.set_animation("m_idle");
+mario.set_animation("m_stop_r");
+mario.set_lock(true);
+mario.set_animation("m_idle_r");
+application.right_key_press = false;
 }
 	}
 	);
 	var ev_parent = this;
 	application.events.addListener("updates", function()
 	{    
-		if (application.key_press)
+		if (application.left_key_press)
 {
 monster.set_x(monster.x - 0.200000003);
+mario.set_x(mario.x - 0.200000003);
+}
+if (application.right_key_press)
+{
+monster.set_x(monster.x + 0.200000003);
+mario.set_x(mario.x + 0.200000003);
 }
 	}
 	);
@@ -238,12 +369,15 @@ window.onload = function()
 		    monster = new ms.ui.Sprite( 
 	    "monster_sheet",g_ui_root.manager, g_ui_root);
         monster = monster;
-                monster.set_animation("m_idle");
-                monster.position(200, 200);
+            monster.set_x(200);
+            monster.set_y(200);
+            monster.set_animation("m_idle");
 		    girl1 = new ms.ui.Sprite( 
 	    "azucola_sheet",g_ui_root.manager, g_ui_root);
         girl1 = girl1;
-                girl1.set_animation("g1_idle");
+            girl1.set_x(300);
+            girl1.set_y(200);
+            girl1.set_animation("g1_idle");
 	var ev_parent = this;
 	girl1.events.addListener("click", function()
 	{    
@@ -255,11 +389,12 @@ girl1.set_animation("g1_idle");
 	}
 	);
 		application.are_obj_events = true;
-                girl1.position(300, 200);
 		    girl2 = new ms.ui.Sprite( 
 	    "azucola_sheet",g_ui_root.manager, g_ui_root);
         girl2 = girl2;
-                girl2.set_animation("g2_idle");
+            girl2.set_x(400);
+            girl2.set_y(200);
+            girl2.set_animation("g2_idle");
 	var ev_parent = this;
 	girl2.events.addListener("click", function()
 	{    
@@ -270,22 +405,30 @@ girl2.set_animation("g2_idle");
 	}
 	);
 		application.are_obj_events = true;
-                girl2.position(400, 200);
+		    mario = new ms.ui.Sprite( 
+	    "mario_sheet",g_ui_root.manager, g_ui_root);
+        mario = mario;
+            mario.set_x(300);
+            mario.set_y(400);
+            mario.set_animation("m_idle_r");
 		    lbl1 = new ms.ui.Label( 
 	    "12px Verdana",g_ui_root.manager, g_ui_root);
         lbl1 = lbl1;
-                lbl1.text("Press left arrow to walk the monster");
-                lbl1.position(100, 100);
+            lbl1.set_x(100);
+            lbl1.set_y(100);
+            lbl1.text("Press left arrow to walk the monster");
 		    lbl2 = new ms.ui.Label( 
 	    "12px Verdana",g_ui_root.manager, g_ui_root);
         lbl2 = lbl2;
-                lbl2.text("Click the blond girl to crash her down and jump later (testing animation queue)");
-                lbl2.position(100, 120);
+            lbl2.set_x(100);
+            lbl2.set_y(120);
+            lbl2.text("Click the blond girl to crash her down and jump later (testing animation queue)");
 		    lbl3 = new ms.ui.Label( 
 	    "12px Verdana",g_ui_root.manager, g_ui_root);
         lbl3 = lbl3;
-                lbl3.text("Click the triguena girl to make her cry (testing animation bounce)");
-                lbl3.position(100, 140);
+            lbl3.set_x(100);
+            lbl3.set_y(140);
+            lbl3.text("Click the triguena girl to make her cry (testing animation bounce)");
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -306,9 +449,8 @@ girl2.set_animation("g2_idle");
 }
 </script>
 </head>
-<body>
-	<canvas id="myCanvas" width="600" height="600">
-		<p>Your browser doesn't support canvas.</p>
-	</canvas>
+<body>	
+	<canvas id="myCanvas" width="600" height="600"
+		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
 </body>
 </html>

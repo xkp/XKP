@@ -1,0 +1,25 @@
+<xss:parameter id="obj"/>
+
+<xss:code>	
+	out()
+	{
+	<xss:e value="obj.parent.id"/>.gradient = {};
+	<xss:e value="obj.parent.id"/>.gradient.colors = [];
+	<xss:e value="obj.parent.id"/>.gradient.x1 = <xss:e value="obj.x1"/>;
+	<xss:e value="obj.parent.id"/>.gradient.y1 = <xss:e value="obj.y1"/>;
+	<xss:e value="obj.parent.id"/>.gradient.x2 = <xss:e value="obj.x2"/>;
+	<xss:e value="obj.parent.id"/>.gradient.y2 = <xss:e value="obj.y2"/>;
+	}
+	for(var child in obj.children)
+	{
+		out()
+		{
+			<xss:e value="obj.parent.id"/>.gradient.colors.push({offset: <xss:e value="child.offset"/>,
+																 color: '<xss:e value="child.color"/>'});
+		}
+	}
+	out()
+	{	
+	<xss:e value="obj.parent.id"/>.invalidate();
+	}
+</xss:code>

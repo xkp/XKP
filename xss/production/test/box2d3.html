@@ -6,12 +6,11 @@
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
         <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script> 
 		<script type="text/javascript" src="../js/ms-joint.js"></script> 
             <script type="text/javascript" src="../js/ms-spawner.js"></script>
@@ -24,8 +23,7 @@ var g_canvas;
 var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
-var Sound = new ms.ui.Sound();
-		var streamer = new ms.streamer.Streamer();
+var SoundUtils = new ms.ui.SoundUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -33,6 +31,7 @@ var Sound = new ms.ui.Sound();
 				height: 400,
 				canvas: drawingCanvas
 			};
+            var streamer = new ms.streamer.Streamer();							
 			var ui = new ms.ui.Manager(client, streamer);
 			var g_ui = ui;
 			var g_ui_root = ui.root;
@@ -97,8 +96,8 @@ var Sound = new ms.ui.Sound();
             var xform = new b2Transform(pos, rot);
             me.SetTransform(xform);
         }
-        var def_package_items = [];
-                def_package_items.push(
+        var global_package_items = [];
+                global_package_items.push(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -107,7 +106,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
@@ -116,8 +115,8 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
-		g_startup_package.load();	
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
 function start(resolution)  
 {  
 	function updater()  
@@ -196,7 +195,6 @@ var __img1;var __img2;var __img3;
         $super(
         src? src : "images/smile_grin_48.png"        );
         this.events = new ms.event.EventHolder(); 
-                this.size(50, 50);
 				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
@@ -228,6 +226,8 @@ var __img1;var __img2;var __img3;
                         this.parent.removeComponent(this);
                     }
                 }
+            this.set_width(50);
+            this.set_height(50);
 	var ev_parent = this;
 	this.events.addListener("collision", function(who)
 	{    
@@ -270,22 +270,31 @@ window.onload = function()
 		    __img1 = new ms.ui.Image( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
         __img1 = __img1;
-                __img1.rect(0, 390, 600, 40);
+            __img1.set_x(0);
+            __img1.set_y(390);
+            __img1.set_width(600);
+            __img1.set_height(40);
 		    __img2 = new ms.ui.Image( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
         __img2 = __img2;
-                __img2.rect(590, 350, 10, 40);
+            __img2.set_x(590);
+            __img2.set_y(350);
+            __img2.set_width(10);
+            __img2.set_height(40);
 		    __img3 = new ms.ui.Image( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
         __img3 = __img3;
-                __img3.rect(0, 350, 10, 40);
+            __img3.set_x(0);
+            __img3.set_y(350);
+            __img3.set_width(10);
+            __img3.set_height(40);
         sp1 = new ms.arcade.Spawner(g_spawner_manager, 100, 100, 1, 1);
         sp1 = sp1;
-                sp1.x = 100;
-                sp1.y = 100;
-                sp1.set_rotation(95);
-                sp1.frequency = 1;
-                sp1.velocity = 1;
+            sp1.x = 100;
+            sp1.y = 100;
+            sp1.set_rotation(95);
+            sp1.frequency = 1;
+            sp1.velocity = 1;
         sp1.creator = function()
         {
             return new smiley_ball("images/smile_grin_48.png");
@@ -413,9 +422,8 @@ window.onload = function()
 }
 </script>
 </head>
-<body>
-	<canvas id="myCanvas" width="600" height="400">
-		<p>Your browser doesn't support canvas.</p>
-	</canvas>
+<body>	
+	<canvas id="myCanvas" width="600" height="400"
+		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
 </body>
 </html>

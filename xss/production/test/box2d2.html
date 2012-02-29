@@ -6,12 +6,11 @@
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
         <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script> 
 		<script type="text/javascript" src="../js/ms-joint.js"></script> 
             <script type="text/javascript" src="../js/ms-spawner.js"></script>
@@ -24,8 +23,7 @@ var g_canvas;
 var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
-var Sound = new ms.ui.Sound();
-		var streamer = new ms.streamer.Streamer();
+var SoundUtils = new ms.ui.SoundUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -33,6 +31,7 @@ var Sound = new ms.ui.Sound();
 				height: 400,
 				canvas: drawingCanvas
 			};
+            var streamer = new ms.streamer.Streamer();							
 			var ui = new ms.ui.Manager(client, streamer);
 			var g_ui = ui;
 			var g_ui_root = ui.root;
@@ -97,8 +96,8 @@ var Sound = new ms.ui.Sound();
             var xform = new b2Transform(pos, rot);
             me.SetTransform(xform);
         }
-        var def_package_items = [];
-                def_package_items.push(
+        var global_package_items = [];
+                global_package_items.push(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -107,7 +106,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
@@ -116,8 +115,8 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
-		g_startup_package.load();	
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
 function start(resolution)  
 {  
 	function updater()  
@@ -220,8 +219,11 @@ window.onload = function()
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
         btn1 = btn1;
-                btn1.set_rotation(0.200000003);
-                btn1.rect(200, 200, 50, 50);
+            btn1.set_x(200);
+            btn1.set_y(200);
+            btn1.set_rotation(0.200000003);
+            btn1.set_width(50);
+            btn1.set_height(50);
 				btn1.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
@@ -291,9 +293,8 @@ window.onload = function()
 }
 </script>
 </head>
-<body>
-	<canvas id="myCanvas" width="600" height="400">
-		<p>Your browser doesn't support canvas.</p>
-	</canvas>
+<body>	
+	<canvas id="myCanvas" width="600" height="400"
+		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
 </body>
 </html>

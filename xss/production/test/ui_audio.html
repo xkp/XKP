@@ -6,12 +6,11 @@
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -21,8 +20,7 @@ var g_canvas;
 var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
-var Sound = new ms.ui.Sound();
-		var streamer = new ms.streamer.Streamer();
+var SoundUtils = new ms.ui.SoundUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -30,13 +28,14 @@ var Sound = new ms.ui.Sound();
 				height: 400,
 				canvas: drawingCanvas
 			};
+            var streamer = new ms.streamer.Streamer();							
 			var ui = new ms.ui.Manager(client, streamer);
 			var g_ui = ui;
 			var g_ui_root = ui.root;
 		}
 		var streamer = new ms.streamer.Streamer();
-        var def_package_items = [];
-                def_package_items.push(
+        var global_package_items = [];
+                global_package_items.push(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -45,7 +44,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
@@ -54,7 +53,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
@@ -63,7 +62,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
@@ -72,7 +71,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image5",
 		resource_type:	RESOURCE_IMAGE,
@@ -81,7 +80,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image6",
 		resource_type:	RESOURCE_IMAGE,
@@ -90,7 +89,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image7",
 		resource_type:	RESOURCE_IMAGE,
@@ -99,7 +98,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image8",
 		resource_type:	RESOURCE_IMAGE,
@@ -108,7 +107,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image9",
 		resource_type:	RESOURCE_IMAGE,
@@ -117,7 +116,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image10",
 		resource_type:	RESOURCE_IMAGE,
@@ -126,7 +125,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image11",
 		resource_type:	RESOURCE_IMAGE,
@@ -135,7 +134,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image12",
 		resource_type:	RESOURCE_IMAGE,
@@ -144,26 +143,26 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__audio1",
-		resource_type:	RESOURCE_SOUND,
+		resource_type:	RESOURCE_AUDIO,
 		src:			"sounds/applauselong.wav",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__audio2",
-		resource_type:	RESOURCE_SOUND,
+		resource_type:	RESOURCE_AUDIO,
 		src:			"sounds/forest.wav",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
 });
-        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
-		g_startup_package.load();	
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
 function start(resolution)  
 {  
 	function updater()  
@@ -181,8 +180,15 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var lbl1;var btnSound1;var btnSound2;var volume_bar;var btn1;var btn2;var lbl3;var btnPlay;var btnPause;var btnStop;
-                application.curr_sound = null;
+var lbl1;var btnSound1;var btnSound2;var volume_bar;var btn1;var btn2;var lbl3;var btnPlay;var btnPause;var btnStop;var sound_1;var sound_2;
+            application.curr_sound = null;
+	var ev_parent = this;
+	application.events.addListener("init", function()
+	{    
+		application.curr_sound = sound_1;
+application.curr_sound.play();
+	}
+	);
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -215,44 +221,56 @@ window.onload = function()
 		    lbl1 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
         lbl1 = lbl1;
-                lbl1.text("click the sound you want to listen");
-                lbl1.position(220, 190);
+            lbl1.set_x(220);
+            lbl1.set_y(190);
+            lbl1.text("click the sound you want to listen");
 		    btnSound1 = new ms.ui.Button( 
 	    "images/sound_2.png","images/sound_2.png",g_ui_root.manager, g_ui_root);
         btnSound1 = btnSound1;
+            btnSound1.set_x(275);
+            btnSound1.set_y(210);
+            btnSound1.set_width(50);
+            btnSound1.set_height(10);
 	var ev_parent = this;
 	btnSound1.events.addListener("click", function()
 	{    
-		sound_1.pause();
-sound_1.currentTime = 0;
+		sound_1.stop();
 application.curr_sound = sound_2;
 application.curr_sound.play();
 	}
 	);
 		application.are_obj_events = true;
-                btnSound1.rect(275, 210, 50, 10);
 		    btnSound2 = new ms.ui.Button( 
 	    "images/sound_1.png","images/sound_1.png",g_ui_root.manager, g_ui_root);
         btnSound2 = btnSound2;
+            btnSound2.set_x(275);
+            btnSound2.set_y(240);
+            btnSound2.set_width(50);
+            btnSound2.set_height(10);
 	var ev_parent = this;
 	btnSound2.events.addListener("click", function()
 	{    
-		sound_2.pause();
-sound_2.currentTime = 0;
+		sound_2.stop();
 application.curr_sound = sound_1;
 application.curr_sound.play();
 	}
 	);
 		application.are_obj_events = true;
-                btnSound2.rect(275, 240, 50, 10);
 		    volume_bar = new ms.ui.ProgressBar( 
 	    null,g_ui_root.manager, g_ui_root);
         volume_bar = volume_bar;
-                volume_bar.value(50);
-                volume_bar.rect(225, 120, 150, 10);
+            volume_bar.set_x(225);
+            volume_bar.set_y(120);
+            volume_bar.value(50);
+            volume_bar.set_width(150);
+            volume_bar.set_height(10);
 		    btn1 = new ms.ui.Image( 
 	    "images/arrow_left.png",g_ui_root.manager, g_ui_root);
         btn1 = btn1;
+            btn1.set_x(200);
+            btn1.set_y(115);
+            btn1.set_width(20);
+            btn1.set_height(20);
 	var ev_parent = this;
 	btn1.events.addListener("click", function()
 	{    
@@ -261,10 +279,13 @@ application.curr_sound.volume -= 0.100000001;
 	}
 	);
 		application.are_obj_events = true;
-                btn1.rect(200, 115, 20, 20);
 		    btn2 = new ms.ui.Image( 
 	    "images/arrow_right.png",g_ui_root.manager, g_ui_root);
         btn2 = btn2;
+            btn2.set_x(380);
+            btn2.set_y(115);
+            btn2.set_width(20);
+            btn2.set_height(20);
 	var ev_parent = this;
 	btn2.events.addListener("click", function()
 	{    
@@ -273,15 +294,19 @@ application.curr_sound.volume += 0.100000001;
 	}
 	);
 		application.are_obj_events = true;
-                btn2.rect(380, 115, 20, 20);
 		    lbl3 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
         lbl3 = lbl3;
-                lbl3.text("click small arrows to adjust volume");
-                lbl3.position(220, 100);
+            lbl3.set_x(220);
+            lbl3.set_y(100);
+            lbl3.text("click small arrows to adjust volume");
 		    btnPlay = new ms.ui.Button( 
 	    "images/play.png","images/play_over.png",g_ui_root.manager, g_ui_root);
         btnPlay = btnPlay;
+            btnPlay.set_x(175);
+            btnPlay.set_y(300);
+            btnPlay.set_width(50);
+            btnPlay.set_height(50);
 	var ev_parent = this;
 	btnPlay.events.addListener("click", function()
 	{    
@@ -289,10 +314,13 @@ application.curr_sound.volume += 0.100000001;
 	}
 	);
 		application.are_obj_events = true;
-                btnPlay.rect(175, 300, 50, 50);
 		    btnPause = new ms.ui.Button( 
 	    "images/pause.png","images/pause_over.png",g_ui_root.manager, g_ui_root);
         btnPause = btnPause;
+            btnPause.set_x(275);
+            btnPause.set_y(300);
+            btnPause.set_width(50);
+            btnPause.set_height(50);
 	var ev_parent = this;
 	btnPause.events.addListener("click", function()
 	{    
@@ -300,26 +328,29 @@ application.curr_sound.volume += 0.100000001;
 	}
 	);
 		application.are_obj_events = true;
-                btnPause.rect(275, 300, 50, 50);
 		    btnStop = new ms.ui.Button( 
 	    "images/stop.png","images/stop_over.png",g_ui_root.manager, g_ui_root);
         btnStop = btnStop;
+            btnStop.set_x(375);
+            btnStop.set_y(300);
+            btnStop.set_width(50);
+            btnStop.set_height(50);
 	var ev_parent = this;
 	btnStop.events.addListener("click", function()
 	{    
-		application.curr_sound.pause();
-application.curr_sound.currentTime = 0;
+		application.curr_sound.stop();
 	}
 	);
 		application.are_obj_events = true;
-                btnStop.rect(375, 300, 50, 50);
-	var sound_1 = 
-	document.createElement('audio');
-	sound_1.setAttribute('src', 'sounds/forest.wav');	
-	sound_1.play();
-	var sound_2 = 
-	document.createElement('audio');
-	sound_2.setAttribute('src', 'sounds/applauselong.wav');	
+		    sound_1 = new ms.ui.Sound( 
+	    "sounds/forest.wav",g_ui_root.manager, g_ui_root);
+        sound_1 = sound_1;
+            sound_1.src = "sounds/forest.wav";
+            sound_1.set_loop(false);
+		    sound_2 = new ms.ui.Sound( 
+	    "sounds/applauselong.wav",g_ui_root.manager, g_ui_root);
+        sound_2 = sound_2;
+            sound_2.src = "sounds/applauselong.wav";
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -340,9 +371,8 @@ application.curr_sound.currentTime = 0;
 }
 </script>
 </head>
-<body>
-	<canvas id="myCanvas" width="600" height="400">
-		<p>Your browser doesn't support canvas.</p>
-	</canvas>
+<body>	
+	<canvas id="myCanvas" width="600" height="400"
+		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
 </body>
 </html>

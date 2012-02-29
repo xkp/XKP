@@ -5,7 +5,7 @@ ms.ui.Manager = Class.create(
 	initialize: function(client, streamer)
 	{
 		this.streamer = streamer;
-
+		
 	    //setup our components
 	    this.root = new ms.ui.Component(this);
 	    this.root.rect(0, 0, client.width, client.height);
@@ -16,7 +16,6 @@ ms.ui.Manager = Class.create(
 		this.mouse_pressed	= false;
 	    this.lastx 		= 0;
 	    this.lasty 		= 0;
-
 	},	
 
 	//Resource handling
@@ -29,7 +28,6 @@ ms.ui.Manager = Class.create(
 			if(!res.loaded)
 				resources.push({ type: res.type, url: res.asset});			
 		}
-
 		if (resources.length > 0)
 		{
 			var this_ = this;
@@ -86,9 +84,7 @@ ms.ui.Manager = Class.create(
 	
 	//Mouse management
 	mousemove: function(x, y)
-	{
-		x = x - canvas_position.x;
-		y = y - canvas_position.y;
+	{		
 		if(this.mouse_over.physics){
 			this.mouse_over.physics.SetAwake(true);
 			if(this.mouse_over.physics.mouse_joint)
@@ -103,50 +99,39 @@ ms.ui.Manager = Class.create(
 	        this.lasty = y;
 	        return true;
 	    }
-
 	    var over = this.root.find(x, y);
 	    if (!over)
 	        over = this.root;
-
 	    if (over != this.mouse_over)
 	    {
-	    	this.mouse_over.events.dispatch("mouseout", [this.mouse_over]);
-
-	        over.events.dispatch("mousein", [over]);
-
+	    	this.mouse_over.events.dispatch("mouseout", [x, y, this.mouse_over]);
+	        over.events.dispatch("mousein", [x, y, over]);
 	        this.mouse_over = over;
-	    }
-
-	    
+	    }	    
 	    over.events.dispatch("mousemove", [x, y, over]);
-
+		application.events.dispatch("mousemove", [x, y]);
 	    this.lastx = x;
 	    this.lasty = y;
-
 	    return this.mouse_over != this.root;
 	},
 	
 	mousedown: function(x, y)
-	{
-		x = x - canvas_position.x;
-		y = y - canvas_position.y;
+	{		
 		if(this.mouse_over.physics)
 			this.mouse_over.physics.SetAwake(true);
 		
 	    this.mouse_over.events.dispatch("mousedown", [x, y]);
 	    
 		this.mouse_pressed = true;
-
+		
+		application.events.dispatch("mousedown", [x, y]);
 	    return this.mouse_over != this.root;
 	},
 
 	mouseup: function(x, y)
-	{
-		x = x - canvas_position.x;
-		y = y - canvas_position.y;
+	{		
 		if(this.mouse_over.physics)
-			this.mouse_over.physics.SetAwake(true);
-			
+			this.mouse_over.physics.SetAwake(true);			
 		this.mouse_pressed = false;
 	    if (this.dragging)
 	    {
@@ -154,12 +139,11 @@ ms.ui.Manager = Class.create(
 	        
 	        this.mouse_over.events.dispatch("dragend", [x, y]);
 	        return true;
-	    }
-	    
-	    this.mouse_over.events.dispatch("mouseup", [x, y]);
-	    	    
-	    this.mouse_over.events.dispatch("click", []);	   
-
+	    }	    
+	    this.mouse_over.events.dispatch("mouseup", [x, y]);	    	    
+	    this.mouse_over.events.dispatch("click", [x, y]);	   
+		application.events.dispatch("mouseup", [x, y]);
+		application.events.dispatch("click", [x, y]);
 	    return this.mouse_over != this.root;
 	},
 	
@@ -313,7 +297,7 @@ ms.ui.Manager = Class.create(
 
     update: function(elapsed, context)
     {
-        if (this.redraw_)
+        if(this.redraw_)
         {
             this.redraw_ = false;
 
@@ -321,8 +305,6 @@ ms.ui.Manager = Class.create(
             this.dirt_ = [];
             return;
         }
-
-
         var bg_dirt    = [];
         var to_draw    = [];
         
@@ -348,7 +330,6 @@ ms.ui.Manager = Class.create(
         {
             var rect = bg_dirt[i];
             context.fillStyle = this.backgroundFill;
-
             context.fillRect(rect.x, rect.y, rect.w, rect.h);
         }
 
@@ -362,7 +343,6 @@ ms.ui.Manager = Class.create(
 
         this.dirt_ = [];
     },
-
     draw: function(context)
     {
         //background
@@ -387,14 +367,18 @@ ms.ui.Component = Class.create(
 		this.parent 	= parent;	
 		this.events = new ms.event.EventHolder();
 
-		this.x 			= 0; 
-        this.y 			= 0; 
-        this.w 			= 0;
-        this.h 			= 0;
-		this.rotation 	= 0;		
-
-        this.opacity = null; //this means, no opacity
-
+		this.x 	= 0; 
+        this.y 	= 0; 
+        this.w 	= this.orig_w	= 0;
+        this.h 	= this.orig_h	= 0;
+		this.rotation 			= 0;
+        this.placement  = "";
+		this.scale = 1;
+		
+		if(parent)
+			this.opacity = parent.opacity; 
+		else
+			this.opacity = null; //this means, no opacity
 		if (parent)
 			parent.addComponent(this);
 	},
@@ -419,12 +403,54 @@ ms.ui.Component = Class.create(
     alpha: function(value)
     {
         if (value < 0)
-            value = 0;
-		
+            value = 0;		
         this.opacity = value/100;
+		for(var i = 0; i < this.components.length; i++)
+        {					
+            var cmp = this.components[i];
+			cmp.alpha(value);            
+        }
         this.invalidate();
     },
 
+	set_placement: function(value)
+	{
+		this.placement = value;		
+	},
+	
+    update_placement: function()
+    {		
+        if (this.placement == "client")
+        {
+            this.client(); 
+        }    
+        else if (this.placement == "center")
+        {
+            if (this.orig_w != 0 && this.orig_h != 0)
+                this.center(this.orig_w, this.orig_h);                       
+        }
+        else if (this.placement == "bottom")
+        {
+            if (this.orig_h != 0)
+                this.bottom(this.orig_h);            
+        }
+        else if (this.placement == "top")
+        {
+            if (this.orig_h != 0)
+				this.top(this.orig_h);            
+        }
+        else if (this.placement == "right")
+        {
+            if (this.orig_w != 0)
+                this.right(this.orig_w);            
+        }
+        else if (this.placement == "left")
+        {
+            if (this.orig_w != 0)
+                this.left(this.orig_w);            
+        }
+    },
+    
 	set_rotation: function(value)
     {
         this.rotation = value * Math.PI/180;
@@ -477,22 +503,24 @@ ms.ui.Component = Class.create(
     },
 
     set_x: function(value)
-    {
+    {		
         this.position(value, this.y);
     },
 
     set_y: function(value)
-    {
+    {		
         this.position(this.x, value);
     },
 
     set_width: function(value)
     {
+		this.orig_w = value;
         this.size(value, this.h);
     },
 
     set_height: function(value)
     {
+		this.orig_h = value;
         this.size(this.w, value);
     },
 
@@ -521,7 +549,7 @@ ms.ui.Component = Class.create(
 		this.rect(this.parent.w - w, 0, w, this.parent.h);
 	},
 
-	left: function(h)
+	left: function(w)
 	{
 		this.rect(0, 0, w, this.parent.h);
 	},
@@ -574,6 +602,18 @@ ms.ui.Component = Class.create(
         this.manager.invalidate(this);
     },
 
+	set_scale: function(factor)
+	{
+		this.scale = factor;
+		this.set_width(this.w * this.scale);
+		this.set_height(this.h * this.scale);
+		for(var i = 0; i < this.components.length; i++)
+        {					
+            var cmp = this.components[i];
+			cmp.set_scale(this.scale);            
+        }
+	},
+	
 	find: function(x, y)
 	{
 	    if (this.contains(x, y))
@@ -594,16 +634,13 @@ ms.ui.Component = Class.create(
                 if (child_result)
                     return child_result;
 	        }
-
 	        return this.mouse_thru? null : this;
 	    }
-
 	    return null;
 	},
 
 	contains: function(x, y)
 	{	
-
 		var A_x = - this.w/2;
 		var A_y = - this.h/2;
 
@@ -639,6 +676,7 @@ ms.ui.Component = Class.create(
 
     draw: function(context, x, y)
     {
+		this.update_placement();
         var clip_inside = true;
 		for(var i = 0; i < this.components.length; i++)
         {	
@@ -678,13 +716,28 @@ ms.ui.Image = Class.create(ms.ui.Component,
 		var texture = resource.data;
 		if (image && !texture && image != 'null')
 			throw "Image " + image + " not loaded";		
-	    this.texture = texture;		
+	    this.texture = texture;
+		this.tile = false;
+		this.iwidth;
+		this.iheight;
 	},
 
 	fill: function(f)
 	{
         this.fill_ = f;
         this.invalidate();
+	},
+	
+	set_iwidth: function(v)
+	{
+		this.tile = true;
+		this.iwidth = v;	
+	},
+	
+	set_iheight: function(v)
+	{
+		this.tile = true;
+		this.iheight = v;		
 	},
 
     src: function()
@@ -704,39 +757,63 @@ ms.ui.Image = Class.create(ms.ui.Component,
         this.source = "";
 	    this.texture = texture;
         this.invalidate();
-	},           
-                                  
+	},     
+	
 	draw: function($super, context, x, y)
-    {
+    {	
+		if(!this.iwidth)
+			this.iwidth = this.w;
+		if(!this.iheight)
+			this.iheight = this.h;
+			
 		var old_alpha;
-
-		context.save();
-		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
-		context.rotate(this.rotation);
-
 		if (this.opacity != null)
         {
             old_alpha = context.globalAlpha;
             context.globalAlpha = this.opacity;
         }
-
-        if (this.texture)
-        {
-            context.drawImage(this.texture, - this.w/2, - this.h/2, this.w, this.h);
-        }
-        else if (this.fill_)
-        {
-            context.fillStyle = this.fill_;
-            context.fillRect(-this.w/2, -this.h/2, this.w, this.h);
-        }
-
+		if(this.tile)
+		{
+			var ix = this.x + x;
+			var iy = this.y + y;
+			context.save();
+			context.beginPath();					
+			context.rect(this.x + x, this.y + y, this.w, this.h);	
+			context.clip();			
+			while(this.x + x + this.w >= ix)
+			{
+				iy = this.y + y;
+				while(this.y + y + this.h >= iy)
+				{
+					context.drawImage(this.texture, ix, iy, this.iwidth, this.iheight);
+					iy += this.iheight;
+				}
+				ix += this.iwidth;
+			}
+			context.restore();
+		}
+		else
+		{
+			context.save();
+			context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
+			context.rotate(this.rotation);
+							
+			if (this.texture)
+			{
+				context.drawImage(this.texture, - this.w/2, - this.h/2, this.w, this.h);
+			}
+			else if (this.fill_)
+			{
+				context.fillStyle = this.fill_;
+				context.fillRect(-this.w/2, -this.h/2, this.w, this.h);
+			}
+			context.restore();  
+		}
+		
         if (this.opacity != null)
         {
             context.globalAlpha = old_alpha;
         }
-
-		context.restore();  
-
         $super(context);
     }
 });
@@ -778,7 +855,7 @@ ms.ui.ProgressBar = Class.create(ms.ui.Component,
 		var ww = this.w*(this.percent/100);
 	    this.left.rect(0, 0, ww, this.h);
 	    this.right.rect(ww, 0, this.w - ww, this.h);
-        $super();
+		$super();
 	}
 });
 
@@ -800,8 +877,11 @@ ms.ui.Label = Class.create(ms.ui.Component,
 	
 	set_color: function(value)
 	{
-		this.color_value = value;	
-		this.manager.invalidate_all();
+		if(value != null)
+		{
+			this.color_value = value;	
+			this.manager.invalidate_all();
+		}
 	},
 
 	extents: function()
@@ -811,15 +891,21 @@ ms.ui.Label = Class.create(ms.ui.Component,
 
     draw: function($super, context, x, y)
     {
-		context.save();
-
+		context.save();		
+		if (this.opacity != null)
+        {
+            old_alpha = context.globalAlpha;
+            context.globalAlpha = this.opacity;
+        }            
 		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
 		context.rotate(this.rotation);
-
         context.font = this.font;
 		context.fillStyle = this.color_value; //td:
         context.fillText(this.value, -this.w/2, -this.h/2);
-
+		if (this.opacity != null)
+        {
+            context.globalAlpha = old_alpha;
+        }		
 		context.restore(); 
         $super(context);
     },
@@ -846,6 +932,178 @@ ms.ui.Button = Class.create(ms.ui.Image,
 	},	
 });
 
+ms.ui.RippleEffect = Class.create(ms.ui.Component,
+{
+	initialize : function($super, image, manager, parent) 
+	{
+		$super(manager, parent);	
+		if(image)
+		{
+			var resource = streamer.get_resource(image);
+			this.img = resource.data;
+		}
+        this.first_run = false;		
+		this.riprad = 3;		
+		this.mapind;		
+		this.ripplemap = [];
+		this.last_map = [];
+		this.ripple;
+		this.ripple_data;
+		this.texture;
+		this.texture_data;
+		this.is_running = true;	
+		this.is_disturbed = false;						
+		this.canvas = document.createElement('canvas');		
+		this.context = this.canvas.getContext('2d');
+		this.mouse_thru = true;
+	},
+	set_ripradius: function(value)
+	{
+		if(value != null)
+		 this.riprad = value;
+	},
+	get_ripradius: function()
+	{
+		return this.riprad;
+	},
+	draw: function($super, context, x, y)
+    {		
+		this.canvas.width = this.w;
+		this.canvas.height = this.h;
+		if (this.is_disturbed) {
+				this.newframe();
+				var old_alpha = context.globalAlpha;
+				context.globalAlpha = this.opacity;        
+				this.context.putImageData(this.ripple, this.x, this.y);	
+				context.drawImage(this.canvas, this.x, this.y, this.w, this.h);				
+				context.globalAlpha = old_alpha;
+				this.invalidate();
+		}
+		else{
+			if(!this.first_run)
+			{
+				this.oldind = this.w;
+				this.newind = this.w * (this.h + 3);	
+				this.size = this.w * (this.h + 2) * 2;
+				this.half_width = this.w >> 1;
+				this.half_height = this.h >> 1;	
+			}
+			var old_alpha = context.globalAlpha;
+			context.globalAlpha = this.opacity;
+			if(this.gradient)
+			{
+				gradient = this.context.createLinearGradient(this.gradient.x1, this.gradient.y1, 
+															 this.gradient.x2, this.gradient.y2);
+				for (var i = 0; i < this.gradient.colors.length; i++) {
+					gradient.addColorStop(this.gradient.colors[i].offset, this.gradient.colors[i].color);
+				}				
+				this.context.fillStyle = gradient;
+				this.context.fillRect(this.x, this.y, this.w, this.h);
+			}
+			else if(this.img)
+				this.context.drawImage(this.img, this.x, this.y, this.w, this.h);			
+			context.drawImage(this.canvas, this.x, this.y, this.w, this.h);
+			context.globalAlpha = old_alpha;
+			if(!this.first_run)
+			{
+				for(var i = 0; i < this.size; i++) {
+					this.last_map[i] = this.ripplemap[i] = 0;
+				}
+				this.texture = this.context.getImageData(this.x, this.y, this.w, this.h);
+				this.texture_data = this.texture.data;
+				this.ripple = this.context.getImageData(this.x, this.y, this.w, this.h);
+				this.ripple_data = this.ripple.data;
+			}
+			this.first_run = true;
+		}				
+        $super(context);		
+    },	
+	disturb: function(dx, dy)
+	{		
+			dx -= 2*this.x;
+			dy -= 2*this.y;
+			dx <<= 0;
+			dy <<= 0;
+			this.is_disturbed = true;
+			
+			for (var j = dy - this.riprad; j < dy + this.riprad; j++) {
+				for (var k = dx - this.riprad; k < dx + this.riprad; k++) {
+					this.ripplemap[this.oldind + (j * this.w) + k] += 512;
+				}
+			}
+			this.invalidate();		
+	},
+	newframe: function() 
+	{
+		var i, a, b, data, cur_pixel, new_pixel, old_data;
+		
+		i = this.oldind;
+		this.oldind = this.newind;
+		this.newind = i;
+		
+		i = 0;
+		this.mapind = this.oldind;
+				
+		var _width = this.w,
+			_height = this.h,
+			_ripplemap = this.ripplemap,
+			_mapind = this.mapind,
+			_newind = this.newind,
+			_last_map = this.last_map,
+			_rd = this.ripple.data,
+			_td = this.texture.data,
+			_half_width = this.half_width,
+			_half_height = this.half_height,
+			_is_disturbed = false;
+		
+		for (var y = 0; y < _height; y++) {
+			for (var x = 0; x < _width; x++) {
+				data = (
+					_ripplemap[_mapind - _width] + 
+					_ripplemap[_mapind + _width] + 
+					_ripplemap[_mapind - 1] + 
+					_ripplemap[_mapind + 1]) >> 1;
+					
+				data -= _ripplemap[_newind + i];
+				data -= data >> 5;
+				
+				_ripplemap[_newind + i] = data;
+
+				//where data=0 then still, where data>0 then wave
+				data = 1024 - data;
+				
+				old_data = _last_map[i];
+				_last_map[i] = data;
+				
+				if (old_data != data) {
+					//offsets
+					_is_disturbed = true;
+					a = (((x - _half_width) * data / 1024) << 0) + _half_width;
+					b = (((y - _half_height) * data / 1024) << 0) + _half_height;
+	
+					//bounds check
+					if (a >= _width) a = _width - 1;
+					if (a < 0) a = 0;
+					if (b >= _height) b = _height - 1;
+					if (b < 0) b = 0;
+	
+					new_pixel = (a + (b * _width)) * 4;
+					cur_pixel = i * 4;
+					
+					_rd[cur_pixel] = _td[new_pixel];
+					_rd[cur_pixel + 1] = _td[new_pixel + 1];
+					_rd[cur_pixel + 2] = _td[new_pixel + 2];
+					//_rd[cur_pixel + 3] = _td[new_pixel + 3];
+				}				
+				++_mapind;
+				++i;
+			}
+		}		
+		this.mapind = _mapind;
+		this.is_disturbed = _is_disturbed;
+	},
+});
+
 ms.ui.StateButton = Class.create(ms.ui.Image,
 {
 	initialize: function($super, active, inactive, manager, parent)
@@ -861,8 +1119,7 @@ ms.ui.StateButton = Class.create(ms.ui.Image,
 		{		
 			ev_parent.active  = !ev_parent.active;
 			ev_parent.image(ev_parent.active? active_texture : inactive_texture);
-		});
-		
+		});		
 	},	
 });
 
@@ -911,7 +1168,7 @@ ms.ui.Line = Class.create(ms.ui.Component,
 	    this.y2         = 0;
         this.lineWidth  = 2;
         this.lineCap    = '';
-        this.fillStyle  = 'black'
+        this.color_value = 'black';
 	},
 
 	coords: function(x1, y1, x2, y2)
@@ -933,6 +1190,15 @@ ms.ui.Line = Class.create(ms.ui.Component,
     {
         this.lineWidth = v;
         this.invalidate();
+    },
+	
+	set_color: function(v) 
+    {
+		if(v != null)
+		{
+			this.color_value = v;
+			this.invalidate();
+		}
     },
 
     set_lineCap: function(v) 
@@ -959,14 +1225,24 @@ ms.ui.Line = Class.create(ms.ui.Component,
 
     draw: function($super, context, x, y)
     {
-		old_line_width = context.lineWidth;
-        context.fillStyle = this.fillStyle;
-        context.beginPath();
-        context.lineWidth = this.lineWidth;
+		if (this.opacity != null)
+        {
+            old_alpha = context.globalAlpha;
+            context.globalAlpha = this.opacity;
+        }		
+		old_line_width = context.lineWidth;         
+        context.lineWidth = this.lineWidth;		
+		context.beginPath();
         context.moveTo(x + this.x1, y + this.y1);
         context.lineTo(x + this.x2, y + this.y2);
-        context.stroke();
+		context.closePath();
+		context.strokeStyle = this.color_value;
+		context.stroke();		
 		context.lineWidth = old_line_width;
+		if (this.opacity != null)
+        {
+            context.globalAlpha = old_alpha;
+        }		
 		$super(context);
     },
 });
@@ -1038,25 +1314,21 @@ ms.ui.Rectangle = Class.create(ms.ui.Component,
 		this.stroke = stroke;
 		this.line_width = line_width;
 	},	
-
 	set_fill: function(value)
 	{
 		this.fill = value;
 		this.invalidate();
 	},
-
 	set_stroke: function(value)
 	{
 		this.stroke = value;
 		this.invalidate();
 	},
-
 	set_line_width: function(value)
 	{
 		this.line_width = value;
 		this.invalidate();
 	},
-
 	draw: function($super, context, x, y)
 	{		
 		old_line_width = context.lineWidth;
@@ -1077,7 +1349,17 @@ ms.ui.Rectangle = Class.create(ms.ui.Component,
 		if(this.fill){
 			context.fillStyle = this.fill;
 			context.fill();
-		}		
+		}
+		if(this.gradient)
+		{
+			gradient = context.createLinearGradient(this.gradient.x1, this.gradient.y1, 
+														 this.gradient.x2, this.gradient.y2);
+			for (var i = 0; i < this.gradient.colors.length; i++) {
+				gradient.addColorStop(this.gradient.colors[i].offset, this.gradient.colors[i].color);
+			}				
+			context.fillStyle = gradient;	
+			context.fill();
+		}
 		if(this.stroke){
 			context.strokeStyle = this.stroke;
 			context.stroke();
@@ -1279,7 +1561,8 @@ ms.ui.Sprite = Class.create(ms.ui.Component,
 		this.frame_count = 0;		
 		this.current_step = 0;
 		this.loop = true;
-		this.bounce = false;		
+		this.bounce = false;
+		this.right_to_left = false;
 		this.anim_queue = [];		
 	},
 	set_animation: function(value)
@@ -1298,6 +1581,10 @@ ms.ui.Sprite = Class.create(ms.ui.Component,
 		if(value)
 			this.bounce = false;
 		this.loop = value;		
+	},
+	set_right_to_left: function(value)
+	{
+		this.right_to_left = value;				
 	},
 	set_bounce: function(value)
 	{
@@ -1325,9 +1612,17 @@ ms.ui.Sprite = Class.create(ms.ui.Component,
 			{
 				old_alpha = context.globalAlpha;
 				context.globalAlpha = this.opacity;
-			}		
+			}
+			if(!this.curr_anim.right_to_left)			
 			context.drawImage(this.image, 
 						this.w * (this.frame_count + this.curr_anim.frame_col), 
+						this.h * this.curr_anim.frame_row, 
+						this.w, this.h, 
+						- this.w/2, - this.h/2, 
+						this.w, this.h);
+			else
+			context.drawImage(this.image, 
+						this.w * (this.curr_anim.frame_col - this.frame_count), 
 						this.h * this.curr_anim.frame_row, 
 						this.w, this.h, 
 						- this.w/2, - this.h/2, 
@@ -1384,13 +1679,112 @@ ms.ui.Sprite = Class.create(ms.ui.Component,
 				if(this.loop)
 					{ this.frame_count = 0; } 
 			}
+			
 			this.current_step = 0;			
 		}
 		this.invalidate();
 	},	
 });
 
+ms.ui.Video = Class.create(ms.ui.Component,
+{	
+	initialize: function($super, src, manager, parent)
+	{				
+		$super(manager, parent);
+		var resource = streamer.get_resource(src);
+        if (!resource)
+            throw "Unknow resource: " + src;         		
+		this.vid = resource.data;
+		this.mute_vol = 0;
+		this.vid.loop = true;
+	},	
+	set_loop: function(value)
+	{		
+		this.vid.loop = value;		
+	},
+	draw: function($super, context, x, y)
+	{		
+		$super(context);		
+		var old_alpha;
+		context.save();
+		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
+		context.rotate(this.rotation);
+		if (this.opacity != null)
+		{
+			old_alpha = context.globalAlpha;
+			context.globalAlpha = this.opacity;
+		}
+		context.drawImage(this.vid, -this.w/2, -this.h/2, this.w, this.h);
+		if (this.opacity != null)
+		{
+			context.globalAlpha = old_alpha;
+		}				
+		context.restore();	
+		if(!(this.vid.paused || this.vid.ended))
+			this.invalidate();
+		$super(context);
+	},
+	play: function()
+	{				
+		this.vid.play();
+		this.invalidate();
+	},
+	stop: function()
+	{		
+		this.vid.pause();
+		this.vid.currentTime = 0;	
+		this.invalidate();	
+	},
+	pause: function()
+	{				
+		this.vid.pause();
+		this.invalidate();
+	},
+	mute: function()
+	{		
+		var temp_vol = this.mute_vol;
+		this.mute_vol = this.vid.volume;
+		this.vid.volume = temp_vol;
+	}, 
+});
+
 ms.ui.Sound = Class.create(
+{
+	initialize: function(src)
+	{					
+		var resource = streamer.get_resource(src);
+        if (!resource)
+            throw "Unknow resource: " + src;         		
+		this.sound = resource.data;
+		this.mute_vol = 0;
+		this.sound.loop = true;
+	},	
+	set_loop: function(value)
+	{		
+		this.sound.loop = value;		
+	},			
+	play: function()
+	{			
+		this.sound.play();
+	},
+	stop: function()
+	{		
+		this.sound.pause();
+		this.sound.currentTime = 0;				
+	},
+	pause: function()
+	{				
+		this.sound.pause();		
+	},
+	mute: function()
+	{		
+		var temp_vol = this.mute_vol;
+		this.mute_vol = this.sound.volume;
+		this.sound.volume = temp_vol;
+	}, 
+});
+
+ms.ui.SoundUtils = Class.create(
 {
 	play: function(src)
 	{

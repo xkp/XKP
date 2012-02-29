@@ -14,21 +14,17 @@
 	 <xss:marker id="css_style"/>
 	}
 </style>
-<script type="text/javascript" src="../js/three/Detector.js"></script>
-<script type="text/javascript" src="../js/three/Three.js"></script>
-<script type="text/javascript" src="../js/three/Stats.js"></script>
-<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-<script type="text/javascript" src="../js/three/Utils.js"></script>
+
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+<xss:code>
+    compiler.inject("render_js_includes");
+</xss:code>	
 
 <xss:code>
 
@@ -142,10 +138,25 @@ animate();
 function animate() {
 	if(ui)
 		drawingCanvas.getContext('2d').clearRect(0,0,<xss:e value="application.width"/>,<xss:e value="application.height"/>);
-	requestAnimationFrame( animate );
-	render();
+<xss:code>	
+	if(application.send_to_back == "ui")
+	out()
+	{
 	if(ui)
 		ui.draw(drawingCanvas.getContext('2d'));
+	}
+	out()
+	{
+	requestAnimationFrame( animate );
+	render();
+	}	
+	if(!(application.send_to_back == "ui"))
+	out()
+	{
+	if(ui)
+		ui.draw(drawingCanvas.getContext('2d'));
+	}
+</xss:code>
 }
 
 </script>

@@ -1,12 +1,13 @@
 <module id="ui" src="ui.xs">
     <types>
         <class id="component" renderer="component.xss">
-            <property id="x" type="int" dont_init="true">
+		
+            <property id="x" type="int">
                 <get text="x"/>
                 <set text="set_x({value})"/>
             </property>
 
-            <property id="y" type="int" dont_init="true">
+            <property id="y" type="int">
                 <get text="y"/>
                 <set text="set_y({value})"/>
             </property>
@@ -15,13 +16,18 @@
                 <get text="get_rotation()"/>
                 <set text="set_rotation({value})"/>
             </property>
+			
+			<property id="placement" type="string">
+                <get text="placement"/>
+                <set text="set_placement({value})"/>
+            </property>
 
-            <property id="width" type="int" dont_init="true">
+            <property id="width" type="int">
                 <get text="get_width()"/>
                 <set text="set_width({value})"/>
             </property>
 
-            <property id="height" type="int" dont_init="true">
+            <property id="height" type="int">
                 <get text="get_height()"/>
                 <set text="set_height({value})"/>
             </property>
@@ -38,6 +44,11 @@
             <property id="alpha" type="float">
                 <get text="get_alpha()"/>
                 <set text="alpha({value})"/>
+            </property>
+			
+			<property id="scale" type="float">
+                <get text="scale"/>
+                <set text="set_scale({value})"/>
             </property>
         </class>
 
@@ -71,7 +82,7 @@
 			<property id="lock" type="bool">
 				<get text="lock"/>
                 <set text="set_lock({value})"/>
-            </property>
+            </property>			
 		</class>	
 		
 		<class id="rectangle" super="component" output_id="ms.ui.Rectangle">
@@ -118,6 +129,8 @@
 		
 		<class id="polygon_point" renderer="path_renderer.xss"/>
 		
+		<class id="linear_gradient" renderer="gradient_renderer.xss"/>
+		
 		<class id="circle" super="component" output_id="ms.ui.Circle">
 			<constructor_params>
                 <parameter property="fill" runtime="true"/>
@@ -158,6 +171,27 @@
 
             <property id="image" type="object">
                 <set text="image({value})"/>
+            </property>
+			
+			<property id="iwidth" type="int">
+                <get text="iwidth"/>
+                <set text="set_iwidth({value})"/>
+            </property>
+			
+			<property id="iheight" type="int">
+                <get text="iheight"/>
+                <set text="set_iheight({value})"/>
+            </property>
+        </class>
+		
+		<class id="ripple_effect" super="component" output_id="ms.ui.RippleEffect">
+            <constructor_params>
+                <parameter property="src" runtime="true"/>				
+            </constructor_params>			
+            <property id="src" type="string" dont_init="true"/>   
+			<property id="ripradius" type="int" dont_init="true">
+				<get text="get_ripradius"/>
+                <set text="set_ripradius({value})"/>
             </property>
         </class>
 
@@ -251,21 +285,33 @@
                 <get text="lineCap"/>
                 <set text="set_lineCap({value})"/>
             </property>
+			
+			<property id="color" type="string">
+                <get text="color"/>
+                <set text="set_color({value})"/>
+            </property>
         </class>
 		
-		<class id="sound" renderer="audio_renderer.xss">
-            <property id="src"  type="string" runtime="true"/>
-			<property id="play" type="bool"/>
+		<class id="sound" output_id="ms.ui.Sound">
+			<constructor_params>
+                <parameter property="src"/>				
+            </constructor_params>			
+            <property id="src"  type="string"/>
+			<property id="loop" type="bool">
+				<get text="sound.loop"/>
+                <set text="set_loop({value})"/>
+            </property>
         </class>
 		
-		<class id="video" renderer="video_renderer.xss">
-            <property id="src"        type="string"/>
-            <property id="loop"       type="bool"/>
-            <property id="controls"   type="bool"/>
-            <property id="autoplay"   type="bool"/> 
-			<property id="audio"      type="bool"/>
-			<property id="width"      type="bool"/>
-			<property id="height"     type="bool"/>
+		<class id="vid" super="component" output_id="ms.ui.Video">
+            <constructor_params>
+                <parameter property="src"/>				
+            </constructor_params>			
+            <property id="src"  type="string" dont_init="true"/>
+			<property id="loop" type="bool">
+				<get text="vid.loop"/>
+                <set text="set_loop({value})"/>
+            </property>
         </class>
 		
     </types>

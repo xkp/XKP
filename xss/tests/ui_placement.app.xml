@@ -1,0 +1,23 @@
+<application src="ui_placement.app.xs" width="600" height="600">
+    <resources>        
+        <image src="images/smile_grin_48.png"/>
+        <image src="images/smile_sad_48.png"/>		
+        <image src="images/arrow_right_48.png"/>
+        <image src="images/arrow_right_green_48.png"/>        	
+    </resources>
+
+	<div id="test1" x="100" y="50" width="400" height="200">
+		<label id="lbl0" x="240" y="75" font="12px Verdana" caption="Use keyb arrows to move div or btn"/>
+		<label id="lbl2" x="240" y="100" font="12px Verdana" caption="Use +,- numpad to resize div"/>
+		<label id="lbl3" x="240" y="125" font="12px Verdana" caption="Use CTRL/SHIFT to hide/show the div"/>
+		<label id="lbl4" x="40" y="150" font="12px Verdana" caption="Use SPACE to unplace the button and clic the arrow buttons to replace it"/>
+        <label id="lbl1" x="270" y="200" font="12px Verdana" caption="Click smiley"/>
+        <button id="btn1" width="50" height="50" placement="center" up="images/smile_sad_48.png" down="images/smile_grin_48.png"/>
+    </div>     
+   
+    <button id="btnRight" x="320" y="350" width="50" height="50" up="images/arrow_right_green_48.png" down="images/arrow_right_48.png"/>
+    <button id="btnLeft" x="220" y="350" rotation="180" width="50" height="50" up="images/arrow_right_green_48.png" down="images/arrow_right_48.png"/>
+	<button id="btnUp" x="270" y="300" rotation="-90" width="50" height="50" up="images/arrow_right_green_48.png" down="images/arrow_right_48.png"/>
+	<button id="btnDown" x="270" y="400" rotation="90" width="50" height="50" up="images/arrow_right_green_48.png" down="images/arrow_right_48.png"/>
+    
+</application>

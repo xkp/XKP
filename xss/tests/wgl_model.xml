@@ -1,4 +1,4 @@
-<application src="wgl_model.xs" title="Test 3D" background="RoyalBlue">
+<application src="wgl_model.xs" title="Test 3D" background="#356">
 
 	<resources>	
 	
@@ -13,9 +13,9 @@
 			<position z="500"/>            
 		</camera>
 		
-		<ambient_light id="a_ligth" color="Salmon"/>
+		<ambient_light id="a_ligth" color="2232576"/>
 		
-		<directional_light id="d_ligth_1" color="Ivory">			
+		<directional_light id="d_ligth_1" color="16772829">			
             <position y="-70" z="100"/>            
 		</directional_light>
 				
