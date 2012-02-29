@@ -313,9 +313,14 @@ Comment End = '*/'
     ::=  property Identifier <Type Opt> <Prop Descriptor>
      |   <Local Var Decl> ';'
      
+<Method Name>
+    ::= method 
+     |  function
+
 
 <Method Decl>
-    ::=  method Identifier '(' <Arg Decl List Opt> ')' <Type Opt> <Block>
+    ::=  <Method Name> Identifier '(' <Arg Decl List Opt> ')' <Type Opt> <Block>
+     |   <Type> Identifier '(' <Arg Decl List Opt> ')' <Block>
 
 <Type Opt>
     ::=  ':' <Type>

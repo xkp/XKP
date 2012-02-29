@@ -93,14 +93,15 @@ Ivory);
 	scene.addLight(d_ligth_1);
                 d_ligth_1.position.y = -70;
                 d_ligth_1.position.z = 100;
-	var male_model;
+	var male_model = new THREE.Object3D();
 	var male_model_loader = 
 	generate_model_loader(streamer.get_resource('model/male02/Male02_slim.js').type);
 		male_model_loader.load(
 		{
 				model : streamer.get_resource('model/male02/Male02_slim.js').asset , callback : function( geometry )
 			{
-				male_model = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
+				var male_model_mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
+				male_model.addChild(male_model_mesh);
                 male_model.position.x = 120;
                 male_model.position.y = -350;
                 male_model.position.z = -350;
@@ -110,7 +111,8 @@ Ivory);
 				scene.addObject(male_model);
 			} 
 		} 
-	);	
+	);
+	male_model.events = new ms.event.EventHolder();
 	var ev_parent = this;
 	male_model.events.addListener("click", function()
 	{    
@@ -118,14 +120,15 @@ Ivory);
 	}
 	);
 		application.are_obj_events = true;
-	var female_model;
+	var female_model = new THREE.Object3D();
 	var female_model_loader = 
 	generate_model_loader(streamer.get_resource('model_1').type);
 		female_model_loader.load(
 		{
 				model : streamer.get_resource('model_1').asset , callback : function( geometry )
 			{
-				female_model = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
+				var female_model_mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
+				female_model.addChild(female_model_mesh);
                 female_model.position.x = -110;
                 female_model.position.y = -350;
                 female_model.position.z = -350;
@@ -135,7 +138,8 @@ Ivory);
 				scene.addObject(female_model);
 			} 
 		} 
-	);	
+	);
+	female_model.events = new ms.event.EventHolder();
 	var ev_parent = this;
 	female_model.events.addListener("click", function()
 	{    

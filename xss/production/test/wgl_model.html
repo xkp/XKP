@@ -6,7 +6,7 @@
 <body>
 <style type="text/css">
 	body{
-	background:#356;
+	background:RoyalBlue;
 	}
 </style>
 <script type="text/javascript" src="../js/three/Detector.js"></script>
@@ -81,12 +81,12 @@ new THREE.Camera(
                 camera_1.position.z = 500;
 var a_ligth = 
 new THREE.AmbientLight(
-2232576);
+Salmon);
 		;
 	scene.addLight(a_ligth);
 var d_ligth_1 = 
 new THREE.DirectionalLight(
-16772829);
+Ivory);
 		;
 	scene.addLight(d_ligth_1);
                 d_ligth_1.position.y = -70;
@@ -148,7 +148,7 @@ new THREE.DirectionalLight(
                 application.mouse_x = null;
                 application.mouse_y = null;
 	var ev_parent = this;
-	application.events.addListener("updates", function()
+	application.events.addListener("animate", function()
 	{    
 		camera_1.position.x = camera_1.position.x + (application.mouse_x - camera_1.position.x) * 0.0500000007;
 camera_1.position.y = camera_1.position.y + (-application.mouse_y - camera_1.position.y) * 0.0500000007;
