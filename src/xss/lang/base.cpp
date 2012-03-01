@@ -490,6 +490,121 @@ void base_code_renderer::dispatch(stmt_dispatch& info)
                     //to handle this
   }
 
+bool constant_switch(stmt_switch& info)
+  {
+    if (info.expr.empty())
+      return false;
+
+    std::vector<switch_section>::iterator it = info.sections.begin();
+    std::vector<switch_section>::iterator nd = info.sections.end();
+    for(; it != nd; it++)
+      {
+        std::vector<expression>::iterator cit = it->cases.begin();
+        std::vector<expression>::iterator cnd = it->cases.end();
+
+        for(; cit != cnd; cit++)
+          {
+            variant v;
+		        if (!cit->is_constant(v))
+              return false;
+          }
+      }
+
+    return true;
+  }
+
+void base_code_renderer::switch_(stmt_switch& info)
+  {
+    if (constant_switch(info))
+      {
+        add_line("switch(" + render_expression(info.expr, ctx_) + ")");
+		    add_line("{");
+
+          std::vector<switch_section>::iterator it = info.sections.begin();
+          std::vector<switch_section>::iterator nd = info.sections.end();
+          for(; it != nd; it++)
+            {
+              std::vector<expression>::iterator cit = it->cases.begin();
+              std::vector<expression>::iterator cnd = it->cases.end();
+
+              for(; cit != cnd; cit++)
+                {
+		              add_line("case " + render_expression(*cit, ctx_) + " : ");
+                }
+		          
+              add_line("{");
+                render_code(it->case_code);
+
+                if (!it->case_code.empty())
+                  {
+                    variant& last_stmt = it->case_code.get_stament(it->case_code.size() - 1);
+                    if (!last_stmt.is<stmt_break>())
+                      add_line("break;");
+                  }
+		          add_line("}");
+            }
+
+          if (!info.default_code.empty())
+            {
+		          add_line("default: ");
+              add_line("{");
+                render_code(info.default_code);
+		          add_line("}");
+            }
+		    
+        add_line("}");
+      }
+    else
+      {
+        //generate as ifs
+        std::vector<switch_section>::iterator it = info.sections.begin();
+        std::vector<switch_section>::iterator nd = info.sections.end();
+        bool first = true;
+        for(; it != nd; it++)
+          {
+            str case_expr;
+
+            if (it->cases.size() == 1)
+              case_expr = render_expression(it->cases[0], ctx_);
+            else
+              {
+                std::vector<expression>::iterator cit = it->cases.begin();
+                std::vector<expression>::iterator cnd = it->cases.end();
+                bool cfirst = true;
+                for(; cit != cnd; cit++)
+                  {
+                    if (cfirst)  
+                      cfirst = false;
+                    else 
+                      case_expr += " || ";
+
+		                case_expr += "(" + render_expression(*cit, ctx_) + ")";
+                  }
+              }
+		          
+            if (first)  
+              {
+                first = false;
+                add_line("if (" + case_expr + ")");
+              }
+            else 
+                add_line("else if (" + case_expr + ")");
+            
+            add_line("{");
+              render_code(it->case_code);
+		        add_line("}");
+          }
+
+        if (!info.default_code.empty())
+          {
+		        add_line("else");
+            add_line("{");
+              render_code(info.default_code);
+		        add_line("}");
+          }
+      }
+  }
+
 str base_code_renderer::indent()
   {
     str result;

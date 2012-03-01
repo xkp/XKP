@@ -169,6 +169,22 @@ void code_type_resolver::while_(stmt_while& info)
       return_type_found(result);
   }
 
+void code_type_resolver::switch_(stmt_switch& info)
+  {
+    XSSType result = lang_utils::code_type(info.default_code, ctx_);
+    if (result)
+      return_type_found(result);
+
+    std::vector<switch_section>::iterator it = info.sections.begin();
+    std::vector<switch_section>::iterator nd = info.sections.end();
+    for(; it != nd; it++)
+      {
+        result = lang_utils::code_type(it->case_code, ctx_);
+        if (result)
+          return_type_found(result);
+      }
+  }
+
 void code_type_resolver::return_type_found(XSSType type)
   {
     if (type->is_variant())

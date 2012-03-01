@@ -180,6 +180,10 @@ struct code_renderer : ICodeRenderer,
     virtual void dispatch(stmt_dispatch& info)
       {
       }
+
+    virtual void switch_(stmt_switch& info)
+      {
+      }
     private:
       code            code_;
       param_list_decl params_;

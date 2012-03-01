@@ -390,6 +390,11 @@ void code::visit(code_visitor* visitor)
             stmt_dispatch d = *it;
             visitor->dispatch(d);
           }
+        else if (it->is<stmt_switch>())
+          {
+            stmt_switch s = *it;
+            visitor->switch_(s);
+          }
         else
           {
             assert(false); 
@@ -417,6 +422,11 @@ void code::range(int from, int to, code& result)
   {
     for(int i = from; i < to; i++)
       result.add_statement(statements_[i]);
+  }
+
+size_t code::size()
+  {
+    return statements_.size();
   }
 
 //xs_container

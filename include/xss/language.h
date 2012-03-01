@@ -59,6 +59,7 @@ struct code_type_resolver : code_visitor
     virtual void for_(stmt_for& info);
     virtual void iterfor_(stmt_iter_for& info);
     virtual void while_(stmt_while& info);
+    virtual void switch_(stmt_switch& info);
 
     virtual void expression_(stmt_expression& info)   {}
     virtual void variable_(stmt_variable& info)       {}

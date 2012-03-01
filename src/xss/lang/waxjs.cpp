@@ -189,6 +189,11 @@ struct wax_splitter : code_visitor
         assert(false); //ditto
       }
     
+    virtual void switch_(stmt_switch& info)
+      {
+        assert(false); //ditto
+      }
+
     CodeSplit get()
       {
         return result_;

@@ -6,6 +6,10 @@ private string p4;
 
 method foo()
 {
+    int a = 0;
+    int b = 2;
+    int c = -1;
+
     switch()
     {
         case a > b:
@@ -26,6 +30,7 @@ method foo()
         case 2:
         {
             a += 10;
+            break;
         }
 
         case 3:

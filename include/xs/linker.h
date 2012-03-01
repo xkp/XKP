@@ -44,6 +44,7 @@ namespace xkp
       virtual void expression_(stmt_expression& info);
       virtual void dsl_(dsl& info);
       virtual void dispatch(stmt_dispatch& info);
+      virtual void switch_(stmt_switch& info);
 
       //expression_visitor
       virtual void push(variant operand, bool top);

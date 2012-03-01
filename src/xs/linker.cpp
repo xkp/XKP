@@ -485,6 +485,11 @@ void code_linker::dispatch(stmt_dispatch& info)
     add_instruction(i_dispatch, info.arg_count);
   }
 
+void code_linker::switch_(stmt_switch& info)
+  {
+    assert(false);
+  }
+
 void code_linker::push(variant operand, bool top)
   {
     if (operand.is<expression_identifier>() ||

@@ -7,6 +7,10 @@
     for(var mthd in application.methods)
     {
         compiler.log("method: " + mthd.id);
+        out()
+        {
+            <xss:e>mthd.code.render()</xss:e>
+        }
     }
 
 </xss:code>
