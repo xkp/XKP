@@ -1,0 +1,108 @@
+
+<xss:parameter id="prop"/>
+<xss:parameter id="owner"/>
+<xss:parameter id="is_class"/>
+<xss:parameter id="path"/>
+
+<xss:code>
+	//TRACE: log
+	compiler.log("Rendering property: " + prop.id);
+
+	//if(!prop.user_defined || prop.no_render)
+	//	return;
+	if(prop.no_script || 
+		prop.render_type == "body_intag" || 
+		prop.render_type == "body_outtag")
+		return;
+	
+	string prop_name = prop.output_id;
+
+	if(!is_class)
+	{
+		prop_name = owner.output_id + "." + prop_name;
+	}
+
+	if(path && prop_name != "rotation")
+	{
+		prop_name = path + "." + prop_name;
+	}
+
+	if(prop.set && prop.get)
+	{
+		out()
+		{
+			<xss:e value="prop_name"/>_get = function() <xss:open_brace/>
+				<xss:e>prop.get.render()</xss:e>
+			<xss:close_brace/>;
+
+			<xss:e value="prop_name"/>_set = function(value) <xss:open_brace/>
+				<xss:e>prop.set.render()</xss:e>
+			<xss:close_brace/>;
+		}
+	}
+	else if(prop.set)
+	{
+		out(indent = 0)
+		{
+			<xss:e value="prop_name"/> = <xss:e value="prop.render_value()"/>;
+
+			<xss:e value="prop_name"/>_set = function(value) <xss:open_brace/>
+				<xss:e value="prop_name"/> = value;
+				<xss:e value="prop.set.render()"/>
+			<xss:close_brace/>;
+		}
+	}
+	else if(prop.get)
+	{
+		out(indent = 0)
+		{
+			<xss:e>prop.name</xss:e>_get = function() <xss:open_brace/>
+				<xss:e>prop.get.render()</xss:e>
+			<xss:close_brace/>;
+		}
+	}
+	else
+	{
+		string value;
+		if(!prop.type)
+			compiler.error("Properties must have a type");
+
+		if(prop.type.is_object && !prop.type.is_enum && prop.value)
+		{
+			compiler.xss("instance.xss", prop.value, path = prop_name );
+		}
+		else
+		{
+			if(prop.use_plain_value)
+				value = prop.value;
+			else
+				value = prop.render_value();
+		}
+		
+		if(value != null) //dont initialize empty values
+		{
+			if(is_class)
+			{
+				out()
+				{
+					<xss:e value="prop_name"/> = <xss:e value="value"/>;
+				}
+			}
+			else
+			{
+				if(!path)
+					path = owner.output_id;
+				else
+				{
+					if(owner.output_id != "")
+						path = path + "." + owner.output_id;
+				}
+				
+				out()
+				{
+					<xss:e v="compiler.property_set(prop, path, value)"/>;
+				}
+			}
+		}
+	}
+</xss:code>

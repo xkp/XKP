@@ -1,0 +1,52 @@
+<application name="KitchenSink" title="Kitchen Sink" src="kitchensink.xs">
+
+	<resources>
+		<res_image id="dialog" src="images/dialog.png"/>
+		<res_image id="emulator" src="images/emulator.png"/>
+	</resources>
+
+	<tabcontrol id="kitchen" width="500" height="400" placement="client">
+		<property id="tabs" type="array">
+			<string value="Buttons?"/>
+			<string value="Radios"/>
+			<string value="Image"/>
+			<string value="ProgressBars"/>
+		</property>
+		
+		<div padding="5" placement="client">
+			<button id="btn1" x="0" y="0" caption="Standard button (Toggle CheckBox)"/>
+			<togglebutton id="toggle1" x="130" y="0" text_on="=Activado=" text_off="=Desactivado="/>
+			<imagebutton id="imgbtn1" x="240" y="0" src="images/dialog.png"/>
+			<label id="lbl1" x="0" y="56" caption="Simple Labeled"/>
+			<editbox id="edit1" x="115" y="50" width="180" text="Some text!" hint="Empty EditText!"/>
+			<checkbox id="chkb1" x="50" y="300" caption="I'm a checkbox"/>
+		</div>
+		
+		<scroller padding="5" placement="client">
+			<radiogroup id="rdgTab3" orientation="vertical">
+				<radiobutton id="radio1" caption="First radiobutton inside radiogroup"/>
+				<radiobutton id="radio2" caption="Second radiobutton inside radiogroup"/>
+				<radiobutton id="radio3" caption="Third radiobutton inside radiogroup"/>
+				<radiobutton id="radio4" caption="Fourth radiobutton inside radiogroup"/>
+				<radiobutton id="radio5" caption="Fifth radiobutton inside radiogroup"/>
+				<radiobutton id="radio6" caption="Sixth radiobutton inside radiogroup"/>
+				<radiobutton id="radio7" caption="Seventh radiobutton inside radiogroup"/>
+				<radiobutton id="radio8" caption="Eighth radiobutton inside radiogroup"/>
+				<radiobutton id="radio9" caption="Ninth radiobutton inside radiogroup"/>
+			</radiogroup>
+		</scroller>
+		
+		<scroller padding="5" placement="client">
+			<img id="img1" src="images/emulator.png"/>
+		</scroller>
+		
+		<div padding="5" placement="client">
+			<progress_bar id="prgbar1" x="0" y="0" style="small"/>
+			<progress_bar id="prgbar2" x="70" y="0" style="normal"/>
+			<progress_bar id="prgbar3" x="180" y="0" style="large"/>
+			<progress_bar id="prgbar4" x="0" y="100" width="200" max="100" progress="60" secondary_progress="30" style="horizontal"/>
+			<seekbar id="seekb1" x="0" y="150" width="200" max="200" progress="60" secondary_progress="30"/>
+		</div>
+	</tabcontrol>
+
+</application>

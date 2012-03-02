@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title><xss:e value="application.title"/></title>
+	<link type="text/css" href="<xss:e value="compiler.options.jquery_ui_css_filepath"/>" rel="stylesheet">
+	<script type="text/javascript" src="<xss:e value="compiler.options.jquery_filepath"/>"></script>
+	<script type="text/javascript" src="<xss:e value="compiler.options.jquery_ui_filepath"/>"></script>
+	
+	<script type="text/javascript" src="js/utils.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+		
+			//all system position is absolute
+			$("*").each(function(index, domElem) {
+				if($(domElem).attr("id") != undefined) {
+					$(domElem).css("position", "absolute");
+				}
+			});
+		
+			<xss:code>
+				compiler.inject("render_instances");
+			</xss:code>
+		});
+	</script>
+
+	<style>
+	</style>
+</head>
+
+<body>
+    <xss:class>
+		method render_component(var component, int idt)
+		{
+			string class_name = "div";
+			if(component.type)
+				class_name = component.type.output_id;
+			
+			if(component.renderer)
+			{
+				string file_renderer = "class.xss/" + component.renderer;
+				compiler.xss(file_renderer, this, component, idt + 1);
+			}
+			else
+			{
+				//open the tag of component
+				out(indent = idt)
+				{
+					<<xss:e value="class_name"/> id="<xss:e value="component.id"/>"
+				}
+				
+				//render some properties inside html tag
+				if(component.attributes)
+				{
+					for(var attr in component.attributes)
+					{
+						string attrib = attr.value;
+						if(attr.expr)
+						{
+							if(attrib == "{parent.id}")
+							{
+								attrib = component.parent.id;
+							}
+							else
+							if(attrib == "{id}")
+							{
+								attrib = component.id;
+							}
+						}
+						
+						out(indent = idt + 1)
+						{
+							<xss:e value="attr.name"/>="<xss:e value="attrib"/>" 
+						}
+					}
+				}
+				
+				var prop_outtag = [];
+				var qproperty = component.query_properties("*");
+				for(var p1 in qproperty)
+				{
+					if(p1.value == null)
+						continue;
+					
+					if(p1.render_type == "body_intag")
+					{
+						out(indent = idt)
+						{
+							<xss:e value="p1.output_id"/>="<xss:e value="p1.value"/>" 
+						}
+					} 
+					else
+					if(p1.render_type == "body_outtag")
+					{
+						prop_outtag += p1;
+					}
+				}
+				
+				compiler.out(">");
+				
+				for(var p2 in prop_outtag)
+				{
+					out(indent = idt)
+					{
+						<xss:e value="p2.value"/>
+					}
+				}
+				
+				if(component.children)
+				{
+					for(var child in component.children)
+					{
+						render_component(child, idt + 1);
+					}
+				}
+					
+				//close the tag
+				out(indent = idt)
+				{
+					</<xss:e value="class_name"/>>
+				}
+			}
+		}
+
+		on render()
+		{
+			application.type.output_id = "div";
+			
+			//recursively generate child components
+			render_component(application, 1);
+		}
+    </xss:class>
+</body>
+</html>

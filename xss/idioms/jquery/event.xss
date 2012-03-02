@@ -1,0 +1,40 @@
+
+<xss:parameter id="ev"/>
+<xss:parameter id="owner"/>
+<xss:parameter id="is_class"/>
+
+<xss:code>
+	//TRACE: log
+	compiler.log("Rendering event: " + ev.name);
+	
+	var		impls		= ev.impls;
+	var		evargs		= ev.args;
+	string	ev_parent	= owner.output_id;
+
+	//generate functions
+	if(is_class)
+		ev_parent = "this";
+
+	out(indent = 0)
+	{
+		<xss:e value="ev_parent"/>.<xss:e value="ev.output_id"/>( function(<xss:e value="evargs.render()"/>) <xss:open_brace/> 
+	}
+
+	for(var evimpl in impls)
+	{
+		if(!is_class)
+			evimpl.use_this_id(true);
+		else
+			evimpl.this_string("ev_parent");
+
+		out(indent = 1)
+		{
+			<xss:e>evimpl.render()</xss:e>
+		}
+	}
+
+	out(indent = 0)
+	{
+		<xss:close_brace/>);
+	}
+</xss:code>

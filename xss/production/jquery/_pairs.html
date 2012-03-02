@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>XKP - EXCESS - jQuery UI Test 02</title>
+	<script src="jquery/jquery.js"></script>
+	<style>
+	
+		body {
+			overflow: auto;
+		}
+		
+		#box1 {
+			float: left;
+			border: 1px solid #111;
+			width: 320px;
+			height: 350px;
+			margin: 10px;
+		}
+		
+		#box1 img {
+			background: no-repeat 50% 50%;
+			float: left;
+			border: 1px solid #ccc;
+			background-color: #e0e0e0;
+			padding: .1em;
+			margin: 1em;
+			width: 13%;
+		}
+	</style>
+</head>
+<body>
+	<div id="box1">
+		<img id="d1" value="0"/>
+		<img id="d2" value="1"/>
+		<img id="d3" value="2"/>
+		<img id="d4" value="3"/>
+		<img id="d5" value="4"/>
+		<img id="d6" value="5"/>
+		<img id="d7" value="6"/>
+		<img id="d8" value="7"/>
+		<img id="d9" value="8"/>
+		<img id="d10" value="9"/>
+		<img id="d11" value="10"/>
+		<img id="d12" value="11"/>
+		<img id="d13" value="12"/>
+		<img id="d14" value="13"/>
+		<img id="d15" value="14"/>
+		<img id="d16" value="15"/>
+	</div>
+	<input id="shuffler" type="button" value="Shuffle targets" />
+</body>
+	<script>
+		$(document).ready(function() {
+			
+			Array.prototype.shuffle = function() {
+				var s = [];
+				while (this.length) s.push(this.splice(Math.random() * this.length, 1)[0]);
+				while (s.length) this.push(s.pop());
+				return this;
+			}
+			
+			// td: then, shuffle this array
+			var id_images = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ];
+			
+			id_images.shuffle();
+			var pairs = 8;
+			var ticks = 0;
+
+			var shuffler = $("#shuffler");
+			shuffler.click(function() {
+				id_images.shuffle();
+				pairs = 8;
+				ticks = 0;
+				$("#box1 img").each(function(index, domElem) {
+					$(domElem).attr("__showme", "false");
+					$(domElem).attr("target_id", id_images[index] % 8);
+					$(domElem).attr("src", "images/bkgrd.ico");
+				});
+			});
+			
+			$("#box1 img").each(function(index, domElem) {
+				$(domElem).attr("__showme", "false");
+				$(domElem).attr("target_id", id_images[index] % 8);
+				$(domElem).attr("src", "images/bkgrd.ico");
+			});
+			
+			var current = null;
+			$("#box1 img").click(function() {
+			
+				// if current has some image
+				if(current != null) {
+					if($(this).attr("__showme") === "true") return;
+					
+					if( current.attr("target_id") === $(this).attr("target_id") &&
+						current.attr("value") != $(this).attr("value") ) {
+						current.attr("__showme", "true");
+						$(this).attr("__showme", "true");
+						pairs--;
+					}
+					
+					if(current.attr("__showme") != "true") {
+						// hide this and show background image
+						current.attr( "src", "images/bkgrd.ico" );
+					}
+				}
+				
+				// assign new state
+				current = $(this);
+				
+				// calculate image and id target
+				var id = id_images[ +current.attr("value") ] % 8;
+				var url_img = "images/d" + id + ".ico";
+				
+				// show image target
+				current.attr( "src", url_img );
+				
+				ticks++;
+				if(pairs == 0)
+					alert("FELICIDADES! Lo has logrado en " + ticks + " clicks.");
+			});
+		});
+	</script>
+</html>
