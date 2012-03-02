@@ -1,7 +1,15 @@
 on pre_process(obj)
 {
 	if(obj.id == '')
-		obj.id = compiler.genid(obj.class_name);
+		obj.id = compiler.genid(obj.class_name);	
+}
+
+on render_js_includes()
+{
+	out()
+	{		
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
+	}
 }
 
 on render_initialization()
@@ -18,50 +26,34 @@ on render_resources()
 
     out()
     {
-        var def_package_items = [];
+        var global_package_items = [];
     }
 
     for(var res in instances)
     {	
-		if(res.renderer)
+		if(res.class_name == "package")
+			out()
+			{
+				var <xss:e v="res.id"/> = new ms.streamer.Package(streamer);
+			}
+		else if(res.renderer)
 		{
 			compiler.xss(res.renderer, res);
 		}
-		else if (res.class_name == "package")
+		else if (res.parent.class_name == "package")
         {
-            string pack_id = compiler.genid("__p");
             out()
             {
-                var <xss:e v="pack_id"/> = 
-                [
+                <xss:e v="res.parent.id"/>.add_item(
             }
-                
-            for(var resource in res.children)
-            {
-                render_resource(resource); compiler.out(",");
-            }
-                
-            out()
-            {
-                ];
-                    
-                <xss:e v="res.id"/> = new ms.streamer.Package(streamer, <xss:e v="pack_id"/>);
-				<xss:e v="res.id"/>.load();	
-                       
-            }                
-            if (res.auto_load)
-            {
-                out()
-                {
-                    <xss:e v="res.id"/>.load();
-                }
-            }
+            render_resource(res);
+            compiler.out(");");
         }
         else
         {
             out()
             {
-                def_package_items.push(
+                global_package_items.push(
             }
             render_resource(res);
             compiler.out(");");
@@ -69,8 +61,8 @@ on render_resources()
     }
     out()
     {
-        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
-		g_startup_package.load();	
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
     }
 }
 

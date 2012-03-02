@@ -26,7 +26,7 @@ class bullet : img
         {
             this.RemoveFromWorld();
 			if(sound.active)
-				Sound.play("sounds/boom.wav");
+				SoundUtils.play("sounds/boom.wav");
         }
     }
 }

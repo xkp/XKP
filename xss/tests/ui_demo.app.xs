@@ -6,6 +6,7 @@ on btnNext.click()
         main.active++;
 	btnNext.x ++;
 	btnNext.rotation += 10;
+	div_2_res.load();
 }
 
 on btnPrev.click()
@@ -18,11 +19,7 @@ on btn1.click()
 {	
 	lbl1.caption = "Got " + clicks + " smileys";
 	clicks++;	
-}
-
-on btn1.mousedown()   
-{		
-	btn1.rotation += 50;	
+	btn1.placement = "right";
 }
 
 on btn2.click()
@@ -50,6 +47,8 @@ on keydown(keycode)
 		if(keycode == DOWN_ARROW)
 			btn1.y += 2;
 	}
+	if(keycode == NUMPAD_PLUS)
+		test1.scale = 1.5;
 }
 
 

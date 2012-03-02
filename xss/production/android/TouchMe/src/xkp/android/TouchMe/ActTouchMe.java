@@ -44,7 +44,7 @@ void initCallers() {
 						} //switch
 							return true;
 						}
-			private Double prop_btnTouchme_MAX_DELTHA = 80.000000f;
+			private Double prop_btnTouchme_MAX_DELTHA = 80.000000;
 			private Double prop_btnTouchme_FIRST_QUATER = Math.PI / 4;
 			private Double prop_btnTouchme_SECOND_QUATER = 3 * Math.PI / 4;
 			private Double prop_btnTouchme_THIRD_QUATER = 5 * Math.PI / 4;

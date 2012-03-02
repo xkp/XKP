@@ -6,12 +6,11 @@
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -21,8 +20,7 @@ var g_canvas;
 var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
-var Sound = new ms.ui.Sound();
-		var streamer = new ms.streamer.Streamer();
+var SoundUtils = new ms.ui.SoundUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -30,13 +28,14 @@ var Sound = new ms.ui.Sound();
 				height: 600,
 				canvas: drawingCanvas
 			};
+            var streamer = new ms.streamer.Streamer();							
 			var ui = new ms.ui.Manager(client, streamer);
 			var g_ui = ui;
 			var g_ui_root = ui.root;
 		}
 		var streamer = new ms.streamer.Streamer();
-        var def_package_items = [];
-                def_package_items.push(
+        var global_package_items = [];
+                global_package_items.push(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -45,7 +44,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
@@ -54,8 +53,8 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
-		g_startup_package.load();	
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
 function start(resolution)  
 {  
 	function updater()  
@@ -106,18 +105,23 @@ window.onload = function()
 		    __label1 = new ms.ui.Label( 
 	    "12px Verdana",g_ui_root.manager, g_ui_root);
         __label1 = __label1;
-                __label1.text("Here we can see the painter");
-                __label1.position(200, 200);
+            __label1.set_x(200);
+            __label1.set_y(200);
+            __label1.text("Here we can see the painter");
 		    painter_1 = new ms.ui.Painter( 
 	    g_ui_root.manager, g_ui_root);
         painter_1 = painter_1;
-                painter_1.ctx = null;
-                painter_1.x = 50;
-                painter_1.y = 50;
-                painter_1.size = 20;
-                painter_1.degrees = 30;
-                painter_1.degreesList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29];
-                painter_1.i = 0;
+            painter_1.set_x(200);
+            painter_1.set_y(300);
+            painter_1.set_width(600);
+            painter_1.set_height(300);
+            painter_1.ctx = null;
+            painter_1.x = 50;
+            painter_1.y = 50;
+            painter_1.size = 20;
+            painter_1.degrees = 30;
+            painter_1.degreesList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29];
+            painter_1.i = 0;
 	painter_1.reset = function() 
 	{
 		painter_1.ctx.clearRect(150, 250, 100, 100);
@@ -157,7 +161,6 @@ painter_1.i = 0;
 		painter_1.ctx = context;
 window.canvasTimer = window.setInterval(painter_1.draw_all, 100);
 	};
-                painter_1.rect(200, 300, 600, 300);
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -178,9 +181,8 @@ window.canvasTimer = window.setInterval(painter_1.draw_all, 100);
 }
 </script>
 </head>
-<body>
-	<canvas id="myCanvas" width="600" height="600">
-		<p>Your browser doesn't support canvas.</p>
-	</canvas>
+<body>	
+	<canvas id="myCanvas" width="600" height="600"
+		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
 </body>
 </html>

@@ -1,13 +1,17 @@
 <module id="resources" src="resources.xs">
     <types>
         
-		<class id="package" renderer="package_renderer.xss"/>
+		<class id="package"/>				
 		
         <class id="image" resource_type="RESOURCE_IMAGE">
             <property id="src" type="string"/>
         </class>	
 		
-		<class id="audio" resource_type="RESOURCE_SOUND">
+		<class id="audio" resource_type="RESOURCE_AUDIO">
+			<property id="src" type="string"/>			
+		</class>
+		
+		<class id="video" resource_type="RESOURCE_VIDEO">
 			<property id="src" type="string"/>			
 		</class>
 		
@@ -30,6 +34,7 @@
 			<property id="frame_col" type="int"/>
 			<property id="frames" type="int"/>
 			<property id="step" type="int"/>
+			<property id="right_to_left" type="bool"/>
 		</class>
 		
     </types>

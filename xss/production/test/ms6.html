@@ -6,12 +6,12 @@
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+        <script type="text/javascript" src="../js/ms-state.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -21,8 +21,7 @@ var g_canvas;
 var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
-var Sound = new ms.ui.Sound();
-		var streamer = new ms.streamer.Streamer();
+var SoundUtils = new ms.ui.SoundUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -30,6 +29,7 @@ var Sound = new ms.ui.Sound();
 				height: 400,
 				canvas: drawingCanvas
 			};
+            var streamer = new ms.streamer.Streamer();							
 			var ui = new ms.ui.Manager(client, streamer);
 			var g_ui = ui;
 			var g_ui_root = ui.root;
@@ -40,8 +40,8 @@ var Sound = new ms.ui.Sound();
             return a + (b - a)*t;
         }		
 		var streamer = new ms.streamer.Streamer();
-        var def_package_items = [];
-                def_package_items.push(
+        var global_package_items = [];
+                global_package_items.push(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -50,7 +50,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
@@ -59,8 +59,8 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
-		g_startup_package.load();	
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
 function start(resolution)  
 {  
 	function updater()  
@@ -88,7 +88,6 @@ var btn1;var btn2;var ms61;var ms62;
         $super(
                 );
         this.events = new ms.event.EventHolder(); 
-                this.size(50, 100);
 this.anim1 =
 new ms.state.Sequence(
 g_sequence_manager);
@@ -109,6 +108,8 @@ g_sequence_manager);
 		    this.btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",this.manager, this);
         btn1 = this.btn1;
+            this.btn1.set_placement("top");
+            this.btn1.set_height(50);
 	var ev_parent = this;
 	btn1.events.addListener("click", function()
 	{    
@@ -123,10 +124,11 @@ btn2.alpha(100);
 	}
 	);
 		application.are_obj_events = true;
- this.btn1.top(50); 
 		    this.btn2 = new ms.ui.Button( 
 	    "images/smile_grin_48.png","images/smile_sad_48.png",this.manager, this);
         btn2 = this.btn2;
+            this.btn2.set_placement("bottom");
+            this.btn2.set_height(50);
 	var ev_parent = this;
 	btn2.events.addListener("click", function()
 	{    
@@ -141,7 +143,8 @@ anim1.start();
 	}
 	);
 		application.are_obj_events = true;
- this.btn2.bottom(50); 
+            this.set_width(50);
+            this.set_height(100);
             if (this.init)
                 this.init();
             },
@@ -178,11 +181,13 @@ window.onload = function()
 		    ms61 = new ms6( 
 	    g_ui_root.manager, g_ui_root);
         ms61 = ms61;
-                ms61.rect(100, 100, 50, 100);
+            ms61.set_x(100);
+            ms61.set_y(100);
 		    ms62 = new ms6( 
 	    g_ui_root.manager, g_ui_root);
         ms62 = ms62;
-                ms62.rect(200, 100, 50, 100);
+            ms62.set_x(200);
+            ms62.set_y(100);
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -203,9 +208,8 @@ window.onload = function()
 }
 </script>
 </head>
-<body>
-	<canvas id="myCanvas" width="600" height="400">
-		<p>Your browser doesn't support canvas.</p>
-	</canvas>
+<body>	
+	<canvas id="myCanvas" width="600" height="400"
+		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
 </body>
 </html>

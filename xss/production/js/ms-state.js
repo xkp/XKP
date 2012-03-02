@@ -599,7 +599,7 @@ ms.state.Sequence = Class.create(
         this.time = 0;
         this.just_started = true;
 
-        this.events.dispatch("star", [this]);
+        this.events.dispatch("start", [this]);
     },
 
     stop: function()

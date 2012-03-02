@@ -6,12 +6,11 @@
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
         <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script> 
 		<script type="text/javascript" src="../js/ms-joint.js"></script> 
             <script type="text/javascript" src="../js/ms-spawner.js"></script>
@@ -24,8 +23,7 @@ var g_canvas;
 var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
-var Sound = new ms.ui.Sound();
-		var streamer = new ms.streamer.Streamer();
+var SoundUtils = new ms.ui.SoundUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -33,6 +31,7 @@ var Sound = new ms.ui.Sound();
 				height: 600,
 				canvas: drawingCanvas
 			};
+            var streamer = new ms.streamer.Streamer();							
 			var ui = new ms.ui.Manager(client, streamer);
 			var g_ui = ui;
 			var g_ui_root = ui.root;
@@ -97,8 +96,8 @@ var Sound = new ms.ui.Sound();
             var xform = new b2Transform(pos, rot);
             me.SetTransform(xform);
         }
-        var def_package_items = [];
-                def_package_items.push(
+        var global_package_items = [];
+                global_package_items.push(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -107,7 +106,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
@@ -116,7 +115,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
@@ -125,7 +124,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
@@ -134,8 +133,8 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
-		g_startup_package.load();	
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
 function start(resolution)  
 {  
 	function updater()  
@@ -214,7 +213,6 @@ var car_1;var right_wheel;var right_rear_wheel;var left_wheel;var left_rear_whee
         $super(
         src? src : "images/car.png"        );
         this.events = new ms.event.EventHolder(); 
-                this.size(50, 100);
 				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
@@ -246,6 +244,8 @@ var car_1;var right_wheel;var right_rear_wheel;var left_wheel;var left_rear_whee
                         this.parent.removeComponent(this);
                     }
                 }
+            this.set_width(50);
+            this.set_height(100);
             if (this.init)
                 this.init();
             },
@@ -259,7 +259,6 @@ var car_1;var right_wheel;var right_rear_wheel;var left_wheel;var left_rear_whee
         $super(
         src? src : "images/wheel.png"        );
         this.events = new ms.event.EventHolder(); 
-                this.size(10, 20);
 				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
@@ -291,6 +290,8 @@ var car_1;var right_wheel;var right_rear_wheel;var left_wheel;var left_rear_whee
                         this.parent.removeComponent(this);
                     }
                 }
+            this.set_width(10);
+            this.set_height(20);
             if (this.init)
                 this.init();
             },
@@ -304,7 +305,6 @@ var car_1;var right_wheel;var right_rear_wheel;var left_wheel;var left_rear_whee
         $super(
         src? src : "images/box.png"        );
         this.events = new ms.event.EventHolder(); 
-                this.size(100, 100);
 				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
@@ -336,6 +336,8 @@ var car_1;var right_wheel;var right_rear_wheel;var left_wheel;var left_rear_whee
                         this.parent.removeComponent(this);
                     }
                 }
+            this.set_width(100);
+            this.set_height(100);
             if (this.init)
                 this.init();
             },
@@ -403,17 +405,17 @@ var car_1;var right_wheel;var right_rear_wheel;var left_wheel;var left_rear_whee
                 this.init();
             },
 });
-                application.steering_angle = 0;
-                application.max_steer_angle = 60;
-                application.steer_speed = 0.00999999978;
-                application.engine_speed = 0;
-                application.engine_on = false;
-                application.direction = null;
-                application.mspeed = null;
-                application.velocity = null;
-                application.sideways_axis = null;
-                application.local_point = null;
-                application.gear = null;
+            application.steering_angle = 0;
+            application.max_steer_angle = 60;
+            application.steer_speed = 0.00999999978;
+            application.engine_speed = 0;
+            application.engine_on = false;
+            application.direction = null;
+            application.mspeed = null;
+            application.velocity = null;
+            application.sideways_axis = null;
+            application.local_point = null;
+            application.gear = null;
 	application.start_engine = function() 
 	{
 		application.engine_on = true;
@@ -531,88 +533,110 @@ window.onload = function()
 		    car_1 = new car( 
 	    "images/car.png",g_ui_root.manager, g_ui_root);
         car_1 = car_1;
-                car_1.rect(300, 200, 50, 100);
+            car_1.set_x(300);
+            car_1.set_y(200);
 		    right_wheel = new wheel( 
 	    "images/wheel.png",g_ui_root.manager, g_ui_root);
         right_wheel = right_wheel;
-                right_wheel.rect(345, 220, 10, 20);
+            right_wheel.set_x(345);
+            right_wheel.set_y(220);
 		    right_rear_wheel = new wheel( 
 	    "images/wheel.png",g_ui_root.manager, g_ui_root);
         right_rear_wheel = right_rear_wheel;
-                right_rear_wheel.rect(345, 260, 10, 20);
+            right_rear_wheel.set_x(345);
+            right_rear_wheel.set_y(260);
 		    left_wheel = new wheel( 
 	    "images/wheel.png",g_ui_root.manager, g_ui_root);
         left_wheel = left_wheel;
-                left_wheel.rect(295, 220, 10, 20);
+            left_wheel.set_x(295);
+            left_wheel.set_y(220);
 		    left_rear_wheel = new wheel( 
 	    "images/wheel.png",g_ui_root.manager, g_ui_root);
         left_rear_wheel = left_rear_wheel;
-                left_rear_wheel.rect(295, 260, 10, 20);
+            left_rear_wheel.set_x(295);
+            left_rear_wheel.set_y(260);
 		    box_1 = new box( 
 	    "images/box.png",g_ui_root.manager, g_ui_root);
         box_1 = box_1;
-                box_1.rect(400, 300, 100, 100);
+            box_1.set_x(400);
+            box_1.set_y(300);
 		    box_2 = new box( 
 	    "images/box.png",g_ui_root.manager, g_ui_root);
         box_2 = box_2;
-                box_2.rect(400, 100, 100, 100);
+            box_2.set_x(400);
+            box_2.set_y(100);
 		    box_3 = new box( 
 	    "images/box.png",g_ui_root.manager, g_ui_root);
         box_3 = box_3;
-                box_3.rect(200, 300, 100, 100);
+            box_3.set_x(200);
+            box_3.set_y(300);
 		    box_4 = new box( 
 	    "images/box.png",g_ui_root.manager, g_ui_root);
         box_4 = box_4;
-                box_4.rect(100, 100, 100, 100);
+            box_4.set_x(100);
+            box_4.set_y(100);
 		    __floor1 = new floor( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
         __floor1 = __floor1;
-                __floor1.rect(0, 590, 800, 10);
+            __floor1.set_x(0);
+            __floor1.set_y(590);
+            __floor1.set_width(800);
+            __floor1.set_height(10);
 		    __floor2 = new floor( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
         __floor2 = __floor2;
-                __floor2.rect(0, 0, 10, 600);
+            __floor2.set_x(0);
+            __floor2.set_y(0);
+            __floor2.set_width(10);
+            __floor2.set_height(600);
 		    __floor3 = new floor( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
         __floor3 = __floor3;
-                __floor3.rect(0, 0, 800, 10);
+            __floor3.set_x(0);
+            __floor3.set_y(0);
+            __floor3.set_width(800);
+            __floor3.set_height(10);
 		    __floor4 = new floor( 
 	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
         __floor4 = __floor4;
-                __floor4.rect(790, 0, 10, 600);
+            __floor4.set_x(790);
+            __floor4.set_y(0);
+            __floor4.set_width(10);
+            __floor4.set_height(600);
 		    __label1 = new ms.ui.Label( 
 	    "11px Verdana",g_ui_root.manager, g_ui_root);
         __label1 = __label1;
-                __label1.text("Use arrow keys to drive the car");
-                __label1.position(100, 75);
+            __label1.set_x(100);
+            __label1.set_y(75);
+            __label1.text("Use arrow keys to drive the car");
 right_wheel_joint = 
 new ms.joint.RevoluteJoint(
 car_1,right_wheel);
-                right_wheel_joint.joint.EnableMotor(1);
-                right_wheel_joint.joint.SetMaxMotorTorque(100000);
-                right_wheel_joint.joint.EnableLimit(1);
-                right_wheel_joint.set_lower_angle(-60);
-                right_wheel_joint.set_upper_angle(60);
+            right_wheel_joint.joint.EnableMotor(1);
+            right_wheel_joint.joint.SetMaxMotorTorque(100000);
+            right_wheel_joint.joint.EnableLimit(1);
+            right_wheel_joint.set_lower_angle(-60);
+            right_wheel_joint.set_upper_angle(60);
 left_wheel_joint = 
 new ms.joint.RevoluteJoint(
 car_1,left_wheel);
-                left_wheel_joint.joint.EnableMotor(1);
-                left_wheel_joint.joint.SetMaxMotorTorque(100000);
-                left_wheel_joint.joint.EnableLimit(1);
-                left_wheel_joint.set_lower_angle(-60);
-                left_wheel_joint.set_upper_angle(60);
+            left_wheel_joint.joint.EnableMotor(1);
+            left_wheel_joint.joint.SetMaxMotorTorque(100000);
+            left_wheel_joint.joint.EnableLimit(1);
+            left_wheel_joint.set_lower_angle(-60);
+            left_wheel_joint.set_upper_angle(60);
 right_rear_wheel_joint = 
 new ms.joint.PrismaticJoint(
 car_1,right_rear_wheel,1,0);
-                right_rear_wheel_joint.joint.EnableLimit(1);
-                right_rear_wheel_joint.set_lower_limit(0);
-                right_rear_wheel_joint.set_upper_limit(0);
+            right_rear_wheel_joint.joint.EnableLimit(1);
+            right_rear_wheel_joint.set_lower_limit(0);
+            right_rear_wheel_joint.set_upper_limit(0);
 left_rear_wheel_joint = 
 new ms.joint.PrismaticJoint(
 car_1,left_rear_wheel,1,0);
-                left_rear_wheel_joint.joint.EnableLimit(1);
-                left_rear_wheel_joint.set_lower_limit(0);
-                left_rear_wheel_joint.set_upper_limit(0);
+            left_rear_wheel_joint.joint.EnableLimit(1);
+            left_rear_wheel_joint.set_lower_limit(0);
+            left_rear_wheel_joint.set_upper_limit(0);
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -633,9 +657,8 @@ car_1,left_rear_wheel,1,0);
 }
 </script>
 </head>
-<body>
-	<canvas id="myCanvas" width="800" height="600">
-		<p>Your browser doesn't support canvas.</p>
-	</canvas>
+<body>	
+	<canvas id="myCanvas" width="800" height="600"
+		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
 </body>
 </html>

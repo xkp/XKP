@@ -1,0 +1,208 @@
+<application title="danydenis.com" src="dany_dennis.xs" width="1024" height="768" background="Black">
+    <resources>
+        <image src="images/pictures/redbox.png"/>	
+        <image src="images/pictures/redbox2.png"/>
+        <image src="images/pictures/pict1.jpg"/>
+        <image src="images/pictures/pict1_neg.jpg"/>
+        <image src="images/pictures/pict2.jpg"/>
+        <image src="images/pictures/pict2_neg.jpg"/>
+        <image src="images/pictures/pict3.jpg"/>
+        <image src="images/pictures/pict3_neg.jpg"/>
+		<image src="images/pictures/pict4.jpg"/>
+		<image src="images/pictures/pict4_neg.jpg"/>
+		<image src="images/pictures/pict5.jpg"/>
+		<image src="images/pictures/pict5_neg.jpg"/>
+		<image src="images/pictures/pict6.jpg"/>
+		<image src="images/pictures/pict6_neg.jpg"/>
+		<image src="images/pictures/pict7.jpg"/>
+		<image src="images/pictures/pict7_neg.jpg"/>
+		<image src="images/pictures/pict8.jpg"/>
+		<image src="images/pictures/pict8_neg.jpg"/>
+		<image src="images/pictures/pict9.jpg"/>
+		<image src="images/pictures/pict9_neg.jpg"/>
+		<image src="images/pictures/pict10.jpg"/>
+		<image src="images/pictures/pict10_neg.jpg"/>
+		<image src="images/pictures/pict11.jpg"/>
+		<image src="images/pictures/pict11_neg.jpg"/>
+		<image src="images/pictures/banner.png"/>
+        <image src="images/pictures/close.png"/>
+		<image src="images/pictures/camerawl.png"/>
+		<image src="images/pictures/lens.png"/>
+    </resources>
+  	
+	<scene>
+		<camera id="camera_1" fov="45" aspect="1.5" near="1" far="10000">
+			<position z="1000"/>			
+		</camera>
+	              
+		<plane id="plane_1" width="146" height="302" alpha="0" texture="images/pictures/pict1_neg.jpg">
+			<scale x="0.5" y="0.5" z="0.5"/>
+		</plane>
+		<plane id="plane_2" width="301" height="302" alpha="0" texture="images/pictures/pict2_neg.jpg">
+			<scale x="0.5" y="0.5" z="0.5"/>
+		</plane>	
+		<plane id="plane_3" width="117" height="302" alpha="0" texture="images/pictures/pict3_neg.jpg">
+			<scale x="0.5" y="0.5" z="0.5"/>
+		</plane>
+		<plane id="plane_4" width="245" height="240" alpha="0" texture="images/pictures/pict4_neg.jpg">
+			<scale x="0.5" y="0.5" z="0.5"/>
+		</plane>
+		<plane id="plane_5" width="240" height="240" alpha="0" texture="images/pictures/pict5_neg.jpg">
+			<scale x="0.5" y="0.5" z="0.5"/>
+		</plane>      
+	</scene>
+	   
+    <img id="close" x="800" y="10" width="30" height="30" alpha="0" src="images/pictures/close.png"/>			
+	<ripple_effect id="box_cont" x="25" y="25" width="802" height="602" alpha="60" src="images/pictures/redbox2.png"/>
+	<img id="box_border" x="50" y="50" width="800" height="600" alpha="80" src="images/pictures/redbox.png"/>
+    
+	<img id="banner" x="200" y="200" width="400" height="50" rotation="-30" alpha="0" src="images/pictures/banner.png"/>	
+	
+    <img id="camerawl" x="320" y="240" width="280" height="180" alpha="0" src="images/pictures/camerawl.png"/>
+	<img id="lens" x="430" y="287" width="120" height="120" alpha="0" src="images/pictures/lens.png"/>
+    
+    <line id="line_top" x1="5" y1="38" x2="5" y2="38" alpha="50" color="white"/>
+	
+	<img id="pict1" x="0" y="0" width="0" height="0" alpha="0" src="images/pictures/pict1.jpg"/>
+	<img id="pict2" x="0" y="0" width="0" height="0" alpha="0" src="images/pictures/pict2.jpg"/>
+	<img id="pict3" x="0" y="0" width="0" height="0" alpha="0" src="images/pictures/pict3.jpg"/>
+	<img id="pict4" x="0" y="0" width="0" height="0" alpha="0" src="images/pictures/pict4.jpg"/>
+	<img id="pict5" x="0" y="0" width="0" height="0" alpha="0" src="images/pictures/pict5.jpg"/>	
+	
+    <sequence id="init_anim" auto_start="true">
+        <at time="0">
+            <animate property="banner.alpha" from="0" to="100" in="2"/>
+			<animate property="camerawl.alpha" from="0" to="100" in="2"/>
+			<animate property="lens.alpha" from="0" to="100" in="2"/>
+        </at>
+        <at time="2">
+            <animate property="banner.x" from="200" to="10" in="4"/>
+			<animate property="banner.y" from="200" to="10" in="4"/>
+            <animate property="banner.width" from="400" to="200" in="4"/>
+			<animate property="banner.height" from="50" to="25" in="4"/>
+			<animate property="banner.rotation" from="-30" to="0" in="4"/>
+			<animate property="line_top.x2" from="5" to="800" in="4"/>
+			<animate property="lens.rotation" from="0" to="-45" in="1"/>
+        </at>
+		<at time="3">            
+			<animate property="lens.rotation" from="-45" to="45" in="2"/>
+        </at>
+		<at time="5">            
+			<animate property="lens.rotation" from="45" to="0" in="1"/>
+        </at>
+		<at time="6">            
+			<animate property="camerawl.x" from="320" to="750" in="2"/>
+			<animate property="camerawl.y" from="240" to="1" in="2"/>
+            <animate property="camerawl.width" from="280" to="38" in="2"/>
+			<animate property="camerawl.height" from="180" to="28" in="2"/>
+			<animate property="lens.x" from="430" to="764" in="2"/>
+			<animate property="lens.y" from="287" to="8" in="2"/>
+            <animate property="lens.width" from="120" to="18" in="2"/>
+			<animate property="lens.height" from="120" to="18" in="2"/>
+        </at>       
+    </sequence>
+    
+    <sequence id="cam_out">
+        <at time="0">
+			<animate property="camerawl.x" from="camerawl.x" to="750" in="2"/>
+			<animate property="camerawl.y" from="camerawl.y" to="1" in="2"/>
+            <animate property="camerawl.width" from="camerawl.width" to="38" in="2"/>
+			<animate property="camerawl.height" from="camerawl.height" to="28" in="2"/>
+			<animate property="lens.x" from="lens.x" to="764" in="2"/>
+			<animate property="lens.y" from="lens.y" to="8" in="2"/>
+            <animate property="lens.width" from="lens.width" to="18" in="2"/>
+			<animate property="lens.height" from="lens.height" to="18" in="2"/>
+             <animate property="close.alpha" from="close.alpha" to="0" in="2"/>
+        </at>        
+    </sequence>
+    
+    <sequence id="cam_in">
+        <at time="0">
+			<animate property="camerawl.x" from="camerawl.x" to="320" in="2"/>
+			<animate property="camerawl.y" from="camerawl.y" to="240" in="2"/>
+            <animate property="camerawl.width" from="camerawl.width" to="280" in="2"/>
+			<animate property="camerawl.height" from="camerawl.height" to="180" in="2"/>
+			<animate property="lens.x" from="lens.x" to="430" in="2"/>
+			<animate property="lens.y" from="lens.y" to="287" in="2"/>
+            <animate property="lens.width" from="lens.width" to="120" in="2"/>
+			<animate property="lens.height" from="lens.height" to="120" in="2"/>
+            <animate property="close.alpha"	from="close.alpha" to="100" in="2"/>
+        </at>        
+    </sequence>
+    	
+	<sequence id="p1_in">
+        <at time="0">
+			<animate property="pict1.x" 		from="332" to="300" in="3"/>
+			<animate property="pict1.y" 		from="219" to="30" in="3"/>
+            <animate property="pict1.width" 	from="97" to="292" in="3"/>
+			<animate property="pict1.height" 	from="201" to="604" in="3"/>
+			<animate property="pict1.alpha"		from="pict1.alpha" to="100" in="3"/>
+            <animate property="close.alpha"		from="close.alpha" to="100" in="3"/>
+        </at>        
+    </sequence>
+	
+	<sequence id="p2_in">
+        <at time="0">
+			<animate property="pict2.x" 		from="332" to="100" in="3"/>
+			<animate property="pict2.y" 		from="219" to="30" in="3"/>
+            <animate property="pict2.width" 	from="200" to="602" in="3"/>
+			<animate property="pict2.height" 	from="201" to="604" in="3"/>
+			<animate property="pict2.alpha"		from="pict2.alpha" to="100" in="3"/>
+            <animate property="close.alpha"		from="close.alpha" to="100" in="3"/>
+        </at>        
+    </sequence>
+	
+	<sequence id="p3_in">
+        <at time="0">
+			<animate property="pict3.x" 		from="332" to="315" in="3"/>
+			<animate property="pict3.y" 		from="219" to="30" in="3"/>
+            <animate property="pict3.width" 	from="78" to="234" in="3"/>
+			<animate property="pict3.height" 	from="201" to="604" in="3"/>
+			<animate property="pict3.alpha"		from="pict3.alpha" to="100" in="3"/>
+            <animate property="close.alpha"		from="close.alpha" to="100" in="3"/>
+        </at>
+    </sequence>
+	
+	<sequence id="p4_in">
+        <at time="0">
+			<animate property="pict4.x" 		from="332" to="170" in="3"/>
+			<animate property="pict4.y" 		from="219" to="30" in="3"/>
+            <animate property="pict4.width" 	from="179" to="539" in="3"/>
+			<animate property="pict4.height" 	from="176" to="528" in="3"/>
+			<animate property="pict4.alpha"		from="pict4.alpha" to="100" in="3"/>
+            <animate property="close.alpha"		from="close.alpha" to="100" in="3"/>
+        </at>        
+    </sequence>
+	
+	<sequence id="p5_in">
+        <at time="0">
+			<animate property="pict5.x"			from="332" to="130" in="3"/>
+			<animate property="pict5.y"			from="219" to="30" in="3"/>
+            <animate property="pict5.width" 	from="193" to="580" in="3"/>
+			<animate property="pict5.height" 	from="193" to="580" in="3"/>
+			<animate property="pict5.alpha"		from="pict5.alpha" to="100" in="3"/>
+            <animate property="close.alpha"		from="close.alpha" to="100" in="3"/>
+        </at>       
+    </sequence>
+	
+	<pic_out id="pic_out"/>
+	
+	<idle_anim id="idle_anim_1"/>
+	<idle_anim id="idle_anim_2"/>
+	<idle_anim id="idle_anim_3"/>
+	<idle_anim id="idle_anim_4"/>
+	<idle_anim id="idle_anim_5"/>
+	
+	<sequence id="idle_anim_seq" auto_start="true">
+		<every t="8">
+			<run method="animate_all"/>
+		</every>
+	</sequence>
+    
+    <sequence id="close_fade_in">
+		<at time="0">
+			<animate property="close.alpha"	from="close.alpha" to="0" in="3"/>
+		</at>
+	</sequence>
+
+</application>

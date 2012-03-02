@@ -13,5 +13,5 @@
     <button id="btn1" x="200" y="200" rotation="0.2" width="50" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png">
         <physics body_type="dynamic" shape="circle" radius="1.2" x="10" y="10"/>
     </button>
-    <body id="floor" body_type="static" shape="rect" x="10" y="15.13" width="20" height="2"/>
+    <body id="floor" body_type="static" shape="rect" x="0" y="380" width="400" height="2"/>
 </application>

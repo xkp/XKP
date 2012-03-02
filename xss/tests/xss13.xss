@@ -1,0 +1,12 @@
+<xss:code>
+    for(var prop in application.properties)
+    {
+        compiler.log("property: " + prop.id);
+    }
+
+    for(var mthd in application.methods)
+    {
+        compiler.log("method: " + mthd.id);
+    }
+
+</xss:code>

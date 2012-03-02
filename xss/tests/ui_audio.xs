@@ -1,17 +1,21 @@
 property curr_sound;
 
+on init()
+{
+	curr_sound = sound_1;
+	curr_sound.play();
+}
+
 on btnSound2.click()
 {	
-	sound_2.pause();
-	sound_2.currentTime = 0;
+	sound_2.stop();
 	curr_sound = sound_1;
 	curr_sound.play();
 }
 
 on btnSound1.click()
 {	
-	sound_1.pause();
-	sound_1.currentTime = 0;
+	sound_1.stop();	
 	curr_sound = sound_2;
 	curr_sound.play();
 }
@@ -23,8 +27,7 @@ on btnPlay.click()
 
 on btnStop.click()
 {
-    curr_sound.pause();
-	curr_sound.currentTime = 0;
+    curr_sound.stop();	
 }
 
 on btnPause.click()

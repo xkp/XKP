@@ -1,12 +1,12 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 public class JavaTest1 {
-			private Float prop_instance1_xvalue = 100.199997f;
+			private Float prop_instance1_xvalue = 100.199997;
 			private Object prop_instance1_svalue;
 			private Object prop_instance1_typing;
 			private Integer prop_instance1_simple = 50;
 			public Float prop_instance1_read_only_get() {
-				return 10.000000f;
+				return 10.000000;
 			}
 			private Object prop_instance1_writable;
 			public void prop_instance1_writable_set(Object value) {
@@ -22,19 +22,19 @@ public class JavaTest1 {
 		public Object mthd_instance1_test0(Integer value) {
 			ArrayList xxx;
 Integer a = value;
-Float b = 5.000000f;
+Float b = 5.000000;
 Integer c = 2;
-Float d = 3.140000f;
+Float d = 3.140000;
 return a * b - xxx.get(c);
 		}
 		public Float mthd_instance1_test1(Integer value) {
-			Float b = 5.000000f;
+			Float b = 5.000000;
 return b / 2;
 		}
 		public String mthd_instance1_test2(Integer value) {
 			Integer a = value;
-Float b = 5.000000f;
-return mthd_application_app_test(a * b);
+Float b = 5.000000;
+return application.mthd_application_app_test(a * b);
 		}
 		public Object mthd_instance1_test3(Object value) {
 			return value;
@@ -50,7 +50,7 @@ return mthd_application_app_test(a * b);
 Integer v0 = 20;
 Integer v1 = instance1.px_value;
 String v2 = "string";
-Float v3 = 3.140000f;
+Float v3 = 3.140000;
 Boolean v4 = true;
 Object v5 = prop_instance1_xvalue;
 Integer x0;
@@ -117,9 +117,9 @@ else
 }
 String rmthd;
 rmthd = mthd_application_app_test(10);
-String thd = mthd_application_app_test(2);
+String thd = application.mthd_application_app_test(2);
 Object mthd;
-mthd = mthd_instance1_test0(10);
+mthd = instance1.mthd_instance1_test0(10);
 			}
 	public static void main(String[] args) {
 				application.create();

@@ -26,7 +26,7 @@ RealLiteral    = {Digit}*'.'{Digit}+
 StringLiteral  = '"'( {String Ch} | '\'{Printable} )* '"'
 CharLiteral    = '' ( {Char Ch} | '\'{Printable} )* ''
 
-DSLIdentifier	 = '@''@'{ID Head} {ID Tail}*
+DSLIdentifier    = '@''@'{ID Head} {ID Tail}*
 
 ! ----------------------------------------------------------------- Comments
 
@@ -143,11 +143,11 @@ Comment End = '*/'
         |  '(' <Expression> ')' 
 
 <Array Literal>
-	::= '[' <Arg List Opt> ']'
+    ::= '[' <Arg List Opt> ']'
        
 <Primary>
        ::= Identifier
-	 |  <Array Literal>	
+     |  <Array Literal> 
         |  Identifier '(' <Arg List Opt> ')'    !Current object method
         |  <Literal>        
 
@@ -169,8 +169,8 @@ Comment End = '*/'
 
 
 <Type>
-	::= Identifier '<' <Type Arg List> '>'
-	|   Identifier	
+    ::= Identifier '<' <Type Arg List> '>'
+    |   Identifier  
 
 <Type Arg List>
        ::= <Type Arg List> ',' <Type Argument>
@@ -184,9 +184,9 @@ Comment End = '*/'
 ! ----------------------------------------------------------------- DSLs
 
 <DSL>
-	::= DSLIdentifier Identifier '(' <Arg List Opt> ')' '@' DecLiteral
-	 |  DSLIdentifier '(' <Arg List Opt> ')' '@' DecLiteral
-	 |  DSLIdentifier '@' DecLiteral
+    ::= DSLIdentifier Identifier '(' <Arg List Opt> ')' '@' DecLiteral
+     |  DSLIdentifier '(' <Arg List Opt> ')' '@' DecLiteral
+     |  DSLIdentifier '@' DecLiteral
 
 ! ----------------------------------------------------------------- Code
 <Stm List>
@@ -198,7 +198,7 @@ Comment End = '*/'
         |   if       '(' <Expression> ')' <Statement>
         |   if       '(' <Expression> ')' <Statement> else <Statement>        
         |   for      '(' <For Init Opt> ';' <For Condition Opt> ';' <For Iterator Opt> ')' <Statement>
-        |   for  	'(' <Type> Identifier in <Expression> ')' <Statement>  
+        |   for     '(' <Type> Identifier in <Expression> ')' <Statement>  
         |   while    '(' <Expression> ')' <Statement>
         |   switch   '(' <Expression> ')' '{' <Switch Sections Opt> '}'
         |   dispatch <Qualified ID> '(' <Arg List Opt> ')' ';'
@@ -214,7 +214,7 @@ Comment End = '*/'
         |  '{' '}' 
          
 <Local Var Decl> 
-	 ::= <Type> <Variable Declarator>
+     ::= <Type> <Variable Declarator>
 
 <Variable Declarator>
         ::= Identifier
@@ -259,14 +259,14 @@ Comment End = '*/'
         |  '{' '}' 
 
 <Adj List>
-	::= <Adj List> <Adjetive>
-	 |  <Adjetive>	
+    ::= <Adj List> <Adjetive>
+     |  <Adjetive>  
 
 <Adjetive>
-	::= delegate 
+    ::= delegate 
      |  public
-	 |  private
-	 |  class
+     |  private
+     |  class
 
 <Arg Decl List Opt>
        ::= <Arg Decl List>
@@ -279,7 +279,7 @@ Comment End = '*/'
 <Argument Decl>
        ::= <Type> Identifier '=' <Expression>
        |   <Type> Identifier
-	|   Identifier	
+    |   Identifier  
 
 <Class Arg Decl List>
        ::= <Class Arg Decl List> ',' <Class Argument Decl>
@@ -290,46 +290,53 @@ Comment End = '*/'
        |   Identifier
 
 <Class Arg List Opt>
-	::= '<' <Class Arg Decl List> '>'
-	|   !Nothing
- 	
+    ::= '<' <Class Arg Decl List> '>'
+    |   !Nothing
+    
 <Construct>
        ::=  <Adj List> <Property>
-	 |   <Adj List> <Method Decl>
-	 |   <Property>
-	 |   <Method Decl>
-	 |   instance <Qualified ID> <Type Opt> <Construct Block>
-	 |   class Identifier <Class Arg List Opt> <Type Opt> <Construct Block>
-	 |   behaviour Identifier <Type Opt> <Construct Block>
-	 |   on <Qualified ID> '(' <Arg Decl List Opt> ')' <Block>
-	 |   const Identifier '=' <Expression> ';'
-	 |   event Identifier '(' <Arg Decl List Opt> ')' ';'
-	 |   behave as Identifier <Block>
-	 |   behave as Identifier ';'
-	 |   <Expression> '->' <Expression>';'
-	 |   <DSL>
+     |   <Adj List> <Method Decl>
+     |   <Property>
+     |   <Method Decl>
+     |   instance <Qualified ID> <Type Opt> <Construct Block>
+     |   class Identifier <Class Arg List Opt> <Type Opt> <Construct Block>
+     |   behaviour Identifier <Type Opt> <Construct Block>
+     |   on <Qualified ID> '(' <Arg Decl List Opt> ')' <Block>
+     |   const Identifier '=' <Expression> ';'
+     |   event Identifier '(' <Arg Decl List Opt> ')' ';'
+     |   behave as Identifier <Block>
+     |   behave as Identifier ';'
+     |   <Expression> '->' <Expression>';'
+     |   <DSL>
 
 <Property>
-	::=  property Identifier <Type Opt> <Prop Descriptor>
+    ::=  property Identifier <Type Opt> <Prop Descriptor>
+     |   <Local Var Decl> ';'
+     
+<Method Name>
+    ::= method 
+     |  function
+
 
 <Method Decl>
-	::=  method Identifier '(' <Arg Decl List Opt> ')' <Type Opt> <Block>
+    ::=  <Method Name> Identifier '(' <Arg Decl List Opt> ')' <Type Opt> <Block>
+     |   <Type> Identifier '(' <Arg Decl List Opt> ')' <Block>
 
 <Type Opt>
-	::=  ':' <Type>
-	 |   !Nothing	
+    ::=  ':' <Type>
+     |   !Nothing   
 
 <Prop Descriptor>
-	::=  <Block>
+    ::=  <Block>
      |   '=' <Block> <Block>
-	 |   '=' <Block>
-	 |   '=' <Expression> <Block>
-	 |   '=' <Expression> ';'
-	 |   ';'		
+     |   '=' <Block>
+     |   '=' <Expression> <Block>
+     |   '=' <Expression> ';'
+     |   ';'        
 
 ! ----------------------------------------------------------------- Main
 
 <Program>
-	::= <Block>
-	 |  <Construct List>
-	 |  <Expression>
+    ::= <Block>
+     |  <Construct List>
+     |  <Expression>

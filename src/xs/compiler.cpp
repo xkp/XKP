@@ -46,7 +46,7 @@ enum xs_rules
     rule_minusequal     = 17,       //<Expression> ::= <Conditional Exp> '-=' <Expression>
     rule_multequal      = 18,       //<Expression> ::= <Conditional Exp> '*=' <Expression>
     rule_divequal       = 19,       //<Expression> ::= <Conditional Exp> '/=' <Expression>
-    rule_shiftlequal    = 20,       //"<Expression> ::= <Conditional Exp> '<<=' <Expression>
+    rule_shiftlequal    = 20,       //<Expression> ::= <Conditional Exp> '<<=' <Expression>
     rule_shiftrequal    = 21,       //<Expression> ::= <Conditional Exp> '>>=' <Expression>
     rule_conditional    = 23,       //<Conditional Exp> ::= <Or Exp> '?' <Or Exp> ':' <Conditional Exp>
     rule_or             = 25,       //<Or Exp> ::= <Or Exp> '||' <And Exp>
@@ -136,12 +136,14 @@ enum xs_rules
     rule_bind           = 154,      //<Construct> ::= <Expression> '->' <Expression> ';'
     rule_construct_dsl  = 155,      //<Construct> ::= <DSL>
     rule_property       = 156,      //<Property> ::= property Identifier <Type Opt> <Prop Descriptor>
-    rule_method         = 157,      //<Method Decl> ::= method Identifier '(' <Arg Decl List Opt> ')' <Type Opt> <Block>
-    rule_typed          = 158,      //<Type Opt> ::= ':' <Type>
-    rule_prop_get_set   = 161,      //<Prop Descriptor> ::= '=' <Block> <Block>
-    rule_prop_get       = 162,      //<Prop Descriptor> ::= '=' <Block>
-    rule_prop_value_set = 163,      //<Prop Descriptor> ::= '=' <Expression> <Block>
-    rule_prop_value     = 164,      //<Prop Descriptor> ::= '=' <Expression> ';'
+    rule_var_property   = 157,      //<Property> ::= <Local Var Decl> ';'
+    rule_method         = 160,      //<Method Decl> ::= <Method Name> Identifier '(' <Arg Decl List Opt> ')' <Type Opt> <Block>
+    rule_method_c       = 161,      //<Method Decl> ::= <Type> Identifier '(' <Arg Decl List Opt> ')' <Block>
+    rule_typed          = 162,      //<Type Opt> ::= ':' <Type>
+    rule_prop_get_set   = 165,      //<Prop Descriptor> ::= '=' <Block> <Block>
+    rule_prop_get       = 166,      //<Prop Descriptor> ::= '=' <Block>
+    rule_prop_value_set = 167,      //<Prop Descriptor> ::= '=' <Expression> <Block>
+    rule_prop_value     = 168,      //<Prop Descriptor> ::= '=' <Expression> ';'
   };
 
 //ditto for symbols
@@ -151,15 +153,15 @@ enum xs_terminals
     terminal_int          = 52, //"DecLiteral"
     terminal_delegate     = 54, //"delegate"
     terminal_false        = 59, //"false"
-    terminal_hex          = 62, //"HexLiteral"
-    terminal_identifier   = 63, //"Identifier"
-    terminal_member_name  = 68, //"MemberName"
-    terminal_null         = 70, //"null"
-    terminal_private      = 72, //"private"
-    terminal_public       = 74, //"public"
-    terminal_float        = 75, //"RealLiteral"
-    terminal_string       = 77, //"StringLiteral"
-    terminal_true         = 79, //"true"
+    terminal_hex          = 63, //"HexLiteral"
+    terminal_identifier   = 64, //"Identifier"
+    terminal_member_name  = 69, //"MemberName"
+    terminal_null         = 71, //"null"
+    terminal_private      = 73, //"private"
+    terminal_public       = 75, //"public"
+    terminal_float        = 76, //"RealLiteral"
+    terminal_string       = 78, //"StringLiteral"
+    terminal_true         = 80, //"true"
   };
 
 //parse tree visitors, will walk the parse tree and return a human usable
@@ -1054,11 +1056,12 @@ struct property_ : visitor_base<property_>
   {
     property_(xs_property& output) : output_(output)
       {
-        register_rule(rule_property,        &property_::main );
-        register_rule(rule_block,           &property_::set_only );
-        register_rule(rule_prop_get_set,    &property_::get_set );
-        register_rule(rule_prop_get,        &property_::get_only );
-        register_rule(rule_prop_value,      &property_::value );
+        register_rule(rule_property,      &property_::main );
+        register_rule(rule_var_property,  &property_::as_var );
+        register_rule(rule_block,         &property_::set_only );
+        register_rule(rule_prop_get_set,  &property_::get_set );
+        register_rule(rule_prop_get,      &property_::get_only );
+        register_rule(rule_prop_value,    &property_::value );
         register_rule(rule_prop_value_set,  &property_::value_set );
       }
 
@@ -1078,6 +1081,17 @@ struct property_ : visitor_base<property_>
         output_.type = tp.type_;
 
         visitor->visit(token->Tokens[3], *this);
+      }
+
+    void as_var( TokenStruct* token, parsetree_visitor* visitor )
+      {
+        stmt_variable sv;
+        variable_     v(sv);
+        visitor->visit(token->Tokens[0], v);
+
+        output_.name  = sv.id;
+        output_.type  = sv.type;
+        output_.value = sv.value;
       }
 
     void set_only( TokenStruct* token, parsetree_visitor* visitor )
@@ -1122,6 +1136,7 @@ struct method_ : visitor_base<method_>
     method_(xs_method& output) : output_(output)
       {
         register_rule(rule_method, &method_::main );
+        register_rule(rule_method_c, &method_::main_c );
       }
 
     bool visit(TokenStruct* token, parsetree_visitor* visitor)
@@ -1142,6 +1157,18 @@ struct method_ : visitor_base<method_>
 
         code_ cd(output_.cde);
         visitor->visit(token->Tokens[6], cd);
+      }
+
+    void main_c( TokenStruct* token, parsetree_visitor* visitor )
+      {
+        output_.type = wide2str(token->Tokens[0]->Tokens[0]->Data);
+        output_.name = wide2str(token->Tokens[1]->Data);
+
+        param_decl_ pd(output_.args);
+        visitor->visit(token->Tokens[3], pd);
+
+        code_ cd(output_.cde);
+        visitor->visit(token->Tokens[5], cd);
       }
 
     xs_method& output_;
@@ -1231,7 +1258,9 @@ struct xs_ : visitor_base<xs_>
         register_rule(rule_const,           &xs_::const_ );
         register_rule(rule_event_decl,      &xs_::event_decl );
         register_rule(rule_property,        &xs_::add_property );
+        register_rule(rule_var_property,    &xs_::add_property );
         register_rule(rule_method,          &xs_::add_method );
+        register_rule(rule_method_c,        &xs_::add_method );
         register_rule( rule_complete_dsl,   &xs_::complete_dsl );
         register_rule( rule_parameter_dsl,  &xs_::parameter_dsl );
         register_rule( rule_simple_dsl,     &xs_::simple_dsl );
@@ -1562,16 +1591,16 @@ bool xs_compiler::compile_xs_file(const str& filename, xs_container& result)
 void xs_compiler::init_grammar()
   {
     Grammar.CaseSensitive = False;
-    Grammar.InitialSymbol = 119;
+    Grammar.InitialSymbol = 121;
     Grammar.InitialDfaState = 0;
     Grammar.InitialLalrState = 0;
-    Grammar.SymbolCount = 136;
+    Grammar.SymbolCount = 138;
     Grammar.SymbolArray = GrammarSymbolArray;
-    Grammar.RuleCount = 169;
+    Grammar.RuleCount = 173;
     Grammar.RuleArray = GrammarRuleArray;
-    Grammar.DfaStateCount = 212;
+    Grammar.DfaStateCount = 219;
     Grammar.DfaArray = GrammarDfaStateArray;
-    Grammar.LalrStateCount = 324;
+    Grammar.LalrStateCount = 334;
     Grammar.LalrArray = GrammarLalrStateArray;
   }
 

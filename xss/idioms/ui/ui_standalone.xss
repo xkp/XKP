@@ -1,5 +1,4 @@
 
-
 <xss:code>
 //preconditions
 if (!application.canvasElement)
@@ -24,18 +23,11 @@ if (!application.ui_package)
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
-
 <script type="text/javascript" src="../js/ms-event.js"></script>
-
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
-
 <xss:code>
-    compiler.inject("render_jscripts");
+    compiler.inject("render_js_includes");
 </xss:code>
 
 <script type="text/javascript">	
@@ -49,7 +41,7 @@ var g_ui_root;
 var application = {};
 
 application.events = new ms.event.EventHolder();
-var Sound = new ms.ui.Sound();
+var SoundUtils = new ms.ui.SoundUtils();
 		
 <xss:code>
     compiler.inject("render_initialization");
@@ -139,13 +131,10 @@ window.onload = function()
 
 </head>
 
-<body>
-	<canvas id="<xss:e value="application.canvasElement"/>" width="<xss:e value="application.width"/>" height="<xss:e value="application.height"/>">
-
-		<p>Your browser doesn't support canvas.</p>
-
-	</canvas>
-		
+<body>	
+	<canvas id="<xss:e value="application.canvasElement"/>" width="<xss:e value="application.width"/>" height="<xss:e value="application.height"/>"
+		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
+			
 	<xss:marker id="html_body"/>
 
 </body>

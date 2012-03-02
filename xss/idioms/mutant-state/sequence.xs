@@ -15,18 +15,14 @@ on render_initialization()
             return a + (b - a)*t;
         }		
 	}
+}
 
-    out(marker = "includes")
-    {
-        <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
-        <script type="text/javascript" src="../js/jquery.utils.js"></script>
-        <script type="text/javascript" src="../js/utils.js"></script>
-        <script type="text/javascript" src="../js/prototype.js"></script>
-
-        <script type="text/javascript" src="../js/ms-ui.js"></script>
-        <script type="text/javascript" src="../js/ms-streamer.js"></script>
+on render_js_includes()
+{
+	out()
+	{		
         <script type="text/javascript" src="../js/ms-state.js"></script>
-    }
+	}
 }
 
 on render_types()

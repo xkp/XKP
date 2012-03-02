@@ -9,20 +9,19 @@
 	background:RoyalBlue;
 	}
 </style>
-<script type="text/javascript" src="../js/three/Detector.js"></script>
-<script type="text/javascript" src="../js/three/Three.js"></script>
-<script type="text/javascript" src="../js/three/Stats.js"></script>
-<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/three/Three.js"></script>
+		<script type="text/javascript" src="../js/three/Stats.js"></script>
+		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+		<script type="text/javascript" src="../js/three/Utils.js"></script>
+		<script type="text/javascript" src="../js/three/Detector.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript">		
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 var renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -35,8 +34,8 @@ var application = {};
 application.events = new ms.event.EventHolder();
 		var streamer = new ms.streamer.Streamer();
 	// --------RESOURCES---------
-        var def_package_items = [];
-                def_package_items.push(
+        var global_package_items = [];
+                global_package_items.push(
             {
 		id:				"model_1",
 		resource_type:	RESOURCE_JSON_MODEL,
@@ -45,7 +44,7 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__json_model1",
 		resource_type:	RESOURCE_JSON_MODEL,
@@ -54,8 +53,8 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });
-        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
-		g_startup_package.load();	
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
@@ -78,7 +77,7 @@ var camera_1 =
 new THREE.Camera(
 75,1.5,1,100000);
 		active_camera = camera_1;
-                camera_1.position.z = 500;
+            camera_1.position.z = 500;
 var a_ligth = 
 new THREE.AmbientLight(
 Salmon);
@@ -89,26 +88,28 @@ new THREE.DirectionalLight(
 Ivory);
 		;
 	scene.addLight(d_ligth_1);
-                d_ligth_1.position.y = -70;
-                d_ligth_1.position.z = 100;
-	var male_model;
+            d_ligth_1.position.y = -70;
+            d_ligth_1.position.z = 100;
+	var male_model = new THREE.Object3D();
 	var male_model_loader = 
 	generate_model_loader(streamer.get_resource('model/male02/Male02_slim.js').type);
 		male_model_loader.load(
 		{
 				model : streamer.get_resource('model/male02/Male02_slim.js').asset , callback : function( geometry )
 			{
-				male_model = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
-                male_model.position.x = 120;
-                male_model.position.y = -350;
-                male_model.position.z = -350;
-                male_model.scale.x = 4;
-                male_model.scale.y = 4;
-                male_model.scale.z = 4;
+				var male_model_mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
+				male_model.addChild(male_model_mesh);
+            male_model.position.x = 120;
+            male_model.position.y = -350;
+            male_model.position.z = -350;
+            male_model.scale.x = 4;
+            male_model.scale.y = 4;
+            male_model.scale.z = 4;
 				scene.addObject(male_model);
 			} 
 		} 
-	);	
+	);
+	male_model.events = new ms.event.EventHolder();
 	var ev_parent = this;
 	male_model.events.addListener("click", function()
 	{    
@@ -116,24 +117,26 @@ Ivory);
 	}
 	);
 		application.are_obj_events = true;
-	var female_model;
+	var female_model = new THREE.Object3D();
 	var female_model_loader = 
 	generate_model_loader(streamer.get_resource('model_1').type);
 		female_model_loader.load(
 		{
 				model : streamer.get_resource('model_1').asset , callback : function( geometry )
 			{
-				female_model = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
-                female_model.position.x = -110;
-                female_model.position.y = -350;
-                female_model.position.z = -350;
-                female_model.scale.x = 4;
-                female_model.scale.y = 4;
-                female_model.scale.z = 4;
+				var female_model_mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
+				female_model.addChild(female_model_mesh);
+            female_model.position.x = -110;
+            female_model.position.y = -350;
+            female_model.position.z = -350;
+            female_model.scale.x = 4;
+            female_model.scale.y = 4;
+            female_model.scale.z = 4;
 				scene.addObject(female_model);
 			} 
 		} 
-	);	
+	);
+	female_model.events = new ms.event.EventHolder();
 	var ev_parent = this;
 	female_model.events.addListener("click", function()
 	{    
@@ -141,8 +144,8 @@ Ivory);
 	}
 	);
 		application.are_obj_events = true;
-                application.mouse_x = null;
-                application.mouse_y = null;
+            application.mouse_x = null;
+            application.mouse_y = null;
 	var ev_parent = this;
 	application.events.addListener("animate", function()
 	{    

@@ -8,11 +8,20 @@
 							style="background-color:<xss:e value = "application.background"/>;" >
 	</canvas>
    </body>
-    <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
+	
+	<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+	<script type="text/javascript" src="../js/jquery.utils.js"></script>
+	<script type="text/javascript" src="../js/utils.js"></script>
+	<script type="text/javascript" src="../js/prototype.js"></script>
 	<script type="text/javascript" src="../js/ms-event.js"></script>
 	<script type="text/javascript" src="../js/keys.js"></script>
 	<script type="text/javascript" src="../js/colors.js"></script>
-    <script type="text/javascript">
+    <xss:code>
+		compiler.inject("render_js_includes");
+	</xss:code>
+	
+	<script type="text/javascript">
+	
       var g_ui = {};     
       function init() {
          <xss:code>
