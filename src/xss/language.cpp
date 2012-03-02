@@ -20,6 +20,7 @@ const str SUnknownTypeFromExpression("Cannot deduce type from assigned expressio
 const str SInconsistentExpressionType("Inconsistent type of expression assigned");
 const str SInvalidAssign("Invalid assign");
 const str SCannotResolveAssign("Cannot resolve assign identifier");
+const str SCannontResolveType("Cannot resolve type");
 
 //source_collector
 void source_collector::property_(xs_property& info)
@@ -409,6 +410,28 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
 							stack_.pop();
 
             //and do nothing
+            break;
+          }
+
+        case op_instantiate:
+          {
+            int args = stack_.top(); stack_.pop();
+            xs_type tt = stack_.top(); stack_.pop();
+
+            for(int i = 0; i < args; i++)
+							stack_.pop();
+
+            XSSType type = ctx_->get_type(tt.name); //td: <>
+            if (!type)
+              {
+                param_list error;
+                error.add("id", SLinker);
+                error.add("desc", SCannontResolveType);
+                error.add("what", tt.name);
+                xss_throw(error);
+              }
+
+            stack_.push(type);
             break;
           }
 
@@ -929,6 +952,7 @@ const char* operator_str[] =
     "",     //op_func_call
     "",     //op_array,
     "",     //op_parameter
+    "",     //op_instantiate
   };
 
 const int operator_precedence[] =
@@ -971,6 +995,7 @@ const int operator_precedence[] =
     1,  //"",     //op_func_call
     1,  //"",     //op_array,
     1,  //"",     //op_parameter
+    1,  //"new",  //op_instantiate
   };
 
 str lang_utils::operator_string(operator_type op)

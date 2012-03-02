@@ -25,6 +25,7 @@ const str SCannotResolveParam("Cannot resolve constructor parameter");
 const str SCannotResolveCtorProperty("Cannot resolve constructor property");
 const str STooManyParamsInCtor("Too many params in constructor");
 const str SUnknownDSL("Unkown dsl");
+const str SCannotResolveType("Unkown type");
 
 //variable_gather
 variable_gather::variable_gather(XSSContext ctx):
@@ -1099,6 +1100,36 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
             break;
           }
 
+        case op_instantiate:
+          {
+            std::stringstream result;
+            xs_type caller = arg1;
+            int     args   = arg2;
+
+            //pop the arguments
+			      std::vector<str> params;
+            for(int i = 0; i < args; i++)
+              {
+                variant arg  = stack_.top(); stack_.pop();
+                str     sarg = operand_to_string(arg);
+                params.push_back(sarg);
+			        }
+            
+            XSSType type = ctx_->get_type(caller.name);
+
+            if (!type)
+              {
+                param_list error;
+                error.add("id", SLanguage);
+                error.add("desc", SCannotResolveType);
+                error.add("type", type->id());
+                xss_throw(error);
+              }
+            
+            push_rendered(render_instantiation(type, params), op_prec, variant());
+            break;
+          }
+
         case op_func_call:
           {
             //td!!! this is silly, function calls ( foo(bar) instead of foo1.foo(bar) ) configure
@@ -1137,44 +1168,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 
             XSSType instantiation = ctx_->get_type(caller);
             if (instantiation)
-              {
-                //grab parameter info
-                //td: types
-                DynamicArray info(new dynamic_array);
-                std::vector<str>::reverse_iterator pit = params.rbegin();
-                std::vector<str>::reverse_iterator pnd = params.rend();
-                for(; pit != pnd; pit++)
-                  {
-                    XSSObject param_info(new xss_object());
-                    param_info->add_attribute("value", *pit);
-
-                    info->push_back(param_info);
-                  }
-
-                XSSObject type(instantiation);
-                str xss = type->get<str>("instantiator", str());
-                if (!xss.empty())
-                  {
-                    //prepare rendering parameters
-                    param_list args;
-                    args.add("type", instantiation);
-                    args.add("args", info);
-
-                    XSSCompiler compiler = ctx_->resolve("compiler");
-                    fs::path type_path   = compiler->type_path(caller);
-
-                    XSSContext  ctx(new xss_context(ctx_, type_path));
-                    XSSRenderer rend = compiler->compile_xss_file(xss, ctx);
-                    str         res  = rend->render(XSSObject(), &args);
-                    push_rendered(res, op_prec, variant());
-                  }
-                else
-                  {
-                    Language lang = ctx_->get_language();
-                    str      lr = lang->instantiate(instantiation, XSSObject(), info);
-                    push_rendered(lr, op_prec, variant(), caller);
-                  }
-              }
+              push_rendered(render_instantiation(instantiation, params), op_prec, variant());
             else
               push_rendered(result.str(), op_prec, variant(), caller); //td: we could find out the type here or something
             break;
@@ -1264,6 +1258,43 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 
 				default:
           assert(false); //td:
+      }
+  }
+
+str base_expr_renderer::render_instantiation(XSSType type, std::vector<str>& params)
+  {
+    //grab parameter info
+    //td: types
+    DynamicArray info(new dynamic_array);
+    std::vector<str>::reverse_iterator pit = params.rbegin();
+    std::vector<str>::reverse_iterator pnd = params.rend();
+    for(; pit != pnd; pit++)
+      {
+        XSSObject param_info(new xss_object());
+        param_info->add_attribute("value", *pit);
+
+        info->push_back(param_info);
+      }
+
+    str xss = type->get<str>("instantiator", str());
+    if (!xss.empty())
+      {
+        //prepare rendering parameters
+        param_list args;
+        args.add("type", type);
+        args.add("args", info);
+
+        XSSCompiler compiler = ctx_->resolve("compiler");
+        fs::path type_path   = compiler->type_path(type->id());
+
+        XSSContext  ctx(new xss_context(ctx_, type_path));
+        XSSRenderer rend = compiler->compile_xss_file(xss, ctx);
+        return rend->render(XSSObject(), &args);
+      }
+    else
+      {
+        Language lang = ctx_->get_language();
+        return lang->instantiate(type, XSSObject(), info);
       }
   }
 

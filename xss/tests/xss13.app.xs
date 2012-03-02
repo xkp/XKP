@@ -42,6 +42,8 @@ method foo()
 
 function bar(var xx)
 {
+    var yy = new object(25);
+    object zz = object(25);
 }
 
 void foobar(string barfoo)

@@ -344,6 +344,7 @@ void java_expr_renderer::exec_operator(operator_type op, int pop_count, int push
         case op_func_call:
         case op_parameter:
 				case op_dot:
+        case op_instantiate:
           {
             // execute exec_operator of base class with the same parameters
             base_expr_renderer::exec_operator(op, pop_count, push_count, top);

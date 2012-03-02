@@ -77,6 +77,7 @@ const char* operator_name[] =
     "",     //op_array,
     "",     //op_parameter
     "",     //op_parameter_name
+    "new",  //op_instantiate
   };
 
 //just a very bad name
@@ -121,6 +122,7 @@ operator_type native_op[] =
     op_not, //op_array,
     op_not, //op_parameter
     op_not, //op_parameter_name
+    op_not, //op_instantiate
   };
 
 struct array_evaluator : expr_evaluator

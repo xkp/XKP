@@ -43,6 +43,7 @@ const int operand_count[] =
     2, //op_func_call
     1, //op_array,
     1, //op_parameter
+    2, //op_instantiate
   };
 
 //expression
@@ -294,6 +295,7 @@ void expression_splitter::exec_operator(operator_type op, int pop_count, int pus
 				      pop_count += (int)result_.back();
               break;
             case op_func_call:
+            case op_instantiate:
 				      pop_count += (int)result_.back();
               break;
             case op_parameter:

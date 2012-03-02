@@ -47,6 +47,7 @@ namespace xkp
       op_func_call,         //35  
       op_array,             //36
       op_parameter,         //37 
+      op_instantiate,       //38
     };    
     
   struct operator_exec

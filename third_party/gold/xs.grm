@@ -140,6 +140,7 @@ Comment End = '*/'
 
 <Primary Exp>
        ::= <Primary>
+        |  new <Type> '(' <Arg List Opt> ')'    !Instantiation
         |  '(' <Expression> ')' 
 
 <Array Literal>

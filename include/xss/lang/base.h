@@ -142,6 +142,8 @@ struct base_expr_renderer : IExpressionRenderer,
 
       void push_rendered(str value, int prec, variant object, const str& path = str());
 			str	 render_captured_property();
+      str  render_instantiation(XSSType type, std::vector<str>& params);
+
   };
 
 struct base_args_renderer : public IArgumentRenderer
