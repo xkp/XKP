@@ -26,6 +26,7 @@ const str SCannotResolveCtorProperty("Cannot resolve constructor property");
 const str STooManyParamsInCtor("Too many params in constructor");
 const str SUnknownDSL("Unkown dsl");
 const str SCannotResolveType("Unkown type");
+const str SOnlyOneCatch("Only One Catch, please");
 
 //variable_gather
 variable_gather::variable_gather(XSSContext ctx):
@@ -604,6 +605,47 @@ void base_code_renderer::switch_(stmt_switch& info)
 		        add_line("}");
           }
       }
+  }
+
+void base_code_renderer::try_(stmt_try& info)
+  {
+    add_line("try");
+		add_line("{");
+      render_code(info.try_code);
+		add_line("}");
+
+    if (!info.catches.empty())
+      {
+        if (info.catches.size() > 1)
+          {
+            //lazy me
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", SOnlyOneCatch);
+            xss_throw(error);
+          }
+
+        add_line("catch(__exception)");
+		    add_line("{");
+          catch_& lonely = info.catches[0];
+          if (!lonely.id.empty())
+		        add_line("var " + lonely.id + " = __exception;");
+            render_code(lonely.catch_code);
+		    add_line("}");
+      }
+
+    if (!info.finally_code.empty())
+      {
+        add_line("finally");
+		    add_line("{");
+            render_code(info.finally_code);
+		    add_line("}");
+      }
+  }
+
+void base_code_renderer::throw_(stmt_throw& info)
+  {
+    add_line("throw " + render_expression(info.expr, ctx_) + ";");
   }
 
 str base_code_renderer::indent()

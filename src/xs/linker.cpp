@@ -492,6 +492,16 @@ void code_linker::switch_(stmt_switch& info)
     assert(false);
   }
 
+void code_linker::try_(stmt_try& info)
+  {
+    assert(false);
+  }
+
+void code_linker::throw_(stmt_throw& info)
+  {
+    assert(false);
+  }
+
 void code_linker::push(variant operand, bool top)
   {
     if (operand.is<expression_identifier>() ||

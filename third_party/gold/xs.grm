@@ -206,9 +206,24 @@ Comment End = '*/'
         |   break ';'
         |   continue ';'
         |   return <Expression Opt> ';'
+        |   try <Block> <Catch Clauses> <Finally Clause Opt>
+        |   throw <Expression> ';'
         |   <Expression> ';'        
         |   <Block>    
         |   <DSL>     
+
+<Catch Clauses>
+        ::= <Catch Clause> <Catch Clauses>
+         |  !Nothing
+
+<Catch Clause>
+        ::= catch '(' <Type> Identifier ')' <Block>
+         |  catch '(' <Type>            ')' <Block>
+         |  catch <Block>
+
+<Finally Clause Opt>
+        ::= finally <Block>
+         |  !Nothing
 
 <Block>
        ::= '{' <Stm List> '}'

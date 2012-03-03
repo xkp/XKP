@@ -60,6 +60,7 @@ struct code_type_resolver : code_visitor
     virtual void iterfor_(stmt_iter_for& info);
     virtual void while_(stmt_while& info);
     virtual void switch_(stmt_switch& info);
+    virtual void try_(stmt_try& info);
 
     virtual void expression_(stmt_expression& info)   {}
     virtual void variable_(stmt_variable& info)       {}
@@ -67,6 +68,7 @@ struct code_type_resolver : code_visitor
     virtual void continue_()                          {}
     virtual void dsl_(dsl& info)                      {}
     virtual void dispatch(stmt_dispatch& info)        {}
+    virtual void throw_(stmt_throw& info)             {}  
 		private:
       code             cde_;
 			XSSContext	     ctx_;

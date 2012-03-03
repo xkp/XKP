@@ -397,6 +397,16 @@ void code::visit(code_visitor* visitor)
             stmt_switch s = *it;
             visitor->switch_(s);
           }
+        else if (it->is<stmt_try>())
+          {
+            stmt_try t = *it;
+            visitor->try_(t);
+          }
+        else if (it->is<stmt_throw>())
+          {
+            stmt_throw t = *it;
+            visitor->throw_(t);
+          }
         else
           {
             assert(false); 

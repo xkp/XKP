@@ -184,6 +184,15 @@ struct code_renderer : ICodeRenderer,
     virtual void switch_(stmt_switch& info)
       {
       }
+
+    virtual void try_(stmt_try& info)
+      {
+      }
+
+    virtual void throw_(stmt_throw& info)
+      {
+      }
+
     private:
       code            code_;
       param_list_decl params_;

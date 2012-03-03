@@ -44,6 +44,26 @@ function bar(var xx)
 {
     var yy = new object(25);
     object zz = object(25);
+
+    try
+    {
+        some.dangerous();
+    }
+    catch(int id)
+    {
+        console.log("error: " + id);
+    }
+    catch
+    {
+        console.log("other error");
+    }
+    finally
+    {
+        console.log("finally!");
+    }
+
+    if (yy.z > 4)
+        throw yy;
 }
 
 void foobar(string barfoo)

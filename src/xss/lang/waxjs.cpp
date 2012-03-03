@@ -194,6 +194,16 @@ struct wax_splitter : code_visitor
         assert(false); //ditto
       }
 
+    virtual void try_(stmt_try& info)
+      {
+        assert(false); //ditto-est
+      }
+
+    virtual void throw_(stmt_throw& info)
+      {
+        assert(false); //ditto-est-test
+      }
+
     CodeSplit get()
       {
         return result_;

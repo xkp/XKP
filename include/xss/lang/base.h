@@ -46,6 +46,8 @@ struct variable_gather : code_visitor
     virtual void dsl_(dsl& info)                      {}
     virtual void dispatch(stmt_dispatch& info)        {}
     virtual void switch_(stmt_switch& info)           {}
+    virtual void try_(stmt_try& info)                 {}
+    virtual void throw_(stmt_throw& info)             {}
 
     private:
       typedef std::vector<str> var_list;
@@ -79,6 +81,8 @@ struct base_code_renderer : ICodeRenderer,
     virtual void dsl_(dsl& info);
     virtual void dispatch(stmt_dispatch& info);
     virtual void switch_(stmt_switch& info);
+    virtual void try_(stmt_try& info);
+    virtual void throw_(stmt_throw& info);
 
     private:
       param_list_decl params_;

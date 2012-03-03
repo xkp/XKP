@@ -187,6 +187,25 @@ struct expression_splitter : expression_visitor
       code                        default_code;
     };
 
+  struct catch_
+    {
+      xs_type type;
+      str     id;
+      code    catch_code;
+    };
+
+  struct stmt_try
+    {
+      code                try_code;
+      std::vector<catch_> catches;
+      code                finally_code;
+    };
+
+  struct stmt_throw
+    {
+      expression expr;
+    };
+
   struct dsl
     {
       str        name;
@@ -211,6 +230,8 @@ struct expression_splitter : expression_visitor
       virtual void dsl_(dsl& info)                    = 0;
       virtual void dispatch(stmt_dispatch& info)      = 0;
       virtual void switch_(stmt_switch& info)         = 0;
+      virtual void try_(stmt_try& info)               = 0;
+      virtual void throw_(stmt_throw& info)           = 0;
     };    
 
   //forwards

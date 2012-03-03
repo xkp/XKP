@@ -186,6 +186,26 @@ void code_type_resolver::switch_(stmt_switch& info)
       }
   }
 
+void code_type_resolver::try_(stmt_try& info)
+  {
+    XSSType result = lang_utils::code_type(info.try_code, ctx_);
+    if (result)
+      return_type_found(result);
+
+    result = lang_utils::code_type(info.finally_code, ctx_);
+    if (result)
+      return_type_found(result);
+
+    std::vector<catch_>::iterator it = info.catches.begin();
+    std::vector<catch_>::iterator nd = info.catches.end();
+    for(; it != nd; it++)
+      {
+        result = lang_utils::code_type(it->catch_code, ctx_);
+        if (result)
+          return_type_found(result);
+      }
+  }
+
 void code_type_resolver::return_type_found(XSSType type)
   {
     if (type->is_variant())
