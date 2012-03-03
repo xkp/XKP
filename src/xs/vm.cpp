@@ -59,6 +59,7 @@ const char* vm_operator_name[] =
     "",     //op_parameter
     "",     //op_parameter_name
     "",     //op_instantiate
+    "",     //op_object
   };
 
 operator_type vm_native_op[] =
@@ -103,6 +104,7 @@ operator_type vm_native_op[] =
     op_not, //op_parameter
     op_not, //op_parameter_name
     op_not, //op_instantiate
+    op_not, //op_object
   };
 
 //execution_context

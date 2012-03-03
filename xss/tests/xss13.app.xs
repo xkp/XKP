@@ -53,10 +53,6 @@ function bar(var xx)
     {
         console.log("error: " + id);
     }
-    catch
-    {
-        console.log("other error");
-    }
     finally
     {
         console.log("finally!");
@@ -68,4 +64,5 @@ function bar(var xx)
 
 void foobar(string barfoo)
 {
+    var x = {color : "blue", eyes : false};
 }

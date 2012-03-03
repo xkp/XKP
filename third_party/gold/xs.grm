@@ -138,9 +138,22 @@ Comment End = '*/'
          |  '++'
          |  '--'     
 
+<Object List Opt>
+       ::= <Object List>
+        |  !Nothing
+       
+<Object List>
+       ::= <Object List> ',' <Object Value>
+        |  <Object Value>
+
+<Object Value>
+       ::= Identifier ':' <Expression>
+       |  Identifier '=' <Expression>
+
 <Primary Exp>
        ::= <Primary>
         |  new <Type> '(' <Arg List Opt> ')'    !Instantiation
+        |  '{' <Object List Opt> '}'            !Object
         |  '(' <Expression> ')' 
 
 <Array Literal>
@@ -148,7 +161,7 @@ Comment End = '*/'
        
 <Primary>
        ::= Identifier
-     |  <Array Literal> 
+        |  <Array Literal> 
         |  Identifier '(' <Arg List Opt> ')'    !Current object method
         |  <Literal>        
 

@@ -81,7 +81,7 @@ struct expression_splitter : expression_visitor
       std::stack<int>      positions_; 
 	};
 
-//helpers
+  //helpers
   struct xs_const
     {
       str        name;

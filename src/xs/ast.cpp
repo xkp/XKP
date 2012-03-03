@@ -44,6 +44,7 @@ const int operand_count[] =
     1, //op_array,
     1, //op_parameter
     2, //op_instantiate
+    1, //op_object
   };
 
 //expression

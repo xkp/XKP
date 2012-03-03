@@ -76,82 +76,85 @@ enum xs_rules
     rule_index          = 59,       //<Method> ::= '[' <Expression List> ']'
     rule_post_inc       = 60,       //<Method> ::= '++'
     rule_post_dec       = 61,       //<Method> ::= --
-    rule_instantiation  = 63,       //<Primary Exp> ::= new <Type> '(' <Arg List Opt> ')'
-    rule_array          = 65,       //<Array Literal> ::= '[' <Arg List Opt> ']'
-    rule_func_call      = 68,       //<Primary> ::= Identifier '(' <Arg List Opt> ')'
-    rule_empty_args     = 71,       //<Arg List Opt> ::=
-    rule_argument_list  = 72,       //<Arg List> ::= <Arg List> ',' <Argument>
-    rule_named_argument = 74,       //<Argument> ::= Identifier '=' <Conditional Exp>
-    rule_argument       = 75,       //<Argument> ::= <Conditional Exp>
-    rule_type_params    = 76,       //<Type> ::= Identifier '<' <Type Arg List> '>'
-    rule_type           = 77,       //<Type> ::= Identifier
-    rule_type_args      = 78,       //<Type Arg List> ::= <Type Arg List> ',' <Type Argument>
-    rule_type_arg_named = 80,       //<Type Argument> ::= Identifier '=' <Primary Exp>
-    rule_complete_dsl   = 82,       //<DSL> ::= DSLIdentifier Identifier '(' <Arg List Opt> ')' '@' DecLiteral
-    rule_parameter_dsl  = 83,       //<DSL> ::= DSLIdentifier '(' <Arg List Opt> ')' '@' DecLiteral
-    rule_simple_dsl     = 84,       //<DSL> ::= DSLIdentifier '@' DecLiteral
-    rule_if             = 88,       //<Statement> ::= if '(' <Expression> ')' <Statement>
-    rule_ifelse         = 89,       //<Statement> ::= if '(' <Expression> ')' <Statement> else <Statement>
-    rule_for            = 90,       //<Statement> ::= for '(' <For Init Opt> ';' <For Condition Opt> ';' <For Iterator Opt> ')' <Statement>
-    rule_iterfor        = 91,       //<Statement> ::= for '(' <Type> Identifier in <Expression> ')' <Statement>
-    rule_while          = 92,       //<Statement> ::= while '(' <Expression> ')' <Statement>
-    rule_switch         = 93,       //<Statement> ::= switch '(' <Switch Header> ')' '{' <Switch Sections Opt> '}'
-    rule_dispatch       = 94,       //<Statement> ::= dispatch <Qualified ID> '(' <Arg List Opt> ')' ';'
-    rule_break          = 95,       //<Statement> ::= break ';'
-    rule_continue       = 96,       //<Statement> ::= continue ';'
-    rule_return         = 97,       //<Statement> ::= return <Expression Opt> ';'
-    rule_try            = 98,       //<Statement> ::= try <Block> <Catch Clauses> <Finally Clause Opt>
-    rule_throw          = 99,       //<Statement> ::= throw <Expression> ';'
-    rule_expr_stmt      = 100,      //<Statement> ::= <Expression> ';'
-    rule_code_block     = 101,      //<Statement> ::= <Block>
-    rule_code_dsl       = 102,      //<Statement> ::= <DSL>
-    rule_catch_id       = 105,      //<Catch Clause> ::= catch '(' <Type> Identifier ')' <Block>
-    rule_catch_type     = 106,      //<Catch Clause> ::= catch '(' <Type> ')' <Block>
-    rule_catch_any      = 107,      //<Catch Clause> ::= catch <Block>
-    rule_finally        = 108,      //<Finally Clause Opt> ::= finally <Block>
-    rule_block          = 110,      //<Block> ::= '{' <Stm List> '}'
-    rule_vardecl        = 112,      //<Local Var Decl> ::= <Type> <Variable Declarator>
-    rule_varname        = 113,      //<Variable Declarator> ::= Identifier
-    rule_varinit        = 114,      //<Variable Declarator> ::= Identifier '=' <Expression>
-    rule_switchsection  = 119,      //<Switch Section> ::= <Switch Labels> <Stm List>
-    rule_switchcase     = 122,      //<Switch Label> ::= case <Expression> ':'
-    rule_switchdefault  = 123,      //<Switch Label> ::= default ':'
-    rule_for_vardecl    = 124,      //<For Init Opt> ::= <Local Var Decl>
-    rule_for_initexpr   = 125,      //<For Init Opt> ::= <Expression>
-    rule_for_opt        = 126,      //<For Iterator Opt> ::= <Expression>
-    rule_for_cond       = 129,      //<For Condition Opt> ::= <Expression>
-    rule_adjetive_list  = 137,      //<Adj List> ::= <Adj List> <Adjetive>
-    rule_plist_empty    = 142,      //<Arg Decl List Opt> ::=
-    rule_plist_decl     = 143,      //<Arg Decl List> ::= <Arg Decl List> ',' <Argument Decl>
-    rule_default_arg    = 145,      //<Argument Decl> ::= <Type> Identifier '=' <Expression>
-    rule_arg            = 146,      //<Argument Decl> ::= <Type> Identifier
-    rule_untyped_arg    = 147,      //<Argument Decl> ::= Identifier
-    rule_class_plist    = 148,      //<Class Arg Decl List> ::= <Class Arg Decl List> ',' <Class Argument Decl>
-    rule_class_def_arg  = 150,      //<Class Argument Decl> ::= Identifier '=' <Primary Exp>
-    rule_class_arg      = 151,      //<Class Argument Decl> ::= Identifier
-    rule_class_args     = 152,      //<Class Arg List Opt> ::= '<' <Class Arg Decl List> '>'
-    rule_class_no_args  = 153,      //<Class Arg List Opt> ::=
-    rule_adj_property   = 154,      //<Construct> ::= <Adj List> <Property>
-    rule_adj_method     = 155,      //<Construct> ::= <Adj List> <Method Decl>
-    rule_instance       = 158,      //<Construct> ::= instance <Qualified ID> <Type Opt> <Construct Block>
-    rule_class          = 159,      //<Construct> ::= class Identifier <Class Arg List Opt> <Type Opt> <Construct Block>
-    rule_behaviour      = 160,      //<Construct> ::= behaviour Identifier <Type Opt> <Construct Block>
-    rule_event          = 161,      //<Construct> ::= on <Qualified ID> '(' <Arg Decl List Opt> ')' <Block>
-    rule_const          = 162,      //<Construct> ::= const Identifier '=' <Expression> ';'
-    rule_event_decl     = 163,      //<Construct> ::= event Identifier '(' <Arg Decl List Opt> ')' ';'
-    rule_behaveas       = 164,      //<Construct> ::= behave as Identifier <Block>
-    rule_behaveas_empty = 165,      //<Construct> ::= behave as Identifier ';'
-    rule_bind           = 166,      //<Construct> ::= <Expression> '->' <Expression> ';'
-    rule_construct_dsl  = 167,      //<Construct> ::= <DSL>
-    rule_property       = 168,      //<Property> ::= property Identifier <Type Opt> <Prop Descriptor>
-    rule_var_property   = 169,      //<Property> ::= <Local Var Decl> ';'
-    rule_method         = 172,      //<Method Decl> ::= <Method Name> Identifier '(' <Arg Decl List Opt> ')' <Type Opt> <Block>
-    rule_method_c       = 173,      //<Method Decl> ::= <Type> Identifier '(' <Arg Decl List Opt> ')' <Block>
-    rule_typed          = 174,      //<Type Opt> ::= ':' <Type>
-    rule_prop_get_set   = 177,      //<Prop Descriptor> ::= '=' <Block> <Block>
-    rule_prop_get       = 178,      //<Prop Descriptor> ::= '=' <Block>
-    rule_prop_value_set = 179,      //<Prop Descriptor> ::= '=' <Expression> <Block>
-    rule_prop_value     = 180,      //<Prop Descriptor> ::= '=' <Expression> ';'
+    rule_object_value   = 66,       //<Object Value> ::= Identifier ':' <Expression>
+    rule_object_value_1 = 67,       //<Object Value> ::= Identifier '=' <Expression>
+    rule_instantiation  = 69,       //<Primary Exp> ::= new <Type> '(' <Arg List Opt> ')'
+    rule_object         = 70,       //<Primary Exp> ::= '{' <Object List Opt> '}'
+    rule_array          = 72,       //<Array Literal> ::= '[' <Arg List Opt> ']'
+    rule_func_call      = 75,       //<Primary> ::= Identifier '(' <Arg List Opt> ')'
+    rule_empty_args     = 78,       //<Arg List Opt> ::=
+    rule_argument_list  = 79,       //<Arg List> ::= <Arg List> ',' <Argument>
+    rule_named_argument = 81,       //<Argument> ::= Identifier '=' <Conditional Exp>
+    rule_argument       = 82,       //<Argument> ::= <Conditional Exp>
+    rule_type_params    = 83,       //<Type> ::= Identifier '<' <Type Arg List> '>'
+    rule_type           = 84,       //<Type> ::= Identifier
+    rule_type_args      = 85,       //<Type Arg List> ::= <Type Arg List> ',' <Type Argument>
+    rule_type_arg_named = 87,       //<Type Argument> ::= Identifier '=' <Primary Exp>
+    rule_complete_dsl   = 89,       //<DSL> ::= DSLIdentifier Identifier '(' <Arg List Opt> ')' '@' DecLiteral
+    rule_parameter_dsl  = 90,       //<DSL> ::= DSLIdentifier '(' <Arg List Opt> ')' '@' DecLiteral
+    rule_simple_dsl     = 91,       //<DSL> ::= DSLIdentifier '@' DecLiteral
+    rule_if             = 95,       //<Statement> ::= if '(' <Expression> ')' <Statement>
+    rule_ifelse         = 96,       //<Statement> ::= if '(' <Expression> ')' <Statement> else <Statement>
+    rule_for            = 97,       //<Statement> ::= for '(' <For Init Opt> ';' <For Condition Opt> ';' <For Iterator Opt> ')' <Statement>
+    rule_iterfor        = 98,       //<Statement> ::= for '(' <Type> Identifier in <Expression> ')' <Statement>
+    rule_while          = 99,       //<Statement> ::= while '(' <Expression> ')' <Statement>
+    rule_switch         = 100,      //<Statement> ::= switch '(' <Switch Header> ')' '{' <Switch Sections Opt> '}'
+    rule_dispatch       = 101,      //<Statement> ::= dispatch <Qualified ID> '(' <Arg List Opt> ')' ';'
+    rule_break          = 102,      //<Statement> ::= break ';'
+    rule_continue       = 103,      //<Statement> ::= continue ';'
+    rule_return         = 104,      //<Statement> ::= return <Expression Opt> ';'
+    rule_try            = 105,      //<Statement> ::= try <Block> <Catch Clauses> <Finally Clause Opt>
+    rule_throw          = 106,      //<Statement> ::= throw <Expression> ';'
+    rule_expr_stmt      = 107,      //<Statement> ::= <Expression> ';'
+    rule_code_block     = 108,      //<Statement> ::= <Block>
+    rule_code_dsl       = 109,      //<Statement> ::= <DSL>
+    rule_catch_id       = 112,      //<Catch Clause> ::= catch '(' <Type> Identifier ')' <Block>
+    rule_catch_type     = 113,      //<Catch Clause> ::= catch '(' <Type> ')' <Block>
+    rule_catch_any      = 114,      //<Catch Clause> ::= catch <Block>
+    rule_finally        = 115,      //<Finally Clause Opt> ::= finally <Block>
+    rule_block          = 117,      //<Block> ::= '{' <Stm List> '}'
+    rule_vardecl        = 119,      //<Local Var Decl> ::= <Type> <Variable Declarator>
+    rule_varname        = 120,      //<Variable Declarator> ::= Identifier
+    rule_varinit        = 121,      //<Variable Declarator> ::= Identifier '=' <Expression>
+    rule_switchsection  = 126,      //<Switch Section> ::= <Switch Labels> <Stm List>
+    rule_switchcase     = 129,      //<Switch Label> ::= case <Expression> ':'
+    rule_switchdefault  = 130,      //<Switch Label> ::= default ':'
+    rule_for_vardecl    = 131,      //<For Init Opt> ::= <Local Var Decl>
+    rule_for_initexpr   = 132,      //<For Init Opt> ::= <Expression>
+    rule_for_opt        = 133,      //<For Iterator Opt> ::= <Expression>
+    rule_for_cond       = 136,      //<For Condition Opt> ::= <Expression>
+    rule_adjetive_list  = 142,      //<Adj List> ::= <Adj List> <Adjetive>
+    rule_plist_empty    = 149,      //<Arg Decl List Opt> ::=
+    rule_plist_decl     = 150,      //<Arg Decl List> ::= <Arg Decl List> ',' <Argument Decl>
+    rule_default_arg    = 152,      //<Argument Decl> ::= <Type> Identifier '=' <Expression>
+    rule_arg            = 153,      //<Argument Decl> ::= <Type> Identifier
+    rule_untyped_arg    = 154,      //<Argument Decl> ::= Identifier
+    rule_class_plist    = 155,      //<Class Arg Decl List> ::= <Class Arg Decl List> ',' <Class Argument Decl>
+    rule_class_def_arg  = 157,      //<Class Argument Decl> ::= Identifier '=' <Primary Exp>
+    rule_class_arg      = 158,      //<Class Argument Decl> ::= Identifier
+    rule_class_args     = 159,      //<Class Arg List Opt> ::= '<' <Class Arg Decl List> '>'
+    rule_class_no_args  = 160,      //<Class Arg List Opt> ::=
+    rule_adj_property   = 161,      //<Construct> ::= <Adj List> <Property>
+    rule_adj_method     = 162,      //<Construct> ::= <Adj List> <Method Decl>
+    rule_instance       = 165,      //<Construct> ::= instance <Qualified ID> <Type Opt> <Construct Block>
+    rule_class          = 166,      //<Construct> ::= class Identifier <Class Arg List Opt> <Type Opt> <Construct Block>
+    rule_behaviour      = 167,      //<Construct> ::= behaviour Identifier <Type Opt> <Construct Block>
+    rule_event          = 168,      //<Construct> ::= on <Qualified ID> '(' <Arg Decl List Opt> ')' <Block>
+    rule_const          = 169,      //<Construct> ::= const Identifier '=' <Expression> ';'
+    rule_event_decl     = 170,      //<Construct> ::= event Identifier '(' <Arg Decl List Opt> ')' ';'
+    rule_behaveas       = 171,      //<Construct> ::= behave as Identifier <Block>
+    rule_behaveas_empty = 172,      //<Construct> ::= behave as Identifier ';'
+    rule_bind           = 173,      //<Construct> ::= <Expression> '->' <Expression> ';'
+    rule_construct_dsl  = 174,      //<Construct> ::= <DSL>
+    rule_property       = 175,      //<Property> ::= property Identifier <Type Opt> <Prop Descriptor>
+    rule_var_property   = 176,      //<Property> ::= <Local Var Decl> ';'
+    rule_method         = 179,      //<Method Decl> ::= <Method Name> Identifier '(' <Arg Decl List Opt> ')' <Type Opt> <Block>
+    rule_method_c       = 180,      //<Method Decl> ::= <Type> Identifier '(' <Arg Decl List Opt> ')' <Block>
+    rule_typed          = 181,      //<Type Opt> ::= ':' <Type>
+    rule_prop_get_set   = 184,      //<Prop Descriptor> ::= '=' <Block> <Block>
+    rule_prop_get       = 185,      //<Prop Descriptor> ::= '=' <Block>
+    rule_prop_value_set = 186,      //<Prop Descriptor> ::= '=' <Expression> <Block>
+    rule_prop_value     = 187,      //<Prop Descriptor> ::= '=' <Expression> ';'
   };
 
 //ditto for symbols
@@ -169,7 +172,7 @@ enum xs_terminals
     terminal_public       = 78, //"public"
     terminal_float        = 79, //"RealLiteral"
     terminal_string       = 81, //"StringLiteral"
-    terminal_true         = 83, //"true"
+    terminal_true         = 84, //"true"
   };
 
 //parse tree visitors, will walk the parse tree and return a human usable
@@ -296,6 +299,7 @@ struct expression_ : visitor_base<expression_>
     void member_call( TokenStruct* token, parsetree_visitor* visitor );
     void instantiate( TokenStruct* token, parsetree_visitor* visitor );
     void build_array( TokenStruct* token, parsetree_visitor* visitor );
+    void object( TokenStruct* token, parsetree_visitor* visitor );
     void to_do( TokenStruct* token, parsetree_visitor* visitor );
   };
 
@@ -514,6 +518,7 @@ expression_::expression_( expression& ctx )
     register_rule(rule_member_call,   &expression_::member_call);
     register_rule(rule_array,         &expression_::build_array);
     register_rule(rule_instantiation, &expression_::instantiate);
+    register_rule(rule_object,        &expression_::object);
     register_rule(rule_conditional,   &expression_::to_do);
   }
 
@@ -618,6 +623,42 @@ void expression_::instantiate( TokenStruct* token, parsetree_visitor* visitor )
     ctx_.push_operand( type );
     ctx_.push_operand( args.param_count );
     ctx_.push_operator( op_instantiate );
+  }
+
+struct object_ : visitor_base<object_>
+  {
+    object_::object_()
+      {
+        register_rule(rule_object_value,   &object_::object_value);
+        register_rule(rule_object_value_1, &object_::object_value);
+      }
+
+    std::vector<xs_const> values;
+
+    bool visit(TokenStruct* token, parsetree_visitor* visitor)
+      {
+        return visit_rule(this, token, visitor);
+      }
+
+    void object_value( TokenStruct* token, parsetree_visitor* visitor )
+      {
+        xs_const result;
+        result.name =  wide2str(token->Tokens[0]->Data);
+        
+        expression_ value(result.value);
+        visitor->visit(token->Tokens[2], value);
+
+        values.push_back(result);
+      }
+  };
+
+void expression_::object( TokenStruct* token, parsetree_visitor* visitor )
+  {
+    object_ obj;
+    visitor->visit(token->Tokens[1], obj);
+
+    ctx_.push_operand( obj.values );
+    ctx_.push_operator( op_object );
   }
 
 void expression_::build_array( TokenStruct* token, parsetree_visitor* visitor )
@@ -783,7 +824,7 @@ struct try_ : visitor_base<try_>
         visitor->visit(token->Tokens[1], cc_);
       }
 
-    stmt_try output_;
+    stmt_try& output_;
   };
 //type_
 bool type_::visit(TokenStruct* token, parsetree_visitor* visitor)
@@ -1804,16 +1845,16 @@ bool xs_compiler::compile_xs_file(const str& filename, xs_container& result)
 void xs_compiler::init_grammar()
   {
     Grammar.CaseSensitive = False;
-    Grammar.InitialSymbol = 129;
+    Grammar.InitialSymbol = 132;
     Grammar.InitialDfaState = 0;
     Grammar.InitialLalrState = 0;
-    Grammar.SymbolCount = 147;
+    Grammar.SymbolCount = 150;
     Grammar.SymbolArray = GrammarSymbolArray;
-    Grammar.RuleCount = 185;
+    Grammar.RuleCount = 192;
     Grammar.RuleArray = GrammarRuleArray;
     Grammar.DfaStateCount = 235;
     Grammar.DfaArray = GrammarDfaStateArray;
-    Grammar.LalrStateCount = 360;
+    Grammar.LalrStateCount = 374;
     Grammar.LalrArray = GrammarLalrStateArray;
   }
 

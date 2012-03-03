@@ -1172,6 +1172,33 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
             break;
           }
 
+        case op_object:
+          {
+            //td: !!! move to js
+            std::stringstream result;
+            std::vector<xs_const> values = arg1;
+
+            result << "{";
+            
+            std::vector<xs_const>::iterator it = values.begin();
+            std::vector<xs_const>::iterator nd = values.end();
+            bool first = true;
+            for(; it != nd; it++)
+              {
+                if (first)
+                  first = false;
+                else
+                  result << ',';
+                  
+                result << it->name << " : " << render_expression(it->value);
+              }
+            
+            result << "}";
+
+            push_rendered(result.str(), op_prec, variant());
+            break;
+          }
+
         case op_func_call:
           {
             //td!!! this is silly, function calls ( foo(bar) instead of foo1.foo(bar) ) configure

@@ -272,6 +272,11 @@ str java_expr_renderer::render()
     return lang_utils::render_expression<java_expr_renderer>(expr_, ctx_);
   }
 
+str java_expr_renderer::render_expression(expression& expr)
+  {
+    return lang_utils::render_expression<java_expr_renderer>(expr, ctx_);
+  }
+
 void java_expr_renderer::exec_operator(operator_type op, int pop_count, int push_count, bool top)
   {
 		if (top && assigner)
@@ -345,6 +350,7 @@ void java_expr_renderer::exec_operator(operator_type op, int pop_count, int push
         case op_parameter:
 				case op_dot:
         case op_instantiate:
+        case op_object:
           {
             // execute exec_operator of base class with the same parameters
             base_expr_renderer::exec_operator(op, pop_count, push_count, top);

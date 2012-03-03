@@ -455,6 +455,14 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
             break;
           }
 
+        case op_object:
+          {
+            stack_.pop(); 
+            XSSType type = ctx_->get_type("object"); 
+            stack_.push(type);
+            break;
+          }
+
 				case op_func_call:
           {
             int args = stack_.top(); stack_.pop();
@@ -973,6 +981,7 @@ const char* operator_str[] =
     "",     //op_array,
     "",     //op_parameter
     "",     //op_instantiate
+    "",     //op_object
   };
 
 const int operator_precedence[] =
@@ -1016,6 +1025,7 @@ const int operator_precedence[] =
     1,  //"",     //op_array,
     1,  //"",     //op_parameter
     1,  //"new",  //op_instantiate
+    1,  //"{}",   //op_object
   };
 
 str lang_utils::operator_string(operator_type op)
