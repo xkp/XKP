@@ -343,12 +343,15 @@ struct xss_string_schema : object_schema<xss_string>
   {
     virtual void declare()
       {
-        method_<int,  1>("size",      &xss_string::size);
-        method_<int,  3>("find",      &xss_string::find);
-        method_<int,  2>("find_last", &xss_string::find_last);
-        method_<bool, 1>("empty",     &xss_string::empty);
-        method_<str,  3>("erase",     &xss_string::erase);
-        method_<str,  3>("substr",    &xss_string::substr);
+        method_<int,  1>("size",          &xss_string::size);
+        method_<int,  3>("find",          &xss_string::find);
+        method_<int,  2>("find_first",    &xss_string::find_first);
+        method_<int,  2>("find_last",     &xss_string::find_last);
+        method_<int,  2>("find_first_not",&xss_string::find_first_not);
+        method_<int,  2>("find_last_not", &xss_string::find_last_not);
+        method_<bool, 1>("empty",         &xss_string::empty);
+        method_<str,  3>("erase",         &xss_string::erase);
+        method_<str,  3>("substr",        &xss_string::substr);
       }
   };
 

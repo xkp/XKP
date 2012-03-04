@@ -2572,27 +2572,32 @@ int xss_string::size(const str& s)
 
 int xss_string::find(const str& s, const str& subs, int pos)
   {
-    return s.find(subs, pos);
+    int found = s.find(subs, pos);
+    return found == str::npos ? -1 : found;
   }
 
 int xss_string::find_first(const str& s, const str& subs)
   {
-    return s.find_first_of(subs);
+    int found = s.find_first_of(subs);
+    return found == str::npos ? -1 : found;
   }
 
 int xss_string::find_last(const str& s, const str& subs)
   {
-    return s.find_last_of(subs);
+    int found = s.find_last_of(subs);
+    return found == str::npos ? -1 : found;
   }
 
 int xss_string::find_first_not(const str& s, const str& subs)
   {
-    return s.find_first_not_of(subs);
+    int found = s.find_first_not_of(subs);
+    return found == str::npos ? -1 : found;
   }
 
 int xss_string::find_last_not(const str& s, const str& subs)
   {
-    return s.find_last_not_of(subs);
+    int found = s.find_last_not_of(subs);
+    return found == str::npos ? -1 : found;
   }
 
 bool xss_string::empty(const str& s)

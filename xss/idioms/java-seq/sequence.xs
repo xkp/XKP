@@ -59,13 +59,17 @@ on copy_default_files(app, bns, plibs)
         "SequenceUpdateEvent.java"
 	];
 	
+	//TRACE: log
+	compiler.log("Rendering default files...");
+	
 	string ns = bns + ".libs.Sequence";
 	for(string f in files)
 	{
 		string srcf = compiler.full_path("/libs/" + f);
 		string dstf = plibs + "Sequence/" + f;
 		
-		compiler.log("Rendering default file: " + srcf);
+		//TRACE: log
+		//compiler.log("Rendering default file: " + srcf);
 		
 		compiler.xss(srcf, output_file = dstf, ns = ns);
 	}
