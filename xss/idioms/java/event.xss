@@ -4,7 +4,7 @@
 
 <xss:code>
 	//TRACE: log
-	compiler.log("Rendering event: " + e.name);
+	//compiler.log("Rendering event: " + e.name);
 	
 	if(new_id == null)
 		new_id = e.output_id;

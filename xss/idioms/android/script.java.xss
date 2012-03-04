@@ -95,7 +95,8 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 				
 				if(!found3)
 				{
-					compiler.log("Adding class " + c.name + " on " + clazz.id);
+					//TRACE: log
+					//compiler.log("Adding class " + c.name + " on " + clazz.id);
 					classes += c.name;
 					
 					string xss_file = "class.xss/" + c.file_name;
@@ -135,7 +136,8 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 				
 				if(!found4)
 				{
-					compiler.log("Adding method " + util.name +" to XKPUtil static class.");
+					//TRACE: log
+					//compiler.log("Adding method " + util.name +" to XKPUtil static class.");
 					utils += util.name;
 					
 					string util_file = "class.xss/" + util.file_name;
@@ -162,7 +164,8 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 				
 				if(!found2)
 				{
-					compiler.log("Adding interface " + e.interface + " on " + clazz.id);
+					//TRACE: log
+					//compiler.log("Adding interface " + e.interface + " on " + clazz.id);
 					interfaces += e.interface;
 					
 					if(firstTime)
@@ -392,7 +395,8 @@ void initCallers() {
 <xss:code>
 	if(is_type)
 	{
-		compiler.log("Custom class " + clazz.output_id + "...");
+		//TRACE: log
+		//compiler.log("Custom class " + clazz.output_id + "...");
 	} else
 	{
 		clazz.instances += application;

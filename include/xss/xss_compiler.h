@@ -145,7 +145,7 @@ namespace xkp
         virtual void out(const str& cat, const str& text, param_list* params) = 0;
         virtual void success()                                                = 0;
         virtual void error(param_list& data)                                  = 0;
-        virtual str  string()                                                 = 0; 
+        virtual str  string()                                                 = 0;
     };
 
   class ConsoleOutput : public ICompilerOutput
@@ -154,7 +154,7 @@ namespace xkp
         virtual void out(const str& cat, const str& text, param_list* params);
         virtual void success();
         virtual void error(param_list& data);
-        virtual str  string(); 
+        virtual str  string();
     };
 
   class JsonOutput : public ICompilerOutput
@@ -165,7 +165,7 @@ namespace xkp
         virtual void out(const str& cat, const str& text, param_list* params);
         virtual void success();
         virtual void error(param_list& data);
-        virtual str  string(); 
+        virtual str  string();
       private:
         Json::Value json_;
     };
@@ -271,7 +271,10 @@ namespace xkp
       public:
         int  size(const str& s);
         int  find(const str& s, const str& subs, int pos = 0);
+        int  find_first(const str& s, const str& subs);
         int  find_last(const str& s, const str& subs);
+        int  find_first_not(const str& s, const str& subs);
+        int  find_last_not(const str& s, const str& subs);
         bool empty(const str& s);
         str  erase(const str& s, int pos = 0, int npos = 0);
         str  substr(const str& s, int pos = 0, int npos = 0);
@@ -293,7 +296,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         dynamic_method_ ("inject", &xss_compiler::inject);
         dynamic_method_ ("log",    &xss_compiler::log);
         dynamic_method_ ("error",  &xss_compiler::error);
-        
+
         dynamic_function_<XSSObject>("analyze_expression",  &xss_compiler::analyze_expression);
 
         readonly_property<XSSObject>("options", &xss_compiler::options_);
