@@ -227,7 +227,7 @@ on copy_default_files(app, bns, plibs)
 	}
 }
 
-on render_idiom_scripts()
+on render_idiom_scripts(main)
 {
 
 }
