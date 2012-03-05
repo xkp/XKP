@@ -1,34 +1,34 @@
 <application name="Characters" title="List of Characters" src="characters.xs">
 
 	<resources>
-		<image id="i_aladdin" src="resources/aladdin.png"/>
-		<image id="i_mickey" src="resources/mickey.png"/>
-		<image id="i_pluto" src="resources/pluto.png"/>
-		<audio id="a_audio1" src="resources/audio1.ogg"/>
-		<audio id="a_audio2" src="resources/audio2.ogg"/>
-		<video id="v_mickey" src="resources/mickey.3gp"/>
-		<video id="v_pluto" src="resources/pluto.3gp"/>
+		<image id="i_aladdin" src="aladdin.png"/>
+		<image id="i_mickey" src="mickey.png"/>
+		<image id="i_pluto" src="pluto.png"/>
+		<audio id="a_audio1" src="audio1.ogg"/>
+		<audio id="a_audio2" src="audio2.ogg"/>
+		<video id="v_mickey" src="mickey.3gp"/>
+		<video id="v_pluto" src="pluto.3gp"/>
 	</resources>
 
 	<character id="aladdin" 
 		name="Aladdin" 
 		surname="Allababa Prince" 
 		employment="Professor of Steal" 
-		img_src="resources/aladdin.png" 
+		img_src="aladdin.png" 
 		placement="top" />
 	
 	<character id="mickey" 
 		name="Mickey" 
 		surname="Disney Cartoons?" 
 		employment="A mouse that ..." 
-		img_src="resources/mickey.png" 
+		img_src="mickey.png" 
 		placement="top"/>
 	
 	<character id="pluto" 
 		name="Pluto" 
 		surname="Disney Cartoons" 
 		employment="Bones eater" 
-		img_src="resources/pluto.png" 
+		img_src="pluto.png" 
 		placement="top"/>
 	
 </application>

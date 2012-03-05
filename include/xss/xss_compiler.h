@@ -278,6 +278,7 @@ namespace xkp
         bool empty(const str& s);
         str  erase(const str& s, int pos = 0, int npos = 0);
         str  substr(const str& s, int pos = 0, int npos = 0);
+        str  strip_spaces(const str& s);
     };
 
   class xss_math
@@ -320,7 +321,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<str,        2>("property_get",        &xss_compiler::property_get);
         method_<bool,       1>("is_type",             &xss_compiler::is_type);
         method_<str,        1>("instantiate",         &xss_compiler::instantiate);
-        method_<bool,       1>("application_object", &xss_compiler::application_object);
+        method_<bool,       1>("application_object",  &xss_compiler::application_object);
       }
   };
 
@@ -352,6 +353,7 @@ struct xss_string_schema : object_schema<xss_string>
         method_<bool, 1>("empty",         &xss_string::empty);
         method_<str,  3>("erase",         &xss_string::erase);
         method_<str,  3>("substr",        &xss_string::substr);
+        method_<str,  1>("strip_spaces",  &xss_string::strip_spaces);
       }
   };
 

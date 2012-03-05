@@ -2616,6 +2616,18 @@ str xss_string::substr(const str& s, int pos, int npos)
     return s.substr(pos, npos);
   }
 
+str xss_string::strip_spaces(const str& s)
+  {
+    size_t found = s.find(" ", 0);
+    while(found != str::npos)
+      {
+        s.erase(found, 1);
+        found = s.find(" ", found);
+      }
+
+    return s;
+  }
+
 //xss_math
 double xss_math::max(double v1, double v2)
   {

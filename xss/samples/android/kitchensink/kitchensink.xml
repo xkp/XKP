@@ -1,8 +1,8 @@
 <application name="KitchenSink" title="Kitchen Sink" src="kitchensink.xs">
 
 	<resources>
-		<res_image id="dialog" src="images/dialog.png"/>
-		<res_image id="emulator" src="images/emulator.png"/>
+		<image id="dialog" src="dialog.png"/>
+		<image id="emulator" src="emulator.png"/>
 	</resources>
 
 	<tabcontrol id="kitchen" placement="client">
@@ -16,7 +16,7 @@
 		<div padding="5" placement="client">
 			<button id="btn1" x="0" y="0" caption="Standard button"/>
 			<togglebutton id="toggle1" x="130" y="0" text_on="=Activado=" text_off="=Desactivado="/>
-			<imagebutton id="imgbtn1" x="240" y="0" src="images/dialog.png"/>
+			<imagebutton id="imgbtn1" x="240" y="0" src="dialog.png"/>
 			<label id="lbl1" x="0" y="56" caption="Simple Labeled"/>
 			<editbox id="edit1" x="115" y="50" width="180" hint="Empty EditText!"/>
 			<checkbox id="chkb1" x="0" y="100" caption="Checking all boxes"/>
@@ -37,7 +37,7 @@
 		</scroller>
 		
 		<scroller padding="5" placement="client">
-			<img id="img1" src="images/emulator.png"/>
+			<img id="img1" src="emulator.png"/>
 		</scroller>
 		
 		<div padding="5" placement="client">

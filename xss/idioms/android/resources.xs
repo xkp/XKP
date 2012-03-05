@@ -14,6 +14,8 @@ on render_instances(app)
 	string pattern_others  = "._";
 	string pattern_all     = pattern_numbers + pattern_string + pattern_others;
 
+	string project_res_path = "resources/";
+
 	for(var inst in instances)
 	{
 		//TIPS: stupid stripped string... live is hard :(
@@ -36,7 +38,8 @@ on render_instances(app)
 			compiler.error("Resource filename is incorrect", filename = fn_img);
 		
 		//then
-		string srcf = project_path + simg;
+		//string srcf = project_path + simg;
+		string srcf = project_path + project_res_path + simg;
 		string dstf = output_path + fn_img;
 		
 		//coping resource

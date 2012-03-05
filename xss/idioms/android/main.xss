@@ -10,7 +10,13 @@
 	string base_namespace = "xkp.android";
 	string appName = "DefaultAndroidApplication";
 	if(application.name)
-		appName = application.name;
+	{
+		appName = String.strip_spaces(application.name);
+	}
+	else 
+	{
+		appName = String.strip_spaces(application.id);
+	}
 	
 	int targetAPILevel = 6;
 	int minAPILevel = 3;
