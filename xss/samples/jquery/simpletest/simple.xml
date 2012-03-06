@@ -5,7 +5,7 @@
     <label id="lblLastName" caption="Enter last name: " x="10" y="70" width="140" height="40"/>
     <editbox id="edtLastName" hint="Your last name" x="140" y="70" width="160" height="20"/>
 	
-    <button id="btnFullName" caption="Resolve Full Name" x="40" y="110" width="200" height="43"/>
+    <button id="btnFullName" caption="Resolve Full Name" x="140" y="110" width="200" height="43"/>
 	
     <label id="lblFullName" caption="Your full name is " x="10" y="170" width="300" height="25"/>
 	
