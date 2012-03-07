@@ -554,6 +554,22 @@ str html_renderer::render(XSSObject this_, param_list* args)
         curr = t.close + 1;
       }
 
+    //before we close we need to add a script tag containing the app code
+    //for that we'll find the closing body tag
+    tag body_tag;
+    for(int bidx = tags.size() - 1; bidx >= 0; bidx--)
+      {
+        body_tag = tags.get(bidx);
+        if (body_tag.tag_name == "body")
+          break;
+      }
+
+    result << str(html_text.begin() + curr, html_text.begin() + body_tag.start - 1);
+    result << "<script type=\"text/javascript\">\n" << content_ << "\n" << "</script>\n";
+
+    //and close
+    curr = body_tag.start;
+
     result << str(html_text.begin() + curr, html_text.end());
     return result.str();
   }

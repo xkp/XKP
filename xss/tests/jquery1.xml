@@ -1,0 +1,8 @@
+<application name="SimpleTest" title="Testing templates" src="jquery1.xs" template="jquery1.html">
+
+    <div placement="client" html_id="content">
+        <button id="btnFullName" caption="Click Me" x="140" y="110" width="200" height="43"/>
+        <label id="lblFullName" caption="" x="10" y="170" width="300" height="25"/>
+    </div>
+
+</application>

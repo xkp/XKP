@@ -1,3 +1,5 @@
+<xss:parameter id="using_template"/>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -30,106 +32,20 @@
 </head>
 
 <body>
-    <xss:class>
-		method render_component(var component, int idt)
-		{
-			string class_name = "div";
-			if(component.type)
-				class_name = component.type.output_id;
-			
-			if(component.renderer)
-			{
-				string file_renderer = "class.xss/" + component.renderer;
-				compiler.xss(file_renderer, this, component, idt + 1);
-			}
-			else
-			{
-				//open the tag of component
-				out(indent = idt)
-				{
-					<<xss:e value="class_name"/> id="<xss:e value="component.id"/>"
-				}
-				
-				//render some properties inside html tag
-				if(component.attributes)
-				{
-					for(var attr in component.attributes)
-					{
-						string attrib = attr.value;
-						if(attr.expr)
-						{
-							if(attrib == "{parent.id}")
-							{
-								attrib = component.parent.id;
-							}
-							else
-							if(attrib == "{id}")
-							{
-								attrib = component.id;
-							}
-						}
-						
-						out(indent = idt + 1)
-						{
-							<xss:e value="attr.name"/>="<xss:e value="attrib"/>" 
-						}
-					}
-				}
-				
-				var prop_outtag = [];
-				var qproperty = component.query_properties("*");
-				for(var p1 in qproperty)
-				{
-					if(p1.value == null)
-						continue;
-					
-					if(p1.render_type == "body_intag")
-					{
-						out(indent = idt)
-						{
-							<xss:e value="p1.output_id"/>="<xss:e value="p1.value"/>" 
-						}
-					} 
-					else
-					if(p1.render_type == "body_outtag")
-					{
-						prop_outtag += p1;
-					}
-				}
-				
-				compiler.out(">");
-				
-				for(var p2 in prop_outtag)
-				{
-					out(indent = idt)
-					{
-						<xss:e value="p2.value"/>
-					}
-				}
-				
-				if(component.children)
-				{
-					for(var child in component.children)
-					{
-						render_component(child, idt + 1);
-					}
-				}
-					
-				//close the tag
-				out(indent = idt)
-				{
-					</<xss:e value="class_name"/>>
-				}
-			}
-		}
-
-		on render()
-		{
-			application.type.output_id = "div";
-			
-			//recursively generate child components
-			render_component(application, 1);
-		}
-    </xss:class>
+    <xss:code>
+        for(var i in application.children)
+        {
+            var tag = null;
+            if (using_template)
+            {
+                if (!i.html_id)
+                    compiler.error("jQuery components must have html_id when using a template");   
+                
+                tag = i.html_id;
+            }
+            
+            compiler.xss("component.xss", i, marker = tag);
+        }
+    </xss:code>
 </body>
 </html>

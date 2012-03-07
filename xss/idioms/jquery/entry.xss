@@ -1,0 +1,11 @@
+<xss:code>
+    //distinguish between 
+    if (application.template)
+    {
+        compiler.xss("main.xss", true, html_template = application.template);
+    }
+    else
+    {
+        compiler.xss("main.xss", false);
+    }
+</xss:code>
