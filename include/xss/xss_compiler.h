@@ -278,7 +278,7 @@ namespace xkp
         bool empty(const str& s);
         str  erase(const str& s, int pos = 0, int npos = 0);
         str  substr(const str& s, int pos = 0, int npos = 0);
-        str  strip_spaces(const str& s);
+        str  strip_spaces(str s);
     };
 
   class xss_math
