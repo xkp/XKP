@@ -42,6 +42,7 @@ namespace xkp
       void     push_back(const tag t); 
       int      find(const str& id);
       tag&     get(int idx);
+      size_t   size();
       private:
         std::vector<tag> tags_;
     };

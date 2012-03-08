@@ -1,0 +1,50 @@
+<xss:parameter id="caller"/>
+<xss:parameter id="cmp"/>
+<xss:parameter id="idt"/>
+
+<div id="<xss:e value="cmp.id"/>">
+
+<xss:code>
+
+	out(indent = idt)
+	{
+		<ul>
+	}
+	
+	var tabs_prop = cmp.get_property("tabs");
+	int sz_tabs = 0;
+	if(tabs_prop.type.is_array)
+		sz_tabs = tabs_prop.value.size;
+	
+	int sz_childs = 0;
+	if(cmp.children)
+		sz_childs = cmp.children.size;
+	
+	// check very important condition
+	if(sz_tabs != sz_childs || sz_tabs == 0)
+		compiler.error("Component 'tabcontrol' need identical tabs and childs major of zero", component = cmp.id);
+	
+	//for(var tab in tabs_prop.value)
+	for(int i = 0; i < sz_tabs; i++)
+	{
+		var tab = tabs_prop.value[i];
+		var child = cmp.children[i];
+		
+		out(indent = idt + 1)
+		{
+			<li><a href="#<xss:e value="child.id"/>"><span><xss:e value="tab.value"/></span></a></li>
+		}
+	}
+
+	out(indent = idt)
+	{
+		</ul>
+	}
+	
+	for(var c in cmp.children)
+	{
+		caller.render_component(c, idt + 1);
+	}
+
+</xss:code>
+</div>

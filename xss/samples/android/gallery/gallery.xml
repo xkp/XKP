@@ -1,26 +1,26 @@
 <application name="Gallery" title="Image Gallery" src="gallery.xs" width="320" height="430">
 	
 	<resources>
-		<res_image id="img01" src="photos/gallery_photo_1.jpg"/>
-		<res_image id="img02" src="photos/gallery_photo_2.jpg"/>
-		<res_image id="img03" src="photos/gallery_photo_3.jpg"/>
-		<res_image id="img04" src="photos/gallery_photo_4.jpg"/>
-		<res_image id="img05" src="photos/gallery_photo_5.jpg"/>
-		<res_image id="img06" src="photos/gallery_photo_6.jpg"/>
-		<res_image id="img07" src="photos/gallery_photo_7.jpg"/>
-		<res_image id="img08" src="photos/gallery_photo_8.jpg"/>
+		<image id="img01" src="gallery_photo_1.jpg"/>
+		<image id="img02" src="gallery_photo_2.jpg"/>
+		<image id="img03" src="gallery_photo_3.jpg"/>
+		<image id="img04" src="gallery_photo_4.jpg"/>
+		<image id="img05" src="gallery_photo_5.jpg"/>
+		<image id="img06" src="gallery_photo_6.jpg"/>
+		<image id="img07" src="gallery_photo_7.jpg"/>
+		<image id="img08" src="gallery_photo_8.jpg"/>
 	</resources>
 	
 	<imagegallery id="gallery" width="320" height="120" spacing="5" placement="center">
 		<property id="images" type="array">
-			<string value="photos/gallery_photo_1.jpg"/>
-			<string value="photos/gallery_photo_2.jpg"/>
-			<string value="photos/gallery_photo_3.jpg"/>
-			<string value="photos/gallery_photo_4.jpg"/>
-			<string value="photos/gallery_photo_5.jpg"/>
-			<string value="photos/gallery_photo_6.jpg"/>
-			<string value="photos/gallery_photo_7.jpg"/>
-			<string value="photos/gallery_photo_8.jpg"/>
+			<string value="gallery_photo_1.jpg"/>
+			<string value="gallery_photo_2.jpg"/>
+			<string value="gallery_photo_3.jpg"/>
+			<string value="gallery_photo_4.jpg"/>
+			<string value="gallery_photo_5.jpg"/>
+			<string value="gallery_photo_6.jpg"/>
+			<string value="gallery_photo_7.jpg"/>
+			<string value="gallery_photo_8.jpg"/>
 		</property>
 	</imagegallery>
 	

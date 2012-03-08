@@ -1,0 +1,18 @@
+<project 
+	entry_point="../../../idioms/jquery/main.xss" 
+	language="js" 
+	target="simple.xml" 
+	output="simple.html" >
+	
+	<idiom src="../../../idioms/jquery/classes.xml"/>
+	
+	<path>
+		<output path="../../../production/jquery/"/>
+	</path>
+	
+	<options 
+		event_scope="instance" 		
+		jquery_filepath="jquery/jquery.js" 
+		jquery_ui_filepath="jquery/jquery-ui.js" 
+		jquery_ui_css_filepath="jquery/jquery-ui.css" />
+</project>

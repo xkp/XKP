@@ -102,13 +102,13 @@ void initCallers() {
 						}
 			private void onClickbtnLeft() {
 				swtStates.setDisplayedChild(swtStates.getDisplayedChild() - 1);
-btnLeft.setText(application.mthd_application_getSwitchText(swtStates.getDisplayedChild() - 1));
+btnLeft.setText(mthd_application_getSwitchText(swtStates.getDisplayedChild() - 1));
 int x = ((XKPLayout.LayoutParams) btnLeft.getLayoutParams()).getPlacement();
 ((XKPLayout.LayoutParams) btnLeft.getLayoutParams()).setPlacement(XKPLayout.PL_LEFT);
 			}
 			private void onClickbtnRight() {
 				swtStates.setDisplayedChild(swtStates.getDisplayedChild() + 1);
-btnLeft.setText(application.mthd_application_getSwitchText(swtStates.getDisplayedChild() + 1));
+btnLeft.setText(mthd_application_getSwitchText(swtStates.getDisplayedChild() + 1));
 			}
 			private void onCheckedChangedchkVerifier() {
 			}

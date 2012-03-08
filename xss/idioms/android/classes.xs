@@ -27,7 +27,10 @@ on render_instances(app)
 
 on render_types(app, bns)
 {
-	compiler.log("### Begin Rendering Android Types...");
+	compiler.log("Rendering Android Types...");
+	
+	//TRACE: log
+	//compiler.log("### Begin Rendering Android Types...");
 
 	//compiler.log(this.id);
 	//compiler.log(this.user_types.size);
@@ -55,7 +58,8 @@ on render_types(app, bns)
 		compiler.xss("layout.xml.xss", output_file = output_filename, clazz = ut, appName = app, base_namespace = bns);
     }
 	
-	compiler.log("### End Rendering Android Types...");
+	//TRACE: log
+	//compiler.log("### End Rendering Android Types...");
 }
 
 on render_type_initialization(clazz, bns, app)
@@ -85,8 +89,9 @@ on render_initialization(clazz, bns, app)
 			
 			string srcf = compiler.full_path("/copy.defaults" + src_path + src_filename);
 			string dstf = app + dst_path + dst_filename;
-			
-			compiler.log("Rendering widget file: " + srcf);
+
+			//TRACE: log
+			//compiler.log("Rendering widget file: " + srcf);
 			
 			compiler.xss(src = srcf, output_file = dstf, appName = app, base_namespace = bns);
 		}
@@ -95,7 +100,10 @@ on render_initialization(clazz, bns, app)
 
 method render_imports(clazz, bns)
 {
-	compiler.log("### Begin Rendering Android Imports...");
+	compiler.log("Begin Rendering Android Imports...");	
+	
+	//TRACE: log
+	//compiler.log("### Begin Rendering Android Imports...");
 
 	array<string> imports    = [];
 	
@@ -127,7 +135,8 @@ method render_imports(clazz, bns)
 				
 				if(!found1)
 				{
-					compiler.log("Adding import " + i.import + " on " + clazz.id);
+					//TRACE: log
+					//compiler.log("Adding import " + i.import + " on " + clazz.id);
 					imports += i.import;
 					
 					out(indent = 0, marker = "imports")
@@ -157,7 +166,8 @@ method render_imports(clazz, bns)
 			
 			if(!found2)
 			{
-				compiler.log("Adding import " + import + " on " + clazz.id);
+				//TRACE: log
+				//compiler.log("Adding import " + import + " on " + clazz.id);
 				imports += import;
 				
 				out(indent = 0, marker = "imports")
@@ -168,7 +178,8 @@ method render_imports(clazz, bns)
 		}
 	}
 	
-	compiler.log("### End Rendering Android Imports...");
+	//TRACE: log
+	//compiler.log("### End Rendering Android Imports...");
 }
 
 on copy_default_files(app, bns, plibs)
@@ -186,12 +197,14 @@ on copy_default_files(app, bns, plibs)
 		"/gen/.empty"
 	];
 	
+	compiler.log("Copying default files...");
 	for(string f1 in cp_files)
 	{
 		string srcf1 = compiler.full_path("/copy.defaults" + f1);
 		string dstf1 = app + f1;
-		
-		compiler.log("Copying default file: " + srcf1);
+
+		//TRACE: log
+		//compiler.log("Copying default file: " + srcf1);
 		
 		compiler.copy_file(src = srcf1, dst = dstf1);
 	}
@@ -201,18 +214,20 @@ on copy_default_files(app, bns, plibs)
 		"/src/xkp/android/libs/Layout/XKPLayout.java"
 	];
 	
+	compiler.log("Rendering default files...");
 	for(string f2 in res_files)
 	{
 		string srcf2 = compiler.full_path("/copy.defaults" + f2);
 		string dstf2 = app + f2;
 		
-		compiler.log("Rendering default file: " + srcf2);
+		//TRACE: log
+		//compiler.log("Rendering default file: " + srcf2);
 		
 		compiler.xss(src = srcf2, output_file = dstf2, appName = app, base_namespace = bns);
 	}
 }
 
-on render_idiom_scripts()
+on render_idiom_scripts(main)
 {
 
 }

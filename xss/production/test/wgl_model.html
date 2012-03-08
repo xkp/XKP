@@ -6,7 +6,7 @@
 <body>
 <style type="text/css">
 	body{
-	background:RoyalBlue;
+	background:#356;
 	}
 </style>
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
@@ -80,12 +80,12 @@ new THREE.Camera(
             camera_1.position.z = 500;
 var a_ligth = 
 new THREE.AmbientLight(
-Salmon);
+2232576);
 		;
 	scene.addLight(a_ligth);
 var d_ligth_1 = 
 new THREE.DirectionalLight(
-Ivory);
+16772829);
 		;
 	scene.addLight(d_ligth_1);
             d_ligth_1.position.y = -70;
@@ -147,7 +147,7 @@ Ivory);
             application.mouse_x = null;
             application.mouse_y = null;
 	var ev_parent = this;
-	application.events.addListener("animate", function()
+	application.events.addListener("updates", function()
 	{    
 		camera_1.position.x = camera_1.position.x + (application.mouse_x - camera_1.position.x) * 0.0500000007;
 camera_1.position.y = camera_1.position.y + (-application.mouse_y - camera_1.position.y) * 0.0500000007;

@@ -1,0 +1,13 @@
+<application name="SimpleTest" title="Simple Sample jQuery Application" src="simple.xs" width="320" height="430">
+    <label id="lblFirstName" caption="Enter first name: " x="10" y="20" width="140" height="40"/>
+    <editbox id="edtFirstName" hint="Your first name" x="140" y="20" width="160" height="20"/>
+	
+    <label id="lblLastName" caption="Enter last name: " x="10" y="70" width="140" height="40"/>
+    <editbox id="edtLastName" hint="Your last name" x="140" y="70" width="160" height="20"/>
+	
+    <button id="btnFullName" caption="Resolve Full Name" x="140" y="110" width="200" height="43"/>
+	
+    <label id="lblFullName" caption="Your full name is " x="10" y="170" width="300" height="25"/>
+	
+	<editbox id="edtContainer" hint="Container" x="10" y="210" width="300" height="100" lines="6"/>
+</application>

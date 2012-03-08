@@ -1,0 +1,5 @@
+<xss:parameter id="caller"/>
+<xss:parameter id="cmp"/>
+
+<input id="<xss:e value="cmp.id"/>" type="radio" name="<xss:e value="cmp.parent.id"/>"/>
+<label id="__l<xss:e value="cmp.id"/>" for="<xss:e value="cmp.id"/>"><xss:e value="cmp.caption"/></label>

@@ -2,6 +2,7 @@
 <xss:parameter id="appName"/>
 <xss:parameter id="base_namespace"/>
 <xss:parameter id="is_type" default="false"/>
+<xss:parameter id="main" default="0"/>
 
 package <xss:e value="base_namespace"/>.<xss:e value="appName"/>;
 
@@ -95,7 +96,8 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 				
 				if(!found3)
 				{
-					compiler.log("Adding class " + c.name + " on " + clazz.id);
+					//TRACE: log
+					//compiler.log("Adding class " + c.name + " on " + clazz.id);
 					classes += c.name;
 					
 					string xss_file = "class.xss/" + c.file_name;
@@ -135,7 +137,8 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 				
 				if(!found4)
 				{
-					compiler.log("Adding method " + util.name +" to XKPUtil static class.");
+					//TRACE: log
+					//compiler.log("Adding method " + util.name +" to XKPUtil static class.");
 					utils += util.name;
 					
 					string util_file = "class.xss/" + util.file_name;
@@ -162,7 +165,8 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 				
 				if(!found2)
 				{
-					compiler.log("Adding interface " + e.interface + " on " + clazz.id);
+					//TRACE: log
+					//compiler.log("Adding interface " + e.interface + " on " + clazz.id);
 					interfaces += e.interface;
 					
 					if(firstTime)
@@ -384,7 +388,7 @@ void initCallers() {
 	}
 	
 	// render other idiom scripts
-	compiler.inject("render_idiom_scripts");
+	compiler.inject("render_idiom_scripts", main = main);
 </xss:code>
 
 <xss:marker id="events"/>
@@ -392,7 +396,8 @@ void initCallers() {
 <xss:code>
 	if(is_type)
 	{
-		compiler.log("Custom class " + clazz.output_id + "...");
+		//TRACE: log
+		//compiler.log("Custom class " + clazz.output_id + "...");
 	} else
 	{
 		clazz.instances += application;

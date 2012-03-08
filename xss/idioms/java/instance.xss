@@ -11,11 +11,13 @@
 	if(type)
 		str_rend = "class";
 	
-	compiler.log("-- Rendering " + str_rend + ": " + it.id);
+	//TRACE: log
+	compiler.log("Rendering " + str_rend + ": " + it.id);
 	
 	if (render_properties)
     {
-        compiler.log("Properties size: " + it.properties.size);
+		//TRACE: log
+        //compiler.log("Properties size: " + it.properties.size);
 	    for(var p in it.properties)
 	    {
 		    //TIPS: it's a very hacky hoo,... 
@@ -39,7 +41,8 @@
 	
 	if (render_methods)
     {
-        compiler.log("Methods size: " + it.methods.size);
+		//TRACE: log
+        //compiler.log("Methods size: " + it.methods.size);
 	    for(var m in it.methods)
 	    {
 		    compiler.xss("method.xss", m = m, iname = it.output_id);
@@ -48,7 +51,8 @@
 	
 	if (render_events)
     {
-        compiler.log("Events size: " + it.events.size);
+		//TRACE: log
+        //compiler.log("Events size: " + it.events.size);
 	    for(var e in it.events)
 	    {
 		    string renderer_path = "event.xss";

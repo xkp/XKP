@@ -80,6 +80,8 @@
 		<Unit filename="..\..\..\include\xs\vm.h" />
 		<Unit filename="..\..\..\include\xs\xs_error.h" />
 		<Unit filename="..\..\..\include\xss\brace_parser.h" />
+		<Unit filename="..\..\..\include\xss\dsl\generic_assign.h" />
+		<Unit filename="..\..\..\include\xss\dsl\shell.h" />
 		<Unit filename="..\..\..\include\xss\dsl\sql.h" />
 		<Unit filename="..\..\..\include\xss\dsl_out.h" />
 		<Unit filename="..\..\..\include\xss\html_parser.h" />
@@ -109,6 +111,8 @@
 		<Unit filename="..\..\..\src\xs\operators.cpp" />
 		<Unit filename="..\..\..\src\xs\vm.cpp" />
 		<Unit filename="..\..\..\src\xss\brace_parser.cpp" />
+		<Unit filename="..\..\..\src\xss\dsl\generic_assign.cpp" />
+		<Unit filename="..\..\..\src\xss\dsl\shell.cpp" />
 		<Unit filename="..\..\..\src\xss\dsl\sql.cpp" />
 		<Unit filename="..\..\..\src\xss\dsl_out.cpp" />
 		<Unit filename="..\..\..\src\xss\html_parser.cpp" />

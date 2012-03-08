@@ -1,0 +1,57 @@
+<html>
+<body>
+<table width="500" border="0">
+<tr>
+<td colspan="2" style="background-color:#FFA500;">
+<h1>Main Title of Web Page</h1>
+</td>
+</tr>
+<tr valign="top">
+<td style="background-color:#FFD700;width:100px;text-align:top;">
+<b>Menu</b><br />
+HTML<br />
+CSS<br />
+JavaScript
+</td>
+<td id="content" style="background-color:#EEEEEE;height:200px;width:400px;text-align:top;">
+				<div id="__div1"
+			>
+				<input id="btnFullName"
+						type="button" 
+						name="btnFullName" 
+						value="Click Me" 
+					>
+				</input>
+				<div id="lblFullName"
+			>
+				</div>
+				</div>
+</td>
+</tr>
+<tr>
+<td colspan="2" style="background-color:#FFA500;text-align:center;">
+Copyright © 2011 W3Schools.com</td>
+</tr>
+</table>
+    <script type="text/javascript" src="../js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../js/jquery/jquery-ui.js"></script>
+    <script type="text/javascript" src="../js/jquery/utils.js"></script><script type="text/javascript">
+			var __div1 = $("#__div1");
+			var btnFullName = $("#btnFullName").button();
+			var lblFullName = $("#lblFullName");
+			var application = $("#application");
+					__div1.attr("placement", "client");
+					btnFullName.css( { left:140 } );
+					btnFullName.css( { top:110 } );
+					btnFullName.width(200);
+					btnFullName.height(43);
+		btnFullName.click( function() { 
+			lblFullName.text("Hello world");
+		});
+					lblFullName.css( { left:10 } );
+					lblFullName.css( { top:170 } );
+					lblFullName.width(300);
+					lblFullName.height(25);
+</script>
+</body>
+</html>

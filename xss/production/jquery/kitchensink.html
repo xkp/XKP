@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>Kitchen Sink</title>
+	<link type="text/css" href="jquery/jquery-ui.css" rel="stylesheet">
+	<script type="text/javascript" src="jquery/jquery.js"></script>
+	<script type="text/javascript" src="jquery/jquery-ui.js"></script>
+	<script type="text/javascript" src="js/utils.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			//all system position is absolute
+			$("*").each(function(index, domElem) {
+				if($(domElem).attr("id") != undefined) {
+					$(domElem).css("position", "absolute");
+				}
+			});
+			var kitchen = $("#kitchen").tabs();
+			var __div1 = $("#__div1");
+			var btn1 = $("#btn1").button();
+			var lbl1 = $("#lbl1");
+			var edit1 = $("#edit1");
+			var chkb1 = $("#chkb1");
+			var __scroller1 = $("#__scroller1");
+			var rdgTab3 = $("#rdgTab3").buttonset();
+			var radio1 = $("#radio1").button();
+			var radio2 = $("#radio2").button();
+			var radio3 = $("#radio3").button();
+			var radio4 = $("#radio4").button();
+			var radio5 = $("#radio5").button();
+			var radio6 = $("#radio6").button();
+			var radio7 = $("#radio7").button();
+			var radio8 = $("#radio8").button();
+			var radio9 = $("#radio9").button();
+			var __scroller2 = $("#__scroller2");
+			var img1 = $("#img1");
+			var __div2 = $("#__div2");
+			var application = $("#application");
+					kitchen.width(500);
+					kitchen.height(400);
+					kitchen.attr("placement", "client");
+					__div1.attr("placement", "client");
+					btn1.css( { left:0 } );
+					btn1.css( { top:0 } );
+		btn1.click( function() { 
+			chkb1.attr("checked", !chkb1.attr("checked"));
+util_labelPropText(chkb1, edit1.attr("value"));
+console.log(util_labelPropText(chkb1));
+		});
+					lbl1.css( { left:0 } );
+					lbl1.css( { top:56 } );
+					edit1.css( { left:115 } );
+					edit1.css( { top:50 } );
+					edit1.width(180);
+					chkb1.css( { left:50 } );
+					chkb1.css( { top:300 } );
+					__scroller1.attr("placement", "client");
+					__scroller2.attr("placement", "client");
+					__div2.attr("placement", "client");
+		});
+	</script>
+	<style>
+	</style>
+</head>
+<body>
+					<div id="application"
+				>
+					<div id="__resources1"
+				>
+					<div id="dialog"
+				>
+					</div>
+					<div id="emulator"
+				>
+					</div>
+					</div>
+<div id="kitchen">
+		<ul>
+			<li><a href="#__div1"><span>Buttons?</span></a></li>
+			<li><a href="#__scroller1"><span>Radios</span></a></li>
+			<li><a href="#__scroller2"><span>Image</span></a></li>
+			<li><a href="#__div2"><span>ProgressBars</span></a></li>
+		</ul>
+					<div id="__div1"
+				>
+					<input id="btn1"
+							type="button" 
+							name="btn1" 
+							value="Standard button (Toggle CheckBox)" 
+						>
+					</input>
+					<div id="toggle1"
+				>
+					</div>
+					<div id="imgbtn1"
+				>
+					</div>
+					<div id="lbl1"
+				>
+						Simple Labeled
+					</div>
+					<input id="edit1"
+							type="text" 
+							name="edit1" 
+							value="Some text!" 
+							title="Empty EditText!" 
+						>
+					</input>
+<input id="chkb1" type="checkbox" name="__div1"/>
+<label id="__lchkb1" for="chkb1">I'm a checkbox</label>
+					</div>
+					<div id="__scroller1"
+							style="overflow:auto" 
+						>
+					<div id="rdgTab3"
+				>
+<input id="radio1" type="radio" name="rdgTab3"/>
+<label id="__lradio1" for="radio1">First radiobutton inside radiogroup</label>
+<input id="radio2" type="radio" name="rdgTab3"/>
+<label id="__lradio2" for="radio2">Second radiobutton inside radiogroup</label>
+<input id="radio3" type="radio" name="rdgTab3"/>
+<label id="__lradio3" for="radio3">Third radiobutton inside radiogroup</label>
+<input id="radio4" type="radio" name="rdgTab3"/>
+<label id="__lradio4" for="radio4">Fourth radiobutton inside radiogroup</label>
+<input id="radio5" type="radio" name="rdgTab3"/>
+<label id="__lradio5" for="radio5">Fifth radiobutton inside radiogroup</label>
+<input id="radio6" type="radio" name="rdgTab3"/>
+<label id="__lradio6" for="radio6">Sixth radiobutton inside radiogroup</label>
+<input id="radio7" type="radio" name="rdgTab3"/>
+<label id="__lradio7" for="radio7">Seventh radiobutton inside radiogroup</label>
+<input id="radio8" type="radio" name="rdgTab3"/>
+<label id="__lradio8" for="radio8">Eighth radiobutton inside radiogroup</label>
+<input id="radio9" type="radio" name="rdgTab3"/>
+<label id="__lradio9" for="radio9">Ninth radiobutton inside radiogroup</label>
+					</div>
+					</div>
+					<div id="__scroller2"
+							style="overflow:auto" 
+						>
+					<input id="img1"
+							type="image" 
+							name="img1" 
+							src="images/emulator.png" 
+						>
+					</input>
+					</div>
+					<div id="__div2"
+				>
+					<div id="prgbar1"
+				>
+					</div>
+					<div id="prgbar2"
+				>
+					</div>
+					<div id="prgbar3"
+				>
+					</div>
+					<div id="prgbar4"
+				>
+					</div>
+					<div id="seekb1"
+				>
+					</div>
+					</div>
+				</div>
+					</div>
+				</body>
+</html>

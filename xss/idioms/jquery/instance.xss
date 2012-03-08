@@ -1,0 +1,25 @@
+
+<xss:parameter id="it"/>
+<xss:parameter id="is_class"/>
+
+<xss:code>
+	//render properties
+	for(var prop in it.properties)
+	{
+		if(prop.dont_init)
+			continue;
+		
+		compiler.xss("property.xss", prop, it, is_class);
+	}
+
+	for(var mthd in it.methods)
+	{
+		compiler.xss("method.xss", mthd, it, is_class);
+	}
+
+	//render events as functions
+	for(var ev in it.events)
+	{
+		compiler.xss("event.xss", ev, it, is_class);
+	}
+</xss:code>
