@@ -148,7 +148,6 @@ Comment End = '*/'
 
 <Object Value>
        ::= Identifier ':' <Expression>
-       |  Identifier '=' <Expression>
 
 <Primary Exp>
        ::= <Primary>
