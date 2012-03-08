@@ -1,4 +1,4 @@
-<application name="SimpleTest" title="Simple Sample Android Application" src="simple.xs" width="320" height="430">
+<application name="Simple Test" title="Simple Sample Android Application" src="simple.xs" width="320" height="430">
     <label id="lblFirstName" caption="Enter forename: " x="10" y="20" width="140" height="40"/>
     <editbox id="edtFirstName" hint="Your first name" x="120" y="10" width="160" height="40"/>
 	

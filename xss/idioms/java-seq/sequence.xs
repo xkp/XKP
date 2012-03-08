@@ -59,55 +59,62 @@ on copy_default_files(app, bns, plibs)
         "SequenceUpdateEvent.java"
 	];
 	
+	//TRACE: log
+	compiler.log("Rendering default files...");
+	
 	string ns = bns + ".libs.Sequence";
 	for(string f in files)
 	{
 		string srcf = compiler.full_path("/libs/" + f);
 		string dstf = plibs + "Sequence/" + f;
 		
-		compiler.log("Rendering default file: " + srcf);
+		//TRACE: log
+		//compiler.log("Rendering default file: " + srcf);
 		
 		compiler.xss(srcf, output_file = dstf, ns = ns);
 	}
 }
 
-on render_idiom_scripts()
+on render_idiom_scripts(main)
 {
-	out(indent = 0)
+	if(main == 1)
 	{
-		private double update_freq = 1/30.0;
+		out(indent = 0)
+		{
+			private double update_freq = 1/30.0;
 
-		private void Update() <xss:open_brace/>
-			runOnUiThread(new Runnable() <xss:open_brace/>
-				public void run() <xss:open_brace/>
-					double delta = update_freq;
-	}
-	
-						compiler.inject("render_update");
-	
-	out(indent = 0)
-	{
-				<xss:close_brace/>
-			<xss:close_brace/>);
-		<xss:close_brace/>;
-	}
-	
-	out(indent = 0)
-	{
-		private void Start() <xss:open_brace/>
-			Timer timer = new Timer();
-			timer.schedule(new TimerTask() <xss:open_brace/>
-				@Override
-				public void run() <xss:open_brace/>
-					Update();
-				<xss:close_brace/>
-				
-			<xss:close_brace/>, 0, (long)(update_freq * 1000)); 
-		<xss:close_brace/>
-	}
-	
-	out(indent = 0, marker = "callers")
-	{
-		Start();
+			private void Update() <xss:open_brace/>
+				runOnUiThread(new Runnable() <xss:open_brace/>
+					public void run() <xss:open_brace/>
+						double delta = update_freq;
+		}
+		
+							compiler.inject("render_update");
+		
+		out(indent = 0)
+		{
+					<xss:close_brace/>
+				<xss:close_brace/>);
+			<xss:close_brace/>;
+		}
+		
+		out(indent = 0)
+		{
+			private void Start() <xss:open_brace/>
+				Timer timer = new Timer();
+				timer.schedule(new TimerTask() <xss:open_brace/>
+					@Override
+					public void run() <xss:open_brace/>
+						Update();
+					<xss:close_brace/>
+					
+				<xss:close_brace/>, 0, (long)(update_freq * 1000)); 
+			<xss:close_brace/>
+		}
+		
+		out(indent = 0, marker = "callers")
+		{
+			Start();
+		}
 	}
 }

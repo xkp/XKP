@@ -4,7 +4,7 @@
 
 <xss:code>
 	//TRACE: log
-	compiler.log("Rendering property: " + p.id);
+	//compiler.log("Rendering property: " + p.id);
 
 	if(!p.user_defined || p.no_render)
 		return;

@@ -4,22 +4,11 @@
 
 log: Rendering Android project...
 log: API Level = 4
-log: ### Begin Rendering Android Types...
-log: ### End Rendering Android Types...
+log: Rendering Android Types...
 log: Rendering Sequence Types...
-log: Adding interface OnClickListener on android
-log: ### Begin Rendering Android Imports...
-log: Adding import android.widget.TextView on android
-log: Adding import android.text.method.KeyListener on android
-log: Adding import android.view.View.OnClickListener on android
-log: Adding import android.view.View.OnLongClickListener on android
-log: Adding import android.view.MotionEvent on android
-log: Adding import android.view.View.OnTouchListener on android
-log: Adding import android.view.View.OnKeyListener on android
-log: Adding import android.view.View.OnFocusChangeListener on android
-log: Adding import android.widget.Button on android
-log: ### End Rendering Android Imports...
+log: Begin Rendering Android Imports...
 log: Rendering Sequence...
+<<<<<<< HEAD
 log: -- Rendering instance: anim1
 log: Properties size: 0
 log: Methods size: 0
@@ -93,6 +82,24 @@ log: Rendering default file: c:/dev/xkp/xss/samples/android/animtest/../../../id
 log: Rendering default file: c:/dev/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/Sequence.java
 log: Rendering default file: c:/dev/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/EventHolder.java
 log: Rendering default file: c:/dev/xkp/xss/samples/android/animtest/../../../idioms/java-seq/libs/SequenceUpdateEvent.java
+=======
+log: Rendering instance: anim1
+log: Rendering instance: anim1
+log: Rendering instance: anim2
+log: Rendering instance: anim2
+log: Rendering instance: anim3
+log: Rendering instance: anim3
+log: Rendering instance: lbl1
+log: Rendering instance: lbl2
+log: Rendering instance: lbl3
+log: Rendering instance: btn1
+log: Rendering instance: btn2
+log: Rendering instance: btn3
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+log: Rendering default files...
+>>>>>>> 84f89226f0491bbd2fed0d83900708a9aba98787
 
 Success are greateful
 ===[ characters.project.xml ]================
@@ -100,6 +107,7 @@ Success are greateful
 
 log: Rendering Android project...
 log: API Level = 4
+<<<<<<< HEAD
 log: ### Begin Rendering Android Types...
 log: Adding method setResourceImageView to XKPUtil static class.
 log: ### Begin Rendering Android Imports...
@@ -182,6 +190,23 @@ log: Copying default file: c:/dev/xkp/xss/samples/android/characters/../../../id
 log: Copying default file: c:/dev/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/bin/.empty
 log: Copying default file: c:/dev/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/gen/.empty
 log: Rendering default file: c:/dev/xkp/xss/samples/android/characters/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
+=======
+log: Rendering Android Types...
+log: Begin Rendering Android Imports...
+log: Rendering instance: picture
+log: Rendering instance: lname
+log: Rendering instance: lsurname
+log: Rendering instance: lemployment
+log: Rendering class: character
+log: Begin Rendering Android Imports...
+log: Copying resource files...
+log: Rendering instance: aladdin
+log: Rendering instance: mickey
+log: Rendering instance: pluto
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+>>>>>>> 84f89226f0491bbd2fed0d83900708a9aba98787
 
 Success are greateful
 ===[ contacts.project.xml ]================
@@ -189,6 +214,7 @@ Success are greateful
 
 log: Rendering Android project...
 log: API Level = 4
+<<<<<<< HEAD
 log: ### Begin Rendering Android Types...
 log: ### End Rendering Android Types...
 log: Adding interface OnClickListener on android
@@ -311,6 +337,33 @@ log: Copying default file: c:/dev/xkp/xss/samples/android/contacts/../../../idio
 log: Copying default file: c:/dev/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/bin/.empty
 log: Copying default file: c:/dev/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/gen/.empty
 log: Rendering default file: c:/dev/xkp/xss/samples/android/contacts/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
+=======
+log: Rendering Android Types...
+log: Begin Rendering Android Imports...
+log: Rendering instance: 
+log: Rendering instance: btnLeft
+log: Rendering instance: btnRight
+log: Rendering instance: swtStates
+log: Rendering instance: divAdd
+log: Rendering instance: lblFullName
+log: Rendering instance: lblPhone
+log: Rendering instance: edtFullName
+log: Rendering instance: edtPhoneNumber
+log: Rendering instance: chkVerifier
+log: Rendering instance: btnAddContact
+log: Rendering instance: divFind
+log: Rendering instance: lblFindType
+log: Rendering instance: rdbByName
+log: Rendering instance: rdbByPhone
+log: Rendering instance: lblCriterion
+log: Rendering instance: edtCriterion
+log: Rendering instance: divAbout
+log: Rendering instance: lblName
+log: Rendering instance: lblContact
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+>>>>>>> 84f89226f0491bbd2fed0d83900708a9aba98787
 
 Success are greateful
 ===[ figures2d.project.xml ]================
@@ -318,6 +371,7 @@ Success are greateful
 
 log: Rendering Android project...
 log: API Level = 4
+<<<<<<< HEAD
 log: ### Begin Rendering Android Types...
 log: ### End Rendering Android Types...
 log: Adding interface OnClickInsideFigureListener on android
@@ -392,6 +446,21 @@ log: Copying default file: c:/dev/xkp/xss/samples/android/figures2d/../../../idi
 log: Copying default file: c:/dev/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/bin/.empty
 log: Copying default file: c:/dev/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/gen/.empty
 log: Rendering default file: c:/dev/xkp/xss/samples/android/figures2d/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
+=======
+log: Rendering Android Types...
+log: Begin Rendering Android Imports...
+log: Rendering instance: div1
+log: Rendering instance: c1
+log: Rendering instance: r1
+log: Rendering instance: p1
+log: Rendering instance: point1
+log: Rendering instance: point2
+log: Rendering instance: point3
+log: Rendering instance: point4
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+>>>>>>> 84f89226f0491bbd2fed0d83900708a9aba98787
 
 Success are greateful
 ===[ gallery.project.xml ]================
@@ -399,6 +468,7 @@ Success are greateful
 
 log: Rendering Android project...
 log: API Level = 4
+<<<<<<< HEAD
 log: ### Begin Rendering Android Types...
 log: ### End Rendering Android Types...
 log: Adding class ImageAdapter on android
@@ -444,6 +514,15 @@ log: Copying default file: c:/dev/xkp/xss/samples/android/gallery/../../../idiom
 log: Copying default file: c:/dev/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/bin/.empty
 log: Copying default file: c:/dev/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/gen/.empty
 log: Rendering default file: c:/dev/xkp/xss/samples/android/gallery/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
+=======
+log: Rendering Android Types...
+log: Begin Rendering Android Imports...
+log: Copying resource files...
+log: Rendering instance: gallery
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+>>>>>>> 84f89226f0491bbd2fed0d83900708a9aba98787
 
 Success are greateful
 ===[ kitchensink.project.xml ]================
@@ -451,6 +530,7 @@ Success are greateful
 
 log: Rendering Android project...
 log: API Level = 4
+<<<<<<< HEAD
 log: ### Begin Rendering Android Types...
 log: ### End Rendering Android Types...
 log: Adding method setupTabHost to XKPUtil static class.
@@ -612,6 +692,41 @@ log: Copying default file: c:/dev/xkp/xss/samples/android/kitchensink/../../../i
 log: Copying default file: c:/dev/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/bin/.empty
 log: Copying default file: c:/dev/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/gen/.empty
 log: Rendering default file: c:/dev/xkp/xss/samples/android/kitchensink/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
+=======
+log: Rendering Android Types...
+log: Begin Rendering Android Imports...
+log: Copying resource files...
+log: Rendering instance: kitchen
+log: Rendering instance: 
+log: Rendering instance: btn1
+log: Rendering instance: toggle1
+log: Rendering instance: imgbtn1
+log: Rendering instance: lbl1
+log: Rendering instance: edit1
+log: Rendering instance: chkb1
+log: Rendering instance: 
+log: Rendering instance: rdgTab3
+log: Rendering instance: radio1
+log: Rendering instance: radio2
+log: Rendering instance: radio3
+log: Rendering instance: radio4
+log: Rendering instance: radio5
+log: Rendering instance: radio6
+log: Rendering instance: radio7
+log: Rendering instance: radio8
+log: Rendering instance: radio9
+log: Rendering instance: 
+log: Rendering instance: img1
+log: Rendering instance: 
+log: Rendering instance: prgbar1
+log: Rendering instance: prgbar2
+log: Rendering instance: prgbar3
+log: Rendering instance: prgbar4
+log: Rendering instance: seekb1
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+>>>>>>> 84f89226f0491bbd2fed0d83900708a9aba98787
 
 Success are greateful
 ===[ simple.project.xml ]================
@@ -619,6 +734,7 @@ Success are greateful
 
 log: Rendering Android project...
 log: API Level = 4
+<<<<<<< HEAD
 log: ### Begin Rendering Android Types...
 log: ### End Rendering Android Types...
 log: Adding interface OnClickListener on android
@@ -677,6 +793,20 @@ log: Copying default file: c:/dev/xkp/xss/samples/android/simpletest/../../../id
 log: Copying default file: c:/dev/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/bin/.empty
 log: Copying default file: c:/dev/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/gen/.empty
 log: Rendering default file: c:/dev/xkp/xss/samples/android/simpletest/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
+=======
+log: Rendering Android Types...
+log: Begin Rendering Android Imports...
+log: Rendering instance: lblFirstName
+log: Rendering instance: edtFirstName
+log: Rendering instance: lblLastName
+log: Rendering instance: edtLastName
+log: Rendering instance: btnFullName
+log: Rendering instance: lblFullName
+log: Rendering instance: edtContainer
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+>>>>>>> 84f89226f0491bbd2fed0d83900708a9aba98787
 
 Success are greateful
 ===[ touchme.project.xml ]================
@@ -684,6 +814,7 @@ Success are greateful
 
 log: Rendering Android project...
 log: API Level = 4
+<<<<<<< HEAD
 log: ### Begin Rendering Android Types...
 log: ### End Rendering Android Types...
 log: Adding interface OnTouchListener on android
@@ -723,6 +854,14 @@ log: Copying default file: c:/dev/xkp/xss/samples/android/touchme/../../../idiom
 log: Copying default file: c:/dev/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/bin/.empty
 log: Copying default file: c:/dev/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/gen/.empty
 log: Rendering default file: c:/dev/xkp/xss/samples/android/touchme/../../../idioms/android/copy.defaults/src/xkp/android/libs/Layout/XKPLayout.java
+=======
+log: Rendering Android Types...
+log: Begin Rendering Android Imports...
+log: Rendering instance: btnTouchme
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+>>>>>>> 84f89226f0491bbd2fed0d83900708a9aba98787
 
 Success are greateful
 ===[ kitchensink.project.xml ]================
@@ -1078,45 +1217,13 @@ Success are greateful
 
 
 log: Rendering Java instances...
-log: -- Rendering instance: instance1
-log: Properties size: 7
-log: Rendering property: xvalue
-log: Rendering property: svalue
-log: Rendering property: typing
-log: Rendering property: simple
-log: Rendering property: read_only
-log: Rendering property: writable
-log: Rendering property: mixed
-log: Methods size: 4
-log: Rendering method: test0
-log: Rendering method: test1
-log: Rendering method: test2
-log: Rendering method: test3
-log: Events size: 0
-log: -- Rendering instance: application
-log: Properties size: 3
-log: Rendering property: lvalue
-log: Rendering property: yvalue
-log: Rendering property: xvalue
-log: Methods size: 1
-log: Rendering method: app_test
-log: Events size: 1
-log: Rendering event: create
+log: Rendering instance: instance1
+log: Rendering instance: application
 
 Success are greateful
 ===[ java2.project.xml ]================(Tests)
 
 
-log: Rendering method: check_type
-log: Rendering method: foobar
-log: Rendering event: click
-log: Rendering property: foo
-log: Rendering property: typing
-log: Rendering property: simple
-log: Rendering property: read_only
-log: Rendering property: writable
-log: Rendering property: mixed
-log: Rendering property: bar
 Success are greateful
 ===[ jquery1.project.xml ]================(Tests)
 
@@ -1668,14 +1775,15 @@ Success are greateful
 
 log: Rendering Sequence Types...
 log: Rendering Sequence...
-log: -- Rendering instance: test_sequence
-log: Properties size: 0
-log: Methods size: 0
-log: -- Rendering instance: test_sequence
-log: Events size: 0
+log: Rendering instance: test_sequence
+log: Rendering instance: test_sequence
 Error [idiom] run tag got an invalid method
 	methd = 
+<<<<<<< HEAD
 	file = c:/dev/xkp/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
+=======
+	file = d:/xkp/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
+>>>>>>> 84f89226f0491bbd2fed0d83900708a9aba98787
 
 ===[ json1.project.xml ]================(Tests)
 
@@ -1684,7 +1792,11 @@ Error [reader] Invalid XML file
 	xml error = Error document empty.
 	line = 0
 	column = 0
+<<<<<<< HEAD
 	file = c:/dev/xkp/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
+=======
+	file = d:/xkp/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
+>>>>>>> 84f89226f0491bbd2fed0d83900708a9aba98787
 
 ===[ ms1.project.xml ]================(Tests)
 
@@ -2019,16 +2131,8 @@ log: instance: it1
 log: instance: it2
 log: instance: application
 log: Instance it1...
-log: Rendering property: getting
-log: Rendering event: create
 log: Instance it2...
-log: Rendering property: counter
-log: Rendering property: getting
-log: Rendering property: setting
-log: Rendering event: click
-log: Rendering method: returning
 log: Instance application...
-log: Rendering property: counter
 			== Instance it1 ==
 		
 
@@ -2147,10 +2251,27 @@ log: myMarker<html>
 <p id="myMarker">
 Hey, here is myMarker
 </p>
+<<<<<<< HEAD
 
 </body>
 </html>
 
+
+Success are greateful
+===[ xss13.project.xml ]================(Tests)
+=======
+>>>>>>> 84f89226f0491bbd2fed0d83900708a9aba98787
+
+</body>
+</html>
+
+log: property: p1
+log: property: p2
+log: property: p3
+log: property: p4
+log: method: foo
+log: method: bar
+log: method: foobar
 
 Success are greateful
 ===[ xss13.project.xml ]================(Tests)
@@ -2488,3 +2609,8 @@ return c;
 	
 
 Success are greateful
+===[ xssY.project.xml ]================(Tests)
+
+
+Error [404] File not found
+	file = d:/xkp/xss/tests/xss12.app.xsERROR: Project:  xssY.project.xml
