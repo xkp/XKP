@@ -1162,6 +1162,13 @@ XSSType xss_compiler::get_type(const str& type)
     return ctx->get_type(type);
   }
 
+XSSObject xss_compiler::get_instance(const str& instance)
+  {
+    XSSContext ctx    = current_context();
+    XSSObject  result = ctx->resolve(instance, XSSObject(), RESOLVE_INSTANCE);
+    return result; 
+  }
+
 XSSType xss_compiler::type_of(variant v)
   {
     XSSObject obj = variant_cast<XSSObject>(v, XSSObject());
@@ -1244,7 +1251,11 @@ XSSObject xss_compiler::analyze_expression(const param_list params)
         result->add_attribute("first_property", ea.first_property());
 
         Language lang = ctx->get_language();
-        str path_str = lang->render_expression(ea.get_path(), ctx);
+
+        str path_str;
+        expression& path_expr = ea.get_path();
+        if (!path_expr.empty())
+          path_str = lang->render_expression(path_expr, ctx);
 
         result->add_attribute("path", path_str);
       }

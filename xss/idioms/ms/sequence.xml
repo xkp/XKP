@@ -6,6 +6,7 @@
             </constructor_params>
 
             <property id="loop" type="bool"/>
+            <property id="target" type="object" value_is_expression="true"/>
 
             <method id="start"/>
             <method id="stop"/>

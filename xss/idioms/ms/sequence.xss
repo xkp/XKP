@@ -57,12 +57,45 @@
         {
             if (itm.class_name == "animate")
             {
-                var prop_info = compiler.analyze_expression(itm.property, this_ = seq);
+                var  expr_this = seq;
+                bool targetted = false;
+                if (seq.target)
+                {
+                    targetted = true;
+                    if (rendering_instance)
+                        expr_this = compiler.get_instance(seq.target);
+                    else
+                        compiler.error("Sequence classes do not support target, use target_type");
+                    
+                    if (!expr_this)
+                        compiler.error("Invalid sequence target", target=seq.target);
+                }
+                else if (seq.target_type)
+                {
+                    targetted = true;
+                    if (!rendering_instance)
+                        expr_this = compiler.get_type(seq.target_type);
+                    else
+                        compiler.error("Sequence instances do not support target_type, use target");
+
+                    if (!expr_this)
+                        compiler.error("Invalid sequence target type", target=seq.target_type);
+                }
+                
+                var prop_info = compiler.analyze_expression(itm.property, this_ = expr_this);
 
                 var    prop      = prop_info.property;
                 string prop_name = prop_info.property_name;
                 string iid       = compiler.genid('__i');
                 string path      = prop_info.path;
+                
+                if (targetted)
+                {
+                    if (path == '')
+                        path = seq_id + ".target";
+                    else
+                        path = seq_id + ".target." + path;
+                }
                 
                 if (!rendering_instance)
                 {

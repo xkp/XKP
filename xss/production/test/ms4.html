@@ -97,7 +97,7 @@ var img1;var img2;var fade1;var fade2;
                         },
                         [
                         {t: 0, value: 0},
-                        {t: 1, value: 30},
+                        {t: 1, value: 70},
                         ]);
                         this.addHandler(____i1);	              
                     var ____i2 = new ms.state.Interpolator(
@@ -107,11 +107,10 @@ var img1;var img2;var fade1;var fade2;
                             this__.target.alpha(value);
                         },
                         [
-                        {t: 1, value: 30},
+                        {t: 1, value: 70},
                         {t: 2, value: 100},
                         ]);
                         this.addHandler(____i2);	              
-            this.target = null;
             if (this.init)
                 this.init();
             },
@@ -119,8 +118,6 @@ var img1;var img2;var fade1;var fade2;
 	var ev_parent = this;
 	application.events.addListener("init", function()
 	{    
-		fade1.target = img1;
-fade2.target = img2;
 	}
 	);
 window.onload = function() 
@@ -176,10 +173,12 @@ window.onload = function()
 fade1 =
 new fade_in(
 g_sequence_manager);
+            fade1.target = img1;
             fade1.parent_sequence = null;
 fade2 =
 new fade_in(
 g_sequence_manager);
+            fade2.target = img2;
             fade2.loop = true;
                 fade2.start();
             fade2.parent_sequence = null;

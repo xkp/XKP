@@ -64,7 +64,10 @@ else
 
     if (prop.type.is_object && prop.value)
     {        
-        compiler.xss("instance.xss", prop.value, path = prop_name );
+        if (prop.value is string)
+            value = prop.value;
+        else
+            compiler.xss("instance.xss", prop.value, path = prop_name );
     }
     else
     {
