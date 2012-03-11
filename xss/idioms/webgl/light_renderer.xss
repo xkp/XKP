@@ -1,7 +1,8 @@
 <xss:parameter id="obj"/>
 
 <xss:code>	
-	out(){var <xss:e v="obj.id"/> = }compiler.xss("../common-js/instantiator.xss", obj);
+	out(marker = "threejs_variables", marker_source = "entry") {var <xss:e v="obj.id"/>;}
+	out(){<xss:e v="obj.id"/> = }compiler.xss("../common-js/instantiator.xss", obj);
 	out(){
 		;
 	scene.addLight(<xss:e value = "obj.id"/>);

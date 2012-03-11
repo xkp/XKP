@@ -9,6 +9,31 @@ function importjs(dir, file) {
 	bodyID.appendChild(newScript);
 }
 
+function measureText(pText, pFont) {
+    var lDiv = document.createElement('lDiv');
+
+    document.body.appendChild(lDiv);
+    
+    lDiv.style.font = pFont;
+	if(!lDiv.style.font)
+		lDiv.style.font = "10px sans-serif"
+    lDiv.style.position = "absolute";
+    lDiv.style.left = -1000;
+    lDiv.style.top = -1000;
+
+    lDiv.innerHTML = pText;
+
+    var lResult = {
+        width: lDiv.clientWidth,
+        height: lDiv.clientHeight
+    };
+
+    document.body.removeChild(lDiv);
+    lDiv = null;
+
+    return lResult;
+}
+
 String.prototype.namespace = function(separator) {
   this.split(separator || '.').inject(window, function(parent, child) {
     return parent[child] == undefined ? parent[child] = { } : parent[child];

@@ -9,18 +9,21 @@
 	background:Black;
 	}
 </style>
+<script type="text/javascript" src="../js/three/Detector.js"></script>
+<script type="text/javascript" src="../js/three/Three.js"></script>
+<script type="text/javascript" src="../js/three/Stats.js"></script>
+<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
-		<script type="text/javascript" src="../js/ms-ui.js"></script>
-		<script type="text/javascript" src="../js/three/Three.js"></script>
-		<script type="text/javascript" src="../js/three/Stats.js"></script>
-		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-		<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui;
@@ -32,6 +35,7 @@ var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 application.events = new ms.event.EventHolder();
+		var streamer = new ms.streamer.Streamer();
 		if(drawingCanvas){
 			var client =
 			{
@@ -39,7 +43,6 @@ application.events = new ms.event.EventHolder();
 				height: window.innerHeight,
 				canvas: drawingCanvas
 			};
-            var streamer = new ms.streamer.Streamer();							
 			var ui = new ms.ui.Manager(client, streamer);
 			var g_ui = ui;
 			var g_ui_root = ui.root;
@@ -69,7 +72,7 @@ new THREE.Scene(
 var camera_1 = 
 new THREE.Camera(
 65,1.5,1,1000);
-            camera_1.position.z = 100;
+                camera_1.position.z = 100;
 var amb_light_1 = 
 new THREE.AmbientLight(
 MidnightBlue);
@@ -95,32 +98,32 @@ Yellow,1,50);
 			{ color: Red, program: program_fill, } 
 			) );	
 			scene.addObject( particle1 );	
-            particle1.scale.x = 0.5;
-            particle1.scale.y = 0.5;
-            particle1.scale.z = 0.5;
+                particle1.scale.x = 0.5;
+                particle1.scale.y = 0.5;
+                particle1.scale.z = 0.5;
 			var particle2 = new THREE.Particle( 
 			new THREE.ParticleCanvasMaterial( 
 			{ color: Lime, program: program_fill, } 
 			) );	
 			scene.addObject( particle2 );	
-            particle2.scale.x = 0.5;
-            particle2.scale.y = 0.5;
-            particle2.scale.z = 0.5;
+                particle2.scale.x = 0.5;
+                particle2.scale.y = 0.5;
+                particle2.scale.z = 0.5;
 			var particle3 = new THREE.Particle( 
 			new THREE.ParticleCanvasMaterial( 
 			{ color: Yellow, program: program_fill, } 
 			) );	
 			scene.addObject( particle3 );	
-            particle3.scale.x = 0.5;
-            particle3.scale.y = 0.5;
-            particle3.scale.z = 0.5;
+                particle3.scale.x = 0.5;
+                particle3.scale.y = 0.5;
+                particle3.scale.z = 0.5;
 	    var sphere1_sphere = 
 new THREE.Sphere(
 20,32,16);
 	    var sphere1 = new THREE.Mesh(sphere1_sphere, material_sphere1);
 	    scene.addObject(sphere1);
 		sphere1.events = new ms.event.EventHolder();
-            application.time = null;
+                application.time = null;
 	var ev_parent = this;
 	application.events.addListener("updates", function()
 	{    
@@ -200,7 +203,7 @@ function animate() {
 	render();
 	if(ui)
 		ui.draw(drawingCanvas.getContext('2d'));
-	}
+}
 </script>
 </body>
 </html>

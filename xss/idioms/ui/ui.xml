@@ -204,6 +204,22 @@
             <property id="up"   type="string" dont_init="true"/>
             <property id="down" type="string" dont_init="true"/>
         </class>
+		
+		<class id="text_button" super="component" output_id="ms.ui.TextButton">
+            <constructor_params>
+                <parameter property="text" runtime="true"/> 
+				<parameter property="font" runtime="true"/> 
+            </constructor_params>
+            
+            <property id="text" type="string" dont_init="true">
+				<get text="text"/>
+                <set text="set_text({value})"/>
+            </property>
+			<property id="font" type="string" dont_init="true">
+				<get text="font"/>
+                <set text="set_font({value})"/>
+            </property>
+        </class>
 
         <class id="state_button" super="component" output_id="ms.ui.StateButton">
             <constructor_params>
@@ -230,7 +246,7 @@
                 <set text="text({value})"/>
             </property>
 			
-			<property id="color" type="string" use_plain_value="true">
+			<property id="color" type="string">
                 <get text="color"/>
                 <set text="set_color({value})"/>
             </property>

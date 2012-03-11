@@ -33,7 +33,7 @@ var app_height = 600;
 var lbl0;var btn1;var lbl1;var lbl2;
 var application = {};
 application.events = new ms.event.EventHolder();
-		var streamer = new ms.streamer.Streamer();
+		var streamer = new ms.streamer.Streamer();		
 		if(drawingCanvas){
 			var client =
 			{
@@ -65,7 +65,15 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
+});	
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
         var global_package = new ms.streamer.Package(streamer, global_package_items);	
 		global_package.load();	
     // --------RESOURCES---------
@@ -83,41 +91,44 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var materials = 
+var materials;var __basic_material1;var __basic_material2;var __basic_material3;var __basic_material4;var __basic_material5;var __basic_material6;var plane_material;var scene;var camera_1;var cube_1;var plane_1;
+threejs_load_resources(function()
+{
+materials = 
 new Array(
 );
-var __basic_material1 = new THREE.MeshBasicMaterial({
+__basic_material1 = new THREE.MeshBasicMaterial({
 color:Math.random() * 0xffffff
 	});
 	materials.push(__basic_material1);
-var __basic_material2 = new THREE.MeshBasicMaterial({
+__basic_material2 = new THREE.MeshBasicMaterial({
 color:Math.random() * 0xffffff
 	});
 	materials.push(__basic_material2);
-var __basic_material3 = new THREE.MeshBasicMaterial({
+__basic_material3 = new THREE.MeshBasicMaterial({
 color:Math.random() * 0xffffff
 	});
 	materials.push(__basic_material3);
-var __basic_material4 = new THREE.MeshBasicMaterial({
+__basic_material4 = new THREE.MeshBasicMaterial({
 color:Math.random() * 0xffffff
 	});
 	materials.push(__basic_material4);
-var __basic_material5 = new THREE.MeshBasicMaterial({
+__basic_material5 = new THREE.MeshBasicMaterial({
 color:Math.random() * 0xffffff
 	});
 	materials.push(__basic_material5);
-var __basic_material6 = new THREE.MeshBasicMaterial({
+__basic_material6 = new THREE.MeshBasicMaterial({
 color:Math.random() * 0xffffff
 	});
 	materials.push(__basic_material6);
-var plane_material = new THREE.MeshBasicMaterial({
+plane_material = new THREE.MeshBasicMaterial({
 color:Grey
 	});
             set_material_alpha(plane_material, 50);
-var scene = 
+scene = 
 new THREE.Scene(
 );
-var camera_1 = 
+camera_1 = 
 new THREE.Camera(
 70,1.5,1,1000);
             camera_1.position.y = 300;
@@ -125,14 +136,14 @@ new THREE.Camera(
 	    var cube_1_cube = 
 new THREE.Cube(
 200,200,200,1,1,1,materials);
-	    var cube_1 = new THREE.Mesh(cube_1_cube, new THREE.MeshFaceMaterial());
+	    cube_1 = new THREE.Mesh(cube_1_cube, new THREE.MeshFaceMaterial());
 	    scene.addObject(cube_1);
 		cube_1.events = new ms.event.EventHolder();
             cube_1.position.y = 150;
 	    var plane_1_plane = 
 new THREE.Plane(
 200,200);
-	    var plane_1 = new THREE.Mesh(plane_1_plane, plane_material);
+	    plane_1 = new THREE.Mesh(plane_1_plane, plane_material);
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
             set_rotation_x(plane_1.rotation, -1.57000005);
@@ -199,8 +210,7 @@ btn1.set_y(btn1.y + 2);
 	}
 	);
 if(ui)
-{
-	ui.load_resources(function(){		
+{	
 	drawingCanvas.onmousemove = function(ev)
 	{
 		ui.mousemove(ev.clientX, ev.clientY);                  
@@ -247,8 +257,7 @@ application.clicks = application.clicks + 1;
             lbl2.set_x(240);
             lbl2.set_y(420);
             lbl2.text("Drag mouse to spin the cube");
-		g_ui.fill_background = false;
-	});
+	g_ui.fill_background = false;	
 }
 var event_manager = new ms.event.ThreeEventManager();
 document.onmousemove = function(ev)
@@ -278,6 +287,7 @@ document.onkeypress = function(ev)
 application.events.dispatch("init", []);
 document.body.appendChild( renderer.domElement );
 animate();
+});
 function animate() {
 	if(ui)
 		drawingCanvas.getContext('2d').clearRect(0,0,600,600);

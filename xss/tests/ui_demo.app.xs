@@ -15,6 +15,16 @@ on btnPrev.click()
         main.active--;	
 }
 
+on lbl0.mousein()
+{
+	lbl0.caption = "The mouse is over me...";
+}
+
+on lbl0.mouseout()
+{
+	lbl0.caption = "use arrows to move smile";
+}
+
 on btn1.click()   
 {	
 	lbl1.caption = "Got " + clicks + " smileys";

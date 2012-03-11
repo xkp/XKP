@@ -1,9 +1,62 @@
 <xss:classes>
-    <class id="idle_anim" super="sequence">
-        <at time="0">
-            <animate property="target.x" from="target.x" to="Math.random()*(20)+(target.x-10)" in="2"/>
-            <animate property="target.y" from="target.y" to="Math.random()*(20)+(target.y-10)" in="2"/>
-            <animate property="target.rotation" from="target.rotation" to="Math.random()*10-5" in="2"/>
-        </at>
-    </class>
+	<class id="anim_plane" super="plane">
+		<sequence id="plane_anim">
+			<at time="0">
+				<animate property="anim_plane.position.x" from="anim_plane.position.x" to="Math.random()*(anim_plane.max_x - anim_plane.min_x)+(anim_plane.min_x)" in="8"/>
+				<animate property="anim_plane.position.y" from="anim_plane.position.y" to="Math.random()*(anim_plane.max_y - anim_plane.min_y)+(anim_plane.min_y)" in="8"/>
+				<animate property="anim_plane.rotation.y" from="anim_plane.rotation.y" to="Math.random()*60-30" in="8"/>
+			</at>			
+		</sequence>
+		<sequence id="quickly_anim">
+			<at time="0">
+				<animate property="anim_plane.position.x" from="anim_plane.position.x" to="Math.random()*(anim_plane.max_x - anim_plane.min_x)+(anim_plane.min_x)" in="2"/>
+				<animate property="anim_plane.position.y" from="anim_plane.position.y" to="Math.random()*(anim_plane.max_y - anim_plane.min_y)+(anim_plane.min_y)" in="2"/>
+				<animate property="anim_plane.rotation.y" from="anim_plane.rotation.y" to="Math.random()*60-30" in="2"/>
+			</at>
+			<at time="2">
+				<run sequence="plane_anim"/>
+				<run sequence="idle_anim"/>
+			</at>
+		</sequence>
+		<sequence id="alpha_anim" auto_start="true">
+			<at time="0">
+				<animate property="anim_plane.alpha" from="0" to="100" in="2"/>				
+			</at>			
+		</sequence>
+		<sequence id="idle_anim">
+			<every t="8">
+				<run sequence="plane_anim"/>
+			</every>
+		</sequence>
+		<sequence id="show_me">
+			<at time="0">
+				<animate property="anim_plane.position.x" from="anim_plane.position.x" to="-55" in="2"/>
+				<animate property="anim_plane.position.y" from="anim_plane.position.y" to="50" in="2"/>
+				<animate property="anim_plane.position.z" from="anim_plane.position.z" to="100" in="2"/>
+				<animate property="anim_plane.scale.x" from="anim_plane.scale.x" to="12" in="2"/>
+				<animate property="anim_plane.scale.y" from="anim_plane.scale.y" to="12" in="2"/>
+				<animate property="anim_plane.scale.z" from="anim_plane.scale.z" to="10" in="2"/>
+				<animate property="anim_plane.rotation.y" from="anim_plane.rotation.y" to="0" in="2"/>
+				<animate property="liquid.alpha" from="liquid.alpha" to="0" in="2"/>	
+				<animate property="btn1.alpha" from="0" to="100" in="2"/>
+				<animate property="btn2.alpha" from="0" to="100" in="2"/>
+			</at>			
+		</sequence>
+		<sequence id="back_to">
+			<at time="0">				
+				<animate property="anim_plane.scale.x" from="12" to="2" in="2"/>
+				<animate property="anim_plane.scale.y" from="12" to="2" in="2"/>
+				<animate property="anim_plane.scale.z" from="10" to="0" in="2"/>	
+				<animate property="anim_plane.position.z" from="100" to="0" in="2"/>
+				<animate property="liquid.alpha" from="liquid.alpha" to="80" in="2"/>
+				<animate property="btn1.alpha" from="100" to="0" in="2"/>
+				<animate property="btn2.alpha" from="100" to="0" in="2"/>
+				<run sequence="plane_anim"/>
+				<run sequence="idle_anim"/>
+			</at>			
+		</sequence>
+	</class>
 </xss:classes>
+
+	
+	

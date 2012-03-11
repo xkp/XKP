@@ -76,11 +76,11 @@
 		<class id="depth_material" super="material" output_id="THREE.MeshDepthMaterial" renderer="param_in_obj.xss"/>
 						
 		<class id="object3d">			
-            <property id="color" type="string" use_plain_value="true">
+            <property id="color" type="string">
 				<set text="materials[0].color.setHex({value})"/>
             </property>
 			<property id="texture" type="string">
-				<set text="materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource({value}).asset)"/>
+				<set text="materials[0].map = new THREE.Texture(streamer.get_resource({value}).data)"/>
             </property>			
 			<property id="alpha" type="float" use_plain_value="true">	
 				<get text="get_object_alpha({path})" global = "true"/>
@@ -111,7 +111,7 @@
 		</class>
 				
 		<class id="light"> 					
-			<property id="color" type="string" dont_init="true" use_plain_value="true"/>			
+			<property id="color" type="string" dont_init="true"/>			
 			<property id="position" type="vector3d"/>
 			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>
@@ -163,6 +163,34 @@
 			<property id="scale" type="vector3d"/>
 		</class>	
 	
+		<class id="quake_camera" output_id="THREE.QuakeCamera" renderer="camera_renderer.xss">
+			<constructor_params> 				
+				<parameter property="fov"/>
+				<parameter property="aspect"/>
+				<parameter property="near"/>
+				<parameter property="far"/>     
+				<parameter property="target"/> 
+				<parameter property="speed"/>
+				<parameter property="look_speed"/>
+				<parameter property="no_fly"/>
+				<parameter property="vertical"/>
+				<parameter property="auto_forward"/>			
+			</constructor_params>			
+			<property id="fov" type="string" dont_init="true"/>
+			<property id="aspect" type="string" dont_init="true"/>
+			<property id="near" type="string" dont_init="true"/>
+			<property id="far" type="string" dont_init="true"/>
+			<property id="target" type="string" dont_init="true"/>
+			<property id="speed" output_id="movementSpeed" type="string" dont_init="true"/> 
+			<property id="look_speed" output_id="lookSpeed" type="string" dont_init="true"/>
+			<property id="no_fly" output_id="noFly" type="string" dont_init="true"/>
+			<property id="vertical" output_id="lookVertical" type="string" dont_init="true"/>
+			<property id="auto_forward" output_id="autoForward" type="string" dont_init="true"/>
+			<property id="position" type="vector3d"/>
+			<property id="rotation" type="rotation_class"/>
+			<property id="scale" type="vector3d"/>
+		</class>
+		
 		<class id="plane" super="object3d" output_id="THREE.Plane" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
 				<parameter property="width" runtime="true"/>

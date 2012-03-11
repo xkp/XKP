@@ -33,7 +33,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 			var g_ui = ui;
 			var g_ui_root = ui.root;
 		}
-		var streamer = new ms.streamer.Streamer();
+		var streamer = new ms.streamer.Streamer();		
         var global_package_items = [];
                 global_package_items.push(
             {
@@ -53,6 +53,23 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
+                global_package_items.push(
+            {
+		id:				"__image3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/box.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
         var global_package = new ms.streamer.Package(streamer, global_package_items);	
 		global_package.load();	
 function start(resolution)  
@@ -72,7 +89,7 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var __label1;var lbl1;var btn1;var stateBtn;var lbl3;
+var __label1;var lbl1;var btn1;var img1;var tb1;var stateBtn;var lbl3;
             application.clicks = 0;
 window.onload = function() 
 {
@@ -140,6 +157,19 @@ btn1.set_y(y - btn1.h / 2);
 	}
 	);
 		application.are_obj_events = true;
+		    img1 = new ms.ui.Image( 
+	    "images/box.png",g_ui_root.manager, g_ui_root);
+        img1 = img1;
+            img1.set_x(470);
+            img1.set_y(300);
+            img1.set_rotation(10);
+            img1.set_width(50);
+            img1.set_height(50);
+		    tb1 = new ms.ui.TextButton( 
+	    "Aceptar","12px Tahoma",g_ui_root.manager, g_ui_root);
+        tb1 = tb1;
+            tb1.set_x(400);
+            tb1.set_y(200);
 		    stateBtn = new ms.ui.StateButton( 
 	    "images/smile_grin_48.png","images/smile_sad_48.png",g_ui_root.manager, g_ui_root);
         stateBtn = stateBtn;

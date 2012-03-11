@@ -34,7 +34,7 @@ var app_height = window.innerHeight;
 var __label1;var lbl1;
 var application = {};
 application.events = new ms.event.EventHolder();
-		var streamer = new ms.streamer.Streamer();
+		var streamer = new ms.streamer.Streamer();		
 		if(drawingCanvas){
 			var client =
 			{
@@ -93,7 +93,15 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
+});	
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
         var global_package = new ms.streamer.Package(streamer, global_package_items);	
 		global_package.load();	
     // --------RESOURCES---------
@@ -111,6 +119,7 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
+var img_plane;var img_reflect;var scene;var camera_1;
         function create_my_plane(
      ) {  		
 			var my_plane = new THREE.Object3D();
@@ -139,7 +148,7 @@ my_plane.scale.y = 1;
 	    var img_plane_plane = 
 new THREE.Plane(
 128,164);
-	    var img_plane = new THREE.Mesh(img_plane_plane, new THREE.MeshBasicMaterial());
+	    img_plane = new THREE.Mesh(img_plane_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(img_plane);
 		img_plane.events = new ms.event.EventHolder();
             my_plane.addChild(img_plane);
@@ -147,7 +156,7 @@ new THREE.Plane(
 	    var img_reflect_plane = 
 new THREE.Plane(
 128,164);
-	    var img_reflect = new THREE.Mesh(img_reflect_plane, new THREE.MeshBasicMaterial());
+	    img_reflect = new THREE.Mesh(img_reflect_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(img_reflect);
 		img_reflect.events = new ms.event.EventHolder();
             img_reflect.doubleSided = true;
@@ -158,12 +167,15 @@ new THREE.Plane(
             my_plane.addChild(img_reflect);
         return my_plane;
         }
-var scene = 
+threejs_load_resources(function()
+{
+scene = 
 new THREE.Scene(
 );
-var camera_1 = 
+camera_1 = 
 new THREE.Camera(
 45,1.5,1,10000);
+		active_camera = camera_1;
             camera_1.position.x = 500;
             camera_1.position.y = 500;
             camera_1.position.z = 1000;
@@ -222,8 +234,7 @@ application.speed = -0.200000003 * (window.innerWidth / 2 - x) / window.innerWid
 	}
 	);
 if(ui)
-{
-	ui.load_resources(function(){		
+{	
 	drawingCanvas.onmousemove = function(ev)
 	{
 		ui.mousemove(ev.clientX, ev.clientY);                  
@@ -241,17 +252,16 @@ if(ui)
         __label1 = __label1;
             __label1.set_x(150);
             __label1.set_y(75);
-            __label1.set_color(Ivory);
+            __label1.set_color("Ivory");
             __label1.text("Move mouse to control the carousel movement");
 		    lbl1 = new ms.ui.Label( 
 	    "15px Verdana",g_ui_root.manager, g_ui_root);
         lbl1 = lbl1;
             lbl1.set_x(175);
             lbl1.set_y(100);
-            lbl1.set_color(Ivory);
+            lbl1.set_color("Ivory");
             lbl1.text("Put the mouse over an image to zoom it");
-		g_ui.fill_background = false;
-	});
+	g_ui.fill_background = false;	
 }
 var event_manager = new ms.event.ThreeEventManager();
 document.onmousemove = function(ev)
@@ -281,6 +291,7 @@ document.onkeypress = function(ev)
 application.events.dispatch("init", []);
 document.body.appendChild( renderer.domElement );
 animate();
+});
 function animate() {
 	if(ui)
 		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);

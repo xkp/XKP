@@ -32,7 +32,7 @@ var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 application.events = new ms.event.EventHolder();
-		var streamer = new ms.streamer.Streamer();
+		var streamer = new ms.streamer.Streamer();		
 	// --------RESOURCES---------
         var global_package_items = [];
                 global_package_items.push(
@@ -43,7 +43,15 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
+});	
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
         var global_package = new ms.streamer.Package(streamer, global_package_items);	
 		global_package.load();	
     // --------RESOURCES---------
@@ -61,13 +69,14 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
+var my_sphere;var material_wireframe;var all_in_one;var __basic_material1;var __basic_material2;var __lambert_material1;var __lambert_material2;var __depth_material1;var __normal_material1;var __basic_material3;var __lambert_material3;var scene;var camera_1;var amb_light_1;var dir_light_1;var particle_1;var point_light_1;var plane_1;
         function create_my_sphere(
     radius,x_segments,y_segments ) { 
             var my_sphere;
 	    var my_sphere_sphere = 
 new THREE.Sphere(
 radius,x_segments,y_segments);
-	    var my_sphere = new THREE.Mesh(my_sphere_sphere, new THREE.MeshBasicMaterial());
+	    my_sphere = new THREE.Mesh(my_sphere_sphere, new THREE.MeshBasicMaterial());
 	    scene.addObject(my_sphere);
 		my_sphere.events = new ms.event.EventHolder();
         my_sphere.mat = null;
@@ -78,56 +87,58 @@ radius,x_segments,y_segments);
         };
         return my_sphere;
         }
-var material_wireframe = new THREE.MeshBasicMaterial({
+threejs_load_resources(function()
+{
+material_wireframe = new THREE.MeshBasicMaterial({
 color:Ivory,wireframe:true
 	});
-var all_in_one = 
+all_in_one = 
 new Array(
 );
-var __basic_material1 = new THREE.MeshBasicMaterial({
+__basic_material1 = new THREE.MeshBasicMaterial({
 color:0x00ffff,wireframe:true
 	});
 	all_in_one.push(__basic_material1);
-var __basic_material2 = new THREE.MeshBasicMaterial({
+__basic_material2 = new THREE.MeshBasicMaterial({
 color:0xff0000,blending:additive_blending
 	});
 	all_in_one.push(__basic_material2);
-var __lambert_material1 = new THREE.MeshLambertMaterial({
+__lambert_material1 = new THREE.MeshLambertMaterial({
 color:White,shading:flat_shading
 	});
 	all_in_one.push(__lambert_material1);
-var __lambert_material2 = new THREE.MeshLambertMaterial({
+__lambert_material2 = new THREE.MeshLambertMaterial({
 color:White,shading:smooth_shading
 	});
 	all_in_one.push(__lambert_material2);
-var __depth_material1 = new THREE.MeshDepthMaterial({
+__depth_material1 = new THREE.MeshDepthMaterial({
 	});
 	all_in_one.push(__depth_material1);
-var __normal_material1 = new THREE.MeshNormalMaterial({
+__normal_material1 = new THREE.MeshNormalMaterial({
 	});
 	all_in_one.push(__normal_material1);
-var __basic_material3 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/land_ocean_ice_cloud.jpg').asset),
+__basic_material3 = new THREE.MeshBasicMaterial({
+map:new THREE.Texture(streamer.get_resource('images/land_ocean_ice_cloud.jpg').data),
 	});
 	all_in_one.push(__basic_material3);
-var __lambert_material3 = new THREE.MeshLambertMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/land_ocean_ice_cloud.jpg').asset),
+__lambert_material3 = new THREE.MeshLambertMaterial({
+map:new THREE.Texture(streamer.get_resource('images/land_ocean_ice_cloud.jpg').data),
 	});
 	all_in_one.push(__lambert_material3);
-var scene = 
+scene = 
 new THREE.Scene(
 );
-var camera_1 = 
+camera_1 = 
 new THREE.Camera(
 45,1.5,1,2000);
             camera_1.position.z = 800;
             camera_1.position.y = 200;
-var amb_light_1 = 
+amb_light_1 = 
 new THREE.AmbientLight(
 0x202020);
 		;
 	scene.addLight(amb_light_1);
-var dir_light_1 = 
+dir_light_1 = 
 new THREE.DirectionalLight(
 Math.random() * 0xffffff);
 		;
@@ -135,7 +146,7 @@ Math.random() * 0xffffff);
             dir_light_1.position.x = Math.random() - 0.5;
             dir_light_1.position.y = Math.random() - 0.5;
             dir_light_1.position.z = Math.random() - 0.5;
-			var particle_1 = new THREE.Particle( 
+			particle_1 = new THREE.Particle( 
 			new THREE.ParticleCanvasMaterial( 
 			{ color: White, program: program_fill, } 
 			) );	
@@ -143,7 +154,7 @@ Math.random() * 0xffffff);
             particle_1.scale.x = 5;
             particle_1.scale.y = 5;
             particle_1.scale.z = 5;
-var point_light_1 = 
+point_light_1 = 
 new THREE.PointLight(
 White,1);
 		;
@@ -151,7 +162,7 @@ White,1);
 	    var plane_1_plane = 
 new THREE.Plane(
 1000,1000,100,100);
-	    var plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
+	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
             plane_1.position.y = -70;
@@ -200,10 +211,8 @@ point_light_1.position.z = particle_1.position.z;
 	}
 	);
 if(ui)
-{
-	ui.load_resources(function(){		
-		g_ui.fill_background = false;
-	});
+{	
+	g_ui.fill_background = false;	
 }
 var event_manager = new ms.event.ThreeEventManager();
 document.onmousemove = function(ev)
@@ -233,6 +242,7 @@ document.onkeypress = function(ev)
 application.events.dispatch("init", []);
 document.body.appendChild( renderer.domElement );
 animate();
+});
 function animate() {
 	if(ui)
 		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);

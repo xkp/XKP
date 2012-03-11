@@ -169,6 +169,7 @@
                     {
                         var <xss:e v="sid"/> = new ms.state.Caller(function()
                         {
+							<xss:e v="itm.sequence"/>.stop();
                             <xss:e v="itm.sequence"/>.start();
                         });
                         <xss:e v="seq_id"/>.addAction(null, null, new ms.state.State(<xss:e v="time"/>, <xss:e v="time"/>, <xss:e v="sid"/>));                    
@@ -220,7 +221,8 @@
                 {
                     out()
                     {
-                         <xss:e v="child.sequence"/>.start();
+						<xss:e v="child.sequence"/>.stop();
+                        <xss:e v="child.sequence"/>.start();
                     }
                 }
                 else compiler.log("WARNING: 'run' needs 'method' or 'sequence'");
@@ -267,6 +269,7 @@
                 {
                     out() 
                     {
+						<xss:e v="seq.id"/>.<xss:e v="action.sequence"/>.stop();
                         <xss:e v="seq.id"/>.<xss:e v="action.sequence"/>.start();
                     }
                 }

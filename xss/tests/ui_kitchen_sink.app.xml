@@ -10,8 +10,7 @@
         <image src="images/arrow_right_green_48.png"/>
         <image src="images/arrow_left_48.png"/>
         <image src="images/arrow_left_green_48.png"/>
-		<image src="images/AzuCola_Trans.png"/>
-		<image src="images/box.png"/>
+		<image src="images/AzuCola_Trans.png"/>		
 
 		<sprite_sheet id="monster_sheet" src="images/monster.png" frame_width="64" frame_height="64">
 			<animation id="m_run_l" frame_row="0" frame_col="0" frames="10" step="20"/>
@@ -24,18 +23,19 @@
     <switch id="main" x="0" y="0" width="600" height="450">
         <div id="test1">
 			<label id="title0" x="50" y="50" font="12px Verdana" caption="This screen shows some buttons (1/4)"/>
-			<label id="lbl0" x="240" y="175" font="Verdana" caption="Use keyboard arrows to move the first smiley"/>
-            <label id="lbl1" x="330" y="220" font="Verdana" caption="Click this smiley to count"/>
+			<label id="lbl_event" x="240" y="120" font="12px Verdana" caption="Pass the mouse over this text..."/>
+			<label id="lbl0" x="240" y="175" caption="Use keyboard arrows to move the first smiley"/>
+            <label id="lbl1" x="330" y="220" caption="Click this smiley to count"/>
             <button id="btn1" x="270" y="200" width="50" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png"/>
 			<state_button id="stateBtn" x="270" y="300" width="50" height="50" active="images/smile_grin_48.png" inactive="images/smile_sad_48.png"/>
-			<label id="lbl3" x="330" y="340" font="Verdana" caption="This smiley is a state button, click it"/>
+			<label id="lbl3" x="330" y="340" caption="This smiley is a state button, click it"/>
         </div>
         <div id="test2">
 			<label id="title1" x="50" y="50" font="12px Verdana" caption="This screen shows a percentage or progress bar and a sprite sheet animation (2/4)"/>
             <progress_bar id="pb1" x="225" y="120" width="150" height="10"/>
             <img id="btn2" x="200" y="115" width="20" height="20" src="images/arrow_left.png"/>
             <img id="btn3" x="380" y="115" width="20" height="20" src="images/arrow_right.png"/>
-            <label id="lbl2" x="210" y="200" font="Verdana" caption="Click small arrows to adjust percentage"/>
+            <label id="lbl2" x="210" y="200" caption="Click small arrows to adjust percentage"/>
 			<label id="lbl7" x="210" y="270" font="11px Verdana" caption="Press arrows on your keyboard to walk the zombie"/>
 			<sprite id="monster" x="300" y="300" sheet="monster_sheet" animation="m_idle"/>			
         </div>
@@ -53,16 +53,19 @@
 			<label id="lbl4" x="50" y="400" font="11px Verdana" caption="Click the circle pressing NUMPAD + or NUMPAD - to increment or decrement its linewidth"/>
 			<label id="lbl5" x="50" y="420" font="11px Verdana" caption="Greeny the drunked rectangle and Pinky the polygon rotates like the other components, test it!!!"/>
 			<label id="lbl6" x="50" y="440" font="11px Verdana" caption="Click the smiley to increment the black line width"/>
+			<label id="lbl8" x="50" y="460" font="11px Verdana" caption="Use SHIFT/ALT with click to resize the polygon"/>
 			<button id="btn5" x="400" y="200" width="50" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png"/>
         </div>
 		<div id="test4">
-			<label id="title3" x="50" y="50" font="12px Verdana" caption="This screen shows two intersected clip area components with diferent forms (4/4)"/>
-			<label id="inst0" x="70" y="70" font="12px Verdana" caption="Use arrows to move the rect and WASD to move the circle"/>
+			<label id="title3" x="50" y="50" font="12px Verdana" caption="This screen shows two intersected clip area components with diferent forms"/>
+			<label id="title4" x="50" y="70" font="12px Verdana" caption="and the text button(4/4)"/>
+			<label id="inst0" x="70" y="90" font="12px Verdana" caption="Use arrows to move the rect and WASD to move the circle"/>
 			<div id="clips">
 				<clip_area id="ca1" x="90" y="100" width="200" height="220" shape="rect"/>				
 				<img id="back_img" x="0" y="0" width="500" height="500" src="images/AzuCola_Trans.png"/>
 				<clip_area id="ca2" x="100" y="160" width="200" height="200" shape="circle"/>
 			</div>
+			<text_button id="tb1" x="400" y="400" font="12px Arial" text="My_Button"/>
         </div>
     </switch>
 	

@@ -5,12 +5,40 @@ function set_active_camera( camera )
 	active_camera = camera;
 }
 
+function threejs_load_resources(callback)
+{
+	var resources = [];
+	for(var i = 0; i < streamer.resources.length; i++)
+	{
+		var res = streamer.resources[i];
+		if(!res.loaded)
+			resources.push({ type: res.type, url: res.asset});			
+	}
+	if (resources.length > 0)
+	{		
+		var stream_client =
+		{
+			resource_loaded: function(res, data)
+			{					
+			},
+
+			finished_loading: function()
+			{
+				callback();
+			}
+		};
+
+		streamer.request(resources, stream_client);
+	}
+	else callback();
+}
+
 function set_transform_image( path, value )
 {
 	for(var i = 0; i < path.children.length; i++)
 	{
 		var child = path.children[i];		
-		child.materials[ 0 ].map = THREE.ImageUtils.loadTexture(streamer.get_resource(value).asset);	
+		child.materials[ 0 ].map = new THREE.Texture(streamer.get_resource(value).data);	
 	}	
 }
 
@@ -26,6 +54,11 @@ function set_transform_material( path, value )
 function set_object_alpha( path, value )
 {	         
 	path.materials[0].opacity = value / 100;	
+}
+
+function get_object_alpha( path )
+{	         
+	return path.materials[0].opacity * 100;	
 }
 
 function set_material_alpha( path, value )

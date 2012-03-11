@@ -1,17 +1,5 @@
-<project 
-	entry_point="../idioms/jquery/entry.xss" 
-	language="js" 
-	target="jquery1.xml" 
-	output="jquery1.html" >
-	
-	<idiom src="../idioms/jquery/classes.xml"/>
-	
-	<path>
-		<output path="../production/test/"/>
-	</path>
-	
-	<options 
-		jquery_filepath="jquery/jquery.js" 
-		jquery_ui_filepath="jquery/jquery-ui.js" 
-		jquery_ui_css_filepath="jquery/jquery-ui.css" />
+<project entry_point="../idioms/jquery/standalone_app.xss" language="js" target="jquery1.app.xml">
+    <idiom src="../idioms/jquery/module.xml"/>
 </project>
+           
+         

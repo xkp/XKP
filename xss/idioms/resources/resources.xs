@@ -16,7 +16,7 @@ on render_initialization()
 {
 	out()
 	{
-		var streamer = new ms.streamer.Streamer();
+		var streamer = new ms.streamer.Streamer();		
 	}	
 }
 
@@ -58,9 +58,17 @@ on render_resources()
             render_resource(res);
             compiler.out(");");
         }		
-    }
+    }	
     out()
-    {
+    {	
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
         var global_package = new ms.streamer.Package(streamer, global_package_items);	
 		global_package.load();	
     }

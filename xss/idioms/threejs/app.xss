@@ -22,6 +22,7 @@
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+
 <xss:code>
     compiler.inject("render_js_includes");
 </xss:code>	
@@ -45,6 +46,7 @@ out(){
 
 var renderer = new THREE.CanvasRenderer();	
 var ui;
+var SoundUtils;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
@@ -87,20 +89,26 @@ application.events.dispatch("switch_cameras", []);
 
 }
 
+<xss:marker id="threejs_variables"/>
+
 <xss:code>
 	compiler.inject("render_types");
+</xss:code>
+
+threejs_load_resources(function()
+{
+<xss:code>
 	compiler.inject("render_instances");	
 	compiler.xss("../common-js/instance.xss", application);
 </xss:code>
 
 if(ui)
-{
-	ui.load_resources(function(){		
-		<xss:code>		
-			compiler.inject("render_ui_instances");			
-		</xss:code>		
-		g_ui.fill_background = false;
-	});
+{	
+	SoundUtils = new ms.ui.SoundUtils();
+	<xss:code>		
+		compiler.inject("render_ui_instances");			
+	</xss:code>		
+	g_ui.fill_background = false;	
 }
 
 var event_manager = new ms.event.ThreeEventManager();
@@ -134,7 +142,7 @@ application.events.dispatch("init", []);
 	
 document.body.appendChild( renderer.domElement );
 animate();
-
+});
 function animate() {
 	if(ui)
 		drawingCanvas.getContext('2d').clearRect(0,0,<xss:e value="application.width"/>,<xss:e value="application.height"/>);

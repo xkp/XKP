@@ -683,7 +683,7 @@ void expr_object_resolver::exec_operator(operator_type op, int pop_count, int pu
                         if (var_type->is_array())
                           result = var_type->array_type();
                         else
-                          assert(false); //td: throw
+                          not_found_ = true;
                         break;
                       }
                     default:
@@ -781,6 +781,7 @@ void expression_analizer::analyze(expression& expr, XSSContext ctx)
                         case RESOLVE_INSTANCE:
                         case RESOLVE_VARIABLE: break;
                         case RESOLVE_PROPERTY: first_property_ = true; break;
+                        case RESOLVE_TYPE: first_property_ = false; break;
                         default : assert(false); //catch
                       }
                     first_ = fri.value;

@@ -1,9 +1,10 @@
 <xss:parameter id="obj"/>
 
 <xss:code>
+	out(marker = "threejs_variables", marker_source = "entry") {var <xss:e v="obj.id"/>;}
 	if(obj.class_name == "particle"){
 		out(){
-			var <xss:e v="obj.id"/> = new THREE.Particle( 
+			<xss:e v="obj.id"/> = new THREE.Particle( 
 			new THREE.ParticleCanvasMaterial( 
 			{ color: <xss:e v="obj.color"/>, program: <xss:e v="obj.program"/>, } 
 			) );	

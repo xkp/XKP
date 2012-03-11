@@ -1,30 +1,56 @@
-on click(x, y)
-{
-	idle_anim_1.target = art1;
-	idle_anim_2.target = art2;
-	idle_anim_3.target = art3;
-	idle_anim_4.target = art4;
-	idle_anim_5.target = art5;
-	idle_anim_6.target = art6;
-	idle_anim_7.target = art7;
-	idle_anim_8.target = art8;
-	idle_anim_9.target = forms1;
-	idle_anim_10.target = forms2;
-	idle_anim_11.target = forms3;
-	idle_anim_12.target = forms4;
-	idle_anim_13.target = forms5;
-	idle_anim_14.target = forms6;
-	idle_anim_15.target = forms7;
-	idle_anim_16.target = forms8;
-	idle_anim_17.target = times1;
-	idle_anim_18.target = times2;
-	idle_anim_19.target = times3;
-	idle_anim_20.target = times4;
-	idle_anim_21.target = times5;
-	idle_anim_22.target = times6;
-	idle_anim_23.target = times7;
-	idle_anim_seq.start();
+property art_planes = [];
+property forms_planes = [];
+property times_planes = [];
+property art_img = ["a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8"];
+property forms_img = ["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8"];
+property times_img = ["t1", "t2", "t3", "t4", "t5", "t6", "t7"];
+property resource;
+property group;
+property group_zoomed;
+property zoomed;
+property selected;
+property phase = 1;
+property temp_index;
+property temp_img;
+property image;
+
+method init_planes()
+{	
+	for(int a = 0; a < 8; a++){
+		resource = streamer.get_resource(art_img[a]).data;
+		art_planes += anim_plane(resource.naturalWidth/13, resource.naturalHeight/13);
+		art_planes[a].set_image(art_img[a]); 
+		scene.addObject(art_planes[a]);	
+		art_planes[a].plane_anim.start();		
+	}
+	art_planes += anim_plane(79, 24);
+	art_planes[8].set_image("images/pictures/art.png"); 
+	scene.addObject(art_planes[8]);
+	for(int f = 0; f < 8; f++){
+		resource = streamer.get_resource(forms_img[f]).data;
+		forms_planes += anim_plane(resource.naturalWidth/10, resource.naturalHeight/10);
+		forms_planes[f].set_image(forms_img[f]); 
+		scene.addObject(forms_planes[f]);
+		forms_planes[f].plane_anim.start();		
+	}
+	forms_planes += anim_plane(85, 23);
+	forms_planes[8].set_image("images/pictures/forms.png"); 
+	scene.addObject(forms_planes[8]);
+	for(int t = 0; t < 7; t++){
+		resource = streamer.get_resource(times_img[t]).data;
+		times_planes += anim_plane(resource.naturalWidth/10, resource.naturalHeight/10);
+		times_planes[t].set_image(times_img[t]); 
+		scene.addObject(times_planes[t]);	
+		times_planes[t].plane_anim.start();		
+	}
+	times_planes += anim_plane(98, 26);
+	times_planes[7].set_image("images/pictures/times.png"); 
+	scene.addObject(times_planes[7]);	
+	set_min_max_group(art_planes, -550, -350, 250, 0);
+	set_min_max_group(forms_planes,-200, 0, 250, 0);
+	set_min_max_group(times_planes, 150, 350, 250, 0);
 }
+
 on init()
 {	
 	art_pack.load();
@@ -32,55 +58,267 @@ on init()
 	times_pack.load();	
 }
 
-instance idle_anim_seq
+instance init_anim
 {
 	method animate_all()
 	{
-		idle_anim_1.stop();
-		idle_anim_1.start();
-		idle_anim_2.stop();
-		idle_anim_2.start();
-		idle_anim_3.stop();
-		idle_anim_3.start();
-		idle_anim_4.stop();
-		idle_anim_4.start();
-		idle_anim_5.stop();
-		idle_anim_5.start();
-		idle_anim_6.stop();
-		idle_anim_6.start();
-		idle_anim_7.stop();
-		idle_anim_7.start();
-		idle_anim_8.stop();
-		idle_anim_8.start();
-		idle_anim_9.stop();
-		idle_anim_9.start();
-		idle_anim_10.stop();
-		idle_anim_10.start();
-		idle_anim_11.stop();
-		idle_anim_11.start();
-		idle_anim_12.stop();
-		idle_anim_12.start();
-		idle_anim_13.stop();
-		idle_anim_13.start();
-		idle_anim_14.stop();
-		idle_anim_14.start();
-		idle_anim_15.stop();
-		idle_anim_15.start();
-		idle_anim_16.stop();
-		idle_anim_16.start();
-		idle_anim_17.stop();
-		idle_anim_17.start();
-		idle_anim_18.stop();
-		idle_anim_18.start();
-		idle_anim_19.stop();
-		idle_anim_19.start();
-		idle_anim_20.stop();
-		idle_anim_20.start();
-		idle_anim_21.stop();
-		idle_anim_21.start();
-		idle_anim_22.stop();
-		idle_anim_22.start();
-		idle_anim_23.stop();
-		idle_anim_23.start();
+		application.init_planes();
+		liquid_appear.start();
 	}
+}
+
+method find_owner(element)
+{	
+	for(int i = 0; i < 9; i++)
+	{
+		if(art_planes[i] == element)
+			return art_planes;
+		if(forms_planes[i] == element)
+			return forms_planes;
+		if(i < 8)
+			if(times_planes[i] == element)
+				return times_planes;
+	}	
+}
+
+on mousemove(x, y)
+{
+	if(phase == 1)
+	{
+		if(group)
+		{
+			set_list_scale(group, 1.5);	
+			liquid.disturb(x, y);			
+		}
+		if(art_planes != group)
+		{
+			set_list_scale(art_planes, 1);			
+		}
+		if(forms_planes != group)
+		{
+			set_list_scale(forms_planes, 1);			
+		}
+		if(times_planes != group)
+		{
+			set_list_scale(times_planes, 1);			
+		}
+	}	
+}
+
+on click(x, y)
+{		
+	if(phase == 3)
+	{
+		if(selected)
+		{
+			phase = 2;
+			selected.back_to.stop();
+			selected.back_to.start();
+			zoomed = false;
+		}
+	}else
+	if(phase == 2)
+	{
+		if(find_owner(selected) == group_zoomed)
+		{
+			if(get_img_index(selected, group_zoomed) != group_zoomed.length - 1)
+			{
+				liquid.disturb(x, y);
+				SoundUtils.play("sounds/water-droplet-1.mp3");
+				phase = 3;
+				selected.plane_anim.stop();
+				selected.idle_anim.stop();
+				selected.show_me.stop();
+				selected.show_me.start();
+				zoomed = selected;
+			}
+		}
+		else
+		{	
+			liquid.disturb(x, y);
+			SoundUtils.play("sounds/water-droplet-1.mp3");
+			if(group)
+			{
+				group_zoomed = group;
+				phase = 2;
+			}
+			if(art_planes == group)
+			{
+				set_down_groups(forms_planes, times_planes);
+			}
+			else if(forms_planes == group)
+			{
+				set_down_groups(art_planes, times_planes);
+			}
+			else if(times_planes == group)
+			{
+				set_down_groups(art_planes, forms_planes);
+			}		
+			set_list_scale(group, 2);		
+			set_min_max_group_quickly(group, -400, 250, 250, 0);
+		}
+	}else
+	if(phase == 1)
+	{	
+		liquid.disturb(x, y);
+		SoundUtils.play("sounds/water-droplet-1.mp3");
+		if(group)
+		{
+			group_zoomed = group;
+			phase = 2;
+		}
+		if(art_planes == group)
+		{
+			set_down_groups(forms_planes, times_planes);
+		}
+		else if(forms_planes == group)
+		{
+			set_down_groups(art_planes, times_planes);
+		}
+		else if(times_planes == group)
+		{
+			set_down_groups(art_planes, forms_planes);
+		}		
+		set_list_scale(group, 2);		
+		set_min_max_group_quickly(group, -400, 250, 250, 0);		
+	}
+}
+
+on btn1.click()
+{		
+	if(zoomed)
+	{
+		temp_img = zoomed;
+		temp_index = get_img_index(zoomed, group_zoomed);
+		if(temp_index == 0)
+			temp_index = group_zoomed.length - 1;
+		group_zoomed[temp_index - 1].plane_anim.stop();
+		group_zoomed[temp_index - 1].idle_anim.stop();
+		zoomed = group_zoomed[temp_index - 1];
+		temp_img.scale.x = 2;
+		temp_img.scale.y = 2;
+		temp_img.scale.z = 0;
+		temp_img.position.z = 0;
+		temp_img.plane_anim.stop();
+		temp_img.plane_anim.start();
+		temp_img.idle_anim.stop();
+		temp_img.idle_anim.start();		
+		zoomed.scale.x = 12;
+		zoomed.scale.y = 12;
+		zoomed.scale.z = 10;
+		zoomed.position.x = -55;
+		zoomed.position.y = 50;
+		zoomed.position.z = 100;	
+		zoomed.rotation.y = 0;
+	}
+}
+
+on btn2.click()
+{
+	if(zoomed)
+	{
+		temp_img = zoomed;
+		temp_index = get_img_index(zoomed, group_zoomed);
+		if(temp_index == group_zoomed.length - 2)
+			temp_index = - 1;
+		group_zoomed[temp_index + 1].plane_anim.stop();
+		group_zoomed[temp_index + 1].idle_anim.stop();
+		zoomed = group_zoomed[temp_index + 1];
+		temp_img.scale.x = 2;
+		temp_img.scale.y = 2;
+		temp_img.scale.z = 0;
+		temp_img.position.z = 0;
+		temp_img.plane_anim.stop();
+		temp_img.plane_anim.start();
+		temp_img.idle_anim.stop();
+		temp_img.idle_anim.start();		
+		zoomed.scale.x = 12;
+		zoomed.scale.y = 12;
+		zoomed.scale.z = 10;
+		zoomed.position.x = -55;
+		zoomed.position.y = 50;
+		zoomed.position.z = 100;	
+		zoomed.rotation.y = 0;
+	}
+}
+
+method set_list_scale(list, scale)
+{
+	for(var item in list)
+	{
+		item.scale.x = scale;
+		item.scale.y = scale;
+		item.scale.z = scale;
+	}
+}
+
+method set_scale(element, scale)
+{
+	element.scale.x = scale;
+	element.scale.y = scale;
+	element.scale.z = scale;
+}
+
+method set_min_max_group(list, min_x, max_x, min_y, max_y)
+{
+	for(int k = 0; k < list.length; k++)
+	{
+		if(k != list.length - 1)
+		{
+			list[k].min_x = min_x;
+			list[k].max_x = max_x;
+			list[k].min_y = min_y;
+			list[k].max_y = max_y;
+			list[k].plane_anim.stop();
+			list[k].idle_anim.stop();
+			list[k].plane_anim.start();
+			list[k].idle_anim.start();
+		}
+		else
+		{
+			list[k].position.x = min_x + (max_x - min_x)/2;
+			list[k].position.y = min_y + (min_y - max_y)/4;
+		}
+	}
+}
+
+method set_min_max_group_quickly(list, min_x, max_x, min_y, max_y)
+{
+	for(int k = 0; k < list.length; k++)
+	{
+		if(k != list.length - 1)
+		{
+			list[k].min_x = min_x;
+			list[k].max_x = max_x;
+			list[k].min_y = min_y;
+			list[k].max_y = max_y;
+			list[k].plane_anim.stop();
+			list[k].idle_anim.stop();
+			list[k].quickly_anim.stop();
+			list[k].quickly_anim.start();			
+		}
+		else
+		{
+			list[k].position.x = min_x + (max_x - min_x)/2;
+			list[k].position.y = min_y + (min_y - max_y)/4;
+		}
+	}	
+}
+
+method set_down_groups(group_1, group_2)
+{
+	set_list_scale(group_1, 0.7);
+	set_list_scale(group_2, 0.7);
+	set_min_max_group(group_1, -450, -350, -100, -200);		
+	set_min_max_group(group_2, 150, 250, -100, -200);
+}
+
+method get_img_index(img_param, list)
+{
+	for(int l = 0; l < list.length; l++)
+	{
+		if(img_param == list[l])
+			return l;
+	}	
+	return -1;
 }

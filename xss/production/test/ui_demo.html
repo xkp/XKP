@@ -215,17 +215,30 @@ window.onload = function()
 	    main.manager, main);test1.mouse_thru = true;
         test1 = test1;
 		    lbl0 = new ms.ui.Label( 
-	    "Verdana",test1.manager, test1);
+	    "12px Verdana",test1.manager, test1);
         lbl0 = lbl0;
             lbl0.set_x(240);
             lbl0.set_y(75);
             lbl0.text("use arrows to move smile");
+	var ev_parent = this;
+	lbl0.events.addListener("mousein", function()
+	{    
+		lbl0.text("The mouse is over me...");
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
+	lbl0.events.addListener("mouseout", function()
+	{    
+		lbl0.text("use arrows to move smile");
+	}
+	);
+		application.are_obj_events = true;
 		    lbl1 = new ms.ui.Label( 
 	    "Verdana",test1.manager, test1);
         lbl1 = lbl1;
             lbl1.set_x(270);
             lbl1.set_y(200);
-            lbl1.set_rotation(-15);
             lbl1.text("click smiley");
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",test1.manager, test1);
@@ -282,7 +295,7 @@ btn1.set_placement("right");
 	);
 		application.are_obj_events = true;
 		    lbl2 = new ms.ui.Label( 
-	    "Verdana",test2.manager, test2);
+	    "10px Arial",test2.manager, test2);
         lbl2 = lbl2;
             lbl2.set_x(210);
             lbl2.set_y(200);
@@ -336,7 +349,7 @@ main.active(main.get_active() - 1);
             stateBtn.set_width(50);
             stateBtn.set_height(50);
 		    lbl3 = new ms.ui.Label( 
-	    "Verdana",g_ui_root.manager, g_ui_root);
+	    "10px Arial",g_ui_root.manager, g_ui_root);
         lbl3 = lbl3;
             lbl3.set_x(330);
             lbl3.set_y(440);

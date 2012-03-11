@@ -37,13 +37,17 @@ ms.event.ThreeEventManager = Class.create(
 	    if (this.dragging)
 	    {
 	        this.dragging = false;
-	        application.events.dispatch("dragend", [x, y]);
+			if(!ui)
+				application.events.dispatch("dragend", [x, y]);
 			if(this.intersects.length > 0 && this.intersects[0].object.events)
 				this.intersects[0].object.events.dispatch("dragend", [x, y]);
 	        return true;
 	    }
-		application.events.dispatch("mouseup", [x, y]);
-		application.events.dispatch("click", [x, y]); 
+		if(!ui)
+		{
+			application.events.dispatch("mouseup", [x, y]);
+			application.events.dispatch("click", [x, y]); 
+		}
 		if(this.intersects.length > 0 && this.intersects[0].object.events){
 			this.intersects[0].object.events.dispatch("mouseup", [x, y]);	
 			this.intersects[0].object.events.dispatch("click", [x, y]);		
@@ -54,7 +58,8 @@ ms.event.ThreeEventManager = Class.create(
 		x = x - canvas_position.x;
 		y = y - canvas_position.y;
 		this.mouse_pressed = true;
-		application.events.dispatch("mousedown", [x, y]); 
+		if(!ui)		
+			application.events.dispatch("mousedown", [x, y]); 		
 		if(this.intersects.length > 0 && this.intersects[0].object.events)
 			this.intersects[0].object.events.dispatch("mousedown", [x, y]);		
 	},	
@@ -70,12 +75,14 @@ ms.event.ThreeEventManager = Class.create(
 			this.dragging = true;
 	    if (this.dragging)
 	    {
-			application.events.dispatch("drag", [x, y]);
+			if(!ui)
+				application.events.dispatch("drag", [x, y]);
 			if(this.intersects.length > 0 && this.intersects[0].object.events)
 				this.intersects[0].object.events.dispatch("drag", [x, y]);
 	        return true;
 	    }
-		application.events.dispatch("mousemove", [x, y]); 
+		if(!ui)
+			application.events.dispatch("mousemove", [x, y]); 
 		objects = scene.objects;		
 		for ( i = 0; i < objects.length; i++ ) {
 				object = objects[i];
@@ -89,17 +96,20 @@ ms.event.ThreeEventManager = Class.create(
 	},		
 	keydown: function(keycode)
 	{
-	    application.events.dispatch("keydown", [keycode]);    
+		if(!ui)
+			application.events.dispatch("keydown", [keycode]);    
 	},
 
 	keyup: function(keycode)
 	{
-	    application.events.dispatch("keyup", [keycode]);    
+		if(!ui)
+			application.events.dispatch("keyup", [keycode]);    
 	},
 
 	keypress: function(keycode)
 	{
-	    application.events.dispatch("keypress", [keycode]);    
+		if(!ui)
+			application.events.dispatch("keypress", [keycode]);    
 	},
 
 	get_3js_intersects: function(x, y){

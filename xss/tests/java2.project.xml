@@ -1,10 +1,1 @@
-<project 
-	entry_point="java.xss" 
-	language="java" 
-	target="java2.app.xml" 
-	output="../production/test/JavaTest2.java">
-	
-	<options event_scope="instance"/>
-	
-	<idiom src="../idioms/test/idiom.xml"/>
-</project> 
+<project 	entry_point="../idioms/java/main.xss" 	language="java" 	target="java2.app.xml" >		<path>		<output path="../production/test/"/>	</path>		<options option1="java.test"/>		<idiom src="../idioms/java/classes.xml"/></project>
