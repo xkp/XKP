@@ -39,27 +39,21 @@ ms.state.Manager = Class.create(
 	},	
 });
 
-
-//ESC: Esto se puede borrar, no?
-ms.state.Handler = Class.create(
+ms.state.SequenceUpdateEvent = Class.create(
 {
-	load_resources: function(streamer)		{},
-	flags: 			function()				{return 0;},
-	channel: 		function()				{alert("Handlers of type: " + this.get_class() + " must provide a channel")},
-	split: 			function(start, end)    {alert("Handlers of type: " + this.get_class() + " must provide a way to split")},
-	mix: 			function(other)			{return null;},
-	deleted:		function()				{},
-	update:		    function(t, pt)			{},
+initialize: function(t,d)
+    {
+		this.time = t;
+		this.delta = d;
+	}
+
 });
-
-
-
-
 
 ms.state.Sequence = Class.create(
 {
     initialize: function(manager,target)
     {
+		this.loop = false;
 		this.target = target;
 	    this.handlers = [];
 		this.running = false;
@@ -67,6 +61,7 @@ ms.state.Sequence = Class.create(
 		this.manager = manager;
 		this.parent = null;
         this.just_started = false;
+		this.events = new ms.event.EventHolder();
     },
 
     start: function()
@@ -79,9 +74,15 @@ ms.state.Sequence = Class.create(
 
         this.running = true;
         this.time = 0;
-        this.just_started = true;
+        //this.just_started = true;
+		this.events.dispatch("start", null);
 		
     },
+	
+	set_loop: function(value)
+	{
+	    this.loop = value;
+	},
 
     stop: function()
     {
@@ -90,6 +91,7 @@ ms.state.Sequence = Class.create(
 
 		if (!this.parent)	
 			this.manager.remove(this);
+		this.events.dispatch("stop", null);
     },
 	addHandler: function(handler)
 	{
@@ -104,39 +106,31 @@ ms.state.Sequence = Class.create(
 
     update: function(delta)
     {
-        if (this.running)
-        {
-            if (this.just_started)
-            {
-                this.just_started = false;
-                if (this.on_start)
-                    this.on_start();
-            }
-			 
+        if (!this.running)
+				return;
+            
+        var pt = this.time;
+		this.time += delta/1000.0;
 
-            var pt = this.time;
-			this.time += delta/1000.0;
-            if (this.on_update)
-			{	
-                this.on_update(delta, this.time);   
-			}
-			
+		this.events.dispatch("update", new ms.state.SequenceUpdateEvent(this.time, delta));
+            			
+		var finished = true;
+        var handlers = this.handlers;
 
-            var handlers = this.handlers;
-			for(var i = 0; i < handlers.length; i++)
-			{
-			    for(var j = 0; i < handlers.length; j++)
-				{
-				    if(handlers[j].time)
-					{
-						if(handlers[j].time==this.time)
-							handlers[j].update(this.time, pt); //ESC: para que era esto de nuevo?
-					}
-				} 	
-				
-                handlers[i].update(this.time, pt); 
-			}
-        }
+		for(var i = 0; i < handlers.length; i++)
+		{
+			var hf = handlers[i].update(this.time, pt);
+			finished = finished && hf;			  
+		}
+
+		if (finished)
+		{
+			if (this.loop)
+				this.time = 0;
+			else
+				this.stop();
+		}
+        
     },
 
 	
@@ -158,7 +152,7 @@ ms.state.Interpolator = Class.create(
 		   
 
         if (!this.keys || this.keys.length < 2)
-            return; //fail
+            return true; //fail
 
 			
          for(var i = 1; i < this.keys.length; i++)
@@ -172,10 +166,10 @@ ms.state.Interpolator = Class.create(
                 var value = this.interp(k1.value, k2.value, tt);
 
                 this.assign(value);
-                break;
+                 return false;
             }
          }
-		
+		 return true;
     },
 });
 
@@ -191,8 +185,13 @@ ms.state.Caller = Class.create(
     {	
         if(this.time)
 		{
-		    if(this.time>=this.pt_at&&this.time<=this.t_at) //que son los t_at? no se supone que sean los parametros (t y pt)? 
-			    this.fn();
+			if (pt > this.time_)
+				return true;
+			if (t < this.time_)
+				return false;
+			this.fn();        
+			return true;
+		    
 		}   //preg si algo ademas del at genera un Caller
             //ESC: Si, por ahora son los unicos
 

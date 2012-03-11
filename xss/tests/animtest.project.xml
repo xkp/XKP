@@ -1,13 +1,9 @@
-<project entry_point="../idioms/ui/ui_standalone.xss" language="js" target="ms4.app.xml" output="ms4.html">
+<project entry_point="../idioms/ui/ui_standalone.xss" language="js" target="animtest.xml" output="animtest.html">
     <path>
         <output path="../production/test"/>
     </path>
-
-    <include def="ms4.classes.xml" src="ms4.classes.xs"/>
 
     <idiom src="../idioms/ui/ui.xml"/>
     <idiom src="../idioms/ms/sequence.xml"/>
     <idiom src="../idioms/resources/resources.xml"/>
 </project>
-           
-         

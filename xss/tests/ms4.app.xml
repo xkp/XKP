@@ -4,5 +4,7 @@
     </resources>
     
     <img id="img1" src="images/img1.png" x="100" y="100" width="50" height="50"/>
+    <img id="img2" src="images/img1.png" x="160" y="100" width="50" height="50"/>
     <fade_in id="fade1"/>
+    <fade_in id="fade2" loop="true" auto_start="true"/>
 </application>

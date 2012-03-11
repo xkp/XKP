@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Testing sequences</title>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/ms-sequence.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript">	
+var drawingCanvas;		
+var g_ui;
+var g_elapsed = -1;
+var g_delta = 0.0;
+var g_canvas;
+var g_ui_root;
+var application = {};
+application.events = new ms.event.EventHolder();
+var SoundUtils = new ms.ui.SoundUtils();
+		if(drawingCanvas){
+			var client =
+			{
+				width: 320,
+				height: 430,
+				canvas: drawingCanvas
+			};
+            var streamer = new ms.streamer.Streamer();							
+			var ui = new ms.ui.Manager(client, streamer);
+			var g_ui = ui;
+			var g_ui_root = ui.root;
+		}
+		var g_sequence_manager = new ms.state.Manager();
+        function default_interpolate(a, b, t)
+        {
+            return a + (b - a)*t;
+        }		
+		var streamer = new ms.streamer.Streamer();		
+        var global_package_items = [];
+                global_package_items.push(
+            {
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/img1.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
+function start(resolution)  
+{  
+	function updater()  
+	{  
+		var now   = new Date().getTime();
+        if (g_elapsed < 0)
+            g_delta = 0; //first update
+        else
+		    g_delta  = now - g_elapsed;  
+        g_elapsed = now; 
+		g_sequence_manager.update(g_delta);
+		application.events.dispatch("updates", []);	
+		var context = g_canvas.getContext('2d');
+		g_ui.update(g_delta, context);
+        window.setTimeout(updater, resolution);  
+	}    
+	window.setTimeout(updater, resolution);  
+}  
+var lbl1;var lbl2;var lbl3;var btn1;var btn2;var btn3;var anim1;var anim2;var anim3;
+            application.click_count = 0;
+window.onload = function() 
+{
+	drawingCanvas = document.getElementById("myCanvas");
+    g_canvas = drawingCanvas;
+	if (drawingCanvas && drawingCanvas.getContext)
+	{
+		var client =
+		{
+			width: 320,
+			height: 430,
+			canvas: drawingCanvas
+		};
+		var ui = new ms.ui.Manager(client, streamer);
+		g_ui = ui;
+        g_ui_root = ui.root;
+     	ui.load_resources(function()
+		{
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX, ev.clientY);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX, ev.clientY);                  
+	};	
+		    lbl1 = new ms.ui.Label( 
+	    null,g_ui_root.manager, g_ui_root);
+        lbl1 = lbl1;
+            lbl1.text("Button 1 Stopped");
+            lbl1.set_x(10);
+            lbl1.set_y(10);
+            lbl1.set_width(140);
+            lbl1.set_height(35);
+		    lbl2 = new ms.ui.Label( 
+	    null,g_ui_root.manager, g_ui_root);
+        lbl2 = lbl2;
+            lbl2.text("Button 2 Stopped");
+            lbl2.set_x(10);
+            lbl2.set_y(30);
+            lbl2.set_width(140);
+            lbl2.set_height(35);
+		    lbl3 = new ms.ui.Label( 
+	    null,g_ui_root.manager, g_ui_root);
+        lbl3 = lbl3;
+            lbl3.text("Button 3 Looping...");
+            lbl3.set_x(10);
+            lbl3.set_y(50);
+            lbl3.set_width(140);
+            lbl3.set_height(35);
+		    btn1 = new ms.ui.Image( 
+	    "images/img1.png",g_ui_root.manager, g_ui_root);
+        btn1 = btn1;
+            btn1.set_x(40);
+            btn1.set_y(110);
+            btn1.set_width(100);
+            btn1.set_height(43);
+	var ev_parent = this;
+	btn1.events.addListener("click", function()
+	{    
+		anim1.start();
+	}
+	);
+		application.are_obj_events = true;
+		    btn2 = new ms.ui.Image( 
+	    "images/img1.png",g_ui_root.manager, g_ui_root);
+        btn2 = btn2;
+            btn2.set_x(40);
+            btn2.set_y(160);
+            btn2.set_width(100);
+            btn2.set_height(45);
+	var ev_parent = this;
+	btn2.events.addListener("click", function()
+	{    
+		btn2.set_x(40);
+	}
+	);
+		application.are_obj_events = true;
+		    btn3 = new ms.ui.Image( 
+	    "images/img1.png",g_ui_root.manager, g_ui_root);
+        btn3 = btn3;
+            btn3.set_x(40);
+            btn3.set_y(210);
+            btn3.set_width(100);
+            btn3.set_height(47);
+	var ev_parent = this;
+	btn3.events.addListener("click", function()
+	{    
+		application.click_count = application.click_count + 1;
+if (application.click_count == 4)
+{
+application.click_count = 0;
+anim3.start();
+}
+	}
+	);
+		application.are_obj_events = true;
+anim1 =
+new ms.state.Sequence(
+g_sequence_manager);
+	var ev_parent = this;
+	anim1.events.addListener("start", function()
+	{    
+		lbl1.text("Button 1 Animating...");
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
+	anim1.events.addListener("stop", function()
+	{    
+		lbl1.text("Button 1 Stopped");
+anim2.start();
+	}
+	);
+		application.are_obj_events = true;
+            anim1.parent_sequence = null;
+                    var ____i1 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            btn1.set_x(value);
+                        },
+                        [
+                        {t: 0, value: 40},
+                        {t: 1, value: 200},
+                        ]);
+                        anim1.addHandler(____i1);	              
+anim2 =
+new ms.state.Sequence(
+g_sequence_manager);
+	var ev_parent = this;
+	anim2.events.addListener("start", function()
+	{    
+		lbl2.text("Button 2 Chasing...");
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
+	anim2.events.addListener("stop", function()
+	{    
+		lbl2.text("Button 2 Stopped");
+	}
+	);
+		application.are_obj_events = true;
+            anim2.parent_sequence = null;
+                    var ____i2 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            btn2.set_x(value);
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 2, value: null},
+                        ]);
+                        anim2.addHandler(____i2);	              
+                anim2.events.addListener('start', function()
+                {
+                    ____i2.keys[0].value = btn2.x;
+                    ____i2.keys[1].value = btn1.x;
+                });
+anim3 =
+new ms.state.Sequence(
+g_sequence_manager);
+            anim3.loop = true;
+	anim3.stop_anim3 = function() 
+	{
+		lbl3.text("Button 3 Stopped");
+anim3.stop();
+	};
+                anim3.start();
+            anim3.parent_sequence = null;
+                    var ____i3 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            btn3.set_x(value);
+                        },
+                        [
+                        {t: 0, value: 40},
+                        {t: 1.5, value: 200},
+                        ]);
+                        anim3.addHandler(____i3);	              
+                    var ____i4 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            btn3.set_x(value);
+                        },
+                        [
+                        {t: 1.5, value: 200},
+                        {t: 3, value: 40},
+                        ]);
+                        anim3.addHandler(____i4);	              
+                anim3.events.addListener('update',function(elapsed, last)
+                {
+                    if (application.click_count == 3)
+                    {
+                        anim3.stop_anim3();
+                    }
+                });
+			document.onkeydown = function(ev)
+			{
+				ui.keydown(ev.keyCode);                  
+			};
+			document.onkeyup = function(ev)
+			{
+				ui.keyup(ev.keyCode);                  
+			};
+			document.onkeypress = function(ev)
+			{
+				ui.keypress(ev.keyCode);                  
+			};
+            application.events.dispatch("init", []);
+            start();
+			ui.draw(drawingCanvas.getContext('2d'));
+		});
+	}
+}
+</script>
+</head>
+<body>	
+	<canvas id="myCanvas" width="320" height="430"
+		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
+</body>
+</html>

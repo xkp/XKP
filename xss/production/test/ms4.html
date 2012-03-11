@@ -6,12 +6,11 @@
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
-<script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/ms-sequence.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -21,7 +20,7 @@ var g_canvas;
 var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
-var Sound = new ms.ui.Sound();
+var SoundUtils = new ms.ui.SoundUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -29,6 +28,7 @@ var Sound = new ms.ui.Sound();
 				height: 400,
 				canvas: drawingCanvas
 			};
+            var streamer = new ms.streamer.Streamer();							
 			var ui = new ms.ui.Manager(client, streamer);
 			var g_ui = ui;
 			var g_ui_root = ui.root;
@@ -37,17 +37,28 @@ var Sound = new ms.ui.Sound();
         function default_interpolate(a, b, t)
         {
             return a + (b - a)*t;
-        }
-		var streamer = new ms.streamer.Streamer();
-        var def_package_items = [];
-                def_package_items.push(
+        }		
+		var streamer = new ms.streamer.Streamer();		
+        var global_package_items = [];
+                global_package_items.push(
             {
-		id:"__image1",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/img1.png"
-});
-        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
-		g_startup_package.load();	
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/img1.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
 function start(resolution)  
 {  
 	function updater()  
@@ -59,13 +70,14 @@ function start(resolution)
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
 		g_sequence_manager.update(g_delta);
+		application.events.dispatch("updates", []);	
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var img1;var fade1;
+var img1;var img2;var fade1;var fade2;
             fade_in = Class.create(ms.state.Sequence,
         {
     initialize: function($super
@@ -78,7 +90,6 @@ var img1;var fade1;
                 var this__ = this;
             this.parent_sequence = null;
                     var ____i1 = new ms.state.Interpolator(
-                        "alpha", 
                         default_interpolate,
                         function(value)
                         {
@@ -88,9 +99,8 @@ var img1;var fade1;
                         {t: 0, value: 0},
                         {t: 1, value: 30},
                         ]);
-                    this.addAction(null, "alpha", new ms.state.State(0, 1, ____i1));                    
+                        this.addHandler(____i1);	              
                     var ____i2 = new ms.state.Interpolator(
-                        "alpha", 
                         default_interpolate,
                         function(value)
                         {
@@ -100,8 +110,8 @@ var img1;var fade1;
                         {t: 1, value: 30},
                         {t: 2, value: 100},
                         ]);
-                    this.addAction(null, "alpha", new ms.state.State(1, 2, ____i2));                    
-                this.target = null;
+                        this.addHandler(____i2);	              
+            this.target = null;
             if (this.init)
                 this.init();
             },
@@ -110,6 +120,7 @@ var img1;var fade1;
 	application.events.addListener("init", function()
 	{    
 		fade1.target = img1;
+fade2.target = img2;
 	}
 	);
 window.onload = function() 
@@ -144,18 +155,34 @@ window.onload = function()
 		    img1 = new ms.ui.Image( 
 	    "images/img1.png",g_ui_root.manager, g_ui_root);
         img1 = img1;
+            img1.set_x(100);
+            img1.set_y(100);
+            img1.set_width(50);
+            img1.set_height(50);
 	var ev_parent = this;
 	img1.events.addListener("click", function()
 	{    
 		fade1.start();
 	}
 	);
-                img1.rect(100, 100, 50, 50);
+		application.are_obj_events = true;
+		    img2 = new ms.ui.Image( 
+	    "images/img1.png",g_ui_root.manager, g_ui_root);
+        img2 = img2;
+            img2.set_x(160);
+            img2.set_y(100);
+            img2.set_width(50);
+            img2.set_height(50);
 fade1 =
 new fade_in(
 g_sequence_manager);
-        fade1 = fade1;
             fade1.parent_sequence = null;
+fade2 =
+new fade_in(
+g_sequence_manager);
+            fade2.loop = true;
+                fade2.start();
+            fade2.parent_sequence = null;
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -176,9 +203,8 @@ g_sequence_manager);
 }
 </script>
 </head>
-<body>
-	<canvas id="myCanvas" width="600" height="400">
-		<p>Your browser doesn't support canvas.</p>
-	</canvas>
+<body>	
+	<canvas id="myCanvas" width="600" height="400"
+		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
 </body>
 </html>

@@ -1,3 +1,7 @@
+<xss:parameter id="seq"/>
+<xss:parameter id="is_class"/>
+<xss:parameter id="path"/>
+
 <xss:class>
     method resolve_key(key, key_value, key_index, owner_seq, prop_info, interp)
     {
@@ -11,12 +15,12 @@
             //Note: such expressions will be evaluated at sequence's start time 
             
             var info = object();
-            info.expr = compiler.generate_expression(key_value, owner_seq);
+            info.expr = compiler.render_expression(key_value, owner_seq);
             info.idx  = key_index;
             info.interp = interp;
             
             if (!rendering_instance)
-                info.expr = compiler.replace_this(info.expr, "this__");
+                info.expr = compiler.replace_identifier(info.expr, owner_seq.id, "this__");
             
             owner_seq.key_expressions += info;
         }
@@ -25,12 +29,12 @@
             //same deal, only this time we'll assign the current value 
             //kinda neat
             var nfo = object();
-            nfo.expr = prop_info.path + "." + prop_info.prop.resolve_value();
+            nfo.expr = compiler.property_get(prop_info.property, prop_info.path);
             nfo.idx  = key_index;
             nfo.interp = interp;
             
             if (!rendering_instance)
-                nfo.expr = compiler.replace_this(nfo.expr, "this__");
+                nfo.expr = compiler.replace_identifier(nfo.expr, owner_seq.id, "this__");
 
             owner_seq.key_expressions += nfo;
         }
@@ -40,39 +44,52 @@
         }
     }
     
-    method generate_runnable_item(itm)
-    {
-    }
-    
     method generate_at(at, seq, rendering_instance)
     {
-        var seq_id = seq.id;
+        var seq_id = seq.output_id;
         if (!rendering_instance)
             seq_id = "this";
+        else if (path)
+            seq_id = path + "." + seq_id;
 
         float time = at.time;
         for(var itm in at.children)
         {
             if (itm.class_name == "animate")
             {
-                var prop_info = compiler.resolve_property(itm.property, seq);
+                var prop_info = compiler.analyze_expression(itm.property, this_ = seq);
 
-                var    prop      = prop_info.prop;
-                string prop_name = prop_info.prop_name;
+                var    prop      = prop_info.property;
+                string prop_name = prop_info.property_name;
                 string iid       = compiler.genid('__i');
                 string path      = prop_info.path;
                 
                 if (!rendering_instance)
-                    path = compiler.replace_this(path, "this__"); 
+                {
+					if (!prop_info.this_property)
+                        compiler.error("Sequence class targets must be properties");
+
+                    path = compiler.replace_identifier(path, "this.", "this__.");
+                }
+                else if (prop_info.this_property)
+                {
+                    path = compiler.replace_identifier(path, "this.", seq.id + ".");
+                }    
                 
+                string assign = path + "." + prop_name + " = value"; 
+                if (prop)
+                {
+                    assign = compiler.property_set(prop, path, 'value');
+                }
+
                 out(indent = 2)
                 {
                     var <xss:e v="iid"/> = new ms.state.Interpolator(
-                        "<xss:e v="prop_name"/>", 
+                         
                         default_interpolate,
                         function(value)
                         {
-                            <xss:e v="path"/>.<xss:e v="prop.resolve_assign('value')"/>;
+                            <xss:e v="assign"/>;
                         },
                         [
                 }
@@ -86,14 +103,14 @@
                 else
                 {
                     //a simple from/to animation
-                    var start   = object();
-                    start.t     = 0;
-                    start.value = itm.from;
-                    
                     var end     = object();
                     end.t       = itm.in;
                     end.value   = itm.to;
                             
+                    var start   = object();
+                    start.t     = 0;
+                    start.value = itm.from;
+
                     keys = [start, end];
                 }
                         
@@ -106,8 +123,11 @@
                         length = key.t; 
                             
                     key.t += time;
-                    resolve_key(key, key.value, idx, seq, prop_info, iid);                    
+                    resolve_key(key, key.value, idx, seq, prop_info, iid);       
                     
+                    if (key.value == null)
+                        key.value = "null";
+                        
                     out(indent = 4)
                     {
                         {t: <xss:e v="key.t"/>, value: <xss:e v="key.value"/>},
@@ -116,11 +136,11 @@
                     idx++;
                 }
 
-                //close the interpolator and add the action
+                //close the interpolator 
                 out(indent = 2)
                 {
                         ]);
-                    <xss:e v="seq_id"/>.addAction(null, "<xss:e v="prop_name"/>", new ms.state.State(<xss:e v="time"/>, <xss:e v="time + length"/>, <xss:e v="iid"/>));                    
+                        <xss:e v="seq_id"/>.addHandler(<xss:e v="iid"/>);	              
                             
                 }
             }
@@ -135,23 +155,26 @@
                         
                     out(indent = 2)
                     {
-                        var <xss:e v="mid"/> = new ms.state.Caller(function()
+                        var <xss:e v="mid"/> = new ms.state.Caller(<xss:e v="time"/>,function()
                         {
                             <xss:e v="mid_caller"/>.<xss:e v="itm.method"/>();
                         });
-                        <xss:e v="seq_id"/>.addAction(null, null, new ms.state.State(<xss:e v="time"/>, <xss:e v="time"/>, <xss:e v="mid"/>));                    
+                          
+						  <xss:e v="mid_caller"/>.addHandler(<xss:e v="mid"/>);						  
                     }
                 }
                 else if (itm.sequence)
                 {
+					string mid_caller1 = seq.id;
                     string sid = compiler.genid('__s');
                     out(indent = 2)
                     {
-                        var <xss:e v="sid"/> = new ms.state.Caller(function()
+                        var <xss:e v="sid"/> = new ms.state.Caller(<xss:e v="time"/>,function()
                         {
                             <xss:e v="itm.sequence"/>.start();
                         });
-                        <xss:e v="seq_id"/>.addAction(null, null, new ms.state.State(<xss:e v="time"/>, <xss:e v="time"/>, <xss:e v="sid"/>));                    
+                          
+						 <xss:e v="mid_caller1"/>.addHandler(<xss:e v="sid"/>);	
                     }
                 }
                 else
@@ -211,14 +234,12 @@
         out()
         {
             <xss:close_brace/>);
-            <xss:e v="seq.id"/>.addAction(null, null, new ms.state.State(0, 0, <xss:e v="aid"/>));                    
+            <xss:e v="caller"/>.addHandler(<xss:e v="aid"/>);	                    
         }
     }
             
     method generate_item(itm, seq, rendering_instance)
     {
-        compiler.log("ITEM = " + itm.class_name);
-
         if (itm.class_name == "at")         generate_at(itm, seq, rendering_instance);
         else if (itm.class_name == "when")  generate_when(itm, seq);
         else if (itm.class_name == "every") generate_every(itm, seq, rendering_instance);
@@ -232,7 +253,7 @@
         }
     }
     
-    method generate_when_actions(array actions, seq_id)
+    method generate_when_actions(array actions, seq_id, seq)
     {
         for(var action in actions)
         {
@@ -240,16 +261,16 @@
             {
                 if (action.method)
                 {
-                    out(indent = 3) 
+                    out() 
                     {
-                        <xss:e v="seq_id"/>.<xss:e v="action.method"/>();
+                        <xss:e v="seq.id"/>.<xss:e v="action.method"/>();
                     }
                 }
                 else if (action.sequence)
                 {
-                    out(indent = 2, marker = "conditions") 
+                    out() 
                     {
-                        <xss:e v="seq_id"/>.<xss:e v="action.sequence"/>.start();
+                        <xss:e v="seq.id"/>.<xss:e v="action.sequence"/>.start();
                     }
                 }
                 else
@@ -269,13 +290,24 @@
     method generate_sequence(seq, parent, rendering_instance)
     {
         string parent_id = "null";
-        string seq_id = seq.id;
+        string seq_id = seq.output_id;
+		
+        
+        if (path)
+          seq_id = path + "." + seq_id;
+            
         if (parent)
-        {
             parent.subs += seq;
 
-            if (rendering_instance) //must distinguish between classes and instances
-                                    //rendering differs
+        if (rendering_instance)
+        {
+            //declare variable on the top level if no path is supplied, could be confusing
+            if (!path)
+                out(marker = "variables", marker_source = "entry") {var <xss:e v="seq_id"/>;}
+
+            //initialize it here
+            out() {<xss:e v="seq_id"/> =} compiler.xss("../common-js/instantiator.xss", seq);
+            if (parent)
             {
                 //build the instance chain
                 parent_id = parent.id;
@@ -292,33 +324,36 @@
                 {
                     <xss:e v="seq_id"/> = new ms.state.Sequence();
                     <xss:e v="parent_id"/>.push(<xss:e v="seq.id"/>);
-                }
+					if(seq.loop)
+							<xss:e v="seq_id"/>.setloop(true);
+				}
+				
             }
-            else
+            
+            compiler.xss("../common-js/instance.xss", seq, path = path);
+        }
+        else
+        {
+            //render as class
+            if (parent)
             {
-                //rendering a class, this is going into the constructor
-                out(indent = 2)
+                out()
                 {
                     this.<xss:e v="seq.id"/> = new ms.state.Sequence();
                     this.push(this.<xss:e v="seq.id"/>);
+					if(seq.loop)
+							this.<xss:e v="seq.id"/>.setloop(true);
                 }
             }
-        }
-        
-        if (!rendering_instance)
-        {
+
             seq_id = "this";
             out(indent = 2)
             {
                 var this__ = this;
             }
         }
-            
-        out(indent = 2)
-        {
-            <xss:e v="seq_id"/>.parent_sequence = <xss:e v="parent_id"/>;
-        }
-                
+        
+
         if (seq.auto_start)
         {
             out(indent = 2)
@@ -327,9 +362,11 @@
             }
         }
                 
-        if (rendering_instance)
-            compiler.xss("../common-js/instance.xss", seq);
-        
+        out()
+        {
+            <xss:e v="seq_id"/>.parent_sequence = <xss:e v="parent_id"/>;
+        }
+
         //we'll let our children fill in on what the want done
         seq.conditions      = [];
         seq.actions         = [];
@@ -339,12 +376,12 @@
         {
             generate_item(item, seq, rendering_instance);
         }
-        
+
         if (!seq.key_expressions.empty)
         {
             out(indent = 2)
             {
-                <xss:e v="seq_id"/>.on_start = function()
+                <xss:e v="seq_id"/>.events.addListener('start', function()
                 <xss:open_brace/>
             }
             
@@ -358,7 +395,7 @@
             
             out(indent = 2)
             {
-                <xss:close_brace/>
+                <xss:close_brace/>);
             }
         }
 
@@ -366,7 +403,7 @@
         {
             out(indent = 2)
             {
-                <xss:e v="seq_id"/>.on_update = function(elapsed, last)
+                <xss:e v="seq_id"/>.events.addListener('update',function(elapsed, last)
                 <xss:open_brace/>
             }
             
@@ -374,14 +411,16 @@
             int cond_idx = 0;
             for(var cond in seq.conditions)
             {
+                cond = compiler.render_expression(cond, seq);
+
                 out(indent = 3)
                 {
-                    if (<xss:e v="cond">)
+                    if (<xss:e v="cond"/>)
                     <xss:open_brace/>
                 }
                 
                 var action_list = seq.actions[cond_idx]; cond_idx++;
-                generate_when_actions(action_list, seq_id);
+                generate_when_actions(action_list, seq_id, seq);
                 
                 out(indent = 2)
                 {
@@ -391,13 +430,13 @@
             
             out(indent = 2)
             {
-                <xss:close_brace/>
+                <xss:close_brace/>);
             }
         }
     }
             
-    method generate()
+    on render()
     {
-        generate_sequence(seq, null, !rendering_class);
+        generate_sequence(seq, null, !is_class);
     }
 </xss:class>
