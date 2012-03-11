@@ -1,0 +1,8 @@
+<project entry_point="../idioms/jquery/shared.xss" language="js" target="jquery2.app.xml" output="jquery5.html">
+    <path>
+        <output path="../production/test/"/>
+    </path>
+    <idiom src="../idioms/jquery/module.xml"/>
+</project>
+           
+         
