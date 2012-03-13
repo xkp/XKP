@@ -44,14 +44,8 @@
         }
     }
     
-    method generate_at(at, seq, rendering_instance)
+    method generate_at(at, seq, seq_id, rendering_instance)
     {
-        var seq_id = seq.output_id;
-        if (!rendering_instance)
-            seq_id = "this";
-        else if (path)
-            seq_id = path + "." + seq_id;
-
         float time = at.time;
         for(var itm in at.children)
         {
@@ -128,13 +122,13 @@
                 }
                         
                 //generate keys
-                array keys;
-                if (itm.keys)
+                array keys = itm.find_by_type("key");
+                
+                if (keys.empty)
                 {
-                    keys = itm.keys;
-                }
-                else
-                {
+                    if (!itm.in || !itm.from || !itm.to)
+                        compiler.error("animate needs keys or [from, to, in]");
+                    
                     //a simple from/to animation
                     var end     = object();
                     end.t       = itm.in;
@@ -179,110 +173,209 @@
             }
             else if (itm.class_name == "run")
             {
-                if (itm.method)
+                string mid = compiler.genid('__r');
+                out()
                 {
-                    string mid = compiler.genid('__m');
-                    string mid_caller = seq.id;
-                    if (!rendering_instance)
-                        mid_caller = "this__"; 
-                        
-                    out(indent = 2)
-                    {
-                        var <xss:e v="mid"/> = new ms.state.Caller(<xss:e v="time"/>,function()
-                        {
-                            <xss:e v="mid_caller"/>.<xss:e v="itm.method"/>();
-                        });
-                          
-						  <xss:e v="mid_caller"/>.addHandler(<xss:e v="mid"/>);						  
-                    }
+                    var <xss:e v="mid"/> = new ms.state.Caller(<xss:e v="time"/>,function()
+                    <xss:open_brace/>
                 }
-                else if (itm.sequence)
+
+                generate_run(itm, seq_id, seq);
+                
+                out()
                 {
-					string mid_caller1 = seq.id;
-                    string sid = compiler.genid('__s');
-                    out(indent = 2)
-                    {
-                        var <xss:e v="sid"/> = new ms.state.Caller(<xss:e v="time"/>,function()
-                        {
-                            <xss:e v="itm.sequence"/>.start();
-                        });
-                          
-						 <xss:e v="mid_caller1"/>.addHandler(<xss:e v="sid"/>);	
-                    }
-                }
-                else
-                {
-                    //td: error
+                    <xss:close_brace/>);
+                    <xss:e v="seq_id"/>.addHandler(<xss:e v="mid"/>);						  
                 }
             }
         }
     }
             
-    method generate_when(itm, seq)
+    method analyze_expression(string expr, seq, rendering_instance)
     {
-        if (!itm.expr)
-            return; //td: error
-            
-        seq.conditions += itm.expr;
-        seq.actions += itm.children;
+        var  expr_this = seq;
+        bool targetted = false;
+        if (seq.target)
+        {
+            targetted = true;
+            if (rendering_instance)
+                expr_this = compiler.get_instance(seq.target);
+            else
+                compiler.error("Sequence classes do not support target, use target_type");
+                    
+            if (!expr_this)
+                compiler.error("Invalid sequence target", target=seq.target);
+        }
+        else if (seq.target_type)
+        {
+            targetted = true;
+            if (!rendering_instance)
+                expr_this = compiler.get_type(seq.target_type);
+            else
+                compiler.error("Sequence instances do not support target_type, use target");
+
+            if (!expr_this)
+                compiler.error("Invalid sequence target type", target=seq.target_type);
+        }
+                
+        var result = compiler.analyze_expression(expr, this_ = expr_this);
+        
+        if (targetted)
+        {
+            if (result.path == '')
+                result.path = seq_id + ".target";
+            else
+                result.path = seq_id + ".target." + result.path;
+        }
+                
+        if (!rendering_instance)
+        {
+			if (!result.this_property)
+                compiler.error("Sequence class targets must be properties");
+
+            result.path = compiler.replace_identifier(result.path, "this.", "this__.");
+        }
+        else if (result.this_property)
+        {
+            result.path = compiler.replace_identifier(result.path, "this.", seq.id + ".");
+        }    
+                
+        result.assign = result.path + "." + prop_name + " = value"; 
+        if (prop)
+        {
+            result.assign = compiler.property_set(prop, result.path, 'value');
+        }
+        
+        return result;
     }
     
-    method generate_every(itm, seq, rendering_instance)
+    method generate_when(itm, seq, seq_id, rendering_instance)
     {
+        if (itm.expr)
+        {
+            seq.conditions += itm.expr;
+            seq.actions += itm.children;
+        }
+        else if (itm.trigger)
+        {
+            var ev = analyze_expression(itm.trigger, seq, rendering_instance);
+            out()
+            {
+                if (<xss:e v="ev.path"/>.events)
+                <xss:open_brace/>
+                    <xss:e v="ev.path"/>.events.addListener("<xss:e v="ev.property_name"/>", function()
+                    <xss:open_brace/>
+                        if (<xss:e v="seq_id"/>.running)
+                        <xss:open_brace/>
+            }                        
+
+            generate_when_actions(itm.children, seq_id, seq);
+            
+            out()
+            {
+                        <xss:close_brace/>
+                    <xss:close_brace/>);
+               <xss:close_brace/>
+            }
+        }
+        else
+            compiler.error("When tag expects an 'expr' or 'trigger'");
+    }
+    
+    method generate_every(itm, seq, seq_id, rendering_instance)
+    {
+        if (!itm.time)
+            compiler.error("'every' needs 'time'");
+    
         string aid = compiler.genid("__h");
         
         out()
         {
-            var <xss:e v="aid"/> = new ms.state.Every(<xss:e v="itm.t"/>, function(t)
+            var <xss:e v="aid"/> = new ms.state.Every(<xss:e v="itm.time"/>, function(t)
             <xss:open_brace/>
         }
         
-        string caller = seq.id;
-        if (!rendering_instance)
-            caller = "this__"; 
-
         for(var child in itm.children)
         {
             if (child.class_name == "run") 
-            {
-                if (child.method)
-                {
-                    out()
-                    {
-                        <xss:e v="caller"/>.<xss:e v="child.method"/>();
-                    }
-                }
-                else if (child.sequence)
-                {
-                    out()
-                    {
-                         <xss:e v="child.sequence"/>.start();
-                    }
-                }
-                else compiler.log("WARNING: 'run' needs 'method' or 'sequence'");
-            }
-            else compiler.log("WARNING: 'every' supports only 'run'");
+                generate_run(child, seq_id, seq);
+            else 
+                compiler.error("'every' supports only 'run'");
         }
 
         out()
         {
             <xss:close_brace/>);
-            <xss:e v="caller"/>.addHandler(<xss:e v="aid"/>);	                    
+            <xss:e v="seq_id"/>.addHandler(<xss:e v="aid"/>);	                    
         }
     }
             
-    method generate_item(itm, seq, rendering_instance)
+    method generate_item(itm, seq, seq_id, rendering_instance)
     {
-        if (itm.class_name == "at")         generate_at(itm, seq, rendering_instance);
-        else if (itm.class_name == "when")  generate_when(itm, seq);
-        else if (itm.class_name == "every") generate_every(itm, seq, rendering_instance);
-        else if (itm.class_name == "sequence")
+        if (itm.class_name == "at")             generate_at(itm, seq, seq_id, rendering_instance);
+        else if (itm.class_name == "when")      generate_when(itm, seq, seq_id, rendering_instance);
+        else if (itm.class_name == "every")     generate_every(itm, seq, seq_id, rendering_instance);
+        else if (itm.class_name == "sequence")  
         {
-            generate_sequence(itm, seq, true);
+            //render nested sequence
+            string nested_id = seq_id + "." + itm.id;
+            generate_sequence(itm, nested_id, seq_id, true);
+            
+            string shid = compiler.genid('__sh');
+            out()
+            {
+                var <xss:e v="shid"/> = new ms.state.SequenceHandler(<xss:e v="nested_id"/>);
+                <xss:e v="seq_id"/>.addHandler(<xss:e v="shid"/>);						  
+            }
         }
         else
         {
-            //td: error
+            compiler.error("Invalid animation tag", tag = itm.class_name);
+        }
+    }
+    
+    method generate_run(action, seq_id, seq)
+    {
+        if (action.method)
+        {
+            out() 
+            {
+                <xss:e v="seq_id"/>.<xss:e v="action.method"/>();
+            }
+        }
+        else if (action.sequence)
+        {
+            out() 
+            {
+                <xss:e v="seq_id"/>.<xss:e v="action.sequence"/>.start();
+            }
+        }
+        else if (action.expr)
+        {
+            var expr_this = seq;
+            var this_str = seq_id;
+            if (seq.target)
+            {
+                expr_this = compiler.get_instance(seq.target);
+                this_str += ".target";
+            }
+            else if (seq.target_type)
+            {
+                expr_this = compiler.get_type(seq.target_type);
+                this_str += ".target";
+            }
+                
+            string result = compiler.render_expression(action.expr, expr_this);
+            result = compiler.replace_identifier(result, "this.", this_str + ".");
+            
+            out() 
+            {
+                <xss:e v="result"/>;
+            }
+        }
+        else
+        {
+            compiler.log("WARNING: You can run methods, sequences or expressions, nothing else");
         }
     }
     
@@ -291,94 +384,38 @@
         for(var action in actions)
         {
             if (action.class_name == "run")
-            {
-                if (action.method)
-                {
-                    out() 
-                    {
-                        <xss:e v="seq.id"/>.<xss:e v="action.method"/>();
-                    }
-                }
-                else if (action.sequence)
-                {
-                    out() 
-                    {
-                        <xss:e v="seq.id"/>.<xss:e v="action.sequence"/>.start();
-                    }
-                }
-                else
-                {
-                    //td: error
-                    compiler.log("WARNING: You can run methods or sequences, nothing else");
-                }
-            }
+                generate_run(action, seq_id, seq);
             else
-            {
-                //td: error
                 compiler.log("WARNING: Only run is allowed inside whens");
-            }
         }
     }
             
-    method generate_sequence(seq, parent, rendering_instance)
+    method generate_sequence(seq, seq_id, parent_id, rendering_instance)
     {
-        string parent_id = "null";
-        string seq_id = seq.output_id;
-		
+        if (seq_id == null)
+        {
+            seq_id  = seq.output_id;
+            if (path)
+              seq_id = path + "." + seq_id;
+        }
         
-        if (path)
-          seq_id = path + "." + seq_id;
-            
-        if (parent)
-            parent.subs += seq;
-
         if (rendering_instance)
         {
             //declare variable on the top level if no path is supplied, could be confusing
-            if (!path)
+            if (!path && !parent_id)
                 out(marker = "variables", marker_source = "entry") {var <xss:e v="seq_id"/>;}
 
             //initialize it here
             out() {<xss:e v="seq_id"/> =} compiler.xss("../common-js/instantiator.xss", seq);
-            if (parent)
-            {
-                //build the instance chain
-                parent_id = parent.id;
-
-                var p = parent.parent;
-                while(p != null)
-                {
-                    parent_id = p.id + "." + parent_id;
-                    p = p.parent;
-                }
             
-                seq_id = parent_id + "." + seq.id;
-                out(indent = 2)
-                {
-                    <xss:e v="seq_id"/> = new ms.state.Sequence();
-                    <xss:e v="parent_id"/>.push(<xss:e v="seq.id"/>);
-					if(seq.loop)
-							<xss:e v="seq_id"/>.setloop(true);
-				}
-				
-            }
-            
-            compiler.xss("../common-js/instance.xss", seq, path = path);
+            if (parent_id)
+                compiler.xss("../common-js/instance.xss", seq, path = parent_id);
+            else
+                compiler.xss("../common-js/instance.xss", seq, path = path);
         }
         else
         {
             //render as class
-            if (parent)
-            {
-                out()
-                {
-                    this.<xss:e v="seq.id"/> = new ms.state.Sequence();
-                    this.push(this.<xss:e v="seq.id"/>);
-					if(seq.loop)
-							this.<xss:e v="seq.id"/>.setloop(true);
-                }
-            }
-
             seq_id = "this";
             out(indent = 2)
             {
@@ -395,19 +432,15 @@
             }
         }
                 
-        out()
-        {
-            <xss:e v="seq_id"/>.parent_sequence = <xss:e v="parent_id"/>;
-        }
+        if (parent_id) out() { <xss:e v="seq_id"/>.parent_sequence = true; }
 
         //we'll let our children fill in on what the want done
         seq.conditions      = [];
         seq.actions         = [];
-        seq.subs            = [];
         seq.key_expressions = [];
         for(var item in seq.children)
         {
-            generate_item(item, seq, rendering_instance);
+            generate_item(item, seq, seq_id, rendering_instance);
         }
 
         if (!seq.key_expressions.empty)
@@ -470,6 +503,7 @@
             
     on render()
     {
-        generate_sequence(seq, null, !is_class);
+        if (seq.parent.class_name != "sequence") //only generate top level
+            generate_sequence(seq, null, null, !is_class);
     }
 </xss:class>

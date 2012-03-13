@@ -67,7 +67,8 @@ else
         if (prop.value is string)
             value = prop.value;
         else
-            compiler.xss("instance.xss", prop.value, path = prop_name );
+            value = "null"; //td:!!
+        //    compiler.xss("instance.xss", prop.value, path = prop_name );
     }
     else
     {

@@ -149,8 +149,6 @@ ms.state.Interpolator = Class.create(
 
 	update: function(t)				
     {	
-		   
-
         if (!this.keys || this.keys.length < 2)
             return true; //fail
 
@@ -175,13 +173,13 @@ ms.state.Interpolator = Class.create(
 
 ms.state.Caller = Class.create(
 {
-    initialize: function(fn, time) //cuando las propiedades son importantes (como el t aca), es bueno ponerlas en el constructor
+    initialize: function(fn, time) 
     {
         this.time = time; 
         this.fn = fn;
     },
 
-	update: function(t, pt) //ESC: el update trae los dos parametros, el interpolator y eso 
+	update: function(t, pt) 
     {	
         if(this.time)
 		{
@@ -192,9 +190,7 @@ ms.state.Caller = Class.create(
 			this.fn();        
 			return true;
 		    
-		}   //preg si algo ademas del at genera un Caller
-            //ESC: Si, por ahora son los unicos
-
+		}
     },
 });
 
@@ -207,11 +203,6 @@ ms.state.Every = Class.create(
         this.wait = freq;
     },
 
-	channel: function()				
-    {
-        return null;
-    },
-	
 	update: function(t, pt)				
     {
         this.wait -= (t - pt);
@@ -220,5 +211,19 @@ ms.state.Every = Class.create(
             this.wait = this.freq;
             this.fn();
         }
+    },
+});
+
+ms.state.SequenceHandler = Class.create(
+{
+    initialize: function(seq)
+    {
+        this.seq = seq;
+    },
+
+	update: function(t, pt)				
+    {
+        var delta = t - pt;
+        this.seq.update(delta);
     },
 });

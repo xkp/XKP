@@ -1,7 +1,15 @@
 on pre_process(obj)
 {
-	if(obj.id == '')
-			obj.id = compiler.genid(obj.class_name);
+	if (obj.id == '')
+        obj.id = compiler.genid(obj.class_name);
+
+    if (obj.parent)
+    {
+        if (obj.class_name == 'sequence' && obj.parent.class_name == 'sequence')
+        {
+            obj.parent.add_property(obj.id, obj, obj.type);
+        }
+    }
 }
 
 on render_js_includes()

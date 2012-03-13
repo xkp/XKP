@@ -1121,24 +1121,66 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 
         case op_dot_call:
           {
-            std::stringstream ss;
+            Language lang = ctx_->get_language();
 
-            str opnd1 = operand_to_string(arg1);
-            str opnd2 = operand_to_string(arg2);
+            str caller_str = operand_to_string(arg1);
 
-						str separator = ctx_->get_language()->resolve_separator();
+            expression_identifier ei = arg2;
+            str right_str  = ei.value;
 
-				    //here comes the hacky hoo
-            size_t first_dot = opnd2.find_first_of(separator);
-				    if (first_dot != str::npos)
-					    {
-						    str str_this = opnd2.substr(0, first_dot);
-                if (str_this == opnd1)
-                  opnd2.erase(0, first_dot + 1);
-					    }
+            //and who may I say is calling
+            XSSObject caller = get_instance(arg1);
+			      if (!caller)
+			        {
+				        if (arg1.is<expression_identifier>())
+					        {
+						        expression_identifier ei = arg1;
+                    caller = variant_cast<XSSObject>(ctx_->resolve(ei.value, RESOLVE_ANY), XSSObject());
+					        }
+                else if (arg1.is<already_rendered>())
+                  {
+                    already_rendered ar = arg1;
+                    caller = variant_cast<XSSObject>(ar.object, XSSObject());
+                  }
+			        }
 
-            ss << opnd1 << "." << opnd2;
-            push_rendered(ss.str(), op_prec, variant(), opnd1);
+						str separator = ctx_->get_language()->resolve_separator(caller);
+            if (caller)
+              {
+                resolve_info left;
+                left.what  = RESOLVE_INSTANCE;
+                left.value = caller;
+
+                resolve_info right;
+                right.left = &left;
+
+                expression_identifier ei = arg2;
+                if (ctx_->resolve(ei.value, right))
+                  {
+                    switch(right.what)
+                      {
+                        case RESOLVE_CHILD:
+                        case RESOLVE_INSTANCE:
+                        case RESOLVE_PROPERTY:
+                          {
+                            assert(false);
+                            break; //td: error
+                          }
+                        case RESOLVE_METHOD:
+                          {
+                            XSSMethod mthd = right.value;
+                            right_str = mthd->output_id();
+                            break;
+                          }
+                        default:
+                          {
+                            assert(false); //use case
+                          }
+                      }
+                  }
+              }
+
+            push_rendered(caller_str + separator + right_str, 0, variant(), caller_str);
             break;
           }
 
