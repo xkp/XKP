@@ -14,13 +14,6 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 		
-			//all system position is absolute
-			$("*").each(function(index, domElem) {
-				if($(domElem).attr("id") != undefined) {
-					$(domElem).css("position", "absolute");
-				}
-			});
-		
 			<xss:code>
 				compiler.inject("render_instances");
 			</xss:code>
