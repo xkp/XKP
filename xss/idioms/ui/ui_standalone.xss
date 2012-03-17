@@ -47,12 +47,12 @@ var SoundUtils = new ms.ui.SoundUtils();
     compiler.inject("render_initialization");
 	compiler.inject("render_resources");
 </xss:code>
-
-
+var canvas_position = {x:0, y:0};
 function start(resolution)  
 {  
 	function updater()  
-	{  
+	{
+		canvas_position = getElementPosition(drawingCanvas);
 		var now   = new Date().getTime();
         if (g_elapsed < 0)
             g_delta = 0; //first update

@@ -78,6 +78,12 @@ ms.state.Sequence = Class.create(
 		this.events.dispatch("start", null);
 		
     },
+
+    restart: function()
+    {
+        this.time = 0;
+        this.start();
+    },
 	
 	set_loop: function(value)
 	{
@@ -112,7 +118,7 @@ ms.state.Sequence = Class.create(
         var pt = this.time;
 		this.time += delta/1000.0;
 
-		this.events.dispatch("update", new ms.state.SequenceUpdateEvent(this.time, delta));
+		this.events.dispatch("update", [new ms.state.SequenceUpdateEvent(this.time, delta)]);
             			
 		var finished = true;
         var handlers = this.handlers;
@@ -147,14 +153,14 @@ ms.state.Interpolator = Class.create(
     },
 
 
-	update: function(t)				
+	update: function(t, pt)				
     {	
         if (!this.keys || this.keys.length < 2)
             return true; //fail
 
-			
-         for(var i = 1; i < this.keys.length; i++)
-         {
+		var len = this.keys.length;
+        for(var i = 1; i < len; i++)
+        {
             var k1 = this.keys[i - 1];
             var k2 = this.keys[i];
 
@@ -164,16 +170,24 @@ ms.state.Interpolator = Class.create(
                 var value = this.interp(k1.value, k2.value, tt);
 
                 this.assign(value);
-                 return false;
+                return false;
             }
-         }
-		 return true;
+        }
+
+        //make sure the animation ends
+        var last = this.keys[len - 1];
+        if (t >= last.t && pt < last.t)
+        {
+            this.assign(last.value);
+        }
+
+		return true;
     },
 });
 
 ms.state.Caller = Class.create(
 {
-    initialize: function(fn, time) 
+    initialize: function(time, fn) 
     {
         this.time = time; 
         this.fn = fn;
@@ -181,16 +195,13 @@ ms.state.Caller = Class.create(
 
 	update: function(t, pt) 
     {	
-        if(this.time)
-		{
-			if (pt > this.time_)
-				return true;
-			if (t < this.time_)
-				return false;
-			this.fn();        
+		if (pt > this.time)
 			return true;
-		    
-		}
+		if (t < this.time)
+			return false;
+		
+        this.fn();        
+		return true;
     },
 });
 

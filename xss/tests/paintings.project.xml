@@ -6,7 +6,7 @@
 	
 	<include def="paintings.classes.xml" src="paintings.classes.xs"/>
 	
-	<idiom src="../idioms/mutant-state/sequence.xml"/>
+	<idiom src="../idioms/ms/sequence.xml"/>
 	<idiom src="../idioms/resources/resources.xml"/>
 	<idiom src="../idioms/ui/ui.xml"/>  	
 	<idiom src="../idioms/threejs/module.xml"/>	 	

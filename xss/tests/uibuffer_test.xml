@@ -1,0 +1,58 @@
+<application src="uibuffer_test.xs" title="Test 3D">
+
+	<resources>	
+		<image src="images/yahoo.png"/>
+        <image src="images/yahoo_up.png"/>	
+		<image src="images/twitter.png"/>
+        <image src="images/twitter_up.png"/>
+		<image src="images/facebook.png"/>
+        <image src="images/facebook_up.png"/>
+		<image src="images/msn.png"/>
+        <image src="images/msn_up.png"/>
+	</resources>
+
+	<materials>		
+		<composite_material id="materials">
+			<basic_material color="Math.random() * 0xffffff"/>
+			<basic_material color="Math.random() * 0xffffff"/>			
+			<basic_material texture_object="webmail"/>			
+			<basic_material color="Math.random() * 0xffffff"/>
+			<basic_material texture_object="soc_net"/>
+			<basic_material color="Math.random() * 0xffffff"/>
+		</composite_material>		
+		<basic_material id="plane_material" color="Grey" alpha="50"/>
+		<basic_material id="plane_mat1" color="Green"/>			
+	</materials>
+	
+	<label id="lbl0" x="200" y="75" font="12px Verdana" caption="Drag mouse to spin the cube"/>
+	<label id="lbl1" x="200" y="120" font="12px Verdana" caption="Select what you want to open"/>
+		
+	<ui id="webmail" width="200" height="200">
+		<rectangle id="r1" x="0" y="0" width="200" height="200" mouse_thru="true" alpha="60" fill="beige"/>
+		<button id="yh" x="25" y="50" width="50" height="50" up="images/yahoo_up.png" down="images/yahoo.png"/>
+		<button id="msn" x="125" y="50" width="50" height="50" up="images/msn_up.png" down="images/msn.png"/>
+		<label id="title1" x="50" y="10" font="12px Verdana" caption="Webmails"/>		
+	</ui>
+
+	<ui id="soc_net" width="200" height="200">
+		<rectangle id="r2" x="0" y="0" width="200" height="200" mouse_thru="true" alpha="60" fill="lightblue"/>
+		<button id="fb" x="25" y="50" width="50" height="50" up="images/facebook_up.png" down="images/facebook.png"/>
+		<button id="tw" x="125" y="50" width="50" height="50" up="images/twitter_up.png" down="images/twitter.png"/>
+		<label id="title2" x="50" y="10" font="12px Verdana" caption="Social networks"/>		
+	</ui>
+	
+	<scene>		
+		<camera id="camera_1" fov="70" aspect="1.5" near="1" far="1000">
+			<position y="300" z="500"/>			
+		</camera>			
+		<cube id="cube_1" width="200" height="200" depth="200" x_segments="1" 
+				y_segments="1" z_segments="1" material="materials">			
+			<position x="-150" y="50"/>			
+		</cube>				
+		<plane id="plane_1" width="200" height="200" material="plane_material">
+			<rotation x="-90"/>	
+			<position x="-150" y="-100"/>
+		</plane>		
+	</scene>
+			
+</application>

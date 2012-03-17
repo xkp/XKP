@@ -87,7 +87,6 @@
                 compiler.error("Class not rendereable", class_name = inst.type_name);
             }    
             
-            compiler.log(inst_renderer);
             string path = compiler.idiom_path(inst, inst_renderer);
             compiler.xss(path, inst, path = "this");
         }

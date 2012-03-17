@@ -1,3 +1,27 @@
+function getElementPosition(element) {
+	var elem=element, tagname="", x=0, y=0;
+	while(elem && (typeof(elem) == "object") && (typeof(elem.tagName) != "undefined")) {
+		y += elem.offsetTop;
+		x += elem.offsetLeft;
+		tagname = elem.tagName.toUpperCase();
+		if(tagname == "BODY")
+			elem=0;
+		if(typeof(elem) == "object") {
+			if(typeof(elem.offsetParent) == "object")
+				elem = elem.offsetParent;
+		}
+	}
+	return {x: x, y: y};
+}
+
+function distance3d(vector1, vector2)
+{
+	var x = vector1.x - vector2.x;
+	var y = vector1.y - vector2.y;
+	var z = vector1.z - vector2.z;
+	return Math.sqrt(x * x + y * y + z * z);
+}
+
 function set_active_camera( camera )
 {
 	renderer.render(scene, camera);
@@ -39,6 +63,25 @@ function set_transform_image( path, value )
 	{
 		var child = path.children[i];		
 		child.materials[ 0 ].map = new THREE.Texture(streamer.get_resource(value).data);	
+	}	
+}
+
+function set_cube_face_object( path, face, value )
+{
+	path.geometry.faces[face].materials[0].map = new THREE.Texture(value);	
+}
+
+function set_cube_face( path, value, face )
+{
+	path.geometry.faces[face].materials[0].map = new THREE.Texture(streamer.get_resource(value).data);	
+}
+
+function set_transform_texture_object( path, value )
+{
+	for(var i = 0; i < path.children.length; i++)
+	{
+		var child = path.children[i];		
+		child.materials[ 0 ].map = new THREE.Texture(value);	
 	}	
 }
 

@@ -1,5 +1,18 @@
-var canvas_position = {x: 8, y: 8};
-
+function getElementPosition(element) {
+	var elem=element, tagname="", x=0, y=0;
+	while(elem && (typeof(elem) == "object") && (typeof(elem.tagName) != "undefined")) {
+		y += elem.offsetTop;
+		x += elem.offsetLeft;
+		tagname = elem.tagName.toUpperCase();
+		if(tagname == "BODY")
+			elem=0;
+		if(typeof(elem) == "object") {
+			if(typeof(elem.offsetParent) == "object")
+				elem = elem.offsetParent;
+		}
+	}
+	return {x: x, y: y};
+}
 function importjs(dir, file) {
 	var bodyID = document.getElementsByTagName("body")[0];
 	var newScript = document.createElement('script');

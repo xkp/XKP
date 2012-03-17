@@ -1,133 +1,81 @@
-property art_planes = [];
-property forms_planes = [];
-property times_planes = [];
-property art_img = ["a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8"];
-property forms_img = ["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8"];
-property times_img = ["t1", "t2", "t3", "t4", "t5", "t6", "t7"];
+property art_planes;
+property forms_planes;
+property times_planes;
+property art_img = ["a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8", "art_title"];
+property forms_img = ["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "forms_title"];
+property times_img = ["t1", "t2", "t3", "t4", "t5", "t6", "t7", "times_title"];
 property resource;
-property group;
 property group_zoomed;
 property zoomed;
 property selected;
-property phase = 1;
+property phase;
 property temp_index;
 property temp_img;
-property image;
-
-method init_planes()
-{	
-	for(int a = 0; a < 8; a++){
-		resource = streamer.get_resource(art_img[a]).data;
-		art_planes += anim_plane(resource.naturalWidth/13, resource.naturalHeight/13);
-		art_planes[a].set_image(art_img[a]); 
-		scene.addObject(art_planes[a]);	
-		art_planes[a].plane_anim.start();		
-	}
-	art_planes += anim_plane(79, 24);
-	art_planes[8].set_image("images/pictures/art.png"); 
-	scene.addObject(art_planes[8]);
-	for(int f = 0; f < 8; f++){
-		resource = streamer.get_resource(forms_img[f]).data;
-		forms_planes += anim_plane(resource.naturalWidth/10, resource.naturalHeight/10);
-		forms_planes[f].set_image(forms_img[f]); 
-		scene.addObject(forms_planes[f]);
-		forms_planes[f].plane_anim.start();		
-	}
-	forms_planes += anim_plane(85, 23);
-	forms_planes[8].set_image("images/pictures/forms.png"); 
-	scene.addObject(forms_planes[8]);
-	for(int t = 0; t < 7; t++){
-		resource = streamer.get_resource(times_img[t]).data;
-		times_planes += anim_plane(resource.naturalWidth/10, resource.naturalHeight/10);
-		times_planes[t].set_image(times_img[t]); 
-		scene.addObject(times_planes[t]);	
-		times_planes[t].plane_anim.start();		
-	}
-	times_planes += anim_plane(98, 26);
-	times_planes[7].set_image("images/pictures/times.png"); 
-	scene.addObject(times_planes[7]);	
-	set_min_max_group(art_planes, -550, -350, 250, 0);
-	set_min_max_group(forms_planes,-200, 0, 250, 0);
-	set_min_max_group(times_planes, 150, 350, 250, 0);
-}
-
-on init()
-{	
-	art_pack.load();
-	forms_pack.load();
-	times_pack.load();	
-}
+property waiting_for_load = false;
 
 instance init_anim
 {
-	method animate_all()
+	method enter_if_loaded()
 	{
-		application.init_planes();
-		liquid_appear.start();
+		if(everybody_pack.all_loaded)
+		{			
+			init_anim.stop();
+			init_anim2.stop();
+			line1.setVisible(false);
+			line2.setVisible(false);
+			line3.setVisible(false);
+			line4.setVisible(false);
+			rect1.setVisible(true);			
+			go_up.start();
+			enter_to.setVisible(false);
+			application.init_planes();
+		}
+        else
+		{
+			application.waiting_for_load = true;
+		}
 	}
 }
 
-method find_owner(element)
-{	
-	for(int i = 0; i < 9; i++)
-	{
-		if(art_planes[i] == element)
-			return art_planes;
-		if(forms_planes[i] == element)
-			return forms_planes;
-		if(i < 8)
-			if(times_planes[i] == element)
-				return times_planes;
-	}	
-}
-
-on mousemove(x, y)
+method init_planes()
 {
-	if(phase == 1)
-	{
-		if(group)
-		{
-			set_list_scale(group, 1.5);	
-			liquid.disturb(x, y);			
-		}
-		if(art_planes != group)
-		{
-			set_list_scale(art_planes, 1);			
-		}
-		if(forms_planes != group)
-		{
-			set_list_scale(forms_planes, 1);			
-		}
-		if(times_planes != group)
-		{
-			set_list_scale(times_planes, 1);			
-		}
-	}	
+	art_planes = planes_group();
+	art_planes.images = art_img;
+	forms_planes = planes_group();
+	forms_planes.images = forms_img;
+	times_planes = planes_group();
+	times_planes.images = times_img;
+	art_planes.set_limits(-550, -350, 250, 0);
+	forms_planes.set_limits(-200, 0, 250, 0);
+	times_planes.set_limits(150, 350, 250, 0);
+	phase = 1;
 }
 
 on click(x, y)
-{		
-	if(phase == 3)
+{
+	if(phase == 1 && selected)
 	{
-		if(selected)
-		{
-			phase = 2;
-			selected.back_to.stop();
-			selected.back_to.start();
-			zoomed = false;
-		}
+		liquid.disturb(x, y);
+		phase = 2;
+		if(art_planes.find(selected) != -1)
+			init_phase_2(art_planes, forms_planes, times_planes);
+		if(forms_planes.find(selected) != -1)
+			init_phase_2(forms_planes, art_planes, times_planes);
+		if(times_planes.find(selected) != -1)
+			init_phase_2(times_planes, art_planes, forms_planes);
 	}else
 	if(phase == 2)
 	{
-		if(find_owner(selected) == group_zoomed)
+		if(selected.parent_ == group_zoomed)
 		{
-			if(get_img_index(selected, group_zoomed) != group_zoomed.length - 1)
+			if(!selected.title)
 			{
 				liquid.disturb(x, y);
 				SoundUtils.play("sounds/water-droplet-1.mp3");
 				phase = 3;
 				selected.plane_anim.stop();
 				selected.idle_anim.stop();
+				selected.quickly_anim.stop();
 				selected.show_me.stop();
 				selected.show_me.start();
 				zoomed = selected;
@@ -137,64 +85,147 @@ on click(x, y)
 		{	
 			liquid.disturb(x, y);
 			SoundUtils.play("sounds/water-droplet-1.mp3");
-			if(group)
-			{
-				group_zoomed = group;
-				phase = 2;
-			}
-			if(art_planes == group)
-			{
-				set_down_groups(forms_planes, times_planes);
-			}
-			else if(forms_planes == group)
-			{
-				set_down_groups(art_planes, times_planes);
-			}
-			else if(times_planes == group)
-			{
-				set_down_groups(art_planes, forms_planes);
-			}		
-			set_list_scale(group, 2);		
-			set_min_max_group_quickly(group, -400, 250, 250, 0);
+			if(art_planes.find(selected) != -1)
+				init_phase_2(art_planes, forms_planes, times_planes);
+			if(forms_planes.find(selected) != -1)
+				init_phase_2(forms_planes, art_planes, times_planes);
+			if(times_planes.find(selected) != -1)
+				init_phase_2(times_planes, art_planes, forms_planes);
 		}
 	}else
-	if(phase == 1)
-	{	
-		liquid.disturb(x, y);
-		SoundUtils.play("sounds/water-droplet-1.mp3");
-		if(group)
+	if(phase == 3)
+	{		
+		if(selected == zoomed)
 		{
-			group_zoomed = group;
 			phase = 2;
-		}
-		if(art_planes == group)
+			zoomed.back_to.stop();
+			zoomed.back_to.start();
+			zoomed = false;
+		}	
+	}
+}
+
+on init()
+{
+	everybody_pack.load();
+}
+
+on everybody_pack.loaded()
+{
+	loading_seq.stop();
+	idle_load.stop();
+	loading.setVisible(false);
+	enter_to.setVisible(true);	
+	enterto_in.start();	
+	
+    if (waiting_for_load)
+	{
+		init_anim.stop();
+		init_anim2.stop();
+		line1.setVisible(false);
+		line2.setVisible(false);
+		line3.setVisible(false);
+		line4.setVisible(false);
+		rect1.setVisible(true);			
+		go_up.start();
+		enter_to.setVisible(false);
+		init_planes();
+	}
+}
+
+on enter_to.mousein()
+{
+	enter_to.width += 3;
+	enter_to.height += 3;
+}
+
+on enter_to.mouseout()
+{
+	enter_to.width -= 3;
+	enter_to.height -= 3;	
+}
+
+on enter_to.mousedown()
+{
+	enter_to.x += 2;
+	enter_to.y += 2;
+}
+
+on enter_to.mouseup()
+{
+	enter_to.x -= 2;
+	enter_to.y -= 2;
+	init_anim.stop();
+	init_anim2.stop();
+	line1.setVisible(false);
+	line2.setVisible(false);
+	line3.setVisible(false);
+	line4.setVisible(false);
+	rect1.setVisible(true);
+	linetop.x2 = 905;
+	go_up.start();
+	enter_to.setVisible(false);
+	application.init_planes();	
+}
+
+method init_phase_2(group1, group2, group3)
+{
+	group_zoomed = group1;
+	group1.set_individual_scale(2);		
+	group1.set_limits_quickly(-400, 250, 250, 0);
+	group2.set_individual_scale(0.7);		
+	group2.set_limits(-450, -350, -100, -200);
+	group3.set_individual_scale(0.7);		
+	group3.set_limits(150, 250, -100, -200);
+}
+
+on mousemove(x, y)
+{
+	if(phase == 1)
+	{
+		if(art_planes.find(selected) != -1)
 		{
-			set_down_groups(forms_planes, times_planes);
+			liquid.disturb(x, y);
+            art_planes.selected();
+			//art_planes.set_individual_scale(1.5);
 		}
-		else if(forms_planes == group)
+		else 
+            art_planes.unselected();
+            //art_planes.set_individual_scale(1);
+		
+        if(forms_planes.find(selected) != -1)
 		{
-			set_down_groups(art_planes, times_planes);
+			liquid.disturb(x, y);
+			//forms_planes.set_individual_scale(1.5);
+            forms_planes.selected();
 		}
-		else if(times_planes == group)
+		else 
+            forms_planes.unselected();
+            //forms_planes.set_individual_scale(1);
+		
+        if(times_planes.find(selected) != -1)
 		{
-			set_down_groups(art_planes, forms_planes);
-		}		
-		set_list_scale(group, 2);		
-		set_min_max_group_quickly(group, -400, 250, 250, 0);		
+			liquid.disturb(x, y);
+			//times_planes.set_individual_scale(1.5);
+            times_planes.selected();
+		}
+		else 
+            times_planes.unselected();
+            //times_planes.set_individual_scale(1);
 	}
 }
 
 on btn1.click()
 {		
-	if(zoomed)
+	if(phase==3)
 	{
 		temp_img = zoomed;
-		temp_index = get_img_index(zoomed, group_zoomed);
+		temp_index = group_zoomed.find(zoomed);
 		if(temp_index == 0)
-			temp_index = group_zoomed.length - 1;
-		group_zoomed[temp_index - 1].plane_anim.stop();
-		group_zoomed[temp_index - 1].idle_anim.stop();
-		zoomed = group_zoomed[temp_index - 1];
+			temp_index = group_zoomed.plane_array.length - 1;
+		group_zoomed.plane_array[temp_index - 1].plane_anim.stop();
+		group_zoomed.plane_array[temp_index - 1].idle_anim.stop();
+		zoomed = group_zoomed.plane_array[temp_index - 1];
 		temp_img.scale.x = 2;
 		temp_img.scale.y = 2;
 		temp_img.scale.z = 0;
@@ -215,15 +246,15 @@ on btn1.click()
 
 on btn2.click()
 {
-	if(zoomed)
+	if(phase==3)
 	{
 		temp_img = zoomed;
-		temp_index = get_img_index(zoomed, group_zoomed);
-		if(temp_index == group_zoomed.length - 2)
+		temp_index = group_zoomed.find(zoomed);
+		if(temp_index == group_zoomed.plane_array.length - 2)
 			temp_index = - 1;
-		group_zoomed[temp_index + 1].plane_anim.stop();
-		group_zoomed[temp_index + 1].idle_anim.stop();
-		zoomed = group_zoomed[temp_index + 1];
+		group_zoomed.plane_array[temp_index + 1].plane_anim.stop();
+		group_zoomed.plane_array[temp_index + 1].idle_anim.stop();
+		zoomed = group_zoomed.plane_array[temp_index + 1];
 		temp_img.scale.x = 2;
 		temp_img.scale.y = 2;
 		temp_img.scale.z = 0;
@@ -242,83 +273,19 @@ on btn2.click()
 	}
 }
 
-method set_list_scale(list, scale)
+instance rain
 {
-	for(var item in list)
-	{
-		item.scale.x = scale;
-		item.scale.y = scale;
-		item.scale.z = scale;
-	}
-}
+    property probablity = 0.5;
 
-method set_scale(element, scale)
-{
-	element.scale.x = scale;
-	element.scale.y = scale;
-	element.scale.z = scale;
-}
+    void drop()
+    {
+        if (Math.random() < probablity)
+        {
+            float x = 200 + Math.random()*600;
+            float y = 200 + Math.random()*400;
+ 		    liquid.disturb(x, y);
 
-method set_min_max_group(list, min_x, max_x, min_y, max_y)
-{
-	for(int k = 0; k < list.length; k++)
-	{
-		if(k != list.length - 1)
-		{
-			list[k].min_x = min_x;
-			list[k].max_x = max_x;
-			list[k].min_y = min_y;
-			list[k].max_y = max_y;
-			list[k].plane_anim.stop();
-			list[k].idle_anim.stop();
-			list[k].plane_anim.start();
-			list[k].idle_anim.start();
-		}
-		else
-		{
-			list[k].position.x = min_x + (max_x - min_x)/2;
-			list[k].position.y = min_y + (min_y - max_y)/4;
-		}
-	}
-}
-
-method set_min_max_group_quickly(list, min_x, max_x, min_y, max_y)
-{
-	for(int k = 0; k < list.length; k++)
-	{
-		if(k != list.length - 1)
-		{
-			list[k].min_x = min_x;
-			list[k].max_x = max_x;
-			list[k].min_y = min_y;
-			list[k].max_y = max_y;
-			list[k].plane_anim.stop();
-			list[k].idle_anim.stop();
-			list[k].quickly_anim.stop();
-			list[k].quickly_anim.start();			
-		}
-		else
-		{
-			list[k].position.x = min_x + (max_x - min_x)/2;
-			list[k].position.y = min_y + (min_y - max_y)/4;
-		}
-	}	
-}
-
-method set_down_groups(group_1, group_2)
-{
-	set_list_scale(group_1, 0.7);
-	set_list_scale(group_2, 0.7);
-	set_min_max_group(group_1, -450, -350, -100, -200);		
-	set_min_max_group(group_2, 150, 250, -100, -200);
-}
-
-method get_img_index(img_param, list)
-{
-	for(int l = 0; l < list.length; l++)
-	{
-		if(img_param == list[l])
-			return l;
-	}	
-	return -1;
+            SoundUtils.play("sounds/water-droplet-1.mp3");
+        }
+    }
 }

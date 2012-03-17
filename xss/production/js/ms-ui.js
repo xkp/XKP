@@ -13,11 +13,16 @@ ms.ui.Manager = Class.create(
 	    //mouse handling
 	    this.mouse_over = this.root;
 	    this.dragging 		= false;
-		this.mouse_pressed	= false;
+		mouse_pressed	= false;
 	    this.lastx 		= 0;
 	    this.lasty 		= 0;
-	},	
-
+		this.events = new ms.event.EventHolder();
+		this.drag = false;
+		this.over_drag = false;
+		this.dragend = false;
+		this.over_dragend = false;
+	},		
+	
 	//Resource handling
 	load_resources: function(callback)
 	{
@@ -57,7 +62,7 @@ ms.ui.Manager = Class.create(
 			if(cmp.physics)
 				cmp.physics.SetAwake(true);
         }		
-	    application.events.dispatch("keydown", [keycode]);    
+	    this.events.dispatch("keydown", [keycode]);    
 	},
 
 	keyup: function(keycode)
@@ -68,7 +73,7 @@ ms.ui.Manager = Class.create(
 			if(cmp.physics)
 				cmp.physics.SetAwake(true);
         }	
-	    application.events.dispatch("keyup", [keycode]);    
+	    this.events.dispatch("keyup", [keycode]);    
 	},
 
 	keypress: function(keycode)
@@ -79,7 +84,7 @@ ms.ui.Manager = Class.create(
 			if(cmp.physics)
 				cmp.physics.SetAwake(true);
         }	
-	    application.events.dispatch("keypress", [keycode]);    
+	    this.events.dispatch("keypress", [keycode]);    
 	},	
 	
 	//Mouse management
@@ -90,15 +95,14 @@ ms.ui.Manager = Class.create(
 			if(this.mouse_over.physics.mouse_joint)
 				this.create_mouse_joint(x, y, this.mouse_over.physics);			
 		}	
-	    if(this.mouse_pressed)
+	    if(mouse_pressed)
 			this.dragging = true;
 	    if (this.dragging)
 	    {	
-			application.events.dispatch("drag", [x, y]);
-			this.mouse_over.events.dispatch("drag", [x, y]);
+			this.drag = this.events.dispatch("drag", [x, y]);
+			this.over_drag = this.mouse_over.events.dispatch("drag", [x, y]);
 	        this.lastx = x;
-	        this.lasty = y;
-	        return true;
+	        this.lasty = y;	        
 	    }
 	    var over = this.root.find(x, y);
 	    if (!over)
@@ -109,8 +113,10 @@ ms.ui.Manager = Class.create(
 	        over.events.dispatch("mousein", [x, y, over]);
 	        this.mouse_over = over;
 	    }	    
-	    over.events.dispatch("mousemove", [x, y, over]);
-		application.events.dispatch("mousemove", [x, y]);
+		if(!this.over_drag)
+			over.events.dispatch("mousemove", [x, y, over]);
+		if(!this.drag)
+			this.events.dispatch("mousemove", [x, y]);
 	    this.lastx = x;
 	    this.lasty = y;
 	    return this.mouse_over != this.root;
@@ -123,35 +129,41 @@ ms.ui.Manager = Class.create(
 		
 	    this.mouse_over.events.dispatch("mousedown", [x, y]);
 	    
-		this.mouse_pressed = true;
+		mouse_pressed = true;
 		
-		application.events.dispatch("mousedown", [x, y]);
+		this.events.dispatch("mousedown", [x, y]);
 	    return this.mouse_over != this.root;
 	},
 
 	mouseup: function(x, y)
-	{		
+	{						
 		if(this.mouse_over.physics)
-			this.mouse_over.physics.SetAwake(true);			
-		this.mouse_pressed = false;
+			this.mouse_over.physics.SetAwake(true);	
+		mouse_pressed = false;
 	    if (this.dragging)
 	    {
 	        this.dragging = false;
-	        application.events.dispatch("dragend", [x, y]);
-	        this.mouse_over.events.dispatch("dragend", [x, y]);
-	        return true;
+			this.dragend = this.events.dispatch("dragend", [x, y]);
+	        this.over_dragend = this.mouse_over.events.dispatch("dragend", [x, y]);	        
 	    }	    
-	    this.mouse_over.events.dispatch("mouseup", [x, y]);	    	    
-	    this.mouse_over.events.dispatch("click", [x, y]);	   
-		application.events.dispatch("mouseup", [x, y]);
-		application.events.dispatch("click", [x, y]);
-	    return this.mouse_over != this.root;
+		if(!this.over_drag && !this.over_dragend)
+		{
+			this.mouse_over.events.dispatch("mouseup", [x, y]);	    	    
+			this.mouse_over.events.dispatch("click", [x, y]);	  
+		}
+		if(!this.drag && !this.dragend)
+		{
+			this.events.dispatch("mouseup", [x, y]);
+			this.events.dispatch("click", [x, y]);
+		}
+		this.drag = this.over_drag = this.dragend = this.over_dragend = false;		
+	    return this.mouse_over != this.root;		
 	},
 	
 	create_mouse_joint: function(x, y, body){
 		var handledMouseX = x  / 30;
 		var handledMouseY = y  / 30;
-		if(this.mouse_pressed && (!this.mouseJoint)) {
+		if(mouse_pressed && (!this.mouseJoint)) {
 			var md = new b2MouseJointDef();
             md.bodyA = g_world.GetGroundBody();
             md.bodyB = body;
@@ -161,7 +173,7 @@ ms.ui.Manager = Class.create(
             this.mouseJoint = g_world.CreateJoint(md);
         }
         if(this.mouseJoint) {
-           if(this.mouse_pressed) {
+           if(mouse_pressed) {
               this.mouseJoint.SetTarget(new b2Vec2(handledMouseX, handledMouseY));
            } else {
               g_world.DestroyJoint(this.mouseJoint);
@@ -360,9 +372,6 @@ ms.ui.Component = Class.create(
 {
 	initialize: function(manager, parent)
 	{
-		if(manager == null) manager = g_ui_root.manager;
-		if(parent == null) parent = g_ui_root;
-
 		this.manager    = manager;
 		this.components = [];
 		this.parent 	= parent;	
@@ -374,7 +383,7 @@ ms.ui.Component = Class.create(
         this.h 	= this.orig_h	= 0;
 		this.rotation 			= 0;
         this.placement  = "";
-		this.scale = 1;
+		this.scale = 1;		
 		
 		if(parent)
 			this.opacity = parent.opacity; 
@@ -383,8 +392,8 @@ ms.ui.Component = Class.create(
 		if (parent)
 			parent.addComponent(this);
 	},
-
-    count: function()
+	
+	count: function()
     {
         return this.components.length;
     },
@@ -676,7 +685,7 @@ ms.ui.Component = Class.create(
     },
 
     draw: function(context, x, y)
-    {
+    {		
 		this.update_placement();
         var clip_inside = true;
 		for(var i = 0; i < this.components.length; i++)
@@ -764,7 +773,7 @@ ms.ui.Image = Class.create(ms.ui.Component,
 	},     
 	
 	draw: function($super, context, x, y)
-    {	
+    {			
 		if(!this.iwidth)
 			this.iwidth = this.w;
 		if(!this.iheight)
@@ -775,7 +784,7 @@ ms.ui.Image = Class.create(ms.ui.Component,
         {
             old_alpha = context.globalAlpha;
             context.globalAlpha = this.opacity;
-        }
+        }	
 		if(this.tile)
 		{
 			var ix = this.x + x;
@@ -800,10 +809,9 @@ ms.ui.Image = Class.create(ms.ui.Component,
 		{
 			context.save();
 			context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
-			context.rotate(this.rotation);
-							
+			context.rotate(this.rotation);					
 			if (this.texture)
-			{
+			{				
 				context.drawImage(this.texture, - this.w/2, - this.h/2, this.w, this.h);
 			}
 			else if (this.fill_)
@@ -817,7 +825,8 @@ ms.ui.Image = Class.create(ms.ui.Component,
         if (this.opacity != null)
         {
             context.globalAlpha = old_alpha;
-        }
+        }		
+		
         $super(context);
     }
 });
@@ -894,7 +903,7 @@ ms.ui.Label = Class.create(ms.ui.Component,
 	},
 
     draw: function($super, context, x, y)
-    {		
+    {	
 		context.save();		
 		if (this.opacity != null)
         {
@@ -1012,7 +1021,7 @@ ms.ui.TextButton = Class.create(ms.ui.Component,
 		}        
 	},
 	draw: function($super, context, x, y)
-    {		
+    {
 		var gradient;
 		context.save();		
 		if (this.opacity != null)
@@ -1092,7 +1101,7 @@ ms.ui.RippleEffect = Class.create(ms.ui.Component,
 		return this.riprad;
 	},
 	draw: function($super, context, x, y)
-    {		
+    {	
 		this.canvas.width = this.w;
 		this.canvas.height = this.h;
 		if (this.is_disturbed) {
@@ -1460,7 +1469,7 @@ ms.ui.Rectangle = Class.create(ms.ui.Component,
 		this.invalidate();
 	},
 	draw: function($super, context, x, y)
-	{		
+	{	
 		old_line_width = context.lineWidth;
 		context.save();
 		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
@@ -1980,7 +1989,3 @@ ms.ui.SoundUtils = Class.create(
 		audioElement.play();
 	},
 });
-
-
-
-

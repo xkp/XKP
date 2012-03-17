@@ -24,10 +24,10 @@ on render_initialization()
 				canvas: drawingCanvas
 			};
             var streamer = new ms.streamer.Streamer();							
-			var ui = new ms.ui.Manager(client, streamer);
-		
+			var ui = new ms.ui.Manager(client, streamer);			
 			var g_ui = ui;
 			var g_ui_root = ui.root;
+			var mouse_pressed = false;
 		}
 	}
 }
@@ -50,16 +50,52 @@ on render_ui_instances()
 	out(){	
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX, ev.clientY);                  
+		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX, ev.clientY);                  
+		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX, ev.clientY);                  
-	};	
+		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
 	}
 	
     for(int i = 0; i < instances.size; i++)

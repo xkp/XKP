@@ -2,12 +2,14 @@
     <types>
         <class id="component" renderer="component.xss">
 		
-            <property id="x" type="int">
+			<property id="mouse_thru" type="bool"/>               
+			
+            <property id="x" type="int" use_plain_value="true">
                 <get text="x"/>
                 <set text="set_x({value})"/>
             </property>
 
-            <property id="y" type="int">
+            <property id="y" type="int" use_plain_value="true">
                 <get text="y"/>
                 <set text="set_y({value})"/>
             </property>
@@ -22,12 +24,12 @@
                 <set text="set_placement({value})"/>
             </property>
 
-            <property id="width" type="int">
+            <property id="width" type="int" use_plain_value="true">
                 <get text="get_width()"/>
                 <set text="set_width({value})"/>
             </property>
 
-            <property id="height" type="int">
+            <property id="height" type="int" use_plain_value="true">
                 <get text="get_height()"/>
                 <set text="set_height({value})"/>
             </property>
@@ -50,9 +52,15 @@
                 <get text="scale"/>
                 <set text="set_scale({value})"/>
             </property>
+			
         </class>
-
+		
 		<class id="painter" super="component" output_id="ms.ui.Painter"/>
+		
+		<class id="ui" renderer="buffer_renderer.xss">
+			<property id="width" type="int" use_plain_value="true"/>                
+            <property id="height" type="int" use_plain_value="true"/>                
+		</class>
 		
 		<class id="clip_area" super="component" output_id="ms.ui.ClipArea">
 			<constructor_params>

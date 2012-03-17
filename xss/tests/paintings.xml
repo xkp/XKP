@@ -1,18 +1,21 @@
 <application title="danydenis.com" src="paintings.xs" width="1000" height="800" background="Black">
     <resources>        
 		<image src="images/pictures/banner.png"/> 	
-		<image src="images/pictures/lens_d1.png"/>
-		<image src="images/pictures/lens_d2.png"/>
+		<image src="images/pictures/lente1.png"/>
+		<image src="images/pictures/lente2.png"/>
 		<image src="images/pictures/facebook.png"/>
 		<image src="images/pictures/twitter.png"/>	
 		<image src="images/pictures/loading.png"/>
+		<image src="images/pictures/enter.png"/>
 		<image src="images/pictures/boxdef.jpg"/>
 		<image src="images/pictures/arrow_up.png"/>
 		<image src="images/pictures/arrow_down.png"/>
-		<audio src="sounds/water-droplet-1.mp3"/>
+        <image src="images/pictures/photobucket.png"/>
+        
+        <audio src="sounds/water-droplet-1.mp3"/>
 		
-		<package id="art_pack">
-			<image src="images/pictures/art.png"/>
+		<package id="everybody_pack">
+			<image id="art_title" src="images/pictures/art.png"/>
 			<image id="a1" src="images/pictures/Arte/a1.jpg"/>
 			<image id="a2" src="images/pictures/Arte/a2.jpg"/>
 			<image id="a3" src="images/pictures/Arte/a3.jpg"/>
@@ -20,10 +23,8 @@
 			<image id="a5" src="images/pictures/Arte/a5.jpg"/>
 			<image id="a6" src="images/pictures/Arte/a6.jpg"/>
 			<image id="a7" src="images/pictures/Arte/a7.jpg"/>
-			<image id="a8" src="images/pictures/Arte/a8.jpg"/>
-		</package>
-		<package id="forms_pack">
-			<image src="images/pictures/forms.png"/>
+			<image id="a8" src="images/pictures/Arte/a8.jpg"/>		
+			<image id="forms_title" src="images/pictures/forms.png"/>
 			<image id="f1" src="images/pictures/Formas/f1.jpg"/>
 			<image id="f2" src="images/pictures/Formas/f2.jpg"/>
 			<image id="f3" src="images/pictures/Formas/f3.jpg"/>
@@ -31,10 +32,8 @@
 			<image id="f5" src="images/pictures/Formas/f5.jpg"/>
 			<image id="f6" src="images/pictures/Formas/f6.jpg"/>
 			<image id="f7" src="images/pictures/Formas/f7.jpg"/>
-			<image id="f8" src="images/pictures/Formas/f8.jpg"/>		
-		</package>
-		<package id="times_pack">
-			<image src="images/pictures/times.png"/>
+			<image id="f8" src="images/pictures/Formas/f8.jpg"/>			
+			<image id="times_title" src="images/pictures/times.png"/>
 			<image id="t1" src="images/pictures/Tiempos/t1.jpg"/>
 			<image id="t2" src="images/pictures/Tiempos/t2.jpg"/>
 			<image id="t3" src="images/pictures/Tiempos/t3.jpg"/>
@@ -44,34 +43,28 @@
 			<image id="t7" src="images/pictures/Tiempos/t7.jpg"/>			
 		</package>
     </resources>
-  	
-	<basic_material id="mat" color="white"/>
-	
+  		
 	<scene>
 		<camera id="camera_1" fov="45" aspect="1.5" near="1" far="10000">
 			<position z="1000"/>			
 		</camera>	  
 	</scene>
 	
-	<ripple_effect id="liquid" x="0" y="0" width="1000" height="800" alpha="0" ripradius="10" src="images/pictures/boxdef.jpg">
-        <alinear_gradient x1="0" y1="0" x2="1000" y2="800">
-            <color_stop offset="0.0" color="#D00000"/>
-            <color_stop offset="0.5" color="#1F0000"/>
-            <color_stop offset="0.9" color="#0F0000"/>
-            <color_stop offset="1.0" color="#D00000"/>
-        </alinear_gradient>
-    </ripple_effect>
+	<ripple_effect id="liquid" x="0" y="0" width="app_width" height="app_height" alpha="0" ripradius="10" src="images/pictures/boxdef.jpg">
+	</ripple_effect>
 		
 	<img id="banner" x="15" y="10" width="231" height="28" alpha="0" src="images/pictures/banner.png"/>	
-	<img id="loading" x="280" y="550" width="140" height="22" alpha="0" src="images/pictures/loading.png"/>	
+	<img id="loading" x="280" y="550" width="153" height="27" alpha="0" src="images/pictures/loading.png"/>	
+	<img id="enter_to" x="310" y="551.5" width="92" height="24" visible="false" src="images/pictures/enter.png"/>
 	
-	<img id="lens1" x="225" y="225" width="250" height="250" alpha="0" src="images/pictures/lens_d1.png"/>
-	<img id="lens2" x="220" y="220" width="260" height="260" alpha="0" src="images/pictures/lens_d2.png"/>
-	
-	<img id="facebook" x="750" y="4" width="31" height="31" alpha="0" src="images/pictures/facebook.png"/>
-	<img id="twitter" x="800" y="4" width="31" height="31" alpha="0" src="images/pictures/twitter.png"/>
-	
-	<button id="btn1" x="0" y="300" width="64" height="64" rotation="180" alpha="0" up="images/pictures/arrow_up.png" down="images/pictures/arrow_down.png"/>
+	<img id="lens1" x="225" y="225" width="250" height="250" alpha="0" src="images/pictures/lente1.png"/>
+	<img id="lens2" x="220" y="220" width="260" height="260" alpha="0" src="images/pictures/lente2.png"/>
+
+    <img id="facebook" x="880" y="8" width="24" height="24" alpha="0" src="images/pictures/facebook.png"/>
+	<img id="twitter" x="845" y="8" width="24" height="24" alpha="0" src="images/pictures/twitter.png"/>
+    <img id="email" x="810" y="8" width="24" height="24" alpha="0" src="images/pictures/photobucket.png"/>
+
+    <button id="btn1" x="0" y="300" width="64" height="64" rotation="180" alpha="0" up="images/pictures/arrow_up.png" down="images/pictures/arrow_down.png"/>
 	
 	<button id="btn2" x="840" y="300" width="64" height="64" alpha="0" up="images/pictures/arrow_up.png" down="images/pictures/arrow_down.png"/>
 	
@@ -82,73 +75,52 @@
 	<line id="line3" x1="500" y1="500" x2="500" y2="500" alpha="60" color="white"/>
 	<line id="line4" x1="200" y1="500" x2="200" y2="500" alpha="60" color="white"/>	
 	
-	<rectangle id="rect1" x="200" y="200" width="300" height="300" alpha="0" stroke="white"/>	
+	<rectangle id="rect1" x="200" y="200" width="300" height="300" visible="false" alpha="60" stroke="white"/>	
 			
 	<sequence id="init_anim" auto_start="true">		
 		<at time="0">
 			<animate property="line1.x2" from="200" to="500" in="1"/>
-            <animate property="banner.alpha" from="0" to="25" in="1"/>
-			<animate property="loading.alpha" from="0" to="50" in="1"/>
-			<animate property="linetop.x2" from="5" to="230" in="1"/>			
-			<animate property="lens1.alpha" from="0" to="25" in="1"/>
-			<animate property="lens2.alpha" from="0" to="25" in="1"/>			
+            <animate property="linetop.x2" from="5" to="905" in="4"/>
         </at>
 		<at time="1">
-            <animate property="line2.y2" from="200" to="500" in="1"/>
-			<animate property="banner.alpha" from="25" to="50" in="1"/>
-			<animate property="loading.alpha" from="50" to="100" in="1"/>
-			<animate property="linetop.x2" from="230" to="455" in="1"/>			
-			<animate property="lens1.alpha" from="25" to="50" in="1"/>
-			<animate property="lens2.alpha" from="25" to="50" in="1"/>	
+            <animate property="line2.y2" from="200" to="500" in="1"/>			
         </at>
 		<at time="2">
-            <animate property="line3.x2" from="500" to="200" in="1"/>	
-			<animate property="banner.alpha" from="50" to="75" in="1"/>
-			<animate property="loading.alpha" from="100" to="50" in="1"/>
-			<animate property="linetop.x2" from="455" to="680" in="1"/>			
-			<animate property="lens1.alpha" from="50" to="75" in="1"/>
-			<animate property="lens2.alpha" from="50" to="75" in="1"/>
+            <animate property="line3.x2" from="500" to="200" in="1"/>				
         </at>
 		<at time="3">
             <animate property="line4.y2" from="500" to="200" in="1"/>
-			<animate property="banner.alpha" from="75" to="100" in="1"/>
-			<animate property="loading.alpha" from="50" to="0" in="1"/>
-			<animate property="linetop.x2" from="680" to="905" in="1"/>			
-			<animate property="lens1.alpha" from="75" to="100" in="1"/>
-			<animate property="lens2.alpha" from="75" to="100" in="1"/>
         </at>        
 		<at time="4">            
 			<animate property="lens1.rotation" from="0" to="45" in="1"/>
-			<animate property="lens2.rotation" from="0" to="-45" in="1"/>
-			<animate property="loading.alpha" from="0" to="50" in="1"/>			
+			<animate property="lens2.rotation" from="0" to="-45" in="1"/>					
         </at>
 		<at time="5">            
-			<animate property="lens1.rotation" from="45" to="0" in="1"/>
-			<animate property="lens2.rotation" from="-45" to="0" in="1"/>
-			<animate property="loading.alpha" from="50" to="100" in="1"/>			
-        </at>
-		<at time="6"> 
-			<animate property="loading.alpha" from="100" to="50" in="1"/>
-			<animate property="lens1.rotation" from="0" to="-45" in="1"/>
-			<animate property="lens2.rotation" from="0" to="45" in="1"/>
-			<animate property="line1.alpha" from="60" to="30" in="1"/>
-			<animate property="line2.alpha" from="60" to="30" in="1"/>
-			<animate property="line3.alpha" from="60" to="30" in="1"/>
-			<animate property="line4.alpha" from="60" to="30" in="1"/>
-			<animate property="rect1.alpha" from="0" to="30" in="1"/>
-        </at>
-		<at time="7"> 
-			<animate property="loading.alpha" from="50" to="0" in="1"/>
-			<animate property="lens1.rotation" from="-45" to="0" in="1"/>
-			<animate property="lens2.rotation" from="45" to="0" in="1"/>
-			<animate property="line1.alpha" from="30" to="0" in="1"/>
-			<animate property="line2.alpha" from="30" to="0" in="1"/>
-			<animate property="line3.alpha" from="30" to="0" in="1"/>
-			<animate property="line4.alpha" from="30" to="0" in="1"/>
-			<animate property="rect1.alpha" from="30" to="60" in="1"/>
+			<animate property="lens1.rotation" from="45" to="-45" in="2"/>
+			<animate property="lens2.rotation" from="-45" to="45" in="2"/>					
         </at>		
-		<at time="8">
-			<animate property="loading.alpha" from="0" to="100" in="2"/>
+		<at time="7"> 			
+			<animate property="lens1.rotation" from="-45" to="0" in="1"/>
+			<animate property="lens2.rotation" from="45" to="0" in="1"/>			
+        </at>
+		<at time="8"> 			
+			<run method="enter_if_loaded"/>						
+        </at>
+	</sequence>
+	<sequence id="init_anim2" auto_start="true">
+		<at time="0">
+			<animate property="banner.alpha" from="0" to="100" in="4"/>			
+			<animate property="lens1.alpha" from="0" to="100" in="8"/>
+			<animate property="lens2.alpha" from="0" to="100" in="8"/>	
+		</at>
+	</sequence>
+    <sequence id="rain">
+        <every time="3">
+            <run method="drop"/>
+        </every>
+    </sequence>
+	<sequence id="go_up">
+		<at time="0">			
 			<animate property="lens1.x" from="225" to="700" in="2"/>
 			<animate property="lens1.y" from="225" to="2" in="2"/>
 			<animate property="lens1.width" from="250" to="31" in="2"/>
@@ -162,17 +134,35 @@
 			<animate property="lens2.width" from="260" to="32" in="2"/>
 			<animate property="lens2.height" from="260" to="32" in="2"/>
 			<animate property="facebook.alpha" from="0" to="100" in="2"/>
-			<animate property="twitter.alpha" from="0" to="100" in="2"/>						
+			<animate property="twitter.alpha" from="0" to="100" in="2"/>
+            <animate property="email.alpha" from="0" to="100" in="2"/>
+            <animate property="liquid.alpha" from="0" to="50" in="2"/>
         </at>
-		<at time="10">	
-			<animate property="loading.alpha" from="100" to="0" in="2"/>
-			<run method="animate_all"/>			
-		</at>
-	</sequence> 
-	<sequence id="liquid_appear">
+        <at time="1">
+            <animate property="lens1.alpha" from="100" to="0" in="1"/>
+            <animate property="lens2.alpha" from="100" to="0" in="1"/>
+            <animate property="rect1.alpha" from="100" to="0" in="1"/>
+        </at>
+        <at time="2">
+            <run sequence="rain"/>
+        </at>
+	</sequence>	
+	<sequence id="loading_seq" auto_start="true">
 		<at time="0">
-			<animate property="liquid.alpha" from="0" to="80" in="2"/>				
-		</at>			
+			<animate property="loading.alpha" from="0" to="100" in="2"/>				
+		</at>
+		<at time="2">
+			<animate property="loading.alpha" from="100" to="0" in="2"/>				
+		</at>		
+	</sequence>	
+	<sequence id="idle_load" auto_start="true">
+		<every time="4">
+			<run sequence="loading_seq"/>
+		</every>
+	</sequence>	
+	<sequence id="enterto_in">
+		<at time="0">
+			<animate property="enter_to.alpha" from="0" to="100" in="1"/>
+		</at>
 	</sequence>
-	
 </application>

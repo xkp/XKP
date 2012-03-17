@@ -1,6 +1,12 @@
 <xss:parameter id="i"/>
 
 <xss:code>		
+        if (i.idiom)
+        {
+            if (i.idiom.id == "sequence")
+                return;
+        }
+    
 		if(i.renderer)
 			compiler.xss(i.renderer, i);
 		else{		

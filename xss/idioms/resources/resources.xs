@@ -32,10 +32,16 @@ on render_resources()
     for(var res in instances)
     {	
 		if(res.class_name == "package")
+		{
 			out()
 			{
-				var <xss:e v="res.id"/> = new ms.streamer.Package(streamer);
+				var <xss:e v="res.id"/> = new ms.streamer.Package(streamer);				
 			}
+			for(var ev in res.events)
+			{
+				compiler.xss("../common-js/event.xss", ev, res, is_class = false, path = path);
+			}
+		}
 		else if(res.renderer)
 		{
 			compiler.xss(res.renderer, res);

@@ -1,6 +1,6 @@
 <module id="resources" src="resources.xs">
     <types>
-        
+	
 		<class id="package"/>				
 		
         <class id="image" resource_type="RESOURCE_IMAGE">

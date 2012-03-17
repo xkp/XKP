@@ -688,14 +688,21 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
 											}
 										else if (type && (type->options() & TYPE_DYNAMIC) != 0)
 											{
-												add_instruction(i_dynamic_get, add_constant(ei.value));
+												if (resolving_assigner_ && top)
+													{
+												    add_instruction(i_dynamic_set, add_constant(ei.value));
+													}
+                        else
+                          {
+												    add_instruction(i_dynamic_get, add_constant(ei.value));
 
-												int lv = register_variable("", null, null);
-												add_instruction(i_store, lv);
+												    int lv = register_variable("", null, null);
+												    add_instruction(i_store, lv);
 
-												//i've decided to save dynamic gets into the stack
-												//to avoid general unplesantness with alredy_in_stack.
-												stack_.push( local_variable(lv, null) );
+												    //i've decided to save dynamic gets into the stack
+												    //to avoid general unplesantness with alredy_in_stack.
+												    stack_.push( local_variable(lv, null) );
+                          }
 											}
 										else
                       {

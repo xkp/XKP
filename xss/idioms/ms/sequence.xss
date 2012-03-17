@@ -3,24 +3,38 @@
 <xss:parameter id="path"/>
 
 <xss:class>
+    object get_scope(seq)
+    {
+        var  expr_this = seq;
+        if (seq.target)
+            expr_this = compiler.get_instance(seq.target);
+        else if (seq.target_type)
+            expr_this = compiler.get_type(seq.target_type);
+        else if (compiler.is_type(seq.parent))
+            expr_this = compiler.get_type(seq.parent.id);
+        
+        return expr_this;
+    }
+    
     method resolve_key(key, key_value, key_index, owner_seq, prop_info, interp)
     {
         //for good measure
         key.value = null;
 
+        var this_ = get_scope(owner_seq); 
         if (compiler.parse_expression(key_value))
         {
             //in this case we need to figure out the key values at runtime
             //this code will keep the expression information to be genearted later. 
             //Note: such expressions will be evaluated at sequence's start time 
             
-            var info = object();
-            info.expr = compiler.render_expression(key_value, owner_seq);
+            var info  = object();
+            info.expr = compiler.render_expression(key_value, this_);
             info.idx  = key_index;
             info.interp = interp;
             
-            if (!rendering_instance)
-                info.expr = compiler.replace_identifier(info.expr, owner_seq.id, "this__");
+            if (prop_info.inside_class)
+                info.expr = compiler.replace_identifier(info.expr, "this.", "this__."); //td!!! this_str
             
             owner_seq.key_expressions += info;
         }
@@ -29,12 +43,13 @@
             //same deal, only this time we'll assign the current value 
             //kinda neat
             var nfo = object();
+            
             nfo.expr = compiler.property_get(prop_info.property, prop_info.path);
             nfo.idx  = key_index;
             nfo.interp = interp;
             
-            if (!rendering_instance)
-                nfo.expr = compiler.replace_identifier(nfo.expr, owner_seq.id, "this__");
+            //if (!rendering_instance)
+            //    nfo.expr = compiler.replace_identifier(nfo.expr, owner_seq.id, "this__");
 
             owner_seq.key_expressions += nfo;
         }
@@ -51,63 +66,20 @@
         {
             if (itm.class_name == "animate")
             {
-                var  expr_this = seq;
-                bool targetted = false;
-                if (seq.target)
-                {
-                    targetted = true;
-                    if (rendering_instance)
-                        expr_this = compiler.get_instance(seq.target);
-                    else
-                        compiler.error("Sequence classes do not support target, use target_type");
-                    
-                    if (!expr_this)
-                        compiler.error("Invalid sequence target", target=seq.target);
-                }
-                else if (seq.target_type)
-                {
-                    targetted = true;
-                    if (!rendering_instance)
-                        expr_this = compiler.get_type(seq.target_type);
-                    else
-                        compiler.error("Sequence instances do not support target_type, use target");
-
-                    if (!expr_this)
-                        compiler.error("Invalid sequence target type", target=seq.target_type);
-                }
-                
-                var prop_info = compiler.analyze_expression(itm.property, this_ = expr_this);
+                var prop_info = analyze_expression(itm.property, seq, seq_id, rendering_instance);
 
                 var    prop      = prop_info.property;
                 string prop_name = prop_info.property_name;
                 string iid       = compiler.genid('__i');
                 string path      = prop_info.path;
                 
-                if (targetted)
-                {
-                    if (path == '')
-                        path = seq_id + ".target";
-                    else
-                        path = seq_id + ".target." + path;
-                }
-                
-                if (!rendering_instance)
-                {
-					if (!prop_info.this_property)
-                        compiler.error("Sequence class targets must be properties");
-
-                    path = compiler.replace_identifier(path, "this.", "this__.");
-                }
-                else if (prop_info.this_property)
-                {
-                    path = compiler.replace_identifier(path, "this.", seq.id + ".");
-                }    
-                
-                string assign = path + "." + prop_name + " = value"; 
+                string assign    = path + "." + prop_name + " = value"; 
                 if (prop)
                 {
                     assign = compiler.property_set(prop, path, 'value');
                 }
+                else compiler.error("Cannot find animatable property", prop = itm.property);
+                
 
                 out(indent = 2)
                 {
@@ -126,8 +98,9 @@
                 
                 if (keys.empty)
                 {
-                    if (!itm.in || !itm.from || !itm.to)
-                        compiler.error("animate needs keys or [from, to, in]");
+                    if (itm.in == null|| itm.from == null || itm.to == null)					
+                         compiler.error("animate needs keys or [from, to, in]");
+					
                     
                     //a simple from/to animation
                     var end     = object();
@@ -191,10 +164,11 @@
         }
     }
             
-    method analyze_expression(string expr, seq, rendering_instance)
+    method analyze_expression(string expr, seq, seq_id, rendering_instance)
     {
         var  expr_this = seq;
         bool targetted = false;
+        bool inside_class = false;
         if (seq.target)
         {
             targetted = true;
@@ -209,23 +183,36 @@
         else if (seq.target_type)
         {
             targetted = true;
-            if (!rendering_instance)
-                expr_this = compiler.get_type(seq.target_type);
-            else
-                compiler.error("Sequence instances do not support target_type, use target");
+            expr_this = compiler.get_type(seq.target_type);
 
             if (!expr_this)
                 compiler.error("Invalid sequence target type", target=seq.target_type);
         }
+        else if (compiler.is_type(seq.parent))
+        {
+            inside_class = true;
+            expr_this = compiler.get_type(seq.parent.id);
+        }
                 
         var result = compiler.analyze_expression(expr, this_ = expr_this);
+        result.inside_class = inside_class;
         
         if (targetted)
         {
-            if (result.path == '')
+            if (result.path == null || result.path == '')
                 result.path = seq_id + ".target";
             else
                 result.path = seq_id + ".target." + result.path;
+        }
+        
+        if (inside_class)
+        {
+            if (result.path == null || result.path == '')
+                result.path = "this__";
+            else
+            {
+                result.path = compiler.replace_identifier(result.path, "this.", "this__.");
+            }
         }
                 
         if (!rendering_instance)
@@ -239,13 +226,7 @@
         {
             result.path = compiler.replace_identifier(result.path, "this.", seq.id + ".");
         }    
-                
-        result.assign = result.path + "." + prop_name + " = value"; 
-        if (prop)
-        {
-            result.assign = compiler.property_set(prop, result.path, 'value');
-        }
-        
+               
         return result;
     }
     
@@ -258,7 +239,7 @@
         }
         else if (itm.trigger)
         {
-            var ev = analyze_expression(itm.trigger, seq, rendering_instance);
+            var ev = analyze_expression(itm.trigger, seq, seq_id, rendering_instance);
             out()
             {
                 if (<xss:e v="ev.path"/>.events)
@@ -344,10 +325,21 @@
             }
         }
         else if (action.sequence)
-        {
-            out() 
+        {   
+            var torun = compiler.analyze_expression(action.sequence);
+            if (torun.this_property)
             {
-                <xss:e v="seq_id"/>.<xss:e v="action.sequence"/>.start();
+			    out() 
+                {
+                    <xss:e v="seq_id"/>.<xss:e v="action.sequence"/>.start();
+                }
+            }
+            else
+            {
+			    out() 
+                {
+                    <xss:e v="action.sequence"/>.start();
+                }
             }
         }
         else if (action.expr)
@@ -503,7 +495,10 @@
             
     on render()
     {
-        if (seq.parent.class_name != "sequence") //only generate top level
+        var top_level = !seq.parent;
+        if (!top_level)
+            top_level = seq.parent.class_name != "sequence";
+        if (top_level) 
             generate_sequence(seq, null, null, !is_class);
     }
 </xss:class>

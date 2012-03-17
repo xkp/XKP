@@ -30,7 +30,8 @@
 				<parameter property="color"/> 
 				<parameter property="wireframe"/>
 				<parameter property="wireframe_linewidth"/>
-				<parameter property="src"/>				
+				<parameter property="src"/>	
+				<parameter property="texture_object"/>
 				<parameter property="shading"/>
 				<parameter property="vertex_colors"/>
 				<parameter property="env_map"/>
@@ -43,13 +44,14 @@
 				<parameter property="ambient"/>
 				<parameter property="blending"/>
 			</constructor_params>
-			<property id="color" type="string" dont_init="true"/> 			
+			<property id="color" type="string" use_plain_value="true" dont_init="true"/> 			
 			<property id="wireframe" type="string" dont_init="true"/>
 			<property id="wireframe_linewidth" type="string" output_id="wireframeLinewidth" dont_init="true"/>
 			<property id="alpha" type="float">
 				<set text="set_material_alpha({path}, {value})" global = "true"/>
             </property>			
-			<property id="src" type="string" dont_init="true"/>				
+			<property id="src" type="string" dont_init="true"/>		
+			<property id="texture_object" type="string" dont_init="true"/>	
 			<property id="shading" type="string" dont_init="true"/>
 			<property id="vertex_colors" type="string" output_id="vertexColors" dont_init="true"/>
 			<property id="env_map" type="string" output_id="envMap" dont_init="true"/>
@@ -58,7 +60,7 @@
 			<property id="shininess" type="string" dont_init="true"/>
 			<property id="specular" type="string" dont_init="true"/>
 			<property id="transparent" type="string" dont_init="true"/>	
-			<property id="refraction_ratio" type="float"/>
+			<property id="refraction_ratio" type="float" output_id="refractionRatio" dont_init="true"/>
 			<property id="ambient" type="string" dont_init="true"/>
 			<property id="blending" type="string" dont_init="true"/>
 		</class>
@@ -76,12 +78,15 @@
 		<class id="depth_material" super="material" output_id="THREE.MeshDepthMaterial" renderer="param_in_obj.xss"/>
 						
 		<class id="object3d">			
-            <property id="color" type="string">
+            <property id="color" type="string" use_plain_value="true">
 				<set text="materials[0].color.setHex({value})"/>
             </property>
 			<property id="texture" type="string">
 				<set text="materials[0].map = new THREE.Texture(streamer.get_resource({value}).data)"/>
-            </property>			
+            </property>	
+			<property id="texture_object" type="string">
+				<set text="materials[0].map = new THREE.Texture({value})"/>
+            </property>
 			<property id="alpha" type="float" use_plain_value="true">	
 				<get text="get_object_alpha({path})" global = "true"/>
 				<set text="set_object_alpha({path}, {value})" global = "true"/>
@@ -102,6 +107,9 @@
 			<property id="texture" type="string" use_plain_value="true">
 				<set text="set_transform_image({path}, {value})" global = "true"/>
             </property>
+			<property id="texture_object" type="string" use_plain_value="true">
+				<set text="set_transform_texture_object({path}, {value})" global = "true"/>
+            </property>
 			<property id="material" type="string" use_plain_value="true">
 				<set text="set_transform_material({path}, {value})" global = "true"/>
             </property>
@@ -111,7 +119,7 @@
 		</class>
 				
 		<class id="light"> 					
-			<property id="color" type="string" dont_init="true"/>			
+			<property id="color" type="string" dont_init="true" use_plain_value="true"/>			
 			<property id="position" type="vector3d"/>
 			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>

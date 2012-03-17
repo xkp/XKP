@@ -23,11 +23,8 @@ if (params)
 					if(i > 0) out() {,}					
 					if(prop.output_id == "src") 
 						out(){map:new THREE.Texture(streamer.get_resource('<xss:e v="obj.src"/>').data),}
-					else
-					if(prop.use_plain_value)
-						out() {<xss:e v="prop.output_id"/>:<xss:e v="prop.value"/>}
-					else
-						out() {<xss:e v="prop.output_id"/>:<xss:e v="prop.render_value()"/>}
+					else					
+						out() {<xss:e v="prop.output_id"/>:<xss:e v="prop.value()"/>}
 					i++;
 				}
 				}

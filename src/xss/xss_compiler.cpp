@@ -1207,6 +1207,11 @@ XSSObject xss_compiler::analyze_expression(const param_list params)
         xss_throw(error);
       }
 
+    if (expr == "group_scale")
+    {
+      str debug("xxx");
+    }
+
     XSSObject result(new xss_object);
 
     xs_utils   xs;
