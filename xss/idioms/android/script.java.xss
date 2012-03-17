@@ -112,12 +112,19 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 			{
 				out(indent = 2, marker = "declarations")
 				{
-					XKPUtils util = new XKPUtils();
+					XKPUtils util = new XKPUtils(this);
 				}
 				
 				out(indent = 2, marker = "defined_class_util")
 				{
 					public class XKPUtils <xss:open_brace/>
+						private Activity mActivity;
+						private ArrayList<XKPPackage> mPackages;
+
+						private XKPUtils(Activity act) <xss:open_brace/>
+							mActivity = act;
+							mPackages = new ArrayList<XKPPackage>();
+						<xss:close_brace/>
 				}
 				
 				class_utils = true;
@@ -384,7 +391,7 @@ void initCallers() {
     }
 	else
 	{
-		compiler.inject("render_type_initialization", clazz = clazz, bnd = base_namespace, app = appName);
+		compiler.inject("render_type_initialization", clazz = clazz, bns = base_namespace, app = appName);
 	}
 	
 	// render other idiom scripts

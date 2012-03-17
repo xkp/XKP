@@ -1,7 +1,8 @@
 on pre_process(obj)
 {
 	if(obj.id == "")
-		obj.output_id = compiler.genid(obj.class_name);
+		obj.id = compiler.genid(obj.class_name);
+		//obj.output_id = compiler.genid(obj.class_name);
 
 	// flatting properties
 	for(var p in obj.properties)
@@ -100,7 +101,7 @@ on render_initialization(clazz, bns, app)
 
 method render_imports(clazz, bns)
 {
-	compiler.log("Begin Rendering Android Imports...");	
+	compiler.log("Rendering Android Imports...");
 	
 	//TRACE: log
 	//compiler.log("### Begin Rendering Android Imports...");

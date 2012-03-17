@@ -13,6 +13,7 @@ import xkp.android.libs.Layout.XKPLayout;
 						import android.view.View.OnFocusChangeListener;
 						import android.widget.Button;
 						import android.text.method.KeyListener;
+						import xkp.android.libs.Widget.XKPSwitcher;
 						import android.widget.TextView;
 						import android.widget.EditText;
 						import android.widget.CheckBox;

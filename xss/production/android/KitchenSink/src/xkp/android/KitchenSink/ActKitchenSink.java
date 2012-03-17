@@ -20,7 +20,9 @@ import xkp.android.libs.Layout.XKPLayout;
 						import android.text.method.KeyListener;
 						import android.widget.ToggleButton;
 						import android.widget.ImageButton;
+						import android.graphics.Bitmap;
 						import android.widget.ImageView;
+						import xkp.android.libs.Widget.XKPPackage;
 						import android.widget.TextView;
 						import android.widget.EditText;
 						import android.widget.CheckBox;
@@ -33,11 +35,12 @@ import xkp.android.libs.Layout.XKPLayout;
 						import android.widget.ProgressBar;
 						import android.widget.SeekBar;
 						import android.widget.SeekBar.OnSeekBarChangeListener;
+						import xkp.android.libs.Widget.XKPPackage;
 		public class ActKitchenSink 
 						extends Activity
 {
 				private TabHost kitchen;
-					XKPUtils util = new XKPUtils();
+					XKPUtils util = new XKPUtils(this);
 				private XKPLayout __div1;
 				private Button btn1;
 				private ToggleButton toggle1;
@@ -64,6 +67,23 @@ import xkp.android.libs.Layout.XKPLayout;
 				private ProgressBar prgbar3;
 				private ProgressBar prgbar4;
 				private SeekBar seekb1;
+				private XKPPackage __resources1;
+			private String [] mResources___resources1_XKPName = {
+				"dialog",
+				"emulator"
+			};
+			private String [] mResources___resources1_DroidName = {
+				"dialog.png",
+				"emulator.png"
+			};
+			private Integer [] mResources___resources1_Type = {
+				XKPPackage.BITMAP_RESOURCE,
+				XKPPackage.BITMAP_RESOURCE
+			};
+			private Integer [] mResources___resources1_Id = {
+				R.drawable.dialog,
+				R.drawable.emulator
+			};
 	ActKitchenSink application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
@@ -107,8 +127,19 @@ void initCallers() {
 }
 			void initInstances() {
 				application = this;
+				__resources1 = new XKPPackage(this, 
+					mResources___resources1_XKPName, mResources___resources1_DroidName, 
+					mResources___resources1_Type, mResources___resources1_Id, true);
+				util.addXKPPackage(__resources1);
+					__resources1.load();
 			}
 					public class XKPUtils {
+						private Activity mActivity;
+						private ArrayList<XKPPackage> mPackages;
+						private XKPUtils(Activity act) {
+							mActivity = act;
+							mPackages = new ArrayList<XKPPackage>();
+						}
 						void setupTabHost(int id, ArrayList<String> tabs) {
 			TabHost tabh = (TabHost) findViewById(id);
 			tabh.setup();
@@ -127,16 +158,10 @@ void initCallers() {
 				tabh.addTab(spec);
 			}
 		}
-		void setResourceImageView(int id, String resource) {
-			int rpos = resource.lastIndexOf("/");
-			String n_res = resource.substring(rpos + 1);
-			rpos = n_res.lastIndexOf(".");
-			String res = n_res.substring(0, rpos);
-			int resId = getResources().getIdentifier(
-							res, "drawable", 
-							getContext().getPackageName());
-			ImageView img = (ImageView) findViewById(id);
-			img.setImageResource(resId);
+		public void setResourceImageView(int id, String resource) {
+			ImageView img = (ImageView) mActivity.findViewById(id);
+			img.setImageBitmap(getImageFromResource(resource));
 		}
+		public void addXKPPackage(XKPPackage pack) {			mPackages.add(pack);		}				private int getResourceIdentifierFromPackages(String resource, XKPPackage [] outWrapperPack) {			for(int i = 0; i < mPackages.size(); i++) {				XKPPackage pack = mPackages.get(i);				int resId = pack.getResourceIdentifier(resource);				if(resId != -1) {					outWrapperPack[0] = pack;					return resId;				}			}			outWrapperPack[0] = null;			return -1;		}				public Bitmap getImageFromResource(String resource) {			XKPPackage pack = null;			XKPPackage [] wrapperPack = new XKPPackage [] { pack };  						int resId = getResourceIdentifierFromPackages(resource, wrapperPack);			pack = wrapperPack[0];						if(pack != null) {				return pack.getBitmapResource(resId);			}						return null;		}
 			}
 }

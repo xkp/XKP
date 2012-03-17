@@ -1,12 +1,12 @@
-package xkp.android.Gallery;
+package xkp.android.ImagesChanger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import android.view.View;
 			import android.app.Activity;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
-						import android.widget.Gallery;
 						import android.graphics.Bitmap;
+						import android.widget.ImageView;
 						import xkp.android.libs.Widget.XKPPackage;
 						import android.view.View.OnClickListener;
 						import android.view.View.OnLongClickListener;
@@ -14,36 +14,38 @@ import xkp.android.libs.Layout.XKPLayout;
 						import android.view.View.OnTouchListener;
 						import android.view.View.OnKeyListener;
 						import android.view.View.OnFocusChangeListener;
-						import android.view.ViewGroup;
-						import android.widget.ImageView;
-						import android.widget.BaseAdapter;
-						import android.content.Context;
+						import android.widget.Button;
+						import android.text.method.KeyListener;
+						import android.widget.TextView;
 						import xkp.android.libs.Widget.XKPPackage;
-		public class ActGallery 
+		public class ActImagesChanger 
 						extends Activity
+							implements OnClickListener
 {
-				private Gallery gallery;
+				private ImageView album;
 					XKPUtils util = new XKPUtils(this);
+				private Button changer;
+				private TextView identifier;
 				private XKPPackage __resources1;
 			private String [] mResources___resources1_XKPName = {
-				"img01",
-				"img02",
-				"img03",
-				"img04",
-				"img05",
-				"img06",
-				"img07",
-				"img08"
+				"img1",
+				"img2",
+				"img3",
+				"img4",
+				"img5",
+				"img6",
+				"img7",
+				"img8"
 			};
 			private String [] mResources___resources1_DroidName = {
-				"gallery_photo_1.jpg",
-				"gallery_photo_2.jpg",
-				"gallery_photo_3.jpg",
-				"gallery_photo_4.jpg",
-				"gallery_photo_5.jpg",
-				"gallery_photo_6.jpg",
-				"gallery_photo_7.jpg",
-				"gallery_photo_8.jpg"
+				"photo_1.jpg",
+				"photo_2.jpg",
+				"photo_3.jpg",
+				"photo_4.jpg",
+				"photo_5.jpg",
+				"photo_6.jpg",
+				"photo_7.jpg",
+				"photo_8.jpg"
 			};
 			private Integer [] mResources___resources1_Type = {
 				XKPPackage.BITMAP_RESOURCE,
@@ -56,16 +58,16 @@ import xkp.android.libs.Layout.XKPLayout;
 				XKPPackage.BITMAP_RESOURCE
 			};
 			private Integer [] mResources___resources1_Id = {
-				R.drawable.gallery_photo_1,
-				R.drawable.gallery_photo_2,
-				R.drawable.gallery_photo_3,
-				R.drawable.gallery_photo_4,
-				R.drawable.gallery_photo_5,
-				R.drawable.gallery_photo_6,
-				R.drawable.gallery_photo_7,
-				R.drawable.gallery_photo_8
+				R.drawable.photo_1,
+				R.drawable.photo_2,
+				R.drawable.photo_3,
+				R.drawable.photo_4,
+				R.drawable.photo_5,
+				R.drawable.photo_6,
+				R.drawable.photo_7,
+				R.drawable.photo_8
 			};
-	ActGallery application;
+	ActImagesChanger application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -75,8 +77,10 @@ import xkp.android.libs.Layout.XKPLayout;
                 initCallers();
 			}
 			private void bindViews() {
-				gallery = (Gallery) findViewById(R.id.gallery);
-					gallery.setAdapter(new ImageAdapter(this));
+				album = (ImageView) findViewById(R.id.album);
+				changer = (Button) findViewById(R.id.changer);
+					changer.setOnClickListener(this);
+				identifier = (TextView) findViewById(R.id.identifier);
 	}
 void initCallers() {
 }
@@ -88,54 +92,22 @@ void initCallers() {
 				util.addXKPPackage(__resources1);
 					__resources1.load();
 			}
-	public class ImageAdapter extends BaseAdapter {
-		private static final int ITEM_WIDTH = 236;
-		private static final int ITEM_HEIGHT = 188;
-		private final Context mContext;
-		private final float mDensity;
-		private final Integer[] mImageIds = {
-				R.drawable.gallery_photo_1,
-				R.drawable.gallery_photo_2,
-				R.drawable.gallery_photo_3,
-				R.drawable.gallery_photo_4,
-				R.drawable.gallery_photo_5,
-				R.drawable.gallery_photo_6,
-				R.drawable.gallery_photo_7,
-				R.drawable.gallery_photo_8
-					};
-		public ImageAdapter(Context ctx) {
-			mContext = ctx;
-			mDensity = ctx.getResources().getDisplayMetrics().density;
-		}
-		@Override
-		public int getCount() {
-			return mImageIds.length;
-		}
-		@Override
-		public Object getItem(int position) {
-			return position;
-		}
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			ImageView imageView;
-			if (convertView == null) {
-				convertView = new ImageView(mContext);
-				imageView = (ImageView) convertView;
-				imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-				imageView.setLayoutParams(new Gallery.LayoutParams(
-						(int) (ITEM_WIDTH * mDensity + 0.5f),
-						(int) (ITEM_HEIGHT * mDensity + 0.5f)));
-			} else {
-				imageView = (ImageView) convertView;
+						public void onClick(View v) {
+							switch (v.getId()) {
+									case R.id.changer:
+										onClickchanger();
+										break;
+						} //switch
+						}
+			private void onClickchanger() {
+				prop_application_currentImage = prop_application_currentImage + 1;
+prop_application_currentImage = prop_application_currentImage % prop_application_resources.size();
+String currentResource = prop_application_resources.get(prop_application_currentImage);
+util.setResourceImageView(album, currentResource);
+identifier.setText(currentResource);
 			}
-			imageView.setImageResource(mImageIds[position]);
-			return imageView;
-		}
-	}
+			private Integer prop_application_currentImage = 0;
+			private ArrayList<String> prop_application_resources = new ArrayList(Arrays.asList( new Object [] {"img1", "img2", "img3", "img4", "img5", "img6", "img7", "img8"} ));
 					public class XKPUtils {
 						private Activity mActivity;
 						private ArrayList<XKPPackage> mPackages;

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<xkp.android.libs.Layout.XKPLayout 
+				xmlns:android="http://schemas.android.com/apk/res/android" 
+				xmlns:xkp="http://schemas.android.com/apk/res/xkp.android.ImagesChanger" 
+				android:id="@+id/application" 
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				xkp:placement="client"
+			>
+				<ImageView android:id="@+id/album"
+				android:src="@drawable/photo_1"
+				android:layout_width="320dp"
+				android:layout_height="120dp"
+				xkp:placement="center"
+			>
+				</ImageView>
+				<Button android:id="@+id/changer"
+				android:layout_height="50dp"
+				android:text="@string/res0"
+				xkp:placement="bottom"
+				android:layout_width="wrap_content"
+			>
+				</Button>
+				<TextView android:id="@+id/identifier"
+				android:layout_height="40dp"
+				xkp:placement="top"
+				android:layout_width="wrap_content"
+			>
+				</TextView>
+			</xkp.android.libs.Layout.XKPLayout>

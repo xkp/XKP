@@ -1,19 +1,32 @@
 <module id="android_resources" src="resources.xs">
 
-	<instance id="resources" no_render="true">
-	</instance>
-	
 	<types>
+		<class id="resources" res_container="true" res_main_container="true" output_id="XKPPackage" sub_ns="libs.Widget">
+			<array id="imports">
+				<object import="xkp.android.libs.Widget.XKPPackage"/>
+			</array>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Widget/" src_filename="XKPPackage.java"/>
+			</array>
+			
+			<method id="load" type="bool"/>
+			
+			<event id="loaded" output_id="onPackageLoaded" interface="OnResourcePackageListener" def_args="XKPPackage pack" set_handle="setOnResourcePackageListener" set_param_hnd="this"/>
+		</class>
 	
-		<class id="image" no_render="true" droid_location="/res/drawable/" droid_type="drawable">
+		<class id="package" super="resources" res_container="true" output_id="XKPPackage" sub_ns="libs.Widget">
+		</class>
+	
+		<class id="image" no_render="true" resrc="true" droid_location="drawable" droid_type="BITMAP_RESOURCE">
 			<property id="src" type="string"/>
 		</class>
 		
-		<class id="audio" no_render="true" droid_location="/res/raw/" driod_type="raw">
+		<class id="audio" no_render="true" resrc="true" droid_location="raw" droid_type="AUDIO_RESOURCE">
 			<property id="src" type="string"/>
 		</class>
 		
-		<class id="video" no_render="true" droid_location="/res/raw/" driod_type="raw">
+		<class id="video" no_render="true" resrc="true" droid_location="raw" droid_type="VIDEO_RESOURCE">
 			<property id="src" type="string"/>
 		</class>
 		

@@ -6,7 +6,7 @@ log: Rendering Android project...
 log: API Level = 4
 log: Rendering Android Types...
 log: Rendering Sequence Types...
-log: Begin Rendering Android Imports...
+log: Rendering Android Imports...
 log: Rendering Sequence...
 log: Rendering instance: anim1
 log: Rendering instance: anim1
@@ -32,13 +32,14 @@ Success are greateful
 log: Rendering Android project...
 log: API Level = 4
 log: Rendering Android Types...
-log: Begin Rendering Android Imports...
+log: Rendering Android Imports...
 log: Rendering instance: picture
 log: Rendering instance: lname
 log: Rendering instance: lsurname
 log: Rendering instance: lemployment
 log: Rendering class: character
-log: Begin Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
 log: Copying resource files...
 log: Rendering instance: aladdin
 log: Rendering instance: mickey
@@ -54,8 +55,8 @@ Success are greateful
 log: Rendering Android project...
 log: API Level = 4
 log: Rendering Android Types...
-log: Begin Rendering Android Imports...
-log: Rendering instance: 
+log: Rendering Android Imports...
+log: Rendering instance: __div1
 log: Rendering instance: btnLeft
 log: Rendering instance: btnRight
 log: Rendering instance: swtStates
@@ -86,7 +87,7 @@ Success are greateful
 log: Rendering Android project...
 log: API Level = 4
 log: Rendering Android Types...
-log: Begin Rendering Android Imports...
+log: Rendering Android Imports...
 log: Rendering instance: div1
 log: Rendering instance: c1
 log: Rendering instance: r1
@@ -106,9 +107,27 @@ Success are greateful
 log: Rendering Android project...
 log: API Level = 4
 log: Rendering Android Types...
-log: Begin Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
 log: Copying resource files...
 log: Rendering instance: gallery
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+
+Success are greateful
+===[ images.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Copying resource files...
+log: Rendering instance: album
+log: Rendering instance: changer
+log: Rendering instance: identifier
 log: Rendering instance: application
 log: Copying default files...
 log: Rendering default files...
@@ -120,17 +139,18 @@ Success are greateful
 log: Rendering Android project...
 log: API Level = 4
 log: Rendering Android Types...
-log: Begin Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
 log: Copying resource files...
 log: Rendering instance: kitchen
-log: Rendering instance: 
+log: Rendering instance: __div1
 log: Rendering instance: btn1
 log: Rendering instance: toggle1
 log: Rendering instance: imgbtn1
 log: Rendering instance: lbl1
 log: Rendering instance: edit1
 log: Rendering instance: chkb1
-log: Rendering instance: 
+log: Rendering instance: __scroller1
 log: Rendering instance: rdgTab3
 log: Rendering instance: radio1
 log: Rendering instance: radio2
@@ -141,9 +161,9 @@ log: Rendering instance: radio6
 log: Rendering instance: radio7
 log: Rendering instance: radio8
 log: Rendering instance: radio9
-log: Rendering instance: 
+log: Rendering instance: __scroller2
 log: Rendering instance: img1
-log: Rendering instance: 
+log: Rendering instance: __div2
 log: Rendering instance: prgbar1
 log: Rendering instance: prgbar2
 log: Rendering instance: prgbar3
@@ -160,7 +180,7 @@ Success are greateful
 log: Rendering Android project...
 log: API Level = 4
 log: Rendering Android Types...
-log: Begin Rendering Android Imports...
+log: Rendering Android Imports...
 log: Rendering instance: lblFirstName
 log: Rendering instance: edtFirstName
 log: Rendering instance: lblLastName
@@ -179,7 +199,7 @@ Success are greateful
 log: Rendering Android project...
 log: API Level = 4
 log: Rendering Android Types...
-log: Begin Rendering Android Imports...
+log: Rendering Android Imports...
 log: Rendering instance: btnTouchme
 log: Rendering instance: application
 log: Copying default files...
@@ -1909,5 +1929,80 @@ Success are greateful
 ===[ xssY.project.xml ]================(Tests)
 
 
-Error [404] File not found
-	file = d:/xkp/xss/tests/xss12.app.xsERROR: Project:  xssY.project.xml
+log: PRE_PROCESS xssY_idiom2: classifying class
+log: PRE_PROCESS xssY_idiom2: clazz_1 i_xssY
+log: PRE_PROCESS xssY_idiom2: clazz_2 x_xssY
+log: PRE_PROCESS xssY_idiom2: application application
+log: PRE_PROCESS xssY_idiom2: __resources1 resources
+log: PRE_PROCESS xssY_idiom2: img01 image
+log: PRE_PROCESS xssY_idiom2: img02 image
+log: PRE_PROCESS xssY_idiom2: p1 package
+log: PRE_PROCESS xssY_idiom2: img03 image
+log: PRE_PROCESS xssY_idiom2: img04 image
+log: PRE_PROCESS xssY_idiom2: i1 i_xssY1
+log: PRE_PROCESS xssY_idiom2: i2 i_xssY2
+log: PRE_PROCESS xssY_idiom2: classing classifying
+log: INSIDE WIDGET!!
+log: 0
+log: processing instance __resources1
+log: processing instance img01
+log: processing instance img02
+log: processing instance p1
+log: processing instance img03
+log: processing instance img04
+log: properties size: 0
+log: methods size: 0
+log: events size: 0
+log: children size: 1
+		FROM render_instances on xssY_idiom (1)
+	
+			INSTANCE: i1
+		
+		FROM render_instances on xssY_idiom (2)
+	
+			INSTANCE:  PARENT: application CHILDRENS: 3
+		
+			INSTANCE: img01 PARENT:  CHILDRENS: 0
+		
+			INSTANCE: img02 PARENT:  CHILDRENS: 0
+		
+			INSTANCE: p1 PARENT:  CHILDRENS: 2
+		
+			INSTANCE: img03 PARENT: p1 CHILDRENS: 0
+		
+			INSTANCE: img04 PARENT: p1 CHILDRENS: 0
+		
+		Rendering User Types on xssY.idiom (1)...
+	
+		Rendering User Types on xssY.idiom (2)...
+	
+			[instance: i1]
+		
+			[instance: application]
+		
+					private void click() {
+				
+						Display disp;
+Integer w = disp.getWidth();
+Integer h = disp.getHeight();
+					
+					}
+				
+			instance id= "i1" idiom= "xssY_idiom1"
+		
+			instance id= "application" idiom= ""
+		
+			instance id= "" idiom= "xssY_idiom2"
+		
+			instance id= "img01" idiom= "xssY_idiom2"
+		
+			instance id= "img02" idiom= "xssY_idiom2"
+		
+			instance id= "p1" idiom= "xssY_idiom2"
+		
+			instance id= "img03" idiom= "xssY_idiom2"
+		
+			instance id= "img04" idiom= "xssY_idiom2"
+		
+
+Success are greateful

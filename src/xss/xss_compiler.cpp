@@ -1515,6 +1515,24 @@ void xss_compiler::read_instances(XSSObject module_data, XSSApplicationRenderer 
     for(; it != nd; it++)
       {
         XSSObject singleton = *it;
+
+        XSSType super;
+        if (singleton->has("super"))
+          {
+            str super_name = singleton->get<str>("super", str());
+            super = ctx->get_type(super_name);
+            if (!super)
+              {
+                param_list error;
+                error.add("id", SProjectError);
+                error.add("desc", SUnknownClass);
+                error.add("class", super_name);
+                xss_throw(error);
+              }
+          }
+
+        singleton->set_type(super);
+
         ctx->register_symbol(RESOLVE_INSTANCE, singleton->id(), singleton);
       }
   }
@@ -2607,8 +2625,8 @@ bool xss_string::empty(const str& s)
 
 str xss_string::erase(const str& s, int pos, int npos)
   {
-    assert(false);
-    return s.substr(pos, npos);
+    str r = s;
+    return r.erase(pos, npos);
   }
 
 str xss_string::substr(const str& s, int pos, int npos)
@@ -2618,14 +2636,14 @@ str xss_string::substr(const str& s, int pos, int npos)
 
 str xss_string::strip_spaces(const str& s)
   {
-    size_t found = s.find(" ", 0);
+	  str r = s;
+	  size_t found = r.find(" ", 0);
     while(found != str::npos)
       {
-        s.erase(found, 1);
-        found = s.find(" ", found);
+        r.erase(found, 1);
+        found = r.find(" ", found);
       }
-
-    return s;
+    return r;
   }
 
 //xss_math
