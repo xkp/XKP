@@ -1,0 +1,8 @@
+<xss:parameter id="type"/>
+<xss:parameter id="args"/>
+
+new <xss:e v="type.id"/>(
+<xss:code>
+compiler.xss("constructor_args.xss", type, args);
+</xss:code>
+)

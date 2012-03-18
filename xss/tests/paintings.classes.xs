@@ -186,14 +186,18 @@ class social_button : img
     //keep initialization value
     float ox;
     float oy;
-    float owidth;
-    float oheight;
-
-    on init()
+ 
+    on mousein()
     {
         ox = x;
         oy = y;
-        owidth = width;
-        oheight = height;
+        shrink.stop();
+        grow.start();
+    }
+
+    on mouseout()
+    {
+        grow.stop();
+        shrink.start();
     }
 }

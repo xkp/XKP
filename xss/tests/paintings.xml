@@ -60,9 +60,9 @@
 	<img id="lens1" x="225" y="225" width="250" height="250" alpha="0" src="images/pictures/lente1.png"/>
 	<img id="lens2" x="220" y="220" width="260" height="260" alpha="0" src="images/pictures/lente2.png"/>
 
-    <img id="facebook" x="880" y="8" width="24" height="24" alpha="0" src="images/pictures/facebook.png"/>
-	<img id="twitter" x="845" y="8" width="24" height="24" alpha="0" src="images/pictures/twitter.png"/>
-    <img id="email" x="810" y="8" width="24" height="24" alpha="0" src="images/pictures/photobucket.png"/>
+    <social_button id="facebook" x="880" y="8" width="24" height="24" alpha="0" src="images/pictures/facebook.png"/>
+    <social_button id="twitter" x="845" y="8" width="24" height="24" alpha="0" src="images/pictures/twitter.png"/>
+    <social_button id="email" x="810" y="8" width="24" height="24" alpha="0" src="images/pictures/photobucket.png"/>
 
     <button id="btn1" x="0" y="300" width="64" height="64" rotation="180" alpha="0" up="images/pictures/arrow_up.png" down="images/pictures/arrow_down.png"/>
 	
