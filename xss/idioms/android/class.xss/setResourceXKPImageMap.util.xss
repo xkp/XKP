@@ -1,4 +1,13 @@
 		public void setResourceXKPImageMap(int id, String resource) {
 			XKPImageMap img = (XKPImageMap) mActivity.findViewById(id);
-			img.setImageMap(getImageFromResource(resource));
+			if(img == null) {
+				for (ViewGroup viewgrp : mViewGroup) {
+					img = (XKPImageMap) viewgrp.findViewById(id);
+					if(img != null) break;
+				}
+			}
+			if(img != null) img.setImageMap(getImageFromResource(resource));
+		}
+		public void setResourceXKPImageMap(XKPImageMap img, String resource) {
+			if(img != null) img.setImageMap(getImageFromResource(resource));
 		}

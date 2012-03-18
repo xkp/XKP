@@ -651,20 +651,14 @@
 		
 		<class id="img" super="IWidget" output_id="ImageView">
 			<array id="imports">
-				<object import="android.graphics.Bitmap"/>
 				<object import="android.widget.ImageView"/>
-				<object import="xkp.android.libs.Widget.XKPPackage"/>
+				<object import="xkp.android.libs.Widget.XKPUtils"/>
 			</array>
 			
 			<property id="src" type="string" output_id="src" ns="android" res_type="drawable">
 				<!--<set text="util.setResourceImageView(R.id.{path}, {value})" global="true"/>-->
 				<set text="util.setResourceImageView({path}, {value})" global="true"/>
 			</property>
-			<!-- TODO: make that res_id work with only one struct, source by resource identifier
-			<property id="res_id" type="string" output_id="src" ns="android" res_type="resource">
-				<set text="util.setResourceImageView(R.id.{path}, {value})" global="true"/>
-			</property>
-			-->
 			
 			<property id="scale" type="EScaleType" output_id="scaleType" ns="android">
 				<get text="getScaleType()"/>
@@ -684,8 +678,7 @@
 			</method>-->
 			
 			<array id="utils">
-				<object name="setResourceImageView" file_name="setResourceImageView.util.xss"/>
-				<object name="XKPPackageResources" file_name="XKPPackageResources.util.xss"/>
+				<object name="setResourceImageView" file_name="setResourceImageView.util.xss" import="android.widget.ImageView"/>
 			</array>
 		</class>
 		
@@ -700,7 +693,8 @@
 			</array>
 			
 			<property id="map_src" type="string" ns="android" res_type="drawable">
-				<set text="util.setResourceXKPImageMap(R.id.{path}, {value})" global="true"/>
+				<!--<set text="util.setResourceXKPImageMap(R.id.{path}, {value})" global="true"/>-->
+				<set text="util.setResourceXKPImageMap({path}, {value})" global="true"/>
 			</property>
 			
 			<!--TODO: zoom -->
@@ -726,7 +720,7 @@
 			</property>
 			
 			<array id="utils">
-				<object name="setResourceXKPImageMap" file_name="setResourceXKPImageMap.util.xss"/>
+				<object name="setResourceImageMap" file_name="setResourceXKPImageMap.util.xss" import="xkp.android.libs.Widget.XKPImageMap"/>
 			</array>
 		</class>
 		
@@ -925,7 +919,7 @@
 			</method>-->
 			
 			<array id="utils">
-				<object name="setupTabHost" file_name="setupTabHost.util.xss"/>
+				<object name="setupTabHost" file_name="setupTabHost.util.xss" import="android.widget.TabHost"/>
 			</array>
 			
 			<array id="inits">
@@ -983,8 +977,7 @@
 		<class id="imagegallery" super="IWidget" output_id="Gallery">
 			<array id="imports">
 				<object import="android.widget.Gallery"/>
-				<object import="android.graphics.Bitmap"/>
-				<object import="xkp.android.libs.Widget.XKPPackage"/>
+				<object import="xkp.android.libs.Widget.XKPUtils"/>
 			</array>
 			
 			<property id="spacing" type="int" ns="android" res_type="dimension">
@@ -998,8 +991,7 @@
 			</property>
 			
 			<array id="utils">
-				<object name="setResourceImageView" file_name="setResourceImageView.util.xss"/>
-				<object name="XKPPackageResources" file_name="XKPPackageResources.util.xss"/>
+				<object name="setResourceImageView" file_name="setResourceImageView.util.xss" import="android.widget.ImageView"/>
 			</array>
 			
 			<import id="IClassImageAdapter"/>

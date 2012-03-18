@@ -1,4 +1,13 @@
 		public void setResourceImageView(int id, String resource) {
 			ImageView img = (ImageView) mActivity.findViewById(id);
-			img.setImageBitmap(getImageFromResource(resource));
+			if(img == null) {
+				for (ViewGroup viewgrp : mViewGroup) {
+					img = (ImageView) viewgrp.findViewById(id);
+					if(img != null) break;
+				}
+			}
+			if(img != null) img.setImageBitmap(getImageFromResource(resource));
+		}
+		public void setResourceImageView(ImageView img, String resource) {
+			if(img != null) img.setImageBitmap(getImageFromResource(resource));
 		}

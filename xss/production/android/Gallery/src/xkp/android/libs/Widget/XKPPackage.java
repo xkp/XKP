@@ -104,7 +104,14 @@ public class XKPPackage {
 	public Bitmap getBitmapResource(int resId) {
 		return mBitmapResources.get(resId);
 	}
-	private int getResourceIdFromXKPName(String resName) {
+	public Bitmap getBitmapResourceFromPosition(int position) {
+		if(position >= 0 && position < mBitmapResources.size()) {
+			int resId = mResourceId.get(position);
+			return mBitmapResources.get(resId);
+		}
+		return null;
+	}
+	public int getResourceIdFromXKPName(String resName) {
 		for(int i = 0; i < mResourceXKPName.size(); i++) {
 			String name = mResourceXKPName.get(i); 
 			if(name.contains(resName) || resName.contains(name))
@@ -112,7 +119,7 @@ public class XKPPackage {
 		}
 		return -1;
 	}
-	private int getPositionFromXKPName(String resName) {
+	public int getPositionFromXKPName(String resName) {
 		for(int i = 0; i < mResourceXKPName.size(); i++) {
 			String name = mResourceXKPName.get(i);
 			if(name.contains(resName) || resName.contains(name))
@@ -120,7 +127,7 @@ public class XKPPackage {
 		}
 		return -1;
 	}
-	private int getResourceIdFromDroidName(String resName) {
+	public int getResourceIdFromDroidName(String resName) {
 		for(int i = 0; i < mResourceDroidName.size(); i++) {
 			String name = mResourceDroidName.get(i); 
 			if(name.contains(resName) || resName.contains(name))
@@ -128,15 +135,15 @@ public class XKPPackage {
 		}
 		return -1;
 	}
-	private int getPositionFromDroidName(String resName) {
+	public int getPositionFromDroidName(String resName) {
 		for(int i = 0; i < mResourceDroidName.size(); i++) {
 			String name = mResourceDroidName.get(i); 
-			if(name.contains(resName) || resName.contains(name))
+			if(name.contains(resName))
 				return i;
 		}
 		return -1;
 	}
-	private int getResourcePosition(String resource) {
+	public int getResourcePosition(String resource) {
 		// first, look at in xkp names
 		Integer position = getPositionFromXKPName(resource);
 		// then, in source identifiers
@@ -146,11 +153,14 @@ public class XKPPackage {
 	}
 	public int getResourceIdentifier(String resource) {
 		// first, look at in xkp names
-		int identifier = getResourceIdFromXKPName(resource);
+		Integer identifier = getResourceIdFromXKPName(resource);
 		// then, in source identifiers
 		if(identifier == -1)
 			identifier = getResourceIdFromDroidName(resource);
 		return identifier;
+	}
+	public int getResourceCount() {
+		return mResourceXKPName.size();
 	}
 	public void setOnResourcePackageListener(OnResourcePackageListener l) {
 		mOnResourcePackageListener = l;

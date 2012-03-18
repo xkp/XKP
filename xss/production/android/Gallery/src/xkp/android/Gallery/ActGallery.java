@@ -5,9 +5,9 @@ import android.view.View;
 			import android.app.Activity;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
+			import xkp.android.libs.Widget.XKPUtils;
 						import android.widget.Gallery;
-						import android.graphics.Bitmap;
-						import xkp.android.libs.Widget.XKPPackage;
+						import xkp.android.libs.Widget.XKPUtils;
 						import android.view.View.OnClickListener;
 						import android.view.View.OnLongClickListener;
 						import android.view.MotionEvent;
@@ -23,7 +23,7 @@ import xkp.android.libs.Layout.XKPLayout;
 						extends Activity
 {
 				private Gallery gallery;
-					XKPUtils util = new XKPUtils(this);
+			public static XKPUtils util;
 				private XKPPackage __resources1;
 			private String [] mResources___resources1_XKPName = {
 				"img01",
@@ -69,16 +69,19 @@ import xkp.android.libs.Layout.XKPLayout;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
+                initCallers();
+				initInstances();
 				setContentView(R.layout.main);
 				bindViews();
-				initInstances();
-                initCallers();
 			}
 			private void bindViews() {
 				gallery = (Gallery) findViewById(R.id.gallery);
 					gallery.setAdapter(new ImageAdapter(this));
 	}
 void initCallers() {
+			util = new XKPUtils();
+			ActGallery.util.addView(this);
+			util = ActGallery.util;
 }
 			void initInstances() {
 				application = this;
@@ -136,17 +139,4 @@ void initCallers() {
 			return imageView;
 		}
 	}
-					public class XKPUtils {
-						private Activity mActivity;
-						private ArrayList<XKPPackage> mPackages;
-						private XKPUtils(Activity act) {
-							mActivity = act;
-							mPackages = new ArrayList<XKPPackage>();
-						}
-						public void setResourceImageView(int id, String resource) {
-			ImageView img = (ImageView) mActivity.findViewById(id);
-			img.setImageBitmap(getImageFromResource(resource));
-		}
-		public void addXKPPackage(XKPPackage pack) {			mPackages.add(pack);		}				private int getResourceIdentifierFromPackages(String resource, XKPPackage [] outWrapperPack) {			for(int i = 0; i < mPackages.size(); i++) {				XKPPackage pack = mPackages.get(i);				int resId = pack.getResourceIdentifier(resource);				if(resId != -1) {					outWrapperPack[0] = pack;					return resId;				}			}			outWrapperPack[0] = null;			return -1;		}				public Bitmap getImageFromResource(String resource) {			XKPPackage pack = null;			XKPPackage [] wrapperPack = new XKPPackage [] { pack };  						int resId = getResourceIdentifierFromPackages(resource, wrapperPack);			pack = wrapperPack[0];						if(pack != null) {				return pack.getBitmapResource(resId);			}						return null;		}
-			}
 }

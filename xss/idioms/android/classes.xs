@@ -32,9 +32,8 @@ on render_types(app, bns)
 	
 	//TRACE: log
 	//compiler.log("### Begin Rendering Android Types...");
-
-	//compiler.log(this.id);
-	//compiler.log(this.user_types.size);
+	
+	var idiom = compiler.get_idiom("android");
     for(var ut in user_types)
     {
 		//TODO: think very well how to proceed with this
@@ -45,11 +44,13 @@ on render_types(app, bns)
 		{
 			//compiler.log("instance: " + it.id);
 			it.idiom = this;
+			if(it.utils) idiom.need_utils = true;
 		}
 		for(var ch in ut.children)
 		{
 			//compiler.log("child: " + ch.id);
 			ch.idiom = this;
+			if(ch.utils) idiom.need_utils = true;
 		}
 		
 		string output_filename = app + "/src/xkp/android/" + app + "/" + ut.output_id + ".java";
@@ -65,10 +66,15 @@ on render_types(app, bns)
 
 on render_type_initialization(clazz, bns, app)
 {
-	render_imports(clazz);
+	initialization(clazz, bns, app);
 }
 
 on render_initialization(clazz, bns, app)
+{
+	initialization(clazz, bns, app);
+}
+
+method initialization(clazz, bns, app)
 {
 	render_imports(clazz, bns);
 	

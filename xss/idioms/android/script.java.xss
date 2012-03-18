@@ -62,6 +62,7 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 	array<string> utils		 = [];
 	
 	bool class_utils = false;
+	var idiom = compiler.get_idiom("android");
 	
 	for(var inst in clazz.instances)
 	{
@@ -108,27 +109,7 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 		
 		if(inst.utils)
 		{
-			if(!class_utils)
-			{
-				out(indent = 2, marker = "declarations")
-				{
-					XKPUtils util = new XKPUtils(this);
-				}
-				
-				out(indent = 2, marker = "defined_class_util")
-				{
-					public class XKPUtils <xss:open_brace/>
-						private Activity mActivity;
-						private ArrayList<XKPPackage> mPackages;
-
-						private XKPUtils(Activity act) <xss:open_brace/>
-							mActivity = act;
-							mPackages = new ArrayList<XKPPackage>();
-						<xss:close_brace/>
-				}
-				
-				class_utils = true;
-			}
+			if(!idiom.bundle) idiom.bundle = [];
 			
 			for(var util in inst.utils)
 			{
@@ -144,14 +125,12 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 				
 				if(!found4)
 				{
-					//TRACE: log
-					//compiler.log("Adding method " + util.name +" to XKPUtil static class.");
 					utils += util.name;
-					
-					string util_file = "class.xss/" + util.file_name;
-					compiler.xss(util_file, marker = "defined_class_util");
+					idiom.bundle += util;
 				}
 			}
+			
+			class_utils = true;
 		}
 	
 		//find necessary events interfaces without duplicates
@@ -243,11 +222,39 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 		}
 	}
 	
-	if(class_utils)
+	bool need_utils = idiom.need_utils;
+
+	if(class_utils || need_utils)
 	{
-		out(indent = 2, marker = "defined_class_util")
+		out(indent = 2, marker = "declarations")
 		{
-			<xss:close_brace/>
+			public static XKPUtils util;
+		}
+		
+		out(indent = 0, marker = "imports")
+		{
+			import xkp.android.libs.Widget.XKPUtils;
+		}
+				
+		out(indent = 1, marker = "callers")
+		{
+			util = new XKPUtils();
+			<xss:e value="'Act' + appName"/>.util.addView(this);
+			util = <xss:e value="'Act' + appName"/>.util;
+		}
+		
+		if(main == 1)
+		{
+			string src_path = "/src/xkp/android/libs/Widget/";
+			string src_filename = "XKPUtils.java";
+			string dst_path = src_path;
+			string dst_filename = src_filename;
+			
+			string srcf = compiler.full_path("/copy.defaults" + src_path + src_filename);
+			string dstf = appName + dst_path + dst_filename;
+
+			string ipath = compiler.full_path("");
+			compiler.xss(src = srcf, output_file = dstf, appName = appName, base_namespace = base_namespace, bundle = idiom.bundle, idiom_path = ipath);
 		}
 	}
 </xss:code>
@@ -269,6 +276,8 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 			public <xss:e value="clazz.output_id"/>(Context context, AttributeSet attrs) <xss:open_brace/>
 				super(context, attrs);
 				
+				initCallers();
+				
 				LayoutInflater li = (LayoutInflater) context.
 					getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				
@@ -285,10 +294,10 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 			@Override
 			public void onCreate(Bundle savedInstanceState) <xss:open_brace/>
 				super.onCreate(savedInstanceState);
+                initCallers();
+				initInstances();
 				setContentView(R.layout.main);
 				bindViews();
-				initInstances();
-                initCallers();
 			<xss:close_brace/>
 			
 			private void bindViews() <xss:open_brace/>
@@ -468,5 +477,4 @@ void initCallers() {
 </xss:code>
 
 <xss:marker id="defined_class"/>
-<xss:marker id="defined_class_util"/>
 }

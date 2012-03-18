@@ -49,10 +49,10 @@ import xkp.android.libs.Layout.XKPLayout;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
+                initCallers();
+				initInstances();
 				setContentView(R.layout.main);
 				bindViews();
-				initInstances();
-                initCallers();
 			}
 			private void bindViews() {
 				__div1 = (XKPLayout) findViewById(R.id.__div1);

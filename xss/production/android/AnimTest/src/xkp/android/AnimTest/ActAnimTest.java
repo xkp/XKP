@@ -38,10 +38,10 @@ anim3.stop();
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
+                initCallers();
+				initInstances();
 				setContentView(R.layout.main);
 				bindViews();
-				initInstances();
-                initCallers();
 			}
 			private void bindViews() {
 				lbl1 = (TextView) findViewById(R.id.lbl1);

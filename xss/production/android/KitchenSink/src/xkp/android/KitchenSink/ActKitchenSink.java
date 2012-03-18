@@ -5,6 +5,7 @@ import android.view.View;
 			import android.app.Activity;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
+			import xkp.android.libs.Widget.XKPUtils;
 						import android.view.ViewGroup;
 						import android.widget.TabHost;
 						import android.widget.TabHost.TabSpec;
@@ -20,9 +21,8 @@ import xkp.android.libs.Layout.XKPLayout;
 						import android.text.method.KeyListener;
 						import android.widget.ToggleButton;
 						import android.widget.ImageButton;
-						import android.graphics.Bitmap;
 						import android.widget.ImageView;
-						import xkp.android.libs.Widget.XKPPackage;
+						import xkp.android.libs.Widget.XKPUtils;
 						import android.widget.TextView;
 						import android.widget.EditText;
 						import android.widget.CheckBox;
@@ -40,7 +40,6 @@ import xkp.android.libs.Layout.XKPLayout;
 						extends Activity
 {
 				private TabHost kitchen;
-					XKPUtils util = new XKPUtils(this);
 				private XKPLayout __div1;
 				private Button btn1;
 				private ToggleButton toggle1;
@@ -67,6 +66,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				private ProgressBar prgbar3;
 				private ProgressBar prgbar4;
 				private SeekBar seekb1;
+			public static XKPUtils util;
 				private XKPPackage __resources1;
 			private String [] mResources___resources1_XKPName = {
 				"dialog",
@@ -88,10 +88,10 @@ import xkp.android.libs.Layout.XKPLayout;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
+                initCallers();
+				initInstances();
 				setContentView(R.layout.main);
 				bindViews();
-				initInstances();
-                initCallers();
 			}
 			private void bindViews() {
 				kitchen = (TabHost) findViewById(R.id.kitchen);
@@ -124,6 +124,9 @@ import xkp.android.libs.Layout.XKPLayout;
 				seekb1 = (SeekBar) findViewById(R.id.seekb1);
 	}
 void initCallers() {
+			util = new XKPUtils();
+			ActKitchenSink.util.addView(this);
+			util = ActKitchenSink.util;
 }
 			void initInstances() {
 				application = this;
@@ -132,36 +135,5 @@ void initCallers() {
 					mResources___resources1_Type, mResources___resources1_Id, true);
 				util.addXKPPackage(__resources1);
 					__resources1.load();
-			}
-					public class XKPUtils {
-						private Activity mActivity;
-						private ArrayList<XKPPackage> mPackages;
-						private XKPUtils(Activity act) {
-							mActivity = act;
-							mPackages = new ArrayList<XKPPackage>();
-						}
-						void setupTabHost(int id, ArrayList<String> tabs) {
-			TabHost tabh = (TabHost) findViewById(id);
-			tabh.setup();
-			TabHost.TabSpec spec;
-			ViewGroup linear = (ViewGroup) tabh.getChildAt(0);
-			ViewGroup frame = (ViewGroup) linear.getChildAt(1);
-			int szTabs = tabs.size();
-			int childs = frame.getChildCount();
-			int szMin = Math.min(szTabs, childs);
-			for(int i = 0; i < szMin; i++) {
-				String tab = tabs.get(i);
-				int viewId = frame.getChildAt(i).getId();
-				spec = tabh.newTabSpec(tab);
-				spec.setContent(viewId);
-				spec.setIndicator(tab);
-				tabh.addTab(spec);
-			}
-		}
-		public void setResourceImageView(int id, String resource) {
-			ImageView img = (ImageView) mActivity.findViewById(id);
-			img.setImageBitmap(getImageFromResource(resource));
-		}
-		public void addXKPPackage(XKPPackage pack) {			mPackages.add(pack);		}				private int getResourceIdentifierFromPackages(String resource, XKPPackage [] outWrapperPack) {			for(int i = 0; i < mPackages.size(); i++) {				XKPPackage pack = mPackages.get(i);				int resId = pack.getResourceIdentifier(resource);				if(resId != -1) {					outWrapperPack[0] = pack;					return resId;				}			}			outWrapperPack[0] = null;			return -1;		}				public Bitmap getImageFromResource(String resource) {			XKPPackage pack = null;			XKPPackage [] wrapperPack = new XKPPackage [] { pack };  						int resId = getResourceIdentifierFromPackages(resource, wrapperPack);			pack = wrapperPack[0];						if(pack != null) {				return pack.getBitmapResource(resId);			}						return null;		}
 			}
 }
