@@ -202,6 +202,7 @@ namespace xkp
         void        copy_file(const str& src, const str& dst);
         void        out(variant what);
         XSSType     get_type(const str& type);
+        XSSObject   get_instance(const str& instance);
         XSSType     type_of(variant v);
         str         property_set(XSSProperty prop, const str& path, const str& value);
         str         property_get(XSSProperty prop, const str& path);
@@ -278,7 +279,7 @@ namespace xkp
         bool empty(const str& s);
         str  erase(const str& s, int pos = 0, int npos = 0);
         str  substr(const str& s, int pos = 0, int npos = 0);
-        str  strip_spaces(const str& s);
+        str  strip_spaces(str s);
     };
 
   class xss_math
@@ -316,6 +317,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<void,       2>("copy_file",           &xss_compiler::copy_file);
         method_<void,       1>("out",                 &xss_compiler::out);
         method_<XSSType,    1>("get_type",            &xss_compiler::get_type);
+        method_<XSSObject,  1>("get_instance",        &xss_compiler::get_instance);
         method_<XSSType,    1>("type_of",             &xss_compiler::type_of);
         method_<str,        3>("property_set",        &xss_compiler::property_set);
         method_<str,        2>("property_get",        &xss_compiler::property_get);

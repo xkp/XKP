@@ -20,6 +20,7 @@ const str SUnknownTypeFromExpression("Cannot deduce type from assigned expressio
 const str SInconsistentExpressionType("Inconsistent type of expression assigned");
 const str SInvalidAssign("Invalid assign");
 const str SCannotResolveAssign("Cannot resolve assign identifier");
+const str SCannontResolveType("Cannot resolve type");
 
 //source_collector
 void source_collector::property_(xs_property& info)
@@ -167,6 +168,42 @@ void code_type_resolver::while_(stmt_while& info)
     XSSType result = lang_utils::code_type(info.while_code, ctx_);
     if (result)
       return_type_found(result);
+  }
+
+void code_type_resolver::switch_(stmt_switch& info)
+  {
+    XSSType result = lang_utils::code_type(info.default_code, ctx_);
+    if (result)
+      return_type_found(result);
+
+    std::vector<switch_section>::iterator it = info.sections.begin();
+    std::vector<switch_section>::iterator nd = info.sections.end();
+    for(; it != nd; it++)
+      {
+        result = lang_utils::code_type(it->case_code, ctx_);
+        if (result)
+          return_type_found(result);
+      }
+  }
+
+void code_type_resolver::try_(stmt_try& info)
+  {
+    XSSType result = lang_utils::code_type(info.try_code, ctx_);
+    if (result)
+      return_type_found(result);
+
+    result = lang_utils::code_type(info.finally_code, ctx_);
+    if (result)
+      return_type_found(result);
+
+    std::vector<catch_>::iterator it = info.catches.begin();
+    std::vector<catch_>::iterator nd = info.catches.end();
+    for(; it != nd; it++)
+      {
+        result = lang_utils::code_type(it->catch_code, ctx_);
+        if (result)
+          return_type_found(result);
+      }
   }
 
 void code_type_resolver::return_type_found(XSSType type)
@@ -396,6 +433,36 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
             break;
           }
 
+        case op_instantiate:
+          {
+            int args = stack_.top(); stack_.pop();
+            xs_type tt = stack_.top(); stack_.pop();
+
+            for(int i = 0; i < args; i++)
+							stack_.pop();
+
+            XSSType type = ctx_->get_type(tt.name); //td: <>
+            if (!type)
+              {
+                param_list error;
+                error.add("id", SLinker);
+                error.add("desc", SCannontResolveType);
+                error.add("what", tt.name);
+                xss_throw(error);
+              }
+
+            stack_.push(type);
+            break;
+          }
+
+        case op_object:
+          {
+            stack_.pop(); 
+            XSSType type = ctx_->get_type("object"); 
+            stack_.push(type);
+            break;
+          }
+
 				case op_func_call:
           {
             int args = stack_.top(); stack_.pop();
@@ -616,7 +683,7 @@ void expr_object_resolver::exec_operator(operator_type op, int pop_count, int pu
                         if (var_type->is_array())
                           result = var_type->array_type();
                         else
-                          assert(false); //td: throw
+                          not_found_ = true;
                         break;
                       }
                     default:
@@ -714,6 +781,7 @@ void expression_analizer::analyze(expression& expr, XSSContext ctx)
                         case RESOLVE_INSTANCE:
                         case RESOLVE_VARIABLE: break;
                         case RESOLVE_PROPERTY: first_property_ = true; break;
+                        case RESOLVE_TYPE: first_property_ = false; break;
                         default : assert(false); //catch
                       }
                     first_ = fri.value;
@@ -913,6 +981,8 @@ const char* operator_str[] =
     "",     //op_func_call
     "",     //op_array,
     "",     //op_parameter
+    "",     //op_instantiate
+    "",     //op_object
   };
 
 const int operator_precedence[] =
@@ -955,6 +1025,8 @@ const int operator_precedence[] =
     1,  //"",     //op_func_call
     1,  //"",     //op_array,
     1,  //"",     //op_parameter
+    1,  //"new",  //op_instantiate
+    1,  //"{}",   //op_object
   };
 
 str lang_utils::operator_string(operator_type op)

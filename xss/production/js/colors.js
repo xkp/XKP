@@ -146,7 +146,7 @@ Wheat  = 0xF5DEB3
 White  = 0xFFFFFF    
 WhiteSmoke  = 0xF5F5F5    
 Yellow  = 0xFFFF00    
-YellowGreen  = 0x9ACD32   
+YellowGreen  = 0x9ACD32 
 
 aliceblue  = 0xf0f8ff    
 antiquewhite  = 0xfaebd7  
@@ -294,7 +294,7 @@ wheat  = 0xf5deb3
 white  = 0xffffff    
 whitesmoke  = 0xf5f5f5    
 yellow  = 0xffff00    
-yellowgreen  = 0x9acd32  
+yellowgreen  = 0x9acd32   
 
 // Color definitions END
 

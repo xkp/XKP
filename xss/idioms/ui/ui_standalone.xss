@@ -25,7 +25,7 @@ if (!application.ui_package)
 <script type="text/javascript" src="../js/prototype.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
-<script type="text/javascript" src="../js/colors.js"></script>
+
 <xss:code>
     compiler.inject("render_js_includes");
 </xss:code>
@@ -47,12 +47,12 @@ var SoundUtils = new ms.ui.SoundUtils();
     compiler.inject("render_initialization");
 	compiler.inject("render_resources");
 </xss:code>
-
-
+var canvas_position = {x:0, y:0};
 function start(resolution)  
 {  
 	function updater()  
-	{  
+	{
+		canvas_position = getElementPosition(drawingCanvas);
 		var now   = new Date().getTime();
         if (g_elapsed < 0)
             g_delta = 0; //first update

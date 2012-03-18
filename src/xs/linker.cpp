@@ -77,6 +77,8 @@ const char* operator_name[] =
     "",     //op_array,
     "",     //op_parameter
     "",     //op_parameter_name
+    "new",  //op_instantiate
+    "{}",   //op_object
   };
 
 //just a very bad name
@@ -121,6 +123,8 @@ operator_type native_op[] =
     op_not, //op_array,
     op_not, //op_parameter
     op_not, //op_parameter_name
+    op_not, //op_instantiate
+    op_not, //op_object
   };
 
 struct array_evaluator : expr_evaluator
@@ -485,6 +489,21 @@ void code_linker::dispatch(stmt_dispatch& info)
     add_instruction(i_dispatch, info.arg_count);
   }
 
+void code_linker::switch_(stmt_switch& info)
+  {
+    assert(false);
+  }
+
+void code_linker::try_(stmt_try& info)
+  {
+    assert(false);
+  }
+
+void code_linker::throw_(stmt_throw& info)
+  {
+    assert(false);
+  }
+
 void code_linker::push(variant operand, bool top)
   {
     if (operand.is<expression_identifier>() ||
@@ -669,14 +688,21 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
 											}
 										else if (type && (type->options() & TYPE_DYNAMIC) != 0)
 											{
-												add_instruction(i_dynamic_get, add_constant(ei.value));
+												if (resolving_assigner_ && top)
+													{
+												    add_instruction(i_dynamic_set, add_constant(ei.value));
+													}
+                        else
+                          {
+												    add_instruction(i_dynamic_get, add_constant(ei.value));
 
-												int lv = register_variable("", null, null);
-												add_instruction(i_store, lv);
+												    int lv = register_variable("", null, null);
+												    add_instruction(i_store, lv);
 
-												//i've decided to save dynamic gets into the stack
-												//to avoid general unplesantness with alredy_in_stack.
-												stack_.push( local_variable(lv, null) );
+												    //i've decided to save dynamic gets into the stack
+												    //to avoid general unplesantness with alredy_in_stack.
+												    stack_.push( local_variable(lv, null) );
+                          }
 											}
 										else
                       {

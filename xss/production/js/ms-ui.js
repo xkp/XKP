@@ -13,11 +13,16 @@ ms.ui.Manager = Class.create(
 	    //mouse handling
 	    this.mouse_over = this.root;
 	    this.dragging 		= false;
-		this.mouse_pressed	= false;
+		mouse_pressed	= false;
 	    this.lastx 		= 0;
 	    this.lasty 		= 0;
-	},	
-
+		this.events = new ms.event.EventHolder();
+		this.drag = false;
+		this.over_drag = false;
+		this.dragend = false;
+		this.over_dragend = false;
+	},		
+	
 	//Resource handling
 	load_resources: function(callback)
 	{
@@ -57,7 +62,7 @@ ms.ui.Manager = Class.create(
 			if(cmp.physics)
 				cmp.physics.SetAwake(true);
         }		
-	    application.events.dispatch("keydown", [keycode]);    
+	    this.events.dispatch("keydown", [keycode]);    
 	},
 
 	keyup: function(keycode)
@@ -68,7 +73,7 @@ ms.ui.Manager = Class.create(
 			if(cmp.physics)
 				cmp.physics.SetAwake(true);
         }	
-	    application.events.dispatch("keyup", [keycode]);    
+	    this.events.dispatch("keyup", [keycode]);    
 	},
 
 	keypress: function(keycode)
@@ -79,7 +84,7 @@ ms.ui.Manager = Class.create(
 			if(cmp.physics)
 				cmp.physics.SetAwake(true);
         }	
-	    application.events.dispatch("keypress", [keycode]);    
+	    this.events.dispatch("keypress", [keycode]);    
 	},	
 	
 	//Mouse management
@@ -90,14 +95,14 @@ ms.ui.Manager = Class.create(
 			if(this.mouse_over.physics.mouse_joint)
 				this.create_mouse_joint(x, y, this.mouse_over.physics);			
 		}	
-	    if(this.mouse_pressed)
+	    if(mouse_pressed)
 			this.dragging = true;
 	    if (this.dragging)
-	    {			
-			this.mouse_over.events.dispatch("drag", [x, y]);
+	    {	
+			this.drag = this.events.dispatch("drag", [x, y]);
+			this.over_drag = this.mouse_over.events.dispatch("drag", [x, y]);
 	        this.lastx = x;
-	        this.lasty = y;
-	        return true;
+	        this.lasty = y;	        
 	    }
 	    var over = this.root.find(x, y);
 	    if (!over)
@@ -108,8 +113,10 @@ ms.ui.Manager = Class.create(
 	        over.events.dispatch("mousein", [x, y, over]);
 	        this.mouse_over = over;
 	    }	    
-	    over.events.dispatch("mousemove", [x, y, over]);
-		application.events.dispatch("mousemove", [x, y]);
+		if(!this.over_drag)
+			over.events.dispatch("mousemove", [x, y, over]);
+		if(!this.drag)
+			this.events.dispatch("mousemove", [x, y]);
 	    this.lastx = x;
 	    this.lasty = y;
 	    return this.mouse_over != this.root;
@@ -122,35 +129,41 @@ ms.ui.Manager = Class.create(
 		
 	    this.mouse_over.events.dispatch("mousedown", [x, y]);
 	    
-		this.mouse_pressed = true;
+		mouse_pressed = true;
 		
-		application.events.dispatch("mousedown", [x, y]);
+		this.events.dispatch("mousedown", [x, y]);
 	    return this.mouse_over != this.root;
 	},
 
 	mouseup: function(x, y)
-	{		
+	{						
 		if(this.mouse_over.physics)
-			this.mouse_over.physics.SetAwake(true);			
-		this.mouse_pressed = false;
+			this.mouse_over.physics.SetAwake(true);	
+		mouse_pressed = false;
 	    if (this.dragging)
 	    {
 	        this.dragging = false;
-	        
-	        this.mouse_over.events.dispatch("dragend", [x, y]);
-	        return true;
+			this.dragend = this.events.dispatch("dragend", [x, y]);
+	        this.over_dragend = this.mouse_over.events.dispatch("dragend", [x, y]);	        
 	    }	    
-	    this.mouse_over.events.dispatch("mouseup", [x, y]);	    	    
-	    this.mouse_over.events.dispatch("click", [x, y]);	   
-		application.events.dispatch("mouseup", [x, y]);
-		application.events.dispatch("click", [x, y]);
-	    return this.mouse_over != this.root;
+		if(!this.over_drag && !this.over_dragend)
+		{
+			this.mouse_over.events.dispatch("mouseup", [x, y]);	    	    
+			this.mouse_over.events.dispatch("click", [x, y]);	  
+		}
+		if(!this.drag && !this.dragend)
+		{
+			this.events.dispatch("mouseup", [x, y]);
+			this.events.dispatch("click", [x, y]);
+		}
+		this.drag = this.over_drag = this.dragend = this.over_dragend = false;		
+	    return this.mouse_over != this.root;		
 	},
 	
 	create_mouse_joint: function(x, y, body){
 		var handledMouseX = x  / 30;
 		var handledMouseY = y  / 30;
-		if(this.mouse_pressed && (!this.mouseJoint)) {
+		if(mouse_pressed && (!this.mouseJoint)) {
 			var md = new b2MouseJointDef();
             md.bodyA = g_world.GetGroundBody();
             md.bodyB = body;
@@ -160,7 +173,7 @@ ms.ui.Manager = Class.create(
             this.mouseJoint = g_world.CreateJoint(md);
         }
         if(this.mouseJoint) {
-           if(this.mouse_pressed) {
+           if(mouse_pressed) {
               this.mouseJoint.SetTarget(new b2Vec2(handledMouseX, handledMouseY));
            } else {
               g_world.DestroyJoint(this.mouseJoint);
@@ -359,9 +372,6 @@ ms.ui.Component = Class.create(
 {
 	initialize: function(manager, parent)
 	{
-		if(manager == null) manager = g_ui_root.manager;
-		if(parent == null) parent = g_ui_root;
-
 		this.manager    = manager;
 		this.components = [];
 		this.parent 	= parent;	
@@ -373,7 +383,7 @@ ms.ui.Component = Class.create(
         this.h 	= this.orig_h	= 0;
 		this.rotation 			= 0;
         this.placement  = "";
-		this.scale = 1;
+		this.scale = 1;		
 		
 		if(parent)
 			this.opacity = parent.opacity; 
@@ -382,8 +392,8 @@ ms.ui.Component = Class.create(
 		if (parent)
 			parent.addComponent(this);
 	},
-
-    count: function()
+	
+	count: function()
     {
         return this.components.length;
     },
@@ -675,7 +685,7 @@ ms.ui.Component = Class.create(
     },
 
     draw: function(context, x, y)
-    {
+    {		
 		this.update_placement();
         var clip_inside = true;
 		for(var i = 0; i < this.components.length; i++)
@@ -711,7 +721,10 @@ ms.ui.Image = Class.create(ms.ui.Component,
         var resource = streamer.get_resource(image);
         
         if (!resource)
-            throw "Unknow resource: " + image;
+		{
+			alert("Unknow resource: " + image);
+            resource = streamer.get_resource("invalid_res");
+		}            
          		
 		var texture = resource.data;
 		if (image && !texture && image != 'null')
@@ -760,7 +773,7 @@ ms.ui.Image = Class.create(ms.ui.Component,
 	},     
 	
 	draw: function($super, context, x, y)
-    {	
+    {			
 		if(!this.iwidth)
 			this.iwidth = this.w;
 		if(!this.iheight)
@@ -771,7 +784,7 @@ ms.ui.Image = Class.create(ms.ui.Component,
         {
             old_alpha = context.globalAlpha;
             context.globalAlpha = this.opacity;
-        }
+        }	
 		if(this.tile)
 		{
 			var ix = this.x + x;
@@ -796,10 +809,9 @@ ms.ui.Image = Class.create(ms.ui.Component,
 		{
 			context.save();
 			context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
-			context.rotate(this.rotation);
-							
+			context.rotate(this.rotation);					
 			if (this.texture)
-			{
+			{				
 				context.drawImage(this.texture, - this.w/2, - this.h/2, this.w, this.h);
 			}
 			else if (this.fill_)
@@ -813,7 +825,8 @@ ms.ui.Image = Class.create(ms.ui.Component,
         if (this.opacity != null)
         {
             context.globalAlpha = old_alpha;
-        }
+        }		
+		
         $super(context);
     }
 });
@@ -872,7 +885,7 @@ ms.ui.Label = Class.create(ms.ui.Component,
 	text: function(text)
 	{
 		this.value = text;
-		this.manager.invalidate_all(); //td: do extents!!!
+		this.invalidate(); //td: do extents!!!
 	},
 	
 	set_color: function(value)
@@ -880,7 +893,7 @@ ms.ui.Label = Class.create(ms.ui.Component,
 		if(value != null)
 		{
 			this.color_value = value;	
-			this.manager.invalidate_all();
+			this.invalidate();
 		}
 	},
 
@@ -890,18 +903,21 @@ ms.ui.Label = Class.create(ms.ui.Component,
 	},
 
     draw: function($super, context, x, y)
-    {
+    {	
 		context.save();		
 		if (this.opacity != null)
         {
             old_alpha = context.globalAlpha;
             context.globalAlpha = this.opacity;
-        }            
+        }
+		var measure = measureText(this.value, this.font);
+		this.w = measure.width;
+		this.h = measure.height;			
 		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
 		context.rotate(this.rotation);
-        context.font = this.font;
-		context.fillStyle = this.color_value; //td:
-        context.fillText(this.value, -this.w/2, -this.h/2);
+        context.font = this.font;				
+		context.fillStyle = this.color_value; 	
+        context.fillText(this.value, -this.w/2, -this.h/2 + this.h);		
 		if (this.opacity != null)
         {
             context.globalAlpha = old_alpha;
@@ -916,7 +932,10 @@ ms.ui.Button = Class.create(ms.ui.Image,
 	initialize: function($super, normal, over, manager, parent)
 	{
 		$super(normal, manager, parent);
-
+		if(!streamer.get_resource(normal))
+			normal = "invalid_res";
+		if(!streamer.get_resource(over))
+			over = "invalid_res";
 		var normal_texture = streamer.get_resource(normal).data;
 		var over_texture   = streamer.get_resource(over).data;	
 		var ev_parent = this;
@@ -930,6 +949,121 @@ ms.ui.Button = Class.create(ms.ui.Image,
 		});
 				
 	},	
+});
+
+ms.ui.TextButton = Class.create(ms.ui.Component,
+{
+	initialize: function($super, text, font, manager, parent)
+	{
+		$super(manager, parent);
+		this.mouse_into = false;
+		this.clicked = false;
+		var ev_parent = this;
+		this.events.addListener('mousein', function()
+		{
+			ev_parent.mouse_into = true;
+			ev_parent.invalidate();
+		});	
+		this.events.addListener('mouseout', function()
+		{
+			ev_parent.mouse_into = false;
+			ev_parent.invalidate();
+		});
+		this.events.addListener('mousedown', function()
+		{
+			ev_parent.clicked = true;
+			ev_parent.invalidate();
+			ev_parent.x ++;
+			ev_parent.y ++;
+		});	
+		this.events.addListener('mouseup', function()
+		{
+			ev_parent.clicked = false;
+			ev_parent.invalidate();
+			ev_parent.x --;
+			ev_parent.y --;
+		});
+		this.text = text;	
+		this.font = font;
+	},	
+	set_text: function(value)
+	{
+		this.text = value;
+		this.invalidate();
+	},	
+	set_font: function(value)
+	{
+		this.font = value;
+		this.invalidate();
+	},
+	round_rect: function(ctx, x, y, width, height, radius, fill, stroke) {
+		if (typeof radius === "undefined") {
+			radius = 5;
+		}
+		ctx.beginPath();
+		ctx.moveTo(x + radius, y);
+		ctx.lineTo(x + width - radius, y);
+		ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+		ctx.lineTo(x + width, y + height - radius);
+		ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+		ctx.lineTo(x + radius, y + height);
+		ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+		ctx.lineTo(x, y + radius);
+		ctx.quadraticCurveTo(x, y, x + radius, y);
+		ctx.closePath();
+		if (stroke) {
+			ctx.strokeStyle = stroke;
+			ctx.stroke();
+		}
+		if (fill) {
+			ctx.fillStyle = fill;
+			ctx.fill();
+		}        
+	},
+	draw: function($super, context, x, y)
+    {
+		var gradient;
+		context.save();		
+		if (this.opacity != null)
+        {
+            old_alpha = context.globalAlpha;
+            context.globalAlpha = this.opacity;
+        }
+		var measure = measureText(this.text, this.font);
+		this.w = measure.width + 20;
+		this.h = measure.height + 20;			
+		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
+		context.rotate(this.rotation);
+        context.font = this.font;
+		gradient = context.createLinearGradient(0, -this.h/2, 
+												0, -this.h/2 + this.w);
+		if(!this.mouse_into)
+		{			
+			gradient.addColorStop(0.0, '#F3F8FE');
+			gradient.addColorStop(1.0, '#DCE6F4');
+		}
+		else
+		if(this.clicked)
+		{
+			gradient.addColorStop(0.0, '#C9D4E4');
+			gradient.addColorStop(0.2, '#E1EBF5');
+			gradient.addColorStop(1.0, '#CFDBED');			
+		}else
+		{
+			gradient.addColorStop(0.0, '#FFFFFF');			
+			gradient.addColorStop(1.0, '#BED2E6');			
+		}
+		this.round_rect(context, -this.w/2, -this.h/2, this.w, 
+						this.h, 5, gradient, '#AABCD4');
+		context.fillStyle = '#693978'; 		
+        context.fillText(this.text, -this.w/2 + 10, -this.h/2 + this.h - 10);		
+		if (this.opacity != null)
+        {
+            context.globalAlpha = old_alpha;
+        }
+		context.restore(); 
+        $super(context);		
+	},
 });
 
 ms.ui.RippleEffect = Class.create(ms.ui.Component,
@@ -967,7 +1101,7 @@ ms.ui.RippleEffect = Class.create(ms.ui.Component,
 		return this.riprad;
 	},
 	draw: function($super, context, x, y)
-    {		
+    {	
 		this.canvas.width = this.w;
 		this.canvas.height = this.h;
 		if (this.is_disturbed) {
@@ -1109,6 +1243,11 @@ ms.ui.StateButton = Class.create(ms.ui.Image,
 	initialize: function($super, active, inactive, manager, parent)
 	{
 		$super(active, manager, parent);
+		
+		if(!streamer.get_resource(active))
+			active = "invalid_res";
+		if(!streamer.get_resource(inactive))
+			inactive = "invalid_res";
 
 		var active_texture 		= streamer.get_resource(active).data;
 		var inactive_texture   	= streamer.get_resource(inactive).data;
@@ -1330,7 +1469,7 @@ ms.ui.Rectangle = Class.create(ms.ui.Component,
 		this.invalidate();
 	},
 	draw: function($super, context, x, y)
-	{		
+	{	
 		old_line_width = context.lineWidth;
 		context.save();
 		context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
@@ -1413,7 +1552,7 @@ ms.ui.Circle = Class.create(ms.ui.Component,
 	{	
 		old_line_width = context.lineWidth;
 		context.beginPath();
-		if (this.opacity != null)
+		if(this.opacity != null)
         {
             old_alpha = context.globalAlpha;
             context.globalAlpha = this.opacity;
@@ -1430,7 +1569,7 @@ ms.ui.Circle = Class.create(ms.ui.Component,
 			context.strokeStyle = this.stroke;
 			context.stroke();
 		}		
-		if (this.opacity != null)
+		if(this.opacity != null)
         {
             context.globalAlpha = old_alpha;
         }
@@ -1452,6 +1591,72 @@ ms.ui.Polygon = Class.create(ms.ui.Component,
 		this.y = window.innerHeight;
 		this.w = 0;
 		this.h = 0;
+	},
+	get_min_pos: function()
+	{
+		var min_pos = {x: window.innerWidth, y: window.innerHeight};
+		for(var i = 0; i < this.points.length; i++)
+        {	
+			var point = this.points[i];			
+			if(point.x < min_pos.x)
+				min_pos.x = point.x;
+			if(point.y < min_pos.y)
+				min_pos.y = point.y;
+		}
+		return min_pos;		
+	},
+	get_max_pos: function()
+	{
+		var max_pos = {x: 0, y: 0};
+		for(var i = 0; i < this.points.length; i++)
+        {	
+			var point = this.points[i];			
+			if(point.x > max_pos.x)
+				max_pos.x = point.x;
+			if(point.y > max_pos.y)
+				max_pos.y = point.y;
+		}
+		return max_pos;		
+	},
+	set_x: function(value)
+	{		
+		var offset_x = value - this.x
+		for(var i = 0; i < this.points.length; i++)
+        {				
+			this.points[i].x += offset_x;						
+		}
+		this.invalidate();
+	},	
+	set_y: function(value)
+	{		
+		var offset_y = value - this.y
+		for(var i = 0; i < this.points.length; i++)
+        {				
+			this.points[i].y += offset_y;						
+		}
+		this.invalidate();
+	},
+	set_width: function(value)
+	{		
+		var mid_w = this.x + this.w/2;
+		var offset_w = value - this.w; 
+		for(var i = 0; i < this.points.length; i++)
+        {		
+			if(this.points[i].x > mid_w)
+				this.points[i].x += offset_w;						
+		}
+		this.invalidate();
+	},	
+	set_height: function(value)
+	{		
+		var mid_h = this.y + this.h/2;
+		var offset_h = value - this.h; 
+		for(var i = 0; i < this.points.length; i++)
+        {		
+			if(this.points[i].y > mid_h)
+				this.points[i].y += offset_h;						
+		}
+		this.invalidate();
 	},
 	set_fill: function(value)
 	{
@@ -1492,22 +1697,12 @@ ms.ui.Polygon = Class.create(ms.ui.Component,
 	},
 	draw: function($super, context, x, y)
 	{		
-		for(var i = 0; i < this.points.length; i++)
-        {	
-			var point = this.points[i];			
-			if(point.x < this.x)
-				this.x = point.x;
-			if(point.y < this.y)
-				this.y = point.y;
-		}		
-		for(var i = 0; i < this.points.length; i++)
-        {	
-			var point = this.points[i];			
-			if(point.x - this.x > this.w)
-				this.w = point.x - this.x;
-			if(point.y - this.y > this.h)
-				this.h = point.y - this.y;			
-		}
+		var min_pos = this.get_min_pos();
+		this.x = min_pos.x;
+		this.y = min_pos.y;
+		var max_pos = this.get_max_pos();
+		this.w = max_pos.x - min_pos.x;
+		this.h = max_pos.y - min_pos.y;
 		context.save();		
 		offset_x = this.x + this.w/2;
 		offset_y = this.y + this.h/2;
@@ -1794,7 +1989,3 @@ ms.ui.SoundUtils = Class.create(
 		audioElement.play();
 	},
 });
-
-
-
-

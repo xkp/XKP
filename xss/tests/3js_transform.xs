@@ -19,13 +19,21 @@ on mousemove(x, y){
 		cylinder_1.rotation.z += 0.5;
 	}
 }
+
+on cube_1.mousein()
+{
+	cube_1.rotation.x += 0.5;
+	cube_1.rotation.y += 0.5;
+	cube_1.rotation.z += 0.5;
+}
+
 on keydown(keycode){
 	if(keycode == SHIFT) {
 		is_shift_down = true;
 	}
 	if(keycode == CTRL) {
 		is_ctrl_down = true;
-	}
+	}	
 }
 on keyup(keycode){
 	if(keycode == SHIFT) {

@@ -6,6 +6,18 @@ property px;
 property py;
 property left_key_down = false;
 property right_key_down = false;
+property increase_pol_size = false;
+property decrease_pol_size = false;
+
+on lbl_event.mousein()
+{
+	lbl_event.caption = "The mouse is over me...";
+}
+
+on lbl_event.mouseout()
+{
+	lbl_event.caption = "Pass the mouse over this text...";
+}
 
 on btnNext.click()
 {
@@ -172,6 +184,10 @@ on keydown(keycode)
 		do_rotation_minus = true;
 	if(keycode == CTRL)
 		do_drag = true;
+	if(keycode == SHIFT)
+		increase_pol_size = true;
+	if(keycode == ALT)
+		decrease_pol_size = true;
 }
 
 on keyup(keycode)
@@ -192,6 +208,10 @@ on keyup(keycode)
 		do_rotation_minus = false;
 	if(keycode == CTRL)
 		do_drag = false;
+	if(keycode == SHIFT)
+		increase_pol_size = false;
+	if(keycode == ALT)
+		decrease_pol_size = false;
 }
 
 on btn5.click(){	
@@ -208,6 +228,15 @@ on btn5.drag(x, y)
 	{
 		btn5.x = x - btn5.w/2;
 		btn5.y = y - btn5.h/2;
+	}
+}
+
+on monster.drag(x, y)
+{
+	if(do_drag)
+	{
+		monster.x = x - monster.w/2;
+		monster.y = y - monster.h/2;
 	}
 }
 
@@ -229,6 +258,15 @@ on c1.drag(x, y)
 	}
 }
 
+on p1.drag(x, y)
+{
+	if(do_drag)
+	{
+		p1.x = x - p1.w/2;
+		p1.y = y - p1.h/2;
+	}
+}
+
 on r1.click(){
 	r1.stroke = "brown";	
 	if(do_rotation_plus)
@@ -245,21 +283,33 @@ on c1.click(){
 }
 
 on p1.click(){
-	if(do_rotation_plus)
-		p1.rotation += 5;
-	else if(do_rotation_minus)
-		p1.rotation -= 5;
-	else 
-	for(var i = 0; i < 4; i++ ){
-		if(i%2 == 0){
-			px = p1.points[i].x + 5;
-			py = p1.points[i].y + 5;
-		}else{
-			px = p1.points[i].x - 5;
-			py = p1.points[i].y - 5;
+	if(increase_pol_size)
+	{
+		p1.width += 5;
+		p1.height += 5;
+	}else
+	if(decrease_pol_size)
+	{
+		p1.width -= 5;
+		p1.height -= 5;
+	}else
+	{
+		if(do_rotation_plus)
+			p1.rotation += 5;
+		else if(do_rotation_minus)
+			p1.rotation -= 5;
+		else 
+		for(var i = 0; i < 4; i++ ){
+			if(i%2 == 0){
+				px = p1.points[i].x + 5;
+				py = p1.points[i].y + 5;
+			}else{
+				px = p1.points[i].x - 5;
+				py = p1.points[i].y - 5;
+			}
+			p1.setPointbyIndex(i, px, py);		
 		}
-		p1.setPointbyIndex(i, px, py);		
-	}
+	}	
 }
 
 on updates()

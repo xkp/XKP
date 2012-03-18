@@ -80,6 +80,11 @@ str js_expr_renderer::render()
     return lang_utils::render_expression<js_expr_renderer>(expr_, ctx_);
   }
 
+str js_expr_renderer::render_expression(expression& expr)
+  {
+    return lang_utils::render_expression<js_expr_renderer>(expr, ctx_);
+  }
+
 //js_args_renderer
 js_args_renderer::js_args_renderer():
   base_args_renderer()

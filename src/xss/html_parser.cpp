@@ -70,6 +70,11 @@ tag& tag_list::get(int idx)
     return tags_[idx];
   }
 
+size_t tag_list::size()
+  {
+    return tags_.size();
+  }
+
 //an extremely simple html parser, at this point the htmls to be used are expected to
 //be correct, so we'll keep an intermediate representation of the tags
 

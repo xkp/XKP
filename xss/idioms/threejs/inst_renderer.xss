@@ -1,10 +1,17 @@
 <xss:parameter id="i"/>
 
 <xss:code>		
+        if (i.idiom)
+        {
+            if (i.idiom.id == "sequence")
+                return;
+        }
+    
 		if(i.renderer)
 			compiler.xss(i.renderer, i);
-		else{						
-			out(){var <xss:e v="i.id"/> = }
+		else{		
+			out(marker = "threejs_variables", marker_source = "entry") {var <xss:e v="i.id"/>;}
+			out(){<xss:e v="i.id"/> = }
 			compiler.xss("../common-js/instantiator.xss", i);						
 			}
 		if(i.class_name == "transform"){

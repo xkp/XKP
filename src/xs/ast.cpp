@@ -43,6 +43,8 @@ const int operand_count[] =
     2, //op_func_call
     1, //op_array,
     1, //op_parameter
+    2, //op_instantiate
+    1, //op_object
   };
 
 //expression
@@ -294,6 +296,7 @@ void expression_splitter::exec_operator(operator_type op, int pop_count, int pus
 				      pop_count += (int)result_.back();
               break;
             case op_func_call:
+            case op_instantiate:
 				      pop_count += (int)result_.back();
               break;
             case op_parameter:
@@ -390,6 +393,21 @@ void code::visit(code_visitor* visitor)
             stmt_dispatch d = *it;
             visitor->dispatch(d);
           }
+        else if (it->is<stmt_switch>())
+          {
+            stmt_switch s = *it;
+            visitor->switch_(s);
+          }
+        else if (it->is<stmt_try>())
+          {
+            stmt_try t = *it;
+            visitor->try_(t);
+          }
+        else if (it->is<stmt_throw>())
+          {
+            stmt_throw t = *it;
+            visitor->throw_(t);
+          }
         else
           {
             assert(false); 
@@ -417,6 +435,11 @@ void code::range(int from, int to, code& result)
   {
     for(int i = from; i < to; i++)
       result.add_statement(statements_[i]);
+  }
+
+size_t code::size()
+  {
+    return statements_.size();
   }
 
 //xs_container

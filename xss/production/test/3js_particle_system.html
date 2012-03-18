@@ -9,18 +9,21 @@
 	background:Black;
 	}
 </style>
+<script type="text/javascript" src="../js/three/Detector.js"></script>
+<script type="text/javascript" src="../js/three/Three.js"></script>
+<script type="text/javascript" src="../js/three/Stats.js"></script>
+<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
-		<script type="text/javascript" src="../js/ms-ui.js"></script>
-		<script type="text/javascript" src="../js/three/Three.js"></script>
-		<script type="text/javascript" src="../js/three/Stats.js"></script>
-		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-		<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui;
@@ -33,6 +36,7 @@ var app_height = window.innerHeight;
 var lbl0;
 var application = {};
 application.events = new ms.event.EventHolder();
+		var streamer = new ms.streamer.Streamer();
 		if(drawingCanvas){
 			var client =
 			{
@@ -40,7 +44,6 @@ application.events = new ms.event.EventHolder();
 				height: window.innerHeight,
 				canvas: drawingCanvas
 			};
-            var streamer = new ms.streamer.Streamer();							
 			var ui = new ms.ui.Manager(client, streamer);
 			var g_ui = ui;
 			var g_ui_root = ui.root;
@@ -67,7 +70,7 @@ new THREE.Scene(
 var camera_1 = 
 new THREE.Camera(
 75,1.5,1,3000);
-            camera_1.position.z = 1000;
+                camera_1.position.z = 1000;
 		for ( var i = 0; i < 1000; i++ ) {
 			particle = new THREE.Particle( new THREE.ParticleCanvasMaterial( { color: Math.random() * 0x808008 + 0x808008, program: program_fill, } ) );
 				particle.position.x = 
@@ -79,8 +82,8 @@ new THREE.Camera(
 			particle.scale.x = particle.scale.y = Math.random() * 10 + 5;
 			scene.addObject( particle );
 		}
-            application.mouse_x = null;
-            application.mouse_y = null;
+                application.mouse_x = null;
+                application.mouse_y = null;
 	var ev_parent = this;
 	application.events.addListener("updates", function()
 	{    
@@ -113,10 +116,9 @@ if(ui)
 		    lbl0 = new ms.ui.Label( 
 	    "12px Verdana",g_ui_root.manager, g_ui_root);
         lbl0 = lbl0;
-            lbl0.set_x(350);
-            lbl0.set_y(50);
-            lbl0.set_color(White);
-            lbl0.text("Move the mouse to rotate the camera");
+                lbl0.set_color(White);
+                lbl0.text("Move the mouse to rotate the camera");
+                lbl0.position(350, 50);
 		g_ui.fill_background = false;
 	});
 }
@@ -155,7 +157,7 @@ function animate() {
 	render();
 	if(ui)
 		ui.draw(drawingCanvas.getContext('2d'));
-	}
+}
 </script>
 </body>
 </html>

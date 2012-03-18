@@ -1,8 +1,9 @@
 <xss:parameter id="obj"/>
 <xss:code>
 
+out(marker = "threejs_variables", marker_source = "entry") {var <xss:e v="obj.id"/>;}
 out(){
-var <xss:e v = "obj.id"/> = new <xss:e v="obj.type.output_id"/>(<xss:open_brace/>
+<xss:e v = "obj.id"/> = new <xss:e v="obj.type.output_id"/>(<xss:open_brace/>
 }
 
 var type = obj.type;
@@ -21,9 +22,12 @@ if (params)
 				if(prop.value != null){
 					if(i > 0) out() {,}					
 					if(prop.output_id == "src") 
-						out(){map:THREE.ImageUtils.loadTexture(streamer.get_resource('<xss:e v="obj.src"/>').asset),}
-					else
-						out() {<xss:e v="prop.output_id"/>:<xss:e v="prop.value"/>}
+						out(){map:new THREE.Texture(streamer.get_resource('<xss:e v="obj.src"/>').data),}
+					else					
+					if(prop.output_id == "texture_object") 
+						out(){map:new THREE.Texture(<xss:e v="obj.texture_object"/>),}
+					else		
+						out() {<xss:e v="prop.output_id"/>:<xss:e v="prop.value"/>}					
 					i++;
 				}
 				}

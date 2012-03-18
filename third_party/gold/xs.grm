@@ -138,8 +138,21 @@ Comment End = '*/'
          |  '++'
          |  '--'     
 
+<Object List Opt>
+       ::= <Object List>
+        |  !Nothing
+       
+<Object List>
+       ::= <Object List> ',' <Object Value>
+        |  <Object Value>
+
+<Object Value>
+       ::= Identifier ':' <Expression>
+
 <Primary Exp>
        ::= <Primary>
+        |  new <Type> '(' <Arg List Opt> ')'    !Instantiation
+        |  '{' <Object List Opt> '}'            !Object
         |  '(' <Expression> ')' 
 
 <Array Literal>
@@ -147,7 +160,7 @@ Comment End = '*/'
        
 <Primary>
        ::= Identifier
-     |  <Array Literal> 
+        |  <Array Literal> 
         |  Identifier '(' <Arg List Opt> ')'    !Current object method
         |  <Literal>        
 
@@ -200,14 +213,29 @@ Comment End = '*/'
         |   for      '(' <For Init Opt> ';' <For Condition Opt> ';' <For Iterator Opt> ')' <Statement>
         |   for     '(' <Type> Identifier in <Expression> ')' <Statement>  
         |   while    '(' <Expression> ')' <Statement>
-        |   switch   '(' <Expression> ')' '{' <Switch Sections Opt> '}'
+        |   switch   '(' <Switch Header> ')' '{' <Switch Sections Opt> '}'
         |   dispatch <Qualified ID> '(' <Arg List Opt> ')' ';'
         |   break ';'
         |   continue ';'
         |   return <Expression Opt> ';'
+        |   try <Block> <Catch Clauses> <Finally Clause Opt>
+        |   throw <Expression> ';'
         |   <Expression> ';'        
         |   <Block>    
         |   <DSL>     
+
+<Catch Clauses>
+        ::= <Catch Clause> <Catch Clauses>
+         |  !Nothing
+
+<Catch Clause>
+        ::= catch '(' <Type> Identifier ')' <Block>
+         |  catch '(' <Type>            ')' <Block>
+         |  catch <Block>
+
+<Finally Clause Opt>
+        ::= finally <Block>
+         |  !Nothing
 
 <Block>
        ::= '{' <Stm List> '}'
@@ -219,6 +247,10 @@ Comment End = '*/'
 <Variable Declarator>
         ::= Identifier
          |  Identifier '=' <Expression>
+
+<Switch Header>
+        ::= <Expression>
+         |  !Nothing
 
 <Switch Sections Opt>
         ::= <Switch Sections Opt> <Switch Section>

@@ -13,8 +13,6 @@
     <img id="img1" x="100" y="100" width="130" height="130" src="images/test2.png"/>
     <img id="img2" x="300" y="300" width="80" height="80" src="images/test2.png"/>
 
-
-
     <sequence id="s1" auto_start="true">
         <at time="0">
             <animate property="c2.radius" from="0" to="50" in="20"/>

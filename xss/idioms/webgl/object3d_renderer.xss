@@ -3,7 +3,7 @@
 <xss:code>			
 	if (!obj.material)
         obj.material = "new THREE.MeshBasicMaterial()";
-		
+	out(marker = "threejs_variables", marker_source = "entry") {var <xss:e v="obj.id"/>;}	
 	out()
     {
 	    var <xss:e v="obj.output_id"/>_<xss:e v="obj.class_name"/> = 
@@ -13,7 +13,7 @@
 	
     out()
     {
-	    var <xss:e v="obj.id"/> = new THREE.Mesh(<xss:e v="obj.id"/>_<xss:e v="obj.class_name"/>, <xss:e v="obj.material"/>);
+	    <xss:e v="obj.id"/> = new THREE.Mesh(<xss:e v="obj.id"/>_<xss:e v="obj.class_name"/>, <xss:e v="obj.material"/>);
 	    scene.addObject(<xss:e value = "obj.id"/>);
 		<xss:e v="obj.id"/>.events = new ms.event.EventHolder();
 	}	

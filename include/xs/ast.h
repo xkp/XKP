@@ -81,7 +81,7 @@ struct expression_splitter : expression_visitor
       std::stack<int>      positions_; 
 	};
 
-//helpers
+  //helpers
   struct xs_const
     {
       str        name;
@@ -107,6 +107,7 @@ struct expression_splitter : expression_visitor
         variant& get_stament(int idx);
         void     cut(int idx, code& result);
         void     range(int from, int to, code& result);
+        size_t   size();
       private:
         typedef std::vector<variant> statement_list;
 
@@ -173,6 +174,38 @@ struct expression_splitter : expression_visitor
       expression expr;
     };
     
+  struct switch_section
+    {
+      std::vector<expression> cases;
+      code                    case_code;
+    };
+
+  struct stmt_switch
+    {
+      expression                  expr;
+      std::vector<switch_section> sections;
+      code                        default_code;
+    };
+
+  struct catch_
+    {
+      xs_type type;
+      str     id;
+      code    catch_code;
+    };
+
+  struct stmt_try
+    {
+      code                try_code;
+      std::vector<catch_> catches;
+      code                finally_code;
+    };
+
+  struct stmt_throw
+    {
+      expression expr;
+    };
+
   struct dsl
     {
       str        name;
@@ -196,6 +229,9 @@ struct expression_splitter : expression_visitor
       virtual void expression_(stmt_expression& info) = 0;
       virtual void dsl_(dsl& info)                    = 0;
       virtual void dispatch(stmt_dispatch& info)      = 0;
+      virtual void switch_(stmt_switch& info)         = 0;
+      virtual void try_(stmt_try& info)               = 0;
+      virtual void throw_(stmt_throw& info)           = 0;
     };    
 
   //forwards

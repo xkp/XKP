@@ -31,29 +31,64 @@
                     idx++;
                 }
             }    
-    out() { ) <xss:open_brace/> }
-	if(super_transform)
+    out() { ) <xss:open_brace/> 
+    
+    var <xss:e v="clazz.id"/>;
+    }
+
+    if(super_transform)
+	{		
 		out() 
 		{ 		
-			var <xss:e v="clazz.id"/> = new THREE.Object3D();
+			<xss:e v="clazz.id"/> = new THREE.Object3D();
 			<xss:e v="clazz.id"/>.events = new ms.event.EventHolder();
 		}
+	}
 	else{
 		string clazz_renderer = clazz.type.renderer;
         if (!clazz_renderer)
         {
             compiler.error("Class not rendereable", class_name = clazz.type_name);
         }                
-        out()
-        {
-            var <xss:e v="clazz.output_id"/>;
-        }            
         string clazz_path = compiler.idiom_path(clazz, clazz_renderer);
         compiler.xss(clazz_path, clazz);		
 	}
-    compiler.xss("../common-js/instance.xss", clazz);    
-    for(var inst in clazz.instances)
+    
+    out()
+    {
+        var this__ = <xss:e v="clazz.id"/>;
+    }
+
+    for(var seq in clazz.instances)
     {		
+        if (seq.class_name != "sequence") //td: !!!
+            continue; 
+
+        string seq_renderer = seq.type.renderer;
+        
+        out()
+        {
+            var <xss:e v="seq.output_id"/>;
+        }
+
+        string seq_path = compiler.idiom_path(seq, seq_renderer);
+        compiler.xss(seq_path, seq);
+		compiler.xss("../common-js/instance.xss", seq);
+        
+        out()
+        {
+            <xss:e v="clazz.id"/>.<xss:e v="seq.output_id"/> = <xss:e v="seq.output_id"/>;
+        }
+        
+    }    
+
+    compiler.xss("../common-js/instance.xss", clazz);    
+
+for(var inst in clazz.instances)
+    {		
+        if (inst.class_name == "sequence") //td: !!!
+            continue; 
+            
         string inst_renderer = inst.type.renderer;
         if (!inst_renderer)
         {
@@ -67,10 +102,16 @@
         compiler.xss(inst_path, inst);
 		if(!inst.dont_render)
 			compiler.xss("../common-js/instance.xss", inst);
-        out()
-        {
-            <xss:e v="clazz.id"/>.addChild(<xss:e v="inst.output_id"/>);
-        }        
+        if(super_transform)
+			out()
+			{
+				<xss:e v="clazz.id"/>.addChild(<xss:e v="inst.output_id"/>);
+			}   
+		else
+			out()
+			{
+				<xss:e v="clazz.id"/>.<xss:e v="inst.output_id"/> = <xss:e v="inst.output_id"/>;
+			}     
     }    
     out()
     {

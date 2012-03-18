@@ -25,6 +25,8 @@ const str SCannotResolveParam("Cannot resolve constructor parameter");
 const str SCannotResolveCtorProperty("Cannot resolve constructor property");
 const str STooManyParamsInCtor("Too many params in constructor");
 const str SUnknownDSL("Unkown dsl");
+const str SCannotResolveType("Unkown type");
+const str SOnlyOneCatch("Only One Catch, please");
 
 //variable_gather
 variable_gather::variable_gather(XSSContext ctx):
@@ -488,6 +490,162 @@ void base_code_renderer::dispatch(stmt_dispatch& info)
   {
     assert(false); //td: ought to define what to do here, it would seem like the idiom would like
                     //to handle this
+  }
+
+bool constant_switch(stmt_switch& info)
+  {
+    if (info.expr.empty())
+      return false;
+
+    std::vector<switch_section>::iterator it = info.sections.begin();
+    std::vector<switch_section>::iterator nd = info.sections.end();
+    for(; it != nd; it++)
+      {
+        std::vector<expression>::iterator cit = it->cases.begin();
+        std::vector<expression>::iterator cnd = it->cases.end();
+
+        for(; cit != cnd; cit++)
+          {
+            variant v;
+		        if (!cit->is_constant(v))
+              return false;
+          }
+      }
+
+    return true;
+  }
+
+void base_code_renderer::switch_(stmt_switch& info)
+  {
+    if (constant_switch(info))
+      {
+        add_line("switch(" + render_expression(info.expr, ctx_) + ")");
+		    add_line("{");
+
+          std::vector<switch_section>::iterator it = info.sections.begin();
+          std::vector<switch_section>::iterator nd = info.sections.end();
+          for(; it != nd; it++)
+            {
+              std::vector<expression>::iterator cit = it->cases.begin();
+              std::vector<expression>::iterator cnd = it->cases.end();
+
+              for(; cit != cnd; cit++)
+                {
+		              add_line("case " + render_expression(*cit, ctx_) + " : ");
+                }
+		          
+              add_line("{");
+                render_code(it->case_code);
+
+                if (!it->case_code.empty())
+                  {
+                    variant& last_stmt = it->case_code.get_stament(it->case_code.size() - 1);
+                    if (!last_stmt.is<stmt_break>())
+                      add_line("break;");
+                  }
+		          add_line("}");
+            }
+
+          if (!info.default_code.empty())
+            {
+		          add_line("default: ");
+              add_line("{");
+                render_code(info.default_code);
+		          add_line("}");
+            }
+		    
+        add_line("}");
+      }
+    else
+      {
+        //generate as ifs
+        std::vector<switch_section>::iterator it = info.sections.begin();
+        std::vector<switch_section>::iterator nd = info.sections.end();
+        bool first = true;
+        for(; it != nd; it++)
+          {
+            str case_expr;
+
+            if (it->cases.size() == 1)
+              case_expr = render_expression(it->cases[0], ctx_);
+            else
+              {
+                std::vector<expression>::iterator cit = it->cases.begin();
+                std::vector<expression>::iterator cnd = it->cases.end();
+                bool cfirst = true;
+                for(; cit != cnd; cit++)
+                  {
+                    if (cfirst)  
+                      cfirst = false;
+                    else 
+                      case_expr += " || ";
+
+		                case_expr += "(" + render_expression(*cit, ctx_) + ")";
+                  }
+              }
+		          
+            if (first)  
+              {
+                first = false;
+                add_line("if (" + case_expr + ")");
+              }
+            else 
+                add_line("else if (" + case_expr + ")");
+            
+            add_line("{");
+              render_code(it->case_code);
+		        add_line("}");
+          }
+
+        if (!info.default_code.empty())
+          {
+		        add_line("else");
+            add_line("{");
+              render_code(info.default_code);
+		        add_line("}");
+          }
+      }
+  }
+
+void base_code_renderer::try_(stmt_try& info)
+  {
+    add_line("try");
+		add_line("{");
+      render_code(info.try_code);
+		add_line("}");
+
+    if (!info.catches.empty())
+      {
+        if (info.catches.size() > 1)
+          {
+            //lazy me
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", SOnlyOneCatch);
+            xss_throw(error);
+          }
+
+        add_line("catch(__exception)");
+		    add_line("{");
+          catch_& lonely = info.catches[0];
+          if (!lonely.id.empty())
+		        add_line("var " + lonely.id + " = __exception;");
+            render_code(lonely.catch_code);
+		    add_line("}");
+      }
+
+    if (!info.finally_code.empty())
+      {
+        add_line("finally");
+		    add_line("{");
+            render_code(info.finally_code);
+		    add_line("}");
+      }
+  }
+
+void base_code_renderer::throw_(stmt_throw& info)
+  {
+    add_line("throw " + render_expression(info.expr, ctx_) + ";");
   }
 
 str base_code_renderer::indent()
@@ -963,24 +1121,123 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 
         case op_dot_call:
           {
-            std::stringstream ss;
+            Language lang = ctx_->get_language();
 
-            str opnd1 = operand_to_string(arg1);
-            str opnd2 = operand_to_string(arg2);
+            str caller_str = operand_to_string(arg1);
 
-						str separator = ctx_->get_language()->resolve_separator();
+            expression_identifier ei = arg2;
+            str right_str  = ei.value;
 
-				    //here comes the hacky hoo
-            size_t first_dot = opnd2.find_first_of(separator);
-				    if (first_dot != str::npos)
-					    {
-						    str str_this = opnd2.substr(0, first_dot);
-                if (str_this == opnd1)
-                  opnd2.erase(0, first_dot + 1);
-					    }
+            //and who may I say is calling
+            XSSObject caller = get_instance(arg1);
+			      if (!caller)
+			        {
+				        if (arg1.is<expression_identifier>())
+					        {
+						        expression_identifier ei = arg1;
+                    caller = variant_cast<XSSObject>(ctx_->resolve(ei.value, RESOLVE_ANY), XSSObject());
+					        }
+                else if (arg1.is<already_rendered>())
+                  {
+                    already_rendered ar = arg1;
+                    caller = variant_cast<XSSObject>(ar.object, XSSObject());
+                  }
+			        }
 
-            ss << opnd1 << "." << opnd2;
-            push_rendered(ss.str(), op_prec, variant(), opnd1);
+						str separator = ctx_->get_language()->resolve_separator(caller);
+            if (caller)
+              {
+                resolve_info left;
+                left.what  = RESOLVE_INSTANCE;
+                left.value = caller;
+
+                resolve_info right;
+                right.left = &left;
+
+                expression_identifier ei = arg2;
+                if (ctx_->resolve(ei.value, right))
+                  {
+                    switch(right.what)
+                      {
+                        case RESOLVE_CHILD:
+                        case RESOLVE_INSTANCE:
+                        case RESOLVE_PROPERTY:
+                          {
+                            assert(false);
+                            break; //td: error
+                          }
+                        case RESOLVE_METHOD:
+                          {
+                            XSSMethod mthd = right.value;
+                            right_str = mthd->output_id();
+                            break;
+                          }
+                        default:
+                          {
+                            assert(false); //use case
+                          }
+                      }
+                  }
+              }
+
+            push_rendered(caller_str + separator + right_str, 0, variant(), caller_str);
+            break;
+          }
+
+        case op_instantiate:
+          {
+            std::stringstream result;
+            xs_type caller = arg1;
+            int     args   = arg2;
+
+            //pop the arguments
+			      std::vector<str> params;
+            for(int i = 0; i < args; i++)
+              {
+                variant arg  = stack_.top(); stack_.pop();
+                str     sarg = operand_to_string(arg);
+                params.push_back(sarg);
+			        }
+            
+            XSSType type = ctx_->get_type(caller.name);
+
+            if (!type)
+              {
+                param_list error;
+                error.add("id", SLanguage);
+                error.add("desc", SCannotResolveType);
+                error.add("type", type->id());
+                xss_throw(error);
+              }
+            
+            push_rendered(render_instantiation(type, params), op_prec, variant());
+            break;
+          }
+
+        case op_object:
+          {
+            //td: !!! move to js
+            std::stringstream result;
+            std::vector<xs_const> values = arg1;
+
+            result << "{";
+            
+            std::vector<xs_const>::iterator it = values.begin();
+            std::vector<xs_const>::iterator nd = values.end();
+            bool first = true;
+            for(; it != nd; it++)
+              {
+                if (first)
+                  first = false;
+                else
+                  result << ',';
+                  
+                result << it->name << " : " << render_expression(it->value);
+              }
+            
+            result << "}";
+
+            push_rendered(result.str(), op_prec, variant());
             break;
           }
 
@@ -1022,44 +1279,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 
             XSSType instantiation = ctx_->get_type(caller);
             if (instantiation)
-              {
-                //grab parameter info
-                //td: types
-                DynamicArray info(new dynamic_array);
-                std::vector<str>::reverse_iterator pit = params.rbegin();
-                std::vector<str>::reverse_iterator pnd = params.rend();
-                for(; pit != pnd; pit++)
-                  {
-                    XSSObject param_info(new xss_object());
-                    param_info->add_attribute("value", *pit);
-
-                    info->push_back(param_info);
-                  }
-
-                XSSObject type(instantiation);
-                str xss = type->get<str>("instantiator", str());
-                if (!xss.empty())
-                  {
-                    //prepare rendering parameters
-                    param_list args;
-                    args.add("type", instantiation);
-                    args.add("args", info);
-
-                    XSSCompiler compiler = ctx_->resolve("compiler");
-                    fs::path type_path   = compiler->type_path(caller);
-
-                    XSSContext  ctx(new xss_context(ctx_, type_path));
-                    XSSRenderer rend = compiler->compile_xss_file(xss, ctx);
-                    str         res  = rend->render(XSSObject(), &args);
-                    push_rendered(res, op_prec, variant());
-                  }
-                else
-                  {
-                    Language lang = ctx_->get_language();
-                    str      lr = lang->instantiate(instantiation, XSSObject(), info);
-                    push_rendered(lr, op_prec, variant(), caller);
-                  }
-              }
+              push_rendered(render_instantiation(instantiation, params), op_prec, variant());
             else
               push_rendered(result.str(), op_prec, variant(), caller); //td: we could find out the type here or something
             break;
@@ -1149,6 +1369,43 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 
 				default:
           assert(false); //td:
+      }
+  }
+
+str base_expr_renderer::render_instantiation(XSSType type, std::vector<str>& params)
+  {
+    //grab parameter info
+    //td: types
+    DynamicArray info(new dynamic_array);
+    std::vector<str>::reverse_iterator pit = params.rbegin();
+    std::vector<str>::reverse_iterator pnd = params.rend();
+    for(; pit != pnd; pit++)
+      {
+        XSSObject param_info(new xss_object());
+        param_info->add_attribute("value", *pit);
+
+        info->push_back(param_info);
+      }
+
+    str xss = type->get<str>("instantiator", str());
+    if (!xss.empty())
+      {
+        //prepare rendering parameters
+        param_list args;
+        args.add("type", type);
+        args.add("args", info);
+
+        XSSCompiler compiler = ctx_->resolve("compiler");
+        fs::path type_path   = compiler->type_path(type->id());
+
+        XSSContext  ctx(new xss_context(ctx_, type_path));
+        XSSRenderer rend = compiler->compile_xss_file(xss, ctx);
+        return rend->render(XSSObject(), &args);
+      }
+    else
+      {
+        Language lang = ctx_->get_language();
+        return lang->instantiate(type, XSSObject(), info);
       }
   }
 

@@ -23,6 +23,7 @@
 		<script type="text/javascript" src="../js/three/Detector.js"></script>
 		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript">		
+var ui;
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 var renderer = new THREE.WebGLRenderer( { antialias: false } );
 var active_camera;
@@ -32,7 +33,7 @@ var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 application.events = new ms.event.EventHolder();
-		var streamer = new ms.streamer.Streamer();
+		var streamer = new ms.streamer.Streamer();		
 	// --------RESOURCES---------
         var global_package_items = [];
                 global_package_items.push(
@@ -52,7 +53,15 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
+});	
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
         var global_package = new ms.streamer.Package(streamer, global_package_items);	
 		global_package.load();	
     // --------RESOURCES---------
@@ -70,31 +79,34 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var material_sphere1 = new THREE.MeshLambertMaterial({
-color:Green,shading:flat_shading
+var material_sphere1;var material_sphere2;var material_wireframe;var scene;var camera_1;var camera_1;var light;var container_1;var sphere_1;var container_2;var sphere_2;var plane_1;
+threejs_load_resources(function()
+{
+material_sphere1 = new THREE.MeshLambertMaterial({
+color:green,shading:"flat_shading"
 	});
-var material_sphere2 = new THREE.MeshLambertMaterial({
-color:Yellow,shading:flat_shading
+material_sphere2 = new THREE.MeshLambertMaterial({
+color:yellow,shading:"flat_shading"
 	});
-var material_wireframe = new THREE.MeshLambertMaterial({
-color:MediumSlateBlue ,wireframe:true
+material_wireframe = new THREE.MeshLambertMaterial({
+color:mediumslateblue ,wireframe:true
 	});
-var scene = 
+scene = 
 new THREE.Scene(
 );
-var camera_1 = new THREE.QuakeCamera({
+camera_1 = new THREE.QuakeCamera({
 fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly:true,lookVertical:false
 	});
 		active_camera = camera_1;
             camera_1.position.y = 25;
-var light = 
+light = 
 new THREE.DirectionalLight(
-White);
+white);
 		;
 	scene.addLight(light);
             light.position.y = 0.5;
             light.position.z = 1;
-var container_1 = 
+container_1 = 
 new THREE.Object3D(
 );
 container_1.events = new ms.event.EventHolder();
@@ -103,7 +115,7 @@ container_1.events = new ms.event.EventHolder();
 	    var sphere_1_sphere = 
 new THREE.Sphere(
 20,32,16);
-	    var sphere_1 = new THREE.Mesh(sphere_1_sphere, material_sphere1);
+	    sphere_1 = new THREE.Mesh(sphere_1_sphere, material_sphere1);
 	    scene.addObject(sphere_1);
 		sphere_1.events = new ms.event.EventHolder();
 				container_1.addChild(sphere_1);
@@ -115,7 +127,7 @@ new THREE.Sphere(
 	sound_1.play();
 				container_1.addChild(sound_1);
 				scene.addObject(container_1);
-var container_2 = 
+container_2 = 
 new THREE.Object3D(
 );
 container_2.events = new ms.event.EventHolder();
@@ -124,7 +136,7 @@ container_2.events = new ms.event.EventHolder();
 	    var sphere_2_sphere = 
 new THREE.Sphere(
 20,32,16);
-	    var sphere_2 = new THREE.Mesh(sphere_2_sphere, material_sphere2);
+	    sphere_2 = new THREE.Mesh(sphere_2_sphere, material_sphere2);
 	    scene.addObject(sphere_2);
 		sphere_2.events = new ms.event.EventHolder();
 				container_2.addChild(sphere_2);
@@ -139,7 +151,7 @@ new THREE.Sphere(
 	    var plane_1_plane = 
 new THREE.Plane(
 1000,1000,100,100);
-	    var plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
+	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
             plane_1.position.y = 0.100000001;
@@ -172,6 +184,7 @@ document.onkeypress = function(ev)
 application.events.dispatch("init", []);
 document.body.appendChild( renderer.domElement );
 animate();
+});
 function animate() {	
 	requestAnimationFrame( animate );
 	render();	

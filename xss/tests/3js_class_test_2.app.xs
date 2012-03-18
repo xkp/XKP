@@ -1,7 +1,7 @@
 
 on click(x, y){
 	var cylinder_1 = my_cylinder(200,100,100,500);	
-	cylinder_1.hex = Red;
+	cylinder_1.hex = red;
 	cylinder_1.position.x = x;
 	cylinder_1.position.y = y;	
 	cylinder_1.rotation.x = 10;

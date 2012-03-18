@@ -1,9 +1,96 @@
 <xss:classes>
-    <class id="idle_anim" super="sequence">
-        <at time="0">
-            <animate property="target.x" from="target.x" to="Math.random()*(20)+(target.x-10)" in="2"/>
-            <animate property="target.y" from="target.y" to="Math.random()*(20)+(target.y-10)" in="2"/>
-            <animate property="target.rotation" from="target.rotation" to="Math.random()*10-5" in="2"/>
-        </at>
+	<class id="anim_plane" super="plane">
+		<sequence id="plane_anim">
+			<at time="0">
+				<animate property="position.x" from="@" to="Math.random()*(max_x - min_x)+(min_x)" in="8"/>
+				<animate property="position.y" from="@" to="Math.random()*(max_y - min_y)+(min_y)" in="8"/>
+				<animate property="rotation.y" from="@" to="Math.random()*60-30" in="8"/>
+			</at>			
+		</sequence>
+		<sequence id="quickly_anim">
+			<at time="0">
+				<animate property="position.x" from="@" to="Math.random()*(max_x - min_x)+(min_x)" in="2"/>
+				<animate property="position.y" from="@" to="Math.random()*(max_y - min_y)+(min_y)" in="2"/>
+				<animate property="rotation.y" from="@" to="Math.random()*60-30" in="2"/>
+			</at>
+			<at time="2">
+				<run sequence="plane_anim"/>
+				<run sequence="idle_anim"/>
+			</at>
+		</sequence>
+		<sequence id="alpha_anim" auto_start="true">
+			<at time="0">
+				<animate property="alpha" from="0" to="100" in="2"/>				
+			</at>			
+		</sequence>
+		<sequence id="idle_anim">
+			<every time="8">
+				<run sequence="plane_anim"/>
+			</every>
+		</sequence>
+		<sequence id="show_me">
+			<at time="0">
+				<animate property="position.x" from="@" to="-55" in="2"/>
+				<animate property="position.y" from="@" to="50" in="2"/>
+				<animate property="position.z" from="@" to="100" in="2"/>
+				<animate property="scale.x" from="@" to="12" in="2"/>
+				<animate property="scale.y" from="@" to="12" in="2"/>
+				<animate property="scale.z" from="@" to="10" in="2"/>
+				<animate property="rotation.y" from="@" to="0" in="2"/>
+				<animate property="liquid.alpha" from="@" to="0" in="2"/>	
+				<animate property="btn1.alpha" from="0" to="100" in="2"/>
+				<animate property="btn2.alpha" from="0" to="100" in="2"/>
+			</at>			
+		</sequence>
+		<sequence id="back_to">
+			<at time="0">				
+				<animate property="scale.x" from="12" to="2" in="2"/>
+				<animate property="scale.y" from="12" to="2" in="2"/>
+				<animate property="scale.z" from="10" to="0" in="2"/>	
+				<animate property="position.z" from="100" to="0" in="2"/>
+				<animate property="liquid.alpha" from="@" to="50" in="2"/>
+				<animate property="btn1.alpha" from="100" to="0" in="2"/>
+				<animate property="btn2.alpha" from="100" to="0" in="2"/>
+				<run sequence="plane_anim"/>
+				<run sequence="idle_anim"/>
+			</at>			
+		</sequence>
+	</class>
+
+    <class id="planes_group" super="transform">
+        <sequence id="grow_plane">
+            <at time="0">
+                <animate property="group_scale" from="@" to="1.5" in="1"/>
+            </at>
+        </sequence>
+
+        <sequence id="shrink_plane">
+            <at time="0">
+                <animate property="group_scale" from="@" to="1" in="1"/>
+            </at>
+        </sequence>
     </class>
+
+    <class id="social_button" super="img">
+        <sequence id="grow">
+            <at time="0">
+                <animate property="x" from="@" to="ox - 4" in="0.3"/>
+                <animate property="y" from="@" to="oy - 4" in="0.3"/>
+                <animate property="width" from="@" to="32" in="0.3"/>
+                <animate property="height" from="@" to="32" in="0.3"/>
+            </at>
+        </sequence>
+
+        <sequence id="shrink">
+            <at time="0">
+                <animate property="x" from="@" to="ox" in="0.3"/>
+                <animate property="y" from="@" to="oy" in="0.3"/>
+                <animate property="width" from="@" to="24" in="0.3"/>
+                <animate property="height" from="@" to="24" in="0.3"/>
+            </at>
+        </sequence>
+    </class> 
 </xss:classes>
+
+	
+	

@@ -33,7 +33,8 @@ struct java_expr_renderer : public base_expr_renderer
     virtual str array_operation(const str& left, const str& right, operator_type op);
 
     //IExpressionRenderer
-    virtual str     render();
+    virtual str render();
+    virtual str render_expression(expression& expr);
 
     //expression_visitor
     virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top);

@@ -498,13 +498,15 @@ struct xss_type_schema : xss_object_schema<xss_type>
 
 				inherit_from<xss_object>();
 
-				readonly_property<XSSType>("super",   &xss_type::get_super);
-        readonly_property<bool>("is_enum",    &xss_type::is_enum);
-				readonly_property<bool>("is_array",   &xss_type::is_array);
-				readonly_property<bool>("is_object",  &xss_type::is_object);
-				readonly_property<bool>("is_native",  &xss_type::is_native);
-				readonly_property<bool>("is_variant", &xss_type::is_variant);
-				readonly_property<DynamicArray>("instances", &xss_type::all_instances_);
+				readonly_property<XSSType>("super",                  &xss_type::get_super);
+        readonly_property<bool>("is_enum",                   &xss_type::is_enum);
+				readonly_property<bool>("is_array",                  &xss_type::is_array);
+				readonly_property<bool>("is_object",                 &xss_type::is_object);
+				readonly_property<bool>("is_native",                 &xss_type::is_native);
+				readonly_property<bool>("is_variant",                &xss_type::is_variant);
+				readonly_property<DynamicArray>("instances",         &xss_type::all_instances_);
+				readonly_property<DynamicArray>("local_instances",   &xss_type::local_instances_);
+				readonly_property<DynamicArray>("foreign_instances", &xss_type::foreign_instances_);
 
 				readonly_property<DynamicArray>("constructor_params", &xss_type::ctor_args);
       }

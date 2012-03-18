@@ -16,7 +16,7 @@ on render_initialization()
 {
 	out()
 	{
-		var streamer = new ms.streamer.Streamer();
+		var streamer = new ms.streamer.Streamer();		
 	}	
 }
 
@@ -32,10 +32,16 @@ on render_resources()
     for(var res in instances)
     {	
 		if(res.class_name == "package")
+		{
 			out()
 			{
-				var <xss:e v="res.id"/> = new ms.streamer.Package(streamer);
+				var <xss:e v="res.id"/> = new ms.streamer.Package(streamer);				
 			}
+			for(var ev in res.events)
+			{
+				compiler.xss("../common-js/event.xss", ev, res, is_class = false, path = path);
+			}
+		}
 		else if(res.renderer)
 		{
 			compiler.xss(res.renderer, res);
@@ -58,9 +64,17 @@ on render_resources()
             render_resource(res);
             compiler.out(");");
         }		
-    }
+    }	
     out()
-    {
+    {	
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
         var global_package = new ms.streamer.Package(streamer, global_package_items);	
 		global_package.load();	
     }

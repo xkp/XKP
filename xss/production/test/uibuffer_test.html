@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test 3D</title>
+</head>
+<body>
+<style type="text/css">
+	body{
+	}
+</style>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/three/Three.js"></script>
+		<script type="text/javascript" src="../js/three/Stats.js"></script>
+		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+		<script type="text/javascript" src="../js/three/Utils.js"></script>
+<script type="text/javascript">		
+var renderer = new THREE.CanvasRenderer();	
+var ui;
+var SoundUtils;
+var active_camera;
+var g_elapsed = -1;
+var g_delta = 0.0;	
+var drawingCanvas = renderer.domElement;
+var canvas_position = {x:0, y:0};
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
+var lbl0;var lbl1;
+		var webmail = document.createElement('canvas');
+		var webmail_ui;
+	var r1;var yh;var msn;var title1;
+		var soc_net = document.createElement('canvas');
+		var soc_net_ui;
+	var r2;var fb;var tw;var title2;
+var application = {};
+application.events = new ms.event.EventHolder();
+		var streamer = new ms.streamer.Streamer();		
+		if(drawingCanvas){
+			var client =
+			{
+				width: window.innerWidth,
+				height: window.innerHeight,
+				canvas: drawingCanvas
+			};
+            var streamer = new ms.streamer.Streamer();							
+			var ui = new ms.ui.Manager(client, streamer);			
+			var g_ui = ui;
+			var g_ui_root = ui.root;
+			var mouse_pressed = false;
+		}
+	// --------RESOURCES---------
+        var global_package_items = [];
+                global_package_items.push(
+            {
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/yahoo.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/yahoo_up.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/twitter.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image4",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/twitter_up.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image5",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/facebook.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image6",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/facebook_up.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image7",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/msn.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image8",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/msn_up.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
+    // --------RESOURCES---------
+soundRenderer = new THREE.SoundRenderer();		
+document.body.appendChild( soundRenderer.domElement );
+renderer.setSize( app_width, app_height );
+function render() {
+canvas_position = getElementPosition(drawingCanvas);
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+    g_delta = 0; //first update
+else
+g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+application.events.dispatch("updates", []);	
+		set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+var materials;var __basic_material1;var __basic_material2;var __basic_material3;var __basic_material4;var __basic_material5;var __basic_material6;var plane_material;var plane_mat1;var scene;var camera_1;var cube_1;var plane_1;
+threejs_load_resources(function()
+{
+materials = 
+new Array(
+);
+__basic_material1 = new THREE.MeshBasicMaterial({
+color:Math.random() * 0xffffff
+	});
+	materials.push(__basic_material1);
+__basic_material2 = new THREE.MeshBasicMaterial({
+color:Math.random() * 0xffffff
+	});
+	materials.push(__basic_material2);
+__basic_material3 = new THREE.MeshBasicMaterial({
+map:new THREE.Texture(webmail),
+	});
+	materials.push(__basic_material3);
+__basic_material4 = new THREE.MeshBasicMaterial({
+color:Math.random() * 0xffffff
+	});
+	materials.push(__basic_material4);
+__basic_material5 = new THREE.MeshBasicMaterial({
+map:new THREE.Texture(soc_net),
+	});
+	materials.push(__basic_material5);
+__basic_material6 = new THREE.MeshBasicMaterial({
+color:Math.random() * 0xffffff
+	});
+	materials.push(__basic_material6);
+plane_material = new THREE.MeshBasicMaterial({
+color:Grey
+	});
+            set_material_alpha(plane_material, 50);
+plane_mat1 = new THREE.MeshBasicMaterial({
+color:Green
+	});
+scene = 
+new THREE.Scene(
+);
+camera_1 = 
+new THREE.Camera(
+70,1.5,1,1000);
+		active_camera = camera_1;
+            camera_1.position.y = 300;
+            camera_1.position.z = 500;
+	    var cube_1_cube = 
+new THREE.Cube(
+200,200,200,1,1,1,materials);
+	    cube_1 = new THREE.Mesh(cube_1_cube, new THREE.MeshFaceMaterial());
+	    scene.addObject(cube_1);
+		cube_1.events = new ms.event.EventHolder();
+            cube_1.position.x = -150;
+            cube_1.position.y = 50;
+	    var plane_1_plane = 
+new THREE.Plane(
+200,200);
+	    plane_1 = new THREE.Mesh(plane_1_plane, plane_material);
+	    scene.addObject(plane_1);
+		plane_1.events = new ms.event.EventHolder();
+            set_rotation_x(plane_1.rotation, -90);
+            plane_1.position.x = -150;
+            plane_1.position.y = -100;
+            application.x_target_rotation = 0;
+            application.x_target_rotation_on_mouse_down = 0;
+            application.mouse_x = 0;
+            application.mouse_x_on_mouse_down = 0;
+            application.y_target_rotation = 0;
+            application.y_target_rotation_on_mouse_down = 0;
+            application.mouse_y = 0;
+            application.mouse_y_on_mouse_down = 0;
+            application.window_half_x = app_width / 2;
+            application.window_half_y = app_height / 2;
+	var ev_parent = this;
+	application.events.addListener("mousedown", function(x,y)
+	{    
+		application.mouse_x_on_mouse_down = x - application.window_half_x;
+application.x_target_rotation_on_mouse_down = application.x_target_rotation;
+application.mouse_y_on_mouse_down = y - application.window_half_y;
+application.y_target_rotation_on_mouse_down = application.y_target_rotation;
+	}
+	);
+	var ev_parent = this;
+	application.events.addListener("drag", function(x,y)
+	{    
+		application.mouse_x = x - application.window_half_x;
+application.x_target_rotation = application.x_target_rotation_on_mouse_down + (application.mouse_x - application.mouse_x_on_mouse_down) * 0.300000012;
+application.mouse_y = y - application.window_half_y;
+application.y_target_rotation = application.y_target_rotation_on_mouse_down + (application.mouse_y - application.mouse_y_on_mouse_down) * 0.300000012;
+	}
+	);
+	var ev_parent = this;
+	application.events.addListener("updates", function()
+	{    
+		set_rotation_y(cube_1.rotation, get_rotation_y(cube_1.rotation) + (application.x_target_rotation - get_rotation_y(cube_1.rotation)) * 0.200000003);
+set_rotation_z(plane_1.rotation, get_rotation_y(cube_1.rotation));
+set_rotation_x(cube_1.rotation, get_rotation_x(cube_1.rotation) + (application.y_target_rotation - get_rotation_x(cube_1.rotation)) * 0.200000003);
+	}
+	);
+if(ui)
+{	
+	SoundUtils = new ms.ui.SoundUtils();
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+		    lbl0 = new ms.ui.Label( 
+	    "12px Verdana",g_ui_root.manager, g_ui_root);
+        lbl0 = lbl0;
+            lbl0.set_x(200);
+            lbl0.set_y(75);
+            lbl0.text("Drag mouse to spin the cube");
+		    lbl1 = new ms.ui.Label( 
+	    "12px Verdana",g_ui_root.manager, g_ui_root);
+        lbl1 = lbl1;
+            lbl1.set_x(200);
+            lbl1.set_y(120);
+            lbl1.text("Select what you want to open");
+		webmail.width = 200;
+		webmail.height = 200;							
+		webmail_ui = new ms.ui.Manager(webmail, streamer);
+		var webmail_g_ui_root = webmail_ui.root;				
+	application.are_obj_events = true;
+application.events.addListener("updates", function()
+	{   
+		if(webmail_ui)
+			webmail_ui.draw(webmail.getContext('2d'));
+	});
+application.events.addListener("t_mousemove", function(x, y, texture)
+	{   
+		if(texture)
+			if(texture.image == webmail)
+				webmail_ui.mousemove(x*200, y*200);
+	});
+application.events.addListener("t_mouseup", function(x, y, texture)
+	{   
+		if(texture)
+			if(texture.image == webmail)
+				webmail_ui.mouseup(x*200, y*200);
+	});
+application.events.addListener("t_mousedown", function(x, y, texture)
+	{   
+		if(texture)
+			if(texture.image == webmail)
+				webmail_ui.mousedown(x*200, y*200);
+	});
+		    r1 = new ms.ui.Rectangle( 
+	    "beige",null,null,webmail_g_ui_root.manager, webmail_g_ui_root);
+        r1 = r1;
+            r1.set_x(0);
+            r1.set_y(0);
+            r1.set_width(200);
+            r1.set_height(200);
+            r1.mouse_thru = true;
+            r1.alpha(60);
+		    yh = new ms.ui.Button( 
+	    "images/yahoo_up.png","images/yahoo.png",webmail_g_ui_root.manager, webmail_g_ui_root);
+        yh = yh;
+            yh.set_x(25);
+            yh.set_y(50);
+            yh.set_width(50);
+            yh.set_height(50);
+	var ev_parent = this;
+	yh.events.addListener("click", function()
+	{    
+		lbl1.text("Yahoo is opening...");
+	}
+	);
+		application.are_obj_events = true;
+		    msn = new ms.ui.Button( 
+	    "images/msn_up.png","images/msn.png",webmail_g_ui_root.manager, webmail_g_ui_root);
+        msn = msn;
+            msn.set_x(125);
+            msn.set_y(50);
+            msn.set_width(50);
+            msn.set_height(50);
+	var ev_parent = this;
+	msn.events.addListener("click", function()
+	{    
+		lbl1.text("Hotmail is opening...");
+	}
+	);
+		application.are_obj_events = true;
+		    title1 = new ms.ui.Label( 
+	    "12px Verdana",webmail_g_ui_root.manager, webmail_g_ui_root);
+        title1 = title1;
+            title1.set_x(50);
+            title1.set_y(10);
+            title1.text("Webmails");
+		soc_net.width = 200;
+		soc_net.height = 200;							
+		soc_net_ui = new ms.ui.Manager(soc_net, streamer);
+		var soc_net_g_ui_root = soc_net_ui.root;				
+	application.are_obj_events = true;
+application.events.addListener("updates", function()
+	{   
+		if(soc_net_ui)
+			soc_net_ui.draw(soc_net.getContext('2d'));
+	});
+application.events.addListener("t_mousemove", function(x, y, texture)
+	{   
+		if(texture)
+			if(texture.image == soc_net)
+				soc_net_ui.mousemove(x*200, y*200);
+	});
+application.events.addListener("t_mouseup", function(x, y, texture)
+	{   
+		if(texture)
+			if(texture.image == soc_net)
+				soc_net_ui.mouseup(x*200, y*200);
+	});
+application.events.addListener("t_mousedown", function(x, y, texture)
+	{   
+		if(texture)
+			if(texture.image == soc_net)
+				soc_net_ui.mousedown(x*200, y*200);
+	});
+		    r2 = new ms.ui.Rectangle( 
+	    "lightblue",null,null,soc_net_g_ui_root.manager, soc_net_g_ui_root);
+        r2 = r2;
+            r2.set_x(0);
+            r2.set_y(0);
+            r2.set_width(200);
+            r2.set_height(200);
+            r2.mouse_thru = true;
+            r2.alpha(60);
+		    fb = new ms.ui.Button( 
+	    "images/facebook_up.png","images/facebook.png",soc_net_g_ui_root.manager, soc_net_g_ui_root);
+        fb = fb;
+            fb.set_x(25);
+            fb.set_y(50);
+            fb.set_width(50);
+            fb.set_height(50);
+	var ev_parent = this;
+	fb.events.addListener("click", function()
+	{    
+		lbl1.text("Facebook is opening...");
+	}
+	);
+		application.are_obj_events = true;
+		    tw = new ms.ui.Button( 
+	    "images/twitter_up.png","images/twitter.png",soc_net_g_ui_root.manager, soc_net_g_ui_root);
+        tw = tw;
+            tw.set_x(125);
+            tw.set_y(50);
+            tw.set_width(50);
+            tw.set_height(50);
+	var ev_parent = this;
+	tw.events.addListener("click", function()
+	{    
+		lbl1.text("Twitter is opening...");
+	}
+	);
+		application.are_obj_events = true;
+		    title2 = new ms.ui.Label( 
+	    "12px Verdana",soc_net_g_ui_root.manager, soc_net_g_ui_root);
+        title2 = title2;
+            title2.set_x(50);
+            title2.set_y(10);
+            title2.text("Social networks");
+	g_ui.fill_background = false;	
+}
+var event_manager = new ms.event.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(ev.keyCode);                  
+};
+application.events.dispatch("init", []);
+document.body.appendChild( renderer.domElement );
+animate();
+});
+function animate() {
+	if(ui)
+		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
+	requestAnimationFrame( animate );
+	render();
+	if(ui)
+		ui.draw(drawingCanvas.getContext('2d'));
+	}
+</script>
+</body>
+</html>

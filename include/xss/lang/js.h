@@ -28,7 +28,8 @@ struct js_expr_renderer : public base_expr_renderer
     js_expr_renderer(expression& expr, XSSContext ctx);
 
     //IExpressionRenderer
-    virtual str     render();
+    virtual str render();
+    virtual str render_expression(expression& expr);
   };
 
 struct js_args_renderer : public base_args_renderer

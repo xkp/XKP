@@ -4,6 +4,14 @@ on pre_process(obj)
 			obj.id = compiler.genid(obj.class_name);
 }
 
+on render_js_includes()
+{
+	out()
+	{
+		<script type="text/javascript" src="../js/ms-state.js"></script>
+	}
+}
+
 on render_initialization()
 {
 	out()
@@ -14,15 +22,7 @@ on render_initialization()
         {
             return a + (b - a)*t;
         }		
-	}
-}
-
-on render_js_includes()
-{
-	out()
-	{		
-        <script type="text/javascript" src="../js/ms-state.js"></script>
-	}
+	}    
 }
 
 on render_types()

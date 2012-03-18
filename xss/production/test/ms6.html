@@ -6,12 +6,12 @@
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
-		<script type="text/javascript" src="../js/ms-ui.js"></script>
-        <script type="text/javascript" src="../js/ms-state.js"></script>
-		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -21,7 +21,7 @@ var g_canvas;
 var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
-var SoundUtils = new ms.ui.SoundUtils();
+var Sound = new ms.ui.Sound();
 		if(drawingCanvas){
 			var client =
 			{
@@ -29,7 +29,6 @@ var SoundUtils = new ms.ui.SoundUtils();
 				height: 400,
 				canvas: drawingCanvas
 			};
-            var streamer = new ms.streamer.Streamer();							
 			var ui = new ms.ui.Manager(client, streamer);
 			var g_ui = ui;
 			var g_ui_root = ui.root;
@@ -38,29 +37,23 @@ var SoundUtils = new ms.ui.SoundUtils();
         function default_interpolate(a, b, t)
         {
             return a + (b - a)*t;
-        }		
+        }
 		var streamer = new ms.streamer.Streamer();
-        var global_package_items = [];
-                global_package_items.push(
+        var def_package_items = [];
+                def_package_items.push(
             {
-		id:				"__image1",
-		resource_type:	RESOURCE_IMAGE,
-		src:			"images/smile_grin_48.png",
-		frame_width:	null,
-		frame_height:	null,
-		animations:		[]
+		id:"__image1",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/smile_grin_48.png"
 });
-                global_package_items.push(
+                def_package_items.push(
             {
-		id:				"__image2",
-		resource_type:	RESOURCE_IMAGE,
-		src:			"images/smile_sad_48.png",
-		frame_width:	null,
-		frame_height:	null,
-		animations:		[]
+		id:"__image2",
+		resource_type:RESOURCE_IMAGE,
+		src:"images/smile_sad_48.png"
 });
-        var global_package = new ms.streamer.Package(streamer, global_package_items);	
-		global_package.load();	
+        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
+		g_startup_package.load();	
 function start(resolution)  
 {  
 	function updater()  
@@ -72,14 +65,12 @@ function start(resolution)
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
 		g_sequence_manager.update(g_delta);
-		application.events.dispatch("updates", []);	
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var btn1;var btn2;var ms61;var ms62;
             ms6 = Class.create(ms.ui.Component,
         {
     initialize: function($super
@@ -88,10 +79,11 @@ var btn1;var btn2;var ms61;var ms62;
         $super(
                 );
         this.events = new ms.event.EventHolder(); 
+                this.size(50, 100);
 this.anim1 =
 new ms.state.Sequence(
 g_sequence_manager);
-        anim1 = this.anim1;
+        var anim1 = this.anim1;
             this.anim1.parent_sequence = null;
                     var ____i1 = new ms.state.Interpolator(
                         "alpha", 
@@ -107,9 +99,7 @@ g_sequence_manager);
                     this.anim1.addAction(null, "alpha", new ms.state.State(0, 10.5, ____i1));                    
 		    this.btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",this.manager, this);
-        btn1 = this.btn1;
-            this.btn1.set_placement("top");
-            this.btn1.set_height(50);
+        var btn1 = this.btn1;
 	var ev_parent = this;
 	btn1.events.addListener("click", function()
 	{    
@@ -123,12 +113,10 @@ btn2.alpha(100);
 }
 	}
 	);
-		application.are_obj_events = true;
+ this.btn1.top(50); 
 		    this.btn2 = new ms.ui.Button( 
 	    "images/smile_grin_48.png","images/smile_sad_48.png",this.manager, this);
-        btn2 = this.btn2;
-            this.btn2.set_placement("bottom");
-            this.btn2.set_height(50);
+        var btn2 = this.btn2;
 	var ev_parent = this;
 	btn2.events.addListener("click", function()
 	{    
@@ -142,9 +130,7 @@ anim1.start();
 }
 	}
 	);
-		application.are_obj_events = true;
-            this.set_width(50);
-            this.set_height(100);
+ this.btn2.bottom(50); 
             if (this.init)
                 this.init();
             },
@@ -180,14 +166,12 @@ window.onload = function()
 	};	
 		    ms61 = new ms6( 
 	    g_ui_root.manager, g_ui_root);
-        ms61 = ms61;
-            ms61.set_x(100);
-            ms61.set_y(100);
+        var ms61 = ms61;
+                ms61.rect(100, 100, 50, 100);
 		    ms62 = new ms6( 
 	    g_ui_root.manager, g_ui_root);
-        ms62 = ms62;
-            ms62.set_x(200);
-            ms62.set_y(100);
+        var ms62 = ms62;
+                ms62.rect(200, 100, 50, 100);
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -200,7 +184,10 @@ window.onload = function()
 			{
 				ui.keypress(ev.keyCode);                  
 			};
-            application.events.dispatch("init", []);
+            if (application.init)
+            {
+                application.init();
+            }
             start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});
@@ -208,8 +195,9 @@ window.onload = function()
 }
 </script>
 </head>
-<body>	
-	<canvas id="myCanvas" width="600" height="400"
-		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
+<body>
+	<canvas id="myCanvas" width="600" height="400">
+		<p>Your browser doesn't support canvas.</p>
+	</canvas>
 </body>
 </html>

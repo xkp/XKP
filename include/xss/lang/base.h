@@ -45,6 +45,9 @@ struct variable_gather : code_visitor
     virtual void continue_()                          {}
     virtual void dsl_(dsl& info)                      {}
     virtual void dispatch(stmt_dispatch& info)        {}
+    virtual void switch_(stmt_switch& info)           {}
+    virtual void try_(stmt_try& info)                 {}
+    virtual void throw_(stmt_throw& info)             {}
 
     private:
       typedef std::vector<str> var_list;
@@ -77,6 +80,9 @@ struct base_code_renderer : ICodeRenderer,
     virtual void expression_(stmt_expression& info);
     virtual void dsl_(dsl& info);
     virtual void dispatch(stmt_dispatch& info);
+    virtual void switch_(stmt_switch& info);
+    virtual void try_(stmt_try& info);
+    virtual void throw_(stmt_throw& info);
 
     private:
       param_list_decl params_;
@@ -116,7 +122,8 @@ struct base_expr_renderer : IExpressionRenderer,
     //IExpressionRenderer
     virtual XSSType type();
     virtual variant eval(XSSContext ctx);
-    virtual str     render() = 0;
+    virtual str     render()                            = 0;
+    virtual str     render_expression(expression& expr) = 0;
 
     //expression_visitor
     virtual void push(variant operand, bool top);
@@ -140,6 +147,8 @@ struct base_expr_renderer : IExpressionRenderer,
 
       void push_rendered(str value, int prec, variant object, const str& path = str());
 			str	 render_captured_property();
+      str  render_instantiation(XSSType type, std::vector<str>& params);
+
   };
 
 struct base_args_renderer : public IArgumentRenderer

@@ -2,6 +2,13 @@
 <html>
 <head>
 <title>danydenis.com</title>
+</head>
+<body>
+<style type="text/css">
+	body{
+	background:Black;
+	}
+</style>
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
@@ -9,25 +16,34 @@
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
-        <script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+		<script type="text/javascript" src="../js/ms-sequence.js"></script>
 		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 		<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript">	
-var drawingCanvas;		
-var g_ui;
+		<script type="text/javascript" src="../js/three/Three.js"></script>
+		<script type="text/javascript" src="../js/three/Stats.js"></script>
+		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+		<script type="text/javascript" src="../js/three/Utils.js"></script>
+<script type="text/javascript">		
+var renderer = new THREE.CanvasRenderer();	
+var ui;
+var SoundUtils;
+var active_camera;
 var g_elapsed = -1;
-var g_delta = 0.0;
-var g_canvas;
-var g_ui_root;
+var g_delta = 0.0;	
+var drawingCanvas = renderer.domElement;
+var canvas_position = {x:0, y:0};
+var app_width = 1000;
+var app_height = 800;
+var plane_anim;var quickly_anim;var alpha_anim;var idle_anim;var show_me;var back_to;var grow_plane;var shrink_plane;var init_anim;var init_anim2;var rain;var go_up;var loading_seq;var idle_load;var enterto_in;var liquid;var banner;var loading;var enter_to;var lens1;var lens2;var facebook;var twitter;var email;var btn1;var btn2;var linetop;var line1;var line2;var line3;var line4;var rect1;
 var application = {};
 application.events = new ms.event.EventHolder();
-var SoundUtils = new ms.ui.SoundUtils();
 		var g_sequence_manager = new ms.state.Manager();
         function default_interpolate(a, b, t)
         {
             return a + (b - a)*t;
         }		
-		var streamer = new ms.streamer.Streamer();
+		var streamer = new ms.streamer.Streamer();		
 		if(drawingCanvas){
 			var client =
 			{
@@ -36,10 +52,12 @@ var SoundUtils = new ms.ui.SoundUtils();
 				canvas: drawingCanvas
 			};
             var streamer = new ms.streamer.Streamer();							
-			var ui = new ms.ui.Manager(client, streamer);
+			var ui = new ms.ui.Manager(client, streamer);			
 			var g_ui = ui;
 			var g_ui_root = ui.root;
+			var mouse_pressed = false;
 		}
+	// --------RESOURCES---------
         var global_package_items = [];
                 global_package_items.push(
             {
@@ -54,7 +72,7 @@ var SoundUtils = new ms.ui.SoundUtils();
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"images/pictures/lens_d1.png",
+		src:			"images/pictures/lente1.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
@@ -63,7 +81,7 @@ var SoundUtils = new ms.ui.SoundUtils();
             {
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"images/pictures/lens_d2.png",
+		src:			"images/pictures/lente2.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
@@ -86,17 +104,104 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-				var art_pack = new ms.streamer.Package(streamer);
-                art_pack.add_item(
+                global_package_items.push(
             {
 		id:				"__image6",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/pictures/loading.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image7",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/pictures/enter.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image8",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/pictures/boxdef.jpg",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image9",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/pictures/arrow_up.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image10",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/pictures/arrow_down.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__image11",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/pictures/photobucket.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+                global_package_items.push(
+            {
+		id:				"__audio1",
+		resource_type:	RESOURCE_AUDIO,
+		src:			"sounds/water-droplet-1.mp3",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});
+				var everybody_pack = new ms.streamer.Package(streamer);				
+	var ev_parent = this;
+	everybody_pack.events.addListener("loaded", function()
+	{    
+		loading_seq.stop();
+idle_load.stop();
+loading.setVisible(false);
+enter_to.setVisible(true);
+enterto_in.start();
+if (application.waiting_for_load)
+{
+init_anim.stop();
+init_anim2.stop();
+line1.setVisible(false);
+line2.setVisible(false);
+line3.setVisible(false);
+line4.setVisible(false);
+rect1.setVisible(true);
+go_up.start();
+enter_to.setVisible(false);
+application.init_planes();
+}
+	}
+	);
+		application.are_obj_events = true;
+                everybody_pack.add_item(
+            {
+		id:				"art_title",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/pictures/art.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
 });
-                art_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"a1",
 		resource_type:	RESOURCE_IMAGE,
@@ -105,7 +210,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                art_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"a2",
 		resource_type:	RESOURCE_IMAGE,
@@ -114,7 +219,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                art_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"a3",
 		resource_type:	RESOURCE_IMAGE,
@@ -123,7 +228,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                art_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"a4",
 		resource_type:	RESOURCE_IMAGE,
@@ -132,7 +237,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                art_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"a5",
 		resource_type:	RESOURCE_IMAGE,
@@ -141,7 +246,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                art_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"a6",
 		resource_type:	RESOURCE_IMAGE,
@@ -150,7 +255,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                art_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"a7",
 		resource_type:	RESOURCE_IMAGE,
@@ -159,7 +264,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                art_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"a8",
 		resource_type:	RESOURCE_IMAGE,
@@ -168,17 +273,16 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-				var forms_pack = new ms.streamer.Package(streamer);
-                forms_pack.add_item(
+                everybody_pack.add_item(
             {
-		id:				"__image7",
+		id:				"forms_title",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/pictures/forms.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
 });
-                forms_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"f1",
 		resource_type:	RESOURCE_IMAGE,
@@ -187,7 +291,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                forms_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"f2",
 		resource_type:	RESOURCE_IMAGE,
@@ -196,7 +300,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                forms_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"f3",
 		resource_type:	RESOURCE_IMAGE,
@@ -205,7 +309,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                forms_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"f4",
 		resource_type:	RESOURCE_IMAGE,
@@ -214,7 +318,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                forms_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"f5",
 		resource_type:	RESOURCE_IMAGE,
@@ -223,7 +327,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                forms_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"f6",
 		resource_type:	RESOURCE_IMAGE,
@@ -232,7 +336,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                forms_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"f7",
 		resource_type:	RESOURCE_IMAGE,
@@ -241,7 +345,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                forms_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"f8",
 		resource_type:	RESOURCE_IMAGE,
@@ -250,17 +354,16 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-				var times_pack = new ms.streamer.Package(streamer);
-                times_pack.add_item(
+                everybody_pack.add_item(
             {
-		id:				"__image8",
+		id:				"times_title",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/pictures/times.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
 });
-                times_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"t1",
 		resource_type:	RESOURCE_IMAGE,
@@ -269,7 +372,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                times_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"t2",
 		resource_type:	RESOURCE_IMAGE,
@@ -278,7 +381,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                times_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"t3",
 		resource_type:	RESOURCE_IMAGE,
@@ -287,7 +390,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                times_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"t4",
 		resource_type:	RESOURCE_IMAGE,
@@ -296,7 +399,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                times_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"t5",
 		resource_type:	RESOURCE_IMAGE,
@@ -305,7 +408,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                times_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"t6",
 		resource_type:	RESOURCE_IMAGE,
@@ -314,7 +417,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });
-                times_pack.add_item(
+                everybody_pack.add_item(
             {
 		id:				"t7",
 		resource_type:	RESOURCE_IMAGE,
@@ -322,389 +425,1498 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
+});	
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
         var global_package = new ms.streamer.Package(streamer, global_package_items);	
 		global_package.load();	
-function start(resolution)  
-{  
-	function updater()  
-	{  
-		var now   = new Date().getTime();
-        if (g_elapsed < 0)
-            g_delta = 0; //first update
-        else
-		    g_delta  = now - g_elapsed;  
-        g_elapsed = now; 
+    // --------RESOURCES---------
+soundRenderer = new THREE.SoundRenderer();		
+document.body.appendChild( soundRenderer.domElement );
+renderer.setSize( app_width, app_height );
+function render() {
+canvas_position = getElementPosition(drawingCanvas);
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+    g_delta = 0; //first update
+else
+g_delta  = now - g_elapsed;  
+g_elapsed = now; 
 		g_sequence_manager.update(g_delta);
-		application.events.dispatch("updates", []);	
-		var context = g_canvas.getContext('2d');
-		g_ui.update(g_delta, context);
-        window.setTimeout(updater, resolution);  
-	}    
-	window.setTimeout(updater, resolution);  
-}  
-var liquid;var art_div;var art1;var art2;var art3;var art4;var art5;var art6;var art7;var art8;var art;var forms_div;var forms1;var forms2;var forms3;var forms4;var forms5;var forms6;var forms7;var forms8;var forms;var times_div;var times1;var times2;var times3;var times4;var times5;var times6;var times7;var times;var banner;var lens1;var lens2;var facebook;var twitter;var linetop;var line1;var line2;var line3;var line4;var idle_anim_1;var idle_anim_2;var idle_anim_3;var idle_anim_4;var idle_anim_5;var idle_anim_6;var idle_anim_7;var idle_anim_8;var idle_anim_9;var idle_anim_10;var idle_anim_11;var idle_anim_12;var idle_anim_13;var idle_anim_14;var idle_anim_15;var idle_anim_16;var idle_anim_17;var idle_anim_18;var idle_anim_19;var idle_anim_20;var idle_anim_21;var idle_anim_22;var idle_anim_23;var idle_anim_seq;var init_anim;
-            idle_anim = Class.create(ms.state.Sequence,
+application.events.dispatch("updates", []);	
+		set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+var anim_plane;var scene;var camera_1;
+            social_button = Class.create(ms.ui.Image,
         {
     initialize: function($super
-                , manager
-                )
+                , src
+				, manager, parent
+			)
     {
         $super(
-        manager        );
+        src
+				, manager, parent
+			        );
         this.events = new ms.event.EventHolder(); 
-                var this__ = this;
-            this.parent_sequence = null;
+        var this__  = this;
+this.grow =
+new ms.state.Sequence(
+g_sequence_manager);
                     var ____i1 = new ms.state.Interpolator(
-                        "x", 
                         default_interpolate,
                         function(value)
                         {
-                            this__.target.set_x(value);
+                            this__.set_x(value);
                         },
                         [
                         {t: 0, value: null},
-                        {t: 2, value: null},
+                        {t: 0.300000012, value: null},
                         ]);
-                    this.addAction(null, "x", new ms.state.State(0, 2, ____i1));                    
+                        this.grow.addHandler(____i1);	              
                     var ____i2 = new ms.state.Interpolator(
-                        "y", 
                         default_interpolate,
                         function(value)
                         {
-                            this__.target.set_y(value);
+                            this__.set_y(value);
                         },
                         [
                         {t: 0, value: null},
-                        {t: 2, value: null},
+                        {t: 0.300000012, value: null},
                         ]);
-                    this.addAction(null, "y", new ms.state.State(0, 2, ____i2));                    
+                        this.grow.addHandler(____i2);	              
                     var ____i3 = new ms.state.Interpolator(
-                        "rotation", 
                         default_interpolate,
                         function(value)
                         {
-                            this__.target.set_rotation(value);
+                            this__.set_width(value);
                         },
                         [
                         {t: 0, value: null},
-                        {t: 2, value: null},
+                        {t: 0.300000012, value: 32},
                         ]);
-                    this.addAction(null, "rotation", new ms.state.State(0, 2, ____i3));                    
-                this.on_start = function()
+                        this.grow.addHandler(____i3);	              
+                    var ____i4 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.set_height(value);
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 0.300000012, value: 32},
+                        ]);
+                        this.grow.addHandler(____i4);	              
+                this.grow.events.addListener('start', function()
                 {
-                    ____i1.keys[0].value = this.target.x;
-                    ____i1.keys[1].value = Math.random() * 20 + this.target.x - 10;
-                    ____i2.keys[0].value = this.target.y;
-                    ____i2.keys[1].value = Math.random() * 20 + this.target.y - 10;
-                    ____i3.keys[0].value = this.target.get_rotation();
-                    ____i3.keys[1].value = Math.random() * 10 - 5;
-                }
-            this.target = null;
+                    ____i1.keys[0].value = this__.x;
+                    ____i1.keys[1].value = this__.ox - 4;
+                    ____i2.keys[0].value = this__.y;
+                    ____i2.keys[1].value = this__.oy - 4;
+                    ____i3.keys[0].value = this__.get_width();
+                    ____i4.keys[0].value = this__.get_height();
+                });
+this.shrink =
+new ms.state.Sequence(
+g_sequence_manager);
+                    var ____i5 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.set_x(value);
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 0.300000012, value: null},
+                        ]);
+                        this.shrink.addHandler(____i5);	              
+                    var ____i6 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.set_y(value);
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 0.300000012, value: null},
+                        ]);
+                        this.shrink.addHandler(____i6);	              
+                    var ____i7 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.set_width(value);
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 0.300000012, value: 24},
+                        ]);
+                        this.shrink.addHandler(____i7);	              
+                    var ____i8 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.set_height(value);
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 0.300000012, value: 24},
+                        ]);
+                        this.shrink.addHandler(____i8);	              
+                this.shrink.events.addListener('start', function()
+                {
+                    ____i5.keys[0].value = this__.x;
+                    ____i5.keys[1].value = this__.ox;
+                    ____i6.keys[0].value = this__.y;
+                    ____i6.keys[1].value = this__.oy;
+                    ____i7.keys[0].value = this__.get_width();
+                    ____i8.keys[0].value = this__.get_height();
+                });
+            this.ox = null;
+            this.oy = null;
+	var ev_parent = this;
+	this.events.addListener("mousein", function()
+	{    
+		ev_parent.ox = ev_parent.x;
+ev_parent.oy = ev_parent.y;
+ev_parent.shrink.stop();
+ev_parent.grow.start();
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
+	this.events.addListener("mouseout", function()
+	{    
+		ev_parent.grow.stop();
+ev_parent.shrink.start();
+	}
+	);
+		application.are_obj_events = true;
             if (this.init)
                 this.init();
             },
 });
+        function create_anim_plane(
+    width,height,x_segments,y_segments ) { 
+    var anim_plane;
+	    var anim_plane_plane = 
+new THREE.Plane(
+width,height,x_segments,y_segments);
+	    anim_plane = new THREE.Mesh(anim_plane_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(anim_plane);
+		anim_plane.events = new ms.event.EventHolder();
+        var this__ = anim_plane;
+            var plane_anim;
+plane_anim =
+new ms.state.Sequence(
+g_sequence_manager);
+                    var ____i9 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.position.x = value;
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 8, value: null},
+                        ]);
+                        plane_anim.addHandler(____i9);	              
+                    var ____i10 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.position.y = value;
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 8, value: null},
+                        ]);
+                        plane_anim.addHandler(____i10);	              
+                    var ____i11 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            set_rotation_y(this__.rotation, value);
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 8, value: null},
+                        ]);
+                        plane_anim.addHandler(____i11);	              
+                plane_anim.events.addListener('start', function()
+                {
+                    ____i9.keys[0].value = this__.position.x;
+                    ____i9.keys[1].value = Math.random() * (this__.max_x - this__.min_x) + this__.min_x;
+                    ____i10.keys[0].value = this__.position.y;
+                    ____i10.keys[1].value = Math.random() * (this__.max_y - this__.min_y) + this__.min_y;
+                    ____i11.keys[0].value = get_rotation_y(this__.rotation);
+                    ____i11.keys[1].value = Math.random() * 60 - 30;
+                });
+            anim_plane.plane_anim = plane_anim;
+            var quickly_anim;
+quickly_anim =
+new ms.state.Sequence(
+g_sequence_manager);
+                    var ____i12 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.position.x = value;
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 2, value: null},
+                        ]);
+                        quickly_anim.addHandler(____i12);	              
+                    var ____i13 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.position.y = value;
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 2, value: null},
+                        ]);
+                        quickly_anim.addHandler(____i13);	              
+                    var ____i14 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            set_rotation_y(this__.rotation, value);
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 2, value: null},
+                        ]);
+                        quickly_anim.addHandler(____i14);	              
+                    var ____r1 = new ms.state.Caller(2,function()
+                    {
+                    plane_anim.start();
+                    });
+                    quickly_anim.addHandler(____r1);						  
+                    var ____r2 = new ms.state.Caller(2,function()
+                    {
+                    idle_anim.start();
+                    });
+                    quickly_anim.addHandler(____r2);						  
+                quickly_anim.events.addListener('start', function()
+                {
+                    ____i12.keys[0].value = this__.position.x;
+                    ____i12.keys[1].value = Math.random() * (this__.max_x - this__.min_x) + this__.min_x;
+                    ____i13.keys[0].value = this__.position.y;
+                    ____i13.keys[1].value = Math.random() * (this__.max_y - this__.min_y) + this__.min_y;
+                    ____i14.keys[0].value = get_rotation_y(this__.rotation);
+                    ____i14.keys[1].value = Math.random() * 60 - 30;
+                });
+            anim_plane.quickly_anim = quickly_anim;
+            var alpha_anim;
+alpha_anim =
+new ms.state.Sequence(
+g_sequence_manager);
+                alpha_anim.start();
+                    var ____i15 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            set_object_alpha(this__, value);
+                        },
+                        [
+                        {t: 0, value: 0},
+                        {t: 2, value: 100},
+                        ]);
+                        alpha_anim.addHandler(____i15);	              
+            anim_plane.alpha_anim = alpha_anim;
+            var idle_anim;
+idle_anim =
+new ms.state.Sequence(
+g_sequence_manager);
+            var ____h1 = new ms.state.Every(8, function(t)
+            {
+                    plane_anim.start();
+            });
+            idle_anim.addHandler(____h1);	                    
+            anim_plane.idle_anim = idle_anim;
+            var show_me;
+show_me =
+new ms.state.Sequence(
+g_sequence_manager);
+                    var ____i16 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.position.x = value;
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 2, value: -55},
+                        ]);
+                        show_me.addHandler(____i16);	              
+                    var ____i17 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.position.y = value;
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 2, value: 50},
+                        ]);
+                        show_me.addHandler(____i17);	              
+                    var ____i18 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.position.z = value;
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 2, value: 100},
+                        ]);
+                        show_me.addHandler(____i18);	              
+                    var ____i19 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.scale.x = value;
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 2, value: 12},
+                        ]);
+                        show_me.addHandler(____i19);	              
+                    var ____i20 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.scale.y = value;
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 2, value: 12},
+                        ]);
+                        show_me.addHandler(____i20);	              
+                    var ____i21 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.scale.z = value;
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 2, value: 10},
+                        ]);
+                        show_me.addHandler(____i21);	              
+                    var ____i22 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            set_rotation_y(this__.rotation, value);
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 2, value: 0},
+                        ]);
+                        show_me.addHandler(____i22);	              
+                    var ____i23 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            liquid.alpha(value);
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 2, value: 0},
+                        ]);
+                        show_me.addHandler(____i23);	              
+                    var ____i24 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            btn1.alpha(value);
+                        },
+                        [
+                        {t: 0, value: 0},
+                        {t: 2, value: 100},
+                        ]);
+                        show_me.addHandler(____i24);	              
+                    var ____i25 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            btn2.alpha(value);
+                        },
+                        [
+                        {t: 0, value: 0},
+                        {t: 2, value: 100},
+                        ]);
+                        show_me.addHandler(____i25);	              
+                show_me.events.addListener('start', function()
+                {
+                    ____i16.keys[0].value = this__.position.x;
+                    ____i17.keys[0].value = this__.position.y;
+                    ____i18.keys[0].value = this__.position.z;
+                    ____i19.keys[0].value = this__.scale.x;
+                    ____i20.keys[0].value = this__.scale.y;
+                    ____i21.keys[0].value = this__.scale.z;
+                    ____i22.keys[0].value = get_rotation_y(this__.rotation);
+                    ____i23.keys[0].value = liquid.get_alpha();
+                });
+            anim_plane.show_me = show_me;
+            var back_to;
+back_to =
+new ms.state.Sequence(
+g_sequence_manager);
+                    var ____i26 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.scale.x = value;
+                        },
+                        [
+                        {t: 0, value: 12},
+                        {t: 2, value: 2},
+                        ]);
+                        back_to.addHandler(____i26);	              
+                    var ____i27 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.scale.y = value;
+                        },
+                        [
+                        {t: 0, value: 12},
+                        {t: 2, value: 2},
+                        ]);
+                        back_to.addHandler(____i27);	              
+                    var ____i28 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.scale.z = value;
+                        },
+                        [
+                        {t: 0, value: 10},
+                        {t: 2, value: 0},
+                        ]);
+                        back_to.addHandler(____i28);	              
+                    var ____i29 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.position.z = value;
+                        },
+                        [
+                        {t: 0, value: 100},
+                        {t: 2, value: 0},
+                        ]);
+                        back_to.addHandler(____i29);	              
+                    var ____i30 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            liquid.alpha(value);
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 2, value: 50},
+                        ]);
+                        back_to.addHandler(____i30);	              
+                    var ____i31 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            btn1.alpha(value);
+                        },
+                        [
+                        {t: 0, value: 100},
+                        {t: 2, value: 0},
+                        ]);
+                        back_to.addHandler(____i31);	              
+                    var ____i32 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            btn2.alpha(value);
+                        },
+                        [
+                        {t: 0, value: 100},
+                        {t: 2, value: 0},
+                        ]);
+                        back_to.addHandler(____i32);	              
+                    var ____r3 = new ms.state.Caller(0,function()
+                    {
+                    plane_anim.start();
+                    });
+                    back_to.addHandler(____r3);						  
+                    var ____r4 = new ms.state.Caller(0,function()
+                    {
+                    idle_anim.start();
+                    });
+                    back_to.addHandler(____r4);						  
+                back_to.events.addListener('start', function()
+                {
+                    ____i30.keys[0].value = liquid.get_alpha();
+                });
+            anim_plane.back_to = back_to;
+            anim_plane.max_x = null;
+            anim_plane.min_x = null;
+            anim_plane.max_y = null;
+            anim_plane.min_y = null;
+            anim_plane.parent_ = null;
+            anim_plane.title = false;
+	anim_plane.set_image = function(value) 
+	{
+		anim_plane.materials[0].map = new THREE.Texture(streamer.get_resource(value).data);
+	};
+	var ev_parent = this;
+	anim_plane.events.addListener("mousein", function(x,y)
+	{    
+		application.selected = anim_plane;
+if (application.phase == 2)
+{
+if (anim_plane.parent_ == application.group_zoomed)
+{
+if (!anim_plane.title)
+{
+anim_plane.scale.x = 3;
+anim_plane.scale.y = 3;
+anim_plane.scale.z = 3;
+}
+}
+else
+{
+anim_plane.parent_.set_individual_scale(0.800000012);
+}
+liquid.disturb(x, y);
+}
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
+	anim_plane.events.addListener("mouseout", function()
+	{    
+		application.selected = false;
+if (application.phase == 2)
+{
+if (anim_plane.parent_ == application.group_zoomed)
+{
+anim_plane.scale.x = 2;
+anim_plane.scale.y = 2;
+anim_plane.scale.z = 2;
+}
+else
+{
+if (application.art_planes != application.group_zoomed)
+{
+application.art_planes.set_individual_scale(0.699999988);
+}
+if (application.forms_planes != application.group_zoomed)
+{
+application.forms_planes.set_individual_scale(0.699999988);
+}
+if (application.times_planes != application.group_zoomed)
+{
+application.times_planes.set_individual_scale(0.699999988);
+}
+}
+}
+	}
+	);
+		application.are_obj_events = true;
+        return anim_plane;
+        }
+        function create_planes_group(
+     ) { 
+    var planes_group;
+			planes_group = new THREE.Object3D();
+			planes_group.events = new ms.event.EventHolder();
+        var this__ = planes_group;
+            var grow_plane;
+grow_plane =
+new ms.state.Sequence(
+g_sequence_manager);
+                    var ____i33 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.group_scale_set(value);
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 1, value: 1.5},
+                        ]);
+                        grow_plane.addHandler(____i33);	              
+                grow_plane.events.addListener('start', function()
+                {
+                    ____i33.keys[0].value = this__.group_scale;
+                });
+            planes_group.grow_plane = grow_plane;
+            var shrink_plane;
+shrink_plane =
+new ms.state.Sequence(
+g_sequence_manager);
+                    var ____i34 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            this__.group_scale_set(value);
+                        },
+                        [
+                        {t: 0, value: null},
+                        {t: 1, value: 1},
+                        ]);
+                        shrink_plane.addHandler(____i34);	              
+                shrink_plane.events.addListener('start', function()
+                {
+                    ____i34.keys[0].value = this__.group_scale;
+                });
+            planes_group.shrink_plane = shrink_plane;
+            planes_group.selected = false;
+            planes_group.plane_array = [];
+        planes_group.images = null;
+        planes_group.images_set = function (value)
+        {
+            planes_group.images = value;
+            var resource;
+for(var index = 0; index < this.images.length - 1; index++)
+{
+resource = streamer.get_resource(this.images[index]).data;
+this.plane_array.push(
+create_anim_plane(
+resource.naturalWidth / 13,resource.naturalHeight / 13
+)
+);
+this.plane_array[index].set_image(this.images[index]);
+this.plane_array[index].parent_ = this;
+}
+resource = streamer.get_resource(this.images[this.images.length - 1]).data;
+this.plane_array.push(
+create_anim_plane(
+resource.naturalWidth,resource.naturalHeight
+)
+);
+this.plane_array[this.images.length - 1].set_image(this.images[this.images.length - 1]);
+this.plane_array[this.images.length - 1].parent_ = this;
+this.plane_array[this.images.length - 1].title = true;
+        };
+        planes_group.group_scale = null;
+        planes_group.group_scale_set = function (value)
+        {
+            planes_group.group_scale = value;
+            this.set_individual_scale(value);
+        };
+            planes_group.selected_ = false;
+	planes_group.selected = function() 
+	{
+		if (planes_group.selected_)
+{
+return;
+}
+planes_group.selected_ = true;
+shrink_plane.stop();
+grow_plane.start();
+	};
+	planes_group.unselected = function() 
+	{
+		if (!planes_group.selected_)
+{
+return;
+}
+planes_group.selected_ = false;
+shrink_plane.start();
+grow_plane.stop();
+	};
+	planes_group.set_limits = function(min_x,max_x,min_y,max_y) 
+	{
+		for(var index = 0; index < planes_group.plane_array.length; index++)
+{
+if (index != planes_group.plane_array.length - 1)
+{
+planes_group.plane_array[index].min_x = min_x;
+planes_group.plane_array[index].max_x = max_x;
+planes_group.plane_array[index].min_y = min_y;
+planes_group.plane_array[index].max_y = max_y;
+planes_group.plane_array[index].plane_anim.stop();
+planes_group.plane_array[index].idle_anim.stop();
+planes_group.plane_array[index].quickly_anim.stop();
+planes_group.plane_array[index].plane_anim.start();
+planes_group.plane_array[index].idle_anim.start();
+}
+else
+{
+planes_group.plane_array[index].position.x = min_x + (max_x - min_x) / 2;
+planes_group.plane_array[index].position.y = min_y + (min_y - max_y) / 4;
+}
+}
+	};
+	planes_group.set_limits_quickly = function(min_x,max_x,min_y,max_y) 
+	{
+		for(var index = 0; index < planes_group.plane_array.length; index++)
+{
+if (index != planes_group.plane_array.length - 1)
+{
+planes_group.plane_array[index].min_x = min_x;
+planes_group.plane_array[index].max_x = max_x;
+planes_group.plane_array[index].min_y = min_y;
+planes_group.plane_array[index].max_y = max_y;
+planes_group.plane_array[index].plane_anim.stop();
+planes_group.plane_array[index].idle_anim.stop();
+planes_group.plane_array[index].quickly_anim.stop();
+planes_group.plane_array[index].quickly_anim.start();
+}
+else
+{
+planes_group.plane_array[index].position.x = min_x + (max_x - min_x) / 2;
+planes_group.plane_array[index].position.y = min_y + (min_y - max_y) / 4;
+}
+}
+	};
+	planes_group.set_individual_scale = function(value) 
+	{
+		var pl_iterable = planes_group.plane_array;
+for(var pl_iterator = 0; pl_iterator < pl_iterable.length; pl_iterator++)
+{
+var pl = pl_iterable[pl_iterator];
+pl.scale.x = value;
+pl.scale.y = value;
+pl.scale.z = value;
+}
+	};
+	planes_group.find = function(item) 
+	{
+		for(var index = 0; index < planes_group.plane_array.length; index++)
+{
+if (planes_group.plane_array[index] == item)
+{
+return index;
+}
+}
+return -1;
+	};
+	planes_group.set_selected = function(value) 
+	{
+		if (value)
+{
+grow.start();
+shrink.stop();
+}
+else
+{
+grow.stop();
+shrink.start();
+}
+	};
+        return planes_group;
+        }
+threejs_load_resources(function()
+{
+init_anim =
+new ms.state.Sequence(
+g_sequence_manager);
+	init_anim.enter_if_loaded = function() 
+	{
+		if (everybody_pack.all_loaded)
+{
+init_anim.stop();
+init_anim2.stop();
+line1.setVisible(false);
+line2.setVisible(false);
+line3.setVisible(false);
+line4.setVisible(false);
+rect1.setVisible(true);
+go_up.start();
+enter_to.setVisible(false);
+application.init_planes();
+}
+else
+{
+application.waiting_for_load = true;
+}
+	};
+                init_anim.start();
+                    var ____i35 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            line1.set_x2(value);
+                        },
+                        [
+                        {t: 0, value: 200},
+                        {t: 1, value: 500},
+                        ]);
+                        init_anim.addHandler(____i35);	              
+                    var ____i36 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            linetop.set_x2(value);
+                        },
+                        [
+                        {t: 0, value: 5},
+                        {t: 4, value: 905},
+                        ]);
+                        init_anim.addHandler(____i36);	              
+                    var ____i37 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            line2.set_y2(value);
+                        },
+                        [
+                        {t: 1, value: 200},
+                        {t: 2, value: 500},
+                        ]);
+                        init_anim.addHandler(____i37);	              
+                    var ____i38 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            line3.set_x2(value);
+                        },
+                        [
+                        {t: 2, value: 500},
+                        {t: 3, value: 200},
+                        ]);
+                        init_anim.addHandler(____i38);	              
+                    var ____i39 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            line4.set_y2(value);
+                        },
+                        [
+                        {t: 3, value: 500},
+                        {t: 4, value: 200},
+                        ]);
+                        init_anim.addHandler(____i39);	              
+                    var ____i40 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            lens1.set_rotation(value);
+                        },
+                        [
+                        {t: 4, value: 0},
+                        {t: 5, value: 45},
+                        ]);
+                        init_anim.addHandler(____i40);	              
+                    var ____i41 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            lens2.set_rotation(value);
+                        },
+                        [
+                        {t: 4, value: 0},
+                        {t: 5, value: -45},
+                        ]);
+                        init_anim.addHandler(____i41);	              
+                    var ____i42 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            lens1.set_rotation(value);
+                        },
+                        [
+                        {t: 5, value: 45},
+                        {t: 7, value: -45},
+                        ]);
+                        init_anim.addHandler(____i42);	              
+                    var ____i43 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            lens2.set_rotation(value);
+                        },
+                        [
+                        {t: 5, value: -45},
+                        {t: 7, value: 45},
+                        ]);
+                        init_anim.addHandler(____i43);	              
+                    var ____i44 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            lens1.set_rotation(value);
+                        },
+                        [
+                        {t: 7, value: -45},
+                        {t: 8, value: 0},
+                        ]);
+                        init_anim.addHandler(____i44);	              
+                    var ____i45 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            lens2.set_rotation(value);
+                        },
+                        [
+                        {t: 7, value: 45},
+                        {t: 8, value: 0},
+                        ]);
+                        init_anim.addHandler(____i45);	              
+                    var ____r5 = new ms.state.Caller(8,function()
+                    {
+                init_anim.enter_if_loaded();
+                    });
+                    init_anim.addHandler(____r5);						  
+init_anim2 =
+new ms.state.Sequence(
+g_sequence_manager);
+                init_anim2.start();
+                    var ____i46 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            banner.alpha(value);
+                        },
+                        [
+                        {t: 0, value: 0},
+                        {t: 4, value: 100},
+                        ]);
+                        init_anim2.addHandler(____i46);	              
+                    var ____i47 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            lens1.alpha(value);
+                        },
+                        [
+                        {t: 0, value: 0},
+                        {t: 8, value: 100},
+                        ]);
+                        init_anim2.addHandler(____i47);	              
+                    var ____i48 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            lens2.alpha(value);
+                        },
+                        [
+                        {t: 0, value: 0},
+                        {t: 8, value: 100},
+                        ]);
+                        init_anim2.addHandler(____i48);	              
+rain =
+new ms.state.Sequence(
+g_sequence_manager);
+            rain.probablity = 0.5;
+	rain.drop = function() 
+	{
+		if (Math.random() < rain.probablity)
+{
+var x = 200 + Math.random() * 600;
+var y = 200 + Math.random() * 400;
+liquid.disturb(x, y);
+SoundUtils.play("sounds/water-droplet-1.mp3");
+}
+	};
+            var ____h2 = new ms.state.Every(3, function(t)
+            {
+                rain.drop();
+            });
+            rain.addHandler(____h2);	                    
+go_up =
+new ms.state.Sequence(
+g_sequence_manager);
+                    var ____i49 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            lens1.set_x(value);
+                        },
+                        [
+                        {t: 0, value: 225},
+                        {t: 2, value: 700},
+                        ]);
+                        go_up.addHandler(____i49);	              
+                    var ____i50 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            lens1.set_y(value);
+                        },
+                        [
+                        {t: 0, value: 225},
+                        {t: 2, value: 2},
+                        ]);
+                        go_up.addHandler(____i50);	              
+                    var ____i51 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            lens1.set_width(value);
+                        },
+                        [
+                        {t: 0, value: 250},
+                        {t: 2, value: 31},
+                        ]);
+                        go_up.addHandler(____i51);	              
+                    var ____i52 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            lens1.set_height(value);
+                        },
+                        [
+                        {t: 0, value: 250},
+                        {t: 2, value: 31},
+                        ]);
+                        go_up.addHandler(____i52);	              
+                    var ____i53 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            lens2.set_x(value);
+                        },
+                        [
+                        {t: 0, value: 220},
+                        {t: 2, value: 699},
+                        ]);
+                        go_up.addHandler(____i53);	              
+                    var ____i54 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            lens2.set_y(value);
+                        },
+                        [
+                        {t: 0, value: 220},
+                        {t: 2, value: 1},
+                        ]);
+                        go_up.addHandler(____i54);	              
+                    var ____i55 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            rect1.set_x(value);
+                        },
+                        [
+                        {t: 0, value: 200},
+                        {t: 2, value: 698},
+                        ]);
+                        go_up.addHandler(____i55);	              
+                    var ____i56 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            rect1.set_y(value);
+                        },
+                        [
+                        {t: 0, value: 200},
+                        {t: 2, value: 1},
+                        ]);
+                        go_up.addHandler(____i56);	              
+                    var ____i57 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            rect1.set_width(value);
+                        },
+                        [
+                        {t: 0, value: 300},
+                        {t: 2, value: 35},
+                        ]);
+                        go_up.addHandler(____i57);	              
+                    var ____i58 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            rect1.set_height(value);
+                        },
+                        [
+                        {t: 0, value: 300},
+                        {t: 2, value: 35},
+                        ]);
+                        go_up.addHandler(____i58);	              
+                    var ____i59 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            lens2.set_width(value);
+                        },
+                        [
+                        {t: 0, value: 260},
+                        {t: 2, value: 32},
+                        ]);
+                        go_up.addHandler(____i59);	              
+                    var ____i60 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            lens2.set_height(value);
+                        },
+                        [
+                        {t: 0, value: 260},
+                        {t: 2, value: 32},
+                        ]);
+                        go_up.addHandler(____i60);	              
+                    var ____i61 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            facebook.alpha(value);
+                        },
+                        [
+                        {t: 0, value: 0},
+                        {t: 2, value: 100},
+                        ]);
+                        go_up.addHandler(____i61);	              
+                    var ____i62 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            twitter.alpha(value);
+                        },
+                        [
+                        {t: 0, value: 0},
+                        {t: 2, value: 100},
+                        ]);
+                        go_up.addHandler(____i62);	              
+                    var ____i63 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            email.alpha(value);
+                        },
+                        [
+                        {t: 0, value: 0},
+                        {t: 2, value: 100},
+                        ]);
+                        go_up.addHandler(____i63);	              
+                    var ____i64 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            liquid.alpha(value);
+                        },
+                        [
+                        {t: 0, value: 0},
+                        {t: 2, value: 50},
+                        ]);
+                        go_up.addHandler(____i64);	              
+                    var ____i65 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            lens1.alpha(value);
+                        },
+                        [
+                        {t: 1, value: 100},
+                        {t: 2, value: 0},
+                        ]);
+                        go_up.addHandler(____i65);	              
+                    var ____i66 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            lens2.alpha(value);
+                        },
+                        [
+                        {t: 1, value: 100},
+                        {t: 2, value: 0},
+                        ]);
+                        go_up.addHandler(____i66);	              
+                    var ____i67 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            rect1.alpha(value);
+                        },
+                        [
+                        {t: 1, value: 100},
+                        {t: 2, value: 0},
+                        ]);
+                        go_up.addHandler(____i67);	              
+                    var ____r6 = new ms.state.Caller(2,function()
+                    {
+                    rain.start();
+                    });
+                    go_up.addHandler(____r6);						  
+loading_seq =
+new ms.state.Sequence(
+g_sequence_manager);
+                loading_seq.start();
+                    var ____i68 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            loading.alpha(value);
+                        },
+                        [
+                        {t: 0, value: 0},
+                        {t: 2, value: 100},
+                        ]);
+                        loading_seq.addHandler(____i68);	              
+                    var ____i69 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            loading.alpha(value);
+                        },
+                        [
+                        {t: 2, value: 100},
+                        {t: 4, value: 0},
+                        ]);
+                        loading_seq.addHandler(____i69);	              
+idle_load =
+new ms.state.Sequence(
+g_sequence_manager);
+                idle_load.start();
+            var ____h3 = new ms.state.Every(4, function(t)
+            {
+                    loading_seq.start();
+            });
+            idle_load.addHandler(____h3);	                    
+enterto_in =
+new ms.state.Sequence(
+g_sequence_manager);
+                    var ____i70 = new ms.state.Interpolator(
+                        default_interpolate,
+                        function(value)
+                        {
+                            enter_to.alpha(value);
+                        },
+                        [
+                        {t: 0, value: 0},
+                        {t: 1, value: 100},
+                        ]);
+                        enterto_in.addHandler(____i70);	              
+scene = 
+new THREE.Scene(
+);
+camera_1 = 
+new THREE.Camera(
+45,1.5,1,10000);
+		active_camera = camera_1;
+            camera_1.position.z = 1000;
+            application.art_planes = null;
+            application.forms_planes = null;
+            application.times_planes = null;
+            application.art_img = ["a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8", "art_title"];
+            application.forms_img = ["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "forms_title"];
+            application.times_img = ["t1", "t2", "t3", "t4", "t5", "t6", "t7", "times_title"];
+            application.resource = null;
+            application.group_zoomed = null;
+            application.zoomed = null;
+            application.selected = null;
+            application.phase = null;
+            application.temp_index = null;
+            application.temp_img = null;
+            application.waiting_for_load = false;
+	application.init_planes = function() 
+	{
+		application.art_planes = 
+create_planes_group(
+)
+;
+application.art_planes.images_set(application.art_img);
+application.forms_planes = 
+create_planes_group(
+)
+;
+application.forms_planes.images_set(application.forms_img);
+application.times_planes = 
+create_planes_group(
+)
+;
+application.times_planes.images_set(application.times_img);
+application.art_planes.set_limits(-550, -350, 250, 0);
+application.forms_planes.set_limits(-200, 0, 250, 0);
+application.times_planes.set_limits(150, 350, 250, 0);
+application.phase = 1;
+	};
+	application.init_phase_2 = function(group1,group2,group3) 
+	{
+		application.group_zoomed = group1;
+group1.set_individual_scale(2);
+group1.set_limits_quickly(-400, 250, 250, 0);
+group2.set_individual_scale(0.699999988);
+group2.set_limits(-450, -350, -100, -200);
+group3.set_individual_scale(0.699999988);
+group3.set_limits(150, 250, -100, -200);
+	};
 	var ev_parent = this;
 	application.events.addListener("click", function(x,y)
 	{    
-		idle_anim_1.target = art1;
-idle_anim_2.target = art2;
-idle_anim_3.target = art3;
-idle_anim_4.target = art4;
-idle_anim_5.target = art5;
-idle_anim_6.target = art6;
-idle_anim_7.target = art7;
-idle_anim_8.target = art8;
-idle_anim_9.target = forms1;
-idle_anim_10.target = forms2;
-idle_anim_11.target = forms3;
-idle_anim_12.target = forms4;
-idle_anim_13.target = forms5;
-idle_anim_14.target = forms6;
-idle_anim_15.target = forms7;
-idle_anim_16.target = forms8;
-idle_anim_17.target = times1;
-idle_anim_18.target = times2;
-idle_anim_19.target = times3;
-idle_anim_20.target = times4;
-idle_anim_21.target = times5;
-idle_anim_22.target = times6;
-idle_anim_23.target = times7;
-idle_anim_seq.start();
+		if (application.phase == 1 && application.selected)
+{
+liquid.disturb(x, y);
+application.phase = 2;
+if (application.art_planes.find(application.selected) != -1)
+{
+application.init_phase_2(application.art_planes, application.forms_planes, application.times_planes);
+}
+if (application.forms_planes.find(application.selected) != -1)
+{
+application.init_phase_2(application.forms_planes, application.art_planes, application.times_planes);
+}
+if (application.times_planes.find(application.selected) != -1)
+{
+application.init_phase_2(application.times_planes, application.art_planes, application.forms_planes);
+}
+}
+else
+{
+if (application.phase == 2)
+{
+if (application.selected.parent_ == application.group_zoomed)
+{
+if (!application.selected.title)
+{
+liquid.disturb(x, y);
+SoundUtils.play("sounds/water-droplet-1.mp3");
+application.phase = 3;
+application.selected.plane_anim.stop();
+application.selected.idle_anim.stop();
+application.selected.quickly_anim.stop();
+application.selected.show_me.stop();
+application.selected.show_me.start();
+application.zoomed = application.selected;
+}
+}
+else
+{
+liquid.disturb(x, y);
+SoundUtils.play("sounds/water-droplet-1.mp3");
+if (application.art_planes.find(application.selected) != -1)
+{
+application.init_phase_2(application.art_planes, application.forms_planes, application.times_planes);
+}
+if (application.forms_planes.find(application.selected) != -1)
+{
+application.init_phase_2(application.forms_planes, application.art_planes, application.times_planes);
+}
+if (application.times_planes.find(application.selected) != -1)
+{
+application.init_phase_2(application.times_planes, application.art_planes, application.forms_planes);
+}
+}
+}
+else
+{
+if (application.phase == 3)
+{
+if (application.selected == application.zoomed)
+{
+application.phase = 2;
+application.zoomed.back_to.stop();
+application.zoomed.back_to.start();
+application.zoomed = false;
+}
+}
+}
+}
 	}
 	);
 	var ev_parent = this;
 	application.events.addListener("init", function()
 	{    
-		art_pack.load();
-forms_pack.load();
-times_pack.load();
+		everybody_pack.load();
 	}
 	);
-window.onload = function() 
+	var ev_parent = this;
+	application.events.addListener("mousemove", function(x,y)
+	{    
+		if (application.phase == 1)
 {
-	drawingCanvas = document.getElementById("myCanvas");
-    g_canvas = drawingCanvas;
-	if (drawingCanvas && drawingCanvas.getContext)
-	{
-		var client =
-		{
-			width: 1000,
-			height: 800,
-			canvas: drawingCanvas
-		};
-		var ui = new ms.ui.Manager(client, streamer);
-		g_ui = ui;
-        g_ui_root = ui.root;
-     	ui.load_resources(function()
-		{
+if (application.art_planes.find(application.selected) != -1)
+{
+liquid.disturb(x, y);
+application.art_planes.selected();
+}
+else
+{
+application.art_planes.unselected();
+}
+if (application.forms_planes.find(application.selected) != -1)
+{
+liquid.disturb(x, y);
+application.forms_planes.selected();
+}
+else
+{
+application.forms_planes.unselected();
+}
+if (application.times_planes.find(application.selected) != -1)
+{
+liquid.disturb(x, y);
+application.times_planes.selected();
+}
+else
+{
+application.times_planes.unselected();
+}
+}
+	}
+	);
+if(ui)
+{	
+	SoundUtils = new ms.ui.SoundUtils();
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX, ev.clientY);                  
+		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX, ev.clientY);                  
+		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX, ev.clientY);                  
-	};	
+		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
 		    liquid = new ms.ui.RippleEffect( 
-	    null,g_ui_root.manager, g_ui_root);
+	    "images/pictures/boxdef.jpg",g_ui_root.manager, g_ui_root);
         liquid = liquid;
             liquid.set_x(0);
             liquid.set_y(0);
-            liquid.set_width(1000);
-            liquid.set_height(800);
-            liquid.alpha(80);
-	liquid.gradient = {};
-	liquid.gradient.colors = [];
-	liquid.gradient.x1 = 0;
-	liquid.gradient.y1 = 0;
-	liquid.gradient.x2 = 1000;
-	liquid.gradient.y2 = 800;
-			liquid.gradient.colors.push({offset: 0,
-																 color: 'black'});
-			liquid.gradient.colors.push({offset: 1,
-																 color: 'black'});
-	liquid.invalidate();
-				art_pack.events.addListener("loaded", function()
-				{				
-		    art_div = new ms.ui.Component( 
-	    g_ui_root.manager, g_ui_root);art_div.mouse_thru = true;
-        art_div = art_div;
-            art_div.alpha(0);
-            art_div.set_x(30);
-            art_div.set_y(100);
-            art_div.set_width(200);
-            art_div.set_height(200);
-		    art1 = new ms.ui.Image( 
-	    "a1",art_div.manager, art_div);
-        art1 = art1;
-            art1.set_x(0);
-            art1.set_y(30);
-            art1.set_width(48);
-            art1.set_height(48);
-		    art2 = new ms.ui.Image( 
-	    "a2",art_div.manager, art_div);
-        art2 = art2;
-            art2.set_x(135);
-            art2.set_y(30);
-            art2.set_width(44.7000008);
-            art2.set_height(60.4000015);
-		    art3 = new ms.ui.Image( 
-	    "a3",art_div.manager, art_div);
-        art3 = art3;
-            art3.set_x(55);
-            art3.set_y(40);
-            art3.set_width(49.0999985);
-            art3.set_height(48);
-		    art4 = new ms.ui.Image( 
-	    "a4",art_div.manager, art_div);
-        art4 = art4;
-            art4.set_x(10);
-            art4.set_y(145);
-            art4.set_width(60.4000015);
-            art4.set_height(42.7999992);
-		    art5 = new ms.ui.Image( 
-	    "a5",art_div.manager, art_div);
-        art5 = art5;
-            art5.set_x(80);
-            art5.set_y(145);
-            art5.set_width(60.4000015);
-            art5.set_height(44.5);
-		    art6 = new ms.ui.Image( 
-	    "a6",art_div.manager, art_div);
-        art6 = art6;
-            art6.set_x(15);
-            art6.set_y(95);
-            art6.set_width(60.4000015);
-            art6.set_height(27.6000004);
-		    art7 = new ms.ui.Image( 
-	    "a7",art_div.manager, art_div);
-        art7 = art7;
-            art7.set_x(150);
-            art7.set_y(130);
-            art7.set_width(29.2000008);
-            art7.set_height(60.4000015);
-		    art8 = new ms.ui.Image( 
-	    "a8",art_div.manager, art_div);
-        art8 = art8;
-            art8.set_x(110);
-            art8.set_y(75);
-            art8.set_width(23.3999996);
-            art8.set_height(60.4000015);
-		    art = new ms.ui.Image( 
-	    "images/pictures/art.png",art_div.manager, art_div);
-        art = art;
-            art.set_x(65);
-            art.set_y(0);
-            art.set_width(79);
-            art.set_height(24);
-});				
-				forms_pack.events.addListener("loaded", function()
-				{				
-		    forms_div = new ms.ui.Component( 
-	    g_ui_root.manager, g_ui_root);forms_div.mouse_thru = true;
-        forms_div = forms_div;
-            forms_div.alpha(0);
-            forms_div.set_x(300);
-            forms_div.set_y(100);
-            forms_div.set_width(200);
-            forms_div.set_height(200);
-		    forms1 = new ms.ui.Image( 
-	    "f1",forms_div.manager, forms_div);
-        forms1 = forms1;
-            forms1.set_x(0);
-            forms1.set_y(28);
-            forms1.set_width(70);
-            forms1.set_height(46.5999985);
-		    forms2 = new ms.ui.Image( 
-	    "f2",forms_div.manager, forms_div);
-        forms2 = forms2;
-            forms2.set_x(0);
-            forms2.set_y(90);
-            forms2.set_width(70);
-            forms2.set_height(46.5999985);
-		    forms3 = new ms.ui.Image( 
-	    "f3",forms_div.manager, forms_div);
-        forms3 = forms3;
-            forms3.set_x(70);
-            forms3.set_y(70);
-            forms3.set_width(70);
-            forms3.set_height(46.5999985);
-		    forms4 = new ms.ui.Image( 
-	    "f4",forms_div.manager, forms_div);
-        forms4 = forms4;
-            forms4.set_x(120);
-            forms4.set_y(26);
-            forms4.set_width(60.4000015);
-            forms4.set_height(40.2000008);
-		    forms5 = new ms.ui.Image( 
-	    "f5",forms_div.manager, forms_div);
-        forms5 = forms5;
-            forms5.set_x(75);
-            forms5.set_y(120);
-            forms5.set_width(70);
-            forms5.set_height(46.5999985);
-		    forms6 = new ms.ui.Image( 
-	    "f6",forms_div.manager, forms_div);
-        forms6 = forms6;
-            forms6.set_x(145);
-            forms6.set_y(80);
-            forms6.set_width(70);
-            forms6.set_height(46.5999985);
-		    forms7 = new ms.ui.Image( 
-	    "f7",forms_div.manager, forms_div);
-        forms7 = forms7;
-            forms7.set_x(120);
-            forms7.set_y(170);
-            forms7.set_width(70);
-            forms7.set_height(46.5999985);
-		    forms8 = new ms.ui.Image( 
-	    "f8",forms_div.manager, forms_div);
-        forms8 = forms8;
-            forms8.set_x(3);
-            forms8.set_y(160);
-            forms8.set_width(70);
-            forms8.set_height(46.5999985);
-		    forms = new ms.ui.Image( 
-	    "images/pictures/forms.png",forms_div.manager, forms_div);
-        forms = forms;
-            forms.set_x(47.5);
-            forms.set_y(0);
-            forms.set_width(85);
-            forms.set_height(23);
-});				
-				times_pack.events.addListener("loaded", function()
-				{				
-		    times_div = new ms.ui.Component( 
-	    g_ui_root.manager, g_ui_root);times_div.mouse_thru = true;
-        times_div = times_div;
-            times_div.alpha(0);
-            times_div.set_x(570);
-            times_div.set_y(100);
-            times_div.set_width(200);
-            times_div.set_height(200);
-		    times1 = new ms.ui.Image( 
-	    "t1",times_div.manager, times_div);
-        times1 = times1;
-            times1.set_x(0);
-            times1.set_y(28);
-            times1.set_width(70);
-            times1.set_height(46.5999985);
-		    times2 = new ms.ui.Image( 
-	    "t2",times_div.manager, times_div);
-        times2 = times2;
-            times2.set_x(0);
-            times2.set_y(90);
-            times2.set_width(70);
-            times2.set_height(46.5999985);
-		    times3 = new ms.ui.Image( 
-	    "t3",times_div.manager, times_div);
-        times3 = times3;
-            times3.set_x(140);
-            times3.set_y(26);
-            times3.set_width(70);
-            times3.set_height(46.5999985);
-		    times4 = new ms.ui.Image( 
-	    "t4",times_div.manager, times_div);
-        times4 = times4;
-            times4.set_x(78);
-            times4.set_y(35);
-            times4.set_width(46.5999985);
-            times4.set_height(70);
-		    times5 = new ms.ui.Image( 
-	    "t5",times_div.manager, times_div);
-        times5 = times5;
-            times5.set_x(75);
-            times5.set_y(110);
-            times5.set_width(70);
-            times5.set_height(46.5999985);
-		    times6 = new ms.ui.Image( 
-	    "t6",times_div.manager, times_div);
-        times6 = times6;
-            times6.set_x(120);
-            times6.set_y(162);
-            times6.set_width(70);
-            times6.set_height(46.5999985);
-		    times7 = new ms.ui.Image( 
-	    "t7",times_div.manager, times_div);
-        times7 = times7;
-            times7.set_x(3);
-            times7.set_y(160);
-            times7.set_width(70);
-            times7.set_height(46.5999985);
-		    times = new ms.ui.Image( 
-	    "images/pictures/times.png",times_div.manager, times_div);
-        times = times;
-            times.set_x(38.75);
-            times.set_y(0);
-            times.set_width(98);
-            times.set_height(26);
-});
+            liquid.set_width(app_width);
+            liquid.set_height(app_height);
+            liquid.alpha(0);
 		    banner = new ms.ui.Image( 
 	    "images/pictures/banner.png",g_ui_root.manager, g_ui_root);
         banner = banner;
@@ -713,8 +1925,67 @@ window.onload = function()
             banner.set_width(231);
             banner.set_height(28);
             banner.alpha(0);
+		    loading = new ms.ui.Image( 
+	    "images/pictures/loading.png",g_ui_root.manager, g_ui_root);
+        loading = loading;
+            loading.set_x(280);
+            loading.set_y(550);
+            loading.set_width(153);
+            loading.set_height(27);
+            loading.alpha(0);
+		    enter_to = new ms.ui.Image( 
+	    "images/pictures/enter.png",g_ui_root.manager, g_ui_root);
+        enter_to = enter_to;
+            enter_to.set_x(310);
+            enter_to.set_y(551.5);
+            enter_to.set_width(92);
+            enter_to.set_height(24);
+            enter_to.setVisible(false);
+	var ev_parent = this;
+	enter_to.events.addListener("mousein", function()
+	{    
+		enter_to.set_width(enter_to.get_width() + 3);
+enter_to.set_height(enter_to.get_height() + 3);
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
+	enter_to.events.addListener("mouseout", function()
+	{    
+		enter_to.set_width(enter_to.get_width() - 3);
+enter_to.set_height(enter_to.get_height() - 3);
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
+	enter_to.events.addListener("mousedown", function()
+	{    
+		enter_to.set_x(enter_to.x + 2);
+enter_to.set_y(enter_to.y + 2);
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
+	enter_to.events.addListener("mouseup", function()
+	{    
+		enter_to.set_x(enter_to.x - 2);
+enter_to.set_y(enter_to.y - 2);
+init_anim.stop();
+init_anim2.stop();
+line1.setVisible(false);
+line2.setVisible(false);
+line3.setVisible(false);
+line4.setVisible(false);
+rect1.setVisible(true);
+linetop.set_x2(905);
+go_up.start();
+enter_to.setVisible(false);
+application.init_planes();
+	}
+	);
+		application.are_obj_events = true;
 		    lens1 = new ms.ui.Image( 
-	    "images/pictures/lens_d1.png",g_ui_root.manager, g_ui_root);
+	    "images/pictures/lente1.png",g_ui_root.manager, g_ui_root);
         lens1 = lens1;
             lens1.set_x(225);
             lens1.set_y(225);
@@ -722,29 +1993,120 @@ window.onload = function()
             lens1.set_height(250);
             lens1.alpha(0);
 		    lens2 = new ms.ui.Image( 
-	    "images/pictures/lens_d2.png",g_ui_root.manager, g_ui_root);
+	    "images/pictures/lente2.png",g_ui_root.manager, g_ui_root);
         lens2 = lens2;
             lens2.set_x(220);
             lens2.set_y(220);
             lens2.set_width(260);
             lens2.set_height(260);
             lens2.alpha(0);
-		    facebook = new ms.ui.Image( 
+		    facebook = new social_button( 
 	    "images/pictures/facebook.png",g_ui_root.manager, g_ui_root);
         facebook = facebook;
-            facebook.set_x(750);
-            facebook.set_y(4);
-            facebook.set_width(31);
-            facebook.set_height(31);
+            facebook.set_x(880);
+            facebook.set_y(8);
+            facebook.set_width(24);
+            facebook.set_height(24);
             facebook.alpha(0);
-		    twitter = new ms.ui.Image( 
+		    twitter = new social_button( 
 	    "images/pictures/twitter.png",g_ui_root.manager, g_ui_root);
         twitter = twitter;
-            twitter.set_x(800);
-            twitter.set_y(4);
-            twitter.set_width(31);
-            twitter.set_height(31);
+            twitter.set_x(845);
+            twitter.set_y(8);
+            twitter.set_width(24);
+            twitter.set_height(24);
             twitter.alpha(0);
+		    email = new social_button( 
+	    "images/pictures/photobucket.png",g_ui_root.manager, g_ui_root);
+        email = email;
+            email.set_x(810);
+            email.set_y(8);
+            email.set_width(24);
+            email.set_height(24);
+            email.alpha(0);
+		    btn1 = new ms.ui.Button( 
+	    "images/pictures/arrow_up.png","images/pictures/arrow_down.png",g_ui_root.manager, g_ui_root);
+        btn1 = btn1;
+            btn1.set_x(0);
+            btn1.set_y(300);
+            btn1.set_width(64);
+            btn1.set_height(64);
+            btn1.set_rotation(180);
+            btn1.alpha(0);
+	var ev_parent = this;
+	btn1.events.addListener("click", function()
+	{    
+		if (application.phase == 3)
+{
+application.temp_img = application.zoomed;
+application.temp_index = application.group_zoomed.find(application.zoomed);
+if (application.temp_index == 0)
+{
+application.temp_index = application.group_zoomed.plane_array.length - 1;
+}
+application.group_zoomed.plane_array[application.temp_index - 1].plane_anim.stop();
+application.group_zoomed.plane_array[application.temp_index - 1].idle_anim.stop();
+application.zoomed = application.group_zoomed.plane_array[application.temp_index - 1];
+application.temp_img.scale.x = 2;
+application.temp_img.scale.y = 2;
+application.temp_img.scale.z = 0;
+application.temp_img.position.z = 0;
+application.temp_img.plane_anim.stop();
+application.temp_img.plane_anim.start();
+application.temp_img.idle_anim.stop();
+application.temp_img.idle_anim.start();
+application.zoomed.scale.x = 12;
+application.zoomed.scale.y = 12;
+application.zoomed.scale.z = 10;
+application.zoomed.position.x = -55;
+application.zoomed.position.y = 50;
+application.zoomed.position.z = 100;
+set_rotation_y(application.zoomed.rotation, 0);
+}
+	}
+	);
+		application.are_obj_events = true;
+		    btn2 = new ms.ui.Button( 
+	    "images/pictures/arrow_up.png","images/pictures/arrow_down.png",g_ui_root.manager, g_ui_root);
+        btn2 = btn2;
+            btn2.set_x(840);
+            btn2.set_y(300);
+            btn2.set_width(64);
+            btn2.set_height(64);
+            btn2.alpha(0);
+	var ev_parent = this;
+	btn2.events.addListener("click", function()
+	{    
+		if (application.phase == 3)
+{
+application.temp_img = application.zoomed;
+application.temp_index = application.group_zoomed.find(application.zoomed);
+if (application.temp_index == application.group_zoomed.plane_array.length - 2)
+{
+application.temp_index = -1;
+}
+application.group_zoomed.plane_array[application.temp_index + 1].plane_anim.stop();
+application.group_zoomed.plane_array[application.temp_index + 1].idle_anim.stop();
+application.zoomed = application.group_zoomed.plane_array[application.temp_index + 1];
+application.temp_img.scale.x = 2;
+application.temp_img.scale.y = 2;
+application.temp_img.scale.z = 0;
+application.temp_img.position.z = 0;
+application.temp_img.plane_anim.stop();
+application.temp_img.plane_anim.start();
+application.temp_img.idle_anim.stop();
+application.temp_img.idle_anim.start();
+application.zoomed.scale.x = 12;
+application.zoomed.scale.y = 12;
+application.zoomed.scale.z = 10;
+application.zoomed.position.x = -55;
+application.zoomed.position.y = 50;
+application.zoomed.position.z = 100;
+set_rotation_y(application.zoomed.rotation, 0);
+}
+	}
+	);
+		application.are_obj_events = true;
 		    linetop = new ms.ui.Line( 
 	    g_ui_root.manager, g_ui_root);
         linetop = linetop;
@@ -790,580 +2152,54 @@ window.onload = function()
             line4.set_y2(500);
             line4.alpha(60);
             line4.set_color("white");
-idle_anim_1 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_1 = idle_anim_1;
-            idle_anim_1.parent_sequence = null;
-idle_anim_2 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_2 = idle_anim_2;
-            idle_anim_2.parent_sequence = null;
-idle_anim_3 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_3 = idle_anim_3;
-            idle_anim_3.parent_sequence = null;
-idle_anim_4 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_4 = idle_anim_4;
-            idle_anim_4.parent_sequence = null;
-idle_anim_5 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_5 = idle_anim_5;
-            idle_anim_5.parent_sequence = null;
-idle_anim_6 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_6 = idle_anim_6;
-            idle_anim_6.parent_sequence = null;
-idle_anim_7 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_7 = idle_anim_7;
-            idle_anim_7.parent_sequence = null;
-idle_anim_8 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_8 = idle_anim_8;
-            idle_anim_8.parent_sequence = null;
-idle_anim_9 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_9 = idle_anim_9;
-            idle_anim_9.parent_sequence = null;
-idle_anim_10 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_10 = idle_anim_10;
-            idle_anim_10.parent_sequence = null;
-idle_anim_11 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_11 = idle_anim_11;
-            idle_anim_11.parent_sequence = null;
-idle_anim_12 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_12 = idle_anim_12;
-            idle_anim_12.parent_sequence = null;
-idle_anim_13 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_13 = idle_anim_13;
-            idle_anim_13.parent_sequence = null;
-idle_anim_14 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_14 = idle_anim_14;
-            idle_anim_14.parent_sequence = null;
-idle_anim_15 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_15 = idle_anim_15;
-            idle_anim_15.parent_sequence = null;
-idle_anim_16 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_16 = idle_anim_16;
-            idle_anim_16.parent_sequence = null;
-idle_anim_17 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_17 = idle_anim_17;
-            idle_anim_17.parent_sequence = null;
-idle_anim_18 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_18 = idle_anim_18;
-            idle_anim_18.parent_sequence = null;
-idle_anim_19 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_19 = idle_anim_19;
-            idle_anim_19.parent_sequence = null;
-idle_anim_20 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_20 = idle_anim_20;
-            idle_anim_20.parent_sequence = null;
-idle_anim_21 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_21 = idle_anim_21;
-            idle_anim_21.parent_sequence = null;
-idle_anim_22 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_22 = idle_anim_22;
-            idle_anim_22.parent_sequence = null;
-idle_anim_23 =
-new idle_anim(
-g_sequence_manager);
-        idle_anim_23 = idle_anim_23;
-            idle_anim_23.parent_sequence = null;
-idle_anim_seq =
-new ms.state.Sequence(
-g_sequence_manager);
-        idle_anim_seq = idle_anim_seq;
-	idle_anim_seq.animate_all = function() 
-	{
-		idle_anim_1.stop();
-idle_anim_1.start();
-idle_anim_2.stop();
-idle_anim_2.start();
-idle_anim_3.stop();
-idle_anim_3.start();
-idle_anim_4.stop();
-idle_anim_4.start();
-idle_anim_5.stop();
-idle_anim_5.start();
-idle_anim_6.stop();
-idle_anim_6.start();
-idle_anim_7.stop();
-idle_anim_7.start();
-idle_anim_8.stop();
-idle_anim_8.start();
-idle_anim_9.stop();
-idle_anim_9.start();
-idle_anim_10.stop();
-idle_anim_10.start();
-idle_anim_11.stop();
-idle_anim_11.start();
-idle_anim_12.stop();
-idle_anim_12.start();
-idle_anim_13.stop();
-idle_anim_13.start();
-idle_anim_14.stop();
-idle_anim_14.start();
-idle_anim_15.stop();
-idle_anim_15.start();
-idle_anim_16.stop();
-idle_anim_16.start();
-idle_anim_17.stop();
-idle_anim_17.start();
-idle_anim_18.stop();
-idle_anim_18.start();
-idle_anim_19.stop();
-idle_anim_19.start();
-idle_anim_20.stop();
-idle_anim_20.start();
-idle_anim_21.stop();
-idle_anim_21.start();
-idle_anim_22.stop();
-idle_anim_22.start();
-idle_anim_23.stop();
-idle_anim_23.start();
-	};
-            idle_anim_seq.parent_sequence = null;
-            var ____h1 = new ms.state.Every(2, function(t)
-            {
-                        idle_anim_seq.animate_all();
-            });
-            idle_anim_seq.addAction(null, null, new ms.state.State(0, 0, ____h1));                    
-init_anim =
-new ms.state.Sequence(
-g_sequence_manager);
-        init_anim = init_anim;
-                init_anim.start();
-            init_anim.parent_sequence = null;
-                    var ____i4 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            banner.alpha(value);
-                        },
-                        [
-                        {t: 0, value: 0},
-                        {t: 2, value: 100},
-                        ]);
-                    init_anim.addAction(null, "alpha", new ms.state.State(0, 2, ____i4));                    
-                    var ____i5 = new ms.state.Interpolator(
-                        "x2", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            linetop.set_x2(value);
-                        },
-                        [
-                        {t: 0, value: 5},
-                        {t: 2, value: 850},
-                        ]);
-                    init_anim.addAction(null, "x2", new ms.state.State(0, 2, ____i5));                    
-                    var ____i6 = new ms.state.Interpolator(
-                        "x2", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            line1.set_x2(value);
-                        },
-                        [
-                        {t: 0, value: 200},
-                        {t: 2, value: 500},
-                        ]);
-                    init_anim.addAction(null, "x2", new ms.state.State(0, 2, ____i6));                    
-                    var ____i7 = new ms.state.Interpolator(
-                        "y2", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            line2.set_y2(value);
-                        },
-                        [
-                        {t: 0, value: 200},
-                        {t: 2, value: 500},
-                        ]);
-                    init_anim.addAction(null, "y2", new ms.state.State(0, 2, ____i7));                    
-                    var ____i8 = new ms.state.Interpolator(
-                        "x2", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            line3.set_x2(value);
-                        },
-                        [
-                        {t: 0, value: 500},
-                        {t: 2, value: 200},
-                        ]);
-                    init_anim.addAction(null, "x2", new ms.state.State(0, 2, ____i8));                    
-                    var ____i9 = new ms.state.Interpolator(
-                        "y2", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            line4.set_y2(value);
-                        },
-                        [
-                        {t: 0, value: 500},
-                        {t: 2, value: 200},
-                        ]);
-                    init_anim.addAction(null, "y2", new ms.state.State(0, 2, ____i9));                    
-                    var ____i10 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens1.alpha(value);
-                        },
-                        [
-                        {t: 0, value: 0},
-                        {t: 2, value: 100},
-                        ]);
-                    init_anim.addAction(null, "alpha", new ms.state.State(0, 2, ____i10));                    
-                    var ____i11 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens2.alpha(value);
-                        },
-                        [
-                        {t: 0, value: 0},
-                        {t: 2, value: 100},
-                        ]);
-                    init_anim.addAction(null, "alpha", new ms.state.State(0, 2, ____i11));                    
-                    var ____i12 = new ms.state.Interpolator(
-                        "rotation", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens1.set_rotation(value);
-                        },
-                        [
-                        {t: 2, value: 0},
-                        {t: 3, value: 45},
-                        ]);
-                    init_anim.addAction(null, "rotation", new ms.state.State(2, 3, ____i12));                    
-                    var ____i13 = new ms.state.Interpolator(
-                        "rotation", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens2.set_rotation(value);
-                        },
-                        [
-                        {t: 2, value: 0},
-                        {t: 3, value: -45},
-                        ]);
-                    init_anim.addAction(null, "rotation", new ms.state.State(2, 3, ____i13));                    
-                    var ____i14 = new ms.state.Interpolator(
-                        "rotation", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens1.set_rotation(value);
-                        },
-                        [
-                        {t: 3, value: 45},
-                        {t: 5, value: -45},
-                        ]);
-                    init_anim.addAction(null, "rotation", new ms.state.State(3, 5, ____i14));                    
-                    var ____i15 = new ms.state.Interpolator(
-                        "rotation", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens2.set_rotation(value);
-                        },
-                        [
-                        {t: 3, value: -45},
-                        {t: 5, value: 45},
-                        ]);
-                    init_anim.addAction(null, "rotation", new ms.state.State(3, 5, ____i15));                    
-                    var ____i16 = new ms.state.Interpolator(
-                        "rotation", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens1.set_rotation(value);
-                        },
-                        [
-                        {t: 5, value: -45},
-                        {t: 6, value: 0},
-                        ]);
-                    init_anim.addAction(null, "rotation", new ms.state.State(5, 6, ____i16));                    
-                    var ____i17 = new ms.state.Interpolator(
-                        "rotation", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens2.set_rotation(value);
-                        },
-                        [
-                        {t: 5, value: 45},
-                        {t: 6, value: 0},
-                        ]);
-                    init_anim.addAction(null, "rotation", new ms.state.State(5, 6, ____i17));                    
-                    var ____i18 = new ms.state.Interpolator(
-                        "x", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens1.set_x(value);
-                        },
-                        [
-                        {t: 6, value: 225},
-                        {t: 8, value: 700},
-                        ]);
-                    init_anim.addAction(null, "x", new ms.state.State(6, 8, ____i18));                    
-                    var ____i19 = new ms.state.Interpolator(
-                        "y", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens1.set_y(value);
-                        },
-                        [
-                        {t: 6, value: 225},
-                        {t: 8, value: 2},
-                        ]);
-                    init_anim.addAction(null, "y", new ms.state.State(6, 8, ____i19));                    
-                    var ____i20 = new ms.state.Interpolator(
-                        "width", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens1.set_width(value);
-                        },
-                        [
-                        {t: 6, value: 250},
-                        {t: 8, value: 31},
-                        ]);
-                    init_anim.addAction(null, "width", new ms.state.State(6, 8, ____i20));                    
-                    var ____i21 = new ms.state.Interpolator(
-                        "height", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens1.set_height(value);
-                        },
-                        [
-                        {t: 6, value: 250},
-                        {t: 8, value: 31},
-                        ]);
-                    init_anim.addAction(null, "height", new ms.state.State(6, 8, ____i21));                    
-                    var ____i22 = new ms.state.Interpolator(
-                        "x", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens2.set_x(value);
-                        },
-                        [
-                        {t: 6, value: 220},
-                        {t: 8, value: 699},
-                        ]);
-                    init_anim.addAction(null, "x", new ms.state.State(6, 8, ____i22));                    
-                    var ____i23 = new ms.state.Interpolator(
-                        "y", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens2.set_y(value);
-                        },
-                        [
-                        {t: 6, value: 220},
-                        {t: 8, value: 1},
-                        ]);
-                    init_anim.addAction(null, "y", new ms.state.State(6, 8, ____i23));                    
-                    var ____i24 = new ms.state.Interpolator(
-                        "width", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens2.set_width(value);
-                        },
-                        [
-                        {t: 6, value: 260},
-                        {t: 8, value: 32},
-                        ]);
-                    init_anim.addAction(null, "width", new ms.state.State(6, 8, ____i24));                    
-                    var ____i25 = new ms.state.Interpolator(
-                        "height", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens2.set_height(value);
-                        },
-                        [
-                        {t: 6, value: 260},
-                        {t: 8, value: 32},
-                        ]);
-                    init_anim.addAction(null, "height", new ms.state.State(6, 8, ____i25));                    
-                    var ____i26 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            facebook.alpha(value);
-                        },
-                        [
-                        {t: 6, value: 0},
-                        {t: 8, value: 100},
-                        ]);
-                    init_anim.addAction(null, "alpha", new ms.state.State(6, 8, ____i26));                    
-                    var ____i27 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            twitter.alpha(value);
-                        },
-                        [
-                        {t: 6, value: 0},
-                        {t: 8, value: 100},
-                        ]);
-                    init_anim.addAction(null, "alpha", new ms.state.State(6, 8, ____i27));                    
-                    var ____i28 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            line1.alpha(value);
-                        },
-                        [
-                        {t: 6, value: 60},
-                        {t: 8, value: 0},
-                        ]);
-                    init_anim.addAction(null, "alpha", new ms.state.State(6, 8, ____i28));                    
-                    var ____i29 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            line2.alpha(value);
-                        },
-                        [
-                        {t: 6, value: 60},
-                        {t: 8, value: 0},
-                        ]);
-                    init_anim.addAction(null, "alpha", new ms.state.State(6, 8, ____i29));                    
-                    var ____i30 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            line3.alpha(value);
-                        },
-                        [
-                        {t: 6, value: 60},
-                        {t: 8, value: 0},
-                        ]);
-                    init_anim.addAction(null, "alpha", new ms.state.State(6, 8, ____i30));                    
-                    var ____i31 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            line4.alpha(value);
-                        },
-                        [
-                        {t: 6, value: 60},
-                        {t: 8, value: 0},
-                        ]);
-                    init_anim.addAction(null, "alpha", new ms.state.State(6, 8, ____i31));                    
-                    var ____i32 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            art_div.alpha(value);
-                        },
-                        [
-                        {t: 8, value: 0},
-                        {t: 10, value: 80},
-                        ]);
-                    init_anim.addAction(null, "alpha", new ms.state.State(8, 10, ____i32));                    
-                    var ____i33 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            forms_div.alpha(value);
-                        },
-                        [
-                        {t: 8, value: 0},
-                        {t: 10, value: 80},
-                        ]);
-                    init_anim.addAction(null, "alpha", new ms.state.State(8, 10, ____i33));                    
-                    var ____i34 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            times_div.alpha(value);
-                        },
-                        [
-                        {t: 8, value: 0},
-                        {t: 10, value: 80},
-                        ]);
-                    init_anim.addAction(null, "alpha", new ms.state.State(8, 10, ____i34));                    
-			document.onkeydown = function(ev)
-			{
-				ui.keydown(ev.keyCode);                  
-			};
-			document.onkeyup = function(ev)
-			{
-				ui.keyup(ev.keyCode);                  
-			};
-			document.onkeypress = function(ev)
-			{
-				ui.keypress(ev.keyCode);                  
-			};
-            application.events.dispatch("init", []);
-            start();
-			ui.draw(drawingCanvas.getContext('2d'));
-		});
-	}
+		    rect1 = new ms.ui.Rectangle( 
+	    null,"white",null,g_ui_root.manager, g_ui_root);
+        rect1 = rect1;
+            rect1.set_x(200);
+            rect1.set_y(200);
+            rect1.set_width(300);
+            rect1.set_height(300);
+            rect1.setVisible(false);
+            rect1.alpha(60);
+	g_ui.fill_background = false;	
 }
+var event_manager = new ms.event.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(ev.keyCode);                  
+};
+application.events.dispatch("init", []);
+document.body.appendChild( renderer.domElement );
+animate();
+});
+function animate() {
+	if(ui)
+		drawingCanvas.getContext('2d').clearRect(0,0,1000,800);
+	requestAnimationFrame( animate );
+	render();
+	if(ui)
+		ui.draw(drawingCanvas.getContext('2d'));
+	}
 </script>
-</head>
-<body>	
-	<canvas id="myCanvas" width="1000" height="800"
-		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
 </body>
 </html>

@@ -2,7 +2,8 @@
     
     <page id="home" src="twotter.html">
         <element id="user_name" />
-        
+        <element id="user_image" />
+
         <replicator id="followers">
             <element name="follower" id="follower" />
         </replicator>

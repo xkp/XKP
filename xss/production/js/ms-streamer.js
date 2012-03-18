@@ -409,12 +409,14 @@ ms.streamer.Package = Class.create(
         this.streamer 	= streamer;
         this.job		= null;
 		this.events		= new ms.event.EventHolder();
+		this.all_loaded = false;
     },
 	
 	add_item: function(item)
 	{
 		this.items.push(item);
 		this.state  = STATE_UNLOADED;
+		this.all_loaded = false;
 	},
 	
     load: function()
@@ -468,7 +470,8 @@ ms.streamer.Package = Class.create(
 
     finished_loading: function()
     {
-		this.events.dispatch("loaded", []); 
+		this.all_loaded = true;
+		this.events.dispatch("loaded", []); 		
     },
 
     progress: function()

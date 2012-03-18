@@ -1,0 +1,58 @@
+<application name="AnimTest" title="Testing sequences" src="animtest.xs" width="320" height="430">
+    <resources>
+        <image src="images/img1.png"/>
+    </resources>
+
+    <label id="lbl1" caption="Button 1 Stopped" x="10" y="10" width="140" height="35"/>
+    <label id="lbl2" caption="Button 2 Stopped" x="10" y="30" width="140" height="35"/>
+    <label id="lbl3" caption="Button 3 Looping..." x="10" y="50" width="140" height="35"/>
+    <label id="lbl4" caption="Button 4 Waiting For Click..." x="10" y="70" width="140" height="35"/>
+
+    <img id="btn1" src="images/img1.png" x="40" y="110" width="43" height="43"/>
+    <img id="btn2" src="images/img1.png"  x="40" y="160" width="43" height="43"/>
+    <img id="btn3" src="images/img1.png"  x="40" y="210" width="43" height="43"/>
+    <img id="btn4" src="images/img1.png"  x="40" y="260" width="43" height="43"/>
+
+    <sequence id="anim1">
+        <at time="0">
+            <animate property="btn1.x" from="40" to="200" in="1"/>
+        </at>
+    </sequence>
+
+    <sequence id="anim2">
+        <at time="0">
+            <animate property="btn2.x" from="@" to="btn1.x" in="2"/>
+        </at>
+    </sequence>
+
+    <sequence id="anim3" loop="true" auto_start="true">
+        <at time="0">
+            <animate property="btn3.x" from="40" to="200" in="1.5"/>
+        </at>
+        
+        <at time="1.5">
+            <animate property="btn3.x" from="200" to="40" in="1.5"/>
+        </at>
+        
+        <when expr="application.click_count == 3">
+            <run method="stop_anim3"/>
+        </when>
+    </sequence>
+
+    <sequence id="anim4" auto_start="true">
+        <sequence id="nested">
+            <at time="0">
+                <animate property="btn4.x" from="40" to="200" in="1.5"/>
+            </at>
+
+            <at time="1.5">
+                <animate property="btn4.x" from="200" to="40" in="1.5"/>
+            </at>
+        </sequence>
+
+        <when trigger="btn4.click">
+            <run expr="nested.start()"/>
+            <run expr="lbl4.caption = 'Clicked!'"/>
+        </when>
+    </sequence>
+</application>

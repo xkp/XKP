@@ -8,7 +8,6 @@
 <script type="text/javascript" src="../js/prototype.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
-<script type="text/javascript" src="../js/colors.js"></script>
 		<script type="text/javascript" src="../js/ms-ui.js"></script>
 		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript">	
@@ -33,7 +32,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 			var g_ui = ui;
 			var g_ui_root = ui.root;
 		}
-		var streamer = new ms.streamer.Streamer();
+		var streamer = new ms.streamer.Streamer();		
         var global_package_items = [];
                 global_package_items.push(
             {
@@ -136,15 +135,6 @@ var SoundUtils = new ms.ui.SoundUtils();
 });
                 global_package_items.push(
             {
-		id:				"__image12",
-		resource_type:	RESOURCE_IMAGE,
-		src:			"images/box.png",
-		frame_width:	null,
-		frame_height:	null,
-		animations:		[]
-});
-                global_package_items.push(
-            {
 		id:				"monster_sheet",
 		resource_type:	RESOURCE_SPRITE,
 		src:			"images/monster.png",
@@ -191,6 +181,14 @@ var SoundUtils = new ms.ui.SoundUtils();
 					right_to_left:		false
 				});
 		}		
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
         var global_package = new ms.streamer.Package(streamer, global_package_items);	
 		global_package.load();	
 function start(resolution)  
@@ -210,7 +208,7 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var main;var test1;var title0;var lbl0;var lbl1;var btn1;var stateBtn;var lbl3;var test2;var title1;var pb1;var btn2;var btn3;var lbl2;var lbl7;var monster;var test3;var title2;var c1;var r1;var p1;var line1;var lbl4;var lbl5;var lbl6;var btn5;var test4;var title3;var inst0;var clips;var ca1;var back_img;var ca2;var inst1;var inst2;var inst3;var btnNext;var btnPrev;
+var main;var test1;var title0;var lbl_event;var lbl0;var lbl1;var btn1;var stateBtn;var lbl3;var test2;var title1;var pb1;var btn2;var btn3;var lbl2;var lbl7;var monster;var test3;var title2;var c1;var r1;var p1;var line1;var lbl4;var lbl5;var lbl6;var lbl8;var btn5;var test4;var title3;var title4;var inst0;var clips;var ca1;var back_img;var ca2;var tb1;var inst1;var inst2;var inst3;var btnNext;var btnPrev;
             application.clicks = 0;
             application.do_rotation_plus = false;
             application.do_rotation_minus = false;
@@ -219,6 +217,8 @@ var main;var test1;var title0;var lbl0;var lbl1;var btn1;var stateBtn;var lbl3;v
             application.py = null;
             application.left_key_down = false;
             application.right_key_down = false;
+            application.increase_pol_size = false;
+            application.decrease_pol_size = false;
 	var ev_parent = this;
 	application.events.addListener("keydown", function(keycode)
 	{    
@@ -295,6 +295,14 @@ if (keycode == CTRL)
 {
 application.do_drag = true;
 }
+if (keycode == SHIFT)
+{
+application.increase_pol_size = true;
+}
+if (keycode == ALT)
+{
+application.decrease_pol_size = true;
+}
 	}
 	);
 	var ev_parent = this;
@@ -321,6 +329,14 @@ application.do_rotation_minus = false;
 if (keycode == CTRL)
 {
 application.do_drag = false;
+}
+if (keycode == SHIFT)
+{
+application.increase_pol_size = false;
+}
+if (keycode == ALT)
+{
+application.decrease_pol_size = false;
 }
 	}
 	);
@@ -382,14 +398,34 @@ window.onload = function()
             title0.set_x(50);
             title0.set_y(50);
             title0.text("This screen shows some buttons (1/4)");
+		    lbl_event = new ms.ui.Label( 
+	    "12px Verdana",test1.manager, test1);
+        lbl_event = lbl_event;
+            lbl_event.set_x(240);
+            lbl_event.set_y(120);
+            lbl_event.text("Pass the mouse over this text...");
+	var ev_parent = this;
+	lbl_event.events.addListener("mousein", function()
+	{    
+		lbl_event.text("The mouse is over me...");
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
+	lbl_event.events.addListener("mouseout", function()
+	{    
+		lbl_event.text("Pass the mouse over this text...");
+	}
+	);
+		application.are_obj_events = true;
 		    lbl0 = new ms.ui.Label( 
-	    "Verdana",test1.manager, test1);
+	    null,test1.manager, test1);
         lbl0 = lbl0;
             lbl0.set_x(240);
             lbl0.set_y(175);
             lbl0.text("Use keyboard arrows to move the first smiley");
 		    lbl1 = new ms.ui.Label( 
-	    "Verdana",test1.manager, test1);
+	    null,test1.manager, test1);
         lbl1 = lbl1;
             lbl1.set_x(330);
             lbl1.set_y(220);
@@ -469,7 +505,7 @@ stateBtn.set_y(y - btnNext.h / 2);
 	);
 		application.are_obj_events = true;
 		    lbl3 = new ms.ui.Label( 
-	    "Verdana",test1.manager, test1);
+	    null,test1.manager, test1);
         lbl3 = lbl3;
             lbl3.set_x(330);
             lbl3.set_y(340);
@@ -557,7 +593,7 @@ btn3.set_y(y - btnNext.h / 2);
 	);
 		application.are_obj_events = true;
 		    lbl2 = new ms.ui.Label( 
-	    "Verdana",test2.manager, test2);
+	    null,test2.manager, test2);
         lbl2 = lbl2;
             lbl2.set_x(210);
             lbl2.set_y(200);
@@ -574,6 +610,17 @@ btn3.set_y(y - btnNext.h / 2);
             monster.set_x(300);
             monster.set_y(300);
             monster.set_animation("m_idle");
+	var ev_parent = this;
+	monster.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+monster.set_x(x - monster.w / 2);
+monster.set_y(y - monster.h / 2);
+}
+	}
+	);
+		application.are_obj_events = true;
 		    test3 = new ms.ui.Component( 
 	    main.manager, main);test3.mouse_thru = true;
         test3 = test3;
@@ -654,9 +701,34 @@ r1.set_rotation(r1.get_rotation() - 5);
         p1 = p1;
             p1.alpha(40);
 	var ev_parent = this;
+	p1.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+p1.set_x(x - p1.w / 2);
+p1.set_y(y - p1.h / 2);
+}
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
 	p1.events.addListener("click", function()
 	{    
-		if (application.do_rotation_plus)
+		if (application.increase_pol_size)
+{
+p1.set_width(p1.get_width() + 5);
+p1.set_height(p1.get_height() + 5);
+}
+else
+{
+if (application.decrease_pol_size)
+{
+p1.set_width(p1.get_width() - 5);
+p1.set_height(p1.get_height() - 5);
+}
+else
+{
+if (application.do_rotation_plus)
 {
 p1.set_rotation(p1.get_rotation() + 5);
 }
@@ -681,6 +753,8 @@ application.px = p1.points[i].x - 5;
 application.py = p1.points[i].y - 5;
 }
 p1.setPointbyIndex(i, application.px, application.py);
+}
+}
 }
 }
 }
@@ -717,6 +791,12 @@ p1.setPointbyIndex(i, application.px, application.py);
             lbl6.set_x(50);
             lbl6.set_y(440);
             lbl6.text("Click the smiley to increment the black line width");
+		    lbl8 = new ms.ui.Label( 
+	    "11px Verdana",test3.manager, test3);
+        lbl8 = lbl8;
+            lbl8.set_x(50);
+            lbl8.set_y(460);
+            lbl8.text("Use SHIFT/ALT with click to resize the polygon");
 		    btn5 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",test3.manager, test3);
         btn5 = btn5;
@@ -758,12 +838,18 @@ btn5.set_y(y - btn5.h / 2);
         title3 = title3;
             title3.set_x(50);
             title3.set_y(50);
-            title3.text("This screen shows two intersected clip area components with diferent forms (4/4)");
+            title3.text("This screen shows two intersected clip area components with diferent forms");
+		    title4 = new ms.ui.Label( 
+	    "12px Verdana",test4.manager, test4);
+        title4 = title4;
+            title4.set_x(50);
+            title4.set_y(70);
+            title4.text("and the text button(4/4)");
 		    inst0 = new ms.ui.Label( 
 	    "12px Verdana",test4.manager, test4);
         inst0 = inst0;
             inst0.set_x(70);
-            inst0.set_y(70);
+            inst0.set_y(90);
             inst0.text("Use arrows to move the rect and WASD to move the circle");
 		    clips = new ms.ui.Component( 
 	    test4.manager, test4);clips.mouse_thru = true;
@@ -791,6 +877,11 @@ btn5.set_y(y - btn5.h / 2);
             ca2.set_width(200);
             ca2.set_height(200);
             ca2.shape = "circle";
+		    tb1 = new ms.ui.TextButton( 
+	    "My_Button","12px Arial",test4.manager, test4);
+        tb1 = tb1;
+            tb1.set_x(400);
+            tb1.set_y(400);
 		    inst1 = new ms.ui.Label( 
 	    "12px Verdana",g_ui_root.manager, g_ui_root);
         inst1 = inst1;

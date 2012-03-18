@@ -3,6 +3,7 @@
 <xss:code>
 	if(obj.class_name == "texture_cube")
 	{
+		out(marker = "threejs_variables", marker_source = "entry") {var <xss:e v="obj.id"/>;}
 		out(){
 		var urls = ["<xss:e v="obj.posx"/>", "<xss:e v="obj.negx"/>",
 					"<xss:e v="obj.posy"/>", "<xss:e v="obj.negy"/>",
@@ -10,11 +11,11 @@
 		}	
 		if(obj.mapping)
 			out(){
-			var <xss:e v="obj.id"/> = THREE.ImageUtils.loadTextureCube( urls, <xss:e v="obj.mapping"/>);
+			<xss:e v="obj.id"/> = THREE.ImageUtils.loadTextureCube( urls, <xss:e v="obj.mapping"/>);
 			}
 		else
 			out(){
-			var <xss:e v="obj.id"/> = THREE.ImageUtils.loadTextureCube( urls );
+			<xss:e v="obj.id"/> = THREE.ImageUtils.loadTextureCube( urls );
 			}
 	}
 	else

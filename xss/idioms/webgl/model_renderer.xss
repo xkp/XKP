@@ -4,9 +4,10 @@
 <xss:parameter id="event_renderer"    default="../common-js/event.xss"/>
 
 <xss:code>
+	out(marker = "threejs_variables", marker_source = "entry") {var <xss:e v="obj.id"/>;}
 	
 	out(){
-	var <xss:e v="obj.id"/> = new THREE.Object3D();
+	<xss:e v="obj.id"/> = new THREE.Object3D();
 	var <xss:e v="obj.id"/>_loader = 
 	generate_model_loader(streamer.get_resource('<xss:e v="obj.src"/>').type);
 	} 

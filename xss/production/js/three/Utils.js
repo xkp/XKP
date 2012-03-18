@@ -1,3 +1,27 @@
+function getElementPosition(element) {
+	var elem=element, tagname="", x=0, y=0;
+	while(elem && (typeof(elem) == "object") && (typeof(elem.tagName) != "undefined")) {
+		y += elem.offsetTop;
+		x += elem.offsetLeft;
+		tagname = elem.tagName.toUpperCase();
+		if(tagname == "BODY")
+			elem=0;
+		if(typeof(elem) == "object") {
+			if(typeof(elem.offsetParent) == "object")
+				elem = elem.offsetParent;
+		}
+	}
+	return {x: x, y: y};
+}
+
+function distance3d(vector1, vector2)
+{
+	var x = vector1.x - vector2.x;
+	var y = vector1.y - vector2.y;
+	var z = vector1.z - vector2.z;
+	return Math.sqrt(x * x + y * y + z * z);
+}
+
 function set_active_camera( camera )
 {
 	renderer.render(scene, camera);
@@ -5,12 +29,59 @@ function set_active_camera( camera )
 	active_camera = camera;
 }
 
+function threejs_load_resources(callback)
+{
+	var resources = [];
+	for(var i = 0; i < streamer.resources.length; i++)
+	{
+		var res = streamer.resources[i];
+		if(!res.loaded)
+			resources.push({ type: res.type, url: res.asset});			
+	}
+	if (resources.length > 0)
+	{		
+		var stream_client =
+		{
+			resource_loaded: function(res, data)
+			{					
+			},
+
+			finished_loading: function()
+			{
+				callback();
+			}
+		};
+
+		streamer.request(resources, stream_client);
+	}
+	else callback();
+}
+
 function set_transform_image( path, value )
 {
 	for(var i = 0; i < path.children.length; i++)
 	{
 		var child = path.children[i];		
-		child.materials[ 0 ].map = THREE.ImageUtils.loadTexture(streamer.get_resource(value).asset);	
+		child.materials[ 0 ].map = new THREE.Texture(streamer.get_resource(value).data);	
+	}	
+}
+
+function set_cube_face_object( path, face, value )
+{
+	path.geometry.faces[face].materials[0].map = new THREE.Texture(value);	
+}
+
+function set_cube_face( path, value, face )
+{
+	path.geometry.faces[face].materials[0].map = new THREE.Texture(streamer.get_resource(value).data);	
+}
+
+function set_transform_texture_object( path, value )
+{
+	for(var i = 0; i < path.children.length; i++)
+	{
+		var child = path.children[i];		
+		child.materials[ 0 ].map = new THREE.Texture(value);	
 	}	
 }
 
@@ -26,6 +97,11 @@ function set_transform_material( path, value )
 function set_object_alpha( path, value )
 {	         
 	path.materials[0].opacity = value / 100;	
+}
+
+function get_object_alpha( path )
+{	         
+	return path.materials[0].opacity * 100;	
 }
 
 function set_material_alpha( path, value )
