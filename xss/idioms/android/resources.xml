@@ -10,6 +10,10 @@
 				<object src_path="/src/xkp/android/libs/Widget/" src_filename="XKPPackage.java"/>
 			</array>
 			
+			<property id="is_loaded" type="bool">
+				<get text="isResourceLoaded()"/>
+			</property>
+			
 			<method id="load" type="bool"/>
 			
 			<event id="loaded" output_id="onPackageLoaded" interface="OnResourcePackageListener" def_args="XKPPackage pack" set_handle="setOnResourcePackageListener" set_param_hnd="this"/>

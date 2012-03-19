@@ -23,8 +23,8 @@ public class XKPImageMap extends ImageView implements OnTouchListener {
 	
 	private int mCameraLeft = 0;
 	private int mCameraTop = 0;
-	private int mCameraWidth = 0;
-	private int mCameraHeight = 0;
+	private int mCameraWidth = -1;
+	private int mCameraHeight = -1;
 	
 	private int mTouchX = 0;
 	private int mTouchY = 0;
@@ -43,8 +43,8 @@ public class XKPImageMap extends ImageView implements OnTouchListener {
 		
 		mCameraLeft = ta.getDimensionPixelOffset(R.styleable.XKPImageMap_camera_left, 0);
 		mCameraTop = ta.getDimensionPixelOffset(R.styleable.XKPImageMap_camera_top, 0);
-		mCameraWidth = ta.getDimensionPixelOffset(R.styleable.XKPImageMap_camera_width, 0);
-		mCameraHeight = ta.getDimensionPixelOffset(R.styleable.XKPImageMap_camera_height, 0);
+		mCameraWidth = ta.getDimensionPixelOffset(R.styleable.XKPImageMap_camera_width, -1);
+		mCameraHeight = ta.getDimensionPixelOffset(R.styleable.XKPImageMap_camera_height, -1);
 		
 		mBitmapResourceId = ta.getResourceId(R.styleable.XKPImageMap_map_src, 0);
 		
@@ -107,7 +107,7 @@ public class XKPImageMap extends ImageView implements OnTouchListener {
 	
 	protected void drawScene() {
 		checkDimensions();
-		if(mBitmap != null)
+		if(mBitmap != null && mCameraWidth > 0 && mCameraHeight > 0)
 			setImageBitmap(Bitmap.createBitmap(
 					mBitmap, mCameraLeft, mCameraTop, mCameraWidth, mCameraHeight));
 	}
@@ -124,8 +124,12 @@ public class XKPImageMap extends ImageView implements OnTouchListener {
 			
 			if(mCameraWidth >= mBitmap.getWidth())
 				mCameraWidth = mBitmap.getWidth();
+                        else if(mCameraWidth < 0) 
+				mCameraWidth = getWidth();
 			if(mCameraHeight >= mBitmap.getHeight())
 				mCameraHeight = mBitmap.getHeight();
+			else if(mCameraHeight < 0)
+				mCameraHeight = getHeight();
 		}
 	}
 	

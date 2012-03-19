@@ -6,12 +6,11 @@
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
-<script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/ms-state.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -21,7 +20,7 @@ var g_canvas;
 var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
-var Sound = new ms.ui.Sound();
+var SoundUtils = new ms.ui.SoundUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -29,83 +28,125 @@ var Sound = new ms.ui.Sound();
 				height: 400,
 				canvas: drawingCanvas
 			};
-			var ui = new ms.ui.Manager(client, streamer);
+            var streamer = new ms.streamer.Streamer();							
+			var ui = new ms.ui.Manager(client, streamer);			
 			var g_ui = ui;
 			var g_ui_root = ui.root;
+			var mouse_pressed = false;
 		}
 		var g_sequence_manager = new ms.state.Manager();
         function default_interpolate(a, b, t)
         {
             return a + (b - a)*t;
-        }
-		var streamer = new ms.streamer.Streamer();
-        var def_package_items = [];
-                def_package_items.push(
+        }		
+		var streamer = new ms.streamer.Streamer();		
+        var global_package_items = [];
+                global_package_items.push(
             {
-		id:"__image1",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/progress.full.png"
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/progress.full.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
-		id:"__image2",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/progress.empty.png"
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/progress.empty.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
-		id:"__image3",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_grin_48.png"
+		id:				"__image3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/smile_grin_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
-		id:"__image4",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/smile_sad_48.png"
+		id:				"__image4",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/smile_sad_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
-		id:"__image5",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_left.png"
+		id:				"__image5",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/arrow_left.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
-		id:"__image6",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_right.png"
+		id:				"__image6",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/arrow_right.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
-		id:"__image7",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_right_48.png"
+		id:				"__image7",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/arrow_right_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
-		id:"__image8",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_right_green_48.png"
+		id:				"__image8",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/arrow_right_green_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
-		id:"__image9",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_left_48.png"
+		id:				"__image9",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/arrow_left_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
-		id:"__image10",
-		resource_type:RESOURCE_IMAGE,
-		src:"images/arrow_left_green_48.png"
-});
-        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
-		g_startup_package.load();	
+		id:				"__image10",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/arrow_left_green_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
+    var canvas_position = {x:0, y:0};
 function start(resolution)  
 {  
 	function updater()  
-	{  
+	{
+		canvas_position = getElementPosition(drawingCanvas);
 		var now   = new Date().getTime();
         if (g_elapsed < 0)
             g_delta = 0; //first update
@@ -113,12 +154,15 @@ function start(resolution)
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
 		g_sequence_manager.update(g_delta);
+		application.events.dispatch("updates", []);	
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
         window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var main;var test1;var lbl1;var btn1;var test2;var pb1;var btn2;var btn3;var lbl2;var btnNext;var btnPrev;
+            application.clicks = 0;
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -138,33 +182,76 @@ window.onload = function()
 		{
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX, ev.clientY);                  
+		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX, ev.clientY);                  
+		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX, ev.clientY);                  
-	};	
+		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
 		    main = new ms.ui.Switch( 
 	    g_ui_root.manager, g_ui_root);
-        var main = main;
-                main.rect(0, 0, 600, 250);
+        main = main;
+            main.set_x(0);
+            main.set_y(0);
+            main.set_width(600);
+            main.set_height(250);
 		    test1 = new ms.ui.Component( 
 	    main.manager, main);test1.mouse_thru = true;
-        var test1 = test1;
+        test1 = test1;
 		    lbl1 = new ms.ui.Label( 
 	    "Verdana",test1.manager, test1);
-        var lbl1 = lbl1;
-                lbl1.set_rotation(-0.200000003);
-                lbl1.text("click smiley");
-                lbl1.position(270, 200);
+        lbl1 = lbl1;
+            lbl1.set_x(270);
+            lbl1.set_y(200);
+            lbl1.set_rotation(-0.200000003);
+            lbl1.text("click smiley");
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",test1.manager, test1);
-        var btn1 = btn1;
-                btn1.set_rotation(0.200000003);
+        btn1 = btn1;
+            btn1.set_placement("center");
+            btn1.set_rotation(0.200000003);
+            btn1.set_width(50);
+            btn1.set_height(50);
 	var ev_parent = this;
 	btn1.events.addListener("click", function()
 	{    
@@ -173,43 +260,58 @@ lbl1.text("Got " + application.clicks + " smileys");
 btn1.set_rotation(btn1.get_rotation() + 0.200000003);
 	}
 	);
- btn1.center(50, 50); 
+		application.are_obj_events = true;
 		    test2 = new ms.ui.Component( 
 	    main.manager, main);test2.mouse_thru = true;
-        var test2 = test2;
+        test2 = test2;
 		    pb1 = new ms.ui.ProgressBar( 
 	    null,test2.manager, test2);
-        var pb1 = pb1;
- pb1.center(150, 10); 
+        pb1 = pb1;
+            pb1.set_placement("center");
+            pb1.set_width(150);
+            pb1.set_height(10);
 		    btn2 = new ms.ui.Image( 
 	    "images/arrow_left.png",test2.manager, test2);
-        var btn2 = btn2;
+        btn2 = btn2;
+            btn2.set_x(200);
+            btn2.set_y(115);
+            btn2.set_width(20);
+            btn2.set_height(20);
 	var ev_parent = this;
 	btn2.events.addListener("click", function()
 	{    
 		pb1.value(pb1.get_value() - 1);
 	}
 	);
-                btn2.rect(200, 115, 20, 20);
+		application.are_obj_events = true;
 		    btn3 = new ms.ui.Image( 
 	    "images/arrow_right.png",test2.manager, test2);
-        var btn3 = btn3;
+        btn3 = btn3;
+            btn3.set_x(380);
+            btn3.set_y(115);
+            btn3.set_width(20);
+            btn3.set_height(20);
 	var ev_parent = this;
 	btn3.events.addListener("click", function()
 	{    
 		pb1.value(pb1.get_value() + 1);
 	}
 	);
-                btn3.rect(380, 115, 20, 20);
+		application.are_obj_events = true;
 		    lbl2 = new ms.ui.Label( 
 	    "Verdana",test2.manager, test2);
-        var lbl2 = lbl2;
-                lbl2.set_rotation(0.200000003);
-                lbl2.text("click small arrows to adjust percentage");
-                lbl2.position(210, 200);
+        lbl2 = lbl2;
+            lbl2.set_x(210);
+            lbl2.set_y(200);
+            lbl2.set_rotation(0.200000003);
+            lbl2.text("click small arrows to adjust percentage");
 		    btnNext = new ms.ui.Button( 
 	    "images/arrow_right_green_48.png","images/arrow_right_48.png",g_ui_root.manager, g_ui_root);
-        var btnNext = btnNext;
+        btnNext = btnNext;
+            btnNext.set_x(320);
+            btnNext.set_y(300);
+            btnNext.set_width(100);
+            btnNext.set_height(50);
 	var ev_parent = this;
 	btnNext.events.addListener("click", function()
 	{    
@@ -220,11 +322,15 @@ main.active(main.get_active() + 1);
 btnNext.set_rotation(btnNext.get_rotation() + 0.200000003);
 	}
 	);
-                btnNext.rect(320, 300, 100, 50);
+		application.are_obj_events = true;
 		    btnPrev = new ms.ui.Button( 
 	    "images/arrow_left_green_48.png","images/arrow_left_48.png",g_ui_root.manager, g_ui_root);
-        var btnPrev = btnPrev;
-                btnPrev.set_rotation(0.400000006);
+        btnPrev = btnPrev;
+            btnPrev.set_x(220);
+            btnPrev.set_y(300);
+            btnPrev.set_rotation(0.400000006);
+            btnPrev.set_width(50);
+            btnPrev.set_height(50);
 	var ev_parent = this;
 	btnPrev.events.addListener("click", function()
 	{    
@@ -234,8 +340,7 @@ main.active(main.get_active() - 1);
 }
 	}
 	);
-                btnPrev.rect(220, 300, 50, 50);
-                application.clicks = 0;
+		application.are_obj_events = true;
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -248,10 +353,7 @@ main.active(main.get_active() - 1);
 			{
 				ui.keypress(ev.keyCode);                  
 			};
-            if (application.init)
-            {
-                application.init();
-            }
+            application.events.dispatch("init", []);
             start();
 			ui.draw(drawingCanvas.getContext('2d'));
 		});
@@ -259,9 +361,8 @@ main.active(main.get_active() - 1);
 }
 </script>
 </head>
-<body>
-	<canvas id="myCanvas" width="600" height="400">
-		<p>Your browser doesn't support canvas.</p>
-	</canvas>
+<body>	
+	<canvas id="myCanvas" width="600" height="400"
+		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
 </body>
 </html>

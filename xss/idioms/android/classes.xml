@@ -682,7 +682,7 @@
 			</array>
 		</class>
 		
-		<class id="imgmap" super="img" sub_ns="libs.Widget" output_id="XKPImageMap">
+		<class id="imagemap" super="img" sub_ns="libs.Widget" output_id="XKPImageMap">
 			<array id="imports">
 				<object import="xkp.android.libs.Widget.XKPImageMap"/>
 			</array>
@@ -692,7 +692,7 @@
 				<object src_path="/res/values/" src_filename="styleable_XKPImageMap.xml"/>
 			</array>
 			
-			<property id="map_src" type="string" ns="android" res_type="drawable">
+			<property id="map_src" type="string" ns="xkp" res_type="drawable">
 				<!--<set text="util.setResourceXKPImageMap(R.id.{path}, {value})" global="true"/>-->
 				<set text="util.setResourceXKPImageMap({path}, {value})" global="true"/>
 			</property>

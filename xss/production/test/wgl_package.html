@@ -23,8 +23,10 @@
 		<script type="text/javascript" src="../js/three/Utils.js"></script>
 		<script type="text/javascript" src="../js/three/Detector.js"></script>
 <script type="text/javascript">		
+var ui;
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 var renderer = new THREE.WebGLRenderer( { antialias: false } );
+var canvas_position = {x:0, y:0};
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
@@ -32,7 +34,7 @@ var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 application.events = new ms.event.EventHolder();
-		var streamer = new ms.streamer.Streamer();
+		var streamer = new ms.streamer.Streamer();		
 	// --------RESOURCES---------
         var global_package_items = [];
                 global_package_items.push(
@@ -62,8 +64,8 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });
-				var pack_1_items = [];
-                pack_1_items.push(
+				var pack_1 = new ms.streamer.Package(streamer);				
+                pack_1.add_item(
             {
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
@@ -72,7 +74,7 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });
-                pack_1_items.push(
+                pack_1.add_item(
             {
 		id:				"__image5",
 		resource_type:	RESOURCE_IMAGE,
@@ -80,7 +82,15 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
+});	
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
         var global_package = new ms.streamer.Package(streamer, global_package_items);	
 		global_package.load();	
     // --------RESOURCES---------
@@ -88,6 +98,7 @@ soundRenderer = new THREE.SoundRenderer();
 document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( app_width, app_height );
 function render() {
+canvas_position = getElementPosition(renderer.domElement);
 var now   = new Date().getTime();
 if (g_elapsed < 0)
     g_delta = 0; //first update
@@ -98,71 +109,72 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var scene = 
+var scene;var camera_1;var plane_1;var plane_2;var plane_3;var container;var plane_4;var plane_5;
+threejs_load_resources(function()
+{
+scene = 
 new THREE.Scene(
 );
-var camera_1 = 
+camera_1 = 
 new THREE.Camera(
 45,1.5,1,10000);
 		active_camera = camera_1;
-                camera_1.position.x = 500;
-                camera_1.position.y = 500;
-                camera_1.position.z = 1000;
+            camera_1.position.x = 500;
+            camera_1.position.y = 500;
+            camera_1.position.z = 1000;
 	    var plane_1_plane = 
 new THREE.Plane(
 128,164);
-	    var plane_1 = new THREE.Mesh(plane_1_plane, new THREE.MeshBasicMaterial());
+	    plane_1 = new THREE.Mesh(plane_1_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
-                plane_1.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/test1.png").asset);
-                plane_1.position.x = 100;
-                plane_1.position.y = 100;
+            plane_1.materials[0].map = new THREE.Texture(streamer.get_resource("images/test1.png").data);
+            plane_1.position.x = 100;
+            plane_1.position.y = 100;
 	    var plane_2_plane = 
 new THREE.Plane(
 128,164);
-	    var plane_2 = new THREE.Mesh(plane_2_plane, new THREE.MeshBasicMaterial());
+	    plane_2 = new THREE.Mesh(plane_2_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_2);
 		plane_2.events = new ms.event.EventHolder();
-                plane_2.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/test2.png").asset);
-                plane_2.position.x = 300;
-                plane_2.position.y = 100;
+            plane_2.materials[0].map = new THREE.Texture(streamer.get_resource("images/test2.png").data);
+            plane_2.position.x = 300;
+            plane_2.position.y = 100;
 	    var plane_3_plane = 
 new THREE.Plane(
 128,164);
-	    var plane_3 = new THREE.Mesh(plane_3_plane, new THREE.MeshBasicMaterial());
+	    plane_3 = new THREE.Mesh(plane_3_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_3);
 		plane_3.events = new ms.event.EventHolder();
-                plane_3.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/test3.png").asset);
-                plane_3.position.x = 100;
-                plane_3.position.y = 300;
-				var pack_1 = 
-					new ms.streamer.Package(streamer, pack_1_items);
+            plane_3.materials[0].map = new THREE.Texture(streamer.get_resource("images/test3.png").data);
+            plane_3.position.x = 100;
+            plane_3.position.y = 300;
 				pack_1.events.addListener("loaded", function()
 				{				
-var container = 
+container = 
 new THREE.Object3D(
 );
 container.events = new ms.event.EventHolder();
 	    var plane_4_plane = 
 new THREE.Plane(
 128,164);
-	    var plane_4 = new THREE.Mesh(plane_4_plane, new THREE.MeshBasicMaterial());
+	    plane_4 = new THREE.Mesh(plane_4_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_4);
 		plane_4.events = new ms.event.EventHolder();
 				container.addChild(plane_4);
 				scene.addObject(container);
-                plane_4.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/test4.png").asset);
-                plane_4.position.x = -100;
+            plane_4.materials[0].map = new THREE.Texture(streamer.get_resource("images/test4.png").data);
+            plane_4.position.x = -100;
 	    var plane_5_plane = 
 new THREE.Plane(
 128,164);
-	    var plane_5 = new THREE.Mesh(plane_5_plane, new THREE.MeshBasicMaterial());
+	    plane_5 = new THREE.Mesh(plane_5_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_5);
 		plane_5.events = new ms.event.EventHolder();
 				container.addChild(plane_5);
 				scene.addObject(container);
-                plane_5.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/test5.png").asset);
-                plane_5.position.x = -400;
+            plane_5.materials[0].map = new THREE.Texture(streamer.get_resource("images/test5.png").data);
+            plane_5.position.x = -400;
 });
 	var ev_parent = this;
 	application.events.addListener("click", function()
@@ -198,6 +210,7 @@ document.onkeypress = function(ev)
 application.events.dispatch("init", []);
 document.body.appendChild( renderer.domElement );
 animate();
+});
 function animate() {	
 	requestAnimationFrame( animate );
 	render();	

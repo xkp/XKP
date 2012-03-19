@@ -6,13 +6,11 @@
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
-<script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/ripple.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/ms-state.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -22,8 +20,7 @@ var g_canvas;
 var g_ui_root;
 var application = {};
 application.events = new ms.event.EventHolder();
-var Sound = new ms.ui.Sound();
-		var streamer = new ms.streamer.Streamer();
+var SoundUtils = new ms.ui.SoundUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -31,18 +28,20 @@ var Sound = new ms.ui.Sound();
 				height: 1000,
 				canvas: drawingCanvas
 			};
-			var ui = new ms.ui.Manager(client, streamer);
+            var streamer = new ms.streamer.Streamer();							
+			var ui = new ms.ui.Manager(client, streamer);			
 			var g_ui = ui;
 			var g_ui_root = ui.root;
+			var mouse_pressed = false;
 		}
 		var g_sequence_manager = new ms.state.Manager();
         function default_interpolate(a, b, t)
         {
             return a + (b - a)*t;
         }		
-		var streamer = new ms.streamer.Streamer();
-        var def_package_items = [];
-                def_package_items.push(
+		var streamer = new ms.streamer.Streamer();		
+        var global_package_items = [];
+                global_package_items.push(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -51,7 +50,7 @@ var Sound = new ms.ui.Sound();
 		frame_height:	null,
 		animations:		[]
 });
-                def_package_items.push(
+                global_package_items.push(
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
@@ -59,13 +58,23 @@ var Sound = new ms.ui.Sound();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
-		g_startup_package.load();	
+});	
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
+        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		global_package.load();	
+    var canvas_position = {x:0, y:0};
 function start(resolution)  
 {  
 	function updater()  
-	{  
+	{
+		canvas_position = getElementPosition(drawingCanvas);
 		var now   = new Date().getTime();
         if (g_elapsed < 0)
             g_delta = 0; //first update
@@ -81,7 +90,7 @@ function start(resolution)
 	window.setTimeout(updater, resolution);  
 }  
 var rr1;var r1;var r2;var r3;var c1;var c2;var img1;var img2;var s1;
-                application.increment = 10;
+            application.increment = 10;
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -101,45 +110,99 @@ window.onload = function()
 		{
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX, ev.clientY);                  
+		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX, ev.clientY);                  
+		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX, ev.clientY);                  
-	};	
+		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
 		    rr1 = new ms.ui.Rectangle( 
 	    "black",null,null,g_ui_root.manager, g_ui_root);
         rr1 = rr1;
-                rr1.rect(70, 30, 100, 3);
+            rr1.set_x(70);
+            rr1.set_y(30);
+            rr1.set_width(100);
+            rr1.set_height(3);
 		    r1 = new ms.ui.Rectangle( 
 	    "black",null,null,g_ui_root.manager, g_ui_root);
         r1 = r1;
-                r1.rect(120, 20, 3, 0);
+            r1.set_x(120);
+            r1.set_y(20);
+            r1.set_width(3);
+            r1.set_height(0);
 		    r2 = new ms.ui.Rectangle( 
 	    "black",null,null,g_ui_root.manager, g_ui_root);
         r2 = r2;
-                r2.rect(40, 140, 103, 3);
+            r2.set_x(40);
+            r2.set_y(140);
+            r2.set_width(103);
+            r2.set_height(3);
 		    r3 = new ms.ui.Rectangle( 
 	    "black",null,null,g_ui_root.manager, g_ui_root);
         r3 = r3;
-                r3.rect(20, 20, 3, 103);
+            r3.set_x(20);
+            r3.set_y(20);
+            r3.set_width(3);
+            r3.set_height(103);
 		    c1 = new ms.ui.Circle( 
 	    null,"black",20,g_ui_root.manager, g_ui_root);
         c1 = c1;
-                c1.set_radius(60);
-                c1.position(35, 35);
+            c1.set_x(35);
+            c1.set_y(35);
+            c1.set_radius(60);
 		    c2 = new ms.ui.Circle( 
 	    null,"black",10,g_ui_root.manager, g_ui_root);
         c2 = c2;
-                c2.set_radius(60);
-                c2.position(75, 350);
+            c2.set_x(75);
+            c2.set_y(350);
+            c2.set_radius(60);
 		    img1 = new ms.ui.Image( 
 	    "images/test2.png",g_ui_root.manager, g_ui_root);
         img1 = img1;
+            img1.set_x(100);
+            img1.set_y(100);
+            img1.set_width(130);
+            img1.set_height(130);
 	var ev_parent = this;
 	img1.events.addListener("click", function()
 	{    
@@ -148,11 +211,13 @@ img1.set_height(img1.get_height() + application.increment);
 	}
 	);
 		application.are_obj_events = true;
-                img1.rect(100, 100, 130, 130);
 		    img2 = new ms.ui.Image( 
 	    "images/test2.png",g_ui_root.manager, g_ui_root);
         img2 = img2;
-                img2.rect(300, 300, 80, 80);
+            img2.set_x(300);
+            img2.set_y(300);
+            img2.set_width(80);
+            img2.set_height(80);
 s1 =
 new ms.state.Sequence(
 g_sequence_manager);
@@ -203,9 +268,8 @@ g_sequence_manager);
 }
 </script>
 </head>
-<body>
-	<canvas id="myCanvas" width="1000" height="1000">
-		<p>Your browser doesn't support canvas.</p>
-	</canvas>
+<body>	
+	<canvas id="myCanvas" width="1000" height="1000"
+		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
 </body>
 </html>

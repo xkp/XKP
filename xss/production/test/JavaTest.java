@@ -1,26 +1,21 @@
-// 
-// Java tests console
-// This source is generated with xss:xkp
-//
 import java.util.ArrayList;
 import java.util.Arrays;
 public class JavaTest {
-				private static Class_instance1 instance1;
-			private Float prop_instance1_xvalue = 100.199997;
+			private Float prop_instance1_xvalue = 100.199997f;
 			private Object prop_instance1_svalue;
 		public Float mthd_instance1_test0(Integer value) {
 			Integer a = value;
-Float b = 5.000000;
+Float b = 5.000000f;
 return a * b;
 		}
 		public Float mthd_instance1_test1(Integer value) {
-			Float b = 5.000000;
+			Float b = 5.000000f;
 return b / 2;
 		}
 		public String mthd_instance1_test2(Integer value) {
 			Integer a = value;
-Float b = 5.000000;
-return application.app_test(a * b);
+Float b = 5.000000f;
+return mthd_application_app_test(a * b);
 		}
 		public Object mthd_instance1_test3(Object value) {
 			return value;
@@ -42,7 +37,7 @@ if (!has_property)
 Integer v0 = 20;
 Integer v1 = instance1.px_value;
 String v2 = "string";
-Float v3 = 3.140000;
+Float v3 = 3.140000f;
 Boolean v4 = true;
 Integer x0;
 x0 = instance1.px_value;
@@ -108,12 +103,12 @@ else
 	}
 }
 String rmthd;
-rmthd = application.app_test(10);
-String thd = application.app_test(2);
+rmthd = mthd_application_app_test(10);
+String thd = mthd_application_app_test(2);
 Object mthd;
-mthd = instance1.test0(10);
-mthd = instance1.test0(10, "a", -2);
-mthd = instance1.test0(2 * 5, "b" + "a", 1);
+mthd = mthd_instance1_test0(10);
+mthd = mthd_instance1_test0(10, "a", -2);
+mthd = mthd_instance1_test0(2 * 5, "b" + "a", 1);
 			}
 	public static void main(String[] args) {
 				application.create();

@@ -15,6 +15,7 @@
 <script type="text/javascript" src="../js/prototype.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
 		<script type="text/javascript" src="../js/three/Three.js"></script>
 		<script type="text/javascript" src="../js/three/Stats.js"></script>
 		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
@@ -25,6 +26,7 @@
 var ui;
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 var renderer = new THREE.WebGLRenderer( { antialias: false } );
+var canvas_position = {x:0, y:0};
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
@@ -68,6 +70,7 @@ soundRenderer = new THREE.SoundRenderer();
 document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( app_width, app_height );
 function render() {
+canvas_position = getElementPosition(renderer.domElement);
 var now   = new Date().getTime();
 if (g_elapsed < 0)
     g_delta = 0; //first update

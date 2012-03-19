@@ -78,11 +78,15 @@ var img1;
         {
     initialize: function($super
                 , src
-                )
+				, manager, parent
+			)
     {
         $super(
-        src        );
+        src
+				, manager, parent
+			        );
         this.events = new ms.event.EventHolder(); 
+        var this__  = this;
             this.x_pos = null;
             this.y_pos = null;
             this.img2 = null;
@@ -98,7 +102,12 @@ this.set_rotation(this.rotation + 10);
 		ev_parent.x_pos = ev_parent.x;
 ev_parent.y_pos = ev_parent.y;
 ev_parent.traslate();
-ev_parent.img2 = new my_image("images/img1.png");
+ev_parent.img2 = 
+new my_image(
+"images/img1.png"
+			, g_ui_root.manager, g_ui_root
+)
+;
 ev_parent.img2.rect(ev_parent.x_pos + 50, ev_parent.y_pos - 50, 50, 50);
 	}
 	);
@@ -205,7 +214,12 @@ application.y_pos = application.y_pos + 60;
 img1.set_rotation(img1.get_rotation() + 10);
 img1.set_x(img1.x + 5);
 img1.set_y(img1.y + 5);
-application.img2 = new my_image("images/img1.png");
+application.img2 = 
+new my_image(
+"images/img1.png"
+			, g_ui_root.manager, g_ui_root
+)
+;
 application.img2.rect(application.x_pos, application.y_pos, 50, 50);
 	}
 	);

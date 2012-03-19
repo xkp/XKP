@@ -16,6 +16,7 @@
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
 		<script type="text/javascript" src="../js/three/Three.js"></script>
 		<script type="text/javascript" src="../js/three/Stats.js"></script>
 		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
@@ -24,15 +25,17 @@
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui;
+var SoundUtils;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
+var canvas_position = {x:0, y:0};
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 application.events = new ms.event.EventHolder();
-		var streamer = new ms.streamer.Streamer();
+		var streamer = new ms.streamer.Streamer();		
 	// --------RESOURCES---------
         var global_package_items = [];
                 global_package_items.push(
@@ -52,7 +55,15 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
+});	
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
         var global_package = new ms.streamer.Package(streamer, global_package_items);	
 		global_package.load();	
     // --------RESOURCES---------
@@ -60,6 +71,7 @@ soundRenderer = new THREE.SoundRenderer();
 document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( app_width, app_height );
 function render() {
+canvas_position = getElementPosition(drawingCanvas);
 var now   = new Date().getTime();
 if (g_elapsed < 0)
     g_delta = 0; //first update
@@ -67,28 +79,37 @@ else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
 application.events.dispatch("updates", []);	
+		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var material_sphere1 = new THREE.MeshLambertMaterial({
+var material_sphere1;var material_sphere2;var material_wireframe;var scene;var camera_1;var camera_1;var light;var container_1;var sphere_1;var container_2;var sphere_2;var plane_1;
+threejs_load_resources(function()
+{
+material_sphere1 = new THREE.MeshLambertMaterial({
 color:Green,shading:THREE.FlatShading
 	});
-var material_sphere2 = new THREE.MeshLambertMaterial({
+material_sphere2 = new THREE.MeshLambertMaterial({
 color:Yellow,shading:THREE.FlatShading
 	});
-var material_wireframe = new THREE.MeshLambertMaterial({
+material_wireframe = new THREE.MeshLambertMaterial({
 color:MediumSlateBlue ,wireframe:true
 	});
-var scene = 
+scene = 
 new THREE.Scene(
 );
-var light = 
+camera_1 = new THREE.QuakeCamera({
+fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly:true,lookVertical:false
+	});
+		active_camera = camera_1;
+            camera_1.position.y = 25;
+light = 
 new THREE.DirectionalLight(
 White);
 		;
 	scene.addLight(light);
             light.position.y = 0.5;
             light.position.z = 1;
-var container_1 = 
+container_1 = 
 new THREE.Object3D(
 );
 container_1.events = new ms.event.EventHolder();
@@ -97,12 +118,12 @@ container_1.events = new ms.event.EventHolder();
 	    var sphere_1_sphere = 
 new THREE.Sphere(
 20,32,16);
-	    var sphere_1 = new THREE.Mesh(sphere_1_sphere, material_sphere1);
+	    sphere_1 = new THREE.Mesh(sphere_1_sphere, material_sphere1);
 	    scene.addObject(sphere_1);
 		sphere_1.events = new ms.event.EventHolder();
 				container_1.addChild(sphere_1);
 				scene.addObject(container_1);
-var container_2 = 
+container_2 = 
 new THREE.Object3D(
 );
 container_2.events = new ms.event.EventHolder();
@@ -111,7 +132,7 @@ container_2.events = new ms.event.EventHolder();
 	    var sphere_2_sphere = 
 new THREE.Sphere(
 20,32,16);
-	    var sphere_2 = new THREE.Mesh(sphere_2_sphere, material_sphere2);
+	    sphere_2 = new THREE.Mesh(sphere_2_sphere, material_sphere2);
 	    scene.addObject(sphere_2);
 		sphere_2.events = new ms.event.EventHolder();
 				container_2.addChild(sphere_2);
@@ -119,16 +140,15 @@ new THREE.Sphere(
 	    var plane_1_plane = 
 new THREE.Plane(
 1000,1000,100,100);
-	    var plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
+	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
             plane_1.position.y = 0.100000001;
             set_rotation_x(plane_1.rotation, -90);
 if(ui)
-{
-	ui.load_resources(function(){		
-		g_ui.fill_background = false;
-	});
+{	
+	SoundUtils = new ms.ui.SoundUtils();
+	g_ui.fill_background = false;	
 }
 var event_manager = new ms.event.ThreeEventManager();
 document.onmousemove = function(ev)
@@ -158,6 +178,7 @@ document.onkeypress = function(ev)
 application.events.dispatch("init", []);
 document.body.appendChild( renderer.domElement );
 animate();
+});
 function animate() {
 	if(ui)
 		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);

@@ -9,12 +9,6 @@
 	<script type="text/javascript" src="js/utils.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			//all system position is absolute
-			$("*").each(function(index, domElem) {
-				if($(domElem).attr("id") != undefined) {
-					$(domElem).css("position", "absolute");
-				}
-			});
 			var kitchen = $("#kitchen").tabs();
 			var __div1 = $("#__div1");
 			var btn1 = $("#btn1").button();
@@ -63,17 +57,15 @@ console.log(util_labelPropText(chkb1));
 	</style>
 </head>
 <body>
-					<div id="application"
-				>
-					<div id="__resources1"
-				>
-					<div id="dialog"
-				>
-					</div>
-					<div id="emulator"
-				>
-					</div>
-					</div>
+				<div id="__resources1"
+			>
+				<div id="dialog"
+			>
+				</div>
+				<div id="emulator"
+			>
+				</div>
+				</div>
 <div id="kitchen">
 		<ul>
 			<li><a href="#__div1"><span>Buttons?</span></a></li>
@@ -81,39 +73,39 @@ console.log(util_labelPropText(chkb1));
 			<li><a href="#__scroller2"><span>Image</span></a></li>
 			<li><a href="#__div2"><span>ProgressBars</span></a></li>
 		</ul>
-					<div id="__div1"
-				>
-					<input id="btn1"
-							type="button" 
-							name="btn1" 
-							value="Standard button (Toggle CheckBox)" 
-						>
-					</input>
-					<div id="toggle1"
-				>
-					</div>
-					<div id="imgbtn1"
-				>
-					</div>
-					<div id="lbl1"
-				>
-						Simple Labeled
-					</div>
-					<input id="edit1"
-							type="text" 
-							name="edit1" 
-							value="Some text!" 
-							title="Empty EditText!" 
-						>
-					</input>
+				<div id="__div1"
+			>
+				<input id="btn1"
+						type="button" 
+						name="btn1" 
+						value="Standard button (Toggle CheckBox)" 
+					>
+				</input>
+				<div id="toggle1"
+			>
+				</div>
+				<div id="imgbtn1"
+			>
+				</div>
+				<div id="lbl1"
+			>
+					Simple Labeled
+				</div>
+				<input id="edit1"
+						type="text" 
+						name="edit1" 
+						value="Some text!" 
+						title="Empty EditText!" 
+					>
+				</input>
 <input id="chkb1" type="checkbox" name="__div1"/>
 <label id="__lchkb1" for="chkb1">I'm a checkbox</label>
-					</div>
-					<div id="__scroller1"
-							style="overflow:auto" 
-						>
-					<div id="rdgTab3"
-				>
+				</div>
+				<div id="__scroller1"
+						style="overflow:auto" 
+					>
+				<div id="rdgTab3"
+			>
 <input id="radio1" type="radio" name="rdgTab3"/>
 <label id="__lradio1" for="radio1">First radiobutton inside radiogroup</label>
 <input id="radio2" type="radio" name="rdgTab3"/>
@@ -132,37 +124,36 @@ console.log(util_labelPropText(chkb1));
 <label id="__lradio8" for="radio8">Eighth radiobutton inside radiogroup</label>
 <input id="radio9" type="radio" name="rdgTab3"/>
 <label id="__lradio9" for="radio9">Ninth radiobutton inside radiogroup</label>
-					</div>
-					</div>
-					<div id="__scroller2"
-							style="overflow:auto" 
-						>
-					<input id="img1"
-							type="image" 
-							name="img1" 
-							src="images/emulator.png" 
-						>
-					</input>
-					</div>
-					<div id="__div2"
-				>
-					<div id="prgbar1"
-				>
-					</div>
-					<div id="prgbar2"
-				>
-					</div>
-					<div id="prgbar3"
-				>
-					</div>
-					<div id="prgbar4"
-				>
-					</div>
-					<div id="seekb1"
-				>
-					</div>
-					</div>
 				</div>
-					</div>
-				</body>
+				</div>
+				<div id="__scroller2"
+						style="overflow:auto" 
+					>
+				<input id="img1"
+						type="image" 
+						name="img1" 
+						src="images/emulator.png" 
+					>
+				</input>
+				</div>
+				<div id="__div2"
+			>
+				<div id="prgbar1"
+			>
+				</div>
+				<div id="prgbar2"
+			>
+				</div>
+				<div id="prgbar3"
+			>
+				</div>
+				<div id="prgbar4"
+			>
+				</div>
+				<div id="seekb1"
+			>
+				</div>
+				</div>
+			</div>
+</body>
 </html>

@@ -105,6 +105,10 @@ public class XKPPackage {
 		return mResourceLoaded;
 	}
 	
+	public boolean isResourceLoaded() {
+		return mResourceLoaded;
+	}
+	
 	synchronized protected void loadResource() {
 		for(int i = 0; i < mResourceId.size(); i++) {
 			switch(mResourceType.get(i)) {
