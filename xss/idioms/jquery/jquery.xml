@@ -1,0 +1,34 @@
+<module id="jquery" src="classes.xs">
+	<types>
+		<class id="component">
+            <property id="x" type="int" output_id="left" render_type="script">
+                <get text="position().left"/>
+                <set text="css( { left:{value} } )"/>
+            </property>
+			
+            <property id="y" type="int" output_id="top" render_type="script">
+                <get text="position().top"/>
+                <set text="css( { top:{value} } )"/>
+            </property>
+			
+            <property id="width" type="int" render_type="script">
+                <get text="width()"/>
+                <set text="width({value})"/>
+            </property>
+			
+            <property id="height" type="int" render_type="script">
+                <get text="height()"/>
+                <set text="height({value})"/>
+            </property>
+
+            <property id="placement" type="string" render_type="script">
+				<get text='attr("placement")'/>
+				<set text='attr("placement", {value})'/>
+			</property>
+		</class>
+		
+		<!-- components -->
+		<class id="div" super="component" output_id="div" html_renderer="div.html.xss"/>
+	</types>
+	
+</module>

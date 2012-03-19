@@ -1,0 +1,234 @@
+<xss:parameter id="it"/>
+
+<div id="<xss:e value="it.output_id"/>">
+<xss:class>
+    public int direction_south  = 0;
+    public int direction_north  = 1;
+    public int direction_east   = 2;
+    public int direction_west   = 3;
+    public int direction_client = 4;
+    
+    private var result_ = [];
+    private var table_  = null;
+    
+    void add_operation(op)
+    {
+        var container = null;
+        if (table_) container = table_;
+        else        container = result_;
+        
+        if ((op.direction == direction_north || 
+             op.direction == direction_west) && !op.ordered)   
+        {
+            //to follow the table's layout the componentes must be inverted
+            var newcomps = [];
+            for(int i = op.components.size - 1; i >= 0; i--)
+                newcomps += op.components[i];
+            
+            op.components = newcomps;
+        }
+        
+        container += op;
+    }
+    
+    int get_direction(cmp)
+    {
+        if (cmp.placement == "top")
+            return direction_south;    
+        if (cmp.placement == "bottom")
+            return direction_north;    
+        if (cmp.placement == "left")
+            return direction_east;    
+        if (cmp.placement == "right")
+            return direction_west;    
+        if (cmp.placement == "client")
+            return direction_client;
+        
+        compiler.error("Invalid placement", pl = cmp.placement, cmp = cmp.id);
+    }
+    
+    int get_operation(cmp, int idx, object result)
+    {
+        var child = cmp.children[idx];
+        result.direction  = get_direction(child);
+        if (result.direction == direction_client)
+        {
+            result.component = child;
+            return idx + 1;
+        }
+        
+        //non client
+        result.components = [];
+        var pl = child.placement;  
+
+        while(child.placement == pl)
+        {
+            result.components += child;
+            idx++;
+            
+            if (idx >= cmp.children.size)
+                return -1;
+            
+            child = cmp.children[idx];
+        }
+        
+        return idx;
+    }
+    
+    object swap_last(op)
+    {
+        var container = null;
+        if (table_) container = table_;
+        else        container = result_;
+
+        var tmp  = object();
+        var last = container[container.size - 1];
+        tmp.direction = last.direction;
+        tmp.components = last.components;
+        
+        last.direction = op.direction;
+        last.components = op.components;
+        
+        return tmp;
+    }
+    
+    method generate_layout(cmp)
+    {
+        var  direction   = null;
+        int  idx         = 0;
+        var  need_client = null;
+        var  full        = false;
+        
+        while(idx >= 0 && idx < cmp.children.size)
+        {
+            var child = cmp.children[idx];
+            if (full)
+                compiler.error("Invalid layout, adding components after it is full", component = child.id);
+            
+            var op = object();
+            idx = get_operation(cmp, idx, op); 
+
+            if (direction == null)
+            {
+                add_operation(op);
+            }
+            else
+            {
+                //case handling
+                if ((direction == direction_south && op.direction == direction_north) ||
+                    (direction == direction_east && op.direction == direction_west))    
+                {
+                    //no need to split the table, but we do need to trap
+                    //the next direction change
+                    var client_op = object();
+                    client_op.direction = direction_client;
+                    need_client = client_op;
+                    
+                    //and so the client op go before the "bottom" components
+                    add_operation(client_op);
+                    add_operation(op);
+                }
+                else if ((direction == direction_north && op.direction == direction_south) ||
+                          (direction == direction_west && op.direction == direction_east))  
+                {
+                    //swap operations, so the components on the left hand are rendered first
+                    var bottom = swap_last(op);
+                    bottom.ordered = true; //the components were already swapped
+                    
+                    //now wait for change
+                    var client_op1 = object();
+                    client_op1.direction = direction_client;
+                    need_client = client_op1;
+                    
+                    //and add
+                    add_operation(client_op1);
+                    add_operation(bottom);
+                }
+                else if (op.direction == direction_client)
+                {
+                    if (need_client)
+                    {
+                        need_client.component = op.component;
+                        need_client = null;
+                    }
+                    else
+                        add_operation(op);
+                    
+                    full = true;
+                }
+                else
+                {
+                    //collision, add a new table
+                    var table = [];
+                    
+                    var table_op = object();
+                    table_op.table = table;
+                    
+                    if (need_client)
+                    {
+                        need_client.table = table;
+                        need_client = null;
+                    }
+                    else
+                        add_operation(table_op);
+                    
+                    table_ = table; 
+                    add_operation(op); //add the breaking op to the new table
+                }
+            }
+            
+            direction  = op.direction;
+        }
+        
+        return result_;
+    }
+    
+    method print_layout(var layout, int indent)
+    {
+        string indent_str = "";
+        for(int i = 0; i < indent; i++)
+            indent_str += " ";
+        
+        for(var l in layout)
+        {
+            if (l.table)
+            {
+                compiler.log(indent_str + "Table");
+                print_layout(l.table, indent + 2);
+            }
+            else if (l.direction == direction_client)
+            {
+                compiler.log(indent_str + "Client " + l.component.id);
+            }
+            else
+            {
+                compiler.log(indent_str + "Regular " + l.direction);
+                array components = l.components;
+                for(var ll in components)
+                {
+                    compiler.log(indent_str + "Component " + ll.id);
+                }
+            }
+        }
+    }
+    
+    on render()
+    {
+        if (it.children.empty)
+            return;
+    
+        bool do_layout = it.children[0].placement != null;
+        if (!do_layout)
+        {
+            //just render
+            for(var cmp in it.children)
+                compiler.xss("../component.xss", cmp);
+        }
+        else
+        {
+            array layout = generate_layout(it);
+            print_layout(layout, 0);
+        }
+    }
+</xss:class>
+</div>
