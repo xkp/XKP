@@ -94,6 +94,7 @@
 
 	on render()
 	{
+        compiler.log("PINGA");
 		render_component(it, 1);
 	}
 </xss:class>

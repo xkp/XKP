@@ -39,6 +39,13 @@ $(function() {
     
     method render_component(var component)
     {
+        if (component.type.html_renderer)
+        {
+			string file_renderer = "class.xss/" + component.type.html_renderer;
+			compiler.xss(file_renderer, component);
+            return;
+        }
+        
         out()
         {
             <<xss:e value="component.tag_name"/> <xss:e value="tag_properties(component)"/>>

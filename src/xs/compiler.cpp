@@ -1871,7 +1871,15 @@ str xs_compiler::process_dsl(const str& src, std::vector<str>& dsl_texts)
             if (curr == str::npos)
               break;
 
+            
+            size_t prev_char = curr - 1;
             size_t next_char = curr + dsl.size();
+            if (curr > 0 && !isspace(result[prev_char]) )
+            {
+                curr = next_char;
+                continue; //just part of a word
+            }
+
             if (next_char < result.size() && isalpha(result[next_char]) )
               {
                 curr = next_char;

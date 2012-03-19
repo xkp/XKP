@@ -2030,7 +2030,7 @@ void base_xs_linker::property_(xs_property& info)
     else
       {
         itm.type = ctx_.types_->get_type(info.type);
-        if (!itm.type)
+        if (!itm.type && info.type != "var")
           {
             param_list error;
             error.add("id", SUnknownIdentifier);
