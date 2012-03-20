@@ -183,6 +183,94 @@
         return result_;
     }
     
+    method render_component(cmp)
+    {
+        out() 
+        {
+            component goes here <xss:e v="cmp.id"/>
+        }
+    }
+    
+    method render_client(cmp)
+    {
+        out() 
+        {
+            client goes here <xss:e v="cmp.id"/>
+        }
+    }
+    
+    method render_layout(var layout)
+    {
+        if (layout.size == 1)
+        {
+            var cl = layout[0];
+            if (cl.client)
+                render_component(cl.component);
+            else
+                compiler.error("Layout not implemented");
+            
+            return;
+        }
+    
+        out()
+        {
+            <table border="0">
+        }
+        
+        var  tag = null;
+        bool close_row = false; 
+        for(var op in layout)
+        {
+            if (tag == null)
+            {
+                if (op.direction == direction_south || op.direction == direction_north)
+                    tag = "tr";
+                else if (op.direction == direction_east || op.direction == direction_north)
+                {
+                    tag = "td";
+                    close_row = true;
+                    
+                    out() {<tr>}
+                }
+                else compiler.error("Unimplmented layout " + op.direction);
+            }
+            
+            out() {<<xss:e v="tag"/>>}
+            if (op.table)
+                render_layout(op.table);
+            else if (op.direction == direction_client)
+                render_client(op.component);
+            else
+            {
+                bool first = true;
+                int  idx   = 0;
+                
+                for(var cmp in op.components)
+                {
+                    if (idx > 0) 
+                        out() {<<xss:e v="tag"/>>}
+                    
+                    render_component(cmp);
+                    
+                    idx++;
+                    if (idx < op.components.size)
+                        out() {</<xss:e v="tag"/>>}
+                }
+            }
+            out() {</<xss:e v="tag"/>>}
+        }
+        
+        if (close_row)
+        {
+            out() {</tr>}
+        }
+                
+        out()
+        {
+            </table>
+        }
+    }
+    
     method print_layout(var layout, int indent)
     {
         string indent_str = "";
@@ -227,7 +315,7 @@
         else
         {
             array layout = generate_layout(it);
-            print_layout(layout, 0);
+            render_layout(layout);
         }
     }
 </xss:class>
