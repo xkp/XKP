@@ -2,5 +2,6 @@
 <resources>
     <string name="app_name">Maps</string>
 					<string name="res0">Click buttons to see Gallery or Maps</string>
-					<string name="res1">Scene is EMPTY!</string>
+					<string name="res1"></string>
+					<string name="res2">Scene is EMPTY!</string>
 				</resources>

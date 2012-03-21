@@ -23,8 +23,10 @@
 		<label id="lblStatus" caption="Click buttons to see Gallery or Maps" height="60" width="160" gravity="center" placement="center"/>
 	</div>
 	
+	<label id="lblInformation" caption="" height="30" gravity="center" placement="bottom"/>
+	
 	<switcher id="swtScene" placement="client" active="lblScene">
-		<label id="lblInformation" caption="Scene is EMPTY!" width="200" height="200" placement="center" gravity="center"/>
+		<label id="lblSwicherInformation" caption="Scene is EMPTY!" width="200" height="200" placement="center" gravity="center"/>
 		<img id="imgGallery" placement="client"/>
 		<imagemap id="mapController" placement="client"/>
 	</switcher>

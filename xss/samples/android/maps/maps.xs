@@ -26,6 +26,7 @@ on btnGallery.click()
 	}
 	
 	swtScene.active = "imgGallery";
+	lblInformation.caption = "Click pictures to iterate through theirs.";
 }
 
 on btnMaps.click()
@@ -37,6 +38,7 @@ on btnMaps.click()
 	}
 	
 	swtScene.active = "mapController";
+	lblInformation.caption = "Drag picture to see whole map.";
 }
 
 on photos.loaded()

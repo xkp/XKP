@@ -28,8 +28,9 @@ import xkp.android.libs.Layout.XKPLayout;
 				private ImageButton btnGallery;
 				private ImageButton btnMaps;
 				private TextView lblStatus;
-				private XKPSwitcher swtScene;
 				private TextView lblInformation;
+				private XKPSwitcher swtScene;
+				private TextView lblSwicherInformation;
 				private ImageView imgGallery;
 				private XKPImageMap mapController;
 			public static XKPUtils util;
@@ -126,8 +127,9 @@ import xkp.android.libs.Layout.XKPLayout;
 					}
 				});
 				lblStatus = (TextView) findViewById(R.id.lblStatus);
-				swtScene = (XKPSwitcher) findViewById(R.id.swtScene);
 				lblInformation = (TextView) findViewById(R.id.lblInformation);
+				swtScene = (XKPSwitcher) findViewById(R.id.swtScene);
+				lblSwicherInformation = (TextView) findViewById(R.id.lblSwicherInformation);
 				imgGallery = (ImageView) findViewById(R.id.imgGallery);
 				imgGallery.setOnClickListener(new OnClickListener() {
 					@Override
@@ -179,6 +181,7 @@ private void initCallers() {
 	photos.load();
 }
 swtScene.setDisplayedChildByName(util.getIdFromName("imgGallery"));
+lblInformation.setText("Click pictures to iterate through theirs.");
 			}
 			private void onClickbtnMaps() {
 				if (!maps.isResourceLoaded())
@@ -187,6 +190,7 @@ swtScene.setDisplayedChildByName(util.getIdFromName("imgGallery"));
 	maps.load();
 }
 swtScene.setDisplayedChildByName(util.getIdFromName("mapController"));
+lblInformation.setText("Drag picture to see whole map.");
 			}
 			private void onClickimgGallery() {
 				prop_application_currentImage = prop_application_currentImage + 1;

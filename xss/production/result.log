@@ -2227,3 +2227,111 @@ Integer h = disp.getHeight();
 		
 
 Success are greateful
+===[ maps.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: __div1
+log: Rendering instance: btnGallery
+log: Rendering instance: btnMaps
+log: Rendering instance: lblStatus
+log: Rendering instance: lblInformation
+log: Rendering instance: swtScene
+log: Rendering instance: lblSwicherInformation
+log: Rendering instance: imgGallery
+log: Rendering instance: mapController
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: ico_gallery
+log: Rendering instance: ico_maps
+log: Rendering instance: photos
+log: Rendering instance: worth_1
+log: Rendering instance: worth_2
+log: Rendering instance: worth_3
+log: Rendering instance: worth_4
+log: Rendering instance: worth_5
+log: Rendering instance: worth_6
+log: Rendering instance: worth_7
+log: Rendering instance: maps
+log: Rendering instance: holguin
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+
+Success are greateful
+===[ maps.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: __div1
+log: Rendering instance: btnGallery
+log: Rendering instance: btnMaps
+log: Rendering instance: lblStatus
+log: Rendering instance: lblInformation
+log: Rendering instance: swtScene
+log: Rendering instance: lblSwicherInformation
+log: Rendering instance: imgGallery
+log: Rendering instance: mapController
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: ico_gallery
+log: Rendering instance: ico_maps
+log: Rendering instance: photos
+log: Rendering instance: worth_1
+log: Rendering instance: worth_2
+log: Rendering instance: worth_3
+log: Rendering instance: worth_4
+log: Rendering instance: worth_5
+log: Rendering instance: worth_6
+log: Rendering instance: worth_7
+log: Rendering instance: maps
+log: Rendering instance: holguin
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+
+Success are greateful
+===[ maps.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: __div1
+log: Rendering instance: btnGallery
+log: Rendering instance: btnMaps
+log: Rendering instance: lblStatus
+log: Rendering instance: lblInformation
+log: Rendering instance: swtScene
+log: Rendering instance: lblSwicherInformation
+log: Rendering instance: imgGallery
+log: Rendering instance: mapController
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: ico_gallery
+log: Rendering instance: ico_maps
+log: Rendering instance: photos
+log: Rendering instance: worth_1
+log: Rendering instance: worth_2
+log: Rendering instance: worth_3
+log: Rendering instance: worth_4
+log: Rendering instance: worth_5
+log: Rendering instance: worth_6
+log: Rendering instance: worth_7
+log: Rendering instance: maps
+log: Rendering instance: holguin
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+
+Success are greateful
