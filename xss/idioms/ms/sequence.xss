@@ -80,18 +80,8 @@
                 }
                 else compiler.error("Cannot find animatable property", prop = itm.property);
                 
-
-                out(indent = 2)
-                {
-                    var <xss:e v="iid"/> = new ms.state.Interpolator(
-                         
-                        default_interpolate,
-                        function(value)
-                        {
-                            <xss:e v="assign"/>;
-                        },
-                        [
-                }
+                //start the interpolator
+                idiom.begin_interpolator(iid, assign);
                         
                 //generate keys
                 array keys = itm.find_by_type("key");
@@ -128,38 +118,21 @@
                     if (key.value == null)
                         key.value = "null";
                         
-                    out(indent = 4)
-                    {
-                        {t: <xss:e v="key.t"/>, value: <xss:e v="key.value"/>},
-                    }
+                    idiom.render_key(key);
                     
                     idx++;
                 }
 
                 //close the interpolator 
-                out(indent = 2)
-                {
-                        ]);
-                        <xss:e v="seq_id"/>.addHandler(<xss:e v="iid"/>);	              
-                            
-                }
+                idiom.close_interpolator(iid, seq_id);
             }
             else if (itm.class_name == "run")
             {
                 string mid = compiler.genid('__r');
-                out()
-                {
-                    var <xss:e v="mid"/> = new ms.state.Caller(<xss:e v="time"/>,function()
-                    <xss:open_brace/>
-                }
-
-                generate_run(itm, seq_id, seq);
                 
-                out()
-                {
-                    <xss:close_brace/>);
-                    <xss:e v="seq_id"/>.addHandler(<xss:e v="mid"/>);						  
-                }
+                idiom.begin_caller(mid, time);
+                generate_run(itm, seq_id, seq);
+                idiom.close_caller(seq_id, mid);
             }
         }
     }
@@ -240,24 +213,10 @@
         else if (itm.trigger)
         {
             var ev = analyze_expression(itm.trigger, seq, seq_id, rendering_instance);
-            out()
-            {
-                if (<xss:e v="ev.path"/>.events)
-                <xss:open_brace/>
-                    <xss:e v="ev.path"/>.events.addListener("<xss:e v="ev.property_name"/>", function()
-                    <xss:open_brace/>
-                        if (<xss:e v="seq_id"/>.running)
-                        <xss:open_brace/>
-            }                        
-
-            generate_when_actions(itm.children, seq_id, seq);
             
-            out()
-            {
-                        <xss:close_brace/>
-                    <xss:close_brace/>);
-               <xss:close_brace/>
-            }
+            idiom.begin_when_event(ev, seq_id);
+            generate_when_actions(itm.children, seq_id, seq);
+            idiom.close_when_event();
         }
         else
             compiler.error("When tag expects an 'expr' or 'trigger'");
@@ -270,11 +229,7 @@
     
         string aid = compiler.genid("__h");
         
-        out()
-        {
-            var <xss:e v="aid"/> = new ms.state.Every(<xss:e v="itm.time"/>, function(t)
-            <xss:open_brace/>
-        }
+        idiom.begin_every(aid, itm.time);
         
         for(var child in itm.children)
         {
@@ -284,11 +239,7 @@
                 compiler.error("'every' supports only 'run'");
         }
 
-        out()
-        {
-            <xss:close_brace/>);
-            <xss:e v="seq_id"/>.addHandler(<xss:e v="aid"/>);	                    
-        }
+        idiom.close_every(aid, seq_id);
     }
             
     method generate_item(itm, seq, seq_id, rendering_instance)
@@ -303,11 +254,7 @@
             generate_sequence(itm, nested_id, seq_id, true);
             
             string shid = compiler.genid('__sh');
-            out()
-            {
-                var <xss:e v="shid"/> = new ms.state.SequenceHandler(<xss:e v="nested_id"/>);
-                <xss:e v="seq_id"/>.addHandler(<xss:e v="shid"/>);						  
-            }
+            idiom.register_nested_sequence(seq_id, nested_id, shid);
         }
         else
         {
@@ -393,23 +340,15 @@
         
         if (rendering_instance)
         {
-            //declare variable on the top level if no path is supplied, could be confusing
-            if (!path && !parent_id)
-                out(marker = "variables", marker_source = "entry") {var <xss:e v="seq_id"/>;}
-
-            //initialize it here
-            out() {<xss:e v="seq_id"/> =} compiler.xss("../common-js/instantiator.xss", seq);
-            
-            if (parent_id)
-                compiler.xss("../common-js/instance.xss", seq, path = parent_id);
-            else
-                compiler.xss("../common-js/instance.xss", seq, path = path);
+            idiom.render_instance(seq, seq_id, parent_id, path);
         }
         else
         {
             //render as class
+            //td: !!! check for java
+            
             seq_id = "this";
-            out(indent = 2)
+            out()
             {
                 var this__ = this;
             }
@@ -418,13 +357,14 @@
 
         if (seq.auto_start)
         {
-            out(indent = 2)
+            out()
             {
                 <xss:e v="seq_id"/>.start();
             }
         }
                 
-        if (parent_id) out() { <xss:e v="seq_id"/>.parent_sequence = true; }
+        if (parent_id) 
+            idiom.notify_parented(seq_id);
 
         //we'll let our children fill in on what the want done
         seq.conditions      = [];
@@ -437,33 +377,19 @@
 
         if (!seq.key_expressions.empty)
         {
-            out(indent = 2)
-            {
-                <xss:e v="seq_id"/>.events.addListener('start', function()
-                <xss:open_brace/>
-            }
+            idiom.begin_key_expressions(seq_id);
             
             for(var key_xpr in seq.key_expressions)
             {
-                out(indent=3)
-                {
-                    <xss:e v="key_xpr.interp"/>.keys[<xss:e v="key_xpr.idx"/>].value = <xss:e v="key_xpr.expr"/>;
-                }
+                idiom.render_key_expression(key_xpr);
             }
             
-            out(indent = 2)
-            {
-                <xss:close_brace/>);
-            }
+            idiom.close_key_expressions();
         }
 
         if (!seq.conditions.empty)
         {
-            out(indent = 2)
-            {
-                <xss:e v="seq_id"/>.events.addListener('update',function(elapsed, last)
-                <xss:open_brace/>
-            }
+            idiom.begin_frame_conditions(seq_id);
             
             //check the conditions described on the when clause
             int cond_idx = 0;
@@ -471,7 +397,7 @@
             {
                 cond = compiler.render_expression(cond, seq);
 
-                out(indent = 3)
+                out()
                 {
                     if (<xss:e v="cond"/>)
                     <xss:open_brace/>
@@ -480,21 +406,26 @@
                 var action_list = seq.actions[cond_idx]; cond_idx++;
                 generate_when_actions(action_list, seq_id, seq);
                 
-                out(indent = 2)
+                out()
                 {
                     <xss:close_brace/>
                 }
             }
             
-            out(indent = 2)
-            {
-                <xss:close_brace/>);
-            }
+            idiom.close_frame_conditions();
         }
     }
-            
+        
+    property idiom; //delegate 
+    
     on render()
     {
+        idiom = seq.idiom;
+        if (!idiom)
+        {
+            compiler.log("Why no idiom?");
+        }
+        
         var top_level = !seq.parent;
         if (!top_level)
             top_level = seq.parent.class_name != "sequence";

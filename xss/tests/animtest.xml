@@ -21,7 +21,11 @@
 
     <sequence id="anim2">
         <at time="0">
-            <animate property="btn2.x" from="@" to="btn1.x" in="2"/>
+            <animate property="btn2.x">
+                <key t="0" value="@"/>
+                <key t="1.4" value="btn2.x + (btn1.x - btn2.x)/2"/>
+                <key t="2" value="btn1.x"/>
+            </animate>
         </at>
     </sequence>
 

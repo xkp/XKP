@@ -112,7 +112,6 @@
                 var prop_type = prop.type.output_id;
                 out(indent = 2)
                 {
-					//<xss:e v="prop_name"/>
                    final Interpolator <xss:e v="iid"/> = new Interpolator();
 				   <xss:e v="iid"/>.setAssigner(new Assign(){
 	                    public void put(Object value)

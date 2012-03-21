@@ -1,0 +1,15 @@
+<module id="sequence" src="sequence.xs">
+    <types>
+        <class id="sequence" instantiator="instantiator.xss" renderer="sequence.xss" output_id="ms.state.Sequence">
+            <constructor_params>
+                <parameter id="manager" constant="g_sequence_manager"/>
+            </constructor_params>
+
+            <property id="loop" type="bool"/>
+            <property id="target" type="object" value_is_expression="true"/>
+
+            <method id="start"/>
+            <method id="stop"/>
+        </class>
+    </types>
+</module>

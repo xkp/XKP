@@ -11,8 +11,6 @@ on render_initialization(clazz, bns)
 
 on render_types()
 {
-	compiler.log("Rendering Sequence Types...");
-
     for(var ut in user_types)
     {
         var full_path = compiler.full_path("sequence.xss");
@@ -22,9 +20,6 @@ on render_types()
 
 on render_instances()
 {
-	compiler.log("Rendering Sequence...");
-	
-	//and then instances
     for(var i in instances)
     {
 		compiler.xss("sequence.xss", i, is_class = false);
@@ -60,16 +55,13 @@ on copy_default_files(app, bns, plibs)
 	];
 	
 	//TRACE: log
-	compiler.log("Rendering default files...");
+	compiler.log("Copying files...");
 	
 	string ns = bns + ".libs.Sequence";
 	for(string f in files)
 	{
 		string srcf = compiler.full_path("/libs/" + f);
 		string dstf = plibs + "Sequence/" + f;
-		
-		//TRACE: log
-		//compiler.log("Rendering default file: " + srcf);
 		
 		compiler.xss(srcf, output_file = dstf, ns = ns);
 	}

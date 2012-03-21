@@ -4,6 +4,6 @@
     </path>
 
     <idiom src="../idioms/ui/ui.xml"/>
-    <idiom src="../idioms/ms/sequence.xml"/>
+    <idiom src="../idioms/ms/js/sequence.xml"/>
     <idiom src="../idioms/resources/resources.xml"/>
 </project>

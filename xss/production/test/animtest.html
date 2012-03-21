@@ -29,9 +29,10 @@ var SoundUtils = new ms.ui.SoundUtils();
 				canvas: drawingCanvas
 			};
             var streamer = new ms.streamer.Streamer();							
-			var ui = new ms.ui.Manager(client, streamer);
+			var ui = new ms.ui.Manager(client, streamer);			
 			var g_ui = ui;
 			var g_ui_root = ui.root;
+			var mouse_pressed = false;
 		}
 		var g_sequence_manager = new ms.state.Manager();
         function default_interpolate(a, b, t)
@@ -59,10 +60,12 @@ var SoundUtils = new ms.ui.SoundUtils();
 		});
         var global_package = new ms.streamer.Package(streamer, global_package_items);	
 		global_package.load();	
+    var canvas_position = {x:0, y:0};
 function start(resolution)  
 {  
 	function updater()  
-	{  
+	{
+		canvas_position = getElementPosition(drawingCanvas);
 		var now   = new Date().getTime();
         if (g_elapsed < 0)
             g_delta = 0; //first update
@@ -98,16 +101,52 @@ window.onload = function()
 		{
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX, ev.clientY);                  
+		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX, ev.clientY);                  
+		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX, ev.clientY);                  
-	};	
+		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
 		    lbl1 = new ms.ui.Label( 
 	    null,g_ui_root.manager, g_ui_root);
         lbl1 = lbl1;
@@ -212,17 +251,17 @@ anim2.start();
 	}
 	);
 		application.are_obj_events = true;
-                    var ____i1 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            btn1.set_x(value);
-                        },
-                        [
-                        {t: 0, value: 40},
-                        {t: 1, value: 200},
-                        ]);
-                        anim1.addHandler(____i1);	              
+        var ____i1 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                btn1.set_x(value);
+            },
+            [
+        {t: 0, value: 40},
+        {t: 1, value: 200},
+            ]);
+            anim1.addHandler(____i1);	              
 anim2 =
 new ms.state.Sequence(
 g_sequence_manager);
@@ -240,22 +279,24 @@ g_sequence_manager);
 	}
 	);
 		application.are_obj_events = true;
-                    var ____i2 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            btn2.set_x(value);
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 2, value: null},
-                        ]);
-                        anim2.addHandler(____i2);	              
-                anim2.events.addListener('start', function()
-                {
-                    ____i2.keys[0].value = btn2.x;
-                    ____i2.keys[1].value = btn1.x;
-                });
+        var ____i2 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                btn2.set_x(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 1.39999998, value: null},
+        {t: 2, value: null},
+            ]);
+            anim2.addHandler(____i2);	              
+        anim2.events.addListener('start', function()
+        {
+        ____i2.keys[0].value = btn2.x;
+        ____i2.keys[1].value = btn2.x + (btn1.x - btn2.x) / 2;
+        ____i2.keys[2].value = btn1.x;
+        });
 anim3 =
 new ms.state.Sequence(
 g_sequence_manager);
@@ -266,79 +307,78 @@ g_sequence_manager);
 anim3.stop();
 	};
                 anim3.start();
-                    var ____i3 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            btn3.set_x(value);
-                        },
-                        [
-                        {t: 0, value: 40},
-                        {t: 1.5, value: 200},
-                        ]);
-                        anim3.addHandler(____i3);	              
-                    var ____i4 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            btn3.set_x(value);
-                        },
-                        [
-                        {t: 1.5, value: 200},
-                        {t: 3, value: 40},
-                        ]);
-                        anim3.addHandler(____i4);	              
-                anim3.events.addListener('update',function(elapsed, last)
-                {
+        var ____i3 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                btn3.set_x(value);
+            },
+            [
+        {t: 0, value: 40},
+        {t: 1.5, value: 200},
+            ]);
+            anim3.addHandler(____i3);	              
+        var ____i4 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                btn3.set_x(value);
+            },
+            [
+        {t: 1.5, value: 200},
+        {t: 3, value: 40},
+            ]);
+            anim3.addHandler(____i4);	              
+        anim3.events.addListener('update',function(elapsed, last)
+        {
                     if (application.click_count == 3)
                     {
                 anim3.stop_anim3();
                     }
-                });
+        });
 anim4 =
 new ms.state.Sequence(
 g_sequence_manager);
-            anim4.nested = null;
                 anim4.start();
             anim4.nested =
 new ms.state.Sequence(
 g_sequence_manager);
- anim4.nested.parent_sequence = true; 
-                    var ____i5 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            btn4.set_x(value);
-                        },
-                        [
-                        {t: 0, value: 40},
-                        {t: 1.5, value: 200},
-                        ]);
-                        anim4.nested.addHandler(____i5);	              
-                    var ____i6 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            btn4.set_x(value);
-                        },
-                        [
-                        {t: 1.5, value: 200},
-                        {t: 3, value: 40},
-                        ]);
-                        anim4.nested.addHandler(____i6);	              
-                var ____sh1 = new ms.state.SequenceHandler(anim4.nested);
-                anim4.addHandler(____sh1);						  
-                if (btn4.events)
+        anim4.nested.parent_sequence = true; 
+        var ____i5 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                btn4.set_x(value);
+            },
+            [
+        {t: 0, value: 40},
+        {t: 1.5, value: 200},
+            ]);
+            anim4.nested.addHandler(____i5);	              
+        var ____i6 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                btn4.set_x(value);
+            },
+            [
+        {t: 1.5, value: 200},
+        {t: 3, value: 40},
+            ]);
+            anim4.nested.addHandler(____i6);	              
+        var ____sh1 = new ms.state.SequenceHandler(anim4.nested);
+        anim4.addHandler(____sh1);						  
+        if (btn4.events)
+        {
+            btn4.events.addListener("click", function()
+            {
+                if (anim4.running)
                 {
-                    btn4.events.addListener("click", function()
-                    {
-                        if (anim4.running)
-                        {
                 anim4.nested.start();
                 lbl4.text("Clicked!");
-                        }
-                    });
-               }
+                }
+            });
+        }
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
