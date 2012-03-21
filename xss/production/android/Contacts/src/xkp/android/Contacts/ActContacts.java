@@ -55,19 +55,19 @@ import xkp.android.libs.Layout.XKPLayout;
 			private void bindViews() {
 				__div1 = (XKPLayout) findViewById(R.id.__div1);
 				btnLeft = (Button) findViewById(R.id.btnLeft);
-					btnLeft.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							onClickbtnLeft();
-						}
-					});
+				btnLeft.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						onClickbtnLeft();
+					}
+				});
 				btnRight = (Button) findViewById(R.id.btnRight);
-					btnRight.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							onClickbtnRight();
-						}
-					});
+				btnRight.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						onClickbtnRight();
+					}
+				});
 				swtStates = (XKPSwitcher) findViewById(R.id.swtStates);
 				divAdd = (XKPLayout) findViewById(R.id.divAdd);
 				lblFullName = (TextView) findViewById(R.id.lblFullName);
@@ -75,12 +75,12 @@ import xkp.android.libs.Layout.XKPLayout;
 				edtFullName = (EditText) findViewById(R.id.edtFullName);
 				edtPhoneNumber = (EditText) findViewById(R.id.edtPhoneNumber);
 				chkVerifier = (CheckBox) findViewById(R.id.chkVerifier);
-					chkVerifier.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-						@Override
-						public void onCheckedChanged(CompoundButton v, Boolean isChecked) {
-							onCheckedChangedchkVerifier();
-						}
-					});
+				chkVerifier.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+					@Override
+					public void onCheckedChanged(CompoundButton v, Boolean isChecked) {
+						onCheckedChangedchkVerifier();
+					}
+				});
 				btnAddContact = (Button) findViewById(R.id.btnAddContact);
 				divFind = (XKPLayout) findViewById(R.id.divFind);
 				lblFindType = (TextView) findViewById(R.id.lblFindType);

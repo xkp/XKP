@@ -216,6 +216,7 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 		}
 	}
 
+	var idiom = compiler.get_idiom("android");
 	for(var inst in clazz.instances)
 	{
 		if(inst.id == null || inst.no_script || inst.no_render)
@@ -228,26 +229,8 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 				<xss:e value="inst.output_id"/> = (<xss:e value="inst.type.output_id"/>) <xss:e value="prefix"/>findViewById(R.id.<xss:e value="inst.output_id"/>);
 			}
 		}
-		
-		for(var e in inst.events)
-		{
-			if(e.interface && e.implemented)
-			{
-				string handler = "set" + e.interface;
-				if(e.set_handle)
-					handler = e.set_handle;
-				
-				out(indent = 2)
-				{
-					<xss:e value="inst.output_id"/>.<xss:e value="handler"/>(new <xss:e value="e.interface"/>() <xss:open_brace/>
-						@Override
-						public void <xss:e value="e.output_id"/>(<xss:e value="e.def_args"/>) <xss:open_brace/>
-							<xss:e>e.output_id</xss:e><xss:e value="inst.output_id"/>(<xss:e>e.args.render()</xss:e>);
-						<xss:close_brace/>
-					<xss:close_brace/>);
-				}
-			}
-		}
+
+		idiom.process_event_handler(inst);
 		
 		if(inst.inits)
 		{

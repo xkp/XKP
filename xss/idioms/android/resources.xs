@@ -4,6 +4,7 @@ on render_instances(app)
 	
 	//TRACE: log
 	//compiler.log("Begin Rendering Resources Instances...");
+	var android_idiom = compiler.get_idiom("android");
 	
 	string pattern_numbers = "0123456789";
 	string pattern_string  = "abcdefghijklmnopqrstuvwxyz";
@@ -50,26 +51,7 @@ on render_instances(app)
 			}
 		}
 		
-		//render events
-		for(var e in inst.events)
-		{
-			if(e.interface && e.implemented)
-			{
-				string handler = "set" + e.interface;
-				if(e.set_handle)
-					handler = e.set_handle;
-				
-				out(indent = 2)
-				{
-					<xss:e value="inst.output_id"/>.<xss:e value="handler"/>(new <xss:e value="e.interface"/>() <xss:open_brace/>
-						@Override
-						public void <xss:e value="e.output_id"/>(<xss:e value="e.def_args"/>) <xss:open_brace/>
-							<xss:e>e.output_id</xss:e><xss:e value="inst.output_id"/>(<xss:e>e.args.render()</xss:e>);
-						<xss:close_brace/>
-					<xss:close_brace/>);
-				}
-			}
-		}
+		android_idiom.process_event_handler(inst);
 		
 		if(!inst.resrc)
 			continue;

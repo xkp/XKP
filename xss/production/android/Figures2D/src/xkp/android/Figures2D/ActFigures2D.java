@@ -34,26 +34,26 @@ import xkp.android.libs.Layout.XKPLayout;
 			private void bindViews() {
 				div1 = (XKPLayout) findViewById(R.id.div1);
 				c1 = (XKPCircle) findViewById(R.id.c1);
-					c1.setOnClickInsideFigureListener(new OnClickInsideFigureListener() {
-						@Override
-						public void onClickInsideFigure(View v) {
-							onClickInsideFigurec1();
-						}
-					});
+				c1.setOnClickInsideFigureListener(new OnClickInsideFigureListener() {
+					@Override
+					public void onClickInsideFigure(View v) {
+						onClickInsideFigurec1();
+					}
+				});
 				r1 = (XKPRectangle) findViewById(R.id.r1);
-					r1.setOnClickInsideFigureListener(new OnClickInsideFigureListener() {
-						@Override
-						public void onClickInsideFigure(View v) {
-							onClickInsideFigurer1();
-						}
-					});
+				r1.setOnClickInsideFigureListener(new OnClickInsideFigureListener() {
+					@Override
+					public void onClickInsideFigure(View v) {
+						onClickInsideFigurer1();
+					}
+				});
 				p1 = (XKPPolygon) findViewById(R.id.p1);
-					p1.setOnClickInsideFigureListener(new OnClickInsideFigureListener() {
-						@Override
-						public void onClickInsideFigure(View v) {
-							onClickInsideFigurep1();
-						}
-					});
+				p1.setOnClickInsideFigureListener(new OnClickInsideFigureListener() {
+					@Override
+					public void onClickInsideFigure(View v) {
+						onClickInsideFigurep1();
+					}
+				});
 			p1.addPoint(100, 100);
 			p1.addPoint(100, 50);
 			p1.addPoint(190, 10);

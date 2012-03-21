@@ -112,29 +112,29 @@ import xkp.android.libs.Layout.XKPLayout;
 			private void bindViews() {
 				__div1 = (XKPLayout) findViewById(R.id.__div1);
 				btnGallery = (ImageButton) findViewById(R.id.btnGallery);
-					btnGallery.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							onClickbtnGallery();
-						}
-					});
+				btnGallery.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						onClickbtnGallery();
+					}
+				});
 				btnMaps = (ImageButton) findViewById(R.id.btnMaps);
-					btnMaps.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							onClickbtnMaps();
-						}
-					});
+				btnMaps.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						onClickbtnMaps();
+					}
+				});
 				lblStatus = (TextView) findViewById(R.id.lblStatus);
 				swtScene = (XKPSwitcher) findViewById(R.id.swtScene);
 				lblInformation = (TextView) findViewById(R.id.lblInformation);
 				imgGallery = (ImageView) findViewById(R.id.imgGallery);
-					imgGallery.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							onClickimgGallery();
-						}
-					});
+				imgGallery.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						onClickimgGallery();
+					}
+				});
 				mapController = (XKPImageMap) findViewById(R.id.mapController);
 	}
 private void initCallers() {
@@ -154,23 +154,23 @@ private void initCallers() {
 					mResources_photos_Type, mResources_photos_Id
 					);
 				util.addXKPPackage(photos);
-					photos.setOnResourcePackageListener(new OnResourcePackageListener() {
-						@Override
-						public void onResourcePackageLoaded(XKPPackage pack) {
-							onResourcePackageLoadedphotos();
-						}
-					});
+				photos.setOnResourcePackageListener(new OnResourcePackageListener() {
+					@Override
+					public void onResourcePackageLoaded(XKPPackage pack) {
+						onResourcePackageLoadedphotos();
+					}
+				});
 				maps = new XKPPackage(this, 
 					mResources_maps_XKPName, mResources_maps_DroidName, 
 					mResources_maps_Type, mResources_maps_Id
 					);
 				util.addXKPPackage(maps);
-					maps.setOnResourcePackageListener(new OnResourcePackageListener() {
-						@Override
-						public void onResourcePackageLoaded(XKPPackage pack) {
-							onResourcePackageLoadedmaps();
-						}
-					});
+				maps.setOnResourcePackageListener(new OnResourcePackageListener() {
+					@Override
+					public void onResourcePackageLoaded(XKPPackage pack) {
+						onResourcePackageLoadedmaps();
+					}
+				});
 			}
 			private void onClickbtnGallery() {
 				if (!photos.isResourceLoaded())

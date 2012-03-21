@@ -47,26 +47,26 @@ anim3.stop();
 				lbl2 = (TextView) findViewById(R.id.lbl2);
 				lbl3 = (TextView) findViewById(R.id.lbl3);
 				btn1 = (Button) findViewById(R.id.btn1);
-					btn1.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							onClickbtn1();
-						}
-					});
+				btn1.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						onClickbtn1();
+					}
+				});
 				btn2 = (Button) findViewById(R.id.btn2);
-					btn2.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							onClickbtn2();
-						}
-					});
+				btn2.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						onClickbtn2();
+					}
+				});
 				btn3 = (Button) findViewById(R.id.btn3);
-					btn3.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							onClickbtn3();
-						}
-					});
+				btn3.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						onClickbtn3();
+					}
+				});
 	}
 private void initCallers() {
 			Start();

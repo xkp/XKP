@@ -192,6 +192,39 @@ method render_imports(clazz, bns)
 	//compiler.log("### End Rendering Android Imports...");
 }
 
+method process_event_handler(inst)
+{
+	//render event
+	for(var e in inst.events)
+	{
+		if(e.interface && e.implemented)
+		{
+			string handler = "set" + e.interface;
+			if(e.set_handle) handler = e.set_handle;
+				
+			string ret_type = "void";
+			string ret_word = "";
+			if(e.return_type)
+			{
+				ret_type = e.return_type;
+				ret_word = "return ";
+			}
+			
+			//TODO: parse spaces and commas in the events parameters,
+			//      for remove type from each parameter
+			out(indent = 2)
+			{
+				<xss:e value="inst.output_id"/>.<xss:e value="handler"/>(new <xss:e value="e.interface"/>() <xss:open_brace/>
+					@Override
+					public <xss:e value="ret_type"/> <xss:e value="e.output_id"/>(<xss:e value="e.def_args"/>) <xss:open_brace/>
+						<xss:e value="ret_word"/><xss:e value="e.output_id"/><xss:e value="inst.output_id"/>(<xss:e>e.args.render()</xss:e>);
+					<xss:close_brace/>
+				<xss:close_brace/>);
+			}
+		}
+	}
+}
+
 on copy_default_files(app, bns, plibs)
 {
 	// file list for copy

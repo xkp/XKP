@@ -79,12 +79,12 @@ import xkp.android.libs.Layout.XKPLayout;
 			private void bindViews() {
 				album = (ImageView) findViewById(R.id.album);
 				changer = (Button) findViewById(R.id.changer);
-					changer.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							onClickchanger();
-						}
-					});
+				changer.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						onClickchanger();
+					}
+				});
 				identifier = (TextView) findViewById(R.id.identifier);
 	}
 private void initCallers() {

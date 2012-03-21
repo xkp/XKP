@@ -28,12 +28,12 @@ import xkp.android.libs.Layout.XKPLayout;
 			}
 			private void bindViews() {
 				btnTouchme = (Button) findViewById(R.id.btnTouchme);
-					btnTouchme.setOnTouchListener(new OnTouchListener() {
-						@Override
-						public void onTouch(View v, MotionEvent ev) {
-							onTouchbtnTouchme(MotionEvent ev);
-						}
-					});
+				btnTouchme.setOnTouchListener(new OnTouchListener() {
+					@Override
+					public boolean onTouch(View v, MotionEvent ev) {
+						return onTouchbtnTouchme(MotionEvent ev);
+					}
+				});
 	}
 private void initCallers() {
 }
@@ -47,7 +47,7 @@ private void initCallers() {
 			private Double prop_btnTouchme_FOURTH_QUATER = 7 * Math.PI / 4;
 			private Float prop_btnTouchme_mStartX;
 			private Float prop_btnTouchme_mStartY;
-			private void onTouchbtnTouchme(MotionEvent ev) {
+			private boolean onTouchbtnTouchme(MotionEvent ev) {
 				int action = ev.getAction();
 int pl = XKPLayout.PL_CENTER;
 Display display = getWindowManager().getDefaultDisplay();
@@ -77,13 +77,13 @@ else
 		if (max_deltha < prop_btnTouchme_MAX_DELTHA / 10)
 		{
 			((XKPLayout.LayoutParams) btnTouchme.getLayoutParams()).setPlacement(pl);
-			return;
+			return true;
 		}
 		else
 		{
 			if (max_deltha < prop_btnTouchme_MAX_DELTHA)
 			{
-				return;
+				return true;
 			}
 		}
 		if (angle >= prop_btnTouchme_FIRST_QUATER && angle <= prop_btnTouchme_SECOND_QUATER)
@@ -111,5 +111,6 @@ else
 		((XKPLayout.LayoutParams) btnTouchme.getLayoutParams()).setPlacement(pl);
 	}
 }
+return true;
 			}
 }

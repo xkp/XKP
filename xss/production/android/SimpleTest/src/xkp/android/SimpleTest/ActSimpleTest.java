@@ -40,12 +40,12 @@ import xkp.android.libs.Layout.XKPLayout;
 				lblLastName = (TextView) findViewById(R.id.lblLastName);
 				edtLastName = (EditText) findViewById(R.id.edtLastName);
 				btnFullName = (Button) findViewById(R.id.btnFullName);
-					btnFullName.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							onClickbtnFullName();
-						}
-					});
+				btnFullName.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						onClickbtnFullName();
+					}
+				});
 				lblFullName = (TextView) findViewById(R.id.lblFullName);
 				edtContainer = (EditText) findViewById(R.id.edtContainer);
 	}
