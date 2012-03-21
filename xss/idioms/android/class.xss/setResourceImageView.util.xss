@@ -1,14 +1,13 @@
-		void setResourceImageView(int id, String resource) {
-			int rpos = resource.lastIndexOf("/");
-			String n_res = resource.substring(rpos + 1);
-			
-			rpos = n_res.lastIndexOf(".");
-			String res = n_res.substring(0, rpos);
-			
-			int resId = getResources().getIdentifier(
-							res, "drawable", 
-							getContext().getPackageName());
-			
-			ImageView img = (ImageView) findViewById(id);
-			img.setImageResource(resId);
+		public void setResourceImageView(int id, String resource) {
+			ImageView img = (ImageView) mActivity.findViewById(id);
+			if(img == null) {
+				for (ViewGroup viewgrp : mViewGroup) {
+					img = (ImageView) viewgrp.findViewById(id);
+					if(img != null) break;
+				}
+			}
+			if(img != null) img.setImageBitmap(getImageFromResource(resource));
+		}
+		public void setResourceImageView(ImageView img, String resource) {
+			if(img != null) img.setImageBitmap(getImageFromResource(resource));
 		}

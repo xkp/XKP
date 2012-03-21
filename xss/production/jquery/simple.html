@@ -9,12 +9,6 @@
 	<script type="text/javascript" src="js/utils.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			//all system position is absolute
-			$("*").each(function(index, domElem) {
-				if($(domElem).attr("id") != undefined) {
-					$(domElem).css("position", "absolute");
-				}
-			});
 			var lblFirstName = $("#lblFirstName");
 			var edtFirstName = $("#edtFirstName");
 			var lblLastName = $("#lblLastName");
@@ -69,44 +63,41 @@ edtContainer.attr("value", edtContainer.attr("value") + lblFullName.text() + "\n
 	</style>
 </head>
 <body>
-					<div id="application"
-				>
-					<div id="lblFirstName"
-				>
-						Enter first name: 
-					</div>
-					<input id="edtFirstName"
-							type="text" 
-							name="edtFirstName" 
-							title="Your first name" 
-						>
-					</input>
-					<div id="lblLastName"
-				>
-						Enter last name: 
-					</div>
-					<input id="edtLastName"
-							type="text" 
-							name="edtLastName" 
-							title="Your last name" 
-						>
-					</input>
-					<input id="btnFullName"
-							type="button" 
-							name="btnFullName" 
-							value="Resolve Full Name" 
-						>
-					</input>
-					<div id="lblFullName"
-				>
-						Your full name is 
-					</div>
-					<input id="edtContainer"
-							type="text" 
-							name="edtContainer" 
-							title="Container" 
-						>
-					</input>
-					</div>
-				</body>
+				<div id="lblFirstName"
+			>
+					Enter first name: 
+				</div>
+				<input id="edtFirstName"
+						type="text" 
+						name="edtFirstName" 
+						title="Your first name" 
+					>
+				</input>
+				<div id="lblLastName"
+			>
+					Enter last name: 
+				</div>
+				<input id="edtLastName"
+						type="text" 
+						name="edtLastName" 
+						title="Your last name" 
+					>
+				</input>
+				<input id="btnFullName"
+						type="button" 
+						name="btnFullName" 
+						value="Resolve Full Name" 
+					>
+				</input>
+				<div id="lblFullName"
+			>
+					Your full name is 
+				</div>
+				<input id="edtContainer"
+						type="text" 
+						name="edtContainer" 
+						title="Container" 
+					>
+				</input>
+</body>
 </html>

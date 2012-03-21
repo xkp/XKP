@@ -6,12 +6,10 @@
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
-<script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript">	
 var drawingCanvas;		
 var g_ui;
@@ -29,11 +27,13 @@ var SoundUtils = new ms.ui.SoundUtils();
 				height: 600,
 				canvas: drawingCanvas
 			};
-			var ui = new ms.ui.Manager(client, streamer);
+            var streamer = new ms.streamer.Streamer();							
+			var ui = new ms.ui.Manager(client, streamer);			
 			var g_ui = ui;
 			var g_ui_root = ui.root;
+			var mouse_pressed = false;
 		}
-		var streamer = new ms.streamer.Streamer();
+		var streamer = new ms.streamer.Streamer();		
         var global_package_items = [];
                 global_package_items.push(
             {
@@ -169,13 +169,23 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
+});	
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
         var global_package = new ms.streamer.Package(streamer, global_package_items);	
 		global_package.load();	
+    var canvas_position = {x:0, y:0};
 function start(resolution)  
 {  
 	function updater()  
-	{  
+	{
+		canvas_position = getElementPosition(drawingCanvas);
 		var now   = new Date().getTime();
         if (g_elapsed < 0)
             g_delta = 0; //first update
@@ -200,8 +210,6 @@ window.onload = function()
 {
 	drawingCanvas = document.getElementById("myCanvas");
     g_canvas = drawingCanvas;
-	w_canvas = document.getElementById("water_canvas");
-	w_context = w_canvas.getContext('2d');
 	if (drawingCanvas && drawingCanvas.getContext)
 	{
 		var client =
@@ -217,28 +225,72 @@ window.onload = function()
 		{
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX, ev.clientY);                  
+		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX, ev.clientY);                  
+		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX, ev.clientY);                  
-	};	
+		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
 		    v = new ms.ui.Video( 
 	    "video/sintel.mp4",g_ui_root.manager, g_ui_root);
         v = v;
-                v.rect(50, 50, 400, 200);
+            v.set_x(50);
+            v.set_y(50);
+            v.set_width(400);
+            v.set_height(200);
 		    lbl1 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
         lbl1 = lbl1;
-                lbl1.text("Volume controls");
-                lbl1.position(40, 300);
+            lbl1.set_x(40);
+            lbl1.set_y(300);
+            lbl1.text("Volume controls");
 		    btnVolUp = new ms.ui.Image( 
 	    "images/plus.png",g_ui_root.manager, g_ui_root);
         btnVolUp = btnVolUp;
+            btnVolUp.set_x(20);
+            btnVolUp.set_y(320);
+            btnVolUp.set_width(30);
+            btnVolUp.set_height(30);
 	var ev_parent = this;
 	btnVolUp.events.addListener("click", function()
 	{    
@@ -246,10 +298,13 @@ window.onload = function()
 	}
 	);
 		application.are_obj_events = true;
-                btnVolUp.rect(20, 320, 30, 30);
 		    btnVolDown = new ms.ui.Image( 
 	    "images/minus.png",g_ui_root.manager, g_ui_root);
         btnVolDown = btnVolDown;
+            btnVolDown.set_x(60);
+            btnVolDown.set_y(320);
+            btnVolDown.set_width(30);
+            btnVolDown.set_height(30);
 	var ev_parent = this;
 	btnVolDown.events.addListener("click", function()
 	{    
@@ -257,10 +312,13 @@ window.onload = function()
 	}
 	);
 		application.are_obj_events = true;
-                btnVolDown.rect(60, 320, 30, 30);
 		    btnMute = new ms.ui.StateButton( 
 	    "images/sound_on.png","images/sound_off.png",g_ui_root.manager, g_ui_root);
         btnMute = btnMute;
+            btnMute.set_x(100);
+            btnMute.set_y(320);
+            btnMute.set_width(30);
+            btnMute.set_height(30);
 	var ev_parent = this;
 	btnMute.events.addListener("click", function()
 	{    
@@ -268,15 +326,19 @@ window.onload = function()
 	}
 	);
 		application.are_obj_events = true;
-                btnMute.rect(100, 320, 30, 30);
 		    lbl2 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
         lbl2 = lbl2;
-                lbl2.text("Playback controls");
-                lbl2.position(200, 300);
+            lbl2.set_x(200);
+            lbl2.set_y(300);
+            lbl2.text("Playback controls");
 		    btnPlay = new ms.ui.Button( 
 	    "images/play.png","images/play_over.png",g_ui_root.manager, g_ui_root);
         btnPlay = btnPlay;
+            btnPlay.set_x(180);
+            btnPlay.set_y(315);
+            btnPlay.set_width(40);
+            btnPlay.set_height(40);
 	var ev_parent = this;
 	btnPlay.events.addListener("click", function()
 	{    
@@ -284,10 +346,13 @@ window.onload = function()
 	}
 	);
 		application.are_obj_events = true;
-                btnPlay.rect(180, 315, 40, 40);
 		    btnPause = new ms.ui.Button( 
 	    "images/pause.png","images/pause_over.png",g_ui_root.manager, g_ui_root);
         btnPause = btnPause;
+            btnPause.set_x(220);
+            btnPause.set_y(315);
+            btnPause.set_width(40);
+            btnPause.set_height(40);
 	var ev_parent = this;
 	btnPause.events.addListener("click", function()
 	{    
@@ -295,10 +360,13 @@ window.onload = function()
 	}
 	);
 		application.are_obj_events = true;
-                btnPause.rect(220, 315, 40, 40);
 		    btnStop = new ms.ui.Button( 
 	    "images/stop.png","images/stop_over.png",g_ui_root.manager, g_ui_root);
         btnStop = btnStop;
+            btnStop.set_x(260);
+            btnStop.set_y(315);
+            btnStop.set_width(40);
+            btnStop.set_height(40);
 	var ev_parent = this;
 	btnStop.events.addListener("click", function()
 	{    
@@ -306,15 +374,19 @@ window.onload = function()
 	}
 	);
 		application.are_obj_events = true;
-                btnStop.rect(260, 315, 40, 40);
 		    lbl3 = new ms.ui.Label( 
 	    "Verdana",g_ui_root.manager, g_ui_root);
         lbl3 = lbl3;
-                lbl3.text("Rotation controls");
-                lbl3.position(360, 300);
+            lbl3.set_x(360);
+            lbl3.set_y(300);
+            lbl3.text("Rotation controls");
 		    btnRotLeft = new ms.ui.Image( 
 	    "images/rota_left.png",g_ui_root.manager, g_ui_root);
         btnRotLeft = btnRotLeft;
+            btnRotLeft.set_x(365);
+            btnRotLeft.set_y(320);
+            btnRotLeft.set_width(30);
+            btnRotLeft.set_height(30);
 	var ev_parent = this;
 	btnRotLeft.events.addListener("click", function()
 	{    
@@ -322,10 +394,13 @@ window.onload = function()
 	}
 	);
 		application.are_obj_events = true;
-                btnRotLeft.rect(365, 320, 30, 30);
 		    btnRotRight = new ms.ui.Image( 
 	    "images/rota_right.png",g_ui_root.manager, g_ui_root);
         btnRotRight = btnRotRight;
+            btnRotRight.set_x(405);
+            btnRotRight.set_y(320);
+            btnRotRight.set_width(30);
+            btnRotRight.set_height(30);
 	var ev_parent = this;
 	btnRotRight.events.addListener("click", function()
 	{    
@@ -333,7 +408,6 @@ window.onload = function()
 	}
 	);
 		application.are_obj_events = true;
-                btnRotRight.rect(405, 320, 30, 30);
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -356,8 +430,6 @@ window.onload = function()
 </head>
 <body>	
 	<canvas id="myCanvas" width="800" height="600"
-		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
-	<canvas id="water_canvas" width="800" height="600"
-		style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
 </body>
 </html>

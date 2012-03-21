@@ -1,7 +1,8 @@
 on pre_process(obj)
 {
 	if(obj.id == "")
-		obj.output_id = compiler.genid(obj.class_name);
+		obj.id = compiler.genid(obj.class_name);
+		//obj.output_id = compiler.genid(obj.class_name);
 
 	// flatting properties
 	for(var p in obj.properties)
@@ -22,7 +23,10 @@ on pre_process(obj)
 
 on render_instances(app)
 {
-
+	for(var i in instances)
+	{
+		compiler.xss("../java/instance.xss", marker = "handlers", it = i);
+	}
 }
 
 on render_types(app, bns)
@@ -31,9 +35,8 @@ on render_types(app, bns)
 	
 	//TRACE: log
 	//compiler.log("### Begin Rendering Android Types...");
-
-	//compiler.log(this.id);
-	//compiler.log(this.user_types.size);
+	
+	var idiom = compiler.get_idiom("android");
     for(var ut in user_types)
     {
 		//TODO: think very well how to proceed with this
@@ -44,11 +47,13 @@ on render_types(app, bns)
 		{
 			//compiler.log("instance: " + it.id);
 			it.idiom = this;
+			if(it.utils) idiom.need_utils = true;
 		}
 		for(var ch in ut.children)
 		{
 			//compiler.log("child: " + ch.id);
 			ch.idiom = this;
+			if(ch.utils) idiom.need_utils = true;
 		}
 		
 		string output_filename = app + "/src/xkp/android/" + app + "/" + ut.output_id + ".java";
@@ -64,10 +69,15 @@ on render_types(app, bns)
 
 on render_type_initialization(clazz, bns, app)
 {
-	render_imports(clazz);
+	initialization(clazz, bns, app);
 }
 
 on render_initialization(clazz, bns, app)
+{
+	initialization(clazz, bns, app);
+}
+
+method initialization(clazz, bns, app)
 {
 	render_imports(clazz, bns);
 	
@@ -100,13 +110,13 @@ on render_initialization(clazz, bns, app)
 
 method render_imports(clazz, bns)
 {
-	compiler.log("Begin Rendering Android Imports...");	
+	compiler.log("Rendering Android Imports...");
 	
 	//TRACE: log
 	//compiler.log("### Begin Rendering Android Imports...");
 
 	array<string> imports    = [];
-	
+
 	for(var inst in clazz.instances)
 	{
 		//TRACE: log
@@ -180,6 +190,39 @@ method render_imports(clazz, bns)
 	
 	//TRACE: log
 	//compiler.log("### End Rendering Android Imports...");
+}
+
+method process_event_handler(inst)
+{
+	//render event
+	for(var e in inst.events)
+	{
+		if(e.interface && e.implemented)
+		{
+			string handler = "set" + e.interface;
+			if(e.set_handle) handler = e.set_handle;
+				
+			string ret_type = "void";
+			string ret_word = "";
+			if(e.return_type)
+			{
+				ret_type = e.return_type;
+				ret_word = "return ";
+			}
+			
+			//TODO: parse spaces and commas in the events parameters,
+			//      for remove type from each parameter
+			out(indent = 2)
+			{
+				<xss:e value="inst.output_id"/>.<xss:e value="handler"/>(new <xss:e value="e.interface"/>() <xss:open_brace/>
+					@Override
+					public <xss:e value="ret_type"/> <xss:e value="e.output_id"/>(<xss:e value="e.def_args"/>) <xss:open_brace/>
+						<xss:e value="ret_word"/><xss:e value="e.output_id"/><xss:e value="inst.output_id"/>(<xss:e>e.args.render()</xss:e>);
+					<xss:close_brace/>
+				<xss:close_brace/>);
+			}
+		}
+	}
 }
 
 on copy_default_files(app, bns, plibs)

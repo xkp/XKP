@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<declare-styleable name="XKPImageMap">
+		<attr name="map_src" format="reference"/>
+		<attr name="camera_left" format="dimension"/>
+		<attr name="camera_top" format="dimension"/>
+		<attr name="camera_width" format="dimension"/>
+		<attr name="camera_height" format="dimension"/>
+	</declare-styleable>
+</resources>

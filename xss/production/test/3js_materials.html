@@ -16,6 +16,7 @@
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
 		<script type="text/javascript" src="../js/three/Three.js"></script>
 		<script type="text/javascript" src="../js/three/Stats.js"></script>
 		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
@@ -24,10 +25,12 @@
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui;
+var SoundUtils;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
+var canvas_position = {x:0, y:0};
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
@@ -59,6 +62,7 @@ soundRenderer = new THREE.SoundRenderer();
 document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( app_width, app_height );
 function render() {
+canvas_position = getElementPosition(drawingCanvas);
 var now   = new Date().getTime();
 if (g_elapsed < 0)
     g_delta = 0; //first update
@@ -72,13 +76,14 @@ application.events.dispatch("switch_cameras", []);
 var my_sphere;var material_wireframe;var all_in_one;var __basic_material1;var __basic_material2;var __lambert_material1;var __lambert_material2;var __depth_material1;var __normal_material1;var __basic_material3;var __lambert_material3;var scene;var camera_1;var amb_light_1;var dir_light_1;var particle_1;var point_light_1;var plane_1;
         function create_my_sphere(
     radius,x_segments,y_segments ) { 
-            var my_sphere;
+    var my_sphere;
 	    var my_sphere_sphere = 
 new THREE.Sphere(
 radius,x_segments,y_segments);
 	    my_sphere = new THREE.Mesh(my_sphere_sphere, new THREE.MeshBasicMaterial());
 	    scene.addObject(my_sphere);
 		my_sphere.events = new ms.event.EventHolder();
+        var this__ = my_sphere;
         my_sphere.mat = null;
         my_sphere.mat_set = function (value)
         {
@@ -131,6 +136,7 @@ new THREE.Scene(
 camera_1 = 
 new THREE.Camera(
 45,1.5,1,2000);
+		active_camera = camera_1;
             camera_1.position.z = 800;
             camera_1.position.y = 200;
 amb_light_1 = 
@@ -212,6 +218,7 @@ point_light_1.position.z = particle_1.position.z;
 	);
 if(ui)
 {	
+	SoundUtils = new ms.ui.SoundUtils();
 	g_ui.fill_background = false;	
 }
 var event_manager = new ms.event.ThreeEventManager();

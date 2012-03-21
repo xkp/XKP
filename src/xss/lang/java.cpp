@@ -778,7 +778,7 @@ str java_lang::property_get(XSSProperty prop, const str& path, XSSContext ctx)
             //read only, set but no get
             param_list error;
             error.add("id", SJavaLanguage);
-            error.add("desc", SReadOnlyProperty);
+            error.add("desc", SWriteOnlyProperty);
             error.add("property", prop->id());
             xss_throw(error);
           }
@@ -825,7 +825,7 @@ str java_lang::property_set(XSSProperty prop, const str& path, const str& value,
           {
             param_list error;
             error.add("id", SJavaLanguage);
-            error.add("desc", SWriteOnlyProperty);
+            error.add("desc", SReadOnlyProperty);
             error.add("property", prop->id());
             xss_throw(error);
           }

@@ -8,7 +8,6 @@
 <script type="text/javascript" src="../js/prototype.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
-<script type="text/javascript" src="../js/colors.js"></script>
 		<script type="text/javascript" src="../js/ms-ui.js"></script>
 		<script type="text/javascript" src="../js/ms-streamer.js"></script>
         <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script> 
@@ -33,11 +32,12 @@ var SoundUtils = new ms.ui.SoundUtils();
 				canvas: drawingCanvas
 			};
             var streamer = new ms.streamer.Streamer();							
-			var ui = new ms.ui.Manager(client, streamer);
+			var ui = new ms.ui.Manager(client, streamer);			
 			var g_ui = ui;
 			var g_ui_root = ui.root;
+			var mouse_pressed = false;
 		}
-		var streamer = new ms.streamer.Streamer();
+		var streamer = new ms.streamer.Streamer();		
         var   b2Vec2 = Box2D.Common.Math.b2Vec2
         ,  b2AABB = Box2D.Collision.b2AABB
         ,  b2Mat22 = Box2D.Common.Math.b2Mat22
@@ -165,13 +165,23 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
+});	
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
         var global_package = new ms.streamer.Package(streamer, global_package_items);	
 		global_package.load();	
+    var canvas_position = {x:0, y:0};
 function start(resolution)  
 {  
 	function updater()  
-	{  
+	{
+		canvas_position = getElementPosition(drawingCanvas);
 		var now   = new Date().getTime();
         if (g_elapsed < 0)
             g_delta = 0; //first update
@@ -242,11 +252,15 @@ var sound;var hero;var __floor1;var game_over;
         {
     initialize: function($super
                 , src
-                )
+				, manager, parent
+			)
     {
         $super(
-        src? src : "images/smile_sad_48.png"        );
+        src? src : "images/smile_sad_48.png"
+				, manager, parent
+			        );
         this.events = new ms.event.EventHolder(); 
+        var this__  = this;
 				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
@@ -316,10 +330,16 @@ g_sequence_manager);
                     this.fade_out.addAction(null, "alpha", new ms.state.State(0, 3, ____i1));                    
             this.set_width(60);
             this.set_height(60);
+            this.cannon.cannon.x = 20;
+            this.cannon.cannon.y = 60;
+            this.cannon.cannon.set_rotation(0);
+            this.cannon.cannon.frequency = 1;
+            this.cannon.cannon.velocity = 2;
+            this.fade_out.fade_out.target = null;
 	this.init = function() 
 	{
-		move_around.target = this;
-fade_out.target = this;
+		this.move_around.target = this;
+this.fade_out.target = this;
 	};
 	var ev_parent = this;
 	this.events.addListener("collision", function(who)
@@ -327,8 +347,8 @@ fade_out.target = this;
 		if (who instanceof bad_guy)
 {
 ev_parent.RemoveFromWorld(true);
-cannon.stop();
-fade_out.start();
+ev_parent.cannon.stop();
+ev_parent.fade_out.start();
 }
 	}
 	);
@@ -341,11 +361,15 @@ fade_out.start();
         {
     initialize: function($super
                 , src
-                )
+				, manager, parent
+			)
     {
         $super(
-        src? src : "images/smile_grin_48.png"        );
+        src? src : "images/smile_grin_48.png"
+				, manager, parent
+			        );
         this.events = new ms.event.EventHolder(); 
+        var this__  = this;
 				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
@@ -386,9 +410,11 @@ g_sequence_manager);
             this.move_around.parent_sequence = null;
             this.set_width(30);
             this.set_height(30);
+            this.move_around.move_around.vx = 0;
+            this.move_around.move_around.vy = 0;
 	this.init = function() 
 	{
-		move_around.target = this;
+		this.move_around.target = this;
 	};
 	var ev_parent = this;
 	this.events.addListener("collision", function()
@@ -404,11 +430,15 @@ g_sequence_manager);
         {
     initialize: function($super
                 , src
-                )
+				, manager, parent
+			)
     {
         $super(
-        src? src : "images/bomb.png"        );
+        src? src : "images/bomb.png"
+				, manager, parent
+			        );
         this.events = new ms.event.EventHolder(); 
+        var this__  = this;
 				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
@@ -463,11 +493,15 @@ SoundUtils.play("sounds/boom.wav");
         {
     initialize: function($super
                 , src
-                )
+				, manager, parent
+			)
     {
         $super(
-        src? src : "images/stone-12.jpg"        );
+        src? src : "images/stone-12.jpg"
+				, manager, parent
+			        );
         this.events = new ms.event.EventHolder(); 
+        var this__  = this;
 				this.events.addListener('resized', function(cmp)
                 {
                     if (cmp.physics)
@@ -512,6 +546,7 @@ SoundUtils.play("sounds/boom.wav");
         $super(
         manager        );
         this.events = new ms.event.EventHolder(); 
+        var this__  = this;
                 var this__ = this;
             this.parent_sequence = null;
             this.speed = 130;
@@ -583,16 +618,52 @@ window.onload = function()
 		{
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX, ev.clientY);                  
+		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX, ev.clientY);                  
+		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX, ev.clientY);                  
-	};	
+		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
 		    sound = new ms.ui.StateButton( 
 	    "images/sound_on.png","images/sound_off.png",g_ui_root.manager, g_ui_root);
         sound = sound;

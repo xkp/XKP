@@ -16,6 +16,7 @@
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
 		<script type="text/javascript" src="../js/three/Three.js"></script>
 		<script type="text/javascript" src="../js/three/Stats.js"></script>
 		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
@@ -23,10 +24,12 @@
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui;
+var SoundUtils;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
+var canvas_position = {x:0, y:0};
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
@@ -37,6 +40,7 @@ soundRenderer = new THREE.SoundRenderer();
 document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( app_width, app_height );
 function render() {
+canvas_position = getElementPosition(drawingCanvas);
 var now   = new Date().getTime();
 if (g_elapsed < 0)
     g_delta = 0; //first update
@@ -44,39 +48,50 @@ else
 g_delta  = now - g_elapsed;  
 g_elapsed = now; 
 application.events.dispatch("updates", []);	
+		set_active_camera(camera_1);
 		set_active_camera(camera_2);
 application.events.dispatch("switch_cameras", []);
 }
-var material_sphere1 = new THREE.MeshLambertMaterial({
+var material_sphere1;var material_sphere2;var material_wireframe;var cylinder_material;var cylinder1_material;var cube_material;var cube1_material;var scene;var camera_1;var camera_1;var camera_2;var light;var sphere_1;var sphere_2;var cylinder_1;var cylinder_2;var cube_1;var cube_2;var plane_1;
+threejs_load_resources(function()
+{
+material_sphere1 = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading
 	});
-var material_sphere2 = new THREE.MeshLambertMaterial({
+material_sphere2 = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading
 	});
-var material_wireframe = new THREE.MeshLambertMaterial({
+material_wireframe = new THREE.MeshLambertMaterial({
 color:MediumSlateBlue,wireframe:true
 	});
-var cylinder_material = new THREE.MeshLambertMaterial({
+cylinder_material = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading
 	});
-var cylinder1_material = new THREE.MeshLambertMaterial({
+cylinder1_material = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading
 	});
-var cube_material = new THREE.MeshLambertMaterial({
+cube_material = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading
 	});
-var cube1_material = new THREE.MeshLambertMaterial({
+cube1_material = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading
 	});
-var scene = 
+scene = 
 new THREE.Scene(
 );
-var camera_2 = 
+camera_1 = new THREE.QuakeCamera({
+fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly:true,lookVertical:false
+	});
+		active_camera = camera_1;
+            camera_1.position.x = -250;
+            camera_1.position.y = 25;
+camera_2 = 
 new THREE.Camera(
 50,1.5,1,10000);
+		active_camera = camera_2;
             camera_2.position.x = -250;
             camera_2.position.y = 25;
-var light = 
+light = 
 new THREE.DirectionalLight(
 16777215);
 		;
@@ -86,7 +101,7 @@ new THREE.DirectionalLight(
 	    var sphere_1_sphere = 
 new THREE.Sphere(
 20,32,16);
-	    var sphere_1 = new THREE.Mesh(sphere_1_sphere, material_sphere1);
+	    sphere_1 = new THREE.Mesh(sphere_1_sphere, material_sphere1);
 	    scene.addObject(sphere_1);
 		sphere_1.events = new ms.event.EventHolder();
             sphere_1.position.x = 250;
@@ -94,7 +109,7 @@ new THREE.Sphere(
 	    var sphere_2_sphere = 
 new THREE.Sphere(
 20,32,16);
-	    var sphere_2 = new THREE.Mesh(sphere_2_sphere, material_sphere2);
+	    sphere_2 = new THREE.Mesh(sphere_2_sphere, material_sphere2);
 	    scene.addObject(sphere_2);
 		sphere_2.events = new ms.event.EventHolder();
             sphere_2.position.x = -250;
@@ -102,7 +117,7 @@ new THREE.Sphere(
 	    var cylinder_1_cylinder = 
 new THREE.Cylinder(
 20,10,10,50);
-	    var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
+	    cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
 	    scene.addObject(cylinder_1);
 		cylinder_1.events = new ms.event.EventHolder();
             set_rotation_x(cylinder_1.rotation, 212);
@@ -113,7 +128,7 @@ new THREE.Cylinder(
 	    var cylinder_2_cylinder = 
 new THREE.Cylinder(
 20,10,10,50);
-	    var cylinder_2 = new THREE.Mesh(cylinder_2_cylinder, cylinder1_material);
+	    cylinder_2 = new THREE.Mesh(cylinder_2_cylinder, cylinder1_material);
 	    scene.addObject(cylinder_2);
 		cylinder_2.events = new ms.event.EventHolder();
             set_rotation_x(cylinder_2.rotation, 212);
@@ -124,7 +139,7 @@ new THREE.Cylinder(
 	    var cube_1_cube = 
 new THREE.Cube(
 30,30,30);
-	    var cube_1 = new THREE.Mesh(cube_1_cube, cube_material);
+	    cube_1 = new THREE.Mesh(cube_1_cube, cube_material);
 	    scene.addObject(cube_1);
 		cube_1.events = new ms.event.EventHolder();
             cube_1.position.x = -100;
@@ -135,7 +150,7 @@ new THREE.Cube(
 	    var cube_2_cube = 
 new THREE.Cube(
 30,30,30);
-	    var cube_2 = new THREE.Mesh(cube_2_cube, cube1_material);
+	    cube_2 = new THREE.Mesh(cube_2_cube, cube1_material);
 	    scene.addObject(cube_2);
 		cube_2.events = new ms.event.EventHolder();
             cube_2.position.x = 100;
@@ -146,7 +161,7 @@ new THREE.Cube(
 	    var plane_1_plane = 
 new THREE.Plane(
 1000,1000,100,100);
-	    var plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
+	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
             plane_1.position.y = 0.100000001;
@@ -175,10 +190,9 @@ set_active_camera(camera_2);
 	}
 	);
 if(ui)
-{
-	ui.load_resources(function(){		
-		g_ui.fill_background = false;
-	});
+{	
+	SoundUtils = new ms.ui.SoundUtils();
+	g_ui.fill_background = false;	
 }
 var event_manager = new ms.event.ThreeEventManager();
 document.onmousemove = function(ev)
@@ -208,6 +222,7 @@ document.onkeypress = function(ev)
 application.events.dispatch("init", []);
 document.body.appendChild( renderer.domElement );
 animate();
+});
 function animate() {
 	if(ui)
 		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);

@@ -324,6 +324,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<bool,       1>("is_type",             &xss_compiler::is_type);
         method_<str,        1>("instantiate",         &xss_compiler::instantiate);
         method_<bool,       1>("application_object",  &xss_compiler::application_object);
+        method_<variant,    1>("get_idiom",           &xss_compiler::idiom_by_id);
       }
   };
 

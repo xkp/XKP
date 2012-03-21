@@ -16,6 +16,7 @@
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
 		<script type="text/javascript" src="../js/ms-state.js"></script>
 		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 		<script type="text/javascript" src="../js/ms-ui.js"></script>
@@ -26,10 +27,12 @@
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui;
+var SoundUtils;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
+var canvas_position = {x:0, y:0};
 var app_width = 1024;
 var app_height = 768;
 var init_anim;var cam_out;var cam_in;var p1_in;var p2_in;var p3_in;var p4_in;var p5_in;var pic_out;var idle_anim_1;var idle_anim_2;var idle_anim_3;var idle_anim_4;var idle_anim_5;var idle_anim_seq;var close_fade_in;var close;var box_cont;var box_border;var banner;var camerawl;var lens;var line_top;var pict1;var pict2;var pict3;var pict4;var pict5;
@@ -40,7 +43,7 @@ application.events = new ms.event.EventHolder();
         {
             return a + (b - a)*t;
         }		
-		var streamer = new ms.streamer.Streamer();
+		var streamer = new ms.streamer.Streamer();		
 		if(drawingCanvas){
 			var client =
 			{
@@ -49,9 +52,10 @@ application.events = new ms.event.EventHolder();
 				canvas: drawingCanvas
 			};
             var streamer = new ms.streamer.Streamer();							
-			var ui = new ms.ui.Manager(client, streamer);
+			var ui = new ms.ui.Manager(client, streamer);			
 			var g_ui = ui;
 			var g_ui_root = ui.root;
+			var mouse_pressed = false;
 		}
 	// --------RESOURCES---------
         var global_package_items = [];
@@ -306,7 +310,15 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
+});	
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
         var global_package = new ms.streamer.Package(streamer, global_package_items);	
 		global_package.load();	
     // --------RESOURCES---------
@@ -314,6 +326,7 @@ soundRenderer = new THREE.SoundRenderer();
 document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( app_width, app_height );
 function render() {
+canvas_position = getElementPosition(drawingCanvas);
 var now   = new Date().getTime();
 if (g_elapsed < 0)
     g_delta = 0; //first update
@@ -325,6 +338,7 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
+var scene;var camera_1;var plane_1;var plane_2;var plane_3;var plane_4;var plane_5;
             idle_anim = Class.create(ms.state.Sequence,
         {
     initialize: function($super
@@ -334,6 +348,7 @@ application.events.dispatch("switch_cameras", []);
         $super(
         manager        );
         this.events = new ms.event.EventHolder(); 
+        var this__  = this;
                 var this__ = this;
             this.parent_sequence = null;
                     var ____i1 = new ms.state.Interpolator(
@@ -422,7 +437,7 @@ application.events.dispatch("switch_cameras", []);
                     ____i5.keys[1].value = Math.random() * 60 - 30;
                     ____i6.keys[0].value = get_object_alpha(this.target);
                 }
-                this.target = null;
+            this.target = null;
             if (this.init)
                 this.init();
             },
@@ -436,6 +451,7 @@ application.events.dispatch("switch_cameras", []);
         $super(
         manager        );
         this.events = new ms.event.EventHolder(); 
+        var this__  = this;
                 var this__ = this;
             this.parent_sequence = null;
                     var ____i7 = new ms.state.Interpolator(
@@ -508,11 +524,13 @@ application.events.dispatch("switch_cameras", []);
                     ____i10.keys[1].value = this.target.get_height() / 3;
                     ____i11.keys[0].value = this.target.get_alpha();
                 }
-                this.target = null;
+            this.target = null;
             if (this.init)
                 this.init();
             },
 });
+threejs_load_resources(function()
+{
 init_anim =
 new ms.state.Sequence(
 g_sequence_manager);
@@ -1494,24 +1512,25 @@ g_sequence_manager);
                 {
                     ____i80.keys[0].value = close.get_alpha();
                 }
-var scene = 
+scene = 
 new THREE.Scene(
 );
-var camera_1 = 
+camera_1 = 
 new THREE.Camera(
 45,1.5,1,10000);
-                camera_1.position.z = 1000;
+		active_camera = camera_1;
+            camera_1.position.z = 1000;
 	    var plane_1_plane = 
 new THREE.Plane(
 146,302);
-	    var plane_1 = new THREE.Mesh(plane_1_plane, new THREE.MeshBasicMaterial());
+	    plane_1 = new THREE.Mesh(plane_1_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
-                set_object_alpha(plane_1, 0);
-                plane_1.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/pictures/pict1_neg.jpg").asset);
-                plane_1.scale.x = 0.5;
-                plane_1.scale.y = 0.5;
-                plane_1.scale.z = 0.5;
+            set_object_alpha(plane_1, 0);
+            plane_1.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict1_neg.jpg").data);
+            plane_1.scale.x = 0.5;
+            plane_1.scale.y = 0.5;
+            plane_1.scale.z = 0.5;
 	var ev_parent = this;
 	plane_1.events.addListener("click", function()
 	{    
@@ -1532,7 +1551,7 @@ p1_in.start();
 plane_1.scale.y = 0.699999988;
 plane_1.scale.z = 0.699999988;
 idle_anim_1.stop();
-plane_1.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/pictures/pict1.jpg").asset);
+plane_1.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict1.jpg").data);
 	}
 	);
 		application.are_obj_events = true;
@@ -1543,21 +1562,21 @@ plane_1.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("i
 plane_1.scale.y = 0.5;
 plane_1.scale.z = 0.5;
 idle_anim_1.start();
-plane_1.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/pictures/pict1_neg.jpg").asset);
+plane_1.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict1_neg.jpg").data);
 	}
 	);
 		application.are_obj_events = true;
 	    var plane_2_plane = 
 new THREE.Plane(
 301,302);
-	    var plane_2 = new THREE.Mesh(plane_2_plane, new THREE.MeshBasicMaterial());
+	    plane_2 = new THREE.Mesh(plane_2_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_2);
 		plane_2.events = new ms.event.EventHolder();
-                set_object_alpha(plane_2, 0);
-                plane_2.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/pictures/pict2_neg.jpg").asset);
-                plane_2.scale.x = 0.5;
-                plane_2.scale.y = 0.5;
-                plane_2.scale.z = 0.5;
+            set_object_alpha(plane_2, 0);
+            plane_2.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict2_neg.jpg").data);
+            plane_2.scale.x = 0.5;
+            plane_2.scale.y = 0.5;
+            plane_2.scale.z = 0.5;
 	var ev_parent = this;
 	plane_2.events.addListener("click", function()
 	{    
@@ -1578,7 +1597,7 @@ p2_in.start();
 plane_2.scale.y = 0.699999988;
 plane_2.scale.z = 0.699999988;
 idle_anim_2.stop();
-plane_2.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/pictures/pict2.jpg").asset);
+plane_2.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict2.jpg").data);
 	}
 	);
 		application.are_obj_events = true;
@@ -1589,21 +1608,21 @@ plane_2.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("i
 plane_2.scale.y = 0.5;
 plane_2.scale.z = 0.5;
 idle_anim_2.start();
-plane_2.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/pictures/pict2_neg.jpg").asset);
+plane_2.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict2_neg.jpg").data);
 	}
 	);
 		application.are_obj_events = true;
 	    var plane_3_plane = 
 new THREE.Plane(
 117,302);
-	    var plane_3 = new THREE.Mesh(plane_3_plane, new THREE.MeshBasicMaterial());
+	    plane_3 = new THREE.Mesh(plane_3_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_3);
 		plane_3.events = new ms.event.EventHolder();
-                set_object_alpha(plane_3, 0);
-                plane_3.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/pictures/pict3_neg.jpg").asset);
-                plane_3.scale.x = 0.5;
-                plane_3.scale.y = 0.5;
-                plane_3.scale.z = 0.5;
+            set_object_alpha(plane_3, 0);
+            plane_3.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict3_neg.jpg").data);
+            plane_3.scale.x = 0.5;
+            plane_3.scale.y = 0.5;
+            plane_3.scale.z = 0.5;
 	var ev_parent = this;
 	plane_3.events.addListener("click", function()
 	{    
@@ -1624,7 +1643,7 @@ p3_in.start();
 plane_3.scale.y = 0.699999988;
 plane_3.scale.z = 0.699999988;
 idle_anim_3.stop();
-plane_3.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/pictures/pict3.jpg").asset);
+plane_3.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict3.jpg").data);
 	}
 	);
 		application.are_obj_events = true;
@@ -1635,21 +1654,21 @@ plane_3.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("i
 plane_3.scale.y = 0.5;
 plane_3.scale.z = 0.5;
 idle_anim_3.start();
-plane_3.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/pictures/pict3_neg.jpg").asset);
+plane_3.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict3_neg.jpg").data);
 	}
 	);
 		application.are_obj_events = true;
 	    var plane_4_plane = 
 new THREE.Plane(
 245,240);
-	    var plane_4 = new THREE.Mesh(plane_4_plane, new THREE.MeshBasicMaterial());
+	    plane_4 = new THREE.Mesh(plane_4_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_4);
 		plane_4.events = new ms.event.EventHolder();
-                set_object_alpha(plane_4, 0);
-                plane_4.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/pictures/pict4_neg.jpg").asset);
-                plane_4.scale.x = 0.5;
-                plane_4.scale.y = 0.5;
-                plane_4.scale.z = 0.5;
+            set_object_alpha(plane_4, 0);
+            plane_4.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict4_neg.jpg").data);
+            plane_4.scale.x = 0.5;
+            plane_4.scale.y = 0.5;
+            plane_4.scale.z = 0.5;
 	var ev_parent = this;
 	plane_4.events.addListener("click", function()
 	{    
@@ -1670,7 +1689,7 @@ p4_in.start();
 plane_4.scale.y = 0.699999988;
 plane_4.scale.z = 0.699999988;
 idle_anim_4.stop();
-plane_4.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/pictures/pict4.jpg").asset);
+plane_4.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict4.jpg").data);
 	}
 	);
 		application.are_obj_events = true;
@@ -1681,21 +1700,21 @@ plane_4.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("i
 plane_4.scale.y = 0.5;
 plane_4.scale.z = 0.5;
 idle_anim_4.start();
-plane_4.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/pictures/pict4_neg.jpg").asset);
+plane_4.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict4_neg.jpg").data);
 	}
 	);
 		application.are_obj_events = true;
 	    var plane_5_plane = 
 new THREE.Plane(
 240,240);
-	    var plane_5 = new THREE.Mesh(plane_5_plane, new THREE.MeshBasicMaterial());
+	    plane_5 = new THREE.Mesh(plane_5_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_5);
 		plane_5.events = new ms.event.EventHolder();
-                set_object_alpha(plane_5, 0);
-                plane_5.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/pictures/pict5_neg.jpg").asset);
-                plane_5.scale.x = 0.5;
-                plane_5.scale.y = 0.5;
-                plane_5.scale.z = 0.5;
+            set_object_alpha(plane_5, 0);
+            plane_5.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict5_neg.jpg").data);
+            plane_5.scale.x = 0.5;
+            plane_5.scale.y = 0.5;
+            plane_5.scale.z = 0.5;
 	var ev_parent = this;
 	plane_5.events.addListener("click", function()
 	{    
@@ -1716,7 +1735,7 @@ p5_in.start();
 plane_5.scale.y = 0.699999988;
 plane_5.scale.z = 0.699999988;
 idle_anim_5.stop();
-plane_5.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/pictures/pict5.jpg").asset);
+plane_5.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict5.jpg").data);
 	}
 	);
 		application.are_obj_events = true;
@@ -1727,13 +1746,13 @@ plane_5.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("i
 plane_5.scale.y = 0.5;
 plane_5.scale.z = 0.5;
 idle_anim_5.start();
-plane_5.materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource("images/pictures/pict5_neg.jpg").asset);
+plane_5.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict5_neg.jpg").data);
 	}
 	);
 		application.are_obj_events = true;
-                application.curr_pict = null;
-                application.one_in = false;
-                application.camera_in = false;
+            application.curr_pict = null;
+            application.one_in = false;
+            application.camera_in = false;
 	var ev_parent = this;
 	application.events.addListener("init", function()
 	{    
@@ -1751,28 +1770,64 @@ idle_anim_5.target = plane_5;
 	}
 	);
 if(ui)
-{
-	ui.load_resources(function(){		
+{	
+	SoundUtils = new ms.ui.SoundUtils();
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX, ev.clientY);                  
+		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX, ev.clientY);                  
+		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX, ev.clientY);                  
-	};	
+		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
 		    close = new ms.ui.Image( 
 	    "images/pictures/close.png",g_ui_root.manager, g_ui_root);
         close = close;
-                close.set_x(800);
-                close.set_y(10);
-                close.set_width(30);
-                close.set_height(30);
-                close.alpha(0);
+            close.set_x(800);
+            close.set_y(10);
+            close.set_width(30);
+            close.set_height(30);
+            close.alpha(0);
 	var ev_parent = this;
 	close.events.addListener("click", function()
 	{    
@@ -1798,36 +1853,36 @@ close_fade_in.start();
 		    box_cont = new ms.ui.RippleEffect( 
 	    "images/pictures/redbox2.png",g_ui_root.manager, g_ui_root);
         box_cont = box_cont;
-                box_cont.set_x(25);
-                box_cont.set_y(25);
-                box_cont.set_width(802);
-                box_cont.set_height(602);
-                box_cont.alpha(60);
+            box_cont.set_x(25);
+            box_cont.set_y(25);
+            box_cont.set_width(802);
+            box_cont.set_height(602);
+            box_cont.alpha(60);
 		    box_border = new ms.ui.Image( 
 	    "images/pictures/redbox.png",g_ui_root.manager, g_ui_root);
         box_border = box_border;
-                box_border.set_x(50);
-                box_border.set_y(50);
-                box_border.set_width(800);
-                box_border.set_height(600);
-                box_border.alpha(80);
+            box_border.set_x(50);
+            box_border.set_y(50);
+            box_border.set_width(800);
+            box_border.set_height(600);
+            box_border.alpha(80);
 		    banner = new ms.ui.Image( 
 	    "images/pictures/banner.png",g_ui_root.manager, g_ui_root);
         banner = banner;
-                banner.set_x(200);
-                banner.set_y(200);
-                banner.set_width(400);
-                banner.set_height(50);
-                banner.set_rotation(-30);
-                banner.alpha(0);
+            banner.set_x(200);
+            banner.set_y(200);
+            banner.set_width(400);
+            banner.set_height(50);
+            banner.set_rotation(-30);
+            banner.alpha(0);
 		    camerawl = new ms.ui.Image( 
 	    "images/pictures/camerawl.png",g_ui_root.manager, g_ui_root);
         camerawl = camerawl;
-                camerawl.set_x(320);
-                camerawl.set_y(240);
-                camerawl.set_width(280);
-                camerawl.set_height(180);
-                camerawl.alpha(0);
+            camerawl.set_x(320);
+            camerawl.set_y(240);
+            camerawl.set_width(280);
+            camerawl.set_height(180);
+            camerawl.alpha(0);
 	var ev_parent = this;
 	camerawl.events.addListener("click", function()
 	{    
@@ -1844,62 +1899,61 @@ cam_in.start();
 		    lens = new ms.ui.Image( 
 	    "images/pictures/lens.png",g_ui_root.manager, g_ui_root);
         lens = lens;
-                lens.set_x(430);
-                lens.set_y(287);
-                lens.set_width(120);
-                lens.set_height(120);
-                lens.alpha(0);
+            lens.set_x(430);
+            lens.set_y(287);
+            lens.set_width(120);
+            lens.set_height(120);
+            lens.alpha(0);
 		    line_top = new ms.ui.Line( 
 	    g_ui_root.manager, g_ui_root);
         line_top = line_top;
-                line_top.set_x1(5);
-                line_top.set_y1(38);
-                line_top.set_x2(5);
-                line_top.set_y2(38);
-                line_top.alpha(50);
-                line_top.set_color("white");
+            line_top.set_x1(5);
+            line_top.set_y1(38);
+            line_top.set_x2(5);
+            line_top.set_y2(38);
+            line_top.alpha(50);
+            line_top.set_color("white");
 		    pict1 = new ms.ui.Image( 
 	    "images/pictures/pict1.jpg",g_ui_root.manager, g_ui_root);
         pict1 = pict1;
-                pict1.set_x(0);
-                pict1.set_y(0);
-                pict1.set_width(0);
-                pict1.set_height(0);
-                pict1.alpha(0);
+            pict1.set_x(0);
+            pict1.set_y(0);
+            pict1.set_width(0);
+            pict1.set_height(0);
+            pict1.alpha(0);
 		    pict2 = new ms.ui.Image( 
 	    "images/pictures/pict2.jpg",g_ui_root.manager, g_ui_root);
         pict2 = pict2;
-                pict2.set_x(0);
-                pict2.set_y(0);
-                pict2.set_width(0);
-                pict2.set_height(0);
-                pict2.alpha(0);
+            pict2.set_x(0);
+            pict2.set_y(0);
+            pict2.set_width(0);
+            pict2.set_height(0);
+            pict2.alpha(0);
 		    pict3 = new ms.ui.Image( 
 	    "images/pictures/pict3.jpg",g_ui_root.manager, g_ui_root);
         pict3 = pict3;
-                pict3.set_x(0);
-                pict3.set_y(0);
-                pict3.set_width(0);
-                pict3.set_height(0);
-                pict3.alpha(0);
+            pict3.set_x(0);
+            pict3.set_y(0);
+            pict3.set_width(0);
+            pict3.set_height(0);
+            pict3.alpha(0);
 		    pict4 = new ms.ui.Image( 
 	    "images/pictures/pict4.jpg",g_ui_root.manager, g_ui_root);
         pict4 = pict4;
-                pict4.set_x(0);
-                pict4.set_y(0);
-                pict4.set_width(0);
-                pict4.set_height(0);
-                pict4.alpha(0);
+            pict4.set_x(0);
+            pict4.set_y(0);
+            pict4.set_width(0);
+            pict4.set_height(0);
+            pict4.alpha(0);
 		    pict5 = new ms.ui.Image( 
 	    "images/pictures/pict5.jpg",g_ui_root.manager, g_ui_root);
         pict5 = pict5;
-                pict5.set_x(0);
-                pict5.set_y(0);
-                pict5.set_width(0);
-                pict5.set_height(0);
-                pict5.alpha(0);
-		g_ui.fill_background = false;
-	});
+            pict5.set_x(0);
+            pict5.set_y(0);
+            pict5.set_width(0);
+            pict5.set_height(0);
+            pict5.alpha(0);
+	g_ui.fill_background = false;	
 }
 var event_manager = new ms.event.ThreeEventManager();
 document.onmousemove = function(ev)
@@ -1929,6 +1983,7 @@ document.onkeypress = function(ev)
 application.events.dispatch("init", []);
 document.body.appendChild( renderer.domElement );
 animate();
+});
 function animate() {
 	if(ui)
 		drawingCanvas.getContext('2d').clearRect(0,0,1024,768);

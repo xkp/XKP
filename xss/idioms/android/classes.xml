@@ -652,16 +652,13 @@
 		<class id="img" super="IWidget" output_id="ImageView">
 			<array id="imports">
 				<object import="android.widget.ImageView"/>
+				<object import="xkp.android.libs.Widget.XKPUtils"/>
 			</array>
 			
 			<property id="src" type="string" output_id="src" ns="android" res_type="drawable">
-				<set text="util.setResourceImageView(R.id.{path}, {value})" global="true"/>
+				<!--<set text="util.setResourceImageView(R.id.{path}, {value})" global="true"/>-->
+				<set text="util.setResourceImageView({path}, {value})" global="true"/>
 			</property>
-			<!-- TODO: make that res_id work with only one struct, source by resource identifier
-			<property id="res_id" type="string" output_id="src" ns="android" res_type="resource">
-				<set text="util.setResourceImageView(R.id.{path}, {value})" global="true"/>
-			</property>
-			-->
 			
 			<property id="scale" type="EScaleType" output_id="scaleType" ns="android">
 				<get text="getScaleType()"/>
@@ -681,7 +678,49 @@
 			</method>-->
 			
 			<array id="utils">
-				<object name="setResourceImageView" file_name="setResourceImageView.util.xss"/>
+				<object name="setResourceImageView" file_name="setResourceImageView.util.xss" import="android.widget.ImageView"/>
+			</array>
+		</class>
+		
+		<class id="imagemap" super="img" sub_ns="libs.Widget" output_id="XKPImageMap">
+			<array id="imports">
+				<object import="xkp.android.libs.Widget.XKPImageMap"/>
+			</array>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Widget/" src_filename="XKPImageMap.java"/>
+				<object src_path="/res/values/" src_filename="styleable_XKPImageMap.xml"/>
+			</array>
+			
+			<property id="map_src" type="string" ns="xkp" res_type="drawable">
+				<!--<set text="util.setResourceXKPImageMap(R.id.{path}, {value})" global="true"/>-->
+				<set text="util.setResourceXKPImageMap({path}, {value})" global="true"/>
+			</property>
+			
+			<!--TODO: zoom -->
+			
+			<property id="cam_x" type="int" output_id="camera_left" ns="xkp" res_type="dimension">
+				<get text="getCameraLeft()"/>
+				<set text="setCameraLeft({value})"/>
+			</property>
+			
+			<property id="cam_y" type="int" output_id="camera_top" ns="xkp" res_type="dimension">
+				<get text="getCameraTop()"/>
+				<set text="setCameraTop({value})"/>
+			</property>
+			
+			<property id="cam_width" type="int" output_id="camera_width" ns="xkp" res_type="dimension">
+				<get text="getCameraWidth()"/>
+				<set text="setCameraWidth({value})"/>
+			</property>
+			
+			<property id="cam_height" type="int" output_id="camera_height" ns="xkp" res_type="dimension">
+				<get text="getCameraHeight()"/>
+				<set text="setCameraHeight({value})"/>
+			</property>
+			
+			<array id="utils">
+				<object name="setResourceImageMap" file_name="setResourceXKPImageMap.util.xss" import="xkp.android.libs.Widget.XKPImageMap"/>
 			</array>
 		</class>
 		
@@ -880,7 +919,7 @@
 			</method>-->
 			
 			<array id="utils">
-				<object name="setupTabHost" file_name="setupTabHost.util.xss"/>
+				<object name="setupTabHost" file_name="setupTabHost.util.xss" import="android.widget.TabHost"/>
 			</array>
 			
 			<array id="inits">
@@ -938,6 +977,7 @@
 		<class id="imagegallery" super="IWidget" output_id="Gallery">
 			<array id="imports">
 				<object import="android.widget.Gallery"/>
+				<object import="xkp.android.libs.Widget.XKPUtils"/>
 			</array>
 			
 			<property id="spacing" type="int" ns="android" res_type="dimension">
@@ -950,6 +990,10 @@
 				<set text="empty({value})"/>
 			</property>
 			
+			<array id="utils">
+				<object name="setResourceImageView" file_name="setResourceImageView.util.xss" import="android.widget.ImageView"/>
+			</array>
+			
 			<import id="IClassImageAdapter"/>
 		</class>
 		
@@ -960,6 +1004,10 @@
 		</class>
 		
 		<class id="switcher" super="IWidget" sub_ns="libs.Widget" output_id="XKPSwitcher">
+			<array id="imports">
+				<object import="xkp.android.libs.Widget.XKPSwitcher"/>
+			</array>
+			
 			<array id="xkp_files">
 				<object src_path="/src/xkp/android/libs/Widget/" src_filename="XKPSwitcher.java"/>
 				<object src_path="/res/values/" src_filename="styleable_XKPSwitcher.xml"/>
@@ -967,7 +1015,7 @@
 			
 			<property id="active" type="string" output_id="current" ns="xkp" res_type="id_reference">
 				<get text="getDisplayedChildByName()"/>
-				<set text="setDisplayedChildByName({value})"/>
+				<set text="setDisplayedChildByName(util.getIdFromName({value}))"/>
 			</property>
 			
 			<property id="active_index" type="int" output_id="currentIndex" ns="xkp">

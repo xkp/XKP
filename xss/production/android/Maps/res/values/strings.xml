@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Maps</string>
+					<string name="res0">Click buttons to see Gallery or Maps</string>
+					<string name="res1"></string>
+					<string name="res2">Scene is EMPTY!</string>
+				</resources>

@@ -1,5 +1,11 @@
-		void setupTabHost(int id, ArrayList<String> tabs) {
-			TabHost tabh = (TabHost) findViewById(id);
+		public void setupTabHost(int id, ArrayList<String> tabs) {
+			TabHost tabh = (TabHost) mActivity.findViewById(id);
+			if(tabh == null) {
+				for (ViewGroup viewgrp : mViewGroup) {
+					tabh = (TabHost) viewgrp.findViewById(id);
+					if(tabh != null) break;
+				}
+			}
 			
 			tabh.setup();
 			TabHost.TabSpec spec;

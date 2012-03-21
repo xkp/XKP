@@ -16,6 +16,7 @@
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
 		<script type="text/javascript" src="../js/ms-state.js"></script>
 		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 		<script type="text/javascript" src="../js/ms-ui.js"></script>
@@ -31,6 +32,7 @@ var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
+var canvas_position = {x:0, y:0};
 var app_width = 1000;
 var app_height = 800;
 var plane_anim;var quickly_anim;var alpha_anim;var idle_anim;var show_me;var back_to;var init_anim;var liquid;var banner;var loading;var lens1;var lens2;var facebook;var twitter;var btn1;var btn2;var linetop;var line1;var line2;var line3;var line4;var rect1;
@@ -50,9 +52,10 @@ application.events = new ms.event.EventHolder();
 				canvas: drawingCanvas
 			};
             var streamer = new ms.streamer.Streamer();							
-			var ui = new ms.ui.Manager(client, streamer);
+			var ui = new ms.ui.Manager(client, streamer);			
 			var g_ui = ui;
 			var g_ui_root = ui.root;
+			var mouse_pressed = false;
 		}
 	// --------RESOURCES---------
         var global_package_items = [];
@@ -128,7 +131,7 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });
-				var art_pack = new ms.streamer.Package(streamer);
+				var art_pack = new ms.streamer.Package(streamer);				
                 art_pack.add_item(
             {
 		id:				"__image9",
@@ -210,7 +213,7 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });
-				var forms_pack = new ms.streamer.Package(streamer);
+				var forms_pack = new ms.streamer.Package(streamer);				
                 forms_pack.add_item(
             {
 		id:				"__image10",
@@ -292,7 +295,7 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });
-				var times_pack = new ms.streamer.Package(streamer);
+				var times_pack = new ms.streamer.Package(streamer);				
                 times_pack.add_item(
             {
 		id:				"__image11",
@@ -380,6 +383,7 @@ soundRenderer = new THREE.SoundRenderer();
 document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( app_width, app_height );
 function render() {
+canvas_position = getElementPosition(drawingCanvas);
 var now   = new Date().getTime();
 if (g_elapsed < 0)
     g_delta = 0; //first update
@@ -393,84 +397,15 @@ application.events.dispatch("switch_cameras", []);
 }
 var anim_plane;var mat;var scene;var camera_1;
         function create_anim_plane(
-    width,height,x_segments,y_segments ) { var anim_plane;
+    width,height,x_segments,y_segments ) { 
+    var anim_plane;
 	    var anim_plane_plane = 
 new THREE.Plane(
 width,height,x_segments,y_segments);
 	    anim_plane = new THREE.Mesh(anim_plane_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(anim_plane);
 		anim_plane.events = new ms.event.EventHolder();
-            anim_plane.max_x = null;
-            anim_plane.min_x = null;
-            anim_plane.max_y = null;
-            anim_plane.min_y = null;
-            anim_plane.image = null;
-	anim_plane.set_image = function(value) 
-	{
-		anim_plane.image = value;
-anim_plane.materials[0].map = new THREE.Texture(streamer.get_resource(value).data);
-	};
-	anim_plane.get_image = function() 
-	{
-		application.image = anim_plane.image;
-	};
-	var ev_parent = this;
-	anim_plane.events.addListener("mousein", function(x,y)
-	{    
-		application.selected = anim_plane;
-application.group = application.find_owner(anim_plane);
-if (application.phase == 2)
-{
-if (application.find_owner(anim_plane) == application.group_zoomed)
-{
-if (application.get_img_index(anim_plane, application.group_zoomed) != application.group_zoomed.length - 1)
-{
-anim_plane.scale.x = 3;
-anim_plane.scale.y = 3;
-anim_plane.scale.z = 3;
-}
-}
-else
-{
-application.set_list_scale(application.group, 0.800000012);
-}
-liquid.disturb(x, y);
-}
-	}
-	);
-		application.are_obj_events = true;
-	var ev_parent = this;
-	anim_plane.events.addListener("mouseout", function()
-	{    
-		application.group = false;
-application.selected = false;
-if (application.phase == 2)
-{
-if (application.find_owner(anim_plane) == application.group_zoomed)
-{
-anim_plane.scale.x = 2;
-anim_plane.scale.y = 2;
-anim_plane.scale.z = 2;
-}
-else
-{
-if (application.art_planes != application.group_zoomed)
-{
-application.set_list_scale(application.art_planes, 0.699999988);
-}
-if (application.forms_planes != application.group_zoomed)
-{
-application.set_list_scale(application.forms_planes, 0.699999988);
-}
-if (application.times_planes != application.group_zoomed)
-{
-application.set_list_scale(application.times_planes, 0.699999988);
-}
-}
-}
-	}
-	);
-		application.are_obj_events = true;
+        var this__ = anim_plane;
             var plane_anim;
 plane_anim =
 new ms.state.Sequence(
@@ -522,7 +457,7 @@ g_sequence_manager);
                     ____i3.keys[0].value = get_rotation_y(anim_plane.rotation);
                     ____i3.keys[1].value = Math.random() * 60 - 30;
                 }
-				anim_plane.plane_anim = plane_anim;
+            anim_plane.plane_anim = plane_anim;
             var quickly_anim;
 quickly_anim =
 new ms.state.Sequence(
@@ -586,7 +521,7 @@ g_sequence_manager);
                     ____i6.keys[0].value = get_rotation_y(anim_plane.rotation);
                     ____i6.keys[1].value = Math.random() * 60 - 30;
                 }
-				anim_plane.quickly_anim = quickly_anim;
+            anim_plane.quickly_anim = quickly_anim;
             var alpha_anim;
 alpha_anim =
 new ms.state.Sequence(
@@ -606,7 +541,7 @@ g_sequence_manager);
                         {t: 2, value: 100},
                         ]);
                     alpha_anim.addAction(null, "alpha", new ms.state.State(0, 2, ____i7));                    
-				anim_plane.alpha_anim = alpha_anim;
+            anim_plane.alpha_anim = alpha_anim;
             var idle_anim;
 idle_anim =
 new ms.state.Sequence(
@@ -619,7 +554,7 @@ g_sequence_manager);
                         plane_anim.start();
             });
             idle_anim.addAction(null, null, new ms.state.State(0, 0, ____h1));                    
-				anim_plane.idle_anim = idle_anim;
+            anim_plane.idle_anim = idle_anim;
             var show_me;
 show_me =
 new ms.state.Sequence(
@@ -757,7 +692,7 @@ g_sequence_manager);
                     ____i14.keys[0].value = get_rotation_y(anim_plane.rotation);
                     ____i15.keys[0].value = liquid.get_alpha();
                 }
-				anim_plane.show_me = show_me;
+            anim_plane.show_me = show_me;
             var back_to;
 back_to =
 new ms.state.Sequence(
@@ -864,7 +799,78 @@ g_sequence_manager);
                 {
                     ____i22.keys[0].value = liquid.get_alpha();
                 }
-				anim_plane.back_to = back_to;
+            anim_plane.back_to = back_to;
+            anim_plane.max_x = null;
+            anim_plane.min_x = null;
+            anim_plane.max_y = null;
+            anim_plane.min_y = null;
+            anim_plane.image = null;
+	anim_plane.set_image = function(value) 
+	{
+		anim_plane.image = value;
+anim_plane.materials[0].map = new THREE.Texture(streamer.get_resource(value).data);
+	};
+	anim_plane.get_image = function() 
+	{
+		application.image = anim_plane.image;
+	};
+	var ev_parent = this;
+	anim_plane.events.addListener("mousein", function(x,y)
+	{    
+		application.selected = anim_plane;
+application.group = application.find_owner(anim_plane);
+if (application.phase == 2)
+{
+if (application.find_owner(anim_plane) == application.group_zoomed)
+{
+if (application.get_img_index(anim_plane, application.group_zoomed) != application.group_zoomed.length - 1)
+{
+anim_plane.scale.x = 3;
+anim_plane.scale.y = 3;
+anim_plane.scale.z = 3;
+}
+}
+else
+{
+application.set_list_scale(application.group, 0.800000012);
+}
+liquid.disturb(x, y);
+}
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
+	anim_plane.events.addListener("mouseout", function()
+	{    
+		application.group = false;
+application.selected = false;
+if (application.phase == 2)
+{
+if (application.find_owner(anim_plane) == application.group_zoomed)
+{
+anim_plane.scale.x = 2;
+anim_plane.scale.y = 2;
+anim_plane.scale.z = 2;
+}
+else
+{
+if (application.art_planes != application.group_zoomed)
+{
+application.set_list_scale(application.art_planes, 0.699999988);
+}
+if (application.forms_planes != application.group_zoomed)
+{
+application.set_list_scale(application.forms_planes, 0.699999988);
+}
+if (application.times_planes != application.group_zoomed)
+{
+application.set_list_scale(application.times_planes, 0.699999988);
+}
+}
+}
+	}
+	);
+		application.are_obj_events = true;
         return anim_plane;
         }
 threejs_load_resources(function()
@@ -1629,7 +1635,7 @@ g_sequence_manager);
                         });
                         init_anim.addAction(null, null, new ms.state.State(10, 10, ____m1));                    
 mat = new THREE.MeshBasicMaterial({
-color:"white"
+color:white
 	});
 scene = 
 new THREE.Scene(
@@ -1948,16 +1954,52 @@ if(ui)
 	SoundUtils = new ms.ui.SoundUtils();
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX, ev.clientY);                  
+		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX, ev.clientY);                  
+		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX, ev.clientY);                  
-	};	
+		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
 		    liquid = new ms.ui.RippleEffect( 
 	    null,g_ui_root.manager, g_ui_root);
         liquid = liquid;
@@ -1974,7 +2016,7 @@ if(ui)
 	liquid.gradient.y2 = 800;
 			liquid.gradient.colors.push({offset: 0,
 																 color: 'black'});
-			liquid.gradient.colors.push({offset: 2,
+			liquid.gradient.colors.push({offset: 1,
 																 color: 'red'});
 	liquid.invalidate();
 		    banner = new ms.ui.Image( 

@@ -9,34 +9,34 @@
 	background:FloralWhite;
 	}
 </style>
-<script type="text/javascript" src="../js/three/Detector.js"></script>
-<script type="text/javascript" src="../js/three/Three.js"></script>
-<script type="text/javascript" src="../js/three/Stats.js"></script>
-<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/three/Three.js"></script>
+		<script type="text/javascript" src="../js/three/Stats.js"></script>
+		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+		<script type="text/javascript" src="../js/three/Utils.js"></script>
+		<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui;
+var SoundUtils;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
+var canvas_position = {x:0, y:0};
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var anim_1;var fade_1;var lbl0;
 var application = {};
 application.events = new ms.event.EventHolder();
-		var streamer = new ms.streamer.Streamer();
 		if(drawingCanvas){
 			var client =
 			{
@@ -44,9 +44,11 @@ application.events = new ms.event.EventHolder();
 				height: window.innerHeight,
 				canvas: drawingCanvas
 			};
-			var ui = new ms.ui.Manager(client, streamer);
+            var streamer = new ms.streamer.Streamer();							
+			var ui = new ms.ui.Manager(client, streamer);			
 			var g_ui = ui;
 			var g_ui_root = ui.root;
+			var mouse_pressed = false;
 		}
 		var g_sequence_manager = new ms.state.Manager();
         function default_interpolate(a, b, t)
@@ -59,6 +61,7 @@ soundRenderer = new THREE.SoundRenderer();
 document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( app_width, app_height );
 function render() {
+canvas_position = getElementPosition(drawingCanvas);
 var now   = new Date().getTime();
 if (g_elapsed < 0)
     g_delta = 0; //first update
@@ -70,6 +73,7 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
+var cylinder_material;var scene;var camera_1;var light;var cylinder_1;
             move_anim = Class.create(ms.state.Sequence,
         {
     initialize: function($super
@@ -79,6 +83,7 @@ application.events.dispatch("switch_cameras", []);
         $super(
         manager        );
         this.events = new ms.event.EventHolder(); 
+        var this__  = this;
                 var this__ = this;
             this.parent_sequence = null;
                     var ____i1 = new ms.state.Interpolator(
@@ -105,7 +110,7 @@ application.events.dispatch("switch_cameras", []);
                         {t: 6, value: 0},
                         ]);
                     this.addAction(null, "x", new ms.state.State(2, 6, ____i2));                    
-                this.target = null;
+            this.target = null;
             if (this.init)
                 this.init();
             },
@@ -119,6 +124,7 @@ application.events.dispatch("switch_cameras", []);
         $super(
         manager        );
         this.events = new ms.event.EventHolder(); 
+        var this__  = this;
                 var this__ = this;
             this.parent_sequence = null;
                     var ____i3 = new ms.state.Interpolator(
@@ -145,36 +151,39 @@ application.events.dispatch("switch_cameras", []);
                         {t: 6, value: 100},
                         ]);
                     this.addAction(null, "alpha", new ms.state.State(2, 6, ____i4));                    
-                this.target = null;
+            this.target = null;
             if (this.init)
                 this.init();
             },
 });
-var cylinder_material = new THREE.MeshBasicMaterial({
+threejs_load_resources(function()
+{
+cylinder_material = new THREE.MeshBasicMaterial({
 color:Math.random() * 0xffffff
 	});
-var scene = 
+scene = 
 new THREE.Scene(
 );
-var camera_1 = 
+camera_1 = 
 new THREE.Camera(
 75,1.5,1,3000);
-                camera_1.position.z = 1000;
-var light = 
+		active_camera = camera_1;
+            camera_1.position.z = 1000;
+light = 
 new THREE.DirectionalLight(
 1677);
 		;
 	scene.addLight(light);
-                light.position.y = 0.5;
-                light.position.z = 1;
+            light.position.y = 0.5;
+            light.position.z = 1;
 	    var cylinder_1_cylinder = 
 new THREE.Cylinder(
 200,100,100,500);
-	    var cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
+	    cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
 	    scene.addObject(cylinder_1);
 		cylinder_1.events = new ms.event.EventHolder();
-                set_rotation_x(cylinder_1.rotation, 10);
-                set_rotation_y(cylinder_1.rotation, 10);
+            set_rotation_x(cylinder_1.rotation, 10);
+            set_rotation_y(cylinder_1.rotation, 10);
 	var ev_parent = this;
 	cylinder_1.events.addListener("click", function()
 	{    
@@ -201,27 +210,63 @@ fade_1.target = cylinder_1;
 	}
 	);
 if(ui)
-{
-	ui.load_resources(function(){		
+{	
+	SoundUtils = new ms.ui.SoundUtils();
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX, ev.clientY);                  
+		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX, ev.clientY);                  
+		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX, ev.clientY);                  
-	};	
+		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
 		    lbl0 = new ms.ui.Label( 
 	    "12px Verdana",g_ui_root.manager, g_ui_root);
         lbl0 = lbl0;
-                lbl0.text("Click the cylinder to animate it");
-                lbl0.position(240, 75);
-		g_ui.fill_background = false;
-	});
+            lbl0.set_x(240);
+            lbl0.set_y(75);
+            lbl0.text("Click the cylinder to animate it");
+	g_ui.fill_background = false;	
 }
 var event_manager = new ms.event.ThreeEventManager();
 document.onmousemove = function(ev)
@@ -251,6 +296,7 @@ document.onkeypress = function(ev)
 application.events.dispatch("init", []);
 document.body.appendChild( renderer.domElement );
 animate();
+});
 function animate() {
 	if(ui)
 		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
@@ -258,7 +304,7 @@ function animate() {
 	render();
 	if(ui)
 		ui.draw(drawingCanvas.getContext('2d'));
-}
+	}
 </script>
 </body>
 </html>

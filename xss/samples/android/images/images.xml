@@ -1,0 +1,18 @@
+<application name="Images Changer" title="Image Changer" src="images.xs" width="320" height="430">
+	
+	<resources>
+		<image id="img1" src="photo_1.jpg"/>
+		<image id="img2" src="photo_2.jpg"/>
+		<image id="img3" src="photo_3.jpg"/>
+		<image id="img4" src="photo_4.jpg"/>
+		<image id="img5" src="photo_5.jpg"/>
+		<image id="img6" src="photo_6.jpg"/>
+		<image id="img7" src="photo_7.jpg"/>
+		<image id="img8" src="photo_8.jpg"/>
+	</resources>
+
+	<img id="album" src="photo_1.jpg" width="320" height="120" placement="center"/>
+	<button id="changer" height="50" caption="Changer" placement="bottom"/>
+	<label id="identifier" height="40" placement="top"/>
+
+</application>

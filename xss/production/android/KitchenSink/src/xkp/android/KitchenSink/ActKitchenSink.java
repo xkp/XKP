@@ -5,6 +5,7 @@ import android.view.View;
 			import android.app.Activity;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
+			import xkp.android.libs.Widget.XKPUtils;
 						import android.view.ViewGroup;
 						import android.widget.TabHost;
 						import android.widget.TabHost.TabSpec;
@@ -21,6 +22,7 @@ import xkp.android.libs.Layout.XKPLayout;
 						import android.widget.ToggleButton;
 						import android.widget.ImageButton;
 						import android.widget.ImageView;
+						import xkp.android.libs.Widget.XKPUtils;
 						import android.widget.TextView;
 						import android.widget.EditText;
 						import android.widget.CheckBox;
@@ -33,11 +35,12 @@ import xkp.android.libs.Layout.XKPLayout;
 						import android.widget.ProgressBar;
 						import android.widget.SeekBar;
 						import android.widget.SeekBar.OnSeekBarChangeListener;
+						import xkp.android.libs.Widget.XKPPackage;
+						import xkp.android.libs.Widget.XKPPackage.OnResourcePackageListener;
 		public class ActKitchenSink 
 						extends Activity
 {
 				private TabHost kitchen;
-					XKPUtils util = new XKPUtils();
 				private XKPLayout __div1;
 				private Button btn1;
 				private ToggleButton toggle1;
@@ -64,14 +67,32 @@ import xkp.android.libs.Layout.XKPLayout;
 				private ProgressBar prgbar3;
 				private ProgressBar prgbar4;
 				private SeekBar seekb1;
-	ActKitchenSink application;
+			public static XKPUtils util;
+				private XKPPackage __resources1;
+			private String [] mResources___resources1_XKPName = {
+				"dialog",
+				"emulator"
+			};
+			private String [] mResources___resources1_DroidName = {
+				"dialog.png",
+				"emulator.png"
+			};
+			private Integer [] mResources___resources1_Type = {
+				XKPPackage.BITMAP_RESOURCE,
+				XKPPackage.BITMAP_RESOURCE
+			};
+			private Integer [] mResources___resources1_Id = {
+				R.drawable.dialog,
+				R.drawable.emulator
+			};
+	private ActKitchenSink application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
+                initCallers();
+				initInstances();
 				setContentView(R.layout.main);
 				bindViews();
-				initInstances();
-                initCallers();
 			}
 			private void bindViews() {
 				kitchen = (TabHost) findViewById(R.id.kitchen);
@@ -103,40 +124,17 @@ import xkp.android.libs.Layout.XKPLayout;
 				prgbar4 = (ProgressBar) findViewById(R.id.prgbar4);
 				seekb1 = (SeekBar) findViewById(R.id.seekb1);
 	}
-void initCallers() {
+private void initCallers() {
+			util = new XKPUtils();
+			ActKitchenSink.util.addView(this);
+			util = ActKitchenSink.util;
 }
-			void initInstances() {
+			private void initInstances() {
 				application = this;
-			}
-					public class XKPUtils {
-						void setupTabHost(int id, ArrayList<String> tabs) {
-			TabHost tabh = (TabHost) findViewById(id);
-			tabh.setup();
-			TabHost.TabSpec spec;
-			ViewGroup linear = (ViewGroup) tabh.getChildAt(0);
-			ViewGroup frame = (ViewGroup) linear.getChildAt(1);
-			int szTabs = tabs.size();
-			int childs = frame.getChildCount();
-			int szMin = Math.min(szTabs, childs);
-			for(int i = 0; i < szMin; i++) {
-				String tab = tabs.get(i);
-				int viewId = frame.getChildAt(i).getId();
-				spec = tabh.newTabSpec(tab);
-				spec.setContent(viewId);
-				spec.setIndicator(tab);
-				tabh.addTab(spec);
-			}
-		}
-		void setResourceImageView(int id, String resource) {
-			int rpos = resource.lastIndexOf("/");
-			String n_res = resource.substring(rpos + 1);
-			rpos = n_res.lastIndexOf(".");
-			String res = n_res.substring(0, rpos);
-			int resId = getResources().getIdentifier(
-							res, "drawable", 
-							getContext().getPackageName());
-			ImageView img = (ImageView) findViewById(id);
-			img.setImageResource(resId);
-		}
+				__resources1 = new XKPPackage(this, 
+					mResources___resources1_XKPName, mResources___resources1_DroidName, 
+					mResources___resources1_Type, mResources___resources1_Id
+					, true);
+				util.addXKPPackage(__resources1);
 			}
 }

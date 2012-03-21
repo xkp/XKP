@@ -7,7 +7,9 @@ import android.view.View;
 			import android.util.AttributeSet;
 			import android.view.LayoutInflater;
 import xkp.android.libs.Layout.XKPLayout;
+			import xkp.android.libs.Widget.XKPUtils;
 						import android.widget.ImageView;
+						import xkp.android.libs.Widget.XKPUtils;
 						import android.view.View.OnClickListener;
 						import android.view.View.OnLongClickListener;
 						import android.view.MotionEvent;
@@ -20,16 +22,17 @@ import xkp.android.libs.Layout.XKPLayout;
 						extends XKPLayout
 {
 				private ImageView picture;
-					XKPUtils util = new XKPUtils();
 				private TextView lname;
 				private TextView lsurname;
 				private TextView lemployment;
-	ActCharacters application;
+			public static XKPUtils util;
+	private ActCharacters application;
 			public character(Context context) {
 				this(context, null);
 			}
 			public character(Context context, AttributeSet attrs) {
 				super(context, attrs);
+				initCallers();
 				LayoutInflater li = (LayoutInflater) context.
 					getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				// link xml file with inflater
@@ -47,7 +50,10 @@ import xkp.android.libs.Layout.XKPLayout;
 				img_src_set(ta.getString(R.styleable.character_img_src));
 			ta.recycle();
 			}
-void initCallers() {
+private void initCallers() {
+			util = new XKPUtils();
+			ActCharacters.util.addView(this);
+			util = ActCharacters.util;
 }
 			public String name_get() {
 				return lname.getText().toString();
@@ -70,7 +76,7 @@ void initCallers() {
 			private String img_src;
 			public void img_src_set(String value) {
 				img_src = value;
-				util.setResourceImageView(R.id.picture, value);
+				util.setResourceImageView(picture, value);
 			}
 		public void foo() {
 			name_set("foo");
@@ -78,17 +84,4 @@ void initCallers() {
 		public void bar() {
 			surname_set("bar");
 		}
-					public class XKPUtils {
-						void setResourceImageView(int id, String resource) {
-			int rpos = resource.lastIndexOf("/");
-			String n_res = resource.substring(rpos + 1);
-			rpos = n_res.lastIndexOf(".");
-			String res = n_res.substring(0, rpos);
-			int resId = getResources().getIdentifier(
-							res, "drawable", 
-							getContext().getPackageName());
-			ImageView img = (ImageView) findViewById(id);
-			img.setImageResource(resId);
-		}
-			}
 }

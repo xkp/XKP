@@ -47,12 +47,12 @@ instance btnTouchme
 			if(max_deltha < MAX_DELTHA / 10) 
 			{
 				btnTouchme.placement = pl;
-				return;
+				return true;
 			}
 			else
 			if(max_deltha < MAX_DELTHA)
 			{
-				return;
+				return true;
 			}
 			
 			if(angle >= FIRST_QUATER && angle <= SECOND_QUATER)
@@ -76,5 +76,7 @@ instance btnTouchme
 			
 			placement = pl;
 		}
+		
+		return true;
 	}
 }

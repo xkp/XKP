@@ -15,35 +15,31 @@ import xkp.android.libs.Layout.XKPLayout;
 						import android.view.View.OnFocusChangeListener;
 		public class ActTouchMe 
 						extends Activity
-							implements OnTouchListener
 {
 				private Button btnTouchme;
-	ActTouchMe application;
+	private ActTouchMe application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
+                initCallers();
+				initInstances();
 				setContentView(R.layout.main);
 				bindViews();
-				initInstances();
-                initCallers();
 			}
 			private void bindViews() {
 				btnTouchme = (Button) findViewById(R.id.btnTouchme);
-					btnTouchme.setOnTouchListener(this);
+				btnTouchme.setOnTouchListener(new OnTouchListener() {
+					@Override
+					public boolean onTouch(View v, MotionEvent ev) {
+						return onTouchbtnTouchme(MotionEvent ev);
+					}
+				});
 	}
-void initCallers() {
+private void initCallers() {
 }
-			void initInstances() {
+			private void initInstances() {
 				application = this;
 			}
-						public boolean onTouch(View v, MotionEvent ev) {
-							switch (v.getId()) {
-									case R.id.btnTouchme:
-										onTouchbtnTouchme(ev);
-										break;
-						} //switch
-							return true;
-						}
 			private Double prop_btnTouchme_MAX_DELTHA = 80.000000f;
 			private Double prop_btnTouchme_FIRST_QUATER = Math.PI / 4;
 			private Double prop_btnTouchme_SECOND_QUATER = 3 * Math.PI / 4;
@@ -51,7 +47,7 @@ void initCallers() {
 			private Double prop_btnTouchme_FOURTH_QUATER = 7 * Math.PI / 4;
 			private Float prop_btnTouchme_mStartX;
 			private Float prop_btnTouchme_mStartY;
-			private void onTouchbtnTouchme(MotionEvent ev) {
+			private boolean onTouchbtnTouchme(MotionEvent ev) {
 				int action = ev.getAction();
 int pl = XKPLayout.PL_CENTER;
 Display display = getWindowManager().getDefaultDisplay();
@@ -81,13 +77,13 @@ else
 		if (max_deltha < prop_btnTouchme_MAX_DELTHA / 10)
 		{
 			((XKPLayout.LayoutParams) btnTouchme.getLayoutParams()).setPlacement(pl);
-			return;
+			return true;
 		}
 		else
 		{
 			if (max_deltha < prop_btnTouchme_MAX_DELTHA)
 			{
-				return;
+				return true;
 			}
 		}
 		if (angle >= prop_btnTouchme_FIRST_QUATER && angle <= prop_btnTouchme_SECOND_QUATER)
@@ -115,5 +111,6 @@ else
 		((XKPLayout.LayoutParams) btnTouchme.getLayoutParams()).setPlacement(pl);
 	}
 }
+return true;
 			}
 }

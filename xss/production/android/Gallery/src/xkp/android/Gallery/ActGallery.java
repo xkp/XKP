@@ -5,7 +5,9 @@ import android.view.View;
 			import android.app.Activity;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
+			import xkp.android.libs.Widget.XKPUtils;
 						import android.widget.Gallery;
+						import xkp.android.libs.Widget.XKPUtils;
 						import android.view.View.OnClickListener;
 						import android.view.View.OnLongClickListener;
 						import android.view.MotionEvent;
@@ -16,27 +18,78 @@ import xkp.android.libs.Layout.XKPLayout;
 						import android.widget.ImageView;
 						import android.widget.BaseAdapter;
 						import android.content.Context;
+						import xkp.android.libs.Widget.XKPPackage;
+						import xkp.android.libs.Widget.XKPPackage.OnResourcePackageListener;
 		public class ActGallery 
 						extends Activity
 {
 				private Gallery gallery;
-	ActGallery application;
+			public static XKPUtils util;
+				private XKPPackage __resources1;
+			private String [] mResources___resources1_XKPName = {
+				"img01",
+				"img02",
+				"img03",
+				"img04",
+				"img05",
+				"img06",
+				"img07",
+				"img08"
+			};
+			private String [] mResources___resources1_DroidName = {
+				"gallery_photo_1.jpg",
+				"gallery_photo_2.jpg",
+				"gallery_photo_3.jpg",
+				"gallery_photo_4.jpg",
+				"gallery_photo_5.jpg",
+				"gallery_photo_6.jpg",
+				"gallery_photo_7.jpg",
+				"gallery_photo_8.jpg"
+			};
+			private Integer [] mResources___resources1_Type = {
+				XKPPackage.BITMAP_RESOURCE,
+				XKPPackage.BITMAP_RESOURCE,
+				XKPPackage.BITMAP_RESOURCE,
+				XKPPackage.BITMAP_RESOURCE,
+				XKPPackage.BITMAP_RESOURCE,
+				XKPPackage.BITMAP_RESOURCE,
+				XKPPackage.BITMAP_RESOURCE,
+				XKPPackage.BITMAP_RESOURCE
+			};
+			private Integer [] mResources___resources1_Id = {
+				R.drawable.gallery_photo_1,
+				R.drawable.gallery_photo_2,
+				R.drawable.gallery_photo_3,
+				R.drawable.gallery_photo_4,
+				R.drawable.gallery_photo_5,
+				R.drawable.gallery_photo_6,
+				R.drawable.gallery_photo_7,
+				R.drawable.gallery_photo_8
+			};
+	private ActGallery application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
+                initCallers();
+				initInstances();
 				setContentView(R.layout.main);
 				bindViews();
-				initInstances();
-                initCallers();
 			}
 			private void bindViews() {
 				gallery = (Gallery) findViewById(R.id.gallery);
-					gallery.setAdapter(new ImageAdapter(this));
 	}
-void initCallers() {
+private void initCallers() {
+			util = new XKPUtils();
+			ActGallery.util.addView(this);
+			util = ActGallery.util;
 }
-			void initInstances() {
+			private void initInstances() {
 				application = this;
+				__resources1 = new XKPPackage(this, 
+					mResources___resources1_XKPName, mResources___resources1_DroidName, 
+					mResources___resources1_Type, mResources___resources1_Id
+					, true);
+				util.addXKPPackage(__resources1);
 			}
 	public class ImageAdapter extends BaseAdapter {
 		private static final int ITEM_WIDTH = 236;

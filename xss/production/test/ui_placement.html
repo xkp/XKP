@@ -8,7 +8,6 @@
 <script type="text/javascript" src="../js/prototype.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
-<script type="text/javascript" src="../js/colors.js"></script>
 		<script type="text/javascript" src="../js/ms-ui.js"></script>
 		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript">	
@@ -29,11 +28,12 @@ var SoundUtils = new ms.ui.SoundUtils();
 				canvas: drawingCanvas
 			};
             var streamer = new ms.streamer.Streamer();							
-			var ui = new ms.ui.Manager(client, streamer);
+			var ui = new ms.ui.Manager(client, streamer);			
 			var g_ui = ui;
 			var g_ui_root = ui.root;
+			var mouse_pressed = false;
 		}
-		var streamer = new ms.streamer.Streamer();
+		var streamer = new ms.streamer.Streamer();		
         var global_package_items = [];
                 global_package_items.push(
             {
@@ -70,13 +70,23 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
+});	
+		global_package_items.push({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});
         var global_package = new ms.streamer.Package(streamer, global_package_items);	
 		global_package.load();	
+    var canvas_position = {x:0, y:0};
 function start(resolution)  
 {  
 	function updater()  
-	{  
+	{
+		canvas_position = getElementPosition(drawingCanvas);
 		var now   = new Date().getTime();
         if (g_elapsed < 0)
             g_delta = 0; //first update
@@ -91,8 +101,8 @@ function start(resolution)
 	window.setTimeout(updater, resolution);  
 }  
 var test1;var lbl0;var lbl2;var lbl3;var lbl4;var lbl1;var btn1;var btnRight;var btnLeft;var btnUp;var btnDown;
-                application.clicks = 0;
-                application.flag = true;
+            application.clicks = 0;
+            application.flag = true;
 	var ev_parent = this;
 	application.events.addListener("keydown", function(keycode)
 	{    
@@ -184,59 +194,95 @@ window.onload = function()
 		{
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX, ev.clientY);                  
+		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX, ev.clientY);                  
+		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX, ev.clientY);                  
-	};	
+		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
 		    test1 = new ms.ui.Component( 
 	    g_ui_root.manager, g_ui_root);test1.mouse_thru = true;
         test1 = test1;
-                test1.set_x(100);
-                test1.set_y(50);
-                test1.set_width(400);
-                test1.set_height(200);
+            test1.set_x(100);
+            test1.set_y(50);
+            test1.set_width(400);
+            test1.set_height(200);
 		    lbl0 = new ms.ui.Label( 
 	    "12px Verdana",test1.manager, test1);
         lbl0 = lbl0;
-                lbl0.set_x(240);
-                lbl0.set_y(75);
-                lbl0.text("Use keyb arrows to move div or btn");
+            lbl0.set_x(240);
+            lbl0.set_y(75);
+            lbl0.text("Use keyb arrows to move div or btn");
 		    lbl2 = new ms.ui.Label( 
 	    "12px Verdana",test1.manager, test1);
         lbl2 = lbl2;
-                lbl2.set_x(240);
-                lbl2.set_y(100);
-                lbl2.text("Use +,- numpad to resize div");
+            lbl2.set_x(240);
+            lbl2.set_y(100);
+            lbl2.text("Use +,- numpad to resize div");
 		    lbl3 = new ms.ui.Label( 
 	    "12px Verdana",test1.manager, test1);
         lbl3 = lbl3;
-                lbl3.set_x(240);
-                lbl3.set_y(125);
-                lbl3.text("Use CTRL/SHIFT to hide/show the div");
+            lbl3.set_x(240);
+            lbl3.set_y(125);
+            lbl3.text("Use CTRL/SHIFT to hide/show the div");
 		    lbl4 = new ms.ui.Label( 
 	    "12px Verdana",test1.manager, test1);
         lbl4 = lbl4;
-                lbl4.set_x(40);
-                lbl4.set_y(150);
-                lbl4.text("Use SPACE to unplace the button and clic the arrow buttons to replace it");
+            lbl4.set_x(40);
+            lbl4.set_y(150);
+            lbl4.text("Use SPACE to unplace the button and clic the arrow buttons to replace it");
 		    lbl1 = new ms.ui.Label( 
 	    "12px Verdana",test1.manager, test1);
         lbl1 = lbl1;
-                lbl1.set_x(270);
-                lbl1.set_y(200);
-                lbl1.text("Click smiley");
+            lbl1.set_x(270);
+            lbl1.set_y(200);
+            lbl1.text("Click smiley");
 		    btn1 = new ms.ui.Button( 
 	    "images/smile_sad_48.png","images/smile_grin_48.png",test1.manager, test1);
         btn1 = btn1;
-                btn1.set_width(50);
-                btn1.set_height(50);
-                btn1.set_placement("center");
+            btn1.set_width(50);
+            btn1.set_height(50);
+            btn1.set_placement("center");
 	var ev_parent = this;
 	btn1.events.addListener("click", function()
 	{    
@@ -248,10 +294,10 @@ application.clicks = application.clicks + 1;
 		    btnRight = new ms.ui.Button( 
 	    "images/arrow_right_green_48.png","images/arrow_right_48.png",g_ui_root.manager, g_ui_root);
         btnRight = btnRight;
-                btnRight.set_x(320);
-                btnRight.set_y(350);
-                btnRight.set_width(50);
-                btnRight.set_height(50);
+            btnRight.set_x(320);
+            btnRight.set_y(350);
+            btnRight.set_width(50);
+            btnRight.set_height(50);
 	var ev_parent = this;
 	btnRight.events.addListener("click", function()
 	{    
@@ -263,11 +309,11 @@ application.flag = true;
 		    btnLeft = new ms.ui.Button( 
 	    "images/arrow_right_green_48.png","images/arrow_right_48.png",g_ui_root.manager, g_ui_root);
         btnLeft = btnLeft;
-                btnLeft.set_x(220);
-                btnLeft.set_y(350);
-                btnLeft.set_rotation(180);
-                btnLeft.set_width(50);
-                btnLeft.set_height(50);
+            btnLeft.set_x(220);
+            btnLeft.set_y(350);
+            btnLeft.set_rotation(180);
+            btnLeft.set_width(50);
+            btnLeft.set_height(50);
 	var ev_parent = this;
 	btnLeft.events.addListener("click", function()
 	{    
@@ -279,11 +325,11 @@ application.flag = true;
 		    btnUp = new ms.ui.Button( 
 	    "images/arrow_right_green_48.png","images/arrow_right_48.png",g_ui_root.manager, g_ui_root);
         btnUp = btnUp;
-                btnUp.set_x(270);
-                btnUp.set_y(300);
-                btnUp.set_rotation(-90);
-                btnUp.set_width(50);
-                btnUp.set_height(50);
+            btnUp.set_x(270);
+            btnUp.set_y(300);
+            btnUp.set_rotation(-90);
+            btnUp.set_width(50);
+            btnUp.set_height(50);
 	var ev_parent = this;
 	btnUp.events.addListener("click", function()
 	{    
@@ -295,11 +341,11 @@ application.flag = true;
 		    btnDown = new ms.ui.Button( 
 	    "images/arrow_right_green_48.png","images/arrow_right_48.png",g_ui_root.manager, g_ui_root);
         btnDown = btnDown;
-                btnDown.set_x(270);
-                btnDown.set_y(400);
-                btnDown.set_rotation(90);
-                btnDown.set_width(50);
-                btnDown.set_height(50);
+            btnDown.set_x(270);
+            btnDown.set_y(400);
+            btnDown.set_rotation(90);
+            btnDown.set_width(50);
+            btnDown.set_height(50);
 	var ev_parent = this;
 	btnDown.events.addListener("click", function()
 	{    

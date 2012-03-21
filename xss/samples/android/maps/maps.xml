@@ -1,0 +1,34 @@
+<application name="Maps" title="Maps" src="maps.xs" width="320" height="430">
+	
+	<resources>
+		<image id="ico_gallery" src="launcher_gallery.png"/>
+		<image id="ico_maps" src="launcher_maps.png"/>
+		<package id="photos">
+			<image id="worth_1" src="worth_1.jpg"/>
+			<image id="worth_2" src="worth_2.jpg"/>
+			<image id="worth_3" src="worth_3.jpg"/>
+			<image id="worth_4" src="worth_4.jpg"/>
+			<image id="worth_5" src="worth_5.jpg"/>
+			<image id="worth_6" src="worth_6.jpg"/>
+			<image id="worth_7" src="worth_7.jpg"/>
+		</package>
+		<package id="maps">
+			<image id="holguin" src="holguinmap.jpg"/>
+		</package>
+	</resources>
+
+	<div height="80" placement="top">
+		<imagebutton id="btnGallery" src="launcher_gallery" x="0" y="0" width="80" height="60" placement="left"/>
+		<imagebutton id="btnMaps" src="launcher_maps" x="100" y="0" width="80" height="60" placement="right"/>
+		<label id="lblStatus" caption="Click buttons to see Gallery or Maps" height="60" width="160" gravity="center" placement="center"/>
+	</div>
+	
+	<label id="lblInformation" caption="" height="30" gravity="center" placement="bottom"/>
+	
+	<switcher id="swtScene" placement="client" active="lblScene">
+		<label id="lblSwicherInformation" caption="Scene is EMPTY!" width="200" height="200" placement="center" gravity="center"/>
+		<img id="imgGallery" placement="client"/>
+		<imagemap id="mapController" placement="client"/>
+	</switcher>
+
+</application>
