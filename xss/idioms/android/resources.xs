@@ -32,20 +32,19 @@ on render_instances(app)
 				private <xss:e value="sClassName"/> <xss:e value="inst.output_id"/>;
 			}
 		
+			string load_main_resource = "";
+			if(inst.res_main_container == true)
+			{
+				load_main_resource = ", true";
+			}
+			
 			out(indent = 1)
 			{
 				<xss:e value="inst.output_id"/> = new <xss:e value="sClassName"/>(this, 
 					mResources_<xss:e value="inst.output_id"/>_XKPName, mResources_<xss:e value="inst.output_id"/>_DroidName, 
-					mResources_<xss:e value="inst.output_id"/>_Type, mResources_<xss:e value="inst.output_id"/>_Id, true);
+					mResources_<xss:e value="inst.output_id"/>_Type, mResources_<xss:e value="inst.output_id"/>_Id
+					<xss:e value="load_main_resource"/>);
 				util.addXKPPackage(<xss:e value="inst.output_id"/>);
-			}
-			
-			if(inst.res_main_container == true)
-			{
-				out(indent = 1)
-				{
-					<xss:e value="inst.output_id"/>.load();
-				}
 			}
 		}
 		
@@ -99,6 +98,9 @@ on render_instances(app)
 	//TRACE: log
 	//compiler.log("End Rendering Resources Instances...");
 }
+
+//properties, methods, and events
+//compiler.xss(xss_file, marker = "defined_class", appName, inst);
 
 on render_types(app)
 {
@@ -361,4 +363,16 @@ on copy_default_files(app, bns, plibs)
 on render_idiom_scripts(main)
 {
 
+}
+
+on render_instances_events(app, bns)
+{
+	compiler.log("resources - render_instances_events");
+	var android_idiom = compiler.get_idiom("android");
+	android_idiom.building_events(app, bns, this);
+	
+	for(var i in instances)
+	{
+		compiler.xss("../java/instance.xss", it = i);
+	}
 }

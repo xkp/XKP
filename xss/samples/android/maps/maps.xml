@@ -2,7 +2,7 @@
 	
 	<resources>
 		<image id="ico_gallery" src="launcher_gallery.png"/>
-		<image id="ic_maps" src="launcher_maps.png"/>
+		<image id="ico_maps" src="launcher_maps.png"/>
 		<package id="photos">
 			<image id="worth_1" src="worth_1.jpg"/>
 			<image id="worth_2" src="worth_2.jpg"/>
@@ -13,9 +13,7 @@
 			<image id="worth_7" src="worth_7.jpg"/>
 		</package>
 		<package id="maps">
-			<image id="holguin1" src="holguinmap1.jpg"/>
-			<image id="holguin2" src="holguinmap2.jpg"/>
-			<image id="world" src="worldmap3.jpg"/>
+			<image id="holguin" src="holguinmap.jpg"/>
 		</package>
 	</resources>
 
@@ -25,10 +23,10 @@
 		<label id="lblStatus" caption="Click buttons to see Gallery or Maps" height="60" width="160" gravity="center" placement="center"/>
 	</div>
 	
-	<switcher id="swtScene" placement="center" active="lblScene">
+	<switcher id="swtScene" placement="client" active="lblScene">
 		<label id="lblInformation" caption="Scene is EMPTY!" width="200" height="200" placement="center" gravity="center"/>
-		<img id="imgGallery" placement="center"/>
-		<imagemap id="mapController" placement="center"/>
+		<img id="imgGallery" placement="client"/>
+		<imagemap id="mapController" placement="client"/>
 	</switcher>
 
 </application>

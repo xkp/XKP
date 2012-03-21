@@ -19,16 +19,35 @@ on imgGallery.click()
 
 on btnGallery.click()
 {
-	if(photos.is_loaded)
+	if(!photos.is_loaded)
+	{
+		lblStatus.caption = "Loading resources...";
 		photos.load();
+	}
 	
-	lblStatus.caption = "Loading resources...";
 	swtScene.active = "imgGallery";
+}
+
+on btnMaps.click()
+{
+	if(!maps.is_loaded)
+	{
+		lblStatus.caption = "Loading resources...";
+		maps.load();
+	}
+	
+	swtScene.active = "mapController";
 }
 
 on photos.loaded()
 {
-	lblStatus.caption = "Resources was loaded completely...";
+	lblStatus.caption = "Photos was loaded completely...";
 	
 	imgGallery.click();
+}
+
+on maps.loaded()
+{
+	lblStatus.caption = "Maps was loaded completely...";
+	mapController.map_src = "holguin";
 }

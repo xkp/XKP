@@ -109,7 +109,7 @@ public class XKPPackage {
 		return mResourceLoaded;
 	}
 	
-	synchronized protected void loadResource() {
+	protected void loadResource() {
 		for(int i = 0; i < mResourceId.size(); i++) {
 			switch(mResourceType.get(i)) {
 			case BITMAP_RESOURCE:
@@ -128,7 +128,7 @@ public class XKPPackage {
 		}
 	}
 	
-	synchronized private void performResourceLoaded() {
+	private void performResourceLoaded() {
 		if(mResourceLoaded && mOnResourcePackageListener != null)
 			mOnResourcePackageListener.onResourcePackageLoaded(this);
 	}

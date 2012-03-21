@@ -113,7 +113,7 @@ method render_imports(clazz, bns)
 	//compiler.log("### Begin Rendering Android Imports...");
 
 	array<string> imports    = [];
-	
+
 	for(var inst in clazz.instances)
 	{
 		//TRACE: log
@@ -237,4 +237,112 @@ on copy_default_files(app, bns, plibs)
 on render_idiom_scripts(main)
 {
 
+}
+
+on render_instances_events(app, bns, idiom)
+{
+	building_events(app, bns, idiom);
+}
+
+method building_events(app, bns, idiom)
+{
+	if(!idiom) idiom = this;
+	
+	compiler.log("building_event = ");
+	//array<string> interfaces = [];
+	if(!application.interfaces) application.interfaces = [];
+	
+	compiler.log("instances size = " + idiom.instances.size);
+	for(var inst in idiom.instances)
+	{
+		//TRACE: log
+		//compiler.log("View: " + inst.id);
+		if(inst.no_script || inst.no_render)
+			continue;
+		
+		//find necessary events interfaces without duplicates
+		for(var e in inst.events)
+		{
+			if(e.interface && e.implemented)
+			{
+				bool found2 = false;
+				for(var it in application.interfaces)
+				{
+					if(it == e.interface)
+					{
+						found2 = true;
+						break;
+					}
+				}
+				
+				if(!found2)
+				{
+					//TRACE: log
+					//compiler.log("Adding interface " + e.interface);
+					if(application.interfaces.size == 0)
+					{
+						out(dont_break = true, indent = 2, marker = "interfaces")
+						{
+							implements <xss:e value="e.interface"/>
+						}
+					}
+					else
+					{
+						out(dont_break = true, indent = 0, marker = "interfaces")
+						{
+							, <xss:e value="e.interface"/>
+						}
+					}
+					
+					application.interfaces += e.interface;
+					
+					string ret_type = "void";
+					if(e.return_type)
+						ret_type = e.return_type;
+					
+					//TODO: implements call to arguments from classes by event name
+					out(indent = 1, marker = "handlers")
+					{
+						public <xss:e value="ret_type"/> <xss:e value="e.output_id"/>(<xss:e value="e.def_args"/>) <xss:open_brace/>
+							switch (v.getId()) <xss:open_brace/>
+					}
+					
+					for(var insti in idiom.instances)
+					{
+						for(var e_insti in insti.events)
+						{
+							if(e_insti.output_id == e.output_id && e_insti.implemented)
+							{
+								out(indent = 2, marker = "handlers")
+								{
+									case R.id.<xss:e value="insti.id"/>:
+										<xss:e value="e.output_id"/><xss:e value="insti.id"/>(<xss:e value="e.param_mthd"/>);
+										break;
+										
+								}
+							}
+						}
+					}
+					
+					out(indent = 1, marker = "handlers")
+					{
+						<xss:close_brace/> //switch
+					}
+					
+					if(ret_type == "boolean")
+					{
+						out(indent = 1, marker = "handlers")
+						{
+							return true;
+						}
+					}
+					
+					out(indent = 1, marker = "handlers")
+					{
+						<xss:close_brace/>
+					}
+				}
+			}
+		}
+	}
 }

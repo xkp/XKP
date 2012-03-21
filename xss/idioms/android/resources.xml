@@ -1,9 +1,10 @@
 <module id="android_resources" src="resources.xs">
 
 	<types>
-		<class id="resources" res_container="true" res_main_container="true" output_id="XKPPackage" sub_ns="libs.Widget">
+		<class id="package" res_container="true" output_id="XKPPackage" sub_ns="libs.Widget">
 			<array id="imports">
 				<object import="xkp.android.libs.Widget.XKPPackage"/>
+				<object import="xkp.android.libs.Widget.XKPPackage.OnResourcePackageListener"/>
 			</array>
 			
 			<array id="xkp_files">
@@ -16,10 +17,10 @@
 			
 			<method id="load" type="bool"/>
 			
-			<event id="loaded" output_id="onPackageLoaded" interface="OnResourcePackageListener" def_args="XKPPackage pack" set_handle="setOnResourcePackageListener" set_param_hnd="this"/>
+			<event id="loaded" output_id="onResourcePackageLoaded" interface="OnResourcePackageListener" def_args="XKPPackage pack" set_handle="setOnResourcePackageListener" set_param_hnd="this"/>
 		</class>
 	
-		<class id="package" super="resources" res_container="true" output_id="XKPPackage" sub_ns="libs.Widget">
+		<class id="resources" super="package" res_container="true" res_main_container="true" output_id="XKPPackage" sub_ns="libs.Widget">
 		</class>
 	
 		<class id="image" no_render="true" resrc="true" droid_location="drawable" droid_type="BITMAP_RESOURCE">
