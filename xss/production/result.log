@@ -1,0 +1,408 @@
+
+===[ maps.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: __div1
+log: Rendering instance: btnGallery
+log: Rendering instance: btnMaps
+log: Rendering instance: lblStatus
+log: Rendering instance: swtScene
+log: Rendering instance: lblInformation
+log: Rendering instance: imgGallery
+log: Rendering instance: mapController
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: ico_gallery
+log: Rendering instance: ico_maps
+log: Rendering instance: photos
+log: Rendering instance: worth_1
+log: Rendering instance: worth_2
+log: Rendering instance: worth_3
+log: Rendering instance: worth_4
+log: Rendering instance: worth_5
+log: Rendering instance: worth_6
+log: Rendering instance: worth_7
+log: Rendering instance: maps
+log: Rendering instance: holguin
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+
+Success are greateful
+===[ maps.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: __div1
+log: Rendering instance: btnGallery
+log: Rendering instance: btnMaps
+log: Rendering instance: lblStatus
+log: Rendering instance: swtScene
+log: Rendering instance: lblInformation
+log: Rendering instance: imgGallery
+log: Rendering instance: mapController
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: ico_gallery
+log: Rendering instance: ico_maps
+log: Rendering instance: photos
+log: Rendering instance: worth_1
+log: Rendering instance: worth_2
+log: Rendering instance: worth_3
+log: Rendering instance: worth_4
+log: Rendering instance: worth_5
+log: Rendering instance: worth_6
+log: Rendering instance: worth_7
+log: Rendering instance: maps
+log: Rendering instance: holguin
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+
+Success are greateful
+===[ maps.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: __div1
+log: Rendering instance: btnGallery
+log: Rendering instance: btnMaps
+log: Rendering instance: lblStatus
+log: Rendering instance: swtScene
+log: Rendering instance: lblInformation
+log: Rendering instance: imgGallery
+log: Rendering instance: mapController
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: ico_gallery
+log: Rendering instance: ico_maps
+log: Rendering instance: photos
+log: Rendering instance: worth_1
+log: Rendering instance: worth_2
+log: Rendering instance: worth_3
+log: Rendering instance: worth_4
+log: Rendering instance: worth_5
+log: Rendering instance: worth_6
+log: Rendering instance: worth_7
+log: Rendering instance: maps
+log: Rendering instance: holguin
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+
+Success are greateful
+===[ maps.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: __div1
+log: Rendering instance: btnGallery
+log: Rendering instance: btnMaps
+log: Rendering instance: lblStatus
+log: Rendering instance: swtScene
+log: Rendering instance: lblInformation
+log: Rendering instance: imgGallery
+log: Rendering instance: mapController
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: ico_gallery
+log: Rendering instance: ico_maps
+log: Rendering instance: photos
+log: Rendering instance: worth_1
+log: Rendering instance: worth_2
+log: Rendering instance: worth_3
+log: Rendering instance: worth_4
+log: Rendering instance: worth_5
+log: Rendering instance: worth_6
+log: Rendering instance: worth_7
+log: Rendering instance: maps
+log: Rendering instance: holguin
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+
+Success are greateful
+===[ animtest.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Sequence Types...
+log: Rendering Android Imports...
+log: Rendering instance: lbl1
+log: Rendering instance: lbl2
+log: Rendering instance: lbl3
+log: Rendering instance: btn1
+log: Rendering instance: btn2
+log: Rendering instance: btn3
+log: Rendering Sequence...
+log: Rendering instance: anim1
+log: Rendering instance: anim1
+log: Rendering instance: anim2
+log: Rendering instance: anim2
+log: Rendering instance: anim3
+log: Rendering instance: anim3
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+log: Rendering default files...
+
+Success are greateful
+===[ characters.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering class: character
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: aladdin
+log: Rendering instance: mickey
+log: Rendering instance: pluto
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: i_aladdin
+log: Rendering instance: i_mickey
+log: Rendering instance: i_pluto
+log: Rendering instance: a_audio1
+log: Rendering instance: a_audio2
+log: Rendering instance: v_mickey
+log: Rendering instance: v_pluto
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+
+Success are greateful
+===[ contacts.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering instance: __div1
+log: Rendering instance: btnLeft
+log: Rendering instance: btnRight
+log: Rendering instance: swtStates
+log: Rendering instance: divAdd
+log: Rendering instance: lblFullName
+log: Rendering instance: lblPhone
+log: Rendering instance: edtFullName
+log: Rendering instance: edtPhoneNumber
+log: Rendering instance: chkVerifier
+log: Rendering instance: btnAddContact
+log: Rendering instance: divFind
+log: Rendering instance: lblFindType
+log: Rendering instance: rdbByName
+log: Rendering instance: rdbByPhone
+log: Rendering instance: lblCriterion
+log: Rendering instance: edtCriterion
+log: Rendering instance: divAbout
+log: Rendering instance: lblName
+log: Rendering instance: lblContact
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+
+Success are greateful
+===[ figures2d.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering instance: div1
+log: Rendering instance: c1
+log: Rendering instance: r1
+log: Rendering instance: p1
+log: Rendering instance: point1
+log: Rendering instance: point2
+log: Rendering instance: point3
+log: Rendering instance: point4
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+
+Success are greateful
+===[ gallery.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: gallery
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: img01
+log: Rendering instance: img02
+log: Rendering instance: img03
+log: Rendering instance: img04
+log: Rendering instance: img05
+log: Rendering instance: img06
+log: Rendering instance: img07
+log: Rendering instance: img08
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+
+Success are greateful
+===[ images.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: album
+log: Rendering instance: changer
+log: Rendering instance: identifier
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: img1
+log: Rendering instance: img2
+log: Rendering instance: img3
+log: Rendering instance: img4
+log: Rendering instance: img5
+log: Rendering instance: img6
+log: Rendering instance: img7
+log: Rendering instance: img8
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+
+Success are greateful
+===[ kitchensink.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: kitchen
+log: Rendering instance: __div1
+log: Rendering instance: btn1
+log: Rendering instance: toggle1
+log: Rendering instance: imgbtn1
+log: Rendering instance: lbl1
+log: Rendering instance: edit1
+log: Rendering instance: chkb1
+log: Rendering instance: __scroller1
+log: Rendering instance: rdgTab3
+log: Rendering instance: radio1
+log: Rendering instance: radio2
+log: Rendering instance: radio3
+log: Rendering instance: radio4
+log: Rendering instance: radio5
+log: Rendering instance: radio6
+log: Rendering instance: radio7
+log: Rendering instance: radio8
+log: Rendering instance: radio9
+log: Rendering instance: __scroller2
+log: Rendering instance: img1
+log: Rendering instance: __div2
+log: Rendering instance: prgbar1
+log: Rendering instance: prgbar2
+log: Rendering instance: prgbar3
+log: Rendering instance: prgbar4
+log: Rendering instance: seekb1
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: dialog
+log: Rendering instance: emulator
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+
+Success are greateful
+===[ maps.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: __div1
+log: Rendering instance: btnGallery
+log: Rendering instance: btnMaps
+log: Rendering instance: lblStatus
+log: Rendering instance: swtScene
+log: Rendering instance: lblInformation
+log: Rendering instance: imgGallery
+log: Rendering instance: mapController
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: ico_gallery
+log: Rendering instance: ico_maps
+log: Rendering instance: photos
+log: Rendering instance: worth_1
+log: Rendering instance: worth_2
+log: Rendering instance: worth_3
+log: Rendering instance: worth_4
+log: Rendering instance: worth_5
+log: Rendering instance: worth_6
+log: Rendering instance: worth_7
+log: Rendering instance: maps
+log: Rendering instance: holguin
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+
+Success are greateful
+===[ simple.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering instance: lblFirstName
+log: Rendering instance: edtFirstName
+log: Rendering instance: lblLastName
+log: Rendering instance: edtLastName
+log: Rendering instance: btnFullName
+log: Rendering instance: lblFullName
+log: Rendering instance: edtContainer
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+
+Success are greateful
+===[ touchme.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering instance: btnTouchme
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+
+Success are greateful

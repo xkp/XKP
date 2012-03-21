@@ -55,6 +55,18 @@ public class XKPUtils {
 		mPackages.add(pack);
 	}
 
+	public int getIdFromName(String instanceName) {
+		String res = mActivity.getPackageName() + ":id/" + instanceName;
+		int id = mActivity.getResources().getIdentifier(res, "id", mActivity.getPackageName());
+		if(id == 0) {
+			for(ViewGroup viewgrp : mViewGroup) {
+				id = viewgrp.getResources().getIdentifier(res, "id", mActivity.getPackageName());
+				if(id != 0) break;
+			}
+		}
+		return id;
+	}
+	
 	private int getResourceIdentifierFromPackages(String resource, XKPPackage [] outWrapperPack) {
 		for(int i = 0; i < mPackages.size(); i++) {
 			XKPPackage pack = mPackages.get(i);

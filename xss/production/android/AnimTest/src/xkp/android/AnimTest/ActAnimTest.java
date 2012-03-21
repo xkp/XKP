@@ -19,7 +19,6 @@ import xkp.android.libs.Layout.XKPLayout;
         import xkp.android.libs.Sequence.*;
 		public class ActAnimTest 
 						extends Activity
-							implements OnClickListener
 {
 				private TextView lbl1;
 				private TextView lbl2;
@@ -34,7 +33,7 @@ private Sequence anim3;
 			lbl3.setText("Button 3 Stopped");
 anim3.stop();
 		}
-	ActAnimTest application;
+	private ActAnimTest application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -48,16 +47,31 @@ anim3.stop();
 				lbl2 = (TextView) findViewById(R.id.lbl2);
 				lbl3 = (TextView) findViewById(R.id.lbl3);
 				btn1 = (Button) findViewById(R.id.btn1);
-					btn1.setOnClickListener(this);
+					btn1.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							onClickbtn1();
+						}
+					});
 				btn2 = (Button) findViewById(R.id.btn2);
-					btn2.setOnClickListener(this);
+					btn2.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							onClickbtn2();
+						}
+					});
 				btn3 = (Button) findViewById(R.id.btn3);
-					btn3.setOnClickListener(this);
+					btn3.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							onClickbtn3();
+						}
+					});
 	}
-void initCallers() {
+private void initCallers() {
 			Start();
 }
-			void initInstances() {
+			private void initInstances() {
 				application = this;
 anim1 = new Sequence();
 anim1.events.addListener("start", new EventHolder.Implementor() 
@@ -180,19 +194,6 @@ anim3 = new Sequence();anim3.setLoop(true);
 					}
 				}, 0, (long)(update_freq * 1000)); 
 			}
-						public void onClick(View v) {
-							switch (v.getId()) {
-									case R.id.btn1:
-										onClickbtn1();
-										break;
-									case R.id.btn2:
-										onClickbtn2();
-										break;
-									case R.id.btn3:
-										onClickbtn3();
-										break;
-						} //switch
-						}
 			private void onClickbtn1() {
 				anim1.start();
 			}

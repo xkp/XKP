@@ -36,6 +36,7 @@ import xkp.android.libs.Layout.XKPLayout;
 						import android.widget.SeekBar;
 						import android.widget.SeekBar.OnSeekBarChangeListener;
 						import xkp.android.libs.Widget.XKPPackage;
+						import xkp.android.libs.Widget.XKPPackage.OnResourcePackageListener;
 		public class ActKitchenSink 
 						extends Activity
 {
@@ -84,7 +85,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				R.drawable.dialog,
 				R.drawable.emulator
 			};
-	ActKitchenSink application;
+	private ActKitchenSink application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -123,17 +124,17 @@ import xkp.android.libs.Layout.XKPLayout;
 				prgbar4 = (ProgressBar) findViewById(R.id.prgbar4);
 				seekb1 = (SeekBar) findViewById(R.id.seekb1);
 	}
-void initCallers() {
+private void initCallers() {
 			util = new XKPUtils();
 			ActKitchenSink.util.addView(this);
 			util = ActKitchenSink.util;
 }
-			void initInstances() {
+			private void initInstances() {
 				application = this;
 				__resources1 = new XKPPackage(this, 
 					mResources___resources1_XKPName, mResources___resources1_DroidName, 
-					mResources___resources1_Type, mResources___resources1_Id, true);
+					mResources___resources1_Type, mResources___resources1_Id
+					, true);
 				util.addXKPPackage(__resources1);
-					__resources1.load();
 			}
 }

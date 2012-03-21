@@ -26,7 +26,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				private TextView lsurname;
 				private TextView lemployment;
 			public static XKPUtils util;
-	ActCharacters application;
+	private ActCharacters application;
 			public character(Context context) {
 				this(context, null);
 			}
@@ -50,7 +50,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				img_src_set(ta.getString(R.styleable.character_img_src));
 			ta.recycle();
 			}
-void initCallers() {
+private void initCallers() {
 			util = new XKPUtils();
 			ActCharacters.util.addView(this);
 			util = ActCharacters.util;

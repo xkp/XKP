@@ -1015,7 +1015,7 @@
 			
 			<property id="active" type="string" output_id="current" ns="xkp" res_type="id_reference">
 				<get text="getDisplayedChildByName()"/>
-				<set text="setDisplayedChildByName({value})"/>
+				<set text="setDisplayedChildByName(util.getIdFromName({value}))"/>
 			</property>
 			
 			<property id="active_index" type="int" output_id="currentIndex" ns="xkp">

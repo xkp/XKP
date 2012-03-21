@@ -53,7 +53,6 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 						<xss:e value="cextends"/>
 	}
 </xss:code>
-						<xss:marker id="interfaces"/>
 
 <xss:code>
 	//contents
@@ -71,6 +70,7 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 		if(inst.no_script || inst.no_render)
 			continue;
 		
+		//render all instances declarations
 		if(inst.id && inst.id != application.id)
 		{
 			out(indent = 1, marker = "declarations")
@@ -106,6 +106,7 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 			}
 		}
 		
+		//find all utils without duplicates
 		if(inst.utils)
 		{
 			if(!idiom.bundle) idiom.bundle = [];
@@ -133,11 +134,8 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 		}
 	}
 	
-	//TIP: all instances are declared, then render theirs events
-	compiler.inject("render_instances_events", app = appName, bns = base_namespace);
-	
+	//render all utils methods
 	bool need_utils = idiom.need_utils;
-
 	if(class_utils || need_utils)
 	{
 		out(indent = 2, marker = "declarations")
@@ -241,19 +239,12 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 				
 				out(indent = 2)
 				{
-					<xss:e value="inst.output_id"/>.<xss:e value="handler"/>(<xss:e value="e.set_param_hnd"/>);
-				}
-			}
-		}
-		
-		var qprops = inst.query_properties("*");
-		for(var p in qprops)
-		{
-			if(p.set_handle)
-			{
-				out(indent = 2)
-				{
-					<xss:e value="inst.output_id"/>.<xss:e value="p.set_handle"/>(<xss:e value="p.set_param_hnd"/>);
+					<xss:e value="inst.output_id"/>.<xss:e value="handler"/>(new <xss:e value="e.interface"/>() <xss:open_brace/>
+						@Override
+						public void <xss:e value="e.output_id"/>(<xss:e value="e.def_args"/>) <xss:open_brace/>
+							<xss:e>e.output_id</xss:e><xss:e value="inst.output_id"/>(<xss:e>e.args.render()</xss:e>);
+						<xss:close_brace/>
+					<xss:close_brace/>);
 				}
 			}
 		}
@@ -324,21 +315,12 @@ private void initCallers() {
 <xss:marker id="handlers"/>
 
 <xss:code>
-	if(is_type)
+	if(!is_type)
 	{
-		//TRACE: log
-		//compiler.log("Custom class " + clazz.output_id + "...");
-	} else
-	{
+		compiler.xss("../java/instance.xss", it = application);
 		clazz.instances += application;
 	}
-	
-	for(var i in clazz.instances)
-	{
-		compiler.xss("../java/instance.xss", it = i);
-	}
-	
-	if(is_type)
+	else
 	{
 		compiler.xss("../java/instance.xss", it = clazz);
 		

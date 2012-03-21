@@ -15,10 +15,9 @@ import xkp.android.libs.Layout.XKPLayout;
 						import android.view.View.OnFocusChangeListener;
 		public class ActTouchMe 
 						extends Activity
-							implements OnTouchListener
 {
 				private Button btnTouchme;
-	ActTouchMe application;
+	private ActTouchMe application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -29,21 +28,18 @@ import xkp.android.libs.Layout.XKPLayout;
 			}
 			private void bindViews() {
 				btnTouchme = (Button) findViewById(R.id.btnTouchme);
-					btnTouchme.setOnTouchListener(this);
+					btnTouchme.setOnTouchListener(new OnTouchListener() {
+						@Override
+						public void onTouch(View v, MotionEvent ev) {
+							onTouchbtnTouchme(MotionEvent ev);
+						}
+					});
 	}
-void initCallers() {
+private void initCallers() {
 }
-			void initInstances() {
+			private void initInstances() {
 				application = this;
 			}
-						public boolean onTouch(View v, MotionEvent ev) {
-							switch (v.getId()) {
-									case R.id.btnTouchme:
-										onTouchbtnTouchme(ev);
-										break;
-						} //switch
-							return true;
-						}
 			private Double prop_btnTouchme_MAX_DELTHA = 80.000000f;
 			private Double prop_btnTouchme_FIRST_QUATER = Math.PI / 4;
 			private Double prop_btnTouchme_SECOND_QUATER = 3 * Math.PI / 4;

@@ -18,9 +18,9 @@ import xkp.android.libs.Layout.XKPLayout;
 						import android.text.method.KeyListener;
 						import android.widget.TextView;
 						import xkp.android.libs.Widget.XKPPackage;
+						import xkp.android.libs.Widget.XKPPackage.OnResourcePackageListener;
 		public class ActImagesChanger 
 						extends Activity
-							implements OnClickListener
 {
 				private ImageView album;
 				private Button changer;
@@ -67,7 +67,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				R.drawable.photo_7,
 				R.drawable.photo_8
 			};
-	ActImagesChanger application;
+	private ActImagesChanger application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -79,29 +79,27 @@ import xkp.android.libs.Layout.XKPLayout;
 			private void bindViews() {
 				album = (ImageView) findViewById(R.id.album);
 				changer = (Button) findViewById(R.id.changer);
-					changer.setOnClickListener(this);
+					changer.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							onClickchanger();
+						}
+					});
 				identifier = (TextView) findViewById(R.id.identifier);
 	}
-void initCallers() {
+private void initCallers() {
 			util = new XKPUtils();
 			ActImagesChanger.util.addView(this);
 			util = ActImagesChanger.util;
 }
-			void initInstances() {
+			private void initInstances() {
 				application = this;
 				__resources1 = new XKPPackage(this, 
 					mResources___resources1_XKPName, mResources___resources1_DroidName, 
-					mResources___resources1_Type, mResources___resources1_Id, true);
+					mResources___resources1_Type, mResources___resources1_Id
+					, true);
 				util.addXKPPackage(__resources1);
-					__resources1.load();
 			}
-						public void onClick(View v) {
-							switch (v.getId()) {
-									case R.id.changer:
-										onClickchanger();
-										break;
-						} //switch
-						}
 			private void onClickchanger() {
 				prop_application_currentImage = prop_application_currentImage + 1;
 prop_application_currentImage = prop_application_currentImage % prop_application_resources.size();

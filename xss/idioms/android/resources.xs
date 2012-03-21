@@ -15,6 +15,8 @@ on render_instances(app)
 	//TODO: iterate through resources for make collection to render
 	for(var inst in instances)
 	{
+		compiler.xss("../java/instance.xss", marker = "handlers", it = inst);
+		
 		//compiler.log(inst.id);
 		string parent = "resources";
 		if(inst.parent.id != "")
@@ -45,6 +47,27 @@ on render_instances(app)
 					mResources_<xss:e value="inst.output_id"/>_Type, mResources_<xss:e value="inst.output_id"/>_Id
 					<xss:e value="load_main_resource"/>);
 				util.addXKPPackage(<xss:e value="inst.output_id"/>);
+			}
+		}
+		
+		//render events
+		for(var e in inst.events)
+		{
+			if(e.interface && e.implemented)
+			{
+				string handler = "set" + e.interface;
+				if(e.set_handle)
+					handler = e.set_handle;
+				
+				out(indent = 2)
+				{
+					<xss:e value="inst.output_id"/>.<xss:e value="handler"/>(new <xss:e value="e.interface"/>() <xss:open_brace/>
+						@Override
+						public void <xss:e value="e.output_id"/>(<xss:e value="e.def_args"/>) <xss:open_brace/>
+							<xss:e>e.output_id</xss:e><xss:e value="inst.output_id"/>(<xss:e>e.args.render()</xss:e>);
+						<xss:close_brace/>
+					<xss:close_brace/>);
+				}
 			}
 		}
 		
@@ -98,9 +121,6 @@ on render_instances(app)
 	//TRACE: log
 	//compiler.log("End Rendering Resources Instances...");
 }
-
-//properties, methods, and events
-//compiler.xss(xss_file, marker = "defined_class", appName, inst);
 
 on render_types(app)
 {
@@ -363,16 +383,4 @@ on copy_default_files(app, bns, plibs)
 on render_idiom_scripts(main)
 {
 
-}
-
-on render_instances_events(app, bns)
-{
-	compiler.log("resources - render_instances_events");
-	var android_idiom = compiler.get_idiom("android");
-	android_idiom.building_events(app, bns, this);
-	
-	for(var i in instances)
-	{
-		compiler.xss("../java/instance.xss", it = i);
-	}
 }

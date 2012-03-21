@@ -17,7 +17,6 @@ import xkp.android.libs.Layout.XKPLayout;
 						import android.widget.Button;
 		public class ActSimpleTest 
 						extends Activity
-							implements OnClickListener
 {
 				private TextView lblFirstName;
 				private EditText edtFirstName;
@@ -26,7 +25,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				private Button btnFullName;
 				private TextView lblFullName;
 				private EditText edtContainer;
-	ActSimpleTest application;
+	private ActSimpleTest application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -41,22 +40,20 @@ import xkp.android.libs.Layout.XKPLayout;
 				lblLastName = (TextView) findViewById(R.id.lblLastName);
 				edtLastName = (EditText) findViewById(R.id.edtLastName);
 				btnFullName = (Button) findViewById(R.id.btnFullName);
-					btnFullName.setOnClickListener(this);
+					btnFullName.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							onClickbtnFullName();
+						}
+					});
 				lblFullName = (TextView) findViewById(R.id.lblFullName);
 				edtContainer = (EditText) findViewById(R.id.edtContainer);
 	}
-void initCallers() {
+private void initCallers() {
 }
-			void initInstances() {
+			private void initInstances() {
 				application = this;
 			}
-						public void onClick(View v) {
-							switch (v.getId()) {
-									case R.id.btnFullName:
-										onClickbtnFullName();
-										break;
-						} //switch
-						}
 			private void onClickbtnFullName() {
 				String fullname = edtFirstName.getText().toString() + " " + edtLastName.getText().toString();
 if (!fullname.equals(" "))

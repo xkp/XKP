@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<xkp.android.libs.Layout.XKPLayout 
+				xmlns:android="http://schemas.android.com/apk/res/android" 
+				xmlns:xkp="http://schemas.android.com/apk/res/xkp.android.Maps" 
+				android:id="@+id/application" 
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				xkp:placement="client"
+			>
+				<xkp.android.libs.Layout.XKPLayout android:id="@+id/__div1"
+				android:layout_height="80dp"
+				xkp:placement="top"
+				android:layout_width="wrap_content"
+			>
+				<ImageButton android:id="@+id/btnGallery"
+				android:src="@drawable/launcher_gallery"
+				xkp:layout_x="0dp"
+				xkp:layout_y="0dp"
+				android:layout_width="80dp"
+				android:layout_height="60dp"
+				xkp:placement="left"
+			>
+				</ImageButton>
+				<ImageButton android:id="@+id/btnMaps"
+				android:src="@drawable/launcher_maps"
+				xkp:layout_x="100dp"
+				xkp:layout_y="0dp"
+				android:layout_width="80dp"
+				android:layout_height="60dp"
+				xkp:placement="right"
+			>
+				</ImageButton>
+				<TextView android:id="@+id/lblStatus"
+				android:text="@string/res0"
+				android:layout_height="60dp"
+				android:layout_width="160dp"
+				android:gravity="center"
+				xkp:placement="center"
+			>
+				</TextView>
+				</xkp.android.libs.Layout.XKPLayout>
+				<xkp.android.libs.Widget.XKPSwitcher android:id="@+id/swtScene"
+				xkp:placement="client"
+				xkp:current="@+id/lblScene"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				<TextView android:id="@+id/lblInformation"
+				android:text="@string/res1"
+				android:layout_width="200dp"
+				android:layout_height="200dp"
+				xkp:placement="center"
+				android:gravity="center"
+			>
+				</TextView>
+				<ImageView android:id="@+id/imgGallery"
+				xkp:placement="client"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</ImageView>
+				<xkp.android.libs.Widget.XKPImageMap android:id="@+id/mapController"
+				xkp:placement="client"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</xkp.android.libs.Widget.XKPImageMap>
+				</xkp.android.libs.Widget.XKPSwitcher>
+			</xkp.android.libs.Layout.XKPLayout>

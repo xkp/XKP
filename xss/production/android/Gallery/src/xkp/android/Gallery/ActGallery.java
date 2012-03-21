@@ -19,6 +19,7 @@ import xkp.android.libs.Layout.XKPLayout;
 						import android.widget.BaseAdapter;
 						import android.content.Context;
 						import xkp.android.libs.Widget.XKPPackage;
+						import xkp.android.libs.Widget.XKPPackage.OnResourcePackageListener;
 		public class ActGallery 
 						extends Activity
 {
@@ -65,7 +66,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				R.drawable.gallery_photo_7,
 				R.drawable.gallery_photo_8
 			};
-	ActGallery application;
+	private ActGallery application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -76,20 +77,19 @@ import xkp.android.libs.Layout.XKPLayout;
 			}
 			private void bindViews() {
 				gallery = (Gallery) findViewById(R.id.gallery);
-					gallery.setAdapter(new ImageAdapter(this));
 	}
-void initCallers() {
+private void initCallers() {
 			util = new XKPUtils();
 			ActGallery.util.addView(this);
 			util = ActGallery.util;
 }
-			void initInstances() {
+			private void initInstances() {
 				application = this;
 				__resources1 = new XKPPackage(this, 
 					mResources___resources1_XKPName, mResources___resources1_DroidName, 
-					mResources___resources1_Type, mResources___resources1_Id, true);
+					mResources___resources1_Type, mResources___resources1_Id
+					, true);
 				util.addXKPPackage(__resources1);
-					__resources1.load();
 			}
 	public class ImageAdapter extends BaseAdapter {
 		private static final int ITEM_WIDTH = 236;

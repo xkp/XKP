@@ -17,13 +17,12 @@ import xkp.android.libs.Layout.XKPLayout;
 						import xkp.android.libs.Graphic.XKPPolygon;
 		public class ActFigures2D 
 						extends Activity
-							implements OnClickInsideFigureListener
 {
 				private XKPLayout div1;
 				private XKPCircle c1;
 				private XKPRectangle r1;
 				private XKPPolygon p1;
-	ActFigures2D application;
+	private ActFigures2D application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -35,34 +34,36 @@ import xkp.android.libs.Layout.XKPLayout;
 			private void bindViews() {
 				div1 = (XKPLayout) findViewById(R.id.div1);
 				c1 = (XKPCircle) findViewById(R.id.c1);
-					c1.setOnClickInsideFigureListener(this);
+					c1.setOnClickInsideFigureListener(new OnClickInsideFigureListener() {
+						@Override
+						public void onClickInsideFigure(View v) {
+							onClickInsideFigurec1();
+						}
+					});
 				r1 = (XKPRectangle) findViewById(R.id.r1);
-					r1.setOnClickInsideFigureListener(this);
+					r1.setOnClickInsideFigureListener(new OnClickInsideFigureListener() {
+						@Override
+						public void onClickInsideFigure(View v) {
+							onClickInsideFigurer1();
+						}
+					});
 				p1 = (XKPPolygon) findViewById(R.id.p1);
-					p1.setOnClickInsideFigureListener(this);
+					p1.setOnClickInsideFigureListener(new OnClickInsideFigureListener() {
+						@Override
+						public void onClickInsideFigure(View v) {
+							onClickInsideFigurep1();
+						}
+					});
 			p1.addPoint(100, 100);
 			p1.addPoint(100, 50);
 			p1.addPoint(190, 10);
 			p1.addPoint(150, 200);
 	}
-void initCallers() {
+private void initCallers() {
 }
-			void initInstances() {
+			private void initInstances() {
 				application = this;
 			}
-						public void onClickInsideFigure(View v) {
-							switch (v.getId()) {
-									case R.id.c1:
-										onClickInsideFigurec1();
-										break;
-									case R.id.r1:
-										onClickInsideFigurer1();
-										break;
-									case R.id.p1:
-										onClickInsideFigurep1();
-										break;
-						} //switch
-						}
 			private void onClickInsideFigurec1() {
 				c1.setLineWidth(c1.getLineWidth() + 1);
 			}

@@ -7,6 +7,7 @@ import android.view.View;
 import xkp.android.libs.Layout.XKPLayout;
 			import xkp.android.libs.Widget.XKPUtils;
 						import xkp.android.libs.Widget.XKPPackage;
+						import xkp.android.libs.Widget.XKPPackage.OnResourcePackageListener;
 		public class ActCharacters 
 						extends Activity
 {
@@ -51,7 +52,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				R.raw.mickey,
 				R.raw.pluto
 			};
-	ActCharacters application;
+	private ActCharacters application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -65,17 +66,17 @@ import xkp.android.libs.Layout.XKPLayout;
 				mickey = (character) findViewById(R.id.mickey);
 				pluto = (character) findViewById(R.id.pluto);
 	}
-void initCallers() {
+private void initCallers() {
 			util = new XKPUtils();
 			ActCharacters.util.addView(this);
 			util = ActCharacters.util;
 }
-			void initInstances() {
+			private void initInstances() {
 				application = this;
 				__resources1 = new XKPPackage(this, 
 					mResources___resources1_XKPName, mResources___resources1_DroidName, 
-					mResources___resources1_Type, mResources___resources1_Id, true);
+					mResources___resources1_Type, mResources___resources1_Id
+					, true);
 				util.addXKPPackage(__resources1);
-					__resources1.load();
 			}
 }
