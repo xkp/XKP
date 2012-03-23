@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+</head>
+<body>
+<style type="text/css">
+	body{
+	}
+</style>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/three/Three.js"></script>
+		<script type="text/javascript" src="../js/three/Stats.js"></script>
+		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+		<script type="text/javascript" src="../js/three/Utils.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
+		<script type="text/javascript" src="../js/pixastic/pixastic.core.js"></script>
+		<script type="text/javascript" src="../js/pixastic/actions.js"></script>	
+		<script type="text/javascript" src="../js/pixastic/pixastic-manager.js"></script>
+		<script type="text/javascript" src="../js/pixastic/pixastic.js"></script>
+<script type="text/javascript">		
+var renderer = new THREE.CanvasRenderer();	
+var ui;
+var SoundUtils;
+var active_camera;
+var g_elapsed = -1;
+var g_delta = 0.0;	
+var drawingCanvas = renderer.domElement;
+var canvas_position = {x:0, y:0};
+var app_width = 600;
+var app_height = 600;
+var lbl0;var lbl1;var lbl2;var img1;var img2;var img3;var img4;
+var application = {};
+application.events = new ms.event.EventHolder();
+		if(drawingCanvas){
+			var client =
+			{
+				width: 600,
+				height: 600,
+				canvas: drawingCanvas
+			};
+            var streamer = new ms.streamer.Streamer();							
+			var ui = new ms.ui.Manager(client, streamer);			
+			var g_ui = ui;
+			var g_ui_root = ui.root;
+			var mouse_pressed = false;
+		}
+		var streamer = new ms.streamer.Streamer();	
+		var ResourceUtils = new ms.streamer.ResourceUtils();
+	// --------RESOURCES---------
+		var global_package = new ms.streamer.Package(streamer);	
+                global_package.add_item(
+            {
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test1.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+                global_package.add_item(
+            {
+		id:				"image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test2.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var image1;
+				global_package.events.addListener("loaded", function()
+				{
+					image1 = streamer.get_resource("image1");
+				});
+		global_package.add_item({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});		
+		global_package.load();	
+    // --------RESOURCES---------
+soundRenderer = new THREE.SoundRenderer();		
+document.body.appendChild( soundRenderer.domElement );
+renderer.setSize( app_width, app_height );
+function render() {
+canvas_position = getElementPosition(drawingCanvas);
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+    g_delta = 0; //first update
+else
+g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+application.events.dispatch("updates", []);	
+		set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+var sphere_material;var scene;var camera_1;var plane1;var sphere1;var sphere2;var plane2;
+threejs_load_resources(function()
+{
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+		    lbl0 = new ms.ui.Label( 
+	    "12px Arial",g_ui_root.manager, g_ui_root);
+        lbl0 = lbl0;
+            lbl0.set_x(50);
+            lbl0.set_y(20);
+            lbl0.text("Brightness and contrast filter demo");
+		    lbl1 = new ms.ui.Label( 
+	    "12px Arial",g_ui_root.manager, g_ui_root);
+        lbl1 = lbl1;
+            lbl1.set_x(50);
+            lbl1.set_y(40);
+            lbl1.text("Pass mouse over the Gioconda's elements to change their filter values");
+		    lbl2 = new ms.ui.Label( 
+	    "12px Arial",g_ui_root.manager, g_ui_root);
+        lbl2 = lbl2;
+            lbl2.set_x(50);
+            lbl2.set_y(60);
+            lbl2.text("Press numpad + and - to increase or decrease resource filter values");
+		    img1 = new ms.ui.Image( 
+	    "images/test1.png",g_ui_root.manager, g_ui_root);
+        img1 = img1;
+            img1.set_x(50);
+            img1.set_y(100);
+            img1.set_width(128);
+            img1.set_height(164);
+	var ev_parent = this;
+	img1.events.addListener("mousein", function()
+	{    
+		img1.bf1.set_brightness(20);
+img1.bf1.set_contrast(0.200000003);
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
+	img1.events.addListener("mouseout", function()
+	{    
+		img1.bf1.set_brightness(80);
+img1.bf1.set_contrast(0.800000012);
+	}
+	);
+		application.are_obj_events = true;
+		    img2 = new ms.ui.Image( 
+	    "images/test2.png",g_ui_root.manager, g_ui_root);
+        img2 = img2;
+            img2.set_x(50);
+            img2.set_y(450);
+            img2.set_width(60);
+            img2.set_height(100);
+		    img3 = new ms.ui.Image( 
+	    "images/test2.png",g_ui_root.manager, g_ui_root);
+        img3 = img3;
+            img3.set_x(150);
+            img3.set_y(450);
+            img3.set_width(60);
+            img3.set_height(100);
+		    img4 = new ms.ui.Image( 
+	    "images/test2.png",g_ui_root.manager, g_ui_root);
+        img4 = img4;
+            img4.set_x(250);
+            img4.set_y(450);
+            img4.set_width(60);
+            img4.set_height(100);
+sphere_material = new THREE.MeshBasicMaterial({
+map:new THREE.Texture(streamer.get_resource('images/test1.png').data),
+	});
+scene = 
+new THREE.Scene(
+);
+camera_1 = 
+new THREE.Camera(
+45,1.5,1,10000);
+		active_camera = camera_1;
+            camera_1.position.z = 1000;
+	    var plane1_plane = 
+new THREE.Plane(
+280,320);
+	    plane1 = new THREE.Mesh(plane1_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(plane1);
+		plane1.events = new ms.event.EventHolder();
+            plane1.materials[0].map = new THREE.Texture(streamer.get_resource("images/test1.png").data);
+            plane1.position.x = -30;
+            set_rotation_y(plane1.rotation, -10);
+	var ev_parent = this;
+	plane1.events.addListener("mousein", function()
+	{    
+		plane1.bf2.set_brightness(20);
+plane1.bf2.set_contrast(0.200000003);
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
+	plane1.events.addListener("mouseout", function()
+	{    
+		plane1.bf2.set_brightness(80);
+plane1.bf2.set_contrast(0.800000012);
+	}
+	);
+		application.are_obj_events = true;
+	    var sphere1_sphere = 
+new THREE.Sphere(
+150);
+	    sphere1 = new THREE.Mesh(sphere1_sphere, sphere_material);
+	    scene.addObject(sphere1);
+		sphere1.events = new ms.event.EventHolder();
+            sphere1.position.x = 400;
+            sphere1.position.y = -100;
+	var ev_parent = this;
+	sphere1.events.addListener("mousein", function()
+	{    
+		set_rotation_x(sphere1.rotation, get_rotation_x(sphere1.rotation) + 1);
+set_rotation_y(sphere1.rotation, get_rotation_y(sphere1.rotation) + 1);
+set_rotation_z(sphere1.rotation, get_rotation_z(sphere1.rotation) + 1);
+sphere_material.bf0.set_brightness(20);
+sphere_material.bf0.set_contrast(0.200000003);
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
+	sphere1.events.addListener("mouseout", function()
+	{    
+		sphere_material.bf0.set_brightness(80);
+sphere_material.bf0.set_contrast(0.800000012);
+	}
+	);
+		application.are_obj_events = true;
+	    var sphere2_sphere = 
+new THREE.Sphere(
+150);
+	    sphere2 = new THREE.Mesh(sphere2_sphere, sphere_material);
+	    scene.addObject(sphere2);
+		sphere2.events = new ms.event.EventHolder();
+            sphere2.position.x = 400;
+            sphere2.position.y = 200;
+	var ev_parent = this;
+	sphere2.events.addListener("mousein", function()
+	{    
+		set_rotation_x(sphere2.rotation, get_rotation_x(sphere2.rotation) + 1);
+set_rotation_y(sphere2.rotation, get_rotation_y(sphere2.rotation) + 1);
+set_rotation_z(sphere2.rotation, get_rotation_z(sphere2.rotation) + 1);
+sphere_material.bf0.set_brightness(20);
+sphere_material.bf0.set_contrast(0.200000003);
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
+	sphere2.events.addListener("mouseout", function()
+	{    
+		sphere_material.bf0.set_brightness(80);
+sphere_material.bf0.set_contrast(0.800000012);
+	}
+	);
+		application.are_obj_events = true;
+	    var plane2_plane = 
+new THREE.Plane(
+100,100);
+	    plane2 = new THREE.Mesh(plane2_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(plane2);
+		plane2.events = new ms.event.EventHolder();
+            plane2.materials[0].map = new THREE.Texture(streamer.get_resource("images/test2.png").data);
+            plane2.position.x = -300;
+            plane2.position.y = -30;
+            set_rotation_y(plane2.rotation, -10);
+	streamer.get_resource('image1').bfres = new pixastic.Brightness(
+80,0.800000012,"bfres", streamer.get_resource('image1'));	
+	sphere_material.bf0 = new pixastic.Brightness(
+80,0.800000012,"bf0", sphere_material);	
+	img1.bf1 = new pixastic.Brightness(
+80,0.800000012,"bf1", img1);	
+	plane1.bf2 = new pixastic.Brightness(
+80,0.800000012,"bf2", plane1);	
+	var ev_parent = this;
+	application.events.addListener("keyup", function(keycode)
+	{    
+		if (keycode == NUMPAD_PLUS)
+{
+image1.bfres.set_brightness(image1.bfres.brightness + 2);
+image1.bfres.set_contrast(image1.bfres.contrast + 0.200000003);
+}
+if (keycode == NUMPAD_MINUS)
+{
+image1.bfres.set_brightness(image1.bfres.brightness - 2);
+image1.bfres.set_contrast(image1.bfres.contrast - 0.200000003);
+}
+	}
+	);
+if(ui)
+{	
+	SoundUtils = new ms.ui.SoundUtils();		
+	g_ui.fill_background = false;	
+}
+var event_manager = new ms.event.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(ev.keyCode);                  
+};
+application.events.dispatch("init", []);
+document.body.appendChild( renderer.domElement );
+animate();
+});
+function animate() {
+	if(ui)
+		drawingCanvas.getContext('2d').clearRect(0,0,600,600);
+	requestAnimationFrame( animate );
+	render();
+	if(ui)
+		ui.draw(drawingCanvas.getContext('2d'));
+	}
+</script>
+</body>
+</html>

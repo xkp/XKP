@@ -76,12 +76,14 @@
                 string assign    = path + "." + prop_name + " = value"; 
                 if (prop)
                 {
+                    compiler.log("Here");
                     assign = compiler.property_set(prop, path, 'value');
+                    compiler.log("And Here?");
                 }
                 else compiler.error("Cannot find animatable property", prop = itm.property);
                 
                 //start the interpolator
-                idiom.begin_interpolator(iid, assign);
+                idiom.begin_interpolator(prop, iid, assign, path);
                         
                 //generate keys
                 array keys = itm.find_by_type("key");
@@ -118,7 +120,7 @@
                     if (key.value == null)
                         key.value = "null";
                         
-                    idiom.render_key(key);
+                    idiom.render_key(iid, key);
                     
                     idx++;
                 }
@@ -128,9 +130,13 @@
             }
             else if (itm.class_name == "run")
             {
+                var mthd = seq.get_method(itm.method);
+                if (!mthd)
+                    compiler.error("run tag got an invalid method", methd = itm.method);
+
                 string mid = compiler.genid('__r');
                 
-                idiom.begin_caller(mid, time);
+                idiom.begin_caller(mthd, mid, time);
                 generate_run(itm, seq_id, seq);
                 idiom.close_caller(seq_id, mid);
             }
@@ -364,7 +370,7 @@
         }
                 
         if (parent_id) 
-            idiom.notify_parented(seq_id);
+            idiom.notify_parented(seq_id, parent_id);
 
         //we'll let our children fill in on what the want done
         seq.conditions      = [];

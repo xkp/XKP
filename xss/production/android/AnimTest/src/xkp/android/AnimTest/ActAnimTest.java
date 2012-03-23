@@ -26,9 +26,6 @@ import xkp.android.libs.Layout.XKPLayout;
 				private Button btn1;
 				private Button btn2;
 				private Button btn3;
-			private Sequence anim1;
-private Sequence anim2;
-private Sequence anim3;
 		public void mthd_anim3_stop_anim3() {
 			lbl3.setText("Button 3 Stopped");
 anim3.stop();
@@ -73,7 +70,6 @@ private void initCallers() {
 }
 			private void initInstances() {
 				application = this;
-anim1 = new Sequence();
 anim1.events.addListener("start", new EventHolder.Implementor() 
 {
 	public void call(Object ev) 
@@ -89,20 +85,17 @@ anim1.events.addListener("stop", new EventHolder.Implementor()
 anim2.start();
 				}
 });
-            anim1.setParent(null);
-					//x
-                   final Interpolator ____i1 = new Interpolator();
-				   ____i1.setAssigner(new Assign(){
-	                    public void put(Object value)
-	                    {
-						    ((XKPLayout.LayoutParams) btn1.getLayoutParams()).setLeft((Integer)value);
-	                    }
-				   });
-				   ____i1.setInterpolator(Manager.getInstance().interpolator("Integer"));	
-						____i1.addKey(0, 40);
-						____i1.addKey(1, 200);
-				    anim1.addHandler(____i1);
-anim2 = new Sequence();
+        final Interpolator ____i1 = new Interpolator();
+	    ____i1.setAssigner(new Assign(){
+	        public void put(Object value)
+	        {
+			    ((XKPLayout.LayoutParams) btn1.getLayoutParams()).setLeft((Integer)value);
+	        }
+	    });
+	    ____i1.setInterpolator(Manager.getInstance().interpolator(""));	
+        ____i1.addKey(0, 40);
+        ____i1.addKey(1, 200);
+        anim1.addHandler(____i1);	              
 anim2.events.addListener("start", new EventHolder.Implementor() 
 {
 	public void call(Object ev) 
@@ -117,64 +110,57 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
 				lbl2.setText("Button 2 Stopped");
 				}
 });
-            anim2.setParent(null);
-					//x
-                   final Interpolator ____i2 = new Interpolator();
-				   ____i2.setAssigner(new Assign(){
-	                    public void put(Object value)
-	                    {
-						    ((XKPLayout.LayoutParams) btn2.getLayoutParams()).setLeft((Integer)value);
-	                    }
-				   });
-				   ____i2.setInterpolator(Manager.getInstance().interpolator("Integer"));	
-						____i2.addKey(0, null);
-						____i2.addKey(2, null);
-				    anim2.addHandler(____i2);
-                anim2.events.addListener("start",  new EventHolder.Implementor() 
-                {
-	                public void call(Object ev) 
-                    {
-                    ____i2.setKeyValue(0, btn2.getLeft());
-                    ____i2.setKeyValue(1, btn1.getLeft());
-                }
-                });
-anim3 = new Sequence();anim3.setLoop(true);
+        final Interpolator ____i2 = new Interpolator();
+	    ____i2.setAssigner(new Assign(){
+	        public void put(Object value)
+	        {
+			    ((XKPLayout.LayoutParams) btn2.getLayoutParams()).setLeft((Integer)value);
+	        }
+	    });
+	    ____i2.setInterpolator(Manager.getInstance().interpolator(""));	
+        ____i2.addKey(0, null);
+        ____i2.addKey(2, null);
+        anim2.addHandler(____i2);	              
+        anim2.events.addListener("start",  new EventHolder.Implementor() 
+        {
+	        public void call(Object ev) 
+            {
+        ____i2.setKeyValue(0, btn2.getLeft());
+        ____i2.setKeyValue(1, btn1.getLeft());
+            }
+        });
                 anim3.start();
-            anim3.setParent(null);
-					//x
-                   final Interpolator ____i3 = new Interpolator();
-				   ____i3.setAssigner(new Assign(){
-	                    public void put(Object value)
-	                    {
-						    ((XKPLayout.LayoutParams) btn3.getLayoutParams()).setLeft((Integer)value);
-	                    }
-				   });
-				   ____i3.setInterpolator(Manager.getInstance().interpolator("Integer"));	
-						____i3.addKey(0, 40);
-						____i3.addKey(1.5, 200);
-				    anim3.addHandler(____i3);
-					//x
-                   final Interpolator ____i4 = new Interpolator();
-				   ____i4.setAssigner(new Assign(){
-	                    public void put(Object value)
-	                    {
-						    ((XKPLayout.LayoutParams) btn3.getLayoutParams()).setLeft((Integer)value);
-	                    }
-				   });
-				   ____i4.setInterpolator(Manager.getInstance().interpolator("Integer"));	
-						____i4.addKey(1.5, 200);
-						____i4.addKey(3, 40);
-				    anim3.addHandler(____i4);
-                anim3.events.addListener("update",  new EventHolder.Implementor() 
-                {
-	                public void call(Object ev) 
-                    {
+        final Interpolator ____i3 = new Interpolator();
+	    ____i3.setAssigner(new Assign(){
+	        public void put(Object value)
+	        {
+			    ((XKPLayout.LayoutParams) btn3.getLayoutParams()).setLeft((Integer)value);
+	        }
+	    });
+	    ____i3.setInterpolator(Manager.getInstance().interpolator(""));	
+        ____i3.addKey(0, 40);
+        ____i3.addKey(1.5, 200);
+        anim3.addHandler(____i3);	              
+        final Interpolator ____i4 = new Interpolator();
+	    ____i4.setAssigner(new Assign(){
+	        public void put(Object value)
+	        {
+			    ((XKPLayout.LayoutParams) btn3.getLayoutParams()).setLeft((Integer)value);
+	        }
+	    });
+	    ____i4.setInterpolator(Manager.getInstance().interpolator(""));	
+        ____i4.addKey(1.5, 200);
+        ____i4.addKey(3, 40);
+        anim3.addHandler(____i4);	              
+        anim3.events.addListener("update",  new EventHolder.Implementor() 
+        {
+	        public void call(Object ev) 
+            {
                     if (prop_application_click_count == 3)
                     {
-						mthd_anim3_stop_anim3();
+                anim3.stop_anim3();
                     }
-                }
-			    });
+        });
 			}
 			private double update_freq = 1/30.0;
 			private void Update() {
