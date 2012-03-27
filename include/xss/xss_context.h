@@ -117,13 +117,14 @@ class xss_object : public editable_object<xss_object>,
       DynamicArray           get_event_code(const str& event_name);
 		  bool                   is_injected(const str& name);
       void                   add_method(const str& event_name, XSSMethod m);
+		  bool                   empty();
     public:
       //children management
 			void add_child(XSSObject obj);
       void remove_child(XSSObject obj);
 		public:
       void add_property_(XSSProperty prop);
-      void add_property(const str& name, variant value, XSSType type);
+      XSSProperty add_property(const str& name, variant value, XSSType type);
       void register_property(const str& name, XSSProperty new_prop = XSSProperty());
       void register_method(const str& name, XSSMethod new_mthd = XSSMethod());
       void register_event_impl(const str& name, XSSEvent new_evt = XSSEvent());
@@ -132,6 +133,8 @@ class xss_object : public editable_object<xss_object>,
       XSSProperty get_shallow_property(const str& name);
 			XSSEvent    get_event(const str& name);
 			XSSMethod		get_method(const str& name);
+      variant     attribute_value(const str& name);
+
     public:
       str           id_;
       str           output_id_;
@@ -478,7 +481,7 @@ struct xss_object_schema : editable_object_schema<T>
 
         this->template method_<DynamicArray, 1>("query_properties", &T::query_properties);
         this->template method_<XSSProperty, 1> ("get_property",     &T::get_property);
-        this->template method_<void, 3>        ("add_property",     &T::add_property);
+        this->template method_<XSSProperty, 3> ("add_property",     &T::add_property);
         this->template method_<bool, 1>        ("has_property",     &T::has_property);
         this->template method_<void, 1>        ("add_child",        &T::add_child);
         this->template method_<XSSMethod, 1>   ("get_method",       &T::get_method);
@@ -486,7 +489,8 @@ struct xss_object_schema : editable_object_schema<T>
         this->template method_<DynamicArray, 1>("find_by_type",     &T::find_by_type);
         this->template method_<XSSObject, 1>   ("find",             &T::find);
         this->template method_<DynamicArray, 1>("get_event_code",   &T::get_event_code);
-        
+        this->template method_<variant, 1>     ("attribute_value",  &T::attribute_value);
+        this->template method_<bool, 0>        ("empty",            &T::empty);
 		  }
   };
 

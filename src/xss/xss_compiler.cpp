@@ -70,6 +70,11 @@ const str SAliasMustHaveAliased("Alias types must have a 'aliased' attribute");
 const str SBadAliasType("Alias type not found");
 const str SCannotCompileExpression("Cannot compile expression");
 const str SAnalyzeExpectsExpression("Expression expected");
+const str STooFewParametersAOP("compiler.add_object_property expects at least two arguments (object, property name)");
+const str SExpectingObjectAOP("compiler.add_object_property expects an object for its first argument");
+const str SExpectingPropNameAOP("compiler.add_object_property expects an string for its second argument");
+const str SExpectingTypeNameAOP("compiler.add_object_property found an invalid type");
+const str SUnnamedAtrributeAOP("compiler.add_object_property found an unnamed attribute");
 
 //xss_application_renderer
 xss_application_renderer::xss_application_renderer(fs::path entry_point, Language lang, XSSCompiler compiler):
@@ -1207,11 +1212,6 @@ XSSObject xss_compiler::analyze_expression(const param_list params)
         xss_throw(error);
       }
 
-    if (expr == "group_scale")
-    {
-      str debug("xxx");
-    }
-
     XSSObject result(new xss_object);
 
     xs_utils   xs;
@@ -1263,6 +1263,82 @@ XSSObject xss_compiler::analyze_expression(const param_list params)
           path_str = lang->render_expression(path_expr, ctx);
 
         result->add_attribute("path", path_str);
+      }
+
+    return result;
+  }
+
+XSSProperty xss_compiler::add_object_property(const param_list params)
+  {
+    if (params.size() < 2)
+      {
+        param_list error;
+        error.add("id", SCompiler);
+        error.add("desc", STooFewParametersAOP);
+        xss_throw(error);
+      }
+
+    XSSObject obj       = variant_cast<XSSObject>(params.get(0), XSSObject());
+    str       prop_name = variant_cast<str>(params.get(1), str());
+
+    if (!obj)
+      {
+        param_list error;
+        error.add("id", SCompiler);
+        error.add("desc", SExpectingObjectAOP);
+        xss_throw(error);
+      }
+
+    if (prop_name.empty())
+      {
+        param_list error;
+        error.add("id", SCompiler);
+        error.add("desc", SExpectingPropNameAOP);
+        xss_throw(error);
+      }
+
+    //resolve type
+    XSSType    type;
+    XSSContext ctx = current_context();
+    variant type_value = params.get("type");
+    if (type_value.is<XSSType>())
+        type = type_value;
+    else if (type_value.is<str>())
+      {
+        str type_name = variant_cast<str>(type_value, str());
+        type = ctx->get_type(type_name);
+        if (!type)
+          {
+            param_list error;
+            error.add("id", SCompiler);
+            error.add("desc", SExpectingTypeNameAOP);
+            error.add("type name", type_name);
+            xss_throw(error);
+          }
+      }
+
+    //resolve_value
+    variant value      = params.get("value");
+    XSSType value_type = type_of(value);
+    if (!type)
+      type = value_type;
+
+    //Add the property
+    XSSProperty result = obj->add_property(prop_name, value, type);
+
+    for(int i = 2; i < params.size(); i++)
+      {
+        str pname = params.get_name(i);
+        if (pname.empty())
+          {
+            param_list error;
+            error.add("id", SCompiler);
+            error.add("desc", SUnnamedAtrributeAOP);
+            error.add("index", i);
+            xss_throw(error);
+          }
+
+        result->add_attribute(pname, params.get(i));
       }
 
     return result;

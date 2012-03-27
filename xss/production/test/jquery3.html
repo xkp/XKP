@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>TITLE</title>
+<script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
+<link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css">
+<script type="text/javascript">
+$(function() {
+			var main = $("#main");
+			var tc1 = $("#tc1");
+			var local = $("#local");
+			var remote = $("#remote");
+			var __div1 = $("#__div1");
+			var __img1 = $("#__img1");
+			var application = $("#application");
+tc1.tabs(
+{
+			    collapsible : true,
+		    }
+);
+});
+</script>
+<style>
+#main {width : 600;height : 400}
+#tc1 {width : 400}
+#__img1 {display : block;margin-left : auto;margin-right : auto}
+</style>
+</head>
+<body>
+            <div id='application'>
+<div id="main">
+            <table border="0"  width = "600"  height = "400" >
+        <tr><td  width = "400px"   style="vertical-align:top">
+<div id="tc1">
+		<ul>
+			<li><a href="#local"><span>Components</span></a></li>
+			<li><a href="somepage.html"><span>Some Page</span></a></li>
+		</ul>
+<div id="local">
+</div>
+</div>
+</td><td>
+<div id="__div1">
+				<img id="__img1"
+						src="images/img1.png" 
+					>
+				</img>
+</div>
+</td></tr>
+            </table>
+        </div>
+                </div>
+            </body>
+</html>

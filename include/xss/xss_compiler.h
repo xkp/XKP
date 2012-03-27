@@ -207,6 +207,7 @@ namespace xkp
         str         property_set(XSSProperty prop, const str& path, const str& value);
         str         property_get(XSSProperty prop, const str& path);
         XSSObject   analyze_expression(const param_list params);
+        XSSProperty add_object_property(const param_list params);
         bool        is_type(variant v);
         str         instantiate(variant v);
         str         file(fs::path path);
@@ -299,7 +300,8 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         dynamic_method_ ("log",    &xss_compiler::log);
         dynamic_method_ ("error",  &xss_compiler::error);
 
-        dynamic_function_<XSSObject>("analyze_expression",  &xss_compiler::analyze_expression);
+        dynamic_function_<XSSObject>  ("analyze_expression",  &xss_compiler::analyze_expression);
+        dynamic_function_<XSSProperty>("add_object_property", &xss_compiler::add_object_property);
 
         readonly_property<XSSObject>("options", &xss_compiler::options_);
 

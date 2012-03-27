@@ -210,11 +210,16 @@
 				<get text='+{path}.css("opacity")' global="true"/>
 				<set text='css( { opacity: {value} } )'/>
 			</property>
-		</class>
+
+            <property id="background" type="string" render_type="script">
+                <get text='css("background-color")'/>
+                <set text='css("background-color", {value})'/>
+            </property>
+        </class>
 		
 		<!-- components -->
 		<class id="div" super="IComponent" output_id="div">
-		</class>
+        </class>
 		
 		<class id="scroller" super="IComponent" output_id="div">
 			<array id="attributes">

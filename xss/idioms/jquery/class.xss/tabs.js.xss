@@ -1,0 +1,5 @@
+<xss:parameter id="it"/>
+
+<xss:e value="it.output_id"/>.tabs(<xss:code>
+    compiler.xss("../../common-js/object.xss", it, "tab_script");
+</xss:code>);

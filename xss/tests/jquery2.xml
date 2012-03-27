@@ -1,6 +1,6 @@
 <application name="PlacementTest" title="Testing layout" src="jquery2.xs">
     <div id="main" width="600" height="400">
-        <div id="r1" placement="right" width="100"/>
+        <div id="r1" background-color="Red" placement="right" width="100"/>
         <div id="r2" placement="right" width="100"/>
         <div id="l1" placement="left" width="100"/>
         <div id="t1" placement="top" height="100"/>

@@ -6,19 +6,21 @@
 <script type="text/javascript" src="../js/jquery.js"></script>
 <script type="text/javascript">
 $(function() {
-            main.width(600);
-            main.height(400);
-            r1.attr("placement", "right");
-            r1.width(100);
-            r2.attr("placement", "right");
-            r2.width(100);
-            l1.attr("placement", "left");
-            l1.width(100);
-            t1.attr("placement", "top");
-            t1.height(100);
-            b1.attr("placement", "bottom");
-            b1.height(100);
-            c1.attr("placement", "client");
+			var main = $("#main");
+			var r1 = $("#r1");
+			var r2 = $("#r2");
+			var l1 = $("#l1");
+			var t1 = $("#t1");
+			var b1 = $("#b1");
+			var c1 = $("#c1");
+			var application = $("#application");
+					r1.css("background-color", "Red");
+					r1.attr("placement", "right");
+					r2.attr("placement", "right");
+					l1.attr("placement", "left");
+					t1.attr("placement", "top");
+					b1.attr("placement", "bottom");
+					c1.attr("placement", "client");
 });
 </script>
 <style>
@@ -27,24 +29,30 @@ $(function() {
 <body>
             <div id='application'>
 <div id="main">
-            <table border="0">
-        <tr><td>
-            component goes here l1
-        </td><td>
-            <table border="0">
-        <tr>
-            component goes here t1
-        </tr><tr>
-            client goes here c1
-        </tr><tr>
-            component goes here b1
-        </tr>
+            <table border="0"  width = "600"  height = "400" >
+        <tr style="vertical-align:top"><td  width = "100px" >
+<div id="l1">
+</div>
+</td><td>
+            <table border="0" >
+        <tr  height = "100px" >
+<div id="t1">
+</div>
+</tr><tr>
+<div id="c1">
+</div>
+</tr><tr  height = "100px" >
+<div id="b1">
+</div>
+</tr>
             </table>
-        </td><td>
-            component goes here r2
-        </td><td>
-            component goes here r1
-        </td></tr>
+        </td><td  width = "100px" >
+<div id="r2">
+</div>
+</td><td  width = "100px" >
+<div id="r1">
+</div>
+</td></tr>
             </table>
         </div>
                 </div>

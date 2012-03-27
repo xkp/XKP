@@ -1,5 +1,9 @@
 <xss:parameter id="it"/>
 
+<xss:code>
+    compiler.log(it.output_id + " class: " + it.class_name);
+</xss:code>
+
 <div id="<xss:e value="it.output_id"/>">
 <xss:class>
     public int direction_south  = 0;
@@ -41,7 +45,7 @@
             return direction_east;    
         if (cmp.placement == "right")
             return direction_west;    
-        if (cmp.placement == "client")
+        if (cmp.placement == "client" || cmp.placement == "center")
             return direction_client;
         
         compiler.error("Invalid placement", pl = cmp.placement, cmp = cmp.id);
@@ -90,6 +94,45 @@
         last.components = op.components;
         
         return tmp;
+    }
+    
+    string get_operation_width(op, cmp)
+    {
+        if (op.direction == direction_east || op.direction == direction_west)
+        {
+            if (cmp.width == null)
+                compiler.error("placemtent left and right require 'width'");
+            
+            return cmp.width + "px";
+        }
+        
+        return null;
+    }
+    
+    string get_operation_height(op, cmp)
+    {
+        if (op.direction == direction_south || op.direction == direction_north)
+        {
+            if (cmp.height == null)
+                compiler.error("placemtent left and right require 'height'");
+            
+            return cmp.height + "px";
+        }
+
+        return null;
+    }
+    
+    string get_size_string(width, height)
+    {
+        string result = "";
+        if (width != null)
+            result += ' width = "' + width + '" ';
+
+        if (height != null)
+            result += ' height = "' + height + '" ';
+        
+        compiler.log("size string: " + result);
+        return result;
     }
     
     method generate_layout(cmp)
@@ -185,36 +228,51 @@
     
     method render_component(cmp)
     {
-        out() 
-        {
-            component goes here <xss:e v="cmp.id"/>
-        }
+        compiler.xss("../component.xss", cmp);
     }
     
     method render_client(cmp)
     {
-        out() 
+        if (cmp.placement == "center")
         {
-            client goes here <xss:e v="cmp.id"/>
+            compiler.log("Adding prop to: " + cmp.output_id);
+            compiler.add_object_property(cmp.css, "display",      value = "block", as_plain_text = true);
+            compiler.add_object_property(cmp.css, "margin-left",  value = "auto",  as_plain_text = true);
+            compiler.add_object_property(cmp.css, "margin-right", value = "auto",  as_plain_text = true);
         }
+        
+        render_component(cmp);
     }
     
-    method render_layout(var layout)
+    method special_layout(layout, parent)
     {
         if (layout.size == 1)
         {
             var cl = layout[0];
-            if (cl.client)
-                render_component(cl.component);
+            compiler.log("SPECHAL : " + cl.component.output_id);
+            if (cl.direction == direction_client)
+                render_client(cl.component);
             else
-                compiler.error("Layout not implemented");
+                compiler.error("Layout not implemented, single components must be either client or centered");
             
-            return;
+            return true;
         }
+        
+        return false;
+    }
     
+    method render_layout(var layout, object root)
+    {
+        if (special_layout(layout))
+            return;
+    
+        string attributes = "";
+        if (root)
+            attributes = get_size_string(root.width, root.height);
+
         out()
         {
-            <table border="0">
+            <table border="0" <xss:e v="attributes"/>>
         }
         
         var  tag = null;
@@ -225,7 +283,7 @@
             {
                 if (op.direction == direction_south || op.direction == direction_north)
                     tag = "tr";
-                else if (op.direction == direction_east || op.direction == direction_north)
+                else if (op.direction == direction_east || op.direction == direction_west)
                 {
                     tag = "td";
                     close_row = true;
@@ -235,29 +293,40 @@
                 else compiler.error("Unimplmented layout " + op.direction);
             }
             
-            out() {<<xss:e v="tag"/>>}
             if (op.table)
+            {
+                out() {<<xss:e v="tag"/>>}
+                
                 render_layout(op.table);
+                
+                out() {</<xss:e v="tag"/>>}
+            }
             else if (op.direction == direction_client)
+            {
+                out() {<<xss:e v="tag"/>>}
+                
                 render_client(op.component);
+                
+                out() {</<xss:e v="tag"/>>}
+            }
             else
             {
-                bool first = true;
-                int  idx   = 0;
+                bool first  = true;
+                int  idx    = 0;
                 
                 for(var cmp in op.components)
                 {
-                    if (idx > 0) 
-                        out() {<<xss:e v="tag"/>>}
+                    var  width  = get_operation_width(op, cmp);
+                    var  height = get_operation_height(op, cmp);
+                    
+                    string size_str = get_size_string(width, height);
+                    out() {<<xss:e v="tag"/> <xss:e v="size_str"/>  style="vertical-align:top">}
                     
                     render_component(cmp);
                     
-                    idx++;
-                    if (idx < op.components.size)
-                        out() {</<xss:e v="tag"/>>}
+                    out() {</<xss:e v="tag"/>>}
                 }
             }
-            out() {</<xss:e v="tag"/>>}
         }
         
         if (close_row)
@@ -315,7 +384,7 @@
         else
         {
             array layout = generate_layout(it);
-            render_layout(layout);
+            render_layout(layout, it);
         }
     }
 </xss:class>

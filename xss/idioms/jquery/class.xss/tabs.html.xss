@@ -1,0 +1,40 @@
+<xss:parameter id="it"/>
+
+<div id="<xss:e value="it.output_id"/>">
+
+<xss:code>
+	out()
+	{
+		<ul>
+	}
+	
+	for(var tab in it.children)
+	{
+        if (!tab.caption)
+            compiler.error("Tabs are expected to provide a caption");
+            
+		string href = "#" + tab.output_id;
+        if (tab.href)
+            href = tab.href;
+            
+        out()
+		{
+			<li><a href="<xss:e value="href"/>"><span><xss:e value="tab.caption"/></span></a></li>
+		}
+	}
+
+	out()
+	{
+		</ul>
+	}
+	
+	for(var cmp in it.children)
+	{
+        if (cmp.href)
+            continue;
+            
+        compiler.xss("../component.xss", cmp);
+	}
+
+</xss:code>
+</div>

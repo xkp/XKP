@@ -1,0 +1,20 @@
+<xss:parameter id="obj"/>
+
+#<xss:e v="obj.output_id"/> {<xss:code>
+    bool first = true;
+    var  css   = obj.css;
+    
+    for(var prop in css.properties)
+    {
+        if (first) first = false;
+        else       out() {;}
+		
+        var value_str;
+        if (prop.as_plain_text)
+            value_str = prop.value;
+        else
+            value_str = prop.render_value();
+        
+        out() {<xss:e value="prop.name"/> : <xss:e v="value_str"/>}
+    }
+</xss:code>}

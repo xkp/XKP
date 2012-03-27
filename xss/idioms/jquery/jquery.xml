@@ -1,4 +1,4 @@
-<module id="jquery" src="classes.xs">
+<module id="jquery" src="jquery.xs">
 	<types>
 		<class id="component">
             <property id="x" type="int" output_id="left" render_type="script">
@@ -11,24 +11,44 @@
                 <set text="css( { top:{value} } )"/>
             </property>
 			
-            <property id="width" type="int" render_type="script">
+            <property id="width" type="int" css="true" dont_init="true">
                 <get text="width()"/>
                 <set text="width({value})"/>
             </property>
 			
-            <property id="height" type="int" render_type="script">
+            <property id="height" type="int" css="true" dont_init="true">
                 <get text="height()"/>
                 <set text="height({value})"/>
             </property>
 
-            <property id="placement" type="string" render_type="script">
+            <property id="placement" type="string" dont_init="true">
 				<get text='attr("placement")'/>
 				<set text='attr("placement", {value})'/>
 			</property>
-		</class>
+
+            <property id="background-color" type="string" css="true">
+                <get text='css("background-color")'/>
+                <set text='css("background-color", {value})'/>
+            </property>
+
+            <property id="color" type="string" render_type="script">
+                <get text='css("background-color")'/>
+                <set text='css("background-color", {value})'/>
+            </property>
+        </class>
 		
 		<!-- components -->
-		<class id="div" super="component" output_id="div" html_renderer="div.html.xss"/>
-	</types>
+        <class id="div" super="component" html_renderer="div.html.xss"/>
+        <class id="img" super="component">
+            <property id="src" type="string" render_type="body_intag">
+                <get text='attr("src")'/>
+                <set text='attr("src", {value})'/>
+            </property>
+        </class>
+
+        <class id="tabcontrol" super="component" js_renderer="tabs.js.xss" html_renderer="tabs.html.xss">
+            <property id="collapsible" type="bool" dont_init="true" tab_script="true"/>
+        </class>
+    </types>
 	
 </module>
