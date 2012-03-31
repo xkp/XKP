@@ -1,0 +1,10 @@
+<project entry_point="../idioms/ui/ui_standalone.xss" language="js" target="ms7.app.xml" output="ms7.html">
+    <path>
+        <output path="../production/test"/>
+    </path>
+
+    <idiom src="../idioms/ui/ui.xml"/>
+    <idiom src="../idioms/resources/resources.xml"/>
+</project>
+           
+         
