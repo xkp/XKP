@@ -35,10 +35,11 @@ var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 application.events = new ms.event.EventHolder();
-		var streamer = new ms.streamer.Streamer();		
+		var streamer = new ms.streamer.Streamer();	
+		var ResourceUtils = new ms.streamer.ResourceUtils();
 	// --------RESOURCES---------
-        var global_package_items = [];
-                global_package_items.push(
+		var global_package = new ms.streamer.Package(streamer);	
+                global_package.add_item(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -47,15 +48,19 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });	
-		global_package_items.push({
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
 			src:			"images/no_res.png",
 			frame_width:	null,
 			frame_height:	null,
 			animations:		[]
-		});
-        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		});		
 		global_package.load();	
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
@@ -79,7 +84,7 @@ var my_sphere;var material_wireframe;var all_in_one;var __basic_material1;var __
     var my_sphere;
 	    var my_sphere_sphere = 
 new THREE.Sphere(
-radius,x_segments,y_segments);
+);
 	    my_sphere = new THREE.Mesh(my_sphere_sphere, new THREE.MeshBasicMaterial());
 	    scene.addObject(my_sphere);
 		my_sphere.events = new ms.event.EventHolder();
@@ -181,9 +186,7 @@ new THREE.Plane(
 		for(var i = 0; i < all_in_one.length; i++)
 {
 var sphere_1 = 
-create_my_sphere(
-70,32,16
-)
+create_my_sphere(70, 32, 16)
 ;
 sphere_1.mat_set(all_in_one[i]);
 sphere_1.position.x = i % 4 * 200 - 400;
@@ -218,7 +221,7 @@ point_light_1.position.z = particle_1.position.z;
 	);
 if(ui)
 {	
-	SoundUtils = new ms.ui.SoundUtils();
+	SoundUtils = new ms.ui.SoundUtils();		
 	g_ui.fill_background = false;	
 }
 var event_manager = new ms.event.ThreeEventManager();

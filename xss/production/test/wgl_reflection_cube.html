@@ -9,23 +9,23 @@
 	background:Black;
 	}
 </style>
-<script type="text/javascript" src="../js/three/Detector.js"></script>
-<script type="text/javascript" src="../js/three/Three.js"></script>
-<script type="text/javascript" src="../js/three/Stats.js"></script>
-<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/three/Three.js"></script>
+		<script type="text/javascript" src="../js/three/Stats.js"></script>
+		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+		<script type="text/javascript" src="../js/three/Utils.js"></script>
+		<script type="text/javascript" src="../js/three/Detector.js"></script>
 <script type="text/javascript">		
+var ui;
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 var renderer = new THREE.WebGLRenderer( { antialias: false } );
+var canvas_position = {x:0, y:0};
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
@@ -39,6 +39,7 @@ soundRenderer = new THREE.SoundRenderer();
 document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( app_width, app_height );
 function render() {
+canvas_position = getElementPosition(renderer.domElement);
 var now   = new Date().getTime();
 if (g_elapsed < 0)
     g_delta = 0; //first update
@@ -49,13 +50,13 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
+var my_sphere;var t_cube1;var material_sphere1;var scene;var camera_1;
         function create_my_sphere(
-    radius,x_segments,y_segments ) { 
-            var my_sphere;
+    radius,x_segments,y_segments ) { var my_sphere;
 	    var my_sphere_sphere = 
 new THREE.Sphere(
 radius,x_segments,y_segments);
-	    var my_sphere = new THREE.Mesh(my_sphere_sphere, new THREE.MeshBasicMaterial());
+	    my_sphere = new THREE.Mesh(my_sphere_sphere, new THREE.MeshBasicMaterial());
 	    scene.addObject(my_sphere);
 		my_sphere.events = new ms.event.EventHolder();
         my_sphere.mat = null;
@@ -66,30 +67,32 @@ radius,x_segments,y_segments);
         };
         return my_sphere;
         }
+threejs_load_resources(function()
+{
 		var urls = ["images/cube/pisa/px.png", "images/cube/pisa/nx.png",
 					"images/cube/pisa/py.png", "images/cube/pisa/ny.png",
 					"images/cube/pisa/pz.png", "images/cube/pisa/nz.png" ];		
-			var t_cube1 = THREE.ImageUtils.loadTextureCube( urls );
-var material_sphere1 = new THREE.MeshLambertMaterial({
+			t_cube1 = THREE.ImageUtils.loadTextureCube( urls );
+material_sphere1 = new THREE.MeshLambertMaterial({
 color:White,envMap:t_cube1
 	});
-var scene = 
+scene = 
 new THREE.Scene(
 );
-var camera_1 = 
+camera_1 = 
 new THREE.Camera(
 60,1.5,1,100000);
 		active_camera = camera_1;
-                camera_1.position.z = 3200;
+            camera_1.position.z = 3200;
 		THREE.SceneUtils.addPanoramaCubeWebGL( 
 									scene,
 									100000, 
 									t_cube1 
 									);		
-                application.mouse_x = null;
-                application.mouse_y = null;
-                application.spheres = [];
-                application.timer = null;
+            application.mouse_x = null;
+            application.mouse_y = null;
+            application.spheres = [];
+            application.timer = null;
 	var ev_parent = this;
 	application.events.addListener("init", function()
 	{    
@@ -161,6 +164,7 @@ document.onkeypress = function(ev)
 application.events.dispatch("init", []);
 document.body.appendChild( renderer.domElement );
 animate();
+});
 function animate() {	
 	requestAnimationFrame( animate );
 	render();	

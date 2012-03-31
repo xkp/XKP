@@ -74,13 +74,8 @@
                 string path      = prop_info.path;
                 
                 string assign    = path + "." + prop_name + " = value"; 
-                if (prop)
-                {
-                    compiler.log("Here");
-                    assign = compiler.property_set(prop, path, 'value');
-                    compiler.log("And Here?");
-                }
-                else compiler.error("Cannot find animatable property", prop = itm.property);
+                if (prop) assign = compiler.property_set(prop, path, 'value');
+                else      compiler.error("Cannot find animatable property", prop = itm.property);
                 
                 //start the interpolator
                 idiom.begin_interpolator(prop, iid, assign, path);
@@ -130,10 +125,6 @@
             }
             else if (itm.class_name == "run")
             {
-                var mthd = seq.get_method(itm.method);
-                if (!mthd)
-                    compiler.error("run tag got an invalid method", methd = itm.method);
-
                 string mid = compiler.genid('__r');
                 
                 idiom.begin_caller(mthd, mid, time);
@@ -429,7 +420,7 @@
         idiom = seq.idiom;
         if (!idiom)
         {
-            compiler.log("Why no idiom?");
+            compiler.log("Why no idiom? " + seq.output_id);
         }
         
         var top_level = !seq.parent;

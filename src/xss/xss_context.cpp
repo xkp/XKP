@@ -643,16 +643,24 @@ bool xss_context::resolve_path(const std::vector<str>& path, resolve_info& info)
     return !just_paste;
   }
 
-void xss_context::register_symbol(RESOLVE_ITEM type, const str& id, variant symbol)
+void xss_context::register_symbol(RESOLVE_ITEM type, const str& id, variant symbol, bool overrite)
   {
       symbol_list::iterator it = symbols_.find(id);
       if (it != symbols_.end())
         {
-          param_list error;
-          error.add("id", SContextError);
-          error.add("desc", SDuplicateSymbol);
-          error.add("symbol", id);
-          xss_throw(error);
+          if (overrite)
+            {
+              it->second.value = symbol;
+              return;
+            }
+          else
+            {
+              param_list error;
+              error.add("id", SContextError);
+              error.add("desc", SDuplicateSymbol);
+              error.add("symbol", id);
+              xss_throw(error);
+            }
         }
 
       symbols_.insert(symbol_list_pair(id, symbol_data(type, symbol)));

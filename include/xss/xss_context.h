@@ -195,7 +195,7 @@ class xss_type : public xss_object
     public:
       XSSType      super_;
       Language     lang_;
-      DynamicArray ctor_args_;
+      DynamicArray ctor_args_; //td: constructors
       DynamicArray all_instances_;
       DynamicArray local_instances_;
       DynamicArray foreign_instances_;
@@ -232,24 +232,25 @@ struct IArgumentRenderer : public IRenderer
 
 struct ILanguage
   {
-    virtual variant compile_code(code& cde, param_list_decl& params, XSSContext ctx)	                  = 0;
-    virtual variant compile_expression(expression expr, XSSContext ctx)							                    = 0;
-		virtual variant compile_args(param_list_decl& params, XSSContext ctx)					                      = 0;
-    virtual str     resolve_this(XSSContext ctx)																			                  = 0;
-    virtual str     resolve_separator(XSSObject lh = XSSObject())										                    = 0;
-    virtual bool    can_cast(XSSType left, XSSType right)                                               = 0;
-    virtual void    init_context(XSSContext ctx)                                                        = 0; //td: !!!
-    virtual void    init_application_context(XSSContext ctx)                                            = 0;
-    virtual XSSType resolve_array_type(XSSType type, const str& at_name, XSSContext ctx)                = 0;
-    virtual str     render_value(XSSType type, variant value)                                           = 0;
-    virtual str     property_get(XSSProperty prop, const str& path, XSSContext ctx)                     = 0;
-    virtual str     property_set(XSSProperty prop, const str& path, const str& value, XSSContext ctx)   = 0;
-    virtual str     render_assignment(const str& path, const str& prop, const str& value)               = 0;
-    virtual str     expression_path(const str& expr )                                                   = 0;
-    virtual str     array_operation(operator_type op, const str& arr, const str& value, XSSContext ctx) = 0;
-    virtual str     render_expression(expression& expr, XSSContext ctx)                                 = 0;
-    virtual str     instantiate(XSSType type, XSSObject instance, DynamicArray params)                  = 0;
-    virtual bool    custom_operator(XSSType lt, XSSType rt, str l, str r, operator_type op, str& res)   = 0;
+    virtual variant compile_code(code& cde, param_list_decl& params, XSSContext ctx)	                    = 0;
+    virtual variant compile_expression(expression expr, XSSContext ctx)							                      = 0;
+		virtual variant compile_args(param_list_decl& params, XSSContext ctx)					                        = 0;
+    virtual str     resolve_this(XSSContext ctx)																			                    = 0;
+    virtual str     resolve_separator(XSSObject lh = XSSObject())										                      = 0;
+    virtual bool    can_cast(XSSType left, XSSType right)                                                 = 0;
+    virtual void    init_context(XSSContext ctx)                                                          = 0; //td: !!!
+    virtual void    init_application_context(XSSContext ctx)                                              = 0;
+    virtual XSSType resolve_array_type(XSSType type, const str& at_name, XSSContext ctx)                  = 0;
+    virtual str     render_value(XSSType type, variant value)                                             = 0;
+    virtual str     property_get(XSSProperty prop, const str& path, XSSContext ctx)                       = 0;
+    virtual str     property_set(XSSProperty prop, const str& path, const str& value, XSSContext ctx)     = 0;
+    virtual str     render_assignment(const str& path, const str& prop, const str& value)                 = 0;
+    virtual str     expression_path(const str& expr )                                                     = 0;
+    virtual str     array_operation(operator_type op, const str& arr, const str& value, XSSContext ctx)   = 0;
+    virtual str     render_expression(expression& expr, XSSContext ctx)                                   = 0;
+    virtual str     instantiate(XSSType type, XSSObject instance, DynamicArray rt, param_list& args)      = 0;
+    virtual str     render_ctor_args(XSSType type, XSSObject instance, DynamicArray rt, param_list& args) = 0;
+    virtual bool    custom_operator(XSSType lt, XSSType rt, str l, str r, operator_type op, str& res)     = 0;
   };
 
 //resolver
@@ -352,7 +353,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       bool    resolve(const str& id, resolve_info& info);
       variant resolve(const str& id, XSSObject instance, RESOLVE_ITEM item_type = RESOLVE_ANY);
       bool    resolve_path(const std::vector<str>& path, resolve_info& info);
-      void    register_symbol(RESOLVE_ITEM type, const str& id, variant symbol);
+      void    register_symbol(RESOLVE_ITEM type, const str& id, variant symbol, bool overrite = false);
     protected:
       typedef std::map<str, XSSType>  type_list;
       typedef std::pair<str, XSSType> type_list_pair;

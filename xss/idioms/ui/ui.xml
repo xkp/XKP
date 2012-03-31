@@ -1,8 +1,17 @@
 <module id="ui" src="ui.xs">
     <types>
         <class id="component" renderer="component.xss">
-		
-			<property id="mouse_thru" type="bool"/>               
+            <constructor_params>
+                <parameter id="manager" default_value="g_ui_root.manager"/>
+                <parameter id="parent"  default_value="g_ui_root"/>
+            </constructor_params>
+
+            <property id="mouse_thru" type="bool"/> 
+
+			<property id="switchable" type="bool">
+				<get text="switchable"/>
+                <set text="set_switchable({value})"/>
+            </property>
 			
             <property id="x" type="int" use_plain_value="true">
                 <get text="x"/>
@@ -237,6 +246,10 @@
 			
 			<property id="active"   type="string" dont_init="true"/>
             <property id="inactive" type="string" dont_init="true"/>
+			<property id="is_active" type="bool">
+				<get text="is_active"/>
+                <set text="set_active({value})"/>
+            </property>
         </class>
 
         <class id="label" super="component" output_id="ms.ui.Label">

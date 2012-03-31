@@ -36,10 +36,11 @@ var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 application.events = new ms.event.EventHolder();
-		var streamer = new ms.streamer.Streamer();		
+		var streamer = new ms.streamer.Streamer();	
+		var ResourceUtils = new ms.streamer.ResourceUtils();
 	// --------RESOURCES---------
-        var global_package_items = [];
-                global_package_items.push(
+		var global_package = new ms.streamer.Package(streamer);	
+                global_package.add_item(
             {
 		id:				"model_1",
 		resource_type:	RESOURCE_JSON_MODEL,
@@ -47,8 +48,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var model_1;
+				global_package.events.addListener("loaded", function()
+				{
+					model_1 = streamer.get_resource("model_1");
+				});
+                global_package.add_item(
             {
 		id:				"__json_model1",
 		resource_type:	RESOURCE_JSON_MODEL,
@@ -57,15 +63,19 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });	
-		global_package_items.push({
+				var __json_model1;
+				global_package.events.addListener("loaded", function()
+				{
+					__json_model1 = streamer.get_resource("__json_model1");
+				});
+		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
 			src:			"images/no_res.png",
 			frame_width:	null,
 			frame_height:	null,
 			animations:		[]
-		});
-        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		});		
 		global_package.load();	
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
@@ -178,7 +188,7 @@ application.mouse_y = y - app_height / 2;
 	);
 if(ui)
 {	
-	SoundUtils = new ms.ui.SoundUtils();
+	SoundUtils = new ms.ui.SoundUtils();		
 	g_ui.fill_background = false;	
 }
 var event_manager = new ms.event.ThreeEventManager();

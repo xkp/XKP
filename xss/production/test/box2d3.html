@@ -36,7 +36,8 @@ var SoundUtils = new ms.ui.SoundUtils();
 			var g_ui_root = ui.root;
 			var mouse_pressed = false;
 		}
-		var streamer = new ms.streamer.Streamer();		
+		var streamer = new ms.streamer.Streamer();	
+		var ResourceUtils = new ms.streamer.ResourceUtils();
         var   b2Vec2 = Box2D.Common.Math.b2Vec2
         ,  b2AABB = Box2D.Collision.b2AABB
         ,  b2Mat22 = Box2D.Common.Math.b2Mat22
@@ -96,8 +97,8 @@ var SoundUtils = new ms.ui.SoundUtils();
             var xform = new b2Transform(pos, rot);
             me.SetTransform(xform);
         }
-        var global_package_items = [];
-                global_package_items.push(
+		var global_package = new ms.streamer.Package(streamer);	
+                global_package.add_item(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -105,8 +106,13 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+                global_package.add_item(
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
@@ -115,15 +121,19 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });	
-		global_package_items.push({
+				var __image2;
+				global_package.events.addListener("loaded", function()
+				{
+					__image2 = streamer.get_resource("__image2");
+				});
+		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
 			src:			"images/no_res.png",
 			frame_width:	null,
 			frame_height:	null,
 			animations:		[]
-		});
-        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		});		
 		global_package.load();	
     var canvas_position = {x:0, y:0};
 function start(resolution)  
@@ -199,14 +209,13 @@ var __img1;var __img2;var __img3;
             smiley_ball = Class.create(ms.ui.Image,
         {
     initialize: function($super
+                , manager
+                , parent
                 , src
-				, manager, parent
-			)
+                )
     {
         $super(
-        src? src : "images/smile_grin_48.png"
-				, manager, parent
-			        );
+        manager,parent,src? src : "images/smile_grin_48.png"        );
         this.events = new ms.event.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -317,22 +326,22 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    __img1 = new ms.ui.Image( 
-	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+		    __img1 = new ms.ui.Image( g_ui_root.manager, g_ui_root
+	    , "images/stone-12.jpg");
         __img1 = __img1;
             __img1.set_x(0);
             __img1.set_y(390);
             __img1.set_width(600);
             __img1.set_height(40);
-		    __img2 = new ms.ui.Image( 
-	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+		    __img2 = new ms.ui.Image( g_ui_root.manager, g_ui_root
+	    , "images/stone-12.jpg");
         __img2 = __img2;
             __img2.set_x(590);
             __img2.set_y(350);
             __img2.set_width(10);
             __img2.set_height(40);
-		    __img3 = new ms.ui.Image( 
-	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+		    __img3 = new ms.ui.Image( g_ui_root.manager, g_ui_root
+	    , "images/stone-12.jpg");
         __img3 = __img3;
             __img3.set_x(0);
             __img3.set_y(350);
@@ -347,7 +356,7 @@ window.onload = function()
             sp1.velocity = 1;
         sp1.creator = function()
         {
-            return new smiley_ball("images/smile_grin_48.png");
+            return new smiley_ball(g_ui_root.manager, g_ui_root, "images/smile_grin_48.png");
         }
             sp1.start();
 				__img1.events.addListener('resized', function(cmp)

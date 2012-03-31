@@ -29,7 +29,7 @@ js_code_renderer::js_code_renderer(code& cde, param_list_decl& params, XSSContex
 
 void js_code_renderer::use_this_id(bool value)
   {
-    ctx_->register_symbol(RESOLVE_CONST, "#use_this_id", value);
+    ctx_->register_symbol(RESOLVE_CONST, "#use_this_id", value, true);
   }
 
 void js_code_renderer::force_this(bool value)
@@ -270,12 +270,12 @@ str js_lang::array_operation(operator_type op, const str& arr, const str& value,
     return str();
   }
 
-str js_lang::instantiate(XSSType type, XSSObject instance, DynamicArray params)
+str js_lang::instantiate(XSSType type, XSSObject instance, DynamicArray rt, param_list& args)
   {
     if (type->id() == "object")
       return "{}";
 
-    return base_lang::instantiate(type, instance, params);
+    return base_lang::instantiate(type, instance, rt, args);
   }
 
 bool js_lang::custom_operator(XSSType lt, XSSType rt, str l, str r, operator_type op, str& res)

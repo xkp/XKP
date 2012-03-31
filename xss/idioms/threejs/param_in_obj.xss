@@ -14,9 +14,9 @@ if (params)
     int i = 0;
     for(var p in params)
     {			
-			if (p.property)
-			{					
-				if(obj.get_property(p.property) != null)
+		if (p.property)
+		{					
+			if(obj.get_property(p.property) != null)
 				{
 				var prop = obj.get_property(p.property);
 				if(prop.value != null){
@@ -30,8 +30,8 @@ if (params)
 						out() {<xss:e v="prop.output_id"/>:<xss:e v="prop.value"/>}					
 					i++;
 				}
-				}
-			}			        
+			}
+		}			        
     }
 }
 

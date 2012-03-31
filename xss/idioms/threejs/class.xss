@@ -26,8 +26,10 @@
                     if (idx > 0) out() {,}                    
                     out() {<xss:e v="param_str"/>}
 					var value_type = compiler.type_of(idx);
-					clazz.add_property(param_str, param_str, value_type);
-					clazz.get_property(param_str).use_plain_value = true;
+					
+                    //td: pa que sirve esto?????????
+                    //clazz.add_property(param_str, param_str, value_type);
+					//clazz.get_property(param_str).use_plain_value = true;
                     idx++;
                 }
             }    

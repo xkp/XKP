@@ -43,7 +43,8 @@ application.events = new ms.event.EventHolder();
         {
             return a + (b - a)*t;
         }		
-		var streamer = new ms.streamer.Streamer();		
+		var streamer = new ms.streamer.Streamer();	
+		var ResourceUtils = new ms.streamer.ResourceUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -58,8 +59,8 @@ application.events = new ms.event.EventHolder();
 			var mouse_pressed = false;
 		}
 	// --------RESOURCES---------
-        var global_package_items = [];
-                global_package_items.push(
+		var global_package = new ms.streamer.Package(streamer);	
+                global_package.add_item(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -67,8 +68,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+                global_package.add_item(
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
@@ -76,8 +82,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image2;
+				global_package.events.addListener("loaded", function()
+				{
+					__image2 = streamer.get_resource("__image2");
+				});
+                global_package.add_item(
             {
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
@@ -85,8 +96,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image3;
+				global_package.events.addListener("loaded", function()
+				{
+					__image3 = streamer.get_resource("__image3");
+				});
+                global_package.add_item(
             {
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
@@ -94,8 +110,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image4;
+				global_package.events.addListener("loaded", function()
+				{
+					__image4 = streamer.get_resource("__image4");
+				});
+                global_package.add_item(
             {
 		id:				"__image5",
 		resource_type:	RESOURCE_IMAGE,
@@ -103,8 +124,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image5;
+				global_package.events.addListener("loaded", function()
+				{
+					__image5 = streamer.get_resource("__image5");
+				});
+                global_package.add_item(
             {
 		id:				"__image6",
 		resource_type:	RESOURCE_IMAGE,
@@ -112,8 +138,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image6;
+				global_package.events.addListener("loaded", function()
+				{
+					__image6 = streamer.get_resource("__image6");
+				});
+                global_package.add_item(
             {
 		id:				"__image7",
 		resource_type:	RESOURCE_IMAGE,
@@ -121,8 +152,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image7;
+				global_package.events.addListener("loaded", function()
+				{
+					__image7 = streamer.get_resource("__image7");
+				});
+                global_package.add_item(
             {
 		id:				"__image8",
 		resource_type:	RESOURCE_IMAGE,
@@ -130,8 +166,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image8;
+				global_package.events.addListener("loaded", function()
+				{
+					__image8 = streamer.get_resource("__image8");
+				});
+                global_package.add_item(
             {
 		id:				"__image9",
 		resource_type:	RESOURCE_IMAGE,
@@ -139,8 +180,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image9;
+				global_package.events.addListener("loaded", function()
+				{
+					__image9 = streamer.get_resource("__image9");
+				});
+                global_package.add_item(
             {
 		id:				"__image10",
 		resource_type:	RESOURCE_IMAGE,
@@ -148,8 +194,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image10;
+				global_package.events.addListener("loaded", function()
+				{
+					__image10 = streamer.get_resource("__image10");
+				});
+                global_package.add_item(
             {
 		id:				"__image11",
 		resource_type:	RESOURCE_IMAGE,
@@ -157,8 +208,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image11;
+				global_package.events.addListener("loaded", function()
+				{
+					__image11 = streamer.get_resource("__image11");
+				});
+                global_package.add_item(
             {
 		id:				"__audio1",
 		resource_type:	RESOURCE_AUDIO,
@@ -166,7 +222,12 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
+});	
+				var __audio1;
+				global_package.events.addListener("loaded", function()
+				{
+					__audio1 = streamer.get_resource("__audio1");
+				});
 				var everybody_pack = new ms.streamer.Package(streamer);				
 	var ev_parent = this;
 	everybody_pack.events.addListener("loaded", function()
@@ -201,6 +262,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var art_title;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					art_title = streamer.get_resource("art_title");
+				});
                 everybody_pack.add_item(
             {
 		id:				"a1",
@@ -210,6 +276,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var a1;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					a1 = streamer.get_resource("a1");
+				});
                 everybody_pack.add_item(
             {
 		id:				"a2",
@@ -219,6 +290,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var a2;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					a2 = streamer.get_resource("a2");
+				});
                 everybody_pack.add_item(
             {
 		id:				"a3",
@@ -228,6 +304,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var a3;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					a3 = streamer.get_resource("a3");
+				});
                 everybody_pack.add_item(
             {
 		id:				"a4",
@@ -237,6 +318,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var a4;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					a4 = streamer.get_resource("a4");
+				});
                 everybody_pack.add_item(
             {
 		id:				"a5",
@@ -246,6 +332,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var a5;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					a5 = streamer.get_resource("a5");
+				});
                 everybody_pack.add_item(
             {
 		id:				"a6",
@@ -255,6 +346,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var a6;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					a6 = streamer.get_resource("a6");
+				});
                 everybody_pack.add_item(
             {
 		id:				"a7",
@@ -264,6 +360,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var a7;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					a7 = streamer.get_resource("a7");
+				});
                 everybody_pack.add_item(
             {
 		id:				"a8",
@@ -273,6 +374,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var a8;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					a8 = streamer.get_resource("a8");
+				});
                 everybody_pack.add_item(
             {
 		id:				"forms_title",
@@ -282,6 +388,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var forms_title;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					forms_title = streamer.get_resource("forms_title");
+				});
                 everybody_pack.add_item(
             {
 		id:				"f1",
@@ -291,6 +402,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var f1;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					f1 = streamer.get_resource("f1");
+				});
                 everybody_pack.add_item(
             {
 		id:				"f2",
@@ -300,6 +416,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var f2;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					f2 = streamer.get_resource("f2");
+				});
                 everybody_pack.add_item(
             {
 		id:				"f3",
@@ -309,6 +430,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var f3;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					f3 = streamer.get_resource("f3");
+				});
                 everybody_pack.add_item(
             {
 		id:				"f4",
@@ -318,6 +444,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var f4;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					f4 = streamer.get_resource("f4");
+				});
                 everybody_pack.add_item(
             {
 		id:				"f5",
@@ -327,6 +458,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var f5;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					f5 = streamer.get_resource("f5");
+				});
                 everybody_pack.add_item(
             {
 		id:				"f6",
@@ -336,6 +472,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var f6;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					f6 = streamer.get_resource("f6");
+				});
                 everybody_pack.add_item(
             {
 		id:				"f7",
@@ -345,6 +486,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var f7;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					f7 = streamer.get_resource("f7");
+				});
                 everybody_pack.add_item(
             {
 		id:				"f8",
@@ -354,6 +500,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var f8;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					f8 = streamer.get_resource("f8");
+				});
                 everybody_pack.add_item(
             {
 		id:				"times_title",
@@ -363,6 +514,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var times_title;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					times_title = streamer.get_resource("times_title");
+				});
                 everybody_pack.add_item(
             {
 		id:				"t1",
@@ -372,6 +528,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var t1;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					t1 = streamer.get_resource("t1");
+				});
                 everybody_pack.add_item(
             {
 		id:				"t2",
@@ -381,6 +542,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var t2;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					t2 = streamer.get_resource("t2");
+				});
                 everybody_pack.add_item(
             {
 		id:				"t3",
@@ -390,6 +556,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var t3;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					t3 = streamer.get_resource("t3");
+				});
                 everybody_pack.add_item(
             {
 		id:				"t4",
@@ -399,6 +570,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var t4;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					t4 = streamer.get_resource("t4");
+				});
                 everybody_pack.add_item(
             {
 		id:				"t5",
@@ -408,6 +584,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var t5;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					t5 = streamer.get_resource("t5");
+				});
                 everybody_pack.add_item(
             {
 		id:				"t6",
@@ -417,6 +598,11 @@ application.init_planes();
 		frame_height:	null,
 		animations:		[]
 });
+				var t6;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					t6 = streamer.get_resource("t6");
+				});
                 everybody_pack.add_item(
             {
 		id:				"t7",
@@ -425,16 +611,20 @@ application.init_planes();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});	
-		global_package_items.push({
+});
+				var t7;
+				everybody_pack.events.addListener("loaded", function()
+				{
+					t7 = streamer.get_resource("t7");
+				});
+		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
 			src:			"images/no_res.png",
 			frame_width:	null,
 			frame_height:	null,
 			animations:		[]
-		});
-        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		});		
 		global_package.load();	
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
@@ -457,128 +647,127 @@ var anim_plane;var scene;var camera_1;
             social_button = Class.create(ms.ui.Image,
         {
     initialize: function($super
+                , manager
+                , parent
                 , src
-				, manager, parent
-			)
+                )
     {
         $super(
-        src
-				, manager, parent
-			        );
+        manager,parent,src        );
         this.events = new ms.event.EventHolder(); 
         var this__  = this;
 this.grow =
 new ms.state.Sequence(
 g_sequence_manager);
-                    var ____i1 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.set_x(value);
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 0.300000012, value: null},
-                        ]);
-                        this.grow.addHandler(____i1);	              
-                    var ____i2 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.set_y(value);
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 0.300000012, value: null},
-                        ]);
-                        this.grow.addHandler(____i2);	              
-                    var ____i3 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.set_width(value);
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 0.300000012, value: 32},
-                        ]);
-                        this.grow.addHandler(____i3);	              
-                    var ____i4 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.set_height(value);
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 0.300000012, value: 32},
-                        ]);
-                        this.grow.addHandler(____i4);	              
-                this.grow.events.addListener('start', function()
-                {
-                    ____i1.keys[0].value = this__.x;
-                    ____i1.keys[1].value = this__.ox - 4;
-                    ____i2.keys[0].value = this__.y;
-                    ____i2.keys[1].value = this__.oy - 4;
-                    ____i3.keys[0].value = this__.get_width();
-                    ____i4.keys[0].value = this__.get_height();
-                });
+        var ____i1 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_x(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 0.300000012, value: null},
+            ]);
+            this.grow.addHandler(____i1);	              
+        var ____i2 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_y(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 0.300000012, value: null},
+            ]);
+            this.grow.addHandler(____i2);	              
+        var ____i3 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_width(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 0.300000012, value: 32},
+            ]);
+            this.grow.addHandler(____i3);	              
+        var ____i4 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_height(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 0.300000012, value: 32},
+            ]);
+            this.grow.addHandler(____i4);	              
+        this.grow.events.addListener('start', function()
+        {
+        ____i1.keys[0].value = this__.x;
+        ____i1.keys[1].value = this__.ox - 4;
+        ____i2.keys[0].value = this__.y;
+        ____i2.keys[1].value = this__.oy - 4;
+        ____i3.keys[0].value = this__.get_width();
+        ____i4.keys[0].value = this__.get_height();
+        });
 this.shrink =
 new ms.state.Sequence(
 g_sequence_manager);
-                    var ____i5 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.set_x(value);
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 0.300000012, value: null},
-                        ]);
-                        this.shrink.addHandler(____i5);	              
-                    var ____i6 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.set_y(value);
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 0.300000012, value: null},
-                        ]);
-                        this.shrink.addHandler(____i6);	              
-                    var ____i7 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.set_width(value);
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 0.300000012, value: 24},
-                        ]);
-                        this.shrink.addHandler(____i7);	              
-                    var ____i8 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.set_height(value);
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 0.300000012, value: 24},
-                        ]);
-                        this.shrink.addHandler(____i8);	              
-                this.shrink.events.addListener('start', function()
-                {
-                    ____i5.keys[0].value = this__.x;
-                    ____i5.keys[1].value = this__.ox;
-                    ____i6.keys[0].value = this__.y;
-                    ____i6.keys[1].value = this__.oy;
-                    ____i7.keys[0].value = this__.get_width();
-                    ____i8.keys[0].value = this__.get_height();
-                });
+        var ____i5 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_x(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 0.300000012, value: null},
+            ]);
+            this.shrink.addHandler(____i5);	              
+        var ____i6 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_y(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 0.300000012, value: null},
+            ]);
+            this.shrink.addHandler(____i6);	              
+        var ____i7 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_width(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 0.300000012, value: 24},
+            ]);
+            this.shrink.addHandler(____i7);	              
+        var ____i8 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_height(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 0.300000012, value: 24},
+            ]);
+            this.shrink.addHandler(____i8);	              
+        this.shrink.events.addListener('start', function()
+        {
+        ____i5.keys[0].value = this__.x;
+        ____i5.keys[1].value = this__.ox;
+        ____i6.keys[0].value = this__.y;
+        ____i6.keys[1].value = this__.oy;
+        ____i7.keys[0].value = this__.get_width();
+        ____i8.keys[0].value = this__.get_height();
+        });
             this.ox = null;
             this.oy = null;
 	var ev_parent = this;
@@ -608,7 +797,7 @@ ev_parent.shrink.start();
     var anim_plane;
 	    var anim_plane_plane = 
 new THREE.Plane(
-width,height,x_segments,y_segments);
+);
 	    anim_plane = new THREE.Mesh(anim_plane_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(anim_plane);
 		anim_plane.events = new ms.event.EventHolder();
@@ -617,354 +806,354 @@ width,height,x_segments,y_segments);
 plane_anim =
 new ms.state.Sequence(
 g_sequence_manager);
-                    var ____i9 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.position.x = value;
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 8, value: null},
-                        ]);
-                        plane_anim.addHandler(____i9);	              
-                    var ____i10 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.position.y = value;
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 8, value: null},
-                        ]);
-                        plane_anim.addHandler(____i10);	              
-                    var ____i11 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            set_rotation_y(this__.rotation, value);
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 8, value: null},
-                        ]);
-                        plane_anim.addHandler(____i11);	              
-                plane_anim.events.addListener('start', function()
-                {
-                    ____i9.keys[0].value = this__.position.x;
-                    ____i9.keys[1].value = Math.random() * (this__.max_x - this__.min_x) + this__.min_x;
-                    ____i10.keys[0].value = this__.position.y;
-                    ____i10.keys[1].value = Math.random() * (this__.max_y - this__.min_y) + this__.min_y;
-                    ____i11.keys[0].value = get_rotation_y(this__.rotation);
-                    ____i11.keys[1].value = Math.random() * 60 - 30;
-                });
+        var ____i9 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.position.x = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 8, value: null},
+            ]);
+            plane_anim.addHandler(____i9);	              
+        var ____i10 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.position.y = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 8, value: null},
+            ]);
+            plane_anim.addHandler(____i10);	              
+        var ____i11 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                set_rotation_y(this__.rotation, value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 8, value: null},
+            ]);
+            plane_anim.addHandler(____i11);	              
+        plane_anim.events.addListener('start', function()
+        {
+        ____i9.keys[0].value = this__.position.x;
+        ____i9.keys[1].value = Math.random() * (this__.max_x - this__.min_x) + this__.min_x;
+        ____i10.keys[0].value = this__.position.y;
+        ____i10.keys[1].value = Math.random() * (this__.max_y - this__.min_y) + this__.min_y;
+        ____i11.keys[0].value = get_rotation_y(this__.rotation);
+        ____i11.keys[1].value = Math.random() * 60 - 30;
+        });
             anim_plane.plane_anim = plane_anim;
             var quickly_anim;
 quickly_anim =
 new ms.state.Sequence(
 g_sequence_manager);
-                    var ____i12 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.position.x = value;
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 2, value: null},
-                        ]);
-                        quickly_anim.addHandler(____i12);	              
-                    var ____i13 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.position.y = value;
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 2, value: null},
-                        ]);
-                        quickly_anim.addHandler(____i13);	              
-                    var ____i14 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            set_rotation_y(this__.rotation, value);
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 2, value: null},
-                        ]);
-                        quickly_anim.addHandler(____i14);	              
-                    var ____r1 = new ms.state.Caller(2,function()
-                    {
+        var ____i12 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.position.x = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: null},
+            ]);
+            quickly_anim.addHandler(____i12);	              
+        var ____i13 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.position.y = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: null},
+            ]);
+            quickly_anim.addHandler(____i13);	              
+        var ____i14 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                set_rotation_y(this__.rotation, value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: null},
+            ]);
+            quickly_anim.addHandler(____i14);	              
+        var ____r1 = new ms.state.Caller(2,function()
+        {
                     plane_anim.start();
-                    });
-                    quickly_anim.addHandler(____r1);						  
-                    var ____r2 = new ms.state.Caller(2,function()
-                    {
+        });
+        quickly_anim.addHandler(____r1);						  
+        var ____r2 = new ms.state.Caller(2,function()
+        {
                     idle_anim.start();
-                    });
-                    quickly_anim.addHandler(____r2);						  
-                quickly_anim.events.addListener('start', function()
-                {
-                    ____i12.keys[0].value = this__.position.x;
-                    ____i12.keys[1].value = Math.random() * (this__.max_x - this__.min_x) + this__.min_x;
-                    ____i13.keys[0].value = this__.position.y;
-                    ____i13.keys[1].value = Math.random() * (this__.max_y - this__.min_y) + this__.min_y;
-                    ____i14.keys[0].value = get_rotation_y(this__.rotation);
-                    ____i14.keys[1].value = Math.random() * 60 - 30;
-                });
+        });
+        quickly_anim.addHandler(____r2);						  
+        quickly_anim.events.addListener('start', function()
+        {
+        ____i12.keys[0].value = this__.position.x;
+        ____i12.keys[1].value = Math.random() * (this__.max_x - this__.min_x) + this__.min_x;
+        ____i13.keys[0].value = this__.position.y;
+        ____i13.keys[1].value = Math.random() * (this__.max_y - this__.min_y) + this__.min_y;
+        ____i14.keys[0].value = get_rotation_y(this__.rotation);
+        ____i14.keys[1].value = Math.random() * 60 - 30;
+        });
             anim_plane.quickly_anim = quickly_anim;
             var alpha_anim;
 alpha_anim =
 new ms.state.Sequence(
 g_sequence_manager);
                 alpha_anim.start();
-                    var ____i15 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            set_object_alpha(this__, value);
-                        },
-                        [
-                        {t: 0, value: 0},
-                        {t: 2, value: 100},
-                        ]);
-                        alpha_anim.addHandler(____i15);	              
+        var ____i15 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                set_object_alpha(this__, value);
+            },
+            [
+        {t: 0, value: 0},
+        {t: 2, value: 100},
+            ]);
+            alpha_anim.addHandler(____i15);	              
             anim_plane.alpha_anim = alpha_anim;
             var idle_anim;
 idle_anim =
 new ms.state.Sequence(
 g_sequence_manager);
-            var ____h1 = new ms.state.Every(8, function(t)
-            {
+        var ____h1 = new ms.state.Every(8, function(t)
+        {
                     plane_anim.start();
-            });
-            idle_anim.addHandler(____h1);	                    
+        });
+        idle_anim.addHandler(____h1);	                    
             anim_plane.idle_anim = idle_anim;
             var show_me;
 show_me =
 new ms.state.Sequence(
 g_sequence_manager);
-                    var ____i16 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.position.x = value;
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 2, value: -55},
-                        ]);
-                        show_me.addHandler(____i16);	              
-                    var ____i17 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.position.y = value;
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 2, value: 50},
-                        ]);
-                        show_me.addHandler(____i17);	              
-                    var ____i18 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.position.z = value;
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 2, value: 100},
-                        ]);
-                        show_me.addHandler(____i18);	              
-                    var ____i19 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.scale.x = value;
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 2, value: 12},
-                        ]);
-                        show_me.addHandler(____i19);	              
-                    var ____i20 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.scale.y = value;
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 2, value: 12},
-                        ]);
-                        show_me.addHandler(____i20);	              
-                    var ____i21 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.scale.z = value;
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 2, value: 10},
-                        ]);
-                        show_me.addHandler(____i21);	              
-                    var ____i22 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            set_rotation_y(this__.rotation, value);
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 2, value: 0},
-                        ]);
-                        show_me.addHandler(____i22);	              
-                    var ____i23 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            liquid.alpha(value);
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 2, value: 0},
-                        ]);
-                        show_me.addHandler(____i23);	              
-                    var ____i24 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            btn1.alpha(value);
-                        },
-                        [
-                        {t: 0, value: 0},
-                        {t: 2, value: 100},
-                        ]);
-                        show_me.addHandler(____i24);	              
-                    var ____i25 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            btn2.alpha(value);
-                        },
-                        [
-                        {t: 0, value: 0},
-                        {t: 2, value: 100},
-                        ]);
-                        show_me.addHandler(____i25);	              
-                show_me.events.addListener('start', function()
-                {
-                    ____i16.keys[0].value = this__.position.x;
-                    ____i17.keys[0].value = this__.position.y;
-                    ____i18.keys[0].value = this__.position.z;
-                    ____i19.keys[0].value = this__.scale.x;
-                    ____i20.keys[0].value = this__.scale.y;
-                    ____i21.keys[0].value = this__.scale.z;
-                    ____i22.keys[0].value = get_rotation_y(this__.rotation);
-                    ____i23.keys[0].value = liquid.get_alpha();
-                });
+        var ____i16 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.position.x = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: -55},
+            ]);
+            show_me.addHandler(____i16);	              
+        var ____i17 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.position.y = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: 50},
+            ]);
+            show_me.addHandler(____i17);	              
+        var ____i18 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.position.z = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: 100},
+            ]);
+            show_me.addHandler(____i18);	              
+        var ____i19 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.x = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: 12},
+            ]);
+            show_me.addHandler(____i19);	              
+        var ____i20 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.y = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: 12},
+            ]);
+            show_me.addHandler(____i20);	              
+        var ____i21 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.z = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: 10},
+            ]);
+            show_me.addHandler(____i21);	              
+        var ____i22 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                set_rotation_y(this__.rotation, value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: 0},
+            ]);
+            show_me.addHandler(____i22);	              
+        var ____i23 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                liquid.alpha(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: 0},
+            ]);
+            show_me.addHandler(____i23);	              
+        var ____i24 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                btn1.alpha(value);
+            },
+            [
+        {t: 0, value: 0},
+        {t: 2, value: 100},
+            ]);
+            show_me.addHandler(____i24);	              
+        var ____i25 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                btn2.alpha(value);
+            },
+            [
+        {t: 0, value: 0},
+        {t: 2, value: 100},
+            ]);
+            show_me.addHandler(____i25);	              
+        show_me.events.addListener('start', function()
+        {
+        ____i16.keys[0].value = this__.position.x;
+        ____i17.keys[0].value = this__.position.y;
+        ____i18.keys[0].value = this__.position.z;
+        ____i19.keys[0].value = this__.scale.x;
+        ____i20.keys[0].value = this__.scale.y;
+        ____i21.keys[0].value = this__.scale.z;
+        ____i22.keys[0].value = get_rotation_y(this__.rotation);
+        ____i23.keys[0].value = liquid.get_alpha();
+        });
             anim_plane.show_me = show_me;
             var back_to;
 back_to =
 new ms.state.Sequence(
 g_sequence_manager);
-                    var ____i26 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.scale.x = value;
-                        },
-                        [
-                        {t: 0, value: 12},
-                        {t: 2, value: 2},
-                        ]);
-                        back_to.addHandler(____i26);	              
-                    var ____i27 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.scale.y = value;
-                        },
-                        [
-                        {t: 0, value: 12},
-                        {t: 2, value: 2},
-                        ]);
-                        back_to.addHandler(____i27);	              
-                    var ____i28 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.scale.z = value;
-                        },
-                        [
-                        {t: 0, value: 10},
-                        {t: 2, value: 0},
-                        ]);
-                        back_to.addHandler(____i28);	              
-                    var ____i29 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.position.z = value;
-                        },
-                        [
-                        {t: 0, value: 100},
-                        {t: 2, value: 0},
-                        ]);
-                        back_to.addHandler(____i29);	              
-                    var ____i30 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            liquid.alpha(value);
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 2, value: 50},
-                        ]);
-                        back_to.addHandler(____i30);	              
-                    var ____i31 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            btn1.alpha(value);
-                        },
-                        [
-                        {t: 0, value: 100},
-                        {t: 2, value: 0},
-                        ]);
-                        back_to.addHandler(____i31);	              
-                    var ____i32 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            btn2.alpha(value);
-                        },
-                        [
-                        {t: 0, value: 100},
-                        {t: 2, value: 0},
-                        ]);
-                        back_to.addHandler(____i32);	              
-                    var ____r3 = new ms.state.Caller(0,function()
-                    {
+        var ____i26 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.x = value;
+            },
+            [
+        {t: 0, value: 12},
+        {t: 2, value: 2},
+            ]);
+            back_to.addHandler(____i26);	              
+        var ____i27 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.y = value;
+            },
+            [
+        {t: 0, value: 12},
+        {t: 2, value: 2},
+            ]);
+            back_to.addHandler(____i27);	              
+        var ____i28 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.z = value;
+            },
+            [
+        {t: 0, value: 10},
+        {t: 2, value: 0},
+            ]);
+            back_to.addHandler(____i28);	              
+        var ____i29 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.position.z = value;
+            },
+            [
+        {t: 0, value: 100},
+        {t: 2, value: 0},
+            ]);
+            back_to.addHandler(____i29);	              
+        var ____i30 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                liquid.alpha(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: 50},
+            ]);
+            back_to.addHandler(____i30);	              
+        var ____i31 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                btn1.alpha(value);
+            },
+            [
+        {t: 0, value: 100},
+        {t: 2, value: 0},
+            ]);
+            back_to.addHandler(____i31);	              
+        var ____i32 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                btn2.alpha(value);
+            },
+            [
+        {t: 0, value: 100},
+        {t: 2, value: 0},
+            ]);
+            back_to.addHandler(____i32);	              
+        var ____r3 = new ms.state.Caller(0,function()
+        {
                     plane_anim.start();
-                    });
-                    back_to.addHandler(____r3);						  
-                    var ____r4 = new ms.state.Caller(0,function()
-                    {
+        });
+        back_to.addHandler(____r3);						  
+        var ____r4 = new ms.state.Caller(0,function()
+        {
                     idle_anim.start();
-                    });
-                    back_to.addHandler(____r4);						  
-                back_to.events.addListener('start', function()
-                {
-                    ____i30.keys[0].value = liquid.get_alpha();
-                });
+        });
+        back_to.addHandler(____r4);						  
+        back_to.events.addListener('start', function()
+        {
+        ____i30.keys[0].value = liquid.get_alpha();
+        });
             anim_plane.back_to = back_to;
             anim_plane.max_x = null;
             anim_plane.min_x = null;
@@ -1043,41 +1232,41 @@ application.times_planes.set_individual_scale(0.699999988);
 grow_plane =
 new ms.state.Sequence(
 g_sequence_manager);
-                    var ____i33 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.group_scale_set(value);
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 1, value: 1.5},
-                        ]);
-                        grow_plane.addHandler(____i33);	              
-                grow_plane.events.addListener('start', function()
-                {
-                    ____i33.keys[0].value = this__.group_scale;
-                });
+        var ____i33 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.group_scale_set(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 1, value: 1.5},
+            ]);
+            grow_plane.addHandler(____i33);	              
+        grow_plane.events.addListener('start', function()
+        {
+        ____i33.keys[0].value = this__.group_scale;
+        });
             planes_group.grow_plane = grow_plane;
             var shrink_plane;
 shrink_plane =
 new ms.state.Sequence(
 g_sequence_manager);
-                    var ____i34 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            this__.group_scale_set(value);
-                        },
-                        [
-                        {t: 0, value: null},
-                        {t: 1, value: 1},
-                        ]);
-                        shrink_plane.addHandler(____i34);	              
-                shrink_plane.events.addListener('start', function()
-                {
-                    ____i34.keys[0].value = this__.group_scale;
-                });
+        var ____i34 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.group_scale_set(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 1, value: 1},
+            ]);
+            shrink_plane.addHandler(____i34);	              
+        shrink_plane.events.addListener('start', function()
+        {
+        ____i34.keys[0].value = this__.group_scale;
+        });
             planes_group.shrink_plane = shrink_plane;
             planes_group.selected = false;
             planes_group.plane_array = [];
@@ -1090,18 +1279,14 @@ for(var index = 0; index < this.images.length - 1; index++)
 {
 resource = streamer.get_resource(this.images[index]).data;
 this.plane_array.push(
-create_anim_plane(
-resource.naturalWidth / 13,resource.naturalHeight / 13
-)
+create_anim_plane(resource.naturalWidth / 13, resource.naturalHeight / 13, null, null)
 );
 this.plane_array[index].set_image(this.images[index]);
 this.plane_array[index].parent_ = this;
 }
 resource = streamer.get_resource(this.images[this.images.length - 1]).data;
 this.plane_array.push(
-create_anim_plane(
-resource.naturalWidth,resource.naturalHeight
-)
+create_anim_plane(resource.naturalWidth, resource.naturalHeight, null, null)
 );
 this.plane_array[this.images.length - 1].set_image(this.images[this.images.length - 1]);
 this.plane_array[this.images.length - 1].parent_ = this;
@@ -1242,169 +1427,169 @@ application.waiting_for_load = true;
 }
 	};
                 init_anim.start();
-                    var ____i35 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            line1.set_x2(value);
-                        },
-                        [
-                        {t: 0, value: 200},
-                        {t: 1, value: 500},
-                        ]);
-                        init_anim.addHandler(____i35);	              
-                    var ____i36 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            linetop.set_x2(value);
-                        },
-                        [
-                        {t: 0, value: 5},
-                        {t: 4, value: 905},
-                        ]);
-                        init_anim.addHandler(____i36);	              
-                    var ____i37 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            line2.set_y2(value);
-                        },
-                        [
-                        {t: 1, value: 200},
-                        {t: 2, value: 500},
-                        ]);
-                        init_anim.addHandler(____i37);	              
-                    var ____i38 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            line3.set_x2(value);
-                        },
-                        [
-                        {t: 2, value: 500},
-                        {t: 3, value: 200},
-                        ]);
-                        init_anim.addHandler(____i38);	              
-                    var ____i39 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            line4.set_y2(value);
-                        },
-                        [
-                        {t: 3, value: 500},
-                        {t: 4, value: 200},
-                        ]);
-                        init_anim.addHandler(____i39);	              
-                    var ____i40 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens1.set_rotation(value);
-                        },
-                        [
-                        {t: 4, value: 0},
-                        {t: 5, value: 45},
-                        ]);
-                        init_anim.addHandler(____i40);	              
-                    var ____i41 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens2.set_rotation(value);
-                        },
-                        [
-                        {t: 4, value: 0},
-                        {t: 5, value: -45},
-                        ]);
-                        init_anim.addHandler(____i41);	              
-                    var ____i42 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens1.set_rotation(value);
-                        },
-                        [
-                        {t: 5, value: 45},
-                        {t: 7, value: -45},
-                        ]);
-                        init_anim.addHandler(____i42);	              
-                    var ____i43 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens2.set_rotation(value);
-                        },
-                        [
-                        {t: 5, value: -45},
-                        {t: 7, value: 45},
-                        ]);
-                        init_anim.addHandler(____i43);	              
-                    var ____i44 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens1.set_rotation(value);
-                        },
-                        [
-                        {t: 7, value: -45},
-                        {t: 8, value: 0},
-                        ]);
-                        init_anim.addHandler(____i44);	              
-                    var ____i45 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens2.set_rotation(value);
-                        },
-                        [
-                        {t: 7, value: 45},
-                        {t: 8, value: 0},
-                        ]);
-                        init_anim.addHandler(____i45);	              
-                    var ____r5 = new ms.state.Caller(8,function()
-                    {
+        var ____i35 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                line1.set_x2(value);
+            },
+            [
+        {t: 0, value: 200},
+        {t: 1, value: 500},
+            ]);
+            init_anim.addHandler(____i35);	              
+        var ____i36 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                linetop.set_x2(value);
+            },
+            [
+        {t: 0, value: 5},
+        {t: 4, value: 905},
+            ]);
+            init_anim.addHandler(____i36);	              
+        var ____i37 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                line2.set_y2(value);
+            },
+            [
+        {t: 1, value: 200},
+        {t: 2, value: 500},
+            ]);
+            init_anim.addHandler(____i37);	              
+        var ____i38 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                line3.set_x2(value);
+            },
+            [
+        {t: 2, value: 500},
+        {t: 3, value: 200},
+            ]);
+            init_anim.addHandler(____i38);	              
+        var ____i39 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                line4.set_y2(value);
+            },
+            [
+        {t: 3, value: 500},
+        {t: 4, value: 200},
+            ]);
+            init_anim.addHandler(____i39);	              
+        var ____i40 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                lens1.set_rotation(value);
+            },
+            [
+        {t: 4, value: 0},
+        {t: 5, value: 45},
+            ]);
+            init_anim.addHandler(____i40);	              
+        var ____i41 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                lens2.set_rotation(value);
+            },
+            [
+        {t: 4, value: 0},
+        {t: 5, value: -45},
+            ]);
+            init_anim.addHandler(____i41);	              
+        var ____i42 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                lens1.set_rotation(value);
+            },
+            [
+        {t: 5, value: 45},
+        {t: 7, value: -45},
+            ]);
+            init_anim.addHandler(____i42);	              
+        var ____i43 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                lens2.set_rotation(value);
+            },
+            [
+        {t: 5, value: -45},
+        {t: 7, value: 45},
+            ]);
+            init_anim.addHandler(____i43);	              
+        var ____i44 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                lens1.set_rotation(value);
+            },
+            [
+        {t: 7, value: -45},
+        {t: 8, value: 0},
+            ]);
+            init_anim.addHandler(____i44);	              
+        var ____i45 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                lens2.set_rotation(value);
+            },
+            [
+        {t: 7, value: 45},
+        {t: 8, value: 0},
+            ]);
+            init_anim.addHandler(____i45);	              
+        var ____r5 = new ms.state.Caller(8,function()
+        {
                 init_anim.enter_if_loaded();
-                    });
-                    init_anim.addHandler(____r5);						  
+        });
+        init_anim.addHandler(____r5);						  
 init_anim2 =
 new ms.state.Sequence(
 g_sequence_manager);
                 init_anim2.start();
-                    var ____i46 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            banner.alpha(value);
-                        },
-                        [
-                        {t: 0, value: 0},
-                        {t: 4, value: 100},
-                        ]);
-                        init_anim2.addHandler(____i46);	              
-                    var ____i47 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens1.alpha(value);
-                        },
-                        [
-                        {t: 0, value: 0},
-                        {t: 8, value: 100},
-                        ]);
-                        init_anim2.addHandler(____i47);	              
-                    var ____i48 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens2.alpha(value);
-                        },
-                        [
-                        {t: 0, value: 0},
-                        {t: 8, value: 100},
-                        ]);
-                        init_anim2.addHandler(____i48);	              
+        var ____i46 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                banner.alpha(value);
+            },
+            [
+        {t: 0, value: 0},
+        {t: 4, value: 100},
+            ]);
+            init_anim2.addHandler(____i46);	              
+        var ____i47 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                lens1.alpha(value);
+            },
+            [
+        {t: 0, value: 0},
+        {t: 8, value: 100},
+            ]);
+            init_anim2.addHandler(____i47);	              
+        var ____i48 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                lens2.alpha(value);
+            },
+            [
+        {t: 0, value: 0},
+        {t: 8, value: 100},
+            ]);
+            init_anim2.addHandler(____i48);	              
 rain =
 new ms.state.Sequence(
 g_sequence_manager);
@@ -1419,277 +1604,577 @@ liquid.disturb(x, y);
 SoundUtils.play("sounds/water-droplet-1.mp3");
 }
 	};
-            var ____h2 = new ms.state.Every(3, function(t)
-            {
+        var ____h2 = new ms.state.Every(3, function(t)
+        {
                 rain.drop();
-            });
-            rain.addHandler(____h2);	                    
+        });
+        rain.addHandler(____h2);	                    
 go_up =
 new ms.state.Sequence(
 g_sequence_manager);
-                    var ____i49 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens1.set_x(value);
-                        },
-                        [
-                        {t: 0, value: 225},
-                        {t: 2, value: 700},
-                        ]);
-                        go_up.addHandler(____i49);	              
-                    var ____i50 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens1.set_y(value);
-                        },
-                        [
-                        {t: 0, value: 225},
-                        {t: 2, value: 2},
-                        ]);
-                        go_up.addHandler(____i50);	              
-                    var ____i51 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens1.set_width(value);
-                        },
-                        [
-                        {t: 0, value: 250},
-                        {t: 2, value: 31},
-                        ]);
-                        go_up.addHandler(____i51);	              
-                    var ____i52 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens1.set_height(value);
-                        },
-                        [
-                        {t: 0, value: 250},
-                        {t: 2, value: 31},
-                        ]);
-                        go_up.addHandler(____i52);	              
-                    var ____i53 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens2.set_x(value);
-                        },
-                        [
-                        {t: 0, value: 220},
-                        {t: 2, value: 699},
-                        ]);
-                        go_up.addHandler(____i53);	              
-                    var ____i54 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens2.set_y(value);
-                        },
-                        [
-                        {t: 0, value: 220},
-                        {t: 2, value: 1},
-                        ]);
-                        go_up.addHandler(____i54);	              
-                    var ____i55 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            rect1.set_x(value);
-                        },
-                        [
-                        {t: 0, value: 200},
-                        {t: 2, value: 698},
-                        ]);
-                        go_up.addHandler(____i55);	              
-                    var ____i56 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            rect1.set_y(value);
-                        },
-                        [
-                        {t: 0, value: 200},
-                        {t: 2, value: 1},
-                        ]);
-                        go_up.addHandler(____i56);	              
-                    var ____i57 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            rect1.set_width(value);
-                        },
-                        [
-                        {t: 0, value: 300},
-                        {t: 2, value: 35},
-                        ]);
-                        go_up.addHandler(____i57);	              
-                    var ____i58 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            rect1.set_height(value);
-                        },
-                        [
-                        {t: 0, value: 300},
-                        {t: 2, value: 35},
-                        ]);
-                        go_up.addHandler(____i58);	              
-                    var ____i59 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens2.set_width(value);
-                        },
-                        [
-                        {t: 0, value: 260},
-                        {t: 2, value: 32},
-                        ]);
-                        go_up.addHandler(____i59);	              
-                    var ____i60 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens2.set_height(value);
-                        },
-                        [
-                        {t: 0, value: 260},
-                        {t: 2, value: 32},
-                        ]);
-                        go_up.addHandler(____i60);	              
-                    var ____i61 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            facebook.alpha(value);
-                        },
-                        [
-                        {t: 0, value: 0},
-                        {t: 2, value: 100},
-                        ]);
-                        go_up.addHandler(____i61);	              
-                    var ____i62 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            twitter.alpha(value);
-                        },
-                        [
-                        {t: 0, value: 0},
-                        {t: 2, value: 100},
-                        ]);
-                        go_up.addHandler(____i62);	              
-                    var ____i63 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            email.alpha(value);
-                        },
-                        [
-                        {t: 0, value: 0},
-                        {t: 2, value: 100},
-                        ]);
-                        go_up.addHandler(____i63);	              
-                    var ____i64 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            liquid.alpha(value);
-                        },
-                        [
-                        {t: 0, value: 0},
-                        {t: 2, value: 50},
-                        ]);
-                        go_up.addHandler(____i64);	              
-                    var ____i65 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens1.alpha(value);
-                        },
-                        [
-                        {t: 1, value: 100},
-                        {t: 2, value: 0},
-                        ]);
-                        go_up.addHandler(____i65);	              
-                    var ____i66 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            lens2.alpha(value);
-                        },
-                        [
-                        {t: 1, value: 100},
-                        {t: 2, value: 0},
-                        ]);
-                        go_up.addHandler(____i66);	              
-                    var ____i67 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            rect1.alpha(value);
-                        },
-                        [
-                        {t: 1, value: 100},
-                        {t: 2, value: 0},
-                        ]);
-                        go_up.addHandler(____i67);	              
-                    var ____r6 = new ms.state.Caller(2,function()
-                    {
+        var ____i49 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                lens1.set_x(value);
+            },
+            [
+        {t: 0, value: 225},
+        {t: 2, value: 700},
+            ]);
+            go_up.addHandler(____i49);	              
+        var ____i50 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                lens1.set_y(value);
+            },
+            [
+        {t: 0, value: 225},
+        {t: 2, value: 2},
+            ]);
+            go_up.addHandler(____i50);	              
+        var ____i51 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                lens1.set_width(value);
+            },
+            [
+        {t: 0, value: 250},
+        {t: 2, value: 31},
+            ]);
+            go_up.addHandler(____i51);	              
+        var ____i52 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                lens1.set_height(value);
+            },
+            [
+        {t: 0, value: 250},
+        {t: 2, value: 31},
+            ]);
+            go_up.addHandler(____i52);	              
+        var ____i53 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                lens2.set_x(value);
+            },
+            [
+        {t: 0, value: 220},
+        {t: 2, value: 699},
+            ]);
+            go_up.addHandler(____i53);	              
+        var ____i54 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                lens2.set_y(value);
+            },
+            [
+        {t: 0, value: 220},
+        {t: 2, value: 1},
+            ]);
+            go_up.addHandler(____i54);	              
+        var ____i55 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                rect1.set_x(value);
+            },
+            [
+        {t: 0, value: 200},
+        {t: 2, value: 698},
+            ]);
+            go_up.addHandler(____i55);	              
+        var ____i56 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                rect1.set_y(value);
+            },
+            [
+        {t: 0, value: 200},
+        {t: 2, value: 1},
+            ]);
+            go_up.addHandler(____i56);	              
+        var ____i57 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                rect1.set_width(value);
+            },
+            [
+        {t: 0, value: 300},
+        {t: 2, value: 35},
+            ]);
+            go_up.addHandler(____i57);	              
+        var ____i58 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                rect1.set_height(value);
+            },
+            [
+        {t: 0, value: 300},
+        {t: 2, value: 35},
+            ]);
+            go_up.addHandler(____i58);	              
+        var ____i59 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                lens2.set_width(value);
+            },
+            [
+        {t: 0, value: 260},
+        {t: 2, value: 32},
+            ]);
+            go_up.addHandler(____i59);	              
+        var ____i60 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                lens2.set_height(value);
+            },
+            [
+        {t: 0, value: 260},
+        {t: 2, value: 32},
+            ]);
+            go_up.addHandler(____i60);	              
+        var ____i61 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                facebook.alpha(value);
+            },
+            [
+        {t: 0, value: 0},
+        {t: 2, value: 100},
+            ]);
+            go_up.addHandler(____i61);	              
+        var ____i62 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                twitter.alpha(value);
+            },
+            [
+        {t: 0, value: 0},
+        {t: 2, value: 100},
+            ]);
+            go_up.addHandler(____i62);	              
+        var ____i63 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                email.alpha(value);
+            },
+            [
+        {t: 0, value: 0},
+        {t: 2, value: 100},
+            ]);
+            go_up.addHandler(____i63);	              
+        var ____i64 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                liquid.alpha(value);
+            },
+            [
+        {t: 0, value: 0},
+        {t: 2, value: 50},
+            ]);
+            go_up.addHandler(____i64);	              
+        var ____i65 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                lens1.alpha(value);
+            },
+            [
+        {t: 1, value: 100},
+        {t: 2, value: 0},
+            ]);
+            go_up.addHandler(____i65);	              
+        var ____i66 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                lens2.alpha(value);
+            },
+            [
+        {t: 1, value: 100},
+        {t: 2, value: 0},
+            ]);
+            go_up.addHandler(____i66);	              
+        var ____i67 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                rect1.alpha(value);
+            },
+            [
+        {t: 1, value: 100},
+        {t: 2, value: 0},
+            ]);
+            go_up.addHandler(____i67);	              
+        var ____r6 = new ms.state.Caller(2,function()
+        {
                     rain.start();
-                    });
-                    go_up.addHandler(____r6);						  
+        });
+        go_up.addHandler(____r6);						  
 loading_seq =
 new ms.state.Sequence(
 g_sequence_manager);
                 loading_seq.start();
-                    var ____i68 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            loading.alpha(value);
-                        },
-                        [
-                        {t: 0, value: 0},
-                        {t: 2, value: 100},
-                        ]);
-                        loading_seq.addHandler(____i68);	              
-                    var ____i69 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            loading.alpha(value);
-                        },
-                        [
-                        {t: 2, value: 100},
-                        {t: 4, value: 0},
-                        ]);
-                        loading_seq.addHandler(____i69);	              
+        var ____i68 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                loading.alpha(value);
+            },
+            [
+        {t: 0, value: 0},
+        {t: 2, value: 100},
+            ]);
+            loading_seq.addHandler(____i68);	              
+        var ____i69 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                loading.alpha(value);
+            },
+            [
+        {t: 2, value: 100},
+        {t: 4, value: 0},
+            ]);
+            loading_seq.addHandler(____i69);	              
 idle_load =
 new ms.state.Sequence(
 g_sequence_manager);
                 idle_load.start();
-            var ____h3 = new ms.state.Every(4, function(t)
-            {
+        var ____h3 = new ms.state.Every(4, function(t)
+        {
                     loading_seq.start();
-            });
-            idle_load.addHandler(____h3);	                    
+        });
+        idle_load.addHandler(____h3);	                    
 enterto_in =
 new ms.state.Sequence(
 g_sequence_manager);
-                    var ____i70 = new ms.state.Interpolator(
-                        default_interpolate,
-                        function(value)
-                        {
-                            enter_to.alpha(value);
-                        },
-                        [
-                        {t: 0, value: 0},
-                        {t: 1, value: 100},
-                        ]);
-                        enterto_in.addHandler(____i70);	              
+        var ____i70 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                enter_to.alpha(value);
+            },
+            [
+        {t: 0, value: 0},
+        {t: 1, value: 100},
+            ]);
+            enterto_in.addHandler(____i70);	              
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+		    liquid = new ms.ui.RippleEffect( g_ui_root.manager, g_ui_root
+	    , "images/pictures/boxdef.jpg");
+        liquid = liquid;
+            liquid.set_x(0);
+            liquid.set_y(0);
+            liquid.set_width(app_width);
+            liquid.set_height(app_height);
+            liquid.alpha(0);
+		    banner = new ms.ui.Image( g_ui_root.manager, g_ui_root
+	    , "images/pictures/banner.png");
+        banner = banner;
+            banner.set_x(15);
+            banner.set_y(10);
+            banner.set_width(231);
+            banner.set_height(28);
+            banner.alpha(0);
+		    loading = new ms.ui.Image( g_ui_root.manager, g_ui_root
+	    , "images/pictures/loading.png");
+        loading = loading;
+            loading.set_x(280);
+            loading.set_y(550);
+            loading.set_width(153);
+            loading.set_height(27);
+            loading.alpha(0);
+		    enter_to = new ms.ui.Image( g_ui_root.manager, g_ui_root
+	    , "images/pictures/enter.png");
+        enter_to = enter_to;
+            enter_to.set_x(310);
+            enter_to.set_y(551.5);
+            enter_to.set_width(92);
+            enter_to.set_height(24);
+            enter_to.setVisible(false);
+	var ev_parent = this;
+	enter_to.events.addListener("mousein", function()
+	{    
+		enter_to.set_width(enter_to.get_width() + 3);
+enter_to.set_height(enter_to.get_height() + 3);
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
+	enter_to.events.addListener("mouseout", function()
+	{    
+		enter_to.set_width(enter_to.get_width() - 3);
+enter_to.set_height(enter_to.get_height() - 3);
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
+	enter_to.events.addListener("mousedown", function()
+	{    
+		enter_to.set_x(enter_to.x + 2);
+enter_to.set_y(enter_to.y + 2);
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
+	enter_to.events.addListener("mouseup", function()
+	{    
+		enter_to.set_x(enter_to.x - 2);
+enter_to.set_y(enter_to.y - 2);
+init_anim.stop();
+init_anim2.stop();
+line1.setVisible(false);
+line2.setVisible(false);
+line3.setVisible(false);
+line4.setVisible(false);
+rect1.setVisible(true);
+linetop.set_x2(905);
+go_up.start();
+enter_to.setVisible(false);
+application.init_planes();
+	}
+	);
+		application.are_obj_events = true;
+		    lens1 = new ms.ui.Image( g_ui_root.manager, g_ui_root
+	    , "images/pictures/lente1.png");
+        lens1 = lens1;
+            lens1.set_x(225);
+            lens1.set_y(225);
+            lens1.set_width(250);
+            lens1.set_height(250);
+            lens1.alpha(0);
+		    lens2 = new ms.ui.Image( g_ui_root.manager, g_ui_root
+	    , "images/pictures/lente2.png");
+        lens2 = lens2;
+            lens2.set_x(220);
+            lens2.set_y(220);
+            lens2.set_width(260);
+            lens2.set_height(260);
+            lens2.alpha(0);
+		    facebook = new social_button( g_ui_root.manager, g_ui_root
+	    , "images/pictures/facebook.png");
+        facebook = facebook;
+            facebook.set_x(880);
+            facebook.set_y(8);
+            facebook.set_width(24);
+            facebook.set_height(24);
+            facebook.alpha(0);
+		    twitter = new social_button( g_ui_root.manager, g_ui_root
+	    , "images/pictures/twitter.png");
+        twitter = twitter;
+            twitter.set_x(845);
+            twitter.set_y(8);
+            twitter.set_width(24);
+            twitter.set_height(24);
+            twitter.alpha(0);
+		    email = new social_button( g_ui_root.manager, g_ui_root
+	    , "images/pictures/photobucket.png");
+        email = email;
+            email.set_x(810);
+            email.set_y(8);
+            email.set_width(24);
+            email.set_height(24);
+            email.alpha(0);
+		    btn1 = new ms.ui.Button( g_ui_root.manager, g_ui_root
+	    , "images/pictures/arrow_up.png", "images/pictures/arrow_down.png");
+        btn1 = btn1;
+            btn1.set_x(0);
+            btn1.set_y(300);
+            btn1.set_width(64);
+            btn1.set_height(64);
+            btn1.set_rotation(180);
+            btn1.alpha(0);
+	var ev_parent = this;
+	btn1.events.addListener("click", function()
+	{    
+		if (application.phase == 3)
+{
+application.temp_img = application.zoomed;
+application.temp_index = application.group_zoomed.find(application.zoomed);
+if (application.temp_index == 0)
+{
+application.temp_index = application.group_zoomed.plane_array.length - 1;
+}
+application.group_zoomed.plane_array[application.temp_index - 1].plane_anim.stop();
+application.group_zoomed.plane_array[application.temp_index - 1].idle_anim.stop();
+application.zoomed = application.group_zoomed.plane_array[application.temp_index - 1];
+application.temp_img.scale.x = 2;
+application.temp_img.scale.y = 2;
+application.temp_img.scale.z = 0;
+application.temp_img.position.z = 0;
+application.temp_img.plane_anim.stop();
+application.temp_img.plane_anim.start();
+application.temp_img.idle_anim.stop();
+application.temp_img.idle_anim.start();
+application.zoomed.scale.x = 12;
+application.zoomed.scale.y = 12;
+application.zoomed.scale.z = 10;
+application.zoomed.position.x = -55;
+application.zoomed.position.y = 50;
+application.zoomed.position.z = 100;
+application.zoomed.rotation.y = 0;
+}
+	}
+	);
+		application.are_obj_events = true;
+		    btn2 = new ms.ui.Button( g_ui_root.manager, g_ui_root
+	    , "images/pictures/arrow_up.png", "images/pictures/arrow_down.png");
+        btn2 = btn2;
+            btn2.set_x(840);
+            btn2.set_y(300);
+            btn2.set_width(64);
+            btn2.set_height(64);
+            btn2.alpha(0);
+	var ev_parent = this;
+	btn2.events.addListener("click", function()
+	{    
+		if (application.phase == 3)
+{
+application.temp_img = application.zoomed;
+application.temp_index = application.group_zoomed.find(application.zoomed);
+if (application.temp_index == application.group_zoomed.plane_array.length - 2)
+{
+application.temp_index = -1;
+}
+application.group_zoomed.plane_array[application.temp_index + 1].plane_anim.stop();
+application.group_zoomed.plane_array[application.temp_index + 1].idle_anim.stop();
+application.zoomed = application.group_zoomed.plane_array[application.temp_index + 1];
+application.temp_img.scale.x = 2;
+application.temp_img.scale.y = 2;
+application.temp_img.scale.z = 0;
+application.temp_img.position.z = 0;
+application.temp_img.plane_anim.stop();
+application.temp_img.plane_anim.start();
+application.temp_img.idle_anim.stop();
+application.temp_img.idle_anim.start();
+application.zoomed.scale.x = 12;
+application.zoomed.scale.y = 12;
+application.zoomed.scale.z = 10;
+application.zoomed.position.x = -55;
+application.zoomed.position.y = 50;
+application.zoomed.position.z = 100;
+application.zoomed.rotation.y = 0;
+}
+	}
+	);
+		application.are_obj_events = true;
+		    linetop = new ms.ui.Line( g_ui_root.manager, g_ui_root
+	    );
+        linetop = linetop;
+            linetop.set_x1(5);
+            linetop.set_y1(40);
+            linetop.set_x2(5);
+            linetop.set_y2(40);
+            linetop.alpha(60);
+            linetop.set_color("white");
+		    line1 = new ms.ui.Line( g_ui_root.manager, g_ui_root
+	    );
+        line1 = line1;
+            line1.set_x1(200);
+            line1.set_y1(200);
+            line1.set_x2(200);
+            line1.set_y2(200);
+            line1.alpha(60);
+            line1.set_color("white");
+		    line2 = new ms.ui.Line( g_ui_root.manager, g_ui_root
+	    );
+        line2 = line2;
+            line2.set_x1(500);
+            line2.set_y1(200);
+            line2.set_x2(500);
+            line2.set_y2(200);
+            line2.alpha(60);
+            line2.set_color("white");
+		    line3 = new ms.ui.Line( g_ui_root.manager, g_ui_root
+	    );
+        line3 = line3;
+            line3.set_x1(500);
+            line3.set_y1(500);
+            line3.set_x2(500);
+            line3.set_y2(500);
+            line3.alpha(60);
+            line3.set_color("white");
+		    line4 = new ms.ui.Line( g_ui_root.manager, g_ui_root
+	    );
+        line4 = line4;
+            line4.set_x1(200);
+            line4.set_y1(500);
+            line4.set_x2(200);
+            line4.set_y2(500);
+            line4.alpha(60);
+            line4.set_color("white");
+		    rect1 = new ms.ui.Rectangle( g_ui_root.manager, g_ui_root
+	    , null, "white", null);
+        rect1 = rect1;
+            rect1.set_x(200);
+            rect1.set_y(200);
+            rect1.set_width(300);
+            rect1.set_height(300);
+            rect1.setVisible(false);
+            rect1.alpha(60);
 scene = 
 new THREE.Scene(
 );
@@ -1715,18 +2200,15 @@ new THREE.Camera(
 	application.init_planes = function() 
 	{
 		application.art_planes = 
-create_planes_group(
-)
+create_planes_group()
 ;
 application.art_planes.images_set(application.art_img);
 application.forms_planes = 
-create_planes_group(
-)
+create_planes_group()
 ;
 application.forms_planes.images_set(application.forms_img);
 application.times_planes = 
-create_planes_group(
-)
+create_planes_group()
 ;
 application.times_planes.images_set(application.times_img);
 application.art_planes.set_limits(-550, -350, 250, 0);
@@ -1860,307 +2342,7 @@ application.times_planes.unselected();
 	);
 if(ui)
 {	
-	SoundUtils = new ms.ui.SoundUtils();
-	drawingCanvas.onmousemove = function(ev)
-	{
-		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmousedown = function(ev)
-	{
-		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmouseup = function(ev)
-	{
-		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};		
-	ui.events.addListener("mousedown", function(x,y)
-	{    
-		application.events.dispatch("mousedown", [x, y]);
-	});
-	ui.events.addListener("mouseup", function(x,y)
-	{    
-		application.events.dispatch("mouseup", [x, y]);
-	});
-	ui.events.addListener("mousemove", function(x,y)
-	{    
-		application.events.dispatch("mousemove", [x, y]);
-	});
-	ui.events.addListener("click", function(x,y)
-	{    
-		application.events.dispatch("click", [x, y]);
-	});
-	ui.events.addListener("drag", function(x,y)
-	{    
-		application.events.dispatch("drag", [x, y]);
-	});
-	ui.events.addListener("dragend", function(x,y)
-	{    
-		application.events.dispatch("dragend", [x, y]);
-	});
-	ui.events.addListener("keyup", function(keycode)
-	{    
-		application.events.dispatch("keyup", [keycode]);
-	});
-	ui.events.addListener("keydown", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
-	ui.events.addListener("keypress", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
-		    liquid = new ms.ui.RippleEffect( 
-	    "images/pictures/boxdef.jpg",g_ui_root.manager, g_ui_root);
-        liquid = liquid;
-            liquid.set_x(0);
-            liquid.set_y(0);
-            liquid.set_width(app_width);
-            liquid.set_height(app_height);
-            liquid.alpha(0);
-		    banner = new ms.ui.Image( 
-	    "images/pictures/banner.png",g_ui_root.manager, g_ui_root);
-        banner = banner;
-            banner.set_x(15);
-            banner.set_y(10);
-            banner.set_width(231);
-            banner.set_height(28);
-            banner.alpha(0);
-		    loading = new ms.ui.Image( 
-	    "images/pictures/loading.png",g_ui_root.manager, g_ui_root);
-        loading = loading;
-            loading.set_x(280);
-            loading.set_y(550);
-            loading.set_width(153);
-            loading.set_height(27);
-            loading.alpha(0);
-		    enter_to = new ms.ui.Image( 
-	    "images/pictures/enter.png",g_ui_root.manager, g_ui_root);
-        enter_to = enter_to;
-            enter_to.set_x(310);
-            enter_to.set_y(551.5);
-            enter_to.set_width(92);
-            enter_to.set_height(24);
-            enter_to.setVisible(false);
-	var ev_parent = this;
-	enter_to.events.addListener("mousein", function()
-	{    
-		enter_to.set_width(enter_to.get_width() + 3);
-enter_to.set_height(enter_to.get_height() + 3);
-	}
-	);
-		application.are_obj_events = true;
-	var ev_parent = this;
-	enter_to.events.addListener("mouseout", function()
-	{    
-		enter_to.set_width(enter_to.get_width() - 3);
-enter_to.set_height(enter_to.get_height() - 3);
-	}
-	);
-		application.are_obj_events = true;
-	var ev_parent = this;
-	enter_to.events.addListener("mousedown", function()
-	{    
-		enter_to.set_x(enter_to.x + 2);
-enter_to.set_y(enter_to.y + 2);
-	}
-	);
-		application.are_obj_events = true;
-	var ev_parent = this;
-	enter_to.events.addListener("mouseup", function()
-	{    
-		enter_to.set_x(enter_to.x - 2);
-enter_to.set_y(enter_to.y - 2);
-init_anim.stop();
-init_anim2.stop();
-line1.setVisible(false);
-line2.setVisible(false);
-line3.setVisible(false);
-line4.setVisible(false);
-rect1.setVisible(true);
-linetop.set_x2(905);
-go_up.start();
-enter_to.setVisible(false);
-application.init_planes();
-	}
-	);
-		application.are_obj_events = true;
-		    lens1 = new ms.ui.Image( 
-	    "images/pictures/lente1.png",g_ui_root.manager, g_ui_root);
-        lens1 = lens1;
-            lens1.set_x(225);
-            lens1.set_y(225);
-            lens1.set_width(250);
-            lens1.set_height(250);
-            lens1.alpha(0);
-		    lens2 = new ms.ui.Image( 
-	    "images/pictures/lente2.png",g_ui_root.manager, g_ui_root);
-        lens2 = lens2;
-            lens2.set_x(220);
-            lens2.set_y(220);
-            lens2.set_width(260);
-            lens2.set_height(260);
-            lens2.alpha(0);
-		    facebook = new social_button( 
-	    "images/pictures/facebook.png",g_ui_root.manager, g_ui_root);
-        facebook = facebook;
-            facebook.set_x(880);
-            facebook.set_y(8);
-            facebook.set_width(24);
-            facebook.set_height(24);
-            facebook.alpha(0);
-		    twitter = new social_button( 
-	    "images/pictures/twitter.png",g_ui_root.manager, g_ui_root);
-        twitter = twitter;
-            twitter.set_x(845);
-            twitter.set_y(8);
-            twitter.set_width(24);
-            twitter.set_height(24);
-            twitter.alpha(0);
-		    email = new social_button( 
-	    "images/pictures/photobucket.png",g_ui_root.manager, g_ui_root);
-        email = email;
-            email.set_x(810);
-            email.set_y(8);
-            email.set_width(24);
-            email.set_height(24);
-            email.alpha(0);
-		    btn1 = new ms.ui.Button( 
-	    "images/pictures/arrow_up.png","images/pictures/arrow_down.png",g_ui_root.manager, g_ui_root);
-        btn1 = btn1;
-            btn1.set_x(0);
-            btn1.set_y(300);
-            btn1.set_width(64);
-            btn1.set_height(64);
-            btn1.set_rotation(180);
-            btn1.alpha(0);
-	var ev_parent = this;
-	btn1.events.addListener("click", function()
-	{    
-		if (application.phase == 3)
-{
-application.temp_img = application.zoomed;
-application.temp_index = application.group_zoomed.find(application.zoomed);
-if (application.temp_index == 0)
-{
-application.temp_index = application.group_zoomed.plane_array.length - 1;
-}
-application.group_zoomed.plane_array[application.temp_index - 1].plane_anim.stop();
-application.group_zoomed.plane_array[application.temp_index - 1].idle_anim.stop();
-application.zoomed = application.group_zoomed.plane_array[application.temp_index - 1];
-application.temp_img.scale.x = 2;
-application.temp_img.scale.y = 2;
-application.temp_img.scale.z = 0;
-application.temp_img.position.z = 0;
-application.temp_img.plane_anim.stop();
-application.temp_img.plane_anim.start();
-application.temp_img.idle_anim.stop();
-application.temp_img.idle_anim.start();
-application.zoomed.scale.x = 12;
-application.zoomed.scale.y = 12;
-application.zoomed.scale.z = 10;
-application.zoomed.position.x = -55;
-application.zoomed.position.y = 50;
-application.zoomed.position.z = 100;
-set_rotation_y(application.zoomed.rotation, 0);
-}
-	}
-	);
-		application.are_obj_events = true;
-		    btn2 = new ms.ui.Button( 
-	    "images/pictures/arrow_up.png","images/pictures/arrow_down.png",g_ui_root.manager, g_ui_root);
-        btn2 = btn2;
-            btn2.set_x(840);
-            btn2.set_y(300);
-            btn2.set_width(64);
-            btn2.set_height(64);
-            btn2.alpha(0);
-	var ev_parent = this;
-	btn2.events.addListener("click", function()
-	{    
-		if (application.phase == 3)
-{
-application.temp_img = application.zoomed;
-application.temp_index = application.group_zoomed.find(application.zoomed);
-if (application.temp_index == application.group_zoomed.plane_array.length - 2)
-{
-application.temp_index = -1;
-}
-application.group_zoomed.plane_array[application.temp_index + 1].plane_anim.stop();
-application.group_zoomed.plane_array[application.temp_index + 1].idle_anim.stop();
-application.zoomed = application.group_zoomed.plane_array[application.temp_index + 1];
-application.temp_img.scale.x = 2;
-application.temp_img.scale.y = 2;
-application.temp_img.scale.z = 0;
-application.temp_img.position.z = 0;
-application.temp_img.plane_anim.stop();
-application.temp_img.plane_anim.start();
-application.temp_img.idle_anim.stop();
-application.temp_img.idle_anim.start();
-application.zoomed.scale.x = 12;
-application.zoomed.scale.y = 12;
-application.zoomed.scale.z = 10;
-application.zoomed.position.x = -55;
-application.zoomed.position.y = 50;
-application.zoomed.position.z = 100;
-set_rotation_y(application.zoomed.rotation, 0);
-}
-	}
-	);
-		application.are_obj_events = true;
-		    linetop = new ms.ui.Line( 
-	    g_ui_root.manager, g_ui_root);
-        linetop = linetop;
-            linetop.set_x1(5);
-            linetop.set_y1(40);
-            linetop.set_x2(5);
-            linetop.set_y2(40);
-            linetop.alpha(60);
-            linetop.set_color("white");
-		    line1 = new ms.ui.Line( 
-	    g_ui_root.manager, g_ui_root);
-        line1 = line1;
-            line1.set_x1(200);
-            line1.set_y1(200);
-            line1.set_x2(200);
-            line1.set_y2(200);
-            line1.alpha(60);
-            line1.set_color("white");
-		    line2 = new ms.ui.Line( 
-	    g_ui_root.manager, g_ui_root);
-        line2 = line2;
-            line2.set_x1(500);
-            line2.set_y1(200);
-            line2.set_x2(500);
-            line2.set_y2(200);
-            line2.alpha(60);
-            line2.set_color("white");
-		    line3 = new ms.ui.Line( 
-	    g_ui_root.manager, g_ui_root);
-        line3 = line3;
-            line3.set_x1(500);
-            line3.set_y1(500);
-            line3.set_x2(500);
-            line3.set_y2(500);
-            line3.alpha(60);
-            line3.set_color("white");
-		    line4 = new ms.ui.Line( 
-	    g_ui_root.manager, g_ui_root);
-        line4 = line4;
-            line4.set_x1(200);
-            line4.set_y1(500);
-            line4.set_x2(200);
-            line4.set_y2(500);
-            line4.alpha(60);
-            line4.set_color("white");
-		    rect1 = new ms.ui.Rectangle( 
-	    null,"white",null,g_ui_root.manager, g_ui_root);
-        rect1 = rect1;
-            rect1.set_x(200);
-            rect1.set_y(200);
-            rect1.set_width(300);
-            rect1.set_height(300);
-            rect1.setVisible(false);
-            rect1.alpha(60);
+	SoundUtils = new ms.ui.SoundUtils();		
 	g_ui.fill_background = false;	
 }
 var event_manager = new ms.event.ThreeEventManager();

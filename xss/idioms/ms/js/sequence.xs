@@ -39,8 +39,10 @@ on render_types()
 
     for(var ut in user_types)
     {
-        var full_path = compiler.full_path("sequence.xss");
-		compiler.xss("../common-js/class.xss", ut, renderer = full_path);
+        compiler.log("Here?");
+        var full_path = compiler.full_path("../sequence.xss");
+		compiler.xss("../../common-js/class.xss", ut, renderer = full_path);
+        compiler.log("Nope");
     }
 }
 
@@ -77,7 +79,7 @@ method begin_interpolator(prop, string iid, string assign, string path)
     }
 }
 
-method render_key(key)
+method render_key(iid, key)
 {
     out()
     {

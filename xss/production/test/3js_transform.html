@@ -69,6 +69,72 @@ application.events.dispatch("switch_cameras", []);
 var cylinder_material;var cube_material;var sphere_material;var scene;var camera_1;var light;var cylinder_1;var container;var cube_1;var sphere_1;
 threejs_load_resources(function()
 {
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+		    lbl0 = new ms.ui.Label( g_ui_root.manager, g_ui_root
+	    , "12px Verdana");
+        lbl0 = lbl0;
+            lbl0.set_x(240);
+            lbl0.set_y(75);
+            lbl0.text("Move mouse to rotate the cylinder");
+		    lbl1 = new ms.ui.Label( g_ui_root.manager, g_ui_root
+	    , "12px Verdana");
+        lbl1 = lbl1;
+            lbl1.set_x(240);
+            lbl1.set_y(100);
+            lbl1.text("Move mouse pressing SHIFT to rotate the transform");
+		    lbl2 = new ms.ui.Label( g_ui_root.manager, g_ui_root
+	    , "12px Verdana");
+        lbl2 = lbl2;
+            lbl2.set_x(240);
+            lbl2.set_y(125);
+            lbl2.text("Move mouse pressing CTRL to rotate the camera horizontally");
 cylinder_material = new THREE.MeshBasicMaterial({
 color:Math.random() * 0xffffff
 	});
@@ -205,73 +271,7 @@ camera_1.position.z = 1400 * Math.cos(application.theta * Math.PI / 360);
 	);
 if(ui)
 {	
-	SoundUtils = new ms.ui.SoundUtils();
-	drawingCanvas.onmousemove = function(ev)
-	{
-		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmousedown = function(ev)
-	{
-		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmouseup = function(ev)
-	{
-		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};		
-	ui.events.addListener("mousedown", function(x,y)
-	{    
-		application.events.dispatch("mousedown", [x, y]);
-	});
-	ui.events.addListener("mouseup", function(x,y)
-	{    
-		application.events.dispatch("mouseup", [x, y]);
-	});
-	ui.events.addListener("mousemove", function(x,y)
-	{    
-		application.events.dispatch("mousemove", [x, y]);
-	});
-	ui.events.addListener("click", function(x,y)
-	{    
-		application.events.dispatch("click", [x, y]);
-	});
-	ui.events.addListener("drag", function(x,y)
-	{    
-		application.events.dispatch("drag", [x, y]);
-	});
-	ui.events.addListener("dragend", function(x,y)
-	{    
-		application.events.dispatch("dragend", [x, y]);
-	});
-	ui.events.addListener("keyup", function(keycode)
-	{    
-		application.events.dispatch("keyup", [keycode]);
-	});
-	ui.events.addListener("keydown", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
-	ui.events.addListener("keypress", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
-		    lbl0 = new ms.ui.Label( 
-	    "12px Verdana",g_ui_root.manager, g_ui_root);
-        lbl0 = lbl0;
-            lbl0.set_x(240);
-            lbl0.set_y(75);
-            lbl0.text("Move mouse to rotate the cylinder");
-		    lbl1 = new ms.ui.Label( 
-	    "12px Verdana",g_ui_root.manager, g_ui_root);
-        lbl1 = lbl1;
-            lbl1.set_x(240);
-            lbl1.set_y(100);
-            lbl1.text("Move mouse pressing SHIFT to rotate the transform");
-		    lbl2 = new ms.ui.Label( 
-	    "12px Verdana",g_ui_root.manager, g_ui_root);
-        lbl2 = lbl2;
-            lbl2.set_x(240);
-            lbl2.set_y(125);
-            lbl2.text("Move mouse pressing CTRL to rotate the camera horizontally");
+	SoundUtils = new ms.ui.SoundUtils();		
 	g_ui.fill_background = false;	
 }
 var event_manager = new ms.event.ThreeEventManager();

@@ -107,10 +107,7 @@ threejs_load_resources(function()
 
 if(ui)
 {	
-	SoundUtils = new ms.ui.SoundUtils();
-	<xss:code>		
-		compiler.inject("render_ui_instances");			
-	</xss:code>		
+	SoundUtils = new ms.ui.SoundUtils();		
 	g_ui.fill_background = false;	
 }
 

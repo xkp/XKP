@@ -34,10 +34,11 @@ var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 application.events = new ms.event.EventHolder();
-		var streamer = new ms.streamer.Streamer();		
+		var streamer = new ms.streamer.Streamer();	
+		var ResourceUtils = new ms.streamer.ResourceUtils();
 	// --------RESOURCES---------
-        var global_package_items = [];
-                global_package_items.push(
+		var global_package = new ms.streamer.Package(streamer);	
+                global_package.add_item(
             {
 		id:				"image_1",
 		resource_type:	RESOURCE_IMAGE,
@@ -45,8 +46,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var image_1;
+				global_package.events.addListener("loaded", function()
+				{
+					image_1 = streamer.get_resource("image_1");
+				});
+                global_package.add_item(
             {
 		id:				"image_2",
 		resource_type:	RESOURCE_IMAGE,
@@ -54,8 +60,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var image_2;
+				global_package.events.addListener("loaded", function()
+				{
+					image_2 = streamer.get_resource("image_2");
+				});
+                global_package.add_item(
             {
 		id:				"image_3",
 		resource_type:	RESOURCE_IMAGE,
@@ -63,8 +74,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var image_3;
+				global_package.events.addListener("loaded", function()
+				{
+					image_3 = streamer.get_resource("image_3");
+				});
+                global_package.add_item(
             {
 		id:				"image_4",
 		resource_type:	RESOURCE_IMAGE,
@@ -72,8 +88,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var image_4;
+				global_package.events.addListener("loaded", function()
+				{
+					image_4 = streamer.get_resource("image_4");
+				});
+                global_package.add_item(
             {
 		id:				"image_5",
 		resource_type:	RESOURCE_IMAGE,
@@ -81,8 +102,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var image_5;
+				global_package.events.addListener("loaded", function()
+				{
+					image_5 = streamer.get_resource("image_5");
+				});
+                global_package.add_item(
             {
 		id:				"image_6",
 		resource_type:	RESOURCE_IMAGE,
@@ -90,8 +116,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var image_6;
+				global_package.events.addListener("loaded", function()
+				{
+					image_6 = streamer.get_resource("image_6");
+				});
+                global_package.add_item(
             {
 		id:				"__audio1",
 		resource_type:	RESOURCE_AUDIO,
@@ -100,15 +131,19 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });	
-		global_package_items.push({
+				var __audio1;
+				global_package.events.addListener("loaded", function()
+				{
+					__audio1 = streamer.get_resource("__audio1");
+				});
+		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
 			src:			"images/no_res.png",
 			frame_width:	null,
 			frame_height:	null,
 			animations:		[]
-		});
-        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		});		
 		global_package.load();	
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
@@ -216,7 +251,7 @@ set_rotation_x(cube_1.rotation, get_rotation_x(cube_1.rotation) + (application.y
 	);
 if(ui)
 {	
-	SoundUtils = new ms.ui.SoundUtils();
+	SoundUtils = new ms.ui.SoundUtils();		
 	g_ui.fill_background = false;	
 }
 var event_manager = new ms.event.ThreeEventManager();

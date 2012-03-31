@@ -1357,10 +1357,12 @@ bool xss_compiler::is_type(variant v)
     return ctx->get_type(obj->id());
   }
 
-str xss_compiler::instantiate(variant v)
+str xss_compiler::instantiate(const param_list params)
   {
-    XSSType   type = variant_cast<XSSType>(v, XSSType());
-    XSSObject instance;
+    variant      v    = params.get(0);
+    XSSType      type = variant_cast<XSSType>(v, XSSType());
+    XSSObject    instance;
+    DynamicArray rt;
     if (!type)
       {
         instance = variant_cast<XSSObject>(v, XSSObject());
@@ -1373,7 +1375,69 @@ str xss_compiler::instantiate(variant v)
     XSSContext ctx  = current_context();
     Language   lang = ctx->get_language();
 
-    str result = lang->instantiate(type, instance, DynamicArray());
+    param_list pl;
+    for(size_t i = 1; i < params.size(); i++)
+      {
+        str pname  = params.get_name(i);
+        variant pvalue = params.get(i);
+
+        if (pname == "instance")
+          {
+            instance = variant_cast<XSSObject>(pvalue, XSSObject());
+            continue;
+          }
+        else if (pname == "runtime_args")
+          {
+            rt = variant_cast<DynamicArray>(pvalue, DynamicArray());
+            continue;
+          }
+
+        pl.add(pname, pvalue);
+      }
+
+    str result = lang->instantiate(type, instance, rt, pl);
+    return result;
+  }
+
+str xss_compiler::render_ctor_args(const param_list params)
+  {
+    variant   v    = params.get(0);
+    XSSType   type = variant_cast<XSSType>(v, XSSType());
+    XSSObject instance;
+    DynamicArray rt;
+    if (!type)
+      {
+        instance = variant_cast<XSSObject>(v, XSSObject());
+        if (instance)
+          {
+            type = instance->type();
+          }
+      }
+
+    XSSContext ctx  = current_context();
+    Language   lang = ctx->get_language();
+
+    param_list pl;
+    for(size_t i = 1; i < params.size(); i++)
+      {
+        str     pname  = params.get_name(i);
+        variant pvalue = params.get(i);
+
+        if (pname == "instance")
+          {
+            instance = variant_cast<XSSObject>(pvalue, XSSObject());
+            continue;
+          }
+        else if (pname == "runtime_args")
+          {
+            rt = variant_cast<DynamicArray>(pvalue, DynamicArray());
+            continue;
+          }
+
+        pl.add(pname, pvalue);
+      }
+
+    str result = lang->render_ctor_args(type, instance, rt, pl);
     return result;
   }
 
@@ -1666,8 +1730,8 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
             type->set_id(type_data->id());
             type->set_super(super);
             type->set_output_id(type_data->output_id());
-            type->set_definition(type_data);
             type->inherit();
+            type->set_definition(type_data);
 
             str class_name = type_data->type_name();
             bool alias = false;
@@ -1852,7 +1916,10 @@ void xss_compiler::preprocess_type(XSSType clazz, XSSObject def_class, const str
         virtual void handle(XSSObject obj, XSSModule mod)
           {
             if (mod->one_of_us(obj))
-              dynamic_set(obj, "idiom", mod);
+              {
+                dynamic_set(obj, "idiom", mod);
+                dynamic_set(target, "idiom", mod);
+              }
 
             if (root == obj)
               return; //do not register the class
@@ -1860,8 +1927,6 @@ void xss_compiler::preprocess_type(XSSType clazz, XSSObject def_class, const str
             str obj_id = obj->id();
             if (!obj_id.empty())
               ctx->register_symbol(RESOLVE_INSTANCE, obj_id, obj);
-
-            dynamic_set(target, "idiom", mod);
 
             if (module == mod)
               target->register_instance(obj);

@@ -5,7 +5,6 @@
 log: Rendering Android project...
 log: API Level = 4
 log: Rendering Android Types...
-log: Rendering Sequence Types...
 log: Rendering Android Imports...
 log: Rendering instance: lbl1
 log: Rendering instance: lbl2
@@ -13,7 +12,6 @@ log: Rendering instance: lbl3
 log: Rendering instance: btn1
 log: Rendering instance: btn2
 log: Rendering instance: btn3
-log: Rendering Sequence...
 log: Rendering instance: anim1
 log: Rendering instance: anim1
 log: Rendering instance: anim2
@@ -23,7 +21,7 @@ log: Rendering instance: anim3
 log: Rendering instance: application
 log: Copying default files...
 log: Rendering default files...
-log: Rendering default files...
+log: Copying files...
 
 Success are greateful
 ===[ characters.project.xml ]================
@@ -211,8 +209,9 @@ log: Rendering instance: __div1
 log: Rendering instance: btnGallery
 log: Rendering instance: btnMaps
 log: Rendering instance: lblStatus
-log: Rendering instance: swtScene
 log: Rendering instance: lblInformation
+log: Rendering instance: swtScene
+log: Rendering instance: lblSwicherInformation
 log: Rendering instance: imgGallery
 log: Rendering instance: mapController
 log: Copying resource files...
@@ -386,8 +385,8 @@ Success are greateful
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering Sequence Types...
-log: Rendering Sequence...
 log: Rendering UI...
+log: Rendering Sequence...
 Success are greateful
 ===[ 3js-ui.project.xml ]================(Tests)
 
@@ -504,7 +503,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
-log: Rendering Sequence...
 Success are greateful
 ===[ box2d1.project.xml ]================(Tests)
 
@@ -737,559 +735,48 @@ for(Object i : list)
 Success are greateful
 ===[ jquery1.project.xml ]================(Tests)
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>TITLE</title>
-<script type="text/javascript" src="../js/jquery.js"></script>
 
-<script type="text/javascript">
-$(function() {
-	
+Error [404] File not found
+	file = c:/dev/xkp/xss/tests/../idioms/jquery/module.xmlERROR: Project:  jquery1.project.xml
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            btn1.text("One button");
-        
-
-
-
-
-
-
-            btn1.width(100);
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            btn2.text("Two button");
-        
-
-
-
-
-
-
-            btn2.width(100);
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            btn3.text("Reset");
-        
-
-
-
-
-
-
-            btn3.width(100);
-        
-
-});
-</script>
-
-<style>
-</style>
-</head>
-
-<body>
-    
-            <div id='application'>
-        
-            <button id='btn1'>
-        
-                </button>
-            
-            <button id='btn2'>
-        
-                </button>
-            
-            <button id='btn3'>
-        
-                </button>
-            
-                </div>
-            </body>
-</html>
-
-
-Success are greateful
 ===[ jquery2.project.xml ]================(Tests)
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>TITLE</title>
-<script type="text/javascript" src="../js/jquery.js"></script>
 
-<script type="text/javascript">
-$(function() {
-	
-
-
-
-
-
-
-
-
-
-
-
-
-        application.target = null;
-
-        application.target_set = function (value)
-        {
-            application.target = value;
-            btn2.text("target acquired " + value);
-for(var i = 0; i < 20; i++)
-{
-btn2.width(btn2.width() + 10);
-if (btn2.width() > 200)
-{
-btn2.width(100);
-}
-}
-
-        };
-    
-
-
-
-
-
-
-	application.reset = function(s) 
-	{
-		application.target_set(s);
-btn1.text("...");
-btn2.text("...");
-	};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            btn1.text("One button");
-        
-
-
-
-
-
-
-            btn1.width(100);
-        
-
-
-
-
-
-
-	var ev_parent = this;
-	btn1.events.addListener("click", function()
-	{    
-
-		btn2.text("Clicked");
-btn1.text("Other Clicked");
-	
-	}
-	);
-
-		application.are_obj_events = true;
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            btn2.text("Two button");
-        
-
-
-
-
-
-
-            btn2.width(100);
-        
-
-
-
-
-
-
-	var ev_parent = this;
-	btn2.events.addListener("click", function()
-	{    
-
-		btn1.text("Old value: " + application.target);
-application.target_set(300);
-	
-	}
-	);
-
-		application.are_obj_events = true;
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            btn3.text("Reset");
-        
-
-
-
-
-
-
-            btn3.width(100);
-        
-
-
-
-
-
-
-	var ev_parent = this;
-	btn3.events.addListener("click", function()
-	{    
-
-		application.reset();
-	
-	}
-	);
-
-		application.are_obj_events = true;
-	
-
-});
-</script>
-
-<style>
-</style>
-</head>
-
-<body>
-    
-            <div id='application'>
-        
-            <button id='btn1'>
-        
-                </button>
-            
-            <button id='btn2'>
-        
-                </button>
-            
-            <button id='btn3'>
-        
-                </button>
-            
-                </div>
-            </body>
-</html>
-
-
+log: Rendering property: background-color
+log: main class: div
+log: size string:  width = "600"  height = "400" 
+log: size string:  width = "100px" 
+log: l1 class: div
+log: size string:  height = "100px" 
+log: t1 class: div
+log: c1 class: div
+log: size string:  height = "100px" 
+log: b1 class: div
+log: size string:  width = "100px" 
+log: r2 class: div
+log: size string:  width = "100px" 
+log: r1 class: div
 Success are greateful
 ===[ jquery3.project.xml ]================(Tests)
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>TITLE</title>
-<script type="text/javascript" src="../js/jquery.js"></script>
 
-<script type="text/javascript">
-$(function() {
-	
-
-
-
-
-
-
-
-
-
-
-
-
-        application.target = null;
-
-        application.target_set = function (value)
-        {
-            application.target = value;
-            btn2.text("target acquired " + value);
-for(var i = 0; i < 20; i++)
-{
-btn2.width(btn2.width() + 10);
-if (btn2.width() > 200)
-{
-btn2.width(100);
-}
-}
-
-        };
-    
-
-
-
-
-
-
-	application.reset = function(s) 
-	{
-		application.target_set(s);
-btn1.text("...");
-btn2.text("...");
-	};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            btn1.text("One button");
-        
-
-
-
-
-
-
-            btn1.width(100);
-        
-
-
-
-
-
-
-	var ev_parent = this;
-	btn1.events.addListener("click", function()
-	{    
-
-		btn2.text("Clicked");
-btn1.text("Other Clicked");
-	
-	}
-	);
-
-		application.are_obj_events = true;
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            btn2.text("Two button");
-        
-
-
-
-
-
-
-            btn2.width(100);
-        
-
-
-
-
-
-
-	var ev_parent = this;
-	btn2.events.addListener("click", function()
-	{    
-
-		btn1.text("Old value: " + application.target);
-application.target_set(300);
-	
-	}
-	);
-
-		application.are_obj_events = true;
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            btn3.text("Reset");
-        
-
-
-
-
-
-
-            btn3.width(100);
-        
-
-
-
-
-
-
-	var ev_parent = this;
-	btn3.events.addListener("click", function()
-	{    
-
-		application.reset();
-	
-	}
-	);
-
-		application.are_obj_events = true;
-	
-
-});
-</script>
-
-<style>
-</style>
-</head>
-
-<body>
-    
-            <div id='application'>
-        
-            <button id='btn1'>
-        
-                </button>
-            
-            <button id='btn2'>
-        
-                </button>
-            
-            <button id='btn3'>
-        
-                </button>
-            
-                </div>
-            </body>
-</html>
-
-
-Success are greateful
-===[ jquery4.project.xml ]================(Tests)
-
-
-Success are greateful
-===[ jquery5.project.xml ]================(Tests)
-
-
-log: Rendering jQuery...
+log: Rendering property: src
+log: main class: div
+log: size string:  width = "600"  height = "400" 
+log: size string:  width = "400px" 
+log: local class: div
+log: __div1 class: div
+log: SPECHAL : __img1
+log: Adding prop to: __img1
 Success are greateful
 ===[ jseq1.project.xml ]================(Tests)
 
 
-log: Rendering Sequence Types...
-log: Rendering Sequence...
 log: Rendering instance: test_sequence
 log: Rendering instance: test_sequence
 Error [idiom] run tag got an invalid method
 	methd = 
-	file = d:/xkp/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
+	file = c:/dev/xkp/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
 
 ===[ json1.project.xml ]================(Tests)
 
@@ -1298,7 +785,7 @@ Error [reader] Invalid XML file
 	xml error = Error document empty.
 	line = 0
 	column = 0
-	file = d:/xkp/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
+	file = c:/dev/xkp/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
 
 ===[ ms1.project.xml ]================(Tests)
 
@@ -1327,8 +814,9 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
+log: Here?
+log: Nope
 log: Rendering UI...
-log: Rendering Sequence...
 Success are greateful
 ===[ ms5.project.xml ]================(Tests)
 
@@ -1344,10 +832,17 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering UI Types...
-Error [context] A symbol with this name already exists
-	symbol = #use_this_id
-	file = d:/xkp/xss/tests/../idioms/mutant-state/../common-js/event.xssERROR: Project:  ms6.project.xml
+log: Rendering Sequence Types...
+log: Rendering UI...
+log: Rendering Sequence...
+Success are greateful
+===[ ms7.project.xml ]================(Tests)
 
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering UI...
+Success are greateful
 ===[ newseq1.project.xml ]================(Tests)
 
 
@@ -1364,7 +859,6 @@ log: Rendering Resources...
 log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: Rendering 3js Types...
-log: Rendering Sequence...
 log: Rendering UI...
 Success are greateful
 ===[ paintings_grad.project.xml ]================(Tests)
@@ -1574,7 +1068,7 @@ Success are greateful
 
 Error [language] Missing declared tag
 	tag = user_image
-	file = d:/xkp/xss/tests/../idioms/wax/server.xssERROR: Project:  wax3.project.xml
+	file = c:/dev/xkp/xss/tests/../idioms/wax/server.xssERROR: Project:  wax3.project.xml
 
 ===[ wax4.project.xml ]================(Tests)
 
@@ -1583,15 +1077,24 @@ Success are greateful
 ===[ wgl_cameras.project.xml ]================(Tests)
 
 
+log: Rendering 3js Types...
+Success are greateful
 ===[ wgl_cube_img.project.xml ]================(Tests)
 
 
+log: Rendering Resources...
+log: Rendering 3js Types...
+Success are greateful
 ===[ wgl_icosahedron.project.xml ]================(Tests)
 
 
+log: Rendering 3js Types...
+Success are greateful
 ===[ wgl_materials.project.xml ]================(Tests)
 
 
+log: Rendering 3js Types...
+Success are greateful
 ===[ wgl_model.project.xml ]================(Tests)
 
 
@@ -1607,12 +1110,19 @@ Success are greateful
 ===[ wgl_reflection_cube.project.xml ]================(Tests)
 
 
+log: Rendering 3js Types...
+Success are greateful
 ===[ wgl_refraction_cube.project.xml ]================(Tests)
 
 
+log: Rendering 3js Types...
+Success are greateful
 ===[ wgl_sound.project.xml ]================(Tests)
 
 
+log: Rendering Resources...
+log: Rendering 3js Types...
+Success are greateful
 ===[ xss1.project.xml ]================(Tests)
 
 
@@ -1835,11 +1345,11 @@ Success are greateful
 			
 		instance id: t2
 	
-				something2
-			
 				something_
 			
 				something
+			
+				something2
 			
 				something3
 			
@@ -1852,11 +1362,11 @@ Success are greateful
 				
 		instance id: t4
 	
-				exploit
-			
 				something_
 			
 				something
+			
+				exploit
 			
 				something3
 			
@@ -2145,193 +1655,5 @@ var c = new t_xss9_2();
 return c;
 
 	
-
-Success are greateful
-===[ xssY.project.xml ]================(Tests)
-
-
-log: PRE_PROCESS xssY_idiom2: classifying class
-log: PRE_PROCESS xssY_idiom2: clazz_1 i_xssY
-log: PRE_PROCESS xssY_idiom2: clazz_2 x_xssY
-log: PRE_PROCESS xssY_idiom2: application application
-log: PRE_PROCESS xssY_idiom2: __resources1 resources
-log: PRE_PROCESS xssY_idiom2: img01 image
-log: PRE_PROCESS xssY_idiom2: img02 image
-log: PRE_PROCESS xssY_idiom2: p1 package
-log: PRE_PROCESS xssY_idiom2: img03 image
-log: PRE_PROCESS xssY_idiom2: img04 image
-log: PRE_PROCESS xssY_idiom2: i1 i_xssY1
-log: PRE_PROCESS xssY_idiom2: i2 i_xssY2
-log: PRE_PROCESS xssY_idiom2: classing classifying
-log: INSIDE WIDGET!!
-log: 0
-log: processing instance __resources1
-log: processing instance img01
-log: processing instance img02
-log: processing instance p1
-log: processing instance img03
-log: processing instance img04
-log: properties size: 0
-log: methods size: 0
-log: events size: 0
-log: children size: 1
-		FROM render_instances on xssY_idiom (1)
-	
-			INSTANCE: i1
-		
-		FROM render_instances on xssY_idiom (2)
-	
-			INSTANCE:  PARENT: application CHILDRENS: 3
-		
-			INSTANCE: img01 PARENT:  CHILDRENS: 0
-		
-			INSTANCE: img02 PARENT:  CHILDRENS: 0
-		
-			INSTANCE: p1 PARENT:  CHILDRENS: 2
-		
-			INSTANCE: img03 PARENT: p1 CHILDRENS: 0
-		
-			INSTANCE: img04 PARENT: p1 CHILDRENS: 0
-		
-		Rendering User Types on xssY.idiom (1)...
-	
-		Rendering User Types on xssY.idiom (2)...
-	
-			[instance: i1]
-		
-			[instance: application]
-		
-					private void click() {
-				
-						Display disp;
-Integer w = disp.getWidth();
-Integer h = disp.getHeight();
-					
-					}
-				
-			instance id= "i1" idiom= "xssY_idiom1"
-		
-			instance id= "application" idiom= ""
-		
-			instance id= "" idiom= "xssY_idiom2"
-		
-			instance id= "img01" idiom= "xssY_idiom2"
-		
-			instance id= "img02" idiom= "xssY_idiom2"
-		
-			instance id= "p1" idiom= "xssY_idiom2"
-		
-			instance id= "img03" idiom= "xssY_idiom2"
-		
-			instance id= "img04" idiom= "xssY_idiom2"
-		
-
-Success are greateful
-===[ maps.project.xml ]================
-
-
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: __div1
-log: Rendering instance: btnGallery
-log: Rendering instance: btnMaps
-log: Rendering instance: lblStatus
-log: Rendering instance: lblInformation
-log: Rendering instance: swtScene
-log: Rendering instance: lblSwicherInformation
-log: Rendering instance: imgGallery
-log: Rendering instance: mapController
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: ico_gallery
-log: Rendering instance: ico_maps
-log: Rendering instance: photos
-log: Rendering instance: worth_1
-log: Rendering instance: worth_2
-log: Rendering instance: worth_3
-log: Rendering instance: worth_4
-log: Rendering instance: worth_5
-log: Rendering instance: worth_6
-log: Rendering instance: worth_7
-log: Rendering instance: maps
-log: Rendering instance: holguin
-log: Rendering instance: application
-log: Copying default files...
-log: Rendering default files...
-
-Success are greateful
-===[ maps.project.xml ]================
-
-
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: __div1
-log: Rendering instance: btnGallery
-log: Rendering instance: btnMaps
-log: Rendering instance: lblStatus
-log: Rendering instance: lblInformation
-log: Rendering instance: swtScene
-log: Rendering instance: lblSwicherInformation
-log: Rendering instance: imgGallery
-log: Rendering instance: mapController
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: ico_gallery
-log: Rendering instance: ico_maps
-log: Rendering instance: photos
-log: Rendering instance: worth_1
-log: Rendering instance: worth_2
-log: Rendering instance: worth_3
-log: Rendering instance: worth_4
-log: Rendering instance: worth_5
-log: Rendering instance: worth_6
-log: Rendering instance: worth_7
-log: Rendering instance: maps
-log: Rendering instance: holguin
-log: Rendering instance: application
-log: Copying default files...
-log: Rendering default files...
-
-Success are greateful
-===[ maps.project.xml ]================
-
-
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: __div1
-log: Rendering instance: btnGallery
-log: Rendering instance: btnMaps
-log: Rendering instance: lblStatus
-log: Rendering instance: lblInformation
-log: Rendering instance: swtScene
-log: Rendering instance: lblSwicherInformation
-log: Rendering instance: imgGallery
-log: Rendering instance: mapController
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: ico_gallery
-log: Rendering instance: ico_maps
-log: Rendering instance: photos
-log: Rendering instance: worth_1
-log: Rendering instance: worth_2
-log: Rendering instance: worth_3
-log: Rendering instance: worth_4
-log: Rendering instance: worth_5
-log: Rendering instance: worth_6
-log: Rendering instance: worth_7
-log: Rendering instance: maps
-log: Rendering instance: holguin
-log: Rendering instance: application
-log: Copying default files...
-log: Rendering default files...
 
 Success are greateful

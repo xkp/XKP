@@ -24,7 +24,7 @@
                 
         out()
 	    {
-		    <xss:e value = "cmp_id"/> = new <xss:e value = "cmp.type.output_id"/>( 
+		    <xss:e value = "cmp_id"/> = new <xss:e value = "cmp.type.output_id"/>( <xss:e value = "parent_id"/>.manager, <xss:e value = "parent_id"/>
 	    }
 	    var type = cmp.type;
         if (type.constructor_params)
@@ -32,22 +32,18 @@
             for(int i = 0; i < type.constructor_params.size; i++)
 		    {				
                 var param = type.constructor_params[i];
-                string param_value;
-                if (param.constant)
-                    param_value = param.constant;
-                else if (param.property)
+                if (param.property)
                 {
                     var prop = cmp.get_property(param.property);					
                     if(prop != null)
-                        out() {<xss:e v="prop.render_value()"/>}			
+                        out() {, <xss:e v="prop.render_value()"/>}			
                     else
-                        out() {null}	    
+                        out() {, null}	    
                 }    
-				
-                out(dont_break = true) {,}
 		    }
+            
+            out() {);}
         }	    
-        out() {<xss:e value = "parent_id"/>.manager, <xss:e value = "parent_id"/>);}
 		if(cmp.type.output_id == "ms.ui.Component" || cmp.type.output_id == "ms.ui.ClipArea"){
 			out() {<xss:e v="cmp_id"/>.mouse_thru = true;}			
 		}

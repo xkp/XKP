@@ -8,23 +8,24 @@
 	body{
 	}
 </style>
-<script type="text/javascript" src="../js/three/Detector.js"></script>
-<script type="text/javascript" src="../js/three/Three.js"></script>
-<script type="text/javascript" src="../js/three/Stats.js"></script>
-<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+		<script type="text/javascript" src="../js/three/Three.js"></script>
+		<script type="text/javascript" src="../js/three/Stats.js"></script>
+		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+		<script type="text/javascript" src="../js/three/Utils.js"></script>
+		<script type="text/javascript" src="../js/three/Detector.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript">		
+var ui;
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 var renderer = new THREE.WebGLRenderer( { antialias: false } );
+var canvas_position = {x:0, y:0};
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
@@ -32,10 +33,11 @@ var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 application.events = new ms.event.EventHolder();
-		var streamer = new ms.streamer.Streamer();
+		var streamer = new ms.streamer.Streamer();	
+		var ResourceUtils = new ms.streamer.ResourceUtils();
 	// --------RESOURCES---------
-        var def_package_items = [];
-                def_package_items.push(
+		var global_package = new ms.streamer.Package(streamer);	
+                global_package.add_item(
             {
 		id:				"image_1",
 		resource_type:	RESOURCE_IMAGE,
@@ -43,8 +45,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                def_package_items.push(
+});	
+				var image_1;
+				global_package.events.addListener("loaded", function()
+				{
+					image_1 = streamer.get_resource("image_1");
+				});
+                global_package.add_item(
             {
 		id:				"image_2",
 		resource_type:	RESOURCE_IMAGE,
@@ -52,8 +59,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                def_package_items.push(
+});	
+				var image_2;
+				global_package.events.addListener("loaded", function()
+				{
+					image_2 = streamer.get_resource("image_2");
+				});
+                global_package.add_item(
             {
 		id:				"image_3",
 		resource_type:	RESOURCE_IMAGE,
@@ -61,8 +73,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                def_package_items.push(
+});	
+				var image_3;
+				global_package.events.addListener("loaded", function()
+				{
+					image_3 = streamer.get_resource("image_3");
+				});
+                global_package.add_item(
             {
 		id:				"image_4",
 		resource_type:	RESOURCE_IMAGE,
@@ -70,8 +87,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                def_package_items.push(
+});	
+				var image_4;
+				global_package.events.addListener("loaded", function()
+				{
+					image_4 = streamer.get_resource("image_4");
+				});
+                global_package.add_item(
             {
 		id:				"image_5",
 		resource_type:	RESOURCE_IMAGE,
@@ -79,8 +101,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                def_package_items.push(
+});	
+				var image_5;
+				global_package.events.addListener("loaded", function()
+				{
+					image_5 = streamer.get_resource("image_5");
+				});
+                global_package.add_item(
             {
 		id:				"image_6",
 		resource_type:	RESOURCE_IMAGE,
@@ -88,23 +115,41 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                def_package_items.push(
+});	
+				var image_6;
+				global_package.events.addListener("loaded", function()
+				{
+					image_6 = streamer.get_resource("image_6");
+				});
+                global_package.add_item(
             {
 		id:				"__audio1",
-		resource_type:	RESOURCE_SOUND,
+		resource_type:	RESOURCE_AUDIO,
 		src:			"sounds/forest.wav",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-        var g_startup_package = new ms.streamer.Package(streamer, def_package_items);	
-		g_startup_package.load();	
+});	
+				var __audio1;
+				global_package.events.addListener("loaded", function()
+				{
+					__audio1 = streamer.get_resource("__audio1");
+				});
+		global_package.add_item({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});		
+		global_package.load();	
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( app_width, app_height );
 function render() {
+canvas_position = getElementPosition(renderer.domElement);
 var now   = new Date().getTime();
 if (g_elapsed < 0)
     g_delta = 0; //first update
@@ -115,76 +160,79 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var materials = 
+var materials;var __basic_material1;var __basic_material2;var __basic_material3;var __basic_material4;var __basic_material5;var __basic_material6;var plane_material;var scene;var camera_1;var cube_1;var plane_1;
+threejs_load_resources(function()
+{
+materials = 
 new Array(
 );
-var __basic_material1 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_1').asset),
+__basic_material1 = new THREE.MeshBasicMaterial({
+map:new THREE.Texture(streamer.get_resource('image_1').data),
 	});
 	materials.push(__basic_material1);
-var __basic_material2 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_2').asset),
+__basic_material2 = new THREE.MeshBasicMaterial({
+map:new THREE.Texture(streamer.get_resource('image_2').data),
 	});
 	materials.push(__basic_material2);
-var __basic_material3 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_3').asset),
+__basic_material3 = new THREE.MeshBasicMaterial({
+map:new THREE.Texture(streamer.get_resource('image_3').data),
 	});
 	materials.push(__basic_material3);
-var __basic_material4 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_4').asset),
+__basic_material4 = new THREE.MeshBasicMaterial({
+map:new THREE.Texture(streamer.get_resource('image_4').data),
 	});
 	materials.push(__basic_material4);
-var __basic_material5 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_5').asset),
+__basic_material5 = new THREE.MeshBasicMaterial({
+map:new THREE.Texture(streamer.get_resource('image_5').data),
 	});
 	materials.push(__basic_material5);
-var __basic_material6 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_6').asset),
+__basic_material6 = new THREE.MeshBasicMaterial({
+map:new THREE.Texture(streamer.get_resource('image_6').data),
 	});
 	materials.push(__basic_material6);
-var plane_material = new THREE.MeshBasicMaterial({
+plane_material = new THREE.MeshBasicMaterial({
 color:Grey
 	});
-                set_material_alpha(plane_material, 50);
-var scene = 
+            set_material_alpha(plane_material, 50);
+scene = 
 new THREE.Scene(
 );
-var camera_1 = 
+camera_1 = 
 new THREE.Camera(
 70,1.5,1,1000);
 		active_camera = camera_1;
-                camera_1.position.y = 300;
-                camera_1.position.z = 500;
+            camera_1.position.y = 300;
+            camera_1.position.z = 500;
 	    var cube_1_cube = 
 new THREE.Cube(
 200,200,200,1,1,1,materials);
-	    var cube_1 = new THREE.Mesh(cube_1_cube, new THREE.MeshFaceMaterial());
+	    cube_1 = new THREE.Mesh(cube_1_cube, new THREE.MeshFaceMaterial());
 	    scene.addObject(cube_1);
 		cube_1.events = new ms.event.EventHolder();
-                cube_1.position.y = 150;
+            cube_1.position.y = 150;
 	    var plane_1_plane = 
 new THREE.Plane(
 200,200);
-	    var plane_1 = new THREE.Mesh(plane_1_plane, plane_material);
+	    plane_1 = new THREE.Mesh(plane_1_plane, plane_material);
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
-                set_rotation_x(plane_1.rotation, -90);
+            set_rotation_x(plane_1.rotation, -90);
 	var __sound_3d1 = new THREE.Sound(streamer.get_resource('sounds/forest.wav').asset
 	,700,20,true
 	);
 	scene.addObject(__sound_3d1);
 	__sound_3d1.play();
-                application.x_target_rotation = 0;
-                application.x_target_rotation_on_mouse_down = 0;
-                application.mouse_x = 0;
-                application.mouse_x_on_mouse_down = 0;
-                application.y_target_rotation = 0;
-                application.y_target_rotation_on_mouse_down = 0;
-                application.mouse_y = 0;
-                application.mouse_y_on_mouse_down = 0;
-                application.window_half_x = app_width / 2;
-                application.window_half_y = app_height / 2;
-                application.is_mouse_down = false;
+            application.x_target_rotation = 0;
+            application.x_target_rotation_on_mouse_down = 0;
+            application.mouse_x = 0;
+            application.mouse_x_on_mouse_down = 0;
+            application.y_target_rotation = 0;
+            application.y_target_rotation_on_mouse_down = 0;
+            application.mouse_y = 0;
+            application.mouse_y_on_mouse_down = 0;
+            application.window_half_x = app_width / 2;
+            application.window_half_y = app_height / 2;
+            application.is_mouse_down = false;
 	var ev_parent = this;
 	application.events.addListener("mousedown", function(x,y)
 	{    
@@ -239,6 +287,7 @@ document.onkeypress = function(ev)
 application.events.dispatch("init", []);
 document.body.appendChild( renderer.domElement );
 animate();
+});
 function animate() {	
 	requestAnimationFrame( animate );
 	render();	

@@ -69,44 +69,6 @@ application.events.dispatch("switch_cameras", []);
 var scene;var camera_1;var __particle_system1;
 threejs_load_resources(function()
 {
-scene = 
-new THREE.Scene(
-);
-camera_1 = 
-new THREE.Camera(
-75,1.5,1,3000);
-		active_camera = camera_1;
-            camera_1.position.z = 1000;
-		for ( var i = 0; i < 1000; i++ ) {
-			particle = new THREE.Particle( new THREE.ParticleCanvasMaterial( { color: Math.random() * 0x808008 + 0x808008, program: program_fill, } ) );
-				particle.position.x = 
-				default_interpolate(-400, 400, Math.random());
-				particle.position.y = 
-				default_interpolate(-400, 400, Math.random());
-				particle.position.z = 
-				default_interpolate(-400, 400, Math.random());
-			particle.scale.x = particle.scale.y = Math.random() * 10 + 5;
-			scene.addObject( particle );
-		}
-            application.mouse_x = null;
-            application.mouse_y = null;
-	var ev_parent = this;
-	application.events.addListener("updates", function()
-	{    
-		camera_1.position.x = camera_1.position.x + (application.mouse_x - camera_1.position.x) * 0.0500000007;
-camera_1.position.y = camera_1.position.y + (-application.mouse_y - camera_1.position.y) * 0.0500000007;
-	}
-	);
-	var ev_parent = this;
-	application.events.addListener("mousemove", function(x,y)
-	{    
-		application.mouse_x = x - app_width / 2;
-application.mouse_y = y - app_height / 2;
-	}
-	);
-if(ui)
-{	
-	SoundUtils = new ms.ui.SoundUtils();
 	drawingCanvas.onmousemove = function(ev)
 	{
 		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
@@ -155,13 +117,51 @@ if(ui)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    lbl0 = new ms.ui.Label( 
-	    "12px Verdana",g_ui_root.manager, g_ui_root);
+		    lbl0 = new ms.ui.Label( g_ui_root.manager, g_ui_root
+	    , "12px Verdana");
         lbl0 = lbl0;
             lbl0.set_x(350);
             lbl0.set_y(50);
             lbl0.set_color("White");
             lbl0.text("Move the mouse to rotate the camera");
+scene = 
+new THREE.Scene(
+);
+camera_1 = 
+new THREE.Camera(
+75,1.5,1,3000);
+		active_camera = camera_1;
+            camera_1.position.z = 1000;
+		for ( var i = 0; i < 1000; i++ ) {
+			particle = new THREE.Particle( new THREE.ParticleCanvasMaterial( { color: Math.random() * 0x808008 + 0x808008, program: program_fill, } ) );
+				particle.position.x = 
+				default_interpolate(-400, 400, Math.random());
+				particle.position.y = 
+				default_interpolate(-400, 400, Math.random());
+				particle.position.z = 
+				default_interpolate(-400, 400, Math.random());
+			particle.scale.x = particle.scale.y = Math.random() * 10 + 5;
+			scene.addObject( particle );
+		}
+            application.mouse_x = null;
+            application.mouse_y = null;
+	var ev_parent = this;
+	application.events.addListener("updates", function()
+	{    
+		camera_1.position.x = camera_1.position.x + (application.mouse_x - camera_1.position.x) * 0.0500000007;
+camera_1.position.y = camera_1.position.y + (-application.mouse_y - camera_1.position.y) * 0.0500000007;
+	}
+	);
+	var ev_parent = this;
+	application.events.addListener("mousemove", function(x,y)
+	{    
+		application.mouse_x = x - app_width / 2;
+application.mouse_y = y - app_height / 2;
+	}
+	);
+if(ui)
+{	
+	SoundUtils = new ms.ui.SoundUtils();		
 	g_ui.fill_background = false;	
 }
 var event_manager = new ms.event.ThreeEventManager();
