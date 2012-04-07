@@ -3,12 +3,21 @@
 <xss:class>
 	method render_component(var component, int idt)
 	{
+        if (component.simple)
+        {
+            out() {<<xss:e value="component.type.id"/>/>}
+            return;
+        }
+    
 		string class_name = "";
 		if (component.type)
 			class_name = component.type.tag;
         
         if (!class_name)
             class_name = component.type.id;
+            
+        if (class_name == "")
+            return;
 			
 		if(component.html_renderer)
 		{
@@ -55,7 +64,7 @@
 				if(p1.value == null)
 					continue;
 					
-				if(p1.render_type == "body_intag")
+				if(p1.render_as == "attribute")
 				{
 					out()
 					{
@@ -63,7 +72,7 @@
 					}
 				} 
 				else
-				if(p1.render_type == "body_outtag")
+				if(p1.render_as == "text")
 				{
 					prop_outtag += p1;
 				}
@@ -97,6 +106,9 @@
 
 	on render()
 	{
-		render_component(it, 1);
+		if (it.class_name == "html")
+            out(){<xss:e value="it.text"/>}
+        else
+            render_component(it, 1);
 	}
 </xss:class>

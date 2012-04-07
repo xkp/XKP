@@ -1,0 +1,26 @@
+<xss:parameter id="it"/>
+<xss:code>
+    string source = compiler.genid("acsource");    
+    out()
+    {
+        var <xss:e value="source"/> = [
+    }
+
+    array items = it.find_by_type("item");
+    for(var item in items)
+    {
+        out() {"<xss:e value="item.caption"/>", }
+    }
+
+    out()
+    {
+    ];
+    }
+
+    var source_arg = object();
+    source_arg.id = "source";
+    source_arg.value = source;
+    var extra = [source_arg];
+
+    compiler.xss("../jquery-object.xss", it, extra = extra);
+</xss:code>

@@ -1153,6 +1153,23 @@ bool xss_object::has_property(const str& prop)
     return get_property(prop);
   }
 
+bool xss_object::have_value(const str& prop)
+  {
+    std::vector<variant>::iterator it = properties_->ref_begin();
+    std::vector<variant>::iterator nd = properties_->ref_end();
+
+    for(; it != nd; it++)
+      {
+        XSSProperty xprop = *it;
+        if (xprop->id() == prop)
+          {
+            return !xprop->value_.empty();
+          }
+      }
+
+    return false;
+  }
+
 XSSObject xss_object::find(const str& what)
   {
     if (what.empty())
@@ -1402,7 +1419,7 @@ XSSProperty xss_object::add_property(const str& name, variant value, XSSType typ
             if (prop->id() == name)
               {
                 prop->set_value(value, type);
-                return result;
+                return prop;
               }
           }
 

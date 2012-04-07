@@ -1,9 +1,5 @@
 <xss:parameter id="it"/>
 
-<xss:code>
-    compiler.log(it.output_id + " class: " + it.class_name);
-</xss:code>
-
 <div id="<xss:e value="it.output_id"/>">
 <xss:class>
     public int direction_south  = 0;
@@ -52,20 +48,32 @@
         if (cmp.placement == "client" || cmp.placement == "center")
             return direction_client;
         
-        compiler.error("Invalid placement", pl = cmp.placement, cmp = cmp.id);
+        if (cmp.have_value("x") && cmp.have_value("y"))
+        {
+            compiler.log("IT IS ALIVE");
+            return direction_float;    
+        }
+            
+        return null;
     }
     
     int get_operation(cmp, int idx, object result)
     {
         var child = cmp.children[idx];
         result.direction  = get_direction(child);
+        if (result.direction == null)
+        {
+            compiler.error("Invalid layout, all components must have a placement", pl = cmp.placement, cmp = cmp.id);
+        }
+        
+        
         if (result.direction == direction_client)
         {
             result.component = child;
             return idx + 1;
         }
         
-        if (result.direction == direction_floating)
+        if (result.direction == direction_float)
         {
             floating_ += child;
             result.ignore = true;
@@ -156,11 +164,17 @@
         while(idx >= 0 && idx < cmp.children.size)
         {
             var child = cmp.children[idx];
+            var op    = object();
+            idx = get_operation(cmp, idx, op); 
+            
+            if (op.ignore)
+            {
+                compiler.log("Ignoring idx " + idx);
+                continue;
+            }
+                
             if (full)
                 compiler.error("Invalid layout, adding components after it is full", component = child.id);
-            
-            var op = object();
-            idx = get_operation(cmp, idx, op); 
 
             if (direction == null)
             {
@@ -242,11 +256,10 @@
         compiler.xss("../component.xss", cmp);
     }
     
-    method render_client(cmp)
+    method render_client(cmp, parent)
     {
         if (cmp.placement == "center")
         {
-            compiler.log("Adding prop to: " + cmp.output_id);
             compiler.add_object_property(cmp.css, "display",      value = "block", as_plain_text = true);
             compiler.add_object_property(cmp.css, "margin-left",  value = "auto",  as_plain_text = true);
             compiler.add_object_property(cmp.css, "margin-right", value = "auto",  as_plain_text = true);
@@ -260,9 +273,10 @@
         if (layout.size == 1)
         {
             var cl = layout[0];
-            compiler.log("SPECHAL : " + cl.component.output_id);
             if (cl.direction == direction_client)
-                render_client(cl.component);
+                render_client(cl.component, parent);
+            else if (cl.direction == direction_float)
+                return false;
             else
                 compiler.error("Layout not implemented, single components must be either client or centered");
             
@@ -274,7 +288,7 @@
     
     method render_layout(var layout, object root)
     {
-        if (special_layout(layout))
+        if (special_layout(layout, root))
             return;
     
         string attributes = "";
@@ -314,7 +328,11 @@
             }
             else if (op.direction == direction_client)
             {
-                out() {<<xss:e v="tag"/>>}
+                string align_str = "vertical-align:top";
+                if (op.component.placement == "center")
+                    align_str = "vertical-align:middle";
+
+                out() {<<xss:e v="tag"/> style="<xss:e v="align_str"/>">}
                 
                 render_client(op.component);
                 
@@ -385,17 +403,44 @@
         if (it.children.empty)
             return;
     
-        bool do_layout = it.children[0].placement != null;
+        var  first = it.children[0];
+        var  dir = get_direction(first);        
+        bool do_layout = dir != null;
+        
         if (!do_layout)
         {
             //just render
             for(var cmp in it.children)
+            {
+                var ndir = get_direction(cmp);
+                if (ndir != null)
+                {
+                    if (ndir == direction_float)
+                    {
+                        floating_ += cmp;
+                        continue;
+                    }
+                    
+                    compiler.error("Invalid layout, all components must have a placement, or neither of them", pl = cmp.placement, cmp = cmp.id);
+                }
                 compiler.xss("../component.xss", cmp);
+            }
         }
         else
         {
             array layout = generate_layout(it);
             render_layout(layout, it);
+        }
+
+        //render floating components last
+        if (floating_.size > 0)
+        {
+            compiler.add_object_property(it.css, "position", value = "relative", as_plain_text = true);
+            for(var fcmp in floating_)
+            {
+                compiler.add_object_property(fcmp.css, "position", value = "absolute", as_plain_text = true);
+                render_component(fcmp);
+            }
         }
     }
 </xss:class>

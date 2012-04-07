@@ -1145,6 +1145,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 			        }
 
 						str separator = ctx_->get_language()->resolve_separator(caller);
+            variant call_obj;
             if (caller)
               {
                 resolve_info left;
@@ -1169,6 +1170,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                         case RESOLVE_METHOD:
                           {
                             XSSMethod mthd = right.value;
+                            call_obj = mthd;
                             right_str = mthd->output_id();
                             break;
                           }
@@ -1180,7 +1182,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                   }
               }
 
-            push_rendered(caller_str + separator + right_str, 0, variant(), caller_str);
+            push_rendered(caller_str + separator + right_str, 0, call_obj, caller_str);
             break;
           }
 
@@ -1319,6 +1321,18 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 
             variant top = stack_.top(); stack_.pop();
             str caller = operand_to_string(top);
+
+            bool gotit = false;
+            if (top.is<already_rendered>())
+              {
+                already_rendered arr = top;
+                XSSMethod mthd = variant_cast<XSSMethod>(arr.object, XSSMethod());
+                if (mthd && mthd->get<bool>("ignore_args", false))
+                  {
+                    push_rendered(caller, op_prec, variant(), caller); 
+                    break;
+                  }
+              }
 
             push_rendered(caller + result.str(), op_prec, variant(), caller); //td: we could find out the type here or something
             break;

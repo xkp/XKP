@@ -13,7 +13,7 @@ on pre_process(obj)
 
         if (prop.css)
         {
-            css.add_property(prop.id, prop.value, prop.type);
+            compiler.add_object_property(css, prop.output_id, value = prop.value, postfix = prop.postfix);
         }
             
     }
@@ -32,8 +32,10 @@ on render_instances()
 		string jq_object = '$("#' + ri.id + '")';
 		
 		string jq_classname = "";
-		if(ri.jq_classname && ri.jq_classname != "")
-			jq_classname = "." + ri.jq_classname + "()";
+		if(ri.jquery && ri.jquery != "")
+        {
+			jq_classname = "." + ri.jquery + "()";
+        }
 		
 		out()
 		{

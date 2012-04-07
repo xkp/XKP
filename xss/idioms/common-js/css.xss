@@ -14,7 +14,10 @@
             value_str = prop.value;
         else
             value_str = prop.render_value();
-        
+            
+        if (prop.postfix)
+            value_str += prop.postfix;
+            
         out() {<xss:e value="prop.name"/> : <xss:e v="value_str"/>}
     }
 </xss:code>}

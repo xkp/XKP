@@ -1,0 +1,45 @@
+<application name="jq4" title="Testing componentes" src="jquery4.xs">
+    <div id="main" width="800" height="600">
+        <div>
+            <label id="lbl1" caption="Hello Components"/>
+            <editbox id="edit1" width="252"/>
+        </div>
+        <radiobutton id="rb1" caption="Radio Buttoning"/>
+        <checkbox id="cb1" caption="Check Boxing"/>
+        <radiogroup>
+            <radiobutton caption="Chocolate"/>
+            <radiobutton caption="Vanilla"/>
+            <radiobutton caption="Strawberry"/>
+        </radiogroup>
+
+        <div x="400" y="20" width="600" height="400">
+            <accordion id="acc1" placement="client">
+                <div caption="Accordion Item 1">
+                    <html>
+                        <p>
+                            Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
+                            Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
+                            ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis <br/>
+                            lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui. 
+                        </p>
+                        <ul>
+                            <li>List item one</li>
+                            <li>List item two</li>
+                            <li>List item three</li>
+                        </ul>
+                    </html>                    
+                </div>
+                <div caption="Accordion Item 2">
+                    <tabs id="tc1" collapsible="true">
+                        <div caption="Tab Page 1">
+                            
+                        </div>
+                        <div caption="Tab Page 2" href="somepage.html"/>
+                    </tabs>
+                </div>
+            </accordion>
+        </div>
+        
+        <button id="btn1" x="20" y="120" caption="I'm floating"/>
+    </div>
+</application>

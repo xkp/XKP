@@ -1,0 +1,28 @@
+<xss:parameter id="it"/>
+
+<div id="<xss:e value="it.output_id"/>">
+
+<xss:code>
+	string header_tag = "h3";
+    if (it.header_tag)
+        header_tag = it.header_tag;
+        
+	for(var child in it.children)
+	{
+        if (!child.caption)
+            compiler.error("Accordion items are expected to provide a caption");
+            
+		string href = "#";
+        if (child.href)
+            href = child.href;
+            
+        out()
+		{
+            <<xss:e value="header_tag"/>><a href="#"><xss:e value="child.caption"/></a></<xss:e value="header_tag"/>>
+		}
+
+        compiler.xss("../component.xss", child);
+	}
+
+</xss:code>
+</div>

@@ -12,7 +12,6 @@ $(function() {
 			var tc1 = $("#tc1");
 			var local = $("#local");
 			var remote = $("#remote");
-			var __div1 = $("#__div1");
 			var __img1 = $("#__img1");
 			var application = $("#application");
 tc1.tabs(
@@ -20,11 +19,12 @@ tc1.tabs(
 			    collapsible : true,
 		    }
 );
+					__img1.attr("src", "images/img1.png");
 });
 </script>
 <style>
-#main {width : 600;height : 400}
-#tc1 {width : 400}
+#main {width : 600px;height : 400px}
+#tc1 {width : 400px}
 #__img1 {display : block;margin-left : auto;margin-right : auto}
 </style>
 </head>
@@ -41,13 +41,11 @@ tc1.tabs(
 <div id="local">
 </div>
 </div>
-</td><td>
-<div id="__div1">
+</td><td style="vertical-align:middle">
 				<img id="__img1"
 						src="images/img1.png" 
 					>
 				</img>
-</div>
 </td></tr>
             </table>
         </div>

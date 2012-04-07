@@ -1,0 +1,105 @@
+<application name="jq5" title="JQuitchen Sink" src="jquery5.xs">
+    <div id="main" width="1200">
+        <accordion id="acc1" placement="left" width="300" fillSpace="true">
+            <div caption="Plain HTML">
+                <html>
+                    <p>
+                        We allow you to specify your own html
+                        whenever you feel convinient.
+                    </p>
+                </html>
+            </div>
+            <div caption="Remote HTML">
+                <html>
+                    <p>
+                        When using tabs you can simply scpecify an "href"
+                        attribute and jQuery will do the rest.
+                    </p>
+                </html>
+            </div>
+            <div caption="Common Controls">
+                <html>
+                    <p>
+                        The good old buttons, checkboxes and
+                        labels we're used to. Clickables.
+                    </p>
+                </html>
+            </div>
+            <div caption="JQuery UI">
+                <html>
+                    <p>
+                        Advanced components, courtesy of 
+                    </p>
+                    <a href="www.jqueryui.com"> jQuery UI </a>
+                </html>
+            </div>
+        </accordion>
+        <tabs id="tc1" placement="client" height="400">
+            <div caption="Plain HTML">
+                <html>
+                    <p>
+                        Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
+                        Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
+                        ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis <br/>
+                        lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
+                    </p>
+                    <ul>
+                        <li>List item one</li>
+                        <li>List item two</li>
+                        <li>List item three</li>
+                        <li>List item two</li>
+                        <li>List item three</li>
+                    </ul>
+                </html>
+            </div>
+            <div caption="Remote HTML" href="somepage.html"/>
+            <div caption="Common Controls">
+                
+            </div>
+            <div caption="JQuery UI">
+                <div placement="left" width="350">
+                    <label caption="Date: "/>
+                    <datepicker id="dp2" input="true"/>
+                    <datepicker id="dp1"/>
+                </div>
+                <div placement="client">
+                    <label caption="autocomplete (type an vowel): "/>
+                    <autocomplete>
+                        <item caption="Ambient"/>
+                        <item caption="Amphibious"/>
+                        <item caption="Anthropology"/>
+                        <item caption="Effervecent"/>
+                        <item caption="Emporium"/>
+                        <item caption="Entropy"/>
+                        <item caption="Indeed"/>
+                        <item caption="IPhone"/>
+                        <item caption="Impossible"/>
+                        <item caption="Obliquos"/>
+                        <item caption="Onerous"/>
+                        <item caption="Obnoxious"/>
+                        <item caption="Up?"/>
+                        <item caption="Usurpator"/>
+                    </autocomplete>
+                    <br/>
+                    <button id="btn1" caption="Open Dialog 1"/>
+                    <button id="btn2" caption="Open Dialog 2"/>
+                    <dialog id="simple_dialog" modal="true">
+                        <html>
+                            <p>
+                                This is a simple dialog
+                            </p>
+                            <p>
+                                Currently using <b>36% of your storage space</b>.
+                            </p>
+                        </html>
+                    </dialog>
+                    <br/>
+                    <br/>
+                    <progressbar id="pb1" value="37"/>
+                    <br/>
+                    <slider id="sld1" min="0" max="100" value="37"/>
+                </div>
+            </div>
+        </tabs>
+    </div>
+</application>

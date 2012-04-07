@@ -1357,12 +1357,57 @@ bool xss_compiler::is_type(variant v)
     return ctx->get_type(obj->id());
   }
 
+struct instantiate_params
+  {
+    XSSObject    instance;
+    DynamicArray runtime;
+    param_list   values;
+  };
+
+void process_instantiate_params(const param_list params, int idx, instantiate_params& result)
+  {
+    for(size_t i = idx; i < params.size(); i++)
+      {
+        str     pname  = params.get_name(i);
+        variant pvalue = params.get(i);
+
+        if (pname == "instance")
+          {
+            result.instance = variant_cast<XSSObject>(pvalue, XSSObject());
+            continue;
+          }
+        else if (pname == "runtime_args")
+          {
+            result.runtime = variant_cast<DynamicArray>(pvalue, DynamicArray());
+            continue;
+          }
+        else if (pname == "param_values")
+          {
+            DynamicArray pv = variant_cast<DynamicArray>(pvalue, DynamicArray());
+            assert(pv);
+
+		        std::vector<variant>::iterator it = pv->ref_begin();
+		        std::vector<variant>::iterator nd = pv->ref_end();
+
+            for(; it != nd; it++)
+              {
+                XSSObject pobj = variant_cast<XSSObject>(*it, XSSObject()); assert(pobj); //td: error
+                str pid = pobj->id();
+                str pval = pobj->get<str>("value", str());
+                result.values.add(pid, pval);
+              }
+            continue;
+          }
+
+        result.values.add(pname, pvalue);
+      }
+  }
+
 str xss_compiler::instantiate(const param_list params)
   {
     variant      v    = params.get(0);
     XSSType      type = variant_cast<XSSType>(v, XSSType());
     XSSObject    instance;
-    DynamicArray rt;
     if (!type)
       {
         instance = variant_cast<XSSObject>(v, XSSObject());
@@ -1375,27 +1420,13 @@ str xss_compiler::instantiate(const param_list params)
     XSSContext ctx  = current_context();
     Language   lang = ctx->get_language();
 
-    param_list pl;
-    for(size_t i = 1; i < params.size(); i++)
-      {
-        str pname  = params.get_name(i);
-        variant pvalue = params.get(i);
+    instantiate_params iparams;
+    process_instantiate_params(params, 1, iparams);
 
-        if (pname == "instance")
-          {
-            instance = variant_cast<XSSObject>(pvalue, XSSObject());
-            continue;
-          }
-        else if (pname == "runtime_args")
-          {
-            rt = variant_cast<DynamicArray>(pvalue, DynamicArray());
-            continue;
-          }
+    if (!instance)
+      instance = iparams.instance;
 
-        pl.add(pname, pvalue);
-      }
-
-    str result = lang->instantiate(type, instance, rt, pl);
+    str result = lang->instantiate(type, instance, iparams.runtime, iparams.values);
     return result;
   }
 
@@ -1404,7 +1435,6 @@ str xss_compiler::render_ctor_args(const param_list params)
     variant   v    = params.get(0);
     XSSType   type = variant_cast<XSSType>(v, XSSType());
     XSSObject instance;
-    DynamicArray rt;
     if (!type)
       {
         instance = variant_cast<XSSObject>(v, XSSObject());
@@ -1417,27 +1447,10 @@ str xss_compiler::render_ctor_args(const param_list params)
     XSSContext ctx  = current_context();
     Language   lang = ctx->get_language();
 
-    param_list pl;
-    for(size_t i = 1; i < params.size(); i++)
-      {
-        str     pname  = params.get_name(i);
-        variant pvalue = params.get(i);
+    instantiate_params iparams;
+    process_instantiate_params(params, 1, iparams);
 
-        if (pname == "instance")
-          {
-            instance = variant_cast<XSSObject>(pvalue, XSSObject());
-            continue;
-          }
-        else if (pname == "runtime_args")
-          {
-            rt = variant_cast<DynamicArray>(pvalue, DynamicArray());
-            continue;
-          }
-
-        pl.add(pname, pvalue);
-      }
-
-    str result = lang->render_ctor_args(type, instance, rt, pl);
+    str result = lang->render_ctor_args(type, instance, iparams.runtime, iparams.values);
     return result;
   }
 
