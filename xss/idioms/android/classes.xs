@@ -115,6 +115,7 @@ method render_imports(clazz, bns)
 	//TRACE: log
 	//compiler.log("### Begin Rendering Android Imports...");
 
+	//TODO: customize imports to clazz object for check dup in all application and class types
 	array<string> imports    = [];
 
 	for(var inst in clazz.instances)

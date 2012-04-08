@@ -2,6 +2,8 @@ package xkp.android.SimpleTest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 			import android.app.Activity;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
@@ -25,7 +27,9 @@ import xkp.android.libs.Layout.XKPLayout;
 				private Button btnFullName;
 				private TextView lblFullName;
 				private EditText edtContainer;
-	private ActSimpleTest application;
+		private XKPLayout layoutapplication;
+	private boolean mLayoutStarted = false;
+			private ActSimpleTest application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -35,6 +39,20 @@ import xkp.android.libs.Layout.XKPLayout;
 				bindViews();
 			}
 			private void bindViews() {
+		layoutapplication = (XKPLayout) findViewById(R.id.layoutapplication);
+		ViewTreeObserver mainLayoutViewTreeObserver = layoutapplication.getViewTreeObserver();
+		if(mainLayoutViewTreeObserver.isAlive()) {
+			mainLayoutViewTreeObserver.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+				@Override
+				public void onGlobalLayout() {
+					if(!mLayoutStarted) {
+						mLayoutStarted = true;
+						onLayoutStarted();
+					}
+					onLayoutUpdated();
+				}
+			});
+		}
 				lblFirstName = (TextView) findViewById(R.id.lblFirstName);
 				edtFirstName = (EditText) findViewById(R.id.edtFirstName);
 				lblLastName = (TextView) findViewById(R.id.lblLastName);
@@ -50,6 +68,22 @@ import xkp.android.libs.Layout.XKPLayout;
 				edtContainer = (EditText) findViewById(R.id.edtContainer);
 	}
 private void initCallers() {
+}
+			@Override
+			public void onPause() {
+				super.onPause();
+			}
+			@Override
+			public void onStop() {
+				super.onStop();
+			}
+			@Override
+			public void onResume() {
+				super.onResume();
+			}
+private void onLayoutUpdated() {
+}
+private void onLayoutStarted() {
 }
 			private void initInstances() {
 				application = this;

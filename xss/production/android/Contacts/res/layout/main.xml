@@ -2,7 +2,7 @@
 			<xkp.android.libs.Layout.XKPLayout 
 				xmlns:android="http://schemas.android.com/apk/res/android" 
 				xmlns:xkp="http://schemas.android.com/apk/res/xkp.android.Contacts" 
-				android:id="@+id/application" 
+				android:id="@+id/layoutapplication" 
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
 				xkp:placement="client"

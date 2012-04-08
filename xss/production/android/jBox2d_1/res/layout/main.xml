@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<xkp.android.libs.Layout.XKPLayout 
+				xmlns:android="http://schemas.android.com/apk/res/android" 
+				xmlns:xkp="http://schemas.android.com/apk/res/xkp.android.jBox2d_1" 
+				android:id="@+id/layoutapplication" 
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				xkp:placement="client"
+			>
+			</xkp.android.libs.Layout.XKPLayout>

@@ -3,5 +3,20 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+<xss:code>
+	// render all references libraries 
+	if(application.libraries)
+	{
+		for(var lib in application.libraries)
+		{
+			out(indent = 1)
+			{
+				<classpathentry kind="lib" path="lib/<xss:e value="lib"/>"/>
+			}
+			
+			//TODO: copy libraries files to dest path
+		}
+	}
+</xss:code>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

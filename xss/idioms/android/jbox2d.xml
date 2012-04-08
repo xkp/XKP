@@ -1,0 +1,81 @@
+<module id="jbox2d" src="jbox2d.xs">
+
+	<types>
+	
+		<enum id="EShapeType" output_id="ShapeType" default="EShapeType.circle">
+			<property id="circle" type="EShapeType" output_id="CIRCLE">
+				<get text="ShapeType.CIRCLE" global="true"/>
+			</property>
+			
+			<property id="rect" type="EShapeType" output_id="POLYGON">
+				<get text="ShapeType.POLYGON" global="true"/>
+			</property>
+			
+			<property id="polygon" type="EShapeType" output_id="POLYGON">
+				<get text="ShapeType.POLYGON" global="true"/>
+			</property>
+			
+			<property id="unknown" type="EShapeType" output_id="UNKNOWN">
+				<get text="ShapeType.UNKNOWN" global="true"/>
+			</property>
+		</enum>
+		
+		<enum id="EBodyType" output_id="BodyType" default="EBodyType.dynamic">
+			<property id="dynamic" type="EBodyType" output_id="DYNAMIC">
+				<get text="BodyType.DYNAMIC" global="true"/>
+			</property>
+			
+			<property id="kinematic" type="EBodyType" output_id="KINEMATIC">
+				<get text="BodyType.KINEMATIC" global="true"/>
+			</property>
+			
+			<property id="static" type="EBodyType" output_id="STATIC">
+				<get text="BodyType.STATIC" global="true"/>
+			</property>
+		</enum>
+		
+		<class id="IPhysics">
+			<property id="density" type="float" default_value="1.0"/>
+			<property id="friction" type="float" default_value="0.5"/>
+			<property id="restitution" type="float" default_value="0.2"/>
+			<property id="angular_damping" type="float" default_value="0.0"/>
+			<property id="linear_damping" type="float" default_value="0.0"/>
+		</class>
+		
+		<class id="physics_world" super="IPhysics">
+			<array id="imports">
+				<object import="org.jbox2d.common.Vec2"/>
+				<object import="org.jbox2d.dynamics.BodyType"/>
+				<object import="xkp.android.libs.JBox2d.*"/>
+			</array>
+			
+			<property id="gravity_x" type="int" default_value="0.0"/>
+			<property id="gravity_y" type="int" default_value="10.0"/>
+			<property id="debug_draw" type="bool" default_value="false"/>
+			<property id="scale" type="float" default_value="1.0"/>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPDDView.java"/>
+				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPDebugDraw.java"/>
+				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPJBox2d.java"/>
+				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPPhysicBody.java"/>
+			</array>
+		</class>
+
+		<class id="body" super="IPhysics" renderer="jBox2dBody.xss">
+			<property id="body_type" type="EBodyType"/>
+			<property id="shape" type="EShapeType"/>
+			<property id="sensor" type="bool"/>
+			<property id="x" type="float"/>
+			<property id="y" type="float"/>
+			<property id="width" type="float"/>
+			<property id="height" type="float"/>
+			<property id="radius" type="float" default_value="0.0"/>
+			<property id="rotation" type="float" default_value="0.0"/>
+        </class>
+
+        <class id="physics" super="body" renderer="jBox2dBody.xss"/>
+		
+    </types>
+	
+</module>

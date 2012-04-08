@@ -2,6 +2,8 @@ package xkp.android.AnimTest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 			import android.app.Activity;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
@@ -26,14 +28,16 @@ import xkp.android.libs.Layout.XKPLayout;
 				private Button btn1;
 				private Button btn2;
 				private Button btn3;
-			private Sequence anim1;
+		private XKPLayout layoutapplication;
+	private Sequence anim1;
 private Sequence anim2;
 private Sequence anim3;
 		public void mthd_anim3_stop_anim3() {
 			lbl3.setText("Button 3 Stopped");
 anim3.stop();
 		}
-	private ActAnimTest application;
+	private boolean mLayoutStarted = false;
+			private ActAnimTest application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -43,6 +47,20 @@ anim3.stop();
 				bindViews();
 			}
 			private void bindViews() {
+		layoutapplication = (XKPLayout) findViewById(R.id.layoutapplication);
+		ViewTreeObserver mainLayoutViewTreeObserver = layoutapplication.getViewTreeObserver();
+		if(mainLayoutViewTreeObserver.isAlive()) {
+			mainLayoutViewTreeObserver.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+				@Override
+				public void onGlobalLayout() {
+					if(!mLayoutStarted) {
+						mLayoutStarted = true;
+						onLayoutStarted();
+					}
+					onLayoutUpdated();
+				}
+			});
+		}
 				lbl1 = (TextView) findViewById(R.id.lbl1);
 				lbl2 = (TextView) findViewById(R.id.lbl2);
 				lbl3 = (TextView) findViewById(R.id.lbl3);
@@ -71,6 +89,22 @@ anim3.stop();
 private void initCallers() {
 			Start();
 }
+			@Override
+			public void onPause() {
+				super.onPause();
+			}
+			@Override
+			public void onStop() {
+				super.onStop();
+			}
+			@Override
+			public void onResume() {
+				super.onResume();
+			}
+private void onLayoutUpdated() {
+}
+private void onLayoutStarted() {
+}
 			private void initInstances() {
 				application = this;
 anim1 = new Sequence();
@@ -90,7 +124,6 @@ anim2.start();
 				}
 });
             anim1.setParent(null);
-					//x
                    final Interpolator ____i1 = new Interpolator();
 				   ____i1.setAssigner(new Assign(){
 	                    public void put(Object value)
@@ -118,7 +151,6 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
 				}
 });
             anim2.setParent(null);
-					//x
                    final Interpolator ____i2 = new Interpolator();
 				   ____i2.setAssigner(new Assign(){
 	                    public void put(Object value)
@@ -141,7 +173,6 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
 anim3 = new Sequence();anim3.setLoop(true);
                 anim3.start();
             anim3.setParent(null);
-					//x
                    final Interpolator ____i3 = new Interpolator();
 				   ____i3.setAssigner(new Assign(){
 	                    public void put(Object value)
@@ -153,7 +184,6 @@ anim3 = new Sequence();anim3.setLoop(true);
 						____i3.addKey(0, 40);
 						____i3.addKey(1.5, 200);
 				    anim3.addHandler(____i3);
-					//x
                    final Interpolator ____i4 = new Interpolator();
 				   ____i4.setAssigner(new Assign(){
 	                    public void put(Object value)

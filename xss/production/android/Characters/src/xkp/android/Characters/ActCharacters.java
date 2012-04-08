@@ -2,6 +2,8 @@ package xkp.android.Characters;
 import java.util.ArrayList;
 import java.util.Arrays;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 			import android.app.Activity;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
@@ -15,6 +17,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				private character mickey;
 				private character pluto;
 			public static XKPUtils util;
+		private XKPLayout layoutapplication;
 				private XKPPackage __resources1;
 			private String [] mResources___resources1_XKPName = {
 				"i_aladdin",
@@ -52,7 +55,8 @@ import xkp.android.libs.Layout.XKPLayout;
 				R.raw.mickey,
 				R.raw.pluto
 			};
-	private ActCharacters application;
+	private boolean mLayoutStarted = false;
+			private ActCharacters application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -62,6 +66,20 @@ import xkp.android.libs.Layout.XKPLayout;
 				bindViews();
 			}
 			private void bindViews() {
+		layoutapplication = (XKPLayout) findViewById(R.id.layoutapplication);
+		ViewTreeObserver mainLayoutViewTreeObserver = layoutapplication.getViewTreeObserver();
+		if(mainLayoutViewTreeObserver.isAlive()) {
+			mainLayoutViewTreeObserver.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+				@Override
+				public void onGlobalLayout() {
+					if(!mLayoutStarted) {
+						mLayoutStarted = true;
+						onLayoutStarted();
+					}
+					onLayoutUpdated();
+				}
+			});
+		}
 				aladdin = (character) findViewById(R.id.aladdin);
 				mickey = (character) findViewById(R.id.mickey);
 				pluto = (character) findViewById(R.id.pluto);
@@ -70,6 +88,22 @@ private void initCallers() {
 			util = new XKPUtils();
 			ActCharacters.util.addView(this);
 			util = ActCharacters.util;
+}
+			@Override
+			public void onPause() {
+				super.onPause();
+			}
+			@Override
+			public void onStop() {
+				super.onStop();
+			}
+			@Override
+			public void onResume() {
+				super.onResume();
+			}
+private void onLayoutUpdated() {
+}
+private void onLayoutStarted() {
 }
 			private void initInstances() {
 				application = this;
