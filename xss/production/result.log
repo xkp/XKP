@@ -282,134 +282,29 @@ Success are greateful
 ===[ kitchensink.project.xml ]================
 
 
-log: Rendering jQuery...
-log: Rendering instance with id = kitchen
-log: Rendering property: width
-log: Rendering property: height
-log: Rendering property: placement
-log: Rendering property: tabs
-log: Rendering instance with id = __div1
-log: Rendering property: placement
-log: Rendering instance with id = btn1
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: caption
-log: Rendering event: click
-log: Rendering instance with id = lbl1
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: caption
-log: Rendering instance with id = edit1
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: width
-log: Rendering property: text
-log: Rendering property: hint
-log: Rendering instance with id = chkb1
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: caption
-log: Rendering instance with id = __scroller1
-log: Rendering property: placement
-log: Rendering instance with id = rdgTab3
-log: Rendering instance with id = radio1
-log: Rendering property: caption
-log: Rendering instance with id = radio2
-log: Rendering property: caption
-log: Rendering instance with id = radio3
-log: Rendering property: caption
-log: Rendering instance with id = radio4
-log: Rendering property: caption
-log: Rendering instance with id = radio5
-log: Rendering property: caption
-log: Rendering instance with id = radio6
-log: Rendering property: caption
-log: Rendering instance with id = radio7
-log: Rendering property: caption
-log: Rendering instance with id = radio8
-log: Rendering property: caption
-log: Rendering instance with id = radio9
-log: Rendering property: caption
-log: Rendering instance with id = __scroller2
-log: Rendering property: placement
-log: Rendering instance with id = img1
-log: Rendering property: src
-log: Rendering instance with id = __div2
-log: Rendering property: placement
-log: Rendering instance with id = application
-log: PINGA
-log: PINGA
-Success are greateful
+Error [404] File not found
+	file = d:/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
+
 ===[ pairs.project.xml ]================
 
 
-log: Rendering jQuery...
-log: Rendering instance with id = application
-Success are greateful
+Error [404] File not found
+	file = d:/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
+
 ===[ simple.project.xml ]================
 
 
-log: Rendering jQuery...
-log: Rendering instance with id = lblFirstName
-log: Rendering property: caption
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: width
-log: Rendering property: height
-log: Rendering instance with id = edtFirstName
-log: Rendering property: hint
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: width
-log: Rendering property: height
-log: Rendering instance with id = lblLastName
-log: Rendering property: caption
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: width
-log: Rendering property: height
-log: Rendering instance with id = edtLastName
-log: Rendering property: hint
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: width
-log: Rendering property: height
-log: Rendering instance with id = btnFullName
-log: Rendering property: caption
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: width
-log: Rendering property: height
-log: Rendering event: click
-log: Rendering instance with id = lblFullName
-log: Rendering property: caption
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: width
-log: Rendering property: height
-log: Rendering instance with id = edtContainer
-log: Rendering property: hint
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: width
-log: Rendering property: height
-log: Rendering instance with id = application
-log: PINGA
-log: PINGA
-log: PINGA
-log: PINGA
-log: PINGA
-log: PINGA
-log: PINGA
-Success are greateful
+Error [404] File not found
+	file = d:/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
+
 ===[ 3js-ms.project.xml ]================(Tests)
 
 
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering Sequence Types...
-log: Rendering Sequence...
 log: Rendering UI...
+log: Rendering Sequence...
 Success are greateful
 ===[ 3js-ui.project.xml ]================(Tests)
 
@@ -765,6 +660,37 @@ Error [404] File not found
 ===[ jquery2.project.xml ]================(Tests)
 
 
+log: size string:  width = "600"  height = "400" 
+log: size string:  width = "100px" 
+log: size string:  height = "100px" 
+log: size string:  height = "100px" 
+log: size string:  width = "100px" 
+log: size string:  width = "100px" 
+Success are greateful
+===[ jquery3.project.xml ]================(Tests)
+
+
+log: Rendering property: src
+log: size string:  width = "600"  height = "400" 
+log: size string:  width = "400px" 
+Success are greateful
+===[ jquery4.project.xml ]================(Tests)
+
+
+log: IT IS ALIVE
+log: IT IS ALIVE
+Success are greateful
+===[ jquery5.project.xml ]================(Tests)
+
+
+log: ARGSL input, inst
+log: ARGSL dateText, inst
+log: ARGSL dateText, inst
+log: ARGSL event, ui
+log: size string:  width = "1200" 
+log: size string:  width = "300px" 
+log: size string: 
+log: size string:  width = "350px" 
 Success are greateful
 ===[ jseq1.project.xml ]================(Tests)
 
@@ -808,9 +734,13 @@ Success are greateful
 ===[ ms4.project.xml ]================(Tests)
 
 
-Error [404] File not found
-	file = d:/xkp/xss/tests/../idioms/ms/sequence.xmlERROR: Project:  ms4.project.xml
-
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering Sequence Types...
+log: Here?
+log: Nope
+log: Rendering UI...
+Success are greateful
 ===[ ms5.project.xml ]================(Tests)
 
 
@@ -825,10 +755,17 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering UI Types...
-Error [context] A symbol with this name already exists
-	symbol = #use_this_id
-	file = d:/xkp/xss/tests/../idioms/mutant-state/../common-js/event.xssERROR: Project:  ms6.project.xml
+log: Rendering Sequence Types...
+log: Rendering UI...
+log: Rendering Sequence...
+Success are greateful
+===[ ms7.project.xml ]================(Tests)
 
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering UI...
+Success are greateful
 ===[ newseq1.project.xml ]================(Tests)
 
 
@@ -841,9 +778,12 @@ Success are greateful
 ===[ paintings.project.xml ]================(Tests)
 
 
-Error [404] File not found
-	file = d:/xkp/xss/tests/../idioms/ms/sequence.xmlERROR: Project:  paintings.project.xml
-
+log: Rendering Resources...
+log: Rendering Sequence Types...
+log: Rendering UI Types...
+log: Rendering 3js Types...
+log: Rendering UI...
+Success are greateful
 ===[ paintings_grad.project.xml ]================(Tests)
 
 
@@ -1060,15 +1000,24 @@ Success are greateful
 ===[ wgl_cameras.project.xml ]================(Tests)
 
 
+log: Rendering 3js Types...
+Success are greateful
 ===[ wgl_cube_img.project.xml ]================(Tests)
 
 
+log: Rendering Resources...
+log: Rendering 3js Types...
+Success are greateful
 ===[ wgl_icosahedron.project.xml ]================(Tests)
 
 
+log: Rendering 3js Types...
+Success are greateful
 ===[ wgl_materials.project.xml ]================(Tests)
 
 
+log: Rendering 3js Types...
+Success are greateful
 ===[ wgl_model.project.xml ]================(Tests)
 
 
@@ -1084,12 +1033,19 @@ Success are greateful
 ===[ wgl_reflection_cube.project.xml ]================(Tests)
 
 
+log: Rendering 3js Types...
+Success are greateful
 ===[ wgl_refraction_cube.project.xml ]================(Tests)
 
 
+log: Rendering 3js Types...
+Success are greateful
 ===[ wgl_sound.project.xml ]================(Tests)
 
 
+log: Rendering Resources...
+log: Rendering 3js Types...
+Success are greateful
 ===[ xss1.project.xml ]================(Tests)
 
 
@@ -1312,11 +1268,11 @@ Success are greateful
 			
 		instance id: t2
 	
-				something2
-			
 				something_
 			
 				something
+			
+				something2
 			
 				something3
 			
@@ -1329,11 +1285,11 @@ Success are greateful
 				
 		instance id: t4
 	
-				exploit
-			
 				something_
 			
 				something
+			
+				exploit
 			
 				something3
 			
