@@ -104,7 +104,7 @@
 		</class>
 	
 		<class id="transform" output_id="THREE.Object3D" heritable="true">
-			<property id="texture" type="string" use_plain_value="true">
+			<property id="texture" type="string">
 				<set text="set_transform_image({path}, {value})" global = "true"/>
             </property>
 			<property id="texture_object" type="string" use_plain_value="true">
@@ -201,10 +201,10 @@
 		
 		<class id="plane" super="object3d" output_id="THREE.Plane" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
-				<parameter property="width" runtime="true"/>
-				<parameter property="height" runtime="true"/>
-				<parameter property="x_segments" runtime="true"/>
-				<parameter property="y_segments" runtime="true"/>
+				<parameter id="width" property="width" runtime="true"/>
+				<parameter id="height" property="height" runtime="true"/>
+				<parameter id="x_segments" property="x_segments" runtime="true"/>
+				<parameter id="y_segments" property="y_segments" runtime="true"/>
 			</constructor_params>
 			<property id="width" type="string" dont_init="true"/>
 			<property id="height" type="string" dont_init="true"/>

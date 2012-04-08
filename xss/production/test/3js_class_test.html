@@ -35,10 +35,11 @@ var app_width = 600;
 var app_height = 400;
 var application = {};
 application.events = new ms.event.EventHolder();
-		var streamer = new ms.streamer.Streamer();		
+		var streamer = new ms.streamer.Streamer();	
+		var ResourceUtils = new ms.streamer.ResourceUtils();
 	// --------RESOURCES---------
-        var global_package_items = [];
-                global_package_items.push(
+		var global_package = new ms.streamer.Package(streamer);	
+                global_package.add_item(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -46,8 +47,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+                global_package.add_item(
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
@@ -55,8 +61,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image2;
+				global_package.events.addListener("loaded", function()
+				{
+					__image2 = streamer.get_resource("__image2");
+				});
+                global_package.add_item(
             {
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
@@ -64,8 +75,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image3;
+				global_package.events.addListener("loaded", function()
+				{
+					__image3 = streamer.get_resource("__image3");
+				});
+                global_package.add_item(
             {
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
@@ -73,8 +89,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image4;
+				global_package.events.addListener("loaded", function()
+				{
+					__image4 = streamer.get_resource("__image4");
+				});
+                global_package.add_item(
             {
 		id:				"__image5",
 		resource_type:	RESOURCE_IMAGE,
@@ -83,15 +104,19 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });	
-		global_package_items.push({
+				var __image5;
+				global_package.events.addListener("loaded", function()
+				{
+					__image5 = streamer.get_resource("__image5");
+				});
+		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
 			src:			"images/no_res.png",
 			frame_width:	null,
 			frame_height:	null,
 			animations:		[]
-		});
-        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		});		
 		global_package.load();	
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
@@ -152,8 +177,7 @@ new THREE.Camera(
 application.i = 0;
 }
 var plane_1 = 
-create_my_plane(
-)
+create_my_plane()
 ;
 plane_1.image_set(application.img_array[application.i]);
 plane_1.position.x = x;
@@ -164,7 +188,7 @@ application.i = application.i + 1;
 	);
 if(ui)
 {	
-	SoundUtils = new ms.ui.SoundUtils();
+	SoundUtils = new ms.ui.SoundUtils();		
 	g_ui.fill_background = false;	
 }
 var event_manager = new ms.event.ThreeEventManager();

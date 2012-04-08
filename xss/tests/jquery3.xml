@@ -1,0 +1,9 @@
+<application name="PlacementTest" title="Testing layout" src="jquery3.xs">
+    <div id="main" width="600" height="400">
+        <tabcontrol id="tc1" placement="left" width="400" collapsible="true">
+            <div id="local" caption="Components"/>
+            <div id="remote" caption="Some Page" href="somepage.html"/>
+        </tabcontrol>
+        <img src="images/img1.png" placement="center"/>
+    </div>
+</application>

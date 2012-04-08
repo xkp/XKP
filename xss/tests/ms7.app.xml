@@ -1,0 +1,8 @@
+<application src="ms7.app.xs" width="1000" height="1000">
+    <resources>
+        <image src="images/smile_grin_48.png"/>
+    </resources>
+
+    <div id="div1">
+    </div>
+</application>

@@ -49,10 +49,11 @@ application.events = new ms.event.EventHolder();
 			var g_ui_root = ui.root;
 			var mouse_pressed = false;
 		}
-		var streamer = new ms.streamer.Streamer();		
+		var streamer = new ms.streamer.Streamer();	
+		var ResourceUtils = new ms.streamer.ResourceUtils();
 	// --------RESOURCES---------
-        var global_package_items = [];
-                global_package_items.push(
+		var global_package = new ms.streamer.Package(streamer);	
+                global_package.add_item(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -60,8 +61,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+                global_package.add_item(
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
@@ -69,8 +75,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image2;
+				global_package.events.addListener("loaded", function()
+				{
+					__image2 = streamer.get_resource("__image2");
+				});
+                global_package.add_item(
             {
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
@@ -78,8 +89,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image3;
+				global_package.events.addListener("loaded", function()
+				{
+					__image3 = streamer.get_resource("__image3");
+				});
+                global_package.add_item(
             {
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
@@ -87,8 +103,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image4;
+				global_package.events.addListener("loaded", function()
+				{
+					__image4 = streamer.get_resource("__image4");
+				});
+                global_package.add_item(
             {
 		id:				"__image5",
 		resource_type:	RESOURCE_IMAGE,
@@ -97,15 +118,19 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });	
-		global_package_items.push({
+				var __image5;
+				global_package.events.addListener("loaded", function()
+				{
+					__image5 = streamer.get_resource("__image5");
+				});
+		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
 			src:			"images/no_res.png",
 			frame_width:	null,
 			frame_height:	null,
 			animations:		[]
-		});
-        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		});		
 		global_package.load();	
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
@@ -129,7 +154,7 @@ var my_plane;var scene;var camera_1;
     var my_plane;
 	    var my_plane_plane = 
 new THREE.Plane(
-width,height,x_segments,y_segments);
+);
 	    my_plane = new THREE.Mesh(my_plane_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(my_plane);
 		my_plane.events = new ms.event.EventHolder();
@@ -144,38 +169,6 @@ width,height,x_segments,y_segments);
         }
 threejs_load_resources(function()
 {
-scene = 
-new THREE.Scene(
-);
-camera_1 = 
-new THREE.Camera(
-45,1.5,1,10000);
-		active_camera = camera_1;
-            camera_1.position.z = 1000;
-            application.img_array = ["images/test1.png", "images/test2.png", "images/test3.png", "images/test4.png", "images/test5.png"];
-            application.i = 0;
-	var ev_parent = this;
-	application.events.addListener("click", function(x,y)
-	{    
-		if (application.i == 5)
-{
-application.i = 0;
-}
-var plane_1 = 
-create_my_plane(
-200,260
-)
-;
-plane_1.image_set(application.img_array[application.i]);
-plane_1.position.x = x;
-plane_1.position.y = y;
-scene.addObject(plane_1);
-application.i = application.i + 1;
-	}
-	);
-if(ui)
-{	
-	SoundUtils = new ms.ui.SoundUtils();
 	drawingCanvas.onmousemove = function(ev)
 	{
 		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
@@ -224,12 +217,42 @@ if(ui)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    lbl0 = new ms.ui.Label( 
-	    "12px Verdana",g_ui_root.manager, g_ui_root);
+		    lbl0 = new ms.ui.Label( g_ui_root.manager, g_ui_root
+	    , "12px Verdana");
         lbl0 = lbl0;
             lbl0.set_x(200);
             lbl0.set_y(75);
             lbl0.text("Click wherever to create a randomly positioned plane");
+scene = 
+new THREE.Scene(
+);
+camera_1 = 
+new THREE.Camera(
+45,1.5,1,10000);
+		active_camera = camera_1;
+            camera_1.position.z = 1000;
+            application.img_array = ["images/test1.png", "images/test2.png", "images/test3.png", "images/test4.png", "images/test5.png"];
+            application.i = 0;
+	var ev_parent = this;
+	application.events.addListener("click", function(x,y)
+	{    
+		if (application.i == 5)
+{
+application.i = 0;
+}
+var plane_1 = 
+create_my_plane(200, 260, null, null)
+;
+plane_1.image_set(application.img_array[application.i]);
+plane_1.position.x = x;
+plane_1.position.y = y;
+scene.addObject(plane_1);
+application.i = application.i + 1;
+	}
+	);
+if(ui)
+{	
+	SoundUtils = new ms.ui.SoundUtils();		
 	g_ui.fill_background = false;	
 }
 var event_manager = new ms.event.ThreeEventManager();

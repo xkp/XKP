@@ -4,6 +4,11 @@
 <xss:parameter id="path"/>
 
 <xss:code>
+if (prop.dont_render)
+{
+    return;    
+}
+
 string prop_name = prop.output_id;
 string assign = "=";
 string separator = ";";

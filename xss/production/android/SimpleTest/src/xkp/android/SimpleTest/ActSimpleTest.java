@@ -7,14 +7,14 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 			import android.app.Activity;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
-						import android.widget.TextView;
-						import android.text.method.KeyListener;
 						import android.view.View.OnClickListener;
 						import android.view.View.OnLongClickListener;
 						import android.view.MotionEvent;
 						import android.view.View.OnTouchListener;
 						import android.view.View.OnKeyListener;
 						import android.view.View.OnFocusChangeListener;
+						import android.text.method.KeyListener;
+						import android.widget.TextView;
 						import android.widget.EditText;
 						import android.widget.Button;
 		public class ActSimpleTest 

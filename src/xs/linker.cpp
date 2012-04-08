@@ -1235,8 +1235,8 @@ int code_linker::add_call( instruction_type i, unsigned char param_count, bool i
   {
     assert(i == i_call || i == i_this_call);
 
-    if (named_params && !param_names_.empty())
-      assert(param_names_.size() == param_count);
+    //if (named_params && !param_names_.empty())
+    //  assert(param_names_.size() == param_count);
       
     instruction ii(i, param_count, is_dynamic, invert);
     ii.data.call_data.named_params = named_params;

@@ -36,7 +36,8 @@ var SoundUtils = new ms.ui.SoundUtils();
 			var g_ui_root = ui.root;
 			var mouse_pressed = false;
 		}
-		var streamer = new ms.streamer.Streamer();		
+		var streamer = new ms.streamer.Streamer();	
+		var ResourceUtils = new ms.streamer.ResourceUtils();
         var   b2Vec2 = Box2D.Common.Math.b2Vec2
         ,  b2AABB = Box2D.Collision.b2AABB
         ,  b2Mat22 = Box2D.Common.Math.b2Mat22
@@ -96,8 +97,8 @@ var SoundUtils = new ms.ui.SoundUtils();
             var xform = new b2Transform(pos, rot);
             me.SetTransform(xform);
         }
-        var global_package_items = [];
-                global_package_items.push(
+		var global_package = new ms.streamer.Package(streamer);	
+                global_package.add_item(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -105,8 +106,13 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+                global_package.add_item(
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
@@ -114,8 +120,13 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image2;
+				global_package.events.addListener("loaded", function()
+				{
+					__image2 = streamer.get_resource("__image2");
+				});
+                global_package.add_item(
             {
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
@@ -123,8 +134,13 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image3;
+				global_package.events.addListener("loaded", function()
+				{
+					__image3 = streamer.get_resource("__image3");
+				});
+                global_package.add_item(
             {
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
@@ -133,15 +149,19 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });	
-		global_package_items.push({
+				var __image4;
+				global_package.events.addListener("loaded", function()
+				{
+					__image4 = streamer.get_resource("__image4");
+				});
+		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
 			src:			"images/no_res.png",
 			frame_width:	null,
 			frame_height:	null,
 			animations:		[]
-		});
-        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		});		
 		global_package.load();	
     var canvas_position = {x:0, y:0};
 function start(resolution)  
@@ -217,14 +237,13 @@ var __label1;var __label2;var __label3;var __label4;var __label5;var btn1;var bt
             body_1 = Class.create(ms.ui.Image,
         {
     initialize: function($super
+                , manager
+                , parent
                 , src
-				, manager, parent
-			)
+                )
     {
         $super(
-        src? src : "images/smile_grin_48.png"
-				, manager, parent
-			        );
+        manager,parent,src? src : "images/smile_grin_48.png"        );
         this.events = new ms.event.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -267,14 +286,13 @@ var __label1;var __label2;var __label3;var __label4;var __label5;var btn1;var bt
             body_2 = Class.create(ms.ui.Image,
         {
     initialize: function($super
+                , manager
+                , parent
                 , src
-				, manager, parent
-			)
+                )
     {
         $super(
-        src? src : "images/smile_sad_48.png"
-				, manager, parent
-			        );
+        manager,parent,src? src : "images/smile_sad_48.png"        );
         this.events = new ms.event.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -317,14 +335,13 @@ var __label1;var __label2;var __label3;var __label4;var __label5;var btn1;var bt
             body_3 = Class.create(ms.ui.Image,
         {
     initialize: function($super
+                , manager
+                , parent
                 , src
-				, manager, parent
-			)
+                )
     {
         $super(
-        src? src : "images/img1.png"
-				, manager, parent
-			        );
+        manager,parent,src? src : "images/img1.png"        );
         this.events = new ms.event.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -368,14 +385,13 @@ var __label1;var __label2;var __label3;var __label4;var __label5;var btn1;var bt
             floor = Class.create(ms.ui.Image,
         {
     initialize: function($super
+                , manager
+                , parent
                 , src
-				, manager, parent
-			)
+                )
     {
         $super(
-        src? src : "images/stone-12.jpg"
-				, manager, parent
-			        );
+        manager,parent,src? src : "images/stone-12.jpg"        );
         this.events = new ms.event.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -416,14 +432,13 @@ var __label1;var __label2;var __label3;var __label4;var __label5;var btn1;var bt
             my_body = Class.create(ms.ui.Image,
         {
     initialize: function($super
+                , manager
+                , parent
                 , src
-				, manager, parent
-			)
+                )
     {
         $super(
-        src
-				, manager, parent
-			        );
+        manager,parent,src        );
         this.events = new ms.event.EventHolder(); 
         var this__  = this;
 	var ev_parent = this;
@@ -522,89 +537,89 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    __label1 = new ms.ui.Label( 
-	    "11px Verdana",g_ui_root.manager, g_ui_root);
+		    __label1 = new ms.ui.Label( g_ui_root.manager, g_ui_root
+	    , "11px Verdana");
         __label1 = __label1;
             __label1.set_x(200);
             __label1.set_y(75);
             __label1.text("The happy and sad smileys are connected. Will be?");
-		    __label2 = new ms.ui.Label( 
-	    "11px Verdana",g_ui_root.manager, g_ui_root);
+		    __label2 = new ms.ui.Label( g_ui_root.manager, g_ui_root
+	    , "11px Verdana");
         __label2 = __label2;
             __label2.set_x(200);
             __label2.set_y(95);
             __label2.text("Try to move any of them with the mouse");
-		    __label3 = new ms.ui.Label( 
-	    "11px Verdana",g_ui_root.manager, g_ui_root);
+		    __label3 = new ms.ui.Label( g_ui_root.manager, g_ui_root
+	    , "11px Verdana");
         __label3 = __label3;
             __label3.set_x(50);
             __label3.set_y(135);
             __label3.text("Some faces are happy because they are linked but can rotate freely...(distance joint)");
-		    __label4 = new ms.ui.Label( 
-	    "11px Verdana",g_ui_root.manager, g_ui_root);
+		    __label4 = new ms.ui.Label( g_ui_root.manager, g_ui_root
+	    , "11px Verdana");
         __label4 = __label4;
             __label4.set_x(50);
             __label4.set_y(155);
             __label4.text("Others are sad because they are glued together and have no free will...(weld joint)");
-		    __label5 = new ms.ui.Label( 
-	    "11px Verdana",g_ui_root.manager, g_ui_root);
+		    __label5 = new ms.ui.Label( g_ui_root.manager, g_ui_root
+	    , "11px Verdana");
         __label5 = __label5;
             __label5.set_x(50);
             __label5.set_y(175);
             __label5.text("The two cameras are connected with a pulley joint. Test it !!!");
-		    btn1 = new body_1( 
-	    "images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
+		    btn1 = new body_1( g_ui_root.manager, g_ui_root
+	    , "images/smile_grin_48.png");
         btn1 = btn1;
             btn1.set_x(200);
             btn1.set_y(250);
-		    btn2 = new body_1( 
-	    "images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
+		    btn2 = new body_1( g_ui_root.manager, g_ui_root
+	    , "images/smile_grin_48.png");
         btn2 = btn2;
             btn2.set_x(100);
             btn2.set_y(250);
-		    btn3 = new body_2( 
-	    "images/smile_sad_48.png",g_ui_root.manager, g_ui_root);
+		    btn3 = new body_2( g_ui_root.manager, g_ui_root
+	    , "images/smile_sad_48.png");
         btn3 = btn3;
             btn3.set_x(400);
             btn3.set_y(250);
-		    btn4 = new body_2( 
-	    "images/smile_sad_48.png",g_ui_root.manager, g_ui_root);
+		    btn4 = new body_2( g_ui_root.manager, g_ui_root
+	    , "images/smile_sad_48.png");
         btn4 = btn4;
             btn4.set_x(300);
             btn4.set_y(250);
-		    btn5 = new body_3( 
-	    "images/img1.png",g_ui_root.manager, g_ui_root);
+		    btn5 = new body_3( g_ui_root.manager, g_ui_root
+	    , "images/img1.png");
         btn5 = btn5;
             btn5.set_x(15);
             btn5.set_y(100);
-		    btn6 = new body_3( 
-	    "images/img1.png",g_ui_root.manager, g_ui_root);
+		    btn6 = new body_3( g_ui_root.manager, g_ui_root
+	    , "images/img1.png");
         btn6 = btn6;
             btn6.set_x(500);
             btn6.set_y(500);
-		    __floor1 = new floor( 
-	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+		    __floor1 = new floor( g_ui_root.manager, g_ui_root
+	    , "images/stone-12.jpg");
         __floor1 = __floor1;
             __floor1.set_x(0);
             __floor1.set_y(590);
             __floor1.set_width(600);
             __floor1.set_height(10);
-		    __floor2 = new floor( 
-	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+		    __floor2 = new floor( g_ui_root.manager, g_ui_root
+	    , "images/stone-12.jpg");
         __floor2 = __floor2;
             __floor2.set_x(0);
             __floor2.set_y(0);
             __floor2.set_width(10);
             __floor2.set_height(600);
-		    __floor3 = new floor( 
-	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+		    __floor3 = new floor( g_ui_root.manager, g_ui_root
+	    , "images/stone-12.jpg");
         __floor3 = __floor3;
             __floor3.set_x(0);
             __floor3.set_y(0);
             __floor3.set_width(600);
             __floor3.set_height(10);
-		    __floor4 = new floor( 
-	    "images/stone-12.jpg",g_ui_root.manager, g_ui_root);
+		    __floor4 = new floor( g_ui_root.manager, g_ui_root
+	    , "images/stone-12.jpg");
         __floor4 = __floor4;
             __floor4.set_x(590);
             __floor4.set_y(0);

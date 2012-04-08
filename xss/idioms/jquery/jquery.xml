@@ -1,34 +1,292 @@
-<module id="jquery" src="classes.xs">
+<module id="jquery" src="jquery.xs">
 	<types>
 		<class id="component">
-            <property id="x" type="int" output_id="left" render_type="script">
+            <property id="x" type="int" output_id="left" render_type="script" css="true" dont_init="true" postfix="px">
                 <get text="position().left"/>
                 <set text="css( { left:{value} } )"/>
             </property>
 			
-            <property id="y" type="int" output_id="top" render_type="script">
+            <property id="y" type="int" output_id="top" render_type="script" css="true" dont_init="true" postfix="px">
                 <get text="position().top"/>
                 <set text="css( { top:{value} } )"/>
             </property>
 			
-            <property id="width" type="int" render_type="script">
+            <property id="width" type="int" css="true" dont_init="true" postfix="px">
                 <get text="width()"/>
                 <set text="width({value})"/>
             </property>
 			
-            <property id="height" type="int" render_type="script">
+            <property id="height" type="int" css="true" dont_init="true" postfix="px">
                 <get text="height()"/>
                 <set text="height({value})"/>
             </property>
 
-            <property id="placement" type="string" render_type="script">
+            <property id="placement" type="string" dont_init="true">
 				<get text='attr("placement")'/>
 				<set text='attr("placement", {value})'/>
 			</property>
-		</class>
+
+            <property id="background-color" type="string" css="true" dont_init="true">
+                <get text='css("background-color")'/>
+                <set text='css("background-color", {value})'/>
+            </property>
+
+            <property id="color" type="string" render_type="script" dont_init="true">
+                <get text='css("background-color")'/>
+                <set text='css("background-color", {value})'/>
+            </property>
+
+            <property id="visible" type="bool" render_type="script" dont_init="true">
+                <get text='JQUComponent.get_visible({path})' global='true'/>
+                <set text='JQUComponent.set_visible({path}, {value})' global='true'/>
+            </property>
+        </class>
 		
 		<!-- components -->
-		<class id="div" super="component" output_id="div" html_renderer="div.html.xss"/>
-	</types>
-	
+        <class id="div" super="component" html_renderer="div.html.xss"/>
+        <class id="br" simple="true" dont_render="true"/>
+
+        <class id="img" super="component">
+            <property id="src" type="string" render_as="attribute">
+                <get text='attr("src")'/>
+                <set text='attr("src", {value})'/>
+            </property>
+        </class>
+
+        <class id="label" super="component">
+            <property id="caption" type="string" render_as="text" dont_init="true">
+                <get text="text()"/>
+                <set text="text({value})"/>
+            </property>
+
+            <method id="empty" />
+        </class>
+
+        <class id="button" super="component" tag="input" jquery="button">
+            <array id="attributes">
+                <object name="type" value="button"/>
+                <object name="name" value="{id}" expr="true"/>
+            </array>
+
+            <property id="caption" type="string" output_id="value" render_as="attribute" dont_init="true">
+                <get text='attr("value")'/>
+                <set text='attr("value", {value})'/>
+            </property>
+        </class>
+
+        <class id="editbox" super="component" tag="input">
+            <array id="attributes">
+                <object name="type" value="text"/>
+                <object name="name" value="{id}" expr="true"/>
+            </array>
+
+            <property id="text" type="string" output_id="value" render_as="attribute" dont_init="true">
+                <get text='attr("value")'/>
+                <set text='attr("value", {value})'/>
+            </property>
+
+            <property id="hint" type="string" output_id="title" render_as="attribute" dont_init="true">
+                <get text='attr("title")'/>
+                <set text='attr("title", {value})'/>
+            </property>
+        </class>
+
+        <class id="radiobutton" super="component" jquery="button" html_renderer="radiobutton.html.xss">
+            <property id="caption" type="string" render_as="text" dont_init="true">
+                <get text='util_labelPropText({path})' global="true"/>
+                <set text='util_labelPropText({path}, {value})' global="true"/>
+            </property>
+
+            <property id="checked" type="bool" render_as="attribute" dont_init="true">
+                <get text='attr("checked")'/>
+                <set text='attr("checked", {value})'/>
+            </property>
+        </class>
+
+        <class id="checkbox" super="component" jquery="button" html_renderer="radiobutton.html.xss">
+            <property id="caption" type="string" render_as="text" dont_init="true">
+                <get text='util_labelPropText({path})' global="true"/>
+                <set text='util_labelPropText({path}, {value})' global="true"/>
+            </property>
+
+            <property id="checked" type="bool" render_as="attribute" dont_init="true">
+                <get text='attr("checked")'/>
+                <set text='attr("checked", {value})'/>
+            </property>
+        </class>
+
+        <class id="radiogroup" super="component" tag="div" jquery="buttonset"/>
+        <class id="checkgroup" super="component" tag="div" jquery="buttonset"/>
+
+        <class id="accordion" super="component" js_renderer="../jquery-object.xss" html_renderer="accordion.html.xss">
+            <property id="disabled"    type="bool" dont_init="true" render_as="script"/>
+            <property id="active"      type="var"  dont_init="true" render_as="script"/>
+            <property id="animated"    type="bool" dont_init="true" render_as="script"/>
+            <property id="autoHeight"  type="bool" dont_init="true" render_as="script"/>
+            <property id="clearStyle"  type="bool" dont_init="true" render_as="script"/>
+            <property id="navigation"  type="bool" dont_init="true" render_as="script"/>
+            <property id="fillSpace"   type="bool" dont_init="true" render_as="script"/>
+            <property id="action"      output_id="event" type="string" dont_init="true" render_as="script"/>
+
+            <event id="create"      render_as="script"/>
+            <event id="change"      render_as="script"/>
+            <event id="changestart" render_as="script"/>
+        </class>
+
+        <class id="datepicker" super="component" js_renderer="../jquery-object.xss"  html_renderer="datepicker.html.xss">
+            <property id="disabled" type="bool" dont_init="true" render_as="script"/>
+            <property id="altField" type="var" dont_init="true" render_as="script"/>
+            <property id="altFormat" type="string" dont_init="true" render_as="script"/>
+            <property id="appendText" type="string" dont_init="true" render_as="script"/>
+            <property id="autoSize" type="bool" dont_init="true" render_as="script"/>
+            <property id="buttonImage" type="string" dont_init="true" render_as="script"/>
+            <property id="buttonImageOnly" type="bool" dont_init="true" render_as="script"/>
+            <property id="buttonText" type="string" dont_init="true" render_as="script"/>
+            <property id="changeMonth" type="bool" dont_init="true" render_as="script"/>
+            <property id="changeYear" type="bool" dont_init="true" render_as="script"/>
+            <property id="constrainInput" type="bool" dont_init="true" render_as="script"/>
+            <property id="currentText" type="string" dont_init="true" render_as="script"/>
+            <property id="dateFormat" type="string" dont_init="true" render_as="script"/>
+            <property id="defaultDate" type="var" dont_init="true" render_as="script"/>
+            <property id="duration" type="var" dont_init="true" render_as="script"/>
+            <property id="firstDay" type="int" dont_init="true" render_as="script"/>
+            <property id="gotoCurrent" type="bool" dont_init="true" render_as="script"/>
+            <property id="hideIfNoPrevNext" type="bool" dont_init="true" render_as="script"/>
+            <property id="isRTL" type="bool" dont_init="true" render_as="script"/>
+            <property id="maxDate" type="var" dont_init="true" render_as="script"/>
+            <property id="minDate" type="var" dont_init="true" render_as="script"/>
+            <property id="navigationAsDateFormat" type="bool" dont_init="true" render_as="script"/>
+            <property id="nextText" type="string" dont_init="true" render_as="script"/>
+            <property id="numberOfMonths" type="var" dont_init="true" render_as="script"/>
+            <property id="prevText" type="string" dont_init="true" render_as="script"/>
+            <property id="selectOtherMonths" type="bool" dont_init="true" render_as="script"/>
+            <property id="shortYearCutoff" type="var" dont_init="true" render_as="script"/>
+            <property id="showAnim" type="string" dont_init="true" render_as="script"/>
+            <property id="showButtonPanel" type="bool" dont_init="true" render_as="script"/>
+            <property id="showCurrentAtPos" type="int" dont_init="true" render_as="script"/>
+            <property id="showMonthAfterYear" type="bool" dont_init="true" render_as="script"/>
+            <property id="showOn" type="string" dont_init="true" render_as="script"/>
+            <property id="showOtherMonths" type="bool" dont_init="true" render_as="script"/>
+            <property id="showWeek" type="bool" dont_init="true" render_as="script"/>
+            <property id="stepMonths" type="int" dont_init="true" render_as="script"/>
+            <property id="weekHeader" type="string" dont_init="true" render_as="script"/>
+            <property id="yearRange" type="string" dont_init="true" render_as="script"/>
+            <property id="yearSuffix" type="string" dont_init="true" render_as="script"/>
+
+            <event id="create"  render_as="script"/>
+            <event id="beforeShow"  render_as="script" output_args="input, inst"/>
+            <event id="beforeShowDay"  render_as="script" output_args="date"/>
+            <event id="changeMonthYear" output_id="onChangeMonthYear" render_as="script" output_args="year, month, inst"/>
+            <event id="close"  output_id="onClose" render_as="script" output_args="dateText, inst"/>
+            <event id="select" output_id="onSelect" render_as="script" output_args="dateText, inst"/>
+        </class>
+
+        <class id="autocomplete" super="component" tag="input" js_renderer="autocomplete.js.xss">
+            <property id="disabled" type="bool" dont_init="true" render_as="script"/>
+            <property id="appendTo" type="string" dont_init="true" render_as="script"/>
+            <property id="autoFocus" type="bool" dont_init="true" render_as="script"/>
+            <property id="delay" type="int" dont_init="true" render_as="script"/>
+            <property id="minLength" type="int" dont_init="true" render_as="script"/>
+            <property id="source" type="array" dont_init="true" render_as="script"/>
+
+            <event id="create" render_as="script"/>
+            <event id="search" render_as="script"/>
+            <event id="open" render_as="script"/>
+            <event id="focus" render_as="script"/>
+            <event id="select" render_as="script"/>
+            <event id="close" render_as="script"/>
+            <event id="change" render_as="script"/>
+        </class>
+        
+        <class id="dialog" super="component" js_renderer="dialog.js.xss" html_renderer="div.html.xss">
+            <property id="disabled" type="bool" dont_init="true" render_as="script"/>
+            <property id="autoOpen" type="bool" dont_init="true" render_as="script"/>
+            <property id="closeOnEscape" type="bool" dont_init="true" render_as="script"/>
+            <property id="closeText" type="string" dont_init="true" render_as="script"/>
+            <property id="dialogClass" type="string" dont_init="true" render_as="script"/>
+            <property id="draggable" type="bool" dont_init="true" render_as="script"/>
+            <property id="hideEffect" type="string" dont_init="true" render_as="script"/>
+            <property id="hide" type="string" dont_init="true" render_as="script"/>
+            <property id="maxHeight" type="int" dont_init="true" render_as="script"/>
+            <property id="maxWidth" type="int" dont_init="true" render_as="script"/>
+            <property id="minHeight" type="int" dont_init="true" render_as="script"/>
+            <property id="minWidth" type="int" dont_init="true" render_as="script"/>
+            <property id="modal" type="bool" dont_init="true" render_as="script"/>
+            <property id="resizable" type="bool" dont_init="true" render_as="script"/>
+            <property id="showEffect" type="string" dont_init="true" render_as="script"/>
+            <property id="show" type="string" dont_init="true" render_as="script"/>
+            <property id="stack" type="bool" dont_init="true" render_as="script"/>
+            <property id="title" type="string" dont_init="true" render_as="script"/>
+
+            <method id="show"  output_id="dialog('open')" ignore_args="true"/>
+            <method id="close" output_id="dialog('close')" ignore_args="true"/>
+
+            <event id="create" render_as="script"/>
+            <event id="beforeClose" render_as="script"/>
+            <event id="open" render_as="script"/>
+            <event id="focus" render_as="script"/>
+            <event id="dragStart" render_as="script"/>
+            <event id="drag" render_as="script"/>
+            <event id="dragStop" render_as="script"/>
+            <event id="resizeStart" render_as="script"/>
+            <event id="resize" render_as="script"/>
+            <event id="resizeStop" render_as="script"/>
+            <event id="closed" output_id="close" render_as="script"/>
+        </class>
+
+        <class id="progressbar" super="component" js_renderer="../jquery-object.xss" tag="div">
+            <property id="disabled" type="bool" dont_init="true" render_as="script"/>
+            <property id="value" type="int" dont_init="true" render_as="script">
+                <get text='progressbar( "option", "value" )'/>
+                <set text='progressbar( "option", "value", {value})'/>
+            </property>
+
+            <event id="create"   render_as="script"/>
+            <event id="change"   render_as="script"/>
+            <event id="complete" render_as="script"/>
+        </class>
+
+        <class id="slider" super="component" js_renderer="../jquery-object.xss"  tag="div">
+            <property id="disabled" type="bool" dont_init="true" render_as="script"/>
+            <property id="animate" type="var" dont_init="true" render_as="script"/>
+            <property id="max" type="int" dont_init="true" render_as="script"/>
+            <property id="min" type="int" dont_init="true" render_as="script"/>
+            <property id="orientation" type="string" dont_init="true" render_as="script"/>
+            <property id="range" type="var" dont_init="true" render_as="script"/>
+            <property id="step" type="int" dont_init="true" render_as="script"/>
+            <property id="value" type="int" dont_init="true" render_as="script">
+                <get text='slider( "option", "value" )'/>
+                <set text='slider( "option", "value", {value})'/>
+            </property>
+            <property id="values" type="array" dont_init="true" render_as="script"/>
+
+            <event id="create" render_as="script"/>
+            <event id="start" render_as="script"/>
+            <event id="slide" render_as="script"/>
+            <event id="change" render_as="script"/>
+            <event id="stop" render_as="script"/>
+        </class>
+
+        <class id="tabs" super="component" js_renderer="../jquery-object.xss" tag="tabs" html_renderer="tabs.html.xss">
+            <property id="disabled" type="bool" dont_init="true" render_as="script"/>
+            <property id="action" output_id="event" type="string" dont_init="true" render_as="script"/>
+            <property id="cache" type="bool" dont_init="true" render_as="script"/>
+            <property id="collapsible" type="bool" dont_init="true" render_as="script"/>
+            <property id="fx" type="var" dont_init="true" render_as="script"/>
+            <property id="idPrefix" type="string" dont_init="true" render_as="script"/>
+            <property id="panelTemplate" type="string" dont_init="true" render_as="script"/>
+            <property id="selected" type="int" dont_init="true" render_as="script"/>
+            <property id="spinner" type="string" dont_init="true" render_as="script"/>
+            <property id="tabTemplate" type="string" dont_init="true" render_as="script"/>
+
+            <event id="create" render_as="script"/>
+            <event id="select" render_as="script"/>
+            <event id="load" render_as="script"/>
+            <event id="show" render_as="script"/>
+            <event id="add" render_as="script"/>
+            <event id="remove" render_as="script"/>
+            <event id="enable" render_as="script"/>
+            <event id="disable" render_as="script"/>
+        </class>
+    </types>
 </module>

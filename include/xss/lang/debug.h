@@ -26,7 +26,8 @@ namespace xkp
         virtual str     expression_path(const str& expr );
         virtual str     array_operation(operator_type op, const str& arr, const str& value, XSSContext ctx);
         virtual str     render_expression(expression& expr, XSSContext ctx);
-        virtual str     instantiate(XSSType type, XSSObject instance, DynamicArray params);
+        virtual str     instantiate(XSSType type, XSSObject instance, DynamicArray rt, param_list& args);
+        virtual str     render_ctor_args(XSSType type, XSSObject instance, DynamicArray rt, param_list& args);
         virtual bool    custom_operator(XSSType lt, XSSType rt, str l, str r, operator_type op, str& res);
     };
 }

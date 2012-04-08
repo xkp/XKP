@@ -714,7 +714,7 @@ ms.ui.Component = Class.create(
 
 ms.ui.Image = Class.create(ms.ui.Component,
 {	
-	initialize: function($super, image, manager, parent)
+	initialize: function($super, manager, parent, image)
 	{				
 		$super(manager, parent);
         
@@ -833,7 +833,7 @@ ms.ui.Image = Class.create(ms.ui.Component,
 
 ms.ui.ProgressBar = Class.create(ms.ui.Component,
 {
-	initialize: function($super , images, manager, parent)
+	initialize: function($super, manager, parent, images)
 	{
 		$super(manager, parent);
 		if (!images)
@@ -874,7 +874,7 @@ ms.ui.ProgressBar = Class.create(ms.ui.Component,
 
 ms.ui.Label = Class.create(ms.ui.Component,
 {
-	initialize: function($super, font, manager, parent)
+	initialize: function($super, manager, parent, font)
 	{
 		$super(manager, parent);
 	    this.font = font;
@@ -953,7 +953,7 @@ ms.ui.Button = Class.create(ms.ui.Image,
 
 ms.ui.TextButton = Class.create(ms.ui.Component,
 {
-	initialize: function($super, text, font, manager, parent)
+	initialize: function($super, manager, parent, text, font)
 	{
 		$super(manager, parent);
 		this.mouse_into = false;
@@ -1068,7 +1068,7 @@ ms.ui.TextButton = Class.create(ms.ui.Component,
 
 ms.ui.RippleEffect = Class.create(ms.ui.Component,
 {
-	initialize : function($super, image, manager, parent) 
+	initialize : function($super, manager, parent, image) 
 	{
 		$super(manager, parent);	
 		if(image)
@@ -1240,9 +1240,9 @@ ms.ui.RippleEffect = Class.create(ms.ui.Component,
 
 ms.ui.StateButton = Class.create(ms.ui.Image,
 {
-	initialize: function($super, active, inactive, manager, parent)
+	initialize: function($super, manager, parent, active, inactive)
 	{
-		$super(active, manager, parent);
+		$super(manager, parent, active);
 		
 		if(!streamer.get_resource(active))
 			active = "invalid_res";
@@ -1426,7 +1426,7 @@ ms.ui.Painter = Class.create(ms.ui.Component,
 
 ms.ui.ClipArea = Class.create(ms.ui.Component,
 {	
-	initialize: function($super, shape, manager, parent)
+	initialize: function($super, manager, parent, shape)
 	{				
 		$super(manager, parent);
 		this.clip = true;
@@ -1446,7 +1446,7 @@ ms.ui.ClipArea = Class.create(ms.ui.Component,
 
 ms.ui.Rectangle = Class.create(ms.ui.Component,
 {	
-	initialize: function($super, fill, stroke, line_width, manager, parent)
+	initialize: function($super, manager, parent, fill, stroke, line_width)
 	{				
 		$super(manager, parent);
 		this.fill = fill;
@@ -1516,7 +1516,7 @@ ms.ui.Rectangle = Class.create(ms.ui.Component,
 
 ms.ui.Circle = Class.create(ms.ui.Component,
 {	
-	initialize: function($super, fill, stroke, line_width, manager, parent)
+	initialize: function($super, manager, parent, fill, stroke, line_width)
 	{				
 		$super(manager, parent);
 		this.fill = fill;
@@ -1580,7 +1580,7 @@ ms.ui.Circle = Class.create(ms.ui.Component,
 
 ms.ui.Polygon = Class.create(ms.ui.Component,
 {	
-	initialize: function($super, fill, stroke, line_width, manager, parent)
+	initialize: function($super, manager, parent, fill, stroke, line_width)
 	{				
 		$super(manager, parent);
 		this.fill = fill;
@@ -1746,7 +1746,7 @@ ms.ui.Polygon = Class.create(ms.ui.Component,
 
 ms.ui.Sprite = Class.create(ms.ui.Component,
 {	
-	initialize: function($super, sheet, manager, parent)
+	initialize: function($super, manager, parent, sheet)
 	{				
 		$super(manager, parent);
 		this.sheet = streamer.get_resource(sheet);
@@ -1883,7 +1883,7 @@ ms.ui.Sprite = Class.create(ms.ui.Component,
 
 ms.ui.Video = Class.create(ms.ui.Component,
 {	
-	initialize: function($super, src, manager, parent)
+	initialize: function($super, manager, parent, src)
 	{				
 		$super(manager, parent);
 		var resource = streamer.get_resource(src);

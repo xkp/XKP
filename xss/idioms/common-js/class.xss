@@ -3,11 +3,8 @@
 <xss:parameter id="property_renderer" default="property.xss"/>
 <xss:parameter id="method_renderer"   default="method.xss"/>
 <xss:parameter id="event_renderer"    default="event.xss"/>
-<xss:parameter id="parent"/>
 
 <xss:code>
-	if(parent)
-		clazz.instantiator = "../ui/instantiator.xss";
     if (clazz.super)
     {	
         out()
@@ -38,18 +35,12 @@
                 }
             }
         }
-		if(parent)			
-			out()
-			{
-				, manager, parent
-			}			
     </xss:code>)
     {
         $super(
         <xss:code>			
-            var c_params = null; 
-            if (clazz.super)
-                c_params = clazz.super.constructor_params;							
+            var c_params = clazz.type.constructor_params; 
+            
             if (c_params)
             {				
                 int idx = 0;				
@@ -77,20 +68,15 @@
                     idx++;
                 }
             }	
-			if(parent)			
-			out()
-			{
-				, manager, parent
-			}	
         </xss:code>
         );
         this.events = new ms.event.EventHolder(); 
         var this__  = this;
         <xss:code>
-        //foreign instance will have a special place in our hearts
+        //register instances as properties, why not?
         for(var fi in clazz.instances)
         {
-            clazz.add_property(fi.output_id, fi, fi.type);
+            compiler.add_object_property(clazz, fi.output_id, value = fi, type = fi.type, dont_render = true);
         }
         
         if (renderer)

@@ -349,9 +349,14 @@ str debug_language::render_expression(expression& expr, XSSContext ctx)
     return "no goal";
   }
 
-str debug_language::instantiate(XSSType type, XSSObject instance, DynamicArray params)
+str debug_language::instantiate(XSSType type, XSSObject instance, DynamicArray rt, param_list& args)
   {
     return "only instances";
+  }
+
+str debug_language::render_ctor_args(XSSType type, XSSObject instance, DynamicArray rt, param_list& args)
+  {
+    return "and them damned constructors";
   }
 
 bool debug_language::custom_operator(XSSType lt, XSSType rt, str l, str r, operator_type op, str& res)

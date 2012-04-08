@@ -42,7 +42,8 @@ var lbl0;var lbl1;
 	var r2;var fb;var tw;var title2;
 var application = {};
 application.events = new ms.event.EventHolder();
-		var streamer = new ms.streamer.Streamer();		
+		var streamer = new ms.streamer.Streamer();	
+		var ResourceUtils = new ms.streamer.ResourceUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -57,8 +58,8 @@ application.events = new ms.event.EventHolder();
 			var mouse_pressed = false;
 		}
 	// --------RESOURCES---------
-        var global_package_items = [];
-                global_package_items.push(
+		var global_package = new ms.streamer.Package(streamer);	
+                global_package.add_item(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -66,8 +67,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+                global_package.add_item(
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
@@ -75,8 +81,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image2;
+				global_package.events.addListener("loaded", function()
+				{
+					__image2 = streamer.get_resource("__image2");
+				});
+                global_package.add_item(
             {
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
@@ -84,8 +95,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image3;
+				global_package.events.addListener("loaded", function()
+				{
+					__image3 = streamer.get_resource("__image3");
+				});
+                global_package.add_item(
             {
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
@@ -93,8 +109,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image4;
+				global_package.events.addListener("loaded", function()
+				{
+					__image4 = streamer.get_resource("__image4");
+				});
+                global_package.add_item(
             {
 		id:				"__image5",
 		resource_type:	RESOURCE_IMAGE,
@@ -102,8 +123,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image5;
+				global_package.events.addListener("loaded", function()
+				{
+					__image5 = streamer.get_resource("__image5");
+				});
+                global_package.add_item(
             {
 		id:				"__image6",
 		resource_type:	RESOURCE_IMAGE,
@@ -111,8 +137,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image6;
+				global_package.events.addListener("loaded", function()
+				{
+					__image6 = streamer.get_resource("__image6");
+				});
+                global_package.add_item(
             {
 		id:				"__image7",
 		resource_type:	RESOURCE_IMAGE,
@@ -120,8 +151,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image7;
+				global_package.events.addListener("loaded", function()
+				{
+					__image7 = streamer.get_resource("__image7");
+				});
+                global_package.add_item(
             {
 		id:				"__image8",
 		resource_type:	RESOURCE_IMAGE,
@@ -130,15 +166,19 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });	
-		global_package_items.push({
+				var __image8;
+				global_package.events.addListener("loaded", function()
+				{
+					__image8 = streamer.get_resource("__image8");
+				});
+		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
 			src:			"images/no_res.png",
 			frame_width:	null,
 			frame_height:	null,
 			animations:		[]
-		});
-        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		});		
 		global_package.load();	
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
@@ -159,6 +199,208 @@ application.events.dispatch("switch_cameras", []);
 var materials;var __basic_material1;var __basic_material2;var __basic_material3;var __basic_material4;var __basic_material5;var __basic_material6;var plane_material;var plane_mat1;var scene;var camera_1;var cube_1;var plane_1;
 threejs_load_resources(function()
 {
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+		    lbl0 = new ms.ui.Label( g_ui_root.manager, g_ui_root
+	    , "12px Verdana");
+        lbl0 = lbl0;
+            lbl0.set_x(200);
+            lbl0.set_y(75);
+            lbl0.text("Drag mouse to spin the cube");
+		    lbl1 = new ms.ui.Label( g_ui_root.manager, g_ui_root
+	    , "12px Verdana");
+        lbl1 = lbl1;
+            lbl1.set_x(200);
+            lbl1.set_y(120);
+            lbl1.text("Select what you want to open");
+		webmail.width = 200;
+		webmail.height = 200;							
+		webmail_ui = new ms.ui.Manager(webmail, streamer);
+		var webmail_g_ui_root = webmail_ui.root;				
+	application.are_obj_events = true;
+application.events.addListener("updates", function()
+	{   
+		if(webmail_ui)
+			webmail_ui.draw(webmail.getContext('2d'));
+	});
+application.events.addListener("t_mousemove", function(x, y, texture)
+	{   
+		if(texture)
+			if(texture.image == webmail)
+				webmail_ui.mousemove(x*200, y*200);
+	});
+application.events.addListener("t_mouseup", function(x, y, texture)
+	{   
+		if(texture)
+			if(texture.image == webmail)
+				webmail_ui.mouseup(x*200, y*200);
+	});
+application.events.addListener("t_mousedown", function(x, y, texture)
+	{   
+		if(texture)
+			if(texture.image == webmail)
+				webmail_ui.mousedown(x*200, y*200);
+	});
+		    r1 = new ms.ui.Rectangle( webmail_g_ui_root.manager, webmail_g_ui_root
+	    , "beige", null, null);
+        r1 = r1;
+            r1.set_x(0);
+            r1.set_y(0);
+            r1.set_width(200);
+            r1.set_height(200);
+            r1.mouse_thru = true;
+            r1.alpha(60);
+		    yh = new ms.ui.Button( webmail_g_ui_root.manager, webmail_g_ui_root
+	    , "images/yahoo_up.png", "images/yahoo.png");
+        yh = yh;
+            yh.set_x(25);
+            yh.set_y(50);
+            yh.set_width(50);
+            yh.set_height(50);
+	var ev_parent = this;
+	yh.events.addListener("click", function()
+	{    
+		lbl1.text("Yahoo is opening...");
+	}
+	);
+		application.are_obj_events = true;
+		    msn = new ms.ui.Button( webmail_g_ui_root.manager, webmail_g_ui_root
+	    , "images/msn_up.png", "images/msn.png");
+        msn = msn;
+            msn.set_x(125);
+            msn.set_y(50);
+            msn.set_width(50);
+            msn.set_height(50);
+	var ev_parent = this;
+	msn.events.addListener("click", function()
+	{    
+		lbl1.text("Hotmail is opening...");
+	}
+	);
+		application.are_obj_events = true;
+		    title1 = new ms.ui.Label( webmail_g_ui_root.manager, webmail_g_ui_root
+	    , "12px Verdana");
+        title1 = title1;
+            title1.set_x(50);
+            title1.set_y(10);
+            title1.text("Webmails");
+		soc_net.width = 200;
+		soc_net.height = 200;							
+		soc_net_ui = new ms.ui.Manager(soc_net, streamer);
+		var soc_net_g_ui_root = soc_net_ui.root;				
+	application.are_obj_events = true;
+application.events.addListener("updates", function()
+	{   
+		if(soc_net_ui)
+			soc_net_ui.draw(soc_net.getContext('2d'));
+	});
+application.events.addListener("t_mousemove", function(x, y, texture)
+	{   
+		if(texture)
+			if(texture.image == soc_net)
+				soc_net_ui.mousemove(x*200, y*200);
+	});
+application.events.addListener("t_mouseup", function(x, y, texture)
+	{   
+		if(texture)
+			if(texture.image == soc_net)
+				soc_net_ui.mouseup(x*200, y*200);
+	});
+application.events.addListener("t_mousedown", function(x, y, texture)
+	{   
+		if(texture)
+			if(texture.image == soc_net)
+				soc_net_ui.mousedown(x*200, y*200);
+	});
+		    r2 = new ms.ui.Rectangle( soc_net_g_ui_root.manager, soc_net_g_ui_root
+	    , "lightblue", null, null);
+        r2 = r2;
+            r2.set_x(0);
+            r2.set_y(0);
+            r2.set_width(200);
+            r2.set_height(200);
+            r2.mouse_thru = true;
+            r2.alpha(60);
+		    fb = new ms.ui.Button( soc_net_g_ui_root.manager, soc_net_g_ui_root
+	    , "images/facebook_up.png", "images/facebook.png");
+        fb = fb;
+            fb.set_x(25);
+            fb.set_y(50);
+            fb.set_width(50);
+            fb.set_height(50);
+	var ev_parent = this;
+	fb.events.addListener("click", function()
+	{    
+		lbl1.text("Facebook is opening...");
+	}
+	);
+		application.are_obj_events = true;
+		    tw = new ms.ui.Button( soc_net_g_ui_root.manager, soc_net_g_ui_root
+	    , "images/twitter_up.png", "images/twitter.png");
+        tw = tw;
+            tw.set_x(125);
+            tw.set_y(50);
+            tw.set_width(50);
+            tw.set_height(50);
+	var ev_parent = this;
+	tw.events.addListener("click", function()
+	{    
+		lbl1.text("Twitter is opening...");
+	}
+	);
+		application.are_obj_events = true;
+		    title2 = new ms.ui.Label( soc_net_g_ui_root.manager, soc_net_g_ui_root
+	    , "12px Verdana");
+        title2 = title2;
+            title2.set_x(50);
+            title2.set_y(10);
+            title2.text("Social networks");
 materials = 
 new Array(
 );
@@ -257,209 +499,7 @@ set_rotation_x(cube_1.rotation, get_rotation_x(cube_1.rotation) + (application.y
 	);
 if(ui)
 {	
-	SoundUtils = new ms.ui.SoundUtils();
-	drawingCanvas.onmousemove = function(ev)
-	{
-		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmousedown = function(ev)
-	{
-		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmouseup = function(ev)
-	{
-		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};		
-	ui.events.addListener("mousedown", function(x,y)
-	{    
-		application.events.dispatch("mousedown", [x, y]);
-	});
-	ui.events.addListener("mouseup", function(x,y)
-	{    
-		application.events.dispatch("mouseup", [x, y]);
-	});
-	ui.events.addListener("mousemove", function(x,y)
-	{    
-		application.events.dispatch("mousemove", [x, y]);
-	});
-	ui.events.addListener("click", function(x,y)
-	{    
-		application.events.dispatch("click", [x, y]);
-	});
-	ui.events.addListener("drag", function(x,y)
-	{    
-		application.events.dispatch("drag", [x, y]);
-	});
-	ui.events.addListener("dragend", function(x,y)
-	{    
-		application.events.dispatch("dragend", [x, y]);
-	});
-	ui.events.addListener("keyup", function(keycode)
-	{    
-		application.events.dispatch("keyup", [keycode]);
-	});
-	ui.events.addListener("keydown", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
-	ui.events.addListener("keypress", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
-		    lbl0 = new ms.ui.Label( 
-	    "12px Verdana",g_ui_root.manager, g_ui_root);
-        lbl0 = lbl0;
-            lbl0.set_x(200);
-            lbl0.set_y(75);
-            lbl0.text("Drag mouse to spin the cube");
-		    lbl1 = new ms.ui.Label( 
-	    "12px Verdana",g_ui_root.manager, g_ui_root);
-        lbl1 = lbl1;
-            lbl1.set_x(200);
-            lbl1.set_y(120);
-            lbl1.text("Select what you want to open");
-		webmail.width = 200;
-		webmail.height = 200;							
-		webmail_ui = new ms.ui.Manager(webmail, streamer);
-		var webmail_g_ui_root = webmail_ui.root;				
-	application.are_obj_events = true;
-application.events.addListener("updates", function()
-	{   
-		if(webmail_ui)
-			webmail_ui.draw(webmail.getContext('2d'));
-	});
-application.events.addListener("t_mousemove", function(x, y, texture)
-	{   
-		if(texture)
-			if(texture.image == webmail)
-				webmail_ui.mousemove(x*200, y*200);
-	});
-application.events.addListener("t_mouseup", function(x, y, texture)
-	{   
-		if(texture)
-			if(texture.image == webmail)
-				webmail_ui.mouseup(x*200, y*200);
-	});
-application.events.addListener("t_mousedown", function(x, y, texture)
-	{   
-		if(texture)
-			if(texture.image == webmail)
-				webmail_ui.mousedown(x*200, y*200);
-	});
-		    r1 = new ms.ui.Rectangle( 
-	    "beige",null,null,webmail_g_ui_root.manager, webmail_g_ui_root);
-        r1 = r1;
-            r1.set_x(0);
-            r1.set_y(0);
-            r1.set_width(200);
-            r1.set_height(200);
-            r1.mouse_thru = true;
-            r1.alpha(60);
-		    yh = new ms.ui.Button( 
-	    "images/yahoo_up.png","images/yahoo.png",webmail_g_ui_root.manager, webmail_g_ui_root);
-        yh = yh;
-            yh.set_x(25);
-            yh.set_y(50);
-            yh.set_width(50);
-            yh.set_height(50);
-	var ev_parent = this;
-	yh.events.addListener("click", function()
-	{    
-		lbl1.text("Yahoo is opening...");
-	}
-	);
-		application.are_obj_events = true;
-		    msn = new ms.ui.Button( 
-	    "images/msn_up.png","images/msn.png",webmail_g_ui_root.manager, webmail_g_ui_root);
-        msn = msn;
-            msn.set_x(125);
-            msn.set_y(50);
-            msn.set_width(50);
-            msn.set_height(50);
-	var ev_parent = this;
-	msn.events.addListener("click", function()
-	{    
-		lbl1.text("Hotmail is opening...");
-	}
-	);
-		application.are_obj_events = true;
-		    title1 = new ms.ui.Label( 
-	    "12px Verdana",webmail_g_ui_root.manager, webmail_g_ui_root);
-        title1 = title1;
-            title1.set_x(50);
-            title1.set_y(10);
-            title1.text("Webmails");
-		soc_net.width = 200;
-		soc_net.height = 200;							
-		soc_net_ui = new ms.ui.Manager(soc_net, streamer);
-		var soc_net_g_ui_root = soc_net_ui.root;				
-	application.are_obj_events = true;
-application.events.addListener("updates", function()
-	{   
-		if(soc_net_ui)
-			soc_net_ui.draw(soc_net.getContext('2d'));
-	});
-application.events.addListener("t_mousemove", function(x, y, texture)
-	{   
-		if(texture)
-			if(texture.image == soc_net)
-				soc_net_ui.mousemove(x*200, y*200);
-	});
-application.events.addListener("t_mouseup", function(x, y, texture)
-	{   
-		if(texture)
-			if(texture.image == soc_net)
-				soc_net_ui.mouseup(x*200, y*200);
-	});
-application.events.addListener("t_mousedown", function(x, y, texture)
-	{   
-		if(texture)
-			if(texture.image == soc_net)
-				soc_net_ui.mousedown(x*200, y*200);
-	});
-		    r2 = new ms.ui.Rectangle( 
-	    "lightblue",null,null,soc_net_g_ui_root.manager, soc_net_g_ui_root);
-        r2 = r2;
-            r2.set_x(0);
-            r2.set_y(0);
-            r2.set_width(200);
-            r2.set_height(200);
-            r2.mouse_thru = true;
-            r2.alpha(60);
-		    fb = new ms.ui.Button( 
-	    "images/facebook_up.png","images/facebook.png",soc_net_g_ui_root.manager, soc_net_g_ui_root);
-        fb = fb;
-            fb.set_x(25);
-            fb.set_y(50);
-            fb.set_width(50);
-            fb.set_height(50);
-	var ev_parent = this;
-	fb.events.addListener("click", function()
-	{    
-		lbl1.text("Facebook is opening...");
-	}
-	);
-		application.are_obj_events = true;
-		    tw = new ms.ui.Button( 
-	    "images/twitter_up.png","images/twitter.png",soc_net_g_ui_root.manager, soc_net_g_ui_root);
-        tw = tw;
-            tw.set_x(125);
-            tw.set_y(50);
-            tw.set_width(50);
-            tw.set_height(50);
-	var ev_parent = this;
-	tw.events.addListener("click", function()
-	{    
-		lbl1.text("Twitter is opening...");
-	}
-	);
-		application.are_obj_events = true;
-		    title2 = new ms.ui.Label( 
-	    "12px Verdana",soc_net_g_ui_root.manager, soc_net_g_ui_root);
-        title2 = title2;
-            title2.set_x(50);
-            title2.set_y(10);
-            title2.text("Social networks");
+	SoundUtils = new ms.ui.SoundUtils();		
 	g_ui.fill_background = false;	
 }
 var event_manager = new ms.event.ThreeEventManager();

@@ -4,7 +4,7 @@
 	target="animtest.xml" >
 	
 	<idiom src="../../../idioms/android/classes.xml"/>
-	<idiom src="../../../idioms/java-seq/sequence.xml"/>
+	<idiom src="../../../idioms/ms/java/sequence.xml"/>
 	
 	<path>
 		<output path="../../../production/android/"/>

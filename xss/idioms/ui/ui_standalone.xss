@@ -102,8 +102,7 @@ window.onload = function()
         g_ui_root = ui.root;
      	ui.load_resources(function()
 		{
-            <xss:code>
-			compiler.inject("render_ui_instances");    
+            <xss:code>			
 			compiler.inject("render_instances");            
             </xss:code>
 			

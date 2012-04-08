@@ -1145,6 +1145,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
 			        }
 
 						str separator = ctx_->get_language()->resolve_separator(caller);
+            variant call_obj;
             if (caller)
               {
                 resolve_info left;
@@ -1169,6 +1170,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                         case RESOLVE_METHOD:
                           {
                             XSSMethod mthd = right.value;
+                            call_obj = mthd;
                             right_str = mthd->output_id();
                             break;
                           }
@@ -1180,7 +1182,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                   }
               }
 
-            push_rendered(caller_str + separator + right_str, 0, variant(), caller_str);
+            push_rendered(caller_str + separator + right_str, 0, call_obj, caller_str);
             break;
           }
 
@@ -1320,6 +1322,18 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
             variant top = stack_.top(); stack_.pop();
             str caller = operand_to_string(top);
 
+            bool gotit = false;
+            if (top.is<already_rendered>())
+              {
+                already_rendered arr = top;
+                XSSMethod mthd = variant_cast<XSSMethod>(arr.object, XSSMethod());
+                if (mthd && mthd->get<bool>("ignore_args", false))
+                  {
+                    push_rendered(caller, op_prec, variant(), caller); 
+                    break;
+                  }
+              }
+
             push_rendered(caller + result.str(), op_prec, variant(), caller); //td: we could find out the type here or something
             break;
           }
@@ -1393,7 +1407,7 @@ str base_expr_renderer::render_instantiation(XSSType type, std::vector<str>& par
         //prepare rendering parameters
         param_list args;
         args.add("type", type);
-        args.add("args", info);
+        args.add("runtime_args", info);
 
         XSSCompiler compiler = ctx_->resolve("compiler");
         fs::path type_path   = compiler->type_path(type->id());
@@ -1405,7 +1419,8 @@ str base_expr_renderer::render_instantiation(XSSType type, std::vector<str>& par
     else
       {
         Language lang = ctx_->get_language();
-        return lang->instantiate(type, XSSObject(), info);
+        param_list pl;
+        return lang->instantiate(type, XSSObject(), info, pl);
       }
   }
 
@@ -1548,14 +1563,11 @@ str base_lang::render_expression(expression& expr, XSSContext ctx)
     return rend->render();
   }
 
-str base_lang::instantiate(XSSType type, XSSObject instance, DynamicArray params)
+str base_lang::render_ctor_args(XSSType type, XSSObject instance, DynamicArray rt, param_list& args)
   {
-    str          class_name  = type->output_id();
     DynamicArray ctor_params = type->ctor_args();
 
     std::stringstream ss;
-    ss << "new " << class_name << "(";
-
     std::vector<variant>::iterator it = ctor_params->ref_begin();
     std::vector<variant>::iterator nd = ctor_params->ref_end();
 
@@ -1572,45 +1584,59 @@ str base_lang::instantiate(XSSType type, XSSObject instance, DynamicArray params
           {
             value = constant;
           }
-        else if (runtime && params)
+        else if (runtime && rt)
           {
-            if (curr < params->size())
+            if (curr < rt->size())
               {
-                XSSObject param_value = params->at(curr++);
+                XSSObject param_value = rt->at(curr++);
                           value       = param_value->get<str>("value", str()); assert(!value.empty());
               }
           }
 
+        if (value.empty() && args.has(p->id()))
+          {
+            value = variant_cast<str>(args.get(p->id()), str());
+          }
+
         if (value.empty())
           {
-            if (prperty.empty())
+            if (!prperty.empty())
               {
-                param_list error;
-                error.add("id", SLanguage);
-                error.add("desc", SCannotResolveParam);
-                error.add("type", type->id());
-                error.add("parameter", p->id());
-                xss_throw(error);
+                XSSProperty prop;
+                if (instance)
+                  prop = instance->get_property(prperty);
+                else
+                  prop = type->get_property(prperty);
+
+                if (!prop)
+                  {
+                    param_list error;
+                    error.add("id", SLanguage);
+                    error.add("desc", SCannotResolveCtorProperty);
+                    error.add("type", type->id());
+                    error.add("property", prperty);
+                    xss_throw(error);
+                  }
+
+                value = prop->render_value();
               }
-
-
-            XSSProperty prop;
-            if (instance)
-              prop = instance->get_property(prperty);
             else
-              prop = type->get_property(prperty);
-
-            if (!prop)
               {
-                param_list error;
-                error.add("id", SLanguage);
-                error.add("desc", SCannotResolveCtorProperty);
-                error.add("type", type->id());
-                error.add("property", prperty);
-                xss_throw(error);
+                if (p->has("default_value"))
+                  value = p->get<str> ("default_value", str());
+                
+                if (value.empty())
+                  {
+                    param_list error;
+                    error.add("id", SLanguage);
+                    error.add("desc", SCannotResolveParam);
+                    error.add("type", type->id());
+                    error.add("parameter", p->id());
+                    xss_throw(error);
+                  }
               }
 
-            value = prop->render_value();
+
           }
 
         if (first)
@@ -1620,7 +1646,16 @@ str base_lang::instantiate(XSSType type, XSSObject instance, DynamicArray params
 
         ss << value;
       }
+    return ss.str();
+  }
 
+str base_lang::instantiate(XSSType type, XSSObject instance, DynamicArray rt, param_list& args)
+  {
+    str class_name  = type->output_id();
+
+    std::stringstream ss;
+    ss << "new " << class_name << "(";
+    ss << render_ctor_args(type, instance, rt, args);
     ss << ")";
     return ss.str();
   }

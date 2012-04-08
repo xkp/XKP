@@ -7,10 +7,10 @@
 		res.step = 0;
 	out()
 	{
-		for(var i = 0; i < global_package_items.length; i++)
+		for(var i = 0; i < global_package.items.length; i++)
         {						
-			if(global_package_items[i].id == "<xss:e v="res.parent.id"/>")
-				global_package_items[i].animations.push
+			if(global_package.items[i].id == "<xss:e v="res.parent.id"/>")
+				global_package.items[i].animations.push
 				({
 					id:			"<xss:e v="res.id"/>",
 					frame_row:	<xss:e v="res.frame_row"/>,

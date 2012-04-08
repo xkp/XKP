@@ -3,12 +3,26 @@ on pre_process(obj)
 {
 	if(obj.id == "")
 		obj.id = compiler.genid(obj.class_name);
+
+    //isolate css for easier handling
+    var css = object();
+    for(var prop in obj.properties)
+    {
+        if (prop.value == null)
+            continue;
+
+        if (prop.css)
+        {
+            compiler.add_object_property(css, prop.output_id, value = prop.value, postfix = prop.postfix);
+        }
+            
+    }
+
+    obj.css = css;
 }
 
 on render_instances()
 {
-	compiler.log("Rendering jQuery...");
-    
 	var rd_instances = instances;
 	rd_instances += application;
 	
@@ -18,8 +32,10 @@ on render_instances()
 		string jq_object = '$("#' + ri.id + '")';
 		
 		string jq_classname = "";
-		if(ri.jq_classname && ri.jq_classname != "")
-			jq_classname = "." + ri.jq_classname + "()";
+		if(ri.jquery && ri.jquery != "")
+        {
+			jq_classname = "." + ri.jquery + "()";
+        }
 		
 		out()
 		{
@@ -30,8 +46,27 @@ on render_instances()
 	//and then instances
     for(var i in rd_instances)
     {
-		compiler.log("Rendering instance with id = " + i.id);
         compiler.xss("instance.xss", it = i, is_class = false);
-		//compiler.xss("../common-js/instance.xss", i, event_renderer = "../jquery/event.xss");
+
+        if (i.js_renderer)
+        {
+            string fname = "class.xss/" + i.js_renderer;
+            compiler.xss(fname, it = i);
+        }
+    }
+}
+
+on render_css()
+{
+    for(var i in instances)
+    {
+        var css = i.css;
+        if (!css)
+            continue;
+
+        if (css.empty())
+            continue;
+        
+        compiler.xss("../common-js/css.xss", i, marker = "css");
     }
 }

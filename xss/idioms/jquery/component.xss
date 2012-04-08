@@ -1,19 +1,31 @@
 <xss:parameter id="it"/>
+
 <xss:class>
 	method render_component(var component, int idt)
 	{
-		string class_name = "div";
-		if(component.type)
-			class_name = component.type.output_id;
+        if (component.simple)
+        {
+            out() {<<xss:e value="component.type.id"/>/>}
+            return;
+        }
+    
+		string class_name = "";
+		if (component.type)
+			class_name = component.type.tag;
+        
+        if (!class_name)
+            class_name = component.type.id;
+            
+        if (class_name == "")
+            return;
 			
-		if(component.renderer)
+		if(component.html_renderer)
 		{
-			string file_renderer = "class.xss/" + component.renderer;
-			compiler.xss(file_renderer, this, component, idt + 1);
+			string file_renderer = "class.xss/" + component.html_renderer;
+			compiler.xss(file_renderer, component);
 		}
 		else
 		{
-			//open the tag of component
 			out(indent = idt)
 			{
 				<<xss:e value="class_name"/> id="<xss:e value="component.id"/>"
@@ -52,15 +64,15 @@
 				if(p1.value == null)
 					continue;
 					
-				if(p1.render_type == "body_intag")
+				if(p1.render_as == "attribute")
 				{
-					out(indent = idt)
+					out()
 					{
 						<xss:e value="p1.output_id"/>="<xss:e value="p1.value"/>" 
 					}
 				} 
 				else
-				if(p1.render_type == "body_outtag")
+				if(p1.render_as == "text")
 				{
 					prop_outtag += p1;
 				}
@@ -94,7 +106,9 @@
 
 	on render()
 	{
-        compiler.log("PINGA");
-		render_component(it, 1);
+		if (it.class_name == "html")
+            out(){<xss:e value="it.text"/>}
+        else
+            render_component(it, 1);
 	}
 </xss:class>

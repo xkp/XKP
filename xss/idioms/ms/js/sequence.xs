@@ -39,8 +39,10 @@ on render_types()
 
     for(var ut in user_types)
     {
-        var full_path = compiler.full_path("sequence.xss");
-		compiler.xss("../common-js/class.xss", ut, renderer = full_path);
+        compiler.log("Here?");
+        var full_path = compiler.full_path("../sequence.xss");
+		compiler.xss("../../common-js/class.xss", ut, renderer = full_path);
+        compiler.log("Nope");
     }
 }
 
@@ -62,7 +64,7 @@ on render_update()
 }
 
 //java script delegates
-method begin_interpolator(string iid, string assign)
+method begin_interpolator(prop, string iid, string assign, string path)
 {
     out()
     {
@@ -77,7 +79,7 @@ method begin_interpolator(string iid, string assign)
     }
 }
 
-method render_key(key)
+method render_key(iid, key)
 {
     out()
     {
@@ -94,7 +96,7 @@ method close_interpolator(iid, seq_id)
     }
 }
 
-method begin_caller(mid, time)
+method begin_caller(methd, mid, time)
 {
     out()
     {

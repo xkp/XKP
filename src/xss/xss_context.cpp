@@ -643,16 +643,24 @@ bool xss_context::resolve_path(const std::vector<str>& path, resolve_info& info)
     return !just_paste;
   }
 
-void xss_context::register_symbol(RESOLVE_ITEM type, const str& id, variant symbol)
+void xss_context::register_symbol(RESOLVE_ITEM type, const str& id, variant symbol, bool overrite)
   {
       symbol_list::iterator it = symbols_.find(id);
       if (it != symbols_.end())
         {
-          param_list error;
-          error.add("id", SContextError);
-          error.add("desc", SDuplicateSymbol);
-          error.add("symbol", id);
-          xss_throw(error);
+          if (overrite)
+            {
+              it->second.value = symbol;
+              return;
+            }
+          else
+            {
+              param_list error;
+              error.add("id", SContextError);
+              error.add("desc", SDuplicateSymbol);
+              error.add("symbol", id);
+              xss_throw(error);
+            }
         }
 
       symbols_.insert(symbol_list_pair(id, symbol_data(type, symbol)));
@@ -1145,6 +1153,23 @@ bool xss_object::has_property(const str& prop)
     return get_property(prop);
   }
 
+bool xss_object::have_value(const str& prop)
+  {
+    std::vector<variant>::iterator it = properties_->ref_begin();
+    std::vector<variant>::iterator nd = properties_->ref_end();
+
+    for(; it != nd; it++)
+      {
+        XSSProperty xprop = *it;
+        if (xprop->id() == prop)
+          {
+            return !xprop->value_.empty();
+          }
+      }
+
+    return false;
+  }
+
 XSSObject xss_object::find(const str& what)
   {
     if (what.empty())
@@ -1247,6 +1272,11 @@ void xss_object::add_method(const str& name, XSSMethod m)
     methods_->push_back(m); //td: check for it not existing
   }
 
+bool xss_object::empty()
+  {
+    return properties_->empty() && methods_->empty() && events_->empty();
+  }
+
 void xss_object::add_child(XSSObject obj)
   {
     obj->set_parent(shared_from_this());
@@ -1327,6 +1357,11 @@ XSSMethod xss_object::get_method(const str& name)
     return XSSMethod();
   }
 
+variant xss_object::attribute_value(const str& name)
+  {
+    return dynamic_get(this, name);
+  }
+
 void xss_object::add_property_(XSSProperty prop)
   {
     std::vector<variant>::iterator it = properties_->ref_begin();
@@ -1366,7 +1401,7 @@ void xss_object::add_property_(XSSProperty prop)
       }
   }
 
-void xss_object::add_property(const str& name, variant value, XSSType type)
+XSSProperty xss_object::add_property(const str& name, variant value, XSSType type)
   {
     XSSProperty result;
     XSSProperty old_prop = get_property(name);
@@ -1384,7 +1419,7 @@ void xss_object::add_property(const str& name, variant value, XSSType type)
             if (prop->id() == name)
               {
                 prop->set_value(value, type);
-                return;
+                return prop;
               }
           }
 
@@ -1402,6 +1437,7 @@ void xss_object::add_property(const str& name, variant value, XSSType type)
     result->set_parent(XSSObject(this));
 
     properties_->push_back(result);
+    return result;
   }
 
 void xss_object::register_property(const str& name, XSSProperty new_prop)

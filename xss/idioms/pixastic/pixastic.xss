@@ -1,0 +1,48 @@
+<xss:parameter id="obj"/>
+
+<xss:code>
+if (obj.parent.id == "application")					
+    compiler.error("Filter need be nested", Filter=obj.id);
+	
+var type = obj.type;
+var params = type.constructor_params;
+var rect = "null";
+string parent_id = obj.parent.id;
+
+if(obj.parent.type.id == "image")
+	parent_id = "streamer.get_resource('"+obj.parent.id+"')";
+out()
+{
+	<xss:e v="parent_id"/>.<xss:e v="obj.id"/> = new <xss:e v="type.output_id"/>(
+}
+
+if(type.constructor_params)           
+{    
+    for(var p in type.constructor_params)
+    {				
+		if (p.property)
+		{					
+            var prop = obj.get_property(p.property);			
+			if(prop.value != null)
+			{
+			    if(prop.use_plain_value)
+					out() {<xss:e v="prop.value"/>,}
+				else
+					out() {<xss:e v="prop.render_value()"/>,}			    			
+			}else
+				out() {null,}
+		}			        
+    }
+}
+for(var child in obj.children)
+{
+	if(child.class_name == "rect" && child.left && child.top && child.width && child.height)
+	{		
+		rect =	'{left: '+child.left+', top: '+child.top+', width: '+child.width+', height: '+child.height+'}';	
+	}
+}
+
+out(){<xss:e v="rect"/>, <xss:e v="parent_id"/>);	
+}
+compiler.xss("../common-js/instance.xss", obj, path = parent_id);
+</xss:code>

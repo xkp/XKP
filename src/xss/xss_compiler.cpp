@@ -70,6 +70,11 @@ const str SAliasMustHaveAliased("Alias types must have a 'aliased' attribute");
 const str SBadAliasType("Alias type not found");
 const str SCannotCompileExpression("Cannot compile expression");
 const str SAnalyzeExpectsExpression("Expression expected");
+const str STooFewParametersAOP("compiler.add_object_property expects at least two arguments (object, property name)");
+const str SExpectingObjectAOP("compiler.add_object_property expects an object for its first argument");
+const str SExpectingPropNameAOP("compiler.add_object_property expects an string for its second argument");
+const str SExpectingTypeNameAOP("compiler.add_object_property found an invalid type");
+const str SUnnamedAtrributeAOP("compiler.add_object_property found an unnamed attribute");
 
 //xss_application_renderer
 xss_application_renderer::xss_application_renderer(fs::path entry_point, Language lang, XSSCompiler compiler):
@@ -1207,11 +1212,6 @@ XSSObject xss_compiler::analyze_expression(const param_list params)
         xss_throw(error);
       }
 
-    if (expr == "group_scale")
-    {
-      str debug("xxx");
-    }
-
     XSSObject result(new xss_object);
 
     xs_utils   xs;
@@ -1268,6 +1268,82 @@ XSSObject xss_compiler::analyze_expression(const param_list params)
     return result;
   }
 
+XSSProperty xss_compiler::add_object_property(const param_list params)
+  {
+    if (params.size() < 2)
+      {
+        param_list error;
+        error.add("id", SCompiler);
+        error.add("desc", STooFewParametersAOP);
+        xss_throw(error);
+      }
+
+    XSSObject obj       = variant_cast<XSSObject>(params.get(0), XSSObject());
+    str       prop_name = variant_cast<str>(params.get(1), str());
+
+    if (!obj)
+      {
+        param_list error;
+        error.add("id", SCompiler);
+        error.add("desc", SExpectingObjectAOP);
+        xss_throw(error);
+      }
+
+    if (prop_name.empty())
+      {
+        param_list error;
+        error.add("id", SCompiler);
+        error.add("desc", SExpectingPropNameAOP);
+        xss_throw(error);
+      }
+
+    //resolve type
+    XSSType    type;
+    XSSContext ctx = current_context();
+    variant type_value = params.get("type");
+    if (type_value.is<XSSType>())
+        type = type_value;
+    else if (type_value.is<str>())
+      {
+        str type_name = variant_cast<str>(type_value, str());
+        type = ctx->get_type(type_name);
+        if (!type)
+          {
+            param_list error;
+            error.add("id", SCompiler);
+            error.add("desc", SExpectingTypeNameAOP);
+            error.add("type name", type_name);
+            xss_throw(error);
+          }
+      }
+
+    //resolve_value
+    variant value      = params.get("value");
+    XSSType value_type = type_of(value);
+    if (!type)
+      type = value_type;
+
+    //Add the property
+    XSSProperty result = obj->add_property(prop_name, value, type);
+
+    for(int i = 2; i < params.size(); i++)
+      {
+        str pname = params.get_name(i);
+        if (pname.empty())
+          {
+            param_list error;
+            error.add("id", SCompiler);
+            error.add("desc", SUnnamedAtrributeAOP);
+            error.add("index", i);
+            xss_throw(error);
+          }
+
+        result->add_attribute(pname, params.get(i));
+      }
+
+    return result;
+  }
+
 bool xss_compiler::is_type(variant v)
   {
     if (v.is<XSSType>())
@@ -1281,8 +1357,82 @@ bool xss_compiler::is_type(variant v)
     return ctx->get_type(obj->id());
   }
 
-str xss_compiler::instantiate(variant v)
+struct instantiate_params
   {
+    XSSObject    instance;
+    DynamicArray runtime;
+    param_list   values;
+  };
+
+void process_instantiate_params(const param_list params, int idx, instantiate_params& result)
+  {
+    for(size_t i = idx; i < params.size(); i++)
+      {
+        str     pname  = params.get_name(i);
+        variant pvalue = params.get(i);
+
+        if (pname == "instance")
+          {
+            result.instance = variant_cast<XSSObject>(pvalue, XSSObject());
+            continue;
+          }
+        else if (pname == "runtime_args")
+          {
+            result.runtime = variant_cast<DynamicArray>(pvalue, DynamicArray());
+            continue;
+          }
+        else if (pname == "param_values")
+          {
+            DynamicArray pv = variant_cast<DynamicArray>(pvalue, DynamicArray());
+            assert(pv);
+
+		        std::vector<variant>::iterator it = pv->ref_begin();
+		        std::vector<variant>::iterator nd = pv->ref_end();
+
+            for(; it != nd; it++)
+              {
+                XSSObject pobj = variant_cast<XSSObject>(*it, XSSObject()); assert(pobj); //td: error
+                str pid = pobj->id();
+                str pval = pobj->get<str>("value", str());
+                result.values.add(pid, pval);
+              }
+            continue;
+          }
+
+        result.values.add(pname, pvalue);
+      }
+  }
+
+str xss_compiler::instantiate(const param_list params)
+  {
+    variant      v    = params.get(0);
+    XSSType      type = variant_cast<XSSType>(v, XSSType());
+    XSSObject    instance;
+    if (!type)
+      {
+        instance = variant_cast<XSSObject>(v, XSSObject());
+        if (instance)
+          {
+            type = instance->type();
+          }
+      }
+
+    XSSContext ctx  = current_context();
+    Language   lang = ctx->get_language();
+
+    instantiate_params iparams;
+    process_instantiate_params(params, 1, iparams);
+
+    if (!instance)
+      instance = iparams.instance;
+
+    str result = lang->instantiate(type, instance, iparams.runtime, iparams.values);
+    return result;
+  }
+
+str xss_compiler::render_ctor_args(const param_list params)
+  {
+    variant   v    = params.get(0);
     XSSType   type = variant_cast<XSSType>(v, XSSType());
     XSSObject instance;
     if (!type)
@@ -1297,7 +1447,10 @@ str xss_compiler::instantiate(variant v)
     XSSContext ctx  = current_context();
     Language   lang = ctx->get_language();
 
-    str result = lang->instantiate(type, instance, DynamicArray());
+    instantiate_params iparams;
+    process_instantiate_params(params, 1, iparams);
+
+    str result = lang->render_ctor_args(type, instance, iparams.runtime, iparams.values);
     return result;
   }
 
@@ -1590,8 +1743,8 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
             type->set_id(type_data->id());
             type->set_super(super);
             type->set_output_id(type_data->output_id());
-            type->set_definition(type_data);
             type->inherit();
+            type->set_definition(type_data);
 
             str class_name = type_data->type_name();
             bool alias = false;
@@ -1776,7 +1929,10 @@ void xss_compiler::preprocess_type(XSSType clazz, XSSObject def_class, const str
         virtual void handle(XSSObject obj, XSSModule mod)
           {
             if (mod->one_of_us(obj))
-              dynamic_set(obj, "idiom", mod);
+              {
+                dynamic_set(obj, "idiom", mod);
+                dynamic_set(target, "idiom", mod);
+              }
 
             if (root == obj)
               return; //do not register the class
@@ -1784,8 +1940,6 @@ void xss_compiler::preprocess_type(XSSType clazz, XSSObject def_class, const str
             str obj_id = obj->id();
             if (!obj_id.empty())
               ctx->register_symbol(RESOLVE_INSTANCE, obj_id, obj);
-
-            dynamic_set(target, "idiom", mod);
 
             if (module == mod)
               target->register_instance(obj);

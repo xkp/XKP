@@ -3,71 +3,104 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>TITLE</title>
-<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
+<link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css">
 <script type="text/javascript">
 $(function() {
-        application.target = null;
-        application.target_set = function (value)
-        {
-            application.target = value;
-            btn2.text("target acquired " + value);
-for(var i = 0; i < 20; i++)
-{
-btn2.width(btn2.width() + 10);
-if (btn2.width() > 200)
-{
-btn2.width(100);
-}
-}
-        };
-	application.reset = function(s) 
-	{
-		application.target_set(s);
-btn1.text("...");
-btn2.text("...");
-	};
-            btn1.text("One button");
-            btn1.width(100);
-	var ev_parent = this;
-	btn1.events.addListener("click", function()
-	{    
-		btn2.text("Clicked");
-btn1.text("Other Clicked");
-	}
-	);
-		application.are_obj_events = true;
-            btn2.text("Two button");
-            btn2.width(100);
-	var ev_parent = this;
-	btn2.events.addListener("click", function()
-	{    
-		btn1.text("Old value: " + application.target);
-application.target_set(300);
-	}
-	);
-		application.are_obj_events = true;
-            btn3.text("Reset");
-            btn3.width(100);
-	var ev_parent = this;
-	btn3.events.addListener("click", function()
-	{    
-		application.reset();
-	}
-	);
-		application.are_obj_events = true;
+			var main = $("#main");
+			var __div1 = $("#__div1");
+			var lbl1 = $("#lbl1");
+			var edit1 = $("#edit1");
+			var rb1 = $("#rb1").button();
+			var cb1 = $("#cb1").button();
+			var __radiogroup1 = $("#__radiogroup1").buttonset();
+			var __radiobutton1 = $("#__radiobutton1").button();
+			var __radiobutton2 = $("#__radiobutton2").button();
+			var __radiobutton3 = $("#__radiobutton3").button();
+			var __div2 = $("#__div2");
+			var acc1 = $("#acc1");
+			var __div3 = $("#__div3");
+			var __div4 = $("#__div4");
+			var tc1 = $("#tc1");
+			var __div5 = $("#__div5");
+			var __div6 = $("#__div6");
+			var btn1 = $("#btn1").button();
+			var application = $("#application");
+        acc1.accordion({
+    });
+        tc1.tabs({
+            collapsible: true,
+        });
+		btn1.click( function() { 
+			lbl1.text(edit1.attr("value"));
+		});
 });
 </script>
 <style>
+#main {width : 800px;height : 600px;position : relative}
+#edit1 {width : 252px}
+#__div2 {left : 400px;top : 20px;width : 600px;height : 400px;position : absolute}
+#btn1 {left : 20px;top : 120px;position : absolute}
 </style>
 </head>
 <body>
             <div id='application'>
-            <button id='btn1'>
-                </button>
-            <button id='btn2'>
-                </button>
-            <button id='btn3'>
-                </button>
+<div id="main">
+<div id="__div1">
+				<label id="lbl1"
+			>
+					Hello Components
+				</label>
+				<input id="edit1"
+						type="text" 
+						name="edit1" 
+					>
+				</input>
+</div>
+            <div id="rb1">
+        <input id="rb1_input" type="radio" name="main"/>
+        <label id="rb1_label" for="rb1_input"> Radio Buttoning </label>
+            </div>
+            <div id="cb1">
+        <input id="cb1_input" type="checkbox" name="main"/>
+        <label id="cb1_label" for="cb1_input"> Check Boxing </label>
+            </div>
+				<div id="__radiogroup1"
+			>
+        <input id="__rgitem3" type="radio" name="__radiogroup1"/>
+        <label id="" for="__rgitem3"> Chocolate </label>
+        <input id="__rgitem4" type="radio" name="__radiogroup1"/>
+        <label id="" for="__rgitem4"> Vanilla </label>
+        <input id="__rgitem5" type="radio" name="__radiogroup1"/>
+        <label id="" for="__rgitem5"> Strawberry </label>
+				</div>
+<div id="__div2">
+<div id="acc1">
+            <h3><a href="#">Accordion Item 1</a></h3>
+<div id="__div3">
+<p>Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis. Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis<br />lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.</p><ul><li>List item one</li><li>List item two</li><li>List item three</li></ul>
+</div>
+            <h3><a href="#">Accordion Item 2</a></h3>
+<div id="__div4">
+<div id="tc1">
+		<ul>
+			<li><a href="#__div5"><span>Tab Page 1</span></a></li>
+			<li><a href="somepage.html"><span>Tab Page 2</span></a></li>
+		</ul>
+<div id="__div5">
+</div>
+</div>
+</div>
+</div>
+</div>
+				<input id="btn1"
+						type="button" 
+						name="btn1" 
+						value="I'm floating" 
+					>
+				</input>
+</div>
                 </div>
             </body>
 </html>

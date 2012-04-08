@@ -10,16 +10,16 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 			import android.view.LayoutInflater;
 import xkp.android.libs.Layout.XKPLayout;
 			import xkp.android.libs.Widget.XKPUtils;
-						import android.widget.ImageView;
-						import xkp.android.libs.Widget.XKPUtils;
 						import android.view.View.OnClickListener;
 						import android.view.View.OnLongClickListener;
 						import android.view.MotionEvent;
 						import android.view.View.OnTouchListener;
 						import android.view.View.OnKeyListener;
 						import android.view.View.OnFocusChangeListener;
-						import android.widget.TextView;
+						import android.widget.ImageView;
+						import xkp.android.libs.Widget.XKPUtils;
 						import android.text.method.KeyListener;
+						import android.widget.TextView;
 		public class character 
 						extends XKPLayout
 {

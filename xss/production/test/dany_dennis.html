@@ -43,7 +43,8 @@ application.events = new ms.event.EventHolder();
         {
             return a + (b - a)*t;
         }		
-		var streamer = new ms.streamer.Streamer();		
+		var streamer = new ms.streamer.Streamer();	
+		var ResourceUtils = new ms.streamer.ResourceUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -58,8 +59,8 @@ application.events = new ms.event.EventHolder();
 			var mouse_pressed = false;
 		}
 	// --------RESOURCES---------
-        var global_package_items = [];
-                global_package_items.push(
+		var global_package = new ms.streamer.Package(streamer);	
+                global_package.add_item(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -67,8 +68,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+                global_package.add_item(
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
@@ -76,8 +82,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image2;
+				global_package.events.addListener("loaded", function()
+				{
+					__image2 = streamer.get_resource("__image2");
+				});
+                global_package.add_item(
             {
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
@@ -85,8 +96,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image3;
+				global_package.events.addListener("loaded", function()
+				{
+					__image3 = streamer.get_resource("__image3");
+				});
+                global_package.add_item(
             {
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
@@ -94,8 +110,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image4;
+				global_package.events.addListener("loaded", function()
+				{
+					__image4 = streamer.get_resource("__image4");
+				});
+                global_package.add_item(
             {
 		id:				"__image5",
 		resource_type:	RESOURCE_IMAGE,
@@ -103,8 +124,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image5;
+				global_package.events.addListener("loaded", function()
+				{
+					__image5 = streamer.get_resource("__image5");
+				});
+                global_package.add_item(
             {
 		id:				"__image6",
 		resource_type:	RESOURCE_IMAGE,
@@ -112,8 +138,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image6;
+				global_package.events.addListener("loaded", function()
+				{
+					__image6 = streamer.get_resource("__image6");
+				});
+                global_package.add_item(
             {
 		id:				"__image7",
 		resource_type:	RESOURCE_IMAGE,
@@ -121,8 +152,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image7;
+				global_package.events.addListener("loaded", function()
+				{
+					__image7 = streamer.get_resource("__image7");
+				});
+                global_package.add_item(
             {
 		id:				"__image8",
 		resource_type:	RESOURCE_IMAGE,
@@ -130,8 +166,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image8;
+				global_package.events.addListener("loaded", function()
+				{
+					__image8 = streamer.get_resource("__image8");
+				});
+                global_package.add_item(
             {
 		id:				"__image9",
 		resource_type:	RESOURCE_IMAGE,
@@ -139,8 +180,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image9;
+				global_package.events.addListener("loaded", function()
+				{
+					__image9 = streamer.get_resource("__image9");
+				});
+                global_package.add_item(
             {
 		id:				"__image10",
 		resource_type:	RESOURCE_IMAGE,
@@ -148,8 +194,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image10;
+				global_package.events.addListener("loaded", function()
+				{
+					__image10 = streamer.get_resource("__image10");
+				});
+                global_package.add_item(
             {
 		id:				"__image11",
 		resource_type:	RESOURCE_IMAGE,
@@ -157,8 +208,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image11;
+				global_package.events.addListener("loaded", function()
+				{
+					__image11 = streamer.get_resource("__image11");
+				});
+                global_package.add_item(
             {
 		id:				"__image12",
 		resource_type:	RESOURCE_IMAGE,
@@ -166,8 +222,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image12;
+				global_package.events.addListener("loaded", function()
+				{
+					__image12 = streamer.get_resource("__image12");
+				});
+                global_package.add_item(
             {
 		id:				"__image13",
 		resource_type:	RESOURCE_IMAGE,
@@ -175,8 +236,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image13;
+				global_package.events.addListener("loaded", function()
+				{
+					__image13 = streamer.get_resource("__image13");
+				});
+                global_package.add_item(
             {
 		id:				"__image14",
 		resource_type:	RESOURCE_IMAGE,
@@ -184,8 +250,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image14;
+				global_package.events.addListener("loaded", function()
+				{
+					__image14 = streamer.get_resource("__image14");
+				});
+                global_package.add_item(
             {
 		id:				"__image15",
 		resource_type:	RESOURCE_IMAGE,
@@ -193,8 +264,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image15;
+				global_package.events.addListener("loaded", function()
+				{
+					__image15 = streamer.get_resource("__image15");
+				});
+                global_package.add_item(
             {
 		id:				"__image16",
 		resource_type:	RESOURCE_IMAGE,
@@ -202,8 +278,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image16;
+				global_package.events.addListener("loaded", function()
+				{
+					__image16 = streamer.get_resource("__image16");
+				});
+                global_package.add_item(
             {
 		id:				"__image17",
 		resource_type:	RESOURCE_IMAGE,
@@ -211,8 +292,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image17;
+				global_package.events.addListener("loaded", function()
+				{
+					__image17 = streamer.get_resource("__image17");
+				});
+                global_package.add_item(
             {
 		id:				"__image18",
 		resource_type:	RESOURCE_IMAGE,
@@ -220,8 +306,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image18;
+				global_package.events.addListener("loaded", function()
+				{
+					__image18 = streamer.get_resource("__image18");
+				});
+                global_package.add_item(
             {
 		id:				"__image19",
 		resource_type:	RESOURCE_IMAGE,
@@ -229,8 +320,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image19;
+				global_package.events.addListener("loaded", function()
+				{
+					__image19 = streamer.get_resource("__image19");
+				});
+                global_package.add_item(
             {
 		id:				"__image20",
 		resource_type:	RESOURCE_IMAGE,
@@ -238,8 +334,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image20;
+				global_package.events.addListener("loaded", function()
+				{
+					__image20 = streamer.get_resource("__image20");
+				});
+                global_package.add_item(
             {
 		id:				"__image21",
 		resource_type:	RESOURCE_IMAGE,
@@ -247,8 +348,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image21;
+				global_package.events.addListener("loaded", function()
+				{
+					__image21 = streamer.get_resource("__image21");
+				});
+                global_package.add_item(
             {
 		id:				"__image22",
 		resource_type:	RESOURCE_IMAGE,
@@ -256,8 +362,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image22;
+				global_package.events.addListener("loaded", function()
+				{
+					__image22 = streamer.get_resource("__image22");
+				});
+                global_package.add_item(
             {
 		id:				"__image23",
 		resource_type:	RESOURCE_IMAGE,
@@ -265,8 +376,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image23;
+				global_package.events.addListener("loaded", function()
+				{
+					__image23 = streamer.get_resource("__image23");
+				});
+                global_package.add_item(
             {
 		id:				"__image24",
 		resource_type:	RESOURCE_IMAGE,
@@ -274,8 +390,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image24;
+				global_package.events.addListener("loaded", function()
+				{
+					__image24 = streamer.get_resource("__image24");
+				});
+                global_package.add_item(
             {
 		id:				"__image25",
 		resource_type:	RESOURCE_IMAGE,
@@ -283,8 +404,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image25;
+				global_package.events.addListener("loaded", function()
+				{
+					__image25 = streamer.get_resource("__image25");
+				});
+                global_package.add_item(
             {
 		id:				"__image26",
 		resource_type:	RESOURCE_IMAGE,
@@ -292,8 +418,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image26;
+				global_package.events.addListener("loaded", function()
+				{
+					__image26 = streamer.get_resource("__image26");
+				});
+                global_package.add_item(
             {
 		id:				"__image27",
 		resource_type:	RESOURCE_IMAGE,
@@ -301,8 +432,13 @@ application.events = new ms.event.EventHolder();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image27;
+				global_package.events.addListener("loaded", function()
+				{
+					__image27 = streamer.get_resource("__image27");
+				});
+                global_package.add_item(
             {
 		id:				"__image28",
 		resource_type:	RESOURCE_IMAGE,
@@ -311,15 +447,19 @@ application.events = new ms.event.EventHolder();
 		frame_height:	null,
 		animations:		[]
 });	
-		global_package_items.push({
+				var __image28;
+				global_package.events.addListener("loaded", function()
+				{
+					__image28 = streamer.get_resource("__image28");
+				});
+		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
 			src:			"images/no_res.png",
 			frame_width:	null,
 			frame_height:	null,
 			animations:		[]
-		});
-        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		});		
 		global_package.load();	
     // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
@@ -1512,6 +1652,187 @@ g_sequence_manager);
                 {
                     ____i80.keys[0].value = close.get_alpha();
                 }
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+		    close = new ms.ui.Image( g_ui_root.manager, g_ui_root
+	    , "images/pictures/close.png");
+        close = close;
+            close.set_x(800);
+            close.set_y(10);
+            close.set_width(30);
+            close.set_height(30);
+            close.alpha(0);
+	var ev_parent = this;
+	close.events.addListener("click", function()
+	{    
+		if (application.camera_in)
+{
+application.camera_in = false;
+application.one_in = false;
+cam_out.stop();
+cam_out.start();
+}
+else
+{
+application.one_in = false;
+pic_out.target = application.curr_pict;
+pic_out.stop();
+pic_out.start();
+close_fade_in.stop();
+close_fade_in.start();
+}
+	}
+	);
+		application.are_obj_events = true;
+		    box_cont = new ms.ui.RippleEffect( g_ui_root.manager, g_ui_root
+	    , "images/pictures/redbox2.png");
+        box_cont = box_cont;
+            box_cont.set_x(25);
+            box_cont.set_y(25);
+            box_cont.set_width(802);
+            box_cont.set_height(602);
+            box_cont.alpha(60);
+		    box_border = new ms.ui.Image( g_ui_root.manager, g_ui_root
+	    , "images/pictures/redbox.png");
+        box_border = box_border;
+            box_border.set_x(50);
+            box_border.set_y(50);
+            box_border.set_width(800);
+            box_border.set_height(600);
+            box_border.alpha(80);
+		    banner = new ms.ui.Image( g_ui_root.manager, g_ui_root
+	    , "images/pictures/banner.png");
+        banner = banner;
+            banner.set_x(200);
+            banner.set_y(200);
+            banner.set_width(400);
+            banner.set_height(50);
+            banner.set_rotation(-30);
+            banner.alpha(0);
+		    camerawl = new ms.ui.Image( g_ui_root.manager, g_ui_root
+	    , "images/pictures/camerawl.png");
+        camerawl = camerawl;
+            camerawl.set_x(320);
+            camerawl.set_y(240);
+            camerawl.set_width(280);
+            camerawl.set_height(180);
+            camerawl.alpha(0);
+	var ev_parent = this;
+	camerawl.events.addListener("click", function()
+	{    
+		if (!application.one_in)
+{
+application.one_in = true;
+application.camera_in = true;
+cam_in.stop();
+cam_in.start();
+}
+	}
+	);
+		application.are_obj_events = true;
+		    lens = new ms.ui.Image( g_ui_root.manager, g_ui_root
+	    , "images/pictures/lens.png");
+        lens = lens;
+            lens.set_x(430);
+            lens.set_y(287);
+            lens.set_width(120);
+            lens.set_height(120);
+            lens.alpha(0);
+		    line_top = new ms.ui.Line( g_ui_root.manager, g_ui_root
+	    );
+        line_top = line_top;
+            line_top.set_x1(5);
+            line_top.set_y1(38);
+            line_top.set_x2(5);
+            line_top.set_y2(38);
+            line_top.alpha(50);
+            line_top.set_color("white");
+		    pict1 = new ms.ui.Image( g_ui_root.manager, g_ui_root
+	    , "images/pictures/pict1.jpg");
+        pict1 = pict1;
+            pict1.set_x(0);
+            pict1.set_y(0);
+            pict1.set_width(0);
+            pict1.set_height(0);
+            pict1.alpha(0);
+		    pict2 = new ms.ui.Image( g_ui_root.manager, g_ui_root
+	    , "images/pictures/pict2.jpg");
+        pict2 = pict2;
+            pict2.set_x(0);
+            pict2.set_y(0);
+            pict2.set_width(0);
+            pict2.set_height(0);
+            pict2.alpha(0);
+		    pict3 = new ms.ui.Image( g_ui_root.manager, g_ui_root
+	    , "images/pictures/pict3.jpg");
+        pict3 = pict3;
+            pict3.set_x(0);
+            pict3.set_y(0);
+            pict3.set_width(0);
+            pict3.set_height(0);
+            pict3.alpha(0);
+		    pict4 = new ms.ui.Image( g_ui_root.manager, g_ui_root
+	    , "images/pictures/pict4.jpg");
+        pict4 = pict4;
+            pict4.set_x(0);
+            pict4.set_y(0);
+            pict4.set_width(0);
+            pict4.set_height(0);
+            pict4.alpha(0);
+		    pict5 = new ms.ui.Image( g_ui_root.manager, g_ui_root
+	    , "images/pictures/pict5.jpg");
+        pict5 = pict5;
+            pict5.set_x(0);
+            pict5.set_y(0);
+            pict5.set_width(0);
+            pict5.set_height(0);
+            pict5.alpha(0);
 scene = 
 new THREE.Scene(
 );
@@ -1771,188 +2092,7 @@ idle_anim_5.target = plane_5;
 	);
 if(ui)
 {	
-	SoundUtils = new ms.ui.SoundUtils();
-	drawingCanvas.onmousemove = function(ev)
-	{
-		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmousedown = function(ev)
-	{
-		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmouseup = function(ev)
-	{
-		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};		
-	ui.events.addListener("mousedown", function(x,y)
-	{    
-		application.events.dispatch("mousedown", [x, y]);
-	});
-	ui.events.addListener("mouseup", function(x,y)
-	{    
-		application.events.dispatch("mouseup", [x, y]);
-	});
-	ui.events.addListener("mousemove", function(x,y)
-	{    
-		application.events.dispatch("mousemove", [x, y]);
-	});
-	ui.events.addListener("click", function(x,y)
-	{    
-		application.events.dispatch("click", [x, y]);
-	});
-	ui.events.addListener("drag", function(x,y)
-	{    
-		application.events.dispatch("drag", [x, y]);
-	});
-	ui.events.addListener("dragend", function(x,y)
-	{    
-		application.events.dispatch("dragend", [x, y]);
-	});
-	ui.events.addListener("keyup", function(keycode)
-	{    
-		application.events.dispatch("keyup", [keycode]);
-	});
-	ui.events.addListener("keydown", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
-	ui.events.addListener("keypress", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
-		    close = new ms.ui.Image( 
-	    "images/pictures/close.png",g_ui_root.manager, g_ui_root);
-        close = close;
-            close.set_x(800);
-            close.set_y(10);
-            close.set_width(30);
-            close.set_height(30);
-            close.alpha(0);
-	var ev_parent = this;
-	close.events.addListener("click", function()
-	{    
-		if (application.camera_in)
-{
-application.camera_in = false;
-application.one_in = false;
-cam_out.stop();
-cam_out.start();
-}
-else
-{
-application.one_in = false;
-pic_out.target = application.curr_pict;
-pic_out.stop();
-pic_out.start();
-close_fade_in.stop();
-close_fade_in.start();
-}
-	}
-	);
-		application.are_obj_events = true;
-		    box_cont = new ms.ui.RippleEffect( 
-	    "images/pictures/redbox2.png",g_ui_root.manager, g_ui_root);
-        box_cont = box_cont;
-            box_cont.set_x(25);
-            box_cont.set_y(25);
-            box_cont.set_width(802);
-            box_cont.set_height(602);
-            box_cont.alpha(60);
-		    box_border = new ms.ui.Image( 
-	    "images/pictures/redbox.png",g_ui_root.manager, g_ui_root);
-        box_border = box_border;
-            box_border.set_x(50);
-            box_border.set_y(50);
-            box_border.set_width(800);
-            box_border.set_height(600);
-            box_border.alpha(80);
-		    banner = new ms.ui.Image( 
-	    "images/pictures/banner.png",g_ui_root.manager, g_ui_root);
-        banner = banner;
-            banner.set_x(200);
-            banner.set_y(200);
-            banner.set_width(400);
-            banner.set_height(50);
-            banner.set_rotation(-30);
-            banner.alpha(0);
-		    camerawl = new ms.ui.Image( 
-	    "images/pictures/camerawl.png",g_ui_root.manager, g_ui_root);
-        camerawl = camerawl;
-            camerawl.set_x(320);
-            camerawl.set_y(240);
-            camerawl.set_width(280);
-            camerawl.set_height(180);
-            camerawl.alpha(0);
-	var ev_parent = this;
-	camerawl.events.addListener("click", function()
-	{    
-		if (!application.one_in)
-{
-application.one_in = true;
-application.camera_in = true;
-cam_in.stop();
-cam_in.start();
-}
-	}
-	);
-		application.are_obj_events = true;
-		    lens = new ms.ui.Image( 
-	    "images/pictures/lens.png",g_ui_root.manager, g_ui_root);
-        lens = lens;
-            lens.set_x(430);
-            lens.set_y(287);
-            lens.set_width(120);
-            lens.set_height(120);
-            lens.alpha(0);
-		    line_top = new ms.ui.Line( 
-	    g_ui_root.manager, g_ui_root);
-        line_top = line_top;
-            line_top.set_x1(5);
-            line_top.set_y1(38);
-            line_top.set_x2(5);
-            line_top.set_y2(38);
-            line_top.alpha(50);
-            line_top.set_color("white");
-		    pict1 = new ms.ui.Image( 
-	    "images/pictures/pict1.jpg",g_ui_root.manager, g_ui_root);
-        pict1 = pict1;
-            pict1.set_x(0);
-            pict1.set_y(0);
-            pict1.set_width(0);
-            pict1.set_height(0);
-            pict1.alpha(0);
-		    pict2 = new ms.ui.Image( 
-	    "images/pictures/pict2.jpg",g_ui_root.manager, g_ui_root);
-        pict2 = pict2;
-            pict2.set_x(0);
-            pict2.set_y(0);
-            pict2.set_width(0);
-            pict2.set_height(0);
-            pict2.alpha(0);
-		    pict3 = new ms.ui.Image( 
-	    "images/pictures/pict3.jpg",g_ui_root.manager, g_ui_root);
-        pict3 = pict3;
-            pict3.set_x(0);
-            pict3.set_y(0);
-            pict3.set_width(0);
-            pict3.set_height(0);
-            pict3.alpha(0);
-		    pict4 = new ms.ui.Image( 
-	    "images/pictures/pict4.jpg",g_ui_root.manager, g_ui_root);
-        pict4 = pict4;
-            pict4.set_x(0);
-            pict4.set_y(0);
-            pict4.set_width(0);
-            pict4.set_height(0);
-            pict4.alpha(0);
-		    pict5 = new ms.ui.Image( 
-	    "images/pictures/pict5.jpg",g_ui_root.manager, g_ui_root);
-        pict5 = pict5;
-            pict5.set_x(0);
-            pict5.set_y(0);
-            pict5.set_width(0);
-            pict5.set_height(0);
-            pict5.alpha(0);
+	SoundUtils = new ms.ui.SoundUtils();		
 	g_ui.fill_background = false;	
 }
 var event_manager = new ms.event.ThreeEventManager();

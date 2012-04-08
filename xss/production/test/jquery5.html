@@ -3,51 +3,180 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>TITLE</title>
-<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
+<script type="text/javascript" src="../js/jquery-idiom.js"></script>
+<link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css">
 <script type="text/javascript">
 $(function() {
-            btn1.text("One button");
-            btn1.width(100);
-	var ev_parent = this;
-	btn1.events.addListener("click", function()
-	{    
-		btn2.text("Clicked");
-btn1.text("Other Clicked");
-	}
-	);
-		application.are_obj_events = true;
-            btn2.text("Two button");
-            btn2.width(100);
-	var ev_parent = this;
-	btn2.events.addListener("click", function()
-	{    
-		btn1.text("Old value: " + application.target);
-application.target_set(300);
-	}
-	);
-		application.are_obj_events = true;
-            btn3.text("Reset");
-            btn3.width(100);
-	var ev_parent = this;
-	btn3.events.addListener("click", function()
-	{    
-		application.reset();
-	}
-	);
-		application.are_obj_events = true;
+			var main = $("#main");
+			var acc1 = $("#acc1");
+			var __div1 = $("#__div1");
+			var __div2 = $("#__div2");
+			var __div3 = $("#__div3");
+			var __div4 = $("#__div4");
+			var tc1 = $("#tc1");
+			var __div5 = $("#__div5");
+			var __div6 = $("#__div6");
+			var __div7 = $("#__div7");
+			var __div8 = $("#__div8");
+			var __div9 = $("#__div9");
+			var __label1 = $("#__label1");
+			var dp2 = $("#dp2");
+			var dp1 = $("#dp1");
+			var __div10 = $("#__div10");
+			var __label2 = $("#__label2");
+			var __autocomplete1 = $("#__autocomplete1");
+			var __br1 = $("#__br1");
+			var btn1 = $("#btn1").button();
+			var btn2 = $("#btn2").button();
+			var simple_dialog = $("#simple_dialog");
+			var __br2 = $("#__br2");
+			var __br3 = $("#__br3");
+			var pb1 = $("#pb1");
+			var __br4 = $("#__br4");
+			var sld1 = $("#sld1");
+			var application = $("#application");
+        acc1.accordion({
+            fillSpace: true,
+        });
+        tc1.tabs({
+    });
+        dp2.datepicker({
+		    beforeShow: function(input, inst) { 
+	     JQUComponent.set_visible(dp1, false);
+		    },
+		    onClose: function(dateText, inst) { 
+	     JQUComponent.set_visible(dp1, true);
+		    },
+	    });
+        dp1.datepicker({
+		    onSelect: function(dateText, inst) { 
+	     alert(dateText);
+		    },
+	    });
+        var __acsource1 = [
+    "Ambient", "Amphibious", "Anthropology", "Effervecent", "Emporium", "Entropy", "Indeed", "IPhone", "Impossible", "Obliquos", "Onerous", "Obnoxious", "Up?", "Usurpator", 
+    ];
+        __autocomplete1.autocomplete({
+                source: __acsource1,
+            });
+		btn1.click( function() { 
+			simple_dialog.dialog('open');
+		});
+        simple_dialog.dialog({
+            modal: true,
+                autoOpen: false,
+            });
+        pb1.progressbar({
+            value: 37,
+        });
+        sld1.slider({
+            min: 0,
+            max: 100,
+            value: 37,
+		    change: function(event, ui) { 
+	     pb1.progressbar( "option", "value", sld1.slider( "option", "value" ));
+		    },
+	    });
 });
 </script>
 <style>
+#main {width : 1200px}
+#acc1 {width : 300px}
+#tc1 {height : 400px}
+#__div9 {width : 350px}
 </style>
 </head>
 <body>
             <div id='application'>
-            <button id='btn1'>
-                </button>
-            <button id='btn2'>
-                </button>
-            <button id='btn3'>
-                </button>
+<div id="main">
+            <table border="0"  width = "1200" >
+        <tr><td  width = "300px"   style="vertical-align:top">
+<div id="acc1">
+            <h3><a href="#">Plain HTML</a></h3>
+<div id="__div1">
+<p>We allow you to specify your own html whenever you feel convinient.</p>
+</div>
+            <h3><a href="#">Remote HTML</a></h3>
+<div id="__div2">
+<p>When using tabs you can simply scpecify an "href" attribute and jQuery will do the rest.</p>
+</div>
+            <h3><a href="#">Common Controls</a></h3>
+<div id="__div3">
+<p>The good old buttons, checkboxes and labels we're used to. Clickables.</p>
+</div>
+            <h3><a href="#">JQuery UI</a></h3>
+<div id="__div4">
+<p>Advanced components, courtesy of</p><a href="www.jqueryui.com">jQuery UI</a>
+</div>
+</div>
+</td><td style="vertical-align:top">
+<div id="tc1">
+		<ul>
+			<li><a href="#__div5"><span>Plain HTML</span></a></li>
+			<li><a href="somepage.html"><span>Remote HTML</span></a></li>
+			<li><a href="#__div7"><span>Common Controls</span></a></li>
+			<li><a href="#__div8"><span>JQuery UI</span></a></li>
+		</ul>
+<div id="__div5">
+<p>Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis. Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis<br />lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.</p><ul><li>List item one</li><li>List item two</li><li>List item three</li><li>List item two</li><li>List item three</li></ul>
+</div>
+<div id="__div7">
+</div>
+<div id="__div8">
+            <table border="0" >
+        <tr><td  width = "350px"   style="vertical-align:top">
+<div id="__div9">
+				<label id="__label1"
+			>
+					Date: 
+				</label>
+			<input type="text" id="dp2"></input>
+			<div id="dp1"></div>
+</div>
+</td><td style="vertical-align:top">
+<div id="__div10">
+				<label id="__label2"
+			>
+					autocomplete (type an vowel): 
+				</label>
+				<input id="__autocomplete1"
+			>
+				</input>
+<br/>
+				<input id="btn1"
+						type="button" 
+						name="btn1" 
+						value="Open Dialog 1" 
+					>
+				</input>
+				<input id="btn2"
+						type="button" 
+						name="btn2" 
+						value="Open Dialog 2" 
+					>
+				</input>
+<div id="simple_dialog">
+<p>This is a simple dialog</p><p>Currently using<b>36% of your storage space</b>.</p>
+</div>
+<br/>
+<br/>
+				<div id="pb1"
+			>
+				</div>
+<br/>
+				<div id="sld1"
+			>
+				</div>
+</div>
+</td></tr>
+            </table>
+        </div>
+</div>
+</td></tr>
+            </table>
+        </div>
                 </div>
             </body>
 </html>

@@ -133,12 +133,12 @@ ms.event.ThreeEventManager = Class.create(
 		}
 	},
 	keydown: function(keycode)
-	{		
+	{
 		application.events.dispatch("keydown", [keycode]);    
 	},
 
 	keyup: function(keycode)
-	{		
+	{
 		application.events.dispatch("keyup", [keycode]);    
 	},
 

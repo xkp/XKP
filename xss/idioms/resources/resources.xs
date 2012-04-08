@@ -16,7 +16,8 @@ on render_initialization()
 {
 	out()
 	{
-		var streamer = new ms.streamer.Streamer();		
+		var streamer = new ms.streamer.Streamer();	
+		var ResourceUtils = new ms.streamer.ResourceUtils();
 	}	
 }
 
@@ -24,9 +25,9 @@ on render_resources()
 {
 	compiler.log("Rendering Resources...");
 
-    out()
-    {
-        var global_package_items = [];
+    out() 
+	{        
+		var global_package = new ms.streamer.Package(streamer);	
     }
 
     for(var res in instances)
@@ -54,28 +55,43 @@ on render_resources()
             }
             render_resource(res);
             compiler.out(");");
+			out()
+			{
+				var <xss:e v="res.id"/>;
+				<xss:e v="res.parent.id"/>.events.addListener("loaded", function()
+				{
+					<xss:e v="res.id"/> = streamer.get_resource("<xss:e v="res.id"/>");
+				});
+			}
         }
         else
         {
             out()
             {
-                global_package_items.push(
+                global_package.add_item(
             }
             render_resource(res);
             compiler.out(");");
+			out()
+			{	
+				var <xss:e v="res.id"/>;
+				global_package.events.addListener("loaded", function()
+				{
+					<xss:e v="res.id"/> = streamer.get_resource("<xss:e v="res.id"/>");
+				});
+			}
         }		
     }	
     out()
     {	
-		global_package_items.push({
+		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
 			src:			"images/no_res.png",
 			frame_width:	null,
 			frame_height:	null,
 			animations:		[]
-		});
-        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		});		
 		global_package.load();	
     }
 }
@@ -87,5 +103,5 @@ method render_resource(resource)
         compiler.error("Unknown resource type", type = resource.class_name);
 	compiler.out("{");
 	compiler.xss("renderer.xss", resource);
-	compiler.out("}");	    
+	compiler.out("}");		
 }

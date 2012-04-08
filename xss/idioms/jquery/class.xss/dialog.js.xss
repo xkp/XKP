@@ -1,0 +1,15 @@
+<xss:parameter id="it"/>
+<xss:code>
+
+    var extra = [];
+    if (!it.auto_open)
+    {
+        var ao = object();
+        ao.id = "autoOpen";
+        ao.value = "false";
+        
+        extra += ao;
+    }
+
+    compiler.xss("../jquery-object.xss", it, extra = extra);
+</xss:code>

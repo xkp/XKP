@@ -33,9 +33,10 @@ var SoundUtils = new ms.ui.SoundUtils();
 			var g_ui_root = ui.root;
 			var mouse_pressed = false;
 		}
-		var streamer = new ms.streamer.Streamer();		
-        var global_package_items = [];
-                global_package_items.push(
+		var streamer = new ms.streamer.Streamer();	
+		var ResourceUtils = new ms.streamer.ResourceUtils();
+		var global_package = new ms.streamer.Package(streamer);	
+                global_package.add_item(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -43,8 +44,13 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+                global_package.add_item(
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
@@ -52,8 +58,13 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image2;
+				global_package.events.addListener("loaded", function()
+				{
+					__image2 = streamer.get_resource("__image2");
+				});
+                global_package.add_item(
             {
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
@@ -62,15 +73,19 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });	
-		global_package_items.push({
+				var __image3;
+				global_package.events.addListener("loaded", function()
+				{
+					__image3 = streamer.get_resource("__image3");
+				});
+		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
 			src:			"images/no_res.png",
 			frame_width:	null,
 			frame_height:	null,
 			animations:		[]
-		});
-        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		});		
 		global_package.load();	
     var canvas_position = {x:0, y:0};
 function start(resolution)  
@@ -158,20 +173,20 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    __label1 = new ms.ui.Label( 
-	    "Verdana",g_ui_root.manager, g_ui_root);
+		    __label1 = new ms.ui.Label( g_ui_root.manager, g_ui_root
+	    , "Verdana");
         __label1 = __label1;
             __label1.set_x(240);
             __label1.set_y(75);
             __label1.text("drag the smile to move it");
-		    lbl1 = new ms.ui.Label( 
-	    "Verdana",g_ui_root.manager, g_ui_root);
+		    lbl1 = new ms.ui.Label( g_ui_root.manager, g_ui_root
+	    , "Verdana");
         lbl1 = lbl1;
             lbl1.set_x(250);
             lbl1.set_y(90);
             lbl1.text("click smiley");
-		    btn1 = new ms.ui.Button( 
-	    "images/smile_sad_48.png","images/smile_grin_48.png",g_ui_root.manager, g_ui_root);
+		    btn1 = new ms.ui.Button( g_ui_root.manager, g_ui_root
+	    , "images/smile_sad_48.png", "images/smile_grin_48.png");
         btn1 = btn1;
             btn1.set_x(270);
             btn1.set_y(100);
@@ -195,29 +210,29 @@ btn1.set_y(y - btn1.h / 2);
 	}
 	);
 		application.are_obj_events = true;
-		    img1 = new ms.ui.Image( 
-	    "images/box.png",g_ui_root.manager, g_ui_root);
+		    img1 = new ms.ui.Image( g_ui_root.manager, g_ui_root
+	    , "images/box.png");
         img1 = img1;
             img1.set_x(470);
             img1.set_y(300);
             img1.set_rotation(10);
             img1.set_width(50);
             img1.set_height(50);
-		    tb1 = new ms.ui.TextButton( 
-	    "Aceptar","12px Tahoma",g_ui_root.manager, g_ui_root);
+		    tb1 = new ms.ui.TextButton( g_ui_root.manager, g_ui_root
+	    , "Aceptar", "12px Tahoma");
         tb1 = tb1;
             tb1.set_x(400);
             tb1.set_y(200);
-		    stateBtn = new ms.ui.StateButton( 
-	    "images/smile_grin_48.png","images/smile_sad_48.png",g_ui_root.manager, g_ui_root);
+		    stateBtn = new ms.ui.StateButton( g_ui_root.manager, g_ui_root
+	    , "images/smile_grin_48.png", "images/smile_sad_48.png");
         stateBtn = stateBtn;
             stateBtn.set_x(270);
             stateBtn.set_y(200);
             stateBtn.set_rotation(-45);
             stateBtn.set_width(50);
             stateBtn.set_height(50);
-		    lbl3 = new ms.ui.Label( 
-	    "Verdana",g_ui_root.manager, g_ui_root);
+		    lbl3 = new ms.ui.Label( g_ui_root.manager, g_ui_root
+	    , "Verdana");
         lbl3 = lbl3;
             lbl3.set_x(330);
             lbl3.set_y(240);

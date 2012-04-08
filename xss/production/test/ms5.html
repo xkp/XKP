@@ -39,9 +39,10 @@ var SoundUtils = new ms.ui.SoundUtils();
         {
             return a + (b - a)*t;
         }		
-		var streamer = new ms.streamer.Streamer();		
-        var global_package_items = [];
-                global_package_items.push(
+		var streamer = new ms.streamer.Streamer();	
+		var ResourceUtils = new ms.streamer.ResourceUtils();
+		var global_package = new ms.streamer.Package(streamer);	
+                global_package.add_item(
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
@@ -49,8 +50,13 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+                global_package.add_item(
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
@@ -58,8 +64,13 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image2;
+				global_package.events.addListener("loaded", function()
+				{
+					__image2 = streamer.get_resource("__image2");
+				});
+                global_package.add_item(
             {
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
@@ -67,8 +78,13 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image3;
+				global_package.events.addListener("loaded", function()
+				{
+					__image3 = streamer.get_resource("__image3");
+				});
+                global_package.add_item(
             {
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
@@ -76,8 +92,13 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image4;
+				global_package.events.addListener("loaded", function()
+				{
+					__image4 = streamer.get_resource("__image4");
+				});
+                global_package.add_item(
             {
 		id:				"__image5",
 		resource_type:	RESOURCE_IMAGE,
@@ -85,8 +106,13 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image5;
+				global_package.events.addListener("loaded", function()
+				{
+					__image5 = streamer.get_resource("__image5");
+				});
+                global_package.add_item(
             {
 		id:				"__image6",
 		resource_type:	RESOURCE_IMAGE,
@@ -94,8 +120,13 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image6;
+				global_package.events.addListener("loaded", function()
+				{
+					__image6 = streamer.get_resource("__image6");
+				});
+                global_package.add_item(
             {
 		id:				"__image7",
 		resource_type:	RESOURCE_IMAGE,
@@ -103,8 +134,13 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image7;
+				global_package.events.addListener("loaded", function()
+				{
+					__image7 = streamer.get_resource("__image7");
+				});
+                global_package.add_item(
             {
 		id:				"__image8",
 		resource_type:	RESOURCE_IMAGE,
@@ -112,8 +148,13 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image8;
+				global_package.events.addListener("loaded", function()
+				{
+					__image8 = streamer.get_resource("__image8");
+				});
+                global_package.add_item(
             {
 		id:				"__image9",
 		resource_type:	RESOURCE_IMAGE,
@@ -121,8 +162,13 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
-});
-                global_package_items.push(
+});	
+				var __image9;
+				global_package.events.addListener("loaded", function()
+				{
+					__image9 = streamer.get_resource("__image9");
+				});
+                global_package.add_item(
             {
 		id:				"__image10",
 		resource_type:	RESOURCE_IMAGE,
@@ -131,15 +177,19 @@ var SoundUtils = new ms.ui.SoundUtils();
 		frame_height:	null,
 		animations:		[]
 });	
-		global_package_items.push({
+				var __image10;
+				global_package.events.addListener("loaded", function()
+				{
+					__image10 = streamer.get_resource("__image10");
+				});
+		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
 			src:			"images/no_res.png",
 			frame_width:	null,
 			frame_height:	null,
 			animations:		[]
-		});
-        var global_package = new ms.streamer.Package(streamer, global_package_items);	
+		});		
 		global_package.load();	
     var canvas_position = {x:0, y:0};
 function start(resolution)  
@@ -228,25 +278,25 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    main = new ms.ui.Switch( 
-	    g_ui_root.manager, g_ui_root);
+		    main = new ms.ui.Switch( g_ui_root.manager, g_ui_root
+	    );
         main = main;
             main.set_x(0);
             main.set_y(0);
             main.set_width(600);
             main.set_height(250);
-		    test1 = new ms.ui.Component( 
-	    main.manager, main);test1.mouse_thru = true;
+		    test1 = new ms.ui.Component( main.manager, main
+	    );test1.mouse_thru = true;
         test1 = test1;
-		    lbl1 = new ms.ui.Label( 
-	    "Verdana",test1.manager, test1);
+		    lbl1 = new ms.ui.Label( test1.manager, test1
+	    , "Verdana");
         lbl1 = lbl1;
             lbl1.set_x(270);
             lbl1.set_y(200);
             lbl1.set_rotation(-0.200000003);
             lbl1.text("click smiley");
-		    btn1 = new ms.ui.Button( 
-	    "images/smile_sad_48.png","images/smile_grin_48.png",test1.manager, test1);
+		    btn1 = new ms.ui.Button( test1.manager, test1
+	    , "images/smile_sad_48.png", "images/smile_grin_48.png");
         btn1 = btn1;
             btn1.set_placement("center");
             btn1.set_rotation(0.200000003);
@@ -261,17 +311,17 @@ btn1.set_rotation(btn1.get_rotation() + 0.200000003);
 	}
 	);
 		application.are_obj_events = true;
-		    test2 = new ms.ui.Component( 
-	    main.manager, main);test2.mouse_thru = true;
+		    test2 = new ms.ui.Component( main.manager, main
+	    );test2.mouse_thru = true;
         test2 = test2;
-		    pb1 = new ms.ui.ProgressBar( 
-	    null,test2.manager, test2);
+		    pb1 = new ms.ui.ProgressBar( test2.manager, test2
+	    , null);
         pb1 = pb1;
             pb1.set_placement("center");
             pb1.set_width(150);
             pb1.set_height(10);
-		    btn2 = new ms.ui.Image( 
-	    "images/arrow_left.png",test2.manager, test2);
+		    btn2 = new ms.ui.Image( test2.manager, test2
+	    , "images/arrow_left.png");
         btn2 = btn2;
             btn2.set_x(200);
             btn2.set_y(115);
@@ -284,8 +334,8 @@ btn1.set_rotation(btn1.get_rotation() + 0.200000003);
 	}
 	);
 		application.are_obj_events = true;
-		    btn3 = new ms.ui.Image( 
-	    "images/arrow_right.png",test2.manager, test2);
+		    btn3 = new ms.ui.Image( test2.manager, test2
+	    , "images/arrow_right.png");
         btn3 = btn3;
             btn3.set_x(380);
             btn3.set_y(115);
@@ -298,15 +348,15 @@ btn1.set_rotation(btn1.get_rotation() + 0.200000003);
 	}
 	);
 		application.are_obj_events = true;
-		    lbl2 = new ms.ui.Label( 
-	    "Verdana",test2.manager, test2);
+		    lbl2 = new ms.ui.Label( test2.manager, test2
+	    , "Verdana");
         lbl2 = lbl2;
             lbl2.set_x(210);
             lbl2.set_y(200);
             lbl2.set_rotation(0.200000003);
             lbl2.text("click small arrows to adjust percentage");
-		    btnNext = new ms.ui.Button( 
-	    "images/arrow_right_green_48.png","images/arrow_right_48.png",g_ui_root.manager, g_ui_root);
+		    btnNext = new ms.ui.Button( g_ui_root.manager, g_ui_root
+	    , "images/arrow_right_green_48.png", "images/arrow_right_48.png");
         btnNext = btnNext;
             btnNext.set_x(320);
             btnNext.set_y(300);
@@ -323,8 +373,8 @@ btnNext.set_rotation(btnNext.get_rotation() + 0.200000003);
 	}
 	);
 		application.are_obj_events = true;
-		    btnPrev = new ms.ui.Button( 
-	    "images/arrow_left_green_48.png","images/arrow_left_48.png",g_ui_root.manager, g_ui_root);
+		    btnPrev = new ms.ui.Button( g_ui_root.manager, g_ui_root
+	    , "images/arrow_left_green_48.png", "images/arrow_left_48.png");
         btnPrev = btnPrev;
             btnPrev.set_x(220);
             btnPrev.set_y(300);

@@ -320,6 +320,19 @@ bool xss_object_reader::xml_special_node(TiXmlElement* node, XSSObject parent, X
       return read_xml_event(node, type, parent, result);
     else if (class_name == "array")
       return read_xml_array(node, type, parent, result);
+    else if (class_name == "html")
+      {
+        std::ostringstream ss;
+        ss << *node;
+        str res = ss.str();
+        res.erase(res.begin(), res.begin() + str("<html>").size());
+        res.erase(res.begin() + res.size() - str("</html>").size(), res.end());
+        
+        result = XSSObject(new xss_object());
+        result->set_type_name("html");
+        result->add_attribute("text", res);
+        return true;
+      }
 
     return false;
   }

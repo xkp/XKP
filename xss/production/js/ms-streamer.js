@@ -79,14 +79,17 @@ ms.streamer.ImageLoader = Class.create(ms.streamer.Loader,
     load: function(resource)
     {
 		var img = new Image(); 
-			
+		img.src = resource.asset;
+		var canvas = document.createElement("canvas");
+		
         var this_  = this;
         img.onload = function()
-        {
-    	    this_.on_loaded(resource, img);
-        };
-
-        img.src = resource.asset;
+        {			
+			canvas.width = img.naturalWidth;
+			canvas.height = img.naturalHeight;
+			canvas.getContext('2d').drawImage(img, 0, 0);  
+			this_.on_loaded(resource, canvas);
+        };        
     }
 });
 
@@ -516,4 +519,12 @@ ms.streamer.PackageContainer = Class.create(
         }
         return null;
     },
+});
+
+ms.streamer.ResourceUtils = Class.create(
+{
+	get_resource: function(id)
+	{
+		return streamer.get_resource(id).data;
+	}
 });
