@@ -45,8 +45,6 @@
         if (ev.output_args)
             evargs = ev.output_args;
             
-        compiler.log("ARGSL " + evargs);
-            
 	    out(indent = 0)
 	    {
 		    <xss:e value="ev.output_id"/>: function(<xss:e v="evargs"/>) <xss:open_brace/> 

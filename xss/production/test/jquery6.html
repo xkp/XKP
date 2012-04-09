@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>TITLE</title>
+<script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
+<script type="text/javascript" src="../js/jquery-idiom.js"></script>
+<link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css">
+<script type="text/javascript">
+$(function() {
+			var main = $("#main");
+			var acc1 = $("#acc1");
+			var __div1 = $("#__div1");
+			var __div2 = $("#__div2");
+			var __div3 = $("#__div3");
+			var __div4 = $("#__div4");
+			var __img1 = $("#__img1");
+			var application = $("#application");
+        acc1.accordion({
+            fillSpace: true,
+        });
+					__img1.attr("src", "images/img3.jpg");
+});
+</script>
+<style>
+#main {width : 800px;height : 400px}
+#acc1 {width : 300px}
+#__img1 {display : block;margin-left : auto;margin-right : auto}
+</style>
+</head>
+<body>
+            <div id='application'>
+<div id="main">
+            <table border="0"  width = "800"  height = "400" >
+        <tr><td  width = "300px"   style="vertical-align:top">
+<div id="acc1">
+            <h3><a href="#">Plain HTML</a></h3>
+<div id="__div1">
+<p>We allow you to specify your own html whenever you feel convinient.</p>
+</div>
+            <h3><a href="#">Remote HTML</a></h3>
+<div id="__div2">
+<p>When using tabs you can simply scpecify an "href" attribute and jQuery will do the rest.</p>
+</div>
+            <h3><a href="#">Common Controls</a></h3>
+<div id="__div3">
+<p>The good old buttons, checkboxes and labels we're used to. Clickables.</p>
+</div>
+            <h3><a href="#">JQuery UI</a></h3>
+<div id="__div4">
+<p>Advanced components, courtesy of</p><a href="www.jqueryui.com">jQuery UI</a>
+</div>
+</div>
+</td><td style="vertical-align:middle">
+				<img id="__img1"
+						src="images/img3.jpg" 
+					>
+				</img>
+</td></tr>
+            </table>
+        </div>
+                </div>
+            </body>
+</html>

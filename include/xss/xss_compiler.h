@@ -215,6 +215,7 @@ namespace xkp
         bool        application_object(XSSObject obj);
         XSSModule   idiom_by_class(const str& class_name);
         XSSModule   idiom_by_id(const str& id);
+        str         render_code(const str& code, param_list_decl& args, XSSContext ctx);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);

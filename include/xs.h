@@ -115,6 +115,7 @@ namespace xkp
       
       //plain compile
       ByteCode compile_code(const str& src, code_context& ctx, fs::path file);
+      void     compile_code(const str& src, code_context& ctx, fs::path file, code& result);
       
       //compile instance code
       void compile_instance(const str& src, DynamicObject instance, code_context& ctx, fs::path file);

@@ -168,6 +168,15 @@
     <ClInclude Include="..\..\..\include\xss\dsl\shell.h">
       <Filter>Header Files\xss\dsl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\dsl\vm_base.h">
+      <Filter>Header Files\xss\dsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\dsl\native.h">
+      <Filter>Header Files\xss\dsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\dsl\html5_asynch.h">
+      <Filter>Header Files\xss\dsl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -276,6 +285,15 @@
       <Filter>Source Files\xss\dsl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\xss\dsl\shell.cpp">
+      <Filter>Source Files\xss\dsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\dsl\vm_base.cpp">
+      <Filter>Source Files\xss\dsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\dsl\native.cpp">
+      <Filter>Source Files\xss\dsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\dsl\html5_asynch.cpp">
       <Filter>Source Files\xss\dsl</Filter>
     </ClCompile>
   </ItemGroup>

@@ -9,6 +9,7 @@
 #include "xss/lang/waxjs.h"
 #include "xss/lang/java.h"
 #include "xss/dsl_out.h"
+#include "xss/dsl/native.h"
 
 #include "xs/linker.h"
 #include "xs/compiler.h"
@@ -1482,6 +1483,21 @@ XSSModule xss_compiler::idiom_by_id(const str& id)
     return current_app_->get_idiom(id);
   }
 
+str xss_compiler::render_code(const str& text, param_list_decl& args, XSSContext ctx)
+  {
+    code_context code_ctx;
+    code_ctx = ctx->get_compile_context();
+    Language lang = ctx->get_language();
+    xs_utils     xs;
+
+    code cde;
+    xs.compile_code(text, code_ctx, ctx->path(), cde);
+
+    variant cc = lang->compile_code(cde, args, ctx);
+    ICodeRenderer* compiled = variant_cast<ICodeRenderer*>(cc, null); assert(compiled);
+    return compiled->render();
+  }
+
 void xss_compiler::push_renderer(XSSRenderer renderer)
   {
     if (renderers_.empty())
@@ -2192,6 +2208,9 @@ void xss_compiler::read_application(const str& app_file)
         //read the application
         XSSContext ctx  = app_renderer->context();
         Language   lang = ctx->get_language();
+        
+        //register standard dsls
+        ctx->register_xss_dsl("native", XSSDSL(new dsl_native));
         lang->init_application_context(ctx);
 
         xss_object_reader reader(ctx);
