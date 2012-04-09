@@ -11,7 +11,7 @@
 			<<xss:e value="base_namespace"/>.libs.Layout.XKPLayout 
 				xmlns:android="http://schemas.android.com/apk/res/android" 
 				xmlns:xkp="http://schemas.android.com/apk/res/<xss:e value="base_namespace"/>.<xss:e value="appName"/>" 
-				android:id="@+id/<xss:e value="clazz.output_id"/>" 
+				android:id="@+id/layout<xss:e value="clazz.output_id"/>" 
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
 				xkp:placement="client"

@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 <xss:code>
 	if(is_type)
 	{
@@ -173,8 +175,11 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 
 {
 	<xss:marker id="declarations"/>
-	private <xss:e value="'Act' + appName"/> application;
+	
+	private boolean mLayoutStarted = false;
 <xss:code>
+	string clazzer_name = "";
+	
 	// build instance or type constructors
 	string prefix = "";
 	if(is_type)
@@ -199,10 +204,13 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 				// and with all views
 		}
 		prefix = "root.";
+		clazzer_name = clazz.output_id;
 	} else
 	{
 		out(indent = 0)
 		{
+			private <xss:e value="'Act' + appName"/> application;
+			
 			@Override
 			public void onCreate(Bundle savedInstanceState) <xss:open_brace/>
 				super.onCreate(savedInstanceState);
@@ -214,6 +222,31 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 			
 			private void bindViews() <xss:open_brace/>
 		}
+		clazzer_name = application.output_id;
+	}
+	
+	out(indent = 0, marker = "declarations")
+	{
+		private XKPLayout layout<xss:e value="clazzer_name"/>;
+	}
+	
+	//TIPS: create layout treeview observer
+	out(indent = 0)
+	{
+		layout<xss:e value="clazzer_name"/> = (XKPLayout) findViewById(R.id.layout<xss:e value="clazzer_name"/>);
+		ViewTreeObserver mainLayoutViewTreeObserver = layout<xss:e value="clazzer_name"/>.getViewTreeObserver();
+		if(mainLayoutViewTreeObserver.isAlive()) <xss:open_brace/>
+			mainLayoutViewTreeObserver.addOnGlobalLayoutListener(new OnGlobalLayoutListener() <xss:open_brace/>
+				@Override
+				public void onGlobalLayout() <xss:open_brace/>
+					if(!mLayoutStarted) <xss:open_brace/>
+						mLayoutStarted = true;
+						onLayoutStarted();
+					<xss:close_brace/>
+					onLayoutUpdated();
+				<xss:close_brace/>
+			<xss:close_brace/>);
+		<xss:close_brace/>
 	}
 
 	var idiom = compiler.get_idiom("android");
@@ -265,6 +298,55 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 
 private void initCallers() {
 	<xss:marker id="callers"/>
+}
+
+<xss:code>
+	if(!is_type)
+	{
+		out(indent = 1)
+		{
+			@Override
+			public void onPause() <xss:open_brace/>
+				super.onPause();
+		}
+		compiler.inject("render_application_pause", app = appName, bns = base_namespace);
+		out(indent = 1)
+		{
+			<xss:close_brace/>
+		}
+
+		out(indent = 1)
+		{
+			@Override
+			public void onStop() <xss:open_brace/>
+				super.onStop();
+		}
+		compiler.inject("render_application_stop", app = appName, bns = base_namespace);
+		out(indent = 1)
+		{
+			<xss:close_brace/>
+		}
+
+		out(indent = 1)
+		{
+			@Override
+			public void onResume() <xss:open_brace/>
+				super.onResume();
+		}
+		compiler.inject("render_application_resume", app = appName, bns = base_namespace);
+		out(indent = 1)
+		{
+			<xss:close_brace/>
+		}
+	}
+</xss:code>
+
+private void onLayoutUpdated() {
+	<xss:marker id="layout_update"/>
+}
+
+private void onLayoutStarted() {
+	<xss:marker id="layout_start"/>
 }
 
 <xss:code>

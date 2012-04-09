@@ -153,6 +153,20 @@ log: Copying default files...
 log: Rendering default files...
 
 Success are greateful
+===[ box2d1.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 7
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Copying default files...
+log: Rendering default files...
+log: Copying default files...
+
+Success are greateful
 ===[ kitchensink.project.xml ]================
 
 
@@ -201,7 +215,7 @@ Success are greateful
 
 
 log: Rendering Android project...
-log: API Level = 4
+log: API Level = 7
 log: Rendering Android Types...
 log: Rendering Android Imports...
 log: Rendering Android Imports...
@@ -268,117 +282,21 @@ Success are greateful
 ===[ kitchensink.project.xml ]================
 
 
-log: Rendering jQuery...
-log: Rendering instance with id = kitchen
-log: Rendering property: width
-log: Rendering property: height
-log: Rendering property: placement
-log: Rendering property: tabs
-log: Rendering instance with id = __div1
-log: Rendering property: placement
-log: Rendering instance with id = btn1
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: caption
-log: Rendering event: click
-log: Rendering instance with id = lbl1
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: caption
-log: Rendering instance with id = edit1
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: width
-log: Rendering property: text
-log: Rendering property: hint
-log: Rendering instance with id = chkb1
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: caption
-log: Rendering instance with id = __scroller1
-log: Rendering property: placement
-log: Rendering instance with id = rdgTab3
-log: Rendering instance with id = radio1
-log: Rendering property: caption
-log: Rendering instance with id = radio2
-log: Rendering property: caption
-log: Rendering instance with id = radio3
-log: Rendering property: caption
-log: Rendering instance with id = radio4
-log: Rendering property: caption
-log: Rendering instance with id = radio5
-log: Rendering property: caption
-log: Rendering instance with id = radio6
-log: Rendering property: caption
-log: Rendering instance with id = radio7
-log: Rendering property: caption
-log: Rendering instance with id = radio8
-log: Rendering property: caption
-log: Rendering instance with id = radio9
-log: Rendering property: caption
-log: Rendering instance with id = __scroller2
-log: Rendering property: placement
-log: Rendering instance with id = img1
-log: Rendering property: src
-log: Rendering instance with id = __div2
-log: Rendering property: placement
-log: Rendering instance with id = application
-Success are greateful
+Error [404] File not found
+	file = d:/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
+
 ===[ pairs.project.xml ]================
 
 
-log: Rendering jQuery...
-log: Rendering instance with id = application
-Success are greateful
+Error [404] File not found
+	file = d:/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
+
 ===[ simple.project.xml ]================
 
 
-log: Rendering jQuery...
-log: Rendering instance with id = lblFirstName
-log: Rendering property: caption
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: width
-log: Rendering property: height
-log: Rendering instance with id = edtFirstName
-log: Rendering property: hint
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: width
-log: Rendering property: height
-log: Rendering instance with id = lblLastName
-log: Rendering property: caption
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: width
-log: Rendering property: height
-log: Rendering instance with id = edtLastName
-log: Rendering property: hint
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: width
-log: Rendering property: height
-log: Rendering instance with id = btnFullName
-log: Rendering property: caption
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: width
-log: Rendering property: height
-log: Rendering event: click
-log: Rendering instance with id = lblFullName
-log: Rendering property: caption
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: width
-log: Rendering property: height
-log: Rendering instance with id = edtContainer
-log: Rendering property: hint
-log: Rendering property: x
-log: Rendering property: y
-log: Rendering property: width
-log: Rendering property: height
-log: Rendering instance with id = application
-Success are greateful
+Error [404] File not found
+	file = d:/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
+
 ===[ 3js-ms.project.xml ]================(Tests)
 
 
@@ -737,37 +655,42 @@ Success are greateful
 
 
 Error [404] File not found
-	file = c:/dev/xkp/xss/tests/../idioms/jquery/module.xmlERROR: Project:  jquery1.project.xml
+	file = d:/xkp/xss/tests/../idioms/jquery/module.xmlERROR: Project:  jquery1.project.xml
 
 ===[ jquery2.project.xml ]================(Tests)
 
 
-log: Rendering property: background-color
-log: main class: div
 log: size string:  width = "600"  height = "400" 
 log: size string:  width = "100px" 
-log: l1 class: div
 log: size string:  height = "100px" 
-log: t1 class: div
-log: c1 class: div
 log: size string:  height = "100px" 
-log: b1 class: div
 log: size string:  width = "100px" 
-log: r2 class: div
 log: size string:  width = "100px" 
-log: r1 class: div
 Success are greateful
 ===[ jquery3.project.xml ]================(Tests)
 
 
 log: Rendering property: src
-log: main class: div
 log: size string:  width = "600"  height = "400" 
 log: size string:  width = "400px" 
-log: local class: div
-log: __div1 class: div
-log: SPECHAL : __img1
-log: Adding prop to: __img1
+Success are greateful
+===[ jquery4.project.xml ]================(Tests)
+
+
+log: IT IS ALIVE
+log: IT IS ALIVE
+Success are greateful
+===[ jquery5.project.xml ]================(Tests)
+
+
+log: ARGSL input, inst
+log: ARGSL dateText, inst
+log: ARGSL dateText, inst
+log: ARGSL event, ui
+log: size string:  width = "1200" 
+log: size string:  width = "300px" 
+log: size string: 
+log: size string:  width = "350px" 
 Success are greateful
 ===[ jseq1.project.xml ]================(Tests)
 
@@ -776,7 +699,7 @@ log: Rendering instance: test_sequence
 log: Rendering instance: test_sequence
 Error [idiom] run tag got an invalid method
 	methd = 
-	file = c:/dev/xkp/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
+	file = d:/xkp/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
 
 ===[ json1.project.xml ]================(Tests)
 
@@ -785,7 +708,7 @@ Error [reader] Invalid XML file
 	xml error = Error document empty.
 	line = 0
 	column = 0
-	file = c:/dev/xkp/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
+	file = d:/xkp/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
 
 ===[ ms1.project.xml ]================(Tests)
 
@@ -1068,7 +991,7 @@ Success are greateful
 
 Error [language] Missing declared tag
 	tag = user_image
-	file = c:/dev/xkp/xss/tests/../idioms/wax/server.xssERROR: Project:  wax3.project.xml
+	file = d:/xkp/xss/tests/../idioms/wax/server.xssERROR: Project:  wax3.project.xml
 
 ===[ wax4.project.xml ]================(Tests)
 

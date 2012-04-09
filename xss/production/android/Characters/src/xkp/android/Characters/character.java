@@ -2,6 +2,8 @@ package xkp.android.Characters;
 import java.util.ArrayList;
 import java.util.Arrays;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 			import android.content.Context;
 			import android.content.res.TypedArray;
 			import android.util.AttributeSet;
@@ -26,7 +28,8 @@ import xkp.android.libs.Layout.XKPLayout;
 				private TextView lsurname;
 				private TextView lemployment;
 			public static XKPUtils util;
-	private ActCharacters application;
+		private XKPLayout layoutcharacter;
+	private boolean mLayoutStarted = false;
 			public character(Context context) {
 				this(context, null);
 			}
@@ -38,6 +41,20 @@ import xkp.android.libs.Layout.XKPLayout;
 				// link xml file with inflater
 				View root = li.inflate(R.layout.character, this);
 				// and with all views
+		layoutcharacter = (XKPLayout) findViewById(R.id.layoutcharacter);
+		ViewTreeObserver mainLayoutViewTreeObserver = layoutcharacter.getViewTreeObserver();
+		if(mainLayoutViewTreeObserver.isAlive()) {
+			mainLayoutViewTreeObserver.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+				@Override
+				public void onGlobalLayout() {
+					if(!mLayoutStarted) {
+						mLayoutStarted = true;
+						onLayoutStarted();
+					}
+					onLayoutUpdated();
+				}
+			});
+		}
 				picture = (ImageView) root.findViewById(R.id.picture);
 				lname = (TextView) root.findViewById(R.id.lname);
 				lsurname = (TextView) root.findViewById(R.id.lsurname);
@@ -54,6 +71,10 @@ private void initCallers() {
 			util = new XKPUtils();
 			ActCharacters.util.addView(this);
 			util = ActCharacters.util;
+}
+private void onLayoutUpdated() {
+}
+private void onLayoutStarted() {
 }
 			public String name_get() {
 				return lname.getText().toString();

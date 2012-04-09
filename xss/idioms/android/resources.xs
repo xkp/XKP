@@ -108,7 +108,6 @@ on render_types(app)
 {
 }
 
-//TIP: live is hard,... from here, begin duplicate code of android idiom...
 on render_type_initialization(clazz, bns, app)
 {
 }
@@ -117,33 +116,8 @@ on render_initialization(clazz, bns, app)
 {
 	clazz = this;
 	
-	render_imports(clazz, bns);
-	
-	// render xkp widget files
-	for(var inst in clazz.instances)
-	{
-		if(!inst.xkp_files)
-			continue;
-		
-		for(var file in inst.xkp_files)
-		{
-			string src_path = file.src_path;
-			string src_filename = file.src_filename;
-			string dst_path = file.dst_path;
-			string dst_filename = file.dst_filename;
-			
-			if(!dst_path) dst_path = src_path;
-			if(!dst_filename) dst_filename = src_filename;
-			
-			string srcf = compiler.full_path("/copy.defaults" + src_path + src_filename);
-			string dstf = app + dst_path + dst_filename;
-
-			//TRACE: log
-			//compiler.log("Rendering widget file: " + srcf);
-			
-			compiler.xss(src = srcf, output_file = dstf, appName = app, base_namespace = bns);
-		}
-	}
+	var android_idiom = compiler.get_idiom("android");
+	android_idiom.initialization(clazz, bns, app);
 }
 
 method render_resource(resource)
@@ -272,90 +246,6 @@ method render_resource(resource)
 	}
 	
 	resource.resource_idiom_processed = true;
-}
-
-method render_imports(clazz, bns)
-{
-	compiler.log("Rendering Android Imports...");
-	
-	//TRACE: log
-	//compiler.log("### Begin Rendering Android Imports...");
-
-	array<string> imports    = [];
-	
-	for(var inst in clazz.instances)
-	{
-		//TRACE: log
-		//compiler.log("View: " + inst.id);
-		if(inst.no_script || inst.no_render)
-			continue;
-		
-		//find necessary imports without duplicates
-		if(inst.imports)
-		{
-			//TIPS: live is hard, and very long; :)
-			//TODO: it's necessary to implement vector, stack, queue and set containers in vm
-			for(var i in inst.imports)
-			{
-				//TRACE: log
-				//compiler.log("Import: " + i.import);
-				bool found1 = false;
-				for(var imp1 in imports)
-				{
-					if(imp1 == i.import)
-					{
-						found1 = true;
-						break;
-					}
-				}
-				
-				if(!found1)
-				{
-					//TRACE: log
-					//compiler.log("Adding import " + i.import + " on " + clazz.id);
-					imports += i.import;
-					
-					out(indent = 0, marker = "imports")
-					{
-						import <xss:e value="i.import"/>;
-					}
-				}
-			}
-		}
-		else
-		if(inst.sub_ns)
-		{
-			string import = bns + "." + inst.sub_ns + "." + inst.type.output_type;
-			
-			//TIPS: live is hard, and very long; :)
-			//TODO: it's necessary to implement vector, stack, queue and set containers in vm
-			//TODO: repeated below script... :(  reimplement this!
-			bool found2 = false;
-			for(var imp2 in imports)
-			{
-				if(imp2 == import)
-				{
-					found2 = true;
-					break;
-				}
-			}
-			
-			if(!found2)
-			{
-				//TRACE: log
-				//compiler.log("Adding import " + import + " on " + clazz.id);
-				imports += import;
-				
-				out(indent = 0, marker = "imports")
-				{
-					import <xss:e value="import"/>;
-				}
-			}
-		}
-	}
-	
-	//TRACE: log
-	//compiler.log("### End Rendering Android Imports...");
 }
 
 on copy_default_files(app, bns, plibs)

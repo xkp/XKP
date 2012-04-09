@@ -2,6 +2,8 @@ package xkp.android.Gallery;
 import java.util.ArrayList;
 import java.util.Arrays;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 			import android.app.Activity;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
@@ -25,6 +27,7 @@ import xkp.android.libs.Layout.XKPLayout;
 {
 				private Gallery gallery;
 			public static XKPUtils util;
+		private XKPLayout layoutapplication;
 				private XKPPackage __resources1;
 			private String [] mResources___resources1_XKPName = {
 				"img01",
@@ -66,7 +69,8 @@ import xkp.android.libs.Layout.XKPLayout;
 				R.drawable.gallery_photo_7,
 				R.drawable.gallery_photo_8
 			};
-	private ActGallery application;
+	private boolean mLayoutStarted = false;
+			private ActGallery application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -76,12 +80,42 @@ import xkp.android.libs.Layout.XKPLayout;
 				bindViews();
 			}
 			private void bindViews() {
+		layoutapplication = (XKPLayout) findViewById(R.id.layoutapplication);
+		ViewTreeObserver mainLayoutViewTreeObserver = layoutapplication.getViewTreeObserver();
+		if(mainLayoutViewTreeObserver.isAlive()) {
+			mainLayoutViewTreeObserver.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+				@Override
+				public void onGlobalLayout() {
+					if(!mLayoutStarted) {
+						mLayoutStarted = true;
+						onLayoutStarted();
+					}
+					onLayoutUpdated();
+				}
+			});
+		}
 				gallery = (Gallery) findViewById(R.id.gallery);
 	}
 private void initCallers() {
 			util = new XKPUtils();
 			ActGallery.util.addView(this);
 			util = ActGallery.util;
+}
+			@Override
+			public void onPause() {
+				super.onPause();
+			}
+			@Override
+			public void onStop() {
+				super.onStop();
+			}
+			@Override
+			public void onResume() {
+				super.onResume();
+			}
+private void onLayoutUpdated() {
+}
+private void onLayoutStarted() {
 }
 			private void initInstances() {
 				application = this;

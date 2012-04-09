@@ -2,6 +2,8 @@ package xkp.android.KitchenSink;
 import java.util.ArrayList;
 import java.util.Arrays;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 			import android.app.Activity;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
@@ -68,6 +70,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				private ProgressBar prgbar4;
 				private SeekBar seekb1;
 			public static XKPUtils util;
+		private XKPLayout layoutapplication;
 				private XKPPackage __resources1;
 			private String [] mResources___resources1_XKPName = {
 				"dialog",
@@ -85,7 +88,8 @@ import xkp.android.libs.Layout.XKPLayout;
 				R.drawable.dialog,
 				R.drawable.emulator
 			};
-	private ActKitchenSink application;
+	private boolean mLayoutStarted = false;
+			private ActKitchenSink application;
 			@Override
 			public void onCreate(Bundle savedInstanceState) {
 				super.onCreate(savedInstanceState);
@@ -95,6 +99,20 @@ import xkp.android.libs.Layout.XKPLayout;
 				bindViews();
 			}
 			private void bindViews() {
+		layoutapplication = (XKPLayout) findViewById(R.id.layoutapplication);
+		ViewTreeObserver mainLayoutViewTreeObserver = layoutapplication.getViewTreeObserver();
+		if(mainLayoutViewTreeObserver.isAlive()) {
+			mainLayoutViewTreeObserver.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+				@Override
+				public void onGlobalLayout() {
+					if(!mLayoutStarted) {
+						mLayoutStarted = true;
+						onLayoutStarted();
+					}
+					onLayoutUpdated();
+				}
+			});
+		}
 				kitchen = (TabHost) findViewById(R.id.kitchen);
 					ArrayList tabs = new ArrayList(Arrays.asList( new String [] {				"Buttons?"							, "Radios"							, "Image"							, "ProgressBars"						} ));        util.setupTabHost(R.id.kitchen, tabs);
 				__div1 = (XKPLayout) findViewById(R.id.__div1);
@@ -128,6 +146,22 @@ private void initCallers() {
 			util = new XKPUtils();
 			ActKitchenSink.util.addView(this);
 			util = ActKitchenSink.util;
+}
+			@Override
+			public void onPause() {
+				super.onPause();
+			}
+			@Override
+			public void onStop() {
+				super.onStop();
+			}
+			@Override
+			public void onResume() {
+				super.onResume();
+			}
+private void onLayoutUpdated() {
+}
+private void onLayoutStarted() {
 }
 			private void initInstances() {
 				application = this;
