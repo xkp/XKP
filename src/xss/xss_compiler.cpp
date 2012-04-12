@@ -10,6 +10,7 @@
 #include "xss/lang/java.h"
 #include "xss/dsl_out.h"
 #include "xss/dsl/native.h"
+#include "xss/dsl/vm_shell.h"
 
 #include "xs/linker.h"
 #include "xs/compiler.h"
@@ -95,6 +96,7 @@ xss_application_renderer::xss_application_renderer(fs::path entry_point, Languag
 
     //register standard dsls
     context_->register_dsl("out", DslLinker(new out_linker(compiler)));
+    context_->register_dsl("shell", DslLinker(new vm_shell(compiler)));
 
     //register default types
     context_->add_type("string", XSSType(new xss_type(type_schema<str>())))->set_id("string");
@@ -527,6 +529,32 @@ void xss_compiler::build(fs::path xml)
     run();
 
     copy_files(project_data);
+
+    //if there's any code the user might wanto to maybe run after compilation
+    str project_source = project_data->get<str>("src", str());
+    if (!project_source.empty())
+      {
+        xs_utils xs;
+        code_context cctx;
+        cctx.this_ = project_data;
+
+        dsl_list dsls;
+        dsls.insert(dsl_list_pair("shell", DslLinker(new vm_shell(shared_from_this()))));
+
+        code_context code_ctx;
+        code_ctx.this_ = project_data;
+        code_ctx.dsl_  = &dsls;
+
+        xs.compile_implicit_instance(load_file(base_path_ / project_source), DynamicObject(project_data), code_ctx, xml);
+
+        size_t evid = project_data->event_id("finished");
+        if (evid > 0)
+          {
+            param_list pl;
+            project_data->dispatch_event(evid, pl);
+          }
+
+      }
   }
 
 XSSRenderer xss_compiler::compile_xss_file(const str& src_file, XSSContext ctx, const str& html_template)

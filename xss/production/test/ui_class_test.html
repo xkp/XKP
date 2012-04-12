@@ -106,12 +106,7 @@ this.set_rotation(this.rotation + 10);
 		ev_parent.x_pos = ev_parent.x;
 ev_parent.y_pos = ev_parent.y;
 ev_parent.traslate();
-ev_parent.img2 = 
-new my_image(
-			g_ui_root.manager, g_ui_root
-		,,,"images/img1.png"
-)
-;
+ev_parent.img2 = new my_image(g_ui, g_ui_root, "images/img1.png");
 ev_parent.img2.rect(ev_parent.x_pos + 50, ev_parent.y_pos - 50, 50, 50);
 	}
 	);
@@ -195,8 +190,8 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    img1 = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/img1.png");
+		    img1 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         img1 = img1;
             img1.set_x(100);
             img1.set_y(100);
@@ -218,12 +213,7 @@ application.y_pos = application.y_pos + 60;
 img1.set_rotation(img1.get_rotation() + 10);
 img1.set_x(img1.x + 5);
 img1.set_y(img1.y + 5);
-application.img2 = 
-new my_image(
-			g_ui_root.manager, g_ui_root
-		,,,"images/img1.png"
-)
-;
+application.img2 = new my_image(g_ui, g_ui_root, "images/img1.png");
 application.img2.rect(application.x_pos, application.y_pos, 50, 50);
 	}
 	);

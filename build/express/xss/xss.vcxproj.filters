@@ -177,6 +177,12 @@
     <ClInclude Include="..\..\..\include\xss\dsl\html5_asynch.h">
       <Filter>Header Files\xss\dsl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\dsl\vm_shell.h">
+      <Filter>Header Files\xss\dsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\dsl\ga_parser.h">
+      <Filter>Header Files\xss\dsl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -294,6 +300,12 @@
       <Filter>Source Files\xss\dsl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\xss\dsl\html5_asynch.cpp">
+      <Filter>Source Files\xss\dsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\dsl\vm_shell.cpp">
+      <Filter>Source Files\xss\dsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\dsl\ga_parser.cpp">
       <Filter>Source Files\xss\dsl</Filter>
     </ClCompile>
   </ItemGroup>

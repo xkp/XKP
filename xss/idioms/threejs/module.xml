@@ -127,16 +127,16 @@
 		
 		<class id="ambient_light" super="light" output_id="THREE.AmbientLight" renderer="light_renderer.xss">
 			<constructor_params>
-				<parameter property="color"/>				 				
+				<parameter property="color" runtime="true"/>				 				
 			</constructor_params>
 		</class>
 		
 		<class id="directional_light" super="light" output_id="THREE.DirectionalLight" renderer="light_renderer.xss">
 			<constructor_params>
-				<parameter property="color"/>
-				<parameter property="intensity"/>
-				<parameter property="distance"/>
-				<parameter property="cast_shadow"/>  				
+				<parameter property="color" runtime="true"/>
+				<parameter property="intensity" runtime="true"/>
+				<parameter property="distance" runtime="true"/>
+				<parameter property="cast_shadow" runtime="true"/>  				
 			</constructor_params>				
 			<property id="intensity" type="string" dont_init="true"/>
 			<property id="distance" type="string" dont_init="true"/>
@@ -145,9 +145,9 @@
 	
 		<class id="point_light" super="light" output_id="THREE.PointLight" renderer="light_renderer.xss">
 			<constructor_params>
-				<parameter property="color"/>
-				<parameter property="intensity"/>
-				<parameter property="distance"/>           		
+				<parameter property="color" runtime="true"/>
+				<parameter property="intensity" runtime="true"/>
+				<parameter property="distance" runtime="true"/>           		
 			</constructor_params>				
 			<property id="intensity" type="string" dont_init="true"/>
 			<property id="distance" type="string" dont_init="true"/>
@@ -155,11 +155,11 @@
 	
 		<class id="camera" output_id="THREE.Camera" renderer="camera_renderer.xss">
 			<constructor_params>				
-				<parameter property="fov"/>
-				<parameter property="aspect"/>
-				<parameter property="near"/>
-				<parameter property="far"/>     
-				<parameter property="target"/>  			
+				<parameter property="fov" runtime="true"/>
+				<parameter property="aspect" runtime="true"/>
+				<parameter property="near" runtime="true"/>
+				<parameter property="far" runtime="true"/>     
+				<parameter property="target" runtime="true"/>  			
 			</constructor_params>			
 			<property id="fov" type="string" dont_init="true"/>
 			<property id="aspect" type="string" dont_init="true"/>
@@ -173,16 +173,16 @@
 	
 		<class id="quake_camera" output_id="THREE.QuakeCamera" renderer="camera_renderer.xss">
 			<constructor_params> 				
-				<parameter property="fov"/>
-				<parameter property="aspect"/>
-				<parameter property="near"/>
-				<parameter property="far"/>     
-				<parameter property="target"/> 
-				<parameter property="speed"/>
-				<parameter property="look_speed"/>
-				<parameter property="no_fly"/>
-				<parameter property="vertical"/>
-				<parameter property="auto_forward"/>			
+				<parameter property="fov" runtime="true"/>
+				<parameter property="aspect" runtime="true"/>
+				<parameter property="near" runtime="true"/>
+				<parameter property="far" runtime="true"/>     
+				<parameter property="target" runtime="true"/> 
+				<parameter property="speed" runtime="true"/>
+				<parameter property="look_speed" runtime="true"/>
+				<parameter property="no_fly" runtime="true"/>
+				<parameter property="vertical" runtime="true"/>
+				<parameter property="auto_forward" runtime="true"/>			
 			</constructor_params>			
 			<property id="fov" type="string" dont_init="true"/>
 			<property id="aspect" type="string" dont_init="true"/>
@@ -201,10 +201,10 @@
 		
 		<class id="plane" super="object3d" output_id="THREE.Plane" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
-				<parameter id="width" property="width" runtime="true"/>
-				<parameter id="height" property="height" runtime="true"/>
-				<parameter id="x_segments" property="x_segments" runtime="true"/>
-				<parameter id="y_segments" property="y_segments" runtime="true"/>
+				<parameter property="width" runtime="true"/>
+				<parameter property="height" runtime="true"/>
+				<parameter property="x_segments" runtime="true"/>
+				<parameter property="y_segments" runtime="true"/>
 			</constructor_params>
 			<property id="width" type="string" dont_init="true"/>
 			<property id="height" type="string" dont_init="true"/>

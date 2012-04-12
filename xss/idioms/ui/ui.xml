@@ -1,12 +1,13 @@
 <module id="ui" src="ui.xs">
     <types>
-        <class id="component" renderer="component.xss">
-            <constructor_params>
-                <parameter id="manager" default_value="g_ui_root.manager"/>
-                <parameter id="parent"  default_value="g_ui_root"/>
+        <class id="component" renderer="component.xss">		
+			<constructor_params>
+                <parameter id="manager" default_value="g_ui"/>
+				<parameter id="parent" default_value="g_ui_root"/>
             </constructor_params>
-
-            <property id="mouse_thru" type="bool"/> 
+			<property id="manager" type="string" use_plain_value="true" dont_init="true"/>
+			<property id="parent" type="string" use_plain_value="true" dont_init="true"/>
+			<property id="mouse_thru" type="bool"/> 
 
 			<property id="switchable" type="bool">
 				<get text="switchable"/>
@@ -60,15 +61,25 @@
 			<property id="scale" type="float">
                 <get text="scale"/>
                 <set text="set_scale({value})"/>
-            </property>
-			
+            </property>			
         </class>
 		
 		<class id="painter" super="component" output_id="ms.ui.Painter"/>
 		
+		<class id="replicator" renderer="replicator_renderer.xss" super="component" output_id="ms.ui.Replicator">
+			<constructor_params>
+                <parameter property="template" runtime="true"/>
+            </constructor_params>
+			<property id="template" type="string" use_plain_value="true" dont_init="true"/>
+			<property id="data_source" type="string" use_plain_value="true">
+                <get text="data_source"/>
+                <set text="set_data_source({value})"/>
+            </property>			
+		</class>
+		
 		<class id="ui" renderer="buffer_renderer.xss">
-			<property id="width" type="int" use_plain_value="true"/>                
-            <property id="height" type="int" use_plain_value="true"/>                
+			<property id="width" type="int" use_plain_value="true" runtime="true"/>                
+            <property id="height" type="int" use_plain_value="true" runtime="true"/>                
 		</class>
 		
 		<class id="clip_area" super="component" output_id="ms.ui.ClipArea">
@@ -331,7 +342,7 @@
 		
 		<class id="sound" output_id="ms.ui.Sound">
 			<constructor_params>
-                <parameter property="src"/>				
+                <parameter property="src" runtime="true"/>				
             </constructor_params>			
             <property id="src"  type="string"/>
 			<property id="loop" type="bool">
@@ -342,7 +353,7 @@
 		
 		<class id="vid" super="component" output_id="ms.ui.Video">
             <constructor_params>
-                <parameter property="src"/>				
+                <parameter property="src" runtime="true"/>				
             </constructor_params>			
             <property id="src"  type="string" dont_init="true"/>
 			<property id="loop" type="bool">

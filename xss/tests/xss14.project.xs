@@ -1,0 +1,1 @@
+on finished(){    string file = project_path + "/source.xxx";    shell()    {        javac.exe @file -a --message 'testing'    }}

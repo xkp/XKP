@@ -1,8 +1,7 @@
 <xss:parameter id="type"/>
-<xss:parameter id="args"/>
+<xss:parameter id="runtime_args"/>
 
-new <xss:e v="type.id"/>(
 <xss:code>
-compiler.xss("constructor_args.xss", type, args);
+
 </xss:code>
-)
+<xss:e v="compiler.instantiate(type, runtime_args = runtime_args)"/>;

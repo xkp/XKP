@@ -283,19 +283,19 @@ Success are greateful
 
 
 Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
+	file = c:/dev/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
 
 ===[ pairs.project.xml ]================
 
 
 Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
+	file = c:/dev/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
 
 ===[ simple.project.xml ]================
 
 
 Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
+	file = c:/dev/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
 
 ===[ 3js-ms.project.xml ]================(Tests)
 
@@ -655,24 +655,16 @@ Success are greateful
 
 
 Error [404] File not found
-	file = d:/xkp/xss/tests/../idioms/jquery/module.xmlERROR: Project:  jquery1.project.xml
+	file = c:/dev/xkp/xss/tests/../idioms/jquery/module.xmlERROR: Project:  jquery1.project.xml
 
 ===[ jquery2.project.xml ]================(Tests)
 
 
-log: size string:  width = "600"  height = "400" 
-log: size string:  width = "100px" 
-log: size string:  height = "100px" 
-log: size string:  height = "100px" 
-log: size string:  width = "100px" 
-log: size string:  width = "100px" 
 Success are greateful
 ===[ jquery3.project.xml ]================(Tests)
 
 
 log: Rendering property: src
-log: size string:  width = "600"  height = "400" 
-log: size string:  width = "400px" 
 Success are greateful
 ===[ jquery4.project.xml ]================(Tests)
 
@@ -683,14 +675,15 @@ Success are greateful
 ===[ jquery5.project.xml ]================(Tests)
 
 
-log: ARGSL input, inst
-log: ARGSL dateText, inst
-log: ARGSL dateText, inst
-log: ARGSL event, ui
-log: size string:  width = "1200" 
-log: size string:  width = "300px" 
-log: size string: 
-log: size string:  width = "350px" 
+Error [syntax-error] Error while compiling xs
+	line = 25
+	column = 5
+	file = c:/dev/xkp/xss/tests/jquery5.xsERROR: Project:  jquery5.project.xml
+
+===[ jquery6.project.xml ]================(Tests)
+
+
+log: Rendering property: src
 Success are greateful
 ===[ jseq1.project.xml ]================(Tests)
 
@@ -699,7 +692,7 @@ log: Rendering instance: test_sequence
 log: Rendering instance: test_sequence
 Error [idiom] run tag got an invalid method
 	methd = 
-	file = d:/xkp/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
+	file = c:/dev/xkp/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
 
 ===[ json1.project.xml ]================(Tests)
 
@@ -708,7 +701,7 @@ Error [reader] Invalid XML file
 	xml error = Error document empty.
 	line = 0
 	column = 0
-	file = d:/xkp/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
+	file = c:/dev/xkp/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
 
 ===[ ms1.project.xml ]================(Tests)
 
@@ -991,7 +984,7 @@ Success are greateful
 
 Error [language] Missing declared tag
 	tag = user_image
-	file = d:/xkp/xss/tests/../idioms/wax/server.xssERROR: Project:  wax3.project.xml
+	file = c:/dev/xkp/xss/tests/../idioms/wax/server.xssERROR: Project:  wax3.project.xml
 
 ===[ wax4.project.xml ]================(Tests)
 

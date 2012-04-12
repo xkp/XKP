@@ -334,7 +334,7 @@ var sound;var hero;var __floor1;var game_over;
             this.cannon.velocity = 2;
         this.cannon.creator = function()
         {
-            return new bullet(g_ui_root.manager, g_ui_root, "images/bomb.png");
+            return new bullet(g_ui, g_ui_root, "images/bomb.png");
         }
             this.cannon.parent = this;
             this.cannon.start();
@@ -687,15 +687,15 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    sound = new ms.ui.StateButton( g_ui_root.manager, g_ui_root
-	    , "images/sound_on.png", "images/sound_off.png");
+		    sound = 
+			new ms.ui.StateButton(g_ui_root.manager, g_ui_root, null, null);
         sound = sound;
             sound.set_x(50);
             sound.set_y(50);
             sound.set_width(50);
             sound.set_height(50);
-		    hero = new good_guy( g_ui_root.manager, g_ui_root
-	    , "images/smile_grin_48.png");
+		    hero = 
+			new good_guy(g_ui_root.manager, g_ui_root, "images/smile_grin_48.png");
         hero = hero;
             hero.set_x(300);
             hero.set_y(350);
@@ -708,15 +708,15 @@ hero.src("images/smile_sad_48.png");
 	}
 	);
 		application.are_obj_events = true;
-		    __floor1 = new floor( g_ui_root.manager, g_ui_root
-	    , "images/stone-12.jpg");
+		    __floor1 = 
+			new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
         __floor1 = __floor1;
             __floor1.set_x(0);
             __floor1.set_y(390);
             __floor1.set_width(600);
             __floor1.set_height(40);
-		    game_over = new ms.ui.Label( g_ui_root.manager, g_ui_root
-	    , "40pt Calibri");
+		    game_over = 
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
         game_over = game_over;
             game_over.set_x(220);
             game_over.set_y(200);
@@ -729,7 +729,7 @@ hero.src("images/smile_sad_48.png");
             sp1.frequency = 3;
         sp1.creator = function()
         {
-            return new bad_guy(g_ui_root.manager, g_ui_root, "images/smile_sad_48.png");
+            return new bad_guy(g_ui, g_ui_root, "images/smile_sad_48.png");
         }
             sp1.start();
 			document.onkeydown = function(ev)

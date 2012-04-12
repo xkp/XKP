@@ -7,7 +7,7 @@ on pre_process(obj)
 on render_js_includes()
 {
 	out()
-	{		
+	{
 		<script type="text/javascript" src="../js/ms-ui.js"></script>
 	}
 }
@@ -15,7 +15,7 @@ on render_js_includes()
 on render_initialization()
 {
 	out()
-	{			
+	{
 		if(drawingCanvas){
 			var client =
 			{
@@ -36,23 +36,27 @@ on render_types()
 {
 	compiler.log("Rendering UI Types...");
     for(var ut in user_types)
-    {
-        var full_path = compiler.full_path("component.xss");
-		ut.instantiator = "../ui/instantiator.xss";
-		var param_1 = object();
-		param_1.constant= "manager";
-		//ut.type.constructor_params += param_1; 
-		var param_2 = object();
-		param_2.constant = "parent";
-		//ut.type.constructor_params += param_2; 
-		compiler.xss("../common-js/class.xss", ut, renderer = full_path, context = ut, parent = "true");		
+    {		
+		/* *** no need
+        for(var inst in ut.instances)
+		{
+			string parent_id = inst.parent.output_id;
+			if (parent_id == ut.output_id)
+				parent_id = "this";
+			string manager_id = parent_id + ".manager";    
+			var value_type = compiler.type_of(parent_id);
+			inst.add_property("parent", parent_id, value_type);	
+			inst.add_property("manager", manager_id, value_type);
+		}
+        */
+        var full_path = compiler.full_path("component.xss");		
+		compiler.xss("../common-js/class.xss", ut, renderer = full_path, context = ut);			
     }
 }
 
 on render_instances()
 {
 	compiler.log("Rendering UI...");
-	
 	out(){	
 	drawingCanvas.onmousemove = function(ev)
 	{
@@ -105,12 +109,22 @@ on render_instances()
 	}
 	
     for(int i = 0; i < instances.size; i++)
-    {		
-		var inst = instances[i];
-		if(inst.wait_for_package)
+    {			
+		var inst = instances[i];		
+		/* ** No need
+        string parent_id = inst.parent.output_id;		
+        if (parent_id == "application")
+            parent_id = "g_ui_root";
+		string manager_id = parent_id + ".manager";    
+		var value_type = compiler.type_of(parent_id);
+		inst.add_property("parent", parent_id, value_type);	
+		inst.add_property("manager", manager_id, value_type);
+		*/
+        
+        if(inst.wait_for_package)
 		{			
 			out()
-			{				
+			{
 				<xss:e v="inst.wait_for_package"/>.events.addListener("loaded", function()
 				<xss:open_brace/>				
 			}

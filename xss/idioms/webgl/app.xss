@@ -22,6 +22,7 @@
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
 
 <xss:code>
     compiler.inject("render_js_includes");
@@ -50,7 +51,7 @@ var canvas_position = {x:0, y:0};
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
-
+var streamer = new ms.streamer.Streamer();
 var app_width = <xss:e value="application.width"/>;
 var app_height = <xss:e value="application.height"/>;
 <xss:marker id="variables"/>
