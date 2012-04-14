@@ -1,4 +1,6 @@
 <module id="test_idiom">
+    <dependency id="test_idiom" href="/usr/lib/test_idiom"/>
+
     <types>
         //testing arrays
         <class id="t_arrays">
@@ -119,7 +121,18 @@
         <class id="t_xss9_2">
             
         </class>
-        
+
+        <class id="t_xss14">
+            <dependency id="dep1" href="/use/bin/xss14"/>
+        </class>
+
+        <class id="t_xss14_1">
+            <dependency id="dep2" href="/use/bin/xss14_1"/>
+        </class>
+
+        <class id="t_xss14_2">
+            <dependency id="dep3" href="/use/bin/xss14_2"/>
+        </class>
     </types>
 
 	//testing global instances

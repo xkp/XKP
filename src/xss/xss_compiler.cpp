@@ -77,6 +77,8 @@ const str SExpectingObjectAOP("compiler.add_object_property expects an object fo
 const str SExpectingPropNameAOP("compiler.add_object_property expects an string for its second argument");
 const str SExpectingTypeNameAOP("compiler.add_object_property found an invalid type");
 const str SUnnamedAtrributeAOP("compiler.add_object_property found an unnamed attribute");
+const str SNamelessProjectParameter("project parameters expect a 'name' tag");
+const str SDependencyNeedsHRef("class dependencies expect a 'href' tag");
 
 //xss_application_renderer
 xss_application_renderer::xss_application_renderer(fs::path entry_point, Language lang, XSSCompiler compiler):
@@ -285,7 +287,6 @@ void xss_module::register_module_type(XSSType type)
 void xss_module::register_user_type(XSSType type)
   {
     register_module_type(type);
-    utypes_->push_back(type);
   }
 
 bool xss_module::has_type(const str& type)
@@ -296,6 +297,14 @@ bool xss_module::has_type(const str& type)
 
 void xss_module::register_instance(XSSObject obj)
   {
+    if (instances_->empty())
+      {
+        //notify the compiler we're alive
+        XSSCompiler compiler = ctx_->resolve("compiler");
+
+        compiler->add_dependencies(dependencies_);
+      }
+
     str obj_id = obj->id();
     if (!obj_id.empty())
       {
@@ -335,6 +344,24 @@ bool xss_module::one_of_us(XSSObject obj)
       }
 
     return false;
+  }
+
+void xss_module::set_definition(XSSObject def)
+  {
+    if (def)
+      {
+        XSSObjectList deps = def->find_by_class("dependency");
+
+        XSSObjectList::iterator it = deps.begin();
+        XSSObjectList::iterator nd = deps.end();
+
+        for(; it != nd; it++)
+          {
+            dependencies_.push_back(*it);
+          }
+
+        copy(def);
+      }
   }
 
 DynamicArray xss_module::all_types()
@@ -501,6 +528,27 @@ void xss_compiler::build(fs::path xml)
 
     XSSObject project_data = read_project(xml);
 
+
+    //read params
+    XSSObjectList params = project_data->find_by_class("parameter");
+    XSSObjectList::iterator pit = params.begin();
+    XSSObjectList::iterator pnd = params.end();
+
+    for(; pit != pnd; pit++)
+      {
+        XSSObject xso = *pit;
+        str id = xso->get<str>("name", str());
+        if (id.empty())
+          {
+            param_list error;
+            error.add("id", SProjectError);
+            error.add("desc", SNamelessProjectParameter);
+            xss_throw(error);
+          }
+
+        params_.add(id, xso->get("value", variant()));
+      }
+
     //options
     XSSObject options = project_data->find("options");
     if (options)
@@ -534,18 +582,17 @@ void xss_compiler::build(fs::path xml)
     str project_source = project_data->get<str>("src", str());
     if (!project_source.empty())
       {
-        xs_utils xs;
         code_context cctx;
-        cctx.this_ = project_data;
+        dsl_list     dsls;
+        basic_scope  sc;
 
-        dsl_list dsls;
-        dsls.insert(dsl_list_pair("shell", DslLinker(new vm_shell(shared_from_this()))));
+        cctx.this_  = project_data;
+        cctx.dsl_   = &dsls;
+        cctx.scope_ = &sc;
+        init_project_context(cctx);
 
-        code_context code_ctx;
-        code_ctx.this_ = project_data;
-        code_ctx.dsl_  = &dsls;
-
-        xs.compile_implicit_instance(load_file(base_path_ / project_source), DynamicObject(project_data), code_ctx, xml);
+        xs_utils xs;
+        xs.compile_implicit_instance(load_file(base_path_ / project_source), DynamicObject(project_data), cctx, xml);
 
         size_t evid = project_data->event_id("finished");
         if (evid > 0)
@@ -1526,6 +1573,46 @@ str xss_compiler::render_code(const str& text, param_list_decl& args, XSSContext
     return compiled->render();
   }
 
+void xss_compiler::add_dependencies(XSSObjectList& dependencies)
+  {
+    XSSObjectList::iterator it = dependencies.begin();
+    XSSObjectList::iterator nd = dependencies.end();
+
+    for(; it != nd; it++)
+      {
+        XSSObject obj = *it;
+        str href = obj->get<str>("href", str());
+        if (href.empty())
+          {
+				      param_list error;
+				      error.add("id", SCompiler);
+				      error.add("desc", SDependencyNeedsHRef);
+				      error.add("dep id", obj->id());
+
+				      xss_throw(error);
+          }
+
+        dependency_map::iterator it = dependencies_.find(href);
+        if (it == dependencies_.end())
+          dependencies_.insert(dependency_pair(href, obj));
+      }
+  }
+
+DynamicArray xss_compiler::get_dependencies()
+  {
+    DynamicArray result(new dynamic_array);
+
+    dependency_map::iterator it = dependencies_.begin();
+    dependency_map::iterator nd = dependencies_.end();
+
+    for(; it != nd; it++)
+      {
+        result->push_back(it->second);
+      }
+
+    return result;
+  }
+
 void xss_compiler::push_renderer(XSSRenderer renderer)
   {
     if (renderers_.empty())
@@ -1637,7 +1724,19 @@ void xss_compiler::read_application_types(std::vector<XSSObject> & applications)
         fs::path path = fs::complete(base_path_ / entry_point);
         XSSApplicationRenderer app(new xss_application_renderer(path, lang, shared_from_this()));
 
-        app->context()->register_symbol(RESOLVE_CONST, "#app", app);
+        XSSContext ctx = app->context();
+
+        //add project params
+        for(size_t ii = 0; ii < params_.size(); ii++)
+          {
+            str     pn = params_.get_name(ii);
+            variant vv = params_.get(ii);
+
+            ctx->register_symbol(RESOLVE_CONST, pn, vv);
+          }
+
+        //and some other crap
+        ctx->register_symbol(RESOLVE_CONST, "#app", app);
         register_language_objects(language_name, app->context());
 
         fs::path op = fs::path(app_data->get<str>("output", str()));
@@ -1692,8 +1791,7 @@ XSSModule xss_compiler::read_module(const str& src, XSSApplicationRenderer app, 
       }
 
     XSSModule result(new xss_module(app->context()));
-    result->copy(module_data);
-
+    result->set_definition(module_data);
     result->set_path(path.parent_path());
 
     //read types
@@ -2011,6 +2109,21 @@ void xss_compiler::preprocess_type(XSSType clazz, XSSObject def_class, const str
       }
   }
 
+void xss_compiler::init_project_context(code_context& result)
+  {
+    result.dsl_->insert(dsl_list_pair("shell", DslLinker(new vm_shell(shared_from_this()))));
+
+    result.scope_->register_symbol("compiler", XSSCompiler(shared_from_this()));
+
+    for(size_t ii = 0; ii < params_.size(); ii++)
+      {
+        str     pn = params_.get_name(ii);
+        variant vv = params_.get(ii);
+
+        result.scope_->register_symbol(pn, vv);
+      }
+  }
+
 void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSApplicationRenderer app)
   {
     current_app_ = app;
@@ -2293,12 +2406,19 @@ void xss_compiler::read_application(const str& app_file)
         //must collect the instances in the scope
         struct app_proprocessor : IPreprocessHandler
           {
+            xss_compiler* compiler;
+
             virtual void handle(XSSObject obj, XSSModule module)
               {
                 if (module->one_of_us(obj))
-                  module->register_instance(obj);
+                  {
+                    compiler->collect_dependencies(obj->type());
+                    module->register_instance(obj);
+                  }
               }
           } pre_processor;
+
+        pre_processor.compiler = this;
 
         pre_process(app_renderer, app_data, XSSObject(), &pre_processor, true);
 
@@ -2599,6 +2719,37 @@ void xss_compiler::compile_xs_file(fs::path file, xs_container& result, XSSConte
       {
         xse.data.add("file", file.string());
         throw xse;
+      }
+  }
+
+void xss_compiler::collect_dependencies(XSSType type, XSSType context)
+  {
+    if (type->has("#depcollected"))
+      return;
+
+    type->add_attribute("#depcollected", true);
+
+    XSSObjectList type_dependencies = type->get_dependencies();
+    XSSObjectList::iterator it = type_dependencies.begin();
+    XSSObjectList::iterator nd = type_dependencies.end();
+
+    for(; it != nd; it++)
+      {
+        XSSObject obj = *it;
+        str href = obj->get<str>("href", str());
+        if (href.empty())
+          {
+				      param_list error;
+				      error.add("id", SCompiler);
+				      error.add("desc", SDependencyNeedsHRef);
+				      error.add("dep id", obj->id());
+
+				      xss_throw(error);
+          }
+
+        dependency_map::iterator it = dependencies_.find(href);
+        if (it == dependencies_.end())
+          dependencies_.insert(dependency_pair(href, obj));
       }
   }
 

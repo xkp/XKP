@@ -1,0 +1,10 @@
+<xss:code>
+    var dependencies = compiler.get_dependencies();
+    
+    compiler.log("<Dependencies>");
+    for(var dep in dependencies)
+    {
+        compiler.log(dep.href);
+    }
+    compiler.log("</Dependencies>");
+</xss:code>

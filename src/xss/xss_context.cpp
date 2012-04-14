@@ -1559,7 +1559,19 @@ void xss_type::set_super(XSSType super)
 void xss_type::set_definition(XSSObject def)
   {
     if (def)
-      copy(def);
+      {
+        XSSObjectList deps = def->find_by_class("dependency");
+
+        XSSObjectList::iterator it = deps.begin();
+        XSSObjectList::iterator nd = deps.end();
+
+        for(; it != nd; it++)
+          {
+            dependencies_.push_back(*it);
+          }
+
+        copy(def);
+      }
   }
 
 schema* xss_type::native_type()
@@ -1611,6 +1623,11 @@ XSSContext xss_type::context()
 void xss_type::set_context(XSSContext ctx)
   {
     ctx_ = ctx;
+  }
+
+XSSObjectList xss_type::get_dependencies()
+  {
+    return dependencies_;
   }
 
 void xss_type::as_enum()
