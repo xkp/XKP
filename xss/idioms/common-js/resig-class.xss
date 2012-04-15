@@ -1,0 +1,77 @@
+<xss:parameter id="clazz"/>
+<xss:parameter id="renderer"/>
+<xss:parameter id="property_renderer" default="property.xss"/>
+<xss:parameter id="method_renderer"   default="method.xss"/>
+<xss:parameter id="event_renderer"    default="event.xss"/>
+
+<xss:code>
+    string super_str = "Class";    
+    
+    if (clazz.super)
+        super_str = clazz.super.output_id;    
+
+    out()
+    {
+        var <xss:e v="clazz.output_id"/> = <xss:e v="super_str"/>.extend(
+    }
+</xss:code>
+{
+    init: function()
+    {
+        this._super();
+        this.events = new ms.event.EventHolder(); 
+        
+        var this__  = this;
+        <xss:code>
+        //register instances as properties, why not?
+        for(var fi in clazz.instances)
+        {
+            compiler.add_object_property(clazz, fi.output_id, value = fi, type = fi.type, dont_render = true);
+        }
+        
+        if (renderer)
+        {
+            compiler.xss(renderer, clazz, is_class = true);
+        }
+
+        for(var inst in clazz.instances)
+        {
+            string inst_renderer = inst.type.renderer;
+            if (!inst_renderer)
+            {
+                compiler.error("Class not rendereable", class_name = inst.type_name);
+            }    
+            
+            
+            string path = compiler.idiom_path(inst, inst_renderer);
+            compiler.xss(path, inst, path = "this");
+        }
+        
+        //render properties
+        for(var prop in clazz.properties)
+        {
+            if (prop.dont_init)
+                continue;
+    
+            compiler.xss(property_renderer, prop, clazz, is_class = true, path = "this");
+        }    
+
+        for(var mthd in clazz.methods)
+        {
+            compiler.xss(method_renderer, mthd, clazz, is_class = true, path = "this");
+        }
+
+        //render events as functions
+        for(var ev in clazz.events)
+        {
+            compiler.xss(event_renderer, ev, clazz, is_class = true, path = "this");
+        }
+        
+        //provide a way to initialize stuff
+        out()
+        {
+            this.events.dispatch("init", [this]);
+        }
+        </xss:code>
+    },
+});
