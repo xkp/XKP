@@ -2202,6 +2202,21 @@ void xss_compiler::init_project_context(code_context& result)
       }
   }
 
+void xss_compiler::render_app_types(const str& renderer)
+  {
+    std::vector<XSSType>::iterator it = app_types_.begin();
+    std::vector<XSSType>::iterator nd = app_types_.end();
+
+    for(; it != nd; it++)
+      {
+        param_list pl;
+        pl.add(renderer);
+        pl.add(*it);
+        
+        xss(pl);
+      }
+  }
+
 void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSApplicationRenderer app)
   {
     current_app_ = app;
@@ -2251,6 +2266,8 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
             XSSModule module = app->type_idiom(super);
             if (module)
               module->register_user_type(clazz);
+            else
+              app_types_.push_back(clazz);
 
             //mark as defined user type
             clazz->add_attribute("user_defined", true);
@@ -2303,6 +2320,8 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
                 XSSModule module = app->type_idiom(ci.super);
                 if (module)
                   module->register_user_type(clazz);
+                else
+                  app_types_.push_back(clazz);
 
                 //mark as defined user type
                 clazz->add_attribute("user_defined", true);

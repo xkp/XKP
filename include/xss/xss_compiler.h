@@ -222,6 +222,7 @@ namespace xkp
         DynamicArray get_dependencies(); 
         str          build_project(const param_list params);
         str          get_result();
+        void         render_app_types(const str& renderer);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -246,6 +247,7 @@ namespace xkp
         bool                                use_event_instance_;
         XSSApplicationRenderer              current_app_;
         param_list                          params_;
+        std::vector<XSSType>                app_types_;
 
         XSSObject   read_project(fs::path xml_file, param_list& args);
         void        read_application_types(std::vector<XSSObject> & applications, param_list& args);
@@ -350,6 +352,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<bool,         1>("application_object", &xss_compiler::application_object);
         method_<variant,      1>("get_idiom",          &xss_compiler::idiom_by_id);
         method_<DynamicArray, 0>("get_dependencies",   &xss_compiler::get_dependencies);
+        method_<void,         1>("render_app_types",   &xss_compiler::render_app_types);
       }
   };
 
