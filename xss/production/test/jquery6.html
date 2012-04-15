@@ -15,25 +15,24 @@ $(function() {
 			var __div2 = $("#__div2");
 			var __div3 = $("#__div3");
 			var __div4 = $("#__div4");
-			var __img1 = $("#__img1");
+			var image_container = $("#image_container");
 			var application = $("#application");
         acc1.accordion({
             fillSpace: true,
         });
-					__img1.attr("src", "images/img3.jpg");
 });
 </script>
 <style>
-#main {width : 800px;height : 400px}
-#acc1 {width : 300px}
-#__img1 {display : block;margin-left : auto;margin-right : auto}
+#main {width : 800px;height : 400px;position : relative}
+#acc1 {left : 0px;top : 0px;width : 300px;height : 400px;position : absolute}
+#image_container {left : 300px;top : 0px;width : 600px;height : 400px;position : absolute}
 </style>
 </head>
 <body>
             <div id='application'>
 <div id="main">
             <table border="0"  width = "800"  height = "400" >
-        <tr><td  width = "300px"   style="vertical-align:top">
+            </table>
 <div id="acc1">
             <h3><a href="#">Plain HTML</a></h3>
 <div id="__div1">
@@ -52,14 +51,10 @@ $(function() {
 <p>Advanced components, courtesy of</p><a href="www.jqueryui.com">jQuery UI</a>
 </div>
 </div>
-</td><td style="vertical-align:middle">
-				<img id="__img1"
-						src="images/img3.jpg" 
-					>
-				</img>
-</td></tr>
-            </table>
-        </div>
+				<canvas id="image_container"
+			>
+				</canvas>
+</div>
                 </div>
             </body>
 </html>

@@ -7,6 +7,7 @@
 <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
 <script type="text/javascript" src="../js/jquery-idiom.js"></script>
 <link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css">
+<xss:marker id="includes"/>
 
 <script type="text/javascript">
 $(function() {
@@ -86,5 +87,17 @@ $(function() {
 	    compiler.inject("render_css");
     }
     </xss:class>
+    <xss:code>
+        //insert dependencies after everything has been processed
+        
+        var dependencies = compiler.get_dependencies();
+        for(var dep in dependencies)
+        {
+            out(marker = "includes")
+            {
+                <script type="text/javascript" src="<xss:e v="dep.href"/>"></script>
+            }
+        }
+    </xss:code>    
 </body>
 </html>

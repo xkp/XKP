@@ -407,10 +407,13 @@
         bool do_layout = dir != null;
         
         if (!do_layout)
-        {
+        {   
+            compiler.log("NO LAYOUT");
+            
             //just render
             for(var cmp in it.children)
             {
+                compiler.log(cmp.output_id);
                 var ndir = get_direction(cmp);
                 if (ndir != null)
                 {

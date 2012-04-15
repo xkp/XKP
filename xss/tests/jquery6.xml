@@ -1,6 +1,6 @@
 <application name="jq6" title="JQuitchen Sink" src="jquery6.xs">
     <div id="main" width="800" height="400">
-        <accordion id="acc1" placement="left" width="300" fillSpace="true">
+        <accordion x="0" y="0" id="acc1" width="300" height="400" fillSpace="true">
             <div caption="Plain HTML">
                 <html>
                     <p>
@@ -34,6 +34,7 @@
                 </html>
             </div>
         </accordion>
-        <img src="images/img3.jpg" placement="center"/>
+        
+        <canvas id="image_container" x="300" y="0" width="600" height="400"/>
     </div>
 </application>

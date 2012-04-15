@@ -96,7 +96,8 @@ int main(int argc, char* argv[])
     
     try
       {
-        compiler->build(target);
+        param_list args;
+        compiler->build(target, args);
       }
     catch(xs_error xse)
       {

@@ -1,4 +1,9 @@
 <module id="ui" src="ui.xs">
+    <dependency href="../js/utils.js"/>
+    <dependency href="../js/prototype.js"/>
+    <dependency href="../js/ms-event.js"/>
+    <dependency href="../js/keys.js"/>
+
     <types>
         <class id="component" renderer="component.xss">		
 			<constructor_params>

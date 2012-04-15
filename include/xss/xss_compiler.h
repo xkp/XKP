@@ -178,7 +178,7 @@ namespace xkp
         xss_compiler();
         xss_compiler(ICompilerOutput* out);
       public:
-        void         build(fs::path xml);
+        void         build(fs::path xml, param_list& args);
 				XSSRenderer  compile_xss_file(const str& src_file, XSSContext ctx, const str& html_template = str());
 				XSSRenderer  compile_xss_file(fs::path src_file, XSSContext ctx, const str& html_template = str());
 				XSSRenderer  compile_xss(const str& src, XSSContext ctx, fs::path path = fs::path(), const str& html_template = str());
@@ -220,6 +220,8 @@ namespace xkp
         str          render_code(const str& code, param_list_decl& args, XSSContext ctx);
         void         add_dependencies(XSSObjectList& dependencies);
         DynamicArray get_dependencies(); 
+        str          build_project(const param_list params);
+        str          get_result();
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -239,13 +241,14 @@ namespace xkp
         fs::path                            output_path_;
         fs::path                            app_path_;
         fs::path                            compiling_;
+        str                                 result_;
         XSSRenderer                         entry_;
         bool                                use_event_instance_;
         XSSApplicationRenderer              current_app_;
         param_list                          params_;
 
-        XSSObject   read_project(fs::path xml_file);
-        void        read_application_types(std::vector<XSSObject> & applications);
+        XSSObject   read_project(fs::path xml_file, param_list& args);
+        void        read_application_types(std::vector<XSSObject> & applications, param_list& args);
         XSSModule   read_module(const str& src, XSSApplicationRenderer app, XSSObject module);
         void        read_types(XSSObject module_data, XSSApplicationRenderer app, XSSModule module);
         void        read_instances(XSSObject module_data, XSSApplicationRenderer app, XSSModule module);
@@ -276,10 +279,11 @@ namespace xkp
 		    void  compile_xs_file(fs::path file, xs_container& result, XSSContext ctx);
       private:
         //dependencies
-        typedef std::map<str, XSSObject>  dependency_map;
-        typedef std::pair<str, XSSObject> dependency_pair;
+        typedef std::map<str, int>  dependency_map;
+        typedef std::pair<str, int> dependency_pair;
 
         dependency_map dependencies_;
+        XSSObjectList  deps_;
 
         void collect_dependencies(XSSType type, XSSType context = XSSType());
 		};
@@ -320,6 +324,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         dynamic_function_<XSSProperty>("add_object_property", &xss_compiler::add_object_property);
         dynamic_function_<str>        ("instantiate",         &xss_compiler::instantiate);
         dynamic_function_<str>        ("render_ctor_args",    &xss_compiler::render_ctor_args);
+        dynamic_function_<str>        ("build",               &xss_compiler::build_project);
 
         readonly_property<XSSObject>("options", &xss_compiler::options_);
 

@@ -49,6 +49,8 @@ on render_types()
 			inst.add_property("manager", manager_id, value_type);
 		}
         */
+
+        compiler.log(ut.id);
         var full_path = compiler.full_path("component.xss");		
 		compiler.xss("../common-js/class.xss", ut, renderer = full_path, context = ut);			
     }

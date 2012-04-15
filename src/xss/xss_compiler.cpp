@@ -79,6 +79,8 @@ const str SExpectingTypeNameAOP("compiler.add_object_property found an invalid t
 const str SUnnamedAtrributeAOP("compiler.add_object_property found an unnamed attribute");
 const str SNamelessProjectParameter("project parameters expect a 'name' tag");
 const str SDependencyNeedsHRef("class dependencies expect a 'href' tag");
+const str SBuildProjectExpectsProject("compiler.build expects project as first argument");
+const str SBuildProjectExpectsNamedParameters("compiler.build expects named arguments after project path");
 
 //xss_application_renderer
 xss_application_renderer::xss_application_renderer(fs::path entry_point, Language lang, XSSCompiler compiler):
@@ -287,6 +289,7 @@ void xss_module::register_module_type(XSSType type)
 void xss_module::register_user_type(XSSType type)
   {
     register_module_type(type);
+    utypes_->push_back(type);
   }
 
 bool xss_module::has_type(const str& type)
@@ -519,14 +522,14 @@ xss_compiler::xss_compiler(ICompilerOutput* out):
   {
   }
 
-void xss_compiler::build(fs::path xml)
+void xss_compiler::build(fs::path xml, param_list& args)
   {
     fs::path pp = xml;
     base_path_ = pp.parent_path();
 
     project_path_ = base_path_;
 
-    XSSObject project_data = read_project(xml);
+    XSSObject project_data = read_project(xml, args);
 
 
     //read params
@@ -1594,20 +1597,83 @@ void xss_compiler::add_dependencies(XSSObjectList& dependencies)
 
         dependency_map::iterator it = dependencies_.find(href);
         if (it == dependencies_.end())
-          dependencies_.insert(dependency_pair(href, obj));
+          {
+            dependencies_.insert(dependency_pair(href, deps_.size()));
+            deps_.push_back(obj);
+          }
       }
+  }
+
+str xss_compiler::build_project(const param_list params)
+  {
+    str project_file = variant_cast<str>(params.get(0), str());
+    if (project_file.empty())
+      { 
+				  param_list error;
+				  error.add("id", SCompiler);
+				  error.add("desc", SBuildProjectExpectsProject);
+
+				  xss_throw(error);
+      }
+
+    //grab the rest of the parameters
+    param_list pl;
+    for(size_t i = 1; i < params.size(); i++)
+      {
+        str pn = params.get_name(i);
+        if (pn.empty())
+          { 
+				      param_list error;
+				      error.add("id", SCompiler);
+				      error.add("desc", SBuildProjectExpectsNamedParameters);
+
+				      xss_throw(error);
+          }
+
+        pl.add(pn, params.get(i));
+      }
+
+    XSSCompiler compiler(new xss_compiler(out_));
+
+    fs::path project_path = base_path_ / project_file;
+    compiler->build(project_path, pl);
+
+    //inherit dependencies
+    XSSObjectList&          dm = compiler->deps_;
+    XSSObjectList::iterator it = dm.begin();
+    XSSObjectList::iterator nd = dm.end();
+
+    for(; it != nd; it++)
+      {
+        XSSObject dep = *it;
+        str href = dep->get<str>("href", str());
+
+        dependency_map::iterator myit = dependencies_.find(href);
+        if (myit == dependencies_.end())
+          {
+            dependencies_.insert(dependency_pair(href, deps_.size()));
+            deps_.push_back(dep);
+          }
+      }
+
+    return compiler->get_result();
+  }
+
+str xss_compiler::get_result()
+  {
+    return result_;
   }
 
 DynamicArray xss_compiler::get_dependencies()
   {
     DynamicArray result(new dynamic_array);
 
-    dependency_map::iterator it = dependencies_.begin();
-    dependency_map::iterator nd = dependencies_.end();
+    XSSObjectList::iterator it = deps_.begin(); 
+    XSSObjectList::iterator nd = deps_.end();
 
     for(; it != nd; it++)
       {
-        result->push_back(it->second);
+        result->push_back(*it);
       }
 
     return result;
@@ -1649,7 +1715,7 @@ XSSRenderer xss_compiler::entry_renderer()
     return entry_;
   }
 
-XSSObject xss_compiler::read_project(fs::path xml_file)
+XSSObject xss_compiler::read_project(fs::path xml_file, param_list& args)
   {
     xss_object_reader reader;
     XSSObject project_data;
@@ -1678,12 +1744,12 @@ XSSObject xss_compiler::read_project(fs::path xml_file)
     if (applications.empty())
         applications.push_back(project_data);
 
-    read_application_types(applications);
+    read_application_types(applications, args);
 
     return project_data;
   }
 
-void xss_compiler::read_application_types(std::vector<XSSObject> & applications)
+void xss_compiler::read_application_types(std::vector<XSSObject>& applications, param_list& args)
   {
     std::vector<XSSObject>::iterator it = applications.begin();
     std::vector<XSSObject>::iterator nd = applications.end();
@@ -1724,16 +1790,28 @@ void xss_compiler::read_application_types(std::vector<XSSObject> & applications)
         fs::path path = fs::complete(base_path_ / entry_point);
         XSSApplicationRenderer app(new xss_application_renderer(path, lang, shared_from_this()));
 
-        XSSContext ctx = app->context();
+        //create the "project" object, mainly used to store outside parameters
+        XSSObject project(new xss_object);
+        
+        for(size_t ii = 0; ii < args.size(); ii++)
+          {
+            str     pn = args.get_name(ii);
+            variant vv = args.get(ii);
 
-        //add project params
+            project->add_attribute(pn, vv);
+          }
+
         for(size_t ii = 0; ii < params_.size(); ii++)
           {
             str     pn = params_.get_name(ii);
             variant vv = params_.get(ii);
 
-            ctx->register_symbol(RESOLVE_CONST, pn, vv);
+            project->add_attribute(pn, vv);
           }
+
+        //and register it
+        XSSContext ctx = app->context();
+        ctx->register_symbol(RESOLVE_CONST, "project", project);
 
         //and some other crap
         ctx->register_symbol(RESOLVE_CONST, "#app", app);
@@ -2749,7 +2827,10 @@ void xss_compiler::collect_dependencies(XSSType type, XSSType context)
 
         dependency_map::iterator it = dependencies_.find(href);
         if (it == dependencies_.end())
-          dependencies_.insert(dependency_pair(href, obj));
+          {
+            dependencies_.insert(dependency_pair(href, deps_.size()));
+            deps_.push_back(obj);
+          }
       }
   }
 
@@ -2867,13 +2948,15 @@ void xss_compiler::run()
 
         XSSRenderer renderer = compile_xss_file(target, app->context());
 
-        str result = renderer->render(XSSObject(), null);
+        result_ = renderer->render(XSSObject(), null);
 
         fs::path out_file = app->output_path();
         if (out_file.empty())
-          std::cout << result;
+          std::cout << result_;
         else
-          output_file(output_path_ / out_file, result);
+          {
+            output_file(output_path_ / out_file, result_);
+          }
       }
   }
 
