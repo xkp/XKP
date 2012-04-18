@@ -39,10 +39,10 @@ public class XKPDDView extends View {
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		
-		if(mBitmap != null) {
+		if (mBitmap != null) {
 			canvas.drawBitmap(mBitmap, 0, 0, null);
 			
-			//TIPS: hacky hoo for clean bitmap
+			// TIPS: hacky hoo for clean bitmap
 			mBitmap.eraseColor(0);
 		}
 	}

@@ -27,7 +27,7 @@
 	
 	<switcher id="swtScene" placement="client" active="lblScene">
 		<label id="lblSwicherInformation" caption="Scene is EMPTY!" width="200" height="200" placement="center" gravity="center"/>
-		<img id="imgGallery" placement="client"/>
+		<img_native id="imgGallery" placement="client"/>
 		<imagemap id="mapController" placement="client"/>
 	</switcher>
 

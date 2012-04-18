@@ -1,7 +1,7 @@
 <xss:parameter id="appName"/>
 <xss:parameter id="base_namespace"/>
 
-package <xss:e value="base_namespace"/>.libs.Graphic;
+package <xss:e value="base_namespace"/>.libs.Graphics;
 
 import android.content.Context;
 import android.content.res.TypedArray;

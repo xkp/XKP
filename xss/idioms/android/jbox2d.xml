@@ -35,11 +35,33 @@
 		</enum>
 		
 		<class id="IPhysics">
-			<property id="density" type="float" default_value="1.0"/>
-			<property id="friction" type="float" default_value="0.5"/>
-			<property id="restitution" type="float" default_value="0.2"/>
+			<property id="density" type="float" default_value="1.0">
+				<get text="getDensity()"/>
+				<set text="setDensity({value})"/>
+			</property>
+			
+			<property id="friction" type="float" default_value="0.5">
+				<get text="getFriction()"/>
+				<set text="setFriction({value})"/>
+			</property>
+			
+			<property id="restitution" type="float" default_value="0.2">
+				<get text="getRestitution()"/>
+				<set text="setRestitution({value})"/>
+			</property>
+			
 			<property id="angular_damping" type="float" default_value="0.0"/>
 			<property id="linear_damping" type="float" default_value="0.0"/>
+		</class>
+		
+		<class id="IJoint">
+            <property id="body_a" type="string">
+				<set text="setBodyA({value})"/>
+			</property>
+			
+            <property id="body_b" type="string">
+				<set text="setBodyB({value})"/>
+			</property>
 		</class>
 		
 		<class id="physics_world" super="IPhysics">
@@ -63,15 +85,41 @@
 		</class>
 
 		<class id="body" super="IPhysics" renderer="jBox2dBody.xss">
-			<property id="body_type" type="EBodyType"/>
+            <constructor_params>
+                <parameter property="world"/>
+                <parameter property="shape"/>
+                <parameter property="host"/>
+            </constructor_params>
+
+			<property id="world" type="string"/>
+			<property id="host" type="string"/>
+			
 			<property id="shape" type="EShapeType"/>
 			<property id="sensor" type="bool"/>
-			<property id="x" type="float"/>
-			<property id="y" type="float"/>
+			
+			<property id="body_type" type="EBodyType">
+				<get text="getBodyType()"/>
+				<set text="setBodyType({value})"/>
+			</property>
+			
+			<property id="x" type="float">
+				<get text="getPosition().x"/>
+				<set text="setPosition({value}, {path}.getPosition().y)"/>
+			</property>
+			
+			<property id="y" type="float">
+				<get text="getPosition().y"/>
+				<set text="setPosition({path}.getPosition().x, {value})"/>
+			</property>
+			
 			<property id="width" type="float"/>
 			<property id="height" type="float"/>
 			<property id="radius" type="float" default_value="0.0"/>
-			<property id="rotation" type="float" default_value="0.0"/>
+			
+			<property id="rotation" type="float" default_value="0.0">
+				<get text="getAngle()"/>
+				<set text="setAngle({value})"/>
+			</property>
         </class>
 
         <class id="physics" super="body" renderer="jBox2dBody.xss"/>

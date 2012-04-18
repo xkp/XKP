@@ -265,6 +265,18 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 
 		idiom.process_event_handler(inst);
 		
+		var qprops = inst.query_properties("*");
+		for(var p in qprops)
+		{
+			if(p.set_handle)
+			{
+				out(indent = 2)
+				{
+					<xss:e value="inst.output_id"/>.<xss:e value="p.set_handle"/>(<xss:e value="p.set_param_hnd"/>);
+ 				}
+ 			}
+ 		}
+		
 		if(inst.inits)
 		{
 			for(var init in inst.inits)

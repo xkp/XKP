@@ -13,5 +13,6 @@
 		<attr name="pos_y2" format="dimension"/>
 		<attr name="pos_width" format="dimension"/>
 		<attr name="pos_height" format="dimension"/>
+		<attr name="rotation" format="integer"/>
 	</declare-styleable>
 </resources>

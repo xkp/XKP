@@ -13,10 +13,10 @@ import xkp.android.libs.Layout.XKPLayout;
 						import android.view.View.OnTouchListener;
 						import android.view.View.OnKeyListener;
 						import android.view.View.OnFocusChangeListener;
-						import xkp.android.libs.Graphic.XKPGraphics.OnClickInsideFigureListener;
-						import xkp.android.libs.Graphic.XKPCircle;
-						import xkp.android.libs.Graphic.XKPRectangle;
-						import xkp.android.libs.Graphic.XKPPolygon;
+						import xkp.android.libs.Graphics.XKPGraphics.OnClickInsideFigureListener;
+						import xkp.android.libs.Graphics.XKPCircle;
+						import xkp.android.libs.Graphics.XKPRectangle;
+						import xkp.android.libs.Graphics.XKPPolygon;
 		public class ActFigures2D 
 						extends Activity
 {

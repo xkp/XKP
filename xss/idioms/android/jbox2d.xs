@@ -135,23 +135,9 @@ on render_instances()
 			else
 				compiler.error("Invalid shape", object = i.id, shape = i.shape);
 			
-			var body_type = "";
-			if(i.body_type == "static")
-				body_type = "BodyType.STATIC";
-			else
-			if(i.body_type == "dynamic")
-				body_type = "BodyType.DYNAMIC";
-			else
-			if(i.body_type == "kinematic")
-				body_type = "BodyType.KINEMATIC";
-			else
-				compiler.error("Invalid body_type", object = i.id, body_type = i.body_type);
-				
-			//var prop = i.query_properties("body_type");
-			//var body_type = compiler.compile_expression(prop); //[no]
-			//var body_type = compiler.evaluate_property(i.body_type);
-			//var body_type = compiler.render_expression(i.body_type, i);
-			//var body_type = i.body_type.value.render_value();
+			
+			var prop = i.get_property("body_type");
+			var body_type = prop.render_value();
 			
 			out(indent = 1, marker = "layout_start")
 			{

@@ -95,6 +95,7 @@ import xkp.android.libs.Layout.XKPLayout;
 			});
 		}
 				gallery = (Gallery) findViewById(R.id.gallery);
+					gallery.setAdapter(new ImageAdapter(this));
 	}
 private void initCallers() {
 			util = new XKPUtils();
