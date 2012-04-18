@@ -1484,9 +1484,10 @@ void process_instantiate_params(const param_list params, int idx, instantiate_pa
 
 str xss_compiler::instantiate(const param_list params)
   {
-    variant      v    = params.get(0);
-    XSSType      type = variant_cast<XSSType>(v, XSSType());
-    XSSObject    instance;
+    variant   v    = params.get(0);
+    XSSType   type = variant_cast<XSSType>(v, XSSType());
+    XSSObject instance;
+
     if (!type)
       {
         instance = variant_cast<XSSObject>(v, XSSObject());
@@ -1504,6 +1505,21 @@ str xss_compiler::instantiate(const param_list params)
 
     if (!instance)
       instance = iparams.instance;
+
+    str xss = type->get<str>("instantiator", str());
+    if (!xss.empty())
+      {
+        //prepare rendering parameters
+        param_list args;
+        args.add("type", type);
+        args.add("runtime_args", iparams.runtime);
+
+        fs::path tp = type_path(type->id());
+
+        XSSContext  ctx(new xss_context(current_context(), tp));
+        XSSRenderer rend = compile_xss_file(xss, ctx);
+        return rend->render(XSSObject(), &args);
+      }
 
     str result = lang->instantiate(type, instance, iparams.runtime, iparams.values);
     return result;

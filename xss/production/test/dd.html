@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>danydenis.com</title>
+</head>
+<body>
+<style type="text/css">
+	body{
+	background:Black;
+	}
+</style>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
+		<script type="text/javascript" src="../js/ms-sequence.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/three/Three.js"></script>
+		<script type="text/javascript" src="../js/three/Stats.js"></script>
+		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+		<script type="text/javascript" src="../js/three/Utils.js"></script>
+<script type="text/javascript">		
+var renderer = new THREE.CanvasRenderer();	
+var ui;
+var SoundUtils;
+var active_camera;
+var g_elapsed = -1;
+var g_delta = 0.0;	
+var drawingCanvas = renderer.domElement;
+var canvas_position = {x:0, y:0};
+var streamer = new ms.streamer.Streamer();
+var app_width = 1000;
+var app_height = 800;
+var idle;var move;var selected;var unselected;var grow;var shrink;var facebook;var twitter;var email;
+var application = {};
+application.events = new ms.event.EventHolder();
+		var g_sequence_manager = new ms.state.Manager();
+        function default_interpolate(a, b, t)
+        {
+            return a + (b - a)*t;
+        }		
+		var streamer = new ms.streamer.Streamer();	
+		var ResourceUtils = new ms.streamer.ResourceUtils();
+		if(drawingCanvas){
+			var client =
+			{
+				width: 1000,
+				height: 800,
+				canvas: drawingCanvas
+			};
+            var streamer = new ms.streamer.Streamer();							
+			var ui = new ms.ui.Manager(client, streamer);			
+			var g_ui = ui;
+			var g_ui_root = ui.root;
+			var mouse_pressed = false;
+		}
+	// --------RESOURCES---------
+		var global_package = new ms.streamer.Package(streamer);	
+                global_package.add_item(
+            {
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"dd/facebook.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+                global_package.add_item(
+            {
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"dd/twitter.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var __image2;
+				global_package.events.addListener("loaded", function()
+				{
+					__image2 = streamer.get_resource("__image2");
+				});
+                global_package.add_item(
+            {
+		id:				"__image3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"dd/photobucket.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var __image3;
+				global_package.events.addListener("loaded", function()
+				{
+					__image3 = streamer.get_resource("__image3");
+				});
+		global_package.add_item({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});		
+		global_package.load();	
+    // --------RESOURCES---------
+soundRenderer = new THREE.SoundRenderer();		
+document.body.appendChild( soundRenderer.domElement );
+renderer.setSize( app_width, app_height );
+function render() {
+canvas_position = getElementPosition(drawingCanvas);
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+    g_delta = 0; //first update
+else
+g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+		g_sequence_manager.update(g_delta);
+application.events.dispatch("updates", []);	
+		set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+var image_plane;var img1;var img2;var img3;var img4;var img5;var img6;var img7;var img8;var scene;var camera_1;var plane_1;
+            social_button = Class.create(ms.ui.Image,
+        {
+    initialize: function($super
+                , manager
+                , parent
+                , src
+                )
+    {
+        $super(
+        manager,parent,src        );
+        this.events = new ms.event.EventHolder(); 
+        var this__  = this;
+this.grow =
+new ms.state.Sequence(
+g_sequence_manager);
+        var ____i1 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_x(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 0.300000012, value: null},
+            ]);
+            this.grow.addHandler(____i1);	              
+        var ____i2 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_y(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 0.300000012, value: null},
+            ]);
+            this.grow.addHandler(____i2);	              
+        var ____i3 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_width(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 0.300000012, value: 32},
+            ]);
+            this.grow.addHandler(____i3);	              
+        var ____i4 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_height(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 0.300000012, value: 32},
+            ]);
+            this.grow.addHandler(____i4);	              
+        this.grow.events.addListener('start', function()
+        {
+        ____i1.keys[0].value = this__.x;
+        ____i1.keys[1].value = this__.ox - 4;
+        ____i2.keys[0].value = this__.y;
+        ____i2.keys[1].value = this__.oy - 4;
+        ____i3.keys[0].value = this__.get_width();
+        ____i4.keys[0].value = this__.get_height();
+        });
+this.shrink =
+new ms.state.Sequence(
+g_sequence_manager);
+        var ____i5 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_x(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 0.300000012, value: null},
+            ]);
+            this.shrink.addHandler(____i5);	              
+        var ____i6 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_y(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 0.300000012, value: null},
+            ]);
+            this.shrink.addHandler(____i6);	              
+        var ____i7 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_width(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 0.300000012, value: 24},
+            ]);
+            this.shrink.addHandler(____i7);	              
+        var ____i8 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_height(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 0.300000012, value: 24},
+            ]);
+            this.shrink.addHandler(____i8);	              
+        this.shrink.events.addListener('start', function()
+        {
+        ____i5.keys[0].value = this__.x;
+        ____i5.keys[1].value = this__.ox;
+        ____i6.keys[0].value = this__.y;
+        ____i6.keys[1].value = this__.oy;
+        ____i7.keys[0].value = this__.get_width();
+        ____i8.keys[0].value = this__.get_height();
+        });
+            this.ox = null;
+            this.oy = null;
+	var ev_parent = this;
+	this.events.addListener("mousein", function()
+	{    
+		ev_parent.ox = ev_parent.x;
+ev_parent.oy = ev_parent.y;
+ev_parent.shrink.stop();
+ev_parent.grow.start();
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
+	this.events.addListener("mouseout", function()
+	{    
+		ev_parent.grow.stop();
+ev_parent.shrink.start();
+	}
+	);
+		application.are_obj_events = true;
+            if (this.init)
+                this.init();
+            },
+});
+        function create_image_plane(
+    width,height,x_segments,y_segments ) { 
+    var image_plane;
+	    image_plane_plane = 
+		new THREE.Plane(null, null, null, null) ;
+	    image_plane = new THREE.Mesh(image_plane_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(image_plane);
+		image_plane.events = new ms.event.EventHolder();
+        var this__ = image_plane;
+            var idle;
+idle =
+new ms.state.Sequence(
+g_sequence_manager);
+            idle.loop = true;
+        var ____i9 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                set_rotation_y(this__.rotation, value);
+            },
+            [
+        {t: 0, value: 0},
+        {t: 1, value: -10},
+        {t: 2, value: 10},
+        {t: 3, value: 0},
+            ]);
+            idle.addHandler(____i9);	              
+        var ____i10 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                set_object_alpha(this__, value);
+            },
+            [
+        {t: 0, value: 100},
+        {t: 1, value: 60},
+        {t: 3, value: 100},
+            ]);
+            idle.addHandler(____i10);	              
+            idle.loop = true;
+            image_plane.idle = idle;
+            var move;
+move =
+new ms.state.Sequence(
+g_sequence_manager);
+        var ____i11 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.position.x = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: null},
+            ]);
+            move.addHandler(____i11);	              
+        var ____i12 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.position.y = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: null},
+            ]);
+            move.addHandler(____i12);	              
+        var ____i13 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.position.z = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: null},
+            ]);
+            move.addHandler(____i13);	              
+        move.events.addListener('start', function()
+        {
+        ____i11.keys[0].value = this__.position.x;
+        ____i11.keys[1].value = this__.destination.x;
+        ____i12.keys[0].value = this__.position.y;
+        ____i12.keys[1].value = this__.destination.y;
+        ____i13.keys[0].value = this__.position.z;
+        ____i13.keys[1].value = this__.destination.z;
+        });
+            image_plane.move = move;
+            var selected;
+selected =
+new ms.state.Sequence(
+g_sequence_manager);
+        var ____i14 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.x = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: 1.5},
+            ]);
+            selected.addHandler(____i14);	              
+        var ____i15 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.y = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: 1.5},
+            ]);
+            selected.addHandler(____i15);	              
+        var ____i16 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.z = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: 1.5},
+            ]);
+            selected.addHandler(____i16);	              
+        selected.events.addListener('start', function()
+        {
+        ____i14.keys[0].value = this__.scale.x;
+        ____i15.keys[0].value = this__.scale.y;
+        ____i16.keys[0].value = this__.scale.z;
+        });
+            image_plane.selected = selected;
+            var unselected;
+unselected =
+new ms.state.Sequence(
+g_sequence_manager);
+        var ____i17 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.x = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: 1},
+            ]);
+            unselected.addHandler(____i17);	              
+        var ____i18 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.y = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: 1},
+            ]);
+            unselected.addHandler(____i18);	              
+        var ____i19 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.z = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: 1},
+            ]);
+            unselected.addHandler(____i19);	              
+        unselected.events.addListener('start', function()
+        {
+        ____i17.keys[0].value = this__.scale.x;
+        ____i18.keys[0].value = this__.scale.y;
+        ____i19.keys[0].value = this__.scale.z;
+        });
+            image_plane.unselected = unselected;
+            image_plane.destination = null;
+	image_plane.set_image = function(value) 
+	{
+		image_plane.materials[0].map = new THREE.Texture(streamer.get_resource(value).data);
+	};
+	var ev_parent = this;
+	image_plane.events.addListener("mousein", function(x,y)
+	{    
+		unselected.stop();
+selected.start();
+	}
+	);
+		application.are_obj_events = true;
+	var ev_parent = this;
+	image_plane.events.addListener("mouseout", function()
+	{    
+		unselected.start();
+selected.stop();
+	}
+	);
+		application.are_obj_events = true;
+        return image_plane;
+        }
+        function create_image_group(
+     ) { 
+    var image_group;
+			image_group = new THREE.Object3D();
+			image_group.events = new ms.event.EventHolder();
+        var this__ = image_group;
+            var grow;
+grow =
+new ms.state.Sequence(
+g_sequence_manager);
+        var ____i20 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.x = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 1, value: 1.5},
+            ]);
+            grow.addHandler(____i20);	              
+        var ____i21 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.y = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 1, value: 1.5},
+            ]);
+            grow.addHandler(____i21);	              
+        var ____i22 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.z = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 1, value: 1.5},
+            ]);
+            grow.addHandler(____i22);	              
+        grow.events.addListener('start', function()
+        {
+        ____i20.keys[0].value = this__.scale.x;
+        ____i21.keys[0].value = this__.scale.y;
+        ____i22.keys[0].value = this__.scale.z;
+        });
+            image_group.grow = grow;
+            var shrink;
+shrink =
+new ms.state.Sequence(
+g_sequence_manager);
+        var ____i23 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.x = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 1, value: 1},
+            ]);
+            shrink.addHandler(____i23);	              
+        var ____i24 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.y = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 1, value: 1},
+            ]);
+            shrink.addHandler(____i24);	              
+        var ____i25 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.z = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 1, value: 1},
+            ]);
+            shrink.addHandler(____i25);	              
+        shrink.events.addListener('start', function()
+        {
+        ____i23.keys[0].value = this__.scale.x;
+        ____i24.keys[0].value = this__.scale.y;
+        ____i25.keys[0].value = this__.scale.z;
+        });
+            image_group.shrink = shrink;
+            image_group.planes_ = [img1, img2, img3, img4, img5, img6, img7, img8];
+        image_group.images = null;
+        image_group.images_set = function (value)
+        {
+            image_group.images = value;
+            for(var i = 0; i < value.length; i++)
+{
+this.planes_[i].set_image(value[i]);
+}
+        };
+        image_group.destination = null;
+        image_group.destination_set = function (value)
+        {
+            image_group.destination = value;
+            for(var i = 0; i < value.length; i++)
+{
+this.planes_[i].destination = value[i];
+this.planes_[i].move.start();
+}
+        };
+            var img1;
+	    img1_image_plane = 
+create_image_plane(100, 100, null, null)
+ ;
+	    img1 = new THREE.Mesh(img1_image_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(img1);
+		img1.events = new ms.event.EventHolder();
+				image_group.addChild(img1);
+            var img2;
+	    img2_image_plane = 
+create_image_plane(100, 100, null, null)
+ ;
+	    img2 = new THREE.Mesh(img2_image_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(img2);
+		img2.events = new ms.event.EventHolder();
+				image_group.addChild(img2);
+            var img3;
+	    img3_image_plane = 
+create_image_plane(100, 100, null, null)
+ ;
+	    img3 = new THREE.Mesh(img3_image_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(img3);
+		img3.events = new ms.event.EventHolder();
+				image_group.addChild(img3);
+            var img4;
+	    img4_image_plane = 
+create_image_plane(100, 100, null, null)
+ ;
+	    img4 = new THREE.Mesh(img4_image_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(img4);
+		img4.events = new ms.event.EventHolder();
+				image_group.addChild(img4);
+            var img5;
+	    img5_image_plane = 
+create_image_plane(100, 100, null, null)
+ ;
+	    img5 = new THREE.Mesh(img5_image_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(img5);
+		img5.events = new ms.event.EventHolder();
+				image_group.addChild(img5);
+            var img6;
+	    img6_image_plane = 
+create_image_plane(100, 100, null, null)
+ ;
+	    img6 = new THREE.Mesh(img6_image_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(img6);
+		img6.events = new ms.event.EventHolder();
+				image_group.addChild(img6);
+            var img7;
+	    img7_image_plane = 
+create_image_plane(100, 100, null, null)
+ ;
+	    img7 = new THREE.Mesh(img7_image_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(img7);
+		img7.events = new ms.event.EventHolder();
+				image_group.addChild(img7);
+            var img8;
+	    img8_image_plane = 
+create_image_plane(100, 100, null, null)
+ ;
+	    img8 = new THREE.Mesh(img8_image_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(img8);
+		img8.events = new ms.event.EventHolder();
+				image_group.addChild(img8);
+        return image_group;
+        }
+threejs_load_resources(function()
+{
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+		    facebook = 
+			new social_button(g_ui_root.manager, g_ui_root, "dd/facebook.png");
+        facebook = facebook;
+            facebook.set_x(880);
+            facebook.set_y(8);
+            facebook.set_width(24);
+            facebook.set_height(24);
+		    twitter = 
+			new social_button(g_ui_root.manager, g_ui_root, "dd/twitter.png");
+        twitter = twitter;
+            twitter.set_x(845);
+            twitter.set_y(8);
+            twitter.set_width(24);
+            twitter.set_height(24);
+		    email = 
+			new social_button(g_ui_root.manager, g_ui_root, "dd/photobucket.png");
+        email = email;
+            email.set_x(810);
+            email.set_y(8);
+            email.set_width(24);
+            email.set_height(24);
+			    scene = new THREE.Scene() ;
+		    camera_1 = 
+		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
+		active_camera = camera_1;
+            camera_1.position.x = 500;
+            camera_1.position.y = 500;
+            camera_1.position.z = 1000;
+	    plane_1_plane = 
+		new THREE.Plane(null, null, null, null) ;
+	    plane_1 = new THREE.Mesh(plane_1_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(plane_1);
+		plane_1.events = new ms.event.EventHolder();
+            plane_1.materials[0].map = new THREE.Texture(streamer.get_resource("dd/facebook.png").data);
+            plane_1.position.x = 100;
+            plane_1.position.y = 100;
+	var ev_parent = this;
+	application.events.addListener("init", function()
+	{    
+	}
+	);
+if(ui)
+{	
+	SoundUtils = new ms.ui.SoundUtils();		
+	g_ui.fill_background = false;	
+}
+var event_manager = new ms.event.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(ev.keyCode);                  
+};
+application.events.dispatch("init", []);
+document.body.appendChild( renderer.domElement );
+animate();
+});
+function animate() {
+	if(ui)
+		drawingCanvas.getContext('2d').clearRect(0,0,1000,800);
+	requestAnimationFrame( animate );
+	render();
+	if(ui)
+		ui.draw(drawingCanvas.getContext('2d'));
+	}
+</script>
+</body>
+</html>

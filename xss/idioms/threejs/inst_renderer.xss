@@ -11,36 +11,10 @@
 		else
 		{
 			var type = i.type;
-			array param_values = [];
-			if (type.constructor_params)
-			{
-				for(var param in type.constructor_params)
-				{			                
-					if (param.property)
-					{
-						var prop = i.get_property(param.property);
-						var tmp = object();
-						tmp.id = prop.id;
-						if(prop.value != null)
-						{									
-							if(prop.use_plain_value)
-								tmp.value = prop.value;
-							else
-								tmp.value = prop.render_value();						
-						}
-						else
-						{
-							tmp.value = null;
-						}
-						param_values += tmp;
-					}   			                
-				}
-			}
 			out(marker = "threejs_variables", marker_source = "entry") {var <xss:e v="i.id"/>;}
 			out()
 			{
-			<xss:e v="i.id"/> = 
-			<xss:e v="compiler.instantiate(i.type, runtime_args = param_values)"/> ;
+			    <xss:e v="i.id"/> = <xss:e v="compiler.instantiate(i.type)"/> ;
 			}
 		}
 		if(i.class_name == "transform"){

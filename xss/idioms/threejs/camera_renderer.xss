@@ -6,60 +6,24 @@
 	if(!type)
 		type = obj.type;
 	
-	if(!param_values)
-	{
-		//BEGIN CHAPUCERIA, ESTO  NO HABRIA QUE HACERLO SI FUNCIONARA COMO TE DECIA EN EL CORREO
-		param_values = [];
-		if (type.constructor_params)
-        {
-            for(var param in type.constructor_params)
-		    {			                
-				if (param.property)
-                {
-                    var prop = obj.get_property(param.property);
-					var tmp = object();
-					tmp.id = prop.id;
-					if(prop.value != null)
-					{									
-						if(prop.use_plain_value)
-							tmp.value = prop.value;
-						else
-							tmp.value = prop.render_value();						
-					}
-					else
-					{
-						tmp.value = null;
-					}
-					param_values += tmp;
-                }   			                
-		    }
-        }
-		//END CHAPUCERIA
-			//ESTO  NO HABRIA QUE HACERLO SI FUNCIONARA COMO TE DECIA EN EL CORREO
-			//AQUI BASTARIA CON DECIR param_values = obj.properties y a cagar no??? al final obj.properties es un array de objetos que tiene id y value
-			//ENTONCES EL SABRIA USANDO LOS CONSTRUCTOR_ARGS QUIEN LLEVA USE_PLAIN_VALUE
-	}
-	
 	out(marker = "threejs_variables", marker_source = "entry") {var <xss:e v="obj.id"/>;}
-	if(obj.class_name == "quake_camera")
+
+    if(obj.class_name == "quake_camera")
 		compiler.xss("param_in_obj.xss", obj);
 	else
 	{	
-	//AQUI METEMOS LA HISTORIA
 		out()
 		{
-		<xss:e v="obj.id"/> = 
-		<xss:e v="compiler.instantiate(type, runtime_args = param_values)"/> ;	
+		    <xss:e v="obj.id"/> = 
+		    <xss:e v="compiler.instantiate(obj)"/> ;	
 		}
-	//AQUI METEMOS LA HISTORIA
-	//SI SE CAMBIA AQUI runtime_args por param_values, acaso no deberia pinchar??? no lo hace
 	}
 	out()
 	{
 		active_camera = <xss:e v="obj.id"/>;
 	}
 	out(marker = "render_function", marker_source = "entry")
-		{
+	{
 		set_active_camera(<xss:e v="obj.id"/>);
-		}	
+	}	
 </xss:code>
