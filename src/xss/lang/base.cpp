@@ -1577,9 +1577,10 @@ str base_lang::render_ctor_args(XSSType type, XSSObject instance, DynamicArray r
       {
         str       value;
         XSSObject p = *it;
-        str       constant = p->get<str> ("constant", str());
-        str       prperty  = p->get<str> ("property", str());
-        bool      runtime  = p->get<bool>("runtime",  false);
+        str       constant        = p->get<str> ("constant", str());
+        str       prperty         = p->get<str> ("property", str());
+        bool      runtime         = p->get<bool>("runtime",  false);
+        bool      use_plain_value = p->get<bool>("use_plain_value", false);
         if (!constant.empty())
           {
             value = constant;
@@ -1618,7 +1619,11 @@ str base_lang::render_ctor_args(XSSType type, XSSObject instance, DynamicArray r
                     xss_throw(error);
                   }
 
-                value = prop->render_value();
+                if (use_plain_value)
+                  value = variant_cast<str>(prop->value_, str());
+
+                if (value.empty())
+                  value = prop->render_value();
               }
             else
               {

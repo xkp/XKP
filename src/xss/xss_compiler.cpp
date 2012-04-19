@@ -1450,7 +1450,7 @@ void process_instantiate_params(const param_list params, int idx, instantiate_pa
         str     pname  = params.get_name(i);
         variant pvalue = params.get(i);
 
-        if (pname == "instance")
+        if (pname == "object")
           {
             result.instance = variant_cast<XSSObject>(pvalue, XSSObject());
             continue;
@@ -1463,17 +1463,18 @@ void process_instantiate_params(const param_list params, int idx, instantiate_pa
         else if (pname == "param_values")
           {
             DynamicArray pv = variant_cast<DynamicArray>(pvalue, DynamicArray());
-            assert(pv);
-
-		        std::vector<variant>::iterator it = pv->ref_begin();
-		        std::vector<variant>::iterator nd = pv->ref_end();
-
-            for(; it != nd; it++)
+            if (pv)
               {
-                XSSObject pobj = variant_cast<XSSObject>(*it, XSSObject()); assert(pobj); //td: error
-                str pid = pobj->id();
-                str pval = pobj->get<str>("value", str());
-                result.values.add(pid, pval);
+		            std::vector<variant>::iterator it = pv->ref_begin();
+		            std::vector<variant>::iterator nd = pv->ref_end();
+
+                for(; it != nd; it++)
+                  {
+                    XSSObject pobj = variant_cast<XSSObject>(*it, XSSObject()); assert(pobj); //td: error
+                    str pid = pobj->id();
+                    str pval = pobj->get<str>("value", str());
+                    result.values.add(pid, pval);
+                  }
               }
             continue;
           }

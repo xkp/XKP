@@ -929,9 +929,9 @@ ms.ui.Label = Class.create(ms.ui.Component,
 
 ms.ui.Button = Class.create(ms.ui.Image,
 {
-	initialize: function($super, normal, over, manager, parent)
+	initialize: function($super,manager, parent, normal, over)
 	{
-		$super(normal, manager, parent);
+		$super(manager, parent, normal);
 		if(!streamer.get_resource(normal))
 			normal = "invalid_res";
 		if(!streamer.get_resource(over))

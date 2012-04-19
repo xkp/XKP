@@ -27,22 +27,22 @@
 		
 		<class id="material">
 			<constructor_params>
-				<parameter property="color"/> 
-				<parameter property="wireframe"/>
-				<parameter property="wireframe_linewidth"/>
-				<parameter property="src"/>	
-				<parameter property="texture_object"/>
-				<parameter property="shading"/>
-				<parameter property="vertex_colors"/>
-				<parameter property="env_map"/>
-				<parameter property="combine"/>
-				<parameter property="reflectivity"/>
-				<parameter property="shininess"/>
-				<parameter property="specular"/>
-				<parameter property="transparent"/>
-				<parameter property="refraction_ratio"/>
-				<parameter property="ambient"/>
-				<parameter property="blending"/>
+				<parameter property="color" runtime="true"/> 
+				<parameter property="wireframe" runtime="true"/>
+				<parameter property="wireframe_linewidth" runtime="true"/>
+				<parameter property="src" runtime="true"/>	
+				<parameter property="texture_object" runtime="true"/>
+				<parameter property="shading" runtime="true"/>
+				<parameter property="vertex_colors" runtime="true"/>
+				<parameter property="env_map" runtime="true"/>
+				<parameter property="combine" runtime="true"/>
+				<parameter property="reflectivity" runtime="true"/>
+				<parameter property="shininess" runtime="true"/>
+				<parameter property="specular" runtime="true"/>
+				<parameter property="transparent" runtime="true"/>
+				<parameter property="refraction_ratio" runtime="true"/>
+				<parameter property="ambient" runtime="true"/>
+				<parameter property="blending" runtime="true"/>
 			</constructor_params>
 			<property id="color" type="string" use_plain_value="true" dont_init="true"/> 			
 			<property id="wireframe" type="string" dont_init="true"/>
@@ -201,10 +201,10 @@
 		
 		<class id="plane" super="object3d" output_id="THREE.Plane" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
-				<parameter property="width" runtime="true"/>
-				<parameter property="height" runtime="true"/>
-				<parameter property="x_segments" runtime="true"/>
-				<parameter property="y_segments" runtime="true"/>
+				<parameter id="width" property="width" runtime="true"/>
+				<parameter id="height" property="height" runtime="true"/>
+				<parameter id="x_segments" property="x_segments" runtime="true" default_value="1"/>
+				<parameter id="y_segments" property="y_segments" runtime="true" default_value="1"/>
 			</constructor_params>
 			<property id="width" type="string" dont_init="true"/>
 			<property id="height" type="string" dont_init="true"/>
@@ -214,15 +214,15 @@
 	
 		<class id="cube" super="object3d" output_id="THREE.Cube" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
-				<parameter property="width" runtime="true"/>
-				<parameter property="height" runtime="true"/>
-				<parameter property="depth" runtime="true"/>      
-				<parameter property="x_segments" runtime="true"/>
-				<parameter property="y_segments" runtime="true"/>
-				<parameter property="z_segments" runtime="true"/>
-				<parameter property="material_array" runtime="true"/>	
-				<parameter property="flipped" runtime="true"/>
-				<parameter property="sides" runtime="true"/>				
+				<parameter id="width" property="width" runtime="true"/>
+				<parameter id="height" property="height" runtime="true"/>
+				<parameter id="depth" property="depth" runtime="true"/>      
+				<parameter id="x_segments" property="x_segments" runtime="true"/>
+				<parameter id="y_segments" property="y_segments" runtime="true"/>
+				<parameter id="z_segments" property="z_segments" runtime="true"/>
+				<parameter id="material_array" property="material_array" runtime="true" use_plain_value="true"/>	
+				<parameter id="flipped" property="flipped" runtime="true"/>
+				<parameter id="sides" property="sides" runtime="true"/>				
 			</constructor_params>
 			<property id="width" type="string" dont_init="true"/> 
 			<property id="height" type="string" dont_init="true"/>

@@ -31,6 +31,7 @@ var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var canvas_position = {x:0, y:0};
+var streamer = new ms.streamer.Streamer();
 var app_width = 600;
 var app_height = 400;
 var application = {};
@@ -148,7 +149,7 @@ var img_plane;var scene;var camera_1;
             this.texture = value;
         };
             var img_plane;
-	    var img_plane_plane = 
+	    img_plane_plane = 
 new THREE.Plane(
 128,164);
 	    img_plane = new THREE.Mesh(img_plane_plane, new THREE.MeshBasicMaterial());
@@ -159,12 +160,9 @@ new THREE.Plane(
         }
 threejs_load_resources(function()
 {
-scene = 
-new THREE.Scene(
-);
-camera_1 = 
-new THREE.Camera(
-45,1.5,1,10000);
+			    scene = new THREE.Scene() ;
+		    camera_1 = 
+		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
 		active_camera = camera_1;
             camera_1.position.z = 1000;
             application.img_array = ["images/test1.png", "images/test2.png", "images/test3.png", "images/test4.png", "images/test5.png"];

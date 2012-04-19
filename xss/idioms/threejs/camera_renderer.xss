@@ -1,6 +1,5 @@
 <xss:parameter id="obj"/>
 <xss:parameter id="type"/>
-<xss:parameter id="param_values"/>	
 
 <xss:code>
 	if(!type)

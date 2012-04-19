@@ -179,14 +179,14 @@ my_plane.scale.y = 1;
 		application.are_obj_events = true;
             var img_plane;
 	    img_plane_plane = 
-		new THREE.Plane(null, null, null, null) ;
+		new THREE.Plane(128, 164, null, null) ;
 	    img_plane = new THREE.Mesh(img_plane_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(img_plane);
 		img_plane.events = new ms.event.EventHolder();
 				my_plane.addChild(img_plane);
             var img_reflect;
 	    img_reflect_plane = 
-		new THREE.Plane(null, null, null, null) ;
+		new THREE.Plane(128, 164, null, null) ;
 	    img_reflect = new THREE.Mesh(img_reflect_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(img_reflect);
 		img_reflect.events = new ms.event.EventHolder();
