@@ -1,8 +1,10 @@
 <xss:parameter id="i"/>
 
-<xss:code>		
+<xss:code>				
 		if(i.renderer)
+		{			
 			compiler.xss(i.renderer, i);
+		}
 		else{		
 			out(marker = "threejs_variables", marker_source = "entry") {var <xss:e v="i.id"/>;}
 			out(){<xss:e v="i.id"/> = }

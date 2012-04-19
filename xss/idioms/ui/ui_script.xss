@@ -1,0 +1,94 @@
+var drawingCanvas;		
+var g_ui;
+var g_elapsed = -1;
+var g_delta = 0.0;
+var g_canvas;
+var g_ui_root;
+var application = {};
+
+application.events = new ms.event.EventHolder();
+var SoundUtils = new ms.ui.SoundUtils();
+		
+<xss:code>
+    compiler.inject("render_initialization");
+	compiler.inject("render_resources");
+</xss:code>
+var canvas_position = {x:0, y:0};
+function start(resolution)  
+{  
+	function updater()  
+	{
+		canvas_position = getElementPosition(drawingCanvas);
+		var now   = new Date().getTime();
+        if (g_elapsed < 0)
+            g_delta = 0; //first update
+        else
+		    g_delta  = now - g_elapsed;  
+		
+        g_elapsed = now; 
+              
+        <xss:code>
+            compiler.inject("render_update");
+        </xss:code>
+		
+		application.events.dispatch("updates", []);	
+
+		var context = g_canvas.getContext('2d');
+		g_ui.update(g_delta, context);
+
+        window.setTimeout(updater, resolution);  
+	}    
+	window.setTimeout(updater, resolution);  
+}  
+
+<xss:marker id="variables"/>
+
+<xss:code>
+compiler.inject("render_types");
+compiler.xss("../common-js/instance.xss", application);
+</xss:code>
+
+window.onload = function() 
+{
+	drawingCanvas = document.getElementById("<xss:e value="application.canvasElement"/>");
+    g_canvas = drawingCanvas;
+	
+	if (drawingCanvas && drawingCanvas.getContext)
+	{
+		var client =
+		{
+			width: <xss:e value="application.width"/>,
+			height: <xss:e value="application.height"/>,
+			canvas: drawingCanvas
+		};
+            							
+		var ui = new ms.ui.Manager(client, streamer);
+		
+		g_ui = ui;
+        g_ui_root = ui.root;
+     	ui.load_resources(function()
+		{
+            <xss:code>			
+			compiler.inject("render_instances");            
+            </xss:code>
+			
+			document.onkeydown = function(ev)
+			{
+				ui.keydown(ev.keyCode);                  
+			};
+			document.onkeyup = function(ev)
+			{
+				ui.keyup(ev.keyCode);                  
+			};
+			document.onkeypress = function(ev)
+			{
+				ui.keypress(ev.keyCode);                  
+			};
+
+            application.events.dispatch("init", []);
+    
+            start();
+			ui.draw(drawingCanvas.getContext('2d'));
+		});
+	}
+}

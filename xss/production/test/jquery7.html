@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"
+        />
+        <title>TITLE</title>
+        <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+        <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
+        <script type="text/javascript" src="../js/jquery-idiom.js"></script>
+        <link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css"></link>
+        <script type="text/javascript" src="../js/utils.js"></script>
+        <script type="text/javascript" src="../js/prototype.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                var __div1 = $("#__div1");
+                var __div2 = $("#__div2");
+                var lbl1 = $("#lbl1");
+                var edit1 = $("#edit1");
+                var btn1 = $("#btn1").button();
+                var app = $("#app");
+                var application = $("#application");
+            });
+        </script>
+        <style>
+            #__div1 {
+                position : relative
+            }
+            #__div2 {
+                left : 0px;
+                top : 0px;
+                width : 200px;
+                position : absolute
+            }
+            #edit1 {
+                width : 252px
+            }
+            #app {
+                left : 300px;
+                top : 0px;
+                width : 600px;
+                height : 400px;
+                position : absolute
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div id='application'>
+            <div id="__div1">
+                <table border="0"></table>
+                <div id="__div2">
+                    <label id="lbl1">Enter Id</label>
+                    <input id="edit1" type="text" name="edit1"></input>
+                    <input id="btn1" type="button" name="btn1" value="Update"></input>
+                </div>
+                <canvas id="app"></canvas>
+            </div>
+        </div>
+    </body>
+
+</html>

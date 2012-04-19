@@ -1,0 +1,5 @@
+<application name="XSS14" title="Test Project Script" src="xss14.app.xs">
+    <t_xss14>
+        <t_xss14_1/>
+    </t_xss14>
+</application>

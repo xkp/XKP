@@ -121,6 +121,7 @@ namespace xkp
         bool               has_type(const str& type);
         void               register_instance(XSSObject obj);
         bool               one_of_us(XSSObject obj);
+        void               set_definition(XSSObject def);
       private:
         XSSContext   ctx_;
         size_t       ev_pprocess_;
@@ -133,9 +134,10 @@ namespace xkp
         type_list types_;
       public:
         //glue visibility
-        DynamicArray instances_;
-        DynamicArray utypes_;
-        DynamicArray all_types();
+        DynamicArray  instances_;
+        DynamicArray  utypes_;
+        XSSObjectList dependencies_;
+        DynamicArray  all_types();
     };
 
   //output handling
@@ -176,45 +178,51 @@ namespace xkp
         xss_compiler();
         xss_compiler(ICompilerOutput* out);
       public:
-        void        build(fs::path xml);
-				XSSRenderer compile_xss_file(const str& src_file, XSSContext ctx, const str& html_template = str());
-				XSSRenderer compile_xss_file(fs::path src_file, XSSContext ctx, const str& html_template = str());
-				XSSRenderer compile_xss(const str& src, XSSContext ctx, fs::path path = fs::path(), const str& html_template = str());
-			  void        output_file(const str& fname, const str& contents);
-			  void        output_file(fs::path fpath, const str& contents);
-        str         output_path();
-        str         project_path();
-        str         genid(const str& what);
-        void        xss(const param_list params);
-        void        inject(const param_list params);
-        void        log(const param_list params);
-        void        error(const param_list params);
-        bool        parse_expression(variant v);
-        variant     compile_expression(const str& expr);
-        str         render_expression(const str& expr, XSSObject this_);
-        str         replace_identifier(const str& s, const str& src, const str& dst);
-        variant     evaluate_property(XSSProperty prop);
-        str         renderer_file(const str& file);
-        str         idiom_path(XSSObject obj, const str& file);
-        fs::path    type_path(const str& type_name);
-        str         full_path(const str& file);
-        fs::path    compiling();
-        void        copy_file(const str& src, const str& dst);
-        void        out(variant what);
-        XSSType     get_type(const str& type);
-        XSSObject   get_instance(const str& instance);
-        XSSType     type_of(variant v);
-        str         property_set(XSSProperty prop, const str& path, const str& value);
-        str         property_get(XSSProperty prop, const str& path);
-        XSSObject   analyze_expression(const param_list params);
-        XSSProperty add_object_property(const param_list params);
-        bool        is_type(variant v);
-        str         instantiate(const param_list params);
-        str         render_ctor_args(const param_list params);
-        str         file(fs::path path);
-        bool        application_object(XSSObject obj);
-        XSSModule   idiom_by_class(const str& class_name);
-        XSSModule   idiom_by_id(const str& id);
+        void         build(fs::path xml, param_list& args);
+				XSSRenderer  compile_xss_file(const str& src_file, XSSContext ctx, const str& html_template = str());
+				XSSRenderer  compile_xss_file(fs::path src_file, XSSContext ctx, const str& html_template = str());
+				XSSRenderer  compile_xss(const str& src, XSSContext ctx, fs::path path = fs::path(), const str& html_template = str());
+			  void         output_file(const str& fname, const str& contents);
+			  void         output_file(fs::path fpath, const str& contents);
+        str          output_path();
+        str          project_path();
+        str          genid(const str& what);
+        void         xss(const param_list params);
+        void         inject(const param_list params);
+        void         log(const param_list params);
+        void         error(const param_list params);
+        bool         parse_expression(variant v);
+        variant      compile_expression(const str& expr);
+        str          render_expression(const str& expr, XSSObject this_);
+        str          replace_identifier(const str& s, const str& src, const str& dst);
+        variant      evaluate_property(XSSProperty prop);
+        str          renderer_file(const str& file);
+        str          idiom_path(XSSObject obj, const str& file);
+        fs::path     type_path(const str& type_name);
+        str          full_path(const str& file);
+        fs::path     compiling();
+        void         copy_file(const str& src, const str& dst);
+        void         out(variant what);
+        XSSType      get_type(const str& type);
+        XSSObject    get_instance(const str& instance);
+        XSSType      type_of(variant v);
+        str          property_set(XSSProperty prop, const str& path, const str& value);
+        str          property_get(XSSProperty prop, const str& path);
+        XSSObject    analyze_expression(const param_list params);
+        XSSProperty  add_object_property(const param_list params);
+        bool         is_type(variant v);
+        str          instantiate(const param_list params);
+        str          render_ctor_args(const param_list params);
+        str          file(fs::path path);
+        bool         application_object(XSSObject obj);
+        XSSModule    idiom_by_class(const str& class_name);
+        XSSModule    idiom_by_id(const str& id);
+        str          render_code(const str& code, param_list_decl& args, XSSContext ctx);
+        void         add_dependencies(XSSObjectList& dependencies);
+        DynamicArray get_dependencies(); 
+        str          build_project(const param_list params);
+        str          get_result();
+        void         render_app_types(const str& renderer);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -234,12 +242,15 @@ namespace xkp
         fs::path                            output_path_;
         fs::path                            app_path_;
         fs::path                            compiling_;
+        str                                 result_;
         XSSRenderer                         entry_;
         bool                                use_event_instance_;
         XSSApplicationRenderer              current_app_;
+        param_list                          params_;
+        std::vector<XSSType>                app_types_;
 
-        XSSObject   read_project(fs::path xml_file);
-        void        read_application_types(std::vector<XSSObject> & applications);
+        XSSObject   read_project(fs::path xml_file, param_list& args);
+        void        read_application_types(std::vector<XSSObject> & applications, param_list& args);
         XSSModule   read_module(const str& src, XSSApplicationRenderer app, XSSObject module);
         void        read_types(XSSObject module_data, XSSApplicationRenderer app, XSSModule module);
         void        read_instances(XSSObject module_data, XSSApplicationRenderer app, XSSModule module);
@@ -255,6 +266,7 @@ namespace xkp
         void        copy_files(XSSObject project_data);
         void        xss_args(const param_list params, param_list& result, fs::path& output_file, str& marker, MARKER_SOURCE& marker_source, XSSContext& ctx, str& html_template);
         void        preprocess_type(XSSType clazz, XSSObject def_class, const str& super, XSSContext ctx, XSSApplicationRenderer app);
+        void        init_project_context(code_context& cctx);
       private:
         //id gen
         typedef std::map<str, int> genid_list;
@@ -267,6 +279,15 @@ namespace xkp
         str   load_file(fs::path file);
         void  read_object_array(fs::path file, XSSContext ctx, std::vector<XSSObject>& classes_data);
 		    void  compile_xs_file(fs::path file, xs_container& result, XSSContext ctx);
+      private:
+        //dependencies
+        typedef std::map<str, int>  dependency_map;
+        typedef std::pair<str, int> dependency_pair;
+
+        dependency_map dependencies_;
+        XSSObjectList  deps_;
+
+        void collect_dependencies(XSSType type, XSSType context = XSSType());
 		};
 
   class xss_string
@@ -305,30 +326,33 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         dynamic_function_<XSSProperty>("add_object_property", &xss_compiler::add_object_property);
         dynamic_function_<str>        ("instantiate",         &xss_compiler::instantiate);
         dynamic_function_<str>        ("render_ctor_args",    &xss_compiler::render_ctor_args);
+        dynamic_function_<str>        ("build",               &xss_compiler::build_project);
 
         readonly_property<XSSObject>("options", &xss_compiler::options_);
 
-        method_<str,        1>("genid",	              &xss_compiler::genid);
-        method_<bool,       1>("parse_expression",	  &xss_compiler::parse_expression);
-        method_<str,        2>("render_expression",   &xss_compiler::render_expression);
-        method_<variant,    1>("compile_expression",  &xss_compiler::compile_expression);
-        method_<str,	      3>("replace_identifier",  &xss_compiler::replace_identifier);
-        method_<variant,    1>("evaluate_property",   &xss_compiler::evaluate_property);
-        method_<str,        1>("renderer_file",	      &xss_compiler::renderer_file);
-        method_<str,        2>("idiom_path",	        &xss_compiler::idiom_path);
-        method_<str,        1>("full_path",	          &xss_compiler::full_path);
-        method_<str,        0>("output_path",         &xss_compiler::output_path);
-        method_<str,        0>("project_path",        &xss_compiler::project_path);
-        method_<void,       2>("copy_file",           &xss_compiler::copy_file);
-        method_<void,       1>("out",                 &xss_compiler::out);
-        method_<XSSType,    1>("get_type",            &xss_compiler::get_type);
-        method_<XSSObject,  1>("get_instance",        &xss_compiler::get_instance);
-        method_<XSSType,    1>("type_of",             &xss_compiler::type_of);
-        method_<str,        3>("property_set",        &xss_compiler::property_set);
-        method_<str,        2>("property_get",        &xss_compiler::property_get);
-        method_<bool,       1>("is_type",             &xss_compiler::is_type);
-        method_<bool,       1>("application_object",  &xss_compiler::application_object);
-        method_<variant,    1>("get_idiom",           &xss_compiler::idiom_by_id);
+        method_<str,          1>("genid",	             &xss_compiler::genid);
+        method_<bool,         1>("parse_expression",	 &xss_compiler::parse_expression);
+        method_<str,          2>("render_expression",  &xss_compiler::render_expression);
+        method_<variant,      1>("compile_expression", &xss_compiler::compile_expression);
+        method_<str,	        3>("replace_identifier", &xss_compiler::replace_identifier);
+        method_<variant,      1>("evaluate_property",  &xss_compiler::evaluate_property);
+        method_<str,          1>("renderer_file",	     &xss_compiler::renderer_file);
+        method_<str,          2>("idiom_path",	       &xss_compiler::idiom_path);
+        method_<str,          1>("full_path",	         &xss_compiler::full_path);
+        method_<str,          0>("output_path",        &xss_compiler::output_path);
+        method_<str,          0>("project_path",       &xss_compiler::project_path);
+        method_<void,         2>("copy_file",          &xss_compiler::copy_file);
+        method_<void,         1>("out",                &xss_compiler::out);
+        method_<XSSType,      1>("get_type",           &xss_compiler::get_type);
+        method_<XSSObject,    1>("get_instance",       &xss_compiler::get_instance);
+        method_<XSSType,      1>("type_of",            &xss_compiler::type_of);
+        method_<str,          3>("property_set",       &xss_compiler::property_set);
+        method_<str,          2>("property_get",       &xss_compiler::property_get);
+        method_<bool,         1>("is_type",            &xss_compiler::is_type);
+        method_<bool,         1>("application_object", &xss_compiler::application_object);
+        method_<variant,      1>("get_idiom",          &xss_compiler::idiom_by_id);
+        method_<DynamicArray, 0>("get_dependencies",   &xss_compiler::get_dependencies);
+        method_<void,         1>("render_app_types",   &xss_compiler::render_app_types);
       }
   };
 

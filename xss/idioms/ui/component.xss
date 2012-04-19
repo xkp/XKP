@@ -4,6 +4,7 @@
 
 <xss:code>
     string cmp_id = cmp.output_id;
+	array params = [];
     
     if (path)
         cmp_id = path + "." + cmp_id;
@@ -14,40 +15,60 @@
         out(marker = "variables", marker_source = "entry") {var <xss:e v="cmp.output_id"/>;}
         
     if (!is_class)
-    {
-        string parent_id = cmp.parent.output_id;
-        if (parent_id == "application")
-            parent_id = "g_ui_root";
-            
-        if (path)
-            parent_id = path;   
-                
+    {        		
+        string parent_id = "g_ui_root";
+        if (cmp.parent.class_name != "application")
+            parent_id = cmp.parent.output_id;
+
+        var manager_param   = object();
+        manager_param.id    = "manager";
+        manager_param.value = parent_id + ".manager";
+        
+        var parent_param    = object();
+        parent_param.id    = "parent";
+        parent_param.value = parent_id;
+
+        params += manager_param;
+        params += parent_param;
+		
+		var type = cmp.type;   
+        /* 
+        *** TD
+         
+				
+		if (type.constructor_params)
+        {
+            for(var param in type.constructor_params)
+		    {			                
+				if (param.property)
+                {
+                    var prop = cmp.get_property(param.property);
+					if(prop.value != null)
+					{						
+						var tmp = object();
+						tmp.id = prop.id;
+						if(prop.use_plain_value)
+							tmp.value = prop.value;
+						else
+							tmp.value = prop.render_value();
+						params += tmp;
+					}
+                }   			                
+		    }
+        }
+		**** TD 
+        */
+		
         out()
 	    {
-		    <xss:e value = "cmp_id"/> = new <xss:e value = "cmp.type.output_id"/>( <xss:e value = "parent_id"/>.manager, <xss:e value = "parent_id"/>
+		    <xss:e value = "cmp_id"/> = 
+			<xss:e v="compiler.instantiate(type, param_values = params)"/>;
 	    }
-	    var type = cmp.type;
-        if (type.constructor_params)
-        {
-            for(int i = 0; i < type.constructor_params.size; i++)
-		    {				
-                var param = type.constructor_params[i];
-                if (param.property)
-                {
-                    var prop = cmp.get_property(param.property);					
-                    if(prop != null)
-                        out() {, <xss:e v="prop.render_value()"/>}			
-                    else
-                        out() {, null}	    
-                }    
-		    }
-            
-            out() {);}
-        }	    
-		if(cmp.type.output_id == "ms.ui.Component" || cmp.type.output_id == "ms.ui.ClipArea"){
+        
+        //TODO: Porque no marcar las clases con algun valor (mouse_thru, quiza?) 
+        if(cmp.type.output_id == "ms.ui.Component" || cmp.type.output_id == "ms.ui.ClipArea"){
 			out() {<xss:e v="cmp_id"/>.mouse_thru = true;}			
 		}
         compiler.xss("../common-js/instance.xss", cmp, path = path, var_value = cmp_id);
     }
-
 </xss:code>

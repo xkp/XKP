@@ -288,5 +288,7 @@
             <event id="enable" render_as="script"/>
             <event id="disable" render_as="script"/>
         </class>
+        
+        <class id="canvas" super="component" tag="canvas" js_renderer="canvas.js.xss"/>
     </types>
 </module>

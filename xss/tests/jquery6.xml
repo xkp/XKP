@@ -1,0 +1,40 @@
+<application name="jq6" title="JQuitchen Sink" src="jquery6.xs">
+    <div id="main" width="800" height="400">
+        <accordion x="0" y="0" id="acc1" width="300" height="400" fillSpace="true">
+            <div caption="Plain HTML">
+                <html>
+                    <p>
+                        We allow you to specify your own html
+                        whenever you feel convinient.
+                    </p>
+                </html>
+            </div>
+            <div caption="Remote HTML">
+                <html>
+                    <p>
+                        When using tabs you can simply scpecify an "href"
+                        attribute and jQuery will do the rest.
+                    </p>
+                </html>
+            </div>
+            <div caption="Common Controls">
+                <html>
+                    <p>
+                        The good old buttons, checkboxes and
+                        labels we're used to. Clickables.
+                    </p>
+                </html>
+            </div>
+            <div caption="JQuery UI">
+                <html>
+                    <p>
+                        Advanced components, courtesy of 
+                    </p>
+                    <a href="www.jqueryui.com"> jQuery UI </a>
+                </html>
+            </div>
+        </accordion>
+        
+        <canvas id="image_container" x="300" y="0" width="600" height="400"/>
+    </div>
+</application>

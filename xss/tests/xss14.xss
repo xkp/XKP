@@ -1,0 +1,13 @@
+<xss:code>
+    compiler.log("<Dependencies>");
+    var dependencies = compiler.get_dependencies();
+    for(var dep in dependencies)
+    {
+        compiler.log(dep.href);
+    }
+    compiler.log("</Dependencies>");
+
+    compiler.log("<User Classes>");
+    compiler.render_app_types("../idioms/common-js/resig-class.xss");
+    compiler.log("</User Classes>");
+</xss:code>

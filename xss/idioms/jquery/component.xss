@@ -9,6 +9,7 @@
             return;
         }
     
+        compiler.log("Rendering: " + component.output_id);
 		string class_name = "";
 		if (component.type)
 			class_name = component.type.tag;

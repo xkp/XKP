@@ -46,6 +46,7 @@ struct js_args_renderer : public base_args_renderer
 
 struct js_lang : public base_lang
   {
+    virtual void    init_application_context(XSSContext ctx);
     virtual variant compile_code(code& cde, param_list_decl& params, XSSContext ctx);
     virtual variant compile_expression(expression expr, XSSContext ctx);
 		virtual variant compile_args(param_list_decl& params, XSSContext ctx);

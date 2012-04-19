@@ -1,0 +1,6 @@
+<xss:code>
+    if (project.embedded)
+        compiler.xss("ui_embedded.xss");
+    else
+        compiler.xss("ui_standalone.xss");
+</xss:code>

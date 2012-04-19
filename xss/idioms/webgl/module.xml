@@ -79,8 +79,8 @@
             <property id="color" type="string" use_plain_value="true">
 				<set text="materials[0].color.setHex({value})"/>
             </property>
-			<property id="texture" type="string">
-				<set text="materials[0].map = new THREE.Texture(streamer.get_resource({value}).data)"/>
+			<property id="texture" type="string">				
+				<set text="materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource({value}).asset)"/>
             </property>		
 			<property id="material" type="string" use_plain_value="true" dont_init="true">
 				<set text="materials[0] = {value}"/>
@@ -98,7 +98,7 @@
 	
 		<class id="transform" output_id="THREE.Object3D" heritable="true">
 			<property id="texture" type="string" use_plain_value="true">
-				<set text="set_transform_image({path}, {value})" global = "true"/>
+				<set text="set_webgl_transform_image({path}, {value})" global = "true"/>
             </property>
 			<property id="material" type="string" use_plain_value="true">
 				<set text="set_transform_material({path}, {value})" global = "true"/>

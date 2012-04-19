@@ -157,17 +157,18 @@ class xss_type : public xss_object
       //xss_object
       virtual bool resolve(const str& name, schema_item& result);
     public:
-      void         set_super(XSSType super);
-      void         set_definition(XSSObject def);
-      schema*      native_type();
-      XSSType      array_type();
-      void         inherit();
-      XSSType      get_super();
-      DynamicArray ctor_args();
-      void         register_instance(XSSObject obj);
-      void         register_foreign_instance(XSSObject obj);
-      XSSContext   context();
-      void         set_context(XSSContext ctx);
+      void          set_super(XSSType super);
+      void          set_definition(XSSObject def);
+      schema*       native_type();
+      XSSType       array_type();
+      void          inherit();
+      XSSType       get_super();
+      DynamicArray  ctor_args();
+      void          register_instance(XSSObject obj);
+      void          register_foreign_instance(XSSObject obj);
+      XSSContext    context();
+      void          set_context(XSSContext ctx);
+      XSSObjectList get_dependencies();
     public:
       void as_enum();
       void as_array(XSSType type);
@@ -194,12 +195,13 @@ class xss_type : public xss_object
       bool        is_unresolved_;
       XSSContext  ctx_;
     public:
-      XSSType      super_;
-      Language     lang_;
-      DynamicArray ctor_args_; //td: constructors
-      DynamicArray all_instances_;
-      DynamicArray local_instances_;
-      DynamicArray foreign_instances_;
+      XSSType       super_;
+      Language      lang_;
+      DynamicArray  ctor_args_; //td: constructors
+      DynamicArray  all_instances_;
+      DynamicArray  local_instances_;
+      DynamicArray  foreign_instances_;
+      XSSObjectList dependencies_;
   };
 
 class xss_dsl : public xss_object

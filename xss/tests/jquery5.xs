@@ -19,6 +19,14 @@ on btn1.click()
     simple_dialog.show();
 }
 
+on btn2.click()
+{
+    native()
+    {
+        alert("Hello, World");
+    }
+}
+
 on sld1.change()
 {
     pb1.value = sld1.value;

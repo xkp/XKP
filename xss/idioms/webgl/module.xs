@@ -32,12 +32,12 @@ on render_js_includes()
 }
 
 on render_instances()
-{	
+{		
 	for(int i = 0; i < instances.size; i++)
-    {		
-		var inst = instances[i];
+    {			
+		var inst = instances[i];		
 		if(inst.wait_for_package)
-		{			
+		{						
 			out()
 			{				
 				<xss:e v="inst.wait_for_package"/>.events.addListener("loaded", function()
@@ -56,8 +56,8 @@ on render_instances()
 			out(){<xss:close_brace/>);}
 		}
 		else
-		{
-			compiler.xss("inst_renderer.xss", inst);
+		{			
+			compiler.xss("inst_renderer.xss", inst);			
 			if(!inst.dont_render)
 				compiler.xss("../common-js/instance.xss", inst);
 		}

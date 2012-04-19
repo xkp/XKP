@@ -3,6 +3,7 @@
 #include <xss/language.h>
 #include <xss/xss_compiler.h>
 #include <xss/xss_error.h>
+#include <xss/dsl/html5_asynch.h>
 
 using namespace xkp;
 
@@ -140,6 +141,11 @@ str js_args_renderer::render_expression(expression& expr, XSSContext ctx)
   }
 
 //js_lang
+void js_lang::init_application_context(XSSContext ctx)
+  {
+    ctx->register_xss_dsl("asynch", XSSDSL(new dsl_h5_asynch));
+  }
+
 variant js_lang::compile_code(code& cde, param_list_decl& params, XSSContext ctx)
   {
     return reference<js_code_renderer>(new js_code_renderer(cde, params, ctx));

@@ -1,7 +1,7 @@
 property comp_mat_array = [];
 
 on pre_process(obj)
-{		
+{
 	if(obj.class_name == "composite_material"){
 			comp_mat_array += obj.id;			
 	}

@@ -95,6 +95,20 @@ ByteCode xs_utils::compile_code(const str& src, code_context& ctx, fs::path file
     return result;
   }
   
+void xs_utils::compile_code(const str& src, code_context& ctx, fs::path file, code& result)
+  {
+    code_linker linker(ctx);
+
+    //import dsls
+    std::vector<str> dl;
+    prepare_dsl(ctx, &linker, dl);
+
+    //do the deed
+    xs_compiler compiler(dl);
+    
+    compiler.compile_code(src, result);
+  }
+
 variant xs_utils::execute_xs(const str& src, code_context& ctx, fs::path file)
   {
     type_registry types;

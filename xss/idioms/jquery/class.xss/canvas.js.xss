@@ -1,0 +1,10 @@
+<xss:parameter id="it"/>
+<xss:code>
+    if (it.application)
+    {
+        out()
+        {
+            <xss:e>compiler.build(it.application, embedded = true, canvas_id = it.output_id, host = "application")</xss:e>
+        }
+    }    
+</xss:code>
