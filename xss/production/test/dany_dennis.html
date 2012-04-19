@@ -33,6 +33,7 @@ var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var canvas_position = {x:0, y:0};
+var streamer = new ms.streamer.Streamer();
 var app_width = 1024;
 var app_height = 768;
 var init_anim;var cam_out;var cam_in;var p1_in;var p2_in;var p3_in;var p4_in;var p5_in;var pic_out;var idle_anim_1;var idle_anim_2;var idle_anim_3;var idle_anim_4;var idle_anim_5;var idle_anim_seq;var close_fade_in;var close;var box_cont;var box_border;var banner;var camerawl;var lens;var line_top;var pict1;var pict2;var pict3;var pict4;var pict5;
@@ -1700,8 +1701,8 @@ g_sequence_manager);
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    close = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/pictures/close.png");
+		    close = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         close = close;
             close.set_x(800);
             close.set_y(10);
@@ -1730,24 +1731,24 @@ close_fade_in.start();
 	}
 	);
 		application.are_obj_events = true;
-		    box_cont = new ms.ui.RippleEffect( g_ui_root.manager, g_ui_root
-	    , "images/pictures/redbox2.png");
+		    box_cont = 
+			new ms.ui.RippleEffect(g_ui_root.manager, g_ui_root, null);
         box_cont = box_cont;
             box_cont.set_x(25);
             box_cont.set_y(25);
             box_cont.set_width(802);
             box_cont.set_height(602);
             box_cont.alpha(60);
-		    box_border = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/pictures/redbox.png");
+		    box_border = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         box_border = box_border;
             box_border.set_x(50);
             box_border.set_y(50);
             box_border.set_width(800);
             box_border.set_height(600);
             box_border.alpha(80);
-		    banner = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/pictures/banner.png");
+		    banner = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         banner = banner;
             banner.set_x(200);
             banner.set_y(200);
@@ -1755,8 +1756,8 @@ close_fade_in.start();
             banner.set_height(50);
             banner.set_rotation(-30);
             banner.alpha(0);
-		    camerawl = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/pictures/camerawl.png");
+		    camerawl = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         camerawl = camerawl;
             camerawl.set_x(320);
             camerawl.set_y(240);
@@ -1776,16 +1777,16 @@ cam_in.start();
 	}
 	);
 		application.are_obj_events = true;
-		    lens = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/pictures/lens.png");
+		    lens = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         lens = lens;
             lens.set_x(430);
             lens.set_y(287);
             lens.set_width(120);
             lens.set_height(120);
             lens.alpha(0);
-		    line_top = new ms.ui.Line( g_ui_root.manager, g_ui_root
-	    );
+		    line_top = 
+			new ms.ui.Line(g_ui_root.manager, g_ui_root);
         line_top = line_top;
             line_top.set_x1(5);
             line_top.set_y1(38);
@@ -1793,57 +1794,54 @@ cam_in.start();
             line_top.set_y2(38);
             line_top.alpha(50);
             line_top.set_color("white");
-		    pict1 = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/pictures/pict1.jpg");
+		    pict1 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         pict1 = pict1;
             pict1.set_x(0);
             pict1.set_y(0);
             pict1.set_width(0);
             pict1.set_height(0);
             pict1.alpha(0);
-		    pict2 = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/pictures/pict2.jpg");
+		    pict2 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         pict2 = pict2;
             pict2.set_x(0);
             pict2.set_y(0);
             pict2.set_width(0);
             pict2.set_height(0);
             pict2.alpha(0);
-		    pict3 = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/pictures/pict3.jpg");
+		    pict3 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         pict3 = pict3;
             pict3.set_x(0);
             pict3.set_y(0);
             pict3.set_width(0);
             pict3.set_height(0);
             pict3.alpha(0);
-		    pict4 = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/pictures/pict4.jpg");
+		    pict4 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         pict4 = pict4;
             pict4.set_x(0);
             pict4.set_y(0);
             pict4.set_width(0);
             pict4.set_height(0);
             pict4.alpha(0);
-		    pict5 = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/pictures/pict5.jpg");
+		    pict5 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         pict5 = pict5;
             pict5.set_x(0);
             pict5.set_y(0);
             pict5.set_width(0);
             pict5.set_height(0);
             pict5.alpha(0);
-scene = 
-new THREE.Scene(
-);
-camera_1 = 
-new THREE.Camera(
-45,1.5,1,10000);
+			scene = 
+			new THREE.Scene() ;
+		camera_1 = 
+		new THREE.Camera(45, 1.5, 1, 10000, null) ;	
 		active_camera = camera_1;
             camera_1.position.z = 1000;
-	    var plane_1_plane = 
-new THREE.Plane(
-146,302);
+	    plane_1_plane = 
+		new THREE.Plane(146, 302, null, null) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
@@ -1887,9 +1885,8 @@ plane_1.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictu
 	}
 	);
 		application.are_obj_events = true;
-	    var plane_2_plane = 
-new THREE.Plane(
-301,302);
+	    plane_2_plane = 
+		new THREE.Plane(301, 302, null, null) ;
 	    plane_2 = new THREE.Mesh(plane_2_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_2);
 		plane_2.events = new ms.event.EventHolder();
@@ -1933,9 +1930,8 @@ plane_2.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictu
 	}
 	);
 		application.are_obj_events = true;
-	    var plane_3_plane = 
-new THREE.Plane(
-117,302);
+	    plane_3_plane = 
+		new THREE.Plane(117, 302, null, null) ;
 	    plane_3 = new THREE.Mesh(plane_3_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_3);
 		plane_3.events = new ms.event.EventHolder();
@@ -1979,9 +1975,8 @@ plane_3.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictu
 	}
 	);
 		application.are_obj_events = true;
-	    var plane_4_plane = 
-new THREE.Plane(
-245,240);
+	    plane_4_plane = 
+		new THREE.Plane(245, 240, null, null) ;
 	    plane_4 = new THREE.Mesh(plane_4_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_4);
 		plane_4.events = new ms.event.EventHolder();
@@ -2025,9 +2020,8 @@ plane_4.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictu
 	}
 	);
 		application.are_obj_events = true;
-	    var plane_5_plane = 
-new THREE.Plane(
-240,240);
+	    plane_5_plane = 
+		new THREE.Plane(240, 240, null, null) ;
 	    plane_5 = new THREE.Mesh(plane_5_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_5);
 		plane_5.events = new ms.event.EventHolder();

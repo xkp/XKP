@@ -32,6 +32,7 @@ var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var canvas_position = {x:0, y:0};
+var streamer = new ms.streamer.Streamer();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var __label1;var lbl1;
@@ -177,17 +178,15 @@ my_plane.scale.y = 1;
 	);
 		application.are_obj_events = true;
             var img_plane;
-	    var img_plane_plane = 
-new THREE.Plane(
-128,164);
+	    img_plane_plane = 
+		new THREE.Plane(128, 164, null, null) ;
 	    img_plane = new THREE.Mesh(img_plane_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(img_plane);
 		img_plane.events = new ms.event.EventHolder();
 				my_plane.addChild(img_plane);
             var img_reflect;
-	    var img_reflect_plane = 
-new THREE.Plane(
-128,164);
+	    img_reflect_plane = 
+		new THREE.Plane(128, 164, null, null) ;
 	    img_reflect = new THREE.Mesh(img_reflect_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(img_reflect);
 		img_reflect.events = new ms.event.EventHolder();
@@ -249,26 +248,24 @@ threejs_load_resources(function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    __label1 = new ms.ui.Label( g_ui_root.manager, g_ui_root
-	    , "15px Verdana");
+		    __label1 = 
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
         __label1 = __label1;
             __label1.set_x(150);
             __label1.set_y(75);
             __label1.set_color("Ivory");
             __label1.text("Move mouse to control the carousel movement");
-		    lbl1 = new ms.ui.Label( g_ui_root.manager, g_ui_root
-	    , "15px Verdana");
+		    lbl1 = 
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
         lbl1 = lbl1;
             lbl1.set_x(175);
             lbl1.set_y(100);
             lbl1.set_color("Ivory");
             lbl1.text("Put the mouse over an image to zoom it");
-scene = 
-new THREE.Scene(
-);
-camera_1 = 
-new THREE.Camera(
-45,1.5,1,10000);
+			scene = 
+			new THREE.Scene() ;
+		camera_1 = 
+		new THREE.Camera(45, 1.5, 1, 10000, null) ;	
 		active_camera = camera_1;
             camera_1.position.x = 500;
             camera_1.position.y = 500;

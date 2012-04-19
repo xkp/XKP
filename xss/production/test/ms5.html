@@ -11,8 +11,8 @@
 		<script type="text/javascript" src="../js/ms-ui.js"></script>
 		<script type="text/javascript" src="../js/ms-state.js"></script>
 		<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript">	
-var drawingCanvas;		
+<script type="text/javascript">
+    var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -211,7 +211,6 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var main;var test1;var lbl1;var btn1;var test2;var pb1;var btn2;var btn3;var lbl2;var btnNext;var btnPrev;
             application.clicks = 0;
 window.onload = function() 
 {
@@ -278,25 +277,26 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    main = new ms.ui.Switch( g_ui_root.manager, g_ui_root
-	    );
+		    main = 
+			new ms.ui.Switch(g_ui_root.manager, g_ui_root);
         main = main;
             main.set_x(0);
             main.set_y(0);
             main.set_width(600);
             main.set_height(250);
-		    test1 = new ms.ui.Component( main.manager, main
-	    );test1.mouse_thru = true;
+		    test1 = 
+			new ms.ui.Component(main.manager, main);
+	    test1.mouse_thru = true;
         test1 = test1;
-		    lbl1 = new ms.ui.Label( test1.manager, test1
-	    , "Verdana");
+		    lbl1 = 
+			new ms.ui.Label(test1.manager, test1, null);
         lbl1 = lbl1;
             lbl1.set_x(270);
             lbl1.set_y(200);
             lbl1.set_rotation(-0.200000003);
             lbl1.text("click smiley");
-		    btn1 = new ms.ui.Button( test1.manager, test1
-	    , "images/smile_sad_48.png", "images/smile_grin_48.png");
+		    btn1 = 
+			new ms.ui.Button(test1.manager, test1, null, null);
         btn1 = btn1;
             btn1.set_placement("center");
             btn1.set_rotation(0.200000003);
@@ -311,17 +311,18 @@ btn1.set_rotation(btn1.get_rotation() + 0.200000003);
 	}
 	);
 		application.are_obj_events = true;
-		    test2 = new ms.ui.Component( main.manager, main
-	    );test2.mouse_thru = true;
+		    test2 = 
+			new ms.ui.Component(main.manager, main);
+	    test2.mouse_thru = true;
         test2 = test2;
-		    pb1 = new ms.ui.ProgressBar( test2.manager, test2
-	    , null);
+		    pb1 = 
+			new ms.ui.ProgressBar(test2.manager, test2, null);
         pb1 = pb1;
             pb1.set_placement("center");
             pb1.set_width(150);
             pb1.set_height(10);
-		    btn2 = new ms.ui.Image( test2.manager, test2
-	    , "images/arrow_left.png");
+		    btn2 = 
+			new ms.ui.Image(test2.manager, test2, null);
         btn2 = btn2;
             btn2.set_x(200);
             btn2.set_y(115);
@@ -334,8 +335,8 @@ btn1.set_rotation(btn1.get_rotation() + 0.200000003);
 	}
 	);
 		application.are_obj_events = true;
-		    btn3 = new ms.ui.Image( test2.manager, test2
-	    , "images/arrow_right.png");
+		    btn3 = 
+			new ms.ui.Image(test2.manager, test2, null);
         btn3 = btn3;
             btn3.set_x(380);
             btn3.set_y(115);
@@ -348,15 +349,15 @@ btn1.set_rotation(btn1.get_rotation() + 0.200000003);
 	}
 	);
 		application.are_obj_events = true;
-		    lbl2 = new ms.ui.Label( test2.manager, test2
-	    , "Verdana");
+		    lbl2 = 
+			new ms.ui.Label(test2.manager, test2, null);
         lbl2 = lbl2;
             lbl2.set_x(210);
             lbl2.set_y(200);
             lbl2.set_rotation(0.200000003);
             lbl2.text("click small arrows to adjust percentage");
-		    btnNext = new ms.ui.Button( g_ui_root.manager, g_ui_root
-	    , "images/arrow_right_green_48.png", "images/arrow_right_48.png");
+		    btnNext = 
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
         btnNext = btnNext;
             btnNext.set_x(320);
             btnNext.set_y(300);
@@ -373,8 +374,8 @@ btnNext.set_rotation(btnNext.get_rotation() + 0.200000003);
 	}
 	);
 		application.are_obj_events = true;
-		    btnPrev = new ms.ui.Button( g_ui_root.manager, g_ui_root
-	    , "images/arrow_left_green_48.png", "images/arrow_left_48.png");
+		    btnPrev = 
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
         btnPrev = btnPrev;
             btnPrev.set_x(220);
             btnPrev.set_y(300);

@@ -283,19 +283,19 @@ Success are greateful
 
 
 Error [404] File not found
-	file = c:/dev/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
+	file = d:/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
 
 ===[ pairs.project.xml ]================
 
 
 Error [404] File not found
-	file = c:/dev/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
+	file = d:/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
 
 ===[ simple.project.xml ]================
 
 
 Error [404] File not found
-	file = c:/dev/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
+	file = d:/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
 
 ===[ 3js-ms.project.xml ]================(Tests)
 
@@ -438,6 +438,7 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering UI Types...
+log: smiley_ball
 Error [404] File not found
 	file = d:/xkp/xss/tests/../idioms/i-box2d/js/body.xssERROR: Project:  box2d3.project.xml
 
@@ -446,6 +447,10 @@ Error [404] File not found
 
 log: Rendering Resources...
 log: Rendering UI Types...
+log: bad_guy
+log: good_guy
+log: bullet
+log: floor
 log: Rendering Sequence Types...
 log: Rendering UI...
 log: Rendering Sequence...
@@ -455,6 +460,11 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering UI Types...
+log: body_1
+log: body_2
+log: body_3
+log: floor
+log: my_body
 log: Rendering UI...
 Success are greateful
 ===[ box2dcar.project.xml ]================(Tests)
@@ -462,6 +472,11 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering UI Types...
+log: car
+log: wheel
+log: box
+log: floor
+log: my_body
 log: Rendering UI...
 Success are greateful
 ===[ dany_dennis.project.xml ]================(Tests)
@@ -656,35 +671,174 @@ Success are greateful
 
 
 Error [404] File not found
-	file = c:/dev/xkp/xss/tests/../idioms/jquery/module.xmlERROR: Project:  jquery1.project.xml
+	file = d:/xkp/xss/tests/../idioms/jquery/module.xmlERROR: Project:  jquery1.project.xml
 
 ===[ jquery2.project.xml ]================(Tests)
 
 
+log: Rendering: l1
+log: Rendering: t1
+log: Rendering: c1
+log: Rendering: b1
+log: Rendering: r2
+log: Rendering: r1
 Success are greateful
 ===[ jquery3.project.xml ]================(Tests)
 
 
 log: Rendering property: src
+log: Rendering: tc1
+log: Rendering: __img1
 Success are greateful
 ===[ jquery4.project.xml ]================(Tests)
 
 
+log: NO LAYOUT
+log: __div1
+log: Rendering: __div1
+log: NO LAYOUT
+log: lbl1
+log: Rendering: lbl1
+log: edit1
+log: Rendering: edit1
+log: rb1
+log: Rendering: rb1
+log: cb1
+log: Rendering: cb1
+log: __radiogroup1
+log: Rendering: __radiogroup1
+log: Rendering: __radiobutton1
+log: Rendering: __radiobutton2
+log: Rendering: __radiobutton3
+log: __div2
 log: IT IS ALIVE
+log: btn1
 log: IT IS ALIVE
+log: Rendering: __div2
+log: Rendering: acc1
+log: Rendering: __div3
+log: NO LAYOUT
+log: __html1
+log: Rendering: __div4
+log: NO LAYOUT
+log: tc1
+log: Rendering: tc1
+log: Rendering: __div5
+log: Rendering: btn1
 Success are greateful
 ===[ jquery5.project.xml ]================(Tests)
 
 
-Error [syntax-error] Error while compiling xs
-	line = 25
-	column = 5
-	file = c:/dev/xkp/xss/tests/jquery5.xsERROR: Project:  jquery5.project.xml
-
+log: Rendering: acc1
+log: Rendering: __div1
+log: NO LAYOUT
+log: __html1
+log: Rendering: __div2
+log: NO LAYOUT
+log: __html2
+log: Rendering: __div3
+log: NO LAYOUT
+log: __html3
+log: Rendering: __div4
+log: NO LAYOUT
+log: __html4
+log: Rendering: tc1
+log: Rendering: __div5
+log: NO LAYOUT
+log: __html5
+log: Rendering: __div7
+log: Rendering: __div8
+log: Rendering: __div9
+log: NO LAYOUT
+log: __label1
+log: Rendering: __label1
+log: dp2
+log: Rendering: dp2
+log: dp1
+log: Rendering: dp1
+log: Rendering: __div10
+log: NO LAYOUT
+log: __label2
+log: Rendering: __label2
+log: __autocomplete1
+log: Rendering: __autocomplete1
+log: Rendering: __item1
+log: Rendering: __item2
+log: Rendering: __item3
+log: Rendering: __item4
+log: Rendering: __item5
+log: Rendering: __item6
+log: Rendering: __item7
+log: Rendering: __item8
+log: Rendering: __item9
+log: Rendering: __item10
+log: Rendering: __item11
+log: Rendering: __item12
+log: Rendering: __item13
+log: Rendering: __item14
+log: __br1
+log: btn1
+log: Rendering: btn1
+log: btn2
+log: Rendering: btn2
+log: simple_dialog
+log: Rendering: simple_dialog
+log: NO LAYOUT
+log: __html6
+log: __br2
+log: __br3
+log: pb1
+log: Rendering: pb1
+log: __br4
+log: sld1
+log: Rendering: sld1
+Success are greateful
 ===[ jquery6.project.xml ]================(Tests)
 
 
-log: Rendering property: src
+log: IT IS ALIVE
+log: IT IS ALIVE
+log: Ignoring idx 1
+log: IT IS ALIVE
+log: Ignoring idx 2
+log: Rendering: acc1
+log: Rendering: __div1
+log: NO LAYOUT
+log: __html1
+log: Rendering: __div2
+log: NO LAYOUT
+log: __html2
+log: Rendering: __div3
+log: NO LAYOUT
+log: __html3
+log: Rendering: __div4
+log: NO LAYOUT
+log: __html4
+log: Rendering: image_container
+Success are greateful
+===[ jquery7.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering Sequence Types...
+log: Here?
+log: Nope
+log: Rendering UI...
+log: IT IS ALIVE
+log: IT IS ALIVE
+log: Ignoring idx 1
+log: IT IS ALIVE
+log: Ignoring idx 2
+log: Rendering: __div2
+log: NO LAYOUT
+log: lbl1
+log: Rendering: lbl1
+log: edit1
+log: Rendering: edit1
+log: btn1
+log: Rendering: btn1
+log: Rendering: app
 Success are greateful
 ===[ jseq1.project.xml ]================(Tests)
 
@@ -693,7 +847,7 @@ log: Rendering instance: test_sequence
 log: Rendering instance: test_sequence
 Error [idiom] run tag got an invalid method
 	methd = 
-	file = c:/dev/xkp/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
+	file = d:/xkp/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
 
 ===[ json1.project.xml ]================(Tests)
 
@@ -702,7 +856,7 @@ Error [reader] Invalid XML file
 	xml error = Error document empty.
 	line = 0
 	column = 0
-	file = c:/dev/xkp/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
+	file = d:/xkp/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
 
 ===[ ms1.project.xml ]================(Tests)
 
@@ -749,6 +903,7 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering UI Types...
+log: ms6
 log: Rendering Sequence Types...
 log: Rendering UI...
 log: Rendering Sequence...
@@ -775,6 +930,7 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering Sequence Types...
 log: Rendering UI Types...
+log: social_button
 log: Rendering 3js Types...
 log: Rendering UI...
 Success are greateful
@@ -831,6 +987,7 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering UI Types...
+log: my_image
 log: Rendering UI...
 Success are greateful
 ===[ ui_cliparea.project.xml ]================(Tests)
@@ -985,7 +1142,7 @@ Success are greateful
 
 Error [language] Missing declared tag
 	tag = user_image
-	file = c:/dev/xkp/xss/tests/../idioms/wax/server.xssERROR: Project:  wax3.project.xml
+	file = d:/xkp/xss/tests/../idioms/wax/server.xssERROR: Project:  wax3.project.xml
 
 ===[ wax4.project.xml ]================(Tests)
 
@@ -1251,6 +1408,121 @@ throw yy;
         
 
 Success are greateful
+===[ xss14.project.xml ]================(Tests)
+
+
+log: <Dependencies>
+log: /use/bin/xss14
+log: /usr/lib/test_idiom
+log: /use/bin/xss14_1
+log: </Dependencies>
+log: <User Classes>
+log: </User Classes>
+
+
+
+
+
+
+        var test_class = Class.extend(
+    {
+    init: function()
+    {
+        this._super();
+        this.events = new ms.event.EventHolder(); 
+        
+        var this__  = this;
+        
+            this.events.dispatch("init", [this]);
+            },
+});
+
+
+
+
+
+
+
+
+        var test_class1 = test_class.extend(
+    {
+    init: function()
+    {
+        this._super();
+        this.events = new ms.event.EventHolder(); 
+        
+        var this__  = this;
+        
+
+
+
+
+
+        this.some_prop_get = function ()
+        {
+            return 10;
+        };
+
+        this.some_prop_set = function (value)
+        {
+            value++;
+        };
+    
+
+            this.events.dispatch("init", [this]);
+            },
+});
+
+
+
+
+
+
+
+
+        var test_class2 = test_class1.extend(
+    {
+    init: function()
+    {
+        this._super();
+        this.events = new ms.event.EventHolder(); 
+        
+        var this__  = this;
+        
+
+
+
+
+
+        this.some_prop_get = function ()
+        {
+            return 10;
+        };
+
+        this.some_prop_set = function (value)
+        {
+            value++;
+        };
+    
+
+
+
+
+
+
+	this.foo = function() 
+	{
+		this.some_prop_set(this.some_prop_get() + 1);
+	};
+
+            this.events.dispatch("init", [this]);
+            },
+});
+
+
+
+log: /usr/lib/source.xxx
+Success are greateful
 ===[ xss2.project.xml ]================(Tests)
 
 
@@ -1350,6 +1622,12 @@ Success are greateful
 		t_super_derived 
 	
 		t_super_merged 
+	
+		t_xss14 
+	
+		t_xss14_1 
+	
+		t_xss14_2 
 	
 		t_xss5 
 	

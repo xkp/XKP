@@ -29,10 +29,13 @@ struct shellworker : IWorker
               {
                 str text  = it->text[i];
                 str param = it->params[i];
-                
+
                 if (!param.empty())
-                  callable << xss_utils::var_to_string(args.get(curr++));
-                
+                  {
+                    variant v = args.get(curr++);
+                    callable << xss_utils::var_to_string(v);
+                  }
+
                 callable << text;
               }
 

@@ -10,8 +10,8 @@
 <script type="text/javascript" src="../js/keys.js"></script>
 		<script type="text/javascript" src="../js/ms-ui.js"></script>
 		<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript">	
-var drawingCanvas;		
+<script type="text/javascript">
+    var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -205,7 +205,6 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var main;var test1;var lbl0;var lbl1;var btn1;var test2;var pb1;var btn2;var btn3;var lbl2;var btnNext;var btnPrev;var stateBtn;var lbl3;var img1;
             application.clicks = 0;
 	var ev_parent = this;
 	application.events.addListener("keydown", function(keycode)
@@ -300,18 +299,19 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    main = new ms.ui.Switch( g_ui_root.manager, g_ui_root
-	    );
+		    main = 
+			new ms.ui.Switch(g_ui_root.manager, g_ui_root);
         main = main;
             main.set_x(0);
             main.set_y(0);
             main.set_width(600);
             main.set_height(250);
-		    test1 = new ms.ui.Component( main.manager, main
-	    );test1.mouse_thru = true;
+		    test1 = 
+			new ms.ui.Component(main.manager, main);
+	    test1.mouse_thru = true;
         test1 = test1;
-		    lbl0 = new ms.ui.Label( test1.manager, test1
-	    , "12px Verdana");
+		    lbl0 = 
+			new ms.ui.Label(test1.manager, test1, null);
         lbl0 = lbl0;
             lbl0.set_x(240);
             lbl0.set_y(75);
@@ -330,14 +330,14 @@ window.onload = function()
 	}
 	);
 		application.are_obj_events = true;
-		    lbl1 = new ms.ui.Label( test1.manager, test1
-	    , "Verdana");
+		    lbl1 = 
+			new ms.ui.Label(test1.manager, test1, null);
         lbl1 = lbl1;
             lbl1.set_x(270);
             lbl1.set_y(200);
             lbl1.text("click smiley");
-		    btn1 = new ms.ui.Button( test1.manager, test1
-	    , "images/smile_sad_48.png", "images/smile_grin_48.png");
+		    btn1 = 
+			new ms.ui.Button(test1.manager, test1, null, null);
         btn1 = btn1;
             btn1.set_width(50);
             btn1.set_height(50);
@@ -353,17 +353,18 @@ btn1.set_placement("right");
 		application.are_obj_events = true;
 				div_2_res.events.addListener("loaded", function()
 				{				
-		    test2 = new ms.ui.Component( main.manager, main
-	    );test2.mouse_thru = true;
+		    test2 = 
+			new ms.ui.Component(main.manager, main);
+	    test2.mouse_thru = true;
         test2 = test2;
-		    pb1 = new ms.ui.ProgressBar( test2.manager, test2
-	    , null);
+		    pb1 = 
+			new ms.ui.ProgressBar(test2.manager, test2, null);
         pb1 = pb1;
             pb1.set_placement("center");
             pb1.set_width(150);
             pb1.set_height(10);
-		    btn2 = new ms.ui.Image( test2.manager, test2
-	    , "images/arrow_left.png");
+		    btn2 = 
+			new ms.ui.Image(test2.manager, test2, null);
         btn2 = btn2;
             btn2.set_x(200);
             btn2.set_y(115);
@@ -376,8 +377,8 @@ btn1.set_placement("right");
 	}
 	);
 		application.are_obj_events = true;
-		    btn3 = new ms.ui.Image( test2.manager, test2
-	    , "images/arrow_right.png");
+		    btn3 = 
+			new ms.ui.Image(test2.manager, test2, null);
         btn3 = btn3;
             btn3.set_x(380);
             btn3.set_y(115);
@@ -390,16 +391,16 @@ btn1.set_placement("right");
 	}
 	);
 		application.are_obj_events = true;
-		    lbl2 = new ms.ui.Label( test2.manager, test2
-	    , "10px Arial");
+		    lbl2 = 
+			new ms.ui.Label(test2.manager, test2, null);
         lbl2 = lbl2;
             lbl2.set_x(210);
             lbl2.set_y(200);
             lbl2.set_rotation(15);
             lbl2.text("click small arrows to adjust percentage");
 });
-		    btnNext = new ms.ui.Button( g_ui_root.manager, g_ui_root
-	    , "images/arrow_right_green_48.png", "images/arrow_right_48.png");
+		    btnNext = 
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
         btnNext = btnNext;
             btnNext.set_x(320);
             btnNext.set_y(300);
@@ -418,8 +419,8 @@ div_2_res.load();
 	}
 	);
 		application.are_obj_events = true;
-		    btnPrev = new ms.ui.Button( g_ui_root.manager, g_ui_root
-	    , "images/arrow_left_green_48.png", "images/arrow_left_48.png");
+		    btnPrev = 
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
         btnPrev = btnPrev;
             btnPrev.set_x(220);
             btnPrev.set_y(300);
@@ -436,22 +437,22 @@ main.active(main.get_active() - 1);
 	}
 	);
 		application.are_obj_events = true;
-		    stateBtn = new ms.ui.StateButton( g_ui_root.manager, g_ui_root
-	    , "images/smile_grin_48.png", "images/smile_sad_48.png");
+		    stateBtn = 
+			new ms.ui.StateButton(g_ui_root.manager, g_ui_root, null, null);
         stateBtn = stateBtn;
             stateBtn.set_x(270);
             stateBtn.set_y(400);
             stateBtn.set_rotation(-45);
             stateBtn.set_width(50);
             stateBtn.set_height(50);
-		    lbl3 = new ms.ui.Label( g_ui_root.manager, g_ui_root
-	    , "10px Arial");
+		    lbl3 = 
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
         lbl3 = lbl3;
             lbl3.set_x(330);
             lbl3.set_y(440);
             lbl3.text("this smile is a state button, click it");
-		    img1 = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/smile_sad_48.png");
+		    img1 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         img1 = img1;
             img1.set_x(50);
             img1.set_y(470);

@@ -30,6 +30,7 @@ var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var canvas_position = {x:0, y:0};
+var streamer = new ms.streamer.Streamer();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
@@ -54,12 +55,10 @@ application.events.dispatch("switch_cameras", []);
 var scene;var camera_1;var particle_1;
 threejs_load_resources(function()
 {
-scene = 
-new THREE.Scene(
-);
-camera_1 = 
-new THREE.Camera(
-70,1.5,1,1000);
+			scene = 
+			new THREE.Scene() ;
+		camera_1 = 
+		new THREE.Camera(70, 1.5, 1, 1000, null) ;	
 		active_camera = camera_1;
             camera_1.position.y = 300;
             camera_1.position.z = 500;

@@ -31,6 +31,7 @@ var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var canvas_position = {x:0, y:0};
+var streamer = new ms.streamer.Streamer();
 var app_width = 600;
 var app_height = 600;
 var lbl0;var btn1;var lbl1;var lbl2;
@@ -109,9 +110,8 @@ application.events.dispatch("switch_cameras", []);
 var materials;var __basic_material1;var __basic_material2;var __basic_material3;var __basic_material4;var __basic_material5;var __basic_material6;var plane_material;var scene;var camera_1;var cube_1;var plane_1;
 threejs_load_resources(function()
 {
-materials = 
-new Array(
-);
+			materials = 
+			new Array() ;
 __basic_material1 = new THREE.MeshBasicMaterial({
 color:Math.random() * 0xffffff
 	});
@@ -140,25 +140,21 @@ plane_material = new THREE.MeshBasicMaterial({
 color:Grey
 	});
             set_material_alpha(plane_material, 50);
-scene = 
-new THREE.Scene(
-);
-camera_1 = 
-new THREE.Camera(
-70,1.5,1,1000);
+			scene = 
+			new THREE.Scene() ;
+		camera_1 = 
+		new THREE.Camera(70, 1.5, 1, 1000, null) ;	
 		active_camera = camera_1;
             camera_1.position.y = 300;
             camera_1.position.z = 500;
-	    var cube_1_cube = 
-new THREE.Cube(
-200,200,200,1,1,1,materials);
+	    cube_1_cube = 
+		new THREE.Cube(200, 200, 200, 1, 1, 1, materials, null, null) ;
 	    cube_1 = new THREE.Mesh(cube_1_cube, new THREE.MeshFaceMaterial());
 	    scene.addObject(cube_1);
 		cube_1.events = new ms.event.EventHolder();
             cube_1.position.y = 150;
-	    var plane_1_plane = 
-new THREE.Plane(
-200,200);
+	    plane_1_plane = 
+		new THREE.Plane(200, 200, null, null) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, plane_material);
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
@@ -211,14 +207,14 @@ new THREE.Plane(
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    lbl0 = new ms.ui.Label( g_ui_root.manager, g_ui_root
-	    , "Verdana");
+		    lbl0 = 
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
         lbl0 = lbl0;
             lbl0.set_x(240);
             lbl0.set_y(75);
             lbl0.text("Click smile to count");
-		    btn1 = new ms.ui.Button( g_ui_root.manager, g_ui_root
-	    , "images/smile_sad_48.png", "images/smile_grin_48.png");
+		    btn1 = 
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
         btn1 = btn1;
             btn1.set_placement("center");
             btn1.set_rotation(15);
@@ -233,14 +229,14 @@ application.clicks = application.clicks + 1;
 	}
 	);
 		application.are_obj_events = true;
-		    lbl1 = new ms.ui.Label( g_ui_root.manager, g_ui_root
-	    , "Verdana");
+		    lbl1 = 
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
         lbl1 = lbl1;
             lbl1.set_x(240);
             lbl1.set_y(400);
             lbl1.text("Use arrows to move smile");
-		    lbl2 = new ms.ui.Label( g_ui_root.manager, g_ui_root
-	    , "Verdana");
+		    lbl2 = 
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
         lbl2 = lbl2;
             lbl2.set_x(240);
             lbl2.set_y(420);

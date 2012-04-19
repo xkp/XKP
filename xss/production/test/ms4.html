@@ -1,5 +1,17 @@
-function build_application(host, canvasId)
-{
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/prototype.js"></script>
+<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/ms-sequence.js"></script>
+		<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript">
     var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
@@ -117,7 +129,7 @@ function start(resolution)
 	);
 window.onload = function() 
 {
-	drawingCanvas = document.getElementById("");
+	drawingCanvas = document.getElementById("myCanvas");
     g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
 	{
@@ -229,4 +241,10 @@ g_sequence_manager);
 		});
 	}
 }
-}
+</script>
+</head>
+<body>	
+	<canvas id="myCanvas" width="600" height="400"
+		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
+</body>
+</html>

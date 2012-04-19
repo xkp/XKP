@@ -11,8 +11,8 @@
 		<script type="text/javascript" src="../js/ms-ui.js"></script>
 		<script type="text/javascript" src="../js/ms-state.js"></script>
 		<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript">	
-var drawingCanvas;		
+<script type="text/javascript">
+    var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -99,7 +99,6 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var rr1;var r1;var r2;var r3;var c1;var c2;var img1;var img2;var s1;
             application.increment = 10;
 window.onload = function() 
 {
@@ -166,48 +165,48 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    rr1 = new ms.ui.Rectangle( g_ui_root.manager, g_ui_root
-	    , "black", null, null);
+		    rr1 = 
+			new ms.ui.Rectangle(g_ui_root.manager, g_ui_root, null, null, null);
         rr1 = rr1;
             rr1.set_x(70);
             rr1.set_y(30);
             rr1.set_width(100);
             rr1.set_height(3);
-		    r1 = new ms.ui.Rectangle( g_ui_root.manager, g_ui_root
-	    , "black", null, null);
+		    r1 = 
+			new ms.ui.Rectangle(g_ui_root.manager, g_ui_root, null, null, null);
         r1 = r1;
             r1.set_x(120);
             r1.set_y(20);
             r1.set_width(3);
             r1.set_height(0);
-		    r2 = new ms.ui.Rectangle( g_ui_root.manager, g_ui_root
-	    , "black", null, null);
+		    r2 = 
+			new ms.ui.Rectangle(g_ui_root.manager, g_ui_root, null, null, null);
         r2 = r2;
             r2.set_x(40);
             r2.set_y(140);
             r2.set_width(103);
             r2.set_height(3);
-		    r3 = new ms.ui.Rectangle( g_ui_root.manager, g_ui_root
-	    , "black", null, null);
+		    r3 = 
+			new ms.ui.Rectangle(g_ui_root.manager, g_ui_root, null, null, null);
         r3 = r3;
             r3.set_x(20);
             r3.set_y(20);
             r3.set_width(3);
             r3.set_height(103);
-		    c1 = new ms.ui.Circle( g_ui_root.manager, g_ui_root
-	    , null, "black", 20);
+		    c1 = 
+			new ms.ui.Circle(g_ui_root.manager, g_ui_root, null, null, null);
         c1 = c1;
             c1.set_x(35);
             c1.set_y(35);
             c1.set_radius(60);
-		    c2 = new ms.ui.Circle( g_ui_root.manager, g_ui_root
-	    , null, "black", 10);
+		    c2 = 
+			new ms.ui.Circle(g_ui_root.manager, g_ui_root, null, null, null);
         c2 = c2;
             c2.set_x(75);
             c2.set_y(350);
             c2.set_radius(60);
-		    img1 = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/test2.png");
+		    img1 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         img1 = img1;
             img1.set_x(100);
             img1.set_y(100);
@@ -221,8 +220,8 @@ img1.set_height(img1.get_height() + application.increment);
 	}
 	);
 		application.are_obj_events = true;
-		    img2 = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/test2.png");
+		    img2 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         img2 = img2;
             img2.set_x(300);
             img2.set_y(300);

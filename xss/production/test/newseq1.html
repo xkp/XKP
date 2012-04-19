@@ -11,8 +11,8 @@
 		<script type="text/javascript" src="../js/ms-ui.js"></script>
 		<script type="text/javascript" src="../js/ms-state.js"></script>
 		<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript">	
-var drawingCanvas;		
+<script type="text/javascript">
+    var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -85,7 +85,6 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var img1;var fade_in;
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -151,8 +150,8 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    img1 = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/img1.png");
+		    img1 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         img1 = img1;
             img1.set_x(100);
             img1.set_y(100);
