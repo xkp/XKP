@@ -11,8 +11,7 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
-import xkp.android.libs.Layout.XKPLayout;
-import android.view.View;
+import xkp.android.libs.Graphics.XKPGraphics;
 public class XKPPhysicBody {
 	private World 		mRefWorld;
 	private XKPGraphics	mRefView;
@@ -80,6 +79,24 @@ public class XKPPhysicBody {
 	}
 	public float getRestitution() {
 		return mFixtureDef.restitution;
+	}
+	public void setSensor(boolean sensor) {
+		mFixtureDef.isSensor = sensor;
+	}
+	public boolean isSensor() {
+		return mFixtureDef.isSensor;
+	}
+	public void setLinearDamping(float linearDamping) {
+		mBodyDef.linearDamping = linearDamping;
+	}
+	public float getLinearDamping() {
+		return mBodyDef.linearDamping;
+	}
+	public void setAngularDamping(float angularDamping) {
+		mBodyDef.angularDamping = angularDamping;
+	}
+	public float getAngularDamping() {
+		return mBodyDef.angularDamping;
 	}
 	public void setBodyType(BodyType bodyType) {
 		mBodyDef.type = bodyType;

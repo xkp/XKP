@@ -4,7 +4,7 @@
 	target="box2d1.xml" >
 	
 	<idiom src="../../../idioms/android/classes.xml"/>
-	<idiom src="../../../idioms/android/jbox2d.xml"/>
+	<idiom src="../../../idioms/i-box2d/android/jbox2d.xml"/>
 	
 	<path>
 		<output path="../../../production/android/"/>

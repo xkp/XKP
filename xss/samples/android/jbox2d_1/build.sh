@@ -4,6 +4,8 @@
 
 ABS_PATH=$(dirname $0)
 ORI_PATH=`pwd`
+PARAM1=${1}
+CONSOLE="--console"
 
 test -z "$ABS_PATH" && ABS_PATH=.
 cd $ABS_PATH ;
@@ -19,9 +21,15 @@ for proj in $PROJECTS_LIST ; do
 	#fi
 	
 	echo "Executing project: " $proj ;
-	echo -e "\n===[" $proj "]================\n" >> $LOG_FILENAME ;
 	
-	$XSS_FILENAME $proj >> $LOG_FILENAME ;
+	if [ $PARAM1 == $CONSOLE ] ; then
+		echo -e "\n===[" $proj "]================\n" ;
+		$XSS_FILENAME $proj ;
+	else
+		echo -e "\n===[" $proj "]================\n" >> $LOG_FILENAME ;
+		$XSS_FILENAME $proj >> $LOG_FILENAME ;
+	fi
+	
 	result=$? ;
 	
 	if [ "$result" -gt 0 ] ; then

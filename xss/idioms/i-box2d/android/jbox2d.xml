@@ -35,23 +35,30 @@
 		</enum>
 		
 		<class id="IPhysics">
-			<property id="density" type="float" default_value="1.0">
+			<property id="density" type="float">
 				<get text="getDensity()"/>
 				<set text="setDensity({value})"/>
 			</property>
 			
-			<property id="friction" type="float" default_value="0.5">
+			<property id="friction" type="float">
 				<get text="getFriction()"/>
 				<set text="setFriction({value})"/>
 			</property>
 			
-			<property id="restitution" type="float" default_value="0.2">
+			<property id="restitution" type="float">
 				<get text="getRestitution()"/>
 				<set text="setRestitution({value})"/>
 			</property>
 			
-			<property id="angular_damping" type="float" default_value="0.0"/>
-			<property id="linear_damping" type="float" default_value="0.0"/>
+			<property id="angular_damping" type="float">
+				<get text="getAngularDamping()"/>
+				<set text="setAngularDamping({value})"/>
+			</property>
+			
+			<property id="linear_damping" type="float">
+				<get text="getLinearDamping()"/>
+				<set text="setLinearDamping({value})"/>
+			</property>
 		</class>
 		
 		<class id="IJoint">
@@ -77,6 +84,9 @@
 			<property id="scale" type="float" default_value="1.0"/>
 			
 			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Graphics/" src_filename="XKPGraphics.java"/>
+				<object src_path="/res/values/" src_filename="styleable_XKPGraphics.xml"/>
+				
 				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPDDView.java"/>
 				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPDebugDraw.java"/>
 				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPJBox2d.java"/>
@@ -84,18 +94,25 @@
 			</array>
 		</class>
 
-		<class id="body" super="IPhysics" renderer="jBox2dBody.xss">
+		<class id="body" super="IPhysics" renderer="body.xss">
             <constructor_params>
                 <parameter property="world"/>
                 <parameter property="shape"/>
                 <parameter property="host"/>
             </constructor_params>
 
+			<array id="imports">
+				<object import="org.jbox2d.collision.shapes.ShapeType"/>
+			</array>
+			
 			<property id="world" type="string"/>
 			<property id="host" type="string"/>
 			
 			<property id="shape" type="EShapeType"/>
-			<property id="sensor" type="bool"/>
+			<property id="sensor" type="bool">
+				<get text="isSensor()"/>
+				<set text="setSensor({value})"/>
+			</property>
 			
 			<property id="body_type" type="EBodyType">
 				<get text="getBodyType()"/>
@@ -122,7 +139,7 @@
 			</property>
         </class>
 
-        <class id="physics" super="body" renderer="jBox2dBody.xss"/>
+        <class id="physics" super="body" renderer="body.xss"/>
 		
     </types>
 	

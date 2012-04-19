@@ -241,7 +241,7 @@ on copy_default_files(app, bns, plibs)
 		"/gen/.empty"
 	];
 	
-	compiler.log("Copying default files...");
+	compiler.log("[android] Copying default files...");
 	for(string f1 in cp_files)
 	{
 		string srcf1 = compiler.full_path("/copy.defaults" + f1);
@@ -258,7 +258,7 @@ on copy_default_files(app, bns, plibs)
 		"/src/xkp/android/libs/Layout/XKPLayout.java"
 	];
 	
-	compiler.log("Rendering default files...");
+	compiler.log("[android] Rendering default files...");
 	for(string f2 in res_files)
 	{
 		string srcf2 = compiler.full_path("/copy.defaults" + f2);

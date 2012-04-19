@@ -14,7 +14,7 @@
 				<classpathentry kind="lib" path="lib/<xss:e value="lib"/>"/>
 			}
 			
-			//TODO: copy libraries files to dest path
+			//TODO: copy libraries files to dest path & remove from idiom.xs
 		}
 	}
 </xss:code>

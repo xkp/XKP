@@ -1,0 +1,152 @@
+<xss:parameter id="it"/>
+<xss:parameter id="world"/>
+
+<xss:class>
+    property idiom; //delegate 
+	property visual_parent : string;
+	
+	method basic_properties()
+	{
+		//fixture properties
+		var density = 1.0;
+		if (it.density)
+			density = it.density;
+		else if (world)
+			density = world.density;
+		
+		var friction = 0.5;
+		if (it.friction)
+			friction = it.friction;
+		else if (world)
+			friction = world.friction;
+		
+		var restitution = 0.2; 
+		if (it.restitution)
+			restitution = it.restitution;
+		else if (world)
+			restitution = world.restitution;
+		
+		var angular_damping;
+		if (it.angular_damping)
+			angular_damping = it.angular_damping;
+		else if (world)
+			angular_damping = world.angular_damping;
+			
+		var linear_damping;
+		if (it.linear_damping)
+			linear_damping = it.linear_damping;	
+		else if (world)
+			linear_damping = world.linear_damping;
+		
+        //body type
+		if (!it.body_type)
+			compiler.error("Physics object must have a body type");
+
+		var body_type = idiom.get_body_type(it);
+		
+		idiom.define_basic_properties(it, density, friction, restitution, body_type, angular_damping, linear_damping);
+	}
+
+    method shape()
+    {
+        if (!it.shape)
+            compiler.error("Invalid, bodies must have a shape", object = it.id);
+
+		idiom.render_shape_definition(it, world, visual_parent);
+    }
+
+    method position()
+    {
+		idiom.render_position(it, visual_parent);
+    }
+
+    private method foreign_parent(obj)
+    {
+        var foreing = obj.parent;
+        if (foreing)
+        {
+            if (foreing.has_property("x") &&
+                foreing.has_property("y") &&
+                foreing.has_property("width") &&
+                foreing.has_property("height") &&
+				foreing.has_property("rotation") &&
+				foreing.children.size == 1)
+            {
+                return foreing;
+            }
+        }
+        return null;
+    }
+
+    on render()
+    {
+        idiom = it.idiom;
+        if (!idiom)
+        {
+            compiler.log("Why no idiom? " + it.output_id);
+        }
+        
+        world  = world;
+        var vp = foreign_parent(it);
+        
+		visual_parent = idiom.get_physical_host(it, vp);
+		
+        if (visual_parent)
+        {
+            //must wrap this in a function so the box 2d objects are created on resize
+            out()
+            {
+				<xss:e v="visual_parent"/>.events.addListener('resized', function(cmp)
+                <xss:open_brace/>
+                    if (cmp.physics)
+                        g_world.DestroyBody(cmp.physics);
+            }
+        }
+		
+        //idiom.instancing_body(it);
+		
+        shape();
+        basic_properties();
+        position();
+
+        //add the body into the world
+		idiom.create_body(it, visual_parent);
+		
+		//FAQ: what is mouse_joint?
+		if(it.mouse_joint)
+			out()
+			{
+				current_body.mouse_joint = <xss:e v="it.mouse_joint"/>;
+			}
+			
+        if (visual_parent)
+        {
+            out()
+            {
+                cmp.physics = current_body;	
+                cmp.events.addListener('moved', update_body_position);
+                
+                current_body.host = cmp;
+                <xss:close_brace/>
+				);
+                
+                if (<xss:e v="visual_parent"/>.w > 0 && <xss:e v="visual_parent"/>.h > 0)
+                {
+					<xss:e v="visual_parent"/>.events.dispatch("resized", [<xss:e v="visual_parent"/>]);
+                }
+                
+                <xss:e v="visual_parent"/>.RemoveFromWorld = function(keep_visual) 
+                {
+                    g_world.DestroyBody(<xss:e v="visual_parent"/>.physics);
+                    if (!keep_visual)
+                    {
+                        <xss:e v="visual_parent"/>.parent.removeComponent(<xss:e v="visual_parent"/>);
+                    }
+                }
+                
+            }
+            
+        }
+    }
+
+</xss:class>
