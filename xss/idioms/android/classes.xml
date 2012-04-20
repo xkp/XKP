@@ -997,10 +997,10 @@
 			<import id="IClassImageAdapter"/>
 		</class>
 		
-		<class id="holder" super="IWidget" sub_ns="libs.Layout" output_id="XKPLayout">
+		<class id="holder" super="IWidget" sub_ns="libs.Layout" output_id="XKPLayout" container="true">
 		</class>
 		
-		<class id="div" super="holder" sub_ns="libs.Layout" output_id="XKPLayout">
+		<class id="div" super="holder" sub_ns="libs.Layout" output_id="XKPLayout" container="true">
 		</class>
 		
 		<class id="switcher" super="IWidget" sub_ns="libs.Widget" output_id="XKPSwitcher">

@@ -34,7 +34,7 @@
 			</property>
 		</enum>
 		
-		<class id="IPhysics">
+		<class id="IPhysics" sub_ns="libs.JBox2d">
 			<property id="density" type="float">
 				<get text="getDensity()"/>
 				<set text="setDensity({value})"/>
@@ -71,7 +71,7 @@
 			</property>
 		</class>
 		
-		<class id="physics_world" super="IPhysics">
+		<class id="physics_world" super="IPhysics" no_layout="true">
 			<array id="imports">
 				<object import="org.jbox2d.common.Vec2"/>
 				<object import="org.jbox2d.dynamics.BodyType"/>
@@ -94,7 +94,7 @@
 			</array>
 		</class>
 
-		<class id="body" super="IPhysics" renderer="body.xss">
+		<class id="body" super="IPhysics" output_id="XKPPhysicBody" sub_ns="libs.JBox2d" no_layout="true" renderer="body.xss">
             <constructor_params>
                 <parameter property="world"/>
                 <parameter property="shape"/>
@@ -103,6 +103,7 @@
 
 			<array id="imports">
 				<object import="org.jbox2d.collision.shapes.ShapeType"/>
+				<object import="xkp.android.libs.JBox2d.XKPPhysicBody"/>
 			</array>
 			
 			<property id="world" type="string"/>
@@ -139,7 +140,7 @@
 			</property>
         </class>
 
-        <class id="physics" super="body" renderer="body.xss"/>
+        <class id="physics" super="body" output_id="XKPPhysicBody" sub_ns="libs.JBox2d" no_render="true" renderer="body.xss"/>
 		
     </types>
 	

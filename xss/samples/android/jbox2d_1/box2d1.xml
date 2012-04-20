@@ -16,3 +16,10 @@
 	<body id="floor_3" body_type="static" shape="rect" x="300" y="10" width="10" height="400"/>
 	<body id="floor_4" body_type="static" shape="rect" x="10" y="400" width="300" height="10"/>
 </application>
+
+<!--
+	** box2d differences
+		- application size, name, title, xs source file and background js property
+		- physics_world debug_draw property set to true
+		- some components positions and sizes
+-->

@@ -151,7 +151,7 @@ on render_application_pause()
 {
 	out(indent = 1)
 	{
-		mHandler.removeCallbacks(mRunnableWorld);
+		if(mHandler != null) mHandler.removeCallbacks(mRunnableWorld);
 	}
 }
 
@@ -159,7 +159,7 @@ on render_application_stop()
 {
 	out(indent = 1)
 	{
-		mHandler.removeCallbacks(mRunnableWorld);
+		if(mHandler != null) mHandler.removeCallbacks(mRunnableWorld);
 	}
 }
 

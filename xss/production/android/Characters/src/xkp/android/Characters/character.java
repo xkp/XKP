@@ -38,10 +38,11 @@ import xkp.android.libs.Layout.XKPLayout;
 				initCallers();
 				LayoutInflater li = (LayoutInflater) context.
 					getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				// link xml file with inflater
-				View root = li.inflate(R.layout.character, this);
-				// and with all views
-		layoutcharacter = (XKPLayout) findViewById(R.id.layoutcharacter);
+				// TIPS: link xml file with inflater
+				XKPLayout root = (XKPLayout) li.inflate(R.layout.character, this);
+				// TIPS: and with all exists views
+		// TIPS: create an observer for notify layout updated
+		layoutcharacter = (XKPLayout) root.findViewById(R.id.layoutcharacter);
 		ViewTreeObserver mainLayoutViewTreeObserver = layoutcharacter.getViewTreeObserver();
 		if(mainLayoutViewTreeObserver.isAlive()) {
 			mainLayoutViewTreeObserver.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {

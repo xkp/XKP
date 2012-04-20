@@ -39,6 +39,8 @@ on render_types(app, bns)
 	var idiom = compiler.get_idiom("android");
     for(var ut in user_types)
     {
+		ut.instances += ut.type;
+	
 		//TODO: think very well how to proceed with this
 		// set idiom to custom clazz with instances
 		ut.idiom = this;

@@ -17,6 +17,7 @@ import xkp.android.libs.Layout.XKPLayout;
 						import org.jbox2d.dynamics.BodyType;
 						import xkp.android.libs.JBox2d.*;
 						import org.jbox2d.collision.shapes.ShapeType;
+						import xkp.android.libs.JBox2d.XKPPhysicBody;
 		public class ActjBox2d_2 
 						extends Activity
 {
@@ -61,6 +62,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				bindViews();
 			}
 			private void bindViews() {
+		// TIPS: create an observer for notify layout updated
 		layoutapplication = (XKPLayout) findViewById(R.id.layoutapplication);
 		ViewTreeObserver mainLayoutViewTreeObserver = layoutapplication.getViewTreeObserver();
 		if(mainLayoutViewTreeObserver.isAlive()) {
@@ -85,12 +87,12 @@ private void initCallers() {
 			@Override
 			public void onPause() {
 				super.onPause();
-		mHandler.removeCallbacks(mRunnableWorld);
+		if(mHandler != null) mHandler.removeCallbacks(mRunnableWorld);
 			}
 			@Override
 			public void onStop() {
 				super.onStop();
-		mHandler.removeCallbacks(mRunnableWorld);
+		if(mHandler != null) mHandler.removeCallbacks(mRunnableWorld);
 			}
 			@Override
 			public void onResume() {

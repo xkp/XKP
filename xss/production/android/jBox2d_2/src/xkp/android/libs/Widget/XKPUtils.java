@@ -2,6 +2,7 @@ package xkp.android.libs.Widget;
 import java.util.ArrayList;
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.view.View;
 import android.view.ViewGroup;
 					import xkp.android.libs.Graphics.XKPImage;
 public class XKPUtils {
@@ -17,6 +18,9 @@ public class XKPUtils {
 	}
 	public void addView(Activity act) {
 		mActivity = act;
+	}
+	public void addView(View v) {
+		// do nothing
 	}
 	public void addXKPPackage(XKPPackage pack) {
 		mPackages.add(pack);
