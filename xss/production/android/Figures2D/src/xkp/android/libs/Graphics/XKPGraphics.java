@@ -30,6 +30,7 @@ public class XKPGraphics extends View {
 	protected Integer   	mY2					= -1;
 	protected Integer 		mDX					= 0;
 	protected Integer		mDY					= 0;
+	protected Integer 		mRadius 			= 1;
 	protected RectF			mBounds				= new RectF();
 	protected double		mRotation			= 0;
 	protected Matrix		mMtxRotation		= new Matrix();
@@ -61,7 +62,7 @@ public class XKPGraphics extends View {
 		mY2 = ta.getDimensionPixelOffset(R.styleable.XKPGraphics_pos_y2, -1);
 		mDX = ta.getDimensionPixelOffset(R.styleable.XKPGraphics_pos_width, -1);
 		mDY = ta.getDimensionPixelOffset(R.styleable.XKPGraphics_pos_height, -1);
-		int rotation = ta.getInteger(R.styleable.XKPGraphics_rotation, 0);
+		double rotation = ta.getFloat(R.styleable.XKPGraphics_rotation, 0);
 		if(mDX != -1 && mDY != -1) {
 			mX2 = mX1 + mDX;
 			mY2 = mY1 + mDY;
@@ -80,8 +81,8 @@ public class XKPGraphics extends View {
 		mPaintFill.setColor(mFillColor);
 		mPaintFill.setAntiAlias(true);
 		mPaintFill.setStrokeWidth(mLineWidth);
-		setPosition(mX1, mY1, mX2, mY2);
 		setRotation(rotation);
+		setPosition(mX1, mY1, mX2, mY2);
 		setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(final View v, final MotionEvent event) {
 				if(!isEnabled())
@@ -230,6 +231,15 @@ public class XKPGraphics extends View {
 	}
 	protected void updateShapePosition() {
 	}
+	public void setRadius(Integer radius) {
+		mRadius = radius;
+		mX2 = mRadius * 2;
+		mY2 = mRadius * 2;
+		invalidate();
+	}
+	public Integer getRadius() {
+		return mRadius;
+	}
 	public void setPosition(Integer x1, Integer y1, Integer x2, Integer y2) {
 		mX1 = x1;
 		mY1 = y1;
@@ -242,6 +252,7 @@ public class XKPGraphics extends View {
 		mDY = Math.abs(mY2 - mY1);
 		if(mDX == 0) mDX = 1;
 		if(mDY == 0) mDY = 1;
+		mRadius = Math.max(mDX, mDY) / 2;
 		setRotation(mRotation);
 		updateShapePosition();
 		invalidate();

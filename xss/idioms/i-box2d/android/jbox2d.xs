@@ -198,6 +198,35 @@ on render_idiom_scripts(main)
 }
 
 //android delegates
+method start_rendering_body(it, world, vp)
+{
+	string host = "";
+	if(vp)
+		host = ", " + vp;
+	
+	var prop = it.get_property("shape");
+	var shape = prop.render_value();
+	
+	out(indent = 1)
+	{
+		XKPPhysicBody <xss:e value="it.output_id"/> = new XKPPhysicBody(<xss:e value="world.output_id"/>.getWorld(), 
+			<xss:e value="shape"/><xss:e value="host"/>);
+	}
+	
+	bool isSensor = it.sensor;
+	if (isSensor == null)
+		isSensor = false;
+	
+	out()
+	{
+		<xss:e value="it.output_id"/>.setSensor(<xss:e v="isSensor"/>);
+	}
+}
+
+method end_rendering_body(it, world, vp)
+{
+}
+
 method get_physical_host(it, vp)
 {
 	var visual_parent;
@@ -211,21 +240,21 @@ method get_physical_host(it, vp)
 	return visual_parent;
 }
 
-method create_body(it, visual_parent)
+method create_body(it, vp)
 {
 	string create_params = "";
 	if(it.shape == "circle")
 	{
-		if(visual_parent)
-			create_params = visual_parent + ".getRadius()";
+		if(vp)
+			create_params = vp + ".getRadius()";
 		else
 			create_params = it.radius as string;
 	}
 	else
 	if(it.shape == "rect")
 	{
-		if(visual_parent)
-			create_params = visual_parent + ".getDX(), " + visual_parent + ".getDY()";
+		if(vp)
+			create_params = vp + ".getDX(), " + vp + ".getDY()";
 		else
 			create_params = (it.width as string) + ", " + (it.height as string);
 			
@@ -247,7 +276,7 @@ method get_body_type(it)
 	return body_type;
 }
 
-method define_basic_properties(it, density, friction, restitution, body_type, angular_damping, linear_damping)
+method render_basic_properties(it, density, friction, restitution, body_type, angular_damping, linear_damping)
 {
 	//output it all
 	if(angular_damping)
@@ -275,38 +304,17 @@ method define_basic_properties(it, density, friction, restitution, body_type, an
 	}
 }
 
-method render_shape_definition(it, world, visual_parent)
+method render_shape_definition(it, world, vp)
 {
-	string host = "";
-	if(visual_parent)
-		host = ", " + visual_parent;
-	
-	var prop = it.get_property("shape");
-	var shape = prop.render_value();
-	
-	out(indent = 1)
-	{
-		XKPPhysicBody <xss:e value="it.output_id"/> = new XKPPhysicBody(<xss:e value="world.output_id"/>.getWorld(), 
-			<xss:e value="shape"/><xss:e value="host"/>);
-	}
-	
-	bool isSensor = it.sensor;
-	if (isSensor == null)
-		isSensor = false;
-	
-	out()
-	{
-		<xss:e value="it.output_id"/>.setSensor(<xss:e v="isSensor"/>);
-	}
 }
 
-method render_position(it, visual_parent)
+method render_position(it, vp)
 {
-	if (visual_parent)
+	if (vp)
 	{
 		out(indent = 1)
 		{
-			<xss:e value="it.output_id"/>.setPosition(<xss:e value="visual_parent"/>.getX1(), <xss:e value="visual_parent"/>.getY1());
+			<xss:e value="it.output_id"/>.setPosition(<xss:e value="vp"/>.getX1(), <xss:e value="vp"/>.getY1());
 		}
 	}
 	else

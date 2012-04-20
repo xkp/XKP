@@ -83,7 +83,7 @@ private void onLayoutStarted() {
 		body_1.setFriction(0.5f);
 		body_1.setRestitution(0.200000003f);
 		body_1.setBodyType(BodyType.DYNAMIC);
-			body_1.setPosition(90, 160);
+			body_1.setPosition(50, 200);
 		body_1.createBody(20);
 		XKPPhysicBody body_2 = new XKPPhysicBody(myWorld.getWorld(), 
 			ShapeType.POLYGON);
@@ -101,7 +101,7 @@ private void onLayoutStarted() {
 		body_3.setFriction(0.5f);
 		body_3.setRestitution(0.200000003f);
 		body_3.setBodyType(BodyType.DYNAMIC);
-			body_3.setPosition(130, 80);
+			body_3.setPosition(100, 60);
 		body_3.createBody(30);
 		XKPPhysicBody body_4 = new XKPPhysicBody(myWorld.getWorld(), 
 			ShapeType.POLYGON);

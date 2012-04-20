@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<xkp.android.libs.Layout.XKPLayout 
+				xmlns:android="http://schemas.android.com/apk/res/android" 
+				xmlns:xkp="http://schemas.android.com/apk/res/xkp.android.jBox2d_2" 
+				android:id="@+id/layoutapplication" 
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				xkp:placement="client"
+			>
+				<xkp.android.libs.Graphics.XKPImage android:id="@+id/btn1"
+				xkp:pos_x1="200dp"
+				xkp:pos_y1="200dp"
+				xkp:rotation="0.200000"
+				xkp:pos_width="50dp"
+				xkp:pos_height="50dp"
+				xkp:src="@drawable/smile_sad_48"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</xkp.android.libs.Graphics.XKPImage>
+			</xkp.android.libs.Layout.XKPLayout>

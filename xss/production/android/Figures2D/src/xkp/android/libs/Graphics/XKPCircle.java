@@ -7,7 +7,6 @@ import android.graphics.drawable.shapes.PathShape;
 import android.util.AttributeSet;
 import xkp.android.Figures2D.R;
 public class XKPCircle extends XKPGraphics {
-	private Integer mRadius = 1;
 	public XKPCircle(Context context) {
 		this(context, null);
 	}
@@ -29,12 +28,5 @@ public class XKPCircle extends XKPGraphics {
 		mPathShape.computeBounds(mBounds, true);
 		mDrawable = new ShapeDrawable(new PathShape(mPathShape, mBounds.width(), mBounds.height()));
 		mDrawable.setBounds(0, 0, (int) mBounds.width(), (int) mBounds.height());
-	}
-	public void setRadius(Integer radius) {
-		this.mRadius = radius;
-		invalidate();
-	}
-	public Integer getRadius() {
-		return mRadius;
 	}
 }

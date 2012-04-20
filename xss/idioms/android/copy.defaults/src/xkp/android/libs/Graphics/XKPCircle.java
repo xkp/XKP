@@ -14,8 +14,6 @@ import <xss:e value="base_namespace"/>.<xss:e value="appName"/>.R;
 
 public class XKPCircle extends XKPGraphics {
 	
-	private Integer mRadius = 1;
-	
 	public XKPCircle(Context context) {
 		this(context, null);
 	}
@@ -45,15 +43,5 @@ public class XKPCircle extends XKPGraphics {
 		
 		mDrawable = new ShapeDrawable(new PathShape(mPathShape, mBounds.width(), mBounds.height()));
 		mDrawable.setBounds(0, 0, (int) mBounds.width(), (int) mBounds.height());
-	}
-
-	public void setRadius(Integer radius) {
-		this.mRadius = radius;
-		
-		invalidate();
-	}
-	
-	public Integer getRadius() {
-		return mRadius;
 	}
 }

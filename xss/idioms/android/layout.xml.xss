@@ -212,6 +212,9 @@
 				if(!(prop.value is string))
 				{
 					assignValue = prop.render_value();
+				
+					int posf = String.find_last(assignValue, "f");
+					assignValue = String.substr(assignValue, 0, posf);
 				}
 			}
 			

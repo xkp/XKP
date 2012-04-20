@@ -245,6 +245,57 @@ on render_update()
 }
 
 //javascript delegates
+method start_rendering_body(it, world, vp)
+{
+	if (vp)
+	{
+		//must wrap this in a function so the box 2d objects are created on resize
+		out()
+		{
+			<xss:e v="vp"/>.events.addListener('resized', function(cmp)
+			<xss:open_brace/>
+				if (cmp.physics)
+					g_world.DestroyBody(cmp.physics);
+		}
+	}
+}
+
+method end_rendering_body(it, world, vp)
+{
+	if(it.mouse_joint)
+		out()
+		{
+			current_body.mouse_joint = <xss:e v="it.mouse_joint"/>;
+		}
+		
+	if (vp)
+	{
+		out()
+		{
+			cmp.physics = current_body;	
+			cmp.events.addListener('moved', update_body_position);
+			
+			current_body.host = cmp;
+			<xss:close_brace/>
+			);
+			
+			if (<xss:e v="vp"/>.w > 0 && <xss:e v="vp"/>.h > 0)
+			{
+				<xss:e v="vp"/>.events.dispatch("resized", [<xss:e v="vp"/>]);
+			}
+			
+			<xss:e v="vp"/>.RemoveFromWorld = function(keep_visual) 
+			{
+				g_world.DestroyBody(<xss:e v="vp"/>.physics);
+				if (!keep_visual)
+				{
+					<xss:e v="vp"/>.parent.removeComponent(<xss:e v="vp"/>);
+				}
+			}
+		}
+	}
+}
+
 method get_physical_host(it, vp)
 {
 	var visual_parent;
@@ -285,7 +336,7 @@ method get_body_type(it)
 	return body_type;
 }
 
-method define_basic_properties(it, density, friction, restitution, body_type, angular_damping, linear_damping)
+method render_basic_properties(it, density, friction, restitution, body_type, angular_damping, linear_damping)
 {
 	//output it all
 	if(angular_damping)
@@ -308,7 +359,7 @@ method define_basic_properties(it, density, friction, restitution, body_type, an
 	}
 }
 
-method render_shape_definition(it, world, visual_parent)
+method render_shape_definition(it, world, vp)
 {
 	if (it.shape == "rect")
 	{
@@ -324,7 +375,7 @@ method render_shape_definition(it, world, visual_parent)
 				fixDef.shape.SetAsBox(<xss:e v="it.width"/>/g_world_scale, <xss:e v="it.height"/>/g_world_scale);
 			}
 		}
-		else if (visual_parent)
+		else if (vp)
 		{
 			out()
 			{
@@ -343,7 +394,7 @@ method render_shape_definition(it, world, visual_parent)
 				fixDef.shape = new b2CircleShape(<xss:e v="it.radius"/>/g_world_scale);
 			}
 		}
-		else if (visual_parent)
+		else if (vp)
 		{
 			out()
 			{
@@ -368,9 +419,9 @@ method render_shape_definition(it, world, visual_parent)
 	}
 }
 
-method render_position(it, visual_parent)
+method render_position(it, vp)
 {
-	if (visual_parent)
+	if (vp)
 	{
 		out()
 		{

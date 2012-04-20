@@ -18,7 +18,7 @@ public class XKPPolygon extends XKPGraphics {
 	}
 	@Override
 	protected void onDraw(Canvas canvas) {
-		updateShapePosition();
+		setRotation(mRotation);
 		super.onDraw(canvas);
 	}
 	@Override

@@ -1146,7 +1146,7 @@
 				<set text="setAlpha({value})"/>
 			</property>
 			
-			<property id="rotation" type="float" ns="android" api_level="11">
+			<property id="rotation" type="float" ns="xkp" res_type="float">
 				<get text="getRotation()"/>
 				<set text="setRotation({value})"/>
 			</property>
