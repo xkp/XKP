@@ -1,0 +1,147 @@
+<module id="jbox2d" src="jbox2d.xs">
+
+	<types>
+	
+		<enum id="EShapeType" output_id="ShapeType" default="EShapeType.circle">
+			<property id="circle" type="EShapeType" output_id="CIRCLE">
+				<get text="ShapeType.CIRCLE" global="true"/>
+			</property>
+			
+			<property id="rect" type="EShapeType" output_id="POLYGON">
+				<get text="ShapeType.POLYGON" global="true"/>
+			</property>
+			
+			<property id="polygon" type="EShapeType" output_id="POLYGON">
+				<get text="ShapeType.POLYGON" global="true"/>
+			</property>
+			
+			<property id="unknown" type="EShapeType" output_id="UNKNOWN">
+				<get text="ShapeType.UNKNOWN" global="true"/>
+			</property>
+		</enum>
+		
+		<enum id="EBodyType" output_id="BodyType" default="EBodyType.dynamic">
+			<property id="dynamic" type="EBodyType" output_id="DYNAMIC">
+				<get text="BodyType.DYNAMIC" global="true"/>
+			</property>
+			
+			<property id="kinematic" type="EBodyType" output_id="KINEMATIC">
+				<get text="BodyType.KINEMATIC" global="true"/>
+			</property>
+			
+			<property id="static" type="EBodyType" output_id="STATIC">
+				<get text="BodyType.STATIC" global="true"/>
+			</property>
+		</enum>
+		
+		<class id="IPhysics" sub_ns="libs.JBox2d">
+			<property id="density" type="float">
+				<get text="getDensity()"/>
+				<set text="setDensity({value})"/>
+			</property>
+			
+			<property id="friction" type="float">
+				<get text="getFriction()"/>
+				<set text="setFriction({value})"/>
+			</property>
+			
+			<property id="restitution" type="float">
+				<get text="getRestitution()"/>
+				<set text="setRestitution({value})"/>
+			</property>
+			
+			<property id="angular_damping" type="float">
+				<get text="getAngularDamping()"/>
+				<set text="setAngularDamping({value})"/>
+			</property>
+			
+			<property id="linear_damping" type="float">
+				<get text="getLinearDamping()"/>
+				<set text="setLinearDamping({value})"/>
+			</property>
+		</class>
+		
+		<class id="IJoint">
+            <property id="body_a" type="string">
+				<set text="setBodyA({value})"/>
+			</property>
+			
+            <property id="body_b" type="string">
+				<set text="setBodyB({value})"/>
+			</property>
+		</class>
+		
+		<class id="physics_world" super="IPhysics" no_layout="true">
+			<array id="imports">
+				<object import="org.jbox2d.common.Vec2"/>
+				<object import="org.jbox2d.dynamics.BodyType"/>
+				<object import="xkp.android.libs.JBox2d.*"/>
+			</array>
+			
+			<property id="gravity_x" type="int" default_value="0.0"/>
+			<property id="gravity_y" type="int" default_value="10.0"/>
+			<property id="debug_draw" type="bool" default_value="false"/>
+			<property id="scale" type="float" default_value="1.0"/>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Graphics/" src_filename="XKPGraphics.java"/>
+				<object src_path="/res/values/" src_filename="styleable_XKPGraphics.xml"/>
+				
+				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPDDView.java"/>
+				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPDebugDraw.java"/>
+				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPJBox2d.java"/>
+				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPPhysicBody.java"/>
+			</array>
+		</class>
+
+		<class id="body" super="IPhysics" output_id="XKPPhysicBody" sub_ns="libs.JBox2d" no_layout="true" renderer="body.xss">
+            <constructor_params>
+                <parameter property="world"/>
+                <parameter property="shape"/>
+                <parameter property="host"/>
+            </constructor_params>
+
+			<array id="imports">
+				<object import="org.jbox2d.collision.shapes.ShapeType"/>
+				<object import="xkp.android.libs.JBox2d.XKPPhysicBody"/>
+			</array>
+			
+			<property id="world" type="string"/>
+			<property id="host" type="string"/>
+			
+			<property id="shape" type="EShapeType"/>
+			<property id="sensor" type="bool">
+				<get text="isSensor()"/>
+				<set text="setSensor({value})"/>
+			</property>
+			
+			<property id="body_type" type="EBodyType">
+				<get text="getBodyType()"/>
+				<set text="setBodyType({value})"/>
+			</property>
+			
+			<property id="x" type="float">
+				<get text="getPosition().x"/>
+				<set text="setPosition({value}, {path}.getPosition().y)"/>
+			</property>
+			
+			<property id="y" type="float">
+				<get text="getPosition().y"/>
+				<set text="setPosition({path}.getPosition().x, {value})"/>
+			</property>
+			
+			<property id="width" type="float"/>
+			<property id="height" type="float"/>
+			<property id="radius" type="float" default_value="0.0"/>
+			
+			<property id="rotation" type="float" default_value="0.0">
+				<get text="getAngle()"/>
+				<set text="setAngle({value})"/>
+			</property>
+        </class>
+
+        <class id="physics" super="body" output_id="XKPPhysicBody" sub_ns="libs.JBox2d" no_render="true" renderer="body.xss"/>
+		
+    </types>
+	
+</module>

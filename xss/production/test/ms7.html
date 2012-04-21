@@ -10,8 +10,8 @@
 <script type="text/javascript" src="../js/keys.js"></script>
 		<script type="text/javascript" src="../js/ms-ui.js"></script>
 		<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript">	
-var drawingCanvas;		
+<script type="text/javascript">
+    var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -78,7 +78,6 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var div1;
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -144,8 +143,9 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    div1 = new ms.ui.Component( g_ui_root.manager, g_ui_root
-	    );div1.mouse_thru = true;
+		    div1 = 
+			new ms.ui.Component(g_ui_root.manager, g_ui_root);
+	    div1.mouse_thru = true;
         div1 = div1;
 			document.onkeydown = function(ev)
 			{

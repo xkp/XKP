@@ -10,8 +10,8 @@
 <script type="text/javascript" src="../js/keys.js"></script>
 		<script type="text/javascript" src="../js/ms-ui.js"></script>
 		<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript">	
-var drawingCanvas;		
+<script type="text/javascript">
+    var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -92,7 +92,6 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var div1;var c1;var r1;var p1;var line1;var btn;
             application.x = null;
             application.y = null;
 window.onload = function() 
@@ -160,15 +159,16 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    div1 = new ms.ui.Component( g_ui_root.manager, g_ui_root
-	    );div1.mouse_thru = true;
+		    div1 = 
+			new ms.ui.Component(g_ui_root.manager, g_ui_root);
+	    div1.mouse_thru = true;
         div1 = div1;
             div1.set_x(0);
             div1.set_y(0);
             div1.set_width(400);
             div1.set_height(200);
-		    c1 = new ms.ui.Circle( div1.manager, div1
-	    , "cyan", "black", 3);
+		    c1 = 
+			new ms.ui.Circle(div1.manager, div1, null, null, null);
         c1 = c1;
             c1.set_x(50);
             c1.set_y(50);
@@ -180,8 +180,8 @@ window.onload = function()
 	}
 	);
 		application.are_obj_events = true;
-		    r1 = new ms.ui.Rectangle( div1.manager, div1
-	    , "green", null, null);
+		    r1 = 
+			new ms.ui.Rectangle(div1.manager, div1, null, null, null);
         r1 = r1;
             r1.set_x(200);
             r1.set_y(50);
@@ -196,23 +196,23 @@ window.onload = function()
 	}
 	);
 		application.are_obj_events = true;
-		    p1 = new ms.ui.Polygon( div1.manager, div1
-	    , "pink", "brown", 3);
+		    p1 = 
+			new ms.ui.Polygon(div1.manager, div1, null, null, null);
         p1 = p1;
             p1.alpha(40);
 		p1.points.push({id:"point1", x:300, y:300});
 		p1.points.push({id:"point2", x:300, y:250});
 		p1.points.push({id:"point3", x:390, y:200});
 		p1.points.push({id:"point4", x:350, y:400});
-		    line1 = new ms.ui.Line( div1.manager, div1
-	    );
+		    line1 = 
+			new ms.ui.Line(div1.manager, div1);
         line1 = line1;
             line1.set_x1(500);
             line1.set_y1(350);
             line1.set_x2(500);
             line1.set_y2(500);
-		    btn = new ms.ui.Button( g_ui_root.manager, g_ui_root
-	    , "images/smile_grin_48.png", "images/smile_sad_48.png");
+		    btn = 
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
         btn = btn;
             btn.set_x(270);
             btn.set_y(200);

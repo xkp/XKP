@@ -236,7 +236,7 @@
 		
 		<class id="IClickInsideFigureListener">
 			<array id="imports">
-				<object import="xkp.android.libs.Graphic.XKPGraphics.OnClickInsideFigureListener"/>
+				<object import="xkp.android.libs.Graphics.XKPGraphics.OnClickInsideFigureListener"/>
 			</array>
 			
 			<event id="click" output_id="onClickInsideFigure" interface="OnClickInsideFigureListener" def_args="View v" set_handle="setOnClickInsideFigureListener" set_param_hnd="this"/>
@@ -649,7 +649,7 @@
 			</method>-->
 		</class>
 		
-		<class id="img" super="IWidget" output_id="ImageView">
+		<class id="img_native" super="IWidget" output_id="ImageView">
 			<array id="imports">
 				<object import="android.widget.ImageView"/>
 				<object import="xkp.android.libs.Widget.XKPUtils"/>
@@ -682,7 +682,7 @@
 			</array>
 		</class>
 		
-		<class id="imagemap" super="img" sub_ns="libs.Widget" output_id="XKPImageMap">
+		<class id="imagemap" super="img_native" sub_ns="libs.Widget" output_id="XKPImageMap">
 			<array id="imports">
 				<object import="xkp.android.libs.Widget.XKPImageMap"/>
 			</array>
@@ -724,7 +724,7 @@
 			</array>
 		</class>
 		
-		<class id="imagebutton" super="img" output_id="ImageButton">
+		<class id="imagebutton" super="img_native" output_id="ImageButton">
 			<array id="imports">
 				<object import="android.widget.ImageButton"/>
 			</array>
@@ -997,10 +997,10 @@
 			<import id="IClassImageAdapter"/>
 		</class>
 		
-		<class id="holder" super="IWidget" sub_ns="libs.Layout" output_id="XKPLayout">
+		<class id="holder" super="IWidget" sub_ns="libs.Layout" output_id="XKPLayout" container="true">
 		</class>
 		
-		<class id="div" super="holder" sub_ns="libs.Layout" output_id="XKPLayout">
+		<class id="div" super="holder" sub_ns="libs.Layout" output_id="XKPLayout" container="true">
 		</class>
 		
 		<class id="switcher" super="IWidget" sub_ns="libs.Widget" output_id="XKPSwitcher">
@@ -1047,7 +1047,7 @@
 		<!-- GRAPHIC declarations -->
 		<class id="IGraphic">
 			<array id="xkp_files">
-				<object src_path="/src/xkp/android/libs/Graphic/" src_filename="XKPGraphics.java"/>
+				<object src_path="/src/xkp/android/libs/Graphics/" src_filename="XKPGraphics.java"/>
 				<object src_path="/res/values/" src_filename="styleable_XKPGraphics.xml"/>
 			</array>
 			
@@ -1146,41 +1146,64 @@
 				<set text="setAlpha({value})"/>
 			</property>
 			
-			<property id="rotation" type="float" ns="android" api_level="11">
+			<property id="rotation" type="float" ns="xkp" res_type="float">
 				<get text="getRotation()"/>
 				<set text="setRotation({value})"/>
 			</property>
+
+			<method id="click" type="bool" output_id="performClickInsideFigure"/>
 			
 			<import id="IClickInsideFigureListener"/>
 		</class>
 		
-		<class id="rectangle" super="IGraphic" sub_ns="libs.Graphic" output_id="XKPRectangle">
+		<class id="img" super="IGraphic" sub_ns="libs.Graphics" output_id="XKPImage">
 			<array id="imports">
-				<object import="xkp.android.libs.Graphic.XKPRectangle"/>
+				<object import="xkp.android.libs.Graphics.XKPImage"/>
+				<object import="xkp.android.libs.Widget.XKPUtils"/>
+			</array>
+			
+			<property id="src" type="string" output_id="src" ns="xkp" res_type="drawable">
+				<!--<set text="util.setResourceXKPImage(R.id.{path}, {value})" global="true"/>-->
+				<set text="util.setResourceXKPImage({path}, {value})" global="true"/>
+			</property>
+			
+			<array id="utils">
+				<object name="setResourceXKPImage" file_name="setResourceXKPImage.util.xss" import="xkp.android.libs.Graphics.XKPImage"/>
 			</array>
 			
 			<array id="xkp_files">
-				<object src_path="/src/xkp/android/libs/Graphic/" src_filename="XKPRectangle.java"/>
+				<object src_path="/src/xkp/android/libs/Graphics/" src_filename="XKPImage.java"/>
+				<object src_path="/res/values/" src_filename="styleable_XKPImage.xml"/>
 			</array>
 		</class>
 		
-		<class id="line" super="IGraphic" sub_ns="libs.Graphic" output_id="XKPLine">
+		<class id="rectangle" super="IGraphic" sub_ns="libs.Graphics" output_id="XKPRectangle">
 			<array id="imports">
-				<object import="xkp.android.libs.Graphic.XKPLine"/>
+				<object import="xkp.android.libs.Graphics.XKPRectangle"/>
 			</array>
 			
 			<array id="xkp_files">
-				<object src_path="/src/xkp/android/libs/Graphic/" src_filename="XKPLine.java"/>
+				<object src_path="/src/xkp/android/libs/Graphics/" src_filename="XKPRectangle.java"/>
 			</array>
 		</class>
 		
-		<class id="circle" super="IGraphic" sub_ns="libs.Graphic" output_id="XKPCircle">
+		<class id="line" super="IGraphic" sub_ns="libs.Graphics" output_id="XKPLine">
 			<array id="imports">
-				<object import="xkp.android.libs.Graphic.XKPCircle"/>
+				<object import="xkp.android.libs.Graphics.XKPLine"/>
 			</array>
 			
 			<array id="xkp_files">
-				<object src_path="/src/xkp/android/libs/Graphic/" src_filename="XKPCircle.java"/>
+				<object src_path="/src/xkp/android/libs/Graphics/" src_filename="XKPLine.java"/>
+			</array>
+		</class>
+		
+		<class id="circle" super="IGraphic" sub_ns="libs.Graphics" output_id="XKPCircle">
+			<array id="imports">
+				<object import="xkp.android.libs.Graphics.XKPCircle"/>
+			</array>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Graphics/" src_filename="XKPCircle.java"/>
 				<object src_path="/res/values/" src_filename="styleable_XKPCircle.xml"/>
 			</array>
 			
@@ -1190,13 +1213,13 @@
 			</property>
 		</class>
 		
-		<class id="polygon" super="IGraphic" sub_ns="libs.Graphic" output_id="XKPPolygon">
+		<class id="polygon" super="IGraphic" sub_ns="libs.Graphics" output_id="XKPPolygon">
 			<array id="imports">
-				<object import="xkp.android.libs.Graphic.XKPPolygon"/>
+				<object import="xkp.android.libs.Graphics.XKPPolygon"/>
 			</array>
 			
 			<array id="xkp_files">
-				<object src_path="/src/xkp/android/libs/Graphic/" src_filename="XKPPolygon.java"/>
+				<object src_path="/src/xkp/android/libs/Graphics/" src_filename="XKPPolygon.java"/>
 			</array>
 			
 			<property id="points_count" type="int" no_layout="true">
@@ -1222,23 +1245,23 @@
 			<property id="y" type="int"/>
 		</class>
 		
-		<class id="point" super="IGraphic" sub_ns="libs.Graphic" output_id="XKPPoint">
+		<class id="point" super="IGraphic" sub_ns="libs.Graphics" output_id="XKPPoint">
 			<array id="imports">
-				<object import="xkp.android.libs.Graphic.XKPPoint"/>
+				<object import="xkp.android.libs.Graphics.XKPPoint"/>
 			</array>
 			
 			<array id="xkp_files">
-				<object src_path="/src/xkp/android/libs/Graphic/" src_filename="XKPPoint.java"/>
+				<object src_path="/src/xkp/android/libs/Graphics/" src_filename="XKPPoint.java"/>
 			</array>
 		</class>
 		
-		<class id="clip_area" super="IGraphic" sub_ns="libs.Graphic" output_id="XKPClip">
+		<class id="clip_area" super="IGraphic" sub_ns="libs.Graphics" output_id="XKPClip">
 			<array id="imports">
-				<object import="xkp.android.libs.Graphic.XKPClip"/>
+				<object import="xkp.android.libs.Graphics.XKPClip"/>
 			</array>
 			
 			<array id="xkp_files">
-				<object src_path="/src/xkp/android/libs/Graphic/" src_filename="XKPClip.java"/>
+				<object src_path="/src/xkp/android/libs/Graphics/" src_filename="XKPClip.java"/>
 				<object src_path="/res/values/" src_filename="styleable_XKPClip.xml"/>
 			</array>
 			

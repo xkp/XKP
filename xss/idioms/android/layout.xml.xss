@@ -55,20 +55,21 @@
 			strViewName += view.type.output_id;
 		}
 		
+		if(!view.parent && compiler.is_type(view))
+		{
+			out(indent = ind)
+			{
+				<<xss:e value="strViewName"/> android:id="@+id/layout<xss:e value="clazz.output_id"/>" 
+				xmlns:android="http://schemas.android.com/apk/res/android" 
+				xmlns:xkp="http://schemas.android.com/apk/res/<xss:e value="base_namespace"/>.<xss:e value="appName"/>" 
+			}
+		}
+		else
 		if(view.id != application.id)
 		{
 			out(indent = ind)
 			{
 				<<xss:e value="strViewName"/> android:id="@+id/<xss:e value="view.output_id"/>"
-			}
-		}
-		
-		if(!view.parent && compiler.is_type(view))
-		{
-			out(indent = ind)
-			{
-				xmlns:android="http://schemas.android.com/apk/res/android" 
-				xmlns:xkp="http://schemas.android.com/apk/res/<xss:e value="base_namespace"/>.<xss:e value="appName"/>" 
 			}
 		}
 		
@@ -211,6 +212,9 @@
 				if(!(prop.value is string))
 				{
 					assignValue = prop.render_value();
+				
+					int posf = String.find_last(assignValue, "f");
+					assignValue = String.substr(assignValue, 0, posf);
 				}
 			}
 			

@@ -33,6 +33,7 @@ var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var canvas_position = {x:0, y:0};
+var streamer = new ms.streamer.Streamer();
 var app_width = 1000;
 var app_height = 800;
 var plane_anim;var quickly_anim;var alpha_anim;var idle_anim;var show_me;var back_to;var init_anim;var liquid;var banner;var loading;var lens1;var lens2;var facebook;var twitter;var btn1;var btn2;var linetop;var line1;var line2;var line3;var line4;var rect1;
@@ -569,9 +570,8 @@ var anim_plane;var mat;var scene;var camera_1;
         function create_anim_plane(
     width,height,x_segments,y_segments ) { 
     var anim_plane;
-	    var anim_plane_plane = 
-new THREE.Plane(
-);
+	    anim_plane_plane = 
+		new THREE.Plane(width, height, x_segments, y_segments) ;
 	    anim_plane = new THREE.Mesh(anim_plane_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(anim_plane);
 		anim_plane.events = new ms.event.EventHolder();
@@ -1852,8 +1852,8 @@ g_sequence_manager);
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    liquid = new ms.ui.RippleEffect( g_ui_root.manager, g_ui_root
-	    , null);
+		    liquid = 
+			new ms.ui.RippleEffect(g_ui_root.manager, g_ui_root, null);
         liquid = liquid;
             liquid.set_x(0);
             liquid.set_y(0);
@@ -1871,56 +1871,56 @@ g_sequence_manager);
 			liquid.gradient.colors.push({offset: 1,
 																 color: 'red'});
 	liquid.invalidate();
-		    banner = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/pictures/banner.png");
+		    banner = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         banner = banner;
             banner.set_x(15);
             banner.set_y(10);
             banner.set_width(231);
             banner.set_height(28);
             banner.alpha(0);
-		    loading = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/pictures/loading.png");
+		    loading = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         loading = loading;
             loading.set_x(280);
             loading.set_y(550);
             loading.set_width(140);
             loading.set_height(22);
             loading.alpha(0);
-		    lens1 = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/pictures/lens_d1.png");
+		    lens1 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         lens1 = lens1;
             lens1.set_x(225);
             lens1.set_y(225);
             lens1.set_width(250);
             lens1.set_height(250);
             lens1.alpha(0);
-		    lens2 = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/pictures/lens_d2.png");
+		    lens2 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         lens2 = lens2;
             lens2.set_x(220);
             lens2.set_y(220);
             lens2.set_width(260);
             lens2.set_height(260);
             lens2.alpha(0);
-		    facebook = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/pictures/facebook.png");
+		    facebook = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         facebook = facebook;
             facebook.set_x(750);
             facebook.set_y(4);
             facebook.set_width(31);
             facebook.set_height(31);
             facebook.alpha(0);
-		    twitter = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/pictures/twitter.png");
+		    twitter = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         twitter = twitter;
             twitter.set_x(800);
             twitter.set_y(4);
             twitter.set_width(31);
             twitter.set_height(31);
             twitter.alpha(0);
-		    btn1 = new ms.ui.Button( g_ui_root.manager, g_ui_root
-	    , "images/pictures/arrow_up.png", "images/pictures/arrow_down.png");
+		    btn1 = 
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
         btn1 = btn1;
             btn1.set_x(0);
             btn1.set_y(300);
@@ -1961,8 +1961,8 @@ application.zoomed.rotation.y = 0;
 	}
 	);
 		application.are_obj_events = true;
-		    btn2 = new ms.ui.Button( g_ui_root.manager, g_ui_root
-	    , "images/pictures/arrow_up.png", "images/pictures/arrow_down.png");
+		    btn2 = 
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
         btn2 = btn2;
             btn2.set_x(840);
             btn2.set_y(300);
@@ -2002,8 +2002,8 @@ application.zoomed.rotation.y = 0;
 	}
 	);
 		application.are_obj_events = true;
-		    linetop = new ms.ui.Line( g_ui_root.manager, g_ui_root
-	    );
+		    linetop = 
+			new ms.ui.Line(g_ui_root.manager, g_ui_root);
         linetop = linetop;
             linetop.set_x1(5);
             linetop.set_y1(40);
@@ -2011,8 +2011,8 @@ application.zoomed.rotation.y = 0;
             linetop.set_y2(40);
             linetop.alpha(60);
             linetop.set_color("white");
-		    line1 = new ms.ui.Line( g_ui_root.manager, g_ui_root
-	    );
+		    line1 = 
+			new ms.ui.Line(g_ui_root.manager, g_ui_root);
         line1 = line1;
             line1.set_x1(200);
             line1.set_y1(200);
@@ -2020,8 +2020,8 @@ application.zoomed.rotation.y = 0;
             line1.set_y2(200);
             line1.alpha(60);
             line1.set_color("white");
-		    line2 = new ms.ui.Line( g_ui_root.manager, g_ui_root
-	    );
+		    line2 = 
+			new ms.ui.Line(g_ui_root.manager, g_ui_root);
         line2 = line2;
             line2.set_x1(500);
             line2.set_y1(200);
@@ -2029,8 +2029,8 @@ application.zoomed.rotation.y = 0;
             line2.set_y2(200);
             line2.alpha(60);
             line2.set_color("white");
-		    line3 = new ms.ui.Line( g_ui_root.manager, g_ui_root
-	    );
+		    line3 = 
+			new ms.ui.Line(g_ui_root.manager, g_ui_root);
         line3 = line3;
             line3.set_x1(500);
             line3.set_y1(500);
@@ -2038,8 +2038,8 @@ application.zoomed.rotation.y = 0;
             line3.set_y2(500);
             line3.alpha(60);
             line3.set_color("white");
-		    line4 = new ms.ui.Line( g_ui_root.manager, g_ui_root
-	    );
+		    line4 = 
+			new ms.ui.Line(g_ui_root.manager, g_ui_root);
         line4 = line4;
             line4.set_x1(200);
             line4.set_y1(500);
@@ -2047,8 +2047,8 @@ application.zoomed.rotation.y = 0;
             line4.set_y2(500);
             line4.alpha(60);
             line4.set_color("white");
-		    rect1 = new ms.ui.Rectangle( g_ui_root.manager, g_ui_root
-	    , null, "white", null);
+		    rect1 = 
+			new ms.ui.Rectangle(g_ui_root.manager, g_ui_root, null, null, null);
         rect1 = rect1;
             rect1.set_x(200);
             rect1.set_y(200);
@@ -2058,12 +2058,10 @@ application.zoomed.rotation.y = 0;
 mat = new THREE.MeshBasicMaterial({
 color:white
 	});
-scene = 
-new THREE.Scene(
-);
-camera_1 = 
-new THREE.Camera(
-45,1.5,1,10000);
+			scene = 
+			new THREE.Scene() ;
+		camera_1 = 
+		new THREE.Camera(45, 1.5, 1, 10000, null) ;	
 		active_camera = camera_1;
             camera_1.position.z = 1000;
             application.art_planes = [];

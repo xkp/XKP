@@ -11,7 +11,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 			>
-				<xkp.android.libs.Graphic.XKPCircle android:id="@+id/c1"
+				<xkp.android.libs.Graphics.XKPCircle android:id="@+id/c1"
 				xkp:pos_x1="150dp"
 				xkp:pos_y1="200dp"
 				xkp:radius="60dp"
@@ -21,8 +21,8 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 			>
-				</xkp.android.libs.Graphic.XKPCircle>
-				<xkp.android.libs.Graphic.XKPRectangle android:id="@+id/r1"
+				</xkp.android.libs.Graphics.XKPCircle>
+				<xkp.android.libs.Graphics.XKPRectangle android:id="@+id/r1"
 				xkp:pos_x1="200dp"
 				xkp:pos_y1="50dp"
 				xkp:pos_width="60dp"
@@ -33,14 +33,14 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 			>
-				</xkp.android.libs.Graphic.XKPRectangle>
-				<xkp.android.libs.Graphic.XKPPolygon android:id="@+id/p1"
+				</xkp.android.libs.Graphics.XKPRectangle>
+				<xkp.android.libs.Graphics.XKPPolygon android:id="@+id/p1"
 				xkp:fill_color="@color/pink"
 				xkp:stroke_color="@color/brown"
 				xkp:line_width="3dp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 			>
-				</xkp.android.libs.Graphic.XKPPolygon>
+				</xkp.android.libs.Graphics.XKPPolygon>
 				</xkp.android.libs.Layout.XKPLayout>
 			</xkp.android.libs.Layout.XKPLayout>

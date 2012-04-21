@@ -11,8 +11,8 @@
 		<script type="text/javascript" src="../js/ms-ui.js"></script>
 		<script type="text/javascript" src="../js/ms-sequence.js"></script>
 		<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript">	
-var drawingCanvas;		
+<script type="text/javascript">
+    var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -85,7 +85,6 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var lbl1;var lbl2;var lbl3;var lbl4;var btn1;var btn2;var btn3;var btn4;var anim1;var anim2;var anim3;var anim4;
             application.click_count = 0;
 window.onload = function() 
 {
@@ -152,40 +151,40 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    lbl1 = new ms.ui.Label( g_ui_root.manager, g_ui_root
-	    , null);
+		    lbl1 = 
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
         lbl1 = lbl1;
             lbl1.text("Button 1 Stopped");
             lbl1.set_x(10);
             lbl1.set_y(10);
             lbl1.set_width(140);
             lbl1.set_height(35);
-		    lbl2 = new ms.ui.Label( g_ui_root.manager, g_ui_root
-	    , null);
+		    lbl2 = 
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
         lbl2 = lbl2;
             lbl2.text("Button 2 Stopped");
             lbl2.set_x(10);
             lbl2.set_y(30);
             lbl2.set_width(140);
             lbl2.set_height(35);
-		    lbl3 = new ms.ui.Label( g_ui_root.manager, g_ui_root
-	    , null);
+		    lbl3 = 
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
         lbl3 = lbl3;
             lbl3.text("Button 3 Looping...");
             lbl3.set_x(10);
             lbl3.set_y(50);
             lbl3.set_width(140);
             lbl3.set_height(35);
-		    lbl4 = new ms.ui.Label( g_ui_root.manager, g_ui_root
-	    , null);
+		    lbl4 = 
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
         lbl4 = lbl4;
             lbl4.text("Button 4 Waiting For Click...");
             lbl4.set_x(10);
             lbl4.set_y(70);
             lbl4.set_width(140);
             lbl4.set_height(35);
-		    btn1 = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/img1.png");
+		    btn1 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         btn1 = btn1;
             btn1.set_x(40);
             btn1.set_y(110);
@@ -198,8 +197,8 @@ window.onload = function()
 	}
 	);
 		application.are_obj_events = true;
-		    btn2 = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/img1.png");
+		    btn2 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         btn2 = btn2;
             btn2.set_x(40);
             btn2.set_y(160);
@@ -212,8 +211,8 @@ window.onload = function()
 	}
 	);
 		application.are_obj_events = true;
-		    btn3 = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/img1.png");
+		    btn3 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         btn3 = btn3;
             btn3.set_x(40);
             btn3.set_y(210);
@@ -231,8 +230,8 @@ anim3.start();
 	}
 	);
 		application.are_obj_events = true;
-		    btn4 = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/img1.png");
+		    btn4 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         btn4 = btn4;
             btn4.set_x(40);
             btn4.set_y(260);

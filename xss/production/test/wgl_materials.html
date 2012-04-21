@@ -16,6 +16,7 @@
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
 		<script type="text/javascript" src="../js/three/Three.js"></script>
 		<script type="text/javascript" src="../js/three/Stats.js"></script>
 		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
@@ -29,6 +30,7 @@ var canvas_position = {x:0, y:0};
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
+var streamer = new ms.streamer.Streamer();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
@@ -52,13 +54,15 @@ application.events.dispatch("switch_cameras", []);
 }
 var my_sphere;var material_wireframe;var all_in_one;var material_sphere1;var material_sphere2;var material_sphere3;var material_sphere4;var material_sphere5;var material_sphere6;var material_sphere7;var material_sphere8;var material_sphere9;var material_particle;var scene;var camera_1;var amb_light_1;var dir_light_1;var particle_1;var point_light_1;var plane_1;
         function create_my_sphere(
-    radius,x_segments,y_segments ) { var my_sphere;
+    radius,x_segments,y_segments ) { 
+    var my_sphere;
 	    var my_sphere_sphere = 
 new THREE.Sphere(
 radius,x_segments,y_segments);
 	    my_sphere = new THREE.Mesh(my_sphere_sphere, new THREE.MeshBasicMaterial());
 	    scene.addObject(my_sphere);
 		my_sphere.events = new ms.event.EventHolder();
+        var this__ = my_sphere;
         my_sphere.mat = null;
         my_sphere.mat_set = function (value)
         {

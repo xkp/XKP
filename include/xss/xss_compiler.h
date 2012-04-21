@@ -219,7 +219,7 @@ namespace xkp
         XSSModule    idiom_by_id(const str& id);
         str          render_code(const str& code, param_list_decl& args, XSSContext ctx);
         void         add_dependencies(XSSObjectList& dependencies);
-        DynamicArray get_dependencies(); 
+        DynamicArray get_dependencies();
         str          build_project(const param_list params);
         str          get_result();
         void         render_app_types(const str& renderer);
@@ -350,7 +350,8 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<str,          2>("property_get",       &xss_compiler::property_get);
         method_<bool,         1>("is_type",            &xss_compiler::is_type);
         method_<bool,         1>("application_object", &xss_compiler::application_object);
-        method_<variant,      1>("get_idiom",          &xss_compiler::idiom_by_id);
+        method_<variant,      1>("idiom_by_id",        &xss_compiler::idiom_by_id);
+        method_<variant,      1>("idiom_by_class",     &xss_compiler::idiom_by_class);
         method_<DynamicArray, 0>("get_dependencies",   &xss_compiler::get_dependencies);
         method_<void,         1>("render_app_types",   &xss_compiler::render_app_types);
       }

@@ -11,7 +11,7 @@
 		<image id="img8" src="photo_8.jpg"/>
 	</resources>
 
-	<img id="album" src="photo_1.jpg" width="320" height="120" placement="center"/>
+	<img_native id="album" src="photo_1.jpg" width="320" height="120" placement="center"/>
 	<button id="changer" height="50" caption="Changer" placement="bottom"/>
 	<label id="identifier" height="40" placement="top"/>
 

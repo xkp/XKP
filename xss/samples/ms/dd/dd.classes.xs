@@ -1,8 +1,6 @@
 
 class image_plane : plane
 {	
-	property destination : array<float>;
-	
 	method set_image(value)
 	{		
 		texture = value;
@@ -19,12 +17,17 @@ class image_plane : plane
         unselected.start();
         selected.stop();
 	}
+
+    on click()
+    {
+        dispatch application.image_selected(this);
+    }
 }
 
 class image_group : transform
 {
-    array<anim_plane> planes_ = [img1, img2, img3, img4, img5, img6, img7, img8]; 
-
+	property destination : object;
+	
 	property images : array <string>	
 	{
 		for(int i = 0; i < value.length; i++)
@@ -41,6 +44,8 @@ class image_group : transform
             planes_[i].move.start();
 		}
     }
+
+    array<anim_plane> planes_ = [img1, img2, img3, img4, img5, img6, img7, img8]; 
 }
 
 class social_button : img

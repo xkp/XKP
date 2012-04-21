@@ -44,6 +44,7 @@ anim3.stop();
 				bindViews();
 			}
 			private void bindViews() {
+		// TIPS: create an observer for notify layout updated
 		layoutapplication = (XKPLayout) findViewById(R.id.layoutapplication);
 		ViewTreeObserver mainLayoutViewTreeObserver = layoutapplication.getViewTreeObserver();
 		if(mainLayoutViewTreeObserver.isAlive()) {

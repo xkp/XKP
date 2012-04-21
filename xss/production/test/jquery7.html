@@ -1,62 +1,292 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-    
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"
-        />
-        <title>TITLE</title>
-        <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
-        <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
-        <script type="text/javascript" src="../js/jquery-idiom.js"></script>
-        <link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css"></link>
-        <script type="text/javascript" src="../js/utils.js"></script>
-        <script type="text/javascript" src="../js/prototype.js"></script>
-        <script type="text/javascript">
-            $(function () {
-                var __div1 = $("#__div1");
-                var __div2 = $("#__div2");
-                var lbl1 = $("#lbl1");
-                var edit1 = $("#edit1");
-                var btn1 = $("#btn1").button();
-                var app = $("#app");
-                var application = $("#application");
-            });
-        </script>
-        <style>
-            #__div1 {
-                position : relative
-            }
-            #__div2 {
-                left : 0px;
-                top : 0px;
-                width : 200px;
-                position : absolute
-            }
-            #edit1 {
-                width : 252px
-            }
-            #app {
-                left : 300px;
-                top : 0px;
-                width : 600px;
-                height : 400px;
-                position : absolute
-            }
-        </style>
-    </head>
-    
-    <body>
-        <div id='application'>
-            <div id="__div1">
-                <table border="0"></table>
-                <div id="__div2">
-                    <label id="lbl1">Enter Id</label>
-                    <input id="edit1" type="text" name="edit1"></input>
-                    <input id="btn1" type="button" name="btn1" value="Update"></input>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>TITLE</title>
+<script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
+<script type="text/javascript" src="../js/jquery-idiom.js"></script>
+<link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css">
+                <script type="text/javascript" src="../js/utils.js"></script>
+                <script type="text/javascript" src="../js/prototype.js"></script>
+                <script type="text/javascript" src="../js/ms-event.js"></script>
+                <script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript">
+$(function() {
+			var __div1 = $("#__div1");
+			var __div2 = $("#__div2");
+			var lbl1 = $("#lbl1");
+			var edit1 = $("#edit1");
+			var btn1 = $("#btn1").button();
+			var app = $("#app");
+			var application = $("#application");
+function build_application(host, canvasId)
+{
+    var drawingCanvas;		
+var g_ui;
+var g_elapsed = -1;
+var g_delta = 0.0;
+var g_canvas;
+var g_ui_root;
+var application = {};
+application.events = new ms.event.EventHolder();
+var SoundUtils = new ms.ui.SoundUtils();
+		if(drawingCanvas){
+			var client =
+			{
+				width: 600,
+				height: 400,
+				canvas: drawingCanvas
+			};
+            var streamer = new ms.streamer.Streamer();							
+			var ui = new ms.ui.Manager(client, streamer);			
+			var g_ui = ui;
+			var g_ui_root = ui.root;
+			var mouse_pressed = false;
+		}
+		var g_sequence_manager = new ms.state.Manager();
+        function default_interpolate(a, b, t)
+        {
+            return a + (b - a)*t;
+        }		
+		var streamer = new ms.streamer.Streamer();	
+		var ResourceUtils = new ms.streamer.ResourceUtils();
+		var global_package = new ms.streamer.Package(streamer);	
+                global_package.add_item(
+            {
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/img1.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+		global_package.add_item({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});		
+		global_package.load();	
+    var canvas_position = {x:0, y:0};
+function start(resolution)  
+{  
+	function updater()  
+	{
+		canvas_position = getElementPosition(drawingCanvas);
+		var now   = new Date().getTime();
+        if (g_elapsed < 0)
+            g_delta = 0; //first update
+        else
+		    g_delta  = now - g_elapsed;  
+        g_elapsed = now; 
+		g_sequence_manager.update(g_delta);
+		application.events.dispatch("updates", []);	
+		var context = g_canvas.getContext('2d');
+		g_ui.update(g_delta, context);
+        window.setTimeout(updater, resolution);  
+	}    
+	window.setTimeout(updater, resolution);  
+}  
+            fade_in = Class.create(ms.state.Sequence,
+        {
+    initialize: function($super
+                , manager
+                )
+    {
+        $super(
+        manager        );
+        this.events = new ms.event.EventHolder(); 
+        var this__  = this;
+                var this__ = this;
+        var ____i1 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.target.alpha(value);
+            },
+            [
+        {t: 0, value: 0},
+        {t: 1, value: 70},
+            ]);
+            this.addHandler(____i1);	              
+        var ____i2 = new ms.state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.target.alpha(value);
+            },
+            [
+        {t: 1, value: 70},
+        {t: 2, value: 100},
+            ]);
+            this.addHandler(____i2);	              
+            if (this.init)
+                this.init();
+            },
+});
+	var ev_parent = this;
+	application.events.addListener("init", function()
+	{    
+	}
+	);
+window.onload = function() 
+{
+	drawingCanvas = document.getElementById("");
+    g_canvas = drawingCanvas;
+	if (drawingCanvas && drawingCanvas.getContext)
+	{
+		var client =
+		{
+			width: 600,
+			height: 400,
+			canvas: drawingCanvas
+		};
+		var ui = new ms.ui.Manager(client, streamer);
+		g_ui = ui;
+        g_ui_root = ui.root;
+     	ui.load_resources(function()
+		{
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+		    img1 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
+        img1 = img1;
+            img1.set_x(100);
+            img1.set_y(100);
+            img1.set_width(50);
+            img1.set_height(50);
+	var ev_parent = this;
+	img1.events.addListener("click", function()
+	{    
+		fade1.start();
+	}
+	);
+		application.are_obj_events = true;
+		    img2 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
+        img2 = img2;
+            img2.set_x(160);
+            img2.set_y(100);
+            img2.set_width(50);
+            img2.set_height(50);
+fade1 =
+new fade_in(
+g_sequence_manager);
+            fade1.target = img1;
+fade2 =
+new fade_in(
+g_sequence_manager);
+            fade2.target = img2;
+            fade2.loop = true;
+                fade2.start();
+			document.onkeydown = function(ev)
+			{
+				ui.keydown(ev.keyCode);                  
+			};
+			document.onkeyup = function(ev)
+			{
+				ui.keyup(ev.keyCode);                  
+			};
+			document.onkeypress = function(ev)
+			{
+				ui.keypress(ev.keyCode);                  
+			};
+            application.events.dispatch("init", []);
+            start();
+			ui.draw(drawingCanvas.getContext('2d'));
+		});
+	}
+}
+}
+});
+</script>
+<style>
+#__div1 {position : relative}
+#__div2 {left : 0px;top : 0px;width : 200px;position : absolute}
+#edit1 {width : 252px}
+#app {left : 300px;top : 0px;width : 600px;height : 400px;position : absolute}
+</style>
+</head>
+<body>
+            <div id='application'>
+<div id="__div1">
+            <table border="0" >
+            </table>
+<div id="__div2">
+				<label id="lbl1"
+			>
+					Enter Id
+				</label>
+				<input id="edit1"
+						type="text" 
+						name="edit1" 
+					>
+				</input>
+				<input id="btn1"
+						type="button" 
+						name="btn1" 
+						value="Update" 
+					>
+				</input>
+</div>
+				<canvas id="app"
+			>
+				</canvas>
+</div>
                 </div>
-                <canvas id="app"></canvas>
-            </div>
-        </div>
-    </body>
-
+                </body>
 </html>

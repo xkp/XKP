@@ -59,10 +59,10 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 <xss:code>
 	//contents
 	array<string> classes	 = [];
-	array<string> utils		 = [];
 	
 	bool class_utils = false;
-	var idiom = compiler.get_idiom("android");
+	bool new_utils = false;
+	var idiom = compiler.idiom_by_id("android");
 	
 	for(var inst in clazz.instances)
 	{
@@ -73,7 +73,7 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 			continue;
 		
 		//render all instances declarations
-		if(inst.id && inst.id != application.id)
+		if(inst.id && inst.id != application.id && !compiler.is_type(inst))
 		{
 			out(indent = 1, marker = "declarations")
 			{
@@ -116,9 +116,9 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 			for(var util in inst.utils)
 			{
 				bool found4 = false;
-				for(var utl in utils)
+				for(var utl in idiom.bundle)
 				{
-					if(utl == util.name)
+					if(utl.name == util.name)
 					{
 						found4 = true;
 						break;
@@ -127,8 +127,8 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 				
 				if(!found4)
 				{
-					utils += util.name;
 					idiom.bundle += util;
+					new_utils = true;
 				}
 			}
 			
@@ -157,7 +157,7 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 			util = <xss:e value="'Act' + appName"/>.util;
 		}
 		
-		if(main == 1)
+		if(new_utils)
 		{
 			string src_path = "/src/xkp/android/libs/Widget/";
 			string src_filename = "XKPUtils.java";
@@ -178,12 +178,20 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 	
 	private boolean mLayoutStarted = false;
 <xss:code>
+	string parent_type_name = "";
 	string clazzer_name = "";
+	string ref_parent = "null";
 	
 	// build instance or type constructors
 	string prefix = "";
 	if(is_type)
 	{
+		parent_type_name = clazz.type.output_id;
+		if(clazz.container)
+		{
+			ref_parent = "this";
+		}
+		
 		out(indent = 0)
 		{
 			public <xss:e value="clazz.output_id"/>(Context context) <xss:open_brace/>
@@ -198,15 +206,32 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 				LayoutInflater li = (LayoutInflater) context.
 					getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				
-				// link xml file with inflater
-				View root = li.inflate(R.layout.<xss:e value="clazz.output_id"/>, this);
+				// TIPS: link xml file with inflater
+				<xss:e value="parent_type_name"/> root = (<xss:e value="parent_type_name"/>) li.inflate(R.layout.<xss:e value="clazz.output_id"/>, <xss:e value="ref_parent"/>);
 				
-				// and with all views
+				// TIPS: and with all exists views
 		}
+		
+		if(!clazz.container)
+		{
+			string _path = "this";
+			for(var prop in clazz.properties)
+			{
+				var _prop = clazz.get_property(prop.name);
+				var _value = _prop.render_value();
+				
+				out(indent = 0)
+				{
+					<xss:e value="compiler.property_set(_prop, _path, _value)"/>;
+				}
+			}
+		}
+		
 		prefix = "root.";
 		clazzer_name = clazz.output_id;
 	} else
 	{
+		parent_type_name = "XKPLayout"; // TIPS: force,... very much forces
 		out(indent = 0)
 		{
 			private <xss:e value="'Act' + appName"/> application;
@@ -227,13 +252,14 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 	
 	out(indent = 0, marker = "declarations")
 	{
-		private XKPLayout layout<xss:e value="clazzer_name"/>;
+		private <xss:e value="parent_type_name"/> layout<xss:e value="clazzer_name"/>;
 	}
 	
 	//TIPS: create layout treeview observer
 	out(indent = 0)
 	{
-		layout<xss:e value="clazzer_name"/> = (XKPLayout) findViewById(R.id.layout<xss:e value="clazzer_name"/>);
+		// TIPS: create an observer for notify layout updated
+		layout<xss:e value="clazzer_name"/> = (<xss:e value="parent_type_name"/>) <xss:e value="prefix"/>findViewById(R.id.layout<xss:e value="clazzer_name"/>);
 		ViewTreeObserver mainLayoutViewTreeObserver = layout<xss:e value="clazzer_name"/>.getViewTreeObserver();
 		if(mainLayoutViewTreeObserver.isAlive()) <xss:open_brace/>
 			mainLayoutViewTreeObserver.addOnGlobalLayoutListener(new OnGlobalLayoutListener() <xss:open_brace/>
@@ -249,10 +275,10 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 		<xss:close_brace/>
 	}
 
-	var idiom = compiler.get_idiom("android");
+	var idiom = compiler.idiom_by_id("android");
 	for(var inst in clazz.instances)
 	{
-		if(inst.id == null || inst.no_script || inst.no_render)
+		if(inst.id == null || inst.no_script || inst.no_render || compiler.is_type(inst))
 			continue;
 		
 		if(inst.id && inst.id != application.id)
@@ -264,6 +290,18 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 		}
 
 		idiom.process_event_handler(inst);
+		
+		var qprops = inst.query_properties("*");
+		for(var p in qprops)
+		{
+			if(p.set_handle)
+			{
+				out(indent = 2)
+				{
+					<xss:e value="inst.output_id"/>.<xss:e value="p.set_handle"/>(<xss:e value="p.set_param_hnd"/>);
+ 				}
+ 			}
+ 		}
 		
 		if(inst.inits)
 		{
@@ -362,7 +400,7 @@ private void onLayoutStarted() {
 		}
 		
 		compiler.inject("render_instances", app = appName);
-	
+
 		out(indent = 0)
 		{
 			<xss:close_brace/>
@@ -394,7 +432,7 @@ private void onLayoutStarted() {
 		{
 			if(!prop.set || !prop.type)
 				continue;
-				
+			
 			string method_set = prop.output_id + "_set";
 			string style_name = "R.styleable." + clazz.output_id + "_" + prop.id;
 			string get_function = "";

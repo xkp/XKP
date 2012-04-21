@@ -1,4 +1,4 @@
-<module id="jquery" src="jquery.xs">
+ <module id="jquery" src="jquery.xs">
 	<types>
 		<class id="component">
             <property id="x" type="int" output_id="left" render_type="script" css="true" dont_init="true" postfix="px">
@@ -40,6 +40,31 @@
                 <get text='JQUComponent.get_visible({path})' global='true'/>
                 <set text='JQUComponent.set_visible({path}, {value})' global='true'/>
             </property>
+
+            <event id="change"/>
+            <event id="click"/>
+            <event id="blur"/>
+            <event id="dblclick"/>
+            <event id="error"/>
+            <event id="focus"/>
+            <event id="focusin"/>
+            <event id="focusout"/>
+            <event id="hover"/>
+            <event id="keydown"/>
+            <event id="keypress"/>
+            <event id="keyup"/>
+            <event id="load"/>
+            <event id="unload"/>
+            <event id="mousedown"/>
+            <event id="mousein"  output_id="mouseenter"/>
+            <event id="mouseout" output_id="mouseleave"/>
+            <event id="mouseover"/>
+            <event id="mouseup"/>
+            <event id="ready"/>
+            <event id="scroll"/>
+            <event id="select"/>
+            <event id="submit"/>
+            <event id="toggle"/>
         </class>
 		
 		<!-- components -->

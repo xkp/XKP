@@ -153,7 +153,12 @@ var my_plane;var scene;var camera_1;
     function create_my_plane(
     width,height,x_segments,y_segments ) { 
     var my_plane;
+<<<<<<< HEAD
 	    my_plane_plane = new THREE.Plane(width, height, x_segments, y_segments) ;
+=======
+	    my_plane_plane = 
+		new THREE.Plane(width, height, x_segments, y_segments) ;
+>>>>>>> 92e6d60f1b95a9c69ab6767d7758094950a61307
 	    my_plane = new THREE.Mesh(my_plane_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(my_plane);
 		my_plane.events = new ms.event.EventHolder();
@@ -217,14 +222,25 @@ threejs_load_resources(function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    lbl0 = 
+<<<<<<< HEAD
 			new ms.ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+=======
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
+>>>>>>> 92e6d60f1b95a9c69ab6767d7758094950a61307
         lbl0 = lbl0;
             lbl0.set_x(200);
             lbl0.set_y(75);
             lbl0.text("Click wherever to create a randomly positioned plane");
+<<<<<<< HEAD
 			    scene = new THREE.Scene() ;
 		    camera_1 = 
 		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
+=======
+			scene = 
+			new THREE.Scene() ;
+		camera_1 = 
+		new THREE.Camera(45, 1.5, 1, 10000, null) ;	
+>>>>>>> 92e6d60f1b95a9c69ab6767d7758094950a61307
 		active_camera = camera_1;
             camera_1.position.z = 1000;
             application.img_array = ["images/test1.png", "images/test2.png", "images/test3.png", "images/test4.png", "images/test5.png"];

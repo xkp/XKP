@@ -15,6 +15,7 @@
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
 		<script type="text/javascript" src="../js/three/Three.js"></script>
 		<script type="text/javascript" src="../js/three/Stats.js"></script>
 		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
@@ -29,6 +30,7 @@ var canvas_position = {x:0, y:0};
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
+var streamer = new ms.streamer.Streamer();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
@@ -167,27 +169,27 @@ materials =
 new Array(
 );
 __basic_material1 = new THREE.MeshBasicMaterial({
-map:new THREE.Texture(streamer.get_resource('image_1').data),
+map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_1').asset),
 	});
 	materials.push(__basic_material1);
 __basic_material2 = new THREE.MeshBasicMaterial({
-map:new THREE.Texture(streamer.get_resource('image_2').data),
+map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_2').asset),
 	});
 	materials.push(__basic_material2);
 __basic_material3 = new THREE.MeshBasicMaterial({
-map:new THREE.Texture(streamer.get_resource('image_3').data),
+map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_3').asset),
 	});
 	materials.push(__basic_material3);
 __basic_material4 = new THREE.MeshBasicMaterial({
-map:new THREE.Texture(streamer.get_resource('image_4').data),
+map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_4').asset),
 	});
 	materials.push(__basic_material4);
 __basic_material5 = new THREE.MeshBasicMaterial({
-map:new THREE.Texture(streamer.get_resource('image_5').data),
+map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_5').asset),
 	});
 	materials.push(__basic_material5);
 __basic_material6 = new THREE.MeshBasicMaterial({
-map:new THREE.Texture(streamer.get_resource('image_6').data),
+map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_6').asset),
 	});
 	materials.push(__basic_material6);
 plane_material = new THREE.MeshBasicMaterial({

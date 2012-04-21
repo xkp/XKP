@@ -1,0 +1,25 @@
+<application name="jBox2d_2" title="[jBox2d] Simple test 2" src="box2d2.xs" width="320" height="420">
+	<physics_world gravity_y   = "10" id="myWorld" debug_draw="true"
+					scale       = "30" 
+					friction    = "0.5"
+					density     = "1.0"
+					restitution = "0.2"/>
+
+	<resources>
+		<image src="smile_grin_48.png"/>
+		<image src="smile_sad_48.png"/>
+	</resources>
+
+	<img id="btn1" x="200" y="200" rotation="0.2" width="50" height="50" src="smile_sad_48.png" down="smile_grin_48.png">
+		<physics body_type="dynamic" shape="circle" radius="1.2" x="10" y="10"/>
+	</img>
+	<body id="floor" body_type="static" shape="rect" x="0" y="380" width="400" height="2"/>
+</application>
+
+<!--
+	** box2d differences
+		- application size, name, title and xs source file
+		- remove image resources ubication (folder name "images", before filename of image)
+		- change type of component "btn1" from "button" to "img", cuz android button don't have rotation and image resource properties
+		- change property "up" to "src" and remove folder name "images" from its value
+-->

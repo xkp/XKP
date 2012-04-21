@@ -10,12 +10,13 @@ import xkp.android.libs.Layout.XKPLayout;
 						import org.jbox2d.common.Vec2;
 						import org.jbox2d.dynamics.BodyType;
 						import xkp.android.libs.JBox2d.*;
+						import org.jbox2d.collision.shapes.ShapeType;
+						import xkp.android.libs.JBox2d.XKPPhysicBody;
 		public class ActjBox2d_1 
 						extends Activity
 {
 		private XKPLayout layoutapplication;
 		private XKPJBox2d 			myWorld;
-		private XKPDDView 			ddView;
 		private android.os.Handler 	mHandler;
 		private final double jBox2dFreq = 1 / 60.0f;
 		private final Runnable mRunnableWorld = new Runnable() {
@@ -24,6 +25,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				mHandler.postDelayed(mRunnableWorld, (long) (jBox2dFreq * 1000));
 			}
 		};
+			private XKPDDView 			ddView;
 	private boolean mLayoutStarted = false;
 			private ActjBox2d_1 application;
 			@Override
@@ -35,6 +37,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				bindViews();
 			}
 			private void bindViews() {
+		// TIPS: create an observer for notify layout updated
 		layoutapplication = (XKPLayout) findViewById(R.id.layoutapplication);
 		ViewTreeObserver mainLayoutViewTreeObserver = layoutapplication.getViewTreeObserver();
 		if(mainLayoutViewTreeObserver.isAlive()) {
@@ -55,12 +58,12 @@ private void initCallers() {
 			@Override
 			public void onPause() {
 				super.onPause();
-		mHandler.removeCallbacks(mRunnableWorld);
+		if(mHandler != null) mHandler.removeCallbacks(mRunnableWorld);
 			}
 			@Override
 			public void onStop() {
 				super.onStop();
-		mHandler.removeCallbacks(mRunnableWorld);
+		if(mHandler != null) mHandler.removeCallbacks(mRunnableWorld);
 			}
 			@Override
 			public void onResume() {
@@ -70,47 +73,92 @@ private void initCallers() {
 private void onLayoutUpdated() {
 }
 private void onLayoutStarted() {
-		//TODO: determine real screen dimensions (width & height)
-		ddView = new XKPDDView(this, 320, 480);
-		layoutapplication.addView(ddView);
+			//TODO: determine real screen dimensions (width & height)
+			ddView = new XKPDDView(this, 320, 480);
+			layoutapplication.addView(ddView);
         myWorld = new XKPJBox2d();
 		myWorld.createWorld(new Vec2(0f, 5f), ddView.getDebugDraw());
-				XKPPhysicBody body_1 = new XKPPhysicBody(myWorld.getWorld());
-				body_1.createCircleBody(90f, 160f, 20f, 
-					0f, BodyType.DYNAMIC, 
-					1f, 0.5f, 0.200000003f);
-				XKPPhysicBody body_2 = new XKPPhysicBody(myWorld.getWorld());
-				body_2.createBoxBody(30f, 24f, 20f, 30f, 
-					45f, BodyType.DYNAMIC, 
-					1f, 0.5f, 0.200000003f);
-				XKPPhysicBody body_3 = new XKPPhysicBody(myWorld.getWorld());
-				body_3.createCircleBody(130f, 80f, 30f, 
-					0f, BodyType.DYNAMIC, 
-					1f, 0.5f, 0.200000003f);
-				XKPPhysicBody body_4 = new XKPPhysicBody(myWorld.getWorld());
-				body_4.createBoxBody(150f, 180f, 50f, 20f, 
-					0f, BodyType.DYNAMIC, 
-					1f, 0.5f, 0.200000003f);
-				XKPPhysicBody body_5 = new XKPPhysicBody(myWorld.getWorld());
-				body_5.createCircleBody(200f, 100f, 10f, 
-					0f, BodyType.DYNAMIC, 
-					1f, 0.5f, 0.200000003f);
-				XKPPhysicBody floor_1 = new XKPPhysicBody(myWorld.getWorld());
-				floor_1.createBoxBody(0f, 0f, 10f, 400f, 
-					0f, BodyType.STATIC, 
-					1f, 0.5f, 0.200000003f);
-				XKPPhysicBody floor_2 = new XKPPhysicBody(myWorld.getWorld());
-				floor_2.createBoxBody(0f, 0f, 300f, 10f, 
-					0f, BodyType.STATIC, 
-					1f, 0.5f, 0.200000003f);
-				XKPPhysicBody floor_3 = new XKPPhysicBody(myWorld.getWorld());
-				floor_3.createBoxBody(300f, 10f, 10f, 400f, 
-					0f, BodyType.STATIC, 
-					1f, 0.5f, 0.200000003f);
-				XKPPhysicBody floor_4 = new XKPPhysicBody(myWorld.getWorld());
-				floor_4.createBoxBody(10f, 400f, 300f, 10f, 
-					0f, BodyType.STATIC, 
-					1f, 0.5f, 0.200000003f);
+		XKPPhysicBody body_1 = new XKPPhysicBody(myWorld.getWorld(), 
+			ShapeType.CIRCLE);
+		body_1.setSensor(false);
+		body_1.setDensity(1f);
+		body_1.setFriction(0.5f);
+		body_1.setRestitution(0.200000003f);
+		body_1.setBodyType(BodyType.DYNAMIC);
+			body_1.setPosition(50, 200);
+		body_1.createBody(20);
+		XKPPhysicBody body_2 = new XKPPhysicBody(myWorld.getWorld(), 
+			ShapeType.POLYGON);
+		body_2.setSensor(false);
+		body_2.setDensity(1f);
+		body_2.setFriction(0.5f);
+		body_2.setRestitution(0.200000003f);
+		body_2.setBodyType(BodyType.DYNAMIC);
+			body_2.setPosition(30, 24);
+		body_2.createBody(20, 30);
+		XKPPhysicBody body_3 = new XKPPhysicBody(myWorld.getWorld(), 
+			ShapeType.CIRCLE);
+		body_3.setSensor(false);
+		body_3.setDensity(1f);
+		body_3.setFriction(0.5f);
+		body_3.setRestitution(0.200000003f);
+		body_3.setBodyType(BodyType.DYNAMIC);
+			body_3.setPosition(100, 60);
+		body_3.createBody(30);
+		XKPPhysicBody body_4 = new XKPPhysicBody(myWorld.getWorld(), 
+			ShapeType.POLYGON);
+		body_4.setSensor(false);
+		body_4.setDensity(1f);
+		body_4.setFriction(0.5f);
+		body_4.setRestitution(0.200000003f);
+		body_4.setBodyType(BodyType.DYNAMIC);
+			body_4.setPosition(150, 180);
+		body_4.createBody(50, 20);
+		XKPPhysicBody body_5 = new XKPPhysicBody(myWorld.getWorld(), 
+			ShapeType.CIRCLE);
+		body_5.setSensor(false);
+		body_5.setDensity(1f);
+		body_5.setFriction(0.5f);
+		body_5.setRestitution(0.200000003f);
+		body_5.setBodyType(BodyType.DYNAMIC);
+			body_5.setPosition(200, 100);
+		body_5.createBody(10);
+		XKPPhysicBody floor_1 = new XKPPhysicBody(myWorld.getWorld(), 
+			ShapeType.POLYGON);
+		floor_1.setSensor(false);
+		floor_1.setDensity(1f);
+		floor_1.setFriction(0.5f);
+		floor_1.setRestitution(0.200000003f);
+		floor_1.setBodyType(BodyType.STATIC);
+			floor_1.setPosition(0, 0);
+		floor_1.createBody(10, 400);
+		XKPPhysicBody floor_2 = new XKPPhysicBody(myWorld.getWorld(), 
+			ShapeType.POLYGON);
+		floor_2.setSensor(false);
+		floor_2.setDensity(1f);
+		floor_2.setFriction(0.5f);
+		floor_2.setRestitution(0.200000003f);
+		floor_2.setBodyType(BodyType.STATIC);
+			floor_2.setPosition(0, 0);
+		floor_2.createBody(300, 10);
+		XKPPhysicBody floor_3 = new XKPPhysicBody(myWorld.getWorld(), 
+			ShapeType.POLYGON);
+		floor_3.setSensor(false);
+		floor_3.setDensity(1f);
+		floor_3.setFriction(0.5f);
+		floor_3.setRestitution(0.200000003f);
+		floor_3.setBodyType(BodyType.STATIC);
+			floor_3.setPosition(300, 10);
+		floor_3.createBody(10, 400);
+		XKPPhysicBody floor_4 = new XKPPhysicBody(myWorld.getWorld(), 
+			ShapeType.POLYGON);
+		floor_4.setSensor(false);
+		floor_4.setDensity(1f);
+		floor_4.setFriction(0.5f);
+		floor_4.setRestitution(0.200000003f);
+		floor_4.setBodyType(BodyType.STATIC);
+			floor_4.setPosition(10, 400);
+		floor_4.createBody(300, 10);
         mHandler = new android.os.Handler();
         mHandler.post(mRunnableWorld);
 }

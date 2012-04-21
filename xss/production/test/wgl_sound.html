@@ -16,6 +16,7 @@
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript" src="../js/ms-streamer.js"></script>
 		<script type="text/javascript" src="../js/three/Three.js"></script>
 		<script type="text/javascript" src="../js/three/Stats.js"></script>
 		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
@@ -30,6 +31,7 @@ var canvas_position = {x:0, y:0};
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
+var streamer = new ms.streamer.Streamer();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};

@@ -17,5 +17,7 @@
 		
 		<attr name="pos_width" format="dimension"/>
 		<attr name="pos_height" format="dimension"/>
+		
+		<attr name="rotation" format="float"/>
 	</declare-styleable>
 </resources>

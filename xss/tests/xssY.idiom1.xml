@@ -1,0 +1,14 @@
+<module id="xssY_idiom1" src="xssY.idiom1.xs">
+    <types>
+	
+		<class id="c_xssY1_i1">
+			<property id="propA_1" type="string"/>
+		</class>
+		
+		<class id="c_xssY2_i1">
+			<property id="propB_1" type="string"/>
+		</class>
+		
+	</types>
+	
+</module>

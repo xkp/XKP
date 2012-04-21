@@ -4,7 +4,7 @@ on render_instances(app)
 	
 	//TRACE: log
 	//compiler.log("Begin Rendering Resources Instances...");
-	var android_idiom = compiler.get_idiom("android");
+	var android_idiom = compiler.idiom_by_id("android");
 	
 	string pattern_numbers = "0123456789";
 	string pattern_string  = "abcdefghijklmnopqrstuvwxyz";
@@ -116,7 +116,7 @@ on render_initialization(clazz, bns, app)
 {
 	clazz = this;
 	
-	var android_idiom = compiler.get_idiom("android");
+	var android_idiom = compiler.idiom_by_id("android");
 	android_idiom.initialization(clazz, bns, app);
 }
 

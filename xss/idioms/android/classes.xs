@@ -31,28 +31,28 @@ on render_instances(app)
 
 on render_types(app, bns)
 {
-	compiler.log("Rendering Android Types...");
-	
 	//TRACE: log
-	//compiler.log("### Begin Rendering Android Types...");
+	compiler.log("Rendering Types...");
 	
-	var idiom = compiler.get_idiom("android");
+	var idiom = compiler.idiom_by_id("android");
     for(var ut in user_types)
     {
+		ut.instances += ut.type;
+	
 		//TODO: think very well how to proceed with this
 		// set idiom to custom clazz with instances
 		ut.idiom = this;
-		//compiler.log("type: " + ut.id);
+		compiler.log("type: " + ut.id);
 		for(var it in ut.instances)
 		{
-			//compiler.log("instance: " + it.id);
-			it.idiom = this;
+			compiler.log("instance: " + it.id);
+			it.idiom = compiler.idiom_by_class(it.type.id);
 			if(it.utils) idiom.need_utils = true;
 		}
 		for(var ch in ut.children)
 		{
-			//compiler.log("child: " + ch.id);
-			ch.idiom = this;
+			compiler.log("child: " + ch.id);
+			ch.idiom = compiler.idiom_by_class(ch.type.id);
 			if(ch.utils) idiom.need_utils = true;
 		}
 		
@@ -62,9 +62,6 @@ on render_types(app, bns)
 		output_filename = app + "/res/layout/" + ut.output_id + ".xml";
 		compiler.xss("layout.xml.xss", output_file = output_filename, clazz = ut, appName = app, base_namespace = bns);
     }
-	
-	//TRACE: log
-	//compiler.log("### End Rendering Android Types...");
 }
 
 on render_type_initialization(clazz, bns, app)
@@ -241,7 +238,7 @@ on copy_default_files(app, bns, plibs)
 		"/gen/.empty"
 	];
 	
-	compiler.log("Copying default files...");
+	compiler.log("[android] Copying default files...");
 	for(string f1 in cp_files)
 	{
 		string srcf1 = compiler.full_path("/copy.defaults" + f1);
@@ -258,7 +255,7 @@ on copy_default_files(app, bns, plibs)
 		"/src/xkp/android/libs/Layout/XKPLayout.java"
 	];
 	
-	compiler.log("Rendering default files...");
+	compiler.log("[android] Rendering default files...");
 	for(string f2 in res_files)
 	{
 		string srcf2 = compiler.full_path("/copy.defaults" + f2);

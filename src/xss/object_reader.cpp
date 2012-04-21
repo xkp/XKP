@@ -139,7 +139,7 @@ XSSObject xss_object_reader::read_xml_object(TiXmlElement* node, XSSObject paren
 
         XSSType type = ctx_? ctx_->get_type(class_name) : XSSType();
 
-        if (!type && class_name == "class")
+        if (!type && class_name == "class_name")
           {
             //when reading types, look for the super class as "type"
             const char* cc = node->Attribute("super");
@@ -166,7 +166,7 @@ XSSObject xss_object_reader::read_xml_object(TiXmlElement* node, XSSObject paren
             str attr_name  = attr->Name();
             str attr_value = attr->Value();
 
-            if (attr_name == "class")
+            if (attr_name == "class_name")
               {
                 //do nothing
               }

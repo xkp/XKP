@@ -37,7 +37,7 @@
 		</scroller>
 		
 		<scroller padding="5" placement="client">
-			<img id="img1" src="emulator.png"/>
+			<img_native id="img1" src="emulator.png"/>
 		</scroller>
 		
 		<div padding="5" placement="client">

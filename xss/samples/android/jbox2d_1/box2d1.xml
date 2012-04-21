@@ -1,18 +1,25 @@
 <application name="jBox2d_1" title="[jBox2d] Simple test 1" src="box2d1.xs" width="320" height="420">
-    <physics_world gravity_y   = "5" id="myWorld" debug_draw="true"
-                   scale       = "30" 
-                   friction    = "0.5"
-                   density     = "1.0"
-                   restitution = "0.2"/>
-    
-    <body id="body_1" body_type="dynamic" shape="circle" radius="20" x="90" y="160"/>
+	<physics_world gravity_y   = "5" id="myWorld" debug_draw="true"
+					scale       = "30" 
+					friction    = "0.5"
+					density     = "1.0"
+					restitution = "0.2"/>
+	
+	<body id="body_1" body_type="dynamic" shape="circle" radius="20" x="50" y="200"/>
 	<body id="body_2" body_type="dynamic" shape="rect" x="30" y="24" width="20" height="30" rotation="45"/>
-	<body id="body_3" body_type="dynamic" shape="circle" radius="30" x="130" y="80"/>
+	<body id="body_3" body_type="dynamic" shape="circle" radius="30" x="100" y="60"/>
 	<body id="body_4" body_type="dynamic" shape="rect" x="150" y="180" width="50" height="20"/>
 	<body id="body_5" body_type="dynamic" shape="circle" radius="10" x="200" y="100"/>
 	
-    <body id="floor_1" body_type="static" shape="rect" x="0" y="0" width="10" height="400"/>
+	<body id="floor_1" body_type="static" shape="rect" x="0" y="0" width="10" height="400"/>
 	<body id="floor_2" body_type="static" shape="rect" x="0" y="0" width="300" height="10"/>
 	<body id="floor_3" body_type="static" shape="rect" x="300" y="10" width="10" height="400"/>
 	<body id="floor_4" body_type="static" shape="rect" x="10" y="400" width="300" height="10"/>
 </application>
+
+<!--
+	** box2d differences
+		- application size, name, title, xs source file and background js property
+		- physics_world debug_draw property set to true
+		- some components positions and sizes
+-->

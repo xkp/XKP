@@ -11,8 +11,8 @@
 		<script type="text/javascript" src="../js/ms-ui.js"></script>
 		<script type="text/javascript" src="../js/ms-state.js"></script>
 		<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript">	
-var drawingCanvas;		
+<script type="text/javascript">
+    var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -99,7 +99,6 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var btn1;var btn2;var ms61;var ms62;
             ms6 = Class.create(ms.ui.Component,
         {
     initialize: function($super
@@ -128,8 +127,8 @@ g_sequence_manager);
                         {t: 10.5, value: 0},
                         ]);
                     this.anim1.addAction(null, "alpha", new ms.state.State(0, 10.5, ____i1));                    
-		    this.btn1 = new ms.ui.Button( this.manager, this
-	    , "images/smile_sad_48.png", "images/smile_grin_48.png");
+		    this.btn1 = 
+			new ms.ui.Button(ms6.manager, ms6, null, null);
         btn1 = this.btn1;
             this.btn1.set_placement("top");
             this.btn1.set_height(50);
@@ -147,8 +146,8 @@ ms6.btn2.alpha(100);
 	}
 	);
 		application.are_obj_events = true;
-		    this.btn2 = new ms.ui.Button( this.manager, this
-	    , "images/smile_grin_48.png", "images/smile_sad_48.png");
+		    this.btn2 = 
+			new ms.ui.Button(ms6.manager, ms6, null, null);
         btn2 = this.btn2;
             this.btn2.set_placement("bottom");
             this.btn2.set_height(50);
@@ -237,13 +236,13 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    ms61 = new ms6( g_ui_root.manager, g_ui_root
-	    );
+		    ms61 = 
+			new ms6(g_ui_root.manager, g_ui_root);
         ms61 = ms61;
             ms61.set_x(100);
             ms61.set_y(100);
-		    ms62 = new ms6( g_ui_root.manager, g_ui_root
-	    );
+		    ms62 = 
+			new ms6(g_ui_root.manager, g_ui_root);
         ms62 = ms62;
             ms62.set_x(200);
             ms62.set_y(100);
