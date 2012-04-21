@@ -1,0 +1,9 @@
+<application id="xssY_application" src="xssY.app.xs">
+
+    <c_xssY1_i1 id="ci1"/>
+	
+	<c_xssY1_i2 id="ci2"/>
+	
+	<my_class id="clazzing"/>
+	
+</application>

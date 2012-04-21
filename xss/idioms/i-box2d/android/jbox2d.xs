@@ -17,12 +17,21 @@ on pre_process(obj)
 	}
 }
 
+on render_type_initialization(clazz, bns, app)
+{
+	//TIPS: copy defaults files of idiom classes and render imports
+	clazz = this;
+	
+	var android_idiom = compiler.idiom_by_id("android");
+	android_idiom.initialization(clazz, bns, app);
+}
+
 on render_initialization(clazz, bns, app)
 {
 	//TIPS: copy defaults files of idiom classes and render imports
 	clazz = this;
 	
-	var android_idiom = compiler.get_idiom("android");
+	var android_idiom = compiler.idiom_by_id("android");
 	android_idiom.initialization(clazz, bns, app);
 	
 	//TIPS: assign needed libraries
@@ -91,13 +100,15 @@ on render_types()
 {
 }
 
-on render_instances()
+on render_instances(app)
 {
 	if(world == null)
 		compiler.error("JBox2d requires a physics_world object");
 
+	compiler.log("Rendering jBox2d instances... [" + id + "]");
 	for(var i in instances)
 	{
+		compiler.log("jbox2d inst: " + i.id);
 		if(i.class_name == "physics_world")
 			continue;
 
@@ -114,26 +125,6 @@ on render_instances()
 			
 			compiler.xss("../../java/instance.xss", i);
 		}
-		
-		/*
-		    //compiler.xss(renderer, i, world = world, marker = "layout_start");
-			
-			
-			var prop = i.get_property("body_type");
-			var body_type = prop.render_value();
-			
-			out(indent = 1, marker = "layout_start")
-			{
-				XKPPhysicBody <xss:e value="i.output_id"/> = new XKPPhysicBody(<xss:e value="world.output_id"/>.getWorld());
-				
-				<xss:e value="i.output_id"/>.create<xss:e value="create_shape"/>Body(<xss:e value="i.x"/>f, <xss:e value="i.y"/>f<xss:e value="create_size"/>, 
-					<xss:e value="rotation"/>f, <xss:e value="body_type"/>, 
-					<xss:e value="density"/>f, <xss:e value="friction"/>f, <xss:e value="restitution"/>f);
-			}
-        } else {
-			compiler.error("[IMPLEMENT ME] idiom: jbox2d; method: render_instances()");
-		}
-		*/
     }
 	
 	out(indent = 1, marker = "layout_start")

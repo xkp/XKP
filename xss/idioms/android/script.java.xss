@@ -62,7 +62,7 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 	
 	bool class_utils = false;
 	bool new_utils = false;
-	var idiom = compiler.get_idiom("android");
+	var idiom = compiler.idiom_by_id("android");
 	
 	for(var inst in clazz.instances)
 	{
@@ -275,7 +275,7 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 		<xss:close_brace/>
 	}
 
-	var idiom = compiler.get_idiom("android");
+	var idiom = compiler.idiom_by_id("android");
 	for(var inst in clazz.instances)
 	{
 		if(inst.id == null || inst.no_script || inst.no_render || compiler.is_type(inst))
@@ -400,7 +400,7 @@ private void onLayoutStarted() {
 		}
 		
 		compiler.inject("render_instances", app = appName);
-	
+
 		out(indent = 0)
 		{
 			<xss:close_brace/>

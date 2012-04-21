@@ -13,8 +13,8 @@
         <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script> 
 		<script type="text/javascript" src="../js/ms-joint.js"></script> 
             <script type="text/javascript" src="../js/ms-spawner.js"></script>
-<script type="text/javascript">	
-var drawingCanvas;		
+<script type="text/javascript">
+    var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -205,7 +205,6 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-var __img1;var __img2;var __img3;
             smiley_ball = Class.create(ms.ui.Image,
         {
     initialize: function($super
@@ -326,22 +325,22 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    __img1 = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/stone-12.jpg");
+		    __img1 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         __img1 = __img1;
             __img1.set_x(0);
             __img1.set_y(390);
             __img1.set_width(600);
             __img1.set_height(40);
-		    __img2 = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/stone-12.jpg");
+		    __img2 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         __img2 = __img2;
             __img2.set_x(590);
             __img2.set_y(350);
             __img2.set_width(10);
             __img2.set_height(40);
-		    __img3 = new ms.ui.Image( g_ui_root.manager, g_ui_root
-	    , "images/stone-12.jpg");
+		    __img3 = 
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
         __img3 = __img3;
             __img3.set_x(0);
             __img3.set_y(350);
@@ -356,7 +355,7 @@ window.onload = function()
             sp1.velocity = 1;
         sp1.creator = function()
         {
-            return new smiley_ball(g_ui_root.manager, g_ui_root, "images/smile_grin_48.png");
+            return new smiley_ball(g_ui, g_ui_root, "images/smile_grin_48.png");
         }
             sp1.start();
 				__img1.events.addListener('resized', function(cmp)

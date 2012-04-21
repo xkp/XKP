@@ -169,7 +169,8 @@ public class XKPGraphics extends View {
 		}
 		
 		if(mBitmap != null) {
-			canvas.drawBitmap(mBitmap, null, new RectF(mX1, mY1, mX2, mY2), null);
+			Bitmap renderBmp = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), mMtxRotation, false);
+			canvas.drawBitmap(renderBmp, null, new RectF(mX1, mY1, mX2, mY2), null);
 		}
 		
 		if(mDrawable != null) {

@@ -1,0 +1,12 @@
+<project 
+	entry_point="xssY.app.xss" 
+	language="java" 
+	target="xssY.app.xml" >
+	
+	<options event_scope="instance" />
+	
+	<idiom src="xssY.idiom1.xml" />
+	<idiom src="xssY.idiom2.xml" />
+	
+	<include def="xssY.include.xml" src="xssY.include.xs" />
+</project> 

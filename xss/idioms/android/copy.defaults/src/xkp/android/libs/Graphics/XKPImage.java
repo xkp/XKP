@@ -44,6 +44,10 @@ public class XKPImage extends XKPGraphics {
 		invalidate();
 	}
 	
+	public Bitmap getImageBitmap() {
+		return mBitmap;
+	}
+	
 	public void setAlpha() {
 		//TODO: 
 	}

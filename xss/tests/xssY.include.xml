@@ -1,0 +1,11 @@
+<xs>
+    <class id="my_class_1" super="c_xssY1_i1" propA_1="Hello">
+		<c_xssY2_i1 id="clazz_1"/>
+		<c_xssY1_i2 id="clazz_2"/>
+    </class>
+	
+    <class id="my_class_2" super="c_xssY1_i2" propA_1="Hello">
+		<c_xssY1_i1 id="clazz_1"/>
+		<c_xssY2_i2 id="clazz_2"/>
+    </class>
+</xs>

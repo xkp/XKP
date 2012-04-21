@@ -1,0 +1,7 @@
+<xss:code>
+	//dispatch render types events to all idioms
+	compiler.inject("render_types");
+	
+	//dispatch render instances events to all idioms
+	compiler.inject("render_instances");
+</xss:code>

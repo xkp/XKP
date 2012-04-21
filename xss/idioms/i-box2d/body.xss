@@ -89,6 +89,7 @@
         world  = world;
         var vp = foreign_parent(it);
         
+		compiler.log("it: " + it.id + " idiom: " + idiom.id + " vp: " + vp.id);
 		visual_parent = idiom.get_physical_host(it, vp);
 		
 		idiom.start_rendering_body(it, world, visual_parent);
