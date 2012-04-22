@@ -50,7 +50,7 @@ on render_initialization(clazz, bns, app)
 	
 	out(indent = 1, marker = "declarations")
 	{
-		private XKPJBox2d 			<xss:e value="world.output_id"/>;
+		public static XKPJBox2d 	<xss:e value="world.output_id"/>;
 		private android.os.Handler 	mHandler;
 	
 		private final double jBox2dFreq = 1 / 60.0f;
@@ -100,37 +100,45 @@ on render_types()
 {
 }
 
-on render_instances(app)
+on render_instances(app, clazz)
 {
+	if(clazz == null) clazz = this;
+	
 	if(world == null)
 		compiler.error("JBox2d requires a physics_world object");
 
-	compiler.log("Rendering jBox2d instances... [" + id + "]");
 	for(var i in instances)
 	{
-		compiler.log("jbox2d inst: " + i.id);
-		if(i.class_name == "physics_world")
-			continue;
-
-        string renderer = i.type.renderer;
-        if(renderer)
-		{
-			renderer = "../" + renderer;
-		    compiler.xss(renderer, i, world = world, marker = "layout_start");
-		}
-		else
-		{
-            out() { <xss:e v="i.id"/> = }
-			compiler.xss("../../java/instantiator.xss", i);
-			
-			compiler.xss("../../java/instance.xss", i);
-		}
+		render_instance(app, clazz, i);
     }
 	
 	out(indent = 1, marker = "layout_start")
 	{
         mHandler = new android.os.Handler();
         mHandler.post(mRunnableWorld);
+	}
+}
+
+method render_instance(app, clazz, it)
+{
+	if(it.class_name == "physics_world") return;
+
+	string renderer = it.type.renderer;
+	if(renderer)
+	{
+		renderer = "../" + renderer;
+		
+		if(!it.parent.container && compiler.is_type(it.parent))
+			compiler.xss(renderer, it, world = world, marker = "set_property_value");
+		else
+			compiler.xss(renderer, it, world = world, marker = "layout_start");
+	}
+	else
+	{
+		out() { <xss:e v="it.id"/> = }
+		compiler.xss("../../java/instantiator.xss", it);
+		
+		compiler.xss("../../java/instance.xss", it);
 	}
 }
 
@@ -188,7 +196,7 @@ on render_idiom_scripts(main)
 
 }
 
-//android delegates
+//android body.xss delegates
 method start_rendering_body(it, world, vp)
 {
 	string host = "";
@@ -200,7 +208,7 @@ method start_rendering_body(it, world, vp)
 	
 	out(indent = 1)
 	{
-		XKPPhysicBody <xss:e value="it.output_id"/> = new XKPPhysicBody(<xss:e value="world.output_id"/>.getWorld(), 
+		XKPPhysicBody <xss:e value="it.output_id"/> = new XKPPhysicBody(Act<xss:e value="application.appName"/>.<xss:e value="world.output_id"/>.getWorld(), 
 			<xss:e value="shape"/><xss:e value="host"/>);
 	}
 	
@@ -223,7 +231,10 @@ method get_physical_host(it, vp)
 	var visual_parent;
 	if (vp)
 	{
-		visual_parent = vp.output_id;
+		if (compiler.is_type(vp))
+			visual_parent = "this";
+		else
+			visual_parent = vp.output_id;
 	}
 	else 
 		visual_parent = null;
@@ -313,6 +324,53 @@ method render_position(it, vp)
 		out(indent = 1)
 		{
 			<xss:e value="it.output_id"/>.setPosition(<xss:e value="it.x"/>, <xss:e value="it.y"/>);
+		}
+	}
+}
+
+//android spawner.xss delegates
+method render_create_spawner(it, path, id)
+{
+	/*
+	// TODO: well,... this form to make instantiate,... isn't work good, cuz the renders values don't output correctly
+	//      example: quotes in string type; 'f' after a number in an float type...
+	var param_values = [];
+	var tmp = object();
+	tmp.id = "view_layout"; 
+	tmp.value = "layout" + application.output_id;
+	param_values += tmp;
+
+	tmp.id = "creator_class"; 
+	tmp.value = it.creator_class as string;
+	param_values += tmp;
+	
+	tmp.id = "x";
+
+	out()
+	{
+		<xss:e value="it.type.output_id"/> <xss:e v="id"/> = <xss:e v="compiler.instantiate(it, runtime_args = param_values)"/>;
+	}
+	*/
+	
+	string type = it.type.output_id;
+	string nums_params = it.x + ", " + it.y + ", " + it.rotation + "f";
+	out()
+	{
+		<xss:e value="type"/> <xss:e v="id"/> = new <xss:e value="type"/>(this, layout<xss:e value="application.output_id"/>, 
+													"<xss:e value="it.creator_class"/>", <xss:e value="nums_params"/>);
+	}
+
+	//compiler.xss("../common-js/instance.xss", it, path = path, var_value = id);
+	compiler.xss("../../java/instance.xss", it);
+}
+
+method render_instancing_spawner(it, path, id, type)
+{
+	if (it.auto_start)
+	{
+		out()
+		{
+			<xss:e v="id"/>.start();
 		}
 	}
 }

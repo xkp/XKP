@@ -32,7 +32,7 @@ public class XKPSpawner {
 	public XKPSpawner(Context ctx, XKPLayout viewLayout, String className, Vec2 position, float rotation) {
 		mContext = ctx;
 		mViewLayout = viewLayout;
-		mClassName = "xkp.android.libs.Graphics." + className;
+		mClassName = "<xss:e value="base_namespace"/>.<xss:e value="appName"/>." + className;
 		mRotation = rotation;
 		if (position != null)
 			mPosition = position;
@@ -40,6 +40,10 @@ public class XKPSpawner {
 		prepareClass();
 	}
 
+	public XKPSpawner(Context ctx, XKPLayout viewLayout, String className, Integer x, Integer y, float rotation) {
+		this(ctx, viewLayout, className, new Vec2(x, y), rotation);
+	}
+	
 	public XKPSpawner(Context ctx, XKPLayout viewLayout, String className) {
 		this(ctx, viewLayout, className, null, 0);
 	}
@@ -102,6 +106,10 @@ public class XKPSpawner {
 		mPosition = position;
 	}
 
+	public void setPosition(Integer x, Integer y) {
+		mPosition = new Vec2(x, y);
+	}
+	
 	public Vec2 getPosition() {
 		return mPosition;
 	}
