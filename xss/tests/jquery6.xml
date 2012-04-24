@@ -1,40 +1,42 @@
-<application name="jq6" title="JQuitchen Sink" src="jquery6.xs">
-    <div id="main" width="800" height="400">
-        <accordion x="0" y="0" id="acc1" width="300" height="400" fillSpace="true">
-            <div caption="Plain HTML">
-                <html>
-                    <p>
-                        We allow you to specify your own html
-                        whenever you feel convinient.
-                    </p>
-                </html>
-            </div>
-            <div caption="Remote HTML">
-                <html>
-                    <p>
-                        When using tabs you can simply scpecify an "href"
-                        attribute and jQuery will do the rest.
-                    </p>
-                </html>
-            </div>
-            <div caption="Common Controls">
-                <html>
-                    <p>
-                        The good old buttons, checkboxes and
-                        labels we're used to. Clickables.
-                    </p>
-                </html>
-            </div>
-            <div caption="JQuery UI">
-                <html>
-                    <p>
-                        Advanced components, courtesy of 
-                    </p>
-                    <a href="www.jqueryui.com"> jQuery UI </a>
-                </html>
-            </div>
-        </accordion>
-        
-        <canvas id="image_container" x="300" y="0" width="600" height="400"/>
-    </div>
+<application name="jq6" title="Good stuff" src="jquery6.xs" template="jq6_template.html">
+    <accordion id="acc1" html_id="sidebar" height="490" fillSpace="true">
+        <div caption="Brightness">
+            <label caption="Level"/>     <br/> <br/>
+            <slider id="brightness"/>    <br/>
+            <label caption="Constrast"/> <br/> <br/>
+            <slider id="constrast"/>
+        </div>
+        <div caption="Color">
+            <label caption="Red"/>  <br/> <br/>
+            <slider id="red"/>      <br/>
+            <label caption="Blue"/> <br/> <br/>
+            <slider id="blue"/>     <br/>
+            <label caption="Green"/><br/> <br/>
+            <slider id="green"/>
+        </div>
+        <div caption="HSL">
+            <label caption="Hue"/>       <br/> <br/>
+            <slider id="hue"/>           <br/>
+            <label caption="Saturation"/><br/> <br/>
+            <slider id="saturation"/>    <br/>
+            <label caption="Lightness"/> <br/> <br/>
+            <slider id="lightness"/>
+        </div>
+        <div caption="Noise">
+            <label caption="Amount"/>  <br/> <br/>
+            <slider id="amount"/>      <br/>
+            <label caption="Strength"/><br/> <br/>
+            <slider id="strength"/>    <br/>
+            <br/>
+            <checkbox id="mono" caption="Mono"/>
+        </div>
+        <div caption="Glow">
+            <label caption="Amount"/>   <br/> <br/>
+            <slider id="glow_amount"/>  <br/>
+            <label caption="Radius"/>   <br/> <br/>
+            <slider id="radius"/>       <br/>
+        </div>
+    </accordion>
+    
+    <canvas id="image_container" width="605" height="375" html_id="target-container" />
 </application>

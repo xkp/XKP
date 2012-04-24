@@ -5,12 +5,9 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<title><xss:e value="application.title"/></title>
-	<link type="text/css" href="<xss:e value="compiler.options.jquery_ui_css_filepath"/>" rel="stylesheet">
-	<script type="text/javascript" src="<xss:e value="compiler.options.jquery_filepath"/>"></script>
-	<script type="text/javascript" src="<xss:e value="compiler.options.jquery_ui_filepath"/>"></script>
-	
-	<script type="text/javascript" src="js/utils.js"></script>
 
+    <xss:marker id="dependencies"/>
+    
 	<script type="text/javascript">
 		$(document).ready(function() {
 		
@@ -42,3 +39,8 @@
     </xss:code>
 </body>
 </html>
+
+<xss:code>
+    compiler.inject("render_dependencies", marker = "dependencies");
+    compiler.inject("render_css");
+</xss:code>

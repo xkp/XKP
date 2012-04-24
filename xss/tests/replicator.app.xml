@@ -1,0 +1,9 @@
+<application src="replicator.app.xs" width="600" height="600">
+    <resources>
+        <image src="images/img1.png"/>
+		<image src="images/twitter.png"/>
+    </resources>
+	
+	<replicator id="rep1" template="menu_item" x="30" y="30" width="500" height="100"/>
+	<replicator id="rep2" template="my_image" x="30" y="200" width="500" height="100"/>
+</application>

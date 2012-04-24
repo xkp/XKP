@@ -565,6 +565,9 @@ str html_renderer::render(XSSObject this_, param_list* args)
       }
 
     result << str(html_text.begin() + curr, html_text.begin() + body_tag.start - 1);
+    result << dependencies_ << "\n";
+
+    result << "<style>\n" << style_ << "\n</style>\n";
     result << "<script type=\"text/javascript\">\n" << content_ << "\n" << "</script>\n";
 
     //and close
@@ -581,6 +584,18 @@ void html_renderer::append(const str& what)
 
 void html_renderer::append_at(const str& what, const str& marker)
   {
+    if (marker == "dependencies")
+      {
+        dependencies_ += what;
+        return;
+      }
+
+    if (marker == "css")
+      {
+        style_ += what;
+        return;
+      }
+
     tag_map::iterator it = tasks_.find(marker);
     if (it == tasks_.end())
       tasks_.insert(tag_map_pair(marker, what));

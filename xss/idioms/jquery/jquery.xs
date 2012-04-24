@@ -21,13 +21,38 @@ on pre_process(obj)
     obj.css = css;
 }
 
+on render_dependencies()
+{
+    var dependencies = compiler.idiom_dependencies("jquery");
+
+    var jquery_path = project.jquery_path;
+    if (!jquery_path)
+        jquery_path = "../js";
+
+    var css_path = project.css_path;
+    if (!css_path)
+        css_path = "../css/ui-lightness";
+
+    for(var dep in dependencies)
+    {
+        if (dep.stylesheet)
+            compiler.xss("../common-js/dependency.xss", dep, path = css_path);
+        else
+            compiler.xss("../common-js/dependency.xss", dep, path = jquery_path);
+    }
+}
+
 on render_instances()
 {
-	var rd_instances = instances;
-	rd_instances += application;
-	
+    out()
+    {
+        var application = {};
+    }
+
+    compiler.xss("../common-js/instance.xss", application, event_renderer = "../jquery/app-event.xss");
+    	
 	//first one, generate all instances declarations
-	for(var ri in rd_instances)
+	for(var ri in instances)
 	{
 		string jq_object = '$("#' + ri.id + '")';
 		
@@ -44,7 +69,7 @@ on render_instances()
 	}
 	
 	//and then instances
-    for(var i in rd_instances)
+    for(var i in instances)
     {
         compiler.xss("instance.xss", it = i, is_class = false);
 
@@ -53,6 +78,12 @@ on render_instances()
             string fname = "class.xss/" + i.js_renderer;
             compiler.xss(fname, it = i);
         }
+    }
+
+    out()
+    {
+        if (application.init)
+            application.init();
     }
 }
 

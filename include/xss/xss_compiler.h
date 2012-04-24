@@ -218,15 +218,16 @@ namespace xkp
         XSSModule    idiom_by_class(const str& class_name);
         XSSModule    idiom_by_id(const str& id);
         str          render_code(const str& code, param_list_decl& args, XSSContext ctx);
-        void         add_dependencies(XSSObjectList& dependencies);
+        void         add_dependencies(XSSObjectList& dependencies, XSSObject idiom);
         DynamicArray get_dependencies();
+        DynamicArray idiom_dependencies(const str& idiom);
         str          build_project(const param_list params);
         str          get_result();
         void         render_app_types(const str& renderer);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
-        void        pop_renderer();
+        XSSRenderer pop_renderer();
         XSSRenderer current_renderer();
         XSSRenderer previous_renderer();
         XSSRenderer entry_renderer();
@@ -287,6 +288,7 @@ namespace xkp
         dependency_map dependencies_;
         XSSObjectList  deps_;
 
+        void add_dependency(const str& href, XSSObject obj, XSSObject idiom);
         void collect_dependencies(XSSType type, XSSType context = XSSType());
 		};
 
@@ -353,6 +355,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<variant,      1>("idiom_by_id",        &xss_compiler::idiom_by_id);
         method_<variant,      1>("idiom_by_class",     &xss_compiler::idiom_by_class);
         method_<DynamicArray, 0>("get_dependencies",   &xss_compiler::get_dependencies);
+        method_<DynamicArray, 1>("idiom_dependencies", &xss_compiler::idiom_dependencies);
         method_<void,         1>("render_app_types",   &xss_compiler::render_app_types);
       }
   };

@@ -3,13 +3,15 @@
 <xss:class>
 	method render_component(var component, int idt)
 	{
+        if (component.class_name == "element")
+            return;
+
         if (component.simple)
         {
             out() {<<xss:e value="component.type.id"/>/>}
             return;
         }
     
-        compiler.log("Rendering: " + component.output_id);
 		string class_name = "";
 		if (component.type)
 			class_name = component.type.tag;

@@ -1,0 +1,9 @@
+<xss:classes>
+    <class id="my_image" super="img" placement="right" width="50" height="50"/>
+	<class id="menu_item" super="div" placement="left" width="100" height="100">
+		<div>
+			<label id="lbl_caption" x="0" y="10"/>
+			<img id="icon" x="10" y="30" width="50" height="50"/>
+		</div>
+	</class>		
+</xss:classes>
