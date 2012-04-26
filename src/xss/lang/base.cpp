@@ -1565,6 +1565,8 @@ str base_lang::render_expression(expression& expr, XSSContext ctx)
 
 str base_lang::render_ctor_args(XSSType type, XSSObject instance, DynamicArray rt, param_list& args)
   {
+    str type_name = type->id();
+
     DynamicArray ctor_params = type->ctor_args();
 
     std::stringstream ss;

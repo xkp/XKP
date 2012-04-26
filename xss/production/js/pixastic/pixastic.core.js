@@ -315,7 +315,6 @@ var Pixastic = (function() {
 			} else if (Pixastic.Client.isIE() && typeof img.__pixastic_org_style == "undefined") {
 				img.__pixastic_org_style = img.style.cssText;
 			}
-
 			var params = {
 				image : img,
 				canvas : canvas,
@@ -367,37 +366,130 @@ var Pixastic = (function() {
 
 			return img;
 		},
+		
+		applyActionImageData : function(img, dataImg, actionName, options) {
 
-		prepareData : function(params, getCopy) {
-			var ctx = params.canvas.getContext("2d");
-			var rect = params.options.rect;
-			var dataDesc = ctx.getImageData(rect.left, rect.top, rect.width, rect.height);
-			var data = dataDesc.data;
-			if (!getCopy) params.canvasData = dataDesc;
-			return data;
+			options = options || {};	
+			
+			var w = img.width;
+			var h = img.height;	
+
+			if (actionName.indexOf("(") > -1) {
+				var tmp = actionName;
+				actionName = tmp.substr(0, tmp.indexOf("("));
+				var arg = tmp.match(/\((.*?)\)/);
+				if (arg[1]) {
+					arg = arg[1].split(";");
+					for (var a=0;a<arg.length;a++) {
+						thisArg = arg[a].split("=");
+						if (thisArg.length == 2) {
+							if (thisArg[0] == "rect") {
+								var rectVal = thisArg[1].split(",");
+								options[thisArg[0]] = {
+									left : parseInt(rectVal[0],10)||0,
+									top : parseInt(rectVal[1],10)||0,
+									width : parseInt(rectVal[2],10)||0,
+									height : parseInt(rectVal[3],10)||0
+								}
+							} else {
+								options[thisArg[0]] = thisArg[1];
+							}
+						}
+					}
+				}
+			}
+
+			if (!options.rect) {
+				options.rect = {
+					left : 0, top : 0, width : w, height : h
+				};
+			} else {
+				options.rect.left = Math.round(options.rect.left);
+				options.rect.top = Math.round(options.rect.top);
+				options.rect.width = Math.round(options.rect.width);
+				options.rect.height = Math.round(options.rect.height);
+			}
+
+			var validAction = false;
+			if (Pixastic.Actions[actionName] && typeof Pixastic.Actions[actionName].process == "function") {
+				validAction = true;
+			}
+			if (!validAction) {
+				if (Pixastic.debug) writeDebug("Invalid action \"" + actionName + "\". Maybe file not included?");
+				return false;
+			}
+			if (!Pixastic.Actions[actionName].checkSupport()) {
+				if (Pixastic.debug) writeDebug("Action \"" + actionName + "\" not supported by this browser.");
+				return false;
+			}	
+
+			var params = {
+				image : img,
+				width : w,
+				height : h,
+				useData : true,
+				options : options
+			}
+
+			// Ok, let's do it!
+
+			var res = Pixastic.Actions[actionName].process(params);
+
+			if (!res) {
+				return false;
+			}
+
+			return params.canvasData;
+		},
+
+		prepareData : function(params, getCopy) {		
+			if(params.image instanceof ImageData)
+			{						
+				var data = params.image.data;
+				if (!getCopy) params.canvasData = params.image;
+				return data;
+			}
+			else
+			{		
+				var ctx = params.canvas.getContext("2d");
+				var rect = params.options.rect;
+				var dataDesc = ctx.getImageData(rect.left, rect.top, rect.width, rect.height);
+				var data = dataDesc.data;
+				if (!getCopy) params.canvasData = dataDesc;
+				return data;		
+			}		
 		},
 
 		// load the image file
 		process : function(img, actionName, options, callback) {
-			if (img.tagName.toLowerCase() == "img") {
-				var dataImg = new Image();
-				dataImg.src = img.src;
-				if (dataImg.complete) {
-					var res = Pixastic.applyAction(img, dataImg, actionName, options);
-					if (callback) callback(res);
-					return res;
-				} else {
-					dataImg.onload = function() {
-						var res = Pixastic.applyAction(img, dataImg, actionName, options)
-						if (callback) callback(res);
-					}
-				}
-			}
-			if (img.tagName.toLowerCase() == "canvas") {
-				var res = Pixastic.applyAction(img, img, actionName, options);
+			if(img instanceof ImageData)
+			{
+				var res = Pixastic.applyActionImageData(img, img, actionName, options);
 				if (callback) callback(res);
 				return res;
 			}
+			else
+			{
+				if (img.tagName.toLowerCase() == "img") {
+					var dataImg = new Image();
+					dataImg.src = img.src;
+					if (dataImg.complete) {
+						var res = Pixastic.applyAction(img, dataImg, actionName, options);
+						if (callback) callback(res);
+						return res;
+					} else {
+						dataImg.onload = function() {
+							var res = Pixastic.applyAction(img, dataImg, actionName, options)
+							if (callback) callback(res);
+						}
+					}
+				}
+				if (img.tagName.toLowerCase() == "canvas") {
+					var res = Pixastic.applyAction(img, img, actionName, options);
+					if (callback) callback(res);
+					return res;
+				}			
+			}			
 		},
 
 		revert : function(img) {

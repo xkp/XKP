@@ -120,24 +120,23 @@ threejs_load_resources(function()
 material_sphere1 = new THREE.MeshLambertMaterial({
 color:White,shading:flat_shading
 	});
-			scene = 
-			new THREE.Scene() ;
-		camera_1 = 
-		new THREE.Camera(65, 1.5, 1, 1000, null) ;	
+			    scene = new THREE.Scene() ;
+		    camera_1 = 
+		    new THREE.Camera(65, 1.5, 1, 1000, null) ;	
 		active_camera = camera_1;
             camera_1.position.z = 100;
-	amb_light_1 = 
-	new THREE.AmbientLight(MidnightBlue) ;
-	scene.addLight(amb_light_1);
-	light1 = 
-	new THREE.PointLight(Red, 1, 50) ;
-	scene.addLight(light1);
-	light2 = 
-	new THREE.PointLight(Lime, 1, 50) ;
-	scene.addLight(light2);
-	light3 = 
-	new THREE.PointLight(Yellow, 1, 50) ;
-	scene.addLight(light3);
+	    amb_light_1 = 
+	    new THREE.AmbientLight(MidnightBlue) ;
+	    scene.addLight(amb_light_1);
+	    light1 = 
+	    new THREE.PointLight(Red, 1, 50) ;
+	    scene.addLight(light1);
+	    light2 = 
+	    new THREE.PointLight(Lime, 1, 50) ;
+	    scene.addLight(light2);
+	    light3 = 
+	    new THREE.PointLight(Yellow, 1, 50) ;
+	    scene.addLight(light3);
 			particle1 = new THREE.Particle( 
 			new THREE.ParticleCanvasMaterial( 
 			{ color: Red, program: program_fill, } 
@@ -162,8 +161,7 @@ color:White,shading:flat_shading
             particle3.scale.x = 0.5;
             particle3.scale.y = 0.5;
             particle3.scale.z = 0.5;
-	    sphere1_sphere = 
-		new THREE.Sphere(20, 32, 16) ;
+	    sphere1_sphere = new THREE.Sphere(20, 32, 16) ;
 	    sphere1 = new THREE.Mesh(sphere1_sphere, material_sphere1);
 	    scene.addObject(sphere1);
 		sphere1.events = new ms.event.EventHolder();

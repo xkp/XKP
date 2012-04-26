@@ -16,10 +16,14 @@ function getElementPosition(element) {
 
 function distance3d(vector1, vector2)
 {
-	var x = vector1.x - vector2.x;
-	var y = vector1.y - vector2.y;
-	var z = vector1.z - vector2.z;
-	return Math.sqrt(x * x + y * y + z * z);
+	if(vector1 && vector2)
+	{
+		var x = vector1.x - vector2.x;
+		var y = vector1.y - vector2.y;
+		var z = vector1.z - vector2.z;
+		return Math.sqrt(x * x + y * y + z * z);
+	}
+	else return -1;
 }
 
 function set_active_camera( camera )

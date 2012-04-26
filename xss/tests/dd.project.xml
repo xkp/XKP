@@ -1,12 +1,12 @@
-<project entry_point="../idioms/threejs/app.xss" language="js" target="paintings.xml" output="paintings.html">
+<project entry_point="../idioms/threejs/app.xss" language="js" target="dd.xml" output="dd.html">
 
     <path>  	
         <output path="../production/test"/>
     </path>
 	
-	<include def="paintings.classes.xml" src="paintings.classes.xs"/>
+	<include def="dd.classes.xml" src="dd.classes.xs"/>
 	
-	<idiom src="../idioms/ms/sequence.xml"/>
+	<idiom src="../idioms/ms/js/sequence.xml"/>
 	<idiom src="../idioms/resources/resources.xml"/>
 	<idiom src="../idioms/ui/ui.xml"/>  	
 	<idiom src="../idioms/threejs/module.xml"/>	 	

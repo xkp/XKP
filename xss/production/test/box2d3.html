@@ -214,42 +214,19 @@ function start(resolution)
                 )
     {
         $super(
-        manager,parent,src? src : "images/smile_grin_48.png"        );
+        manager,parent,src        );
         this.events = new ms.event.EventHolder(); 
         var this__  = this;
-				this.events.addListener('resized', function(cmp)
-                {
-                    if (cmp.physics)
-                        g_world.DestroyBody(cmp.physics);
              fixDef.density = 1;
              fixDef.friction = 0.5;
              fixDef.restitution = 0.200000003;
              bodyDef.type = b2Body.b2_dynamicBody;
                     fixDef.shape = new b2CircleShape(21.5/g_world_scale);
             fixDef.isSensor = false;
-                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
+                bodyDef.position.Set((0 + /2)/g_world_scale, (0 + /2)/g_world_scale);
             current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
 			current_body.mouse_joint = true;
-                cmp.physics = current_body;			
-                cmp.events.addListener('moved', update_body_position);
-                current_body.host = cmp;
-                }
-				);
-                if (this.w > 0 && this.h > 0)
-                {
-					this.events.dispatch("resized", [this]);          
-                }
-                this.RemoveFromWorld = function(keep_visual) 
-                {
-                    g_world.DestroyBody(this.physics);
-                    if (!keep_visual)
-                    {
-                        this.parent.removeComponent(this);
-                    }
-                }
-            this.set_width(50);
-            this.set_height(50);
 	var ev_parent = this;
 	this.events.addListener("collision", function(who)
 	{    
@@ -326,21 +303,21 @@ window.onload = function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    __img1 = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
         __img1 = __img1;
             __img1.set_x(0);
             __img1.set_y(390);
             __img1.set_width(600);
             __img1.set_height(40);
 		    __img2 = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
         __img2 = __img2;
             __img2.set_x(590);
             __img2.set_y(350);
             __img2.set_width(10);
             __img2.set_height(40);
 		    __img3 = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
         __img3 = __img3;
             __img3.set_x(0);
             __img3.set_y(350);
@@ -355,7 +332,7 @@ window.onload = function()
             sp1.velocity = 1;
         sp1.creator = function()
         {
-            return new smiley_ball(g_ui, g_ui_root, "images/smile_grin_48.png");
+            return new smiley_ball(g_ui, g_ui_root, null);
         }
             sp1.start();
 				__img1.events.addListener('resized', function(cmp)

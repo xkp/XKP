@@ -1,6 +1,14 @@
 <module id="pixastic" src="pixastic.xs">
 	<types>
-		<class id="brightness" output_id="pixastic.Brightness">	
+		<class id="preset" output_id="pixastic.Preset"/>	
+		<class id="preset_filter"/>
+		<class id="filter">
+			<property id="apply" type="bool" use_plain_value="true">
+				<get text="apply_"/>
+                <set text="set_apply({value})"/>
+            </property>
+		</class>
+		<class id="brightness" super="filter" output_id="pixastic.Brightness">	
 			<constructor_params>
 				<parameter property="brightness"/>	
 				<parameter property="contrast"/>				
@@ -12,13 +20,9 @@
 			<property id="contrast" type="float" use_plain_value="true" dont_init="true">
 				<get text="options.contrast"/>
                 <set text="set_contrast({value})"/>
-            </property>
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
+            </property>			
 		</class>
-		<class id="hsl" output_id="pixastic.HSL">	
+		<class id="hsl" super="filter" output_id="pixastic.HSL">	
 			<constructor_params>
 				<parameter property="hue"/>	
 				<parameter property="saturation"/>
@@ -35,13 +39,9 @@
 			<property id="lightness" type="int" use_plain_value="true" dont_init="true">
 				<get text="options.lightness"/>
                 <set text="set_lightness({value})"/>
-            </property>
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
+            </property>			
 		</class>
-		<class id="edges" output_id="pixastic.Edges">	
+		<class id="edges" super="filter" output_id="pixastic.Edges">	
 			<constructor_params>
 				<parameter property="mono"/>	
 				<parameter property="invert"/>				
@@ -53,13 +53,9 @@
 			<property id="invert" type="bool" use_plain_value="true" dont_init="true">
 				<get text="options.invert"/>
                 <set text="set_invert({value})"/>
-            </property>		
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
+            </property>			
 		</class>
-		<class id="pointillize" output_id="pixastic.Pointillize">	
+		<class id="pointillize" super="filter" output_id="pixastic.Pointillize">	
 			<constructor_params>
 				<parameter property="radius"/>	
 				<parameter property="density"/>	
@@ -81,13 +77,9 @@
 			<property id="transparent" type="bool" use_plain_value="true" dont_init="true">
 				<get text="options.transparent"/>
                 <set text="set_transparent({value})"/>
-            </property>
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
+            </property>			
 		</class>
-		<class id="blend" output_id="pixastic.Blend">	
+		<class id="blend" super="filter" output_id="pixastic.Blend">	
 			<constructor_params>
 				<parameter property="amount"/>	
 				<parameter property="mode"/>	
@@ -104,24 +96,10 @@
 			<property id="blend_image" type="string" dont_init="true">
 				<get text="options.image"/>
                 <set text="set_image({value})"/>
-            </property>
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
+            </property>			
 		</class>
-		<class id="flipv" output_id="pixastic.FlipV">
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
-		</class>
-		<class id="invert" output_id="pixastic.Invert">
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
-		</class>
+		<class id="flipv" super="filter" output_id="pixastic.FlipV"/>			
+		<class id="invert" super="filter" output_id="pixastic.Invert"/>			
 		<class id="noise" output_id="pixastic.Noise">		
 			<constructor_params>
 				<parameter property="amount"/>	
@@ -139,19 +117,10 @@
 			<property id="strength" type="float" use_plain_value="true" dont_init="true">
 				<get text="options.strength"/>
                 <set text="set_strength({value})"/>
-            </property>
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
+            </property>			
 		</class>
-		<class id="sepia" output_id="pixastic.Sepia">
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
-		</class>
-		<class id="coloradjust" output_id="pixastic.ColorAdjust">		
+		<class id="sepia" super="filter" output_id="pixastic.Sepia"/>		
+		<class id="coloradjust" super="filter" output_id="pixastic.ColorAdjust">		
 			<constructor_params>
 				<parameter property="red"/>	
 				<parameter property="green"/>
@@ -168,25 +137,11 @@
 			<property id="blue" type="float" use_plain_value="true" dont_init="true">
 				<get text="options.blue"/>
                 <set text="set_blue({value})"/>
-            </property>
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
+            </property>			
 		</class>
-		<class id="blur" output_id="pixastic.Blur">
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
-		</class>
-		<class id="edges2" output_id="pixastic.Edges2">			
-            <property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
-		</class>
-		<class id="glow" output_id="pixastic.Glow">	
+		<class id="blur" super="filter" output_id="pixastic.Blur"/>		
+		<class id="edges2" super="filter" output_id="pixastic.Edges2"/>	         
+		<class id="glow" super="filter" output_id="pixastic.Glow">	
 			<constructor_params>
 				<parameter property="amount"/>	
 				<parameter property="radius"/>								
@@ -199,12 +154,8 @@
 				<get text="options.radius"/>
                 <set text="set_radius({value})"/>
             </property>				
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
 		</class>
-		<class id="laplace" output_id="pixastic.Laplace">		
+		<class id="laplace" super="filter" output_id="pixastic.Laplace">		
 			<constructor_params>
 				<parameter property="edge_strength"/>	
 				<parameter property="grey_level"/>
@@ -222,44 +173,27 @@
 				<get text="options.invert"/>
                 <set text="set_invert({value})"/>
             </property>
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
 		</class>
-		<class id="sharpen" output_id="pixastic.Sharpen">	
+		<class id="sharpen" super="filter" output_id="pixastic.Sharpen">	
 			<constructor_params>
 				<parameter property="amount"/>												
 			</constructor_params>
             <property id="amount" type="float" use_plain_value="true" dont_init="true">
 				<get text="options.amount"/>
                 <set text="set_amount({value})"/>
-            </property>						
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
             </property>
 		</class>
-		<class id="blurfast" output_id="pixastic.BlurFast">	
+		<class id="blurfast" super="filter" output_id="pixastic.BlurFast">	
 			<constructor_params>
 				<parameter property="amount"/>												
 			</constructor_params>
             <property id="amount" type="float" use_plain_value="true" dont_init="true">
 				<get text="options.amount"/>
                 <set text="set_amount({value})"/>
-            </property>						
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
+            </property>	
 		</class>
-		<class id="crop" output_id="pixastic.Crop">							
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
-		</class>	
-		<class id="emboss" output_id="pixastic.Emboss">	
+		<class id="crop" super="filter" output_id="pixastic.Crop"/>				
+		<class id="emboss" super="filter" output_id="pixastic.Emboss">	
 			<constructor_params>
 				<parameter property="strength"/>	
 				<parameter property="grey_level"/>
@@ -281,83 +215,48 @@
 			<property id="blend" type="bool" use_plain_value="true" dont_init="true">
 				<get text="options.blend"/>
                 <set text="set_blend({value})"/>
-            </property>	
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
             </property>
 		</class>
-		<class id="lighten" output_id="pixastic.Lighten">	
+		<class id="lighten" super="filter" output_id="pixastic.Lighten">	
 			<constructor_params>
 				<parameter property="amount"/>												
 			</constructor_params>
             <property id="amount" type="float" use_plain_value="true" dont_init="true">
 				<get text="options.amount"/>
                 <set text="set_amount({value})"/>
-            </property>						
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
             </property>
 		</class>
-		<class id="posterize" output_id="pixastic.Posterize">	
+		<class id="posterize" super="filter" output_id="pixastic.Posterize">	
 			<constructor_params>
 				<parameter property="levels"/>												
 			</constructor_params>
             <property id="levels" type="int" use_plain_value="true" dont_init="true">
 				<get text="options.levels"/>
                 <set text="set_levels({value})"/>
-            </property>						
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
             </property>
 		</class>
-		<class id="solarize" output_id="pixastic.Solarize">							
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
-		</class>
-		<class id="desaturate" output_id="pixastic.Desaturate">	
+		<class id="solarize" super="filter" output_id="pixastic.Solarize"/>			
+		<class id="desaturate" super="filter" output_id="pixastic.Desaturate">	
 			<constructor_params>
 				<parameter property="average"/>												
 			</constructor_params>
             <property id="average" type="bool" use_plain_value="true" dont_init="true">
 				<get text="options.average"/>
                 <set text="set_average({value})"/>
-            </property>						
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
+            </property>	
 		</class>
-		<class id="fliph" output_id="pixastic.FlipH">
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
-		</class>
-		<class id="mosaic" output_id="pixastic.Mosaic">	
+		<class id="fliph" super="filter" output_id="pixastic.FlipH"/>			
+		<class id="mosaic" super="filter" output_id="pixastic.Mosaic">	
 			<constructor_params>
 				<parameter property="block_size"/>												
 			</constructor_params>
             <property id="block_size" type="int" use_plain_value="true" dont_init="true">
 				<get text="options.blockSize"/>
                 <set text="set_block_size({value})"/>
-            </property>						
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
+            </property>	
 		</class>
-		<class id="removenoise" output_id="pixastic.RemoveNoise">
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
-            </property>
-		</class>
-		<class id="unsharpmask" output_id="pixastic.UnsharpMask">	
+		<class id="removenoise" super="filter" output_id="pixastic.RemoveNoise"/>			
+		<class id="unsharpmask" super="filter" output_id="pixastic.UnsharpMask">	
 			<constructor_params>
 				<parameter property="amount"/>		
 				<parameter property="radius"/>
@@ -374,10 +273,6 @@
 			<property id="threshold" type="float" use_plain_value="true" dont_init="true">
 				<get text="options.threshold"/>
                 <set text="set_threshold({value})"/>
-            </property>
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply"/>
-                <set text="set_apply({value})"/>
             </property>
 		</class>
 	</types>	

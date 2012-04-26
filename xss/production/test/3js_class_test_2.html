@@ -80,16 +80,10 @@ application.events.dispatch("updates", []);
 application.events.dispatch("switch_cameras", []);
 }
 var my_cylinder;var scene;var camera_1;
-        function create_my_cylinder(
+    function create_my_cylinder(
     segments,top_radius,bottom_radius,height,topoffset,bottomoffset ) { 
     var my_cylinder;
-	    my_cylinder_cylinder = 
-<<<<<<< HEAD
-create_my_cylinder(null, null, null, null, null, null)
- ;
-=======
-		new THREE.Cylinder(segments, top_radius, bottom_radius, height, topoffset, bottomoffset) ;
->>>>>>> 92e6d60f1b95a9c69ab6767d7758094950a61307
+	    my_cylinder_cylinder = new THREE.Cylinder(segments, top_radius, bottom_radius, height, topoffset, bottomoffset) ;
 	    my_cylinder = new THREE.Mesh(my_cylinder_cylinder, new THREE.MeshBasicMaterial());
 	    scene.addObject(my_cylinder);
 		my_cylinder.events = new ms.event.EventHolder();
@@ -167,35 +161,20 @@ threejs_load_resources(function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    lbl0 = 
-<<<<<<< HEAD
 			new ms.ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-=======
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
->>>>>>> 92e6d60f1b95a9c69ab6767d7758094950a61307
         lbl0 = lbl0;
             lbl0.set_x(200);
             lbl0.set_y(75);
             lbl0.text("Click wherever to create a randomly positioned cylinder");
 		    lbl1 = 
-<<<<<<< HEAD
 			new ms.ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-=======
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
->>>>>>> 92e6d60f1b95a9c69ab6767d7758094950a61307
         lbl1 = lbl1;
             lbl1.set_x(200);
             lbl1.set_y(100);
             lbl1.text("Pass the mouse over a cylinder to change its color");
-<<<<<<< HEAD
 			    scene = new THREE.Scene() ;
 		    camera_1 = 
 		    new THREE.Camera(75, 1.5, 1, 3000, null) ;	
-=======
-			scene = 
-			new THREE.Scene() ;
-		camera_1 = 
-		new THREE.Camera(75, 1.5, 1, 3000, null) ;	
->>>>>>> 92e6d60f1b95a9c69ab6767d7758094950a61307
 		active_camera = camera_1;
             camera_1.position.z = 1000;
 	var ev_parent = this;

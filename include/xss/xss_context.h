@@ -169,6 +169,7 @@ class xss_type : public xss_object
       XSSContext    context();
       void          set_context(XSSContext ctx);
       XSSObjectList get_dependencies();
+      void          propertize();
     public:
       void as_enum();
       void as_array(XSSType type);

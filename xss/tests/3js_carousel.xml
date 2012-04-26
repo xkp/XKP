@@ -9,7 +9,7 @@
 	</resources>
 		
 	<label id="" x="150" y="75" color="Ivory" font="15px Verdana" caption="Move mouse to control the carousel movement"/>
-	<label id="lbl1" x="175" y="100" color="Ivory" font="15px Verdana" caption="Put the mouse over an image to zoom it"/>
+	<label id="lbl1" x="175" y="100" color="Ivory" font="15px Verdana" caption="Put the mouse over an image to zoom it"/>	
 	
 	<scene>	
 	

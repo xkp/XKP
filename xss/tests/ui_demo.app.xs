@@ -29,7 +29,6 @@ on btn1.click()
 {	
 	lbl1.caption = "Got " + clicks + " smileys";
 	clicks++;	
-	btn1.placement = "right";
 }
 
 on btn2.click()

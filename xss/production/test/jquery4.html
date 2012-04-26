@@ -7,8 +7,13 @@
 <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
 <script type="text/javascript" src="../js/jquery-idiom.js"></script>
 <link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css">
+                <script type="text/javascript" src="jquery-1.7.1.min.js"></script>
+                <script type="text/javascript" src="jquery-ui-1.8.18.custom.min.js"></script>
+                <script type="text/javascript" src="jquery-idiom.js"></script>
+                <script type="text/javascript" src="jquery-ui-1.8.18.custom.css"></script>
 <script type="text/javascript">
 $(function() {
+        var application = {};
 			var main = $("#main");
 			var __div1 = $("#__div1");
 			var lbl1 = $("#lbl1");
@@ -27,7 +32,6 @@ $(function() {
 			var __div5 = $("#__div5");
 			var __div6 = $("#__div6");
 			var btn1 = $("#btn1").button();
-			var application = $("#application");
         acc1.accordion({
     });
         tc1.tabs({
@@ -36,7 +40,9 @@ $(function() {
 		btn1.click( function() { 
 			lbl1.text(edit1.attr("value"));
 		});
-});
+        if (application.init)
+            application.init();
+    });
 </script>
 <style>
 #main {width : 800px;height : 600px;position : relative}

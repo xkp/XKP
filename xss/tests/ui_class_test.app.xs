@@ -11,7 +11,7 @@ method init()
 }
 
 on img1.click()
-{  
+{
     if(x_pos >= (X_MAX - 110))
 		x_pos = 0;
 	x_pos += 60;

@@ -1,54 +1,27 @@
 on click()
-{	
-	img1.f1.rect(1, 10, 60, 60);
+{
+	img3.bf0.apply = !img3.bf0.apply;
+	img3.f1.apply = !img3.f1.apply;
+	b_filter.apply = !b_filter.apply;	
+	img1.imagedata = b_filter.apply(img1.imagedata);	
 }
-
-on keyup(keycode)
+on init()
 {	
+	img2.imagedata = preset_1.apply(img2.imagedata);
+	plane1.imagedata = preset_1.apply(plane1.imagedata);
+	sphere_material.imagedata = preset_1.apply(sphere_material.imagedata);
+	img1.imagedata = b_filter.apply(img1.imagedata);
+}
+on keydown(keycode)
+{
 	if(keycode == NUMPAD_PLUS)
 	{
-		image1.bfres.brightness += 10;
-		image1.bfres.contrast += 0.1;
+		b_filter.brightness += 5;
+		img1.imagedata = b_filter.apply(img1.imagedata);	
 	}
 	if(keycode == NUMPAD_MINUS)
 	{
-		image1.bfres.brightness -= 10;
-		image1.bfres.contrast -= 0.1;
+		b_filter.brightness -= 5;
+		img1.imagedata = b_filter.apply(img1.imagedata);	
 	}
-}
-on plane1.mousein()
-{
-	plane1.bf2.brightness = 20;
-	plane1.bf2.contrast = 0.2;
-}
-on plane1.mouseout()
-{
-	plane1.bf2.brightness = 80;
-	plane1.bf2.contrast = 0.8;
-}
-on sphere1.mousein()
-{
-	sphere1.rotation.x ++;
-	sphere1.rotation.y ++;
-	sphere1.rotation.z ++;
-	sphere_material.bf0.brightness = 20;
-	sphere_material.bf0.contrast = 0.2;
-}
-on sphere1.mouseout()
-{
-	sphere_material.bf0.brightness = 80;
-	sphere_material.bf0.contrast = 0.8;
-}
-on sphere2.mousein()
-{
-	sphere2.rotation.x ++;
-	sphere2.rotation.y ++;
-	sphere2.rotation.z ++;
-	sphere_material.bf0.brightness = 20;
-	sphere_material.bf0.contrast = 0.2;
-}
-on sphere2.mouseout()
-{
-	sphere_material.bf0.brightness = 80;
-	sphere_material.bf0.contrast = 0.8;
 }

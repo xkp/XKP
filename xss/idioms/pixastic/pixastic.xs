@@ -12,6 +12,7 @@ on render_js_includes()
 		<script type="text/javascript" src="../js/pixastic/actions.js"></script>	
 		<script type="text/javascript" src="../js/pixastic/pixastic-manager.js"></script>
 		<script type="text/javascript" src="../js/pixastic/pixastic.js"></script>
+		<script type="text/javascript" src="../js/pixastic/pixastic-utils.js"></script>
 	}
 }
 

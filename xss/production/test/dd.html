@@ -129,7 +129,7 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var image_plane;var img1;var img2;var img3;var img4;var img5;var img6;var img7;var img8;var img9;var scene;var camera_1;var test_ip;
+var image_plane;var scene;var camera_1;var test_ip;
             social_button = Class.create(ms.ui.Image,
         {
     initialize: function($super
@@ -427,12 +427,6 @@ selected.stop();
 	}
 	);
 		application.are_obj_events = true;
-	var ev_parent = this;
-	image_plane.events.addListener("click", function()
-	{    
-	}
-	);
-		application.are_obj_events = true;
         return image_plane;
         }
     function create_image_group(
@@ -581,94 +575,73 @@ g_sequence_manager);
         image_group.images_set = function (value)
         {
             image_group.images = value;
-            for(var i = 0; i < value.length; i++)
+            var dist = 150;
+var planes_ = [img1, img2, img3, img4, img5, img6, img7, img8, img9];
+var positions = [{x : -dist,y : -dist}, {x : -dist,y : 0}, {x : -dist,y : dist}, {x : 0,y : -dist}, {x : 0,y : 0}, {x : 0,y : dist}, {x : dist,y : -dist}, {x : dist,y : 0}, {x : dist,y : dist}];
+for(var i = 0; i < value.length; i++)
 {
-this.planes_[i].set_image(value[i]);
+var pos = positions[i];
+planes_[i].position.x = pos.x;
+planes_[i].position.y = pos.y;
+planes_[i].set_image(value[i]);
 }
         };
         image_group.destination = null;
         image_group.destination_set = function (value)
         {
             image_group.destination = value;
-            for(var i = 0; i < value.length; i++)
+            var planes_ = [img1, img2, img3, img4, img5, img6, img7, img8, img9];
+for(var i = 0; i < value.length; i++)
 {
-this.planes_[i].destination = value[i];
-this.planes_[i].move.start();
+planes_[i].destination = value[i];
+planes_[i].move.start();
 }
         };
-            image_group.planes_ = [img1, img2, img3, img4, img5, img6, img7, img8];
-            var img1;
-	    img1_image_plane = 
+			    var img1;
+			    img1 = 
 create_image_plane(100, 100, null, null)
  ;
-	    img1 = new THREE.Mesh(img1_image_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(img1);
-		img1.events = new ms.event.EventHolder();
-				image_group.addChild(img1);
-            var img2;
-	    img2_image_plane = 
+				    image_group.addChild(img1);
+			    var img2;
+			    img2 = 
 create_image_plane(100, 100, null, null)
  ;
-	    img2 = new THREE.Mesh(img2_image_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(img2);
-		img2.events = new ms.event.EventHolder();
-				image_group.addChild(img2);
-            var img3;
-	    img3_image_plane = 
+				    image_group.addChild(img2);
+			    var img3;
+			    img3 = 
 create_image_plane(100, 100, null, null)
  ;
-	    img3 = new THREE.Mesh(img3_image_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(img3);
-		img3.events = new ms.event.EventHolder();
-				image_group.addChild(img3);
-            var img4;
-	    img4_image_plane = 
+				    image_group.addChild(img3);
+			    var img4;
+			    img4 = 
 create_image_plane(100, 100, null, null)
  ;
-	    img4 = new THREE.Mesh(img4_image_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(img4);
-		img4.events = new ms.event.EventHolder();
-				image_group.addChild(img4);
-            var img5;
-	    img5_image_plane = 
+				    image_group.addChild(img4);
+			    var img5;
+			    img5 = 
 create_image_plane(100, 100, null, null)
  ;
-	    img5 = new THREE.Mesh(img5_image_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(img5);
-		img5.events = new ms.event.EventHolder();
-				image_group.addChild(img5);
-            var img6;
-	    img6_image_plane = 
+				    image_group.addChild(img5);
+			    var img6;
+			    img6 = 
 create_image_plane(100, 100, null, null)
  ;
-	    img6 = new THREE.Mesh(img6_image_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(img6);
-		img6.events = new ms.event.EventHolder();
-				image_group.addChild(img6);
-            var img7;
-	    img7_image_plane = 
+				    image_group.addChild(img6);
+			    var img7;
+			    img7 = 
 create_image_plane(100, 100, null, null)
  ;
-	    img7 = new THREE.Mesh(img7_image_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(img7);
-		img7.events = new ms.event.EventHolder();
-				image_group.addChild(img7);
-            var img8;
-	    img8_image_plane = 
+				    image_group.addChild(img7);
+			    var img8;
+			    img8 = 
 create_image_plane(100, 100, null, null)
  ;
-	    img8 = new THREE.Mesh(img8_image_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(img8);
-		img8.events = new ms.event.EventHolder();
-				image_group.addChild(img8);
-            var img9;
-	    img9_image_plane = 
+				    image_group.addChild(img8);
+			    var img9;
+			    img9 = 
 create_image_plane(100, 100, null, null)
  ;
-	    img9 = new THREE.Mesh(img9_image_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(img9);
-		img9.events = new ms.event.EventHolder();
-				image_group.addChild(img9);
+				    image_group.addChild(img9);
         return image_group;
         }
 threejs_load_resources(function()
@@ -746,16 +719,19 @@ threejs_load_resources(function()
 		    camera_1 = 
 		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
 		active_camera = camera_1;
+		        scene.addObject(camera_1);
             camera_1.position.z = 1000;
 			    test_ip = 
 create_image_group()
  ;
-            test_ip.position.x = -500;
+		        scene.addObject(test_ip);
+            test_ip.position.x = -100;
             test_ip.position.y = 0;
             test_ip.position.z = 0;
 	var ev_parent = this;
 	application.events.addListener("init", function()
 	{    
+		test_ip.images_set(["dd/twitter.png", "dd/twitter.png", "dd/twitter.png", "dd/twitter.png", "dd/twitter.png", "dd/twitter.png", "dd/twitter.png", "dd/twitter.png", "dd/twitter.png"]);
 	}
 	);
 if(ui)

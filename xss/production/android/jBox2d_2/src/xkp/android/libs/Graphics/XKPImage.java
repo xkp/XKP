@@ -29,6 +29,9 @@ public class XKPImage extends XKPGraphics {
 		mBitmap.prepareToDraw();
 		invalidate();
 	}
+	public Bitmap getImageBitmap() {
+		return mBitmap;
+	}
 	public void setAlpha() {
 		//TODO: 
 	}

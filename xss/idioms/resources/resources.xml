@@ -3,8 +3,12 @@
 	
 		<class id="package"/>				
 		
-        <class id="image" resource_type="RESOURCE_IMAGE">
+        <class id="image" resource_type="RESOURCE_IMAGE" hasimagedata="true">
             <property id="src" type="string"/>
+			<property id="imagedata" type="string" use_plain_value="true">
+				<get text="get_image_data({path})" global = "true"/>
+                <set text="put_image({path}, {value})" global = "true"/>
+            </property>
         </class>	
 		
 		<class id="audio" resource_type="RESOURCE_AUDIO">

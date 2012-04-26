@@ -80,11 +80,10 @@ application.events.dispatch("updates", []);
 application.events.dispatch("switch_cameras", []);
 }
 var my_sphere;var material_wireframe;var all_in_one;var __basic_material1;var __basic_material2;var __lambert_material1;var __lambert_material2;var __depth_material1;var __normal_material1;var __basic_material3;var __lambert_material3;var scene;var camera_1;var amb_light_1;var dir_light_1;var particle_1;var point_light_1;var plane_1;
-        function create_my_sphere(
+    function create_my_sphere(
     radius,x_segments,y_segments ) { 
     var my_sphere;
-	    my_sphere_sphere = 
-		new THREE.Sphere(radius, x_segments, y_segments) ;
+	    my_sphere_sphere = new THREE.Sphere(radius, x_segments, y_segments) ;
 	    my_sphere = new THREE.Mesh(my_sphere_sphere, new THREE.MeshBasicMaterial());
 	    scene.addObject(my_sphere);
 		my_sphere.events = new ms.event.EventHolder();
@@ -102,8 +101,7 @@ threejs_load_resources(function()
 material_wireframe = new THREE.MeshBasicMaterial({
 color:Ivory,wireframe:true
 	});
-			all_in_one = 
-			new Array() ;
+			    all_in_one = new Array() ;
 __basic_material1 = new THREE.MeshBasicMaterial({
 color:0x00ffff,wireframe:true
 	});
@@ -134,19 +132,18 @@ __lambert_material3 = new THREE.MeshLambertMaterial({
 map:new THREE.Texture(streamer.get_resource('images/land_ocean_ice_cloud.jpg').data),
 	});
 	all_in_one.push(__lambert_material3);
-			scene = 
-			new THREE.Scene() ;
-		camera_1 = 
-		new THREE.Camera(45, 1.5, 1, 2000, null) ;	
+			    scene = new THREE.Scene() ;
+		    camera_1 = 
+		    new THREE.Camera(45, 1.5, 1, 2000, null) ;	
 		active_camera = camera_1;
             camera_1.position.z = 800;
             camera_1.position.y = 200;
-	amb_light_1 = 
-	new THREE.AmbientLight(0x202020) ;
-	scene.addLight(amb_light_1);
-	dir_light_1 = 
-	new THREE.DirectionalLight(Math.random() * 0xffffff, null, null, null) ;
-	scene.addLight(dir_light_1);
+	    amb_light_1 = 
+	    new THREE.AmbientLight(0x202020) ;
+	    scene.addLight(amb_light_1);
+	    dir_light_1 = 
+	    new THREE.DirectionalLight(Math.random() * 0xffffff, null, null, null) ;
+	    scene.addLight(dir_light_1);
             dir_light_1.position.x = Math.random() - 0.5;
             dir_light_1.position.y = Math.random() - 0.5;
             dir_light_1.position.z = Math.random() - 0.5;
@@ -158,11 +155,10 @@ map:new THREE.Texture(streamer.get_resource('images/land_ocean_ice_cloud.jpg').d
             particle_1.scale.x = 5;
             particle_1.scale.y = 5;
             particle_1.scale.z = 5;
-	point_light_1 = 
-	new THREE.PointLight(White, 1, null) ;
-	scene.addLight(point_light_1);
-	    plane_1_plane = 
-		new THREE.Plane(1000, 1000, 100, 100) ;
+	    point_light_1 = 
+	    new THREE.PointLight(White, 1, null) ;
+	    scene.addLight(point_light_1);
+	    plane_1_plane = new THREE.Plane(1000, 1000, 100, 100) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();

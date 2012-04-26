@@ -128,7 +128,7 @@ g_sequence_manager);
                         ]);
                     this.anim1.addAction(null, "alpha", new ms.state.State(0, 10.5, ____i1));                    
 		    this.btn1 = 
-			new ms.ui.Button(ms6.manager, ms6, null, null);
+			new ms.ui.Button(ms6.manager, ms6, "images/smile_sad_48.png", "images/smile_grin_48.png");
         btn1 = this.btn1;
             this.btn1.set_placement("top");
             this.btn1.set_height(50);
@@ -147,7 +147,7 @@ ms6.btn2.alpha(100);
 	);
 		application.are_obj_events = true;
 		    this.btn2 = 
-			new ms.ui.Button(ms6.manager, ms6, null, null);
+			new ms.ui.Button(ms6.manager, ms6, "images/smile_grin_48.png", "images/smile_sad_48.png");
         btn2 = this.btn2;
             this.btn2.set_placement("bottom");
             this.btn2.set_height(50);
@@ -165,8 +165,6 @@ ms6.anim1.start();
 	}
 	);
 		application.are_obj_events = true;
-            this.set_width(50);
-            this.set_height(100);
             if (this.init)
                 this.init();
             },

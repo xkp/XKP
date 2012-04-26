@@ -376,6 +376,12 @@ ms.ui.Component = Class.create(
 		this.components = [];
 		this.parent 	= parent;	
 		this.events = new ms.event.EventHolder();
+		this.visible_ = true;
+		this.switchable = true;
+		this.offset_right = 0;
+		this.offset_left = 0;
+		this.offset_top = 0;
+		this.offset_bottom = 0;
 
 		this.x 	= 0; 
         this.y 	= 0; 
@@ -383,7 +389,13 @@ ms.ui.Component = Class.create(
         this.h 	= this.orig_h	= 0;
 		this.rotation 			= 0;
         this.placement  = "";
-		this.scale = 1;		
+		if(this.parent)
+		{	
+			if(this.parent.scale)
+				this.scale = this.parent.scale;
+		}
+		else
+			this.scale = 1;		
 		
 		if(parent)
 			this.opacity = parent.opacity; 
@@ -426,10 +438,25 @@ ms.ui.Component = Class.create(
 	set_placement: function(value)
 	{
 		this.placement = value;		
+		this.invalidate();
 	},
 	
+	set_switchable: function(value)
+	{
+		this.switchable = value;	
+		if(!value)
+			this.hide();	
+		this.parent.active(this.parent.components.indexOf(this));
+	},
     update_placement: function()
     {		
+		if(this.parent)
+		{
+			if(this.orig_w > this.parent.w - this.parent.offset_right - this.parent.offset_left)
+				this.orig_w = this.parent.w - this.parent.offset_right - this.parent.offset_left;
+			if(this.orig_h > this.parent.h - this.parent.offset_top - this.parent.offset_bottom)
+				this.orig_h = this.parent.h - this.parent.offset_top - this.parent.offset_bottom;
+		}
         if (this.placement == "client")
         {
             this.client(); 
@@ -536,7 +563,12 @@ ms.ui.Component = Class.create(
 
 	client: function()
 	{
-		this.rect(0, 0, this.parent.w, this.parent.h);
+	this.rect(this.parent.offset_left, 
+				this.parent.offset_top, 
+				this.parent.w - this.parent.offset_right - this.parent.offset_left, 
+				this.parent.h - this.parent.offset_top - this.parent.offset_bottom);
+		this.parent.offset_left += this.parent.w - this.parent.offset_right;
+		this.parent.offset_top += this.parent.h - this.parent.offset_bottom;
 	},
 
 	center: function(w, h)
@@ -546,22 +578,39 @@ ms.ui.Component = Class.create(
 
 	bottom: function(h)
 	{
-		this.rect(0, this.parent.h - h, this.parent.w, h);
+
+		this.rect(this.parent.offset_left, 
+				this.parent.h - h - this.parent.offset_bottom, 
+				this.parent.w - this.parent.offset_right - this.parent.offset_left, 
+				h);
+		this.parent.offset_bottom += h;
 	},
 
 	top: function(h)
 	{
-		this.rect(0, 0, this.parent.w, h);
+		this.rect(this.parent.offset_left, 
+				this.parent.offset_top, 
+				this.parent.w - this.parent.offset_right - this.parent.offset_left, 
+				h);
+		this.parent.offset_top += h;
 	},
 
 	right: function(w)
 	{
-		this.rect(this.parent.w - w, 0, w, this.parent.h);
+		this.rect(this.parent.w - w - this.parent.offset_right, 
+				this.parent.offset_top, 
+				w, 
+				this.parent.h - this.parent.offset_top - this.parent.offset_bottom);
+		this.parent.offset_right += w;
 	},
 
 	left: function(w)
 	{
-		this.rect(0, 0, w, this.parent.h);
+		this.rect(this.parent.offset_left, 
+				this.parent.offset_top, 
+				w, 
+				this.parent.h - this.parent.offset_top - this.parent.offset_bottom);
+		this.parent.offset_left += w;
 	},
 
 	hide: function()
@@ -615,13 +664,16 @@ ms.ui.Component = Class.create(
 	set_scale: function(factor)
 	{
 		this.scale = factor;
+this.set_x(this.x + this.w/2 - (this.w * this.scale)/2);
+		this.set_y(this.y + this.h/2 - (this.h * this.scale)/2);
 		this.set_width(this.w * this.scale);
 		this.set_height(this.h * this.scale);
 		for(var i = 0; i < this.components.length; i++)
         {					
             var cmp = this.components[i];
-			cmp.set_scale(this.scale);            
+			cmp.set_scale(factor);            
         }
+		this.invalidate();
 	},
 	
 	find: function(x, y)
@@ -686,6 +738,10 @@ ms.ui.Component = Class.create(
 
     draw: function(context, x, y)
     {		
+		this.offset_right = 0;
+		this.offset_left = 0;
+		this.offset_top = 0;
+		this.offset_bottom = 0;
 		this.update_placement();
         var clip_inside = true;
 		for(var i = 0; i < this.components.length; i++)
@@ -722,14 +778,11 @@ ms.ui.Image = Class.create(ms.ui.Component,
         
         if (!resource)
 		{
-			alert("Unknow resource: " + image);
+			console.warn("Unknow resource: " + image);
             resource = streamer.get_resource("invalid_res");
 		}            
          		
-		var texture = resource.data;
-		if (image && !texture && image != 'null')
-			throw "Image " + image + " not loaded";		
-	    this.texture = texture;
+		this.texture = resource.data;
 		this.tile = false;
 		this.iwidth;
 		this.iheight;
@@ -787,16 +840,18 @@ ms.ui.Image = Class.create(ms.ui.Component,
         }	
 		if(this.tile)
 		{
-			var ix = this.x + x;
-			var iy = this.y + y;
+			var ix = - this.w/2;
+			var iy = - this.w/2;
 			context.save();
+			context.translate(this.x + x + this.w/2, this.y + y + this.h/2);
+			context.rotate(this.rotation);	
 			context.beginPath();					
-			context.rect(this.x + x, this.y + y, this.w, this.h);	
+			context.rect(- this.w/2, - this.h/2, this.w, this.h);	
 			context.clip();			
-			while(this.x + x + this.w >= ix)
+			while(- this.w/2 + this.w >= ix)
 			{
-				iy = this.y + y;
-				while(this.y + y + this.h >= iy)
+				iy = - this.h/2;
+				while(- this.h/2 + this.h >= iy)
 				{
 					context.drawImage(this.texture, ix, iy, this.iwidth, this.iheight);
 					iy += this.iheight;
@@ -840,8 +895,8 @@ ms.ui.ProgressBar = Class.create(ms.ui.Component,
 		{
 			images = ['images/progress.empty.png', 'images/progress.full.png'];
 		}		
-		this.left    = new ms.ui.Image(images[1], this.manager, this);
-		this.right   = new ms.ui.Image(images[0], this.manager, this);
+		this.left    = new ms.ui.Image(this.manager, this, images[1]);
+		this.right   = new ms.ui.Image(this.manager, this, images[0]);
 		this.percent = 0;
 		this.resized();
 	},
@@ -1249,28 +1304,34 @@ ms.ui.StateButton = Class.create(ms.ui.Image,
 		if(!streamer.get_resource(inactive))
 			inactive = "invalid_res";
 
-		var active_texture 		= streamer.get_resource(active).data;
-		var inactive_texture   	= streamer.get_resource(inactive).data;
+		this.active_texture 		= streamer.get_resource(active).data;
+		this.inactive_texture   	= streamer.get_resource(inactive).data;
 
-		this.active = true;		
+		this.is_active = true;		
 		var ev_parent = this;		
 		this.events.addListener('click', function()
 		{		
-			ev_parent.active  = !ev_parent.active;
-			ev_parent.image(ev_parent.active? active_texture : inactive_texture);
+			ev_parent.is_active  = !ev_parent.is_active;
+			ev_parent.image(ev_parent.is_active? ev_parent.active_texture : ev_parent.inactive_texture);
 		});		
 	},	
+	set_active: function(value)
+	{
+		this.is_active = value;
+		this.image(this.is_active? this.active_texture : this.inactive_texture);
+	},
 });
 
 ms.ui.Switch = Class.create(ms.ui.Component,
 {
+	temp_active: 0,
 	active_: 0,
 
 	componentAdded: function(cmp)
 	{
         cmp.rect(0, 0, this.w, this.h);
 
-		if (this.components.length == (this.active_ + 1))
+		if (this.components.length == (this.active_ + 1) && cmp.switchable)
 			cmp.show();
 		else
 			cmp.hide();
@@ -1278,16 +1339,52 @@ ms.ui.Switch = Class.create(ms.ui.Component,
 
 	active: function( idx )
 	{
-		if (idx == this.active_)
-			return;
+		this.temp_active = this.active_;
+		if(idx >= this.active_)
 
-		this.components[this.active_].hide();
+			this.move_to_next( idx );
+		if(idx <= this.active_)
+			this.move_to_prev( idx );		
+	},
+	
+	move_to_next: function( idx )
+	{				
+		if(this.components[idx].switchable)
+		{
+			this.components[this.active_].hide();		
 
-		this.active_ = idx;
+			this.active_ = idx;
 
-		this.components[this.active_].show();
-
-        this.invalidate();
+			this.components[this.active_].show();
+			this.invalidate();
+		}else
+		{	
+			if(idx + 1 == this.components.length)
+				return
+			if(idx + 1 != this.temp_active)
+				this.move_to_next( idx + 1 );
+			else
+				return;
+		}
+	},
+	
+	move_to_prev: function( idx )
+	{				
+		if(this.components[idx].switchable)
+		{
+			this.components[this.active_].hide();		
+			this.active_ = idx;
+			this.components[this.active_].show();
+			this.invalidate();
+		}else
+		{	
+			if(idx - 1 == -1)
+				return
+			if(idx - 1 != this.temp_active)
+				this.move_to_prev( idx - 1 );
+			else
+				return;
+		}
 	},
 
     get_active: function()
@@ -1988,4 +2085,12 @@ ms.ui.SoundUtils = Class.create(
 		audioElement.setAttribute('src', src);	
 		audioElement.play();
 	},
+});
+ms.ui.Replicator = Class.create(ms.ui.Component,
+{
+	initialize: function($super, manager, parent, template)
+	{			
+		$super(manager, parent);		
+		this.template = template;				
+	},			
 });
