@@ -30,16 +30,6 @@ Success are greateful
 log: Rendering Android project...
 log: API Level = 4
 log: Rendering Types...
-log: type: character
-log: instance: picture
-log: instance: lname
-log: instance: lsurname
-log: instance: lemployment
-log: instance: div
-log: child: picture
-log: child: lname
-log: child: lsurname
-log: child: lemployment
 log: Rendering Android Imports...
 log: Rendering class: character
 log: Rendering Android Imports...
@@ -171,14 +161,12 @@ log: API Level = 7
 log: Rendering Types...
 log: Rendering Android Imports...
 log: Rendering Android Imports...
-log: Rendering jBox2d instances... [jbox2d]
-log: jbox2d inst: myWorld
-log: jbox2d inst: body_1
-Error [vm] Cannot resolve
-	object = 
-	property = id
-	file = c:/dev/XKP/xss/samples/android/jbox2d_1/../../../idioms/i-box2d/android/../body.xssERROR: Project:  box2d1.project.xml
+log: Rendering instance: application
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: [jbox2d] Copying default files...
 
+Success are greateful
 ===[ box2d2.project.xml ]================
 
 
@@ -193,16 +181,37 @@ log: Copying resource files...
 log: Rendering instance: __resources1
 log: Rendering instance: __image1
 log: Rendering instance: __image2
-log: Rendering jBox2d instances... [jbox2d]
-log: jbox2d inst: myWorld
-log: jbox2d inst: __physics1
-log: it: __physics1 idiom: jbox2d vp: btn1
-log: jbox2d inst: floor
-Error [vm] Cannot resolve
-	object = 
-	property = id
-	file = c:/dev/XKP/xss/samples/android/jbox2d_2/../../../idioms/i-box2d/android/../body.xssERROR: Project:  box2d2.project.xml
+log: Rendering instance: application
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: [jbox2d] Copying default files...
 
+Success are greateful
+===[ box2d3.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 7
+log: Rendering Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering class: smiley_ball
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: __img1
+log: Rendering instance: __img2
+log: Rendering instance: __img3
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: __image1
+log: Rendering instance: __image2
+log: Rendering instance: application
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: [jbox2d] Copying default files...
+
+Success are greateful
 ===[ kitchensink.project.xml ]================
 
 
@@ -501,7 +510,7 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: smiley_ball
 log: Here img
-log: HAS PARENT class
+log: HAS PARENT img
 log: No, not there
 log: Rendering UI...
 log: UI Component: __img1
@@ -515,9 +524,13 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: bad_guy
 log: Here img
-log: HAS PARENT class
-Error [idiom] Circle shapes mush have a radius or visual parent
-	file = c:/dev/XKP/xss/tests/../idioms/box2d/body.xssERROR: Project:  box2d4.project.xml
+log: HAS PARENT img
+log: No, not there
+log: Here img
+log: HAS PARENT img
+log: No, not there
+Error [404] File not found
+	file = c:/dev/XKP/xss/tests/../idioms/mutant-state/instantiator.xssERROR: Project:  box2d4.project.xml
 
 ===[ box2d5.project.xml ]================(Tests)
 
@@ -526,18 +539,38 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: body_1
 log: Here img
-log: HAS PARENT class
+log: HAS PARENT img
 log: No, not there
 log: body_2
 log: Here img
-log: HAS PARENT class
+log: HAS PARENT img
 log: No, not there
 log: body_3
 log: Here img
-log: HAS PARENT class
-Error [idiom] Rect shapes mush have [width, height] or a visual parent
-	file = c:/dev/XKP/xss/tests/../idioms/box2d/body.xssERROR: Project:  box2d5.project.xml
-
+log: HAS PARENT img
+log: No, not there
+log: floor
+log: Here img
+log: HAS PARENT img
+log: No, not there
+log: my_body
+log: Rendering UI...
+log: UI Component: __label1
+log: UI Component: __label2
+log: UI Component: __label3
+log: UI Component: __label4
+log: UI Component: __label5
+log: UI Component: btn1
+log: UI Component: btn2
+log: UI Component: btn3
+log: UI Component: btn4
+log: UI Component: btn5
+log: UI Component: btn6
+log: UI Component: __floor1
+log: UI Component: __floor2
+log: UI Component: __floor3
+log: UI Component: __floor4
+Success are greateful
 ===[ box2dcar.project.xml ]================(Tests)
 
 
@@ -545,10 +578,37 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: car
 log: Here img
-log: HAS PARENT class
-Error [idiom] Rect shapes mush have [width, height] or a visual parent
-	file = c:/dev/XKP/xss/tests/../idioms/box2d/body.xssERROR: Project:  box2dcar.project.xml
-
+log: HAS PARENT img
+log: No, not there
+log: wheel
+log: Here img
+log: HAS PARENT img
+log: No, not there
+log: box
+log: Here img
+log: HAS PARENT img
+log: No, not there
+log: floor
+log: Here img
+log: HAS PARENT img
+log: No, not there
+log: my_body
+log: Rendering UI...
+log: UI Component: car_1
+log: UI Component: right_wheel
+log: UI Component: right_rear_wheel
+log: UI Component: left_wheel
+log: UI Component: left_rear_wheel
+log: UI Component: box_1
+log: UI Component: box_2
+log: UI Component: box_3
+log: UI Component: box_4
+log: UI Component: __floor1
+log: UI Component: __floor2
+log: UI Component: __floor3
+log: UI Component: __floor4
+log: UI Component: __label1
+Success are greateful
 ===[ dany_dennis.project.xml ]================(Tests)
 
 
@@ -579,10 +639,10 @@ log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: social_button
 log: Here img
-log: HAS PARENT class
+log: HAS PARENT img
 log: No, not there
 log: Here img
-log: HAS PARENT class
+log: HAS PARENT img
 log: No, not there
 log: Rendering 3js Types...
 log: Rendering UI...
@@ -765,6 +825,28 @@ for(Object i : list)
 
 
 
+
+
+Success are greateful
+===[ java4.project.xml ]================(Tests)
+
+
+
+
+
+
+			JavaClass jar = new JavaClass(this, defaulting, "some_component");
+		
+				jar.setX(10);
+			
+				jar.setY(10);
+			
+				jar.setWidth(100);
+			
+				jar.setHeight(50);
+			
+				jar.setGuest("some_component");
+			
 
 
 Success are greateful
@@ -1038,12 +1120,20 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Here?
-log: Why no idiom? fade_in
-Error [vm] Cannot resolve
-	object = 
-	method = begin_interpolator
-	file = c:/dev/XKP/xss/tests/../idioms/ms/js/../sequence.xssERROR: Project:  jquery7.project.xml
-
+log: Nope
+log: Rendering UI...
+log: UI Component: img1
+log: UI Component: img2
+log: IT IS ALIVE
+log: IT IS ALIVE
+log: Ignoring idx 1
+log: IT IS ALIVE
+log: Ignoring idx 2
+log: NO LAYOUT
+log: lbl1
+log: edit1
+log: btn1
+Success are greateful
 ===[ jseq1.project.xml ]================(Tests)
 
 
@@ -1098,12 +1188,11 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Here?
-log: Why no idiom? fade_in
-Error [vm] Cannot resolve
-	object = 
-	method = begin_interpolator
-	file = c:/dev/XKP/xss/tests/../idioms/ms/js/../sequence.xssERROR: Project:  ms4.project.xml
-
+log: Nope
+log: Rendering UI...
+log: UI Component: img1
+log: UI Component: img2
+Success are greateful
 ===[ ms5.project.xml ]================(Tests)
 
 
@@ -1131,14 +1220,14 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: ms6
 log: Here div
-log: HAS PARENT class
+log: HAS PARENT div
 log: No, not there
 log: Here div
-log: HAS PARENT class
+log: HAS PARENT div
 log: UI Component: this.btn1
 log: No, not there
 log: Here div
-log: HAS PARENT class
+log: HAS PARENT div
 log: UI Component: this.btn2
 log: No, not there
 log: Rendering Sequence Types...
@@ -1364,11 +1453,11 @@ log: Rendering UI Types...
 log: my_image
 log: menu_item
 log: Here div
-log: HAS PARENT class
+log: HAS PARENT div
 log: UI Component: this.lbl_caption
 log: No, not there
 log: Here div
-log: HAS PARENT class
+log: HAS PARENT div
 log: UI Component: this.icon
 log: No, not there
 log: Rendering UI...
@@ -2413,34 +2502,56 @@ Success are greateful
 			USER CLAZZ: my_class_1  IDIOM: xssY_idiom1
 			SUPER USER CLAZZ: c_xssY1_i1  IDIOM: 
 		
-				INSTANCE: clazz_1  IDIOM: xssY_idiom1
-			
-				INSTANCE: clazz_2  IDIOM: xssY_idiom2
-			
-				CHILDREN: clazz_1  IDIOM: 
-			
-				CHILDREN: clazz_2  IDIOM: 
-			
+		==[IDIOM 1]=====================
+		INSTANCE: clazz_1  
+		TYPE: c_xssY2_i1  
+		PARENT: my_class_1  
+		IDIOM: xssY_idiom1  
+	
+		==[IDIOM 2]=====================
+		INSTANCE: clazz_2  
+		TYPE: c_xssY1_i2  
+		PARENT: my_class_1  
+		IDIOM: xssY_idiom2  
+	
 		Rendering User Types on xssY.idiom (2)...
 	
 			USER CLAZZ: my_class_2  IDIOM: xssY_idiom2
 			SUPER USER CLAZZ: c_xssY1_i2  IDIOM: 
 		
-				INSTANCE: clazz_1  IDIOM: xssY_idiom1
-			
-				INSTANCE: clazz_2  IDIOM: xssY_idiom2
-			
-				CHILDREN: clazz_1  IDIOM: 
-			
-				CHILDREN: clazz_2  IDIOM: 
-			
+		==[IDIOM 1]=====================
+		INSTANCE: clazz_1  
+		TYPE: c_xssY1_i1  
+		PARENT: my_class_2  
+		IDIOM: xssY_idiom1  
+	
+		==[IDIOM 2]=====================
+		INSTANCE: clazz_2  
+		TYPE: c_xssY2_i2  
+		PARENT: my_class_2  
+		IDIOM: xssY_idiom2  
+	
 		Rendering Instances on xssY_idiom (1)
 	
-			INSTANCE: ci1  TYPE: c_xssY1_i1  IDIOM: xssY_idiom1  PARENT: application  CHILDRENS: 0
-		
+		==[IDIOM 1]=====================
+		INSTANCE: ci1  
+		TYPE: c_xssY1_i1  
+		PARENT: application  
+		IDIOM: xssY_idiom1  
+	
+		==[IDIOM 1]=====================
+		INSTANCE: clazzing  
+		TYPE: my_class_1  
+		PARENT: application  
+		IDIOM: xssY_idiom1  
+	
 		Rendering Instances on xssY_idiom (2)
 	
-			INSTANCE: ci2  TYPE: c_xssY1_i2  IDIOM: xssY_idiom2  PARENT: application  CHILDRENS: 0
-		
+		==[IDIOM 2]=====================
+		INSTANCE: ci2  
+		TYPE: c_xssY1_i2  
+		PARENT: application  
+		IDIOM: xssY_idiom2  
+	
 
 Success are greateful

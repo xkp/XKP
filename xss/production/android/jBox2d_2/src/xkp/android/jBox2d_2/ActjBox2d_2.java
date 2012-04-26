@@ -24,7 +24,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				private XKPImage btn1;
 			public static XKPUtils util;
 		private XKPLayout layoutapplication;
-		private XKPJBox2d 			myWorld;
+		public static XKPJBox2d 	myWorld;
 		private android.os.Handler 	mHandler;
 		private final double jBox2dFreq = 1 / 60.0f;
 		private final Runnable mRunnableWorld = new Runnable() {
@@ -107,8 +107,8 @@ private void onLayoutStarted() {
 			layoutapplication.addView(ddView);
         myWorld = new XKPJBox2d();
 		myWorld.createWorld(new Vec2(0f, 10f), ddView.getDebugDraw());
-		XKPPhysicBody __physics1 = new XKPPhysicBody(myWorld.getWorld(), 
-			ShapeType.CIRCLE, btn1);
+			XKPPhysicBody __physics1 = new XKPPhysicBody(ActjBox2d_2.myWorld.getWorld(), 
+				ShapeType.CIRCLE, btn1);
 		__physics1.setSensor(false);
 		__physics1.setDensity(1f);
 		__physics1.setFriction(0.5f);
@@ -116,8 +116,8 @@ private void onLayoutStarted() {
 		__physics1.setBodyType(BodyType.DYNAMIC);
 			__physics1.setPosition(btn1.getX1(), btn1.getY1());
 		__physics1.createBody(btn1.getRadius());
-		XKPPhysicBody floor = new XKPPhysicBody(myWorld.getWorld(), 
-			ShapeType.POLYGON);
+			XKPPhysicBody floor = new XKPPhysicBody(ActjBox2d_2.myWorld.getWorld(), 
+				ShapeType.POLYGON);
 		floor.setSensor(false);
 		floor.setDensity(1f);
 		floor.setFriction(0.5f);

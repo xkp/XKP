@@ -82,34 +82,40 @@ camera_1 = new THREE.QuakeCamera({
 fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly:true,lookVertical:false
 	});
 		active_camera = camera_1;
+		        scene.addObject(camera_1);
             camera_1.position.x = -250;
             camera_1.position.y = 25;
 		    camera_2 = 
 		    new THREE.Camera(50, 1.5, 1, 10000, null) ;	
 		active_camera = camera_2;
+		        scene.addObject(camera_2);
             camera_2.position.x = -250;
             camera_2.position.y = 25;
 	    light = 
 	    new THREE.DirectionalLight(16777215, null, null, null) ;
 	    scene.addLight(light);
+		        scene.addObject(light);
             light.position.y = 0.5;
             light.position.z = 1;
 	    sphere_1_sphere = new THREE.Sphere(20, 32, 16) ;
 	    sphere_1 = new THREE.Mesh(sphere_1_sphere, material_sphere1);
 	    scene.addObject(sphere_1);
 		sphere_1.events = new ms.event.EventHolder();
+		        scene.addObject(sphere_1);
             sphere_1.position.x = 250;
             sphere_1.position.y = 30;
 	    sphere_2_sphere = new THREE.Sphere(20, 32, 16) ;
 	    sphere_2 = new THREE.Mesh(sphere_2_sphere, material_sphere2);
 	    scene.addObject(sphere_2);
 		sphere_2.events = new ms.event.EventHolder();
+		        scene.addObject(sphere_2);
             sphere_2.position.x = -250;
             sphere_2.position.y = 30;
 	    cylinder_1_cylinder = new THREE.Cylinder(20, 10, 10, 50, null, null) ;
 	    cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
 	    scene.addObject(cylinder_1);
 		cylinder_1.events = new ms.event.EventHolder();
+		        scene.addObject(cylinder_1);
             set_rotation_x(cylinder_1.rotation, 212);
             set_rotation_y(cylinder_1.rotation, 212);
             cylinder_1.position.x = 100;
@@ -119,6 +125,7 @@ fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly
 	    cylinder_2 = new THREE.Mesh(cylinder_2_cylinder, cylinder1_material);
 	    scene.addObject(cylinder_2);
 		cylinder_2.events = new ms.event.EventHolder();
+		        scene.addObject(cylinder_2);
             set_rotation_x(cylinder_2.rotation, 212);
             set_rotation_y(cylinder_2.rotation, 212);
             cylinder_2.position.x = -100;
@@ -128,6 +135,7 @@ fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly
 	    cube_1 = new THREE.Mesh(cube_1_cube, cube_material);
 	    scene.addObject(cube_1);
 		cube_1.events = new ms.event.EventHolder();
+		        scene.addObject(cube_1);
             cube_1.position.x = -100;
             cube_1.position.y = 30;
             cube_1.position.z = -100;
@@ -137,6 +145,7 @@ fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly
 	    cube_2 = new THREE.Mesh(cube_2_cube, cube1_material);
 	    scene.addObject(cube_2);
 		cube_2.events = new ms.event.EventHolder();
+		        scene.addObject(cube_2);
             cube_2.position.x = 100;
             cube_2.position.y = 30;
             cube_2.position.z = -100;
@@ -146,6 +155,7 @@ fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly
 	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
+		        scene.addObject(plane_1);
             plane_1.position.y = 0.100000001;
             set_rotation_x(plane_1.rotation, -90);
             application.is_quake_camera = false;

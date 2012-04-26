@@ -213,6 +213,7 @@ threejs_load_resources(function()
 		    camera_1 = 
 		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
 		active_camera = camera_1;
+		        scene.addObject(camera_1);
             camera_1.position.x = 500;
             camera_1.position.y = 500;
             camera_1.position.z = 1000;
@@ -220,6 +221,7 @@ threejs_load_resources(function()
 	    plane_1 = new THREE.Mesh(plane_1_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
+		        scene.addObject(plane_1);
             plane_1.materials[0].map = new THREE.Texture(streamer.get_resource("images/test1.png").data);
             plane_1.position.x = 100;
             plane_1.position.y = 100;
@@ -227,6 +229,7 @@ threejs_load_resources(function()
 	    plane_2 = new THREE.Mesh(plane_2_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_2);
 		plane_2.events = new ms.event.EventHolder();
+		        scene.addObject(plane_2);
             plane_2.materials[0].map = new THREE.Texture(streamer.get_resource("images/test2.png").data);
             plane_2.position.x = 300;
             plane_2.position.y = 100;
@@ -234,13 +237,15 @@ threejs_load_resources(function()
 	    plane_3 = new THREE.Mesh(plane_3_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_3);
 		plane_3.events = new ms.event.EventHolder();
+		        scene.addObject(plane_3);
             plane_3.materials[0].map = new THREE.Texture(streamer.get_resource("images/test3.png").data);
             plane_3.position.x = 100;
             plane_3.position.y = 300;
 				pack_1.events.addListener("loaded", function()
 				{				
 			    container = new THREE.Object3D() ;
-			container.events = new ms.event.EventHolder();
+			container.events = new ms.event.EventHolder();				
+		        scene.addObject(container);
 	    plane_4_plane = new THREE.Plane(128, 164, null, null) ;
 	    plane_4 = new THREE.Mesh(plane_4_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_4);

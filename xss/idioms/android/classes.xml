@@ -834,8 +834,7 @@
 			<event id="stoptracking" output_id="onStopTrackingTouch" interface="SeekBar.OnSeekBarChangeListener" def_args="SeekBar seekBar" set_handle="setOnSeekBarChangeListener" set_param_hnd="this"/>
 		</class>
 		
-		<!-- td: define a custom property (maybe "container") for all container components -->
-		<class id="scroller" super="IWidget" output_id="ScrollView">
+		<class id="scroller" super="IWidget" output_id="ScrollView" container="true">
 			<array id="imports">
 				<object import="android.widget.ScrollView"/>
 			</array>

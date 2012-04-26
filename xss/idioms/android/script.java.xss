@@ -400,7 +400,7 @@ private void onLayoutStarted() {
 		}
 		
 		compiler.inject("render_instances", app = appName);
-
+		
 		out(indent = 0)
 		{
 			<xss:close_brace/>
@@ -409,8 +409,13 @@ private void onLayoutStarted() {
 	else
 	{
 		compiler.inject("render_type_initialization", clazz = clazz, bns = base_namespace, app = appName);
+		
+		for(var inst in clazz.instances)
+		{
+			inst.idiom.render_instance(appName, clazz, inst);
+		}
 	}
-	
+		
 	// render other idiom scripts
 	compiler.inject("render_idiom_scripts", main = main);
 </xss:code>

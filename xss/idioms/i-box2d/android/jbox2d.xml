@@ -62,11 +62,11 @@
 		</class>
 		
 		<class id="IJoint">
-            <property id="body_a" type="string">
+			<property id="body_a" type="string">
 				<set text="setBodyA({value})"/>
 			</property>
 			
-            <property id="body_b" type="string">
+			<property id="body_b" type="string">
 				<set text="setBodyB({value})"/>
 			</property>
 		</class>
@@ -95,12 +95,12 @@
 		</class>
 
 		<class id="body" super="IPhysics" output_id="XKPPhysicBody" sub_ns="libs.JBox2d" no_layout="true" renderer="body.xss">
-            <constructor_params>
-                <parameter property="world"/>
-                <parameter property="shape"/>
-                <parameter property="host"/>
-            </constructor_params>
-
+			<constructor_params>
+				<parameter property="world"/>
+				<parameter property="shape"/>
+				<parameter property="host"/>
+			</constructor_params>
+			
 			<array id="imports">
 				<object import="org.jbox2d.collision.shapes.ShapeType"/>
 				<object import="xkp.android.libs.JBox2d.XKPPhysicBody"/>
@@ -130,6 +130,10 @@
 				<set text="setPosition({path}.getPosition().x, {value})"/>
 			</property>
 			
+			<!--TODO: complete all body properties -->
+			<property id="linear_damping" type="float"/>
+			<property id="angular_damping" type="float"/>
+			
 			<property id="width" type="float"/>
 			<property id="height" type="float"/>
 			<property id="radius" type="float" default_value="0.0"/>
@@ -138,10 +142,59 @@
 				<get text="getAngle()"/>
 				<set text="setAngle({value})"/>
 			</property>
-        </class>
+		</class>
 
-        <class id="physics" super="body" output_id="XKPPhysicBody" sub_ns="libs.JBox2d" no_render="true" renderer="body.xss"/>
+		<class id="physics" super="body" output_id="XKPPhysicBody" sub_ns="libs.JBox2d" no_render="true" renderer="body.xss"/>
 		
-    </types>
+		<class id="spawner" output_id="XKPSpawner" sub_ns="libs.JBox2d" no_render="true" renderer="spawner.xss">
+			<constructor_params>
+				<parameter id="context" constant="this"/>
+				<parameter id="view_layout" default_value="layoutapplication"/>
+				<parameter property="creator_class" runtime="true"/>
+				<parameter property="x" runtime="true"/>
+				<parameter property="y" runtime="true"/>
+				<parameter property="rotation" runtime="true"/>
+			</constructor_params>
+			
+			<array id="imports">
+				<object import="xkp.android.libs.JBox2d.XKPSpawner"/>
+			</array>
+			
+			<property id="creator_class" type="string" no_render="true"/>
+			<property id="auto_start" type="bool" no_render="true"/>
+			
+			<property id="x" type="int">
+				<get text="getPosition().x"/>
+				<set text="setPosition({value}, {path}.getPosition().y)"/>
+			</property>
+			
+			<property id="y" type="int">
+				<get text="getPosition().y"/>
+				<set text="setPosition({path}.getPosition().x, {value})"/>
+			</property>
+			
+			<property id="frequency" type="float">
+				<get text="getFrequency()"/>
+				<set text="setFrequency({value})"/>
+			</property>
+			
+			<property id="rotation" type="float">
+				<get text="getRotation()"/>
+				<set text="setRotation({value})"/>
+			</property>
+			
+			<property id="velocity" type="float">
+				<get text="getLinearVelocity()"/>
+				<set text="setLinearVelocity({value})"/>
+			</property>
+			
+			<method id="start"/>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPSpawner.java"/>
+			</array>
+		</class>
+		
+	</types>
 	
 </module>

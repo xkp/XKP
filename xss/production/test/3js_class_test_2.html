@@ -176,6 +176,7 @@ threejs_load_resources(function()
 		    camera_1 = 
 		    new THREE.Camera(75, 1.5, 1, 3000, null) ;	
 		active_camera = camera_1;
+		        scene.addObject(camera_1);
             camera_1.position.z = 1000;
 	var ev_parent = this;
 	application.events.addListener("click", function(x,y)

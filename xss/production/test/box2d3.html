@@ -214,19 +214,42 @@ function start(resolution)
                 )
     {
         $super(
-        manager,parent,src        );
+        manager,parent,src? src : "images/smile_grin_48.png"        );
         this.events = new ms.event.EventHolder(); 
         var this__  = this;
+				this.events.addListener('resized', function(cmp)
+                {
+                    if (cmp.physics)
+                        g_world.DestroyBody(cmp.physics);
              fixDef.density = 1;
              fixDef.friction = 0.5;
              fixDef.restitution = 0.200000003;
              bodyDef.type = b2Body.b2_dynamicBody;
                     fixDef.shape = new b2CircleShape(21.5/g_world_scale);
             fixDef.isSensor = false;
-                bodyDef.position.Set((0 + /2)/g_world_scale, (0 + /2)/g_world_scale);
+                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
             current_body = g_world.CreateBody(bodyDef);			
             current_body.CreateFixture(fixDef);
 			current_body.mouse_joint = true;
+                cmp.physics = current_body;			
+                cmp.events.addListener('moved', update_body_position);
+                current_body.host = cmp;
+                }
+				);
+                if (this.w > 0 && this.h > 0)
+                {
+					this.events.dispatch("resized", [this]);          
+                }
+                this.RemoveFromWorld = function(keep_visual) 
+                {
+                    g_world.DestroyBody(this.physics);
+                    if (!keep_visual)
+                    {
+                        this.parent.removeComponent(this);
+                    }
+                }
+            this.set_height(50);
+            this.set_width(50);
 	var ev_parent = this;
 	this.events.addListener("collision", function(who)
 	{    
@@ -332,7 +355,7 @@ window.onload = function()
             sp1.velocity = 1;
         sp1.creator = function()
         {
-            return new smiley_ball(g_ui, g_ui_root, null);
+            return new smiley_ball(g_ui, g_ui_root, "images/smile_grin_48.png");
         }
             sp1.start();
 				__img1.events.addListener('resized', function(cmp)

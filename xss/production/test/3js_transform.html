@@ -148,21 +148,25 @@ sphere_material = new THREE.MeshNormalMaterial({
 		    camera_1 = 
 		    new THREE.Camera(75, 1.5, 1, 3000, null) ;	
 		active_camera = camera_1;
+		        scene.addObject(camera_1);
             camera_1.position.z = 1000;
 	    light = 
 	    new THREE.DirectionalLight(Ivory, null, null, null) ;
 	    scene.addLight(light);
+		        scene.addObject(light);
             light.position.y = 0.5;
             light.position.z = 1;
 	    cylinder_1_cylinder = new THREE.Cylinder(200, 100, 100, 500, null, null) ;
 	    cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
 	    scene.addObject(cylinder_1);
 		cylinder_1.events = new ms.event.EventHolder();
+		        scene.addObject(cylinder_1);
             set_rotation_x(cylinder_1.rotation, 70);
             set_rotation_y(cylinder_1.rotation, 70);
             cylinder_1.position.x = 600;
 			    container = new THREE.Object3D() ;
-			container.events = new ms.event.EventHolder();
+			container.events = new ms.event.EventHolder();				
+		        scene.addObject(container);
 	    cube_1_cube = new THREE.Cube(300, 300, 300, null, null, null, null, null, null) ;
 	    cube_1 = new THREE.Mesh(cube_1_cube, cube_material);
 	    scene.addObject(cube_1);

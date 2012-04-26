@@ -244,7 +244,7 @@ on render_update()
     }
 }
 
-//javascript delegates
+//javascript body.xss delegates
 method start_rendering_body(it, world, vp)
 {
 	if (vp)
@@ -452,6 +452,49 @@ method render_position(it, vp)
 		out()
 		{
 			bodyDef.position.Set((<xss:e v="x"/> + <xss:e v="w"/>/2)/g_world_scale, (<xss:e v="y"/> + <xss:e v="h"/>/2)/g_world_scale);
+		}
+	}
+}
+
+//javascript spawner.xss delegates
+method render_create_spawner(it, path, id)
+{
+	out()
+	{
+		<xss:e v="id"/> = <xss:e v="compiler.instantiate(it)"/>;
+	}
+
+	compiler.xss("../../common-js/instance.xss", it, path = path, var_value = id);
+}
+
+method render_instancing_spawner(it, path, id, type)
+{
+	out()
+	{
+		<xss:e v="id"/>.creator = function()
+		{
+			return <xss:e v="compiler.instantiate(type)"/>;
+		}
+	}
+	
+	if (it.parent.id != "application")
+	{
+		string visual_parent = it.parent.output_id;
+		
+		if (compiler.is_type(it.parent))
+			visual_parent = "this";
+
+		out()
+		{
+			<xss:e v="id"/>.parent = <xss:e v="visual_parent"/>;
+		}
+	}
+
+	if (it.auto_start)
+	{
+		out()
+		{
+			<xss:e v="id"/>.start();
 		}
 	}
 }

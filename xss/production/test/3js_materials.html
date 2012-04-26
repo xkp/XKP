@@ -136,14 +136,17 @@ map:new THREE.Texture(streamer.get_resource('images/land_ocean_ice_cloud.jpg').d
 		    camera_1 = 
 		    new THREE.Camera(45, 1.5, 1, 2000, null) ;	
 		active_camera = camera_1;
+		        scene.addObject(camera_1);
             camera_1.position.z = 800;
             camera_1.position.y = 200;
 	    amb_light_1 = 
 	    new THREE.AmbientLight(0x202020) ;
 	    scene.addLight(amb_light_1);
+		        scene.addObject(amb_light_1);
 	    dir_light_1 = 
 	    new THREE.DirectionalLight(Math.random() * 0xffffff, null, null, null) ;
 	    scene.addLight(dir_light_1);
+		        scene.addObject(dir_light_1);
             dir_light_1.position.x = Math.random() - 0.5;
             dir_light_1.position.y = Math.random() - 0.5;
             dir_light_1.position.z = Math.random() - 0.5;
@@ -152,16 +155,19 @@ map:new THREE.Texture(streamer.get_resource('images/land_ocean_ice_cloud.jpg').d
 			{ color: White, program: program_fill, } 
 			) );	
 			scene.addObject( particle_1 );	
+		        scene.addObject(particle_1);
             particle_1.scale.x = 5;
             particle_1.scale.y = 5;
             particle_1.scale.z = 5;
 	    point_light_1 = 
 	    new THREE.PointLight(White, 1, null) ;
 	    scene.addLight(point_light_1);
+		        scene.addObject(point_light_1);
 	    plane_1_plane = new THREE.Plane(1000, 1000, 100, 100) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
+		        scene.addObject(plane_1);
             plane_1.position.y = -70;
             set_rotation_x(plane_1.rotation, -90);
             application.timer = null;

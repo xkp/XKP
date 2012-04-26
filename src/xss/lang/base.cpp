@@ -533,7 +533,7 @@ void base_code_renderer::switch_(stmt_switch& info)
                 {
 		              add_line("case " + render_expression(*cit, ctx_) + " : ");
                 }
-		          
+
               add_line("{");
                 render_code(it->case_code);
 
@@ -553,7 +553,7 @@ void base_code_renderer::switch_(stmt_switch& info)
                 render_code(info.default_code);
 		          add_line("}");
             }
-		    
+
         add_line("}");
       }
     else
@@ -575,23 +575,23 @@ void base_code_renderer::switch_(stmt_switch& info)
                 bool cfirst = true;
                 for(; cit != cnd; cit++)
                   {
-                    if (cfirst)  
+                    if (cfirst)
                       cfirst = false;
-                    else 
+                    else
                       case_expr += " || ";
 
 		                case_expr += "(" + render_expression(*cit, ctx_) + ")";
                   }
               }
-		          
-            if (first)  
+
+            if (first)
               {
                 first = false;
                 add_line("if (" + case_expr + ")");
               }
-            else 
+            else
                 add_line("else if (" + case_expr + ")");
-            
+
             add_line("{");
               render_code(it->case_code);
 		        add_line("}");
@@ -1200,7 +1200,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                 str     sarg = operand_to_string(arg);
                 params.push_back(sarg);
 			        }
-            
+
             XSSType type = ctx_->get_type(caller.name);
 
             if (!type)
@@ -1211,7 +1211,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                 error.add("type", type->id());
                 xss_throw(error);
               }
-            
+
             push_rendered(render_instantiation(type, params), op_prec, variant());
             break;
           }
@@ -1223,7 +1223,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
             std::vector<xs_const> values = arg1;
 
             result << "{";
-            
+
             std::vector<xs_const>::iterator it = values.begin();
             std::vector<xs_const>::iterator nd = values.end();
             bool first = true;
@@ -1233,10 +1233,10 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                   first = false;
                 else
                   result << ',';
-                  
+
                 result << it->name << " : " << render_expression(it->value);
               }
-            
+
             result << "}";
 
             push_rendered(result.str(), op_prec, variant());
@@ -1329,7 +1329,7 @@ void base_expr_renderer::exec_operator(operator_type op, int pop_count, int push
                 XSSMethod mthd = variant_cast<XSSMethod>(arr.object, XSSMethod());
                 if (mthd && mthd->get<bool>("ignore_args", false))
                   {
-                    push_rendered(caller, op_prec, variant(), caller); 
+                    push_rendered(caller, op_prec, variant(), caller);
                     break;
                   }
               }
@@ -1592,7 +1592,8 @@ str base_lang::render_ctor_args(XSSType type, XSSObject instance, DynamicArray r
             if (curr < rt->size())
               {
                 XSSObject param_value = rt->at(curr++);
-                          value       = param_value->get<str>("value", str()); 
+                variant   var         = param_value->get<variant>("value", variant());
+                value = render_value(XSSType(), var); assert(!value.empty());
               }
           }
 
@@ -1631,7 +1632,7 @@ str base_lang::render_ctor_args(XSSType type, XSSObject instance, DynamicArray r
               {
                 if (p->has("default_value"))
                   value = p->get<str> ("default_value", str());
-                
+
                 if (value.empty())
                   {
                     param_list error;

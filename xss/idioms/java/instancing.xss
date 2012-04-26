@@ -1,0 +1,31 @@
+<xss:parameter id="obj"/>
+<xss:parameter id="instantiate" default="true"/>
+<xss:parameter id="setproperties" default="true"/>
+
+<xss:code>
+	if(instantiate)
+	{
+		string id = obj.output_id;
+		string type = obj.type.output_id;
+		
+		out()
+		{
+			<xss:e value="type"/> <xss:e value="id"/> = <xss:e v="compiler.instantiate(obj)"/>;
+		}
+	}
+	
+	if(setproperties)
+	{
+		string path = obj.output_id;
+		for(var prop in obj.properties)
+		{
+			if(prop.no_render || prop.no_script) continue;
+			
+			string value = prop.render_value();
+			out()
+			{
+				<xss:e value="compiler.property_set(prop, path, value)"/>;
+			}
+		}
+	}
+</xss:code>

@@ -20,6 +20,9 @@
 		appName = application.id;
 	}
 	
+	// TODO: replace all 'app' & 'appName' parameter passed to method for 'application.appName'
+	application.appName = appName;
+	
 	int targetAPILevel = 6;
 	int minAPILevel = 3;
 	if(appOptions.android_api_level)

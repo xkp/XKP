@@ -21,12 +21,18 @@ on pre_process(obj)
 			m.output_id = "mthd_" + obj.output_id + "_" + m.name;
 }
 
-on render_instances(app)
+on render_instances(app, clazz)
 {
-	for(var i in instances)
+	if(clazz == null) clazz = this;
+	
+	for(var i in clazz.instances)
 	{
 		compiler.xss("../java/instance.xss", marker = "handlers", it = i);
 	}
+}
+
+method render_instance(app, clazz, it)
+{
 }
 
 on render_types(app, bns)
@@ -42,16 +48,16 @@ on render_types(app, bns)
 		//TODO: think very well how to proceed with this
 		// set idiom to custom clazz with instances
 		ut.idiom = this;
-		compiler.log("type: " + ut.id);
+		//compiler.log("type: " + ut.id);
 		for(var it in ut.instances)
 		{
-			compiler.log("instance: " + it.id);
+			//compiler.log("instance: " + it.id);
 			it.idiom = compiler.idiom_by_class(it.type.id);
 			if(it.utils) idiom.need_utils = true;
 		}
 		for(var ch in ut.children)
 		{
-			compiler.log("child: " + ch.id);
+			//compiler.log("child: " + ch.id);
 			ch.idiom = compiler.idiom_by_class(ch.type.id);
 			if(ch.utils) idiom.need_utils = true;
 		}

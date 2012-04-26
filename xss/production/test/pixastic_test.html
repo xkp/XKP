@@ -230,11 +230,13 @@ map:new THREE.Texture(streamer.get_resource('images/test1.png').data),
 		    camera_1 = 
 		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
 		active_camera = camera_1;
+		        scene.addObject(camera_1);
             camera_1.position.z = 1000;
 	    plane1_plane = new THREE.Plane(280, 320, null, null) ;
 	    plane1 = new THREE.Mesh(plane1_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane1);
 		plane1.events = new ms.event.EventHolder();
+		        scene.addObject(plane1);
             plane1.materials[0].map = new THREE.Texture(streamer.get_resource("images/test1.png").data);
             plane1.position.x = -30;
             set_rotation_y(plane1.rotation, -10);
@@ -242,18 +244,21 @@ map:new THREE.Texture(streamer.get_resource('images/test1.png').data),
 	    sphere1 = new THREE.Mesh(sphere1_sphere, sphere_material);
 	    scene.addObject(sphere1);
 		sphere1.events = new ms.event.EventHolder();
+		        scene.addObject(sphere1);
             sphere1.position.x = 400;
             sphere1.position.y = -100;
 	    sphere2_sphere = new THREE.Sphere(150, null, null) ;
 	    sphere2 = new THREE.Mesh(sphere2_sphere, sphere_material);
 	    scene.addObject(sphere2);
 		sphere2.events = new ms.event.EventHolder();
+		        scene.addObject(sphere2);
             sphere2.position.x = 400;
             sphere2.position.y = 200;
 	    plane2_plane = new THREE.Plane(100, 100, null, null) ;
 	    plane2 = new THREE.Mesh(plane2_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane2);
 		plane2.events = new ms.event.EventHolder();
+		        scene.addObject(plane2);
             plane2.materials[0].map = new THREE.Texture(streamer.get_resource("images/test2.png").data);
             plane2.position.x = -300;
             plane2.position.y = -30;

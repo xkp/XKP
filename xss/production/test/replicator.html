@@ -110,6 +110,9 @@ function start(resolution)
             this.data_source = value;
             this.src(value);
         };
+            this.set_height(50);
+            this.set_placement("right");
+            this.set_width(50);
             if (this.init)
                 this.init();
             },
@@ -144,6 +147,9 @@ function start(resolution)
             this.lbl_caption.text(value.caption);
 this.icon.src(value.image);
         };
+            this.set_height(100);
+            this.set_placement("left");
+            this.set_width(100);
             if (this.init)
                 this.init();
             },

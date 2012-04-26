@@ -104,6 +104,10 @@ on render_instances(app)
 	//compiler.log("End Rendering Resources Instances...");
 }
 
+method render_instance(app, clazz, it)
+{
+}
+
 on render_types(app)
 {
 }

@@ -23,6 +23,7 @@ public class XKPPhysicBody {
 	private World 		mRefWorld;
 	private XKPGraphics	mRefView;
 	
+	private boolean mIsBodyCreated = false;
 	private BodyDef 	mBodyDef;
 	private FixtureDef mFixtureDef;
 
@@ -43,9 +44,9 @@ public class XKPPhysicBody {
 		mAABB = new AABB();
 		
 		if (shapeType == ShapeType.CIRCLE) {
-	        mShape = new CircleShape();
+			mShape = new CircleShape();
 		} else if (shapeType == ShapeType.POLYGON) {
-	        mShape = new PolygonShape();
+			mShape = new PolygonShape();
 		}
 	}
 	
@@ -57,7 +58,7 @@ public class XKPPhysicBody {
 		return mBody;
 	}
 	
-	public boolean updateRefPosition() {
+	public boolean updateHostPosition() {
 		if (mRefView == null && !(mRefView instanceof XKPGraphics))
 			return false;
 		
@@ -87,6 +88,8 @@ public class XKPPhysicBody {
 	
 	public void setDensity(float density) {
 		mFixtureDef.density = density;
+		if(mIsBodyCreated)
+			mBody.m_fixtureList.setDensity(density);
 	}
 	
 	public float getDensity() {
@@ -95,6 +98,8 @@ public class XKPPhysicBody {
 	
 	public void setFriction(float friction) {
 		mFixtureDef.friction = friction;
+		if(mIsBodyCreated)
+			mBody.m_fixtureList.setFriction(friction);
 	}
 	
 	public float getFriction() {
@@ -103,6 +108,8 @@ public class XKPPhysicBody {
 	
 	public void setRestitution(float restitution) {
 		mFixtureDef.restitution = restitution;
+		if(mIsBodyCreated)
+			mBody.m_fixtureList.setRestitution(restitution);
 	}
 	
 	public float getRestitution() {
@@ -111,6 +118,8 @@ public class XKPPhysicBody {
 	
 	public void setSensor(boolean sensor) {
 		mFixtureDef.isSensor = sensor;
+		if(mIsBodyCreated)
+			mBody.m_fixtureList.setSensor(sensor);
 	}
 	
 	public boolean isSensor() {
@@ -119,26 +128,42 @@ public class XKPPhysicBody {
 	
 	public void setLinearDamping(float linearDamping) {
 		mBodyDef.linearDamping = linearDamping;
+		if(mIsBodyCreated)
+			mBody.setLinearDamping(linearDamping);
 	}
 	
 	public float getLinearDamping() {
-		return mBodyDef.linearDamping;
+		return mBody.getLinearDamping();
+	}
+	
+	public void setLinearVelocity(Vec2 linearVelocity) {
+		mBodyDef.linearVelocity = linearVelocity;
+		if(mIsBodyCreated)
+			mBody.setLinearVelocity(linearVelocity);
+	}
+	
+	public Vec2 getLinearVelocity() {
+		return mBody.getLinearVelocity();
 	}
 	
 	public void setAngularDamping(float angularDamping) {
 		mBodyDef.angularDamping = angularDamping;
+		if(mIsBodyCreated)
+			mBody.setAngularDamping(angularDamping);
 	}
 	
 	public float getAngularDamping() {
-		return mBodyDef.angularDamping;
+		return mBody.getAngularDamping();
 	}
 
 	public void setBodyType(BodyType bodyType) {
 		mBodyDef.type = bodyType;
+		if(mIsBodyCreated)
+			mBody.setType(bodyType);
 	}
 	
 	public BodyType getBodyType() {
-		return mBodyDef.type;
+		return mBody.m_type;
 	}
 	
 	public void setPosition(Vec2 pos) {
@@ -148,9 +173,12 @@ public class XKPPhysicBody {
 		Transform transf = new Transform();
 		transf.set(pos, mBodyDef.angle);
 		mShape.computeAABB(mAABB, transf);
-        
+		
 		mBodyDef.position = new Vec2((pos.x + mAABB.getExtents().x) / mScale,
 				(pos.y + mAABB.getExtents().y) / mScale);
+		
+		if(mIsBodyCreated)
+			mBody.setTransform(mBodyDef.position, getAngle());
 	}
 	
 	public void setPosition(float x, float y) {
@@ -158,31 +186,37 @@ public class XKPPhysicBody {
 	}
 	
 	public Vec2 getPosition() {
-		return mBodyDef.position;
+		return mBody.getPosition();
 	}
 	
 	public void setAngle(float angle) {
 		mBodyDef.angle = (float) degree2rad(angle);
+		if(mIsBodyCreated)
+			mBody.setTransform(getPosition(), angle);
 	}
 	
 	public float getAngle() {
-		return mBodyDef.angle;
+		return mBody.getAngle();
 	}
 	
 	public void setAllowSleep(boolean allow) {
 		mBodyDef.allowSleep = allow;
+		if(mIsBodyCreated)
+			mBody.setSleepingAllowed(allow);
 	}
 	
 	public boolean getAllowSleep() {
-		return mBodyDef.allowSleep;
+		return mBody.isSleepingAllowed();
 	}
 	
 	public void setAwake(boolean awake) {
 		mBodyDef.awake = awake;
+		if(mIsBodyCreated)
+			mBody.setAwake(awake);
 	}
 	
 	public boolean getAwake() {
-		return mBodyDef.awake;
+		return mBody.isAwake();
 	}
 	
 	public void createBody(float radius_width, float height, int verticesCount,
@@ -204,9 +238,10 @@ public class XKPPhysicBody {
 		
 		setPosition(null);
 		mBody = mRefWorld.createBody(mBodyDef);
-        
-        mBody.createFixture(mFixtureDef);
-        mBody.setUserData(this);
+		mIsBodyCreated = true;
+		
+		mBody.createFixture(mFixtureDef);
+		mBody.setUserData(this);
 	}
 	
 	public void createBody(float width, float height) {
