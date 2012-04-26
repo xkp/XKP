@@ -36,5 +36,43 @@
 			
 			<event id="click"/>
 		</class>
+		
+		<class id="java4" output_id="JavaClass">
+			<constructor_params>
+				<parameter id="const" constant="this"/>
+				<parameter id="default" default_value="defaulting"/>
+				<parameter property="guest" runtime="true"/>
+			</constructor_params>
+			
+			<property id="x" type="int">
+				<get text="getX()"/>
+				<set text="setX({value})"/>
+			</property>
+			
+			<property id="y" type="int">
+				<get text="getY()"/>
+				<set text="setY({value})"/>
+			</property>
+			
+			<property id="width" type="int">
+				<get text="getWidth()"/>
+				<set text="setWidth({value})"/>
+			</property>
+			
+			<property id="height" type="int">
+				<get text="getHeight()"/>
+				<set text="setHeight({value})"/>
+			</property>
+			
+			<property id="script" type="string" no_script="true">
+				<get text="getScript()"/>
+				<set text="setScript({value})"/>
+			</property>
+			
+			<property id="guest" type="string">
+				<get text="getGuest()"/>
+				<set text="setGuest({value})"/>
+			</property>
+		</class>
 	</types>
 </module>

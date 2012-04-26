@@ -1,0 +1,6 @@
+<application name="JavaTest4" title="Java Test Console 4" src="java4.app.xs">
+	<java4 id="jar" x="10" y="10" width="100" height="50" 
+		guest="some_component" 
+		script="var a = 2;"
+		/>
+</application>

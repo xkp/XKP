@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<xkp.android.libs.Layout.XKPLayout 
+				xmlns:android="http://schemas.android.com/apk/res/android" 
+				xmlns:xkp="http://schemas.android.com/apk/res/xkp.android.jBox2d_3" 
+				android:id="@+id/layoutapplication" 
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				xkp:placement="client"
+			>
+				<xkp.android.libs.Graphics.XKPImage android:id="@+id/__img1"
+				xkp:pos_x1="0dp"
+				xkp:pos_y1="390dp"
+				xkp:pos_width="600dp"
+				xkp:pos_height="40dp"
+				xkp:src="@drawable/stone_12"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</xkp.android.libs.Graphics.XKPImage>
+				<xkp.android.libs.Graphics.XKPImage android:id="@+id/__img2"
+				xkp:pos_x1="590dp"
+				xkp:pos_y1="350dp"
+				xkp:pos_width="10dp"
+				xkp:pos_height="40dp"
+				xkp:src="@drawable/stone_12"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</xkp.android.libs.Graphics.XKPImage>
+				<xkp.android.libs.Graphics.XKPImage android:id="@+id/__img3"
+				xkp:pos_x1="0dp"
+				xkp:pos_y1="350dp"
+				xkp:pos_width="10dp"
+				xkp:pos_height="40dp"
+				xkp:src="@drawable/stone_12"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</xkp.android.libs.Graphics.XKPImage>
+			</xkp.android.libs.Layout.XKPLayout>

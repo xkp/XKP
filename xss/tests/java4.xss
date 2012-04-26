@@ -1,0 +1,6 @@
+<xss:code>
+	for(var inst in java.instances)
+	{
+		compiler.xss("../idioms/java/instancing.xss", obj = inst);
+	}
+</xss:code>

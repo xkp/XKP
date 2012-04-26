@@ -206,10 +206,19 @@ method start_rendering_body(it, world, vp)
 	var prop = it.get_property("shape");
 	var shape = prop.render_value();
 	
-	out(indent = 1)
+	if(vp == "this")
 	{
-		XKPPhysicBody <xss:e value="it.output_id"/> = new XKPPhysicBody(Act<xss:e value="application.appName"/>.<xss:e value="world.output_id"/>.getWorld(), 
-			<xss:e value="shape"/><xss:e value="host"/>);
+		out(indent = 1, marker = "declarations", marker_source = "previous")
+		{
+			public XKPPhysicBody <xss:e value="it.output_id"/> = new XKPPhysicBody(Act<xss:e value="application.appName"/>.<xss:e value="world.output_id"/>.getWorld(), 
+				<xss:e value="shape"/><xss:e value="host"/>);
+		}
+	} else {
+		out(indent = 1)
+		{
+			XKPPhysicBody <xss:e value="it.output_id"/> = new XKPPhysicBody(Act<xss:e value="application.appName"/>.<xss:e value="world.output_id"/>.getWorld(), 
+				<xss:e value="shape"/><xss:e value="host"/>);
+		}
 	}
 	
 	bool isSensor = it.sensor;
@@ -331,37 +340,7 @@ method render_position(it, vp)
 //android spawner.xss delegates
 method render_create_spawner(it, path, id)
 {
-	/*
-	// TODO: well,... this form to make instantiate,... isn't work good, cuz the renders values don't output correctly
-	//      example: quotes in string type; 'f' after a number in an float type...
-	var param_values = [];
-	var tmp = object();
-	tmp.id = "view_layout"; 
-	tmp.value = "layout" + application.output_id;
-	param_values += tmp;
-
-	tmp.id = "creator_class"; 
-	tmp.value = it.creator_class as string;
-	param_values += tmp;
-	
-	tmp.id = "x";
-
-	out()
-	{
-		<xss:e value="it.type.output_id"/> <xss:e v="id"/> = <xss:e v="compiler.instantiate(it, runtime_args = param_values)"/>;
-	}
-	*/
-	
-	string type = it.type.output_id;
-	string nums_params = it.x + ", " + it.y + ", " + it.rotation + "f";
-	out()
-	{
-		<xss:e value="type"/> <xss:e v="id"/> = new <xss:e value="type"/>(this, layout<xss:e value="application.output_id"/>, 
-													"<xss:e value="it.creator_class"/>", <xss:e value="nums_params"/>);
-	}
-
-	//compiler.xss("../common-js/instance.xss", it, path = path, var_value = id);
-	compiler.xss("../../java/instance.xss", it);
+	compiler.xss("../../java/instancing.xss", obj = it);
 }
 
 method render_instancing_spawner(it, path, id, type)

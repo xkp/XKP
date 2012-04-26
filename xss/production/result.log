@@ -206,7 +206,6 @@ log: Copying resource files...
 log: Rendering instance: __resources1
 log: Rendering instance: __image1
 log: Rendering instance: __image2
-log: Rendering instance: sp1
 log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
@@ -710,6 +709,28 @@ for(Object i : list)
 
 
 
+
+
+Success are greateful
+===[ java4.project.xml ]================(Tests)
+
+
+
+
+
+
+			JavaClass jar = new JavaClass(this, defaulting, "some_component");
+		
+				jar.setX(10);
+			
+				jar.setY(10);
+			
+				jar.setWidth(100);
+			
+				jar.setHeight(50);
+			
+				jar.setGuest("some_component");
+			
 
 
 Success are greateful

@@ -1,0 +1,7 @@
+<project 
+	entry_point="java4.xss" 
+	language="java" 
+	target="java4.app.xml" >
+	
+	<idiom src="../idioms/java/classes.xml"/>
+</project>

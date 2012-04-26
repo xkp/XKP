@@ -4,6 +4,7 @@
 package <xss:e value="base_namespace"/>.libs.JBox2d;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +21,12 @@ public class XKPSpawner {
 	private float 		mRotation = 0.0f;
 	private Vec2 		mPosition = new Vec2(0, 0);
 	private float		mFrequency = 1.0f;
+	private Vec2		mLinearVelocity = new Vec2(0, 0);
 	
 	private String 		mClassName;
 	private Class		mClass;
 	private Constructor mConstructor;
+	private Field		mFieldBody;
 	
 	private List 		mInstances = new ArrayList();
 	
@@ -59,8 +62,9 @@ public class XKPSpawner {
 	
 	private final Runnable mRunnableSpawner = new Runnable() {
 		public void run() {
-			spawn();
-			mHandler.postDelayed(mRunnableSpawner, (long) (mFrequency * 1000));
+			if(spawn()) {
+				mHandler.postDelayed(mRunnableSpawner, (long) (mFrequency * 1000));
+			}
 		}
 	};
 
@@ -69,23 +73,45 @@ public class XKPSpawner {
 			Class mClass = Class.forName(mClassName);
 			mConstructor = mClass.getConstructor(Context.class);
 			
+			Field[] fields = mClass.getFields();
+			for (Field field : fields) {
+				if(field.getType().getSimpleName().equals("XKPPhysicBody")) {
+					mFieldBody = field;
+					break;
+				}
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void spawn() {
+	public boolean spawn() {
 		try {
+			//XKPSpawnClass newInstance = (XKPSpawnClass) mConstructor.newInstance(mContext);
+			//newInstance.setPosition((int) mPosition.x, (int) mPosition.y);
+			//newInstance.setRotation(mRotation);
+			
 			XKPGraphics newInstance = (XKPGraphics) mConstructor.newInstance(mContext);
-			newInstance.setPosition((int) mPosition.x, (int) mPosition.y);
-			newInstance.setRotation(mRotation);
+			if(mFieldBody != null) {
+				XKPPhysicBody physicBody = (XKPPhysicBody) mFieldBody.get(newInstance);
+				
+				if(physicBody == null)
+					return false;
+				
+				physicBody.setPosition((int) mPosition.x, (int) mPosition.y);
+				physicBody.setAngle(mRotation);
+				physicBody.setLinearVelocity(mLinearVelocity);
+			}
 
 			mInstances.add(newInstance);
 			mViewLayout.addView(newInstance);
-			
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
+
+		return true;
 	}
 
 	public boolean isAlive() {
@@ -106,7 +132,7 @@ public class XKPSpawner {
 		mPosition = position;
 	}
 
-	public void setPosition(Integer x, Integer y) {
+	public void setPosition(float x, float y) {
 		mPosition = new Vec2(x, y);
 	}
 	
@@ -120,5 +146,15 @@ public class XKPSpawner {
 	
 	public float getFrequency() {
 		return mFrequency;
+	}
+	
+	public void setLinearVelocity(float velocity) {
+		float vx = (float) (velocity * Math.sin(mRotation));
+		float vy = (float) (velocity * Math.cos(mRotation));
+		mLinearVelocity = new Vec2(vx, vy);
+	}
+	
+	public Vec2 getLinearVelocity() {
+		return mLinearVelocity;
 	}
 }

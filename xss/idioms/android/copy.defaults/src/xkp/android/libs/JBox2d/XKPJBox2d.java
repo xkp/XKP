@@ -69,7 +69,7 @@ public class XKPJBox2d {
 		while (body != null) {
 			if (body.isActive() && body.getUserData() != null) {
 				XKPPhysicBody physic = (XKPPhysicBody) body.getUserData();
-				boolean result = physic.updateRefPosition();
+				boolean result = physic.updateHostPosition();
 			}
 			body = body.getNext();
 		}

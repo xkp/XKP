@@ -130,6 +130,10 @@
 				<set text="setPosition({path}.getPosition().x, {value})"/>
 			</property>
 			
+			<!--TODO: complete all body properties -->
+			<property id="linear_damping" type="float"/>
+			<property id="angular_damping" type="float"/>
+			
 			<property id="width" type="float"/>
 			<property id="height" type="float"/>
 			<property id="radius" type="float" default_value="0.0"/>
@@ -156,8 +160,8 @@
 				<object import="xkp.android.libs.JBox2d.XKPSpawner"/>
 			</array>
 			
-			<property id="creator_class" type="string"/>
-			<property id="auto_start" type="bool"/>
+			<property id="creator_class" type="string" no_render="true"/>
+			<property id="auto_start" type="bool" no_render="true"/>
 			
 			<property id="x" type="int">
 				<get text="getPosition().x"/>
@@ -179,7 +183,10 @@
 				<set text="setRotation({value})"/>
 			</property>
 			
-			<property id="velocity" type="float"/>
+			<property id="velocity" type="float">
+				<get text="getLinearVelocity()"/>
+				<set text="setLinearVelocity({value})"/>
+			</property>
 			
 			<method id="start"/>
 			
