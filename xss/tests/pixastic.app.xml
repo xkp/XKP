@@ -1,0 +1,163 @@
+<application src="pixastic.app.xs" width="1000" height="800">
+
+	<resources>
+		<image src="images/test1.png"/>		
+		<image src="images/arrow_right_green_48.png"/>
+		<image src="images/arrow_left_green_48.png"/>
+		<image src="images/arrow_right_48.png"/>
+		<image src="images/arrow_left_48.png"/>
+		<image src="images/arrow_left.png"/>
+		<image src="images/arrow_right.png"/>
+		<image src="images/progress.full.png"/>
+        <image src="images/progress.empty.png"/>
+		<image src="images/unchecked.jpg"/>
+		<image src="images/checked.jpg"/>
+    </resources>
+	
+    <label x="20" y="10" font="15px Verdana" caption="Image processing demo"/>
+	<line x1="5" y1="40" x2="800" y2="40"/>		
+	
+	<img id="img1" x="280" y="100" width="256" height="328" src="images/test1.png" mouse_thru="true">		
+		<flipv id="flipv_filter" apply="false"/>
+		<invert id="invert_filter" apply="false"/>
+		<sepia id="sepia_filter" apply="false"/>
+		<hsl id="hsl_filter" hue="0" saturation="0" lightness="0" apply="false"/>
+		<edges id="edges_filter" mono="false" invert="false" apply="false"/> 
+		<pointillize id="pointillize_filter" radius="1" density="0" noise="0" transparent="false" apply="false"/>		
+		<brightness id="brightness_filter" brightness="0" contrast="0" apply="false"/>
+		<coloradjust id="coloradjust_filter" red="0" green="0" blue="0" apply="false"/>
+		<noise id="noise_filter" amount="0" strength="0" mono="false" apply="false"/>
+		<blur id="blur_filter" apply="false"/>
+		<edges2 id="edges2_filter" apply="false"/>
+		<glow id="glow_filter" amount="0" radius="0" apply="false"/>
+		<sharpen id="sharpen_filter" amount="0" apply="false"/>
+		<solarize id="solarize_filter" apply="false"/>
+		<fliph id="fliph_filter" apply="false"/>
+		<mosaic id="mosaic_filter" block_size="0" apply="false"/>
+	</img>
+		
+	<label id="title" x="570" y="80" font="13px Verdana" caption="Drag to the image the filter you want to able/disable"/>
+	<label id="flipv_label" x="610" y="110" font="12px Verdana" caption="Flip Vertically"/>
+	<label id="hsl_label" x="610" y="130" font="12px Verdana" caption="Hue/Saturation/Light"/>
+	<label id="edges_label" x="610" y="150" font="12px Verdana" caption="Edge Detection"/>
+	<label id="pointillize_label" x="610" y="170" font="12px Verdana" caption="Pointillize"/>
+	<label id="brightness_label" x="610" y="190" font="12px Verdana" caption="Brightness/Contrast"/>
+	<label id="invert_label" x="610" y="210" font="12px Verdana" caption="Invert"/>
+	<label id="sepia_label" x="610" y="230" font="12px Verdana" caption="Sepia"/>
+	<label id="coloradjust_label" x="610" y="250" font="12px Verdana" caption="Color Adjust"/>
+	<label id="noise_label" x="610" y="270" font="12px Verdana" caption="Noise"/>
+	<label id="blur_label" x="610" y="290" font="12px Verdana" caption="Blur"/>
+	<label id="edges2_label" x="610" y="310" font="12px Verdana" caption="Edge Detection 2"/>
+	<label id="glow_label" x="610" y="330" font="12px Verdana" caption="Glow"/>
+	<label id="sharpen_label" x="610" y="350" font="12px Verdana" caption="Sharpen"/>
+	<label id="solarize_label" x="610" y="370" font="12px Verdana" caption="Solarize"/>
+	<label id="fliph_label" x="610" y="390" font="12px Verdana" caption="Flip Horizontally"/>
+	<label id="mosaic_label" x="610" y="410" font="12px Verdana" caption="Mosaic"/>
+	
+	<switch id="options" x="20" y="80" width="300" height="250">
+        <div id="hsl_options" switchable="false">
+			<label x="10" y="50" font="12px Verdana" caption="Hue/Saturation/Light Parameters"/>
+			<label x="40" y="80" font="12px Verdana" caption="Saturation Adjust"/>
+			<progress_bar id="saturation_bar" x="40" y="105" value="50" width="120" height="10"/>
+			<img id="saturation_b1" x="10" y="100" width="20" height="20" src="images/arrow_left.png"/>
+            <img id="saturation_b2" x="170" y="100" width="20" height="20" src="images/arrow_right.png"/>
+			<label x="40" y="130" font="12px Verdana" caption="Hue Adjust"/>
+			<progress_bar id="hue_bar" x="40" y="155" value="50" width="120" height="10"/>
+			<img id="hue_b1" x="10" y="150" width="20" height="20" src="images/arrow_left.png"/>
+            <img id="hue_b2" x="170" y="150" width="20" height="20" src="images/arrow_right.png"/>
+			<label x="40" y="180" font="12px Verdana" caption="Lightness Adjust"/>
+			<progress_bar id="lightness_bar" x="40" y="205" value="50" width="120" height="10"/>
+			<img id="lightness_b1" x="10" y="200" width="20" height="20" src="images/arrow_left.png"/>
+            <img id="lightness_b2" x="170" y="200" width="20" height="20" src="images/arrow_right.png"/>
+        </div>
+		<div id="edges_options" switchable="false">
+			<label x="10" y="50" font="12px Verdana" caption="Edge Detection Parameters"/>
+			<state_button id="mono_check" x="40" y="80" width="32" height="32" is_active="false" active="images/checked.jpg" inactive="images/unchecked.jpg"/>
+			<label x="90" y="85" font="12px Verdana" caption="Mono"/>
+			<state_button id="invert_check" x="40" y="130" width="32" height="32" is_active="false" active="images/checked.jpg" inactive="images/unchecked.jpg"/>
+			<label x="90" y="135" font="12px Verdana" caption="Invert"/>			
+        </div>
+		<div id="pointillize_options" switchable="false">
+			<label x="10" y="50" font="12px Verdana" caption="Pointillize Parameters"/>
+			<label x="40" y="80" font="12px Verdana" caption="Density Adjust"/>
+			<progress_bar id="density_bar" x="40" y="105" width="120" height="10"/>
+			<img id="density_b1" x="10" y="100" width="20" height="20" src="images/arrow_left.png"/>
+            <img id="density_b2" x="170" y="100" width="20" height="20" src="images/arrow_right.png"/>
+			<label x="40" y="130" font="12px Verdana" caption="Noise Adjust"/>
+			<progress_bar id="noise_bar" x="40" y="155" width="120" height="10"/>
+			<img id="noise_b1" x="10" y="150" width="20" height="20" src="images/arrow_left.png"/>
+            <img id="noise_b2" x="170" y="150" width="20" height="20" src="images/arrow_right.png"/>
+			<state_button id="transparent_check" x="40" y="180" width="32" height="32" is_active="false" active="images/checked.jpg" inactive="images/unchecked.jpg"/>
+			<label x="90" y="185" font="12px Verdana" caption="Transparent"/>
+        </div>
+		<div id="brightness_options" switchable="false">
+			<label x="10" y="50" font="12px Verdana" caption="Brightness Parameters"/>
+			<label x="40" y="80" font="12px Verdana" caption="Brightness Adjust"/>
+			<progress_bar id="brightness_bar" x="40" y="105" value="50" width="120" height="10"/>
+			<img id="brightness_b1" x="10" y="100" width="20" height="20" src="images/arrow_left.png"/>
+            <img id="brightness_b2" x="170" y="100" width="20" height="20" src="images/arrow_right.png"/>
+			<label x="40" y="130" font="12px Verdana" caption="Contrast Adjust"/>
+			<progress_bar id="contrast_bar" x="40" y="155" value="50" width="120" height="10"/>
+			<img id="contrast_b1" x="10" y="150" width="20" height="20" src="images/arrow_left.png"/>
+            <img id="contrast_b2" x="170" y="150" width="20" height="20" src="images/arrow_right.png"/>
+        </div>
+		<div id="coloradjust_options" switchable="false">
+			<label x="10" y="50" font="12px Verdana" caption="Color Adjust Parameters"/>
+			<label x="40" y="80" font="12px Verdana" caption="Red Adjust"/>
+			<progress_bar id="red_bar" x="40" y="105" value="50" width="120" height="10"/>
+			<img id="red_b1" x="10" y="100" width="20" height="20" src="images/arrow_left.png"/>
+            <img id="red_b2" x="170" y="100" width="20" height="20" src="images/arrow_right.png"/>
+			<label x="40" y="130" font="12px Verdana" caption="Green Adjust"/>
+			<progress_bar id="green_bar" x="40" y="155" value="50" width="120" height="10"/>
+			<img id="green_b1" x="10" y="150" width="20" height="20" src="images/arrow_left.png"/>
+            <img id="green_b2" x="170" y="150" width="20" height="20" src="images/arrow_right.png"/>
+			<label x="40" y="180" font="12px Verdana" caption="Blue Adjust"/>
+			<progress_bar id="blue_bar" x="40" y="205" value="50" width="120" height="10"/>
+			<img id="blue_b1" x="10" y="200" width="20" height="20" src="images/arrow_left.png"/>
+            <img id="blue_b2" x="170" y="200" width="20" height="20" src="images/arrow_right.png"/>
+        </div>
+		<div id="noise_options" switchable="false">
+			<label x="10" y="50" font="12px Verdana" caption="Noise Parameters"/>
+			<label x="40" y="80" font="12px Verdana" caption="Amount Adjust"/>
+			<progress_bar id="amount_bar" x="40" y="105" width="120" height="10"/>
+			<img id="amount_b1" x="10" y="100" width="20" height="20" src="images/arrow_left.png"/>
+            <img id="amount_b2" x="170" y="100" width="20" height="20" src="images/arrow_right.png"/>
+			<label x="40" y="130" font="12px Verdana" caption="Strength Adjust"/>
+			<progress_bar id="strength_bar" x="40" y="155" width="120" height="10"/>
+			<img id="strength_b1" x="10" y="150" width="20" height="20" src="images/arrow_left.png"/>
+            <img id="strength_b2" x="170" y="150" width="20" height="20" src="images/arrow_right.png"/>
+			<state_button id="mono_check1" x="40" y="180" width="32" height="32" is_active="false" active="images/checked.jpg" inactive="images/unchecked.jpg"/>
+			<label x="90" y="185" font="12px Verdana" caption="Mono"/>
+        </div>
+		<div id="glow_options" switchable="false">
+			<label x="10" y="50" font="12px Verdana" caption="Glow Parameters"/>
+			<label x="40" y="80" font="12px Verdana" caption="Amount Adjust"/>
+			<progress_bar id="amount_bar1" x="40" y="105" width="120" height="10"/>
+			<img id="amount_b11" x="10" y="100" width="20" height="20" src="images/arrow_left.png"/>
+            <img id="amount_b21" x="170" y="100" width="20" height="20" src="images/arrow_right.png"/>
+			<label x="40" y="130" font="12px Verdana" caption="Radius Adjust"/>
+			<progress_bar id="radius_bar" x="40" y="155" width="120" height="10"/>
+			<img id="radius_b1" x="10" y="150" width="20" height="20" src="images/arrow_left.png"/>
+            <img id="radius_b2" x="170" y="150" width="20" height="20" src="images/arrow_right.png"/>			
+        </div>
+		<div id="sharpen_options" switchable="false">
+			<label x="10" y="50" font="12px Verdana" caption="Sharpen Parameters"/>
+			<label x="40" y="80" font="12px Verdana" caption="Amount Adjust"/>
+			<progress_bar id="amount_bar2" x="40" y="105" width="120" height="10"/>
+			<img id="amount_b12" x="10" y="100" width="20" height="20" src="images/arrow_left.png"/>
+            <img id="amount_b22" x="170" y="100" width="20" height="20" src="images/arrow_right.png"/>				
+        </div>
+		<div id="mosaic_options" switchable="false">
+			<label x="0" y="50" font="12px Verdana" caption="Mosaic Parameters"/>
+			<label x="40" y="80" font="12px Verdana" caption="Block Size Adjust"/>
+			<progress_bar id="bsize_bar" x="40" y="105" width="120" height="10"/>
+			<img id="bsize_b1" x="10" y="100" width="20" height="20" src="images/arrow_left.png"/>
+            <img id="bsize_b2" x="170" y="100" width="20" height="20" src="images/arrow_right.png"/>				
+        </div>
+	</switch>	
+	
+	<button id="btnNext" x="130" y="400" width="50" height="50" up="images/arrow_right_green_48.png" down="images/arrow_right_48.png"/>
+    <button id="btnPrev" x="60" y="400" width="50" height="50" up="images/arrow_left_green_48.png" down="images/arrow_left_48.png"/> 
+	<label x="20" y="470" font="12px Verdana" caption="The arrows will allow changing among the configurations of filters"/>
+	
+</application>

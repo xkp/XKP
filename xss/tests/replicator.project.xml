@@ -1,0 +1,12 @@
+<project entry_point="../idioms/ui/ui_standalone.xss" language="js" target="replicator.app.xml" output="replicator.html">
+    <path>
+        <output path="../production/test"/>
+    </path>
+
+    <include def="replicator.classes.xml" src="replicator.classes.xs"/>
+
+    <idiom src="../idioms/ui/ui.xml"/>
+	<idiom src="../idioms/resources/resources.xml"/>
+</project>
+           
+         

@@ -32,37 +32,11 @@
         params += parent_param;
 		
 		var type = cmp.type;   
-        /* 
-        *** TD
-         
-				
-		if (type.constructor_params)
-        {
-            for(var param in type.constructor_params)
-		    {			                
-				if (param.property)
-                {
-                    var prop = cmp.get_property(param.property);
-					if(prop.value != null)
-					{						
-						var tmp = object();
-						tmp.id = prop.id;
-						if(prop.use_plain_value)
-							tmp.value = prop.value;
-						else
-							tmp.value = prop.render_value();
-						params += tmp;
-					}
-                }   			                
-		    }
-        }
-		**** TD 
-        */
-		
+        compiler.log("UI Component: " + cmp_id);
         out()
 	    {
 		    <xss:e value = "cmp_id"/> = 
-			<xss:e v="compiler.instantiate(type, param_values = params)"/>;
+			<xss:e v="compiler.instantiate(cmp, param_values = params)"/>;
 	    }
         
         //TODO: Porque no marcar las clases con algun valor (mouse_thru, quiza?) 

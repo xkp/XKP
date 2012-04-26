@@ -305,7 +305,7 @@ void xss_module::register_instance(XSSObject obj)
         //notify the compiler we're alive
         XSSCompiler compiler = ctx_->resolve("compiler");
 
-        compiler->add_dependencies(dependencies_);
+        compiler->add_dependencies(dependencies_, shared_from_this());
       }
 
     str obj_id = obj->id();
@@ -984,8 +984,25 @@ void xss_compiler::inject(const param_list params)
       }
 
     param_list pl;
+    str        marker;
     for(size_t i = 1; i < params.size(); i++)
-      pl.add(params.get(i));
+      {
+        str     pname  = params.get_name(i);
+        variant pvalue = params.get(i);
+        if (pname == "marker")
+          {
+            marker = variant_cast<str>(pvalue, str());
+            continue;
+          }
+
+        pl.add(pname, pvalue);
+      }
+
+    if (!marker.empty())
+      {
+        XSSRenderer renderer(new xss_renderer(shared_from_this(), ctx, ctx->path()));
+        push_renderer(renderer);
+      }
 
     std::vector<XSSModule> modules = renderer->modules();
     std::vector<XSSModule>::iterator it = modules.begin();
@@ -996,6 +1013,13 @@ void xss_compiler::inject(const param_list params)
         size_t evid = mod->event_id(evname);
         if (evid > 0)
           mod->dispatch_event(evid, pl);
+      }
+
+    if (!marker.empty())
+      {
+        XSSRenderer renderer = pop_renderer();
+        XSSRenderer current  = current_renderer();
+        current->append_at(renderer->get(), marker);
       }
   }
 
@@ -1450,7 +1474,7 @@ void process_instantiate_params(const param_list params, int idx, instantiate_pa
         str     pname  = params.get_name(i);
         variant pvalue = params.get(i);
 
-        if (pname == "instance")
+        if (pname == "object")
           {
             result.instance = variant_cast<XSSObject>(pvalue, XSSObject());
             continue;
@@ -1463,17 +1487,18 @@ void process_instantiate_params(const param_list params, int idx, instantiate_pa
         else if (pname == "param_values")
           {
             DynamicArray pv = variant_cast<DynamicArray>(pvalue, DynamicArray());
-            assert(pv);
-
-		        std::vector<variant>::iterator it = pv->ref_begin();
-		        std::vector<variant>::iterator nd = pv->ref_end();
-
-            for(; it != nd; it++)
+            if (pv)
               {
-                XSSObject pobj = variant_cast<XSSObject>(*it, XSSObject()); assert(pobj); //td: error
-                str pid = pobj->id();
-                str pval = pobj->get<str>("value", str());
-                result.values.add(pid, pval);
+		            std::vector<variant>::iterator it = pv->ref_begin();
+		            std::vector<variant>::iterator nd = pv->ref_end();
+
+                for(; it != nd; it++)
+                  {
+                    XSSObject pobj = variant_cast<XSSObject>(*it, XSSObject()); assert(pobj); //td: error
+                    str pid = pobj->id();
+                    str pval = pobj->get<str>("value", str());
+                    result.values.add(pid, pval);
+                  }
               }
             continue;
           }
@@ -1484,9 +1509,10 @@ void process_instantiate_params(const param_list params, int idx, instantiate_pa
 
 str xss_compiler::instantiate(const param_list params)
   {
-    variant      v    = params.get(0);
-    XSSType      type = variant_cast<XSSType>(v, XSSType());
-    XSSObject    instance;
+    variant   v    = params.get(0);
+    XSSType   type = variant_cast<XSSType>(v, XSSType());
+    XSSObject instance;
+
     if (!type)
       {
         instance = variant_cast<XSSObject>(v, XSSObject());
@@ -1504,6 +1530,21 @@ str xss_compiler::instantiate(const param_list params)
 
     if (!instance)
       instance = iparams.instance;
+
+    str xss = type->get<str>("instantiator", str());
+    if (!xss.empty())
+      {
+        //prepare rendering parameters
+        param_list args;
+        args.add("type", type);
+        args.add("runtime_args", iparams.runtime);
+
+        fs::path tp = type_path(type->id());
+
+        XSSContext  ctx(new xss_context(current_context(), tp));
+        XSSRenderer rend = compile_xss_file(xss, ctx);
+        return rend->render(XSSObject(), &args);
+      }
 
     str result = lang->instantiate(type, instance, iparams.runtime, iparams.values);
     return result;
@@ -1576,7 +1617,7 @@ str xss_compiler::render_code(const str& text, param_list_decl& args, XSSContext
     return compiled->render();
   }
 
-void xss_compiler::add_dependencies(XSSObjectList& dependencies)
+void xss_compiler::add_dependencies(XSSObjectList& dependencies, XSSObject idiom)
   {
     XSSObjectList::iterator it = dependencies.begin();
     XSSObjectList::iterator nd = dependencies.end();
@@ -1598,8 +1639,7 @@ void xss_compiler::add_dependencies(XSSObjectList& dependencies)
         dependency_map::iterator it = dependencies_.find(href);
         if (it == dependencies_.end())
           {
-            dependencies_.insert(dependency_pair(href, deps_.size()));
-            deps_.push_back(obj);
+            add_dependency(href, obj, idiom);
           }
       }
   }
@@ -1651,8 +1691,7 @@ str xss_compiler::build_project(const param_list params)
         dependency_map::iterator myit = dependencies_.find(href);
         if (myit == dependencies_.end())
           {
-            dependencies_.insert(dependency_pair(href, deps_.size()));
-            deps_.push_back(dep);
+            add_dependency(href, dep, XSSObject());
           }
       }
 
@@ -1679,6 +1718,24 @@ DynamicArray xss_compiler::get_dependencies()
     return result;
   }
 
+DynamicArray xss_compiler::idiom_dependencies(const str& idiom_id)
+  {
+    DynamicArray result(new dynamic_array);
+
+    XSSObjectList::iterator it = deps_.begin(); 
+    XSSObjectList::iterator nd = deps_.end();
+
+    for(; it != nd; it++)
+      {
+        XSSObject dep   = *it;
+        XSSObject idiom = dep->get<XSSObject>("idiom", XSSObject());
+        if (idiom && idiom->id() == idiom_id)
+          result->push_back(dep);
+      }
+
+    return result;
+  }
+
 void xss_compiler::push_renderer(XSSRenderer renderer)
   {
     if (renderers_.empty())
@@ -1687,12 +1744,15 @@ void xss_compiler::push_renderer(XSSRenderer renderer)
     renderers_.push_back(renderer);
   }
 
-void xss_compiler::pop_renderer()
+XSSRenderer xss_compiler::pop_renderer()
   {
+    XSSRenderer result = renderers_.back();
     renderers_.pop_back();
 
     if (renderers_.empty())
       entry_ = XSSRenderer();
+
+    return result;
   }
 
 XSSRenderer xss_compiler::current_renderer()
@@ -2819,6 +2879,14 @@ void xss_compiler::compile_xs_file(fs::path file, xs_container& result, XSSConte
       }
   }
 
+void xss_compiler::add_dependency(const str& href, XSSObject obj, XSSObject idiom)
+  {
+    obj->add_attribute("idiom", idiom);
+
+    dependencies_.insert(dependency_pair(href, deps_.size()));
+    deps_.push_back(obj);
+  }
+
 void xss_compiler::collect_dependencies(XSSType type, XSSType context)
   {
     if (type->has("#depcollected"))
@@ -2847,8 +2915,8 @@ void xss_compiler::collect_dependencies(XSSType type, XSSType context)
         dependency_map::iterator it = dependencies_.find(href);
         if (it == dependencies_.end())
           {
-            dependencies_.insert(dependency_pair(href, deps_.size()));
-            deps_.push_back(obj);
+            XSSObject idiom = current_app_->type_idiom(type->id());
+            add_dependency(href, obj, idiom);
           }
       }
   }

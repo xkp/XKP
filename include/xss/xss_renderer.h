@@ -130,6 +130,8 @@ namespace xkp
 
         str     template_;
         str     content_;
+        str     dependencies_;
+        str     style_;
         tag_map tasks_;
     };
 

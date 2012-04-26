@@ -1,0 +1,11 @@
+<project entry_point="../idioms/ui/ui_standalone.xss" language="js" target="pixastic.app.xml" output="pixastic.html">
+    <path>
+        <output path="../production/test"/>
+    </path>
+	
+    <idiom src="../idioms/ui/ui.xml"/> 	
+	<idiom src="../idioms/resources/resources.xml"/>
+	<idiom src="../idioms/pixastic/pixastic.xml"/>	
+</project>
+           
+         

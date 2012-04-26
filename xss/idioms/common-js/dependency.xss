@@ -1,0 +1,22 @@
+<xss:parameter id="it"/>
+<xss:parameter id="path"/>
+<xss:code>
+    string href = it.href;
+    if (path)
+        href = path + "/" + href;
+    
+    if (it.stylesheet)
+    {
+        out()
+        {
+            <link rel="stylesheet" href="<xss:e v="href"/>"></link>
+        }
+    }
+    else
+    {
+        out()
+        {
+            <script type="text/javascript" src="<xss:e v="href"/>"></script>
+        }
+    }
+</xss:code>
