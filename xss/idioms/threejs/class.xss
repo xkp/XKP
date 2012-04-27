@@ -2,7 +2,7 @@
 
 <xss:code>
     array param_values = [];
-    clazz.instantiator = "instantiator.xss";
+    clazz.instantiator = "instantiator.xss";	
     bool super_transform = false;
     out()
     {
@@ -94,11 +94,26 @@
     compiler.xss("../common-js/instance.xss", clazz);    
 
     for(var inst in clazz.instances)
-    {		
+    {				
         if (inst.class_name == "sequence") //td: !!!
-            continue; 
-            
-        string inst_renderer = inst.type.renderer;
+            continue;             
+		if(inst.type.user_defined)
+		{
+			out()
+			{
+			    var <xss:e v="inst.id"/>;
+			    <xss:e v="inst.id"/> = <xss:e v="compiler.instantiate(inst.type, object = inst)"/> ;
+			}
+
+            if(super_transform)
+			    out()
+			    {
+				    <xss:e v="clazz.id"/>.addChild(<xss:e v="inst.output_id"/>);
+			    }   
+			continue;
+		}		
+        string inst_renderer = inst.type.renderer;				
+			
         if (!inst_renderer)
         {
             compiler.error("Class not rendereable", class_name = inst.type_name);
@@ -108,7 +123,7 @@
             var <xss:e v="inst.output_id"/>;
         }            
         string inst_path = compiler.idiom_path(inst, inst_renderer);
-        compiler.xss(inst_path, inst);
+		compiler.xss(inst_path, inst);
 		if(!inst.dont_render)
 			compiler.xss("../common-js/instance.xss", inst);
         if(super_transform)

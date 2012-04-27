@@ -2235,16 +2235,13 @@ void xss_compiler::preprocess_type(XSSType clazz, XSSObject def_class, const str
       } pre_processor;
 
     XSSModule module = app->type_idiom(super);
-    if (def_class)
-      {
-        assert(app == current_app_);
-        pre_processor.ctx    = ctx;
-        pre_processor.root   = def_class;
-        pre_processor.target = clazz;
-        pre_processor.module = module;
+    assert(app == current_app_);
+    pre_processor.ctx    = ctx;
+    pre_processor.root    = XSSObject(clazz);
+    pre_processor.target = clazz;
+    pre_processor.module = module;
 
-        pre_process(app, def_class, XSSObject(), &pre_processor);
-      }
+    pre_process(app, XSSObject(clazz), XSSObject(), &pre_processor);
   }
 
 void xss_compiler::init_project_context(code_context& result)
@@ -2434,7 +2431,8 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
             clazz->set_definition(def_class);
             clazz->set_super(super);
             clazz->set_context(ictx);
-				    ictx->set_this(XSSObject(clazz));
+				    
+            ictx->set_this(XSSObject(clazz));
 
             preprocess_type(clazz, def_class, ci.super, ictx, app);
 
@@ -2473,6 +2471,15 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
         preprocess_type(clazz, def_class, super, ictx, app);
 
         clazz->set_context(ictx);
+      }
+
+    std::vector<XSSType>::iterator cit = classes.begin();
+    std::vector<XSSType>::iterator cnd = classes.end();
+
+    for(; cit != cnd; cit++)
+      {
+        XSSType ct = *cit;
+        ct->propertize();
       }
   }
 

@@ -367,7 +367,11 @@ ms.streamer.Streamer = Class.create(
 		}
 
 		resource.loaded = true;
-		resource.data   = data;
+		if(data)
+		{
+			resource.data   = data;
+			resource.data.id = resource.id;
+		}
 		for(var i = resource.requests.length - 1; i >= 0; i--)
 		{
 			var req = resource.requests[i];

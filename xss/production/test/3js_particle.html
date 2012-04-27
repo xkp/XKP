@@ -59,6 +59,7 @@ threejs_load_resources(function()
 		    camera_1 = 
 		    new THREE.Camera(70, 1.5, 1, 1000, null) ;	
 		active_camera = camera_1;
+		        scene.addObject(camera_1);
             camera_1.position.y = 300;
             camera_1.position.z = 500;
 			particle_1 = new THREE.Particle( 
@@ -66,6 +67,7 @@ threejs_load_resources(function()
 			{ color: Math.random()*0x808008, program: program_fill, } 
 			) );	
 			scene.addObject( particle_1 );	
+		        scene.addObject(particle_1);
             particle_1.position.y = 150;
             particle_1.scale.x = 5;
             particle_1.scale.y = 5;

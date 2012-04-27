@@ -70,26 +70,6 @@
             </at>
         </sequence>
     </class>
-
-    <class id="social_button" super="img">
-        <sequence id="grow">
-            <at time="0">
-                <animate property="x" from="@" to="ox - 4" in="0.3"/>
-                <animate property="y" from="@" to="oy - 4" in="0.3"/>
-                <animate property="width" from="@" to="32" in="0.3"/>
-                <animate property="height" from="@" to="32" in="0.3"/>
-            </at>
-        </sequence>
-
-        <sequence id="shrink">
-            <at time="0">
-                <animate property="x" from="@" to="ox" in="0.3"/>
-                <animate property="y" from="@" to="oy" in="0.3"/>
-                <animate property="width" from="@" to="24" in="0.3"/>
-                <animate property="height" from="@" to="24" in="0.3"/>
-            </at>
-        </sequence>
-    </class> 
 </xss:classes>
 
 	

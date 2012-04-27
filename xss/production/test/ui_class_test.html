@@ -24,7 +24,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 			var client =
 			{
 				width: 600,
-				height: 400,
+				height: 600,
 				canvas: drawingCanvas
 			};
             var streamer = new ms.streamer.Streamer();							
@@ -133,7 +133,7 @@ window.onload = function()
 		var client =
 		{
 			width: 600,
-			height: 400,
+			height: 600,
 			canvas: drawingCanvas
 		};
 		var ui = new ms.ui.Manager(client, streamer);
@@ -189,6 +189,21 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
+		    test1 = 
+			new ms.ui.Component(g_ui_root.manager, g_ui_root);
+	    test1.mouse_thru = true;
+        test1 = test1;
+            test1.set_x(200);
+            test1.set_y(200);
+            test1.set_width(200);
+            test1.set_height(200);
+		    img4 = 
+			new my_image(test1.manager, test1, "images/img1.png");
+        img4 = img4;
+            img4.set_x(0);
+            img4.set_y(0);
+            img4.set_width(100);
+            img4.set_height(100);
 		    img1 = 
 			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/img1.png");
         img1 = img1;
@@ -238,7 +253,7 @@ application.img2.rect(application.x_pos, application.y_pos, 50, 50);
 </script>
 </head>
 <body>	
-	<canvas id="myCanvas" width="600" height="400"
+	<canvas id="myCanvas" width="600" height="600"
 		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
 </body>
 </html>

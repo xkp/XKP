@@ -9,7 +9,6 @@
 <script type="text/javascript" src="../js/ms-event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 		<script type="text/javascript" src="../js/ms-ui.js"></script>
-		<script type="text/javascript" src="../js/ms-state.js"></script>
 		<script type="text/javascript" src="../js/ms-streamer.js"></script>
 <script type="text/javascript">
     var drawingCanvas;		
@@ -25,7 +24,7 @@ var SoundUtils = new ms.ui.SoundUtils();
 			var client =
 			{
 				width: 600,
-				height: 400,
+				height: 600,
 				canvas: drawingCanvas
 			};
             var streamer = new ms.streamer.Streamer();							
@@ -34,11 +33,6 @@ var SoundUtils = new ms.ui.SoundUtils();
 			var g_ui_root = ui.root;
 			var mouse_pressed = false;
 		}
-		var g_sequence_manager = new ms.state.Manager();
-        function default_interpolate(a, b, t)
-        {
-            return a + (b - a)*t;
-        }		
 		var streamer = new ms.streamer.Streamer();	
 		var ResourceUtils = new ms.streamer.ResourceUtils();
 		var global_package = new ms.streamer.Package(streamer);	
@@ -46,7 +40,7 @@ var SoundUtils = new ms.ui.SoundUtils();
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"images/smile_grin_48.png",
+		src:			"images/img1.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
@@ -60,7 +54,7 @@ var SoundUtils = new ms.ui.SoundUtils();
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"images/smile_sad_48.png",
+		src:			"images/twitter.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
@@ -91,7 +85,6 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
-		g_sequence_manager.update(g_delta);
 		application.events.dispatch("updates", []);	
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
@@ -99,7 +92,32 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-            ms6 = Class.create(ms.ui.Component,
+            my_image = Class.create(ms.ui.Image,
+        {
+    initialize: function($super
+                , manager
+                , parent
+                , src
+                )
+    {
+        $super(
+        manager,parent,src        );
+        this.events = new ms.event.EventHolder(); 
+        var this__  = this;
+        this.data_source = null;
+        this.data_source_set = function (value)
+        {
+            this.data_source = value;
+            this.src(value);
+        };
+            this.set_height(50);
+            this.set_placement("right");
+            this.set_width(50);
+            if (this.init)
+                this.init();
+            },
+});
+            menu_item = Class.create(ms.ui.Component,
         {
     initialize: function($super
                 , manager
@@ -110,67 +128,41 @@ function start(resolution)
         manager,parent        );
         this.events = new ms.event.EventHolder(); 
         var this__  = this;
-this.anim1 =
-new ms.state.Sequence(
-g_sequence_manager);
-        anim1 = this.anim1;
-            this.anim1.parent_sequence = null;
-                    var ____i1 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            btn1.alpha(value);
-                        },
-                        [
-                        {t: 0, value: 100},
-                        {t: 10.5, value: 0},
-                        ]);
-                    this.anim1.addAction(null, "alpha", new ms.state.State(0, 10.5, ____i1));                    
-		    this.btn1 = 
-			new ms.ui.Button(ms6.manager, ms6, "images/smile_sad_48.png", "images/smile_grin_48.png");
-        btn1 = this.btn1;
-            this.btn1.set_placement("top");
-            this.btn1.set_height(50);
-	var ev_parent = this;
-	btn1.events.addListener("click", function()
-	{    
-		if (ms6.btn2.get_alpha() > 0)
-{
-ms6.btn2.alpha(ms6.btn2.get_alpha() - 5);
-}
-else
-{
-ms6.btn2.alpha(100);
-}
-	}
-	);
-		application.are_obj_events = true;
-		    this.btn2 = 
-			new ms.ui.Button(ms6.manager, ms6, "images/smile_grin_48.png", "images/smile_sad_48.png");
-        btn2 = this.btn2;
-            this.btn2.set_placement("bottom");
-            this.btn2.set_height(50);
-	var ev_parent = this;
-	btn2.events.addListener("click", function()
-	{    
-		if (ms6.anim1.running)
-{
-ms6.anim1.stop();
-}
-else
-{
-ms6.anim1.start();
-}
-	}
-	);
-		application.are_obj_events = true;
+		    this.lbl_caption = 
+			new ms.ui.Label(menu_item.manager, menu_item, null);
+        lbl_caption = this.lbl_caption;
+            this.lbl_caption.set_x(0);
+            this.lbl_caption.set_y(10);
+		    this.icon = 
+			new ms.ui.Image(menu_item.manager, menu_item, null);
+        icon = this.icon;
+            this.icon.set_x(10);
+            this.icon.set_y(30);
+            this.icon.set_width(50);
+            this.icon.set_height(50);
+        this.data_source = null;
+        this.data_source_set = function (value)
+        {
+            this.data_source = value;
+            this.lbl_caption.text(value.caption);
+this.icon.src(value.image);
+        };
             this.set_height(100);
-            this.set_width(50);
+            this.set_placement("left");
+            this.set_width(100);
             if (this.init)
                 this.init();
             },
 });
+            application.menu1 = [{caption : "unstanding",image : "images/img1.png"}, {caption : "jajajaja",image : "images/twitter.png"}];
+            application.images1 = ["images/img1.png", "images/twitter.png"];
+	var ev_parent = this;
+	application.events.addListener("click", function()
+	{    
+		rep1.set_data_source(application.menu1);
+rep2.set_data_source(application.images1);
+	}
+	);
 window.onload = function() 
 {
 	drawingCanvas = document.getElementById("myCanvas");
@@ -180,7 +172,7 @@ window.onload = function()
 		var client =
 		{
 			width: 600,
-			height: 400,
+			height: 600,
 			canvas: drawingCanvas
 		};
 		var ui = new ms.ui.Manager(client, streamer);
@@ -236,16 +228,43 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    ms61 = 
-			new ms6(g_ui_root.manager, g_ui_root);
-        ms61 = ms61;
-            ms61.set_x(100);
-            ms61.set_y(100);
-		    ms62 = 
-			new ms6(g_ui_root.manager, g_ui_root);
-        ms62 = ms62;
-            ms62.set_x(200);
-            ms62.set_y(100);
+		    rep1 = 
+			new ms.ui.Replicator(g_ui_root.manager, g_ui_root, "menu_item");
+        rep1 = rep1;
+            rep1.set_x(30);
+            rep1.set_y(30);
+            rep1.set_width(500);
+            rep1.set_height(100);
+	rep1.set_data_source = function(data)
+		{
+			this.components = [];
+			for(var i = 0; i < data.length; i++)
+			{
+				var item = data[i];
+				var child = new menu_item(
+				this.manager, this);				
+				child.data_source_set(item); 				
+			}
+		}
+		    rep2 = 
+			new ms.ui.Replicator(g_ui_root.manager, g_ui_root, "my_image");
+        rep2 = rep2;
+            rep2.set_x(30);
+            rep2.set_y(200);
+            rep2.set_width(500);
+            rep2.set_height(100);
+	rep2.set_data_source = function(data)
+		{
+			this.components = [];
+			for(var i = 0; i < data.length; i++)
+			{
+				var item = data[i];
+				var child = new my_image(
+	, null
+				this.manager, this);				
+				child.data_source_set(item); 				
+			}
+		}
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  
@@ -267,7 +286,7 @@ window.onload = function()
 </script>
 </head>
 <body>	
-	<canvas id="myCanvas" width="600" height="400"
+	<canvas id="myCanvas" width="600" height="600"
 		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
 </body>
 </html>

@@ -5,7 +5,7 @@
     <dependency href="../js/keys.js"/>
 
     <types>
-        <class id="component" renderer="component.xss">		
+        <class id="component" renderer="component.xss" hasimagedata="true">		
 			<constructor_params>
                 <parameter id="manager" default_value="g_ui"/>
 				<parameter id="parent" default_value="g_ui_root"/>
@@ -13,6 +13,11 @@
 			<property id="manager" type="string" use_plain_value="true" dont_init="true"/>
 			<property id="parent" type="string" use_plain_value="true" dont_init="true"/>
 			<property id="mouse_thru" type="bool"/> 
+			
+			<property id="imagedata" type="string" use_plain_value="true">
+				<get text="get_image_data({path})" global = "true"/>
+                <set text="put_image({path}, {value})" global = "true"/>
+            </property>
 
 			<property id="switchable" type="bool">
 				<get text="switchable"/>

@@ -1,7 +1,11 @@
-<application src="ui_class_test.app.xs" width="600" height="400">
+<application src="ui_class_test.app.xs" width="600" height="600">
     <resources>
         <image src="images/img1.png"/>
     </resources>
-
+	
+	<div id="test1" x="200" y="200" width="200" height="200">
+		<my_image id="img4" src="images/img1.png" x="0" y="0" width="100" height="100"/>
+    </div>
+	
     <img id="img1" src="images/img1.png" x="100" y="100" width="50" height="50"/>    
 </application>

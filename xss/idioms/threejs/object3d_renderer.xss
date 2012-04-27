@@ -9,8 +9,7 @@
 	if (!obj.material)
         obj.material = "new THREE.MeshBasicMaterial()";
 	
-	out(marker = "threejs_variables", marker_source = "entry") {var <xss:e v="obj.id"/>;}
-	
+	out(marker = "threejs_variables", marker_source = "entry") {var <xss:e v="obj.id"/>;}	
 	
     out()
     {

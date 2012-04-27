@@ -497,6 +497,17 @@ window.onload = function()
             title0.set_x(50);
             title0.set_y(50);
             title0.text("This screen shows some buttons (1/4)");
+	var ev_parent = this;
+	title0.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+title0.set_x(x - title0.w / 2);
+title0.set_y(y - title0.h / 2);
+}
+	}
+	);
+		application.are_obj_events = true;
 		    lbl_event = 
 			new ms.ui.Label(test1.manager, test1, "12px Verdana");
         lbl_event = lbl_event;
@@ -573,7 +584,7 @@ btn1.set_y(y - btnNext.h / 2);
 	var ev_parent = this;
 	stateBtn.events.addListener("click", function()
 	{    
-		if (stateBtn.active)
+		if (stateBtn.is_active)
 {
 lbl3.text("Wow I'm happy !!!");
 }

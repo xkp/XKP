@@ -37,3 +37,7 @@ on mousemove(x, y){
 		speed = -(0.2) * ( window.innerWidth/2 - x) / ( window.innerWidth/2);
 	}
 }
+
+on click(){
+	
+}

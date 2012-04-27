@@ -9,16 +9,16 @@ class anim_plane : plane
 	property title = false;
 	
 	method set_image(value)
-	{		
+	{
 		texture = value;
-	}	
+	}
 	on mousein(x, y)
 	{
 		application.selected = anim_plane;			
 		if(application.phase == 2)
-		{			
+		{
 			if(parent_ == application.group_zoomed)
-			{	
+			{
 				if(!title)
 				{
 					anim_plane.scale.x = 3;
@@ -65,13 +65,13 @@ class planes_group : transform
 	{
 		var resource;
 		for(int index = 0; index < images.length - 1; index++){
-			resource = streamer.get_resource(images[index]).data;
-			plane_array += anim_plane(resource.naturalWidth/13, resource.naturalHeight/13);
+			resource = ResourceUtils.get_resource(images[index]);
+			plane_array += anim_plane(resource.width/13, resource.height/13);
 			plane_array[index].set_image(images[index]);
 			plane_array[index].parent_ = this;
 		}
-		resource = streamer.get_resource(images[images.length - 1]).data;
-		plane_array += anim_plane(resource.naturalWidth, resource.naturalHeight);
+		resource = ResourceUtils.get_resource(images[images.length - 1]);
+		plane_array += anim_plane(resource.width, resource.height);
 		plane_array[images.length - 1].set_image(images[images.length - 1]);
 		plane_array[images.length - 1].parent_ = this;
 		plane_array[images.length - 1].title = true;
@@ -186,18 +186,14 @@ class social_button : img
     //keep initialization value
     float ox;
     float oy;
- 
-    on mousein()
+    float owidth;
+    float oheight;
+
+    on init()
     {
         ox = x;
         oy = y;
-        shrink.stop();
-        grow.start();
-    }
-
-    on mouseout()
-    {
-        grow.stop();
-        shrink.start();
+        owidth = width;
+        oheight = height;
     }
 }

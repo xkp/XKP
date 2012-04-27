@@ -793,11 +793,10 @@ ev_parent.shrink.start();
                 this.init();
             },
 });
-        function create_anim_plane(
+    function create_anim_plane(
     width,height,x_segments,y_segments ) { 
     var anim_plane;
-	    anim_plane_plane = 
-		new THREE.Plane(width, height, x_segments, y_segments) ;
+	    anim_plane_plane = new THREE.Plane(width, height, x_segments, y_segments) ;
 	    anim_plane = new THREE.Mesh(anim_plane_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(anim_plane);
 		anim_plane.events = new ms.event.EventHolder();
@@ -1222,7 +1221,7 @@ application.times_planes.set_individual_scale(0.699999988);
 		application.are_obj_events = true;
         return anim_plane;
         }
-        function create_planes_group(
+    function create_planes_group(
      ) { 
     var planes_group;
 			planes_group = new THREE.Object3D();
@@ -1924,7 +1923,7 @@ g_sequence_manager);
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    liquid = 
-			new ms.ui.RippleEffect(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.RippleEffect(g_ui_root.manager, g_ui_root, "images/pictures/boxdef.jpg");
         liquid = liquid;
             liquid.set_x(0);
             liquid.set_y(0);
@@ -1932,7 +1931,7 @@ g_sequence_manager);
             liquid.set_height(app_height);
             liquid.alpha(0);
 		    banner = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/banner.png");
         banner = banner;
             banner.set_x(15);
             banner.set_y(10);
@@ -1940,7 +1939,7 @@ g_sequence_manager);
             banner.set_height(28);
             banner.alpha(0);
 		    loading = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/loading.png");
         loading = loading;
             loading.set_x(280);
             loading.set_y(550);
@@ -1948,7 +1947,7 @@ g_sequence_manager);
             loading.set_height(27);
             loading.alpha(0);
 		    enter_to = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/enter.png");
         enter_to = enter_to;
             enter_to.set_x(310);
             enter_to.set_y(551.5);
@@ -1999,7 +1998,7 @@ application.init_planes();
 	);
 		application.are_obj_events = true;
 		    lens1 = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/lente1.png");
         lens1 = lens1;
             lens1.set_x(225);
             lens1.set_y(225);
@@ -2007,7 +2006,7 @@ application.init_planes();
             lens1.set_height(250);
             lens1.alpha(0);
 		    lens2 = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/lente2.png");
         lens2 = lens2;
             lens2.set_x(220);
             lens2.set_y(220);
@@ -2015,7 +2014,7 @@ application.init_planes();
             lens2.set_height(260);
             lens2.alpha(0);
 		    facebook = 
-			new social_button(g_ui_root.manager, g_ui_root, null);
+			new social_button(g_ui_root.manager, g_ui_root, "images/pictures/facebook.png");
         facebook = facebook;
             facebook.set_x(880);
             facebook.set_y(8);
@@ -2023,7 +2022,7 @@ application.init_planes();
             facebook.set_height(24);
             facebook.alpha(0);
 		    twitter = 
-			new social_button(g_ui_root.manager, g_ui_root, null);
+			new social_button(g_ui_root.manager, g_ui_root, "images/pictures/twitter.png");
         twitter = twitter;
             twitter.set_x(845);
             twitter.set_y(8);
@@ -2031,7 +2030,7 @@ application.init_planes();
             twitter.set_height(24);
             twitter.alpha(0);
 		    email = 
-			new social_button(g_ui_root.manager, g_ui_root, null);
+			new social_button(g_ui_root.manager, g_ui_root, "images/pictures/photobucket.png");
         email = email;
             email.set_x(810);
             email.set_y(8);
@@ -2039,7 +2038,7 @@ application.init_planes();
             email.set_height(24);
             email.alpha(0);
 		    btn1 = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/pictures/arrow_up.png", "images/pictures/arrow_down.png");
         btn1 = btn1;
             btn1.set_x(0);
             btn1.set_y(300);
@@ -2081,7 +2080,7 @@ application.zoomed.rotation.y = 0;
 	);
 		application.are_obj_events = true;
 		    btn2 = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/pictures/arrow_up.png", "images/pictures/arrow_down.png");
         btn2 = btn2;
             btn2.set_x(840);
             btn2.set_y(300);
@@ -2167,7 +2166,7 @@ application.zoomed.rotation.y = 0;
             line4.alpha(60);
             line4.set_color("white");
 		    rect1 = 
-			new ms.ui.Rectangle(g_ui_root.manager, g_ui_root, null, null, null);
+			new ms.ui.Rectangle(g_ui_root.manager, g_ui_root, null, "white", null);
         rect1 = rect1;
             rect1.set_x(200);
             rect1.set_y(200);
@@ -2175,10 +2174,9 @@ application.zoomed.rotation.y = 0;
             rect1.set_height(300);
             rect1.setVisible(false);
             rect1.alpha(60);
-			scene = 
-			new THREE.Scene() ;
-		camera_1 = 
-		new THREE.Camera(45, 1.5, 1, 10000, null) ;	
+			    scene = new THREE.Scene() ;
+		    camera_1 = 
+		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
 		active_camera = camera_1;
             camera_1.position.z = 1000;
             application.art_planes = null;

@@ -1838,11 +1838,13 @@ cam_in.start();
 		    camera_1 = 
 		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
 		active_camera = camera_1;
+		        scene.addObject(camera_1);
             camera_1.position.z = 1000;
 	    plane_1_plane = new THREE.Plane(146, 302, null, null) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
+		        scene.addObject(plane_1);
             set_object_alpha(plane_1, 0);
             plane_1.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict1_neg.jpg").data);
             plane_1.scale.x = 0.5;
@@ -1887,6 +1889,7 @@ plane_1.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictu
 	    plane_2 = new THREE.Mesh(plane_2_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_2);
 		plane_2.events = new ms.event.EventHolder();
+		        scene.addObject(plane_2);
             set_object_alpha(plane_2, 0);
             plane_2.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict2_neg.jpg").data);
             plane_2.scale.x = 0.5;
@@ -1931,6 +1934,7 @@ plane_2.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictu
 	    plane_3 = new THREE.Mesh(plane_3_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_3);
 		plane_3.events = new ms.event.EventHolder();
+		        scene.addObject(plane_3);
             set_object_alpha(plane_3, 0);
             plane_3.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict3_neg.jpg").data);
             plane_3.scale.x = 0.5;
@@ -1975,6 +1979,7 @@ plane_3.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictu
 	    plane_4 = new THREE.Mesh(plane_4_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_4);
 		plane_4.events = new ms.event.EventHolder();
+		        scene.addObject(plane_4);
             set_object_alpha(plane_4, 0);
             plane_4.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict4_neg.jpg").data);
             plane_4.scale.x = 0.5;
@@ -2019,6 +2024,7 @@ plane_4.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictu
 	    plane_5 = new THREE.Mesh(plane_5_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_5);
 		plane_5.events = new ms.event.EventHolder();
+		        scene.addObject(plane_5);
             set_object_alpha(plane_5, 0);
             plane_5.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict5_neg.jpg").data);
             plane_5.scale.x = 0.5;

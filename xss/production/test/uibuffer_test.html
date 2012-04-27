@@ -438,18 +438,21 @@ color:Green
 		    camera_1 = 
 		    new THREE.Camera(70, 1.5, 1, 1000, null) ;	
 		active_camera = camera_1;
+		        scene.addObject(camera_1);
             camera_1.position.y = 300;
             camera_1.position.z = 500;
 	    cube_1_cube = new THREE.Cube(200, 200, 200, 1, 1, 1, materials, null, null) ;
 	    cube_1 = new THREE.Mesh(cube_1_cube, new THREE.MeshFaceMaterial());
 	    scene.addObject(cube_1);
 		cube_1.events = new ms.event.EventHolder();
+		        scene.addObject(cube_1);
             cube_1.position.x = -150;
             cube_1.position.y = 50;
 	    plane_1_plane = new THREE.Plane(200, 200, null, null) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, plane_material);
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();
+		        scene.addObject(plane_1);
             set_rotation_x(plane_1.rotation, -90);
             plane_1.position.x = -150;
             plane_1.position.y = -100;

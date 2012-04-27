@@ -14,6 +14,7 @@
 		<script type="text/javascript" src="../js/pixastic/actions.js"></script>	
 		<script type="text/javascript" src="../js/pixastic/pixastic-manager.js"></script>
 		<script type="text/javascript" src="../js/pixastic/pixastic.js"></script>
+		<script type="text/javascript" src="../js/pixastic/pixastic-utils.js"></script>
 <script type="text/javascript">
     var drawingCanvas;		
 var g_ui;
@@ -333,7 +334,7 @@ flipv_label.set_y(y - flipv_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.flipv_filter.set_apply(!img1.flipv_filter.apply);
+img1.flipv_filter.set_apply(!img1.flipv_filter.apply_);
 }
 flipv_label.set_x(610);
 flipv_label.set_y(110);
@@ -359,11 +360,11 @@ hsl_label.set_y(y - hsl_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.hsl_filter.set_apply(!img1.hsl_filter.apply);
+img1.hsl_filter.set_apply(!img1.hsl_filter.apply_);
 }
 hsl_label.set_x(610);
 hsl_label.set_y(130);
-hsl_options.set_switchable(img1.hsl_filter.apply);
+hsl_options.set_switchable(img1.hsl_filter.apply_);
 	}
 	);
 		application.are_obj_events = true;
@@ -386,11 +387,11 @@ edges_label.set_y(y - edges_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.edges_filter.set_apply(!img1.edges_filter.apply);
+img1.edges_filter.set_apply(!img1.edges_filter.apply_);
 }
 edges_label.set_x(610);
 edges_label.set_y(150);
-edges_options.set_switchable(img1.edges_filter.apply);
+edges_options.set_switchable(img1.edges_filter.apply_);
 	}
 	);
 		application.are_obj_events = true;
@@ -413,11 +414,11 @@ pointillize_label.set_y(y - pointillize_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.pointillize_filter.set_apply(!img1.pointillize_filter.apply);
+img1.pointillize_filter.set_apply(!img1.pointillize_filter.apply_);
 }
 pointillize_label.set_x(610);
 pointillize_label.set_y(170);
-pointillize_options.set_switchable(img1.pointillize_filter.apply);
+pointillize_options.set_switchable(img1.pointillize_filter.apply_);
 	}
 	);
 		application.are_obj_events = true;
@@ -440,11 +441,11 @@ brightness_label.set_y(y - brightness_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.brightness_filter.set_apply(!img1.brightness_filter.apply);
+img1.brightness_filter.set_apply(!img1.brightness_filter.apply_);
 }
 brightness_label.set_x(610);
 brightness_label.set_y(190);
-brightness_options.set_switchable(img1.brightness_filter.apply);
+brightness_options.set_switchable(img1.brightness_filter.apply_);
 	}
 	);
 		application.are_obj_events = true;
@@ -467,7 +468,7 @@ invert_label.set_y(y - invert_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.invert_filter.set_apply(!img1.invert_filter.apply);
+img1.invert_filter.set_apply(!img1.invert_filter.apply_);
 }
 invert_label.set_x(610);
 invert_label.set_y(210);
@@ -493,7 +494,7 @@ sepia_label.set_y(y - sepia_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.sepia_filter.set_apply(!img1.sepia_filter.apply);
+img1.sepia_filter.set_apply(!img1.sepia_filter.apply_);
 }
 sepia_label.set_x(610);
 sepia_label.set_y(230);
@@ -519,11 +520,11 @@ coloradjust_label.set_y(y - coloradjust_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.coloradjust_filter.set_apply(!img1.coloradjust_filter.apply);
+img1.coloradjust_filter.set_apply(!img1.coloradjust_filter.apply_);
 }
 coloradjust_label.set_x(610);
 coloradjust_label.set_y(250);
-coloradjust_options.set_switchable(img1.coloradjust_filter.apply);
+coloradjust_options.set_switchable(img1.coloradjust_filter.apply_);
 	}
 	);
 		application.are_obj_events = true;
@@ -546,7 +547,7 @@ noise_label.set_y(y - noise_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.noise_filter.set_apply(!img1.noise_filter.apply);
+img1.noise_filter.apply = !img1.noise_filter.apply;
 }
 noise_label.set_x(610);
 noise_label.set_y(270);
@@ -573,7 +574,7 @@ blur_label.set_y(y - blur_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.blur_filter.set_apply(!img1.blur_filter.apply);
+img1.blur_filter.set_apply(!img1.blur_filter.apply_);
 }
 blur_label.set_x(610);
 blur_label.set_y(290);
@@ -599,7 +600,7 @@ edges2_label.set_y(y - edges2_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.edges2_filter.set_apply(!img1.edges2_filter.apply);
+img1.edges2_filter.set_apply(!img1.edges2_filter.apply_);
 }
 edges2_label.set_x(610);
 edges2_label.set_y(310);
@@ -625,11 +626,11 @@ glow_label.set_y(y - glow_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.glow_filter.set_apply(!img1.glow_filter.apply);
+img1.glow_filter.set_apply(!img1.glow_filter.apply_);
 }
 glow_label.set_x(610);
 glow_label.set_y(330);
-glow_options.set_switchable(img1.glow_filter.apply);
+glow_options.set_switchable(img1.glow_filter.apply_);
 	}
 	);
 		application.are_obj_events = true;
@@ -652,11 +653,11 @@ sharpen_label.set_y(y - sharpen_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.sharpen_filter.set_apply(!img1.sharpen_filter.apply);
+img1.sharpen_filter.set_apply(!img1.sharpen_filter.apply_);
 }
 sharpen_label.set_x(610);
 sharpen_label.set_y(350);
-sharpen_options.set_switchable(img1.sharpen_filter.apply);
+sharpen_options.set_switchable(img1.sharpen_filter.apply_);
 	}
 	);
 		application.are_obj_events = true;
@@ -679,7 +680,7 @@ solarize_label.set_y(y - solarize_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.solarize_filter.set_apply(!img1.solarize_filter.apply);
+img1.solarize_filter.set_apply(!img1.solarize_filter.apply_);
 }
 solarize_label.set_x(610);
 solarize_label.set_y(370);
@@ -705,7 +706,7 @@ fliph_label.set_y(y - fliph_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.fliph_filter.set_apply(!img1.fliph_filter.apply);
+img1.fliph_filter.set_apply(!img1.fliph_filter.apply_);
 }
 fliph_label.set_x(610);
 fliph_label.set_y(390);
@@ -731,11 +732,11 @@ mosaic_label.set_y(y - mosaic_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.mosaic_filter.set_apply(!img1.mosaic_filter.apply);
+img1.mosaic_filter.set_apply(!img1.mosaic_filter.apply_);
 }
 mosaic_label.set_x(610);
 mosaic_label.set_y(410);
-mosaic_options.set_switchable(img1.mosaic_filter.apply);
+mosaic_options.set_switchable(img1.mosaic_filter.apply_);
 	}
 	);
 		application.are_obj_events = true;
@@ -1665,54 +1666,133 @@ options.active(options.get_active() - 1);
             __label31.set_x(20);
             __label31.set_y(470);
             __label31.text("The arrows will allow changing among the configurations of filters");
-	img1.flipv_filter = new pixastic.FlipV(
-null, img1);	
+			img1.flipv_filter = new pixastic.FlipV(
+		null, img1);		
+		if(!img1.filters)
+			img1.filters = [];
+		img1.filters.push(img1.flipv_filter);
             img1.flipv_filter.set_apply(0);
-	img1.invert_filter = new pixastic.Invert(
-null, img1);	
+			obtain_image(img1.flipv_filter, img1);
+			img1.put_on_apply = true;
+			img1.invert_filter = new pixastic.Invert(
+		null, img1);		
+		if(!img1.filters)
+			img1.filters = [];
+		img1.filters.push(img1.invert_filter);
             img1.invert_filter.set_apply(0);
-	img1.sepia_filter = new pixastic.Sepia(
-null, img1);	
+			obtain_image(img1.invert_filter, img1);
+			img1.put_on_apply = true;
+			img1.sepia_filter = new pixastic.Sepia(
+		null, img1);		
+		if(!img1.filters)
+			img1.filters = [];
+		img1.filters.push(img1.sepia_filter);
             img1.sepia_filter.set_apply(0);
-	img1.hsl_filter = new pixastic.HSL(
-0,0,0,null, img1);	
+			obtain_image(img1.sepia_filter, img1);
+			img1.put_on_apply = true;
+			img1.hsl_filter = new pixastic.HSL(
+		0,0,0,null, img1);		
+		if(!img1.filters)
+			img1.filters = [];
+		img1.filters.push(img1.hsl_filter);
             img1.hsl_filter.set_apply(0);
-	img1.edges_filter = new pixastic.Edges(
-false,false,null, img1);	
+			obtain_image(img1.hsl_filter, img1);
+			img1.put_on_apply = true;
+			img1.edges_filter = new pixastic.Edges(
+		false,false,null, img1);		
+		if(!img1.filters)
+			img1.filters = [];
+		img1.filters.push(img1.edges_filter);
             img1.edges_filter.set_apply(0);
-	img1.pointillize_filter = new pixastic.Pointillize(
-1,0,0,false,null, img1);	
+			obtain_image(img1.edges_filter, img1);
+			img1.put_on_apply = true;
+			img1.pointillize_filter = new pixastic.Pointillize(
+		1,0,0,false,null, img1);		
+		if(!img1.filters)
+			img1.filters = [];
+		img1.filters.push(img1.pointillize_filter);
             img1.pointillize_filter.set_apply(0);
-	img1.brightness_filter = new pixastic.Brightness(
-0,0,null, img1);	
+			obtain_image(img1.pointillize_filter, img1);
+			img1.put_on_apply = true;
+			img1.brightness_filter = new pixastic.Brightness(
+		0,0,null, img1);		
+		if(!img1.filters)
+			img1.filters = [];
+		img1.filters.push(img1.brightness_filter);
             img1.brightness_filter.set_apply(0);
-	img1.coloradjust_filter = new pixastic.ColorAdjust(
-0,0,0,null, img1);	
+			obtain_image(img1.brightness_filter, img1);
+			img1.put_on_apply = true;
+			img1.coloradjust_filter = new pixastic.ColorAdjust(
+		0,0,0,null, img1);		
+		if(!img1.filters)
+			img1.filters = [];
+		img1.filters.push(img1.coloradjust_filter);
             img1.coloradjust_filter.set_apply(0);
-	img1.noise_filter = new pixastic.Noise(
-0,0,false,null, img1);	
-            img1.noise_filter.set_apply(0);
-	img1.blur_filter = new pixastic.Blur(
-null, img1);	
+			obtain_image(img1.coloradjust_filter, img1);
+			img1.put_on_apply = true;
+			img1.noise_filter = new pixastic.Noise(
+		0,0,false,null, img1);		
+		if(!img1.filters)
+			img1.filters = [];
+		img1.filters.push(img1.noise_filter);
+			obtain_image(img1.noise_filter, img1);
+			img1.put_on_apply = true;
+			img1.blur_filter = new pixastic.Blur(
+		null, img1);		
+		if(!img1.filters)
+			img1.filters = [];
+		img1.filters.push(img1.blur_filter);
             img1.blur_filter.set_apply(0);
-	img1.edges2_filter = new pixastic.Edges2(
-null, img1);	
+			obtain_image(img1.blur_filter, img1);
+			img1.put_on_apply = true;
+			img1.edges2_filter = new pixastic.Edges2(
+		null, img1);		
+		if(!img1.filters)
+			img1.filters = [];
+		img1.filters.push(img1.edges2_filter);
             img1.edges2_filter.set_apply(0);
-	img1.glow_filter = new pixastic.Glow(
-0,0,null, img1);	
+			obtain_image(img1.edges2_filter, img1);
+			img1.put_on_apply = true;
+			img1.glow_filter = new pixastic.Glow(
+		0,0,null, img1);		
+		if(!img1.filters)
+			img1.filters = [];
+		img1.filters.push(img1.glow_filter);
             img1.glow_filter.set_apply(0);
-	img1.sharpen_filter = new pixastic.Sharpen(
-0,null, img1);	
+			obtain_image(img1.glow_filter, img1);
+			img1.put_on_apply = true;
+			img1.sharpen_filter = new pixastic.Sharpen(
+		0,null, img1);		
+		if(!img1.filters)
+			img1.filters = [];
+		img1.filters.push(img1.sharpen_filter);
             img1.sharpen_filter.set_apply(0);
-	img1.solarize_filter = new pixastic.Solarize(
-null, img1);	
+			obtain_image(img1.sharpen_filter, img1);
+			img1.put_on_apply = true;
+			img1.solarize_filter = new pixastic.Solarize(
+		null, img1);		
+		if(!img1.filters)
+			img1.filters = [];
+		img1.filters.push(img1.solarize_filter);
             img1.solarize_filter.set_apply(0);
-	img1.fliph_filter = new pixastic.FlipH(
-null, img1);	
+			obtain_image(img1.solarize_filter, img1);
+			img1.put_on_apply = true;
+			img1.fliph_filter = new pixastic.FlipH(
+		null, img1);		
+		if(!img1.filters)
+			img1.filters = [];
+		img1.filters.push(img1.fliph_filter);
             img1.fliph_filter.set_apply(0);
-	img1.mosaic_filter = new pixastic.Mosaic(
-0,null, img1);	
+			obtain_image(img1.fliph_filter, img1);
+			img1.put_on_apply = true;
+			img1.mosaic_filter = new pixastic.Mosaic(
+		0,null, img1);		
+		if(!img1.filters)
+			img1.filters = [];
+		img1.filters.push(img1.mosaic_filter);
             img1.mosaic_filter.set_apply(0);
+			obtain_image(img1.mosaic_filter, img1);
+			img1.put_on_apply = true;
 			document.onkeydown = function(ev)
 			{
 				ui.keydown(ev.keyCode);                  

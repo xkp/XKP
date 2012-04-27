@@ -1,6 +1,7 @@
 <project entry_point="../idioms/ui/ui_standalone.xss" language="js" target="ui_demo.app.xml" output="ui_demo.html">
     <path>
         <output path="../production/test"/>
+		
     </path>
 
     <idiom src="../idioms/ui/ui.xml"/>    

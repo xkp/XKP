@@ -856,7 +856,7 @@ void xss_object::copy(XSSObject obj)
 
         my_child->copy(obj_child);
 
-        children_->push_back(my_child);
+        add_child(my_child);
       }
 
 		DynamicArray obj_properties = obj->properties();
@@ -1041,7 +1041,7 @@ void xss_object::set_type_name(const str& id)
 
 void xss_object::set_parent(XSSObject parent)
   {
-    assert(!parent_);
+    //td: !!! assert(!parent_);
     parent_ = parent;
   }
 
@@ -1523,6 +1523,8 @@ void xss_type::set_super(XSSType super)
 
     if (super_)
       {
+        type_name_ = super_->id();
+
         //copy construction parameters
         DynamicArray super_args = super_->ctor_args();
 
@@ -1574,6 +1576,33 @@ void xss_type::set_definition(XSSObject def)
       }
   }
 
+void xss_type::propertize()
+  {
+    //find values that correspond to our properties, update values
+    item_list::iterator iit = items_.begin();
+    item_list::iterator ind = items_.end();
+
+    for(; iit != ind; iit++)
+      {
+        XSSProperty myprop = get_shallow_property(iit->first);
+        XSSProperty typeprop = type_? type_->get_property(iit->first) : XSSProperty();
+            
+        variant value;
+        if (iit->second.get)
+            value = iit->second.get->get(this);
+
+        if (myprop)
+          myprop->value_ = value;
+        else if (typeprop)
+          {
+            myprop = XSSProperty(new xss_property);
+            myprop->copy(XSSObject(typeprop));
+            myprop->value_ = value;
+            add_property_(myprop);
+          }
+      }
+  }
+
 schema* xss_type::native_type()
   {
     return xs_type_;
@@ -1605,12 +1634,18 @@ DynamicArray xss_type::ctor_args()
 
 void xss_type::register_instance(XSSObject obj)
   {
+    //td: big mess differentiating between reader object and types
+    //particularly their children
+    obj->set_parent(shared_from_this());
+
     all_instances_->push_back(obj);
     local_instances_->push_back(obj);
   }
 
 void xss_type::register_foreign_instance(XSSObject obj)
   {
+    obj->set_parent(shared_from_this());
+
     all_instances_->push_back(obj);
     foreign_instances_->push_back(obj);
   }

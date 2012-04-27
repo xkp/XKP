@@ -49,12 +49,16 @@ ms.event.ThreeEventManager = Class.create(
 			if(this.intersects.length > 0 && this.intersects[0].object.events)
 				this.over_dragend = this.intersects[0].object.events.dispatch("dragend", [x, y]);	        
 	    }
-		if(!this.drag && !this.dragend)
+		
+        if(!this.drag && !this.dragend)
+        {
 			if(!ui)
 			{
 				application.events.dispatch("mouseup", [x, y]);
 				application.events.dispatch("click", [x, y]); 
 			}
+        }
+
 		if(!this.over_drag && !this.over_dragend)
 			if(this.intersects.length > 0 && this.intersects[0].object.events){
 				this.intersects[0].object.events.dispatch("mouseup", [x, y]);	
@@ -96,7 +100,7 @@ ms.event.ThreeEventManager = Class.create(
 		y = y - canvas_position.y;
 		this.intersects = this.get_3js_intersects(x, y);		
 		if(this.intersects.length > 0){
-			if(!(this.intersects[0].object.parent instanceof THREE.Scene))
+			if(!(this.intersects[0].object.parent instanceof THREE.Scene) && !(this.intersects[0].object.parent instanceof THREE.Object3D))
 				this.intersects[0].object = this.intersects[0].object.parent;			
 		}
 		if(this.mouse_pressed)

@@ -1,5 +1,5 @@
 <project entry_point="../idioms/threejs/app.xss" language="js" target="pixastic_test.app.xml" output="pixastic_test.html">
-    <path>
+    <path>	
         <output path="../production/test"/>
     </path>
 	

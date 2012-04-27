@@ -391,20 +391,19 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
-Error [project] Instance not found in any idiom
-	object = my_plane
-	file = d:/xkp/xss/tests/../idioms/threejs/class.xssERROR: Project:  3js_class_test_1.project.xml
-
+log: Rendering UI...
+log: UI Component: lbl0
+Success are greateful
 ===[ 3js_class_test_2.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
-Error [project] Instance not found in any idiom
-	object = my_cylinder
-	file = d:/xkp/xss/tests/../idioms/threejs/class.xssERROR: Project:  3js_class_test_2.project.xml
-
+log: Rendering UI...
+log: UI Component: lbl0
+log: UI Component: lbl1
+Success are greateful
 ===[ 3js_cube.project.xml ]================(Tests)
 
 
@@ -431,10 +430,7 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering 3js Types...
-Error [project] Instance not found in any idiom
-	object = my_sphere
-	file = d:/xkp/xss/tests/../idioms/threejs/class.xssERROR: Project:  3js_materials.project.xml
-
+Success are greateful
 ===[ 3js_model.project.xml ]================(Tests)
 
 
@@ -513,17 +509,28 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: smiley_ball
-Error [404] File not found
-	file = d:/xkp/xss/tests/../idioms/i-box2d/js/body.xssERROR: Project:  box2d3.project.xml
-
+log: Here img
+log: HAS PARENT img
+log: No, not there
+log: Rendering UI...
+log: UI Component: __img1
+log: UI Component: __img2
+log: UI Component: __img3
+Success are greateful
 ===[ box2d4.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering UI Types...
 log: bad_guy
-Error [idiom] Circle shapes mush have a radius or visual parent
-	file = d:/xkp/xss/tests/../idioms/box2d/body.xssERROR: Project:  box2d4.project.xml
+log: Here img
+log: HAS PARENT img
+log: No, not there
+log: Here img
+log: HAS PARENT img
+log: No, not there
+Error [404] File not found
+	file = d:/xkp/xss/tests/../idioms/mutant-state/instantiator.xssERROR: Project:  box2d4.project.xml
 
 ===[ box2d5.project.xml ]================(Tests)
 
@@ -531,20 +538,77 @@ Error [idiom] Circle shapes mush have a radius or visual parent
 log: Rendering Resources...
 log: Rendering UI Types...
 log: body_1
+log: Here img
+log: HAS PARENT img
+log: No, not there
 log: body_2
+log: Here img
+log: HAS PARENT img
+log: No, not there
 log: body_3
-Error [idiom] Rect shapes mush have [width, height] or a visual parent
-	file = d:/xkp/xss/tests/../idioms/box2d/body.xssERROR: Project:  box2d5.project.xml
-
+log: Here img
+log: HAS PARENT img
+log: No, not there
+log: floor
+log: Here img
+log: HAS PARENT img
+log: No, not there
+log: my_body
+log: Rendering UI...
+log: UI Component: __label1
+log: UI Component: __label2
+log: UI Component: __label3
+log: UI Component: __label4
+log: UI Component: __label5
+log: UI Component: btn1
+log: UI Component: btn2
+log: UI Component: btn3
+log: UI Component: btn4
+log: UI Component: btn5
+log: UI Component: btn6
+log: UI Component: __floor1
+log: UI Component: __floor2
+log: UI Component: __floor3
+log: UI Component: __floor4
+Success are greateful
 ===[ box2dcar.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering UI Types...
 log: car
-Error [idiom] Rect shapes mush have [width, height] or a visual parent
-	file = d:/xkp/xss/tests/../idioms/box2d/body.xssERROR: Project:  box2dcar.project.xml
-
+log: Here img
+log: HAS PARENT img
+log: No, not there
+log: wheel
+log: Here img
+log: HAS PARENT img
+log: No, not there
+log: box
+log: Here img
+log: HAS PARENT img
+log: No, not there
+log: floor
+log: Here img
+log: HAS PARENT img
+log: No, not there
+log: my_body
+log: Rendering UI...
+log: UI Component: car_1
+log: UI Component: right_wheel
+log: UI Component: right_rear_wheel
+log: UI Component: left_wheel
+log: UI Component: left_rear_wheel
+log: UI Component: box_1
+log: UI Component: box_2
+log: UI Component: box_3
+log: UI Component: box_4
+log: UI Component: __floor1
+log: UI Component: __floor2
+log: UI Component: __floor3
+log: UI Component: __floor4
+log: UI Component: __label1
+Success are greateful
 ===[ dany_dennis.project.xml ]================(Tests)
 
 
@@ -566,6 +630,25 @@ log: UI Component: pict2
 log: UI Component: pict3
 log: UI Component: pict4
 log: UI Component: pict5
+Success are greateful
+===[ dd.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering Sequence Types...
+log: Rendering UI Types...
+log: social_button
+log: Here img
+log: HAS PARENT img
+log: No, not there
+log: Here img
+log: HAS PARENT img
+log: No, not there
+log: Rendering 3js Types...
+log: Rendering UI...
+log: UI Component: facebook
+log: UI Component: twitter
+log: UI Component: email
 Success are greateful
 ===[ enums.project.xml ]================(Tests)
 
@@ -1037,12 +1120,20 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Here?
-log: Why no idiom? fade_in
-Error [vm] Cannot resolve
-	object = 
-	method = begin_interpolator
-	file = d:/xkp/xss/tests/../idioms/ms/js/../sequence.xssERROR: Project:  jquery7.project.xml
-
+log: Nope
+log: Rendering UI...
+log: UI Component: img1
+log: UI Component: img2
+log: IT IS ALIVE
+log: IT IS ALIVE
+log: Ignoring idx 1
+log: IT IS ALIVE
+log: Ignoring idx 2
+log: NO LAYOUT
+log: lbl1
+log: edit1
+log: btn1
+Success are greateful
 ===[ jseq1.project.xml ]================(Tests)
 
 
@@ -1097,12 +1188,11 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Here?
-log: Why no idiom? fade_in
-Error [vm] Cannot resolve
-	object = 
-	method = begin_interpolator
-	file = d:/xkp/xss/tests/../idioms/ms/js/../sequence.xssERROR: Project:  ms4.project.xml
-
+log: Nope
+log: Rendering UI...
+log: UI Component: img1
+log: UI Component: img2
+Success are greateful
 ===[ ms5.project.xml ]================(Tests)
 
 
@@ -1129,8 +1219,17 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: ms6
+log: Here div
+log: HAS PARENT div
+log: No, not there
+log: Here div
+log: HAS PARENT div
 log: UI Component: this.btn1
+log: No, not there
+log: Here div
+log: HAS PARENT div
 log: UI Component: this.btn2
+log: No, not there
 log: Rendering Sequence Types...
 log: Rendering UI...
 log: UI Component: ms61
@@ -1158,14 +1257,8 @@ Success are greateful
 ===[ paintings.project.xml ]================(Tests)
 
 
-log: Rendering Resources...
-log: Rendering Sequence Types...
-log: Rendering UI Types...
-log: social_button
-log: Rendering 3js Types...
-Error [project] Instance not found in any idiom
-	object = anim_plane
-	file = d:/xkp/xss/tests/../idioms/threejs/class.xssERROR: Project:  paintings.project.xml
+Error [404] File not found
+	file = d:/xkp/xss/tests/../idioms/ms/sequence.xmlERROR: Project:  paintings.project.xml
 
 ===[ paintings_grad.project.xml ]================(Tests)
 
@@ -1174,10 +1267,24 @@ log: Rendering Resources...
 log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: Rendering 3js Types...
-Error [project] Instance not found in any idiom
-	object = anim_plane
-	file = d:/xkp/xss/tests/../idioms/threejs/class.xssERROR: Project:  paintings_grad.project.xml
-
+log: Rendering Sequence...
+log: Rendering UI...
+log: UI Component: liquid
+log: UI Component: banner
+log: UI Component: loading
+log: UI Component: lens1
+log: UI Component: lens2
+log: UI Component: facebook
+log: UI Component: twitter
+log: UI Component: btn1
+log: UI Component: btn2
+log: UI Component: linetop
+log: UI Component: line1
+log: UI Component: line2
+log: UI Component: line3
+log: UI Component: line4
+log: UI Component: rect1
+Success are greateful
 ===[ pixastic.project.xml ]================(Tests)
 
 
@@ -1345,9 +1452,14 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: my_image
 log: menu_item
-log: UI Component: this.__div1
+log: Here div
+log: HAS PARENT div
 log: UI Component: this.lbl_caption
+log: No, not there
+log: Here div
+log: HAS PARENT div
 log: UI Component: this.icon
+log: No, not there
 log: Rendering UI...
 log: UI Component: rep1
 log: UI Component: rep2
@@ -1388,6 +1500,8 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: my_image
 log: Rendering UI...
+log: UI Component: test1
+log: UI Component: img4
 log: UI Component: img1
 Success are greateful
 ===[ ui_cliparea.project.xml ]================(Tests)
@@ -1416,7 +1530,10 @@ log: UI Component: main
 log: UI Component: test1
 log: UI Component: lbl0
 log: UI Component: lbl1
+log: UI Component: div1
 log: UI Component: btn1
+log: UI Component: div2
+log: UI Component: btn44
 log: UI Component: test2
 log: UI Component: pb1
 log: UI Component: btn2
@@ -1689,10 +1806,7 @@ Success are greateful
 
 
 log: Rendering 3js Types...
-Error [project] Instance not found in any idiom
-	object = my_sphere
-	file = d:/xkp/xss/tests/../idioms/webgl/class.xssERROR: Project:  wgl_materials.project.xml
-
+Success are greateful
 ===[ wgl_model.project.xml ]================(Tests)
 
 
@@ -1709,18 +1823,12 @@ Success are greateful
 
 
 log: Rendering 3js Types...
-Error [project] Instance not found in any idiom
-	object = my_sphere
-	file = d:/xkp/xss/tests/../idioms/webgl/class.xssERROR: Project:  wgl_reflection_cube.project.xml
-
+Success are greateful
 ===[ wgl_refraction_cube.project.xml ]================(Tests)
 
 
 log: Rendering 3js Types...
-Error [project] Instance not found in any idiom
-	object = my_sphere
-	file = d:/xkp/xss/tests/../idioms/webgl/class.xssERROR: Project:  wgl_refraction_cube.project.xml
-
+Success are greateful
 ===[ wgl_sound.project.xml ]================(Tests)
 
 
@@ -2446,4 +2554,4 @@ Success are greateful
 		IDIOM: xssY_idiom2  
 	
 
-Success are greatefulERROR: Project:  box2d3.project.xml
+Success are greateful

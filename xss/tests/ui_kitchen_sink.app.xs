@@ -38,6 +38,15 @@ on btnNext.drag(x, y)
 	}
 }
 
+on title0.drag(x, y)
+{
+	if(do_drag)
+	{
+		title0.x = x - title0.w/2;
+		title0.y = y - title0.h/2;
+	}
+}
+
 on btnPrev.click()
 {
 	if(do_rotation_plus)
@@ -114,7 +123,7 @@ on btn3.drag(x, y)
 
 on stateBtn.click()
 {
-	if(stateBtn.active)
+	if(stateBtn.is_active)
 		lbl3.caption = "Wow I'm happy !!!";	
 	else
 		lbl3.caption = "Bad I'm sad... Click again on me";	

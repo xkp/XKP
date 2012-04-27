@@ -248,8 +248,8 @@ function start(resolution)
                         this.parent.removeComponent(this);
                     }
                 }
-            this.set_width(50);
             this.set_height(50);
+            this.set_width(50);
 	var ev_parent = this;
 	this.events.addListener("collision", function(who)
 	{    
@@ -326,21 +326,21 @@ window.onload = function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    __img1 = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
         __img1 = __img1;
             __img1.set_x(0);
             __img1.set_y(390);
             __img1.set_width(600);
             __img1.set_height(40);
 		    __img2 = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
         __img2 = __img2;
             __img2.set_x(590);
             __img2.set_y(350);
             __img2.set_width(10);
             __img2.set_height(40);
 		    __img3 = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
         __img3 = __img3;
             __img3.set_x(0);
             __img3.set_y(350);
