@@ -349,6 +349,7 @@ log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
+log: UI Component: lbl0
 log: Rendering Sequence...
 Success are greateful
 ===[ 3js-ui.project.xml ]================(Tests)
@@ -358,6 +359,10 @@ log: Rendering Resources...
 log: Rendering 3js Types...
 log: Rendering UI Types...
 log: Rendering UI...
+log: UI Component: lbl0
+log: UI Component: btn1
+log: UI Component: lbl1
+log: UI Component: lbl2
 Success are greateful
 ===[ 3js_cameras.project.xml ]================(Tests)
 
@@ -371,6 +376,8 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: UI Component: __label1
+log: UI Component: lbl1
 Success are greateful
 ===[ 3js_class_test.project.xml ]================(Tests)
 
@@ -384,22 +391,27 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
-log: Rendering UI...
-Success are greateful
+Error [project] Instance not found in any idiom
+	object = my_plane
+	file = d:/xkp/xss/tests/../idioms/threejs/class.xssERROR: Project:  3js_class_test_1.project.xml
+
 ===[ 3js_class_test_2.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
-log: Rendering UI...
-Success are greateful
+Error [project] Instance not found in any idiom
+	object = my_cylinder
+	file = d:/xkp/xss/tests/../idioms/threejs/class.xssERROR: Project:  3js_class_test_2.project.xml
+
 ===[ 3js_cube.project.xml ]================(Tests)
 
 
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: UI Component: lbl0
 Success are greateful
 ===[ 3js_cube_img.project.xml ]================(Tests)
 
@@ -419,7 +431,10 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering 3js Types...
-Success are greateful
+Error [project] Instance not found in any idiom
+	object = my_sphere
+	file = d:/xkp/xss/tests/../idioms/threejs/class.xssERROR: Project:  3js_materials.project.xml
+
 ===[ 3js_model.project.xml ]================(Tests)
 
 
@@ -433,6 +448,7 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: UI Component: __label1
 Success are greateful
 ===[ 3js_particle.project.xml ]================(Tests)
 
@@ -445,6 +461,7 @@ Success are greateful
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: UI Component: lbl0
 Success are greateful
 ===[ 3js_sound.project.xml ]================(Tests)
 
@@ -458,6 +475,9 @@ Success are greateful
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: UI Component: lbl0
+log: UI Component: lbl1
+log: UI Component: lbl2
 Success are greateful
 ===[ animtest.project.xml ]================(Tests)
 
@@ -466,6 +486,14 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
+log: UI Component: lbl1
+log: UI Component: lbl2
+log: UI Component: lbl3
+log: UI Component: lbl4
+log: UI Component: btn1
+log: UI Component: btn2
+log: UI Component: btn3
+log: UI Component: btn4
 Success are greateful
 ===[ box2d1.project.xml ]================(Tests)
 
@@ -477,6 +505,7 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: UI Component: btn1
 Success are greateful
 ===[ box2d3.project.xml ]================(Tests)
 
@@ -493,13 +522,9 @@ Error [404] File not found
 log: Rendering Resources...
 log: Rendering UI Types...
 log: bad_guy
-log: good_guy
-log: bullet
-log: floor
-log: Rendering Sequence Types...
-log: Rendering UI...
-log: Rendering Sequence...
-Success are greateful
+Error [idiom] Circle shapes mush have a radius or visual parent
+	file = d:/xkp/xss/tests/../idioms/box2d/body.xssERROR: Project:  box2d4.project.xml
+
 ===[ box2d5.project.xml ]================(Tests)
 
 
@@ -508,22 +533,18 @@ log: Rendering UI Types...
 log: body_1
 log: body_2
 log: body_3
-log: floor
-log: my_body
-log: Rendering UI...
-Success are greateful
+Error [idiom] Rect shapes mush have [width, height] or a visual parent
+	file = d:/xkp/xss/tests/../idioms/box2d/body.xssERROR: Project:  box2d5.project.xml
+
 ===[ box2dcar.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering UI Types...
 log: car
-log: wheel
-log: box
-log: floor
-log: my_body
-log: Rendering UI...
-Success are greateful
+Error [idiom] Rect shapes mush have [width, height] or a visual parent
+	file = d:/xkp/xss/tests/../idioms/box2d/body.xssERROR: Project:  box2dcar.project.xml
+
 ===[ dany_dennis.project.xml ]================(Tests)
 
 
@@ -533,6 +554,18 @@ log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering Sequence...
 log: Rendering UI...
+log: UI Component: close
+log: UI Component: box_cont
+log: UI Component: box_border
+log: UI Component: banner
+log: UI Component: camerawl
+log: UI Component: lens
+log: UI Component: line_top
+log: UI Component: pict1
+log: UI Component: pict2
+log: UI Component: pict3
+log: UI Component: pict4
+log: UI Component: pict5
 Success are greateful
 ===[ enums.project.xml ]================(Tests)
 
@@ -737,151 +770,265 @@ Success are greateful
 ===[ jquery1.project.xml ]================(Tests)
 
 
-Error [404] File not found
-	file = d:/xkp/xss/tests/../idioms/jquery/module.xmlERROR: Project:  jquery1.project.xml
+log: IT IS ALIVE
+log: IT IS ALIVE
+log: Ignoring idx 1
+log: IT IS ALIVE
+log: Ignoring idx 2<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>TITLE</title>
+<script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
+<script type="text/javascript" src="../js/jquery-idiom.js"></script>
+<link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css">
 
+                <script type="text/javascript" src="jquery-1.7.1.min.js"></script>
+            
+                <script type="text/javascript" src="jquery-ui-1.8.18.custom.min.js"></script>
+            
+                <script type="text/javascript" src="jquery-idiom.js"></script>
+            
+                <script type="text/javascript" src="jquery-ui-1.8.18.custom.css"></script>
+            
+
+<script type="text/javascript">
+$(function() {
+	
+
+
+
+
+
+
+
+
+        var application = {};
+    
+
+
+
+
+
+
+
+
+			var __div1 = $("#__div1");
+		
+			var btnFullName = $("#btnFullName").button();
+		
+			var lblFullName = $("#lblFullName");
+		
+
+
+
+
+
+
+
+
+
+
+
+		btnFullName.click( function() { 
+	
+			lblFullName.text("Hello world");
+		
+		});
+	
+
+
+
+
+        if (application.init)
+            application.init();
+    });
+</script>
+
+<style>
+    
+
+#__div1 {position : relative}
+
+
+#btnFullName {left : 140px;top : 110px;width : 200px;height : 43px;position : absolute}
+
+
+#lblFullName {left : 10px;top : 170px;width : 300px;height : 25px;position : absolute}
+
+</style>
+</head>
+
+<body>
+    
+            <div id='application'>
+        
+
+<div id="__div1">
+
+            <table border="0" >
+        
+            </table>
+        
+
+
+				<input id="btnFullName"
+			
+						type="button" 
+					
+						name="btnFullName" 
+					
+						value="Click Me" 
+					>
+				</input>
+			
+
+
+
+				<label id="lblFullName"
+			>
+					
+				
+				</label>
+			
+</div>
+
+
+                </div>
+                </body>
+</html>
+
+
+Success are greateful
 ===[ jquery2.project.xml ]================(Tests)
 
 
-log: Rendering: l1
-log: Rendering: t1
-log: Rendering: c1
-log: Rendering: b1
-log: Rendering: r2
-log: Rendering: r1
 Success are greateful
 ===[ jquery3.project.xml ]================(Tests)
 
 
 log: Rendering property: src
-log: Rendering: tc1
-log: Rendering: __img1
 Success are greateful
 ===[ jquery4.project.xml ]================(Tests)
 
 
 log: NO LAYOUT
 log: __div1
-log: Rendering: __div1
 log: NO LAYOUT
 log: lbl1
-log: Rendering: lbl1
 log: edit1
-log: Rendering: edit1
 log: rb1
-log: Rendering: rb1
 log: cb1
-log: Rendering: cb1
 log: __radiogroup1
-log: Rendering: __radiogroup1
-log: Rendering: __radiobutton1
-log: Rendering: __radiobutton2
-log: Rendering: __radiobutton3
 log: __div2
 log: IT IS ALIVE
 log: btn1
 log: IT IS ALIVE
-log: Rendering: __div2
-log: Rendering: acc1
-log: Rendering: __div3
 log: NO LAYOUT
 log: __html1
-log: Rendering: __div4
 log: NO LAYOUT
 log: tc1
-log: Rendering: tc1
-log: Rendering: __div5
-log: Rendering: btn1
 Success are greateful
 ===[ jquery5.project.xml ]================(Tests)
 
 
-log: Rendering: acc1
-log: Rendering: __div1
 log: NO LAYOUT
 log: __html1
-log: Rendering: __div2
 log: NO LAYOUT
 log: __html2
-log: Rendering: __div3
 log: NO LAYOUT
 log: __html3
-log: Rendering: __div4
 log: NO LAYOUT
 log: __html4
-log: Rendering: tc1
-log: Rendering: __div5
 log: NO LAYOUT
 log: __html5
-log: Rendering: __div7
-log: Rendering: __div8
-log: Rendering: __div9
 log: NO LAYOUT
 log: __label1
-log: Rendering: __label1
 log: dp2
-log: Rendering: dp2
 log: dp1
-log: Rendering: dp1
-log: Rendering: __div10
 log: NO LAYOUT
 log: __label2
-log: Rendering: __label2
 log: __autocomplete1
-log: Rendering: __autocomplete1
-log: Rendering: __item1
-log: Rendering: __item2
-log: Rendering: __item3
-log: Rendering: __item4
-log: Rendering: __item5
-log: Rendering: __item6
-log: Rendering: __item7
-log: Rendering: __item8
-log: Rendering: __item9
-log: Rendering: __item10
-log: Rendering: __item11
-log: Rendering: __item12
-log: Rendering: __item13
-log: Rendering: __item14
 log: __br1
 log: btn1
-log: Rendering: btn1
 log: btn2
-log: Rendering: btn2
 log: simple_dialog
-log: Rendering: simple_dialog
 log: NO LAYOUT
 log: __html6
 log: __br2
 log: __br3
 log: pb1
-log: Rendering: pb1
 log: __br4
 log: sld1
-log: Rendering: sld1
 Success are greateful
 ===[ jquery6.project.xml ]================(Tests)
 
 
-log: IT IS ALIVE
-log: IT IS ALIVE
-log: Ignoring idx 1
-log: IT IS ALIVE
-log: Ignoring idx 2
-log: Rendering: acc1
-log: Rendering: __div1
 log: NO LAYOUT
-log: __html1
-log: Rendering: __div2
+log: __label1
+log: __br1
+log: __br2
+log: brightness
+log: __br3
+log: __label2
+log: __br4
+log: __br5
+log: constrast
 log: NO LAYOUT
-log: __html2
-log: Rendering: __div3
+log: __label3
+log: __br6
+log: __br7
+log: red
+log: __br8
+log: __label4
+log: __br9
+log: __br10
+log: blue
+log: __br11
+log: __label5
+log: __br12
+log: __br13
+log: green
 log: NO LAYOUT
-log: __html3
-log: Rendering: __div4
+log: __label6
+log: __br14
+log: __br15
+log: hue
+log: __br16
+log: __label7
+log: __br17
+log: __br18
+log: saturation
+log: __br19
+log: __label8
+log: __br20
+log: __br21
+log: lightness
 log: NO LAYOUT
-log: __html4
-log: Rendering: image_container
+log: __label9
+log: __br22
+log: __br23
+log: amount
+log: __br24
+log: __label10
+log: __br25
+log: __br26
+log: strength
+log: __br27
+log: __br28
+log: mono
+log: NO LAYOUT
+log: __label11
+log: __br29
+log: __br30
+log: glow_amount
+log: __br31
+log: __label12
+log: __br32
+log: __br33
+log: radius
+log: __br34
 Success are greateful
 ===[ jquery7.project.xml ]================(Tests)
 
@@ -890,23 +1037,12 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Here?
-log: Nope
-log: Rendering UI...
-log: IT IS ALIVE
-log: IT IS ALIVE
-log: Ignoring idx 1
-log: IT IS ALIVE
-log: Ignoring idx 2
-log: Rendering: __div2
-log: NO LAYOUT
-log: lbl1
-log: Rendering: lbl1
-log: edit1
-log: Rendering: edit1
-log: btn1
-log: Rendering: btn1
-log: Rendering: app
-Success are greateful
+log: Why no idiom? fade_in
+Error [vm] Cannot resolve
+	object = 
+	method = begin_interpolator
+	file = d:/xkp/xss/tests/../idioms/ms/js/../sequence.xssERROR: Project:  jquery7.project.xml
+
 ===[ jseq1.project.xml ]================(Tests)
 
 
@@ -944,6 +1080,14 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
+log: UI Component: rr1
+log: UI Component: r1
+log: UI Component: r2
+log: UI Component: r3
+log: UI Component: c1
+log: UI Component: c2
+log: UI Component: img1
+log: UI Component: img2
 log: Rendering Sequence...
 Success are greateful
 ===[ ms4.project.xml ]================(Tests)
@@ -953,9 +1097,12 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Here?
-log: Nope
-log: Rendering UI...
-Success are greateful
+log: Why no idiom? fade_in
+Error [vm] Cannot resolve
+	object = 
+	method = begin_interpolator
+	file = d:/xkp/xss/tests/../idioms/ms/js/../sequence.xssERROR: Project:  ms4.project.xml
+
 ===[ ms5.project.xml ]================(Tests)
 
 
@@ -963,6 +1110,17 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
+log: UI Component: main
+log: UI Component: test1
+log: UI Component: lbl1
+log: UI Component: btn1
+log: UI Component: test2
+log: UI Component: pb1
+log: UI Component: btn2
+log: UI Component: btn3
+log: UI Component: lbl2
+log: UI Component: btnNext
+log: UI Component: btnPrev
 log: Rendering Sequence...
 Success are greateful
 ===[ ms6.project.xml ]================(Tests)
@@ -971,8 +1129,12 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: ms6
+log: UI Component: this.btn1
+log: UI Component: this.btn2
 log: Rendering Sequence Types...
 log: Rendering UI...
+log: UI Component: ms61
+log: UI Component: ms62
 log: Rendering Sequence...
 Success are greateful
 ===[ ms7.project.xml ]================(Tests)
@@ -981,6 +1143,7 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: UI Component: div1
 Success are greateful
 ===[ newseq1.project.xml ]================(Tests)
 
@@ -989,6 +1152,7 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
+log: UI Component: img1
 log: Rendering Sequence...
 Success are greateful
 ===[ paintings.project.xml ]================(Tests)
@@ -999,8 +1163,10 @@ log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: social_button
 log: Rendering 3js Types...
-log: Rendering UI...
-Success are greateful
+Error [project] Instance not found in any idiom
+	object = anim_plane
+	file = d:/xkp/xss/tests/../idioms/threejs/class.xssERROR: Project:  paintings.project.xml
+
 ===[ paintings_grad.project.xml ]================(Tests)
 
 
@@ -1008,8 +1174,145 @@ log: Rendering Resources...
 log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: Rendering 3js Types...
-log: Rendering Sequence...
+Error [project] Instance not found in any idiom
+	object = anim_plane
+	file = d:/xkp/xss/tests/../idioms/threejs/class.xssERROR: Project:  paintings_grad.project.xml
+
+===[ pixastic.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
 log: Rendering UI...
+log: UI Component: __label1
+log: UI Component: __line1
+log: UI Component: img1
+log: UI Component: title
+log: UI Component: flipv_label
+log: UI Component: hsl_label
+log: UI Component: edges_label
+log: UI Component: pointillize_label
+log: UI Component: brightness_label
+log: UI Component: invert_label
+log: UI Component: sepia_label
+log: UI Component: coloradjust_label
+log: UI Component: noise_label
+log: UI Component: blur_label
+log: UI Component: edges2_label
+log: UI Component: glow_label
+log: UI Component: sharpen_label
+log: UI Component: solarize_label
+log: UI Component: fliph_label
+log: UI Component: mosaic_label
+log: UI Component: options
+log: UI Component: hsl_options
+log: UI Component: __label2
+log: UI Component: __label3
+log: UI Component: saturation_bar
+log: UI Component: saturation_b1
+log: UI Component: saturation_b2
+log: UI Component: __label4
+log: UI Component: hue_bar
+log: UI Component: hue_b1
+log: UI Component: hue_b2
+log: UI Component: __label5
+log: UI Component: lightness_bar
+log: UI Component: lightness_b1
+log: UI Component: lightness_b2
+log: UI Component: edges_options
+log: UI Component: __label6
+log: UI Component: mono_check
+log: UI Component: __label7
+log: UI Component: invert_check
+log: UI Component: __label8
+log: UI Component: pointillize_options
+log: UI Component: __label9
+log: UI Component: __label10
+log: UI Component: density_bar
+log: UI Component: density_b1
+log: UI Component: density_b2
+log: UI Component: __label11
+log: UI Component: noise_bar
+log: UI Component: noise_b1
+log: UI Component: noise_b2
+log: UI Component: transparent_check
+log: UI Component: __label12
+log: UI Component: brightness_options
+log: UI Component: __label13
+log: UI Component: __label14
+log: UI Component: brightness_bar
+log: UI Component: brightness_b1
+log: UI Component: brightness_b2
+log: UI Component: __label15
+log: UI Component: contrast_bar
+log: UI Component: contrast_b1
+log: UI Component: contrast_b2
+log: UI Component: coloradjust_options
+log: UI Component: __label16
+log: UI Component: __label17
+log: UI Component: red_bar
+log: UI Component: red_b1
+log: UI Component: red_b2
+log: UI Component: __label18
+log: UI Component: green_bar
+log: UI Component: green_b1
+log: UI Component: green_b2
+log: UI Component: __label19
+log: UI Component: blue_bar
+log: UI Component: blue_b1
+log: UI Component: blue_b2
+log: UI Component: noise_options
+log: UI Component: __label20
+log: UI Component: __label21
+log: UI Component: amount_bar
+log: UI Component: amount_b1
+log: UI Component: amount_b2
+log: UI Component: __label22
+log: UI Component: strength_bar
+log: UI Component: strength_b1
+log: UI Component: strength_b2
+log: UI Component: mono_check1
+log: UI Component: __label23
+log: UI Component: glow_options
+log: UI Component: __label24
+log: UI Component: __label25
+log: UI Component: amount_bar1
+log: UI Component: amount_b11
+log: UI Component: amount_b21
+log: UI Component: __label26
+log: UI Component: radius_bar
+log: UI Component: radius_b1
+log: UI Component: radius_b2
+log: UI Component: sharpen_options
+log: UI Component: __label27
+log: UI Component: __label28
+log: UI Component: amount_bar2
+log: UI Component: amount_b12
+log: UI Component: amount_b22
+log: UI Component: mosaic_options
+log: UI Component: __label29
+log: UI Component: __label30
+log: UI Component: bsize_bar
+log: UI Component: bsize_b1
+log: UI Component: bsize_b2
+log: UI Component: btnNext
+log: UI Component: btnPrev
+log: UI Component: __label31
+Success are greateful
+===[ pixastic_test.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering 3js Types...
+log: Rendering UI...
+log: UI Component: lbl0
+log: UI Component: lbl1
+log: UI Component: lbl2
+log: UI Component: img1
+log: UI Component: img2
+log: UI Component: img3
+log: UI Component: img4
 Success are greateful
 ===[ query_properties.project.xml ]================(Tests)
 
@@ -1035,12 +1338,38 @@ log: assigning default_value = EVisibility.true
 				property "sameName" = "My owner is application."			
 
 Success are greateful
+===[ replicator.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: my_image
+log: menu_item
+log: UI Component: this.__div1
+log: UI Component: this.lbl_caption
+log: UI Component: this.icon
+log: Rendering UI...
+log: UI Component: rep1
+log: UI Component: rep2
+Success are greateful
 ===[ ui_audio.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: UI Component: lbl1
+log: UI Component: btnSound1
+log: UI Component: btnSound2
+log: UI Component: volume_bar
+log: UI Component: btn1
+log: UI Component: btn2
+log: UI Component: lbl3
+log: UI Component: btnPlay
+log: UI Component: btnPause
+log: UI Component: btnStop
+log: UI Component: sound_1
+log: UI Component: sound_2
 Success are greateful
 ===[ ui_audio_1.project.xml ]================(Tests)
 
@@ -1048,6 +1377,9 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: UI Component: lbl1
+log: UI Component: btnExplosion
+log: UI Component: btnShoots
 Success are greateful
 ===[ ui_class_test.project.xml ]================(Tests)
 
@@ -1056,6 +1388,7 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: my_image
 log: Rendering UI...
+log: UI Component: img1
 Success are greateful
 ===[ ui_cliparea.project.xml ]================(Tests)
 
@@ -1063,6 +1396,15 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: UI Component: div1
+log: UI Component: ca1
+log: UI Component: __label1
+log: UI Component: lbl1
+log: UI Component: ca2
+log: UI Component: btn1
+log: UI Component: btn2
+log: UI Component: stateBtn
+log: UI Component: lbl3
 Success are greateful
 ===[ ui_demo.project.xml ]================(Tests)
 
@@ -1070,6 +1412,21 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: UI Component: main
+log: UI Component: test1
+log: UI Component: lbl0
+log: UI Component: lbl1
+log: UI Component: btn1
+log: UI Component: test2
+log: UI Component: pb1
+log: UI Component: btn2
+log: UI Component: btn3
+log: UI Component: lbl2
+log: UI Component: btnNext
+log: UI Component: btnPrev
+log: UI Component: stateBtn
+log: UI Component: lbl3
+log: UI Component: img1
 Success are greateful
 ===[ ui_drag.project.xml ]================(Tests)
 
@@ -1077,6 +1434,13 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: UI Component: __label1
+log: UI Component: lbl1
+log: UI Component: btn1
+log: UI Component: img1
+log: UI Component: tb1
+log: UI Component: stateBtn
+log: UI Component: lbl3
 Success are greateful
 ===[ ui_figures.project.xml ]================(Tests)
 
@@ -1084,6 +1448,12 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: UI Component: div1
+log: UI Component: c1
+log: UI Component: r1
+log: UI Component: p1
+log: UI Component: line1
+log: UI Component: btn
 Success are greateful
 ===[ ui_kitchen_sink.project.xml ]================(Tests)
 
@@ -1091,6 +1461,48 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: UI Component: main
+log: UI Component: test1
+log: UI Component: title0
+log: UI Component: lbl_event
+log: UI Component: lbl0
+log: UI Component: lbl1
+log: UI Component: btn1
+log: UI Component: stateBtn
+log: UI Component: lbl3
+log: UI Component: test2
+log: UI Component: title1
+log: UI Component: pb1
+log: UI Component: btn2
+log: UI Component: btn3
+log: UI Component: lbl2
+log: UI Component: lbl7
+log: UI Component: monster
+log: UI Component: test3
+log: UI Component: title2
+log: UI Component: c1
+log: UI Component: r1
+log: UI Component: p1
+log: UI Component: line1
+log: UI Component: lbl4
+log: UI Component: lbl5
+log: UI Component: lbl6
+log: UI Component: lbl8
+log: UI Component: btn5
+log: UI Component: test4
+log: UI Component: title3
+log: UI Component: title4
+log: UI Component: inst0
+log: UI Component: clips
+log: UI Component: ca1
+log: UI Component: back_img
+log: UI Component: ca2
+log: UI Component: tb1
+log: UI Component: inst1
+log: UI Component: inst2
+log: UI Component: inst3
+log: UI Component: btnNext
+log: UI Component: btnPrev
 Success are greateful
 ===[ ui_painter.project.xml ]================(Tests)
 
@@ -1098,6 +1510,8 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: UI Component: __label1
+log: UI Component: painter_1
 Success are greateful
 ===[ ui_placement.project.xml ]================(Tests)
 
@@ -1105,6 +1519,17 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: UI Component: test1
+log: UI Component: lbl0
+log: UI Component: lbl2
+log: UI Component: lbl3
+log: UI Component: lbl4
+log: UI Component: lbl1
+log: UI Component: btn1
+log: UI Component: btnRight
+log: UI Component: btnLeft
+log: UI Component: btnUp
+log: UI Component: btnDown
 Success are greateful
 ===[ ui_selfdrawn.project.xml ]================(Tests)
 
@@ -1118,6 +1543,13 @@ Error [cannot-resolve] Instance not found
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: UI Component: monster
+log: UI Component: girl1
+log: UI Component: girl2
+log: UI Component: mario
+log: UI Component: lbl1
+log: UI Component: lbl2
+log: UI Component: lbl3
 Success are greateful
 ===[ ui_video.project.xml ]================(Tests)
 
@@ -1125,6 +1557,18 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: UI Component: v
+log: UI Component: lbl1
+log: UI Component: btnVolUp
+log: UI Component: btnVolDown
+log: UI Component: btnMute
+log: UI Component: lbl2
+log: UI Component: btnPlay
+log: UI Component: btnPause
+log: UI Component: btnStop
+log: UI Component: lbl3
+log: UI Component: btnRotLeft
+log: UI Component: btnRotRight
 Success are greateful
 ===[ uibuffer_test.project.xml ]================(Tests)
 
@@ -1133,6 +1577,16 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: UI Component: lbl0
+log: UI Component: lbl1
+log: UI Component: r1
+log: UI Component: yh
+log: UI Component: msn
+log: UI Component: title1
+log: UI Component: r2
+log: UI Component: fb
+log: UI Component: tw
+log: UI Component: title2
 Success are greateful
 ===[ wax1.project.xml ]================(Tests)
 
@@ -1235,7 +1689,10 @@ Success are greateful
 
 
 log: Rendering 3js Types...
-Success are greateful
+Error [project] Instance not found in any idiom
+	object = my_sphere
+	file = d:/xkp/xss/tests/../idioms/webgl/class.xssERROR: Project:  wgl_materials.project.xml
+
 ===[ wgl_model.project.xml ]================(Tests)
 
 
@@ -1252,12 +1709,18 @@ Success are greateful
 
 
 log: Rendering 3js Types...
-Success are greateful
+Error [project] Instance not found in any idiom
+	object = my_sphere
+	file = d:/xkp/xss/tests/../idioms/webgl/class.xssERROR: Project:  wgl_reflection_cube.project.xml
+
 ===[ wgl_refraction_cube.project.xml ]================(Tests)
 
 
 log: Rendering 3js Types...
-Success are greateful
+Error [project] Instance not found in any idiom
+	object = my_sphere
+	file = d:/xkp/xss/tests/../idioms/webgl/class.xssERROR: Project:  wgl_refraction_cube.project.xml
+
 ===[ wgl_sound.project.xml ]================(Tests)
 
 
@@ -1407,6 +1870,10 @@ log: myMarker<html>
 <p id="myMarker">
 Hey, here is myMarker
 </p>
+
+<style>
+
+</style>
 <script type="text/javascript">
 
 </script>
@@ -1979,4 +2446,4 @@ Success are greateful
 		IDIOM: xssY_idiom2  
 	
 
-Success are greateful
+Success are greatefulERROR: Project:  box2d3.project.xml

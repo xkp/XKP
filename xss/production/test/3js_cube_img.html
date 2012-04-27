@@ -165,8 +165,7 @@ application.events.dispatch("switch_cameras", []);
 var materials;var __basic_material1;var __basic_material2;var __basic_material3;var __basic_material4;var __basic_material5;var __basic_material6;var plane_material;var scene;var camera_1;var cube_1;var plane_1;
 threejs_load_resources(function()
 {
-			materials = 
-			new Array() ;
+			    materials = new Array() ;
 __basic_material1 = new THREE.MeshBasicMaterial({
 	});
 	materials.push(__basic_material1);
@@ -189,21 +188,18 @@ plane_material = new THREE.MeshBasicMaterial({
 color:Grey
 	});
             set_material_alpha(plane_material, 50);
-			scene = 
-			new THREE.Scene() ;
-		camera_1 = 
-		new THREE.Camera(70, 1.5, 1, 1000, null) ;	
+			    scene = new THREE.Scene() ;
+		    camera_1 = 
+		    new THREE.Camera(70, 1.5, 1, 1000, null) ;	
 		active_camera = camera_1;
             camera_1.position.y = 300;
             camera_1.position.z = 500;
-	    cube_1_cube = 
-		new THREE.Cube(200, 200, 200, 1, 1, 1, materials, null, null) ;
+	    cube_1_cube = new THREE.Cube(200, 200, 200, 1, 1, 1, materials, null, null) ;
 	    cube_1 = new THREE.Mesh(cube_1_cube, new THREE.MeshFaceMaterial());
 	    scene.addObject(cube_1);
 		cube_1.events = new ms.event.EventHolder();
             cube_1.position.y = 150;
-	    plane_1_plane = 
-		new THREE.Plane(200, 200, null, null) ;
+	    plane_1_plane = new THREE.Plane(200, 200, null, null) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, plane_material);
 	    scene.addObject(plane_1);
 		plane_1.events = new ms.event.EventHolder();

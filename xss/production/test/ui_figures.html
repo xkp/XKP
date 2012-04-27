@@ -168,7 +168,7 @@ window.onload = function()
             div1.set_width(400);
             div1.set_height(200);
 		    c1 = 
-			new ms.ui.Circle(div1.manager, div1, null, null, null);
+			new ms.ui.Circle(div1.manager, div1, "cyan", "black", 3);
         c1 = c1;
             c1.set_x(50);
             c1.set_y(50);
@@ -181,7 +181,7 @@ window.onload = function()
 	);
 		application.are_obj_events = true;
 		    r1 = 
-			new ms.ui.Rectangle(div1.manager, div1, null, null, null);
+			new ms.ui.Rectangle(div1.manager, div1, "green", null, null);
         r1 = r1;
             r1.set_x(200);
             r1.set_y(50);
@@ -197,7 +197,7 @@ window.onload = function()
 	);
 		application.are_obj_events = true;
 		    p1 = 
-			new ms.ui.Polygon(div1.manager, div1, null, null, null);
+			new ms.ui.Polygon(div1.manager, div1, "pink", "brown", 3);
         p1 = p1;
             p1.alpha(40);
 		p1.points.push({id:"point1", x:300, y:300});
@@ -212,7 +212,7 @@ window.onload = function()
             line1.set_x2(500);
             line1.set_y2(500);
 		    btn = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/smile_grin_48.png", "images/smile_sad_48.png");
         btn = btn;
             btn.set_x(270);
             btn.set_y(200);

@@ -2,9 +2,6 @@
 				<xkp.android.libs.Graphics.XKPImage android:id="@+id/layoutsmiley_ball" 
 				xmlns:android="http://schemas.android.com/apk/res/android" 
 				xmlns:xkp="http://schemas.android.com/apk/res/xkp.android.jBox2d_3" 
-				xkp:src="@drawable/smile_grin_48"
-				xkp:pos_width="50dp"
-				xkp:pos_height="50dp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 			>

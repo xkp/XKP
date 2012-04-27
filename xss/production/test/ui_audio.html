@@ -334,13 +334,13 @@ window.onload = function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    lbl1 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
         lbl1 = lbl1;
             lbl1.set_x(220);
             lbl1.set_y(190);
             lbl1.text("click the sound you want to listen");
 		    btnSound1 = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/sound_2.png", "images/sound_2.png");
         btnSound1 = btnSound1;
             btnSound1.set_x(275);
             btnSound1.set_y(210);
@@ -356,7 +356,7 @@ application.curr_sound.play();
 	);
 		application.are_obj_events = true;
 		    btnSound2 = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/sound_1.png", "images/sound_1.png");
         btnSound2 = btnSound2;
             btnSound2.set_x(275);
             btnSound2.set_y(240);
@@ -380,7 +380,7 @@ application.curr_sound.play();
             volume_bar.set_width(150);
             volume_bar.set_height(10);
 		    btn1 = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/arrow_left.png");
         btn1 = btn1;
             btn1.set_x(200);
             btn1.set_y(115);
@@ -395,7 +395,7 @@ application.curr_sound.volume -= 0.100000001;
 	);
 		application.are_obj_events = true;
 		    btn2 = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/arrow_right.png");
         btn2 = btn2;
             btn2.set_x(380);
             btn2.set_y(115);
@@ -410,13 +410,13 @@ application.curr_sound.volume += 0.100000001;
 	);
 		application.are_obj_events = true;
 		    lbl3 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
         lbl3 = lbl3;
             lbl3.set_x(220);
             lbl3.set_y(100);
             lbl3.text("click small arrows to adjust volume");
 		    btnPlay = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/play.png", "images/play_over.png");
         btnPlay = btnPlay;
             btnPlay.set_x(175);
             btnPlay.set_y(300);
@@ -430,7 +430,7 @@ application.curr_sound.volume += 0.100000001;
 	);
 		application.are_obj_events = true;
 		    btnPause = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/pause.png", "images/pause_over.png");
         btnPause = btnPause;
             btnPause.set_x(275);
             btnPause.set_y(300);
@@ -444,7 +444,7 @@ application.curr_sound.volume += 0.100000001;
 	);
 		application.are_obj_events = true;
 		    btnStop = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/stop.png", "images/stop_over.png");
         btnStop = btnStop;
             btnStop.set_x(375);
             btnStop.set_y(300);
@@ -458,12 +458,12 @@ application.curr_sound.volume += 0.100000001;
 	);
 		application.are_obj_events = true;
 		    sound_1 = 
-			new ms.ui.Sound(null);
+			new ms.ui.Sound("sounds/forest.wav");
         sound_1 = sound_1;
             sound_1.src = "sounds/forest.wav";
             sound_1.set_loop(false);
 		    sound_2 = 
-			new ms.ui.Sound(null);
+			new ms.ui.Sound("sounds/applauselong.wav");
         sound_2 = sound_2;
             sound_2.src = "sounds/applauselong.wav";
 			document.onkeydown = function(ev)

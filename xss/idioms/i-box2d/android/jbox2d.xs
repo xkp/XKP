@@ -259,7 +259,10 @@ method create_body(it, vp)
 		if(vp)
 			create_params = vp + ".getRadius()";
 		else
-			create_params = it.radius as string;
+		{
+			var prop_rad = it.get_property("radius");
+			create_params = prop_rad.render_value();
+		}
 	}
 	else
 	if(it.shape == "rect")
@@ -267,7 +270,11 @@ method create_body(it, vp)
 		if(vp)
 			create_params = vp + ".getDX(), " + vp + ".getDY()";
 		else
-			create_params = (it.width as string) + ", " + (it.height as string);
+		{
+			var prop_width = it.get_property("width");
+			var prop_height = it.get_property("height");
+			create_params = prop_width.render_value() + ", " + prop_height.render_value();
+		}
 			
 		//TIPS: if parenthesis is omited, an exception error is dispatched
 	}

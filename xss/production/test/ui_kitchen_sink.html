@@ -492,13 +492,13 @@ window.onload = function()
 	    test1.mouse_thru = true;
         test1 = test1;
 		    title0 = 
-			new ms.ui.Label(test1.manager, test1, null);
+			new ms.ui.Label(test1.manager, test1, "12px Verdana");
         title0 = title0;
             title0.set_x(50);
             title0.set_y(50);
             title0.text("This screen shows some buttons (1/4)");
 		    lbl_event = 
-			new ms.ui.Label(test1.manager, test1, null);
+			new ms.ui.Label(test1.manager, test1, "12px Verdana");
         lbl_event = lbl_event;
             lbl_event.set_x(240);
             lbl_event.set_y(120);
@@ -530,7 +530,7 @@ window.onload = function()
             lbl1.set_y(220);
             lbl1.text("Click this smiley to count");
 		    btn1 = 
-			new ms.ui.Button(test1.manager, test1, null, null);
+			new ms.ui.Button(test1.manager, test1, "images/smile_sad_48.png", "images/smile_grin_48.png");
         btn1 = btn1;
             btn1.set_x(270);
             btn1.set_y(200);
@@ -564,7 +564,7 @@ btn1.set_y(y - btnNext.h / 2);
 	);
 		application.are_obj_events = true;
 		    stateBtn = 
-			new ms.ui.StateButton(test1.manager, test1, null, null);
+			new ms.ui.StateButton(test1.manager, test1, "images/smile_grin_48.png", "images/smile_sad_48.png");
         stateBtn = stateBtn;
             stateBtn.set_x(270);
             stateBtn.set_y(300);
@@ -614,7 +614,7 @@ stateBtn.set_y(y - btnNext.h / 2);
 	    test2.mouse_thru = true;
         test2 = test2;
 		    title1 = 
-			new ms.ui.Label(test2.manager, test2, null);
+			new ms.ui.Label(test2.manager, test2, "12px Verdana");
         title1 = title1;
             title1.set_x(50);
             title1.set_y(50);
@@ -627,7 +627,7 @@ stateBtn.set_y(y - btnNext.h / 2);
             pb1.set_width(150);
             pb1.set_height(10);
 		    btn2 = 
-			new ms.ui.Image(test2.manager, test2, null);
+			new ms.ui.Image(test2.manager, test2, "images/arrow_left.png");
         btn2 = btn2;
             btn2.set_x(200);
             btn2.set_y(115);
@@ -660,7 +660,7 @@ btn2.set_y(y - btnNext.h / 2);
 	);
 		application.are_obj_events = true;
 		    btn3 = 
-			new ms.ui.Image(test2.manager, test2, null);
+			new ms.ui.Image(test2.manager, test2, "images/arrow_right.png");
         btn3 = btn3;
             btn3.set_x(380);
             btn3.set_y(115);
@@ -699,13 +699,13 @@ btn3.set_y(y - btnNext.h / 2);
             lbl2.set_y(200);
             lbl2.text("Click small arrows to adjust percentage");
 		    lbl7 = 
-			new ms.ui.Label(test2.manager, test2, null);
+			new ms.ui.Label(test2.manager, test2, "11px Verdana");
         lbl7 = lbl7;
             lbl7.set_x(210);
             lbl7.set_y(270);
             lbl7.text("Press arrows on your keyboard to walk the zombie");
 		    monster = 
-			new ms.ui.Sprite(test2.manager, test2, null);
+			new ms.ui.Sprite(test2.manager, test2, "monster_sheet");
         monster = monster;
             monster.set_x(300);
             monster.set_y(300);
@@ -726,13 +726,13 @@ monster.set_y(y - monster.h / 2);
 	    test3.mouse_thru = true;
         test3 = test3;
 		    title2 = 
-			new ms.ui.Label(test3.manager, test3, null);
+			new ms.ui.Label(test3.manager, test3, "12px Verdana");
         title2 = title2;
             title2.set_x(50);
             title2.set_y(50);
             title2.text("This screen shows a lot of figures (3/4)");
 		    c1 = 
-			new ms.ui.Circle(test3.manager, test3, null, null, null);
+			new ms.ui.Circle(test3.manager, test3, "cyan", "black", 3);
         c1 = c1;
             c1.set_x(70);
             c1.set_y(70);
@@ -763,7 +763,7 @@ c1.set_line_width(c1.line_width - 1);
 	);
 		application.are_obj_events = true;
 		    r1 = 
-			new ms.ui.Rectangle(test3.manager, test3, null, null, null);
+			new ms.ui.Rectangle(test3.manager, test3, "green", null, null);
         r1 = r1;
             r1.set_x(300);
             r1.set_y(100);
@@ -798,7 +798,7 @@ r1.set_rotation(r1.get_rotation() - 5);
 	);
 		application.are_obj_events = true;
 		    p1 = 
-			new ms.ui.Polygon(test3.manager, test3, null, null, null);
+			new ms.ui.Polygon(test3.manager, test3, "pink", "brown", 3);
         p1 = p1;
             p1.alpha(40);
 	var ev_parent = this;
@@ -875,31 +875,31 @@ p1.setPointbyIndex(i, application.px, application.py);
             line1.set_y2(300);
             line1.set_color("red");
 		    lbl4 = 
-			new ms.ui.Label(test3.manager, test3, null);
+			new ms.ui.Label(test3.manager, test3, "11px Verdana");
         lbl4 = lbl4;
             lbl4.set_x(50);
             lbl4.set_y(400);
             lbl4.text("Click the circle pressing NUMPAD + or NUMPAD - to increment or decrement its linewidth");
 		    lbl5 = 
-			new ms.ui.Label(test3.manager, test3, null);
+			new ms.ui.Label(test3.manager, test3, "11px Verdana");
         lbl5 = lbl5;
             lbl5.set_x(50);
             lbl5.set_y(420);
             lbl5.text("Greeny the drunked rectangle and Pinky the polygon rotates like the other components, test it!!!");
 		    lbl6 = 
-			new ms.ui.Label(test3.manager, test3, null);
+			new ms.ui.Label(test3.manager, test3, "11px Verdana");
         lbl6 = lbl6;
             lbl6.set_x(50);
             lbl6.set_y(440);
             lbl6.text("Click the smiley to increment the black line width");
 		    lbl8 = 
-			new ms.ui.Label(test3.manager, test3, null);
+			new ms.ui.Label(test3.manager, test3, "11px Verdana");
         lbl8 = lbl8;
             lbl8.set_x(50);
             lbl8.set_y(460);
             lbl8.text("Use SHIFT/ALT with click to resize the polygon");
 		    btn5 = 
-			new ms.ui.Button(test3.manager, test3, null, null);
+			new ms.ui.Button(test3.manager, test3, "images/smile_sad_48.png", "images/smile_grin_48.png");
         btn5 = btn5;
             btn5.set_x(400);
             btn5.set_y(200);
@@ -936,19 +936,19 @@ btn5.set_y(y - btn5.h / 2);
 	    test4.mouse_thru = true;
         test4 = test4;
 		    title3 = 
-			new ms.ui.Label(test4.manager, test4, null);
+			new ms.ui.Label(test4.manager, test4, "12px Verdana");
         title3 = title3;
             title3.set_x(50);
             title3.set_y(50);
             title3.text("This screen shows two intersected clip area components with diferent forms");
 		    title4 = 
-			new ms.ui.Label(test4.manager, test4, null);
+			new ms.ui.Label(test4.manager, test4, "12px Verdana");
         title4 = title4;
             title4.set_x(50);
             title4.set_y(70);
             title4.text("and the text button(4/4)");
 		    inst0 = 
-			new ms.ui.Label(test4.manager, test4, null);
+			new ms.ui.Label(test4.manager, test4, "12px Verdana");
         inst0 = inst0;
             inst0.set_x(70);
             inst0.set_y(90);
@@ -958,7 +958,7 @@ btn5.set_y(y - btn5.h / 2);
 	    clips.mouse_thru = true;
         clips = clips;
 		    ca1 = 
-			new ms.ui.ClipArea(clips.manager, clips, null);
+			new ms.ui.ClipArea(clips.manager, clips, "rect");
 	    ca1.mouse_thru = true;
         ca1 = ca1;
             ca1.set_x(90);
@@ -967,14 +967,14 @@ btn5.set_y(y - btn5.h / 2);
             ca1.set_height(220);
             ca1.shape = "rect";
 		    back_img = 
-			new ms.ui.Image(clips.manager, clips, null);
+			new ms.ui.Image(clips.manager, clips, "images/AzuCola_Trans.png");
         back_img = back_img;
             back_img.set_x(0);
             back_img.set_y(0);
             back_img.set_width(500);
             back_img.set_height(500);
 		    ca2 = 
-			new ms.ui.ClipArea(clips.manager, clips, null);
+			new ms.ui.ClipArea(clips.manager, clips, "circle");
 	    ca2.mouse_thru = true;
         ca2 = ca2;
             ca2.set_x(100);
@@ -983,30 +983,30 @@ btn5.set_y(y - btn5.h / 2);
             ca2.set_height(200);
             ca2.shape = "circle";
 		    tb1 = 
-			new ms.ui.TextButton(test4.manager, test4, null, null);
+			new ms.ui.TextButton(test4.manager, test4, "My_Button", "12px Arial");
         tb1 = tb1;
             tb1.set_x(400);
             tb1.set_y(400);
 		    inst1 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
         inst1 = inst1;
             inst1.set_x(50);
             inst1.set_y(480);
             inst1.text("Click on this arrows to change the screen");
 		    inst2 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
         inst2 = inst2;
             inst2.set_x(50);
             inst2.set_y(500);
             inst2.text("Use NUMPAD + or NUMPAD - keys with click over a component to rotate it");
 		    inst3 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
         inst3 = inst3;
             inst3.set_x(50);
             inst3.set_y(520);
             inst3.text("Use CTRL + mouse drag over a component to drag it");
 		    btnNext = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/arrow_right_green_48.png", "images/arrow_right_48.png");
         btnNext = btnNext;
             btnNext.set_x(320);
             btnNext.set_y(550);
@@ -1042,7 +1042,7 @@ btnNext.set_y(y - btnNext.h / 2);
 	);
 		application.are_obj_events = true;
 		    btnPrev = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/arrow_left_green_48.png", "images/arrow_left_48.png");
         btnPrev = btnPrev;
             btnPrev.set_x(220);
             btnPrev.set_y(550);

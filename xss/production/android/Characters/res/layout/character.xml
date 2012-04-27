@@ -2,9 +2,8 @@
 				<xkp.android.libs.Layout.XKPLayout android:id="@+id/layoutcharacter" 
 				xmlns:android="http://schemas.android.com/apk/res/android" 
 				xmlns:xkp="http://schemas.android.com/apk/res/xkp.android.Characters" 
-				android:layout_width="320dp"
-				android:layout_height="100dp"
-				android:padding="2dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
 			>
 				<ImageView android:id="@+id/picture"
 				xkp:layout_x="0dp"

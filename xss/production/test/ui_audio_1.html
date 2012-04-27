@@ -214,13 +214,13 @@ window.onload = function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    lbl1 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
         lbl1 = lbl1;
             lbl1.set_x(220);
             lbl1.set_y(190);
             lbl1.text("click to create a new instance of a sound");
 		    btnExplosion = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/bomb.png", "images/bomb.png");
         btnExplosion = btnExplosion;
             btnExplosion.set_x(290);
             btnExplosion.set_y(220);
@@ -234,7 +234,7 @@ window.onload = function()
 	);
 		application.are_obj_events = true;
 		    btnShoots = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/AK-47.png", "images/AK-47.png");
         btnShoots = btnShoots;
             btnShoots.set_x(275);
             btnShoots.set_y(300);

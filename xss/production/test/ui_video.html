@@ -346,20 +346,20 @@ window.onload = function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    v = 
-			new ms.ui.Video(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Video(g_ui_root.manager, g_ui_root, "video/sintel.mp4");
         v = v;
             v.set_x(50);
             v.set_y(50);
             v.set_width(400);
             v.set_height(200);
 		    lbl1 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
         lbl1 = lbl1;
             lbl1.set_x(40);
             lbl1.set_y(300);
             lbl1.text("Volume controls");
 		    btnVolUp = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/plus.png");
         btnVolUp = btnVolUp;
             btnVolUp.set_x(20);
             btnVolUp.set_y(320);
@@ -373,7 +373,7 @@ window.onload = function()
 	);
 		application.are_obj_events = true;
 		    btnVolDown = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/minus.png");
         btnVolDown = btnVolDown;
             btnVolDown.set_x(60);
             btnVolDown.set_y(320);
@@ -387,7 +387,7 @@ window.onload = function()
 	);
 		application.are_obj_events = true;
 		    btnMute = 
-			new ms.ui.StateButton(g_ui_root.manager, g_ui_root, null, null);
+			new ms.ui.StateButton(g_ui_root.manager, g_ui_root, "images/sound_on.png", "images/sound_off.png");
         btnMute = btnMute;
             btnMute.set_x(100);
             btnMute.set_y(320);
@@ -401,13 +401,13 @@ window.onload = function()
 	);
 		application.are_obj_events = true;
 		    lbl2 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
         lbl2 = lbl2;
             lbl2.set_x(200);
             lbl2.set_y(300);
             lbl2.text("Playback controls");
 		    btnPlay = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/play.png", "images/play_over.png");
         btnPlay = btnPlay;
             btnPlay.set_x(180);
             btnPlay.set_y(315);
@@ -421,7 +421,7 @@ window.onload = function()
 	);
 		application.are_obj_events = true;
 		    btnPause = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/pause.png", "images/pause_over.png");
         btnPause = btnPause;
             btnPause.set_x(220);
             btnPause.set_y(315);
@@ -435,7 +435,7 @@ window.onload = function()
 	);
 		application.are_obj_events = true;
 		    btnStop = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, null, null);
+			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/stop.png", "images/stop_over.png");
         btnStop = btnStop;
             btnStop.set_x(260);
             btnStop.set_y(315);
@@ -449,13 +449,13 @@ window.onload = function()
 	);
 		application.are_obj_events = true;
 		    lbl3 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
         lbl3 = lbl3;
             lbl3.set_x(360);
             lbl3.set_y(300);
             lbl3.text("Rotation controls");
 		    btnRotLeft = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/rota_left.png");
         btnRotLeft = btnRotLeft;
             btnRotLeft.set_x(365);
             btnRotLeft.set_y(320);
@@ -469,7 +469,7 @@ window.onload = function()
 	);
 		application.are_obj_events = true;
 		    btnRotRight = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, null);
+			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/rota_right.png");
         btnRotRight = btnRotRight;
             btnRotRight.set_x(405);
             btnRotRight.set_y(320);

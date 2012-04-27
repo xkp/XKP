@@ -13,9 +13,8 @@
 				xkp:employment="Professor of Steal"
 				xkp:img_src="@drawable/aladdin"
 				xkp:placement="top"
-				android:layout_width="320dp"
-				android:layout_height="100dp"
-				android:padding="2dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
 			>
 				</xkp.android.Characters.character>
 				<xkp.android.Characters.character android:id="@+id/mickey"
@@ -24,9 +23,8 @@
 				xkp:employment="A mouse that ..."
 				xkp:img_src="@drawable/mickey"
 				xkp:placement="top"
-				android:layout_width="320dp"
-				android:layout_height="100dp"
-				android:padding="2dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
 			>
 				</xkp.android.Characters.character>
 				<xkp.android.Characters.character android:id="@+id/pluto"
@@ -35,9 +33,8 @@
 				xkp:employment="Bones eater"
 				xkp:img_src="@drawable/pluto"
 				xkp:placement="top"
-				android:layout_width="320dp"
-				android:layout_height="100dp"
-				android:padding="2dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
 			>
 				</xkp.android.Characters.character>
 			</xkp.android.libs.Layout.XKPLayout>

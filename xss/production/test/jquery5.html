@@ -7,8 +7,13 @@
 <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
 <script type="text/javascript" src="../js/jquery-idiom.js"></script>
 <link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css">
+                <script type="text/javascript" src="jquery-1.7.1.min.js"></script>
+                <script type="text/javascript" src="jquery-ui-1.8.18.custom.min.js"></script>
+                <script type="text/javascript" src="jquery-idiom.js"></script>
+                <script type="text/javascript" src="jquery-ui-1.8.18.custom.css"></script>
 <script type="text/javascript">
 $(function() {
+        var application = {};
 			var main = $("#main");
 			var acc1 = $("#acc1");
 			var __div1 = $("#__div1");
@@ -36,7 +41,6 @@ $(function() {
 			var pb1 = $("#pb1");
 			var __br4 = $("#__br4");
 			var sld1 = $("#sld1");
-			var application = $("#application");
         acc1.accordion({
             fillSpace: true,
         });
@@ -82,7 +86,9 @@ $(function() {
 	     pb1.progressbar( "option", "value", sld1.slider( "option", "value" ));
 		    },
 	    });
-});
+        if (application.init)
+            application.init();
+    });
 </script>
 <style>
 #main {width : 1200px}

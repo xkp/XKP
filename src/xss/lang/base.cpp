@@ -1590,11 +1590,8 @@ str base_lang::render_ctor_args(XSSType type, XSSObject instance, DynamicArray r
             if (curr < rt->size())
               {
                 XSSObject param_value = rt->at(curr++);
-<<<<<<< .mine                variant   var         = param_value->get<variant>("value", variant());
-                value = render_value(XSSType(), var); assert(!value.empty());
-                          //value       = param_value->get<str>("value", str()); assert(!value.empty());
-=======                          value       = param_value->get<str>("value", str()); 
->>>>>>> .theirs              }
+                          value       = param_value->get<str>("value", str());
+              }
           }
 
         if (value.empty() && args.has(p->id()))

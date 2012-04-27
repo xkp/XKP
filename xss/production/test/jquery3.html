@@ -7,15 +7,21 @@
 <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
 <script type="text/javascript" src="../js/jquery-idiom.js"></script>
 <link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css">
+                <script type="text/javascript" src="jquery-1.7.1.min.js"></script>
+                <script type="text/javascript" src="jquery-ui-1.8.18.custom.min.js"></script>
+                <script type="text/javascript" src="jquery-idiom.js"></script>
+                <script type="text/javascript" src="jquery-ui-1.8.18.custom.css"></script>
 <script type="text/javascript">
 $(function() {
+        var application = {};
 			var main = $("#main");
 			var local = $("#local");
 			var remote = $("#remote");
 			var __img1 = $("#__img1");
-			var application = $("#application");
 					__img1.attr("src", "images/img1.png");
-});
+        if (application.init)
+            application.init();
+    });
 </script>
 <style>
 #main {width : 600px;height : 400px}

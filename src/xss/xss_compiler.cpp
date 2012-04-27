@@ -1274,7 +1274,7 @@ XSSObject xss_compiler::get_instance(const str& instance)
   {
     XSSContext ctx    = current_context();
     XSSObject  result = ctx->resolve(instance, XSSObject(), RESOLVE_INSTANCE);
-    return result; 
+    return result;
   }
 
 XSSType xss_compiler::type_of(variant v)
@@ -1648,7 +1648,7 @@ str xss_compiler::build_project(const param_list params)
   {
     str project_file = variant_cast<str>(params.get(0), str());
     if (project_file.empty())
-      { 
+      {
 				  param_list error;
 				  error.add("id", SCompiler);
 				  error.add("desc", SBuildProjectExpectsProject);
@@ -1662,7 +1662,7 @@ str xss_compiler::build_project(const param_list params)
       {
         str pn = params.get_name(i);
         if (pn.empty())
-          { 
+          {
 				      param_list error;
 				      error.add("id", SCompiler);
 				      error.add("desc", SBuildProjectExpectsNamedParameters);
@@ -1707,7 +1707,7 @@ DynamicArray xss_compiler::get_dependencies()
   {
     DynamicArray result(new dynamic_array);
 
-    XSSObjectList::iterator it = deps_.begin(); 
+    XSSObjectList::iterator it = deps_.begin();
     XSSObjectList::iterator nd = deps_.end();
 
     for(; it != nd; it++)
@@ -1722,7 +1722,7 @@ DynamicArray xss_compiler::idiom_dependencies(const str& idiom_id)
   {
     DynamicArray result(new dynamic_array);
 
-    XSSObjectList::iterator it = deps_.begin(); 
+    XSSObjectList::iterator it = deps_.begin();
     XSSObjectList::iterator nd = deps_.end();
 
     for(; it != nd; it++)
@@ -1852,7 +1852,7 @@ void xss_compiler::read_application_types(std::vector<XSSObject>& applications, 
 
         //create the "project" object, mainly used to store outside parameters
         XSSObject project(new xss_object);
-        
+
         for(size_t ii = 0; ii < args.size(); ii++)
           {
             str     pn = args.get_name(ii);
@@ -2272,7 +2272,7 @@ void xss_compiler::render_app_types(const str& renderer)
         param_list pl;
         pl.add(renderer);
         pl.add(*it);
-        
+
         xss(pl);
       }
   }
@@ -2506,7 +2506,7 @@ void xss_compiler::read_application(const str& app_file)
         //read the application
         XSSContext ctx  = app_renderer->context();
         Language   lang = ctx->get_language();
-        
+
         //register standard dsls
         ctx->register_xss_dsl("native", XSSDSL(new dsl_native));
         lang->init_application_context(ctx);
@@ -2915,7 +2915,7 @@ void xss_compiler::collect_dependencies(XSSType type, XSSType context)
         dependency_map::iterator it = dependencies_.find(href);
         if (it == dependencies_.end())
           {
-            XSSObject idiom = current_app_->type_idiom(type->id());
+            XSSObject idiom(current_app_->type_idiom(type->id()));
             add_dependency(href, obj, idiom);
           }
       }
