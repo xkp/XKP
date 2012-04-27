@@ -25,23 +25,24 @@
 
 		<class id="sound_3d" renderer="sound_renderer.xss"/>	
 		
-		<class id="material">
+		<class id="material" hasimagedata="true">
 			<constructor_params>
-				<parameter property="color"/> 
-				<parameter property="wireframe"/>
-				<parameter property="wireframe_linewidth"/>
-				<parameter property="src"/>				
-				<parameter property="shading"/>
-				<parameter property="vertex_colors"/>
-				<parameter property="env_map"/>
-				<parameter property="combine"/>
-				<parameter property="reflectivity"/>
-				<parameter property="shininess"/>
-				<parameter property="specular"/>
-				<parameter property="transparent"/>
-				<parameter property="refraction_ratio"/>
-				<parameter property="ambient"/>
-				<parameter property="blending"/>
+				<parameter id="color" property="color" runtime="true"/> 
+				<parameter id="wireframe" property="wireframe" runtime="true"/>
+				<parameter id="wireframe_linewidth" property="wireframe_linewidth" runtime="true"/>
+				<parameter id="src" property="src" runtime="true"/>	
+				<parameter id="texture_object" property="texture_object" runtime="true"/>
+				<parameter id="shading" property="shading" runtime="true"/>
+				<parameter id="vertex_colors" property="vertex_colors" runtime="true"/>
+				<parameter id="env_map" property="env_map" runtime="true"/>
+				<parameter id="combine" property="combine" runtime="true"/>
+				<parameter id="reflectivity" property="reflectivity" runtime="true"/>
+				<parameter id="shininess" property="shininess" runtime="true"/>
+				<parameter id="specular" property="specular" runtime="true"/>
+				<parameter id="transparent" property="transparent" runtime="true"/>
+				<parameter id="refraction_ratio" property="refraction_ratio" runtime="true"/>
+				<parameter id="ambient" property="ambient" runtime="true"/>
+				<parameter id="blending" property="blending" runtime="true"/>
 			</constructor_params>
 			<property id="color" type="string" use_plain_value="true" dont_init="true"/> 			
 			<property id="wireframe" type="string" dont_init="true"/>
@@ -50,6 +51,7 @@
 				<set text="set_material_alpha({path}, {value})" global = "true"/>
             </property>
 			<property id="src" type="string" dont_init="true"/>				
+			<property id="texture_object" type="string" dont_init="true"/>	
 			<property id="shading" type="string" dont_init="true"/>
 			<property id="vertex_colors" type="string" output_id="vertexColors" dont_init="true"/>
 			<property id="env_map" type="string" output_id="envMap" dont_init="true"/>
@@ -61,6 +63,10 @@
 			<property id="refraction_ratio" type="float" output_id="refractionRatio" dont_init="true"/>
 			<property id="ambient" type="string" dont_init="true"/>
 			<property id="blending" type="string" dont_init="true"/>
+			<property id="imagedata" type="string" use_plain_value="true">
+				<get text="get_image_data({path})" global = "true"/>
+                <set text="put_image({path}, {value})" global = "true"/>
+            </property>			
 		</class>
 		
 		<class id="composite_material" output_id="Array"/>
@@ -75,7 +81,7 @@
 		
 		<class id="depth_material" super="material" output_id="THREE.MeshDepthMaterial" renderer="param_in_obj.xss"/>
 				
-		<class id="object3d">			
+		<class id="object3d" hasimagedata="true">			
             <property id="color" type="string" use_plain_value="true">
 				<set text="materials[0].color.setHex({value})"/>
             </property>
@@ -94,6 +100,10 @@
 			<property id="position" type="vector3d"/>
 			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>
+			<property id="imagedata" type="string" use_plain_value="true">
+				<get text="get_image_data({path})" global = "true"/>
+                <set text="put_image({path}, {value})" global = "true"/>
+            </property>
 		</class>
 	
 		<class id="transform" output_id="THREE.Object3D" heritable="true">
@@ -117,17 +127,17 @@
 		
 		<class id="ambient_light" super="light" output_id="THREE.AmbientLight" renderer="light_renderer.xss">
 			<constructor_params>
-				<parameter property="color"/>				 				
+				<parameter id="color" property="color" runtime="true" use_plain_value="true"/>					 				
 			</constructor_params>
 		</class>
 		
 		<class id="directional_light" super="light" output_id="THREE.DirectionalLight" renderer="light_renderer.xss">
 			<constructor_params>
-				<parameter property="color"/>
-				<parameter property="intensity"/>
-				<parameter property="distance"/>
-				<parameter property="cast_shadow"/>  				
-			</constructor_params>				
+				<parameter id="color" property="color" runtime="true" use_plain_value="true"/>
+				<parameter id="intensity" property="intensity" runtime="true"/>
+				<parameter id="distance" property="distance" runtime="true"/>
+				<parameter id="cast_shadow" property="cast_shadow" runtime="true"/>  				
+			</constructor_params>			
 			<property id="intensity" type="string" dont_init="true"/>
 			<property id="distance" type="string" dont_init="true"/>
 			<property id="cast_shadow" output_id="castShadow" type="string" dont_init="true"/>
@@ -135,9 +145,9 @@
 	
 		<class id="point_light" super="light" output_id="THREE.PointLight" renderer="light_renderer.xss">
 			<constructor_params>
-				<parameter property="color"/>
-				<parameter property="intensity"/>
-				<parameter property="distance"/>           		
+				<parameter id="color" property="color" runtime="true" use_plain_value="true"/>
+				<parameter id="intensity" property="intensity" runtime="true"/>
+				<parameter id="distance" property="distance" runtime="true"/>           		
 			</constructor_params>				
 			<property id="intensity" type="string" dont_init="true"/>
 			<property id="distance" type="string" dont_init="true"/>
@@ -145,12 +155,12 @@
 	
 		<class id="camera" output_id="THREE.Camera" renderer="camera_renderer.xss">
 			<constructor_params>				
-				<parameter property="fov"/>
-				<parameter property="aspect"/>
-				<parameter property="near"/>
-				<parameter property="far"/>     
-				<parameter property="target"/>  			
-			</constructor_params>			
+				<parameter property="fov" runtime="true"/>
+				<parameter property="aspect" runtime="true"/>
+				<parameter property="near" runtime="true"/>
+				<parameter property="far" runtime="true"/>     
+				<parameter property="target" runtime="true"/>  			
+			</constructor_params>				
 			<property id="fov" type="string" dont_init="true"/>
 			<property id="aspect" type="string" dont_init="true"/>
 			<property id="near" type="string" dont_init="true"/>
@@ -163,17 +173,17 @@
 	
 		<class id="quake_camera" output_id="THREE.QuakeCamera" renderer="camera_renderer.xss">
 			<constructor_params> 				
-				<parameter property="fov"/>
-				<parameter property="aspect"/>
-				<parameter property="near"/>
-				<parameter property="far"/>     
-				<parameter property="target"/> 
-				<parameter property="speed"/>
-				<parameter property="look_speed"/>
-				<parameter property="no_fly"/>
-				<parameter property="vertical"/>
-				<parameter property="auto_forward"/>			
-			</constructor_params>			
+				<parameter property="fov" runtime="true"/>
+				<parameter property="aspect" runtime="true"/>
+				<parameter property="near" runtime="true"/>
+				<parameter property="far" runtime="true"/>     
+				<parameter property="target" runtime="true"/> 
+				<parameter property="speed" runtime="true"/>
+				<parameter property="look_speed" runtime="true"/>
+				<parameter property="no_fly" runtime="true"/>
+				<parameter property="vertical" runtime="true"/>
+				<parameter property="auto_forward" runtime="true"/>			
+			</constructor_params>				
 			<property id="fov" type="string" dont_init="true"/>
 			<property id="aspect" type="string" dont_init="true"/>
 			<property id="near" type="string" dont_init="true"/>
@@ -191,10 +201,10 @@
 	
 		<class id="plane" super="object3d" output_id="THREE.Plane" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
-				<parameter property="width" runtime="true"/>
-				<parameter property="height" runtime="true"/>
-				<parameter property="x_segments" runtime="true"/>
-				<parameter property="y_segments" runtime="true"/>
+				<parameter id="width" property="width" runtime="true"/>
+				<parameter id="height" property="height" runtime="true"/>
+				<parameter id="x_segments" property="x_segments" runtime="true" default_value="1"/>
+				<parameter id="y_segments" property="y_segments" runtime="true" default_value="1"/>
 			</constructor_params>
 			<property id="width" type="string" dont_init="true"/>
 			<property id="height" type="string" dont_init="true"/>
@@ -204,15 +214,15 @@
 	
 		<class id="cube" super="object3d" output_id="THREE.Cube" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
-				<parameter property="width" runtime="true"/>
-				<parameter property="height" runtime="true"/>
-				<parameter property="depth" runtime="true"/>      
-				<parameter property="x_segments" runtime="true"/>
-				<parameter property="y_segments" runtime="true"/>
-				<parameter property="z_segments" runtime="true"/>
-				<parameter property="material_array" runtime="true"/>	
-				<parameter property="flipped" runtime="true"/>
-				<parameter property="sides" runtime="true"/>				
+				<parameter id="width" property="width" runtime="true"/>
+				<parameter id="height" property="height" runtime="true"/>
+				<parameter id="depth" property="depth" runtime="true"/>      
+				<parameter id="x_segments" property="x_segments" runtime="true"/>
+				<parameter id="y_segments" property="y_segments" runtime="true"/>
+				<parameter id="z_segments" property="z_segments" runtime="true"/>
+				<parameter id="material_array" property="material_array" runtime="true" use_plain_value="true"/>	
+				<parameter id="flipped" property="flipped" runtime="true"/>
+				<parameter id="sides" property="sides" runtime="true"/>				
 			</constructor_params>
 			<property id="width" type="string" dont_init="true"/> 
 			<property id="height" type="string" dont_init="true"/>
@@ -227,12 +237,12 @@
 	
 		<class id="cylinder" super="object3d" output_id="THREE.Cylinder" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
-				<parameter property="segments" runtime="true"/>
-				<parameter property="top_radius" runtime="true"/>
-				<parameter property="bottom_radius" runtime="true"/>      
-				<parameter property="height" runtime="true"/>
-				<parameter property="topoffset" runtime="true"/>
-				<parameter property="bottomoffset" runtime="true"/>			
+				<parameter id="segments" property="segments" runtime="true"/>
+				<parameter id="top_radius" property="top_radius" runtime="true"/>
+				<parameter id="bottom_radius" property="bottom_radius" runtime="true"/>      
+				<parameter id="height" property="height" runtime="true"/>
+				<parameter id="topoffset" property="topoffset" runtime="true"/>
+				<parameter id="bottomoffset" property="bottomoffset" runtime="true"/>			
 			</constructor_params>	
 			<property id="segments" type="string" dont_init="true"/> 
 			<property id="top_radius" type="string" dont_init="true"/>
@@ -244,9 +254,9 @@
 	
 		<class id="sphere" super="object3d" output_id="THREE.Sphere" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
-				<parameter property="radius" runtime="true"/>
-				<parameter property="x_segments" runtime="true"/>
-				<parameter property="y_segments" runtime="true"/>			
+				<parameter id="radius" property="radius" runtime="true"/>
+				<parameter id="x_segments" property="x_segments" runtime="true"/>
+				<parameter id="y_segments" property="y_segments" runtime="true"/>			
 			</constructor_params>
 			<property id="radius" type="string" dont_init="true"/>
 			<property id="x_segments" output_id="segmentsWidth" type="string" dont_init="true"/>
@@ -255,7 +265,7 @@
 	
 		<class id="icosahedron" super="object3d" output_id="THREE.Icosahedron" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
-				<parameter property="subdivisions" runtime="true"/>			
+				<parameter id="subdivisions" property="subdivisions" runtime="true"/>			
 			</constructor_params>
 			<property id="subdivisions" type="string" dont_init="true"/>
 		</class>

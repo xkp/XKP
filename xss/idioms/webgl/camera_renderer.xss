@@ -1,14 +1,20 @@
 <xss:parameter id="obj"/>
-<xss:parameter id="index"/>	
+<xss:parameter id="type"/>	
 
 <xss:code>
+	if(!type)
+		type = obj.type;
 	
 	out(marker = "threejs_variables", marker_source = "entry") {var <xss:e v="obj.id"/>;}
 	if(obj.class_name == "quake_camera")
 		compiler.xss("param_in_obj.xss", obj);
 	else
 	{
-		out(){<xss:e v="obj.id"/> = }compiler.xss("../common-js/instantiator.xss", obj);	
+		out()
+		{
+		    <xss:e v="obj.id"/> = 
+		    <xss:e v="compiler.instantiate(obj)"/> ;	
+		}
 	}
 	out()
 	{

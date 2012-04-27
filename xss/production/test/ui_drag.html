@@ -5,11 +5,11 @@
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/resig.js"></script>
+<script type="text/javascript" src="../js/event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
-		<script type="text/javascript" src="../js/ms-ui.js"></script>
-		<script type="text/javascript" src="../js/ms-streamer.js"></script>
+		<script type="text/javascript" src="../js/ui.js"></script>
+		<script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">
     var drawingCanvas;		
 var g_ui;
@@ -18,8 +18,8 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
-application.events = new ms.event.EventHolder();
-var SoundUtils = new ms.ui.SoundUtils();
+application.events = new ev.EventHolder();
+var SoundUtils = new ui.SoundUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -27,15 +27,15 @@ var SoundUtils = new ms.ui.SoundUtils();
 				height: 600,
 				canvas: drawingCanvas
 			};
-            var streamer = new ms.streamer.Streamer();							
-			var ui = new ms.ui.Manager(client, streamer);			
-			var g_ui = ui;
-			var g_ui_root = ui.root;
+            var streamer = new stream.Streamer();							
+			var ui_ = new ui.Manager(client, streamer);			
+			var g_ui = ui_;
+			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
 		}
-		var streamer = new ms.streamer.Streamer();	
-		var ResourceUtils = new ms.streamer.ResourceUtils();
-		var global_package = new ms.streamer.Package(streamer);	
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
+		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
             {
 		id:				"__image1",
@@ -119,73 +119,73 @@ window.onload = function()
 			height: 600,
 			canvas: drawingCanvas
 		};
-		var ui = new ms.ui.Manager(client, streamer);
-		g_ui = ui;
-        g_ui_root = ui.root;
-     	ui.load_resources(function()
+		var ui_ = new ui.Manager(client, streamer);
+		g_ui = ui_;
+        g_ui_root = ui_.root;
+     	ui_.load_resources(function()
 		{
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};		
-	ui.events.addListener("mousedown", function(x,y)
+	ui_.events.addListener("mousedown", function(x,y)
 	{    
 		application.events.dispatch("mousedown", [x, y]);
 	});
-	ui.events.addListener("mouseup", function(x,y)
+	ui_.events.addListener("mouseup", function(x,y)
 	{    
 		application.events.dispatch("mouseup", [x, y]);
 	});
-	ui.events.addListener("mousemove", function(x,y)
+	ui_.events.addListener("mousemove", function(x,y)
 	{    
 		application.events.dispatch("mousemove", [x, y]);
 	});
-	ui.events.addListener("click", function(x,y)
+	ui_.events.addListener("click", function(x,y)
 	{    
 		application.events.dispatch("click", [x, y]);
 	});
-	ui.events.addListener("drag", function(x,y)
+	ui_.events.addListener("drag", function(x,y)
 	{    
 		application.events.dispatch("drag", [x, y]);
 	});
-	ui.events.addListener("dragend", function(x,y)
+	ui_.events.addListener("dragend", function(x,y)
 	{    
 		application.events.dispatch("dragend", [x, y]);
 	});
-	ui.events.addListener("keyup", function(keycode)
+	ui_.events.addListener("keyup", function(keycode)
 	{    
 		application.events.dispatch("keyup", [keycode]);
 	});
-	ui.events.addListener("keydown", function(keycode)
+	ui_.events.addListener("keydown", function(keycode)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-	ui.events.addListener("keypress", function(keycode)
+	ui_.events.addListener("keypress", function(keycode)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    __label1 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
+			new ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
         __label1 = __label1;
             __label1.set_x(240);
             __label1.set_y(75);
             __label1.text("drag the smile to move it");
 		    lbl1 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
+			new ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
         lbl1 = lbl1;
             lbl1.set_x(250);
             lbl1.set_y(90);
             lbl1.text("click smiley");
 		    btn1 = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/smile_sad_48.png", "images/smile_grin_48.png");
+			new ui.Button(g_ui_root.manager, g_ui_root, "images/smile_sad_48.png", "images/smile_grin_48.png");
         btn1 = btn1;
             btn1.set_x(270);
             btn1.set_y(100);
@@ -210,7 +210,7 @@ btn1.set_y(y - btn1.h / 2);
 	);
 		application.are_obj_events = true;
 		    img1 = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/box.png");
+			new ui.Image(g_ui_root.manager, g_ui_root, "images/box.png");
         img1 = img1;
             img1.set_x(470);
             img1.set_y(300);
@@ -218,12 +218,12 @@ btn1.set_y(y - btn1.h / 2);
             img1.set_width(50);
             img1.set_height(50);
 		    tb1 = 
-			new ms.ui.TextButton(g_ui_root.manager, g_ui_root, "Aceptar", "12px Tahoma");
+			new ui.TextButton(g_ui_root.manager, g_ui_root, "Aceptar", "12px Tahoma");
         tb1 = tb1;
             tb1.set_x(400);
             tb1.set_y(200);
 		    stateBtn = 
-			new ms.ui.StateButton(g_ui_root.manager, g_ui_root, "images/smile_grin_48.png", "images/smile_sad_48.png");
+			new ui.StateButton(g_ui_root.manager, g_ui_root, "images/smile_grin_48.png", "images/smile_sad_48.png");
         stateBtn = stateBtn;
             stateBtn.set_x(270);
             stateBtn.set_y(200);
@@ -231,26 +231,26 @@ btn1.set_y(y - btn1.h / 2);
             stateBtn.set_width(50);
             stateBtn.set_height(50);
 		    lbl3 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
+			new ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
         lbl3 = lbl3;
             lbl3.set_x(330);
             lbl3.set_y(240);
             lbl3.text("this smile is a state button, click it");
 			document.onkeydown = function(ev)
 			{
-				ui.keydown(ev.keyCode);                  
+				ui_.keydown(ev.keyCode);                  
 			};
 			document.onkeyup = function(ev)
 			{
-				ui.keyup(ev.keyCode);                  
+				ui_.keyup(ev.keyCode);                  
 			};
 			document.onkeypress = function(ev)
 			{
-				ui.keypress(ev.keyCode);                  
+				ui_.keypress(ev.keyCode);                  
 			};
             application.events.dispatch("init", []);
             start();
-			ui.draw(drawingCanvas.getContext('2d'));
+			ui_.draw(drawingCanvas.getContext('2d'));
 		});
 	}
 }

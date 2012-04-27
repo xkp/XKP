@@ -5,14 +5,14 @@
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/resig.js"></script>
+<script type="text/javascript" src="../js/ui.js"></script>
+<script type="text/javascript" src="../js/streamer.js"></script>
+<script type="text/javascript" src="../js/state.js"></script>
 <script type="text/javascript">			
 var g_elapsed = -1;
 var g_delta = 0.0;
-var g_sequence_manager = new ms.state.Manager();
+var g_sequence_manager = new state.Manager();
 var application = {}
 var test_sequence;var test_sequence1;
 function default_interpolate(a, b, t)
@@ -35,19 +35,19 @@ function start(resolution)
 	}  
 	window.setTimeout(update, resolution);  
 }  
-            fade_in = Class.create(ms.state.Sequence,
-        {
-    initialize: function($super
-                , manager
+        var fade_in = state.Sequence.extend(
+    {
+    init: function(
+                manager
                 )
     {
-        $super(
-        manager        );
-        this.events = new ms.event.EventHolder(); 
+        this._super(
+		manager        );
+        this.events = new ev.EventHolder(); 
         var this__  = this;
                 var this__ = this;
             this.parent_sequence = null;
-                    var ____i1 = new ms.state.Interpolator(
+                    var ____i1 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -58,8 +58,8 @@ function start(resolution)
                         {t: 0, value: 0},
                         {t: 1, value: 0.300000012},
                         ]);
-                    this.addAction(null, "alpha", new ms.state.State(0, 1, ____i1));                    
-                    var ____i2 = new ms.state.Interpolator(
+                    this.addAction(null, "alpha", new state.State(0, 1, ____i1));                    
+                    var ____i2 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -70,10 +70,9 @@ function start(resolution)
                         {t: 1, value: 0.300000012},
                         {t: 2, value: 1},
                         ]);
-                    this.addAction(null, "alpha", new ms.state.State(1, 2, ____i2));                    
+                    this.addAction(null, "alpha", new state.State(1, 2, ____i2));                    
             this.target = null;
-            if (this.init)
-                this.init();
+            this.events.dispatch("init", [this]);
             },
 });
             application.target = 0;

@@ -25,7 +25,7 @@
             <property id="rotation" type="float" dont_init="true"/>
         </class>
 
-        <class id="spawner" output_id="ms.arcade.Spawner" renderer="spawner.xss">
+        <class id="spawner" output_id="arcade.Spawner" renderer="spawner.xss">
             <constructor_params>
                 <parameter constant="g_spawner_manager"/>
                 <parameter property="x" runtime="true"/>
@@ -44,7 +44,7 @@
             <property id="velocity" type="float"/>
         </class>
 		
-		<class id="distance_joint" output_id="ms.joint.DistanceJoint">
+		<class id="distance_joint" output_id="joint.DistanceJoint">
             <constructor_params>
                 <parameter property="body_a"/>
                 <parameter property="body_b"/>                               
@@ -66,7 +66,7 @@
             </property>
         </class>		
 		
-		<class id="revolute_joint" output_id="ms.joint.RevoluteJoint">
+		<class id="revolute_joint" output_id="joint.RevoluteJoint">
             <constructor_params>
                 <parameter property="body_a"/>
                 <parameter property="body_b"/>                                          
@@ -104,7 +104,7 @@
             </property>
         </class>
 		
-		<class id="prismatic_joint" output_id="ms.joint.PrismaticJoint">
+		<class id="prismatic_joint" output_id="joint.PrismaticJoint">
             <constructor_params>
                 <parameter property="body_a"/>
                 <parameter property="body_b"/>                           
@@ -142,7 +142,7 @@
             </property>			
         </class>
 		
-		<class id="pulley_joint" output_id="ms.joint.PulleyJoint">
+		<class id="pulley_joint" output_id="joint.PulleyJoint">
             <constructor_params>
                 <parameter property="body_a"/>
                 <parameter property="body_b"/>
@@ -162,7 +162,7 @@
             <property id="ratio" type="float" dont_init="true"/>	
         </class>	
 		
-		<class id="weld_joint" output_id="ms.joint.WeldJoint">
+		<class id="weld_joint" output_id="joint.WeldJoint">
             <constructor_params>
                 <parameter property="body_a"/>
                 <parameter property="body_b"/>                                              

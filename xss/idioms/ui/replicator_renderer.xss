@@ -14,6 +14,10 @@
 				var child = new <xss:e v="obj.template"/>(
 	}
 	var type = compiler.get_type(obj.template);	
+	out()
+	{
+		this.manager, this
+	}
 	if (type.constructor_params)
 	{
 		for(int i = 2; i < type.constructor_params.size; i++)
@@ -23,7 +27,7 @@
 	}	
 	out()
 	{
-				this.manager, this);				
+				);				
 				child.data_source_set(item); 				
 			<xss:close_brace/>
 		<xss:close_brace/>

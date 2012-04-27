@@ -24,7 +24,10 @@ if (params)
 					if(prop.output_id == "src") 
 						out(){map:THREE.ImageUtils.loadTexture(streamer.get_resource('<xss:e v="obj.src"/>').asset),}
 					else					
-						out() {<xss:e v="prop.output_id"/>:<xss:e v="prop.value"/>}
+					if(prop.output_id == "texture_object") 
+						out(){map:new THREE.Texture(<xss:e v="obj.texture_object"/>),}
+					else		
+						out() {<xss:e v="prop.output_id"/>:<xss:e v="prop.value"/>}					
 					i++;
 				}
 			}

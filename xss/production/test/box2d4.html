@@ -5,15 +5,15 @@
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/resig.js"></script>
+<script type="text/javascript" src="../js/event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
-		<script type="text/javascript" src="../js/ms-ui.js"></script>
-		<script type="text/javascript" src="../js/ms-streamer.js"></script>
+		<script type="text/javascript" src="../js/ui.js"></script>
+		<script type="text/javascript" src="../js/streamer.js"></script>
         <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script> 
-		<script type="text/javascript" src="../js/ms-joint.js"></script> 
-            <script type="text/javascript" src="../js/ms-spawner.js"></script>
-		<script type="text/javascript" src="../js/ms-state.js"></script>
+		<script type="text/javascript" src="../js/joint.js"></script> 
+            <script type="text/javascript" src="../js/spawner.js"></script>
+		<script type="text/javascript" src="../js/sequence.js"></script>
 <script type="text/javascript">
     var drawingCanvas;		
 var g_ui;
@@ -22,8 +22,8 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
-application.events = new ms.event.EventHolder();
-var SoundUtils = new ms.ui.SoundUtils();
+application.events = new ev.EventHolder();
+var SoundUtils = new ui.SoundUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -31,14 +31,14 @@ var SoundUtils = new ms.ui.SoundUtils();
 				height: 400,
 				canvas: drawingCanvas
 			};
-            var streamer = new ms.streamer.Streamer();							
-			var ui = new ms.ui.Manager(client, streamer);			
-			var g_ui = ui;
-			var g_ui_root = ui.root;
+            var streamer = new stream.Streamer();							
+			var ui_ = new ui.Manager(client, streamer);			
+			var g_ui = ui_;
+			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
 		}
-		var streamer = new ms.streamer.Streamer();	
-		var ResourceUtils = new ms.streamer.ResourceUtils();
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
         var   b2Vec2 = Box2D.Common.Math.b2Vec2
         ,  b2AABB = Box2D.Collision.b2AABB
         ,  b2Mat22 = Box2D.Common.Math.b2Mat22
@@ -65,7 +65,7 @@ var SoundUtils = new ms.ui.SoundUtils();
             new b2Vec2(0, 0)    //gravity
         ,  true                 //allow sleep
         );		
-            var g_spawner_manager = new ms.arcade.SpawnManager();
+            var g_spawner_manager = new arcade.SpawnManager();
         var g_step_collisions = [];
         var contactListener = new Box2D.Dynamics.b2ContactListener;
         contactListener.BeginContact = function(contact, manifold) 
@@ -98,12 +98,12 @@ var SoundUtils = new ms.ui.SoundUtils();
             var xform = new b2Transform(pos, rot);
             me.SetTransform(xform);
         }
-		var g_sequence_manager = new ms.state.Manager();
+		var g_sequence_manager = new state.Manager();
         function default_interpolate(a, b, t)
         {
             return a + (b - a)*t;
         }		
-		var global_package = new ms.streamer.Package(streamer);	
+		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
             {
 		id:				"__image1",
@@ -282,17 +282,19 @@ function start(resolution)
 	}    
 	window.setTimeout(updater, resolution);  
 }  
-            bad_guy = Class.create(ms.ui.Image,
-        {
-    initialize: function($super
-                , manager
-                , parent
-                , src
+        var bad_guy = ui.Image.extend(
+    {
+    init: function(
+                manager
+                ,
+                parent
+                ,
+                src
                 )
     {
-        $super(
-        manager,parent,src? src : "images/smile_sad_48.png"        );
-        this.events = new ms.event.EventHolder(); 
+        this._super(
+		manager,parent,src? src : "images/smile_sad_48.png"        );
+        this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
                 {
@@ -324,7 +326,7 @@ function start(resolution)
                         this.parent.removeComponent(this);
                     }
                 }
-        this.cannon = new ms.arcade.Spawner(g_spawner_manager, 20, 60, 1, 2);
+        this.cannon = new arcade.Spawner(g_spawner_manager, 20, 60, 1, 2);
         cannon = this.cannon;
             this.cannon.x = 20;
             this.cannon.y = 60;
@@ -340,34 +342,31 @@ function start(resolution)
 this.move_around =
 new move_action(
 g_sequence_manager);
-        move_around = this.move_around;
                 this.move_around.start();
-            this.move_around.parent_sequence = null;
 this.fade_out =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
-        fade_out = this.fade_out;
             this.fade_out.target = null;
-            this.fade_out.parent_sequence = null;
-                    var ____i1 = new ms.state.Interpolator(
-                        "alpha", 
-                        default_interpolate,
-                        function(value)
-                        {
-                            fade_out.target.alpha(value);
-                        },
-                        [
-                        {t: 0, value: 100},
-                        {t: 3, value: 0},
-                        ]);
-                    this.fade_out.addAction(null, "alpha", new ms.state.State(0, 3, ____i1));                    
-            this.set_width(60);
+        var ____i1 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.alpha(value);
+            },
+            [
+        {t: 0, value: 100},
+        {t: 3, value: 0},
+            ]);
+            this.fade_out.addHandler(____i1);	              
             this.set_height(60);
-	this.init = function() 
-	{
-		this.move_around.target = this;
-this.fade_out.target = this;
-	};
+            this.set_width(60);
+	var ev_parent = this;
+	this.events.addListener("init", function()
+	{    
+		ev_parent.move_around.target = ev_parent;
+	}
+	);
+		application.are_obj_events = true;
 	var ev_parent = this;
 	this.events.addListener("collision", function(who)
 	{    
@@ -380,21 +379,22 @@ ev_parent.fade_out.start();
 	}
 	);
 		application.are_obj_events = true;
-            if (this.init)
-                this.init();
+            this.events.dispatch("init", [this]);
             },
 });
-            good_guy = Class.create(ms.ui.Image,
-        {
-    initialize: function($super
-                , manager
-                , parent
-                , src
+        var good_guy = ui.Image.extend(
+    {
+    init: function(
+                manager
+                ,
+                parent
+                ,
+                src
                 )
     {
-        $super(
-        manager,parent,src? src : "images/smile_grin_48.png"        );
-        this.events = new ms.event.EventHolder(); 
+        this._super(
+		manager,parent,src? src : "images/smile_grin_48.png"        );
+        this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
                 {
@@ -429,38 +429,40 @@ ev_parent.fade_out.start();
 this.move_around =
 new move_action(
 g_sequence_manager);
-        move_around = this.move_around;
             this.move_around.vx = 0;
             this.move_around.vy = 0;
                 this.move_around.start();
-            this.move_around.parent_sequence = null;
-            this.set_width(30);
             this.set_height(30);
-	this.init = function() 
-	{
-		this.move_around.target = this;
-	};
+            this.set_width(30);
+	var ev_parent = this;
+	this.events.addListener("init", function()
+	{    
+		ev_parent.move_around.target = ev_parent;
+	}
+	);
+		application.are_obj_events = true;
 	var ev_parent = this;
 	this.events.addListener("collision", function()
 	{    
 	}
 	);
 		application.are_obj_events = true;
-            if (this.init)
-                this.init();
+            this.events.dispatch("init", [this]);
             },
 });
-            bullet = Class.create(ms.ui.Image,
-        {
-    initialize: function($super
-                , manager
-                , parent
-                , src
+        var bullet = ui.Image.extend(
+    {
+    init: function(
+                manager
+                ,
+                parent
+                ,
+                src
                 )
     {
-        $super(
-        manager,parent,src? src : "images/bomb.png"        );
-        this.events = new ms.event.EventHolder(); 
+        this._super(
+		manager,parent,src? src : "images/bomb.png"        );
+        this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
                 {
@@ -492,8 +494,8 @@ g_sequence_manager);
                         this.parent.removeComponent(this);
                     }
                 }
-            this.set_width(20);
             this.set_height(20);
+            this.set_width(20);
 	var ev_parent = this;
 	this.events.addListener("collision", function(who)
 	{    
@@ -508,21 +510,22 @@ SoundUtils.play("sounds/boom.wav");
 	}
 	);
 		application.are_obj_events = true;
-            if (this.init)
-                this.init();
+            this.events.dispatch("init", [this]);
             },
 });
-            floor = Class.create(ms.ui.Image,
-        {
-    initialize: function($super
-                , manager
-                , parent
-                , src
+        var floor = ui.Image.extend(
+    {
+    init: function(
+                manager
+                ,
+                parent
+                ,
+                src
                 )
     {
-        $super(
-        manager,parent,src? src : "images/stone-12.jpg"        );
-        this.events = new ms.event.EventHolder(); 
+        this._super(
+		manager,parent,src? src : "images/stone-12.jpg"        );
+        this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
                 {
@@ -555,31 +558,31 @@ SoundUtils.play("sounds/boom.wav");
                         this.parent.removeComponent(this);
                     }
                 }
-            if (this.init)
-                this.init();
+            this.events.dispatch("init", [this]);
             },
 });
-            move_action = Class.create(ms.state.Sequence,
-        {
-    initialize: function($super
-                , manager
+        var move_action = state.Sequence.extend(
+    {
+    init: function(
+                manager
                 )
     {
-        $super(
-        manager        );
-        this.events = new ms.event.EventHolder(); 
+        this._super(
+		manager        );
+        this.events = new ev.EventHolder(); 
         var this__  = this;
                 var this__ = this;
-            this.parent_sequence = null;
             this.speed = 130;
             this.vx = Math.random();
             this.vy = Math.random();
+            this.loop = true;
             this.target = null;
 	var ev_parent = this;
-	this.events.addListener("tick", function(delta)
+	this.events.addListener("update", function(ev)
 	{    
-		ev_parent.target.set_x(ev_parent.target.x + ev_parent.vx * ev_parent.speed * delta);
-ev_parent.target.set_y(ev_parent.target.y + ev_parent.vy * ev_parent.speed * delta);
+		var millisec = ev.delta / 1000;
+ev_parent.target.set_x(ev_parent.target.x + ev_parent.vx * ev_parent.speed * millisec);
+ev_parent.target.set_y(ev_parent.target.y + ev_parent.vy * ev_parent.speed * millisec);
 if (ev_parent.target.x < 10 || ev_parent.target.x > 570)
 {
 ev_parent.vx = ev_parent.vx * -1;
@@ -591,8 +594,7 @@ ev_parent.vy = ev_parent.vy * -1;
 	}
 	);
 		application.are_obj_events = true;
-            if (this.init)
-                this.init();
+            this.events.dispatch("init", [this]);
             },
 });
 	var ev_parent = this;
@@ -633,61 +635,61 @@ window.onload = function()
 			height: 400,
 			canvas: drawingCanvas
 		};
-		var ui = new ms.ui.Manager(client, streamer);
-		g_ui = ui;
-        g_ui_root = ui.root;
-     	ui.load_resources(function()
+		var ui_ = new ui.Manager(client, streamer);
+		g_ui = ui_;
+        g_ui_root = ui_.root;
+     	ui_.load_resources(function()
 		{
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};		
-	ui.events.addListener("mousedown", function(x,y)
+	ui_.events.addListener("mousedown", function(x,y)
 	{    
 		application.events.dispatch("mousedown", [x, y]);
 	});
-	ui.events.addListener("mouseup", function(x,y)
+	ui_.events.addListener("mouseup", function(x,y)
 	{    
 		application.events.dispatch("mouseup", [x, y]);
 	});
-	ui.events.addListener("mousemove", function(x,y)
+	ui_.events.addListener("mousemove", function(x,y)
 	{    
 		application.events.dispatch("mousemove", [x, y]);
 	});
-	ui.events.addListener("click", function(x,y)
+	ui_.events.addListener("click", function(x,y)
 	{    
 		application.events.dispatch("click", [x, y]);
 	});
-	ui.events.addListener("drag", function(x,y)
+	ui_.events.addListener("drag", function(x,y)
 	{    
 		application.events.dispatch("drag", [x, y]);
 	});
-	ui.events.addListener("dragend", function(x,y)
+	ui_.events.addListener("dragend", function(x,y)
 	{    
 		application.events.dispatch("dragend", [x, y]);
 	});
-	ui.events.addListener("keyup", function(keycode)
+	ui_.events.addListener("keyup", function(keycode)
 	{    
 		application.events.dispatch("keyup", [keycode]);
 	});
-	ui.events.addListener("keydown", function(keycode)
+	ui_.events.addListener("keydown", function(keycode)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-	ui.events.addListener("keypress", function(keycode)
+	ui_.events.addListener("keypress", function(keycode)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    sound = 
-			new ms.ui.StateButton(g_ui_root.manager, g_ui_root, null, null);
+			new ui.StateButton(g_ui_root.manager, g_ui_root, "images/sound_on.png", "images/sound_off.png");
         sound = sound;
             sound.set_x(50);
             sound.set_y(50);
@@ -715,13 +717,13 @@ hero.src("images/smile_sad_48.png");
             __floor1.set_width(600);
             __floor1.set_height(40);
 		    game_over = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, null);
+			new ui.Label(g_ui_root.manager, g_ui_root, "40pt Calibri");
         game_over = game_over;
             game_over.set_x(220);
             game_over.set_y(200);
             game_over.setVisible(false);
             game_over.text("GAME OVER");
-        sp1 = new ms.arcade.Spawner(g_spawner_manager, 300, 100, 3, null);
+        sp1 = new arcade.Spawner(g_spawner_manager, 300, 100, 3, null);
         sp1 = sp1;
             sp1.x = 300;
             sp1.y = 100;
@@ -733,19 +735,19 @@ hero.src("images/smile_sad_48.png");
             sp1.start();
 			document.onkeydown = function(ev)
 			{
-				ui.keydown(ev.keyCode);                  
+				ui_.keydown(ev.keyCode);                  
 			};
 			document.onkeyup = function(ev)
 			{
-				ui.keyup(ev.keyCode);                  
+				ui_.keyup(ev.keyCode);                  
 			};
 			document.onkeypress = function(ev)
 			{
-				ui.keypress(ev.keyCode);                  
+				ui_.keypress(ev.keyCode);                  
 			};
             application.events.dispatch("init", []);
             start();
-			ui.draw(drawingCanvas.getContext('2d'));
+			ui_.draw(drawingCanvas.getContext('2d'));
 		});
 	}
 }

@@ -12,35 +12,35 @@
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/resig.js"></script>
+<script type="text/javascript" src="../js/event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/streamer.js"></script>
 		<script type="text/javascript" src="../js/three/Three.js"></script>
 		<script type="text/javascript" src="../js/three/Stats.js"></script>
 		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
 		<script type="text/javascript" src="../js/three/Utils.js"></script>
 		<script type="text/javascript" src="../js/three/Detector.js"></script>
-		<script type="text/javascript" src="../js/ms-streamer.js"></script>
+		<script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
-var ui;
+var ui_;
 var SoundUtils;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var canvas_position = {x:0, y:0};
-var streamer = new ms.streamer.Streamer();
+var streamer = new stream.Streamer();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
-application.events = new ms.event.EventHolder();
-		var streamer = new ms.streamer.Streamer();	
-		var ResourceUtils = new ms.streamer.ResourceUtils();
+application.events = new ev.EventHolder();
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
 	// --------RESOURCES---------
-		var global_package = new ms.streamer.Package(streamer);	
+		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
             {
 		id:				"model_1",
@@ -97,24 +97,17 @@ application.events.dispatch("switch_cameras", []);
 var scene;var camera_1;var a_ligth;var d_ligth_1;var male_model;var female_model;
 threejs_load_resources(function()
 {
-scene = 
-new THREE.Scene(
-);
-camera_1 = 
-new THREE.Camera(
-75,1.5,1,100000);
+			    scene = new THREE.Scene() ;
+		    camera_1 = 
+		    new THREE.Camera(75, 1.5, 1, 100000, null) ;	
 		active_camera = camera_1;
             camera_1.position.z = 500;
-a_ligth = 
-new THREE.AmbientLight(
-Salmon);
-		;
-	scene.addLight(a_ligth);
-d_ligth_1 = 
-new THREE.DirectionalLight(
-Ivory);
-		;
-	scene.addLight(d_ligth_1);
+	    a_ligth = 
+	    new THREE.AmbientLight(Salmon) ;
+	    scene.addLight(a_ligth);
+	    d_ligth_1 = 
+	    new THREE.DirectionalLight(Ivory, null, null, null) ;
+	    scene.addLight(d_ligth_1);
             d_ligth_1.position.y = -70;
             d_ligth_1.position.z = 100;
 	male_model = new THREE.Object3D();
@@ -136,7 +129,7 @@ Ivory);
 			} 
 		} 
 	);
-	male_model.events = new ms.event.EventHolder();
+	male_model.events = new ev.EventHolder();
 	var ev_parent = this;
 	male_model.events.addListener("click", function()
 	{    
@@ -163,7 +156,7 @@ Ivory);
 			} 
 		} 
 	);
-	female_model.events = new ms.event.EventHolder();
+	female_model.events = new ev.EventHolder();
 	var ev_parent = this;
 	female_model.events.addListener("click", function()
 	{    
@@ -189,10 +182,10 @@ application.mouse_y = y - app_height / 2;
 	);
 if(ui)
 {	
-	SoundUtils = new ms.ui.SoundUtils();		
+	SoundUtils = new ui.SoundUtils();		
 	g_ui.fill_background = false;	
 }
-var event_manager = new ms.event.ThreeEventManager();
+var event_manager = new ev.ThreeEventManager();
 document.onmousemove = function(ev)
 {
 	event_manager.mousemove(ev.clientX, ev.clientY);                  
@@ -222,12 +215,12 @@ document.body.appendChild( renderer.domElement );
 animate();
 });
 function animate() {
-	if(ui)
+	if(ui_)
 		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
 	requestAnimationFrame( animate );
 	render();
-	if(ui)
-		ui.draw(drawingCanvas.getContext('2d'));
+	if(ui_)
+		ui_.draw(drawingCanvas.getContext('2d'));
 	}
 </script>
 </body>

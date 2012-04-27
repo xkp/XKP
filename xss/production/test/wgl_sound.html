@@ -12,17 +12,17 @@
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/resig.js"></script>
+<script type="text/javascript" src="../js/event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/streamer.js"></script>
 		<script type="text/javascript" src="../js/three/Three.js"></script>
 		<script type="text/javascript" src="../js/three/Stats.js"></script>
 		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
 		<script type="text/javascript" src="../js/three/Utils.js"></script>
 		<script type="text/javascript" src="../js/three/Detector.js"></script>
-		<script type="text/javascript" src="../js/ms-streamer.js"></script>
+		<script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">		
 var ui;
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
@@ -31,15 +31,15 @@ var canvas_position = {x:0, y:0};
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
-var streamer = new ms.streamer.Streamer();
+var streamer = new stream.Streamer();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
-application.events = new ms.event.EventHolder();
-		var streamer = new ms.streamer.Streamer();	
-		var ResourceUtils = new ms.streamer.ResourceUtils();
+application.events = new ev.EventHolder();
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
 	// --------RESOURCES---------
-		var global_package = new ms.streamer.Package(streamer);	
+		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
             {
 		id:				"res_sound_1",
@@ -105,33 +105,25 @@ color:yellow,shading:flat_shading
 material_wireframe = new THREE.MeshLambertMaterial({
 color:mediumslateblue ,wireframe:true
 	});
-scene = 
-new THREE.Scene(
-);
+			    scene = new THREE.Scene() ;
 camera_1 = new THREE.QuakeCamera({
 fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly:true,lookVertical:false
 	});
 		active_camera = camera_1;
             camera_1.position.y = 25;
-light = 
-new THREE.DirectionalLight(
-white);
-		;
-	scene.addLight(light);
+	    light = 
+	    new THREE.DirectionalLight(white, null, null, null) ;
+	    scene.addLight(light);
             light.position.y = 0.5;
             light.position.z = 1;
-container_1 = 
-new THREE.Object3D(
-);
-container_1.events = new ms.event.EventHolder();
+			    container_1 = new THREE.Object3D() ;
+			container_1.events = new ev.EventHolder();
             container_1.position.x = 250;
             container_1.position.y = 30;
-	    var sphere_1_sphere = 
-new THREE.Sphere(
-20,32,16);
+	    sphere_1_sphere = new THREE.Sphere(20, 32, 16) ;
 	    sphere_1 = new THREE.Mesh(sphere_1_sphere, material_sphere1);
 	    scene.addObject(sphere_1);
-		sphere_1.events = new ms.event.EventHolder();
+		sphere_1.events = new ev.EventHolder();
 				container_1.addChild(sphere_1);
 				scene.addObject(container_1);
 	var sound_1 = new THREE.Sound(streamer.get_resource('res_sound_1').asset
@@ -141,18 +133,14 @@ new THREE.Sphere(
 	sound_1.play();
 				container_1.addChild(sound_1);
 				scene.addObject(container_1);
-container_2 = 
-new THREE.Object3D(
-);
-container_2.events = new ms.event.EventHolder();
+			    container_2 = new THREE.Object3D() ;
+			container_2.events = new ev.EventHolder();
             container_2.position.x = -250;
             container_2.position.y = 30;
-	    var sphere_2_sphere = 
-new THREE.Sphere(
-20,32,16);
+	    sphere_2_sphere = new THREE.Sphere(20, 32, 16) ;
 	    sphere_2 = new THREE.Mesh(sphere_2_sphere, material_sphere2);
 	    scene.addObject(sphere_2);
-		sphere_2.events = new ms.event.EventHolder();
+		sphere_2.events = new ev.EventHolder();
 				container_2.addChild(sphere_2);
 				scene.addObject(container_2);
 	var sound_2 = new THREE.Sound(streamer.get_resource('res_sound_2').asset
@@ -162,15 +150,13 @@ new THREE.Sphere(
 	sound_2.play();
 				container_2.addChild(sound_2);
 				scene.addObject(container_2);
-	    var plane_1_plane = 
-new THREE.Plane(
-1000,1000,100,100);
+	    plane_1_plane = new THREE.Plane(1000, 1000, 100, 100) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    scene.addObject(plane_1);
-		plane_1.events = new ms.event.EventHolder();
+		plane_1.events = new ev.EventHolder();
             plane_1.position.y = 0.100000001;
             set_rotation_x(plane_1.rotation, -90);
-var event_manager = new ms.event.ThreeEventManager();
+var event_manager = new ev.ThreeEventManager();
 document.onmousemove = function(ev)
 {
 	event_manager.mousemove(ev.clientX, ev.clientY);                  

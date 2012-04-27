@@ -5,14 +5,14 @@
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-ui.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-<script type="text/javascript" src="../js/ms-state.js"></script>
+<script type="text/javascript" src="../js/resig.js"></script>
+<script type="text/javascript" src="../js/ui.js"></script>
+<script type="text/javascript" src="../js/streamer.js"></script>
+<script type="text/javascript" src="../js/state.js"></script>
 <script type="text/javascript">			
 var g_elapsed = -1;
 var g_delta = 0.0;
-var g_sequence_manager = new ms.state.Manager();
+var g_sequence_manager = new state.Manager();
 var application = {}
 var test_sequence;var test_sequence1;
 function default_interpolate(a, b, t)
@@ -37,7 +37,7 @@ function start(resolution)
 }  
             application.target = 0;
 test_sequence =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
         test_sequence = test_sequence;
 	test_sequence.display = function() 
@@ -51,12 +51,12 @@ test_sequence1.start();
 	};
                 test_sequence.start();
             test_sequence.parent_sequence = null;
-            var ____h1 = new ms.state.Every(0.300000012, function(t)
+            var ____h1 = new state.Every(0.300000012, function(t)
             {
                         test_sequence.display();
             });
-            test_sequence.addAction(null, null, new ms.state.State(0, 0, ____h1));                    
-                    var ____i1 = new ms.state.Interpolator(
+            test_sequence.addAction(null, null, new state.State(0, 0, ____h1));                    
+                    var ____i1 = new state.Interpolator(
                         "target", 
                         default_interpolate,
                         function(value)
@@ -67,8 +67,8 @@ test_sequence1.start();
                         {t: 0, value: null},
                         {t: 3, value: 0.300000012},
                         ]);
-                    test_sequence.addAction(null, "target", new ms.state.State(0, 3, ____i1));                    
-                    var ____i2 = new ms.state.Interpolator(
+                    test_sequence.addAction(null, "target", new state.State(0, 3, ____i1));                    
+                    var ____i2 = new state.Interpolator(
                         "target", 
                         default_interpolate,
                         function(value)
@@ -79,8 +79,8 @@ test_sequence1.start();
                         {t: 3, value: 0.300000012},
                         {t: 5, value: 10},
                         ]);
-                    test_sequence.addAction(null, "target", new ms.state.State(3, 5, ____i2));                    
-                    var ____i3 = new ms.state.Interpolator(
+                    test_sequence.addAction(null, "target", new state.State(3, 5, ____i2));                    
+                    var ____i3 = new state.Interpolator(
                         "target", 
                         default_interpolate,
                         function(value)
@@ -91,7 +91,7 @@ test_sequence1.start();
                         {t: 5, value: 10},
                         {t: 15, value: 10000},
                         ]);
-                    test_sequence.addAction(null, "target", new ms.state.State(5, 15, ____i3));                    
+                    test_sequence.addAction(null, "target", new state.State(5, 15, ____i3));                    
                 test_sequence.on_start = function()
                 {
                     ____i1.keys[0].value = application.target;
@@ -104,7 +104,7 @@ test_sequence1.start();
                     }
                 }
 test_sequence1 =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
         test_sequence1 = test_sequence1;
 	test_sequence1.display = function() 
@@ -117,12 +117,12 @@ g_sequence_manager);
 test_sequence.start();
 	};
             test_sequence1.parent_sequence = null;
-            var ____h2 = new ms.state.Every(0.300000012, function(t)
+            var ____h2 = new state.Every(0.300000012, function(t)
             {
                         test_sequence1.shrink_target();
                         test_sequence1.display();
             });
-            test_sequence1.addAction(null, null, new ms.state.State(0, 0, ____h2));                    
+            test_sequence1.addAction(null, null, new state.State(0, 0, ____h2));                    
                 test_sequence1.on_update = function(elapsed, last)
                 {
                     if (application.target < 0)

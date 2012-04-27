@@ -852,6 +852,8 @@ str base_expr_renderer::get()
                   }
               }
           }
+        else if (ei.value == "this")
+          return lang->resolve_this(ctx_);
 
 				return ei.value;
 			}

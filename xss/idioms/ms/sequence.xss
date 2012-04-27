@@ -423,9 +423,19 @@
             compiler.log("Why no idiom? " + seq.output_id);
         }
         
+        if (is_class)
+        {
+            if (seq.target_type)
+            {
+                var ttype = compiler.get_type(seq.target_type);
+                seq.add_property("target", null, ttype);
+            }
+        }
+        
         var top_level = !seq.parent;
         if (!top_level)
             top_level = seq.parent.class_name != "sequence";
+
         if (top_level) 
             generate_sequence(seq, null, null, !is_class);
     }

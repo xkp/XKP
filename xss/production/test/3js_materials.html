@@ -12,34 +12,34 @@
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/resig.js"></script>
+<script type="text/javascript" src="../js/event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/streamer.js"></script>
 		<script type="text/javascript" src="../js/three/Three.js"></script>
 		<script type="text/javascript" src="../js/three/Stats.js"></script>
 		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
 		<script type="text/javascript" src="../js/three/Utils.js"></script>
-		<script type="text/javascript" src="../js/ms-streamer.js"></script>
+		<script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
-var ui;
+var ui_;
 var SoundUtils;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var canvas_position = {x:0, y:0};
-var streamer = new ms.streamer.Streamer();
+var streamer = new stream.Streamer();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
-application.events = new ms.event.EventHolder();
-		var streamer = new ms.streamer.Streamer();	
-		var ResourceUtils = new ms.streamer.ResourceUtils();
+application.events = new ev.EventHolder();
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
 	// --------RESOURCES---------
-		var global_package = new ms.streamer.Package(streamer);	
+		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
             {
 		id:				"__image1",
@@ -86,7 +86,7 @@ var my_sphere;var material_wireframe;var all_in_one;var __basic_material1;var __
 	    my_sphere_sphere = new THREE.Sphere(radius, x_segments, y_segments) ;
 	    my_sphere = new THREE.Mesh(my_sphere_sphere, new THREE.MeshBasicMaterial());
 	    scene.addObject(my_sphere);
-		my_sphere.events = new ms.event.EventHolder();
+		my_sphere.events = new ev.EventHolder();
         var this__ = my_sphere;
         my_sphere.mat = null;
         my_sphere.mat_set = function (value)
@@ -136,17 +136,14 @@ map:new THREE.Texture(streamer.get_resource('images/land_ocean_ice_cloud.jpg').d
 		    camera_1 = 
 		    new THREE.Camera(45, 1.5, 1, 2000, null) ;	
 		active_camera = camera_1;
-		        scene.addObject(camera_1);
             camera_1.position.z = 800;
             camera_1.position.y = 200;
 	    amb_light_1 = 
 	    new THREE.AmbientLight(0x202020) ;
 	    scene.addLight(amb_light_1);
-		        scene.addObject(amb_light_1);
 	    dir_light_1 = 
 	    new THREE.DirectionalLight(Math.random() * 0xffffff, null, null, null) ;
 	    scene.addLight(dir_light_1);
-		        scene.addObject(dir_light_1);
             dir_light_1.position.x = Math.random() - 0.5;
             dir_light_1.position.y = Math.random() - 0.5;
             dir_light_1.position.z = Math.random() - 0.5;
@@ -155,19 +152,16 @@ map:new THREE.Texture(streamer.get_resource('images/land_ocean_ice_cloud.jpg').d
 			{ color: White, program: program_fill, } 
 			) );	
 			scene.addObject( particle_1 );	
-		        scene.addObject(particle_1);
             particle_1.scale.x = 5;
             particle_1.scale.y = 5;
             particle_1.scale.z = 5;
 	    point_light_1 = 
 	    new THREE.PointLight(White, 1, null) ;
 	    scene.addLight(point_light_1);
-		        scene.addObject(point_light_1);
 	    plane_1_plane = new THREE.Plane(1000, 1000, 100, 100) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    scene.addObject(plane_1);
-		plane_1.events = new ms.event.EventHolder();
-		        scene.addObject(plane_1);
+		plane_1.events = new ev.EventHolder();
             plane_1.position.y = -70;
             set_rotation_x(plane_1.rotation, -90);
             application.timer = null;
@@ -213,10 +207,10 @@ point_light_1.position.z = particle_1.position.z;
 	);
 if(ui)
 {	
-	SoundUtils = new ms.ui.SoundUtils();		
+	SoundUtils = new ui.SoundUtils();		
 	g_ui.fill_background = false;	
 }
-var event_manager = new ms.event.ThreeEventManager();
+var event_manager = new ev.ThreeEventManager();
 document.onmousemove = function(ev)
 {
 	event_manager.mousemove(ev.clientX, ev.clientY);                  
@@ -246,12 +240,12 @@ document.body.appendChild( renderer.domElement );
 animate();
 });
 function animate() {
-	if(ui)
+	if(ui_)
 		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
 	requestAnimationFrame( animate );
 	render();
-	if(ui)
-		ui.draw(drawingCanvas.getContext('2d'));
+	if(ui_)
+		ui_.draw(drawingCanvas.getContext('2d'));
 	}
 </script>
 </body>

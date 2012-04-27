@@ -50,7 +50,7 @@
 		out() 
 		{ 		
 			<xss:e v="clazz.id"/> = new THREE.Object3D();
-			<xss:e v="clazz.id"/>.events = new ms.event.EventHolder();
+			<xss:e v="clazz.id"/>.events = new ev.EventHolder();
 		}
 	}
 	else{
@@ -101,15 +101,9 @@
 		{
 			out()
 			{
-			    var <xss:e v="inst.id"/>;
-			    <xss:e v="inst.id"/> = <xss:e v="compiler.instantiate(inst.type, object = inst)"/> ;
+			 var <xss:e v="inst.id"/>;
+			<xss:e v="inst.id"/> = <xss:e v="compiler.instantiate(inst.type, object = inst)"/> ;
 			}
-
-            if(super_transform)
-			    out()
-			    {
-				    <xss:e v="clazz.id"/>.addChild(<xss:e v="inst.output_id"/>);
-			    }   
 			continue;
 		}		
         string inst_renderer = inst.type.renderer;				

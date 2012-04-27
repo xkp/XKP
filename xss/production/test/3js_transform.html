@@ -12,31 +12,31 @@
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/resig.js"></script>
+<script type="text/javascript" src="../js/event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-		<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/streamer.js"></script>
+		<script type="text/javascript" src="../js/ui.js"></script>
 		<script type="text/javascript" src="../js/three/Three.js"></script>
 		<script type="text/javascript" src="../js/three/Stats.js"></script>
 		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
 		<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
-var ui;
+var ui_;
 var SoundUtils;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var canvas_position = {x:0, y:0};
-var streamer = new ms.streamer.Streamer();
+var streamer = new stream.Streamer();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var lbl0;var lbl1;var lbl2;
 var application = {};
-application.events = new ms.event.EventHolder();
+application.events = new ev.EventHolder();
 		if(drawingCanvas){
 			var client =
 			{
@@ -44,10 +44,10 @@ application.events = new ms.event.EventHolder();
 				height: window.innerHeight,
 				canvas: drawingCanvas
 			};
-            var streamer = new ms.streamer.Streamer();							
-			var ui = new ms.ui.Manager(client, streamer);			
-			var g_ui = ui;
-			var g_ui_root = ui.root;
+            var streamer = new stream.Streamer();							
+			var ui_ = new ui.Manager(client, streamer);			
+			var g_ui = ui_;
+			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
 		}
 	// --------RESOURCES---------
@@ -72,66 +72,66 @@ threejs_load_resources(function()
 {
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};		
-	ui.events.addListener("mousedown", function(x,y)
+	ui_.events.addListener("mousedown", function(x,y)
 	{    
 		application.events.dispatch("mousedown", [x, y]);
 	});
-	ui.events.addListener("mouseup", function(x,y)
+	ui_.events.addListener("mouseup", function(x,y)
 	{    
 		application.events.dispatch("mouseup", [x, y]);
 	});
-	ui.events.addListener("mousemove", function(x,y)
+	ui_.events.addListener("mousemove", function(x,y)
 	{    
 		application.events.dispatch("mousemove", [x, y]);
 	});
-	ui.events.addListener("click", function(x,y)
+	ui_.events.addListener("click", function(x,y)
 	{    
 		application.events.dispatch("click", [x, y]);
 	});
-	ui.events.addListener("drag", function(x,y)
+	ui_.events.addListener("drag", function(x,y)
 	{    
 		application.events.dispatch("drag", [x, y]);
 	});
-	ui.events.addListener("dragend", function(x,y)
+	ui_.events.addListener("dragend", function(x,y)
 	{    
 		application.events.dispatch("dragend", [x, y]);
 	});
-	ui.events.addListener("keyup", function(keycode)
+	ui_.events.addListener("keyup", function(keycode)
 	{    
 		application.events.dispatch("keyup", [keycode]);
 	});
-	ui.events.addListener("keydown", function(keycode)
+	ui_.events.addListener("keydown", function(keycode)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-	ui.events.addListener("keypress", function(keycode)
+	ui_.events.addListener("keypress", function(keycode)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    lbl0 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+			new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
         lbl0 = lbl0;
             lbl0.set_x(240);
             lbl0.set_y(75);
             lbl0.text("Move mouse to rotate the cylinder");
 		    lbl1 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+			new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
         lbl1 = lbl1;
             lbl1.set_x(240);
             lbl1.set_y(100);
             lbl1.text("Move mouse pressing SHIFT to rotate the transform");
 		    lbl2 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+			new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
         lbl2 = lbl2;
             lbl2.set_x(240);
             lbl2.set_y(125);
@@ -148,29 +148,25 @@ sphere_material = new THREE.MeshNormalMaterial({
 		    camera_1 = 
 		    new THREE.Camera(75, 1.5, 1, 3000, null) ;	
 		active_camera = camera_1;
-		        scene.addObject(camera_1);
             camera_1.position.z = 1000;
 	    light = 
 	    new THREE.DirectionalLight(Ivory, null, null, null) ;
 	    scene.addLight(light);
-		        scene.addObject(light);
             light.position.y = 0.5;
             light.position.z = 1;
 	    cylinder_1_cylinder = new THREE.Cylinder(200, 100, 100, 500, null, null) ;
 	    cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
 	    scene.addObject(cylinder_1);
-		cylinder_1.events = new ms.event.EventHolder();
-		        scene.addObject(cylinder_1);
+		cylinder_1.events = new ev.EventHolder();
             set_rotation_x(cylinder_1.rotation, 70);
             set_rotation_y(cylinder_1.rotation, 70);
             cylinder_1.position.x = 600;
 			    container = new THREE.Object3D() ;
-			container.events = new ms.event.EventHolder();				
-		        scene.addObject(container);
+			container.events = new ev.EventHolder();
 	    cube_1_cube = new THREE.Cube(300, 300, 300, null, null, null, null, null, null) ;
 	    cube_1 = new THREE.Mesh(cube_1_cube, cube_material);
 	    scene.addObject(cube_1);
-		cube_1.events = new ms.event.EventHolder();
+		cube_1.events = new ev.EventHolder();
 				container.addChild(cube_1);
 				scene.addObject(container);
             cube_1.position.x = -600;
@@ -189,7 +185,7 @@ set_rotation_z(cube_1.rotation, get_rotation_z(cube_1.rotation) + 0.5);
 	    sphere_1_sphere = new THREE.Sphere(200, 20, 20) ;
 	    sphere_1 = new THREE.Mesh(sphere_1_sphere, sphere_material);
 	    scene.addObject(sphere_1);
-		sphere_1.events = new ms.event.EventHolder();
+		sphere_1.events = new ev.EventHolder();
 				container.addChild(sphere_1);
 				scene.addObject(container);
             sphere_1.position.x = -400;
@@ -263,10 +259,10 @@ camera_1.position.z = 1400 * Math.cos(application.theta * Math.PI / 360);
 	);
 if(ui)
 {	
-	SoundUtils = new ms.ui.SoundUtils();		
+	SoundUtils = new ui.SoundUtils();		
 	g_ui.fill_background = false;	
 }
-var event_manager = new ms.event.ThreeEventManager();
+var event_manager = new ev.ThreeEventManager();
 document.onmousemove = function(ev)
 {
 	event_manager.mousemove(ev.clientX, ev.clientY);                  
@@ -296,12 +292,12 @@ document.body.appendChild( renderer.domElement );
 animate();
 });
 function animate() {
-	if(ui)
+	if(ui_)
 		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
 	requestAnimationFrame( animate );
 	render();
-	if(ui)
-		ui.draw(drawingCanvas.getContext('2d'));
+	if(ui_)
+		ui_.draw(drawingCanvas.getContext('2d'));
 	}
 </script>
 </body>

@@ -12,40 +12,40 @@
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/resig.js"></script>
+<script type="text/javascript" src="../js/event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-		<script type="text/javascript" src="../js/ms-state.js"></script>
-		<script type="text/javascript" src="../js/ms-streamer.js"></script>
-		<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/streamer.js"></script>
+		<script type="text/javascript" src="../js/state.js"></script>
+		<script type="text/javascript" src="../js/streamer.js"></script>
+		<script type="text/javascript" src="../js/ui.js"></script>
 		<script type="text/javascript" src="../js/three/Three.js"></script>
 		<script type="text/javascript" src="../js/three/Stats.js"></script>
 		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
 		<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
-var ui;
+var ui_;
 var SoundUtils;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var canvas_position = {x:0, y:0};
-var streamer = new ms.streamer.Streamer();
+var streamer = new stream.Streamer();
 var app_width = 1024;
 var app_height = 768;
 var init_anim;var cam_out;var cam_in;var p1_in;var p2_in;var p3_in;var p4_in;var p5_in;var pic_out;var idle_anim_1;var idle_anim_2;var idle_anim_3;var idle_anim_4;var idle_anim_5;var idle_anim_seq;var close_fade_in;var close;var box_cont;var box_border;var banner;var camerawl;var lens;var line_top;var pict1;var pict2;var pict3;var pict4;var pict5;
 var application = {};
-application.events = new ms.event.EventHolder();
-		var g_sequence_manager = new ms.state.Manager();
+application.events = new ev.EventHolder();
+		var g_sequence_manager = new state.Manager();
         function default_interpolate(a, b, t)
         {
             return a + (b - a)*t;
         }		
-		var streamer = new ms.streamer.Streamer();	
-		var ResourceUtils = new ms.streamer.ResourceUtils();
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -53,14 +53,14 @@ application.events = new ms.event.EventHolder();
 				height: 768,
 				canvas: drawingCanvas
 			};
-            var streamer = new ms.streamer.Streamer();							
-			var ui = new ms.ui.Manager(client, streamer);			
-			var g_ui = ui;
-			var g_ui_root = ui.root;
+            var streamer = new stream.Streamer();							
+			var ui_ = new ui.Manager(client, streamer);			
+			var g_ui = ui_;
+			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
 		}
 	// --------RESOURCES---------
-		var global_package = new ms.streamer.Package(streamer);	
+		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
             {
 		id:				"__image1",
@@ -480,19 +480,19 @@ application.events.dispatch("updates", []);
 application.events.dispatch("switch_cameras", []);
 }
 var scene;var camera_1;var plane_1;var plane_2;var plane_3;var plane_4;var plane_5;
-            idle_anim = Class.create(ms.state.Sequence,
-        {
-    initialize: function($super
-                , manager
+        var idle_anim = state.Sequence.extend(
+    {
+    init: function(
+                manager
                 )
     {
-        $super(
-        manager        );
-        this.events = new ms.event.EventHolder(); 
+        this._super(
+		manager        );
+        this.events = new ev.EventHolder(); 
         var this__  = this;
                 var this__ = this;
             this.parent_sequence = null;
-                    var ____i1 = new ms.state.Interpolator(
+                    var ____i1 = new state.Interpolator(
                         "x", 
                         default_interpolate,
                         function(value)
@@ -503,8 +503,8 @@ var scene;var camera_1;var plane_1;var plane_2;var plane_3;var plane_4;var plane
                         {t: 0, value: null},
                         {t: 10, value: null},
                         ]);
-                    this.addAction(null, "x", new ms.state.State(0, 10, ____i1));                    
-                    var ____i2 = new ms.state.Interpolator(
+                    this.addAction(null, "x", new state.State(0, 10, ____i1));                    
+                    var ____i2 = new state.Interpolator(
                         "y", 
                         default_interpolate,
                         function(value)
@@ -515,8 +515,8 @@ var scene;var camera_1;var plane_1;var plane_2;var plane_3;var plane_4;var plane
                         {t: 0, value: null},
                         {t: 10, value: null},
                         ]);
-                    this.addAction(null, "y", new ms.state.State(0, 10, ____i2));                    
-                    var ____i3 = new ms.state.Interpolator(
+                    this.addAction(null, "y", new state.State(0, 10, ____i2));                    
+                    var ____i3 = new state.Interpolator(
                         "x", 
                         default_interpolate,
                         function(value)
@@ -527,8 +527,8 @@ var scene;var camera_1;var plane_1;var plane_2;var plane_3;var plane_4;var plane
                         {t: 0, value: null},
                         {t: 10, value: null},
                         ]);
-                    this.addAction(null, "x", new ms.state.State(0, 10, ____i3));                    
-                    var ____i4 = new ms.state.Interpolator(
+                    this.addAction(null, "x", new state.State(0, 10, ____i3));                    
+                    var ____i4 = new state.Interpolator(
                         "y", 
                         default_interpolate,
                         function(value)
@@ -539,8 +539,8 @@ var scene;var camera_1;var plane_1;var plane_2;var plane_3;var plane_4;var plane
                         {t: 0, value: null},
                         {t: 10, value: null},
                         ]);
-                    this.addAction(null, "y", new ms.state.State(0, 10, ____i4));                    
-                    var ____i5 = new ms.state.Interpolator(
+                    this.addAction(null, "y", new state.State(0, 10, ____i4));                    
+                    var ____i5 = new state.Interpolator(
                         "z", 
                         default_interpolate,
                         function(value)
@@ -551,8 +551,8 @@ var scene;var camera_1;var plane_1;var plane_2;var plane_3;var plane_4;var plane
                         {t: 0, value: null},
                         {t: 10, value: null},
                         ]);
-                    this.addAction(null, "z", new ms.state.State(0, 10, ____i5));                    
-                    var ____i6 = new ms.state.Interpolator(
+                    this.addAction(null, "z", new state.State(0, 10, ____i5));                    
+                    var ____i6 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -563,7 +563,7 @@ var scene;var camera_1;var plane_1;var plane_2;var plane_3;var plane_4;var plane
                         {t: 0, value: null},
                         {t: 5, value: 100},
                         ]);
-                    this.addAction(null, "alpha", new ms.state.State(0, 5, ____i6));                    
+                    this.addAction(null, "alpha", new state.State(0, 5, ____i6));                    
                 this.on_start = function()
                 {
                     ____i1.keys[0].value = this.target.position.x;
@@ -579,23 +579,22 @@ var scene;var camera_1;var plane_1;var plane_2;var plane_3;var plane_4;var plane
                     ____i6.keys[0].value = get_object_alpha(this.target);
                 }
             this.target = null;
-            if (this.init)
-                this.init();
+            this.events.dispatch("init", [this]);
             },
 });
-            pic_out = Class.create(ms.state.Sequence,
-        {
-    initialize: function($super
-                , manager
+        var pic_out = state.Sequence.extend(
+    {
+    init: function(
+                manager
                 )
     {
-        $super(
-        manager        );
-        this.events = new ms.event.EventHolder(); 
+        this._super(
+		manager        );
+        this.events = new ev.EventHolder(); 
         var this__  = this;
                 var this__ = this;
             this.parent_sequence = null;
-                    var ____i7 = new ms.state.Interpolator(
+                    var ____i7 = new state.Interpolator(
                         "x", 
                         default_interpolate,
                         function(value)
@@ -606,8 +605,8 @@ var scene;var camera_1;var plane_1;var plane_2;var plane_3;var plane_4;var plane
                         {t: 0, value: null},
                         {t: 3, value: 332},
                         ]);
-                    this.addAction(null, "x", new ms.state.State(0, 3, ____i7));                    
-                    var ____i8 = new ms.state.Interpolator(
+                    this.addAction(null, "x", new state.State(0, 3, ____i7));                    
+                    var ____i8 = new state.Interpolator(
                         "y", 
                         default_interpolate,
                         function(value)
@@ -618,8 +617,8 @@ var scene;var camera_1;var plane_1;var plane_2;var plane_3;var plane_4;var plane
                         {t: 0, value: null},
                         {t: 3, value: 219},
                         ]);
-                    this.addAction(null, "y", new ms.state.State(0, 3, ____i8));                    
-                    var ____i9 = new ms.state.Interpolator(
+                    this.addAction(null, "y", new state.State(0, 3, ____i8));                    
+                    var ____i9 = new state.Interpolator(
                         "width", 
                         default_interpolate,
                         function(value)
@@ -630,8 +629,8 @@ var scene;var camera_1;var plane_1;var plane_2;var plane_3;var plane_4;var plane
                         {t: 0, value: null},
                         {t: 3, value: null},
                         ]);
-                    this.addAction(null, "width", new ms.state.State(0, 3, ____i9));                    
-                    var ____i10 = new ms.state.Interpolator(
+                    this.addAction(null, "width", new state.State(0, 3, ____i9));                    
+                    var ____i10 = new state.Interpolator(
                         "height", 
                         default_interpolate,
                         function(value)
@@ -642,8 +641,8 @@ var scene;var camera_1;var plane_1;var plane_2;var plane_3;var plane_4;var plane
                         {t: 0, value: null},
                         {t: 3, value: null},
                         ]);
-                    this.addAction(null, "height", new ms.state.State(0, 3, ____i10));                    
-                    var ____i11 = new ms.state.Interpolator(
+                    this.addAction(null, "height", new state.State(0, 3, ____i10));                    
+                    var ____i11 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -654,7 +653,7 @@ var scene;var camera_1;var plane_1;var plane_2;var plane_3;var plane_4;var plane
                         {t: 0, value: null},
                         {t: 3, value: 0},
                         ]);
-                    this.addAction(null, "alpha", new ms.state.State(0, 3, ____i11));                    
+                    this.addAction(null, "alpha", new state.State(0, 3, ____i11));                    
                 this.on_start = function()
                 {
                     ____i7.keys[0].value = this.target.x;
@@ -666,19 +665,18 @@ var scene;var camera_1;var plane_1;var plane_2;var plane_3;var plane_4;var plane
                     ____i11.keys[0].value = this.target.get_alpha();
                 }
             this.target = null;
-            if (this.init)
-                this.init();
+            this.events.dispatch("init", [this]);
             },
 });
 threejs_load_resources(function()
 {
 init_anim =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
         init_anim = init_anim;
                 init_anim.start();
             init_anim.parent_sequence = null;
-                    var ____i12 = new ms.state.Interpolator(
+                    var ____i12 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -689,8 +687,8 @@ g_sequence_manager);
                         {t: 0, value: 0},
                         {t: 2, value: 100},
                         ]);
-                    init_anim.addAction(null, "alpha", new ms.state.State(0, 2, ____i12));                    
-                    var ____i13 = new ms.state.Interpolator(
+                    init_anim.addAction(null, "alpha", new state.State(0, 2, ____i12));                    
+                    var ____i13 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -701,8 +699,8 @@ g_sequence_manager);
                         {t: 0, value: 0},
                         {t: 2, value: 100},
                         ]);
-                    init_anim.addAction(null, "alpha", new ms.state.State(0, 2, ____i13));                    
-                    var ____i14 = new ms.state.Interpolator(
+                    init_anim.addAction(null, "alpha", new state.State(0, 2, ____i13));                    
+                    var ____i14 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -713,8 +711,8 @@ g_sequence_manager);
                         {t: 0, value: 0},
                         {t: 2, value: 100},
                         ]);
-                    init_anim.addAction(null, "alpha", new ms.state.State(0, 2, ____i14));                    
-                    var ____i15 = new ms.state.Interpolator(
+                    init_anim.addAction(null, "alpha", new state.State(0, 2, ____i14));                    
+                    var ____i15 = new state.Interpolator(
                         "x", 
                         default_interpolate,
                         function(value)
@@ -725,8 +723,8 @@ g_sequence_manager);
                         {t: 2, value: 200},
                         {t: 6, value: 10},
                         ]);
-                    init_anim.addAction(null, "x", new ms.state.State(2, 6, ____i15));                    
-                    var ____i16 = new ms.state.Interpolator(
+                    init_anim.addAction(null, "x", new state.State(2, 6, ____i15));                    
+                    var ____i16 = new state.Interpolator(
                         "y", 
                         default_interpolate,
                         function(value)
@@ -737,8 +735,8 @@ g_sequence_manager);
                         {t: 2, value: 200},
                         {t: 6, value: 10},
                         ]);
-                    init_anim.addAction(null, "y", new ms.state.State(2, 6, ____i16));                    
-                    var ____i17 = new ms.state.Interpolator(
+                    init_anim.addAction(null, "y", new state.State(2, 6, ____i16));                    
+                    var ____i17 = new state.Interpolator(
                         "width", 
                         default_interpolate,
                         function(value)
@@ -749,8 +747,8 @@ g_sequence_manager);
                         {t: 2, value: 400},
                         {t: 6, value: 200},
                         ]);
-                    init_anim.addAction(null, "width", new ms.state.State(2, 6, ____i17));                    
-                    var ____i18 = new ms.state.Interpolator(
+                    init_anim.addAction(null, "width", new state.State(2, 6, ____i17));                    
+                    var ____i18 = new state.Interpolator(
                         "height", 
                         default_interpolate,
                         function(value)
@@ -761,8 +759,8 @@ g_sequence_manager);
                         {t: 2, value: 50},
                         {t: 6, value: 25},
                         ]);
-                    init_anim.addAction(null, "height", new ms.state.State(2, 6, ____i18));                    
-                    var ____i19 = new ms.state.Interpolator(
+                    init_anim.addAction(null, "height", new state.State(2, 6, ____i18));                    
+                    var ____i19 = new state.Interpolator(
                         "rotation", 
                         default_interpolate,
                         function(value)
@@ -773,8 +771,8 @@ g_sequence_manager);
                         {t: 2, value: -30},
                         {t: 6, value: 0},
                         ]);
-                    init_anim.addAction(null, "rotation", new ms.state.State(2, 6, ____i19));                    
-                    var ____i20 = new ms.state.Interpolator(
+                    init_anim.addAction(null, "rotation", new state.State(2, 6, ____i19));                    
+                    var ____i20 = new state.Interpolator(
                         "x2", 
                         default_interpolate,
                         function(value)
@@ -785,8 +783,8 @@ g_sequence_manager);
                         {t: 2, value: 5},
                         {t: 6, value: 800},
                         ]);
-                    init_anim.addAction(null, "x2", new ms.state.State(2, 6, ____i20));                    
-                    var ____i21 = new ms.state.Interpolator(
+                    init_anim.addAction(null, "x2", new state.State(2, 6, ____i20));                    
+                    var ____i21 = new state.Interpolator(
                         "rotation", 
                         default_interpolate,
                         function(value)
@@ -797,8 +795,8 @@ g_sequence_manager);
                         {t: 2, value: 0},
                         {t: 3, value: -45},
                         ]);
-                    init_anim.addAction(null, "rotation", new ms.state.State(2, 3, ____i21));                    
-                    var ____i22 = new ms.state.Interpolator(
+                    init_anim.addAction(null, "rotation", new state.State(2, 3, ____i21));                    
+                    var ____i22 = new state.Interpolator(
                         "rotation", 
                         default_interpolate,
                         function(value)
@@ -809,8 +807,8 @@ g_sequence_manager);
                         {t: 3, value: -45},
                         {t: 5, value: 45},
                         ]);
-                    init_anim.addAction(null, "rotation", new ms.state.State(3, 5, ____i22));                    
-                    var ____i23 = new ms.state.Interpolator(
+                    init_anim.addAction(null, "rotation", new state.State(3, 5, ____i22));                    
+                    var ____i23 = new state.Interpolator(
                         "rotation", 
                         default_interpolate,
                         function(value)
@@ -821,8 +819,8 @@ g_sequence_manager);
                         {t: 5, value: 45},
                         {t: 6, value: 0},
                         ]);
-                    init_anim.addAction(null, "rotation", new ms.state.State(5, 6, ____i23));                    
-                    var ____i24 = new ms.state.Interpolator(
+                    init_anim.addAction(null, "rotation", new state.State(5, 6, ____i23));                    
+                    var ____i24 = new state.Interpolator(
                         "x", 
                         default_interpolate,
                         function(value)
@@ -833,8 +831,8 @@ g_sequence_manager);
                         {t: 6, value: 320},
                         {t: 8, value: 750},
                         ]);
-                    init_anim.addAction(null, "x", new ms.state.State(6, 8, ____i24));                    
-                    var ____i25 = new ms.state.Interpolator(
+                    init_anim.addAction(null, "x", new state.State(6, 8, ____i24));                    
+                    var ____i25 = new state.Interpolator(
                         "y", 
                         default_interpolate,
                         function(value)
@@ -845,8 +843,8 @@ g_sequence_manager);
                         {t: 6, value: 240},
                         {t: 8, value: 1},
                         ]);
-                    init_anim.addAction(null, "y", new ms.state.State(6, 8, ____i25));                    
-                    var ____i26 = new ms.state.Interpolator(
+                    init_anim.addAction(null, "y", new state.State(6, 8, ____i25));                    
+                    var ____i26 = new state.Interpolator(
                         "width", 
                         default_interpolate,
                         function(value)
@@ -857,8 +855,8 @@ g_sequence_manager);
                         {t: 6, value: 280},
                         {t: 8, value: 38},
                         ]);
-                    init_anim.addAction(null, "width", new ms.state.State(6, 8, ____i26));                    
-                    var ____i27 = new ms.state.Interpolator(
+                    init_anim.addAction(null, "width", new state.State(6, 8, ____i26));                    
+                    var ____i27 = new state.Interpolator(
                         "height", 
                         default_interpolate,
                         function(value)
@@ -869,8 +867,8 @@ g_sequence_manager);
                         {t: 6, value: 180},
                         {t: 8, value: 28},
                         ]);
-                    init_anim.addAction(null, "height", new ms.state.State(6, 8, ____i27));                    
-                    var ____i28 = new ms.state.Interpolator(
+                    init_anim.addAction(null, "height", new state.State(6, 8, ____i27));                    
+                    var ____i28 = new state.Interpolator(
                         "x", 
                         default_interpolate,
                         function(value)
@@ -881,8 +879,8 @@ g_sequence_manager);
                         {t: 6, value: 430},
                         {t: 8, value: 764},
                         ]);
-                    init_anim.addAction(null, "x", new ms.state.State(6, 8, ____i28));                    
-                    var ____i29 = new ms.state.Interpolator(
+                    init_anim.addAction(null, "x", new state.State(6, 8, ____i28));                    
+                    var ____i29 = new state.Interpolator(
                         "y", 
                         default_interpolate,
                         function(value)
@@ -893,8 +891,8 @@ g_sequence_manager);
                         {t: 6, value: 287},
                         {t: 8, value: 8},
                         ]);
-                    init_anim.addAction(null, "y", new ms.state.State(6, 8, ____i29));                    
-                    var ____i30 = new ms.state.Interpolator(
+                    init_anim.addAction(null, "y", new state.State(6, 8, ____i29));                    
+                    var ____i30 = new state.Interpolator(
                         "width", 
                         default_interpolate,
                         function(value)
@@ -905,8 +903,8 @@ g_sequence_manager);
                         {t: 6, value: 120},
                         {t: 8, value: 18},
                         ]);
-                    init_anim.addAction(null, "width", new ms.state.State(6, 8, ____i30));                    
-                    var ____i31 = new ms.state.Interpolator(
+                    init_anim.addAction(null, "width", new state.State(6, 8, ____i30));                    
+                    var ____i31 = new state.Interpolator(
                         "height", 
                         default_interpolate,
                         function(value)
@@ -917,13 +915,13 @@ g_sequence_manager);
                         {t: 6, value: 120},
                         {t: 8, value: 18},
                         ]);
-                    init_anim.addAction(null, "height", new ms.state.State(6, 8, ____i31));                    
+                    init_anim.addAction(null, "height", new state.State(6, 8, ____i31));                    
 cam_out =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
         cam_out = cam_out;
             cam_out.parent_sequence = null;
-                    var ____i32 = new ms.state.Interpolator(
+                    var ____i32 = new state.Interpolator(
                         "x", 
                         default_interpolate,
                         function(value)
@@ -934,8 +932,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 2, value: 750},
                         ]);
-                    cam_out.addAction(null, "x", new ms.state.State(0, 2, ____i32));                    
-                    var ____i33 = new ms.state.Interpolator(
+                    cam_out.addAction(null, "x", new state.State(0, 2, ____i32));                    
+                    var ____i33 = new state.Interpolator(
                         "y", 
                         default_interpolate,
                         function(value)
@@ -946,8 +944,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 2, value: 1},
                         ]);
-                    cam_out.addAction(null, "y", new ms.state.State(0, 2, ____i33));                    
-                    var ____i34 = new ms.state.Interpolator(
+                    cam_out.addAction(null, "y", new state.State(0, 2, ____i33));                    
+                    var ____i34 = new state.Interpolator(
                         "width", 
                         default_interpolate,
                         function(value)
@@ -958,8 +956,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 2, value: 38},
                         ]);
-                    cam_out.addAction(null, "width", new ms.state.State(0, 2, ____i34));                    
-                    var ____i35 = new ms.state.Interpolator(
+                    cam_out.addAction(null, "width", new state.State(0, 2, ____i34));                    
+                    var ____i35 = new state.Interpolator(
                         "height", 
                         default_interpolate,
                         function(value)
@@ -970,8 +968,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 2, value: 28},
                         ]);
-                    cam_out.addAction(null, "height", new ms.state.State(0, 2, ____i35));                    
-                    var ____i36 = new ms.state.Interpolator(
+                    cam_out.addAction(null, "height", new state.State(0, 2, ____i35));                    
+                    var ____i36 = new state.Interpolator(
                         "x", 
                         default_interpolate,
                         function(value)
@@ -982,8 +980,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 2, value: 764},
                         ]);
-                    cam_out.addAction(null, "x", new ms.state.State(0, 2, ____i36));                    
-                    var ____i37 = new ms.state.Interpolator(
+                    cam_out.addAction(null, "x", new state.State(0, 2, ____i36));                    
+                    var ____i37 = new state.Interpolator(
                         "y", 
                         default_interpolate,
                         function(value)
@@ -994,8 +992,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 2, value: 8},
                         ]);
-                    cam_out.addAction(null, "y", new ms.state.State(0, 2, ____i37));                    
-                    var ____i38 = new ms.state.Interpolator(
+                    cam_out.addAction(null, "y", new state.State(0, 2, ____i37));                    
+                    var ____i38 = new state.Interpolator(
                         "width", 
                         default_interpolate,
                         function(value)
@@ -1006,8 +1004,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 2, value: 18},
                         ]);
-                    cam_out.addAction(null, "width", new ms.state.State(0, 2, ____i38));                    
-                    var ____i39 = new ms.state.Interpolator(
+                    cam_out.addAction(null, "width", new state.State(0, 2, ____i38));                    
+                    var ____i39 = new state.Interpolator(
                         "height", 
                         default_interpolate,
                         function(value)
@@ -1018,8 +1016,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 2, value: 18},
                         ]);
-                    cam_out.addAction(null, "height", new ms.state.State(0, 2, ____i39));                    
-                    var ____i40 = new ms.state.Interpolator(
+                    cam_out.addAction(null, "height", new state.State(0, 2, ____i39));                    
+                    var ____i40 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -1030,7 +1028,7 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 2, value: 0},
                         ]);
-                    cam_out.addAction(null, "alpha", new ms.state.State(0, 2, ____i40));                    
+                    cam_out.addAction(null, "alpha", new state.State(0, 2, ____i40));                    
                 cam_out.on_start = function()
                 {
                     ____i32.keys[0].value = camerawl.x;
@@ -1044,11 +1042,11 @@ g_sequence_manager);
                     ____i40.keys[0].value = close.get_alpha();
                 }
 cam_in =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
         cam_in = cam_in;
             cam_in.parent_sequence = null;
-                    var ____i41 = new ms.state.Interpolator(
+                    var ____i41 = new state.Interpolator(
                         "x", 
                         default_interpolate,
                         function(value)
@@ -1059,8 +1057,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 2, value: 320},
                         ]);
-                    cam_in.addAction(null, "x", new ms.state.State(0, 2, ____i41));                    
-                    var ____i42 = new ms.state.Interpolator(
+                    cam_in.addAction(null, "x", new state.State(0, 2, ____i41));                    
+                    var ____i42 = new state.Interpolator(
                         "y", 
                         default_interpolate,
                         function(value)
@@ -1071,8 +1069,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 2, value: 240},
                         ]);
-                    cam_in.addAction(null, "y", new ms.state.State(0, 2, ____i42));                    
-                    var ____i43 = new ms.state.Interpolator(
+                    cam_in.addAction(null, "y", new state.State(0, 2, ____i42));                    
+                    var ____i43 = new state.Interpolator(
                         "width", 
                         default_interpolate,
                         function(value)
@@ -1083,8 +1081,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 2, value: 280},
                         ]);
-                    cam_in.addAction(null, "width", new ms.state.State(0, 2, ____i43));                    
-                    var ____i44 = new ms.state.Interpolator(
+                    cam_in.addAction(null, "width", new state.State(0, 2, ____i43));                    
+                    var ____i44 = new state.Interpolator(
                         "height", 
                         default_interpolate,
                         function(value)
@@ -1095,8 +1093,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 2, value: 180},
                         ]);
-                    cam_in.addAction(null, "height", new ms.state.State(0, 2, ____i44));                    
-                    var ____i45 = new ms.state.Interpolator(
+                    cam_in.addAction(null, "height", new state.State(0, 2, ____i44));                    
+                    var ____i45 = new state.Interpolator(
                         "x", 
                         default_interpolate,
                         function(value)
@@ -1107,8 +1105,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 2, value: 430},
                         ]);
-                    cam_in.addAction(null, "x", new ms.state.State(0, 2, ____i45));                    
-                    var ____i46 = new ms.state.Interpolator(
+                    cam_in.addAction(null, "x", new state.State(0, 2, ____i45));                    
+                    var ____i46 = new state.Interpolator(
                         "y", 
                         default_interpolate,
                         function(value)
@@ -1119,8 +1117,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 2, value: 287},
                         ]);
-                    cam_in.addAction(null, "y", new ms.state.State(0, 2, ____i46));                    
-                    var ____i47 = new ms.state.Interpolator(
+                    cam_in.addAction(null, "y", new state.State(0, 2, ____i46));                    
+                    var ____i47 = new state.Interpolator(
                         "width", 
                         default_interpolate,
                         function(value)
@@ -1131,8 +1129,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 2, value: 120},
                         ]);
-                    cam_in.addAction(null, "width", new ms.state.State(0, 2, ____i47));                    
-                    var ____i48 = new ms.state.Interpolator(
+                    cam_in.addAction(null, "width", new state.State(0, 2, ____i47));                    
+                    var ____i48 = new state.Interpolator(
                         "height", 
                         default_interpolate,
                         function(value)
@@ -1143,8 +1141,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 2, value: 120},
                         ]);
-                    cam_in.addAction(null, "height", new ms.state.State(0, 2, ____i48));                    
-                    var ____i49 = new ms.state.Interpolator(
+                    cam_in.addAction(null, "height", new state.State(0, 2, ____i48));                    
+                    var ____i49 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -1155,7 +1153,7 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 2, value: 100},
                         ]);
-                    cam_in.addAction(null, "alpha", new ms.state.State(0, 2, ____i49));                    
+                    cam_in.addAction(null, "alpha", new state.State(0, 2, ____i49));                    
                 cam_in.on_start = function()
                 {
                     ____i41.keys[0].value = camerawl.x;
@@ -1169,11 +1167,11 @@ g_sequence_manager);
                     ____i49.keys[0].value = close.get_alpha();
                 }
 p1_in =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
         p1_in = p1_in;
             p1_in.parent_sequence = null;
-                    var ____i50 = new ms.state.Interpolator(
+                    var ____i50 = new state.Interpolator(
                         "x", 
                         default_interpolate,
                         function(value)
@@ -1184,8 +1182,8 @@ g_sequence_manager);
                         {t: 0, value: 332},
                         {t: 3, value: 300},
                         ]);
-                    p1_in.addAction(null, "x", new ms.state.State(0, 3, ____i50));                    
-                    var ____i51 = new ms.state.Interpolator(
+                    p1_in.addAction(null, "x", new state.State(0, 3, ____i50));                    
+                    var ____i51 = new state.Interpolator(
                         "y", 
                         default_interpolate,
                         function(value)
@@ -1196,8 +1194,8 @@ g_sequence_manager);
                         {t: 0, value: 219},
                         {t: 3, value: 30},
                         ]);
-                    p1_in.addAction(null, "y", new ms.state.State(0, 3, ____i51));                    
-                    var ____i52 = new ms.state.Interpolator(
+                    p1_in.addAction(null, "y", new state.State(0, 3, ____i51));                    
+                    var ____i52 = new state.Interpolator(
                         "width", 
                         default_interpolate,
                         function(value)
@@ -1208,8 +1206,8 @@ g_sequence_manager);
                         {t: 0, value: 97},
                         {t: 3, value: 292},
                         ]);
-                    p1_in.addAction(null, "width", new ms.state.State(0, 3, ____i52));                    
-                    var ____i53 = new ms.state.Interpolator(
+                    p1_in.addAction(null, "width", new state.State(0, 3, ____i52));                    
+                    var ____i53 = new state.Interpolator(
                         "height", 
                         default_interpolate,
                         function(value)
@@ -1220,8 +1218,8 @@ g_sequence_manager);
                         {t: 0, value: 201},
                         {t: 3, value: 604},
                         ]);
-                    p1_in.addAction(null, "height", new ms.state.State(0, 3, ____i53));                    
-                    var ____i54 = new ms.state.Interpolator(
+                    p1_in.addAction(null, "height", new state.State(0, 3, ____i53));                    
+                    var ____i54 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -1232,8 +1230,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 3, value: 100},
                         ]);
-                    p1_in.addAction(null, "alpha", new ms.state.State(0, 3, ____i54));                    
-                    var ____i55 = new ms.state.Interpolator(
+                    p1_in.addAction(null, "alpha", new state.State(0, 3, ____i54));                    
+                    var ____i55 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -1244,18 +1242,18 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 3, value: 100},
                         ]);
-                    p1_in.addAction(null, "alpha", new ms.state.State(0, 3, ____i55));                    
+                    p1_in.addAction(null, "alpha", new state.State(0, 3, ____i55));                    
                 p1_in.on_start = function()
                 {
                     ____i54.keys[0].value = pict1.get_alpha();
                     ____i55.keys[0].value = close.get_alpha();
                 }
 p2_in =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
         p2_in = p2_in;
             p2_in.parent_sequence = null;
-                    var ____i56 = new ms.state.Interpolator(
+                    var ____i56 = new state.Interpolator(
                         "x", 
                         default_interpolate,
                         function(value)
@@ -1266,8 +1264,8 @@ g_sequence_manager);
                         {t: 0, value: 332},
                         {t: 3, value: 100},
                         ]);
-                    p2_in.addAction(null, "x", new ms.state.State(0, 3, ____i56));                    
-                    var ____i57 = new ms.state.Interpolator(
+                    p2_in.addAction(null, "x", new state.State(0, 3, ____i56));                    
+                    var ____i57 = new state.Interpolator(
                         "y", 
                         default_interpolate,
                         function(value)
@@ -1278,8 +1276,8 @@ g_sequence_manager);
                         {t: 0, value: 219},
                         {t: 3, value: 30},
                         ]);
-                    p2_in.addAction(null, "y", new ms.state.State(0, 3, ____i57));                    
-                    var ____i58 = new ms.state.Interpolator(
+                    p2_in.addAction(null, "y", new state.State(0, 3, ____i57));                    
+                    var ____i58 = new state.Interpolator(
                         "width", 
                         default_interpolate,
                         function(value)
@@ -1290,8 +1288,8 @@ g_sequence_manager);
                         {t: 0, value: 200},
                         {t: 3, value: 602},
                         ]);
-                    p2_in.addAction(null, "width", new ms.state.State(0, 3, ____i58));                    
-                    var ____i59 = new ms.state.Interpolator(
+                    p2_in.addAction(null, "width", new state.State(0, 3, ____i58));                    
+                    var ____i59 = new state.Interpolator(
                         "height", 
                         default_interpolate,
                         function(value)
@@ -1302,8 +1300,8 @@ g_sequence_manager);
                         {t: 0, value: 201},
                         {t: 3, value: 604},
                         ]);
-                    p2_in.addAction(null, "height", new ms.state.State(0, 3, ____i59));                    
-                    var ____i60 = new ms.state.Interpolator(
+                    p2_in.addAction(null, "height", new state.State(0, 3, ____i59));                    
+                    var ____i60 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -1314,8 +1312,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 3, value: 100},
                         ]);
-                    p2_in.addAction(null, "alpha", new ms.state.State(0, 3, ____i60));                    
-                    var ____i61 = new ms.state.Interpolator(
+                    p2_in.addAction(null, "alpha", new state.State(0, 3, ____i60));                    
+                    var ____i61 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -1326,18 +1324,18 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 3, value: 100},
                         ]);
-                    p2_in.addAction(null, "alpha", new ms.state.State(0, 3, ____i61));                    
+                    p2_in.addAction(null, "alpha", new state.State(0, 3, ____i61));                    
                 p2_in.on_start = function()
                 {
                     ____i60.keys[0].value = pict2.get_alpha();
                     ____i61.keys[0].value = close.get_alpha();
                 }
 p3_in =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
         p3_in = p3_in;
             p3_in.parent_sequence = null;
-                    var ____i62 = new ms.state.Interpolator(
+                    var ____i62 = new state.Interpolator(
                         "x", 
                         default_interpolate,
                         function(value)
@@ -1348,8 +1346,8 @@ g_sequence_manager);
                         {t: 0, value: 332},
                         {t: 3, value: 315},
                         ]);
-                    p3_in.addAction(null, "x", new ms.state.State(0, 3, ____i62));                    
-                    var ____i63 = new ms.state.Interpolator(
+                    p3_in.addAction(null, "x", new state.State(0, 3, ____i62));                    
+                    var ____i63 = new state.Interpolator(
                         "y", 
                         default_interpolate,
                         function(value)
@@ -1360,8 +1358,8 @@ g_sequence_manager);
                         {t: 0, value: 219},
                         {t: 3, value: 30},
                         ]);
-                    p3_in.addAction(null, "y", new ms.state.State(0, 3, ____i63));                    
-                    var ____i64 = new ms.state.Interpolator(
+                    p3_in.addAction(null, "y", new state.State(0, 3, ____i63));                    
+                    var ____i64 = new state.Interpolator(
                         "width", 
                         default_interpolate,
                         function(value)
@@ -1372,8 +1370,8 @@ g_sequence_manager);
                         {t: 0, value: 78},
                         {t: 3, value: 234},
                         ]);
-                    p3_in.addAction(null, "width", new ms.state.State(0, 3, ____i64));                    
-                    var ____i65 = new ms.state.Interpolator(
+                    p3_in.addAction(null, "width", new state.State(0, 3, ____i64));                    
+                    var ____i65 = new state.Interpolator(
                         "height", 
                         default_interpolate,
                         function(value)
@@ -1384,8 +1382,8 @@ g_sequence_manager);
                         {t: 0, value: 201},
                         {t: 3, value: 604},
                         ]);
-                    p3_in.addAction(null, "height", new ms.state.State(0, 3, ____i65));                    
-                    var ____i66 = new ms.state.Interpolator(
+                    p3_in.addAction(null, "height", new state.State(0, 3, ____i65));                    
+                    var ____i66 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -1396,8 +1394,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 3, value: 100},
                         ]);
-                    p3_in.addAction(null, "alpha", new ms.state.State(0, 3, ____i66));                    
-                    var ____i67 = new ms.state.Interpolator(
+                    p3_in.addAction(null, "alpha", new state.State(0, 3, ____i66));                    
+                    var ____i67 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -1408,18 +1406,18 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 3, value: 100},
                         ]);
-                    p3_in.addAction(null, "alpha", new ms.state.State(0, 3, ____i67));                    
+                    p3_in.addAction(null, "alpha", new state.State(0, 3, ____i67));                    
                 p3_in.on_start = function()
                 {
                     ____i66.keys[0].value = pict3.get_alpha();
                     ____i67.keys[0].value = close.get_alpha();
                 }
 p4_in =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
         p4_in = p4_in;
             p4_in.parent_sequence = null;
-                    var ____i68 = new ms.state.Interpolator(
+                    var ____i68 = new state.Interpolator(
                         "x", 
                         default_interpolate,
                         function(value)
@@ -1430,8 +1428,8 @@ g_sequence_manager);
                         {t: 0, value: 332},
                         {t: 3, value: 170},
                         ]);
-                    p4_in.addAction(null, "x", new ms.state.State(0, 3, ____i68));                    
-                    var ____i69 = new ms.state.Interpolator(
+                    p4_in.addAction(null, "x", new state.State(0, 3, ____i68));                    
+                    var ____i69 = new state.Interpolator(
                         "y", 
                         default_interpolate,
                         function(value)
@@ -1442,8 +1440,8 @@ g_sequence_manager);
                         {t: 0, value: 219},
                         {t: 3, value: 30},
                         ]);
-                    p4_in.addAction(null, "y", new ms.state.State(0, 3, ____i69));                    
-                    var ____i70 = new ms.state.Interpolator(
+                    p4_in.addAction(null, "y", new state.State(0, 3, ____i69));                    
+                    var ____i70 = new state.Interpolator(
                         "width", 
                         default_interpolate,
                         function(value)
@@ -1454,8 +1452,8 @@ g_sequence_manager);
                         {t: 0, value: 179},
                         {t: 3, value: 539},
                         ]);
-                    p4_in.addAction(null, "width", new ms.state.State(0, 3, ____i70));                    
-                    var ____i71 = new ms.state.Interpolator(
+                    p4_in.addAction(null, "width", new state.State(0, 3, ____i70));                    
+                    var ____i71 = new state.Interpolator(
                         "height", 
                         default_interpolate,
                         function(value)
@@ -1466,8 +1464,8 @@ g_sequence_manager);
                         {t: 0, value: 176},
                         {t: 3, value: 528},
                         ]);
-                    p4_in.addAction(null, "height", new ms.state.State(0, 3, ____i71));                    
-                    var ____i72 = new ms.state.Interpolator(
+                    p4_in.addAction(null, "height", new state.State(0, 3, ____i71));                    
+                    var ____i72 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -1478,8 +1476,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 3, value: 100},
                         ]);
-                    p4_in.addAction(null, "alpha", new ms.state.State(0, 3, ____i72));                    
-                    var ____i73 = new ms.state.Interpolator(
+                    p4_in.addAction(null, "alpha", new state.State(0, 3, ____i72));                    
+                    var ____i73 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -1490,18 +1488,18 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 3, value: 100},
                         ]);
-                    p4_in.addAction(null, "alpha", new ms.state.State(0, 3, ____i73));                    
+                    p4_in.addAction(null, "alpha", new state.State(0, 3, ____i73));                    
                 p4_in.on_start = function()
                 {
                     ____i72.keys[0].value = pict4.get_alpha();
                     ____i73.keys[0].value = close.get_alpha();
                 }
 p5_in =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
         p5_in = p5_in;
             p5_in.parent_sequence = null;
-                    var ____i74 = new ms.state.Interpolator(
+                    var ____i74 = new state.Interpolator(
                         "x", 
                         default_interpolate,
                         function(value)
@@ -1512,8 +1510,8 @@ g_sequence_manager);
                         {t: 0, value: 332},
                         {t: 3, value: 130},
                         ]);
-                    p5_in.addAction(null, "x", new ms.state.State(0, 3, ____i74));                    
-                    var ____i75 = new ms.state.Interpolator(
+                    p5_in.addAction(null, "x", new state.State(0, 3, ____i74));                    
+                    var ____i75 = new state.Interpolator(
                         "y", 
                         default_interpolate,
                         function(value)
@@ -1524,8 +1522,8 @@ g_sequence_manager);
                         {t: 0, value: 219},
                         {t: 3, value: 30},
                         ]);
-                    p5_in.addAction(null, "y", new ms.state.State(0, 3, ____i75));                    
-                    var ____i76 = new ms.state.Interpolator(
+                    p5_in.addAction(null, "y", new state.State(0, 3, ____i75));                    
+                    var ____i76 = new state.Interpolator(
                         "width", 
                         default_interpolate,
                         function(value)
@@ -1536,8 +1534,8 @@ g_sequence_manager);
                         {t: 0, value: 193},
                         {t: 3, value: 580},
                         ]);
-                    p5_in.addAction(null, "width", new ms.state.State(0, 3, ____i76));                    
-                    var ____i77 = new ms.state.Interpolator(
+                    p5_in.addAction(null, "width", new state.State(0, 3, ____i76));                    
+                    var ____i77 = new state.Interpolator(
                         "height", 
                         default_interpolate,
                         function(value)
@@ -1548,8 +1546,8 @@ g_sequence_manager);
                         {t: 0, value: 193},
                         {t: 3, value: 580},
                         ]);
-                    p5_in.addAction(null, "height", new ms.state.State(0, 3, ____i77));                    
-                    var ____i78 = new ms.state.Interpolator(
+                    p5_in.addAction(null, "height", new state.State(0, 3, ____i77));                    
+                    var ____i78 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -1560,8 +1558,8 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 3, value: 100},
                         ]);
-                    p5_in.addAction(null, "alpha", new ms.state.State(0, 3, ____i78));                    
-                    var ____i79 = new ms.state.Interpolator(
+                    p5_in.addAction(null, "alpha", new state.State(0, 3, ____i78));                    
+                    var ____i79 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -1572,7 +1570,7 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 3, value: 100},
                         ]);
-                    p5_in.addAction(null, "alpha", new ms.state.State(0, 3, ____i79));                    
+                    p5_in.addAction(null, "alpha", new state.State(0, 3, ____i79));                    
                 p5_in.on_start = function()
                 {
                     ____i78.keys[0].value = pict5.get_alpha();
@@ -1609,7 +1607,7 @@ g_sequence_manager);
         idle_anim_5 = idle_anim_5;
             idle_anim_5.parent_sequence = null;
 idle_anim_seq =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
         idle_anim_seq = idle_anim_seq;
 	idle_anim_seq.animate_all = function() 
@@ -1627,17 +1625,17 @@ idle_anim_5.start();
 	};
                 idle_anim_seq.start();
             idle_anim_seq.parent_sequence = null;
-            var ____h1 = new ms.state.Every(8, function(t)
+            var ____h1 = new state.Every(8, function(t)
             {
                         idle_anim_seq.animate_all();
             });
-            idle_anim_seq.addAction(null, null, new ms.state.State(0, 0, ____h1));                    
+            idle_anim_seq.addAction(null, null, new state.State(0, 0, ____h1));                    
 close_fade_in =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
         close_fade_in = close_fade_in;
             close_fade_in.parent_sequence = null;
-                    var ____i80 = new ms.state.Interpolator(
+                    var ____i80 = new state.Interpolator(
                         "alpha", 
                         default_interpolate,
                         function(value)
@@ -1648,61 +1646,61 @@ g_sequence_manager);
                         {t: 0, value: null},
                         {t: 3, value: 0},
                         ]);
-                    close_fade_in.addAction(null, "alpha", new ms.state.State(0, 3, ____i80));                    
+                    close_fade_in.addAction(null, "alpha", new state.State(0, 3, ____i80));                    
                 close_fade_in.on_start = function()
                 {
                     ____i80.keys[0].value = close.get_alpha();
                 }
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};		
-	ui.events.addListener("mousedown", function(x,y)
+	ui_.events.addListener("mousedown", function(x,y)
 	{    
 		application.events.dispatch("mousedown", [x, y]);
 	});
-	ui.events.addListener("mouseup", function(x,y)
+	ui_.events.addListener("mouseup", function(x,y)
 	{    
 		application.events.dispatch("mouseup", [x, y]);
 	});
-	ui.events.addListener("mousemove", function(x,y)
+	ui_.events.addListener("mousemove", function(x,y)
 	{    
 		application.events.dispatch("mousemove", [x, y]);
 	});
-	ui.events.addListener("click", function(x,y)
+	ui_.events.addListener("click", function(x,y)
 	{    
 		application.events.dispatch("click", [x, y]);
 	});
-	ui.events.addListener("drag", function(x,y)
+	ui_.events.addListener("drag", function(x,y)
 	{    
 		application.events.dispatch("drag", [x, y]);
 	});
-	ui.events.addListener("dragend", function(x,y)
+	ui_.events.addListener("dragend", function(x,y)
 	{    
 		application.events.dispatch("dragend", [x, y]);
 	});
-	ui.events.addListener("keyup", function(keycode)
+	ui_.events.addListener("keyup", function(keycode)
 	{    
 		application.events.dispatch("keyup", [keycode]);
 	});
-	ui.events.addListener("keydown", function(keycode)
+	ui_.events.addListener("keydown", function(keycode)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-	ui.events.addListener("keypress", function(keycode)
+	ui_.events.addListener("keypress", function(keycode)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    close = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/close.png");
+			new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/close.png");
         close = close;
             close.set_x(800);
             close.set_y(10);
@@ -1732,7 +1730,7 @@ close_fade_in.start();
 	);
 		application.are_obj_events = true;
 		    box_cont = 
-			new ms.ui.RippleEffect(g_ui_root.manager, g_ui_root, "images/pictures/redbox2.png");
+			new ui.RippleEffect(g_ui_root.manager, g_ui_root, "images/pictures/redbox2.png");
         box_cont = box_cont;
             box_cont.set_x(25);
             box_cont.set_y(25);
@@ -1740,7 +1738,7 @@ close_fade_in.start();
             box_cont.set_height(602);
             box_cont.alpha(60);
 		    box_border = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/redbox.png");
+			new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/redbox.png");
         box_border = box_border;
             box_border.set_x(50);
             box_border.set_y(50);
@@ -1748,7 +1746,7 @@ close_fade_in.start();
             box_border.set_height(600);
             box_border.alpha(80);
 		    banner = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/banner.png");
+			new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/banner.png");
         banner = banner;
             banner.set_x(200);
             banner.set_y(200);
@@ -1757,7 +1755,7 @@ close_fade_in.start();
             banner.set_rotation(-30);
             banner.alpha(0);
 		    camerawl = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/camerawl.png");
+			new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/camerawl.png");
         camerawl = camerawl;
             camerawl.set_x(320);
             camerawl.set_y(240);
@@ -1778,7 +1776,7 @@ cam_in.start();
 	);
 		application.are_obj_events = true;
 		    lens = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/lens.png");
+			new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/lens.png");
         lens = lens;
             lens.set_x(430);
             lens.set_y(287);
@@ -1786,7 +1784,7 @@ cam_in.start();
             lens.set_height(120);
             lens.alpha(0);
 		    line_top = 
-			new ms.ui.Line(g_ui_root.manager, g_ui_root);
+			new ui.Line(g_ui_root.manager, g_ui_root);
         line_top = line_top;
             line_top.set_x1(5);
             line_top.set_y1(38);
@@ -1795,7 +1793,7 @@ cam_in.start();
             line_top.alpha(50);
             line_top.set_color("white");
 		    pict1 = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/pict1.jpg");
+			new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/pict1.jpg");
         pict1 = pict1;
             pict1.set_x(0);
             pict1.set_y(0);
@@ -1803,7 +1801,7 @@ cam_in.start();
             pict1.set_height(0);
             pict1.alpha(0);
 		    pict2 = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/pict2.jpg");
+			new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/pict2.jpg");
         pict2 = pict2;
             pict2.set_x(0);
             pict2.set_y(0);
@@ -1811,7 +1809,7 @@ cam_in.start();
             pict2.set_height(0);
             pict2.alpha(0);
 		    pict3 = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/pict3.jpg");
+			new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/pict3.jpg");
         pict3 = pict3;
             pict3.set_x(0);
             pict3.set_y(0);
@@ -1819,7 +1817,7 @@ cam_in.start();
             pict3.set_height(0);
             pict3.alpha(0);
 		    pict4 = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/pict4.jpg");
+			new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/pict4.jpg");
         pict4 = pict4;
             pict4.set_x(0);
             pict4.set_y(0);
@@ -1827,7 +1825,7 @@ cam_in.start();
             pict4.set_height(0);
             pict4.alpha(0);
 		    pict5 = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/pict5.jpg");
+			new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/pict5.jpg");
         pict5 = pict5;
             pict5.set_x(0);
             pict5.set_y(0);
@@ -1838,13 +1836,11 @@ cam_in.start();
 		    camera_1 = 
 		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
 		active_camera = camera_1;
-		        scene.addObject(camera_1);
             camera_1.position.z = 1000;
 	    plane_1_plane = new THREE.Plane(146, 302, null, null) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_1);
-		plane_1.events = new ms.event.EventHolder();
-		        scene.addObject(plane_1);
+		plane_1.events = new ev.EventHolder();
             set_object_alpha(plane_1, 0);
             plane_1.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict1_neg.jpg").data);
             plane_1.scale.x = 0.5;
@@ -1888,8 +1884,7 @@ plane_1.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictu
 	    plane_2_plane = new THREE.Plane(301, 302, null, null) ;
 	    plane_2 = new THREE.Mesh(plane_2_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_2);
-		plane_2.events = new ms.event.EventHolder();
-		        scene.addObject(plane_2);
+		plane_2.events = new ev.EventHolder();
             set_object_alpha(plane_2, 0);
             plane_2.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict2_neg.jpg").data);
             plane_2.scale.x = 0.5;
@@ -1933,8 +1928,7 @@ plane_2.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictu
 	    plane_3_plane = new THREE.Plane(117, 302, null, null) ;
 	    plane_3 = new THREE.Mesh(plane_3_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_3);
-		plane_3.events = new ms.event.EventHolder();
-		        scene.addObject(plane_3);
+		plane_3.events = new ev.EventHolder();
             set_object_alpha(plane_3, 0);
             plane_3.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict3_neg.jpg").data);
             plane_3.scale.x = 0.5;
@@ -1978,8 +1972,7 @@ plane_3.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictu
 	    plane_4_plane = new THREE.Plane(245, 240, null, null) ;
 	    plane_4 = new THREE.Mesh(plane_4_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_4);
-		plane_4.events = new ms.event.EventHolder();
-		        scene.addObject(plane_4);
+		plane_4.events = new ev.EventHolder();
             set_object_alpha(plane_4, 0);
             plane_4.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict4_neg.jpg").data);
             plane_4.scale.x = 0.5;
@@ -2023,8 +2016,7 @@ plane_4.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictu
 	    plane_5_plane = new THREE.Plane(240, 240, null, null) ;
 	    plane_5 = new THREE.Mesh(plane_5_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane_5);
-		plane_5.events = new ms.event.EventHolder();
-		        scene.addObject(plane_5);
+		plane_5.events = new ev.EventHolder();
             set_object_alpha(plane_5, 0);
             plane_5.materials[0].map = new THREE.Texture(streamer.get_resource("images/pictures/pict5_neg.jpg").data);
             plane_5.scale.x = 0.5;
@@ -2086,10 +2078,10 @@ idle_anim_5.target = plane_5;
 	);
 if(ui)
 {	
-	SoundUtils = new ms.ui.SoundUtils();		
+	SoundUtils = new ui.SoundUtils();		
 	g_ui.fill_background = false;	
 }
-var event_manager = new ms.event.ThreeEventManager();
+var event_manager = new ev.ThreeEventManager();
 document.onmousemove = function(ev)
 {
 	event_manager.mousemove(ev.clientX, ev.clientY);                  
@@ -2119,12 +2111,12 @@ document.body.appendChild( renderer.domElement );
 animate();
 });
 function animate() {
-	if(ui)
+	if(ui_)
 		drawingCanvas.getContext('2d').clearRect(0,0,1024,768);
 	requestAnimationFrame( animate );
 	render();
-	if(ui)
-		ui.draw(drawingCanvas.getContext('2d'));
+	if(ui_)
+		ui_.draw(drawingCanvas.getContext('2d'));
 	}
 </script>
 </body>

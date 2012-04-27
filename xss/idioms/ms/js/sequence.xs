@@ -16,7 +16,7 @@ on render_js_includes()
 {
 	out()
 	{
-		<script type="text/javascript" src="../js/ms-sequence.js"></script>
+		<script type="text/javascript" src="../js/sequence.js"></script>
 	}
 }
 
@@ -24,7 +24,7 @@ on render_initialization()
 {
 	out()
 	{
-		var g_sequence_manager = new ms.state.Manager();
+		var g_sequence_manager = new state.Manager();
 
         function default_interpolate(a, b, t)
         {
@@ -39,10 +39,8 @@ on render_types()
 
     for(var ut in user_types)
     {
-        compiler.log("Here?");
         var full_path = compiler.full_path("../sequence.xss");
-		compiler.xss("../../common-js/class.xss", ut, renderer = full_path);
-        compiler.log("Nope");
+		compiler.xss("../../common-js/resig-class.xss", ut, renderer = full_path);
     }
 }
 
@@ -68,7 +66,7 @@ method begin_interpolator(prop, string iid, string assign, string path)
 {
     out()
     {
-        var <xss:e v="iid"/> = new ms.state.Interpolator(
+        var <xss:e v="iid"/> = new state.Interpolator(
                          
             default_interpolate,
             function(value)
@@ -100,7 +98,7 @@ method begin_caller(methd, mid, time)
 {
     out()
     {
-        var <xss:e v="mid"/> = new ms.state.Caller(<xss:e v="time"/>,function()
+        var <xss:e v="mid"/> = new state.Caller(<xss:e v="time"/>,function()
         <xss:open_brace/>
     }
 }
@@ -141,7 +139,7 @@ method begin_every(aid, time)
 {
     out()
     {
-        var <xss:e v="aid"/> = new ms.state.Every(<xss:e v="time"/>, function(t)
+        var <xss:e v="aid"/> = new state.Every(<xss:e v="time"/>, function(t)
         <xss:open_brace/>
     }
 }
@@ -159,7 +157,7 @@ method register_nested_sequence(seq_id, nested_id, shid)
 {
     out()
     {
-        var <xss:e v="shid"/> = new ms.state.SequenceHandler(<xss:e v="nested_id"/>);
+        var <xss:e v="shid"/> = new state.SequenceHandler(<xss:e v="nested_id"/>);
         <xss:e v="seq_id"/>.addHandler(<xss:e v="shid"/>);						  
     }
 }

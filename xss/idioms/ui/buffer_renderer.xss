@@ -11,7 +11,7 @@
 	{	
 		<xss:e v="obj.id"/>.width = <xss:e value="obj.width"/>;
 		<xss:e v="obj.id"/>.height = <xss:e value="obj.height"/>;							
-		<xss:e v="obj.id"/>_ui = new ms.ui.Manager(<xss:e v="obj.id"/>, streamer);
+		<xss:e v="obj.id"/>_ui = new ui.Manager(<xss:e v="obj.id"/>, streamer);
 		var <xss:e v="obj.id"/>_g_ui_root = <xss:e v="obj.id"/>_ui.root;				
 	}		
 </xss:code>

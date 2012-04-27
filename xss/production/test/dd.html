@@ -12,40 +12,40 @@
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/resig.js"></script>
+<script type="text/javascript" src="../js/event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
-		<script type="text/javascript" src="../js/ms-sequence.js"></script>
-		<script type="text/javascript" src="../js/ms-streamer.js"></script>
-		<script type="text/javascript" src="../js/ms-ui.js"></script>
+<script type="text/javascript" src="../js/streamer.js"></script>
+		<script type="text/javascript" src="../js/sequence.js"></script>
+		<script type="text/javascript" src="../js/streamer.js"></script>
+		<script type="text/javascript" src="../js/ui.js"></script>
 		<script type="text/javascript" src="../js/three/Three.js"></script>
 		<script type="text/javascript" src="../js/three/Stats.js"></script>
 		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
 		<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
-var ui;
+var ui_;
 var SoundUtils;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var canvas_position = {x:0, y:0};
-var streamer = new ms.streamer.Streamer();
+var streamer = new stream.Streamer();
 var app_width = 1000;
 var app_height = 800;
 var idle;var selected;var unselected;var move;var grow;var shrink;var facebook;var twitter;var email;
 var application = {};
-application.events = new ms.event.EventHolder();
-		var g_sequence_manager = new ms.state.Manager();
+application.events = new ev.EventHolder();
+		var g_sequence_manager = new state.Manager();
         function default_interpolate(a, b, t)
         {
             return a + (b - a)*t;
         }		
-		var streamer = new ms.streamer.Streamer();	
-		var ResourceUtils = new ms.streamer.ResourceUtils();
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -53,14 +53,14 @@ application.events = new ms.event.EventHolder();
 				height: 800,
 				canvas: drawingCanvas
 			};
-            var streamer = new ms.streamer.Streamer();							
-			var ui = new ms.ui.Manager(client, streamer);			
-			var g_ui = ui;
-			var g_ui_root = ui.root;
+            var streamer = new stream.Streamer();							
+			var ui_ = new ui.Manager(client, streamer);			
+			var g_ui = ui_;
+			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
 		}
 	// --------RESOURCES---------
-		var global_package = new ms.streamer.Package(streamer);	
+		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
             {
 		id:				"__image1",
@@ -130,22 +130,24 @@ application.events.dispatch("updates", []);
 application.events.dispatch("switch_cameras", []);
 }
 var image_plane;var scene;var camera_1;var test_ip;
-            social_button = Class.create(ms.ui.Image,
-        {
-    initialize: function($super
-                , manager
-                , parent
-                , src
+        var social_button = ui.Image.extend(
+    {
+    init: function(
+                manager
+                ,
+                parent
+                ,
+                src
                 )
     {
-        $super(
-        manager,parent,src        );
-        this.events = new ms.event.EventHolder(); 
+        this._super(
+		manager,parent,src        );
+        this.events = new ev.EventHolder(); 
         var this__  = this;
 this.grow =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
-        var ____i1 = new ms.state.Interpolator(
+        var ____i1 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -156,7 +158,7 @@ g_sequence_manager);
         {t: 0.300000012, value: null},
             ]);
             this.grow.addHandler(____i1);	              
-        var ____i2 = new ms.state.Interpolator(
+        var ____i2 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -167,7 +169,7 @@ g_sequence_manager);
         {t: 0.300000012, value: null},
             ]);
             this.grow.addHandler(____i2);	              
-        var ____i3 = new ms.state.Interpolator(
+        var ____i3 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -178,7 +180,7 @@ g_sequence_manager);
         {t: 0.300000012, value: 32},
             ]);
             this.grow.addHandler(____i3);	              
-        var ____i4 = new ms.state.Interpolator(
+        var ____i4 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -199,9 +201,9 @@ g_sequence_manager);
         ____i4.keys[0].value = this__.get_height();
         });
 this.shrink =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
-        var ____i5 = new ms.state.Interpolator(
+        var ____i5 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -212,7 +214,7 @@ g_sequence_manager);
         {t: 0.300000012, value: null},
             ]);
             this.shrink.addHandler(____i5);	              
-        var ____i6 = new ms.state.Interpolator(
+        var ____i6 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -223,7 +225,7 @@ g_sequence_manager);
         {t: 0.300000012, value: null},
             ]);
             this.shrink.addHandler(____i6);	              
-        var ____i7 = new ms.state.Interpolator(
+        var ____i7 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -234,7 +236,7 @@ g_sequence_manager);
         {t: 0.300000012, value: 24},
             ]);
             this.shrink.addHandler(____i7);	              
-        var ____i8 = new ms.state.Interpolator(
+        var ____i8 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -274,8 +276,7 @@ ev_parent.shrink.start();
 	}
 	);
 		application.are_obj_events = true;
-            if (this.init)
-                this.init();
+            this.events.dispatch("init", [this]);
             },
 });
     function create_image_plane(
@@ -284,15 +285,15 @@ ev_parent.shrink.start();
 	    image_plane_plane = new THREE.Plane(width, height, x_segments, y_segments) ;
 	    image_plane = new THREE.Mesh(image_plane_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(image_plane);
-		image_plane.events = new ms.event.EventHolder();
+		image_plane.events = new ev.EventHolder();
         var this__ = image_plane;
             var idle;
 idle =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
             idle.loop = true;
                 idle.start();
-        var ____i9 = new ms.state.Interpolator(
+        var ____i9 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -305,7 +306,7 @@ g_sequence_manager);
         {t: 3, value: 0},
             ]);
             idle.addHandler(____i9);	              
-        var ____i10 = new ms.state.Interpolator(
+        var ____i10 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -321,9 +322,9 @@ g_sequence_manager);
             image_plane.idle = idle;
             var selected;
 selected =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
-        var ____i11 = new ms.state.Interpolator(
+        var ____i11 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -334,7 +335,7 @@ g_sequence_manager);
         {t: 2, value: 1.5},
             ]);
             selected.addHandler(____i11);	              
-        var ____i12 = new ms.state.Interpolator(
+        var ____i12 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -345,7 +346,7 @@ g_sequence_manager);
         {t: 2, value: 1.5},
             ]);
             selected.addHandler(____i12);	              
-        var ____i13 = new ms.state.Interpolator(
+        var ____i13 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -365,9 +366,9 @@ g_sequence_manager);
             image_plane.selected = selected;
             var unselected;
 unselected =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
-        var ____i14 = new ms.state.Interpolator(
+        var ____i14 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -378,7 +379,7 @@ g_sequence_manager);
         {t: 2, value: 1},
             ]);
             unselected.addHandler(____i14);	              
-        var ____i15 = new ms.state.Interpolator(
+        var ____i15 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -389,7 +390,7 @@ g_sequence_manager);
         {t: 2, value: 1},
             ]);
             unselected.addHandler(____i15);	              
-        var ____i16 = new ms.state.Interpolator(
+        var ____i16 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -433,13 +434,13 @@ selected.stop();
      ) { 
     var image_group;
 			image_group = new THREE.Object3D();
-			image_group.events = new ms.event.EventHolder();
+			image_group.events = new ev.EventHolder();
         var this__ = image_group;
             var move;
 move =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
-        var ____i17 = new ms.state.Interpolator(
+        var ____i17 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -450,7 +451,7 @@ g_sequence_manager);
         {t: 2, value: null},
             ]);
             move.addHandler(____i17);	              
-        var ____i18 = new ms.state.Interpolator(
+        var ____i18 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -461,7 +462,7 @@ g_sequence_manager);
         {t: 2, value: null},
             ]);
             move.addHandler(____i18);	              
-        var ____i19 = new ms.state.Interpolator(
+        var ____i19 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -484,9 +485,9 @@ g_sequence_manager);
             image_group.move = move;
             var grow;
 grow =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
-        var ____i20 = new ms.state.Interpolator(
+        var ____i20 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -497,7 +498,7 @@ g_sequence_manager);
         {t: 1, value: 1.5},
             ]);
             grow.addHandler(____i20);	              
-        var ____i21 = new ms.state.Interpolator(
+        var ____i21 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -508,7 +509,7 @@ g_sequence_manager);
         {t: 1, value: 1.5},
             ]);
             grow.addHandler(____i21);	              
-        var ____i22 = new ms.state.Interpolator(
+        var ____i22 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -528,9 +529,9 @@ g_sequence_manager);
             image_group.grow = grow;
             var shrink;
 shrink =
-new ms.state.Sequence(
+new state.Sequence(
 g_sequence_manager);
-        var ____i23 = new ms.state.Interpolator(
+        var ____i23 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -541,7 +542,7 @@ g_sequence_manager);
         {t: 1, value: 1},
             ]);
             shrink.addHandler(____i23);	              
-        var ____i24 = new ms.state.Interpolator(
+        var ____i24 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -552,7 +553,7 @@ g_sequence_manager);
         {t: 1, value: 1},
             ]);
             shrink.addHandler(____i24);	              
-        var ____i25 = new ms.state.Interpolator(
+        var ____i25 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -597,100 +598,91 @@ planes_[i].destination = value[i];
 planes_[i].move.start();
 }
         };
-			    var img1;
-			    img1 = 
+			 var img1;
+			img1 = 
 create_image_plane(100, 100, null, null)
  ;
-				    image_group.addChild(img1);
-			    var img2;
-			    img2 = 
+			 var img2;
+			img2 = 
 create_image_plane(100, 100, null, null)
  ;
-				    image_group.addChild(img2);
-			    var img3;
-			    img3 = 
+			 var img3;
+			img3 = 
 create_image_plane(100, 100, null, null)
  ;
-				    image_group.addChild(img3);
-			    var img4;
-			    img4 = 
+			 var img4;
+			img4 = 
 create_image_plane(100, 100, null, null)
  ;
-				    image_group.addChild(img4);
-			    var img5;
-			    img5 = 
+			 var img5;
+			img5 = 
 create_image_plane(100, 100, null, null)
  ;
-				    image_group.addChild(img5);
-			    var img6;
-			    img6 = 
+			 var img6;
+			img6 = 
 create_image_plane(100, 100, null, null)
  ;
-				    image_group.addChild(img6);
-			    var img7;
-			    img7 = 
+			 var img7;
+			img7 = 
 create_image_plane(100, 100, null, null)
  ;
-				    image_group.addChild(img7);
-			    var img8;
-			    img8 = 
+			 var img8;
+			img8 = 
 create_image_plane(100, 100, null, null)
  ;
-				    image_group.addChild(img8);
-			    var img9;
-			    img9 = 
+			 var img9;
+			img9 = 
 create_image_plane(100, 100, null, null)
  ;
-				    image_group.addChild(img9);
         return image_group;
         }
 threejs_load_resources(function()
 {
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};		
-	ui.events.addListener("mousedown", function(x,y)
+	ui_.events.addListener("mousedown", function(x,y)
 	{    
 		application.events.dispatch("mousedown", [x, y]);
 	});
-	ui.events.addListener("mouseup", function(x,y)
+	ui_.events.addListener("mouseup", function(x,y)
 	{    
 		application.events.dispatch("mouseup", [x, y]);
 	});
-	ui.events.addListener("mousemove", function(x,y)
+	ui_.events.addListener("mousemove", function(x,y)
 	{    
 		application.events.dispatch("mousemove", [x, y]);
 	});
-	ui.events.addListener("click", function(x,y)
+	ui_.events.addListener("click", function(x,y)
 	{    
 		application.events.dispatch("click", [x, y]);
 	});
-	ui.events.addListener("drag", function(x,y)
+	ui_.events.addListener("drag", function(x,y)
 	{    
 		application.events.dispatch("drag", [x, y]);
 	});
-	ui.events.addListener("dragend", function(x,y)
+	ui_.events.addListener("dragend", function(x,y)
 	{    
 		application.events.dispatch("dragend", [x, y]);
 	});
-	ui.events.addListener("keyup", function(keycode)
+	ui_.events.addListener("keyup", function(keycode)
 	{    
 		application.events.dispatch("keyup", [keycode]);
 	});
-	ui.events.addListener("keydown", function(keycode)
+	ui_.events.addListener("keydown", function(keycode)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-	ui.events.addListener("keypress", function(keycode)
+	ui_.events.addListener("keypress", function(keycode)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
@@ -719,12 +711,10 @@ threejs_load_resources(function()
 		    camera_1 = 
 		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
 		active_camera = camera_1;
-		        scene.addObject(camera_1);
             camera_1.position.z = 1000;
 			    test_ip = 
 create_image_group()
  ;
-		        scene.addObject(test_ip);
             test_ip.position.x = -100;
             test_ip.position.y = 0;
             test_ip.position.z = 0;
@@ -736,10 +726,10 @@ create_image_group()
 	);
 if(ui)
 {	
-	SoundUtils = new ms.ui.SoundUtils();		
+	SoundUtils = new ui.SoundUtils();		
 	g_ui.fill_background = false;	
 }
-var event_manager = new ms.event.ThreeEventManager();
+var event_manager = new ev.ThreeEventManager();
 document.onmousemove = function(ev)
 {
 	event_manager.mousemove(ev.clientX, ev.clientY);                  
@@ -769,12 +759,12 @@ document.body.appendChild( renderer.domElement );
 animate();
 });
 function animate() {
-	if(ui)
+	if(ui_)
 		drawingCanvas.getContext('2d').clearRect(0,0,1000,800);
 	requestAnimationFrame( animate );
 	render();
-	if(ui)
-		ui.draw(drawingCanvas.getContext('2d'));
+	if(ui_)
+		ui_.draw(drawingCanvas.getContext('2d'));
 	}
 </script>
 </body>

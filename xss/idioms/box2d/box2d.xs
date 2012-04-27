@@ -16,14 +16,14 @@ on render_js_includes()
 	out()
 	{
         <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script> 
-		<script type="text/javascript" src="../js/ms-joint.js"></script> 
+		<script type="text/javascript" src="../js/joint.js"></script> 
     }
 
     if (!application.noSpawner)
     {
 	    out()
 	    {
-            <script type="text/javascript" src="../js/ms-spawner.js"></script>
+            <script type="text/javascript" src="../js/spawner.js"></script>
         }
     }
 }
@@ -74,7 +74,7 @@ on render_initialization()
     {
 	    out()
 	    {
-            var g_spawner_manager = new ms.arcade.SpawnManager();
+            var g_spawner_manager = new arcade.SpawnManager();
         }
     }
 

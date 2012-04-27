@@ -1,7 +1,7 @@
 function obtain_image(obj, parent)
 {
 	var resource;
-	if(parent instanceof ms.ui.Component)
+	if(parent instanceof ui.Component)
 	{
 		resource = streamer.get_resource(parent.texture.id);		
 	}else
@@ -28,7 +28,7 @@ function obtain_image(obj, parent)
 function get_image_data(parent)
 {
 	var resource;
-	if(parent instanceof ms.ui.Component)
+	if(parent instanceof ui.Component)
 	{
 		resource = streamer.get_resource(parent.texture.id);		
 	}else
@@ -56,7 +56,7 @@ function put_image(parent, img)
 	img__.id = img.id;
 	img__.getContext('2d').putImageData(img, 0, 0);
 	var parent__ = parent;	
-	if(parent__ instanceof ms.ui.Component)
+	if(parent__ instanceof ui.Component)
 	{
 		parent__.texture = img__;
 		parent__.invalidate();

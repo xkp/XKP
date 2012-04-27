@@ -5,11 +5,11 @@
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/resig.js"></script>
+<script type="text/javascript" src="../js/event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
-		<script type="text/javascript" src="../js/ms-ui.js"></script>
-		<script type="text/javascript" src="../js/ms-streamer.js"></script>
+		<script type="text/javascript" src="../js/ui.js"></script>
+		<script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">
     var drawingCanvas;		
 var g_ui;
@@ -18,8 +18,8 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
-application.events = new ms.event.EventHolder();
-var SoundUtils = new ms.ui.SoundUtils();
+application.events = new ev.EventHolder();
+var SoundUtils = new ui.SoundUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -27,15 +27,15 @@ var SoundUtils = new ms.ui.SoundUtils();
 				height: 400,
 				canvas: drawingCanvas
 			};
-            var streamer = new ms.streamer.Streamer();							
-			var ui = new ms.ui.Manager(client, streamer);			
-			var g_ui = ui;
-			var g_ui_root = ui.root;
+            var streamer = new stream.Streamer();							
+			var ui_ = new ui.Manager(client, streamer);			
+			var g_ui = ui_;
+			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
 		}
-		var streamer = new ms.streamer.Streamer();	
-		var ResourceUtils = new ms.streamer.ResourceUtils();
-		var global_package = new ms.streamer.Package(streamer);	
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
+		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
             {
 		id:				"__image1",
@@ -280,67 +280,67 @@ window.onload = function()
 			height: 400,
 			canvas: drawingCanvas
 		};
-		var ui = new ms.ui.Manager(client, streamer);
-		g_ui = ui;
-        g_ui_root = ui.root;
-     	ui.load_resources(function()
+		var ui_ = new ui.Manager(client, streamer);
+		g_ui = ui_;
+        g_ui_root = ui_.root;
+     	ui_.load_resources(function()
 		{
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};		
-	ui.events.addListener("mousedown", function(x,y)
+	ui_.events.addListener("mousedown", function(x,y)
 	{    
 		application.events.dispatch("mousedown", [x, y]);
 	});
-	ui.events.addListener("mouseup", function(x,y)
+	ui_.events.addListener("mouseup", function(x,y)
 	{    
 		application.events.dispatch("mouseup", [x, y]);
 	});
-	ui.events.addListener("mousemove", function(x,y)
+	ui_.events.addListener("mousemove", function(x,y)
 	{    
 		application.events.dispatch("mousemove", [x, y]);
 	});
-	ui.events.addListener("click", function(x,y)
+	ui_.events.addListener("click", function(x,y)
 	{    
 		application.events.dispatch("click", [x, y]);
 	});
-	ui.events.addListener("drag", function(x,y)
+	ui_.events.addListener("drag", function(x,y)
 	{    
 		application.events.dispatch("drag", [x, y]);
 	});
-	ui.events.addListener("dragend", function(x,y)
+	ui_.events.addListener("dragend", function(x,y)
 	{    
 		application.events.dispatch("dragend", [x, y]);
 	});
-	ui.events.addListener("keyup", function(keycode)
+	ui_.events.addListener("keyup", function(keycode)
 	{    
 		application.events.dispatch("keyup", [keycode]);
 	});
-	ui.events.addListener("keydown", function(keycode)
+	ui_.events.addListener("keydown", function(keycode)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-	ui.events.addListener("keypress", function(keycode)
+	ui_.events.addListener("keypress", function(keycode)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    lbl1 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
+			new ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
         lbl1 = lbl1;
             lbl1.set_x(220);
             lbl1.set_y(190);
             lbl1.text("click the sound you want to listen");
 		    btnSound1 = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/sound_2.png", "images/sound_2.png");
+			new ui.Button(g_ui_root.manager, g_ui_root, "images/sound_2.png", "images/sound_2.png");
         btnSound1 = btnSound1;
             btnSound1.set_x(275);
             btnSound1.set_y(210);
@@ -356,7 +356,7 @@ application.curr_sound.play();
 	);
 		application.are_obj_events = true;
 		    btnSound2 = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/sound_1.png", "images/sound_1.png");
+			new ui.Button(g_ui_root.manager, g_ui_root, "images/sound_1.png", "images/sound_1.png");
         btnSound2 = btnSound2;
             btnSound2.set_x(275);
             btnSound2.set_y(240);
@@ -372,7 +372,7 @@ application.curr_sound.play();
 	);
 		application.are_obj_events = true;
 		    volume_bar = 
-			new ms.ui.ProgressBar(g_ui_root.manager, g_ui_root, null);
+			new ui.ProgressBar(g_ui_root.manager, g_ui_root, null);
         volume_bar = volume_bar;
             volume_bar.set_x(225);
             volume_bar.set_y(120);
@@ -380,7 +380,7 @@ application.curr_sound.play();
             volume_bar.set_width(150);
             volume_bar.set_height(10);
 		    btn1 = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/arrow_left.png");
+			new ui.Image(g_ui_root.manager, g_ui_root, "images/arrow_left.png");
         btn1 = btn1;
             btn1.set_x(200);
             btn1.set_y(115);
@@ -395,7 +395,7 @@ application.curr_sound.volume -= 0.100000001;
 	);
 		application.are_obj_events = true;
 		    btn2 = 
-			new ms.ui.Image(g_ui_root.manager, g_ui_root, "images/arrow_right.png");
+			new ui.Image(g_ui_root.manager, g_ui_root, "images/arrow_right.png");
         btn2 = btn2;
             btn2.set_x(380);
             btn2.set_y(115);
@@ -410,13 +410,13 @@ application.curr_sound.volume += 0.100000001;
 	);
 		application.are_obj_events = true;
 		    lbl3 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
+			new ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
         lbl3 = lbl3;
             lbl3.set_x(220);
             lbl3.set_y(100);
             lbl3.text("click small arrows to adjust volume");
 		    btnPlay = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/play.png", "images/play_over.png");
+			new ui.Button(g_ui_root.manager, g_ui_root, "images/play.png", "images/play_over.png");
         btnPlay = btnPlay;
             btnPlay.set_x(175);
             btnPlay.set_y(300);
@@ -430,7 +430,7 @@ application.curr_sound.volume += 0.100000001;
 	);
 		application.are_obj_events = true;
 		    btnPause = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/pause.png", "images/pause_over.png");
+			new ui.Button(g_ui_root.manager, g_ui_root, "images/pause.png", "images/pause_over.png");
         btnPause = btnPause;
             btnPause.set_x(275);
             btnPause.set_y(300);
@@ -444,7 +444,7 @@ application.curr_sound.volume += 0.100000001;
 	);
 		application.are_obj_events = true;
 		    btnStop = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/stop.png", "images/stop_over.png");
+			new ui.Button(g_ui_root.manager, g_ui_root, "images/stop.png", "images/stop_over.png");
         btnStop = btnStop;
             btnStop.set_x(375);
             btnStop.set_y(300);
@@ -458,29 +458,29 @@ application.curr_sound.volume += 0.100000001;
 	);
 		application.are_obj_events = true;
 		    sound_1 = 
-			new ms.ui.Sound("sounds/forest.wav");
+			new ui.Sound("sounds/forest.wav");
         sound_1 = sound_1;
             sound_1.src = "sounds/forest.wav";
             sound_1.set_loop(false);
 		    sound_2 = 
-			new ms.ui.Sound("sounds/applauselong.wav");
+			new ui.Sound("sounds/applauselong.wav");
         sound_2 = sound_2;
             sound_2.src = "sounds/applauselong.wav";
 			document.onkeydown = function(ev)
 			{
-				ui.keydown(ev.keyCode);                  
+				ui_.keydown(ev.keyCode);                  
 			};
 			document.onkeyup = function(ev)
 			{
-				ui.keyup(ev.keyCode);                  
+				ui_.keyup(ev.keyCode);                  
 			};
 			document.onkeypress = function(ev)
 			{
-				ui.keypress(ev.keyCode);                  
+				ui_.keypress(ev.keyCode);                  
 			};
             application.events.dispatch("init", []);
             start();
-			ui.draw(drawingCanvas.getContext('2d'));
+			ui_.draw(drawingCanvas.getContext('2d'));
 		});
 	}
 }

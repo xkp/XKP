@@ -5,12 +5,12 @@
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/resig.js"></script>
+<script type="text/javascript" src="../js/event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
-		<script type="text/javascript" src="../js/ms-ui.js"></script>
-		<script type="text/javascript" src="../js/ms-state.js"></script>
-		<script type="text/javascript" src="../js/ms-streamer.js"></script>
+		<script type="text/javascript" src="../js/ui.js"></script>
+		<script type="text/javascript" src="../js/state.js"></script>
+		<script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">
     var drawingCanvas;		
 var g_ui;
@@ -19,8 +19,8 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
-application.events = new ms.event.EventHolder();
-var SoundUtils = new ms.ui.SoundUtils();
+application.events = new ev.EventHolder();
+var SoundUtils = new ui.SoundUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -28,20 +28,20 @@ var SoundUtils = new ms.ui.SoundUtils();
 				height: 400,
 				canvas: drawingCanvas
 			};
-            var streamer = new ms.streamer.Streamer();							
-			var ui = new ms.ui.Manager(client, streamer);			
-			var g_ui = ui;
-			var g_ui_root = ui.root;
+            var streamer = new stream.Streamer();							
+			var ui_ = new ui.Manager(client, streamer);			
+			var g_ui = ui_;
+			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
 		}
-		var g_sequence_manager = new ms.state.Manager();
+		var g_sequence_manager = new state.Manager();
         function default_interpolate(a, b, t)
         {
             return a + (b - a)*t;
         }		
-		var streamer = new ms.streamer.Streamer();	
-		var ResourceUtils = new ms.streamer.ResourceUtils();
-		var global_package = new ms.streamer.Package(streamer);	
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
+		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
             {
 		id:				"__image1",
@@ -224,79 +224,79 @@ window.onload = function()
 			height: 400,
 			canvas: drawingCanvas
 		};
-		var ui = new ms.ui.Manager(client, streamer);
-		g_ui = ui;
-        g_ui_root = ui.root;
-     	ui.load_resources(function()
+		var ui_ = new ui.Manager(client, streamer);
+		g_ui = ui_;
+        g_ui_root = ui_.root;
+     	ui_.load_resources(function()
 		{
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};		
-	ui.events.addListener("mousedown", function(x,y)
+	ui_.events.addListener("mousedown", function(x,y)
 	{    
 		application.events.dispatch("mousedown", [x, y]);
 	});
-	ui.events.addListener("mouseup", function(x,y)
+	ui_.events.addListener("mouseup", function(x,y)
 	{    
 		application.events.dispatch("mouseup", [x, y]);
 	});
-	ui.events.addListener("mousemove", function(x,y)
+	ui_.events.addListener("mousemove", function(x,y)
 	{    
 		application.events.dispatch("mousemove", [x, y]);
 	});
-	ui.events.addListener("click", function(x,y)
+	ui_.events.addListener("click", function(x,y)
 	{    
 		application.events.dispatch("click", [x, y]);
 	});
-	ui.events.addListener("drag", function(x,y)
+	ui_.events.addListener("drag", function(x,y)
 	{    
 		application.events.dispatch("drag", [x, y]);
 	});
-	ui.events.addListener("dragend", function(x,y)
+	ui_.events.addListener("dragend", function(x,y)
 	{    
 		application.events.dispatch("dragend", [x, y]);
 	});
-	ui.events.addListener("keyup", function(keycode)
+	ui_.events.addListener("keyup", function(keycode)
 	{    
 		application.events.dispatch("keyup", [keycode]);
 	});
-	ui.events.addListener("keydown", function(keycode)
+	ui_.events.addListener("keydown", function(keycode)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-	ui.events.addListener("keypress", function(keycode)
+	ui_.events.addListener("keypress", function(keycode)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    main = 
-			new ms.ui.Switch(g_ui_root.manager, g_ui_root);
+			new ui.Switch(g_ui_root.manager, g_ui_root);
         main = main;
             main.set_x(0);
             main.set_y(0);
             main.set_width(600);
             main.set_height(250);
 		    test1 = 
-			new ms.ui.Component(main.manager, main);
+			new ui.Component(main.manager, main);
 	    test1.mouse_thru = true;
         test1 = test1;
 		    lbl1 = 
-			new ms.ui.Label(test1.manager, test1, "Verdana");
+			new ui.Label(test1.manager, test1, "Verdana");
         lbl1 = lbl1;
             lbl1.set_x(270);
             lbl1.set_y(200);
             lbl1.set_rotation(-0.200000003);
             lbl1.text("click smiley");
 		    btn1 = 
-			new ms.ui.Button(test1.manager, test1, "images/smile_sad_48.png", "images/smile_grin_48.png");
+			new ui.Button(test1.manager, test1, "images/smile_sad_48.png", "images/smile_grin_48.png");
         btn1 = btn1;
             btn1.set_placement("center");
             btn1.set_rotation(0.200000003);
@@ -312,17 +312,17 @@ btn1.set_rotation(btn1.get_rotation() + 0.200000003);
 	);
 		application.are_obj_events = true;
 		    test2 = 
-			new ms.ui.Component(main.manager, main);
+			new ui.Component(main.manager, main);
 	    test2.mouse_thru = true;
         test2 = test2;
 		    pb1 = 
-			new ms.ui.ProgressBar(test2.manager, test2, null);
+			new ui.ProgressBar(test2.manager, test2, null);
         pb1 = pb1;
             pb1.set_placement("center");
             pb1.set_width(150);
             pb1.set_height(10);
 		    btn2 = 
-			new ms.ui.Image(test2.manager, test2, "images/arrow_left.png");
+			new ui.Image(test2.manager, test2, "images/arrow_left.png");
         btn2 = btn2;
             btn2.set_x(200);
             btn2.set_y(115);
@@ -336,7 +336,7 @@ btn1.set_rotation(btn1.get_rotation() + 0.200000003);
 	);
 		application.are_obj_events = true;
 		    btn3 = 
-			new ms.ui.Image(test2.manager, test2, "images/arrow_right.png");
+			new ui.Image(test2.manager, test2, "images/arrow_right.png");
         btn3 = btn3;
             btn3.set_x(380);
             btn3.set_y(115);
@@ -350,14 +350,14 @@ btn1.set_rotation(btn1.get_rotation() + 0.200000003);
 	);
 		application.are_obj_events = true;
 		    lbl2 = 
-			new ms.ui.Label(test2.manager, test2, "Verdana");
+			new ui.Label(test2.manager, test2, "Verdana");
         lbl2 = lbl2;
             lbl2.set_x(210);
             lbl2.set_y(200);
             lbl2.set_rotation(0.200000003);
             lbl2.text("click small arrows to adjust percentage");
 		    btnNext = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/arrow_right_green_48.png", "images/arrow_right_48.png");
+			new ui.Button(g_ui_root.manager, g_ui_root, "images/arrow_right_green_48.png", "images/arrow_right_48.png");
         btnNext = btnNext;
             btnNext.set_x(320);
             btnNext.set_y(300);
@@ -375,7 +375,7 @@ btnNext.set_rotation(btnNext.get_rotation() + 0.200000003);
 	);
 		application.are_obj_events = true;
 		    btnPrev = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/arrow_left_green_48.png", "images/arrow_left_48.png");
+			new ui.Button(g_ui_root.manager, g_ui_root, "images/arrow_left_green_48.png", "images/arrow_left_48.png");
         btnPrev = btnPrev;
             btnPrev.set_x(220);
             btnPrev.set_y(300);
@@ -394,19 +394,19 @@ main.active(main.get_active() - 1);
 		application.are_obj_events = true;
 			document.onkeydown = function(ev)
 			{
-				ui.keydown(ev.keyCode);                  
+				ui_.keydown(ev.keyCode);                  
 			};
 			document.onkeyup = function(ev)
 			{
-				ui.keyup(ev.keyCode);                  
+				ui_.keyup(ev.keyCode);                  
 			};
 			document.onkeypress = function(ev)
 			{
-				ui.keypress(ev.keyCode);                  
+				ui_.keypress(ev.keyCode);                  
 			};
             application.events.dispatch("init", []);
             start();
-			ui.draw(drawingCanvas.getContext('2d'));
+			ui_.draw(drawingCanvas.getContext('2d'));
 		});
 	}
 }

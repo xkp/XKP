@@ -1,7 +1,7 @@
 <module id="ui" src="ui.xs">
     <dependency href="../js/utils.js"/>
-    <dependency href="../js/prototype.js"/>
-    <dependency href="../js/ms-event.js"/>
+    <dependency href="../js/resig.js"/>
+    <dependency href="../js/event.js"/>
     <dependency href="../js/keys.js"/>
 
     <types>
@@ -74,9 +74,9 @@
             </property>			
         </class>
 		
-		<class id="painter" super="component" output_id="ms.ui.Painter"/>
+		<class id="painter" super="component" output_id="ui.Painter"/>
 		
-		<class id="replicator" renderer="replicator_renderer.xss" super="component" output_id="ms.ui.Replicator">
+		<class id="replicator" renderer="replicator_renderer.xss" super="component" output_id="ui.Replicator">
 			<constructor_params>
                 <parameter property="template" runtime="true"/>
             </constructor_params>
@@ -92,7 +92,7 @@
             <property id="height" type="int" use_plain_value="true" runtime="true"/>                
 		</class>
 		
-		<class id="clip_area" super="component" output_id="ms.ui.ClipArea">
+		<class id="clip_area" super="component" output_id="ui.ClipArea">
 			<constructor_params>
                 <parameter property="shape" runtime="true"/>
             </constructor_params>
@@ -100,7 +100,7 @@
             <property id="shape" type="string"/>                
 		</class>
 
-		<class id="sprite" super="component" output_id="ms.ui.Sprite">
+		<class id="sprite" super="component" output_id="ui.Sprite">
 			<constructor_params>
                 <parameter property="sheet" runtime="true"/>				
             </constructor_params>
@@ -123,7 +123,7 @@
             </property>			
 		</class>	
 		
-		<class id="rectangle" super="component" output_id="ms.ui.Rectangle">
+		<class id="rectangle" super="component" output_id="ui.Rectangle">
 			<constructor_params>
                 <parameter property="fill" runtime="true"/>
 				<parameter property="stroke" runtime="true"/>
@@ -144,7 +144,7 @@
 			</property>
 		</class>
 		
-		<class id="polygon" super="component" output_id="ms.ui.Polygon">
+		<class id="polygon" super="component" output_id="ui.Polygon">
 			<constructor_params>
                 <parameter property="fill" runtime="true"/>
 				<parameter property="stroke" runtime="true"/>
@@ -169,7 +169,7 @@
 		
 		<class id="linear_gradient" renderer="gradient_renderer.xss"/>
 		
-		<class id="circle" super="component" output_id="ms.ui.Circle">
+		<class id="circle" super="component" output_id="ui.Circle">
 			<constructor_params>
                 <parameter property="fill" runtime="true"/>
 				<parameter property="stroke" runtime="true"/>
@@ -194,10 +194,10 @@
 			</property>
 		</class>
 		
-        <class id="div" super="component" output_id="ms.ui.Component">
+        <class id="div" super="component" output_id="ui.Component">
         </class>
 
-        <class id="img" super="component" output_id="ms.ui.Image">
+        <class id="img" super="component" output_id="ui.Image">
             <constructor_params>
                 <parameter property="src" runtime="true"/>
             </constructor_params>
@@ -222,7 +222,7 @@
             </property>
         </class>
 		
-		<class id="ripple_effect" super="component" output_id="ms.ui.RippleEffect">
+		<class id="ripple_effect" super="component" output_id="ui.RippleEffect">
             <constructor_params>
                 <parameter property="src" runtime="true"/>				
             </constructor_params>			
@@ -233,7 +233,7 @@
             </property>
         </class>
 
-        <class id="button" super="component" output_id="ms.ui.Button">
+        <class id="button" super="component" output_id="ui.Button">
             <constructor_params>
                 <parameter property="up" runtime="true"/>
                 <parameter property="down" runtime="true"/>
@@ -243,7 +243,7 @@
             <property id="down" type="string" dont_init="true"/>
         </class>
 		
-		<class id="text_button" super="component" output_id="ms.ui.TextButton">
+		<class id="text_button" super="component" output_id="ui.TextButton">
             <constructor_params>
                 <parameter property="text" runtime="true"/> 
 				<parameter property="font" runtime="true"/> 
@@ -259,7 +259,7 @@
             </property>
         </class>
 
-        <class id="state_button" super="component" output_id="ms.ui.StateButton">
+        <class id="state_button" super="component" output_id="ui.StateButton">
             <constructor_params>
                 <parameter property="active" runtime="true"/>
                 <parameter property="inactive" runtime="true"/>
@@ -273,7 +273,7 @@
             </property>
         </class>
 
-        <class id="label" super="component" output_id="ms.ui.Label">
+        <class id="label" super="component" output_id="ui.Label">
             <constructor_params>
                 <parameter property="font" runtime="true"/>
             </constructor_params>
@@ -295,7 +295,7 @@
 			
         </class>
 
-        <class id="progress_bar" super="component" output_id="ms.ui.ProgressBar">
+        <class id="progress_bar" super="component" output_id="ui.ProgressBar">
             <constructor_params>
                 <parameter property="images" runtime="true"/>
             </constructor_params>
@@ -306,14 +306,14 @@
             </property>
         </class>
 
-        <class id="switch" super="component" output_id="ms.ui.Switch">
+        <class id="switch" super="component" output_id="ui.Switch">
             <property id="active" type="int">
                 <get text="get_active()"/>
                 <set text="active({value})"/>
             </property>
         </class>
 
-        <class id="line" super="component" output_id="ms.ui.Line">
+        <class id="line" super="component" output_id="ui.Line">
             <property id="x1" type="float">
                 <get text="x1"/>
                 <set text="set_x1({value})"/>
@@ -350,7 +350,7 @@
             </property>
         </class>
 		
-		<class id="sound" output_id="ms.ui.Sound">
+		<class id="sound" output_id="ui.Sound">
 			<constructor_params>
                 <parameter property="src" runtime="true"/>				
             </constructor_params>			
@@ -361,7 +361,7 @@
             </property>
         </class>
 		
-		<class id="vid" super="component" output_id="ms.ui.Video">
+		<class id="vid" super="component" output_id="ui.Video">
             <constructor_params>
                 <parameter property="src" runtime="true"/>				
             </constructor_params>			

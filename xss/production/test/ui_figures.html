@@ -5,11 +5,11 @@
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/resig.js"></script>
+<script type="text/javascript" src="../js/event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
-		<script type="text/javascript" src="../js/ms-ui.js"></script>
-		<script type="text/javascript" src="../js/ms-streamer.js"></script>
+		<script type="text/javascript" src="../js/ui.js"></script>
+		<script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">
     var drawingCanvas;		
 var g_ui;
@@ -18,8 +18,8 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
-application.events = new ms.event.EventHolder();
-var SoundUtils = new ms.ui.SoundUtils();
+application.events = new ev.EventHolder();
+var SoundUtils = new ui.SoundUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -27,15 +27,15 @@ var SoundUtils = new ms.ui.SoundUtils();
 				height: 600,
 				canvas: drawingCanvas
 			};
-            var streamer = new ms.streamer.Streamer();							
-			var ui = new ms.ui.Manager(client, streamer);			
-			var g_ui = ui;
-			var g_ui_root = ui.root;
+            var streamer = new stream.Streamer();							
+			var ui_ = new ui.Manager(client, streamer);			
+			var g_ui = ui_;
+			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
 		}
-		var streamer = new ms.streamer.Streamer();	
-		var ResourceUtils = new ms.streamer.ResourceUtils();
-		var global_package = new ms.streamer.Package(streamer);	
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
+		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
             {
 		id:				"__image1",
@@ -106,61 +106,61 @@ window.onload = function()
 			height: 600,
 			canvas: drawingCanvas
 		};
-		var ui = new ms.ui.Manager(client, streamer);
-		g_ui = ui;
-        g_ui_root = ui.root;
-     	ui.load_resources(function()
+		var ui_ = new ui.Manager(client, streamer);
+		g_ui = ui_;
+        g_ui_root = ui_.root;
+     	ui_.load_resources(function()
 		{
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};		
-	ui.events.addListener("mousedown", function(x,y)
+	ui_.events.addListener("mousedown", function(x,y)
 	{    
 		application.events.dispatch("mousedown", [x, y]);
 	});
-	ui.events.addListener("mouseup", function(x,y)
+	ui_.events.addListener("mouseup", function(x,y)
 	{    
 		application.events.dispatch("mouseup", [x, y]);
 	});
-	ui.events.addListener("mousemove", function(x,y)
+	ui_.events.addListener("mousemove", function(x,y)
 	{    
 		application.events.dispatch("mousemove", [x, y]);
 	});
-	ui.events.addListener("click", function(x,y)
+	ui_.events.addListener("click", function(x,y)
 	{    
 		application.events.dispatch("click", [x, y]);
 	});
-	ui.events.addListener("drag", function(x,y)
+	ui_.events.addListener("drag", function(x,y)
 	{    
 		application.events.dispatch("drag", [x, y]);
 	});
-	ui.events.addListener("dragend", function(x,y)
+	ui_.events.addListener("dragend", function(x,y)
 	{    
 		application.events.dispatch("dragend", [x, y]);
 	});
-	ui.events.addListener("keyup", function(keycode)
+	ui_.events.addListener("keyup", function(keycode)
 	{    
 		application.events.dispatch("keyup", [keycode]);
 	});
-	ui.events.addListener("keydown", function(keycode)
+	ui_.events.addListener("keydown", function(keycode)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-	ui.events.addListener("keypress", function(keycode)
+	ui_.events.addListener("keypress", function(keycode)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    div1 = 
-			new ms.ui.Component(g_ui_root.manager, g_ui_root);
+			new ui.Component(g_ui_root.manager, g_ui_root);
 	    div1.mouse_thru = true;
         div1 = div1;
             div1.set_x(0);
@@ -168,7 +168,7 @@ window.onload = function()
             div1.set_width(400);
             div1.set_height(200);
 		    c1 = 
-			new ms.ui.Circle(div1.manager, div1, "cyan", "black", 3);
+			new ui.Circle(div1.manager, div1, "cyan", "black", 3);
         c1 = c1;
             c1.set_x(50);
             c1.set_y(50);
@@ -181,7 +181,7 @@ window.onload = function()
 	);
 		application.are_obj_events = true;
 		    r1 = 
-			new ms.ui.Rectangle(div1.manager, div1, "green", null, null);
+			new ui.Rectangle(div1.manager, div1, "green", null, null);
         r1 = r1;
             r1.set_x(200);
             r1.set_y(50);
@@ -197,7 +197,7 @@ window.onload = function()
 	);
 		application.are_obj_events = true;
 		    p1 = 
-			new ms.ui.Polygon(div1.manager, div1, "pink", "brown", 3);
+			new ui.Polygon(div1.manager, div1, "pink", "brown", 3);
         p1 = p1;
             p1.alpha(40);
 		p1.points.push({id:"point1", x:300, y:300});
@@ -205,14 +205,14 @@ window.onload = function()
 		p1.points.push({id:"point3", x:390, y:200});
 		p1.points.push({id:"point4", x:350, y:400});
 		    line1 = 
-			new ms.ui.Line(div1.manager, div1);
+			new ui.Line(div1.manager, div1);
         line1 = line1;
             line1.set_x1(500);
             line1.set_y1(350);
             line1.set_x2(500);
             line1.set_y2(500);
 		    btn = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/smile_grin_48.png", "images/smile_sad_48.png");
+			new ui.Button(g_ui_root.manager, g_ui_root, "images/smile_grin_48.png", "images/smile_sad_48.png");
         btn = btn;
             btn.set_x(270);
             btn.set_y(200);
@@ -242,19 +242,19 @@ line1.set_lineWidth(line1.lineWidth + 1);
 		application.are_obj_events = true;
 			document.onkeydown = function(ev)
 			{
-				ui.keydown(ev.keyCode);                  
+				ui_.keydown(ev.keyCode);                  
 			};
 			document.onkeyup = function(ev)
 			{
-				ui.keyup(ev.keyCode);                  
+				ui_.keyup(ev.keyCode);                  
 			};
 			document.onkeypress = function(ev)
 			{
-				ui.keypress(ev.keyCode);                  
+				ui_.keypress(ev.keyCode);                  
 			};
             application.events.dispatch("init", []);
             start();
-			ui.draw(drawingCanvas.getContext('2d'));
+			ui_.draw(drawingCanvas.getContext('2d'));
 		});
 	}
 }

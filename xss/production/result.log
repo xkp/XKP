@@ -349,7 +349,6 @@ log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
-log: UI Component: lbl0
 log: Rendering Sequence...
 Success are greateful
 ===[ 3js-ui.project.xml ]================(Tests)
@@ -359,10 +358,6 @@ log: Rendering Resources...
 log: Rendering 3js Types...
 log: Rendering UI Types...
 log: Rendering UI...
-log: UI Component: lbl0
-log: UI Component: btn1
-log: UI Component: lbl1
-log: UI Component: lbl2
 Success are greateful
 ===[ 3js_cameras.project.xml ]================(Tests)
 
@@ -376,8 +371,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: UI Component: __label1
-log: UI Component: lbl1
 Success are greateful
 ===[ 3js_class_test.project.xml ]================(Tests)
 
@@ -392,7 +385,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: UI Component: lbl0
 Success are greateful
 ===[ 3js_class_test_2.project.xml ]================(Tests)
 
@@ -401,8 +393,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: UI Component: lbl0
-log: UI Component: lbl1
 Success are greateful
 ===[ 3js_cube.project.xml ]================(Tests)
 
@@ -410,7 +400,6 @@ Success are greateful
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: UI Component: lbl0
 Success are greateful
 ===[ 3js_cube_img.project.xml ]================(Tests)
 
@@ -444,7 +433,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: UI Component: __label1
 Success are greateful
 ===[ 3js_particle.project.xml ]================(Tests)
 
@@ -457,7 +445,6 @@ Success are greateful
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: UI Component: lbl0
 Success are greateful
 ===[ 3js_sound.project.xml ]================(Tests)
 
@@ -471,26 +458,13 @@ Success are greateful
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: UI Component: lbl0
-log: UI Component: lbl1
-log: UI Component: lbl2
 Success are greateful
 ===[ animtest.project.xml ]================(Tests)
 
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering Sequence Types...
-log: Rendering UI...
-log: UI Component: lbl1
-log: UI Component: lbl2
-log: UI Component: lbl3
-log: UI Component: lbl4
-log: UI Component: btn1
-log: UI Component: btn2
-log: UI Component: btn3
-log: UI Component: btn4
-Success are greateful
+Error [404] File not found
+	file = c:/dev/XKP/xss/tests/../idioms/ms/sequence.xmlERROR: Project:  animtest.project.xml
+
 ===[ box2d1.project.xml ]================(Tests)
 
 
@@ -501,7 +475,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: UI Component: btn1
 Success are greateful
 ===[ box2d3.project.xml ]================(Tests)
 
@@ -509,13 +482,7 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: smiley_ball
-log: Here img
-log: HAS PARENT img
-log: No, not there
 log: Rendering UI...
-log: UI Component: __img1
-log: UI Component: __img2
-log: UI Component: __img3
 Success are greateful
 ===[ box2d4.project.xml ]================(Tests)
 
@@ -523,53 +490,24 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: bad_guy
-log: Here img
-log: HAS PARENT img
-log: No, not there
-log: Here img
-log: HAS PARENT img
-log: No, not there
-Error [404] File not found
-	file = c:/dev/XKP/xss/tests/../idioms/mutant-state/instantiator.xssERROR: Project:  box2d4.project.xml
-
+log: good_guy
+log: bullet
+log: floor
+log: Rendering Sequence Types...
+log: Rendering UI...
+log: Rendering Sequence...
+Success are greateful
 ===[ box2d5.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering UI Types...
 log: body_1
-log: Here img
-log: HAS PARENT img
-log: No, not there
 log: body_2
-log: Here img
-log: HAS PARENT img
-log: No, not there
 log: body_3
-log: Here img
-log: HAS PARENT img
-log: No, not there
 log: floor
-log: Here img
-log: HAS PARENT img
-log: No, not there
 log: my_body
 log: Rendering UI...
-log: UI Component: __label1
-log: UI Component: __label2
-log: UI Component: __label3
-log: UI Component: __label4
-log: UI Component: __label5
-log: UI Component: btn1
-log: UI Component: btn2
-log: UI Component: btn3
-log: UI Component: btn4
-log: UI Component: btn5
-log: UI Component: btn6
-log: UI Component: __floor1
-log: UI Component: __floor2
-log: UI Component: __floor3
-log: UI Component: __floor4
 Success are greateful
 ===[ box2dcar.project.xml ]================(Tests)
 
@@ -577,37 +515,11 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: car
-log: Here img
-log: HAS PARENT img
-log: No, not there
 log: wheel
-log: Here img
-log: HAS PARENT img
-log: No, not there
 log: box
-log: Here img
-log: HAS PARENT img
-log: No, not there
 log: floor
-log: Here img
-log: HAS PARENT img
-log: No, not there
 log: my_body
 log: Rendering UI...
-log: UI Component: car_1
-log: UI Component: right_wheel
-log: UI Component: right_rear_wheel
-log: UI Component: left_wheel
-log: UI Component: left_rear_wheel
-log: UI Component: box_1
-log: UI Component: box_2
-log: UI Component: box_3
-log: UI Component: box_4
-log: UI Component: __floor1
-log: UI Component: __floor2
-log: UI Component: __floor3
-log: UI Component: __floor4
-log: UI Component: __label1
 Success are greateful
 ===[ dany_dennis.project.xml ]================(Tests)
 
@@ -618,18 +530,6 @@ log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering Sequence...
 log: Rendering UI...
-log: UI Component: close
-log: UI Component: box_cont
-log: UI Component: box_border
-log: UI Component: banner
-log: UI Component: camerawl
-log: UI Component: lens
-log: UI Component: line_top
-log: UI Component: pict1
-log: UI Component: pict2
-log: UI Component: pict3
-log: UI Component: pict4
-log: UI Component: pict5
 Success are greateful
 ===[ dd.project.xml ]================(Tests)
 
@@ -638,17 +538,8 @@ log: Rendering Resources...
 log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: social_button
-log: Here img
-log: HAS PARENT img
-log: No, not there
-log: Here img
-log: HAS PARENT img
-log: No, not there
 log: Rendering 3js Types...
 log: Rendering UI...
-log: UI Component: facebook
-log: UI Component: twitter
-log: UI Component: email
 Success are greateful
 ===[ enums.project.xml ]================(Tests)
 
@@ -700,6 +591,12 @@ prop_btn_sameName = swp;
 				sameName = "My owner is application."			
 
 Success are greateful
+===[ g_anim.project.xml ]================(Tests)
+
+
+Error [404] File not found
+	file = c:/dev/XKP/xss/tests/../idioms/ms/sequence.xmlERROR: Project:  g_anim.project.xml
+
 ===[ java1.project.xml ]================(Tests)
 
 
@@ -1122,8 +1019,6 @@ log: Rendering Sequence Types...
 log: Here?
 log: Nope
 log: Rendering UI...
-log: UI Component: img1
-log: UI Component: img2
 log: IT IS ALIVE
 log: IT IS ALIVE
 log: Ignoring idx 1
@@ -1171,14 +1066,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
-log: UI Component: rr1
-log: UI Component: r1
-log: UI Component: r2
-log: UI Component: r3
-log: UI Component: c1
-log: UI Component: c2
-log: UI Component: img1
-log: UI Component: img2
 log: Rendering Sequence...
 Success are greateful
 ===[ ms4.project.xml ]================(Tests)
@@ -1190,8 +1077,6 @@ log: Rendering Sequence Types...
 log: Here?
 log: Nope
 log: Rendering UI...
-log: UI Component: img1
-log: UI Component: img2
 Success are greateful
 ===[ ms5.project.xml ]================(Tests)
 
@@ -1200,17 +1085,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
-log: UI Component: main
-log: UI Component: test1
-log: UI Component: lbl1
-log: UI Component: btn1
-log: UI Component: test2
-log: UI Component: pb1
-log: UI Component: btn2
-log: UI Component: btn3
-log: UI Component: lbl2
-log: UI Component: btnNext
-log: UI Component: btnPrev
 log: Rendering Sequence...
 Success are greateful
 ===[ ms6.project.xml ]================(Tests)
@@ -1219,21 +1093,8 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: ms6
-log: Here div
-log: HAS PARENT div
-log: No, not there
-log: Here div
-log: HAS PARENT div
-log: UI Component: this.btn1
-log: No, not there
-log: Here div
-log: HAS PARENT div
-log: UI Component: this.btn2
-log: No, not there
 log: Rendering Sequence Types...
 log: Rendering UI...
-log: UI Component: ms61
-log: UI Component: ms62
 log: Rendering Sequence...
 Success are greateful
 ===[ ms7.project.xml ]================(Tests)
@@ -1242,7 +1103,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: UI Component: div1
 Success are greateful
 ===[ newseq1.project.xml ]================(Tests)
 
@@ -1251,7 +1111,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
-log: UI Component: img1
 log: Rendering Sequence...
 Success are greateful
 ===[ paintings.project.xml ]================(Tests)
@@ -1269,21 +1128,6 @@ log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering Sequence...
 log: Rendering UI...
-log: UI Component: liquid
-log: UI Component: banner
-log: UI Component: loading
-log: UI Component: lens1
-log: UI Component: lens2
-log: UI Component: facebook
-log: UI Component: twitter
-log: UI Component: btn1
-log: UI Component: btn2
-log: UI Component: linetop
-log: UI Component: line1
-log: UI Component: line2
-log: UI Component: line3
-log: UI Component: line4
-log: UI Component: rect1
 Success are greateful
 ===[ pixastic.project.xml ]================(Tests)
 
@@ -1291,120 +1135,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: UI Component: __label1
-log: UI Component: __line1
-log: UI Component: img1
-log: UI Component: title
-log: UI Component: flipv_label
-log: UI Component: hsl_label
-log: UI Component: edges_label
-log: UI Component: pointillize_label
-log: UI Component: brightness_label
-log: UI Component: invert_label
-log: UI Component: sepia_label
-log: UI Component: coloradjust_label
-log: UI Component: noise_label
-log: UI Component: blur_label
-log: UI Component: edges2_label
-log: UI Component: glow_label
-log: UI Component: sharpen_label
-log: UI Component: solarize_label
-log: UI Component: fliph_label
-log: UI Component: mosaic_label
-log: UI Component: options
-log: UI Component: hsl_options
-log: UI Component: __label2
-log: UI Component: __label3
-log: UI Component: saturation_bar
-log: UI Component: saturation_b1
-log: UI Component: saturation_b2
-log: UI Component: __label4
-log: UI Component: hue_bar
-log: UI Component: hue_b1
-log: UI Component: hue_b2
-log: UI Component: __label5
-log: UI Component: lightness_bar
-log: UI Component: lightness_b1
-log: UI Component: lightness_b2
-log: UI Component: edges_options
-log: UI Component: __label6
-log: UI Component: mono_check
-log: UI Component: __label7
-log: UI Component: invert_check
-log: UI Component: __label8
-log: UI Component: pointillize_options
-log: UI Component: __label9
-log: UI Component: __label10
-log: UI Component: density_bar
-log: UI Component: density_b1
-log: UI Component: density_b2
-log: UI Component: __label11
-log: UI Component: noise_bar
-log: UI Component: noise_b1
-log: UI Component: noise_b2
-log: UI Component: transparent_check
-log: UI Component: __label12
-log: UI Component: brightness_options
-log: UI Component: __label13
-log: UI Component: __label14
-log: UI Component: brightness_bar
-log: UI Component: brightness_b1
-log: UI Component: brightness_b2
-log: UI Component: __label15
-log: UI Component: contrast_bar
-log: UI Component: contrast_b1
-log: UI Component: contrast_b2
-log: UI Component: coloradjust_options
-log: UI Component: __label16
-log: UI Component: __label17
-log: UI Component: red_bar
-log: UI Component: red_b1
-log: UI Component: red_b2
-log: UI Component: __label18
-log: UI Component: green_bar
-log: UI Component: green_b1
-log: UI Component: green_b2
-log: UI Component: __label19
-log: UI Component: blue_bar
-log: UI Component: blue_b1
-log: UI Component: blue_b2
-log: UI Component: noise_options
-log: UI Component: __label20
-log: UI Component: __label21
-log: UI Component: amount_bar
-log: UI Component: amount_b1
-log: UI Component: amount_b2
-log: UI Component: __label22
-log: UI Component: strength_bar
-log: UI Component: strength_b1
-log: UI Component: strength_b2
-log: UI Component: mono_check1
-log: UI Component: __label23
-log: UI Component: glow_options
-log: UI Component: __label24
-log: UI Component: __label25
-log: UI Component: amount_bar1
-log: UI Component: amount_b11
-log: UI Component: amount_b21
-log: UI Component: __label26
-log: UI Component: radius_bar
-log: UI Component: radius_b1
-log: UI Component: radius_b2
-log: UI Component: sharpen_options
-log: UI Component: __label27
-log: UI Component: __label28
-log: UI Component: amount_bar2
-log: UI Component: amount_b12
-log: UI Component: amount_b22
-log: UI Component: mosaic_options
-log: UI Component: __label29
-log: UI Component: __label30
-log: UI Component: bsize_bar
-log: UI Component: bsize_b1
-log: UI Component: bsize_b2
-log: UI Component: btnNext
-log: UI Component: btnPrev
-log: UI Component: __label31
 Success are greateful
 ===[ pixastic_test.project.xml ]================(Tests)
 
@@ -1413,13 +1143,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: UI Component: lbl0
-log: UI Component: lbl1
-log: UI Component: lbl2
-log: UI Component: img1
-log: UI Component: img2
-log: UI Component: img3
-log: UI Component: img4
 Success are greateful
 ===[ query_properties.project.xml ]================(Tests)
 
@@ -1452,17 +1175,7 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: my_image
 log: menu_item
-log: Here div
-log: HAS PARENT div
-log: UI Component: this.lbl_caption
-log: No, not there
-log: Here div
-log: HAS PARENT div
-log: UI Component: this.icon
-log: No, not there
 log: Rendering UI...
-log: UI Component: rep1
-log: UI Component: rep2
 Success are greateful
 ===[ ui_audio.project.xml ]================(Tests)
 
@@ -1470,18 +1183,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: UI Component: lbl1
-log: UI Component: btnSound1
-log: UI Component: btnSound2
-log: UI Component: volume_bar
-log: UI Component: btn1
-log: UI Component: btn2
-log: UI Component: lbl3
-log: UI Component: btnPlay
-log: UI Component: btnPause
-log: UI Component: btnStop
-log: UI Component: sound_1
-log: UI Component: sound_2
 Success are greateful
 ===[ ui_audio_1.project.xml ]================(Tests)
 
@@ -1489,9 +1190,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: UI Component: lbl1
-log: UI Component: btnExplosion
-log: UI Component: btnShoots
 Success are greateful
 ===[ ui_class_test.project.xml ]================(Tests)
 
@@ -1500,9 +1198,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: my_image
 log: Rendering UI...
-log: UI Component: test1
-log: UI Component: img4
-log: UI Component: img1
 Success are greateful
 ===[ ui_cliparea.project.xml ]================(Tests)
 
@@ -1510,15 +1205,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: UI Component: div1
-log: UI Component: ca1
-log: UI Component: __label1
-log: UI Component: lbl1
-log: UI Component: ca2
-log: UI Component: btn1
-log: UI Component: btn2
-log: UI Component: stateBtn
-log: UI Component: lbl3
 Success are greateful
 ===[ ui_demo.project.xml ]================(Tests)
 
@@ -1526,24 +1212,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: UI Component: main
-log: UI Component: test1
-log: UI Component: lbl0
-log: UI Component: lbl1
-log: UI Component: div1
-log: UI Component: btn1
-log: UI Component: div2
-log: UI Component: btn44
-log: UI Component: test2
-log: UI Component: pb1
-log: UI Component: btn2
-log: UI Component: btn3
-log: UI Component: lbl2
-log: UI Component: btnNext
-log: UI Component: btnPrev
-log: UI Component: stateBtn
-log: UI Component: lbl3
-log: UI Component: img1
 Success are greateful
 ===[ ui_drag.project.xml ]================(Tests)
 
@@ -1551,13 +1219,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: UI Component: __label1
-log: UI Component: lbl1
-log: UI Component: btn1
-log: UI Component: img1
-log: UI Component: tb1
-log: UI Component: stateBtn
-log: UI Component: lbl3
 Success are greateful
 ===[ ui_figures.project.xml ]================(Tests)
 
@@ -1565,12 +1226,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: UI Component: div1
-log: UI Component: c1
-log: UI Component: r1
-log: UI Component: p1
-log: UI Component: line1
-log: UI Component: btn
 Success are greateful
 ===[ ui_kitchen_sink.project.xml ]================(Tests)
 
@@ -1578,48 +1233,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: UI Component: main
-log: UI Component: test1
-log: UI Component: title0
-log: UI Component: lbl_event
-log: UI Component: lbl0
-log: UI Component: lbl1
-log: UI Component: btn1
-log: UI Component: stateBtn
-log: UI Component: lbl3
-log: UI Component: test2
-log: UI Component: title1
-log: UI Component: pb1
-log: UI Component: btn2
-log: UI Component: btn3
-log: UI Component: lbl2
-log: UI Component: lbl7
-log: UI Component: monster
-log: UI Component: test3
-log: UI Component: title2
-log: UI Component: c1
-log: UI Component: r1
-log: UI Component: p1
-log: UI Component: line1
-log: UI Component: lbl4
-log: UI Component: lbl5
-log: UI Component: lbl6
-log: UI Component: lbl8
-log: UI Component: btn5
-log: UI Component: test4
-log: UI Component: title3
-log: UI Component: title4
-log: UI Component: inst0
-log: UI Component: clips
-log: UI Component: ca1
-log: UI Component: back_img
-log: UI Component: ca2
-log: UI Component: tb1
-log: UI Component: inst1
-log: UI Component: inst2
-log: UI Component: inst3
-log: UI Component: btnNext
-log: UI Component: btnPrev
 Success are greateful
 ===[ ui_painter.project.xml ]================(Tests)
 
@@ -1627,8 +1240,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: UI Component: __label1
-log: UI Component: painter_1
 Success are greateful
 ===[ ui_placement.project.xml ]================(Tests)
 
@@ -1636,17 +1247,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: UI Component: test1
-log: UI Component: lbl0
-log: UI Component: lbl2
-log: UI Component: lbl3
-log: UI Component: lbl4
-log: UI Component: lbl1
-log: UI Component: btn1
-log: UI Component: btnRight
-log: UI Component: btnLeft
-log: UI Component: btnUp
-log: UI Component: btnDown
 Success are greateful
 ===[ ui_selfdrawn.project.xml ]================(Tests)
 
@@ -1660,13 +1260,6 @@ Error [cannot-resolve] Instance not found
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: UI Component: monster
-log: UI Component: girl1
-log: UI Component: girl2
-log: UI Component: mario
-log: UI Component: lbl1
-log: UI Component: lbl2
-log: UI Component: lbl3
 Success are greateful
 ===[ ui_video.project.xml ]================(Tests)
 
@@ -1674,18 +1267,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: UI Component: v
-log: UI Component: lbl1
-log: UI Component: btnVolUp
-log: UI Component: btnVolDown
-log: UI Component: btnMute
-log: UI Component: lbl2
-log: UI Component: btnPlay
-log: UI Component: btnPause
-log: UI Component: btnStop
-log: UI Component: lbl3
-log: UI Component: btnRotLeft
-log: UI Component: btnRotRight
 Success are greateful
 ===[ uibuffer_test.project.xml ]================(Tests)
 
@@ -1694,16 +1275,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: UI Component: lbl0
-log: UI Component: lbl1
-log: UI Component: r1
-log: UI Component: yh
-log: UI Component: msn
-log: UI Component: title1
-log: UI Component: r2
-log: UI Component: fb
-log: UI Component: tw
-log: UI Component: title2
 Success are greateful
 ===[ wax1.project.xml ]================(Tests)
 
@@ -2059,112 +1630,11 @@ log: /usr/lib/test_idiom
 log: /use/bin/xss14_1
 log: </Dependencies>
 log: <User Classes>
-log: </User Classes>
+Error [vm] Cannot resolve
+	object = 
+	property = constructor_params
+	file = c:/dev/XKP/xss/tests/../idioms/common-js/resig-class.xssERROR: Project:  xss14.project.xml
 
-
-
-
-
-
-        var test_class = Class.extend(
-    {
-    init: function()
-    {
-        this._super();
-        this.events = new ms.event.EventHolder(); 
-        
-        var this__  = this;
-        
-            this.events.dispatch("init", [this]);
-            },
-});
-
-
-
-
-
-
-
-
-        var test_class1 = test_class.extend(
-    {
-    init: function()
-    {
-        this._super();
-        this.events = new ms.event.EventHolder(); 
-        
-        var this__  = this;
-        
-
-
-
-
-
-        this.some_prop_get = function ()
-        {
-            return 10;
-        };
-
-        this.some_prop_set = function (value)
-        {
-            value++;
-        };
-    
-
-            this.events.dispatch("init", [this]);
-            },
-});
-
-
-
-
-
-
-
-
-        var test_class2 = test_class1.extend(
-    {
-    init: function()
-    {
-        this._super();
-        this.events = new ms.event.EventHolder(); 
-        
-        var this__  = this;
-        
-
-
-
-
-
-        this.some_prop_get = function ()
-        {
-            return 10;
-        };
-
-        this.some_prop_set = function (value)
-        {
-            value++;
-        };
-    
-
-
-
-
-
-
-	this.foo = function() 
-	{
-		this.some_prop_set(this.some_prop_get() + 1);
-	};
-
-            this.events.dispatch("init", [this]);
-            },
-});
-
-
-
-log: /usr/lib/source.xxx
-Success are greateful
 ===[ xss2.project.xml ]================(Tests)
 
 

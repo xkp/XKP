@@ -16,23 +16,24 @@
         
     if (!is_class)
     {        		
-        string parent_id = "g_ui_root";
+        string parent_id = "g_ui_root";		
         if (cmp.parent.class_name != "application")
             parent_id = cmp.parent.output_id;
-
-        var manager_param   = object();
-        manager_param.id    = "manager";
-        manager_param.value = parent_id + ".manager";
-        
-        var parent_param    = object();
-        parent_param.id    = "parent";
-        parent_param.value = parent_id;
-
-        params += manager_param;
-        params += parent_param;
+		if(path)
+			parent_id = path;
+		var manager_param   = object();
+		manager_param.id    = "manager";
+		manager_param.value = parent_id + ".manager";
 		
+		var parent_param    = object();
+		parent_param.id    = "parent";
+		parent_param.value = parent_id;
+
+		params += manager_param;
+		params += parent_param;	
+				
 		var type = cmp.type;   
-        compiler.log("UI Component: " + cmp_id);
+        
         out()
 	    {
 		    <xss:e value = "cmp_id"/> = 
@@ -40,7 +41,7 @@
 	    }
         
         //TODO: Porque no marcar las clases con algun valor (mouse_thru, quiza?) 
-        if(cmp.type.output_id == "ms.ui.Component" || cmp.type.output_id == "ms.ui.ClipArea"){
+        if(cmp.type.output_id == "ui.Component" || cmp.type.output_id == "ui.ClipArea"){
 			out() {<xss:e v="cmp_id"/>.mouse_thru = true;}			
 		}
         compiler.xss("../common-js/instance.xss", cmp, path = path, var_value = cmp_id);

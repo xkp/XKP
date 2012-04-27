@@ -12,29 +12,29 @@
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/resig.js"></script>
+<script type="text/javascript" src="../js/event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/streamer.js"></script>
 		<script type="text/javascript" src="../js/three/Three.js"></script>
 		<script type="text/javascript" src="../js/three/Stats.js"></script>
 		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
 		<script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
-var ui;
+var ui_;
 var SoundUtils;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var canvas_position = {x:0, y:0};
-var streamer = new ms.streamer.Streamer();
+var streamer = new stream.Streamer();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
-application.events = new ms.event.EventHolder();
+application.events = new ev.EventHolder();
 // --------RESOURCES---------
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
@@ -59,7 +59,6 @@ threejs_load_resources(function()
 		    camera_1 = 
 		    new THREE.Camera(70, 1.5, 1, 1000, null) ;	
 		active_camera = camera_1;
-		        scene.addObject(camera_1);
             camera_1.position.y = 300;
             camera_1.position.z = 500;
 			particle_1 = new THREE.Particle( 
@@ -67,7 +66,6 @@ threejs_load_resources(function()
 			{ color: Math.random()*0x808008, program: program_fill, } 
 			) );	
 			scene.addObject( particle_1 );	
-		        scene.addObject(particle_1);
             particle_1.position.y = 150;
             particle_1.scale.x = 5;
             particle_1.scale.y = 5;
@@ -83,10 +81,10 @@ particle_1.scale.z = particle_1.scale.z + 0.0500000007;
 	);
 if(ui)
 {	
-	SoundUtils = new ms.ui.SoundUtils();		
+	SoundUtils = new ui.SoundUtils();		
 	g_ui.fill_background = false;	
 }
-var event_manager = new ms.event.ThreeEventManager();
+var event_manager = new ev.ThreeEventManager();
 document.onmousemove = function(ev)
 {
 	event_manager.mousemove(ev.clientX, ev.clientY);                  
@@ -116,12 +114,12 @@ document.body.appendChild( renderer.domElement );
 animate();
 });
 function animate() {
-	if(ui)
+	if(ui_)
 		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
 	requestAnimationFrame( animate );
 	render();
-	if(ui)
-		ui.draw(drawingCanvas.getContext('2d'));
+	if(ui_)
+		ui_.draw(drawingCanvas.getContext('2d'));
 	}
 </script>
 </body>

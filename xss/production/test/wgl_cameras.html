@@ -12,11 +12,11 @@
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/resig.js"></script>
+<script type="text/javascript" src="../js/event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/streamer.js"></script>
 		<script type="text/javascript" src="../js/three/Three.js"></script>
 		<script type="text/javascript" src="../js/three/Stats.js"></script>
 		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
@@ -30,11 +30,11 @@ var canvas_position = {x:0, y:0};
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
-var streamer = new ms.streamer.Streamer();
+var streamer = new stream.Streamer();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
-application.events = new ms.event.EventHolder();
+application.events = new ev.EventHolder();
 // --------RESOURCES---------
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
@@ -77,94 +77,75 @@ color:Math.random() * 0xffffff,shading:flat_shading
 cube1_material = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading
 	});
-scene = 
-new THREE.Scene(
-);
+			    scene = new THREE.Scene() ;
 camera_1 = new THREE.QuakeCamera({
 fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly:true,lookVertical:false
 	});
 		active_camera = camera_1;
             camera_1.position.x = -250;
             camera_1.position.y = 25;
-camera_2 = 
-new THREE.Camera(
-50,1.5,1,10000);
+		    camera_2 = 
+		    new THREE.Camera(50, 1.5, 1, 10000, null) ;	
 		active_camera = camera_2;
             camera_2.position.x = -250;
             camera_2.position.y = 25;
-light = 
-new THREE.DirectionalLight(
-16777215);
-		;
-	scene.addLight(light);
+	    light = 
+	    new THREE.DirectionalLight(16777215, null, null, null) ;
+	    scene.addLight(light);
             light.position.y = 0.5;
             light.position.z = 1;
-	    var sphere_1_sphere = 
-new THREE.Sphere(
-20,32,16);
+	    sphere_1_sphere = new THREE.Sphere(20, 32, 16) ;
 	    sphere_1 = new THREE.Mesh(sphere_1_sphere, material_sphere1);
 	    scene.addObject(sphere_1);
-		sphere_1.events = new ms.event.EventHolder();
+		sphere_1.events = new ev.EventHolder();
             sphere_1.position.x = 250;
             sphere_1.position.y = 30;
-	    var sphere_2_sphere = 
-new THREE.Sphere(
-20,32,16);
+	    sphere_2_sphere = new THREE.Sphere(20, 32, 16) ;
 	    sphere_2 = new THREE.Mesh(sphere_2_sphere, material_sphere2);
 	    scene.addObject(sphere_2);
-		sphere_2.events = new ms.event.EventHolder();
+		sphere_2.events = new ev.EventHolder();
             sphere_2.position.x = -250;
             sphere_2.position.y = 30;
-	    var cylinder_1_cylinder = 
-new THREE.Cylinder(
-20,10,10,50);
+	    cylinder_1_cylinder = new THREE.Cylinder(20, 10, 10, 50, null, null) ;
 	    cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
 	    scene.addObject(cylinder_1);
-		cylinder_1.events = new ms.event.EventHolder();
+		cylinder_1.events = new ev.EventHolder();
             set_rotation_x(cylinder_1.rotation, 212);
             set_rotation_y(cylinder_1.rotation, 212);
             cylinder_1.position.x = 100;
             cylinder_1.position.y = 30;
             cylinder_1.position.z = 100;
-	    var cylinder_2_cylinder = 
-new THREE.Cylinder(
-20,10,10,50);
+	    cylinder_2_cylinder = new THREE.Cylinder(20, 10, 10, 50, null, null) ;
 	    cylinder_2 = new THREE.Mesh(cylinder_2_cylinder, cylinder1_material);
 	    scene.addObject(cylinder_2);
-		cylinder_2.events = new ms.event.EventHolder();
+		cylinder_2.events = new ev.EventHolder();
             set_rotation_x(cylinder_2.rotation, 212);
             set_rotation_y(cylinder_2.rotation, 212);
             cylinder_2.position.x = -100;
             cylinder_2.position.y = 30;
             cylinder_2.position.z = 100;
-	    var cube_1_cube = 
-new THREE.Cube(
-30,30,30);
+	    cube_1_cube = new THREE.Cube(30, 30, 30, null, null, null, null, null, null) ;
 	    cube_1 = new THREE.Mesh(cube_1_cube, cube_material);
 	    scene.addObject(cube_1);
-		cube_1.events = new ms.event.EventHolder();
+		cube_1.events = new ev.EventHolder();
             cube_1.position.x = -100;
             cube_1.position.y = 30;
             cube_1.position.z = -100;
             set_rotation_x(cube_1.rotation, 212);
             set_rotation_y(cube_1.rotation, 212);
-	    var cube_2_cube = 
-new THREE.Cube(
-30,30,30);
+	    cube_2_cube = new THREE.Cube(30, 30, 30, null, null, null, null, null, null) ;
 	    cube_2 = new THREE.Mesh(cube_2_cube, cube1_material);
 	    scene.addObject(cube_2);
-		cube_2.events = new ms.event.EventHolder();
+		cube_2.events = new ev.EventHolder();
             cube_2.position.x = 100;
             cube_2.position.y = 30;
             cube_2.position.z = -100;
             set_rotation_x(cube_2.rotation, 212);
             set_rotation_y(cube_2.rotation, 212);
-	    var plane_1_plane = 
-new THREE.Plane(
-1000,1000,100,100);
+	    plane_1_plane = new THREE.Plane(1000, 1000, 100, 100) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    scene.addObject(plane_1);
-		plane_1.events = new ms.event.EventHolder();
+		plane_1.events = new ev.EventHolder();
             plane_1.position.y = 0.100000001;
             set_rotation_x(plane_1.rotation, -90);
             application.is_quake_camera = false;
@@ -190,7 +171,7 @@ set_active_camera(camera_2);
 }
 	}
 	);
-var event_manager = new ms.event.ThreeEventManager();
+var event_manager = new ev.ThreeEventManager();
 document.onmousemove = function(ev)
 {
 	event_manager.mousemove(ev.clientX, ev.clientY);                  

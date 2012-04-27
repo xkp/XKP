@@ -11,34 +11,34 @@
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/resig.js"></script>
+<script type="text/javascript" src="../js/event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/streamer.js"></script>
 		<script type="text/javascript" src="../js/three/Three.js"></script>
 		<script type="text/javascript" src="../js/three/Stats.js"></script>
 		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
 		<script type="text/javascript" src="../js/three/Utils.js"></script>
-		<script type="text/javascript" src="../js/ms-streamer.js"></script>
-		<script type="text/javascript" src="../js/ms-ui.js"></script>
+		<script type="text/javascript" src="../js/streamer.js"></script>
+		<script type="text/javascript" src="../js/ui.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
-var ui;
+var ui_;
 var SoundUtils;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var canvas_position = {x:0, y:0};
-var streamer = new ms.streamer.Streamer();
+var streamer = new stream.Streamer();
 var app_width = 600;
 var app_height = 600;
 var lbl0;var btn1;var lbl1;var lbl2;
 var application = {};
-application.events = new ms.event.EventHolder();
-		var streamer = new ms.streamer.Streamer();	
-		var ResourceUtils = new ms.streamer.ResourceUtils();
+application.events = new ev.EventHolder();
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -46,14 +46,14 @@ application.events = new ms.event.EventHolder();
 				height: 600,
 				canvas: drawingCanvas
 			};
-            var streamer = new ms.streamer.Streamer();							
-			var ui = new ms.ui.Manager(client, streamer);			
-			var g_ui = ui;
-			var g_ui_root = ui.root;
+            var streamer = new stream.Streamer();							
+			var ui_ = new ui.Manager(client, streamer);			
+			var g_ui = ui_;
+			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
 		}
 	// --------RESOURCES---------
-		var global_package = new ms.streamer.Package(streamer);	
+		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
             {
 		id:				"__image1",
@@ -143,77 +143,74 @@ color:Grey
 		    camera_1 = 
 		    new THREE.Camera(70, 1.5, 1, 1000, null) ;	
 		active_camera = camera_1;
-		        scene.addObject(camera_1);
             camera_1.position.y = 300;
             camera_1.position.z = 500;
 	    cube_1_cube = new THREE.Cube(200, 200, 200, 1, 1, 1, materials, null, null) ;
 	    cube_1 = new THREE.Mesh(cube_1_cube, new THREE.MeshFaceMaterial());
 	    scene.addObject(cube_1);
-		cube_1.events = new ms.event.EventHolder();
-		        scene.addObject(cube_1);
+		cube_1.events = new ev.EventHolder();
             cube_1.position.y = 150;
 	    plane_1_plane = new THREE.Plane(200, 200, null, null) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, plane_material);
 	    scene.addObject(plane_1);
-		plane_1.events = new ms.event.EventHolder();
-		        scene.addObject(plane_1);
+		plane_1.events = new ev.EventHolder();
             set_rotation_x(plane_1.rotation, -1.57000005);
 	drawingCanvas.onmousemove = function(ev)
 	{
-		ui.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmousedown = function(ev)
 	{
-		ui.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};
 	drawingCanvas.onmouseup = function(ev)
 	{
-		ui.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+		ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 	};		
-	ui.events.addListener("mousedown", function(x,y)
+	ui_.events.addListener("mousedown", function(x,y)
 	{    
 		application.events.dispatch("mousedown", [x, y]);
 	});
-	ui.events.addListener("mouseup", function(x,y)
+	ui_.events.addListener("mouseup", function(x,y)
 	{    
 		application.events.dispatch("mouseup", [x, y]);
 	});
-	ui.events.addListener("mousemove", function(x,y)
+	ui_.events.addListener("mousemove", function(x,y)
 	{    
 		application.events.dispatch("mousemove", [x, y]);
 	});
-	ui.events.addListener("click", function(x,y)
+	ui_.events.addListener("click", function(x,y)
 	{    
 		application.events.dispatch("click", [x, y]);
 	});
-	ui.events.addListener("drag", function(x,y)
+	ui_.events.addListener("drag", function(x,y)
 	{    
 		application.events.dispatch("drag", [x, y]);
 	});
-	ui.events.addListener("dragend", function(x,y)
+	ui_.events.addListener("dragend", function(x,y)
 	{    
 		application.events.dispatch("dragend", [x, y]);
 	});
-	ui.events.addListener("keyup", function(keycode)
+	ui_.events.addListener("keyup", function(keycode)
 	{    
 		application.events.dispatch("keyup", [keycode]);
 	});
-	ui.events.addListener("keydown", function(keycode)
+	ui_.events.addListener("keydown", function(keycode)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-	ui.events.addListener("keypress", function(keycode)
+	ui_.events.addListener("keypress", function(keycode)
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    lbl0 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
+			new ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
         lbl0 = lbl0;
             lbl0.set_x(240);
             lbl0.set_y(75);
             lbl0.text("Click smile to count");
 		    btn1 = 
-			new ms.ui.Button(g_ui_root.manager, g_ui_root, "images/smile_sad_48.png", "images/smile_grin_48.png");
+			new ui.Button(g_ui_root.manager, g_ui_root, "images/smile_sad_48.png", "images/smile_grin_48.png");
         btn1 = btn1;
             btn1.set_placement("center");
             btn1.set_rotation(15);
@@ -229,13 +226,13 @@ application.clicks = application.clicks + 1;
 	);
 		application.are_obj_events = true;
 		    lbl1 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
+			new ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
         lbl1 = lbl1;
             lbl1.set_x(240);
             lbl1.set_y(400);
             lbl1.text("Use arrows to move smile");
 		    lbl2 = 
-			new ms.ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
+			new ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
         lbl2 = lbl2;
             lbl2.set_x(240);
             lbl2.set_y(420);
@@ -304,10 +301,10 @@ btn1.set_y(btn1.y + 2);
 	);
 if(ui)
 {	
-	SoundUtils = new ms.ui.SoundUtils();		
+	SoundUtils = new ui.SoundUtils();		
 	g_ui.fill_background = false;	
 }
-var event_manager = new ms.event.ThreeEventManager();
+var event_manager = new ev.ThreeEventManager();
 document.onmousemove = function(ev)
 {
 	event_manager.mousemove(ev.clientX, ev.clientY);                  
@@ -337,12 +334,12 @@ document.body.appendChild( renderer.domElement );
 animate();
 });
 function animate() {
-	if(ui)
+	if(ui_)
 		drawingCanvas.getContext('2d').clearRect(0,0,600,600);
 	requestAnimationFrame( animate );
 	render();
-	if(ui)
-		ui.draw(drawingCanvas.getContext('2d'));
+	if(ui_)
+		ui_.draw(drawingCanvas.getContext('2d'));
 	}
 </script>
 </body>

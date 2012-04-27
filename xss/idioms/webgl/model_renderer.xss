@@ -32,7 +32,7 @@
 			<xss:close_brace/> 
 		<xss:close_brace/> 
 	);
-	<xss:e v="obj.id"/>.events = new ms.event.EventHolder();
+	<xss:e v="obj.id"/>.events = new ev.EventHolder();
 	}
 
 for(var mthd in obj.methods)

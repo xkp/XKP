@@ -6,8 +6,8 @@ var g_canvas;
 var g_ui_root;
 var application = {};
 
-application.events = new ms.event.EventHolder();
-var SoundUtils = new ms.ui.SoundUtils();
+application.events = new ev.EventHolder();
+var SoundUtils = new ui.SoundUtils();
 		
 <xss:code>
     compiler.inject("render_initialization");
@@ -62,11 +62,11 @@ window.onload = function()
 			canvas: drawingCanvas
 		};
             							
-		var ui = new ms.ui.Manager(client, streamer);
+		var ui_ = new ui.Manager(client, streamer);
 		
-		g_ui = ui;
-        g_ui_root = ui.root;
-     	ui.load_resources(function()
+		g_ui = ui_;
+        g_ui_root = ui_.root;
+     	ui_.load_resources(function()
 		{
             <xss:code>			
 			compiler.inject("render_instances");            
@@ -74,21 +74,21 @@ window.onload = function()
 			
 			document.onkeydown = function(ev)
 			{
-				ui.keydown(ev.keyCode);                  
+				ui_.keydown(ev.keyCode);                  
 			};
 			document.onkeyup = function(ev)
 			{
-				ui.keyup(ev.keyCode);                  
+				ui_.keyup(ev.keyCode);                  
 			};
 			document.onkeypress = function(ev)
 			{
-				ui.keypress(ev.keyCode);                  
+				ui_.keypress(ev.keyCode);                  
 			};
 
             application.events.dispatch("init", []);
     
             start();
-			ui.draw(drawingCanvas.getContext('2d'));
+			ui_.draw(drawingCanvas.getContext('2d'));
 		});
 	}
 }

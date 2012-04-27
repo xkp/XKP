@@ -1,8 +1,8 @@
-"pixastic".namespace();
+var pixastic = {};
 
-pixastic.Preset = Class.create(
+pixastic.Preset = Class.extend(
 {
-	initialize: function()
+	init: function()
 	{
 		this.filters = [];
 		this.apply_ = true;
@@ -15,9 +15,9 @@ pixastic.Preset = Class.create(
 	},
 });
 
-pixastic.Filter = Class.create(
+pixastic.Filter = Class.extend(
 {	
-	initialize: function(parent)
+	init: function(parent)
 	{		
 		this.apply_ = true;		
 		this.parent = parent;		
@@ -87,11 +87,11 @@ pixastic.Filter = Class.create(
 	},
 });
 
-pixastic.Brightness = Class.create(pixastic.Filter,
+pixastic.Brightness = pixastic.Filter.extend(
 {
-	initialize: function($super, brightness, contrast, rect, parent)
+	init: function(brightness, contrast, rect, parent)
 	{
-		$super(parent);		
+		this._super(parent);		
 		this.filter_name = "brightness";
 		this.use_canvas = false;
 		this.options = {"brightness": brightness, "contrast": contrast, "rect": rect};			
@@ -108,11 +108,11 @@ pixastic.Brightness = Class.create(pixastic.Filter,
 	},	
 });	
 
-pixastic.HSL = Class.create(pixastic.Filter,
+pixastic.HSL = pixastic.Filter.extend(
 {
-	initialize: function($super, hue, saturation, lightness, rect, parent)
+	init: function(hue, saturation, lightness, rect, parent)
 	{
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "hsl";
 		this.use_canvas = false;
 		this.options = {"hue": hue, "saturation": saturation, "lightness": lightness, "rect": rect};		
@@ -134,11 +134,11 @@ pixastic.HSL = Class.create(pixastic.Filter,
 	},	
 });	
 
-pixastic.Edges = Class.create(pixastic.Filter,
+pixastic.Edges = pixastic.Filter.extend(
 {
-	initialize: function($super, mono, invert, rect, parent)
+	init: function(mono, invert, rect, parent)
 	{
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "edges";
 		this.use_canvas = false;
 		this.options = {"mono": mono, "invert": invert, "rect": rect};			
@@ -155,11 +155,11 @@ pixastic.Edges = Class.create(pixastic.Filter,
 	},		
 });	
 
-pixastic.Pointillize = Class.create(pixastic.Filter,
+pixastic.Pointillize = pixastic.Filter.extend(
 {
-	initialize: function($super, radius, density, noise, transparent, rect, parent)
+	init: function(radius, density, noise, transparent, rect, parent)
 	{
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "pointillize";
 		this.use_canvas = true;
 		this.options = {"radius": radius, "density": density, "noise": noise, "transparent": transparent, "rect": rect};		
@@ -186,11 +186,11 @@ pixastic.Pointillize = Class.create(pixastic.Filter,
 	},		
 });	
 
-pixastic.Blend = Class.create(pixastic.Filter,
+pixastic.Blend = pixastic.Filter.extend(
 {
-	initialize: function($super, amount, mode, image, rect, parent)
+	init: function(amount, mode, image, rect, parent)
 	{
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "blend";
 		this.use_canvas = true;
 		this.options = {"amount": amount, "mode": mode, "image": streamer.get_resource(image).data, "rect": rect};				
@@ -215,22 +215,22 @@ pixastic.Blend = Class.create(pixastic.Filter,
 	},	
 });	
 
-pixastic.FlipV = Class.create(pixastic.Filter,
+pixastic.FlipV = pixastic.Filter.extend(
 {
-	initialize: function($super, rect, parent)
+	init: function(rect, parent)
 	{			
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "flipv";
 		this.use_canvas = true;
 		this.options = {"rect": rect};			
 	},		
 });
 
-pixastic.Invert = Class.create(pixastic.Filter,
+pixastic.Invert = pixastic.Filter.extend(
 {
-	initialize: function($super, rect, parent)
+	init: function(rect, parent)
 	{			
-		$super(parent);	
+		this._super(parent);	
 		this.use_canvas = false;
 		this.filter_name = "invert";
 		this.options = {"rect": rect};		
@@ -238,11 +238,11 @@ pixastic.Invert = Class.create(pixastic.Filter,
 	},
 });
 
-pixastic.Noise = Class.create(pixastic.Filter,
+pixastic.Noise = pixastic.Filter.extend(
 {	
-	initialize: function($super, amount, strength, mono, rect, parent)
+	init: function(amount, strength, mono, rect, parent)
 	{
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "noise";
 		this.use_canvas = false;
 		this.options = {"amount": amount, "strength": strength, "mono": mono, "rect": rect};		
@@ -264,22 +264,22 @@ pixastic.Noise = Class.create(pixastic.Filter,
 	},
 });	
 
-pixastic.Sepia = Class.create(pixastic.Filter,
+pixastic.Sepia = pixastic.Filter.extend(
 {
-	initialize: function($super, rect, parent)
+	init: function(rect, parent)
 	{			
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "sepia";
 		this.use_canvas = false;
 		this.options = {"rect": rect};					
 	},
 });
 
-pixastic.ColorAdjust = Class.create(pixastic.Filter,
+pixastic.ColorAdjust = pixastic.Filter.extend(
 {
-	initialize: function($super, red, green, blue, rect, parent)
+	init: function(red, green, blue, rect, parent)
 	{
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "coloradjust";
 		this.use_canvas = false;
 		this.options = {"red": red, "green": green, "blue": blue, "rect": rect};				
@@ -301,33 +301,33 @@ pixastic.ColorAdjust = Class.create(pixastic.Filter,
 	},
 });
 
-pixastic.Blur = Class.create(pixastic.Filter,
+pixastic.Blur = pixastic.Filter.extend(
 {
-	initialize: function($super, rect, parent)
+	init: function(rect, parent)
 	{	
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "blur";
 		this.use_canvas = false;
 		this.options = {"rect": rect};			
 	},
 });
 
-pixastic.Edges2 = Class.create(pixastic.Filter,
+pixastic.Edges2 = pixastic.Filter.extend(
 {
-	initialize: function($super, rect, parent)
+	init: function(rect, parent)
 	{			
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "edges2";
 		this.use_canvas = false;
 		this.options = {"rect": rect};		
 	},
 });
 
-pixastic.Glow = Class.create(pixastic.Filter,
+pixastic.Glow = pixastic.Filter.extend(
 {	
-	initialize: function($super, amount, radius, rect, parent)
+	init: function(amount, radius, rect, parent)
 	{
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "glow";
 		this.use_canvas = true;
 		this.options = {"amount": amount, "radius": radius, "rect": rect};			
@@ -344,11 +344,11 @@ pixastic.Glow = Class.create(pixastic.Filter,
 	},
 });	
 
-pixastic.Laplace = Class.create(pixastic.Filter,
+pixastic.Laplace = pixastic.Filter.extend(
 {	
-	initialize: function($super, edge_strength, grey_level, invert, rect, parent)
+	init: function(edge_strength, grey_level, invert, rect, parent)
 	{
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "laplace";
 		this.use_canvas = false;
 		this.options = {"edgeStrength": edge_strength, "greyLevel": grey_level, "invert": invert, "rect": rect};		
@@ -370,11 +370,11 @@ pixastic.Laplace = Class.create(pixastic.Filter,
 	},	
 });
 
-pixastic.Sharpen = Class.create(pixastic.Filter,
+pixastic.Sharpen = pixastic.Filter.extend(
 {	
-	initialize: function($super, amount, rect, parent)
+	init: function(amount, rect, parent)
 	{
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "sharpen";
 		this.use_canvas = false;
 		this.options = {"amount": amount, "rect": rect};		
@@ -386,11 +386,11 @@ pixastic.Sharpen = Class.create(pixastic.Filter,
 	},	
 });	
 
-pixastic.BlurFast = Class.create(pixastic.Filter,
+pixastic.BlurFast = pixastic.Filter.extend(
 {	
-	initialize: function($super, amount, rect, parent)
+	init: function(amount, rect, parent)
 	{
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "blurfast";
 		this.use_canvas = true;
 		this.options = {"amount": amount, "rect": rect};			
@@ -402,22 +402,22 @@ pixastic.BlurFast = Class.create(pixastic.Filter,
 	},	
 });	
 
-pixastic.Crop = Class.create(pixastic.Filter,
+pixastic.Crop = pixastic.Filter.extend(
 {	
-	initialize: function($super, rect, parent)
+	init: function(rect, parent)
 	{
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "crop";
 		this.use_canvas = true;
 		this.options = {"rect": rect};			
 	},
 });	
 
-pixastic.Emboss = Class.create(pixastic.Filter,
+pixastic.Emboss = pixastic.Filter.extend(
 {
-	initialize: function($super, strength, grey_level, direction, blend, rect, parent)
+	init: function(strength, grey_level, direction, blend, rect, parent)
 	{
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "emboss";
 		this.use_canvas = false;
 		this.options = {"strength": strength, "greyLevel": grey_level, "direction": direction, "blend": blend,"rect": rect};		
@@ -444,11 +444,11 @@ pixastic.Emboss = Class.create(pixastic.Filter,
 	},	
 });	
 
-pixastic.Lighten = Class.create(pixastic.Filter,
+pixastic.Lighten = pixastic.Filter.extend(
 {	
-	initialize: function($super, amount, rect, parent)
+	init: function(amount, rect, parent)
 	{
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "lighten";
 		this.use_canvas = false;
 		this.options = {"amount": amount, "rect": rect};		
@@ -460,11 +460,11 @@ pixastic.Lighten = Class.create(pixastic.Filter,
 	},	
 });	
 
-pixastic.Posterize = Class.create(pixastic.Filter,
+pixastic.Posterize = pixastic.Filter.extend(
 {	
-	initialize: function($super, levels, rect, parent)
+	init: function(levels, rect, parent)
 	{
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "posterize";
 		this.use_canvas = false;
 		this.options = {"levels": levels, "rect": rect};		
@@ -476,22 +476,22 @@ pixastic.Posterize = Class.create(pixastic.Filter,
 	},	
 });	
 
-pixastic.Solarize = Class.create(pixastic.Filter,
+pixastic.Solarize = pixastic.Filter.extend(
 {	
-	initialize: function($super, rect, parent)
+	init: function(rect, parent)
 	{
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "solarize";
 		this.use_canvas = false;
 		this.options = {"rect": rect};			
 	},
 });	
 
-pixastic.Desaturate = Class.create(pixastic.Filter,
+pixastic.Desaturate = pixastic.Filter.extend(
 {	
-	initialize: function($super, average, rect, parent)
+	init: function(average, rect, parent)
 	{
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "desaturate";
 		this.use_canvas = false;
 		this.options = {"average": average, "rect": rect};		
@@ -503,22 +503,22 @@ pixastic.Desaturate = Class.create(pixastic.Filter,
 	},	
 });	
 
-pixastic.FlipH = Class.create(pixastic.Filter,
+pixastic.FlipH = pixastic.Filter.extend(
 {
-	initialize: function($super, rect, parent)
+	init: function(rect, parent)
 	{			
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "fliph";
 		this.use_canvas = true;
 		this.options = {"rect": rect};			
 	},		
 });
 
-pixastic.Mosaic = Class.create(pixastic.Filter,
+pixastic.Mosaic = pixastic.Filter.extend(
 {	
-	initialize: function($super, block_size, rect, parent)
+	init: function(block_size, rect, parent)
 	{
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "mosaic";
 		this.use_canvas = true;
 		this.options = {"blockSize": block_size, "rect": rect};			
@@ -530,22 +530,22 @@ pixastic.Mosaic = Class.create(pixastic.Filter,
 	},	
 });	
 
-pixastic.RemoveNoise = Class.create(pixastic.Filter,
+pixastic.RemoveNoise = pixastic.Filter.extend(
 {
-	initialize: function($super, rect, parent)
+	init: function(rect, parent)
 	{			
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "removenoise";
 		this.use_canvas = false;
 		this.options = {"rect": rect};					
 	},		
 });
 
-pixastic.UnsharpMask = Class.create(pixastic.Filter,
+pixastic.UnsharpMask = pixastic.Filter.extend(
 {	
-	initialize: function($super, amount, radius, threshold, rect, parent)
+	init: function(amount, radius, threshold, rect, parent)
 	{
-		$super(parent);	
+		this._super(parent);	
 		this.filter_name = "unsharpmask";
 		this.use_canvas = true;
 		this.options = {"amount": amount, "radius": radius, "threshold": threshold, "rect": rect};			

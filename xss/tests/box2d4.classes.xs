@@ -3,12 +3,12 @@ class move_action : sequence
     property speed  = 130.0;
     property vx     = Math.random();
     property vy     = Math.random();
-    property target : img;
 
-    on tick(delta)
+    on update(ev)
     {
-        target.x += vx*speed*delta;
-        target.y += vy*speed*delta;
+        var millisec = (ev.delta/1000);
+        target.x += vx*speed*millisec;
+        target.y += vy*speed*millisec;
 
         if (target.x < 10 || target.x > 570)
             vx *= -1;
@@ -38,10 +38,9 @@ class bad_guy : img
         property target : bad_guy;
     }
 
-    method init()
+    on init()
     {
         move_around.target = this;
-        fade_out.target = this;
     }
 
     on collision(who)
@@ -57,7 +56,7 @@ class bad_guy : img
 
 class good_guy : img
 {
-    method init()
+    on init()
     {
         move_around.target = this;
     }

@@ -1,10 +1,14 @@
 <xss:parameter id="obj"/>
+<xss:parameter id="type"/>
 
 <xss:code>	
+	if(!type)
+		type = obj.type;
 	out(marker = "threejs_variables", marker_source = "entry") {var <xss:e v="obj.id"/>;}
-	out(){<xss:e v="obj.id"/> = }compiler.xss("../common-js/instantiator.xss", obj);
-	out(){
-		;
-	scene.addLight(<xss:e value = "obj.id"/>);
+	out()
+	{
+	    <xss:e v="obj.id"/> = 
+	    <xss:e v="compiler.instantiate(obj)"/> ;
+	    scene.addLight(<xss:e value = "obj.id"/>);
 	}			
 </xss:code>

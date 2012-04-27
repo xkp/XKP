@@ -18,21 +18,12 @@
 			}
 		}
 		if(i.class_name == "transform"){
-			out(){<xss:e v="i.id"/>.events = new ms.event.EventHolder();}
+			out(){<xss:e v="i.id"/>.events = new ev.EventHolder();}
 		}
-		if (i.parent.class_name == "transform")
-        {			
-		    out()
-            {				
+		if(i.parent.class_name == "transform"){			
+				out(){				
 				<xss:e v="i.parent.id"/>.addChild(<xss:e v="i.id"/>);
 				scene.addObject(<xss:e v="i.parent.id"/>);
-			}
-        }				
-        else if (i.parent.class_name == "scene")
-        {
-		    out()
-            {				
-		        scene.addObject(<xss:e v="i.id"/>);
-            }
-        }
+				}
+			}				
 </xss:code>

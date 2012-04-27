@@ -11,17 +11,17 @@
 <script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
 <script type="text/javascript" src="../js/jquery.utils.js"></script>
 <script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/ms-event.js"></script>
+<script type="text/javascript" src="../js/resig.js"></script>
+<script type="text/javascript" src="../js/event.js"></script>
 <script type="text/javascript" src="../js/keys.js"></script>
 <script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/ms-streamer.js"></script>
+<script type="text/javascript" src="../js/streamer.js"></script>
 		<script type="text/javascript" src="../js/three/Three.js"></script>
 		<script type="text/javascript" src="../js/three/Stats.js"></script>
 		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
 		<script type="text/javascript" src="../js/three/Utils.js"></script>
 		<script type="text/javascript" src="../js/three/Detector.js"></script>
-		<script type="text/javascript" src="../js/ms-streamer.js"></script>
+		<script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">		
 var ui;
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
@@ -30,15 +30,15 @@ var canvas_position = {x:0, y:0};
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
-var streamer = new ms.streamer.Streamer();
+var streamer = new stream.Streamer();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
-application.events = new ms.event.EventHolder();
-		var streamer = new ms.streamer.Streamer();	
-		var ResourceUtils = new ms.streamer.ResourceUtils();
+application.events = new ev.EventHolder();
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
 	// --------RESOURCES---------
-		var global_package = new ms.streamer.Package(streamer);	
+		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
             {
 		id:				"image_1",
@@ -165,9 +165,7 @@ application.events.dispatch("switch_cameras", []);
 var materials;var __basic_material1;var __basic_material2;var __basic_material3;var __basic_material4;var __basic_material5;var __basic_material6;var plane_material;var scene;var camera_1;var cube_1;var plane_1;
 threejs_load_resources(function()
 {
-materials = 
-new Array(
-);
+			    materials = new Array() ;
 __basic_material1 = new THREE.MeshBasicMaterial({
 map:THREE.ImageUtils.loadTexture(streamer.get_resource('image_1').asset),
 	});
@@ -196,28 +194,21 @@ plane_material = new THREE.MeshBasicMaterial({
 color:Grey
 	});
             set_material_alpha(plane_material, 50);
-scene = 
-new THREE.Scene(
-);
-camera_1 = 
-new THREE.Camera(
-70,1.5,1,1000);
+			    scene = new THREE.Scene() ;
+		    camera_1 = 
+		    new THREE.Camera(70, 1.5, 1, 1000, null) ;	
 		active_camera = camera_1;
             camera_1.position.y = 300;
             camera_1.position.z = 500;
-	    var cube_1_cube = 
-new THREE.Cube(
-200,200,200,1,1,1,materials);
+	    cube_1_cube = new THREE.Cube(200, 200, 200, 1, 1, 1, materials, null, null) ;
 	    cube_1 = new THREE.Mesh(cube_1_cube, new THREE.MeshFaceMaterial());
 	    scene.addObject(cube_1);
-		cube_1.events = new ms.event.EventHolder();
+		cube_1.events = new ev.EventHolder();
             cube_1.position.y = 150;
-	    var plane_1_plane = 
-new THREE.Plane(
-200,200);
+	    plane_1_plane = new THREE.Plane(200, 200, null, null) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, plane_material);
 	    scene.addObject(plane_1);
-		plane_1.events = new ms.event.EventHolder();
+		plane_1.events = new ev.EventHolder();
             set_rotation_x(plane_1.rotation, -90);
 	var __sound_3d1 = new THREE.Sound(streamer.get_resource('sounds/forest.wav').asset
 	,700,20,true
@@ -261,7 +252,7 @@ set_rotation_z(plane_1.rotation, get_rotation_y(cube_1.rotation));
 set_rotation_x(cube_1.rotation, get_rotation_x(cube_1.rotation) + (application.y_target_rotation - get_rotation_x(cube_1.rotation)) * 0.200000003);
 	}
 	);
-var event_manager = new ms.event.ThreeEventManager();
+var event_manager = new ev.ThreeEventManager();
 document.onmousemove = function(ev)
 {
 	event_manager.mousemove(ev.clientX, ev.clientY);                  

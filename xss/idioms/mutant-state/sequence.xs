@@ -8,7 +8,7 @@ on render_js_includes()
 {
 	out()
 	{
-		<script type="text/javascript" src="../js/ms-state.js"></script>
+		<script type="text/javascript" src="../js/state.js"></script>
 	}
 }
 
@@ -16,7 +16,7 @@ on render_initialization()
 {
 	out()
 	{
-		var g_sequence_manager = new ms.state.Manager();
+		var g_sequence_manager = new state.Manager();
 
         function default_interpolate(a, b, t)
         {
@@ -32,7 +32,7 @@ on render_types()
     for(var ut in user_types)
     {
         var full_path = compiler.full_path("sequence.xss");
-		compiler.xss("../common-js/class.xss", ut, renderer = full_path);
+		compiler.xss("../common-js/resig-class.xss", ut, renderer = full_path);
     }
 }
 

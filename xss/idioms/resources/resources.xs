@@ -8,7 +8,7 @@ on render_js_includes()
 {
 	out()
 	{		
-		<script type="text/javascript" src="../js/ms-streamer.js"></script>
+		<script type="text/javascript" src="../js/streamer.js"></script>
 	}
 }
 
@@ -16,8 +16,8 @@ on render_initialization()
 {
 	out()
 	{
-		var streamer = new ms.streamer.Streamer();	
-		var ResourceUtils = new ms.streamer.ResourceUtils();
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
 	}	
 }
 
@@ -27,7 +27,7 @@ on render_resources()
 
     out() 
 	{        
-		var global_package = new ms.streamer.Package(streamer);	
+		var global_package = new stream.Package(streamer);	
     }
 
     for(var res in instances)
@@ -36,7 +36,7 @@ on render_resources()
 		{
 			out()
 			{
-				var <xss:e v="res.id"/> = new ms.streamer.Package(streamer);				
+				var <xss:e v="res.id"/> = new stream.Package(streamer);				
 			}
 			for(var ev in res.events)
 			{

@@ -1,0 +1,14 @@
+<application title="Global Anim Sample" src="g_anim.xs" width="1000" height="800">
+    <resources>        
+		<image src="images/test1.png"/>   
+    </resources>
+  		
+	<scene>
+		<camera id="camera_1" fov="45" aspect="1.5" near="1" far="10000">
+			<position z="1000"/>			
+		</camera>	  
+	</scene>
+	
+	<my_image id="img4" src="images/test1.png" x="100" y="100" width="128" height="164"/>
+		
+</application>

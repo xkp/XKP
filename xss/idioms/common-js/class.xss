@@ -70,7 +70,7 @@
             }	
         </xss:code>
         );
-        this.events = new ms.event.EventHolder(); 
+        this.events = new ev.EventHolder(); 
         var this__  = this;
         <xss:code>
         //register instances as properties, why not?
@@ -85,29 +85,14 @@
         }
 
         for(var inst in clazz.instances)
-        {
-			if(inst.type.user_defined)
-			{
-				out()
-				{
-				    var <xss:e v="inst.id"/>;
-				    <xss:e v="inst.id"/> = <xss:e v="compiler.instantiate(inst.type, object = inst)"/> ;
-				}
-				continue;
-			}		
-            
+        {				
             string inst_renderer = inst.type.renderer;
             if (!inst_renderer)
             {
                 compiler.error("Class not rendereable", class_name = inst.type_name);
-            }    
-            
+            }               
             string path = compiler.idiom_path(inst, inst_renderer);
-            compiler.log("Here " + clazz.type_name);
-            if (inst.parent)
-                compiler.log("HAS PARENT " + inst.parent.type_name);
             compiler.xss(path, inst, path = "this");
-            compiler.log("No, not there");
         }
         
         //render properties
@@ -133,8 +118,7 @@
         //provide a way to initialize stuff
         out()
         {
-            if (this.init)
-                this.init();
+            this.events.dispatch("init", [this]);
         }
         </xss:code>
     },

@@ -1,0 +1,22 @@
+<xss:classes>
+	<class id="my_image" super="img"> 
+		<sequence id="img_pos" loop="true" auto_start="true">
+			<at time="0">
+				<animate property="x" from="@" to="Math.random()*100" in="2"/>
+				<animate property="y" from="@" to="Math.random()*100" in="2"/>
+				<animate property="rotation" from="@" to="Math.random()*45" in="2"/>
+			</at>		
+			<at time="2">
+				<animate property="x" from="@" to="Math.random()*100" in="2"/>
+				<animate property="y" from="@" to="Math.random()*100" in="2"/>
+				<animate property="rotation" from="@" to="Math.random()*45" in="2"/>
+			</at>	
+		</sequence>					
+	</class>
+	<class id="my_plane" super="plane">
+		
+	</class>
+</xss:classes>
+
+	
+	
