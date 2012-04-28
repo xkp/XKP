@@ -19,8 +19,10 @@
         string parent_id = "g_ui_root";		
         if (cmp.parent.class_name != "application")
             parent_id = cmp.parent.output_id;
-		if(path)
-			parent_id = path;
+		
+        if(compiler.is_type(cmp.parent))
+			parent_id = "this";
+            
 		var manager_param   = object();
 		manager_param.id    = "manager";
 		manager_param.value = parent_id + ".manager";

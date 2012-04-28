@@ -12,8 +12,13 @@
 		$(document).ready(function() {
 		
 			<xss:code>
-				compiler.inject("render_instances");
-			</xss:code>
+                compiler.inject("render_instances");
+                out()
+                {
+                    if (application.init)
+                        application.init();
+                }
+            </xss:code>
 		});
 	</script>
 
@@ -25,6 +30,9 @@
     <xss:code>
         for(var i in application.children)
         {
+            if (i.idiom.id != "jquery")
+                continue;
+                
             var tag = null;
             if (using_template)
             {

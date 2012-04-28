@@ -15,10 +15,21 @@ on render_js_includes()
 	}
 }
 
+on render_dependencies()
+{
+    var dependencies = compiler.idiom_dependencies("pixastic");
+    for(var dep in dependencies)
+    {   
+        compiler.log("Rendering pix dependen");
+        compiler.xss("../common-js/dependency.xss", dep);
+    }
+}
+
 on render_instances()
 {
 	for(var inst in instances)
     {
+        compiler.log("Rendering Pix instances");
 		compiler.xss("pixastic.xss", inst);
     }
 }

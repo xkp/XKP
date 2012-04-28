@@ -2362,7 +2362,6 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
 
             //look for a declaration on the xml file
             XSSObject def_class;
-            XSSObject clazz;
             std::map<str, int>::iterator dtit = def_types.find(cid);
             if (dtit == def_types.end())
               {

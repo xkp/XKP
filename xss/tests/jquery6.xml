@@ -4,39 +4,48 @@
             <label caption="Level"/>     <br/> <br/>
             <slider id="brightness"/>    <br/>
             <label caption="Constrast"/> <br/> <br/>
-            <slider id="constrast"/>
+            <slider id="constrast" value="50"/>
         </div>
         <div caption="Color">
-            <label caption="Red"/>  <br/> <br/>
-            <slider id="red"/>      <br/>
-            <label caption="Blue"/> <br/> <br/>
-            <slider id="blue"/>     <br/>
-            <label caption="Green"/><br/> <br/>
-            <slider id="green"/>
+            <label caption="Red"/>  <br/><br/>
+            <slider id="red" min="-100" max="100" value="0"/>
+            <br/>
+            <label caption="Blue"/> <br/><br/>
+            <slider id="blue" min="-100" max="100" value="0"/>
+            <br/>
+            <label caption="Green"/><br/><br/>
+            <slider id="green" min="-100" max="100" value="0"/>
         </div>
         <div caption="HSL">
-            <label caption="Hue"/>       <br/> <br/>
-            <slider id="hue"/>           <br/>
+            <label caption="Hue"/> <br/> <br/>
+            <slider id="hue" min="-180" max="180" value="0"/>           
+            <br/>
             <label caption="Saturation"/><br/> <br/>
-            <slider id="saturation"/>    <br/>
+            <slider id="saturation" min="-100" max="100" value="0"/>    
+            <br/>
             <label caption="Lightness"/> <br/> <br/>
-            <slider id="lightness"/>
+            <slider id="lightness" min="-100" max="100" value="0"/>
         </div>
         <div caption="Noise">
             <label caption="Amount"/>  <br/> <br/>
-            <slider id="amount"/>      <br/>
+            <slider id="noise_amount"/>      <br/>
             <label caption="Strength"/><br/> <br/>
-            <slider id="strength"/>    <br/>
+            <slider id="noise_strength"/>    <br/>
             <br/>
             <checkbox id="mono" caption="Mono"/>
         </div>
-        <div caption="Glow">
-            <label caption="Amount"/>   <br/> <br/>
-            <slider id="glow_amount"/>  <br/>
-            <label caption="Radius"/>   <br/> <br/>
-            <slider id="radius"/>       <br/>
+        <div caption="Blur">
+            <button id="blur_apply" caption="Apply"/>
         </div>
     </accordion>
     
     <canvas id="image_container" width="605" height="375" html_id="target-container" />
+
+    <preset id="transformer">
+        <brightness id="b_filter" brightness="50" contrast="0.5"/>
+        <hsl id="hsl_filter" hue="40"/>
+        <coloradjust id="c_filter"/>
+        <noise id="n_filter"/>
+        <blur id="blur_filter"/>
+    </preset>
 </application>

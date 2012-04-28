@@ -462,9 +462,11 @@ Success are greateful
 ===[ animtest.project.xml ]================(Tests)
 
 
-Error [404] File not found
-	file = c:/dev/XKP/xss/tests/../idioms/ms/sequence.xmlERROR: Project:  animtest.project.xml
-
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering Sequence Types...
+log: Rendering UI...
+Success are greateful
 ===[ box2d1.project.xml ]================(Tests)
 
 
@@ -495,7 +497,6 @@ log: bullet
 log: floor
 log: Rendering Sequence Types...
 log: Rendering UI...
-log: Rendering Sequence...
 Success are greateful
 ===[ box2d5.project.xml ]================(Tests)
 
@@ -594,9 +595,13 @@ Success are greateful
 ===[ g_anim.project.xml ]================(Tests)
 
 
-Error [404] File not found
-	file = c:/dev/XKP/xss/tests/../idioms/ms/sequence.xmlERROR: Project:  g_anim.project.xml
-
+log: Rendering Resources...
+log: Rendering Sequence Types...
+log: Rendering UI Types...
+log: my_image
+log: Rendering 3js Types...
+log: Rendering UI...
+Success are greateful
 ===[ java1.project.xml ]================(Tests)
 
 
@@ -1016,8 +1021,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
-log: Here?
-log: Nope
 log: Rendering UI...
 log: IT IS ALIVE
 log: IT IS ALIVE
@@ -1074,8 +1077,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
-log: Here?
-log: Nope
 log: Rendering UI...
 Success are greateful
 ===[ ms5.project.xml ]================(Tests)
@@ -1630,11 +1631,118 @@ log: /usr/lib/test_idiom
 log: /use/bin/xss14_1
 log: </Dependencies>
 log: <User Classes>
-Error [vm] Cannot resolve
-	object = 
-	property = constructor_params
-	file = c:/dev/XKP/xss/tests/../idioms/common-js/resig-class.xssERROR: Project:  xss14.project.xml
+log: </User Classes>
 
+
+
+
+
+
+        var test_class = Class.extend(
+    {
+    init: function(
+	 )
+    {
+        this._super(
+		        );
+        this.events = new ev.EventHolder(); 
+        
+        var this__  = this;
+        
+            this.events.dispatch("init", [this]);
+            },
+});
+
+
+
+
+
+
+
+
+        var test_class1 = test_class.extend(
+    {
+    init: function(
+	 )
+    {
+        this._super(
+		        );
+        this.events = new ev.EventHolder(); 
+        
+        var this__  = this;
+        
+
+
+
+
+
+        this.some_prop_get = function ()
+        {
+            return 10;
+        };
+
+        this.some_prop_set = function (value)
+        {
+            value++;
+        };
+    
+
+            this.events.dispatch("init", [this]);
+            },
+});
+
+
+
+
+
+
+
+
+        var test_class2 = test_class1.extend(
+    {
+    init: function(
+	 )
+    {
+        this._super(
+		        );
+        this.events = new ev.EventHolder(); 
+        
+        var this__  = this;
+        
+
+
+
+
+
+        this.some_prop_get = function ()
+        {
+            return 10;
+        };
+
+        this.some_prop_set = function (value)
+        {
+            value++;
+        };
+    
+
+
+
+
+
+
+	this.foo = function() 
+	{
+		this.some_prop_set(this.some_prop_get() + 1);
+	};
+
+            this.events.dispatch("init", [this]);
+            },
+});
+
+
+
+log: /usr/lib/source.xxx
+Success are greateful
 ===[ xss2.project.xml ]================(Tests)
 
 

@@ -79,12 +79,6 @@ on render_instances()
             compiler.xss(fname, it = i);
         }
     }
-
-    out()
-    {
-        if (application.init)
-            application.init();
-    }
 }
 
 on render_css()

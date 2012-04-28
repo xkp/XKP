@@ -161,7 +161,7 @@ Released   : 20120325
 				</label>
 <br/>
 <br/>
-				<div id="amount"
+				<div id="noise_amount"
 			>
 				</div>
 <br/>
@@ -171,7 +171,7 @@ Released   : 20120325
 				</label>
 <br/>
 <br/>
-				<div id="strength"
+				<div id="noise_strength"
 			>
 				</div>
 <br/>
@@ -181,28 +181,14 @@ Released   : 20120325
         <label id="mono_label" for="mono_input"> Mono </label>
             </div>
 </div>
-            <h3><a href="#">Glow</a></h3>
+            <h3><a href="#">Blur</a></h3>
 <div id="__div5">
-				<label id="__label11"
-			>
-					Amount
-				</label>
-<br/>
-<br/>
-				<div id="glow_amount"
-			>
-				</div>
-<br/>
-				<label id="__label12"
-			>
-					Radius
-				</label>
-<br/>
-<br/>
-				<div id="radius"
-			>
-				</div>
-<br/>
+				<input id="blur_apply"
+						type="button" 
+						name="blur_apply" 
+						value="Apply" 
+					>
+				</input>
 </div>
 </div>
 				</div>
@@ -221,6 +207,11 @@ Released   : 20120325
             <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
             <script type="text/javascript" src="../js/jquery-idiom.js"></script>
             <link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css"></link>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/pixastic/pixastic.core.js"></script>
+            <script type="text/javascript" src="../js/pixastic/actions.js"></script>
+            <script type="text/javascript" src="../js/pixastic/pixastic-manager.js"></script>
+            <script type="text/javascript" src="../js/pixastic/pixastic-utils.js"></script>
 <style>
 #acc1 {height : 490px}
 #image_container {width : 605px;height : 375px}
@@ -246,7 +237,14 @@ return context.getImageData(0, 0, target.width, target.height);
 var context = target.getContext("2d");
 context.putImageData(data, 0, 0);
 	};
+	application.apply_filter = function(filter) 
+	{
+		var imgdata = application.get_image_data();
+filter.applyToImage(imgdata);
+application.set_image_data(imgdata);
+	};
 		application.init = function() { 
+        //some jquery, to lighten the mood
         $("#img1").click(function() { application.set_image("img1"); });
         $("#img2").click(function() { application.set_image("img2"); });
         $("#img3").click(function() { application.set_image("img3"); });
@@ -298,56 +296,135 @@ context.putImageData(data, 0, 0);
 			var __label9 = $("#__label9");
 			var __br22 = $("#__br22");
 			var __br23 = $("#__br23");
-			var amount = $("#amount");
+			var noise_amount = $("#noise_amount");
 			var __br24 = $("#__br24");
 			var __label10 = $("#__label10");
 			var __br25 = $("#__br25");
 			var __br26 = $("#__br26");
-			var strength = $("#strength");
+			var noise_strength = $("#noise_strength");
 			var __br27 = $("#__br27");
 			var __br28 = $("#__br28");
 			var mono = $("#mono").button();
 			var __div5 = $("#__div5");
-			var __label11 = $("#__label11");
-			var __br29 = $("#__br29");
-			var __br30 = $("#__br30");
-			var glow_amount = $("#glow_amount");
-			var __br31 = $("#__br31");
-			var __label12 = $("#__label12");
-			var __br32 = $("#__br32");
-			var __br33 = $("#__br33");
-			var radius = $("#radius");
-			var __br34 = $("#__br34");
+			var blur_apply = $("#blur_apply").button();
 			var image_container = $("#image_container");
         acc1.accordion({
             fillSpace: true,
         });
         brightness.slider({
-    });
+		    change: function(event, ui) { 
+	     transformer.b_filter.set_brightness(brightness.slider( "option", "value" ));
+application.apply_filter(transformer.b_filter);
+		    },
+	    });
         constrast.slider({
-    });
+            value: 50,
+		    change: function(event, ui) { 
+	     transformer.b_filter.constrast = constrast.slider( "option", "value" ) / 100;
+application.apply_filter(transformer.b_filter);
+		    },
+	    });
         red.slider({
-    });
+            min: -100,
+            max: 100,
+            value: 0,
+		    change: function(event, ui) { 
+	     transformer.c_filter.set_red(red.slider( "option", "value" ) / 100);
+application.apply_filter(transformer.c_filter);
+		    },
+	    });
         blue.slider({
-    });
+            min: -100,
+            max: 100,
+            value: 0,
+		    change: function(event, ui) { 
+	     transformer.c_filter.set_blue(blue.slider( "option", "value" ) / 100);
+application.apply_filter(transformer.c_filter);
+		    },
+	    });
         green.slider({
-    });
+            min: -100,
+            max: 100,
+            value: 0,
+		    change: function(event, ui) { 
+	     transformer.c_filter.set_green(green.slider( "option", "value" ) / 100);
+application.apply_filter(transformer.c_filter);
+		    },
+	    });
         hue.slider({
-    });
+            min: -180,
+            max: 180,
+            value: 0,
+		    change: function(event, ui) { 
+	     transformer.hsl_filter.set_hue(hue.slider( "option", "value" ));
+application.apply_filter(transformer.hsl_filter);
+		    },
+	    });
         saturation.slider({
-    });
+            min: -100,
+            max: 100,
+            value: 0,
+		    change: function(event, ui) { 
+	     transformer.hsl_filter.set_saturation(saturation.slider( "option", "value" ));
+application.apply_filter(transformer.hsl_filter);
+		    },
+	    });
         lightness.slider({
-    });
-        amount.slider({
-    });
-        strength.slider({
-    });
-        glow_amount.slider({
-    });
-        radius.slider({
-    });
-        if (application.init)
-            application.init();
+            min: -100,
+            max: 100,
+            value: 0,
+		    change: function(event, ui) { 
+	     transformer.hsl_filter.set_lightness(lightness.slider( "option", "value" ));
+application.apply_filter(transformer.hsl_filter);
+		    },
+	    });
+        noise_amount.slider({
+		    change: function(event, ui) { 
+	     transformer.n_filter.set_amount(noise_amount.slider( "option", "value" ) / 100);
+application.apply_filter(transformer.n_filter);
+		    },
+	    });
+        noise_strength.slider({
+		    change: function(event, ui) { 
+	     transformer.n_filter.set_strength(noise_strength.slider( "option", "value" ) / 100);
+application.apply_filter(transformer.n_filter);
+		    },
+	    });
+		mono.change( function() { 
+			transformer.n_filter.set_mono(mono.value);
+application.apply_filter(transformer.n_filter);
+		});
+		blur_apply.click( function() { 
+			application.apply_filter(transformer.blur_filter);
+		});
+	    var transformer = new pixastic.Preset() ;
+			transformer.b_filter = new pixastic.Brightness(
+		50,0.5,null, transformer);		
+		if(!transformer.filters)
+			transformer.filters = [];
+		transformer.filters.push(transformer.b_filter);
+			transformer.hsl_filter = new pixastic.HSL(
+		40,null,null,null, transformer);		
+		if(!transformer.filters)
+			transformer.filters = [];
+		transformer.filters.push(transformer.hsl_filter);
+			transformer.c_filter = new pixastic.ColorAdjust(
+		null,null,null,null, transformer);		
+		if(!transformer.filters)
+			transformer.filters = [];
+		transformer.filters.push(transformer.c_filter);
+			transformer.n_filter = new pixastic.Noise(
+		null,null,null,null, transformer);		
+		if(!transformer.filters)
+			transformer.filters = [];
+		transformer.filters.push(transformer.n_filter);
+			transformer.blur_filter = new pixastic.Blur(
+		null, transformer);		
+		if(!transformer.filters)
+			transformer.filters = [];
+		transformer.filters.push(transformer.blur_filter);
+                    if (application.init)
+                        application.init();
 </script>
 </body>
 </html>

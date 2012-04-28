@@ -39,6 +39,25 @@ pixastic.Filter = Class.extend(
 		this.options.rect = {"left": left, "top": top, "width": width, "height": height};
 		this.apply();
 	},
+    
+    applyToCanvas: function(canvas)
+    {
+		Pixastic.process(
+		    canvas,
+		    this.filter_name,	
+		    this.options		
+		);
+    },
+
+    applyToImage: function(imgData)
+    {
+		Pixastic.process(
+		    imgData,
+		    this.filter_name,	
+		    this.options		
+		);
+    },
+        
 	apply: function(image)
 	{
 		if(image)
@@ -49,7 +68,8 @@ pixastic.Filter = Class.extend(
 		{		
 			for (var i = 0; i < this.image.data.length; ++i)
 				this.tmp_img.data[i] = this.image.data[i];  			
-			var curr_filter;			
+			
+            var curr_filter;			
 			for(var i = 0; i < this.parent.filters.length; i++)
 			{
 				curr_filter = this.parent.filters[i];

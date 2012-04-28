@@ -22,11 +22,6 @@
 		prop_name = owner.output_id + "." + prop_name;
 	}
 
-	if(path && prop_name != "rotation")
-	{
-		prop_name = path + "." + prop_name;
-	}
-
 	if(prop.set && prop.get)
 	{
 		out()

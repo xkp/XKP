@@ -19,7 +19,7 @@
     init: function(
 	 <xss:code>
 		var i = 0;
-        var c_params = clazz.type.constructor_params;
+        var c_params = clazz.constructor_params;
         if (c_params)
         {
             for(var p in c_params)
@@ -37,7 +37,7 @@
     {
         this._super(
 		<xss:code>			
-            var c_params = clazz.type.constructor_params; 
+            var c_params = clazz.constructor_params; 
             
 			if (c_params)
             {				
