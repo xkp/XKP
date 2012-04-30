@@ -15,9 +15,11 @@ import xkp.android.libs.Layout.XKPLayout;
 						import xkp.android.libs.Widget.XKPPackage.OnResourcePackageListener;
 						import org.jbox2d.common.Vec2;
 						import org.jbox2d.dynamics.BodyType;
-						import xkp.android.libs.JBox2d.*;
 						import org.jbox2d.collision.shapes.ShapeType;
 						import xkp.android.libs.JBox2d.XKPPhysicBody;
+						import xkp.android.libs.JBox2d.XKPJBox2d;
+						import xkp.android.libs.JBox2d.XKPDDView;
+						import xkp.android.libs.JBox2d.XKPDebugDraw;
 		public class ActjBox2d_2 
 						extends Activity
 {

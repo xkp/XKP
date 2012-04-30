@@ -19,11 +19,6 @@ on pre_process(obj)
 
 on render_type_initialization(clazz, bns, app)
 {
-	//TIPS: copy defaults files of idiom classes and render imports
-	clazz = this;
-	
-	var android_idiom = compiler.idiom_by_id("android");
-	android_idiom.initialization(clazz, bns, app);
 }
 
 on render_initialization(clazz, bns, app)
@@ -123,6 +118,11 @@ method render_instance(app, clazz, it)
 {
 	if(it.class_name == "physics_world") return;
 
+	//TIPS: set 'world' property of component
+	var prop_world = it.get_property("world");
+	if(prop_world)
+		prop_world.value = "Act" + application.appName + "." + world.output_id + ".getWorld()";
+	
 	string renderer = it.type.renderer;
 	if(renderer)
 	{
@@ -358,5 +358,22 @@ method render_instancing_spawner(it, path, id, type)
 		{
 			<xss:e v="id"/>.start();
 		}
+	}
+}
+
+//android joint.xss delegates
+method render_create_joint(it, world, path, id)
+{
+	//td: pass world arg to instantiate constructor_params
+	compiler.xss("../../java/instancing.xss", obj = it, setproperties = false);
+}
+
+method render_instancing_joint(it, world, path, id)
+{
+	compiler.xss("../../java/instancing.xss", obj = it, instantiate = false);
+	
+	out()
+	{
+		<xss:e value="id"/>.createJoint();
 	}
 }

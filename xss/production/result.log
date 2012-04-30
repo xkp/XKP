@@ -2554,4 +2554,45 @@ Success are greateful
 		IDIOM: xssY_idiom2  
 	
 
-Success are greateful
+Success are greatefulERROR: Project:  box2d3.project.xml
+ERROR: Project:  box2d3.project.xml
+
+===[ box2d4.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 7
+log: Rendering Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+Error [vm] Cannot resolve
+	object = jBox2d_4
+	property = id
+	file = d:/xkp/xss/samples/android/jbox2d_4/../../../idioms/ms/java/../../java/instance.xssERROR: Project:  box2d4.project.xml
+ERROR: Project:  box2d4.project.xml
+ERROR: Project:  box2d5.project.xml
+ERROR: Project:  box2d5.project.xml
+ERROR: Project:  box2d5.project.xml
+ERROR: Project:  box2d5.project.xml
+
+===[ box2d2.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 7
+log: Rendering Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: btn1
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: __image1
+log: Rendering instance: __image2
+log: Rendering instance: application
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: [jbox2d] Copying default files...
+
+Success are greatefulERROR: Project:  box2d4.project.xml
+ERROR: Project:  box2d4.project.xml

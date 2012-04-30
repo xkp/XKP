@@ -10,12 +10,13 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 			import android.view.LayoutInflater;
 import xkp.android.libs.Layout.XKPLayout;
 			import xkp.android.libs.Widget.XKPUtils;
+						import org.jbox2d.common.Vec2;
+						import org.jbox2d.dynamics.BodyType;
+						import org.jbox2d.collision.shapes.ShapeType;
+						import xkp.android.libs.JBox2d.XKPPhysicBody;
 						import xkp.android.libs.Graphics.XKPGraphics.OnClickInsideFigureListener;
 						import xkp.android.libs.Graphics.XKPImage;
 						import xkp.android.libs.Widget.XKPUtils;
-						import org.jbox2d.common.Vec2;
-						import org.jbox2d.dynamics.BodyType;
-						import xkp.android.libs.JBox2d.*;
 		public class smiley_ball 
 						extends XKPImage
 {

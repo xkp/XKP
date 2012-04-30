@@ -125,9 +125,6 @@ method render_imports(clazz, bns)
 	{
 		//TRACE: log
 		//compiler.log("View: " + inst.id);
-		if(inst.no_script || inst.no_render)
-			continue;
-		
 		//find necessary imports without duplicates
 		if(inst.imports)
 		{

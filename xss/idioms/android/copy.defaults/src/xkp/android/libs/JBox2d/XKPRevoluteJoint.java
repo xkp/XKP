@@ -14,6 +14,7 @@ public class XKPRevoluteJoint {
 	
 	private RevoluteJoint		mRevtJoint;
 	private RevoluteJointDef 	mRevtJointD;
+	private boolean mIsJointCreated = false;
 	
 	public XKPRevoluteJoint(World world) {
 		mRefWorld = world;
@@ -22,77 +23,108 @@ public class XKPRevoluteJoint {
 	
 	public void createJoint() {
 		mRevtJoint = (RevoluteJoint) mRefWorld.createJoint(mRevtJointD);
+		mIsJointCreated = true;
 	}
 	
 	public void setBodyA(XKPPhysicBody bodyA) {
 		mRevtJointD.bodyA = bodyA.getBody();
+		if(mIsJointCreated)
+			mRevtJoint.m_bodyA = bodyA.getBody();
 	}
 	
 	public void setBodyB(XKPPhysicBody bodyB) {
 		mRevtJointD.bodyB = bodyB.getBody();
+		if(mIsJointCreated)
+			mRevtJoint.m_bodyB = bodyB.getBody();
 	}
 	
 	public void setLowerAngle(float lowerAngle) {
 		mRevtJointD.lowerAngle = lowerAngle;
+		if(mIsJointCreated)
+			mRevtJoint.m_lowerAngle = lowerAngle;
 	}
 	
 	public float getLowerAngle() {
-		return mRevtJointD.lowerAngle;
+		return mRevtJoint.m_lowerAngle;
 	}
 	
 	public void setUpperAngle(float upperAngle) {
 		mRevtJointD.upperAngle = upperAngle;
+		if(mIsJointCreated)
+			mRevtJoint.m_upperAngle = upperAngle;
 	}
 	
 	public float getUpperAngle() {
-		return mRevtJointD.upperAngle;
+		return mRevtJoint.m_upperAngle;
+	}
+	
+	public void setAngle(float angle) {
+		mRevtJointD.referenceAngle = angle;
+		if(mIsJointCreated)
+			mRevtJoint.m_referenceAngle = angle;
+	}
+	
+	public float getAngle() {
+		return mRevtJoint.m_referenceAngle;
 	}
 	
 	public void setMaxMotorTorque(float maxMotorTorque) {
 		mRevtJointD.maxMotorTorque = maxMotorTorque;
+		if(mIsJointCreated)
+			mRevtJoint.setMaxMotorTorque(maxMotorTorque);
 	}
 	
 	public float getMaxMotorTorque() {
-		return mRevtJointD.maxMotorTorque;
+		return mRevtJoint.m_maxMotorTorque;
 	}
 	
 	public void setMotorSpeed(float motorSpeed) {
 		mRevtJointD.motorSpeed = motorSpeed;
+		if(mIsJointCreated)
+			mRevtJoint.setMotorSpeed(motorSpeed);
 	}
 	
 	public float getMotorSpeed() {
-		return mRevtJointD.motorSpeed;
+		return mRevtJoint.m_motorSpeed;
 	}
 	
 	public void setLimit(boolean limit) {
 		mRevtJointD.enableLimit = limit;
+		if(mIsJointCreated)
+			mRevtJoint.m_enableLimit = limit;
 	}
 	
 	public boolean getLimit() {
-		return mRevtJointD.enableLimit;
+		return mRevtJoint.m_enableLimit;
 	}
 	
 	public void setMotor(boolean motor) {
 		mRevtJointD.enableMotor = motor;
+		if(mIsJointCreated)
+			mRevtJoint.m_enableMotor = motor;
 	}
 	
 	public boolean getMotor() {
-		return mRevtJointD.enableMotor;
+		return mRevtJoint.m_enableMotor;
 	}
 	
 	public void setAnchorA(Vec2 anchorA) {
 		mRevtJointD.localAnchorA.set(anchorA);
+		if(mIsJointCreated)
+			mRevtJoint.m_localAnchor1.set(anchorA);
 	}
 	
 	public Vec2 getAnchorA() {
-		return mRevtJointD.localAnchorA;
+		return mRevtJoint.m_localAnchor1;
 	}
 	
 	public void setAnchorB(Vec2 anchorB) {
 		mRevtJointD.localAnchorB.set(anchorB);
+		if(mIsJointCreated)
+			mRevtJoint.m_localAnchor2.set(anchorB);
 	}
 	
 	public Vec2 getAnchorB() {
-		return mRevtJointD.localAnchorB;
+		return mRevtJoint.m_localAnchor2;
 	}
 }

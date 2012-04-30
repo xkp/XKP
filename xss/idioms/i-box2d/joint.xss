@@ -1,0 +1,20 @@
+<xss:parameter id="it"/>
+<xss:parameter id="world"/>
+<xss:parameter id="path"/>
+
+<xss:code>
+	var idiom = it.idiom;
+	if (!idiom)
+	{
+		compiler.log("WARNING: Why no idiom? " + it.output_id);
+	}
+
+	string id = it.output_id;
+	if (path)
+		id = path + "." + id;
+	
+	it.world = world;
+	idiom.render_create_joint(it, world, path, id);
+
+	idiom.render_instancing_joint(it, world, path, id);
+</xss:code>
