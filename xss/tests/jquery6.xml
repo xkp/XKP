@@ -1,44 +1,49 @@
 <application name="jq6" title="Good stuff" src="jquery6.xs" template="jq6_template.html">
-    <accordion id="acc1" html_id="sidebar" height="490" fillSpace="true">
-        <div caption="Brightness">
-            <label caption="Level"/>     <br/> <br/>
-            <slider id="brightness"/>    <br/>
-            <label caption="Constrast"/> <br/> <br/>
-            <slider id="constrast" value="50"/>
+    <div html_id="sidebar">
+        <div placement="top" height="40">
+            <button id="preset_apply" caption="Apply Stack"/>
         </div>
-        <div caption="Color">
-            <label caption="Red"/>  <br/><br/>
-            <slider id="red" min="-100" max="100" value="0"/>
-            <br/>
-            <label caption="Blue"/> <br/><br/>
-            <slider id="blue" min="-100" max="100" value="0"/>
-            <br/>
-            <label caption="Green"/><br/><br/>
-            <slider id="green" min="-100" max="100" value="0"/>
-        </div>
-        <div caption="HSL">
-            <label caption="Hue"/> <br/> <br/>
-            <slider id="hue" min="-180" max="180" value="0"/>           
-            <br/>
-            <label caption="Saturation"/><br/> <br/>
-            <slider id="saturation" min="-100" max="100" value="0"/>    
-            <br/>
-            <label caption="Lightness"/> <br/> <br/>
-            <slider id="lightness" min="-100" max="100" value="0"/>
-        </div>
-        <div caption="Noise">
-            <label caption="Amount"/>  <br/> <br/>
-            <slider id="noise_amount"/>      <br/>
-            <label caption="Strength"/><br/> <br/>
-            <slider id="noise_strength"/>    <br/>
-            <br/>
-            <checkbox id="mono" caption="Mono"/>
-        </div>
-        <div caption="Blur">
-            <button id="blur_apply" caption="Apply"/>
-        </div>
-    </accordion>
-    
+        <accordion id="acc1" height="360" placement="client" fillSpace="true">
+            <div caption="Brightness">
+                <label caption="Level"/>     <br/> <br/>
+                <slider id="brightness"/>    <br/>
+                <label caption="Constrast"/> <br/> <br/>
+                <slider id="constrast" value="50"/>
+            </div>
+            <div caption="Color">
+                <label caption="Red"/>  <br/><br/>
+                <slider id="red" min="-100" max="100" value="0"/>
+                <br/>
+                <label caption="Blue"/> <br/><br/>
+                <slider id="blue" min="-100" max="100" value="0"/>
+                <br/>
+                <label caption="Green"/><br/><br/>
+                <slider id="green" min="-100" max="100" value="0"/>
+            </div>
+            <div caption="HSL">
+                <label caption="Hue"/> <br/> <br/>
+                <slider id="hue" min="-180" max="180" value="0"/>           
+                <br/>
+                <label caption="Saturation"/><br/> <br/>
+                <slider id="saturation" min="-100" max="100" value="0"/>    
+                <br/>
+                <label caption="Lightness"/> <br/> <br/>
+                <slider id="lightness" min="-100" max="100" value="0"/>
+            </div>
+            <div caption="Noise">
+                <label caption="Amount"/>  <br/> <br/>
+                <slider id="noise_amount"/>      <br/>
+                <label caption="Strength"/><br/> <br/>
+                <slider id="noise_strength"/>    <br/>
+                <br/>
+                <checkbox id="mono" caption="Mono"/>
+            </div>
+            <div caption="Blur">
+                <button id="blur_apply" caption="Apply"/>
+            </div>
+        </accordion>
+    </div>
+
     <canvas id="image_container" width="605" height="375" html_id="target-container" />
 
     <preset id="transformer">

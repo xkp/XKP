@@ -194,6 +194,7 @@ namespace xkp
         bool         parse_expression(variant v);
         variant      compile_expression(const str& expr);
         str          render_expression(const str& expr, XSSObject this_);
+        str          render_expr(const expression& expr, XSSObject this_);
         str          replace_identifier(const str& s, const str& src, const str& dst);
         variant      evaluate_property(XSSProperty prop);
         str          renderer_file(const str& file);

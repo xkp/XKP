@@ -42,6 +42,27 @@ on init()
     }
 }
 
+//apply preset, in another thread
+on preset_apply.click()
+{
+    var image_data = get_image_data();
+    preset_apply.disabled = true;
+    preset_apply.caption = "Applying...";
+
+    asynch(mypreset = transformer, image = image_data)
+    {
+        mypreset.apply(image);
+
+        //this will run on the dom thread
+        synch(image_data = image)
+        {
+            set_image_data(image_data);
+            preset_apply.disabled = false;
+            preset_apply.caption = "Apply Stack";
+        }
+    }
+}
+
 //controls
 on brightness.change()
 {

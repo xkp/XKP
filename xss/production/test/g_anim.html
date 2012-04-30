@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Global Anim Sample</title>
+</head>
+<body>
+<style type="text/css">
+	body{
+	}
+</style>
+<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="../js/jquery.utils.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
+<script type="text/javascript" src="../js/resig.js"></script>
+<script type="text/javascript" src="../js/event.js"></script>
+<script type="text/javascript" src="../js/keys.js"></script>
+<script type="text/javascript" src="../js/colors.js"></script>
+<script type="text/javascript" src="../js/streamer.js"></script>
+		<script type="text/javascript" src="../js/sequence.js"></script>
+		<script type="text/javascript" src="../js/streamer.js"></script>
+		<script type="text/javascript" src="../js/ui.js"></script>
+		<script type="text/javascript" src="../js/three/Three.js"></script>
+		<script type="text/javascript" src="../js/three/Stats.js"></script>
+		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+		<script type="text/javascript" src="../js/three/Utils.js"></script>
+<script type="text/javascript">		
+var renderer = new THREE.CanvasRenderer();	
+var ui_;
+var SoundUtils;
+var active_camera;
+var g_elapsed = -1;
+var g_delta = 0.0;	
+var drawingCanvas = renderer.domElement;
+var canvas_position = {x:0, y:0};
+var streamer = new stream.Streamer();
+var app_width = 1000;
+var app_height = 800;
+var img4;
+var application = {};
+application.events = new ev.EventHolder();
+		var g_sequence_manager = new state.Manager();
+        function default_interpolate(a, b, t)
+        {
+            return a + (b - a)*t;
+        }		
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
+		if(drawingCanvas){
+			var client =
+			{
+				width: 1000,
+				height: 800,
+				canvas: drawingCanvas
+			};
+            var streamer = new stream.Streamer();							
+			var ui_ = new ui.Manager(client, streamer);			
+			var g_ui = ui_;
+			var g_ui_root = ui_.root;
+			var mouse_pressed = false;
+		}
+	// --------RESOURCES---------
+		var global_package = new stream.Package(streamer);	
+                global_package.add_item(
+            {
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test1.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+		global_package.add_item({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});		
+		global_package.load();	
+    // --------RESOURCES---------
+soundRenderer = new THREE.SoundRenderer();		
+document.body.appendChild( soundRenderer.domElement );
+renderer.setSize( app_width, app_height );
+function render() {
+canvas_position = getElementPosition(drawingCanvas);
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+    g_delta = 0; //first update
+else
+g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+		g_sequence_manager.update(g_delta);
+application.events.dispatch("updates", []);	
+		set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+var my_plane;var scene;var camera_1;
+        var my_image = ui.Image.extend(
+    {
+    init: function(
+                manager
+                ,
+                parent
+                ,
+                src
+                )
+    {
+        this._super(
+		manager,parent,src        );
+        this.events = new ev.EventHolder(); 
+        var this__  = this;
+this.img_pos =
+new state.Sequence(
+g_sequence_manager);
+            this.img_pos.loop = true;
+                this.img_pos.start();
+        var ____i1 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_x(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: null},
+            ]);
+            this.img_pos.addHandler(____i1);	              
+        var ____i2 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_y(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: null},
+            ]);
+            this.img_pos.addHandler(____i2);	              
+        var ____i3 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_rotation(value);
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: null},
+            ]);
+            this.img_pos.addHandler(____i3);	              
+        var ____i4 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_x(value);
+            },
+            [
+        {t: 2, value: null},
+        {t: 4, value: null},
+            ]);
+            this.img_pos.addHandler(____i4);	              
+        var ____i5 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_y(value);
+            },
+            [
+        {t: 2, value: null},
+        {t: 4, value: null},
+            ]);
+            this.img_pos.addHandler(____i5);	              
+        var ____i6 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.set_rotation(value);
+            },
+            [
+        {t: 2, value: null},
+        {t: 4, value: null},
+            ]);
+            this.img_pos.addHandler(____i6);	              
+        this.img_pos.events.addListener('start', function()
+        {
+        ____i1.keys[0].value = this__.x;
+        ____i1.keys[1].value = Math.random() * 100;
+        ____i2.keys[0].value = this__.y;
+        ____i2.keys[1].value = Math.random() * 100;
+        ____i3.keys[0].value = this__.get_rotation();
+        ____i3.keys[1].value = Math.random() * 45;
+        ____i4.keys[0].value = this__.x;
+        ____i4.keys[1].value = Math.random() * 100;
+        ____i5.keys[0].value = this__.y;
+        ____i5.keys[1].value = Math.random() * 100;
+        ____i6.keys[0].value = this__.get_rotation();
+        ____i6.keys[1].value = Math.random() * 45;
+        });
+            this.events.dispatch("init", [this]);
+            },
+});
+    function create_my_plane(
+    width,height,x_segments,y_segments ) { 
+    var my_plane;
+	    my_plane_plane = new THREE.Plane(width, height, x_segments, y_segments) ;
+	    my_plane = new THREE.Mesh(my_plane_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(my_plane);
+		my_plane.events = new ev.EventHolder();
+        var this__ = my_plane;
+        my_plane.image = null;
+        my_plane.image_set = function (value)
+        {
+            my_plane.image = value;
+            this.materials[0].map = new THREE.Texture(streamer.get_resource(value).data);
+        };
+        return my_plane;
+        }
+threejs_load_resources(function()
+{
+	drawingCanvas.onmousemove = function(ev)
+	{
+		ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};
+	drawingCanvas.onmousedown = function(ev)
+	{
+		ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};
+	drawingCanvas.onmouseup = function(ev)
+	{
+		ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+	};		
+	ui_.events.addListener("mousedown", function(x,y)
+	{    
+		application.events.dispatch("mousedown", [x, y]);
+	});
+	ui_.events.addListener("mouseup", function(x,y)
+	{    
+		application.events.dispatch("mouseup", [x, y]);
+	});
+	ui_.events.addListener("mousemove", function(x,y)
+	{    
+		application.events.dispatch("mousemove", [x, y]);
+	});
+	ui_.events.addListener("click", function(x,y)
+	{    
+		application.events.dispatch("click", [x, y]);
+	});
+	ui_.events.addListener("drag", function(x,y)
+	{    
+		application.events.dispatch("drag", [x, y]);
+	});
+	ui_.events.addListener("dragend", function(x,y)
+	{    
+		application.events.dispatch("dragend", [x, y]);
+	});
+	ui_.events.addListener("keyup", function(keycode)
+	{    
+		application.events.dispatch("keyup", [keycode]);
+	});
+	ui_.events.addListener("keydown", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+	ui_.events.addListener("keypress", function(keycode)
+	{    
+		application.events.dispatch("keydown", [keycode]);
+	});
+		    img4 = 
+			new my_image(g_ui_root.manager, g_ui_root, "images/test1.png");
+        img4 = img4;
+            img4.set_x(100);
+            img4.set_y(100);
+            img4.set_width(128);
+            img4.set_height(164);
+			    scene = new THREE.Scene() ;
+		    camera_1 = 
+		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
+		active_camera = camera_1;
+            camera_1.position.z = 1000;
+if(ui)
+{	
+	SoundUtils = new ui.SoundUtils();		
+	g_ui.fill_background = false;	
+}
+var event_manager = new ev.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(ev.keyCode);                  
+};
+application.events.dispatch("init", []);
+document.body.appendChild( renderer.domElement );
+animate();
+});
+function animate() {
+	if(ui_)
+		drawingCanvas.getContext('2d').clearRect(0,0,1000,800);
+	requestAnimationFrame( animate );
+	render();
+	if(ui_)
+		ui_.draw(drawingCanvas.getContext('2d'));
+	}
+</script>
+</body>
+</html>

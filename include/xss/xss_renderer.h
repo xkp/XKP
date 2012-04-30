@@ -5,6 +5,7 @@
 #include "xss_parser.h"
 #include "xss_context.h"
 #include "xss_compiler.h"
+#include "xss_error.h"
 
 #include <xs.h>
 #include <map>

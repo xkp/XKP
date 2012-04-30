@@ -1101,6 +1101,24 @@ variant xss_compiler::compile_expression(const str& expr)
     return lang->compile_expression(result, ctx);
   }
 
+str xss_compiler::render_expr(const expression& expr, XSSObject this_)
+  {
+    XSSContext ctx  = current_context();
+    Language   lang = ctx->get_language();
+
+    //compile
+    XSSContext my_ctx(new xss_context(ctx));
+		my_ctx->set_this(this_);
+
+    variant ev = lang->compile_expression(expr, my_ctx);
+    //IXSSRenderer* rend = variant_cast<IXSSRenderer*>(ev, null); assert(rend);
+    IExpressionRenderer* rend = variant_cast<IExpressionRenderer*>(ev, null); assert(rend);
+
+    //and render
+		//return rend->render(this_, null);
+    return rend->render();
+  }
+
 str xss_compiler::render_expression(const str& expr, XSSObject this_)
 	{
 		xs_utils	 xs;
@@ -3024,10 +3042,14 @@ void xss_compiler::run()
     std::vector<XSSApplicationRenderer>::iterator it = applications_.begin();
     std::vector<XSSApplicationRenderer>::iterator nd = applications_.end();
 
+    fs::path output_org = output_path_;
     for(; it != nd; it++)
       {
         XSSApplicationRenderer app = *it;
         current_app_ = app;
+        fs::path real_output = output_org / app->output_path();
+
+        output_path_ = real_output.parent_path();
 
         fs::path target = app->entry_point();
         if (target.empty())
@@ -3048,9 +3070,10 @@ void xss_compiler::run()
           std::cout << result_;
         else
           {
-            output_file(output_path_ / out_file, result_);
+            output_file(output_org / out_file, result_);
           }
       }
+    output_path_ = output_org;
   }
 
 void xss_compiler::copy_files(XSSObject project_data)

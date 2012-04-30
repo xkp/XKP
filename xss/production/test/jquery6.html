@@ -66,9 +66,21 @@ Released   : 20120325
 				</div>
 				<!-- end #content -->
 				<div id="sidebar">
+<div id="__div1">
+            <table border="0" >
+        <tr  height = "40px"   style="vertical-align:top">
+<div id="__div2">
+				<input id="preset_apply"
+						type="button" 
+						name="preset_apply" 
+						value="Apply Stack" 
+					>
+				</input>
+</div>
+</tr><tr style="vertical-align:top">
 <div id="acc1">
             <h3><a href="#">Brightness</a></h3>
-<div id="__div1">
+<div id="__div3">
 				<label id="__label1"
 			>
 					Level
@@ -90,7 +102,7 @@ Released   : 20120325
 				</div>
 </div>
             <h3><a href="#">Color</a></h3>
-<div id="__div2">
+<div id="__div4">
 				<label id="__label3"
 			>
 					Red
@@ -122,7 +134,7 @@ Released   : 20120325
 				</div>
 </div>
             <h3><a href="#">HSL</a></h3>
-<div id="__div3">
+<div id="__div5">
 				<label id="__label6"
 			>
 					Hue
@@ -154,7 +166,7 @@ Released   : 20120325
 				</div>
 </div>
             <h3><a href="#">Noise</a></h3>
-<div id="__div4">
+<div id="__div6">
 				<label id="__label9"
 			>
 					Amount
@@ -177,12 +189,12 @@ Released   : 20120325
 <br/>
 <br/>
             <div id="mono">
-        <input id="mono_input" type="checkbox" name="__div4"/>
+        <input id="mono_input" type="checkbox" name="__div6"/>
         <label id="mono_label" for="mono_input"> Mono </label>
             </div>
 </div>
             <h3><a href="#">Blur</a></h3>
-<div id="__div5">
+<div id="__div7">
 				<input id="blur_apply"
 						type="button" 
 						name="blur_apply" 
@@ -191,6 +203,9 @@ Released   : 20120325
 				</input>
 </div>
 </div>
+</tr>
+            </table>
+        </div>
 				</div>
 				<!-- end #sidebar -->
 				<div style="clear: both;">&nbsp;</div>
@@ -213,7 +228,8 @@ Released   : 20120325
             <script type="text/javascript" src="../js/pixastic/pixastic-manager.js"></script>
             <script type="text/javascript" src="../js/pixastic/pixastic-utils.js"></script>
 <style>
-#acc1 {height : 490px}
+#__div2 {height : 40px}
+#acc1 {height : 360px}
 #image_container {width : 605px;height : 375px}
 </style>
 <script type="text/javascript">
@@ -250,9 +266,17 @@ application.set_image_data(imgdata);
         $("#img3").click(function() { application.set_image("img3"); });
         $("#img4").click(function() { application.set_image("img4"); });
 			application.set_image("img2");
+//some jquery, to lighten the mood
+        $("#img1").click(function() { application.set_image("img1"); });
+        $("#img2").click(function() { application.set_image("img2"); });
+        $("#img3").click(function() { application.set_image("img3"); });
+        $("#img4").click(function() { application.set_image("img4"); });
 		}
-			var acc1 = $("#acc1");
 			var __div1 = $("#__div1");
+			var __div2 = $("#__div2");
+			var preset_apply = $("#preset_apply").button();
+			var acc1 = $("#acc1");
+			var __div3 = $("#__div3");
 			var __label1 = $("#__label1");
 			var __br1 = $("#__br1");
 			var __br2 = $("#__br2");
@@ -262,7 +286,7 @@ application.set_image_data(imgdata);
 			var __br4 = $("#__br4");
 			var __br5 = $("#__br5");
 			var constrast = $("#constrast");
-			var __div2 = $("#__div2");
+			var __div4 = $("#__div4");
 			var __label3 = $("#__label3");
 			var __br6 = $("#__br6");
 			var __br7 = $("#__br7");
@@ -277,7 +301,7 @@ application.set_image_data(imgdata);
 			var __br12 = $("#__br12");
 			var __br13 = $("#__br13");
 			var green = $("#green");
-			var __div3 = $("#__div3");
+			var __div5 = $("#__div5");
 			var __label6 = $("#__label6");
 			var __br14 = $("#__br14");
 			var __br15 = $("#__br15");
@@ -292,7 +316,7 @@ application.set_image_data(imgdata);
 			var __br20 = $("#__br20");
 			var __br21 = $("#__br21");
 			var lightness = $("#lightness");
-			var __div4 = $("#__div4");
+			var __div6 = $("#__div6");
 			var __label9 = $("#__label9");
 			var __br22 = $("#__br22");
 			var __br23 = $("#__br23");
@@ -305,9 +329,23 @@ application.set_image_data(imgdata);
 			var __br27 = $("#__br27");
 			var __br28 = $("#__br28");
 			var mono = $("#mono").button();
-			var __div5 = $("#__div5");
+			var __div7 = $("#__div7");
 			var blur_apply = $("#blur_apply").button();
 			var image_container = $("#image_container");
+		preset_apply.click( function() { 
+			var image_data = application.get_image_data();
+preset_apply.disabled = true;
+preset_apply.attr("value", "Applying...");
+var __worker1 = new Worker('__asynch1.js');
+__worker1.onmessage = function(message) {
+if (message.data.id == '__wwmsg1') {
+var image_data = message.data.image_data;application.set_image_data(image_data);
+preset_apply.disabled = false;
+preset_apply.attr("value", "Apply Stack");
+}
+}
+__worker1.postMessage({mypreset : transformer,image : image_data,});
+		});
         acc1.accordion({
             fillSpace: true,
         });

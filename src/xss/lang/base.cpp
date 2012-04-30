@@ -483,7 +483,7 @@ void base_code_renderer::dsl_(dsl& info)
         xss_throw(error);
       }
 
-    dsl->render(info, ctx_);
+    add_line(dsl->render(info, ctx_));
   }
 
 void base_code_renderer::dispatch(stmt_dispatch& info)
