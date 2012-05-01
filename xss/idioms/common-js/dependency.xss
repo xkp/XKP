@@ -7,6 +7,7 @@
     
     if (it.stylesheet)
     {
+        compiler.log("RENDERING STYLE SHEET");
         out()
         {
             <link rel="stylesheet" href="<xss:e v="href"/>"></link>

@@ -3,9 +3,9 @@
         application.ui_package = "ui_package";
 </xss:code>
 
-function build_<xss:e v="application.id"/>(host, canvasId)
+<xss:e v="project.appId"/> = (function (host)
 {
     <xss:code>
-        compiler.xss("ui_script.xss");
+        compiler.xss("ui_script.xss", canvas_name = project.canvasId);
     </xss:code>
-}
+})(<xss:e v="project.hostId"/>);

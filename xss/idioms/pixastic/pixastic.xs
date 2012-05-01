@@ -20,7 +20,6 @@ on render_dependencies()
     var dependencies = compiler.idiom_dependencies("pixastic");
     for(var dep in dependencies)
     {   
-        compiler.log("Rendering pix dependen");
         compiler.xss("../common-js/dependency.xss", dep);
     }
 }

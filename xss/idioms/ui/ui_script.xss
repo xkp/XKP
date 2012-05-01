@@ -1,3 +1,5 @@
+<xss:parameter id="canvas_name"/>
+
 var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
@@ -50,7 +52,16 @@ compiler.xss("../common-js/instance.xss", application);
 
 window.onload = function() 
 {
-	drawingCanvas = document.getElementById("<xss:e value="application.canvasElement"/>");
+    <xss:code>
+	var elementId = canvas_name;
+    if (!elementId) 
+        elementId = application.canvasElement;
+    
+    out()
+    {
+        drawingCanvas = document.getElementById("<xss:e value="elementId"/>");
+    }
+    </xss:code>
     g_canvas = drawingCanvas;
 	
 	if (drawingCanvas && drawingCanvas.getContext)

@@ -1,6 +1,6 @@
 <module id="ui" src="ui.xs">
+    <dependency href="resig.js" shared="true"/>
     <dependency href="../js/utils.js"/>
-    <dependency href="../js/resig.js"/>
     <dependency href="../js/event.js"/>
     <dependency href="../js/keys.js"/>
 

@@ -1,22 +1,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>TITLE</title>
-<script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
-<script type="text/javascript" src="../js/jquery-idiom.js"></script>
-<link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css">
-                <script type="text/javascript" src="jquery-1.7.1.min.js"></script>
-                <script type="text/javascript" src="jquery-ui-1.8.18.custom.min.js"></script>
-                <script type="text/javascript" src="jquery-idiom.js"></script>
-                <script type="text/javascript" src="jquery-ui-1.8.18.custom.css"></script>
-                <script type="text/javascript" src="../js/utils.js"></script>
-                <script type="text/javascript" src="../js/resig.js"></script>
-                <script type="text/javascript" src="../js/event.js"></script>
-                <script type="text/javascript" src="../js/keys.js"></script>
-<script type="text/javascript">
-$(function() {
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>Embedded canvas</title>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+            <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
+            <script type="text/javascript" src="../js/jquery-idiom.js"></script>
+            <link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css"></link>
+            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
         var application = {};
 			var __div1 = $("#__div1");
 			var __div2 = $("#__div2");
@@ -24,21 +20,9 @@ $(function() {
 			var edit1 = $("#edit1");
 			var btn1 = $("#btn1").button();
 			var app = $("#app");
-<!DOCTYPE html>
-<html>
-<head>
-<title></title>
-<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
-<script type="text/javascript" src="../js/jquery.utils.js"></script>
-<script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/resig.js"></script>
-<script type="text/javascript" src="../js/event.js"></script>
-<script type="text/javascript" src="../js/keys.js"></script>
-		<script type="text/javascript" src="../js/ui.js"></script>
-		<script type="text/javascript" src="../js/sequence.js"></script>
-		<script type="text/javascript" src="../js/streamer.js"></script>
-<script type="text/javascript">
-    var drawingCanvas;		
+app.application = (function (host)
+{
+var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -150,8 +134,8 @@ function start(resolution)
 });
 window.onload = function() 
 {
-	drawingCanvas = document.getElementById("myCanvas");
-    g_canvas = drawingCanvas;
+        drawingCanvas = document.getElementById("app");
+        g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
 	{
 		var client =
@@ -262,26 +246,15 @@ g_sequence_manager);
 		});
 	}
 }
-</script>
-</head>
-<body>	
-	<canvas id="myCanvas" width="600" height="400"
-		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
-</body>
-</html>
-        if (application.init)
-            application.init();
-    });
-</script>
-<style>
-#__div1 {position : relative}
-#__div2 {left : 0px;top : 0px;width : 200px;position : absolute}
-#edit1 {width : 252px}
-#app {left : 300px;top : 0px;width : 600px;height : 400px;position : absolute}
-</style>
+})(application);
+                    if (application.init)
+                        application.init();
+                		});
+	</script>
+	<style>
+	</style>
 </head>
 <body>
-            <div id='application'>
 <div id="__div1">
             <table border="0" >
             </table>
@@ -306,6 +279,5 @@ g_sequence_manager);
 			>
 				</canvas>
 </div>
-                </div>
-                </body>
+</body>
 </html>

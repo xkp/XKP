@@ -21,9 +21,13 @@ on pre_process(obj)
     obj.css = css;
 }
 
-on render_dependencies()
+on compile_dependency(dep)
 {
-    var dependencies = compiler.idiom_dependencies("jquery");
+    if (!dep.idiom)
+        return;
+
+    if (dep.idiom.id != "jquery")
+        return;
 
     var jquery_path = project.jquery_path;
     if (!jquery_path)
@@ -33,13 +37,10 @@ on render_dependencies()
     if (!css_path)
         css_path = "../css/ui-lightness";
 
-    for(var dep in dependencies)
-    {
-        if (dep.stylesheet)
-            compiler.xss("../common-js/dependency.xss", dep, path = css_path);
-        else
-            compiler.xss("../common-js/dependency.xss", dep, path = jquery_path);
-    }
+    if (dep.stylesheet)
+        dep.href = css_path + '/' + dep.href;
+    else
+        dep.href = jquery_path + '/' + dep.href;
 }
 
 on render_instances()

@@ -1,5 +1,5 @@
 <module id="pixastic" src="pixastic.xs">
-    <dependency href="../js/resig.js"/>
+    <dependency href="resig.js" shared="true"/>
     <dependency href="../js/pixastic/pixastic.core.js"/>
     <dependency href="../js/pixastic/actions.js"/>
     <dependency href="../js/pixastic/pixastic-manager.js"/>

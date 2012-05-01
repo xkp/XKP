@@ -1748,7 +1748,11 @@ DynamicArray xss_compiler::idiom_dependencies(const str& idiom_id)
         XSSObject dep   = *it;
         XSSObject idiom = dep->get<XSSObject>("idiom", XSSObject());
         if (idiom && idiom->id() == idiom_id)
-          result->push_back(dep);
+          {
+            bool shared = dep->get<bool>("shared", false);
+            if (!shared)
+              result->push_back(dep);
+          }
       }
 
     return result;
