@@ -40,8 +40,7 @@
 	</scene>
 	
 	<label id="lbl0" x="240" y="75" font="Verdana" caption="Click smile to count"/>
-	<button id="btn1" placement="center" rotation="15" width="50" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png"/>
-	<label id="lbl1" x="240" y="400" font="Verdana" caption="Use arrows to move smile"/>
+	<button id="btn1" placement="center" rotation="15" width="50" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png"/>	
 	<label id="lbl2" x="240" y="420" font="Verdana" caption="Drag mouse to spin the cube"/>
 	
 </application>

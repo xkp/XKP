@@ -9,20 +9,13 @@
 	background:#356;
 	}
 </style>
-<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
-<script type="text/javascript" src="../js/jquery.utils.js"></script>
-<script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/resig.js"></script>
-<script type="text/javascript" src="../js/event.js"></script>
-<script type="text/javascript" src="../js/keys.js"></script>
-<script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/streamer.js"></script>
-		<script type="text/javascript" src="../js/three/Three.js"></script>
-		<script type="text/javascript" src="../js/three/Stats.js"></script>
-		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-		<script type="text/javascript" src="../js/three/Utils.js"></script>
-		<script type="text/javascript" src="../js/three/Detector.js"></script>
-		<script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/Detector.js"></script>
 <script type="text/javascript">		
 var ui;
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
@@ -129,8 +122,7 @@ threejs_load_resources(function()
 		} 
 	);
 	male_model.events = new ev.EventHolder();
-	var ev_parent = this;
-	male_model.events.addListener("click", function()
+	this.male_model.events.addListener("click", function()
 	{    
 		male_model.position.x = male_model.position.x + 10;
 	}
@@ -156,8 +148,7 @@ threejs_load_resources(function()
 		} 
 	);
 	female_model.events = new ev.EventHolder();
-	var ev_parent = this;
-	female_model.events.addListener("click", function()
+	this.female_model.events.addListener("click", function()
 	{    
 		female_model.position.x = female_model.position.x - 10;
 	}
@@ -165,14 +156,12 @@ threejs_load_resources(function()
 		application.are_obj_events = true;
             application.mouse_x = null;
             application.mouse_y = null;
-	var ev_parent = this;
 	application.events.addListener("updates", function()
 	{    
 		camera_1.position.x = camera_1.position.x + (application.mouse_x - camera_1.position.x) * 0.0500000007;
 camera_1.position.y = camera_1.position.y + (-application.mouse_y - camera_1.position.y) * 0.0500000007;
 	}
 	);
-	var ev_parent = this;
 	application.events.addListener("mousemove", function(x,y)
 	{    
 		application.mouse_x = x - app_width / 2;

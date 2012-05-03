@@ -345,15 +345,15 @@ Error [404] File not found
 ===[ 3js-ms.project.xml ]================(Tests)
 
 
-log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering Sequence Types...
+log: Rendering UI Types...
 log: Rendering UI...
-log: Rendering Sequence...
 Success are greateful
 ===[ 3js-ui.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering 3js Types...
 log: Rendering UI Types...
@@ -367,20 +367,16 @@ Success are greateful
 ===[ 3js_carousel.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
 Success are greateful
-===[ 3js_class_test.project.xml ]================(Tests)
-
-
-log: Rendering Resources...
-log: Rendering 3js Types...
-Success are greateful
 ===[ 3js_class_test_1.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
@@ -389,6 +385,7 @@ Success are greateful
 ===[ 3js_class_test_2.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
@@ -397,15 +394,9 @@ Success are greateful
 ===[ 3js_cube.project.xml ]================(Tests)
 
 
+log: Rendering 3js Types...
 log: Rendering UI Types...
-log: Rendering 3js Types...
 log: Rendering UI...
-Success are greateful
-===[ 3js_cube_img.project.xml ]================(Tests)
-
-
-log: Rendering Resources...
-log: Rendering 3js Types...
 Success are greateful
 ===[ 3js_lights.project.xml ]================(Tests)
 
@@ -417,18 +408,14 @@ Success are greateful
 ===[ 3js_materials.project.xml ]================(Tests)
 
 
-log: Rendering Resources...
-log: Rendering 3js Types...
-Success are greateful
-===[ 3js_model.project.xml ]================(Tests)
-
-
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering 3js Types...
 Success are greateful
 ===[ 3js_package.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
@@ -446,12 +433,6 @@ log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
 Success are greateful
-===[ 3js_sound.project.xml ]================(Tests)
-
-
-log: Rendering Resources...
-log: Rendering 3js Types...
-Success are greateful
 ===[ 3js_transform.project.xml ]================(Tests)
 
 
@@ -462,6 +443,7 @@ Success are greateful
 ===[ animtest.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
@@ -474,6 +456,7 @@ Success are greateful
 ===[ box2d2.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
@@ -481,50 +464,72 @@ Success are greateful
 ===[ box2d3.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: smiley_ball
+log: Instance renderer: body.xss instance: __physics1
 log: Rendering UI...
 Success are greateful
 ===[ box2d4.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: bad_guy
+log: Instance renderer: body.xss instance: __physics2
+log: Instance renderer: spawner.xss instance: cannon
+log: Instance renderer: ../sequence.xss instance: move_around
+log: Instance renderer: ../sequence.xss instance: fade_out
 log: good_guy
+log: Instance renderer: body.xss instance: __physics3
+log: Instance renderer: ../sequence.xss instance: move_around
 log: bullet
+log: Instance renderer: body.xss instance: __physics1
 log: floor
+log: Instance renderer: body.xss instance: __physics4
 log: Rendering Sequence Types...
 log: Rendering UI...
 Success are greateful
 ===[ box2d5.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: body_1
+log: Instance renderer: body.xss instance: __physics1
 log: body_2
+log: Instance renderer: body.xss instance: __physics2
 log: body_3
+log: Instance renderer: body.xss instance: __physics3
 log: floor
+log: Instance renderer: body.xss instance: __physics4
 log: my_body
 log: Rendering UI...
 Success are greateful
 ===[ box2dcar.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: car
+log: Instance renderer: body.xss instance: __physics2
 log: wheel
+log: Instance renderer: body.xss instance: __physics4
 log: box
+log: Instance renderer: body.xss instance: __physics1
 log: floor
+log: Instance renderer: body.xss instance: __physics3
 log: my_body
 log: Rendering UI...
 Success are greateful
 ===[ dany_dennis.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering Sequence Types...
 log: Rendering UI Types...
@@ -535,10 +540,13 @@ Success are greateful
 ===[ dd.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: social_button
+log: Instance renderer: ../sequence.xss instance: grow
+log: Instance renderer: ../sequence.xss instance: shrink
 log: Rendering 3js Types...
 log: Rendering UI...
 Success are greateful
@@ -595,10 +603,12 @@ Success are greateful
 ===[ g_anim.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: my_image
+log: Instance renderer: ../sequence.xss instance: img_pos
 log: Rendering 3js Types...
 log: Rendering UI...
 Success are greateful
@@ -759,35 +769,104 @@ log: IT IS ALIVE
 log: IT IS ALIVE
 log: Ignoring idx 1
 log: IT IS ALIVE
-log: Ignoring idx 2<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>TITLE</title>
-<script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
-<script type="text/javascript" src="../js/jquery-idiom.js"></script>
-<link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css">
+log: Ignoring idx 2<html>
+<body>
 
-                <script type="text/javascript" src="jquery-1.7.1.min.js"></script>
-            
-                <script type="text/javascript" src="jquery-ui-1.8.18.custom.min.js"></script>
-            
-                <script type="text/javascript" src="jquery-idiom.js"></script>
-            
-                <script type="text/javascript" src="jquery-ui-1.8.18.custom.css"></script>
-            
+<table width="500" border="0">
+<tr>
+<td colspan="2" style="background-color:#FFA500;">
+<h1>Main Title of Web Page</h1>
+</td>
+</tr>
 
+<tr valign="top">
+<td style="background-color:#FFD700;width:100px;text-align:top;">
+<b>Menu</b><br />
+HTML<br />
+CSS<br />
+JavaScript
+</td>
+<td id="content" style="background-color:#EEEEEE;height:200px;width:400px;text-align:top;">
+
+
+
+<div id="__div1">
+
+            <table border="0" >
+        
+            </table>
+        
+
+
+				<input id="btnFullName"
+			
+						type="button" 
+					
+						name="btnFullName" 
+					
+						value="Click Me" 
+					>
+				</input>
+			
+
+
+
+				<label id="lblFullName"
+			>
+					
+				
+				</label>
+			
+</div>
+
+
+
+
+</td>
+</tr>
+
+<tr>
+<td colspan="2" style="background-color:#FFA500;text-align:center;">
+Copyright © 2011 W3Schools.com</td>
+</tr>
+</table>
+
+    <script type="text/javascript" src="../js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../js/jquery/jquery-ui.js"></script>
+    <script type="text/javascript" src="../js/jquery/utils.js"></script>
+
+
+            <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+        
+
+
+
+            <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
+        
+
+
+
+            <script type="text/javascript" src="../js/jquery-idiom.js"></script>
+        
+
+
+
+            <link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css"></link>
+        
+
+<style>
+
+
+#__div1 {position : relative}
+
+
+#btnFullName {left : 140px;top : 110px;width : 200px;height : 43px;position : absolute}
+
+
+#lblFullName {left : 10px;top : 170px;width : 300px;height : 25px;position : absolute}
+
+</style>
 <script type="text/javascript">
-$(function() {
-	
-
-
-
-
-
-
-
 
         var application = {};
     
@@ -826,64 +905,12 @@ $(function() {
 
 
 
-        if (application.init)
-            application.init();
-    });
+                    if (application.init)
+                        application.init();
+                
 </script>
-
-<style>
-    
-
-#__div1 {position : relative}
-
-
-#btnFullName {left : 140px;top : 110px;width : 200px;height : 43px;position : absolute}
-
-
-#lblFullName {left : 10px;top : 170px;width : 300px;height : 25px;position : absolute}
-
-</style>
-</head>
-
-<body>
-    
-            <div id='application'>
-        
-
-<div id="__div1">
-
-            <table border="0" >
-        
-            </table>
-        
-
-
-				<input id="btnFullName"
-			
-						type="button" 
-					
-						name="btnFullName" 
-					
-						value="Click Me" 
-					>
-				</input>
-			
-
-
-
-				<label id="lblFullName"
-			>
-					
-				
-				</label>
-			
-</div>
-
-
-                </div>
-                </body>
+</body>
 </html>
-
 
 Success are greateful
 ===[ jquery2.project.xml ]================(Tests)
@@ -951,6 +978,8 @@ Success are greateful
 
 
 log: NO LAYOUT
+log: preset_apply
+log: NO LAYOUT
 log: __label1
 log: __br1
 log: __br2
@@ -994,30 +1023,22 @@ log: NO LAYOUT
 log: __label9
 log: __br22
 log: __br23
-log: amount
+log: noise_amount
 log: __br24
 log: __label10
 log: __br25
 log: __br26
-log: strength
+log: noise_strength
 log: __br27
 log: __br28
 log: mono
 log: NO LAYOUT
-log: __label11
-log: __br29
-log: __br30
-log: glow_amount
-log: __br31
-log: __label12
-log: __br32
-log: __br33
-log: radius
-log: __br34
+log: blur_apply
 Success are greateful
 ===[ jquery7.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
@@ -1065,6 +1086,7 @@ Success are greateful
 ===[ ms3.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
@@ -1074,6 +1096,7 @@ Success are greateful
 ===[ ms4.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
@@ -1082,6 +1105,7 @@ Success are greateful
 ===[ ms5.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
@@ -1091,16 +1115,20 @@ Success are greateful
 ===[ ms6.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: ms6
+log: Instance renderer: ../sequence.xss instance: anim1
+log: Instance renderer: component.xss instance: btn1
+log: Instance renderer: component.xss instance: btn2
 log: Rendering Sequence Types...
 log: Rendering UI...
-log: Rendering Sequence...
 Success are greateful
 ===[ ms7.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
@@ -1108,6 +1136,7 @@ Success are greateful
 ===[ newseq1.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
@@ -1117,12 +1146,18 @@ Success are greateful
 ===[ paintings.project.xml ]================(Tests)
 
 
-Error [404] File not found
-	file = c:/dev/XKP/xss/tests/../idioms/ms/sequence.xmlERROR: Project:  paintings.project.xml
-
+log: on resources.render_initialization
+log: Rendering Resources...
+log: Rendering Sequence Types...
+log: Rendering UI Types...
+log: social_button
+log: Rendering 3js Types...
+log: Rendering UI...
+Success are greateful
 ===[ paintings_grad.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering Sequence Types...
 log: Rendering UI Types...
@@ -1133,6 +1168,7 @@ Success are greateful
 ===[ pixastic.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
@@ -1140,6 +1176,7 @@ Success are greateful
 ===[ pixastic_test.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
@@ -1172,15 +1209,19 @@ Success are greateful
 ===[ replicator.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: my_image
 log: menu_item
+log: Instance renderer: component.xss instance: lbl_caption
+log: Instance renderer: component.xss instance: icon
 log: Rendering UI...
 Success are greateful
 ===[ ui_audio.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
@@ -1188,6 +1229,7 @@ Success are greateful
 ===[ ui_audio_1.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
@@ -1195,6 +1237,7 @@ Success are greateful
 ===[ ui_class_test.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: my_image
@@ -1203,6 +1246,7 @@ Success are greateful
 ===[ ui_cliparea.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
@@ -1210,6 +1254,7 @@ Success are greateful
 ===[ ui_demo.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
@@ -1217,6 +1262,7 @@ Success are greateful
 ===[ ui_drag.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
@@ -1224,6 +1270,7 @@ Success are greateful
 ===[ ui_figures.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
@@ -1231,6 +1278,7 @@ Success are greateful
 ===[ ui_kitchen_sink.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
@@ -1238,6 +1286,7 @@ Success are greateful
 ===[ ui_painter.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
@@ -1245,6 +1294,7 @@ Success are greateful
 ===[ ui_placement.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
@@ -1258,6 +1308,7 @@ Error [cannot-resolve] Instance not found
 ===[ ui_sprite.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
@@ -1265,6 +1316,7 @@ Success are greateful
 ===[ ui_video.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
@@ -1272,6 +1324,7 @@ Success are greateful
 ===[ uibuffer_test.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
@@ -1366,12 +1419,15 @@ Success are greateful
 ===[ wgl_cube_img.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering 3js Types...
 Success are greateful
 ===[ wgl_icosahedron.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
+log: Rendering Resources...
 log: Rendering 3js Types...
 Success are greateful
 ===[ wgl_materials.project.xml ]================(Tests)
@@ -1382,12 +1438,14 @@ Success are greateful
 ===[ wgl_model.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering 3js Types...
 Success are greateful
 ===[ wgl_package.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering 3js Types...
 Success are greateful
@@ -1404,6 +1462,7 @@ Success are greateful
 ===[ wgl_sound.project.xml ]================(Tests)
 
 
+log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering 3js Types...
 Success are greateful
@@ -1626,8 +1685,8 @@ Success are greateful
 
 
 log: <Dependencies>
-log: /use/bin/xss14
 log: /usr/lib/test_idiom
+log: /use/bin/xss14
 log: /use/bin/xss14_1
 log: </Dependencies>
 log: <User Classes>
@@ -1676,12 +1735,12 @@ log: </User Classes>
 
 
 
-        this.some_prop_get = function ()
+        some_prop_get = function ()
         {
             return 10;
         };
 
-        this.some_prop_set = function (value)
+        some_prop_set = function (value)
         {
             value++;
         };
@@ -1714,12 +1773,12 @@ log: </User Classes>
 
 
 
-        this.some_prop_get = function ()
+        some_prop_get = function ()
         {
             return 10;
         };
 
-        this.some_prop_set = function (value)
+        some_prop_set = function (value)
         {
             value++;
         };

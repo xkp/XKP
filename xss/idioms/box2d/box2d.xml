@@ -1,4 +1,11 @@
 <module id="box2d" src="box2d.xs">
+	<dependency href="resig.js" shared="true"/>
+    <dependency href="event.js" shared="true"/>
+    <dependency href="Box2dWeb-2.1.a.3.min.js"/>
+    <dependency href="utils.js"/>
+    <dependency href="keys.js"/>
+    <dependency href="joint.js"/>
+	<dependency href="spawner.js"/>
     <types>
         <class id="physics_world" renderer="body.xss">
 			<property id="density" type="float" dont_init="true"/>

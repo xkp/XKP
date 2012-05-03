@@ -1644,6 +1644,10 @@ void xss_type::register_instance(XSSObject obj)
 
 void xss_type::register_foreign_instance(XSSObject obj)
   {
+    XSSModule idiom = obj->get<XSSModule>("idiom", XSSModule());
+    if (idiom)
+      idiom->used();
+
     obj->set_parent(shared_from_this());
 
     all_instances_->push_back(obj);

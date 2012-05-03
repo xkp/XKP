@@ -7,7 +7,6 @@
         <image src="images/stop_over.png"/>
 		<image src="images/pause_over.png"/>
 		<image src="images/play.png"/>
-        <image src="images/stop.png"/>
 		<image src="images/pause.png"/>
 		<image src="images/minus.png"/>
 		<image src="images/plus.png"/>
@@ -18,7 +17,7 @@
 		<video src="video/sintel.mp4"/>
 	 </resources>
 	 
-    <vid id="v" src="video/sintel.mp4" x="50" y="50" width="400" height="200"/>
+    <vid id="v" src="video/sample_mpeg4.mp4" x="50" y="50" width="400" height="200"/>
 	
 	<label id="lbl1" x="40" y="300" font="Verdana" caption="Volume controls"/>
     <img id="btnVolUp" x="20" y="320" width="30" height="30" src="images/plus.png"/>

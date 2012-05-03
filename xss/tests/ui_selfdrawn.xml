@@ -1,6 +1,0 @@
-<application src="ui_selfdrawn.xs" width="600" height="600">
-    <resources>
-    </resources>
-
-	<self_drawn id="sd1" x="200" y="300" width="600" height="300"/>
-</application>

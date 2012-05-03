@@ -1,18 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>TITLE</title>
-<script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
-<script type="text/javascript" src="../js/jquery-idiom.js"></script>
-<link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css">
-                <script type="text/javascript" src="jquery-1.7.1.min.js"></script>
-                <script type="text/javascript" src="jquery-ui-1.8.18.custom.min.js"></script>
-                <script type="text/javascript" src="jquery-idiom.js"></script>
-                <script type="text/javascript" src="jquery-ui-1.8.18.custom.css"></script>
-<script type="text/javascript">
-$(function() {
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>Testing componentes</title>
+            <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+            <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
+            <script type="text/javascript" src="../js/jquery-idiom.js"></script>
+            <link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css"></link>
+	<script type="text/javascript">
+		$(document).ready(function() {
         var application = {};
 			var main = $("#main");
 			var __div1 = $("#__div1");
@@ -40,19 +36,14 @@ $(function() {
 		btn1.click( function() { 
 			lbl1.text(edit1.attr("value"));
 		});
-        if (application.init)
-            application.init();
-    });
-</script>
-<style>
-#main {width : 800px;height : 600px;position : relative}
-#edit1 {width : 252px}
-#__div2 {left : 400px;top : 20px;width : 600px;height : 400px;position : absolute}
-#btn1 {left : 20px;top : 120px;position : absolute}
-</style>
+                    if (application.init)
+                        application.init();
+                		});
+	</script>
+	<style>
+	</style>
 </head>
 <body>
-            <div id='application'>
 <div id="main">
 <div id="__div1">
 				<label id="lbl1"
@@ -108,6 +99,5 @@ $(function() {
 					>
 				</input>
 </div>
-                </div>
-                </body>
+</body>
 </html>

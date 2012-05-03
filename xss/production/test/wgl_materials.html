@@ -9,19 +9,13 @@
 	background:Black;
 	}
 </style>
-<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
-<script type="text/javascript" src="../js/jquery.utils.js"></script>
-<script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/resig.js"></script>
-<script type="text/javascript" src="../js/event.js"></script>
-<script type="text/javascript" src="../js/keys.js"></script>
-<script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/streamer.js"></script>
-		<script type="text/javascript" src="../js/three/Three.js"></script>
-		<script type="text/javascript" src="../js/three/Stats.js"></script>
-		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-		<script type="text/javascript" src="../js/three/Utils.js"></script>
-		<script type="text/javascript" src="../js/three/Detector.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/Detector.js"></script>
 <script type="text/javascript">		
 var ui;
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
@@ -142,7 +136,6 @@ color:White
             set_rotation_x(plane_1.rotation, -90);
             application.timer = null;
             application.objects = [];
-	var ev_parent = this;
 	application.events.addListener("init", function()
 	{    
 		for(var i = 0; i < all_in_one.length; i++)
@@ -161,7 +154,6 @@ scene.addObject(sphere_1);
 }
 	}
 	);
-	var ev_parent = this;
 	application.events.addListener("updates", function()
 	{    
 		application.timer = g_elapsed * 9.99999975e-005;

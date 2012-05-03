@@ -8,24 +8,21 @@
 	body{
 	}
 </style>
-<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
-<script type="text/javascript" src="../js/jquery.utils.js"></script>
-<script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/resig.js"></script>
-<script type="text/javascript" src="../js/event.js"></script>
-<script type="text/javascript" src="../js/keys.js"></script>
-<script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/streamer.js"></script>
-		<script type="text/javascript" src="../js/ui.js"></script>
-		<script type="text/javascript" src="../js/three/Three.js"></script>
-		<script type="text/javascript" src="../js/three/Stats.js"></script>
-		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-		<script type="text/javascript" src="../js/three/Utils.js"></script>
-		<script type="text/javascript" src="../js/streamer.js"></script>
-		<script type="text/javascript" src="../js/pixastic/pixastic.core.js"></script>
-		<script type="text/javascript" src="../js/pixastic/actions.js"></script>	
-		<script type="text/javascript" src="../js/pixastic/pixastic-manager.js"></script>	
-		<script type="text/javascript" src="../js/pixastic/pixastic-utils.js"></script>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/pixastic/pixastic.core.js"></script>
+            <script type="text/javascript" src="../js/pixastic/actions.js"></script>
+            <script type="text/javascript" src="../js/pixastic/pixastic-manager.js"></script>
+            <script type="text/javascript" src="../js/pixastic/pixastic-utils.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui_;
@@ -35,7 +32,7 @@ var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var canvas_position = {x:0, y:0};
-var streamer = new stream.Streamer();
+var streamer;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var lbl0;var lbl1;var lbl2;var img1;var img2;var img3;var img4;
@@ -47,8 +44,7 @@ application.events = new ev.EventHolder();
 				width: window.innerWidth,
 				height: window.innerHeight,
 				canvas: drawingCanvas
-			};
-            var streamer = new stream.Streamer();							
+			};            						
 			var ui_ = new ui.Manager(client, streamer);			
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
@@ -176,47 +172,40 @@ threejs_load_resources(function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    lbl0 = 
-			new ui.Label(g_ui_root.manager, g_ui_root, "12px Arial");
+		    lbl0 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Arial");
         lbl0 = lbl0;
             lbl0.set_x(50);
             lbl0.set_y(20);
             lbl0.text("Brightness and contrast filter demo");
-		    lbl1 = 
-			new ui.Label(g_ui_root.manager, g_ui_root, "12px Arial");
+		    lbl1 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Arial");
         lbl1 = lbl1;
             lbl1.set_x(50);
             lbl1.set_y(40);
             lbl1.text("Pass mouse over the Gioconda's elements to change their filter values");
-		    lbl2 = 
-			new ui.Label(g_ui_root.manager, g_ui_root, "12px Arial");
+		    lbl2 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Arial");
         lbl2 = lbl2;
             lbl2.set_x(50);
             lbl2.set_y(60);
             lbl2.text("Press numpad + and - to increase or decrease resource filter values");
-		    img1 = 
-			new ui.Image(g_ui_root.manager, g_ui_root, "images/test1.png");
+		    img1 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test1.png");
         img1 = img1;
             img1.set_x(50);
             img1.set_y(100);
             img1.set_width(128);
             img1.set_height(164);
-		    img2 = 
-			new ui.Image(g_ui_root.manager, g_ui_root, "images/test2.png");
+		    img2 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test2.png");
         img2 = img2;
             img2.set_x(50);
             img2.set_y(450);
             img2.set_width(60);
             img2.set_height(100);
-		    img3 = 
-			new ui.Image(g_ui_root.manager, g_ui_root, "images/test2.png");
+		    img3 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test2.png");
         img3 = img3;
             img3.set_x(150);
             img3.set_y(450);
             img3.set_width(60);
             img3.set_height(100);
-		    img4 = 
-			new ui.Image(g_ui_root.manager, g_ui_root, "images/test2.png");
+		    img4 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test2.png");
         img4 = img4;
             img4.set_x(250);
             img4.set_y(450);
@@ -296,7 +285,6 @@ map:new THREE.Texture(streamer.get_resource('images/test1.png').data),
             img3.f1.set_apply(0);
 			obtain_image(img3.f1, img3);
 			img3.put_on_apply = true;
-	var ev_parent = this;
 	application.events.addListener("click", function()
 	{    
 		img3.bf0.set_apply(!img3.bf0.apply_);
@@ -305,7 +293,6 @@ b_filter.set_apply(!b_filter.apply_);
 put_image(img1, b_filter.apply(get_image_data(img1)));
 	}
 	);
-	var ev_parent = this;
 	application.events.addListener("init", function()
 	{    
 		put_image(img2, preset_1.apply(get_image_data(img2)));
@@ -314,7 +301,6 @@ put_image(sphere_material, preset_1.apply(get_image_data(sphere_material)));
 put_image(img1, b_filter.apply(get_image_data(img1)));
 	}
 	);
-	var ev_parent = this;
 	application.events.addListener("keydown", function(keycode)
 	{    
 		if (keycode == NUMPAD_PLUS)
@@ -329,7 +315,7 @@ put_image(img1, b_filter.apply(get_image_data(img1)));
 }
 	}
 	);
-if(ui)
+if(ui_)
 {	
 	SoundUtils = new ui.SoundUtils();		
 	g_ui.fill_background = false;	

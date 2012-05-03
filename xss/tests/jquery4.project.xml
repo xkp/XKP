@@ -1,4 +1,4 @@
-<project entry_point="../idioms/jquery/standalone_app.xss" language="js" target="jquery4.xml" output="../production/test/jquery4.html">
+<project entry_point="../idioms/jquery/entry.xss" language="js" target="jquery4.xml" output="../production/test/jquery4.html">
     <idiom src="../idioms/jquery/jquery.xml"/>
 </project>
            

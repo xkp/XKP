@@ -1,5 +1,0 @@
-<xss:classes>
-    <class id="my_plane" super="transform">
-		<plane id="img_plane" width="128" height="164"/>		
-	</class>
-</xss:classes>

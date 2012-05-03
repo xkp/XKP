@@ -9,21 +9,18 @@
 	background:Black;
 	}
 </style>
-<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
-<script type="text/javascript" src="../js/jquery.utils.js"></script>
-<script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/resig.js"></script>
-<script type="text/javascript" src="../js/event.js"></script>
-<script type="text/javascript" src="../js/keys.js"></script>
-<script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/streamer.js"></script>
-		<script type="text/javascript" src="../js/sequence.js"></script>
-		<script type="text/javascript" src="../js/streamer.js"></script>
-		<script type="text/javascript" src="../js/ui.js"></script>
-		<script type="text/javascript" src="../js/three/Three.js"></script>
-		<script type="text/javascript" src="../js/three/Stats.js"></script>
-		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-		<script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/sequence.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui_;
@@ -33,7 +30,7 @@ var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var canvas_position = {x:0, y:0};
-var streamer = new stream.Streamer();
+var streamer;
 var app_width = 1000;
 var app_height = 800;
 var idle;var selected;var unselected;var move;var grow;var shrink;var facebook;var twitter;var email;
@@ -52,8 +49,7 @@ application.events = new ev.EventHolder();
 				width: 1000,
 				height: 800,
 				canvas: drawingCanvas
-			};
-            var streamer = new stream.Streamer();							
+			};            						
 			var ui_ = new ui.Manager(client, streamer);			
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
@@ -258,21 +254,19 @@ g_sequence_manager);
         });
             this.ox = null;
             this.oy = null;
-	var ev_parent = this;
 	this.events.addListener("mousein", function()
 	{    
-		ev_parent.ox = ev_parent.x;
-ev_parent.oy = ev_parent.y;
-ev_parent.shrink.stop();
-ev_parent.grow.start();
+		this__.ox = this__.x;
+this__.oy = this__.y;
+this__.shrink.stop();
+this__.grow.start();
 	}
 	);
 		application.are_obj_events = true;
-	var ev_parent = this;
 	this.events.addListener("mouseout", function()
 	{    
-		ev_parent.grow.stop();
-ev_parent.shrink.start();
+		this__.grow.stop();
+this__.shrink.start();
 	}
 	);
 		application.are_obj_events = true;
@@ -412,7 +406,6 @@ g_sequence_manager);
 	{
 		image_plane.materials[0].map = new THREE.Texture(streamer.get_resource(value).data);
 	};
-	var ev_parent = this;
 	image_plane.events.addListener("mousein", function(x,y)
 	{    
 		unselected.stop();
@@ -420,7 +413,6 @@ selected.start();
 	}
 	);
 		application.are_obj_events = true;
-	var ev_parent = this;
 	image_plane.events.addListener("mouseout", function()
 	{    
 		unselected.start();
@@ -686,22 +678,19 @@ threejs_load_resources(function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    facebook = 
-			new social_button(g_ui_root.manager, g_ui_root, "dd/facebook.png");
+		    facebook = new social_button(g_ui_root.manager, g_ui_root, "images/facebook.png");
         facebook = facebook;
             facebook.set_x(880);
             facebook.set_y(8);
             facebook.set_width(24);
             facebook.set_height(24);
-		    twitter = 
-			new social_button(g_ui_root.manager, g_ui_root, "dd/twitter.png");
+		    twitter = new social_button(g_ui_root.manager, g_ui_root, "images/twitter.png");
         twitter = twitter;
             twitter.set_x(845);
             twitter.set_y(8);
             twitter.set_width(24);
             twitter.set_height(24);
-		    email = 
-			new social_button(g_ui_root.manager, g_ui_root, "dd/photobucket.png");
+		    email = new social_button(g_ui_root.manager, g_ui_root, "images/photobucket.png");
         email = email;
             email.set_x(810);
             email.set_y(8);
@@ -718,13 +707,12 @@ create_image_group()
             test_ip.position.x = -100;
             test_ip.position.y = 0;
             test_ip.position.z = 0;
-	var ev_parent = this;
 	application.events.addListener("init", function()
 	{    
 		test_ip.images_set(["dd/twitter.png", "dd/twitter.png", "dd/twitter.png", "dd/twitter.png", "dd/twitter.png", "dd/twitter.png", "dd/twitter.png", "dd/twitter.png", "dd/twitter.png"]);
 	}
 	);
-if(ui)
+if(ui_)
 {	
 	SoundUtils = new ui.SoundUtils();		
 	g_ui.fill_background = false;	

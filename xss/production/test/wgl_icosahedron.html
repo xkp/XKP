@@ -8,19 +8,13 @@
 	body{
 	}
 </style>
-<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
-<script type="text/javascript" src="../js/jquery.utils.js"></script>
-<script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/resig.js"></script>
-<script type="text/javascript" src="../js/event.js"></script>
-<script type="text/javascript" src="../js/keys.js"></script>
-<script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/streamer.js"></script>
-		<script type="text/javascript" src="../js/three/Three.js"></script>
-		<script type="text/javascript" src="../js/three/Stats.js"></script>
-		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-		<script type="text/javascript" src="../js/three/Utils.js"></script>
-		<script type="text/javascript" src="../js/three/Detector.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/Detector.js"></script>
 <script type="text/javascript">		
 var ui;
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
@@ -34,8 +28,34 @@ var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 application.events = new ev.EventHolder();
-// --------RESOURCES---------
-// --------RESOURCES---------
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
+	// --------RESOURCES---------
+		var global_package = new stream.Package(streamer);	
+                global_package.add_item(
+            {
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/shadow.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+		global_package.add_item({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});		
+		global_package.load();	
+    // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
 document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( app_width, app_height );
@@ -51,7 +71,7 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var mat_1;var mat_2;var mat_3;var scene;var camera_1;var icosahedron_1;var icosahedron_2;var icosahedron_3;
+var mat_1;var mat_2;var mat_3;var shadow_mat;var scene;var camera_1;var icosahedron_1;var icosahedron_2;var icosahedron_3;var plane_1;var plane_2;var plane_3;var light_1;
 threejs_load_resources(function()
 {
 mat_1 = new THREE.MeshLambertMaterial({
@@ -62,6 +82,9 @@ color:Math.random() * 0xffffff
 	});
 mat_3 = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff
+	});
+shadow_mat = new THREE.MeshBasicMaterial({
+map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/shadow.png').asset),
 	});
 			    scene = new THREE.Scene() ;
 		    camera_1 = 
@@ -76,6 +99,14 @@ color:Math.random() * 0xffffff
             icosahedron_1.scale.x = 200;
             icosahedron_1.scale.y = 200;
             icosahedron_1.scale.z = 200;
+	this.icosahedron_1.events.addListener("mousein", function()
+	{    
+		set_rotation_x(icosahedron_1.rotation, get_rotation_x(icosahedron_1.rotation) + 2);
+set_rotation_y(icosahedron_1.rotation, get_rotation_y(icosahedron_1.rotation) + 2);
+set_rotation_z(icosahedron_1.rotation, get_rotation_z(icosahedron_1.rotation) + 2);
+	}
+	);
+		application.are_obj_events = true;
 	    icosahedron_2_icosahedron = new THREE.Icosahedron(1) ;
 	    icosahedron_2 = new THREE.Mesh(icosahedron_2_icosahedron, mat_2);
 	    scene.addObject(icosahedron_2);
@@ -83,6 +114,14 @@ color:Math.random() * 0xffffff
             icosahedron_2.scale.x = 200;
             icosahedron_2.scale.y = 200;
             icosahedron_2.scale.z = 200;
+	this.icosahedron_2.events.addListener("mousein", function()
+	{    
+		set_rotation_x(icosahedron_2.rotation, get_rotation_x(icosahedron_2.rotation) + 2);
+set_rotation_y(icosahedron_2.rotation, get_rotation_y(icosahedron_2.rotation) + 2);
+set_rotation_z(icosahedron_2.rotation, get_rotation_z(icosahedron_2.rotation) + 2);
+	}
+	);
+		application.are_obj_events = true;
 	    icosahedron_3_icosahedron = new THREE.Icosahedron(1) ;
 	    icosahedron_3 = new THREE.Mesh(icosahedron_3_icosahedron, mat_3);
 	    scene.addObject(icosahedron_3);
@@ -91,6 +130,52 @@ color:Math.random() * 0xffffff
             icosahedron_3.scale.x = 200;
             icosahedron_3.scale.y = 200;
             icosahedron_3.scale.z = 200;
+	this.icosahedron_3.events.addListener("mousein", function()
+	{    
+		set_rotation_x(icosahedron_3.rotation, get_rotation_x(icosahedron_3.rotation) + 2);
+set_rotation_y(icosahedron_3.rotation, get_rotation_y(icosahedron_3.rotation) + 2);
+set_rotation_z(icosahedron_3.rotation, get_rotation_z(icosahedron_3.rotation) + 2);
+	}
+	);
+		application.are_obj_events = true;
+	    plane_1_plane = new THREE.Plane(300, 300, null, null) ;
+	    plane_1 = new THREE.Mesh(plane_1_plane, shadow_mat);
+	    scene.addObject(plane_1);
+		plane_1.events = new ev.EventHolder();
+            set_rotation_x(plane_1.rotation, -90);
+            plane_1.position.x = -450;
+            plane_1.position.y = -250;
+	    plane_2_plane = new THREE.Plane(300, 300, null, null) ;
+	    plane_2 = new THREE.Mesh(plane_2_plane, shadow_mat);
+	    scene.addObject(plane_2);
+		plane_2.events = new ev.EventHolder();
+            set_rotation_x(plane_2.rotation, -90);
+            plane_2.position.y = -250;
+	    plane_3_plane = new THREE.Plane(300, 300, null, null) ;
+	    plane_3 = new THREE.Mesh(plane_3_plane, shadow_mat);
+	    scene.addObject(plane_3);
+		plane_3.events = new ev.EventHolder();
+            set_rotation_x(plane_3.rotation, -90);
+            plane_3.position.x = 450;
+            plane_3.position.y = -250;
+	    light_1 = 
+	    new THREE.DirectionalLight(White, null, null, null) ;
+	    scene.addLight(light_1);
+            light_1.position.z = 1;
+            application.mouseX = 0;
+            application.mouseY = 0;
+	application.events.addListener("mousemove", function(x,y)
+	{    
+		application.mouseX = x - window.innerWidth / 2;
+application.mouseY = y - window.innerHeight / 2;
+	}
+	);
+	application.events.addListener("updates", function()
+	{    
+		camera_1.position.x = camera_1.position.x + (application.mouseX - camera_1.position.x) * 0.0500000007;
+camera_1.position.y = camera_1.position.y + (-application.mouseY - camera_1.position.y) * 0.0500000007;
+	}
+	);
 var event_manager = new ev.ThreeEventManager();
 document.onmousemove = function(ev)
 {

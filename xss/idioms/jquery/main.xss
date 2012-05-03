@@ -60,13 +60,11 @@
     {
         if (dep.shared)
         {
-            compiler.log("IT IS SHARED");
             //shared libraries will be assumed to be at the default library path 
             compiler.xss("../common-js/dependency.xss", dep, path = default_path, marker = "dependencies");
         }
         else
         {
-            compiler.log("IT IS NOT SHARED");
             //let the idioms decide
             compiler.inject("compile_dependency", dep);
             non_shared += dep;

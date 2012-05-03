@@ -4,31 +4,25 @@ on pre_process(obj)
 		obj.id = compiler.genid(obj.class_name);
 }
 
-on render_js_includes()
+on compile_dependency(dep)
 {
-	out()
-	{
-		<script type="text/javascript" src="../js/pixastic/pixastic.core.js"></script>
-		<script type="text/javascript" src="../js/pixastic/actions.js"></script>	
-		<script type="text/javascript" src="../js/pixastic/pixastic-manager.js"></script>	
-		<script type="text/javascript" src="../js/pixastic/pixastic-utils.js"></script>
-	}
-}
+    if (!dep.idiom)
+        return;
 
-on render_dependencies()
-{
-    var dependencies = compiler.idiom_dependencies("pixastic");
-    for(var dep in dependencies)
-    {   
-        compiler.xss("../common-js/dependency.xss", dep);
-    }
+    if (dep.idiom.id != "pixastic")
+        return;
+
+    var path = project.pixastic_path;
+    if (!path)
+        path = "../js/pixastic";
+
+    dep.href = path + '/' + dep.href;
 }
 
 on render_instances()
 {
 	for(var inst in instances)
     {
-        compiler.log("Rendering Pix instances");
 		compiler.xss("pixastic.xss", inst);
     }
 }

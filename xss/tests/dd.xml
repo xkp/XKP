@@ -15,7 +15,7 @@
         </image_group>
     </scene>
 
-    <social_button id="facebook" x="880" y="8" width="24" height="24" src="dd/facebook.png"/>
-    <social_button id="twitter" x="845" y="8" width="24" height="24" src="dd/twitter.png"/>
-    <social_button id="email" x="810" y="8" width="24" height="24" src="dd/photobucket.png"/>
+    <social_button id="facebook" x="880" y="8" width="24" height="24" src="images/facebook.png"/>
+    <social_button id="twitter" x="845" y="8" width="24" height="24" src="images/twitter.png"/>
+    <social_button id="email" x="810" y="8" width="24" height="24" src="images/photobucket.png"/>
 </application>

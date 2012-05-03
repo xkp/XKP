@@ -8,21 +8,18 @@
 	body{
 	}
 </style>
-<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
-<script type="text/javascript" src="../js/jquery.utils.js"></script>
-<script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/resig.js"></script>
-<script type="text/javascript" src="../js/event.js"></script>
-<script type="text/javascript" src="../js/keys.js"></script>
-<script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/streamer.js"></script>
-		<script type="text/javascript" src="../js/sequence.js"></script>
-		<script type="text/javascript" src="../js/streamer.js"></script>
-		<script type="text/javascript" src="../js/ui.js"></script>
-		<script type="text/javascript" src="../js/three/Three.js"></script>
-		<script type="text/javascript" src="../js/three/Stats.js"></script>
-		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-		<script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/sequence.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui_;
@@ -32,7 +29,7 @@ var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var canvas_position = {x:0, y:0};
-var streamer = new stream.Streamer();
+var streamer;
 var app_width = 1000;
 var app_height = 800;
 var img4;
@@ -51,8 +48,7 @@ application.events = new ev.EventHolder();
 				width: 1000,
 				height: 800,
 				canvas: drawingCanvas
-			};
-            var streamer = new stream.Streamer();							
+			};            						
 			var ui_ = new ui.Manager(client, streamer);			
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
@@ -270,8 +266,7 @@ threejs_load_resources(function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    img4 = 
-			new my_image(g_ui_root.manager, g_ui_root, "images/test1.png");
+		    img4 = new my_image(g_ui_root.manager, g_ui_root, "images/test1.png");
         img4 = img4;
             img4.set_x(100);
             img4.set_y(100);
@@ -282,7 +277,7 @@ threejs_load_resources(function()
 		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
 		active_camera = camera_1;
             camera_1.position.z = 1000;
-if(ui)
+if(ui_)
 {	
 	SoundUtils = new ui.SoundUtils();		
 	g_ui.fill_background = false;	

@@ -234,7 +234,8 @@ xss_module::xss_module()
 xss_module::xss_module(XSSContext ctx):
   ctx_(ctx),
   instances_(new dynamic_array),
-  utypes_(new dynamic_array)
+  utypes_(new dynamic_array),
+  used_(false)
   {
     ev_pprocess_ = register_event("pre_process");
     DYNAMIC_INHERITANCE(xss_module)
@@ -272,6 +273,8 @@ void xss_module::set_path(fs::path p)
 
 void xss_module::register_module_type(XSSType type)
   {
+    used();
+    
     type_list::iterator it = types_.find(type->id());
     if (it != types_.end())
 			{
@@ -288,6 +291,8 @@ void xss_module::register_module_type(XSSType type)
 
 void xss_module::register_user_type(XSSType type)
   {
+    used();
+
     register_module_type(type);
     utypes_->push_back(type);
   }
@@ -298,15 +303,20 @@ bool xss_module::has_type(const str& type)
     return it != types_.end();
   }
 
-void xss_module::register_instance(XSSObject obj)
+void xss_module::used()
   {
-    if (instances_->empty())
+    if (!used_)
       {
-        //notify the compiler we're alive
-        XSSCompiler compiler = ctx_->resolve("compiler");
+        used_ = true;
 
+        XSSCompiler compiler = ctx_->resolve("compiler");
         compiler->add_dependencies(dependencies_, shared_from_this());
       }
+  }
+
+void xss_module::register_instance(XSSObject obj)
+  {
+    used();
 
     str obj_id = obj->id();
     if (!obj_id.empty())

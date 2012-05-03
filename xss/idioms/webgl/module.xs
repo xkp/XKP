@@ -19,16 +19,14 @@ on pre_process(obj)
 		obj.id = compiler.genid(obj.class_name);
 }
 
-on render_js_includes()
+on render_dependencies()
 {
-	out()
-	{
-		<script type="text/javascript" src="../js/three/Three.js"></script>
-		<script type="text/javascript" src="../js/three/Stats.js"></script>
-		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-		<script type="text/javascript" src="../js/three/Utils.js"></script>
-		<script type="text/javascript" src="../js/three/Detector.js"></script>
-	}
+    var dependencies = compiler.idiom_dependencies("threejs");
+
+    for(var dep in dependencies)
+    {       
+        compiler.xss("../common-js/dependency.xss", dep);
+    }
 }
 
 on render_instances()

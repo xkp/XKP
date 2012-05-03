@@ -9,3 +9,17 @@
         compiler.xss("ui_script.xss", canvas_name = project.canvasId);
     </xss:code>
 })(<xss:e v="project.hostId"/>);
+
+<xss:code>
+    //process dependencies, the caller will be rendering them
+    var dependencies = compiler.get_dependencies();
+    
+    for(var dep in dependencies)
+    {
+        if (dep.shared)
+            continue;
+            
+        compiler.inject("compile_dependency", dep);
+    }
+</xss:code>
+

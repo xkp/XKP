@@ -1,4 +1,7 @@
 <module id="resources" src="resources.xs">
+	<dependency href="resig.js" shared="true"/>   
+	<dependency href="streamer.js"/>    
+    
     <types>
 	
 		<class id="package"/>				

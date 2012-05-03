@@ -2,16 +2,14 @@
 <html>
 <head>
 <title></title>
-<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
-<script type="text/javascript" src="../js/jquery.utils.js"></script>
-<script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/resig.js"></script>
-<script type="text/javascript" src="../js/event.js"></script>
-<script type="text/javascript" src="../js/keys.js"></script>
-		<script type="text/javascript" src="../js/ui.js"></script>
-		<script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
 <script type="text/javascript">
-    var drawingCanvas;		
+var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -20,21 +18,20 @@ var g_ui_root;
 var application = {};
 application.events = new ev.EventHolder();
 var SoundUtils = new ui.SoundUtils();
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
 		if(drawingCanvas){
 			var client =
 			{
 				width: 600,
 				height: 600,
 				canvas: drawingCanvas
-			};
-            var streamer = new stream.Streamer();							
+			};            						
 			var ui_ = new ui.Manager(client, streamer);			
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
 		}
-		var streamer = new stream.Streamer();	
-		var ResourceUtils = new stream.ResourceUtils();
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
             {
@@ -318,7 +315,6 @@ function start(resolution)
 }  
             application.left_key_press = false;
             application.right_key_press = false;
-	var ev_parent = this;
 	application.events.addListener("keydown", function(keycode)
 	{    
 		if (keycode == LEFT_ARROW)
@@ -335,7 +331,6 @@ application.right_key_press = true;
 }
 	}
 	);
-	var ev_parent = this;
 	application.events.addListener("keyup", function(keycode)
 	{    
 		if (keycode == LEFT_ARROW)
@@ -356,7 +351,6 @@ application.right_key_press = false;
 }
 	}
 	);
-	var ev_parent = this;
 	application.events.addListener("updates", function()
 	{    
 		if (application.left_key_press)
@@ -373,8 +367,8 @@ mario.set_x(mario.x + 0.200000003);
 	);
 window.onload = function() 
 {
-	drawingCanvas = document.getElementById("myCanvas");
-    g_canvas = drawingCanvas;
+        drawingCanvas = document.getElementById("myCanvas");
+        g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
 	{
 		var client =
@@ -436,19 +430,16 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    monster = 
-			new ui.Sprite(g_ui_root.manager, g_ui_root, "monster_sheet");
+		    monster = new ui.Sprite(g_ui_root.manager, g_ui_root, "monster_sheet");
         monster = monster;
             monster.set_x(200);
             monster.set_y(200);
             monster.set_animation("m_idle");
-		    girl1 = 
-			new ui.Sprite(g_ui_root.manager, g_ui_root, "azucola_sheet");
+		    girl1 = new ui.Sprite(g_ui_root.manager, g_ui_root, "azucola_sheet");
         girl1 = girl1;
             girl1.set_x(300);
             girl1.set_y(200);
             girl1.set_animation("g1_idle");
-	var ev_parent = this;
 	girl1.events.addListener("click", function()
 	{    
 		girl1.set_animation("g1_down");
@@ -459,13 +450,11 @@ girl1.set_animation("g1_idle");
 	}
 	);
 		application.are_obj_events = true;
-		    girl2 = 
-			new ui.Sprite(g_ui_root.manager, g_ui_root, "azucola_sheet");
+		    girl2 = new ui.Sprite(g_ui_root.manager, g_ui_root, "azucola_sheet");
         girl2 = girl2;
             girl2.set_x(400);
             girl2.set_y(200);
             girl2.set_animation("g2_idle");
-	var ev_parent = this;
 	girl2.events.addListener("click", function()
 	{    
 		girl2.set_animation("g2_cry");
@@ -475,26 +464,22 @@ girl2.set_animation("g2_idle");
 	}
 	);
 		application.are_obj_events = true;
-		    mario = 
-			new ui.Sprite(g_ui_root.manager, g_ui_root, "mario_sheet");
+		    mario = new ui.Sprite(g_ui_root.manager, g_ui_root, "mario_sheet");
         mario = mario;
             mario.set_x(300);
             mario.set_y(400);
             mario.set_animation("m_idle_r");
-		    lbl1 = 
-			new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+		    lbl1 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
         lbl1 = lbl1;
             lbl1.set_x(100);
             lbl1.set_y(100);
             lbl1.text("Press left arrow to walk the monster");
-		    lbl2 = 
-			new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+		    lbl2 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
         lbl2 = lbl2;
             lbl2.set_x(100);
             lbl2.set_y(120);
             lbl2.text("Click the blond girl to crash her down and jump later (testing animation queue)");
-		    lbl3 = 
-			new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+		    lbl3 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
         lbl3 = lbl3;
             lbl3.set_x(100);
             lbl3.set_y(140);

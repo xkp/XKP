@@ -1,5 +1,13 @@
 <module id="threejs" src="module.xs">
-
+	<dependency href="resig.js" shared="true"/>	  
+    <dependency href="event.js" shared="true"/>
+    <dependency href="keys.js" shared="true"/>
+	<dependency href="colors.js" shared="true"/>
+	
+    <dependency href="Three.js"/>
+    <dependency href="Stats.js"/>
+    <dependency href="RequestAnimationFrame.js"/>
+	<dependency href="Utils.js"/>
 	<types>
 	
 		<class id="vector3d">		

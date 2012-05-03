@@ -9,20 +9,17 @@
 	background:Black;
 	}
 </style>
-<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
-<script type="text/javascript" src="../js/jquery.utils.js"></script>
-<script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/resig.js"></script>
-<script type="text/javascript" src="../js/event.js"></script>
-<script type="text/javascript" src="../js/keys.js"></script>
-<script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/streamer.js"></script>
-		<script type="text/javascript" src="../js/streamer.js"></script>
-		<script type="text/javascript" src="../js/ui.js"></script>
-		<script type="text/javascript" src="../js/three/Three.js"></script>
-		<script type="text/javascript" src="../js/three/Stats.js"></script>
-		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-		<script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui_;
@@ -32,7 +29,7 @@ var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var canvas_position = {x:0, y:0};
-var streamer = new stream.Streamer();
+var streamer;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var __label1;var lbl1;
@@ -46,8 +43,7 @@ application.events = new ev.EventHolder();
 				width: window.innerWidth,
 				height: window.innerHeight,
 				canvas: drawingCanvas
-			};
-            var streamer = new stream.Streamer();							
+			};            						
 			var ui_ = new ui.Manager(client, streamer);			
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
@@ -161,7 +157,6 @@ var img_plane;var img_reflect;var scene;var camera_1;
 	{
 		set_transform_image(my_plane, value);
 	};
-	var ev_parent = this;
 	my_plane.events.addListener("mousein", function()
 	{    
 		my_plane.scale.x = 1.5;
@@ -169,7 +164,6 @@ my_plane.scale.y = 1.5;
 	}
 	);
 		application.are_obj_events = true;
-	var ev_parent = this;
 	my_plane.events.addListener("mouseout", function()
 	{    
 		my_plane.scale.x = 1;
@@ -246,15 +240,13 @@ threejs_load_resources(function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    __label1 = 
-			new ui.Label(g_ui_root.manager, g_ui_root, "15px Verdana");
+		    __label1 = new ui.Label(g_ui_root.manager, g_ui_root, "15px Verdana");
         __label1 = __label1;
             __label1.set_x(150);
             __label1.set_y(75);
             __label1.set_color("Ivory");
             __label1.text("Move mouse to control the carousel movement");
-		    lbl1 = 
-			new ui.Label(g_ui_root.manager, g_ui_root, "15px Verdana");
+		    lbl1 = new ui.Label(g_ui_root.manager, g_ui_root, "15px Verdana");
         lbl1 = lbl1;
             lbl1.set_x(175);
             lbl1.set_y(100);
@@ -288,13 +280,11 @@ application.plane_array[i].position.x = 275 * Math.cos(application.angle);
 application.plane_array[i].position.z = 275 * Math.sin(application.angle);
 }
 	};
-	var ev_parent = this;
 	application.events.addListener("updates", function()
 	{    
 		application.position_items();
 	}
 	);
-	var ev_parent = this;
 	application.events.addListener("init", function()
 	{    
 		for(var i = 0; i < 5; i++)
@@ -307,7 +297,6 @@ scene.addObject(application.plane_array[i]);
 }
 	}
 	);
-	var ev_parent = this;
 	application.events.addListener("mousemove", function(x,y)
 	{    
 		if (x < window.innerWidth / 2)
@@ -320,12 +309,11 @@ application.speed = -0.200000003 * (window.innerWidth / 2 - x) / window.innerWid
 }
 	}
 	);
-	var ev_parent = this;
 	application.events.addListener("click", function()
 	{    
 	}
 	);
-if(ui)
+if(ui_)
 {	
 	SoundUtils = new ui.SoundUtils();		
 	g_ui.fill_background = false;	

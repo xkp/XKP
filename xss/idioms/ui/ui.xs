@@ -4,12 +4,19 @@ on pre_process(obj)
 		obj.id = compiler.genid(obj.class_name);
 }
 
-on render_js_includes()
+on compile_dependency(dep)
 {
-	out()
-	{
-		<script type="text/javascript" src="../js/ui.js"></script>
-	}
+    if (!dep.idiom)
+        return;
+
+    if (dep.idiom.id != "ui")
+        return;
+
+    var path = project.js_path;
+    if (!path)
+        path = "../js";
+
+    dep.href = path + '/' + dep.href;
 }
 
 on render_initialization()
@@ -22,8 +29,7 @@ on render_initialization()
 				width: <xss:e value="application.width"/>,
 				height: <xss:e value="application.height"/>,
 				canvas: drawingCanvas
-			};
-            var streamer = new stream.Streamer();							
+			};            						
 			var ui_ = new ui.Manager(client, streamer);			
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;

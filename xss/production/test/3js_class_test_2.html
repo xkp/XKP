@@ -8,20 +8,17 @@
 	body{
 	}
 </style>
-<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
-<script type="text/javascript" src="../js/jquery.utils.js"></script>
-<script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/resig.js"></script>
-<script type="text/javascript" src="../js/event.js"></script>
-<script type="text/javascript" src="../js/keys.js"></script>
-<script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/streamer.js"></script>
-		<script type="text/javascript" src="../js/ui.js"></script>
-		<script type="text/javascript" src="../js/three/Three.js"></script>
-		<script type="text/javascript" src="../js/three/Stats.js"></script>
-		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-		<script type="text/javascript" src="../js/three/Utils.js"></script>
-		<script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui_;
@@ -31,7 +28,7 @@ var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var canvas_position = {x:0, y:0};
-var streamer = new stream.Streamer();
+var streamer;
 var app_width = 600;
 var app_height = 400;
 var lbl0;var lbl1;
@@ -43,8 +40,7 @@ application.events = new ev.EventHolder();
 				width: 600,
 				height: 400,
 				canvas: drawingCanvas
-			};
-            var streamer = new stream.Streamer();							
+			};            						
 			var ui_ = new ui.Manager(client, streamer);			
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
@@ -94,14 +90,12 @@ var my_cylinder;var scene;var camera_1;
             my_cylinder.hex = value;
             this.materials[0].color.setHex(value);
         };
-	var ev_parent = this;
 	my_cylinder.events.addListener("mousein", function()
 	{    
 		my_cylinder.materials[0].color.setHex(lightgreen);
 	}
 	);
 		application.are_obj_events = true;
-	var ev_parent = this;
 	my_cylinder.events.addListener("mouseout", function()
 	{    
 		my_cylinder.materials[0].color.setHex(red);
@@ -160,14 +154,12 @@ threejs_load_resources(function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    lbl0 = 
-			new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+		    lbl0 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
         lbl0 = lbl0;
             lbl0.set_x(200);
             lbl0.set_y(75);
             lbl0.text("Click wherever to create a randomly positioned cylinder");
-		    lbl1 = 
-			new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+		    lbl1 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
         lbl1 = lbl1;
             lbl1.set_x(200);
             lbl1.set_y(100);
@@ -177,7 +169,6 @@ threejs_load_resources(function()
 		    new THREE.Camera(75, 1.5, 1, 3000, null) ;	
 		active_camera = camera_1;
             camera_1.position.z = 1000;
-	var ev_parent = this;
 	application.events.addListener("click", function(x,y)
 	{    
 		var cylinder_1 = 
@@ -191,7 +182,7 @@ set_rotation_y(cylinder_1.rotation, 10);
 scene.addObject(cylinder_1);
 	}
 	);
-if(ui)
+if(ui_)
 {	
 	SoundUtils = new ui.SoundUtils();		
 	g_ui.fill_background = false;	

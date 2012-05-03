@@ -2,16 +2,14 @@
 <html>
 <head>
 <title></title>
-<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
-<script type="text/javascript" src="../js/jquery.utils.js"></script>
-<script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/resig.js"></script>
-<script type="text/javascript" src="../js/event.js"></script>
-<script type="text/javascript" src="../js/keys.js"></script>
-		<script type="text/javascript" src="../js/ui.js"></script>
-		<script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">
-    var drawingCanvas;		
+var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -26,8 +24,7 @@ var SoundUtils = new ui.SoundUtils();
 				width: 600,
 				height: 600,
 				canvas: drawingCanvas
-			};
-            var streamer = new stream.Streamer();							
+			};            						
 			var ui_ = new ui.Manager(client, streamer);			
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
@@ -94,8 +91,8 @@ function start(resolution)
 }  
 window.onload = function() 
 {
-	drawingCanvas = document.getElementById("myCanvas");
-    g_canvas = drawingCanvas;
+        drawingCanvas = document.getElementById("myCanvas");
+        g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
 	{
 		var client =
@@ -157,14 +154,12 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    __label1 = 
-			new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+		    __label1 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
         __label1 = __label1;
             __label1.set_x(200);
             __label1.set_y(200);
             __label1.text("Here we can see the painter");
-		    painter_1 = 
-			new ui.Painter(g_ui_root.manager, g_ui_root);
+		    painter_1 = new ui.Painter(g_ui_root.manager, g_ui_root);
         painter_1 = painter_1;
             painter_1.set_x(200);
             painter_1.set_y(300);

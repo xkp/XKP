@@ -1,10 +1,14 @@
 <application src="wgl_icosahedron.xs" title="Test 3D">
 
+	<resources>
+		<image src="images/shadow.png"/>
+	</resources>
 	<materials>	
 	
 		<lambert_material id="mat_1" color="Math.random() * 0xffffff"/>
 		<lambert_material id="mat_2" color="Math.random() * 0xffffff"/>
 		<lambert_material id="mat_3" color="Math.random() * 0xffffff"/>
+		<basic_material id="shadow_mat" src="images/shadow.png"/>
 		
 	</materials>	
 	
@@ -28,6 +32,24 @@
 			<scale x="200" y="200" z="200"/>
 		</icosahedron>		
 		
+		<plane id="plane_1" width="300" height="300" material="shadow_mat">
+			<rotation x="-90"/>
+			<position x="-450" y="-250"/>
+		</plane>
+		
+		<plane id="plane_2" width="300" height="300" material="shadow_mat">
+			<rotation x="-90"/>
+			<position y="-250"/>
+		</plane>
+		
+		<plane id="plane_3" width="300" height="300" material="shadow_mat">
+			<rotation x="-90"/>
+			<position x="450" y="-250"/>
+		</plane>
+		
+		<directional_light id="light_1" color="White">
+			<position z="1"/>
+		</directional_light>
 	</scene>
 			
 </application>

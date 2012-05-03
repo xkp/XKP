@@ -2,16 +2,14 @@
 <html>
 <head>
 <title></title>
-<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
-<script type="text/javascript" src="../js/jquery.utils.js"></script>
-<script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/resig.js"></script>
-<script type="text/javascript" src="../js/event.js"></script>
-<script type="text/javascript" src="../js/keys.js"></script>
-		<script type="text/javascript" src="../js/ui.js"></script>
-		<script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">
-    var drawingCanvas;		
+var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -26,8 +24,7 @@ var SoundUtils = new ui.SoundUtils();
 				width: 600,
 				height: 600,
 				canvas: drawingCanvas
-			};
-            var streamer = new stream.Streamer();							
+			};            						
 			var ui_ = new ui.Manager(client, streamer);			
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
@@ -106,10 +103,10 @@ function start(resolution)
 		manager,parent,src        );
         this.events = new ev.EventHolder(); 
         var this__  = this;
-        this.data_source = null;
-        this.data_source_set = function (value)
+        data_source = null;
+        data_source_set = function (value)
         {
-            this.data_source = value;
+            data_source = value;
             this.src(value);
         };
             this.set_height(50);
@@ -130,22 +127,20 @@ function start(resolution)
 		manager,parent        );
         this.events = new ev.EventHolder(); 
         var this__  = this;
-		    this.lbl_caption = 
-			new ui.Label(this.manager, this, null);
+		    this.lbl_caption = new ui.Label(this.manager, this, null);
         lbl_caption = this.lbl_caption;
             this.lbl_caption.set_x(0);
             this.lbl_caption.set_y(10);
-		    this.icon = 
-			new ui.Image(this.manager, this, null);
+		    this.icon = new ui.Image(this.manager, this, null);
         icon = this.icon;
             this.icon.set_x(10);
             this.icon.set_y(30);
             this.icon.set_width(50);
             this.icon.set_height(50);
-        this.data_source = null;
-        this.data_source_set = function (value)
+        data_source = null;
+        data_source_set = function (value)
         {
-            this.data_source = value;
+            data_source = value;
             this.lbl_caption.text(value.caption);
 this.icon.src(value.image);
         };
@@ -157,7 +152,6 @@ this.icon.src(value.image);
 });
             application.menu1 = [{caption : "unstanding",image : "images/img1.png"}, {caption : "jajajaja",image : "images/twitter.png"}];
             application.images1 = ["images/img1.png", "images/twitter.png"];
-	var ev_parent = this;
 	application.events.addListener("click", function()
 	{    
 		rep1.set_data_source(application.menu1);
@@ -166,8 +160,8 @@ rep2.set_data_source(application.images1);
 	);
 window.onload = function() 
 {
-	drawingCanvas = document.getElementById("myCanvas");
-    g_canvas = drawingCanvas;
+        drawingCanvas = document.getElementById("myCanvas");
+        g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
 	{
 		var client =
@@ -229,8 +223,7 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    rep1 = 
-			new ui.Replicator(g_ui_root.manager, g_ui_root, "menu_item");
+		    rep1 = new ui.Replicator(g_ui_root.manager, g_ui_root, "menu_item");
         rep1 = rep1;
             rep1.set_x(30);
             rep1.set_y(30);
@@ -248,8 +241,7 @@ window.onload = function()
 				child.data_source_set(item); 				
 			}
 		}
-		    rep2 = 
-			new ui.Replicator(g_ui_root.manager, g_ui_root, "my_image");
+		    rep2 = new ui.Replicator(g_ui_root.manager, g_ui_root, "my_image");
         rep2 = rep2;
             rep2.set_x(30);
             rep2.set_y(200);

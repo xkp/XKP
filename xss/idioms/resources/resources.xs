@@ -4,16 +4,24 @@ on pre_process(obj)
 		obj.id = compiler.genid(obj.class_name);	
 }
 
-on render_js_includes()
+on compile_dependency(dep)
 {
-	out()
-	{		
-		<script type="text/javascript" src="../js/streamer.js"></script>
-	}
+    if (!dep.idiom)
+        return;
+
+    if (dep.idiom.id != "resources")
+        return;
+
+    var path = project.js_path;
+    if (!path)
+        path = "../js";
+
+    dep.href = path + '/' + dep.href;
 }
 
 on render_initialization()
 {
+    compiler.log("on resources.render_initialization");
 	out()
 	{
 		var streamer = new stream.Streamer();	

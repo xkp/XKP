@@ -929,14 +929,14 @@ ui.Button = ui.Image.extend(
 			over = "invalid_res";
 		var normal_texture = streamer.get_resource(normal).data;
 		var over_texture   = streamer.get_resource(over).data;	
-		var ev_parent = this;
+		var this__ = this;
 		this.events.addListener('mousein', function()
 		{
-			ev_parent.image(over_texture);
+			this__.image(over_texture);
 		});	
 		this.events.addListener('mouseout', function()
 		{
-			ev_parent.image(normal_texture);
+			this__.image(normal_texture);
 		});
 				
 	},	
@@ -949,30 +949,30 @@ ui.TextButton = ui.Component.extend(
 		this._super(manager, parent);
 		this.mouse_into = false;
 		this.clicked = false;
-		var ev_parent = this;
+		var this__ = this;
 		this.events.addListener('mousein', function()
 		{
-			ev_parent.mouse_into = true;
-			ev_parent.invalidate();
+			this__.mouse_into = true;
+			this__.invalidate();
 		});	
 		this.events.addListener('mouseout', function()
 		{
-			ev_parent.mouse_into = false;
-			ev_parent.invalidate();
+			this__.mouse_into = false;
+			this__.invalidate();
 		});
 		this.events.addListener('mousedown', function()
 		{
-			ev_parent.clicked = true;
-			ev_parent.invalidate();
-			ev_parent.x ++;
-			ev_parent.y ++;
+			this__.clicked = true;
+			this__.invalidate();
+			this__.x ++;
+			this__.y ++;
 		});	
 		this.events.addListener('mouseup', function()
 		{
-			ev_parent.clicked = false;
-			ev_parent.invalidate();
-			ev_parent.x --;
-			ev_parent.y --;
+			this__.clicked = false;
+			this__.invalidate();
+			this__.x --;
+			this__.y --;
 		});
 		this.text = text;	
 		this.font = font;
@@ -1244,11 +1244,11 @@ ui.StateButton = ui.Image.extend(
 		this.inactive_texture   	= streamer.get_resource(inactive).data;
 
 		this.is_active = true;		
-		var ev_parent = this;		
+		var this__ = this;		
 		this.events.addListener('click', function()
 		{		
-			ev_parent.is_active  = !ev_parent.is_active;
-			ev_parent.image(ev_parent.is_active? ev_parent.active_texture : ev_parent.inactive_texture);
+			this__.is_active  = !this__.is_active;
+			this__.image(this__.is_active? this__.active_texture : this__.inactive_texture);
 		});		
 	},	
 	set_active: function(value)

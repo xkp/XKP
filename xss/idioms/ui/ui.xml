@@ -1,9 +1,10 @@
-<module id="ui" src="ui.xs">
+<module id="ui" src="ui.xs">    
     <dependency href="resig.js" shared="true"/>
-    <dependency href="../js/utils.js"/>
-    <dependency href="../js/event.js"/>
-    <dependency href="../js/keys.js"/>
-
+    <dependency href="event.js" shared="true"/>
+    <dependency href="utils.js" shared="true"/>
+    <dependency href="keys.js" shared="true"/>
+    
+	<dependency href="ui.js"/>
     <types>
         <class id="component" renderer="component.xss" hasimagedata="true">		
 			<constructor_params>

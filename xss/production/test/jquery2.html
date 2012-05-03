@@ -1,18 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>TITLE</title>
-<script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
-<script type="text/javascript" src="../js/jquery-idiom.js"></script>
-<link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css">
-                <script type="text/javascript" src="jquery-1.7.1.min.js"></script>
-                <script type="text/javascript" src="jquery-ui-1.8.18.custom.min.js"></script>
-                <script type="text/javascript" src="jquery-idiom.js"></script>
-                <script type="text/javascript" src="jquery-ui-1.8.18.custom.css"></script>
-<script type="text/javascript">
-$(function() {
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>Testing layout</title>
+            <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+            <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
+            <script type="text/javascript" src="../js/jquery-idiom.js"></script>
+            <link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css"></link>
+	<script type="text/javascript">
+		$(document).ready(function() {
         var application = {};
 			var main = $("#main");
 			var r1 = $("#r1");
@@ -21,21 +17,14 @@ $(function() {
 			var t1 = $("#t1");
 			var b1 = $("#b1");
 			var c1 = $("#c1");
-        if (application.init)
-            application.init();
-    });
-</script>
-<style>
-#main {width : 600px;height : 400px}
-#r1 {background-color : "Red";width : 100px}
-#r2 {width : 100px}
-#l1 {width : 100px}
-#t1 {height : 100px}
-#b1 {height : 100px}
-</style>
+                    if (application.init)
+                        application.init();
+                		});
+	</script>
+	<style>
+	</style>
 </head>
 <body>
-            <div id='application'>
 <div id="main">
             <table border="0"  width = "600"  height = "400" >
         <tr><td  width = "100px"   style="vertical-align:top">
@@ -63,6 +52,5 @@ $(function() {
 </td></tr>
             </table>
         </div>
-                </div>
-                </body>
+</body>
 </html>

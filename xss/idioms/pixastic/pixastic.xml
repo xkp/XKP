@@ -1,11 +1,11 @@
 <module id="pixastic" src="pixastic.xs">
     <dependency href="resig.js" shared="true"/>
-    <dependency href="../js/pixastic/pixastic.core.js"/>
-    <dependency href="../js/pixastic/actions.js"/>
-    <dependency href="../js/pixastic/pixastic-manager.js"/>
-    <dependency href="../js/pixastic/pixastic-utils.js"/>
 
-    <types>
+    <dependency href="pixastic.core.js"/>	  
+    <dependency href="actions.js"/>
+	<dependency href="pixastic-manager.js"/>	  
+    <dependency href="pixastic-utils.js"/>
+	<types>
 		<class id="preset" output_id="pixastic.Preset"/>	
 		<class id="preset_filter"/>
 		<class id="filter">

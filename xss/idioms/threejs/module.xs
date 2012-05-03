@@ -19,15 +19,19 @@ on pre_process(obj)
 		obj.id = compiler.genid(obj.class_name);
 }
 
-on render_js_includes()
+on compile_dependency(dep)
 {
-	out()
-	{
-		<script type="text/javascript" src="../js/three/Three.js"></script>
-		<script type="text/javascript" src="../js/three/Stats.js"></script>
-		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-		<script type="text/javascript" src="../js/three/Utils.js"></script>
-	}
+    if (!dep.idiom)
+        return;
+
+    if (dep.idiom.id != "threejs")
+        return;
+
+    var path = project.threejs_path;
+    if (!path)
+        path = "../js/three";
+
+    dep.href = path + '/' + dep.href;
 }
 
 on render_instances()

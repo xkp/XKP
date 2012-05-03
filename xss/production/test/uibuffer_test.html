@@ -8,20 +8,17 @@
 	body{
 	}
 </style>
-<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
-<script type="text/javascript" src="../js/jquery.utils.js"></script>
-<script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/resig.js"></script>
-<script type="text/javascript" src="../js/event.js"></script>
-<script type="text/javascript" src="../js/keys.js"></script>
-<script type="text/javascript" src="../js/colors.js"></script>
-<script type="text/javascript" src="../js/streamer.js"></script>
-		<script type="text/javascript" src="../js/streamer.js"></script>
-		<script type="text/javascript" src="../js/ui.js"></script>
-		<script type="text/javascript" src="../js/three/Three.js"></script>
-		<script type="text/javascript" src="../js/three/Stats.js"></script>
-		<script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-		<script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui_;
@@ -31,7 +28,7 @@ var g_elapsed = -1;
 var g_delta = 0.0;	
 var drawingCanvas = renderer.domElement;
 var canvas_position = {x:0, y:0};
-var streamer = new stream.Streamer();
+var streamer;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var lbl0;var lbl1;
@@ -51,8 +48,7 @@ application.events = new ev.EventHolder();
 				width: window.innerWidth,
 				height: window.innerHeight,
 				canvas: drawingCanvas
-			};
-            var streamer = new stream.Streamer();							
+			};            						
 			var ui_ = new ui.Manager(client, streamer);			
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
@@ -248,14 +244,12 @@ threejs_load_resources(function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    lbl0 = 
-			new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+		    lbl0 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
         lbl0 = lbl0;
             lbl0.set_x(200);
             lbl0.set_y(75);
             lbl0.text("Drag mouse to spin the cube");
-		    lbl1 = 
-			new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+		    lbl1 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
         lbl1 = lbl1;
             lbl1.set_x(200);
             lbl1.set_y(120);
@@ -288,8 +282,7 @@ application.events.addListener("t_mousedown", function(x, y, texture)
 			if(texture.image == webmail)
 				webmail_ui.mousedown(x*200, y*200);
 	});
-		    r1 = 
-			new ui.Rectangle(webmail_g_ui_root.manager, webmail_g_ui_root, "beige", null, null);
+		    r1 = new ui.Rectangle(webmail_g_ui_root.manager, webmail_g_ui_root, "beige", null, null);
         r1 = r1;
             r1.set_x(0);
             r1.set_y(0);
@@ -297,36 +290,31 @@ application.events.addListener("t_mousedown", function(x, y, texture)
             r1.set_height(200);
             r1.mouse_thru = true;
             r1.alpha(60);
-		    yh = 
-			new ui.Button(webmail_g_ui_root.manager, webmail_g_ui_root, "images/yahoo_up.png", "images/yahoo.png");
+		    yh = new ui.Button(webmail_g_ui_root.manager, webmail_g_ui_root, "images/yahoo_up.png", "images/yahoo.png");
         yh = yh;
             yh.set_x(25);
             yh.set_y(50);
             yh.set_width(50);
             yh.set_height(50);
-	var ev_parent = this;
 	yh.events.addListener("click", function()
 	{    
 		lbl1.text("Yahoo is opening...");
 	}
 	);
 		application.are_obj_events = true;
-		    msn = 
-			new ui.Button(webmail_g_ui_root.manager, webmail_g_ui_root, "images/msn_up.png", "images/msn.png");
+		    msn = new ui.Button(webmail_g_ui_root.manager, webmail_g_ui_root, "images/msn_up.png", "images/msn.png");
         msn = msn;
             msn.set_x(125);
             msn.set_y(50);
             msn.set_width(50);
             msn.set_height(50);
-	var ev_parent = this;
 	msn.events.addListener("click", function()
 	{    
 		lbl1.text("Hotmail is opening...");
 	}
 	);
 		application.are_obj_events = true;
-		    title1 = 
-			new ui.Label(webmail_g_ui_root.manager, webmail_g_ui_root, "12px Verdana");
+		    title1 = new ui.Label(webmail_g_ui_root.manager, webmail_g_ui_root, "12px Verdana");
         title1 = title1;
             title1.set_x(50);
             title1.set_y(10);
@@ -359,8 +347,7 @@ application.events.addListener("t_mousedown", function(x, y, texture)
 			if(texture.image == soc_net)
 				soc_net_ui.mousedown(x*200, y*200);
 	});
-		    r2 = 
-			new ui.Rectangle(soc_net_g_ui_root.manager, soc_net_g_ui_root, "lightblue", null, null);
+		    r2 = new ui.Rectangle(soc_net_g_ui_root.manager, soc_net_g_ui_root, "lightblue", null, null);
         r2 = r2;
             r2.set_x(0);
             r2.set_y(0);
@@ -368,36 +355,31 @@ application.events.addListener("t_mousedown", function(x, y, texture)
             r2.set_height(200);
             r2.mouse_thru = true;
             r2.alpha(60);
-		    fb = 
-			new ui.Button(soc_net_g_ui_root.manager, soc_net_g_ui_root, "images/facebook_up.png", "images/facebook.png");
+		    fb = new ui.Button(soc_net_g_ui_root.manager, soc_net_g_ui_root, "images/facebook_up.png", "images/facebook.png");
         fb = fb;
             fb.set_x(25);
             fb.set_y(50);
             fb.set_width(50);
             fb.set_height(50);
-	var ev_parent = this;
 	fb.events.addListener("click", function()
 	{    
 		lbl1.text("Facebook is opening...");
 	}
 	);
 		application.are_obj_events = true;
-		    tw = 
-			new ui.Button(soc_net_g_ui_root.manager, soc_net_g_ui_root, "images/twitter_up.png", "images/twitter.png");
+		    tw = new ui.Button(soc_net_g_ui_root.manager, soc_net_g_ui_root, "images/twitter_up.png", "images/twitter.png");
         tw = tw;
             tw.set_x(125);
             tw.set_y(50);
             tw.set_width(50);
             tw.set_height(50);
-	var ev_parent = this;
 	tw.events.addListener("click", function()
 	{    
 		lbl1.text("Twitter is opening...");
 	}
 	);
 		application.are_obj_events = true;
-		    title2 = 
-			new ui.Label(soc_net_g_ui_root.manager, soc_net_g_ui_root, "12px Verdana");
+		    title2 = new ui.Label(soc_net_g_ui_root.manager, soc_net_g_ui_root, "12px Verdana");
         title2 = title2;
             title2.set_x(50);
             title2.set_y(10);
@@ -463,7 +445,6 @@ color:Green
             application.mouse_y_on_mouse_down = 0;
             application.window_half_x = app_width / 2;
             application.window_half_y = app_height / 2;
-	var ev_parent = this;
 	application.events.addListener("mousedown", function(x,y)
 	{    
 		application.mouse_x_on_mouse_down = x - application.window_half_x;
@@ -472,7 +453,6 @@ application.mouse_y_on_mouse_down = y - application.window_half_y;
 application.y_target_rotation_on_mouse_down = application.y_target_rotation;
 	}
 	);
-	var ev_parent = this;
 	application.events.addListener("drag", function(x,y)
 	{    
 		application.mouse_x = x - application.window_half_x;
@@ -481,7 +461,6 @@ application.mouse_y = y - application.window_half_y;
 application.y_target_rotation = application.y_target_rotation_on_mouse_down + (application.mouse_y - application.mouse_y_on_mouse_down) * 0.300000012;
 	}
 	);
-	var ev_parent = this;
 	application.events.addListener("updates", function()
 	{    
 		set_rotation_y(cube_1.rotation, get_rotation_y(cube_1.rotation) + (application.x_target_rotation - get_rotation_y(cube_1.rotation)) * 0.200000003);
@@ -489,7 +468,7 @@ set_rotation_z(plane_1.rotation, get_rotation_y(cube_1.rotation));
 set_rotation_x(cube_1.rotation, get_rotation_x(cube_1.rotation) + (application.y_target_rotation - get_rotation_x(cube_1.rotation)) * 0.200000003);
 	}
 	);
-if(ui)
+if(ui_)
 {	
 	SoundUtils = new ui.SoundUtils();		
 	g_ui.fill_background = false;	

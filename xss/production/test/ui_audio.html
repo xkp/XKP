@@ -2,16 +2,14 @@
 <html>
 <head>
 <title></title>
-<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
-<script type="text/javascript" src="../js/jquery.utils.js"></script>
-<script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/resig.js"></script>
-<script type="text/javascript" src="../js/event.js"></script>
-<script type="text/javascript" src="../js/keys.js"></script>
-		<script type="text/javascript" src="../js/ui.js"></script>
-		<script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">
-    var drawingCanvas;		
+var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -26,8 +24,7 @@ var SoundUtils = new ui.SoundUtils();
 				width: 600,
 				height: 400,
 				canvas: drawingCanvas
-			};
-            var streamer = new stream.Streamer();							
+			};            						
 			var ui_ = new ui.Manager(client, streamer);			
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
@@ -261,7 +258,6 @@ function start(resolution)
 	window.setTimeout(updater, resolution);  
 }  
             application.curr_sound = null;
-	var ev_parent = this;
 	application.events.addListener("init", function()
 	{    
 		application.curr_sound = sound_1;
@@ -270,8 +266,8 @@ application.curr_sound.play();
 	);
 window.onload = function() 
 {
-	drawingCanvas = document.getElementById("myCanvas");
-    g_canvas = drawingCanvas;
+        drawingCanvas = document.getElementById("myCanvas");
+        g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
 	{
 		var client =
@@ -333,20 +329,17 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    lbl1 = 
-			new ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
+		    lbl1 = new ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
         lbl1 = lbl1;
             lbl1.set_x(220);
             lbl1.set_y(190);
             lbl1.text("click the sound you want to listen");
-		    btnSound1 = 
-			new ui.Button(g_ui_root.manager, g_ui_root, "images/sound_2.png", "images/sound_2.png");
+		    btnSound1 = new ui.Button(g_ui_root.manager, g_ui_root, "images/sound_2.png", "images/sound_2.png");
         btnSound1 = btnSound1;
             btnSound1.set_x(275);
             btnSound1.set_y(210);
             btnSound1.set_width(50);
             btnSound1.set_height(10);
-	var ev_parent = this;
 	btnSound1.events.addListener("click", function()
 	{    
 		sound_1.stop();
@@ -355,14 +348,12 @@ application.curr_sound.play();
 	}
 	);
 		application.are_obj_events = true;
-		    btnSound2 = 
-			new ui.Button(g_ui_root.manager, g_ui_root, "images/sound_1.png", "images/sound_1.png");
+		    btnSound2 = new ui.Button(g_ui_root.manager, g_ui_root, "images/sound_1.png", "images/sound_1.png");
         btnSound2 = btnSound2;
             btnSound2.set_x(275);
             btnSound2.set_y(240);
             btnSound2.set_width(50);
             btnSound2.set_height(10);
-	var ev_parent = this;
 	btnSound2.events.addListener("click", function()
 	{    
 		sound_2.stop();
@@ -371,22 +362,19 @@ application.curr_sound.play();
 	}
 	);
 		application.are_obj_events = true;
-		    volume_bar = 
-			new ui.ProgressBar(g_ui_root.manager, g_ui_root, null);
+		    volume_bar = new ui.ProgressBar(g_ui_root.manager, g_ui_root, null);
         volume_bar = volume_bar;
             volume_bar.set_x(225);
             volume_bar.set_y(120);
             volume_bar.value(50);
             volume_bar.set_width(150);
             volume_bar.set_height(10);
-		    btn1 = 
-			new ui.Image(g_ui_root.manager, g_ui_root, "images/arrow_left.png");
+		    btn1 = new ui.Image(g_ui_root.manager, g_ui_root, "images/arrow_left.png");
         btn1 = btn1;
             btn1.set_x(200);
             btn1.set_y(115);
             btn1.set_width(20);
             btn1.set_height(20);
-	var ev_parent = this;
 	btn1.events.addListener("click", function()
 	{    
 		volume_bar.value(volume_bar.get_value() - 10);
@@ -394,14 +382,12 @@ application.curr_sound.volume -= 0.100000001;
 	}
 	);
 		application.are_obj_events = true;
-		    btn2 = 
-			new ui.Image(g_ui_root.manager, g_ui_root, "images/arrow_right.png");
+		    btn2 = new ui.Image(g_ui_root.manager, g_ui_root, "images/arrow_right.png");
         btn2 = btn2;
             btn2.set_x(380);
             btn2.set_y(115);
             btn2.set_width(20);
             btn2.set_height(20);
-	var ev_parent = this;
 	btn2.events.addListener("click", function()
 	{    
 		volume_bar.value(volume_bar.get_value() + 10);
@@ -409,61 +395,52 @@ application.curr_sound.volume += 0.100000001;
 	}
 	);
 		application.are_obj_events = true;
-		    lbl3 = 
-			new ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
+		    lbl3 = new ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
         lbl3 = lbl3;
             lbl3.set_x(220);
             lbl3.set_y(100);
             lbl3.text("click small arrows to adjust volume");
-		    btnPlay = 
-			new ui.Button(g_ui_root.manager, g_ui_root, "images/play.png", "images/play_over.png");
+		    btnPlay = new ui.Button(g_ui_root.manager, g_ui_root, "images/play.png", "images/play_over.png");
         btnPlay = btnPlay;
             btnPlay.set_x(175);
             btnPlay.set_y(300);
             btnPlay.set_width(50);
             btnPlay.set_height(50);
-	var ev_parent = this;
 	btnPlay.events.addListener("click", function()
 	{    
 		application.curr_sound.play();
 	}
 	);
 		application.are_obj_events = true;
-		    btnPause = 
-			new ui.Button(g_ui_root.manager, g_ui_root, "images/pause.png", "images/pause_over.png");
+		    btnPause = new ui.Button(g_ui_root.manager, g_ui_root, "images/pause.png", "images/pause_over.png");
         btnPause = btnPause;
             btnPause.set_x(275);
             btnPause.set_y(300);
             btnPause.set_width(50);
             btnPause.set_height(50);
-	var ev_parent = this;
 	btnPause.events.addListener("click", function()
 	{    
 		application.curr_sound.pause();
 	}
 	);
 		application.are_obj_events = true;
-		    btnStop = 
-			new ui.Button(g_ui_root.manager, g_ui_root, "images/stop.png", "images/stop_over.png");
+		    btnStop = new ui.Button(g_ui_root.manager, g_ui_root, "images/stop.png", "images/stop_over.png");
         btnStop = btnStop;
             btnStop.set_x(375);
             btnStop.set_y(300);
             btnStop.set_width(50);
             btnStop.set_height(50);
-	var ev_parent = this;
 	btnStop.events.addListener("click", function()
 	{    
 		application.curr_sound.stop();
 	}
 	);
 		application.are_obj_events = true;
-		    sound_1 = 
-			new ui.Sound("sounds/forest.wav");
+		    sound_1 = new ui.Sound("sounds/forest.wav");
         sound_1 = sound_1;
             sound_1.src = "sounds/forest.wav";
             sound_1.set_loop(false);
-		    sound_2 = 
-			new ui.Sound("sounds/applauselong.wav");
+		    sound_2 = new ui.Sound("sounds/applauselong.wav");
         sound_2 = sound_2;
             sound_2.src = "sounds/applauselong.wav";
 			document.onkeydown = function(ev)

@@ -2,17 +2,15 @@
 <html>
 <head>
 <title></title>
-<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
-<script type="text/javascript" src="../js/jquery.utils.js"></script>
-<script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/resig.js"></script>
-<script type="text/javascript" src="../js/event.js"></script>
-<script type="text/javascript" src="../js/keys.js"></script>
-		<script type="text/javascript" src="../js/ui.js"></script>
-		<script type="text/javascript" src="../js/state.js"></script>
-		<script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/sequence.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">
-    var drawingCanvas;		
+var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -27,8 +25,7 @@ var SoundUtils = new ui.SoundUtils();
 				width: 600,
 				height: 400,
 				canvas: drawingCanvas
-			};
-            var streamer = new stream.Streamer();							
+			};            						
 			var ui_ = new ui.Manager(client, streamer);			
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
@@ -214,8 +211,8 @@ function start(resolution)
             application.clicks = 0;
 window.onload = function() 
 {
-	drawingCanvas = document.getElementById("myCanvas");
-    g_canvas = drawingCanvas;
+        drawingCanvas = document.getElementById("myCanvas");
+        g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
 	{
 		var client =
@@ -277,32 +274,27 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    main = 
-			new ui.Switch(g_ui_root.manager, g_ui_root);
+		    main = new ui.Switch(g_ui_root.manager, g_ui_root);
         main = main;
             main.set_x(0);
             main.set_y(0);
             main.set_width(600);
             main.set_height(250);
-		    test1 = 
-			new ui.Component(main.manager, main);
+		    test1 = new ui.Component(main.manager, main);
 	    test1.mouse_thru = true;
         test1 = test1;
-		    lbl1 = 
-			new ui.Label(test1.manager, test1, "Verdana");
+		    lbl1 = new ui.Label(test1.manager, test1, "Verdana");
         lbl1 = lbl1;
             lbl1.set_x(270);
             lbl1.set_y(200);
             lbl1.set_rotation(-0.200000003);
             lbl1.text("click smiley");
-		    btn1 = 
-			new ui.Button(test1.manager, test1, "images/smile_sad_48.png", "images/smile_grin_48.png");
+		    btn1 = new ui.Button(test1.manager, test1, "images/smile_sad_48.png", "images/smile_grin_48.png");
         btn1 = btn1;
             btn1.set_placement("center");
             btn1.set_rotation(0.200000003);
             btn1.set_width(50);
             btn1.set_height(50);
-	var ev_parent = this;
 	btn1.events.addListener("click", function()
 	{    
 		application.clicks = application.clicks + 1;
@@ -311,59 +303,50 @@ btn1.set_rotation(btn1.get_rotation() + 0.200000003);
 	}
 	);
 		application.are_obj_events = true;
-		    test2 = 
-			new ui.Component(main.manager, main);
+		    test2 = new ui.Component(main.manager, main);
 	    test2.mouse_thru = true;
         test2 = test2;
-		    pb1 = 
-			new ui.ProgressBar(test2.manager, test2, null);
+		    pb1 = new ui.ProgressBar(test2.manager, test2, null);
         pb1 = pb1;
             pb1.set_placement("center");
             pb1.set_width(150);
             pb1.set_height(10);
-		    btn2 = 
-			new ui.Image(test2.manager, test2, "images/arrow_left.png");
+		    btn2 = new ui.Image(test2.manager, test2, "images/arrow_left.png");
         btn2 = btn2;
             btn2.set_x(200);
             btn2.set_y(115);
             btn2.set_width(20);
             btn2.set_height(20);
-	var ev_parent = this;
 	btn2.events.addListener("click", function()
 	{    
 		pb1.value(pb1.get_value() - 1);
 	}
 	);
 		application.are_obj_events = true;
-		    btn3 = 
-			new ui.Image(test2.manager, test2, "images/arrow_right.png");
+		    btn3 = new ui.Image(test2.manager, test2, "images/arrow_right.png");
         btn3 = btn3;
             btn3.set_x(380);
             btn3.set_y(115);
             btn3.set_width(20);
             btn3.set_height(20);
-	var ev_parent = this;
 	btn3.events.addListener("click", function()
 	{    
 		pb1.value(pb1.get_value() + 1);
 	}
 	);
 		application.are_obj_events = true;
-		    lbl2 = 
-			new ui.Label(test2.manager, test2, "Verdana");
+		    lbl2 = new ui.Label(test2.manager, test2, "Verdana");
         lbl2 = lbl2;
             lbl2.set_x(210);
             lbl2.set_y(200);
             lbl2.set_rotation(0.200000003);
             lbl2.text("click small arrows to adjust percentage");
-		    btnNext = 
-			new ui.Button(g_ui_root.manager, g_ui_root, "images/arrow_right_green_48.png", "images/arrow_right_48.png");
+		    btnNext = new ui.Button(g_ui_root.manager, g_ui_root, "images/arrow_right_green_48.png", "images/arrow_right_48.png");
         btnNext = btnNext;
             btnNext.set_x(320);
             btnNext.set_y(300);
             btnNext.set_width(100);
             btnNext.set_height(50);
-	var ev_parent = this;
 	btnNext.events.addListener("click", function()
 	{    
 		if (main.get_active() < main.count() - 1)
@@ -374,15 +357,13 @@ btnNext.set_rotation(btnNext.get_rotation() + 0.200000003);
 	}
 	);
 		application.are_obj_events = true;
-		    btnPrev = 
-			new ui.Button(g_ui_root.manager, g_ui_root, "images/arrow_left_green_48.png", "images/arrow_left_48.png");
+		    btnPrev = new ui.Button(g_ui_root.manager, g_ui_root, "images/arrow_left_green_48.png", "images/arrow_left_48.png");
         btnPrev = btnPrev;
             btnPrev.set_x(220);
             btnPrev.set_y(300);
             btnPrev.set_rotation(0.400000006);
             btnPrev.set_width(50);
             btnPrev.set_height(50);
-	var ev_parent = this;
 	btnPrev.events.addListener("click", function()
 	{    
 		if (main.get_active() > 0)

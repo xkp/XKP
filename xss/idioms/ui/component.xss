@@ -11,7 +11,8 @@
         
     if (is_class)
         cmp_id = "this";
-    else
+    
+    if (compiler.application_object(cmp))
         out(marker = "variables", marker_source = "entry") {var <xss:e v="cmp.output_id"/>;}
         
     if (!is_class)
@@ -38,8 +39,7 @@
         
         out()
 	    {
-		    <xss:e value = "cmp_id"/> = 
-			<xss:e v="compiler.instantiate(cmp, param_values = params)"/>;
+		    <xss:e value = "cmp_id"/> = <xss:e v="compiler.instantiate(cmp, param_values = params)"/>;
 	    }
         
         //TODO: Porque no marcar las clases con algun valor (mouse_thru, quiza?) 

@@ -4,7 +4,7 @@
     </path>
 
     <idiom src="../idioms/ui/ui.xml"/>
-    <idiom src="../idioms/mutant-state/sequence.xml"/>
+    <idiom src="../idioms/ms/js/sequence.xml"/>
     <idiom src="../idioms/resources/resources.xml"/>
 
     <include def="ms6.classes.xml" src="ms6.classes.xs"/>

@@ -37,20 +37,3 @@ on btn1.click()
 	btn1.rotation += 10;
 	clicks++;	
 }
-
-on keydown(keycode)
-{
-	if(btn1.isVisible()){
-		if(keycode == LEFT_ARROW)
-			btn1.x -= 2;
-		
-		if(keycode == RIGHT_ARROW)
-			btn1.x += 2;
-		
-		if(keycode == UP_ARROW)
-			btn1.y -= 2;
-		
-		if(keycode == DOWN_ARROW)
-			btn1.y += 2;
-	}
-}

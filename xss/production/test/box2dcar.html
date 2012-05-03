@@ -2,19 +2,17 @@
 <html>
 <head>
 <title></title>
-<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
-<script type="text/javascript" src="../js/jquery.utils.js"></script>
-<script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/resig.js"></script>
-<script type="text/javascript" src="../js/event.js"></script>
-<script type="text/javascript" src="../js/keys.js"></script>
-		<script type="text/javascript" src="../js/ui.js"></script>
-		<script type="text/javascript" src="../js/streamer.js"></script>
-        <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script> 
-		<script type="text/javascript" src="../js/joint.js"></script> 
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
+            <script type="text/javascript" src="../js/joint.js"></script>
             <script type="text/javascript" src="../js/spawner.js"></script>
 <script type="text/javascript">
-    var drawingCanvas;		
+var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -29,8 +27,7 @@ var SoundUtils = new ui.SoundUtils();
 				width: 800,
 				height: 600,
 				canvas: drawingCanvas
-			};
-            var streamer = new stream.Streamer();							
+			};            						
 			var ui_ = new ui.Manager(client, streamer);			
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
@@ -445,7 +442,6 @@ function start(resolution)
 		manager,parent,src        );
         this.events = new ev.EventHolder(); 
         var this__  = this;
-	var ev_parent = this;
 	this.events.addListener("collision", function(who)
 	{    
 	}
@@ -505,7 +501,6 @@ application.sideways_axis = b.GetTransform().R.col2.Copy();
 application.sideways_axis.Multiply(application.velocity.x * application.sideways_axis.x + application.velocity.y * application.sideways_axis.y);
 b.SetLinearVelocity(application.sideways_axis);
 	};
-	var ev_parent = this;
 	application.events.addListener("keydown", function(keycode)
 	{    
 		if (keycode == LEFT_ARROW)
@@ -530,7 +525,6 @@ application.start_engine();
 }
 	}
 	);
-	var ev_parent = this;
 	application.events.addListener("keyup", function(keycode)
 	{    
 		if (keycode == DOWN_ARROW || keycode == UP_ARROW)
@@ -544,7 +538,6 @@ application.steer_speed = 1;
 }
 	}
 	);
-	var ev_parent = this;
 	application.events.addListener("updates", function()
 	{    
 		application.update_car();
@@ -552,8 +545,8 @@ application.steer_speed = 1;
 	);
 window.onload = function() 
 {
-	drawingCanvas = document.getElementById("myCanvas");
-    g_canvas = drawingCanvas;
+        drawingCanvas = document.getElementById("myCanvas");
+        g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
 	{
 		var client =
@@ -615,81 +608,67 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    car_1 = 
-			new car(g_ui_root.manager, g_ui_root, "images/car.png");
+		    car_1 = new car(g_ui_root.manager, g_ui_root, "images/car.png");
         car_1 = car_1;
             car_1.set_x(300);
             car_1.set_y(200);
-		    right_wheel = 
-			new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
+		    right_wheel = new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
         right_wheel = right_wheel;
             right_wheel.set_x(345);
             right_wheel.set_y(220);
-		    right_rear_wheel = 
-			new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
+		    right_rear_wheel = new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
         right_rear_wheel = right_rear_wheel;
             right_rear_wheel.set_x(345);
             right_rear_wheel.set_y(260);
-		    left_wheel = 
-			new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
+		    left_wheel = new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
         left_wheel = left_wheel;
             left_wheel.set_x(295);
             left_wheel.set_y(220);
-		    left_rear_wheel = 
-			new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
+		    left_rear_wheel = new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
         left_rear_wheel = left_rear_wheel;
             left_rear_wheel.set_x(295);
             left_rear_wheel.set_y(260);
-		    box_1 = 
-			new box(g_ui_root.manager, g_ui_root, "images/box.png");
+		    box_1 = new box(g_ui_root.manager, g_ui_root, "images/box.png");
         box_1 = box_1;
             box_1.set_x(400);
             box_1.set_y(300);
-		    box_2 = 
-			new box(g_ui_root.manager, g_ui_root, "images/box.png");
+		    box_2 = new box(g_ui_root.manager, g_ui_root, "images/box.png");
         box_2 = box_2;
             box_2.set_x(400);
             box_2.set_y(100);
-		    box_3 = 
-			new box(g_ui_root.manager, g_ui_root, "images/box.png");
+		    box_3 = new box(g_ui_root.manager, g_ui_root, "images/box.png");
         box_3 = box_3;
             box_3.set_x(200);
             box_3.set_y(300);
-		    box_4 = 
-			new box(g_ui_root.manager, g_ui_root, "images/box.png");
+		    box_4 = new box(g_ui_root.manager, g_ui_root, "images/box.png");
         box_4 = box_4;
             box_4.set_x(100);
             box_4.set_y(100);
-		    __floor1 = 
-			new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
+		    __floor1 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
         __floor1 = __floor1;
             __floor1.set_x(0);
             __floor1.set_y(590);
             __floor1.set_width(800);
             __floor1.set_height(10);
-		    __floor2 = 
-			new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
+		    __floor2 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
         __floor2 = __floor2;
             __floor2.set_x(0);
             __floor2.set_y(0);
             __floor2.set_width(10);
             __floor2.set_height(600);
-		    __floor3 = 
-			new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
+		    __floor3 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
         __floor3 = __floor3;
             __floor3.set_x(0);
             __floor3.set_y(0);
             __floor3.set_width(800);
             __floor3.set_height(10);
-		    __floor4 = 
-			new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
+		    __floor4 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
         __floor4 = __floor4;
             __floor4.set_x(790);
             __floor4.set_y(0);
             __floor4.set_width(10);
             __floor4.set_height(600);
-		    __label1 = 
-			new ui.Label(g_ui_root.manager, g_ui_root, "11px Verdana");
+		    __label1 = new ui.Label(g_ui_root.manager, g_ui_root, "11px Verdana");
         __label1 = __label1;
             __label1.set_x(100);
             __label1.set_y(75);

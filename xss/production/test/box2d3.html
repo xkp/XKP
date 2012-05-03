@@ -2,19 +2,17 @@
 <html>
 <head>
 <title></title>
-<script type="text/javascript" src="../js/jquery-1.4.2.min.js" ></script>
-<script type="text/javascript" src="../js/jquery.utils.js"></script>
-<script type="text/javascript" src="../js/utils.js"></script>
-<script type="text/javascript" src="../js/resig.js"></script>
-<script type="text/javascript" src="../js/event.js"></script>
-<script type="text/javascript" src="../js/keys.js"></script>
-		<script type="text/javascript" src="../js/ui.js"></script>
-		<script type="text/javascript" src="../js/streamer.js"></script>
-        <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script> 
-		<script type="text/javascript" src="../js/joint.js"></script> 
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
+            <script type="text/javascript" src="../js/joint.js"></script>
             <script type="text/javascript" src="../js/spawner.js"></script>
 <script type="text/javascript">
-    var drawingCanvas;		
+var drawingCanvas;		
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -29,8 +27,7 @@ var SoundUtils = new ui.SoundUtils();
 				width: 600,
 				height: 400,
 				canvas: drawingCanvas
-			};
-            var streamer = new stream.Streamer();							
+			};            						
 			var ui_ = new ui.Manager(client, streamer);			
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
@@ -252,7 +249,6 @@ function start(resolution)
                 }
             this.set_height(50);
             this.set_width(50);
-	var ev_parent = this;
 	this.events.addListener("collision", function(who)
 	{    
 	}
@@ -263,8 +259,8 @@ function start(resolution)
 });
 window.onload = function() 
 {
-	drawingCanvas = document.getElementById("myCanvas");
-    g_canvas = drawingCanvas;
+        drawingCanvas = document.getElementById("myCanvas");
+        g_canvas = drawingCanvas;
 	if (drawingCanvas && drawingCanvas.getContext)
 	{
 		var client =
@@ -326,22 +322,19 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    __img1 = 
-			new ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
+		    __img1 = new ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
         __img1 = __img1;
             __img1.set_x(0);
             __img1.set_y(390);
             __img1.set_width(600);
             __img1.set_height(40);
-		    __img2 = 
-			new ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
+		    __img2 = new ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
         __img2 = __img2;
             __img2.set_x(590);
             __img2.set_y(350);
             __img2.set_width(10);
             __img2.set_height(40);
-		    __img3 = 
-			new ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
+		    __img3 = new ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
         __img3 = __img3;
             __img3.set_x(0);
             __img3.set_y(350);

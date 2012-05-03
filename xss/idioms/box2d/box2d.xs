@@ -11,21 +11,19 @@ on pre_process(obj)
 		obj.id = compiler.genid(obj.class_name);
 }
 
-on render_js_includes()
+on compile_dependency(dep)
 {
-	out()
-	{
-        <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script> 
-		<script type="text/javascript" src="../js/joint.js"></script> 
-    }
+    if (!dep.idiom)
+        return;
 
-    if (!application.noSpawner)
-    {
-	    out()
-	    {
-            <script type="text/javascript" src="../js/spawner.js"></script>
-        }
-    }
+    if (dep.idiom.id != "box2d")
+        return;
+
+    var box2d_path = project.box2d_path;
+    if (!box2d_path)
+        box2d_path = "../js";
+
+    dep.href = box2d_path + '/' + dep.href;
 }
 
 on render_initialization()

@@ -12,12 +12,19 @@ on pre_process(obj)
     }
 }
 
-on render_js_includes()
+on compile_dependency(dep)
 {
-	out()
-	{
-		<script type="text/javascript" src="../js/sequence.js"></script>
-	}
+    if (!dep.idiom)
+        return;
+
+    if (dep.idiom.id != "sequence")
+        return;
+
+    var path = project.js_path;
+    if (!path)
+        path = "../js";
+
+    dep.href = path + '/' + dep.href;
 }
 
 on render_initialization()

@@ -10,8 +10,7 @@
         <image src="images/arrow_right_green_48.png"/>
         <image src="images/arrow_left_48.png"/>
         <image src="images/arrow_left_green_48.png"/>
-		<image src="images/AzuCola_Trans.png"/>		
-
+		
 		<sprite_sheet id="monster_sheet" src="images/monster.png" frame_width="64" frame_height="64">
 			<animation id="m_run_l" frame_row="0" frame_col="0" frames="10" step="20"/>
 			<animation id="m_run_d" frame_row="2" frame_col="9" frames="10" step="20" right_to_left="true"/>
@@ -58,11 +57,11 @@
         </div>
 		<div id="test4">
 			<label id="title3" x="50" y="50" font="12px Verdana" caption="This screen shows two intersected clip area components with diferent forms"/>
-			<label id="title4" x="50" y="70" font="12px Verdana" caption="and the text button(4/4)"/>
+			<label id="title4" x="50" y="70" font="12px Verdana" caption="over a tiled image and the text button(4/4)"/>			
 			<label id="inst0" x="70" y="90" font="12px Verdana" caption="Use arrows to move the rect and WASD to move the circle"/>
 			<div id="clips">
 				<clip_area id="ca1" x="90" y="100" width="200" height="220" shape="rect"/>				
-				<img id="back_img" x="0" y="0" width="500" height="500" src="images/AzuCola_Trans.png"/>
+				<img id="back_img" x="0" y="0" width="400" height="400" iwidth="120" iheight="40" src="images/smile_grin_48.png"/>
 				<clip_area id="ca2" x="100" y="160" width="200" height="200" shape="circle"/>
 			</div>
 			<text_button id="tb1" x="400" y="400" font="12px Arial" text="My_Button"/>

@@ -10,8 +10,8 @@
 		<image src="images/arrow_right.png"/>
 		<image src="images/progress.full.png"/>
         <image src="images/progress.empty.png"/>
-		<image src="images/unchecked.png"/>
-		<image src="images/checked.png"/>
+		<image src="images/unchecked.jpg"/>
+		<image src="images/checked.jpg"/>
     </resources>
 	
     <label x="20" y="10" font="15px Verdana" caption="Image processing demo"/>
@@ -72,9 +72,9 @@
         </div>
 		<div id="edges_options" switchable="false">
 			<label x="10" y="50" font="12px Verdana" caption="Edge Detection Parameters"/>
-			<state_button id="mono_check" x="40" y="80" width="32" height="32" is_active="false" active="images/checked.png" inactive="images/unchecked.png"/>
+			<state_button id="mono_check" x="40" y="80" width="32" height="32" is_active="false" active="images/checked.jpg" inactive="images/unchecked.jpg"/>
 			<label x="90" y="85" font="12px Verdana" caption="Mono"/>
-			<state_button id="invert_check" x="40" y="130" width="32" height="32" is_active="false" active="images/checked.png" inactive="images/unchecked.png"/>
+			<state_button id="invert_check" x="40" y="130" width="32" height="32" is_active="false" active="images/checked.jpg" inactive="images/unchecked.jpg"/>
 			<label x="90" y="135" font="12px Verdana" caption="Invert"/>			
         </div>
 		<div id="pointillize_options" switchable="false">
