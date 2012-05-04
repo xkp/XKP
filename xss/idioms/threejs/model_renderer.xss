@@ -8,13 +8,13 @@
 	out(){
 	var <xss:e v="obj.id"/>;
 	var <xss:e v="obj.id"/>_loader = 
-	generate_model_loader(streamer.get_resource('<xss:e v="obj.src"/>').type);
+	generate_model_loader(scene.streamer.get_resource('<xss:e v="obj.src"/>').type);
 	} 
 	
 	out(){	
 		<xss:e value = "obj.id"/>_loader.load(
 		<xss:open_brace/>
-				model : streamer.get_resource('<xss:e v="obj.src"/>').asset , callback : function( geometry )
+				model : scene.streamer.get_resource('<xss:e v="obj.src"/>').asset , callback : function( geometry )
 			<xss:open_brace/>
 				<xss:e v="obj.id"/> = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
 	}

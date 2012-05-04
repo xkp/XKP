@@ -23,6 +23,7 @@
 var renderer = new THREE.CanvasRenderer();	
 var ui_;
 var SoundUtils;
+var scene = new THREE.Scene();
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
@@ -62,8 +63,8 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var material_sphere1;var scene;var camera_1;var amb_light_1;var light1;var light2;var light3;var particle1;var particle2;var particle3;var sphere1;
-threejs_load_resources(function()
+var material_sphere1;var camera_1;var amb_light_1;var light1;var light2;var light3;var particle1;var particle2;var particle3;var sphere1;
+threejs_load_resources(streamer, function()
 {
 	drawingCanvas.onmousemove = function(ev)
 	{
@@ -116,7 +117,6 @@ threejs_load_resources(function()
 material_sphere1 = new THREE.MeshLambertMaterial({
 color:White,shading:flat_shading
 	});
-			    scene = new THREE.Scene() ;
 		    camera_1 = 
 		    new THREE.Camera(65, 1.5, 1, 1000, null) ;	
 		active_camera = camera_1;

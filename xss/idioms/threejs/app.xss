@@ -37,6 +37,7 @@ out(){
 var renderer = new THREE.CanvasRenderer();	
 var ui_;
 var SoundUtils;
+var scene = new THREE.Scene();
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
@@ -88,7 +89,7 @@ application.events.dispatch("switch_cameras", []);
 	compiler.inject("render_types");
 </xss:code>
 
-threejs_load_resources(function()
+threejs_load_resources(streamer, function()
 {
 <xss:code>
 	compiler.inject("render_instances");	

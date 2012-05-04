@@ -14,8 +14,8 @@
             <script type="text/javascript" src="../js/utils.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
             <script type="text/javascript" src="../js/colors.js"></script>
-            <script type="text/javascript" src="../js/streamer.js"></script>
             <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
@@ -24,6 +24,7 @@
 var renderer = new THREE.CanvasRenderer();	
 var ui_;
 var SoundUtils;
+var scene = new THREE.Scene();
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
@@ -35,8 +36,6 @@ var app_height = window.innerHeight;
 var __label1;var lbl1;
 var application = {};
 application.events = new ev.EventHolder();
-		var streamer = new stream.Streamer();	
-		var ResourceUtils = new stream.ResourceUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -49,6 +48,8 @@ application.events = new ev.EventHolder();
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
 		}
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
@@ -146,7 +147,7 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var img_plane;var img_reflect;var scene;var camera_1;
+var img_plane;var img_reflect;var camera_1;
     function create_my_plane(
      ) { 
     var my_plane;
@@ -190,7 +191,7 @@ my_plane.scale.y = 1;
 				my_plane.addChild(img_reflect);
         return my_plane;
         }
-threejs_load_resources(function()
+threejs_load_resources(streamer, function()
 {
 	drawingCanvas.onmousemove = function(ev)
 	{
@@ -241,18 +242,15 @@ threejs_load_resources(function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    __label1 = new ui.Label(g_ui_root.manager, g_ui_root, "15px Verdana");
-        __label1 = __label1;
             __label1.set_x(150);
             __label1.set_y(75);
             __label1.set_color("Ivory");
             __label1.text("Move mouse to control the carousel movement");
 		    lbl1 = new ui.Label(g_ui_root.manager, g_ui_root, "15px Verdana");
-        lbl1 = lbl1;
             lbl1.set_x(175);
             lbl1.set_y(100);
             lbl1.set_color("Ivory");
             lbl1.text("Put the mouse over an image to zoom it");
-			    scene = new THREE.Scene() ;
 		    camera_1 = 
 		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
 		active_camera = camera_1;

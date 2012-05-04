@@ -21,7 +21,7 @@ on pre_process(obj)
 
 on render_dependencies()
 {
-    var dependencies = compiler.idiom_dependencies("threejs");
+    var dependencies = compiler.idiom_dependencies("webgl");
 
     for(var dep in dependencies)
     {       

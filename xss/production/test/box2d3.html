@@ -12,7 +12,8 @@
             <script type="text/javascript" src="../js/joint.js"></script>
             <script type="text/javascript" src="../js/spawner.js"></script>
 <script type="text/javascript">
-var drawingCanvas;		
+var drawingCanvas;	
+var streamer;	
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -323,25 +324,21 @@ window.onload = function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    __img1 = new ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
-        __img1 = __img1;
             __img1.set_x(0);
             __img1.set_y(390);
             __img1.set_width(600);
             __img1.set_height(40);
 		    __img2 = new ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
-        __img2 = __img2;
             __img2.set_x(590);
             __img2.set_y(350);
             __img2.set_width(10);
             __img2.set_height(40);
 		    __img3 = new ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
-        __img3 = __img3;
             __img3.set_x(0);
             __img3.set_y(350);
             __img3.set_width(10);
             __img3.set_height(40);
         sp1 = new arcade.Spawner(g_spawner_manager, 100, 100, 1, 1);
-        sp1 = sp1;
             sp1.x = 100;
             sp1.y = 100;
             sp1.set_rotation(95);

@@ -94,7 +94,7 @@
 				<set text="materials[0].color.setHex({value})"/>
             </property>
 			<property id="texture" type="string">
-				<set text="materials[0].map = new THREE.Texture(streamer.get_resource({value}).data)"/>
+				<set text="materials[0].map = new THREE.Texture(scene.streamer.get_resource({value}).data)"/>
             </property>	
 			<property id="texture_object" type="string">
 				<set text="materials[0].map = new THREE.Texture({value})"/>
@@ -309,10 +309,7 @@
 			<property id="color" type="string" dont_init="true"/>
 			<property id="quantity" type="string" dont_init="true"/>
 			<property id="scale" type="string" dont_init="true"/>			
-		</class>
-   
-		<class id="scene" output_id="THREE.Scene"/>		
-				
+		</class>			
 	</types>
 	
 </module>

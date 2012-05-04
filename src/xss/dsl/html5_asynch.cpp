@@ -6,11 +6,40 @@
 
 using namespace xkp;
 
+const str SLanguage("html5 asynch");
+
+const str SAsynchObjectNotSerializable("Objects need to be serializable in order to enter threads");
+
+struct asynch_param_info
+  {
+    str     id;
+    str     value;
+    XSSType type;
+  };
+
+typedef std::vector<asynch_param_info> asynch_params;
+
 struct synch_code
   {
-    str        id;
-    str        code;  
-    param_list params;
+    str           id;
+    str           code;  
+    asynch_params params;
+  };
+
+void process_asynch_params(XSSCompiler compiler, const param_list params, asynch_params& result)
+  {
+    for(size_t i = 0; i < params.size(); i++)
+      {
+        str pname  = params.get_name(i);
+        expression pvalue = params.get(i); 
+        
+        asynch_param_info res;
+        res.id = pname;
+        res.value = compiler->render_expr(pvalue, XSSObject());
+        res.type = compiler->type_of(pvalue);
+
+        result.push_back(res);
+      }
   };
 
 class dsl_h5_synch : public xss_dsl
@@ -27,11 +56,17 @@ class dsl_h5_synch : public xss_dsl
           std::ostringstream result;
           str id = compiler_->genid("wwmsg");
           
+          asynch_params params;
+          process_asynch_params(compiler_, info.params, params);
+          
           result << "\nvar " << id << " = {";
-          for(size_t i = 0; i < info.params.size(); i++)
+          
+          asynch_params::iterator it = params.begin();
+          asynch_params::iterator nd = params.end();
+
+          for(; it != nd; it++)
             {
-              str pname = info.params.get_name(i);
-              result << pname << " : " << pname << ",";
+              result << it->id << " : " << it->value << ",";
             }
           
           result << "};";
@@ -40,7 +75,7 @@ class dsl_h5_synch : public xss_dsl
           synch_code sc;
           sc.id = id;
           sc.code = info.text;
-          sc.params = info.params;
+          sc.params = params;
 
           synchs_.push_back(sc);
 
@@ -128,16 +163,49 @@ str dsl_h5_asynch::render(dsl& info, XSSContext ctx)
               
             //declare variables for synch params
             param_list_decl synch_params;
-            for(size_t i = 0; i < it->params.size(); i++)
+
+            asynch_params params;
+            process_asynch_params(compiler, info.params, params);
+
+            asynch_params::iterator pit = params.begin();
+            asynch_params::iterator pnd = params.end();
+
+            for(; pit != pnd; pit++)
               {
-                str var_name = it->params.get_name(i);
-                result << "\nvar " << var_name << " = message.data." << var_name << ";";
+                str     var_name = pit->id;
+                XSSType ptype    = pit->type;
+                if (ptype && !ptype->is_variant())
+                  {
+                    str serializer = ptype->get<str>("serializer", str());
+                    if (serializer.empty())
+                      {
+                        param_list error;
+                        error.add("id", SLanguage);
+                        error.add("desc", SAsynchObjectNotSerializable);
+                        error.add("type", ptype->id());
+                        xss_throw(error);
+                      }
+
+                    str path = compiler->idiom_path(XSSObject(ptype), serializer);
+                    XSSRenderer rend = compiler->compile_xss_file(path, ctx);
+                    
+                    param_list spl;
+                    spl.add(ptype);
+                    spl.add("data", "message.data." + var_name);
+
+                    str serial_str = rend->render(XSSObject(ptype), &spl);
+
+                    result << "\nvar " << var_name << " = " << serial_str;
+
+                    
+                  }
+                else
+                  {
+                    result << "\nvar " << var_name << " = message.data." << var_name << ";";
+                  }
 
                 pdl.name = var_name;
-
-                expression e;
-                e.push_operand(info.params.get(i));
-                pdl.default_value = e;
+                pdl.type = pit->type? pit->type->id() : "var";
 
                 synch_params.push_back(pdl);
               }

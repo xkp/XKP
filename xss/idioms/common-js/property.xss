@@ -10,13 +10,19 @@ if (prop.dont_render)
 }
 
 string prop_name = prop.output_id;
+
 string assign = "=";
 string separator = ";";
 
-if (!is_class)
+if (path)
+{
+    prop_name = path + "." + prop_name;    
+}
+else if (!is_class)
 {
     prop_name = owner.output_id + "." + prop_name;    
 }
+
 
 if (prop.set && prop.get)
 {
@@ -35,6 +41,8 @@ if (prop.set && prop.get)
 }
 else if (prop.set)
 {
+    compiler.log("prop_name: " + prop_name);
+    compiler.log("path: " + path);
     out(indent = 0)
     {
         <xss:e value="prop_name"/> <xss:e value="assign"/> <xss:e value="prop.render_value()"/><xss:e value="separator"/>

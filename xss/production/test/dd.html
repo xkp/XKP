@@ -25,6 +25,7 @@
 var renderer = new THREE.CanvasRenderer();	
 var ui_;
 var SoundUtils;
+var scene = new THREE.Scene();
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
@@ -125,7 +126,7 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var image_plane;var scene;var camera_1;var test_ip;
+var image_plane;var camera_1;var test_ip;
         var social_button = ui.Image.extend(
     {
     init: function(
@@ -404,7 +405,7 @@ g_sequence_manager);
             image_plane.unselected = unselected;
 	image_plane.set_image = function(value) 
 	{
-		image_plane.materials[0].map = new THREE.Texture(streamer.get_resource(value).data);
+		image_plane.materials[0].map = new THREE.Texture(scene.streamer.get_resource(value).data);
 	};
 	image_plane.events.addListener("mousein", function(x,y)
 	{    
@@ -628,7 +629,7 @@ create_image_plane(100, 100, null, null)
  ;
         return image_group;
         }
-threejs_load_resources(function()
+threejs_load_resources(streamer, function()
 {
 	drawingCanvas.onmousemove = function(ev)
 	{
@@ -679,24 +680,20 @@ threejs_load_resources(function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    facebook = new social_button(g_ui_root.manager, g_ui_root, "images/facebook.png");
-        facebook = facebook;
             facebook.set_x(880);
             facebook.set_y(8);
             facebook.set_width(24);
             facebook.set_height(24);
 		    twitter = new social_button(g_ui_root.manager, g_ui_root, "images/twitter.png");
-        twitter = twitter;
             twitter.set_x(845);
             twitter.set_y(8);
             twitter.set_width(24);
             twitter.set_height(24);
 		    email = new social_button(g_ui_root.manager, g_ui_root, "images/photobucket.png");
-        email = email;
             email.set_x(810);
             email.set_y(8);
             email.set_width(24);
             email.set_height(24);
-			    scene = new THREE.Scene() ;
 		    camera_1 = 
 		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
 		active_camera = camera_1;

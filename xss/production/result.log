@@ -449,18 +449,6 @@ log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
 Success are greateful
-===[ box2d1.project.xml ]================(Tests)
-
-
-Success are greateful
-===[ box2d2.project.xml ]================(Tests)
-
-
-log: on resources.render_initialization
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering UI...
-Success are greateful
 ===[ box2d3.project.xml ]================(Tests)
 
 
@@ -526,17 +514,6 @@ log: Instance renderer: body.xss instance: __physics3
 log: my_body
 log: Rendering UI...
 Success are greateful
-===[ dany_dennis.project.xml ]================(Tests)
-
-
-log: on resources.render_initialization
-log: Rendering Resources...
-log: Rendering Sequence Types...
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: Rendering Sequence...
-log: Rendering UI...
-Success are greateful
 ===[ dd.project.xml ]================(Tests)
 
 
@@ -549,56 +526,6 @@ log: Instance renderer: ../sequence.xss instance: grow
 log: Instance renderer: ../sequence.xss instance: shrink
 log: Rendering 3js Types...
 log: Rendering UI...
-Success are greateful
-===[ enums.project.xml ]================(Tests)
-
-
-log: Rendering test with enum class...
-log: output_xml: top && output_id: PL_TOP
-log: output_xml: visible && output_id: VISIBLE
-			Instance: name = "btn", type = "Button"
-		
-				property:text = "Enums"			
-				property:layout_width = 200			
-				property:layout_height = 43			
-				property:enabled = false			
-				property:placement(enum) = XKPLayout.PL_TOP			
-				sameName = "My owner is button 'btn'"			
-				property:layout_x = 0			
-				property:layout_y = 0			
-				property:visible(enum) = View.VISIBLE			
-				property:states = 			
-					void onClick() {
-				
-						int pl = XKPLayout.PL_LEFT;
-((XKPLayout.LayoutParams) btn.getLayoutParams()).setPlacement(((XKPLayout.LayoutParams) btn.getLayoutParams()).getPlacement() + 1);
-if (btn.getVisibility() == View.VISIBLE)
-{
-	btn.setVisibility(View.INVISIBLE);
-}
-else
-{
-	if (btn.getVisibility() == View.INVISIBLE)
-	{
-		btn.setVisibility(View.GONE);
-	}
-	else
-	{
-		btn.setVisibility(View.VISIBLE);
-	}
-}
-btn.setEnabled(!btn.isEnabled());
-btn.layout(btn.getLeft(), btn.getTop(), btn.getLeft() + btn.getHeight() * 2, btn.getBottom());
-String swp = sameName;
-sameName = prop_btn_sameName;
-prop_btn_sameName = swp;
-					
-					}
-				
-			Instance: name = "application", type = "Application"
-		
-				sameName = "My owner is application."			
-
 Success are greateful
 ===[ g_anim.project.xml ]================(Tests)
 
@@ -877,7 +804,6 @@ Copyright © 2011 W3Schools.com</td>
 
 
 
-
 			var __div1 = $("#__div1");
 		
 			var btnFullName = $("#btnFullName").button();
@@ -977,64 +903,10 @@ Success are greateful
 ===[ jquery6.project.xml ]================(Tests)
 
 
-log: NO LAYOUT
-log: preset_apply
-log: NO LAYOUT
-log: __label1
-log: __br1
-log: __br2
-log: brightness
-log: __br3
-log: __label2
-log: __br4
-log: __br5
-log: constrast
-log: NO LAYOUT
-log: __label3
-log: __br6
-log: __br7
-log: red
-log: __br8
-log: __label4
-log: __br9
-log: __br10
-log: blue
-log: __br11
-log: __label5
-log: __br12
-log: __br13
-log: green
-log: NO LAYOUT
-log: __label6
-log: __br14
-log: __br15
-log: hue
-log: __br16
-log: __label7
-log: __br17
-log: __br18
-log: saturation
-log: __br19
-log: __label8
-log: __br20
-log: __br21
-log: lightness
-log: NO LAYOUT
-log: __label9
-log: __br22
-log: __br23
-log: noise_amount
-log: __br24
-log: __label10
-log: __br25
-log: __br26
-log: noise_strength
-log: __br27
-log: __br28
-log: mono
-log: NO LAYOUT
-log: blur_apply
-Success are greateful
+Error [html5 asynch] Objects need to be serializable in order to enter threads
+	type = preset
+	file = c:/dev/XKP/xss/tests/../idioms/jquery/event.xssERROR: Project:  jquery6.project.xml
+
 ===[ jquery7.project.xml ]================(Tests)
 
 
@@ -1053,46 +925,6 @@ log: lbl1
 log: edit1
 log: btn1
 Success are greateful
-===[ jseq1.project.xml ]================(Tests)
-
-
-log: Rendering instance: test_sequence
-log: Rendering instance: test_sequence
-Error [idiom] run tag got an invalid method
-	methd = 
-	file = c:/dev/XKP/xss/tests/../idioms/java-seq/sequence.xssERROR: Project:  jseq1.project.xml
-
-===[ json1.project.xml ]================(Tests)
-
-
-Error [reader] Invalid XML file
-	xml error = Error document empty.
-	line = 0
-	column = 0
-	file = c:/dev/XKP/xss/tests/json1.app.jsonERROR: Project:  json1.project.xml
-
-===[ ms1.project.xml ]================(Tests)
-
-
-log: Rendering Sequence Types...
-log: Rendering Sequence...
-Success are greateful
-===[ ms2.project.xml ]================(Tests)
-
-
-log: Rendering Sequence Types...
-log: Rendering Sequence...
-Success are greateful
-===[ ms3.project.xml ]================(Tests)
-
-
-log: on resources.render_initialization
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering Sequence Types...
-log: Rendering UI...
-log: Rendering Sequence...
-Success are greateful
 ===[ ms4.project.xml ]================(Tests)
 
 
@@ -1110,7 +942,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
-log: Rendering Sequence...
 Success are greateful
 ===[ ms6.project.xml ]================(Tests)
 
@@ -1125,24 +956,6 @@ log: Instance renderer: component.xss instance: btn2
 log: Rendering Sequence Types...
 log: Rendering UI...
 Success are greateful
-===[ ms7.project.xml ]================(Tests)
-
-
-log: on resources.render_initialization
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering UI...
-Success are greateful
-===[ newseq1.project.xml ]================(Tests)
-
-
-log: on resources.render_initialization
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering Sequence Types...
-log: Rendering UI...
-log: Rendering Sequence...
-Success are greateful
 ===[ paintings.project.xml ]================(Tests)
 
 
@@ -1152,17 +965,6 @@ log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: social_button
 log: Rendering 3js Types...
-log: Rendering UI...
-Success are greateful
-===[ paintings_grad.project.xml ]================(Tests)
-
-
-log: on resources.render_initialization
-log: Rendering Resources...
-log: Rendering Sequence Types...
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: Rendering Sequence...
 log: Rendering UI...
 Success are greateful
 ===[ pixastic.project.xml ]================(Tests)
@@ -1185,27 +987,9 @@ Success are greateful
 ===[ query_properties.project.xml ]================(Tests)
 
 
-log: Rendering test query_properties...
-log: assigning default_value = 0
-log: assigning default_value = 0
-log: assigning default_value = EVisibility.true
-			Instance: name = "btn", type = "Button"
-		
-				property "caption" = "Enums"			
-				property "width" = 200			
-				property "height" = 43			
-				property "enabled" = false			
-				property "placement" = XKPLayout.PL_TOP			
-				property "sameName" = "My owner is button 'btn'"			
-				property "x" = 0			
-				property "y" = 0			
-				property "visible" = "EVisibility.true"			
-				property "states" = 			
-			Instance: name = "application", type = "Application"
-		
-				property "sameName" = "My owner is application."			
+Error [404] File not found
+	file = c:/dev/XKP/xss/tests/enums.app.xmlERROR: Project:  query_properties.project.xml
 
-Success are greateful
 ===[ replicator.project.xml ]================(Tests)
 
 
@@ -1243,38 +1027,6 @@ log: Rendering UI Types...
 log: my_image
 log: Rendering UI...
 Success are greateful
-===[ ui_cliparea.project.xml ]================(Tests)
-
-
-log: on resources.render_initialization
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering UI...
-Success are greateful
-===[ ui_demo.project.xml ]================(Tests)
-
-
-log: on resources.render_initialization
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering UI...
-Success are greateful
-===[ ui_drag.project.xml ]================(Tests)
-
-
-log: on resources.render_initialization
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering UI...
-Success are greateful
-===[ ui_figures.project.xml ]================(Tests)
-
-
-log: on resources.render_initialization
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering UI...
-Success are greateful
 ===[ ui_kitchen_sink.project.xml ]================(Tests)
 
 
@@ -1299,12 +1051,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
 Success are greateful
-===[ ui_selfdrawn.project.xml ]================(Tests)
-
-
-Error [cannot-resolve] Instance not found
-	instance = sd1ERROR: Project:  ui_selfdrawn.project.xml
-
 ===[ ui_sprite.project.xml ]================(Tests)
 
 

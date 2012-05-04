@@ -1,6 +1,7 @@
 <application src="ui_class_test.app.xs" width="600" height="600">
     <resources>
         <image src="images/img1.png"/>
+		<image src="images/test1.png"/>
     </resources>
 	
 	<div id="test1" x="200" y="200" width="200" height="200">

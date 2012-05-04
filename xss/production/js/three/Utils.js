@@ -33,15 +33,17 @@ function set_active_camera( camera )
 	active_camera = camera;
 }
 
-function threejs_load_resources(callback)
+function threejs_load_resources(streamer, callback)
 {
+	scene.streamer = streamer;
 	var resources = [];
-	for(var i = 0; i < streamer.resources.length; i++)
-	{
-		var res = streamer.resources[i];
-		if(!res.loaded)
-			resources.push({ type: res.type, url: res.asset});			
-	}
+	if(scene.streamer)
+		for(var i = 0; i < scene.streamer.resources.length; i++)
+		{
+			var res = scene.streamer.resources[i];
+			if(!res.loaded)
+				resources.push({ type: res.type, url: res.asset});			
+		}
 	if (resources.length > 0)
 	{		
 		var stream_client =
@@ -56,7 +58,7 @@ function threejs_load_resources(callback)
 			}
 		};
 
-		streamer.request(resources, stream_client);
+		scene.streamer.request(resources, stream_client);
 	}
 	else callback();
 }
@@ -66,7 +68,7 @@ function set_transform_image( path, value )
 	for(var i = 0; i < path.children.length; i++)
 	{
 		var child = path.children[i];		
-		child.materials[ 0 ].map = new THREE.Texture(streamer.get_resource(value).data);	
+		child.materials[ 0 ].map = new THREE.Texture(scene.streamer.get_resource(value).data);	
 	}	
 }
 
@@ -77,7 +79,7 @@ function set_cube_face_object( path, face, value )
 
 function set_cube_face( path, value, face )
 {
-	path.geometry.faces[face].materials[0].map = new THREE.Texture(streamer.get_resource(value).data);	
+	path.geometry.faces[face].materials[0].map = new THREE.Texture(scene.streamer.get_resource(value).data);	
 }
 
 function set_transform_texture_object( path, value )

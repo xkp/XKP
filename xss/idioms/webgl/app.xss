@@ -42,7 +42,8 @@ var canvas_position = {x:0, y:0};
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
-var streamer = new stream.Streamer();
+var scene = new THREE.Scene();
+var streamer;
 var app_width = <xss:e value="application.width"/>;
 var app_height = <xss:e value="application.height"/>;
 <xss:marker id="variables"/>
@@ -87,7 +88,7 @@ application.events.dispatch("switch_cameras", []);
 	compiler.inject("render_types");
 </xss:code>
 
-threejs_load_resources(function()
+threejs_load_resources(streamer, function()
 {
 <xss:code>
 	compiler.inject("render_instances");	

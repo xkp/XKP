@@ -1312,6 +1312,12 @@ XSSType xss_compiler::type_of(variant v)
       return obj->type();
 
     XSSContext ctx = current_context();
+    if (v.is<expression>())
+      {
+        expression e = v;
+        return lang_utils::expr_type(e, ctx);
+      }
+
     return ctx->get_type(v.get_schema());
   }
 

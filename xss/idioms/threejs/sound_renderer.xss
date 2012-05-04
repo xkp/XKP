@@ -2,7 +2,7 @@
 
 <xss:code>	
 	out(){
-	var <xss:e v="obj.id"/> = new THREE.Sound(streamer.get_resource('<xss:e v="obj.src"/>').asset
+	var <xss:e v="obj.id"/> = new THREE.Sound(scene.streamer.get_resource('<xss:e v="obj.src"/>').asset
 	}
 	if(obj.radius != null) out(){,<xss:e v="obj.radius"/>}
 	if(obj.volume != null) out(){,<xss:e v="obj.volume"/>}

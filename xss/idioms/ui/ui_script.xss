@@ -1,6 +1,7 @@
 <xss:parameter id="canvas_name"/>
 
-var drawingCanvas;		
+var drawingCanvas;	
+var streamer;	
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;

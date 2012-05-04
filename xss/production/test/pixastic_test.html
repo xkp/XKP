@@ -27,6 +27,7 @@
 var renderer = new THREE.CanvasRenderer();	
 var ui_;
 var SoundUtils;
+var scene = new THREE.Scene();
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
@@ -121,8 +122,8 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var sphere_material;var scene;var camera_1;var plane1;var sphere1;var sphere2;var plane2;
-threejs_load_resources(function()
+var sphere_material;var camera_1;var plane1;var sphere1;var sphere2;var plane2;
+threejs_load_resources(streamer, function()
 {
 	drawingCanvas.onmousemove = function(ev)
 	{
@@ -173,48 +174,40 @@ threejs_load_resources(function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    lbl0 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Arial");
-        lbl0 = lbl0;
             lbl0.set_x(50);
             lbl0.set_y(20);
             lbl0.text("Brightness and contrast filter demo");
 		    lbl1 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Arial");
-        lbl1 = lbl1;
             lbl1.set_x(50);
             lbl1.set_y(40);
             lbl1.text("Pass mouse over the Gioconda's elements to change their filter values");
 		    lbl2 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Arial");
-        lbl2 = lbl2;
             lbl2.set_x(50);
             lbl2.set_y(60);
             lbl2.text("Press numpad + and - to increase or decrease resource filter values");
 		    img1 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test1.png");
-        img1 = img1;
             img1.set_x(50);
             img1.set_y(100);
             img1.set_width(128);
             img1.set_height(164);
 		    img2 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test2.png");
-        img2 = img2;
             img2.set_x(50);
             img2.set_y(450);
             img2.set_width(60);
             img2.set_height(100);
 		    img3 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test2.png");
-        img3 = img3;
             img3.set_x(150);
             img3.set_y(450);
             img3.set_width(60);
             img3.set_height(100);
 		    img4 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test2.png");
-        img4 = img4;
             img4.set_x(250);
             img4.set_y(450);
             img4.set_width(60);
             img4.set_height(100);
 sphere_material = new THREE.MeshBasicMaterial({
-map:new THREE.Texture(streamer.get_resource('images/test1.png').data),
+map:new THREE.Texture(scene.streamer.get_resource('images/test1.png').data),
 	});
-			    scene = new THREE.Scene() ;
 		    camera_1 = 
 		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
 		active_camera = camera_1;
@@ -223,7 +216,7 @@ map:new THREE.Texture(streamer.get_resource('images/test1.png').data),
 	    plane1 = new THREE.Mesh(plane1_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane1);
 		plane1.events = new ev.EventHolder();
-            plane1.materials[0].map = new THREE.Texture(streamer.get_resource("images/test1.png").data);
+            plane1.materials[0].map = new THREE.Texture(scene.streamer.get_resource("images/test1.png").data);
             plane1.position.x = -30;
             set_rotation_y(plane1.rotation, -10);
 	    sphere1_sphere = new THREE.Sphere(150, null, null) ;
@@ -242,7 +235,7 @@ map:new THREE.Texture(streamer.get_resource('images/test1.png').data),
 	    plane2 = new THREE.Mesh(plane2_plane, new THREE.MeshBasicMaterial());
 	    scene.addObject(plane2);
 		plane2.events = new ev.EventHolder();
-            plane2.materials[0].map = new THREE.Texture(streamer.get_resource("images/test2.png").data);
+            plane2.materials[0].map = new THREE.Texture(scene.streamer.get_resource("images/test2.png").data);
             plane2.position.x = -300;
             plane2.position.y = -30;
             set_rotation_y(plane2.rotation, -10);

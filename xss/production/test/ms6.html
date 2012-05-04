@@ -10,7 +10,8 @@
             <script type="text/javascript" src="../js/sequence.js"></script>
             <script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">
-var drawingCanvas;		
+var drawingCanvas;	
+var streamer;	
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -123,7 +124,6 @@ g_sequence_manager);
             ]);
             this.anim1.addHandler(____i1);	              
 		    this.btn1 = new ui.Button(this.manager, this, "images/smile_sad_48.png", "images/smile_grin_48.png");
-        btn1 = this.btn1;
             this.btn1.set_placement("top");
             this.btn1.set_height(50);
 	this.btn1.events.addListener("click", function()
@@ -140,7 +140,6 @@ this__.btn2.alpha(100);
 	);
 		application.are_obj_events = true;
 		    this.btn2 = new ui.Button(this.manager, this, "images/smile_grin_48.png", "images/smile_sad_48.png");
-        btn2 = this.btn2;
             this.btn2.set_placement("bottom");
             this.btn2.set_height(50);
 	this.btn2.events.addListener("click", function()
@@ -227,11 +226,9 @@ window.onload = function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    ms61 = new ms6(g_ui_root.manager, g_ui_root);
-        ms61 = ms61;
             ms61.set_x(100);
             ms61.set_y(100);
 		    ms62 = new ms6(g_ui_root.manager, g_ui_root);
-        ms62 = ms62;
             ms62.set_x(200);
             ms62.set_y(100);
 			document.onkeydown = function(ev)

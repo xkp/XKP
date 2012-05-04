@@ -8,6 +8,8 @@
 	body{
 	}
 </style>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
             <script type="text/javascript" src="../js/colors.js"></script>
             <script type="text/javascript" src="../js/three/Three.js"></script>
@@ -23,7 +25,8 @@ var canvas_position = {x:0, y:0};
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
-var streamer = new stream.Streamer();
+var scene = new THREE.Scene();
+var streamer;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
@@ -71,8 +74,8 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var mat_1;var mat_2;var mat_3;var shadow_mat;var scene;var camera_1;var icosahedron_1;var icosahedron_2;var icosahedron_3;var plane_1;var plane_2;var plane_3;var light_1;
-threejs_load_resources(function()
+var mat_1;var mat_2;var mat_3;var shadow_mat;var camera_1;var icosahedron_1;var icosahedron_2;var icosahedron_3;var plane_1;var plane_2;var plane_3;var light_1;
+threejs_load_resources(streamer, function()
 {
 mat_1 = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff
@@ -84,9 +87,8 @@ mat_3 = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff
 	});
 shadow_mat = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/shadow.png').asset),
+map:THREE.ImageUtils.loadTexture(scene.streamer.get_resource('images/shadow.png').asset),
 	});
-			    scene = new THREE.Scene() ;
 		    camera_1 = 
 		    new THREE.Camera(40, 1.5, 1, 10000, null) ;	
 		active_camera = camera_1;
@@ -99,7 +101,7 @@ map:THREE.ImageUtils.loadTexture(streamer.get_resource('images/shadow.png').asse
             icosahedron_1.scale.x = 200;
             icosahedron_1.scale.y = 200;
             icosahedron_1.scale.z = 200;
-	this.icosahedron_1.events.addListener("mousein", function()
+	icosahedron_1.events.addListener("mousein", function()
 	{    
 		set_rotation_x(icosahedron_1.rotation, get_rotation_x(icosahedron_1.rotation) + 2);
 set_rotation_y(icosahedron_1.rotation, get_rotation_y(icosahedron_1.rotation) + 2);
@@ -114,7 +116,7 @@ set_rotation_z(icosahedron_1.rotation, get_rotation_z(icosahedron_1.rotation) + 
             icosahedron_2.scale.x = 200;
             icosahedron_2.scale.y = 200;
             icosahedron_2.scale.z = 200;
-	this.icosahedron_2.events.addListener("mousein", function()
+	icosahedron_2.events.addListener("mousein", function()
 	{    
 		set_rotation_x(icosahedron_2.rotation, get_rotation_x(icosahedron_2.rotation) + 2);
 set_rotation_y(icosahedron_2.rotation, get_rotation_y(icosahedron_2.rotation) + 2);
@@ -130,7 +132,7 @@ set_rotation_z(icosahedron_2.rotation, get_rotation_z(icosahedron_2.rotation) + 
             icosahedron_3.scale.x = 200;
             icosahedron_3.scale.y = 200;
             icosahedron_3.scale.z = 200;
-	this.icosahedron_3.events.addListener("mousein", function()
+	icosahedron_3.events.addListener("mousein", function()
 	{    
 		set_rotation_x(icosahedron_3.rotation, get_rotation_x(icosahedron_3.rotation) + 2);
 set_rotation_y(icosahedron_3.rotation, get_rotation_y(icosahedron_3.rotation) + 2);

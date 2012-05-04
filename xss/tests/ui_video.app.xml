@@ -14,10 +14,10 @@
 		<image src="images/rota_right.png"/>
 		<image src="images/sound_on.png"/>
         <image src="images/sound_off.png"/>
-		<video src="video/sintel.mp4"/>
+		<video src="video/gizmo.mp4"/>
 	 </resources>
 	 
-    <vid id="v" src="video/sample_mpeg4.mp4" x="50" y="50" width="400" height="200"/>
+    <vid id="v" src="video/gizmo.mp4" x="50" y="50" width="400" height="200"/>
 	
 	<label id="lbl1" x="40" y="300" font="Verdana" caption="Volume controls"/>
     <img id="btnVolUp" x="20" y="320" width="30" height="30" src="images/plus.png"/>

@@ -4,6 +4,11 @@ class my_image : img
 	property y_pos;
 	property img2;
 	
+	property image
+	{
+		src = value;
+	}
+	
 	method traslate()
 	{
 		this.x += 5;

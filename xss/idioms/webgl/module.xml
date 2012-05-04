@@ -1,6 +1,6 @@
-<module id="threejs" src="module.xs">
-	<dependency href="resig.js" shared="true"/>	  
-    <dependency href="event.js" shared="true"/>
+<module id="webgl" src="module.xs">
+	<dependency href="../js/resig.js"/>	  
+    <dependency href="../js/event.js"/>
     
     <dependency href="../js/keys.js"/>
 	<dependency href="../js/colors.js"/>
@@ -95,7 +95,7 @@
 				<set text="materials[0].color.setHex({value})"/>
             </property>
 			<property id="texture" type="string">				
-				<set text="materials[0].map = THREE.ImageUtils.loadTexture(streamer.get_resource({value}).asset)"/>
+				<set text="materials[0].map = THREE.ImageUtils.loadTexture(scene.streamer.get_resource({value}).asset)"/>
             </property>		
 			<property id="material" type="string" use_plain_value="true" dont_init="true">
 				<set text="materials[0] = {value}"/>
@@ -278,9 +278,7 @@
 			</constructor_params>
 			<property id="subdivisions" type="string" dont_init="true"/>
 		</class>
-	
-		<class id="scene" output_id="THREE.Scene"/>	
-
+			
 		<class id="texture_cube" renderer="envmap_renderer.xss">
 			<constructor_params>
 				<parameter property="posx"/>

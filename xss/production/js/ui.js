@@ -27,12 +27,13 @@ ui.Manager = Class.extend(
 	load_resources: function(callback)
 	{
 		var resources = [];
-		for(var i = 0; i < this.streamer.resources.length; i++)
-		{
-			var res = this.streamer.resources[i];
-			if(!res.loaded)
-				resources.push({ type: res.type, url: res.asset});			
-		}
+		if(this.streamer)
+			for(var i = 0; i < this.streamer.resources.length; i++)
+			{
+				var res = this.streamer.resources[i];
+				if(!res.loaded)
+					resources.push({ type: res.type, url: res.asset});			
+			}
 		if (resources.length > 0)
 		{
 			var this_ = this;
@@ -710,12 +711,12 @@ ui.Image = ui.Component.extend(
 	{				
 		this._super(manager, parent);
         
-        var resource = streamer.get_resource(image);
+        var resource = this.manager.streamer.get_resource(image);
         
         if (!resource)
 		{
 			console.warn("Unknow resource: " + image);
-            resource = streamer.get_resource("invalid_res");
+            resource = this.manager.streamer.get_resource("invalid_res");
 		}            
          		
 		this.texture = resource.data;
@@ -750,7 +751,7 @@ ui.Image = ui.Component.extend(
     src: function(image)
     {
         this.source = image;
-	    this.texture = streamer.get_resource(image).data;
+	    this.texture = this.manager.streamer.get_resource(image).data;
         this.invalidate();
     },
 
@@ -923,12 +924,12 @@ ui.Button = ui.Image.extend(
 	init: function(manager, parent, normal, over)
 	{
 		this._super(manager, parent, normal);
-		if(!streamer.get_resource(normal))
+		if(!this.manager.streamer.get_resource(normal))
 			normal = "invalid_res";
-		if(!streamer.get_resource(over))
+		if(!this.manager.streamer.get_resource(over))
 			over = "invalid_res";
-		var normal_texture = streamer.get_resource(normal).data;
-		var over_texture   = streamer.get_resource(over).data;	
+		var normal_texture = this.manager.streamer.get_resource(normal).data;
+		var over_texture   = this.manager.streamer.get_resource(over).data;	
 		var this__ = this;
 		this.events.addListener('mousein', function()
 		{
@@ -1064,7 +1065,7 @@ ui.RippleEffect = ui.Component.extend(
 		this._super(manager, parent);
 		if(image)
 		{
-			var resource = streamer.get_resource(image);
+			var resource = this.manager.streamer.get_resource(image);
 			this.img = resource.data;
 		}
         this.first_run = false;		
@@ -1235,13 +1236,13 @@ ui.StateButton = ui.Image.extend(
 	{
 		this._super(manager, parent, active);
 		
-		if(!streamer.get_resource(active))
+		if(!this.manager.streamer.get_resource(active))
 			active = "invalid_res";
-		if(!streamer.get_resource(inactive))
+		if(!this.manager.streamer.get_resource(inactive))
 			inactive = "invalid_res";
 
-		this.active_texture 		= streamer.get_resource(active).data;
-		this.inactive_texture   	= streamer.get_resource(inactive).data;
+		this.active_texture 		= this.manager.streamer.get_resource(active).data;
+		this.inactive_texture   	= this.manager.streamer.get_resource(inactive).data;
 
 		this.is_active = true;		
 		var this__ = this;		
@@ -1782,7 +1783,7 @@ ui.Sprite = ui.Component.extend(
 	init: function(manager, parent, sheet)
 	{				
 		this._super(manager, parent);
-		this.sheet = streamer.get_resource(sheet);
+		this.sheet = this.manager.streamer.get_resource(sheet);
 		this.image = this.sheet.data;
 		this.w = this.sheet.frame_width;
 		this.h = this.sheet.frame_height;		
@@ -1919,7 +1920,7 @@ ui.Video = ui.Component.extend(
 	init: function(manager, parent, src)
 	{				
 		this._super(manager, parent);
-		var resource = streamer.get_resource(src);
+		var resource = this.manager.streamer.get_resource(src);
         if (!resource)
             throw "Unknow resource: " + src;         		
 		this.vid = resource.data;
@@ -1980,7 +1981,7 @@ ui.Sound = Class.extend(
 {
 	init: function(src)
 	{					
-		var resource = streamer.get_resource(src);
+		var resource = this.manager.streamer.get_resource(src);
         if (!resource)
             throw "Unknow resource: " + src;         		
 		this.sound = resource.data;

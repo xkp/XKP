@@ -23,6 +23,9 @@ on img1.click()
 	img1.y += 5;
 	img2 = my_image("images/img1.png");
 	img2.rect(x_pos,y_pos,50,50);
+	img2.image = "images/test1.png";
 }
+
+
 
 

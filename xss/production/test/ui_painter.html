@@ -9,7 +9,8 @@
             <script type="text/javascript" src="../js/ui.js"></script>
             <script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">
-var drawingCanvas;		
+var drawingCanvas;	
+var streamer;	
 var g_ui;
 var g_elapsed = -1;
 var g_delta = 0.0;
@@ -155,12 +156,10 @@ window.onload = function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    __label1 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-        __label1 = __label1;
             __label1.set_x(200);
             __label1.set_y(200);
             __label1.text("Here we can see the painter");
 		    painter_1 = new ui.Painter(g_ui_root.manager, g_ui_root);
-        painter_1 = painter_1;
             painter_1.set_x(200);
             painter_1.set_y(300);
             painter_1.set_width(600);

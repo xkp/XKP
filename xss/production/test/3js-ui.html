@@ -23,6 +23,7 @@
 var renderer = new THREE.CanvasRenderer();	
 var ui_;
 var SoundUtils;
+var scene = new THREE.Scene();
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
@@ -103,8 +104,8 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var materials;var __basic_material1;var __basic_material2;var __basic_material3;var __basic_material4;var __basic_material5;var __basic_material6;var plane_material;var scene;var camera_1;var cube_1;var plane_1;
-threejs_load_resources(function()
+var materials;var __basic_material1;var __basic_material2;var __basic_material3;var __basic_material4;var __basic_material5;var __basic_material6;var plane_material;var camera_1;var cube_1;var plane_1;
+threejs_load_resources(streamer, function()
 {
 			    materials = new Array() ;
 __basic_material1 = new THREE.MeshBasicMaterial({
@@ -135,7 +136,6 @@ plane_material = new THREE.MeshBasicMaterial({
 color:Grey
 	});
             set_material_alpha(plane_material, 50);
-			    scene = new THREE.Scene() ;
 		    camera_1 = 
 		    new THREE.Camera(70, 1.5, 1, 1000, null) ;	
 		active_camera = camera_1;
@@ -200,12 +200,10 @@ color:Grey
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    lbl0 = new ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
-        lbl0 = lbl0;
             lbl0.set_x(240);
             lbl0.set_y(75);
             lbl0.text("Click smile to count");
 		    btn1 = new ui.Button(g_ui_root.manager, g_ui_root, "images/smile_sad_48.png", "images/smile_grin_48.png");
-        btn1 = btn1;
             btn1.set_placement("center");
             btn1.set_rotation(15);
             btn1.set_width(50);
@@ -219,7 +217,6 @@ application.clicks = application.clicks + 1;
 	);
 		application.are_obj_events = true;
 		    lbl2 = new ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
-        lbl2 = lbl2;
             lbl2.set_x(240);
             lbl2.set_y(420);
             lbl2.text("Drag mouse to spin the cube");

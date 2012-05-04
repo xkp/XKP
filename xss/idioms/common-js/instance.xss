@@ -3,18 +3,8 @@
 <xss:parameter id="method_renderer"   default="method.xss"/>
 <xss:parameter id="event_renderer"    default="event.xss"/>
 <xss:parameter id="path"/>
-<xss:parameter id="var_value"/>
 
 <xss:code>
-
-//render a variable with the value passed
-if (var_value)
-{
-    out()
-    {
-        <xss:e v="it.id"/> = <xss:e v="var_value"/>;
-    }
-}
 
 //render properties
 for(var prop in it.properties)

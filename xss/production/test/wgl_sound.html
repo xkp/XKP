@@ -9,6 +9,8 @@
 	background:SlateGray;
 	}
 </style>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
             <script type="text/javascript" src="../js/colors.js"></script>
             <script type="text/javascript" src="../js/three/Three.js"></script>
@@ -24,7 +26,8 @@ var canvas_position = {x:0, y:0};
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
-var streamer = new stream.Streamer();
+var scene = new THREE.Scene();
+var streamer;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
@@ -86,8 +89,8 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var material_sphere1;var material_sphere2;var material_wireframe;var scene;var camera_1;var camera_1;var light;var container_1;var sphere_1;var container_2;var sphere_2;var plane_1;
-threejs_load_resources(function()
+var material_sphere1;var material_sphere2;var material_wireframe;var camera_1;var camera_1;var light;var container_1;var sphere_1;var container_2;var sphere_2;var plane_1;
+threejs_load_resources(streamer, function()
 {
 material_sphere1 = new THREE.MeshLambertMaterial({
 color:green,shading:flat_shading
@@ -98,7 +101,6 @@ color:yellow,shading:flat_shading
 material_wireframe = new THREE.MeshLambertMaterial({
 color:mediumslateblue ,wireframe:true
 	});
-			    scene = new THREE.Scene() ;
 camera_1 = new THREE.QuakeCamera({
 fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly:true,lookVertical:false
 	});
@@ -119,7 +121,7 @@ fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly
 		sphere_1.events = new ev.EventHolder();
 				container_1.addChild(sphere_1);
 				scene.addObject(container_1);
-	var sound_1 = new THREE.Sound(streamer.get_resource('res_sound_1').asset
+	var sound_1 = new THREE.Sound(scene.streamer.get_resource('res_sound_1').asset
 	,275,20,true
 	);
 	scene.addObject(sound_1);
@@ -136,7 +138,7 @@ fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly
 		sphere_2.events = new ev.EventHolder();
 				container_2.addChild(sphere_2);
 				scene.addObject(container_2);
-	var sound_2 = new THREE.Sound(streamer.get_resource('res_sound_2').asset
+	var sound_2 = new THREE.Sound(scene.streamer.get_resource('res_sound_2').asset
 	,275,20,true
 	);
 	scene.addObject(sound_2);
