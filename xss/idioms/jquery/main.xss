@@ -30,6 +30,9 @@
     <xss:code>
         for(var i in application.children)
         {
+            if (!i.idiom)
+                continue;
+
             if (i.idiom.id != "jquery")
                 continue;
                 

@@ -73,6 +73,17 @@ namespace xkp
       virtual void handle(XSSObject obj, XSSModule module) = 0;
     };
 
+  //utils
+  struct dependency_list
+    {
+      XSSObjectList items;
+
+      void add(XSSObject dep);
+
+      private:
+        std::map<str, int> cache_;
+    };
+
   //classes
 	class xss_application_renderer : public xss_object
     {
@@ -227,6 +238,7 @@ namespace xkp
         str          build_project(const param_list params);
         str          get_result();
         void         render_app_types(const str& renderer);
+        void         type_dependencies(XSSType type, dependency_list& deps);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);

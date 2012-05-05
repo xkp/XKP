@@ -5,8 +5,9 @@
     <dependency href="actions.js"/>
 	<dependency href="pixastic-manager.js"/>	  
     <dependency href="pixastic-utils.js"/>
-	<types>
-		<class id="preset" output_id="pixastic.Preset"/>	
+
+    <types>
+		<class id="preset" output_id="pixastic.Preset" serializer="serializer.xss"/>	
 		<class id="preset_filter"/>
 		<class id="filter">
 			<property id="apply" type="bool" use_plain_value="true">

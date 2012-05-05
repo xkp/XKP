@@ -82,6 +82,18 @@ const str SDependencyNeedsHRef("class dependencies expect a 'href' tag");
 const str SBuildProjectExpectsProject("compiler.build expects project as first argument");
 const str SBuildProjectExpectsNamedParameters("compiler.build expects named arguments after project path");
 
+//dependency_list
+void dependency_list::add(XSSObject dep)
+  {
+    str href = dep->get<str>("href", str());
+    std::map<str, int>::iterator it = cache_.find(href);
+    if (it == cache_.end())
+      {
+        cache_.insert(std::pair<str, int>(href, items.size()));
+        items.push_back(dep);
+      }
+  }
+
 //xss_application_renderer
 xss_application_renderer::xss_application_renderer(fs::path entry_point, Language lang, XSSCompiler compiler):
   filename_(entry_point)
@@ -273,8 +285,6 @@ void xss_module::set_path(fs::path p)
 
 void xss_module::register_module_type(XSSType type)
   {
-    used();
-    
     type_list::iterator it = types_.find(type->id());
     if (it != types_.end())
 			{
@@ -1198,7 +1208,10 @@ str xss_compiler::idiom_path(XSSObject obj, const str& file)
     XSSContext             ctx = current_context();
     XSSApplicationRenderer app = ctx->resolve("#app");
 
-    XSSModule idiom = app->type_idiom(obj->type_name());  //instance_idiom(obj);
+    XSSModule idiom = obj->get<XSSModule>("idiom", XSSModule());
+    if (!idiom)
+      idiom = app->type_idiom(obj->type_name());  //instance_idiom(obj);
+    
     if (!idiom)
       {
         param_list error;
@@ -2143,7 +2156,10 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
 
             //and register
             if (!alias)
-              module->register_module_type(type);
+              {
+                module->register_module_type(type);
+                type->add_attribute("idiom", module);
+              }
 
             ctx->add_type(type_name, type);
 
@@ -2929,6 +2945,27 @@ void xss_compiler::add_dependency(const str& href, XSSObject obj, XSSObject idio
 
     dependencies_.insert(dependency_pair(href, deps_.size()));
     deps_.push_back(obj);
+  }
+
+void xss_compiler::type_dependencies(XSSType type, dependency_list& deps)
+  {
+    XSSModule idiom = type->get<XSSModule>("idiom", XSSModule());
+
+    if (idiom)
+      {
+        XSSObjectList::iterator it = idiom->dependencies_.begin();
+        XSSObjectList::iterator nd = idiom->dependencies_.end();
+
+        for(; it != nd; it++)
+            deps.add(*it);
+      }
+
+    XSSObjectList type_deps = type->get_dependencies();
+    XSSObjectList::iterator it = type_deps.begin();
+    XSSObjectList::iterator nd = type_deps.end();
+
+    for(; it != nd; it++)
+        deps.add(*it);
   }
 
 void xss_compiler::collect_dependencies(XSSType type, XSSType context)

@@ -10,15 +10,6 @@ const str SLanguage("html5 asynch");
 
 const str SAsynchObjectNotSerializable("Objects need to be serializable in order to enter threads");
 
-struct asynch_param_info
-  {
-    str     id;
-    str     value;
-    XSSType type;
-  };
-
-typedef std::vector<asynch_param_info> asynch_params;
-
 struct synch_code
   {
     str           id;
@@ -87,6 +78,42 @@ class dsl_h5_synch : public xss_dsl
   };
 
 //dsl_native
+str dsl_h5_asynch::decode_param(asynch_param_info& param, XSSCompiler compiler, XSSContext ctx)
+  {
+    std::ostringstream result;
+    XSSType ptype    = param.type;
+    if (ptype && !ptype->is_variant())
+      {
+        str serializer = ptype->get<str>("serializer", str());
+        if (serializer.empty())
+          {
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", SAsynchObjectNotSerializable);
+            error.add("type", ptype->id());
+            xss_throw(error);
+          }
+
+        fs::path path = compiler->type_path(ptype->id()) / serializer;
+        XSSRenderer rend = compiler->compile_xss_file(path, ctx);
+                    
+        param_list spl;
+        spl.add(ptype);
+        spl.add("instance_id", param.id);
+        spl.add("data", "message.data." + param.id);
+
+        str serial_str = rend->render(XSSObject(ptype), &spl);
+
+        result << "\nvar " << param.id << " = " << serial_str;
+      }
+    else
+      {
+        result << "\nvar " << param.id << " = message.data." << param.id << ";";
+      }
+
+    return result.str();
+  }
+
 str dsl_h5_asynch::render(dsl& info, XSSContext ctx)
   {
     XSSCompiler compiler = ctx->resolve("compiler");
@@ -103,25 +130,60 @@ str dsl_h5_asynch::render(dsl& info, XSSContext ctx)
     param_list_decl    params;
     std::ostringstream params_object;
     std::ostringstream params_decode;
+    std::ostringstream dependencies;
     param_decl         pdl; //td: !!! xss expressions already
+    dependency_list    deps;
     
-    params_object << "{";
-    for(size_t p = 0; p < info.params.size(); p++)
-      {
-        str        var_name  = info.params.get_name(p);
-        expression var_value = info.params.get(p);
-        str        var_str   = compiler->render_expr(var_value, ctx->get_this());  
+    asynch_params code_params;
+    process_asynch_params(compiler, info.params, code_params);
 
-        params_object << var_name << " : " << var_str << ",";
-        params_decode << "var " << var_name << " = message.data." << var_name << ";\n";
+    params_object << "{";
+   
+    asynch_params::iterator cpit = code_params.begin();
+    asynch_params::iterator cpnd = code_params.end();
+    for(; cpit != cpnd; cpit++)
+      {
+        params_object << cpit->id << " : " << cpit->value << ",";
+        params_decode << decode_param(*cpit, compiler, ctx);
 
         //keep the param
-        pdl.name = var_name;
-        //pdl.type; balh
+        pdl.name = cpit->id;
+
+        if (cpit->type)
+          {
+            compiler->type_dependencies(cpit->type, deps);
+            pdl.type = cpit->type->id();
+          }
+        
 
         params.push_back(pdl);
       }
     params_object << "}";
+
+    //importScript
+    XSSObjectList::iterator dit = deps.items.begin();
+    XSSObjectList::iterator dnd = deps.items.end();
+    for(; dit != dnd; dit++)
+      {
+        //make a copy, avoid future problems
+        XSSObject dep(new xss_object);
+        dep->copy(*dit);
+        XSSObject idiom = dep->get<XSSObject>("idiom", XSSObject());
+        if (idiom)
+          {
+            //td: !!! there is no need for this
+            size_t ev_id = idiom->event_id("compile_dependency");
+            if (ev_id > 0)
+              {
+                param_list pl;
+                pl.add(dep);
+                idiom->dispatch_event(ev_id, pl);
+              }
+          }
+
+        str href = dep->get<str>("href", str());
+        dependencies << "\nimportScripts(\"" << href << "\");";
+      }
 
     //shallow code compile
     std::vector<str> dl;
@@ -138,7 +200,8 @@ str dsl_h5_asynch::render(dsl& info, XSSContext ctx)
     
     //render the asynch code
     std::ostringstream code_str;
-    code_str << "self.onmessage = function(message) {\n" 
+    code_str << dependencies.str() << "\n"
+             << "self.onmessage = function(message) {\n" 
              << params_decode.str() << "\n"
              << code_renderer->render() << "\n"
              << "}";
@@ -164,45 +227,13 @@ str dsl_h5_asynch::render(dsl& info, XSSContext ctx)
             //declare variables for synch params
             param_list_decl synch_params;
 
-            asynch_params params;
-            process_asynch_params(compiler, info.params, params);
-
-            asynch_params::iterator pit = params.begin();
-            asynch_params::iterator pnd = params.end();
+            asynch_params::iterator pit = it->params.begin();
+            asynch_params::iterator pnd = it->params.end();
 
             for(; pit != pnd; pit++)
               {
                 str     var_name = pit->id;
-                XSSType ptype    = pit->type;
-                if (ptype && !ptype->is_variant())
-                  {
-                    str serializer = ptype->get<str>("serializer", str());
-                    if (serializer.empty())
-                      {
-                        param_list error;
-                        error.add("id", SLanguage);
-                        error.add("desc", SAsynchObjectNotSerializable);
-                        error.add("type", ptype->id());
-                        xss_throw(error);
-                      }
-
-                    str path = compiler->idiom_path(XSSObject(ptype), serializer);
-                    XSSRenderer rend = compiler->compile_xss_file(path, ctx);
-                    
-                    param_list spl;
-                    spl.add(ptype);
-                    spl.add("data", "message.data." + var_name);
-
-                    str serial_str = rend->render(XSSObject(ptype), &spl);
-
-                    result << "\nvar " << var_name << " = " << serial_str;
-
-                    
-                  }
-                else
-                  {
-                    result << "\nvar " << var_name << " = message.data." << var_name << ";";
-                  }
+                result << decode_param(*pit, compiler, ctx);
 
                 pdl.name = var_name;
                 pdl.type = pit->type? pit->type->id() : "var";
