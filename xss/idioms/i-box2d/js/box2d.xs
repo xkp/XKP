@@ -498,3 +498,12 @@ method render_instancing_spawner(it, path, id, type)
 		}
 	}
 }
+
+//javascript joint.xss delegates
+method render_create_joint(it, world, path, id)
+{
+}
+
+method render_instancing_joint(it, world, path, id)
+{
+}

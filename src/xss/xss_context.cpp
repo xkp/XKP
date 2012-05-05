@@ -1076,6 +1076,16 @@ void xss_object::set_type(XSSType type)
       }
   }
 
+XSSObject	xss_object::idiom()
+  {
+    return idiom_;
+  }
+
+void xss_object::set_idiom(XSSObject id)
+  {
+    idiom_ = id;
+  }
+
 //struct xss_object::query_info
 void xss_object::query_info::add_property(XSSProperty prop)
   {
@@ -1644,9 +1654,14 @@ void xss_type::register_instance(XSSObject obj)
 
 void xss_type::register_foreign_instance(XSSObject obj)
   {
-    XSSModule idiom = obj->get<XSSModule>("idiom", XSSModule());
-    if (idiom)
-      idiom->used();
+    XSSObject id = obj->idiom();
+    if (id)
+      { 
+        //td: crap
+        xss_module* idiom = dynamic_cast<xss_module*>(id.get());
+        if (idiom)
+          idiom->used();
+      }
 
     obj->set_parent(shared_from_this());
 

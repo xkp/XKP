@@ -168,7 +168,7 @@ str dsl_h5_asynch::render(dsl& info, XSSContext ctx)
         //make a copy, avoid future problems
         XSSObject dep(new xss_object);
         dep->copy(*dit);
-        XSSObject idiom = dep->get<XSSObject>("idiom", XSSObject());
+        XSSObject idiom = dep->idiom();
         if (idiom)
           {
             //td: !!! there is no need for this

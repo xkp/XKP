@@ -1,0 +1,31 @@
+<application name="jBox2d_4" title="[jBox2d] Simple test 4" src="box2d4.xs" width="320" height="420">
+    <physics_world id="myWorld"
+                   scale       = "30" 
+                   friction    = "0.5"
+                   density     = "1.0"
+                   restitution = "0.2"/>
+
+    <resources>
+        <image src="smile_sad_48.png"/>
+        <image src="smile_grin_48.png"/>
+		<image src="sound_on.png"/>
+        <image src="sound_off.png"/>
+        <image src="stone_12.jpg"/>
+        <image src="bomb.png"/>
+        <audio src="boom.wav"/>
+    </resources>
+	
+	<state_button id="sound" x="50" y="50" width="50" height="50" active="sound_on.png" inactive="sound_off.png"/>
+    <spawner id="sp1" x="300" y="100" auto_start="true" frequency="3" creator_class="bad_guy"/>
+    <good_guy id="hero" x="300" y="350"/>
+    <floor x="0" y="390" width="600" height="40"/>
+    <label id="game_over" x="220" y="200" visible="false" font="40pt Calibri" caption="GAME OVER"/>
+</application>
+
+<!--
+	** box2d differences
+		- application size, name, title and xs source file
+		//- spawner frequency and velocity is incremented
+		- remove image resources ubication (folder name "images", before filename of image)
+		- rename image resource "stone-12.jpg" to "stone_12.jpg" (by android identifier specification)
+-->

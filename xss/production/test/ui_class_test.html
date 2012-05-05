@@ -107,10 +107,10 @@ function start(resolution)
             this.x_pos = null;
             this.y_pos = null;
             this.img2 = null;
-        image = null;
-        image_set = function (value)
+        this.image = null;
+        this.image_set = function (value)
         {
-            image = value;
+            this.image = value;
             this.src(value);
         };
 	this.traslate = function() 

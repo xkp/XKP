@@ -15,7 +15,12 @@ import xkp.android.libs.Layout.XKPLayout;
 						import xkp.android.libs.Widget.XKPPackage.OnResourcePackageListener;
 						import org.jbox2d.common.Vec2;
 						import org.jbox2d.dynamics.BodyType;
-						import xkp.android.libs.JBox2d.*;
+						import org.jbox2d.collision.shapes.ShapeType;
+						import xkp.android.libs.JBox2d.XKPPhysicBody;
+						import xkp.android.libs.JBox2d.XKPJBox2d;
+						import xkp.android.libs.JBox2d.XKPDDView;
+						import xkp.android.libs.JBox2d.XKPDebugDraw;
+						import xkp.android.libs.JBox2d.XKPSpawner;
 		public class ActjBox2d_3 
 						extends Activity
 {
@@ -109,7 +114,7 @@ private void onLayoutStarted() {
 			layoutapplication.addView(ddView);
         myWorld = new XKPJBox2d();
 		myWorld.createWorld(new Vec2(0f, 10f), ddView.getDebugDraw());
-			XKPSpawner sp1 = new XKPSpawner(this, layoutapplication, "smiley_ball", 100, 100, 95);
+			XKPSpawner sp1 = new XKPSpawner( this, layoutapplication, "smiley_ball", 100, 100, 95 ); 
 				sp1.setPosition(100, sp1.getPosition().y);
 				sp1.setPosition(sp1.getPosition().x, 100);
 				sp1.setRotation(95);

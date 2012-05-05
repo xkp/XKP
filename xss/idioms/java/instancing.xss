@@ -5,13 +5,64 @@
 <xss:code>
 	if(instantiate)
 	{
-		string id = obj.output_id;
-		string type = obj.type.output_id;
+		string obj_id = obj.output_id;
+		string type_id = obj.type.output_id;
 		
 		out()
 		{
-			<xss:e value="type"/> <xss:e value="id"/> = <xss:e v="compiler.instantiate(obj)"/>;
+			<xss:e value="type_id"/> <xss:e value="obj_id"/> = new <xss:e v="type_id"/>( }
+		
+		var type = obj.type;
+		if (type.constructor_params)
+		{
+			int i = 0;
+			for(var p in type.constructor_params)
+			{
+				if(p.constant)
+				{
+					if(i > 0)
+						out() {, }
+					
+					out() {<xss:e v="p.constant"/>}
+					i++;
+				}
+				else if(p.default_value)
+				{
+					if(i > 0)
+						out() {, }
+					
+					out() {<xss:e v="p.default_value"/>}
+					i++;
+				}
+				else if(p.property)
+				{
+					var pp = obj.get_property(p.property);
+					if(pp.value != null)
+					{
+						if(i > 0)
+							out() {, }
+						
+						if(pp.use_plain_value)
+							out() {<xss:e v="pp.value"/>}
+						else
+							out() {<xss:e v="pp.render_value()"/>}
+						
+						i++;
+					}
+				}
+			}
 		}
+		
+		out() { ); }
+		
+		/*
+		//td: differenciation...
+		out()
+		{
+			<xss:e value="type_id"/> <xss:e value="obj_id"/> = <xss:e v="compiler.instantiate(obj)"/>;
+		}
+		*/
+		
 	}
 	
 	if(setproperties)

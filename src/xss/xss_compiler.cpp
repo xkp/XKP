@@ -337,7 +337,7 @@ void xss_module::register_instance(XSSObject obj)
     instances_->push_back(obj);
 
     XSSObject mod(shared_from_this());
-    dynamic_set(obj, "idiom", mod);
+    obj->set_idiom(mod);
   }
 
 bool xss_module::one_of_us(XSSObject obj)
@@ -1208,8 +1208,11 @@ str xss_compiler::idiom_path(XSSObject obj, const str& file)
     XSSContext             ctx = current_context();
     XSSApplicationRenderer app = ctx->resolve("#app");
 
-    XSSModule idiom = obj->get<XSSModule>("idiom", XSSModule());
-    if (!idiom)
+    XSSObject id = obj->idiom();
+    XSSModule idiom;
+    if (id)
+      idiom = app->get_idiom(id->id());  
+    else  
       idiom = app->type_idiom(obj->type_name());  //instance_idiom(obj);
     
     if (!idiom)
@@ -1315,7 +1318,7 @@ XSSObject xss_compiler::get_instance(const str& instance)
   {
     XSSContext ctx    = current_context();
     XSSObject  result = ctx->resolve(instance, XSSObject(), RESOLVE_INSTANCE);
-    return result; 
+    return result;
   }
 
 XSSType xss_compiler::type_of(variant v)
@@ -1695,7 +1698,7 @@ str xss_compiler::build_project(const param_list params)
   {
     str project_file = variant_cast<str>(params.get(0), str());
     if (project_file.empty())
-      { 
+      {
 				  param_list error;
 				  error.add("id", SCompiler);
 				  error.add("desc", SBuildProjectExpectsProject);
@@ -1709,7 +1712,7 @@ str xss_compiler::build_project(const param_list params)
       {
         str pn = params.get_name(i);
         if (pn.empty())
-          { 
+          {
 				      param_list error;
 				      error.add("id", SCompiler);
 				      error.add("desc", SBuildProjectExpectsNamedParameters);
@@ -1754,7 +1757,7 @@ DynamicArray xss_compiler::get_dependencies()
   {
     DynamicArray result(new dynamic_array);
 
-    XSSObjectList::iterator it = deps_.begin(); 
+    XSSObjectList::iterator it = deps_.begin();
     XSSObjectList::iterator nd = deps_.end();
 
     for(; it != nd; it++)
@@ -1769,13 +1772,13 @@ DynamicArray xss_compiler::idiom_dependencies(const str& idiom_id)
   {
     DynamicArray result(new dynamic_array);
 
-    XSSObjectList::iterator it = deps_.begin(); 
+    XSSObjectList::iterator it = deps_.begin();
     XSSObjectList::iterator nd = deps_.end();
 
     for(; it != nd; it++)
       {
         XSSObject dep   = *it;
-        XSSObject idiom = dep->get<XSSObject>("idiom", XSSObject());
+        XSSObject idiom = dep->idiom();
         if (idiom && idiom->id() == idiom_id)
           {
             bool shared = dep->get<bool>("shared", false);
@@ -1903,7 +1906,7 @@ void xss_compiler::read_application_types(std::vector<XSSObject>& applications, 
 
         //create the "project" object, mainly used to store outside parameters
         XSSObject project(new xss_object);
-        
+
         for(size_t ii = 0; ii < args.size(); ii++)
           {
             str     pn = args.get_name(ii);
@@ -2158,7 +2161,7 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
             if (!alias)
               {
                 module->register_module_type(type);
-                type->add_attribute("idiom", module);
+                type->set_idiom(XSSObject(module));
               }
 
             ctx->add_type(type_name, type);
@@ -2263,10 +2266,7 @@ void xss_compiler::preprocess_type(XSSType clazz, XSSObject def_class, const str
         virtual void handle(XSSObject obj, XSSModule mod)
           {
             if (mod->one_of_us(obj))
-              {
-                dynamic_set(obj, "idiom", mod);
-                dynamic_set(target, "idiom", mod);
-              }
+                obj->set_idiom(XSSObject(mod));
 
             if (root == obj)
               return; //do not register the class
@@ -2323,7 +2323,7 @@ void xss_compiler::render_app_types(const str& renderer)
         param_list pl;
         pl.add(renderer);
         pl.add(*it);
-        
+
         xss(pl);
       }
   }
@@ -2566,7 +2566,7 @@ void xss_compiler::read_application(const str& app_file)
         //read the application
         XSSContext ctx  = app_renderer->context();
         Language   lang = ctx->get_language();
-        
+
         //register standard dsls
         ctx->register_xss_dsl("native", XSSDSL(new dsl_native));
         lang->init_application_context(ctx);
@@ -2941,7 +2941,7 @@ void xss_compiler::compile_xs_file(fs::path file, xs_container& result, XSSConte
 
 void xss_compiler::add_dependency(const str& href, XSSObject obj, XSSObject idiom)
   {
-    obj->add_attribute("idiom", idiom);
+    obj->set_idiom(idiom);
 
     dependencies_.insert(dependency_pair(href, deps_.size()));
     deps_.push_back(obj);
@@ -2949,10 +2949,11 @@ void xss_compiler::add_dependency(const str& href, XSSObject obj, XSSObject idio
 
 void xss_compiler::type_dependencies(XSSType type, dependency_list& deps)
   {
-    XSSModule idiom = type->get<XSSModule>("idiom", XSSModule());
+    XSSObject id = type->idiom();
 
-    if (idiom)
+    if (id)
       {
+        XSSModule idiom = current_app_->get_idiom(id->id());
         XSSObjectList::iterator it = idiom->dependencies_.begin();
         XSSObjectList::iterator nd = idiom->dependencies_.end();
 
@@ -2996,7 +2997,7 @@ void xss_compiler::collect_dependencies(XSSType type, XSSType context)
         dependency_map::iterator it = dependencies_.find(href);
         if (it == dependencies_.end())
           {
-            XSSObject idiom = current_app_->type_idiom(type->id());
+            XSSObject idiom(current_app_->type_idiom(type->id()));
             add_dependency(href, obj, idiom);
           }
       }

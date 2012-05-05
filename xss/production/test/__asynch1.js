@@ -1,8 +1,8 @@
-importScripts("../js/resig.js");
-importScripts("../js/pixastic/pixastic.core.js");
-importScripts("../js/pixastic/actions.js");
-importScripts("../js/pixastic/pixastic-manager.js");
-importScripts("../js/pixastic/pixastic-utils.js");
+importScripts("resig.js");
+importScripts("pixastic.core.js");
+importScripts("actions.js");
+importScripts("pixastic-manager.js");
+importScripts("pixastic-utils.js");
 self.onmessage = function(message) {
 var mypreset = 
 new pixastic.Preset();

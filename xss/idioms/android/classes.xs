@@ -47,7 +47,7 @@ on render_types(app, bns)
 	
 		//TODO: think very well how to proceed with this
 		// set idiom to custom clazz with instances
-		ut.idiom = this;
+		//ut.idiom = this;
 		//compiler.log("type: " + ut.id);
 		for(var it in ut.instances)
 		{
@@ -125,9 +125,6 @@ method render_imports(clazz, bns)
 	{
 		//TRACE: log
 		//compiler.log("View: " + inst.id);
-		if(inst.no_script || inst.no_render)
-			continue;
-		
 		//find necessary imports without duplicates
 		if(inst.imports)
 		{

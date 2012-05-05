@@ -161,12 +161,10 @@ log: API Level = 7
 log: Rendering Types...
 log: Rendering Android Imports...
 log: Rendering Android Imports...
-log: Rendering instance: application
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: [jbox2d] Copying default files...
+Error [cannot-resolve] Unknown identifier
+	identifier = get_body_type
+	file = c:/dev/XKP/xss/samples/android/jbox2d_1/../../../idioms/i-box2d/android/../body.xssERROR: Project:  box2d1.project.xml
 
-Success are greateful
 ===[ box2d2.project.xml ]================
 
 
@@ -181,12 +179,10 @@ log: Copying resource files...
 log: Rendering instance: __resources1
 log: Rendering instance: __image1
 log: Rendering instance: __image2
-log: Rendering instance: application
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: [jbox2d] Copying default files...
+Error [cannot-resolve] Unknown identifier
+	identifier = get_body_type
+	file = c:/dev/XKP/xss/samples/android/jbox2d_2/../../../idioms/i-box2d/android/../body.xssERROR: Project:  box2d2.project.xml
 
-Success are greateful
 ===[ box2d3.project.xml ]================
 
 
@@ -194,24 +190,32 @@ log: Rendering Android project...
 log: API Level = 7
 log: Rendering Types...
 log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering class: smiley_ball
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: __img1
-log: Rendering instance: __img2
-log: Rendering instance: __img3
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: __image1
-log: Rendering instance: __image2
-log: Rendering instance: application
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: [jbox2d] Copying default files...
+Error [cannot-resolve] Unknown identifier
+	identifier = get_body_type
+	file = c:/dev/XKP/xss/samples/android/jbox2d_3/../../../idioms/i-box2d/android/../body.xssERROR: Project:  box2d3.project.xml
 
-Success are greateful
+===[ box2d4.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 7
+log: Rendering Types...
+log: Rendering Android Imports...
+Error [cannot-resolve] Unknown identifier
+	identifier = get_body_type
+	file = c:/dev/XKP/xss/samples/android/jbox2d_4/../../../idioms/i-box2d/android/../body.xssERROR: Project:  box2d4.project.xml
+
+===[ box2d5.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 7
+log: Rendering Types...
+log: Rendering Android Imports...
+Error [cannot-resolve] Unknown identifier
+	identifier = get_body_type
+	file = c:/dev/XKP/xss/samples/android/jbox2d_5/../../../idioms/i-box2d/android/../body.xssERROR: Project:  box2d5.project.xml
+
 ===[ kitchensink.project.xml ]================
 
 
@@ -380,6 +384,8 @@ log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
+log: prop_name: my_plane.image
+log: path: null
 log: Rendering UI...
 Success are greateful
 ===[ 3js_class_test_2.project.xml ]================(Tests)
@@ -389,6 +395,8 @@ log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
+log: prop_name: my_cylinder.hex
+log: path: null
 log: Rendering UI...
 Success are greateful
 ===[ 3js_cube.project.xml ]================(Tests)
@@ -411,6 +419,8 @@ Success are greateful
 log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering 3js Types...
+log: prop_name: my_sphere.mat
+log: path: null
 Success are greateful
 ===[ 3js_package.project.xml ]================(Tests)
 
@@ -525,6 +535,10 @@ log: social_button
 log: Instance renderer: ../sequence.xss instance: grow
 log: Instance renderer: ../sequence.xss instance: shrink
 log: Rendering 3js Types...
+log: prop_name: image_group.images
+log: path: null
+log: prop_name: image_group.destination
+log: path: null
 log: Rendering UI...
 Success are greateful
 ===[ g_anim.project.xml ]================(Tests)
@@ -537,6 +551,8 @@ log: Rendering UI Types...
 log: my_image
 log: Instance renderer: ../sequence.xss instance: img_pos
 log: Rendering 3js Types...
+log: prop_name: my_plane.image
+log: path: null
 log: Rendering UI...
 Success are greateful
 ===[ java1.project.xml ]================(Tests)
@@ -674,8 +690,7 @@ Success are greateful
 
 
 
-			JavaClass jar = new JavaClass(this, defaulting, "some_component");
-		
+			JavaClass jar = new JavaClass( this, defaulting, "some_component" ); 
 				jar.setX(10);
 			
 				jar.setY(10);
@@ -903,10 +918,64 @@ Success are greateful
 ===[ jquery6.project.xml ]================(Tests)
 
 
-Error [html5 asynch] Objects need to be serializable in order to enter threads
-	type = preset
-	file = c:/dev/XKP/xss/tests/../idioms/jquery/event.xssERROR: Project:  jquery6.project.xml
-
+log: NO LAYOUT
+log: preset_apply
+log: NO LAYOUT
+log: __label1
+log: __br1
+log: __br2
+log: brightness
+log: __br3
+log: __label2
+log: __br4
+log: __br5
+log: constrast
+log: NO LAYOUT
+log: __label3
+log: __br6
+log: __br7
+log: red
+log: __br8
+log: __label4
+log: __br9
+log: __br10
+log: blue
+log: __br11
+log: __label5
+log: __br12
+log: __br13
+log: green
+log: NO LAYOUT
+log: __label6
+log: __br14
+log: __br15
+log: hue
+log: __br16
+log: __label7
+log: __br17
+log: __br18
+log: saturation
+log: __br19
+log: __label8
+log: __br20
+log: __br21
+log: lightness
+log: NO LAYOUT
+log: __label9
+log: __br22
+log: __br23
+log: noise_amount
+log: __br24
+log: __label10
+log: __br25
+log: __br26
+log: noise_strength
+log: __br27
+log: __br28
+log: mono
+log: NO LAYOUT
+log: blur_apply
+Success are greateful
 ===[ jquery7.project.xml ]================(Tests)
 
 
@@ -965,6 +1034,10 @@ log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: social_button
 log: Rendering 3js Types...
+log: prop_name: planes_group.images
+log: path: null
+log: prop_name: planes_group.group_scale
+log: path: null
 log: Rendering UI...
 Success are greateful
 ===[ pixastic.project.xml ]================(Tests)
@@ -997,9 +1070,13 @@ log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: my_image
+log: prop_name: this.data_source
+log: path: this
 log: menu_item
 log: Instance renderer: component.xss instance: lbl_caption
 log: Instance renderer: component.xss instance: icon
+log: prop_name: this.data_source
+log: path: this
 log: Rendering UI...
 Success are greateful
 ===[ ui_audio.project.xml ]================(Tests)
@@ -1025,6 +1102,8 @@ log: on resources.render_initialization
 log: Rendering Resources...
 log: Rendering UI Types...
 log: my_image
+log: prop_name: this.image
+log: path: this
 log: Rendering UI...
 Success are greateful
 ===[ ui_kitchen_sink.project.xml ]================(Tests)
@@ -1180,6 +1259,8 @@ Success are greateful
 
 
 log: Rendering 3js Types...
+log: prop_name: my_sphere.mat
+log: path: null
 Success are greateful
 ===[ wgl_model.project.xml ]================(Tests)
 
@@ -1199,11 +1280,15 @@ Success are greateful
 
 
 log: Rendering 3js Types...
+log: prop_name: my_sphere.mat
+log: path: null
 Success are greateful
 ===[ wgl_refraction_cube.project.xml ]================(Tests)
 
 
 log: Rendering 3js Types...
+log: prop_name: my_sphere.mat
+log: path: null
 Success are greateful
 ===[ wgl_sound.project.xml ]================(Tests)
 
@@ -1431,8 +1516,8 @@ Success are greateful
 
 
 log: <Dependencies>
-log: /usr/lib/test_idiom
 log: /use/bin/xss14
+log: /usr/lib/test_idiom
 log: /use/bin/xss14_1
 log: </Dependencies>
 log: <User Classes>
@@ -1481,12 +1566,12 @@ log: </User Classes>
 
 
 
-        some_prop_get = function ()
+        this.some_prop_get = function ()
         {
             return 10;
         };
 
-        some_prop_set = function (value)
+        this.some_prop_set = function (value)
         {
             value++;
         };
@@ -1519,12 +1604,12 @@ log: </User Classes>
 
 
 
-        some_prop_get = function ()
+        this.some_prop_get = function ()
         {
             return 10;
         };
 
-        some_prop_set = function (value)
+        this.some_prop_set = function (value)
         {
             value++;
         };
@@ -1879,62 +1964,4 @@ return c;
 Success are greateful
 ===[ xssY.project.xml ]================(Tests)
 
-
-		Rendering User Types on xssY.idiom (1)...
-	
-			USER CLAZZ: my_class_1  IDIOM: xssY_idiom1
-			SUPER USER CLAZZ: c_xssY1_i1  IDIOM: 
-		
-		==[IDIOM 1]=====================
-		INSTANCE: clazz_1  
-		TYPE: c_xssY2_i1  
-		PARENT: my_class_1  
-		IDIOM: xssY_idiom1  
-	
-		==[IDIOM 2]=====================
-		INSTANCE: clazz_2  
-		TYPE: c_xssY1_i2  
-		PARENT: my_class_1  
-		IDIOM: xssY_idiom2  
-	
-		Rendering User Types on xssY.idiom (2)...
-	
-			USER CLAZZ: my_class_2  IDIOM: xssY_idiom2
-			SUPER USER CLAZZ: c_xssY1_i2  IDIOM: 
-		
-		==[IDIOM 1]=====================
-		INSTANCE: clazz_1  
-		TYPE: c_xssY1_i1  
-		PARENT: my_class_2  
-		IDIOM: xssY_idiom1  
-	
-		==[IDIOM 2]=====================
-		INSTANCE: clazz_2  
-		TYPE: c_xssY2_i2  
-		PARENT: my_class_2  
-		IDIOM: xssY_idiom2  
-	
-		Rendering Instances on xssY_idiom (1)
-	
-		==[IDIOM 1]=====================
-		INSTANCE: ci1  
-		TYPE: c_xssY1_i1  
-		PARENT: application  
-		IDIOM: xssY_idiom1  
-	
-		==[IDIOM 1]=====================
-		INSTANCE: clazzing  
-		TYPE: my_class_1  
-		PARENT: application  
-		IDIOM: xssY_idiom1  
-	
-		Rendering Instances on xssY_idiom (2)
-	
-		==[IDIOM 2]=====================
-		INSTANCE: ci2  
-		TYPE: c_xssY1_i2  
-		PARENT: application  
-		IDIOM: xssY_idiom2  
-	
-
-Success are greateful
+ERROR: Project:  xssY.project.xml

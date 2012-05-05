@@ -88,8 +88,10 @@ class xss_object : public editable_object<xss_object>,
       void set_type_name(const str& id);
       void set_parent(XSSObject parent);
 
-			virtual XSSType			   type();
-			virtual void           set_type(XSSType type);
+			virtual XSSType	  type();
+			virtual void      set_type(XSSType type);
+			virtual XSSObject	idiom();
+			virtual void      set_idiom(XSSObject id);
     public:
       struct query_info
         {
@@ -146,6 +148,7 @@ class xss_object : public editable_object<xss_object>,
 			DynamicArray	properties_;
 			DynamicArray	methods_;
 			DynamicArray	events_;
+			XSSObject     idiom_;
 	};
 
 class xss_type : public xss_object
@@ -483,6 +486,7 @@ struct xss_object_schema : editable_object_schema<T>
 				this->template property_<str>         ("class_name",	&T::type_name_);
         this->template property_<XSSType>     ("type",        &T::type,       &T::set_type);
 				this->template property_<XSSObject>   ("parent",      &T::parent_);
+        this->template property_<XSSObject>   ("idiom",       &T::idiom_);
 
         this->template method_<DynamicArray, 1>("query_properties", &T::query_properties);
         this->template method_<XSSProperty, 1> ("get_property",     &T::get_property);

@@ -78,7 +78,7 @@
                 else      compiler.error("Cannot find animatable property", prop = itm.property);
                 
                 //start the interpolator
-                idiom.begin_interpolator(prop, iid, assign, path);
+                myidiom.begin_interpolator(prop, iid, assign, path);
                         
                 //generate keys
                 array keys = itm.find_by_type("key");
@@ -115,21 +115,21 @@
                     if (key.value == null)
                         key.value = "null";
                         
-                    idiom.render_key(iid, key);
+                    myidiom.render_key(iid, key);
                     
                     idx++;
                 }
 
                 //close the interpolator 
-                idiom.close_interpolator(iid, seq_id);
+                myidiom.close_interpolator(iid, seq_id);
             }
             else if (itm.class_name == "run")
             {
                 string mid = compiler.genid('__r');
                 
-                idiom.begin_caller(mthd, mid, time);
+                myidiom.begin_caller(mthd, mid, time);
                 generate_run(itm, seq_id, seq);
-                idiom.close_caller(seq_id, mid);
+                myidiom.close_caller(seq_id, mid);
             }
         }
     }
@@ -211,9 +211,9 @@
         {
             var ev = analyze_expression(itm.trigger, seq, seq_id, rendering_instance);
             
-            idiom.begin_when_event(ev, seq_id);
+            myidiom.begin_when_event(ev, seq_id);
             generate_when_actions(itm.children, seq_id, seq);
-            idiom.close_when_event();
+            myidiom.close_when_event();
         }
         else
             compiler.error("When tag expects an 'expr' or 'trigger'");
@@ -226,7 +226,7 @@
     
         string aid = compiler.genid("__h");
         
-        idiom.begin_every(aid, itm.time);
+        myidiom.begin_every(aid, itm.time);
         
         for(var child in itm.children)
         {
@@ -236,7 +236,7 @@
                 compiler.error("'every' supports only 'run'");
         }
 
-        idiom.close_every(aid, seq_id);
+        myidiom.close_every(aid, seq_id);
     }
             
     method generate_item(itm, seq, seq_id, rendering_instance)
@@ -251,7 +251,7 @@
             generate_sequence(itm, nested_id, seq_id, true);
             
             string shid = compiler.genid('__sh');
-            idiom.register_nested_sequence(seq_id, nested_id, shid);
+            myidiom.register_nested_sequence(seq_id, nested_id, shid);
         }
         else
         {
@@ -337,7 +337,7 @@
         
         if (rendering_instance)
         {
-            idiom.render_instance(seq, seq_id, parent_id, path);
+            myidiom.render_instance(seq, seq_id, parent_id, path);
         }
         else
         {
@@ -361,7 +361,7 @@
         }
                 
         if (parent_id) 
-            idiom.notify_parented(seq_id, parent_id);
+            myidiom.notify_parented(seq_id, parent_id);
 
         //we'll let our children fill in on what the want done
         seq.conditions      = [];
@@ -374,19 +374,19 @@
 
         if (!seq.key_expressions.empty)
         {
-            idiom.begin_key_expressions(seq_id);
+            myidiom.begin_key_expressions(seq_id);
             
             for(var key_xpr in seq.key_expressions)
             {
-                idiom.render_key_expression(key_xpr);
+                myidiom.render_key_expression(key_xpr);
             }
             
-            idiom.close_key_expressions();
+            myidiom.close_key_expressions();
         }
 
         if (!seq.conditions.empty)
         {
-            idiom.begin_frame_conditions(seq_id);
+            myidiom.begin_frame_conditions(seq_id);
             
             //check the conditions described on the when clause
             int cond_idx = 0;
@@ -409,19 +409,15 @@
                 }
             }
             
-            idiom.close_frame_conditions();
+            myidiom.close_frame_conditions();
         }
     }
         
-    property idiom; //delegate 
+    property myidiom; //delegate 
     
     on render()
     {
-        idiom = seq.idiom;
-        if (!idiom)
-        {
-            compiler.log("Why no idiom? " + seq.output_id);
-        }
+        myidiom = seq.idiom;
         
         if (is_class)
         {

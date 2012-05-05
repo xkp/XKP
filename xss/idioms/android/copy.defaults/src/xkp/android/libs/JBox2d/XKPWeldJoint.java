@@ -13,6 +13,7 @@ public class XKPWeldJoint {
 	
 	private WeldJoint			mWeldJoint;
 	private WeldJointDef 		mWeldJointD;
+	private boolean mIsJointCreated = false;
 	
 	public XKPWeldJoint(World world) {
 		mRefWorld = world;
@@ -21,14 +22,19 @@ public class XKPWeldJoint {
 	
 	public void createJoint() {
 		mWeldJoint = (WeldJoint) mRefWorld.createJoint(mWeldJointD);
+		mIsJointCreated = true;
 	}
 	
 	public void setBodyA(XKPPhysicBody bodyA) {
 		mWeldJointD.bodyA = bodyA.getBody();
+		if(mIsJointCreated)
+			mWeldJoint.m_bodyA = bodyA.getBody();
 	}
 	
 	public void setBodyB(XKPPhysicBody bodyB) {
 		mWeldJointD.bodyB = bodyB.getBody();
+		if(mIsJointCreated)
+			mWeldJoint.m_bodyB = bodyB.getBody(); 
 	}
 
 	public void setRefAngle(float angle) {

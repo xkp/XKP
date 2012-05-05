@@ -1,0 +1,35 @@
+<xs>
+    <class id="bad_guy" super="img" src="smile_sad_48.png" width="60" height="60">
+        <physics body_type="dynamic" shape="circle" radius="21.5"/>
+
+        <spawner id="cannon" x="20" y="60" rotation="0" auto_start="true" frequency="1" creator_class="bullet" velocity="2"/>
+
+        <move_action id="move_around" auto_start="true"/>
+        <sequence id="fade_out">
+            <at time="0">
+                <animate property="target.alpha" from="100" to="0" in="3"/>
+            </at>
+        </sequence>
+    </class>
+
+    <class id="good_guy" super="img" src="smile_grin_48.png" width="30" height="30">
+        <physics body_type="dynamic" sensor="true" shape="circle" radius="21.5"/>
+        <move_action id="move_around" vx="0" vy="0" auto_start="true"/>
+    </class>
+
+    <class id="bullet" super="img" src="bomb.png" width="20" height="20">
+        <physics body_type="dynamic" shape="circle" radius="21.5"/>
+    </class>
+
+    <class id="floor" super="img" src="stone_12.jpg">
+        <physics body_type="static" shape="rect"/>
+    </class>
+</xs>
+
+<!--
+	** box2d differences
+		//- spawner frequency and velocity is incremented
+		- remove image resources ubication (folder name "images", before filename of image)
+		- rename image resource "stone-12.jpg" to "stone_12.jpg" (by android identifier specification)
+		- physics 'aradius' property is changed to 'radius'; i don't know what is this property 'aradius'
+-->
