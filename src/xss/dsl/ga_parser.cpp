@@ -226,40 +226,44 @@ bool ga_parser::parse(str text, std::vector<ga_item>& result)
 
 void ga_parser::parse_item(const str& text, ga_item& result)
   {
-    std::vector<str> params;
-    boost::split(params, text, boost::is_any_of("@"));
-          
-    //first one is plain text
-    result.params.push_back(str());
-    result.text.push_back(params[0]);
+    std::vector<str> items;
+    boost::split(items, text, boost::is_space());
 
-    //ignore it
-    params.erase(params.begin());
-
-    std::vector<str>::iterator it = params.begin();
-    std::vector<str>::iterator nd = params.end();
-    for(; it != nd; it++)
+    for(size_t idx = 0; idx < items.size(); idx++)
       {
-        str line = *it;
-        str::iterator pit = line.begin();
-        str::iterator pnd = line.end();
-              
-        bool found = false;
-        for(; pit != pnd; pit++)
+        str item = items[idx];
+
+        size_t token_pos = item.find_first_of("@");
+        while(token_pos != str::npos)
           {
-            if (!boost::is_alpha()(*pit) && !boost::is_digit()(*pit))
+            shell_param param;
+            param.item_idx = idx;
+            param.item_spot = token_pos;
+
+            bool found = false;
+            for(size_t it = token_pos + 1; it < item.size(); it++)
               {
-                result.params.push_back(str(line.begin(), pit));
-                result.text.push_back(str(pit, line.end()));
-                found = true;
-                break;
+                if (!boost::is_alpha()(item[it]) && !boost::is_digit()(item[it]))
+                  {
+                    size_t count = it - token_pos - 1;
+                    param.id = str(item, token_pos + 1, count);
+                    item.erase(token_pos, count + 1);
+                    found = true;
+                    break;
+                  }
               }
+
+            if (!found)
+              {
+                param.id = str(item, token_pos + 1);
+                item.erase(token_pos);
+              }
+
+            result.params.push_back(param);
+            
+            token_pos = item.find_first_of("@", token_pos);
           }
 
-        if (!found)
-          {
-            result.params.push_back(line);
-            result.text.push_back(str());
-          }
+        result.items.push_back(item);
       }
   }
