@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">[jBox2d] Simple test 5</string>
+					<string name="res0">The happy and sad smileys are connected. Will be?</string>
+					<string name="res1">Try to move any of them with the mouse</string>
+					<string name="res2">Some faces are happy because they are linked but can rotate freely...(distance joint)</string>
+					<string name="res3">Others are sad because they are glued together and have no free will...(weld joint)</string>
+					<string name="res4">The two cameras are connected with a pulley joint. Test it !!!</string>
+				</resources>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<xkp.android.libs.Layout.XKPLayout 
+				xmlns:android="http://schemas.android.com/apk/res/android" 
+				xmlns:xkp="http://schemas.android.com/apk/res/xkp.android.jBox2d_5" 
+				android:id="@+id/layoutapplication" 
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				xkp:placement="client"
+			>
+				<TextView android:id="@+id/__label1"
+				xkp:layout_x="200dp"
+				xkp:layout_y="75dp"
+				android:text="@string/res0"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</TextView>
+				<TextView android:id="@+id/__label2"
+				xkp:layout_x="200dp"
+				xkp:layout_y="95dp"
+				android:text="@string/res1"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</TextView>
+				<TextView android:id="@+id/__label3"
+				xkp:layout_x="50dp"
+				xkp:layout_y="135dp"
+				android:text="@string/res2"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</TextView>
+				<TextView android:id="@+id/__label4"
+				xkp:layout_x="50dp"
+				xkp:layout_y="155dp"
+				android:text="@string/res3"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</TextView>
+				<TextView android:id="@+id/__label5"
+				xkp:layout_x="50dp"
+				xkp:layout_y="175dp"
+				android:text="@string/res4"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</TextView>
+				<xkp.android.jBox2d_5.body_1 android:id="@+id/btn1"
+				xkp:pos_x1="200dp"
+				xkp:pos_y1="250dp"
+				xkp:pos_height="50dp"
+				xkp:src="@drawable/smile_grin_48"
+				xkp:pos_width="50dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</xkp.android.jBox2d_5.body_1>
+				<xkp.android.jBox2d_5.body_1 android:id="@+id/btn2"
+				xkp:pos_x1="100dp"
+				xkp:pos_y1="250dp"
+				xkp:pos_height="50dp"
+				xkp:src="@drawable/smile_grin_48"
+				xkp:pos_width="50dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</xkp.android.jBox2d_5.body_1>
+				<xkp.android.jBox2d_5.body_2 android:id="@+id/btn3"
+				xkp:pos_x1="400dp"
+				xkp:pos_y1="250dp"
+				xkp:pos_height="50dp"
+				xkp:src="@drawable/smile_sad_48"
+				xkp:pos_width="50dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</xkp.android.jBox2d_5.body_2>
+				<xkp.android.jBox2d_5.body_2 android:id="@+id/btn4"
+				xkp:pos_x1="300dp"
+				xkp:pos_y1="250dp"
+				xkp:pos_height="50dp"
+				xkp:src="@drawable/smile_sad_48"
+				xkp:pos_width="50dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</xkp.android.jBox2d_5.body_2>
+				<xkp.android.jBox2d_5.body_3 android:id="@+id/btn5"
+				xkp:pos_x1="15dp"
+				xkp:pos_y1="100dp"
+				xkp:pos_height="50dp"
+				xkp:src="@drawable/img1"
+				xkp:pos_width="50dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</xkp.android.jBox2d_5.body_3>
+				<xkp.android.jBox2d_5.body_3 android:id="@+id/btn6"
+				xkp:pos_x1="500dp"
+				xkp:pos_y1="500dp"
+				xkp:pos_height="50dp"
+				xkp:src="@drawable/img1"
+				xkp:pos_width="50dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</xkp.android.jBox2d_5.body_3>
+				<xkp.android.jBox2d_5.floor android:id="@+id/__floor1"
+				xkp:pos_x1="0dp"
+				xkp:pos_y1="590dp"
+				xkp:pos_width="600dp"
+				xkp:pos_height="10dp"
+				xkp:src="@drawable/stone_12"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</xkp.android.jBox2d_5.floor>
+				<xkp.android.jBox2d_5.floor android:id="@+id/__floor2"
+				xkp:pos_x1="0dp"
+				xkp:pos_y1="0dp"
+				xkp:pos_width="10dp"
+				xkp:pos_height="600dp"
+				xkp:src="@drawable/stone_12"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</xkp.android.jBox2d_5.floor>
+				<xkp.android.jBox2d_5.floor android:id="@+id/__floor3"
+				xkp:pos_x1="0dp"
+				xkp:pos_y1="0dp"
+				xkp:pos_width="600dp"
+				xkp:pos_height="10dp"
+				xkp:src="@drawable/stone_12"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</xkp.android.jBox2d_5.floor>
+				<xkp.android.jBox2d_5.floor android:id="@+id/__floor4"
+				xkp:pos_x1="590dp"
+				xkp:pos_y1="0dp"
+				xkp:pos_width="10dp"
+				xkp:pos_height="600dp"
+				xkp:src="@drawable/stone_12"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</xkp.android.jBox2d_5.floor>
+			</xkp.android.libs.Layout.XKPLayout>

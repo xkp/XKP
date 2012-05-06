@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+				<xkp.android.libs.Graphics.XKPImage android:id="@+id/layoutmy_body" 
+				xmlns:android="http://schemas.android.com/apk/res/android" 
+				xmlns:xkp="http://schemas.android.com/apk/res/xkp.android.jBox2d_5" 
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			>
+				</xkp.android.libs.Graphics.XKPImage>
