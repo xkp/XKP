@@ -78,6 +78,7 @@ struct shellworker : IWorker
                 error.add("exec", valuable_items[0]);
                 xss_throw(error);
               }
+
           }
       }
     private:
