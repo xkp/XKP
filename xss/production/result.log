@@ -161,10 +161,12 @@ log: API Level = 7
 log: Rendering Types...
 log: Rendering Android Imports...
 log: Rendering Android Imports...
-Error [cannot-resolve] Unknown identifier
-	identifier = get_body_type
-	file = c:/dev/XKP/xss/samples/android/jbox2d_1/../../../idioms/i-box2d/android/../body.xssERROR: Project:  box2d1.project.xml
+log: Rendering instance: application
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: [jbox2d] Copying default files...
 
+Success are greateful
 ===[ box2d2.project.xml ]================
 
 
@@ -179,10 +181,12 @@ log: Copying resource files...
 log: Rendering instance: __resources1
 log: Rendering instance: __image1
 log: Rendering instance: __image2
-Error [cannot-resolve] Unknown identifier
-	identifier = get_body_type
-	file = c:/dev/XKP/xss/samples/android/jbox2d_2/../../../idioms/i-box2d/android/../body.xssERROR: Project:  box2d2.project.xml
+log: Rendering instance: application
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: [jbox2d] Copying default files...
 
+Success are greateful
 ===[ box2d3.project.xml ]================
 
 
@@ -190,10 +194,23 @@ log: Rendering Android project...
 log: API Level = 7
 log: Rendering Types...
 log: Rendering Android Imports...
-Error [cannot-resolve] Unknown identifier
-	identifier = get_body_type
-	file = c:/dev/XKP/xss/samples/android/jbox2d_3/../../../idioms/i-box2d/android/../body.xssERROR: Project:  box2d3.project.xml
+log: Rendering class: smiley_ball
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: __img1
+log: Rendering instance: __img2
+log: Rendering instance: __img3
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: __image1
+log: Rendering instance: __image2
+log: Rendering instance: application
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: [jbox2d] Copying default files...
 
+Success are greateful
 ===[ box2d4.project.xml ]================
 
 
@@ -201,9 +218,10 @@ log: Rendering Android project...
 log: API Level = 7
 log: Rendering Types...
 log: Rendering Android Imports...
-Error [cannot-resolve] Unknown identifier
-	identifier = get_body_type
-	file = c:/dev/XKP/xss/samples/android/jbox2d_4/../../../idioms/i-box2d/android/../body.xssERROR: Project:  box2d4.project.xml
+Error [vm] Cannot resolve
+	object = jBox2d_4
+	property = id
+	file = d:/xkp/xss/samples/android/jbox2d_4/../../../idioms/ms/java/../../java/instance.xssERROR: Project:  box2d4.project.xml
 
 ===[ box2d5.project.xml ]================
 
@@ -212,10 +230,45 @@ log: Rendering Android project...
 log: API Level = 7
 log: Rendering Types...
 log: Rendering Android Imports...
-Error [cannot-resolve] Unknown identifier
-	identifier = get_body_type
-	file = c:/dev/XKP/xss/samples/android/jbox2d_5/../../../idioms/i-box2d/android/../body.xssERROR: Project:  box2d5.project.xml
+log: Rendering class: body_1
+log: Rendering Android Imports...
+log: Rendering class: body_2
+log: Rendering Android Imports...
+log: Rendering class: body_3
+log: Rendering Android Imports...
+log: Rendering class: floor
+log: Rendering Android Imports...
+log: Rendering class: my_body
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: __label1
+log: Rendering instance: __label2
+log: Rendering instance: __label3
+log: Rendering instance: __label4
+log: Rendering instance: __label5
+log: Rendering instance: btn1
+log: Rendering instance: btn2
+log: Rendering instance: btn3
+log: Rendering instance: btn4
+log: Rendering instance: btn5
+log: Rendering instance: btn6
+log: Rendering instance: __floor1
+log: Rendering instance: __floor2
+log: Rendering instance: __floor3
+log: Rendering instance: __floor4
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: __image1
+log: Rendering instance: __image2
+log: Rendering instance: __image3
+log: Rendering instance: __image4
+log: Rendering instance: application
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: [jbox2d] Copying default files...
 
+Success are greateful
 ===[ kitchensink.project.xml ]================
 
 
@@ -332,19 +385,19 @@ Success are greateful
 
 
 Error [404] File not found
-	file = c:/dev/XKP/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
+	file = d:/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
 
 ===[ pairs.project.xml ]================
 
 
 Error [404] File not found
-	file = c:/dev/XKP/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
+	file = d:/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
 
 ===[ simple.project.xml ]================
 
 
 Error [404] File not found
-	file = c:/dev/XKP/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
+	file = d:/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
 
 ===[ 3js-ms.project.xml ]================(Tests)
 
@@ -1060,9 +1113,23 @@ Success are greateful
 ===[ query_properties.project.xml ]================(Tests)
 
 
-Error [404] File not found
-	file = c:/dev/XKP/xss/tests/enums.app.xmlERROR: Project:  query_properties.project.xml
+log: Rendering test query_properties...
+			Instance: name = "t1", type = "t_arrays"
+		
+			Instance: name = "t2", type = "t_arrays1"
+		
+			Instance: name = "t3", type = "t_super_derived"
+		
+				property "title" = null			
+				property "name" = null			
+			Instance: name = "t4", type = "t_super_merged"
+		
+				property "test_2" = null			
+				property "test_1" = null			
+			Instance: name = "application", type = "Application"
+		
 
+Success are greateful
 ===[ replicator.project.xml ]================(Tests)
 
 
@@ -1230,7 +1297,7 @@ Success are greateful
 
 Error [language] Missing declared tag
 	tag = user_image
-	file = c:/dev/XKP/xss/tests/../idioms/wax/server.xssERROR: Project:  wax3.project.xml
+	file = d:/xkp/xss/tests/../idioms/wax/server.xssERROR: Project:  wax3.project.xml
 
 ===[ wax4.project.xml ]================(Tests)
 
@@ -1964,4 +2031,62 @@ return c;
 Success are greateful
 ===[ xssY.project.xml ]================(Tests)
 
-ERROR: Project:  xssY.project.xml
+
+		Rendering User Types on xssY.idiom (1)...
+	
+			USER CLAZZ: my_class_1  IDIOM: xssY_idiom1
+			SUPER USER CLAZZ: c_xssY1_i1  IDIOM: xssY_idiom1
+		
+		==[IDIOM 1]=====================
+		INSTANCE: clazz_1  
+		TYPE: c_xssY2_i1  
+		PARENT: my_class_1  
+		IDIOM: xssY_idiom1  
+	
+		==[IDIOM 2]=====================
+		INSTANCE: clazz_2  
+		TYPE: c_xssY1_i2  
+		PARENT: my_class_1  
+		IDIOM: xssY_idiom2  
+	
+		Rendering User Types on xssY.idiom (2)...
+	
+			USER CLAZZ: my_class_2  IDIOM: xssY_idiom2
+			SUPER USER CLAZZ: c_xssY1_i2  IDIOM: xssY_idiom2
+		
+		==[IDIOM 1]=====================
+		INSTANCE: clazz_1  
+		TYPE: c_xssY1_i1  
+		PARENT: my_class_2  
+		IDIOM: xssY_idiom1  
+	
+		==[IDIOM 2]=====================
+		INSTANCE: clazz_2  
+		TYPE: c_xssY2_i2  
+		PARENT: my_class_2  
+		IDIOM: xssY_idiom2  
+	
+		Rendering Instances on xssY_idiom (1)
+	
+		==[IDIOM 1]=====================
+		INSTANCE: ci1  
+		TYPE: c_xssY1_i1  
+		PARENT: application  
+		IDIOM: xssY_idiom1  
+	
+		==[IDIOM 1]=====================
+		INSTANCE: clazzing  
+		TYPE: my_class_1  
+		PARENT: application  
+		IDIOM: xssY_idiom1  
+	
+		Rendering Instances on xssY_idiom (2)
+	
+		==[IDIOM 2]=====================
+		INSTANCE: ci2  
+		TYPE: c_xssY1_i2  
+		PARENT: application  
+		IDIOM: xssY_idiom2  
+	
+
+Success are greateful

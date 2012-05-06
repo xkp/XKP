@@ -1,8 +1,8 @@
 <xss:code>
 	compiler.log("Rendering test query_properties...");
 	
-	enum_idiom.instances += application;
-	for(var i in enum_idiom.instances)
+	test_idiom.instances += application;
+	for(var i in test_idiom.instances)
 	{
 		string itype = "";
 		if(i.type)
