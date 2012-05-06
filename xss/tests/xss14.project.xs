@@ -1,1 +1,1 @@
-on finished(){    string file = js_path + "/source.xxx";    compiler.log(file);    shell()    {        javac.exe @file -a --message 'testing'    }}
+on finished(){    string file = js_path + "/source.xxx";    compiler.log(file);    shell()    {        result = javac.exe @file -a --message 'testing'    }}

@@ -217,6 +217,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\xss\dsl\ga_parser.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\xss\dsl\generic_assign.cpp"
 				>
 			</File>
@@ -254,6 +258,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\src\xs\linker.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\xss\dsl\native.cpp"
 				>
 			</File>
 			<File
@@ -343,11 +351,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\base.h"
+				RelativePath="..\..\..\include\xss\lang\base.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\xss\lang\base.h"
+				RelativePath="..\..\..\include\base.h"
 				>
 			</File>
 			<File
@@ -380,6 +388,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\xs\engine.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\xss\dsl\ga_parser.h"
 				>
 			</File>
 			<File
@@ -416,6 +428,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\xs\linker.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\xss\dsl\native.h"
 				>
 			</File>
 			<File

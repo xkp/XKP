@@ -6,11 +6,18 @@
 
 namespace xkp {
   
+  struct shell_param
+    {
+      size_t  item_idx;
+      size_t  item_spot;
+      str     id;
+    };
+
   struct ga_item
     {
-      str              variable;
-      std::vector<str> text;
-      std::vector<str> params;
+      str                       variable;
+      std::vector<str>          items;
+      std::vector<shell_param>  params;
     };
 
   struct ga_parser
