@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>Embedded canvas</title>
+            <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+            <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
+            <script type="text/javascript" src="../js/jquery-idiom.js"></script>
+            <link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css"></link>
+            <link rel="stylesheet" href="../css/supersized.css"></link>
+            <link rel="stylesheet" href="../css/supersized.shutter.css"></link>
+            <script type="text/javascript" src="../js/jquery.easing.min.js"></script>
+            <script type="text/javascript" src="../js/supersized.3.2.7.min.js"></script>
+            <script type="text/javascript" src="../js/supersized.shutter.min.js"></script>
+            <script type="text/javascript" src="../js/highcharts.js"></script>
+            <link rel="stylesheet" href="../css/ui.jqgrid.css"></link>
+            <script type="text/javascript" src="../js/grid.locale-en.js"></script>
+            <script type="text/javascript" src="../js/jquery.jqGrid.min.js"></script>
+            <link rel="stylesheet" href="../css/skitter.styles.css"></link>
+            <script type="text/javascript" src="../js/jquery.skitter.min.js"></script>
+            <script type="text/javascript" src="../js/jquery.animate-colors-min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+        var application = {};
+			var main = $("#main");
+			var myChart = $("#myChart");
+			var container = $("#container");
+			var myGrid = $("#myGrid");
+			var myGallery = $("#myGallery");
+            $.supersized({
+                slideshow: true,
+                autoplay: true,
+                slide_interval: 3000,
+                transition: 3,
+                fit_landscape: true,
+                slide_links: "blank",
+                thumb_links: true,
+                progress_bar: true,
+             slides: [ 
+{
+			    image : "images/kazvan-1.jpg",
+			    thumb : "images/thumbs/kazvan-1.jpg",
+			    title : "Image Credit: Maria Kazvan",
+			    url : "http://www.nonsensesociety.com/2011/04/maria-kazvan/",
+		    }
+, 
+{
+			    image : "images/kazvan-2.jpg",
+			    thumb : "images/thumbs/kazvan-2.jpg",
+			    title : "Image Credit: Maria Kazvan",
+			    url : "http://www.nonsensesociety.com/2011/04/maria-kazvan/",
+		    }
+, 
+{
+			    image : "images/kazvan-3.jpg",
+			    thumb : "images/thumbs/kazvan-3.jpg",
+			    title : "Image Credit: Maria Kazvan",
+			    url : "http://www.nonsensesociety.com/2011/04/maria-kazvan/",
+		    }
+, 
+{
+			    image : "images/wojno-1.jpg",
+			    thumb : "images/thumbs/wojno-1.jpg",
+			    title : "Image Credit: Colin Wojno",
+			    url : "http://www.nonsensesociety.com/2011/03/colin/",
+		    }
+, 
+{
+			    image : "images/wojno-2.jpg",
+			    thumb : "images/thumbs/wojno-2.jpg",
+			    title : "Image Credit: Colin Wojno",
+			    url : "http://www.nonsensesociety.com/2011/03/colin/",
+		    }
+, 
+{
+			    image : "images/wojno-3.jpg",
+			    thumb : "images/thumbs/wojno-3.jpg",
+			    title : "Image Credit: Colin Wojno",
+			    url : "http://www.nonsensesociety.com/2011/03/colin/",
+		    }
+, 
+{
+			    image : "images/shaden-1.jpg",
+			    thumb : "images/thumbs/shaden-1.jpg",
+			    title : "Image Credit: Brooke Shaden",
+			    url : "http://www.nonsensesociety.com/2011/06/brooke-shaden/",
+		    }
+, 
+{
+			    image : "images/shaden-2.jpg",
+			    thumb : "images/thumbs/shaden-2.jpg",
+			    title : "Image Credit: Brooke Shaden",
+			    url : "http://www.nonsensesociety.com/2011/06/brooke-shaden/",
+		    }
+, 
+{
+			    image : "images/shaden-2.jpg",
+			    thumb : "images/thumbs/shaden-2.jpg",
+			    title : "Image Credit: Brooke Shaden",
+			    url : "http://www.nonsensesociety.com/2011/06/brooke-shaden/",
+		    }
+,  ], });
+myChart.ChartObject = new Highcharts.Chart({
+        chart: {
+            renderTo: 'myChart',
+			    type : "bar",
+},
+ series: [ 
+{
+			    name : "Series1",
+		    }
+,  ], 
+});
+            myGrid.jqGrid({
+         colModel: [ 
+{
+			    index : "id",
+			    name : "id",
+			    sorttype : "int",
+			    width : 60,
+		    }
+, 
+{
+			    index : "invdate",
+			    name : "invdate",
+			    sorttype : "date",
+			    width : 90,
+		    }
+, 
+{
+			    index : "name",
+			    name : "name",
+			    width : 100,
+		    }
+, 
+{
+			    align : "right",
+			    index : "amount",
+			    name : "amount",
+			    sorttype : "float",
+			    width : 80,
+		    }
+, 
+{
+			    align : "right",
+			    index : "tax",
+			    name : "tax",
+			    sorttype : "float",
+			    width : 80,
+		    }
+, 
+{
+			    align : "right",
+			    index : "total",
+			    name : "total",
+			    sorttype : "float",
+			    width : 80,
+		    }
+, 
+{
+			    index : "note",
+			    name : "note",
+			    sortable : false,
+			    width : 150,
+		    }
+,  ], 
+                datatype: 'local',
+            });
+            myGallery.skitter({
+        });
+		application.init = function() { 
+			var series1 = myChart.ChartObject.series[0];
+series1.setData([10, 20, 0, 50, 3, -100]);
+myChart.ChartObject.addSeries({name : "Series2",data : [0, 10, 50, 20, 3, -10]});
+JQUGrid.set_data(myGrid, [{id : "1",invdate : "2007-10-01",name : "test",note : "note",amount : "200.00",tax : "10.00",total : "210.00"}, {id : "2",invdate : "2007-10-02",name : "test2",note : "note2",amount : "300.00",tax : "20.00",total : "320.00"}, {id : "3",invdate : "2007-09-01",name : "test3",note : "note3",amount : "400.00",tax : "30.00",total : "430.00"}, {id : "4",invdate : "2007-10-04",name : "test",note : "note",amount : "200.00",tax : "10.00",total : "210.00"}, {id : "5",invdate : "2007-10-05",name : "test2",note : "note2",amount : "300.00",tax : "20.00",total : "320.00"}, {id : "6",invdate : "2007-09-06",name : "test3",note : "note3",amount : "400.00",tax : "30.00",total : "430.00"}, {id : "7",invdate : "2007-10-04",name : "test",note : "note",amount : "200.00",tax : "10.00",total : "210.00"}, {id : "8",invdate : "2007-10-03",name : "test2",note : "note2",amount : "300.00",tax : "20.00",total : "320.00"}, {id : "9",invdate : "2007-09-01",name : "test3",note : "note3",amount : "400.00",tax : "30.00",total : "430.00"}]);
+		}
+                    if (application.init)
+                        application.init();
+                		});
+	</script>
+	<style>
+#main {position : relative}
+#myChart {left : 100px;top : 100px;width : 500px;height : 350px;position : absolute}
+#container {left : 100px;top : 500px;width : 500px;height : 350px;position : absolute}
+#myGallery {left : 700px;top : 100px;width : 500px;height : 350px;position : absolute}
+    </style>
+</head>
+<body>
+<div id="main">
+<div id="myChart">
+</div>
+<div id="container">
+				<table id="myGrid"
+			>
+				</table>
+</div>
+<div id="myGallery" class="box_skitter">
+		<ul>
+                <li>
+                    <a href="#cubeRandom"><img src="images/002.jpg" class="cubeRandom" /></a>
+                    <div class="label_text">
+                        <p>cubeRandom</p>
+                    </div>
+                </li>
+                <li>
+                    <a href="#block"><img src="images/003.jpg" class="block" /></a>
+                    <div class="label_text">
+                        <p>block</p>
+                    </div>
+                </li>
+                <li>
+                    <a href="#cubeStop"><img src="images/004.jpg" class="cubeStop" /></a>
+                    <div class="label_text">
+                        <p>cubeStop</p>
+                    </div>
+                </li>
+                <li>
+                    <a href="#cubeHide"><img src="images/005.jpg" class="cubeHide" /></a>
+                    <div class="label_text">
+                        <p>cubeHide</p>
+                    </div>
+                </li>
+		</ul>
+	</div>
+</div>
+</body>
+</html>

@@ -2,7 +2,7 @@
      <dependency href="jquery-1.7.1.min.js"/>
      <dependency href="jquery-ui-1.8.18.custom.min.js"/>
      <dependency href="jquery-idiom.js"/>
-     <dependency href="jquery-ui-1.8.18.custom.css" stylesheet="true"/>
+     <dependency href="ui-lightness/jquery-ui-1.8.18.custom.css" stylesheet="true"/>
 
      <types>
 		<class id="component">
@@ -602,5 +602,239 @@
         </class>
         
         <class id="canvas" super="component" tag="canvas" js_renderer="canvas.js.xss"/>
-    </types>
+
+        <class id="supersized" js_renderer="../jquery-object.xss" html_renderer="../bypass.xss" caller="$">
+            <dependency stylesheet="true" href="supersized.css"/>
+            <dependency stylesheet="true" href="supersized.shutter.css"/>
+            <dependency href="jquery.easing.min.js"/>
+            <dependency href="supersized.3.2.7.min.js"/>
+            <dependency href="supersized.shutter.min.js"/>
+
+            <property id="slideshow" type="bool" dont_init="true" render_as="script"/>
+            <property id="autoplay" type="bool" dont_init="true" render_as="script"/>
+            <property id="start_slide" type="int" dont_init="true" render_as="script"/>
+            <property id="stop_loop" type="bool" dont_init="true" render_as="script"/>
+            <property id="random" type="bool" dont_init="true" render_as="script"/>
+            <property id="slide_interval" type="int" dont_init="true" render_as="script"/>
+            <property id="transition" type="int" dont_init="true" render_as="script"/>
+            <property id="transition_speed" type="int" dont_init="true" render_as="script"/>
+            <property id="new_window" type="bool" dont_init="true" render_as="script"/>
+            <property id="pause_hover" type="bool" dont_init="true" render_as="script"/>
+            <property id="keyboard_nav" type="bool" dont_init="true" render_as="script"/>
+            <property id="performance" type="int" dont_init="true" render_as="script"/>
+            <property id="image_protect" type="bool" dont_init="true" render_as="script"/>
+            <property id="image_protect" type="bool" dont_init="true" render_as="script"/>
+            <property id="min_width" type="int" dont_init="true" render_as="script"/>
+            <property id="min_height" type="int" dont_init="true" render_as="script"/>
+            <property id="vertical_center" type="bool" dont_init="true" render_as="script"/>
+            <property id="horizontal_center" type="bool" dont_init="true" render_as="script"/>
+            <property id="fit_always" type="bool" dont_init="true" render_as="script"/>
+            <property id="fit_portrait" type="bool" dont_init="true" render_as="script"/>
+            <property id="fit_landscape" type="bool" dont_init="true" render_as="script"/>
+            <property id="slide_links" type="var" dont_init="true" render_as="script"/>
+            <property id="thumb_links" type="bool" dont_init="true" render_as="script"/>
+            <property id="thumbnail_navigation" type="bool" dont_init="true" render_as="script"/>
+            <property id="slides" type="array" dont_init="true" render_as="script"/>
+            <property id="progress_bar" type="bool" dont_init="true" render_as="script"/>
+            <property id="mouse_scrub" type="bool" dont_init="true" render_as="script"/>
+        </class>
+         
+        <class id="highchart" super="component" js_renderer="highchart.xss" html_renderer="div.html.xss">
+            <dependency href="highcharts.js"/>
+
+            <property id="chart" type="object" dont_init="true">
+                <get text='ChartObject.chart'/>
+                <set text='ChartObject.chart = {value}'/>
+            </property>
+            <property id="colors" type="array" dont_init="true" render_as="script">
+                <get text='ChartObject.colors'/>
+                <set text='ChartObject.colors = {value}'/>
+            </property>
+            <property id="credits" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.credits'/>
+                <set text='ChartObject.credits = {value}'/>
+            </property>
+            <property id="labels" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.labels'/>
+                <set text='ChartObject.labels = {value}'/>
+            </property>
+            <property id="legend" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.legend'/>
+                <set text='ChartObject.legend = {value}'/>
+            </property>
+            <property id="loading" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.loading'/>
+                <set text='ChartObject.loading = {value}'/>
+            </property>
+            <property id="plotOptions" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.plotOptions'/>
+                <set text='ChartObject.plotOptions = {value}'/>
+            </property>
+            <property id="point" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.plotOptions'/>
+                <set text='ChartObject.plotOptions = {value}'/>
+            </property>
+            <property id="series" type="array" dont_init="true" render_as="script">
+                <get text='ChartObject.series'/>
+                <set text='ChartObject.series = {value}'/>
+            </property>
+            <property id="subtitle" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.subtitle'/>
+                <set text='ChartObject.subtitle = {value}'/>
+            </property>
+            <property id="symbols" type="array" dont_init="true" render_as="script">
+                <get text='ChartObject.symbols'/>
+                <set text='ChartObject.symbols = {value}'/>
+            </property>
+            <property id="title" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.title'/>
+                <set text='ChartObject.title = {value}'/>
+            </property>
+            <property id="tooltip" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.tooltip'/>
+                <set text='ChartObject.tooltip = {value}'/>
+            </property>
+            <property id="xAxis" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.xAxis'/>
+                <set text='ChartObject.xAxis = {value}'/>
+            </property>
+            <property id="yAxis" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.yAxis'/>
+                <set text='ChartObject.yAxis = {value}'/>
+            </property>
+            <property id="exporting" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.exporting'/>
+                <set text='ChartObject.exporting = {value}'/>
+            </property>
+            <property id="navigation" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.navigation'/>
+                <set text='ChartObject.navigation = {value}'/>
+            </property>
+        </class>
+        
+        <class id="jqGrid" super="component" js_renderer="jqGrid.js.xss" tag="table" >
+            <dependency stylesheet="true" href="ui.jqgrid.css"/>
+            <dependency href="grid.locale-en.js"/>
+            <dependency href="jquery.jqGrid.min.js"/>
+
+            <property id="caption" type="string" dont_init="true" render_as="script">
+                <get text="jqGrid('getGridParam', 'caption')"/>
+                <set text="jqGrid('setCaption',{value})"/>
+            </property>
+
+            <property id="columns" output_id="colModel" type="array" dont_init="true" render_as="script">
+                <get text="jqGrid('getGridParam', 'colModel')"/>
+                <set text="jqGrid('setGridParam', 'colModel', {value})"/>
+            </property>
+
+            <property id="data_source" type="array" dont_init="true">
+                <set text='JQUGrid.set_data({path}, {value})' global='true'/>
+            </property>
+        </class>
+         
+        <class id="skitter" super="component" js_renderer="../jquery-object.xss" html_renderer="skitter.html.xss" >
+            <dependency stylesheet="true" href="skitter.styles.css"/>
+            <dependency href="jquery.skitter.min.js"/>
+            <dependency href="jquery.easing.min.js"/>
+            <dependency href="jquery.animate-colors-min.js"/>
+
+            <property id="images" type="array" dont_init="true"/>
+            
+            <property id="animateNumberActive" type="object" dont_init="true" render_as="script"/>
+            <property id="animateNumberOut" type="object" dont_init="true" render_as="script"/>
+            <property id="animateNumberOver" type="object" dont_init="true" render_as="script"/>
+            
+            <property id="animation" type="string" dont_init="true" render_as="script">
+                <set text="skitter({animation: {value}})"/>
+            </property>
+            
+            <property id="auto_play" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({auto_play: {value}})"/>
+            </property>
+            
+            <property id="controls" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({controls: {value}})"/>
+            </property>
+            
+            <property id="controls_position" type="string" dont_init="true" render_as="script">
+                <set text="skitter({controls_position: {value}})"/>
+            </property>
+
+            <property id="dots" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({dots: {value}})"/>
+            </property>
+
+            <property id="easing_default" type="string" dont_init="true" render_as="script">
+                <set text="skitter({easing_default: {value}})"/>
+            </property>
+
+            <property id="enable_navigation_keys" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({enable_navigation_keys: {value}})"/>
+            </property>
+            
+            <property id="focus" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({focus: {value}})"/>
+            </property>
+
+            <property id="focus_position" type="string" dont_init="true" render_as="script">
+                <set text="skitter({focus_position: {value}})"/>
+            </property>
+
+            <property id="fullscreen" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({fullscreen: {value}})"/>
+            </property>
+
+            <property id="hideTools" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({hideTools: {value}})"/>
+            </property>
+
+            <property id="interval" type="int" dont_init="true" render_as="script">
+                <set text="skitter({interval: {value}})"/>
+            </property>
+
+            <property id="label" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({label: {value}})"/>
+            </property>
+
+            <property id="navigation" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({navigation: {value}})"/>
+            </property>
+
+            <property id="numbers" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({numbers: {value}})"/>
+            </property>
+
+            <property id="numbers_align" type="string" dont_init="true" render_as="script">
+                <set text="skitter({numbers_align: {value}})"/>
+            </property>
+
+            <property id="preview" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({preview: {value}})"/>
+            </property>
+
+            <property id="show_randomly" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({show_randomly: {value}})"/>
+            </property>
+
+            <property id="stop_over" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({show_randomly: {value}})"/>
+            </property>
+            
+            <property id="thumbs" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({thumbs: {value}})"/>
+            </property>
+
+            <property id="velocity" type="float" dont_init="true" render_as="script">
+                <set text="skitter({velocity: {value}})"/>
+            </property>
+
+            <property id="width_label" type="string" dont_init="true" render_as="script">
+                <set text="skitter({width_label: {value}})"/>
+            </property>
+
+            <property id="with_animations" type="array" dont_init="true" render_as="script">
+                <set text="skitter({width_label: {value}})"/>
+            </property>
+        </class>
+     </types>
 </module>

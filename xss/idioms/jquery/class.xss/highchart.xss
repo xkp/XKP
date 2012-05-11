@@ -1,0 +1,18 @@
+<xss:parameter id="it"/>
+
+<xss:e v="it.id"/>.ChartObject = new Highcharts.Chart({
+<xss:code>
+    //render chart properties    
+    out()
+    {
+        chart: <xss:open_brace/>
+            renderTo: '<xss:e v="it.id"/>',
+    }
+    
+    var p = it.get_property("chart");
+    if (p.value)
+        compiler.xss("../../common-js/raw-object.xss", p.value, no_braces = true);
+    compiler.out("},");
+    
+    compiler.xss("../jquery-object.xss", it, just_content = true);
+</xss:code>});

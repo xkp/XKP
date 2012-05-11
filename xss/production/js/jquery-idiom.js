@@ -14,3 +14,12 @@ var JQUComponent =
         return inst.is(":visible");
     },
 }
+
+var JQUGrid = 
+{
+    set_data : function(grid, data)
+    {
+        for(var i = 0; i <= data.length; i++)
+	        grid.jqGrid('addRowData',i + 1, data[i]);    
+    },
+}

@@ -1,9 +1,6 @@
 
 on pre_process(obj)
 {
-	if(obj.id == "")
-		obj.id = compiler.genid(obj.class_name);
-
     //isolate css for easier handling
     var css = object();
     for(var prop in obj.properties)
@@ -35,7 +32,7 @@ on compile_dependency(dep)
 
     var css_path = project.css_path;
     if (!css_path)
-        css_path = "../css/ui-lightness";
+        css_path = "../css";
 
     if (dep.stylesheet)
         dep.href = css_path + '/' + dep.href;
@@ -50,11 +47,12 @@ on render_instances()
         var application = {};
     }
 
-    compiler.xss("../common-js/instance.xss", application, event_renderer = "../jquery/app-event.xss");
-    	
 	//first one, generate all instances declarations
 	for(var ri in instances)
 	{
+        if (ri.id == "")
+            continue;
+
 		string jq_object = '$("#' + ri.id + '")';
 		
 		string jq_classname = "";
@@ -80,6 +78,9 @@ on render_instances()
             compiler.xss(fname, it = i);
         }
     }
+
+    //finally the application
+    compiler.xss("../common-js/instance.xss", application, event_renderer = "../jquery/app-event.xss");
 }
 
 on render_css()

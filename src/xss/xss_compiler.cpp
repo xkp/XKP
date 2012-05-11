@@ -1353,6 +1353,27 @@ str xss_compiler::property_get(XSSProperty prop, const str& path)
     return lang->property_get(prop, path, ctx);
   }
 
+str xss_compiler::render_value(variant value)
+  {
+    if (value.empty())
+      return "null"; //td: somehow the language must resolve this
+
+    IRenderer* renderer = variant_cast<IRenderer*>(value, null);
+    if (renderer)
+      {
+        str result = renderer->render();
+        return result;
+      }
+
+    if (value.is<str>())
+      {
+        str result = variant_cast<str>(value, str());
+        return '"' + result + '"';
+      }
+
+    return xss_utils::var_to_string(value);
+  }
+
 XSSObject xss_compiler::analyze_expression(const param_list params)
   {
     //get expression
@@ -2997,8 +3018,9 @@ void xss_compiler::collect_dependencies(XSSType type, XSSType context)
         dependency_map::iterator it = dependencies_.find(href);
         if (it == dependencies_.end())
           {
-            XSSObject idiom(current_app_->type_idiom(type->id()));
-            add_dependency(href, obj, idiom);
+            XSSModule idiom = current_app_->type_idiom(type->id());
+            idiom->used();
+            add_dependency(href, obj, XSSObject(idiom));
           }
       }
   }

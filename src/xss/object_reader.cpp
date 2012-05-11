@@ -232,16 +232,39 @@ XSSObject xss_object_reader::read_xml_object(TiXmlElement* node, XSSObject paren
             bool handled = false;
             if (result_type)
               {
+                if (str(child_node->Value()) == "images")
+                  {
+                    str debug("XXX");
+                  }
+
                 XSSProperty type_prop = result_type->get_property(child_node->Value());
                 if (type_prop)
                   {
                     handled = true;
-                    XSSObject child = read_xml_object(child_node, result, true, type_prop->type());
-                    
                     XSSProperty new_prop(new xss_property);
                     new_prop->copy(XSSObject(type_prop));
-                    new_prop->value_ = child;
 
+                    //account for arrays
+                    XSSType type_prop_type = type_prop->type();
+                    if (type_prop_type && type_prop_type->is_array())
+                      {
+                        XSSObjectList obj_array_of_obj = read_xml_array(child_node);
+                        XSSObjectList::iterator oaooit = obj_array_of_obj.begin();
+                        XSSObjectList::iterator oaoond = obj_array_of_obj.end();
+                        DynamicArray value_of_the_thing(new dynamic_array);
+                        for(; oaooit != oaoond; oaooit++)
+                          {
+                            value_of_the_thing->push_back(*oaooit);
+                          }
+                           
+                        new_prop->value_ = value_of_the_thing;
+                      }
+                    else
+                      {
+                        XSSObject child = read_xml_object(child_node, result, true, type_prop->type());
+                        new_prop->value_ = child;
+                      }
+                    
                     result->properties()->push_back(new_prop);
                   }
               }
@@ -511,13 +534,37 @@ bool xss_object_reader::read_xml_array(TiXmlElement* node, const str& type, XSSO
 
     str           id(idd);
     DynamicArray  my_result(new dynamic_array);
-    XSSObjectList aa = read_xml_array(node);
+    XSSType tt = ctx_->get_type(type);
+    if (!tt || tt->is_object())
+      {
+        XSSObjectList aa = read_xml_array(node);
+        XSSObjectList::iterator it = aa.begin();
+        XSSObjectList::iterator nd = aa.end();
 
-    XSSObjectList::iterator it = aa.begin();
-    XSSObjectList::iterator nd = aa.end();
+        for(; it != nd; it++)
+          my_result->push_back(*it);
+      }
+    else
+      {
+        //native data
+        TiXmlElement* child = node->FirstChildElement();
+        while(child)
+          {
+            const TiXmlAttribute* attr = child->FirstAttribute();
+            while(attr)
+              {
+                str attr_name = attr->Name();
+                if (attr_name == "value")
+                  {
+                    my_result->push_back(xml_attribute_value(attr));
+                    break;
+                  }
 
-    for(; it != nd; it++)
-      my_result->push_back(*it);
+	              attr = attr->Next();
+              }
+            child = child->NextSiblingElement();
+          }
+      }
 
     parent->add_attribute(id, my_result);
     return true;

@@ -239,6 +239,7 @@ namespace xkp
         str          get_result();
         void         render_app_types(const str& renderer);
         void         type_dependencies(XSSType type, dependency_list& deps);
+        str          render_value(variant value);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -372,6 +373,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<DynamicArray, 0>("get_dependencies",   &xss_compiler::get_dependencies);
         method_<DynamicArray, 1>("idiom_dependencies", &xss_compiler::idiom_dependencies);
         method_<void,         1>("render_app_types",   &xss_compiler::render_app_types);
+        method_<str,          1>("render_value",       &xss_compiler::render_value);
       }
   };
 

@@ -23,7 +23,8 @@
 	</script>
 
 	<style>
-	</style>
+        <xss:marker id="css"/>
+    </style>
 </head>
 
 <body>

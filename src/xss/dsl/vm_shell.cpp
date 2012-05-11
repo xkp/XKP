@@ -57,16 +57,16 @@ struct shellworker : IWorker
             //finally, execute the application
             try
               {
-                std::string exe = bp::find_executable_in_path(valuable_items[0]);
-                std::vector<std::string> args;
+                //std::string exe = bp::find_executable_in_path(valuable_items[0]);
+                //std::vector<std::string> args;
 
-                std::vector<str>::iterator vit = valuable_items.begin();
-                std::vector<str>::iterator vnd = valuable_items.end();
-                for(; vit != vnd; vit++)
-                  args.push_back(*vit);
+                //std::vector<str>::iterator vit = valuable_items.begin();
+                //std::vector<str>::iterator vnd = valuable_items.end();
+                //for(; vit != vnd; vit++)
+                //  args.push_back(*vit);
 
-                bp::child c = bp::launch(exe, args, bp::context());
-                const bp::status s = c.wait();
+                //bp::child c = bp::launch(exe, args, bp::context());
+                //const bp::status s = c.wait();
 
                 //td: recover the result of execution and save into variable, how to?
               }

@@ -1,0 +1,8 @@
+<xss:parameter id="it"/>
+
+<xss:code>
+for(var cmp in it.children)
+{
+    compiler.xss("component.xss", cmp);
+}
+</xss:code>

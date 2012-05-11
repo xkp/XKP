@@ -1266,6 +1266,36 @@ DynamicArray xss_object::get_event_code(const str& event_name)
     return DynamicArray(new dynamic_array);
   }
 
+DynamicArray xss_object::get_attributes()
+  {
+    DynamicArray result(new dynamic_array);
+
+    struct attr_visitor : dynamic_visitor
+      {
+        attr_visitor(DynamicArray result):
+          result_(result)
+          {
+          }
+
+        virtual void item(const str& name, variant value)
+          {
+            XSSObject result(new xss_object);
+            result->add_attribute("name", name); //td: types
+            result->add_attribute("value", value); 
+
+            result_->insert(result);
+
+          }
+
+        DynamicArray result_;
+      };
+
+    attr_visitor av(result);
+    this->visit(&av);
+
+    return result;
+  }
+
 bool xss_object::is_injected(const str& name)
   {
     item_list::iterator it = items_.find(name);
