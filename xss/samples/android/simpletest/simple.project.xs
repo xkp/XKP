@@ -27,9 +27,10 @@ on finished()
 	//    shell(working_path="...", environment_var="...") { ... }
 	shell()
 	{
-		aapt p=xkp.android.@appName -f -M @appOutputPath/AndroidManifest.xml -A @appOutputPath/assets -S @appOutputPath/res -m -J @appOutputPath/gen -I @apiPlatform
+		aapt package -v -f -I @apiPlatform -M @appOutputPath/AndroidManifest.xml -A @appOutputPath/assets -S @appOutputPath/res -m -J @appOutputPath/gen -F @appOutputPath/bin/resources.ap_
 	}
 	
+	/*
 	//ERROR: on concat expression javaFileList when string declaration is not initialized
 	int counter = 0;
 	string javaFileList = "";
@@ -42,34 +43,37 @@ on finished()
 		else
 			javaFileList = file;
 	}
+	*/
+	
 	
 	//TIPS: i need that the string expression scape some characters like quotes
 	//string javacParams = "-encoding ascii -target 1.5 -bootclasspath " + apiPlatform + " -classpath " + apiPlatform + " -sourcepath " + appOutputPath + "/src -sourcepath " + appOutputPath + "/gen";
 	//compiler.log(javacParams);
 	//compiler.log(appOutputPath);
 	
-	/*
+	
 	var arrayJavaFile = compiler.find_files(appOutputPath, ".*\.java");
 	for(var file in arrayJavaFile)
 	{
 		string filename = file.filename;
-		compiler.log(filename);
+		compiler.log("Compiling with javac: " + filename);
+		
 		shell()
 		{
-			javac -encoding ascii -target 1.5 -d @appOutputPath/bin -bootclasspath @apiPlatform -classpath @apiPlatform -sourcepath "@appOutputPath/src;@appOutputPath/gen" @filename
+			javac -encoding ascii -target 1.5 -classpath @apiPlatform -sourcepath "@appOutputPath/src;@appOutputPath/gen" -d @appOutputPath/bin @filename
 		}
 	}
-	*/
-
-	/*
+	
 	compiler.log("");
 	compiler.log(javaFileList);
 	compiler.log("");
 	javaFileList = appOutputPath + "/gen/xkp/android/" + appName + "/R.java";
+	javaFileList = javaFileList + " " + appOutputPath + "/src/xkp/android/libs/Layout/XKPLayout.java";
+	javaFileList = javaFileList + " " + appOutputPath + "/src/xkp/android/" + appName + "/Act" + appName + ".java";
 	compiler.log("");
 	compiler.log(javaFileList);
 	compiler.log("");
-	*/
+	
 	
 	string libsParams = "-rj " + appOutputPath + "/libs";
 	libsParams = "";
