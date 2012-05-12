@@ -1248,17 +1248,6 @@ str xss_compiler::full_path(const str& file)
     return file_pth.string();
   }
 
-str xss_compiler::normalize_path(const str& path)
-  {
-    str text = path;
-#ifdef _WIN32
-    boost::replace_all(text, "\\", "\\\\");
-#else
-
-#endif
-    return text;
-  }
-
 fs::path xss_compiler::compiling()
   {
     return compiling_;
