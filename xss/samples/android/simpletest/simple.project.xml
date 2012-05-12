@@ -1,6 +1,7 @@
 <project 
 	entry_point="../../../idioms/android/main.xss" 
 	language="java" 
+	src="simple.project.xs" 
 	target="simple.xml" >
 	
 	<idiom src="../../../idioms/android/classes.xml"/>
@@ -20,5 +21,5 @@
 	<options 
 		event_scope="instance" 
 		android_api_level="4" 
-		android_project_type="eclipse"/>
+		android_project_type="apk"/>
 </project>

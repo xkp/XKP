@@ -20,9 +20,6 @@
 		appName = application.id;
 	}
 	
-	// TODO: replace all 'app' & 'appName' parameter passed to method for 'application.appName'
-	application.appName = appName;
-	
 	int targetAPILevel = 6;
 	int minAPILevel = 3;
 	if(appOptions.android_api_level)
@@ -39,6 +36,10 @@
 			compiler.error("The number of Android API level version is not correct", android_api_level = apiL);
 		}
 	}
+	
+	// TODO: replace all 'app' & 'appName' parameter passed to method for 'application.appName'
+	application.appName = appName;
+	application.targetAPILevel = targetAPILevel;
 	
 	//inject idiom event for render types
 	compiler.inject("render_types", app = appName, bns = base_namespace);
@@ -62,7 +63,8 @@
 	output_filename = appName + "/res/layout/main.xml";
 	compiler.xss("layout.xml.xss", output_file = output_filename, appName = appName, base_namespace = base_namespace, clazz = application);
 	
-	// appOptions.android_project_type = enum {eclipse, script, ant, others, ...}
+	//td: organize all this muddy of appOptions
+	// appOptions.android_project_type = enum {eclipse, script, ant, apk, others, ...}
 	if(appOptions.android_project_type == "eclipse")
 	{
 		output_filename = appName + "/" + ".project";
@@ -79,6 +81,10 @@
 	{
 		output_filename = appName + "/build.bat";
 		compiler.xss("build.bat.xss", output_file = output_filename, appName, targetAPILevel, appOutputPath);
+	}
+	else
+	if(appOptions.android_project_type == "apk")
+	{
 	}
 	else
 	{

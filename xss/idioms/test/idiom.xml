@@ -128,6 +128,7 @@
 
         <class id="t_xss14_1">
             <dependency id="dep2" href="/use/bin/xss14_1"/>
+			<dependency id="dep22" href="/use/bin/xss14_11"/>
         </class>
 
         <class id="t_xss14_2">

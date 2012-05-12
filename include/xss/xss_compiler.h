@@ -214,8 +214,10 @@ namespace xkp
         str          idiom_path(XSSObject obj, const str& file);
         fs::path     type_path(const str& type_name);
         str          full_path(const str& file);
+        str          normalize_path(const str& path);
         fs::path     compiling();
         void         copy_file(const str& src, const str& dst);
+        DynamicArray find_files(const str& init_path, const str& filter);
         void         out(variant what);
         XSSType      get_type(const str& type);
         XSSObject    get_instance(const str& instance);
@@ -372,6 +374,8 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<DynamicArray, 0>("get_dependencies",   &xss_compiler::get_dependencies);
         method_<DynamicArray, 1>("idiom_dependencies", &xss_compiler::idiom_dependencies);
         method_<void,         1>("render_app_types",   &xss_compiler::render_app_types);
+        method_<DynamicArray, 2>("find_files",         &xss_compiler::find_files);
+        method_<str,          1>("normalize_path",     &xss_compiler::normalize_path);
       }
   };
 

@@ -38,6 +38,8 @@ struct shellworker : IWorker
                 valuable_items.push_back(*iit);
               }
 
+            if (!valuable_items.size()) continue;
+
             //evaluate params
             std::vector<shell_param>::reverse_iterator rpit = it->params.rbegin();
             std::vector<shell_param>::reverse_iterator rpnd = it->params.rend();
@@ -65,10 +67,15 @@ struct shellworker : IWorker
                 for(; vit != vnd; vit++)
                   args.push_back(*vit);
 
-                bp::child c = bp::launch(exe, args, bp::context());
-                const bp::status s = c.wait();
-
                 //td: recover the result of execution and save into variable, how to?
+                //... this is temporal, only for debug purpose
+                bp::context ctx;
+                ctx.add(bp::close_stream(bp::stdin_fileno))
+                   .add(bp::inherit_stream(bp::stdout_fileno))
+                   .add(bp::inherit_stream(bp::stderr_fileno));
+
+                bp::child c = bp::launch(exe, args, ctx);
+                const bp::status s = c.wait();
               }
             catch (const boost::system::system_error&)
               {
@@ -104,15 +111,15 @@ DSLWorker vm_shell::create_worker(dsl& info, code_linker& owner, std::vector<str
     for(; it != nd; it++)
       {
         //fun stuff, gather the params in the query (in the form @value)
-        std::vector<shell_param>::iterator pit = it->params.begin();
-        std::vector<shell_param>::iterator pnd = it->params.end();
+        std::vector<shell_param>::reverse_iterator rpit = it->params.rbegin();
+        std::vector<shell_param>::reverse_iterator rpnd = it->params.rend();
 
-        for(; pit != pnd; pit++)
+        for(; rpit != rpnd; rpit++)
           {
-            if (pit->id.empty())
+            if (rpit->id.empty())
               continue;
 
-            expressions.push_back(pit->id);
+            expressions.push_back(rpit->id);
           }
       }
 

@@ -2090,3 +2090,76 @@ Success are greateful
 	
 
 Success are greateful
+===[ simple.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Types...
+log: Rendering Android Imports...
+log: Rendering instance: lblFirstName
+log: Rendering instance: edtFirstName
+log: Rendering instance: lblLastName
+log: Rendering instance: edtLastName
+log: Rendering instance: btnFullName
+log: Rendering instance: lblFullName
+log: Rendering instance: edtContainer
+log: Rendering instance: application
+log: [android] Copying default files...
+log: [android] Rendering default files...
+
+Success are greateful
+===[ simple.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Types...
+log: Rendering Android Imports...
+log: Rendering instance: lblFirstName
+log: Rendering instance: edtFirstName
+log: Rendering instance: lblLastName
+log: Rendering instance: edtLastName
+log: Rendering instance: btnFullName
+log: Rendering instance: lblFullName
+log: Rendering instance: edtContainer
+log: Rendering instance: application
+log: [android] Copying default files...
+log: [android] Rendering default files...
+
+Success are greateful
+===[ simple.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Types...
+log: Rendering Android Imports...
+log: Rendering instance: lblFirstName
+log: Rendering instance: edtFirstName
+log: Rendering instance: lblLastName
+log: Rendering instance: edtLastName
+log: Rendering instance: btnFullName
+log: Rendering instance: lblFullName
+log: Rendering instance: edtContainer
+log: Rendering instance: application
+log: [android] Copying default files...
+log: [android] Rendering default files...
+
+Success are greatefulERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml

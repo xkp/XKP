@@ -16,9 +16,11 @@
 #include "xs/compiler.h"
 #include "xs/xs_error.h"
 
+#include <boost/regex.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/replace.hpp>
 #include <boost/algorithm/string.hpp>
 
 #include <iostream>
@@ -1246,6 +1248,17 @@ str xss_compiler::full_path(const str& file)
     return file_pth.string();
   }
 
+str xss_compiler::normalize_path(const str& path)
+  {
+    str text = path;
+#ifdef _WIN32
+    boost::replace_all(text, "\\", "\\\\");
+#else
+
+#endif
+    return text;
+  }
+
 fs::path xss_compiler::compiling()
   {
     return compiling_;
@@ -1300,6 +1313,39 @@ void xss_compiler::copy_file(const str& src_file, const str& dst_file)
         fs::create_directories(dst_path);
         fs::copy_file(src, dst, fs::copy_option::overwrite_if_exists);
       }
+  }
+
+DynamicArray xss_compiler::find_files(const xkp::str &init_path, const xkp::str &filter)
+  {
+    DynamicArray result(new dynamic_array);
+    try
+      {
+        const boost::regex rfjava(filter);
+        boost::smatch what;
+
+        fs::recursive_directory_iterator it(init_path);
+        for (; it != fs::recursive_directory_iterator(); ++it )
+          {
+            if(!fs::is_regular_file(it->status())) continue;
+            if(!boost::regex_match( it->leaf(), what, rfjava)) continue;
+
+            XSSObject file(new xss_object);
+            file->add_attribute("filename", it->string());
+
+            result->push_back(file);
+          }
+      }
+    catch(...)
+      {
+        //td: custom error message to specialize
+				param_list error;
+				error.add("id", SCompiler);
+				error.add("desc", str("find_files"));
+
+				xss_throw(error);
+      }
+
+    return result;
   }
 
 void xss_compiler::out(variant w)
@@ -2303,6 +2349,15 @@ void xss_compiler::init_project_context(code_context& result)
     result.dsl_->insert(dsl_list_pair("shell", DslLinker(new vm_shell(shared_from_this()))));
 
     result.scope_->register_symbol("compiler", XSSCompiler(shared_from_this()));
+
+    result.scope_->register_symbol("String", XSSString(new xss_string));
+
+    XSSContext              ctx = current_context();
+    XSSApplicationRenderer  app = ctx->resolve("#app");
+    result.scope_->register_symbol("#app", app);
+
+    XSSObject               appObj = ctx->resolve("application");
+    result.scope_->register_symbol("application", appObj);
 
     for(size_t ii = 0; ii < params_.size(); ii++)
       {
