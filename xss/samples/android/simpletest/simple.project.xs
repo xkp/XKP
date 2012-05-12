@@ -31,13 +31,16 @@ on finished()
 	}
 	
 	//ERROR: on concat expression javaFileList when string declaration is not initialized
+	int counter = 0;
 	string javaFileList = "";
 	var arrayJavaFile = compiler.find_files(appOutputPath, ".*\.java");
 	for(var f in arrayJavaFile)
 	{
 		string file = f.filename;
-		javaFileList = javaFileList + " " + file;
-		break;
+		if(counter > 0)
+			javaFileList = javaFileList + " " + file;
+		else
+			javaFileList = file;
 	}
 	
 	//TIPS: i need that the string expression scape some characters like quotes
@@ -58,12 +61,24 @@ on finished()
 	}
 	*/
 
+	/*
+	compiler.log("");
+	compiler.log(javaFileList);
+	compiler.log("");
+	javaFileList = appOutputPath + "/gen/xkp/android/" + appName + "/R.java";
+	compiler.log("");
+	compiler.log(javaFileList);
+	compiler.log("");
+	*/
+	
 	string libsParams = "-rj " + appOutputPath + "/libs";
 	libsParams = "";
 	
+	//compiler.log(appOutputPath);
+	
 	shell()
 	{
-		javac -encoding ascii -target 1.5 -d @appOutputPath/bin -bootclasspath @apiPlatform -classpath @apiPlatform -sourcepath "@appOutputPath/src;@appOutputPath/gen" @javaFileList~
+		javac -encoding ascii -target 1.5 -classpath @apiPlatform -sourcepath "@appOutputPath/src;@appOutputPath/gen" -d @appOutputPath/bin @javaFileList~
 		dx@winExt --dex --output=@appOutputPath/bin/classes.dex @appOutputPath/bin~
 		aapt p=xkp.android.@appName -f -M @appOutputPath/AndroidManifest.xml -S @appOutputPath/res -I @apiPlatform -F @appOutputPath/bin/@appName.ap_~
 		apkbuilder@winExt @appOutputPath/bin/@appName.apk -z @appOutputPath/bin/@appName.ap_ -f @appOutputPath/bin/classes.dex -rf @appOutputPath/src @libsParams
