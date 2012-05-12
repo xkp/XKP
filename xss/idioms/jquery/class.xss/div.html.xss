@@ -60,6 +60,12 @@
     int get_operation(cmp, int idx, object result)
     {
         var child = cmp.children[idx];
+        if (child.idiom.id != "jquery")
+        {
+            result.ignore = true;
+            return idx + 1;
+        }
+        
         result.direction  = get_direction(child);
         if (result.direction == null)
         {
@@ -164,7 +170,7 @@
         {
             var child = cmp.children[idx];
             var op    = object();
-            idx = get_operation(cmp, idx, op); 
+            idx       = get_operation(cmp, idx, op); 
             
             if (op.ignore)
             {

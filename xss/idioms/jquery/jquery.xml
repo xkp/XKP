@@ -31,12 +31,12 @@
 				<set text='attr("placement", {value})'/>
 			</property>
 
-            <property id="background-color" type="string" css="true" dont_init="true">
+            <property id="background-color" type="string" css="true" dont_init="true" as_plain_text="true">
                 <get text='css("background-color")'/>
                 <set text='css("background-color", {value})'/>
             </property>
 
-            <property id="color" type="string" render_type="script" dont_init="true">
+            <property id="color" type="string" css="true" dont_init="true" as_plain_text="true">
                 <get text='css("background-color")'/>
                 <set text='css("background-color", {value})'/>
             </property>
@@ -46,9 +46,19 @@
                 <set text='JQUComponent.set_visible({path}, {value})' global='true'/>
             </property>
 
-            <property id="enabled" type="bool" >
+            <property id="enabled" type="bool" dont_init="true">
                 <get text='JQUComponent.get_enabled({path})' global='true'/>
                 <set text='JQUComponent.set_enabled({path}, {value})' global='true'/>
+            </property>
+
+            <property id="alpha" output_id="opacity" type="float" css="true">
+                <get text='css("opacity")'/>
+                <set text='css("opacity", {value})'/>
+            </property>
+
+            <property id="opacity" type="float" css="true">
+                <get text='css("opacity")'/>
+                <set text='css("opacity", {value})'/>
             </property>
 
             <event id="change"/>
@@ -96,20 +106,15 @@
                 <set text="text({value})"/>
             </property>
 
-            <property id="font" type="string">
+            <property id="font" type="string" css="true" dont_init="true" as_plain_text="true">
                 <get text='css("font")'/>
                 <set text='css("font", {value})'/>
-            </property>
-
-            <property id="color" type="string">
-                <get text='css("color")'/>
-                <set text='css("color", {value})'/>
             </property>
 
             <method id="empty"/>
         </class>
 
-        <class id="button" super="component" tag="input" jquery="button">
+         <class id="button" super="component" tag="input" jquery="button">
             <array id="attributes">
                 <object name="type" value="button"/>
                 <object name="name" value="{id}" expr="true"/>

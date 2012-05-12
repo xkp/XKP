@@ -10,7 +10,7 @@ on pre_process(obj)
 
         if (prop.css)
         {
-            compiler.add_object_property(css, prop.output_id, value = prop.value, postfix = prop.postfix);
+            compiler.add_object_property(css, prop.output_id, value = prop.value, postfix = prop.postfix, as_plain_text=prop.as_plain_text);
         }
             
     }

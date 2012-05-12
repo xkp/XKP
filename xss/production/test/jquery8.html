@@ -3,6 +3,8 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<title>Embedded canvas</title>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
             <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
             <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
             <script type="text/javascript" src="../js/jquery-idiom.js"></script>
@@ -19,12 +21,21 @@
             <link rel="stylesheet" href="../css/skitter.styles.css"></link>
             <script type="text/javascript" src="../js/jquery.skitter.min.js"></script>
             <script type="text/javascript" src="../js/jquery.animate-colors-min.js"></script>
+            <script type="text/javascript" src="../js/sequence.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
+		var g_sequence_manager = new state.Manager();
+        function default_interpolate(a, b, t)
+        {
+            return a + (b - a)*t;
+        }		
         var application = {};
+			var __supersized1 = $("#__supersized1");
 			var main = $("#main");
+			var back = $("#back");
+			var title = $("#title");
 			var myChart = $("#myChart");
-			var container = $("#container");
+			var gridContainer = $("#gridContainer");
 			var myGrid = $("#myGrid");
 			var myGallery = $("#myGallery");
             $.supersized({
@@ -100,10 +111,12 @@
 			    url : "http://www.nonsensesociety.com/2011/06/brooke-shaden/",
 		    }
 ,  ], });
+					back.attr("src", "images/jq8.png");
+					back.css("opacity", 0.5);
 myChart.ChartObject = new Highcharts.Chart({
         chart: {
             renderTo: 'myChart',
-			    type : "bar",
+			    type : "line",
 },
  series: [ 
 {
@@ -174,22 +187,76 @@ series1.setData([10, 20, 0, 50, 3, -100]);
 myChart.ChartObject.addSeries({name : "Series2",data : [0, 10, 50, 20, 3, -10]});
 JQUGrid.set_data(myGrid, [{id : "1",invdate : "2007-10-01",name : "test",note : "note",amount : "200.00",tax : "10.00",total : "210.00"}, {id : "2",invdate : "2007-10-02",name : "test2",note : "note2",amount : "300.00",tax : "20.00",total : "320.00"}, {id : "3",invdate : "2007-09-01",name : "test3",note : "note3",amount : "400.00",tax : "30.00",total : "430.00"}, {id : "4",invdate : "2007-10-04",name : "test",note : "note",amount : "200.00",tax : "10.00",total : "210.00"}, {id : "5",invdate : "2007-10-05",name : "test2",note : "note2",amount : "300.00",tax : "20.00",total : "320.00"}, {id : "6",invdate : "2007-09-06",name : "test3",note : "note3",amount : "400.00",tax : "30.00",total : "430.00"}, {id : "7",invdate : "2007-10-04",name : "test",note : "note",amount : "200.00",tax : "10.00",total : "210.00"}, {id : "8",invdate : "2007-10-03",name : "test2",note : "note2",amount : "300.00",tax : "20.00",total : "320.00"}, {id : "9",invdate : "2007-09-01",name : "test3",note : "note3",amount : "400.00",tax : "30.00",total : "430.00"}]);
 		}
+__sequence1 =
+new state.Sequence(
+g_sequence_manager);
+                __sequence1.start();
+        var ____i1 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                title.css("opacity", value);
+            },
+            [
+        {t: 0, value: 1},
+        {t: 2, value: 0},
+            ]);
+            __sequence1.addHandler(____i1);	              
+        var ____i2 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                title.css("opacity", value);
+            },
+            [
+        {t: 2, value: 0},
+        {t: 5, value: 1},
+            ]);
+            __sequence1.addHandler(____i2);	              
+        var g_elapsed = -1;
+        var g_delta = 0.0;	
+        function start(resolution)  
+        {  
+	        function updater()  
+	        {
+		        var now   = new Date().getTime();
+                if (g_elapsed < 0)
+                    g_delta = 0; //first update
+                else
+		            g_delta  = now - g_elapsed;  
+                g_elapsed = now; 
+		g_sequence_manager.update(g_delta);
+                window.setTimeout(updater, resolution);  
+	        }      
+	        window.setTimeout(updater, resolution);  
+        }      
+        start();  
                     if (application.init)
                         application.init();
                 		});
 	</script>
 	<style>
 #main {position : relative}
-#myChart {left : 100px;top : 100px;width : 500px;height : 350px;position : absolute}
-#container {left : 100px;top : 500px;width : 500px;height : 350px;position : absolute}
-#myGallery {left : 700px;top : 100px;width : 500px;height : 350px;position : absolute}
+#back {left : 50px;top : 50px;width : 1200px;height : 800px;opacity : 0.5;position : absolute}
+#title {left : 70px;top : 70px;font : bold 24px verdana,sans-serif;color : white;position : absolute}
+#myChart {left : 100px;top : 200px;width : 500px;height : 250px;position : absolute}
+#gridContainer {left : 300px;top : 550px;width : 600px;position : absolute}
+#myGallery {left : 620px;top : 200px;width : 550px;height : 250px;position : absolute}
     </style>
 </head>
 <body>
 <div id="main">
+				<img id="back"
+						src="images/jq8.png" 
+					>
+				</img>
+				<label id="title"
+			>
+					Extended controls
+				</label>
 <div id="myChart">
 </div>
-<div id="container">
+<div id="gridContainer">
 				<table id="myGrid"
 			>
 				</table>
