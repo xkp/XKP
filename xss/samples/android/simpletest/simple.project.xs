@@ -25,9 +25,9 @@ on finished()
 	
 	//td: make that some parameters of shell work well, like that:
 	//    shell(working_path="...", environment_var="...") { ... }
-	shell()
+	shell(working_path = appOutputPath, environment_var = "...")
 	{
-		aapt package -v -f -I @apiPlatform -M @appOutputPath/AndroidManifest.xml -A @appOutputPath/assets -S @appOutputPath/res -m -J @appOutputPath/gen -F @appOutputPath/bin/resources.ap_
+		aapt package -v -f -I @apiPlatform -M @appOutputPath/AndroidManifest.xml -A @appOutputPath/assets -S @appOutputPath/res -m -J @appOutputPath/gen -F @appOutputPath/bin/@appName.ap_
 	}
 	
 	/*
@@ -67,9 +67,10 @@ on finished()
 	compiler.log("");
 	compiler.log(javaFileList);
 	compiler.log("");
-	javaFileList = appOutputPath + "/gen/xkp/android/" + appName + "/R.java";
-	javaFileList = javaFileList + " " + appOutputPath + "/src/xkp/android/libs/Layout/XKPLayout.java";
-	javaFileList = javaFileList + " " + appOutputPath + "/src/xkp/android/" + appName + "/Act" + appName + ".java";
+	javaFileList = appOutputPath + "/src/xkp/android/" + appName + "/*.java";
+	//javaFileList = appOutputPath + "/gen/xkp/android/" + appName + "/R.java";
+	//javaFileList = javaFileList + " " + appOutputPath + "/src/xkp/android/libs/Layout/XKPLayout.java";
+	//javaFileList = javaFileList + " " + appOutputPath + "/src/xkp/android/" + appName + "/Act" + appName + ".java";
 	compiler.log("");
 	compiler.log(javaFileList);
 	compiler.log("");
@@ -84,7 +85,6 @@ on finished()
 	{
 		javac -encoding ascii -target 1.5 -classpath @apiPlatform -sourcepath "@appOutputPath/src;@appOutputPath/gen" -d @appOutputPath/bin @javaFileList~
 		dx@winExt --dex --output=@appOutputPath/bin/classes.dex @appOutputPath/bin~
-		aapt p=xkp.android.@appName -f -M @appOutputPath/AndroidManifest.xml -S @appOutputPath/res -I @apiPlatform -F @appOutputPath/bin/@appName.ap_~
 		apkbuilder@winExt @appOutputPath/bin/@appName.apk -z @appOutputPath/bin/@appName.ap_ -f @appOutputPath/bin/classes.dex -rf @appOutputPath/src @libsParams
 	}
 }

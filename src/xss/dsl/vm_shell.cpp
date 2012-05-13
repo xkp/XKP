@@ -74,6 +74,10 @@ struct shellworker : IWorker
                    .add(bp::inherit_stream(bp::stdout_fileno))
                    .add(bp::inherit_stream(bp::stderr_fileno));
 
+                str working_path = it->working_path;
+                if (!working_path.empty())
+                  ctx.work_directory = working_path;
+
                 bp::child c = bp::launch(exe, args, ctx);
                 const bp::status s = c.wait();
               }
@@ -120,6 +124,24 @@ DSLWorker vm_shell::create_worker(dsl& info, code_linker& owner, std::vector<str
               continue;
 
             expressions.push_back(rpit->id);
+          }
+      }
+
+    //save values of dsl params
+    if (info.param_count)
+      {
+        it = result.begin();
+        for(; it != nd; it++)
+          {
+            variant working_path_v = info.params.get("working_path");
+            str working_path;
+
+            if (!working_path_v.empty())
+              {
+                expression expr = working_path_v;
+                str wkp = variant_cast<str>(owner.evaluate_expression(expr), str(""));
+                it->working_path = wkp;
+              }
           }
       }
 
