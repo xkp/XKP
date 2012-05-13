@@ -90,5 +90,11 @@
 	{
 		compiler.error("Project type is not implemented", android_project_type = appOptions.android_project_type);
 	}
+	
+	appOutputPath = appOutputPath + "/" + appName;
+	string classes = appName + "/" + "classes";
+	
+	string classsource = "javac.classes.xss";
+	compiler.xss(classsource, output_file = classes, appOutputPath);
 
 </xss:code>

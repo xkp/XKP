@@ -236,6 +236,15 @@ void ga_parser::parse_item(const str& text, ga_item& result)
         size_t token_pos = item.find_first_of("@");
         while(token_pos != str::npos)
           {
+            // scape double arroba
+            size_t next = token_pos + 1;
+            if ((next < item.size()) && item[next] == '@')
+              {
+                item.erase(next, 1);
+                token_pos = item.find_first_of("@", next);
+                continue;
+              }
+
             shell_param param;
             param.item_idx = idx;
             param.item_spot = token_pos;

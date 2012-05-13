@@ -27,8 +27,9 @@ on finished()
 	//    shell(working_path="...", environment_var="...") { ... }
 	shell(working_path = appOutputPath, environment_var = "...")
 	{
-		aapt package -v -f -I @apiPlatform -M @appOutputPath/AndroidManifest.xml -A @appOutputPath/assets -S @appOutputPath/res -m -J @appOutputPath/gen -F @appOutputPath/bin/@appName.ap_
+		aapt package -f -I @apiPlatform -M @appOutputPath/AndroidManifest.xml -A @appOutputPath/assets -S @appOutputPath/res -m -J @appOutputPath/gen -F @appOutputPath/bin/@appName.ap_
 	}
+	
 	
 	/*
 	//ERROR: on concat expression javaFileList when string declaration is not initialized
@@ -51,30 +52,38 @@ on finished()
 	//compiler.log(javacParams);
 	//compiler.log(appOutputPath);
 	
-	
+	/*
 	var arrayJavaFile = compiler.find_files(appOutputPath, ".*\.java");
 	for(var file in arrayJavaFile)
 	{
 		string filename = file.filename;
 		compiler.log("Compiling with javac: " + filename);
 		
-		shell()
+		shell(working_path = "d:/xkp/xss/production/android/SimpleTest")
 		{
-			javac -encoding ascii -target 1.5 -classpath @apiPlatform -sourcepath "@appOutputPath/src;@appOutputPath/gen" -d @appOutputPath/bin @filename
+			javac -encoding ascii -target 1.5 -classpath @apiPlatform -sourcepath "src;gen" -d bin @filename
 		}
 	}
+	*/
+
+	/*	
+	//javaFileList = "src/xkp/android/Act" + appName + ".java";
+	//javaFileList = "gen/xkp/android/" + appName + "/R.java";
+	//javaFileList = javaFileList + " src/xkp/android/libs/Layout/XKPLayout.java";
+	//javaFileList = javaFileList + " src/xkp/android/" + appName + "/Act" + appName + ".java";
+
+	//compiler.log(javaFileList);
 	
-	compiler.log("");
-	compiler.log(javaFileList);
-	compiler.log("");
-	javaFileList = appOutputPath + "/src/xkp/android/" + appName + "/*.java";
-	//javaFileList = appOutputPath + "/gen/xkp/android/" + appName + "/R.java";
-	//javaFileList = javaFileList + " " + appOutputPath + "/src/xkp/android/libs/Layout/XKPLayout.java";
-	//javaFileList = javaFileList + " " + appOutputPath + "/src/xkp/android/" + appName + "/Act" + appName + ".java";
-	compiler.log("");
-	compiler.log(javaFileList);
-	compiler.log("");
+	shell(working_path = "d:/xkp/xss/production/android/SimpleTest")
+	{
+		javac -encoding ascii -target 1.5 -d bin -classpath @apiPlatform -sourcepath "src;gen" @javaFileList
+	}
+	*/
 	
+	shell(working_path = "d:/xkp/xss/production/android/SimpleTest")
+	{
+		javac @options @classes
+	}
 	
 	string libsParams = "-rj " + appOutputPath + "/libs";
 	libsParams = "";
@@ -83,8 +92,9 @@ on finished()
 	
 	shell()
 	{
-		javac -encoding ascii -target 1.5 -classpath @apiPlatform -sourcepath "@appOutputPath/src;@appOutputPath/gen" -d @appOutputPath/bin @javaFileList~
 		dx@winExt --dex --output=@appOutputPath/bin/classes.dex @appOutputPath/bin~
 		apkbuilder@winExt @appOutputPath/bin/@appName.apk -z @appOutputPath/bin/@appName.ap_ -f @appOutputPath/bin/classes.dex -rf @appOutputPath/src @libsParams
 	}
+	
+		//javac -encoding ascii -target 1.5 -classpath @apiPlatform -sourcepath "@appOutputPath/src;@appOutputPath/gen" -d @appOutputPath/bin @javaFileList~
 }
