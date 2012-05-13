@@ -85,16 +85,15 @@
 	else
 	if(appOptions.android_project_type == "apk")
 	{
+		appOutputPath = appOutputPath + "/" + appName;
+		application.output_classes = "java.lst";
+		string output_classes = appName + "/" + application.output_classes;
+		
+		string xss_classes = "java.lst.xss";
+		compiler.xss(xss_classes, output_file = output_classes, appOutputPath);
 	}
 	else
 	{
 		compiler.error("Project type is not implemented", android_project_type = appOptions.android_project_type);
 	}
-	
-	appOutputPath = appOutputPath + "/" + appName;
-	string classes = appName + "/" + "classes";
-	
-	string classsource = "javac.classes.xss";
-	compiler.xss(classsource, output_file = classes, appOutputPath);
-
 </xss:code>
