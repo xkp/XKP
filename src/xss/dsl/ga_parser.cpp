@@ -132,13 +132,13 @@ struct assign_grammar : grammar<assign_grammar>
           text_r    = *(  "\\;" | (anychar_p - (';' | end_p) ));
           assign_r  = *( (   ident_r          [variable(self.ctx)]
                           >>  "=" >> text_r   [inner(self.ctx)]
-                          >>  ('~' 
+                          >>  (';' 
                               | end_p         [end_parse(self.ctx)]
                               ) 
                           )
                           |
                           (   text_r          [no_variable(self.ctx)]
-                          >>  ('~' 
+                          >>  (';' 
                               | end_p         [end_parse(self.ctx)]
                               ) 
                           )

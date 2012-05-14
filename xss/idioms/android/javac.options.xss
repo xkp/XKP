@@ -1,10 +1,7 @@
 <xss:parameter id="appOutputPath"/>
 
 <xss:code>
-	string android_sdk = compiler.get_env_var("ANDROID_SDK");
-	if(android_sdk == "")
-		compiler.error("Environment variable is not defined", variable_name = "ANDROID_SDK");
-	
+	string android_sdk = application.android_sdk;
 	int targetAPILevel = application.targetAPILevel;
 	
 	out()

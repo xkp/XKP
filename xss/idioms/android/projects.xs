@@ -14,16 +14,15 @@ on finished()
 	if(appOptions.android_project_type != "apk")
 		return;
 
-	compiler.log("Creating bundle apk file...");
+	compiler.log("Creating .apk bundle file...");
 	
 	//td: 
-	string sdkBase = "d:/android/sdk/";
 	string winExt = ".bat";
 	
 	string appOutputPath = compiler.output_path();
 	appOutputPath = appOutputPath + "/" + appName;
 
-	string apiPlatform = sdkBase + "platforms/android-" + targetAPILevel + "/android.jar";
+	string apiPlatform = application.android_sdk + "/platforms/android-" + targetAPILevel + "/android.jar";
 	
 	//td: make that some parameters of shell work well, like that:
 	//    shell(working_path="...", environment_var="...") { ... }
@@ -43,7 +42,7 @@ on finished()
 	
 	shell()
 	{
-		dx@winExt --dex --output=@appOutputPath/bin/classes.dex @appOutputPath/bin~
+		dx@winExt --dex --output=@appOutputPath/bin/classes.dex @appOutputPath/bin;
 		apkbuilder@winExt @appOutputPath/bin/@appName.apk -z @appOutputPath/bin/@appName.ap_ -f @appOutputPath/bin/classes.dex -rf @appOutputPath/src @libsParams
 	}
 }

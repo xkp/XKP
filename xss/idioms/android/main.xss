@@ -85,6 +85,11 @@
 	else
 	if(appOptions.android_project_type == "apk")
 	{
+		string android_sdk = compiler.get_env_var("ANDROID_SDK");
+		if(android_sdk == "")
+			compiler.error("Environment variable is not defined", variable_name = "ANDROID_SDK");
+		application.android_sdk = android_sdk;
+		
 		application.output_classes = "java.lst";
 		application.output_javac_options = "javac.opts";
 		
