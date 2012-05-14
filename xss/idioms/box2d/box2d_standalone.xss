@@ -23,6 +23,7 @@
 
          compiler.inject("render_initialization");
          compiler.inject("render_instances");
+		 compiler.inject("render_inst_elems");
          </xss:code>
 
          <xss:marker id="variables"/>

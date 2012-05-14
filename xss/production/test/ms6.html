@@ -31,7 +31,7 @@ var SoundUtils = new ui.SoundUtils();
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
-		}
+		}		
 		var g_sequence_manager = new state.Manager();
         function default_interpolate(a, b, t)
         {
@@ -90,13 +90,14 @@ function start(resolution)
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
 		g_sequence_manager.update(g_delta);
-		application.events.dispatch("updates", []);	
+		application.events.dispatch("updates", []);			
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-        window.setTimeout(updater, resolution);  
+		window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var ms61;var ms62;
         var ms6 = ui.Component.extend(
     {
     init: function(
@@ -105,8 +106,8 @@ function start(resolution)
                 parent
                 )
     {
-        this._super(
-		manager,parent        );
+			this._super(	
+			manager,parent);       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 this.anim1 =
@@ -124,6 +125,9 @@ g_sequence_manager);
             ]);
             this.anim1.addHandler(____i1);	              
 		    this.btn1 = new ui.Button(this.manager, this, "images/smile_sad_48.png", "images/smile_grin_48.png");
+		    this.btn2 = new ui.Button(this.manager, this, "images/smile_grin_48.png", "images/smile_sad_48.png");
+            this.set_height(100);
+            this.set_width(50);
             this.btn1.set_placement("top");
             this.btn1.set_height(50);
 	this.btn1.events.addListener("click", function()
@@ -139,7 +143,6 @@ this__.btn2.alpha(100);
 	}
 	);
 		application.are_obj_events = true;
-		    this.btn2 = new ui.Button(this.manager, this, "images/smile_grin_48.png", "images/smile_sad_48.png");
             this.btn2.set_placement("bottom");
             this.btn2.set_height(50);
 	this.btn2.events.addListener("click", function()
@@ -155,8 +158,6 @@ this__.anim1.start();
 	}
 	);
 		application.are_obj_events = true;
-            this.set_height(100);
-            this.set_width(50);
             this.events.dispatch("init", [this]);
             },
 });
@@ -226,9 +227,9 @@ window.onload = function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    ms61 = new ms6(g_ui_root.manager, g_ui_root);
+		    ms62 = new ms6(g_ui_root.manager, g_ui_root);
             ms61.set_x(100);
             ms61.set_y(100);
-		    ms62 = new ms6(g_ui_root.manager, g_ui_root);
             ms62.set_x(200);
             ms62.set_y(100);
 			document.onkeydown = function(ev)
@@ -244,7 +245,7 @@ window.onload = function()
 				ui_.keypress(ev.keyCode);                  
 			};
             application.events.dispatch("init", []);
-            start();
+            start();			
 			ui_.draw(drawingCanvas.getContext('2d'));
 		});
 	}

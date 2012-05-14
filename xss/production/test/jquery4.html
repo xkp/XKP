@@ -28,11 +28,11 @@
 			var __div5 = $("#__div5");
 			var __div6 = $("#__div6");
 			var btn1 = $("#btn1").button();
-        acc1.accordion({
-    });
-        tc1.tabs({
-            collapsible: true,
+            acc1.accordion({
         });
+            tc1.tabs({
+                collapsible: true,
+            });
 		btn1.click( function() { 
 			lbl1.text(edit1.attr("value"));
 		});
@@ -41,7 +41,11 @@
                 		});
 	</script>
 	<style>
-	</style>
+#main {width : 800px;height : 600px;position : relative}
+#edit1 {width : 252px}
+#__div2 {left : 400px;top : 20px;width : 600px;height : 400px;position : absolute}
+#btn1 {left : 20px;top : 120px;position : absolute}
+    </style>
 </head>
 <body>
 <div id="main">

@@ -11,16 +11,16 @@
 </style>
             <script type="text/javascript" src="../js/resig.js"></script>
             <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
             <script type="text/javascript" src="../js/colors.js"></script>
-            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/sequence.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
-            <script type="text/javascript" src="../js/ui.js"></script>
-            <script type="text/javascript" src="../js/sequence.js"></script>
-            <script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui_;
@@ -35,6 +35,7 @@ var streamer;
 var app_width = 1000;
 var app_height = 800;
 var plane_anim;var quickly_anim;var alpha_anim;var idle_anim;var show_me;var back_to;var grow_plane;var shrink_plane;var init_anim;var init_anim2;var rain;var go_up;var loading_seq;var idle_load;var enterto_in;var liquid;var banner;var loading;var enter_to;var lens1;var lens2;var facebook;var twitter;var email;var btn1;var btn2;var linetop;var line1;var line2;var line3;var line4;var rect1;
+var anim_plane;var camera_1;
 var application = {};
 application.events = new ev.EventHolder();
 		var g_sequence_manager = new state.Manager();
@@ -55,7 +56,7 @@ application.events = new ev.EventHolder();
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
-		}
+		}		
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
@@ -640,7 +641,6 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var anim_plane;var camera_1;
         var social_button = ui.Image.extend(
     {
     init: function(
@@ -651,8 +651,8 @@ var anim_plane;var camera_1;
                 src
                 )
     {
-        this._super(
-		manager,parent,src        );
+			this._super(	
+			manager,parent,src);       
         this.events = new ev.EventHolder(); 
         var this__  = this;
             this.ox = null;
@@ -1799,24 +1799,40 @@ g_sequence_manager);
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    liquid = new ui.RippleEffect(g_ui_root.manager, g_ui_root, "images/pictures/boxdef.jpg");
+		    banner = new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/banner.png");
+		    loading = new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/loading.png");
+		    enter_to = new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/enter.png");
+		    lens1 = new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/lente1.png");
+		    lens2 = new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/lente2.png");
+		    facebook = new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/facebook.png");
+		    twitter = new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/twitter.png");
+		    email = new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/photobucket.png");
+		    btn1 = new ui.Button(g_ui_root.manager, g_ui_root, "images/pictures/arrow_up.png", "images/pictures/arrow_down.png");
+		    btn2 = new ui.Button(g_ui_root.manager, g_ui_root, "images/pictures/arrow_up.png", "images/pictures/arrow_down.png");
+		    linetop = new ui.Line(g_ui_root.manager, g_ui_root);
+		    line1 = new ui.Line(g_ui_root.manager, g_ui_root);
+		    line2 = new ui.Line(g_ui_root.manager, g_ui_root);
+		    line3 = new ui.Line(g_ui_root.manager, g_ui_root);
+		    line4 = new ui.Line(g_ui_root.manager, g_ui_root);
+		    rect1 = new ui.Rectangle(g_ui_root.manager, g_ui_root, null, "white", null);
+		    camera_1 = 
+		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
+		active_camera = camera_1;
             liquid.set_x(0);
             liquid.set_y(0);
             liquid.set_width(app_width);
             liquid.set_height(app_height);
             liquid.alpha(0);
-		    banner = new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/banner.png");
             banner.set_x(15);
             banner.set_y(10);
             banner.set_width(231);
             banner.set_height(28);
             banner.alpha(0);
-		    loading = new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/loading.png");
             loading.set_x(280);
             loading.set_y(550);
             loading.set_width(153);
             loading.set_height(27);
             loading.alpha(0);
-		    enter_to = new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/enter.png");
             enter_to.set_x(310);
             enter_to.set_y(551.5);
             enter_to.set_width(92);
@@ -1861,37 +1877,31 @@ application.init_planes();
 	}
 	);
 		application.are_obj_events = true;
-		    lens1 = new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/lente1.png");
             lens1.set_x(225);
             lens1.set_y(225);
             lens1.set_width(250);
             lens1.set_height(250);
             lens1.alpha(0);
-		    lens2 = new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/lente2.png");
             lens2.set_x(220);
             lens2.set_y(220);
             lens2.set_width(260);
             lens2.set_height(260);
             lens2.alpha(0);
-		    facebook = new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/facebook.png");
             facebook.set_x(880);
             facebook.set_y(8);
             facebook.set_width(24);
             facebook.set_height(24);
             facebook.alpha(0);
-		    twitter = new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/twitter.png");
             twitter.set_x(845);
             twitter.set_y(8);
             twitter.set_width(24);
             twitter.set_height(24);
             twitter.alpha(0);
-		    email = new ui.Image(g_ui_root.manager, g_ui_root, "images/pictures/photobucket.png");
             email.set_x(810);
             email.set_y(8);
             email.set_width(24);
             email.set_height(24);
             email.alpha(0);
-		    btn1 = new ui.Button(g_ui_root.manager, g_ui_root, "images/pictures/arrow_up.png", "images/pictures/arrow_down.png");
             btn1.set_x(0);
             btn1.set_y(300);
             btn1.set_width(64);
@@ -1930,7 +1940,6 @@ application.zoomed.rotation.y = 0;
 	}
 	);
 		application.are_obj_events = true;
-		    btn2 = new ui.Button(g_ui_root.manager, g_ui_root, "images/pictures/arrow_up.png", "images/pictures/arrow_down.png");
             btn2.set_x(840);
             btn2.set_y(300);
             btn2.set_width(64);
@@ -1968,51 +1977,42 @@ application.zoomed.rotation.y = 0;
 	}
 	);
 		application.are_obj_events = true;
-		    linetop = new ui.Line(g_ui_root.manager, g_ui_root);
             linetop.set_x1(5);
             linetop.set_y1(40);
             linetop.set_x2(5);
             linetop.set_y2(40);
             linetop.alpha(60);
             linetop.set_color("white");
-		    line1 = new ui.Line(g_ui_root.manager, g_ui_root);
             line1.set_x1(200);
             line1.set_y1(200);
             line1.set_x2(200);
             line1.set_y2(200);
             line1.alpha(60);
             line1.set_color("white");
-		    line2 = new ui.Line(g_ui_root.manager, g_ui_root);
             line2.set_x1(500);
             line2.set_y1(200);
             line2.set_x2(500);
             line2.set_y2(200);
             line2.alpha(60);
             line2.set_color("white");
-		    line3 = new ui.Line(g_ui_root.manager, g_ui_root);
             line3.set_x1(500);
             line3.set_y1(500);
             line3.set_x2(500);
             line3.set_y2(500);
             line3.alpha(60);
             line3.set_color("white");
-		    line4 = new ui.Line(g_ui_root.manager, g_ui_root);
             line4.set_x1(200);
             line4.set_y1(500);
             line4.set_x2(200);
             line4.set_y2(500);
             line4.alpha(60);
             line4.set_color("white");
-		    rect1 = new ui.Rectangle(g_ui_root.manager, g_ui_root, null, "white", null);
             rect1.set_x(200);
             rect1.set_y(200);
             rect1.set_width(300);
             rect1.set_height(300);
             rect1.setVisible(false);
             rect1.alpha(60);
-		    camera_1 = 
-		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
-		active_camera = camera_1;
             camera_1.position.z = 1000;
             application.art_planes = null;
             application.forms_planes = null;
@@ -2205,10 +2205,14 @@ animate();
 function animate() {
 	if(ui_)
 		drawingCanvas.getContext('2d').clearRect(0,0,1000,800);
+	renderer.domElement.getContext('2d').globalAlpha = 1;
 	requestAnimationFrame( animate );
 	render();
 	if(ui_)
+	{
+		drawingCanvas.getContext('2d').globalAlpha = 1;
 		ui_.draw(drawingCanvas.getContext('2d'));
+	}
 	}
 </script>
 </body>

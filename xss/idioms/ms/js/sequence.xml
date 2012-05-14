@@ -1,4 +1,4 @@
-<module id="sequence" src="sequence.xs">
+<module id="sequence" src="sequence.xs" auto_dependencies="true">
 	<dependency href="resig.js" shared="true"/>
     <dependency href="event.js" shared="true"/>
     <dependency href="sequence.js"/>

@@ -246,6 +246,10 @@ ui.Manager = Class.extend(
 
     update: function(elapsed, context)
     {
+		if(context.canvas.width != this.root.get_width())
+			this.root.set_width(context.canvas.width);
+		if(context.canvas.height != this.root.get_height())
+			this.root.set_height(context.canvas.height);
         if(this.redraw_)
         {
             this.redraw_ = false;
@@ -327,11 +331,16 @@ ui.Component = Class.extend(
         this.placement  = "";
 		if(this.parent)
 		{	
-			if(this.parent.scale)
-				this.scale = this.parent.scale;
+			if(this.parent.scaleX)
+				this.scaleX = this.parent.scaleX;
+			if(this.parent.scaleY)
+				this.scaleY = this.parent.scaleY;
 		}
 		else
-			this.scale = 1;		
+		{
+			this.scaleX = 1;
+			this.scaleY = 1;			
+		}
 		
 		if(parent)
 			this.opacity = parent.opacity; 
@@ -387,7 +396,7 @@ ui.Component = Class.extend(
     update_placement: function()
     {		
 		if(this.parent)
-		{
+		{			
 			if(this.orig_w > this.parent.w - this.parent.offset_right - this.parent.offset_left)
 				this.orig_w = this.parent.w - this.parent.offset_right - this.parent.offset_left;
 			if(this.orig_h > this.parent.h - this.parent.offset_top - this.parent.offset_bottom)
@@ -600,11 +609,11 @@ ui.Component = Class.extend(
 
 	set_scale: function(factor)
 	{
-		this.scale = factor;
-this.set_x(this.x + this.w/2 - (this.w * this.scale)/2);
-		this.set_y(this.y + this.h/2 - (this.h * this.scale)/2);
-		this.set_width(this.w * this.scale);
-		this.set_height(this.h * this.scale);
+		this.scaleX = factor;
+		this.scaleY = factor;
+this.set_x(this.x + this.w/2 - (this.orig_w * this.scaleX)/2);
+		this.set_y(this.y + this.h/2 - (this.orig_h * this.scaleY)/2);
+		this.size(this.orig_w * this.scaleX, this.orig_h * this.scaleY);		
 		for(var i = 0; i < this.components.length; i++)
         {					
             var cmp = this.components[i];
@@ -674,7 +683,7 @@ this.set_x(this.x + this.w/2 - (this.w * this.scale)/2);
     },
 
     draw: function(context, x, y)
-    {		
+    {			
 		this.offset_right = 0;
 		this.offset_left = 0;
 		this.offset_top = 0;
@@ -1273,6 +1282,22 @@ ui.Switch = ui.Component.extend(
 		else
 			cmp.hide();
 	},
+	
+	set_width: function(value)
+	{
+		this.w = value;
+		for (var i = 0; i < this.components.length; i++) {
+			this.components[i].set_width(value);
+		}
+	},
+	
+	set_height: function(value)
+	{
+		this.h = value;
+		for (var i = 0; i < this.components.length; i++) {
+			this.components[i].set_height(value);
+		}
+	},
 
 	active: function( idx )
 	{
@@ -1780,13 +1805,9 @@ ui.Polygon = ui.Component.extend(
 
 ui.Sprite = ui.Component.extend(
 {	
-	init: function(manager, parent, sheet)
+	init: function(manager, parent)
 	{				
-		this._super(manager, parent);
-		this.sheet = this.manager.streamer.get_resource(sheet);
-		this.image = this.sheet.data;
-		this.w = this.sheet.frame_width;
-		this.h = this.sheet.frame_height;		
+		this._super(manager, parent);		
 		this.frame_count = 0;		
 		this.current_step = 0;
 		this.loop = true;
@@ -1810,6 +1831,13 @@ ui.Sprite = ui.Component.extend(
 		if(value)
 			this.bounce = false;
 		this.loop = value;		
+	},
+	set_sheet: function(value)
+	{
+		this.sheet = this.manager.streamer.get_resource(value);
+		this.image = this.sheet.data;
+		this.w = this.sheet.frame_width;
+		this.h = this.sheet.frame_height;		
 	},
 	set_right_to_left: function(value)
 	{
@@ -1980,7 +2008,7 @@ ui.Video = ui.Component.extend(
 ui.Sound = Class.extend(
 {
 	init: function(src)
-	{					
+	{				
 		var resource = this.manager.streamer.get_resource(src);
         if (!resource)
             throw "Unknow resource: " + src;         		

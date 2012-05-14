@@ -1317,6 +1317,33 @@ bool xss_object::empty()
     return properties_->empty() && methods_->empty() && events_->empty();
   }
 
+void xss_object::propertize()
+  {
+    //find values that correspond to our properties, update values
+    item_list::iterator iit = items_.begin();
+    item_list::iterator ind = items_.end();
+
+    for(; iit != ind; iit++)
+      {
+        XSSProperty myprop = get_shallow_property(iit->first);
+        XSSProperty typeprop = type_? type_->get_property(iit->first) : XSSProperty();
+            
+        variant value;
+        if (iit->second.get)
+            value = iit->second.get->get(this);
+
+        if (myprop)
+          myprop->value_ = value;
+        else if (typeprop)
+          {
+            myprop = XSSProperty(new xss_property);
+            myprop->copy(XSSObject(typeprop));
+            myprop->value_ = value;
+            add_property_(myprop);
+          }
+      }
+  }
+
 void xss_object::add_child(XSSObject obj)
   {
     obj->set_parent(shared_from_this());
@@ -1326,6 +1353,59 @@ void xss_object::add_child(XSSObject obj)
 void xss_object::remove_child(XSSObject obj)
   {
     assert(false); //hate removing
+  }
+
+void xss_object::fixup_children(XSSContext ctx)
+  {
+    std::vector<variant>::iterator it = children_->ref_begin();
+    std::vector<variant>::iterator nd = children_->ref_end();
+
+    size_t idx = 0;
+    std::vector<size_t> to_remove;
+    for(; it != nd; it++, idx++)
+      {
+        XSSObject child = *it;
+
+        XSSProperty myprop = get_shallow_property(child->type_name());
+        XSSProperty typeprop = type_? type_->get_property(child->type_name()) : XSSProperty();
+
+        bool found = true;
+        if (myprop)
+          myprop->value_ = child;
+        else if (typeprop)
+          {
+            myprop = XSSProperty(new xss_property);
+            myprop->copy(XSSObject(typeprop));
+            myprop->value_ = child;
+            add_property_(myprop);
+          }
+        else 
+          {
+            found = false;
+            XSSType   child_type = child->type();
+            if (!child_type)
+              {
+                child_type = ctx->get_type(child->type_name());
+                child->set_type(child_type);
+                child->propertize();
+              }
+          }
+
+        if (found)
+          {
+            child->set_type(myprop->type());
+            child->propertize();
+
+            to_remove.push_back(idx);
+          }
+
+        child->fixup_children(ctx);
+      }
+
+    std::vector<size_t>::reverse_iterator rit = to_remove.rbegin();
+    std::vector<size_t>::reverse_iterator rnd = to_remove.rend();
+    for(; rit != rnd; rit++)
+      children_->remove(*rit);
   }
 
 XSSProperty xss_object::get_property(const str& name)
@@ -1613,33 +1693,6 @@ void xss_type::set_definition(XSSObject def)
           }
 
         copy(def);
-      }
-  }
-
-void xss_type::propertize()
-  {
-    //find values that correspond to our properties, update values
-    item_list::iterator iit = items_.begin();
-    item_list::iterator ind = items_.end();
-
-    for(; iit != ind; iit++)
-      {
-        XSSProperty myprop = get_shallow_property(iit->first);
-        XSSProperty typeprop = type_? type_->get_property(iit->first) : XSSProperty();
-            
-        variant value;
-        if (iit->second.get)
-            value = iit->second.get->get(this);
-
-        if (myprop)
-          myprop->value_ = value;
-        else if (typeprop)
-          {
-            myprop = XSSProperty(new xss_property);
-            myprop->copy(XSSObject(typeprop));
-            myprop->value_ = value;
-            add_property_(myprop);
-          }
       }
   }
 

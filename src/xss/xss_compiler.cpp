@@ -1374,6 +1374,13 @@ str xss_compiler::render_value(variant value)
     return xss_utils::var_to_string(value);
   }
 
+void xss_compiler::using_idiom(const str& idiom)
+  {
+    XSSModule mod = idiom_by_id(idiom);
+    if (mod)
+      mod->used();
+  }
+
 XSSObject xss_compiler::analyze_expression(const param_list params)
   {
     //get expression
@@ -2013,6 +2020,10 @@ XSSModule xss_compiler::read_module(const str& src, XSSApplicationRenderer app, 
     //read instances, these will act as singletons
     read_instances(module, app, result);
 
+    //account for dependencies
+    if (result->get<bool>("auto_dependencies", false))
+      result->used();
+
 		//and code, if present
     str code_file = module_data->get<str>("src", str());
     if (!code_file.empty())
@@ -2505,6 +2516,7 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
             clazz->set_definition(def_class);
             clazz->set_super(super);
             clazz->set_context(ictx);
+            clazz->fixup_children(ictx);
 				    
             ictx->set_this(XSSObject(clazz));
 

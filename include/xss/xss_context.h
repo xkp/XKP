@@ -122,10 +122,12 @@ class xss_object : public editable_object<xss_object>,
 		  bool                   is_injected(const str& name);
       void                   add_method(const str& event_name, XSSMethod m);
 		  bool                   empty();
+      void                   propertize();
     public:
       //children management
 			void add_child(XSSObject obj);
       void remove_child(XSSObject obj);
+      void fixup_children(XSSContext ctx);
 		public:
       void add_property_(XSSProperty prop);
       XSSProperty add_property(const str& name, variant value, XSSType type);
@@ -173,7 +175,6 @@ class xss_type : public xss_object
       XSSContext    context();
       void          set_context(XSSContext ctx);
       XSSObjectList get_dependencies();
-      void          propertize();
     public:
       void as_enum();
       void as_array(XSSType type);

@@ -6,12 +6,12 @@
             <script type="text/javascript" src="../js/event.js"></script>
             <script type="text/javascript" src="../js/utils.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
-            <script type="text/javascript" src="../js/sequence.js"></script>
             <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/sequence.js"></script>
             <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
             <script type="text/javascript" src="../js/joint.js"></script>
             <script type="text/javascript" src="../js/spawner.js"></script>
-            <script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">
 var drawingCanvas;	
 var streamer;	
@@ -34,7 +34,7 @@ var SoundUtils = new ui.SoundUtils();
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
-		}
+		}		
 		var streamer = new stream.Streamer();	
 		var ResourceUtils = new stream.ResourceUtils();
         var   b2Vec2 = Box2D.Common.Math.b2Vec2
@@ -273,13 +273,14 @@ function start(resolution)
             bb = bb.GetNext();
         }
 		g_sequence_manager.update(g_delta);
-		application.events.dispatch("updates", []);	
+		application.events.dispatch("updates", []);			
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-        window.setTimeout(updater, resolution);  
+		window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var sound;var hero;var __floor1;var game_over;
         var bad_guy = ui.Image.extend(
     {
     init: function(
@@ -290,8 +291,8 @@ function start(resolution)
                 src
                 )
     {
-        this._super(
-		manager,parent,src? src : "images/smile_sad_48.png"        );
+			this._super(	
+			manager,parent,src? src : "images/smile_sad_48.png");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -325,11 +326,6 @@ function start(resolution)
                     }
                 }
         this.cannon = new arcade.Spawner(g_spawner_manager, 20, 60, 1, 2);
-            this.cannon.x = 20;
-            this.cannon.y = 60;
-            this.cannon.set_rotation(0);
-            this.cannon.frequency = 1;
-            this.cannon.velocity = 2;
         this.cannon.creator = function()
         {
             return new bullet(g_ui, g_ui_root, "images/bomb.png");
@@ -374,6 +370,12 @@ this__.fade_out.start();
 	}
 	);
 		application.are_obj_events = true;
+            this.cannon.x = 20;
+            this.cannon.y = 60;
+            this.cannon.set_rotation(0);
+            this.cannon.frequency = 1;
+            this.cannon.velocity = 2;
+            this.fade_out.target = null;
             this.events.dispatch("init", [this]);
             },
 });
@@ -387,8 +389,8 @@ this__.fade_out.start();
                 src
                 )
     {
-        this._super(
-		manager,parent,src? src : "images/smile_grin_48.png"        );
+			this._super(	
+			manager,parent,src? src : "images/smile_grin_48.png");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -440,6 +442,8 @@ g_sequence_manager);
 	}
 	);
 		application.are_obj_events = true;
+            this.move_around.vx = 0;
+            this.move_around.vy = 0;
             this.events.dispatch("init", [this]);
             },
 });
@@ -453,8 +457,8 @@ g_sequence_manager);
                 src
                 )
     {
-        this._super(
-		manager,parent,src? src : "images/bomb.png"        );
+			this._super(	
+			manager,parent,src? src : "images/bomb.png");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -515,8 +519,8 @@ SoundUtils.play("sounds/boom.wav");
                 src
                 )
     {
-        this._super(
-		manager,parent,src? src : "images/stone-12.jpg"        );
+			this._super(	
+			manager,parent,src? src : "images/stone-12.jpg");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -559,8 +563,8 @@ SoundUtils.play("sounds/boom.wav");
                 manager
                 )
     {
-        this._super(
-		manager        );
+			this._super(	
+			manager);       
         this.events = new ev.EventHolder(); 
         var this__  = this;
                 var this__ = this;
@@ -678,11 +682,19 @@ window.onload = function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    sound = new ui.StateButton(g_ui_root.manager, g_ui_root, "images/sound_on.png", "images/sound_off.png");
+		    hero = new good_guy(g_ui_root.manager, g_ui_root, "images/smile_grin_48.png");
+		    __floor1 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
+		    game_over = new ui.Label(g_ui_root.manager, g_ui_root, "40pt Calibri");
+        sp1 = new arcade.Spawner(g_spawner_manager, 300, 100, 3, null);
+        sp1.creator = function()
+        {
+            return new bad_guy(g_ui, g_ui_root, "images/smile_sad_48.png");
+        }
+            sp1.start();
             sound.set_x(50);
             sound.set_y(50);
             sound.set_width(50);
             sound.set_height(50);
-		    hero = new good_guy(g_ui_root.manager, g_ui_root, "images/smile_grin_48.png");
             hero.set_x(300);
             hero.set_y(350);
 	hero.events.addListener("collision", function()
@@ -693,25 +705,17 @@ hero.src("images/smile_sad_48.png");
 	}
 	);
 		application.are_obj_events = true;
-		    __floor1 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
             __floor1.set_x(0);
             __floor1.set_y(390);
             __floor1.set_width(600);
             __floor1.set_height(40);
-		    game_over = new ui.Label(g_ui_root.manager, g_ui_root, "40pt Calibri");
             game_over.set_x(220);
             game_over.set_y(200);
             game_over.setVisible(false);
             game_over.text("GAME OVER");
-        sp1 = new arcade.Spawner(g_spawner_manager, 300, 100, 3, null);
             sp1.x = 300;
             sp1.y = 100;
             sp1.frequency = 3;
-        sp1.creator = function()
-        {
-            return new bad_guy(g_ui, g_ui_root, "images/smile_sad_48.png");
-        }
-            sp1.start();
 			document.onkeydown = function(ev)
 			{
 				ui_.keydown(ev.keyCode);                  
@@ -725,7 +729,7 @@ hero.src("images/smile_sad_48.png");
 				ui_.keypress(ev.keyCode);                  
 			};
             application.events.dispatch("init", []);
-            start();
+            start();			
 			ui_.draw(drawingCanvas.getContext('2d'));
 		});
 	}

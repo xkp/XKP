@@ -7,10 +7,10 @@
             <script type="text/javascript" src="../js/utils.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
             <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
             <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
             <script type="text/javascript" src="../js/joint.js"></script>
             <script type="text/javascript" src="../js/spawner.js"></script>
-            <script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">
 var drawingCanvas;	
 var streamer;	
@@ -33,7 +33,7 @@ var SoundUtils = new ui.SoundUtils();
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
-		}
+		}		
 		var streamer = new stream.Streamer();	
 		var ResourceUtils = new stream.ResourceUtils();
         var   b2Vec2 = Box2D.Common.Math.b2Vec2
@@ -196,13 +196,14 @@ function start(resolution)
             }
             bb = bb.GetNext();
         }
-		application.events.dispatch("updates", []);	
+		application.events.dispatch("updates", []);			
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-        window.setTimeout(updater, resolution);  
+		window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var __img1;var __img2;var __img3;
         var smiley_ball = ui.Image.extend(
     {
     init: function(
@@ -213,8 +214,8 @@ function start(resolution)
                 src
                 )
     {
-        this._super(
-		manager,parent,src? src : "images/smile_grin_48.png"        );
+			this._super(	
+			manager,parent,src? src : "images/smile_grin_48.png");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -324,26 +325,9 @@ window.onload = function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    __img1 = new ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
-            __img1.set_x(0);
-            __img1.set_y(390);
-            __img1.set_width(600);
-            __img1.set_height(40);
 		    __img2 = new ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
-            __img2.set_x(590);
-            __img2.set_y(350);
-            __img2.set_width(10);
-            __img2.set_height(40);
 		    __img3 = new ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
-            __img3.set_x(0);
-            __img3.set_y(350);
-            __img3.set_width(10);
-            __img3.set_height(40);
         sp1 = new arcade.Spawner(g_spawner_manager, 100, 100, 1, 1);
-            sp1.x = 100;
-            sp1.y = 100;
-            sp1.set_rotation(95);
-            sp1.frequency = 1;
-            sp1.velocity = 1;
         sp1.creator = function()
         {
             return new smiley_ball(g_ui, g_ui_root, "images/smile_grin_48.png");
@@ -451,6 +435,23 @@ window.onload = function()
             debugDraw.SetLineThickness(1.0);
             debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
             g_world.SetDebugDraw(debugDraw);
+            __img1.set_x(0);
+            __img1.set_y(390);
+            __img1.set_width(600);
+            __img1.set_height(40);
+            __img2.set_x(590);
+            __img2.set_y(350);
+            __img2.set_width(10);
+            __img2.set_height(40);
+            __img3.set_x(0);
+            __img3.set_y(350);
+            __img3.set_width(10);
+            __img3.set_height(40);
+            sp1.x = 100;
+            sp1.y = 100;
+            sp1.set_rotation(95);
+            sp1.frequency = 1;
+            sp1.velocity = 1;
 			document.onkeydown = function(ev)
 			{
 				ui_.keydown(ev.keyCode);                  
@@ -464,7 +465,7 @@ window.onload = function()
 				ui_.keypress(ev.keyCode);                  
 			};
             application.events.dispatch("init", []);
-            start();
+            start();			
 			ui_.draw(drawingCanvas.getContext('2d'));
 		});
 	}

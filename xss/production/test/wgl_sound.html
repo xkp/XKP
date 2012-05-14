@@ -13,13 +13,14 @@
             <script type="text/javascript" src="../js/event.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
             <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
 <script type="text/javascript">		
-var ui;
+var ui_;
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 var renderer = new THREE.WebGLRenderer( { antialias: false } );
 var canvas_position = {x:0, y:0};
@@ -105,16 +106,11 @@ camera_1 = new THREE.QuakeCamera({
 fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly:true,lookVertical:false
 	});
 		active_camera = camera_1;
-            camera_1.position.y = 25;
 	    light = 
 	    new THREE.DirectionalLight(white, null, null, null) ;
 	    scene.addLight(light);
-            light.position.y = 0.5;
-            light.position.z = 1;
 			    container_1 = new THREE.Object3D() ;
 			container_1.events = new ev.EventHolder();
-            container_1.position.x = 250;
-            container_1.position.y = 30;
 	    sphere_1_sphere = new THREE.Sphere(20, 32, 16) ;
 	    sphere_1 = new THREE.Mesh(sphere_1_sphere, material_sphere1);
 	    scene.addObject(sphere_1);
@@ -130,8 +126,6 @@ fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly
 				scene.addObject(container_1);
 			    container_2 = new THREE.Object3D() ;
 			container_2.events = new ev.EventHolder();
-            container_2.position.x = -250;
-            container_2.position.y = 30;
 	    sphere_2_sphere = new THREE.Sphere(20, 32, 16) ;
 	    sphere_2 = new THREE.Mesh(sphere_2_sphere, material_sphere2);
 	    scene.addObject(sphere_2);
@@ -149,6 +143,13 @@ fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly
 	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    scene.addObject(plane_1);
 		plane_1.events = new ev.EventHolder();
+            camera_1.position.y = 25;
+            light.position.y = 0.5;
+            light.position.z = 1;
+            container_1.position.x = 250;
+            container_1.position.y = 30;
+            container_2.position.x = -250;
+            container_2.position.y = 30;
             plane_1.position.y = 0.100000001;
             set_rotation_x(plane_1.rotation, -90);
 var event_manager = new ev.ThreeEventManager();

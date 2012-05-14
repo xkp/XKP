@@ -1,6 +1,10 @@
 
 on pre_process(obj)
 {
+	//assign name if it dont have, must optimize
+    if(obj.id == '')
+		obj.id = compiler.genid(obj.class_name);
+
     //isolate css for easier handling
     var css = object();
     for(var prop in obj.properties)

@@ -56,7 +56,9 @@
             </at>
         </sequence>
 
-        <image_plane id="img1"/>
+        <image_plane id="img1">
+            <position x="-300" y="0" z="0"/>
+        </image_plane>
         <image_plane id="img2"/>
         <image_plane id="img3"/>
         <image_plane id="img4"/>

@@ -2,6 +2,9 @@ on pre_process(obj)
 {
 	if(obj.id == '')
 		obj.id = compiler.genid(obj.class_name);
+	if(obj.parent)	
+		if(obj.parent.wait_for_package)
+			obj.wait_for_package = obj.parent.wait_for_package;
 }
 
 on compile_dependency(dep)
@@ -34,7 +37,7 @@ on render_initialization()
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
-		}
+		}		
 	}
 }
 
@@ -42,11 +45,31 @@ on render_types()
 {
 	compiler.log("Rendering UI Types...");
     for(var ut in user_types)
-    {		
-        compiler.log(ut.id);
+    {		       
         var full_path = compiler.full_path("component.xss");		
 		compiler.xss("../common-js/resig-class.xss", ut, renderer = full_path, context = ut);			
     }
+}
+
+on render_inst_elems()
+{
+	for(var inst in instances)
+    {
+		if(!inst.dont_render)
+		{
+			if(inst.wait_for_package)
+			{
+				out()
+				{
+				<xss:e v="inst.wait_for_package"/>.events.addListener("loaded", function()
+				<xss:open_brace/>
+				}
+			}
+			compiler.xss("../common-js/instance.xss", inst);
+			if(inst.wait_for_package)
+				out(){<xss:close_brace/>);}
+		}
+	}
 }
 
 on render_instances()
@@ -103,10 +126,8 @@ on render_instances()
 	});
 	}
 	
-    for(int i = 0; i < instances.size; i++)
-    {			
-		var inst = instances[i];		
-		        
+    for(var inst in instances)
+    {					
         if(inst.wait_for_package)
 		{			
 			out()
@@ -114,20 +135,12 @@ on render_instances()
 				<xss:e v="inst.wait_for_package"/>.events.addListener("loaded", function()
 				<xss:open_brace/>				
 			}
-			compiler.xss("component.xss", inst, false);
-			for(var child in inst.children)
-			{
-				if(child.renderer)
-					compiler.xss(child.renderer, child);			
-				else
-					compiler.xss("component.xss", child, false);
-				i++;
-			}
-			out(){<xss:close_brace/>);}
-		}
-		else if(inst.renderer)
+		}			
+		if(inst.renderer)
 			compiler.xss(inst.renderer, inst);			
 		else
 			compiler.xss("component.xss", inst, false);
+		if(inst.wait_for_package)	
+			out(){<xss:close_brace/>);}		
     }
 }

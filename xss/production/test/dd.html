@@ -11,16 +11,16 @@
 </style>
             <script type="text/javascript" src="../js/resig.js"></script>
             <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
             <script type="text/javascript" src="../js/colors.js"></script>
-            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/sequence.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
-            <script type="text/javascript" src="../js/ui.js"></script>
-            <script type="text/javascript" src="../js/sequence.js"></script>
-            <script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui_;
@@ -35,6 +35,7 @@ var streamer;
 var app_width = 1000;
 var app_height = 800;
 var idle;var selected;var unselected;var move;var grow;var shrink;var facebook;var twitter;var email;
+var image_plane;var camera_1;var test_ip;
 var application = {};
 application.events = new ev.EventHolder();
 		var g_sequence_manager = new state.Manager();
@@ -55,7 +56,7 @@ application.events = new ev.EventHolder();
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
-		}
+		}		
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
@@ -126,7 +127,6 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var image_plane;var camera_1;var test_ip;
         var social_button = ui.Image.extend(
     {
     init: function(
@@ -137,8 +137,8 @@ var image_plane;var camera_1;var test_ip;
                 src
                 )
     {
-        this._super(
-		manager,parent,src        );
+			this._super(	
+			manager,parent,src);       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 this.grow =
@@ -313,7 +313,6 @@ g_sequence_manager);
         {t: 3, value: 100},
             ]);
             idle.addHandler(____i10);	              
-            idle.loop = true;
             image_plane.idle = idle;
             var selected;
 selected =
@@ -403,6 +402,7 @@ g_sequence_manager);
         ____i16.keys[0].value = this__.scale.z;
         });
             image_plane.unselected = unselected;
+            idle.loop = true;
 	image_plane.set_image = function(value) 
 	{
 		image_plane.materials[0].map = new THREE.Texture(scene.streamer.get_resource(value).data);
@@ -564,33 +564,6 @@ g_sequence_manager);
         ____i25.keys[0].value = this__.scale.z;
         });
             image_group.shrink = shrink;
-            image_group.destination = null;
-        image_group.images = null;
-        image_group.images_set = function (value)
-        {
-            image_group.images = value;
-            var dist = 150;
-var planes_ = [img1, img2, img3, img4, img5, img6, img7, img8, img9];
-var positions = [{x : -dist,y : -dist}, {x : -dist,y : 0}, {x : -dist,y : dist}, {x : 0,y : -dist}, {x : 0,y : 0}, {x : 0,y : dist}, {x : dist,y : -dist}, {x : dist,y : 0}, {x : dist,y : dist}];
-for(var i = 0; i < value.length; i++)
-{
-var pos = positions[i];
-planes_[i].position.x = pos.x;
-planes_[i].position.y = pos.y;
-planes_[i].set_image(value[i]);
-}
-        };
-        image_group.destination = null;
-        image_group.destination_set = function (value)
-        {
-            image_group.destination = value;
-            var planes_ = [img1, img2, img3, img4, img5, img6, img7, img8, img9];
-for(var i = 0; i < value.length; i++)
-{
-planes_[i].destination = value[i];
-planes_[i].move.start();
-}
-        };
 			 var img1;
 			img1 = 
 create_image_plane(100, 100, null, null)
@@ -627,6 +600,36 @@ create_image_plane(100, 100, null, null)
 			img9 = 
 create_image_plane(100, 100, null, null)
  ;
+            img1.position.x = -300;
+            img1.position.y = 0;
+            img1.position.z = 0;
+            image_group.destination = null;
+        image_group.images = null;
+        image_group.images_set = function (value)
+        {
+            image_group.images = value;
+            var dist = 150;
+var planes_ = [img1, img2, img3, img4, img5, img6, img7, img8, img9];
+var positions = [{x : -dist,y : -dist}, {x : -dist,y : 0}, {x : -dist,y : dist}, {x : 0,y : -dist}, {x : 0,y : 0}, {x : 0,y : dist}, {x : dist,y : -dist}, {x : dist,y : 0}, {x : dist,y : dist}];
+for(var i = 0; i < value.length; i++)
+{
+var pos = positions[i];
+planes_[i].position.x = pos.x;
+planes_[i].position.y = pos.y;
+planes_[i].set_image(value[i]);
+}
+        };
+        image_group.destination = null;
+        image_group.destination_set = function (value)
+        {
+            image_group.destination = value;
+            var planes_ = [img1, img2, img3, img4, img5, img6, img7, img8, img9];
+for(var i = 0; i < value.length; i++)
+{
+planes_[i].destination = value[i];
+planes_[i].move.start();
+}
+        };
         return image_group;
         }
 threejs_load_resources(streamer, function()
@@ -680,28 +683,28 @@ threejs_load_resources(streamer, function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    facebook = new social_button(g_ui_root.manager, g_ui_root, "images/facebook.png");
+		    twitter = new social_button(g_ui_root.manager, g_ui_root, "images/twitter.png");
+		    email = new social_button(g_ui_root.manager, g_ui_root, "images/photobucket.png");
+		    camera_1 = 
+		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
+		active_camera = camera_1;
+			    test_ip = 
+create_image_group()
+ ;
             facebook.set_x(880);
             facebook.set_y(8);
             facebook.set_width(24);
             facebook.set_height(24);
-		    twitter = new social_button(g_ui_root.manager, g_ui_root, "images/twitter.png");
             twitter.set_x(845);
             twitter.set_y(8);
             twitter.set_width(24);
             twitter.set_height(24);
-		    email = new social_button(g_ui_root.manager, g_ui_root, "images/photobucket.png");
             email.set_x(810);
             email.set_y(8);
             email.set_width(24);
             email.set_height(24);
-		    camera_1 = 
-		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
-		active_camera = camera_1;
             camera_1.position.z = 1000;
-			    test_ip = 
-create_image_group()
- ;
-            test_ip.position.x = -100;
+            test_ip.position.x = -300;
             test_ip.position.y = 0;
             test_ip.position.z = 0;
 	application.events.addListener("init", function()
@@ -746,10 +749,14 @@ animate();
 function animate() {
 	if(ui_)
 		drawingCanvas.getContext('2d').clearRect(0,0,1000,800);
+	renderer.domElement.getContext('2d').globalAlpha = 1;
 	requestAnimationFrame( animate );
 	render();
 	if(ui_)
+	{
+		drawingCanvas.getContext('2d').globalAlpha = 1;
 		ui_.draw(drawingCanvas.getContext('2d'));
+	}
 	}
 </script>
 </body>
