@@ -3013,6 +3013,17 @@ void xss_compiler::type_dependencies(XSSType type, dependency_list& deps)
         deps.add(*it);
   }
 
+str xss_compiler::get_env_var(const str& key)
+  {
+    char* val = getenv(key.c_str());
+
+    std::string result = "";
+    if (val != NULL)
+      result = val;
+    
+    return result;
+  }
+
 void xss_compiler::collect_dependencies(XSSType type, XSSType context)
   {
     if (type->has("#depcollected"))

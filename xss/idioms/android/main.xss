@@ -85,12 +85,18 @@
 	else
 	if(appOptions.android_project_type == "apk")
 	{
-		appOutputPath = appOutputPath + "/" + appName;
 		application.output_classes = "java.lst";
+		application.output_javac_options = "javac.opts";
+		
+		appOutputPath = appOutputPath + "/" + appName;
 		string output_classes = appName + "/" + application.output_classes;
+		string output_javac_options = appName + "/" + application.output_javac_options;
 		
 		string xss_classes = "java.lst.xss";
 		compiler.xss(xss_classes, output_file = output_classes, appOutputPath);
+		
+		string xss_javac_options = "javac.options.xss";
+		compiler.xss(xss_javac_options, output_file = output_javac_options, appOutputPath);
 	}
 	else
 	{

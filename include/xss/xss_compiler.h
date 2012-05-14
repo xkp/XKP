@@ -240,6 +240,7 @@ namespace xkp
         str          get_result();
         void         render_app_types(const str& renderer);
         void         type_dependencies(XSSType type, dependency_list& deps);
+        str          get_env_var(const str& key);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -374,6 +375,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<DynamicArray, 1>("idiom_dependencies", &xss_compiler::idiom_dependencies);
         method_<void,         1>("render_app_types",   &xss_compiler::render_app_types);
         method_<DynamicArray, 2>("find_files",         &xss_compiler::find_files);
+        method_<str,          1>("get_env_var",        &xss_compiler::get_env_var);
       }
   };
 

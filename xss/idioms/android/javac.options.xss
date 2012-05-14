@@ -1,0 +1,19 @@
+<xss:parameter id="appOutputPath"/>
+
+<xss:code>
+	string android_sdk = compiler.get_env_var("ANDROID_SDK");
+	if(android_sdk == "")
+		compiler.error("Environment variable is not defined", variable_name = "ANDROID_SDK");
+	
+	int targetAPILevel = application.targetAPILevel;
+	
+	out()
+	{
+-encoding ascii 
+-target 1.5 
+-d <xss:e value="appOutputPath"/>/bin 
+-bootclasspath <xss:e value="android_sdk"/>/platforms/android-<xss:e value="targetAPILevel"/>/android.jar 
+-classpath <xss:e value="android_sdk"/>/platforms/android-<xss:e value="targetAPILevel"/>/android.jar 
+-sourcepath "<xss:e value="appOutputPath"/>/src;<xss:e value="appOutputPath"/>/gen"
+	}
+</xss:code>

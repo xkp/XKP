@@ -9,6 +9,7 @@ on finished()
 	int targetAPILevel = application.targetAPILevel;
 	string appName = application.appName;
 	string outputClasses = application.output_classes;
+	string outputJavacOpts = application.output_javac_options;
 	
 	if(appOptions.android_project_type != "apk")
 		return;
@@ -34,7 +35,7 @@ on finished()
 	//shell(working_path = appOutputPath)
 	shell(working_path = "d:/xkp/xss/production/android/SimpleTest")
 	{
-		javac @@options @@@outputClasses
+		javac @@@outputJavacOpts @@@outputClasses
 	}
 	
 	string libsParams = "-rj " + appOutputPath + "/libs";
