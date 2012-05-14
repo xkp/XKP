@@ -313,7 +313,7 @@ void xss_renderer::append(const str& what)
 
 void xss_renderer::append_at(const str& what, const str& marker)
   {
-	  marker_map::iterator it = markers_.find(marker);
+    marker_map::iterator it = markers_.find(marker);
     if (it != markers_.end())
       {
         it->second.value += what;

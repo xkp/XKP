@@ -30,7 +30,7 @@ var SoundUtils = new ui.SoundUtils();
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
-		}
+		}		
 		var streamer = new stream.Streamer();	
 		var ResourceUtils = new stream.ResourceUtils();
 		var global_package = new stream.Package(streamer);	
@@ -83,10 +83,10 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
-		application.events.dispatch("updates", []);	
+		application.events.dispatch("updates", []);			
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-        window.setTimeout(updater, resolution);  
+		window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
@@ -100,8 +100,8 @@ function start(resolution)
                 src
                 )
     {
-        this._super(
-		manager,parent,src        );
+			this._super(	
+			manager,parent,src);       
         this.events = new ev.EventHolder(); 
         var this__  = this;
         this.data_source = null;
@@ -124,18 +124,12 @@ function start(resolution)
                 parent
                 )
     {
-        this._super(
-		manager,parent        );
+			this._super(	
+			manager,parent);       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 		    this.lbl_caption = new ui.Label(this.manager, this, null);
-            this.lbl_caption.set_x(0);
-            this.lbl_caption.set_y(10);
 		    this.icon = new ui.Image(this.manager, this, null);
-            this.icon.set_x(10);
-            this.icon.set_y(30);
-            this.icon.set_width(50);
-            this.icon.set_height(50);
         this.data_source = null;
         this.data_source_set = function (value)
         {
@@ -146,6 +140,12 @@ this.icon.src(value.image);
             this.set_height(100);
             this.set_placement("left");
             this.set_width(100);
+            this.lbl_caption.set_x(0);
+            this.lbl_caption.set_y(10);
+            this.icon.set_x(10);
+            this.icon.set_y(30);
+            this.icon.set_width(50);
+            this.icon.set_height(50);
             this.events.dispatch("init", [this]);
             },
 });
@@ -223,10 +223,6 @@ window.onload = function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    rep1 = new ui.Replicator(g_ui_root.manager, g_ui_root, "menu_item");
-            rep1.set_x(30);
-            rep1.set_y(30);
-            rep1.set_width(500);
-            rep1.set_height(100);
 	rep1.set_data_source = function(data)
 		{
 			this.components = [];
@@ -240,10 +236,6 @@ window.onload = function()
 			}
 		}
 		    rep2 = new ui.Replicator(g_ui_root.manager, g_ui_root, "my_image");
-            rep2.set_x(30);
-            rep2.set_y(200);
-            rep2.set_width(500);
-            rep2.set_height(100);
 	rep2.set_data_source = function(data)
 		{
 			this.components = [];
@@ -257,6 +249,14 @@ window.onload = function()
 				child.data_source_set(item); 				
 			}
 		}
+            rep1.set_x(30);
+            rep1.set_y(30);
+            rep1.set_width(500);
+            rep1.set_height(100);
+            rep2.set_x(30);
+            rep2.set_y(200);
+            rep2.set_width(500);
+            rep2.set_height(100);
 			document.onkeydown = function(ev)
 			{
 				ui_.keydown(ev.keyCode);                  
@@ -270,7 +270,7 @@ window.onload = function()
 				ui_.keypress(ev.keyCode);                  
 			};
             application.events.dispatch("init", []);
-            start();
+            start();			
 			ui_.draw(drawingCanvas.getContext('2d'));
 		});
 	}

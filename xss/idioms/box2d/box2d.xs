@@ -125,6 +125,15 @@ on render_types()
 {
 }
 
+on render_inst_elems()
+{
+	for(var inst in instances)
+    {
+		if(!inst.dont_render)
+			compiler.xss("../common-js/instance.xss", inst);
+	}
+}
+
 on render_instances()
 {
     if (!world)
@@ -139,8 +148,7 @@ on render_instances()
         if (renderer)
 		    compiler.xss(renderer, i, world = world);
         else{
-            out(){<xss:e v="i.id"/> = }compiler.xss("../common-js/instantiator.xss", i);
-			compiler.xss("../common-js/instance.xss", i);
+            out(){<xss:e v="i.id"/> = }compiler.xss("../common-js/instantiator.xss", i);			
 		}
     }
 

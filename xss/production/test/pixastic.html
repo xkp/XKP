@@ -6,8 +6,8 @@
             <script type="text/javascript" src="../js/event.js"></script>
             <script type="text/javascript" src="../js/utils.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
-            <script type="text/javascript" src="../js/streamer.js"></script>
             <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
             <script type="text/javascript" src="../js/pixastic/pixastic.core.js"></script>
             <script type="text/javascript" src="../js/pixastic/actions.js"></script>
             <script type="text/javascript" src="../js/pixastic/pixastic-manager.js"></script>
@@ -34,7 +34,7 @@ var SoundUtils = new ui.SoundUtils();
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
-		}
+		}		
 		var streamer = new stream.Streamer();	
 		var ResourceUtils = new stream.ResourceUtils();
 		var global_package = new stream.Package(streamer);	
@@ -168,7 +168,7 @@ var SoundUtils = new ui.SoundUtils();
             {
 		id:				"__image10",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"images/unchecked.jpg",
+		src:			"images/unchecked.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
@@ -182,7 +182,7 @@ var SoundUtils = new ui.SoundUtils();
             {
 		id:				"__image11",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"images/checked.jpg",
+		src:			"images/checked.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
@@ -213,13 +213,14 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
-		application.events.dispatch("updates", []);	
+		application.events.dispatch("updates", []);			
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-        window.setTimeout(updater, resolution);  
+		window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var __label1;var __line1;var img1;var title;var flipv_label;var hsl_label;var edges_label;var pointillize_label;var brightness_label;var invert_label;var sepia_label;var coloradjust_label;var noise_label;var blur_label;var edges2_label;var glow_label;var sharpen_label;var solarize_label;var fliph_label;var mosaic_label;var options;var hsl_options;var __label2;var __label3;var saturation_bar;var saturation_b1;var saturation_b2;var __label4;var hue_bar;var hue_b1;var hue_b2;var __label5;var lightness_bar;var lightness_b1;var lightness_b2;var edges_options;var __label6;var mono_check;var __label7;var invert_check;var __label8;var pointillize_options;var __label9;var __label10;var density_bar;var density_b1;var density_b2;var __label11;var noise_bar;var noise_b1;var noise_b2;var transparent_check;var __label12;var brightness_options;var __label13;var __label14;var brightness_bar;var brightness_b1;var brightness_b2;var __label15;var contrast_bar;var contrast_b1;var contrast_b2;var coloradjust_options;var __label16;var __label17;var red_bar;var red_b1;var red_b2;var __label18;var green_bar;var green_b1;var green_b2;var __label19;var blue_bar;var blue_b1;var blue_b2;var noise_options;var __label20;var __label21;var amount_bar;var amount_b1;var amount_b2;var __label22;var strength_bar;var strength_b1;var strength_b2;var mono_check1;var __label23;var glow_options;var __label24;var __label25;var amount_bar1;var amount_b11;var amount_b21;var __label26;var radius_bar;var radius_b1;var radius_b2;var sharpen_options;var __label27;var __label28;var amount_bar2;var amount_b12;var amount_b22;var mosaic_options;var __label29;var __label30;var bsize_bar;var bsize_b1;var bsize_b2;var btnNext;var btnPrev;var __label31;
 window.onload = function() 
 {
         drawingCanvas = document.getElementById("myCanvas");
@@ -286,1085 +287,128 @@ window.onload = function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    __label1 = new ui.Label(g_ui_root.manager, g_ui_root, "15px Verdana");
-            __label1.set_x(20);
-            __label1.set_y(10);
-            __label1.text("Image processing demo");
 		    __line1 = new ui.Line(g_ui_root.manager, g_ui_root);
-            __line1.set_x1(5);
-            __line1.set_y1(40);
-            __line1.set_x2(800);
-            __line1.set_y2(40);
 		    img1 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test1.png");
-            img1.set_x(280);
-            img1.set_y(100);
-            img1.set_width(256);
-            img1.set_height(328);
-            img1.mouse_thru = true;
 		    title = new ui.Label(g_ui_root.manager, g_ui_root, "13px Verdana");
-            title.set_x(570);
-            title.set_y(80);
-            title.text("Drag to the image the filter you want to able/disable");
 		    flipv_label = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            flipv_label.set_x(610);
-            flipv_label.set_y(110);
-            flipv_label.text("Flip Vertically");
-	flipv_label.events.addListener("drag", function(x,y)
-	{    
-		flipv_label.set_x(x - flipv_label.get_width() / 2);
-flipv_label.set_y(y - flipv_label.get_height() / 2);
-	}
-	);
-		application.are_obj_events = true;
-	flipv_label.events.addListener("dragend", function(x,y)
-	{    
-		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
-{
-img1.flipv_filter.set_apply(!img1.flipv_filter.apply_);
-}
-flipv_label.set_x(610);
-flipv_label.set_y(110);
-	}
-	);
-		application.are_obj_events = true;
 		    hsl_label = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            hsl_label.set_x(610);
-            hsl_label.set_y(130);
-            hsl_label.text("Hue/Saturation/Light");
-	hsl_label.events.addListener("drag", function(x,y)
-	{    
-		hsl_label.set_x(x - hsl_label.get_width() / 2);
-hsl_label.set_y(y - hsl_label.get_height() / 2);
-	}
-	);
-		application.are_obj_events = true;
-	hsl_label.events.addListener("dragend", function(x,y)
-	{    
-		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
-{
-img1.hsl_filter.set_apply(!img1.hsl_filter.apply_);
-}
-hsl_label.set_x(610);
-hsl_label.set_y(130);
-hsl_options.set_switchable(img1.hsl_filter.apply_);
-	}
-	);
-		application.are_obj_events = true;
 		    edges_label = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            edges_label.set_x(610);
-            edges_label.set_y(150);
-            edges_label.text("Edge Detection");
-	edges_label.events.addListener("drag", function(x,y)
-	{    
-		edges_label.set_x(x - edges_label.get_width() / 2);
-edges_label.set_y(y - edges_label.get_height() / 2);
-	}
-	);
-		application.are_obj_events = true;
-	edges_label.events.addListener("dragend", function(x,y)
-	{    
-		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
-{
-img1.edges_filter.set_apply(!img1.edges_filter.apply_);
-}
-edges_label.set_x(610);
-edges_label.set_y(150);
-edges_options.set_switchable(img1.edges_filter.apply_);
-	}
-	);
-		application.are_obj_events = true;
 		    pointillize_label = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            pointillize_label.set_x(610);
-            pointillize_label.set_y(170);
-            pointillize_label.text("Pointillize");
-	pointillize_label.events.addListener("drag", function(x,y)
-	{    
-		pointillize_label.set_x(x - pointillize_label.get_width() / 2);
-pointillize_label.set_y(y - pointillize_label.get_height() / 2);
-	}
-	);
-		application.are_obj_events = true;
-	pointillize_label.events.addListener("dragend", function(x,y)
-	{    
-		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
-{
-img1.pointillize_filter.set_apply(!img1.pointillize_filter.apply_);
-}
-pointillize_label.set_x(610);
-pointillize_label.set_y(170);
-pointillize_options.set_switchable(img1.pointillize_filter.apply_);
-	}
-	);
-		application.are_obj_events = true;
 		    brightness_label = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            brightness_label.set_x(610);
-            brightness_label.set_y(190);
-            brightness_label.text("Brightness/Contrast");
-	brightness_label.events.addListener("drag", function(x,y)
-	{    
-		brightness_label.set_x(x - brightness_label.get_width() / 2);
-brightness_label.set_y(y - brightness_label.get_height() / 2);
-	}
-	);
-		application.are_obj_events = true;
-	brightness_label.events.addListener("dragend", function(x,y)
-	{    
-		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
-{
-img1.brightness_filter.set_apply(!img1.brightness_filter.apply_);
-}
-brightness_label.set_x(610);
-brightness_label.set_y(190);
-brightness_options.set_switchable(img1.brightness_filter.apply_);
-	}
-	);
-		application.are_obj_events = true;
 		    invert_label = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            invert_label.set_x(610);
-            invert_label.set_y(210);
-            invert_label.text("Invert");
-	invert_label.events.addListener("drag", function(x,y)
-	{    
-		invert_label.set_x(x - invert_label.get_width() / 2);
-invert_label.set_y(y - invert_label.get_height() / 2);
-	}
-	);
-		application.are_obj_events = true;
-	invert_label.events.addListener("dragend", function(x,y)
-	{    
-		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
-{
-img1.invert_filter.set_apply(!img1.invert_filter.apply_);
-}
-invert_label.set_x(610);
-invert_label.set_y(210);
-	}
-	);
-		application.are_obj_events = true;
 		    sepia_label = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            sepia_label.set_x(610);
-            sepia_label.set_y(230);
-            sepia_label.text("Sepia");
-	sepia_label.events.addListener("drag", function(x,y)
-	{    
-		sepia_label.set_x(x - sepia_label.get_width() / 2);
-sepia_label.set_y(y - sepia_label.get_height() / 2);
-	}
-	);
-		application.are_obj_events = true;
-	sepia_label.events.addListener("dragend", function(x,y)
-	{    
-		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
-{
-img1.sepia_filter.set_apply(!img1.sepia_filter.apply_);
-}
-sepia_label.set_x(610);
-sepia_label.set_y(230);
-	}
-	);
-		application.are_obj_events = true;
 		    coloradjust_label = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            coloradjust_label.set_x(610);
-            coloradjust_label.set_y(250);
-            coloradjust_label.text("Color Adjust");
-	coloradjust_label.events.addListener("drag", function(x,y)
-	{    
-		coloradjust_label.set_x(x - coloradjust_label.get_width() / 2);
-coloradjust_label.set_y(y - coloradjust_label.get_height() / 2);
-	}
-	);
-		application.are_obj_events = true;
-	coloradjust_label.events.addListener("dragend", function(x,y)
-	{    
-		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
-{
-img1.coloradjust_filter.set_apply(!img1.coloradjust_filter.apply_);
-}
-coloradjust_label.set_x(610);
-coloradjust_label.set_y(250);
-coloradjust_options.set_switchable(img1.coloradjust_filter.apply_);
-	}
-	);
-		application.are_obj_events = true;
 		    noise_label = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            noise_label.set_x(610);
-            noise_label.set_y(270);
-            noise_label.text("Noise");
-	noise_label.events.addListener("drag", function(x,y)
-	{    
-		noise_label.set_x(x - noise_label.get_width() / 2);
-noise_label.set_y(y - noise_label.get_height() / 2);
-	}
-	);
-		application.are_obj_events = true;
-	noise_label.events.addListener("dragend", function(x,y)
-	{    
-		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
-{
-img1.noise_filter.apply = !img1.noise_filter.apply;
-}
-noise_label.set_x(610);
-noise_label.set_y(270);
-noise_options.set_switchable(img1.noise_filter.apply);
-	}
-	);
-		application.are_obj_events = true;
 		    blur_label = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            blur_label.set_x(610);
-            blur_label.set_y(290);
-            blur_label.text("Blur");
-	blur_label.events.addListener("drag", function(x,y)
-	{    
-		blur_label.set_x(x - blur_label.get_width() / 2);
-blur_label.set_y(y - blur_label.get_height() / 2);
-	}
-	);
-		application.are_obj_events = true;
-	blur_label.events.addListener("dragend", function(x,y)
-	{    
-		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
-{
-img1.blur_filter.set_apply(!img1.blur_filter.apply_);
-}
-blur_label.set_x(610);
-blur_label.set_y(290);
-	}
-	);
-		application.are_obj_events = true;
 		    edges2_label = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            edges2_label.set_x(610);
-            edges2_label.set_y(310);
-            edges2_label.text("Edge Detection 2");
-	edges2_label.events.addListener("drag", function(x,y)
-	{    
-		edges2_label.set_x(x - edges2_label.get_width() / 2);
-edges2_label.set_y(y - edges2_label.get_height() / 2);
-	}
-	);
-		application.are_obj_events = true;
-	edges2_label.events.addListener("dragend", function(x,y)
-	{    
-		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
-{
-img1.edges2_filter.set_apply(!img1.edges2_filter.apply_);
-}
-edges2_label.set_x(610);
-edges2_label.set_y(310);
-	}
-	);
-		application.are_obj_events = true;
 		    glow_label = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            glow_label.set_x(610);
-            glow_label.set_y(330);
-            glow_label.text("Glow");
-	glow_label.events.addListener("drag", function(x,y)
-	{    
-		glow_label.set_x(x - glow_label.get_width() / 2);
-glow_label.set_y(y - glow_label.get_height() / 2);
-	}
-	);
-		application.are_obj_events = true;
-	glow_label.events.addListener("dragend", function(x,y)
-	{    
-		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
-{
-img1.glow_filter.set_apply(!img1.glow_filter.apply_);
-}
-glow_label.set_x(610);
-glow_label.set_y(330);
-glow_options.set_switchable(img1.glow_filter.apply_);
-	}
-	);
-		application.are_obj_events = true;
 		    sharpen_label = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            sharpen_label.set_x(610);
-            sharpen_label.set_y(350);
-            sharpen_label.text("Sharpen");
-	sharpen_label.events.addListener("drag", function(x,y)
-	{    
-		sharpen_label.set_x(x - sharpen_label.get_width() / 2);
-sharpen_label.set_y(y - sharpen_label.get_height() / 2);
-	}
-	);
-		application.are_obj_events = true;
-	sharpen_label.events.addListener("dragend", function(x,y)
-	{    
-		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
-{
-img1.sharpen_filter.set_apply(!img1.sharpen_filter.apply_);
-}
-sharpen_label.set_x(610);
-sharpen_label.set_y(350);
-sharpen_options.set_switchable(img1.sharpen_filter.apply_);
-	}
-	);
-		application.are_obj_events = true;
 		    solarize_label = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            solarize_label.set_x(610);
-            solarize_label.set_y(370);
-            solarize_label.text("Solarize");
-	solarize_label.events.addListener("drag", function(x,y)
-	{    
-		solarize_label.set_x(x - solarize_label.get_width() / 2);
-solarize_label.set_y(y - solarize_label.get_height() / 2);
-	}
-	);
-		application.are_obj_events = true;
-	solarize_label.events.addListener("dragend", function(x,y)
-	{    
-		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
-{
-img1.solarize_filter.set_apply(!img1.solarize_filter.apply_);
-}
-solarize_label.set_x(610);
-solarize_label.set_y(370);
-	}
-	);
-		application.are_obj_events = true;
 		    fliph_label = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            fliph_label.set_x(610);
-            fliph_label.set_y(390);
-            fliph_label.text("Flip Horizontally");
-	fliph_label.events.addListener("drag", function(x,y)
-	{    
-		fliph_label.set_x(x - fliph_label.get_width() / 2);
-fliph_label.set_y(y - fliph_label.get_height() / 2);
-	}
-	);
-		application.are_obj_events = true;
-	fliph_label.events.addListener("dragend", function(x,y)
-	{    
-		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
-{
-img1.fliph_filter.set_apply(!img1.fliph_filter.apply_);
-}
-fliph_label.set_x(610);
-fliph_label.set_y(390);
-	}
-	);
-		application.are_obj_events = true;
 		    mosaic_label = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            mosaic_label.set_x(610);
-            mosaic_label.set_y(410);
-            mosaic_label.text("Mosaic");
-	mosaic_label.events.addListener("drag", function(x,y)
-	{    
-		mosaic_label.set_x(x - mosaic_label.get_width() / 2);
-mosaic_label.set_y(y - mosaic_label.get_height() / 2);
-	}
-	);
-		application.are_obj_events = true;
-	mosaic_label.events.addListener("dragend", function(x,y)
-	{    
-		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
-{
-img1.mosaic_filter.set_apply(!img1.mosaic_filter.apply_);
-}
-mosaic_label.set_x(610);
-mosaic_label.set_y(410);
-mosaic_options.set_switchable(img1.mosaic_filter.apply_);
-	}
-	);
-		application.are_obj_events = true;
 		    options = new ui.Switch(g_ui_root.manager, g_ui_root);
-            options.set_x(20);
-            options.set_y(80);
-            options.set_width(300);
-            options.set_height(250);
 		    hsl_options = new ui.Component(options.manager, options);
 	    hsl_options.mouse_thru = true;
-            hsl_options.set_switchable(false);
 		    __label2 = new ui.Label(hsl_options.manager, hsl_options, "12px Verdana");
-            __label2.set_x(10);
-            __label2.set_y(50);
-            __label2.text("Hue/Saturation/Light Parameters");
 		    __label3 = new ui.Label(hsl_options.manager, hsl_options, "12px Verdana");
-            __label3.set_x(40);
-            __label3.set_y(80);
-            __label3.text("Saturation Adjust");
 		    saturation_bar = new ui.ProgressBar(hsl_options.manager, hsl_options, null);
-            saturation_bar.set_x(40);
-            saturation_bar.set_y(105);
-            saturation_bar.value(50);
-            saturation_bar.set_width(120);
-            saturation_bar.set_height(10);
 		    saturation_b1 = new ui.Image(hsl_options.manager, hsl_options, "images/arrow_left.png");
-            saturation_b1.set_x(10);
-            saturation_b1.set_y(100);
-            saturation_b1.set_width(20);
-            saturation_b1.set_height(20);
-	saturation_b1.events.addListener("click", function()
-	{    
-		saturation_bar.value(saturation_bar.get_value() - 2);
-img1.hsl_filter.set_saturation(img1.hsl_filter.options.saturation - 4);
-	}
-	);
-		application.are_obj_events = true;
 		    saturation_b2 = new ui.Image(hsl_options.manager, hsl_options, "images/arrow_right.png");
-            saturation_b2.set_x(170);
-            saturation_b2.set_y(100);
-            saturation_b2.set_width(20);
-            saturation_b2.set_height(20);
-	saturation_b2.events.addListener("click", function()
-	{    
-		saturation_bar.value(saturation_bar.get_value() + 2);
-img1.hsl_filter.set_saturation(img1.hsl_filter.options.saturation + 4);
-	}
-	);
-		application.are_obj_events = true;
 		    __label4 = new ui.Label(hsl_options.manager, hsl_options, "12px Verdana");
-            __label4.set_x(40);
-            __label4.set_y(130);
-            __label4.text("Hue Adjust");
 		    hue_bar = new ui.ProgressBar(hsl_options.manager, hsl_options, null);
-            hue_bar.set_x(40);
-            hue_bar.set_y(155);
-            hue_bar.value(50);
-            hue_bar.set_width(120);
-            hue_bar.set_height(10);
 		    hue_b1 = new ui.Image(hsl_options.manager, hsl_options, "images/arrow_left.png");
-            hue_b1.set_x(10);
-            hue_b1.set_y(150);
-            hue_b1.set_width(20);
-            hue_b1.set_height(20);
-	hue_b1.events.addListener("click", function()
-	{    
-		hue_bar.value(hue_bar.get_value() - 2);
-img1.hsl_filter.set_hue(img1.hsl_filter.options.hue - 7.19999981);
-	}
-	);
-		application.are_obj_events = true;
 		    hue_b2 = new ui.Image(hsl_options.manager, hsl_options, "images/arrow_right.png");
-            hue_b2.set_x(170);
-            hue_b2.set_y(150);
-            hue_b2.set_width(20);
-            hue_b2.set_height(20);
-	hue_b2.events.addListener("click", function()
-	{    
-		hue_bar.value(hue_bar.get_value() + 2);
-img1.hsl_filter.set_hue(img1.hsl_filter.options.hue + 7.19999981);
-	}
-	);
-		application.are_obj_events = true;
 		    __label5 = new ui.Label(hsl_options.manager, hsl_options, "12px Verdana");
-            __label5.set_x(40);
-            __label5.set_y(180);
-            __label5.text("Lightness Adjust");
 		    lightness_bar = new ui.ProgressBar(hsl_options.manager, hsl_options, null);
-            lightness_bar.set_x(40);
-            lightness_bar.set_y(205);
-            lightness_bar.value(50);
-            lightness_bar.set_width(120);
-            lightness_bar.set_height(10);
 		    lightness_b1 = new ui.Image(hsl_options.manager, hsl_options, "images/arrow_left.png");
-            lightness_b1.set_x(10);
-            lightness_b1.set_y(200);
-            lightness_b1.set_width(20);
-            lightness_b1.set_height(20);
-	lightness_b1.events.addListener("click", function()
-	{    
-		lightness_bar.value(lightness_bar.get_value() - 2);
-img1.hsl_filter.set_lightness(img1.hsl_filter.options.lightness - 4);
-	}
-	);
-		application.are_obj_events = true;
 		    lightness_b2 = new ui.Image(hsl_options.manager, hsl_options, "images/arrow_right.png");
-            lightness_b2.set_x(170);
-            lightness_b2.set_y(200);
-            lightness_b2.set_width(20);
-            lightness_b2.set_height(20);
-	lightness_b2.events.addListener("click", function()
-	{    
-		lightness_bar.value(lightness_bar.get_value() + 2);
-img1.hsl_filter.set_lightness(img1.hsl_filter.options.lightness + 4);
-	}
-	);
-		application.are_obj_events = true;
 		    edges_options = new ui.Component(options.manager, options);
 	    edges_options.mouse_thru = true;
-            edges_options.set_switchable(false);
 		    __label6 = new ui.Label(edges_options.manager, edges_options, "12px Verdana");
-            __label6.set_x(10);
-            __label6.set_y(50);
-            __label6.text("Edge Detection Parameters");
-		    mono_check = new ui.StateButton(edges_options.manager, edges_options, "images/checked.jpg", "images/unchecked.jpg");
-            mono_check.set_x(40);
-            mono_check.set_y(80);
-            mono_check.set_width(32);
-            mono_check.set_height(32);
-            mono_check.set_active(false);
-	mono_check.events.addListener("click", function()
-	{    
-		img1.edges_filter.set_mono(mono_check.is_active);
-	}
-	);
-		application.are_obj_events = true;
+		    mono_check = new ui.StateButton(edges_options.manager, edges_options, "images/checked.png", "images/unchecked.png");
 		    __label7 = new ui.Label(edges_options.manager, edges_options, "12px Verdana");
-            __label7.set_x(90);
-            __label7.set_y(85);
-            __label7.text("Mono");
-		    invert_check = new ui.StateButton(edges_options.manager, edges_options, "images/checked.jpg", "images/unchecked.jpg");
-            invert_check.set_x(40);
-            invert_check.set_y(130);
-            invert_check.set_width(32);
-            invert_check.set_height(32);
-            invert_check.set_active(false);
-	invert_check.events.addListener("click", function()
-	{    
-		img1.edges_filter.set_invert(invert_check.is_active);
-	}
-	);
-		application.are_obj_events = true;
+		    invert_check = new ui.StateButton(edges_options.manager, edges_options, "images/checked.png", "images/unchecked.png");
 		    __label8 = new ui.Label(edges_options.manager, edges_options, "12px Verdana");
-            __label8.set_x(90);
-            __label8.set_y(135);
-            __label8.text("Invert");
 		    pointillize_options = new ui.Component(options.manager, options);
 	    pointillize_options.mouse_thru = true;
-            pointillize_options.set_switchable(false);
 		    __label9 = new ui.Label(pointillize_options.manager, pointillize_options, "12px Verdana");
-            __label9.set_x(10);
-            __label9.set_y(50);
-            __label9.text("Pointillize Parameters");
 		    __label10 = new ui.Label(pointillize_options.manager, pointillize_options, "12px Verdana");
-            __label10.set_x(40);
-            __label10.set_y(80);
-            __label10.text("Density Adjust");
 		    density_bar = new ui.ProgressBar(pointillize_options.manager, pointillize_options, null);
-            density_bar.set_x(40);
-            density_bar.set_y(105);
-            density_bar.set_width(120);
-            density_bar.set_height(10);
 		    density_b1 = new ui.Image(pointillize_options.manager, pointillize_options, "images/arrow_left.png");
-            density_b1.set_x(10);
-            density_b1.set_y(100);
-            density_b1.set_width(20);
-            density_b1.set_height(20);
-	density_b1.events.addListener("click", function()
-	{    
-		density_bar.value(density_bar.get_value() - 2);
-img1.pointillize_filter.set_density(img1.pointillize_filter.options.density - 0.100000001);
-	}
-	);
-		application.are_obj_events = true;
 		    density_b2 = new ui.Image(pointillize_options.manager, pointillize_options, "images/arrow_right.png");
-            density_b2.set_x(170);
-            density_b2.set_y(100);
-            density_b2.set_width(20);
-            density_b2.set_height(20);
-	density_b2.events.addListener("click", function()
-	{    
-		density_bar.value(density_bar.get_value() + 2);
-img1.pointillize_filter.set_density(img1.pointillize_filter.options.density + 0.100000001);
-	}
-	);
-		application.are_obj_events = true;
 		    __label11 = new ui.Label(pointillize_options.manager, pointillize_options, "12px Verdana");
-            __label11.set_x(40);
-            __label11.set_y(130);
-            __label11.text("Noise Adjust");
 		    noise_bar = new ui.ProgressBar(pointillize_options.manager, pointillize_options, null);
-            noise_bar.set_x(40);
-            noise_bar.set_y(155);
-            noise_bar.set_width(120);
-            noise_bar.set_height(10);
 		    noise_b1 = new ui.Image(pointillize_options.manager, pointillize_options, "images/arrow_left.png");
-            noise_b1.set_x(10);
-            noise_b1.set_y(150);
-            noise_b1.set_width(20);
-            noise_b1.set_height(20);
-	noise_b1.events.addListener("click", function()
-	{    
-		noise_bar.value(noise_bar.get_value() - 2);
-img1.pointillize_filter.set_noise(img1.pointillize_filter.options.noise - 0.100000001);
-	}
-	);
-		application.are_obj_events = true;
 		    noise_b2 = new ui.Image(pointillize_options.manager, pointillize_options, "images/arrow_right.png");
-            noise_b2.set_x(170);
-            noise_b2.set_y(150);
-            noise_b2.set_width(20);
-            noise_b2.set_height(20);
-	noise_b2.events.addListener("click", function()
-	{    
-		noise_bar.value(noise_bar.get_value() + 2);
-img1.pointillize_filter.set_noise(img1.pointillize_filter.options.noise + 0.100000001);
-	}
-	);
-		application.are_obj_events = true;
-		    transparent_check = new ui.StateButton(pointillize_options.manager, pointillize_options, "images/checked.jpg", "images/unchecked.jpg");
-            transparent_check.set_x(40);
-            transparent_check.set_y(180);
-            transparent_check.set_width(32);
-            transparent_check.set_height(32);
-            transparent_check.set_active(false);
-	transparent_check.events.addListener("click", function()
-	{    
-		img1.pointillize_filter.set_transparent(transparent_check.is_active);
-	}
-	);
-		application.are_obj_events = true;
+		    transparent_check = new ui.StateButton(pointillize_options.manager, pointillize_options, "images/checked.png", "images/unchecked.png");
 		    __label12 = new ui.Label(pointillize_options.manager, pointillize_options, "12px Verdana");
-            __label12.set_x(90);
-            __label12.set_y(185);
-            __label12.text("Transparent");
 		    brightness_options = new ui.Component(options.manager, options);
 	    brightness_options.mouse_thru = true;
-            brightness_options.set_switchable(false);
 		    __label13 = new ui.Label(brightness_options.manager, brightness_options, "12px Verdana");
-            __label13.set_x(10);
-            __label13.set_y(50);
-            __label13.text("Brightness Parameters");
 		    __label14 = new ui.Label(brightness_options.manager, brightness_options, "12px Verdana");
-            __label14.set_x(40);
-            __label14.set_y(80);
-            __label14.text("Brightness Adjust");
 		    brightness_bar = new ui.ProgressBar(brightness_options.manager, brightness_options, null);
-            brightness_bar.set_x(40);
-            brightness_bar.set_y(105);
-            brightness_bar.value(50);
-            brightness_bar.set_width(120);
-            brightness_bar.set_height(10);
 		    brightness_b1 = new ui.Image(brightness_options.manager, brightness_options, "images/arrow_left.png");
-            brightness_b1.set_x(10);
-            brightness_b1.set_y(100);
-            brightness_b1.set_width(20);
-            brightness_b1.set_height(20);
-	brightness_b1.events.addListener("click", function()
-	{    
-		brightness_bar.value(brightness_bar.get_value() - 2);
-img1.brightness_filter.set_brightness(img1.brightness_filter.options.brightness - 3);
-	}
-	);
-		application.are_obj_events = true;
 		    brightness_b2 = new ui.Image(brightness_options.manager, brightness_options, "images/arrow_right.png");
-            brightness_b2.set_x(170);
-            brightness_b2.set_y(100);
-            brightness_b2.set_width(20);
-            brightness_b2.set_height(20);
-	brightness_b2.events.addListener("click", function()
-	{    
-		brightness_bar.value(brightness_bar.get_value() + 2);
-img1.brightness_filter.set_brightness(img1.brightness_filter.options.brightness + 3);
-	}
-	);
-		application.are_obj_events = true;
 		    __label15 = new ui.Label(brightness_options.manager, brightness_options, "12px Verdana");
-            __label15.set_x(40);
-            __label15.set_y(130);
-            __label15.text("Contrast Adjust");
 		    contrast_bar = new ui.ProgressBar(brightness_options.manager, brightness_options, null);
-            contrast_bar.set_x(40);
-            contrast_bar.set_y(155);
-            contrast_bar.value(50);
-            contrast_bar.set_width(120);
-            contrast_bar.set_height(10);
 		    contrast_b1 = new ui.Image(brightness_options.manager, brightness_options, "images/arrow_left.png");
-            contrast_b1.set_x(10);
-            contrast_b1.set_y(150);
-            contrast_b1.set_width(20);
-            contrast_b1.set_height(20);
-	contrast_b1.events.addListener("click", function()
-	{    
-		contrast_bar.value(contrast_bar.get_value() - 2);
-img1.brightness_filter.set_contrast(img1.brightness_filter.options.contrast - 0.0199999996);
-	}
-	);
-		application.are_obj_events = true;
 		    contrast_b2 = new ui.Image(brightness_options.manager, brightness_options, "images/arrow_right.png");
-            contrast_b2.set_x(170);
-            contrast_b2.set_y(150);
-            contrast_b2.set_width(20);
-            contrast_b2.set_height(20);
-	contrast_b2.events.addListener("click", function()
-	{    
-		contrast_bar.value(contrast_bar.get_value() + 2);
-img1.brightness_filter.set_contrast(img1.brightness_filter.options.contrast + 0.0199999996);
-	}
-	);
-		application.are_obj_events = true;
 		    coloradjust_options = new ui.Component(options.manager, options);
 	    coloradjust_options.mouse_thru = true;
-            coloradjust_options.set_switchable(false);
 		    __label16 = new ui.Label(coloradjust_options.manager, coloradjust_options, "12px Verdana");
-            __label16.set_x(10);
-            __label16.set_y(50);
-            __label16.text("Color Adjust Parameters");
 		    __label17 = new ui.Label(coloradjust_options.manager, coloradjust_options, "12px Verdana");
-            __label17.set_x(40);
-            __label17.set_y(80);
-            __label17.text("Red Adjust");
 		    red_bar = new ui.ProgressBar(coloradjust_options.manager, coloradjust_options, null);
-            red_bar.set_x(40);
-            red_bar.set_y(105);
-            red_bar.value(50);
-            red_bar.set_width(120);
-            red_bar.set_height(10);
 		    red_b1 = new ui.Image(coloradjust_options.manager, coloradjust_options, "images/arrow_left.png");
-            red_b1.set_x(10);
-            red_b1.set_y(100);
-            red_b1.set_width(20);
-            red_b1.set_height(20);
-	red_b1.events.addListener("click", function()
-	{    
-		red_bar.value(red_bar.get_value() - 2);
-img1.coloradjust_filter.set_red(img1.coloradjust_filter.options.red - 0.0199999996);
-	}
-	);
-		application.are_obj_events = true;
 		    red_b2 = new ui.Image(coloradjust_options.manager, coloradjust_options, "images/arrow_right.png");
-            red_b2.set_x(170);
-            red_b2.set_y(100);
-            red_b2.set_width(20);
-            red_b2.set_height(20);
-	red_b2.events.addListener("click", function()
-	{    
-		red_bar.value(red_bar.get_value() + 2);
-img1.coloradjust_filter.set_red(img1.coloradjust_filter.options.red + 0.0199999996);
-	}
-	);
-		application.are_obj_events = true;
 		    __label18 = new ui.Label(coloradjust_options.manager, coloradjust_options, "12px Verdana");
-            __label18.set_x(40);
-            __label18.set_y(130);
-            __label18.text("Green Adjust");
 		    green_bar = new ui.ProgressBar(coloradjust_options.manager, coloradjust_options, null);
-            green_bar.set_x(40);
-            green_bar.set_y(155);
-            green_bar.value(50);
-            green_bar.set_width(120);
-            green_bar.set_height(10);
 		    green_b1 = new ui.Image(coloradjust_options.manager, coloradjust_options, "images/arrow_left.png");
-            green_b1.set_x(10);
-            green_b1.set_y(150);
-            green_b1.set_width(20);
-            green_b1.set_height(20);
-	green_b1.events.addListener("click", function()
-	{    
-		green_bar.value(green_bar.get_value() - 2);
-img1.coloradjust_filter.set_green(img1.coloradjust_filter.options.green - 0.0199999996);
-	}
-	);
-		application.are_obj_events = true;
 		    green_b2 = new ui.Image(coloradjust_options.manager, coloradjust_options, "images/arrow_right.png");
-            green_b2.set_x(170);
-            green_b2.set_y(150);
-            green_b2.set_width(20);
-            green_b2.set_height(20);
-	green_b2.events.addListener("click", function()
-	{    
-		green_bar.value(green_bar.get_value() + 2);
-img1.coloradjust_filter.set_green(img1.coloradjust_filter.options.green + 0.0199999996);
-	}
-	);
-		application.are_obj_events = true;
 		    __label19 = new ui.Label(coloradjust_options.manager, coloradjust_options, "12px Verdana");
-            __label19.set_x(40);
-            __label19.set_y(180);
-            __label19.text("Blue Adjust");
 		    blue_bar = new ui.ProgressBar(coloradjust_options.manager, coloradjust_options, null);
-            blue_bar.set_x(40);
-            blue_bar.set_y(205);
-            blue_bar.value(50);
-            blue_bar.set_width(120);
-            blue_bar.set_height(10);
 		    blue_b1 = new ui.Image(coloradjust_options.manager, coloradjust_options, "images/arrow_left.png");
-            blue_b1.set_x(10);
-            blue_b1.set_y(200);
-            blue_b1.set_width(20);
-            blue_b1.set_height(20);
-	blue_b1.events.addListener("click", function()
-	{    
-		blue_bar.value(blue_bar.get_value() - 2);
-img1.coloradjust_filter.set_blue(img1.coloradjust_filter.options.blue - 0.0199999996);
-	}
-	);
-		application.are_obj_events = true;
 		    blue_b2 = new ui.Image(coloradjust_options.manager, coloradjust_options, "images/arrow_right.png");
-            blue_b2.set_x(170);
-            blue_b2.set_y(200);
-            blue_b2.set_width(20);
-            blue_b2.set_height(20);
-	blue_b2.events.addListener("click", function()
-	{    
-		blue_bar.value(blue_bar.get_value() + 2);
-img1.coloradjust_filter.set_blue(img1.coloradjust_filter.options.blue + 0.0199999996);
-	}
-	);
-		application.are_obj_events = true;
 		    noise_options = new ui.Component(options.manager, options);
 	    noise_options.mouse_thru = true;
-            noise_options.set_switchable(false);
 		    __label20 = new ui.Label(noise_options.manager, noise_options, "12px Verdana");
-            __label20.set_x(10);
-            __label20.set_y(50);
-            __label20.text("Noise Parameters");
 		    __label21 = new ui.Label(noise_options.manager, noise_options, "12px Verdana");
-            __label21.set_x(40);
-            __label21.set_y(80);
-            __label21.text("Amount Adjust");
 		    amount_bar = new ui.ProgressBar(noise_options.manager, noise_options, null);
-            amount_bar.set_x(40);
-            amount_bar.set_y(105);
-            amount_bar.set_width(120);
-            amount_bar.set_height(10);
 		    amount_b1 = new ui.Image(noise_options.manager, noise_options, "images/arrow_left.png");
-            amount_b1.set_x(10);
-            amount_b1.set_y(100);
-            amount_b1.set_width(20);
-            amount_b1.set_height(20);
-	amount_b1.events.addListener("click", function()
-	{    
-		amount_bar.value(amount_bar.get_value() - 2);
-img1.noise_filter.set_amount(img1.noise_filter.options.amount - 0.0199999996);
-	}
-	);
-		application.are_obj_events = true;
 		    amount_b2 = new ui.Image(noise_options.manager, noise_options, "images/arrow_right.png");
-            amount_b2.set_x(170);
-            amount_b2.set_y(100);
-            amount_b2.set_width(20);
-            amount_b2.set_height(20);
-	amount_b2.events.addListener("click", function()
-	{    
-		amount_bar.value(amount_bar.get_value() + 2);
-img1.noise_filter.set_amount(img1.noise_filter.options.amount + 0.0199999996);
-	}
-	);
-		application.are_obj_events = true;
 		    __label22 = new ui.Label(noise_options.manager, noise_options, "12px Verdana");
-            __label22.set_x(40);
-            __label22.set_y(130);
-            __label22.text("Strength Adjust");
 		    strength_bar = new ui.ProgressBar(noise_options.manager, noise_options, null);
-            strength_bar.set_x(40);
-            strength_bar.set_y(155);
-            strength_bar.set_width(120);
-            strength_bar.set_height(10);
 		    strength_b1 = new ui.Image(noise_options.manager, noise_options, "images/arrow_left.png");
-            strength_b1.set_x(10);
-            strength_b1.set_y(150);
-            strength_b1.set_width(20);
-            strength_b1.set_height(20);
-	strength_b1.events.addListener("click", function()
-	{    
-		strength_bar.value(strength_bar.get_value() - 2);
-img1.noise_filter.set_strength(img1.noise_filter.options.strength - 0.0199999996);
-	}
-	);
-		application.are_obj_events = true;
 		    strength_b2 = new ui.Image(noise_options.manager, noise_options, "images/arrow_right.png");
-            strength_b2.set_x(170);
-            strength_b2.set_y(150);
-            strength_b2.set_width(20);
-            strength_b2.set_height(20);
-	strength_b2.events.addListener("click", function()
-	{    
-		strength_bar.value(strength_bar.get_value() + 2);
-img1.noise_filter.set_strength(img1.noise_filter.options.strength + 0.0199999996);
-	}
-	);
-		application.are_obj_events = true;
-		    mono_check1 = new ui.StateButton(noise_options.manager, noise_options, "images/checked.jpg", "images/unchecked.jpg");
-            mono_check1.set_x(40);
-            mono_check1.set_y(180);
-            mono_check1.set_width(32);
-            mono_check1.set_height(32);
-            mono_check1.set_active(false);
-	mono_check1.events.addListener("click", function()
-	{    
-		img1.noise_filter.set_mono(mono_check.is_active);
-	}
-	);
-		application.are_obj_events = true;
+		    mono_check1 = new ui.StateButton(noise_options.manager, noise_options, "images/checked.png", "images/unchecked.png");
 		    __label23 = new ui.Label(noise_options.manager, noise_options, "12px Verdana");
-            __label23.set_x(90);
-            __label23.set_y(185);
-            __label23.text("Mono");
 		    glow_options = new ui.Component(options.manager, options);
 	    glow_options.mouse_thru = true;
-            glow_options.set_switchable(false);
 		    __label24 = new ui.Label(glow_options.manager, glow_options, "12px Verdana");
-            __label24.set_x(10);
-            __label24.set_y(50);
-            __label24.text("Glow Parameters");
 		    __label25 = new ui.Label(glow_options.manager, glow_options, "12px Verdana");
-            __label25.set_x(40);
-            __label25.set_y(80);
-            __label25.text("Amount Adjust");
 		    amount_bar1 = new ui.ProgressBar(glow_options.manager, glow_options, null);
-            amount_bar1.set_x(40);
-            amount_bar1.set_y(105);
-            amount_bar1.set_width(120);
-            amount_bar1.set_height(10);
 		    amount_b11 = new ui.Image(glow_options.manager, glow_options, "images/arrow_left.png");
-            amount_b11.set_x(10);
-            amount_b11.set_y(100);
-            amount_b11.set_width(20);
-            amount_b11.set_height(20);
-	amount_b11.events.addListener("click", function()
-	{    
-		amount_bar1.value(amount_bar1.get_value() - 2);
-img1.glow_filter.set_amount(img1.glow_filter.options.amount - 0.0199999996);
-	}
-	);
-		application.are_obj_events = true;
 		    amount_b21 = new ui.Image(glow_options.manager, glow_options, "images/arrow_right.png");
-            amount_b21.set_x(170);
-            amount_b21.set_y(100);
-            amount_b21.set_width(20);
-            amount_b21.set_height(20);
-	amount_b21.events.addListener("click", function()
-	{    
-		amount_bar1.value(amount_bar1.get_value() + 2);
-img1.glow_filter.set_amount(img1.glow_filter.options.amount + 0.0199999996);
-	}
-	);
-		application.are_obj_events = true;
 		    __label26 = new ui.Label(glow_options.manager, glow_options, "12px Verdana");
-            __label26.set_x(40);
-            __label26.set_y(130);
-            __label26.text("Radius Adjust");
 		    radius_bar = new ui.ProgressBar(glow_options.manager, glow_options, null);
-            radius_bar.set_x(40);
-            radius_bar.set_y(155);
-            radius_bar.set_width(120);
-            radius_bar.set_height(10);
 		    radius_b1 = new ui.Image(glow_options.manager, glow_options, "images/arrow_left.png");
-            radius_b1.set_x(10);
-            radius_b1.set_y(150);
-            radius_b1.set_width(20);
-            radius_b1.set_height(20);
-	radius_b1.events.addListener("click", function()
-	{    
-		radius_bar.value(radius_bar.get_value() - 2);
-img1.glow_filter.set_radius(img1.glow_filter.options.radius - 0.0199999996);
-	}
-	);
-		application.are_obj_events = true;
 		    radius_b2 = new ui.Image(glow_options.manager, glow_options, "images/arrow_right.png");
-            radius_b2.set_x(170);
-            radius_b2.set_y(150);
-            radius_b2.set_width(20);
-            radius_b2.set_height(20);
-	radius_b2.events.addListener("click", function()
-	{    
-		radius_bar.value(radius_bar.get_value() + 2);
-img1.glow_filter.set_radius(img1.glow_filter.options.radius + 0.0199999996);
-	}
-	);
-		application.are_obj_events = true;
 		    sharpen_options = new ui.Component(options.manager, options);
 	    sharpen_options.mouse_thru = true;
-            sharpen_options.set_switchable(false);
 		    __label27 = new ui.Label(sharpen_options.manager, sharpen_options, "12px Verdana");
-            __label27.set_x(10);
-            __label27.set_y(50);
-            __label27.text("Sharpen Parameters");
 		    __label28 = new ui.Label(sharpen_options.manager, sharpen_options, "12px Verdana");
-            __label28.set_x(40);
-            __label28.set_y(80);
-            __label28.text("Amount Adjust");
 		    amount_bar2 = new ui.ProgressBar(sharpen_options.manager, sharpen_options, null);
-            amount_bar2.set_x(40);
-            amount_bar2.set_y(105);
-            amount_bar2.set_width(120);
-            amount_bar2.set_height(10);
 		    amount_b12 = new ui.Image(sharpen_options.manager, sharpen_options, "images/arrow_left.png");
-            amount_b12.set_x(10);
-            amount_b12.set_y(100);
-            amount_b12.set_width(20);
-            amount_b12.set_height(20);
-	amount_b12.events.addListener("click", function()
-	{    
-		amount_bar2.value(amount_bar2.get_value() - 2);
-img1.sharpen_filter.set_amount(img1.sharpen_filter.options.amount - 0.0199999996);
-	}
-	);
-		application.are_obj_events = true;
 		    amount_b22 = new ui.Image(sharpen_options.manager, sharpen_options, "images/arrow_right.png");
-            amount_b22.set_x(170);
-            amount_b22.set_y(100);
-            amount_b22.set_width(20);
-            amount_b22.set_height(20);
-	amount_b22.events.addListener("click", function()
-	{    
-		amount_bar2.value(amount_bar2.get_value() + 2);
-img1.sharpen_filter.set_amount(img1.sharpen_filter.options.amount + 0.0199999996);
-	}
-	);
-		application.are_obj_events = true;
 		    mosaic_options = new ui.Component(options.manager, options);
 	    mosaic_options.mouse_thru = true;
-            mosaic_options.set_switchable(false);
 		    __label29 = new ui.Label(mosaic_options.manager, mosaic_options, "12px Verdana");
-            __label29.set_x(0);
-            __label29.set_y(50);
-            __label29.text("Mosaic Parameters");
 		    __label30 = new ui.Label(mosaic_options.manager, mosaic_options, "12px Verdana");
-            __label30.set_x(40);
-            __label30.set_y(80);
-            __label30.text("Block Size Adjust");
 		    bsize_bar = new ui.ProgressBar(mosaic_options.manager, mosaic_options, null);
-            bsize_bar.set_x(40);
-            bsize_bar.set_y(105);
-            bsize_bar.set_width(120);
-            bsize_bar.set_height(10);
 		    bsize_b1 = new ui.Image(mosaic_options.manager, mosaic_options, "images/arrow_left.png");
-            bsize_b1.set_x(10);
-            bsize_b1.set_y(100);
-            bsize_b1.set_width(20);
-            bsize_b1.set_height(20);
-	bsize_b1.events.addListener("click", function()
-	{    
-		bsize_bar.value(bsize_bar.get_value() - 2);
-img1.mosaic_filter.set_block_size(img1.mosaic_filter.options.blockSize - 1);
-	}
-	);
-		application.are_obj_events = true;
 		    bsize_b2 = new ui.Image(mosaic_options.manager, mosaic_options, "images/arrow_right.png");
-            bsize_b2.set_x(170);
-            bsize_b2.set_y(100);
-            bsize_b2.set_width(20);
-            bsize_b2.set_height(20);
-	bsize_b2.events.addListener("click", function()
-	{    
-		bsize_bar.value(bsize_bar.get_value() + 2);
-img1.mosaic_filter.set_block_size(img1.mosaic_filter.options.blockSize + 1);
-	}
-	);
-		application.are_obj_events = true;
 		    btnNext = new ui.Button(g_ui_root.manager, g_ui_root, "images/arrow_right_green_48.png", "images/arrow_right_48.png");
-            btnNext.set_x(130);
-            btnNext.set_y(400);
-            btnNext.set_width(50);
-            btnNext.set_height(50);
-	btnNext.events.addListener("click", function()
-	{    
-		if (options.get_active() < options.count() - 1)
-{
-options.active(options.get_active() + 1);
-}
-	}
-	);
-		application.are_obj_events = true;
 		    btnPrev = new ui.Button(g_ui_root.manager, g_ui_root, "images/arrow_left_green_48.png", "images/arrow_left_48.png");
-            btnPrev.set_x(60);
-            btnPrev.set_y(400);
-            btnPrev.set_width(50);
-            btnPrev.set_height(50);
-	btnPrev.events.addListener("click", function()
-	{    
-		if (options.get_active() > 0)
-{
-options.active(options.get_active() - 1);
-}
-	}
-	);
-		application.are_obj_events = true;
 		    __label31 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            __label31.set_x(20);
-            __label31.set_y(470);
-            __label31.text("The arrows will allow changing among the configurations of filters");
 			img1.flipv_filter = new pixastic.FlipV(
 		null, img1);		
 		if(!img1.filters)
@@ -1492,6 +536,963 @@ options.active(options.get_active() - 1);
             img1.mosaic_filter.set_apply(0);
 			obtain_image(img1.mosaic_filter, img1);
 			img1.put_on_apply = true;
+            __label1.set_x(20);
+            __label1.set_y(10);
+            __label1.text("Image processing demo");
+            __line1.set_x1(5);
+            __line1.set_y1(40);
+            __line1.set_x2(800);
+            __line1.set_y2(40);
+            img1.set_x(280);
+            img1.set_y(100);
+            img1.set_width(256);
+            img1.set_height(328);
+            img1.mouse_thru = true;
+            title.set_x(570);
+            title.set_y(80);
+            title.text("Drag to the image the filter you want to able/disable");
+            flipv_label.set_x(610);
+            flipv_label.set_y(110);
+            flipv_label.text("Flip Vertically");
+	flipv_label.events.addListener("drag", function(x,y)
+	{    
+		flipv_label.set_x(x - flipv_label.get_width() / 2);
+flipv_label.set_y(y - flipv_label.get_height() / 2);
+	}
+	);
+		application.are_obj_events = true;
+	flipv_label.events.addListener("dragend", function(x,y)
+	{    
+		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
+{
+img1.flipv_filter.set_apply(!img1.flipv_filter.apply_);
+}
+flipv_label.set_x(610);
+flipv_label.set_y(110);
+	}
+	);
+		application.are_obj_events = true;
+            hsl_label.set_x(610);
+            hsl_label.set_y(130);
+            hsl_label.text("Hue/Saturation/Light");
+	hsl_label.events.addListener("drag", function(x,y)
+	{    
+		hsl_label.set_x(x - hsl_label.get_width() / 2);
+hsl_label.set_y(y - hsl_label.get_height() / 2);
+	}
+	);
+		application.are_obj_events = true;
+	hsl_label.events.addListener("dragend", function(x,y)
+	{    
+		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
+{
+img1.hsl_filter.set_apply(!img1.hsl_filter.apply_);
+}
+hsl_label.set_x(610);
+hsl_label.set_y(130);
+hsl_options.set_switchable(img1.hsl_filter.apply_);
+	}
+	);
+		application.are_obj_events = true;
+            edges_label.set_x(610);
+            edges_label.set_y(150);
+            edges_label.text("Edge Detection");
+	edges_label.events.addListener("drag", function(x,y)
+	{    
+		edges_label.set_x(x - edges_label.get_width() / 2);
+edges_label.set_y(y - edges_label.get_height() / 2);
+	}
+	);
+		application.are_obj_events = true;
+	edges_label.events.addListener("dragend", function(x,y)
+	{    
+		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
+{
+img1.edges_filter.set_apply(!img1.edges_filter.apply_);
+}
+edges_label.set_x(610);
+edges_label.set_y(150);
+edges_options.set_switchable(img1.edges_filter.apply_);
+	}
+	);
+		application.are_obj_events = true;
+            pointillize_label.set_x(610);
+            pointillize_label.set_y(170);
+            pointillize_label.text("Pointillize");
+	pointillize_label.events.addListener("drag", function(x,y)
+	{    
+		pointillize_label.set_x(x - pointillize_label.get_width() / 2);
+pointillize_label.set_y(y - pointillize_label.get_height() / 2);
+	}
+	);
+		application.are_obj_events = true;
+	pointillize_label.events.addListener("dragend", function(x,y)
+	{    
+		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
+{
+img1.pointillize_filter.set_apply(!img1.pointillize_filter.apply_);
+}
+pointillize_label.set_x(610);
+pointillize_label.set_y(170);
+pointillize_options.set_switchable(img1.pointillize_filter.apply_);
+	}
+	);
+		application.are_obj_events = true;
+            brightness_label.set_x(610);
+            brightness_label.set_y(190);
+            brightness_label.text("Brightness/Contrast");
+	brightness_label.events.addListener("drag", function(x,y)
+	{    
+		brightness_label.set_x(x - brightness_label.get_width() / 2);
+brightness_label.set_y(y - brightness_label.get_height() / 2);
+	}
+	);
+		application.are_obj_events = true;
+	brightness_label.events.addListener("dragend", function(x,y)
+	{    
+		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
+{
+img1.brightness_filter.set_apply(!img1.brightness_filter.apply_);
+}
+brightness_label.set_x(610);
+brightness_label.set_y(190);
+brightness_options.set_switchable(img1.brightness_filter.apply_);
+	}
+	);
+		application.are_obj_events = true;
+            invert_label.set_x(610);
+            invert_label.set_y(210);
+            invert_label.text("Invert");
+	invert_label.events.addListener("drag", function(x,y)
+	{    
+		invert_label.set_x(x - invert_label.get_width() / 2);
+invert_label.set_y(y - invert_label.get_height() / 2);
+	}
+	);
+		application.are_obj_events = true;
+	invert_label.events.addListener("dragend", function(x,y)
+	{    
+		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
+{
+img1.invert_filter.set_apply(!img1.invert_filter.apply_);
+}
+invert_label.set_x(610);
+invert_label.set_y(210);
+	}
+	);
+		application.are_obj_events = true;
+            sepia_label.set_x(610);
+            sepia_label.set_y(230);
+            sepia_label.text("Sepia");
+	sepia_label.events.addListener("drag", function(x,y)
+	{    
+		sepia_label.set_x(x - sepia_label.get_width() / 2);
+sepia_label.set_y(y - sepia_label.get_height() / 2);
+	}
+	);
+		application.are_obj_events = true;
+	sepia_label.events.addListener("dragend", function(x,y)
+	{    
+		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
+{
+img1.sepia_filter.set_apply(!img1.sepia_filter.apply_);
+}
+sepia_label.set_x(610);
+sepia_label.set_y(230);
+	}
+	);
+		application.are_obj_events = true;
+            coloradjust_label.set_x(610);
+            coloradjust_label.set_y(250);
+            coloradjust_label.text("Color Adjust");
+	coloradjust_label.events.addListener("drag", function(x,y)
+	{    
+		coloradjust_label.set_x(x - coloradjust_label.get_width() / 2);
+coloradjust_label.set_y(y - coloradjust_label.get_height() / 2);
+	}
+	);
+		application.are_obj_events = true;
+	coloradjust_label.events.addListener("dragend", function(x,y)
+	{    
+		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
+{
+img1.coloradjust_filter.set_apply(!img1.coloradjust_filter.apply_);
+}
+coloradjust_label.set_x(610);
+coloradjust_label.set_y(250);
+coloradjust_options.set_switchable(img1.coloradjust_filter.apply_);
+	}
+	);
+		application.are_obj_events = true;
+            noise_label.set_x(610);
+            noise_label.set_y(270);
+            noise_label.text("Noise");
+	noise_label.events.addListener("drag", function(x,y)
+	{    
+		noise_label.set_x(x - noise_label.get_width() / 2);
+noise_label.set_y(y - noise_label.get_height() / 2);
+	}
+	);
+		application.are_obj_events = true;
+	noise_label.events.addListener("dragend", function(x,y)
+	{    
+		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
+{
+img1.noise_filter.apply = !img1.noise_filter.apply;
+}
+noise_label.set_x(610);
+noise_label.set_y(270);
+noise_options.set_switchable(img1.noise_filter.apply);
+	}
+	);
+		application.are_obj_events = true;
+            blur_label.set_x(610);
+            blur_label.set_y(290);
+            blur_label.text("Blur");
+	blur_label.events.addListener("drag", function(x,y)
+	{    
+		blur_label.set_x(x - blur_label.get_width() / 2);
+blur_label.set_y(y - blur_label.get_height() / 2);
+	}
+	);
+		application.are_obj_events = true;
+	blur_label.events.addListener("dragend", function(x,y)
+	{    
+		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
+{
+img1.blur_filter.set_apply(!img1.blur_filter.apply_);
+}
+blur_label.set_x(610);
+blur_label.set_y(290);
+	}
+	);
+		application.are_obj_events = true;
+            edges2_label.set_x(610);
+            edges2_label.set_y(310);
+            edges2_label.text("Edge Detection 2");
+	edges2_label.events.addListener("drag", function(x,y)
+	{    
+		edges2_label.set_x(x - edges2_label.get_width() / 2);
+edges2_label.set_y(y - edges2_label.get_height() / 2);
+	}
+	);
+		application.are_obj_events = true;
+	edges2_label.events.addListener("dragend", function(x,y)
+	{    
+		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
+{
+img1.edges2_filter.set_apply(!img1.edges2_filter.apply_);
+}
+edges2_label.set_x(610);
+edges2_label.set_y(310);
+	}
+	);
+		application.are_obj_events = true;
+            glow_label.set_x(610);
+            glow_label.set_y(330);
+            glow_label.text("Glow");
+	glow_label.events.addListener("drag", function(x,y)
+	{    
+		glow_label.set_x(x - glow_label.get_width() / 2);
+glow_label.set_y(y - glow_label.get_height() / 2);
+	}
+	);
+		application.are_obj_events = true;
+	glow_label.events.addListener("dragend", function(x,y)
+	{    
+		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
+{
+img1.glow_filter.set_apply(!img1.glow_filter.apply_);
+}
+glow_label.set_x(610);
+glow_label.set_y(330);
+glow_options.set_switchable(img1.glow_filter.apply_);
+	}
+	);
+		application.are_obj_events = true;
+            sharpen_label.set_x(610);
+            sharpen_label.set_y(350);
+            sharpen_label.text("Sharpen");
+	sharpen_label.events.addListener("drag", function(x,y)
+	{    
+		sharpen_label.set_x(x - sharpen_label.get_width() / 2);
+sharpen_label.set_y(y - sharpen_label.get_height() / 2);
+	}
+	);
+		application.are_obj_events = true;
+	sharpen_label.events.addListener("dragend", function(x,y)
+	{    
+		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
+{
+img1.sharpen_filter.set_apply(!img1.sharpen_filter.apply_);
+}
+sharpen_label.set_x(610);
+sharpen_label.set_y(350);
+sharpen_options.set_switchable(img1.sharpen_filter.apply_);
+	}
+	);
+		application.are_obj_events = true;
+            solarize_label.set_x(610);
+            solarize_label.set_y(370);
+            solarize_label.text("Solarize");
+	solarize_label.events.addListener("drag", function(x,y)
+	{    
+		solarize_label.set_x(x - solarize_label.get_width() / 2);
+solarize_label.set_y(y - solarize_label.get_height() / 2);
+	}
+	);
+		application.are_obj_events = true;
+	solarize_label.events.addListener("dragend", function(x,y)
+	{    
+		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
+{
+img1.solarize_filter.set_apply(!img1.solarize_filter.apply_);
+}
+solarize_label.set_x(610);
+solarize_label.set_y(370);
+	}
+	);
+		application.are_obj_events = true;
+            fliph_label.set_x(610);
+            fliph_label.set_y(390);
+            fliph_label.text("Flip Horizontally");
+	fliph_label.events.addListener("drag", function(x,y)
+	{    
+		fliph_label.set_x(x - fliph_label.get_width() / 2);
+fliph_label.set_y(y - fliph_label.get_height() / 2);
+	}
+	);
+		application.are_obj_events = true;
+	fliph_label.events.addListener("dragend", function(x,y)
+	{    
+		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
+{
+img1.fliph_filter.set_apply(!img1.fliph_filter.apply_);
+}
+fliph_label.set_x(610);
+fliph_label.set_y(390);
+	}
+	);
+		application.are_obj_events = true;
+            mosaic_label.set_x(610);
+            mosaic_label.set_y(410);
+            mosaic_label.text("Mosaic");
+	mosaic_label.events.addListener("drag", function(x,y)
+	{    
+		mosaic_label.set_x(x - mosaic_label.get_width() / 2);
+mosaic_label.set_y(y - mosaic_label.get_height() / 2);
+	}
+	);
+		application.are_obj_events = true;
+	mosaic_label.events.addListener("dragend", function(x,y)
+	{    
+		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
+{
+img1.mosaic_filter.set_apply(!img1.mosaic_filter.apply_);
+}
+mosaic_label.set_x(610);
+mosaic_label.set_y(410);
+mosaic_options.set_switchable(img1.mosaic_filter.apply_);
+	}
+	);
+		application.are_obj_events = true;
+            options.set_x(20);
+            options.set_y(80);
+            options.set_width(300);
+            options.set_height(250);
+            hsl_options.set_switchable(false);
+            __label2.set_x(10);
+            __label2.set_y(50);
+            __label2.text("Hue/Saturation/Light Parameters");
+            __label3.set_x(40);
+            __label3.set_y(80);
+            __label3.text("Saturation Adjust");
+            saturation_bar.set_x(40);
+            saturation_bar.set_y(105);
+            saturation_bar.value(50);
+            saturation_bar.set_width(120);
+            saturation_bar.set_height(10);
+            saturation_b1.set_x(10);
+            saturation_b1.set_y(100);
+            saturation_b1.set_width(20);
+            saturation_b1.set_height(20);
+	saturation_b1.events.addListener("click", function()
+	{    
+		saturation_bar.value(saturation_bar.get_value() - 2);
+img1.hsl_filter.set_saturation(img1.hsl_filter.options.saturation - 4);
+	}
+	);
+		application.are_obj_events = true;
+            saturation_b2.set_x(170);
+            saturation_b2.set_y(100);
+            saturation_b2.set_width(20);
+            saturation_b2.set_height(20);
+	saturation_b2.events.addListener("click", function()
+	{    
+		saturation_bar.value(saturation_bar.get_value() + 2);
+img1.hsl_filter.set_saturation(img1.hsl_filter.options.saturation + 4);
+	}
+	);
+		application.are_obj_events = true;
+            __label4.set_x(40);
+            __label4.set_y(130);
+            __label4.text("Hue Adjust");
+            hue_bar.set_x(40);
+            hue_bar.set_y(155);
+            hue_bar.value(50);
+            hue_bar.set_width(120);
+            hue_bar.set_height(10);
+            hue_b1.set_x(10);
+            hue_b1.set_y(150);
+            hue_b1.set_width(20);
+            hue_b1.set_height(20);
+	hue_b1.events.addListener("click", function()
+	{    
+		hue_bar.value(hue_bar.get_value() - 2);
+img1.hsl_filter.set_hue(img1.hsl_filter.options.hue - 7.19999981);
+	}
+	);
+		application.are_obj_events = true;
+            hue_b2.set_x(170);
+            hue_b2.set_y(150);
+            hue_b2.set_width(20);
+            hue_b2.set_height(20);
+	hue_b2.events.addListener("click", function()
+	{    
+		hue_bar.value(hue_bar.get_value() + 2);
+img1.hsl_filter.set_hue(img1.hsl_filter.options.hue + 7.19999981);
+	}
+	);
+		application.are_obj_events = true;
+            __label5.set_x(40);
+            __label5.set_y(180);
+            __label5.text("Lightness Adjust");
+            lightness_bar.set_x(40);
+            lightness_bar.set_y(205);
+            lightness_bar.value(50);
+            lightness_bar.set_width(120);
+            lightness_bar.set_height(10);
+            lightness_b1.set_x(10);
+            lightness_b1.set_y(200);
+            lightness_b1.set_width(20);
+            lightness_b1.set_height(20);
+	lightness_b1.events.addListener("click", function()
+	{    
+		lightness_bar.value(lightness_bar.get_value() - 2);
+img1.hsl_filter.set_lightness(img1.hsl_filter.options.lightness - 4);
+	}
+	);
+		application.are_obj_events = true;
+            lightness_b2.set_x(170);
+            lightness_b2.set_y(200);
+            lightness_b2.set_width(20);
+            lightness_b2.set_height(20);
+	lightness_b2.events.addListener("click", function()
+	{    
+		lightness_bar.value(lightness_bar.get_value() + 2);
+img1.hsl_filter.set_lightness(img1.hsl_filter.options.lightness + 4);
+	}
+	);
+		application.are_obj_events = true;
+            edges_options.set_switchable(false);
+            __label6.set_x(10);
+            __label6.set_y(50);
+            __label6.text("Edge Detection Parameters");
+            mono_check.set_x(40);
+            mono_check.set_y(80);
+            mono_check.set_width(32);
+            mono_check.set_height(32);
+            mono_check.set_active(false);
+	mono_check.events.addListener("click", function()
+	{    
+		img1.edges_filter.set_mono(mono_check.is_active);
+	}
+	);
+		application.are_obj_events = true;
+            __label7.set_x(90);
+            __label7.set_y(85);
+            __label7.text("Mono");
+            invert_check.set_x(40);
+            invert_check.set_y(130);
+            invert_check.set_width(32);
+            invert_check.set_height(32);
+            invert_check.set_active(false);
+	invert_check.events.addListener("click", function()
+	{    
+		img1.edges_filter.set_invert(invert_check.is_active);
+	}
+	);
+		application.are_obj_events = true;
+            __label8.set_x(90);
+            __label8.set_y(135);
+            __label8.text("Invert");
+            pointillize_options.set_switchable(false);
+            __label9.set_x(10);
+            __label9.set_y(50);
+            __label9.text("Pointillize Parameters");
+            __label10.set_x(40);
+            __label10.set_y(80);
+            __label10.text("Density Adjust");
+            density_bar.set_x(40);
+            density_bar.set_y(105);
+            density_bar.set_width(120);
+            density_bar.set_height(10);
+            density_b1.set_x(10);
+            density_b1.set_y(100);
+            density_b1.set_width(20);
+            density_b1.set_height(20);
+	density_b1.events.addListener("click", function()
+	{    
+		density_bar.value(density_bar.get_value() - 2);
+img1.pointillize_filter.set_density(img1.pointillize_filter.options.density - 0.100000001);
+	}
+	);
+		application.are_obj_events = true;
+            density_b2.set_x(170);
+            density_b2.set_y(100);
+            density_b2.set_width(20);
+            density_b2.set_height(20);
+	density_b2.events.addListener("click", function()
+	{    
+		density_bar.value(density_bar.get_value() + 2);
+img1.pointillize_filter.set_density(img1.pointillize_filter.options.density + 0.100000001);
+	}
+	);
+		application.are_obj_events = true;
+            __label11.set_x(40);
+            __label11.set_y(130);
+            __label11.text("Noise Adjust");
+            noise_bar.set_x(40);
+            noise_bar.set_y(155);
+            noise_bar.set_width(120);
+            noise_bar.set_height(10);
+            noise_b1.set_x(10);
+            noise_b1.set_y(150);
+            noise_b1.set_width(20);
+            noise_b1.set_height(20);
+	noise_b1.events.addListener("click", function()
+	{    
+		noise_bar.value(noise_bar.get_value() - 2);
+img1.pointillize_filter.set_noise(img1.pointillize_filter.options.noise - 0.100000001);
+	}
+	);
+		application.are_obj_events = true;
+            noise_b2.set_x(170);
+            noise_b2.set_y(150);
+            noise_b2.set_width(20);
+            noise_b2.set_height(20);
+	noise_b2.events.addListener("click", function()
+	{    
+		noise_bar.value(noise_bar.get_value() + 2);
+img1.pointillize_filter.set_noise(img1.pointillize_filter.options.noise + 0.100000001);
+	}
+	);
+		application.are_obj_events = true;
+            transparent_check.set_x(40);
+            transparent_check.set_y(180);
+            transparent_check.set_width(32);
+            transparent_check.set_height(32);
+            transparent_check.set_active(false);
+	transparent_check.events.addListener("click", function()
+	{    
+		img1.pointillize_filter.set_transparent(transparent_check.is_active);
+	}
+	);
+		application.are_obj_events = true;
+            __label12.set_x(90);
+            __label12.set_y(185);
+            __label12.text("Transparent");
+            brightness_options.set_switchable(false);
+            __label13.set_x(10);
+            __label13.set_y(50);
+            __label13.text("Brightness Parameters");
+            __label14.set_x(40);
+            __label14.set_y(80);
+            __label14.text("Brightness Adjust");
+            brightness_bar.set_x(40);
+            brightness_bar.set_y(105);
+            brightness_bar.value(50);
+            brightness_bar.set_width(120);
+            brightness_bar.set_height(10);
+            brightness_b1.set_x(10);
+            brightness_b1.set_y(100);
+            brightness_b1.set_width(20);
+            brightness_b1.set_height(20);
+	brightness_b1.events.addListener("click", function()
+	{    
+		brightness_bar.value(brightness_bar.get_value() - 2);
+img1.brightness_filter.set_brightness(img1.brightness_filter.options.brightness - 3);
+	}
+	);
+		application.are_obj_events = true;
+            brightness_b2.set_x(170);
+            brightness_b2.set_y(100);
+            brightness_b2.set_width(20);
+            brightness_b2.set_height(20);
+	brightness_b2.events.addListener("click", function()
+	{    
+		brightness_bar.value(brightness_bar.get_value() + 2);
+img1.brightness_filter.set_brightness(img1.brightness_filter.options.brightness + 3);
+	}
+	);
+		application.are_obj_events = true;
+            __label15.set_x(40);
+            __label15.set_y(130);
+            __label15.text("Contrast Adjust");
+            contrast_bar.set_x(40);
+            contrast_bar.set_y(155);
+            contrast_bar.value(50);
+            contrast_bar.set_width(120);
+            contrast_bar.set_height(10);
+            contrast_b1.set_x(10);
+            contrast_b1.set_y(150);
+            contrast_b1.set_width(20);
+            contrast_b1.set_height(20);
+	contrast_b1.events.addListener("click", function()
+	{    
+		contrast_bar.value(contrast_bar.get_value() - 2);
+img1.brightness_filter.set_contrast(img1.brightness_filter.options.contrast - 0.0199999996);
+	}
+	);
+		application.are_obj_events = true;
+            contrast_b2.set_x(170);
+            contrast_b2.set_y(150);
+            contrast_b2.set_width(20);
+            contrast_b2.set_height(20);
+	contrast_b2.events.addListener("click", function()
+	{    
+		contrast_bar.value(contrast_bar.get_value() + 2);
+img1.brightness_filter.set_contrast(img1.brightness_filter.options.contrast + 0.0199999996);
+	}
+	);
+		application.are_obj_events = true;
+            coloradjust_options.set_switchable(false);
+            __label16.set_x(10);
+            __label16.set_y(50);
+            __label16.text("Color Adjust Parameters");
+            __label17.set_x(40);
+            __label17.set_y(80);
+            __label17.text("Red Adjust");
+            red_bar.set_x(40);
+            red_bar.set_y(105);
+            red_bar.value(50);
+            red_bar.set_width(120);
+            red_bar.set_height(10);
+            red_b1.set_x(10);
+            red_b1.set_y(100);
+            red_b1.set_width(20);
+            red_b1.set_height(20);
+	red_b1.events.addListener("click", function()
+	{    
+		red_bar.value(red_bar.get_value() - 2);
+img1.coloradjust_filter.set_red(img1.coloradjust_filter.options.red - 0.0199999996);
+	}
+	);
+		application.are_obj_events = true;
+            red_b2.set_x(170);
+            red_b2.set_y(100);
+            red_b2.set_width(20);
+            red_b2.set_height(20);
+	red_b2.events.addListener("click", function()
+	{    
+		red_bar.value(red_bar.get_value() + 2);
+img1.coloradjust_filter.set_red(img1.coloradjust_filter.options.red + 0.0199999996);
+	}
+	);
+		application.are_obj_events = true;
+            __label18.set_x(40);
+            __label18.set_y(130);
+            __label18.text("Green Adjust");
+            green_bar.set_x(40);
+            green_bar.set_y(155);
+            green_bar.value(50);
+            green_bar.set_width(120);
+            green_bar.set_height(10);
+            green_b1.set_x(10);
+            green_b1.set_y(150);
+            green_b1.set_width(20);
+            green_b1.set_height(20);
+	green_b1.events.addListener("click", function()
+	{    
+		green_bar.value(green_bar.get_value() - 2);
+img1.coloradjust_filter.set_green(img1.coloradjust_filter.options.green - 0.0199999996);
+	}
+	);
+		application.are_obj_events = true;
+            green_b2.set_x(170);
+            green_b2.set_y(150);
+            green_b2.set_width(20);
+            green_b2.set_height(20);
+	green_b2.events.addListener("click", function()
+	{    
+		green_bar.value(green_bar.get_value() + 2);
+img1.coloradjust_filter.set_green(img1.coloradjust_filter.options.green + 0.0199999996);
+	}
+	);
+		application.are_obj_events = true;
+            __label19.set_x(40);
+            __label19.set_y(180);
+            __label19.text("Blue Adjust");
+            blue_bar.set_x(40);
+            blue_bar.set_y(205);
+            blue_bar.value(50);
+            blue_bar.set_width(120);
+            blue_bar.set_height(10);
+            blue_b1.set_x(10);
+            blue_b1.set_y(200);
+            blue_b1.set_width(20);
+            blue_b1.set_height(20);
+	blue_b1.events.addListener("click", function()
+	{    
+		blue_bar.value(blue_bar.get_value() - 2);
+img1.coloradjust_filter.set_blue(img1.coloradjust_filter.options.blue - 0.0199999996);
+	}
+	);
+		application.are_obj_events = true;
+            blue_b2.set_x(170);
+            blue_b2.set_y(200);
+            blue_b2.set_width(20);
+            blue_b2.set_height(20);
+	blue_b2.events.addListener("click", function()
+	{    
+		blue_bar.value(blue_bar.get_value() + 2);
+img1.coloradjust_filter.set_blue(img1.coloradjust_filter.options.blue + 0.0199999996);
+	}
+	);
+		application.are_obj_events = true;
+            noise_options.set_switchable(false);
+            __label20.set_x(10);
+            __label20.set_y(50);
+            __label20.text("Noise Parameters");
+            __label21.set_x(40);
+            __label21.set_y(80);
+            __label21.text("Amount Adjust");
+            amount_bar.set_x(40);
+            amount_bar.set_y(105);
+            amount_bar.set_width(120);
+            amount_bar.set_height(10);
+            amount_b1.set_x(10);
+            amount_b1.set_y(100);
+            amount_b1.set_width(20);
+            amount_b1.set_height(20);
+	amount_b1.events.addListener("click", function()
+	{    
+		amount_bar.value(amount_bar.get_value() - 2);
+img1.noise_filter.set_amount(img1.noise_filter.options.amount - 0.0199999996);
+	}
+	);
+		application.are_obj_events = true;
+            amount_b2.set_x(170);
+            amount_b2.set_y(100);
+            amount_b2.set_width(20);
+            amount_b2.set_height(20);
+	amount_b2.events.addListener("click", function()
+	{    
+		amount_bar.value(amount_bar.get_value() + 2);
+img1.noise_filter.set_amount(img1.noise_filter.options.amount + 0.0199999996);
+	}
+	);
+		application.are_obj_events = true;
+            __label22.set_x(40);
+            __label22.set_y(130);
+            __label22.text("Strength Adjust");
+            strength_bar.set_x(40);
+            strength_bar.set_y(155);
+            strength_bar.set_width(120);
+            strength_bar.set_height(10);
+            strength_b1.set_x(10);
+            strength_b1.set_y(150);
+            strength_b1.set_width(20);
+            strength_b1.set_height(20);
+	strength_b1.events.addListener("click", function()
+	{    
+		strength_bar.value(strength_bar.get_value() - 2);
+img1.noise_filter.set_strength(img1.noise_filter.options.strength - 0.0199999996);
+	}
+	);
+		application.are_obj_events = true;
+            strength_b2.set_x(170);
+            strength_b2.set_y(150);
+            strength_b2.set_width(20);
+            strength_b2.set_height(20);
+	strength_b2.events.addListener("click", function()
+	{    
+		strength_bar.value(strength_bar.get_value() + 2);
+img1.noise_filter.set_strength(img1.noise_filter.options.strength + 0.0199999996);
+	}
+	);
+		application.are_obj_events = true;
+            mono_check1.set_x(40);
+            mono_check1.set_y(180);
+            mono_check1.set_width(32);
+            mono_check1.set_height(32);
+            mono_check1.set_active(false);
+	mono_check1.events.addListener("click", function()
+	{    
+		img1.noise_filter.set_mono(mono_check.is_active);
+	}
+	);
+		application.are_obj_events = true;
+            __label23.set_x(90);
+            __label23.set_y(185);
+            __label23.text("Mono");
+            glow_options.set_switchable(false);
+            __label24.set_x(10);
+            __label24.set_y(50);
+            __label24.text("Glow Parameters");
+            __label25.set_x(40);
+            __label25.set_y(80);
+            __label25.text("Amount Adjust");
+            amount_bar1.set_x(40);
+            amount_bar1.set_y(105);
+            amount_bar1.set_width(120);
+            amount_bar1.set_height(10);
+            amount_b11.set_x(10);
+            amount_b11.set_y(100);
+            amount_b11.set_width(20);
+            amount_b11.set_height(20);
+	amount_b11.events.addListener("click", function()
+	{    
+		amount_bar1.value(amount_bar1.get_value() - 2);
+img1.glow_filter.set_amount(img1.glow_filter.options.amount - 0.0199999996);
+	}
+	);
+		application.are_obj_events = true;
+            amount_b21.set_x(170);
+            amount_b21.set_y(100);
+            amount_b21.set_width(20);
+            amount_b21.set_height(20);
+	amount_b21.events.addListener("click", function()
+	{    
+		amount_bar1.value(amount_bar1.get_value() + 2);
+img1.glow_filter.set_amount(img1.glow_filter.options.amount + 0.0199999996);
+	}
+	);
+		application.are_obj_events = true;
+            __label26.set_x(40);
+            __label26.set_y(130);
+            __label26.text("Radius Adjust");
+            radius_bar.set_x(40);
+            radius_bar.set_y(155);
+            radius_bar.set_width(120);
+            radius_bar.set_height(10);
+            radius_b1.set_x(10);
+            radius_b1.set_y(150);
+            radius_b1.set_width(20);
+            radius_b1.set_height(20);
+	radius_b1.events.addListener("click", function()
+	{    
+		radius_bar.value(radius_bar.get_value() - 2);
+img1.glow_filter.set_radius(img1.glow_filter.options.radius - 0.0199999996);
+	}
+	);
+		application.are_obj_events = true;
+            radius_b2.set_x(170);
+            radius_b2.set_y(150);
+            radius_b2.set_width(20);
+            radius_b2.set_height(20);
+	radius_b2.events.addListener("click", function()
+	{    
+		radius_bar.value(radius_bar.get_value() + 2);
+img1.glow_filter.set_radius(img1.glow_filter.options.radius + 0.0199999996);
+	}
+	);
+		application.are_obj_events = true;
+            sharpen_options.set_switchable(false);
+            __label27.set_x(10);
+            __label27.set_y(50);
+            __label27.text("Sharpen Parameters");
+            __label28.set_x(40);
+            __label28.set_y(80);
+            __label28.text("Amount Adjust");
+            amount_bar2.set_x(40);
+            amount_bar2.set_y(105);
+            amount_bar2.set_width(120);
+            amount_bar2.set_height(10);
+            amount_b12.set_x(10);
+            amount_b12.set_y(100);
+            amount_b12.set_width(20);
+            amount_b12.set_height(20);
+	amount_b12.events.addListener("click", function()
+	{    
+		amount_bar2.value(amount_bar2.get_value() - 2);
+img1.sharpen_filter.set_amount(img1.sharpen_filter.options.amount - 0.0199999996);
+	}
+	);
+		application.are_obj_events = true;
+            amount_b22.set_x(170);
+            amount_b22.set_y(100);
+            amount_b22.set_width(20);
+            amount_b22.set_height(20);
+	amount_b22.events.addListener("click", function()
+	{    
+		amount_bar2.value(amount_bar2.get_value() + 2);
+img1.sharpen_filter.set_amount(img1.sharpen_filter.options.amount + 0.0199999996);
+	}
+	);
+		application.are_obj_events = true;
+            mosaic_options.set_switchable(false);
+            __label29.set_x(0);
+            __label29.set_y(50);
+            __label29.text("Mosaic Parameters");
+            __label30.set_x(40);
+            __label30.set_y(80);
+            __label30.text("Block Size Adjust");
+            bsize_bar.set_x(40);
+            bsize_bar.set_y(105);
+            bsize_bar.set_width(120);
+            bsize_bar.set_height(10);
+            bsize_b1.set_x(10);
+            bsize_b1.set_y(100);
+            bsize_b1.set_width(20);
+            bsize_b1.set_height(20);
+	bsize_b1.events.addListener("click", function()
+	{    
+		bsize_bar.value(bsize_bar.get_value() - 2);
+img1.mosaic_filter.set_block_size(img1.mosaic_filter.options.blockSize - 1);
+	}
+	);
+		application.are_obj_events = true;
+            bsize_b2.set_x(170);
+            bsize_b2.set_y(100);
+            bsize_b2.set_width(20);
+            bsize_b2.set_height(20);
+	bsize_b2.events.addListener("click", function()
+	{    
+		bsize_bar.value(bsize_bar.get_value() + 2);
+img1.mosaic_filter.set_block_size(img1.mosaic_filter.options.blockSize + 1);
+	}
+	);
+		application.are_obj_events = true;
+            btnNext.set_x(130);
+            btnNext.set_y(400);
+            btnNext.set_width(50);
+            btnNext.set_height(50);
+	btnNext.events.addListener("click", function()
+	{    
+		if (options.get_active() < options.count() - 1)
+{
+options.active(options.get_active() + 1);
+}
+	}
+	);
+		application.are_obj_events = true;
+            btnPrev.set_x(60);
+            btnPrev.set_y(400);
+            btnPrev.set_width(50);
+            btnPrev.set_height(50);
+	btnPrev.events.addListener("click", function()
+	{    
+		if (options.get_active() > 0)
+{
+options.active(options.get_active() - 1);
+}
+	}
+	);
+		application.are_obj_events = true;
+            __label31.set_x(20);
+            __label31.set_y(470);
+            __label31.text("The arrows will allow changing among the configurations of filters");
 			document.onkeydown = function(ev)
 			{
 				ui_.keydown(ev.keyCode);                  
@@ -1505,7 +1506,7 @@ options.active(options.get_active() - 1);
 				ui_.keypress(ev.keyCode);                  
 			};
             application.events.dispatch("init", []);
-            start();
+            start();			
 			ui_.draw(drawingCanvas.getContext('2d'));
 		});
 	}

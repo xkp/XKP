@@ -1353,6 +1353,34 @@ str xss_compiler::property_get(XSSProperty prop, const str& path)
     return lang->property_get(prop, path, ctx);
   }
 
+str xss_compiler::render_value(variant value)
+  {
+    if (value.empty())
+      return "null"; //td: somehow the language must resolve this
+
+    IRenderer* renderer = variant_cast<IRenderer*>(value, null);
+    if (renderer)
+      {
+        str result = renderer->render();
+        return result;
+      }
+
+    if (value.is<str>())
+      {
+        str result = variant_cast<str>(value, str());
+        return '"' + result + '"';
+      }
+
+    return xss_utils::var_to_string(value);
+  }
+
+void xss_compiler::using_idiom(const str& idiom)
+  {
+    XSSModule mod = idiom_by_id(idiom);
+    if (mod)
+      mod->used();
+  }
+
 XSSObject xss_compiler::analyze_expression(const param_list params)
   {
     //get expression
@@ -1992,6 +2020,10 @@ XSSModule xss_compiler::read_module(const str& src, XSSApplicationRenderer app, 
     //read instances, these will act as singletons
     read_instances(module, app, result);
 
+    //account for dependencies
+    if (result->get<bool>("auto_dependencies", false))
+      result->used();
+
 		//and code, if present
     str code_file = module_data->get<str>("src", str());
     if (!code_file.empty())
@@ -2484,6 +2516,7 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
             clazz->set_definition(def_class);
             clazz->set_super(super);
             clazz->set_context(ictx);
+            clazz->fixup_children(ictx);
 				    
             ictx->set_this(XSSObject(clazz));
 
@@ -2997,8 +3030,9 @@ void xss_compiler::collect_dependencies(XSSType type, XSSType context)
         dependency_map::iterator it = dependencies_.find(href);
         if (it == dependencies_.end())
           {
-            XSSObject idiom(current_app_->type_idiom(type->id()));
-            add_dependency(href, obj, idiom);
+            XSSModule idiom = current_app_->type_idiom(type->id());
+            idiom->used();
+            add_dependency(href, obj, XSSObject(idiom));
           }
       }
   }

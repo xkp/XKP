@@ -68,6 +68,38 @@ on render_update()
 	}
 }
 
+on render_updater()
+{
+	out()
+	{
+        var g_elapsed = -1;
+        var g_delta = 0.0;	
+        function start(resolution)  
+        <xss:open_brace/>  
+	        function updater()  
+	        <xss:open_brace/>
+		        var now   = new Date().getTime();
+                if (g_elapsed < 0)
+                    g_delta = 0; //first update
+                else
+		            g_delta  = now - g_elapsed;  
+		
+                g_elapsed = now; 
+    }          
+
+    compiler.inject("render_update");
+
+    out()
+    {
+                window.setTimeout(updater, resolution);  
+	        <xss:close_brace/>      
+	        window.setTimeout(updater, resolution);  
+        <xss:close_brace/>      
+        
+        start();  
+    }
+}
+
 //java script delegates
 method begin_interpolator(prop, string iid, string assign, string path)
 {

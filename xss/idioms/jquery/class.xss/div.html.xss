@@ -60,6 +60,12 @@
     int get_operation(cmp, int idx, object result)
     {
         var child = cmp.children[idx];
+        if (child.idiom.id != "jquery")
+        {
+            result.ignore = true;
+            return idx + 1;
+        }
+        
         result.direction  = get_direction(child);
         if (result.direction == null)
         {
@@ -164,7 +170,7 @@
         {
             var child = cmp.children[idx];
             var op    = object();
-            idx = get_operation(cmp, idx, op); 
+            idx       = get_operation(cmp, idx, op); 
             
             if (op.ignore)
             {
@@ -269,6 +275,9 @@
     
     method special_layout(layout, parent)
     {
+        if (layout.size == 0)
+            return true;
+            
         if (layout.size == 1)
         {
             var cl = layout[0];
@@ -437,6 +446,7 @@
         //render floating components last
         if (floating_.size > 0)
         {
+            compiler.log("RENDERING FLOATING");
             compiler.add_object_property(it.css, "position", value = "relative", as_plain_text = true);
             for(var fcmp in floating_)
             {

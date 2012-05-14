@@ -30,6 +30,7 @@ var canvas_position = {x:0, y:0};
 var streamer;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
+var camera_1;var particle_1;
 var application = {};
 application.events = new ev.EventHolder();
 // --------RESOURCES---------
@@ -49,19 +50,18 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var camera_1;var particle_1;
 threejs_load_resources(streamer, function()
 {
 		    camera_1 = 
 		    new THREE.Camera(70, 1.5, 1, 1000, null) ;	
 		active_camera = camera_1;
-            camera_1.position.y = 300;
-            camera_1.position.z = 500;
 			particle_1 = new THREE.Particle( 
 			new THREE.ParticleCanvasMaterial( 
 			{ color: Math.random()*0x808008, program: program_fill, } 
 			) );	
 			scene.addObject( particle_1 );	
+            camera_1.position.y = 300;
+            camera_1.position.z = 500;
             particle_1.position.y = 150;
             particle_1.scale.x = 5;
             particle_1.scale.y = 5;
@@ -111,10 +111,14 @@ animate();
 function animate() {
 	if(ui_)
 		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
+	renderer.domElement.getContext('2d').globalAlpha = 1;
 	requestAnimationFrame( animate );
 	render();
 	if(ui_)
+	{
+		drawingCanvas.getContext('2d').globalAlpha = 1;
 		ui_.draw(drawingCanvas.getContext('2d'));
+	}
 	}
 </script>
 </body>

@@ -44,13 +44,13 @@ ev.ThreeEventManager = Class.extend(
 	    if (this.dragging)
 	    {
 	        this.dragging = false;
-			if(!ui)
+			if(!ui_)
 				this.dragend = application.events.dispatch("dragend", [x, y]);
 			if(this.intersects.length > 0 && this.intersects[0].object.events)
 				this.over_dragend = this.intersects[0].object.events.dispatch("dragend", [x, y]);	        
 	    }
 		if(!this.drag && !this.dragend)
-			if(!ui)
+			if(!ui_)
 			{
 				application.events.dispatch("mouseup", [x, y]);
 				application.events.dispatch("click", [x, y]); 
@@ -76,7 +76,7 @@ ev.ThreeEventManager = Class.extend(
 		x = x - canvas_position.x;
 		y = y - canvas_position.y;
 		this.mouse_pressed = true;
-		if(!ui)		
+		if(!ui_)		
 			application.events.dispatch("mousedown", [x, y]); 		
 		if(this.intersects.length > 0 && this.intersects[0].object.events)
 			this.intersects[0].object.events.dispatch("mousedown", [x, y]);		
@@ -103,13 +103,13 @@ ev.ThreeEventManager = Class.extend(
 			this.dragging = true;
 	    if (this.dragging)
 	    {
-			if(!ui)
+			if(!ui_)
 				this.drag = application.events.dispatch("drag", [x, y]);
 			if(this.intersects.length > 0 && this.intersects[0].object.events)
 				this.over_drag = this.intersects[0].object.events.dispatch("drag", [x, y]);	        
 	    }
 		if(!this.over_drag && !this.over_dragend)
-			if(!ui)
+			if(!ui_)
 				application.events.dispatch("mousemove", [x, y]); 
 		objects = scene.objects;		
 		for ( i = 0; i < objects.length; i++ ) {

@@ -7,10 +7,10 @@
             <script type="text/javascript" src="../js/utils.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
             <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
             <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
             <script type="text/javascript" src="../js/joint.js"></script>
             <script type="text/javascript" src="../js/spawner.js"></script>
-            <script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">
 var drawingCanvas;	
 var streamer;	
@@ -33,7 +33,7 @@ var SoundUtils = new ui.SoundUtils();
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
-		}
+		}		
 		var streamer = new stream.Streamer();	
 		var ResourceUtils = new stream.ResourceUtils();
         var   b2Vec2 = Box2D.Common.Math.b2Vec2
@@ -224,13 +224,14 @@ function start(resolution)
             }
             bb = bb.GetNext();
         }
-		application.events.dispatch("updates", []);	
+		application.events.dispatch("updates", []);			
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-        window.setTimeout(updater, resolution);  
+		window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var __label1;var __label2;var __label3;var __label4;var __label5;var btn1;var btn2;var btn3;var btn4;var btn5;var btn6;var __floor1;var __floor2;var __floor3;var __floor4;
         var body_1 = ui.Image.extend(
     {
     init: function(
@@ -241,8 +242,8 @@ function start(resolution)
                 src
                 )
     {
-        this._super(
-		manager,parent,src? src : "images/smile_grin_48.png"        );
+			this._super(	
+			manager,parent,src? src : "images/smile_grin_48.png");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -291,8 +292,8 @@ function start(resolution)
                 src
                 )
     {
-        this._super(
-		manager,parent,src? src : "images/smile_sad_48.png"        );
+			this._super(	
+			manager,parent,src? src : "images/smile_sad_48.png");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -341,8 +342,8 @@ function start(resolution)
                 src
                 )
     {
-        this._super(
-		manager,parent,src? src : "images/img1.png"        );
+			this._super(	
+			manager,parent,src? src : "images/img1.png");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -392,8 +393,8 @@ function start(resolution)
                 src
                 )
     {
-        this._super(
-		manager,parent,src? src : "images/stone-12.jpg"        );
+			this._super(	
+			manager,parent,src? src : "images/stone-12.jpg");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -440,8 +441,8 @@ function start(resolution)
                 src
                 )
     {
-        this._super(
-		manager,parent,src        );
+			this._super(	
+			manager,parent,src);       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 	this.events.addListener("collision", function(who)
@@ -538,73 +539,73 @@ window.onload = function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    __label1 = new ui.Label(g_ui_root.manager, g_ui_root, "11px Verdana");
-            __label1.set_x(200);
-            __label1.set_y(75);
-            __label1.text("The happy and sad smileys are connected. Will be?");
 		    __label2 = new ui.Label(g_ui_root.manager, g_ui_root, "11px Verdana");
-            __label2.set_x(200);
-            __label2.set_y(95);
-            __label2.text("Try to move any of them with the mouse");
 		    __label3 = new ui.Label(g_ui_root.manager, g_ui_root, "11px Verdana");
-            __label3.set_x(50);
-            __label3.set_y(135);
-            __label3.text("Some faces are happy because they are linked but can rotate freely...(distance joint)");
 		    __label4 = new ui.Label(g_ui_root.manager, g_ui_root, "11px Verdana");
-            __label4.set_x(50);
-            __label4.set_y(155);
-            __label4.text("Others are sad because they are glued together and have no free will...(weld joint)");
 		    __label5 = new ui.Label(g_ui_root.manager, g_ui_root, "11px Verdana");
-            __label5.set_x(50);
-            __label5.set_y(175);
-            __label5.text("The two cameras are connected with a pulley joint. Test it !!!");
 		    btn1 = new body_1(g_ui_root.manager, g_ui_root, "images/smile_grin_48.png");
-            btn1.set_x(200);
-            btn1.set_y(250);
 		    btn2 = new body_1(g_ui_root.manager, g_ui_root, "images/smile_grin_48.png");
-            btn2.set_x(100);
-            btn2.set_y(250);
 		    btn3 = new body_2(g_ui_root.manager, g_ui_root, "images/smile_sad_48.png");
-            btn3.set_x(400);
-            btn3.set_y(250);
 		    btn4 = new body_2(g_ui_root.manager, g_ui_root, "images/smile_sad_48.png");
-            btn4.set_x(300);
-            btn4.set_y(250);
 		    btn5 = new body_3(g_ui_root.manager, g_ui_root, "images/img1.png");
-            btn5.set_x(15);
-            btn5.set_y(100);
 		    btn6 = new body_3(g_ui_root.manager, g_ui_root, "images/img1.png");
-            btn6.set_x(500);
-            btn6.set_y(500);
 		    __floor1 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
-            __floor1.set_x(0);
-            __floor1.set_y(590);
-            __floor1.set_width(600);
-            __floor1.set_height(10);
 		    __floor2 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
-            __floor2.set_x(0);
-            __floor2.set_y(0);
-            __floor2.set_width(10);
-            __floor2.set_height(600);
 		    __floor3 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
-            __floor3.set_x(0);
-            __floor3.set_y(0);
-            __floor3.set_width(600);
-            __floor3.set_height(10);
 		    __floor4 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
-            __floor4.set_x(590);
-            __floor4.set_y(0);
-            __floor4.set_width(10);
-            __floor4.set_height(600);
 __distance_joint1 = 
 new joint.DistanceJoint(
 btn1,btn2);
-            __distance_joint1.joint.SetLength(5);
 __weld_joint1 = 
 new joint.WeldJoint(
 btn3,btn4);
 __pulley_joint1 = 
 new joint.PulleyJoint(
 btn5,btn6,100,100,500,500,1);
+            __label1.set_x(200);
+            __label1.set_y(75);
+            __label1.text("The happy and sad smileys are connected. Will be?");
+            __label2.set_x(200);
+            __label2.set_y(95);
+            __label2.text("Try to move any of them with the mouse");
+            __label3.set_x(50);
+            __label3.set_y(135);
+            __label3.text("Some faces are happy because they are linked but can rotate freely...(distance joint)");
+            __label4.set_x(50);
+            __label4.set_y(155);
+            __label4.text("Others are sad because they are glued together and have no free will...(weld joint)");
+            __label5.set_x(50);
+            __label5.set_y(175);
+            __label5.text("The two cameras are connected with a pulley joint. Test it !!!");
+            btn1.set_x(200);
+            btn1.set_y(250);
+            btn2.set_x(100);
+            btn2.set_y(250);
+            btn3.set_x(400);
+            btn3.set_y(250);
+            btn4.set_x(300);
+            btn4.set_y(250);
+            btn5.set_x(15);
+            btn5.set_y(100);
+            btn6.set_x(500);
+            btn6.set_y(500);
+            __floor1.set_x(0);
+            __floor1.set_y(590);
+            __floor1.set_width(600);
+            __floor1.set_height(10);
+            __floor2.set_x(0);
+            __floor2.set_y(0);
+            __floor2.set_width(10);
+            __floor2.set_height(600);
+            __floor3.set_x(0);
+            __floor3.set_y(0);
+            __floor3.set_width(600);
+            __floor3.set_height(10);
+            __floor4.set_x(590);
+            __floor4.set_y(0);
+            __floor4.set_width(10);
+            __floor4.set_height(600);
+            __distance_joint1.joint.SetLength(5);
 			document.onkeydown = function(ev)
 			{
 				ui_.keydown(ev.keyCode);                  
@@ -618,7 +619,7 @@ btn5,btn6,100,100,500,500,1);
 				ui_.keypress(ev.keyCode);                  
 			};
             application.events.dispatch("init", []);
-            start();
+            start();			
 			ui_.draw(drawingCanvas.getContext('2d'));
 		});
 	}

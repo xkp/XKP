@@ -10,15 +10,15 @@
 </style>
             <script type="text/javascript" src="../js/resig.js"></script>
             <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
             <script type="text/javascript" src="../js/colors.js"></script>
-            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
-            <script type="text/javascript" src="../js/streamer.js"></script>
-            <script type="text/javascript" src="../js/ui.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui_;
@@ -33,6 +33,7 @@ var streamer;
 var app_width = 600;
 var app_height = 400;
 var lbl0;
+var my_plane;var camera_1;
 var application = {};
 application.events = new ev.EventHolder();
 		if(drawingCanvas){
@@ -46,7 +47,7 @@ application.events = new ev.EventHolder();
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
-		}
+		}		
 		var streamer = new stream.Streamer();	
 		var ResourceUtils = new stream.ResourceUtils();
 	// --------RESOURCES---------
@@ -146,7 +147,6 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var my_plane;var camera_1;
     function create_my_plane(
     width,height,x_segments,y_segments ) { 
     var my_plane;
@@ -214,12 +214,12 @@ threejs_load_resources(streamer, function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    lbl0 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            lbl0.set_x(200);
-            lbl0.set_y(75);
-            lbl0.text("Click wherever to create a randomly positioned plane");
 		    camera_1 = 
 		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
 		active_camera = camera_1;
+            lbl0.set_x(200);
+            lbl0.set_y(75);
+            lbl0.text("Click wherever to create a randomly positioned plane");
             camera_1.position.z = 1000;
             application.img_array = ["images/test1.png", "images/test2.png", "images/test3.png", "images/test4.png", "images/test5.png"];
             application.i = 0;
@@ -276,10 +276,14 @@ animate();
 function animate() {
 	if(ui_)
 		drawingCanvas.getContext('2d').clearRect(0,0,600,400);
+	renderer.domElement.getContext('2d').globalAlpha = 1;
 	requestAnimationFrame( animate );
 	render();
 	if(ui_)
+	{
+		drawingCanvas.getContext('2d').globalAlpha = 1;
 		ui_.draw(drawingCanvas.getContext('2d'));
+	}
 	}
 </script>
 </body>

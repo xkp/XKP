@@ -11,15 +11,15 @@
 </style>
             <script type="text/javascript" src="../js/resig.js"></script>
             <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
             <script type="text/javascript" src="../js/colors.js"></script>
-            <script type="text/javascript" src="../js/utils.js"></script>
             <script type="text/javascript" src="../js/sequence.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
-            <script type="text/javascript" src="../js/ui.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui_;
@@ -34,6 +34,7 @@ var streamer;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var anim_1;var fade_1;var lbl0;
+var cylinder_material;var camera_1;var light;var cylinder_1;
 var application = {};
 application.events = new ev.EventHolder();
 		var g_sequence_manager = new state.Manager();
@@ -52,7 +53,7 @@ application.events = new ev.EventHolder();
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
-		}
+		}		
 	// --------RESOURCES---------
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
@@ -71,15 +72,14 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var cylinder_material;var camera_1;var light;var cylinder_1;
         var move_anim = state.Sequence.extend(
     {
     init: function(
                 manager
                 )
     {
-        this._super(
-		manager        );
+			this._super(	
+			manager);       
         this.events = new ev.EventHolder(); 
         var this__  = this;
                 var this__ = this;
@@ -115,8 +115,8 @@ var cylinder_material;var camera_1;var light;var cylinder_1;
                 manager
                 )
     {
-        this._super(
-		manager        );
+			this._super(	
+			manager);       
         this.events = new ev.EventHolder(); 
         var this__  = this;
                 var this__ = this;
@@ -154,25 +154,13 @@ color:Math.random() * 0xffffff
 		    camera_1 = 
 		    new THREE.Camera(75, 1.5, 1, 3000, null) ;	
 		active_camera = camera_1;
-            camera_1.position.z = 1000;
 	    light = 
 	    new THREE.DirectionalLight(1677, null, null, null) ;
 	    scene.addLight(light);
-            light.position.y = 0.5;
-            light.position.z = 1;
 	    cylinder_1_cylinder = new THREE.Cylinder(200, 100, 100, 500, null, null) ;
 	    cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
 	    scene.addObject(cylinder_1);
 		cylinder_1.events = new ev.EventHolder();
-            set_rotation_x(cylinder_1.rotation, 10);
-            set_rotation_y(cylinder_1.rotation, 10);
-	cylinder_1.events.addListener("click", function()
-	{    
-		anim_1.start();
-fade_1.start();
-	}
-	);
-		application.are_obj_events = true;
 anim_1 =
 new move_anim(
 g_sequence_manager);
@@ -228,6 +216,18 @@ g_sequence_manager);
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    lbl0 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+            camera_1.position.z = 1000;
+            light.position.y = 0.5;
+            light.position.z = 1;
+            set_rotation_x(cylinder_1.rotation, 10);
+            set_rotation_y(cylinder_1.rotation, 10);
+	cylinder_1.events.addListener("click", function()
+	{    
+		anim_1.start();
+fade_1.start();
+	}
+	);
+		application.are_obj_events = true;
             lbl0.set_x(240);
             lbl0.set_y(75);
             lbl0.text("Click the cylinder to animate it");
@@ -274,10 +274,14 @@ animate();
 function animate() {
 	if(ui_)
 		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
+	renderer.domElement.getContext('2d').globalAlpha = 1;
 	requestAnimationFrame( animate );
 	render();
 	if(ui_)
+	{
+		drawingCanvas.getContext('2d').globalAlpha = 1;
 		ui_.draw(drawingCanvas.getContext('2d'));
+	}
 	}
 </script>
 </body>

@@ -47,6 +47,7 @@ var streamer;
 var app_width = <xss:e value="application.width"/>;
 var app_height = <xss:e value="application.height"/>;
 <xss:marker id="variables"/>
+<xss:marker id="threejs_variables"/>
 var application = {};
 application.events = new ev.EventHolder();
 
@@ -83,16 +84,16 @@ application.events.dispatch("switch_cameras", []);
 
 }
 
-<xss:marker id="threejs_variables"/>
-
 <xss:code>
 	compiler.inject("render_types");
+	compiler.render_app_types("../common-js/resig-class.xss");
 </xss:code>
 
 threejs_load_resources(streamer, function()
 {
 <xss:code>
 	compiler.inject("render_instances");	
+	compiler.inject("render_inst_elems");
 	compiler.xss("../common-js/instance.xss", application);
 </xss:code>
 
@@ -139,13 +140,17 @@ function animate() {
 		drawingCanvas.getContext('2d').clearRect(0,0,<xss:e value="application.width"/>,<xss:e value="application.height"/>);
 <xss:code>	
 	if(application.send_to_back == "ui")
+		out()
+		{
+		if(ui_)
+		<xss:open_brace/>
+			drawingCanvas.getContext('2d').globalAlpha = 1;
+			ui_.draw(drawingCanvas.getContext('2d'));
+		<xss:close_brace/>
+		}	
 	out()
 	{
-	if(ui_)
-		ui_.draw(drawingCanvas.getContext('2d'));
-	}
-	out()
-	{
+	renderer.domElement.getContext('2d').globalAlpha = 1;
 	requestAnimationFrame( animate );
 	render();
 	}	
@@ -153,7 +158,10 @@ function animate() {
 	out()
 	{
 	if(ui_)
+	<xss:open_brace/>
+		drawingCanvas.getContext('2d').globalAlpha = 1;
 		ui_.draw(drawingCanvas.getContext('2d'));
+	<xss:close_brace/>
 	}
 </xss:code>
 }
@@ -174,6 +182,8 @@ function animate() {
     array non_shared = [];
     for(var dep in dependencies)
     {
+        compiler.log("dependency: " + dep.href);
+        
         if (dep.shared)
         {
             //shared libraries will be assumed to be at the default library path 

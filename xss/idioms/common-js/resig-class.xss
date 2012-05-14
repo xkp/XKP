@@ -35,8 +35,12 @@
         }
     </xss:code>)
     {
-        this._super(
-		<xss:code>			
+		<xss:code>
+			if(clazz.super)
+			{
+			out(){
+			this._super(	
+			}
             var c_params = clazz.constructor_params; 
             
 			if (c_params)
@@ -66,8 +70,10 @@
                     idx++;
                 }
             }	
+			out(){);}
+			}
         </xss:code>
-        );
+       
         this.events = new ev.EventHolder(); 
         
         var this__  = this;
@@ -117,6 +123,11 @@
         }
         
         //provide a way to initialize stuff
+		for(var inst_ in clazz.instances)
+		{	
+			if(!inst_.dont_render)
+				compiler.xss("../common-js/instance.xss", inst_, path = "this");
+		}
         out()
         {
             this.events.dispatch("init", [this]);

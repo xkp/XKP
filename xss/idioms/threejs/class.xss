@@ -82,16 +82,13 @@
 
         string seq_path = compiler.idiom_path(seq, seq_renderer);
         compiler.xss(seq_path, seq);
-		compiler.xss("../common-js/instance.xss", seq);
-        
+		        
         out()
         {
             <xss:e v="clazz.id"/>.<xss:e v="seq.output_id"/> = <xss:e v="seq.output_id"/>;
         }
         
-    }    
-
-    compiler.xss("../common-js/instance.xss", clazz);    
+    }          
 
     for(var inst in clazz.instances)
     {				
@@ -117,9 +114,7 @@
             var <xss:e v="inst.output_id"/>;
         }            
         string inst_path = compiler.idiom_path(inst, inst_renderer);
-		compiler.xss(inst_path, inst);
-		if(!inst.dont_render)
-			compiler.xss("../common-js/instance.xss", inst);
+		compiler.xss(inst_path, inst);		
         if(super_transform)
 			out()
 			{
@@ -130,7 +125,13 @@
 			{
 				<xss:e v="clazz.id"/>.<xss:e v="inst.output_id"/> = <xss:e v="inst.output_id"/>;
 			}     
-    }    
+    }  
+	for(var inst_ in clazz.instances)
+    {	
+		if(!inst_.dont_render)
+			compiler.xss("../common-js/instance.xss", inst_);
+	}
+	compiler.xss("../common-js/instance.xss", clazz); 
     out()
     {
         return <xss:e v="clazz.id"/>;

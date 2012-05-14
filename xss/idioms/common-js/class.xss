@@ -116,10 +116,15 @@
         }
         
         //provide a way to initialize stuff
+		for(var inst_ in clazz.instances)
+		{	
+			if(!inst_.dont_render)
+				compiler.xss("../common-js/instance.xss", inst_, path = "this");
+		}
         out()
         {
             this.events.dispatch("init", [this]);
-        }
+        }		
         </xss:code>
     },
 });

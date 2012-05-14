@@ -6,6 +6,7 @@ on pre_process(obj)
 
 on compile_dependency(dep)
 {
+    compiler.log("on resources.compile_dependency");
     if (!dep.idiom)
         return;
 
@@ -21,7 +22,6 @@ on compile_dependency(dep)
 
 on render_initialization()
 {
-    compiler.log("on resources.render_initialization");
 	out()
 	{
 		var streamer = new stream.Streamer();	
@@ -39,7 +39,7 @@ on render_resources()
     }
 
     for(var res in instances)
-    {	
+    {
 		if(res.class_name == "package")
 		{
 			out()

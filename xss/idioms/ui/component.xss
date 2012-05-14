@@ -13,7 +13,7 @@
         cmp_id = "this";
     
     if (compiler.application_object(cmp))
-        out(marker = "variables", marker_source = "entry") {var <xss:e v="cmp.output_id"/>;}
+        out(marker = "variables", marker_source = "previous") {var <xss:e v="cmp.output_id"/>;}
         
     if (!is_class)
     {        		
@@ -45,7 +45,6 @@
         //TODO: Porque no marcar las clases con algun valor (mouse_thru, quiza?) 
         if(cmp.type.output_id == "ui.Component" || cmp.type.output_id == "ui.ClipArea"){
 			out() {<xss:e v="cmp_id"/>.mouse_thru = true;}			
-		}
-        compiler.xss("../common-js/instance.xss", cmp, path = path, var_value = cmp_id);
+		}        
     }
 </xss:code>

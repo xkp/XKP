@@ -30,7 +30,7 @@ var SoundUtils = new ui.SoundUtils();
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
-		}
+		}		
 		var streamer = new stream.Streamer();	
 		var ResourceUtils = new stream.ResourceUtils();
 		var global_package = new stream.Package(streamer);	
@@ -83,13 +83,14 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
-		application.events.dispatch("updates", []);	
+		application.events.dispatch("updates", []);			
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-        window.setTimeout(updater, resolution);  
+		window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var test1;var img4;var img1;
         var my_image = ui.Image.extend(
     {
     init: function(
@@ -100,8 +101,8 @@ function start(resolution)
                 src
                 )
     {
-        this._super(
-		manager,parent,src        );
+			this._super(	
+			manager,parent,src);       
         this.events = new ev.EventHolder(); 
         var this__  = this;
             this.x_pos = null;
@@ -209,16 +210,16 @@ window.onload = function()
 	});
 		    test1 = new ui.Component(g_ui_root.manager, g_ui_root);
 	    test1.mouse_thru = true;
+		    img4 = new my_image(test1.manager, test1, "images/img1.png");
+		    img1 = new ui.Image(g_ui_root.manager, g_ui_root, "images/img1.png");
             test1.set_x(200);
             test1.set_y(200);
             test1.set_width(200);
             test1.set_height(200);
-		    img4 = new my_image(test1.manager, test1, "images/img1.png");
             img4.set_x(0);
             img4.set_y(0);
             img4.set_width(100);
             img4.set_height(100);
-		    img1 = new ui.Image(g_ui_root.manager, g_ui_root, "images/img1.png");
             img1.set_x(100);
             img1.set_y(100);
             img1.set_width(50);
@@ -257,7 +258,7 @@ application.img2.image_set("images/test1.png");
 				ui_.keypress(ev.keyCode);                  
 			};
             application.events.dispatch("init", []);
-            start();
+            start();			
 			ui_.draw(drawingCanvas.getContext('2d'));
 		});
 	}

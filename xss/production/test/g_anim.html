@@ -13,13 +13,13 @@
             <script type="text/javascript" src="../js/utils.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
             <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/sequence.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
             <script type="text/javascript" src="../js/ui.js"></script>
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
-            <script type="text/javascript" src="../js/sequence.js"></script>
-            <script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui_;
@@ -34,6 +34,7 @@ var streamer;
 var app_width = 1000;
 var app_height = 800;
 var img4;
+var my_plane;var camera_1;
 var application = {};
 application.events = new ev.EventHolder();
 		var g_sequence_manager = new state.Manager();
@@ -54,7 +55,7 @@ application.events = new ev.EventHolder();
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
-		}
+		}		
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
@@ -97,7 +98,6 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var my_plane;var camera_1;
         var my_image = ui.Image.extend(
     {
     init: function(
@@ -108,8 +108,8 @@ var my_plane;var camera_1;
                 src
                 )
     {
-        this._super(
-		manager,parent,src        );
+			this._super(	
+			manager,parent,src);       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 this.img_pos =
@@ -198,6 +198,7 @@ g_sequence_manager);
         ____i6.keys[0].value = this__.get_rotation();
         ____i6.keys[1].value = Math.random() * 45;
         });
+            this.img_pos.loop = true;
             this.events.dispatch("init", [this]);
             },
 });
@@ -268,13 +269,13 @@ threejs_load_resources(streamer, function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    img4 = new my_image(g_ui_root.manager, g_ui_root, "images/test1.png");
+		    camera_1 = 
+		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
+		active_camera = camera_1;
             img4.set_x(100);
             img4.set_y(100);
             img4.set_width(128);
             img4.set_height(164);
-		    camera_1 = 
-		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
-		active_camera = camera_1;
             camera_1.position.z = 1000;
 if(ui_)
 {	
@@ -313,10 +314,14 @@ animate();
 function animate() {
 	if(ui_)
 		drawingCanvas.getContext('2d').clearRect(0,0,1000,800);
+	renderer.domElement.getContext('2d').globalAlpha = 1;
 	requestAnimationFrame( animate );
 	render();
 	if(ui_)
+	{
+		drawingCanvas.getContext('2d').globalAlpha = 1;
 		ui_.draw(drawingCanvas.getContext('2d'));
+	}
 	}
 </script>
 </body>

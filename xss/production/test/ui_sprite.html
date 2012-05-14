@@ -32,7 +32,7 @@ var SoundUtils = new ui.SoundUtils();
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
-		}
+		}		
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
             {
@@ -307,13 +307,14 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
-		application.events.dispatch("updates", []);	
+		application.events.dispatch("updates", []);			
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-        window.setTimeout(updater, resolution);  
+		window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var monster;var girl1;var girl2;var mario;var lbl1;var lbl2;var lbl3;
             application.left_key_press = false;
             application.right_key_press = false;
 	application.events.addListener("keydown", function(keycode)
@@ -431,13 +432,20 @@ window.onload = function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    monster = new ui.Sprite(g_ui_root.manager, g_ui_root, "monster_sheet");
+		    monster = new ui.Sprite(g_ui_root.manager, g_ui_root);
+		    girl1 = new ui.Sprite(g_ui_root.manager, g_ui_root);
+		    girl2 = new ui.Sprite(g_ui_root.manager, g_ui_root);
+		    mario = new ui.Sprite(g_ui_root.manager, g_ui_root);
+		    lbl1 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+		    lbl2 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+		    lbl3 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
             monster.set_x(200);
             monster.set_y(200);
+            monster.set_sheet("monster_sheet");
             monster.set_animation("m_idle");
-		    girl1 = new ui.Sprite(g_ui_root.manager, g_ui_root, "azucola_sheet");
             girl1.set_x(300);
             girl1.set_y(200);
+            girl1.set_sheet("azucola_sheet");
             girl1.set_animation("g1_idle");
 	girl1.events.addListener("click", function()
 	{    
@@ -449,9 +457,9 @@ girl1.set_animation("g1_idle");
 	}
 	);
 		application.are_obj_events = true;
-		    girl2 = new ui.Sprite(g_ui_root.manager, g_ui_root, "azucola_sheet");
             girl2.set_x(400);
             girl2.set_y(200);
+            girl2.set_sheet("azucola_sheet");
             girl2.set_animation("g2_idle");
 	girl2.events.addListener("click", function()
 	{    
@@ -462,19 +470,16 @@ girl2.set_animation("g2_idle");
 	}
 	);
 		application.are_obj_events = true;
-		    mario = new ui.Sprite(g_ui_root.manager, g_ui_root, "mario_sheet");
             mario.set_x(300);
             mario.set_y(400);
+            mario.set_sheet("mario_sheet");
             mario.set_animation("m_idle_r");
-		    lbl1 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
             lbl1.set_x(100);
             lbl1.set_y(100);
             lbl1.text("Press left arrow to walk the monster");
-		    lbl2 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
             lbl2.set_x(100);
             lbl2.set_y(120);
             lbl2.text("Click the blond girl to crash her down and jump later (testing animation queue)");
-		    lbl3 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
             lbl3.set_x(100);
             lbl3.set_y(140);
             lbl3.text("Click the triguena girl to make her cry (testing animation bounce)");
@@ -491,7 +496,7 @@ girl2.set_animation("g2_idle");
 				ui_.keypress(ev.keyCode);                  
 			};
             application.events.dispatch("init", []);
-            start();
+            start();			
 			ui_.draw(drawingCanvas.getContext('2d'));
 		});
 	}

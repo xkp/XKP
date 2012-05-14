@@ -19,7 +19,7 @@
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
 <script type="text/javascript">		
-var ui;
+var ui_;
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 var renderer = new THREE.WebGLRenderer( { antialias: false } );
 var canvas_position = {x:0, y:0};
@@ -112,17 +112,12 @@ color:White
 		    camera_1 = 
 		    new THREE.Camera(45, 1.5, 1, 2000, null) ;	
 		active_camera = camera_1;
-            camera_1.position.z = 800;
-            camera_1.position.y = 200;
 	    amb_light_1 = 
 	    new THREE.AmbientLight(0x202020) ;
 	    scene.addLight(amb_light_1);
 	    dir_light_1 = 
 	    new THREE.DirectionalLight(Math.random() * 0xffffff, null, null, null) ;
 	    scene.addLight(dir_light_1);
-            dir_light_1.position.x = Math.random() - 0.5;
-            dir_light_1.position.y = Math.random() - 0.5;
-            dir_light_1.position.z = Math.random() - 0.5;
 	    particle_1_sphere = new THREE.Sphere(4, 8, 8) ;
 	    particle_1 = new THREE.Mesh(particle_1_sphere, material_particle);
 	    scene.addObject(particle_1);
@@ -134,6 +129,11 @@ color:White
 	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    scene.addObject(plane_1);
 		plane_1.events = new ev.EventHolder();
+            camera_1.position.z = 800;
+            camera_1.position.y = 200;
+            dir_light_1.position.x = Math.random() - 0.5;
+            dir_light_1.position.y = Math.random() - 0.5;
+            dir_light_1.position.z = Math.random() - 0.5;
             plane_1.position.y = -70;
             set_rotation_x(plane_1.rotation, -90);
             application.timer = null;
