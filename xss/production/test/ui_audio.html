@@ -6,8 +6,8 @@
             <script type="text/javascript" src="../js/event.js"></script>
             <script type="text/javascript" src="../js/utils.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
-            <script type="text/javascript" src="../js/streamer.js"></script>
             <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">
 var drawingCanvas;	
 var streamer;	
@@ -30,7 +30,7 @@ var SoundUtils = new ui.SoundUtils();
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
-		}
+		}		
 		var streamer = new stream.Streamer();	
 		var ResourceUtils = new stream.ResourceUtils();
 		var global_package = new stream.Package(streamer);	
@@ -251,13 +251,14 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
-		application.events.dispatch("updates", []);	
+		application.events.dispatch("updates", []);			
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-        window.setTimeout(updater, resolution);  
+		window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var lbl1;var btnSound1;var btnSound2;var volume_bar;var btn1;var btn2;var lbl3;var btnPlay;var btnPause;var btnStop;var sound_1;var sound_2;
             application.curr_sound = null;
 	application.events.addListener("init", function()
 	{    
@@ -331,10 +332,20 @@ window.onload = function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    lbl1 = new ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
+		    btnSound1 = new ui.Button(g_ui_root.manager, g_ui_root, "images/sound_2.png", "images/sound_2.png");
+		    btnSound2 = new ui.Button(g_ui_root.manager, g_ui_root, "images/sound_1.png", "images/sound_1.png");
+		    volume_bar = new ui.ProgressBar(g_ui_root.manager, g_ui_root, null);
+		    btn1 = new ui.Image(g_ui_root.manager, g_ui_root, "images/arrow_left.png");
+		    btn2 = new ui.Image(g_ui_root.manager, g_ui_root, "images/arrow_right.png");
+		    lbl3 = new ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
+		    btnPlay = new ui.Button(g_ui_root.manager, g_ui_root, "images/play.png", "images/play_over.png");
+		    btnPause = new ui.Button(g_ui_root.manager, g_ui_root, "images/pause.png", "images/pause_over.png");
+		    btnStop = new ui.Button(g_ui_root.manager, g_ui_root, "images/stop.png", "images/stop_over.png");
+		    sound_1 = new ui.Sound("sounds/forest.wav");
+		    sound_2 = new ui.Sound("sounds/applauselong.wav");
             lbl1.set_x(220);
             lbl1.set_y(190);
             lbl1.text("click the sound you want to listen");
-		    btnSound1 = new ui.Button(g_ui_root.manager, g_ui_root, "images/sound_2.png", "images/sound_2.png");
             btnSound1.set_x(275);
             btnSound1.set_y(210);
             btnSound1.set_width(50);
@@ -347,7 +358,6 @@ application.curr_sound.play();
 	}
 	);
 		application.are_obj_events = true;
-		    btnSound2 = new ui.Button(g_ui_root.manager, g_ui_root, "images/sound_1.png", "images/sound_1.png");
             btnSound2.set_x(275);
             btnSound2.set_y(240);
             btnSound2.set_width(50);
@@ -360,13 +370,11 @@ application.curr_sound.play();
 	}
 	);
 		application.are_obj_events = true;
-		    volume_bar = new ui.ProgressBar(g_ui_root.manager, g_ui_root, null);
             volume_bar.set_x(225);
             volume_bar.set_y(120);
             volume_bar.value(50);
             volume_bar.set_width(150);
             volume_bar.set_height(10);
-		    btn1 = new ui.Image(g_ui_root.manager, g_ui_root, "images/arrow_left.png");
             btn1.set_x(200);
             btn1.set_y(115);
             btn1.set_width(20);
@@ -378,7 +386,6 @@ application.curr_sound.volume -= 0.100000001;
 	}
 	);
 		application.are_obj_events = true;
-		    btn2 = new ui.Image(g_ui_root.manager, g_ui_root, "images/arrow_right.png");
             btn2.set_x(380);
             btn2.set_y(115);
             btn2.set_width(20);
@@ -390,11 +397,9 @@ application.curr_sound.volume += 0.100000001;
 	}
 	);
 		application.are_obj_events = true;
-		    lbl3 = new ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
             lbl3.set_x(220);
             lbl3.set_y(100);
             lbl3.text("click small arrows to adjust volume");
-		    btnPlay = new ui.Button(g_ui_root.manager, g_ui_root, "images/play.png", "images/play_over.png");
             btnPlay.set_x(175);
             btnPlay.set_y(300);
             btnPlay.set_width(50);
@@ -405,7 +410,6 @@ application.curr_sound.volume += 0.100000001;
 	}
 	);
 		application.are_obj_events = true;
-		    btnPause = new ui.Button(g_ui_root.manager, g_ui_root, "images/pause.png", "images/pause_over.png");
             btnPause.set_x(275);
             btnPause.set_y(300);
             btnPause.set_width(50);
@@ -416,7 +420,6 @@ application.curr_sound.volume += 0.100000001;
 	}
 	);
 		application.are_obj_events = true;
-		    btnStop = new ui.Button(g_ui_root.manager, g_ui_root, "images/stop.png", "images/stop_over.png");
             btnStop.set_x(375);
             btnStop.set_y(300);
             btnStop.set_width(50);
@@ -427,10 +430,8 @@ application.curr_sound.volume += 0.100000001;
 	}
 	);
 		application.are_obj_events = true;
-		    sound_1 = new ui.Sound("sounds/forest.wav");
             sound_1.src = "sounds/forest.wav";
             sound_1.set_loop(false);
-		    sound_2 = new ui.Sound("sounds/applauselong.wav");
             sound_2.src = "sounds/applauselong.wav";
 			document.onkeydown = function(ev)
 			{
@@ -445,7 +446,7 @@ application.curr_sound.volume += 0.100000001;
 				ui_.keypress(ev.keyCode);                  
 			};
             application.events.dispatch("init", []);
-            start();
+            start();			
 			ui_.draw(drawingCanvas.getContext('2d'));
 		});
 	}

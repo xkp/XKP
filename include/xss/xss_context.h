@@ -118,13 +118,16 @@ class xss_object : public editable_object<xss_object>,
       DynamicArray           find_by_type(const str& which);
       DynamicArray           get_event_impl(const str& event_name, XSSEvent& ev);
       DynamicArray           get_event_code(const str& event_name);
+      DynamicArray           get_attributes();
 		  bool                   is_injected(const str& name);
       void                   add_method(const str& event_name, XSSMethod m);
 		  bool                   empty();
+      void                   propertize();
     public:
       //children management
 			void add_child(XSSObject obj);
       void remove_child(XSSObject obj);
+      void fixup_children(XSSContext ctx);
 		public:
       void add_property_(XSSProperty prop);
       XSSProperty add_property(const str& name, variant value, XSSType type);
@@ -172,7 +175,6 @@ class xss_type : public xss_object
       XSSContext    context();
       void          set_context(XSSContext ctx);
       XSSObjectList get_dependencies();
-      void          propertize();
     public:
       void as_enum();
       void as_array(XSSType type);
@@ -501,6 +503,7 @@ struct xss_object_schema : editable_object_schema<T>
         this->template method_<DynamicArray, 1>("get_event_code",   &T::get_event_code);
         this->template method_<variant, 1>     ("attribute_value",  &T::attribute_value);
         this->template method_<bool, 0>        ("empty",            &T::empty);
+        this->template method_<DynamicArray, 0>("get_attributes",   &T::get_attributes);
 		  }
   };
 

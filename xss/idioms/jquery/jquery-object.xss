@@ -1,15 +1,23 @@
 
 <xss:parameter id="it"/>
 <xss:parameter id="extra"/>
+<xss:parameter id="just_content"/>
 
 <xss:code>
-    string jquery_creator = it.jquery;
-    if (!jquery_creator)
-        jquery_creator = it.type.id;
-    
-    out()
+    if (!just_content)
     {
-        <xss:e value="it.output_id"/>.<xss:e value="jquery_creator"/>(<xss:open_brace/>
+        string jquery_creator = it.jquery;
+        if (!jquery_creator)
+            jquery_creator = it.type.id;
+        
+        string caller = it.output_id;
+        if (it.type.caller)
+            caller = it.type.caller;
+        
+        out()
+        {
+            <xss:e value="caller"/>.<xss:e value="jquery_creator"/>(<xss:open_brace/>
+        }
     }
     
 	//render properties
@@ -18,9 +26,37 @@
 		if(prop.render_as != "script")
 			continue;
 		
-		out()
+        if (prop.type.is_array)
         {
-            <xss:e v="prop.id"/>: <xss:e v="prop.render_value()"/>,
+            var array_ = prop.value;
+            if (array_)
+            {
+		        out() { <xss:e v="prop.output_id"/>: [ }
+                
+                for(var ac in array_)
+                {
+                    compiler.xss("../common-js/raw-object.xss", ac);
+                    compiler.out(", ");
+                }
+
+		        out() { ], }
+            }
+        }
+        else if (prop.type.is_object)
+        {
+            var obj_ = prop.value;
+            if (obj_)
+            {
+                compiler.xss("../common-js/raw-object.xss", obj_);
+                compiler.out(", ");
+            }
+        }
+        else
+        {
+		    out()
+            {
+                <xss:e v="prop.output_id"/>: <xss:e v="prop.render_value()"/>,
+            }
         }
 	}
     
@@ -61,4 +97,7 @@
 		    <xss:close_brace/>,
 	    }
 	}
-</xss:code>});
+    
+    if (!just_content)
+        compiler.out("});");
+</xss:code>

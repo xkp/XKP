@@ -15,9 +15,7 @@
 	}
 </style>
 
-<xss:code>
-    compiler.inject("render_dependencies");
-</xss:code>
+<xss:marker id="dependencies"/>
 
 <xss:code>
 
@@ -34,7 +32,7 @@ out(){
 <script type="text/javascript">		
 }
 </xss:code>
-var ui;
+var ui_;
 
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 var renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -86,12 +84,14 @@ application.events.dispatch("switch_cameras", []);
 
 <xss:code>
 	compiler.inject("render_types");
+	compiler.render_app_types("../common-js/resig-class.xss");
 </xss:code>
 
 threejs_load_resources(streamer, function()
 {
 <xss:code>
-	compiler.inject("render_instances");	
+	compiler.inject("render_instances");
+	compiler.inject("render_inst_elems");	
 	compiler.xss("../common-js/instance.xss", application);
 </xss:code>
 
@@ -137,3 +137,36 @@ function animate() {
 </body>
 
 </html>
+
+<xss:code>
+    //process dependencies
+    var dependencies = compiler.get_dependencies();
+    var default_path = project.js_path;
+    if (!default_path)
+        default_path = "../js";
+    
+    array non_shared = [];
+    for(var dep in dependencies)
+    {
+        
+        if (dep.shared)
+        {
+            //shared libraries will be assumed to be at the default library path 
+            compiler.xss("../common-js/dependency.xss", dep, path = default_path, marker = "dependencies");
+        }
+        else
+        {
+            //let the idioms decide
+            compiler.inject("compile_dependency", dep);
+            non_shared += dep;
+        }
+    }
+
+    for(var ndep in non_shared)
+    {
+        //it is understood that dependencies will come out of
+        //compile with their full path
+        compiler.log("dependency: " + ndep.href);
+        compiler.xss("../common-js/dependency.xss", ndep, marker = "dependencies");
+    }
+</xss:code>

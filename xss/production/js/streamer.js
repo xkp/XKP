@@ -223,7 +223,7 @@ stream.Streamer = Class.extend(
 			new stream.BinModelLoader(this),
 			new stream.SpriteLoader(this),
 			new stream.VideoLoader(this),
-		];
+		];	
     },
 
     begin: function()
@@ -261,11 +261,11 @@ stream.Streamer = Class.extend(
             var res = this.resources[i];
             if (res_id == res.id)
             {
-                return res; 
+				return res; 
             }
 			if (res_id == res.asset)
             {
-                return res; 
+				return res; 
             }
         }
 	},

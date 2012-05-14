@@ -1,9 +1,9 @@
 <module id="webgl" src="module.xs">
-	<dependency href="../js/resig.js"/>	  
-    <dependency href="../js/event.js"/>
-    
-    <dependency href="../js/keys.js"/>
-	<dependency href="../js/colors.js"/>
+    <dependency href="resig.js" shared="true"/>
+    <dependency href="event.js" shared="true"/>
+    <dependency href="keys.js" shared="true"/>
+    <dependency href="colors.js" shared="true"/>
+
     <dependency href="../js/three/Three.js"/>
     <dependency href="../js/three/Stats.js"/>
     <dependency href="../js/three/RequestAnimationFrame.js"/>

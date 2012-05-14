@@ -10,15 +10,15 @@
 </style>
             <script type="text/javascript" src="../js/resig.js"></script>
             <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
             <script type="text/javascript" src="../js/colors.js"></script>
-            <script type="text/javascript" src="../js/utils.js"></script>
             <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
-            <script type="text/javascript" src="../js/ui.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui_;
@@ -39,6 +39,7 @@ var lbl0;var lbl1;
 		var soc_net = document.createElement('canvas');
 		var soc_net_ui;
 	var r2;var fb;var tw;var title2;
+var materials;var __basic_material1;var __basic_material2;var __basic_material3;var __basic_material4;var __basic_material5;var __basic_material6;var plane_material;var plane_mat1;var camera_1;var cube_1;var plane_1;
 var application = {};
 application.events = new ev.EventHolder();
 		var streamer = new stream.Streamer();	
@@ -54,7 +55,7 @@ application.events = new ev.EventHolder();
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
-		}
+		}		
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
@@ -194,7 +195,6 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var materials;var __basic_material1;var __basic_material2;var __basic_material3;var __basic_material4;var __basic_material5;var __basic_material6;var plane_material;var plane_mat1;var camera_1;var cube_1;var plane_1;
 threejs_load_resources(streamer, function()
 {
 	drawingCanvas.onmousemove = function(ev)
@@ -246,13 +246,7 @@ threejs_load_resources(streamer, function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    lbl0 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            lbl0.set_x(200);
-            lbl0.set_y(75);
-            lbl0.text("Drag mouse to spin the cube");
 		    lbl1 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            lbl1.set_x(200);
-            lbl1.set_y(120);
-            lbl1.text("Select what you want to open");
 		webmail.width = 200;
 		webmail.height = 200;							
 		webmail_ui = new ui.Manager(webmail, streamer);
@@ -282,38 +276,9 @@ application.events.addListener("t_mousedown", function(x, y, texture)
 				webmail_ui.mousedown(x*200, y*200);
 	});
 		    r1 = new ui.Rectangle(webmail_g_ui_root.manager, webmail_g_ui_root, "beige", null, null);
-            r1.set_x(0);
-            r1.set_y(0);
-            r1.set_width(200);
-            r1.set_height(200);
-            r1.mouse_thru = true;
-            r1.alpha(60);
 		    yh = new ui.Button(webmail_g_ui_root.manager, webmail_g_ui_root, "images/yahoo_up.png", "images/yahoo.png");
-            yh.set_x(25);
-            yh.set_y(50);
-            yh.set_width(50);
-            yh.set_height(50);
-	yh.events.addListener("click", function()
-	{    
-		lbl1.text("Yahoo is opening...");
-	}
-	);
-		application.are_obj_events = true;
 		    msn = new ui.Button(webmail_g_ui_root.manager, webmail_g_ui_root, "images/msn_up.png", "images/msn.png");
-            msn.set_x(125);
-            msn.set_y(50);
-            msn.set_width(50);
-            msn.set_height(50);
-	msn.events.addListener("click", function()
-	{    
-		lbl1.text("Hotmail is opening...");
-	}
-	);
-		application.are_obj_events = true;
 		    title1 = new ui.Label(webmail_g_ui_root.manager, webmail_g_ui_root, "12px Verdana");
-            title1.set_x(50);
-            title1.set_y(10);
-            title1.text("Webmails");
 		soc_net.width = 200;
 		soc_net.height = 200;							
 		soc_net_ui = new ui.Manager(soc_net, streamer);
@@ -343,38 +308,9 @@ application.events.addListener("t_mousedown", function(x, y, texture)
 				soc_net_ui.mousedown(x*200, y*200);
 	});
 		    r2 = new ui.Rectangle(soc_net_g_ui_root.manager, soc_net_g_ui_root, "lightblue", null, null);
-            r2.set_x(0);
-            r2.set_y(0);
-            r2.set_width(200);
-            r2.set_height(200);
-            r2.mouse_thru = true;
-            r2.alpha(60);
 		    fb = new ui.Button(soc_net_g_ui_root.manager, soc_net_g_ui_root, "images/facebook_up.png", "images/facebook.png");
-            fb.set_x(25);
-            fb.set_y(50);
-            fb.set_width(50);
-            fb.set_height(50);
-	fb.events.addListener("click", function()
-	{    
-		lbl1.text("Facebook is opening...");
-	}
-	);
-		application.are_obj_events = true;
 		    tw = new ui.Button(soc_net_g_ui_root.manager, soc_net_g_ui_root, "images/twitter_up.png", "images/twitter.png");
-            tw.set_x(125);
-            tw.set_y(50);
-            tw.set_width(50);
-            tw.set_height(50);
-	tw.events.addListener("click", function()
-	{    
-		lbl1.text("Twitter is opening...");
-	}
-	);
-		application.are_obj_events = true;
 		    title2 = new ui.Label(soc_net_g_ui_root.manager, soc_net_g_ui_root, "12px Verdana");
-            title2.set_x(50);
-            title2.set_y(10);
-            title2.text("Social networks");
 			    materials = new Array() ;
 __basic_material1 = new THREE.MeshBasicMaterial({
 color:Math.random() * 0xffffff
@@ -403,25 +339,93 @@ color:Math.random() * 0xffffff
 plane_material = new THREE.MeshBasicMaterial({
 color:Grey
 	});
-            set_material_alpha(plane_material, 50);
 plane_mat1 = new THREE.MeshBasicMaterial({
 color:Green
 	});
 		    camera_1 = 
 		    new THREE.Camera(70, 1.5, 1, 1000, null) ;	
 		active_camera = camera_1;
-            camera_1.position.y = 300;
-            camera_1.position.z = 500;
 	    cube_1_cube = new THREE.Cube(200, 200, 200, 1, 1, 1, materials, null, null) ;
 	    cube_1 = new THREE.Mesh(cube_1_cube, new THREE.MeshFaceMaterial());
 	    scene.addObject(cube_1);
 		cube_1.events = new ev.EventHolder();
-            cube_1.position.x = -150;
-            cube_1.position.y = 50;
 	    plane_1_plane = new THREE.Plane(200, 200, null, null) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, plane_material);
 	    scene.addObject(plane_1);
 		plane_1.events = new ev.EventHolder();
+            lbl0.set_x(200);
+            lbl0.set_y(75);
+            lbl0.text("Drag mouse to spin the cube");
+            lbl1.set_x(200);
+            lbl1.set_y(120);
+            lbl1.text("Select what you want to open");
+            webmail_g_ui_root.width = 200;
+            webmail_g_ui_root.height = 200;
+            r1.set_x(0);
+            r1.set_y(0);
+            r1.set_width(200);
+            r1.set_height(200);
+            r1.mouse_thru = true;
+            r1.alpha(60);
+            yh.set_x(25);
+            yh.set_y(50);
+            yh.set_width(50);
+            yh.set_height(50);
+	yh.events.addListener("click", function()
+	{    
+		lbl1.text("Yahoo is opening...");
+	}
+	);
+		application.are_obj_events = true;
+            msn.set_x(125);
+            msn.set_y(50);
+            msn.set_width(50);
+            msn.set_height(50);
+	msn.events.addListener("click", function()
+	{    
+		lbl1.text("Hotmail is opening...");
+	}
+	);
+		application.are_obj_events = true;
+            title1.set_x(50);
+            title1.set_y(10);
+            title1.text("Webmails");
+            soc_net_g_ui_root.width = 200;
+            soc_net_g_ui_root.height = 200;
+            r2.set_x(0);
+            r2.set_y(0);
+            r2.set_width(200);
+            r2.set_height(200);
+            r2.mouse_thru = true;
+            r2.alpha(60);
+            fb.set_x(25);
+            fb.set_y(50);
+            fb.set_width(50);
+            fb.set_height(50);
+	fb.events.addListener("click", function()
+	{    
+		lbl1.text("Facebook is opening...");
+	}
+	);
+		application.are_obj_events = true;
+            tw.set_x(125);
+            tw.set_y(50);
+            tw.set_width(50);
+            tw.set_height(50);
+	tw.events.addListener("click", function()
+	{    
+		lbl1.text("Twitter is opening...");
+	}
+	);
+		application.are_obj_events = true;
+            title2.set_x(50);
+            title2.set_y(10);
+            title2.text("Social networks");
+            set_material_alpha(plane_material, 50);
+            camera_1.position.y = 300;
+            camera_1.position.z = 500;
+            cube_1.position.x = -150;
+            cube_1.position.y = 50;
             set_rotation_x(plane_1.rotation, -90);
             plane_1.position.x = -150;
             plane_1.position.y = -100;
@@ -495,10 +499,14 @@ animate();
 function animate() {
 	if(ui_)
 		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
+	renderer.domElement.getContext('2d').globalAlpha = 1;
 	requestAnimationFrame( animate );
 	render();
 	if(ui_)
+	{
+		drawingCanvas.getContext('2d').globalAlpha = 1;
 		ui_.draw(drawingCanvas.getContext('2d'));
+	}
 	}
 </script>
 </body>

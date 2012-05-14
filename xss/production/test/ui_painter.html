@@ -6,8 +6,8 @@
             <script type="text/javascript" src="../js/event.js"></script>
             <script type="text/javascript" src="../js/utils.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
-            <script type="text/javascript" src="../js/streamer.js"></script>
             <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">
 var drawingCanvas;	
 var streamer;	
@@ -30,7 +30,7 @@ var SoundUtils = new ui.SoundUtils();
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
-		}
+		}		
 		var streamer = new stream.Streamer();	
 		var ResourceUtils = new stream.ResourceUtils();
 		var global_package = new stream.Package(streamer);	
@@ -83,13 +83,14 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
-		application.events.dispatch("updates", []);	
+		application.events.dispatch("updates", []);			
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-        window.setTimeout(updater, resolution);  
+		window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var __label1;var painter_1;
 window.onload = function() 
 {
         drawingCanvas = document.getElementById("myCanvas");
@@ -156,10 +157,10 @@ window.onload = function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    __label1 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+		    painter_1 = new ui.Painter(g_ui_root.manager, g_ui_root);
             __label1.set_x(200);
             __label1.set_y(200);
             __label1.text("Here we can see the painter");
-		    painter_1 = new ui.Painter(g_ui_root.manager, g_ui_root);
             painter_1.set_x(200);
             painter_1.set_y(300);
             painter_1.set_width(600);
@@ -223,7 +224,7 @@ window.canvasTimer = window.setInterval(painter_1.draw_all, 100);
 				ui_.keypress(ev.keyCode);                  
 			};
             application.events.dispatch("init", []);
-            start();
+            start();			
 			ui_.draw(drawingCanvas.getContext('2d'));
 		});
 	}

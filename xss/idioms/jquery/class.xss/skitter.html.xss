@@ -1,0 +1,49 @@
+<xss:parameter id="it"/>
+
+<div id="<xss:e value="it.output_id"/>" class="box_skitter">
+<xss:code>
+	out()
+	{
+		<ul>
+	}
+	
+    var images    = it.get_property("images");
+    var img_array = images.value;
+    if (img_array)
+    {
+        compiler.log(img_array.size);
+	    for(var si in img_array)
+	    {
+            var href = si.href;
+            var animation = si.animation;
+            
+            if (!href)
+            {
+                if (animation)
+                    href = "#" + animation;
+                else
+                    href = "#";
+            }
+            
+            if (!animation)
+                animation = "block";
+            
+            out()
+		    {
+                <li>
+                    <a href="<xss:e v="href"/>"><img src="<xss:e v="si.src"/>" class="<xss:e v="animation"/>" /></a>
+
+                    <div class="label_text">
+                        <p><xss:e v="si.label"/></p>
+                    </div>
+                </li>
+		    }
+	    }
+    }
+
+	out()
+	{
+		</ul>
+	}
+</xss:code>
+</div>

@@ -17,10 +17,6 @@ if (i.idiom)
 			    <xss:e v="i.id"/> = <xss:e v="compiler.instantiate(i)"/> ;
 
 			}
-
-
-
-
 		}
 		if(i.class_name == "transform"){
 			out(){<xss:e v="i.id"/>.events = new ev.EventHolder();}

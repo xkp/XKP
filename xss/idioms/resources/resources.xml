@@ -1,4 +1,4 @@
-<module id="resources" src="resources.xs">
+<module id="resources" src="resources.xs" auto_dependencies="true">
 	<dependency href="resig.js" shared="true"/>   
 	<dependency href="streamer.js"/>    
     

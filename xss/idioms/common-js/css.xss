@@ -9,12 +9,17 @@
         if (first) first = false;
         else       out() {;}
 		
+        compiler.log("PROPERTY " + prop.name);
+        
         var value_str;
         if (prop.as_plain_text)
             value_str = prop.value;
         else
             value_str = prop.render_value();
             
+        compiler.log(prop.as_plain_text);
+        compiler.log("VALUE " + value_str);
+
         if (prop.postfix)
             value_str += prop.postfix;
             

@@ -1,0 +1,58 @@
+<application name="jq8" title="Embedded canvas" src="jquery8.xs">
+    <supersized slideshow="true" autoplay="true" slide_interval="3000" transition="3" fit_landscape="true" slide_links="blank" thumb_links="true" progress_bar="true">
+        <slides>
+            <slide image="images/kazvan-1.jpg" thumb="images/thumbs/kazvan-1.jpg" title="Image Credit: Maria Kazvan" url="http://www.nonsensesociety.com/2011/04/maria-kazvan/"/>
+            <slide image="images/kazvan-2.jpg" thumb="images/thumbs/kazvan-2.jpg" title="Image Credit: Maria Kazvan" url="http://www.nonsensesociety.com/2011/04/maria-kazvan/"/>
+            <slide image="images/kazvan-3.jpg" thumb="images/thumbs/kazvan-3.jpg" title="Image Credit: Maria Kazvan" url="http://www.nonsensesociety.com/2011/04/maria-kazvan/"/>
+            <slide image="images/wojno-1.jpg" thumb="images/thumbs/wojno-1.jpg" title="Image Credit: Colin Wojno" url="http://www.nonsensesociety.com/2011/03/colin/"/>
+            <slide image="images/wojno-2.jpg" thumb="images/thumbs/wojno-2.jpg" title="Image Credit: Colin Wojno" url="http://www.nonsensesociety.com/2011/03/colin/"/>
+            <slide image="images/wojno-3.jpg" thumb="images/thumbs/wojno-3.jpg" title="Image Credit: Colin Wojno" url="http://www.nonsensesociety.com/2011/03/colin/"/>
+            <slide image="images/shaden-1.jpg" thumb="images/thumbs/shaden-1.jpg" title="Image Credit: Brooke Shaden" url="http://www.nonsensesociety.com/2011/06/brooke-shaden/"/>
+            <slide image="images/shaden-2.jpg" thumb="images/thumbs/shaden-2.jpg" title="Image Credit: Brooke Shaden" url="http://www.nonsensesociety.com/2011/06/brooke-shaden/"/>
+            <slide image="images/shaden-2.jpg" thumb="images/thumbs/shaden-2.jpg" title="Image Credit: Brooke Shaden" url="http://www.nonsensesociety.com/2011/06/brooke-shaden/"/>
+        </slides>
+    </supersized>
+    <div id="main">
+        <img id="back" src="images/jq8.png" x="50" y="50" width="1200" height="800" alpha="0.5"/>
+        <label id="title" x="70" y="70" font="bold 24px verdana,sans-serif" color="white" caption="Extended controls"/>
+        
+        <highchart id="myChart" x="100" y="200" width="500" height="250">
+            <chart type="line"/>
+            <series>
+                <item name="Series1"/>
+            </series>
+        </highchart>
+
+        <div id="gridContainer" x="300" y="550" width="600" multiselect="true">
+            <jqGrid id="myGrid">
+                <columns>
+                    <column name="id" index="id" width="60" sorttype="int"/>
+                    <column name="invdate" index="invdate" width="90" sorttype="date"/>
+                    <column name="name" index="name" width="100"/>
+                    <column name="amount" index="amount" width="80" align="right" sorttype="float"/>
+                    <column name="tax" index="tax" width="80" align="right" sorttype="float"/>
+                    <column name="total" index="total" width="80" align="right" sorttype="float"/>
+                    <column name="note" index="note" width="150" sortable="false"/>
+                </columns>
+            </jqGrid>
+        </div>
+
+        <skitter id="myGallery" x="620" y="200" width="550" height="250" >
+            <images>
+                <image src="images/002.jpg" animation="cubeRandom" label="cubeRandom"/>
+                <image src="images/003.jpg" animation="block" label="block"/>
+                <image src="images/004.jpg" animation="cubeStop" label="cubeStop"/>
+                <image src="images/005.jpg" animation="cubeHide" label="cubeHide"/>
+            </images>
+        </skitter>
+
+        <sequence auto_start="true">
+            <at time="0">
+                <animate property="title.alpha" from="1" to="0" in="2"/>
+            </at>
+            <at time="2">
+                <animate property="title.alpha" from="0" to="1" in="3"/>
+            </at>
+        </sequence>
+    </div>
+</application>

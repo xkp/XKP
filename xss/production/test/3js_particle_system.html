@@ -33,6 +33,7 @@ var streamer;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var lbl0;
+var camera_1;var __particle_system1;
 var application = {};
 application.events = new ev.EventHolder();
 		if(drawingCanvas){
@@ -46,7 +47,7 @@ application.events = new ev.EventHolder();
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
-		}
+		}		
 	// --------RESOURCES---------
 // --------RESOURCES---------
 soundRenderer = new THREE.SoundRenderer();		
@@ -64,7 +65,6 @@ application.events.dispatch("updates", []);
 		set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var camera_1;var __particle_system1;
 threejs_load_resources(streamer, function()
 {
 	drawingCanvas.onmousemove = function(ev)
@@ -116,14 +116,9 @@ threejs_load_resources(streamer, function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    lbl0 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            lbl0.set_x(350);
-            lbl0.set_y(50);
-            lbl0.set_color("White");
-            lbl0.text("Move the mouse to rotate the camera");
 		    camera_1 = 
 		    new THREE.Camera(75, 1.5, 1, 3000, null) ;	
 		active_camera = camera_1;
-            camera_1.position.z = 1000;
 		for ( var i = 0; i < 1000; i++ ) {
 			particle = new THREE.Particle( new THREE.ParticleCanvasMaterial( { color: Math.random() * 0x808008 + 0x808008, program: program_fill, } ) );
 				particle.position.x = 
@@ -135,6 +130,11 @@ threejs_load_resources(streamer, function()
 			particle.scale.x = particle.scale.y = Math.random() * 10 + 5;
 			scene.addObject( particle );
 		}
+            lbl0.set_x(350);
+            lbl0.set_y(50);
+            lbl0.set_color("White");
+            lbl0.text("Move the mouse to rotate the camera");
+            camera_1.position.z = 1000;
             application.mouse_x = null;
             application.mouse_y = null;
 	application.events.addListener("updates", function()
@@ -186,10 +186,14 @@ animate();
 function animate() {
 	if(ui_)
 		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
+	renderer.domElement.getContext('2d').globalAlpha = 1;
 	requestAnimationFrame( animate );
 	render();
 	if(ui_)
+	{
+		drawingCanvas.getContext('2d').globalAlpha = 1;
 		ui_.draw(drawingCanvas.getContext('2d'));
+	}
 	}
 </script>
 </body>

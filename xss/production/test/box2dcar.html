@@ -7,10 +7,10 @@
             <script type="text/javascript" src="../js/utils.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
             <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
             <script type="text/javascript" src="../js/Box2dWeb-2.1.a.3.min.js"></script>
             <script type="text/javascript" src="../js/joint.js"></script>
             <script type="text/javascript" src="../js/spawner.js"></script>
-            <script type="text/javascript" src="../js/streamer.js"></script>
 <script type="text/javascript">
 var drawingCanvas;	
 var streamer;	
@@ -33,7 +33,7 @@ var SoundUtils = new ui.SoundUtils();
 			var g_ui = ui_;
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
-		}
+		}		
 		var streamer = new stream.Streamer();	
 		var ResourceUtils = new stream.ResourceUtils();
         var   b2Vec2 = Box2D.Common.Math.b2Vec2
@@ -224,13 +224,14 @@ function start(resolution)
             }
             bb = bb.GetNext();
         }
-		application.events.dispatch("updates", []);	
+		application.events.dispatch("updates", []);			
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-        window.setTimeout(updater, resolution);  
+		window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
+var car_1;var right_wheel;var right_rear_wheel;var left_wheel;var left_rear_wheel;var box_1;var box_2;var box_3;var box_4;var __floor1;var __floor2;var __floor3;var __floor4;var __label1;
         var car = ui.Image.extend(
     {
     init: function(
@@ -241,8 +242,8 @@ function start(resolution)
                 src
                 )
     {
-        this._super(
-		manager,parent,src? src : "images/car.png"        );
+			this._super(	
+			manager,parent,src? src : "images/car.png");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -291,8 +292,8 @@ function start(resolution)
                 src
                 )
     {
-        this._super(
-		manager,parent,src? src : "images/wheel.png"        );
+			this._super(	
+			manager,parent,src? src : "images/wheel.png");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -341,8 +342,8 @@ function start(resolution)
                 src
                 )
     {
-        this._super(
-		manager,parent,src? src : "images/box.png"        );
+			this._super(	
+			manager,parent,src? src : "images/box.png");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -391,8 +392,8 @@ function start(resolution)
                 src
                 )
     {
-        this._super(
-		manager,parent,src? src : "images/stone-12.jpg"        );
+			this._super(	
+			manager,parent,src? src : "images/stone-12.jpg");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -439,8 +440,8 @@ function start(resolution)
                 src
                 )
     {
-        this._super(
-		manager,parent,src        );
+			this._super(	
+			manager,parent,src);       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 	this.events.addListener("collision", function(who)
@@ -610,81 +611,81 @@ window.onload = function()
 		application.events.dispatch("keydown", [keycode]);
 	});
 		    car_1 = new car(g_ui_root.manager, g_ui_root, "images/car.png");
+		    right_wheel = new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
+		    right_rear_wheel = new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
+		    left_wheel = new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
+		    left_rear_wheel = new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
+		    box_1 = new box(g_ui_root.manager, g_ui_root, "images/box.png");
+		    box_2 = new box(g_ui_root.manager, g_ui_root, "images/box.png");
+		    box_3 = new box(g_ui_root.manager, g_ui_root, "images/box.png");
+		    box_4 = new box(g_ui_root.manager, g_ui_root, "images/box.png");
+		    __floor1 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
+		    __floor2 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
+		    __floor3 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
+		    __floor4 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
+		    __label1 = new ui.Label(g_ui_root.manager, g_ui_root, "11px Verdana");
+right_wheel_joint = 
+new joint.RevoluteJoint(
+car_1,right_wheel);
+left_wheel_joint = 
+new joint.RevoluteJoint(
+car_1,left_wheel);
+right_rear_wheel_joint = 
+new joint.PrismaticJoint(
+car_1,right_rear_wheel,1,0);
+left_rear_wheel_joint = 
+new joint.PrismaticJoint(
+car_1,left_rear_wheel,1,0);
             car_1.set_x(300);
             car_1.set_y(200);
-		    right_wheel = new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
             right_wheel.set_x(345);
             right_wheel.set_y(220);
-		    right_rear_wheel = new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
             right_rear_wheel.set_x(345);
             right_rear_wheel.set_y(260);
-		    left_wheel = new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
             left_wheel.set_x(295);
             left_wheel.set_y(220);
-		    left_rear_wheel = new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
             left_rear_wheel.set_x(295);
             left_rear_wheel.set_y(260);
-		    box_1 = new box(g_ui_root.manager, g_ui_root, "images/box.png");
             box_1.set_x(400);
             box_1.set_y(300);
-		    box_2 = new box(g_ui_root.manager, g_ui_root, "images/box.png");
             box_2.set_x(400);
             box_2.set_y(100);
-		    box_3 = new box(g_ui_root.manager, g_ui_root, "images/box.png");
             box_3.set_x(200);
             box_3.set_y(300);
-		    box_4 = new box(g_ui_root.manager, g_ui_root, "images/box.png");
             box_4.set_x(100);
             box_4.set_y(100);
-		    __floor1 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
             __floor1.set_x(0);
             __floor1.set_y(590);
             __floor1.set_width(800);
             __floor1.set_height(10);
-		    __floor2 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
             __floor2.set_x(0);
             __floor2.set_y(0);
             __floor2.set_width(10);
             __floor2.set_height(600);
-		    __floor3 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
             __floor3.set_x(0);
             __floor3.set_y(0);
             __floor3.set_width(800);
             __floor3.set_height(10);
-		    __floor4 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
             __floor4.set_x(790);
             __floor4.set_y(0);
             __floor4.set_width(10);
             __floor4.set_height(600);
-		    __label1 = new ui.Label(g_ui_root.manager, g_ui_root, "11px Verdana");
             __label1.set_x(100);
             __label1.set_y(75);
             __label1.text("Use arrow keys to drive the car");
-right_wheel_joint = 
-new joint.RevoluteJoint(
-car_1,right_wheel);
             right_wheel_joint.joint.EnableMotor(1);
             right_wheel_joint.joint.SetMaxMotorTorque(100000);
             right_wheel_joint.joint.EnableLimit(1);
             right_wheel_joint.set_lower_angle(-60);
             right_wheel_joint.set_upper_angle(60);
-left_wheel_joint = 
-new joint.RevoluteJoint(
-car_1,left_wheel);
             left_wheel_joint.joint.EnableMotor(1);
             left_wheel_joint.joint.SetMaxMotorTorque(100000);
             left_wheel_joint.joint.EnableLimit(1);
             left_wheel_joint.set_lower_angle(-60);
             left_wheel_joint.set_upper_angle(60);
-right_rear_wheel_joint = 
-new joint.PrismaticJoint(
-car_1,right_rear_wheel,1,0);
             right_rear_wheel_joint.joint.EnableLimit(1);
             right_rear_wheel_joint.set_lower_limit(0);
             right_rear_wheel_joint.set_upper_limit(0);
-left_rear_wheel_joint = 
-new joint.PrismaticJoint(
-car_1,left_rear_wheel,1,0);
             left_rear_wheel_joint.joint.EnableLimit(1);
             left_rear_wheel_joint.set_lower_limit(0);
             left_rear_wheel_joint.set_upper_limit(0);
@@ -701,7 +702,7 @@ car_1,left_rear_wheel,1,0);
 				ui_.keypress(ev.keyCode);                  
 			};
             application.events.dispatch("init", []);
-            start();
+            start();			
 			ui_.draw(drawingCanvas.getContext('2d'));
 		});
 	}

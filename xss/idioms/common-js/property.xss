@@ -23,7 +23,6 @@ else if (!is_class)
     prop_name = owner.output_id + "." + prop_name;    
 }
 
-
 if (prop.set && prop.get)
 {
     out()

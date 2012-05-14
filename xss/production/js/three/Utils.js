@@ -67,7 +67,7 @@ function set_transform_image( path, value )
 {
 	for(var i = 0; i < path.children.length; i++)
 	{
-		var child = path.children[i];		
+		var child = path.children[i];	
 		child.materials[ 0 ].map = new THREE.Texture(scene.streamer.get_resource(value).data);	
 	}	
 }
@@ -78,7 +78,7 @@ function set_cube_face_object( path, face, value )
 }
 
 function set_cube_face( path, value, face )
-{
+{		
 	path.geometry.faces[face].materials[0].map = new THREE.Texture(scene.streamer.get_resource(value).data);	
 }
 
@@ -101,7 +101,7 @@ function set_transform_material( path, value )
 }
 
 function set_object_alpha( path, value )
-{	         
+{	         	
 	path.materials[0].opacity = value / 100;	
 }
 
@@ -111,8 +111,8 @@ function get_object_alpha( path )
 }
 
 function set_material_alpha( path, value )
-{	         
-	path.opacity = value / 100;	
+{	     	
+	path.opacity = value / 100;
 }
 
 function set_rotation_x( path, value )

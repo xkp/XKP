@@ -10,9 +10,12 @@
     
 	<script type="text/javascript">
 		$(document).ready(function() {
-		
+	        <xss:marker id="variables"/>	
 			<xss:code>
+                compiler.inject("render_initialization");
                 compiler.inject("render_instances");
+                
+                compiler.inject("render_updater");
                 out()
                 {
                     if (application.init)
@@ -23,7 +26,8 @@
 	</script>
 
 	<style>
-	</style>
+        <xss:marker id="css"/>
+    </style>
 </head>
 
 <body>

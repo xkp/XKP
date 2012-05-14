@@ -88,7 +88,9 @@ struct inner : public __action
     
     void operator()( iterator_t begin, iterator_t end ) const 
       {
-        ctx_.add(assign_tag(ctx_.variable, str(begin, end))); 
+        str value(begin, end);
+        boost::replace_all (value, "\\;", ";");
+        ctx_.add(assign_tag(ctx_.variable, value)); 
       }
   };
 
@@ -99,7 +101,9 @@ struct no_variable : public __action
     void operator()( iterator_t begin, iterator_t end ) const 
       { 
         ctx_.variable = "";
-        ctx_.add(assign_tag(str(), str(begin, end))); 
+        str value(begin, end);
+        boost::replace_all (value, "\\;", ";");
+        ctx_.add(assign_tag(str(), value)); 
       }
   };
 
@@ -125,8 +129,8 @@ struct assign_grammar : grammar<assign_grammar>
         definition(assign_grammar const& self)
         {
           ident_r   = lexeme_d[ +chset_p("A-Za-z0-9_-") ];
-          text_r    = *(anychar_p - ('~' | end_p) );
-          assign_r  =  *( (   ident_r         [variable(self.ctx)]
+          text_r    = *(  "\\;" | (anychar_p - (';' | end_p) ));
+          assign_r  = *( (   ident_r          [variable(self.ctx)]
                           >>  "=" >> text_r   [inner(self.ctx)]
                           >>  ('~' 
                               | end_p         [end_parse(self.ctx)]

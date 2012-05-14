@@ -17,6 +17,9 @@ on pre_process(obj)
 	}	
 	if(obj.id == '')
 		obj.id = compiler.genid(obj.class_name);
+	if(obj.parent)	
+		if(obj.parent.wait_for_package)
+			obj.wait_for_package = obj.parent.wait_for_package;
 }
 
 on compile_dependency(dep)
@@ -36,35 +39,41 @@ on compile_dependency(dep)
 
 on render_instances()
 {	
-	for(int i = 0; i < instances.size; i++)
-    {		
-		var inst = instances[i];
+	for(var inst in instances)
+    {	
 		if(inst.wait_for_package)
 		{			
 			out()
 			{				
 				<xss:e v="inst.wait_for_package"/>.events.addListener("loaded", function()
 				<xss:open_brace/>				
-			}
-			compiler.xss("inst_renderer.xss", inst);
-			if(!inst.dont_render)
-				compiler.xss("../common-js/instance.xss", inst);
-			for(var child in inst.children)
-			{
-				compiler.xss("inst_renderer.xss", child);
-				if(!child.dont_render)
-					compiler.xss("../common-js/instance.xss", child);
-				i++;
-			}
+			}						
+		}	
+		compiler.xss("inst_renderer.xss", inst);	
+		if(inst.wait_for_package)
 			out(){<xss:close_brace/>);}
-		}
-		else
-		{
-			compiler.xss("inst_renderer.xss", inst);
-			if(!inst.dont_render)
-				compiler.xss("../common-js/instance.xss", inst);
-		}
     }	
+}
+
+on render_inst_elems()
+{
+	for(var inst in instances)
+    {
+		if(!inst.dont_render)
+		{
+			if(inst.wait_for_package)
+			{
+				out()
+				{
+				<xss:e v="inst.wait_for_package"/>.events.addListener("loaded", function()
+				<xss:open_brace/>
+				}
+			}
+			compiler.xss("../common-js/instance.xss", inst);
+			if(inst.wait_for_package)
+				out(){<xss:close_brace/>);}
+		}
+	}
 }
 
 on render_types()
@@ -73,6 +82,6 @@ on render_types()
 
     for(var ut in user_types)
     {
-		compiler.xss("class.xss", ut, renderer = "inst_renderer.xss");
+		compiler.xss("class.xss", ut, renderer = "inst_renderer.xss");		
     }
 }

@@ -11,7 +11,7 @@
 		</camera>
 
         <image_group id="test_ip">
-            <position x="-100" y="0" z="0"/>
+            <position x="-300" y="0" z="0"/>
         </image_group>
     </scene>
 

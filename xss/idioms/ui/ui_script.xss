@@ -34,12 +34,10 @@ function start(resolution)
             compiler.inject("render_update");
         </xss:code>
 		
-		application.events.dispatch("updates", []);	
-
+		application.events.dispatch("updates", []);			
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
-
-        window.setTimeout(updater, resolution);  
+		window.setTimeout(updater, resolution);  
 	}    
 	window.setTimeout(updater, resolution);  
 }  
@@ -48,6 +46,7 @@ function start(resolution)
 
 <xss:code>
 compiler.inject("render_types");
+compiler.render_app_types("../common-js/resig-class.xss");
 compiler.xss("../common-js/instance.xss", application);
 </xss:code>
 
@@ -81,7 +80,8 @@ window.onload = function()
      	ui_.load_resources(function()
 		{
             <xss:code>			
-			compiler.inject("render_instances");            
+			compiler.inject("render_instances");   
+			compiler.inject("render_inst_elems"); 
             </xss:code>
 			
 			document.onkeydown = function(ev)
@@ -99,7 +99,7 @@ window.onload = function()
 
             application.events.dispatch("init", []);
     
-            start();
+            start();			
 			ui_.draw(drawingCanvas.getContext('2d'));
 		});
 	}

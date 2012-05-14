@@ -1,4 +1,4 @@
-<module id="ui" src="ui.xs">    
+<module id="ui" src="ui.xs" auto_dependencies="true">    
     <dependency href="resig.js" shared="true"/>
     <dependency href="event.js" shared="true"/>
     <dependency href="utils.js" shared="true"/>
@@ -101,11 +101,11 @@
             <property id="shape" type="string"/>                
 		</class>
 
-		<class id="sprite" super="component" output_id="ui.Sprite">
-			<constructor_params>
-                <parameter property="sheet" runtime="true"/>				
-            </constructor_params>
-            <property id="sheet" type="string" dont_init="true"/> 
+		<class id="sprite" super="component" output_id="ui.Sprite">			
+            <property id="sheet" type="string"> 
+				<get text="sheet"/>
+                <set text="set_sheet({value})"/>
+            </property>
 			<property id="animation" type="string">
 				<get text="animation"/>
                 <set text="set_animation({value})"/>

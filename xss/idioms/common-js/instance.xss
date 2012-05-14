@@ -8,10 +8,9 @@
 
 //render properties
 for(var prop in it.properties)
-{
+{	
     if (prop.dont_init)
-        continue;
-    
+        continue;    
     compiler.xss(property_renderer, prop, it, is_class = false, path = path);
 }    
 

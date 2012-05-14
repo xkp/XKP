@@ -6,16 +6,6 @@ on pre_process(obj)
 
 on compile_dependency(dep)
 {
-    if (dep.shared)
-    {
-        var js_path = project.js_path;
-        if (!js_path)
-            js_path = "../js";
-
-        dep.href = js_path + '/' + dep.href;
-        return;
-    }
-        
     if (!dep.idiom)
         return;
 
