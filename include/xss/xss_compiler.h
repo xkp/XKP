@@ -243,6 +243,7 @@ namespace xkp
         str          render_value(variant value);
         void         using_idiom(const str& idiom);
         str          get_env_var(const str& key);
+        str          get_os_name();
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -380,6 +381,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<void,         1>("using_idiom",        &xss_compiler::using_idiom);
         method_<DynamicArray, 2>("find_files",         &xss_compiler::find_files);
         method_<str,          1>("get_env_var",        &xss_compiler::get_env_var);
+        method_<str,          0>("os",                 &xss_compiler::get_os_name);
       }
   };
 

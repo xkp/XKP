@@ -3057,6 +3057,17 @@ str xss_compiler::get_env_var(const str& key)
     return result;
   }
 
+str xss_compiler::get_os_name()
+  {
+#if defined(_WIN32) || defined(_WIN64) || defined(__WIN32__)
+    return "windows";
+#elif defined(__unix__) || defined(__unix) || defined(unix) || defined(__linux__)
+    return "linux";
+#else
+    return "unknown";
+#endif
+  }
+
 void xss_compiler::collect_dependencies(XSSType type, XSSType context)
   {
     if (type->has("#depcollected"))

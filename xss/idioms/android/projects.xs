@@ -17,7 +17,10 @@ on finished()
 	compiler.log("Creating .apk bundle file...");
 	
 	//td: 
-	string winExt = ".bat";
+	string osName = compiler.os();
+	string winExt = "";
+	if(os_name == "windows")
+		winExt = ".bat";
 	
 	string appOutputPath = compiler.output_path();
 	appOutputPath = appOutputPath + appName;
