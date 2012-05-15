@@ -16,7 +16,6 @@ namespace xkp {
   struct ga_item
     {
       str                       variable;
-      str                       working_path;
       std::vector<str>          items;
       std::vector<shell_param>  params;
     };

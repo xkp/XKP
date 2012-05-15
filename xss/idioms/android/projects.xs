@@ -20,20 +20,13 @@ on finished()
 	string winExt = ".bat";
 	
 	string appOutputPath = compiler.output_path();
-	appOutputPath = appOutputPath + "/" + appName;
+	appOutputPath = appOutputPath + appName;
 
 	string apiPlatform = application.android_sdk + "/platforms/android-" + targetAPILevel + "/android.jar";
 	
-	//td: make that some parameters of shell work well, like that:
-	//    shell(working_path="...", environment_var="...") { ... }
-	shell(working_path = appOutputPath, environment_var = "...")
+	shell(working_path = appOutputPath)
 	{
-		aapt package -f -I @apiPlatform -M @appOutputPath/AndroidManifest.xml -A @appOutputPath/assets -S @appOutputPath/res -m -J @appOutputPath/gen -F @appOutputPath/bin/@appName.ap_
-	}
-	
-	//shell(working_path = appOutputPath)
-	shell(working_path = "d:/xkp/xss/production/android/SimpleTest")
-	{
+		aapt package -f -I @apiPlatform -M @appOutputPath/AndroidManifest.xml -A @appOutputPath/assets -S @appOutputPath/res -m -J @appOutputPath/gen -F @appOutputPath/bin/@appName.ap_;
 		javac @@@outputJavacOpts @@@outputClasses
 	}
 	
