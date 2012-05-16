@@ -5,7 +5,7 @@
 	for(var f in arrayJavaFile)
 	{
 		string filename = f.filename;
-		out()
+		out(indent = 0)
 		{
 <xss:e value="filename"/>
 		}
