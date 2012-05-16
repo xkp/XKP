@@ -630,13 +630,21 @@ void xss_compiler::build(fs::path xml, param_list& args)
 XSSRenderer xss_compiler::compile_xss_file(const str& src_file, XSSContext ctx, const str& html_template)
   {
     fs::path path = ctx->path() / src_file;
-    return compile_xss(load_file(path), ctx, path);
+    return compile_xss_file(path, ctx, html_template);
   }
 
 XSSRenderer xss_compiler::compile_xss_file(fs::path src_file, XSSContext ctx, const str& html_template)
   {
     compiling_ = src_file;
+
+    str rpath = src_file.normalize().string();
+    std::map<str, XSSRenderer>::iterator it = xss_file_cache.find(rpath);
+    if (it != xss_file_cache.end() && !it->second->busy())
+      return it->second;
+
     XSSRenderer result = compile_xss(load_file(src_file), ctx, src_file, html_template);
+    
+    xss_file_cache.insert(std::pair<str, XSSRenderer>(rpath, result));
     compiling_ = fs::path();
     return result;
   }
@@ -3109,8 +3117,17 @@ void xss_compiler::pre_process(XSSApplicationRenderer renderer, XSSObject obj, X
     for(; it != nd; it++)
       {
         XSSModule mod = *it;
+        XSSObject obj_mod = obj->idiom();
+        if (obj_mod)
+          {
+            if (obj_mod->id() != mod->id())
+              continue;
+          }
+        else if (!mod->one_of_us(obj))
+          continue;
+
         pre_process_result result = exclude_module? PREPROCESS_KEEPGOING : mod->pre_process(obj, parent);
-        if (handler && mod->one_of_us(obj))
+        if (handler)
           handler->handle(obj, mod);
 
         if (result == PREPROCESS_HANDLED)

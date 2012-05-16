@@ -293,6 +293,7 @@ namespace xkp
       private:
         //cache
         std::multimap<int, XSSRenderer> xss_cache;
+        std::map<str, XSSRenderer>      xss_file_cache;
 
         str   load_file(fs::path file);
         void  read_object_array(fs::path file, XSSContext ctx, std::vector<XSSObject>& classes_data);

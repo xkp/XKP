@@ -74,7 +74,7 @@ on render_initialization()
     {
 	    out()
 	    {
-            var g_spawner_manager = new ms.arcade.SpawnManager();
+            var g_spawner_manager = new arcade.SpawnManager();
         }
     }
 
@@ -139,7 +139,7 @@ on render_instances()
 
         string renderer = i.type.renderer;
         if (renderer) {
-			renderer = "../" + renderer;
+			renderer = renderer;
 		    compiler.xss(renderer, i, world = world);
         } else {
             out(){<xss:e v="i.id"/> = }compiler.xss("../../common-js/instantiator.xss", i);
