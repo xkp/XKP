@@ -246,6 +246,10 @@ ui.Manager = Class.extend(
 
     update: function(elapsed, context)
     {
+		if(context.canvas.width != context.canvas.offsetWidth)
+			context.canvas.width = context.canvas.offsetWidth;
+		if(context.canvas.height != context.canvas.offsetHeight)
+			context.canvas.height = context.canvas.offsetHeight;
 		if(context.canvas.width != this.root.get_width())
 			this.root.set_width(context.canvas.width);
 		if(context.canvas.height != this.root.get_height())
@@ -2005,10 +2009,11 @@ ui.Video = ui.Component.extend(
 	}, 
 });
 
-ui.Sound = Class.extend(
+ui.Sound = ui.Component.extend(
 {
-	init: function(src)
+	init: function(manager, parent, src)
 	{				
+		this._super(manager, parent);
 		var resource = this.manager.streamer.get_resource(src);
         if (!resource)
             throw "Unknow resource: " + src;         		

@@ -351,7 +351,7 @@
             </property>
         </class>
 		
-		<class id="sound" output_id="ui.Sound">
+		<class id="sound" super="component" output_id="ui.Sound">
 			<constructor_params>
                 <parameter property="src" runtime="true"/>				
             </constructor_params>			

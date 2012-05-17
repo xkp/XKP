@@ -38,6 +38,7 @@ var renderer = new THREE.CanvasRenderer();
 var ui_;
 var SoundUtils;
 var scene = new THREE.Scene();
+scene.mouse_thru = true;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	

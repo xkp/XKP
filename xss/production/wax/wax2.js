@@ -1,7 +1,7 @@
 var http = require("http");
 var url  = require("url");
 var application = {};
-	application.util1 = function(return_function) 
+	application.util1 = function() 
 	{
 		var c;
 function __callback1() 
@@ -32,13 +32,9 @@ foo_bar(function(return_value)
 c = return_value;
 });
 	};
-	application.service1 = function(response,request) 
+	application.service1 = function() 
 	{
-function return_function(return_value)
-{
-reqest.end(JSON.stringify(return_value))
-}
-var __params = url.parse(request.url, true).query;function __callback3() 
+		function __callback3() 
 {
 var x = 10;
 function __callback4() 

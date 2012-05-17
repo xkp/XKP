@@ -26,6 +26,7 @@ var renderer = new THREE.CanvasRenderer();
 var ui_;
 var SoundUtils;
 var scene = new THREE.Scene();
+scene.mouse_thru = true;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
@@ -1095,6 +1096,8 @@ application.times_planes.set_individual_scale(0.699999988);
 	}
 	);
 		application.are_obj_events = true;
+		if(anim_plane instanceof THREE.Object3D)
+			scene.addObject(anim_plane);
         return anim_plane;
         }
     function create_planes_group(
@@ -1274,6 +1277,8 @@ grow.stop();
 shrink.start();
 }
 	};
+		if(planes_group instanceof THREE.Object3D)
+			scene.addObject(planes_group);
         return planes_group;
         }
 threejs_load_resources(streamer, function()

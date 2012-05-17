@@ -29,9 +29,9 @@
 				<get text="get_rotation_z({path})" global = "true"/>
 				<set text="set_rotation_z({path}, {value})" global = "true"/>
             </property>		
-		</class>		
+		</class>
 
-		<class id="sound_3d" renderer="sound_renderer.xss"/>	
+        <class id="sound_3d" renderer="sound_renderer.xss"/>	
 		
 		<class id="material" hasimagedata="true">
 			<constructor_params>
@@ -103,6 +103,7 @@
 				<get text="get_object_alpha({path})" global = "true"/>
 				<set text="set_object_alpha({path}, {value})" global = "true"/>
             </property>
+			<property id="mouse_thru" type="bool"/>					
 			<property id="overdraw" type="string"/>
 			<property id="double_sided" type="string" output_id="doubleSided"/>
 			
@@ -129,6 +130,7 @@
 			<property id="material" type="string" use_plain_value="true">
 				<set text="set_transform_material({path}, {value})" global = "true"/>
             </property>
+			<property id="mouse_thru" type="bool"/>	
 			<property id="position" type="vector3d"/>
 			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>

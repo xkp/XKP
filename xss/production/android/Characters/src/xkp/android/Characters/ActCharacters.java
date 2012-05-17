@@ -18,8 +18,8 @@ import xkp.android.libs.Layout.XKPLayout;
 				private character pluto;
 			public static XKPUtils util;
 		private XKPLayout layoutapplication;
-				private XKPPackage __resources1;
-			private String [] mResources___resources1_XKPName = {
+				private XKPPackage ;
+			private String [] mResources__XKPName = {
 				"i_aladdin",
 				"i_mickey",
 				"i_pluto",
@@ -28,7 +28,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				"v_mickey",
 				"v_pluto"
 			};
-			private String [] mResources___resources1_DroidName = {
+			private String [] mResources__DroidName = {
 				"aladdin.png",
 				"mickey.png",
 				"pluto.png",
@@ -37,7 +37,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				"mickey.3gp",
 				"pluto.3gp"
 			};
-			private Integer [] mResources___resources1_Type = {
+			private Integer [] mResources__Type = {
 				XKPPackage.BITMAP_RESOURCE,
 				XKPPackage.BITMAP_RESOURCE,
 				XKPPackage.BITMAP_RESOURCE,
@@ -46,7 +46,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				XKPPackage.VIDEO_RESOURCE,
 				XKPPackage.VIDEO_RESOURCE
 			};
-			private Integer [] mResources___resources1_Id = {
+			private Integer [] mResources__Id = {
 				R.drawable.aladdin,
 				R.drawable.mickey,
 				R.drawable.pluto,
@@ -108,10 +108,10 @@ private void onLayoutStarted() {
 }
 			private void initInstances() {
 				application = this;
-				__resources1 = new XKPPackage(this, 
-					mResources___resources1_XKPName, mResources___resources1_DroidName, 
-					mResources___resources1_Type, mResources___resources1_Id
+				 = new XKPPackage(this, 
+					mResources__XKPName, mResources__DroidName, 
+					mResources__Type, mResources__Id
 					, true);
-				util.addXKPPackage(__resources1);
+				util.addXKPPackage();
 			}
 }

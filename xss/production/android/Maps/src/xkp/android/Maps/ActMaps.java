@@ -37,7 +37,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				private XKPImageMap mapController;
 			public static XKPUtils util;
 		private XKPLayout layoutapplication;
-				private XKPPackage __resources1;
+				private XKPPackage ;
 				private XKPPackage photos;
 				private XKPPackage maps;
 			private String [] mResources_photos_XKPName = {
@@ -88,19 +88,19 @@ import xkp.android.libs.Layout.XKPLayout;
 			private Integer [] mResources_maps_Id = {
 				R.drawable.holguinmap
 			};
-			private String [] mResources___resources1_XKPName = {
+			private String [] mResources__XKPName = {
 				"ico_gallery",
 				"ico_maps"
 			};
-			private String [] mResources___resources1_DroidName = {
+			private String [] mResources__DroidName = {
 				"launcher_gallery.png",
 				"launcher_maps.png"
 			};
-			private Integer [] mResources___resources1_Type = {
+			private Integer [] mResources__Type = {
 				XKPPackage.BITMAP_RESOURCE,
 				XKPPackage.BITMAP_RESOURCE
 			};
-			private Integer [] mResources___resources1_Id = {
+			private Integer [] mResources__Id = {
 				R.drawable.launcher_gallery,
 				R.drawable.launcher_maps
 			};
@@ -181,11 +181,11 @@ private void onLayoutStarted() {
 }
 			private void initInstances() {
 				application = this;
-				__resources1 = new XKPPackage(this, 
-					mResources___resources1_XKPName, mResources___resources1_DroidName, 
-					mResources___resources1_Type, mResources___resources1_Id
+				 = new XKPPackage(this, 
+					mResources__XKPName, mResources__DroidName, 
+					mResources__Type, mResources__Id
 					, true);
-				util.addXKPPackage(__resources1);
+				util.addXKPPackage();
 				photos = new XKPPackage(this, 
 					mResources_photos_XKPName, mResources_photos_DroidName, 
 					mResources_photos_Type, mResources_photos_Id
@@ -228,9 +228,9 @@ swtScene.setDisplayedChildByName(util.getIdFromName("mapController"));
 lblInformation.setText("Drag picture to see whole map.");
 			}
 			private void onClickimgGallery() {
-				prop_application_currentImage = prop_application_currentImage + 1;
-prop_application_currentImage = prop_application_currentImage % prop_application_resources.size();
-String currentResource = prop_application_resources.get(prop_application_currentImage);
+				currentImage = currentImage + 1;
+currentImage = currentImage % resources.size();
+String currentResource = resources.get(currentImage);
 util.setResourceImageView(imgGallery, currentResource);
 			}
 			private void onResourcePackageLoadedphotos() {
@@ -241,6 +241,6 @@ imgGallery.performClick();
 				lblStatus.setText("Maps was loaded completely...");
 util.setResourceXKPImageMap(mapController, "holguin");
 			}
-			private Integer prop_application_currentImage = -1;
-			private ArrayList<String> prop_application_resources = new ArrayList(Arrays.asList( new Object [] {"worth_1", "worth_2", "worth_3", "worth_4", "worth_5", "worth_6", "worth_7"} ));
+			private Integer currentImage = -1;
+			private ArrayList<String> resources = new ArrayList(Arrays.asList( new Object [] {"worth_1", "worth_2", "worth_3", "worth_4", "worth_5", "worth_6", "worth_7"} ));
 }

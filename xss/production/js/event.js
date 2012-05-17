@@ -94,9 +94,10 @@ ev.ThreeEventManager = Class.extend(
 	{				
 		x = x - canvas_position.x;
 		y = y - canvas_position.y;
-		this.intersects = this.get_3js_intersects(x, y);		
+		this.intersects = [];
+		this.get_3js_intersects(x, y);		
 		if(this.intersects.length > 0){
-			if(!(this.intersects[0].object.parent instanceof THREE.Scene))
+			if(!(this.intersects[0].object.parent.mouse_thru))
 				this.intersects[0].object = this.intersects[0].object.parent;			
 		}
 		if(this.mouse_pressed)
@@ -147,17 +148,14 @@ ev.ThreeEventManager = Class.extend(
 		application.events.dispatch("keypress", [keycode]);    
 	},
 
-	get_3js_intersects: function(x, y){
-		if(application.are_obj_events){
-			this.intersects = [];
+	get_3js_intersects: function(x, y){		
+		if(application.are_obj_events){			
 			var vector = new THREE.Vector3( ( x / app_width ) * 2 - 1, - ( y / app_height ) * 2 + 1, 0.5 );
 			projector = new THREE.Projector();
 			projector.unprojectVector( vector, active_camera );
 			var ray = new THREE.Ray( active_camera.position, vector.subSelf( active_camera.position ).normalize() );
-			var intersects = ray.intersectScene( scene );			
-			return intersects;
-		}
-		return [];
+			this.intersects = ray.intersectScene( scene );		
+		}		
 	},
 	
 	get_texture_coord: function(){

@@ -23,6 +23,7 @@ var renderer = new THREE.CanvasRenderer();
 var ui_;
 var SoundUtils;
 var scene = new THREE.Scene();
+scene.mouse_thru = true;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
@@ -91,6 +92,8 @@ application.events.dispatch("switch_cameras", []);
             my_sphere.mat = value;
             this.materials[0] = value;
         };
+		if(my_sphere instanceof THREE.Object3D)
+			scene.addObject(my_sphere);
         return my_sphere;
         }
 threejs_load_resources(streamer, function()

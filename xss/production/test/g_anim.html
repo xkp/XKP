@@ -25,6 +25,7 @@ var renderer = new THREE.CanvasRenderer();
 var ui_;
 var SoundUtils;
 var scene = new THREE.Scene();
+scene.mouse_thru = true;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
@@ -216,6 +217,8 @@ g_sequence_manager);
             my_plane.image = value;
             this.materials[0].map = new THREE.Texture(scene.streamer.get_resource(value).data);
         };
+		if(my_plane instanceof THREE.Object3D)
+			scene.addObject(my_plane);
         return my_plane;
         }
 threejs_load_resources(streamer, function()

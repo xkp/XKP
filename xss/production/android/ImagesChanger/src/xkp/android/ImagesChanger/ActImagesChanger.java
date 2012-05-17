@@ -29,8 +29,8 @@ import xkp.android.libs.Layout.XKPLayout;
 				private TextView identifier;
 			public static XKPUtils util;
 		private XKPLayout layoutapplication;
-				private XKPPackage __resources1;
-			private String [] mResources___resources1_XKPName = {
+				private XKPPackage ;
+			private String [] mResources__XKPName = {
 				"img1",
 				"img2",
 				"img3",
@@ -40,7 +40,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				"img7",
 				"img8"
 			};
-			private String [] mResources___resources1_DroidName = {
+			private String [] mResources__DroidName = {
 				"photo_1.jpg",
 				"photo_2.jpg",
 				"photo_3.jpg",
@@ -50,7 +50,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				"photo_7.jpg",
 				"photo_8.jpg"
 			};
-			private Integer [] mResources___resources1_Type = {
+			private Integer [] mResources__Type = {
 				XKPPackage.BITMAP_RESOURCE,
 				XKPPackage.BITMAP_RESOURCE,
 				XKPPackage.BITMAP_RESOURCE,
@@ -60,7 +60,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				XKPPackage.BITMAP_RESOURCE,
 				XKPPackage.BITMAP_RESOURCE
 			};
-			private Integer [] mResources___resources1_Id = {
+			private Integer [] mResources__Id = {
 				R.drawable.photo_1,
 				R.drawable.photo_2,
 				R.drawable.photo_3,
@@ -129,19 +129,19 @@ private void onLayoutStarted() {
 }
 			private void initInstances() {
 				application = this;
-				__resources1 = new XKPPackage(this, 
-					mResources___resources1_XKPName, mResources___resources1_DroidName, 
-					mResources___resources1_Type, mResources___resources1_Id
+				 = new XKPPackage(this, 
+					mResources__XKPName, mResources__DroidName, 
+					mResources__Type, mResources__Id
 					, true);
-				util.addXKPPackage(__resources1);
+				util.addXKPPackage();
 			}
 			private void onClickchanger() {
-				prop_application_currentImage = prop_application_currentImage + 1;
-prop_application_currentImage = prop_application_currentImage % prop_application_resources.size();
-String currentResource = prop_application_resources.get(prop_application_currentImage);
+				currentImage = currentImage + 1;
+currentImage = currentImage % resources.size();
+String currentResource = resources.get(currentImage);
 util.setResourceImageView(album, currentResource);
 identifier.setText(currentResource);
 			}
-			private Integer prop_application_currentImage = 0;
-			private ArrayList<String> prop_application_resources = new ArrayList(Arrays.asList( new Object [] {"img1", "img2", "img3", "img4", "img5", "img6", "img7", "img8"} ));
+			private Integer currentImage = 0;
+			private ArrayList<String> resources = new ArrayList(Arrays.asList( new Object [] {"img1", "img2", "img3", "img4", "img5", "img6", "img7", "img8"} ));
 }

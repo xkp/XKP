@@ -71,20 +71,20 @@ import xkp.android.libs.Layout.XKPLayout;
 				private SeekBar seekb1;
 			public static XKPUtils util;
 		private XKPLayout layoutapplication;
-				private XKPPackage __resources1;
-			private String [] mResources___resources1_XKPName = {
+				private XKPPackage ;
+			private String [] mResources__XKPName = {
 				"dialog",
 				"emulator"
 			};
-			private String [] mResources___resources1_DroidName = {
+			private String [] mResources__DroidName = {
 				"dialog.png",
 				"emulator.png"
 			};
-			private Integer [] mResources___resources1_Type = {
+			private Integer [] mResources__Type = {
 				XKPPackage.BITMAP_RESOURCE,
 				XKPPackage.BITMAP_RESOURCE
 			};
-			private Integer [] mResources___resources1_Id = {
+			private Integer [] mResources__Id = {
 				R.drawable.dialog,
 				R.drawable.emulator
 			};
@@ -166,10 +166,10 @@ private void onLayoutStarted() {
 }
 			private void initInstances() {
 				application = this;
-				__resources1 = new XKPPackage(this, 
-					mResources___resources1_XKPName, mResources___resources1_DroidName, 
-					mResources___resources1_Type, mResources___resources1_Id
+				 = new XKPPackage(this, 
+					mResources__XKPName, mResources__DroidName, 
+					mResources__Type, mResources__Id
 					, true);
-				util.addXKPPackage(__resources1);
+				util.addXKPPackage();
 			}
 }
