@@ -13,20 +13,25 @@
 -sourcepath "<xss:e value="appOutputPath"/>/src;<xss:e value="appOutputPath"/>/gen"
 	}
 	
+    string osName = compiler.os();
+    string pathSeparator = ":";
+    if(osName == "windows")
+        pathSeparator = ";";
+
 	if(application.libraries)
 	{
 		string jars = "";
 		int counter = 0;
 		for(var lib in application.libraries)
 		{
-			if(counter > 0) jars = jars + ";";
+			if(counter > 0) jars = jars + pathSeparator;
 			jars = jars + appOutputPath + "/lib/" + lib;
 			counter++;
 		}
 		
 		out(indent = 0)
 		{
--classpath <xss:e value="jars"/> 
+-classpath "<xss:e value="jars"/>"
 		}
 	}
 </xss:code>

@@ -14,6 +14,7 @@ using namespace xkp;
 
 const str SLanguage("shell");
 const str SCannotParseAssign("Cannot parse a simple assign text, rtfm");
+const str SShellVariableNotFound("Cannot find shell variable");
 const str SCrashedApplication("Executable application is crashed");
 
 struct shellworker : IWorker
@@ -53,10 +54,10 @@ struct shellworker : IWorker
 
             std::vector<str>::iterator iit = it->items.begin();
             std::vector<str>::iterator ind = it->items.end();
-
             for(; iit != ind; iit++)
               {
-                valuable_items.push_back(*iit);
+                str str_value = *iit;
+                valuable_items.push_back(str_value);
               }
 
             if (!valuable_items.size()) continue;
@@ -71,8 +72,16 @@ struct shellworker : IWorker
                 if (!param.id.empty())
                   {
                     variant v = args.get(curr++);
-                    str var_value = xss_utils::var_to_string(v);
+                    if(v.empty())
+                      {
+                        param_list error;
+                        error.add("id", SLanguage);
+                        error.add("desc", SShellVariableNotFound);
+                        error.add("variable", param.id);
+                        xss_throw(error);
+                      }
 
+                    str var_value = xss_utils::var_to_string(v);
                     valuable_items[param.item_idx].insert(param.item_spot, var_value);
                   }
               }
@@ -80,25 +89,19 @@ struct shellworker : IWorker
             //finally, execute the application
             try
               {
-                std::cout << valuable_items[0] << std::endl;
                 std::string exe = bp::find_executable_in_path(valuable_items[0]);
                 std::vector<std::string> args;
-
-                std::cout << valuable_items[0] << std::endl;
-                std::cout << exe << std::endl;
 
                 std::vector<str>::iterator vit = valuable_items.begin();
                 std::vector<str>::iterator vnd = valuable_items.end();
                 for(; vit != vnd; vit++)
-                  args.push_back(*vit);
+                  {
+                    str arg = *vit;
 
-                //send args to console
-                std::cout << "---exe and args---" << std::endl;
-                std::cout << exe << std::endl;
-                std::vector<str>::iterator agit = args.begin();
-                std::vector<str>::iterator agnd = args.end();
-                for(; agit != agnd; agit++)
-                  std::cout << *agit << std::endl;
+                    //don't add empty params
+                    if (!arg.empty())
+                      args.push_back(arg);
+                  }
 
                 //td: recover the result of execution and save into variable, how to?
                 //... this is temporal, only for debug purpose
@@ -113,8 +116,8 @@ struct shellworker : IWorker
                 bp::child c = bp::launch(exe, args, ctx);
                 const bp::status s = c.wait();
 
-                std::cout << "[" << exe << "] ";
-
+//td: personalize class with static function or only functions
+#if defined(__unix__) || defined(__unix) || defined(unix) || defined(__linux__)
                 if (s.exited()) {
                     std::cout << "Program returned exit code " << s.exit_status() << std::endl;
                 } else if (s.signaled()) {
@@ -126,6 +129,8 @@ struct shellworker : IWorker
                 } else {
                     std::cout << "Unknown termination reason" << std::endl;
                 }
+#elif defined(_WIN32) || defined(_WIN64) || defined(__WIN32__)
+#endif
 
                 if (s.exited() && s.exit_status() == EXIT_SUCCESS)
                   {
@@ -135,12 +140,12 @@ struct shellworker : IWorker
                 else
                   {
                     std::cout << "Shell application failed." << std::endl;
+                    std::cout << "-----------------------------------------------" << std::endl;
 
                     param_list error;
                     error.add("id", SLanguage);
                     error.add("desc", SCrashedApplication);
                     error.add("exec", valuable_items[0]);
-
                     //xss_throw(error);
                   }
               }

@@ -4,7 +4,7 @@ on finished()
 	//set JAVA_HOME = c:\Progra~1\Java\jdk1.6.0_22\
     //set ANDROID_SDK = d:\android\sdk\
 	//set PATH = %PATH%; ..\android-sdk-windows\tools; ..\android-sdk-windows\platforms-tools;
-	
+	/*
 	var appOptions = compiler.options;
 	int targetAPILevel = application.targetAPILevel;
 	string appName = application.appName;
@@ -75,4 +75,5 @@ on finished()
 	}
         //@androidSDKPath/tools/apkbuilder@winExt @appOutputPath/bin/@appName.apk -z @appOutputPath/bin/resources.ap_ -f @appOutputPath/bin/classes.dex -rf @appOutputPath/src @libsParams;
         //jarsigner -keystore @androidIdiomPath/java.keystore/xkp.android.projects.jks -storepass @password -keypass @password -signedjar @appOutputPath/bin/@appName.apk @appOutputPath/bin/resources.ap_ xkp.android.projects
+    */
 }

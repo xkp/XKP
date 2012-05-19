@@ -88,10 +88,92 @@
 		string android_sdk = compiler.get_env_var("ANDROID_SDK");
 		if(android_sdk == "")
 			compiler.error("Environment variable is not defined", variable_name = "ANDROID_SDK");
+
 		application.android_sdk = android_sdk;
-		
 		application.output_classes = "java.lst";
 		application.output_javac_options = "javac.opts";
+
+
+        //=========================================
+        //after this, it was copied from project.xs
+        //=========================================
+
+        //TIPS: commented line is variable redefined...
+        //var appOptions            = compiler.options;
+        //int targetAPILevel        = application.targetAPILevel;
+        //string appName            = application.appName;
+        //string appOutputPath      = compiler.output_path();
+
+        string outputClasses = application.output_classes;
+        string outputJavacOpts = application.output_javac_options;
+    
+        if(appOptions.android_project_type != "apk")
+            return;
+
+        compiler.log("Creating .apk bundle file...");
+        
+        string osName = compiler.os();
+        string exeExt = "";
+        string batExt = "";
+        string rmCmd = "rm";
+        if(osName == "windows")
+        {
+            batExt = ".bat";
+            exeExt = ".exe";
+            rmCmd = "remove";
+        }
+
+        appOutputPath           = appOutputPath + "/" + appName;
+        string androidSDKPath   = application.android_sdk;
+        string apiPlatform      = androidSDKPath + "/platforms/android-" + targetAPILevel + "/android.jar";
+
+        shell(working_path = appOutputPath)
+        {
+            @rmCmd -R @appOutputPath/bin/.
+            @rmCmd -R @appOutputPath/gen/.
+        }
+
+        string output_classes = appName + "/" + application.output_classes;
+        string output_javac_options = appName + "/" + application.output_javac_options;
+    
+        string xss_classes = "../../idioms/android/java.lst.xss";
+        string xss_javac_options = "../../idioms/android/javac.options.xss";
+
+        shell(working_path = appOutputPath)
+        {
+            aapt@exeExt package -f -I @apiPlatform -M @appOutputPath/AndroidManifest.xml -A @appOutputPath/assets -S @appOutputPath/res -m -J @appOutputPath/gen -F @appOutputPath/bin/resources.ap_;
+        }
+
+        compiler.xss("javac.options.xss", output_file = output_javac_options, appOutputPath);
+        compiler.xss("java.lst.xss", output_file = output_classes, appOutputPath);
+        //compiler.xss(xss_classes, output_file = output_classes, appOutputPath);
+        //compiler.xss(xss_javac_options, output_file = output_javac_options, appOutputPath);
+
+        string dxLibPath = "";
+        //if(application.libraries) dxLibPath = appOutputPath + "/lib/*.jar";
+        if(application.libraries) dxLibPath = appOutputPath + "/lib";
+        
+        shell(working_path = appOutputPath)
+        {
+            javac@exeExt @@@outputJavacOpts @@@outputClasses;
+            dx@batExt --dex --output=@appOutputPath/bin/classes.dex @appOutputPath/bin @dxLibPath
+        }
+
+        string appBinPath = appOutputPath + "/bin";
+        shell(working_path = appBinPath)
+        {
+            aapt@exeExt add @appOutputPath/bin/resources.ap_ classes.dex
+        }
+        
+        string libsParams = "-rj " + appOutputPath + "/lib";
+        libsParams = "";
+        string password = "xkp.android.projects.2012";
+        string androidIdiomPath = appOutputPath + "/../../../idioms/android";
+        shell(working_path = appOutputPath)
+        {
+            apkbuilder@batExt @appOutputPath/bin/@appName.apk -z @appOutputPath/bin/resources.ap_ -f @appOutputPath/bin/classes.dex -rf @appOutputPath/src @libsParams;
+            jarsigner -keystore @androidIdiomPath/java.keystore/xkp.android.projects.jks -storepass @password -keypass @password -signedjar @appOutputPath/bin/@appName.apk @appOutputPath/bin/resources.ap_ xkp.android.projects
+        }
 	}
 	else
 	{
