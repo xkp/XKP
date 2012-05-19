@@ -1,0 +1,32 @@
+<xss:parameter id="appOutputPath"/>
+
+<xss:code>
+	string android_sdk = application.android_sdk;
+	int targetAPILevel = application.targetAPILevel;
+	
+	out(indent = 0)
+	{
+-encoding ascii 
+-target 1.5 
+-d <xss:e value="appOutputPath"/>/bin 
+-bootclasspath <xss:e value="android_sdk"/>/platforms/android-<xss:e value="targetAPILevel"/>/android.jar 
+-sourcepath "<xss:e value="appOutputPath"/>/src;<xss:e value="appOutputPath"/>/gen"
+	}
+	
+	if(application.libraries)
+	{
+		string jars = "";
+		int counter = 0;
+		for(var lib in application.libraries)
+		{
+			if(counter > 0) jars = jars + ";";
+			jars = jars + appOutputPath + "/lib/" + lib;
+			counter++;
+		}
+		
+		out(indent = 0)
+		{
+-classpath <xss:e value="jars"/> 
+		}
+	}
+</xss:code>

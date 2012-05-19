@@ -4,6 +4,9 @@
 #include <xss/xss_error.h>
 
 #include <boost/process.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
 
 namespace bp = boost::processes;
 
@@ -24,6 +27,24 @@ struct shellworker : IWorker
       {
         int curr = 0;
 
+        variant v = args.get(curr++);
+        int counter = variant_cast<int>(v, 0);
+
+        str working_path;
+        str environment_vars; //td: correctly
+
+        if (counter & 1)
+          {
+            variant v = args.get(curr++);
+            working_path = xss_utils::var_to_string(v);
+          }
+
+        if (counter & 2)
+          {
+            variant v = args.get(curr++);
+            environment_vars = xss_utils::var_to_string(v);
+          }
+
         std::vector<ga_item>::iterator it = result_.begin();
         std::vector<ga_item>::iterator nd = result_.end();
         for(; it != nd; it++)
@@ -37,6 +58,8 @@ struct shellworker : IWorker
               {
                 valuable_items.push_back(*iit);
               }
+
+            if (!valuable_items.size()) continue;
 
             //evaluate params
             std::vector<shell_param>::reverse_iterator rpit = it->params.rbegin();
@@ -57,18 +80,26 @@ struct shellworker : IWorker
             //finally, execute the application
             try
               {
-                //std::string exe = bp::find_executable_in_path(valuable_items[0]);
-                //std::vector<std::string> args;
+                std::string exe = bp::find_executable_in_path(valuable_items[0]);
+                std::vector<std::string> args;
 
-                //std::vector<str>::iterator vit = valuable_items.begin();
-                //std::vector<str>::iterator vnd = valuable_items.end();
-                //for(; vit != vnd; vit++)
-                //  args.push_back(*vit);
-
-                //bp::child c = bp::launch(exe, args, bp::context());
-                //const bp::status s = c.wait();
+                std::vector<str>::iterator vit = valuable_items.begin();
+                std::vector<str>::iterator vnd = valuable_items.end();
+                for(; vit != vnd; vit++)
+                  args.push_back(*vit);
 
                 //td: recover the result of execution and save into variable, how to?
+                //... this is temporal, only for debug purpose
+                bp::context ctx;
+                ctx.add(bp::close_stream(bp::stdin_fileno))
+                   .add(bp::inherit_stream(bp::stdout_fileno))
+                   .add(bp::inherit_stream(bp::stderr_fileno));
+
+                if (!working_path.empty())
+                  ctx.work_directory = working_path;
+
+                bp::child c = bp::launch(exe, args, ctx);
+                const bp::status s = c.wait();
               }
             catch (const boost::system::system_error&)
               {
@@ -99,20 +130,61 @@ DSLWorker vm_shell::create_worker(dsl& info, code_linker& owner, std::vector<str
         xss_throw(error);
       }
 
+    //push values of dsl params into expression
+    size_t count = 0;
+    std::vector<str> aux_exprs;
+    if (info.param_count)
+      {
+        str text = "working_path environment_vars";
+        std::vector<str> params;
+        boost::split(params, text, boost::is_space());
+
+        for(size_t idx = 0, pos = 1; idx < params.size(); idx++, pos <<= 1)
+          {
+            variant param = info.params.get(params[idx]);
+            if (!param.empty())
+              {
+                expression expr = param;
+                assert(expr.size() == 1); //td:
+
+                variant first = expr.first();
+                if (first.is<expression_identifier>())
+                  {
+                    expression_identifier ei = first;
+                    str value = ei.value;
+                    aux_exprs.push_back(value);
+                    count |= pos;
+                  }
+                else
+                if (first.is<str>())
+                  {
+                    str s = "\"" + variant_cast<str>(first, str("")) + "\"";
+                    aux_exprs.push_back(s);
+                    count |= pos;
+                  }
+                else
+                  assert(false); //catch another case use
+              }
+          }
+      }
+
+    expressions.push_back(boost::lexical_cast<str>(count));
+    expressions.insert(expressions.end(), aux_exprs.begin(), aux_exprs.end());
+
     std::vector<ga_item>::iterator it = result.begin();
     std::vector<ga_item>::iterator nd = result.end();
     for(; it != nd; it++)
       {
         //fun stuff, gather the params in the query (in the form @value)
-        std::vector<shell_param>::iterator pit = it->params.begin();
-        std::vector<shell_param>::iterator pnd = it->params.end();
+        std::vector<shell_param>::reverse_iterator rpit = it->params.rbegin();
+        std::vector<shell_param>::reverse_iterator rpnd = it->params.rend();
 
-        for(; pit != pnd; pit++)
+        for(; rpit != rpnd; rpit++)
           {
-            if (pit->id.empty())
+            if (rpit->id.empty())
               continue;
 
-            expressions.push_back(pit->id);
+            expressions.push_back(rpit->id);
           }
       }
 

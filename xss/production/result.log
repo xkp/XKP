@@ -155,6 +155,7 @@ log: [android] Rendering default files...
 Success are greateful
 ===[ box2d1.project.xml ]================
 
+ 'classes.dex' as 'classes.dex'...
 
 log: Rendering Android project...
 log: API Level = 7
@@ -166,6 +167,7 @@ log: [android] Copying default files...
 log: [android] Rendering default files...
 log: [jbox2d] Copying default files...
 
+log: Creating .apk bundle file...
 Success are greateful
 ===[ box2d2.project.xml ]================
 
@@ -221,7 +223,11 @@ log: Rendering Android Imports...
 Error [vm] Cannot resolve
 	object = jBox2d_4
 	property = id
+<<<<<<< HEAD
 	file = c:/dev/XKP/xss/idioms/java/instance.xssERROR: Project:  box2d4.project.xml
+=======
+	file = d:/xkp/xss/samples/android/jbox2d_4/../../../idioms/ms/java/../../java/instance.xssERROR: Project:  box2d4.project.xml
+>>>>>>> 912a9807c92d0331563f6cc29c5fa7180397fca3
 
 ===[ box2d5.project.xml ]================
 
@@ -351,6 +357,7 @@ log: [android] Rendering default files...
 Success are greateful
 ===[ simple.project.xml ]================
 
+ 'classes.dex' as 'classes.dex'...
 
 log: Rendering Android project...
 log: API Level = 4
@@ -367,6 +374,7 @@ log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
 
+log: Creating .apk bundle file...
 Success are greateful
 ===[ touchme.project.xml ]================
 
@@ -385,19 +393,19 @@ Success are greateful
 
 
 Error [404] File not found
-	file = c:/dev/XKP/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
+	file = d:/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
 
 ===[ pairs.project.xml ]================
 
 
 Error [404] File not found
-	file = c:/dev/XKP/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
+	file = d:/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
 
 ===[ simple.project.xml ]================
 
 
 Error [404] File not found
-	file = c:/dev/XKP/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
+	file = d:/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
 
 ===[ 3js-ms.project.xml ]================(Tests)
 
@@ -1292,7 +1300,11 @@ Success are greateful
 
 Error [html5 asynch] Objects need to be serializable in order to enter threads
 	type = preset
+<<<<<<< HEAD
 	file = c:/dev/XKP/xss/idioms/jquery/event.xssERROR: Project:  jquery6.project.xml
+=======
+	file = d:/xkp/xss/tests/../idioms/jquery/event.xssERROR: Project:  jquery6.project.xml
+>>>>>>> 912a9807c92d0331563f6cc29c5fa7180397fca3
 
 ===[ jquery7.project.xml ]================(Tests)
 
@@ -1597,9 +1609,23 @@ Success are greateful
 ===[ query_properties.project.xml ]================(Tests)
 
 
-Error [404] File not found
-	file = c:/dev/XKP/xss/tests/enums.app.xmlERROR: Project:  query_properties.project.xml
+log: Rendering test query_properties...
+			Instance: name = "t1", type = "t_arrays"
+		
+			Instance: name = "t2", type = "t_arrays1"
+		
+			Instance: name = "t3", type = "t_super_derived"
+		
+				property "title" = null			
+				property "name" = null			
+			Instance: name = "t4", type = "t_super_merged"
+		
+				property "test_2" = null			
+				property "test_1" = null			
+			Instance: name = "application", type = "Application"
+		
 
+Success are greateful
 ===[ replicator.project.xml ]================(Tests)
 
 
@@ -1789,7 +1815,11 @@ Success are greateful
 
 Error [language] Missing declared tag
 	tag = user_image
+<<<<<<< HEAD
 	file = c:/dev/XKP/xss/idioms/wax/server.xssERROR: Project:  wax3.project.xml
+=======
+	file = d:/xkp/xss/tests/../idioms/wax/server.xssERROR: Project:  wax3.project.xml
+>>>>>>> 912a9807c92d0331563f6cc29c5fa7180397fca3
 
 ===[ wax4.project.xml ]================(Tests)
 
@@ -2153,6 +2183,7 @@ log: <Dependencies>
 log: /usr/lib/test_idiom
 log: /use/bin/xss14
 log: /use/bin/xss14_1
+log: /use/bin/xss14_11
 log: </Dependencies>
 log: <User Classes>
 log: </User Classes>
@@ -2599,4 +2630,62 @@ return c;
 Success are greateful
 ===[ xssY.project.xml ]================(Tests)
 
-ERROR: Project:  xssY.project.xml
+
+		Rendering User Types on xssY.idiom (1)...
+	
+			USER CLAZZ: my_class_1  IDIOM: xssY_idiom1
+			SUPER USER CLAZZ: c_xssY1_i1  IDIOM: xssY_idiom1
+		
+		==[IDIOM 1]=====================
+		INSTANCE: clazz_1  
+		TYPE: c_xssY2_i1  
+		PARENT: my_class_1  
+		IDIOM: xssY_idiom1  
+	
+		==[IDIOM 2]=====================
+		INSTANCE: clazz_2  
+		TYPE: c_xssY1_i2  
+		PARENT: my_class_1  
+		IDIOM: xssY_idiom2  
+	
+		Rendering User Types on xssY.idiom (2)...
+	
+			USER CLAZZ: my_class_2  IDIOM: xssY_idiom2
+			SUPER USER CLAZZ: c_xssY1_i2  IDIOM: xssY_idiom2
+		
+		==[IDIOM 1]=====================
+		INSTANCE: clazz_1  
+		TYPE: c_xssY1_i1  
+		PARENT: my_class_2  
+		IDIOM: xssY_idiom1  
+	
+		==[IDIOM 2]=====================
+		INSTANCE: clazz_2  
+		TYPE: c_xssY2_i2  
+		PARENT: my_class_2  
+		IDIOM: xssY_idiom2  
+	
+		Rendering Instances on xssY_idiom (1)
+	
+		==[IDIOM 1]=====================
+		INSTANCE: ci1  
+		TYPE: c_xssY1_i1  
+		PARENT: application  
+		IDIOM: xssY_idiom1  
+	
+		==[IDIOM 1]=====================
+		INSTANCE: clazzing  
+		TYPE: my_class_1  
+		PARENT: application  
+		IDIOM: xssY_idiom1  
+	
+		Rendering Instances on xssY_idiom (2)
+	
+		==[IDIOM 2]=====================
+		INSTANCE: ci2  
+		TYPE: c_xssY1_i2  
+		PARENT: application  
+		IDIOM: xssY_idiom2  
+	
+
+Success are greateful

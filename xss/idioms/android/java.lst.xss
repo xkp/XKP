@@ -1,0 +1,13 @@
+<xss:parameter id="appOutputPath"/>
+
+<xss:code>
+	var arrayJavaFile = compiler.find_files(appOutputPath, ".*\.java");
+	for(var f in arrayJavaFile)
+	{
+		string filename = f.filename;
+		out(indent = 0)
+		{
+<xss:e value="filename"/>
+		}
+	}
+</xss:code>

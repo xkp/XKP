@@ -8,7 +8,7 @@ on render_types()
 	for(var ut in user_types)
 	{
 	
-		ut.idiom = this;
+		//ut.idiom = this;
 		
 		out()
 		{
@@ -18,7 +18,7 @@ on render_types()
 		
 		for(var i in ut.instances)
 		{
-			i.idiom = compiler.idiom_by_class(i.type.id);
+			//i.idiom = compiler.idiom_by_class(i.type.id);
 			
 			i.idiom.render_instance(i);
 		}

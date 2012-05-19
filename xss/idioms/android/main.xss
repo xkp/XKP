@@ -20,9 +20,6 @@
 		appName = application.id;
 	}
 	
-	// TODO: replace all 'app' & 'appName' parameter passed to method for 'application.appName'
-	application.appName = appName;
-	
 	int targetAPILevel = 6;
 	int minAPILevel = 3;
 	if(appOptions.android_api_level)
@@ -39,6 +36,10 @@
 			compiler.error("The number of Android API level version is not correct", android_api_level = apiL);
 		}
 	}
+	
+	// TODO: replace all 'app' & 'appName' parameter passed to method for 'application.appName'
+	application.appName = appName;
+	application.targetAPILevel = targetAPILevel;
 	
 	//inject idiom event for render types
 	compiler.inject("render_types", app = appName, bns = base_namespace);
@@ -62,7 +63,8 @@
 	output_filename = appName + "/res/layout/main.xml";
 	compiler.xss("layout.xml.xss", output_file = output_filename, appName = appName, base_namespace = base_namespace, clazz = application);
 	
-	// appOptions.android_project_type = enum {eclipse, script, ant, others, ...}
+	//td: organize all this muddy of appOptions
+	// appOptions.android_project_type = enum {eclipse, script, ant, apk, others, ...}
 	if(appOptions.android_project_type == "eclipse")
 	{
 		output_filename = appName + "/" + ".project";
@@ -81,8 +83,28 @@
 		compiler.xss("build.bat.xss", output_file = output_filename, appName, targetAPILevel, appOutputPath);
 	}
 	else
+	if(appOptions.android_project_type == "apk")
+	{
+		string android_sdk = compiler.get_env_var("ANDROID_SDK");
+		if(android_sdk == "")
+			compiler.error("Environment variable is not defined", variable_name = "ANDROID_SDK");
+		application.android_sdk = android_sdk;
+		
+		application.output_classes = "java.lst";
+		application.output_javac_options = "javac.opts";
+		
+		appOutputPath = appOutputPath + "/" + appName;
+		string output_classes = appName + "/" + application.output_classes;
+		string output_javac_options = appName + "/" + application.output_javac_options;
+		
+		string xss_classes = "java.lst.xss";
+		compiler.xss(xss_classes, output_file = output_classes, appOutputPath);
+		
+		string xss_javac_options = "javac.options.xss";
+		compiler.xss(xss_javac_options, output_file = output_javac_options, appOutputPath);
+	}
+	else
 	{
 		compiler.error("Project type is not implemented", android_project_type = appOptions.android_project_type);
 	}
-
 </xss:code>

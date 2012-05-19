@@ -1,0 +1,6 @@
+<xss:parameter id="type"/>
+<xss:parameter id="instance_id"/>
+<xss:parameter id="data"/>
+
+<xss:e v="compiler.instantiate(type)"/>;
+<xss:e v="instance_id"/>.deserialize(<xss:e v="data"/>);

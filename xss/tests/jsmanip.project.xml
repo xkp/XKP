@@ -1,0 +1,12 @@
+<project entry_point="../idioms/threejs/app.xss" language="js" target="jsmanip.app.xml" output="jsmanip.html">
+    <path>	
+        <output path="../production/test"/>
+    </path>
+	
+	<idiom src="../idioms/resources/resources.xml"/>
+    <idiom src="../idioms/ui/ui.xml"/>  
+	<idiom src="../idioms/threejs/module.xml"/> 	
+	<idiom src="../idioms/jsmanipulate/jsmanipulate.xml"/>	
+</project>
+           
+         

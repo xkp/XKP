@@ -2,8 +2,8 @@
 <xss:parameter id="path"/>
 
 <xss:code>
-	var idiom = it.idiom;
-	if (!idiom)
+	var myidiom = it.idiom;
+	if (!myidiom)
 	{
 		compiler.log("WARNING: Why no idiom? " + it.output_id);
 	}
@@ -12,7 +12,7 @@
 	if (path)
 		id = path + "." + id;
 
-	idiom.render_create_spawner(it, path, id);
+	myidiom.render_create_spawner(it, path, id);
 
 	string creator_class = it.creator_class;
 	if (!creator_class)
@@ -35,5 +35,5 @@
 	if(no_physics)
 		compiler.error("Spawner requires creator_class with physics type");
 
-	idiom.render_instancing_spawner(it, path, id, type);
+	myidiom.render_instancing_spawner(it, path, id, type);
 </xss:code>

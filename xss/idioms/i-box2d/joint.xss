@@ -3,8 +3,8 @@
 <xss:parameter id="path"/>
 
 <xss:code>
-	var idiom = it.idiom;
-	if (!idiom)
+	var myidiom = it.idiom;
+	if (!myidiom)
 	{
 		compiler.log("WARNING: Why no idiom? " + it.output_id);
 	}
@@ -14,7 +14,7 @@
 		id = path + "." + id;
 	
 	it.world = world;
-	idiom.render_create_joint(it, world, path, id);
+	myidiom.render_create_joint(it, world, path, id);
 
-	idiom.render_instancing_joint(it, world, path, id);
+	myidiom.render_instancing_joint(it, world, path, id);
 </xss:code>

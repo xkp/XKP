@@ -1,6 +1,7 @@
 <project 
 	entry_point="../../../idioms/android/main.xss" 
 	language="java" 
+	src="../../../idioms/android/projects.xs" 
 	target="box2d1.xml" >
 	
 	<idiom src="../../../idioms/android/classes.xml"/>
@@ -21,5 +22,5 @@
 	<options 
 		event_scope="instance" 
 		android_api_level="7" 
-		android_project_type="eclipse"/>
+		android_project_type="apk"/>
 </project>
