@@ -6,8 +6,8 @@
             <script type="text/javascript" src="../js/event.js"></script>
             <script type="text/javascript" src="../js/utils.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
-            <script type="text/javascript" src="../js/ui.js"></script>
             <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
 <script type="text/javascript">
 var drawingCanvas;	
 var streamer;	
@@ -19,6 +19,8 @@ var g_ui_root;
 var application = {};
 application.events = new ev.EventHolder();
 var SoundUtils = new ui.SoundUtils();
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -31,8 +33,6 @@ var SoundUtils = new ui.SoundUtils();
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
 		}		
-		var streamer = new stream.Streamer();	
-		var ResourceUtils = new stream.ResourceUtils();
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
             {
@@ -341,8 +341,8 @@ window.onload = function()
 		    btnPlay = new ui.Button(g_ui_root.manager, g_ui_root, "images/play.png", "images/play_over.png");
 		    btnPause = new ui.Button(g_ui_root.manager, g_ui_root, "images/pause.png", "images/pause_over.png");
 		    btnStop = new ui.Button(g_ui_root.manager, g_ui_root, "images/stop.png", "images/stop_over.png");
-		    sound_1 = new ui.Sound("sounds/forest.wav");
-		    sound_2 = new ui.Sound("sounds/applauselong.wav");
+		    sound_1 = new ui.Sound(g_ui_root.manager, g_ui_root, "sounds/forest.wav");
+		    sound_2 = new ui.Sound(g_ui_root.manager, g_ui_root, "sounds/applauselong.wav");
             lbl1.set_x(220);
             lbl1.set_y(190);
             lbl1.text("click the sound you want to listen");

@@ -3,14 +3,9 @@ var url  = require("url");
         var mysql  = require("mysql");
         var child_process  = require("child_process");
 var application = {};
-	application.service1 = function(response,request) 
+	application.service1 = function(file) 
 	{
-function return_function(return_value)
-{
-reqest.end(JSON.stringify(return_value))
-}
-var __params = url.parse(request.url, true).query;
-var file = __params.file;var data;
+		var data;
 function __callback1() 
 {
 var count = 0;

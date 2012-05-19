@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Test 3D</title>
+<title></title>
 </head>
 <body>
 <style type="text/css">
 	body{
-	background:Black;
 	}
 </style>
             <script type="text/javascript" src="../js/resig.js"></script>
@@ -20,6 +19,9 @@
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/jsmanipulate/jsmanipulate.js"></script>
+            <script type="text/javascript" src="../js/jsmanipulate/jsm-manager.js"></script>
+            <script type="text/javascript" src="../js/jsmanipulate/jsm-utils.js"></script>
 <script type="text/javascript">		
 var renderer = new THREE.CanvasRenderer();	
 var ui_;
@@ -34,8 +36,8 @@ var canvas_position = {x:0, y:0};
 var streamer;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
-var __label1;
-var camera_1;var plane_1;var plane_2;var plane_3;var container;var plane_4;var plane_5;
+var lbl0;var lbl1;var lbl2;var img1;var img2;var img3;var img4;
+var sphere_material;var camera_1;var plane1;var sphere1;var sphere2;var plane2;
 var application = {};
 application.events = new ev.EventHolder();
 		var streamer = new stream.Streamer();	
@@ -84,46 +86,17 @@ application.events = new ev.EventHolder();
 				});
                 global_package.add_item(
             {
-		id:				"__image3",
+		id:				"image0",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test3.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
 });	
-				var __image3;
+				var image0;
 				global_package.events.addListener("loaded", function()
 				{
-					__image3 = streamer.get_resource("__image3");
-				});
-				var pack_1 = new stream.Package(streamer);				
-                pack_1.add_item(
-            {
-		id:				"__image4",
-		resource_type:	RESOURCE_IMAGE,
-		src:			"images/test4.png",
-		frame_width:	null,
-		frame_height:	null,
-		animations:		[]
-});
-				var __image4;
-				pack_1.events.addListener("loaded", function()
-				{
-					__image4 = streamer.get_resource("__image4");
-				});
-                pack_1.add_item(
-            {
-		id:				"__image5",
-		resource_type:	RESOURCE_IMAGE,
-		src:			"images/test5.png",
-		frame_width:	null,
-		frame_height:	null,
-		animations:		[]
-});
-				var __image5;
-				pack_1.events.addListener("loaded", function()
-				{
-					__image5 = streamer.get_resource("__image5");
+					image0 = streamer.get_resource("image0");
 				});
 		global_package.add_item({
 			id:				"invalid_res",
@@ -200,77 +173,116 @@ threejs_load_resources(streamer, function()
 	{    
 		application.events.dispatch("keydown", [keycode]);
 	});
-		    __label1 = new ui.Label(g_ui_root.manager, g_ui_root, "15px Verdana");
+		    lbl0 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Arial");
+		    lbl1 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Arial");
+		    lbl2 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Arial");
+		    img1 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test1.png");
+		    img2 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test2.png");
+		    img3 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test2.png");
+		    img4 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test2.png");
+sphere_material = new THREE.MeshBasicMaterial({
+map:new THREE.Texture(scene.streamer.get_resource('images/test1.png').data),
+	});
 		    camera_1 = 
 		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
 		active_camera = camera_1;
-	    plane_1_plane = new THREE.Plane(128, 164, null, null) ;
-	    plane_1 = new THREE.Mesh(plane_1_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(plane_1);
-		plane_1.events = new ev.EventHolder();
-	    plane_2_plane = new THREE.Plane(128, 164, null, null) ;
-	    plane_2 = new THREE.Mesh(plane_2_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(plane_2);
-		plane_2.events = new ev.EventHolder();
-	    plane_3_plane = new THREE.Plane(128, 164, null, null) ;
-	    plane_3 = new THREE.Mesh(plane_3_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(plane_3);
-		plane_3.events = new ev.EventHolder();
-				pack_1.events.addListener("loaded", function()
-				{				
-			    container = new THREE.Object3D() ;
-			container.events = new ev.EventHolder();
-});				
-				pack_1.events.addListener("loaded", function()
-				{				
-	    plane_4_plane = new THREE.Plane(128, 164, null, null) ;
-	    plane_4 = new THREE.Mesh(plane_4_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(plane_4);
-		plane_4.events = new ev.EventHolder();
-				container.addChild(plane_4);
-				scene.addObject(container);
-});				
-				pack_1.events.addListener("loaded", function()
-				{				
-	    plane_5_plane = new THREE.Plane(128, 164, null, null) ;
-	    plane_5 = new THREE.Mesh(plane_5_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(plane_5);
-		plane_5.events = new ev.EventHolder();
-				container.addChild(plane_5);
-				scene.addObject(container);
-});
-            __label1.set_x(150);
-            __label1.set_y(75);
-            __label1.set_color("Ivory");
-            __label1.text("Press click to load the package");
-            camera_1.position.x = 500;
-            camera_1.position.y = 500;
+	    plane1_plane = new THREE.Plane(280, 320, null, null) ;
+	    plane1 = new THREE.Mesh(plane1_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(plane1);
+		plane1.events = new ev.EventHolder();
+	    sphere1_sphere = new THREE.Sphere(150, null, null) ;
+	    sphere1 = new THREE.Mesh(sphere1_sphere, sphere_material);
+	    scene.addObject(sphere1);
+		sphere1.events = new ev.EventHolder();
+	    sphere2_sphere = new THREE.Sphere(150, null, null) ;
+	    sphere2 = new THREE.Mesh(sphere2_sphere, sphere_material);
+	    scene.addObject(sphere2);
+		sphere2.events = new ev.EventHolder();
+	    plane2_plane = new THREE.Plane(100, 100, null, null) ;
+	    plane2 = new THREE.Mesh(plane2_plane, new THREE.MeshBasicMaterial());
+	    scene.addObject(plane2);
+		plane2.events = new ev.EventHolder();
+			img2.b_filter = new jsmanip.Waterripple(
+		0,50,16,10,0.5,0.5,img2);		
+		if(!img2.filters)
+			img2.filters = [];
+		img2.filters.push(img2.b_filter);
+			obtain_images(img2.b_filter, img2);
+			img2.b_filter.set_render_on_apply(true);
+	    var preset1 = new jsmanip.Preset() ;
+			preset1.wfilter = new jsmanip.Waterripple(
+		0,50,16,10,0.5,0.5,preset1);		
+		if(!preset1.filters)
+			preset1.filters = [];
+		preset1.filters.push(preset1.wfilter);
+			preset1.sepia1 = new jsmanip.Sepia(
+		10,preset1);		
+		if(!preset1.filters)
+			preset1.filters = [];
+		preset1.filters.push(preset1.sepia1);
+			img3.bf0 = new jsmanip.Gain(
+		0.200000003,0.200000003,img3);		
+		if(!img3.filters)
+			img3.filters = [];
+		img3.filters.push(img3.bf0);
+			obtain_images(img3.bf0, img3);
+			img3.bf0.set_render_on_apply(true);
+            lbl0.set_x(50);
+            lbl0.set_y(20);
+            lbl0.text("Brightness and contrast filter demo");
+            lbl1.set_x(50);
+            lbl1.set_y(40);
+            lbl1.text("Pass mouse over the Gioconda's elements to change their filter values");
+            lbl2.set_x(50);
+            lbl2.set_y(60);
+            lbl2.text("Press numpad + and - to increase or decrease resource filter values");
+            img1.set_x(50);
+            img1.set_y(100);
+            img1.set_width(128);
+            img1.set_height(164);
+            img2.set_x(50);
+            img2.set_y(450);
+            img2.set_width(60);
+            img2.set_height(100);
+            img3.set_x(150);
+            img3.set_y(450);
+            img3.set_width(60);
+            img3.set_height(100);
+            img4.set_x(250);
+            img4.set_y(450);
+            img4.set_width(60);
+            img4.set_height(100);
             camera_1.position.z = 1000;
-            plane_1.materials[0].map = new THREE.Texture(scene.streamer.get_resource("images/test1.png").data);
-            plane_1.position.x = 100;
-            plane_1.position.y = 100;
-            plane_2.materials[0].map = new THREE.Texture(scene.streamer.get_resource("images/test2.png").data);
-            plane_2.position.x = 300;
-            plane_2.position.y = 100;
-            plane_3.materials[0].map = new THREE.Texture(scene.streamer.get_resource("images/test3.png").data);
-            plane_3.position.x = 100;
-            plane_3.position.y = 300;
-				pack_1.events.addListener("loaded", function()
-				{
-});
-				pack_1.events.addListener("loaded", function()
-				{
-            plane_4.materials[0].map = new THREE.Texture(scene.streamer.get_resource("images/test4.png").data);
-            plane_4.position.x = -100;
-});
-				pack_1.events.addListener("loaded", function()
-				{
-            plane_5.materials[0].map = new THREE.Texture(scene.streamer.get_resource("images/test5.png").data);
-            plane_5.position.x = -400;
-});
+            plane1.materials[0].map = new THREE.Texture(scene.streamer.get_resource("images/test1.png").data);
+            plane1.position.x = -30;
+            set_rotation_y(plane1.rotation, -10);
+            sphere1.position.x = 400;
+            sphere1.position.y = -100;
+            sphere2.position.x = 400;
+            sphere2.position.y = 200;
+            plane2.materials[0].map = new THREE.Texture(scene.streamer.get_resource("images/test2.png").data);
+            plane2.position.x = -300;
+            plane2.position.y = -30;
+            set_rotation_y(plane2.rotation, -10);
 	application.events.addListener("click", function()
 	{    
-		pack_1.load();
+		put_image(img1, preset1.apply(get_image_data(img1)));
+	}
+	);
+	application.events.addListener("init", function()
+	{    
+	}
+	);
+	application.events.addListener("keydown", function(keycode)
+	{    
+		if (keycode == NUMPAD_PLUS)
+{
+put_image(img2, b_filter.apply(get_image_data(img2)));
+}
+if (keycode == NUMPAD_MINUS)
+{
+put_image(img2, b_filter.apply(get_image_data(img2)));
+}
 	}
 	);
 if(ui_)

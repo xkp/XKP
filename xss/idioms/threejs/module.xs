@@ -4,7 +4,7 @@ on pre_process(obj)
 {
 	if(obj.class_name == "composite_material"){
 			comp_mat_array += obj.id;			
-	}
+	}		
 	if (obj.class_name == "scene")
 		obj.id = "scene";	
 	for(var comp_mat in comp_mat_array){

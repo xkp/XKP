@@ -26,6 +26,7 @@ var renderer = new THREE.CanvasRenderer();
 var ui_;
 var SoundUtils;
 var scene = new THREE.Scene();
+scene.mouse_thru = true;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
@@ -63,7 +64,7 @@ application.events = new ev.EventHolder();
             {
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"dd/facebook.png",
+		src:			"images/facebook.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
@@ -77,7 +78,7 @@ application.events = new ev.EventHolder();
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"dd/twitter.png",
+		src:			"images/twitter.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
@@ -91,7 +92,7 @@ application.events = new ev.EventHolder();
             {
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"dd/photobucket.png",
+		src:			"images/photobucket.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
@@ -421,6 +422,8 @@ selected.stop();
 	}
 	);
 		application.are_obj_events = true;
+		if(image_plane instanceof THREE.Object3D)
+			scene.addObject(image_plane);
         return image_plane;
         }
     function create_image_group(
@@ -568,38 +571,56 @@ g_sequence_manager);
 			img1 = 
 create_image_plane(100, 100, null, null)
  ;
+				if(img1 instanceof THREE.Object3D)
+					image_group.addChild(img1);
 			 var img2;
 			img2 = 
 create_image_plane(100, 100, null, null)
  ;
+				if(img2 instanceof THREE.Object3D)
+					image_group.addChild(img2);
 			 var img3;
 			img3 = 
 create_image_plane(100, 100, null, null)
  ;
+				if(img3 instanceof THREE.Object3D)
+					image_group.addChild(img3);
 			 var img4;
 			img4 = 
 create_image_plane(100, 100, null, null)
  ;
+				if(img4 instanceof THREE.Object3D)
+					image_group.addChild(img4);
 			 var img5;
 			img5 = 
 create_image_plane(100, 100, null, null)
  ;
+				if(img5 instanceof THREE.Object3D)
+					image_group.addChild(img5);
 			 var img6;
 			img6 = 
 create_image_plane(100, 100, null, null)
  ;
+				if(img6 instanceof THREE.Object3D)
+					image_group.addChild(img6);
 			 var img7;
 			img7 = 
 create_image_plane(100, 100, null, null)
  ;
+				if(img7 instanceof THREE.Object3D)
+					image_group.addChild(img7);
 			 var img8;
 			img8 = 
 create_image_plane(100, 100, null, null)
  ;
+				if(img8 instanceof THREE.Object3D)
+					image_group.addChild(img8);
 			 var img9;
 			img9 = 
 create_image_plane(100, 100, null, null)
  ;
+				if(img9 instanceof THREE.Object3D)
+					image_group.addChild(img9);
             img1.position.x = -300;
             img1.position.y = 0;
             img1.position.z = 0;
@@ -630,6 +651,9 @@ planes_[i].destination = value[i];
 planes_[i].move.start();
 }
         };
+            image_group.mouse_thru = true;
+		if(image_group instanceof THREE.Object3D)
+			scene.addObject(image_group);
         return image_group;
         }
 threejs_load_resources(streamer, function()
@@ -709,7 +733,12 @@ create_image_group()
             test_ip.position.z = 0;
 	application.events.addListener("init", function()
 	{    
-		test_ip.images_set(["dd/twitter.png", "dd/twitter.png", "dd/twitter.png", "dd/twitter.png", "dd/twitter.png", "dd/twitter.png", "dd/twitter.png", "dd/twitter.png", "dd/twitter.png"]);
+		test_ip.images_set(["images/twitter.png", "images/twitter.png", "images/twitter.png", "images/twitter.png", "images/twitter.png", "images/twitter.png", "images/twitter.png", "images/twitter.png", "images/twitter.png"]);
+	}
+	);
+	application.events.addListener("click", function()
+	{    
+		test_ip.position.x = 10;
 	}
 	);
 if(ui_)

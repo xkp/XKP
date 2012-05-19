@@ -18,6 +18,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				private character pluto;
 			public static XKPUtils util;
 		private XKPLayout layoutapplication;
+<<<<<<< HEAD
 				private XKPPackage __resources1;
 			private String [] mResources___resources1_XKPName = {
 				"i_aladdin",
@@ -55,6 +56,45 @@ import xkp.android.libs.Layout.XKPLayout;
 				R.raw.mickey,
 				R.raw.pluto
 			};
+=======
+				private XKPPackage ;
+			private String [] mResources__XKPName = {
+				"i_aladdin",
+				"i_mickey",
+				"i_pluto",
+				"a_audio1",
+				"a_audio2",
+				"v_mickey",
+				"v_pluto"
+			};
+			private String [] mResources__DroidName = {
+				"aladdin.png",
+				"mickey.png",
+				"pluto.png",
+				"audio1.ogg",
+				"audio2.ogg",
+				"mickey.3gp",
+				"pluto.3gp"
+			};
+			private Integer [] mResources__Type = {
+				XKPPackage.BITMAP_RESOURCE,
+				XKPPackage.BITMAP_RESOURCE,
+				XKPPackage.BITMAP_RESOURCE,
+				XKPPackage.AUDIO_RESOURCE,
+				XKPPackage.AUDIO_RESOURCE,
+				XKPPackage.VIDEO_RESOURCE,
+				XKPPackage.VIDEO_RESOURCE
+			};
+			private Integer [] mResources__Id = {
+				R.drawable.aladdin,
+				R.drawable.mickey,
+				R.drawable.pluto,
+				R.raw.audio1,
+				R.raw.audio2,
+				R.raw.mickey,
+				R.raw.pluto
+			};
+>>>>>>> 48b4121a3614a3e7cdb142311c9a6460262befd0
 	private boolean mLayoutStarted = false;
 			private ActCharacters application;
 			@Override
@@ -108,10 +148,18 @@ private void onLayoutStarted() {
 }
 			private void initInstances() {
 				application = this;
+<<<<<<< HEAD
 				__resources1 = new XKPPackage(this, 
 					mResources___resources1_XKPName, mResources___resources1_DroidName, 
 					mResources___resources1_Type, mResources___resources1_Id
 					, true);
 				util.addXKPPackage(__resources1);
+=======
+				 = new XKPPackage(this, 
+					mResources__XKPName, mResources__DroidName, 
+					mResources__Type, mResources__Id
+					, true);
+				util.addXKPPackage();
+>>>>>>> 48b4121a3614a3e7cdb142311c9a6460262befd0
 			}
 }

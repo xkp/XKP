@@ -31,7 +31,7 @@
         </sequence>
     </class>
 
-    <class id="image_group" super="transform">
+    <class id="image_group" super="transform" mouse_thru="true">
         <sequence id="move">
             <at time="0">
                 <animate property="position.x" from="@" to="destination.x" in="2"/>

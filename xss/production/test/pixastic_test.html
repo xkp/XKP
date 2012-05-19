@@ -13,8 +13,8 @@
             <script type="text/javascript" src="../js/utils.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
             <script type="text/javascript" src="../js/colors.js"></script>
-            <script type="text/javascript" src="../js/ui.js"></script>
             <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
             <script type="text/javascript" src="../js/pixastic/pixastic.core.js"></script>
             <script type="text/javascript" src="../js/pixastic/actions.js"></script>
             <script type="text/javascript" src="../js/pixastic/pixastic-manager.js"></script>
@@ -28,6 +28,7 @@ var renderer = new THREE.CanvasRenderer();
 var ui_;
 var SoundUtils;
 var scene = new THREE.Scene();
+scene.mouse_thru = true;
 var active_camera;
 var g_elapsed = -1;
 var g_delta = 0.0;	
@@ -40,6 +41,8 @@ var lbl0;var lbl1;var lbl2;var img1;var img2;var img3;var img4;
 var sphere_material;var camera_1;var plane1;var sphere1;var sphere2;var plane2;
 var application = {};
 application.events = new ev.EventHolder();
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
 		if(drawingCanvas){
 			var client =
 			{
@@ -52,8 +55,6 @@ application.events = new ev.EventHolder();
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
 		}		
-		var streamer = new stream.Streamer();	
-		var ResourceUtils = new stream.ResourceUtils();
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
@@ -280,8 +281,8 @@ map:new THREE.Texture(scene.streamer.get_resource('images/test1.png').data),
             set_rotation_y(plane2.rotation, -10);
 	application.events.addListener("click", function()
 	{    
-		img3.bf0.set_apply(!img3.bf0.apply_);
-img3.f1.set_apply(!img3.f1.apply_);
+		img3.bf0.apply = !img3.bf0.apply;
+img3.f1.apply = !img3.f1.apply;
 b_filter.set_apply(!b_filter.apply_);
 put_image(img1, b_filter.apply(get_image_data(img1)));
 	}

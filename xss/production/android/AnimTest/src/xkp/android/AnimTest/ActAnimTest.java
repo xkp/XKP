@@ -29,7 +29,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				private Button btn2;
 				private Button btn3;
 		private XKPLayout layoutapplication;
-		public void mthd_anim3_stop_anim3() {
+		public void stop_anim3() {
 			lbl3.setText("Button 3 Stopped");
 anim3.stop();
 		}
@@ -191,7 +191,7 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
         {
 	        public void call(Object ev) 
             {
-                    if (prop_application_click_count == 3)
+                    if (click_count == 3)
                     {
                 anim3.stop_anim3();
                     }
@@ -222,12 +222,12 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
 				((XKPLayout.LayoutParams) btn2.getLayoutParams()).setLeft((Integer)40);
 			}
 			private void onClickbtn3() {
-				prop_application_click_count = prop_application_click_count + 1;
-if (prop_application_click_count == 4)
+				click_count = click_count + 1;
+if (click_count == 4)
 {
-	prop_application_click_count = 0;
+	click_count = 0;
 	anim3.start();
 }
 			}
-			private Integer prop_application_click_count = 0;
+			private Integer click_count = 0;
 }

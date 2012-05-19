@@ -1,6 +1,14 @@
 <module id="box2d" src="box2d.xs">
+    <dependency href="resig.js" shared="true"/>
+    <dependency href="event.js" shared="true"/>
+    <dependency href="../js/Box2dWeb-2.1.a.3.min.js"/>
+    <dependency href="../js/utils.js"/>
+    <dependency href="../js/keys.js"/>
+    <dependency href="../js/joint.js"/>
+    <dependency href="../js/spawner.js"/>
+
     <types>
-        <class id="physics_world" renderer="body.xss">
+        <class id="physics_world" renderer="../body.xss">
 			<property id="density" type="float" dont_init="true"/>
 			<property id="friction" type="float" dont_init="true"/>
             <property id="restitution" type="float" dont_init="true"/>
@@ -8,7 +16,7 @@
 			<property id="linear_damping" type="float" dont_init="true"/>
 		</class>
 
-        <class id="body" renderer="body.xss">
+        <class id="body" renderer="../body.xss">
             <property id="density"  type="float" dont_init="true"/>
             <property id="friction" type="float" dont_init="true"/>
             <property id="restitution" type="float" dont_init="true"/>
@@ -25,7 +33,7 @@
             <property id="rotation" type="float" dont_init="true"/>
         </class>
 
-        <class id="spawner" output_id="ms.arcade.Spawner" renderer="spawner.xss">
+        <class id="spawner" output_id="arcade.Spawner" renderer="../spawner.xss">
             <constructor_params>
                 <parameter constant="g_spawner_manager"/>
                 <parameter property="x" runtime="true"/>
@@ -44,7 +52,7 @@
             <property id="velocity" type="float"/>
         </class>
 		
-		<class id="distance_joint" output_id="ms.joint.DistanceJoint">
+		<class id="distance_joint" output_id="joint.DistanceJoint">
             <constructor_params>
                 <parameter property="body_a"/>
                 <parameter property="body_b"/>                               
@@ -66,7 +74,7 @@
             </property>
         </class>		
 		
-		<class id="revolute_joint" output_id="ms.joint.RevoluteJoint">
+		<class id="revolute_joint" output_id="joint.RevoluteJoint">
             <constructor_params>
                 <parameter property="body_a"/>
                 <parameter property="body_b"/>                                          
@@ -104,7 +112,7 @@
             </property>
         </class>
 		
-		<class id="prismatic_joint" output_id="ms.joint.PrismaticJoint">
+		<class id="prismatic_joint" output_id="joint.PrismaticJoint">
             <constructor_params>
                 <parameter property="body_a"/>
                 <parameter property="body_b"/>                           
@@ -142,7 +150,7 @@
             </property>			
         </class>
 		
-		<class id="pulley_joint" output_id="ms.joint.PulleyJoint">
+		<class id="pulley_joint" output_id="joint.PulleyJoint">
             <constructor_params>
                 <parameter property="body_a"/>
                 <parameter property="body_b"/>
@@ -162,7 +170,7 @@
             <property id="ratio" type="float" dont_init="true"/>	
         </class>	
 		
-		<class id="weld_joint" output_id="ms.joint.WeldJoint">
+		<class id="weld_joint" output_id="joint.WeldJoint">
             <constructor_params>
                 <parameter property="body_a"/>
                 <parameter property="body_b"/>                                              
@@ -172,6 +180,6 @@
             <property id="body_b" type="string" use_plain_value="true" dont_init="true"/>		
         </class>
 		
-        <class id="physics" super="body" renderer="body.xss"/>
+        <class id="physics" super="body" renderer="../body.xss"/>
     </types>
 </module>

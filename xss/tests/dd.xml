@@ -1,8 +1,8 @@
 <application title="danydenis.com" src="dd.xs" width="1000" height="800" background="Black">
     <resources>        
-		<image src="dd/facebook.png"/>
-		<image src="dd/twitter.png"/>	
-        <image src="dd/photobucket.png"/>
+		<image src="images/facebook.png"/>
+		<image src="images/twitter.png"/>	
+        <image src="images/photobucket.png"/>
     </resources>
   		
 	<scene>

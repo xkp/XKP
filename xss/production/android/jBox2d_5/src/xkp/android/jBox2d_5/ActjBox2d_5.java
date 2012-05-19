@@ -57,6 +57,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				mHandler.postDelayed(mRunnableWorld, (long) (jBox2dFreq * 1000));
 			}
 		};
+<<<<<<< HEAD
 				private XKPPackage __resources1;
 			private String [] mResources___resources1_XKPName = {
 				"__image1",
@@ -82,6 +83,33 @@ import xkp.android.libs.Layout.XKPLayout;
 				R.drawable.stone_12,
 				R.drawable.img1
 			};
+=======
+				private XKPPackage ;
+			private String [] mResources__XKPName = {
+				"",
+				"",
+				"",
+				""
+			};
+			private String [] mResources__DroidName = {
+				"smile_sad_48.png",
+				"smile_grin_48.png",
+				"stone_12.jpg",
+				"img1.png"
+			};
+			private Integer [] mResources__Type = {
+				XKPPackage.BITMAP_RESOURCE,
+				XKPPackage.BITMAP_RESOURCE,
+				XKPPackage.BITMAP_RESOURCE,
+				XKPPackage.BITMAP_RESOURCE
+			};
+			private Integer [] mResources__Id = {
+				R.drawable.smile_sad_48,
+				R.drawable.smile_grin_48,
+				R.drawable.stone_12,
+				R.drawable.img1
+			};
+>>>>>>> 48b4121a3614a3e7cdb142311c9a6460262befd0
 	private boolean mLayoutStarted = false;
 			private ActjBox2d_5 application;
 			@Override
@@ -172,11 +200,19 @@ private void onLayoutStarted() {
 }
 			private void initInstances() {
 				application = this;
+<<<<<<< HEAD
 				__resources1 = new XKPPackage(this, 
 					mResources___resources1_XKPName, mResources___resources1_DroidName, 
 					mResources___resources1_Type, mResources___resources1_Id
 					, true);
 				util.addXKPPackage(__resources1);
+=======
+				 = new XKPPackage(this, 
+					mResources__XKPName, mResources__DroidName, 
+					mResources__Type, mResources__Id
+					, true);
+				util.addXKPPackage();
+>>>>>>> 48b4121a3614a3e7cdb142311c9a6460262befd0
 			}
 			private void keydownapplication(Object keycode) {
 				if (keycode == LEFT_ARROW)

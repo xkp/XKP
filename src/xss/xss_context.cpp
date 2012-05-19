@@ -445,17 +445,18 @@ bool xss_context::resolve(const str& id, resolve_info& info)
             else if (search_this)
               obj = get_this();
 
-            if (obj)
-              {
-                XSSObject child = obj->find(id);
-                if (child)
-                  {
-                    info.what  = RESOLVE_INSTANCE;
-                    info.type  = child->type();
-                    info.value = child;
-                    return true;
-                  }
-              }
+            //td: think this through
+            //if (obj)
+            //  {
+            //    XSSObject child = obj->find(id);
+            //    if (child)
+            //      {
+            //        info.what  = RESOLVE_INSTANCE;
+            //        info.type  = child->type();
+            //        info.value = child;
+            //        return true;
+            //      }
+            //  }
 
             if (!any)
               break;
@@ -645,25 +646,30 @@ bool xss_context::resolve_path(const std::vector<str>& path, resolve_info& info)
 
 void xss_context::register_symbol(RESOLVE_ITEM type, const str& id, variant symbol, bool overrite)
   {
-      symbol_list::iterator it = symbols_.find(id);
-      if (it != symbols_.end())
-        {
-          if (overrite)
-            {
-              it->second.value = symbol;
-              return;
-            }
-          else
-            {
-              param_list error;
-              error.add("id", SContextError);
-              error.add("desc", SDuplicateSymbol);
-              error.add("symbol", id);
-              xss_throw(error);
-            }
-        }
+    if (id == "scene")    
+      {
+        str debug("xxx");
+      }
 
-      symbols_.insert(symbol_list_pair(id, symbol_data(type, symbol)));
+    symbol_list::iterator it = symbols_.find(id);
+    if (it != symbols_.end())
+      {
+        if (overrite)
+          {
+            it->second.value = symbol;
+            return;
+          }
+        else
+          {
+            param_list error;
+            error.add("id", SContextError);
+            error.add("desc", SDuplicateSymbol);
+            error.add("symbol", id);
+            xss_throw(error);
+          }
+      }
+
+    symbols_.insert(symbol_list_pair(id, symbol_data(type, symbol)));
   }
 
 variant xss_context::empty_type_value(RESOLVE_ITEM item_type)

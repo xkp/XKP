@@ -38,7 +38,7 @@ log: Rendering instance: aladdin
 log: Rendering instance: mickey
 log: Rendering instance: pluto
 log: Copying resource files...
-log: Rendering instance: __resources1
+log: Rendering instance: 
 log: Rendering instance: i_aladdin
 log: Rendering instance: i_mickey
 log: Rendering instance: i_pluto
@@ -113,7 +113,7 @@ log: Rendering Android Imports...
 log: Rendering Android Imports...
 log: Rendering instance: gallery
 log: Copying resource files...
-log: Rendering instance: __resources1
+log: Rendering instance: 
 log: Rendering instance: img01
 log: Rendering instance: img02
 log: Rendering instance: img03
@@ -139,7 +139,7 @@ log: Rendering instance: album
 log: Rendering instance: changer
 log: Rendering instance: identifier
 log: Copying resource files...
-log: Rendering instance: __resources1
+log: Rendering instance: 
 log: Rendering instance: img1
 log: Rendering instance: img2
 log: Rendering instance: img3
@@ -180,9 +180,9 @@ log: Rendering Android Imports...
 log: Rendering Android Imports...
 log: Rendering instance: btn1
 log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: __image1
-log: Rendering instance: __image2
+log: Rendering instance: 
+log: Rendering instance: 
+log: Rendering instance: 
 log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
@@ -204,9 +204,9 @@ log: Rendering instance: __img1
 log: Rendering instance: __img2
 log: Rendering instance: __img3
 log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: __image1
-log: Rendering instance: __image2
+log: Rendering instance: 
+log: Rendering instance: 
+log: Rendering instance: 
 log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
@@ -223,7 +223,15 @@ log: Rendering Android Imports...
 Error [vm] Cannot resolve
 	object = jBox2d_4
 	property = id
+<<<<<<< HEAD
 	file = /home/cuba/projects/xkp/xss/samples/android/jbox2d_4/../../../idioms/ms/java/../../java/instance.xssERROR: Project:  box2d4.project.xml
+=======
+<<<<<<< HEAD
+	file = c:/dev/XKP/xss/idioms/java/instance.xssERROR: Project:  box2d4.project.xml
+=======
+	file = d:/xkp/xss/samples/android/jbox2d_4/../../../idioms/ms/java/../../java/instance.xssERROR: Project:  box2d4.project.xml
+>>>>>>> 912a9807c92d0331563f6cc29c5fa7180397fca3
+>>>>>>> 48b4121a3614a3e7cdb142311c9a6460262befd0
 
 ===[ box2d5.project.xml ]================
 
@@ -260,11 +268,11 @@ log: Rendering instance: __floor2
 log: Rendering instance: __floor3
 log: Rendering instance: __floor4
 log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: __image1
-log: Rendering instance: __image2
-log: Rendering instance: __image3
-log: Rendering instance: __image4
+log: Rendering instance: 
+log: Rendering instance: 
+log: Rendering instance: 
+log: Rendering instance: 
+log: Rendering instance: 
 log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
@@ -307,7 +315,7 @@ log: Rendering instance: prgbar3
 log: Rendering instance: prgbar4
 log: Rendering instance: seekb1
 log: Copying resource files...
-log: Rendering instance: __resources1
+log: Rendering instance: 
 log: Rendering instance: dialog
 log: Rendering instance: emulator
 log: Rendering instance: application
@@ -333,7 +341,7 @@ log: Rendering instance: lblSwicherInformation
 log: Rendering instance: imgGallery
 log: Rendering instance: mapController
 log: Copying resource files...
-log: Rendering instance: __resources1
+log: Rendering instance: 
 log: Rendering instance: ico_gallery
 log: Rendering instance: ico_maps
 log: Rendering instance: photos
@@ -665,8 +673,10 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering UI Types...
-log: Instance renderer: body.xss instance: __physics1
+log: Instance renderer: ../body.xss instance: __physics1
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -803,11 +813,9 @@ Success are greateful
 ===[ java2.project.xml ]================(Tests)
 
 
-log: Rendering Java instances...
-log: Rendering instance: instance1
-log: Rendering instance: application
+Error [cannot-resolve] Instance not found
+	instance = application.instance1ERROR: Project:  java2.project.xml
 
-Success are greateful
 ===[ java3.project.xml ]================(Tests)
 
 
@@ -1189,7 +1197,7 @@ log: btn1
 log: IT IS ALIVE
 log: RENDERING FLOATING
 log: NO LAYOUT
-log: __html1
+log: 
 log: NO LAYOUT
 log: tc1
 log: PROPERTY width
@@ -1233,15 +1241,15 @@ Success are greateful
 
 
 log: NO LAYOUT
-log: __html1
+log: 
 log: NO LAYOUT
-log: __html2
+log: 
 log: NO LAYOUT
-log: __html3
+log: 
 log: NO LAYOUT
-log: __html4
+log: 
 log: NO LAYOUT
-log: __html5
+log: 
 log: NO LAYOUT
 log: __label1
 log: dp2
@@ -1254,7 +1262,7 @@ log: btn1
 log: btn2
 log: simple_dialog
 log: NO LAYOUT
-log: __html6
+log: 
 log: __br2
 log: __br3
 log: pb1
@@ -1278,7 +1286,15 @@ Success are greateful
 
 Error [html5 asynch] Objects need to be serializable in order to enter threads
 	type = preset
+<<<<<<< HEAD
 	file = /home/cuba/projects/xkp/xss/tests/../idioms/jquery/event.xssERROR: Project:  jquery6.project.xml
+=======
+<<<<<<< HEAD
+	file = c:/dev/XKP/xss/idioms/jquery/event.xssERROR: Project:  jquery6.project.xml
+=======
+	file = d:/xkp/xss/tests/../idioms/jquery/event.xssERROR: Project:  jquery6.project.xml
+>>>>>>> 912a9807c92d0331563f6cc29c5fa7180397fca3
+>>>>>>> 48b4121a3614a3e7cdb142311c9a6460262befd0
 
 ===[ jquery7.project.xml ]================(Tests)
 
@@ -1435,6 +1451,37 @@ log: PROPERTY position
 log: true
 log: VALUE absolute
 Success are greateful
+===[ jsmanip.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering 3js Types...
+log: Rendering UI...
+log: dependency: resig.js
+log: dependency: streamer.js
+log: on resources.compile_dependency
+log: dependency: event.js
+log: dependency: utils.js
+log: dependency: keys.js
+log: dependency: ui.js
+log: on resources.compile_dependency
+log: dependency: colors.js
+log: dependency: Three.js
+log: on resources.compile_dependency
+log: dependency: Stats.js
+log: on resources.compile_dependency
+log: dependency: RequestAnimationFrame.js
+log: on resources.compile_dependency
+log: dependency: Utils.js
+log: on resources.compile_dependency
+log: dependency: jsmanipulate.js
+log: on resources.compile_dependency
+log: dependency: jsm-manager.js
+log: on resources.compile_dependency
+log: dependency: jsm-utils.js
+log: on resources.compile_dependency
+Success are greateful
 ===[ ms4.project.xml ]================(Tests)
 
 
@@ -1524,12 +1571,12 @@ log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
 log: dependency: resig.js
+log: dependency: streamer.js
+log: on resources.compile_dependency
 log: dependency: event.js
 log: dependency: utils.js
 log: dependency: keys.js
 log: dependency: ui.js
-log: on resources.compile_dependency
-log: dependency: streamer.js
 log: on resources.compile_dependency
 log: dependency: pixastic.core.js
 log: on resources.compile_dependency
@@ -1758,7 +1805,15 @@ Success are greateful
 
 Error [language] Missing declared tag
 	tag = user_image
+<<<<<<< HEAD
 	file = /home/cuba/projects/xkp/xss/tests/../idioms/wax/server.xssERROR: Project:  wax3.project.xml
+=======
+<<<<<<< HEAD
+	file = c:/dev/XKP/xss/idioms/wax/server.xssERROR: Project:  wax3.project.xml
+=======
+	file = d:/xkp/xss/tests/../idioms/wax/server.xssERROR: Project:  wax3.project.xml
+>>>>>>> 912a9807c92d0331563f6cc29c5fa7180397fca3
+>>>>>>> 48b4121a3614a3e7cdb142311c9a6460262befd0
 
 ===[ wax4.project.xml ]================(Tests)
 
@@ -2629,6 +2684,7 @@ Success are greateful
 		IDIOM: xssY_idiom2  
 	
 
+<<<<<<< HEAD
 Success are greatefulERROR: Project:  simple.project.xml
 ERROR: Project:  simple.project.xml
 ERROR: Project:  simple.project.xml
@@ -2653,3 +2709,6 @@ ERROR: Project:  simple.project.xml
 ERROR: Project:  simple.project.xml
 ERROR: Project:  simple.project.xml
 ERROR: Project:  simple.project.xml
+=======
+Success are greateful
+>>>>>>> 48b4121a3614a3e7cdb142311c9a6460262befd0

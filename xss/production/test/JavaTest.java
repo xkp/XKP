@@ -15,7 +15,7 @@ return b / 2;
 		public String mthd_instance1_test2(Integer value) {
 			Integer a = value;
 Float b = 5.000000f;
-return mthd_application_app_test(a * b);
+return application.app_test(a * b);
 		}
 		public Object mthd_instance1_test3(Object value) {
 			return value;
@@ -26,10 +26,10 @@ if (!has_property)
 {
 }
 		}
-			private Integer prop_application_lvalue;
-			private String prop_application_yvalue = "string v";
-			private ArrayList<String> prop_application_xvalue = new ArrayList(Arrays.asList( new Object [] {"value1", "value2", "value3"} ));
-		public String mthd_application_app_test(Integer value) {
+			private Integer lvalue;
+			private String yvalue = "string v";
+			private ArrayList<String> xvalue = new ArrayList(Arrays.asList( new Object [] {"value1", "value2", "value3"} ));
+		public String app_test(Integer value) {
 			return "string value";
 		}
 			private void createapplication() {
@@ -49,9 +49,9 @@ x2 = instance1.ps_value;
 prop_instance1_svalue = x0;
 Object x3;
 x3 = prop_instance1_svalue;
-prop_application_lvalue = x0;
+lvalue = x0;
 Integer x4;
-x4 = prop_application_lvalue;
+x4 = lvalue;
 Integer ivar = 100;
 String svar = String.valueOf(ivar);
 Float fval = Float.valueOf(svar);
@@ -103,8 +103,8 @@ else
 	}
 }
 String rmthd;
-rmthd = mthd_application_app_test(10);
-String thd = mthd_application_app_test(2);
+rmthd = app_test(10);
+String thd = application.app_test(2);
 Object mthd;
 mthd = mthd_instance1_test0(10);
 mthd = mthd_instance1_test0(10, "a", -2);
