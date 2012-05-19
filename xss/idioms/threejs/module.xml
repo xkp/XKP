@@ -29,9 +29,9 @@
 				<get text="get_rotation_z({path})" global = "true"/>
 				<set text="set_rotation_z({path}, {value})" global = "true"/>
             </property>		
-		</class>
+		</class>		
 
-        <class id="sound_3d" renderer="sound_renderer.xss"/>	
+		<class id="sound_3d" renderer="sound_renderer.xss"/>	
 		
 		<class id="material" hasimagedata="true">
 			<constructor_params>

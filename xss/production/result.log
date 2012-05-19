@@ -1449,6 +1449,37 @@ log: PROPERTY position
 log: true
 log: VALUE absolute
 Success are greateful
+===[ jsmanip.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering 3js Types...
+log: Rendering UI...
+log: dependency: resig.js
+log: dependency: streamer.js
+log: on resources.compile_dependency
+log: dependency: event.js
+log: dependency: utils.js
+log: dependency: keys.js
+log: dependency: ui.js
+log: on resources.compile_dependency
+log: dependency: colors.js
+log: dependency: Three.js
+log: on resources.compile_dependency
+log: dependency: Stats.js
+log: on resources.compile_dependency
+log: dependency: RequestAnimationFrame.js
+log: on resources.compile_dependency
+log: dependency: Utils.js
+log: on resources.compile_dependency
+log: dependency: jsmanipulate.js
+log: on resources.compile_dependency
+log: dependency: jsm-manager.js
+log: on resources.compile_dependency
+log: dependency: jsm-utils.js
+log: on resources.compile_dependency
+Success are greateful
 ===[ ms4.project.xml ]================(Tests)
 
 

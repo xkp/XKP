@@ -223,10 +223,9 @@ Released   : 20120325
             <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
             <script type="text/javascript" src="../js/jquery-idiom.js"></script>
             <link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css"></link>
-            <script type="text/javascript" src="../js/pixastic/pixastic.core.js"></script>
-            <script type="text/javascript" src="../js/pixastic/actions.js"></script>
-            <script type="text/javascript" src="../js/pixastic/pixastic-manager.js"></script>
-            <script type="text/javascript" src="../js/pixastic/pixastic-utils.js"></script>
+            <script type="text/javascript" src="../js/jsmanipulate/jsmanipulate.js"></script>
+            <script type="text/javascript" src="../js/jsmanipulate/jsm-manager.js"></script>
+            <script type="text/javascript" src="../js/jsmanipulate/jsm-utils.js"></script>
 <style>
 #__div2 {height : 40px}
 #acc1 {height : 360px}
@@ -234,44 +233,6 @@ Released   : 20120325
 </style>
 <script type="text/javascript">
         var application = {};
-	application.set_image = function(id) 
-	{
-		var image = document.getElementById(id);
-var target = document.getElementById("image_container");
-var context = target.getContext("2d");
-context.drawImage(image, 0, 0, target.width, target.height);
-	};
-	application.get_image_data = function() 
-	{
-		var target = document.getElementById("image_container");
-var context = target.getContext("2d");
-return context.getImageData(0, 0, target.width, target.height);
-	};
-	application.set_image_data = function(data) 
-	{
-		var target = document.getElementById("image_container");
-var context = target.getContext("2d");
-context.putImageData(data, 0, 0);
-	};
-	application.apply_filter = function(filter) 
-	{
-		var imgdata = application.get_image_data();
-filter.applyToImage(imgdata);
-application.set_image_data(imgdata);
-	};
-		application.init = function() { 
-        //some jquery, to lighten the mood
-        $("#img1").click(function() { application.set_image("img1"); });
-        $("#img2").click(function() { application.set_image("img2"); });
-        $("#img3").click(function() { application.set_image("img3"); });
-        $("#img4").click(function() { application.set_image("img4"); });
-			application.set_image("img2");
-//some jquery, to lighten the mood
-        $("#img1").click(function() { application.set_image("img1"); });
-        $("#img2").click(function() { application.set_image("img2"); });
-        $("#img3").click(function() { application.set_image("img3"); });
-        $("#img4").click(function() { application.set_image("img4"); });
-		}
 			var __div1 = $("#__div1");
 			var __div2 = $("#__div2");
 			var preset_apply = $("#preset_apply").button();
@@ -346,118 +307,146 @@ preset_apply.attr("value", "Apply Stack");
 }
 __worker1.postMessage({mypreset : transformer,image : image_data,});
 		});
-        acc1.accordion({
-            fillSpace: true,
-        });
-        brightness.slider({
+            acc1.accordion({
+                fillSpace: true,
+            });
+            brightness.slider({
 		    change: function(event, ui) { 
-	     transformer.b_filter.set_brightness(brightness.slider( "option", "value" ));
+	     transformer.b_filter.brightness = brightness.slider( "option", "value" );
 application.apply_filter(transformer.b_filter);
 		    },
 	    });
-        constrast.slider({
-            value: 50,
+            constrast.slider({
+                value: 50,
 		    change: function(event, ui) { 
 	     transformer.b_filter.constrast = constrast.slider( "option", "value" ) / 100;
 application.apply_filter(transformer.b_filter);
 		    },
 	    });
-        red.slider({
-            min: -100,
-            max: 100,
-            value: 0,
+            red.slider({
+                min: -100,
+                max: 100,
+                value: 0,
 		    change: function(event, ui) { 
-	     transformer.c_filter.set_red(red.slider( "option", "value" ) / 100);
+	     transformer.c_filter.red = red.slider( "option", "value" ) / 100;
 application.apply_filter(transformer.c_filter);
 		    },
 	    });
-        blue.slider({
-            min: -100,
-            max: 100,
-            value: 0,
+            blue.slider({
+                min: -100,
+                max: 100,
+                value: 0,
 		    change: function(event, ui) { 
-	     transformer.c_filter.set_blue(blue.slider( "option", "value" ) / 100);
+	     transformer.c_filter.blue = blue.slider( "option", "value" ) / 100;
 application.apply_filter(transformer.c_filter);
 		    },
 	    });
-        green.slider({
-            min: -100,
-            max: 100,
-            value: 0,
+            green.slider({
+                min: -100,
+                max: 100,
+                value: 0,
 		    change: function(event, ui) { 
-	     transformer.c_filter.set_green(green.slider( "option", "value" ) / 100);
+	     transformer.c_filter.green = green.slider( "option", "value" ) / 100;
 application.apply_filter(transformer.c_filter);
 		    },
 	    });
-        hue.slider({
-            min: -180,
-            max: 180,
-            value: 0,
+            hue.slider({
+                min: -180,
+                max: 180,
+                value: 0,
 		    change: function(event, ui) { 
-	     transformer.hsl_filter.set_hue(hue.slider( "option", "value" ));
+	     transformer.hsl_filter.hue = hue.slider( "option", "value" );
 application.apply_filter(transformer.hsl_filter);
 		    },
 	    });
-        saturation.slider({
-            min: -100,
-            max: 100,
-            value: 0,
+            saturation.slider({
+                min: -100,
+                max: 100,
+                value: 0,
 		    change: function(event, ui) { 
-	     transformer.hsl_filter.set_saturation(saturation.slider( "option", "value" ));
+	     transformer.hsl_filter.saturation = saturation.slider( "option", "value" );
 application.apply_filter(transformer.hsl_filter);
 		    },
 	    });
-        lightness.slider({
-            min: -100,
-            max: 100,
-            value: 0,
+            lightness.slider({
+                min: -100,
+                max: 100,
+                value: 0,
 		    change: function(event, ui) { 
-	     transformer.hsl_filter.set_lightness(lightness.slider( "option", "value" ));
+	     transformer.hsl_filter.lightness = lightness.slider( "option", "value" );
 application.apply_filter(transformer.hsl_filter);
 		    },
 	    });
-        noise_amount.slider({
+            noise_amount.slider({
 		    change: function(event, ui) { 
-	     transformer.n_filter.set_amount(noise_amount.slider( "option", "value" ) / 100);
+	     transformer.n_filter.amount = noise_amount.slider( "option", "value" ) / 100;
 application.apply_filter(transformer.n_filter);
 		    },
 	    });
-        noise_strength.slider({
+            noise_strength.slider({
 		    change: function(event, ui) { 
-	     transformer.n_filter.set_strength(noise_strength.slider( "option", "value" ) / 100);
+	     transformer.n_filter.strength = noise_strength.slider( "option", "value" ) / 100;
 application.apply_filter(transformer.n_filter);
 		    },
 	    });
 		mono.change( function() { 
-			transformer.n_filter.set_mono(mono.value);
+			transformer.n_filter.mono = mono.value;
 application.apply_filter(transformer.n_filter);
 		});
 		blur_apply.click( function() { 
 			application.apply_filter(transformer.blur_filter);
 		});
-	    var transformer = new pixastic.Preset() ;
-			transformer.b_filter = new pixastic.Brightness(
-		50,0.5,null, transformer);		
+	application.set_image = function(id) 
+	{
+		var image = document.getElementById(id);
+var target = document.getElementById("image_container");
+var context = target.getContext("2d");
+context.drawImage(image, 0, 0, target.width, target.height);
+	};
+	application.get_image_data = function() 
+	{
+		var target = document.getElementById("image_container");
+var context = target.getContext("2d");
+return context.getImageData(0, 0, target.width, target.height);
+	};
+	application.set_image_data = function(data) 
+	{
+		var target = document.getElementById("image_container");
+var context = target.getContext("2d");
+context.putImageData(data, 0, 0);
+	};
+	application.apply_filter = function(filter) 
+	{
+		var imgdata = application.get_image_data();
+filter.applyToImage(imgdata);
+application.set_image_data(imgdata);
+	};
+		application.init = function() { 
+        //some jquery, to lighten the mood
+        $("#img1").click(function() { application.set_image("img1"); });
+        $("#img2").click(function() { application.set_image("img2"); });
+        $("#img3").click(function() { application.set_image("img3"); });
+        $("#img4").click(function() { application.set_image("img4"); });
+			application.set_image("img2");
+//some jquery, to lighten the mood
+        $("#img1").click(function() { application.set_image("img1"); });
+        $("#img2").click(function() { application.set_image("img2"); });
+        $("#img3").click(function() { application.set_image("img3"); });
+        $("#img4").click(function() { application.set_image("img4"); });
+		}
+	    var transformer = new jsmanip.Preset() ;
+			transformer.b_filter = new jsmanip.Brightness(
+		null,transformer);		
 		if(!transformer.filters)
 			transformer.filters = [];
 		transformer.filters.push(transformer.b_filter);
-			transformer.hsl_filter = new pixastic.HSL(
-		40,null,null,null, transformer);		
-		if(!transformer.filters)
-			transformer.filters = [];
-		transformer.filters.push(transformer.hsl_filter);
-			transformer.c_filter = new pixastic.ColorAdjust(
-		null,null,null,null, transformer);		
-		if(!transformer.filters)
-			transformer.filters = [];
-		transformer.filters.push(transformer.c_filter);
-			transformer.n_filter = new pixastic.Noise(
-		null,null,null,null, transformer);		
+			transformer.n_filter = new jsmanip.Noise(
+		null,null,null,transformer);		
 		if(!transformer.filters)
 			transformer.filters = [];
 		transformer.filters.push(transformer.n_filter);
-			transformer.blur_filter = new pixastic.Blur(
-		null, transformer);		
+			transformer.blur_filter = new jsmanip.Blur(
+		null,transformer);		
 		if(!transformer.filters)
 			transformer.filters = [];
 		transformer.filters.push(transformer.blur_filter);

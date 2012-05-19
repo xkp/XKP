@@ -889,7 +889,7 @@ void xss_compiler::xss(const param_list params)
 
     //resolve file name
     XSSRenderer r    = current_renderer();
-    XSSContext  rctx = r->context();
+    XSSContext  rctx = r? r->context() : XSSContext(new xss_context(XSSContext()));
 
     fs::path file(file_name);
     if (!file.is_complete())
@@ -945,6 +945,14 @@ void xss_compiler::xss(const param_list params)
     str render_result = result->render(XSSObject(), &result_params);
     if (the_output_file.empty())
       {
+        if (!r)
+          {
+            param_list error;
+            error.add("id", SProjectError);
+            error.add("desc", SXSSNeedsFile);
+            xss_throw(error);
+          }
+
         switch (marker_source)
           {
             case MS_CURRENT:
