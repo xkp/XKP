@@ -155,7 +155,6 @@ log: [android] Rendering default files...
 Success are greateful
 ===[ box2d1.project.xml ]================
 
- 'classes.dex' as 'classes.dex'...
 
 log: Rendering Android project...
 log: API Level = 7
@@ -166,9 +165,10 @@ log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
 log: [jbox2d] Copying default files...
+Error [idiom] Environment variable is not defined
+	variable_name = ANDROID_SDK
+	file = /home/cuba/projects/xkp/xss/samples/android/jbox2d_1/../../../idioms/android/main.xssERROR: Project:  box2d1.project.xml
 
-log: Creating .apk bundle file...
-Success are greateful
 ===[ box2d2.project.xml ]================
 
 
@@ -223,7 +223,7 @@ log: Rendering Android Imports...
 Error [vm] Cannot resolve
 	object = jBox2d_4
 	property = id
-	file = d:/xkp/xss/samples/android/jbox2d_4/../../../idioms/ms/java/../../java/instance.xssERROR: Project:  box2d4.project.xml
+	file = /home/cuba/projects/xkp/xss/samples/android/jbox2d_4/../../../idioms/ms/java/../../java/instance.xssERROR: Project:  box2d4.project.xml
 
 ===[ box2d5.project.xml ]================
 
@@ -353,7 +353,6 @@ log: [android] Rendering default files...
 Success are greateful
 ===[ simple.project.xml ]================
 
- 'classes.dex' as 'classes.dex'...
 
 log: Rendering Android project...
 log: API Level = 4
@@ -369,9 +368,10 @@ log: Rendering instance: edtContainer
 log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
+Error [idiom] Environment variable is not defined
+	variable_name = ANDROID_SDK
+	file = /home/cuba/projects/xkp/xss/samples/android/simpletest/../../../idioms/android/main.xssERROR: Project:  simple.project.xml
 
-log: Creating .apk bundle file...
-Success are greateful
 ===[ touchme.project.xml ]================
 
 
@@ -384,68 +384,6 @@ log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
 
-Success are greateful
-===[ kitchensink.project.xml ]================
-
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
-
-===[ pairs.project.xml ]================
-
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
-
-===[ simple.project.xml ]================
-
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
-
-===[ 3js-ms.project.xml ]================(Tests)
-
-
-log: Rendering 3js Types...
-log: Rendering Sequence Types...
-log: Rendering UI Types...
-log: Rendering UI...
-log: dependency: resig.js
-log: dependency: event.js
-log: dependency: sequence.js
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: dependency: colors.js
-log: dependency: Three.js
-log: dependency: Stats.js
-log: dependency: RequestAnimationFrame.js
-log: dependency: Utils.js
-Success are greateful
-===[ 3js-ui.project.xml ]================(Tests)
-
-
-log: Rendering Resources...
-log: Rendering 3js Types...
-log: Rendering UI Types...
-log: Rendering UI...
-log: dependency: resig.js
-log: dependency: streamer.js
-log: on resources.compile_dependency
-log: dependency: event.js
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: on resources.compile_dependency
-log: dependency: colors.js
-log: dependency: Three.js
-log: on resources.compile_dependency
-log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: RequestAnimationFrame.js
-log: on resources.compile_dependency
-log: dependency: Utils.js
-log: on resources.compile_dependency
 Success are greateful
 ===[ 3js_cameras.project.xml ]================(Tests)
 
@@ -595,6 +533,25 @@ log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
 Success are greateful
+===[ 3js-ms.project.xml ]================(Tests)
+
+
+log: Rendering 3js Types...
+log: Rendering Sequence Types...
+log: Rendering UI Types...
+log: Rendering UI...
+log: dependency: resig.js
+log: dependency: event.js
+log: dependency: sequence.js
+log: dependency: utils.js
+log: dependency: keys.js
+log: dependency: ui.js
+log: dependency: colors.js
+log: dependency: Three.js
+log: dependency: Stats.js
+log: dependency: RequestAnimationFrame.js
+log: dependency: Utils.js
+Success are greateful
 ===[ 3js_package.project.xml ]================(Tests)
 
 
@@ -666,6 +623,31 @@ log: dependency: Three.js
 log: dependency: Stats.js
 log: dependency: RequestAnimationFrame.js
 log: dependency: Utils.js
+Success are greateful
+===[ 3js-ui.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering 3js Types...
+log: Rendering UI Types...
+log: Rendering UI...
+log: dependency: resig.js
+log: dependency: streamer.js
+log: on resources.compile_dependency
+log: dependency: event.js
+log: dependency: utils.js
+log: dependency: keys.js
+log: dependency: ui.js
+log: on resources.compile_dependency
+log: dependency: colors.js
+log: dependency: Three.js
+log: on resources.compile_dependency
+log: dependency: Stats.js
+log: on resources.compile_dependency
+log: dependency: RequestAnimationFrame.js
+log: on resources.compile_dependency
+log: dependency: Utils.js
+log: on resources.compile_dependency
 Success are greateful
 ===[ animtest.project.xml ]================(Tests)
 
@@ -1296,7 +1278,7 @@ Success are greateful
 
 Error [html5 asynch] Objects need to be serializable in order to enter threads
 	type = preset
-	file = d:/xkp/xss/tests/../idioms/jquery/event.xssERROR: Project:  jquery6.project.xml
+	file = /home/cuba/projects/xkp/xss/tests/../idioms/jquery/event.xssERROR: Project:  jquery6.project.xml
 
 ===[ jquery7.project.xml ]================(Tests)
 
@@ -1602,6 +1584,15 @@ log: Rendering UI...
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 Success are greateful
+===[ ui_audio_1.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+Success are greateful
 ===[ ui_audio.project.xml ]================(Tests)
 
 
@@ -1611,13 +1602,29 @@ log: Rendering UI...
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 Success are greateful
-===[ ui_audio_1.project.xml ]================(Tests)
+===[ uibuffer_test.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering UI Types...
+log: Rendering 3js Types...
 log: Rendering UI...
+log: dependency: resig.js
+log: dependency: streamer.js
 log: on resources.compile_dependency
+log: dependency: event.js
+log: dependency: utils.js
+log: dependency: keys.js
+log: dependency: ui.js
+log: on resources.compile_dependency
+log: dependency: colors.js
+log: dependency: Three.js
+log: on resources.compile_dependency
+log: dependency: Stats.js
+log: on resources.compile_dependency
+log: dependency: RequestAnimationFrame.js
+log: on resources.compile_dependency
+log: dependency: Utils.js
 log: on resources.compile_dependency
 Success are greateful
 ===[ ui_class_test.project.xml ]================(Tests)
@@ -1674,31 +1681,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
 log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
-===[ uibuffer_test.project.xml ]================(Tests)
-
-
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: Rendering UI...
-log: dependency: resig.js
-log: dependency: streamer.js
-log: on resources.compile_dependency
-log: dependency: event.js
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: on resources.compile_dependency
-log: dependency: colors.js
-log: dependency: Three.js
-log: on resources.compile_dependency
-log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: RequestAnimationFrame.js
-log: on resources.compile_dependency
-log: dependency: Utils.js
 log: on resources.compile_dependency
 Success are greateful
 ===[ wax1.project.xml ]================(Tests)
@@ -1776,7 +1758,7 @@ Success are greateful
 
 Error [language] Missing declared tag
 	tag = user_image
-	file = d:/xkp/xss/tests/../idioms/wax/server.xssERROR: Project:  wax3.project.xml
+	file = /home/cuba/projects/xkp/xss/tests/../idioms/wax/server.xssERROR: Project:  wax3.project.xml
 
 ===[ wax4.project.xml ]================(Tests)
 
@@ -1917,22 +1899,6 @@ log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/RequestAnimationFrame.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
-Success are greateful
-===[ xss1.project.xml ]================(Tests)
-
-
-hello, darling
-this is Louis
-
-
-		Darling
-	
-		Im glad to see you back where you belong
-	
-
-            Thats all folks
-            It was a pleasure
-        
 Success are greateful
 ===[ xss10.project.xml ]================(Tests)
 
@@ -2255,6 +2221,24 @@ log: </User Classes>
 
 
 log: /usr/lib/source.xxx
+Error [shell] Executable application is crashed
+	exec = javac.exeERROR: Project:  xss14.project.xml
+
+===[ xss1.project.xml ]================(Tests)
+
+
+hello, darling
+this is Louis
+
+
+		Darling
+	
+		Im glad to see you back where you belong
+	
+
+            Thats all folks
+            It was a pleasure
+        
 Success are greateful
 ===[ xss2.project.xml ]================(Tests)
 
@@ -2645,4 +2629,27 @@ Success are greateful
 		IDIOM: xssY_idiom2  
 	
 
-Success are greateful
+Success are greatefulERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml

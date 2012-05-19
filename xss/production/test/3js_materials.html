@@ -182,7 +182,7 @@ scene.addObject(sphere_1);
 	);
 	application.events.addListener("updates", function()
 	{    
-		application.timer = g_elapsed * 9.99999975e-005;
+		application.timer = g_elapsed * 9.99999975e-05;
 camera_1.position.x = Math.cos(application.timer) * 1000;
 camera_1.position.z = Math.sin(application.timer) * 1000;
 for(var i = 0; i < application.objects.length; i++)

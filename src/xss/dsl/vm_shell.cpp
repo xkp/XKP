@@ -80,13 +80,25 @@ struct shellworker : IWorker
             //finally, execute the application
             try
               {
+                std::cout << valuable_items[0] << std::endl;
                 std::string exe = bp::find_executable_in_path(valuable_items[0]);
                 std::vector<std::string> args;
+
+                std::cout << valuable_items[0] << std::endl;
+                std::cout << exe << std::endl;
 
                 std::vector<str>::iterator vit = valuable_items.begin();
                 std::vector<str>::iterator vnd = valuable_items.end();
                 for(; vit != vnd; vit++)
                   args.push_back(*vit);
+
+                //send args to console
+                std::cout << "---exe and args---" << std::endl;
+                std::cout << exe << std::endl;
+                std::vector<str>::iterator agit = args.begin();
+                std::vector<str>::iterator agnd = args.end();
+                for(; agit != agnd; agit++)
+                  std::cout << *agit << std::endl;
 
                 //td: recover the result of execution and save into variable, how to?
                 //... this is temporal, only for debug purpose
@@ -100,6 +112,36 @@ struct shellworker : IWorker
 
                 bp::child c = bp::launch(exe, args, ctx);
                 const bp::status s = c.wait();
+
+                std::cout << "[" << exe << "] ";
+
+                if (s.exited()) {
+                    std::cout << "Program returned exit code " << s.exit_status() << std::endl;
+                } else if (s.signaled()) {
+                    std::cout << "Program received signal " << s.term_signal() << std::endl;
+                    if (s.dumped_core())
+                        std::cout << "Program also dumped core" << std::endl;
+                } else if (s.stopped()) {
+                    std::cout << "Program stopped by signal" << s.stop_signal() << std::endl;
+                } else {
+                    std::cout << "Unknown termination reason" << std::endl;
+                }
+
+                if (s.exited() && s.exit_status() == EXIT_SUCCESS)
+                  {
+                    std::cout << "Shell application is executed successfully." << std::endl;
+                    std::cout << "-----------------------------------------------" << std::endl;
+                  }
+                else
+                  {
+                    std::cout << "Shell application failed." << std::endl;
+
+                    param_list error;
+                    error.add("id", SLanguage);
+                    error.add("desc", SCrashedApplication);
+                    error.add("exec", valuable_items[0]);
+                    xss_throw(error);
+                  }
               }
             catch (const boost::system::system_error&)
               {
