@@ -36,25 +36,6 @@ import xkp.android.libs.Layout.XKPLayout;
 			}
 		};
 			private XKPDDView 			ddView;
-<<<<<<< HEAD
-				private XKPPackage __resources1;
-			private String [] mResources___resources1_XKPName = {
-				"__image1",
-				"__image2"
-			};
-			private String [] mResources___resources1_DroidName = {
-				"smile_grin_48.png",
-				"smile_sad_48.png"
-			};
-			private Integer [] mResources___resources1_Type = {
-				XKPPackage.BITMAP_RESOURCE,
-				XKPPackage.BITMAP_RESOURCE
-			};
-			private Integer [] mResources___resources1_Id = {
-				R.drawable.smile_grin_48,
-				R.drawable.smile_sad_48
-			};
-=======
 				private XKPPackage ;
 			private String [] mResources__XKPName = {
 				"",
@@ -72,7 +53,6 @@ import xkp.android.libs.Layout.XKPLayout;
 				R.drawable.smile_grin_48,
 				R.drawable.smile_sad_48
 			};
->>>>>>> 48b4121a3614a3e7cdb142311c9a6460262befd0
 	private boolean mLayoutStarted = false;
 			private ActjBox2d_2 application;
 			@Override
@@ -152,19 +132,11 @@ private void onLayoutStarted() {
 }
 			private void initInstances() {
 				application = this;
-<<<<<<< HEAD
-				__resources1 = new XKPPackage(this, 
-					mResources___resources1_XKPName, mResources___resources1_DroidName, 
-					mResources___resources1_Type, mResources___resources1_Id
-					, true);
-				util.addXKPPackage(__resources1);
-=======
 				 = new XKPPackage(this, 
 					mResources__XKPName, mResources__DroidName, 
 					mResources__Type, mResources__Id
 					, true);
 				util.addXKPPackage();
->>>>>>> 48b4121a3614a3e7cdb142311c9a6460262befd0
 			}
 			private Object i = 0;
 }

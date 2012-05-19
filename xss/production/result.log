@@ -165,9 +165,16 @@ log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
 log: [jbox2d] Copying default files...
-Error [idiom] Environment variable is not defined
-	variable_name = ANDROID_SDK
-	file = /home/cuba/projects/xkp/xss/samples/android/jbox2d_1/../../../idioms/android/main.xssERROR: Project:  box2d1.project.xml
+
+log: Creating .apk bundle file...
+log: ../../../idioms/android/java.lst.xss
+log: jBox2d_1/java.lst
+log: /home/cuba/projects/xkp/xss/samples/android/jbox2d_1/../../../production/android/jBox2d_1
+log: /home/cuba/projects/android-sdk-linux/platforms/android-7/android.jar
+Error [syntax-error] Error while compiling xs
+	line = 7
+	column = 3
+	file = /home/cuba/projects/xkp/xss/samples/android/jbox2d_1/../../../idioms/android/java.lst.xssERROR: Project:  box2d1.project.xml
 
 ===[ box2d2.project.xml ]================
 
@@ -223,15 +230,7 @@ log: Rendering Android Imports...
 Error [vm] Cannot resolve
 	object = jBox2d_4
 	property = id
-<<<<<<< HEAD
-	file = /home/cuba/projects/xkp/xss/samples/android/jbox2d_4/../../../idioms/ms/java/../../java/instance.xssERROR: Project:  box2d4.project.xml
-=======
-<<<<<<< HEAD
-	file = c:/dev/XKP/xss/idioms/java/instance.xssERROR: Project:  box2d4.project.xml
-=======
-	file = d:/xkp/xss/samples/android/jbox2d_4/../../../idioms/ms/java/../../java/instance.xssERROR: Project:  box2d4.project.xml
->>>>>>> 912a9807c92d0331563f6cc29c5fa7180397fca3
->>>>>>> 48b4121a3614a3e7cdb142311c9a6460262befd0
+	file = /home/cuba/projects/xkp/xss/idioms/java/instance.xssERROR: Project:  box2d4.project.xml
 
 ===[ box2d5.project.xml ]================
 
@@ -376,9 +375,16 @@ log: Rendering instance: edtContainer
 log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
-Error [idiom] Environment variable is not defined
-	variable_name = ANDROID_SDK
-	file = /home/cuba/projects/xkp/xss/samples/android/simpletest/../../../idioms/android/main.xssERROR: Project:  simple.project.xml
+
+log: Creating .apk bundle file...
+log: ../../../idioms/android/java.lst.xss
+log: SimpleTest/java.lst
+log: /home/cuba/projects/xkp/xss/samples/android/simpletest/../../../production/android/SimpleTest
+log: /home/cuba/projects/android-sdk-linux/platforms/android-4/android.jar
+Error [syntax-error] Error while compiling xs
+	line = 7
+	column = 3
+	file = /home/cuba/projects/xkp/xss/samples/android/simpletest/../../../idioms/android/java.lst.xssERROR: Project:  simple.project.xml
 
 ===[ touchme.project.xml ]================
 
@@ -1284,18 +1290,76 @@ Success are greateful
 ===[ jquery6.project.xml ]================(Tests)
 
 
-Error [html5 asynch] Objects need to be serializable in order to enter threads
-	type = preset
-<<<<<<< HEAD
-	file = /home/cuba/projects/xkp/xss/tests/../idioms/jquery/event.xssERROR: Project:  jquery6.project.xml
-=======
-<<<<<<< HEAD
-	file = c:/dev/XKP/xss/idioms/jquery/event.xssERROR: Project:  jquery6.project.xml
-=======
-	file = d:/xkp/xss/tests/../idioms/jquery/event.xssERROR: Project:  jquery6.project.xml
->>>>>>> 912a9807c92d0331563f6cc29c5fa7180397fca3
->>>>>>> 48b4121a3614a3e7cdb142311c9a6460262befd0
-
+log: NO LAYOUT
+log: preset_apply
+log: NO LAYOUT
+log: __label1
+log: __br1
+log: __br2
+log: brightness
+log: __br3
+log: __label2
+log: __br4
+log: __br5
+log: constrast
+log: NO LAYOUT
+log: __label3
+log: __br6
+log: __br7
+log: red
+log: __br8
+log: __label4
+log: __br9
+log: __br10
+log: blue
+log: __br11
+log: __label5
+log: __br12
+log: __br13
+log: green
+log: NO LAYOUT
+log: __label6
+log: __br14
+log: __br15
+log: hue
+log: __br16
+log: __label7
+log: __br17
+log: __br18
+log: saturation
+log: __br19
+log: __label8
+log: __br20
+log: __br21
+log: lightness
+log: NO LAYOUT
+log: __label9
+log: __br22
+log: __br23
+log: noise_amount
+log: __br24
+log: __label10
+log: __br25
+log: __br26
+log: noise_strength
+log: __br27
+log: __br28
+log: mono
+log: NO LAYOUT
+log: blur_apply
+log: PROPERTY height
+log: null
+log: VALUE 40
+log: PROPERTY height
+log: null
+log: VALUE 360
+log: PROPERTY width
+log: null
+log: VALUE 605
+log: PROPERTY height
+log: null
+log: VALUE 375
+Success are greateful
 ===[ jquery7.project.xml ]================(Tests)
 
 
@@ -1805,15 +1869,7 @@ Success are greateful
 
 Error [language] Missing declared tag
 	tag = user_image
-<<<<<<< HEAD
-	file = /home/cuba/projects/xkp/xss/tests/../idioms/wax/server.xssERROR: Project:  wax3.project.xml
-=======
-<<<<<<< HEAD
-	file = c:/dev/XKP/xss/idioms/wax/server.xssERROR: Project:  wax3.project.xml
-=======
-	file = d:/xkp/xss/tests/../idioms/wax/server.xssERROR: Project:  wax3.project.xml
->>>>>>> 912a9807c92d0331563f6cc29c5fa7180397fca3
->>>>>>> 48b4121a3614a3e7cdb142311c9a6460262befd0
+	file = /home/cuba/projects/xkp/xss/idioms/wax/server.xssERROR: Project:  wax3.project.xml
 
 ===[ wax4.project.xml ]================(Tests)
 
@@ -2275,7 +2331,8 @@ log: </User Classes>
 
 
 
-log: /usr/lib/source.xxx
+log: /usr/lib/source.xxxjavac.exe
+
 Error [shell] Executable application is crashed
 	exec = javac.exeERROR: Project:  xss14.project.xml
 
@@ -2684,31 +2741,4 @@ Success are greateful
 		IDIOM: xssY_idiom2  
 	
 
-<<<<<<< HEAD
-Success are greatefulERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-ERROR: Project:  simple.project.xml
-=======
 Success are greateful
->>>>>>> 48b4121a3614a3e7cdb142311c9a6460262befd0

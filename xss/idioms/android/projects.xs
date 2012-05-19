@@ -33,8 +33,8 @@ on finished()
     string output_classes = appName + "/" + application.output_classes;
     string output_javac_options = appName + "/" + application.output_javac_options;
     
-    string xss_classes = "java.lst.xss";
-    string xss_javac_options = "javac.options.xss";
+    string xss_classes = "../../../idioms/android/java.lst.xss";
+    string xss_javac_options = "../../../idioms/android/javac.options.xss";
 
     compiler.log(xss_classes);
     compiler.log(output_classes);

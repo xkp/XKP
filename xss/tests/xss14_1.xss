@@ -1,1 +1,8 @@
-Hello world
+Hello 
+<xss:code>
+    string word = " world!";
+    out()
+    {
+        <xss:e value="word"/>
+    }
+</xss:code>

@@ -37,75 +37,6 @@ import xkp.android.libs.Layout.XKPLayout;
 				private XKPImageMap mapController;
 			public static XKPUtils util;
 		private XKPLayout layoutapplication;
-<<<<<<< HEAD
-				private XKPPackage __resources1;
-				private XKPPackage photos;
-				private XKPPackage maps;
-			private String [] mResources_photos_XKPName = {
-				"worth_1",
-				"worth_2",
-				"worth_3",
-				"worth_4",
-				"worth_5",
-				"worth_6",
-				"worth_7"
-			};
-			private String [] mResources_photos_DroidName = {
-				"worth_1.jpg",
-				"worth_2.jpg",
-				"worth_3.jpg",
-				"worth_4.jpg",
-				"worth_5.jpg",
-				"worth_6.jpg",
-				"worth_7.jpg"
-			};
-			private Integer [] mResources_photos_Type = {
-				XKPPackage.BITMAP_RESOURCE,
-				XKPPackage.BITMAP_RESOURCE,
-				XKPPackage.BITMAP_RESOURCE,
-				XKPPackage.BITMAP_RESOURCE,
-				XKPPackage.BITMAP_RESOURCE,
-				XKPPackage.BITMAP_RESOURCE,
-				XKPPackage.BITMAP_RESOURCE
-			};
-			private Integer [] mResources_photos_Id = {
-				R.drawable.worth_1,
-				R.drawable.worth_2,
-				R.drawable.worth_3,
-				R.drawable.worth_4,
-				R.drawable.worth_5,
-				R.drawable.worth_6,
-				R.drawable.worth_7
-			};
-			private String [] mResources_maps_XKPName = {
-				"holguin"
-			};
-			private String [] mResources_maps_DroidName = {
-				"holguinmap.jpg"
-			};
-			private Integer [] mResources_maps_Type = {
-				XKPPackage.BITMAP_RESOURCE
-			};
-			private Integer [] mResources_maps_Id = {
-				R.drawable.holguinmap
-			};
-			private String [] mResources___resources1_XKPName = {
-				"ico_gallery",
-				"ico_maps"
-			};
-			private String [] mResources___resources1_DroidName = {
-				"launcher_gallery.png",
-				"launcher_maps.png"
-			};
-			private Integer [] mResources___resources1_Type = {
-				XKPPackage.BITMAP_RESOURCE,
-				XKPPackage.BITMAP_RESOURCE
-			};
-			private Integer [] mResources___resources1_Id = {
-				R.drawable.launcher_gallery,
-				R.drawable.launcher_maps
-			};
-=======
 				private XKPPackage ;
 				private XKPPackage photos;
 				private XKPPackage maps;
@@ -173,7 +104,6 @@ import xkp.android.libs.Layout.XKPLayout;
 				R.drawable.launcher_gallery,
 				R.drawable.launcher_maps
 			};
->>>>>>> 48b4121a3614a3e7cdb142311c9a6460262befd0
 	private boolean mLayoutStarted = false;
 			private ActMaps application;
 			@Override
@@ -251,18 +181,6 @@ private void onLayoutStarted() {
 }
 			private void initInstances() {
 				application = this;
-<<<<<<< HEAD
-				__resources1 = new XKPPackage(this, 
-					mResources___resources1_XKPName, mResources___resources1_DroidName, 
-					mResources___resources1_Type, mResources___resources1_Id
-					, true);
-				util.addXKPPackage(__resources1);
-				photos = new XKPPackage(this, 
-					mResources_photos_XKPName, mResources_photos_DroidName, 
-					mResources_photos_Type, mResources_photos_Id
-					);
-				util.addXKPPackage(photos);
-=======
 				 = new XKPPackage(this, 
 					mResources__XKPName, mResources__DroidName, 
 					mResources__Type, mResources__Id
@@ -273,7 +191,6 @@ private void onLayoutStarted() {
 					mResources_photos_Type, mResources_photos_Id
 					);
 				util.addXKPPackage(photos);
->>>>>>> 48b4121a3614a3e7cdb142311c9a6460262befd0
 				photos.setOnResourcePackageListener(new OnResourcePackageListener() {
 					@Override
 					public void onResourcePackageLoaded(XKPPackage pack) {

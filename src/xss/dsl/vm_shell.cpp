@@ -140,7 +140,8 @@ struct shellworker : IWorker
                     error.add("id", SLanguage);
                     error.add("desc", SCrashedApplication);
                     error.add("exec", valuable_items[0]);
-                    xss_throw(error);
+
+                    //xss_throw(error);
                   }
               }
             catch (const boost::system::system_error&)
@@ -149,7 +150,7 @@ struct shellworker : IWorker
                 error.add("id", SLanguage);
                 error.add("desc", SCrashedApplication);
                 error.add("exec", valuable_items[0]);
-                xss_throw(error);
+                //xss_throw(error);
               }
 
           }

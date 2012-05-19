@@ -329,116 +329,6 @@ window.onload = function()
 		    __img1 = new ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
 		    __img2 = new ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
 		    __img3 = new ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
-<<<<<<< HEAD
-        sp1 = new arcade.Spawner(g_spawner_manager, 100, 100, 1, 1);
-        sp1.creator = function()
-        {
-            return new smiley_ball(g_ui, g_ui_root, "images/smile_grin_48.png");
-        }
-            sp1.start();
-				__img1.events.addListener('resized', function(cmp)
-                {
-                    if (cmp.physics)
-                        g_world.DestroyBody(cmp.physics);
-             fixDef.density = 1;
-             fixDef.friction = 0.5;
-             fixDef.restitution = 0.200000003;
-             bodyDef.type = b2Body.b2_staticBody;
-                fixDef.shape = new b2PolygonShape;
-                    fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
-            fixDef.isSensor = false;
-                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
-            current_body = g_world.CreateBody(bodyDef);			
-            current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;			
-                cmp.events.addListener('moved', update_body_position);
-                current_body.host = cmp;
-                }
-				);
-                if (__img1.w > 0 && __img1.h > 0)
-                {
-					__img1.events.dispatch("resized", [__img1]);          
-                }
-                __img1.RemoveFromWorld = function(keep_visual) 
-                {
-                    g_world.DestroyBody(__img1.physics);
-                    if (!keep_visual)
-                    {
-                        __img1.parent.removeComponent(__img1);
-                    }
-                }
-				__img2.events.addListener('resized', function(cmp)
-                {
-                    if (cmp.physics)
-                        g_world.DestroyBody(cmp.physics);
-             fixDef.density = 1;
-             fixDef.friction = 0.5;
-             fixDef.restitution = 0.200000003;
-             bodyDef.type = b2Body.b2_staticBody;
-                fixDef.shape = new b2PolygonShape;
-                    fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
-            fixDef.isSensor = false;
-                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
-            current_body = g_world.CreateBody(bodyDef);			
-            current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;			
-                cmp.events.addListener('moved', update_body_position);
-                current_body.host = cmp;
-                }
-				);
-                if (__img2.w > 0 && __img2.h > 0)
-                {
-					__img2.events.dispatch("resized", [__img2]);          
-                }
-                __img2.RemoveFromWorld = function(keep_visual) 
-                {
-                    g_world.DestroyBody(__img2.physics);
-                    if (!keep_visual)
-                    {
-                        __img2.parent.removeComponent(__img2);
-                    }
-                }
-				__img3.events.addListener('resized', function(cmp)
-                {
-                    if (cmp.physics)
-                        g_world.DestroyBody(cmp.physics);
-             fixDef.density = 1;
-             fixDef.friction = 0.5;
-             fixDef.restitution = 0.200000003;
-             bodyDef.type = b2Body.b2_staticBody;
-                fixDef.shape = new b2PolygonShape;
-                    fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
-            fixDef.isSensor = false;
-                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
-            current_body = g_world.CreateBody(bodyDef);			
-            current_body.CreateFixture(fixDef);
-                cmp.physics = current_body;			
-                cmp.events.addListener('moved', update_body_position);
-                current_body.host = cmp;
-                }
-				);
-                if (__img3.w > 0 && __img3.h > 0)
-                {
-					__img3.events.dispatch("resized", [__img3]);          
-                }
-                __img3.RemoveFromWorld = function(keep_visual) 
-                {
-                    g_world.DestroyBody(__img3.physics);
-                    if (!keep_visual)
-                    {
-                        __img3.parent.removeComponent(__img3);
-                    }
-                }
-            g_ui.fill_background = false; //td: cross idiom
-            var debugDraw = new b2DebugDraw();
-            var debugDrawCanvas = document.getElementById("myCanvas");
-            debugDraw.SetSprite(debugDrawCanvas.getContext("2d"));
-            debugDraw.SetDrawScale(30.0);
-            debugDraw.SetFillAlpha(0.5);
-            debugDraw.SetLineThickness(1.0);
-            debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
-            g_world.SetDebugDraw(debugDraw);
-=======
 		sp1 = new arcade.Spawner(g_spawner_manager, 100, 100, 1, 1);
             sp1.x = 100;
             sp1.y = 100;
@@ -552,7 +442,6 @@ window.onload = function()
             debugDraw.SetLineThickness(1.0);
             debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
             g_world.SetDebugDraw(debugDraw);
->>>>>>> 48b4121a3614a3e7cdb142311c9a6460262befd0
             __img1.set_x(0);
             __img1.set_y(390);
             __img1.set_width(600);
