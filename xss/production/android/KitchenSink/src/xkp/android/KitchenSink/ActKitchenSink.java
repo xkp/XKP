@@ -115,7 +115,7 @@ import xkp.android.libs.Layout.XKPLayout;
 			});
 		}
 				kitchen = (TabHost) findViewById(R.id.kitchen);
-					ArrayList tabs = new ArrayList(Arrays.asList( new String [] {				"Buttons?"							, "Radios"							, "Image"							, "ProgressBars"						} ));        util.setupTabHost(R.id.kitchen, tabs);
+					ArrayList tabs = new ArrayList(Arrays.asList( new String [] {				"Buttons?"							, "Radios"							, "Image"							, "ProgressBars"						} ));        util.setupTabHost(R.id.kitchen, tabs);
 				__div1 = (XKPLayout) findViewById(R.id.__div1);
 				btn1 = (Button) findViewById(R.id.btn1);
 				toggle1 = (ToggleButton) findViewById(R.id.toggle1);
