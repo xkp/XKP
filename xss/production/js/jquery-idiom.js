@@ -13,6 +13,19 @@ var JQUComponent =
     {
         return inst.is(":visible");
     },
+
+    set_enabled : function(inst, value)
+    {
+        if (value)
+            inst.removeAttr("disabled");        
+        else
+            inst.attr("disabled", "disabled");        
+    },
+
+    get_enabled : function(inst)
+    {
+        return !inst.is(":disabled");
+    },
 }
 
 var JQUGrid = 

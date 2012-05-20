@@ -446,17 +446,17 @@ bool xss_context::resolve(const str& id, resolve_info& info)
               obj = get_this();
 
             //td: think this through
-            //if (obj)
-            //  {
-            //    XSSObject child = obj->find(id);
-            //    if (child)
-            //      {
-            //        info.what  = RESOLVE_INSTANCE;
-            //        info.type  = child->type();
-            //        info.value = child;
-            //        return true;
-            //      }
-            //  }
+            if (obj && obj->type() && obj->type()->has("resolve_children"))
+              {
+                XSSObject child = obj->find(id);
+                if (child)
+                  {
+                    info.what  = RESOLVE_INSTANCE;
+                    info.type  = child->type();
+                    info.value = child;
+                    return true;
+                  }
+              }
 
             if (!any)
               break;

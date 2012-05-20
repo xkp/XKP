@@ -6,7 +6,7 @@
 	<dependency href="jsm-utils.js"/>
 	
 	<types>
-		<class id="preset" output_id="jsmanip.Preset" serializer="../common-js/serializer.xss"/>	
+		<class id="preset" output_id="jsmanip.Preset" serializer="../common-js/serializer.xss" resolve_children="true"/>	
 		<class id="preset_filter"/>
 		<class id="filter">
 			<property id="apply" type="bool" use_plain_value="true">

@@ -46,7 +46,7 @@ on init()
 on preset_apply.click()
 {
     var image_data = get_image_data();
-    preset_apply.disabled = true;
+    preset_apply.enabled = false;
     preset_apply.caption = "Applying...";
 
     asynch(mypreset = transformer, image = image_data)
@@ -57,7 +57,7 @@ on preset_apply.click()
         synch(image_data = image)
         {
             set_image_data(image_data);
-            preset_apply.disabled = false;
+            preset_apply.enabled = true;
             preset_apply.caption = "Apply Stack";
         }
     }
@@ -66,71 +66,43 @@ on preset_apply.click()
 //controls
 on brightness.change()
 {
-    transformer.b_filter.brightness = brightness.value;
+    transformer.b_filter.amount = brightness.value/100;
     apply_filter(transformer.b_filter);
 }
 
 on constrast.change()
 {
-    transformer.b_filter.constrast = constrast.value/100;
-    apply_filter(transformer.b_filter);
-}
-
-on red.change()
-{
-    transformer.c_filter.red = red.value/100;
+    transformer.c_filter.amount = constrast.value/100;
     apply_filter(transformer.c_filter);
 }
 
-on blue.change()
+on sepia.change()
 {
-    transformer.c_filter.blue = blue.value/100;
-    apply_filter(transformer.c_filter);
+    transformer.s_filter.amount = sepia.value;
+    apply_filter(transformer.s_filter);
 }
 
-on green.change()
+on noise.change()
 {
-    transformer.c_filter.green = green.value/100;
-    apply_filter(transformer.c_filter);
-}
-
-on hue.change()
-{
-    transformer.hsl_filter.hue = hue.value;
-    apply_filter(transformer.hsl_filter);
-}
-
-on saturation.change()
-{
-    transformer.hsl_filter.saturation = saturation.value;
-    apply_filter(transformer.hsl_filter);
-}
-
-on lightness.change()
-{
-    transformer.hsl_filter.lightness = lightness.value;
-    apply_filter(transformer.hsl_filter);
-}
-
-on noise_amount.change()
-{
-    transformer.n_filter.amount = noise_amount.value/100;
+    transformer.n_filter.amount = noise.value;
     apply_filter(transformer.n_filter);
 }
 
-on noise_strength.change()
+on density.change()
 {
-    transformer.n_filter.strength = noise_strength.value/100;
+    transformer.n_filter.density = density.value/100;
     apply_filter(transformer.n_filter);
+
 }
 
 on mono.change()
 {
-    transformer.n_filter.mono = mono.value;
+    transformer.n_filter.monochrome = mono.value;
     apply_filter(transformer.n_filter);
 }
 
-on blur_apply.click()
+on range.change()
 {
-    apply_filter(transformer.blur_filter);
+    transformer.o_filter.range = range.value;
+    apply_filter(transformer.o_filter);
 }

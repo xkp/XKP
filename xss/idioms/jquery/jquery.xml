@@ -46,7 +46,7 @@
                 <set text='JQUComponent.set_visible({path}, {value})' global='true'/>
             </property>
 
-            <property id="enabled" type="bool" dont_init="true">
+            <property id="enabled" type="bool">
                 <get text='JQUComponent.get_enabled({path})' global='true'/>
                 <set text='JQUComponent.set_enabled({path}, {value})' global='true'/>
             </property>

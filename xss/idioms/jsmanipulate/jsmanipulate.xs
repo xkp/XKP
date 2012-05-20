@@ -12,9 +12,19 @@ on compile_dependency(dep)
     if (dep.idiom.id != "jsmanipulate")
         return;
 
-    var path = project.pixastic_path;
-    if (!path)
-        path = "../js/jsmanipulate";
+    var path;
+    if (dep.shared)
+    {
+        path = project.js_path;
+        if (!path)
+            path = "../js";
+    }
+    else
+    {
+        path = project.pixastic_path;
+        if (!path)
+            path = "../js/jsmanipulate";
+    }
 
     dep.href = path + '/' + dep.href;
 }

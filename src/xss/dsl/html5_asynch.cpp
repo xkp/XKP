@@ -50,7 +50,7 @@ class dsl_h5_synch : public xss_dsl
           asynch_params params;
           process_asynch_params(compiler_, info.params, params);
           
-          result << "\nvar " << id << " = {";
+          result << "\nvar " << id << " = {id: '" << id << "',";
           
           asynch_params::iterator it = params.begin();
           asynch_params::iterator nd = params.end();
@@ -166,8 +166,10 @@ str dsl_h5_asynch::render(dsl& info, XSSContext ctx)
     for(; dit != dnd; dit++)
       {
         //make a copy, avoid future problems
+        XSSObject old = *dit;
         XSSObject dep(new xss_object);
-        dep->copy(*dit);
+        dep->copy(old);
+        dep->set_idiom(old->idiom());
         XSSObject idiom = dep->idiom();
         if (idiom)
           {

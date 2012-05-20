@@ -13,19 +13,22 @@ jsmanip.Preset = Class.extend(
 	    for(var i = 0; i < data.filters.length; i++)
 	    {
             var filter = data.filters[i];
-            var filter_name = filter.filter_name.name;
+            var filter_name = filter.filter_name;
 
-		    var curr_filter = new jsmanip.Constructors[filter_name](this);
+		    var curr_filter = new jsmanip.Constructors[filter_name]();
+            curr_filter.parent = this;
+            curr_filter.options = filter.options;
+
             this.filters.push(curr_filter);
 	    }
     },
 
-	manipulate(image)
+	manipulate: function(image)
     {
 	    for(var i = 0; i < this.filters.length; i++)
 	    {
 		    curr_filter = this.parent.filters[i];
-			curr_filter.filter_name.filter(image, curr_filter.options);							
+			curr_filter.applyToImage(image);							
 	    }
     },
 
@@ -45,22 +48,31 @@ jsmanip.Filter = Class.extend(
 		this.parent = parent;	
 		this.render_on_apply = false;
 	},
-	set_render_on_apply: function(value)
+	
+    set_render_on_apply: function(value)
 	{
 		this.render_on_apply = value;
 		this.apply();
 	},
+
 	set_image: function(orig_img, img)
 	{
 		this.orig_image = orig_img;
 		this.image = img;	
 		this.apply();
 	},
+
 	set_apply: function(apply_)
 	{
 		this.apply_ = apply_;
 		this.apply();
 	},	
+
+	applyToImage: function(image)
+	{
+	    JSManipulate[this.filter_name].filter(image, this.options);							
+    },
+
 	apply: function(image)
 	{
 		if(image)
@@ -78,7 +90,7 @@ jsmanip.Filter = Class.extend(
 				curr_filter = this.parent.filters[i];
 				if(curr_filter.apply_)
 				{						
-					curr_filter.filter_name.filter(this.image, this.options);							
+					curr_filter.applyToImage(this.image);							
 				}			
 			}
 			if(this.render_on_apply)
@@ -93,7 +105,7 @@ jsmanip.Brightness = jsmanip.Filter.extend(
 	init: function(amount_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.brightness;		
+		this.filter_name = "brightness";		
 		this.options = {amount: amount_};			
 	},		
 	set_amount: function(value)
@@ -108,8 +120,7 @@ jsmanip.Blur = jsmanip.Filter.extend(
 	init: function(amount_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.blur;		
-		this.filter_string = "blur";		
+		this.filter_name = "blur";		
 		this.options = {amount: amount_};			
 	},		
 	set_amount: function(value)
@@ -124,8 +135,7 @@ jsmanip.Bump = jsmanip.Filter.extend(
 	init: function(parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.bump;				
-		this.filter_string = "bump";		
+		this.filter_name = "bump";		
 	},	
 });
 
@@ -134,8 +144,7 @@ jsmanip.Circlesmear = jsmanip.Filter.extend(
 	init: function(size_, density_, mix_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.circlesmear;		
-		this.filter_string = "circlesmear";		
+		this.filter_name = "circlesmear";		
 		this.options = {size: size_, density: density_, mix: mix_};			
 	},		
 	set_size: function(value)
@@ -160,8 +169,7 @@ jsmanip.Contrast = jsmanip.Filter.extend(
 	init: function(amount_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.contrast;		
-		this.filter_string = "contrast";		
+		this.filter_name = "contrast";		
 		this.options = {amount: amount_};			
 	},		
 	set_amount: function(value)
@@ -176,8 +184,7 @@ jsmanip.Crosssmear = jsmanip.Filter.extend(
 	init: function(size_, density_, mix_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.crosssmear;		
-		this.filter_string = "crosssmear";		
+		this.filter_name = "crosssmear";		
 		this.options = {size: size_, density: density_, mix: mix_};			
 	},		
 	set_size: function(value)
@@ -202,8 +209,7 @@ jsmanip.Diffusion = jsmanip.Filter.extend(
 	init: function(scale_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.diffusion;		
-		this.filter_string = "diffusion";		
+		this.filter_name = "diffusion";		
 		this.options = {scale: scale_};			
 	},		
 	set_scale: function(value)
@@ -218,8 +224,7 @@ jsmanip.Dither = jsmanip.Filter.extend(
 	init: function(levels_, color_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.dither;		
-		this.filter_string = "dither";		
+		this.filter_name = "dither";		
 		this.options = {levels: levels_, color: color_};			
 	},		
 	set_levels: function(value)
@@ -239,8 +244,7 @@ jsmanip.Edge = jsmanip.Filter.extend(
 	init: function(parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.edge;				
-		this.filter_string = "edge";		
+		this.filter_name = "edge";		
 	},	
 });
 
@@ -249,8 +253,7 @@ jsmanip.Emboss = jsmanip.Filter.extend(
 	init: function(height_, angle_, elevation_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.emboss;		
-		this.filter_string = "emboss";		
+		this.filter_name = "emboss";		
 		this.options = {height: height_, angle: angle_, elevation: elevation_};			
 	},		
 	set_height: function(value)
@@ -275,8 +278,7 @@ jsmanip.Exposure = jsmanip.Filter.extend(
 	init: function(exposure_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.exposure;		
-		this.filter_string = "exposure";		
+		this.filter_name = "exposure";		
 		this.options = {exposure: exposure_};			
 	},		
 	set_exposure: function(value)
@@ -291,8 +293,7 @@ jsmanip.Gain = jsmanip.Filter.extend(
 	init: function(gain_, bias_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.gain;		
-		this.filter_string = "gain";		
+		this.filter_name = "gain";		
 		this.options = {gain: gain_, bias: bias_};			
 	},		
 	set_gain: function(value)
@@ -312,8 +313,7 @@ jsmanip.Gamma = jsmanip.Filter.extend(
 	init: function(amount_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.gamma;		
-		this.filter_string = "gamma";		
+		this.filter_name = "gamma";		
 		this.options = {amount: amount_};			
 	},		
 	set_amount: function(value)
@@ -328,8 +328,7 @@ jsmanip.Greyscale = jsmanip.Filter.extend(
 	init: function(parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.grayscale;				
-		this.filter_string = "grayscale";		
+		this.filter_name = "grayscale";		
 	},	
 });
 
@@ -338,8 +337,7 @@ jsmanip.Hue = jsmanip.Filter.extend(
 	init: function(amount_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.hue;		
-		this.filter_string = "hue";		
+		this.filter_name = "hue";		
 		this.options = {amount: amount_};			
 	},		
 	set_amount: function(value)
@@ -354,8 +352,7 @@ jsmanip.Invert = jsmanip.Filter.extend(
 	init: function(parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.invert;				
-		this.filter_string = "invert";		
+		this.filter_name = "invert";		
 	},	
 });
 
@@ -364,8 +361,7 @@ jsmanip.Kaleidoscope = jsmanip.Filter.extend(
 	init: function(angle_, rotation_, sides_, center_x_, center_y_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.kaleidoscope;		
-		this.filter_string = "kaleidoscope";		
+		this.filter_name = "kaleidoscope";		
 		this.options = {angle: angle_, rotation: rotation_, sides: sides_, centerX: center_x_, centerY: center_y_};			
 	},		
 	set_angle: function(value)
@@ -400,8 +396,7 @@ jsmanip.Lensdistortion = jsmanip.Filter.extend(
 	init: function(refraction_, radius_, center_x_, center_y_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.lensdistortion;		
-		this.filter_string = "lensdistortion";		
+		this.filter_name = "lensdistortion";		
 		this.options = {refraction: refraction_, radius: radius_, centerX: center_x_, centerY: center_y_};			
 	},		
 	set_refraction: function(value)
@@ -432,8 +427,7 @@ jsmanip.Linesmear = jsmanip.Filter.extend(
 	init: function(distance_, density_, angle_, mix_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.linesmear;		
-		this.filter_string = "linesmear";		
+		this.filter_name = "linesmear";		
 		this.options = {distance: distance_, density: density_, angle: angle_, mix: mix_};			
 	},		
 	set_distance: function(value)
@@ -463,8 +457,7 @@ jsmanip.Maximum = jsmanip.Filter.extend(
 	init: function(parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.maximum;				
-		this.filter_string = "maximum";		
+		this.filter_name = "maximum";		
 	},	
 });
 
@@ -473,8 +466,7 @@ jsmanip.Median = jsmanip.Filter.extend(
 	init: function(parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.median;				
-		this.filter_string = "median";		
+		this.filter_name = "median";		
 	},	
 });
 
@@ -483,8 +475,7 @@ jsmanip.Minimum = jsmanip.Filter.extend(
 	init: function(parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.minimum;				
-		this.filter_string = "minimum";		
+		this.filter_name = "minimum";		
 	},	
 });
 
@@ -493,8 +484,7 @@ jsmanip.Noise = jsmanip.Filter.extend(
 	init: function(amount_, density_, monochrome_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.noise;		
-		this.filter_string = "noise";		
+		this.filter_name = "noise";		
 		this.options = {amount: amount_, density: density_, monochrome: monochrome_};			
 	},		
 	set_amount: function(value)
@@ -524,8 +514,7 @@ jsmanip.Oil = jsmanip.Filter.extend(
 	init: function(range_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.oil;		
-		this.filter_string = "oil";		
+		this.filter_name = "oil";		
 		this.options = {range: range_};			
 	},		
 	set_range: function(value)
@@ -540,8 +529,7 @@ jsmanip.Pinch = jsmanip.Filter.extend(
 	init: function(amount_, radius_, angle_, center_x_, center_y_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.pinch;		
-		this.filter_string = "pinch";		
+		this.filter_name = "pinch";		
 		this.options = {amount: amount_, radius: radius_, angle: angle_, centerX: center_x_, centerY: center_y_};			
 	},		
 	set_amount: function(value)
@@ -576,8 +564,7 @@ jsmanip.Pixelate = jsmanip.Filter.extend(
 	init: function(size_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.pixelate;		
-		this.filter_string = "pixelate";		
+		this.filter_name = "pixelate";		
 		this.options = {size: size_};			
 	},		
 	set_size: function(value)
@@ -592,8 +579,7 @@ jsmanip.Posterize = jsmanip.Filter.extend(
 	init: function(levels_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.posterize;		
-		this.filter_string = "posterize";		
+		this.filter_name = "posterize";		
 		this.options = {levels: levels_};			
 	},		
 	set_levels: function(value)
@@ -608,8 +594,7 @@ jsmanip.RGBadjust = jsmanip.Filter.extend(
 	init: function(red_, green_, blue_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.rgbadjust;		
-		this.filter_string = "rgbadjust";		
+		this.filter_name = "rgbadjust";		
 		this.options = {red: red_, green: green_, blue: blue_};			
 	},		
 	set_red: function(value)
@@ -634,8 +619,7 @@ jsmanip.Saturation = jsmanip.Filter.extend(
 	init: function(amount_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.saturation;		
-		this.filter_string = "saturation";		
+		this.filter_name = "saturation";		
         this.options = {amount: amount_};			
 	},		
 	set_amount: function(value)
@@ -650,8 +634,7 @@ jsmanip.Sawtoothripple = jsmanip.Filter.extend(
 	init: function(amplitude_x_, amplitude_y_, wavelength_x_, wavelength_y_,parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.sawtoothripple;		
-		this.filter_string = "sawtoothripple";		
+		this.filter_name = "sawtoothripple";		
 		this.options = {xAmplitude: amplitude_x_, yAmplitude: amplitude_y_, xWavelength: wavelength_x_, yWavelength: wavelength_y_};			
 	},		
 	set_amplitude_x: function(value)
@@ -681,8 +664,7 @@ jsmanip.Sepia = jsmanip.Filter.extend(
 	init: function(amount_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.sepia;		
-		this.filter_string = "sepia";		
+		this.filter_name = "sepia";		
 		this.options = {amount: amount_};			
 	},		
 	set_amount: function(value)
@@ -697,8 +679,7 @@ jsmanip.Sharpen = jsmanip.Filter.extend(
 	init: function(parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.sharpen;				
-		this.filter_string = "sharpen";		
+		this.filter_name = "sharpen";		
 	},	
 });
 
@@ -707,8 +688,7 @@ jsmanip.Sineripple = jsmanip.Filter.extend(
 	init: function(amplitude_x_, amplitude_y_, wavelength_x_, wavelength_y_,parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.sineripple;		
-		this.filter_string = "sineripple";		
+		this.filter_name = "sineripple";		
 		this.options = {xAmplitude: amplitude_x_, yAmplitude: amplitude_y_, xWavelength: wavelength_x_, yWavelength: wavelength_y_};			
 	},		
 	set_amplitude_x: function(value)
@@ -738,8 +718,7 @@ jsmanip.Solarize = jsmanip.Filter.extend(
 	init: function(parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.solarize;				
-		this.filter_string = "solarize";		
+		this.filter_name = "solarize";		
 	},	
 });
 
@@ -748,8 +727,7 @@ jsmanip.Sparkle = jsmanip.Filter.extend(
 	init: function(rays_, size_, amount_, randomness_, center_x_, center_y_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.sparkle;		
-		this.filter_string = "sparkle";		
+		this.filter_name = "sparkle";		
 		this.options = {rays: rays_, size: size_, amount: amount_, randomness: randomness_, centerX: center_x_, centerY: center_y_};			
 	},		
 	set_rays: function(value)
@@ -789,8 +767,7 @@ jsmanip.Squaresmear = jsmanip.Filter.extend(
 	init: function(size_, density_, mix_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.squaresmear;		
-		this.filter_string = "squaresmear";		
+		this.filter_name = "squaresmear";		
 		this.options = {size: size_, density: density_, mix: mix_};			
 	},		
 	set_size: function(value)
@@ -815,8 +792,7 @@ jsmanip.Threshold = jsmanip.Filter.extend(
 	init: function(threshold_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.threshold;		
-		this.filter_string = "threshold";		
+		this.filter_name = "threshold";		
 		this.options = {threshold: threshold_};			
 	},		
 	set_threshold: function(value)
@@ -831,8 +807,7 @@ jsmanip.Triangleripple = jsmanip.Filter.extend(
 	init: function(amplitude_x_, amplitude_y_, wavelength_x_, wavelength_y_,parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.triangleripple;		
-		this.filter_string = "triangleripple";		
+		this.filter_name = "triangleripple";		
 		this.options = {xAmplitude: amplitude_x_, yAmplitude: amplitude_y_, xWavelength: wavelength_x_, yWavelength: wavelength_y_};			
 	},		
 	set_amplitude_x: function(value)
@@ -862,8 +837,7 @@ jsmanip.Vignette = jsmanip.Filter.extend(
 	init: function(amount_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.vignette;		
-		this.filter_string = "vignette";		
+		this.filter_name = "vignette";		
 		this.options = {amount: amount_};			
 	},		
 	set_amount: function(value)
@@ -878,8 +852,7 @@ jsmanip.Twirl = jsmanip.Filter.extend(
 	init: function(radius_, angle_, center_x_, center_y_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.twirl;		
-		this.filter_string = "twirl";		
+		this.filter_name = "twirl";		
 		this.options = {radius: radius_, angle: angle_, centerX: center_x_, centerY: center_y_};			
 	},		
 	set_radius: function(value)
@@ -909,8 +882,7 @@ jsmanip.Waterripple = jsmanip.Filter.extend(
 	init: function(phase_, radius_, wavelength_, amplitude_, center_x_, center_y_, parent)
 	{
 		this._super(parent);		
-		this.filter_name = JSManipulate.waterripple;		
-		this.filter_string = "waterripple";		
+		this.filter_name = "waterripple";		
 		this.options = {phase: phase_, radius: radius_, wavelength: wavelength_, amplitude: amplitude_, centerX: center_x_, centerY: center_y_};			
 	},	
 	set_phase: function(value)
@@ -975,7 +947,7 @@ jsmanip.Constructors =
 	pinch : jsmanip.Pinch,
 	pixelate : jsmanip.Pixelation,
 	posterize : jsmanip.Posterize,
-	rgbadjust : jsmanip.RGBAdjust,
+	rgbadjust : jsmanip.RGBadjust,
 	saturation : jsmanip.Saturation,
 	sawtoothripple : jsmanip.SawtoothRipple,
 	sepia : jsmanip.Sepia,

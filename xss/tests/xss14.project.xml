@@ -1,1 +1,1 @@
-<project entry_point="xss14.xss" language="js" target="xss14.app.xml" src="xss14.project.xs">    <parameter name="js_path" value="/usr/lib"/>    <include src="xss14.classes.xs"/>    <idiom src="../idioms/test/idiom.xml" /></project>
+<project entry_point="xss14.xss" language="js" target="xss14.app.xml" src="xss14.project.xs">    <path>        <output path="../production/test"/>    </path>        <parameter name="js_path" value="/usr/lib"/>    <include src="xss14.classes.xs"/>    <idiom src="../idioms/test/idiom.xml" /></project>
