@@ -155,6 +155,7 @@ log: [android] Rendering default files...
 Success are greateful
 ===[ box2d1.project.xml ]================
 
+ 'classes.dex' as 'classes.dex'...
 
 log: Rendering Android project...
 log: API Level = 7
@@ -165,20 +166,7 @@ log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
 log: [jbox2d] Copying default files...
-log: Creating .apk bundle file...Shell application is executed successfully.
------------------------------------------------
-Shell application is executed successfully.
------------------------------------------------
-Shell application is executed successfully.
------------------------------------------------
- 'classes.dex' as 'classes.dex'...
-Shell application is executed successfully.
------------------------------------------------
-Shell application failed.
------------------------------------------------
-Shell application is executed successfully.
------------------------------------------------
-
+log: Creating .apk bundle file...
 
 Success are greateful
 ===[ box2d2.project.xml ]================
@@ -365,6 +353,7 @@ log: [android] Rendering default files...
 Success are greateful
 ===[ simple.project.xml ]================
 
+ 'classes.dex' as 'classes.dex'...
 
 log: Rendering Android project...
 log: API Level = 4
@@ -380,20 +369,7 @@ log: Rendering instance: edtContainer
 log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
-log: Creating .apk bundle file...Shell application is executed successfully.
------------------------------------------------
-Shell application is executed successfully.
------------------------------------------------
-Shell application is executed successfully.
------------------------------------------------
- 'classes.dex' as 'classes.dex'...
-Shell application is executed successfully.
------------------------------------------------
-Shell application failed.
------------------------------------------------
-Shell application is executed successfully.
------------------------------------------------
-
+log: Creating .apk bundle file...
 
 Success are greateful
 ===[ touchme.project.xml ]================
@@ -2375,12 +2351,10 @@ log: </User Classes>
 
 
 
-log: /usr/lib/source.xxxShell application failed.
------------------------------------------------
-
+log: /usr/lib/source.xxx
 Error [syntax-error] Error while compiling xs
 	line = 4
-	column = 5
+	column = 2
 	file = d:/xkp/xss/tests/xss14_1.xssERROR: Project:  xss14.project.xml
 
 ===[ xss2.project.xml ]================(Tests)

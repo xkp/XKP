@@ -5,7 +5,6 @@
 	//compiler.log(compiler.output_path());
 
 	var appOptions = compiler.options;
-	string appOutputPath = compiler.output_path();
 	
 	string base_namespace = "xkp.android";
 	string appName = "DefaultAndroidApplication";
@@ -19,6 +18,9 @@
 	{
 		appName = application.id;
 	}
+	
+	string appOutputPath = compiler.output_path();
+	appOutputPath = appOutputPath + "/" + appName;
 	
 	int targetAPILevel = 6;
 	int minAPILevel = 3;
@@ -41,6 +43,22 @@
 	application.appName = appName;
 	application.targetAPILevel = targetAPILevel;
 	
+	string exeExt = "";
+	string batExt = "";
+	
+	string osName = compiler.os();
+	if(osName == "windows")
+	{
+		batExt = ".bat";
+		exeExt = ".exe";
+	}
+
+	shell(working_path = appOutputPath)
+	{
+		rm@exeExt -R @appOutputPath/bin
+		rm@exeExt -R @appOutputPath/gen
+	}
+
 	//inject idiom event for render types
 	compiler.inject("render_types", app = appName, bns = base_namespace);
 	
@@ -64,7 +82,7 @@
 	compiler.xss("layout.xml.xss", output_file = output_filename, appName = appName, base_namespace = base_namespace, clazz = application);
 	
 	//td: organize all this muddy of appOptions
-	// appOptions.android_project_type = enum {eclipse, script, ant, apk, others, ...}
+	// appOptions.android_project_type = enum {eclipse, ant, apk, others, ...}
 	if(appOptions.android_project_type == "eclipse")
 	{
 		output_filename = appName + "/" + ".project";
@@ -77,12 +95,6 @@
 		compiler.xss("eclipseProject.default.prop.xss", output_file = output_filename, targetAPILevel);
 	}
 	else
-	if(appOptions.android_project_type == "script")
-	{
-		output_filename = appName + "/build.bat";
-		compiler.xss("build.bat.xss", output_file = output_filename, appName, targetAPILevel, appOutputPath);
-	}
-	else
 	if(appOptions.android_project_type == "apk")
 	{
 		string android_sdk = compiler.get_env_var("ANDROID_SDK");
@@ -93,17 +105,6 @@
 		application.output_classes = "java.lst";
 		application.output_javac_options = "javac.opts";
 
-
-        //=========================================
-        //after this, it was copied from project.xs
-        //=========================================
-
-        //TIPS: commented line is variable redefined...
-        //var appOptions            = compiler.options;
-        //int targetAPILevel        = application.targetAPILevel;
-        //string appName            = application.appName;
-        //string appOutputPath      = compiler.output_path();
-
         string outputClasses = application.output_classes;
         string outputJavacOpts = application.output_javac_options;
     
@@ -112,33 +113,12 @@
 
         compiler.log("Creating .apk bundle file...");
         
-        string osName = compiler.os();
-        string exeExt = "";
-        string batExt = "";
-        string rmCmd = "rm";
-        if(osName == "windows")
-        {
-            batExt = ".bat";
-            exeExt = ".exe";
-            rmCmd = "remove";
-        }
-
-        appOutputPath           = appOutputPath + "/" + appName;
         string androidSDKPath   = application.android_sdk;
         string apiPlatform      = androidSDKPath + "/platforms/android-" + targetAPILevel + "/android.jar";
-
-        shell(working_path = appOutputPath)
-        {
-            @rmCmd -R @appOutputPath/bin/.
-            @rmCmd -R @appOutputPath/gen/.
-        }
 
         string output_classes = appName + "/" + application.output_classes;
         string output_javac_options = appName + "/" + application.output_javac_options;
     
-        string xss_classes = "../../idioms/android/java.lst.xss";
-        string xss_javac_options = "../../idioms/android/javac.options.xss";
-
         shell(working_path = appOutputPath)
         {
             aapt@exeExt package -f -I @apiPlatform -M @appOutputPath/AndroidManifest.xml -A @appOutputPath/assets -S @appOutputPath/res -m -J @appOutputPath/gen -F @appOutputPath/bin/resources.ap_;
@@ -146,11 +126,8 @@
 
         compiler.xss("javac.options.xss", output_file = output_javac_options, appOutputPath);
         compiler.xss("java.lst.xss", output_file = output_classes, appOutputPath);
-        //compiler.xss(xss_classes, output_file = output_classes, appOutputPath);
-        //compiler.xss(xss_javac_options, output_file = output_javac_options, appOutputPath);
 
         string dxLibPath = "";
-        //if(application.libraries) dxLibPath = appOutputPath + "/lib/*.jar";
         if(application.libraries) dxLibPath = appOutputPath + "/lib";
         
         shell(working_path = appOutputPath)

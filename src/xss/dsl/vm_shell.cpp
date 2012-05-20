@@ -33,6 +33,7 @@ struct shellworker : IWorker
 
         str working_path;
         str environment_vars; //td: correctly
+        bool break_errors = false;
 
         if (counter & 1)
           {
@@ -44,6 +45,12 @@ struct shellworker : IWorker
           {
             variant v = args.get(curr++);
             environment_vars = xss_utils::var_to_string(v);
+          }
+
+        if (counter & 4)
+          {
+            variant v = args.get(curr++);
+            break_errors = variant_cast<bool>(v, false);
           }
 
         std::vector<ga_item>::iterator it = result_.begin();
@@ -134,30 +141,32 @@ struct shellworker : IWorker
 
                 if (s.exited() && s.exit_status() == EXIT_SUCCESS)
                   {
-                    std::cout << "Shell application is executed successfully." << std::endl;
-                    std::cout << "-----------------------------------------------" << std::endl;
+                    //std::cout << "[" << exe << "]" << " Shell application is executed successfully." << std::endl;
                   }
                 else
                   {
-                    std::cout << "Shell application failed." << std::endl;
-                    std::cout << "-----------------------------------------------" << std::endl;
-
-                    param_list error;
-                    error.add("id", SLanguage);
-                    error.add("desc", SCrashedApplication);
-                    error.add("exec", valuable_items[0]);
-                    //xss_throw(error);
+                    //std::cout << "[" << exe << "]" << " Shell application failed." << std::endl;
+                    if (break_errors)
+                      {
+                        param_list error;
+                        error.add("id", SLanguage);
+                        error.add("desc", SCrashedApplication);
+                        error.add("exec", valuable_items[0]);
+                        xss_throw(error);
+                      }
                   }
               }
             catch (const boost::system::system_error&)
               {
-                param_list error;
-                error.add("id", SLanguage);
-                error.add("desc", SCrashedApplication);
-                error.add("exec", valuable_items[0]);
-                //xss_throw(error);
+                if (break_errors)
+                  {
+                    param_list error;
+                    error.add("id", SLanguage);
+                    error.add("desc", SCrashedApplication);
+                    error.add("exec", valuable_items[0]);
+                    xss_throw(error);
+                  }
               }
-
           }
       }
     private:
@@ -183,7 +192,7 @@ DSLWorker vm_shell::create_worker(dsl& info, code_linker& owner, std::vector<str
     std::vector<str> aux_exprs;
     if (info.param_count)
       {
-        str text = "working_path environment_vars";
+        str text = "working_path environment_vars break_errors";
         std::vector<str> params;
         boost::split(params, text, boost::is_space());
 

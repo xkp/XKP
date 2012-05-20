@@ -1,7 +1,6 @@
 <project 
 	entry_point="../../../idioms/android/main.xss" 
 	language="java" 
-	src="../../../idioms/android/projects.xs" 
 	target="simple.xml" >
 	
 	<idiom src="../../../idioms/android/classes.xml"/>
@@ -13,7 +12,7 @@
 	<!--
 		DOC: 'android_api_level' is a API level version of exported Android project
 		DOC: 'android_project_type' is a type of output project that would be any of 
-			"eclipse", "ant" or "script" values
+			"eclipse", "ant" or "apk" values
 		
 		TODO: tab character configuration with number of spaces for resolve indent problem
 	-->
