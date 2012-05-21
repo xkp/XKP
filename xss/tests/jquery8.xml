@@ -16,14 +16,14 @@
         <img id="back" src="images/jq8.png" x="50" y="50" width="1200" height="800" alpha="0.5"/>
         <label id="title" x="70" y="70" font="bold 24px verdana,sans-serif" color="white" caption="Extended controls"/>
         
-        <highchart id="myChart" x="100" y="200" width="500" height="250">
+        <highchart id="myChart" x="-600" y="200" width="500" height="250">
             <chart type="line"/>
             <series>
                 <item name="Series1"/>
             </series>
         </highchart>
 
-        <div id="gridContainer" x="300" y="550" width="600" multiselect="true">
+        <div id="gridContainer" x="-600" y="550" width="600" multiselect="true">
             <jqGrid id="myGrid">
                 <columns>
                     <column name="id" index="id" width="60" sorttype="int"/>
@@ -37,7 +37,7 @@
             </jqGrid>
         </div>
 
-        <skitter id="myGallery" x="620" y="200" width="550" height="250" >
+        <skitter id="myGallery" x="620" y="-500" width="550" height="250" >
             <images>
                 <image src="images/002.jpg" animation="cubeRandom" label="cubeRandom"/>
                 <image src="images/003.jpg" animation="block" label="block"/>
@@ -48,10 +48,22 @@
 
         <sequence auto_start="true">
             <at time="0">
-                <animate property="title.alpha" from="1" to="0" in="2"/>
+                <animate property="title.alpha">
+                    <key t="0" value="1"/>
+                    <key t="1" value="0"/>
+                    <key t="2" value="1"/>
+                </animate>
+                <animate property="back.width" from="300" to="1200" in="2"/>
+                <animate property="back.height" from="200" to="800" in="2"/>
             </at>
             <at time="2">
-                <animate property="title.alpha" from="0" to="1" in="3"/>
+                <animate property="gridContainer.x" from="-700" to="300" in="1"/>
+            </at>
+            <at time="3">
+                <animate property="myGallery.y" from="-500" to="200" in="1"/>
+            </at>
+            <at time="4">
+                <animate property="myChart.x" from="-500" to="100" in="1"/>
             </at>
         </sequence>
     </div>

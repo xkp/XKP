@@ -82,6 +82,11 @@ on sepia.change()
     apply_filter(transformer.s_filter);
 }
 
+on sepia_enabled.change()
+{
+    transformer.s_filter.enabled = sepia_enabled.checked;
+}
+
 on noise.change()
 {
     transformer.n_filter.amount = noise.value;
@@ -97,7 +102,7 @@ on density.change()
 
 on mono.change()
 {
-    transformer.n_filter.monochrome = mono.value;
+    transformer.n_filter.monochrome = mono.checked;
     apply_filter(transformer.n_filter);
 }
 

@@ -21,11 +21,21 @@
 			var __div6 = $("#__div6");
 			var __div7 = $("#__div7");
 			var __div8 = $("#__div8");
+			var lbl1 = $("#lbl1");
+			var edit1 = $("#edit1");
+			var rb1 = $("#rb1").button();
+			var cb1 = $("#cb1").button();
+			var __radiogroup1 = $("#__radiogroup1").buttonset();
+			var __radiobutton1 = $("#__radiobutton1").button();
+			var __radiobutton2 = $("#__radiobutton2").button();
+			var __radiobutton3 = $("#__radiobutton3").button();
+			var btnFloating = $("#btnFloating").button();
 			var __div9 = $("#__div9");
+			var __div10 = $("#__div10");
 			var __label1 = $("#__label1");
 			var dp2 = $("#dp2");
 			var dp1 = $("#dp1");
-			var __div10 = $("#__div10");
+			var __div11 = $("#__div11");
 			var __label2 = $("#__label2");
 			var __autocomplete1 = $("#__autocomplete1");
 			var __br1 = $("#__br1");
@@ -39,9 +49,25 @@
 			var sld1 = $("#sld1");
             acc1.accordion({
                 fillSpace: true,
-            });
+		    change: function(event, ui) { 
+	     tc1.tabs( "option", "selected", acc1.accordion("option", "active"));
+		    },
+	    });
             tc1.tabs({
-        });
+		    show: function(event, ui) { 
+	     acc1.accordion("option", "active", tc1.tabs( "option", "selected" ));
+		    },
+	    });
+rb1.__input = "#rb1_input";
+rb1.__label = "#rb1_label";
+cb1.__input = "#cb1_input";
+cb1.__label = "#cb1_label";
+__radiobutton1.__input = "#__radiobutton1_input";
+__radiobutton1.__label = "#__radiobutton1_label";
+__radiobutton2.__input = "#__radiobutton2_input";
+__radiobutton2.__label = "#__radiobutton2_label";
+__radiobutton3.__input = "#__radiobutton3_input";
+__radiobutton3.__label = "#__radiobutton3_label";
             dp2.datepicker({
 		    beforeShow: function(input, inst) { 
 	     JQUComponent.set_visible(dp1, false);
@@ -91,7 +117,8 @@
 #main {width : 1200px}
 #acc1 {width : 300px}
 #tc1 {height : 400px}
-#__div9 {width : 350px}
+#edit1 {width : 252px}
+#__div10 {width : 350px}
     </style>
 </head>
 <body>
@@ -120,19 +147,53 @@
 <div id="tc1">
 		<ul>
 			<li><a href="#__div5"><span>Plain HTML</span></a></li>
-			<li><a href="somepage.html"><span>Remote HTML</span></a></li>
+			<li><a href="jq6_template.html"><span>Remote HTML</span></a></li>
 			<li><a href="#__div7"><span>Common Controls</span></a></li>
-			<li><a href="#__div8"><span>JQuery UI</span></a></li>
+			<li><a href="#__div9"><span>JQuery UI</span></a></li>
 		</ul>
 <div id="__div5">
 <p>Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis. Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis<br />lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.</p><ul><li>List item one</li><li>List item two</li><li>List item three</li><li>List item two</li><li>List item three</li></ul>
 </div>
 <div id="__div7">
-</div>
 <div id="__div8">
+				<label id="lbl1"
+			>
+					Hello Components
+				</label>
+				<input id="edit1"
+						type="text" 
+						name="edit1" 
+					>
+				</input>
+</div>
+            <div id="rb1">
+        <input id="rb1_input" type="radio" name="__div7"/>
+        <label id="rb1_label" for="rb1_input"> Radio Buttoning </label>
+            </div>
+            <div id="cb1">
+        <input id="cb1_input" type="checkbox" name="__div7"/>
+        <label id="cb1_label" for="cb1_input"> Check Boxing </label>
+            </div>
+				<div id="__radiogroup1"
+			>
+        <input id="__rgitem3" type="radio" name="__radiogroup1"/>
+        <label id="" for="__rgitem3"> Chocolate </label>
+        <input id="__rgitem4" type="radio" name="__radiogroup1"/>
+        <label id="" for="__rgitem4"> Vanilla </label>
+        <input id="__rgitem5" type="radio" name="__radiogroup1"/>
+        <label id="" for="__rgitem5"> Strawberry </label>
+				</div>
+				<input id="btnFloating"
+						type="button" 
+						name="btnFloating" 
+						value="I'm a button" 
+					>
+				</input>
+</div>
+<div id="__div9">
             <table border="0" >
         <tr><td  width = "350px"   style="vertical-align:top">
-<div id="__div9">
+<div id="__div10">
 				<label id="__label1"
 			>
 					Date: 
@@ -141,7 +202,7 @@
 			<div id="dp1"></div>
 </div>
 </td><td style="vertical-align:top">
-<div id="__div10">
+<div id="__div11">
 				<label id="__label2"
 			>
 					autocomplete (type an vowel): 

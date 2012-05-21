@@ -1,0 +1,3 @@
+<xss:parameter id="it"/>
+<xss:e v="it.output_id"/>.__input = "#<xss:e v="it.output_id + '_input'"/>";
+<xss:e v="it.output_id"/>.__label = "#<xss:e v="it.output_id + '_label'"/>";

@@ -199,20 +199,65 @@ g_sequence_manager);
             },
             [
         {t: 0, value: 1},
-        {t: 2, value: 0},
+        {t: 1, value: 0},
+        {t: 2, value: 1},
             ]);
             __sequence1.addHandler(____i1);	              
         var ____i2 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
-                title.css("opacity", value);
+                back.width(value);
             },
             [
-        {t: 2, value: 0},
-        {t: 5, value: 1},
+        {t: 0, value: 300},
+        {t: 2, value: 1200},
             ]);
             __sequence1.addHandler(____i2);	              
+        var ____i3 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                back.height(value);
+            },
+            [
+        {t: 0, value: 200},
+        {t: 2, value: 800},
+            ]);
+            __sequence1.addHandler(____i3);	              
+        var ____i4 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                gridContainer.css( { left:value } );
+            },
+            [
+        {t: 2, value: -700},
+        {t: 3, value: 300},
+            ]);
+            __sequence1.addHandler(____i4);	              
+        var ____i5 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                myGallery.css( { top:value } );
+            },
+            [
+        {t: 3, value: -500},
+        {t: 4, value: 200},
+            ]);
+            __sequence1.addHandler(____i5);	              
+        var ____i6 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                myChart.css( { left:value } );
+            },
+            [
+        {t: 4, value: -500},
+        {t: 5, value: 100},
+            ]);
+            __sequence1.addHandler(____i6);	              
         var g_elapsed = -1;
         var g_delta = 0.0;	
         function start(resolution)  
@@ -239,9 +284,9 @@ g_sequence_manager);
 #main {position : relative}
 #back {left : 50px;top : 50px;width : 1200px;height : 800px;opacity : 0.5;position : absolute}
 #title {left : 70px;top : 70px;font : bold 24px verdana,sans-serif;color : white;position : absolute}
-#myChart {left : 100px;top : 200px;width : 500px;height : 250px;position : absolute}
-#gridContainer {left : 300px;top : 550px;width : 600px;position : absolute}
-#myGallery {left : 620px;top : 200px;width : 550px;height : 250px;position : absolute}
+#myChart {left : -600px;top : 200px;width : 500px;height : 250px;position : absolute}
+#gridContainer {left : -600px;top : 550px;width : 600px;position : absolute}
+#myGallery {left : 620px;top : -500px;width : 550px;height : 250px;position : absolute}
     </style>
 </head>
 <body>

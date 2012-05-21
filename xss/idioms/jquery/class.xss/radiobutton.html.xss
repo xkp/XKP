@@ -19,7 +19,7 @@
         
         out()
         {
-            <div id="<xss:e value="it.id"/>">
+            <div id="<xss:e value="it.output_id"/>">
         }
     }
     

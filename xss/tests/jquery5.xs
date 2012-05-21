@@ -31,3 +31,13 @@ on sld1.change()
 {
     pb1.value = sld1.value;
 }
+
+on acc1.change()
+{
+    tc1.selected = acc1.active;
+}
+
+on tc1.show()
+{
+    acc1.active = tc1.selected;
+}

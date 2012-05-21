@@ -52,9 +52,21 @@
                     </ul>
                 </html>
             </div>
-            <div caption="Remote HTML" href="somepage.html"/>
+            <div caption="Remote HTML" href="jq6_template.html"/>
             <div caption="Common Controls">
-                
+                <div>
+                    <label id="lbl1" caption="Hello Components"/>
+                    <editbox id="edit1" width="252"/>
+                </div>
+                <radiobutton id="rb1" caption="Radio Buttoning"/>
+                <checkbox id="cb1" caption="Check Boxing"/>
+                <radiogroup>
+                    <radiobutton caption="Chocolate"/>
+                    <radiobutton caption="Vanilla"/>
+                    <radiobutton caption="Strawberry"/>
+                </radiogroup>
+
+                <button id="btnFloating" caption="I'm a button"/>
             </div>
             <div caption="JQuery UI">
                 <div placement="left" width="350">

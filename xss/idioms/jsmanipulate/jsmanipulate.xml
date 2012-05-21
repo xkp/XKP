@@ -17,6 +17,7 @@
 				<get text="render_on_apply"/>
                 <set text="set_render_on_apply({value})"/>
             </property>
+            <property id="enabled" type="bool"/>
 		</class>
 		<class id="brightness" super="filter" output_id="jsmanip.Brightness">	
 			<constructor_params>

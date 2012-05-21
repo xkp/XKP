@@ -22,7 +22,9 @@
             </div>
             <div caption="Sepia">
                 <label caption="Amount"/>  <br/><br/>
-                <slider id="sepia" min="0" max="30" value="0"/>
+                <slider id="sepia" enabled="false" min="0" max="30" value="0"/>
+                <br/>
+                <checkbox id="sepia_enabled" caption="Enabled"/>
             </div>
             <div caption="Oil Painting">
                 <label caption="Range"/>  <br/><br/>
@@ -37,7 +39,7 @@
         <brightness id="b_filter" amount="0"/> 
         <contrast id="c_filter" amount="1"/>
         <rgbadjust id="color_filter" red="1" green="1" blue="1"/>
-        <sepia id="s_filter" amount="0"/>
+        <sepia id="s_filter" amount="0" enabled="false"/>
         <noise id="n_filter"/>
         <oil id="o_filter" range="0"/>
     </preset>

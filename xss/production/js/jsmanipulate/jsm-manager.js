@@ -18,6 +18,7 @@ jsmanip.Preset = Class.extend(
 		    var curr_filter = new jsmanip.Constructors[filter_name]();
             curr_filter.parent = this;
             curr_filter.options = filter.options;
+            curr_filter.enabled = filter.enabled;
 
             this.filters.push(curr_filter);
 	    }
@@ -45,6 +46,7 @@ jsmanip.Filter = Class.extend(
 	init: function(parent)
 	{		
 		this.apply_ = true;		
+        this.enabled = true;
 		this.parent = parent;	
 		this.render_on_apply = false;
 	},
@@ -70,7 +72,8 @@ jsmanip.Filter = Class.extend(
 
 	applyToImage: function(image)
 	{
-	    JSManipulate[this.filter_name].filter(image, this.options);							
+        if (this.enabled)
+	        JSManipulate[this.filter_name].filter(image, this.options);							
     },
 
 	apply: function(image)

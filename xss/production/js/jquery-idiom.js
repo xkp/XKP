@@ -28,6 +28,19 @@ var JQUComponent =
     },
 }
 
+var JQUCheckbox = 
+{
+    get_checked : function(cb)
+    {
+        return $(cb.__input).attr('checked') != undefined;
+    },
+
+    set_checked : function(cb, value)
+    {
+        return $(cb.__input).attr('checked', value);
+    },
+}
+
 var JQUGrid = 
 {
     set_data : function(grid, data)

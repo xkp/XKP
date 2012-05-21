@@ -139,6 +139,11 @@ Released   : 20120325
 				<div id="sepia"
 			>
 				</div>
+<br/>
+            <div id="sepia_enabled">
+        <input id="sepia_enabled_input" type="checkbox" name="__div5"/>
+        <label id="sepia_enabled_label" for="sepia_enabled_input"> Enabled </label>
+            </div>
 </div>
             <h3><a href="#">Oil Painting</a></h3>
 <div id="__div6">
@@ -214,10 +219,12 @@ Released   : 20120325
 			var __br12 = $("#__br12");
 			var __br13 = $("#__br13");
 			var sepia = $("#sepia");
+			var __br14 = $("#__br14");
+			var sepia_enabled = $("#sepia_enabled").button();
 			var __div6 = $("#__div6");
 			var __label6 = $("#__label6");
-			var __br14 = $("#__br14");
 			var __br15 = $("#__br15");
+			var __br16 = $("#__br16");
 			var range = $("#range");
 			var image_container = $("#image_container");
 		preset_apply.click( function() { 
@@ -274,9 +281,12 @@ application.apply_filter(transformer.n_filter);
 		    },
 	    });
 		mono.change( function() { 
-			transformer.n_filter.set_monochrome(mono.value);
+			transformer.n_filter.set_monochrome(JQUCheckbox.get_checked(mono));
 application.apply_filter(transformer.n_filter);
 		});
+mono.__input = "#mono_input";
+mono.__label = "#mono_label";
+					JQUComponent.set_enabled(sepia, false);
             sepia.slider({
                 min: 0,
                 max: 30,
@@ -286,6 +296,11 @@ application.apply_filter(transformer.n_filter);
 application.apply_filter(transformer.s_filter);
 		    },
 	    });
+		sepia_enabled.change( function() { 
+			transformer.s_filter.enabled = JQUCheckbox.get_checked(sepia_enabled);
+		});
+sepia_enabled.__input = "#sepia_enabled_input";
+sepia_enabled.__label = "#sepia_enabled_label";
             range.slider({
                 min: 0,
                 max: 5,
@@ -354,6 +369,7 @@ application.set_image_data(imgdata);
 		if(!transformer.filters)
 			transformer.filters = [];
 		transformer.filters.push(transformer.s_filter);
+            transformer.s_filter.enabled = false;
 			transformer.n_filter = new jsmanip.Noise(
 		null,null,null,transformer);		
 		if(!transformer.filters)

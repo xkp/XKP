@@ -143,27 +143,27 @@
             </property>
         </class>
 
-        <class id="radiobutton" super="component" jquery="button" html_renderer="radiobutton.html.xss">
+        <class id="radiobutton" super="component" jquery="button" html_renderer="radiobutton.html.xss" js_renderer="radiobutton.js.xss">
             <property id="caption" type="string" render_as="text" dont_init="true">
-                <get text='util_labelPropText({path})' global="true"/>
-                <set text='util_labelPropText({path}, {value})' global="true"/>
+                <get text='JQUCheckbox.get_caption({path})' global="true"/>
+                <set text='JQUCheckbox.set_caption({path}, {value})' global="true"/>
             </property>
 
             <property id="checked" type="bool" render_as="attribute" dont_init="true">
-                <get text='attr("checked")'/>
-                <set text='attr("checked", {value})'/>
+                <get text='JQUCheckbox.get_checked({path})' global='true'/>
+                <set text='JQUCheckbox.set_checked({path}, {value})' global='true'/>
             </property>
         </class>
 
-        <class id="checkbox" super="component" jquery="button" html_renderer="radiobutton.html.xss">
+        <class id="checkbox" super="component" jquery="button" html_renderer="radiobutton.html.xss" js_renderer="radiobutton.js.xss">
             <property id="caption" type="string" render_as="text" dont_init="true">
-                <get text='util_labelPropText({path})' global="true"/>
-                <set text='util_labelPropText({path}, {value})' global="true"/>
+                <get text='JQUCheckbox.get_caption({path})' global="true"/>
+                <set text='JQUCheckbox.set_caption({path}, {value})' global="true"/>
             </property>
 
             <property id="checked" type="bool" render_as="attribute" dont_init="true">
-                <get text='attr("checked")'/>
-                <set text='attr("checked", {value})'/>
+                <get text='JQUCheckbox.get_checked({path})' global='true'/>
+                <set text='JQUCheckbox.set_checked({path}, {value})' global='true'/>
             </property>
         </class>
 
