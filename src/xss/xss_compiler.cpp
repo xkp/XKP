@@ -553,27 +553,6 @@ void xss_compiler::build(fs::path xml, param_list& args)
 
     XSSObject project_data = read_project(xml, args);
 
-
-    //read params
-    XSSObjectList params = project_data->find_by_class("parameter");
-    XSSObjectList::iterator pit = params.begin();
-    XSSObjectList::iterator pnd = params.end();
-
-    for(; pit != pnd; pit++)
-      {
-        XSSObject xso = *pit;
-        str id = xso->get<str>("name", str());
-        if (id.empty())
-          {
-            param_list error;
-            error.add("id", SProjectError);
-            error.add("desc", SNamelessProjectParameter);
-            xss_throw(error);
-          }
-
-        params_.add(id, xso->get("value", variant()));
-      }
-
     //options
     XSSObject options = project_data->find("options");
     if (options)
@@ -607,14 +586,7 @@ void xss_compiler::build(fs::path xml, param_list& args)
     str project_source = project_data->get<str>("src", str());
     if (!project_source.empty())
       {
-        code_context cctx;
-        dsl_list     dsls;
-        basic_scope  sc;
-
-        cctx.this_  = project_data;
-        cctx.dsl_   = &dsls;
-        cctx.scope_ = &sc;
-        init_project_context(cctx);
+        code_context cctx = current_app_->context()->get_compile_context();
 
         xs_utils xs;
         xs.compile_implicit_instance(load_file(base_path_ / project_source), DynamicObject(project_data), cctx, xml);
@@ -891,7 +863,7 @@ void xss_compiler::xss(const param_list params)
 
     //resolve file name
     XSSRenderer r    = current_renderer();
-    XSSContext  rctx = r? r->context() : XSSContext(new xss_context(XSSContext()));
+    XSSContext  rctx = r? r->context() : XSSContext(new xss_context(current_app_->context()));
 
     fs::path file(file_name);
     if (!file.is_complete())
@@ -1929,6 +1901,26 @@ XSSObject xss_compiler::read_project(fs::path xml_file, param_list& args)
         error.add("id", SProjectError);
         error.add("desc", SCannotReadProjectFile);
         xss_throw(error);
+      }
+
+    //read params
+    XSSObjectList params = project_data->find_by_class("parameter");
+    XSSObjectList::iterator pit = params.begin();
+    XSSObjectList::iterator pnd = params.end();
+
+    for(; pit != pnd; pit++)
+      {
+        XSSObject xso = *pit;
+        str id = xso->get<str>("name", str());
+        if (id.empty())
+          {
+            param_list error;
+            error.add("id", SProjectError);
+            error.add("desc", SNamelessProjectParameter);
+            xss_throw(error);
+          }
+
+        params_.add(id, xso->get("value", variant()));
       }
 
     //we need to find out how many different types of applications we'll be compiling

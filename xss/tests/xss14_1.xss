@@ -1,9 +1,10 @@
-Hello world
+Hello 
+
 <xss:code>
-   compiler.log("Hello"); 
-   string word = " world!";
-   out()
-   {
-       <xss:e value="word"/>
-   }
+	string word = " world!";
+	out()
+	{
+		<xss:e value="word"/>
+	}
+	compiler.log(word);
 </xss:code>

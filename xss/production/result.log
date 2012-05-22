@@ -155,7 +155,6 @@ log: [android] Rendering default files...
 Success are greateful
 ===[ box2d1.project.xml ]================
 
- 'classes.dex' as 'classes.dex'...
 
 log: Rendering Android project...
 log: API Level = 7
@@ -166,9 +165,10 @@ log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
 log: [jbox2d] Copying default files...
+Error [idiom] Environment variable is not defined
+	variable_name = ANDROID_SDK
+	file = c:/dev/XKP/xss/idioms/android/main.xssERROR: Project:  box2d1.project.xml
 
-log: Creating .apk bundle file...
-Success are greateful
 ===[ box2d2.project.xml ]================
 
 
@@ -223,11 +223,7 @@ log: Rendering Android Imports...
 Error [vm] Cannot resolve
 	object = jBox2d_4
 	property = id
-<<<<<<< HEAD
 	file = c:/dev/XKP/xss/idioms/java/instance.xssERROR: Project:  box2d4.project.xml
-=======
-	file = d:/xkp/xss/samples/android/jbox2d_4/../../../idioms/ms/java/../../java/instance.xssERROR: Project:  box2d4.project.xml
->>>>>>> 912a9807c92d0331563f6cc29c5fa7180397fca3
 
 ===[ box2d5.project.xml ]================
 
@@ -357,7 +353,6 @@ log: [android] Rendering default files...
 Success are greateful
 ===[ simple.project.xml ]================
 
- 'classes.dex' as 'classes.dex'...
 
 log: Rendering Android project...
 log: API Level = 4
@@ -373,9 +368,10 @@ log: Rendering instance: edtContainer
 log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
+Error [idiom] Environment variable is not defined
+	variable_name = ANDROID_SDK
+	file = c:/dev/XKP/xss/idioms/android/main.xssERROR: Project:  simple.project.xml
 
-log: Creating .apk bundle file...
-Success are greateful
 ===[ touchme.project.xml ]================
 
 
@@ -393,19 +389,19 @@ Success are greateful
 
 
 Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
+	file = c:/dev/XKP/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
 
 ===[ pairs.project.xml ]================
 
 
 Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
+	file = c:/dev/XKP/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
 
 ===[ simple.project.xml ]================
 
 
 Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
+	file = c:/dev/XKP/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
 
 ===[ 3js-ms.project.xml ]================(Tests)
 
@@ -1265,6 +1261,15 @@ log:
 log: NO LAYOUT
 log: 
 log: NO LAYOUT
+log: __div8
+log: NO LAYOUT
+log: lbl1
+log: edit1
+log: rb1
+log: cb1
+log: __radiogroup1
+log: btnFloating
+log: NO LAYOUT
 log: __label1
 log: dp2
 log: dp1
@@ -1293,19 +1298,64 @@ log: null
 log: VALUE 400
 log: PROPERTY width
 log: null
+log: VALUE 252
+log: PROPERTY width
+log: null
 log: VALUE 350
 Success are greateful
 ===[ jquery6.project.xml ]================(Tests)
 
 
-Error [html5 asynch] Objects need to be serializable in order to enter threads
-	type = preset
-<<<<<<< HEAD
-	file = c:/dev/XKP/xss/idioms/jquery/event.xssERROR: Project:  jquery6.project.xml
-=======
-	file = d:/xkp/xss/tests/../idioms/jquery/event.xssERROR: Project:  jquery6.project.xml
->>>>>>> 912a9807c92d0331563f6cc29c5fa7180397fca3
-
+log: Rendering property: enabled
+log: NO LAYOUT
+log: preset_apply
+log: NO LAYOUT
+log: __label1
+log: __br1
+log: __br2
+log: brightness
+log: __br3
+log: __label2
+log: __br4
+log: __br5
+log: constrast
+log: NO LAYOUT
+log: __label3
+log: __br6
+log: __br7
+log: noise
+log: __br8
+log: __label4
+log: __br9
+log: __br10
+log: density
+log: __br11
+log: mono
+log: NO LAYOUT
+log: __label5
+log: __br12
+log: __br13
+log: sepia
+log: __br14
+log: sepia_enabled
+log: NO LAYOUT
+log: __label6
+log: __br15
+log: __br16
+log: range
+log: PROPERTY height
+log: null
+log: VALUE 40
+log: PROPERTY height
+log: null
+log: VALUE 360
+log: PROPERTY width
+log: null
+log: VALUE 605
+log: PROPERTY height
+log: null
+log: VALUE 375
+Success are greateful
 ===[ jquery7.project.xml ]================(Tests)
 
 
@@ -1420,7 +1470,7 @@ log: true
 log: VALUE absolute
 log: PROPERTY left
 log: null
-log: VALUE 100
+log: VALUE -600
 log: PROPERTY top
 log: null
 log: VALUE 200
@@ -1435,7 +1485,7 @@ log: true
 log: VALUE absolute
 log: PROPERTY left
 log: null
-log: VALUE 300
+log: VALUE -600
 log: PROPERTY top
 log: null
 log: VALUE 550
@@ -1450,7 +1500,7 @@ log: null
 log: VALUE 620
 log: PROPERTY top
 log: null
-log: VALUE 200
+log: VALUE -500
 log: PROPERTY width
 log: null
 log: VALUE 550
@@ -1815,11 +1865,7 @@ Success are greateful
 
 Error [language] Missing declared tag
 	tag = user_image
-<<<<<<< HEAD
 	file = c:/dev/XKP/xss/idioms/wax/server.xssERROR: Project:  wax3.project.xml
-=======
-	file = d:/xkp/xss/tests/../idioms/wax/server.xssERROR: Project:  wax3.project.xml
->>>>>>> 912a9807c92d0331563f6cc29c5fa7180397fca3
 
 ===[ wax4.project.xml ]================(Tests)
 
@@ -2298,6 +2344,7 @@ log: </User Classes>
 
 
 log: /usr/lib/source.xxx
+log:  world!
 Success are greateful
 ===[ xss2.project.xml ]================(Tests)
 

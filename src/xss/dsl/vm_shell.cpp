@@ -14,6 +14,7 @@ using namespace xkp;
 
 const str SLanguage("shell");
 const str SCannotParseAssign("Cannot parse a simple assign text, rtfm");
+const str SShellVariableNotFound("Cannot find shell variable");
 const str SCrashedApplication("Executable application is crashed");
 
 struct shellworker : IWorker
@@ -32,6 +33,7 @@ struct shellworker : IWorker
 
         str working_path;
         str environment_vars; //td: correctly
+        bool break_errors = false;
 
         if (counter & 1)
           {
@@ -45,6 +47,12 @@ struct shellworker : IWorker
             environment_vars = xss_utils::var_to_string(v);
           }
 
+        if (counter & 4)
+          {
+            variant v = args.get(curr++);
+            break_errors = variant_cast<bool>(v, false);
+          }
+
         std::vector<ga_item>::iterator it = result_.begin();
         std::vector<ga_item>::iterator nd = result_.end();
         for(; it != nd; it++)
@@ -53,10 +61,10 @@ struct shellworker : IWorker
 
             std::vector<str>::iterator iit = it->items.begin();
             std::vector<str>::iterator ind = it->items.end();
-
             for(; iit != ind; iit++)
               {
-                valuable_items.push_back(*iit);
+                str str_value = *iit;
+                valuable_items.push_back(str_value);
               }
 
             if (!valuable_items.size()) continue;
@@ -71,8 +79,16 @@ struct shellworker : IWorker
                 if (!param.id.empty())
                   {
                     variant v = args.get(curr++);
-                    str var_value = xss_utils::var_to_string(v);
+                    if(v.empty())
+                      {
+                        param_list error;
+                        error.add("id", SLanguage);
+                        error.add("desc", SShellVariableNotFound);
+                        error.add("variable", param.id);
+                        xss_throw(error);
+                      }
 
+                    str var_value = xss_utils::var_to_string(v);
                     valuable_items[param.item_idx].insert(param.item_spot, var_value);
                   }
               }
@@ -86,7 +102,13 @@ struct shellworker : IWorker
                 std::vector<str>::iterator vit = valuable_items.begin();
                 std::vector<str>::iterator vnd = valuable_items.end();
                 for(; vit != vnd; vit++)
-                  args.push_back(*vit);
+                  {
+                    str arg = *vit;
+
+                    //don't add empty params
+                    if (!arg.empty())
+                      args.push_back(arg);
+                  }
 
                 //td: recover the result of execution and save into variable, how to?
                 //... this is temporal, only for debug purpose
@@ -100,16 +122,51 @@ struct shellworker : IWorker
 
                 bp::child c = bp::launch(exe, args, ctx);
                 const bp::status s = c.wait();
+
+//td: personalize class with static function or only functions
+#if defined(__unix__) || defined(__unix) || defined(unix) || defined(__linux__)
+                if (s.exited()) {
+                    std::cout << "Program returned exit code " << s.exit_status() << std::endl;
+                } else if (s.signaled()) {
+                    std::cout << "Program received signal " << s.term_signal() << std::endl;
+                    if (s.dumped_core())
+                        std::cout << "Program also dumped core" << std::endl;
+                } else if (s.stopped()) {
+                    std::cout << "Program stopped by signal" << s.stop_signal() << std::endl;
+                } else {
+                    std::cout << "Unknown termination reason" << std::endl;
+                }
+#elif defined(_WIN32) || defined(_WIN64) || defined(__WIN32__)
+#endif
+
+                if (s.exited() && s.exit_status() == EXIT_SUCCESS)
+                  {
+                    //std::cout << "[" << exe << "]" << " Shell application is executed successfully." << std::endl;
+                  }
+                else
+                  {
+                    //std::cout << "[" << exe << "]" << " Shell application failed." << std::endl;
+                    if (break_errors)
+                      {
+                        param_list error;
+                        error.add("id", SLanguage);
+                        error.add("desc", SCrashedApplication);
+                        error.add("exec", valuable_items[0]);
+                        xss_throw(error);
+                      }
+                  }
               }
             catch (const boost::system::system_error&)
               {
-                param_list error;
-                error.add("id", SLanguage);
-                error.add("desc", SCrashedApplication);
-                error.add("exec", valuable_items[0]);
-                xss_throw(error);
+                if (break_errors)
+                  {
+                    param_list error;
+                    error.add("id", SLanguage);
+                    error.add("desc", SCrashedApplication);
+                    error.add("exec", valuable_items[0]);
+                    xss_throw(error);
+                  }
               }
-
           }
       }
     private:
@@ -135,7 +192,7 @@ DSLWorker vm_shell::create_worker(dsl& info, code_linker& owner, std::vector<str
     std::vector<str> aux_exprs;
     if (info.param_count)
       {
-        str text = "working_path environment_vars";
+        str text = "working_path environment_vars break_errors";
         std::vector<str> params;
         boost::split(params, text, boost::is_space());
 
