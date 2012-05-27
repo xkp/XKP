@@ -54,7 +54,7 @@ on keyup(keycode)
 	}	
 }
 
-on updates()
+on update()
 {		
 	if(left_key_press)
 	{

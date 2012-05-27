@@ -1,7 +1,6 @@
 <xss:parameter id="obj"/>
 <xss:code>
 
-out(marker = "threejs_variables", marker_source = "entry") {var <xss:e v="obj.id"/>;}
 out(){
 <xss:e v = "obj.id"/> = new <xss:e v="obj.type.output_id"/>(<xss:open_brace/>
 }
@@ -22,10 +21,10 @@ if (params)
 				if(prop.value != null){
 					if(i > 0) out() {,}					
 					if(prop.output_id == "src") 
-						out(){map:new THREE.Texture(scene.streamer.get_resource('<xss:e v="obj.src"/>').data),}
+						out(){map:new THREE.Texture(manager.streamer.get_resource('<xss:e v="obj.src"/>').data),}
 					else					
-					if(prop.output_id == "texture_object") 
-						out(){map:new THREE.Texture(<xss:e v="obj.texture_object"/>),}
+					if(prop.output_id == "texture_object")					
+						out(){map:new THREE.Texture(<xss:e v="obj.texture_object"/>),}					
 					else		
 						out() {<xss:e v="prop.output_id"/>:<xss:e v="prop.value"/>}					
 					i++;
@@ -39,6 +38,15 @@ out(){
 	<xss:close_brace/>);
 	}
 	
+if(obj.texture_object){
+	out(){
+		manager.events.addListener("update", function()
+		{   
+			<xss:e v="obj.id"/>.map.needsUpdate = true;			
+		});
+	}
+}
+
 if(obj.parent.class_name == "composite_material")
 	out(){
 	<xss:e v = "obj.parent.id"/>.push(<xss:e v = "obj.id"/>);

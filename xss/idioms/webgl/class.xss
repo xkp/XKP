@@ -89,6 +89,7 @@
         }
         
     }    
+
     for(var inst in clazz.instances)
     {				
         if (inst.class_name == "sequence") //td: !!!
@@ -100,8 +101,10 @@
 			 var <xss:e v="inst.id"/>;
 			<xss:e v="inst.id"/> = <xss:e v="compiler.instantiate(inst.type, object = inst)"/> ;
 			}
-			continue;
+			
 		}		
+		else
+		{
         string inst_renderer = inst.type.renderer;				
 			
         if (!inst_renderer)
@@ -114,10 +117,12 @@
         }            
         string inst_path = compiler.idiom_path(inst, inst_renderer);
 		compiler.xss(inst_path, inst);		
+		}
         if(super_transform)
 			out()
 			{
-				<xss:e v="clazz.id"/>.addChild(<xss:e v="inst.output_id"/>);
+			if(<xss:e v="inst.output_id"/> instanceof THREE.Object3D)
+				<xss:e v="clazz.id"/>.add(<xss:e v="inst.output_id"/>);
 			}   
 		else
 			out()
@@ -133,6 +138,9 @@
 	compiler.xss("../common-js/instance.xss", clazz); 
     out()
     {
+		if(<xss:e v="clazz.id"/> instanceof THREE.Object3D)
+			manager.scene.add(<xss:e v="clazz.id"/>);
+		<xss:e v="clazz.id"/>.manager = manager;
         return <xss:e v="clazz.id"/>;
         <xss:close_brace/>
     }

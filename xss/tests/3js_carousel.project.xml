@@ -1,4 +1,4 @@
-<project entry_point="../idioms/threejs/app.xss" language="js" target="3js_carousel.xml" output="../production/test/3js_carousel.html">
+<project entry_point="../idioms/threejs/entry.xss" language="js" target="3js_carousel.xml" output="../production/test/3js_carousel.html">
     
 	<include def="3js_carousel.classes.xml" src="3js_carousel.classes.xs"/>
 	

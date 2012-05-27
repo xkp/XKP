@@ -273,7 +273,7 @@ function start(resolution)
             bb = bb.GetNext();
         }
 		g_sequence_manager.update(g_delta);
-		application.events.dispatch("updates", []);			
+		application.events.dispatch("update", [g_delta, g_elapsed]);			
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
 		window.setTimeout(updater, resolution);  
@@ -358,7 +358,6 @@ g_sequence_manager);
 		this__.move_around.target = this__;
 	}
 	);
-		application.are_obj_events = true;
 	this.events.addListener("collision", function(who)
 	{    
 		if (who instanceof bad_guy)
@@ -369,7 +368,6 @@ this__.fade_out.start();
 }
 	}
 	);
-		application.are_obj_events = true;
             this.cannon.x = 20;
             this.cannon.y = 60;
             this.cannon.set_rotation(0);
@@ -436,12 +434,10 @@ g_sequence_manager);
 		this__.move_around.target = this__;
 	}
 	);
-		application.are_obj_events = true;
 	this.events.addListener("collision", function()
 	{    
 	}
 	);
-		application.are_obj_events = true;
             this.move_around.vx = 0;
             this.move_around.vy = 0;
             this.events.dispatch("init", [this]);
@@ -505,7 +501,6 @@ SoundUtils.play("sounds/boom.wav");
 }
 	}
 	);
-		application.are_obj_events = true;
             this.events.dispatch("init", [this]);
             },
 });
@@ -588,7 +583,6 @@ this__.vy = this__.vy * -1;
 }
 	}
 	);
-		application.are_obj_events = true;
             this.events.dispatch("init", [this]);
             },
 });
@@ -616,7 +610,7 @@ hero.move_around.vx = 0;
 }
 	}
 	);
-window.onload = function() 
+window.onload = function()
 {
         drawingCanvas = document.getElementById("myCanvas");
         g_canvas = drawingCanvas;
@@ -633,64 +627,10 @@ window.onload = function()
         g_ui_root = ui_.root;
      	ui_.load_resources(function()
 		{
-	drawingCanvas.onmousemove = function(ev)
-	{
-		ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmousedown = function(ev)
-	{
-		ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmouseup = function(ev)
-	{
-		ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};		
-	ui_.events.addListener("mousedown", function(x,y)
-	{    
-		application.events.dispatch("mousedown", [x, y]);
-	});
-	ui_.events.addListener("mouseup", function(x,y)
-	{    
-		application.events.dispatch("mouseup", [x, y]);
-	});
-	ui_.events.addListener("mousemove", function(x,y)
-	{    
-		application.events.dispatch("mousemove", [x, y]);
-	});
-	ui_.events.addListener("click", function(x,y)
-	{    
-		application.events.dispatch("click", [x, y]);
-	});
-	ui_.events.addListener("drag", function(x,y)
-	{    
-		application.events.dispatch("drag", [x, y]);
-	});
-	ui_.events.addListener("dragend", function(x,y)
-	{    
-		application.events.dispatch("dragend", [x, y]);
-	});
-	ui_.events.addListener("keyup", function(keycode)
-	{    
-		application.events.dispatch("keyup", [keycode]);
-	});
-	ui_.events.addListener("keydown", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
-	ui_.events.addListener("keypress", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
 		    sound = new ui.StateButton(g_ui_root.manager, g_ui_root, "images/sound_on.png", "images/sound_off.png");
 		    hero = new good_guy(g_ui_root.manager, g_ui_root, "images/smile_grin_48.png");
 		    __floor1 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
 		    game_over = new ui.Label(g_ui_root.manager, g_ui_root, "40pt Calibri");
-        sp1 = new arcade.Spawner(g_spawner_manager, 300, 100, 3, null);
-        sp1.creator = function()
-        {
-            return new bad_guy(g_ui, g_ui_root, "images/smile_sad_48.png");
-        }
-            sp1.start();
             sound.set_x(50);
             sound.set_y(50);
             sound.set_width(50);
@@ -704,7 +644,6 @@ hero.move_around.stop();
 hero.src("images/smile_sad_48.png");
 	}
 	);
-		application.are_obj_events = true;
             __floor1.set_x(0);
             __floor1.set_y(390);
             __floor1.set_width(600);
@@ -713,6 +652,12 @@ hero.src("images/smile_sad_48.png");
             game_over.set_y(200);
             game_over.setVisible(false);
             game_over.text("GAME OVER");
+        sp1 = new arcade.Spawner(g_spawner_manager, 300, 100, 3, null);
+        sp1.creator = function()
+        {
+            return new bad_guy(g_ui, g_ui_root, "images/smile_sad_48.png");
+        }
+            sp1.start();
             sp1.x = 300;
             sp1.y = 100;
             sp1.frequency = 3;
@@ -727,7 +672,55 @@ hero.src("images/smile_sad_48.png");
 			document.onkeypress = function(ev)
 			{
 				ui_.keypress(ev.keyCode);                  
+			};			
+			drawingCanvas.onmousemove = function(ev)
+			{
+				ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 			};
+			drawingCanvas.onmousedown = function(ev)
+			{
+				ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+			};
+			drawingCanvas.onmouseup = function(ev)
+			{
+				ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+			};		
+			ui_.events.addListener("mousedown", function(x,y)
+			{    
+				application.events.dispatch("mousedown", [x, y]);
+			});
+			ui_.events.addListener("mouseup", function(x,y)
+			{    
+				application.events.dispatch("mouseup", [x, y]);
+			});
+			ui_.events.addListener("mousemove", function(x,y)
+			{    
+				application.events.dispatch("mousemove", [x, y]);
+			});
+			ui_.events.addListener("click", function(x,y)
+			{    
+				application.events.dispatch("click", [x, y]);
+			});
+			ui_.events.addListener("drag", function(x,y)
+			{    
+				application.events.dispatch("drag", [x, y]);
+			});
+			ui_.events.addListener("dragend", function(x,y)
+			{    
+				application.events.dispatch("dragend", [x, y]);
+			});
+			ui_.events.addListener("keyup", function(keycode)
+			{    
+				application.events.dispatch("keyup", [keycode]);
+			});
+			ui_.events.addListener("keydown", function(keycode)
+			{    
+				application.events.dispatch("keydown", [keycode]);
+			});
+			ui_.events.addListener("keypress", function(keycode)
+			{    
+				application.events.dispatch("keydown", [keycode]);
+			});
             application.events.dispatch("init", []);
             start();			
 			ui_.draw(drawingCanvas.getContext('2d'));

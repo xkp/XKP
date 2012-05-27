@@ -24,13 +24,13 @@
 	
 	<scene>		
 	
-		<camera id="camera_1" fov="45" aspect="1.5" near="1" far="2000">
+		<camera id="camera_1" fov="45" aspect="1.5" near="1" far="2000" >
 			<position z="800" y="200"/>			
 		</camera>			
 		
 		<ambient_light id="amb_light_1" color="0x202020"/>
 		
-		<directional_light id="dir_light_1" color="Math.random() * 0xffffff">
+		<directional_light id="dir_light_1" color="Math.random() * 0xffffff" intensity="1">
 			<position x="Math.random() - 0.5" y="Math.random() - 0.5" z="Math.random() - 0.5"/>
 		</directional_light>
 		
@@ -38,11 +38,10 @@
 			<scale x="5" y="5" z="5"/>						
 		</particle>
 		
-		<point_light id="point_light_1" color="White" intensity="1"/>
+		<point_light id="point_light_1" color="White" intensity="1" distance="0"/>
 		
 		<plane id="plane_1" width="1000" height="1000" x_segments="100" y_segments="100" material="material_wireframe">
-			<position y="-70"/>
-			<rotation x="-90"/>
+			<position y="-100"/>			
 		</plane>		
 				
 	</scene>

@@ -6,7 +6,7 @@ on pre_process(obj)
 			comp_mat_array += obj.id;			
 	}
 	if (obj.class_name == "scene")
-		obj.id = "scene";	
+		obj.id = "manager.scene";	
 	for(var comp_mat in comp_mat_array){
 		if(comp_mat == obj.material){
 			var value = obj.material;			

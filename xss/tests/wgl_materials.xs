@@ -1,5 +1,6 @@
 property timer;
 property objects = [];
+bool flag = false;
 
 on init()
 {
@@ -13,16 +14,33 @@ on init()
 		sphere_1.rotation.y = Math.random() * 200 - 100;
 		sphere_1.rotation.z = Math.random() * 200 - 100;
 		objects += sphere_1;
-		scene.addObject( sphere_1 );
+		scene.add( sphere_1 );
 	}
 }
 
-on updates()
+on mousedown()
 {
-	timer = g_elapsed * 0.0001;
+	flag = true;
+}
+
+on mouseup()
+{
+	flag = false;
+}
+
+on update()
+{
+	timer = g_elapsed * 0.0001;	
+
 	camera_1.position.x = Math.cos( timer ) * 1000;
 	camera_1.position.z = Math.sin( timer ) * 1000;
-
+	if(flag)
+		camera_1.look_at = objects[1].position;
+	else
+		camera_1.look_at = scene.position;
+		
+	all_in_one[9].emissive.setHSV( 0.54, 1, 0.7 * ( 0.5 + 0.5 * Math.sin( 35 * timer ) ) );	
+				
 	for ( int i = 0; i < objects.length; i++ ) {
 		var object = objects[ i ];
 		object.rotation.x += 0.01;

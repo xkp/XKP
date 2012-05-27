@@ -121,7 +121,7 @@
 			out()
 			{
 				if(<xss:e v="inst.output_id"/> instanceof THREE.Object3D)
-					<xss:e v="clazz.id"/>.addChild(<xss:e v="inst.output_id"/>);
+					<xss:e v="clazz.id"/>.add(<xss:e v="inst.output_id"/>);
 			}   
 		else
 			out()
@@ -138,7 +138,8 @@
     out()
     {
 		if(<xss:e v="clazz.id"/> instanceof THREE.Object3D)
-			scene.addObject(<xss:e v="clazz.id"/>);
+			manager.scene.add(<xss:e v="clazz.id"/>);
+		<xss:e v="clazz.id"/>.manager = manager;
         return <xss:e v="clazz.id"/>;
         <xss:close_brace/>
     }

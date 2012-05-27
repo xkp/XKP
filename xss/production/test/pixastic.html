@@ -213,7 +213,7 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
-		application.events.dispatch("updates", []);			
+		application.events.dispatch("update", [g_delta, g_elapsed]);			
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
 		window.setTimeout(updater, resolution);  
@@ -221,7 +221,7 @@ function start(resolution)
 	window.setTimeout(updater, resolution);  
 }  
 var __label1;var __line1;var img1;var title;var flipv_label;var hsl_label;var edges_label;var pointillize_label;var brightness_label;var invert_label;var sepia_label;var coloradjust_label;var noise_label;var blur_label;var edges2_label;var glow_label;var sharpen_label;var solarize_label;var fliph_label;var mosaic_label;var options;var hsl_options;var __label2;var __label3;var saturation_bar;var saturation_b1;var saturation_b2;var __label4;var hue_bar;var hue_b1;var hue_b2;var __label5;var lightness_bar;var lightness_b1;var lightness_b2;var edges_options;var __label6;var mono_check;var __label7;var invert_check;var __label8;var pointillize_options;var __label9;var __label10;var density_bar;var density_b1;var density_b2;var __label11;var noise_bar;var noise_b1;var noise_b2;var transparent_check;var __label12;var brightness_options;var __label13;var __label14;var brightness_bar;var brightness_b1;var brightness_b2;var __label15;var contrast_bar;var contrast_b1;var contrast_b2;var coloradjust_options;var __label16;var __label17;var red_bar;var red_b1;var red_b2;var __label18;var green_bar;var green_b1;var green_b2;var __label19;var blue_bar;var blue_b1;var blue_b2;var noise_options;var __label20;var __label21;var amount_bar;var amount_b1;var amount_b2;var __label22;var strength_bar;var strength_b1;var strength_b2;var mono_check1;var __label23;var glow_options;var __label24;var __label25;var amount_bar1;var amount_b11;var amount_b21;var __label26;var radius_bar;var radius_b1;var radius_b2;var sharpen_options;var __label27;var __label28;var amount_bar2;var amount_b12;var amount_b22;var mosaic_options;var __label29;var __label30;var bsize_bar;var bsize_b1;var bsize_b2;var btnNext;var btnPrev;var __label31;
-window.onload = function() 
+window.onload = function()
 {
         drawingCanvas = document.getElementById("myCanvas");
         g_canvas = drawingCanvas;
@@ -238,54 +238,6 @@ window.onload = function()
         g_ui_root = ui_.root;
      	ui_.load_resources(function()
 		{
-	drawingCanvas.onmousemove = function(ev)
-	{
-		ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmousedown = function(ev)
-	{
-		ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmouseup = function(ev)
-	{
-		ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};		
-	ui_.events.addListener("mousedown", function(x,y)
-	{    
-		application.events.dispatch("mousedown", [x, y]);
-	});
-	ui_.events.addListener("mouseup", function(x,y)
-	{    
-		application.events.dispatch("mouseup", [x, y]);
-	});
-	ui_.events.addListener("mousemove", function(x,y)
-	{    
-		application.events.dispatch("mousemove", [x, y]);
-	});
-	ui_.events.addListener("click", function(x,y)
-	{    
-		application.events.dispatch("click", [x, y]);
-	});
-	ui_.events.addListener("drag", function(x,y)
-	{    
-		application.events.dispatch("drag", [x, y]);
-	});
-	ui_.events.addListener("dragend", function(x,y)
-	{    
-		application.events.dispatch("dragend", [x, y]);
-	});
-	ui_.events.addListener("keyup", function(keycode)
-	{    
-		application.events.dispatch("keyup", [keycode]);
-	});
-	ui_.events.addListener("keydown", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
-	ui_.events.addListener("keypress", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
 		    __label1 = new ui.Label(g_ui_root.manager, g_ui_root, "15px Verdana");
 		    __line1 = new ui.Line(g_ui_root.manager, g_ui_root);
 		    img1 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test1.png");
@@ -560,7 +512,6 @@ window.onload = function()
 flipv_label.set_y(y - flipv_label.get_height() / 2);
 	}
 	);
-		application.are_obj_events = true;
 	flipv_label.events.addListener("dragend", function(x,y)
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
@@ -571,7 +522,6 @@ flipv_label.set_x(610);
 flipv_label.set_y(110);
 	}
 	);
-		application.are_obj_events = true;
             hsl_label.set_x(610);
             hsl_label.set_y(130);
             hsl_label.text("Hue/Saturation/Light");
@@ -581,7 +531,6 @@ flipv_label.set_y(110);
 hsl_label.set_y(y - hsl_label.get_height() / 2);
 	}
 	);
-		application.are_obj_events = true;
 	hsl_label.events.addListener("dragend", function(x,y)
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
@@ -593,7 +542,6 @@ hsl_label.set_y(130);
 hsl_options.set_switchable(img1.hsl_filter.apply);
 	}
 	);
-		application.are_obj_events = true;
             edges_label.set_x(610);
             edges_label.set_y(150);
             edges_label.text("Edge Detection");
@@ -603,7 +551,6 @@ hsl_options.set_switchable(img1.hsl_filter.apply);
 edges_label.set_y(y - edges_label.get_height() / 2);
 	}
 	);
-		application.are_obj_events = true;
 	edges_label.events.addListener("dragend", function(x,y)
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
@@ -615,7 +562,6 @@ edges_label.set_y(150);
 edges_options.set_switchable(img1.edges_filter.apply);
 	}
 	);
-		application.are_obj_events = true;
             pointillize_label.set_x(610);
             pointillize_label.set_y(170);
             pointillize_label.text("Pointillize");
@@ -625,7 +571,6 @@ edges_options.set_switchable(img1.edges_filter.apply);
 pointillize_label.set_y(y - pointillize_label.get_height() / 2);
 	}
 	);
-		application.are_obj_events = true;
 	pointillize_label.events.addListener("dragend", function(x,y)
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
@@ -637,7 +582,6 @@ pointillize_label.set_y(170);
 pointillize_options.set_switchable(img1.pointillize_filter.apply);
 	}
 	);
-		application.are_obj_events = true;
             brightness_label.set_x(610);
             brightness_label.set_y(190);
             brightness_label.text("Brightness/Contrast");
@@ -647,7 +591,6 @@ pointillize_options.set_switchable(img1.pointillize_filter.apply);
 brightness_label.set_y(y - brightness_label.get_height() / 2);
 	}
 	);
-		application.are_obj_events = true;
 	brightness_label.events.addListener("dragend", function(x,y)
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
@@ -659,7 +602,6 @@ brightness_label.set_y(190);
 brightness_options.set_switchable(img1.brightness_filter.apply);
 	}
 	);
-		application.are_obj_events = true;
             invert_label.set_x(610);
             invert_label.set_y(210);
             invert_label.text("Invert");
@@ -669,7 +611,6 @@ brightness_options.set_switchable(img1.brightness_filter.apply);
 invert_label.set_y(y - invert_label.get_height() / 2);
 	}
 	);
-		application.are_obj_events = true;
 	invert_label.events.addListener("dragend", function(x,y)
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
@@ -680,7 +621,6 @@ invert_label.set_x(610);
 invert_label.set_y(210);
 	}
 	);
-		application.are_obj_events = true;
             sepia_label.set_x(610);
             sepia_label.set_y(230);
             sepia_label.text("Sepia");
@@ -690,7 +630,6 @@ invert_label.set_y(210);
 sepia_label.set_y(y - sepia_label.get_height() / 2);
 	}
 	);
-		application.are_obj_events = true;
 	sepia_label.events.addListener("dragend", function(x,y)
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
@@ -701,7 +640,6 @@ sepia_label.set_x(610);
 sepia_label.set_y(230);
 	}
 	);
-		application.are_obj_events = true;
             coloradjust_label.set_x(610);
             coloradjust_label.set_y(250);
             coloradjust_label.text("Color Adjust");
@@ -711,7 +649,6 @@ sepia_label.set_y(230);
 coloradjust_label.set_y(y - coloradjust_label.get_height() / 2);
 	}
 	);
-		application.are_obj_events = true;
 	coloradjust_label.events.addListener("dragend", function(x,y)
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
@@ -723,7 +660,6 @@ coloradjust_label.set_y(250);
 coloradjust_options.set_switchable(img1.coloradjust_filter.apply);
 	}
 	);
-		application.are_obj_events = true;
             noise_label.set_x(610);
             noise_label.set_y(270);
             noise_label.text("Noise");
@@ -733,7 +669,6 @@ coloradjust_options.set_switchable(img1.coloradjust_filter.apply);
 noise_label.set_y(y - noise_label.get_height() / 2);
 	}
 	);
-		application.are_obj_events = true;
 	noise_label.events.addListener("dragend", function(x,y)
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
@@ -745,7 +680,6 @@ noise_label.set_y(270);
 noise_options.set_switchable(img1.noise_filter.apply);
 	}
 	);
-		application.are_obj_events = true;
             blur_label.set_x(610);
             blur_label.set_y(290);
             blur_label.text("Blur");
@@ -755,7 +689,6 @@ noise_options.set_switchable(img1.noise_filter.apply);
 blur_label.set_y(y - blur_label.get_height() / 2);
 	}
 	);
-		application.are_obj_events = true;
 	blur_label.events.addListener("dragend", function(x,y)
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
@@ -766,7 +699,6 @@ blur_label.set_x(610);
 blur_label.set_y(290);
 	}
 	);
-		application.are_obj_events = true;
             edges2_label.set_x(610);
             edges2_label.set_y(310);
             edges2_label.text("Edge Detection 2");
@@ -776,7 +708,6 @@ blur_label.set_y(290);
 edges2_label.set_y(y - edges2_label.get_height() / 2);
 	}
 	);
-		application.are_obj_events = true;
 	edges2_label.events.addListener("dragend", function(x,y)
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
@@ -787,7 +718,6 @@ edges2_label.set_x(610);
 edges2_label.set_y(310);
 	}
 	);
-		application.are_obj_events = true;
             glow_label.set_x(610);
             glow_label.set_y(330);
             glow_label.text("Glow");
@@ -797,7 +727,6 @@ edges2_label.set_y(310);
 glow_label.set_y(y - glow_label.get_height() / 2);
 	}
 	);
-		application.are_obj_events = true;
 	glow_label.events.addListener("dragend", function(x,y)
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
@@ -809,7 +738,6 @@ glow_label.set_y(330);
 glow_options.set_switchable(img1.glow_filter.apply);
 	}
 	);
-		application.are_obj_events = true;
             sharpen_label.set_x(610);
             sharpen_label.set_y(350);
             sharpen_label.text("Sharpen");
@@ -819,7 +747,6 @@ glow_options.set_switchable(img1.glow_filter.apply);
 sharpen_label.set_y(y - sharpen_label.get_height() / 2);
 	}
 	);
-		application.are_obj_events = true;
 	sharpen_label.events.addListener("dragend", function(x,y)
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
@@ -831,7 +758,6 @@ sharpen_label.set_y(350);
 sharpen_options.set_switchable(img1.sharpen_filter.apply);
 	}
 	);
-		application.are_obj_events = true;
             solarize_label.set_x(610);
             solarize_label.set_y(370);
             solarize_label.text("Solarize");
@@ -841,7 +767,6 @@ sharpen_options.set_switchable(img1.sharpen_filter.apply);
 solarize_label.set_y(y - solarize_label.get_height() / 2);
 	}
 	);
-		application.are_obj_events = true;
 	solarize_label.events.addListener("dragend", function(x,y)
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
@@ -852,7 +777,6 @@ solarize_label.set_x(610);
 solarize_label.set_y(370);
 	}
 	);
-		application.are_obj_events = true;
             fliph_label.set_x(610);
             fliph_label.set_y(390);
             fliph_label.text("Flip Horizontally");
@@ -862,7 +786,6 @@ solarize_label.set_y(370);
 fliph_label.set_y(y - fliph_label.get_height() / 2);
 	}
 	);
-		application.are_obj_events = true;
 	fliph_label.events.addListener("dragend", function(x,y)
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
@@ -873,7 +796,6 @@ fliph_label.set_x(610);
 fliph_label.set_y(390);
 	}
 	);
-		application.are_obj_events = true;
             mosaic_label.set_x(610);
             mosaic_label.set_y(410);
             mosaic_label.text("Mosaic");
@@ -883,7 +805,6 @@ fliph_label.set_y(390);
 mosaic_label.set_y(y - mosaic_label.get_height() / 2);
 	}
 	);
-		application.are_obj_events = true;
 	mosaic_label.events.addListener("dragend", function(x,y)
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
@@ -895,7 +816,6 @@ mosaic_label.set_y(410);
 mosaic_options.set_switchable(img1.mosaic_filter.apply);
 	}
 	);
-		application.are_obj_events = true;
             options.set_x(20);
             options.set_y(80);
             options.set_width(300);
@@ -922,7 +842,6 @@ mosaic_options.set_switchable(img1.mosaic_filter.apply);
 img1.hsl_filter.saturation -= 4;
 	}
 	);
-		application.are_obj_events = true;
             saturation_b2.set_x(170);
             saturation_b2.set_y(100);
             saturation_b2.set_width(20);
@@ -933,7 +852,6 @@ img1.hsl_filter.saturation -= 4;
 img1.hsl_filter.saturation += 4;
 	}
 	);
-		application.are_obj_events = true;
             __label4.set_x(40);
             __label4.set_y(130);
             __label4.text("Hue Adjust");
@@ -952,7 +870,6 @@ img1.hsl_filter.saturation += 4;
 img1.hsl_filter.hue -= 7.19999981;
 	}
 	);
-		application.are_obj_events = true;
             hue_b2.set_x(170);
             hue_b2.set_y(150);
             hue_b2.set_width(20);
@@ -963,7 +880,6 @@ img1.hsl_filter.hue -= 7.19999981;
 img1.hsl_filter.hue += 7.19999981;
 	}
 	);
-		application.are_obj_events = true;
             __label5.set_x(40);
             __label5.set_y(180);
             __label5.text("Lightness Adjust");
@@ -982,7 +898,6 @@ img1.hsl_filter.hue += 7.19999981;
 img1.hsl_filter.lightness -= 4;
 	}
 	);
-		application.are_obj_events = true;
             lightness_b2.set_x(170);
             lightness_b2.set_y(200);
             lightness_b2.set_width(20);
@@ -993,7 +908,6 @@ img1.hsl_filter.lightness -= 4;
 img1.hsl_filter.lightness += 4;
 	}
 	);
-		application.are_obj_events = true;
             edges_options.set_switchable(false);
             __label6.set_x(10);
             __label6.set_y(50);
@@ -1008,7 +922,6 @@ img1.hsl_filter.lightness += 4;
 		img1.edges_filter.mono = mono_check.is_active;
 	}
 	);
-		application.are_obj_events = true;
             __label7.set_x(90);
             __label7.set_y(85);
             __label7.text("Mono");
@@ -1022,7 +935,6 @@ img1.hsl_filter.lightness += 4;
 		img1.edges_filter.invert = invert_check.is_active;
 	}
 	);
-		application.are_obj_events = true;
             __label8.set_x(90);
             __label8.set_y(135);
             __label8.text("Invert");
@@ -1047,7 +959,6 @@ img1.hsl_filter.lightness += 4;
 img1.pointillize_filter.density -= 0.100000001;
 	}
 	);
-		application.are_obj_events = true;
             density_b2.set_x(170);
             density_b2.set_y(100);
             density_b2.set_width(20);
@@ -1058,7 +969,6 @@ img1.pointillize_filter.density -= 0.100000001;
 img1.pointillize_filter.density += 0.100000001;
 	}
 	);
-		application.are_obj_events = true;
             __label11.set_x(40);
             __label11.set_y(130);
             __label11.text("Noise Adjust");
@@ -1076,7 +986,6 @@ img1.pointillize_filter.density += 0.100000001;
 img1.pointillize_filter.noise -= 0.100000001;
 	}
 	);
-		application.are_obj_events = true;
             noise_b2.set_x(170);
             noise_b2.set_y(150);
             noise_b2.set_width(20);
@@ -1087,7 +996,6 @@ img1.pointillize_filter.noise -= 0.100000001;
 img1.pointillize_filter.noise += 0.100000001;
 	}
 	);
-		application.are_obj_events = true;
             transparent_check.set_x(40);
             transparent_check.set_y(180);
             transparent_check.set_width(32);
@@ -1098,7 +1006,6 @@ img1.pointillize_filter.noise += 0.100000001;
 		img1.pointillize_filter.transparent = transparent_check.is_active;
 	}
 	);
-		application.are_obj_events = true;
             __label12.set_x(90);
             __label12.set_y(185);
             __label12.text("Transparent");
@@ -1124,7 +1031,6 @@ img1.pointillize_filter.noise += 0.100000001;
 img1.brightness_filter.brightness -= 3;
 	}
 	);
-		application.are_obj_events = true;
             brightness_b2.set_x(170);
             brightness_b2.set_y(100);
             brightness_b2.set_width(20);
@@ -1135,7 +1041,6 @@ img1.brightness_filter.brightness -= 3;
 img1.brightness_filter.brightness += 3;
 	}
 	);
-		application.are_obj_events = true;
             __label15.set_x(40);
             __label15.set_y(130);
             __label15.text("Contrast Adjust");
@@ -1154,7 +1059,6 @@ img1.brightness_filter.brightness += 3;
 img1.brightness_filter.contrast -= 0.0199999996;
 	}
 	);
-		application.are_obj_events = true;
             contrast_b2.set_x(170);
             contrast_b2.set_y(150);
             contrast_b2.set_width(20);
@@ -1165,7 +1069,6 @@ img1.brightness_filter.contrast -= 0.0199999996;
 img1.brightness_filter.contrast += 0.0199999996;
 	}
 	);
-		application.are_obj_events = true;
             coloradjust_options.set_switchable(false);
             __label16.set_x(10);
             __label16.set_y(50);
@@ -1188,7 +1091,6 @@ img1.brightness_filter.contrast += 0.0199999996;
 img1.coloradjust_filter.red -= 0.0199999996;
 	}
 	);
-		application.are_obj_events = true;
             red_b2.set_x(170);
             red_b2.set_y(100);
             red_b2.set_width(20);
@@ -1199,7 +1101,6 @@ img1.coloradjust_filter.red -= 0.0199999996;
 img1.coloradjust_filter.red += 0.0199999996;
 	}
 	);
-		application.are_obj_events = true;
             __label18.set_x(40);
             __label18.set_y(130);
             __label18.text("Green Adjust");
@@ -1218,7 +1119,6 @@ img1.coloradjust_filter.red += 0.0199999996;
 img1.coloradjust_filter.green -= 0.0199999996;
 	}
 	);
-		application.are_obj_events = true;
             green_b2.set_x(170);
             green_b2.set_y(150);
             green_b2.set_width(20);
@@ -1229,7 +1129,6 @@ img1.coloradjust_filter.green -= 0.0199999996;
 img1.coloradjust_filter.green += 0.0199999996;
 	}
 	);
-		application.are_obj_events = true;
             __label19.set_x(40);
             __label19.set_y(180);
             __label19.text("Blue Adjust");
@@ -1248,7 +1147,6 @@ img1.coloradjust_filter.green += 0.0199999996;
 img1.coloradjust_filter.blue -= 0.0199999996;
 	}
 	);
-		application.are_obj_events = true;
             blue_b2.set_x(170);
             blue_b2.set_y(200);
             blue_b2.set_width(20);
@@ -1259,7 +1157,6 @@ img1.coloradjust_filter.blue -= 0.0199999996;
 img1.coloradjust_filter.blue += 0.0199999996;
 	}
 	);
-		application.are_obj_events = true;
             noise_options.set_switchable(false);
             __label20.set_x(10);
             __label20.set_y(50);
@@ -1281,7 +1178,6 @@ img1.coloradjust_filter.blue += 0.0199999996;
 img1.noise_filter.amount -= 0.0199999996;
 	}
 	);
-		application.are_obj_events = true;
             amount_b2.set_x(170);
             amount_b2.set_y(100);
             amount_b2.set_width(20);
@@ -1292,7 +1188,6 @@ img1.noise_filter.amount -= 0.0199999996;
 img1.noise_filter.amount += 0.0199999996;
 	}
 	);
-		application.are_obj_events = true;
             __label22.set_x(40);
             __label22.set_y(130);
             __label22.text("Strength Adjust");
@@ -1310,7 +1205,6 @@ img1.noise_filter.amount += 0.0199999996;
 img1.noise_filter.strength -= 0.0199999996;
 	}
 	);
-		application.are_obj_events = true;
             strength_b2.set_x(170);
             strength_b2.set_y(150);
             strength_b2.set_width(20);
@@ -1321,7 +1215,6 @@ img1.noise_filter.strength -= 0.0199999996;
 img1.noise_filter.strength += 0.0199999996;
 	}
 	);
-		application.are_obj_events = true;
             mono_check1.set_x(40);
             mono_check1.set_y(180);
             mono_check1.set_width(32);
@@ -1332,7 +1225,6 @@ img1.noise_filter.strength += 0.0199999996;
 		img1.noise_filter.mono = mono_check.is_active;
 	}
 	);
-		application.are_obj_events = true;
             __label23.set_x(90);
             __label23.set_y(185);
             __label23.text("Mono");
@@ -1357,7 +1249,6 @@ img1.noise_filter.strength += 0.0199999996;
 img1.glow_filter.amount -= 0.0199999996;
 	}
 	);
-		application.are_obj_events = true;
             amount_b21.set_x(170);
             amount_b21.set_y(100);
             amount_b21.set_width(20);
@@ -1368,7 +1259,6 @@ img1.glow_filter.amount -= 0.0199999996;
 img1.glow_filter.amount += 0.0199999996;
 	}
 	);
-		application.are_obj_events = true;
             __label26.set_x(40);
             __label26.set_y(130);
             __label26.text("Radius Adjust");
@@ -1386,7 +1276,6 @@ img1.glow_filter.amount += 0.0199999996;
 img1.glow_filter.radius -= 0.0199999996;
 	}
 	);
-		application.are_obj_events = true;
             radius_b2.set_x(170);
             radius_b2.set_y(150);
             radius_b2.set_width(20);
@@ -1397,7 +1286,6 @@ img1.glow_filter.radius -= 0.0199999996;
 img1.glow_filter.radius += 0.0199999996;
 	}
 	);
-		application.are_obj_events = true;
             sharpen_options.set_switchable(false);
             __label27.set_x(10);
             __label27.set_y(50);
@@ -1419,7 +1307,6 @@ img1.glow_filter.radius += 0.0199999996;
 img1.sharpen_filter.amount -= 0.0199999996;
 	}
 	);
-		application.are_obj_events = true;
             amount_b22.set_x(170);
             amount_b22.set_y(100);
             amount_b22.set_width(20);
@@ -1430,7 +1317,6 @@ img1.sharpen_filter.amount -= 0.0199999996;
 img1.sharpen_filter.amount += 0.0199999996;
 	}
 	);
-		application.are_obj_events = true;
             mosaic_options.set_switchable(false);
             __label29.set_x(0);
             __label29.set_y(50);
@@ -1452,7 +1338,6 @@ img1.sharpen_filter.amount += 0.0199999996;
 img1.mosaic_filter.block_size -= 1;
 	}
 	);
-		application.are_obj_events = true;
             bsize_b2.set_x(170);
             bsize_b2.set_y(100);
             bsize_b2.set_width(20);
@@ -1463,7 +1348,6 @@ img1.mosaic_filter.block_size -= 1;
 img1.mosaic_filter.block_size += 1;
 	}
 	);
-		application.are_obj_events = true;
             btnNext.set_x(130);
             btnNext.set_y(400);
             btnNext.set_width(50);
@@ -1476,7 +1360,6 @@ options.active(options.get_active() + 1);
 }
 	}
 	);
-		application.are_obj_events = true;
             btnPrev.set_x(60);
             btnPrev.set_y(400);
             btnPrev.set_width(50);
@@ -1489,7 +1372,6 @@ options.active(options.get_active() - 1);
 }
 	}
 	);
-		application.are_obj_events = true;
             __label31.set_x(20);
             __label31.set_y(470);
             __label31.text("The arrows will allow changing among the configurations of filters");
@@ -1504,7 +1386,55 @@ options.active(options.get_active() - 1);
 			document.onkeypress = function(ev)
 			{
 				ui_.keypress(ev.keyCode);                  
+			};			
+			drawingCanvas.onmousemove = function(ev)
+			{
+				ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 			};
+			drawingCanvas.onmousedown = function(ev)
+			{
+				ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+			};
+			drawingCanvas.onmouseup = function(ev)
+			{
+				ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+			};		
+			ui_.events.addListener("mousedown", function(x,y)
+			{    
+				application.events.dispatch("mousedown", [x, y]);
+			});
+			ui_.events.addListener("mouseup", function(x,y)
+			{    
+				application.events.dispatch("mouseup", [x, y]);
+			});
+			ui_.events.addListener("mousemove", function(x,y)
+			{    
+				application.events.dispatch("mousemove", [x, y]);
+			});
+			ui_.events.addListener("click", function(x,y)
+			{    
+				application.events.dispatch("click", [x, y]);
+			});
+			ui_.events.addListener("drag", function(x,y)
+			{    
+				application.events.dispatch("drag", [x, y]);
+			});
+			ui_.events.addListener("dragend", function(x,y)
+			{    
+				application.events.dispatch("dragend", [x, y]);
+			});
+			ui_.events.addListener("keyup", function(keycode)
+			{    
+				application.events.dispatch("keyup", [keycode]);
+			});
+			ui_.events.addListener("keydown", function(keycode)
+			{    
+				application.events.dispatch("keydown", [keycode]);
+			});
+			ui_.events.addListener("keypress", function(keycode)
+			{    
+				application.events.dispatch("keydown", [keycode]);
+			});
             application.events.dispatch("init", []);
             start();			
 			ui_.draw(drawingCanvas.getContext('2d'));

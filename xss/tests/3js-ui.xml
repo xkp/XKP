@@ -25,7 +25,7 @@
 	<scene>	
 	
 		<camera id="camera_1" fov="70" aspect="1.5" near="1" far="1000">
-			<position y="300" z="500"/>			
+			<position y="150" z="500"/>			
 		</camera>
 			
 		<cube id="cube_1" width="200" height="200" depth="200" x_segments="1" 
@@ -34,13 +34,13 @@
 		</cube>
 		
 		<plane id="plane_1" width="200" height="200" material="plane_material">
-			<rotation x="-1.57"/>		
+					
 		</plane>		
 		
 	</scene>
 	
 	<label id="lbl0" x="240" y="75" font="Verdana" caption="Click smile to count"/>
-	<button id="btn1" placement="center" rotation="15" width="50" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png"/>	
-	<label id="lbl2" x="240" y="420" font="Verdana" caption="Drag mouse to spin the cube"/>
+	<button id="btn1" x="240" y="120" rotation="15" width="50" height="50" up="images/smile_sad_48.png" down="images/smile_grin_48.png"/>	
+	<label id="lbl2" x="240" y="200" font="Verdana" caption="Drag mouse to spin the cube"/>
 	
 </application>

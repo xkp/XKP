@@ -16,8 +16,9 @@
 			<normal_material id="material_sphere7" shading="smooth_shading"/>
 			<basic_material id="material_sphere8" color="0xffaa00" wireframe="true"/>
 			<depth_material id="material_sphere9"/>			
+			<lambert_material id="material_sphere10" color="MidnightBlue" emissive="Grey" shading="smooth_shading"ambient="Black"/>
 		</composite_material>
-		
+			
 		<basic_material id="material_particle" color="White"/>
 		
 	</materials>
@@ -30,17 +31,16 @@
 		
 		<ambient_light id="amb_light_1" color="0x202020"/>
 		
-		<directional_light id="dir_light_1" color="Math.random() * 0xffffff">
+		<directional_light id="dir_light_1" color="Math.random() * 0xffffff" intensity="1">
 			<position x="Math.random() - 0.5" y="Math.random() - 0.5" z="Math.random() - 0.5"/>
 		</directional_light>
 		
 		<sphere id="particle_1" radius="4" x_segments="8" y_segments="8"material="material_particle"/>			
 			
-		<point_light id="point_light_1" color="White" intensity="1"/>
+		<point_light id="point_light_1" color="White" intensity="1" distance="0"/>
 		
 		<plane id="plane_1" width="1000" height="1000" x_segments="100" y_segments="100" material="material_wireframe">
-			<position y="-70"/>
-			<rotation x="-90"/>
+			<position y="-70"/>			
 		</plane>			
 				
 	</scene>

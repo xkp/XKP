@@ -14,7 +14,7 @@
 	<scene>	
 	
 		<camera id="camera_1" fov="45" aspect="1.5" near="1" far="10000">
-			<position x="500" y="500" z="1000"/>			
+			<position x="100" y="50" z="1200"/>				
 		</camera>		
 		
 	</scene>

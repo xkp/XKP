@@ -16,11 +16,11 @@ on init()
 		sphere_1.scale.y = sphere_1.scale.x;
 		sphere_1.scale.z = sphere_1.scale.x;
 		spheres += sphere_1;
-		scene.addObject( sphere_1 );
+		scene.add( sphere_1 );
 	}
 }
 
-on updates()
+on update()
 {	
 	timer = g_elapsed * 0.0001;
 	camera_1.position.x += ( mouse_x - camera_1.position.x) * 0.05;

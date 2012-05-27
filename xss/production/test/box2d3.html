@@ -198,7 +198,7 @@ function start(resolution)
             }
             bb = bb.GetNext();
         }
-		application.events.dispatch("updates", []);			
+		application.events.dispatch("update", [g_delta, g_elapsed]);			
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
 		window.setTimeout(updater, resolution);  
@@ -257,11 +257,10 @@ var __img1;var __img2;var __img3;
 	{    
 	}
 	);
-		application.are_obj_events = true;
             this.events.dispatch("init", [this]);
             },
 });
-window.onload = function() 
+window.onload = function()
 {
         drawingCanvas = document.getElementById("myCanvas");
         g_canvas = drawingCanvas;
@@ -278,54 +277,6 @@ window.onload = function()
         g_ui_root = ui_.root;
      	ui_.load_resources(function()
 		{
-	drawingCanvas.onmousemove = function(ev)
-	{
-		ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmousedown = function(ev)
-	{
-		ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmouseup = function(ev)
-	{
-		ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};		
-	ui_.events.addListener("mousedown", function(x,y)
-	{    
-		application.events.dispatch("mousedown", [x, y]);
-	});
-	ui_.events.addListener("mouseup", function(x,y)
-	{    
-		application.events.dispatch("mouseup", [x, y]);
-	});
-	ui_.events.addListener("mousemove", function(x,y)
-	{    
-		application.events.dispatch("mousemove", [x, y]);
-	});
-	ui_.events.addListener("click", function(x,y)
-	{    
-		application.events.dispatch("click", [x, y]);
-	});
-	ui_.events.addListener("drag", function(x,y)
-	{    
-		application.events.dispatch("drag", [x, y]);
-	});
-	ui_.events.addListener("dragend", function(x,y)
-	{    
-		application.events.dispatch("dragend", [x, y]);
-	});
-	ui_.events.addListener("keyup", function(keycode)
-	{    
-		application.events.dispatch("keyup", [keycode]);
-	});
-	ui_.events.addListener("keydown", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
-	ui_.events.addListener("keypress", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
 		    __img1 = new ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
 		    __img2 = new ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
 		    __img3 = new ui.Image(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
@@ -465,7 +416,55 @@ window.onload = function()
 			document.onkeypress = function(ev)
 			{
 				ui_.keypress(ev.keyCode);                  
+			};			
+			drawingCanvas.onmousemove = function(ev)
+			{
+				ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 			};
+			drawingCanvas.onmousedown = function(ev)
+			{
+				ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+			};
+			drawingCanvas.onmouseup = function(ev)
+			{
+				ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+			};		
+			ui_.events.addListener("mousedown", function(x,y)
+			{    
+				application.events.dispatch("mousedown", [x, y]);
+			});
+			ui_.events.addListener("mouseup", function(x,y)
+			{    
+				application.events.dispatch("mouseup", [x, y]);
+			});
+			ui_.events.addListener("mousemove", function(x,y)
+			{    
+				application.events.dispatch("mousemove", [x, y]);
+			});
+			ui_.events.addListener("click", function(x,y)
+			{    
+				application.events.dispatch("click", [x, y]);
+			});
+			ui_.events.addListener("drag", function(x,y)
+			{    
+				application.events.dispatch("drag", [x, y]);
+			});
+			ui_.events.addListener("dragend", function(x,y)
+			{    
+				application.events.dispatch("dragend", [x, y]);
+			});
+			ui_.events.addListener("keyup", function(keycode)
+			{    
+				application.events.dispatch("keyup", [keycode]);
+			});
+			ui_.events.addListener("keydown", function(keycode)
+			{    
+				application.events.dispatch("keydown", [keycode]);
+			});
+			ui_.events.addListener("keypress", function(keycode)
+			{    
+				application.events.dispatch("keydown", [keycode]);
+			});
             application.events.dispatch("init", []);
             start();			
 			ui_.draw(drawingCanvas.getContext('2d'));

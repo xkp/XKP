@@ -6,7 +6,7 @@ property max_rotation = 2*Math.PI;
 property img_array = ["images/test1.png", "images/test2.png", "images/test3.png", "images/test4.png", "images/test5.png"];
 property plane_array = [];
 
-on updates(){
+on update(){
 	position_items();
 }
 
@@ -14,7 +14,7 @@ on init(){
 	for(int i = 0; i < 5; i++){	
 		plane_array += my_plane();
 		plane_array[i].set_image(img_array[i]); 
-		scene.addObject(plane_array[i]);
+		scene.add(plane_array[i]);
 	}
 }
 
@@ -30,11 +30,11 @@ method position_items(){
 }
 
 on mousemove(x, y){	
-	if (x < window.innerWidth/2){
-		speed = -(0.2) * ( window.innerWidth/2 - x) / ( window.innerWidth/2);
+	if (x < app_width/2){
+		speed = -(0.2) * ( app_width/2 - x) / ( app_width/2);
 	}
-	if (x > window.innerWidth/2){
-		speed = -(0.2) * ( window.innerWidth/2 - x) / ( window.innerWidth/2);
+	if (x > app_width/2){
+		speed = -(0.2) * ( app_width/2 - x) / ( app_width/2);
 	}
 }
 

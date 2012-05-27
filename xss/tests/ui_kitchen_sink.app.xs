@@ -321,7 +321,7 @@ on p1.click(){
 	}	
 }
 
-on updates()
+on update()
 {	
 	if(left_key_down)
 		monster.x -= 0.2;

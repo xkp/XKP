@@ -8,9 +8,7 @@
 		
 	if (!obj.material)
         obj.material = "new THREE.MeshBasicMaterial()";
-	
-	out(marker = "threejs_variables", marker_source = "entry") {var <xss:e v="obj.id"/>;}	
-	
+		
     out()
     {
 	    <xss:e v="obj.output_id"/>_<xss:e v="obj.class_name"/> = <xss:e v="compiler.instantiate(obj.type, object = obj, param_values = params)"/> ;
@@ -18,7 +16,7 @@
 	out()
     {
 	    <xss:e v="obj.id"/> = new THREE.Mesh(<xss:e v="obj.id"/>_<xss:e v="obj.class_name"/>, <xss:e v="obj.material"/>);
-	    scene.addObject(<xss:e value = "obj.id"/>);
+	    manager.scene.add(<xss:e value = "obj.id"/>);
 		<xss:e v="obj.id"/>.events = new ev.EventHolder();
 	}	
 </xss:code>

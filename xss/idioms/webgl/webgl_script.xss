@@ -1,0 +1,165 @@
+<xss:parameter id="canvas_name"/>
+if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+<xss:code>
+if(canvas_name)
+	{
+		out()
+		{			
+			var canvasElement = document.getElementById("<xss:e value="canvas_name"/>");	
+			var renderer = new THREE.WebGLRenderer({canvas:canvasElement, antialias: false});
+			renderer.domElement.width = renderer.domElement.offsetWidth;
+			renderer.domElement.height = renderer.domElement.offsetHeight;
+		}
+		application.width = "canvasElement.width";
+		application.height = "canvasElement.height";		
+	}
+	else
+	{
+		out()
+		{
+			var renderer = new THREE.WebGLRenderer( { antialias: false } );
+		}
+	}
+</xss:code>
+var ui_;
+
+var canvas_position = {x:0, y:0};
+var active_camera;
+var g_elapsed;
+var g_delta;	
+var scene = new THREE.Scene();
+scene.mouse_thru = true;
+var streamer;
+var app_width = <xss:e value="application.width"/>;
+var app_height = <xss:e value="application.height"/>;
+<xss:marker id="variables"/>
+var application = {};
+var clock = new THREE.Clock();
+application.events = new ev.EventHolder();
+
+<xss:code>
+    compiler.inject("render_initialization");
+</xss:code>
+// --------RESOURCES---------
+<xss:code>
+    compiler.inject("render_resources");	
+</xss:code>
+// --------RESOURCES---------
+
+renderer.setSize( app_width, app_height );
+var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
+manager.events = new ev.EventHolder();
+function render() {
+manager.canvas_position = getElementPosition(renderer.domElement);
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+	g_delta = 0; //first update
+else
+	g_delta  = now - g_elapsed;  
+
+g_elapsed = now; 
+
+c_delta = clock.getDelta(),
+c_elapsed = clock.getElapsedTime() * 10;
+
+<xss:code>
+	compiler.inject("render_update");
+</xss:code>
+
+manager.events.dispatch("update", [g_delta, g_elapsed]);	
+<xss:marker id="render_function"/>	
+application.events.dispatch("switch_cameras", []);
+
+}
+
+<xss:marker id="threejs_variables"/>
+
+<xss:code>
+	compiler.inject("render_types");
+	compiler.render_app_types("../common-js/resig-class.xss");
+</xss:code>
+
+threejs_load_resources(manager, function()
+{
+<xss:code>
+	compiler.inject("render_instances");
+	compiler.inject("render_inst_elems");	
+	compiler.xss("../common-js/instance.xss", application);
+</xss:code>
+
+var event_manager = new ev.ThreeEventManager();
+
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(manager, ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(manager, ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(manager, ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(manager, ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(manager, ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(manager, ev.keyCode);                  
+};
+
+manager.events.addListener("mousedown", function(x,y)
+{    
+	application.events.dispatch("mousedown", [x, y]);
+});
+manager.events.addListener("mouseup", function(x,y)
+{    
+	application.events.dispatch("mouseup", [x, y]);
+});
+manager.events.addListener("mousemove", function(x,y)
+{    
+	application.events.dispatch("mousemove", [x, y]);
+});
+manager.events.addListener("click", function(x,y)
+{    
+	application.events.dispatch("click", [x, y]);
+});
+manager.events.addListener("drag", function(x,y)
+{    
+	application.events.dispatch("drag", [x, y]);
+});
+manager.events.addListener("dragend", function(x,y)
+{    
+	application.events.dispatch("dragend", [x, y]);
+});
+manager.events.addListener("keyup", function(keycode)
+{    
+	application.events.dispatch("keyup", [keycode]);
+});
+manager.events.addListener("keydown", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("keypress", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("update", function(delta, elapsed)
+{    
+	application.events.dispatch("update", [delta, elapsed]);
+});
+application.events.dispatch("init", []);
+	
+document.body.appendChild( renderer.domElement );
+animate();
+});
+function animate() {	
+	requestAnimationFrame( animate );
+	render();	
+}

@@ -2,7 +2,7 @@
 
 <xss:code>		
 	obj.output_id = obj.id+"_g_ui_root";
-	out(marker = "variables", marker_source = "entry") 
+	out(marker = "variables", marker_source = "previous") 
 	{
 		var <xss:e v="obj.id"/> = document.createElement('canvas');
 		var <xss:e v="obj.id"/>_ui;
@@ -15,25 +15,26 @@
 		var <xss:e v="obj.id"/>_g_ui_root = <xss:e v="obj.id"/>_ui.root;				
 	}		
 </xss:code>
-application.are_obj_events = true;
-application.events.addListener("updates", function()
+manager.events.addListener("update", function()
 	{   
 		if(<xss:e v="obj.id"/>_ui)
+		{
 			<xss:e v="obj.id"/>_ui.draw(<xss:e v="obj.id"/>.getContext('2d'));
+		}
 	});
-application.events.addListener("t_mousemove", function(x, y, texture)
+manager.events.addListener("t_mousemove", function(x, y, texture)
 	{   
 		if(texture)
 			if(texture.image == <xss:e v="obj.id"/>)
 				<xss:e v="obj.id"/>_ui.mousemove(x*<xss:e value="obj.width"/>, y*<xss:e value="obj.height"/>);
 	});
-application.events.addListener("t_mouseup", function(x, y, texture)
+manager.events.addListener("t_mouseup", function(x, y, texture)
 	{   
 		if(texture)
 			if(texture.image == <xss:e v="obj.id"/>)
 				<xss:e v="obj.id"/>_ui.mouseup(x*<xss:e value="obj.width"/>, y*<xss:e value="obj.height"/>);
 	});
-application.events.addListener("t_mousedown", function(x, y, texture)
+manager.events.addListener("t_mousedown", function(x, y, texture)
 	{   
 		if(texture)
 			if(texture.image == <xss:e v="obj.id"/>)

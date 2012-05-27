@@ -1,6 +1,6 @@
 property time;
 
-on updates()
+on update()
 {
 	time = g_elapsed * 0.0005;
 

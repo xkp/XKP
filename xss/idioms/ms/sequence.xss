@@ -264,9 +264,15 @@
         if (action.method)
         {
             var mthd = analyze_expression(action.method, seq, seq_id, rendering_instance);
+            var path = mthd.path;
+            if (!path)
+                path = seq_id;
+            else if (path == "")
+                path = seq_id;
+
             out() 
             {
-                <xss:e v="mthd.path"/>.<xss:e v="action.method"/>();
+                <xss:e v="path"/>.<xss:e v="action.method"/>();
             }
         }
         else if (action.sequence)

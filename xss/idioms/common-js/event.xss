@@ -67,11 +67,4 @@ out(indent = 0)
 	<xss:close_brace/>
 	);
 }
-
-if(it.id != "application")
-	out()
-	{
-		application.are_obj_events = true;
-	}
-
 </xss:code>

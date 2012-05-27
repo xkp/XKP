@@ -130,19 +130,19 @@
 		</class>
 		<class id="exposure" super="filter" output_id="jsmanip.Exposure">	
 			<constructor_params>
-				<parameter property="exposure"/>									
+				<parameter property="amount"/>									
 			</constructor_params>
-            <property id="exposure" type="float" use_plain_value="true" dont_init="true">
+            <property id="amount" type="float" use_plain_value="true" dont_init="true">
 				<get text="options.exposure"/>
                 <set text="set_exposure({value})"/>
             </property>						
 		</class>
 		<class id="gain" super="filter" output_id="jsmanip.Gain">	
 			<constructor_params>
-				<parameter property="gain"/>	
+				<parameter property="amount"/>	
 				<parameter property="bias"/>	
 			</constructor_params>
-            <property id="gain" type="float" use_plain_value="true" dont_init="true">
+            <property id="amount" type="float" use_plain_value="true" dont_init="true">
 				<get text="options.gain"/>
                 <set text="set_gain({value})"/>
             </property>	
@@ -468,9 +468,9 @@
 		</class>
 		<class id="threshold" super="filter" output_id="jsmanip.Threshold">	
 			<constructor_params>
-				<parameter property="threshold"/>									
+				<parameter property="amount"/>									
 			</constructor_params>
-            <property id="threshold" type="float" use_plain_value="true" dont_init="true">
+            <property id="amount" type="float" use_plain_value="true" dont_init="true">
 				<get text="options.threshold"/>
                 <set text="set_threshold({value})"/>
             </property>						

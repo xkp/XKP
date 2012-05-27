@@ -18,26 +18,26 @@
             <script type="text/javascript" src="../js/ui.js"></script>
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
-            <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
-<script type="text/javascript">		
-var renderer = new THREE.CanvasRenderer();	
-var ui_;
-var SoundUtils;
-var scene = new THREE.Scene();
+<script type="text/javascript">	
+			var renderer = new THREE.CanvasRenderer();
+		var scene = new THREE.Scene();
 scene.mouse_thru = true;
+var ui_;
+var canvas_position = {x:0, y:0};
+var clock = new THREE.Clock();
+var SoundUtils;
 var active_camera;
 var g_elapsed = -1;
-var g_delta = 0.0;	
+var g_delta = 0.0;
 var drawingCanvas = renderer.domElement;
-var canvas_position = {x:0, y:0};
 var streamer;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var __label1;
 var camera_1;var plane_1;var plane_2;var plane_3;var container;var plane_4;var plane_5;
 var application = {};
-application.events = new ev.EventHolder();
+application.events = new ev.EventHolder();	
 		var streamer = new stream.Streamer();	
 		var ResourceUtils = new stream.ResourceUtils();
 		if(drawingCanvas){
@@ -135,138 +135,104 @@ application.events = new ev.EventHolder();
 		});		
 		global_package.load();	
     // --------RESOURCES---------
-soundRenderer = new THREE.SoundRenderer();		
-document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( app_width, app_height );
+var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
+manager.events = new ev.EventHolder();
+manager.ui_ = ui_;	
 function render() {
-canvas_position = getElementPosition(drawingCanvas);
+manager.canvas_position = getElementPosition(drawingCanvas);
 var now   = new Date().getTime();
 if (g_elapsed < 0)
-    g_delta = 0; //first update
+	g_delta = 0; //first update
 else
-g_delta  = now - g_elapsed;  
+	g_delta  = now - g_elapsed;  
 g_elapsed = now; 
-application.events.dispatch("updates", []);	
-		set_active_camera(camera_1);
+c_delta = clock.getDelta(),
+c_elapsed = clock.getElapsedTime() * 10;
+manager.events.dispatch("update", [g_delta, g_elapsed]);	
+				manager.scene.add(camera_1);
+				set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-threejs_load_resources(streamer, function()
+threejs_load_resources(manager, function()
 {
-	drawingCanvas.onmousemove = function(ev)
-	{
-		ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmousedown = function(ev)
-	{
-		ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmouseup = function(ev)
-	{
-		ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};		
-	ui_.events.addListener("mousedown", function(x,y)
-	{    
-		application.events.dispatch("mousedown", [x, y]);
-	});
-	ui_.events.addListener("mouseup", function(x,y)
-	{    
-		application.events.dispatch("mouseup", [x, y]);
-	});
-	ui_.events.addListener("mousemove", function(x,y)
-	{    
-		application.events.dispatch("mousemove", [x, y]);
-	});
-	ui_.events.addListener("click", function(x,y)
-	{    
-		application.events.dispatch("click", [x, y]);
-	});
-	ui_.events.addListener("drag", function(x,y)
-	{    
-		application.events.dispatch("drag", [x, y]);
-	});
-	ui_.events.addListener("dragend", function(x,y)
-	{    
-		application.events.dispatch("dragend", [x, y]);
-	});
-	ui_.events.addListener("keyup", function(keycode)
-	{    
-		application.events.dispatch("keyup", [keycode]);
-	});
-	ui_.events.addListener("keydown", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
-	ui_.events.addListener("keypress", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
 		    __label1 = new ui.Label(g_ui_root.manager, g_ui_root, "15px Verdana");
 		    camera_1 = 
-		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
-		active_camera = camera_1;
-	    plane_1_plane = new THREE.Plane(128, 164, null, null) ;
+		    new THREE.PerspectiveCamera(45, 1.5, 1, 10000, null) ;				
+camera_1.manager = manager;
+	    plane_1_plane = new THREE.PlaneGeometry(128, 164, null, null) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(plane_1);
+	    manager.scene.add(plane_1);
 		plane_1.events = new ev.EventHolder();
-	    plane_2_plane = new THREE.Plane(128, 164, null, null) ;
+plane_1.manager = manager;
+	    plane_2_plane = new THREE.PlaneGeometry(128, 164, null, null) ;
 	    plane_2 = new THREE.Mesh(plane_2_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(plane_2);
+	    manager.scene.add(plane_2);
 		plane_2.events = new ev.EventHolder();
-	    plane_3_plane = new THREE.Plane(128, 164, null, null) ;
+plane_2.manager = manager;
+	    plane_3_plane = new THREE.PlaneGeometry(128, 164, null, null) ;
 	    plane_3 = new THREE.Mesh(plane_3_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(plane_3);
+	    manager.scene.add(plane_3);
 		plane_3.events = new ev.EventHolder();
+plane_3.manager = manager;
 				pack_1.events.addListener("loaded", function()
 				{				
 			    container = new THREE.Object3D() ;
-			container.events = new ev.EventHolder();
+			container.events = new ev.EventHolder();container.manager = manager;
 });				
 				pack_1.events.addListener("loaded", function()
 				{				
-	    plane_4_plane = new THREE.Plane(128, 164, null, null) ;
+	    plane_4_plane = new THREE.PlaneGeometry(128, 164, null, null) ;
 	    plane_4 = new THREE.Mesh(plane_4_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(plane_4);
+	    manager.scene.add(plane_4);
 		plane_4.events = new ev.EventHolder();
-				container.addChild(plane_4);
-				scene.addObject(container);
+				container.add(plane_4);
+				manager.scene.add(container);
+				plane_4.manager = manager;
 });				
 				pack_1.events.addListener("loaded", function()
 				{				
-	    plane_5_plane = new THREE.Plane(128, 164, null, null) ;
+	    plane_5_plane = new THREE.PlaneGeometry(128, 164, null, null) ;
 	    plane_5 = new THREE.Mesh(plane_5_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(plane_5);
+	    manager.scene.add(plane_5);
 		plane_5.events = new ev.EventHolder();
-				container.addChild(plane_5);
-				scene.addObject(container);
+				container.add(plane_5);
+				manager.scene.add(container);
+				plane_5.manager = manager;
 });
             __label1.set_x(150);
             __label1.set_y(75);
             __label1.set_color("Ivory");
             __label1.text("Press click to load the package");
-            camera_1.position.x = 500;
-            camera_1.position.y = 500;
+            camera_1.position.x = 100;
+            camera_1.position.y = 100;
             camera_1.position.z = 1000;
-            plane_1.materials[0].map = new THREE.Texture(scene.streamer.get_resource("images/test1.png").data);
+            plane_1.material.map = new THREE.Texture(manager.streamer.get_resource("images/test1.png").data);
             plane_1.position.x = 100;
             plane_1.position.y = 100;
-            plane_2.materials[0].map = new THREE.Texture(scene.streamer.get_resource("images/test2.png").data);
+            set_rotation_x(plane_1.rotation, 90);
+            plane_2.material.map = new THREE.Texture(manager.streamer.get_resource("images/test2.png").data);
             plane_2.position.x = 300;
             plane_2.position.y = 100;
-            plane_3.materials[0].map = new THREE.Texture(scene.streamer.get_resource("images/test3.png").data);
+            set_rotation_x(plane_2.rotation, 90);
+            plane_3.material.map = new THREE.Texture(manager.streamer.get_resource("images/test3.png").data);
             plane_3.position.x = 100;
             plane_3.position.y = 300;
+            set_rotation_x(plane_3.rotation, 90);
 				pack_1.events.addListener("loaded", function()
 				{
 });
 				pack_1.events.addListener("loaded", function()
 				{
-            plane_4.materials[0].map = new THREE.Texture(scene.streamer.get_resource("images/test4.png").data);
+            plane_4.material.map = new THREE.Texture(manager.streamer.get_resource("images/test4.png").data);
             plane_4.position.x = -100;
+            set_rotation_x(plane_4.rotation, 90);
 });
 				pack_1.events.addListener("loaded", function()
 				{
-            plane_5.materials[0].map = new THREE.Texture(scene.streamer.get_resource("images/test5.png").data);
+            plane_5.material.map = new THREE.Texture(manager.streamer.get_resource("images/test5.png").data);
             plane_5.position.x = -400;
+            set_rotation_x(plane_5.rotation, 90);
 });
 	application.events.addListener("click", function()
 	{    
@@ -279,30 +245,76 @@ if(ui_)
 	g_ui.fill_background = false;	
 }
 var event_manager = new ev.ThreeEventManager();
-document.onmousemove = function(ev)
+renderer.domElement.onmousemove = function(ev)
 {
-	event_manager.mousemove(ev.clientX, ev.clientY);                  
+	event_manager.mousemove(manager, ev.clientX, ev.clientY);   
+	if(ui_)
+		ui_.mousemove(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
 };
-document.onmousedown = function(ev)
+renderer.domElement.onmousedown = function(ev)
 {
-	event_manager.mousedown(ev.clientX, ev.clientY);                  
+	event_manager.mousedown(manager, ev.clientX, ev.clientY);     
+	if(ui_)
+		ui_.mousedown(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
 };
-document.onmouseup = function(ev)
+renderer.domElement.onmouseup = function(ev)
 {
-	event_manager.mouseup(ev.clientX, ev.clientY);		
+	event_manager.mouseup(manager, ev.clientX, ev.clientY);		
+	if(ui_)
+		ui_.mouseup(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
 };
 document.onkeydown = function(ev)
 {
-	event_manager.keydown(ev.keyCode);                  
+	event_manager.keydown(manager, ev.keyCode);                  
 };
 document.onkeyup = function(ev)
 {
-	event_manager.keyup(ev.keyCode);                  
+	event_manager.keyup(manager, ev.keyCode);                  
 };
 document.onkeypress = function(ev)
 {
-	event_manager.keypress(ev.keyCode);                  
+	event_manager.keypress(manager, ev.keyCode);                  
 };
+manager.events.addListener("mousedown", function(x,y)
+{    
+	application.events.dispatch("mousedown", [x, y]);
+});
+manager.events.addListener("mouseup", function(x,y)
+{    
+	application.events.dispatch("mouseup", [x, y]);
+});
+manager.events.addListener("mousemove", function(x,y)
+{    
+	application.events.dispatch("mousemove", [x, y]);
+});
+manager.events.addListener("click", function(x,y)
+{    
+	application.events.dispatch("click", [x, y]);
+});
+manager.events.addListener("drag", function(x,y)
+{    
+	application.events.dispatch("drag", [x, y]);
+});
+manager.events.addListener("dragend", function(x,y)
+{    
+	application.events.dispatch("dragend", [x, y]);
+});
+manager.events.addListener("keyup", function(keycode)
+{    
+	application.events.dispatch("keyup", [keycode]);
+});
+manager.events.addListener("keydown", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("keypress", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("update", function(g_delta, g_elapsed)
+{    
+	application.events.dispatch("update", [g_delta, g_elapsed]);
+});
 application.events.dispatch("init", []);
 document.body.appendChild( renderer.domElement );
 animate();

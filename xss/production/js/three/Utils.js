@@ -1,3 +1,15 @@
+var threejs = {};
+threejs.Manager = Class.extend(
+{
+	init: function(scene, renderer, streamer, canvas_position)
+	{			
+		this.scene = scene;
+		this.renderer = renderer;
+		this.streamer = streamer;
+		this.canvas_position = canvas_position;
+	},		
+});
+
 function getElementPosition(element) {
 	var elem=element, tagname="", x=0, y=0;
 	while(elem && (typeof(elem) == "object") && (typeof(elem.tagName) != "undefined")) {
@@ -28,19 +40,18 @@ function distance3d(vector1, vector2)
 
 function set_active_camera( camera )
 {
-	renderer.render(scene, camera);
-	soundRenderer.render(scene, camera);
+	camera.manager.scene.add(camera);
+	camera.manager.renderer.render(camera.manager.scene, camera);	
 	active_camera = camera;
 }
 
-function threejs_load_resources(streamer, callback)
-{
-	scene.streamer = streamer;
+function threejs_load_resources(manager, callback)
+{		
 	var resources = [];
-	if(scene.streamer)
-		for(var i = 0; i < scene.streamer.resources.length; i++)
+	if(manager.streamer)
+		for(var i = 0; i < manager.streamer.resources.length; i++)
 		{
-			var res = scene.streamer.resources[i];
+			var res = manager.streamer.resources[i];
 			if(!res.loaded)
 				resources.push({ type: res.type, url: res.asset});			
 		}
@@ -58,7 +69,7 @@ function threejs_load_resources(streamer, callback)
 			}
 		};
 
-		scene.streamer.request(resources, stream_client);
+		manager.streamer.request(resources, stream_client);
 	}
 	else callback();
 }
@@ -68,18 +79,18 @@ function set_transform_image( path, value )
 	for(var i = 0; i < path.children.length; i++)
 	{
 		var child = path.children[i];	
-		child.materials[ 0 ].map = new THREE.Texture(scene.streamer.get_resource(value).data);	
+		child.material.map = new THREE.Texture(path.manager.streamer.get_resource(value).data);	
 	}	
 }
 
 function set_cube_face_object( path, face, value )
 {
-	path.geometry.faces[face].materials[0].map = new THREE.Texture(value);	
+	path.geometry.faces[face].material.map = new THREE.Texture(value);	
 }
 
 function set_cube_face( path, value, face )
 {		
-	path.geometry.faces[face].materials[0].map = new THREE.Texture(scene.streamer.get_resource(value).data);	
+	path.geometry.faces[face].material.map = new THREE.Texture(path.manager.streamer.get_resource(value).data);	
 }
 
 function set_transform_texture_object( path, value )
@@ -87,7 +98,7 @@ function set_transform_texture_object( path, value )
 	for(var i = 0; i < path.children.length; i++)
 	{
 		var child = path.children[i];		
-		child.materials[ 0 ].map = new THREE.Texture(value);	
+		child.material.map = new THREE.Texture(value);	
 	}	
 }
 
@@ -96,18 +107,18 @@ function set_transform_material( path, value )
 	for(var i = 0; i < path.children.length; i++)
 	{
 		var child = path.children[i];
-		child.materials[ 0 ] = value;		
+		child.material = value;		
 	}	
 }
 
 function set_object_alpha( path, value )
 {	         	
-	path.materials[0].opacity = value / 100;	
+	path.material.opacity = value / 100;	
 }
 
 function get_object_alpha( path )
 {	         
-	return path.materials[0].opacity * 100;	
+	return path.material.opacity * 100;	
 }
 
 function set_material_alpha( path, value )

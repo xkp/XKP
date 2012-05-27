@@ -20,7 +20,7 @@
 	<scene>	
 	
 		<camera id="camera_1" fov="70" aspect="1.5" near="1" far="1000">
-			<position y="300" z="500"/>			
+			<position y="150" z="500"/>			
 		</camera>
 			
 		<cube id="cube_1" width="200" height="200" depth="200" x_segments="1" 
@@ -28,10 +28,8 @@
 			<position y="150"/>			
 		</cube>
 		
-		<plane id="plane_1" width="200" height="200" material="plane_material">
-			<rotation x="-90"/>		
-		</plane>
-		
+		<plane id="plane_1" width="200" height="200" material="plane_material"/>
+					
 	</scene>
 			
 </application>
