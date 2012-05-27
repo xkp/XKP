@@ -1,8 +1,13 @@
 
 class image_plane : plane
 {	
-	method set_image(value)
+    property group;
+    property next_image;
+    property image;
+
+    method set_image(value)
 	{		
+        image = value;
 		texture = value;
 	}	
 
@@ -17,6 +22,16 @@ class image_plane : plane
         unselected.start();
         selected.stop();
 	}
+
+    on click()
+    {
+        application.select(group);
+    }
+
+    method switch_images()
+    {
+        set_image(next_image);
+    }
 }
 
 class image_group : transform
@@ -25,31 +40,31 @@ class image_group : transform
 	
 	property images : array <string>	
 	{
-        var dist      = 150; 
-        var planes_   = [img1, img2, img3, img4, img5, img6, img7, img8, img9]; 
-        var positions = [{x: -dist, y: -dist}, {x: -dist, y: 0}, {x: -dist, y: dist}, 
-                         {x: 0,     y: -dist}, {x: 0,     y: 0}, {x: 0,     y: dist},
-                         {x: dist,  y: -dist}, {x: dist,  y: 0}, {x: dist,  y: dist}]; 
-
 		for(int i = 0; i < value.length; i++)
         {
-            var pos = positions[i];
-
-            planes_[i].position.x = pos.x;
-            planes_[i].position.y = pos.y;
+            planes_[i].group = this;
 			planes_[i].set_image(value[i]);
 		}
 	}
 
-    property destination : array
+    method do_idle()
     {
-        var planes_ = [img1, img2, img3, img4, img5, img6, img7, img8, img9]; 
-		for(int i = 0; i < value.length; i++)
-        {
-			planes_[i].destination = value[i];
-            planes_[i].move.start();
-		}
+        if (Math.random() > 0.5)
+            return;
+
+        var idx1 = Math.floor(Math.random()*8);
+        var idx2 = Math.floor(Math.random()*8);
+
+        if (planes_[idx1].idle.running || planes_[idx2].idle.running)
+            return;
+
+        planes_[idx1].next_image = planes_[idx2].image;
+        planes_[idx2].next_image = planes_[idx1].image;
+        planes_[idx1].idle.start();
+        planes_[idx2].idle.start();
     }
+
+    private array<image_plane> planes_ = [img1, img2, img3, img4, img5, img6, img7, img8, img9]; 
 }
 
 class social_button : img

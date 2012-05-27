@@ -1,0 +1,58 @@
+<application src="cube_ui.xs" title="Test 3D">
+
+	<resources>	
+		<image src="images/1326602376_earth.png"/>
+        <image src="images/1327189824_users.png"/>	
+		<image src="images/1327189922_photo-camera.png"/>
+        <audio src="sounds/camera1.wav"/>
+        <audio src="sounds/applause.wav"/>
+    </resources>
+
+	<materials>		
+		<composite_material id="materials">
+			<basic_material color="Math.random() * 0xffffff"/>
+			<basic_material color="Math.random() * 0xffffff"/>			
+			<basic_material texture_object="earth"/>			
+			<basic_material color="Math.random() * 0xffffff"/>
+			<basic_material texture_object="sounds"/>
+			<basic_material color="Math.random() * 0xffffff"/>
+		</composite_material>		
+		<basic_material id="plane_material" color="Grey" alpha="50"/>
+		<basic_material id="plane_mat1" color="Green"/>			
+	</materials>
+	
+	<label id="lbl0" x="200" y="75" font="12px Verdana" caption="Click the earth to see her dissapear"/>
+	<label id="lbl1" x="200" y="120" font="12px Verdana" caption="Click the icons for sounds"/>
+		
+	<ui id="earth" width="200" height="200">
+		<rectangle id="r1" x="0" y="0" width="200" height="200" mouse_thru="true" alpha="60" fill="beige"/>
+		<img id="eimg" x="25" y="25" width="150" height="150" src="images/1326602376_earth.png"/>
+	</ui>
+
+	<ui id="sounds" width="200" height="200">
+		<rectangle id="r2" x="0" y="0" width="200" height="200" mouse_thru="true" alpha="60" fill="lightblue"/>
+        <img id="applause" x="75" y="50" width="50" height="50" src="images/1327189824_users.png"/>
+        <img id="shutter" x="75" y="120" width="50" height="50" src="images/1327189922_photo-camera.png"/>
+    </ui>
+
+    <sequence id="fade_out">
+        <at time="0">
+            <animate property="eimg.alpha" from="100" to="0" in="3"/>
+        </at>
+    </sequence>
+
+    <scene>		
+		<camera id="camera_1" fov="70" aspect="1.5" near="1" far="1000">
+			<position y="300" z="500"/>			
+		</camera>			
+		<cube id="cube_1" width="200" height="200" depth="200" x_segments="1" 
+				y_segments="1" z_segments="1" material="materials">			
+			<position x="-150" y="50"/>			
+		</cube>				
+		<plane id="plane_1" width="200" height="200" material="plane_material">
+			<rotation x="-90"/>	
+			<position x="-150" y="-100"/>
+		</plane>		
+	</scene>
+			
+</application>

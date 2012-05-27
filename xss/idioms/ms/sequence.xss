@@ -128,7 +128,7 @@
                 string mid = compiler.genid('__r');
                 
                 myidiom.begin_caller(mthd, mid, time);
-                generate_run(itm, seq_id, seq);
+                generate_run(itm, seq_id, seq, rendering_instance);
                 myidiom.close_caller(seq_id, mid);
             }
         }
@@ -231,7 +231,7 @@
         for(var child in itm.children)
         {
             if (child.class_name == "run") 
-                generate_run(child, seq_id, seq);
+                generate_run(child, seq_id, seq, rendering_instance);
             else 
                 compiler.error("'every' supports only 'run'");
         }
@@ -259,13 +259,14 @@
         }
     }
     
-    method generate_run(action, seq_id, seq)
+    method generate_run(action, seq_id, seq, rendering_instance)
     {
         if (action.method)
         {
+            var mthd = analyze_expression(action.method, seq, seq_id, rendering_instance);
             out() 
             {
-                <xss:e v="seq_id"/>.<xss:e v="action.method"/>();
+                <xss:e v="mthd.path"/>.<xss:e v="action.method"/>();
             }
         }
         else if (action.sequence)
@@ -320,7 +321,7 @@
         for(var action in actions)
         {
             if (action.class_name == "run")
-                generate_run(action, seq_id, seq);
+                generate_run(action, seq_id, seq, true);
             else
                 compiler.log("WARNING: Only run is allowed inside whens");
         }
