@@ -25,7 +25,7 @@ on drag(x, y){
 
 on update(){
 	cube_1.rotation.y += ( x_target_rotation - cube_1.rotation.y ) * 0.2 ;
-	plane_1.rotation.z = cube_1.rotation.y;
+	plane_1.rotation.y = cube_1.rotation.y;
 	cube_1.rotation.x += ( y_target_rotation - cube_1.rotation.x ) * 0.2 ;
 }
 

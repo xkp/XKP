@@ -1,8 +1,9 @@
 <classes>
 	<class id="image_plane" super="plane" width="100" height="100">
-		<sequence id="idle">
+        <rotation x="90"/>
+        <sequence id="idle">
 			<at time="0">
-                <animate property="rotation.y">
+                <animate property="rotation.z">
                     <key t="0" value="0"/>
                     <key t="1" value="-40"/>
                     <key t="1.5" value="-10"/>
@@ -16,7 +17,7 @@
             </at>
             <at time="2">
                 <run method="switch_images"/>
-                <animate property="rotation.y">
+                <animate property="rotation.z">
                     <key t="0" value="0"/>
                     <key t="1" value="40"/>
                     <key t="1.5" value="10"/>

@@ -628,7 +628,7 @@ g_sequence_manager);
             default_interpolate,
             function(value)
             {
-                set_rotation_y(this__.rotation, value);
+                set_rotation_z(this__.rotation, value);
             },
             [
         {t: 0, value: 0},
@@ -658,7 +658,7 @@ g_sequence_manager);
             default_interpolate,
             function(value)
             {
-                set_rotation_y(this__.rotation, value);
+                set_rotation_z(this__.rotation, value);
             },
             [
         {t: 2, value: 0},
@@ -768,6 +768,7 @@ g_sequence_manager);
         ____i18.keys[0].value = this__.scale.z;
         });
             image_plane.unselected = unselected;
+            set_rotation_x(image_plane.rotation, 90);
             image_plane.group = null;
             image_plane.next_image = null;
             image_plane.image = null;
