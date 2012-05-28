@@ -68,7 +68,7 @@ public class XKPImage extends XKPGraphics {
 	protected void updateShapePosition() {
 		mPathShape.reset();
 		mPathShape.addRect(mLeftTop.x, mLeftTop.y, mBottomRight.x, mBottomRight.y, Direction.CCW);
-		mPathShape.transform(mMtxRotation);
+		mPathShape.transform(mMtxAngle);
 	}
 	
 	private void calculateSize() {

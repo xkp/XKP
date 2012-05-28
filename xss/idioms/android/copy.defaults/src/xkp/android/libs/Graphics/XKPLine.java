@@ -25,7 +25,7 @@ public class XKPLine extends XKPGraphics {
 		mPathShape.reset();
 		mPathShape.moveTo(mX1, mY1);
 		mPathShape.lineTo(mX2, mY2);
-		mPathShape.transform(mMtxRotation);
+		mPathShape.transform(mMtxAngle);
 		
 		mPathShape.computeBounds(mBounds, true);
 

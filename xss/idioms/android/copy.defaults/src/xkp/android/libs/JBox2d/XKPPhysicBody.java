@@ -67,13 +67,19 @@ public class XKPPhysicBody {
 		mShape.computeAABB(aabb, transf);
 		
 		if (mShape.m_type == ShapeType.POLYGON) {
-			mRefView.setLeft((int) (mBody.getPosition().x - mRefView.getDX() / 2));
-			mRefView.setTop((int) (mBody.getPosition().y - mRefView.getDY() / 2));
+			int x1 = (int) (mBody.getPosition().x - mRefView.getDX() / 2);
+			int y1 = (int) (mBody.getPosition().y - mRefView.getDY() / 2);
+			mRefView.setPosition(x1, y1);
+			mRefView.setAngle(Math.toDegrees(transf.getAngle()));
 		} else if (mShape.m_type == ShapeType.CIRCLE) {
-			mRefView.setLeft((int) (aabb.getCenter().x));
-			mRefView.setTop((int) (aabb.getCenter().y));
+			mRefView.setPosition((int) (aabb.lowerBound.x), (int) (aabb.lowerBound.y));
+			mRefView.setAngle(transf.getAngle());
 		}
-		mRefView.setRotation(rad2degree(transf.getAngle()));
+		
+		//Log.d(getClass().getSimpleName(), "radian angle: " + transf.getAngle() + " \t\t\t degree angle: " + Math.toDegrees(transf.getAngle()));
+
+		//mRefView.setAngle(Math.toDegrees(transf.getAngle()));
+		//mRefView.setAngle(transf.getAngle());
 		
 		return true;
 	}
@@ -190,7 +196,7 @@ public class XKPPhysicBody {
 	}
 	
 	public void setAngle(float angle) {
-		mBodyDef.angle = (float) degree2rad(angle);
+		mBodyDef.angle = (float) Math.toRadians(angle);
 		if(mIsBodyCreated)
 			mBody.setTransform(getPosition(), angle);
 	}

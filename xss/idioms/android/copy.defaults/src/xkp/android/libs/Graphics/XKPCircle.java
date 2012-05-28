@@ -28,6 +28,7 @@ public class XKPCircle extends XKPGraphics {
 		
 		ta.recycle();
 		
+		preCalcPosition(mX1, mY1, mX1 + 2 * mRadius, mY1 + 2 * mRadius);
 		updateShapePosition();
 	}
 
@@ -35,8 +36,8 @@ public class XKPCircle extends XKPGraphics {
 	protected void updateShapePosition() {
 		if(mRadius != null) {
 			mPathShape.reset();
-			mPathShape.addCircle(mX1, mY1, mRadius, Direction.CCW);
-			mPathShape.transform(mMtxRotation);
+			mPathShape.addCircle(mX1 + mRadius, mY1 + mRadius, mRadius, Direction.CCW);
+			mPathShape.transform(mMtxAngle);
 		}
 		
 		mPathShape.computeBounds(mBounds, true);
