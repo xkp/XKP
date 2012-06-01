@@ -43,7 +43,7 @@ on keyup(keycode)
 	}	
 }
 
-on updates(){
+on update(){
 	update_car();
 }
 

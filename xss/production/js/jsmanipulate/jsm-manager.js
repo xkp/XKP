@@ -64,6 +64,12 @@ jsmanip.Filter = Class.extend(
 		this.apply();
 	},
 
+	set_enabled: function(value)
+	{
+		this.enabled = value;
+		this.apply();
+	},	
+
 	set_apply: function(apply_)
 	{
 		this.apply_ = apply_;

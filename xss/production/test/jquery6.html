@@ -297,7 +297,7 @@ application.apply_filter(transformer.s_filter);
 		    },
 	    });
 		sepia_enabled.change( function() { 
-			transformer.s_filter.enabled = JQUCheckbox.get_checked(sepia_enabled);
+			transformer.s_filter.set_enabled(JQUCheckbox.get_checked(sepia_enabled));
 		});
 sepia_enabled.__input = "#sepia_enabled_input";
 sepia_enabled.__label = "#sepia_enabled_label";
@@ -369,7 +369,7 @@ application.set_image_data(imgdata);
 		if(!transformer.filters)
 			transformer.filters = [];
 		transformer.filters.push(transformer.s_filter);
-            transformer.s_filter.enabled = false;
+            transformer.s_filter.set_enabled(0);
 			transformer.n_filter = new jsmanip.Noise(
 		null,null,null,transformer);		
 		if(!transformer.filters)

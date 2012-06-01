@@ -174,8 +174,8 @@ ui.Manager = Class.extend(
             this.mouseJoint = g_world.CreateJoint(md);
         }
         if(this.mouseJoint) {
-           if(mouse_pressed) {
-              this.mouseJoint.SetTarget(new b2Vec2(handledMouseX, handledMouseY));
+           if(mouse_pressed) {			
+				this.mouseJoint.SetTarget(new b2Vec2(handledMouseX, handledMouseY));
            } else {
               g_world.DestroyJoint(this.mouseJoint);
               this.mouseJoint = null;

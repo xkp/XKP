@@ -160,17 +160,17 @@ threejs_load_resources(manager, function()
 		    camera_1 = 
 		    new THREE.PerspectiveCamera(45, 1.5, 1, 10000, null) ;				
 camera_1.manager = manager;
-	    plane_1_plane = new THREE.PlaneGeometry(128, 164, null, null) ;
+	    plane_1_plane = new THREE.PlaneGeometry(128, 164, 1, 1) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, new THREE.MeshBasicMaterial());
 	    manager.scene.add(plane_1);
 		plane_1.events = new ev.EventHolder();
 plane_1.manager = manager;
-	    plane_2_plane = new THREE.PlaneGeometry(128, 164, null, null) ;
+	    plane_2_plane = new THREE.PlaneGeometry(128, 164, 1, 1) ;
 	    plane_2 = new THREE.Mesh(plane_2_plane, new THREE.MeshBasicMaterial());
 	    manager.scene.add(plane_2);
 		plane_2.events = new ev.EventHolder();
 plane_2.manager = manager;
-	    plane_3_plane = new THREE.PlaneGeometry(128, 164, null, null) ;
+	    plane_3_plane = new THREE.PlaneGeometry(128, 164, 1, 1) ;
 	    plane_3 = new THREE.Mesh(plane_3_plane, new THREE.MeshBasicMaterial());
 	    manager.scene.add(plane_3);
 		plane_3.events = new ev.EventHolder();
@@ -182,7 +182,7 @@ plane_3.manager = manager;
 });				
 				pack_1.events.addListener("loaded", function()
 				{				
-	    plane_4_plane = new THREE.PlaneGeometry(128, 164, null, null) ;
+	    plane_4_plane = new THREE.PlaneGeometry(128, 164, 1, 1) ;
 	    plane_4 = new THREE.Mesh(plane_4_plane, new THREE.MeshBasicMaterial());
 	    manager.scene.add(plane_4);
 		plane_4.events = new ev.EventHolder();
@@ -192,7 +192,7 @@ plane_3.manager = manager;
 });				
 				pack_1.events.addListener("loaded", function()
 				{				
-	    plane_5_plane = new THREE.PlaneGeometry(128, 164, null, null) ;
+	    plane_5_plane = new THREE.PlaneGeometry(128, 164, 1, 1) ;
 	    plane_5 = new THREE.Mesh(plane_5_plane, new THREE.MeshBasicMaterial());
 	    manager.scene.add(plane_5);
 		plane_5.events = new ev.EventHolder();

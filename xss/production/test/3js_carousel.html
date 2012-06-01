@@ -160,14 +160,14 @@ application.events.dispatch("switch_cameras", []);
 			my_plane.events = new ev.EventHolder();
         var this__ = my_plane;
 				var img_plane;
-	    img_plane_plane = new THREE.PlaneGeometry(128, 164, null, null) ;
+	    img_plane_plane = new THREE.PlaneGeometry(128, 164, 1, 1) ;
 	    img_plane = new THREE.Mesh(img_plane_plane, new THREE.MeshBasicMaterial());
 	    manager.scene.add(img_plane);
 		img_plane.events = new ev.EventHolder();
 				if(img_plane instanceof THREE.Object3D)
 					my_plane.add(img_plane);
 				var img_reflect;
-	    img_reflect_plane = new THREE.PlaneGeometry(128, 128, null, null) ;
+	    img_reflect_plane = new THREE.PlaneGeometry(128, 128, 1, 1) ;
 	    img_reflect = new THREE.Mesh(img_reflect_plane, new THREE.MeshBasicMaterial());
 	    manager.scene.add(img_reflect);
 		img_reflect.events = new ev.EventHolder();

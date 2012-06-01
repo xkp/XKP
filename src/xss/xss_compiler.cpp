@@ -540,7 +540,8 @@ xss_compiler::xss_compiler()
   }
 
 xss_compiler::xss_compiler(ICompilerOutput* out):
-  out_(out)
+  out_(out),
+  no_output_(false)
   {
   }
 
@@ -1775,6 +1776,7 @@ str xss_compiler::build_project(const param_list params)
       }
 
     XSSCompiler compiler(new xss_compiler(out_));
+    compiler->no_ouput();
 
     fs::path project_path = base_path_ / project_file;
     compiler->build(project_path, pl);
@@ -3076,6 +3078,11 @@ str xss_compiler::get_os_name()
 #endif
   }
 
+void xss_compiler::no_ouput()
+  {
+    no_output_ = true;
+  }
+
 void xss_compiler::collect_dependencies(XSSType type, XSSType context)
   {
     if (type->has("#depcollected"))
@@ -3240,12 +3247,15 @@ void xss_compiler::run()
 
         result_ = renderer->render(XSSObject(), null);
 
-        fs::path out_file = app->output_path();
-        if (out_file.empty())
-          std::cout << result_;
-        else
+        if (!no_output_)
           {
-            output_file(output_org / out_file, result_);
+            fs::path out_file = app->output_path();
+            if (out_file.empty())
+              std::cout << result_;
+            else
+              {
+                output_file(output_org / out_file, result_);
+              }
           }
       }
     output_path_ = output_org;

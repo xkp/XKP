@@ -6,18 +6,17 @@
 	<dependency href="jsm-utils.js"/>
 	
 	<types>
-		<class id="preset" output_id="jsmanip.Preset" serializer="../common-js/serializer.xss" resolve_children="true"/>	
+        <class id="preset" output_id="jsmanip.Preset" serializer="../common-js/serializer.xss" resolve_children="true"/>
 		<class id="preset_filter"/>
 		<class id="filter">
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply_"/>
-                <set text="set_apply({value})"/>
+			<property id="enabled" type="bool" use_plain_value="true">
+				<get text="enabled"/>
+                <set text="set_enabled({value})"/>
             </property>
 			<property id="render_on_apply" type="bool" use_plain_value="true">
 				<get text="render_on_apply"/>
                 <set text="set_render_on_apply({value})"/>
             </property>
-            <property id="enabled" type="bool"/>
 		</class>
 		<class id="brightness" super="filter" output_id="jsmanip.Brightness">	
 			<constructor_params>
@@ -51,7 +50,7 @@
 			<property id="density" type="float" use_plain_value="true" dont_init="true">
 				<get text="options.density"/>
                 <set text="set_density({value})"/>
-            </property>  
+            </property>
 			<property id="mix" type="float" use_plain_value="true" dont_init="true">
 				<get text="options.mix"/>
                 <set text="set_mix({value})"/>
@@ -130,19 +129,19 @@
 		</class>
 		<class id="exposure" super="filter" output_id="jsmanip.Exposure">	
 			<constructor_params>
-				<parameter property="amount"/>									
+				<parameter property="exposure"/>									
 			</constructor_params>
-            <property id="amount" type="float" use_plain_value="true" dont_init="true">
+            <property id="exposure" type="float" use_plain_value="true" dont_init="true">
 				<get text="options.exposure"/>
                 <set text="set_exposure({value})"/>
             </property>						
 		</class>
 		<class id="gain" super="filter" output_id="jsmanip.Gain">	
 			<constructor_params>
-				<parameter property="amount"/>	
+				<parameter property="gain"/>	
 				<parameter property="bias"/>	
 			</constructor_params>
-            <property id="amount" type="float" use_plain_value="true" dont_init="true">
+            <property id="gain" type="float" use_plain_value="true" dont_init="true">
 				<get text="options.gain"/>
                 <set text="set_gain({value})"/>
             </property>	
@@ -468,9 +467,9 @@
 		</class>
 		<class id="threshold" super="filter" output_id="jsmanip.Threshold">	
 			<constructor_params>
-				<parameter property="amount"/>									
+				<parameter property="threshold"/>									
 			</constructor_params>
-            <property id="amount" type="float" use_plain_value="true" dont_init="true">
+            <property id="threshold" type="float" use_plain_value="true" dont_init="true">
 				<get text="options.threshold"/>
                 <set text="set_threshold({value})"/>
             </property>						

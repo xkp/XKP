@@ -1158,14 +1158,14 @@ for(var index = 0; index < this.images.length - 1; index++)
 {
 resource = ResourceUtils.get_resource(this.images[index]);
 this.plane_array.push(
-create_anim_plane(resource.width / 13, resource.height / 13, null, null)
+create_anim_plane(resource.width / 13, resource.height / 13, 1, 1)
 );
 this.plane_array[index].set_image(this.images[index]);
 this.plane_array[index].parent_ = this;
 }
 resource = ResourceUtils.get_resource(this.images[this.images.length - 1]);
 this.plane_array.push(
-create_anim_plane(resource.width, resource.height, null, null)
+create_anim_plane(resource.width, resource.height, 1, 1)
 );
 this.plane_array[this.images.length - 1].set_image(this.images[this.images.length - 1]);
 this.plane_array[this.images.length - 1].parent_ = this;

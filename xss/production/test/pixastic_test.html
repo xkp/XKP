@@ -144,7 +144,7 @@ sphere_material.manager = manager;
 		    camera_1 = 
 		    new THREE.PerspectiveCamera(45, 1.5, 1, 10000, null) ;				
 camera_1.manager = manager;
-	    plane1_plane = new THREE.PlaneGeometry(280, 320, null, null) ;
+	    plane1_plane = new THREE.PlaneGeometry(280, 320, 1, 1) ;
 	    plane1 = new THREE.Mesh(plane1_plane, new THREE.MeshBasicMaterial());
 	    manager.scene.add(plane1);
 		plane1.events = new ev.EventHolder();
@@ -159,7 +159,7 @@ sphere1.manager = manager;
 	    manager.scene.add(sphere2);
 		sphere2.events = new ev.EventHolder();
 sphere2.manager = manager;
-	    plane2_plane = new THREE.PlaneGeometry(100, 100, null, null) ;
+	    plane2_plane = new THREE.PlaneGeometry(100, 100, 1, 1) ;
 	    plane2 = new THREE.Mesh(plane2_plane, new THREE.MeshBasicMaterial());
 	    manager.scene.add(plane2);
 		plane2.events = new ev.EventHolder();

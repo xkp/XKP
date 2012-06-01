@@ -3,15 +3,15 @@ function get_image_data(parent)
 	var resource;
 	if(parent instanceof ui.Component)
 	{
-		resource = streamer.get_resource(parent.texture.id);		
+		resource = parent.manager.streamer.get_resource(parent.texture.id);		
 	}else
 	if(parent instanceof THREE.Mesh)
 	{
-		resource = streamer.get_resource(parent.materials[0].map.image.id);				
+		resource = parent.manager.streamer.get_resource(parent.material.map.image.id);				
 	}else
 	if(parent instanceof THREE.Material)
 	{
-		resource = streamer.get_resource(parent.map.image.id);				
+		resource = parent.manager.streamer.get_resource(parent.map.image.id);				
 	}else
 	{
 		resource = parent;			
@@ -26,15 +26,15 @@ function obtain_images(obj, parent)
 	var resource;
 	if(parent instanceof ui.Component)
 	{
-		resource = streamer.get_resource(parent.texture.id);		
+		resource = parent.manager.streamer.get_resource(parent.texture.id);		
 	}else
 	if(parent instanceof THREE.Mesh)
 	{
-		resource = streamer.get_resource(parent.materials[0].map.image.id);				
+		resource = parent.manager.streamer.get_resource(parent.material.map.image.id);				
 	}else
 	if(parent instanceof THREE.Material)
 	{
-		resource = streamer.get_resource(parent.map.image.id);				
+		resource = parent.manager.streamer.get_resource(parent.map.image.id);				
 	}else
 	{
 		resource = parent;			
@@ -63,7 +63,7 @@ function put_image(parent, img)
 	}else
 	if(parent__ instanceof THREE.Mesh)
 	{	
-		parent__.materials[0].map.image = img__;		
+		parent__.material.map.image = img__;		
 	}else
 	if(parent__ instanceof THREE.Material)
 	{
