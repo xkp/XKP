@@ -1145,9 +1145,9 @@
 				<set text="setAlpha({value})"/>
 			</property>
 			
-			<property id="rotation" type="float" ns="xkp" res_type="float">
-				<get text="getRotation()"/>
-				<set text="setRotation({value})"/>
+			<property id="rotation" type="float" output_id="angle" ns="xkp" res_type="float">
+				<get text="getAngle()"/>
+				<set text="setAngle({value})"/>
 			</property>
 
 			<method id="click" type="bool" output_id="performClickInsideFigure"/>

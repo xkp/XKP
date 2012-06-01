@@ -1,0 +1,14 @@
+<project 
+	entry_point="java5.xss" 
+	language="java" 
+	target="java5.app.xml" >
+	
+	<path>
+		<output path="../production/test/"/>
+	</path>
+	
+	<options event_scope="instance"/>
+	
+	<idiom src="../idioms/java/classes.xml"/>
+	<include def="java5.classes.xml" src="java5.classes.xs" />
+</project>

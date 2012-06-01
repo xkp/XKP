@@ -1,4 +1,4 @@
-instance application.instance1
+instance instance1
 {
 	method test0(int value)
 	{

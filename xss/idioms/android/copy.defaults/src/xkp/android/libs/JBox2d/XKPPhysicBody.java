@@ -70,16 +70,11 @@ public class XKPPhysicBody {
 			int x1 = (int) (mBody.getPosition().x - mRefView.getDX() / 2);
 			int y1 = (int) (mBody.getPosition().y - mRefView.getDY() / 2);
 			mRefView.setPosition(x1, y1);
-			mRefView.setAngle(Math.toDegrees(transf.getAngle()));
 		} else if (mShape.m_type == ShapeType.CIRCLE) {
 			mRefView.setPosition((int) (aabb.lowerBound.x), (int) (aabb.lowerBound.y));
-			mRefView.setAngle(transf.getAngle());
 		}
 		
-		//Log.d(getClass().getSimpleName(), "radian angle: " + transf.getAngle() + " \t\t\t degree angle: " + Math.toDegrees(transf.getAngle()));
-
-		//mRefView.setAngle(Math.toDegrees(transf.getAngle()));
-		//mRefView.setAngle(transf.getAngle());
+		mRefView.setAngle(Math.toDegrees(transf.getAngle()));
 		
 		return true;
 	}

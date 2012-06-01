@@ -15,6 +15,10 @@ public class XKPDDView extends View {
 	private Bitmap			mBitmap;
 	private XKPDebugDraw 	mDrawn;
 	
+	public XKPDDView(Context context) {
+		this(context, 320, 200);
+	}
+
 	public XKPDDView(Context context, int width, int height) {
 		super(context);
 		mDrawn = new XKPDebugDraw(this);

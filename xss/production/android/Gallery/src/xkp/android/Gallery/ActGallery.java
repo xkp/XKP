@@ -28,8 +28,8 @@ import xkp.android.libs.Layout.XKPLayout;
 				private Gallery gallery;
 			public static XKPUtils util;
 		private XKPLayout layoutapplication;
-				private XKPPackage ;
-			private String [] mResources__XKPName = {
+				private XKPPackage __resources1;
+			private String [] mResources___resources1_XKPName = {
 				"img01",
 				"img02",
 				"img03",
@@ -39,7 +39,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				"img07",
 				"img08"
 			};
-			private String [] mResources__DroidName = {
+			private String [] mResources___resources1_DroidName = {
 				"gallery_photo_1.jpg",
 				"gallery_photo_2.jpg",
 				"gallery_photo_3.jpg",
@@ -49,7 +49,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				"gallery_photo_7.jpg",
 				"gallery_photo_8.jpg"
 			};
-			private Integer [] mResources__Type = {
+			private Integer [] mResources___resources1_Type = {
 				XKPPackage.BITMAP_RESOURCE,
 				XKPPackage.BITMAP_RESOURCE,
 				XKPPackage.BITMAP_RESOURCE,
@@ -59,7 +59,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				XKPPackage.BITMAP_RESOURCE,
 				XKPPackage.BITMAP_RESOURCE
 			};
-			private Integer [] mResources__Id = {
+			private Integer [] mResources___resources1_Id = {
 				R.drawable.gallery_photo_1,
 				R.drawable.gallery_photo_2,
 				R.drawable.gallery_photo_3,
@@ -121,11 +121,11 @@ private void onLayoutStarted() {
 }
 			private void initInstances() {
 				application = this;
-				 = new XKPPackage(this, 
-					mResources__XKPName, mResources__DroidName, 
-					mResources__Type, mResources__Id
+				__resources1 = new XKPPackage(this, 
+					mResources___resources1_XKPName, mResources___resources1_DroidName, 
+					mResources___resources1_Type, mResources___resources1_Id
 					, true);
-				util.addXKPPackage();
+				util.addXKPPackage(__resources1);
 			}
 	public class ImageAdapter extends BaseAdapter {
 		private static final int ITEM_WIDTH = 236;

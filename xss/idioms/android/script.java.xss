@@ -412,7 +412,11 @@ private void onLayoutStarted() {
 		
 		for(var inst in clazz.instances)
 		{
-			inst.idiom.render_instance(appName, clazz, inst);
+			//TRACE: log
+			//compiler.log("-- clazz = " + clazz.id);
+			//compiler.log("--- inst = " + inst.id);
+			//compiler.log("---- inst idiom = " + inst.idiom.id);
+			inst.idiom.render_instance(inst, appName, clazz);
 		}
 	}
 		

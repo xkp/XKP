@@ -3,6 +3,8 @@ on pre_process(obj)
 	if(obj.id == "")
 		obj.id = compiler.genid(obj.class_name);
 		//obj.output_id = compiler.genid(obj.class_name);
+	
+	//compiler.log("[android]: " + obj.id + " - " + obj.output_id);
 
 	// flatting properties
 	for(var p in obj.properties)
@@ -31,14 +33,14 @@ on render_instances(app, clazz)
 	}
 }
 
-method render_instance(app, clazz, it)
+method render_instance(it, app, clazz)
 {
 }
 
 on render_types(app, bns)
 {
 	//TRACE: log
-	compiler.log("Rendering Types...");
+	compiler.log("Rendering Android Types...");
 	
 	var idiom = compiler.idiom_by_id("android");
     for(var ut in user_types)
@@ -72,12 +74,20 @@ on render_types(app, bns)
 
 on render_type_initialization(clazz, bns, app)
 {
+	//TRACE: log
+	//compiler.log("### Begin render_type_initialization...");
 	initialization(clazz, bns, app);
+	//TRACE: log
+	//compiler.log("### End render_type_initialization...");
 }
 
 on render_initialization(clazz, bns, app)
 {
+	//TRACE: log
+	//compiler.log("### Begin render_initialization...");
 	initialization(clazz, bns, app);
+	//TRACE: log
+	//compiler.log("### End render_initialization...");
 }
 
 method initialization(clazz, bns, app)

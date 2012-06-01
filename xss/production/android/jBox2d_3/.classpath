@@ -3,7 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-				<classpathentry kind="lib" path="lib/jbox2d-library-2.1.2.2.jar"/>
-				<classpathentry kind="lib" path="lib/slf4j-api-1.6.4.jar"/>
-				<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="lib" path="libs/jbox2d-library-2.1.2.2.jar"/>
+	<classpathentry kind="lib" path="libs/slf4j-api-1.6.4.jar"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+		<classpathentry kind="output" path="bin/classes"/>
 </classpath>

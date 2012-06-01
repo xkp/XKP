@@ -35,21 +35,20 @@ import xkp.android.libs.Layout.XKPLayout;
 				mHandler.postDelayed(mRunnableWorld, (long) (jBox2dFreq * 1000));
 			}
 		};
-			private XKPDDView 			ddView;
-				private XKPPackage ;
-			private String [] mResources__XKPName = {
-				"",
-				""
+				private XKPPackage __resources1;
+			private String [] mResources___resources1_XKPName = {
+				"__image1",
+				"__image2"
 			};
-			private String [] mResources__DroidName = {
+			private String [] mResources___resources1_DroidName = {
 				"smile_grin_48.png",
 				"smile_sad_48.png"
 			};
-			private Integer [] mResources__Type = {
+			private Integer [] mResources___resources1_Type = {
 				XKPPackage.BITMAP_RESOURCE,
 				XKPPackage.BITMAP_RESOURCE
 			};
-			private Integer [] mResources__Id = {
+			private Integer [] mResources___resources1_Id = {
 				R.drawable.smile_grin_48,
 				R.drawable.smile_sad_48
 			};
@@ -104,11 +103,8 @@ private void initCallers() {
 private void onLayoutUpdated() {
 }
 private void onLayoutStarted() {
-			//TODO: determine real screen dimensions (width & height)
-			ddView = new XKPDDView(this, 320, 480);
-			layoutapplication.addView(ddView);
         myWorld = new XKPJBox2d();
-		myWorld.createWorld(new Vec2(0f, 10f), ddView.getDebugDraw());
+		myWorld.createWorld(new Vec2(0f, 10f));
 			XKPPhysicBody __physics1 = new XKPPhysicBody(ActjBox2d_2.myWorld.getWorld(), 
 				ShapeType.CIRCLE, btn1);
 		__physics1.setSensor(false);
@@ -132,11 +128,11 @@ private void onLayoutStarted() {
 }
 			private void initInstances() {
 				application = this;
-				 = new XKPPackage(this, 
-					mResources__XKPName, mResources__DroidName, 
-					mResources__Type, mResources__Id
+				__resources1 = new XKPPackage(this, 
+					mResources___resources1_XKPName, mResources___resources1_DroidName, 
+					mResources___resources1_Type, mResources___resources1_Id
 					, true);
-				util.addXKPPackage();
+				util.addXKPPackage(__resources1);
 			}
 			private Object i = 0;
 }

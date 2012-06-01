@@ -25,10 +25,10 @@ public class XKPLine extends XKPGraphics {
 		mPathShape.reset();
 		mPathShape.moveTo(mX1, mY1);
 		mPathShape.lineTo(mX2, mY2);
-		mPathShape.transform(mMtxAngle);
 		
 		mPathShape.computeBounds(mBounds, true);
-
+		mPathShape.transform(mMtxAngle);
+		
 		mDrawable = new ShapeDrawable(new PathShape(mPathShape, mBounds.width(), mBounds.height()));
 		mDrawable.setBounds(0, 0, (int) mBounds.width(), (int) mBounds.height());
 	}

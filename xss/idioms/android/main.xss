@@ -60,7 +60,11 @@
 	}
 
 	//inject idiom event for render types
+	//TRACE: log
+	//compiler.log("-> Begin Rendering all types");
 	compiler.inject("render_types", app = appName, bns = base_namespace);
+	//TRACE: log
+	//compiler.log("-> End Rendering all types");
 	
 	//render project files
 	string output_filename;
@@ -128,7 +132,7 @@
         compiler.xss("java.lst.xss", output_file = output_classes, appOutputPath);
 
         string dxLibPath = "";
-        if(application.libraries) dxLibPath = appOutputPath + "/lib";
+        if(application.libraries) dxLibPath = appOutputPath + "/libs";
         
         shell(working_path = appOutputPath)
         {
@@ -142,7 +146,7 @@
             aapt@exeExt add @appOutputPath/bin/resources.ap_ classes.dex
         }
         
-        string libsParams = "-rj " + appOutputPath + "/lib";
+        string libsParams = "-rj " + appOutputPath + "/libs";
         libsParams = "";
         string password = "xkp.android.projects.2012";
         string androidIdiomPath = appOutputPath + "/../../../idioms/android";

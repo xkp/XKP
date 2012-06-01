@@ -10,7 +10,7 @@
 				<xkp.android.libs.Graphics.XKPImage android:id="@+id/btn1"
 				xkp:pos_x1="200dp"
 				xkp:pos_y1="200dp"
-				xkp:rotation="0.200000"
+				xkp:angle="0.200000"
 				xkp:pos_width="50dp"
 				xkp:pos_height="50dp"
 				xkp:src="@drawable/smile_sad_48"

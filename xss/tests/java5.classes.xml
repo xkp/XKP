@@ -1,0 +1,5 @@
+<xs>
+    <class id="custom_clazz" super="java5">
+		<classx id="cx"/>
+    </class>
+</xs>

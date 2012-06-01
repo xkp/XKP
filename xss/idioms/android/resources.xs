@@ -1,3 +1,12 @@
+on pre_process(obj)
+{
+	if(obj.id == "")
+		obj.id = compiler.genid(obj.class_name);
+		//obj.output_id = compiler.genid(obj.class_name);
+	
+	//compiler.log("[resources]: " + obj.id + " - " + obj.output_id);
+}
+
 on render_instances(app)
 {
 	compiler.log("Copying resource files...");
@@ -18,7 +27,7 @@ on render_instances(app)
 	{
 		compiler.xss("../java/instance.xss", marker = "handlers", it = inst);
 		
-		//compiler.log(inst.id);
+		//compiler.log(inst.id + " - " + inst.output_id);
 		string parent = "resources";
 		if(inst.parent.id != "")
 			parent = inst.parent.id;
@@ -104,7 +113,7 @@ on render_instances(app)
 	//compiler.log("End Rendering Resources Instances...");
 }
 
-method render_instance(app, clazz, it)
+method render_instance(it, app, clazz)
 {
 }
 

@@ -26,10 +26,10 @@ public class XKPPoint extends XKPGraphics {
 		Integer mRadius = new Integer(1);
 		mPathShape.reset();
 		mPathShape.addCircle(mX1, mY1, mRadius, Direction.CCW);
-		mPathShape.transform(mMtxAngle);
 		
 		mPathShape.computeBounds(mBounds, true);
-
+		mPathShape.transform(mMtxAngle);
+		
 		mDrawable = new ShapeDrawable(new PathShape(mPathShape, mBounds.width(), mBounds.height()));
 		mDrawable.setBounds(0, 0, (int) mBounds.width(), (int) mBounds.height());
 	}

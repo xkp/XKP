@@ -104,7 +104,7 @@ on render_instances(app, clazz)
 
 	for(var i in instances)
 	{
-		render_instance(app, clazz, i);
+		render_instance(i, app, clazz);
     }
 	
 	out(indent = 1, marker = "layout_start")
@@ -114,7 +114,7 @@ on render_instances(app, clazz)
 	}
 }
 
-method render_instance(app, clazz, it)
+method render_instance(it, app, clazz)
 {
 	if(it.class_name == "physics_world") return;
 
@@ -174,8 +174,8 @@ on copy_default_files(app, bns, plibs)
 {
 	// file list for copy
 	array<string> cp_files = [
-		"/lib/jbox2d-library-2.1.2.2.jar",
-		"/lib/slf4j-api-1.6.4.jar"
+		"/libs/jbox2d-library-2.1.2.2.jar",
+		"/libs/slf4j-api-1.6.4.jar"
 	];
 	
 	compiler.log("[jbox2d] Copying default files...");

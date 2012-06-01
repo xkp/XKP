@@ -11,6 +11,8 @@ on render_initialization(clazz, bns)
 
 on render_types()
 {
+	compiler.log("Rendering Sequence Types...");
+	
     for(var ut in user_types)
     {
         var full_path = compiler.full_path("../sequence.xss");

@@ -1,0 +1,3 @@
+<application name="JavaTest5" title="Java Test Console 5" src="java5.app.xs">
+	<custom_clazz id="cc1" x="10" y="10" width="100" height="50" guest="some_component"/>
+</application>

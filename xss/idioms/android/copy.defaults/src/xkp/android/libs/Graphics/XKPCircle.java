@@ -37,10 +37,10 @@ public class XKPCircle extends XKPGraphics {
 		if(mRadius != null) {
 			mPathShape.reset();
 			mPathShape.addCircle(mX1 + mRadius, mY1 + mRadius, mRadius, Direction.CCW);
+			
+			mPathShape.computeBounds(mBounds, true);
 			mPathShape.transform(mMtxAngle);
 		}
-		
-		mPathShape.computeBounds(mBounds, true);
 		
 		mDrawable = new ShapeDrawable(new PathShape(mPathShape, mBounds.width(), mBounds.height()));
 		mDrawable.setBounds(0, 0, (int) mBounds.width(), (int) mBounds.height());

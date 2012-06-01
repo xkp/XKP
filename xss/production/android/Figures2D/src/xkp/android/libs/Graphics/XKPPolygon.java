@@ -1,7 +1,6 @@
 package xkp.android.libs.Graphics;
 import java.util.ArrayList;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Path.FillType;
 import android.graphics.Point;
 import android.graphics.drawable.ShapeDrawable;
@@ -15,11 +14,6 @@ public class XKPPolygon extends XKPGraphics {
 	public XKPPolygon(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		mPathShape.setFillType(FillType.EVEN_ODD);
-	}
-	@Override
-	protected void onDraw(Canvas canvas) {
-		setRotation(mRotation);
-		super.onDraw(canvas);
 	}
 	@Override
 	protected void updateShapePosition() {
@@ -38,17 +32,17 @@ public class XKPPolygon extends XKPGraphics {
 			mLeftTop.set(Math.min(mLeftTop.x, point.x), Math.min(mLeftTop.y, point.y));
 			mBottomRight.set(Math.max(mBottomRight.x, point.x), Math.max(mBottomRight.y, point.y));
 		}
-		mDX = Math.abs(mLeftTop.x - mBottomRight.x);
-		mDY = Math.abs(mLeftTop.y - mBottomRight.y);
+		preCalcPosition(mLeftTop.x, mLeftTop.y, mBottomRight.x, mBottomRight.y);
 		mPathShape.close();
-		mPathShape.transform(mMtxRotation);
 		mPathShape.computeBounds(mBounds, true);
+		mPathShape.transform(mMtxAngle);
 		mDrawable = new ShapeDrawable(new PathShape(mPathShape, mBounds.width(), mBounds.height()));
 		mDrawable.setBounds(0, 0, (int) mBounds.width(), (int) mBounds.height());
 	}
 	public void addPoint(Point point) {
 		mPoints.add(point);
 		updateShapePosition();
+		setAngle(mAngle);
 		invalidate();
 	}
 	public void addPoint(Integer x, Integer y) {
@@ -74,6 +68,8 @@ public class XKPPolygon extends XKPGraphics {
 	public void setPoint(Integer index, Point point) {
 		if(index >= 0 && index < mPoints.size()) {
 			mPoints.get(index).set(point.x, point.y);
+			updateShapePosition();
+			setAngle(mAngle);
 			invalidate();
 		}
 	}

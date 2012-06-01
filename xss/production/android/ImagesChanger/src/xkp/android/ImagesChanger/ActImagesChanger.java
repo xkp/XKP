@@ -29,8 +29,8 @@ import xkp.android.libs.Layout.XKPLayout;
 				private TextView identifier;
 			public static XKPUtils util;
 		private XKPLayout layoutapplication;
-				private XKPPackage ;
-			private String [] mResources__XKPName = {
+				private XKPPackage __resources1;
+			private String [] mResources___resources1_XKPName = {
 				"img1",
 				"img2",
 				"img3",
@@ -40,7 +40,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				"img7",
 				"img8"
 			};
-			private String [] mResources__DroidName = {
+			private String [] mResources___resources1_DroidName = {
 				"photo_1.jpg",
 				"photo_2.jpg",
 				"photo_3.jpg",
@@ -50,7 +50,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				"photo_7.jpg",
 				"photo_8.jpg"
 			};
-			private Integer [] mResources__Type = {
+			private Integer [] mResources___resources1_Type = {
 				XKPPackage.BITMAP_RESOURCE,
 				XKPPackage.BITMAP_RESOURCE,
 				XKPPackage.BITMAP_RESOURCE,
@@ -60,7 +60,7 @@ import xkp.android.libs.Layout.XKPLayout;
 				XKPPackage.BITMAP_RESOURCE,
 				XKPPackage.BITMAP_RESOURCE
 			};
-			private Integer [] mResources__Id = {
+			private Integer [] mResources___resources1_Id = {
 				R.drawable.photo_1,
 				R.drawable.photo_2,
 				R.drawable.photo_3,
@@ -129,11 +129,11 @@ private void onLayoutStarted() {
 }
 			private void initInstances() {
 				application = this;
-				 = new XKPPackage(this, 
-					mResources__XKPName, mResources__DroidName, 
-					mResources__Type, mResources__Id
+				__resources1 = new XKPPackage(this, 
+					mResources___resources1_XKPName, mResources___resources1_DroidName, 
+					mResources___resources1_Type, mResources___resources1_Id
 					, true);
-				util.addXKPPackage();
+				util.addXKPPackage(__resources1);
 			}
 			private void onClickchanger() {
 				currentImage = currentImage + 1;

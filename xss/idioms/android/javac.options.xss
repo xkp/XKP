@@ -25,7 +25,7 @@
 		for(var lib in application.libraries)
 		{
 			if(counter > 0) jars = jars + pathSeparator;
-			jars = jars + appOutputPath + "/lib/" + lib;
+			jars = jars + appOutputPath + "/libs/" + lib;
 			counter++;
 		}
 		

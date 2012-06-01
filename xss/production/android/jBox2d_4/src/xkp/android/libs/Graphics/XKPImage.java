@@ -48,10 +48,11 @@ public class XKPImage extends XKPGraphics {
 	protected void updateShapePosition() {
 		mPathShape.reset();
 		mPathShape.addRect(mLeftTop.x, mLeftTop.y, mBottomRight.x, mBottomRight.y, Direction.CCW);
-		mPathShape.transform(mMtxRotation);
+		mPathShape.transform(mMtxAngle);
 	}
 	private void calculateSize() {
 		if(mBitmap == null) return;
+		if(mX2 == -1 && mY2 == -1)
 		setFigureSize(mBitmap.getWidth(), mBitmap.getHeight());
 	}
 }
