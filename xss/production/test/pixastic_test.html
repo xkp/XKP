@@ -229,21 +229,21 @@ plane2.manager = manager;
             img4.set_width(60);
             img4.set_height(100);
             camera_1.position.z = 1000;
-            plane1.material.map = new THREE.Texture(manager.streamer.get_resource("images/test1.png").data);
+            set_3js_object_texture(plane1, "images/test1.png");
             plane1.position.x = -30;
             set_rotation_y(plane1.rotation, -10);
             sphere1.position.x = 400;
             sphere1.position.y = -100;
             sphere2.position.x = 400;
             sphere2.position.y = 200;
-            plane2.material.map = new THREE.Texture(manager.streamer.get_resource("images/test2.png").data);
+            set_3js_object_texture(plane2, "images/test2.png");
             plane2.position.x = -300;
             plane2.position.y = -30;
             set_rotation_y(plane2.rotation, -10);
 	application.events.addListener("click", function()
 	{    
-		img3.bf0.apply = !img3.bf0.apply;
-img3.f1.apply = !img3.f1.apply;
+		img3.bf0.set_apply(!img3.bf0.apply_);
+img3.f1.set_apply(!img3.f1.apply_);
 b_filter.set_apply(!b_filter.apply_);
 put_image(img1, b_filter.apply(get_image_data(img1)));
 	}
@@ -347,7 +347,7 @@ manager.events.addListener("update", function(g_delta, g_elapsed)
 	application.events.dispatch("update", [g_delta, g_elapsed]);
 });
 application.events.dispatch("init", []);
-document.body.appendChild( renderer.domElement );
+		document.body.appendChild( renderer.domElement );
 animate();
 });
 function animate() {

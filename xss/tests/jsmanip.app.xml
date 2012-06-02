@@ -10,7 +10,7 @@
 	
 	<materials>
 		<basic_material id="material1" src="images/test3.png">
-			<noise id="blur1" amount="25" density="1" monochrome="false"/>
+			<noise id="noise1" amount="25" density="1" monochrome="false"/>
 		</basic_material>
 		<basic_material id="material2" src="images/test3.png"/>
 	</materials>	

@@ -446,9 +446,9 @@ bool xss_context::resolve(const str& id, resolve_info& info)
               obj = get_this();
 
             //td: think this through
-            if (obj && obj->type() && obj->type()->has("resolve_children"))
+            if (obj && obj->type()) // && obj->type()->has("resolve_children")
               {
-                XSSObject child = obj->find(id);
+                XSSObject child = obj->find_by_id(id);
                 if (child)
                   {
                     info.what  = RESOLVE_INSTANCE;
@@ -1198,6 +1198,24 @@ XSSObject xss_object::find(const str& what)
       {
         XSSObject child = *it;
         if (child->id() == what || child->type_name() == what)
+          return child;
+      }
+
+    return XSSObject();
+  }
+
+XSSObject xss_object::find_by_id(const str& what)
+  {
+    if (what.empty())
+      return XSSObject();
+
+    std::vector<variant>::iterator it = children_->ref_begin();
+    std::vector<variant>::iterator nd = children_->ref_end();
+
+    for(; it != nd; it++)
+      {
+        XSSObject child = *it;
+        if (child->id() == what)
           return child;
       }
 

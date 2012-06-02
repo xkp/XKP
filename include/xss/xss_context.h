@@ -114,6 +114,7 @@ class xss_object : public editable_object<xss_object>,
 		public:
       //misc
       XSSObject              find(const str& what);
+      XSSObject              find_by_id(const str& what);
       std::vector<XSSObject> find_by_class(const str& which);
       DynamicArray           find_by_type(const str& which);
       DynamicArray           get_event_impl(const str& event_name, XSSEvent& ev);

@@ -822,9 +822,11 @@ Success are greateful
 ===[ java2.project.xml ]================(Tests)
 
 
-Error [cannot-resolve] Instance not found
-	instance = application.instance1ERROR: Project:  java2.project.xml
+log: Rendering Java instances...
+log: Rendering instance: instance1
+log: Rendering instance: application
 
+Success are greateful
 ===[ java3.project.xml ]================(Tests)
 
 

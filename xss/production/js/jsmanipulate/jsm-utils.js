@@ -64,10 +64,12 @@ function put_image(parent, img)
 	if(parent__ instanceof THREE.Mesh)
 	{	
 		parent__.material.map.image = img__;		
+		parent__.material.map.needsUpdate = true;
 	}else
 	if(parent__ instanceof THREE.Material)
 	{
 		parent__.map.image = img__;			
+		parent__.map.needsUpdate = true;
 	}else
 	{
 		parent__.data.getContext('2d').putImageData(img, 0, 0);

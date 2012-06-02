@@ -93,10 +93,10 @@
 				<set text="material.color.setHex({value})"/>
             </property>
 			<property id="texture" type="string">
-				<set text="material.map = new THREE.Texture(manager.streamer.get_resource({value}).data)"/>
+				<set text="set_3js_object_texture({path}, {value})" global = "true"/>
             </property>	
 			<property id="texture_object" type="string">
-				<set text="material.map = new THREE.Texture({value})"/>
+				<set text="set_3js_texture_object({path}, {value})" global = "true"/>				
             </property>
 			<property id="alpha" type="float" use_plain_value="true">	
 				<get text="get_object_alpha({path})" global = "true"/>

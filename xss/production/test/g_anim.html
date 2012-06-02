@@ -219,7 +219,7 @@ g_sequence_manager);
         my_plane.image_set = function (value)
         {
             my_plane.image = value;
-            this.material.map = new THREE.Texture(manager.streamer.get_resource(value).data);
+            set_3js_object_texture(this, value);
         };
 		if(my_plane instanceof THREE.Object3D)
 			manager.scene.add(my_plane);
@@ -314,7 +314,7 @@ manager.events.addListener("update", function(g_delta, g_elapsed)
 	application.events.dispatch("update", [g_delta, g_elapsed]);
 });
 application.events.dispatch("init", []);
-document.body.appendChild( renderer.domElement );
+		document.body.appendChild( renderer.domElement );
 animate();
 });
 function animate() {

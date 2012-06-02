@@ -186,13 +186,13 @@ plane_3.manager = manager;
             camera_1.position.x = 500;
             camera_1.position.y = 500;
             camera_1.position.z = 1000;
-            plane_1.material.map = THREE.ImageUtils.loadTexture(manager.streamer.get_resource("images/test1.png").asset);
+            set_webgl_texture_object(plane_1, "images/test1.png");
             plane_1.position.x = 100;
             plane_1.position.y = 100;
-            plane_2.material.map = THREE.ImageUtils.loadTexture(manager.streamer.get_resource("images/test2.png").asset);
+            set_webgl_texture_object(plane_2, "images/test2.png");
             plane_2.position.x = 300;
             plane_2.position.y = 100;
-            plane_3.material.map = THREE.ImageUtils.loadTexture(manager.streamer.get_resource("images/test3.png").asset);
+            set_webgl_texture_object(plane_3, "images/test3.png");
             plane_3.position.x = 100;
             plane_3.position.y = 300;
 				pack_1.events.addListener("loaded", function()
@@ -200,12 +200,12 @@ plane_3.manager = manager;
 });
 				pack_1.events.addListener("loaded", function()
 				{
-            plane_4.material.map = THREE.ImageUtils.loadTexture(manager.streamer.get_resource("images/test4.png").asset);
+            set_webgl_texture_object(plane_4, "images/test4.png");
             plane_4.position.x = -100;
 });
 				pack_1.events.addListener("loaded", function()
 				{
-            plane_5.material.map = THREE.ImageUtils.loadTexture(manager.streamer.get_resource("images/test5.png").asset);
+            set_webgl_texture_object(plane_5, "images/test5.png");
             plane_5.position.x = -400;
 });
 	application.events.addListener("click", function()
@@ -279,7 +279,7 @@ manager.events.addListener("update", function(delta, elapsed)
 	application.events.dispatch("update", [delta, elapsed]);
 });
 application.events.dispatch("init", []);
-document.body.appendChild( renderer.domElement );
+		document.body.appendChild( renderer.domElement );
 animate();
 });
 function animate() {	

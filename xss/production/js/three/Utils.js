@@ -83,14 +83,34 @@ function set_transform_image( path, value )
 	}	
 }
 
+function set_3js_object_texture( path, value )
+{
+	path.material.map = new THREE.Texture(path.manager.streamer.get_resource(value).data);
+	path.material.map.needsUpdate = true;
+}
+
+function set_webgl_object_texture( path, value )
+{
+	path.material.map = THREE.ImageUtils.loadTexture(manager.streamer.get_resource(value).asset);
+	path.material.map.needsUpdate = true;
+}
+
+function set_3js_texture_object( path, value )
+{
+	path.material.map = new THREE.Texture(value);
+	path.material.map.needsUpdate = true;
+}
+
 function set_cube_face_object( path, face, value )
 {
 	path.geometry.faces[face].material.map = new THREE.Texture(value);	
+	path.geometry.faces[face].material.map.needsUpdate = true;
 }
 
 function set_cube_face( path, value, face )
 {		
 	path.geometry.faces[face].material.map = new THREE.Texture(path.manager.streamer.get_resource(value).data);	
+	path.geometry.faces[face].material.map.needsUpdate = true;
 }
 
 function set_transform_texture_object( path, value )
@@ -98,7 +118,8 @@ function set_transform_texture_object( path, value )
 	for(var i = 0; i < path.children.length; i++)
 	{
 		var child = path.children[i];		
-		child.material.map = new THREE.Texture(value);	
+		child.material.map = new THREE.Texture(value);
+		child.material.map.needsUpdate = true;	
 	}	
 }
 

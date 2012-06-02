@@ -207,15 +207,15 @@ plane_3.manager = manager;
             camera_1.position.x = 100;
             camera_1.position.y = 100;
             camera_1.position.z = 1000;
-            plane_1.material.map = new THREE.Texture(manager.streamer.get_resource("images/test1.png").data);
+            set_3js_object_texture(plane_1, "images/test1.png");
             plane_1.position.x = 100;
             plane_1.position.y = 100;
             set_rotation_x(plane_1.rotation, 90);
-            plane_2.material.map = new THREE.Texture(manager.streamer.get_resource("images/test2.png").data);
+            set_3js_object_texture(plane_2, "images/test2.png");
             plane_2.position.x = 300;
             plane_2.position.y = 100;
             set_rotation_x(plane_2.rotation, 90);
-            plane_3.material.map = new THREE.Texture(manager.streamer.get_resource("images/test3.png").data);
+            set_3js_object_texture(plane_3, "images/test3.png");
             plane_3.position.x = 100;
             plane_3.position.y = 300;
             set_rotation_x(plane_3.rotation, 90);
@@ -224,19 +224,20 @@ plane_3.manager = manager;
 });
 				pack_1.events.addListener("loaded", function()
 				{
-            plane_4.material.map = new THREE.Texture(manager.streamer.get_resource("images/test4.png").data);
+            set_3js_object_texture(plane_4, "images/test4.png");
             plane_4.position.x = -100;
             set_rotation_x(plane_4.rotation, 90);
 });
 				pack_1.events.addListener("loaded", function()
 				{
-            plane_5.material.map = new THREE.Texture(manager.streamer.get_resource("images/test5.png").data);
+            set_3js_object_texture(plane_5, "images/test5.png");
             plane_5.position.x = -400;
             set_rotation_x(plane_5.rotation, 90);
 });
 	application.events.addListener("click", function()
 	{    
-		pack_1.load();
+		set_3js_object_texture(plane_1, "images/test3.png");
+pack_1.load();
 	}
 	);
 if(ui_)
@@ -316,7 +317,7 @@ manager.events.addListener("update", function(g_delta, g_elapsed)
 	application.events.dispatch("update", [g_delta, g_elapsed]);
 });
 application.events.dispatch("init", []);
-document.body.appendChild( renderer.domElement );
+		document.body.appendChild( renderer.domElement );
 animate();
 });
 function animate() {

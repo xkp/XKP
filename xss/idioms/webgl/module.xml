@@ -93,8 +93,8 @@
             <property id="color" type="string" use_plain_value="true">
 				<set text="material.color.setHex({value})"/>
             </property>
-			<property id="texture" type="string">				
-				<set text="material.map = THREE.ImageUtils.loadTexture(manager.streamer.get_resource({value}).asset)"/>
+			<property id="texture" type="string">					
+				<set text="set_webgl_texture_object({path}, {value})" global = "true"/>
             </property>		
 			<property id="material" type="string" use_plain_value="true" dont_init="true">
 				<set text="material = {value}"/>

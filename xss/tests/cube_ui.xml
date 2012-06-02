@@ -30,7 +30,7 @@
 	</ui>
 
 	<ui id="sounds" width="200" height="200">
-		<rectangle id="r2" x="0" y="0" width="200" height="200" mouse_thru="true" alpha="60" fill="lightblue"/>
+		<rectangle id="r2" x="0" y="0" width="200" height="200" mouse_thru="true" alpha="60" fill="beige"/>
         <img id="applause" x="75" y="50" width="50" height="50" src="images/1327189824_users.png"/>
         <img id="shutter" x="75" y="120" width="50" height="50" src="images/1327189922_photo-camera.png"/>
     </ui>

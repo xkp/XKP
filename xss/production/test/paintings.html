@@ -1043,7 +1043,7 @@ g_sequence_manager);
             anim_plane.title = false;
 	anim_plane.set_image = function(value) 
 	{
-		anim_plane.material.map = new THREE.Texture(manager.streamer.get_resource(value).data);
+		set_3js_object_texture(anim_plane, value);
 	};
 	anim_plane.events.addListener("mousein", function(x,y)
 	{    
@@ -2198,7 +2198,7 @@ manager.events.addListener("update", function(g_delta, g_elapsed)
 	application.events.dispatch("update", [g_delta, g_elapsed]);
 });
 application.events.dispatch("init", []);
-document.body.appendChild( renderer.domElement );
+		document.body.appendChild( renderer.domElement );
 animate();
 });
 function animate() {

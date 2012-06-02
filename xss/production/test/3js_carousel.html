@@ -350,7 +350,7 @@ manager.events.addListener("update", function(g_delta, g_elapsed)
 	application.events.dispatch("update", [g_delta, g_elapsed]);
 });
 application.events.dispatch("init", []);
-document.body.appendChild( renderer.domElement );
+		document.body.appendChild( renderer.domElement );
 animate();
 });
 function animate() {

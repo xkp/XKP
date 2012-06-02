@@ -254,7 +254,7 @@ manager.events.addListener("update", function(delta, elapsed)
 	application.events.dispatch("update", [delta, elapsed]);
 });
 application.events.dispatch("init", []);
-document.body.appendChild( renderer.domElement );
+		document.body.appendChild( renderer.domElement );
 animate();
 });
 function animate() {	

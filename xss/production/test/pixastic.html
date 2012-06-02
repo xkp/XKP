@@ -168,7 +168,7 @@ var SoundUtils = new ui.SoundUtils();
             {
 		id:				"__image10",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"images/unchecked.png",
+		src:			"images/unchecked.jpg",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
@@ -182,7 +182,7 @@ var SoundUtils = new ui.SoundUtils();
             {
 		id:				"__image11",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"images/checked.png",
+		src:			"images/checked.jpg",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
@@ -277,9 +277,9 @@ window.onload = function()
 		    edges_options = new ui.Component(options.manager, options);
 	    edges_options.mouse_thru = true;
 		    __label6 = new ui.Label(edges_options.manager, edges_options, "12px Verdana");
-		    mono_check = new ui.StateButton(edges_options.manager, edges_options, "images/checked.png", "images/unchecked.png");
+		    mono_check = new ui.StateButton(edges_options.manager, edges_options, "images/checked.jpg", "images/unchecked.jpg");
 		    __label7 = new ui.Label(edges_options.manager, edges_options, "12px Verdana");
-		    invert_check = new ui.StateButton(edges_options.manager, edges_options, "images/checked.png", "images/unchecked.png");
+		    invert_check = new ui.StateButton(edges_options.manager, edges_options, "images/checked.jpg", "images/unchecked.jpg");
 		    __label8 = new ui.Label(edges_options.manager, edges_options, "12px Verdana");
 		    pointillize_options = new ui.Component(options.manager, options);
 	    pointillize_options.mouse_thru = true;
@@ -292,7 +292,7 @@ window.onload = function()
 		    noise_bar = new ui.ProgressBar(pointillize_options.manager, pointillize_options, null);
 		    noise_b1 = new ui.Image(pointillize_options.manager, pointillize_options, "images/arrow_left.png");
 		    noise_b2 = new ui.Image(pointillize_options.manager, pointillize_options, "images/arrow_right.png");
-		    transparent_check = new ui.StateButton(pointillize_options.manager, pointillize_options, "images/checked.png", "images/unchecked.png");
+		    transparent_check = new ui.StateButton(pointillize_options.manager, pointillize_options, "images/checked.jpg", "images/unchecked.jpg");
 		    __label12 = new ui.Label(pointillize_options.manager, pointillize_options, "12px Verdana");
 		    brightness_options = new ui.Component(options.manager, options);
 	    brightness_options.mouse_thru = true;
@@ -331,7 +331,7 @@ window.onload = function()
 		    strength_bar = new ui.ProgressBar(noise_options.manager, noise_options, null);
 		    strength_b1 = new ui.Image(noise_options.manager, noise_options, "images/arrow_left.png");
 		    strength_b2 = new ui.Image(noise_options.manager, noise_options, "images/arrow_right.png");
-		    mono_check1 = new ui.StateButton(noise_options.manager, noise_options, "images/checked.png", "images/unchecked.png");
+		    mono_check1 = new ui.StateButton(noise_options.manager, noise_options, "images/checked.jpg", "images/unchecked.jpg");
 		    __label23 = new ui.Label(noise_options.manager, noise_options, "12px Verdana");
 		    glow_options = new ui.Component(options.manager, options);
 	    glow_options.mouse_thru = true;
@@ -516,7 +516,7 @@ flipv_label.set_y(y - flipv_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.flipv_filter.apply = !img1.flipv_filter.apply;
+img1.flipv_filter.set_apply(!img1.flipv_filter.apply_);
 }
 flipv_label.set_x(610);
 flipv_label.set_y(110);
@@ -535,11 +535,11 @@ hsl_label.set_y(y - hsl_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.hsl_filter.apply = !img1.hsl_filter.apply;
+img1.hsl_filter.set_apply(!img1.hsl_filter.apply_);
 }
 hsl_label.set_x(610);
 hsl_label.set_y(130);
-hsl_options.set_switchable(img1.hsl_filter.apply);
+hsl_options.set_switchable(img1.hsl_filter.apply_);
 	}
 	);
             edges_label.set_x(610);
@@ -555,11 +555,11 @@ edges_label.set_y(y - edges_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.edges_filter.apply = !img1.edges_filter.apply;
+img1.edges_filter.set_apply(!img1.edges_filter.apply_);
 }
 edges_label.set_x(610);
 edges_label.set_y(150);
-edges_options.set_switchable(img1.edges_filter.apply);
+edges_options.set_switchable(img1.edges_filter.apply_);
 	}
 	);
             pointillize_label.set_x(610);
@@ -575,11 +575,11 @@ pointillize_label.set_y(y - pointillize_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.pointillize_filter.apply = !img1.pointillize_filter.apply;
+img1.pointillize_filter.set_apply(!img1.pointillize_filter.apply_);
 }
 pointillize_label.set_x(610);
 pointillize_label.set_y(170);
-pointillize_options.set_switchable(img1.pointillize_filter.apply);
+pointillize_options.set_switchable(img1.pointillize_filter.apply_);
 	}
 	);
             brightness_label.set_x(610);
@@ -595,11 +595,11 @@ brightness_label.set_y(y - brightness_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.brightness_filter.apply = !img1.brightness_filter.apply;
+img1.brightness_filter.set_apply(!img1.brightness_filter.apply_);
 }
 brightness_label.set_x(610);
 brightness_label.set_y(190);
-brightness_options.set_switchable(img1.brightness_filter.apply);
+brightness_options.set_switchable(img1.brightness_filter.apply_);
 	}
 	);
             invert_label.set_x(610);
@@ -615,7 +615,7 @@ invert_label.set_y(y - invert_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.invert_filter.apply = !img1.invert_filter.apply;
+img1.invert_filter.set_apply(!img1.invert_filter.apply_);
 }
 invert_label.set_x(610);
 invert_label.set_y(210);
@@ -634,7 +634,7 @@ sepia_label.set_y(y - sepia_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.sepia_filter.apply = !img1.sepia_filter.apply;
+img1.sepia_filter.set_apply(!img1.sepia_filter.apply_);
 }
 sepia_label.set_x(610);
 sepia_label.set_y(230);
@@ -653,11 +653,11 @@ coloradjust_label.set_y(y - coloradjust_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.coloradjust_filter.apply = !img1.coloradjust_filter.apply;
+img1.coloradjust_filter.set_apply(!img1.coloradjust_filter.apply_);
 }
 coloradjust_label.set_x(610);
 coloradjust_label.set_y(250);
-coloradjust_options.set_switchable(img1.coloradjust_filter.apply);
+coloradjust_options.set_switchable(img1.coloradjust_filter.apply_);
 	}
 	);
             noise_label.set_x(610);
@@ -693,7 +693,7 @@ blur_label.set_y(y - blur_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.blur_filter.apply = !img1.blur_filter.apply;
+img1.blur_filter.set_apply(!img1.blur_filter.apply_);
 }
 blur_label.set_x(610);
 blur_label.set_y(290);
@@ -712,7 +712,7 @@ edges2_label.set_y(y - edges2_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.edges2_filter.apply = !img1.edges2_filter.apply;
+img1.edges2_filter.set_apply(!img1.edges2_filter.apply_);
 }
 edges2_label.set_x(610);
 edges2_label.set_y(310);
@@ -731,11 +731,11 @@ glow_label.set_y(y - glow_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.glow_filter.apply = !img1.glow_filter.apply;
+img1.glow_filter.set_apply(!img1.glow_filter.apply_);
 }
 glow_label.set_x(610);
 glow_label.set_y(330);
-glow_options.set_switchable(img1.glow_filter.apply);
+glow_options.set_switchable(img1.glow_filter.apply_);
 	}
 	);
             sharpen_label.set_x(610);
@@ -751,11 +751,11 @@ sharpen_label.set_y(y - sharpen_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.sharpen_filter.apply = !img1.sharpen_filter.apply;
+img1.sharpen_filter.set_apply(!img1.sharpen_filter.apply_);
 }
 sharpen_label.set_x(610);
 sharpen_label.set_y(350);
-sharpen_options.set_switchable(img1.sharpen_filter.apply);
+sharpen_options.set_switchable(img1.sharpen_filter.apply_);
 	}
 	);
             solarize_label.set_x(610);
@@ -771,7 +771,7 @@ solarize_label.set_y(y - solarize_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.solarize_filter.apply = !img1.solarize_filter.apply;
+img1.solarize_filter.set_apply(!img1.solarize_filter.apply_);
 }
 solarize_label.set_x(610);
 solarize_label.set_y(370);
@@ -790,7 +790,7 @@ fliph_label.set_y(y - fliph_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.fliph_filter.apply = !img1.fliph_filter.apply;
+img1.fliph_filter.set_apply(!img1.fliph_filter.apply_);
 }
 fliph_label.set_x(610);
 fliph_label.set_y(390);
@@ -809,11 +809,11 @@ mosaic_label.set_y(y - mosaic_label.get_height() / 2);
 	{    
 		if (x >= img1.x && x <= img1.x + img1.get_width() && y >= img1.y && y <= img1.y + img1.get_height())
 {
-img1.mosaic_filter.apply = !img1.mosaic_filter.apply;
+img1.mosaic_filter.set_apply(!img1.mosaic_filter.apply_);
 }
 mosaic_label.set_x(610);
 mosaic_label.set_y(410);
-mosaic_options.set_switchable(img1.mosaic_filter.apply);
+mosaic_options.set_switchable(img1.mosaic_filter.apply_);
 	}
 	);
             options.set_x(20);
@@ -839,7 +839,7 @@ mosaic_options.set_switchable(img1.mosaic_filter.apply);
 	saturation_b1.events.addListener("click", function()
 	{    
 		saturation_bar.value(saturation_bar.get_value() - 2);
-img1.hsl_filter.saturation -= 4;
+img1.hsl_filter.set_saturation(img1.hsl_filter.options.saturation - 4);
 	}
 	);
             saturation_b2.set_x(170);
@@ -849,7 +849,7 @@ img1.hsl_filter.saturation -= 4;
 	saturation_b2.events.addListener("click", function()
 	{    
 		saturation_bar.value(saturation_bar.get_value() + 2);
-img1.hsl_filter.saturation += 4;
+img1.hsl_filter.set_saturation(img1.hsl_filter.options.saturation + 4);
 	}
 	);
             __label4.set_x(40);
@@ -867,7 +867,7 @@ img1.hsl_filter.saturation += 4;
 	hue_b1.events.addListener("click", function()
 	{    
 		hue_bar.value(hue_bar.get_value() - 2);
-img1.hsl_filter.hue -= 7.19999981;
+img1.hsl_filter.set_hue(img1.hsl_filter.options.hue - 7.19999981);
 	}
 	);
             hue_b2.set_x(170);
@@ -877,7 +877,7 @@ img1.hsl_filter.hue -= 7.19999981;
 	hue_b2.events.addListener("click", function()
 	{    
 		hue_bar.value(hue_bar.get_value() + 2);
-img1.hsl_filter.hue += 7.19999981;
+img1.hsl_filter.set_hue(img1.hsl_filter.options.hue + 7.19999981);
 	}
 	);
             __label5.set_x(40);
@@ -895,7 +895,7 @@ img1.hsl_filter.hue += 7.19999981;
 	lightness_b1.events.addListener("click", function()
 	{    
 		lightness_bar.value(lightness_bar.get_value() - 2);
-img1.hsl_filter.lightness -= 4;
+img1.hsl_filter.set_lightness(img1.hsl_filter.options.lightness - 4);
 	}
 	);
             lightness_b2.set_x(170);
@@ -905,7 +905,7 @@ img1.hsl_filter.lightness -= 4;
 	lightness_b2.events.addListener("click", function()
 	{    
 		lightness_bar.value(lightness_bar.get_value() + 2);
-img1.hsl_filter.lightness += 4;
+img1.hsl_filter.set_lightness(img1.hsl_filter.options.lightness + 4);
 	}
 	);
             edges_options.set_switchable(false);
@@ -919,7 +919,7 @@ img1.hsl_filter.lightness += 4;
             mono_check.set_active(false);
 	mono_check.events.addListener("click", function()
 	{    
-		img1.edges_filter.mono = mono_check.is_active;
+		img1.edges_filter.set_mono(mono_check.is_active);
 	}
 	);
             __label7.set_x(90);
@@ -932,7 +932,7 @@ img1.hsl_filter.lightness += 4;
             invert_check.set_active(false);
 	invert_check.events.addListener("click", function()
 	{    
-		img1.edges_filter.invert = invert_check.is_active;
+		img1.edges_filter.set_invert(invert_check.is_active);
 	}
 	);
             __label8.set_x(90);
@@ -956,7 +956,7 @@ img1.hsl_filter.lightness += 4;
 	density_b1.events.addListener("click", function()
 	{    
 		density_bar.value(density_bar.get_value() - 2);
-img1.pointillize_filter.density -= 0.100000001;
+img1.pointillize_filter.set_density(img1.pointillize_filter.options.density - 0.100000001);
 	}
 	);
             density_b2.set_x(170);
@@ -966,7 +966,7 @@ img1.pointillize_filter.density -= 0.100000001;
 	density_b2.events.addListener("click", function()
 	{    
 		density_bar.value(density_bar.get_value() + 2);
-img1.pointillize_filter.density += 0.100000001;
+img1.pointillize_filter.set_density(img1.pointillize_filter.options.density + 0.100000001);
 	}
 	);
             __label11.set_x(40);
@@ -983,7 +983,7 @@ img1.pointillize_filter.density += 0.100000001;
 	noise_b1.events.addListener("click", function()
 	{    
 		noise_bar.value(noise_bar.get_value() - 2);
-img1.pointillize_filter.noise -= 0.100000001;
+img1.pointillize_filter.set_noise(img1.pointillize_filter.options.noise - 0.100000001);
 	}
 	);
             noise_b2.set_x(170);
@@ -993,7 +993,7 @@ img1.pointillize_filter.noise -= 0.100000001;
 	noise_b2.events.addListener("click", function()
 	{    
 		noise_bar.value(noise_bar.get_value() + 2);
-img1.pointillize_filter.noise += 0.100000001;
+img1.pointillize_filter.set_noise(img1.pointillize_filter.options.noise + 0.100000001);
 	}
 	);
             transparent_check.set_x(40);
@@ -1003,7 +1003,7 @@ img1.pointillize_filter.noise += 0.100000001;
             transparent_check.set_active(false);
 	transparent_check.events.addListener("click", function()
 	{    
-		img1.pointillize_filter.transparent = transparent_check.is_active;
+		img1.pointillize_filter.set_transparent(transparent_check.is_active);
 	}
 	);
             __label12.set_x(90);
@@ -1028,7 +1028,7 @@ img1.pointillize_filter.noise += 0.100000001;
 	brightness_b1.events.addListener("click", function()
 	{    
 		brightness_bar.value(brightness_bar.get_value() - 2);
-img1.brightness_filter.brightness -= 3;
+img1.brightness_filter.set_brightness(img1.brightness_filter.options.brightness - 3);
 	}
 	);
             brightness_b2.set_x(170);
@@ -1038,7 +1038,7 @@ img1.brightness_filter.brightness -= 3;
 	brightness_b2.events.addListener("click", function()
 	{    
 		brightness_bar.value(brightness_bar.get_value() + 2);
-img1.brightness_filter.brightness += 3;
+img1.brightness_filter.set_brightness(img1.brightness_filter.options.brightness + 3);
 	}
 	);
             __label15.set_x(40);
@@ -1056,7 +1056,7 @@ img1.brightness_filter.brightness += 3;
 	contrast_b1.events.addListener("click", function()
 	{    
 		contrast_bar.value(contrast_bar.get_value() - 2);
-img1.brightness_filter.contrast -= 0.0199999996;
+img1.brightness_filter.set_contrast(img1.brightness_filter.options.contrast - 0.0199999996);
 	}
 	);
             contrast_b2.set_x(170);
@@ -1066,7 +1066,7 @@ img1.brightness_filter.contrast -= 0.0199999996;
 	contrast_b2.events.addListener("click", function()
 	{    
 		contrast_bar.value(contrast_bar.get_value() + 2);
-img1.brightness_filter.contrast += 0.0199999996;
+img1.brightness_filter.set_contrast(img1.brightness_filter.options.contrast + 0.0199999996);
 	}
 	);
             coloradjust_options.set_switchable(false);
@@ -1088,7 +1088,7 @@ img1.brightness_filter.contrast += 0.0199999996;
 	red_b1.events.addListener("click", function()
 	{    
 		red_bar.value(red_bar.get_value() - 2);
-img1.coloradjust_filter.red -= 0.0199999996;
+img1.coloradjust_filter.set_red(img1.coloradjust_filter.options.red - 0.0199999996);
 	}
 	);
             red_b2.set_x(170);
@@ -1098,7 +1098,7 @@ img1.coloradjust_filter.red -= 0.0199999996;
 	red_b2.events.addListener("click", function()
 	{    
 		red_bar.value(red_bar.get_value() + 2);
-img1.coloradjust_filter.red += 0.0199999996;
+img1.coloradjust_filter.set_red(img1.coloradjust_filter.options.red + 0.0199999996);
 	}
 	);
             __label18.set_x(40);
@@ -1116,7 +1116,7 @@ img1.coloradjust_filter.red += 0.0199999996;
 	green_b1.events.addListener("click", function()
 	{    
 		green_bar.value(green_bar.get_value() - 2);
-img1.coloradjust_filter.green -= 0.0199999996;
+img1.coloradjust_filter.set_green(img1.coloradjust_filter.options.green - 0.0199999996);
 	}
 	);
             green_b2.set_x(170);
@@ -1126,7 +1126,7 @@ img1.coloradjust_filter.green -= 0.0199999996;
 	green_b2.events.addListener("click", function()
 	{    
 		green_bar.value(green_bar.get_value() + 2);
-img1.coloradjust_filter.green += 0.0199999996;
+img1.coloradjust_filter.set_green(img1.coloradjust_filter.options.green + 0.0199999996);
 	}
 	);
             __label19.set_x(40);
@@ -1144,7 +1144,7 @@ img1.coloradjust_filter.green += 0.0199999996;
 	blue_b1.events.addListener("click", function()
 	{    
 		blue_bar.value(blue_bar.get_value() - 2);
-img1.coloradjust_filter.blue -= 0.0199999996;
+img1.coloradjust_filter.set_blue(img1.coloradjust_filter.options.blue - 0.0199999996);
 	}
 	);
             blue_b2.set_x(170);
@@ -1154,7 +1154,7 @@ img1.coloradjust_filter.blue -= 0.0199999996;
 	blue_b2.events.addListener("click", function()
 	{    
 		blue_bar.value(blue_bar.get_value() + 2);
-img1.coloradjust_filter.blue += 0.0199999996;
+img1.coloradjust_filter.set_blue(img1.coloradjust_filter.options.blue + 0.0199999996);
 	}
 	);
             noise_options.set_switchable(false);
@@ -1175,7 +1175,7 @@ img1.coloradjust_filter.blue += 0.0199999996;
 	amount_b1.events.addListener("click", function()
 	{    
 		amount_bar.value(amount_bar.get_value() - 2);
-img1.noise_filter.amount -= 0.0199999996;
+img1.noise_filter.set_amount(img1.noise_filter.options.amount - 0.0199999996);
 	}
 	);
             amount_b2.set_x(170);
@@ -1185,7 +1185,7 @@ img1.noise_filter.amount -= 0.0199999996;
 	amount_b2.events.addListener("click", function()
 	{    
 		amount_bar.value(amount_bar.get_value() + 2);
-img1.noise_filter.amount += 0.0199999996;
+img1.noise_filter.set_amount(img1.noise_filter.options.amount + 0.0199999996);
 	}
 	);
             __label22.set_x(40);
@@ -1202,7 +1202,7 @@ img1.noise_filter.amount += 0.0199999996;
 	strength_b1.events.addListener("click", function()
 	{    
 		strength_bar.value(strength_bar.get_value() - 2);
-img1.noise_filter.strength -= 0.0199999996;
+img1.noise_filter.set_strength(img1.noise_filter.options.strength - 0.0199999996);
 	}
 	);
             strength_b2.set_x(170);
@@ -1212,7 +1212,7 @@ img1.noise_filter.strength -= 0.0199999996;
 	strength_b2.events.addListener("click", function()
 	{    
 		strength_bar.value(strength_bar.get_value() + 2);
-img1.noise_filter.strength += 0.0199999996;
+img1.noise_filter.set_strength(img1.noise_filter.options.strength + 0.0199999996);
 	}
 	);
             mono_check1.set_x(40);
@@ -1222,7 +1222,7 @@ img1.noise_filter.strength += 0.0199999996;
             mono_check1.set_active(false);
 	mono_check1.events.addListener("click", function()
 	{    
-		img1.noise_filter.mono = mono_check.is_active;
+		img1.noise_filter.set_mono(mono_check.is_active);
 	}
 	);
             __label23.set_x(90);
@@ -1246,7 +1246,7 @@ img1.noise_filter.strength += 0.0199999996;
 	amount_b11.events.addListener("click", function()
 	{    
 		amount_bar1.value(amount_bar1.get_value() - 2);
-img1.glow_filter.amount -= 0.0199999996;
+img1.glow_filter.set_amount(img1.glow_filter.options.amount - 0.0199999996);
 	}
 	);
             amount_b21.set_x(170);
@@ -1256,7 +1256,7 @@ img1.glow_filter.amount -= 0.0199999996;
 	amount_b21.events.addListener("click", function()
 	{    
 		amount_bar1.value(amount_bar1.get_value() + 2);
-img1.glow_filter.amount += 0.0199999996;
+img1.glow_filter.set_amount(img1.glow_filter.options.amount + 0.0199999996);
 	}
 	);
             __label26.set_x(40);
@@ -1273,7 +1273,7 @@ img1.glow_filter.amount += 0.0199999996;
 	radius_b1.events.addListener("click", function()
 	{    
 		radius_bar.value(radius_bar.get_value() - 2);
-img1.glow_filter.radius -= 0.0199999996;
+img1.glow_filter.set_radius(img1.glow_filter.options.radius - 0.0199999996);
 	}
 	);
             radius_b2.set_x(170);
@@ -1283,7 +1283,7 @@ img1.glow_filter.radius -= 0.0199999996;
 	radius_b2.events.addListener("click", function()
 	{    
 		radius_bar.value(radius_bar.get_value() + 2);
-img1.glow_filter.radius += 0.0199999996;
+img1.glow_filter.set_radius(img1.glow_filter.options.radius + 0.0199999996);
 	}
 	);
             sharpen_options.set_switchable(false);
@@ -1304,7 +1304,7 @@ img1.glow_filter.radius += 0.0199999996;
 	amount_b12.events.addListener("click", function()
 	{    
 		amount_bar2.value(amount_bar2.get_value() - 2);
-img1.sharpen_filter.amount -= 0.0199999996;
+img1.sharpen_filter.set_amount(img1.sharpen_filter.options.amount - 0.0199999996);
 	}
 	);
             amount_b22.set_x(170);
@@ -1314,7 +1314,7 @@ img1.sharpen_filter.amount -= 0.0199999996;
 	amount_b22.events.addListener("click", function()
 	{    
 		amount_bar2.value(amount_bar2.get_value() + 2);
-img1.sharpen_filter.amount += 0.0199999996;
+img1.sharpen_filter.set_amount(img1.sharpen_filter.options.amount + 0.0199999996);
 	}
 	);
             mosaic_options.set_switchable(false);
@@ -1335,7 +1335,7 @@ img1.sharpen_filter.amount += 0.0199999996;
 	bsize_b1.events.addListener("click", function()
 	{    
 		bsize_bar.value(bsize_bar.get_value() - 2);
-img1.mosaic_filter.block_size -= 1;
+img1.mosaic_filter.set_block_size(img1.mosaic_filter.options.blockSize - 1);
 	}
 	);
             bsize_b2.set_x(170);
@@ -1345,7 +1345,7 @@ img1.mosaic_filter.block_size -= 1;
 	bsize_b2.events.addListener("click", function()
 	{    
 		bsize_bar.value(bsize_bar.get_value() + 2);
-img1.mosaic_filter.block_size += 1;
+img1.mosaic_filter.set_block_size(img1.mosaic_filter.options.blockSize + 1);
 	}
 	);
             btnNext.set_x(130);
