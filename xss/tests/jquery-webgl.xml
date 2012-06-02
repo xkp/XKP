@@ -1,0 +1,11 @@
+<application name="jq7" title="Embedded webgl" src="jquery-webgl.xs">
+    <div>
+        <div x="0" y="0" width="200">
+            <label id="lbl1" caption="Enter Id"/>
+            <editbox id="edit1" width="252"/>
+            <button id="btn1" caption="Update"/>
+        </div>
+
+        <canvas id="app" application="wgl_monster.project.xml" x="100" y="30" width="600" height="400"/>
+    </div>
+</application>

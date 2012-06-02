@@ -1,0 +1,740 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+Name       : Refillable  
+Description: A two-column, fixed-width design with color scheme.
+Version    : 1.0
+Released   : 20120325
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>jsmanipulate usages demo</title>
+<link href="style.css" rel="stylesheet" type="text/css" media="screen" />
+<style type="text/css">
+@import "gallery.css";
+</style>
+</head>
+<body>
+<div id="wrapper">
+	<div id="header">
+		<div id="logo">
+			<h1><a href="#">jsmanipulate demo </a></h1>
+			<p> design by <a href="http://www.freecsstemplates.org/">Free CSS Templates</a></p>
+		</div>
+	</div>
+	<!-- end #header -->
+	<div id="menu">
+		<ul>
+			<li class="current_page_item"><a href="#">Home</a></li>
+			<li><a href="#">Blog</a></li>
+			<li><a href="#">Photos</a></li>
+			<li><a href="#">About</a></li>
+			<li><a href="#">Links</a></li>
+			<li><a href="#">Contact</a></li>
+		</ul>
+	</div>
+	<!-- end #menu -->
+	<div id="page">
+		<div id="page-bgtop">
+			<div id="page-bgbtm">
+				<div id="content">
+					<div id="gallery-wrapper">
+						<div id="gallery">
+                            <div id="target-container" style="padding: 10px">
+				<canvas id="app"
+			>
+				</canvas>
+                            </div>                          
+							<br class="clear" />
+						</div>
+						<!-- end -->
+					</div>
+					<div style="clear: both;">&nbsp;</div>
+				</div>
+				<!-- end #content -->
+				<div id="sidebar">
+<div id="__div1">
+<div id="acc1">
+            <h3><a href="#">Component Filter Params</a></h3>
+<div id="__div2">
+				<label id="__label1"
+			>
+					The filter is Contrast
+				</label>
+<br/>
+<br/>
+				<label id="__label2"
+			>
+					Amount
+				</label>
+<br/>
+<br/>
+				<div id="contrast"
+			>
+				</div>
+<br/>
+</div>
+            <h3><a href="#">Resource Filter Params</a></h3>
+<div id="__div3">
+				<label id="__label3"
+			>
+					The filter is RGB Adjust
+				</label>
+<br/>
+<br/>
+				<label id="__label4"
+			>
+					Red
+				</label>
+<br/>
+<br/>
+				<div id="red"
+			>
+				</div>
+<br/>
+				<label id="__label5"
+			>
+					Blue
+				</label>
+<br/>
+<br/>
+				<div id="blue"
+			>
+				</div>
+<br/>
+				<label id="__label6"
+			>
+					Green
+				</label>
+<br/>
+<br/>
+				<div id="green"
+			>
+				</div>
+</div>
+            <h3><a href="#">Plane Filter Params</a></h3>
+<div id="__div4">
+				<label id="__label7"
+			>
+					The filter is Emboss
+				</label>
+<br/>
+<br/>
+				<label id="__label8"
+			>
+					Height
+				</label>
+<br/>
+<br/>
+				<div id="height"
+			>
+				</div>
+<br/>
+				<label id="__label9"
+			>
+					Angle
+				</label>
+<br/>
+<br/>
+				<div id="angle"
+			>
+				</div>
+<br/>
+				<label id="__label10"
+			>
+					Elevation
+				</label>
+<br/>
+<br/>
+				<div id="elevation"
+			>
+				</div>
+</div>
+            <h3><a href="#">Material Filter Params</a></h3>
+<div id="__div5">
+				<label id="__label11"
+			>
+					The filter is Noise
+				</label>
+<br/>
+<br/>
+				<label id="__label12"
+			>
+					Amount
+				</label>
+<br/>
+<br/>
+				<div id="noise_amount"
+			>
+				</div>
+<br/>
+				<label id="__label13"
+			>
+					Density
+				</label>
+<br/>
+<br/>
+				<div id="noise_density"
+			>
+				</div>
+<br/>
+<br/>
+            <div id="mono">
+        <input id="mono_input" type="checkbox" name="__div5"/>
+        <label id="mono_label" for="mono_input"> Mono </label>
+            </div>
+</div>
+</div>
+</div>
+				</div>
+				<!-- end #sidebar -->
+				<div style="clear: both;">&nbsp;</div>
+			</div>
+		</div>
+	</div>
+	<!-- end #page -->
+</div>
+<div id="footer">
+	<p>Copyright (c) 2012 www.codexcess.com. All rights reserved. Design by <a href="http://www.freecsstemplates.org/">Free CSS Templates</a>.</p>
+</div>
+<!-- end #footer -->
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+            <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
+            <script type="text/javascript" src="../js/jquery-idiom.js"></script>
+            <link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css"></link>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/jsmanipulate/jsmanipulate.js"></script>
+            <script type="text/javascript" src="../js/jsmanipulate/jsm-manager.js"></script>
+            <script type="text/javascript" src="../js/jsmanipulate/jsm-utils.js"></script>
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
+<style>
+#acc1 {height : 360px}
+#app {width : 500px;height : 500px}
+</style>
+<script type="text/javascript">
+        var application = {};
+			var __div1 = $("#__div1");
+			var acc1 = $("#acc1");
+			var __div2 = $("#__div2");
+			var __label1 = $("#__label1");
+			var __br1 = $("#__br1");
+			var __br2 = $("#__br2");
+			var __label2 = $("#__label2");
+			var __br3 = $("#__br3");
+			var __br4 = $("#__br4");
+			var contrast = $("#contrast");
+			var __br5 = $("#__br5");
+			var __div3 = $("#__div3");
+			var __label3 = $("#__label3");
+			var __br6 = $("#__br6");
+			var __br7 = $("#__br7");
+			var __label4 = $("#__label4");
+			var __br8 = $("#__br8");
+			var __br9 = $("#__br9");
+			var red = $("#red");
+			var __br10 = $("#__br10");
+			var __label5 = $("#__label5");
+			var __br11 = $("#__br11");
+			var __br12 = $("#__br12");
+			var blue = $("#blue");
+			var __br13 = $("#__br13");
+			var __label6 = $("#__label6");
+			var __br14 = $("#__br14");
+			var __br15 = $("#__br15");
+			var green = $("#green");
+			var __div4 = $("#__div4");
+			var __label7 = $("#__label7");
+			var __br16 = $("#__br16");
+			var __br17 = $("#__br17");
+			var __label8 = $("#__label8");
+			var __br18 = $("#__br18");
+			var __br19 = $("#__br19");
+			var height = $("#height");
+			var __br20 = $("#__br20");
+			var __label9 = $("#__label9");
+			var __br21 = $("#__br21");
+			var __br22 = $("#__br22");
+			var angle = $("#angle");
+			var __br23 = $("#__br23");
+			var __label10 = $("#__label10");
+			var __br24 = $("#__br24");
+			var __br25 = $("#__br25");
+			var elevation = $("#elevation");
+			var __div5 = $("#__div5");
+			var __label11 = $("#__label11");
+			var __br26 = $("#__br26");
+			var __br27 = $("#__br27");
+			var __label12 = $("#__label12");
+			var __br28 = $("#__br28");
+			var __br29 = $("#__br29");
+			var noise_amount = $("#noise_amount");
+			var __br30 = $("#__br30");
+			var __label13 = $("#__label13");
+			var __br31 = $("#__br31");
+			var __br32 = $("#__br32");
+			var noise_density = $("#noise_density");
+			var __br33 = $("#__br33");
+			var __br34 = $("#__br34");
+			var mono = $("#mono").button();
+			var app = $("#app");
+            acc1.accordion({
+                fillSpace: true,
+            });
+            contrast.slider({
+                min: 0,
+                max: 200,
+                value: 100,
+		    change: function(event, ui) { 
+	     application.contrast_amount = contrast.slider( "option", "value" ) / 100;
+application.needs_update = true;
+		    },
+	    });
+            red.slider({
+                min: 0,
+                max: 200,
+                value: 100,
+		    change: function(event, ui) { 
+	     application.rgb_red = red.slider( "option", "value" ) / 100;
+application.needs_update = true;
+		    },
+	    });
+            blue.slider({
+                min: 0,
+                max: 200,
+                value: 100,
+		    change: function(event, ui) { 
+	     application.rgb_blue = blue.slider( "option", "value" ) / 100;
+application.needs_update = true;
+		    },
+	    });
+            green.slider({
+                min: 0,
+                max: 200,
+                value: 100,
+		    change: function(event, ui) { 
+	     application.rgb_green = green.slider( "option", "value" ) / 100;
+application.needs_update = true;
+		    },
+	    });
+            height.slider({
+                min: 0,
+                max: 100,
+                value: 1,
+		    change: function(event, ui) { 
+	     application.emboss_height = height.slider( "option", "value" ) / 10;
+application.needs_update = true;
+		    },
+	    });
+            angle.slider({
+                min: 0,
+                max: 360,
+                value: 135,
+		    change: function(event, ui) { 
+	     application.emboss_angle = angle.slider( "option", "value" );
+application.needs_update = true;
+		    },
+	    });
+            elevation.slider({
+                min: 0,
+                max: 180,
+                value: 30,
+		    change: function(event, ui) { 
+	     application.emboss_elevation = elevation.slider( "option", "value" );
+application.needs_update = true;
+		    },
+	    });
+            noise_amount.slider({
+                min: 0,
+                max: 100,
+                value: 25,
+		    change: function(event, ui) { 
+	     application.anoise_amount = noise_amount.slider( "option", "value" );
+application.needs_update = true;
+		    },
+	    });
+            noise_density.slider({
+                min: 0,
+                max: 100,
+                value: 100,
+		    change: function(event, ui) { 
+	     application.anoise_density = noise_density.slider( "option", "value" ) / 100;
+application.needs_update = true;
+		    },
+	    });
+		mono.change( function() { 
+			application.anoise_mono = mono.value;
+application.needs_update = true;
+		});
+mono.__input = "#mono_input";
+mono.__label = "#mono_label";
+            app.application = (function (host)
+{
+			var canvasElement = document.getElementById("app");	
+			var renderer = new THREE.CanvasRenderer({canvas:canvasElement});
+			renderer.domElement.width = renderer.domElement.offsetWidth;
+			renderer.domElement.height = renderer.domElement.offsetHeight;
+		var scene = new THREE.Scene();
+scene.mouse_thru = true;
+var ui_;
+var canvas_position = {x:0, y:0};
+var clock = new THREE.Clock();
+var SoundUtils;
+var active_camera;
+var g_elapsed = -1;
+var g_delta = 0.0;
+var drawingCanvas = renderer.domElement;
+var streamer;
+var app_width = canvasElement.width;
+var app_height = canvasElement.height;
+var r1;var lbl1;var img1;var lbl2;var img2;var lbl3;var lbl4;
+var material1;var material2;var camera_1;var plane1;var plane2;
+var application = {};
+application.events = new ev.EventHolder();	
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
+		if(drawingCanvas){
+			var client =
+			{
+				width: canvasElement.width,
+				height: canvasElement.height,
+				canvas: drawingCanvas
+			};            						
+			var ui_ = new ui.Manager(client, streamer);			
+			var g_ui = ui_;
+			var g_ui_root = ui_.root;
+			var mouse_pressed = false;
+		}		
+	// --------RESOURCES---------
+		var global_package = new stream.Package(streamer);	
+                global_package.add_item(
+            {
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test1.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+                global_package.add_item(
+            {
+		id:				"res_img1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test3.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var res_img1;
+				global_package.events.addListener("loaded", function()
+				{
+					res_img1 = streamer.get_resource("res_img1");
+				});
+                global_package.add_item(
+            {
+		id:				"image0",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test2.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var image0;
+				global_package.events.addListener("loaded", function()
+				{
+					image0 = streamer.get_resource("image0");
+				});
+		global_package.add_item({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});		
+		global_package.load();	
+    // --------RESOURCES---------
+renderer.setSize( app_width, app_height );
+var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
+manager.events = new ev.EventHolder();
+manager.ui_ = ui_;	
+function render() {
+manager.canvas_position = getElementPosition(drawingCanvas);
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+	g_delta = 0; //first update
+else
+	g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+c_delta = clock.getDelta(),
+c_elapsed = clock.getElapsedTime() * 10;
+manager.events.dispatch("update", [g_delta, g_elapsed]);	
+				manager.scene.add(camera_1);
+				set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+threejs_load_resources(manager, function()
+{
+		    r1 = new ui.Rectangle(g_ui_root.manager, g_ui_root, null, "ivory", null);
+		    lbl1 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+		    img1 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test1.png");
+		    lbl2 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+		    img2 = new ui.Image(g_ui_root.manager, g_ui_root, "image0");
+		    lbl3 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+		    lbl4 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+material1 = new THREE.MeshBasicMaterial({
+map:new THREE.Texture(manager.streamer.get_resource('images/test3.png').data),
+	});
+material1.manager = manager;
+material2 = new THREE.MeshBasicMaterial({
+map:new THREE.Texture(manager.streamer.get_resource('images/test3.png').data),
+	});
+material2.manager = manager;
+		    camera_1 = 
+		    new THREE.PerspectiveCamera(45, 1.5, 1, 10000, null) ;				
+camera_1.manager = manager;
+	    plane1_plane = new THREE.PlaneGeometry(300, 300, 1, 1) ;
+	    plane1 = new THREE.Mesh(plane1_plane, material2);
+	    manager.scene.add(plane1);
+		plane1.events = new ev.EventHolder();
+plane1.manager = manager;
+	    plane2_plane = new THREE.PlaneGeometry(300, 300, 1, 1) ;
+	    plane2 = new THREE.Mesh(plane2_plane, material1);
+	    manager.scene.add(plane2);
+		plane2.events = new ev.EventHolder();
+plane2.manager = manager;
+			streamer.get_resource('image0').rgb1 = new jsmanip.RGBadjust(
+		1,1,1,streamer.get_resource('image0'));		
+		if(!streamer.get_resource('image0').filters)
+			streamer.get_resource('image0').filters = [];
+		streamer.get_resource('image0').filters.push(streamer.get_resource('image0').rgb1);
+			obtain_images(streamer.get_resource('image0').rgb1, streamer.get_resource('image0'));
+			streamer.get_resource('image0').rgb1.set_render_on_apply(true);
+			material1.noise1 = new jsmanip.Noise(
+		25,1,false,material1);		
+		if(!material1.filters)
+			material1.filters = [];
+		material1.filters.push(material1.noise1);
+			obtain_images(material1.noise1, material1);
+			material1.noise1.set_render_on_apply(true);
+	    var preset1 = new jsmanip.Preset() ;
+			preset1.brightness1 = new jsmanip.Brightness(
+		0.200000003,preset1);		
+		if(!preset1.filters)
+			preset1.filters = [];
+		preset1.filters.push(preset1.brightness1);
+			preset1.sat1 = new jsmanip.Saturation(
+		0.200000003,preset1);		
+		if(!preset1.filters)
+			preset1.filters = [];
+		preset1.filters.push(preset1.sat1);
+			var hue0_parent = {};
+			var hue0 = new jsmanip.Hue(
+		0.200000003,hue0_parent);
+			hue0_parent.hue0 = hue0;
+		if(!hue0_parent.filters)
+			hue0_parent.filters = [];
+		hue0_parent.filters.push(hue0_parent.hue0);
+			var contrast1_parent = {};
+			var contrast1 = new jsmanip.Contrast(
+		0.200000003,contrast1_parent);
+			contrast1_parent.contrast1 = contrast1;
+		if(!contrast1_parent.filters)
+			contrast1_parent.filters = [];
+		contrast1_parent.filters.push(contrast1_parent.contrast1);
+			img1.contrast2 = new jsmanip.Contrast(
+		0.5,img1);		
+		if(!img1.filters)
+			img1.filters = [];
+		img1.filters.push(img1.contrast2);
+			obtain_images(img1.contrast2, img1);
+			img1.contrast2.set_render_on_apply(true);
+			plane1.emboss1 = new jsmanip.Emboss(
+		1,135,30,plane1);		
+		if(!plane1.filters)
+			plane1.filters = [];
+		plane1.filters.push(plane1.emboss1);
+			obtain_images(plane1.emboss1, plane1);
+			plane1.emboss1.set_render_on_apply(true);
+            r1.set_x(0);
+            r1.set_y(0);
+            r1.set_width(500);
+            r1.set_height(500);
+            lbl1.set_x(55);
+            lbl1.set_y(25);
+            lbl1.text("Component Filter");
+            lbl1.set_color("Azure");
+            img1.set_x(50);
+            img1.set_y(50);
+            img1.set_width(128);
+            img1.set_height(164);
+            lbl2.set_x(250);
+            lbl2.set_y(25);
+            lbl2.text("Resource filter in a component");
+            lbl2.set_color("Azure");
+            img2.set_x(250);
+            img2.set_y(50);
+            img2.set_width(128);
+            img2.set_height(164);
+            lbl3.set_x(55);
+            lbl3.set_y(255);
+            lbl3.text("Plane Filter");
+            lbl3.set_color("Azure");
+            lbl4.set_x(250);
+            lbl4.set_y(255);
+            lbl4.text("Material filter in a plane");
+            lbl4.set_color("Azure");
+            manager.events.addListener('update', function(){camera_1.lookAt(scene.position)});
+            camera_1.position.z = 1000;
+            plane1.position.x = -330;
+            plane1.position.y = -200;
+            set_rotation_x(plane1.rotation, 90);
+            plane2.position.x = 170;
+            plane2.position.y = -200;
+            set_rotation_x(plane2.rotation, 90);
+	application.events.addListener("update", function()
+	{    
+		if (host.needs_update)
+{
+img1.contrast2.set_amount(host.contrast_amount);
+if (image0)
+{
+image0.rgb1.set_red(host.rgb_red);
+image0.rgb1.set_green(host.rgb_green);
+image0.rgb1.set_blue(host.rgb_blue);
+}
+plane1.emboss1.set_height(host.emboss_height);
+plane1.emboss1.set_angle(host.emboss_angle);
+plane1.emboss1.set_elevation(host.emboss_elevation);
+material1.noise1.set_amount(host.anoise_amount);
+material1.noise1.set_density(host.anoise_density);
+material1.noise1.mono = host.anoise_mono;
+host.needs_update = false;
+}
+	}
+	);
+if(ui_)
+{	
+	SoundUtils = new ui.SoundUtils();		
+	g_ui.fill_background = false;	
+}
+var event_manager = new ev.ThreeEventManager();
+renderer.domElement.onmousemove = function(ev)
+{
+	event_manager.mousemove(manager, ev.clientX, ev.clientY);   
+	if(ui_)
+		ui_.mousemove(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
+};
+renderer.domElement.onmousedown = function(ev)
+{
+	event_manager.mousedown(manager, ev.clientX, ev.clientY);     
+	if(ui_)
+		ui_.mousedown(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
+};
+renderer.domElement.onmouseup = function(ev)
+{
+	event_manager.mouseup(manager, ev.clientX, ev.clientY);		
+	if(ui_)
+		ui_.mouseup(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(manager, ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(manager, ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(manager, ev.keyCode);                  
+};
+manager.events.addListener("mousedown", function(x,y)
+{    
+	application.events.dispatch("mousedown", [x, y]);
+});
+manager.events.addListener("mouseup", function(x,y)
+{    
+	application.events.dispatch("mouseup", [x, y]);
+});
+manager.events.addListener("mousemove", function(x,y)
+{    
+	application.events.dispatch("mousemove", [x, y]);
+});
+manager.events.addListener("click", function(x,y)
+{    
+	application.events.dispatch("click", [x, y]);
+});
+manager.events.addListener("drag", function(x,y)
+{    
+	application.events.dispatch("drag", [x, y]);
+});
+manager.events.addListener("dragend", function(x,y)
+{    
+	application.events.dispatch("dragend", [x, y]);
+});
+manager.events.addListener("keyup", function(keycode)
+{    
+	application.events.dispatch("keyup", [keycode]);
+});
+manager.events.addListener("keydown", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("keypress", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("update", function(g_delta, g_elapsed)
+{    
+	application.events.dispatch("update", [g_delta, g_elapsed]);
+});
+application.events.dispatch("init", []);
+animate();
+});
+function animate() {
+	if(ui_)
+		drawingCanvas.getContext('2d').clearRect(0,0,canvasElement.width,canvasElement.height);
+	renderer.domElement.getContext('2d').globalAlpha = 1;
+	requestAnimationFrame( animate );
+	render();
+	if(ui_)
+	{
+		drawingCanvas.getContext('2d').globalAlpha = 1;
+		ui_.draw(drawingCanvas.getContext('2d'));
+	}
+	}
+})(application);
+            application.contrast_amount = 1;
+            application.rgb_red = 1;
+            application.rgb_green = 1;
+            application.rgb_blue = 1;
+            application.emboss_height = 1;
+            application.emboss_angle = 135;
+            application.emboss_elevation = 30;
+            application.anoise_amount = 25;
+            application.anoise_density = 1;
+            application.anoise_mono = true;
+            application.needs_update = true;
+                    if (application.init)
+                        application.init();
+</script>
+</body>
+</html>
