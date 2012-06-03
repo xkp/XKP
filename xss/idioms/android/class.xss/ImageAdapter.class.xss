@@ -1,4 +1,3 @@
-<xss:parameter id="appName"/>
 <xss:parameter id="it"/>
 
 	public class ImageAdapter extends BaseAdapter {
@@ -12,7 +11,7 @@
 		private final Integer[] mImageIds = {
 <xss:code>
 	string project_path = compiler.project_path() + "/";
-	string output_path = appName + "/res/drawable/";
+	string output_path = application.appName + "/res/drawable/";
 	
 	//ERROR: this sentence no resolve correct value... 
 	//       and only success with arrays type

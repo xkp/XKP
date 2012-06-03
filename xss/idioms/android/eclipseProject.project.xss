@@ -1,7 +1,6 @@
-<xss:parameter id="appName"/>
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name><xss:e value="appName"/></name>
+	<name><xss:e value="application.appName"/></name>
 	<comment></comment>
 	<projects>
 	</projects>

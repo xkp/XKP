@@ -1,10 +1,9 @@
 <xss:parameter id="clazz"/>
-<xss:parameter id="appName"/>
 <xss:parameter id="base_namespace"/>
 <xss:parameter id="is_type" default="false"/>
 <xss:parameter id="main" default="0"/>
 
-package <xss:e value="base_namespace"/>.<xss:e value="appName"/>;
+package <xss:e value="base_namespace"/>.<xss:e value="application.appName"/>;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +44,7 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 			cextends = "extends " + clazz.super.output_id;
 	} else
 	{
-		class_name = "Act" + appName;
+		class_name = "Act" + application.appName;
 		cextends = "extends Activity";
 	}
 	
@@ -103,7 +102,7 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 					classes += c.name;
 					
 					string xss_file = "class.xss/" + c.file_name;
-					compiler.xss(xss_file, marker = "defined_class", appName, inst);
+					compiler.xss(xss_file, marker = "defined_class", inst);
 				}
 			}
 		}
@@ -149,12 +148,13 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 		{
 			import xkp.android.libs.Widget.XKPUtils;
 		}
-				
+		
+		string act_name = "Act" + application.appName;
 		out(indent = 1, marker = "callers")
 		{
 			util = new XKPUtils();
-			<xss:e value="'Act' + appName"/>.util.addView(this);
-			util = <xss:e value="'Act' + appName"/>.util;
+			<xss:e value="act_name"/>.util.addView(this);
+			util = <xss:e value="act_name"/>.util;
 		}
 		
 		if(new_utils)
@@ -165,10 +165,10 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 			string dst_filename = src_filename;
 			
 			string srcf = compiler.full_path("/copy.defaults" + src_path + src_filename);
-			string dstf = appName + dst_path + dst_filename;
+			string dstf = application.appName + dst_path + dst_filename;
 
 			string ipath = compiler.full_path("");
-			compiler.xss(src = srcf, output_file = dstf, appName = appName, base_namespace = base_namespace, bundle = idiom.bundle, idiom_path = ipath);
+			compiler.xss(src = srcf, output_file = dstf, base_namespace = base_namespace, bundle = idiom.bundle, idiom_path = ipath);
 		}
 	}
 </xss:code>
@@ -231,10 +231,11 @@ import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 		clazzer_name = clazz.output_id;
 	} else
 	{
+		string act_name = "Act" + application.appName;
 		parent_type_name = "XKPLayout"; // TIPS: force,... very much forces
 		out(indent = 0)
 		{
-			private <xss:e value="'Act' + appName"/> application;
+			private <xss:e value="act_name"/> application;
 			
 			@Override
 			public void onCreate(Bundle savedInstanceState) <xss:open_brace/>
@@ -347,7 +348,7 @@ private void initCallers() {
 			public void onPause() <xss:open_brace/>
 				super.onPause();
 		}
-		compiler.inject("render_application_pause", app = appName, bns = base_namespace);
+		compiler.inject("render_application_pause", bns = base_namespace);
 		out(indent = 1)
 		{
 			<xss:close_brace/>
@@ -359,7 +360,7 @@ private void initCallers() {
 			public void onStop() <xss:open_brace/>
 				super.onStop();
 		}
-		compiler.inject("render_application_stop", app = appName, bns = base_namespace);
+		compiler.inject("render_application_stop", bns = base_namespace);
 		out(indent = 1)
 		{
 			<xss:close_brace/>
@@ -371,7 +372,7 @@ private void initCallers() {
 			public void onResume() <xss:open_brace/>
 				super.onResume();
 		}
-		compiler.inject("render_application_resume", app = appName, bns = base_namespace);
+		compiler.inject("render_application_resume", bns = base_namespace);
 		out(indent = 1)
 		{
 			<xss:close_brace/>
@@ -391,7 +392,7 @@ private void onLayoutStarted() {
 	// render instances of other idioms
 	if(!is_type)
 	{
-		compiler.inject("render_initialization", clazz = clazz, bns = base_namespace, app = appName);
+		compiler.inject("render_initialization", clazz = clazz, bns = base_namespace);
 		
 		out(indent = 0)
 		{
@@ -399,7 +400,7 @@ private void onLayoutStarted() {
 				application = this;
 		}
 		
-		compiler.inject("render_instances", app = appName);
+		compiler.inject("render_instances");
 		
 		out(indent = 0)
 		{
@@ -408,7 +409,7 @@ private void onLayoutStarted() {
     }
 	else
 	{
-		compiler.inject("render_type_initialization", clazz = clazz, bns = base_namespace, app = appName);
+		compiler.inject("render_type_initialization", clazz = clazz, bns = base_namespace);
 		
 		for(var inst in clazz.instances)
 		{
@@ -416,7 +417,7 @@ private void onLayoutStarted() {
 			//compiler.log("-- clazz = " + clazz.id);
 			//compiler.log("--- inst = " + inst.id);
 			//compiler.log("---- inst idiom = " + inst.idiom.id);
-			inst.idiom.render_instance(inst, appName, clazz);
+			inst.idiom.render_instance(inst, clazz);
 		}
 	}
 		
@@ -479,7 +480,7 @@ private void onLayoutStarted() {
 			}
 		}
 		
-		string output_filename = appName + "/res/values/" + clazz.id + "Style.xml";
+		string output_filename = application.appName + "/res/values/" + clazz.id + "Style.xml";
 		compiler.xss("styleableProperties.xml.xss", output_file = output_filename, clazz = clazz);
 	}
 </xss:code>

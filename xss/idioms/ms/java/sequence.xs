@@ -1,3 +1,27 @@
+on pre_process(obj)
+{
+	if(obj.id == "")
+		obj.id = compiler.genid(obj.class_name);
+		//obj.output_id = compiler.genid(obj.class_name);
+	
+	//compiler.log("[android]: " + obj.id + " - " + obj.output_id);
+
+	// flatting properties
+	for(var p in obj.properties)
+	{
+		if(p.parent)
+			if(p.parent.type)
+				continue;
+		
+		if(p.user_defined)
+			p.output_id = "prop_" + obj.output_id + "_" + p.name;
+	}
+	
+	// flatting methods
+	for(var m in obj.methods)
+		if(m.user_defined)
+			m.output_id = "mthd_" + obj.output_id + "_" + m.name;
+}
 
 on render_initialization(clazz, bns)
 {
@@ -36,7 +60,7 @@ on render_update()
 	}
 }
 
-on copy_default_files(app, bns, plibs)
+on copy_default_files(bns, plibs)
 {
 	array<string> files = [
 		"Handler.java",
@@ -219,6 +243,15 @@ method register_nested_sequence(seq_id, nested_id, shid)
 
 method render_instance(seq, seq_id, parent_id, path)
 {
+	string sClassName = "";
+	if(seq.type)
+		sClassName = seq.type.output_id;
+	
+	out(indent = 1, marker = "declarations", marker_source = "previous")
+	{
+		private <xss:e value="sClassName"/> <xss:e value="seq.output_id"/>;
+	}
+		
     compiler.xss("../../java/instance.xss", seq, marker = "declarations", marker_source="previous", render_events = false);
     compiler.xss("../../java/instance.xss", seq, event_renderer = "event.xss", render_properties = false, render_methods = false);
 }

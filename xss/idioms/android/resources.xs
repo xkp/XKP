@@ -7,7 +7,7 @@ on pre_process(obj)
 	//compiler.log("[resources]: " + obj.id + " - " + obj.output_id);
 }
 
-on render_instances(app)
+on render_instances()
 {
 	compiler.log("Copying resource files...");
 	
@@ -21,6 +21,7 @@ on render_instances(app)
 	string pattern_all     = pattern_numbers + pattern_string + pattern_others;
 
 	string project_res_path = "resources/";
+	string app = application.appName;
 	
 	//TODO: iterate through resources for make collection to render
 	for(var inst in instances)
@@ -113,24 +114,24 @@ on render_instances(app)
 	//compiler.log("End Rendering Resources Instances...");
 }
 
-method render_instance(it, app, clazz)
+method render_instance(it, clazz)
 {
 }
 
-on render_types(app)
+on render_types()
 {
 }
 
-on render_type_initialization(clazz, bns, app)
+on render_type_initialization(clazz, bns)
 {
 }
 
-on render_initialization(clazz, bns, app)
+on render_initialization(clazz, bns)
 {
 	clazz = this;
 	
 	var android_idiom = compiler.idiom_by_id("android");
-	android_idiom.initialization(clazz, bns, app);
+	android_idiom.initialization(clazz, bns);
 }
 
 method render_resource(resource)
@@ -261,7 +262,7 @@ method render_resource(resource)
 	resource.resource_idiom_processed = true;
 }
 
-on copy_default_files(app, bns, plibs)
+on copy_default_files(bns, plibs)
 {
 }
 

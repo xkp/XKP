@@ -1,4 +1,3 @@
-<xss:parameter id="appName"/>
 <xss:parameter id="base_namespace"/>
 
 package <xss:e value="base_namespace"/>.libs.JBox2d;
@@ -35,7 +34,7 @@ public class XKPSpawner {
 	public XKPSpawner(Context ctx, XKPLayout viewLayout, String className, Vec2 position, float rotation) {
 		mContext = ctx;
 		mViewLayout = viewLayout;
-		mClassName = "<xss:e value="base_namespace"/>.<xss:e value="appName"/>." + className;
+		mClassName = "<xss:e value="base_namespace"/>.<xss:e value="application.appName"/>." + className;
 		mRotation = rotation;
 		if (position != null)
 			mPosition = position;

@@ -29,7 +29,10 @@ import xkp.android.libs.Layout.XKPLayout;
 				private Button btn2;
 				private Button btn3;
 		private XKPLayout layoutapplication;
-		public void stop_anim3() {
+		private Sequence anim1;
+		private Sequence anim2;
+		private Sequence anim3;
+		public void mthd_anim3_stop_anim3() {
 			lbl3.setText("Button 3 Stopped");
 anim3.stop();
 		}

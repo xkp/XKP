@@ -1,4 +1,3 @@
-<xss:parameter id="appName"/>
 <xss:parameter id="base_namespace"/>
 
 package <xss:e value="base_namespace"/>.libs.Graphics;

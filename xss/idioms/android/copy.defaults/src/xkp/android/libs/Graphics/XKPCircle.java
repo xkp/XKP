@@ -1,4 +1,3 @@
-<xss:parameter id="appName"/>
 <xss:parameter id="base_namespace"/>
 
 package <xss:e value="base_namespace"/>.libs.Graphics;
@@ -10,7 +9,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.PathShape;
 import android.util.AttributeSet;
 
-import <xss:e value="base_namespace"/>.<xss:e value="appName"/>.R;
+import <xss:e value="base_namespace"/>.<xss:e value="application.appName"/>.R;
 
 public class XKPCircle extends XKPGraphics {
 	

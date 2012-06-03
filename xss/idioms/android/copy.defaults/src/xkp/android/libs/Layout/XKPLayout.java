@@ -1,4 +1,3 @@
-<xss:parameter id="appName"/>
 <xss:parameter id="base_namespace"/>
 
 package <xss:e value="base_namespace"/>.libs.Layout;
@@ -13,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import <xss:e value="base_namespace"/>.<xss:e value="appName"/>.R;
+import <xss:e value="base_namespace"/>.<xss:e value="application.appName"/>.R;
 
 public class XKPLayout extends ViewGroup {
 	

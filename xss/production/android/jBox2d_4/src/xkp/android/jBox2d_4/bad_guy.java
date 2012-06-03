@@ -22,7 +22,7 @@ import xkp.android.libs.Layout.XKPLayout;
 						extends XKPImage
 {
 				private move_action move_around;
-				private ms.state.Sequence fade_out;
+				private Sequence fade_out;
 			public static XKPUtils util;
 		private XKPImage layoutbad_guy;
 	private boolean mLayoutStarted = false;
@@ -56,7 +56,7 @@ import xkp.android.libs.Layout.XKPLayout;
 			});
 		}
 				move_around = (move_action) root.findViewById(R.id.move_around);
-				fade_out = (ms.state.Sequence) root.findViewById(R.id.fade_out);
+				fade_out = (Sequence) root.findViewById(R.id.fade_out);
 			TypedArray ta = context.obtainStyledAttributes(
 					attrs, R.styleable.bad_guy);
 			XKPPhysicBody __physics2 = new XKPPhysicBody(ActjBox2d_4.myWorld.getWorld(), 
