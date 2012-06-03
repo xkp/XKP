@@ -7,6 +7,8 @@ import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.joints.PrismaticJoint;
 import org.jbox2d.dynamics.joints.PrismaticJointDef;
 
+import android.view.View;
+
 public class XKPPrismaticJoint {
 	
 	private World 				mRefWorld;
@@ -25,16 +27,36 @@ public class XKPPrismaticJoint {
 		mIsJointCreated = true;
 	}
 	
-	public void setBodyA(XKPPhysicBody bodyA) {
-		mPrismJointD.bodyA = bodyA.getBody();
+	public void setBodyA(Object bodyA) {
+		XKPPhysicBody physicBodyA;
+		if(bodyA instanceof XKPPhysicBody) {
+			physicBodyA = (XKPPhysicBody) bodyA;
+		} else
+		if(bodyA instanceof View) {
+			View v = (View) bodyA;
+			physicBodyA = (XKPPhysicBody) v.getTag();
+		} else 
+			return;
+		
+		mPrismJointD.bodyA = physicBodyA.getBody();
 		if(mIsJointCreated)
-			mPrismJoint.m_bodyA = bodyA.getBody();
+			mPrismJoint.m_bodyA = physicBodyA.getBody();
 	}
-	
-	public void setBodyB(XKPPhysicBody bodyB) {
-		mPrismJointD.bodyB = bodyB.getBody();
+
+	public void setBodyB(Object bodyB) {
+		XKPPhysicBody physicBodyB;
+		if(bodyB instanceof XKPPhysicBody) {
+			physicBodyB = (XKPPhysicBody) bodyB;
+		} else
+		if(bodyB instanceof View) {
+			View v = (View) bodyB;
+			physicBodyB = (XKPPhysicBody) v.getTag();
+		} else 
+			return;
+		
+		mPrismJointD.bodyB = physicBodyB.getBody();
 		if(mIsJointCreated)
-			mPrismJoint.m_bodyB = bodyB.getBody();
+			mPrismJoint.m_bodyB = physicBodyB.getBody();
 	}
 	
 	public void setAxis(Vec2 axis) {

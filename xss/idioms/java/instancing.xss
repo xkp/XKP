@@ -73,6 +73,9 @@
 			if(prop.no_render || prop.no_script) continue;
 			
 			string value = prop.render_value();
+			if(prop.use_plain_value)
+				value = prop.value;
+			
 			out()
 			{
 				<xss:e value="compiler.property_set(prop, path, value)"/>;

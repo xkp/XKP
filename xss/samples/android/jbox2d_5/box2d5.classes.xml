@@ -1,17 +1,17 @@
 <xs>
-    <class id="body_1" super="img" src="smile_grin_48.png" width="50" height="50">
-        <physics body_type="dynamic" shape="circle" radius="21.5" mouse_joint="true"/>        
-    </class>   
-	
-	<class id="body_2" super="img" src="smile_sad_48.png" width="50" height="50">
-        <physics body_type="dynamic" shape="circle" radius="21.5" mouse_joint="true"/>        
-    </class> 
-	
-	<class id="body_3" super="img" src="img1.png" width="50" height="50">
-        <physics body_type="dynamic" shape="rect" mouse_joint="true"/>        
-    </class>
+	<class id="body_1" super="img" src="smile_grin_48.png" width="50" height="50">
+		<physics body_type="dynamic" shape="circle" radius="21.5" mouse_joint="true"/>
+	</class>
 
-    <class id="floor" super="img" src="stone_12.jpg">
-        <physics body_type="static" shape="rect"/>
-    </class>
+	<class id="body_2" super="img" src="smile_sad_48.png" width="50" height="50">
+		<physics body_type="dynamic" shape="circle" radius="21.5" mouse_joint="true"/>
+	</class> 
+
+	<class id="body_3" super="img" src="img1.png" width="50" height="50">
+		<physics body_type="dynamic" shape="rect" mouse_joint="true"/>
+	</class>
+
+	<class id="floor" super="img" src="stone_12.jpg">
+		<physics body_type="static" shape="rect"/>
+	</class>
 </xs>

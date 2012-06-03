@@ -13,6 +13,3 @@ on keydown(keycode)
 	if (keycode == DOWN_ARROW)
 		btn1.y += 5;
 }
-
-
-

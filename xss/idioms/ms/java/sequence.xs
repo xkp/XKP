@@ -199,20 +199,20 @@ method begin_when_event(ev, seq_id)
     {
         <xss:e v="seq_id"/>.events.addListener("<xss:e v="ev.property_name"/>",  new EventHolder.Implementor() 
         <xss:open_brace/>
-	        public void call(Object ev) 
+	        public void call(Object ev)
             <xss:open_brace/>
                 if (<xss:e v="seq_id"/>.running)
                 <xss:open_brace/>
-    }                        
+    }
 }
 
 method close_when_event()
 {
     out()
     {
-                <xss:close_brace/>
-            <xss:close_brace/>);
-        <xss:close_brace/>
+				<xss:close_brace/>
+			<xss:close_brace/>
+		<xss:close_brace/>);
     }
 }
 
@@ -251,7 +251,7 @@ method render_instance(seq, seq_id, parent_id, path)
 	{
 		private <xss:e value="sClassName"/> <xss:e value="seq.output_id"/>;
 	}
-		
+	
     compiler.xss("../../java/instance.xss", seq, marker = "declarations", marker_source="previous", render_events = false);
     compiler.xss("../../java/instance.xss", seq, event_renderer = "event.xss", render_properties = false, render_methods = false);
 }

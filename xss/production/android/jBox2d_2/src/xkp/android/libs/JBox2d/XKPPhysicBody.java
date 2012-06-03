@@ -24,8 +24,11 @@ public class XKPPhysicBody {
 	private float		mScale = 1.0f;
 	protected OnCollisionListener mOnCollisionListener;
 	public XKPPhysicBody(World world, ShapeType shapeType, XKPGraphics view) {
-		mRefWorld = world;
 		mRefView = view;
+		if(view != null) {
+			view.setTag(this);
+		}
+		mRefWorld = world;
 		mBodyDef = new BodyDef();
 		mFixtureDef = new FixtureDef();
 		mAABB = new AABB();

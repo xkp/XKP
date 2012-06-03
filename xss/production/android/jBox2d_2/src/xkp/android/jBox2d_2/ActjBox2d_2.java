@@ -84,6 +84,8 @@ private void initCallers() {
 			util = new XKPUtils();
 			ActjBox2d_2.util.addView(this);
 			util = ActjBox2d_2.util;
+        myWorld = new XKPJBox2d();
+		myWorld.createWorld(new Vec2(0f, 10f));
 }
 			@Override
 			public void onPause() {
@@ -103,8 +105,6 @@ private void initCallers() {
 private void onLayoutUpdated() {
 }
 private void onLayoutStarted() {
-        myWorld = new XKPJBox2d();
-		myWorld.createWorld(new Vec2(0f, 10f));
 			XKPPhysicBody __physics1 = new XKPPhysicBody(ActjBox2d_2.myWorld.getWorld(), 
 				ShapeType.CIRCLE, btn1);
 		__physics1.setSensor(false);

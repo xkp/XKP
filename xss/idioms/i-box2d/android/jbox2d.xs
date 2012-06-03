@@ -84,7 +84,7 @@ on render_initialization(clazz, bns)
 		}
 	}
 	
-	out(indent = 1, marker = "layout_start")
+	out(indent = 1, marker = "callers")
 	{
         <xss:e value="world.output_id"/> = new XKPJBox2d();
 		<xss:e value="world.output_id"/>.createWorld(new Vec2(<xss:e value="gx"/>f, <xss:e value="gy"/>f)<xss:e value="sdebug_draw"/>);

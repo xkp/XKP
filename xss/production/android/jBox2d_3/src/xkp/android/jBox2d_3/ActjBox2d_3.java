@@ -89,6 +89,8 @@ private void initCallers() {
 			util = new XKPUtils();
 			ActjBox2d_3.util.addView(this);
 			util = ActjBox2d_3.util;
+        myWorld = new XKPJBox2d();
+		myWorld.createWorld(new Vec2(0f, 10f));
 }
 			@Override
 			public void onPause() {
@@ -108,8 +110,6 @@ private void initCallers() {
 private void onLayoutUpdated() {
 }
 private void onLayoutStarted() {
-        myWorld = new XKPJBox2d();
-		myWorld.createWorld(new Vec2(0f, 10f));
 			XKPSpawner sp1 = new XKPSpawner( this, layoutapplication, "smiley_ball", 100, 100, 95 ); 
 				sp1.setPosition(100, sp1.getPosition().y);
 				sp1.setPosition(sp1.getPosition().x, 100);

@@ -3,6 +3,7 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.joints.DistanceJoint;
 import org.jbox2d.dynamics.joints.DistanceJointDef;
+import android.view.View;
 public class XKPDistanceJoint {
 	private World 				mRefWorld;
 	private DistanceJoint		mDistJoint;
@@ -16,15 +17,33 @@ public class XKPDistanceJoint {
 		mDistJoint = (DistanceJoint) mRefWorld.createJoint(mDistJointD);
 		mIsJointCreated = true;
 	}
-	public void setBodyA(XKPPhysicBody bodyA) {
-		mDistJointD.bodyA = bodyA.getBody();
-		if(mIsJointCreated)
-			mDistJoint.m_bodyA = bodyA.getBody();
+	public void setBodyA(Object bodyA) {
+		XKPPhysicBody physicBodyA;
+		if(bodyA instanceof XKPPhysicBody) {
+			physicBodyA = (XKPPhysicBody) bodyA;
+		} else
+		if(bodyA instanceof View) {
+			View v = (View) bodyA;
+			physicBodyA = (XKPPhysicBody) v.getTag();
+		} else 
+			return;
+		mDistJointD.bodyA = physicBodyA.getBody();
+		if (mIsJointCreated)
+			mDistJoint.m_bodyA = physicBodyA.getBody();
 	}
-	public void setBodyB(XKPPhysicBody bodyB) {
-		mDistJointD.bodyB = bodyB.getBody();
-		if(mIsJointCreated)
-			mDistJoint.m_bodyB = bodyB.getBody();
+	public void setBodyB(Object bodyB) {
+		XKPPhysicBody physicBodyB;
+		if(bodyB instanceof XKPPhysicBody) {
+			physicBodyB = (XKPPhysicBody) bodyB;
+		} else
+		if(bodyB instanceof View) {
+			View v = (View) bodyB;
+			physicBodyB = (XKPPhysicBody) v.getTag();
+		} else 
+			return;
+		mDistJointD.bodyB = physicBodyB.getBody();
+		if (mIsJointCreated)
+			mDistJoint.m_bodyB = physicBodyB.getBody();
 	}
 	public void setDampingRatio(float dampingRatio) {
 		mDistJointD.dampingRatio = dampingRatio;

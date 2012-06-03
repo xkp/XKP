@@ -128,6 +128,8 @@ private void initCallers() {
 			util = new XKPUtils();
 			ActjBox2d_5.util.addView(this);
 			util = ActjBox2d_5.util;
+        myWorld = new XKPJBox2d();
+		myWorld.createWorld(new Vec2(0f, 3f));
 }
 			@Override
 			public void onPause() {
@@ -147,20 +149,18 @@ private void initCallers() {
 private void onLayoutUpdated() {
 }
 private void onLayoutStarted() {
-        myWorld = new XKPJBox2d();
-		myWorld.createWorld(new Vec2(0f, 3f));
 			XKPDistanceJoint __distance_joint1 = new XKPDistanceJoint( ActjBox2d_5.myWorld.getWorld() ); 
-				__distance_joint1.setBodyA("btn1");
-				__distance_joint1.setBodyB("btn2");
+				__distance_joint1.setBodyA(btn1);
+				__distance_joint1.setBodyB(btn2);
 				__distance_joint1.setLength(5);
 		__distance_joint1.createJoint();
 			XKPWeldJoint __weld_joint1 = new XKPWeldJoint( ActjBox2d_5.myWorld.getWorld() ); 
-				__weld_joint1.setBodyA("btn3");
-				__weld_joint1.setBodyB("btn4");
+				__weld_joint1.setBodyA(btn3);
+				__weld_joint1.setBodyB(btn4);
 		__weld_joint1.createJoint();
 			XKPPulleyJoint __pulley_joint1 = new XKPPulleyJoint( ActjBox2d_5.myWorld.getWorld() ); 
-				__pulley_joint1.setBodyA("btn5");
-				__pulley_joint1.setBodyB("btn6");
+				__pulley_joint1.setBodyA(btn5);
+				__pulley_joint1.setBodyB(btn6);
 				__pulley_joint1.setGroundAnchorA(new Vec2(100, __pulley_joint1.getGroundAnchorA().y));
 				__pulley_joint1.setGroundAnchorA(new Vec2(__pulley_joint1.getGroundAnchorA().x, 100));
 				__pulley_joint1.setGroundAnchorB(new Vec2(500, __pulley_joint1.getGroundAnchorB().y));
