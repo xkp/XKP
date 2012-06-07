@@ -180,7 +180,7 @@ method init_phase_2(group1, group2, group3)
 }
 
 on mousemove(x, y)
-{
+{	
 	if(phase == 1)
 	{
 		if(art_planes.find(selected) != -1)

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-	<title>Embedded canvas</title>
+	<title>Extended Controls</title>
             <script type="text/javascript" src="../js/resig.js"></script>
             <script type="text/javascript" src="../js/event.js"></script>
             <script type="text/javascript" src="../js/sequence.js"></script>
@@ -22,6 +22,8 @@
             <link rel="stylesheet" href="../css/skitter.styles.css"></link>
             <script type="text/javascript" src="../js/jquery.skitter.min.js"></script>
             <script type="text/javascript" src="../js/jquery.animate-colors-min.js"></script>
+            <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+            <script type="text/javascript" src="../js/jquery.ui.map.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 		var g_sequence_manager = new state.Manager();
@@ -38,10 +40,11 @@
 			var gridContainer = $("#gridContainer");
 			var myGrid = $("#myGrid");
 			var myGallery = $("#myGallery");
+			var myMap = $("#myMap");
             $.supersized({
                 slideshow: true,
                 autoplay: true,
-                slide_interval: 3000,
+                slide_interval: 6000,
                 transition: 3,
                 fit_landscape: true,
                 slide_links: "blank",
@@ -169,18 +172,17 @@ myChart.ChartObject = new Highcharts.Chart({
 			    sorttype : "float",
 			    width : 80,
 		    }
-, 
-{
-			    index : "note",
-			    name : "note",
-			    sortable : false,
-			    width : 150,
-		    }
 ,  ], 
                 datatype: 'local',
             });
             myGallery.skitter({
         });
+					JQUMap.set_visible(myMap, false);
+            myMap.gmap({
+                center: "57.7973333,12.0502107",
+                zoom: 10,
+                disableDefaultUI: true,
+            });
 		application.init = function() { 
 			var series1 = myChart.ChartObject.series[0];
 series1.setData([10, 20, 0, 50, 3, -100]);
@@ -232,8 +234,8 @@ g_sequence_manager);
                 gridContainer.css( { left:value } );
             },
             [
-        {t: 2, value: -700},
-        {t: 3, value: 300},
+        {t: 2, value: -800},
+        {t: 3, value: 100},
             ]);
             __sequence1.addHandler(____i4);	              
         var ____i5 = new state.Interpolator(
@@ -247,6 +249,11 @@ g_sequence_manager);
         {t: 4, value: 200},
             ]);
             __sequence1.addHandler(____i5);	              
+        var ____r1 = new state.Caller(4,function()
+        {
+                JQUMap.set_visible(myMap, true);
+        });
+        __sequence1.addHandler(____r1);						  
         var ____i6 = new state.Interpolator(
             default_interpolate,
             function(value)
@@ -284,9 +291,10 @@ g_sequence_manager);
 #main {position : relative}
 #back {left : 50px;top : 50px;width : 1200px;height : 800px;opacity : 0.5;position : absolute}
 #title {left : 70px;top : 70px;font : bold 24px verdana,sans-serif;color : white;position : absolute}
-#myChart {left : -600px;top : 200px;width : 500px;height : 250px;position : absolute}
-#gridContainer {left : -600px;top : 550px;width : 600px;position : absolute}
+#myChart {left : -600px;top : 200px;width : 490px;height : 250px;position : absolute}
+#gridContainer {left : -800px;top : 480px;position : absolute}
 #myGallery {left : 620px;top : -500px;width : 550px;height : 250px;position : absolute}
+#myMap {left : 620px;top : 480px;width : 550px;height : 250px;position : absolute}
     </style>
 </head>
 <body>
@@ -334,6 +342,9 @@ g_sequence_manager);
                 </li>
 		</ul>
 	</div>
+				<div id="myMap"
+			>
+				</div>
 </div>
 </body>
 </html>

@@ -30,6 +30,9 @@ on compile_dependency(dep)
     if (dep.idiom.id != "jquery")
         return;
 
+    if (dep.absolute)
+        return;
+
     var jquery_path = project.jquery_path;
     if (!jquery_path)
         jquery_path = "../js";

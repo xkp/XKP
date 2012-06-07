@@ -406,20 +406,28 @@ Error [404] File not found
 ===[ 3js-ms.project.xml ]================(Tests)
 
 
+log: Rendering Resources...
 log: Rendering 3js Types...
 log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: Rendering UI...
 log: dependency: resig.js
+log: dependency: streamer.js
+log: on resources.compile_dependency
 log: dependency: event.js
 log: dependency: sequence.js
+log: on resources.compile_dependency
 log: dependency: utils.js
 log: dependency: keys.js
 log: dependency: ui.js
+log: on resources.compile_dependency
 log: dependency: colors.js
 log: dependency: Three.js
+log: on resources.compile_dependency
 log: dependency: Stats.js
+log: on resources.compile_dependency
 log: dependency: Utils.js
+log: on resources.compile_dependency
 Success are greateful
 ===[ 3js-ui.project.xml ]================(Tests)
 
@@ -534,6 +542,22 @@ Success are greateful
 
 log: Rendering 3js Types...
 log: Rendering UI Types...
+log: Rendering UI...
+log: dependency: resig.js
+log: dependency: event.js
+log: dependency: utils.js
+log: dependency: keys.js
+log: dependency: ui.js
+log: dependency: colors.js
+log: dependency: Three.js
+log: dependency: Stats.js
+log: dependency: Utils.js
+Success are greateful
+===[ 3js_geometries.project.xml ]================(Tests)
+
+
+log: Rendering UI Types...
+log: Rendering 3js Types...
 log: Rendering UI...
 log: dependency: resig.js
 log: dependency: event.js
@@ -1281,8 +1305,8 @@ Copyright © 2011 W3Schools.com</td>
 
 
 
-		btnFullName.click( function() { 
-	
+		    btnFullName.click( function() { 
+	    
 			lblFullName.text("Hello world");
 		
 		});
@@ -1337,25 +1361,18 @@ Success are greateful
 ===[ jquery3.project.xml ]================(Tests)
 
 
-log: Rendering property: src
+log: PROPERTY left
+log: null
+log: VALUE 100
+log: PROPERTY top
+log: null
+log: VALUE 10
 log: PROPERTY width
 log: null
-log: VALUE 600
+log: VALUE 300
 log: PROPERTY height
 log: null
-log: VALUE 400
-log: PROPERTY width
-log: null
-log: VALUE 400
-log: PROPERTY display
-log: true
-log: VALUE block
-log: PROPERTY margin-left
-log: true
-log: VALUE auto
-log: PROPERTY margin-right
-log: true
-log: VALUE auto
+log: VALUE 300
 Success are greateful
 ===[ jquery4.project.xml ]================(Tests)
 
@@ -1522,7 +1539,10 @@ log: VALUE 605
 log: PROPERTY height
 log: null
 log: VALUE 375
-Success are greateful
+Error [xss] HTML tag not found
+	tag = sidebar
+	file = c:/dev/XKP/xss/tests/../idioms/jquery/../common-js/css.xssERROR: Project:  jquery6.project.xml
+
 ===[ jquery7.project.xml ]================(Tests)
 
 
@@ -1583,6 +1603,7 @@ Success are greateful
 log: Rendering property: src
 log: Rendering property: alpha
 log: MALA COSA
+log: Rendering property: visible
 log: IT IS ALIVE
 log: IT IS ALIVE
 log: Ignoring idx 1
@@ -1594,7 +1615,9 @@ log: IT IS ALIVE
 log: Ignoring idx 4
 log: IT IS ALIVE
 log: Ignoring idx 5
+log: IT IS ALIVE
 log: Ignoring idx 6
+log: Ignoring idx 7
 log: RENDERING FLOATING
 log: NO LAYOUT
 log: myGrid
@@ -1643,7 +1666,7 @@ log: null
 log: VALUE 200
 log: PROPERTY width
 log: null
-log: VALUE 500
+log: VALUE 490
 log: PROPERTY height
 log: null
 log: VALUE 250
@@ -1652,13 +1675,10 @@ log: true
 log: VALUE absolute
 log: PROPERTY left
 log: null
-log: VALUE -600
+log: VALUE -800
 log: PROPERTY top
 log: null
-log: VALUE 550
-log: PROPERTY width
-log: null
-log: VALUE 600
+log: VALUE 480
 log: PROPERTY position
 log: true
 log: VALUE absolute
@@ -1677,6 +1697,40 @@ log: VALUE 250
 log: PROPERTY position
 log: true
 log: VALUE absolute
+log: PROPERTY left
+log: null
+log: VALUE 620
+log: PROPERTY top
+log: null
+log: VALUE 480
+log: PROPERTY width
+log: null
+log: VALUE 550
+log: PROPERTY height
+log: null
+log: VALUE 250
+log: PROPERTY position
+log: true
+log: VALUE absolute
+Success are greateful
+===[ jquery9.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering 3js Types...
+log: Rendering UI Types...
+log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: PROPERTY width
+log: null
+log: VALUE 800
+log: PROPERTY height
+log: null
+log: VALUE 600
 Success are greateful
 ===[ jsmanip.project.xml ]================(Tests)
 
@@ -1792,7 +1846,10 @@ log: VALUE 500
 log: PROPERTY height
 log: null
 log: VALUE 500
-Success are greateful
+Error [xss] HTML tag not found
+	tag = sidebar
+	file = c:/dev/XKP/xss/tests/../idioms/jquery/../common-js/css.xssERROR: Project:  jsmanipulate.project.xml
+
 ===[ ms4.project.xml ]================(Tests)
 
 
@@ -1980,6 +2037,17 @@ log: Rendering UI...
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 Success are greateful
+===[ ui_ripple.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering Sequence Types...
+log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+Success are greateful
 ===[ ui_sprite.project.xml ]================(Tests)
 
 
@@ -2095,7 +2163,7 @@ Success are greateful
 
 
 Error [language] Missing declared tag
-	tag = user_image
+	tag = user_name
 	file = c:/dev/XKP/xss/idioms/wax/server.xssERROR: Project:  wax3.project.xml
 
 ===[ wax4.project.xml ]================(Tests)

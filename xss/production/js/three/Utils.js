@@ -76,22 +76,31 @@ function threejs_load_resources(manager, callback)
 
 function set_transform_image( path, value )
 {
+	var resource = path.manager.streamer.get_resource(value);
+	if(!resource)
+		resource = path.manager.streamer.get_resource("invalid_res");
 	for(var i = 0; i < path.children.length; i++)
 	{
 		var child = path.children[i];	
-		child.material.map = new THREE.Texture(path.manager.streamer.get_resource(value).data);	
+		child.material.map = new THREE.Texture(resource.data);	
 	}	
 }
 
 function set_3js_object_texture( path, value )
 {
-	path.material.map = new THREE.Texture(path.manager.streamer.get_resource(value).data);
+	var resource = path.manager.streamer.get_resource(value);
+	if(!resource)
+		resource = path.manager.streamer.get_resource("invalid_res");
+	path.material.map = new THREE.Texture(resource.data);
 	path.material.map.needsUpdate = true;
 }
 
 function set_webgl_object_texture( path, value )
 {
-	path.material.map = THREE.ImageUtils.loadTexture(manager.streamer.get_resource(value).asset);
+	var resource = path.manager.streamer.get_resource(value);
+	if(!resource)
+		resource = path.manager.streamer.get_resource("invalid_res");
+	path.material.map = THREE.ImageUtils.loadTexture(resource.asset);
 	path.material.map.needsUpdate = true;
 }
 
@@ -104,12 +113,6 @@ function set_3js_texture_object( path, value )
 function set_cube_face_object( path, face, value )
 {
 	path.geometry.faces[face].material.map = new THREE.Texture(value);	
-	path.geometry.faces[face].material.map.needsUpdate = true;
-}
-
-function set_cube_face( path, value, face )
-{		
-	path.geometry.faces[face].material.map = new THREE.Texture(path.manager.streamer.get_resource(value).data);	
 	path.geometry.faces[face].material.map.needsUpdate = true;
 }
 

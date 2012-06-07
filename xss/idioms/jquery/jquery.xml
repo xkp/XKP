@@ -41,7 +41,7 @@
                 <set text='css("background-color", {value})'/>
             </property>
 
-            <property id="visible" type="bool" render_type="script" dont_init="true">
+            <property id="visible" type="bool" render_type="script">
                 <get text='JQUComponent.get_visible({path})' global='true'/>
                 <set text='JQUComponent.set_visible({path}, {value})' global='true'/>
             </property>
@@ -841,5 +841,186 @@
                 <set text="skitter({width_label: {value}})"/>
             </property>
         </class>
+
+         <class id="gmap" super="component" js_renderer="../jquery-object.xss" tag="div">
+             <dependency href="http://maps.google.com/maps/api/js?sensor=true" absolute="true"/>
+             <dependency href="jquery.ui.map.min.js"/>
+
+             <property id="visible" override="true" type="bool" render_type="script">
+                 <get text='JQUComponent.get_visible({path})' global='true'/>
+                 <set text='JQUMap.set_visible({path}, {value})' global='true'/>
+             </property>
+
+             <property id="backgroundColor" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'backgroundColor')"/>
+                 <set text="gmap('option', 'backgroundColor', {value})"/>
+             </property>
+
+             <property id="center" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'center')"/>
+                 <set text="gmap('option', 'center', {value})"/>
+             </property>
+
+             <property id="disableDefaultUI" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'disableDefaultUI')"/>
+                 <set text="gmap('option', 'disableDefaultUI', {value})"/>
+             </property>
+
+             <property id="disableDoubleClickZoom" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'disableDoubleClickZoom')"/>
+                 <set text="gmap('option', 'disableDoubleClickZoom', {value})"/>
+             </property>
+
+             <property id="draggable" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'draggable')"/>
+                 <set text="gmap('option', 'draggable', {value})"/>
+             </property>
+
+             <property id="draggableCursor" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'draggableCursor')"/>
+                 <set text="gmap('option', 'draggableCursor', {value})"/>
+             </property>
+
+             <property id="heading" type="float" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'heading')"/>
+                 <set text="gmap('option', 'heading', {value})"/>
+             </property>
+             
+             <property id="keyboardShortcuts" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'keyboardShortcuts')"/>
+                 <set text="gmap('option', 'keyboardShortcuts', {value})"/>
+             </property>
+             
+             <property id="mapMaker" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'mapMaker')"/>
+                 <set text="gmap('option', 'mapMaker', {value})"/>
+             </property>
+             
+             <property id="mapTypeControl" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'mapTypeControl')"/>
+                 <set text="gmap('option', 'mapTypeControl', {value})"/>
+             </property>
+             
+             <property id="maxZoom" type="float" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'maxZoom')"/>
+                 <set text="gmap('option', 'maxZoom', {value})"/>
+             </property>
+             
+             <property id="minZoom" type="float" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'minZoom')"/>
+                 <set text="gmap('option', 'minZoom', {value})"/>
+             </property>
+             
+             <property id="noClear" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'noClear')"/>
+                 <set text="gmap('option', 'noClear', {value})"/>
+             </property>
+             
+             <property id="overviewMapControl" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'overviewMapControl')"/>
+                 <set text="gmap('option', 'overviewMapControl', {value})"/>
+             </property>
+             
+             <property id="overviewMapControlOptions" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'overviewMapControlOptions')"/>
+                 <set text="gmap('option', 'overviewMapControlOptions', {value})"/>
+             </property>
+             
+             <property id="panControl" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'panControl')"/>
+                 <set text="gmap('option', 'panControl', {value})"/>
+             </property>
+             
+             <property id="panControlOptions" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'panControlOptions')"/>
+                 <set text="gmap('option', 'panControlOptions', {value})"/>
+             </property>
+             
+             <property id="rotateControl" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'rotateControl')"/>
+                 <set text="gmap('option', 'rotateControl', {value})"/>
+             </property>
+             
+             <property id="rotateControlOptions" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'rotateControlOptions')"/>
+                 <set text="gmap('option', 'rotateControlOptions', {value})"/>
+             </property>
+             
+             <property id="scaleControl" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'scaleControl')"/>
+                 <set text="gmap('option', 'scaleControl', {value})"/>
+             </property>
+             
+             <property id="scaleControlOptions" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'scaleControlOptions')"/>
+                 <set text="gmap('option', 'scaleControlOptions', {value})"/>
+             </property>
+             
+             <property id="scrollwheel" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'scrollwheel')"/>
+                 <set text="gmap('option', 'scrollwheel', {value})"/>
+             </property>
+             
+             <property id="streetView" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'streetView')"/>
+                 <set text="gmap('option', 'streetView', {value})"/>
+             </property>
+             
+             <property id="streetViewControl" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'streetViewControl')"/>
+                 <set text="gmap('option', 'streetViewControl', {value})"/>
+             </property>
+             
+             <property id="streetViewControlOptions" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'streetViewControlOptions')"/>
+                 <set text="gmap('option', 'streetViewControlOptions', {value})"/>
+             </property>
+             
+             <property id="styles" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'styles')"/>
+                 <set text="gmap('option', 'styles', {value})"/>
+             </property>
+             
+             <property id="tilt" type="float" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'tilt')"/>
+                 <set text="gmap('option', 'tilt', {value})"/>
+             </property>
+             
+             <property id="zoom" type="float" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'zoom')"/>
+                 <set text="gmap('option', 'zoom', {value})"/>
+             </property>
+             
+             <property id="zoomControl" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'zoomControl')"/>
+                 <set text="gmap('option', 'zoomControl', {value})"/>
+             </property>
+             
+             <property id="zoomControlOptions" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'zoomControlOptions')"/>
+                 <set text="gmap('option', 'zoomControlOptions', {value})"/>
+             </property>
+
+
+             <event id="bounds_changed" render_as="bind" bind_with="addEventListener"/>
+             <event id="center_changed" render_as="bind" bind_with="addEventListener"/>
+             <event id="click" render_as="bind" bind_with="addEventListener"/>
+             <event id="dblclick" render_as="bind" bind_with="addEventListener"/>
+             <event id="drag" render_as="bind" bind_with="addEventListener"/>
+             <event id="dragend" render_as="bind" bind_with="addEventListener"/>
+             <event id="dragstart" render_as="bind" bind_with="addEventListener"/>
+             <event id="heading_changed" render_as="bind" bind_with="addEventListener"/>
+             <event id="idle" render_as="bind" bind_with="addEventListener"/>
+             <event id="maptypeid_changed" render_as="bind" bind_with="addEventListener"/>
+             <event id="mousemove" render_as="bind" bind_with="addEventListener"/>
+             <event id="mouseout" render_as="bind" bind_with="addEventListener"/>
+             <event id="mouseover" render_as="bind" bind_with="addEventListener"/>
+             <event id="projection_changed" render_as="bind" bind_with="addEventListener"/>
+             <event id="resize" render_as="bind" bind_with="addEventListener"/>
+             <event id="rightclick" render_as="bind" bind_with="addEventListener"/>
+             <event id="tilesloaded" render_as="bind" bind_with="addEventListener"/>
+             <event id="tilt_changed" render_as="bind" bind_with="addEventListener"/>
+             <event id="zoom_changed" render_as="bind" bind_with="addEventListener"/>
+         </class>
      </types>
 </module>

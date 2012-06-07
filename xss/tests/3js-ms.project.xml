@@ -5,6 +5,7 @@
 
     <include def="3js-ms.classes.xml" src="3js-ms.classes.xs"/>
 	
+	<idiom src="../idioms/resources/resources.xml"/>
 	<idiom src="../idioms/threejs/module.xml"/> 
 	<idiom src="../idioms/ms/js/sequence.xml"/>
 	<idiom src="../idioms/ui/ui.xml"/>       

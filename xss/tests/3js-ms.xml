@@ -7,7 +7,7 @@
 	</materials>
 	
 	<label id="lbl0" x="240" y="75" font="12px Verdana" caption="Click the cylinder to animate it"/>
-	
+		
 	<scene>	
 	
 		<camera id="camera_1" fov="75" aspect="1.5" near="1" far="3000">

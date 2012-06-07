@@ -14,6 +14,7 @@
             <script type="text/javascript" src="../js/utils.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
             <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
             <script type="text/javascript" src="../js/sequence.js"></script>
             <script type="text/javascript" src="../js/ui.js"></script>
             <script type="text/javascript" src="../js/three/Three.js"></script>
@@ -38,6 +39,8 @@ var lbl0;
 var cylinder_material;var camera_1;var light;var cylinder_1;
 var application = {};
 application.events = new ev.EventHolder();	
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
 		var g_sequence_manager = new state.Manager();
         function default_interpolate(a, b, t)
         {
@@ -56,7 +59,17 @@ application.events = new ev.EventHolder();
 			var mouse_pressed = false;
 		}		
 	// --------RESOURCES---------
-// --------RESOURCES---------
+		var global_package = new stream.Package(streamer);	
+		global_package.add_item({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});		
+		global_package.load();	
+    // --------RESOURCES---------
 renderer.setSize( app_width, app_height );
 var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
 manager.events = new ev.EventHolder();

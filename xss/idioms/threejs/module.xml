@@ -144,7 +144,7 @@
 		
 		<class id="ambient_light" super="light" output_id="THREE.AmbientLight" renderer="light_renderer.xss">
 			<constructor_params>
-				<parameter id="color" property="color" runtime="true" use_plain_value="true"/>				 				
+				<parameter id="color" property="color" runtime="true" use_plain_value="true"/>			 				
 			</constructor_params>
 		</class>
 		
@@ -228,6 +228,24 @@
 			<property id="y_segments" output_id="segmentsHeight" type="string" dont_init="true"/>
 		</class>
 	
+		<class id="tetrahedron" super="object3d" output_id="THREE.TetrahedronGeometry" renderer="object3d_renderer.xss" heritable="true">
+			<constructor_params>
+				<parameter id="radius" property="radius" runtime="true"/>
+				<parameter id="detail" property="detail" runtime="true"/>				
+			</constructor_params>
+			<property id="radius" type="float" dont_init="true"/>
+			<property id="detail" type="float" dont_init="true"/>			
+		</class>
+		
+		<class id="octahedron" super="object3d" output_id="THREE.OctahedronGeometry" renderer="object3d_renderer.xss" heritable="true">
+			<constructor_params>
+				<parameter id="radius" property="radius" runtime="true"/>
+				<parameter id="detail" property="detail" runtime="true"/>				
+			</constructor_params>
+			<property id="radius" type="float" dont_init="true"/>
+			<property id="detail" type="float" dont_init="true"/>			
+		</class>
+		
 		<class id="cube" super="object3d" output_id="THREE.CubeGeometry" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
 				<parameter id="width" property="width" runtime="true"/>
@@ -275,6 +293,40 @@
 			<property id="radius" type="string" dont_init="true"/>
 			<property id="x_segments" output_id="segmentsWidth" type="string" dont_init="true"/>
 			<property id="y_segments" output_id="segmentsHeight" type="string" dont_init="true"/>			
+		</class>
+		
+		<class id="torus" super="object3d" output_id="THREE.TorusGeometry" renderer="object3d_renderer.xss" heritable="true">
+			<constructor_params>
+				<parameter id="radius" property="radius" runtime="true"/>
+				<parameter id="tube" property="tube" runtime="true"/>
+				<parameter id="x_segments" property="x_segments" runtime="true"/>
+				<parameter id="y_segments" property="y_segments" runtime="true"/>	
+				<parameter id="arc" property="arc" runtime="true"/>
+			</constructor_params>
+			<property id="radius" type="string" dont_init="true"/>
+			<property id="tube" type="string" dont_init="true"/>
+			<property id="x_segments" output_id="segmentsWidth" type="string" dont_init="true"/>
+			<property id="y_segments" output_id="segmentsHeight" type="string" dont_init="true"/>
+			<property id="arc" type="string" dont_init="true"/>			
+		</class>
+		
+		<class id="torusknot" super="object3d" output_id="THREE.TorusKnotGeometry" renderer="object3d_renderer.xss" heritable="true">
+			<constructor_params>
+				<parameter id="radius" property="radius" runtime="true"/>
+				<parameter id="tube" property="tube" runtime="true"/>
+				<parameter id="x_segments" property="x_segments" runtime="true"/>
+				<parameter id="y_segments" property="y_segments" runtime="true"/>	
+				<parameter id="p" property="p" runtime="true"/>
+				<parameter id="q" property="q" runtime="true"/>
+				<parameter id="height_scale" property="height_scale" runtime="true"/>
+			</constructor_params>
+			<property id="radius" type="string" dont_init="true"/>
+			<property id="tube" type="string" dont_init="true"/>
+			<property id="x_segments" output_id="segmentsWidth" type="string" dont_init="true"/>
+			<property id="y_segments" output_id="segmentsHeight" type="string" dont_init="true"/>
+			<property id="p" type="string" dont_init="true"/>	
+			<property id="q" type="string" dont_init="true"/>	
+			<property id="height_scale" type="string" dont_init="true"/>	
 		</class>
 	
 		<class id="icosahedron" super="object3d" output_id="THREE.IcosahedronGeometry" renderer="object3d_renderer.xss" heritable="true">
