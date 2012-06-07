@@ -1,0 +1,3 @@
+<application name="jq9" title="Embedded canvas" src="jquery9.xs" template="jq9_template.html">
+    <canvas id="app" width="600" height="400" application="ui_ripple.project.xml" html_id="canvas-container"/>
+</application>

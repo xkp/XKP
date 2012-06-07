@@ -1,0 +1,11 @@
+<project entry_point="../idioms/ui/entry.xss" language="js" target="ui_ripple.xml" output="ui_ripple.html">
+    <path>
+        <output path="../production/test"/>
+    </path>
+
+	<idiom src="../idioms/resources/resources.xml"/>
+    <idiom src="../idioms/ui/ui.xml"/>
+    <idiom src="../idioms/ms/js/sequence.xml"/>
+</project>
+           
+         

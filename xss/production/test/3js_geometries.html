@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test 3D</title>
+</head>
+<body>
+<style type="text/css">
+	body{
+	}
+</style>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
+<script type="text/javascript">	
+			var renderer = new THREE.CanvasRenderer();
+		var scene = new THREE.Scene();
+scene.mouse_thru = true;
+var ui_;
+var canvas_position = {x:0, y:0};
+var clock = new THREE.Clock();
+var SoundUtils;
+var active_camera;
+var g_elapsed = -1;
+var g_delta = 0.0;
+var drawingCanvas = renderer.domElement;
+var streamer;
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
+var material_1;var camera_1;var sphere1;var tetra1;var plane1;var cube1;var icosahedron1;var cylinder1;var octa1;var torus1;var torusknot1;
+var application = {};
+application.events = new ev.EventHolder();	
+		if(drawingCanvas){
+			var client =
+			{
+				width: window.innerWidth,
+				height: window.innerHeight,
+				canvas: drawingCanvas
+			};            						
+			var ui_ = new ui.Manager(client, streamer);			
+			var g_ui = ui_;
+			var g_ui_root = ui_.root;
+			var mouse_pressed = false;
+		}		
+	// --------RESOURCES---------
+// --------RESOURCES---------
+renderer.setSize( app_width, app_height );
+var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
+manager.events = new ev.EventHolder();
+manager.ui_ = ui_;	
+function render() {
+manager.canvas_position = getElementPosition(drawingCanvas);
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+	g_delta = 0; //first update
+else
+	g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+c_delta = clock.getDelta(),
+c_elapsed = clock.getElapsedTime() * 10;
+manager.events.dispatch("update", [g_delta, g_elapsed]);	
+				manager.scene.add(camera_1);
+				set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+threejs_load_resources(manager, function()
+{
+material_1 = new THREE.MeshNormalMaterial({
+	});
+material_1.manager = manager;
+		    camera_1 = 
+		    new THREE.PerspectiveCamera(65, 1.5, 1, 1000, null) ;				
+camera_1.manager = manager;
+	    sphere1_sphere = new THREE.SphereGeometry(20, 32, 16) ;
+	    sphere1 = new THREE.Mesh(sphere1_sphere, material_1);
+	    manager.scene.add(sphere1);
+		sphere1.events = new ev.EventHolder();
+sphere1.manager = manager;
+	    tetra1_tetrahedron = new THREE.TetrahedronGeometry(20, null) ;
+	    tetra1 = new THREE.Mesh(tetra1_tetrahedron, material_1);
+	    manager.scene.add(tetra1);
+		tetra1.events = new ev.EventHolder();
+tetra1.manager = manager;
+	    plane1_plane = new THREE.PlaneGeometry(40, 40, 1, 1) ;
+	    plane1 = new THREE.Mesh(plane1_plane, material_1);
+	    manager.scene.add(plane1);
+		plane1.events = new ev.EventHolder();
+plane1.manager = manager;
+	    cube1_cube = new THREE.CubeGeometry(20, 30, 20, null, null, null, null, null) ;
+	    cube1 = new THREE.Mesh(cube1_cube, material_1);
+	    manager.scene.add(cube1);
+		cube1.events = new ev.EventHolder();
+cube1.manager = manager;
+	    icosahedron1_icosahedron = new THREE.IcosahedronGeometry(20, null) ;
+	    icosahedron1 = new THREE.Mesh(icosahedron1_icosahedron, material_1);
+	    manager.scene.add(icosahedron1);
+		icosahedron1.events = new ev.EventHolder();
+icosahedron1.manager = manager;
+	    cylinder1_cylinder = new THREE.CylinderGeometry(15, 20, 30, 20, 20, null) ;
+	    cylinder1 = new THREE.Mesh(cylinder1_cylinder, material_1);
+	    manager.scene.add(cylinder1);
+		cylinder1.events = new ev.EventHolder();
+cylinder1.manager = manager;
+	    octa1_octahedron = new THREE.OctahedronGeometry(20, null) ;
+	    octa1 = new THREE.Mesh(octa1_octahedron, material_1);
+	    manager.scene.add(octa1);
+		octa1.events = new ev.EventHolder();
+octa1.manager = manager;
+	    torus1_torus = new THREE.TorusGeometry(20, 10, 30, 20, null) ;
+	    torus1 = new THREE.Mesh(torus1_torus, material_1);
+	    manager.scene.add(torus1);
+		torus1.events = new ev.EventHolder();
+torus1.manager = manager;
+	    torusknot1_torusknot = new THREE.TorusKnotGeometry(20, 5, 60, 20, null, null, null) ;
+	    torusknot1 = new THREE.Mesh(torusknot1_torusknot, material_1);
+	    manager.scene.add(torusknot1);
+		torusknot1.events = new ev.EventHolder();
+torusknot1.manager = manager;
+            camera_1.position.z = 200;
+            tetra1.position.x = -60;
+            plane1.position.x = 60;
+            set_rotation_x(plane1.rotation, 90);
+            cube1.position.y = -60;
+            icosahedron1.position.y = 60;
+            cylinder1.position.y = 60;
+            cylinder1.position.x = 60;
+            octa1.position.x = -60;
+            octa1.position.y = 60;
+            torus1.position.x = -60;
+            torus1.position.y = -60;
+            torusknot1.position.x = 60;
+            torusknot1.position.y = -60;
+            application.time = null;
+	application.events.addListener("update", function()
+	{    
+		set_rotation_y(sphere1.rotation, get_rotation_y(sphere1.rotation) - 0.5);
+set_rotation_x(sphere1.rotation, get_rotation_x(sphere1.rotation) - 0.5);
+set_rotation_y(tetra1.rotation, get_rotation_y(tetra1.rotation) - 0.5);
+set_rotation_x(tetra1.rotation, get_rotation_x(tetra1.rotation) - 0.5);
+set_rotation_x(plane1.rotation, get_rotation_x(plane1.rotation) - 0.5);
+set_rotation_y(plane1.rotation, get_rotation_y(plane1.rotation) - 0.5);
+set_rotation_x(cube1.rotation, get_rotation_x(cube1.rotation) - 0.5);
+set_rotation_y(cube1.rotation, get_rotation_y(cube1.rotation) - 0.5);
+set_rotation_x(icosahedron1.rotation, get_rotation_x(icosahedron1.rotation) - 0.5);
+set_rotation_y(icosahedron1.rotation, get_rotation_y(icosahedron1.rotation) - 0.5);
+set_rotation_x(cylinder1.rotation, get_rotation_x(cylinder1.rotation) - 0.5);
+set_rotation_y(cylinder1.rotation, get_rotation_y(cylinder1.rotation) - 0.5);
+set_rotation_x(octa1.rotation, get_rotation_x(octa1.rotation) - 0.5);
+set_rotation_y(octa1.rotation, get_rotation_y(octa1.rotation) - 0.5);
+set_rotation_x(torus1.rotation, get_rotation_x(torus1.rotation) - 0.5);
+set_rotation_y(torus1.rotation, get_rotation_y(torus1.rotation) - 0.5);
+set_rotation_x(torusknot1.rotation, get_rotation_x(torusknot1.rotation) - 0.5);
+set_rotation_y(torusknot1.rotation, get_rotation_y(torusknot1.rotation) - 0.5);
+	}
+	);
+if(ui_)
+{	
+	SoundUtils = new ui.SoundUtils();		
+	g_ui.fill_background = false;	
+}
+var event_manager = new ev.ThreeEventManager();
+renderer.domElement.onmousemove = function(ev)
+{
+	event_manager.mousemove(manager, ev.clientX, ev.clientY);   
+	if(ui_)
+		ui_.mousemove(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
+};
+renderer.domElement.onmousedown = function(ev)
+{
+	event_manager.mousedown(manager, ev.clientX, ev.clientY);     
+	if(ui_)
+		ui_.mousedown(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
+};
+renderer.domElement.onmouseup = function(ev)
+{
+	event_manager.mouseup(manager, ev.clientX, ev.clientY);		
+	if(ui_)
+		ui_.mouseup(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(manager, ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(manager, ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(manager, ev.keyCode);                  
+};
+manager.events.addListener("mousedown", function(x,y)
+{    
+	application.events.dispatch("mousedown", [x, y]);
+});
+manager.events.addListener("mouseup", function(x,y)
+{    
+	application.events.dispatch("mouseup", [x, y]);
+});
+manager.events.addListener("mousemove", function(x,y)
+{    
+	application.events.dispatch("mousemove", [x, y]);
+});
+manager.events.addListener("click", function(x,y)
+{    
+	application.events.dispatch("click", [x, y]);
+});
+manager.events.addListener("drag", function(x,y)
+{    
+	application.events.dispatch("drag", [x, y]);
+});
+manager.events.addListener("dragend", function(x,y)
+{    
+	application.events.dispatch("dragend", [x, y]);
+});
+manager.events.addListener("keyup", function(keycode)
+{    
+	application.events.dispatch("keyup", [keycode]);
+});
+manager.events.addListener("keydown", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("keypress", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("update", function(g_delta, g_elapsed)
+{    
+	application.events.dispatch("update", [g_delta, g_elapsed]);
+});
+application.events.dispatch("init", []);
+		document.body.appendChild( renderer.domElement );
+animate();
+});
+function animate() {
+	if(ui_)
+		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
+	renderer.domElement.getContext('2d').globalAlpha = 1;
+	requestAnimationFrame( animate );
+	render();
+	if(ui_)
+	{
+		drawingCanvas.getContext('2d').globalAlpha = 1;
+		ui_.draw(drawingCanvas.getContext('2d'));
+	}
+	}
+</script>
+</body>
+</html>
