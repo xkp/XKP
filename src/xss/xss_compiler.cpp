@@ -1417,6 +1417,11 @@ XSSObject xss_compiler::analyze_expression(const param_list params)
         xss_throw(error);
       }
 
+    if (expr == "stop_anim3")
+      {
+        str debug("XXX");
+      }
+
     XSSObject result(new xss_object);
 
     xs_utils   xs;
@@ -1459,6 +1464,9 @@ XSSObject xss_compiler::analyze_expression(const param_list params)
         result->add_attribute("first", ea.get_first());
         result->add_attribute("first_string", ea.first_string());
         result->add_attribute("first_property", ea.first_property());
+        result->add_attribute("is_method", ea.is_call());
+        result->add_attribute("methd", ea.method());
+        result->add_attribute("method_name", ea.method_name());
 
         Language lang = ctx->get_language();
 

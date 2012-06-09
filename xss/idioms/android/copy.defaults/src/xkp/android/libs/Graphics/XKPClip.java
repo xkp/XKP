@@ -1,4 +1,3 @@
-<xss:parameter id="appName"/>
 <xss:parameter id="base_namespace"/>
 
 package <xss:e value="base_namespace"/>.libs.Graphics;
@@ -12,7 +11,7 @@ import android.graphics.Path.Direction;
 import android.util.AttributeSet;
 import android.view.View;
 
-import <xss:e value="base_namespace"/>.<xss:e value="appName"/>.R
+import <xss:e value="base_namespace"/>.<xss:e value="application.appName"/>.R
 import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
 
 public class XKPClip extends XKPGraphics {

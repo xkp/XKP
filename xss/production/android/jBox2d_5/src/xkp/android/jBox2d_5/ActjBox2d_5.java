@@ -57,26 +57,26 @@ import xkp.android.libs.Layout.XKPLayout;
 				mHandler.postDelayed(mRunnableWorld, (long) (jBox2dFreq * 1000));
 			}
 		};
-				private XKPPackage ;
-			private String [] mResources__XKPName = {
-				"",
-				"",
-				"",
-				""
+				private XKPPackage __resources1;
+			private String [] mResources___resources1_XKPName = {
+				"__image1",
+				"__image2",
+				"__image3",
+				"__image4"
 			};
-			private String [] mResources__DroidName = {
+			private String [] mResources___resources1_DroidName = {
 				"smile_sad_48.png",
 				"smile_grin_48.png",
 				"stone_12.jpg",
 				"img1.png"
 			};
-			private Integer [] mResources__Type = {
+			private Integer [] mResources___resources1_Type = {
 				XKPPackage.BITMAP_RESOURCE,
 				XKPPackage.BITMAP_RESOURCE,
 				XKPPackage.BITMAP_RESOURCE,
 				XKPPackage.BITMAP_RESOURCE
 			};
-			private Integer [] mResources__Id = {
+			private Integer [] mResources___resources1_Id = {
 				R.drawable.smile_sad_48,
 				R.drawable.smile_grin_48,
 				R.drawable.stone_12,
@@ -128,6 +128,8 @@ private void initCallers() {
 			util = new XKPUtils();
 			ActjBox2d_5.util.addView(this);
 			util = ActjBox2d_5.util;
+        myWorld = new XKPJBox2d();
+		myWorld.createWorld(new Vec2(0f, 3f));
 }
 			@Override
 			public void onPause() {
@@ -147,20 +149,18 @@ private void initCallers() {
 private void onLayoutUpdated() {
 }
 private void onLayoutStarted() {
-        myWorld = new XKPJBox2d();
-		myWorld.createWorld(new Vec2(0f, 3f));
 			XKPDistanceJoint __distance_joint1 = new XKPDistanceJoint( ActjBox2d_5.myWorld.getWorld() ); 
-				__distance_joint1.setBodyA("btn1");
-				__distance_joint1.setBodyB("btn2");
+				__distance_joint1.setBodyA(btn1);
+				__distance_joint1.setBodyB(btn2);
 				__distance_joint1.setLength(5);
 		__distance_joint1.createJoint();
 			XKPWeldJoint __weld_joint1 = new XKPWeldJoint( ActjBox2d_5.myWorld.getWorld() ); 
-				__weld_joint1.setBodyA("btn3");
-				__weld_joint1.setBodyB("btn4");
+				__weld_joint1.setBodyA(btn3);
+				__weld_joint1.setBodyB(btn4);
 		__weld_joint1.createJoint();
 			XKPPulleyJoint __pulley_joint1 = new XKPPulleyJoint( ActjBox2d_5.myWorld.getWorld() ); 
-				__pulley_joint1.setBodyA("btn5");
-				__pulley_joint1.setBodyB("btn6");
+				__pulley_joint1.setBodyA(btn5);
+				__pulley_joint1.setBodyB(btn6);
 				__pulley_joint1.setGroundAnchorA(new Vec2(100, __pulley_joint1.getGroundAnchorA().y));
 				__pulley_joint1.setGroundAnchorA(new Vec2(__pulley_joint1.getGroundAnchorA().x, 100));
 				__pulley_joint1.setGroundAnchorB(new Vec2(500, __pulley_joint1.getGroundAnchorB().y));
@@ -172,11 +172,11 @@ private void onLayoutStarted() {
 }
 			private void initInstances() {
 				application = this;
-				 = new XKPPackage(this, 
-					mResources__XKPName, mResources__DroidName, 
-					mResources__Type, mResources__Id
+				__resources1 = new XKPPackage(this, 
+					mResources___resources1_XKPName, mResources___resources1_DroidName, 
+					mResources___resources1_Type, mResources___resources1_Id
 					, true);
-				util.addXKPPackage();
+				util.addXKPPackage(__resources1);
 			}
 			private void keydownapplication(Object keycode) {
 				if (keycode == LEFT_ARROW)

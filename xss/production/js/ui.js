@@ -1111,9 +1111,7 @@ ui.RippleEffect = ui.Component.extend(
 		return this.riprad;
 	},
 	draw: function(context, x, y)
-    {	
-		this.parent.cleanOffsets();
-		this.update_placement();
+    {			
 		this._canvas.width = this.w;
 		this._canvas.height = this.h;
 		if (this.is_disturbed) {
@@ -1161,12 +1159,13 @@ ui.RippleEffect = ui.Component.extend(
 				this.ripple_data = this.ripple.data;
 			}
 			this.first_run = true;
-		}				        	
+		}				      
+		this._super(context);	
     },	
 	disturb: function(dx, dy)
 	{
-			dx -= 2*this.x;
-			dy -= 2*this.y;
+			dx -= 2 * this.x;
+			dy -= 2 * this.y;
 			dx <<= 0;
 			dy <<= 0;
 			this.is_disturbed = true;

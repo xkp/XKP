@@ -37,3 +37,33 @@ on render_instances()
 		compiler.xss("instance.xss", i);
 	}
 }
+
+on render_types()
+{
+	//TRACE: log
+	compiler.log("Rendering Java Types...");
+	
+    for(var ut in user_types)
+    {
+		//TODO: think very well how to proceed with this
+		// set idiom to custom clazz with instances
+		//ut.idiom = this;
+		//compiler.log("type: " + ut.id);
+		for(var it in ut.instances)
+		{
+			//compiler.log("instance: " + it.id);
+			it.idiom = compiler.idiom_by_class(it.type.id);
+			if(it.utils) idiom.need_utils = true;
+		}
+		for(var ch in ut.children)
+		{
+			//compiler.log("child: " + ch.id);
+			ch.idiom = compiler.idiom_by_class(ch.type.id);
+			if(ch.utils) idiom.need_utils = true;
+		}
+		
+		string output_filename = ut.output_id + ".java";
+		compiler.xss("class.xss", output_file = output_filename, clazz = ut);
+    }
+}
+

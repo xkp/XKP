@@ -1,4 +1,3 @@
-<xss:parameter id="appName"/>
 <xss:parameter id="base_namespace"/>
 
 package <xss:e value="base_namespace"/>.libs.Graphics;
@@ -11,7 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Path.Direction;
 import android.util.AttributeSet;
 
-import <xss:e value="base_namespace"/>.<xss:e value="appName"/>.R;
+import <xss:e value="base_namespace"/>.<xss:e value="application.appName"/>.R;
 
 public class XKPImage extends XKPGraphics {
 
@@ -68,12 +67,13 @@ public class XKPImage extends XKPGraphics {
 	protected void updateShapePosition() {
 		mPathShape.reset();
 		mPathShape.addRect(mLeftTop.x, mLeftTop.y, mBottomRight.x, mBottomRight.y, Direction.CCW);
-		mPathShape.transform(mMtxRotation);
+		mPathShape.transform(mMtxAngle);
 	}
 	
 	private void calculateSize() {
 		if(mBitmap == null) return;
 		
+		if(mX2 == -1 && mY2 == -1)
 		setFigureSize(mBitmap.getWidth(), mBitmap.getHeight());
 	}
 }

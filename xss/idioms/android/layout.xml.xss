@@ -1,5 +1,4 @@
 <xss:parameter id="clazz"/>
-<xss:parameter id="appName"/>
 <xss:parameter id="base_namespace"/>
 
 <?xml version="1.0" encoding="utf-8"?>
@@ -10,7 +9,7 @@
 		{
 			<<xss:e value="base_namespace"/>.libs.Layout.XKPLayout 
 				xmlns:android="http://schemas.android.com/apk/res/android" 
-				xmlns:xkp="http://schemas.android.com/apk/res/<xss:e value="base_namespace"/>.<xss:e value="appName"/>" 
+				xmlns:xkp="http://schemas.android.com/apk/res/<xss:e value="base_namespace"/>.<xss:e value="application.appName"/>" 
 				android:id="@+id/layout<xss:e value="clazz.output_id"/>" 
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
@@ -51,7 +50,7 @@
 		if(view.type)
 		{
 			if(view.type.user_defined)
-				strViewName = base_namespace + "." + appName + ".";
+				strViewName = base_namespace + "." + application.appName + ".";
 			strViewName += view.type.output_id;
 		}
 		
@@ -61,7 +60,7 @@
 			{
 				<<xss:e value="strViewName"/> android:id="@+id/layout<xss:e value="clazz.output_id"/>" 
 				xmlns:android="http://schemas.android.com/apk/res/android" 
-				xmlns:xkp="http://schemas.android.com/apk/res/<xss:e value="base_namespace"/>.<xss:e value="appName"/>" 
+				xmlns:xkp="http://schemas.android.com/apk/res/<xss:e value="base_namespace"/>.<xss:e value="application.appName"/>" 
 			}
 		}
 		else
@@ -178,7 +177,7 @@
 			{
 				//TIPS: stupid stripped string... live is hard :(
 				string project_path = compiler.project_path() + "/";
-				string output_path = appName + "/res/" + prop.res_type + "/";
+				string output_path = application.appName + "/res/" + prop.res_type + "/";
 				
 				string simg = prop.value;
 				int sz = String.size(simg);

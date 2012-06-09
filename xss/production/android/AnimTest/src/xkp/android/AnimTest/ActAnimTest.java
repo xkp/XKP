@@ -4,47 +4,56 @@ import java.util.Arrays;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-			import android.app.Activity;
-			import android.os.Bundle;
+import android.app.Activity;
+import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
-						import android.view.View.OnClickListener;
-						import android.view.View.OnLongClickListener;
-						import android.view.MotionEvent;
-						import android.view.View.OnTouchListener;
-						import android.view.View.OnKeyListener;
-						import android.view.View.OnFocusChangeListener;
-						import android.text.method.KeyListener;
-						import android.widget.TextView;
-						import android.widget.Button;
-        import java.util.Timer;
-        import java.util.TimerTask;
-        import xkp.android.libs.Sequence.*;
-		public class ActAnimTest 
-						extends Activity
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.view.MotionEvent;
+import android.view.View.OnTouchListener;
+import android.view.View.OnKeyListener;
+import android.view.View.OnFocusChangeListener;
+import android.text.method.KeyListener;
+import android.widget.TextView;
+import android.widget.Button;
+import java.util.Timer;
+import java.util.TimerTask;
+import xkp.android.libs.Sequence.*;
+
+public class ActAnimTest extends Activity
 {
-				private TextView lbl1;
-				private TextView lbl2;
-				private TextView lbl3;
-				private Button btn1;
-				private Button btn2;
-				private Button btn3;
-		private XKPLayout layoutapplication;
-		public void stop_anim3() {
-			lbl3.setText("Button 3 Stopped");
-anim3.stop();
-		}
-	private boolean mLayoutStarted = false;
-			private ActAnimTest application;
-			@Override
-			public void onCreate(Bundle savedInstanceState) {
-				super.onCreate(savedInstanceState);
-                initCallers();
-				initInstances();
-				setContentView(R.layout.main);
-				bindViews();
-			}
-			private void bindViews() {
-		// TIPS: create an observer for notify layout updated
+	private TextView lbl1;
+	private TextView lbl2;
+	private TextView lbl3;
+	private Button btn1;
+	private Button btn2;
+	private Button btn3;
+	private XKPLayout layoutapplication;
+	private Sequence anim1 = new Sequence();
+	private Sequence anim2 = new Sequence();
+	private Sequence anim3 = new Sequence();
+
+	public void mthd_anim3_stop_anim3() 
+    {
+	    lbl3.setText("Button 3 Stopped");
+        anim3.stop();
+    }
+	
+    private boolean mLayoutStarted = false;
+	private ActAnimTest application;
+	
+    @Override
+	public void onCreate(Bundle savedInstanceState) 
+    {
+	    super.onCreate(savedInstanceState);
+        initCallers();
+		initInstances();
+		setContentView(R.layout.main);
+		bindViews();
+	}
+	
+    private void bindViews() 
+    {
 		layoutapplication = (XKPLayout) findViewById(R.id.layoutapplication);
 		ViewTreeObserver mainLayoutViewTreeObserver = layoutapplication.getViewTreeObserver();
 		if(mainLayoutViewTreeObserver.isAlive()) {
@@ -193,7 +202,7 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
             {
                     if (click_count == 3)
                     {
-                anim3.stop_anim3();
+        mthd_anim3_stop_anim3();
                     }
         });
 			}

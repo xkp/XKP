@@ -264,57 +264,25 @@
         if (action.method)
         {
             var mthd = analyze_expression(action.method, seq, seq_id, rendering_instance);
+            if (!mthd.is_method)
+                compiler.error("run method must be valid method", methd = action.method);
+            
             var path = mthd.path;
             if (!path)
                 path = seq_id;
             else if (path == "")
                 path = seq_id;
 
-            out() 
-            {
-                <xss:e v="path"/>.<xss:e v="action.method"/>();
-            }
+            myidiom.run_method(mthd, path);
         }
         else if (action.sequence)
         {   
             var torun = compiler.analyze_expression(action.sequence);
-            if (torun.this_property)
-            {
-			    out() 
-                {
-                    <xss:e v="seq_id"/>.<xss:e v="action.sequence"/>.start();
-                }
-            }
-            else
-            {
-			    out() 
-                {
-                    <xss:e v="action.sequence"/>.start();
-                }
-            }
+            myidiom.run_sequence(torun, seq_id);
         }
         else if (action.expr)
         {
-            var expr_this = seq;
-            var this_str = seq_id;
-            if (seq.target)
-            {
-                expr_this = compiler.get_instance(seq.target);
-                this_str += ".target";
-            }
-            else if (seq.target_type)
-            {
-                expr_this = compiler.get_type(seq.target_type);
-                this_str += ".target";
-            }
-                
-            string result = compiler.render_expression(action.expr, expr_this);
-            result = compiler.replace_identifier(result, "this.", this_str + ".");
-            
-            out() 
-            {
-                <xss:e v="result"/>;
-            }
+            myidiom.run_expression(action.expr, seq, seq_id);
         }
         else
         {

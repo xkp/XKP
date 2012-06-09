@@ -151,23 +151,23 @@
 		<class id="directional_light" super="light" output_id="THREE.DirectionalLight" renderer="light_renderer.xss">
 			<constructor_params>
 				<parameter id="color" property="color" runtime="true" use_plain_value="true"/>
-				<parameter id="intensity" property="intensity" runtime="true"/>
-				<parameter id="distance" property="distance" runtime="true"/>
+				<parameter id="intensity" property="intensity" runtime="true" default_value="1"/>
+				<parameter id="distance" property="distance" runtime="true" default_value="0"/>
 				<parameter id="cast_shadow" property="cast_shadow" runtime="true"/>  				
 			</constructor_params>				
-			<property id="intensity" type="string" dont_init="true" default_value="1"/>
-			<property id="distance" type="string" dont_init="true" default_value="0"/>
+			<property id="intensity" type="string" dont_init="true"/>
+			<property id="distance" type="string" dont_init="true"/>
 			<property id="cast_shadow" output_id="castShadow" type="string" dont_init="true"/>
 		</class>
 	
 		<class id="point_light" super="light" output_id="THREE.PointLight" renderer="light_renderer.xss">
 			<constructor_params>
 				<parameter id="color" property="color" runtime="true" use_plain_value="true"/>
-				<parameter id="intensity" property="intensity" runtime="true"/>
-				<parameter id="distance" property="distance" runtime="true"/>           		
+				<parameter id="intensity" property="intensity" runtime="true" default_value="1"/>
+				<parameter id="distance" property="distance" runtime="true" default_value="0"/>           		
 			</constructor_params>				
-			<property id="intensity" type="string" dont_init="true" default_value="1"/>
-			<property id="distance" type="string" dont_init="true" default_value="0"/>
+			<property id="intensity" type="string" dont_init="true"/>
+			<property id="distance" type="string" dont_init="true"/>
 		</class>
 	
 		<class id="camera" output_id="THREE.PerspectiveCamera" renderer="camera_renderer.xss">
@@ -191,8 +191,29 @@
 				<get text="lookAt"/>
 			</property>
 		</class>
-	
-		<class id="firstperson_controls" renderer="camera_renderer.xss">				
+		
+		<class id="controls"/>
+		
+		<class id="fly_controls" super="controls" output_id="THREE.FlyControls" renderer="camera_renderer.xss">		
+			<property id="speed" type="float"> 
+				<set text="movementSpeed = {value}"/>
+				<get text="movementSpeed"/>	
+			</property>
+			<property id="roll_speed" type="float">
+				<set text="rollSpeed = {value}"/>
+				<get text="rollSpeed"/>	
+			</property>			
+			<property id="auto_forward" type="bool">	
+				<set text="autoForward = {value}"/>
+				<get text="autoForward"/>	
+			</property>		
+			<property id="drag_to_look" type="bool">	
+				<set text="dragToLook = {value}"/>
+				<get text="dragToLook"/>	
+			</property>				
+		</class>
+		
+		<class id="firstperson_controls" super="controls" output_id="THREE.FirstPersonControls" renderer="camera_renderer.xss">				
 			<property id="speed" type="string"> 
 				<set text="movementSpeed = {value}"/>
 				<get text="movementSpeed"/>	
@@ -212,8 +233,28 @@
 			<property id="auto_forward" type="string">	
 				<set text="autoForward = {value}"/>
 				<get text="autoForward"/>	
-			</property>			
-		</class>
+			</property>		
+			<property id="move_forward" type="string">	
+				<set text="moveForward = {value}"/>
+				<get text="moveForward"/>	
+			</property>		
+			<property id="move_backward" type="string">	
+				<set text="moveBackward = {value}"/>
+				<get text="moveBackward"/>	
+			</property>
+			<property id="move_left" type="string">	
+				<set text="moveLeft = {value}"/>
+				<get text="moveLeft"/>	
+			</property>
+			<property id="move_right" type="string">	
+				<set text="moveRight = {value}"/>
+				<get text="moveRight"/>	
+			</property>
+			<property id="freeze" type="string">	
+				<set text="freeze = {value}"/>
+				<get text="freeze"/>	
+			</property>
+		</class>	
 		
 		<class id="plane" super="object3d" output_id="THREE.PlaneGeometry" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>

@@ -17,17 +17,17 @@ on pre_process(obj)
 	}
 }
 
-on render_type_initialization(clazz, bns, app)
+on render_type_initialization(clazz, bns)
 {
 }
 
-on render_initialization(clazz, bns, app)
+on render_initialization(clazz, bns)
 {
 	//TIPS: copy defaults files of idiom classes and render imports
 	clazz = this;
 	
 	var android_idiom = compiler.idiom_by_id("android");
-	android_idiom.initialization(clazz, bns, app);
+	android_idiom.initialization(clazz, bns);
 	
 	//TIPS: assign needed libraries
 	if(!application.libraries)
@@ -84,7 +84,7 @@ on render_initialization(clazz, bns, app)
 		}
 	}
 	
-	out(indent = 1, marker = "layout_start")
+	out(indent = 1, marker = "callers")
 	{
         <xss:e value="world.output_id"/> = new XKPJBox2d();
 		<xss:e value="world.output_id"/>.createWorld(new Vec2(<xss:e value="gx"/>f, <xss:e value="gy"/>f)<xss:e value="sdebug_draw"/>);
@@ -95,7 +95,7 @@ on render_types()
 {
 }
 
-on render_instances(app, clazz)
+on render_instances(clazz)
 {
 	if(clazz == null) clazz = this;
 	
@@ -104,7 +104,7 @@ on render_instances(app, clazz)
 
 	for(var i in instances)
 	{
-		render_instance(app, clazz, i);
+		render_instance(i, clazz);
     }
 	
 	out(indent = 1, marker = "layout_start")
@@ -114,7 +114,7 @@ on render_instances(app, clazz)
 	}
 }
 
-method render_instance(app, clazz, it)
+method render_instance(it, clazz)
 {
 	if(it.class_name == "physics_world") return;
 
@@ -170,19 +170,19 @@ on render_application_resume()
 	}
 }
 
-on copy_default_files(app, bns, plibs)
+on copy_default_files(bns, plibs)
 {
 	// file list for copy
 	array<string> cp_files = [
-		"/lib/jbox2d-library-2.1.2.2.jar",
-		"/lib/slf4j-api-1.6.4.jar"
+		"/libs/jbox2d-library-2.1.2.2.jar",
+		"/libs/slf4j-api-1.6.4.jar"
 	];
 	
 	compiler.log("[jbox2d] Copying default files...");
 	for(string f1 in cp_files)
 	{
 		string srcf1 = compiler.full_path("/copy.defaults" + f1);
-		string dstf1 = app + f1;
+		string dstf1 = application.appName + f1;
 
 		//TRACE: log
 		//compiler.log("Copying default file: " + srcf1);

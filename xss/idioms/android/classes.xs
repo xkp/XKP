@@ -3,6 +3,8 @@ on pre_process(obj)
 	if(obj.id == "")
 		obj.id = compiler.genid(obj.class_name);
 		//obj.output_id = compiler.genid(obj.class_name);
+	
+	//compiler.log("[android]: " + obj.id + " - " + obj.output_id);
 
 	// flatting properties
 	for(var p in obj.properties)
@@ -21,7 +23,7 @@ on pre_process(obj)
 			m.output_id = "mthd_" + obj.output_id + "_" + m.name;
 }
 
-on render_instances(app, clazz)
+on render_instances(clazz)
 {
 	if(clazz == null) clazz = this;
 	
@@ -31,15 +33,16 @@ on render_instances(app, clazz)
 	}
 }
 
-method render_instance(app, clazz, it)
+method render_instance(it, clazz)
 {
 }
 
-on render_types(app, bns)
+on render_types(bns)
 {
 	//TRACE: log
-	compiler.log("Rendering Types...");
+	compiler.log("Rendering Android Types...");
 	
+	string app = application.appName;
 	var idiom = compiler.idiom_by_id("android");
     for(var ut in user_types)
     {
@@ -63,27 +66,36 @@ on render_types(app, bns)
 		}
 		
 		string output_filename = app + "/src/xkp/android/" + app + "/" + ut.output_id + ".java";
-		compiler.xss("script.java.xss", output_file = output_filename, clazz = ut, appName = app, base_namespace = bns, is_type = true);
+		compiler.xss("script.java.xss", output_file = output_filename, clazz = ut, base_namespace = bns, is_type = true);
 	
 		output_filename = app + "/res/layout/" + ut.output_id + ".xml";
-		compiler.xss("layout.xml.xss", output_file = output_filename, clazz = ut, appName = app, base_namespace = bns);
+		compiler.xss("layout.xml.xss", output_file = output_filename, clazz = ut, base_namespace = bns);
     }
 }
 
-on render_type_initialization(clazz, bns, app)
+on render_type_initialization(clazz, bns)
 {
-	initialization(clazz, bns, app);
+	//TRACE: log
+	//compiler.log("### Begin render_type_initialization...");
+	initialization(clazz, bns);
+	//TRACE: log
+	//compiler.log("### End render_type_initialization...");
 }
 
-on render_initialization(clazz, bns, app)
+on render_initialization(clazz, bns)
 {
-	initialization(clazz, bns, app);
+	//TRACE: log
+	//compiler.log("### Begin render_initialization...");
+	initialization(clazz, bns);
+	//TRACE: log
+	//compiler.log("### End render_initialization...");
 }
 
-method initialization(clazz, bns, app)
+method initialization(clazz, bns)
 {
 	render_imports(clazz, bns);
 	
+	string app = application.appName;
 	// render xkp widget files
 	for(var inst in clazz.instances)
 	{
@@ -106,7 +118,7 @@ method initialization(clazz, bns, app)
 			//TRACE: log
 			//compiler.log("Rendering widget file: " + srcf);
 			
-			compiler.xss(src = srcf, output_file = dstf, appName = app, base_namespace = bns);
+			compiler.xss(src = srcf, output_file = dstf, base_namespace = bns);
 		}
 	}
 }
@@ -226,7 +238,7 @@ method process_event_handler(inst)
 	}
 }
 
-on copy_default_files(app, bns, plibs)
+on copy_default_files(bns, plibs)
 {
 	// file list for copy
 	array<string> cp_files = [
@@ -241,6 +253,7 @@ on copy_default_files(app, bns, plibs)
 		"/gen/.empty"
 	];
 	
+	string app = application.appName;
 	compiler.log("[android] Copying default files...");
 	for(string f1 in cp_files)
 	{
@@ -267,7 +280,7 @@ on copy_default_files(app, bns, plibs)
 		//TRACE: log
 		//compiler.log("Rendering default file: " + srcf2);
 		
-		compiler.xss(src = srcf2, output_file = dstf2, appName = app, base_namespace = bns);
+		compiler.xss(src = srcf2, output_file = dstf2, base_namespace = bns);
 	}
 }
 

@@ -7,8 +7,8 @@ instance rain
     {
         if (Math.random() < probablity)
         {
-            float x = Math.random() * ripple1.width;
-            float y = Math.random() * ripple1.height;
+            float x = 50 + Math.random() * (ripple1.width - 100);
+            float y = 50 + Math.random() * (ripple1.height - 100);
  		    ripple1.disturb(x, y);			
         }
     }

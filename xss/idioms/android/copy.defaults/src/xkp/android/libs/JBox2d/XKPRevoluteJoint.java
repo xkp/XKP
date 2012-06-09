@@ -1,4 +1,3 @@
-<xss:parameter id="appName"/>
 <xss:parameter id="base_namespace"/>
 
 package <xss:e value="base_namespace"/>.libs.JBox2d;
@@ -7,6 +6,8 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.jbox2d.dynamics.joints.RevoluteJointDef;
+
+import android.view.View;
 
 public class XKPRevoluteJoint {
 	
@@ -26,16 +27,36 @@ public class XKPRevoluteJoint {
 		mIsJointCreated = true;
 	}
 	
-	public void setBodyA(XKPPhysicBody bodyA) {
-		mRevtJointD.bodyA = bodyA.getBody();
+	public void setBodyA(Object bodyA) {
+		XKPPhysicBody physicBodyA;
+		if(bodyA instanceof XKPPhysicBody) {
+			physicBodyA = (XKPPhysicBody) bodyA;
+		} else
+		if(bodyA instanceof View) {
+			View v = (View) bodyA;
+			physicBodyA = (XKPPhysicBody) v.getTag();
+		} else 
+			return;
+		
+		mRevtJointD.bodyA = physicBodyA.getBody();
 		if(mIsJointCreated)
-			mRevtJoint.m_bodyA = bodyA.getBody();
+			mRevtJoint.m_bodyA = physicBodyA.getBody();
 	}
-	
-	public void setBodyB(XKPPhysicBody bodyB) {
-		mRevtJointD.bodyB = bodyB.getBody();
+
+	public void setBodyB(Object bodyB) {
+		XKPPhysicBody physicBodyB;
+		if(bodyB instanceof XKPPhysicBody) {
+			physicBodyB = (XKPPhysicBody) bodyB;
+		} else
+		if(bodyB instanceof View) {
+			View v = (View) bodyB;
+			physicBodyB = (XKPPhysicBody) v.getTag();
+		} else 
+			return;
+		
+		mRevtJointD.bodyB = physicBodyB.getBody();
 		if(mIsJointCreated)
-			mRevtJoint.m_bodyB = bodyB.getBody();
+			mRevtJoint.m_bodyB = physicBodyB.getBody();
 	}
 	
 	public void setLowerAngle(float lowerAngle) {

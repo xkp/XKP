@@ -38,21 +38,20 @@ import xkp.android.libs.Layout.XKPLayout;
 				mHandler.postDelayed(mRunnableWorld, (long) (jBox2dFreq * 1000));
 			}
 		};
-			private XKPDDView 			ddView;
-				private XKPPackage ;
-			private String [] mResources__XKPName = {
-				"",
-				""
+				private XKPPackage __resources1;
+			private String [] mResources___resources1_XKPName = {
+				"__image1",
+				"__image2"
 			};
-			private String [] mResources__DroidName = {
+			private String [] mResources___resources1_DroidName = {
 				"smile_grin_48.png",
 				"stone_12.jpg"
 			};
-			private Integer [] mResources__Type = {
+			private Integer [] mResources___resources1_Type = {
 				XKPPackage.BITMAP_RESOURCE,
 				XKPPackage.BITMAP_RESOURCE
 			};
-			private Integer [] mResources__Id = {
+			private Integer [] mResources___resources1_Id = {
 				R.drawable.smile_grin_48,
 				R.drawable.stone_12
 			};
@@ -90,6 +89,8 @@ private void initCallers() {
 			util = new XKPUtils();
 			ActjBox2d_3.util.addView(this);
 			util = ActjBox2d_3.util;
+        myWorld = new XKPJBox2d();
+		myWorld.createWorld(new Vec2(0f, 10f));
 }
 			@Override
 			public void onPause() {
@@ -109,11 +110,6 @@ private void initCallers() {
 private void onLayoutUpdated() {
 }
 private void onLayoutStarted() {
-			//TODO: determine real screen dimensions (width & height)
-			ddView = new XKPDDView(this, 320, 480);
-			layoutapplication.addView(ddView);
-        myWorld = new XKPJBox2d();
-		myWorld.createWorld(new Vec2(0f, 10f), ddView.getDebugDraw());
 			XKPSpawner sp1 = new XKPSpawner( this, layoutapplication, "smiley_ball", 100, 100, 95 ); 
 				sp1.setPosition(100, sp1.getPosition().y);
 				sp1.setPosition(sp1.getPosition().x, 100);
@@ -153,10 +149,10 @@ private void onLayoutStarted() {
 }
 			private void initInstances() {
 				application = this;
-				 = new XKPPackage(this, 
-					mResources__XKPName, mResources__DroidName, 
-					mResources__Type, mResources__Id
+				__resources1 = new XKPPackage(this, 
+					mResources___resources1_XKPName, mResources___resources1_DroidName, 
+					mResources___resources1_Type, mResources___resources1_Id
 					, true);
-				util.addXKPPackage();
+				util.addXKPPackage(__resources1);
 			}
 }

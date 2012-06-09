@@ -209,7 +209,7 @@ struct html_grammar : grammar<html_grammar>
           string_r = confix_p( '"', (*c_escape_ch_p), '"' )
                    | confix_p( "'", (*c_escape_ch_p), "'" );
 
-          ident_r  = lexeme_d[ +chset_p("A-Za-z0-9_-:") ];
+          ident_r  = lexeme_d[ +chset_p(":A-Za-z0-9_-") ];
 
           tag_r    =  str_p("<")              [start_tag(self.ctx)] 
                    >> ( (  ch_p('/')          [tag_closes(self.ctx)] 

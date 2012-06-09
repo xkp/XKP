@@ -1,4 +1,3 @@
-<xss:parameter id="appName"/>
 <xss:parameter id="base_namespace"/>
 <xss:parameter id="minAPILevel"/>
 <xss:parameter id="targetAPILevel"/>
@@ -9,14 +8,14 @@
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" 
-      package="<xss:e value="base_namespace"/>.<xss:e value="appName"/>"
+      package="<xss:e value="base_namespace"/>.<xss:e value="application.appName"/>"
       android:versionCode="1"
       android:versionName="1.0">
 
     <uses-sdk android:minSdkVersion="<xss:e value="minAPILevel"/>" android:targetSdkVersion="<xss:e value="targetAPILevel"/>"/>
 
     <application android:label="@string/app_name" android:icon="@drawable/icon">
-        <activity android:name=".Act<xss:e value="appName"/>"
+        <activity android:name=".Act<xss:e value="application.appName"/>"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

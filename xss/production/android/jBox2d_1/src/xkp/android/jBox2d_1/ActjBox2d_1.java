@@ -56,6 +56,8 @@ import xkp.android.libs.Layout.XKPLayout;
 		}
 	}
 private void initCallers() {
+        myWorld = new XKPJBox2d();
+		myWorld.createWorld(new Vec2(0f, 5f), ddView.getDebugDraw());
 }
 			@Override
 			public void onPause() {
@@ -78,8 +80,6 @@ private void onLayoutStarted() {
 			//TODO: determine real screen dimensions (width & height)
 			ddView = new XKPDDView(this, 320, 480);
 			layoutapplication.addView(ddView);
-        myWorld = new XKPJBox2d();
-		myWorld.createWorld(new Vec2(0f, 5f), ddView.getDebugDraw());
 			XKPPhysicBody body_1 = new XKPPhysicBody(ActjBox2d_1.myWorld.getWorld(), 
 				ShapeType.CIRCLE);
 		body_1.setSensor(false);

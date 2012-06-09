@@ -1,5 +1,5 @@
 <application name="jBox2d_3" title="[jBox2d] Simple test 3" src="box2d3.xs" width="320" height="420">
-	<physics_world gravity_y   = "10" id="myWorld" debug_draw="true"
+	<physics_world gravity_y   = "10" id="myWorld" debug_draw="false"
 					scale       = "30" 
 					friction    = "0.5"
 					density     = "1.0"
@@ -12,11 +12,11 @@
 
 	<spawner id="sp1" x="100" y="100" rotation="95" auto_start="true" frequency="10" creator_class="smiley_ball" velocity="5"/>
 
-	<img x="0" y="390" width="600" height="40" src="stone_12.jpg">
+	<img x="0" y="390" width="300" height="10" src="stone_12.jpg">
 		<physics body_type="static" shape="rect"/>
 	</img>
 
-	<img x="590" y="350" width="10" height="40" src="stone_12.jpg">
+	<img x="290" y="350" width="10" height="40" src="stone_12.jpg">
 		<physics body_type="static" shape="rect"/>
 	</img>
 
@@ -32,4 +32,5 @@
 		- spawner frequency and velocity is incremented
 		- remove image resources ubication (folder name "images", before filename of image)
 		- rename image resource "stone-12.jpg" to "stone_12.jpg" (by android identifier specification)
+		- change sizes of images that have physics, for adapt to some screen phone dimensions
 -->

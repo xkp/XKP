@@ -51,7 +51,7 @@
             <script type="text/javascript" src="../js/ui.js"></script>
             <script type="text/javascript" src="../js/sequence.js"></script>
 <style>
-#app {width : 600px;height : 400px}
+#app {width : 744px;height : 370px}
 </style>
 <script type="text/javascript">
         var application = {};
@@ -66,8 +66,8 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
-var app_width = 1000;
-var app_height = 600;
+var app_width = 744;
+var app_height = 370;
 application.events = new ev.EventHolder();
 var SoundUtils = new ui.SoundUtils();
 		var streamer = new stream.Streamer();	
@@ -75,8 +75,8 @@ var SoundUtils = new ui.SoundUtils();
 		if(drawingCanvas){
 			var client =
 			{
-				width: 1000,
-				height: 600,
+				width: 744,
+				height: 370,
 				canvas: drawingCanvas
 			};            						
 			var ui_ = new ui.Manager(client, streamer);			
@@ -142,8 +142,8 @@ window.onload = function()
 	{
 		var client =
 		{
-			width: 1000,
-			height: 600,
+			width: 744,
+			height: 370,
 			canvas: drawingCanvas
 		};
 		var ui_ = new ui.Manager(client, streamer);
@@ -160,19 +160,19 @@ g_sequence_manager);
 	{
 		if (Math.random() < rain.probablity)
 {
-var x = Math.random() * ripple1.get_width();
-var y = Math.random() * ripple1.get_height();
+var x = 50 + Math.random() * (ripple1.get_width() - 100);
+var y = 50 + Math.random() * (ripple1.get_height() - 100);
 ripple1.disturb(x, y);
 }
 	};
                 rain.start();
         var ____h1 = new state.Every(1, function(t)
         {
-                rain.drop();
+        rain.();
         });
         rain.addHandler(____h1);	                    
-            ripple1.set_width(600);
-            ripple1.set_height(400);
+            ripple1.set_width(744);
+            ripple1.set_height(370);
             ripple1.set_placement("client");
 			document.onkeydown = function(ev)
 			{

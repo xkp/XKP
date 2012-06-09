@@ -1,4 +1,3 @@
-<xss:parameter id="appName"/>
 <xss:parameter id="base_namespace"/>
 
 package <xss:e value="base_namespace"/>.libs.Graphics;
@@ -10,7 +9,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.PathShape;
 import android.util.AttributeSet;
 
-import <xss:e value="base_namespace"/>.<xss:e value="appName"/>.R;
+import <xss:e value="base_namespace"/>.<xss:e value="application.appName"/>.R;
 
 public class XKPCircle extends XKPGraphics {
 	
@@ -28,6 +27,7 @@ public class XKPCircle extends XKPGraphics {
 		
 		ta.recycle();
 		
+		preCalcPosition(mX1, mY1, mX1 + 2 * mRadius, mY1 + 2 * mRadius);
 		updateShapePosition();
 	}
 
@@ -35,11 +35,11 @@ public class XKPCircle extends XKPGraphics {
 	protected void updateShapePosition() {
 		if(mRadius != null) {
 			mPathShape.reset();
-			mPathShape.addCircle(mX1, mY1, mRadius, Direction.CCW);
-			mPathShape.transform(mMtxRotation);
+			mPathShape.addCircle(mX1 + mRadius, mY1 + mRadius, mRadius, Direction.CCW);
+			
+			mPathShape.computeBounds(mBounds, true);
+			mPathShape.transform(mMtxAngle);
 		}
-		
-		mPathShape.computeBounds(mBounds, true);
 		
 		mDrawable = new ShapeDrawable(new PathShape(mPathShape, mBounds.width(), mBounds.height()));
 		mDrawable.setBounds(0, 0, (int) mBounds.width(), (int) mBounds.height());

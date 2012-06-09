@@ -1,0 +1,47 @@
+<xss:parameter id="clazz"/>
+<xss:parameter id="renderer"/>
+<xss:parameter id="property_renderer" default="property.xss"/>
+<xss:parameter id="method_renderer"   default="method.xss"/>
+<xss:parameter id="event_renderer"    default="event.xss"/>
+
+<xss:code>
+	//TODO: create xss file that call this, and have package head, with imports
+
+	string super_str = "";
+	if(clazz.super)
+		super_str = " extends " + clazz.super.output_id;
+	
+	out(indent = 0)
+	{
+public class <xss:e v="clazz.output_id"/><xss:e value="super_str"/> <xss:open_brace/>
+	}
+	
+	//TODO: render constructor of class
+	
+	if(renderer)
+	{
+		compiler.xss(renderer, clazz, is_class = true);
+	}
+
+	for(var inst in clazz.instances)
+	{
+		compiler.xss("instance.xss", inst);
+	}
+	
+	for(var prop in clazz.properties)
+	{
+		compiler.xss(property_renderer, prop);
+	}
+
+	for(var mthd in clazz.methods)
+	{
+		compiler.xss(method_renderer, mthd);
+	}
+
+	for(var ev in clazz.events)
+	{
+		compiler.xss(event_renderer, ev);
+	}
+</xss:code>
+
+}

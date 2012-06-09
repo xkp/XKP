@@ -65,7 +65,8 @@ ev.ThreeEventManager = Class.extend(
 			{
 				var texture;
 				if(this.intersects[0].face.materialIndex)
-					texture = this.intersects[0].object.geometry.materials[this.intersects[0].face.materialIndex].map;
+					if(this.intersects[0].object.geometry.materials[this.intersects[0].face.materialIndex])
+						texture = this.intersects[0].object.geometry.materials[this.intersects[0].face.materialIndex].map;
 				else					
 					texture = this.intersects[0].object.material.map;
 				manager.events.dispatch("t_mouseup", [this.text_coord.x, this.text_coord.y, texture]);
@@ -85,10 +86,11 @@ ev.ThreeEventManager = Class.extend(
 		{
 			this.text_coord = this.get_texture_coord();
 			if(this.intersects[0].object.material)
-			{
+			{				
 				var texture;
 				if(this.intersects[0].face.materialIndex)
-					texture = this.intersects[0].object.geometry.materials[this.intersects[0].face.materialIndex].map;
+					if(this.intersects[0].object.geometry.materials[this.intersects[0].face.materialIndex])
+						texture = this.intersects[0].object.geometry.materials[this.intersects[0].face.materialIndex].map;
 				else					
 					texture = this.intersects[0].object.material.map;
 				manager.events.dispatch("t_mousedown", [this.text_coord.x, this.text_coord.y, texture]);
@@ -133,7 +135,8 @@ ev.ThreeEventManager = Class.extend(
 			{
 				var texture;
 				if(this.intersects[0].face.materialIndex)
-					texture = this.intersects[0].object.geometry.materials[this.intersects[0].face.materialIndex].map;
+					if(this.intersects[0].object.geometry.materials[this.intersects[0].face.materialIndex])
+						texture = this.intersects[0].object.geometry.materials[this.intersects[0].face.materialIndex].map;
 				else					
 					texture = this.intersects[0].object.material.map;
 				manager.events.dispatch("t_mousemove", [this.text_coord.x, this.text_coord.y, texture]);

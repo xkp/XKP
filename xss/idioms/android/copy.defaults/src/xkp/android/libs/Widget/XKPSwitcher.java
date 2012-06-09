@@ -1,4 +1,3 @@
-<xss:parameter id="appName"/>
 <xss:parameter id="base_namespace"/>
 
 package <xss:e value="base_namespace"/>.libs.Widget;
@@ -10,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
-import <xss:e value="base_namespace"/>.<xss:e value="appName"/>.R;
+import <xss:e value="base_namespace"/>.<xss:e value="application.appName"/>.R;
 
 public class XKPSwitcher extends XKPLayout {
 

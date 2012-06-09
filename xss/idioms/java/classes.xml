@@ -74,5 +74,14 @@
 				<set text="setGuest({value})"/>
 			</property>
 		</class>
+		
+		<class id="java5" output_id="JavaClass">
+			<property id="guest" type="string">
+				<get text="getGuest()"/>
+				<set text="setGuest({value})"/>
+			</property>
+			
+			<event id="java_event" />
+		</class>
 	</types>
 </module>

@@ -1,4 +1,3 @@
-<xss:parameter id="appName"/>
 <xss:parameter id="base_namespace"/>
 <xss:parameter id="bundle"/>
 <xss:parameter id="idiom_path"/>
