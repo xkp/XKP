@@ -308,6 +308,7 @@ method close_frame_conditions()
 {
     out()
     {
+            <xss:close_brace/>
         <xss:close_brace/>);
     }
 }
@@ -315,9 +316,6 @@ method close_frame_conditions()
 method run_method(expr, path)
 {
     var mthd = expr.methd;
-    if (!mthd)
-        compiler.log("Why no method?");
-
     out() 
     {
         <xss:e v="mthd.output_id"/>();

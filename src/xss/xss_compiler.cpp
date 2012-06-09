@@ -1417,11 +1417,6 @@ XSSObject xss_compiler::analyze_expression(const param_list params)
         xss_throw(error);
       }
 
-    if (expr == "stop_anim3")
-      {
-        str debug("XXX");
-      }
-
     XSSObject result(new xss_object);
 
     xs_utils   xs;
