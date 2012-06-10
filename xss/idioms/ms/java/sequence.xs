@@ -139,6 +139,7 @@ on render_idiom_scripts(main)
 //delegates
 method begin_interpolator(object prop, string iid, string assign, string path)
 {
+	var prop_type = prop.type.output_id;
     out()
     {
         final Interpolator <xss:e v="iid"/> = new Interpolator();

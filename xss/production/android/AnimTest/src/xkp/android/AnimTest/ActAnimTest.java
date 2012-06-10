@@ -131,7 +131,7 @@ anim2.start();
 			    ((XKPLayout.LayoutParams) btn1.getLayoutParams()).setLeft((Integer)value);
 	        }
 	    });
-	    ____i1.setInterpolator(Manager.getInstance().interpolator(""));	
+	    ____i1.setInterpolator(Manager.getInstance().interpolator("Integer"));	
         ____i1.addKey(0, 40);
         ____i1.addKey(1, 200);
         anim1.addHandler(____i1);	              
@@ -156,7 +156,7 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
 			    ((XKPLayout.LayoutParams) btn2.getLayoutParams()).setLeft((Integer)value);
 	        }
 	    });
-	    ____i2.setInterpolator(Manager.getInstance().interpolator(""));	
+	    ____i2.setInterpolator(Manager.getInstance().interpolator("Integer"));	
         ____i2.addKey(0, null);
         ____i2.addKey(2, null);
         anim2.addHandler(____i2);	              
@@ -176,7 +176,7 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
 			    ((XKPLayout.LayoutParams) btn3.getLayoutParams()).setLeft((Integer)value);
 	        }
 	    });
-	    ____i3.setInterpolator(Manager.getInstance().interpolator(""));	
+	    ____i3.setInterpolator(Manager.getInstance().interpolator("Integer"));	
         ____i3.addKey(0, 40);
         ____i3.addKey(1.5, 200);
         anim3.addHandler(____i3);	              
@@ -187,7 +187,7 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
 			    ((XKPLayout.LayoutParams) btn3.getLayoutParams()).setLeft((Integer)value);
 	        }
 	    });
-	    ____i4.setInterpolator(Manager.getInstance().interpolator(""));	
+	    ____i4.setInterpolator(Manager.getInstance().interpolator("Integer"));	
         ____i4.addKey(1.5, 200);
         ____i4.addKey(3, 40);
         anim3.addHandler(____i4);	              

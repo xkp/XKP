@@ -88,6 +88,9 @@ private void initCallers() {
 private void onLayoutUpdated() {
 }
 private void onLayoutStarted() {
+		// create body ground
+		BodyDef bodyDef = new BodyDef();
+		groundBody = myWorld.getWorld().createBody(bodyDef);
 			//TODO: determine real screen dimensions (width & height)
 			ddView = new XKPDDView(this, 320, 480);
 			layoutapplication.addView(ddView);
@@ -209,6 +212,8 @@ private void onLayoutStarted() {
 					def.bodyB = body;
 					def.target.set(p);
 					def.maxForce = 3000f * body.getMass();
+					def.dampingRatio = 0;
+					def.frequencyHz = 1000;
 					mouseJoint = (MouseJoint) myWorld.getWorld().createJoint(def);
 					body.setAwake(true);
 				}

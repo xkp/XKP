@@ -23,6 +23,7 @@ log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
 log: Copying files...
+log: Rendering Android Manifest...
 
 Success are greateful
 ===[ characters.project.xml ]================
@@ -50,6 +51,7 @@ log: Rendering instance: v_pluto
 log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
+log: Rendering Android Manifest...
 
 Success are greateful
 ===[ contacts.project.xml ]================
@@ -82,6 +84,7 @@ log: Rendering instance: lblContact
 log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
+log: Rendering Android Manifest...
 
 Success are greateful
 ===[ figures2d.project.xml ]================
@@ -102,6 +105,7 @@ log: Rendering instance: point4
 log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
+log: Rendering Android Manifest...
 
 Success are greateful
 ===[ gallery.project.xml ]================
@@ -126,6 +130,7 @@ log: Rendering instance: img08
 log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
+log: Rendering Android Manifest...
 
 Success are greateful
 ===[ images.project.xml ]================
@@ -152,6 +157,7 @@ log: Rendering instance: img8
 log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
+log: Rendering Android Manifest...
 
 Success are greateful
 ===[ box2d1.project.xml ]================
@@ -166,6 +172,7 @@ log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
 log: [jbox2d] Copying default files...
+log: Rendering Android Manifest...
 
 Success are greateful
 ===[ box2d2.project.xml ]================
@@ -186,6 +193,7 @@ log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
 log: [jbox2d] Copying default files...
+log: Rendering Android Manifest...
 
 Success are greateful
 ===[ box2d3.project.xml ]================
@@ -210,6 +218,7 @@ log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
 log: [jbox2d] Copying default files...
+log: Rendering Android Manifest...
 
 Success are greateful
 ===[ box2d4.project.xml ]================
@@ -236,7 +245,7 @@ log: Rendering Sequence Types...
 Error [vm] Cannot resolve
 	object = 
 	method = this_string
-	file = c:/dev/XKP/xss/idioms/common-js/event.xssERROR: Project:  box2d4.project.xml
+	file = d:/xkp/xss/idioms/common-js/event.xssERROR: Project:  box2d4.project.xml
 
 ===[ box2d5.project.xml ]================
 
@@ -282,6 +291,7 @@ log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
 log: [jbox2d] Copying default files...
+log: Rendering Android Manifest...
 
 Success are greateful
 ===[ kitchensink.project.xml ]================
@@ -326,6 +336,7 @@ log: Rendering instance: emulator
 log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
+log: Rendering Android Manifest...
 
 Success are greateful
 ===[ maps.project.xml ]================
@@ -362,6 +373,7 @@ log: Rendering instance: holguin
 log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
+log: Rendering Android Manifest...
 
 Success are greateful
 ===[ simple.project.xml ]================
@@ -381,6 +393,7 @@ log: Rendering instance: edtContainer
 log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
+log: Rendering Android Manifest...
 
 Success are greateful
 ===[ touchme.project.xml ]================
@@ -394,25 +407,26 @@ log: Rendering instance: btnTouchme
 log: Rendering instance: application
 log: [android] Copying default files...
 log: [android] Rendering default files...
+log: Rendering Android Manifest...
 
 Success are greateful
 ===[ kitchensink.project.xml ]================
 
 
 Error [404] File not found
-	file = c:/dev/XKP/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
+	file = d:/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
 
 ===[ pairs.project.xml ]================
 
 
 Error [404] File not found
-	file = c:/dev/XKP/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
+	file = d:/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
 
 ===[ simple.project.xml ]================
 
 
 Error [404] File not found
-	file = c:/dev/XKP/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
+	file = d:/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
 
 ===[ 3js-ms.project.xml ]================(Tests)
 
@@ -1740,10 +1754,10 @@ log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: PROPERTY width
 log: null
-log: VALUE 600
+log: VALUE 744
 log: PROPERTY height
 log: null
-log: VALUE 400
+log: VALUE 370
 Success are greateful
 ===[ jsmanip.project.xml ]================(Tests)
 
@@ -1973,9 +1987,23 @@ Success are greateful
 ===[ query_properties.project.xml ]================(Tests)
 
 
-Error [404] File not found
-	file = c:/dev/XKP/xss/tests/enums.app.xmlERROR: Project:  query_properties.project.xml
+log: Rendering test query_properties...
+			Instance: name = "t1", type = "t_arrays"
+		
+			Instance: name = "t2", type = "t_arrays1"
+		
+			Instance: name = "t3", type = "t_super_derived"
+		
+				property "title" = null			
+				property "name" = null			
+			Instance: name = "t4", type = "t_super_merged"
+		
+				property "test_2" = null			
+				property "test_1" = null			
+			Instance: name = "application", type = "Application"
+		
 
+Success are greateful
 ===[ replicator.project.xml ]================(Tests)
 
 
@@ -2174,7 +2202,7 @@ Success are greateful
 
 Error [language] Missing declared tag
 	tag = user_image
-	file = c:/dev/XKP/xss/idioms/wax/server.xssERROR: Project:  wax3.project.xml
+	file = d:/xkp/xss/idioms/wax/server.xssERROR: Project:  wax3.project.xml
 
 ===[ wax4.project.xml ]================(Tests)
 

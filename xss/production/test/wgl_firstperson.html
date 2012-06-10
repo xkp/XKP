@@ -85,13 +85,13 @@ color:Math.random() * 0xffffff,shading:flat_shading
 	});
 cube1_material.manager = manager;
 		    camera_1 = 
-		    new THREE.PerspectiveCamera(50, 1.5, 1, 10000, null) ;	
+		    new THREE.PerspectiveCamera(50, 1.5, 1, 10000, null) ;				
 camera_1.manager = manager;
-			__firstperson_controls1 = new THREE.FirstPersonControls( camera_1 );
-			manager.events.addListener("update", function()
-			{				
-				__firstperson_controls1.update( c_delta );
-			})
+				__firstperson_controls1 = new THREE.FirstPersonControls( camera_1 );
+				manager.events.addListener("update", function()
+				{				
+					__firstperson_controls1.update( c_delta );
+				})
 __firstperson_controls1.manager = manager;
 	    light = 
 	    new THREE.DirectionalLight(16777215, 1, null, null) ;

@@ -20,6 +20,13 @@ import org.jbox2d.dynamics.joints.MouseJointDef;
 		private final AABB queryAABB = new AABB();
 		private final XKPQueryCallback callback = new XKPQueryCallback();
 	}
+	
+	out(marker = "layout_start", marker_source = "previous")
+	{
+		// create body ground
+		BodyDef bodyDef = new BodyDef();
+		groundBody = <xss:e value="world.output_id"/>.getWorld().createBody(bodyDef);
+	}
 
 	out(marker = "handlers", marker_source = "previous")
 	{
@@ -61,6 +68,8 @@ import org.jbox2d.dynamics.joints.MouseJointDef;
 					def.bodyB = body;
 					def.target.set(p);
 					def.maxForce = 3000f * body.getMass();
+					def.dampingRatio = 0;
+					def.frequencyHz = 1000;
 					mouseJoint = (MouseJoint) <xss:e value="world.output_id"/>.getWorld().createJoint(def);
 					body.setAwake(true);
 				}

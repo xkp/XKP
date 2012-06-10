@@ -116,6 +116,9 @@ private void initCallers() {
 private void onLayoutUpdated() {
 }
 private void onLayoutStarted() {
+		// create body ground
+		BodyDef bodyDef = new BodyDef();
+		groundBody = myWorld.getWorld().createBody(bodyDef);
 			XKPPhysicBody __physics1 = new XKPPhysicBody(ActjBox2d_2.myWorld.getWorld(), 
 				ShapeType.CIRCLE, btn1);
 		__physics1.setSensor(false);
@@ -176,6 +179,8 @@ private void onLayoutStarted() {
 					def.bodyB = body;
 					def.target.set(p);
 					def.maxForce = 3000f * body.getMass();
+					def.dampingRatio = 0;
+					def.frequencyHz = 1000;
 					mouseJoint = (MouseJoint) myWorld.getWorld().createJoint(def);
 					body.setAwake(true);
 				}

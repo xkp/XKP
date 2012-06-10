@@ -122,6 +122,29 @@
 			</property>
 		</enum>
 		
+		<enum id="EKeyEvent" output_id="int">
+			<property id="left_arrow" type="EKeyEvent">
+				<get text="KeyEvent.KEYCODE_DPAD_LEFT" global="true"/>
+			</property>
+			
+			<property id="right_arrow" type="EKeyEvent">
+				<get text="KeyEvent.KEYCODE_DPAD_RIGHT" global="true"/>
+			</property>
+			
+			<property id="up_arrow" type="EKeyEvent">
+				<get text="KeyEvent.KEYCODE_DPAD_UP" global="true"/>
+			</property>
+			
+			<property id="down_arrow" type="EKeyEvent">
+				<get text="KeyEvent.KEYCODE_DPAD_DOWN" global="true"/>
+			</property>
+			
+			<property id="enter" type="EKeyEvent">
+				<get text="KeyEvent.KEYCODE_ENTER" global="true"/>
+			</property>
+			<!-- continue -->
+		</enum>
+		
 		<enum id="EDirection" output_id="int">
 			<property id="up" type="EDirection" output_id="FOCUS_UP">
 				<get text="View.FOCUS_UP" global="true"/>
@@ -282,7 +305,8 @@
 				<object import="android.view.KeyEvent"/>
 			</array>
 			
-			<event id="keydown" output_id="onKeyDown" return_type="boolean" def_args="int keyCode, KeyEvent event"/>
+			<!-- TODO: how to force the type or argument in events with the declared types here? -->
+			<event id="keydown" output_id="onKeyDown" return_type="boolean" def_args="int keyCode, KeyEvent event" renderer="TODO.xss"/>
 		</class>
 		
 		<class id="IKeyLongPressListener">

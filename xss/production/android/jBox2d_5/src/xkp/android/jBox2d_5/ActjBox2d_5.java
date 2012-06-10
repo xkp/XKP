@@ -161,6 +161,9 @@ private void initCallers() {
 private void onLayoutUpdated() {
 }
 private void onLayoutStarted() {
+		// create body ground
+		BodyDef bodyDef = new BodyDef();
+		groundBody = myWorld.getWorld().createBody(bodyDef);
 			XKPDistanceJoint __distance_joint1 = new XKPDistanceJoint( ActjBox2d_5.myWorld.getWorld() ); 
 				__distance_joint1.setBodyA(btn1);
 				__distance_joint1.setBodyB(btn2);
@@ -221,6 +224,8 @@ private void onLayoutStarted() {
 					def.bodyB = body;
 					def.target.set(p);
 					def.maxForce = 3000f * body.getMass();
+					def.dampingRatio = 0;
+					def.frequencyHz = 1000;
 					mouseJoint = (MouseJoint) myWorld.getWorld().createJoint(def);
 					body.setAwake(true);
 				}

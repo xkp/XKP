@@ -121,6 +121,9 @@ private void initCallers() {
 private void onLayoutUpdated() {
 }
 private void onLayoutStarted() {
+		// create body ground
+		BodyDef bodyDef = new BodyDef();
+		groundBody = myWorld.getWorld().createBody(bodyDef);
 			XKPSpawner sp1 = new XKPSpawner( this, layoutapplication, "smiley_ball", 100, 100, 95 ); 
 				sp1.setPosition(100, sp1.getPosition().y);
 				sp1.setPosition(sp1.getPosition().x, 100);
@@ -197,6 +200,8 @@ private void onLayoutStarted() {
 					def.bodyB = body;
 					def.target.set(p);
 					def.maxForce = 3000f * body.getMass();
+					def.dampingRatio = 0;
+					def.frequencyHz = 1000;
 					mouseJoint = (MouseJoint) myWorld.getWorld().createJoint(def);
 					body.setAwake(true);
 				}

@@ -29,6 +29,13 @@ on render_initialization(clazz, bns)
 {
 	compiler.xss("../../android/class.xss/mouseJoint.class.xss", clazz, world);
 	
+	if(!application.activity_config)
+		application.activity_config = [];
+	
+	// hide title and notification bar
+	var jbox2d_config = 'android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"';
+	application.activity_config += jbox2d_config;
+	
 	//TIPS: copy defaults files of idiom classes and render imports
 	clazz = this;
 	
