@@ -1,0 +1,101 @@
+<xss:parameter id="clazz"/>
+<xss:parameter id="world"/>
+
+<xss:code>
+	out(marker = "imports", marker_source = "previous")
+	{
+import org.jbox2d.callbacks.QueryCallback;
+import org.jbox2d.collision.AABB;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.Fixture;
+import org.jbox2d.dynamics.joints.MouseJoint;
+import org.jbox2d.dynamics.joints.MouseJointDef;
+	}
+
+	out(marker = "declarations", marker_source = "previous")
+	{
+		private Body groundBody;
+		private MouseJoint mouseJoint = null;
+		private final AABB queryAABB = new AABB();
+		private final XKPQueryCallback callback = new XKPQueryCallback();
+	}
+
+	out(marker = "handlers", marker_source = "previous")
+	{
+		@Override
+		public boolean onTouchEvent(MotionEvent event) {
+
+			Vec2 p = new Vec2(event.getX(), event.getY());
+			
+			switch(event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				break;
+			case MotionEvent.ACTION_UP:
+				
+				if (mouseJoint != null) {
+					<xss:e value="world.output_id"/>.getWorld().destroyJoint(mouseJoint);
+					mouseJoint = null;
+				}
+				break;
+			case MotionEvent.ACTION_MOVE:
+				
+				if (mouseJoint != null) {
+					mouseJoint.setTarget(p);
+					break;
+				}
+
+				queryAABB.lowerBound.set(p.x - .001f, p.y - .001f);
+				queryAABB.upperBound.set(p.x + .001f, p.y + .001f);
+				callback.point.set(p);
+				callback.fixture = null;
+				<xss:e value="world.output_id"/>.getWorld().queryAABB(callback, queryAABB);
+
+				if (callback.fixture != null) {
+					Body body = callback.fixture.getBody();
+					XKPPhysicBody physicBody = (XKPPhysicBody)body.getUserData();
+					if(!physicBody.getMouseJoint()) break;
+					
+					MouseJointDef def = new MouseJointDef();
+					def.bodyA = groundBody;
+					def.bodyB = body;
+					def.target.set(p);
+					def.maxForce = 3000f * body.getMass();
+					mouseJoint = (MouseJoint) <xss:e value="world.output_id"/>.getWorld().createJoint(def);
+					body.setAwake(true);
+				}
+				break;
+			}
+			
+			return super.onTouchEvent(event);
+		}
+	}
+	
+	out(marker = "defined_class", marker_source = "previous")
+	{
+		class XKPQueryCallback implements QueryCallback {
+
+			public final Vec2 point;
+			public Fixture fixture;
+
+			public XKPQueryCallback() {
+				point = new Vec2();
+				fixture = null;
+			}
+			
+			public boolean reportFixture(Fixture fixture) {
+				Body body = fixture.getBody();
+				if (body.getType() == BodyType.DYNAMIC) {
+					boolean inside = fixture.testPoint(point);
+					if (inside) {
+						this.fixture = fixture;
+
+						return false;
+					}
+				}
+
+				return true;
+			}
+		}
+	}
+</xss:code>

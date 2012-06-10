@@ -56,6 +56,7 @@ public class XKPSpawner {
 	}
 
 	public void stop() {
+		if(mHandler != null)
 		mHandler.removeCallbacks(mRunnableSpawner);
 	}
 	

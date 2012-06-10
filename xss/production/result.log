@@ -2250,6 +2250,11 @@ log: /usr/lib/test_idiom
 log: /use/bin/xss14
 log: /use/bin/xss14_1
 log: /use/bin/xss14_11
+log: /use/bin/xss14_2
+log: <childrens>
+log: myimport_1 = some_value1
+log: myimport_2 = some_value2
+log: </childrens>
 log: </Dependencies>
 log: <User Classes>
 log: </User Classes>

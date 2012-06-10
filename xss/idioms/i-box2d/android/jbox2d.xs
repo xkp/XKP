@@ -15,6 +15,10 @@ on pre_process(obj)
 	{
 		obj.id = compiler.genid(obj.class_name);
 	}
+	//compiler.log("[jbox2d]: " + obj.id + " - " + obj.output_id);
+	
+	var android_idiom = compiler.idiom_by_id("android");
+	android_idiom.flat_properties_methods(obj);
 }
 
 on render_type_initialization(clazz, bns)
@@ -23,6 +27,8 @@ on render_type_initialization(clazz, bns)
 
 on render_initialization(clazz, bns)
 {
+	compiler.xss("../../android/class.xss/mouseJoint.class.xss", clazz, world);
+	
 	//TIPS: copy defaults files of idiom classes and render imports
 	clazz = this;
 	
@@ -296,6 +302,7 @@ method get_body_type(it)
 
 method render_basic_properties(it, density, friction, restitution, body_type, angular_damping, linear_damping)
 {
+	//TODO: render all this properties dynamicly
 	//output it all
 	if(angular_damping)
 	{
@@ -310,6 +317,14 @@ method render_basic_properties(it, density, friction, restitution, body_type, an
 		out(indent = 1)
 		{
 			<xss:e value="it.output_id"/>.setLinearDamping(<xss:e v="linear_damping"/>f);
+		}
+	}
+	
+	if(it.mouse_joint)
+	{
+		out(indent = 1)
+		{
+			<xss:e value="it.output_id"/>.setMouseJoint(<xss:e v="it.mouse_joint"/>);
 		}
 	}
 	

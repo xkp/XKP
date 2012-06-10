@@ -152,6 +152,11 @@
 				<get text="getAngle()"/>
 				<set text="setAngle({value})"/>
 			</property>
+			
+			<property id="mouse_joint" type="bool">
+				<get text="getMouseJoint()"/>
+				<set text="setMouseJoint({value})"/>
+			</property>
 		</class>
 
 		<class id="physics" super="body" output_id="XKPPhysicBody" sub_ns="libs.JBox2d" no_render="true" renderer="body.xss"/>
