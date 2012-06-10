@@ -587,7 +587,8 @@ void xss_compiler::build(fs::path xml, param_list& args)
     str project_source = project_data->get<str>("src", str());
     if (!project_source.empty())
       {
-        code_context cctx = current_app_->context()->get_compile_context();
+        code_context cctx;
+		cctx = current_app_->context()->get_compile_context();
 
         xs_utils xs;
         xs.compile_implicit_instance(load_file(base_path_ / project_source), DynamicObject(project_data), cctx, xml);
