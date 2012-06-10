@@ -1,10 +1,6 @@
 <module id="sequence" src="sequence.xs">
     <types>
-        <class id="sequence" instantiator="instantiator.xss" renderer="../sequence.xss" output_id="Sequence">
-            <constructor_params>
-                <parameter id="manager" constant="g_sequence_manager"/>
-            </constructor_params>
-
+        <class id="sequence" renderer="../sequence.xss" output_id="Sequence">
             <property id="loop" type="bool"/>
             <property id="target" type="object" value_is_expression="true"/>
 

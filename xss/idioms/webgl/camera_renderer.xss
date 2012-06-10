@@ -1,27 +1,27 @@
 <xss:parameter id="obj"/>
-<xss:parameter id="type"/>	
+<xss:parameter id="type"/>
 
 <xss:code>
 	if(!type)
-		type = obj.type;
-	
-	out(marker = "threejs_variables", marker_source = "entry") {var <xss:e v="obj.id"/>;}
-	if(obj.class_name == "quake_camera")
-		compiler.xss("param_in_obj.xss", obj);
+		type = obj.type;		
+	if(obj.super)
+	{
+		if(obj.super.id == "controls")
+			out(){
+				<xss:e v="obj.id"/> = new <xss:e v="obj.type.output_id"/>( <xss:e v="obj.parent.id"/> );
+				manager.events.addListener("update", function()
+				{				
+					<xss:e v="obj.id"/>.update( c_delta );
+				})
+			}		
+	}
 	else
 	{
 		out()
 		{
 		    <xss:e v="obj.id"/> = 
-		    <xss:e v="compiler.instantiate(obj)"/> ;	
-		}
-	}
-	out()
-	{
-		active_camera = <xss:e v="obj.id"/>;
-	}
-	out(marker = "render_function", marker_source = "entry")
-		{
-		set_active_camera(<xss:e v="obj.id"/>);
+		    <xss:e v="compiler.instantiate(obj)"/> ;				
 		}	
+	}	
 </xss:code>
+

@@ -4,11 +4,10 @@
 <xss:code>	
 	if(!type)
 		type = obj.type;
-	out(marker = "threejs_variables", marker_source = "entry") {var <xss:e v="obj.id"/>;}
 	out()
 	{
 	    <xss:e v="obj.id"/> = 
 	    <xss:e v="compiler.instantiate(obj)"/> ;
-	    scene.addLight(<xss:e value = "obj.id"/>);
+	    manager.scene.add(<xss:e value = "obj.id"/>);
 	}			
 </xss:code>

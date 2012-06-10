@@ -8,6 +8,7 @@ on click(x, y){
 	plane_1.image = img_array[i];
 	plane_1.position.x = x;
 	plane_1.position.y = y;
-	scene.addObject(plane_1);
+	plane_1.rotation.x = 90;
+	scene.add(plane_1);
 	i++;
 }

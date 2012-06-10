@@ -14,9 +14,7 @@
 	 <xss:marker id="css_style"/>
 	}
 </style>
-
 <xss:marker id="dependencies"/>
-
 <xss:code>
 
 if(!application.width) 
@@ -28,145 +26,13 @@ if(application.background)
 	out(marker = "css_style"){
 	background:<xss:e value = "application.background"/>;
 	}
-out(){
-<script type="text/javascript">		
-}
 	
 </xss:code>
 
-var renderer = new THREE.CanvasRenderer();	
-var ui_;
-var SoundUtils;
-var scene = new THREE.Scene();
-scene.mouse_thru = true;
-var active_camera;
-var g_elapsed = -1;
-var g_delta = 0.0;	
-var drawingCanvas = renderer.domElement;
-var canvas_position = {x:0, y:0};
-var streamer;
-var app_width = <xss:e value="application.width"/>;
-var app_height = <xss:e value="application.height"/>;
-<xss:marker id="variables"/>
-<xss:marker id="threejs_variables"/>
-var application = {};
-application.events = new ev.EventHolder();
-
-<xss:code>
-    compiler.inject("render_initialization");
-</xss:code>
-// --------RESOURCES---------
-<xss:code>
-    compiler.inject("render_resources");	
-</xss:code>
-// --------RESOURCES---------
-
-soundRenderer = new THREE.SoundRenderer();		
-document.body.appendChild( soundRenderer.domElement );
-renderer.setSize( app_width, app_height );
-
-function render() {
-
-canvas_position = getElementPosition(drawingCanvas);
-var now   = new Date().getTime();
-if (g_elapsed < 0)
-    g_delta = 0; //first update
-else
-g_delta  = now - g_elapsed;  
-g_elapsed = now; 
-
-<xss:code>
-	compiler.inject("render_update");
-</xss:code>
-
-application.events.dispatch("updates", []);	
-<xss:marker id="render_function"/>	
-application.events.dispatch("switch_cameras", []);
-
-}
-
-<xss:code>
-	compiler.inject("render_types");
-	compiler.render_app_types("../common-js/resig-class.xss");
-</xss:code>
-
-threejs_load_resources(streamer, function()
-{
-<xss:code>
-	compiler.inject("render_instances");	
-	compiler.inject("render_inst_elems");
-	compiler.xss("../common-js/instance.xss", application);
-</xss:code>
-
-if(ui_)
-{	
-	SoundUtils = new ui.SoundUtils();		
-	g_ui.fill_background = false;	
-}
-
-var event_manager = new ev.ThreeEventManager();
-
-document.onmousemove = function(ev)
-{
-	event_manager.mousemove(ev.clientX, ev.clientY);                  
-};
-document.onmousedown = function(ev)
-{
-	event_manager.mousedown(ev.clientX, ev.clientY);                  
-};
-document.onmouseup = function(ev)
-{
-	event_manager.mouseup(ev.clientX, ev.clientY);		
-};
-document.onkeydown = function(ev)
-{
-	event_manager.keydown(ev.keyCode);                  
-};
-document.onkeyup = function(ev)
-{
-	event_manager.keyup(ev.keyCode);                  
-};
-document.onkeypress = function(ev)
-{
-	event_manager.keypress(ev.keyCode);                  
-};
-
-application.events.dispatch("init", []);
-	
-document.body.appendChild( renderer.domElement );
-animate();
-});
-function animate() {
-	if(ui_)
-		drawingCanvas.getContext('2d').clearRect(0,0,<xss:e value="application.width"/>,<xss:e value="application.height"/>);
-<xss:code>	
-	if(application.send_to_back == "ui")
-		out()
-		{
-		if(ui_)
-		<xss:open_brace/>
-			drawingCanvas.getContext('2d').globalAlpha = 1;
-			ui_.draw(drawingCanvas.getContext('2d'));
-		<xss:close_brace/>
-		}	
-	out()
-	{
-	renderer.domElement.getContext('2d').globalAlpha = 1;
-	requestAnimationFrame( animate );
-	render();
-	}	
-	if(!(application.send_to_back == "ui"))
-	out()
-	{
-	if(ui_)
-	<xss:open_brace/>
-		drawingCanvas.getContext('2d').globalAlpha = 1;
-		ui_.draw(drawingCanvas.getContext('2d'));
-	<xss:close_brace/>
-	}
-</xss:code>
-}
-
+<script type="text/javascript">	
+	<xss:code>
+        compiler.xss("threejs_script.xss");
+    </xss:code>
 </script>
 
 </body>

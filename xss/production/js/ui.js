@@ -174,8 +174,8 @@ ui.Manager = Class.extend(
             this.mouseJoint = g_world.CreateJoint(md);
         }
         if(this.mouseJoint) {
-           if(mouse_pressed) {
-              this.mouseJoint.SetTarget(new b2Vec2(handledMouseX, handledMouseY));
+           if(mouse_pressed) {			
+				this.mouseJoint.SetTarget(new b2Vec2(handledMouseX, handledMouseY));
            } else {
               g_world.DestroyJoint(this.mouseJoint);
               this.mouseJoint = null;
@@ -398,9 +398,9 @@ ui.Component = Class.extend(
 		this.parent.active(this.parent.components.indexOf(this));
 	},
     update_placement: function()
-    {		
+    {
 		if(this.parent)
-		{			
+		{
 			if(this.orig_w > this.parent.w - this.parent.offset_right - this.parent.offset_left)
 				this.orig_w = this.parent.w - this.parent.offset_right - this.parent.offset_left;
 			if(this.orig_h > this.parent.h - this.parent.offset_top - this.parent.offset_bottom)
@@ -528,7 +528,6 @@ ui.Component = Class.extend(
 
 	bottom: function(h)
 	{
-
 		this.rect(this.parent.offset_left, 
 				this.parent.h - h - this.parent.offset_bottom, 
 				this.parent.w - this.parent.offset_right - this.parent.offset_left, 
@@ -686,12 +685,17 @@ this.set_x(this.x + this.w/2 - (this.orig_w * this.scaleX)/2);
         }
     },
 
-    draw: function(context, x, y)
-    {			
+	cleanOffsets: function()
+	{
 		this.offset_right = 0;
 		this.offset_left = 0;
 		this.offset_top = 0;
-		this.offset_bottom = 0;
+		this.offset_bottom = 0;		
+	},
+		
+    draw: function(context, x, y)
+    {			
+		this.cleanOffsets();
 		this.update_placement();
         var clip_inside = true;
 		for(var i = 0; i < this.components.length; i++)
@@ -1092,9 +1096,10 @@ ui.RippleEffect = ui.Component.extend(
 		this.texture_data;
 		this.is_running = true;	
 		this.is_disturbed = false;						
-		this.canvas = document.createElement('canvas');		
-		this.context = this.canvas.getContext('2d');
+		this._canvas = document.createElement('canvas');		
+		this._context = this._canvas.getContext('2d');
 		this.mouse_thru = true;
+		this.opacity = 100;
 	},
 	set_ripradius: function(value)
 	{
@@ -1106,15 +1111,15 @@ ui.RippleEffect = ui.Component.extend(
 		return this.riprad;
 	},
 	draw: function(context, x, y)
-    {	
-		this.canvas.width = this.w;
-		this.canvas.height = this.h;
+    {			
+		this._canvas.width = this.w;
+		this._canvas.height = this.h;
 		if (this.is_disturbed) {
 				this.newframe();
 				var old_alpha = context.globalAlpha;
 				context.globalAlpha = this.opacity;        
-				this.context.putImageData(this.ripple, this.x, this.y);	
-				context.drawImage(this.canvas, this.x, this.y, this.w, this.h);				
+				this._context.putImageData(this.ripple, this.x, this.y);	
+				context.drawImage(this._canvas, this.x, this.y, this.w, this.h);				
 				context.globalAlpha = old_alpha;
 				this.invalidate();
 		}
@@ -1131,36 +1136,36 @@ ui.RippleEffect = ui.Component.extend(
 			context.globalAlpha = this.opacity;
 			if(this.gradient)
 			{
-				gradient = this.context.createLinearGradient(this.gradient.x1, this.gradient.y1, 
+				gradient = this._context.createLinearGradient(this.gradient.x1, this.gradient.y1, 
 															 this.gradient.x2, this.gradient.y2);
 				for (var i = 0; i < this.gradient.colors.length; i++) {
 					gradient.addColorStop(this.gradient.colors[i].offset, this.gradient.colors[i].color);
 				}				
-				this.context.fillStyle = gradient;
-				this.context.fillRect(this.x, this.y, this.w, this.h);
+				this._context.fillStyle = gradient;
+				this._context.fillRect(this.x, this.y, this.w, this.h);
 			}
 			else if(this.img)
-				this.context.drawImage(this.img, this.x, this.y, this.w, this.h);			
-			context.drawImage(this.canvas, this.x, this.y, this.w, this.h);
+				this._context.drawImage(this.img, this.x, this.y, this.w, this.h);			
+			context.drawImage(this._canvas, this.x, this.y, this.w, this.h);
 			context.globalAlpha = old_alpha;
 			if(!this.first_run)
 			{
 				for(var i = 0; i < this.size; i++) {
 					this.last_map[i] = this.ripplemap[i] = 0;
 				}
-				this.texture = this.context.getImageData(this.x, this.y, this.w, this.h);
+				this.texture = this._context.getImageData(this.x, this.y, this.w, this.h);
 				this.texture_data = this.texture.data;
-				this.ripple = this.context.getImageData(this.x, this.y, this.w, this.h);
+				this.ripple = this._context.getImageData(this.x, this.y, this.w, this.h);
 				this.ripple_data = this.ripple.data;
 			}
 			this.first_run = true;
-		}				
-        this._super(context);		
+		}				      
+		this._super(context);	
     },	
 	disturb: function(dx, dy)
-	{		
-			dx -= 2*this.x;
-			dy -= 2*this.y;
+	{
+			dx -= 2 * this.x;
+			dy -= 2 * this.y;
 			dx <<= 0;
 			dy <<= 0;
 			this.is_disturbed = true;

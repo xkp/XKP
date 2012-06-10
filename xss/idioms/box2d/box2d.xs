@@ -127,16 +127,7 @@ on render_types()
 
 on render_inst_elems()
 {
-	for(var inst in instances)
-    {
-		if(!inst.dont_render)
-			compiler.xss("../common-js/instance.xss", inst);
-	}
-}
-
-on render_instances()
-{
-    if (!world)
+	if (!world)
         compiler.error("Box2d requires a physics_world object");
 
     for(var i in instances)
@@ -168,6 +159,11 @@ on render_instances()
             g_world.SetDebugDraw(debugDraw);
         }
     }
+	for(var inst in instances)
+    {
+		if(!inst.dont_render)
+			compiler.xss("../common-js/instance.xss", inst);
+	}
 }
 
 on render_update()

@@ -18,26 +18,26 @@
             <script type="text/javascript" src="../js/ui.js"></script>
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
-            <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
-<script type="text/javascript">		
-var renderer = new THREE.CanvasRenderer();	
-var ui_;
-var SoundUtils;
-var scene = new THREE.Scene();
+<script type="text/javascript">	
+			var renderer = new THREE.CanvasRenderer();
+		var scene = new THREE.Scene();
 scene.mouse_thru = true;
+var ui_;
+var canvas_position = {x:0, y:0};
+var clock = new THREE.Clock();
+var SoundUtils;
 var active_camera;
 var g_elapsed = -1;
-var g_delta = 0.0;	
+var g_delta = 0.0;
 var drawingCanvas = renderer.domElement;
-var canvas_position = {x:0, y:0};
 var streamer;
 var app_width = 1000;
 var app_height = 800;
 var img4;
-var my_plane;var camera_1;
+var camera_1;
 var application = {};
-application.events = new ev.EventHolder();
+application.events = new ev.EventHolder();	
 		var g_sequence_manager = new state.Manager();
         function default_interpolate(a, b, t)
         {
@@ -83,20 +83,24 @@ application.events = new ev.EventHolder();
 		});		
 		global_package.load();	
     // --------RESOURCES---------
-soundRenderer = new THREE.SoundRenderer();		
-document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( app_width, app_height );
+var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
+manager.events = new ev.EventHolder();
+manager.ui_ = ui_;	
 function render() {
-canvas_position = getElementPosition(drawingCanvas);
+manager.canvas_position = getElementPosition(drawingCanvas);
 var now   = new Date().getTime();
 if (g_elapsed < 0)
-    g_delta = 0; //first update
+	g_delta = 0; //first update
 else
-g_delta  = now - g_elapsed;  
+	g_delta  = now - g_elapsed;  
 g_elapsed = now; 
+c_delta = clock.getDelta(),
+c_elapsed = clock.getElapsedTime() * 10;
 		g_sequence_manager.update(g_delta);
-application.events.dispatch("updates", []);	
-		set_active_camera(camera_1);
+manager.events.dispatch("update", [g_delta, g_elapsed]);	
+				manager.scene.add(camera_1);
+				set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
         var my_image = ui.Image.extend(
@@ -206,75 +210,28 @@ g_sequence_manager);
     function create_my_plane(
     width,height,x_segments,y_segments ) { 
     var my_plane;
-	    my_plane_plane = new THREE.Plane(width, height, x_segments, y_segments) ;
+	    my_plane_plane = new THREE.PlaneGeometry(width, height, x_segments, y_segments) ;
 	    my_plane = new THREE.Mesh(my_plane_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(my_plane);
+	    manager.scene.add(my_plane);
 		my_plane.events = new ev.EventHolder();
         var this__ = my_plane;
         my_plane.image = null;
         my_plane.image_set = function (value)
         {
             my_plane.image = value;
-            this.materials[0].map = new THREE.Texture(scene.streamer.get_resource(value).data);
+            set_3js_object_texture(this, value);
         };
 		if(my_plane instanceof THREE.Object3D)
-			scene.addObject(my_plane);
+			manager.scene.add(my_plane);
+		my_plane.manager = manager;
         return my_plane;
         }
-threejs_load_resources(streamer, function()
+threejs_load_resources(manager, function()
 {
-	drawingCanvas.onmousemove = function(ev)
-	{
-		ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmousedown = function(ev)
-	{
-		ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmouseup = function(ev)
-	{
-		ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};		
-	ui_.events.addListener("mousedown", function(x,y)
-	{    
-		application.events.dispatch("mousedown", [x, y]);
-	});
-	ui_.events.addListener("mouseup", function(x,y)
-	{    
-		application.events.dispatch("mouseup", [x, y]);
-	});
-	ui_.events.addListener("mousemove", function(x,y)
-	{    
-		application.events.dispatch("mousemove", [x, y]);
-	});
-	ui_.events.addListener("click", function(x,y)
-	{    
-		application.events.dispatch("click", [x, y]);
-	});
-	ui_.events.addListener("drag", function(x,y)
-	{    
-		application.events.dispatch("drag", [x, y]);
-	});
-	ui_.events.addListener("dragend", function(x,y)
-	{    
-		application.events.dispatch("dragend", [x, y]);
-	});
-	ui_.events.addListener("keyup", function(keycode)
-	{    
-		application.events.dispatch("keyup", [keycode]);
-	});
-	ui_.events.addListener("keydown", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
-	ui_.events.addListener("keypress", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
 		    img4 = new my_image(g_ui_root.manager, g_ui_root, "images/test1.png");
 		    camera_1 = 
-		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
-		active_camera = camera_1;
+		    new THREE.PerspectiveCamera(45, 1.5, 1, 10000, null) ;				
+camera_1.manager = manager;
             img4.set_x(100);
             img4.set_y(100);
             img4.set_width(128);
@@ -286,32 +243,78 @@ if(ui_)
 	g_ui.fill_background = false;	
 }
 var event_manager = new ev.ThreeEventManager();
-document.onmousemove = function(ev)
+renderer.domElement.onmousemove = function(ev)
 {
-	event_manager.mousemove(ev.clientX, ev.clientY);                  
+	event_manager.mousemove(manager, ev.clientX, ev.clientY);   
+	if(ui_)
+		ui_.mousemove(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
 };
-document.onmousedown = function(ev)
+renderer.domElement.onmousedown = function(ev)
 {
-	event_manager.mousedown(ev.clientX, ev.clientY);                  
+	event_manager.mousedown(manager, ev.clientX, ev.clientY);     
+	if(ui_)
+		ui_.mousedown(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
 };
-document.onmouseup = function(ev)
+renderer.domElement.onmouseup = function(ev)
 {
-	event_manager.mouseup(ev.clientX, ev.clientY);		
+	event_manager.mouseup(manager, ev.clientX, ev.clientY);		
+	if(ui_)
+		ui_.mouseup(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
 };
 document.onkeydown = function(ev)
 {
-	event_manager.keydown(ev.keyCode);                  
+	event_manager.keydown(manager, ev.keyCode);                  
 };
 document.onkeyup = function(ev)
 {
-	event_manager.keyup(ev.keyCode);                  
+	event_manager.keyup(manager, ev.keyCode);                  
 };
 document.onkeypress = function(ev)
 {
-	event_manager.keypress(ev.keyCode);                  
+	event_manager.keypress(manager, ev.keyCode);                  
 };
+manager.events.addListener("mousedown", function(x,y)
+{    
+	application.events.dispatch("mousedown", [x, y]);
+});
+manager.events.addListener("mouseup", function(x,y)
+{    
+	application.events.dispatch("mouseup", [x, y]);
+});
+manager.events.addListener("mousemove", function(x,y)
+{    
+	application.events.dispatch("mousemove", [x, y]);
+});
+manager.events.addListener("click", function(x,y)
+{    
+	application.events.dispatch("click", [x, y]);
+});
+manager.events.addListener("drag", function(x,y)
+{    
+	application.events.dispatch("drag", [x, y]);
+});
+manager.events.addListener("dragend", function(x,y)
+{    
+	application.events.dispatch("dragend", [x, y]);
+});
+manager.events.addListener("keyup", function(keycode)
+{    
+	application.events.dispatch("keyup", [keycode]);
+});
+manager.events.addListener("keydown", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("keypress", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("update", function(g_delta, g_elapsed)
+{    
+	application.events.dispatch("update", [g_delta, g_elapsed]);
+});
 application.events.dispatch("init", []);
-document.body.appendChild( renderer.domElement );
+		document.body.appendChild( renderer.domElement );
 animate();
 });
 function animate() {

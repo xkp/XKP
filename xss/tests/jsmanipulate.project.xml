@@ -1,0 +1,6 @@
+<project entry_point="../idioms/jquery/entry.xss" language="js" target="jsmanipulate.xml" output="../production/test/jsmanipulate.html">
+    <idiom src="../idioms/jquery/jquery.xml"/>
+</project>
+           
+
+         

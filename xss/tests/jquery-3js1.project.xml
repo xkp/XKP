@@ -1,0 +1,5 @@
+<project entry_point="../idioms/jquery/entry.xss" language="js" target="jquery-3js1.xml" output="../production/test/jquery-3js1.html">
+    <idiom src="../idioms/jquery/jquery.xml"/>
+</project>
+           
+         

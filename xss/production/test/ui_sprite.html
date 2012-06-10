@@ -17,6 +17,8 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+var app_width = 600;
+var app_height = 600;
 application.events = new ev.EventHolder();
 var SoundUtils = new ui.SoundUtils();
 		var streamer = new stream.Streamer();	
@@ -307,7 +309,7 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
-		application.events.dispatch("updates", []);			
+		application.events.dispatch("update", [g_delta, g_elapsed]);			
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
 		window.setTimeout(updater, resolution);  
@@ -353,7 +355,7 @@ application.right_key_press = false;
 }
 	}
 	);
-	application.events.addListener("updates", function()
+	application.events.addListener("update", function()
 	{    
 		if (application.left_key_press)
 {
@@ -367,7 +369,7 @@ mario.set_x(mario.x + 0.200000003);
 }
 	}
 	);
-window.onload = function() 
+window.onload = function()
 {
         drawingCanvas = document.getElementById("myCanvas");
         g_canvas = drawingCanvas;
@@ -384,54 +386,6 @@ window.onload = function()
         g_ui_root = ui_.root;
      	ui_.load_resources(function()
 		{
-	drawingCanvas.onmousemove = function(ev)
-	{
-		ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmousedown = function(ev)
-	{
-		ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmouseup = function(ev)
-	{
-		ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};		
-	ui_.events.addListener("mousedown", function(x,y)
-	{    
-		application.events.dispatch("mousedown", [x, y]);
-	});
-	ui_.events.addListener("mouseup", function(x,y)
-	{    
-		application.events.dispatch("mouseup", [x, y]);
-	});
-	ui_.events.addListener("mousemove", function(x,y)
-	{    
-		application.events.dispatch("mousemove", [x, y]);
-	});
-	ui_.events.addListener("click", function(x,y)
-	{    
-		application.events.dispatch("click", [x, y]);
-	});
-	ui_.events.addListener("drag", function(x,y)
-	{    
-		application.events.dispatch("drag", [x, y]);
-	});
-	ui_.events.addListener("dragend", function(x,y)
-	{    
-		application.events.dispatch("dragend", [x, y]);
-	});
-	ui_.events.addListener("keyup", function(keycode)
-	{    
-		application.events.dispatch("keyup", [keycode]);
-	});
-	ui_.events.addListener("keydown", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
-	ui_.events.addListener("keypress", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
 		    monster = new ui.Sprite(g_ui_root.manager, g_ui_root);
 		    girl1 = new ui.Sprite(g_ui_root.manager, g_ui_root);
 		    girl2 = new ui.Sprite(g_ui_root.manager, g_ui_root);
@@ -456,7 +410,6 @@ girl1.set_lock(true);
 girl1.set_animation("g1_idle");
 	}
 	);
-		application.are_obj_events = true;
             girl2.set_x(400);
             girl2.set_y(200);
             girl2.set_sheet("azucola_sheet");
@@ -469,7 +422,6 @@ girl2.set_lock(true);
 girl2.set_animation("g2_idle");
 	}
 	);
-		application.are_obj_events = true;
             mario.set_x(300);
             mario.set_y(400);
             mario.set_sheet("mario_sheet");
@@ -494,7 +446,55 @@ girl2.set_animation("g2_idle");
 			document.onkeypress = function(ev)
 			{
 				ui_.keypress(ev.keyCode);                  
+			};			
+			drawingCanvas.onmousemove = function(ev)
+			{
+				ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 			};
+			drawingCanvas.onmousedown = function(ev)
+			{
+				ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+			};
+			drawingCanvas.onmouseup = function(ev)
+			{
+				ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+			};		
+			ui_.events.addListener("mousedown", function(x,y)
+			{    
+				application.events.dispatch("mousedown", [x, y]);
+			});
+			ui_.events.addListener("mouseup", function(x,y)
+			{    
+				application.events.dispatch("mouseup", [x, y]);
+			});
+			ui_.events.addListener("mousemove", function(x,y)
+			{    
+				application.events.dispatch("mousemove", [x, y]);
+			});
+			ui_.events.addListener("click", function(x,y)
+			{    
+				application.events.dispatch("click", [x, y]);
+			});
+			ui_.events.addListener("drag", function(x,y)
+			{    
+				application.events.dispatch("drag", [x, y]);
+			});
+			ui_.events.addListener("dragend", function(x,y)
+			{    
+				application.events.dispatch("dragend", [x, y]);
+			});
+			ui_.events.addListener("keyup", function(keycode)
+			{    
+				application.events.dispatch("keyup", [keycode]);
+			});
+			ui_.events.addListener("keydown", function(keycode)
+			{    
+				application.events.dispatch("keydown", [keycode]);
+			});
+			ui_.events.addListener("keypress", function(keycode)
+			{    
+				application.events.dispatch("keydown", [keycode]);
+			});
             application.events.dispatch("init", []);
             start();			
 			ui_.draw(drawingCanvas.getContext('2d'));

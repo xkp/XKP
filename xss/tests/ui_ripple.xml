@@ -1,0 +1,14 @@
+<application src="ui_ripple.xs" width="744" height="370">
+    <resources>
+        <image src="images/ui_ripple.jpg"/>
+    </resources>
+
+    <ripple_effect id="ripple1" width="744" height="370" placement="client" ripradius="10" src="images/ui_ripple.jpg">
+    </ripple_effect>
+	
+    <sequence id="rain" auto_start="true">
+        <every time="1">
+            <run method="drop"/>
+        </every>
+    </sequence>
+</application>

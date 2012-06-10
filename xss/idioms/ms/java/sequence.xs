@@ -249,9 +249,10 @@ method render_instance(seq, seq_id, parent_id, path)
 	
 	out(indent = 1, marker = "declarations", marker_source = "previous")
 	{
-		private <xss:e value="sClassName"/> <xss:e value="seq.output_id"/>;
+		private <xss:e value="sClassName"/> <xss:e value="seq.output_id"/> = <xss:e value="compiler.instantiate(seq)"/>;
 	}
 	
+
     compiler.xss("../../java/instance.xss", seq, marker = "declarations", marker_source="previous", render_events = false);
     compiler.xss("../../java/instance.xss", seq, event_renderer = "event.xss", render_properties = false, render_methods = false);
 }
@@ -307,6 +308,58 @@ method close_frame_conditions()
 {
     out()
     {
+            <xss:close_brace/>
         <xss:close_brace/>);
+    }
+}
+
+method run_method(expr, path)
+{
+    var mthd = expr.methd;
+    out() 
+    {
+        <xss:e v="mthd.output_id"/>();
+    }
+}    
+
+method run_sequence(seq, parent_id)
+{
+    if (seq.this_property)
+    {
+		out() 
+        {
+            <xss:e v="parent_id"/>.<xss:e v="seq.identifier"/>.start();
+        }
+    }
+    else
+    {
+		out() 
+        {
+            <xss:e v="seq.identifier"/>.start();
+        }
+    }
+}    
+
+method run_expression(expr, seq, seq_id)
+{
+    var expr_this = seq;
+    var this_str = seq_id;
+    if (seq.target)
+    {
+        expr_this = compiler.get_instance(seq.target);
+        this_str += ".target";
+    }
+    else if (seq.target_type)
+    {
+        expr_this = compiler.get_type(seq.target_type);
+        this_str += ".target";
+    }
+                
+    string result = compiler.render_expression(expr, expr_this);
+    result = compiler.replace_identifier(result, "this.", this_str + ".");
+            
+    out() 
+    {
+        <xss:e v="result"/>;
     }
 }

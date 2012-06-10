@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>danydenis.com</title>
+<title>Gallery</title>
 </head>
 <body>
 <style type="text/css">
@@ -19,26 +19,25 @@
             <script type="text/javascript" src="../js/ui.js"></script>
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
-            <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
-<script type="text/javascript">		
-var renderer = new THREE.CanvasRenderer();	
-var ui_;
-var SoundUtils;
-var scene = new THREE.Scene();
+<script type="text/javascript">	
+			var renderer = new THREE.CanvasRenderer();
+		var scene = new THREE.Scene();
 scene.mouse_thru = true;
+var ui_;
+var canvas_position = {x:0, y:0};
+var clock = new THREE.Clock();
+var SoundUtils;
 var active_camera;
 var g_elapsed = -1;
-var g_delta = 0.0;	
+var g_delta = 0.0;
 var drawingCanvas = renderer.domElement;
-var canvas_position = {x:0, y:0};
 var streamer;
 var app_width = 1000;
 var app_height = 800;
-var idle;var selected;var unselected;var move;var grow;var shrink;var facebook;var twitter;var email;
-var image_plane;var camera_1;var test_ip;
+var camera_1;var imgg1;var imgg2;var imgg3;
 var application = {};
-application.events = new ev.EventHolder();
+application.events = new ev.EventHolder();	
 		var g_sequence_manager = new state.Manager();
         function default_interpolate(a, b, t)
         {
@@ -62,45 +61,381 @@ application.events = new ev.EventHolder();
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
             {
-		id:				"__image1",
+		id:				"i1",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"images/facebook.png",
+		src:			"images/1326602376_earth.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
 });	
-				var __image1;
+				var i1;
 				global_package.events.addListener("loaded", function()
 				{
-					__image1 = streamer.get_resource("__image1");
+					i1 = streamer.get_resource("i1");
 				});
                 global_package.add_item(
             {
-		id:				"__image2",
+		id:				"i2",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"images/twitter.png",
+		src:			"images/1326662085_statistic.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
 });	
-				var __image2;
+				var i2;
 				global_package.events.addListener("loaded", function()
 				{
-					__image2 = streamer.get_resource("__image2");
+					i2 = streamer.get_resource("i2");
 				});
                 global_package.add_item(
             {
-		id:				"__image3",
+		id:				"i3",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"images/photobucket.png",
+		src:			"images/1326662102_disc-floopy.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
 });	
-				var __image3;
+				var i3;
 				global_package.events.addListener("loaded", function()
 				{
-					__image3 = streamer.get_resource("__image3");
+					i3 = streamer.get_resource("i3");
+				});
+                global_package.add_item(
+            {
+		id:				"i4",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1326662116_hint.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i4;
+				global_package.events.addListener("loaded", function()
+				{
+					i4 = streamer.get_resource("i4");
+				});
+                global_package.add_item(
+            {
+		id:				"i5",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1326662123_comment.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i5;
+				global_package.events.addListener("loaded", function()
+				{
+					i5 = streamer.get_resource("i5");
+				});
+                global_package.add_item(
+            {
+		id:				"i6",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1326662130_calendar.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i6;
+				global_package.events.addListener("loaded", function()
+				{
+					i6 = streamer.get_resource("i6");
+				});
+                global_package.add_item(
+            {
+		id:				"i7",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1327176083_user-man.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i7;
+				global_package.events.addListener("loaded", function()
+				{
+					i7 = streamer.get_resource("i7");
+				});
+                global_package.add_item(
+            {
+		id:				"i8",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1327176117_user-woman.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i8;
+				global_package.events.addListener("loaded", function()
+				{
+					i8 = streamer.get_resource("i8");
+				});
+                global_package.add_item(
+            {
+		id:				"i9",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1327189824_users.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i9;
+				global_package.events.addListener("loaded", function()
+				{
+					i9 = streamer.get_resource("i9");
+				});
+                global_package.add_item(
+            {
+		id:				"i10",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1327189922_photo-camera.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i10;
+				global_package.events.addListener("loaded", function()
+				{
+					i10 = streamer.get_resource("i10");
+				});
+                global_package.add_item(
+            {
+		id:				"i11",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1327199981_left.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i11;
+				global_package.events.addListener("loaded", function()
+				{
+					i11 = streamer.get_resource("i11");
+				});
+                global_package.add_item(
+            {
+		id:				"i12",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1327199986_right.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i12;
+				global_package.events.addListener("loaded", function()
+				{
+					i12 = streamer.get_resource("i12");
+				});
+                global_package.add_item(
+            {
+		id:				"i13",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1329639586_add.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i13;
+				global_package.events.addListener("loaded", function()
+				{
+					i13 = streamer.get_resource("i13");
+				});
+                global_package.add_item(
+            {
+		id:				"i14",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1329639589_remove.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i14;
+				global_package.events.addListener("loaded", function()
+				{
+					i14 = streamer.get_resource("i14");
+				});
+                global_package.add_item(
+            {
+		id:				"i15",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1330237037_clock.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i15;
+				global_package.events.addListener("loaded", function()
+				{
+					i15 = streamer.get_resource("i15");
+				});
+                global_package.add_item(
+            {
+		id:				"i16",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1330237059_user-admin.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i16;
+				global_package.events.addListener("loaded", function()
+				{
+					i16 = streamer.get_resource("i16");
+				});
+                global_package.add_item(
+            {
+		id:				"i17",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1337829456_favourites.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i17;
+				global_package.events.addListener("loaded", function()
+				{
+					i17 = streamer.get_resource("i17");
+				});
+                global_package.add_item(
+            {
+		id:				"i18",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1337829462_picture.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i18;
+				global_package.events.addListener("loaded", function()
+				{
+					i18 = streamer.get_resource("i18");
+				});
+                global_package.add_item(
+            {
+		id:				"i19",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1337829463_computer.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i19;
+				global_package.events.addListener("loaded", function()
+				{
+					i19 = streamer.get_resource("i19");
+				});
+                global_package.add_item(
+            {
+		id:				"i20",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1337829466_rss.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i20;
+				global_package.events.addListener("loaded", function()
+				{
+					i20 = streamer.get_resource("i20");
+				});
+                global_package.add_item(
+            {
+		id:				"i21",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1337829467_star.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i21;
+				global_package.events.addListener("loaded", function()
+				{
+					i21 = streamer.get_resource("i21");
+				});
+                global_package.add_item(
+            {
+		id:				"i22",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1337829468_home.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i22;
+				global_package.events.addListener("loaded", function()
+				{
+					i22 = streamer.get_resource("i22");
+				});
+                global_package.add_item(
+            {
+		id:				"i23",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1337829471_movie.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i23;
+				global_package.events.addListener("loaded", function()
+				{
+					i23 = streamer.get_resource("i23");
+				});
+                global_package.add_item(
+            {
+		id:				"i24",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1337829475_help.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i24;
+				global_package.events.addListener("loaded", function()
+				{
+					i24 = streamer.get_resource("i24");
+				});
+                global_package.add_item(
+            {
+		id:				"i25",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1337829479_timer.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i25;
+				global_package.events.addListener("loaded", function()
+				{
+					i25 = streamer.get_resource("i25");
+				});
+                global_package.add_item(
+            {
+		id:				"i26",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1337829484_refresh.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i26;
+				global_package.events.addListener("loaded", function()
+				{
+					i26 = streamer.get_resource("i26");
+				});
+                global_package.add_item(
+            {
+		id:				"i27",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1337829488_search.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var i27;
+				global_package.events.addListener("loaded", function()
+				{
+					i27 = streamer.get_resource("i27");
 				});
 		global_package.add_item({
 			id:				"invalid_res",
@@ -112,20 +447,24 @@ application.events = new ev.EventHolder();
 		});		
 		global_package.load();	
     // --------RESOURCES---------
-soundRenderer = new THREE.SoundRenderer();		
-document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( app_width, app_height );
+var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
+manager.events = new ev.EventHolder();
+manager.ui_ = ui_;	
 function render() {
-canvas_position = getElementPosition(drawingCanvas);
+manager.canvas_position = getElementPosition(drawingCanvas);
 var now   = new Date().getTime();
 if (g_elapsed < 0)
-    g_delta = 0; //first update
+	g_delta = 0; //first update
 else
-g_delta  = now - g_elapsed;  
+	g_delta  = now - g_elapsed;  
 g_elapsed = now; 
+c_delta = clock.getDelta(),
+c_elapsed = clock.getElapsedTime() * 10;
 		g_sequence_manager.update(g_delta);
-application.events.dispatch("updates", []);	
-		set_active_camera(camera_1);
+manager.events.dispatch("update", [g_delta, g_elapsed]);	
+				manager.scene.add(camera_1);
+				set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
         var social_button = ui.Image.extend(
@@ -264,42 +603,39 @@ this__.shrink.stop();
 this__.grow.start();
 	}
 	);
-		application.are_obj_events = true;
 	this.events.addListener("mouseout", function()
 	{    
 		this__.grow.stop();
 this__.shrink.start();
 	}
 	);
-		application.are_obj_events = true;
             this.events.dispatch("init", [this]);
             },
 });
     function create_image_plane(
     width,height,x_segments,y_segments ) { 
     var image_plane;
-	    image_plane_plane = new THREE.Plane(width, height, x_segments, y_segments) ;
+	    image_plane_plane = new THREE.PlaneGeometry(width, height, x_segments, y_segments) ;
 	    image_plane = new THREE.Mesh(image_plane_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(image_plane);
+	    manager.scene.add(image_plane);
 		image_plane.events = new ev.EventHolder();
         var this__ = image_plane;
             var idle;
 idle =
 new state.Sequence(
 g_sequence_manager);
-            idle.loop = true;
-                idle.start();
         var ____i9 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
-                set_rotation_y(this__.rotation, value);
+                set_rotation_z(this__.rotation, value);
             },
             [
         {t: 0, value: 0},
-        {t: 1, value: -20},
-        {t: 2, value: 20},
-        {t: 3, value: 0},
+        {t: 1, value: -40},
+        {t: 1.5, value: -10},
+        {t: 2, value: -30},
+        {t: 2.5, value: 0},
             ]);
             idle.addHandler(____i9);	              
         var ____i10 = new state.Interpolator(
@@ -310,60 +646,89 @@ g_sequence_manager);
             },
             [
         {t: 0, value: 100},
-        {t: 1, value: 60},
-        {t: 3, value: 100},
+        {t: 2.5, value: 0},
             ]);
             idle.addHandler(____i10);	              
+        var ____r1 = new state.Caller(2,function()
+        {
+                this__.switch_images();
+        });
+        idle.addHandler(____r1);						  
+        var ____i11 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                set_rotation_z(this__.rotation, value);
+            },
+            [
+        {t: 2, value: 0},
+        {t: 3, value: 40},
+        {t: 3.5, value: 10},
+        {t: 4, value: 30},
+        {t: 4.5, value: 0},
+            ]);
+            idle.addHandler(____i11);	              
+        var ____i12 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                set_object_alpha(this__, value);
+            },
+            [
+        {t: 2, value: 0},
+        {t: 4.5, value: 100},
+            ]);
+            idle.addHandler(____i12);	              
             image_plane.idle = idle;
             var selected;
 selected =
 new state.Sequence(
 g_sequence_manager);
-        var ____i11 = new state.Interpolator(
-            default_interpolate,
-            function(value)
-            {
-                this__.scale.x = value;
-            },
-            [
-        {t: 0, value: null},
-        {t: 2, value: 1.5},
-            ]);
-            selected.addHandler(____i11);	              
-        var ____i12 = new state.Interpolator(
-            default_interpolate,
-            function(value)
-            {
-                this__.scale.y = value;
-            },
-            [
-        {t: 0, value: null},
-        {t: 2, value: 1.5},
-            ]);
-            selected.addHandler(____i12);	              
         var ____i13 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
-                this__.scale.z = value;
+                this__.scale.x = value;
             },
             [
         {t: 0, value: null},
         {t: 2, value: 1.5},
             ]);
             selected.addHandler(____i13);	              
+        var ____i14 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.y = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: 1.5},
+            ]);
+            selected.addHandler(____i14);	              
+        var ____i15 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.z = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 2, value: 1.5},
+            ]);
+            selected.addHandler(____i15);	              
         selected.events.addListener('start', function()
         {
-        ____i11.keys[0].value = this__.scale.x;
-        ____i12.keys[0].value = this__.scale.y;
-        ____i13.keys[0].value = this__.scale.z;
+        ____i13.keys[0].value = this__.scale.x;
+        ____i14.keys[0].value = this__.scale.y;
+        ____i15.keys[0].value = this__.scale.z;
         });
             image_plane.selected = selected;
             var unselected;
 unselected =
 new state.Sequence(
 g_sequence_manager);
-        var ____i14 = new state.Interpolator(
+        var ____i16 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -373,8 +738,8 @@ g_sequence_manager);
         {t: 0, value: null},
         {t: 2, value: 1},
             ]);
-            unselected.addHandler(____i14);	              
-        var ____i15 = new state.Interpolator(
+            unselected.addHandler(____i16);	              
+        var ____i17 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -384,8 +749,8 @@ g_sequence_manager);
         {t: 0, value: null},
         {t: 2, value: 1},
             ]);
-            unselected.addHandler(____i15);	              
-        var ____i16 = new state.Interpolator(
+            unselected.addHandler(____i17);	              
+        var ____i18 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -395,18 +760,26 @@ g_sequence_manager);
         {t: 0, value: null},
         {t: 2, value: 1},
             ]);
-            unselected.addHandler(____i16);	              
+            unselected.addHandler(____i18);	              
         unselected.events.addListener('start', function()
         {
-        ____i14.keys[0].value = this__.scale.x;
-        ____i15.keys[0].value = this__.scale.y;
-        ____i16.keys[0].value = this__.scale.z;
+        ____i16.keys[0].value = this__.scale.x;
+        ____i17.keys[0].value = this__.scale.y;
+        ____i18.keys[0].value = this__.scale.z;
         });
             image_plane.unselected = unselected;
-            idle.loop = true;
+            set_rotation_x(image_plane.rotation, 90);
+            image_plane.group = null;
+            image_plane.next_image = null;
+            image_plane.image = null;
 	image_plane.set_image = function(value) 
 	{
-		image_plane.materials[0].map = new THREE.Texture(scene.streamer.get_resource(value).data);
+		image_plane.image = value;
+set_3js_object_texture(image_plane, value);
+	};
+	image_plane.switch_images = function() 
+	{
+		image_plane.set_image(image_plane.next_image);
 	};
 	image_plane.events.addListener("mousein", function(x,y)
 	{    
@@ -414,16 +787,20 @@ g_sequence_manager);
 selected.start();
 	}
 	);
-		application.are_obj_events = true;
 	image_plane.events.addListener("mouseout", function()
 	{    
 		unselected.start();
 selected.stop();
 	}
 	);
-		application.are_obj_events = true;
+	image_plane.events.addListener("click", function()
+	{    
+		application.select(image_plane.group);
+	}
+	);
 		if(image_plane instanceof THREE.Object3D)
-			scene.addObject(image_plane);
+			manager.scene.add(image_plane);
+		image_plane.manager = manager;
         return image_plane;
         }
     function create_image_group(
@@ -432,11 +809,22 @@ selected.stop();
 			image_group = new THREE.Object3D();
 			image_group.events = new ev.EventHolder();
         var this__ = image_group;
+            var main;
+main =
+new state.Sequence(
+g_sequence_manager);
+                main.start();
+        var ____h1 = new state.Every(3, function(t)
+        {
+                this__.do_idle();
+        });
+        main.addHandler(____h1);	                    
+            image_group.main = main;
             var move;
 move =
 new state.Sequence(
 g_sequence_manager);
-        var ____i17 = new state.Interpolator(
+        var ____i19 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -444,10 +832,10 @@ g_sequence_manager);
             },
             [
         {t: 0, value: null},
-        {t: 2, value: null},
+        {t: 1, value: null},
             ]);
-            move.addHandler(____i17);	              
-        var ____i18 = new state.Interpolator(
+            move.addHandler(____i19);	              
+        var ____i20 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -455,10 +843,10 @@ g_sequence_manager);
             },
             [
         {t: 0, value: null},
-        {t: 2, value: null},
+        {t: 1, value: null},
             ]);
-            move.addHandler(____i18);	              
-        var ____i19 = new state.Interpolator(
+            move.addHandler(____i20);	              
+        var ____i21 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -466,79 +854,35 @@ g_sequence_manager);
             },
             [
         {t: 0, value: null},
-        {t: 2, value: null},
+        {t: 1, value: null},
             ]);
-            move.addHandler(____i19);	              
+            move.addHandler(____i21);	              
         move.events.addListener('start', function()
         {
-        ____i17.keys[0].value = this__.position.x;
-        ____i17.keys[1].value = this__.destination.x;
-        ____i18.keys[0].value = this__.position.y;
-        ____i18.keys[1].value = this__.destination.y;
-        ____i19.keys[0].value = this__.position.z;
-        ____i19.keys[1].value = this__.destination.z;
+        ____i19.keys[0].value = this__.position.x;
+        ____i19.keys[1].value = this__.destination.x;
+        ____i20.keys[0].value = this__.position.y;
+        ____i20.keys[1].value = this__.destination.y;
+        ____i21.keys[0].value = this__.position.z;
+        ____i21.keys[1].value = this__.destination.z;
         });
             image_group.move = move;
             var grow;
 grow =
 new state.Sequence(
 g_sequence_manager);
-        var ____i20 = new state.Interpolator(
-            default_interpolate,
-            function(value)
-            {
-                this__.scale.x = value;
-            },
-            [
-        {t: 0, value: null},
-        {t: 1, value: 1.5},
-            ]);
-            grow.addHandler(____i20);	              
-        var ____i21 = new state.Interpolator(
-            default_interpolate,
-            function(value)
-            {
-                this__.scale.y = value;
-            },
-            [
-        {t: 0, value: null},
-        {t: 1, value: 1.5},
-            ]);
-            grow.addHandler(____i21);	              
         var ____i22 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
-                this__.scale.z = value;
+                this__.scale.x = value;
             },
             [
         {t: 0, value: null},
         {t: 1, value: 1.5},
             ]);
             grow.addHandler(____i22);	              
-        grow.events.addListener('start', function()
-        {
-        ____i20.keys[0].value = this__.scale.x;
-        ____i21.keys[0].value = this__.scale.y;
-        ____i22.keys[0].value = this__.scale.z;
-        });
-            image_group.grow = grow;
-            var shrink;
-shrink =
-new state.Sequence(
-g_sequence_manager);
         var ____i23 = new state.Interpolator(
-            default_interpolate,
-            function(value)
-            {
-                this__.scale.x = value;
-            },
-            [
-        {t: 0, value: null},
-        {t: 1, value: 1},
-            ]);
-            shrink.addHandler(____i23);	              
-        var ____i24 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -546,10 +890,10 @@ g_sequence_manager);
             },
             [
         {t: 0, value: null},
-        {t: 1, value: 1},
+        {t: 1, value: 1.5},
             ]);
-            shrink.addHandler(____i24);	              
-        var ____i25 = new state.Interpolator(
+            grow.addHandler(____i23);	              
+        var ____i24 = new state.Interpolator(
             default_interpolate,
             function(value)
             {
@@ -557,188 +901,224 @@ g_sequence_manager);
             },
             [
         {t: 0, value: null},
-        {t: 1, value: 1},
+        {t: 1, value: 1.5},
+            ]);
+            grow.addHandler(____i24);	              
+        grow.events.addListener('start', function()
+        {
+        ____i22.keys[0].value = this__.scale.x;
+        ____i23.keys[0].value = this__.scale.y;
+        ____i24.keys[0].value = this__.scale.z;
+        });
+            image_group.grow = grow;
+            var shrink;
+shrink =
+new state.Sequence(
+g_sequence_manager);
+        var ____i25 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.x = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 1, value: 0.5},
             ]);
             shrink.addHandler(____i25);	              
+        var ____i26 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.y = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 1, value: 0.5},
+            ]);
+            shrink.addHandler(____i26);	              
+        var ____i27 = new state.Interpolator(
+            default_interpolate,
+            function(value)
+            {
+                this__.scale.z = value;
+            },
+            [
+        {t: 0, value: null},
+        {t: 1, value: 0.5},
+            ]);
+            shrink.addHandler(____i27);	              
         shrink.events.addListener('start', function()
         {
-        ____i23.keys[0].value = this__.scale.x;
-        ____i24.keys[0].value = this__.scale.y;
-        ____i25.keys[0].value = this__.scale.z;
+        ____i25.keys[0].value = this__.scale.x;
+        ____i26.keys[0].value = this__.scale.y;
+        ____i27.keys[0].value = this__.scale.z;
         });
             image_group.shrink = shrink;
 			 var img1;
 			img1 = 
-create_image_plane(100, 100, null, null)
+create_image_plane(100, 100, 1, 1)
  ;
 				if(img1 instanceof THREE.Object3D)
-					image_group.addChild(img1);
+					image_group.add(img1);
 			 var img2;
 			img2 = 
-create_image_plane(100, 100, null, null)
+create_image_plane(100, 100, 1, 1)
  ;
 				if(img2 instanceof THREE.Object3D)
-					image_group.addChild(img2);
+					image_group.add(img2);
 			 var img3;
 			img3 = 
-create_image_plane(100, 100, null, null)
+create_image_plane(100, 100, 1, 1)
  ;
 				if(img3 instanceof THREE.Object3D)
-					image_group.addChild(img3);
+					image_group.add(img3);
 			 var img4;
 			img4 = 
-create_image_plane(100, 100, null, null)
+create_image_plane(100, 100, 1, 1)
  ;
 				if(img4 instanceof THREE.Object3D)
-					image_group.addChild(img4);
+					image_group.add(img4);
 			 var img5;
 			img5 = 
-create_image_plane(100, 100, null, null)
+create_image_plane(100, 100, 1, 1)
  ;
 				if(img5 instanceof THREE.Object3D)
-					image_group.addChild(img5);
+					image_group.add(img5);
 			 var img6;
 			img6 = 
-create_image_plane(100, 100, null, null)
+create_image_plane(100, 100, 1, 1)
  ;
 				if(img6 instanceof THREE.Object3D)
-					image_group.addChild(img6);
+					image_group.add(img6);
 			 var img7;
 			img7 = 
-create_image_plane(100, 100, null, null)
+create_image_plane(100, 100, 1, 1)
  ;
 				if(img7 instanceof THREE.Object3D)
-					image_group.addChild(img7);
+					image_group.add(img7);
 			 var img8;
 			img8 = 
-create_image_plane(100, 100, null, null)
+create_image_plane(100, 100, 1, 1)
  ;
 				if(img8 instanceof THREE.Object3D)
-					image_group.addChild(img8);
+					image_group.add(img8);
 			 var img9;
 			img9 = 
-create_image_plane(100, 100, null, null)
+create_image_plane(100, 100, 1, 1)
  ;
 				if(img9 instanceof THREE.Object3D)
-					image_group.addChild(img9);
-            img1.position.x = -300;
-            img1.position.y = 0;
-            img1.position.z = 0;
+					image_group.add(img9);
+            img1.position.x = -150;
+            img1.position.y = -150;
+            img2.position.x = -150;
+            img2.position.y = 0;
+            img3.position.x = -150;
+            img3.position.y = 150;
+            img4.position.x = 0;
+            img4.position.y = -150;
+            img5.position.x = 0;
+            img5.position.y = 0;
+            img6.position.x = 0;
+            img6.position.y = 150;
+            img7.position.x = 150;
+            img7.position.y = -150;
+            img8.position.x = 150;
+            img8.position.y = 0;
+            img9.position.x = 150;
+            img9.position.y = 150;
             image_group.destination = null;
         image_group.images = null;
         image_group.images_set = function (value)
         {
             image_group.images = value;
-            var dist = 150;
-var planes_ = [img1, img2, img3, img4, img5, img6, img7, img8, img9];
-var positions = [{x : -dist,y : -dist}, {x : -dist,y : 0}, {x : -dist,y : dist}, {x : 0,y : -dist}, {x : 0,y : 0}, {x : 0,y : dist}, {x : dist,y : -dist}, {x : dist,y : 0}, {x : dist,y : dist}];
-for(var i = 0; i < value.length; i++)
+            for(var i = 0; i < value.length; i++)
 {
-var pos = positions[i];
-planes_[i].position.x = pos.x;
-planes_[i].position.y = pos.y;
-planes_[i].set_image(value[i]);
+this.planes_[i].group = this;
+this.planes_[i].set_image(value[i]);
 }
         };
-        image_group.destination = null;
-        image_group.destination_set = function (value)
-        {
-            image_group.destination = value;
-            var planes_ = [img1, img2, img3, img4, img5, img6, img7, img8, img9];
-for(var i = 0; i < value.length; i++)
-{
-planes_[i].destination = value[i];
-planes_[i].move.start();
-}
-        };
+            image_group.planes_ = [img1, img2, img3, img4, img5, img6, img7, img8, img9];
             image_group.mouse_thru = true;
+	image_group.do_idle = function() 
+	{
+		if (Math.random() > 0.5)
+{
+return;
+}
+var idx1 = Math.floor(Math.random() * 8);
+var idx2 = Math.floor(Math.random() * 8);
+if (image_group.planes_[idx1].idle.running || image_group.planes_[idx2].idle.running)
+{
+return;
+}
+image_group.planes_[idx1].next_image = image_group.planes_[idx2].image;
+image_group.planes_[idx2].next_image = image_group.planes_[idx1].image;
+image_group.planes_[idx1].idle.start();
+image_group.planes_[idx2].idle.start();
+	};
 		if(image_group instanceof THREE.Object3D)
-			scene.addObject(image_group);
+			manager.scene.add(image_group);
+		image_group.manager = manager;
         return image_group;
         }
-threejs_load_resources(streamer, function()
+threejs_load_resources(manager, function()
 {
-	drawingCanvas.onmousemove = function(ev)
-	{
-		ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmousedown = function(ev)
-	{
-		ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmouseup = function(ev)
-	{
-		ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};		
-	ui_.events.addListener("mousedown", function(x,y)
-	{    
-		application.events.dispatch("mousedown", [x, y]);
-	});
-	ui_.events.addListener("mouseup", function(x,y)
-	{    
-		application.events.dispatch("mouseup", [x, y]);
-	});
-	ui_.events.addListener("mousemove", function(x,y)
-	{    
-		application.events.dispatch("mousemove", [x, y]);
-	});
-	ui_.events.addListener("click", function(x,y)
-	{    
-		application.events.dispatch("click", [x, y]);
-	});
-	ui_.events.addListener("drag", function(x,y)
-	{    
-		application.events.dispatch("drag", [x, y]);
-	});
-	ui_.events.addListener("dragend", function(x,y)
-	{    
-		application.events.dispatch("dragend", [x, y]);
-	});
-	ui_.events.addListener("keyup", function(keycode)
-	{    
-		application.events.dispatch("keyup", [keycode]);
-	});
-	ui_.events.addListener("keydown", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
-	ui_.events.addListener("keypress", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
-		    facebook = new social_button(g_ui_root.manager, g_ui_root, "images/facebook.png");
-		    twitter = new social_button(g_ui_root.manager, g_ui_root, "images/twitter.png");
-		    email = new social_button(g_ui_root.manager, g_ui_root, "images/photobucket.png");
 		    camera_1 = 
-		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
-		active_camera = camera_1;
-			    test_ip = 
+		    new THREE.PerspectiveCamera(45, 1.5, 1, 10000, null) ;				
+camera_1.manager = manager;
+			    imgg1 = 
 create_image_group()
  ;
-            facebook.set_x(880);
-            facebook.set_y(8);
-            facebook.set_width(24);
-            facebook.set_height(24);
-            twitter.set_x(845);
-            twitter.set_y(8);
-            twitter.set_width(24);
-            twitter.set_height(24);
-            email.set_x(810);
-            email.set_y(8);
-            email.set_width(24);
-            email.set_height(24);
+			imgg1.manager = manager;
+			    imgg2 = 
+create_image_group()
+ ;
+			imgg2.manager = manager;
+			    imgg3 = 
+create_image_group()
+ ;
+			imgg3.manager = manager;
             camera_1.position.z = 1000;
-            test_ip.position.x = -300;
-            test_ip.position.y = 0;
-            test_ip.position.z = 0;
+            imgg2.position.x = -500;
+            imgg2.scale.x = 0.5;
+            imgg2.scale.y = 0.5;
+            imgg2.scale.z = 1;
+            imgg3.position.x = 500;
+            imgg3.scale.x = 0.5;
+            imgg3.scale.y = 0.5;
+            imgg3.scale.z = 1;
+            application.left = {x : -500,y : 0,z : 0};
+            application.right = {x : 500,y : 0,z : 0};
+            application.selected = imgg1;
+	application.select = function(group) 
+	{
+		if (application.selected != group)
+{
+if (application.selected)
+{
+if (group.position.x > 0)
+{
+application.selected.destination = application.right;
+}
+else
+{
+application.selected.destination = application.left;
+}
+application.selected.move.start();
+application.selected.shrink.start();
+}
+application.selected = group;
+application.selected.destination = {x : 0,y : 0,z : 0};
+application.selected.move.start();
+application.selected.grow.start();
+}
+	};
 	application.events.addListener("init", function()
 	{    
-		test_ip.images_set(["images/twitter.png", "images/twitter.png", "images/twitter.png", "images/twitter.png", "images/twitter.png", "images/twitter.png", "images/twitter.png", "images/twitter.png", "images/twitter.png"]);
-	}
-	);
-	application.events.addListener("click", function()
-	{    
-		test_ip.position.x = 10;
+		imgg1.images_set(["i1", "i2", "i3", "i4", "i5", "i6", "i7", "i8", "i9"]);
+imgg2.images_set(["i10", "i11", "i12", "i13", "i14", "i15", "i16", "i17", "i18"]);
+imgg3.images_set(["i19", "i20", "i21", "i22", "i23", "i24", "i25", "i26", "i27"]);
 	}
 	);
 if(ui_)
@@ -747,32 +1127,78 @@ if(ui_)
 	g_ui.fill_background = false;	
 }
 var event_manager = new ev.ThreeEventManager();
-document.onmousemove = function(ev)
+renderer.domElement.onmousemove = function(ev)
 {
-	event_manager.mousemove(ev.clientX, ev.clientY);                  
+	event_manager.mousemove(manager, ev.clientX, ev.clientY);   
+	if(ui_)
+		ui_.mousemove(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
 };
-document.onmousedown = function(ev)
+renderer.domElement.onmousedown = function(ev)
 {
-	event_manager.mousedown(ev.clientX, ev.clientY);                  
+	event_manager.mousedown(manager, ev.clientX, ev.clientY);     
+	if(ui_)
+		ui_.mousedown(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
 };
-document.onmouseup = function(ev)
+renderer.domElement.onmouseup = function(ev)
 {
-	event_manager.mouseup(ev.clientX, ev.clientY);		
+	event_manager.mouseup(manager, ev.clientX, ev.clientY);		
+	if(ui_)
+		ui_.mouseup(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
 };
 document.onkeydown = function(ev)
 {
-	event_manager.keydown(ev.keyCode);                  
+	event_manager.keydown(manager, ev.keyCode);                  
 };
 document.onkeyup = function(ev)
 {
-	event_manager.keyup(ev.keyCode);                  
+	event_manager.keyup(manager, ev.keyCode);                  
 };
 document.onkeypress = function(ev)
 {
-	event_manager.keypress(ev.keyCode);                  
+	event_manager.keypress(manager, ev.keyCode);                  
 };
+manager.events.addListener("mousedown", function(x,y)
+{    
+	application.events.dispatch("mousedown", [x, y]);
+});
+manager.events.addListener("mouseup", function(x,y)
+{    
+	application.events.dispatch("mouseup", [x, y]);
+});
+manager.events.addListener("mousemove", function(x,y)
+{    
+	application.events.dispatch("mousemove", [x, y]);
+});
+manager.events.addListener("click", function(x,y)
+{    
+	application.events.dispatch("click", [x, y]);
+});
+manager.events.addListener("drag", function(x,y)
+{    
+	application.events.dispatch("drag", [x, y]);
+});
+manager.events.addListener("dragend", function(x,y)
+{    
+	application.events.dispatch("dragend", [x, y]);
+});
+manager.events.addListener("keyup", function(keycode)
+{    
+	application.events.dispatch("keyup", [keycode]);
+});
+manager.events.addListener("keydown", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("keypress", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("update", function(g_delta, g_elapsed)
+{    
+	application.events.dispatch("update", [g_delta, g_elapsed]);
+});
 application.events.dispatch("init", []);
-document.body.appendChild( renderer.domElement );
+		document.body.appendChild( renderer.domElement );
 animate();
 });
 function animate() {

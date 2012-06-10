@@ -1,4 +1,4 @@
-<project entry_point="../idioms/threejs/app.xss" language="js" target="jsmanip.app.xml" output="jsmanip.html">
+<project entry_point="../idioms/threejs/entry.xss" language="js" target="jsmanip.app.xml" output="jsmanip.html">
     <path>	
         <output path="../production/test"/>
     </path>

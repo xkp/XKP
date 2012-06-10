@@ -6,6 +6,7 @@
 <body>
 <style type="text/css">
 	body{
+	background:black;
 	}
 </style>
             <script type="text/javascript" src="../js/resig.js"></script>
@@ -15,38 +16,38 @@
             <script type="text/javascript" src="../js/colors.js"></script>
             <script type="text/javascript" src="../js/streamer.js"></script>
             <script type="text/javascript" src="../js/ui.js"></script>
-            <script type="text/javascript" src="../js/three/Three.js"></script>
-            <script type="text/javascript" src="../js/three/Stats.js"></script>
-            <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
-            <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/jsmanipulate/jsmanipulate.js"></script>
             <script type="text/javascript" src="../js/jsmanipulate/jsm-manager.js"></script>
             <script type="text/javascript" src="../js/jsmanipulate/jsm-utils.js"></script>
-<script type="text/javascript">		
-var renderer = new THREE.CanvasRenderer();	
-var ui_;
-var SoundUtils;
-var scene = new THREE.Scene();
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
+<script type="text/javascript">	
+			var renderer = new THREE.CanvasRenderer();
+		var scene = new THREE.Scene();
 scene.mouse_thru = true;
+var ui_;
+var canvas_position = {x:0, y:0};
+var clock = new THREE.Clock();
+var SoundUtils;
 var active_camera;
 var g_elapsed = -1;
-var g_delta = 0.0;	
+var g_delta = 0.0;
 var drawingCanvas = renderer.domElement;
-var canvas_position = {x:0, y:0};
 var streamer;
-var app_width = window.innerWidth;
-var app_height = window.innerHeight;
-var lbl0;var lbl1;var lbl2;var img1;var img2;var img3;var img4;
-var sphere_material;var camera_1;var plane1;var sphere1;var sphere2;var plane2;
+var app_width = 500;
+var app_height = 500;
+var r1;var lbl1;var img1;var lbl2;var img2;var lbl3;var lbl4;
+var material1;var material2;var camera_1;var plane1;var plane2;
 var application = {};
-application.events = new ev.EventHolder();
+application.events = new ev.EventHolder();	
 		var streamer = new stream.Streamer();	
 		var ResourceUtils = new stream.ResourceUtils();
 		if(drawingCanvas){
 			var client =
 			{
-				width: window.innerWidth,
-				height: window.innerHeight,
+				width: 500,
+				height: 500,
 				canvas: drawingCanvas
 			};            						
 			var ui_ = new ui.Manager(client, streamer);			
@@ -72,23 +73,23 @@ application.events = new ev.EventHolder();
 				});
                 global_package.add_item(
             {
-		id:				"__image2",
+		id:				"res_img1",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"images/test2.png",
+		src:			"images/test3.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
 });	
-				var __image2;
+				var res_img1;
 				global_package.events.addListener("loaded", function()
 				{
-					__image2 = streamer.get_resource("__image2");
+					res_img1 = streamer.get_resource("res_img1");
 				});
                 global_package.add_item(
             {
 		id:				"image0",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"images/test3.png",
+		src:			"images/test2.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
@@ -108,180 +109,162 @@ application.events = new ev.EventHolder();
 		});		
 		global_package.load();	
     // --------RESOURCES---------
-soundRenderer = new THREE.SoundRenderer();		
-document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( app_width, app_height );
+var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
+manager.events = new ev.EventHolder();
+manager.ui_ = ui_;	
 function render() {
-canvas_position = getElementPosition(drawingCanvas);
+manager.canvas_position = getElementPosition(drawingCanvas);
 var now   = new Date().getTime();
 if (g_elapsed < 0)
-    g_delta = 0; //first update
+	g_delta = 0; //first update
 else
-g_delta  = now - g_elapsed;  
+	g_delta  = now - g_elapsed;  
 g_elapsed = now; 
-application.events.dispatch("updates", []);	
-		set_active_camera(camera_1);
+c_delta = clock.getDelta(),
+c_elapsed = clock.getElapsedTime() * 10;
+manager.events.dispatch("update", [g_delta, g_elapsed]);	
+				manager.scene.add(camera_1);
+				set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-threejs_load_resources(streamer, function()
+threejs_load_resources(manager, function()
 {
-	drawingCanvas.onmousemove = function(ev)
-	{
-		ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmousedown = function(ev)
-	{
-		ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmouseup = function(ev)
-	{
-		ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};		
-	ui_.events.addListener("mousedown", function(x,y)
-	{    
-		application.events.dispatch("mousedown", [x, y]);
-	});
-	ui_.events.addListener("mouseup", function(x,y)
-	{    
-		application.events.dispatch("mouseup", [x, y]);
-	});
-	ui_.events.addListener("mousemove", function(x,y)
-	{    
-		application.events.dispatch("mousemove", [x, y]);
-	});
-	ui_.events.addListener("click", function(x,y)
-	{    
-		application.events.dispatch("click", [x, y]);
-	});
-	ui_.events.addListener("drag", function(x,y)
-	{    
-		application.events.dispatch("drag", [x, y]);
-	});
-	ui_.events.addListener("dragend", function(x,y)
-	{    
-		application.events.dispatch("dragend", [x, y]);
-	});
-	ui_.events.addListener("keyup", function(keycode)
-	{    
-		application.events.dispatch("keyup", [keycode]);
-	});
-	ui_.events.addListener("keydown", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
-	ui_.events.addListener("keypress", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
-		    lbl0 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Arial");
-		    lbl1 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Arial");
-		    lbl2 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Arial");
+		    r1 = new ui.Rectangle(g_ui_root.manager, g_ui_root, null, "ivory", null);
+		    lbl1 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
 		    img1 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test1.png");
-		    img2 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test2.png");
-		    img3 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test2.png");
-		    img4 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test2.png");
-sphere_material = new THREE.MeshBasicMaterial({
-map:new THREE.Texture(scene.streamer.get_resource('images/test1.png').data),
+		    lbl2 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+		    img2 = new ui.Image(g_ui_root.manager, g_ui_root, "image0");
+		    lbl3 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+		    lbl4 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+material1 = new THREE.MeshBasicMaterial({
+map:new THREE.Texture(manager.streamer.get_resource('images/test3.png').data),
 	});
+material1.manager = manager;
+material2 = new THREE.MeshBasicMaterial({
+map:new THREE.Texture(manager.streamer.get_resource('images/test3.png').data),
+	});
+material2.manager = manager;
 		    camera_1 = 
-		    new THREE.Camera(45, 1.5, 1, 10000, null) ;	
-		active_camera = camera_1;
-	    plane1_plane = new THREE.Plane(280, 320, null, null) ;
-	    plane1 = new THREE.Mesh(plane1_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(plane1);
+		    new THREE.PerspectiveCamera(45, 1.5, 1, 10000, null) ;				
+camera_1.manager = manager;
+	    plane1_plane = new THREE.PlaneGeometry(300, 300, 1, 1) ;
+	    plane1 = new THREE.Mesh(plane1_plane, material2);
+	    manager.scene.add(plane1);
 		plane1.events = new ev.EventHolder();
-	    sphere1_sphere = new THREE.Sphere(150, null, null) ;
-	    sphere1 = new THREE.Mesh(sphere1_sphere, sphere_material);
-	    scene.addObject(sphere1);
-		sphere1.events = new ev.EventHolder();
-	    sphere2_sphere = new THREE.Sphere(150, null, null) ;
-	    sphere2 = new THREE.Mesh(sphere2_sphere, sphere_material);
-	    scene.addObject(sphere2);
-		sphere2.events = new ev.EventHolder();
-	    plane2_plane = new THREE.Plane(100, 100, null, null) ;
-	    plane2 = new THREE.Mesh(plane2_plane, new THREE.MeshBasicMaterial());
-	    scene.addObject(plane2);
+plane1.manager = manager;
+	    plane2_plane = new THREE.PlaneGeometry(300, 300, 1, 1) ;
+	    plane2 = new THREE.Mesh(plane2_plane, material1);
+	    manager.scene.add(plane2);
 		plane2.events = new ev.EventHolder();
-			img2.b_filter = new jsmanip.Waterripple(
-		0,50,16,10,0.5,0.5,img2);		
-		if(!img2.filters)
-			img2.filters = [];
-		img2.filters.push(img2.b_filter);
-			obtain_images(img2.b_filter, img2);
-			img2.b_filter.set_render_on_apply(true);
+plane2.manager = manager;
+			streamer.get_resource('image0').rgb1 = new jsmanip.RGBadjust(
+		1,1,1,streamer.get_resource('image0'));		
+		if(!streamer.get_resource('image0').filters)
+			streamer.get_resource('image0').filters = [];
+		streamer.get_resource('image0').filters.push(streamer.get_resource('image0').rgb1);
+			obtain_images(streamer.get_resource('image0').rgb1, streamer.get_resource('image0'));
+			streamer.get_resource('image0').rgb1.set_render_on_apply(true);
+			material1.noise1 = new jsmanip.Noise(
+		25,1,false,material1);		
+		if(!material1.filters)
+			material1.filters = [];
+		material1.filters.push(material1.noise1);
+			obtain_images(material1.noise1, material1);
+			material1.noise1.set_render_on_apply(true);
 	    var preset1 = new jsmanip.Preset() ;
-			preset1.wfilter = new jsmanip.Waterripple(
-		0,50,16,10,0.5,0.5,preset1);		
+			preset1.brightness1 = new jsmanip.Brightness(
+		0.200000003,preset1);		
 		if(!preset1.filters)
 			preset1.filters = [];
-		preset1.filters.push(preset1.wfilter);
-			preset1.sepia1 = new jsmanip.Sepia(
-		10,preset1);		
+		preset1.filters.push(preset1.brightness1);
+			preset1.sat1 = new jsmanip.Saturation(
+		0.200000003,preset1);		
 		if(!preset1.filters)
 			preset1.filters = [];
-		preset1.filters.push(preset1.sepia1);
-			img3.bf0 = new jsmanip.Gain(
-		0.200000003,0.200000003,img3);		
-		if(!img3.filters)
-			img3.filters = [];
-		img3.filters.push(img3.bf0);
-			obtain_images(img3.bf0, img3);
-			img3.bf0.set_render_on_apply(true);
-            lbl0.set_x(50);
-            lbl0.set_y(20);
-            lbl0.text("Brightness and contrast filter demo");
-            lbl1.set_x(50);
-            lbl1.set_y(40);
-            lbl1.text("Pass mouse over the Gioconda's elements to change their filter values");
-            lbl2.set_x(50);
-            lbl2.set_y(60);
-            lbl2.text("Press numpad + and - to increase or decrease resource filter values");
+		preset1.filters.push(preset1.sat1);
+			var hue0_parent = {};
+			var hue0 = new jsmanip.Hue(
+		0.200000003,hue0_parent);
+			hue0_parent.hue0 = hue0;
+		if(!hue0_parent.filters)
+			hue0_parent.filters = [];
+		hue0_parent.filters.push(hue0_parent.hue0);
+			var contrast1_parent = {};
+			var contrast1 = new jsmanip.Contrast(
+		0.200000003,contrast1_parent);
+			contrast1_parent.contrast1 = contrast1;
+		if(!contrast1_parent.filters)
+			contrast1_parent.filters = [];
+		contrast1_parent.filters.push(contrast1_parent.contrast1);
+			img1.contrast2 = new jsmanip.Contrast(
+		0.5,img1);		
+		if(!img1.filters)
+			img1.filters = [];
+		img1.filters.push(img1.contrast2);
+			obtain_images(img1.contrast2, img1);
+			img1.contrast2.set_render_on_apply(true);
+			plane1.emboss1 = new jsmanip.Emboss(
+		1,135,30,plane1);		
+		if(!plane1.filters)
+			plane1.filters = [];
+		plane1.filters.push(plane1.emboss1);
+			obtain_images(plane1.emboss1, plane1);
+			plane1.emboss1.set_render_on_apply(true);
+            r1.set_x(0);
+            r1.set_y(0);
+            r1.set_width(500);
+            r1.set_height(500);
+            lbl1.set_x(55);
+            lbl1.set_y(25);
+            lbl1.text("Component Filter");
+            lbl1.set_color("Azure");
             img1.set_x(50);
-            img1.set_y(100);
+            img1.set_y(50);
             img1.set_width(128);
             img1.set_height(164);
-            img2.set_x(50);
-            img2.set_y(450);
-            img2.set_width(60);
-            img2.set_height(100);
-            img3.set_x(150);
-            img3.set_y(450);
-            img3.set_width(60);
-            img3.set_height(100);
-            img4.set_x(250);
-            img4.set_y(450);
-            img4.set_width(60);
-            img4.set_height(100);
+            lbl2.set_x(250);
+            lbl2.set_y(25);
+            lbl2.text("Resource filter in a component");
+            lbl2.set_color("Azure");
+            img2.set_x(250);
+            img2.set_y(50);
+            img2.set_width(128);
+            img2.set_height(164);
+            lbl3.set_x(55);
+            lbl3.set_y(255);
+            lbl3.text("Plane Filter");
+            lbl3.set_color("Azure");
+            lbl4.set_x(250);
+            lbl4.set_y(255);
+            lbl4.text("Material filter in a plane");
+            lbl4.set_color("Azure");
+            manager.events.addListener('update', function(){camera_1.lookAt(scene.position)});
             camera_1.position.z = 1000;
-            plane1.materials[0].map = new THREE.Texture(scene.streamer.get_resource("images/test1.png").data);
-            plane1.position.x = -30;
-            set_rotation_y(plane1.rotation, -10);
-            sphere1.position.x = 400;
-            sphere1.position.y = -100;
-            sphere2.position.x = 400;
-            sphere2.position.y = 200;
-            plane2.materials[0].map = new THREE.Texture(scene.streamer.get_resource("images/test2.png").data);
-            plane2.position.x = -300;
-            plane2.position.y = -30;
-            set_rotation_y(plane2.rotation, -10);
-	application.events.addListener("click", function()
+            plane1.position.x = -330;
+            plane1.position.y = -200;
+            set_rotation_x(plane1.rotation, 90);
+            plane2.position.x = 170;
+            plane2.position.y = -200;
+            set_rotation_x(plane2.rotation, 90);
+	application.events.addListener("update", function()
 	{    
-		put_image(img1, preset1.apply(get_image_data(img1)));
-	}
-	);
-	application.events.addListener("init", function()
-	{    
-	}
-	);
-	application.events.addListener("keydown", function(keycode)
-	{    
-		if (keycode == NUMPAD_PLUS)
+		if (host.needs_update)
 {
-put_image(img2, b_filter.apply(get_image_data(img2)));
+img1.contrast2.set_amount(host.contrast_amount);
+if (image0)
+{
+image0.rgb1.set_red(host.rgb_red);
+image0.rgb1.set_green(host.rgb_green);
+image0.rgb1.set_blue(host.rgb_blue);
 }
-if (keycode == NUMPAD_MINUS)
-{
-put_image(img2, b_filter.apply(get_image_data(img2)));
+plane1.emboss1.set_height(host.emboss_height);
+plane1.emboss1.set_angle(host.emboss_angle);
+plane1.emboss1.set_elevation(host.emboss_elevation);
+material1.noise1.set_amount(host.anoise_amount);
+material1.noise1.set_density(host.anoise_density);
+material1.noise1.mono = host.anoise_mono;
+host.needs_update = false;
 }
 	}
 	);
@@ -291,37 +274,83 @@ if(ui_)
 	g_ui.fill_background = false;	
 }
 var event_manager = new ev.ThreeEventManager();
-document.onmousemove = function(ev)
+renderer.domElement.onmousemove = function(ev)
 {
-	event_manager.mousemove(ev.clientX, ev.clientY);                  
+	event_manager.mousemove(manager, ev.clientX, ev.clientY);   
+	if(ui_)
+		ui_.mousemove(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
 };
-document.onmousedown = function(ev)
+renderer.domElement.onmousedown = function(ev)
 {
-	event_manager.mousedown(ev.clientX, ev.clientY);                  
+	event_manager.mousedown(manager, ev.clientX, ev.clientY);     
+	if(ui_)
+		ui_.mousedown(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
 };
-document.onmouseup = function(ev)
+renderer.domElement.onmouseup = function(ev)
 {
-	event_manager.mouseup(ev.clientX, ev.clientY);		
+	event_manager.mouseup(manager, ev.clientX, ev.clientY);		
+	if(ui_)
+		ui_.mouseup(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
 };
 document.onkeydown = function(ev)
 {
-	event_manager.keydown(ev.keyCode);                  
+	event_manager.keydown(manager, ev.keyCode);                  
 };
 document.onkeyup = function(ev)
 {
-	event_manager.keyup(ev.keyCode);                  
+	event_manager.keyup(manager, ev.keyCode);                  
 };
 document.onkeypress = function(ev)
 {
-	event_manager.keypress(ev.keyCode);                  
+	event_manager.keypress(manager, ev.keyCode);                  
 };
+manager.events.addListener("mousedown", function(x,y)
+{    
+	application.events.dispatch("mousedown", [x, y]);
+});
+manager.events.addListener("mouseup", function(x,y)
+{    
+	application.events.dispatch("mouseup", [x, y]);
+});
+manager.events.addListener("mousemove", function(x,y)
+{    
+	application.events.dispatch("mousemove", [x, y]);
+});
+manager.events.addListener("click", function(x,y)
+{    
+	application.events.dispatch("click", [x, y]);
+});
+manager.events.addListener("drag", function(x,y)
+{    
+	application.events.dispatch("drag", [x, y]);
+});
+manager.events.addListener("dragend", function(x,y)
+{    
+	application.events.dispatch("dragend", [x, y]);
+});
+manager.events.addListener("keyup", function(keycode)
+{    
+	application.events.dispatch("keyup", [keycode]);
+});
+manager.events.addListener("keydown", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("keypress", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("update", function(g_delta, g_elapsed)
+{    
+	application.events.dispatch("update", [g_delta, g_elapsed]);
+});
 application.events.dispatch("init", []);
-document.body.appendChild( renderer.domElement );
+		document.body.appendChild( renderer.domElement );
 animate();
 });
 function animate() {
 	if(ui_)
-		drawingCanvas.getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
+		drawingCanvas.getContext('2d').clearRect(0,0,500,500);
 	renderer.domElement.getContext('2d').globalAlpha = 1;
 	requestAnimationFrame( animate );
 	render();

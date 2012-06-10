@@ -49,3 +49,13 @@ var JQUGrid =
 	        grid.jqGrid('addRowData',i + 1, data[i]);    
     },
 }
+
+var JQUMap = 
+{
+    set_visible : function(map, visible)
+    {
+        JQUComponent.set_visible(map, visible);
+        if (visible)
+            map.triggerEvent('resize');
+    },
+}

@@ -6,18 +6,17 @@
 	<dependency href="jsm-utils.js"/>
 	
 	<types>
-		<class id="preset" output_id="jsmanip.Preset" serializer="../common-js/serializer.xss" resolve_children="true"/>	
+        <class id="preset" output_id="jsmanip.Preset" serializer="../common-js/serializer.xss" resolve_children="true"/>
 		<class id="preset_filter"/>
 		<class id="filter">
-			<property id="apply" type="bool" use_plain_value="true">
-				<get text="apply_"/>
-                <set text="set_apply({value})"/>
+			<property id="enabled" type="bool" use_plain_value="true">
+				<get text="enabled"/>
+                <set text="set_enabled({value})"/>
             </property>
 			<property id="render_on_apply" type="bool" use_plain_value="true">
 				<get text="render_on_apply"/>
                 <set text="set_render_on_apply({value})"/>
             </property>
-            <property id="enabled" type="bool"/>
 		</class>
 		<class id="brightness" super="filter" output_id="jsmanip.Brightness">	
 			<constructor_params>
@@ -51,7 +50,7 @@
 			<property id="density" type="float" use_plain_value="true" dont_init="true">
 				<get text="options.density"/>
                 <set text="set_density({value})"/>
-            </property>  
+            </property>
 			<property id="mix" type="float" use_plain_value="true" dont_init="true">
 				<get text="options.mix"/>
                 <set text="set_mix({value})"/>

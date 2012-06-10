@@ -9,12 +9,12 @@
 	</resources>
 
 	<materials>		
-		<lambert_material id="material_sphere1" color="White" env_map="t_cube1"/>			
+		<basic_material id="material_sphere1" color="White" env_map="t_cube1"/>			
 	</materials>
 	
 	<scene>		
 	
-		<camera id="camera_1" fov="60" aspect="1.5" near="1" far="100000">
+		<camera id="camera_1" fov="60" aspect="1.5" near="1" far="100000" look_at="scene.position">
 			<position z="3200"/>			
 		</camera>	
 

@@ -446,9 +446,9 @@ bool xss_context::resolve(const str& id, resolve_info& info)
               obj = get_this();
 
             //td: think this through
-            if (obj && obj->type() && obj->type()->has("resolve_children"))
+            if (obj && obj->type()) // && obj->type()->has("resolve_children")
               {
-                XSSObject child = obj->find(id);
+                XSSObject child = obj->find_by_id(id);
                 if (child)
                   {
                     info.what  = RESOLVE_INSTANCE;
@@ -646,11 +646,6 @@ bool xss_context::resolve_path(const std::vector<str>& path, resolve_info& info)
 
 void xss_context::register_symbol(RESOLVE_ITEM type, const str& id, variant symbol, bool overrite)
   {
-    if (id == "scene")    
-      {
-        str debug("xxx");
-      }
-
     symbol_list::iterator it = symbols_.find(id);
     if (it != symbols_.end())
       {
@@ -873,7 +868,18 @@ void xss_object::copy(XSSObject obj)
       {
         XSSProperty obj_prop = *it;
 
-        XSSProperty my_prop = get_shallow_property(obj_prop->id());
+        str  prop_id = obj_prop->id();
+        bool override_prop = obj_prop->get<bool>("override", false);
+
+        if (override_prop)
+          {
+            XSSProperty my_prop(new xss_property);
+            my_prop->copy(XSSObject(obj_prop));
+            properties_->push_back(my_prop);
+            continue;
+          }
+
+        XSSProperty my_prop = get_shallow_property(prop_id);
         bool        add     = true;
         if (my_prop)
           {
@@ -884,9 +890,11 @@ void xss_object::copy(XSSObject obj)
           {
             my_prop = XSSProperty(new xss_property);
             
-            XSSProperty type_prop = get_property(obj_prop->id());
+            XSSProperty type_prop = get_property(prop_id);
             if (type_prop)
+              {
                 my_prop->copy(XSSObject(type_prop));
+              }
 
             my_prop->copy(XSSObject(obj_prop));
           }
@@ -1198,6 +1206,24 @@ XSSObject xss_object::find(const str& what)
       {
         XSSObject child = *it;
         if (child->id() == what || child->type_name() == what)
+          return child;
+      }
+
+    return XSSObject();
+  }
+
+XSSObject xss_object::find_by_id(const str& what)
+  {
+    if (what.empty())
+      return XSSObject();
+
+    std::vector<variant>::iterator it = children_->ref_begin();
+    std::vector<variant>::iterator nd = children_->ref_end();
+
+    for(; it != nd; it++)
+      {
+        XSSObject child = *it;
+        if (child->id() == what)
           return child;
       }
 

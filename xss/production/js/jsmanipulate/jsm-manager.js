@@ -5,7 +5,7 @@ jsmanip.Preset = Class.extend(
 	init: function()
 	{
 		this.filters = [];
-		this.apply_ = true;
+		this.enabled = true;
 	},	
 
     deserialize: function(data)
@@ -44,8 +44,7 @@ jsmanip.Preset = Class.extend(
 jsmanip.Filter = Class.extend(
 {	
 	init: function(parent)
-	{		
-		this.apply_ = true;		
+	{				
         this.enabled = true;
 		this.parent = parent;	
 		this.render_on_apply = false;
@@ -64,9 +63,9 @@ jsmanip.Filter = Class.extend(
 		this.apply();
 	},
 
-	set_apply: function(apply_)
+	set_enabled: function(value)
 	{
-		this.apply_ = apply_;
+		this.enabled = value;
 		this.apply();
 	},	
 
@@ -91,7 +90,7 @@ jsmanip.Filter = Class.extend(
 			for(var i = 0; i < this.parent.filters.length; i++)
 			{
 				curr_filter = this.parent.filters[i];
-				if(curr_filter.apply_)
+				if(curr_filter.enabled)
 				{						
 					curr_filter.applyToImage(this.image);							
 				}			

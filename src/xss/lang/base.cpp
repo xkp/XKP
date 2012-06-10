@@ -1627,8 +1627,11 @@ str base_lang::render_ctor_args(XSSType type, XSSObject instance, DynamicArray r
                 if (use_plain_value)
                   value = variant_cast<str>(prop->value_, str());
 
-                if (value.empty())
+                if (value.empty() && !prop->value_.empty())
                   value = prop->render_value();
+
+                if (value.empty())
+                  value = p->get<str>("default_value", str("null"));
               }
             else
               {

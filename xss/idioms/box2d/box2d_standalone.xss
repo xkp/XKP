@@ -9,10 +9,13 @@
 	</canvas>
    </body>
 	
-    <xss:code>
-		compiler.inject("render_dependencies");
-	</xss:code>
-	
+    <script type="../js/resig.js"/>
+	<script type="../js/event.js"/>
+	<script type="../js/Box2dWeb-2.1.a.3.min.js"/>
+	<script type="../js/utils.js"/>
+	<script type="../js/keys.js"/>
+	<script type="../js/joint.js"/>
+	<script type="../js/spawner.js"/>
 	<script type="text/javascript">
 	
       var g_ui = {};     

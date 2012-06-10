@@ -15,74 +15,93 @@
             <script type="text/javascript" src="../js/colors.js"></script>
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
-            <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
-<script type="text/javascript">		
-var ui_;
+<script type="text/javascript">	
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-var renderer = new THREE.WebGLRenderer( { antialias: false } );
+			var renderer = new THREE.WebGLRenderer( { antialias: false } );
+		var ui_;
 var canvas_position = {x:0, y:0};
 var active_camera;
-var g_elapsed = -1;
-var g_delta = 0.0;	
+var g_elapsed;
+var g_delta;	
 var scene = new THREE.Scene();
+scene.mouse_thru = true;
 var streamer;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
+var clock = new THREE.Clock();
 application.events = new ev.EventHolder();
 // --------RESOURCES---------
 // --------RESOURCES---------
-soundRenderer = new THREE.SoundRenderer();		
-document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( app_width, app_height );
+var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
+manager.events = new ev.EventHolder();
 function render() {
-canvas_position = getElementPosition(renderer.domElement);
+manager.canvas_position = getElementPosition(renderer.domElement);
 var now   = new Date().getTime();
 if (g_elapsed < 0)
-    g_delta = 0; //first update
+	g_delta = 0; //first update
 else
-g_delta  = now - g_elapsed;  
+	g_delta  = now - g_elapsed;  
 g_elapsed = now; 
-application.events.dispatch("updates", []);	
-		set_active_camera(camera_1);
+c_delta = clock.getDelta(),
+c_elapsed = clock.getElapsedTime() * 10;
+manager.events.dispatch("update", [g_delta, g_elapsed]);	
+				manager.scene.add(camera_1);
+				set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var my_sphere;var t_cube1;var material_sphere1;var camera_1;
+var t_cube1;var material_sphere1;var camera_1;var __panorama_cube1;
     function create_my_sphere(
     radius,x_segments,y_segments ) { 
     var my_sphere;
-	    my_sphere_sphere = new THREE.Sphere(radius, x_segments, y_segments) ;
+	    my_sphere_sphere = new THREE.SphereGeometry(radius, x_segments, y_segments) ;
 	    my_sphere = new THREE.Mesh(my_sphere_sphere, new THREE.MeshBasicMaterial());
-	    scene.addObject(my_sphere);
+	    manager.scene.add(my_sphere);
 		my_sphere.events = new ev.EventHolder();
         var this__ = my_sphere;
         my_sphere.mat = null;
         my_sphere.mat_set = function (value)
         {
             my_sphere.mat = value;
-            this.materials[0] = value;
+            this.material = value;
         };
+		if(my_sphere instanceof THREE.Object3D)
+			manager.scene.add(my_sphere);
+		my_sphere.manager = manager;
         return my_sphere;
         }
-threejs_load_resources(streamer, function()
+threejs_load_resources(manager, function()
 {
 		var urls = ["images/cube/pisa/px.png", "images/cube/pisa/nx.png",
 					"images/cube/pisa/py.png", "images/cube/pisa/ny.png",
 					"images/cube/pisa/pz.png", "images/cube/pisa/nz.png" ];		
 			t_cube1 = THREE.ImageUtils.loadTextureCube( urls );
-material_sphere1 = new THREE.MeshLambertMaterial({
+t_cube1.manager = manager;
+material_sphere1 = new THREE.MeshBasicMaterial({
 color:White,envMap:t_cube1
 	});
+material_sphere1.manager = manager;
 		    camera_1 = 
-		    new THREE.Camera(60, 1.5, 1, 100000, null) ;	
-		active_camera = camera_1;
-		THREE.SceneUtils.addPanoramaCubeWebGL( 
-									scene,
-									100000, 
-									t_cube1 
-									);		
+		    new THREE.PerspectiveCamera(60, 1.5, 1, 100000, null) ;	
+camera_1.manager = manager;
+			var __panorama_cube1 = {};
+			var __panorama_cube1_shader = THREE.ShaderUtils.lib[ "cube" ];
+			__panorama_cube1_shader.uniforms[ "tCube" ].texture = __panorama_cube1;
+			var __panorama_cube1_material = new THREE.ShaderMaterial( {
+				fragmentShader: __panorama_cube1_shader.fragmentShader,
+				vertexShader: __panorama_cube1_shader.vertexShader,
+				uniforms: __panorama_cube1_shader.uniforms,
+				depthWrite: false
+			} ),
+			__panorama_cube1_mesh = 
+			new THREE.Mesh( new THREE.CubeGeometry( 100000, 100000, 100000 ), __panorama_cube1_material );
+			__panorama_cube1_mesh.flipSided = true;
+			scene.add( __panorama_cube1_mesh );
+__panorama_cube1.manager = manager;
+            manager.events.addListener('update', function(){camera_1.lookAt(scene.position)});
             camera_1.position.z = 3200;
             application.mouse_x = null;
             application.mouse_y = null;
@@ -103,11 +122,11 @@ sphere_1.scale.x = Math.random() * 3 + 1;
 sphere_1.scale.y = sphere_1.scale.x;
 sphere_1.scale.z = sphere_1.scale.x;
 application.spheres.push(sphere_1);
-scene.addObject(sphere_1);
+scene.add(sphere_1);
 }
 	}
 	);
-	application.events.addListener("updates", function()
+	application.events.addListener("update", function()
 	{    
 		application.timer = g_elapsed * 9.99999975e-005;
 camera_1.position.x = camera_1.position.x + (application.mouse_x - camera_1.position.x) * 0.0500000007;
@@ -129,30 +148,70 @@ application.mouse_y = (y - window.innerHeight / 2) * 10;
 var event_manager = new ev.ThreeEventManager();
 document.onmousemove = function(ev)
 {
-	event_manager.mousemove(ev.clientX, ev.clientY);                  
+	event_manager.mousemove(manager, ev.clientX, ev.clientY);                  
 };
 document.onmousedown = function(ev)
 {
-	event_manager.mousedown(ev.clientX, ev.clientY);                  
+	event_manager.mousedown(manager, ev.clientX, ev.clientY);                  
 };
 document.onmouseup = function(ev)
 {
-	event_manager.mouseup(ev.clientX, ev.clientY);		
+	event_manager.mouseup(manager, ev.clientX, ev.clientY);		
 };
 document.onkeydown = function(ev)
 {
-	event_manager.keydown(ev.keyCode);                  
+	event_manager.keydown(manager, ev.keyCode);                  
 };
 document.onkeyup = function(ev)
 {
-	event_manager.keyup(ev.keyCode);                  
+	event_manager.keyup(manager, ev.keyCode);                  
 };
 document.onkeypress = function(ev)
 {
-	event_manager.keypress(ev.keyCode);                  
+	event_manager.keypress(manager, ev.keyCode);                  
 };
+manager.events.addListener("mousedown", function(x,y)
+{    
+	application.events.dispatch("mousedown", [x, y]);
+});
+manager.events.addListener("mouseup", function(x,y)
+{    
+	application.events.dispatch("mouseup", [x, y]);
+});
+manager.events.addListener("mousemove", function(x,y)
+{    
+	application.events.dispatch("mousemove", [x, y]);
+});
+manager.events.addListener("click", function(x,y)
+{    
+	application.events.dispatch("click", [x, y]);
+});
+manager.events.addListener("drag", function(x,y)
+{    
+	application.events.dispatch("drag", [x, y]);
+});
+manager.events.addListener("dragend", function(x,y)
+{    
+	application.events.dispatch("dragend", [x, y]);
+});
+manager.events.addListener("keyup", function(keycode)
+{    
+	application.events.dispatch("keyup", [keycode]);
+});
+manager.events.addListener("keydown", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("keypress", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("update", function(delta, elapsed)
+{    
+	application.events.dispatch("update", [delta, elapsed]);
+});
 application.events.dispatch("init", []);
-document.body.appendChild( renderer.domElement );
+		document.body.appendChild( renderer.domElement );
 animate();
 });
 function animate() {	

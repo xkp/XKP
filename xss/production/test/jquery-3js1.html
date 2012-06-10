@@ -1,0 +1,400 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>Embedded canvas</title>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+            <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
+            <script type="text/javascript" src="../js/jquery-idiom.js"></script>
+            <link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css"></link>
+            <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+        var application = {};
+			var __div1 = $("#__div1");
+			var __div2 = $("#__div2");
+			var lbl1 = $("#lbl1");
+			var edit1 = $("#edit1");
+			var btn1 = $("#btn1").button();
+			var app = $("#app");
+            app.application = (function (host)
+{
+			var canvasElement = document.getElementById("app");	
+			var renderer = new THREE.CanvasRenderer({canvas:canvasElement});
+			renderer.domElement.width = renderer.domElement.offsetWidth;
+			renderer.domElement.height = renderer.domElement.offsetHeight;
+		var scene = new THREE.Scene();
+scene.mouse_thru = true;
+var ui_;
+var canvas_position = {x:0, y:0};
+var clock = new THREE.Clock();
+var SoundUtils;
+var active_camera;
+var g_elapsed = -1;
+var g_delta = 0.0;
+var drawingCanvas = renderer.domElement;
+var streamer;
+var app_width = canvasElement.width;
+var app_height = canvasElement.height;
+var __label1;var lbl1;
+var camera_1;
+var application = {};
+application.events = new ev.EventHolder();	
+		if(drawingCanvas){
+			var client =
+			{
+				width: canvasElement.width,
+				height: canvasElement.height,
+				canvas: drawingCanvas
+			};            						
+			var ui_ = new ui.Manager(client, streamer);			
+			var g_ui = ui_;
+			var g_ui_root = ui_.root;
+			var mouse_pressed = false;
+		}		
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
+	// --------RESOURCES---------
+		var global_package = new stream.Package(streamer);	
+                global_package.add_item(
+            {
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test1.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+                global_package.add_item(
+            {
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test3.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var __image2;
+				global_package.events.addListener("loaded", function()
+				{
+					__image2 = streamer.get_resource("__image2");
+				});
+                global_package.add_item(
+            {
+		id:				"__image3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test4.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var __image3;
+				global_package.events.addListener("loaded", function()
+				{
+					__image3 = streamer.get_resource("__image3");
+				});
+                global_package.add_item(
+            {
+		id:				"__image4",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test5.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var __image4;
+				global_package.events.addListener("loaded", function()
+				{
+					__image4 = streamer.get_resource("__image4");
+				});
+		global_package.add_item({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});		
+		global_package.load();	
+    // --------RESOURCES---------
+renderer.setSize( app_width, app_height );
+var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
+manager.events = new ev.EventHolder();
+manager.ui_ = ui_;	
+function render() {
+manager.canvas_position = getElementPosition(drawingCanvas);
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+	g_delta = 0; //first update
+else
+	g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+c_delta = clock.getDelta(),
+c_elapsed = clock.getElapsedTime() * 10;
+manager.events.dispatch("update", [g_delta, g_elapsed]);	
+				manager.scene.add(camera_1);
+				set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+    function create_my_plane(
+     ) { 
+    var my_plane;
+			my_plane = new THREE.Object3D();
+			my_plane.events = new ev.EventHolder();
+        var this__ = my_plane;
+				var img_plane;
+	    img_plane_plane = new THREE.PlaneGeometry(128, 164, 1, 1) ;
+	    img_plane = new THREE.Mesh(img_plane_plane, new THREE.MeshBasicMaterial());
+	    manager.scene.add(img_plane);
+		img_plane.events = new ev.EventHolder();
+				if(img_plane instanceof THREE.Object3D)
+					my_plane.add(img_plane);
+				var img_reflect;
+	    img_reflect_plane = new THREE.PlaneGeometry(128, 128, 1, 1) ;
+	    img_reflect = new THREE.Mesh(img_reflect_plane, new THREE.MeshBasicMaterial());
+	    manager.scene.add(img_reflect);
+		img_reflect.events = new ev.EventHolder();
+				if(img_reflect instanceof THREE.Object3D)
+					my_plane.add(img_reflect);
+            set_rotation_x(img_plane.rotation, 90);
+            img_reflect.doubleSided = true;
+            set_object_alpha(img_reflect, 40);
+            img_reflect.scale.y = 0.800000012;
+            img_reflect.position.y = -140;
+            set_rotation_x(img_reflect.rotation, 90);
+            set_rotation_y(img_reflect.rotation, 180);
+	my_plane.set_image = function(value) 
+	{
+		set_transform_image(my_plane, value);
+	};
+	my_plane.events.addListener("mousein", function()
+	{    
+		my_plane.scale.x = 1.5;
+my_plane.scale.y = 1.5;
+	}
+	);
+	my_plane.events.addListener("mouseout", function()
+	{    
+		my_plane.scale.x = 1;
+my_plane.scale.y = 1;
+	}
+	);
+		if(my_plane instanceof THREE.Object3D)
+			manager.scene.add(my_plane);
+		my_plane.manager = manager;
+        return my_plane;
+        }
+threejs_load_resources(manager, function()
+{
+		    __label1 = new ui.Label(g_ui_root.manager, g_ui_root, "15px Verdana");
+		    lbl1 = new ui.Label(g_ui_root.manager, g_ui_root, "15px Verdana");
+		    camera_1 = 
+		    new THREE.PerspectiveCamera(45, 1.5, 1, 10000, null) ;				
+camera_1.manager = manager;
+            __label1.set_x(150);
+            __label1.set_y(75);
+            __label1.set_color("Ivory");
+            __label1.text("Move mouse to control the carousel movement");
+            lbl1.set_x(175);
+            lbl1.set_y(100);
+            lbl1.set_color("Ivory");
+            lbl1.text("Put the mouse over an image to zoom it");
+            camera_1.position.x = 100;
+            camera_1.position.y = 50;
+            camera_1.position.z = 1200;
+            application.angle = null;
+            application.start = 0;
+            application.speed = 0.0199999996;
+            application.step = 2 * Math.PI / 5;
+            application.max_rotation = 2 * Math.PI;
+            application.img_array = ["images/test1.png", "images/test2.png", "images/test3.png", "images/test4.png", "images/test5.png"];
+            application.plane_array = [];
+	application.position_items = function() 
+	{
+		application.start = application.start + application.speed;
+if (application.start > application.max_rotation)
+{
+application.start = 0;
+}
+for(var i = 0; i < 5; i++)
+{
+application.angle = application.start + i * application.step;
+application.plane_array[i].position.x = 275 * Math.cos(application.angle);
+application.plane_array[i].position.z = 275 * Math.sin(application.angle);
+}
+	};
+	application.events.addListener("update", function()
+	{    
+		application.position_items();
+	}
+	);
+	application.events.addListener("init", function()
+	{    
+		for(var i = 0; i < 5; i++)
+{
+application.plane_array.push(
+create_my_plane()
+);
+application.plane_array[i].set_image(application.img_array[i]);
+scene.add(application.plane_array[i]);
+}
+	}
+	);
+	application.events.addListener("mousemove", function(x,y)
+	{    
+		if (x < app_width / 2)
+{
+application.speed = -0.200000003 * (app_width / 2 - x) / app_width / 2;
+}
+if (x > app_width / 2)
+{
+application.speed = -0.200000003 * (app_width / 2 - x) / app_width / 2;
+}
+	}
+	);
+	application.events.addListener("click", function()
+	{    
+	}
+	);
+if(ui_)
+{	
+	SoundUtils = new ui.SoundUtils();		
+	g_ui.fill_background = false;	
+}
+var event_manager = new ev.ThreeEventManager();
+renderer.domElement.onmousemove = function(ev)
+{
+	event_manager.mousemove(manager, ev.clientX, ev.clientY);   
+	if(ui_)
+		ui_.mousemove(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
+};
+renderer.domElement.onmousedown = function(ev)
+{
+	event_manager.mousedown(manager, ev.clientX, ev.clientY);     
+	if(ui_)
+		ui_.mousedown(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
+};
+renderer.domElement.onmouseup = function(ev)
+{
+	event_manager.mouseup(manager, ev.clientX, ev.clientY);		
+	if(ui_)
+		ui_.mouseup(ev.clientX - manager.canvas_position.x, ev.clientY - manager.canvas_position.y);  
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(manager, ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(manager, ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(manager, ev.keyCode);                  
+};
+manager.events.addListener("mousedown", function(x,y)
+{    
+	application.events.dispatch("mousedown", [x, y]);
+});
+manager.events.addListener("mouseup", function(x,y)
+{    
+	application.events.dispatch("mouseup", [x, y]);
+});
+manager.events.addListener("mousemove", function(x,y)
+{    
+	application.events.dispatch("mousemove", [x, y]);
+});
+manager.events.addListener("click", function(x,y)
+{    
+	application.events.dispatch("click", [x, y]);
+});
+manager.events.addListener("drag", function(x,y)
+{    
+	application.events.dispatch("drag", [x, y]);
+});
+manager.events.addListener("dragend", function(x,y)
+{    
+	application.events.dispatch("dragend", [x, y]);
+});
+manager.events.addListener("keyup", function(keycode)
+{    
+	application.events.dispatch("keyup", [keycode]);
+});
+manager.events.addListener("keydown", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("keypress", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("update", function(g_delta, g_elapsed)
+{    
+	application.events.dispatch("update", [g_delta, g_elapsed]);
+});
+application.events.dispatch("init", []);
+animate();
+});
+function animate() {
+	if(ui_)
+		drawingCanvas.getContext('2d').clearRect(0,0,canvasElement.width,canvasElement.height);
+	renderer.domElement.getContext('2d').globalAlpha = 1;
+	requestAnimationFrame( animate );
+	render();
+	if(ui_)
+	{
+		drawingCanvas.getContext('2d').globalAlpha = 1;
+		ui_.draw(drawingCanvas.getContext('2d'));
+	}
+	}
+})(application);
+                    if (application.init)
+                        application.init();
+                		});
+	</script>
+	<style>
+#__div1 {position : relative}
+#__div2 {left : 0px;top : 0px;width : 200px;position : absolute}
+#edit1 {width : 252px}
+#app {left : 100px;top : 30px;width : 600px;height : 400px;position : absolute}
+    </style>
+</head>
+<body>
+<div id="__div1">
+<div id="__div2">
+				<label id="lbl1"
+			>
+					Enter Id
+				</label>
+				<input id="edit1"
+						type="text" 
+						name="edit1" 
+					>
+				</input>
+				<input id="btn1"
+						type="button" 
+						name="btn1" 
+						value="Update" 
+					>
+				</input>
+</div>
+				<canvas id="app"
+			>
+				</canvas>
+</div>
+</body>
+</html>

@@ -1,8 +1,32 @@
-<application title="danydenis.com" src="dd.xs" width="1000" height="800" background="Black">
+<application title="Gallery" src="dd.xs" width="1000" height="800" background="Black">
     <resources>        
-		<image src="images/facebook.png"/>
-		<image src="images/twitter.png"/>	
-        <image src="images/photobucket.png"/>
+		<image id="i1" src="images/1326602376_earth.png"/>
+		<image id="i2" src="images/1326662085_statistic.png"/>	
+        <image id="i3" src="images/1326662102_disc-floopy.png"/>
+        <image id="i4" src="images/1326662116_hint.png"/>
+        <image id="i5" src="images/1326662123_comment.png"/>
+        <image id="i6" src="images/1326662130_calendar.png"/>
+        <image id="i7" src="images/1327176083_user-man.png"/>
+        <image id="i8" src="images/1327176117_user-woman.png"/>
+        <image id="i9" src="images/1327189824_users.png"/>
+        <image id="i10" src="images/1327189922_photo-camera.png"/>
+        <image id="i11" src="images/1327199981_left.png"/>
+        <image id="i12" src="images/1327199986_right.png"/>
+        <image id="i13" src="images/1329639586_add.png"/>
+        <image id="i14" src="images/1329639589_remove.png"/>
+        <image id="i15" src="images/1330237037_clock.png"/>
+        <image id="i16" src="images/1330237059_user-admin.png"/>
+        <image id="i17" src="images/1337829456_favourites.png"/>
+        <image id="i18" src="images/1337829462_picture.png"/>
+        <image id="i19" src="images/1337829463_computer.png"/>
+        <image id="i20" src="images/1337829466_rss.png"/>
+        <image id="i21" src="images/1337829467_star.png"/>
+        <image id="i22" src="images/1337829468_home.png"/>
+        <image id="i23" src="images/1337829471_movie.png"/>
+        <image id="i24" src="images/1337829475_help.png"/>
+        <image id="i25" src="images/1337829479_timer.png"/>
+        <image id="i26" src="images/1337829484_refresh.png"/>
+        <image id="i27" src="images/1337829488_search.png"/>
     </resources>
   		
 	<scene>
@@ -10,12 +34,14 @@
 			<position z="1000"/>			
 		</camera>
 
-        <image_group id="test_ip">
-            <position x="-300" y="0" z="0"/>
+        <image_group id="imgg1"/>
+        <image_group id="imgg2">
+            <position x="-500"/>
+            <scale x="0.5" y="0.5" z="1"/>
+        </image_group>
+        <image_group id="imgg3">
+            <position x="500"/>
+            <scale x="0.5" y="0.5" z="1"/>
         </image_group>
     </scene>
-
-    <social_button id="facebook" x="880" y="8" width="24" height="24" src="images/facebook.png"/>
-    <social_button id="twitter" x="845" y="8" width="24" height="24" src="images/twitter.png"/>
-    <social_button id="email" x="810" y="8" width="24" height="24" src="images/photobucket.png"/>
 </application>

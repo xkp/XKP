@@ -236,7 +236,7 @@ log: Rendering Sequence Types...
 Error [vm] Cannot resolve
 	object = 
 	method = this_string
-	file = d:/xkp/xss/idioms/common-js/event.xssERROR: Project:  box2d4.project.xml
+	file = c:/dev/XKP/xss/idioms/common-js/event.xssERROR: Project:  box2d4.project.xml
 
 ===[ box2d5.project.xml ]================
 
@@ -400,38 +400,45 @@ Success are greateful
 
 
 Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
+	file = c:/dev/XKP/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
 
 ===[ pairs.project.xml ]================
 
 
 Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
+	file = c:/dev/XKP/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
 
 ===[ simple.project.xml ]================
 
 
 Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
+	file = c:/dev/XKP/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
 
 ===[ 3js-ms.project.xml ]================(Tests)
 
 
+log: Rendering Resources...
 log: Rendering 3js Types...
 log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: Rendering UI...
 log: dependency: resig.js
+log: dependency: streamer.js
+log: on resources.compile_dependency
 log: dependency: event.js
 log: dependency: sequence.js
+log: on resources.compile_dependency
 log: dependency: utils.js
 log: dependency: keys.js
 log: dependency: ui.js
+log: on resources.compile_dependency
 log: dependency: colors.js
 log: dependency: Three.js
+log: on resources.compile_dependency
 log: dependency: Stats.js
-log: dependency: RequestAnimationFrame.js
+log: on resources.compile_dependency
 log: dependency: Utils.js
+log: on resources.compile_dependency
 Success are greateful
 ===[ 3js-ui.project.xml ]================(Tests)
 
@@ -453,8 +460,6 @@ log: dependency: Three.js
 log: on resources.compile_dependency
 log: dependency: Stats.js
 log: on resources.compile_dependency
-log: dependency: RequestAnimationFrame.js
-log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
 Success are greateful
@@ -468,7 +473,6 @@ log: dependency: keys.js
 log: dependency: colors.js
 log: dependency: Three.js
 log: dependency: Stats.js
-log: dependency: RequestAnimationFrame.js
 log: dependency: Utils.js
 Success are greateful
 ===[ 3js_carousel.project.xml ]================(Tests)
@@ -490,8 +494,6 @@ log: dependency: colors.js
 log: dependency: Three.js
 log: on resources.compile_dependency
 log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: RequestAnimationFrame.js
 log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
@@ -518,8 +520,6 @@ log: dependency: Three.js
 log: on resources.compile_dependency
 log: dependency: Stats.js
 log: on resources.compile_dependency
-log: dependency: RequestAnimationFrame.js
-log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
 Success are greateful
@@ -545,8 +545,6 @@ log: dependency: Three.js
 log: on resources.compile_dependency
 log: dependency: Stats.js
 log: on resources.compile_dependency
-log: dependency: RequestAnimationFrame.js
-log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
 Success are greateful
@@ -564,7 +562,22 @@ log: dependency: ui.js
 log: dependency: colors.js
 log: dependency: Three.js
 log: dependency: Stats.js
-log: dependency: RequestAnimationFrame.js
+log: dependency: Utils.js
+Success are greateful
+===[ 3js_geometries.project.xml ]================(Tests)
+
+
+log: Rendering UI Types...
+log: Rendering 3js Types...
+log: Rendering UI...
+log: dependency: resig.js
+log: dependency: event.js
+log: dependency: utils.js
+log: dependency: keys.js
+log: dependency: ui.js
+log: dependency: colors.js
+log: dependency: Three.js
+log: dependency: Stats.js
 log: dependency: Utils.js
 Success are greateful
 ===[ 3js_lights.project.xml ]================(Tests)
@@ -581,7 +594,6 @@ log: dependency: ui.js
 log: dependency: colors.js
 log: dependency: Three.js
 log: dependency: Stats.js
-log: dependency: RequestAnimationFrame.js
 log: dependency: Utils.js
 Success are greateful
 ===[ 3js_materials.project.xml ]================(Tests)
@@ -600,8 +612,6 @@ log: dependency: colors.js
 log: dependency: Three.js
 log: on resources.compile_dependency
 log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: RequestAnimationFrame.js
 log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
@@ -626,8 +636,6 @@ log: dependency: Three.js
 log: on resources.compile_dependency
 log: dependency: Stats.js
 log: on resources.compile_dependency
-log: dependency: RequestAnimationFrame.js
-log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
 Success are greateful
@@ -641,7 +649,6 @@ log: dependency: keys.js
 log: dependency: colors.js
 log: dependency: Three.js
 log: dependency: Stats.js
-log: dependency: RequestAnimationFrame.js
 log: dependency: Utils.js
 Success are greateful
 ===[ 3js_particle_system.project.xml ]================(Tests)
@@ -658,7 +665,6 @@ log: dependency: ui.js
 log: dependency: colors.js
 log: dependency: Three.js
 log: dependency: Stats.js
-log: dependency: RequestAnimationFrame.js
 log: dependency: Utils.js
 Success are greateful
 ===[ 3js_transform.project.xml ]================(Tests)
@@ -675,7 +681,6 @@ log: dependency: ui.js
 log: dependency: colors.js
 log: dependency: Three.js
 log: dependency: Stats.js
-log: dependency: RequestAnimationFrame.js
 log: dependency: Utils.js
 Success are greateful
 ===[ animtest.project.xml ]================(Tests)
@@ -694,10 +699,8 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering UI Types...
-log: Instance renderer: ../body.xss instance: __physics1
+log: Instance renderer: body.xss instance: __physics1
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -758,6 +761,32 @@ log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 Success are greateful
+===[ cube_ui.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering 3js Types...
+log: Rendering Sequence Types...
+log: Rendering UI...
+log: dependency: resig.js
+log: dependency: streamer.js
+log: on resources.compile_dependency
+log: dependency: event.js
+log: dependency: utils.js
+log: dependency: keys.js
+log: dependency: ui.js
+log: on resources.compile_dependency
+log: dependency: sequence.js
+log: on resources.compile_dependency
+log: dependency: colors.js
+log: dependency: Three.js
+log: on resources.compile_dependency
+log: dependency: Stats.js
+log: on resources.compile_dependency
+log: dependency: Utils.js
+log: on resources.compile_dependency
+Success are greateful
 ===[ dd.project.xml ]================(Tests)
 
 
@@ -768,8 +797,6 @@ log: Instance renderer: ../sequence.xss instance: grow
 log: Instance renderer: ../sequence.xss instance: shrink
 log: Rendering 3js Types...
 log: prop_name: image_group.images
-log: path: null
-log: prop_name: image_group.destination
 log: path: null
 log: Rendering UI...
 log: dependency: resig.js
@@ -786,8 +813,6 @@ log: dependency: colors.js
 log: dependency: Three.js
 log: on resources.compile_dependency
 log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: RequestAnimationFrame.js
 log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
@@ -817,8 +842,6 @@ log: dependency: colors.js
 log: dependency: Three.js
 log: on resources.compile_dependency
 log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: RequestAnimationFrame.js
 log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
@@ -979,6 +1002,172 @@ log: Rendering Java Types...
 log: Rendering instance: cx
 
 Success are greateful
+===[ jquery-3js.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering 3js Types...
+log: Rendering UI Types...
+log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: IT IS ALIVE
+log: IT IS ALIVE
+log: Ignoring idx 1
+log: IT IS ALIVE
+log: Ignoring idx 2
+log: RENDERING FLOATING
+log: NO LAYOUT
+log: lbl1
+log: edit1
+log: btn1
+log: PROPERTY position
+log: true
+log: VALUE relative
+log: PROPERTY left
+log: null
+log: VALUE 0
+log: PROPERTY top
+log: null
+log: VALUE 0
+log: PROPERTY width
+log: null
+log: VALUE 200
+log: PROPERTY position
+log: true
+log: VALUE absolute
+log: PROPERTY width
+log: null
+log: VALUE 252
+log: PROPERTY left
+log: null
+log: VALUE 100
+log: PROPERTY top
+log: null
+log: VALUE 30
+log: PROPERTY width
+log: null
+log: VALUE 600
+log: PROPERTY height
+log: null
+log: VALUE 400
+log: PROPERTY position
+log: true
+log: VALUE absolute
+Success are greateful
+===[ jquery-3js1.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering 3js Types...
+log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: IT IS ALIVE
+log: IT IS ALIVE
+log: Ignoring idx 1
+log: IT IS ALIVE
+log: Ignoring idx 2
+log: RENDERING FLOATING
+log: NO LAYOUT
+log: lbl1
+log: edit1
+log: btn1
+log: PROPERTY position
+log: true
+log: VALUE relative
+log: PROPERTY left
+log: null
+log: VALUE 0
+log: PROPERTY top
+log: null
+log: VALUE 0
+log: PROPERTY width
+log: null
+log: VALUE 200
+log: PROPERTY position
+log: true
+log: VALUE absolute
+log: PROPERTY width
+log: null
+log: VALUE 252
+log: PROPERTY left
+log: null
+log: VALUE 100
+log: PROPERTY top
+log: null
+log: VALUE 30
+log: PROPERTY width
+log: null
+log: VALUE 600
+log: PROPERTY height
+log: null
+log: VALUE 400
+log: PROPERTY position
+log: true
+log: VALUE absolute
+Success are greateful
+===[ jquery-webgl.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering 3js Types...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: IT IS ALIVE
+log: IT IS ALIVE
+log: Ignoring idx 1
+log: IT IS ALIVE
+log: Ignoring idx 2
+log: RENDERING FLOATING
+log: NO LAYOUT
+log: lbl1
+log: edit1
+log: btn1
+log: PROPERTY position
+log: true
+log: VALUE relative
+log: PROPERTY left
+log: null
+log: VALUE 0
+log: PROPERTY top
+log: null
+log: VALUE 0
+log: PROPERTY width
+log: null
+log: VALUE 200
+log: PROPERTY position
+log: true
+log: VALUE absolute
+log: PROPERTY width
+log: null
+log: VALUE 252
+log: PROPERTY left
+log: null
+log: VALUE 100
+log: PROPERTY top
+log: null
+log: VALUE 30
+log: PROPERTY width
+log: null
+log: VALUE 600
+log: PROPERTY height
+log: null
+log: VALUE 400
+log: PROPERTY position
+log: true
+log: VALUE absolute
+Success are greateful
 ===[ jquery1.project.xml ]================(Tests)
 
 
@@ -1134,8 +1323,8 @@ Copyright © 2011 W3Schools.com</td>
 
 
 
-		btnFullName.click( function() { 
-	
+		    btnFullName.click( function() { 
+	    
 			lblFullName.text("Hello world");
 		
 		});
@@ -1190,25 +1379,18 @@ Success are greateful
 ===[ jquery3.project.xml ]================(Tests)
 
 
-log: Rendering property: src
+log: PROPERTY left
+log: null
+log: VALUE 100
+log: PROPERTY top
+log: null
+log: VALUE 10
 log: PROPERTY width
 log: null
-log: VALUE 600
+log: VALUE 300
 log: PROPERTY height
 log: null
-log: VALUE 400
-log: PROPERTY width
-log: null
-log: VALUE 400
-log: PROPERTY display
-log: true
-log: VALUE block
-log: PROPERTY margin-left
-log: true
-log: VALUE auto
-log: PROPERTY margin-right
-log: true
-log: VALUE auto
+log: VALUE 300
 Success are greateful
 ===[ jquery4.project.xml ]================(Tests)
 
@@ -1436,6 +1618,7 @@ Success are greateful
 log: Rendering property: src
 log: Rendering property: alpha
 log: MALA COSA
+log: Rendering property: visible
 log: IT IS ALIVE
 log: IT IS ALIVE
 log: Ignoring idx 1
@@ -1447,7 +1630,9 @@ log: IT IS ALIVE
 log: Ignoring idx 4
 log: IT IS ALIVE
 log: Ignoring idx 5
+log: IT IS ALIVE
 log: Ignoring idx 6
+log: Ignoring idx 7
 log: RENDERING FLOATING
 log: NO LAYOUT
 log: myGrid
@@ -1496,7 +1681,7 @@ log: null
 log: VALUE 200
 log: PROPERTY width
 log: null
-log: VALUE 500
+log: VALUE 490
 log: PROPERTY height
 log: null
 log: VALUE 250
@@ -1505,13 +1690,10 @@ log: true
 log: VALUE absolute
 log: PROPERTY left
 log: null
-log: VALUE -600
+log: VALUE -800
 log: PROPERTY top
 log: null
-log: VALUE 550
-log: PROPERTY width
-log: null
-log: VALUE 600
+log: VALUE 480
 log: PROPERTY position
 log: true
 log: VALUE absolute
@@ -1530,6 +1712,38 @@ log: VALUE 250
 log: PROPERTY position
 log: true
 log: VALUE absolute
+log: PROPERTY left
+log: null
+log: VALUE 620
+log: PROPERTY top
+log: null
+log: VALUE 480
+log: PROPERTY width
+log: null
+log: VALUE 550
+log: PROPERTY height
+log: null
+log: VALUE 250
+log: PROPERTY position
+log: true
+log: VALUE absolute
+Success are greateful
+===[ jquery9.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering Sequence Types...
+log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: PROPERTY width
+log: null
+log: VALUE 600
+log: PROPERTY height
+log: null
+log: VALUE 400
 Success are greateful
 ===[ jsmanip.project.xml ]================(Tests)
 
@@ -1546,21 +1760,105 @@ log: dependency: utils.js
 log: dependency: keys.js
 log: dependency: ui.js
 log: on resources.compile_dependency
-log: dependency: colors.js
-log: dependency: Three.js
-log: on resources.compile_dependency
-log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: RequestAnimationFrame.js
-log: on resources.compile_dependency
-log: dependency: Utils.js
-log: on resources.compile_dependency
 log: dependency: jsmanipulate.js
 log: on resources.compile_dependency
 log: dependency: jsm-manager.js
 log: on resources.compile_dependency
 log: dependency: jsm-utils.js
 log: on resources.compile_dependency
+log: dependency: colors.js
+log: dependency: Three.js
+log: on resources.compile_dependency
+log: dependency: Stats.js
+log: on resources.compile_dependency
+log: dependency: Utils.js
+log: on resources.compile_dependency
+Success are greateful
+===[ jsmanipulate.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering 3js Types...
+log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: NO LAYOUT
+log: __label1
+log: __br1
+log: __br2
+log: __label2
+log: __br3
+log: __br4
+log: contrast
+log: __br5
+log: NO LAYOUT
+log: __label3
+log: __br6
+log: __br7
+log: __label4
+log: __br8
+log: __br9
+log: red
+log: __br10
+log: __label5
+log: __br11
+log: __br12
+log: blue
+log: __br13
+log: __label6
+log: __br14
+log: __br15
+log: green
+log: NO LAYOUT
+log: __label7
+log: __br16
+log: __br17
+log: __label8
+log: __br18
+log: __br19
+log: height
+log: __br20
+log: __label9
+log: __br21
+log: __br22
+log: angle
+log: __br23
+log: __label10
+log: __br24
+log: __br25
+log: elevation
+log: NO LAYOUT
+log: __label11
+log: __br26
+log: __br27
+log: __label12
+log: __br28
+log: __br29
+log: noise_amount
+log: __br30
+log: __label13
+log: __br31
+log: __br32
+log: noise_density
+log: __br33
+log: __br34
+log: mono
+log: PROPERTY height
+log: null
+log: VALUE 360
+log: PROPERTY width
+log: null
+log: VALUE 500
+log: PROPERTY height
+log: null
+log: VALUE 500
 Success are greateful
 ===[ ms4.project.xml ]================(Tests)
 
@@ -1625,8 +1923,6 @@ log: dependency: Three.js
 log: on resources.compile_dependency
 log: dependency: Stats.js
 log: on resources.compile_dependency
-log: dependency: RequestAnimationFrame.js
-log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
 Success are greateful
@@ -1671,31 +1967,15 @@ log: dependency: Three.js
 log: on resources.compile_dependency
 log: dependency: Stats.js
 log: on resources.compile_dependency
-log: dependency: RequestAnimationFrame.js
-log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
 Success are greateful
 ===[ query_properties.project.xml ]================(Tests)
 
 
-log: Rendering test query_properties...
-			Instance: name = "t1", type = "t_arrays"
-		
-			Instance: name = "t2", type = "t_arrays1"
-		
-			Instance: name = "t3", type = "t_super_derived"
-		
-				property "title" = null			
-				property "name" = null			
-			Instance: name = "t4", type = "t_super_merged"
-		
-				property "test_2" = null			
-				property "test_1" = null			
-			Instance: name = "application", type = "Application"
-		
+Error [404] File not found
+	file = c:/dev/XKP/xss/tests/enums.app.xmlERROR: Project:  query_properties.project.xml
 
-Success are greateful
 ===[ replicator.project.xml ]================(Tests)
 
 
@@ -1767,6 +2047,17 @@ log: Rendering UI...
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 Success are greateful
+===[ ui_ripple.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering Sequence Types...
+log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+Success are greateful
 ===[ ui_sprite.project.xml ]================(Tests)
 
 
@@ -1804,8 +2095,6 @@ log: dependency: colors.js
 log: dependency: Three.js
 log: on resources.compile_dependency
 log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: RequestAnimationFrame.js
 log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
@@ -1885,7 +2174,7 @@ Success are greateful
 
 Error [language] Missing declared tag
 	tag = user_image
-	file = d:/xkp/xss/idioms/wax/server.xssERROR: Project:  wax3.project.xml
+	file = c:/dev/XKP/xss/idioms/wax/server.xssERROR: Project:  wax3.project.xml
 
 ===[ wax4.project.xml ]================(Tests)
 
@@ -1897,7 +2186,6 @@ Success are greateful
 log: Rendering 3js Types...
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/RequestAnimationFrame.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
 Success are greateful
@@ -1911,11 +2199,18 @@ log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
-log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/RequestAnimationFrame.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+Success are greateful
+===[ wgl_firstperson.project.xml ]================(Tests)
+
+
+log: Rendering 3js Types...
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
 Success are greateful
@@ -1929,11 +2224,9 @@ log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
-log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/RequestAnimationFrame.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
 Success are greateful
@@ -1945,7 +2238,6 @@ log: prop_name: my_sphere.mat
 log: path: null
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/RequestAnimationFrame.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
 Success are greateful
@@ -1959,11 +2251,25 @@ log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+Success are greateful
+===[ wgl_monster.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering 3js Types...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/RequestAnimationFrame.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
 Success are greateful
@@ -1977,11 +2283,9 @@ log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
-log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/RequestAnimationFrame.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
 Success are greateful
@@ -1993,7 +2297,6 @@ log: prop_name: my_sphere.mat
 log: path: null
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/RequestAnimationFrame.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
 Success are greateful
@@ -2005,7 +2308,6 @@ log: prop_name: my_sphere.mat
 log: path: null
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/RequestAnimationFrame.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
 Success are greateful
@@ -2019,11 +2321,9 @@ log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
-log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/RequestAnimationFrame.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
 Success are greateful

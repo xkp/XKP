@@ -1,9 +1,5 @@
-<application name="PlacementTest" title="Testing layout" src="jquery3.xs">
-    <div id="main" width="600" height="400">
-        <tabs id="tc1" placement="left" width="400" collapsible="true">
-            <div id="local" caption="Components"/>
-            <div id="remote" caption="Some Page" href="somepage.html"/>
-        </tabs>
-        <img src="images/img1.png" placement="center"/>
-    </div>
+<application name="Components" title="Testing components" src="jquery3.xs">
+    <gmap id="myMap" x="100" y="10" width="300" height="300" center="57.7973333,12.0502107" zoom="10" disableDefaultUI="true">
+        
+    </gmap>
 </application>

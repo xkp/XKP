@@ -229,11 +229,6 @@ XSSObject xss_object_reader::read_xml_object(TiXmlElement* node, XSSObject paren
         while(child_node)
           {
             //special case where a child is a property of the object's type
-            if (str(child_node->Value()) == "position")
-              {
-                str debug("XXX");
-              }
-
             bool handled = false;
             if (result_type)
               {

@@ -744,6 +744,14 @@ void expression_analizer::analyze(expression& expr, XSSContext ctx)
                         property_      = ri.value;
                         break;
                       }
+                    case RESOLVE_METHOD:
+                      {
+                        this_property_ = true;
+                        is_call_       = true;
+                        method_        = ri.value;
+                        method_name_   = identifier_;
+                        break;
+                      }
                   }
               }
           }

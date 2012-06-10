@@ -30,9 +30,9 @@ import xkp.android.libs.Layout.XKPLayout;
 				private Button btn2;
 				private Button btn3;
 		private XKPLayout layoutapplication;
-		private Sequence anim1;
-		private Sequence anim2;
-		private Sequence anim3;
+		private Sequence anim1 = new Sequence();
+		private Sequence anim2 = new Sequence();
+		private Sequence anim3 = new Sequence();
 		public void mthd_anim3_stop_anim3() {
 			lbl3.setText("Button 3 Stopped");
 anim3.stop();
@@ -197,8 +197,9 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
             {
                     if (click_count == 3)
                     {
-                anim3.stop_anim3();
+        mthd_anim3_stop_anim3();
                     }
+            }
         });
 			}
 			private double update_freq = 1/30.0;

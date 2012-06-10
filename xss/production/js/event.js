@@ -36,24 +36,22 @@ ev.ThreeEventManager = Class.extend(
 		this.dragend = false;
 		this.over_dragend = false;
 	},		
-	mouseup: function(x, y)
+	mouseup: function(manager, x, y)
 	{
-		x = x - canvas_position.x;
-		y = y - canvas_position.y;
+		x = x - manager.canvas_position.x;
+		y = y - manager.canvas_position.y;
 		this.mouse_pressed = false;
 	    if (this.dragging)
 	    {
 	        this.dragging = false;
-			if(!ui_)
-				this.dragend = application.events.dispatch("dragend", [x, y]);
+			this.dragend = manager.events.dispatch("dragend", [x, y]);
 			if(this.intersects.length > 0 && this.intersects[0].object.events)
 				this.over_dragend = this.intersects[0].object.events.dispatch("dragend", [x, y]);	        
 	    }
-		if(!this.drag && !this.dragend)
-			if(!ui_)
+		if(!this.drag && !this.dragend)			
 			{
-				application.events.dispatch("mouseup", [x, y]);
-				application.events.dispatch("click", [x, y]); 
+				manager.events.dispatch("mouseup", [x, y]);
+				manager.events.dispatch("click", [x, y]); 
 			}
 		if(!this.over_drag && !this.over_dragend)
 			if(this.intersects.length > 0 && this.intersects[0].object.events){
@@ -63,39 +61,48 @@ ev.ThreeEventManager = Class.extend(
 		if(this.intersects.length > 0 && this.intersects[0].object.geometry)
 		{
 			this.text_coord = this.get_texture_coord();
-			if(this.intersects[0].face.materials[0])
+			if(this.intersects[0].object.material)
 			{
-				var texture = this.intersects[0].face.materials[0].map;
-				application.events.dispatch("t_mouseup", [this.text_coord.x, this.text_coord.y, texture]);
+				var texture;
+				if(this.intersects[0].face.materialIndex)
+					if(this.intersects[0].object.geometry.materials[this.intersects[0].face.materialIndex])
+						texture = this.intersects[0].object.geometry.materials[this.intersects[0].face.materialIndex].map;
+				else					
+					texture = this.intersects[0].object.material.map;
+				manager.events.dispatch("t_mouseup", [this.text_coord.x, this.text_coord.y, texture]);
 			}
 		}
 		this.drag = this.over_drag = this.dragend = this.over_dragend = false;
 	},	
-	mousedown: function(x, y)
+	mousedown: function(manager, x, y)
 	{
-		x = x - canvas_position.x;
-		y = y - canvas_position.y;
+		x = x - manager.canvas_position.x;
+		y = y - manager.canvas_position.y;
 		this.mouse_pressed = true;
-		if(!ui_)		
-			application.events.dispatch("mousedown", [x, y]); 		
+		manager.events.dispatch("mousedown", [x, y]); 		
 		if(this.intersects.length > 0 && this.intersects[0].object.events)
 			this.intersects[0].object.events.dispatch("mousedown", [x, y]);		
 		if(this.intersects.length > 0 && this.intersects[0].object.geometry)
 		{
 			this.text_coord = this.get_texture_coord();
-			if(this.intersects[0].face.materials[0])
-			{
-				var texture = this.intersects[0].face.materials[0].map;
-				application.events.dispatch("t_mousedown", [this.text_coord.x, this.text_coord.y, texture]);
+			if(this.intersects[0].object.material)
+			{				
+				var texture;
+				if(this.intersects[0].face.materialIndex)
+					if(this.intersects[0].object.geometry.materials[this.intersects[0].face.materialIndex])
+						texture = this.intersects[0].object.geometry.materials[this.intersects[0].face.materialIndex].map;
+				else					
+					texture = this.intersects[0].object.material.map;
+				manager.events.dispatch("t_mousedown", [this.text_coord.x, this.text_coord.y, texture]);
 			}
 		}
 	},	
-	mousemove: function(x, y)
+	mousemove: function(manager, x, y)
 	{				
-		x = x - canvas_position.x;
-		y = y - canvas_position.y;
+		x = x - manager.canvas_position.x;
+		y = y - manager.canvas_position.y;
 		this.intersects = [];
-		this.get_3js_intersects(x, y);		
+		this.get_3js_intersects(manager, x, y);		
 		if(this.intersects.length > 0){
 			if(!(this.intersects[0].object.parent.mouse_thru))
 				this.intersects[0].object = this.intersects[0].object.parent;			
@@ -104,15 +111,13 @@ ev.ThreeEventManager = Class.extend(
 			this.dragging = true;
 	    if (this.dragging)
 	    {
-			if(!ui_)
-				this.drag = application.events.dispatch("drag", [x, y]);
+			this.drag = manager.events.dispatch("drag", [x, y]);
 			if(this.intersects.length > 0 && this.intersects[0].object.events)
 				this.over_drag = this.intersects[0].object.events.dispatch("drag", [x, y]);	        
 	    }
 		if(!this.over_drag && !this.over_dragend)
-			if(!ui_)
-				application.events.dispatch("mousemove", [x, y]); 
-		objects = scene.objects;		
+			manager.events.dispatch("mousemove", [x, y]); 
+		objects = manager.scene.__objects;		
 		for ( i = 0; i < objects.length; i++ ) {
 				object = objects[i];
 				if (object.events) 
@@ -126,49 +131,54 @@ ev.ThreeEventManager = Class.extend(
 		if(this.intersects.length > 0 && this.intersects[0].object.geometry)
 		{
 			this.text_coord = this.get_texture_coord();
-			if(this.intersects[0].face.materials[0])
+			if(this.intersects[0].object.material)
 			{
-				var texture = this.intersects[0].face.materials[0].map;
-				application.events.dispatch("t_mousemove", [this.text_coord.x, this.text_coord.y, texture]);
+				var texture;
+				if(this.intersects[0].face.materialIndex)
+					if(this.intersects[0].object.geometry.materials[this.intersects[0].face.materialIndex])
+						texture = this.intersects[0].object.geometry.materials[this.intersects[0].face.materialIndex].map;
+				else					
+					texture = this.intersects[0].object.material.map;
+				manager.events.dispatch("t_mousemove", [this.text_coord.x, this.text_coord.y, texture]);
 			}
 		}
 	},
-	keydown: function(keycode)
+	keydown: function(manager, keycode)
 	{
-		application.events.dispatch("keydown", [keycode]);    
+		manager.events.dispatch("keydown", [keycode]);    
 	},
 
-	keyup: function(keycode)
+	keyup: function(manager, keycode)
 	{
-		application.events.dispatch("keyup", [keycode]);    
+		manager.events.dispatch("keyup", [keycode]);    
 	},
 
-	keypress: function(keycode)
+	keypress: function(manager, keycode)
 	{
-		application.events.dispatch("keypress", [keycode]);    
+		manager.events.dispatch("keypress", [keycode]);    
 	},
 
-	get_3js_intersects: function(x, y){		
-		if(application.are_obj_events){			
-			var vector = new THREE.Vector3( ( x / app_width ) * 2 - 1, - ( y / app_height ) * 2 + 1, 0.5 );
+	get_3js_intersects: function(manager, x, y){		
+			var vector = new THREE.Vector3( ( x / manager.renderer.domElement.width ) * 2 - 1, - ( y / manager.renderer.domElement.height ) * 2 + 1, 0.5 );
 			projector = new THREE.Projector();
 			projector.unprojectVector( vector, active_camera );
 			var ray = new THREE.Ray( active_camera.position, vector.subSelf( active_camera.position ).normalize() );
-			this.intersects = ray.intersectScene( scene );		
-		}		
+			this.intersects = ray.intersectObjects( manager.scene.__objects );					
 	},
 	
-	get_texture_coord: function(){
-		var face = this.intersects[0].face, a, b, c, d,
+	get_texture_coord: function(){		
+		var face = this.intersects[0].face, a = new THREE.Vector3(),
+		b = new THREE.Vector3(), c = new THREE.Vector3(),
+		d = new THREE.Vector3(),
 		pa, bp, pd, da, ab, s_apd, s_bpa, hx, hy,
 		object = this.intersects[0].object, hx_coord, hy_coord,
 		geometry = object.geometry, hitPoint = this.intersects[0].point,
 		vertices = geometry.vertices,
 		objMatrix = object.matrixWorld;
-		a = objMatrix.multiplyVector3( vertices[ face.a ].position.clone() );
-		b = objMatrix.multiplyVector3( vertices[ face.b ].position.clone() );
-		c = objMatrix.multiplyVector3( vertices[ face.c ].position.clone() );
-		d = face instanceof THREE.Face4 ? objMatrix.multiplyVector3( vertices[ face.d ].position.clone() ) : null;
+		a = objMatrix.multiplyVector3( a.copy( vertices[ face.a ] ) );
+		b = objMatrix.multiplyVector3( b.copy( vertices[ face.b ] ) );
+		c = objMatrix.multiplyVector3( c.copy( vertices[ face.c ] ) );		
+		d = face instanceof THREE.Face4 ? d = objMatrix.multiplyVector3( d.copy( vertices[ face.d ] ) ) : null;
 		pa = distance3d(a, hitPoint);
 		bp = distance3d(b, hitPoint);		
 		pd = distance3d(d, hitPoint);
@@ -180,7 +190,7 @@ ev.ThreeEventManager = Class.extend(
 		hx = 2*Math.sqrt(s_bpa*(s_bpa-ab)*(s_bpa-bp)*(s_bpa-pa))/ab;
 		hx_coord = hx/da;
 		hy_coord = hy/ab;
-		return {x: hx_coord, y: hy_coord};
+		return {x: hx_coord, y: hy_coord};		
 	}
 });
 

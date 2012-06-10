@@ -1,9 +1,9 @@
 <project 
 	entry_point="query_properties.xss" 
 	language="java" 
-	target="xss2.app.xml" >
+	target="enums.app.xml" >
 	
 	<options event_scope="instance" />
 	
-	<idiom src="../idioms/test/idiom.xml" />
+	<idiom src="../idioms/test/enums.xml" />
 </project>

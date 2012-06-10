@@ -1,0 +1,45 @@
+<application name="jsmanipulate" title="Image Processing Demo" src="jsmanipulate.xs" template="jsmanip_template.html">
+    <div html_id="sidebar">    	
+        <accordion id="acc1" height="360" placement="client" fillSpace="true">
+            <div caption="Component Filter Params">
+				<label caption="The filter is Contrast"/>     <br/> <br/>
+                <label caption="Amount"/>     <br/> <br/>
+                <slider id="contrast" min="0" max="200" value="100"/>    <br/>                
+            </div>
+            <div caption="Resource Filter Params">
+				<label caption="The filter is RGB Adjust"/>  <br/><br/>
+                <label caption="Red"/>  <br/><br/>
+                <slider id="red" min="0" max="200" value="100"/>
+                <br/>
+                <label caption="Blue"/> <br/><br/>
+                <slider id="blue" min="0" max="200" value="100"/>
+                <br/>
+                <label caption="Green"/><br/><br/>
+                <slider id="green" min="0" max="200" value="100"/>
+            </div>
+            <div caption="Plane Filter Params">
+				<label caption="The filter is Emboss"/>  <br/><br/>
+                <label caption="Height"/> <br/> <br/>
+                <slider id="height" min="0" max="100" value="1"/>           
+                <br/>
+                <label caption="Angle"/><br/> <br/>
+                <slider id="angle" min="0" max="360" value="135"/>    
+                <br/>
+                <label caption="Elevation"/> <br/> <br/>
+                <slider id="elevation" min="0" max="180" value="30"/>
+            </div>
+            <div caption="Material Filter Params">
+				<label caption="The filter is Noise"/>  <br/> <br/>
+                <label caption="Amount"/>  <br/> <br/>
+                <slider id="noise_amount" min="0" max="100" value="25"/>      <br/>
+                <label caption="Density"/><br/> <br/>
+                <slider id="noise_density" min="0" max="100" value="100"/>    <br/>
+                <br/>
+                <checkbox id="mono" caption="Mono" value="true"/>
+            </div>           
+        </accordion>
+    </div>
+
+    <canvas id="app" application="jsmanip.project.xml" width="500" height="500" html_id="target-container"/>
+    
+</application>

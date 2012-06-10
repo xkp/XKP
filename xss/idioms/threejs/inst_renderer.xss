@@ -6,12 +6,18 @@
             if (i.idiom.id == "sequence")
                 return;
         }		
+		out(marker = "threejs_variables", marker_source = "previous") {var <xss:e v="i.id"/>;}
+		if(i.class_name == "camera")
+			out(marker = "render_function", marker_source = "previous")
+			{
+				manager.scene.add(<xss:e v="i.id"/>);
+				set_active_camera(<xss:e v="i.id"/>);
+			}	
 		if(i.renderer)
 			compiler.xss(i.renderer, i);
 		else
 		{
-			var type = i.type;
-			out(marker = "threejs_variables", marker_source = "entry") {var <xss:e v="i.id"/>;}
+			var type = i.type;			
 			out()
 			{
 			    <xss:e v="i.id"/> = <xss:e v="compiler.instantiate(i)"/> ;
@@ -22,8 +28,9 @@
 		}
 		if(i.parent.class_name == "transform"){			
 				out(){				
-				<xss:e v="i.parent.id"/>.addChild(<xss:e v="i.id"/>);
-				scene.addObject(<xss:e v="i.parent.id"/>);
+				<xss:e v="i.parent.id"/>.add(<xss:e v="i.id"/>);
+				manager.scene.add(<xss:e v="i.parent.id"/>);
 				}
 			}				
 </xss:code>
+<xss:e v="i.id"/>.manager = manager;

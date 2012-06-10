@@ -4,7 +4,7 @@ on mousemove(x,y){
 	mouseX = (x - window.innerWidth/2);
 	mouseY = (y - window.innerHeight/2);
 }
-on updates(){
+on update(){
 	camera_1.position.x += ( mouseX - camera_1.position.x ) * 0.05;
 	camera_1.position.y += ( - mouseY - camera_1.position.y ) * 0.05;
 }

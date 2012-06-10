@@ -15,105 +15,117 @@
             <script type="text/javascript" src="../js/colors.js"></script>
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
-            <script type="text/javascript" src="../js/three/RequestAnimationFrame.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
-<script type="text/javascript">		
-var ui_;
+<script type="text/javascript">	
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-var renderer = new THREE.WebGLRenderer( { antialias: false } );
+			var renderer = new THREE.WebGLRenderer( { antialias: false } );
+		var ui_;
 var canvas_position = {x:0, y:0};
 var active_camera;
-var g_elapsed = -1;
-var g_delta = 0.0;	
+var g_elapsed;
+var g_delta;	
 var scene = new THREE.Scene();
+scene.mouse_thru = true;
 var streamer;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
+var clock = new THREE.Clock();
 application.events = new ev.EventHolder();
 // --------RESOURCES---------
 // --------RESOURCES---------
-soundRenderer = new THREE.SoundRenderer();		
-document.body.appendChild( soundRenderer.domElement );
 renderer.setSize( app_width, app_height );
+var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
+manager.events = new ev.EventHolder();
 function render() {
-canvas_position = getElementPosition(renderer.domElement);
+manager.canvas_position = getElementPosition(renderer.domElement);
 var now   = new Date().getTime();
 if (g_elapsed < 0)
-    g_delta = 0; //first update
+	g_delta = 0; //first update
 else
-g_delta  = now - g_elapsed;  
+	g_delta  = now - g_elapsed;  
 g_elapsed = now; 
-application.events.dispatch("updates", []);	
-		set_active_camera(camera_1);
-		set_active_camera(camera_2);
+c_delta = clock.getDelta(),
+c_elapsed = clock.getElapsedTime() * 10;
+manager.events.dispatch("update", [g_delta, g_elapsed]);	
+				manager.scene.add(camera_2);
+				set_active_camera(camera_2);
 application.events.dispatch("switch_cameras", []);
 }
-var material_sphere1;var material_sphere2;var material_wireframe;var cylinder_material;var cylinder1_material;var cube_material;var cube1_material;var camera_1;var camera_1;var camera_2;var light;var sphere_1;var sphere_2;var cylinder_1;var cylinder_2;var cube_1;var cube_2;var plane_1;
-threejs_load_resources(streamer, function()
+var material_sphere1;var material_sphere2;var material_wireframe;var cylinder_material;var cylinder1_material;var cube_material;var cube1_material;var camera_2;var light;var sphere_1;var sphere_2;var cylinder_1;var cylinder_2;var cube_1;var cube_2;var plane_1;
+threejs_load_resources(manager, function()
 {
 material_sphere1 = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading
 	});
+material_sphere1.manager = manager;
 material_sphere2 = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading
 	});
+material_sphere2.manager = manager;
 material_wireframe = new THREE.MeshLambertMaterial({
 color:MediumSlateBlue,wireframe:true
 	});
+material_wireframe.manager = manager;
 cylinder_material = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading
 	});
+cylinder_material.manager = manager;
 cylinder1_material = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading
 	});
+cylinder1_material.manager = manager;
 cube_material = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading
 	});
+cube_material.manager = manager;
 cube1_material = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading
 	});
-camera_1 = new THREE.QuakeCamera({
-fov:50,aspect:1.5,near:1,far:10000,movementSpeed:70,lookSpeed:0.0500000007,noFly:true,lookVertical:false
-	});
-		active_camera = camera_1;
+cube1_material.manager = manager;
 		    camera_2 = 
-		    new THREE.Camera(50, 1.5, 1, 10000, null) ;	
-		active_camera = camera_2;
+		    new THREE.PerspectiveCamera(50, 1.5, 1, 10000, null) ;	
+camera_2.manager = manager;
 	    light = 
 	    new THREE.DirectionalLight(16777215, null, null, null) ;
-	    scene.addLight(light);
-	    sphere_1_sphere = new THREE.Sphere(20, 32, 16) ;
+	    manager.scene.add(light);
+light.manager = manager;
+	    sphere_1_sphere = new THREE.SphereGeometry(20, 32, 16) ;
 	    sphere_1 = new THREE.Mesh(sphere_1_sphere, material_sphere1);
-	    scene.addObject(sphere_1);
+	    manager.scene.add(sphere_1);
 		sphere_1.events = new ev.EventHolder();
-	    sphere_2_sphere = new THREE.Sphere(20, 32, 16) ;
+sphere_1.manager = manager;
+	    sphere_2_sphere = new THREE.SphereGeometry(20, 32, 16) ;
 	    sphere_2 = new THREE.Mesh(sphere_2_sphere, material_sphere2);
-	    scene.addObject(sphere_2);
+	    manager.scene.add(sphere_2);
 		sphere_2.events = new ev.EventHolder();
-	    cylinder_1_cylinder = new THREE.Cylinder(20, 10, 10, 50, null, null) ;
+sphere_2.manager = manager;
+	    cylinder_1_cylinder = new THREE.CylinderGeometry(10, 10, 50, null, null, null) ;
 	    cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
-	    scene.addObject(cylinder_1);
+	    manager.scene.add(cylinder_1);
 		cylinder_1.events = new ev.EventHolder();
-	    cylinder_2_cylinder = new THREE.Cylinder(20, 10, 10, 50, null, null) ;
+cylinder_1.manager = manager;
+	    cylinder_2_cylinder = new THREE.CylinderGeometry(10, 10, 50, null, null, null) ;
 	    cylinder_2 = new THREE.Mesh(cylinder_2_cylinder, cylinder1_material);
-	    scene.addObject(cylinder_2);
+	    manager.scene.add(cylinder_2);
 		cylinder_2.events = new ev.EventHolder();
-	    cube_1_cube = new THREE.Cube(30, 30, 30, null, null, null, null, null, null) ;
+cylinder_2.manager = manager;
+	    cube_1_cube = new THREE.CubeGeometry(30, 30, 30, null, null, null, null, null) ;
 	    cube_1 = new THREE.Mesh(cube_1_cube, cube_material);
-	    scene.addObject(cube_1);
+	    manager.scene.add(cube_1);
 		cube_1.events = new ev.EventHolder();
-	    cube_2_cube = new THREE.Cube(30, 30, 30, null, null, null, null, null, null) ;
+cube_1.manager = manager;
+	    cube_2_cube = new THREE.CubeGeometry(30, 30, 30, null, null, null, null, null) ;
 	    cube_2 = new THREE.Mesh(cube_2_cube, cube1_material);
-	    scene.addObject(cube_2);
+	    manager.scene.add(cube_2);
 		cube_2.events = new ev.EventHolder();
-	    plane_1_plane = new THREE.Plane(1000, 1000, 100, 100) ;
+cube_2.manager = manager;
+	    plane_1_plane = new THREE.PlaneGeometry(1000, 1000, 100, 100) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
-	    scene.addObject(plane_1);
+	    manager.scene.add(plane_1);
 		plane_1.events = new ev.EventHolder();
-            camera_1.position.x = -250;
-            camera_1.position.y = 25;
+plane_1.manager = manager;
             camera_2.position.x = -250;
             camera_2.position.y = 25;
             light.position.y = 0.5;
@@ -168,30 +180,70 @@ set_active_camera(camera_2);
 var event_manager = new ev.ThreeEventManager();
 document.onmousemove = function(ev)
 {
-	event_manager.mousemove(ev.clientX, ev.clientY);                  
+	event_manager.mousemove(manager, ev.clientX, ev.clientY);                  
 };
 document.onmousedown = function(ev)
 {
-	event_manager.mousedown(ev.clientX, ev.clientY);                  
+	event_manager.mousedown(manager, ev.clientX, ev.clientY);                  
 };
 document.onmouseup = function(ev)
 {
-	event_manager.mouseup(ev.clientX, ev.clientY);		
+	event_manager.mouseup(manager, ev.clientX, ev.clientY);		
 };
 document.onkeydown = function(ev)
 {
-	event_manager.keydown(ev.keyCode);                  
+	event_manager.keydown(manager, ev.keyCode);                  
 };
 document.onkeyup = function(ev)
 {
-	event_manager.keyup(ev.keyCode);                  
+	event_manager.keyup(manager, ev.keyCode);                  
 };
 document.onkeypress = function(ev)
 {
-	event_manager.keypress(ev.keyCode);                  
+	event_manager.keypress(manager, ev.keyCode);                  
 };
+manager.events.addListener("mousedown", function(x,y)
+{    
+	application.events.dispatch("mousedown", [x, y]);
+});
+manager.events.addListener("mouseup", function(x,y)
+{    
+	application.events.dispatch("mouseup", [x, y]);
+});
+manager.events.addListener("mousemove", function(x,y)
+{    
+	application.events.dispatch("mousemove", [x, y]);
+});
+manager.events.addListener("click", function(x,y)
+{    
+	application.events.dispatch("click", [x, y]);
+});
+manager.events.addListener("drag", function(x,y)
+{    
+	application.events.dispatch("drag", [x, y]);
+});
+manager.events.addListener("dragend", function(x,y)
+{    
+	application.events.dispatch("dragend", [x, y]);
+});
+manager.events.addListener("keyup", function(keycode)
+{    
+	application.events.dispatch("keyup", [keycode]);
+});
+manager.events.addListener("keydown", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("keypress", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("update", function(delta, elapsed)
+{    
+	application.events.dispatch("update", [delta, elapsed]);
+});
 application.events.dispatch("init", []);
-document.body.appendChild( renderer.domElement );
+		document.body.appendChild( renderer.domElement );
 animate();
 });
 function animate() {	

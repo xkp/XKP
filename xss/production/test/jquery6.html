@@ -227,7 +227,7 @@ Released   : 20120325
 			var __br16 = $("#__br16");
 			var range = $("#range");
 			var image_container = $("#image_container");
-		preset_apply.click( function() { 
+		    preset_apply.click( function() { 
 			var image_data = application.get_image_data();
 JQUComponent.set_enabled(preset_apply, false);
 preset_apply.attr("value", "Applying...");
@@ -280,7 +280,7 @@ application.apply_filter(transformer.n_filter);
 application.apply_filter(transformer.n_filter);
 		    },
 	    });
-		mono.change( function() { 
+		    mono.change( function() { 
 			transformer.n_filter.set_monochrome(JQUCheckbox.get_checked(mono));
 application.apply_filter(transformer.n_filter);
 		});
@@ -296,8 +296,8 @@ mono.__label = "#mono_label";
 application.apply_filter(transformer.s_filter);
 		    },
 	    });
-		sepia_enabled.change( function() { 
-			transformer.s_filter.enabled = JQUCheckbox.get_checked(sepia_enabled);
+		    sepia_enabled.change( function() { 
+			transformer.s_filter.set_enabled(JQUCheckbox.get_checked(sepia_enabled));
 		});
 sepia_enabled.__input = "#sepia_enabled_input";
 sepia_enabled.__label = "#sepia_enabled_label";
@@ -369,7 +369,7 @@ application.set_image_data(imgdata);
 		if(!transformer.filters)
 			transformer.filters = [];
 		transformer.filters.push(transformer.s_filter);
-            transformer.s_filter.enabled = false;
+            transformer.s_filter.set_enabled(0);
 			transformer.n_filter = new jsmanip.Noise(
 		null,null,null,transformer);		
 		if(!transformer.filters)

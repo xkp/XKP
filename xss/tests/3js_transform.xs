@@ -43,7 +43,7 @@ on keyup(keycode){
 		is_ctrl_down = false;
 	}
 }
-on updates(){
+on update(){
 	if ( is_ctrl_down ) {
 		theta += mouse_x * 3;
 	}

@@ -1,20 +1,35 @@
-<xss:classes>
+<classes>
 	<class id="image_plane" super="plane" width="100" height="100">
-		<sequence id="idle" auto_start="true" loop="true">
+        <rotation x="90"/>
+        <sequence id="idle">
 			<at time="0">
-                <animate property="rotation.y">
+                <animate property="rotation.z">
                     <key t="0" value="0"/>
-                    <key t="1" value="-20"/>
-                    <key t="2" value="20"/>
-                    <key t="3" value="0"/>
+                    <key t="1" value="-40"/>
+                    <key t="1.5" value="-10"/>
+                    <key t="2" value="-30"/>
+                    <key t="2.5" value="0"/>
                 </animate>
                 <animate property="alpha">
                     <key t="0" value="100"/>
-                    <key t="1" value="60"/>
-                    <key t="3" value="100"/>
+                    <key t="2.5" value="0"/>
                 </animate>
-            </at>			
-		</sequence>
+            </at>
+            <at time="2">
+                <run method="switch_images"/>
+                <animate property="rotation.z">
+                    <key t="0" value="0"/>
+                    <key t="1" value="40"/>
+                    <key t="1.5" value="10"/>
+                    <key t="2" value="30"/>
+                    <key t="2.5" value="0"/>
+                </animate>
+                <animate property="alpha">
+                    <key t="0" value="0"/>
+                    <key t="2.5" value="100"/>
+                </animate>
+            </at>
+        </sequence>
         <sequence id="selected">
             <at time="0">
                 <animate property="scale.x" from="@" to="1.5" in="2"/>
@@ -32,11 +47,17 @@
     </class>
 
     <class id="image_group" super="transform" mouse_thru="true">
+        <sequence id="main" auto_start="true">
+            <every time="3">
+                <run method="do_idle"/>
+            </every>
+        </sequence>
+
         <sequence id="move">
             <at time="0">
-                <animate property="position.x" from="@" to="destination.x" in="2"/>
-                <animate property="position.y" from="@" to="destination.y" in="2"/>
-                <animate property="position.z" from="@" to="destination.z" in="2"/>
+                <animate property="position.x" from="@" to="destination.x" in="1"/>
+                <animate property="position.y" from="@" to="destination.y" in="1"/>
+                <animate property="position.z" from="@" to="destination.z" in="1"/>
             </at>
         </sequence>
 
@@ -50,23 +71,39 @@
 
         <sequence id="shrink">
             <at time="0">
-                <animate property="scale.x" from="@" to="1" in="1"/>
-                <animate property="scale.y" from="@" to="1" in="1"/>
-                <animate property="scale.z" from="@" to="1" in="1"/>
+                <animate property="scale.x" from="@" to="0.5" in="1"/>
+                <animate property="scale.y" from="@" to="0.5" in="1"/>
+                <animate property="scale.z" from="@" to="0.5" in="1"/>
             </at>
         </sequence>
 
         <image_plane id="img1">
-            <position x="-300" y="0" z="0"/>
+            <position x="-150" y="-150"/>
         </image_plane>
-        <image_plane id="img2"/>
-        <image_plane id="img3"/>
-        <image_plane id="img4"/>
-        <image_plane id="img5"/>
-        <image_plane id="img6"/>
-        <image_plane id="img7"/>
-        <image_plane id="img8"/>
-        <image_plane id="img9"/>
+        <image_plane id="img2">
+            <position x="-150" y="0"/>
+        </image_plane>
+        <image_plane id="img3">
+            <position x="-150" y="150"/>
+        </image_plane>
+        <image_plane id="img4">
+            <position x="0" y="-150"/>
+        </image_plane>
+        <image_plane id="img5">
+            <position x="0" y="0"/>
+        </image_plane>
+        <image_plane id="img6">
+            <position x="0" y="150"/>
+        </image_plane>
+        <image_plane id="img7">
+            <position x="150" y="-150"/>
+        </image_plane>
+        <image_plane id="img8">
+            <position x="150" y="0"/>
+        </image_plane>
+        <image_plane id="img9">
+            <position x="150" y="150"/>
+        </image_plane>
     </class>
 
     <class id="social_button" super="img">
@@ -88,7 +125,7 @@
             </at>
         </sequence>
     </class> 
-</xss:classes>
+</classes>
 
 	
 	

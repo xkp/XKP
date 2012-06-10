@@ -17,6 +17,8 @@ var g_delta = 0.0;
 var g_canvas;
 var g_ui_root;
 var application = {};
+var app_width = 600;
+var app_height = 600;
 application.events = new ev.EventHolder();
 var SoundUtils = new ui.SoundUtils();
 		if(drawingCanvas){
@@ -111,7 +113,7 @@ function start(resolution)
         else
 		    g_delta  = now - g_elapsed;  
         g_elapsed = now; 
-		application.events.dispatch("updates", []);			
+		application.events.dispatch("update", [g_delta, g_elapsed]);			
 		var context = g_canvas.getContext('2d');
 		g_ui.update(g_delta, context);
 		window.setTimeout(updater, resolution);  
@@ -192,7 +194,7 @@ application.flag = false;
 }
 	}
 	);
-window.onload = function() 
+window.onload = function()
 {
         drawingCanvas = document.getElementById("myCanvas");
         g_canvas = drawingCanvas;
@@ -209,54 +211,6 @@ window.onload = function()
         g_ui_root = ui_.root;
      	ui_.load_resources(function()
 		{
-	drawingCanvas.onmousemove = function(ev)
-	{
-		ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmousedown = function(ev)
-	{
-		ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};
-	drawingCanvas.onmouseup = function(ev)
-	{
-		ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
-	};		
-	ui_.events.addListener("mousedown", function(x,y)
-	{    
-		application.events.dispatch("mousedown", [x, y]);
-	});
-	ui_.events.addListener("mouseup", function(x,y)
-	{    
-		application.events.dispatch("mouseup", [x, y]);
-	});
-	ui_.events.addListener("mousemove", function(x,y)
-	{    
-		application.events.dispatch("mousemove", [x, y]);
-	});
-	ui_.events.addListener("click", function(x,y)
-	{    
-		application.events.dispatch("click", [x, y]);
-	});
-	ui_.events.addListener("drag", function(x,y)
-	{    
-		application.events.dispatch("drag", [x, y]);
-	});
-	ui_.events.addListener("dragend", function(x,y)
-	{    
-		application.events.dispatch("dragend", [x, y]);
-	});
-	ui_.events.addListener("keyup", function(keycode)
-	{    
-		application.events.dispatch("keyup", [keycode]);
-	});
-	ui_.events.addListener("keydown", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
-	ui_.events.addListener("keypress", function(keycode)
-	{    
-		application.events.dispatch("keydown", [keycode]);
-	});
 		    test1 = new ui.Component(g_ui_root.manager, g_ui_root);
 	    test1.mouse_thru = true;
 		    lbl0 = new ui.Label(test1.manager, test1, "12px Verdana");
@@ -297,7 +251,6 @@ window.onload = function()
 application.clicks = application.clicks + 1;
 	}
 	);
-		application.are_obj_events = true;
             btnRight.set_x(320);
             btnRight.set_y(350);
             btnRight.set_width(50);
@@ -308,7 +261,6 @@ application.clicks = application.clicks + 1;
 application.flag = true;
 	}
 	);
-		application.are_obj_events = true;
             btnLeft.set_x(220);
             btnLeft.set_y(350);
             btnLeft.set_rotation(180);
@@ -320,7 +272,6 @@ application.flag = true;
 application.flag = true;
 	}
 	);
-		application.are_obj_events = true;
             btnUp.set_x(270);
             btnUp.set_y(300);
             btnUp.set_rotation(-90);
@@ -332,7 +283,6 @@ application.flag = true;
 application.flag = true;
 	}
 	);
-		application.are_obj_events = true;
             btnDown.set_x(270);
             btnDown.set_y(400);
             btnDown.set_rotation(90);
@@ -344,7 +294,6 @@ application.flag = true;
 application.flag = true;
 	}
 	);
-		application.are_obj_events = true;
 			document.onkeydown = function(ev)
 			{
 				ui_.keydown(ev.keyCode);                  
@@ -356,7 +305,55 @@ application.flag = true;
 			document.onkeypress = function(ev)
 			{
 				ui_.keypress(ev.keyCode);                  
+			};			
+			drawingCanvas.onmousemove = function(ev)
+			{
+				ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
 			};
+			drawingCanvas.onmousedown = function(ev)
+			{
+				ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+			};
+			drawingCanvas.onmouseup = function(ev)
+			{
+				ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+			};		
+			ui_.events.addListener("mousedown", function(x,y)
+			{    
+				application.events.dispatch("mousedown", [x, y]);
+			});
+			ui_.events.addListener("mouseup", function(x,y)
+			{    
+				application.events.dispatch("mouseup", [x, y]);
+			});
+			ui_.events.addListener("mousemove", function(x,y)
+			{    
+				application.events.dispatch("mousemove", [x, y]);
+			});
+			ui_.events.addListener("click", function(x,y)
+			{    
+				application.events.dispatch("click", [x, y]);
+			});
+			ui_.events.addListener("drag", function(x,y)
+			{    
+				application.events.dispatch("drag", [x, y]);
+			});
+			ui_.events.addListener("dragend", function(x,y)
+			{    
+				application.events.dispatch("dragend", [x, y]);
+			});
+			ui_.events.addListener("keyup", function(keycode)
+			{    
+				application.events.dispatch("keyup", [keycode]);
+			});
+			ui_.events.addListener("keydown", function(keycode)
+			{    
+				application.events.dispatch("keydown", [keycode]);
+			});
+			ui_.events.addListener("keypress", function(keycode)
+			{    
+				application.events.dispatch("keydown", [keycode]);
+			});
             application.events.dispatch("init", []);
             start();			
 			ui_.draw(drawingCanvas.getContext('2d'));

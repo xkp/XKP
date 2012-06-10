@@ -244,6 +244,7 @@ namespace xkp
         void         using_idiom(const str& idiom);
         str          get_env_var(const str& key);
         str          get_os_name();
+        void         no_ouput();
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -269,6 +270,7 @@ namespace xkp
         XSSApplicationRenderer              current_app_;
         param_list                          params_;
         std::vector<XSSType>                app_types_;
+        bool                                no_output_;    
 
         XSSObject   read_project(fs::path xml_file, param_list& args);
         void        read_application_types(std::vector<XSSObject> & applications, param_list& args);
