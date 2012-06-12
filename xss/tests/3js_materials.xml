@@ -6,7 +6,7 @@
 	
 	<materials>	
 		<basic_material id="material_wireframe" color="Ivory" wireframe="true"/>
-		
+		<particle_canvas_material id="p_mat1" color="Math.random() * 0xffffff" program="program_fill"/>
 		<composite_material id="all_in_one">	
 		
 			<basic_material color="0x00ffff" wireframe="true"/>
@@ -34,7 +34,7 @@
 			<position x="Math.random() - 0.5" y="Math.random() - 0.5" z="Math.random() - 0.5"/>
 		</directional_light>
 		
-		<particle id="particle_1" program="program_fill" color="White">			
+		<particle id="particle_1" material="p_mat1">			
 			<scale x="5" y="5" z="5"/>						
 		</particle>
 		

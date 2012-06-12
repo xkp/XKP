@@ -16,6 +16,7 @@
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/fonts.js"></script>
 <script type="text/javascript">	
 			var renderer = new THREE.CanvasRenderer();
 		var scene = new THREE.Scene();
@@ -31,7 +32,7 @@ var drawingCanvas = renderer.domElement;
 var streamer;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
-var camera_1;var particle_1;
+var p_mat1;var camera_1;var particle_1;
 var application = {};
 application.events = new ev.EventHolder();	
 // --------RESOURCES---------
@@ -57,13 +58,14 @@ application.events.dispatch("switch_cameras", []);
 }
 threejs_load_resources(manager, function()
 {
+p_mat1 = new THREE.ParticleCanvasMaterial({
+color:blue,program:program_fill
+	});
+p_mat1.manager = manager;
 		    camera_1 = 
 		    new THREE.PerspectiveCamera(70, 1.5, 1, 1000, null) ;				
 camera_1.manager = manager;
-			particle_1 = new THREE.Particle( 
-			new THREE.ParticleCanvasMaterial( 
-			{ color: Math.random()*0x808008, program: program_fill, } 
-			) );	
+			particle_1 = new THREE.Particle(p_mat1) ;	
 			manager.scene.add( particle_1 );	
 particle_1.manager = manager;
             camera_1.position.y = 300;

@@ -19,6 +19,7 @@
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/fonts.js"></script>
 <script type="text/javascript">	
 			var renderer = new THREE.CanvasRenderer();
 		var scene = new THREE.Scene();
@@ -245,7 +246,7 @@ color:Math.random() * 0xffffff
 	materials.push(__basic_material2);
 __basic_material2.manager = manager;
 __basic_material3 = new THREE.MeshBasicMaterial({
-map:new THREE.Texture(earth),
+map:new THREE.Texture(earth)
 	});
 		manager.events.addListener("update", function()
 		{   
@@ -259,7 +260,7 @@ color:Math.random() * 0xffffff
 	materials.push(__basic_material4);
 __basic_material4.manager = manager;
 __basic_material5 = new THREE.MeshBasicMaterial({
-map:new THREE.Texture(sounds),
+map:new THREE.Texture(sounds)
 	});
 		manager.events.addListener("update", function()
 		{   

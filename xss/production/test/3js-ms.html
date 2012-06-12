@@ -20,6 +20,7 @@
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/fonts.js"></script>
 <script type="text/javascript">	
 			var renderer = new THREE.CanvasRenderer();
 		var scene = new THREE.Scene();
@@ -174,7 +175,7 @@ cylinder_material.manager = manager;
 		    new THREE.PerspectiveCamera(75, 1.5, 1, 3000, null) ;				
 camera_1.manager = manager;
 	    light = 
-	    new THREE.DirectionalLight(1677, null, null, null) ;
+	    new THREE.DirectionalLight(1677, 1, 0, null) ;
 	    manager.scene.add(light);
 light.manager = manager;
 	    cylinder_1_cylinder = new THREE.CylinderGeometry(150, 100, 200, 50, 50, null) ;

@@ -3,7 +3,7 @@
         <image src="images/ui_ripple.jpg"/>
     </resources>
 
-    <ripple_effect id="ripple1" width="744" height="370" placement="client" ripradius="10" src="images/ui_ripple.jpg">
+    <ripple_effect id="ripple1" placement="client" ripradius="10" src="images/ui_ripple.jpg">
     </ripple_effect>
 	
     <sequence id="rain" auto_start="true">

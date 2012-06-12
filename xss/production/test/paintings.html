@@ -20,6 +20,7 @@
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/fonts.js"></script>
 <script type="text/javascript">	
 			var renderer = new THREE.CanvasRenderer();
 		var scene = new THREE.Scene();
@@ -768,12 +769,12 @@ g_sequence_manager);
             quickly_anim.addHandler(____i6);	              
         var ____r1 = new state.Caller(2,function()
         {
-                    plane_anim.start();
+            plane_anim.start();
         });
         quickly_anim.addHandler(____r1);						  
         var ____r2 = new state.Caller(2,function()
         {
-                    idle_anim.start();
+            idle_anim.start();
         });
         quickly_anim.addHandler(____r2);						  
         quickly_anim.events.addListener('start', function()
@@ -809,7 +810,7 @@ new state.Sequence(
 g_sequence_manager);
         var ____h1 = new state.Every(8, function(t)
         {
-                    plane_anim.start();
+            plane_anim.start();
         });
         idle_anim.addHandler(____h1);	                    
             anim_plane.idle_anim = idle_anim;
@@ -1022,12 +1023,12 @@ g_sequence_manager);
             back_to.addHandler(____i24);	              
         var ____r3 = new state.Caller(0,function()
         {
-                    plane_anim.start();
+            plane_anim.start();
         });
         back_to.addHandler(____r3);						  
         var ____r4 = new state.Caller(0,function()
         {
-                    idle_anim.start();
+            idle_anim.start();
         });
         back_to.addHandler(____r4);						  
         back_to.events.addListener('start', function()
@@ -1432,7 +1433,7 @@ application.waiting_for_load = true;
             init_anim.addHandler(____i37);	              
         var ____r5 = new state.Caller(8,function()
         {
-                init_anim.enter_if_loaded();
+        init_anim.enter_if_loaded();
         });
         init_anim.addHandler(____r5);						  
 init_anim2 =
@@ -1488,7 +1489,7 @@ SoundUtils.play("sounds/water-droplet-1.mp3");
 	};
         var ____h2 = new state.Every(3, function(t)
         {
-                rain.drop();
+        rain.drop();
         });
         rain.addHandler(____h2);	                    
 go_up =
@@ -1705,7 +1706,7 @@ g_sequence_manager);
             go_up.addHandler(____i59);	              
         var ____r6 = new state.Caller(2,function()
         {
-                    rain.start();
+            rain.start();
         });
         go_up.addHandler(____r6);						  
 loading_seq =
@@ -1740,7 +1741,7 @@ g_sequence_manager);
                 idle_load.start();
         var ____h3 = new state.Every(4, function(t)
         {
-                    loading_seq.start();
+            loading_seq.start();
         });
         idle_load.addHandler(____h3);	                    
 enterto_in =

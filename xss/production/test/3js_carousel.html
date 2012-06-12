@@ -19,6 +19,7 @@
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/fonts.js"></script>
 <script type="text/javascript">	
 			var renderer = new THREE.CanvasRenderer();
 		var scene = new THREE.Scene();
@@ -72,7 +73,7 @@ application.events = new ev.EventHolder();
             {
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"images/test3.png",
+		src:			"images/test2.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
@@ -86,7 +87,7 @@ application.events = new ev.EventHolder();
             {
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"images/test4.png",
+		src:			"images/test3.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
@@ -100,7 +101,7 @@ application.events = new ev.EventHolder();
             {
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"images/test5.png",
+		src:			"images/test4.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
@@ -109,6 +110,20 @@ application.events = new ev.EventHolder();
 				global_package.events.addListener("loaded", function()
 				{
 					__image4 = streamer.get_resource("__image4");
+				});
+                global_package.add_item(
+            {
+		id:				"__image5",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/test5.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var __image5;
+				global_package.events.addListener("loaded", function()
+				{
+					__image5 = streamer.get_resource("__image5");
 				});
 		global_package.add_item({
 			id:				"invalid_res",

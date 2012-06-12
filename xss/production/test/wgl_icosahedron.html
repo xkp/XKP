@@ -17,6 +17,7 @@
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
+            <script type="text/javascript" src="../js/three/fonts.js"></script>
 <script type="text/javascript">	
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 			var renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -95,11 +96,11 @@ color:Math.random() * 0xffffff
 	});
 mat_3.manager = manager;
 shadow_mat = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('images/shadow.png').asset),
+map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('images/shadow.png').asset)
 	});
 shadow_mat.manager = manager;
 		    camera_1 = 
-		    new THREE.PerspectiveCamera(40, 1.5, 1, 10000, null) ;	
+		    new THREE.PerspectiveCamera(40, 1.5, 1, 10000, null) ;				
 camera_1.manager = manager;
 	    icosahedron_1_icosahedron = new THREE.IcosahedronGeometry(1, null) ;
 	    icosahedron_1 = new THREE.Mesh(icosahedron_1_icosahedron, mat_1);
@@ -132,7 +133,7 @@ plane_2.manager = manager;
 		plane_3.events = new ev.EventHolder();
 plane_3.manager = manager;
 	    light_1 = 
-	    new THREE.DirectionalLight(White, 1, null, null) ;
+	    new THREE.DirectionalLight(White, 1, 0, null) ;
 	    manager.scene.add(light_1);
 light_1.manager = manager;
             camera_1.position.z = 1800;

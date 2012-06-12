@@ -18,6 +18,7 @@
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
+            <script type="text/javascript" src="../js/three/fonts.js"></script>
 <script type="text/javascript">	
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 			var renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -108,7 +109,7 @@ color:mediumslateblue ,wireframe:true
 	});
 material_wireframe.manager = manager;
 	    light = 
-	    new THREE.DirectionalLight(white, null, null, null) ;
+	    new THREE.DirectionalLight(white, 1, 0, null) ;
 	    manager.scene.add(light);
 light.manager = manager;
 			    container_1 = new THREE.Object3D() ;

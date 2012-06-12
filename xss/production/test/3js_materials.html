@@ -17,6 +17,7 @@
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/fonts.js"></script>
 <script type="text/javascript">	
 			var renderer = new THREE.CanvasRenderer();
 		var scene = new THREE.Scene();
@@ -32,7 +33,7 @@ var drawingCanvas = renderer.domElement;
 var streamer;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
-var material_wireframe;var all_in_one;var __basic_material1;var __basic_material2;var __lambert_material1;var __lambert_material2;var __depth_material1;var __normal_material1;var __basic_material3;var __lambert_material3;var camera_1;var amb_light_1;var dir_light_1;var particle_1;var point_light_1;var plane_1;
+var material_wireframe;var p_mat1;var all_in_one;var __basic_material1;var __basic_material2;var __lambert_material1;var __lambert_material2;var __depth_material1;var __normal_material1;var __basic_material3;var __lambert_material3;var camera_1;var amb_light_1;var dir_light_1;var particle_1;var point_light_1;var plane_1;
 var application = {};
 application.events = new ev.EventHolder();	
 		var streamer = new stream.Streamer();	
@@ -107,6 +108,10 @@ material_wireframe = new THREE.MeshBasicMaterial({
 color:Ivory,wireframe:true
 	});
 material_wireframe.manager = manager;
+p_mat1 = new THREE.ParticleCanvasMaterial({
+color:Math.random() * 0xffffff,program:program_fill
+	});
+p_mat1.manager = manager;
 			    all_in_one = new Array() ;
 			all_in_one.manager = manager;
 __basic_material1 = new THREE.MeshBasicMaterial({
@@ -138,12 +143,12 @@ __normal_material1 = new THREE.MeshNormalMaterial({
 	all_in_one.push(__normal_material1);
 __normal_material1.manager = manager;
 __basic_material3 = new THREE.MeshBasicMaterial({
-map:new THREE.Texture(manager.streamer.get_resource('images/land_ocean_ice_cloud.jpg').data),
+map:new THREE.Texture(manager.streamer.get_resource('images/land_ocean_ice_cloud.jpg').data)
 	});
 	all_in_one.push(__basic_material3);
 __basic_material3.manager = manager;
 __lambert_material3 = new THREE.MeshLambertMaterial({
-map:new THREE.Texture(manager.streamer.get_resource('images/land_ocean_ice_cloud.jpg').data),
+map:new THREE.Texture(manager.streamer.get_resource('images/land_ocean_ice_cloud.jpg').data)
 	});
 	all_in_one.push(__lambert_material3);
 __lambert_material3.manager = manager;
@@ -155,13 +160,10 @@ camera_1.manager = manager;
 	    manager.scene.add(amb_light_1);
 amb_light_1.manager = manager;
 	    dir_light_1 = 
-	    new THREE.DirectionalLight(Math.random() * 0xffffff, 1, null, null) ;
+	    new THREE.DirectionalLight(Math.random() * 0xffffff, 1, 0, null) ;
 	    manager.scene.add(dir_light_1);
 dir_light_1.manager = manager;
-			particle_1 = new THREE.Particle( 
-			new THREE.ParticleCanvasMaterial( 
-			{ color: White, program: program_fill, } 
-			) );	
+			particle_1 = new THREE.Particle(p_mat1) ;	
 			manager.scene.add( particle_1 );	
 particle_1.manager = manager;
 	    point_light_1 = 

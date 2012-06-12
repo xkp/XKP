@@ -22,6 +22,7 @@
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/fonts.js"></script>
 <script type="text/javascript">	
 			var renderer = new THREE.CanvasRenderer();
 		var scene = new THREE.Scene();
@@ -138,11 +139,11 @@ threejs_load_resources(manager, function()
 		    lbl3 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
 		    lbl4 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
 material1 = new THREE.MeshBasicMaterial({
-map:new THREE.Texture(manager.streamer.get_resource('images/test3.png').data),
+map:new THREE.Texture(manager.streamer.get_resource('images/test3.png').data)
 	});
 material1.manager = manager;
 material2 = new THREE.MeshBasicMaterial({
-map:new THREE.Texture(manager.streamer.get_resource('images/test3.png').data),
+map:new THREE.Texture(manager.streamer.get_resource('images/test3.png').data)
 	});
 material2.manager = manager;
 		    camera_1 = 

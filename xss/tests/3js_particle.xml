@@ -1,4 +1,8 @@
-<application src="3js_particle.xs" title="Test 3D" renderer="canvas" background="Peru">
+<application src="3js_particle.xs" title="Test 3D" background="Peru">
+	
+	<materials>
+		<particle_canvas_material id="p_mat1" color="blue" program="program_fill"/>
+	</materials>
 	
 	<scene>	
 	
@@ -6,7 +10,7 @@
 			<position y="300" z="500"/>			
 		</camera>
 			
-		<particle id="particle_1" color="Math.random()*0x808008" program="program_fill">			
+		<particle id="particle_1" material="p_mat1">			
 			<position y="150"/>
 			<scale x="5" y="5" z="5"/>
 		</particle>

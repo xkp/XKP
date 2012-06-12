@@ -439,6 +439,8 @@ log: dependency: Stats.js
 log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
+log: dependency: fonts.js
+log: on resources.compile_dependency
 Success are greateful
 ===[ 3js-ui.project.xml ]================(Tests)
 
@@ -462,6 +464,8 @@ log: dependency: Stats.js
 log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
+log: dependency: fonts.js
+log: on resources.compile_dependency
 Success are greateful
 ===[ 3js_cameras.project.xml ]================(Tests)
 
@@ -474,6 +478,7 @@ log: dependency: colors.js
 log: dependency: Three.js
 log: dependency: Stats.js
 log: dependency: Utils.js
+log: dependency: fonts.js
 Success are greateful
 ===[ 3js_carousel.project.xml ]================(Tests)
 
@@ -496,6 +501,8 @@ log: on resources.compile_dependency
 log: dependency: Stats.js
 log: on resources.compile_dependency
 log: dependency: Utils.js
+log: on resources.compile_dependency
+log: dependency: fonts.js
 log: on resources.compile_dependency
 Success are greateful
 ===[ 3js_class_test_1.project.xml ]================(Tests)
@@ -522,6 +529,8 @@ log: dependency: Stats.js
 log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
+log: dependency: fonts.js
+log: on resources.compile_dependency
 Success are greateful
 ===[ 3js_class_test_2.project.xml ]================(Tests)
 
@@ -547,6 +556,8 @@ log: dependency: Stats.js
 log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
+log: dependency: fonts.js
+log: on resources.compile_dependency
 Success are greateful
 ===[ 3js_cube.project.xml ]================(Tests)
 
@@ -563,6 +574,7 @@ log: dependency: colors.js
 log: dependency: Three.js
 log: dependency: Stats.js
 log: dependency: Utils.js
+log: dependency: fonts.js
 Success are greateful
 ===[ 3js_geometries.project.xml ]================(Tests)
 
@@ -579,6 +591,7 @@ log: dependency: colors.js
 log: dependency: Three.js
 log: dependency: Stats.js
 log: dependency: Utils.js
+log: dependency: fonts.js
 Success are greateful
 ===[ 3js_lights.project.xml ]================(Tests)
 
@@ -595,6 +608,7 @@ log: dependency: colors.js
 log: dependency: Three.js
 log: dependency: Stats.js
 log: dependency: Utils.js
+log: dependency: fonts.js
 Success are greateful
 ===[ 3js_materials.project.xml ]================(Tests)
 
@@ -614,6 +628,8 @@ log: on resources.compile_dependency
 log: dependency: Stats.js
 log: on resources.compile_dependency
 log: dependency: Utils.js
+log: on resources.compile_dependency
+log: dependency: fonts.js
 log: on resources.compile_dependency
 Success are greateful
 ===[ 3js_package.project.xml ]================(Tests)
@@ -638,6 +654,8 @@ log: dependency: Stats.js
 log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
+log: dependency: fonts.js
+log: on resources.compile_dependency
 Success are greateful
 ===[ 3js_particle.project.xml ]================(Tests)
 
@@ -650,6 +668,7 @@ log: dependency: colors.js
 log: dependency: Three.js
 log: dependency: Stats.js
 log: dependency: Utils.js
+log: dependency: fonts.js
 Success are greateful
 ===[ 3js_particle_system.project.xml ]================(Tests)
 
@@ -666,6 +685,7 @@ log: dependency: colors.js
 log: dependency: Three.js
 log: dependency: Stats.js
 log: dependency: Utils.js
+log: dependency: fonts.js
 Success are greateful
 ===[ 3js_transform.project.xml ]================(Tests)
 
@@ -682,6 +702,7 @@ log: dependency: colors.js
 log: dependency: Three.js
 log: dependency: Stats.js
 log: dependency: Utils.js
+log: dependency: fonts.js
 Success are greateful
 ===[ animtest.project.xml ]================(Tests)
 
@@ -786,6 +807,8 @@ log: dependency: Stats.js
 log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
+log: dependency: fonts.js
+log: on resources.compile_dependency
 Success are greateful
 ===[ dd.project.xml ]================(Tests)
 
@@ -816,6 +839,8 @@ log: dependency: Stats.js
 log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
+log: dependency: fonts.js
+log: on resources.compile_dependency
 Success are greateful
 ===[ g_anim.project.xml ]================(Tests)
 
@@ -844,6 +869,8 @@ log: on resources.compile_dependency
 log: dependency: Stats.js
 log: on resources.compile_dependency
 log: dependency: Utils.js
+log: on resources.compile_dependency
+log: dependency: fonts.js
 log: on resources.compile_dependency
 Success are greateful
 ===[ java1.project.xml ]================(Tests)
@@ -1014,6 +1041,7 @@ log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: IT IS ALIVE
 log: IT IS ALIVE
 log: Ignoring idx 1
@@ -1070,6 +1098,7 @@ log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: IT IS ALIVE
 log: IT IS ALIVE
 log: Ignoring idx 1
@@ -1119,6 +1148,7 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering 3js Types...
+log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1740,10 +1770,10 @@ log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: PROPERTY width
 log: null
-log: VALUE 600
+log: VALUE 744
 log: PROPERTY height
 log: null
-log: VALUE 400
+log: VALUE 370
 Success are greateful
 ===[ jsmanip.project.xml ]================(Tests)
 
@@ -1773,6 +1803,8 @@ log: dependency: Stats.js
 log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
+log: dependency: fonts.js
+log: on resources.compile_dependency
 Success are greateful
 ===[ jsmanipulate.project.xml ]================(Tests)
 
@@ -1781,6 +1813,7 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1925,6 +1958,8 @@ log: dependency: Stats.js
 log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
+log: dependency: fonts.js
+log: on resources.compile_dependency
 Success are greateful
 ===[ pixastic.project.xml ]================(Tests)
 
@@ -1968,6 +2003,8 @@ log: on resources.compile_dependency
 log: dependency: Stats.js
 log: on resources.compile_dependency
 log: dependency: Utils.js
+log: on resources.compile_dependency
+log: dependency: fonts.js
 log: on resources.compile_dependency
 Success are greateful
 ===[ query_properties.project.xml ]================(Tests)
@@ -2098,6 +2135,8 @@ log: dependency: Stats.js
 log: on resources.compile_dependency
 log: dependency: Utils.js
 log: on resources.compile_dependency
+log: dependency: fonts.js
+log: on resources.compile_dependency
 Success are greateful
 ===[ wax1.project.xml ]================(Tests)
 
@@ -2180,6 +2219,24 @@ Error [language] Missing declared tag
 
 
 Success are greateful
+===[ webgl_particle.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering 3js Types...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+Success are greateful
 ===[ wgl_cameras.project.xml ]================(Tests)
 
 
@@ -2188,6 +2245,7 @@ log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_cube_img.project.xml ]================(Tests)
 
@@ -2199,11 +2257,13 @@ log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_firstperson.project.xml ]================(Tests)
 
@@ -2213,6 +2273,7 @@ log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_icosahedron.project.xml ]================(Tests)
 
@@ -2224,11 +2285,13 @@ log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_materials.project.xml ]================(Tests)
 
@@ -2240,6 +2303,7 @@ log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_model.project.xml ]================(Tests)
 
@@ -2251,11 +2315,13 @@ log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_monster.project.xml ]================(Tests)
 
@@ -2267,11 +2333,13 @@ log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_package.project.xml ]================(Tests)
 
@@ -2283,11 +2351,13 @@ log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_reflection_cube.project.xml ]================(Tests)
 
@@ -2299,6 +2369,7 @@ log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_refraction_cube.project.xml ]================(Tests)
 
@@ -2310,6 +2381,7 @@ log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_sound.project.xml ]================(Tests)
 
@@ -2321,11 +2393,23 @@ log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+Success are greateful
+===[ wgl_text.project.xml ]================(Tests)
+
+
+log: Rendering 3js Types...
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ xss1.project.xml ]================(Tests)
 

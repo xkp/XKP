@@ -2,7 +2,7 @@
 	
 	<resources>		
 		<image src="images/test1.png"/>
-		
+		<image src="images/test2.png"/>
 		<image src="images/test3.png"/>
 		<image src="images/test4.png"/>
 		<image src="images/test5.png"/>		

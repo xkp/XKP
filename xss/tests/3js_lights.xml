@@ -5,7 +5,10 @@
 	</resources>
 
 	<materials>		
-		<lambert_material id="material_sphere1" color="White" shading="flat_shading"/>			
+		<lambert_material id="material_sphere1" color="White" shading="flat_shading"/>
+		<particle_canvas_material id="p_mat1" color="Math.random() * 0xffffff" program="program_fill"/>
+		<particle_canvas_material id="p_mat2" color="Math.random() * 0xffffff" program="program_fill"/>
+		<particle_canvas_material id="p_mat3" color="Math.random() * 0xffffff" program="program_fill"/>
 	</materials>
 	
 	<scene>	
@@ -16,19 +19,19 @@
 		
 		<ambient_light id="amb_light_1" color="MidnightBlue"/>
 		
-		<point_light id="light1" color="Red" intensity="1" distance="50"/>
-		<point_light id="light2" color="Lime" intensity="1" distance="50"/>
-		<point_light id="light3" color="Yellow" intensity="1" distance="50"/>
+		<point_light id="light1" color="Red" distance="50"/>
+		<point_light id="light2" color="Lime" distance="50"/>
+		<point_light id="light3" color="Yellow" distance="50"/>
 		
-		<particle id="particle1" program="program_fill" color="Red">			
+		<particle id="particle1" material="p_mat1">			
 			<scale x="0.5" y="0.5" z="0.5"/>						
 		</particle>
 			
-		<particle id="particle2" program="program_fill" color="Lime">			
+		<particle id="particle2" material="p_mat2">			
 			<scale x="0.5" y="0.5" z="0.5"/>						
 		</particle>
 		
-		<particle id="particle3" program="program_fill" color="Yellow">			
+		<particle id="particle3" material="p_mat3">			
 			<scale x="0.5" y="0.5" z="0.5"/>						
 		</particle>
 		

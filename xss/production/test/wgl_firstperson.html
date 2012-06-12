@@ -17,6 +17,7 @@
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
+            <script type="text/javascript" src="../js/three/fonts.js"></script>
 <script type="text/javascript">	
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 			var renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -85,16 +86,16 @@ color:Math.random() * 0xffffff,shading:flat_shading
 	});
 cube1_material.manager = manager;
 		    camera_1 = 
-		    new THREE.PerspectiveCamera(50, 1.5, 1, 10000, null) ;	
+		    new THREE.PerspectiveCamera(50, 1.5, 1, 10000, null) ;				
 camera_1.manager = manager;
-			__firstperson_controls1 = new THREE.FirstPersonControls( camera_1 );
-			manager.events.addListener("update", function()
-			{				
-				__firstperson_controls1.update( c_delta );
-			})
+				__firstperson_controls1 = new THREE.FirstPersonControls( camera_1 );
+				manager.events.addListener("update", function()
+				{				
+					__firstperson_controls1.update( c_delta );
+				})
 __firstperson_controls1.manager = manager;
 	    light = 
-	    new THREE.DirectionalLight(16777215, 1, null, null) ;
+	    new THREE.DirectionalLight(16777215, 1, 0, null) ;
 	    manager.scene.add(light);
 light.manager = manager;
 	    sphere_1_sphere = new THREE.SphereGeometry(20, 32, 16) ;

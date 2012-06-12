@@ -18,6 +18,7 @@
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/fonts.js"></script>
 <script type="text/javascript">	
 			var renderer = new THREE.CanvasRenderer();
 		var scene = new THREE.Scene();
@@ -33,7 +34,7 @@ var drawingCanvas = renderer.domElement;
 var streamer;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
-var material_sphere1;var camera_1;var amb_light_1;var light1;var light2;var light3;var particle1;var particle2;var particle3;var sphere1;
+var material_sphere1;var p_mat1;var p_mat2;var p_mat3;var camera_1;var amb_light_1;var light1;var light2;var light3;var particle1;var particle2;var particle3;var sphere1;
 var application = {};
 application.events = new ev.EventHolder();	
 		if(drawingCanvas){
@@ -75,6 +76,18 @@ material_sphere1 = new THREE.MeshLambertMaterial({
 color:White,shading:flat_shading
 	});
 material_sphere1.manager = manager;
+p_mat1 = new THREE.ParticleCanvasMaterial({
+color:Math.random() * 0xffffff,program:program_fill
+	});
+p_mat1.manager = manager;
+p_mat2 = new THREE.ParticleCanvasMaterial({
+color:Math.random() * 0xffffff,program:program_fill
+	});
+p_mat2.manager = manager;
+p_mat3 = new THREE.ParticleCanvasMaterial({
+color:Math.random() * 0xffffff,program:program_fill
+	});
+p_mat3.manager = manager;
 		    camera_1 = 
 		    new THREE.PerspectiveCamera(65, 1.5, 1, 1000, null) ;				
 camera_1.manager = manager;
@@ -94,22 +107,13 @@ light2.manager = manager;
 	    new THREE.PointLight(Yellow, 1, 50) ;
 	    manager.scene.add(light3);
 light3.manager = manager;
-			particle1 = new THREE.Particle( 
-			new THREE.ParticleCanvasMaterial( 
-			{ color: Red, program: program_fill, } 
-			) );	
+			particle1 = new THREE.Particle(p_mat1) ;	
 			manager.scene.add( particle1 );	
 particle1.manager = manager;
-			particle2 = new THREE.Particle( 
-			new THREE.ParticleCanvasMaterial( 
-			{ color: Lime, program: program_fill, } 
-			) );	
+			particle2 = new THREE.Particle(p_mat2) ;	
 			manager.scene.add( particle2 );	
 particle2.manager = manager;
-			particle3 = new THREE.Particle( 
-			new THREE.ParticleCanvasMaterial( 
-			{ color: Yellow, program: program_fill, } 
-			) );	
+			particle3 = new THREE.Particle(p_mat3) ;	
 			manager.scene.add( particle3 );	
 particle3.manager = manager;
 	    sphere1_sphere = new THREE.SphereGeometry(20, 32, 16) ;

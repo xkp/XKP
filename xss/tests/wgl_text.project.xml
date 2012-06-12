@@ -1,0 +1,4 @@
+<project entry_point="../idioms/webgl/app.xss" language="js" target="wgl_text.xml" output="../production/test/wgl_text.html">
+
+	<idiom src="../idioms/webgl/module.xml"/>
+</project>

@@ -16,6 +16,7 @@
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
+            <script type="text/javascript" src="../js/three/fonts.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
         var application = {};
@@ -99,14 +100,14 @@ color:blanchedalmond,wireframe:true
 	});
 material_wireframe.manager = manager;
 		    camera_1 = 
-		    new THREE.PerspectiveCamera(75, 1.5, 1, 10000, null) ;	
+		    new THREE.PerspectiveCamera(75, 1.5, 1, 10000, null) ;				
 camera_1.manager = manager;
 	    a_ligth = 
 	    new THREE.AmbientLight(2232576) ;
 	    manager.scene.add(a_ligth);
 a_ligth.manager = manager;
 	    d_ligth_1 = 
-	    new THREE.DirectionalLight(16772829, 1, null, null) ;
+	    new THREE.DirectionalLight(16772829, 1, 0, null) ;
 	    manager.scene.add(d_ligth_1);
 d_ligth_1.manager = manager;
 	monster_model = new THREE.Object3D();

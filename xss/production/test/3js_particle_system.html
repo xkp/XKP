@@ -18,6 +18,7 @@
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/fonts.js"></script>
 <script type="text/javascript">	
 			var renderer = new THREE.CanvasRenderer();
 		var scene = new THREE.Scene();
@@ -34,7 +35,7 @@ var streamer;
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var lbl0;
-var camera_1;var __particle_system1;
+var p_mat1;var camera_1;var __particle_system1;
 var application = {};
 application.events = new ev.EventHolder();	
 		if(drawingCanvas){
@@ -73,12 +74,16 @@ application.events.dispatch("switch_cameras", []);
 threejs_load_resources(manager, function()
 {
 		    lbl0 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+p_mat1 = new THREE.ParticleCanvasMaterial({
+color:Math.random() * 0x808008 + 0x808008,program:program_fill
+	});
+p_mat1.manager = manager;
 		    camera_1 = 
 		    new THREE.PerspectiveCamera(75, 1.5, 1, 3000, null) ;				
 camera_1.manager = manager;
 		var __particle_system1 = {};
 		for ( var i = 0; i < 1000; i++ ) {
-			particle = new THREE.Particle( new THREE.ParticleCanvasMaterial( { color: Math.random() * 0x808008 + 0x808008, program: program_fill, } ) );
+			particle = new THREE.Particle( p_mat1 );
 				particle.position.x = 
 				default_interpolate(-400, 400, Math.random());
 				particle.position.y = 
@@ -93,6 +98,7 @@ __particle_system1.manager = manager;
             lbl0.set_y(50);
             lbl0.set_color("White");
             lbl0.text("Move the mouse to rotate the camera");
+            manager.events.addListener('update', function(){camera_1.lookAt(scene.position)});
             camera_1.position.z = 1000;
             application.mouse_x = null;
             application.mouse_y = null;

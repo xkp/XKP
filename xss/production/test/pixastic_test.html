@@ -22,6 +22,7 @@
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/fonts.js"></script>
 <script type="text/javascript">	
 			var renderer = new THREE.CanvasRenderer();
 		var scene = new THREE.Scene();
@@ -138,7 +139,7 @@ threejs_load_resources(manager, function()
 		    img3 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test2.png");
 		    img4 = new ui.Image(g_ui_root.manager, g_ui_root, "images/test2.png");
 sphere_material = new THREE.MeshBasicMaterial({
-map:new THREE.Texture(manager.streamer.get_resource('images/test1.png').data),
+map:new THREE.Texture(manager.streamer.get_resource('images/test1.png').data)
 	});
 sphere_material.manager = manager;
 		    camera_1 = 

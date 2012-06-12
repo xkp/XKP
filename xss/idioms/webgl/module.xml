@@ -8,6 +8,7 @@
     <dependency href="../js/three/Stats.js"/>    
 	<dependency href="../js/three/Utils.js"/>
 	<dependency href="../js/three/Detector.js"/>
+	<dependency href="../js/three/fonts.js"/>
 	<types>
 	
 		<class id="vector3d">		
@@ -50,6 +51,7 @@
 				<parameter id="ambient" property="ambient" runtime="true"/>
 				<parameter id="blending" property="blending" runtime="true"/>
 				<parameter id="emissive" property="emissive" runtime="true"/>
+				<parameter id="depth_test" property="depth_test" runtime="true"/>
 			</constructor_params>
 			<property id="color" type="string" use_plain_value="true" dont_init="true"/> 			
 			<property id="wireframe" type="string" dont_init="true"/>
@@ -70,6 +72,7 @@
 			<property id="refraction_ratio" type="float" output_id="refractionRatio" dont_init="true"/>
 			<property id="ambient" type="string" dont_init="true"/>
 			<property id="blending" type="string" dont_init="true"/>
+			<property id="depth_test" type="bool" output_id="depthTest" dont_init="true"/>
 			<property id="emissive" type="string" use_plain_value="true" dont_init="true"/>
 			<property id="imagedata" type="string" use_plain_value="true">
 				<get text="get_image_data({path})" global = "true"/>
@@ -79,6 +82,27 @@
 		
 		<class id="composite_material" output_id="Array"/>
 		
+		<class id="particle_canvas_material" renderer="param_in_obj.xss" output_id="THREE.ParticleCanvasMaterial">
+			<constructor_params>
+				<parameter id="color" property="color" runtime="true"/> 
+				<parameter id="program" property="program" runtime="true"/> 
+			</constructor_params>
+			<property id="color" type="string" use_plain_value="true" dont_init="true"/>
+			<property id="program" type="string" use_plain_value="true" dont_init="true"/>
+		</class>
+		
+		<class id="particle_basic_material" super="material" renderer="param_in_obj.xss" output_id="THREE.ParticleBasicMaterial">
+			<constructor_params>				
+				<parameter id="size" property="size" runtime="true"/>	
+				<parameter id="size_attenuation" property="size_attenuation" runtime="true"/>	
+				<parameter id="vertex_colors" property="vertex_colors" runtime="true"/>
+				<parameter id="fog" property="fog" runtime="true"/>
+			</constructor_params>			
+			<property id="size" type="float" dont_init="true"/>	
+			<property id="size_attenuation" type="bool" dont_init="true" output_id="sizeAttenuation"/>	
+			<property id="vertex_colors" type="bool" dont_init="true" output_id="vertexColors"/>
+			<property id="fog" type="bool" dont_init="true"/>
+		</class>	
 		<class id="basic_material" super="material" output_id="THREE.MeshBasicMaterial" renderer="param_in_obj.xss"/>
 				
 		<class id="lambert_material" super="material" output_id="THREE.MeshLambertMaterial" renderer="param_in_obj.xss"/>
@@ -121,6 +145,7 @@
 			<property id="material" type="string" use_plain_value="true">
 				<set text="set_transform_material({path}, {value})" global = "true"/>
             </property>
+			<property id="mouse_thru" type="bool"/>
 			<property id="position" type="vector3d"/>
 			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>
@@ -142,8 +167,8 @@
 		<class id="directional_light" super="light" output_id="THREE.DirectionalLight" renderer="light_renderer.xss">
 			<constructor_params>
 				<parameter id="color" property="color" runtime="true" use_plain_value="true"/>
-				<parameter id="intensity" property="intensity" runtime="true"/>
-				<parameter id="distance" property="distance" runtime="true"/>
+				<parameter id="intensity" property="intensity" runtime="true" default_value="1"/>
+				<parameter id="distance" property="distance" runtime="true" default_value="0"/>
 				<parameter id="cast_shadow" property="cast_shadow" runtime="true"/>  				
 			</constructor_params>			
 			<property id="intensity" type="string" dont_init="true"/>
@@ -154,8 +179,8 @@
 		<class id="point_light" super="light" output_id="THREE.PointLight" renderer="light_renderer.xss">
 			<constructor_params>
 				<parameter id="color" property="color" runtime="true" use_plain_value="true"/>
-				<parameter id="intensity" property="intensity" runtime="true"/>
-				<parameter id="distance" property="distance" runtime="true"/>           		
+				<parameter id="intensity" property="intensity" runtime="true" default_value="1"/>
+				<parameter id="distance" property="distance" runtime="true" default_value="0"/>           		
 			</constructor_params>				
 			<property id="intensity" type="string" dont_init="true"/>
 			<property id="distance" type="string" dont_init="true"/>
@@ -204,6 +229,33 @@
 			</property>				
 		</class>
 		
+		<class id="trackball_controls" super="controls" output_id="THREE.TrackballControls" renderer="camera_renderer.xss">		
+			<property id="rotate_speed" type="float"> 
+				<set text="rotateSpeed = {value}"/>
+				<get text="rotateSpeed"/>	
+			</property>
+			<property id="zoom_speed" type="float">
+				<set text="zoomSpeed = {value}"/>
+				<get text="zoomSpeed"/>	
+			</property>	
+			<property id="pan_speed" type="float">
+				<set text="panSpeed = {value}"/>
+				<get text="panSpeed"/>	
+			</property>	
+			<property id="no_rotate" type="bool">	
+				<set text="noRotate = {value}"/>
+				<get text="noRotate"/>	
+			</property>		
+			<property id="no_zoom" type="bool">	
+				<set text="noZoom = {value}"/>
+				<get text="noZoom"/>	
+			</property>	
+			<property id="no_pan" type="bool">	
+				<set text="noPan = {value}"/>
+				<get text="noPan"/>	
+			</property>	
+		</class>
+		
 		<class id="firstperson_controls" super="controls" output_id="THREE.FirstPersonControls" renderer="camera_renderer.xss">				
 			<property id="speed" type="string"> 
 				<set text="movementSpeed = {value}"/>
@@ -246,6 +298,32 @@
 				<get text="freeze"/>	
 			</property>
 		</class>	
+		
+		<class id="text" output_id="THREE.TextGeometry" renderer="text_renderer.xss" heritable="true">
+			<constructor_params>
+				<parameter id="size" property="size" runtime="true"/>
+				<parameter id="height" property="height" runtime="true"/>
+				<parameter id="curve_segments" property="curve_segments" runtime="true"/>
+				<parameter id="font" property="font" runtime="true"/>
+				<parameter id="weight" property="weight" runtime="true"/>
+				<parameter id="style" property="style" runtime="true"/>
+				<parameter id="bevel_enabled" property="bevel_enabled" runtime="true"/>
+				<parameter id="bevel_thickness" property="bevel_thickness" runtime="true"/>
+				<parameter id="bevel_size" property="bevel_size" runtime="true"/>
+			</constructor_params>
+			<property id="size" type="float" dont_init="true"/>
+			<property id="height" type="float" dont_init="true"/>
+			<property id="curve_segments" output_id="curveSegments" type="int" dont_init="true"/>
+			<property id="font" type="string" dont_init="true"/>
+			<property id="weight" type="string" dont_init="true"/>
+			<property id="style" type="string" dont_init="true"/>
+			<property id="bevel_enabled" output_id="bevelEnabled" type="bool" dont_init="true"/>
+			<property id="bevel_thickness" output_id="bevelThickness" type="float" dont_init="true"/>
+			<property id="bevel_size" output_id="bevelSize" type="float" dont_init="true"/>
+			<property id="position" type="vector3d"/>
+			<property id="rotation" type="rotation_class"/>
+			<property id="scale" type="vector3d"/>
+		</class>
 	
 		<class id="plane" super="object3d" output_id="THREE.PlaneGeometry" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
@@ -260,6 +338,23 @@
 			<property id="y_segments" output_id="segmentsHeight" type="string" dont_init="true"/>
 		</class>
 	
+		<class id="tetrahedron" super="object3d" output_id="THREE.TetrahedronGeometry" renderer="object3d_renderer.xss" heritable="true">
+			<constructor_params>
+				<parameter id="radius" property="radius" runtime="true"/>
+				<parameter id="detail" property="detail" runtime="true"/>				
+			</constructor_params>
+			<property id="radius" type="float" dont_init="true"/>
+			<property id="detail" type="float" dont_init="true"/>			
+		</class>
+		
+		<class id="octahedron" super="object3d" output_id="THREE.OctahedronGeometry" renderer="object3d_renderer.xss" heritable="true">
+			<constructor_params>
+				<parameter id="radius" property="radius" runtime="true"/>
+				<parameter id="detail" property="detail" runtime="true"/>				
+			</constructor_params>
+			<property id="radius" type="float" dont_init="true"/>
+			<property id="detail" type="float" dont_init="true"/>			
+		</class>
 		<class id="cube" super="object3d" output_id="THREE.CubeGeometry" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
 				<parameter id="width" property="width" runtime="true"/>
@@ -308,7 +403,40 @@
 			<property id="x_segments" output_id="segmentsWidth" type="string" dont_init="true"/>
 			<property id="y_segments" output_id="segmentsHeight" type="string" dont_init="true"/>			
 		</class>
+		
+		<class id="torus" super="object3d" output_id="THREE.TorusGeometry" renderer="object3d_renderer.xss" heritable="true">
+			<constructor_params>
+				<parameter id="radius" property="radius" runtime="true"/>
+				<parameter id="tube" property="tube" runtime="true"/>
+				<parameter id="x_segments" property="x_segments" runtime="true"/>
+				<parameter id="y_segments" property="y_segments" runtime="true"/>	
+				<parameter id="arc" property="arc" runtime="true"/>
+			</constructor_params>
+			<property id="radius" type="string" dont_init="true"/>
+			<property id="tube" type="string" dont_init="true"/>
+			<property id="x_segments" output_id="segmentsWidth" type="string" dont_init="true"/>
+			<property id="y_segments" output_id="segmentsHeight" type="string" dont_init="true"/>
+			<property id="arc" type="string" dont_init="true"/>			
+		</class>
 	
+		<class id="torusknot" super="object3d" output_id="THREE.TorusKnotGeometry" renderer="object3d_renderer.xss" heritable="true">
+			<constructor_params>
+				<parameter id="radius" property="radius" runtime="true"/>
+				<parameter id="tube" property="tube" runtime="true"/>
+				<parameter id="x_segments" property="x_segments" runtime="true"/>
+				<parameter id="y_segments" property="y_segments" runtime="true"/>	
+				<parameter id="p" property="p" runtime="true"/>
+				<parameter id="q" property="q" runtime="true"/>
+				<parameter id="height_scale" property="height_scale" runtime="true"/>
+			</constructor_params>
+			<property id="radius" type="string" dont_init="true"/>
+			<property id="tube" type="string" dont_init="true"/>
+			<property id="x_segments" output_id="segmentsWidth" type="string" dont_init="true"/>
+			<property id="y_segments" output_id="segmentsHeight" type="string" dont_init="true"/>
+			<property id="p" type="string" dont_init="true"/>	
+			<property id="q" type="string" dont_init="true"/>	
+			<property id="height_scale" type="string" dont_init="true"/>	
+		</class>
 		<class id="icosahedron" super="object3d" output_id="THREE.IcosahedronGeometry" renderer="object3d_renderer.xss" heritable="true">
 			<constructor_params>
 				<parameter id="radius" property="radius" runtime="true"/>	
@@ -318,17 +446,17 @@
 			<property id="detail" type="string" dont_init="true"/>
 		</class>
 	
-		<class id="particle" renderer="particle_renderer.xss" heritable="true">
+		<class id="particle" renderer="particle_renderer.xss" output_id="THREE.Particle" heritable="true">
 			<constructor_params>
-				<parameter id="material" property="material" runtime="true"/>									
+				<parameter id="material" property="material" runtime="true" use_plain_value="true"/>									
 			</constructor_params>
-			<property id="material" type="string" dont_init="true" use_plain_value="true"/>
+			<property id="material" type="string" dont_init="true"/>
 			<property id="position" type="vector3d"/>
 			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>
 		</class>
 				
-		<class id="particle_system" renderer="particle_renderer.xss" heritable="true">
+		<class id="particle_system" renderer="particle_renderer.xss" output_id="THREE.Particle" heritable="true">
 			<constructor_params>
 				<parameter id="material" property="material" runtime="true"/>
 				<parameter id="quantity" property="quantity" runtime="true"/>	
@@ -337,7 +465,7 @@
 			<property id="material" type="string" dont_init="true" use_plain_value="true"/>
 			<property id="quantity" type="string" dont_init="true"/>
 			<property id="scale" type="string" dont_init="true"/>			
-		</class>			
+		</class>					
 			
 		<class id="texture_cube" renderer="envmap_renderer.xss">
 			<constructor_params>

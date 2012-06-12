@@ -18,6 +18,7 @@
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
+            <script type="text/javascript" src="../js/three/fonts.js"></script>
 <script type="text/javascript">	
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 			var renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -98,14 +99,14 @@ var camera_1;var a_ligth;var d_ligth_1;var male_model;var female_model;
 threejs_load_resources(manager, function()
 {
 		    camera_1 = 
-		    new THREE.PerspectiveCamera(75, 1.5, 1, 100000, null) ;	
+		    new THREE.PerspectiveCamera(75, 1.5, 1, 100000, null) ;				
 camera_1.manager = manager;
 	    a_ligth = 
 	    new THREE.AmbientLight(2232576) ;
 	    manager.scene.add(a_ligth);
 a_ligth.manager = manager;
 	    d_ligth_1 = 
-	    new THREE.DirectionalLight(16772829, null, null, null) ;
+	    new THREE.DirectionalLight(16772829, 1, 0, null) ;
 	    manager.scene.add(d_ligth_1);
 d_ligth_1.manager = manager;
 	male_model = new THREE.Object3D();

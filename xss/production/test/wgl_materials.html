@@ -17,6 +17,7 @@
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
+            <script type="text/javascript" src="../js/three/fonts.js"></script>
 <script type="text/javascript">	
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 			var renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -134,14 +135,14 @@ color:White
 	});
 material_particle.manager = manager;
 		    camera_1 = 
-		    new THREE.PerspectiveCamera(45, 1.5, 1, 2000, null) ;	
+		    new THREE.PerspectiveCamera(45, 1.5, 1, 2000, null) ;				
 camera_1.manager = manager;
 	    amb_light_1 = 
 	    new THREE.AmbientLight(0x202020) ;
 	    manager.scene.add(amb_light_1);
 amb_light_1.manager = manager;
 	    dir_light_1 = 
-	    new THREE.DirectionalLight(Math.random() * 0xffffff, 1, null, null) ;
+	    new THREE.DirectionalLight(Math.random() * 0xffffff, 1, 0, null) ;
 	    manager.scene.add(dir_light_1);
 dir_light_1.manager = manager;
 	    particle_1_sphere = new THREE.SphereGeometry(4, 8, 8) ;

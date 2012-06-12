@@ -1,0 +1,63 @@
+<application src="webgl_particle.xs" title="Test 3D" background="Black">
+	
+	<resources>		
+		<image src="images/sprites/snowflake1.png"/>
+		<image src="images/sprites/snowflake2.png"/>
+		<image src="images/sprites/snowflake3.png"/>
+		<image src="images/sprites/snowflake4.png"/>
+		<image src="images/sprites/snowflake5.png"/>		
+	</resources>
+	
+	<materials>
+		<particle_basic_material id="p_mat1" size="10" src="images/sprites/snowflake1.png" transparent="true" depth_test="false" blending="additive_blending"/>
+		<particle_basic_material id="p_mat2" size="20" src="images/sprites/snowflake2.png" transparent="true" depth_test="false" blending="additive_blending"/>
+		<particle_basic_material id="p_mat3" size="15" src="images/sprites/snowflake3.png" transparent="true" depth_test="false" blending="additive_blending"/>
+		<particle_basic_material id="p_mat4" size="5" src="images/sprites/snowflake4.png" transparent="true" depth_test="false" blending="additive_blending"/>
+		<particle_basic_material id="p_mat5" size="8" src="images/sprites/snowflake5.png" transparent="true" depth_test="false" blending="additive_blending"/>
+	</materials>
+	
+	<scene>	
+	
+		<camera id="camera_1" fov="70" aspect="1.5" near="1" far="1000" look_at="scene.position">
+			<fly_controls speed="20" roll_speed="0.2"/>
+			<position y="300" z="500"/>			
+		</camera>
+			
+		<particle_system material="p_mat1" 
+						 quantity="10000" scale="Math.random() * 10 + 5">	
+			<x begin="-1000" end="1000"/>
+			<y begin="-1000" end="1000"/>
+			<z begin="-1000" end="1000"/>
+		</particle_system>
+		
+		<particle_system material="p_mat2" 
+						 quantity="10000" scale="Math.random() * 10 + 5">	
+			<x begin="-1000" end="1000"/>
+			<y begin="-1000" end="1000"/>
+			<z begin="-1000" end="1000"/>
+		</particle_system>
+		
+		<particle_system material="p_mat3" 
+						 quantity="10000" scale="Math.random() * 10 + 5">	
+			<x begin="-1000" end="1000"/>
+			<y begin="-1000" end="1000"/>
+			<z begin="-1000" end="1000"/>
+		</particle_system>
+		
+		<particle_system material="p_mat4" 
+						 quantity="10000" scale="Math.random() * 10 + 5">	
+			<x begin="-1000" end="1000"/>
+			<y begin="-1000" end="1000"/>
+			<z begin="-1000" end="1000"/>
+		</particle_system>
+		
+		<particle_system material="p_mat5" 
+						 quantity="10000" scale="Math.random() * 10 + 5">	
+			<x begin="-1000" end="1000"/>
+			<y begin="-1000" end="1000"/>
+			<z begin="-1000" end="1000"/>
+		</particle_system>
+				
+	</scene>
+			
+</application>

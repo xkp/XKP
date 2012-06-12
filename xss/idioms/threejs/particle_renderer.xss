@@ -3,17 +3,14 @@
 <xss:code>
 	if(obj.class_name == "particle"){
 		out(){
-			<xss:e v="obj.id"/> = new THREE.Particle( 
-			new THREE.ParticleCanvasMaterial( 
-			{ color: <xss:e v="obj.color"/>, program: <xss:e v="obj.program"/>, } 
-			) );	
+			<xss:e v="obj.id"/> = <xss:e v="compiler.instantiate(obj)"/> ;	
 			manager.scene.add( <xss:e v="obj.id"/> );	
 		}		
 	}else{
 		out(){
 		var <xss:e v="obj.id"/> = {};
 		for ( var i = 0; i < <xss:e v="obj.quantity"/>; i++ ) <xss:open_brace/>
-			particle = new THREE.Particle( new THREE.ParticleCanvasMaterial( { color: <xss:e v="obj.color"/>, program: <xss:e v="obj.program"/>, } ) );
+			particle = new THREE.Particle( <xss:e v="obj.material"/> );
 		
 		}
 		for(var p_child in obj.children){
