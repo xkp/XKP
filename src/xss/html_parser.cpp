@@ -75,6 +75,55 @@ size_t tag_list::size()
     return tags_.size();
   }
 
+void tag_list::inner_tags(int& tag_idx, tag_list& result)
+  {
+    tag& match_tag = tags_[tag_idx];
+    if (match_tag.closes)
+      return;
+
+    int  matches = 1;
+
+    while (tag_idx < tags_.size() && matches > 0)
+      {
+        tag_idx++;
+        tag& curr_tag = tags_[tag_idx];
+        result.push_back(curr_tag);
+
+        if (curr_tag.tag_name == match_tag.tag_name)
+          {
+            if (curr_tag.closes)
+              matches--;
+            else 
+              matches++;
+          }
+      }
+  }
+
+int tag_list::find_closing(int tag_idx)
+  {
+    tag& match_tag = tags_[tag_idx];
+    if (match_tag.closes)
+      return tag_idx;
+
+    int  matches = 1;
+
+    while (tag_idx < tags_.size() && matches > 0)
+      {
+        tag_idx++;
+        tag& curr_tag = tags_[tag_idx];
+
+        if (curr_tag.tag_name == match_tag.tag_name)
+          {
+            if (curr_tag.closes)
+              matches--;
+            else 
+              matches++;
+          }
+      }
+
+    return tag_idx;
+  }
+
 //an extremely simple html parser, at this point the htmls to be used are expected to
 //be correct, so we'll keep an intermediate representation of the tags
 

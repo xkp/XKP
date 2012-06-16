@@ -92,8 +92,10 @@ struct wax_utils
     private:
       XSSCompiler compiler_;
 
-      bool custom_modifier(XSSObject obj, const str& modifier, tag_list& tags, tag& t);
+      str  split_html(const str& html_text, code& cde, tag_list& tags, DynamicArray elements, int hStart, int hEnd, str& declarations);
+      bool custom_modifier(XSSObject obj, const str& modifier, const str& html_text, tag_list& tags, int& tag_idx, str& result);
       str  render_html_text(const str& text);
+      str  escape(const str& text);
   };
 
 typedef reference<wax_utils> WaxUtils;

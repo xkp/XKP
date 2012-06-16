@@ -14,3 +14,8 @@ on home.render()
     //
     followers.data = data;
 }
+
+on home.followers.render(item)
+{
+    follower.inner_html = item.name;
+}

@@ -13,6 +13,10 @@ const str SCodeAfterReturn("Unreachable code");
 const str SBadHTML("Errors parsing html");
 const str SMissingHTMLTag("Missing declared tag");
 const str SUnknownDSL("Unkown dsl");
+const str SMissingReplicatorEvent("Replicators expect a 'render' event");
+const str STooManyReplicatorEvents("Replicators expect only one 'render' event");
+const str SReplicatorOnlyData("Replicators only contain the 'data' property");
+const str SReplicatorNoFork("Replicators 'render' event does not support offline operations");
 
 #define CHECK_ACTIVE  if (found_) return; curr_++;
 
@@ -423,9 +427,6 @@ str waxjs_code_renderer::render()
       result << render_code(code_);
     else
       result << render_split(fork, CodeSplit());
-    
-    if (is_page)
-      result << "\nreturn_function();";
 
     return result.str();
   }
@@ -1016,6 +1017,73 @@ class object_45 : public xss_object
 
 typedef reference<object_45> Object45; 
 
+struct visitor_45 : code_visitor
+  {
+    visitor_45(XSSContext ctx):
+      ctx_(ctx)
+      {
+      }
+
+    //code_visitor
+    virtual void expression_(stmt_expression& info)
+      {
+        //we're only looking for expression in the form: element.stuff = modifier
+		    
+        operator_type op;
+		    if (info.expr.top_operator(op) && op == op_assign)
+          {
+            expression_splitter assign_splitter(op);
+            info.expr.visit(&assign_splitter);
+
+            expression& left = assign_splitter.left;
+            if ((left.size() == 3) && left.top_operator(op) && op == op_dot)
+              {
+                //we only need to resolve the modifier, the object 45 will register it
+                expr_type_resolver tr(ctx_);
+                left.visit(&tr);
+              }
+          }
+      }
+
+    virtual void if_(stmt_if& info)
+      {
+        visitor_45 v45(ctx_);
+        info.if_code.visit(&v45);
+        info.else_code.visit(&v45);
+      }
+
+    virtual void for_(stmt_for& info)
+      {
+        visitor_45 v45(ctx_);
+        info.for_code.visit(&v45);
+      }
+
+    virtual void iterfor_(stmt_iter_for& info)
+      {
+        visitor_45 v45(ctx_);
+        info.for_code.visit(&v45);
+      }
+
+    virtual void while_(stmt_while& info)
+      {
+        visitor_45 v45(ctx_);
+        info.while_code.visit(&v45);
+      }
+
+    virtual void variable_(stmt_variable& info)       {}
+    virtual void return_(stmt_return& info)           {}
+    virtual void break_()                             {}
+    virtual void continue_()                          {}
+    virtual void dsl_(dsl& info)                      {}
+    virtual void dispatch(stmt_dispatch& info)        {}
+    virtual void switch_(stmt_switch& info)           {}
+    virtual void try_(stmt_try& info)                 {}
+    virtual void throw_(stmt_throw& info)             {}
+
+    private:
+     XSSContext ctx_;
+  }; 
+
 XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
   {
     //do the html thing
@@ -1066,7 +1134,7 @@ XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
         str       eid  = elem->id();
         int       idx  = tags.find(eid);
 
-        obj->set_id(eid);
+        obj->copy(elem);
         if (idx < 0)
           {
             param_list error;
@@ -1086,15 +1154,17 @@ XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
         ctx->register_symbol(RESOLVE_INSTANCE, eid, obj);
       }
 
-    //then, masterfully I must say, I just have to apply any 
-    //serious visitor and the properties the user intends to modify
-    //get attached to our 45
-
-    //in this case we just inquire the return type
+    //then, masterfully I must say, I must go looking for assigns to the elements 
     code& cde = cr->get_code();
     
-    code_type_resolver tr(ctx, cde);
+    visitor_45 tr(ctx);
     cde.visit(&tr);
+
+    //on pages the last intruction will be a call to the return_function
+    stmt_expression rfe;
+    xs_compiler xsc;
+    xsc.compile_expression("return_function()", rfe.expr);
+    cde.add_statement(rfe);
 
     //wait, not over yet... now we must split the html along the modifiers,
     //and generate the the oh sweet code.
@@ -1132,7 +1202,9 @@ XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
                 if (plit != pl.end())
                     pl.erase(plit);
                 
-                if (!custom_modifier(XSSObject(obj), modifier, tags, tt))
+                str cmt;
+                int tag_idx = tag_idxs[idx];
+                if (!custom_modifier(XSSObject(obj), modifier, html_text, tags, tag_idx, cmt))
                   {
                     //add the runtime value as an attribute
                     return_function << "response.write(\"<" << tt.tag_name << " " << modifier << " = \");\n";
@@ -1149,6 +1221,11 @@ XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
 
                     return_function << "\");\n";
                   }
+                else 
+                  {
+                    return_function << cmt;
+                    tt = tags.get(tag_idx);
+                  }
               }
           }
 
@@ -1160,6 +1237,123 @@ XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
     result->add_attribute("pre_code",        declarations.str());
     result->add_attribute("return_function", return_function.str());
     return result;
+  }
+
+str wax_utils::split_html(const str& html_text, code& cde, tag_list& tags, DynamicArray elements, int hStart, int hEnd, str& declarations)
+  {
+    //here comes tricky, every registered element will get its own instance
+    //then the code will be analyzed to find the changes intended for the html
+    XSSContext ctx(new xss_context(compiler_->current_context()));
+    ctx->search_native(true); //looks important...
+
+		std::vector<variant>::iterator it = elements->ref_begin();
+		std::vector<variant>::iterator nd = elements->ref_end();
+
+    std::vector<Object45> items;
+    std::vector<int>      tag_idxs;
+    std::map<int, int>    sort;
+    for(; it != nd; it++)
+      {
+        XSSObject elem = *it;
+        Object45  obj(new object_45);
+        obj->copy(elem);
+
+        str       eid  = elem->id();
+        int       idx  = tags.find(eid);
+
+        obj->set_id(eid);
+        if (idx < 0)
+          {
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", SMissingHTMLTag);
+            error.add("tag", eid);
+            xss_throw(error);
+          }
+
+        tag_idxs.push_back(idx);
+        items.push_back(obj);
+
+        tag& tt = tags.get(idx);
+        sort.insert(std::pair<int, int>(tt.start, items.size()));
+
+        //let the script know
+        ctx->register_symbol(RESOLVE_INSTANCE, eid, obj);
+      }
+
+    //then, masterfully I must say, I must go looking for assigns to the elements 
+    visitor_45 tr(ctx);
+    cde.visit(&tr);
+
+    //wait, not over yet... now we must split the html along the modifiers,
+    //and generate the the oh sweet code.
+    std::map<int, int>::iterator sit = sort.begin();
+    std::map<int, int>::iterator snd = sort.end();
+
+    size_t             curr = hStart;
+    std::ostringstream result;
+    std::ostringstream decl_builder;
+
+    for(; sit != snd; sit++)
+      {
+        int      idx = sit->second - 1;
+        tag&     tt  = tags.get(tag_idxs[idx]);
+        Object45 obj = items[idx];
+
+        if (obj->modified())
+          {
+            decl_builder << "var " << obj->id() << " = {};\n";
+
+            //it has been touched by the user, otherwise just leave it as it was
+            result << render_html_text(html_text.substr(curr, tt.start - curr));
+
+            std::vector<str>& modifiers = obj->modifiers();
+            prop_list         pl        = tt.props;
+
+            std::vector<str>::iterator mit = modifiers.begin();
+            std::vector<str>::iterator mnd = modifiers.end();
+            for(; mit != mnd; mit++)
+              {
+                str modifier = *mit;
+
+                //delete from the property list if it was there
+                prop_list::iterator plit = pl.find(modifier);
+                if (plit != pl.end())
+                    pl.erase(plit);
+                
+                str cmt;
+                int tag_idx = tag_idxs[idx];
+                if (!custom_modifier(XSSObject(obj), modifier, html_text, tags, tag_idx, cmt))
+                  {
+                    //add the runtime value as an attribute
+                    result << "response.write(\"<" << tt.tag_name << " " << modifier << " = \");\n";
+                    result << "response.write('\\\"' + " << obj->id() << "." << modifier << " + '\\\"' );\n";
+                    result << "response.write(\"";
+
+                    prop_list::iterator pit = pl.begin();
+                    prop_list::iterator pnd = pl.end();
+
+                    for(; pit != pnd; pit++)
+                      {
+                        result << pit->first << " = \\\"" << pit->second << "\\\"";
+                      }
+
+                    result << "\");\n";
+                  }
+                else
+                  {
+                    result << cmt;
+                    tt = tags.get(tag_idx);
+                  }
+              }
+          }
+
+        curr = tt.close;
+      }
+
+    declarations = decl_builder.str();
+    result << render_html_text(html_text.substr(curr, hEnd - curr));
+    return result.str();
   }
 
 void wax_utils::pre_process_args(XSSMethod methd)
@@ -1194,14 +1388,105 @@ void wax_utils::pre_process_args(XSSMethod methd)
     methd->add_attribute("#wax_parameters", wax_args);
   }
 
-bool wax_utils::custom_modifier(XSSObject obj, const str& modifier, tag_list& tags, tag& t)
+bool wax_utils::custom_modifier(XSSObject obj, const str& modifier, const str& html_text, tag_list& tags, int& tag_idx, str& result)
   {
-    if (obj->has("replicator") && modifier == "items")
+    if (obj->type_name() =="replicator")
       {
-        //td: !!! replicator
+        if (modifier != "data")
+          {
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", SReplicatorOnlyData);
+            error.add("rep", obj->id());
+            error.add("property", modifier);
+            xss_throw(error);
+          }
+
+        DynamicArray code = obj->get_event_code("render");
+        if (code->size() < 1)
+          {
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", SMissingReplicatorEvent);
+            error.add("replicator", obj->id());
+            xss_throw(error);
+          }
+        else if (code->size() > 1)
+          {
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", STooManyReplicatorEvents);
+            error.add("replicator", obj->id());
+            xss_throw(error);
+          }
+
+        waxjs_code_renderer* cdr = variant_cast<waxjs_code_renderer*>(code->at(0), null); assert(cdr);
+        if (cdr->forked())
+          {
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", SReplicatorNoFork);
+            error.add("replicator", obj->id());
+            xss_throw(error);
+          }
+        
+        tag_list rep_tags;
+        tags.inner_tags(tag_idx, rep_tags);
+        
+        str decl;
+        str html_render = split_html(html_text, cdr->get_code(), rep_tags, obj->children(), rep_tags.get(0).start, rep_tags.get(rep_tags.size() - 1).close, decl);
+        
+        std::ostringstream rep_text;
+        str iterator = obj->id() + "_iterator";
+        rep_text << "\nfor(var " << iterator << " = 0; " << iterator << " < " << obj->id() << ".data.lenght; " << iterator << "++)";
+        rep_text << "\n{";
+        rep_text << "\nvar item = " << obj->id() << ".data[" << iterator << "];";
+        rep_text << "\n" << decl;
+        rep_text << "\n" << cdr->render();
+        rep_text << "\n" << html_render;
+        rep_text << "\n}";
+
+        result = rep_text.str();
+        return true;
+      }
+    else if (modifier == "inner_html")
+      {
+        int closing = tags.find_closing(tag_idx);
+
+        std::ostringstream ih_text;
+        ih_text << "response.write( \"";
+
+        if (closing == tag_idx)
+          {
+            tag& my_tag = tags.get(tag_idx);
+            ih_text << render_html_text(str(html_text.begin() + my_tag.start, html_text.begin() + (my_tag.close - 1))) << ">";
+            ih_text << "\" + " << obj->id() << " + \"";
+            ih_text << "<\\" << my_tag.tag_name << ">";
+          }
+        else
+          {
+            tag& first = tags.get(tag_idx);
+            tag& last  = tags.get(closing);
+            ih_text << escape(str(html_text.begin() + first.start, html_text.begin() + first.close + 1));
+            ih_text << "\" + " << obj->id() << ".inner_html + \"";
+            ih_text << str(html_text.begin() + last.start, html_text.begin() + last.close + 1);
+          }
+
+        tag_idx = closing + 1;
+        ih_text << "\");";
+        result = ih_text.str();
+        return true;
       }
 
     return false;
+  }
+
+str wax_utils::escape(const str& text)
+  {
+    str result = text;
+    boost::replace_all (result, "\n", "\\n");
+    boost::replace_all (result, "\"", "\\\"");
+    return result;
   }
 
 str wax_utils::render_html_text(const str& text)

@@ -43,6 +43,8 @@ namespace xkp
       int      find(const str& id);
       tag&     get(int idx);
       size_t   size();
+      void     inner_tags(int& tag_idx, tag_list& rep_tags);
+      int      find_closing(int tag_idx);
       private:
         std::vector<tag> tags_;
     };

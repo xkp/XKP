@@ -2951,7 +2951,7 @@ void xss_compiler::compile_ast(xs_container& ast, XSSContext ctx)
 
         bool use_event_instance = use_event_instance_;
         XSSObject ai_type(actual_instance->type());
-        if (ai_type->has("event_scope"))
+        if (ai_type && ai_type->has("event_scope"))
           {
             //the class wants to use its own event scope
             str event_scope = ai_type->get<str>("event_scope", str("application"));

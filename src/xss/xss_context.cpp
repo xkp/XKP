@@ -929,6 +929,7 @@ void xss_object::copy(XSSObject obj)
         XSSEvent my_ev = XSSEvent(new xss_event);
 
         my_ev->copy(XSSObject(obj_ev));
+        my_ev->impls = obj_ev->impls;
         events_->push_back(my_ev);
       }
 
