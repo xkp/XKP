@@ -331,7 +331,7 @@ void xss_module::register_instance(XSSObject obj)
     used();
 
     str obj_id = obj->id();
-    if (!obj_id.empty())
+    if (!obj_id.empty() && obj_id != "application")
       {
         ctx_->register_symbol(RESOLVE_INSTANCE, obj_id, obj);
       }
@@ -587,7 +587,8 @@ void xss_compiler::build(fs::path xml, param_list& args)
     str project_source = project_data->get<str>("src", str());
     if (!project_source.empty())
       {
-        code_context cctx = current_app_->context()->get_compile_context();
+        code_context cctx;
+		cctx = current_app_->context()->get_compile_context();
 
         xs_utils xs;
         xs.compile_implicit_instance(load_file(base_path_ / project_source), DynamicObject(project_data), cctx, xml);
@@ -2698,14 +2699,18 @@ void xss_compiler::read_application(const str& app_file)
 
         //create an empty type for application
         //td: think it through
-        XSSType app_type(new xss_type);
-        app_type->set_id("Application");
+        XSSType app_type = ctx->get_type("Application");
+        if (!app_type)
+          {
+            app_type = XSSType(new xss_type);
+            app_type->set_id("Application");
+            ctx->add_type("Application", app_type);
+          }
 
         app_data->set_id("application");
         app_data->set_type(app_type);
 
-        app_renderer->context()->add_type("Application", app_type);
-        app_renderer->context()->register_symbol(RESOLVE_INSTANCE, "application", app_data);
+        ctx->register_symbol(RESOLVE_INSTANCE, "application", app_data);
 
         XSSContext code_ctx(new xss_context(app_renderer->context(), src_path.parent_path()));
         code_ctx->set_this(app_data);

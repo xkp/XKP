@@ -6,7 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.graphics.drawable.ShapeDrawable;
@@ -16,27 +16,26 @@ import android.view.View;
 import xkp.android.Figures2D.R;
 import xkp.android.libs.Layout.XKPLayout;
 public class XKPGraphics extends View {
-	//private final Integer	DEFAULT_SIZE		= 10;
-	protected Integer 		mLineWidth 			= 0;
-	protected Integer 		mStrokeColor 		= 0xffffffff;
-	protected Integer 		mFillColor 			= 0xffffffff;
-	protected Integer   	mBackgroundColor	= 0xffffffff;
+	protected int 			mLineWidth 			= 0;
+	protected int 			mStrokeColor 		= 0xffffffff;
+	protected int 			mFillColor 			= 0xffffffff;
+	protected int   		mBackgroundColor	= 0xffffffff;
 	protected Paint.Cap 	mCap 				= Paint.Cap.BUTT;
 	protected Paint.Style 	mStyle 				= Paint.Style.FILL_AND_STROKE;
-	protected Integer   	mX1					= -1;
-	protected Integer   	mY1					= -1;
-	protected Integer   	mX2					= -1;
-	protected Integer   	mY2					= -1;
-	protected Integer 		mDX					= 0;
-	protected Integer		mDY					= 0;
-	protected Integer		mCenterX			= 0;
-	protected Integer		mCenterY			= 0;
-	protected Integer 		mRadius 			= 1;
+	protected float   		mX1					= -1;
+	protected float   		mY1					= -1;
+	protected float   		mX2					= -1;
+	protected float   		mY2					= -1;
+	protected float 		mDX					= 0;
+	protected float			mDY					= 0;
+	protected float			mCenterX			= 0;
+	protected float			mCenterY			= 0;
+	protected float 		mRadius 			= 1;
 	protected RectF			mBounds				= new RectF();
-	protected double		mAngle				= 0;
+	protected float			mAngle				= 0;
 	protected Matrix		mMtxAngle			= new Matrix();
-	protected Point			mLeftTop			= new Point();
-	protected Point			mBottomRight		= new Point();
+	protected PointF		mLeftTop			= new PointF();
+	protected PointF		mBottomRight		= new PointF();
 	protected RectF			mRectF				= new RectF();
 	protected Path			mPathShape			= new Path();
 	protected Path			mPathClipRef;
@@ -62,7 +61,7 @@ public class XKPGraphics extends View {
 		mY2 = ta.getDimensionPixelOffset(R.styleable.XKPGraphics_pos_y2, -1);
 		mDX = ta.getDimensionPixelOffset(R.styleable.XKPGraphics_pos_width, -1);
 		mDY = ta.getDimensionPixelOffset(R.styleable.XKPGraphics_pos_height, -1);
-		double angle = ta.getFloat(R.styleable.XKPGraphics_angle, 0);
+		float angle = ta.getFloat(R.styleable.XKPGraphics_angle, 0);
 		if(mDX != -1 && mDY != -1) {
 			mX2 = mX1 + mDX;
 			mY2 = mY1 + mDY;
@@ -130,14 +129,14 @@ public class XKPGraphics extends View {
 			paint.setAntiAlias(true);
 			// http://stackoverflow.com/questions/5287483/image-changes-size-as-its-rotated-how-do-i-stop-this
 	        // precompute some trig functions
-	        double radians = Math.toRadians(mAngle);
-	        double sin = Math.abs(Math.sin(radians));
-	        double cos = Math.abs(Math.cos(radians));
+	        float radians = (float) Math.toRadians(mAngle);
+	        float sin = (float) Math.abs(Math.sin(radians));
+	        float cos = (float) Math.abs(Math.cos(radians));
 	        // figure out total width and height of new bitmap
-	        int newWidth = (int) (mDX * cos + mDY * sin);
-	        int newHeight = (int) (mDX * sin + mDY * cos);
-	        int middleWidth = newWidth / 2;
-	        int middleHeight = newHeight / 2;
+	        float newWidth = mDX * cos + mDY * sin;
+	        float newHeight = mDX * sin + mDY * cos;
+	        float middleWidth = newWidth / 2;
+	        float middleHeight = newHeight / 2;
 	        RectF newRectF = new RectF(mCenterX - middleWidth, mCenterY - middleHeight, 
 	        					mCenterX + middleWidth, mCenterY + middleHeight);
 			Bitmap renderBmp = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), mMtxAngle, false);
@@ -159,51 +158,51 @@ public class XKPGraphics extends View {
 	protected Boolean getIsDrawable() {
 		return true;
 	}
-	protected void preCalcAngle(double angle) {
+	protected void preCalcAngle(float angle) {
 		mAngle = angle % 360;
 		mMtxAngle.reset();
-		mMtxAngle.setRotate((float)mAngle, mCenterX, mCenterY);
+		mMtxAngle.setRotate(mAngle, mCenterX, mCenterY);
 	}
-	public void setAngle(double angle) {
+	public void setAngle(float angle) {
 		preCalcAngle(angle);
 		updateShapePosition();
 		invalidate();
 	}
-	public double getAngle() {
+	public float getAngle() {
 		return mAngle;
 	}
-	public void setLineWidth(Integer width) {
+	public void setLineWidth(int width) {
 		mLineWidth = width;
 		mPaintStroke.setStrokeWidth(mLineWidth);
 		mPaintFill.setStrokeWidth(mLineWidth);
 		invalidate();
 	}
-	public Integer getLineWidth() {
+	public int getLineWidth() {
 		return mLineWidth;
 	}
-	protected Integer parseStringColor(String color) {
-		Integer resId = getResources().getIdentifier(color, "color", getContext().getPackageName());
-		Integer iColor = getResources().getInteger(resId);
+	protected int parseStringColor(String color) {
+		int resId = getResources().getIdentifier(color, "color", getContext().getPackageName());
+		int iColor = getResources().getInteger(resId);
 		return iColor;
 	}
-	public void setStrokeColor(Integer color) {
+	public void setStrokeColor(int color) {
 		mStrokeColor = color;
 		mPaintStroke.setColor(mStrokeColor);
 		invalidate();
 	}
 	public void setStrokeColor(String color) {
-		Integer iColor = parseStringColor(color);
+		int iColor = parseStringColor(color);
 		setStrokeColor(iColor);
 	}
-	public Integer getStrokeColor() {
+	public int getStrokeColor() {
 		return mStrokeColor;
 	}
-	public void setFillColor(Integer color) {
+	public void setFillColor(int color) {
 		mFillColor = color;
 		mPaintFill.setColor(mFillColor);
 		invalidate();
 	}
-	public Integer getFillColor() {
+	public int getFillColor() {
 		return this.mFillColor;
 	}
 	protected Paint.Cap parseStringCap(String strCap) {
@@ -253,108 +252,107 @@ public class XKPGraphics extends View {
 	}
 	protected void updateShapePosition() {
 	}
-	public void setRadius(Integer radius) {
+	public void setRadius(float radius) {
 		mRadius = radius;
 		mX2 = mRadius * 2;
 		mY2 = mRadius * 2;
 		invalidate();
 	}
-	public Integer getRadius() {
+	public float getRadius() {
 		return mRadius;
 	}
-	protected void preCalcPosition(Integer x1, Integer y1, Integer x2, Integer y2) {
+	protected void preCalcPosition(float x1, float y1, float x2, float y2) {
 		mX1 = x1;
 		mY1 = y1;
 		mX2 = x2;
 		mY2 = y2;
-		//if(mX2 == -1 && x1 != -1) mX2 = mX1 + DEFAULT_SIZE; else mX2 = x2;
-		//if(mY2 == -1 && y1 != -1) mY2 = mY1 + DEFAULT_SIZE; else mY2 = y2;
 		mLeftTop.set(Math.min(mX1, mX2), Math.min(mY1, mY2));
 		mBottomRight.set(Math.max(mX1, mX2), Math.max(mY1, mY2));
 		mRectF.set(mX1, mY1, mX2, mY2);
 		mDX = Math.abs(mX2 - mX1);
 		mDY = Math.abs(mY2 - mY1);
-        mCenterX = mLeftTop.x + (int) (mDX / 2);
-		mCenterY = mLeftTop.y + (int) (mDY / 2);
+        mCenterX = mLeftTop.x + mDX / 2;
+		mCenterY = mLeftTop.y + mDY / 2;
+		// TODO: compare mDelthas X and Y with an epsilon value and not with zero 
 		if(mDX == 0) mDX = 1;
 		if(mDY == 0) mDY = 1;
 		mRadius = Math.max(mDX, mDY) / 2;
 	}
-	public void setPosition(Integer x1, Integer y1, Integer x2, Integer y2) {
+	public void setPosition(float x1, float y1, float x2, float y2) {
 		preCalcPosition(x1, y1, x2, y2);
 		preCalcAngle(mAngle);
 		updateShapePosition();
 		invalidate();
 	}
-	public void setPosition(Integer x1, Integer y1, boolean anchorRightBottom) {
-		Integer x2 = mX2;
-		Integer y2 = mY2;
+	public void setPosition(float x1, float y1, boolean anchorRightBottom) {
+		float x2 = mX2;
+		float y2 = mY2;
 		if(anchorRightBottom == false && x2 != -1 && y2 != -1) {
 			x2 = x1 + mDX;
 			y2 = y1 + mDY;
 		}
 		setPosition(x1, y1, x2, y2);
 	}
-	public void setPosition(Integer x1, Integer y1) {
+	public void setPosition(float x1, float y1) {
 		setPosition(x1, y1, false);
 	}
-	public void setFigureSize(Integer width, Integer height) {
+	public void setFigureSize(float width, float height) {
 		setPosition(mX1, mY1, mX1 + width, mY1 + height);
 	}
-	public void setFigureWidth(Integer width) {
+	public void setFigureWidth(float width) {
 		setPosition(mX1, mY1, mX1 + width, mY2);
 	}
-	public void setFigureHeight(Integer height) {
+	public void setFigureHeight(float height) {
 		setPosition(mX1, mY1, mX2, mY1 + height);
 	}
-	public void setLeft(Integer x) {
-		int delthaX = mX2 - mX1;
+	public void setLeft(float x) {
+		float delthaX = mX2 - mX1;
 		setPosition(x, mY1, x + delthaX, mY2);
 	}
-	public void setTop(Integer y) {
-		int delthaY = mY2 - mY1;
+	public void setTop(float y) {
+		float delthaY = mY2 - mY1;
 		setPosition(mX1, y, mX2, y + delthaY);
 	}
-	public void setWidth(Integer width) {
+	public void setWidth(float width) {
 		setPosition(mX1, mY1, mX1 + width, mY2);
 	}
-	public void setHeight(Integer height) {
+	public void setHeight(float height) {
 		setPosition(mX1, mY1, mX2, mY1 + height);
 	}
-	public Integer getDX() {
+	public float getDX() {
 		return mDX;
 	}
-	public Integer getDY() {
+	public float getDY() {
 		return mDY;
 	}
-	public void setX1(Integer x1) {
+	public void setX1(float x1) {
 		setPosition(x1, mY1, mX2, mY2);
 	}
-	public void setX2(Integer x2) {
+	public void setX2(float x2) {
 		setPosition(mX1, mY1, x2, mY2);
 	}
-	public void setY1(Integer y1) {
+	public void setY1(float y1) {
 		setPosition(mX1, y1, mX2, mY2);
 	}
-	public void setY2(Integer y2) {
+	public void setY2(float y2) {
 		setPosition(mX1, mY1, mX2, y2);
 	}
-	public Integer getX1() {
+	public float getX1() {
 		return mX1;
 	}
-	public Integer getX2() {
+	public float getX2() {
 		return mX2;
 	}
-	public Integer getY1() {
+	public float getY1() {
 		return mY1;
 	}
-	public Integer getY2() {
+	public float getY2() {
 		return mY2;
 	}
-	public Integer getFigureWidth() {
+	public float getFigureWidth() {
 		return mDX;
 	}
-	public Integer getFigureHeight() {
+	public float getFigureHeight() {
 		return mDY;
 	}
 	public void setOnClickInsideFigureListener(OnClickInsideFigureListener l) {

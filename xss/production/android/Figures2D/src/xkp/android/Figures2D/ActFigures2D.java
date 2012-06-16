@@ -12,6 +12,7 @@ import xkp.android.libs.Layout.XKPLayout;
 						import android.view.MotionEvent;
 						import android.view.View.OnTouchListener;
 						import android.view.View.OnKeyListener;
+						import android.view.KeyEvent;
 						import android.view.View.OnFocusChangeListener;
 						import xkp.android.libs.Graphics.XKPGraphics.OnClickInsideFigureListener;
 						import xkp.android.libs.Graphics.XKPCircle;

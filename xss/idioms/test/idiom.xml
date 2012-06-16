@@ -1,4 +1,4 @@
-<module id="test_idiom">
+<module id="test_idiom" src="idiom.xs">
     <dependency id="test_idiom" href="/usr/lib/test_idiom"/>
 
     <types>
@@ -122,6 +122,7 @@
             
         </class>
 
+		//testing dependencies
         <class id="t_xss14">
             <dependency id="dep1" href="/use/bin/xss14"/>
         </class>
@@ -132,9 +133,59 @@
         </class>
 
         <class id="t_xss14_2">
-            <dependency id="dep3" href="/use/bin/xss14_2"/>
+            <dependency id="dep3" href="/use/bin/xss14_2">
+				<object import="myimport_1" attr="some_value1"/>
+				<object import="myimport_2" attr="some_value2"/>
+			</dependency>
         </class>
+		
+		//testing application class
+		
+		<class id="Application">
+			<property id="brackground" type="string"/>
+			<property id="config" type="var"/>
+			
+			<event id="keydown" output_id="KeyDown" renderer="keydown.event.xss">
+				<object id="args_object" type="array">
+					<object id="keycode">
+						<string id="type" value="int"/>
+						<string id="name" value="keycode"/>
+					</object>
+					<object id="event">
+						<string id="type" value="KeyEvent"/>
+						<string id="name" value="event"/>
+					</object>
+				</object>
+				
+				<!--
+					follow is not recognized inside event object
+				-->
+				<property id="arg_count" type="int"/>
+				<array id="args_array">
+					<object id="keycode" type="int"/>
+					<object id="event" type="KeyEvent"/>
+				</array>
+			</event>
+		</class>
+	
     </types>
+
+	//testing duplicate or singleton application instance
+	<!--
+		instance with id equal to application dispatch an console error:
+			Error [context] A symbol with this name already exists
+			symbol = application
+	-->
+	<!--
+	<instance id="application" type="application" super="application" output_id="" background="">
+		<event id="keydown" output_id="KeyDown" renderer="keydown.event.xss">
+			<array id="args">
+				<object id="keycode" type="int"/>
+				<object id="event" type="KeyEvent"/>
+			</array>
+		</event>
+	</instance>
+	-->
 
 	//testing global instances
     <instance id="i_xss11" output_id="Singleton">
@@ -143,7 +194,7 @@
             <set text="Math.sin(PI)" global="true"/>
         </property>
     </instance>
-
+	
     //was
     <instance id="testwax">
         <method id="bar" asynch="true"/>

@@ -4,6 +4,15 @@
     for(var dep in dependencies)
     {
         compiler.log(dep.href);
+		if(dep.children.size)
+		{
+			compiler.log("<childrens>");
+			for(var child in dep.children)
+			{
+				compiler.log(child.import + " = " + child.attr);
+			}
+			compiler.log("</childrens>");
+		}
     }
     compiler.log("</Dependencies>");
 

@@ -1,10 +1,13 @@
 on pre_process(obj)
 {
-	if(obj.id == "")
+	if(obj.id == '')
+	{
 		obj.id = compiler.genid(obj.class_name);
-		//obj.output_id = compiler.genid(obj.class_name);
-	
+	}
 	//compiler.log("[resources]: " + obj.id + " - " + obj.output_id);
+	
+	var android_idiom = compiler.idiom_by_id("android");
+	android_idiom.flat_properties_methods(obj);
 }
 
 on render_instances()

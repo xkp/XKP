@@ -13,11 +13,19 @@ import xkp.android.libs.Layout.XKPLayout;
 						import android.view.MotionEvent;
 						import android.view.View.OnTouchListener;
 						import android.view.View.OnKeyListener;
+						import android.view.KeyEvent;
 						import android.view.View.OnFocusChangeListener;
 						import android.text.method.KeyListener;
 						import android.widget.TextView;
 						import xkp.android.libs.Widget.XKPPackage;
 						import xkp.android.libs.Widget.XKPPackage.OnResourcePackageListener;
+import org.jbox2d.callbacks.QueryCallback;
+import org.jbox2d.collision.AABB;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.Fixture;
+import org.jbox2d.dynamics.joints.MouseJoint;
+import org.jbox2d.dynamics.joints.MouseJointDef;
 						import org.jbox2d.common.Vec2;
 						import org.jbox2d.dynamics.BodyType;
 						import org.jbox2d.collision.shapes.ShapeType;
@@ -48,6 +56,10 @@ import xkp.android.libs.Layout.XKPLayout;
 				private floor __floor4;
 			public static XKPUtils util;
 		private XKPLayout layoutapplication;
+		private Body groundBody;
+		private MouseJoint mouseJoint = null;
+		private final AABB queryAABB = new AABB();
+		private final XKPQueryCallback callback = new XKPQueryCallback();
 		public static XKPJBox2d 	myWorld;
 		private android.os.Handler 	mHandler;
 		private final double jBox2dFreq = 1 / 60.0f;
@@ -149,6 +161,9 @@ private void initCallers() {
 private void onLayoutUpdated() {
 }
 private void onLayoutStarted() {
+		// create body ground
+		BodyDef bodyDef = new BodyDef();
+		groundBody = myWorld.getWorld().createBody(bodyDef);
 			XKPDistanceJoint __distance_joint1 = new XKPDistanceJoint( ActjBox2d_5.myWorld.getWorld() ); 
 				__distance_joint1.setBodyA(btn1);
 				__distance_joint1.setBodyB(btn2);
@@ -178,22 +193,81 @@ private void onLayoutStarted() {
 					, true);
 				util.addXKPPackage(__resources1);
 			}
+		@Override
+		public boolean onTouchEvent(MotionEvent event) {
+			Vec2 p = new Vec2(event.getX(), event.getY());
+			switch(event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				break;
+			case MotionEvent.ACTION_UP:
+				if (mouseJoint != null) {
+					myWorld.getWorld().destroyJoint(mouseJoint);
+					mouseJoint = null;
+				}
+				break;
+			case MotionEvent.ACTION_MOVE:
+				if (mouseJoint != null) {
+					mouseJoint.setTarget(p);
+					break;
+				}
+				queryAABB.lowerBound.set(p.x - .001f, p.y - .001f);
+				queryAABB.upperBound.set(p.x + .001f, p.y + .001f);
+				callback.point.set(p);
+				callback.fixture = null;
+				myWorld.getWorld().queryAABB(callback, queryAABB);
+				if (callback.fixture != null) {
+					Body body = callback.fixture.getBody();
+					XKPPhysicBody physicBody = (XKPPhysicBody)body.getUserData();
+					if(!physicBody.getMouseJoint()) break;
+					MouseJointDef def = new MouseJointDef();
+					def.bodyA = groundBody;
+					def.bodyB = body;
+					def.target.set(p);
+					def.maxForce = 3000f * body.getMass();
+					def.dampingRatio = 0;
+					def.frequencyHz = 1000;
+					mouseJoint = (MouseJoint) myWorld.getWorld().createJoint(def);
+					body.setAwake(true);
+				}
+				break;
+			}
+			return super.onTouchEvent(event);
+		}
 			private void keydownapplication(Object keycode) {
-				if (keycode == LEFT_ARROW)
+				if (keycode == KeyEvent.KEYCODE_DPAD_LEFT)
 {
-	btn1.setX1(btn1.getX1() - 5);
+	btn1.setLeft(btn1.getX1() - 5);
 }
-if (keycode == RIGHT_ARROW)
+if (keycode == KeyEvent.KEYCODE_DPAD_RIGHT)
 {
-	btn1.setX1(btn1.getX1() + 5);
+	btn1.setLeft(btn1.getX1() + 5);
 }
-if (keycode == UP_ARROW)
+if (keycode == KeyEvent.KEYCODE_DPAD_UP)
 {
-	btn1.setY1(btn1.getY1() - 5);
+	btn1.setTop(btn1.getY1() - 5);
 }
-if (keycode == DOWN_ARROW)
+if (keycode == KeyEvent.KEYCODE_DPAD_DOWN)
 {
-	btn1.setY1(btn1.getY1() + 5);
+	btn1.setTop(btn1.getY1() + 5);
 }
 			}
+		class XKPQueryCallback implements QueryCallback {
+			public final Vec2 point;
+			public Fixture fixture;
+			public XKPQueryCallback() {
+				point = new Vec2();
+				fixture = null;
+			}
+			public boolean reportFixture(Fixture fixture) {
+				Body body = fixture.getBody();
+				if (body.getType() == BodyType.DYNAMIC) {
+					boolean inside = fixture.testPoint(point);
+					if (inside) {
+						this.fixture = fixture;
+						return false;
+					}
+				}
+				return true;
+			}
+		}
 }

@@ -40,6 +40,7 @@ public class XKPSpawner {
 		mHandler.post(mRunnableSpawner);
 	}
 	public void stop() {
+		if(mHandler != null)
 		mHandler.removeCallbacks(mRunnableSpawner);
 	}
 	private final Runnable mRunnableSpawner = new Runnable() {

@@ -16,7 +16,25 @@
 
     <application android:label="@string/app_name" android:icon="@drawable/icon">
         <activity android:name=".Act<xss:e value="application.appName"/>"
-                  android:label="@string/app_name">
+                  android:label="@string/app_name"
+<xss:code>
+	compiler.log("Rendering Android Manifest...");
+	var configs = application.activity_config;
+	if(configs)
+	{
+		for(var cfg in configs)
+		{
+			if(cfg)
+			{
+				out()
+				{
+					<xss:e value="cfg"/>
+				}
+			}
+		}
+	}
+</xss:code>
+				  >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

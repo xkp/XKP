@@ -15,6 +15,10 @@ on pre_process(obj)
 	{
 		obj.id = compiler.genid(obj.class_name);
 	}
+	//compiler.log("[jbox2d]: " + obj.id + " - " + obj.output_id);
+	
+	var android_idiom = compiler.idiom_by_id("android");
+	android_idiom.flat_properties_methods(obj);
 }
 
 on render_type_initialization(clazz, bns)
@@ -23,6 +27,15 @@ on render_type_initialization(clazz, bns)
 
 on render_initialization(clazz, bns)
 {
+	compiler.xss("../../android/class.xss/mouseJoint.class.xss", clazz, world);
+	
+	if(!application.activity_config)
+		application.activity_config = [];
+	
+	// hide title and notification bar
+	var jbox2d_config = 'android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"';
+	application.activity_config += jbox2d_config;
+	
 	//TIPS: copy defaults files of idiom classes and render imports
 	clazz = this;
 	
@@ -181,7 +194,7 @@ on copy_default_files(bns, plibs)
 	compiler.log("[jbox2d] Copying default files...");
 	for(string f1 in cp_files)
 	{
-		string srcf1 = compiler.full_path("/copy.defaults" + f1);
+		string srcf1 = compiler.full_path("../../android/copy.defaults" + f1);
 		string dstf1 = application.appName + f1;
 
 		//TRACE: log
@@ -296,6 +309,7 @@ method get_body_type(it)
 
 method render_basic_properties(it, density, friction, restitution, body_type, angular_damping, linear_damping)
 {
+	//TODO: render all this properties dynamicly
 	//output it all
 	if(angular_damping)
 	{
@@ -310,6 +324,14 @@ method render_basic_properties(it, density, friction, restitution, body_type, an
 		out(indent = 1)
 		{
 			<xss:e value="it.output_id"/>.setLinearDamping(<xss:e v="linear_damping"/>f);
+		}
+	}
+	
+	if(it.mouse_joint)
+	{
+		out(indent = 1)
+		{
+			<xss:e value="it.output_id"/>.setMouseJoint(<xss:e v="it.mouse_joint"/>);
 		}
 	}
 	

@@ -1,11 +1,16 @@
 on pre_process(obj)
 {
-	if(obj.id == "")
+	if(obj.id == '')
+	{
 		obj.id = compiler.genid(obj.class_name);
-		//obj.output_id = compiler.genid(obj.class_name);
-	
+	}
 	//compiler.log("[android]: " + obj.id + " - " + obj.output_id);
+	
+	flat_properties_methods(obj);
+}
 
+method flat_properties_methods(obj)
+{
 	// flatting properties
 	for(var p in obj.properties)
 	{
@@ -123,6 +128,9 @@ method initialization(clazz, bns)
 	}
 }
 
+//TODO: reimplement dependency en xss_compiler to allow an identifier with other properties
+//      even with an object attributes, and then, replace all imports artifacts in all 
+//      necessary idioms
 method render_imports(clazz, bns)
 {
 	compiler.log("Rendering Android Imports...");

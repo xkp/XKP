@@ -12,26 +12,37 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 import xkp.android.libs.Graphics.XKPGraphics;
+/**
+ * A physic body definition holds all the data needed to construct a generic body.
+ * All necessary to define shape, body and other properties are included here.
+ * A link to host handle XKPGraphic object is added too.
+ * 
+ * @author Gilberto Cuba
+ */
 public class XKPPhysicBody {
 	private World 		mRefWorld;
 	private XKPGraphics	mRefView;
 	private boolean mIsBodyCreated = false;
+	private boolean mMouseJoint = false;
 	private BodyDef 	mBodyDef;
 	private FixtureDef mFixtureDef;
 	private Shape		mShape;
 	private Body 		mBody;
 	private AABB		mAABB;
 	private float		mScale = 1.0f;
+	private Vec2 hostPosition;
+	private float hostAngle = 0.0f;
 	protected OnCollisionListener mOnCollisionListener;
 	public XKPPhysicBody(World world, ShapeType shapeType, XKPGraphics view) {
 		mRefView = view;
-		if(view != null) {
+		if (view != null) {
 			view.setTag(this);
 		}
 		mRefWorld = world;
 		mBodyDef = new BodyDef();
 		mFixtureDef = new FixtureDef();
 		mAABB = new AABB();
+		hostPosition = new Vec2();
 		if (shapeType == ShapeType.CIRCLE) {
 			mShape = new CircleShape();
 		} else if (shapeType == ShapeType.POLYGON) {
@@ -47,17 +58,21 @@ public class XKPPhysicBody {
 	public boolean updateHostPosition() {
 		if (mRefView == null && !(mRefView instanceof XKPGraphics))
 			return false;
-		AABB aabb = new AABB();
 		Transform transf = mBody.getTransform();
-		mShape.computeAABB(aabb, transf);
-		if (mShape.m_type == ShapeType.POLYGON) {
-			int x1 = (int) (mBody.getPosition().x - mRefView.getDX() / 2);
-			int y1 = (int) (mBody.getPosition().y - mRefView.getDY() / 2);
-			mRefView.setPosition(x1, y1);
-		} else if (mShape.m_type == ShapeType.CIRCLE) {
-			mRefView.setPosition((int) (aabb.lowerBound.x), (int) (aabb.lowerBound.y));
-		}
-		mRefView.setAngle(Math.toDegrees(transf.getAngle()));
+		float radianAngle = transf.getAngle();
+		float delthaAngle = radianAngle - hostAngle;
+		Vec2 delthaPosition = new Vec2();
+		delthaPosition.set(mBody.getPosition());
+		delthaPosition.subLocal(hostPosition);
+		// update host body with new deltha rotation and position
+		mRefView.setPosition(
+				mRefView.getX1() + delthaPosition.x, 
+				mRefView.getY1() + delthaPosition.y);
+		mRefView.setAngle(
+				mRefView.getAngle() + (float)Math.toDegrees(delthaAngle));
+		// and then reassign host rotation and position to my physic body
+		setPosition(mRefView.getX1(), mRefView.getY1());
+		setAngle(mRefView.getAngle());
 		return true;
 	}
 	public static double degree2rad(float degreeAngle) {
@@ -68,7 +83,7 @@ public class XKPPhysicBody {
 	}
 	public void setDensity(float density) {
 		mFixtureDef.density = density;
-		if(mIsBodyCreated)
+		if (mIsBodyCreated)
 			mBody.m_fixtureList.setDensity(density);
 	}
 	public float getDensity() {
@@ -76,7 +91,7 @@ public class XKPPhysicBody {
 	}
 	public void setFriction(float friction) {
 		mFixtureDef.friction = friction;
-		if(mIsBodyCreated)
+		if (mIsBodyCreated)
 			mBody.m_fixtureList.setFriction(friction);
 	}
 	public float getFriction() {
@@ -84,7 +99,7 @@ public class XKPPhysicBody {
 	}
 	public void setRestitution(float restitution) {
 		mFixtureDef.restitution = restitution;
-		if(mIsBodyCreated)
+		if (mIsBodyCreated)
 			mBody.m_fixtureList.setRestitution(restitution);
 	}
 	public float getRestitution() {
@@ -92,7 +107,7 @@ public class XKPPhysicBody {
 	}
 	public void setSensor(boolean sensor) {
 		mFixtureDef.isSensor = sensor;
-		if(mIsBodyCreated)
+		if (mIsBodyCreated)
 			mBody.m_fixtureList.setSensor(sensor);
 	}
 	public boolean isSensor() {
@@ -100,7 +115,7 @@ public class XKPPhysicBody {
 	}
 	public void setLinearDamping(float linearDamping) {
 		mBodyDef.linearDamping = linearDamping;
-		if(mIsBodyCreated)
+		if (mIsBodyCreated)
 			mBody.setLinearDamping(linearDamping);
 	}
 	public float getLinearDamping() {
@@ -108,7 +123,7 @@ public class XKPPhysicBody {
 	}
 	public void setLinearVelocity(Vec2 linearVelocity) {
 		mBodyDef.linearVelocity = linearVelocity;
-		if(mIsBodyCreated)
+		if (mIsBodyCreated)
 			mBody.setLinearVelocity(linearVelocity);
 	}
 	public Vec2 getLinearVelocity() {
@@ -116,7 +131,7 @@ public class XKPPhysicBody {
 	}
 	public void setAngularDamping(float angularDamping) {
 		mBodyDef.angularDamping = angularDamping;
-		if(mIsBodyCreated)
+		if (mIsBodyCreated)
 			mBody.setAngularDamping(angularDamping);
 	}
 	public float getAngularDamping() {
@@ -124,7 +139,7 @@ public class XKPPhysicBody {
 	}
 	public void setBodyType(BodyType bodyType) {
 		mBodyDef.type = bodyType;
-		if(mIsBodyCreated)
+		if (mIsBodyCreated)
 			mBody.setType(bodyType);
 	}
 	public BodyType getBodyType() {
@@ -134,12 +149,14 @@ public class XKPPhysicBody {
 		if (pos == null)
 			pos = mBodyDef.position;
 		Transform transf = new Transform();
-		transf.set(pos, mBodyDef.angle);
+		transf.set(pos, 0.0f);
 		mShape.computeAABB(mAABB, transf);
-		mBodyDef.position = new Vec2((pos.x + mAABB.getExtents().x) / mScale,
+		mBodyDef.position = new Vec2(
+				(pos.x + mAABB.getExtents().x) / mScale,
 				(pos.y + mAABB.getExtents().y) / mScale);
-		if(mIsBodyCreated)
-			mBody.setTransform(mBodyDef.position, getAngle());
+		hostPosition.set(mBodyDef.position);
+		if (mIsBodyCreated)
+			mBody.setTransform(mBodyDef.position, getRadiansAngle());
 	}
 	public void setPosition(float x, float y) {
 		setPosition(new Vec2(x, y));
@@ -147,17 +164,35 @@ public class XKPPhysicBody {
 	public Vec2 getPosition() {
 		return mBody.getPosition();
 	}
+	/**
+	 * Set the body rotation.
+	 * 
+	 * @param angle
+	 *            the world rotation in degrees.
+	 */
 	public void setAngle(float angle) {
-		mBodyDef.angle = (float) Math.toRadians(angle);
-		if(mIsBodyCreated)
-			mBody.setTransform(getPosition(), angle);
+		hostAngle = (float) Math.toRadians(angle);
+		mBodyDef.angle = hostAngle;
+		if (mIsBodyCreated)
+			mBody.setTransform(getPosition(), hostAngle);
 	}
+	private float getRadiansAngle() {
+		float resultAngle = mBodyDef.angle;
+		if (mIsBodyCreated)
+			resultAngle = mBody.getAngle();
+		return resultAngle;
+	}
+	/**
+	 * Get the body rotation.
+	 * 
+	 * @return the world rotation of the body in degrees.
+	 */
 	public float getAngle() {
-		return mBody.getAngle();
+		return (float) Math.toDegrees(getRadiansAngle());
 	}
 	public void setAllowSleep(boolean allow) {
 		mBodyDef.allowSleep = allow;
-		if(mIsBodyCreated)
+		if (mIsBodyCreated)
 			mBody.setSleepingAllowed(allow);
 	}
 	public boolean getAllowSleep() {
@@ -165,7 +200,7 @@ public class XKPPhysicBody {
 	}
 	public void setAwake(boolean awake) {
 		mBodyDef.awake = awake;
-		if(mIsBodyCreated)
+		if (mIsBodyCreated)
 			mBody.setAwake(awake);
 	}
 	public boolean getAwake() {
@@ -196,6 +231,12 @@ public class XKPPhysicBody {
 	}
 	public void createBody(float radius) {
 		createBody(radius, 0, 0, null);
+	}
+	public void setMouseJoint(boolean mouseJoint) {
+		mMouseJoint = mouseJoint;
+	}
+	public boolean getMouseJoint() {
+		return mMouseJoint;
 	}
 	public void setOnCollisionListener(OnCollisionListener l) {
 		mOnCollisionListener = l;

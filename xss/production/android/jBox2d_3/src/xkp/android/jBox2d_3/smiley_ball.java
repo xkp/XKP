@@ -57,6 +57,7 @@ import xkp.android.libs.Layout.XKPLayout;
 			TypedArray ta = context.obtainStyledAttributes(
 					attrs, R.styleable.smiley_ball);
 		__physics1.setSensor(false);
+			__physics1.setMouseJoint(true);
 		__physics1.setDensity(1f);
 		__physics1.setFriction(0.5f);
 		__physics1.setRestitution(0.200000003f);

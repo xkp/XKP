@@ -1,3 +1,4 @@
+package null.null
 public class custom_clazz extends JavaClass {
 			private Integer x = 0;
 			private Integer y = 0;

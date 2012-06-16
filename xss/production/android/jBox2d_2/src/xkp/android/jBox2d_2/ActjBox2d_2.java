@@ -13,6 +13,13 @@ import xkp.android.libs.Layout.XKPLayout;
 						import xkp.android.libs.Widget.XKPUtils;
 						import xkp.android.libs.Widget.XKPPackage;
 						import xkp.android.libs.Widget.XKPPackage.OnResourcePackageListener;
+import org.jbox2d.callbacks.QueryCallback;
+import org.jbox2d.collision.AABB;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.Fixture;
+import org.jbox2d.dynamics.joints.MouseJoint;
+import org.jbox2d.dynamics.joints.MouseJointDef;
 						import org.jbox2d.common.Vec2;
 						import org.jbox2d.dynamics.BodyType;
 						import org.jbox2d.collision.shapes.ShapeType;
@@ -26,6 +33,10 @@ import xkp.android.libs.Layout.XKPLayout;
 				private XKPImage btn1;
 			public static XKPUtils util;
 		private XKPLayout layoutapplication;
+		private Body groundBody;
+		private MouseJoint mouseJoint = null;
+		private final AABB queryAABB = new AABB();
+		private final XKPQueryCallback callback = new XKPQueryCallback();
 		public static XKPJBox2d 	myWorld;
 		private android.os.Handler 	mHandler;
 		private final double jBox2dFreq = 1 / 60.0f;
@@ -105,6 +116,9 @@ private void initCallers() {
 private void onLayoutUpdated() {
 }
 private void onLayoutStarted() {
+		// create body ground
+		BodyDef bodyDef = new BodyDef();
+		groundBody = myWorld.getWorld().createBody(bodyDef);
 			XKPPhysicBody __physics1 = new XKPPhysicBody(ActjBox2d_2.myWorld.getWorld(), 
 				ShapeType.CIRCLE, btn1);
 		__physics1.setSensor(false);
@@ -134,5 +148,64 @@ private void onLayoutStarted() {
 					, true);
 				util.addXKPPackage(__resources1);
 			}
+		@Override
+		public boolean onTouchEvent(MotionEvent event) {
+			Vec2 p = new Vec2(event.getX(), event.getY());
+			switch(event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				break;
+			case MotionEvent.ACTION_UP:
+				if (mouseJoint != null) {
+					myWorld.getWorld().destroyJoint(mouseJoint);
+					mouseJoint = null;
+				}
+				break;
+			case MotionEvent.ACTION_MOVE:
+				if (mouseJoint != null) {
+					mouseJoint.setTarget(p);
+					break;
+				}
+				queryAABB.lowerBound.set(p.x - .001f, p.y - .001f);
+				queryAABB.upperBound.set(p.x + .001f, p.y + .001f);
+				callback.point.set(p);
+				callback.fixture = null;
+				myWorld.getWorld().queryAABB(callback, queryAABB);
+				if (callback.fixture != null) {
+					Body body = callback.fixture.getBody();
+					XKPPhysicBody physicBody = (XKPPhysicBody)body.getUserData();
+					if(!physicBody.getMouseJoint()) break;
+					MouseJointDef def = new MouseJointDef();
+					def.bodyA = groundBody;
+					def.bodyB = body;
+					def.target.set(p);
+					def.maxForce = 3000f * body.getMass();
+					def.dampingRatio = 0;
+					def.frequencyHz = 1000;
+					mouseJoint = (MouseJoint) myWorld.getWorld().createJoint(def);
+					body.setAwake(true);
+				}
+				break;
+			}
+			return super.onTouchEvent(event);
+		}
 			private Object i = 0;
+		class XKPQueryCallback implements QueryCallback {
+			public final Vec2 point;
+			public Fixture fixture;
+			public XKPQueryCallback() {
+				point = new Vec2();
+				fixture = null;
+			}
+			public boolean reportFixture(Fixture fixture) {
+				Body body = fixture.getBody();
+				if (body.getType() == BodyType.DYNAMIC) {
+					boolean inside = fixture.testPoint(point);
+					if (inside) {
+						this.fixture = fixture;
+						return false;
+					}
+				}
+				return true;
+			}
+		}
 }

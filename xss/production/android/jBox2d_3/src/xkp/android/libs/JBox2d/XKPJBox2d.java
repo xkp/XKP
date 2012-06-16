@@ -59,11 +59,15 @@ public class XKPJBox2d {
 	private class PhysicContactListener implements ContactListener {
 		@Override
 		public void beginContact(Contact contact) {
-			if(contact.isTouching()) {
-				XKPPhysicBody pBodyA = (XKPPhysicBody) contact.getFixtureA().getBody().getUserData();
-				XKPPhysicBody pBodyB = (XKPPhysicBody) contact.getFixtureB().getBody().getUserData();
-				if(pBodyA != null) pBodyA.performBodyCollision(pBodyB);
-				if(pBodyB != null) pBodyB.performBodyCollision(pBodyA);
+			if (contact.isTouching()) {
+				XKPPhysicBody pBodyA = (XKPPhysicBody) contact.getFixtureA()
+						.getBody().getUserData();
+				XKPPhysicBody pBodyB = (XKPPhysicBody) contact.getFixtureB()
+						.getBody().getUserData();
+				if (pBodyA != null)
+					pBodyA.performBodyCollision(pBodyB);
+				if (pBodyB != null)
+					pBodyB.performBodyCollision(pBodyA);
 			}
 		}
 		@Override

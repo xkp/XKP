@@ -41,6 +41,7 @@
 	
 	application.appName = appName;
 	application.targetAPILevel = targetAPILevel;
+	application.base_namespace = base_namespace;
 	
 	string exeExt = "";
 	string batExt = "";
@@ -67,9 +68,6 @@
 	
 	//render project files
 	string output_filename;
-	output_filename = appName + "/" + "AndroidManifest.xml";
-	compiler.xss("AndroidManifest.xml.xss", output_file = output_filename, base_namespace, minAPILevel, targetAPILevel);
-	
 	output_filename = appName + "/src/xkp/android/" + appName + "/Act" + appName + ".java";
 	compiler.xss("script.java.xss", output_file = output_filename, clazz = android, base_namespace = base_namespace, is_type = false, main = 1);
 	
@@ -83,6 +81,9 @@
 	
 	output_filename = appName + "/res/layout/main.xml";
 	compiler.xss("layout.xml.xss", output_file = output_filename, base_namespace = base_namespace, clazz = application);
+	
+	output_filename = appName + "/" + "AndroidManifest.xml";
+	compiler.xss("AndroidManifest.xml.xss", output_file = output_filename, base_namespace, minAPILevel, targetAPILevel);
 	
 	//td: organize all this muddy of appOptions
 	// appOptions.android_project_type = enum {eclipse, ant, apk, others, ...}

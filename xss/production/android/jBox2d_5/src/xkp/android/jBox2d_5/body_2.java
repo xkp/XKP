@@ -57,6 +57,7 @@ import xkp.android.libs.Layout.XKPLayout;
 			TypedArray ta = context.obtainStyledAttributes(
 					attrs, R.styleable.body_2);
 		__physics2.setSensor(false);
+			__physics2.setMouseJoint(true);
 		__physics2.setDensity(1f);
 		__physics2.setFriction(0.5f);
 		__physics2.setRestitution(0.200000003f);
