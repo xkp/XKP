@@ -1,15 +1,20 @@
 
 on keydown(keycode)
 {
-	if (keycode == LEFT_ARROW)
+	if (keycode == EKeyEvent.left_arrow)
 		btn1.x -= 5;
 
-	if (keycode == RIGHT_ARROW)
+	if (keycode == EKeyEvent.right_arrow)
 		btn1.x += 5;
 		
-	if (keycode == UP_ARROW)
+	if (keycode == EKeyEvent.up_arrow)
 		btn1.y -= 5;
 
-	if (keycode == DOWN_ARROW)
+	if (keycode == EKeyEvent.down_arrow)
 		btn1.y += 5;
 }
+
+/*
+	** box2d differences
+		- arrow constants are changed for enums types
+*/

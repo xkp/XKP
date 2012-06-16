@@ -41,6 +41,7 @@
 	
 	application.appName = appName;
 	application.targetAPILevel = targetAPILevel;
+	application.base_namespace = base_namespace;
 	
 	string exeExt = "";
 	string batExt = "";

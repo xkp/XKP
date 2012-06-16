@@ -3,9 +3,22 @@
 <xss:parameter id="property_renderer" default="property.xss"/>
 <xss:parameter id="method_renderer"   default="method.xss"/>
 <xss:parameter id="event_renderer"    default="event.xss"/>
+<xss:parameter id="base_namespace"/>
+<xss:parameter id="imports"/>
 
 <xss:code>
 	//TODO: create xss file that call this, and have package head, with imports
+	
+	string bns = application.base_namespace + "." + application.appName;
+	if(base_namespace)
+		bns = base_namespace;
+	
+	out()
+	{
+package <xss:e value="bns"/>
+	}
+	
+	//TODO: render imports...how pass their values???
 
 	string super_str = "";
 	if(clazz.super)

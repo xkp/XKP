@@ -234,19 +234,19 @@ private void onLayoutStarted() {
 			return super.onTouchEvent(event);
 		}
 			private void keydownapplication(Object keycode) {
-				if (keycode == LEFT_ARROW)
+				if (keycode == KeyEvent.KEYCODE_DPAD_LEFT)
 {
 	btn1.setLeft(btn1.getX1() - 5);
 }
-if (keycode == RIGHT_ARROW)
+if (keycode == KeyEvent.KEYCODE_DPAD_RIGHT)
 {
 	btn1.setLeft(btn1.getX1() + 5);
 }
-if (keycode == UP_ARROW)
+if (keycode == KeyEvent.KEYCODE_DPAD_UP)
 {
 	btn1.setTop(btn1.getY1() - 5);
 }
-if (keycode == DOWN_ARROW)
+if (keycode == KeyEvent.KEYCODE_DPAD_DOWN)
 {
 	btn1.setTop(btn1.getY1() + 5);
 }

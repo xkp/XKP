@@ -40,7 +40,7 @@ on render_types()
     for(var ut in user_types)
     {
         var full_path = compiler.full_path("../sequence.xss");
-		compiler.xss("../../common-js/class.xss", ut, renderer = full_path);
+		compiler.xss("../../java/class.xss", ut, renderer = full_path);
     }
 }
 

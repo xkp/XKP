@@ -1,0 +1,9 @@
+<project 
+	entry_point="xss15.xss" 
+	language="java" 
+	target="xss15.app.xml" >
+	
+	<options event_scope="instance" />
+	
+	<idiom src="../idioms/test/idiom.xml" />
+</project> 

@@ -194,7 +194,7 @@ on copy_default_files(bns, plibs)
 	compiler.log("[jbox2d] Copying default files...");
 	for(string f1 in cp_files)
 	{
-		string srcf1 = compiler.full_path("/copy.defaults" + f1);
+		string srcf1 = compiler.full_path("../../android/copy.defaults" + f1);
 		string dstf1 = application.appName + f1;
 
 		//TRACE: log

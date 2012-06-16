@@ -1,0 +1,73 @@
+<xss:code>
+	out()
+	{
+		Rendering main instance: application
+	}
+	
+    for(var prop in application.properties)
+    {
+		out()
+		{
+			property id = <xss:e value="prop.id"/>
+		}
+    }
+
+    for(var mthd in application.methods)
+    {
+		out()
+		{
+			method name = <xss:e value="mthd.id"/>
+		}
+    }
+	
+    for(var ev in application.events)
+    {
+		out()
+		{
+			event name = <xss:e value="ev.output_id"/>
+        }
+		
+		if(ev.renderer)
+		{
+			out()
+			{
+				rendering extra code on "<xss:e value="ev.renderer"/>"
+			}
+		}
+		
+		if(ev.children)
+		{
+			out()
+			{
+				childrens... (<xss:e>ev.children.size</xss:e>)
+			}
+		}
+		
+		for(var child in ev.children)
+		{
+			out()
+			{
+				child = "<xss:e>child.id</xss:e>"
+			}
+			
+			if(child.type.is_array)
+			{
+				test_idiom.render_array(child);
+			} else
+			if(child.type.is_object)
+			{
+				test_idiom.render_array(child);
+			}
+		}
+		
+		if(ev.args)
+		{
+			out()
+			{
+				<xss:e>ev.args.render()</xss:e>
+			}
+		
+			//compiler.log("args..." + ev.args.size);
+		}
+    }
+</xss:code>

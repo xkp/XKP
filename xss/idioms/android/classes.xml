@@ -363,6 +363,7 @@
 			<method id="max" type="float"/>
 			<method id="abs" type="float"/>
 			<method id="atan2" type="double"/>
+			<method id="random" type="double"/>
 			
 			<property id="PI" output_id="PI" type="double"/>
 		</class>
@@ -1295,7 +1296,12 @@
 				<set text="setForm({value})"/>
 			</property>
 		</class>
-		
+
+		<!--
+		<class id="application">
+			<import id="IKeyDownListener"/>
+		</class>
+		-->
 	</types>
 	
     <instance id="appManager" output_id="getWindowManager()">
