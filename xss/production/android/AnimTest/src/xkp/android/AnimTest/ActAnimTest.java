@@ -7,12 +7,12 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 			import android.app.Activity;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
+						import android.view.View.OnKeyListener;
+						import android.view.KeyEvent;
 						import android.view.View.OnClickListener;
 						import android.view.View.OnLongClickListener;
 						import android.view.MotionEvent;
 						import android.view.View.OnTouchListener;
-						import android.view.View.OnKeyListener;
-						import android.view.KeyEvent;
 						import android.view.View.OnFocusChangeListener;
 						import android.text.method.KeyListener;
 						import android.widget.TextView;
@@ -195,7 +195,7 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
         {
 	        public void call(Object ev) 
             {
-                    if (click_count == 3)
+                    if (prop_application_click_count == 3)
                     {
         mthd_anim3_stop_anim3();
                     }
@@ -220,6 +220,7 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
 					}
 				}, 0, (long)(update_freq * 1000)); 
 			}
+			private Integer prop_application_click_count = 0;
 			private void onClickbtn1() {
 				anim1.start();
 			}
@@ -227,12 +228,11 @@ anim2.events.addListener("stop", new EventHolder.Implementor()
 				((XKPLayout.LayoutParams) btn2.getLayoutParams()).setLeft((Integer)40);
 			}
 			private void onClickbtn3() {
-				click_count = click_count + 1;
-if (click_count == 4)
+				prop_application_click_count = prop_application_click_count + 1;
+if (prop_application_click_count == 4)
 {
-	click_count = 0;
+	prop_application_click_count = 0;
 	anim3.start();
 }
 			}
-			private Integer click_count = 0;
 }

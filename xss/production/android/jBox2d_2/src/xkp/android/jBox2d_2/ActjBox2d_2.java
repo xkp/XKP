@@ -8,6 +8,8 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
 			import xkp.android.libs.Widget.XKPUtils;
+						import android.view.View.OnKeyListener;
+						import android.view.KeyEvent;
 						import xkp.android.libs.Graphics.XKPGraphics.OnClickInsideFigureListener;
 						import xkp.android.libs.Graphics.XKPImage;
 						import xkp.android.libs.Widget.XKPUtils;
@@ -188,7 +190,7 @@ private void onLayoutStarted() {
 			}
 			return super.onTouchEvent(event);
 		}
-			private Object i = 0;
+			private Object prop_application_i = 0;
 		class XKPQueryCallback implements QueryCallback {
 			public final Vec2 point;
 			public Fixture fixture;

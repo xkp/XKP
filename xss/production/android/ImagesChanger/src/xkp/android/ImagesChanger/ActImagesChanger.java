@@ -8,12 +8,12 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
 			import xkp.android.libs.Widget.XKPUtils;
+						import android.view.View.OnKeyListener;
+						import android.view.KeyEvent;
 						import android.view.View.OnClickListener;
 						import android.view.View.OnLongClickListener;
 						import android.view.MotionEvent;
 						import android.view.View.OnTouchListener;
-						import android.view.View.OnKeyListener;
-						import android.view.KeyEvent;
 						import android.view.View.OnFocusChangeListener;
 						import android.widget.ImageView;
 						import xkp.android.libs.Widget.XKPUtils;
@@ -136,13 +136,13 @@ private void onLayoutStarted() {
 					, true);
 				util.addXKPPackage(__resources1);
 			}
+			private Integer prop_application_currentImage = 0;
+			private ArrayList<String> prop_application_resources = new ArrayList(Arrays.asList( new Object [] {"img1", "img2", "img3", "img4", "img5", "img6", "img7", "img8"} ));
 			private void onClickchanger() {
-				currentImage = currentImage + 1;
-currentImage = currentImage % resources.size();
-String currentResource = resources.get(currentImage);
+				prop_application_currentImage = prop_application_currentImage + 1;
+prop_application_currentImage = prop_application_currentImage % prop_application_resources.size();
+String currentResource = prop_application_resources.get(prop_application_currentImage);
 util.setResourceImageView(album, currentResource);
 identifier.setText(currentResource);
 			}
-			private Integer currentImage = 0;
-			private ArrayList<String> resources = new ArrayList(Arrays.asList( new Object [] {"img1", "img2", "img3", "img4", "img5", "img6", "img7", "img8"} ));
 }

@@ -306,7 +306,7 @@
 			</array>
 			
 			<!-- TODO: how to force the type or argument in events with the declared types here? -->
-			<event id="keydown" output_id="onKeyDown" return_type="boolean" def_args="int keyCode, KeyEvent event" renderer="TODO.xss"/>
+			<event id="keydown" output_id="onKeyDown" return_type="boolean" def_args="int keyCode, KeyEvent event" renderer="class.xss/keyDown.event.xss"/>
 		</class>
 		
 		<class id="IKeyLongPressListener">
@@ -1297,11 +1297,10 @@
 			</property>
 		</class>
 
-		<!--
-		<class id="application">
+		<class id="Application">
 			<import id="IKeyDownListener"/>
 		</class>
-		-->
+		
 	</types>
 	
     <instance id="appManager" output_id="getWindowManager()">

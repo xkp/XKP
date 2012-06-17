@@ -8,12 +8,12 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
 			import xkp.android.libs.Widget.XKPUtils;
+						import android.view.View.OnKeyListener;
+						import android.view.KeyEvent;
 						import android.view.View.OnClickListener;
 						import android.view.View.OnLongClickListener;
 						import android.view.MotionEvent;
 						import android.view.View.OnTouchListener;
-						import android.view.View.OnKeyListener;
-						import android.view.KeyEvent;
 						import android.view.View.OnFocusChangeListener;
 						import android.text.method.KeyListener;
 						import android.widget.TextView;
@@ -233,8 +233,7 @@ private void onLayoutStarted() {
 			}
 			return super.onTouchEvent(event);
 		}
-			private void keydownapplication(Object keycode) {
-				if (keycode == KeyEvent.KEYCODE_DPAD_LEFT)
+	@Override	public boolean onKeyDown(int keycode, KeyEvent event)	{				if (keycode == KeyEvent.KEYCODE_DPAD_LEFT)
 {
 	btn1.setLeft(btn1.getX1() - 5);
 }
@@ -250,7 +249,7 @@ if (keycode == KeyEvent.KEYCODE_DPAD_DOWN)
 {
 	btn1.setTop(btn1.getY1() + 5);
 }
-			}
+					return super.onKeyDown(keycode, event);	}
 		class XKPQueryCallback implements QueryCallback {
 			public final Vec2 point;
 			public Fixture fixture;

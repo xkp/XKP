@@ -8,12 +8,12 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
 			import xkp.android.libs.Widget.XKPUtils;
+						import android.view.View.OnKeyListener;
+						import android.view.KeyEvent;
 						import android.view.View.OnClickListener;
 						import android.view.View.OnLongClickListener;
 						import android.view.MotionEvent;
 						import android.view.View.OnTouchListener;
-						import android.view.View.OnKeyListener;
-						import android.view.KeyEvent;
 						import android.view.View.OnFocusChangeListener;
 						import android.widget.ImageView;
 						import xkp.android.libs.Widget.XKPUtils;
@@ -210,6 +210,8 @@ private void onLayoutStarted() {
 					}
 				});
 			}
+			private Integer prop_application_currentImage = -1;
+			private ArrayList<String> prop_application_resources = new ArrayList(Arrays.asList( new Object [] {"worth_1", "worth_2", "worth_3", "worth_4", "worth_5", "worth_6", "worth_7"} ));
 			private void onClickbtnGallery() {
 				if (!photos.isResourceLoaded())
 {
@@ -229,9 +231,9 @@ swtScene.setDisplayedChildByName(util.getIdFromName("mapController"));
 lblInformation.setText("Drag picture to see whole map.");
 			}
 			private void onClickimgGallery() {
-				currentImage = currentImage + 1;
-currentImage = currentImage % resources.size();
-String currentResource = resources.get(currentImage);
+				prop_application_currentImage = prop_application_currentImage + 1;
+prop_application_currentImage = prop_application_currentImage % prop_application_resources.size();
+String currentResource = prop_application_resources.get(prop_application_currentImage);
 util.setResourceImageView(imgGallery, currentResource);
 			}
 			private void onResourcePackageLoadedphotos() {
@@ -242,6 +244,4 @@ imgGallery.performClick();
 				lblStatus.setText("Maps was loaded completely...");
 util.setResourceXKPImageMap(mapController, "holguin");
 			}
-			private Integer currentImage = -1;
-			private ArrayList<String> resources = new ArrayList(Arrays.asList( new Object [] {"worth_1", "worth_2", "worth_3", "worth_4", "worth_5", "worth_6", "worth_7"} ));
 }
