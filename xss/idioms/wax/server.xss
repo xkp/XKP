@@ -37,6 +37,9 @@ http.createServer(function(request, response)
     <xss:code>
     for(var i in application.children)
     {
+        if (i.class_name == "web_service")
+            continue; //ignore
+
         compiler.out("if (pathname == '" + i.id + "')");
         compiler.out("{");
 

@@ -1,6 +1,7 @@
 #include <xss/lang/waxjs.h>
 #include <xss/dsl/sql.h>
 #include <xss/dsl/shell.h>
+#include <xss/xss_renderer.h>
 
 #include <boost/algorithm/string/replace.hpp>
 
@@ -545,7 +546,7 @@ str waxjs_code_renderer::render_split(CodeSplit fork, CodeSplit parent)
       }
     else if (st.is<stmt_expression>())
       {
-        result << code_after.str() << split_expression(fork);
+        result << code_after.str() << split_expression(fork, split_callback);
       }
     else if (st.is<stmt_return>())
       {
@@ -620,25 +621,21 @@ str waxjs_code_renderer::split_if(CodeSplit fork, const str& callback)
       {
         //last use case, the split happens on the if expression, 
         //the key to the algo here is that code gets split only once
-        result << split_method(fork->method);
-        result << "\n{";
-        result << "\n\tif (return_value)";
-        result << "\n\t{\n";
-
-        result << split_and_render(stmnt.if_code, fork);
-
-        result << "\n\t}\n";
-
+        std::ostringstream method_body;
+        method_body << "\n\tif (return_value)";
+        method_body << "\n\t{\n";
+        method_body << split_and_render(stmnt.if_code, fork);
+        method_body << "\n\t}";
         if (!stmnt.else_code.empty())
           {
-            result << "\n\telse\n{\n";
-            result << split_and_render(stmnt.else_code, fork);
-            result << "\n\t}";
+            method_body << "\n\telse\n{\n";
+            method_body << split_and_render(stmnt.else_code, fork);
+            method_body << "\n\t}";
           }
         else
-            result << render_callback(fork);
+            method_body << render_callback(fork);
 
-        result << "\n});";
+        result << split_method(fork->method, compile_args(stmnt.expr), method_body.str());
       }
 
     return result.str();
@@ -705,19 +702,46 @@ str waxjs_code_renderer::split_variable(CodeSplit fork, const str& code_after)
     std::ostringstream result;
     result << "var " << stmnt.id << ";\n";
     result << code_after;
-    result << split_method(fork->method);
-    result << "\n{\n";
-    result << stmnt.id << " = return_value;";
-    result << render_callback(fork);
-    result << "\n});\n";
 
+    std::ostringstream method_body;
+    method_body << "\n{\n";
+    method_body << stmnt.id << " = return_value;";
+    method_body << render_callback(fork);
+    method_body << "\n});\n";
+
+    result << split_method(fork->method, compile_args(stmnt.value), method_body.str());
     return result.str();
   }
 
-str waxjs_code_renderer::split_expression(CodeSplit fork)
+DynamicArray waxjs_code_renderer::compile_args(expression& expr)
+  {
+    DynamicArray result(new dynamic_array);
+
+    expr_param_resolver params;
+    expr.visit(&params);
+
+    param_list& pl = params.get();
+
+    for(size_t i = 0; i < pl.size(); i++)
+      {
+        str name = pl.get_name(i);
+        expression value = pl.get(i);
+
+        str value_str = render_expression(value, ctx_);
+        XSSObject param(new xss_object);
+        param->set_id(name);
+        param->add_attribute("value", value_str);
+
+        result->push_back(param);
+      }
+
+    return result;
+  }
+
+str waxjs_code_renderer::split_expression(CodeSplit fork, const str& callback)
   {
     stmt_expression stmnt = fork->target.get_stament(fork->split_idx - 1);
-
+    
     operator_type op;
     bool assign = false;
     if (stmnt.expr.top_operator(op))
@@ -742,24 +766,17 @@ str waxjs_code_renderer::split_expression(CodeSplit fork)
           }
       }
 
-    std::ostringstream result;
-    result << split_method(fork->method);
-    result << "\n{\n";
-
+    std::ostringstream method_body;
     if (assign)
       {
         expression_splitter es(op);
         stmnt.expr.visit(&es);
-        result << render_expression(es.left, ctx_) << " " << lang_utils::operator_string(op) << " return_value;";
-
-        result << render_callback(fork);
+        method_body << render_expression(es.left, ctx_) << " " << lang_utils::operator_string(op) << " return_value;";
       }
-    else
-      result << render_callback(fork);
-    
-    result << "\n});";
 
-    return result.str();
+    method_body << callback << "()"; //render_callback(fork);
+
+    return split_method(fork->method, compile_args(stmnt.expr), method_body.str());
   }
 
 str waxjs_code_renderer::split_dsl(CodeSplit fork, const str& callback)
@@ -785,13 +802,12 @@ str waxjs_code_renderer::split_return(CodeSplit fork)
   {
     stmt_return stmnt = fork->target.get_stament(fork->split_idx - 1);
 
-    std::ostringstream result;
-    result << split_method(fork->method);
-    result << "\n{\n";
-    result << "return_function(return_value);";
-    result << "\n});";
+    std::ostringstream method_body;
+    method_body << "\n{\n";
+    method_body << "return_function(return_value);";
+    method_body << "\n});";
 
-    return result.str();
+    return split_method(fork->method, compile_args(stmnt.expr), method_body.str());
   }
 
 str waxjs_code_renderer::split_for(CodeSplit fork, const str& callback)
@@ -958,12 +974,36 @@ str waxjs_code_renderer::split_and_render(code& c, CodeSplit parent, const str& 
     return result.str();
   }
 
-str waxjs_code_renderer::split_method(XSSMethod method)
+str waxjs_code_renderer::split_method(XSSMethod method, DynamicArray args, const str& body)
   {
-    std::ostringstream result;
-    result << method->output_id() << "(function(return_value)";
+    str render_file = method->get<str>("renderer", str());
+    if (!render_file.empty())
+      {
+        XSSCompiler compiler = ctx_->resolve("compiler");
+        render_file = compiler->idiom_path(XSSObject(ctx_->get_type("web_service")), render_file);
+        
+        XSSRenderer renderer(new xss_renderer(compiler, ctx_, ctx_->path()));
+        compiler->push_renderer(renderer);
 
-    return result.str();
+        //let subclasses add parameters
+        param_list pl;
+        pl.add(render_file);
+        pl.add("it", method);
+        pl.add("args", args);
+        pl.add("body", body);
+
+        compiler->xss(pl);
+
+        compiler->pop_renderer();
+        return renderer->get();
+      }
+    else
+      {
+        std::ostringstream result;
+        result << method->output_id() << "(function(return_value)";
+        result << "\n{\n" << body << "\n});";
+        return result.str();
+      }
   }
 
 //wax_utils

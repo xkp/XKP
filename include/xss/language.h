@@ -116,6 +116,25 @@ struct expr_object_resolver : expression_visitor
       bool       not_found_;
   };
 
+struct expr_param_resolver : expression_visitor
+  {
+    expr_param_resolver() : recording_(false) {}
+
+    param_list& get();
+
+    //expression_visitor
+    virtual void push(variant operand, bool top);
+    virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top);
+
+    private:
+      typedef std::stack<variant> expr_stack;
+
+      bool       recording_; 
+      expr_stack stack_;
+      param_list result_;
+      expression curr_expr_; 
+  };
+
 struct expression_analizer
   {
     expression_analizer();

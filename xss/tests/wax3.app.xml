@@ -1,24 +1,24 @@
 <application src="wax3.app.xs">
+    <web_service id="google_maps" host="http://maps.googleapis.com">
+        <method id="directions" return_type="object" path="/maps/api/directions/json">
+            <parameter id="origin" type="string" required="true"/>
+            <parameter id="destination" type="string" required="true"/>
+            <parameter id="sensor" type="boolean" required="true"/>
+            <parameter id="waypoints" type="array" separator="|"/>
+        </method>
+        <method id="staticmap" return_type="string" path="/maps/api/directions/staticmap">
+            <parameter id="center" type="string" required="true"/>
+            <parameter id="zoom" type="int" required="true"/>
+            <parameter id="size" type="boolean" required="true"/>
+        </method>
+    </web_service>    
     
-    <page id="home" src="twotter.html">
+    <page id="home" src="wax3.template.xml">
         <element id="user_name" />
 
         <replicator id="followers">
-            <element name="follower" id="follower" />
-        </replicator>
-
-        <replicator id="followees">
-            <element id="followee" />
-        </replicator>
-        
-        <element id="message"/>
-        <element id="quote"/>
-        <element id="publish"/>
-        <element id="get_next"/>
-
-        <replicator id="previous_quotes">
-            <element id="pquote" />
-            <element id="pquote_author" />
+            <element name="fname" id="fname" />
+            <element name="fimg" id="fimg" />
         </replicator>
     </page>
     

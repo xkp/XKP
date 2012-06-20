@@ -502,19 +502,19 @@ Success are greateful
 
 
 Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
+	file = c:/dev/XKP/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
 
 ===[ pairs.project.xml ]================
 
 
 Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
+	file = c:/dev/XKP/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
 
 ===[ simple.project.xml ]================
 
 
 Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
+	file = c:/dev/XKP/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
 
 ===[ 3js-ms.project.xml ]================(Tests)
 
@@ -992,6 +992,113 @@ log: Rendering instance: application
 
 Success are greateful
 ===[ java3.project.xml ]================(Tests)
+
+
+
+
+
+
+		public Object check_type() {
+			Integer a;
+a = 1;
+Object b;
+typing = a;
+return a;
+		}
+	
+
+
+
+
+
+		public String foobar(Integer v) {
+			t1.foo = t2.foo + 10;
+t2.set_bar(t1.foo + t1.get_bar() + "++");
+set_complex(t1, t2.get_bar() + t1.get_bar() + this.foo + "--");
+set_some_int(t1, t1.get_some_int() - 1);
+set_some_int(t2, t2.get_some_int() + 1);
+set_some_int(t1, t1.get_some_int() + 20);
+set_more(t1).complex(get_more(t1).complex() + 1);
+set_more(t2).complex(get_more(t2).complex() - 1);
+ArrayList arr = new ArrayList(Arrays.asList( new Object [] {} ));
+arr.add(10);
+writable_set(read_only_get() + simple + mixed_get());
+mixed_set(writable_get());
+return t1.get_bar();
+		}
+	
+
+
+
+
+
+			private void onClick() {
+		
+				ArrayList<Object> list = new ArrayList(Arrays.asList( new Object [] {1, 2, "item", 3.140000f, "vowel"} ));
+for(Object i : list)
+{
+	System.out.println(i);
+}
+			
+			}
+		
+
+
+
+
+
+
+
+
+
+
+			private Integer typing;
+		
+
+
+
+
+
+			private Integer simple = 50;
+		
+
+
+
+
+
+			public Float read_only_get() {
+				return 10.000000f;
+			}
+		
+
+
+
+
+
+			private Object writable;
+			
+			public void writable_set(Object value) {
+				writable = value;
+				console.log(value);
+			}
+		
+
+
+
+
+
+			public Integer mixed_get() {
+				return 10;
+			}
+			
+			public void mixed_set(Object value) {
+				console.log("Something");
+			}
+		
+
+
+
+
 
 
 
@@ -2006,6 +2113,10 @@ Success are greateful
 
 
 log: Rendering test query_properties...
+			Instance: name = "application", type = "Application"
+		
+				property "brackground" = null			
+				property "config" = null			
 			Instance: name = "t1", type = "t_arrays"
 		
 			Instance: name = "t2", type = "t_arrays1"
@@ -2018,7 +2129,7 @@ log: Rendering test query_properties...
 		
 				property "test_2" = null			
 				property "test_1" = null			
-			Instance: name = "application", type = ""
+			Instance: name = "application", type = "Application"
 		
 				property "brackground" = null			
 				property "config" = null			
@@ -2152,28 +2263,80 @@ Success are greateful
 ===[ wax1.project.xml ]================(Tests)
 
 
+		method: foo
+        code: function __callback1() 
+{
+var x = 10;
+function __callback2() 
+{
+return_function(x);
+return true;
+
+}
+bar(function(return_value)
+{
+__callback1()
+});
+}
+bar(function(return_value)
+{
+	if (return_value)
+	{
+var c;
+function __callback3() 
+{
+function __callback4() 
+{
+
+if (c < 20)
+{return_function(c);
+return true;
+
+__callback4()
+}
+else
+{
+c += 20;
+bar_foo(function(return_value)
+{
+return_function(return_value);
+});
+}
+}
+foo_bar(function(return_value)
+{
+c += return_value;__callback3()
+});
+}
+foo_bar(function(return_value)
+{
+c = return_value;
+});
+
+	}
+
+	else
+{
+bar_foo(function(return_value)
+{
+
+});
+	}
+});
+	
 
 Success are greateful
 ===[ wax2.project.xml ]================(Tests)
 
 
-Error [vm] Cannot resolve
-	object = 
-	method = render
-	file = d:/xkp/xss/idioms/common-js/event.xssERROR: Project:  wax2.project.xml
-
+Success are greateful
 ===[ wax3.project.xml ]================(Tests)
 
 
-Error [vm] Cannot resolve
-	object = 
-	method = render
-	file = d:/xkp/xss/idioms/common-js/event.xssERROR: Project:  wax3.project.xml
-
+Success are greateful
 ===[ wax4.project.xml ]================(Tests)
 
 
-<<<<<<< HEAD
 Success are greateful
 ===[ webgl_particle.project.xml ]================(Tests)
 
@@ -2193,13 +2356,6 @@ log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
 log: dependency: ../js/three/fonts.js
 Success are greateful
-=======
-Error [vm] Cannot resolve
-	object = 
-	method = render
-	file = d:/xkp/xss/idioms/common-js/event.xssERROR: Project:  wax4.project.xml
-
->>>>>>> b089f1d83250f29be3f3b97c9bdd2293e6d54cd5
 ===[ wgl_cameras.project.xml ]================(Tests)
 
 
@@ -2500,6 +2656,10 @@ Success are greateful
 ===[ xss11.project.xml ]================(Tests)
 
 
+		Math.sin(PI);
+String foo = Singleton.get_foo();
+
+	
 
 Success are greateful
 ===[ xss12.project.xml ]================(Tests)
@@ -2717,15 +2877,86 @@ Success are greateful
 ===[ xss15.project.xml ]================(Tests)
 
 
-Error [language] Cannot cast variable value
-	var name = myvar
-	var type = string
-	value type = varERROR: Project:  xss15.project.xml
+		Rendering main instance: application
+	
+			property id = some_property
+		
+			event name = KeyDown
+        
+				rendering extra code on "keydown.event.xss"
+			
+				childrens... (1)
+			
+				child = "args_object"
+			
+		[Begin rendering Array] (2)
+	
+		[Begin rendering Object] (2)
+	
+			id: type
+			type: string
+			value: int
+		
+			id: name
+			type: string
+			value: keycode
+		
+		[End rendering Object]
+	
+		[Begin rendering Object] (2)
+	
+			id: type
+			type: string
+			value: KeyEvent
+		
+			id: name
+			type: string
+			value: event
+		
+		[End rendering Object]
+	
+		[End rendering Array]
+	
+				Object keycode,Object value			
 
+Success are greateful
 ===[ xss2.project.xml ]================(Tests)
 
 
-		application 
+		instance id: t1
+	
+				something_
+			
+				something
+			
+		instance id: t2
+	
+				something_
+			
+				something
+			
+				something2
+			
+				something3
+			
+		instance id: t3
+	
+				event id: click
+				event output_id: onClick
+			
+					Interface: IClick
+				
+		instance id: t4
+	
+				something_
+			
+				something
+			
+				exploit
+			
+				something3
+			
+		Application 
 	
 			id: keydown output_id: KeyDown
 		
@@ -2837,6 +3068,8 @@ Success are greateful
 			
 
 
+        Before? Hello
+    
 				Odd = 1
 			
 				Odd = 3
@@ -2845,6 +3078,13 @@ Success are greateful
 			
 
 AFter! 
+		object
+	
+Is this after "After!"? World
+
+
+
+
 
 
 
@@ -2866,6 +3106,10 @@ Success are greateful
 ===[ xss6.project.xml ]================(Tests)
 
 
+			event id: click event output_id: onClick
+		
+				Interface: IClick
+			
 
 Success are greateful
 ===[ xss7.project.xml ]================(Tests)
@@ -2944,11 +3188,35 @@ Success are greateful
 ===[ xss8.project.xml ]================(Tests)
 
 
+            method id: check_type
+			code: 
+			var a;
+a = 1;
+return a;
+
+		
+            method id: foobar
+			code: 
+			this.foo = t2.foo + "++";
+t2.set_bar(this.foo + this.get_bar() + "++");
+set_complex(this, t2.get_bar() + this.get_bar() + this.foo + "--");
+set_some_int(this, this.get_some_int() - 1);
+set_some_int(t2, t2.get_some_int() + 1);
+set_some_int(this, this.get_some_int() + 20);
+var arr = [];
+arr.push(10);
+this.writable_set(this.read_only_get() + this.simple + this.mixed_get());
+this.mixed_set(this.writable);
+set_more(this).complex(get_more(this).complex() + 1);
+set_more(t2).complex(get_more(t2).complex() - 1);
+
+		
 
 Success are greateful
 ===[ xss9.project.xml ]================(Tests)
 
 
+log: Return type: t_xss9_2
 		class test_class2 : t_xss9_2
 		childrens 1
 	
@@ -2977,6 +3245,12 @@ Success are greateful
 	
 			property some_prop
 		
+		var a = new t_xss9_1(myManager, 10, null);
+var b = new t_xss9_1(myManager, 10, 20);
+var c = new t_xss9_2();
+return c;
+
+	
 
 Success are greateful
 ===[ xssY.project.xml ]================(Tests)

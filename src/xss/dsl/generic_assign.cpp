@@ -180,7 +180,7 @@ class ga_renderer
               bool found = false;
               for(; pit != pnd; pit++)
                 {
-                  if (!boost::is_alpha()(*pit) && !boost::is_digit()(*pit))
+                  if (!boost::is_alpha()(*pit) && !boost::is_digit()(*pit) && !((*pit) == '.') )
                     {
                       params_.push_back(str(line.begin(), pit));
                       texts_.push_back(str(pit, line.end()));

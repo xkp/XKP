@@ -1,0 +1,61 @@
+<xss:parameter id="it"/>
+<xss:parameter id="args"/>
+<xss:parameter id="body"/>
+
+<xss:code>
+    string options_id = compiler.genid("ws_options");
+    string path_id = options_id + "_path";
+    
+    //generate path
+    out()
+    {
+        var <xss:e v="path_id"/> = "<xss:e v="it.path"/>"
+    }
+    
+    bool   first = true;
+    for(var arg in args)
+    {
+        string path = "?";
+        if (first)
+            first = false;
+        else 
+            path = "&";
+        
+        out() { + "<xss:e v="path"/><xss:e v="arg.id"/>=" + <xss:e v="arg.value"/>}
+    }
+    out() {;}
+    
+    string return_value;
+    if (it.return_type == "object")
+        return_value = "JSON.parse(data)";
+    else
+        return_value = "data";
+
+    out()
+    {
+        var <xss:e v="options_id"/> = {
+            host: '<xss:e v="it.host"/>',
+            port: <xss:e v="it.port"/>,
+            path: <xss:e v="path_id"/>
+        };
+        
+        http.get(<xss:e v="options_id"/>, function(res) {
+            var data = '';
+            res.on('data', function(chunk){
+                data += chunk;
+            });
+          
+            function done()
+            {
+                var return_value = <xss:e v="return_value"/>;
+                <xss:e v="body"/>
+            }
+            
+            res.on('end', done);
+            res.on('close', done);
+        }).on('error', function(e) {
+          console.log("Got error: " + e.message);
+        });
+    }
+
+</xss:code>

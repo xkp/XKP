@@ -1,8 +1,9 @@
 
 on home.render()
 {
-    user_name.text = user.id;         //changes the text inside an html <p>here goes user.id</p>  
-    user_image.src = user.image_url;  //changes an attribute of an html element <img src="here goes user.image_url"></img>  
+    var user = {id: "admin"};
+    
+    user_name.text = user.id;
 
     var data = [];
     sql()
@@ -11,11 +12,17 @@ on home.render()
                WHERE USERID = @user.id
     }
 
-    //
+    //fun with web services
+    for(var follower in data)
+    {
+        follower.map = google_maps.staticmap(center = follower.address, zoom = 5, sensor = false);
+    }
+
     followers.data = data;
 }
 
 on home.followers.render(item)
 {
-    follower.inner_html = item.name;
+    fname.inner_html = item.name;
+    fimg.src = item.image;
 }
