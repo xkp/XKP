@@ -84,19 +84,19 @@ var mat_1;var mat_2;var mat_3;var shadow_mat;var camera_1;var icosahedron_1;var 
 threejs_load_resources(manager, function()
 {
 mat_1 = new THREE.MeshLambertMaterial({
-color:Math.random() * 0xffffff
+color:Math.random() * 0xffffff,
 	});
 mat_1.manager = manager;
 mat_2 = new THREE.MeshLambertMaterial({
-color:Math.random() * 0xffffff
+color:Math.random() * 0xffffff,
 	});
 mat_2.manager = manager;
 mat_3 = new THREE.MeshLambertMaterial({
-color:Math.random() * 0xffffff
+color:Math.random() * 0xffffff,
 	});
 mat_3.manager = manager;
 shadow_mat = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('images/shadow.png').asset)
+map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('images/shadow.png').asset),
 	});
 shadow_mat.manager = manager;
 		    camera_1 = 
