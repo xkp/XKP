@@ -1,0 +1,9 @@
+<project entry_point="../idioms/webgl/app.xss" language="js" target="wgl_shader.xml" output="wgl_shader.html">
+    <path>
+        <output path="../production/test"/>
+    </path>
+
+	<idiom src="../idioms/webgl/module.xml"/>
+	<idiom src="../idioms/resources/resources.xml"/>
+    
+</project>

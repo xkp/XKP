@@ -1,0 +1,27 @@
+<application src="wgl_shader_fresnel.xs" title="Test 3D" background="Black">
+
+	<resources>
+		<texture_cube 	id="t_cube1"
+						posx="images/cube/Park2/posx.jpg" negx="images/cube/Park2/negx.jpg"
+						posy="images/cube/Park2/posy.jpg" negy="images/cube/Park2/negy.jpg"
+						posz="images/cube/Park2/posz.jpg" negz="images/cube/Park2/negz.jpg"
+		/>
+	</resources>
+
+	<materials>		
+		<shader_material id="shader_mat1" use_default_shader="fresnel">			
+			<uniform id="tCube" texture_cube="t_cube1"/>			
+		</shader_material>		
+	</materials>
+	
+	<scene>		
+	
+		<camera id="camera_1" fov="60" aspect="1.5" near="1" far="100000" look_at="scene.position">
+			<position z="3200"/>			
+		</camera>	
+
+		<panorama_cube size="100000" texture_cube="t_cube1"/>		
+		
+	</scene>
+			
+</application>

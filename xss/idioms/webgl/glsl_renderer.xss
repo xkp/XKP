@@ -1,0 +1,4 @@
+<xss:parameter id="file"/>
+<xss:code>
+compiler.xss(file, marker_source="entry", marker = "dependencies");
+</xss:code>

@@ -1,0 +1,18 @@
+<xss:parameter id="obj"/>
+<xss:code>
+
+out(){
+<xss:e v = "obj.id"/> = new <xss:e v="obj.type.output_id"/>(<xss:open_brace/>
+}
+
+compiler.xss("parameters_object.xss", obj);
+out(){
+	<xss:close_brace/>);
+	}
+	
+if(obj.parent.class_name == "composite_material")
+	out(){
+	<xss:e v = "obj.parent.id"/>.push(<xss:e v = "obj.id"/>);
+	}
+
+</xss:code>

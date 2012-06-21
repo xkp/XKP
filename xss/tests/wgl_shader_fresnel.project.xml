@@ -1,0 +1,5 @@
+<project entry_point="../idioms/webgl/app.xss" language="js" target="wgl_shader_fresnel.xml" output="../production/test/wgl_shader_fresnel.html">
+
+	<include def="wgl_shader_fresnel.classes.xml" src="wgl_shader_fresnel.classes.xs"/>
+	<idiom src="../idioms/webgl/module.xml"/>
+</project>
