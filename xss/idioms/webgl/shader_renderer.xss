@@ -1,0 +1,111 @@
+<xss:parameter id="obj"/>
+<xss:code>
+if(!obj.use_default_shader)
+{
+	out(marker = "dependencies", marker_source = "entry")
+	{
+	<script id="vertexShader_<xss:e v="obj.id"/>" type="x-shader/x-vertex">
+	}
+		compiler.xss("glsl_renderer.xss", "../../tests/" + obj.vertex_shader);
+	out(marker = "dependencies", marker_source = "entry")
+	{
+	</script>
+	}
+	out(marker = "dependencies", marker_source = "entry")
+	{
+	<script id="fragmentShader_<xss:e v="obj.id"/>" type="x-shader/x-fragment">
+	}
+		compiler.xss("glsl_renderer.xss", "../../tests/" + obj.fragment_shader);
+	out(marker = "dependencies", marker_source = "entry")
+	{
+	</script>
+	}
+	out()
+	{
+		var <xss:e v = "obj.id"/>_uniforms = {};
+	}
+	for(var child_ in obj.children)
+	{
+		out()
+		{
+			<xss:e v = "obj.id"/>_uniforms.<xss:e v = "child_.id"/> = 
+					<xss:open_brace/>
+					type: "<xss:e v = "child_.shader_type"/>", value: <xss:e v = "child_.value"/>					
+		}
+		if(child_.texture)
+			out()
+			{
+				, texture: THREE.ImageUtils.loadTexture( manager.streamer.get_resource('<xss:e v="child_.texture"/>').asset )			
+			}
+		if(child_.texture_cube)
+			out()
+			{
+				, texture: <xss:e v="child_.texture"/>	
+			}
+		out()
+		{
+			<xss:close_brace/>;
+		}
+		if(child_.texture)
+			out()
+			{
+				<xss:e v = "obj.id"/>_uniforms.<xss:e v = "child_.id"/>.texture.wrapS = <xss:e v = "obj.id"/>_uniforms.<xss:e v = "child_.id"/>.texture.wrapT = THREE.Repeat;
+			}		
+	}	
+	out(){
+	<xss:e v = "obj.id"/> = new <xss:e v="obj.type.output_id"/>(<xss:open_brace/>
+	}
+
+	compiler.xss("parameters_object.xss", obj);
+	out(){
+		uniforms: <xss:e v="obj.id"/>_uniforms,
+		vertexShader: document.getElementById( "vertexShader_<xss:e v="obj.id"/>" ).textContent,
+		fragmentShader: document.getElementById( "fragmentShader_<xss:e v="obj.id"/>" ).textContent
+		<xss:close_brace/>);
+		}
+}
+else
+{
+	out()
+	{
+		var <xss:e v="obj.id"/>_shader = THREE.ShaderUtils.lib[ "<xss:e v="obj.use_default_shader"/>" ];
+		var <xss:e v="obj.id"/>_uniforms = THREE.UniformsUtils.clone( <xss:e v="obj.id"/>_shader.uniforms );
+	}	
+	for(var child in obj.children)
+	{
+		out()
+		{
+			<xss:e v = "obj.id"/>_uniforms[ '<xss:e v = "child.id"/>' ]						
+		}
+		if(child.texture)
+			out()
+			{
+				.texture = THREE.ImageUtils.loadTexture( manager.streamer.get_resource('<xss:e v="child.texture"/>').asset )		
+			}
+		else if(child.texture_cube)
+			out()
+			{
+				.texture = <xss:e v="child.texture_cube"/>	
+			}
+		else
+			out()
+			{
+				.value = <xss:e v = "child.value"/>
+			}
+		out()
+		{
+			;
+		}
+	}	
+	out(){
+	<xss:e v = "obj.id"/> = new <xss:e v="obj.type.output_id"/>(<xss:open_brace/>
+	}
+	compiler.xss("parameters_object.xss", obj);
+	out(){
+		uniforms: <xss:e v="obj.id"/>_uniforms,
+		vertexShader: <xss:e v="obj.id"/>_shader.vertexShader,
+		fragmentShader: <xss:e v="obj.id"/>_shader.fragmentShader
+		<xss:close_brace/>);
+		}
+}	
+</xss:code>

@@ -218,6 +218,21 @@ var program_stroke = function ( context )
 	context.stroke();
 }
 
+function vector2( x, y )
+{	
+	return new THREE.Vector2( x, y );
+}
+
+function vector3( x, y, z )
+{	
+	return new THREE.Vector3( x, y, z );
+}
+
+function color( hex )
+{	
+	return new THREE.Color( hex );
+}
+
 var flat_shading = THREE.FlatShading;
 var smooth_shading = THREE.SmoothShading;
 var refraction_mapping = new THREE.CubeRefractionMapping();
