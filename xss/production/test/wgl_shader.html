@@ -6,8 +6,76 @@
 <body>
 <style type="text/css">
 	body{
+	background:black;
 	}
 </style>
+	<script id="vertexShader_shader_mat1" type="x-shader/x-vertex">
+	varying vec2 vUv;
+void main()
+{
+	vUv = uv;
+	vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+	gl_Position = projectionMatrix * mvPosition;
+}
+	</script>
+	<script id="fragmentShader_shader_mat1" type="x-shader/x-fragment">
+	uniform float time;
+uniform vec2 resolution;
+uniform sampler2D texture;
+varying vec2 vUv;
+void main( void ) {
+	vec2 position = -1.0 + 2.0 * vUv;
+	float a = atan( position.y, position.x );
+	float r = sqrt( dot( position, position ) );
+	vec2 uv;
+	uv.x = cos( a ) / r;
+	uv.y = sin( a ) / r;
+	uv /= 10.0;
+	uv += time * 0.05;
+	vec3 color = texture2D( texture, uv ).rgb;
+	gl_FragColor = vec4( color * r * 1.5, 1.0 );
+}
+	</script>
+	<script id="vertexShader_shader_mat2" type="x-shader/x-vertex">
+	varying vec2 vUv;
+void main()
+{
+	vUv = uv;
+	vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+	gl_Position = projectionMatrix * mvPosition;
+}
+	</script>
+	<script id="fragmentShader_shader_mat2" type="x-shader/x-fragment">
+	uniform vec2 resolution;
+uniform float time;
+varying vec2 vUv;
+void main(void)
+{
+	vec2 p = -1.0 + 2.0 * vUv;
+	float a = time*40.0;
+	float d,e,f,g=1.0/40.0,h,i,r,q;
+	e=400.0*(p.x*0.5+0.5);
+	f=400.0*(p.y*0.5+0.5);
+	i=200.0+sin(e*g+a/150.0)*20.0;
+	d=200.0+cos(f*g/2.0)*18.0+cos(e*g)*7.0;
+	r=sqrt(pow(i-e,2.0)+pow(d-f,2.0));
+	q=f/r;
+	e=(r*cos(q))-a/2.0;f=(r*sin(q))-a/2.0;
+	d=sin(e*g)*176.0+sin(e*g)*164.0+r;
+	h=((f+d)+a/2.0)*g;
+	i=cos(h+r*p.x/1.3)*(e+e+a)+cos(q*g*6.0)*(r+h/3.0);
+	h=sin(f*g)*144.0-sin(e*g)*212.0*p.x;
+	h=(h+(f-e)*q+sin(r-(a+h)/7.0)*10.0+i/4.0)*g;
+	i+=cos(h*2.3*sin(a/350.0-q))*184.0*sin(q-(r*4.3+a/12.0)*g)+tan(r*g+h)*184.0*cos(r*g+h);
+	i=mod(i/5.6,256.0)/64.0;
+	if(i<0.0) i+=4.0;
+	if(i>=2.0) i=4.0-i;
+	d=r/350.0;
+	d+=sin(d*d*8.0)*0.52;
+	f=(sin(a*g)+1.0)/2.0;
+	gl_FragColor=vec4(vec3(f*i/1.6,i/2.0+d/13.0,i)*d*p.x+vec3(i/1.3+d/8.0,i/2.0+d/18.0,i)*d*(1.0-p.x),1.0);
+}
+	</script>
             <script type="text/javascript" src="../js/resig.js"></script>
             <script type="text/javascript" src="../js/event.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
@@ -42,7 +110,7 @@ application.events = new ev.EventHolder();
             {
 		id:				"image_1",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"images/test1.png",
+		src:			"images/disturb.jpg",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[]
@@ -51,90 +119,6 @@ application.events = new ev.EventHolder();
 				global_package.events.addListener("loaded", function()
 				{
 					image_1 = streamer.get_resource("image_1");
-				});
-                global_package.add_item(
-            {
-		id:				"image_2",
-		resource_type:	RESOURCE_IMAGE,
-		src:			"images/test2.png",
-		frame_width:	null,
-		frame_height:	null,
-		animations:		[]
-});	
-				var image_2;
-				global_package.events.addListener("loaded", function()
-				{
-					image_2 = streamer.get_resource("image_2");
-				});
-                global_package.add_item(
-            {
-		id:				"image_3",
-		resource_type:	RESOURCE_IMAGE,
-		src:			"images/test3.png",
-		frame_width:	null,
-		frame_height:	null,
-		animations:		[]
-});	
-				var image_3;
-				global_package.events.addListener("loaded", function()
-				{
-					image_3 = streamer.get_resource("image_3");
-				});
-                global_package.add_item(
-            {
-		id:				"image_4",
-		resource_type:	RESOURCE_IMAGE,
-		src:			"images/test4.png",
-		frame_width:	null,
-		frame_height:	null,
-		animations:		[]
-});	
-				var image_4;
-				global_package.events.addListener("loaded", function()
-				{
-					image_4 = streamer.get_resource("image_4");
-				});
-                global_package.add_item(
-            {
-		id:				"image_5",
-		resource_type:	RESOURCE_IMAGE,
-		src:			"images/test5.png",
-		frame_width:	null,
-		frame_height:	null,
-		animations:		[]
-});	
-				var image_5;
-				global_package.events.addListener("loaded", function()
-				{
-					image_5 = streamer.get_resource("image_5");
-				});
-                global_package.add_item(
-            {
-		id:				"image_6",
-		resource_type:	RESOURCE_IMAGE,
-		src:			"images/test6.png",
-		frame_width:	null,
-		frame_height:	null,
-		animations:		[]
-});	
-				var image_6;
-				global_package.events.addListener("loaded", function()
-				{
-					image_6 = streamer.get_resource("image_6");
-				});
-                global_package.add_item(
-            {
-		id:				"__audio1",
-		resource_type:	RESOURCE_AUDIO,
-		src:			"sounds/forest.wav",
-		frame_width:	null,
-		frame_height:	null,
-		animations:		[]
-});	
-				var __audio1;
-				global_package.events.addListener("loaded", function()
-				{
-					__audio1 = streamer.get_resource("__audio1");
 				});
 		global_package.add_item({
 			id:				"invalid_res",
@@ -164,59 +148,58 @@ manager.events.dispatch("update", [g_delta, g_elapsed]);
 				set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var materials;var __basic_material1;var __basic_material2;var __basic_material3;var __basic_material4;var __basic_material5;var __basic_material6;var plane_material;var camera_1;var cube_1;var plane_1;
+var shader_mat1;var shader_mat2;var camera_1;var cube_1;var plane_1;
 threejs_load_resources(manager, function()
 {
-			    materials = new Array() ;
-			materials.manager = manager;
-__basic_material1 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('image_1').asset),
-	});
-	materials.push(__basic_material1);
-__basic_material1.manager = manager;
-__basic_material2 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('image_2').asset),
-	});
-	materials.push(__basic_material2);
-__basic_material2.manager = manager;
-__basic_material3 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('image_3').asset),
-	});
-	materials.push(__basic_material3);
-__basic_material3.manager = manager;
-__basic_material4 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('image_4').asset),
-	});
-	materials.push(__basic_material4);
-__basic_material4.manager = manager;
-__basic_material5 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('image_5').asset),
-	});
-	materials.push(__basic_material5);
-__basic_material5.manager = manager;
-__basic_material6 = new THREE.MeshBasicMaterial({
-map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('image_6').asset),
-	});
-	materials.push(__basic_material6);
-__basic_material6.manager = manager;
-plane_material = new THREE.MeshBasicMaterial({
-color:Grey,
-	});
-plane_material.manager = manager;
+		var shader_mat1_uniforms = {};
+			shader_mat1_uniforms.time = 
+					{
+					type: "f", value: 1					
+			};
+			shader_mat1_uniforms.resolution = 
+					{
+					type: "v2", value: vector2(0, 0)					
+			};
+			shader_mat1_uniforms.texture = 
+					{
+					type: "t", value: 0					
+				, texture: THREE.ImageUtils.loadTexture( manager.streamer.get_resource('images/disturb.jpg').asset )			
+			};
+				shader_mat1_uniforms.texture.texture.wrapS = shader_mat1_uniforms.texture.texture.wrapT = THREE.Repeat;
+	shader_mat1 = new THREE.ShaderMaterial({
+		uniforms: shader_mat1_uniforms,
+		vertexShader: document.getElementById( "vertexShader_shader_mat1" ).textContent,
+		fragmentShader: document.getElementById( "fragmentShader_shader_mat1" ).textContent
+		});
+		shader_mat1.manager = manager;
+		var shader_mat2_uniforms = {};
+			shader_mat2_uniforms.time = 
+					{
+					type: "f", value: 1					
+			};
+			shader_mat2_uniforms.resolution = 
+					{
+					type: "v2", value: vector2(0, 0)					
+			};
+	shader_mat2 = new THREE.ShaderMaterial({
+		uniforms: shader_mat2_uniforms,
+		vertexShader: document.getElementById( "vertexShader_shader_mat2" ).textContent,
+		fragmentShader: document.getElementById( "fragmentShader_shader_mat2" ).textContent
+		});
+		shader_mat2.manager = manager;
 		    camera_1 = 
 		    new THREE.PerspectiveCamera(70, 1.5, 1, 1000, null) ;				
 camera_1.manager = manager;
-	    cube_1_cube = new THREE.CubeGeometry(200, 200, 200, 1, 1, 1, materials, null) ;
-	    cube_1 = new THREE.Mesh(cube_1_cube, new THREE.MeshFaceMaterial());
+	    cube_1_cube = new THREE.CubeGeometry(200, 200, 200, 1, 1, 1, null, null) ;
+	    cube_1 = new THREE.Mesh(cube_1_cube, shader_mat2);
 	    manager.scene.add(cube_1);
 		cube_1.events = new ev.EventHolder();
 cube_1.manager = manager;
 	    plane_1_plane = new THREE.PlaneGeometry(200, 200, 1, 1) ;
-	    plane_1 = new THREE.Mesh(plane_1_plane, plane_material);
+	    plane_1 = new THREE.Mesh(plane_1_plane, shader_mat1);
 	    manager.scene.add(plane_1);
 		plane_1.events = new ev.EventHolder();
 plane_1.manager = manager;
-            set_material_alpha(plane_material, 50);
             camera_1.position.y = 150;
             camera_1.position.z = 500;
             cube_1.position.y = 150;
@@ -249,7 +232,13 @@ application.y_target_rotation = application.y_target_rotation_on_mouse_down + (a
 	);
 	application.events.addListener("update", function()
 	{    
-		set_rotation_y(cube_1.rotation, get_rotation_y(cube_1.rotation) + (application.x_target_rotation - get_rotation_y(cube_1.rotation)) * 0.200000003);
+		shader_mat1.uniforms.resolution.value.x = app_width;
+shader_mat1.uniforms.resolution.value.y = app_height;
+shader_mat2.uniforms.resolution.value.x = app_width;
+shader_mat2.uniforms.resolution.value.y = app_height;
+shader_mat1.uniforms.time.value += 0.0500000007;
+shader_mat2.uniforms.time.value += 0.0199999996;
+set_rotation_y(cube_1.rotation, get_rotation_y(cube_1.rotation) + (application.x_target_rotation - get_rotation_y(cube_1.rotation)) * 0.200000003);
 set_rotation_y(plane_1.rotation, get_rotation_y(cube_1.rotation));
 set_rotation_x(cube_1.rotation, get_rotation_x(cube_1.rotation) + (application.y_target_rotation - get_rotation_x(cube_1.rotation)) * 0.200000003);
 	}
