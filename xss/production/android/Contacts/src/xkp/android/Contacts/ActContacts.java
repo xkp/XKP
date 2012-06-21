@@ -7,12 +7,12 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 			import android.app.Activity;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
+						import android.view.View.OnKeyListener;
+						import android.view.KeyEvent;
 						import android.view.View.OnClickListener;
 						import android.view.View.OnLongClickListener;
 						import android.view.MotionEvent;
 						import android.view.View.OnTouchListener;
-						import android.view.View.OnKeyListener;
-						import android.view.KeyEvent;
 						import android.view.View.OnFocusChangeListener;
 						import android.text.method.KeyListener;
 						import android.widget.Button;
@@ -133,21 +133,9 @@ private void onLayoutStarted() {
 			private void initInstances() {
 				application = this;
 			}
-			private void onClickbtnLeft() {
-				swtStates.setDisplayedChild(swtStates.getDisplayedChild() - 1);
-btnLeft.setText(application.getSwitchText(swtStates.getDisplayedChild() - 1));
-int x = ((XKPLayout.LayoutParams) btnLeft.getLayoutParams()).getPlacement();
-((XKPLayout.LayoutParams) btnLeft.getLayoutParams()).setPlacement(XKPLayout.PL_LEFT);
-			}
-			private void onClickbtnRight() {
-				swtStates.setDisplayedChild(swtStates.getDisplayedChild() + 1);
-btnLeft.setText(application.getSwitchText(swtStates.getDisplayedChild() + 1));
-			}
-			private void onCheckedChangedchkVerifier() {
-			}
-			private ArrayList swtTabsTexts = new ArrayList(Arrays.asList( new Object [] {"Add contact", "Find contact", "About"} ));
-		public String getSwitchText(Integer idx) {
-			Object swtTabsSize = swtTabsTexts.size;
+			private ArrayList prop_application_swtTabsTexts = new ArrayList(Arrays.asList( new Object [] {"Add contact", "Find contact", "About"} ));
+		public String mthd_application_getSwitchText(Integer idx) {
+			Object swtTabsSize = prop_application_swtTabsTexts.size;
 if (idx < 0)
 {
 	idx = swtTabsSize;
@@ -159,8 +147,20 @@ else
 		idx = idx % swtTabsSize;
 	}
 }
-return swtTabsTexts.get(idx);
+return prop_application_swtTabsTexts.get(idx);
 		}
 			private void creationapplication() {
+			}
+			private void onClickbtnLeft() {
+				swtStates.setDisplayedChild(swtStates.getDisplayedChild() - 1);
+btnLeft.setText(mthd_application_getSwitchText(swtStates.getDisplayedChild() - 1));
+int x = ((XKPLayout.LayoutParams) btnLeft.getLayoutParams()).getPlacement();
+((XKPLayout.LayoutParams) btnLeft.getLayoutParams()).setPlacement(XKPLayout.PL_LEFT);
+			}
+			private void onClickbtnRight() {
+				swtStates.setDisplayedChild(swtStates.getDisplayedChild() + 1);
+btnLeft.setText(mthd_application_getSwitchText(swtStates.getDisplayedChild() + 1));
+			}
+			private void onCheckedChangedchkVerifier() {
 			}
 }

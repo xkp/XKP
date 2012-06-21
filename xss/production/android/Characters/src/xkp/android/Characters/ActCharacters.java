@@ -8,6 +8,8 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
 			import xkp.android.libs.Widget.XKPUtils;
+						import android.view.View.OnKeyListener;
+						import android.view.KeyEvent;
 						import xkp.android.libs.Widget.XKPPackage;
 						import xkp.android.libs.Widget.XKPPackage.OnResourcePackageListener;
 		public class ActCharacters 

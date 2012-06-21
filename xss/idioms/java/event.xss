@@ -8,7 +8,7 @@
 	
 	string ret_type = "void";
 	if(e.return_type) ret_type = e.return_type;
-			
+	
 	if(new_id == null) new_id = e.output_id;
 	
 	if(e.implemented && e.name)

@@ -8,12 +8,12 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
 			import xkp.android.libs.Widget.XKPUtils;
+						import android.view.View.OnKeyListener;
+						import android.view.KeyEvent;
 						import android.view.View.OnClickListener;
 						import android.view.View.OnLongClickListener;
 						import android.view.MotionEvent;
 						import android.view.View.OnTouchListener;
-						import android.view.View.OnKeyListener;
-						import android.view.KeyEvent;
 						import android.view.View.OnFocusChangeListener;
 						import android.text.method.KeyListener;
 						import android.widget.TextView;
@@ -228,13 +228,7 @@ private void onLayoutStarted() {
 			}
 			return super.onTouchEvent(event);
 		}
-			private void collisionhero() {
-				game_over.setVisibility(true);
-hero.move_around.stop();
-util.setResourceXKPImage(hero, "smile_sad_48.png");
-			}
-			private void keydownapplication(Object keycode) {
-				if (keycode == LEFT_ARROW)
+	@Override	public boolean onKeyDown(int keycode, KeyEvent event)	{				if (keycode == LEFT_ARROW)
 {
 	hero.move_around.vx = -1;
 }
@@ -242,7 +236,7 @@ if (keycode == RIGHT_ARROW)
 {
 	hero.move_around.vx = 1;
 }
-			}
+					return super.onKeyDown(keycode, event);	}
 			private void keyupapplication(Object keycode) {
 				if (keycode == LEFT_ARROW && hero.move_around.vx < 0)
 {
@@ -252,6 +246,11 @@ if (keycode == RIGHT_ARROW && hero.move_around.vx > 0)
 {
 	hero.move_around.vx = 0;
 }
+			}
+			private void collisionhero() {
+				game_over.setVisibility(true);
+hero.move_around.stop();
+util.setResourceXKPImage(hero, "smile_sad_48.png");
 			}
 		class XKPQueryCallback implements QueryCallback {
 			public final Vec2 point;

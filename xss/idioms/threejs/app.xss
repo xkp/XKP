@@ -49,8 +49,6 @@ if(application.background)
     array non_shared = [];
     for(var dep in dependencies)
     {
-        compiler.log("dependency: " + dep.href);
-        
         if (dep.shared)
         {
             //shared libraries will be assumed to be at the default library path 

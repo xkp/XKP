@@ -56,6 +56,14 @@
 	    for(var e in it.events)
 	    {
 		    string renderer_path = "event.xss";
+			
+			if(e.renderer)
+			{
+				renderer_path = compiler.idiom_path(it, e.renderer);
+				compiler.xss(renderer_path, e = e, it = it);
+				continue;
+			}
+			
 		    if(event_renderer)
 			    renderer_path = compiler.idiom_path(it, event_renderer);
 

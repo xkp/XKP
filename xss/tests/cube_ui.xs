@@ -43,3 +43,8 @@ on shutter.click()
 {
 	SoundUtils.play("sounds/camera1.wav");
 }
+
+on btnPlay.click()
+{
+    myVideo.play();
+}

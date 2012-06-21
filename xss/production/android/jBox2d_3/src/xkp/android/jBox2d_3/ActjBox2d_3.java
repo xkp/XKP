@@ -8,6 +8,8 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 			import android.os.Bundle;
 import xkp.android.libs.Layout.XKPLayout;
 			import xkp.android.libs.Widget.XKPUtils;
+						import android.view.View.OnKeyListener;
+						import android.view.KeyEvent;
 						import xkp.android.libs.Graphics.XKPGraphics.OnClickInsideFigureListener;
 						import xkp.android.libs.Graphics.XKPImage;
 						import xkp.android.libs.Widget.XKPUtils;

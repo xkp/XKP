@@ -3,10 +3,6 @@
 
 <xss:code>
 	var myidiom = it.idiom;
-	if (!myidiom)
-	{
-		compiler.log("WARNING: Why no idiom? " + it.output_id);
-	}
 
 	string id = it.output_id;
 	if (path)

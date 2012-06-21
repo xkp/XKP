@@ -42,6 +42,9 @@ var lbl0;var lbl1;
 		var sounds = document.createElement('canvas');
 		var sounds_ui;
 	var r2;var applause;var shutter;
+		var videos = document.createElement('canvas');
+		var videos_ui;
+	var __rectangle1;var myVideo;var btnPlay;var btnStop;var btnMute;
 var materials;var __basic_material1;var __basic_material2;var __basic_material3;var __basic_material4;var __basic_material5;var __basic_material6;var plane_material;var plane_mat1;var camera_1;var cube_1;var plane_1;
 var application = {};
 application.events = new ev.EventHolder();	
@@ -107,6 +110,76 @@ application.events = new ev.EventHolder();
 				global_package.events.addListener("loaded", function()
 				{
 					__image3 = streamer.get_resource("__image3");
+				});
+                global_package.add_item(
+            {
+		id:				"stop",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1340244084_playback_stop.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var stop;
+				global_package.events.addListener("loaded", function()
+				{
+					stop = streamer.get_resource("stop");
+				});
+                global_package.add_item(
+            {
+		id:				"play",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1340244070_playback_play.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var play;
+				global_package.events.addListener("loaded", function()
+				{
+					play = streamer.get_resource("play");
+				});
+                global_package.add_item(
+            {
+		id:				"sound_on",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1340244179_sound_high.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var sound_on;
+				global_package.events.addListener("loaded", function()
+				{
+					sound_on = streamer.get_resource("sound_on");
+				});
+                global_package.add_item(
+            {
+		id:				"sound_off",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"images/1340244116_sound_mute.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var sound_off;
+				global_package.events.addListener("loaded", function()
+				{
+					sound_off = streamer.get_resource("sound_off");
+				});
+                global_package.add_item(
+            {
+		id:				"__video1",
+		resource_type:	RESOURCE_VIDEO,
+		src:			"video/gizmo.mp4",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var __video1;
+				global_package.events.addListener("loaded", function()
+				{
+					__video1 = streamer.get_resource("__video1");
 				});
                 global_package.add_item(
             {
@@ -233,6 +306,40 @@ manager.events.addListener("t_mousedown", function(x, y, texture)
 		    r2 = new ui.Rectangle(sounds_g_ui_root.manager, sounds_g_ui_root, "beige", null, null);
 		    applause = new ui.Image(sounds_g_ui_root.manager, sounds_g_ui_root, "images/1327189824_users.png");
 		    shutter = new ui.Image(sounds_g_ui_root.manager, sounds_g_ui_root, "images/1327189922_photo-camera.png");
+		videos.width = 400;
+		videos.height = 400;							
+		videos_ui = new ui.Manager(videos, streamer);
+		var videos_g_ui_root = videos_ui.root;				
+	manager.events.addListener("update", function()
+	{   
+		if(videos_ui)
+		{
+			videos_ui.draw(videos.getContext('2d'));
+		}
+	});
+manager.events.addListener("t_mousemove", function(x, y, texture)
+	{   
+		if(texture)
+			if(texture.image == videos)
+				videos_ui.mousemove(x*400, y*400);
+	});
+manager.events.addListener("t_mouseup", function(x, y, texture)
+	{   
+		if(texture)
+			if(texture.image == videos)
+				videos_ui.mouseup(x*400, y*400);
+	});
+manager.events.addListener("t_mousedown", function(x, y, texture)
+	{   
+		if(texture)
+			if(texture.image == videos)
+				videos_ui.mousedown(x*400, y*400);
+	});
+		    __rectangle1 = new ui.Rectangle(videos_g_ui_root.manager, videos_g_ui_root, "beige", null, null);
+		    myVideo = new ui.Video(videos_g_ui_root.manager, videos_g_ui_root, "video/gizmo.mp4");
+		    btnPlay = new ui.Button(videos_g_ui_root.manager, videos_g_ui_root, "play", "play");
+		    btnStop = new ui.Button(videos_g_ui_root.manager, videos_g_ui_root, "stop", "stop");
+		    btnMute = new ui.StateButton(videos_g_ui_root.manager, videos_g_ui_root, "sound_on", "sound_off");
 			    materials = new Array() ;
 			materials.manager = manager;
 __basic_material1 = new THREE.MeshBasicMaterial({
@@ -241,8 +348,12 @@ color:Math.random() * 0xffffff
 	materials.push(__basic_material1);
 __basic_material1.manager = manager;
 __basic_material2 = new THREE.MeshBasicMaterial({
-color:Math.random() * 0xffffff
+map:new THREE.Texture(videos)
 	});
+		manager.events.addListener("update", function()
+		{   
+			__basic_material2.map.needsUpdate = true;			
+		});
 	materials.push(__basic_material2);
 __basic_material2.manager = manager;
 __basic_material3 = new THREE.MeshBasicMaterial({
@@ -357,6 +468,35 @@ g_sequence_manager);
 		SoundUtils.play("sounds/camera1.wav");
 	}
 	);
+            videos_g_ui_root.width = 400;
+            videos_g_ui_root.height = 400;
+            __rectangle1.set_x(0);
+            __rectangle1.set_y(0);
+            __rectangle1.set_width(400);
+            __rectangle1.set_height(400);
+            __rectangle1.mouse_thru = true;
+            __rectangle1.alpha(60);
+            myVideo.set_x(50);
+            myVideo.set_y(50);
+            myVideo.set_width(300);
+            myVideo.set_height(240);
+            btnPlay.set_x(180);
+            btnPlay.set_y(345);
+            btnPlay.set_width(40);
+            btnPlay.set_height(40);
+	btnPlay.events.addListener("click", function()
+	{    
+		myVideo.play();
+	}
+	);
+            btnStop.set_x(260);
+            btnStop.set_y(345);
+            btnStop.set_width(40);
+            btnStop.set_height(40);
+            btnMute.set_x(100);
+            btnMute.set_y(345);
+            btnMute.set_width(40);
+            btnMute.set_height(40);
             set_material_alpha(plane_material, 50);
             camera_1.position.y = 150;
             camera_1.position.z = 500;

@@ -15,7 +15,6 @@ if (type.constructor_params)
 			if(i > 0) 
                 out() {,}
 			
-            compiler.log("CONSTANT " + p.constant);
             out() {<xss:e v="p.constant"/>}		 
 			i++;
 		}

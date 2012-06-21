@@ -1,3 +1,5 @@
+property age : int;
+
 on btnFullName.click()
 {
 	string fullname = edtFirstName.text + " " + edtLastName.text;

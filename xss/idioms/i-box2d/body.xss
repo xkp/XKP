@@ -81,11 +81,6 @@
     on render()
     {
         myidiom = it.idiom;
-        if (!myidiom)
-        {
-            compiler.log("WARNING: Why no idiom? " + it.output_id);
-        }
-        
         world  = world;
         var vp = foreign_parent(it);
         

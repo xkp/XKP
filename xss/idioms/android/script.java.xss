@@ -430,8 +430,8 @@ private void onLayoutStarted() {
 <xss:code>
 	if(!is_type)
 	{
-		compiler.xss("../java/instance.xss", it = application);
-		clazz.instances += application;
+		//compiler.xss("../java/instance.xss", it = application);
+		//clazz.instances += application;
 	}
 	else
 	{

@@ -57,11 +57,8 @@ on pre_process(obj)
         if (!port)
             port = 80;
 
-        compiler.log("WSM " + obj.id);
         for(var wsm in obj.methods)
         {
-            compiler.log("WSM");
-
             wsm.asynch = true;
             wsm.host = host;
             wsm.port = port;

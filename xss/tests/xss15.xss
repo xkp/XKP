@@ -1,7 +1,20 @@
 <xss:code>
 	out()
 	{
-		Rendering main instance: application
+		Rendering main instance: application (<xss:e value="application.id"/>) (<xss:e value="application.name"/>)
+	}
+	
+	var t1 = compiler.type_of(application);
+	compiler.log(t1.id);
+	
+	for(var i in test_idiom.instances)
+	{
+		var type = compiler.type_of(i);
+		if(type)
+		{
+			//if(type.id != "application")
+			compiler.log("id: " + i.id + " type: " + type.id);
+		}
 	}
 	
     for(var prop in application.properties)
