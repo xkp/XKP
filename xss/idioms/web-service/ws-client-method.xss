@@ -1,0 +1,59 @@
+<xss:parameter id="it"/>
+<xss:parameter id="args"/>
+<xss:parameter id="body"/>
+<xss:parameter id="error_handler"/>
+
+<xss:code>
+    string path_id = compiler.genid("url");
+    
+    //generate path
+    out()
+    {
+        var <xss:e v="path_id"/> = "<xss:e v="it.host"/><xss:e v="it.path"/>"
+    }
+    
+    bool   first = true;
+    for(var arg in args)
+    {
+        string path = "?";
+        if (first)
+            first = false;
+        else 
+            path = "&";
+        
+        out() { + "<xss:e v="path"/><xss:e v="arg.id"/>=" + <xss:e v="arg.value"/>}
+    }
+    out() {;}
+    
+    string return_value;
+    string return_type = "json"; //td!
+    if (it.return_type == "object")
+        return_value = "JSON.parse(data)";
+    else
+        return_value = "data";
+        
+    string error_handler_str = "";
+    if (error_handler)
+        error_handler_str = error_handler + "(e);";
+    else 
+        error_handler_str = "throw e;";
+        
+    out()
+    {
+        $.ajax(
+		{
+		    url: <xss:e v="path_id"/>,
+			type: "get",
+			dataType: "<xss:e v="return_type"/>",
+			error: function()
+            {
+                <xss:e v="error_handler_str"/>
+			},
+			success: function(data)
+            {
+                var return_value = <xss:e v="return_value"/>;
+                <xss:e v="body"/>
+			}
+		});    
+    }
+</xss:code>
