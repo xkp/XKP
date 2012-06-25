@@ -4,6 +4,7 @@
 #include <xss/xss_compiler.h>
 #include <xss/xss_error.h>
 #include <xss/dsl/html5_asynch.h>
+#include <xss/dsl/ajax.h>
 
 using namespace xkp;
 
@@ -144,6 +145,7 @@ str js_args_renderer::render_expression(expression& expr, XSSContext ctx)
 void js_lang::init_application_context(XSSContext ctx)
   {
     ctx->register_xss_dsl("asynch", XSSDSL(new dsl_h5_asynch));
+    ctx->register_xss_dsl("ajax", XSSDSL(new dsl_ajax)); //td: !!! manage dsl better
   }
 
 variant js_lang::compile_code(code& cde, param_list_decl& params, XSSContext ctx)

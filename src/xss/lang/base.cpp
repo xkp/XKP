@@ -106,11 +106,17 @@ void variable_gather::variable_(stmt_variable& info)
 
 void variable_gather::if_(stmt_if& info)
   {
-    lang_utils::var_gatherer(info.if_code, ctx_);
+    //lang_utils::var_gatherer(info.if_code, ctx_);
+    variable_gather ivg(ctx_);
+    info.if_code.visit(&ivg);
+    ivg.apply();
 
     if (!info.else_code.empty())
 			{
-        lang_utils::var_gatherer(info.else_code, ctx_);
+        //lang_utils::var_gatherer(info.else_code, ctx_);
+        variable_gather evg(ctx_);
+        info.else_code.visit(&evg);
+        evg.apply();
 			}
   }
 
@@ -119,7 +125,9 @@ void variable_gather::for_(stmt_for& info)
     variable_gather vg(ctx_);
     vg.variable_(info.init_variable);
 
-    lang_utils::var_gatherer(info.for_code, ctx_);
+    //lang_utils::var_gatherer(info.for_code, ctx_);
+    info.for_code.visit(&vg);
+    vg.apply();
   }
 
 void variable_gather::iterfor_(stmt_iter_for& info)
@@ -137,12 +145,44 @@ void variable_gather::iterfor_(stmt_iter_for& info)
 
     ctx_->register_symbol(RESOLVE_VARIABLE, info.id, result);
 
-    lang_utils::var_gatherer(info.for_code, ctx_);
+    //lang_utils::var_gatherer(info.for_code, ctx_);
+    variable_gather vg(ctx_);
+    info.for_code.visit(&vg);
+    vg.apply();
   }
 
 void variable_gather::while_(stmt_while& info)
   {
-    lang_utils::var_gatherer(info.while_code, ctx_);
+    //lang_utils::var_gatherer(info.while_code, ctx_);
+    variable_gather vg(ctx_);
+    info.while_code.visit(&vg);
+    vg.apply();
+  }
+
+void variable_gather::switch_(stmt_switch& info)
+  {
+    std::vector<switch_section>::iterator it = info.sections.begin();
+    std::vector<switch_section>::iterator nd = info.sections.end();
+    for(; it != nd; it++)
+      {
+        //lang_utils::var_gatherer(it->case_code, ctx_);
+        variable_gather vg(ctx_);
+        it->case_code.visit(&vg);
+        vg.apply();
+      }
+
+    //lang_utils::var_gatherer(info.default_code, ctx_);
+    variable_gather vg(ctx_);
+    info.default_code.visit(&vg);
+    vg.apply();
+  }
+
+void variable_gather::try_(stmt_try& info)
+  {
+    //lang_utils::var_gatherer(info.try_code, ctx_);
+    variable_gather vg(ctx_);
+    info.try_code.visit(&vg);
+    vg.apply();
   }
 
 void variable_gather::expression_(stmt_expression& info)

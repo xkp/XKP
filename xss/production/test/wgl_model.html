@@ -112,7 +112,7 @@ d_ligth_1.manager = manager;
 	male_model = new THREE.Object3D();
 	var male_model_loader = 
 	generate_model_loader(manager.streamer.get_resource('model/male02/Male02_slim.js').type);
-		male_model_loader.load(		
+		male_model_loader.load(
 				manager.streamer.get_resource('model/male02/Male02_slim.js').asset , function( geometry )
 			{
 				var male_model_mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
@@ -136,7 +136,7 @@ male_model.manager = manager;
 	female_model = new THREE.Object3D();
 	var female_model_loader = 
 	generate_model_loader(manager.streamer.get_resource('model_1').type);
-		female_model_loader.load(		
+		female_model_loader.load(
 				manager.streamer.get_resource('model_1').asset , function( geometry )
 			{
 				var female_model_mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());

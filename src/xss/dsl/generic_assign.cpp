@@ -36,6 +36,7 @@ const str SLanguage("language");
 
 const str SCannotParseAssign("Cannot parse a simple assign text, rtfm");
 const str SDSLNeedsIdiom("A registered dsl needs an idiom to be included");
+const str SOnlyVariablesAsAsignee("Only variables can be used on the left of an assign dsl");
 
 //an extremely simple html parser, at this point the htmls to be used are expected to
 //be correct, so we'll keep an intermediate representation of the tags
@@ -127,7 +128,7 @@ struct assign_grammar : grammar<assign_grammar>
     {
         definition(assign_grammar const& self)
         {
-          ident_r   = lexeme_d[ +chset_p("A-Za-z0-9_-") ];
+          ident_r   = lexeme_d[ +chset_p("-A-Za-z0-9_") ];
           text_r    = *(anychar_p - (';' | end_p) );
           assign_r  =  *( (   ident_r         [variable(self.ctx)]
                           >>  "=" >> text_r   [inner(self.ctx)]
@@ -180,7 +181,7 @@ class ga_renderer
               bool found = false;
               for(; pit != pnd; pit++)
                 {
-                  if (!boost::is_alpha()(*pit) && !boost::is_digit()(*pit) && !((*pit) == '.') )
+                  if (!boost::is_alpha()(*pit) && !boost::is_digit()(*pit) && !((*pit) == '.') && !((*pit) == '_'))
                     {
                       params_.push_back(str(line.begin(), pit));
                       texts_.push_back(str(pit, line.end()));
@@ -281,7 +282,31 @@ str dsl_generic_assign::render(dsl& info, XSSContext ctx)
         XSSObject tag(new xss_object);
         
         if (!it->variable.empty())
-          tag->add_attribute("variable", it->variable);
+          {
+            variant vv = ctx->resolve(it->variable, RESOLVE_VARIABLE);
+            if (!vv.empty()) 
+              {
+                XSSType type = vv;
+                tag->add_attribute("variable_type", type);
+                if (!type->is_array())
+                  {
+                    if (type->is_object())
+                      tag->add_attribute("resolve_to_object", true);
+                    else if (type->is_native())
+                      tag->add_attribute("resolve_to_value", true);
+                  }
+              }
+            else
+              {
+                param_list error;
+                error.add("id", SLanguage);
+                error.add("desc", SOnlyVariablesAsAsignee);
+                error.add("identifier", it->variable);
+                xss_throw(error);
+              }
+
+            tag->add_attribute("variable", it->variable);
+          }
         
         reference<ga_renderer> rend(new ga_renderer);
         rend->parse(it->text);

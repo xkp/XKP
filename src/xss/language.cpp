@@ -978,6 +978,7 @@ void expression_analizer::analyze_path(expression& expr, operator_type op, XSSCo
         switch(fri.what)
           {
             case RESOLVE_INSTANCE:
+            case RESOLVE_TYPE:
             case RESOLVE_VARIABLE: break;
             case RESOLVE_PROPERTY: first_property_ = true; break;
             default : assert(false); //catch

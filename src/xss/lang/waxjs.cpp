@@ -2,6 +2,7 @@
 #include <xss/dsl/sql.h>
 #include <xss/dsl/shell.h>
 #include <xss/xss_renderer.h>
+#include <xss/brace_parser.h>
 
 #include <boost/algorithm/string/replace.hpp>
 
@@ -18,6 +19,7 @@ const str SMissingReplicatorEvent("Replicators expect a 'render' event");
 const str STooManyReplicatorEvents("Replicators expect only one 'render' event");
 const str SReplicatorOnlyData("Replicators only contain the 'data' property");
 const str SReplicatorNoFork("Replicators 'render' event does not support offline operations");
+const str SMultipleCatchesNotImplemented("Multiple catch staments are not implemented");
 
 #define CHECK_ACTIVE  if (found_) return; curr_++;
 
@@ -191,7 +193,7 @@ struct wax_splitter : code_visitor
 
     virtual void dispatch(stmt_dispatch& info)
       {
-        assert(false); //ditto
+        CHECK_ACTIVE
       }
     
     virtual void switch_(stmt_switch& info)
@@ -201,12 +203,18 @@ struct wax_splitter : code_visitor
 
     virtual void try_(stmt_try& info)
       {
-        assert(false); //ditto-est
+        CHECK_ACTIVE
+
+        CodeSplit result;
+        if (forked(info.try_code, result))
+          {
+            cut(result);
+          }
       }
 
     virtual void throw_(stmt_throw& info)
       {
-        assert(false); //ditto-est-test
+        CHECK_ACTIVE
       }
 
     CodeSplit get()
@@ -390,6 +398,7 @@ waxjs_code_renderer::waxjs_code_renderer(code& cde, param_list_decl& params, XSS
   base_code_renderer(cde, params, ctx)
   {
     compiler_ = variant_cast<XSSCompiler>(ctx->resolve("compiler"), XSSCompiler()); assert(compiler_);
+    lang_utils::var_gatherer(cde, ctx_);
   }
 
 str waxjs_code_renderer::render()
@@ -500,6 +509,10 @@ str waxjs_code_renderer::render_split(CodeSplit fork, CodeSplit parent)
         lang_utils::var_gatherer(fork->target, fork->context);
       }
 
+    //inherit error_handler
+    if (fork->error_handler.empty() && parent)
+      fork->error_handler = parent->error_handler;
+
     std::ostringstream result;
 
     int split_idx = fork->split_idx - 1;
@@ -523,11 +536,26 @@ str waxjs_code_renderer::render_split(CodeSplit fork, CodeSplit parent)
         split_callback = compiler_->genid("callback");
 
         code_after << "function " << split_callback << "() \n{\n";
+        bool has_error_handler = !fork->error_handler.empty();
+        if (has_error_handler)
+          {
+            code_after << "\n\ttry";
+            code_after << "\n\t{";
+          }
 
         bool split;
-        code_after << split_and_render(after_wards, fork, split_callback, &split);
+        code_after << split_and_render(after_wards, fork, fork->callback, &split);
         if (!split && !fork->hook.empty())
           code_after << fork->hook << "();";
+
+        if (has_error_handler)
+          {
+            code_after << "\n\t}";
+            code_after << "\n\tcatch(__error)";
+            code_after << "\n\t{";
+            code_after << "\n\t\t" << fork->error_handler << "(__error);";
+            code_after << "\n\t}";
+          }
 
         code_after << "\n}\n";
       }
@@ -542,7 +570,7 @@ str waxjs_code_renderer::render_split(CodeSplit fork, CodeSplit parent)
       }
     else if (st.is<stmt_variable>())
       {
-        result << split_variable(fork, code_after.str());
+        result << split_variable(fork, code_after.str(), split_callback);
       }
     else if (st.is<stmt_expression>())
       {
@@ -575,6 +603,10 @@ str waxjs_code_renderer::render_split(CodeSplit fork, CodeSplit parent)
     else if (st.is<stmt_while>())
       {
         result << code_after.str() << split_while(fork, split_callback);
+      }
+    else if (st.is<stmt_try>())
+      {
+        result << code_after.str() << split_try(fork, split_callback);
       }
     else
       {
@@ -635,7 +667,7 @@ str waxjs_code_renderer::split_if(CodeSplit fork, const str& callback)
         else
             method_body << render_callback(fork);
 
-        result << split_method(fork->method, compile_args(stmnt.expr), method_body.str());
+        result << split_method(fork->method, fork, compile_args(stmnt.expr), method_body.str());
       }
 
     return result.str();
@@ -695,7 +727,7 @@ str waxjs_code_renderer::render_service()
     return result.str();
   }
 
-str waxjs_code_renderer::split_variable(CodeSplit fork, const str& code_after)
+str waxjs_code_renderer::split_variable(CodeSplit fork, const str& code_after, const str& callback)
   {
     stmt_variable stmnt = fork->target.get_stament(fork->split_idx - 1);
     
@@ -704,12 +736,9 @@ str waxjs_code_renderer::split_variable(CodeSplit fork, const str& code_after)
     result << code_after;
 
     std::ostringstream method_body;
-    method_body << "\n{\n";
     method_body << stmnt.id << " = return_value;";
-    method_body << render_callback(fork);
-    method_body << "\n});\n";
-
-    result << split_method(fork->method, compile_args(stmnt.value), method_body.str());
+    method_body << "\n" << callback << "();";
+    result << split_method(fork->method, fork, compile_args(stmnt.value), method_body.str());
     return result.str();
   }
 
@@ -776,7 +805,7 @@ str waxjs_code_renderer::split_expression(CodeSplit fork, const str& callback)
 
     method_body << callback << "()"; //render_callback(fork);
 
-    return split_method(fork->method, compile_args(stmnt.expr), method_body.str());
+    return split_method(fork->method, fork, compile_args(stmnt.expr), method_body.str());
   }
 
 str waxjs_code_renderer::split_dsl(CodeSplit fork, const str& callback)
@@ -795,6 +824,9 @@ str waxjs_code_renderer::split_dsl(CodeSplit fork, const str& callback)
     XSSContext ctx(new xss_context(ctx_));
     ctx->register_symbol(RESOLVE_CONST, "#wax_callback", callback + "()");
 
+    if (!fork->error_handler.empty())
+      ctx->register_symbol(RESOLVE_CONST, "#wax_error_handler", fork->error_handler);
+
     return dsl->render(dd, ctx);
   }
 
@@ -807,7 +839,7 @@ str waxjs_code_renderer::split_return(CodeSplit fork)
     method_body << "return_function(return_value);";
     method_body << "\n});";
 
-    return split_method(fork->method, compile_args(stmnt.expr), method_body.str());
+    return split_method(fork->method, fork, compile_args(stmnt.expr), method_body.str());
   }
 
 str waxjs_code_renderer::split_for(CodeSplit fork, const str& callback)
@@ -941,6 +973,70 @@ str waxjs_code_renderer::split_while(CodeSplit fork, const str& callback)
     return result.str();
   }
 
+str waxjs_code_renderer::split_try(CodeSplit fork, const str& callback)
+  {
+    std::ostringstream result;
+    stmt_try stmnt = fork->target.get_stament(fork->split_idx - 1);
+
+    if (!stmnt.finally_code.empty())
+      {
+        str finally_fn = compiler_->genid("finally");
+        fork->split_code->hook = finally_fn;
+        result << "\nfunction " << finally_fn << "()";
+        result << "\n{";
+        result << split_and_render(stmnt.finally_code, fork, callback);
+        result << "\n}";
+      }
+
+    str catch_fn = compiler_->genid("catch");
+    result << "\nfunction " << catch_fn << "(__error)";
+    result << "\n{";
+
+    if (stmnt.catches.size() > 1)
+      {
+        std::vector<catch_>::iterator it = stmnt.catches.begin();
+        std::vector<catch_>::iterator nd = stmnt.catches.end();
+        for(; it != nd; it++)
+          {
+            //td: !!!
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", SMultipleCatchesNotImplemented);
+            xss_throw(error);
+          }
+      }
+    else
+      {
+        catch_& the_catch = stmnt.catches[0];
+        str catch_id;
+        if (!the_catch.id.empty())
+          catch_id = the_catch.id;
+        else if (!the_catch.type.name.empty())
+          catch_id = the_catch.type.name; //td: !!!
+
+        if (!catch_id.empty())
+          result << "\n var " << catch_id << " = __error;";
+        
+        result << split_and_render(the_catch.catch_code, fork, callback);
+
+        fork->split_code->error_handler = catch_fn;
+      }
+    result << "\n}";
+
+    fork->split_code->callback = callback;
+
+    result << "\ntry";
+    result << "\n{";
+    result << render_split(fork->split_code, fork);
+    result << "\n}";
+    result << "\ncatch(__error)";
+    result << "\n{";
+    result << "\n\t" << catch_fn << "(__error)";
+    result << "\n}";
+
+    return result.str();
+  }
+
 str waxjs_code_renderer::split_and_render(code& c, CodeSplit parent, const str& callback, bool* split)
   {
     wax_splitter splitter(ctx_, c);
@@ -956,6 +1052,10 @@ str waxjs_code_renderer::split_and_render(code& c, CodeSplit parent, const str& 
         fork->callback = callback;
         if (callback.empty())
           fork->callback = parent->callback;
+
+        if (fork->error_handler.empty())
+          fork->error_handler = parent? parent->error_handler : str();
+
         return render_split(fork, parent);
       }
 
@@ -968,18 +1068,19 @@ str waxjs_code_renderer::split_and_render(code& c, CodeSplit parent, const str& 
 
     result << render_plain_code(c, ctx);
 
-    //if (parent)
-    //  result << render_callback(parent); 
+    if (!callback.empty())
+      result << "\n" << callback << "();"; 
     
     return result.str();
   }
 
-str waxjs_code_renderer::split_method(XSSMethod method, DynamicArray args, const str& body)
+str waxjs_code_renderer::split_method(XSSMethod method, CodeSplit fork, DynamicArray args, const str& body)
   {
+    XSSCompiler compiler = ctx_->resolve("compiler");
+    
     str render_file = method->get<str>("renderer", str());
     if (!render_file.empty())
       {
-        XSSCompiler compiler = ctx_->resolve("compiler");
         render_file = compiler->idiom_path(XSSObject(ctx_->get_type("web_service")), render_file);
         
         XSSRenderer renderer(new xss_renderer(compiler, ctx_, ctx_->path()));
@@ -992,6 +1093,11 @@ str waxjs_code_renderer::split_method(XSSMethod method, DynamicArray args, const
         pl.add("args", args);
         pl.add("body", body);
 
+        if (fork && !fork->error_handler.empty())
+          {
+            pl.add("error_handler", fork->error_handler);
+          }
+
         compiler->xss(pl);
 
         compiler->pop_renderer();
@@ -1000,8 +1106,42 @@ str waxjs_code_renderer::split_method(XSSMethod method, DynamicArray args, const
     else
       {
         std::ostringstream result;
-        result << method->output_id() << "(function(return_value)";
-        result << "\n{\n" << body << "\n});";
+        result << method->output_id() << "(";
+
+        //args
+        //td: !!! data model
+        XSSObjectList methd_args = method->find_by_class("parameter");
+        XSSObjectList::iterator it = methd_args.begin();
+        XSSObjectList::iterator nd = methd_args.end();
+        int idx = 0;
+        for(; it != nd; it++, idx++)
+          {
+            if (idx < args->size())
+              {
+                XSSObject arg = args->at(idx); 
+                result << arg->get<str>("value", str());
+              }
+            else 
+                result << (*it)->get<str>("default_value", str());
+
+            result << ", ";
+          }
+
+        result << "function(" << method->get<str>("callback_args", str()) << ")";
+        result << "\n{";
+
+        str error_arg = method->get<str>("error_arg", str());
+        if (!error_arg.empty())
+          {
+            result << "\n\tif (" << error_arg << ")";
+            if (!fork->error_handler.empty())
+              result << "\n\t{\n\t\t" << fork->error_handler << "(" << error_arg << "); \n\t\t return; \n\t}";
+            else 
+              result << "\n\t\t" << "throw " << error_arg << ";";
+          }
+
+        result << body;
+        result << "\n});";
         return result.str();
       }
   }
@@ -1110,6 +1250,12 @@ struct visitor_45 : code_visitor
         info.while_code.visit(&v45);
       }
 
+    virtual void try_(stmt_try& info)
+      {
+        visitor_45 v45(ctx_);
+        info.try_code.visit(&v45);
+      }
+
     virtual void variable_(stmt_variable& info)       {}
     virtual void return_(stmt_return& info)           {}
     virtual void break_()                             {}
@@ -1117,7 +1263,6 @@ struct visitor_45 : code_visitor
     virtual void dsl_(dsl& info)                      {}
     virtual void dispatch(stmt_dispatch& info)        {}
     virtual void switch_(stmt_switch& info)           {}
-    virtual void try_(stmt_try& info)                 {}
     virtual void throw_(stmt_throw& info)             {}
 
     private:

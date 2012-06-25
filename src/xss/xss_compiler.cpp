@@ -151,6 +151,12 @@ void xss_application_renderer::register_module(const str& id, XSSModule module)
     modules_.push_back(module);
   }
 
+void xss_application_renderer::register_singleton(XSSObject singleton)
+  {
+    singletons_.push_back(singleton);
+    context_->register_symbol(RESOLVE_INSTANCE, singleton->id(), singleton);
+  }
+
 str xss_application_renderer::target()
   {
     return target_;
@@ -227,6 +233,11 @@ XSSModule xss_application_renderer::get_idiom(const str& id)
       }
 
     return XSSModule();
+  }
+
+XSSObjectList xss_application_renderer::get_singletons()
+  {
+    return singletons_;
   }
 
 void xss_application_renderer::set_target(const str& target)
@@ -2067,7 +2078,7 @@ XSSModule xss_compiler::read_module(const str& src, XSSApplicationRenderer app, 
     read_types(module, app, result);
 
     //read instances, these will act as singletons
-    read_instances(module, app, result);
+    XSSObjectList singletons = read_instances(module, app, result);
 
     //account for dependencies
     if (result->get<bool>("auto_dependencies", false))
@@ -2085,10 +2096,19 @@ XSSModule xss_compiler::read_module(const str& src, XSSApplicationRenderer app, 
         xs.compile_implicit_instance(load_file(file), DynamicObject(result), code_ctx, file);
       }
 
+    //preprocess singletons
+    XSSObjectList::iterator it = singletons.begin();
+    XSSObjectList::iterator nd = singletons.end();
+    for(; it != nd; it++)
+      {
+        XSSObject singleton = *it;
+        result->pre_process(singleton, XSSObject());
+      }
+
     return result;
   }
 
-void xss_compiler::read_instances(XSSObject module_data, XSSApplicationRenderer app, XSSModule module)
+XSSObjectList xss_compiler::read_instances(XSSObject module_data, XSSApplicationRenderer app, XSSModule module)
   {
     XSSObjectList instances = module->find_by_class("instance");
     XSSContext ctx   = app->context();
@@ -2119,6 +2139,7 @@ void xss_compiler::read_instances(XSSObject module_data, XSSApplicationRenderer 
 
         ctx->register_symbol(RESOLVE_INSTANCE, singleton->id(), singleton);
       }
+    return instances;
   }
 
 void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app, XSSModule module)
@@ -2443,6 +2464,15 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
           {
             XSSObject clazz_data = *cit;
 
+            if (clazz_data->type_name() == "instance")
+              {
+                str type_name = clazz_data->get<str>("super", str());
+                XSSType stype = app->context()->get_type(type_name);
+                clazz_data->set_type(stype);
+                app->register_singleton(clazz_data); //td: code
+                continue;
+              }
+
             str cid   = clazz_data->id();
             str super = clazz_data->get<str>("super", str());
 
@@ -2739,6 +2769,17 @@ void xss_compiler::read_application(const str& app_file)
 
         //then invoke the pre_Process event
         pre_process(app_renderer, app_data, XSSObject(), null);
+
+        //and dont forget singletons
+        XSSObjectList singletons = app_renderer->get_singletons();
+        XSSObjectList::iterator sit = singletons.begin();
+        XSSObjectList::iterator snd = singletons.end();
+        for(; sit != snd; sit++)
+          {
+            XSSObject singleton = *sit;
+            pre_process(app_renderer, singleton, XSSObject(), null);
+          }
+
         current_app_.reset();
 
         //hook modules to the application
