@@ -38,9 +38,10 @@ function __callback6()
 count--;
 __while_cond1();
 }
-        var __cmd1 = "git mark " + curr + "_file " + count + "";
+        var __cmd1 = "git mark " + curr_file + " " + count + "";
         child_process.exec(__cmd1, function(error, stdout, stderr){
-    __callback6();
+            if (error)
+     throw error;__callback6();
         });
 }
 function __while_cond1()
@@ -67,15 +68,19 @@ return true;
             password: 'password', 
             database: 'test'
         }).connect(function(error) {
+            if (error)
+     throw error;
         var __query1 = "INSERT INTO Registry(file_name, visited)\n            VALUES              (" + file + ", 1)";
         this.query(__query1).execute(function(error, rows, cols) {
-    __callback4();
+            if (error)
+     throw error;__callback4();
         });
         });
 }
-        var __cmd2 = "git commit " + curr + "_file";
+        var __cmd2 = "git commit " + curr_file + "";
         child_process.exec(__cmd2, function(error, stdout, stderr){
-    __callback3();
+            if (error)
+     throw error;__callback3();
         });
 }
 function __for_iter1()
@@ -98,9 +103,12 @@ __for_cond1();
             password: 'password', 
             database: 'test'
         }).connect(function(error) {
+            if (error)
+     throw error;
         var __query2 = "SELECT  * \n                FROM    Registry\n                WHERE   file = " + file + " AND\n                        visited = 0";
         this.query(__query2).execute(function(error, rows, cols) {
-     data = rows; __callback1();
+            if (error)
+     throw error; data = rows; __callback1();
         });
         });
     	};

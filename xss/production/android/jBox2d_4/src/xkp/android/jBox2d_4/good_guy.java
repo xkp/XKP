@@ -63,7 +63,7 @@ import xkp.android.libs.Layout.XKPLayout;
 		__physics3.setFriction(0.5f);
 		__physics3.setRestitution(0.200000003f);
 		__physics3.setBodyType(BodyType.DYNAMIC);
-			__physics3.setPosition(, );
+			__physics3.setPosition(null, null);
 		__physics3.createBody(21.500000f);
 			ta.recycle();
 			}

@@ -11,27 +11,26 @@ function __callback2()
 if (c < 20)
 {return_function(c);
 return true;
-__callback2()
 }
 else
 {
 c += 20;
-bar_foo(function(return_value)
+bar_foo(function()
+{
 {
 return_function(return_value);
 });
-}
-}
-foo_bar(function(return_value)
-{
-c += return_value;__callback1()
 });
 }
-foo_bar(function(return_value)
-{
-c = return_value;
+}
+foo_bar(function()
+{c += return_value;__callback2()
 });
-	};
+}
+foo_bar(function()
+{c = return_value;
+__callback1();
+});	};
 	application.service1 = function() 
 	{
 		function __callback3() 
@@ -42,24 +41,25 @@ function __callback4()
 return_function(x);
 return true;
 }
-bar(function(return_value)
-{
-__callback3()
+bar(function()
+{__callback4()
 });
 }
-bar(function(return_value)
+bar(function()
 {
 	if (return_value)
 	{
-util1(function(return_value)
+util1(function()
+{
 {
 return_function(return_value);
+});
 });
 	}
 	else
 {
-bar_foo(function(return_value)
-{
+bar_foo(function()
+{()
 });
 	}
 });	};

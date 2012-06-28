@@ -502,19 +502,19 @@ Success are greateful
 
 
 Error [404] File not found
-	file = c:/dev/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
+	file = d:/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
 
 ===[ pairs.project.xml ]================
 
 
 Error [404] File not found
-	file = c:/dev/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
+	file = d:/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
 
 ===[ simple.project.xml ]================
 
 
 Error [404] File not found
-	file = c:/dev/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
+	file = d:/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
 
 ===[ 3js-ms.project.xml ]================(Tests)
 
@@ -976,7 +976,37 @@ Copyright © 2011 W3Schools.com</td>
 
 		    btnFullName.click( function() { 
 	    
-			lblFullName.text("Hello world");
+			lblFullName.text("Grabbing ");
+var loc;
+function __callback1() 
+{
+lblFullName.text(loc.geometry.location.Lat + " " + loc.geometry.location.Long);
+
+}
+
+
+
+
+
+
+        var __url1 = "http://maps.googleapis.com/maps/api/geocode/json"
+     + "?address=" + "780 NE 69st" + "&sensor=" + false;
+        $.ajax(
+		{
+		    url: __url1,
+			type: "get",
+			dataType: "json",
+			error: function()
+            {
+                throw e;
+			},
+			success: function(data)
+            {
+                var return_value = JSON.parse(data);
+                loc = return_value;
+__callback1();
+			}
+		});
 		
 		});
 	
@@ -1087,12 +1117,6 @@ Success are greateful
 ===[ paintings.project.xml ]================(Tests)
 
 
-log: Rendering Resources...
-log: Rendering Sequence Types...
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: Rendering UI...
-Success are greateful
 ===[ pixastic.project.xml ]================(Tests)
 
 
@@ -1226,12 +1250,11 @@ return_function(x);
 return true;
 
 }
-bar(function(return_value)
-{
-__callback1()
+bar(function()
+{__callback2()
 });
 }
-bar(function(return_value)
+bar(function()
 {
 	if (return_value)
 	{
@@ -1245,34 +1268,32 @@ if (c < 20)
 {return_function(c);
 return true;
 
-__callback4()
+
 }
 else
 {
 c += 20;
-bar_foo(function(return_value)
+bar_foo(function()
+{
 {
 return_function(return_value);
 });
-}
-}
-foo_bar(function(return_value)
-{
-c += return_value;__callback3()
 });
 }
-foo_bar(function(return_value)
-{
-c = return_value;
+}
+foo_bar(function()
+{c += return_value;__callback4()
 });
-
+}
+foo_bar(function()
+{c = return_value;
+__callback3();
+});
 	}
-
 	else
 {
-bar_foo(function(return_value)
-{
-
+bar_foo(function()
+{()
 });
 	}
 });
@@ -1947,7 +1968,7 @@ Success are greateful
 Error [syntax-error] Error while compiling xs
 	line = 4
 	column = 1
-	file = c:/dev/xkp/xss/tests/xss5.xssERROR: Project:  xss5.project.xml
+	file = d:/xkp/xss/tests/xss5.xssERROR: Project:  xss5.project.xml
 
 ===[ xss6.project.xml ]================(Tests)
 

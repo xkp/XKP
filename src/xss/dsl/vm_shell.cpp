@@ -113,9 +113,9 @@ struct shellworker : IWorker
                 //td: recover the result of execution and save into variable, how to?
                 //... this is temporal, only for debug purpose
                 bp::context ctx;
-                ctx.add(bp::close_stream(bp::stdin_fileno))
-                   .add(bp::inherit_stream(bp::stdout_fileno))
-                   .add(bp::inherit_stream(bp::stderr_fileno));
+                //ctx.add(bp::close_stream(bp::stdin_fileno))
+                //   .add(bp::inherit_stream(bp::stdout_fileno))
+                //   .add(bp::inherit_stream(bp::stderr_fileno));
 
                 if (!working_path.empty())
                   ctx.work_directory = working_path;
