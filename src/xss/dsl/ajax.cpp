@@ -12,7 +12,7 @@ str dsl_ajax::render(dsl& info, XSSContext ctx)
 
     my_ctx->set_language(lang);
     lang->init_application_context(my_ctx);
-    
+
     std::vector<str> dl;
     my_ctx->collect_xss_dsls(dl);
 
@@ -20,7 +20,9 @@ str dsl_ajax::render(dsl& info, XSSContext ctx)
     code ajax_code;
     xc.compile_code(info.text, ajax_code);
 
-    CodeRenderer rend = lang->compile_code(ajax_code, param_list_decl(), my_ctx);
+    param_list_decl plistdecl = param_list_decl();
+
+    CodeRenderer rend = lang->compile_code(ajax_code, plistdecl, my_ctx);
     str result = rend->render();
     return result;
   }

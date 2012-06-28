@@ -82,6 +82,7 @@
 		<Unit filename="../../../include/xs/vm.h" />
 		<Unit filename="../../../include/xs/xs_error.h" />
 		<Unit filename="../../../include/xss/brace_parser.h" />
+		<Unit filename="../../../include/xss/dsl/ajax.h" />
 		<Unit filename="../../../include/xss/dsl/ga_parser.h" />
 		<Unit filename="../../../include/xss/dsl/generic_assign.h" />
 		<Unit filename="../../../include/xss/dsl/html5_asynch.h" />
@@ -118,6 +119,7 @@
 		<Unit filename="../../../src/xs/operators.cpp" />
 		<Unit filename="../../../src/xs/vm.cpp" />
 		<Unit filename="../../../src/xss/brace_parser.cpp" />
+		<Unit filename="../../../src/xss/dsl/ajax.cpp" />
 		<Unit filename="../../../src/xss/dsl/ga_parser.cpp" />
 		<Unit filename="../../../src/xss/dsl/generic_assign.cpp" />
 		<Unit filename="../../../src/xss/dsl/html5_asynch.cpp" />
