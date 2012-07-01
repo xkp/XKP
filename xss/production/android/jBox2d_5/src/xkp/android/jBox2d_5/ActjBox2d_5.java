@@ -249,7 +249,7 @@ if (keycode == KeyEvent.KEYCODE_DPAD_DOWN)
 {
 	btn1.setTop(btn1.getY1() + 5);
 }
-					return super.onKeyDown(keycode, event);	}
+					return super.onKeyDown(keycode, event);	}
 		class XKPQueryCallback implements QueryCallback {
 			public final Vec2 point;
 			public Fixture fixture;

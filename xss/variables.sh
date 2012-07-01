@@ -18,11 +18,11 @@ FILTER=$1
 
 #for windows
 #XSS_FILENAME=$ABSOLUTE_PATH/../bin/debug/xss.exe
-#XSS_FILENAME=$ABSOLUTE_PATH/../bin/release/xss.exe
+XSS_FILENAME=$ABSOLUTE_PATH/../bin/release/xss.exe
 
 #TODO: linux
 #XSS_FILENAME=$ABSOLUTE_PATH/../bin/debug/xss
-XSS_FILENAME=$ABSOLUTE_PATH/../bin/release/xss
+#XSS_FILENAME=$ABSOLUTE_PATH/../bin/release/xss
 
 LOG_FILENAME=$ABSOLUTE_PATH/production/result.log
 #date +%c >> $LOG_FILENAME ;
