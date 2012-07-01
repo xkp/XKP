@@ -122,6 +122,7 @@ struct shellworker : IWorker
 
                 //td: recover the result of execution and save into variable, how to?
                 //... this is temporal, only for debug purpose
+                //    now all file descriptors are closed, then redirect to file or variable
                 bp::context ctx;
                 ctx.add(bp::close_stream(bp::stdin_fileno))
                    .add(bp::close_stream(bp::stdout_fileno))
@@ -139,15 +140,17 @@ struct shellworker : IWorker
 //td: personalize class with static function or only functions
 #if defined(__unix__) || defined(__unix) || defined(unix) || defined(__linux__)
                 if (s.exited()) {
-                    std::cout << "Program returned exit code " << s.exit_status() << std::endl;
+                    //std::cout << "Program returned exit code " << s.exit_status() << std::endl;
                 } else if (s.signaled()) {
-                    std::cout << "Program received signal " << s.term_signal() << std::endl;
+                    //std::cout << "Program received signal " << s.term_signal() << std::endl;
                     if (s.dumped_core())
-                        std::cout << "Program also dumped core" << std::endl;
+                      {
+                        //std::cout << "Program also dumped core" << std::endl;
+                      }
                 } else if (s.stopped()) {
-                    std::cout << "Program stopped by signal" << s.stop_signal() << std::endl;
+                    //std::cout << "Program stopped by signal" << s.stop_signal() << std::endl;
                 } else {
-                    std::cout << "Unknown termination reason" << std::endl;
+                    //std::cout << "Unknown termination reason" << std::endl;
                 }
 #elif defined(_WIN32) || defined(_WIN64) || defined(__WIN32__)
 #endif

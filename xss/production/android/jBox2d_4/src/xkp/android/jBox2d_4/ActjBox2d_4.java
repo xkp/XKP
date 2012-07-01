@@ -236,7 +236,7 @@ if (keycode == RIGHT_ARROW)
 {
 	hero.move_around.vx = 1;
 }
-					return super.onKeyDown(keycode, event);	}
+					return super.onKeyDown(keycode, event);	}
 			private void keyupapplication(Object keycode) {
 				if (keycode == LEFT_ARROW && hero.move_around.vx < 0)
 {

@@ -498,41 +498,6 @@ log: [android] Rendering default files...
 log: Rendering Android Manifest...
 
 Success are greateful
-===[ kitchensink.project.xml ]================
-
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
-
-===[ pairs.project.xml ]================
-
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
-
-===[ simple.project.xml ]================
-
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
-
-===[ 3js-ms.project.xml ]================(Tests)
-
-
-log: Rendering Resources...
-log: Rendering 3js Types...
-log: Rendering Sequence Types...
-log: Rendering UI Types...
-log: Rendering UI...
-Success are greateful
-===[ 3js-ui.project.xml ]================(Tests)
-
-
-log: Rendering Resources...
-log: Rendering 3js Types...
-log: Rendering UI Types...
-log: Rendering UI...
-Success are greateful
 ===[ 3js_cameras.project.xml ]================(Tests)
 
 
@@ -589,6 +554,15 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering 3js Types...
 Success are greateful
+===[ 3js-ms.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering 3js Types...
+log: Rendering Sequence Types...
+log: Rendering UI Types...
+log: Rendering UI...
+Success are greateful
 ===[ 3js_package.project.xml ]================(Tests)
 
 
@@ -614,6 +588,14 @@ Success are greateful
 
 log: Rendering UI Types...
 log: Rendering 3js Types...
+log: Rendering UI...
+Success are greateful
+===[ 3js-ui.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering 3js Types...
+log: Rendering UI Types...
 log: Rendering UI...
 Success are greateful
 ===[ animtest.project.xml ]================(Tests)
@@ -836,28 +818,6 @@ log: Rendering Java Types...
 log: Rendering instance: cx
 
 Success are greateful
-===[ jquery-3js.project.xml ]================(Tests)
-
-
-log: Rendering Resources...
-log: Rendering 3js Types...
-log: Rendering UI Types...
-log: Rendering UI...
-Success are greateful
-===[ jquery-3js1.project.xml ]================(Tests)
-
-
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: Rendering UI...
-Success are greateful
-===[ jquery-webgl.project.xml ]================(Tests)
-
-
-log: Rendering Resources...
-log: Rendering 3js Types...
-Success are greateful
 ===[ jquery1.project.xml ]================(Tests)
 
 <html>
@@ -1033,6 +993,22 @@ Success are greateful
 
 
 Success are greateful
+===[ jquery-3js1.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering 3js Types...
+log: Rendering UI...
+Success are greateful
+===[ jquery-3js.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering 3js Types...
+log: Rendering UI Types...
+log: Rendering UI...
+Success are greateful
 ===[ jquery3.project.xml ]================(Tests)
 
 
@@ -1073,6 +1049,12 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
+Success are greateful
+===[ jquery-webgl.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering 3js Types...
 Success are greateful
 ===[ jsmanip.project.xml ]================(Tests)
 
@@ -1116,6 +1098,7 @@ log: Rendering UI...
 Success are greateful
 ===[ paintings.project.xml ]================(Tests)
 
+ERROR: Project:  paintings.project.xml
 
 ===[ pixastic.project.xml ]================(Tests)
 
@@ -1165,6 +1148,13 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
 Success are greateful
+===[ ui_audio_1.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering UI Types...
+log: Rendering UI...
+Success are greateful
 ===[ ui_audio.project.xml ]================(Tests)
 
 
@@ -1172,11 +1162,12 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
 Success are greateful
-===[ ui_audio_1.project.xml ]================(Tests)
+===[ uibuffer_test.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering UI Types...
+log: Rendering 3js Types...
 log: Rendering UI...
 Success are greateful
 ===[ ui_class_test.project.xml ]================(Tests)
@@ -1227,14 +1218,6 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering UI Types...
-log: Rendering UI...
-Success are greateful
-===[ uibuffer_test.project.xml ]================(Tests)
-
-
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering 3js Types...
 log: Rendering UI...
 Success are greateful
 ===[ wax1.project.xml ]================(Tests)
@@ -1379,15 +1362,15 @@ Success are greateful
 
 log: Rendering 3js Types...
 Success are greateful
+===[ wgl_shader_fresnel.project.xml ]================(Tests)
+
+
+log: Rendering 3js Types...
+Success are greateful
 ===[ wgl_shader.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
-Success are greateful
-===[ wgl_shader_fresnel.project.xml ]================(Tests)
-
-
 log: Rendering 3js Types...
 Success are greateful
 ===[ wgl_sound.project.xml ]================(Tests)
@@ -1400,22 +1383,6 @@ Success are greateful
 
 
 log: Rendering 3js Types...
-Success are greateful
-===[ xss1.project.xml ]================(Tests)
-
-
-hello, darling
-this is Louis
-
-
-		Darling
-	
-		Im glad to see you back where you belong
-	
-
-            Thats all folks
-            It was a pleasure
-        
 Success are greateful
 ===[ xss10.project.xml ]================(Tests)
 
@@ -1793,6 +1760,22 @@ log: id: application type: Application
 				Object keycode,Object value			
 
 Success are greateful
+===[ xss1.project.xml ]================(Tests)
+
+
+hello, darling
+this is Louis
+
+
+		Darling
+	
+		Im glad to see you back where you belong
+	
+
+            Thats all folks
+            It was a pleasure
+        
+Success are greateful
 ===[ xss2.project.xml ]================(Tests)
 
 
@@ -1968,7 +1951,7 @@ Success are greateful
 Error [syntax-error] Error while compiling xs
 	line = 4
 	column = 1
-	file = d:/xkp/xss/tests/xss5.xssERROR: Project:  xss5.project.xml
+	file = /home/cuba/projects/xkp/xss/tests/xss5.xssERROR: Project:  xss5.project.xml
 
 ===[ xss6.project.xml ]================(Tests)
 
