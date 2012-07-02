@@ -722,7 +722,7 @@ str waxjs_code_renderer::render_service()
     std::ostringstream result;
     result << "\nfunction return_function(return_value)";
     result << "\n{";
-    result << "\nreqest.end(JSON.stringify(return_value))";
+    result << "\nrequest.end(JSON.stringify(return_value))";
     result << "\n}";
     return result.str();
   }

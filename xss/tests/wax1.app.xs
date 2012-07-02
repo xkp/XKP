@@ -1,25 +1,52 @@
 method foo()
 {
-    if (testwax.bar(10, 12))
+    try 
     {
-        var c = testwax.foo_bar();
-        c += testwax.foo_bar();
-
-        if (c < 20)
-            return c;
-        else
+        var data = [];
+        sql()
         {
-            c += 20;
-            return testwax.bar_foo(c);
+            data = SELECT * FROM FOLLOWERS
+                   WHERE USERID = @user.id
         }
-    }
-    else
-    {
-        testwax.bar_foo(20);
-    }
 
-    var x = 10;
-    testwax.bar();
-    
-    return x;
+        //fun with web services and caching
+        for(var follower in data)
+        {
+            try
+            {
+                string img_cache;
+                sql() 
+                { 
+                    img_cache = SELECT fname FROM MapCache
+                                WHERE addr = @follower.address
+                }
+                
+                if (!img_cache)
+                {
+                    var img_data = google_maps.staticmap(center = follower.address, zoom = 5, sensor = false);
+                    
+                    //do the caching
+                    img_cache = 'mapcache/' + Math.random()*1000 + '.png';
+                    fs.writeFile(img_cache, img_data);
+
+                    sql()
+                    {
+                        INSERT INTO   MapCache(addr, fname)
+                               VALUES (@follower.address, @img_cache)
+                    }
+                }
+                    
+                follower.map = img_cache;
+            }
+            catch(err)
+            {
+                follower.map = 'images/nomap.png';
+            }
+        }
+
+        followers.data = data;
+    }
+    catch
+    {
+    }
 }

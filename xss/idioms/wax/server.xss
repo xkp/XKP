@@ -7,6 +7,42 @@ var url  = require("url");
 var application = {};
 
 <xss:code>
+//preprocess utility methods (those who aren't services)
+//to determine whether they are forked
+array<object> services = application.find_by_type("service");
+compiler.log(services.size);
+
+for(var service_methd in application.methods)
+{
+    //hookup
+    var service_code   = service_methd.code;
+    service_code.owner = service_methd;
+
+    //find out whether these are services or utilities
+    bool is_service = false;
+    for(var service in services)
+    {
+        compiler.log(service.id);
+        if (service.id == service_methd.id)
+        {
+            is_service = true;
+            break;
+        }
+    }
+
+    if (is_service)
+    {
+        service_methd.wax_service = true;
+        wax_compiler.pre_process_args(service_methd);
+        continue;
+    }
+
+    service_code.check_fork(service_methd);
+
+    if (service_code.forked)
+        service_methd.add_parameter("return_function");
+}
+
 //preprocess pages so a method gets added
 //to the application per page
 
