@@ -1,0 +1,6 @@
+<project entry_point="../idioms/jquery/entry.xss" language="js" target="jquery_pp.xml" output="../production/test/jquery_pp.html">
+    <idiom src="../idioms/jquery/jquery.xml"/>
+</project>
+           
+
+         

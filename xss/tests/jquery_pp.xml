@@ -1,0 +1,35 @@
+<application name="jquery_pp" title="WebGL Post Processing" src="jquery_pp.xs" template="jquery_pp_template.html">
+    <div html_id="sidebar">    		
+        <accordion id="acc1" height="360" placement="client" fillSpace="true">
+			<div caption="Color Effect">				
+                <checkbox id="color_enabled" caption="Enabled"/>
+            </div> 
+            <div caption="Power Color Effect">				
+               <label caption="Red"/>  <br/><br/>
+                <slider id="pc_red" min="0" max="200" value="40"/>
+                <br/>
+                <label caption="Blue"/> <br/><br/>
+                <slider id="pc_blue" min="0" max="200" value="45"/>
+                <br/>
+                <label caption="Green"/><br/><br/>
+                <slider id="pc_green" min="0" max="200" value="45"/>              
+            </div>
+            <div caption="Multiply Color Effect">				
+                <label caption="Red"/>  <br/><br/>
+                <slider id="mc_red" min="0" max="200" value="10"/>
+                <br/>
+                <label caption="Blue"/> <br/><br/>
+                <slider id="mc_blue" min="0" max="200" value="10"/>
+                <br/>
+                <label caption="Green"/><br/><br/>
+                <slider id="mc_green" min="0" max="200" value="10"/>
+            </div>
+            <div caption="Bleach By Pass Effect">				
+                <checkbox id="bleach_enabled" caption="Enabled"/>
+            </div>   			
+        </accordion>
+    </div>
+
+    <canvas id="app" application="wgl_pp_embedded.project.xml" width="500" height="500" html_id="target-container"/>
+    
+</application>

@@ -39,10 +39,21 @@ function distance3d(vector1, vector2)
 }
 
 function set_active_camera( camera )
-{
-	camera.manager.scene.add(camera);
-	camera.manager.renderer.render(camera.manager.scene, camera);	
-	active_camera = camera;
+{	
+	camera.manager.active_camera = camera;
+	if(camera.manager.active_composer)
+		camera.manager.active_composer.render();
+	else
+		camera.manager.renderer.render(camera.manager.scene, camera);		
+}
+
+function set_active_composer( composer )
+{	
+	composer.manager.active_composer = composer;
+	if(composer.manager.active_composer)
+		composer.manager.active_composer.render();
+	else
+		composer.manager.renderer.render(composer.manager.scene, composer.manager.active_camera);		
 }
 
 function threejs_load_resources(manager, callback)
@@ -189,8 +200,8 @@ function get_intersects( x, y, object )
 {
 	var vector = new THREE.Vector3( ( x / window.innerWidth ) * 2 - 1, - ( y / window.innerHeight ) * 2 + 1, 0.5 );
 	projector = new THREE.Projector();
-	projector.unprojectVector( vector, active_camera );
-	var ray = new THREE.Ray( active_camera.position, vector.subSelf( active_camera.position ).normalize() );
+	projector.unprojectVector( vector, manager.active_camera );
+	var ray = new THREE.Ray( manager.active_camera.position, vector.subSelf( manager.active_camera.position ).normalize() );
 	var intersects = ray.intersectObject( object );	
 	return intersects;
 }

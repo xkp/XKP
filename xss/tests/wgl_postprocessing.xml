@@ -1,0 +1,58 @@
+<application src="wgl_postprocessing.xs" title="Test 3D" background="black">
+
+	<resources>		
+		<json_model id="res_model" src="model/leeperrysmith/LeePerrySmith.js"/>	
+		<image src="model/leeperrysmith/Infinite-Level_02_Tangent_SmoothUV.jpg"/>
+		<image src="model/leeperrysmith/Map-COL.jpg"/>
+		<image src="model/leeperrysmith/Map-SPEC.jpg"/>
+	</resources>
+	<materials>						
+		<shader_material id="shader_mat1" use_default_shader="normal" lights="true">			
+			<uniform id="tNormal" texture="model/leeperrysmith/Infinite-Level_02_Tangent_SmoothUV.jpg"/>
+			<uniform id="uNormalScale" value="-0.8"/>			
+			<uniform id="tDiffuse" texture="model/leeperrysmith/Map-COL.jpg"/>
+			<uniform id="tSpecular" texture="model/leeperrysmith/Map-SPEC.jpg"/>
+			<uniform id="enableAO" value="false"/>	
+			<uniform id="enableDiffuse" value="true"/>	
+			<uniform id="enableSpecular" value="true"/>	
+			<uniform id="uDiffuseColor" value="color(0xbbbbbb)"/>	
+			<uniform id="uSpecularColor" value="color(0x060606)"/>	
+			<uniform id="uAmbientColor" value="color(0x111111)"/>	
+			<uniform id="uShininess" value="35"/>	
+			<uniform id="wrapRGB" value="vector3(0.575, 0.5, 0.5)"/>	
+		</shader_material>
+	</materials>
+				
+	<scene>			
+		
+		<camera id="camera_1" fov="75" aspect="1.5" near="1" far="10000" look_at="head_model.position">
+			<position z="1000"/>            
+		</camera>
+		
+		<ambient_light id="a_ligth" color="ivory"/>
+		
+		<directional_light id="d_ligth_1" color="white" intensity="1">			
+            <position y="-70" z="100"/>            
+		</directional_light>
+				
+		<model id="head_model" src="res_model" material="shader_mat1" compute_tangents="true">
+			<position x="-110" z="-350" y="-20"/>	
+			<scale x="250" y="250" z="250"/>			
+		</model>	
+
+		<effect_composer id="composer">
+			<effect id="effect_bleach" shader="bleachbypass">
+				<uniform id="opacity" value="0.4"/>
+			</effect>
+			<effect id="effect_color" shader="colorCorrection">
+				<uniform id="powRGB" value="vector3(1.4, 1.45, 1.45)"/>
+				<uniform id="mulRGB" value="vector3(1.1, 1.1, 1.1)"/>
+			</effect>
+			<effect id="effect_fxaa" shader="fxaa" render_to_screen="true">
+				<uniform id="resolution" value="vector3(1/app_width, 1/app_height)"/>
+			</effect>
+		</effect_composer>
+				
+	</scene>
+	
+</application>

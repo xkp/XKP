@@ -161,8 +161,8 @@ ev.ThreeEventManager = Class.extend(
 	get_3js_intersects: function(manager, x, y){		
 			var vector = new THREE.Vector3( ( x / manager.renderer.domElement.width ) * 2 - 1, - ( y / manager.renderer.domElement.height ) * 2 + 1, 0.5 );
 			projector = new THREE.Projector();
-			projector.unprojectVector( vector, active_camera );
-			var ray = new THREE.Ray( active_camera.position, vector.subSelf( active_camera.position ).normalize() );
+			projector.unprojectVector( vector, manager.active_camera );
+			var ray = new THREE.Ray( manager.active_camera.position, vector.subSelf( manager.active_camera.position ).normalize() );
 			this.intersects = ray.intersectObjects( manager.scene.__objects );					
 	},
 	
