@@ -298,6 +298,12 @@ void xss_module::set_path(fs::path p)
 
 void xss_module::register_module_type(XSSType type)
   {
+    if (host_)
+      {
+        host_->register_module_type(type);
+        return; //td: another weird mechanism
+      }
+
     type_list::iterator it = types_.find(type->id());
     if (it != types_.end())
 			{
@@ -315,6 +321,12 @@ void xss_module::register_module_type(XSSType type)
 void xss_module::register_user_type(XSSType type)
   {
     used();
+
+    if (host_)
+      {
+        host_->register_user_type(type);
+        return; //td: another weird mechanism
+      }
 
     register_module_type(type);
     utypes_->push_back(type);
@@ -337,9 +349,20 @@ void xss_module::used()
       }
   }
 
+void xss_module::set_host(XSSModule host)
+  {
+    host_ = host;
+  }
+
 void xss_module::register_instance(XSSObject obj)
   {
     used();
+
+    if (host_)
+      {
+        host_->register_instance(obj);
+        return; //td: another weird mechanism
+      }
 
     str obj_id = obj->id();
     if (!obj_id.empty() && obj_id != "application")
@@ -1099,6 +1122,9 @@ bool xss_compiler::parse_expression(variant v)
 			return false;
 
 		str s = variant_cast<str>(v, str());
+    if (s.empty())
+		  return false;
+
 		xs_compiler compiler;
 		expression expr;
 		return compiler.compile_expression(s, expr);
@@ -2073,6 +2099,13 @@ XSSModule xss_compiler::read_module(const str& src, XSSApplicationRenderer app, 
     XSSModule result(new xss_module(app->context()));
     result->set_definition(module_data);
     result->set_path(path.parent_path());
+
+    str host = module_data->get<str>("super", str());
+    if (!host.empty())
+      {
+        XSSModule host_module = app->get_idiom(host);
+        result->set_host(host_module);
+      }
 
     //read types
     read_types(module, app, result);

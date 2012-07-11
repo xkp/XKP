@@ -346,7 +346,7 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
             XSSType result = ctx_->get_type("var");
             XSSType xsti = lang_utils::resolve_type(arg2, ctx_);
 
-            if (xsti->is_array())
+            if (xsti && xsti->is_array())
               result = xsti->array_type();
 
             stack_.push(result);

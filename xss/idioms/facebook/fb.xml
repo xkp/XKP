@@ -1,0 +1,116 @@
+ <module id="fb" super="jquery" src="fb.xs">
+     <types>
+         <class id="like_button" super="component" tag="div" css_class="fb-like">
+             <property id="href" output_id="data-href" type="string" render_as="attribute" dont_init="true"/>
+             <property id="send" output_id="data-send" type="bool" value="true" render_as="attribute" dont_init="true"/>
+             <property id="layout" output_id="data-layout" type="string" render_as="attribute" dont_init="true"/>
+             <property id="width" css="false" output_id="data-width" type="int" required="true" render_as="attribute" dont_init="true"/>
+             <property id="show_faces" output_id="data-show-faces" type="bool" render_as="attribute" dont_init="true"/>
+             <property id="action" output_id="data-action" type="string" render_as="attribute" dont_init="true"/>
+             <property id="colorscheme" output_id="data-colorscheme" type="string" render_as="attribute" dont_init="true"/>
+             <property id="font" output_id="data-font" type="string" render_as="attribute" dont_init="true"/>
+         </class>
+
+         <class id="send_button" super="component" tag="div" css_class="fb-send">
+             <property id="href" output_id="data-href" type="string" render_as="attribute" dont_init="true"/>
+             <property id="font" output_id="data-font" type="string" render_as="attribute" dont_init="true"/>
+             <property id="send" output_id="data-send" type="bool" value="true" render_as="attribute" dont_init="true"/>
+             <property id="colorscheme" output_id="data-colorscheme" type="string" render_as="attribute" dont_init="true"/>
+             <property id="ref" output_id="data-ref" type="string" render_as="attribute" dont_init="true"/>
+         </class>
+
+         <class id="subscribe_button" super="component" tag="div" css_class="fb-subscribe">
+             <property id="href" output_id="data-href" type="string" render_as="attribute" dont_init="true"/>
+             <property id="layout" output_id="data-layout" type="string" render_as="attribute" dont_init="true"/>
+             <property id="show_faces" output_id="data-show-faces" type="bool" render_as="attribute" dont_init="true"/>
+             <property id="colorscheme" output_id="data-colorscheme" type="string" render_as="attribute" dont_init="true"/>
+             <property id="font" output_id="data-font" type="string" render_as="attribute" dont_init="true"/>
+             <property id="send" output_id="data-send" type="bool" value="true" render_as="attribute" dont_init="true"/>
+             <property id="width" css="false" output_id="data-width" type="int" required="true" render_as="attribute" dont_init="true"/>
+         </class>
+
+         <class id="activity_feed" super="component" tag="div" css_class="fb-activity">
+             <property id="site" output_id="data-site" type="string" render_as="attribute" dont_init="true"/>
+             <property id="app_id" output_id="data-app_id" type="string" render_as="attribute" dont_init="true"/>
+             <property id="width" css="false" output_id="data-width" type="int" required="true" render_as="attribute" dont_init="true"/>
+             <property id="height" css="false" output_id="data-height" type="int" required="true" render_as="attribute" dont_init="true"/>
+             <property id="header" output_id="data-header" type="bool" render_as="attribute" dont_init="true"/>
+             <property id="colorscheme" output_id="data-colorscheme" type="string" render_as="attribute" dont_init="true"/>
+             <property id="font" output_id="data-font" type="string" render_as="attribute" dont_init="true"/>
+             <property id="border_color" output_id="data-border_color" type="string" render_as="attribute" dont_init="true"/>
+             <property id="recommendations" output_id="data-recommendations" type="bool" render_as="attribute" dont_init="true"/>
+             <property id="filter" output_id="data-filter" type="string" render_as="attribute" dont_init="true"/>
+             <property id="linktarget" output_id="data-linktarget" type="string" render_as="attribute" dont_init="true"/>
+             <property id="ref" output_id="data-ref" type="string" render_as="attribute" dont_init="true"/>
+             <property id="max_age" output_id="data-max_age" type="int" render_as="attribute" dont_init="true"/>
+
+             <property id="send" output_id="data-send" type="bool" value="true" render_as="attribute" dont_init="true"/>
+         </class>
+
+         <class id="recommendations" super="component" tag="div" css_class="fb-recommendations">
+             <property id="site" output_id="data-site" type="string" render_as="attribute" dont_init="true"/>
+             <property id="action" output_id="data-action" type="string" render_as="attribute" dont_init="true"/>
+             <property id="app_id" output_id="data-app_id" type="string" render_as="attribute" dont_init="true"/>
+             <property id="width" css="false" output_id="data-width" type="int" required="true" render_as="attribute" dont_init="true"/>
+             <property id="height" css="false" output_id="data-height" type="int" required="true" render_as="attribute" dont_init="true"/>
+             <property id="header" output_id="data-header" type="bool" render_as="attribute" dont_init="true"/>
+             <property id="colorscheme" output_id="data-colorscheme" type="string" render_as="attribute" dont_init="true"/>
+             <property id="font" output_id="data-font" type="string" render_as="attribute" dont_init="true"/>
+             <property id="border_color" output_id="data-border_color" type="string" render_as="attribute" dont_init="true"/>
+             <property id="recommendations" output_id="data-recommendations" type="bool" render_as="attribute" dont_init="true"/>
+             <property id="filter" output_id="data-filter" type="string" render_as="attribute" dont_init="true"/>
+             <property id="linktarget" output_id="data-linktarget" type="string" render_as="attribute" dont_init="true"/>
+             <property id="ref" output_id="data-ref" type="string" render_as="attribute" dont_init="true"/>
+             <property id="max_age" output_id="data-max_age" type="int" render_as="attribute" dont_init="true"/>
+
+             <property id="send" output_id="data-send" type="bool" value="true" render_as="attribute" dont_init="true"/>
+         </class>
+
+
+         <class id="like_box" super="component" tag="div" css_class="fb-like-box">
+             <property id="href" output_id="data-href" type="string" render_as="attribute" dont_init="true"/>
+             <property id="width" css="false" output_id="data-width" type="int" required="true" render_as="attribute" dont_init="true"/>
+             <property id="height" css="false" output_id="data-height" type="int" required="true" render_as="attribute" dont_init="true"/>
+             <property id="colorscheme" output_id="data-colorscheme" type="string" render_as="attribute" dont_init="true"/>
+             <property id="show_faces" output_id="data-show-faces" type="bool" render_as="attribute" dont_init="true"/>
+             <property id="border_color" output_id="data-border_color" type="string" render_as="attribute" dont_init="true"/>
+             <property id="stream" output_id="data-stream" type="bool" render_as="attribute" dont_init="true"/>
+             <property id="header" output_id="data-header" type="bool" render_as="attribute" dont_init="true"/>
+             <property id="force_wall" output_id="data-force-wall" type="bool" render_as="attribute" dont_init="true"/>
+
+             <property id="send" output_id="data-send" type="bool" value="true" render_as="attribute" dont_init="true"/>
+         </class>
+
+         <class id="logon_button" super="component" tag="div" css_class="fb-login-button">
+             <property id="show_faces" output_id="data-show-faces" type="bool" render_as="attribute" dont_init="true"/>
+             <property id="width" css="false" output_id="data-width" type="int" required="true" render_as="attribute" dont_init="true"/>
+             <property id="max_rows" output_id="data-max-rows" type="int" render_as="attribute" dont_init="true"/>
+             <property id="scope" output_id="data-scope" type="string" render_as="attribute" dont_init="true"/>
+             <property id="registration_url" output_id="data-registration-url" type="string" render_as="attribute" dont_init="true"/>
+
+             <property id="send" output_id="data-send" type="bool" value="true" render_as="attribute" dont_init="true"/>
+         </class>
+
+         <class id="facepile" super="component" tag="div" css_class="fb-facepile">
+             <property id="href" output_id="data-href" type="string" render_as="attribute" dont_init="true"/>
+             <property id="action" output_id="data-action" type="string" render_as="attribute" dont_init="true"/>
+             <property id="app_id" output_id="data-app_id" type="string" render_as="attribute" dont_init="true"/>
+             <property id="max_rows" output_id="data-max-rows" type="int" render_as="attribute" dont_init="true"/>
+             <property id="width" css="false" output_id="data-width" type="int" required="true" render_as="attribute" dont_init="true"/>
+             <property id="size" output_id="data-size" type="string" render_as="attribute" dont_init="true"/>
+             <property id="colorscheme" output_id="data-colorscheme" type="string" render_as="attribute" dont_init="true"/>
+
+             <property id="send" output_id="data-send" type="bool" value="true" render_as="attribute" dont_init="true"/>
+         </class>
+
+         <class id="comments" super="component" tag="div" css_class="fb-comments">
+             <property id="href" output_id="data-href" type="string" render_as="attribute" dont_init="true"/>
+             <property id="width" css="false" output_id="data-width" type="int" required="true" render_as="attribute" dont_init="true"/>
+             <property id="colorscheme" output_id="data-colorscheme" type="string" render_as="attribute" dont_init="true"/>
+             <property id="num_posts" output_id="data-num-posts" type="int" render_as="attribute" dont_init="true"/>
+             <property id="mobile" output_id="data-mobile" type="bool" render_as="attribute" dont_init="true"/>
+
+             <property id="send" output_id="data-send" type="bool" value="true" render_as="attribute" dont_init="true"/>
+         </class>
+     </types>
+</module>

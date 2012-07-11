@@ -1,5 +1,5 @@
 <module id="jsmanipulate" src="jsmanipulate.xs">
-    <dependency href="resig.js" shared="true"/>
+    <dependency href="../js/resig.js" shared="true"/>
 
     <dependency href="jsmanipulate.js"/>	  
 	<dependency href="jsm-manager.js"/>

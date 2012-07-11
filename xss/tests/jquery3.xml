@@ -1,5 +1,8 @@
 <application name="Components" title="Testing components" src="jquery3.xs">
-    <gmap id="myMap" x="100" y="10" width="300" height="300" center="57.7973333,12.0502107" zoom="10" disableDefaultUI="true">
-        
-    </gmap>
+    <div>
+        <gmap id="myMap" x="100" y="10" width="300" height="300" center="57.7973333,12.0502107" zoom="10" disableDefaultUI="true">
+        </gmap>
+
+        <like_button x="500" y="10" width="300" height="300" href="www.google.com"/>
+    </div>
 </application>

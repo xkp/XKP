@@ -40,7 +40,7 @@ namespace xkp
       iterator begin();
       iterator end();
       void     push_back(const tag t); 
-      int      find(const str& id);
+      int      find(const str& id, bool include_tag_name = false);
       tag&     get(int idx);
       size_t   size();
       void     inner_tags(int& tag_idx, tag_list& rep_tags);

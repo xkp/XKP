@@ -78,7 +78,7 @@ Released   : 20120325
 				</input>
 </div>
 </tr><tr style="vertical-align:top">
-<div id="acc1">
+<div id="toolbox">
             <h3><a href="#">Brightness  Constrast</a></h3>
 <div id="__div3">
 				<label id="__label1"
@@ -183,7 +183,7 @@ Released   : 20120325
             <script type="text/javascript" src="../js/jsmanipulate/jsm-utils.js"></script>
 <style>
 #__div2 {height : 40px}
-#acc1 {height : 360px}
+#toolbox {height : 360px}
 #image_container {width : 605px;height : 375px}
 </style>
 <script type="text/javascript">
@@ -191,7 +191,7 @@ Released   : 20120325
 			var __div1 = $("#__div1");
 			var __div2 = $("#__div2");
 			var preset_apply = $("#preset_apply").button();
-			var acc1 = $("#acc1");
+			var toolbox = $("#toolbox");
 			var __div3 = $("#__div3");
 			var __label1 = $("#__label1");
 			var __br1 = $("#__br1");
@@ -228,29 +228,36 @@ Released   : 20120325
 			var range = $("#range");
 			var image_container = $("#image_container");
 		    preset_apply.click( function() { 
-			var image_data = application.get_image_data();
+			var to_transform = application.image_data;
 JQUComponent.set_enabled(preset_apply, false);
 preset_apply.attr("value", "Applying...");
 var __worker1 = new Worker('__asynch1.js');
 __worker1.onmessage = function(message) {
 if (message.data.id == '__wwmsg1') {
-var image_data = message.data.image_data;application.set_image_data(image_data);
+var result = message.data.result;application.set_image_data(result);
 JQUComponent.set_enabled(preset_apply, true);
 preset_apply.attr("value", "Apply Stack");
 }
 }
-__worker1.postMessage({mypreset : transformer,image : image_data,});
+__worker1.postMessage({mypreset : transformer,image : to_transform,});
 		});
-            acc1.accordion({
+            toolbox.accordion({
                 fillSpace: true,
-            });
+		    change: function(event, ui) { 
+	     if (application.current_image)
+{
+application.set_image(application.current_image);
+application.apply_filter();
+}
+		    },
+	    });
             brightness.slider({
                 min: -100,
                 max: 100,
                 value: 0,
 		    change: function(event, ui) { 
 	     transformer.b_filter.set_amount(brightness.slider( "option", "value" ) / 100);
-application.apply_filter(transformer.b_filter);
+application.apply_filter();
 		    },
 	    });
             constrast.slider({
@@ -259,7 +266,7 @@ application.apply_filter(transformer.b_filter);
                 value: 100,
 		    change: function(event, ui) { 
 	     transformer.c_filter.set_amount(constrast.slider( "option", "value" ) / 100);
-application.apply_filter(transformer.c_filter);
+application.apply_filter();
 		    },
 	    });
             noise.slider({
@@ -268,7 +275,7 @@ application.apply_filter(transformer.c_filter);
                 value: 0,
 		    change: function(event, ui) { 
 	     transformer.n_filter.set_amount(noise.slider( "option", "value" ));
-application.apply_filter(transformer.n_filter);
+application.apply_filter();
 		    },
 	    });
             density.slider({
@@ -277,12 +284,12 @@ application.apply_filter(transformer.n_filter);
                 value: 0,
 		    change: function(event, ui) { 
 	     transformer.n_filter.set_density(density.slider( "option", "value" ) / 100);
-application.apply_filter(transformer.n_filter);
+application.apply_filter();
 		    },
 	    });
 		    mono.change( function() { 
 			transformer.n_filter.set_monochrome(JQUCheckbox.get_checked(mono));
-application.apply_filter(transformer.n_filter);
+application.apply_filter();
 		});
 mono.__input = "#mono_input";
 mono.__label = "#mono_label";
@@ -293,7 +300,7 @@ mono.__label = "#mono_label";
                 value: 0,
 		    change: function(event, ui) { 
 	     transformer.s_filter.set_amount(sepia.slider( "option", "value" ));
-application.apply_filter(transformer.s_filter);
+application.apply_filter();
 		    },
 	    });
 		    sepia_enabled.change( function() { 
@@ -307,16 +314,11 @@ sepia_enabled.__label = "#sepia_enabled_label";
                 value: 0,
 		    change: function(event, ui) { 
 	     transformer.o_filter.set_range(range.slider( "option", "value" ));
-application.apply_filter(transformer.o_filter);
+application.apply_filter();
 		    },
 	    });
-	application.set_image = function(id) 
-	{
-		var image = document.getElementById(id);
-var target = document.getElementById("image_container");
-var context = target.getContext("2d");
-context.drawImage(image, 0, 0, target.width, target.height);
-	};
+            application.current_image = null;
+            application.image_data = null;
 	application.get_image_data = function() 
 	{
 		var target = document.getElementById("image_container");
@@ -329,10 +331,29 @@ return context.getImageData(0, 0, target.width, target.height);
 var context = target.getContext("2d");
 context.putImageData(data, 0, 0);
 	};
-	application.apply_filter = function(filter) 
+	application.set_image = function(id) 
 	{
-		var imgdata = application.get_image_data();
+		application.current_image = id;
+var image = document.getElementById(id);
+var target = document.getElementById("image_container");
+var context = target.getContext("2d");
+context.drawImage(image, 0, 0, target.width, target.height);
+application.image_data = application.get_image_data();
+	};
+	application.apply_filter = function() 
+	{
+		application.set_image_data(application.image_data);
+var imgdata = application.get_image_data();
+if (toolbox.accordion("option", "active") > 0)
+{
+var filter = transformer.filters[toolbox.accordion("option", "active") + 1];
 filter.applyToImage(imgdata);
+}
+else
+{
+transformer.b_filter.applyToImage(imgdata);
+transformer.c_filter.applyToImage(imgdata);
+}
 application.set_image_data(imgdata);
 	};
 		application.init = function() { 
@@ -359,22 +380,17 @@ application.set_image_data(imgdata);
 		if(!transformer.filters)
 			transformer.filters = [];
 		transformer.filters.push(transformer.c_filter);
-			transformer.color_filter = new jsmanip.RGBadjust(
-		1,1,1,transformer);		
+			transformer.n_filter = new jsmanip.Noise(
+		null,null,null,transformer);		
 		if(!transformer.filters)
 			transformer.filters = [];
-		transformer.filters.push(transformer.color_filter);
+		transformer.filters.push(transformer.n_filter);
 			transformer.s_filter = new jsmanip.Sepia(
 		0,transformer);		
 		if(!transformer.filters)
 			transformer.filters = [];
 		transformer.filters.push(transformer.s_filter);
             transformer.s_filter.set_enabled(0);
-			transformer.n_filter = new jsmanip.Noise(
-		null,null,null,transformer);		
-		if(!transformer.filters)
-			transformer.filters = [];
-		transformer.filters.push(transformer.n_filter);
 			transformer.o_filter = new jsmanip.Oil(
 		0,transformer);		
 		if(!transformer.filters)

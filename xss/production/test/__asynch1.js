@@ -8,6 +8,6 @@ new jsmanip.Preset();
 mypreset.deserialize(message.data.mypreset);
 var image = message.data.image;
 mypreset.apply(image);
-var __wwmsg1 = {id: '__wwmsg1',image_data : image,};
+var __wwmsg1 = {id: '__wwmsg1',result : image,};
 postMessage(__wwmsg1);
 }

@@ -1,0 +1,6 @@
+<project entry_point="../idioms/jquery/entry.xss" language="js" target="fbtest.xml" output="../production/test/fbtest.html">
+    <idiom src="../idioms/jquery/jquery.xml"/>
+    <idiom src="../idioms/facebook/fb.xml"/>
+</project>
+           
+         

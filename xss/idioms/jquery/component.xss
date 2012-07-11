@@ -33,6 +33,9 @@
 			{
 				<<xss:e value="class_name"/> id="<xss:e value="component.id"/>"
 			}
+            
+            if (component.css_class) 
+                out() { class="<xss:e value="component.css_class"/>" }
 				
 			//render some properties inside html tag
 			if(component.attributes)

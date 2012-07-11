@@ -137,11 +137,13 @@ namespace xkp
         bool               one_of_us(XSSObject obj);
         void               set_definition(XSSObject def);
         void               used();
+        void               set_host(XSSModule host);
       private:
         XSSContext   ctx_;
         size_t       ev_pprocess_;
         fs::path     path_;
         bool         used_; 
+        XSSModule    host_;
       private:
         //types
         typedef std::map<str, XSSType>  type_list;
