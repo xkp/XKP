@@ -53,10 +53,10 @@
 		exeExt = ".exe";
 	}
 
-	shell(working_path = appOutputPath)
+	shell(working_path = appOutputPath, shell_cmd = true)
 	{
-		rm@exeExt -R @appOutputPath/bin
-		rm@exeExt -R @appOutputPath/gen
+		rm@exeExt -R @appOutputPath/bin 2> /dev/null
+		rm@exeExt -R @appOutputPath/gen 2> /dev/null
 	}
 
 	//inject idiom event for render types

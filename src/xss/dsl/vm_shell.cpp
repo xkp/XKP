@@ -34,6 +34,7 @@ struct shellworker : IWorker
         str working_path;
         str environment_vars; //td: correctly
         bool break_errors = false;
+        bool shell_cmd = false;
 
         if (counter & 1)
           {
@@ -51,6 +52,12 @@ struct shellworker : IWorker
           {
             variant v = args.get(curr++);
             break_errors = variant_cast<bool>(v, false);
+          }
+
+        if (counter & 8)
+          {
+            variant v = args.get(curr++);
+            shell_cmd = variant_cast<bool>(v, false);
           }
 
         std::vector<ga_item>::iterator it = result_.begin();
@@ -101,9 +108,12 @@ struct shellworker : IWorker
 
                 std::vector<str>::iterator vit = valuable_items.begin();
                 std::vector<str>::iterator vnd = valuable_items.end();
+
+                std::string command;
                 for(; vit != vnd; vit++)
                   {
                     str arg = *vit;
+                    command += arg + " ";
 
                     //don't add empty params
                     if (!arg.empty())
@@ -112,29 +122,35 @@ struct shellworker : IWorker
 
                 //td: recover the result of execution and save into variable, how to?
                 //... this is temporal, only for debug purpose
+                //    now all file descriptors are closed, then redirect to file or variable
                 bp::context ctx;
                 ctx.add(bp::close_stream(bp::stdin_fileno))
-                   .add(bp::inherit_stream(bp::stdout_fileno))
-                   .add(bp::inherit_stream(bp::stderr_fileno));
+                   .add(bp::close_stream(bp::stdout_fileno))
+                   .add(bp::close_stream(bp::stderr_fileno));
 
                 if (!working_path.empty())
                   ctx.work_directory = working_path;
 
-                bp::child c = bp::launch(exe, args, ctx);
-                const bp::status s = c.wait();
+                bp::status s(0);
+                if (shell_cmd)
+                  s = bp::launch_shell(command, ctx).wait();
+                else
+                  s = bp::launch(exe, args, ctx).wait();
 
 //td: personalize class with static function or only functions
 #if defined(__unix__) || defined(__unix) || defined(unix) || defined(__linux__)
                 if (s.exited()) {
-                    std::cout << "Program returned exit code " << s.exit_status() << std::endl;
+                    //std::cout << "Program returned exit code " << s.exit_status() << std::endl;
                 } else if (s.signaled()) {
-                    std::cout << "Program received signal " << s.term_signal() << std::endl;
+                    //std::cout << "Program received signal " << s.term_signal() << std::endl;
                     if (s.dumped_core())
-                        std::cout << "Program also dumped core" << std::endl;
+                      {
+                        //std::cout << "Program also dumped core" << std::endl;
+                      }
                 } else if (s.stopped()) {
-                    std::cout << "Program stopped by signal" << s.stop_signal() << std::endl;
+                    //std::cout << "Program stopped by signal" << s.stop_signal() << std::endl;
                 } else {
-                    std::cout << "Unknown termination reason" << std::endl;
+                    //std::cout << "Unknown termination reason" << std::endl;
                 }
 #elif defined(_WIN32) || defined(_WIN64) || defined(__WIN32__)
 #endif
@@ -192,7 +208,7 @@ DSLWorker vm_shell::create_worker(dsl& info, code_linker& owner, std::vector<str
     std::vector<str> aux_exprs;
     if (info.param_count)
       {
-        str text = "working_path environment_vars break_errors";
+        str text = "working_path environment_vars break_errors shell_cmd";
         std::vector<str> params;
         boost::split(params, text, boost::is_space());
 

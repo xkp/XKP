@@ -4,6 +4,7 @@ var mysql = require("mysql");
 var application = {};
 application.myService = function (response, request)
 {
+<<<<<<< HEAD
     function return_function(return_value)
     {
         request.end(JSON.stringify(return_value))
@@ -278,6 +279,66 @@ application.myService = function (response, request)
     }
 };
 http.createServer(function (request, response)
+=======
+function __callback2() 
+{
+if (c < 20)
+{return_function(c);
+return true;
+}
+else
+{
+c += 20;
+bar_foo(function()
+{
+{
+return_function(return_value);
+});
+});
+}
+}
+foo_bar(function()
+{c += return_value;__callback2()
+});
+}
+foo_bar(function()
+{c = return_value;
+__callback1();
+});	};
+	application.service1 = function() 
+	{
+		function __callback3() 
+{
+var x = 10;
+function __callback4() 
+{
+return_function(x);
+return true;
+}
+bar(function()
+{__callback4()
+});
+}
+bar(function()
+{
+	if (return_value)
+	{
+util1(function()
+{
+{
+return_function(return_value);
+});
+});
+	}
+	else
+{
+bar_foo(function()
+{()
+});
+	}
+});	};
+http.createServer(function(request, response) 
+>>>>>>> 273df89e2f4f6f6016ad845cc461c087619d31da
 {
     var pathname = url.parse(request.url).pathname;
     if (pathname == 'myService')

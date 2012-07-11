@@ -256,7 +256,7 @@ void ga_parser::parse_item(const str& text, ga_item& result)
             bool found = false;
             for(size_t it = token_pos + 1; it < item.size(); it++)
               {
-                if (!boost::is_alpha()(item[it]) && !boost::is_digit()(item[it]) && item[it] != '.')
+                if (!boost::is_alpha()(item[it]) && !boost::is_digit()(item[it]))
                   {
                     size_t count = it - token_pos - 1;
                     param.id = str(item, token_pos + 1, count);

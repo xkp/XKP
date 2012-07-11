@@ -108,19 +108,31 @@ Error [cannot-resolve] Unknown identifier
 
 
 Error [404] File not found
+<<<<<<< HEAD
 	file = c:/dev/XKP/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
+=======
+	file = d:/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
+>>>>>>> 273df89e2f4f6f6016ad845cc461c087619d31da
 
 ===[ pairs.project.xml ]================
 
 
 Error [404] File not found
+<<<<<<< HEAD
 	file = c:/dev/XKP/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
+=======
+	file = d:/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
+>>>>>>> 273df89e2f4f6f6016ad845cc461c087619d31da
 
 ===[ simple.project.xml ]================
 
 
 Error [404] File not found
+<<<<<<< HEAD
 	file = c:/dev/XKP/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
+=======
+	file = d:/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
+>>>>>>> 273df89e2f4f6f6016ad845cc461c087619d31da
 
 ===[ 3js-ms.project.xml ]================(Tests)
 
@@ -1575,7 +1587,11 @@ Success are greateful
 Error [syntax-error] Error while compiling xs
 	line = 4
 	column = 1
+<<<<<<< HEAD
 	file = c:/dev/XKP/xss/tests/xss5.xssERROR: Project:  xss5.project.xml
+=======
+	file = d:/xkp/xss/tests/xss5.xssERROR: Project:  xss5.project.xml
+>>>>>>> 273df89e2f4f6f6016ad845cc461c087619d31da
 
 ===[ xss6.project.xml ]================(Tests)
 
