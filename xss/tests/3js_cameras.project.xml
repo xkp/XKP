@@ -1,4 +1,0 @@
-<project entry_point="../idioms/threejs/app.xss" language="js" target="3js_cameras.xml" output="../production/test/3js_cameras.html">
-
-	<idiom src="../idioms/threejs/module.xml"/>
-</project>

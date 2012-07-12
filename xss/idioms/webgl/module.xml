@@ -9,6 +9,16 @@
 	<dependency href="../js/three/Utils.js"/>
 	<dependency href="../js/three/Detector.js"/>
 	<dependency href="../js/three/fonts.js"/>
+	<dependency href="../js/three/ShaderExtras.js"/>
+	
+	<dependency href="../js/three/postprocessing/EffectComposer.js"/>
+	<dependency href="../js/three/postprocessing/RenderPass.js"/>
+	<dependency href="../js/three/postprocessing/ShaderPass.js"/>
+	<dependency href="../js/three/postprocessing/BloomPass.js"/>
+	<dependency href="../js/three/postprocessing/FilmPass.js"/>
+	<dependency href="../js/three/postprocessing/DotScreenPass.js"/>
+	<dependency href="../js/three/postprocessing/TexturePass.js"/>
+	<dependency href="../js/three/postprocessing/MaskPass.js"/>
 	<types>
 	
 		<class id="vector3d">		
@@ -522,6 +532,14 @@
 			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>
 		</class>		
+		
+		<class id="effect_composer" renderer="postproc_renderer.xss"/>
+		
+		<class id="effect" renderer="postproc_renderer.xss">
+			<property id="render_to_screen" output_id="renderToScreen" type="bool"/>
+			<property id="enabled" type="bool"/>
+		</class>	
+		
 	</types>
 	
 </module>

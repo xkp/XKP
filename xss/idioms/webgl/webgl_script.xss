@@ -24,7 +24,6 @@ if(canvas_name)
 var ui_;
 
 var canvas_position = {x:0, y:0};
-var active_camera;
 var g_elapsed;
 var g_delta;	
 var scene = new THREE.Scene();

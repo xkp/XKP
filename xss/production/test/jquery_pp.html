@@ -1,0 +1,609 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+Name       : Refillable  
+Description: A two-column, fixed-width design with color scheme.
+Version    : 1.0
+Released   : 20120325
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>webgl post processing demo</title>
+<link href="wgl_pp_style.css" rel="stylesheet" type="text/css" media="screen" />
+<style type="text/css">
+@import "gallery.css";
+</style>
+</head>
+<body>
+<div id="wrapper">
+	<div id="header">
+		<div id="logo">
+			<h1><a href="#">webgl post processing demo </a></h1>
+			<p> design by <a href="http://www.freecsstemplates.org/">Free CSS Templates</a></p>
+		</div>
+	</div>
+	<!-- end #header -->
+	<div id="menu">
+		<ul>
+			<li class="current_page_item"><a href="#">Home</a></li>
+			<li><a href="#">Blog</a></li>
+			<li><a href="#">Photos</a></li>
+			<li><a href="#">About</a></li>
+			<li><a href="#">Links</a></li>
+			<li><a href="#">Contact</a></li>
+		</ul>
+	</div>
+	<!-- end #menu -->
+	<div id="page">
+		<div id="page-bgtop">
+			<div id="page-bgbtm">
+				<div id="content">
+					<div id="gallery-wrapper">
+						<div id="gallery">
+                            <div id="target-container" style="padding: 10px">
+				<canvas id="app"
+			>
+				</canvas>
+                            </div>                          
+							<br class="clear" />
+						</div>
+						<!-- end -->
+					</div>
+					<div style="clear: both;">&nbsp;</div>
+				</div>
+				<!-- end #content -->
+				<div id="sidebar">
+<div id="__div1">
+<div id="acc1">
+            <h3><a href="#">Color Effect</a></h3>
+<div id="__div2">
+            <div id="color_enabled">
+        <input id="color_enabled_input" type="checkbox" name="__div2"/>
+        <label id="color_enabled_label" for="color_enabled_input"> Enabled </label>
+            </div>
+</div>
+            <h3><a href="#">Power Color Effect</a></h3>
+<div id="__div3">
+				<label id="__label1"
+			>
+					Red
+				</label>
+<br/>
+<br/>
+				<div id="pc_red"
+			>
+				</div>
+<br/>
+				<label id="__label2"
+			>
+					Blue
+				</label>
+<br/>
+<br/>
+				<div id="pc_blue"
+			>
+				</div>
+<br/>
+				<label id="__label3"
+			>
+					Green
+				</label>
+<br/>
+<br/>
+				<div id="pc_green"
+			>
+				</div>
+</div>
+            <h3><a href="#">Multiply Color Effect</a></h3>
+<div id="__div4">
+				<label id="__label4"
+			>
+					Red
+				</label>
+<br/>
+<br/>
+				<div id="mc_red"
+			>
+				</div>
+<br/>
+				<label id="__label5"
+			>
+					Blue
+				</label>
+<br/>
+<br/>
+				<div id="mc_blue"
+			>
+				</div>
+<br/>
+				<label id="__label6"
+			>
+					Green
+				</label>
+<br/>
+<br/>
+				<div id="mc_green"
+			>
+				</div>
+</div>
+            <h3><a href="#">Bleach By Pass Effect</a></h3>
+<div id="__div5">
+            <div id="bleach_enabled">
+        <input id="bleach_enabled_input" type="checkbox" name="__div5"/>
+        <label id="bleach_enabled_label" for="bleach_enabled_input"> Enabled </label>
+            </div>
+</div>
+</div>
+</div>
+				</div>
+				<!-- end #sidebar -->
+				<div style="clear: both;">&nbsp;</div>
+			</div>
+		</div>
+	</div>
+	<!-- end #page -->
+</div>
+<div id="footer">
+	<p>Copyright (c) 2012 www.codexcess.com. All rights reserved. Design by <a href="http://www.freecsstemplates.org/">Free CSS Templates</a>.</p>
+</div>
+<!-- end #footer -->
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+            <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
+            <script type="text/javascript" src="../js/jquery-idiom.js"></script>
+            <link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css"></link>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/Detector.js"></script>
+            <script type="text/javascript" src="../js/three/fonts.js"></script>
+            <script type="text/javascript" src="../js/three/ShaderExtras.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/EffectComposer.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/RenderPass.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/ShaderPass.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/BloomPass.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/FilmPass.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/DotScreenPass.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/TexturePass.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/MaskPass.js"></script>
+<style>
+#acc1 {height : 360px}
+#app {width : 500px;height : 500px}
+</style>
+<script type="text/javascript">
+        var application = {};
+			var __div1 = $("#__div1");
+			var acc1 = $("#acc1");
+			var __div2 = $("#__div2");
+			var color_enabled = $("#color_enabled").button();
+			var __div3 = $("#__div3");
+			var __label1 = $("#__label1");
+			var __br1 = $("#__br1");
+			var __br2 = $("#__br2");
+			var pc_red = $("#pc_red");
+			var __br3 = $("#__br3");
+			var __label2 = $("#__label2");
+			var __br4 = $("#__br4");
+			var __br5 = $("#__br5");
+			var pc_blue = $("#pc_blue");
+			var __br6 = $("#__br6");
+			var __label3 = $("#__label3");
+			var __br7 = $("#__br7");
+			var __br8 = $("#__br8");
+			var pc_green = $("#pc_green");
+			var __div4 = $("#__div4");
+			var __label4 = $("#__label4");
+			var __br9 = $("#__br9");
+			var __br10 = $("#__br10");
+			var mc_red = $("#mc_red");
+			var __br11 = $("#__br11");
+			var __label5 = $("#__label5");
+			var __br12 = $("#__br12");
+			var __br13 = $("#__br13");
+			var mc_blue = $("#mc_blue");
+			var __br14 = $("#__br14");
+			var __label6 = $("#__label6");
+			var __br15 = $("#__br15");
+			var __br16 = $("#__br16");
+			var mc_green = $("#mc_green");
+			var __div5 = $("#__div5");
+			var bleach_enabled = $("#bleach_enabled").button();
+			var app = $("#app");
+            acc1.accordion({
+                fillSpace: true,
+            });
+		    color_enabled.change( function() { 
+			application.colorenabled = JQUCheckbox.get_checked(color_enabled);
+application.needs_update = true;
+		});
+color_enabled.__input = "#color_enabled_input";
+color_enabled.__label = "#color_enabled_label";
+            pc_red.slider({
+                min: 0,
+                max: 200,
+                value: 40,
+		    change: function(event, ui) { 
+	     application.pcred = pc_red.slider( "option", "value" ) / 100 + 1;
+application.needs_update = true;
+		    },
+	    });
+            pc_blue.slider({
+                min: 0,
+                max: 200,
+                value: 45,
+		    change: function(event, ui) { 
+	     application.pcblue = pc_blue.slider( "option", "value" ) / 100 + 1;
+application.needs_update = true;
+		    },
+	    });
+            pc_green.slider({
+                min: 0,
+                max: 200,
+                value: 45,
+		    change: function(event, ui) { 
+	     application.pcgreen = pc_green.slider( "option", "value" ) / 100 + 1;
+application.needs_update = true;
+		    },
+	    });
+            mc_red.slider({
+                min: 0,
+                max: 200,
+                value: 10,
+		    change: function(event, ui) { 
+	     application.mcred = mc_red.slider( "option", "value" ) / 100 + 1;
+application.needs_update = true;
+		    },
+	    });
+            mc_blue.slider({
+                min: 0,
+                max: 200,
+                value: 10,
+		    change: function(event, ui) { 
+	     application.mcblue = mc_blue.slider( "option", "value" ) / 100 + 1;
+application.needs_update = true;
+		    },
+	    });
+            mc_green.slider({
+                min: 0,
+                max: 200,
+                value: 10,
+		    change: function(event, ui) { 
+	     application.mcgreen = mc_green.slider( "option", "value" ) / 100 + 1;
+application.needs_update = true;
+		    },
+	    });
+		    bleach_enabled.change( function() { 
+			application.bleachenabled = JQUCheckbox.get_checked(bleach_enabled);
+application.needs_update = true;
+		});
+bleach_enabled.__input = "#bleach_enabled_input";
+bleach_enabled.__label = "#bleach_enabled_label";
+            app.application = (function (host)
+{
+if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+			var canvasElement = document.getElementById("app");	
+			var renderer = new THREE.WebGLRenderer({canvas:canvasElement, antialias: false});
+			renderer.domElement.width = renderer.domElement.offsetWidth;
+			renderer.domElement.height = renderer.domElement.offsetHeight;
+		var ui_;
+var canvas_position = {x:0, y:0};
+var g_elapsed;
+var g_delta;	
+var scene = new THREE.Scene();
+scene.mouse_thru = true;
+var streamer;
+var app_width = canvasElement.width;
+var app_height = canvasElement.height;
+var application = {};
+var clock = new THREE.Clock();
+application.events = new ev.EventHolder();
+		var streamer = new stream.Streamer();	
+		var ResourceUtils = new stream.ResourceUtils();
+	// --------RESOURCES---------
+		var global_package = new stream.Package(streamer);	
+                global_package.add_item(
+            {
+		id:				"res_model",
+		resource_type:	RESOURCE_JSON_MODEL,
+		src:			"model/leeperrysmith/LeePerrySmith.js",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var res_model;
+				global_package.events.addListener("loaded", function()
+				{
+					res_model = streamer.get_resource("res_model");
+				});
+                global_package.add_item(
+            {
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"model/leeperrysmith/Infinite-Level_02_Tangent_SmoothUV.jpg",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+                global_package.add_item(
+            {
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"model/leeperrysmith/Map-COL.jpg",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var __image2;
+				global_package.events.addListener("loaded", function()
+				{
+					__image2 = streamer.get_resource("__image2");
+				});
+                global_package.add_item(
+            {
+		id:				"__image3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"model/leeperrysmith/Map-SPEC.jpg",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[]
+});	
+				var __image3;
+				global_package.events.addListener("loaded", function()
+				{
+					__image3 = streamer.get_resource("__image3");
+				});
+		global_package.add_item({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});		
+		global_package.load();	
+    // --------RESOURCES---------
+renderer.setSize( app_width, app_height );
+var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
+manager.events = new ev.EventHolder();
+function render() {
+manager.canvas_position = getElementPosition(renderer.domElement);
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+	g_delta = 0; //first update
+else
+	g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+c_delta = clock.getDelta(),
+c_elapsed = clock.getElapsedTime() * 10;
+manager.events.dispatch("update", [g_delta, g_elapsed]);	
+				manager.scene.add(camera_1);
+				set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+var shader_mat1;var camera_1;var a_ligth;var d_ligth_1;var head_model;var composer;var effect_bleach;var effect_color;var effect_fxaa;
+threejs_load_resources(manager, function()
+{
+		var shader_mat1_shader = THREE.ShaderUtils.lib[ "normal" ];
+		var shader_mat1_uniforms = THREE.UniformsUtils.clone( shader_mat1_shader.uniforms );
+			shader_mat1_uniforms[ 'tNormal' ]						
+				.texture = THREE.ImageUtils.loadTexture( manager.streamer.get_resource('model/leeperrysmith/Infinite-Level_02_Tangent_SmoothUV.jpg').asset )		
+			;
+			shader_mat1_uniforms[ 'uNormalScale' ]						
+				.value = -0.800000012
+			;
+			shader_mat1_uniforms[ 'tDiffuse' ]						
+				.texture = THREE.ImageUtils.loadTexture( manager.streamer.get_resource('model/leeperrysmith/Map-COL.jpg').asset )		
+			;
+			shader_mat1_uniforms[ 'tSpecular' ]						
+				.texture = THREE.ImageUtils.loadTexture( manager.streamer.get_resource('model/leeperrysmith/Map-SPEC.jpg').asset )		
+			;
+			shader_mat1_uniforms[ 'enableAO' ]						
+				.value = false
+			;
+			shader_mat1_uniforms[ 'enableDiffuse' ]						
+				.value = true
+			;
+			shader_mat1_uniforms[ 'enableSpecular' ]						
+				.value = true
+			;
+			shader_mat1_uniforms[ 'uDiffuseColor' ]						
+				.value = color(0xbbbbbb)
+			;
+			shader_mat1_uniforms[ 'uSpecularColor' ]						
+				.value = color(0x060606)
+			;
+			shader_mat1_uniforms[ 'uAmbientColor' ]						
+				.value = color(0x111111)
+			;
+			shader_mat1_uniforms[ 'uShininess' ]						
+				.value = 35
+			;
+			shader_mat1_uniforms[ 'wrapRGB' ]						
+				.value = vector3(0.575, 0.5, 0.5)
+			;
+	shader_mat1 = new THREE.ShaderMaterial({
+lights:true,
+		uniforms: shader_mat1_uniforms,
+		vertexShader: shader_mat1_shader.vertexShader,
+		fragmentShader: shader_mat1_shader.fragmentShader
+		});
+		shader_mat1.manager = manager;
+		    camera_1 = 
+		    new THREE.PerspectiveCamera(75, 1.5, 1, 10000, null) ;	
+			manager.active_camera = camera_1;
+camera_1.manager = manager;
+	    a_ligth = 
+	    new THREE.AmbientLight(ivory) ;
+	    manager.scene.add(a_ligth);
+a_ligth.manager = manager;
+	    d_ligth_1 = 
+	    new THREE.DirectionalLight(white, 1.20000005, 0, null) ;
+	    manager.scene.add(d_ligth_1);
+d_ligth_1.manager = manager;
+	head_model = new THREE.Object3D();
+	var head_model_loader = 
+	generate_model_loader(manager.streamer.get_resource('res_model').type);
+		head_model_loader.load(
+				manager.streamer.get_resource('res_model').asset , function( geometry )
+			{
+				var head_model_mesh = new THREE.Mesh(geometry, shader_mat1);
+				head_model.add(head_model_mesh);
+            if(1) geometry.computeTangents();
+            head_model.position.x = -300;
+            head_model.position.z = -400;
+            head_model.position.y = -20;
+            head_model.scale.x = 250;
+            head_model.scale.y = 250;
+            head_model.scale.z = 250;
+				manager.scene.add(head_model);
+			} 		
+	);
+	head_model.events = new ev.EventHolder();
+head_model.manager = manager;
+		var renderModel = new THREE.RenderPass( scene, manager.active_camera );
+		composer = new THREE.EffectComposer( renderer );
+		composer.addPass( renderModel );
+		manager.active_composer = composer;
+	composer.manager = manager;
+		effect_bleach = new THREE.ShaderPass( THREE.ShaderExtras[ "bleachbypass" ] );
+			effect_bleach.uniforms[ 'opacity' ]						
+				.value = 0.400000006
+			;
+		composer.addPass( effect_bleach );	
+	effect_bleach.manager = manager;
+		effect_color = new THREE.ShaderPass( THREE.ShaderExtras[ "colorCorrection" ] );
+			effect_color.uniforms[ 'powRGB' ]						
+				.value = vector3(1.4, 1.45, 1.45)
+			;
+			effect_color.uniforms[ 'mulRGB' ]						
+				.value = vector3(1.1, 1.1, 1.1)
+			;
+		composer.addPass( effect_color );	
+	effect_color.manager = manager;
+		effect_fxaa = new THREE.ShaderPass( THREE.ShaderExtras[ "fxaa" ] );
+			effect_fxaa.uniforms[ 'resolution' ]						
+				.value = vector3(1/app_width, 1/app_height)
+			;
+		composer.addPass( effect_fxaa );	
+	effect_fxaa.manager = manager;
+            manager.events.addListener('update', function(){camera_1.lookAt(head_model.position)});
+            camera_1.position.z = 1000;
+            d_ligth_1.position.y = -70;
+            d_ligth_1.position.z = 100;
+            effect_fxaa.renderToScreen = true;
+	application.events.addListener("update", function()
+	{    
+		set_rotation_y(head_model.rotation, get_rotation_y(head_model.rotation) + 0.300000012);
+if (host.needs_update)
+{
+effect_bleach.enabled = host.bleachenabled;
+effect_color.enabled = host.colorenabled;
+host.needs_update = false;
+}
+	}
+	);
+var event_manager = new ev.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(manager, ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(manager, ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(manager, ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(manager, ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(manager, ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(manager, ev.keyCode);                  
+};
+manager.events.addListener("mousedown", function(x,y)
+{    
+	application.events.dispatch("mousedown", [x, y]);
+});
+manager.events.addListener("mouseup", function(x,y)
+{    
+	application.events.dispatch("mouseup", [x, y]);
+});
+manager.events.addListener("mousemove", function(x,y)
+{    
+	application.events.dispatch("mousemove", [x, y]);
+});
+manager.events.addListener("click", function(x,y)
+{    
+	application.events.dispatch("click", [x, y]);
+});
+manager.events.addListener("drag", function(x,y)
+{    
+	application.events.dispatch("drag", [x, y]);
+});
+manager.events.addListener("dragend", function(x,y)
+{    
+	application.events.dispatch("dragend", [x, y]);
+});
+manager.events.addListener("keyup", function(keycode)
+{    
+	application.events.dispatch("keyup", [keycode]);
+});
+manager.events.addListener("keydown", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("keypress", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("update", function(delta, elapsed)
+{    
+	application.events.dispatch("update", [delta, elapsed]);
+});
+application.events.dispatch("init", []);
+animate();
+});
+function animate() {	
+	requestAnimationFrame( animate );
+	render();	
+}
+})(application);
+            application.mcred = 1.10000002;
+            application.mcgreen = 1.10000002;
+            application.mcblue = 1.10000002;
+            application.pcred = 1.45000005;
+            application.pcgreen = 1.39999998;
+            application.pcblue = 1.39999998;
+            application.colorenabled = true;
+            application.bleachenabled = true;
+            application.needs_update = true;
+		application.init = function() { 
+			JQUCheckbox.set_checked(color_enabled, true);
+JQUCheckbox.set_checked(bleach_enabled, true);
+		}
+                    if (application.init)
+                        application.init();
+</script>
+</body>
+</html>
