@@ -1,0 +1,10 @@
+<xss:code>
+for(var mthd in application.methods)
+{
+	out()
+	{
+		method: <xss:e v="mthd.id"/>
+        code: <xss:e v="mthd.code.render()"/>
+	}
+}
+</xss:code>

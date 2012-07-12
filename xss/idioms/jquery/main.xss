@@ -31,6 +31,7 @@
 </head>
 
 <body>
+    <xss:marker id="body"/>
     <xss:code>
         for(var i in application.children)
         {

@@ -1,11 +1,5 @@
-
-method set_image(id)
-{
-    var image = document.getElementById(id);
-    var target = document.getElementById("image_container");
-    var context = target.getContext("2d");
-    context.drawImage(image, 0, 0, target.width, target.height);
-}
+var current_image;
+var image_data;
 
 method get_image_data()
 {
@@ -21,10 +15,44 @@ method set_image_data(data)
     context.putImageData(data, 0, 0);
 }
 
-method apply_filter(filter)
+method set_image(id)
 {
-    var imgdata = get_image_data();
-    filter.applyToImage(imgdata);
+    current_image = id;
+
+    var image = document.getElementById(id);
+    var target = document.getElementById("image_container");
+    var context = target.getContext("2d");
+    context.drawImage(image, 0, 0, target.width, target.height);
+    image_data = get_image_data();
+}
+
+on toolbox.change()
+{
+    if (current_image)
+    {
+        set_image(current_image);
+        apply_filter();
+    }
+}
+
+method apply_filter()
+{
+    set_image_data(image_data);     //restore original
+    var imgdata = get_image_data(); //create a copy
+    
+    //get the filters from the current accordion page
+    if (toolbox.active > 0)
+    {
+        var filter = transformer.filters[toolbox.active + 1];
+        filter.applyToImage(imgdata);
+    }
+    else
+    {
+        //brightness and constrast are in the same page
+        transformer.b_filter.applyToImage(imgdata);
+        transformer.c_filter.applyToImage(imgdata);
+    }
+    
     set_image_data(imgdata);
 }
 
@@ -45,18 +73,18 @@ on init()
 //apply preset, in another thread
 on preset_apply.click()
 {
-    var image_data = get_image_data();
+    var to_transform = image_data;
     preset_apply.enabled = false;
     preset_apply.caption = "Applying...";
 
-    asynch(mypreset = transformer, image = image_data)
+    asynch(mypreset = transformer, image = to_transform)
     {
         mypreset.apply(image);
 
         //this will run on the dom thread
-        synch(image_data = image)
+        synch(result = image)
         {
-            set_image_data(image_data);
+            set_image_data(result);
             preset_apply.enabled = true;
             preset_apply.caption = "Apply Stack";
         }
@@ -67,19 +95,19 @@ on preset_apply.click()
 on brightness.change()
 {
     transformer.b_filter.amount = brightness.value/100;
-    apply_filter(transformer.b_filter);
+    apply_filter();
 }
 
 on constrast.change()
 {
     transformer.c_filter.amount = constrast.value/100;
-    apply_filter(transformer.c_filter);
+    apply_filter();
 }
 
 on sepia.change()
 {
     transformer.s_filter.amount = sepia.value;
-    apply_filter(transformer.s_filter);
+    apply_filter();
 }
 
 on sepia_enabled.change()
@@ -90,24 +118,24 @@ on sepia_enabled.change()
 on noise.change()
 {
     transformer.n_filter.amount = noise.value;
-    apply_filter(transformer.n_filter);
+    apply_filter();
 }
 
 on density.change()
 {
     transformer.n_filter.density = density.value/100;
-    apply_filter(transformer.n_filter);
+    apply_filter();
 
 }
 
 on mono.change()
 {
     transformer.n_filter.monochrome = mono.checked;
-    apply_filter(transformer.n_filter);
+    apply_filter();
 }
 
 on range.change()
 {
     transformer.o_filter.range = range.value;
-    apply_filter(transformer.o_filter);
+    apply_filter();
 }

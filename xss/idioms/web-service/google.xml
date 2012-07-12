@@ -1,0 +1,19 @@
+<library>
+    <instance id="google_maps" super="web_service" host="http://maps.googleapis.com">
+        <method id="directions" return_type="object" path="/maps/api/directions/json">
+            <parameter id="origin" type="string" required="true"/>
+            <parameter id="destination" type="string" required="true"/>
+            <parameter id="sensor" type="boolean" required="true"/>
+            <parameter id="waypoints" type="array" separator="|"/>
+        </method>
+        <method id="staticmap" return_type="string" path="/maps/api/directions/staticmap">
+            <parameter id="center" type="string" required="true"/>
+            <parameter id="zoom" type="int" required="true"/>
+            <parameter id="size" type="boolean" required="true"/>
+        </method>
+        <method id="geocode" return_type="object" path="/maps/api/geocode/json">
+            <parameter id="address" type="string" required="true"/>
+            <parameter id="sensor" type="boolean" required="true"/>
+        </method>
+    </instance>
+</library>

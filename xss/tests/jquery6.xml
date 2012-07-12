@@ -3,7 +3,7 @@
         <div placement="top" height="40">
             <button id="preset_apply" caption="Apply Stack"/>
         </div>
-        <accordion id="acc1" height="360" placement="client" fillSpace="true">
+        <accordion id="toolbox" height="360" placement="client" fillSpace="true">
             <div caption="Brightness & Constrast">
                 <label caption="Level"/>     <br/> <br/>
                 <slider id="brightness"  min="-100" max="100" value="0"/>
@@ -38,9 +38,8 @@
     <preset id="transformer">
         <brightness id="b_filter" amount="0"/> 
         <contrast id="c_filter" amount="1"/>
-        <rgbadjust id="color_filter" red="1" green="1" blue="1"/>
-        <sepia id="s_filter" amount="0" enabled="false"/>
         <noise id="n_filter"/>
+        <sepia id="s_filter" amount="0" enabled="false"/>
         <oil id="o_filter" range="0"/>
     </preset>
 </application>

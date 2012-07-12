@@ -17,6 +17,8 @@ str dsl_shell::get_event()
 
 void dsl_shell::add_parameters(param_list& pl, XSSContext ctx)
   {
-    str callback = variant_cast<str>(ctx->resolve("#wax_callback"), str());
+    str callback      = variant_cast<str>(ctx->resolve("#wax_callback"), str());
+    
     pl.add("callback", callback);
+    pl.add("error_handler", ctx->resolve("#wax_error_handler"));
   }

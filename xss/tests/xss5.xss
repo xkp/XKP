@@ -1,8 +1,15 @@
 <xss:code>
 for(var inst in test_idiom.instances)
 {
+<<<<<<< HEAD
+    if (!inst.parent)
+        continue;
+        
+    compiler.log(inst.parent.id);
+=======
 	if(inst.parent)
 		compiler.log(inst.parent.id);
+>>>>>>> dfa62236127cede5992fe7415c6945315a60c3fa
     
     if (inst.type.super)
         compiler.log(inst.type.super.id);

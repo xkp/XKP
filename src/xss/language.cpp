@@ -346,7 +346,7 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
             XSSType result = ctx_->get_type("var");
             XSSType xsti = lang_utils::resolve_type(arg2, ctx_);
 
-            if (xsti->is_array())
+            if (xsti && xsti->is_array())
               result = xsti->array_type();
 
             stack_.push(result);
@@ -710,6 +710,56 @@ void expr_object_resolver::exec_operator(operator_type op, int pop_count, int pu
       }
   }
 
+//expr_param_resolver
+param_list& expr_param_resolver::get()
+  {
+    return result_;
+  }
+
+void expr_param_resolver::push(variant operand, bool top)
+  {
+    if (recording_)
+      curr_expr_.push_operand(operand);
+      
+		stack_.push(operand);
+  }
+
+void expr_param_resolver::exec_operator(operator_type op, int pop_count, int push_count, bool top)
+  {
+    switch(op)
+      {
+        case op_call:
+        case op_dot_call:
+        case op_func_call:
+          {
+            recording_ = true;
+            break;
+          }
+        case op_parameter:
+          {
+            curr_expr_.pop();
+
+				    expression_identifier arg1 = stack_.top(); 
+            expression_identifier ei = arg1;
+            
+            result_.add(ei.value, curr_expr_);
+            curr_expr_.clear();
+            break;
+          }
+        default:
+          {
+            if (recording_)
+              curr_expr_.push_operator(op);
+          }
+
+        for(int i = 0; i < pop_count; i++)
+          stack_.pop();
+
+        for(int i = 0; i < push_count; i++)
+          stack_.push(variant());
+      }
+  }
+
 //expression_analizer
 expression_analizer::expression_analizer():
   is_identifier_(false),
@@ -928,6 +978,7 @@ void expression_analizer::analyze_path(expression& expr, operator_type op, XSSCo
         switch(fri.what)
           {
             case RESOLVE_INSTANCE:
+            case RESOLVE_TYPE:
             case RESOLVE_VARIABLE: break;
             case RESOLVE_PROPERTY: first_property_ = true; break;
             default : assert(false); //catch

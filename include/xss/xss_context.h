@@ -193,8 +193,8 @@ class xss_type : public xss_object
       Language get_language();
       void     set_language(Language lang);
     private:
-      XSSType array_type_;
-      schema* xs_type_;
+      XSSType     array_type_;
+      schema*     xs_type_;
       bool        is_enum_;
       bool        is_array_;
       bool        is_object_;

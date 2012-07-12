@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <body>
+
+        <h4>
+            Followers of <a id="user_name">Mike</a>:
+        </h4>
+        <ul id="followers">
+            <li>
+                <img id="fimg" src="img.png"></img>
+                <a id="fname">Follower</a>
+            </li>
+        </ul>
+
+    </body>
+</html>

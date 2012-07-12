@@ -2,519 +2,137 @@
 ===[ animtest.project.xml ]================
 
 
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Sequence Types...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: lbl1
-log: Rendering instance: lbl2
-log: Rendering instance: lbl3
-log: Rendering instance: btn1
-log: Rendering instance: btn2
-log: Rendering instance: btn3
-log: Rendering instance: anim1
-log: Rendering instance: anim1
-log: Rendering instance: anim2
-log: Rendering instance: anim2
-log: Rendering instance: anim3
-log: Rendering instance: anim3
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Copying files...
-log: Rendering Android Manifest...
+Error [cannot-resolve] Unknown identifier
+	identifier = apk
+	file = c:/dev/XKP/xss/samples/android/animtest/../../../idioms/android/main.xssERROR: Project:  animtest.project.xml
 
-Success are greateful
 ===[ characters.project.xml ]================
 
 
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering class: character
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: aladdin
-log: Rendering instance: mickey
-log: Rendering instance: pluto
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: i_aladdin
-log: Rendering instance: i_mickey
-log: Rendering instance: i_pluto
-log: Rendering instance: a_audio1
-log: Rendering instance: a_audio2
-log: Rendering instance: v_mickey
-log: Rendering instance: v_pluto
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Rendering Android Manifest...
+Error [cannot-resolve] Unknown identifier
+	identifier = apk
+	file = c:/dev/XKP/xss/samples/android/characters/../../../idioms/android/main.xssERROR: Project:  characters.project.xml
 
-Success are greateful
 ===[ contacts.project.xml ]================
 
 
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: __div1
-log: Rendering instance: btnLeft
-log: Rendering instance: btnRight
-log: Rendering instance: swtStates
-log: Rendering instance: divAdd
-log: Rendering instance: lblFullName
-log: Rendering instance: lblPhone
-log: Rendering instance: edtFullName
-log: Rendering instance: edtPhoneNumber
-log: Rendering instance: chkVerifier
-log: Rendering instance: btnAddContact
-log: Rendering instance: divFind
-log: Rendering instance: lblFindType
-log: Rendering instance: rdbByName
-log: Rendering instance: rdbByPhone
-log: Rendering instance: lblCriterion
-log: Rendering instance: edtCriterion
-log: Rendering instance: divAbout
-log: Rendering instance: lblName
-log: Rendering instance: lblContact
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Rendering Android Manifest...
+Error [cannot-resolve] Unknown identifier
+	identifier = apk
+	file = c:/dev/XKP/xss/samples/android/contacts/../../../idioms/android/main.xssERROR: Project:  contacts.project.xml
 
-Success are greateful
 ===[ figures2d.project.xml ]================
 
 
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: div1
-log: Rendering instance: c1
-log: Rendering instance: r1
-log: Rendering instance: p1
-log: Rendering instance: point1
-log: Rendering instance: point2
-log: Rendering instance: point3
-log: Rendering instance: point4
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Rendering Android Manifest...
+Error [cannot-resolve] Unknown identifier
+	identifier = apk
+	file = c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/main.xssERROR: Project:  figures2d.project.xml
 
-Success are greateful
 ===[ gallery.project.xml ]================
 
 
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: gallery
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: img01
-log: Rendering instance: img02
-log: Rendering instance: img03
-log: Rendering instance: img04
-log: Rendering instance: img05
-log: Rendering instance: img06
-log: Rendering instance: img07
-log: Rendering instance: img08
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Rendering Android Manifest...
+Error [cannot-resolve] Unknown identifier
+	identifier = apk
+	file = c:/dev/XKP/xss/samples/android/gallery/../../../idioms/android/main.xssERROR: Project:  gallery.project.xml
 
-Success are greateful
 ===[ images.project.xml ]================
 
 
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: album
-log: Rendering instance: changer
-log: Rendering instance: identifier
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: img1
-log: Rendering instance: img2
-log: Rendering instance: img3
-log: Rendering instance: img4
-log: Rendering instance: img5
-log: Rendering instance: img6
-log: Rendering instance: img7
-log: Rendering instance: img8
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Rendering Android Manifest...
+Error [cannot-resolve] Unknown identifier
+	identifier = apk
+	file = c:/dev/XKP/xss/samples/android/images/../../../idioms/android/main.xssERROR: Project:  images.project.xml
 
-Success are greateful
 ===[ box2d1.project.xml ]================
 
 
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: [jbox2d] Copying default files...
-log: Rendering Android Manifest...
+Error [cannot-resolve] Unknown identifier
+	identifier = apk
+	file = c:/dev/XKP/xss/samples/android/jbox2d_1/../../../idioms/android/main.xssERROR: Project:  box2d1.project.xml
 
-Success are greateful
 ===[ box2d2.project.xml ]================
 
 
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: btn1
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: __image1
-log: Rendering instance: __image2
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: [jbox2d] Copying default files...
-log: Rendering Android Manifest...
+Error [cannot-resolve] Unknown identifier
+	identifier = apk
+	file = c:/dev/XKP/xss/samples/android/jbox2d_2/../../../idioms/android/main.xssERROR: Project:  box2d2.project.xml
 
-Success are greateful
 ===[ box2d3.project.xml ]================
 
 
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering class: smiley_ball
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: __img1
-log: Rendering instance: __img2
-log: Rendering instance: __img3
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: __image1
-log: Rendering instance: __image2
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: [jbox2d] Copying default files...
-log: Rendering Android Manifest...
+Error [cannot-resolve] Unknown identifier
+	identifier = apk
+	file = c:/dev/XKP/xss/samples/android/jbox2d_3/../../../idioms/android/main.xssERROR: Project:  box2d3.project.xml
 
-Success are greateful
 ===[ box2d4.project.xml ]================
 
 
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering instance: move_around
-log: Rendering instance: move_around
-log: Rendering instance: fade_out
-log: Rendering instance: fade_out
-log: Rendering class: bad_guy
-log: Rendering Android Imports...
-log: Rendering instance: move_around
-log: Rendering instance: move_around
-log: Rendering class: good_guy
-log: Rendering Android Imports...
-log: Rendering class: bullet
-log: Rendering Android Imports...
-log: Rendering class: floor
-log: Rendering Sequence Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: hero
-log: Rendering instance: __floor1
-log: Rendering instance: game_over
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: __image1
-log: Rendering instance: __image2
-log: Rendering instance: __image3
-log: Rendering instance: __image4
-log: Rendering instance: __image5
-log: Rendering instance: __image6
-log: Rendering instance: __audio1
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: [jbox2d] Copying default files...
-log: Copying files...
-log: Rendering Android Manifest...
+Error [cannot-resolve] Unknown identifier
+	identifier = apk
+	file = c:/dev/XKP/xss/samples/android/jbox2d_4/../../../idioms/android/main.xssERROR: Project:  box2d4.project.xml
 
-
-
-
-
-
-
-
-package xkp.android.jBox2d_4
-	
-public class move_action extends Sequence {
-	
-
-
-
-
-                var this__ = this;
-            
-
-
-
-
-
-			private Float speed = 130.000000f;
-		
-
-
-
-
-
-			private Double vx = Math.random();
-		
-
-
-
-
-
-			private Double vy = Math.random();
-		
-
-
-
-
-
-			private XKPImage target;
-		
-
-
-
-
-
-			private void tick(Object delta) {
-		
-				target.setLeft(target.getX1() + vx * speed * delta);
-target.setTop(target.getY1() + vy * speed * delta);
-if (target.getX1() < 10 || target.getX1() > 570)
-{
-	vx = vx * -1;
-}
-if (target.getY1() < 10 || target.getY1() > 200)
-{
-	vy = vy * -1;
-}
-			
-			}
-		
-
-}
-
-
-
-Success are greateful
 ===[ box2d5.project.xml ]================
 
 
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering class: body_1
-log: Rendering Android Imports...
-log: Rendering class: body_2
-log: Rendering Android Imports...
-log: Rendering class: body_3
-log: Rendering Android Imports...
-log: Rendering class: floor
-log: Rendering Android Imports...
-log: Rendering class: my_body
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: __label1
-log: Rendering instance: __label2
-log: Rendering instance: __label3
-log: Rendering instance: __label4
-log: Rendering instance: __label5
-log: Rendering instance: btn1
-log: Rendering instance: btn2
-log: Rendering instance: btn3
-log: Rendering instance: btn4
-log: Rendering instance: btn5
-log: Rendering instance: btn6
-log: Rendering instance: __floor1
-log: Rendering instance: __floor2
-log: Rendering instance: __floor3
-log: Rendering instance: __floor4
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: __image1
-log: Rendering instance: __image2
-log: Rendering instance: __image3
-log: Rendering instance: __image4
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: [jbox2d] Copying default files...
-log: Rendering Android Manifest...
+Error [cannot-resolve] Unknown identifier
+	identifier = apk
+	file = c:/dev/XKP/xss/samples/android/jbox2d_5/../../../idioms/android/main.xssERROR: Project:  box2d5.project.xml
 
-Success are greateful
 ===[ kitchensink.project.xml ]================
 
 
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: kitchen
-log: Rendering instance: __div1
-log: Rendering instance: btn1
-log: Rendering instance: toggle1
-log: Rendering instance: imgbtn1
-log: Rendering instance: lbl1
-log: Rendering instance: edit1
-log: Rendering instance: chkb1
-log: Rendering instance: __scroller1
-log: Rendering instance: rdgTab3
-log: Rendering instance: radio1
-log: Rendering instance: radio2
-log: Rendering instance: radio3
-log: Rendering instance: radio4
-log: Rendering instance: radio5
-log: Rendering instance: radio6
-log: Rendering instance: radio7
-log: Rendering instance: radio8
-log: Rendering instance: radio9
-log: Rendering instance: __scroller2
-log: Rendering instance: img1
-log: Rendering instance: __div2
-log: Rendering instance: prgbar1
-log: Rendering instance: prgbar2
-log: Rendering instance: prgbar3
-log: Rendering instance: prgbar4
-log: Rendering instance: seekb1
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: dialog
-log: Rendering instance: emulator
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Rendering Android Manifest...
+Error [cannot-resolve] Unknown identifier
+	identifier = apk
+	file = c:/dev/XKP/xss/samples/android/kitchensink/../../../idioms/android/main.xssERROR: Project:  kitchensink.project.xml
 
-Success are greateful
 ===[ maps.project.xml ]================
 
 
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: __div1
-log: Rendering instance: btnGallery
-log: Rendering instance: btnMaps
-log: Rendering instance: lblStatus
-log: Rendering instance: lblInformation
-log: Rendering instance: swtScene
-log: Rendering instance: lblSwicherInformation
-log: Rendering instance: imgGallery
-log: Rendering instance: mapController
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: ico_gallery
-log: Rendering instance: ico_maps
-log: Rendering instance: photos
-log: Rendering instance: worth_1
-log: Rendering instance: worth_2
-log: Rendering instance: worth_3
-log: Rendering instance: worth_4
-log: Rendering instance: worth_5
-log: Rendering instance: worth_6
-log: Rendering instance: worth_7
-log: Rendering instance: maps
-log: Rendering instance: holguin
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Rendering Android Manifest...
+Error [cannot-resolve] Unknown identifier
+	identifier = apk
+	file = c:/dev/XKP/xss/samples/android/maps/../../../idioms/android/main.xssERROR: Project:  maps.project.xml
 
-Success are greateful
 ===[ simple.project.xml ]================
 
 
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: lblFirstName
-log: Rendering instance: edtFirstName
-log: Rendering instance: lblLastName
-log: Rendering instance: edtLastName
-log: Rendering instance: btnFullName
-log: Rendering instance: lblFullName
-log: Rendering instance: edtContainer
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Rendering Android Manifest...
+Error [cannot-resolve] Unknown identifier
+	identifier = apk
+	file = c:/dev/XKP/xss/samples/android/simpletest/../../../idioms/android/main.xssERROR: Project:  simple.project.xml
 
-Success are greateful
 ===[ touchme.project.xml ]================
 
 
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: btnTouchme
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Rendering Android Manifest...
+Error [cannot-resolve] Unknown identifier
+	identifier = apk
+	file = c:/dev/XKP/xss/samples/android/touchme/../../../idioms/android/main.xssERROR: Project:  touchme.project.xml
 
-Success are greateful
 ===[ kitchensink.project.xml ]================
 
 
 Error [404] File not found
+<<<<<<< HEAD
+	file = c:/dev/XKP/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
+=======
 	file = d:/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
+>>>>>>> 273df89e2f4f6f6016ad845cc461c087619d31da
 
 ===[ pairs.project.xml ]================
 
 
 Error [404] File not found
+<<<<<<< HEAD
+	file = c:/dev/XKP/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
+=======
 	file = d:/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
+>>>>>>> 273df89e2f4f6f6016ad845cc461c087619d31da
 
 ===[ simple.project.xml ]================
 
 
 Error [404] File not found
+<<<<<<< HEAD
+	file = c:/dev/XKP/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
+=======
 	file = d:/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
+>>>>>>> 273df89e2f4f6f6016ad845cc461c087619d31da
 
 ===[ 3js-ms.project.xml ]================(Tests)
 
@@ -524,25 +142,6 @@ log: Rendering 3js Types...
 log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: Rendering UI...
-log: dependency: resig.js
-log: dependency: streamer.js
-log: on resources.compile_dependency
-log: dependency: event.js
-log: dependency: sequence.js
-log: on resources.compile_dependency
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: on resources.compile_dependency
-log: dependency: colors.js
-log: dependency: Three.js
-log: on resources.compile_dependency
-log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: Utils.js
-log: on resources.compile_dependency
-log: dependency: fonts.js
-log: on resources.compile_dependency
 Success are greateful
 ===[ 3js-ui.project.xml ]================(Tests)
 
@@ -551,36 +150,11 @@ log: Rendering Resources...
 log: Rendering 3js Types...
 log: Rendering UI Types...
 log: Rendering UI...
-log: dependency: resig.js
-log: dependency: streamer.js
-log: on resources.compile_dependency
-log: dependency: event.js
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: on resources.compile_dependency
-log: dependency: colors.js
-log: dependency: Three.js
-log: on resources.compile_dependency
-log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: Utils.js
-log: on resources.compile_dependency
-log: dependency: fonts.js
-log: on resources.compile_dependency
 Success are greateful
 ===[ 3js_cameras.project.xml ]================(Tests)
 
 
 log: Rendering 3js Types...
-log: dependency: resig.js
-log: dependency: event.js
-log: dependency: keys.js
-log: dependency: colors.js
-log: dependency: Three.js
-log: dependency: Stats.js
-log: dependency: Utils.js
-log: dependency: fonts.js
 Success are greateful
 ===[ 3js_carousel.project.xml ]================(Tests)
 
@@ -589,23 +163,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: dependency: resig.js
-log: dependency: event.js
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: on resources.compile_dependency
-log: dependency: streamer.js
-log: on resources.compile_dependency
-log: dependency: colors.js
-log: dependency: Three.js
-log: on resources.compile_dependency
-log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: Utils.js
-log: on resources.compile_dependency
-log: dependency: fonts.js
-log: on resources.compile_dependency
 Success are greateful
 ===[ 3js_class_test_1.project.xml ]================(Tests)
 
@@ -613,26 +170,7 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
-log: prop_name: my_plane.image
-log: path: null
 log: Rendering UI...
-log: dependency: resig.js
-log: dependency: event.js
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: on resources.compile_dependency
-log: dependency: streamer.js
-log: on resources.compile_dependency
-log: dependency: colors.js
-log: dependency: Three.js
-log: on resources.compile_dependency
-log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: Utils.js
-log: on resources.compile_dependency
-log: dependency: fonts.js
-log: on resources.compile_dependency
 Success are greateful
 ===[ 3js_class_test_2.project.xml ]================(Tests)
 
@@ -640,26 +178,7 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
-log: prop_name: my_cylinder.hex
-log: path: null
 log: Rendering UI...
-log: dependency: resig.js
-log: dependency: event.js
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: on resources.compile_dependency
-log: dependency: streamer.js
-log: on resources.compile_dependency
-log: dependency: colors.js
-log: dependency: Three.js
-log: on resources.compile_dependency
-log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: Utils.js
-log: on resources.compile_dependency
-log: dependency: fonts.js
-log: on resources.compile_dependency
 Success are greateful
 ===[ 3js_cube.project.xml ]================(Tests)
 
@@ -667,16 +186,6 @@ Success are greateful
 log: Rendering 3js Types...
 log: Rendering UI Types...
 log: Rendering UI...
-log: dependency: resig.js
-log: dependency: event.js
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: dependency: colors.js
-log: dependency: Three.js
-log: dependency: Stats.js
-log: dependency: Utils.js
-log: dependency: fonts.js
 Success are greateful
 ===[ 3js_geometries.project.xml ]================(Tests)
 
@@ -684,16 +193,6 @@ Success are greateful
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: dependency: resig.js
-log: dependency: event.js
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: dependency: colors.js
-log: dependency: Three.js
-log: dependency: Stats.js
-log: dependency: Utils.js
-log: dependency: fonts.js
 Success are greateful
 ===[ 3js_lights.project.xml ]================(Tests)
 
@@ -701,38 +200,12 @@ Success are greateful
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: dependency: resig.js
-log: dependency: event.js
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: dependency: colors.js
-log: dependency: Three.js
-log: dependency: Stats.js
-log: dependency: Utils.js
-log: dependency: fonts.js
 Success are greateful
 ===[ 3js_materials.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering 3js Types...
-log: prop_name: my_sphere.mat
-log: path: null
-log: dependency: resig.js
-log: dependency: streamer.js
-log: on resources.compile_dependency
-log: dependency: event.js
-log: dependency: keys.js
-log: dependency: colors.js
-log: dependency: Three.js
-log: on resources.compile_dependency
-log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: Utils.js
-log: on resources.compile_dependency
-log: dependency: fonts.js
-log: on resources.compile_dependency
 Success are greateful
 ===[ 3js_package.project.xml ]================(Tests)
 
@@ -741,36 +214,11 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: dependency: resig.js
-log: dependency: streamer.js
-log: on resources.compile_dependency
-log: dependency: event.js
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: on resources.compile_dependency
-log: dependency: colors.js
-log: dependency: Three.js
-log: on resources.compile_dependency
-log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: Utils.js
-log: on resources.compile_dependency
-log: dependency: fonts.js
-log: on resources.compile_dependency
 Success are greateful
 ===[ 3js_particle.project.xml ]================(Tests)
 
 
 log: Rendering 3js Types...
-log: dependency: resig.js
-log: dependency: event.js
-log: dependency: keys.js
-log: dependency: colors.js
-log: dependency: Three.js
-log: dependency: Stats.js
-log: dependency: Utils.js
-log: dependency: fonts.js
 Success are greateful
 ===[ 3js_particle_system.project.xml ]================(Tests)
 
@@ -778,16 +226,6 @@ Success are greateful
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: dependency: resig.js
-log: dependency: event.js
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: dependency: colors.js
-log: dependency: Three.js
-log: dependency: Stats.js
-log: dependency: Utils.js
-log: dependency: fonts.js
 Success are greateful
 ===[ 3js_transform.project.xml ]================(Tests)
 
@@ -795,16 +233,6 @@ Success are greateful
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: dependency: resig.js
-log: dependency: event.js
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: dependency: colors.js
-log: dependency: Three.js
-log: dependency: Stats.js
-log: dependency: Utils.js
-log: dependency: fonts.js
 Success are greateful
 ===[ animtest.project.xml ]================(Tests)
 
@@ -813,76 +241,35 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 Success are greateful
 ===[ box2d3.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering UI Types...
-log: Instance renderer: body.xss instance: __physics1
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 Success are greateful
 ===[ box2d4.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering UI Types...
-log: Instance renderer: body.xss instance: __physics2
-log: Instance renderer: spawner.xss instance: cannon
-log: Instance renderer: ../sequence.xss instance: move_around
-log: Instance renderer: ../sequence.xss instance: fade_out
-log: Instance renderer: body.xss instance: __physics3
-log: Instance renderer: ../sequence.xss instance: move_around
-log: Instance renderer: body.xss instance: __physics1
-log: Instance renderer: body.xss instance: __physics4
 log: Rendering Sequence Types...
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 Success are greateful
 ===[ box2d5.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering UI Types...
-log: Instance renderer: body.xss instance: __physics1
-log: Instance renderer: body.xss instance: __physics2
-log: Instance renderer: body.xss instance: __physics3
-log: Instance renderer: body.xss instance: __physics4
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 Success are greateful
 ===[ box2dcar.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering UI Types...
-log: Instance renderer: body.xss instance: __physics2
-log: Instance renderer: body.xss instance: __physics4
-log: Instance renderer: body.xss instance: __physics1
-log: Instance renderer: body.xss instance: __physics3
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 Success are greateful
 ===[ cube_ui.project.xml ]================(Tests)
 
@@ -892,25 +279,6 @@ log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
-log: dependency: resig.js
-log: dependency: streamer.js
-log: on resources.compile_dependency
-log: dependency: event.js
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: on resources.compile_dependency
-log: dependency: sequence.js
-log: on resources.compile_dependency
-log: dependency: colors.js
-log: dependency: Three.js
-log: on resources.compile_dependency
-log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: Utils.js
-log: on resources.compile_dependency
-log: dependency: fonts.js
-log: on resources.compile_dependency
 Success are greateful
 ===[ dd.project.xml ]================(Tests)
 
@@ -918,31 +286,8 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering Sequence Types...
 log: Rendering UI Types...
-log: Instance renderer: ../sequence.xss instance: grow
-log: Instance renderer: ../sequence.xss instance: shrink
 log: Rendering 3js Types...
-log: prop_name: image_group.images
-log: path: null
 log: Rendering UI...
-log: dependency: resig.js
-log: dependency: event.js
-log: dependency: sequence.js
-log: on resources.compile_dependency
-log: dependency: streamer.js
-log: on resources.compile_dependency
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: on resources.compile_dependency
-log: dependency: colors.js
-log: dependency: Three.js
-log: on resources.compile_dependency
-log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: Utils.js
-log: on resources.compile_dependency
-log: dependency: fonts.js
-log: on resources.compile_dependency
 Success are greateful
 ===[ g_anim.project.xml ]================(Tests)
 
@@ -950,30 +295,8 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering Sequence Types...
 log: Rendering UI Types...
-log: Instance renderer: ../sequence.xss instance: img_pos
 log: Rendering 3js Types...
-log: prop_name: my_plane.image
-log: path: null
 log: Rendering UI...
-log: dependency: resig.js
-log: dependency: event.js
-log: dependency: sequence.js
-log: on resources.compile_dependency
-log: dependency: streamer.js
-log: on resources.compile_dependency
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: on resources.compile_dependency
-log: dependency: colors.js
-log: dependency: Three.js
-log: on resources.compile_dependency
-log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: Utils.js
-log: on resources.compile_dependency
-log: dependency: fonts.js
-log: on resources.compile_dependency
 Success are greateful
 ===[ java1.project.xml ]================(Tests)
 
@@ -1138,55 +461,6 @@ log: Rendering Resources...
 log: Rendering 3js Types...
 log: Rendering UI Types...
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: IT IS ALIVE
-log: IT IS ALIVE
-log: Ignoring idx 1
-log: IT IS ALIVE
-log: Ignoring idx 2
-log: RENDERING FLOATING
-log: NO LAYOUT
-log: lbl1
-log: edit1
-log: btn1
-log: PROPERTY position
-log: true
-log: VALUE relative
-log: PROPERTY left
-log: null
-log: VALUE 0
-log: PROPERTY top
-log: null
-log: VALUE 0
-log: PROPERTY width
-log: null
-log: VALUE 200
-log: PROPERTY position
-log: true
-log: VALUE absolute
-log: PROPERTY width
-log: null
-log: VALUE 252
-log: PROPERTY left
-log: null
-log: VALUE 100
-log: PROPERTY top
-log: null
-log: VALUE 30
-log: PROPERTY width
-log: null
-log: VALUE 600
-log: PROPERTY height
-log: null
-log: VALUE 400
-log: PROPERTY position
-log: true
-log: VALUE absolute
 Success are greateful
 ===[ jquery-3js1.project.xml ]================(Tests)
 
@@ -1195,153 +469,16 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: IT IS ALIVE
-log: IT IS ALIVE
-log: Ignoring idx 1
-log: IT IS ALIVE
-log: Ignoring idx 2
-log: RENDERING FLOATING
-log: NO LAYOUT
-log: lbl1
-log: edit1
-log: btn1
-log: PROPERTY position
-log: true
-log: VALUE relative
-log: PROPERTY left
-log: null
-log: VALUE 0
-log: PROPERTY top
-log: null
-log: VALUE 0
-log: PROPERTY width
-log: null
-log: VALUE 200
-log: PROPERTY position
-log: true
-log: VALUE absolute
-log: PROPERTY width
-log: null
-log: VALUE 252
-log: PROPERTY left
-log: null
-log: VALUE 100
-log: PROPERTY top
-log: null
-log: VALUE 30
-log: PROPERTY width
-log: null
-log: VALUE 600
-log: PROPERTY height
-log: null
-log: VALUE 400
-log: PROPERTY position
-log: true
-log: VALUE absolute
 Success are greateful
 ===[ jquery-webgl.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering 3js Types...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: IT IS ALIVE
-log: IT IS ALIVE
-log: Ignoring idx 1
-log: IT IS ALIVE
-log: Ignoring idx 2
-log: RENDERING FLOATING
-log: NO LAYOUT
-log: lbl1
-log: edit1
-log: btn1
-log: PROPERTY position
-log: true
-log: VALUE relative
-log: PROPERTY left
-log: null
-log: VALUE 0
-log: PROPERTY top
-log: null
-log: VALUE 0
-log: PROPERTY width
-log: null
-log: VALUE 200
-log: PROPERTY position
-log: true
-log: VALUE absolute
-log: PROPERTY width
-log: null
-log: VALUE 252
-log: PROPERTY left
-log: null
-log: VALUE 100
-log: PROPERTY top
-log: null
-log: VALUE 30
-log: PROPERTY width
-log: null
-log: VALUE 600
-log: PROPERTY height
-log: null
-log: VALUE 400
-log: PROPERTY position
-log: true
-log: VALUE absolute
 Success are greateful
 ===[ jquery1.project.xml ]================(Tests)
 
-
-log: IT IS ALIVE
-log: IT IS ALIVE
-log: Ignoring idx 1
-log: IT IS ALIVE
-log: Ignoring idx 2
-log: RENDERING FLOATING
-log: PROPERTY position
-log: true
-log: VALUE relative
-log: PROPERTY left
-log: null
-log: VALUE 140
-log: PROPERTY top
-log: null
-log: VALUE 110
-log: PROPERTY width
-log: null
-log: VALUE 200
-log: PROPERTY height
-log: null
-log: VALUE 43
-log: PROPERTY position
-log: true
-log: VALUE absolute
-log: PROPERTY left
-log: null
-log: VALUE 10
-log: PROPERTY top
-log: null
-log: VALUE 170
-log: PROPERTY width
-log: null
-log: VALUE 300
-log: PROPERTY height
-log: null
-log: VALUE 25
-log: PROPERTY position
-log: true
-log: VALUE absolute<html>
+<html>
 <body>
 
 <table width="500" border="0">
@@ -1457,7 +594,37 @@ Copyright © 2011 W3Schools.com</td>
 
 		    btnFullName.click( function() { 
 	    
-			lblFullName.text("Hello world");
+			lblFullName.text("Grabbing ");
+var loc;
+function __callback1() 
+{
+lblFullName.text(loc.geometry.location.Lat + " " + loc.geometry.location.Long);
+
+}
+
+
+
+
+
+
+        var __url1 = "http://maps.googleapis.com/maps/api/geocode/json"
+     + "?address=" + "780 NE 69st" + "&sensor=" + false;
+        $.ajax(
+		{
+		    url: __url1,
+			type: "get",
+			dataType: "json",
+			error: function()
+            {
+                throw e;
+			},
+			success: function(data)
+            {
+                var return_value = JSON.parse(data);
+                loc = return_value;
+__callback1();
+			}
+		});
 		
 		});
 	
@@ -1483,212 +650,23 @@ Success are greateful
 ===[ jquery2.project.xml ]================(Tests)
 
 
-log: PROPERTY width
-log: null
-log: VALUE 600
-log: PROPERTY height
-log: null
-log: VALUE 400
-log: PROPERTY background-color
-log: true
-log: VALUE Red
-log: PROPERTY width
-log: null
-log: VALUE 100
-log: PROPERTY width
-log: null
-log: VALUE 100
-log: PROPERTY width
-log: null
-log: VALUE 100
-log: PROPERTY height
-log: null
-log: VALUE 100
-log: PROPERTY height
-log: null
-log: VALUE 100
 Success are greateful
 ===[ jquery3.project.xml ]================(Tests)
 
 
-log: PROPERTY left
-log: null
-log: VALUE 100
-log: PROPERTY top
-log: null
-log: VALUE 10
-log: PROPERTY width
-log: null
-log: VALUE 300
-log: PROPERTY height
-log: null
-log: VALUE 300
 Success are greateful
 ===[ jquery4.project.xml ]================(Tests)
 
 
-log: NO LAYOUT
-log: __div1
-log: NO LAYOUT
-log: lbl1
-log: edit1
-log: rb1
-log: cb1
-log: __radiogroup1
-log: __div2
-log: IT IS ALIVE
-log: btn1
-log: IT IS ALIVE
-log: RENDERING FLOATING
-log: NO LAYOUT
-log: 
-log: NO LAYOUT
-log: tc1
-log: PROPERTY width
-log: null
-log: VALUE 800
-log: PROPERTY height
-log: null
-log: VALUE 600
-log: PROPERTY position
-log: true
-log: VALUE relative
-log: PROPERTY width
-log: null
-log: VALUE 252
-log: PROPERTY left
-log: null
-log: VALUE 400
-log: PROPERTY top
-log: null
-log: VALUE 20
-log: PROPERTY width
-log: null
-log: VALUE 600
-log: PROPERTY height
-log: null
-log: VALUE 400
-log: PROPERTY position
-log: true
-log: VALUE absolute
-log: PROPERTY left
-log: null
-log: VALUE 20
-log: PROPERTY top
-log: null
-log: VALUE 120
-log: PROPERTY position
-log: true
-log: VALUE absolute
 Success are greateful
 ===[ jquery5.project.xml ]================(Tests)
 
 
-log: NO LAYOUT
-log: 
-log: NO LAYOUT
-log: 
-log: NO LAYOUT
-log: 
-log: NO LAYOUT
-log: 
-log: NO LAYOUT
-log: 
-log: NO LAYOUT
-log: __div8
-log: NO LAYOUT
-log: lbl1
-log: edit1
-log: rb1
-log: cb1
-log: __radiogroup1
-log: btnFloating
-log: NO LAYOUT
-log: __label1
-log: dp2
-log: dp1
-log: NO LAYOUT
-log: __label2
-log: __autocomplete1
-log: __br1
-log: btn1
-log: btn2
-log: simple_dialog
-log: NO LAYOUT
-log: 
-log: __br2
-log: __br3
-log: pb1
-log: __br4
-log: sld1
-log: PROPERTY width
-log: null
-log: VALUE 1200
-log: PROPERTY width
-log: null
-log: VALUE 300
-log: PROPERTY height
-log: null
-log: VALUE 400
-log: PROPERTY width
-log: null
-log: VALUE 252
-log: PROPERTY width
-log: null
-log: VALUE 350
 Success are greateful
 ===[ jquery6.project.xml ]================(Tests)
 
 
 log: Rendering property: enabled
-log: NO LAYOUT
-log: preset_apply
-log: NO LAYOUT
-log: __label1
-log: __br1
-log: __br2
-log: brightness
-log: __br3
-log: __label2
-log: __br4
-log: __br5
-log: constrast
-log: NO LAYOUT
-log: __label3
-log: __br6
-log: __br7
-log: noise
-log: __br8
-log: __label4
-log: __br9
-log: __br10
-log: density
-log: __br11
-log: mono
-log: NO LAYOUT
-log: __label5
-log: __br12
-log: __br13
-log: sepia
-log: __br14
-log: sepia_enabled
-log: NO LAYOUT
-log: __label6
-log: __br15
-log: __br16
-log: range
-log: PROPERTY height
-log: null
-log: VALUE 40
-log: PROPERTY height
-log: null
-log: VALUE 360
-log: PROPERTY width
-log: null
-log: VALUE 605
-log: PROPERTY height
-log: null
-log: VALUE 375
 Success are greateful
 ===[ jquery7.project.xml ]================(Tests)
 
@@ -1697,168 +675,14 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: IT IS ALIVE
-log: IT IS ALIVE
-log: Ignoring idx 1
-log: IT IS ALIVE
-log: Ignoring idx 2
-log: RENDERING FLOATING
-log: NO LAYOUT
-log: lbl1
-log: edit1
-log: btn1
-log: PROPERTY position
-log: true
-log: VALUE relative
-log: PROPERTY left
-log: null
-log: VALUE 0
-log: PROPERTY top
-log: null
-log: VALUE 0
-log: PROPERTY width
-log: null
-log: VALUE 200
-log: PROPERTY position
-log: true
-log: VALUE absolute
-log: PROPERTY width
-log: null
-log: VALUE 252
-log: PROPERTY left
-log: null
-log: VALUE 300
-log: PROPERTY top
-log: null
-log: VALUE 0
-log: PROPERTY width
-log: null
-log: VALUE 600
-log: PROPERTY height
-log: null
-log: VALUE 400
-log: PROPERTY position
-log: true
-log: VALUE absolute
 Success are greateful
 ===[ jquery8.project.xml ]================(Tests)
 
 
 log: Rendering property: src
 log: Rendering property: alpha
-log: MALA COSA
 log: Rendering property: visible
-log: IT IS ALIVE
-log: IT IS ALIVE
-log: Ignoring idx 1
-log: IT IS ALIVE
-log: Ignoring idx 2
-log: IT IS ALIVE
-log: Ignoring idx 3
-log: IT IS ALIVE
-log: Ignoring idx 4
-log: IT IS ALIVE
-log: Ignoring idx 5
-log: IT IS ALIVE
-log: Ignoring idx 6
-log: Ignoring idx 7
-log: RENDERING FLOATING
-log: NO LAYOUT
-log: myGrid
 log: 4
-log: PROPERTY position
-log: true
-log: VALUE relative
-log: PROPERTY left
-log: null
-log: VALUE 50
-log: PROPERTY top
-log: null
-log: VALUE 50
-log: PROPERTY width
-log: null
-log: VALUE 1200
-log: PROPERTY height
-log: null
-log: VALUE 800
-log: PROPERTY opacity
-log: null
-log: VALUE 0.5
-log: PROPERTY position
-log: true
-log: VALUE absolute
-log: PROPERTY left
-log: null
-log: VALUE 70
-log: PROPERTY top
-log: null
-log: VALUE 70
-log: PROPERTY font
-log: true
-log: VALUE bold 24px verdana,sans-serif
-log: PROPERTY color
-log: true
-log: VALUE white
-log: PROPERTY position
-log: true
-log: VALUE absolute
-log: PROPERTY left
-log: null
-log: VALUE -600
-log: PROPERTY top
-log: null
-log: VALUE 200
-log: PROPERTY width
-log: null
-log: VALUE 490
-log: PROPERTY height
-log: null
-log: VALUE 250
-log: PROPERTY position
-log: true
-log: VALUE absolute
-log: PROPERTY left
-log: null
-log: VALUE -800
-log: PROPERTY top
-log: null
-log: VALUE 480
-log: PROPERTY position
-log: true
-log: VALUE absolute
-log: PROPERTY left
-log: null
-log: VALUE 620
-log: PROPERTY top
-log: null
-log: VALUE -500
-log: PROPERTY width
-log: null
-log: VALUE 550
-log: PROPERTY height
-log: null
-log: VALUE 250
-log: PROPERTY position
-log: true
-log: VALUE absolute
-log: PROPERTY left
-log: null
-log: VALUE 620
-log: PROPERTY top
-log: null
-log: VALUE 480
-log: PROPERTY width
-log: null
-log: VALUE 550
-log: PROPERTY height
-log: null
-log: VALUE 250
-log: PROPERTY position
-log: true
-log: VALUE absolute
 Success are greateful
 ===[ jquery9.project.xml ]================(Tests)
 
@@ -1867,15 +691,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: PROPERTY width
-log: null
-log: VALUE 744
-log: PROPERTY height
-log: null
-log: VALUE 370
 Success are greateful
 ===[ jsmanip.project.xml ]================(Tests)
 
@@ -1884,29 +699,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: dependency: resig.js
-log: dependency: streamer.js
-log: on resources.compile_dependency
-log: dependency: event.js
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: on resources.compile_dependency
-log: dependency: jsmanipulate.js
-log: on resources.compile_dependency
-log: dependency: jsm-manager.js
-log: on resources.compile_dependency
-log: dependency: jsm-utils.js
-log: on resources.compile_dependency
-log: dependency: colors.js
-log: dependency: Three.js
-log: on resources.compile_dependency
-log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: Utils.js
-log: on resources.compile_dependency
-log: dependency: fonts.js
-log: on resources.compile_dependency
 Success are greateful
 ===[ jsmanipulate.project.xml ]================(Tests)
 
@@ -1915,85 +707,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: NO LAYOUT
-log: __label1
-log: __br1
-log: __br2
-log: __label2
-log: __br3
-log: __br4
-log: contrast
-log: __br5
-log: NO LAYOUT
-log: __label3
-log: __br6
-log: __br7
-log: __label4
-log: __br8
-log: __br9
-log: red
-log: __br10
-log: __label5
-log: __br11
-log: __br12
-log: blue
-log: __br13
-log: __label6
-log: __br14
-log: __br15
-log: green
-log: NO LAYOUT
-log: __label7
-log: __br16
-log: __br17
-log: __label8
-log: __br18
-log: __br19
-log: height
-log: __br20
-log: __label9
-log: __br21
-log: __br22
-log: angle
-log: __br23
-log: __label10
-log: __br24
-log: __br25
-log: elevation
-log: NO LAYOUT
-log: __label11
-log: __br26
-log: __br27
-log: __label12
-log: __br28
-log: __br29
-log: noise_amount
-log: __br30
-log: __label13
-log: __br31
-log: __br32
-log: noise_density
-log: __br33
-log: __br34
-log: mono
-log: PROPERTY height
-log: null
-log: VALUE 360
-log: PROPERTY width
-log: null
-log: VALUE 500
-log: PROPERTY height
-log: null
-log: VALUE 500
 Success are greateful
 ===[ ms4.project.xml ]================(Tests)
 
@@ -2002,9 +715,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 Success are greateful
 ===[ ms5.project.xml ]================(Tests)
 
@@ -2013,68 +723,25 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 Success are greateful
 ===[ ms6.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering UI Types...
-log: Instance renderer: ../sequence.xss instance: anim1
-log: Instance renderer: component.xss instance: btn1
-log: Instance renderer: component.xss instance: btn2
 log: Rendering Sequence Types...
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 Success are greateful
 ===[ paintings.project.xml ]================(Tests)
 
+ERROR: Project:  paintings.project.xml
 
-log: Rendering Resources...
-log: Rendering Sequence Types...
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: prop_name: planes_group.images
-log: path: null
-log: prop_name: planes_group.group_scale
-log: path: null
-log: Rendering UI...
-log: dependency: resig.js
-log: dependency: event.js
-log: dependency: sequence.js
-log: on resources.compile_dependency
-log: dependency: streamer.js
-log: on resources.compile_dependency
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: on resources.compile_dependency
-log: dependency: colors.js
-log: dependency: Three.js
-log: on resources.compile_dependency
-log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: Utils.js
-log: on resources.compile_dependency
-log: dependency: fonts.js
-log: on resources.compile_dependency
-Success are greateful
 ===[ pixastic.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 Success are greateful
 ===[ pixastic_test.project.xml ]================(Tests)
 
@@ -2083,31 +750,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: dependency: resig.js
-log: dependency: streamer.js
-log: on resources.compile_dependency
-log: dependency: event.js
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: on resources.compile_dependency
-log: dependency: pixastic.core.js
-log: on resources.compile_dependency
-log: dependency: actions.js
-log: on resources.compile_dependency
-log: dependency: pixastic-manager.js
-log: on resources.compile_dependency
-log: dependency: pixastic-utils.js
-log: on resources.compile_dependency
-log: dependency: colors.js
-log: dependency: Three.js
-log: on resources.compile_dependency
-log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: Utils.js
-log: on resources.compile_dependency
-log: dependency: fonts.js
-log: on resources.compile_dependency
 Success are greateful
 ===[ query_properties.project.xml ]================(Tests)
 
@@ -2140,15 +782,7 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering UI Types...
-log: prop_name: this.data_source
-log: path: this
-log: Instance renderer: component.xss instance: lbl_caption
-log: Instance renderer: component.xss instance: icon
-log: prop_name: this.data_source
-log: path: this
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 Success are greateful
 ===[ ui_audio.project.xml ]================(Tests)
 
@@ -2156,8 +790,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 Success are greateful
 ===[ ui_audio_1.project.xml ]================(Tests)
 
@@ -2165,19 +797,13 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 Success are greateful
 ===[ ui_class_test.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering UI Types...
-log: prop_name: this.image
-log: path: this
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 Success are greateful
 ===[ ui_kitchen_sink.project.xml ]================(Tests)
 
@@ -2185,8 +811,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 Success are greateful
 ===[ ui_painter.project.xml ]================(Tests)
 
@@ -2194,8 +818,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 Success are greateful
 ===[ ui_placement.project.xml ]================(Tests)
 
@@ -2203,8 +825,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 Success are greateful
 ===[ ui_ripple.project.xml ]================(Tests)
 
@@ -2213,9 +833,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 Success are greateful
 ===[ ui_sprite.project.xml ]================(Tests)
 
@@ -2223,8 +840,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 Success are greateful
 ===[ ui_video.project.xml ]================(Tests)
 
@@ -2232,8 +847,6 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
 Success are greateful
 ===[ uibuffer_test.project.xml ]================(Tests)
 
@@ -2242,23 +855,6 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
-log: dependency: resig.js
-log: dependency: streamer.js
-log: on resources.compile_dependency
-log: dependency: event.js
-log: dependency: utils.js
-log: dependency: keys.js
-log: dependency: ui.js
-log: on resources.compile_dependency
-log: dependency: colors.js
-log: dependency: Three.js
-log: on resources.compile_dependency
-log: dependency: Stats.js
-log: on resources.compile_dependency
-log: dependency: Utils.js
-log: on resources.compile_dependency
-log: dependency: fonts.js
-log: on resources.compile_dependency
 Success are greateful
 ===[ wax1.project.xml ]================(Tests)
 
@@ -2273,12 +869,11 @@ return_function(x);
 return true;
 
 }
-bar(function(return_value)
-{
-__callback1()
+bar(function()
+{__callback2()
 });
 }
-bar(function(return_value)
+bar(function()
 {
 	if (return_value)
 	{
@@ -2292,34 +887,32 @@ if (c < 20)
 {return_function(c);
 return true;
 
-__callback4()
+
 }
 else
 {
 c += 20;
-bar_foo(function(return_value)
+bar_foo(function()
+{
 {
 return_function(return_value);
 });
-}
-}
-foo_bar(function(return_value)
-{
-c += return_value;__callback3()
 });
 }
-foo_bar(function(return_value)
-{
-c = return_value;
+}
+foo_bar(function()
+{c += return_value;__callback4()
 });
-
+}
+foo_bar(function()
+{c = return_value;
+__callback3();
+});
 	}
-
 	else
 {
-bar_foo(function(return_value)
-{
-
+bar_foo(function()
+{()
 });
 	}
 });
@@ -2343,192 +936,89 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering 3js Types...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_cameras.project.xml ]================(Tests)
 
 
 log: Rendering 3js Types...
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_cube_img.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering 3js Types...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_firstperson.project.xml ]================(Tests)
 
 
 log: Rendering 3js Types...
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
+Success are greateful
+===[ wgl_head.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering 3js Types...
 Success are greateful
 ===[ wgl_icosahedron.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering 3js Types...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_materials.project.xml ]================(Tests)
 
 
 log: Rendering 3js Types...
-log: prop_name: my_sphere.mat
-log: path: null
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_model.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering 3js Types...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_monster.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering 3js Types...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_package.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering 3js Types...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_reflection_cube.project.xml ]================(Tests)
 
 
 log: Rendering 3js Types...
-log: prop_name: my_sphere.mat
-log: path: null
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_refraction_cube.project.xml ]================(Tests)
 
 
 log: Rendering 3js Types...
-log: prop_name: my_sphere.mat
-log: path: null
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
+Success are greateful
+===[ wgl_shader.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering 3js Types...
+Success are greateful
+===[ wgl_shader_fresnel.project.xml ]================(Tests)
+
+
+log: Rendering 3js Types...
 Success are greateful
 ===[ wgl_sound.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering 3js Types...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ wgl_text.project.xml ]================(Tests)
 
 
 log: Rendering 3js Types...
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
 Success are greateful
 ===[ xss1.project.xml ]================(Tests)
 
@@ -3094,18 +1584,15 @@ Success are greateful
 ===[ xss5.project.xml ]================(Tests)
 
 
-log: null super
-log: application
-log: null super
-log: t1
-log: t_xss5
-log: application
-log: t_xss5
-log: a
-log: ab
-log: ba
+Error [syntax-error] Error while compiling xs
+	line = 4
+	column = 1
+<<<<<<< HEAD
+	file = c:/dev/XKP/xss/tests/xss5.xssERROR: Project:  xss5.project.xml
+=======
+	file = d:/xkp/xss/tests/xss5.xssERROR: Project:  xss5.project.xml
+>>>>>>> 273df89e2f4f6f6016ad845cc461c087619d31da
 
-Success are greateful
 ===[ xss6.project.xml ]================(Tests)
 
 

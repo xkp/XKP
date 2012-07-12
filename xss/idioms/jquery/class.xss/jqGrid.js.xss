@@ -14,7 +14,6 @@
         
         extra += arg;
     }
-    else compiler.log("MALA COSA");    
 
     compiler.xss("../jquery-object.xss", it, extra = extra);
 </xss:code>

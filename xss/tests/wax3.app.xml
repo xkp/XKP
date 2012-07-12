@@ -1,24 +1,10 @@
 <application src="wax3.app.xs">
-    
-    <page id="home" src="twotter.html">
+    <page id="home" src="wax3.template.xml">
         <element id="user_name" />
 
         <replicator id="followers">
-            <element name="follower" id="follower" />
-        </replicator>
-
-        <replicator id="followees">
-            <element id="followee" />
-        </replicator>
-        
-        <element id="message"/>
-        <element id="quote"/>
-        <element id="publish"/>
-        <element id="get_next"/>
-
-        <replicator id="previous_quotes">
-            <element id="pquote" />
-            <element id="pquote_author" />
+            <element name="fname" id="fname" />
+            <element name="fimg" id="fimg" />
         </replicator>
     </page>
     

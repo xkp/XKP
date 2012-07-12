@@ -96,7 +96,7 @@ var material_wireframe;var camera_1;var a_ligth;var d_ligth_1;var monster_model;
 threejs_load_resources(manager, function()
 {
 material_wireframe = new THREE.MeshBasicMaterial({
-color:blanchedalmond,wireframe:true
+color:blanchedalmond,wireframe:true,
 	});
 material_wireframe.manager = manager;
 		    camera_1 = 
@@ -113,7 +113,7 @@ d_ligth_1.manager = manager;
 	monster_model = new THREE.Object3D();
 	var monster_model_loader = 
 	generate_model_loader(manager.streamer.get_resource('model_1').type);
-		monster_model_loader.load(		
+		monster_model_loader.load(
 				manager.streamer.get_resource('model_1').asset , function( geometry )
 			{
 				var monster_model_mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());

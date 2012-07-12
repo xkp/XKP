@@ -50,7 +50,6 @@
         
         if (cmp.have_value("x") && cmp.have_value("y"))
         {
-            compiler.log("IT IS ALIVE");
             return direction_float;    
         }
             
@@ -174,7 +173,6 @@
             
             if (op.ignore)
             {
-                compiler.log("Ignoring idx " + idx);
                 continue;
             }
                 
@@ -417,12 +415,9 @@
         
         if (!do_layout)
         {   
-            compiler.log("NO LAYOUT");
-            
             //just render
             for(var cmp in it.children)
             {
-                compiler.log(cmp.output_id);
                 var ndir = get_direction(cmp);
                 if (ndir != null)
                 {
@@ -446,7 +441,6 @@
         //render floating components last
         if (floating_.size > 0)
         {
-            compiler.log("RENDERING FLOATING");
             compiler.add_object_property(it.css, "position", value = "relative", as_plain_text = true);
             for(var fcmp in floating_)
             {

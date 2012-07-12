@@ -1,5 +1,15 @@
 <module id="wax" src="wax.xs">
     <types>
         <class id="page"/>
+
+        <class id="fs">
+            <method id="readFile" output_id="fs.readFile" asynch="true" callback_args="err, return_value" error_arg="err">
+                <parameter id="filename" type="string"/>
+            </method>
+            <method id="writeFile" output_id="fs.writeFile" asynch="true" callback_args="err" error_arg="err">
+                <parameter id="filename" type="string"/>
+                <parameter id="data" type="string"/>
+            </method>
+        </class>
     </types>
 </module>

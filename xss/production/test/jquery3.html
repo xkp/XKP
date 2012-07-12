@@ -12,7 +12,9 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
         var application = {};
+			var __div1 = $("#__div1");
 			var myMap = $("#myMap");
+			var __like_button1 = $("#__like_button1");
             myMap.gmap({
                 center: "57.7973333,12.0502107",
                 zoom: 10,
@@ -23,12 +25,30 @@
                 		});
 	</script>
 	<style>
-#myMap {left : 100px;top : 10px;width : 300px;height : 300px}
+#__div1 {position : relative}
+#myMap {left : 100px;top : 10px;width : 300px;height : 300px;position : absolute}
+#__like_button1 {left : 500px;top : 10px;data-width : 300px;height : 300px;position : absolute}
     </style>
 </head>
 <body>
+        <div id="fb-root"></div>
+        <script>(function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+<div id="__div1">
 				<div id="myMap"
 			>
 				</div>
+				<div id="__like_button1"
+			 class="fb-like" 
+						data-width="300" 
+						data-href="www.google.com" 
+					>
+				</div>
+</div>
 </body>
 </html>

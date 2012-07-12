@@ -1,0 +1,10 @@
+<application name="fbtest" title="FB plugins" src="fbtest.xs" template="fbtest_index.html">
+    <like_button html_id="like" href="http://codexcess.com"/>
+    <send_button html_id="send" href="http://codexcess.com"/>
+    <subscribe_button html_id="subscribe" href="https://www.facebook.com/zuck"/>
+    <activity_feed html_id="act-feed" site="developers.facebook.com"/>
+    <recommendations html_id="recommendations" site="developers.facebook.com"/>
+    <like_box html_id="like-box" href="http://developers.facebook.com"/>
+    <comments html_id="fb-comm" href="http://codexcess.com" width="200" num_posts="3"/>
+    <facepile html_id="facepile" href="http://developers.facebook.com" width="200"/>
+</application>

@@ -44,6 +44,9 @@ str xss_utils::var_to_string(variant& v)
         return result;
       }
 
+    if (v.empty())
+      return "null";
+
     return variant_cast<str>(v, str());
   }
 

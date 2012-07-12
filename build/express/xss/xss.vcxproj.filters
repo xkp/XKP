@@ -183,6 +183,9 @@
     <ClInclude Include="..\..\..\include\xss\dsl\ga_parser.h">
       <Filter>Header Files\xss\dsl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\dsl\ajax.h">
+      <Filter>Header Files\xss\dsl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -306,6 +309,9 @@
       <Filter>Source Files\xss\dsl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\xss\dsl\ga_parser.cpp">
+      <Filter>Source Files\xss\dsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\dsl\ajax.cpp">
       <Filter>Source Files\xss\dsl</Filter>
     </ClCompile>
   </ItemGroup>

@@ -516,7 +516,7 @@ str html_renderer::render(XSSObject this_, param_list* args)
 
     for(; tit != tnd; tit++)
       {
-        int tidx = tags.find(tit->first);
+        int tidx = tags.find(tit->first, true);
         if (tidx < 0)
           {
             param_list error;

@@ -72,6 +72,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);BOOST_NO_MEMBER_TEMPLATE_FRIENDS;TIXML_USE_STL</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\dev\XKP\include;C:\dev\boost;C:\dev\boost\boost_1_44;C:\dev\XKP\third_party\tinyxml;C:\dev\XKP\third_party\jsoncpp\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -93,6 +94,7 @@
     <ClInclude Include="..\..\..\include\types.h" />
     <ClInclude Include="..\..\..\include\xs.h" />
     <ClInclude Include="..\..\..\include\xss\brace_parseer.h" />
+    <ClInclude Include="..\..\..\include\xss\dsl\ajax.h" />
     <ClInclude Include="..\..\..\include\xss\dsl\ga_parser.h" />
     <ClInclude Include="..\..\..\include\xss\dsl\generic_assign.h" />
     <ClInclude Include="..\..\..\include\xss\dsl\html5_asynch.h" />
@@ -135,6 +137,7 @@
     <ClCompile Include="..\..\..\src\dynamic_objects.cpp" />
     <ClCompile Include="..\..\..\src\xs.cpp" />
     <ClCompile Include="..\..\..\src\xss\brace_parser.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\ajax.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl\ga_parser.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl\generic_assign.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl\html5_asynch.cpp" />

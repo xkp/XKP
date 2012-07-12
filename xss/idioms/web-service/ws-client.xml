@@ -1,0 +1,8 @@
+<module id="ws" src="ws-client.xs">
+    <types>
+        <class id="web_service">
+            <property id="host" type="string"/>"
+            <property id="port" type="int"/>"
+        </class>
+    </types>
+</module>

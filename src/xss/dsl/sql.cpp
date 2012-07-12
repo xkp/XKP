@@ -18,5 +18,7 @@ str dsl_sql::get_event()
 void dsl_sql::add_parameters(param_list& pl, XSSContext ctx)
   {
     str callback = variant_cast<str>(ctx->resolve("#wax_callback"), str());
+
     pl.add("callback", callback);
+    pl.add("error_handler", ctx->resolve("#wax_error_handler"));
   }

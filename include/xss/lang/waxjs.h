@@ -28,6 +28,7 @@ struct code_split
     XSSContext context;
     str        callback;
     str        hook;
+    str        error_handler;
 
     bool      split_on_if;
     bool      split_on_else;
@@ -64,19 +65,21 @@ struct waxjs_code_renderer : public base_code_renderer
 
       str render_split(CodeSplit fork, CodeSplit parent);
       str split_if(CodeSplit fork, const str& callback);
-      str split_variable(CodeSplit fork, const str& code_after);
-      str split_expression(CodeSplit fork);
+      str split_variable(CodeSplit fork, const str& code_after, const str& callback);
+      str split_expression(CodeSplit fork, const str& callback);
       str split_dsl(CodeSplit fork, const str& callback);
       str split_return(CodeSplit fork);
       str split_for(CodeSplit fork, const str& callback);
       str split_iter_for(CodeSplit fork, const str& callback);
       str split_while(CodeSplit fork, const str& callback);
+      str split_try(CodeSplit fork, const str& callback);
       str split_and_render(code& c, CodeSplit parent, const str& callback = str(), bool* split = null);
-      str split_method(XSSMethod method);
+      str split_method(XSSMethod method, CodeSplit fork, DynamicArray args, const str& body);
       str render_callback(CodeSplit fork);
       str render_service();
       str render_page();
       str render_parameters();
+      DynamicArray compile_args(expression& expr);
     public:
       XSSMethod owner_;
   };

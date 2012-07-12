@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test 3D</title>
+</head>
+<body>
+<style type="text/css">
+	body{
+	background:SlateGray;
+	}
+</style>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/Detector.js"></script>
+            <script type="text/javascript" src="../js/three/fonts.js"></script>
+<script type="text/javascript">	
+if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+			var renderer = new THREE.WebGLRenderer( { antialias: false } );
+		var ui_;
+var canvas_position = {x:0, y:0};
+var active_camera;
+var g_elapsed;
+var g_delta;	
+var scene = new THREE.Scene();
+scene.mouse_thru = true;
+var streamer;
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
+var application = {};
+var clock = new THREE.Clock();
+application.events = new ev.EventHolder();
+// --------RESOURCES---------
+// --------RESOURCES---------
+renderer.setSize( app_width, app_height );
+var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
+manager.events = new ev.EventHolder();
+function render() {
+manager.canvas_position = getElementPosition(renderer.domElement);
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+	g_delta = 0; //first update
+else
+	g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+c_delta = clock.getDelta(),
+c_elapsed = clock.getElapsedTime() * 10;
+manager.events.dispatch("update", [g_delta, g_elapsed]);	
+				manager.scene.add(camera_2);
+				set_active_camera(camera_2);
+application.events.dispatch("switch_cameras", []);
+}
+var material_sphere1;var material_sphere2;var material_wireframe;var cylinder_material;var cylinder1_material;var cube_material;var cube1_material;var camera_2;var light;var sphere_1;var sphere_2;var cylinder_1;var cylinder_2;var cube_1;var cube_2;var plane_1;
+threejs_load_resources(manager, function()
+{
+material_sphere1 = new THREE.MeshLambertMaterial({
+color:Math.random() * 0xffffff,shading:flat_shading,
+	});
+material_sphere1.manager = manager;
+material_sphere2 = new THREE.MeshLambertMaterial({
+color:Math.random() * 0xffffff,shading:flat_shading,
+	});
+material_sphere2.manager = manager;
+material_wireframe = new THREE.MeshLambertMaterial({
+color:MediumSlateBlue,wireframe:true,
+	});
+material_wireframe.manager = manager;
+cylinder_material = new THREE.MeshLambertMaterial({
+color:Math.random() * 0xffffff,shading:flat_shading,
+	});
+cylinder_material.manager = manager;
+cylinder1_material = new THREE.MeshLambertMaterial({
+color:Math.random() * 0xffffff,shading:flat_shading,
+	});
+cylinder1_material.manager = manager;
+cube_material = new THREE.MeshLambertMaterial({
+color:Math.random() * 0xffffff,shading:flat_shading,
+	});
+cube_material.manager = manager;
+cube1_material = new THREE.MeshLambertMaterial({
+color:Math.random() * 0xffffff,shading:flat_shading,
+	});
+cube1_material.manager = manager;
+		    camera_2 = 
+		    new THREE.PerspectiveCamera(50, 1.5, 1, 10000, null) ;				
+camera_2.manager = manager;
+	    light = 
+	    new THREE.DirectionalLight(16777215, 1, 0, null) ;
+	    manager.scene.add(light);
+light.manager = manager;
+	    sphere_1_sphere = new THREE.SphereGeometry(20, 32, 16) ;
+	    sphere_1 = new THREE.Mesh(sphere_1_sphere, material_sphere1);
+	    manager.scene.add(sphere_1);
+		sphere_1.events = new ev.EventHolder();
+sphere_1.manager = manager;
+	    sphere_2_sphere = new THREE.SphereGeometry(20, 32, 16) ;
+	    sphere_2 = new THREE.Mesh(sphere_2_sphere, material_sphere2);
+	    manager.scene.add(sphere_2);
+		sphere_2.events = new ev.EventHolder();
+sphere_2.manager = manager;
+	    cylinder_1_cylinder = new THREE.CylinderGeometry(10, 10, 50, null, null, null) ;
+	    cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
+	    manager.scene.add(cylinder_1);
+		cylinder_1.events = new ev.EventHolder();
+cylinder_1.manager = manager;
+	    cylinder_2_cylinder = new THREE.CylinderGeometry(10, 10, 50, null, null, null) ;
+	    cylinder_2 = new THREE.Mesh(cylinder_2_cylinder, cylinder1_material);
+	    manager.scene.add(cylinder_2);
+		cylinder_2.events = new ev.EventHolder();
+cylinder_2.manager = manager;
+	    cube_1_cube = new THREE.CubeGeometry(30, 30, 30, null, null, null, null, null) ;
+	    cube_1 = new THREE.Mesh(cube_1_cube, cube_material);
+	    manager.scene.add(cube_1);
+		cube_1.events = new ev.EventHolder();
+cube_1.manager = manager;
+	    cube_2_cube = new THREE.CubeGeometry(30, 30, 30, null, null, null, null, null) ;
+	    cube_2 = new THREE.Mesh(cube_2_cube, cube1_material);
+	    manager.scene.add(cube_2);
+		cube_2.events = new ev.EventHolder();
+cube_2.manager = manager;
+	    plane_1_plane = new THREE.PlaneGeometry(1000, 1000, 100, 100) ;
+	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
+	    manager.scene.add(plane_1);
+		plane_1.events = new ev.EventHolder();
+plane_1.manager = manager;
+            camera_2.position.x = -250;
+            camera_2.position.y = 25;
+            light.position.y = 0.5;
+            light.position.z = 1;
+            sphere_1.position.x = 250;
+            sphere_1.position.y = 30;
+            sphere_2.position.x = -250;
+            sphere_2.position.y = 30;
+            set_rotation_x(cylinder_1.rotation, 212);
+            set_rotation_y(cylinder_1.rotation, 212);
+            cylinder_1.position.x = 100;
+            cylinder_1.position.y = 30;
+            cylinder_1.position.z = 100;
+            set_rotation_x(cylinder_2.rotation, 212);
+            set_rotation_y(cylinder_2.rotation, 212);
+            cylinder_2.position.x = -100;
+            cylinder_2.position.y = 30;
+            cylinder_2.position.z = 100;
+            cube_1.position.x = -100;
+            cube_1.position.y = 30;
+            cube_1.position.z = -100;
+            set_rotation_x(cube_1.rotation, 212);
+            set_rotation_y(cube_1.rotation, 212);
+            cube_2.position.x = 100;
+            cube_2.position.y = 30;
+            cube_2.position.z = -100;
+            set_rotation_x(cube_2.rotation, 212);
+            set_rotation_y(cube_2.rotation, 212);
+            plane_1.position.y = 0.100000001;
+            set_rotation_x(plane_1.rotation, -90);
+            application.is_quake_camera = false;
+	application.events.addListener("keyup", function(keycode)
+	{    
+		if (keycode == SHIFT)
+{
+application.is_quake_camera = !application.is_quake_camera;
+}
+	}
+	);
+	application.events.addListener("switch_cameras", function()
+	{    
+		if (application.is_quake_camera)
+{
+set_active_camera(camera_1);
+}
+else
+{
+set_active_camera(camera_2);
+}
+	}
+	);
+var event_manager = new ev.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(manager, ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(manager, ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(manager, ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(manager, ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(manager, ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(manager, ev.keyCode);                  
+};
+manager.events.addListener("mousedown", function(x,y)
+{    
+	application.events.dispatch("mousedown", [x, y]);
+});
+manager.events.addListener("mouseup", function(x,y)
+{    
+	application.events.dispatch("mouseup", [x, y]);
+});
+manager.events.addListener("mousemove", function(x,y)
+{    
+	application.events.dispatch("mousemove", [x, y]);
+});
+manager.events.addListener("click", function(x,y)
+{    
+	application.events.dispatch("click", [x, y]);
+});
+manager.events.addListener("drag", function(x,y)
+{    
+	application.events.dispatch("drag", [x, y]);
+});
+manager.events.addListener("dragend", function(x,y)
+{    
+	application.events.dispatch("dragend", [x, y]);
+});
+manager.events.addListener("keyup", function(keycode)
+{    
+	application.events.dispatch("keyup", [keycode]);
+});
+manager.events.addListener("keydown", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("keypress", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("update", function(delta, elapsed)
+{    
+	application.events.dispatch("update", [delta, elapsed]);
+});
+application.events.dispatch("init", []);
+		document.body.appendChild( renderer.domElement );
+animate();
+});
+function animate() {	
+	requestAnimationFrame( animate );
+	render();	
+}
+</script>
+</body>
+</html>

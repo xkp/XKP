@@ -66,7 +66,7 @@ import xkp.android.libs.Layout.XKPLayout;
 		__physics2.setFriction(0.5f);
 		__physics2.setRestitution(0.200000003f);
 		__physics2.setBodyType(BodyType.DYNAMIC);
-			__physics2.setPosition(, );
+			__physics2.setPosition(null, null);
 		__physics2.createBody(21.500000f);
 			XKPSpawner cannon = new XKPSpawner( this, layoutapplication, "bullet", 20, 60, 0 ); 
 				cannon.setPosition(20, cannon.getPosition().y);

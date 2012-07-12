@@ -177,6 +177,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\..\..\src\xss\dsl\ajax.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\xs\array.cpp"
 				>
 			</File>
@@ -343,6 +347,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath="..\..\..\include\xss\dsl\ajax.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\xs\array.h"
 				>
 			</File>
@@ -351,11 +359,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\base.h"
+				RelativePath="..\..\..\include\xss\lang\base.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\xss\lang\base.h"
+				RelativePath="..\..\..\include\base.h"
 				>
 			</File>
 			<File

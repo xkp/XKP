@@ -91,16 +91,18 @@ namespace xkp
         xss_application_renderer(fs::path entry_point, Language lang, XSSCompiler compiler);
       public:
         XSSContext context();
-        void       register_module(const str& id, XSSModule module);
-        str        target();
-        void       set_target(const str& target);
-        fs::path   entry_point();
-        fs::path   output_path();
-        void       output_path(fs::path path);
-        void       set_output_path(const str& path);
-        XSSModule  instance_idiom(XSSObject inst);
-        XSSModule  type_idiom(const str& type);
-        XSSModule  get_idiom(const str& id);
+        void          register_module(const str& id, XSSModule module);
+        void          register_singleton(XSSObject singleton);
+        str           target();
+        void          set_target(const str& target);
+        fs::path      entry_point();
+        fs::path      output_path();
+        void          output_path(fs::path path);
+        void          set_output_path(const str& path);
+        XSSModule     instance_idiom(XSSObject inst);
+        XSSModule     type_idiom(const str& type);
+        XSSModule     get_idiom(const str& id);
+        XSSObjectList get_singletons();
       public:
         std::vector<XSSModule>& modules();
       private:
@@ -109,6 +111,7 @@ namespace xkp
         str                    target_;
         XSSContext             context_;
         std::vector<XSSModule> modules_;
+        XSSObjectList          singletons_;
     };
 
   enum pre_process_result
@@ -134,11 +137,13 @@ namespace xkp
         bool               one_of_us(XSSObject obj);
         void               set_definition(XSSObject def);
         void               used();
+        void               set_host(XSSModule host);
       private:
         XSSContext   ctx_;
         size_t       ev_pprocess_;
         fs::path     path_;
         bool         used_; 
+        XSSModule    host_;
       private:
         //types
         typedef std::map<str, XSSType>  type_list;
@@ -272,24 +277,24 @@ namespace xkp
         std::vector<XSSType>                app_types_;
         bool                                no_output_;    
 
-        XSSObject   read_project(fs::path xml_file, param_list& args);
-        void        read_application_types(std::vector<XSSObject> & applications, param_list& args);
-        XSSModule   read_module(const str& src, XSSApplicationRenderer app, XSSObject module);
-        void        read_types(XSSObject module_data, XSSApplicationRenderer app, XSSModule module);
-        void        read_instances(XSSObject module_data, XSSApplicationRenderer app, XSSModule module);
-        void        read_includes(XSSObject project_data);
-        void        read_include(fs::path def, fs::path src, XSSContext ctx, XSSApplicationRenderer app);
-        void        read_application(const str& app_file);
-        void        compile_ast(xs_container& ast, XSSContext ctx);
-        bool        options(const str& name);
-        Language    get_language(const str& name);
-        void        register_language_objects(const str& language_name, XSSContext context);
-        void        pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent, IPreprocessHandler* handler, bool exclude_module = false);
-        void        run();
-        void        copy_files(XSSObject project_data);
-        void        xss_args(const param_list params, param_list& result, fs::path& output_file, str& marker, MARKER_SOURCE& marker_source, XSSContext& ctx, str& html_template);
-        void        preprocess_type(XSSType clazz, XSSObject def_class, const str& super, XSSContext ctx, XSSApplicationRenderer app);
-        void        init_project_context(code_context& cctx);
+        XSSObject     read_project(fs::path xml_file, param_list& args);
+        void          read_application_types(std::vector<XSSObject> & applications, param_list& args);
+        XSSModule     read_module(const str& src, XSSApplicationRenderer app, XSSObject module);
+        void          read_types(XSSObject module_data, XSSApplicationRenderer app, XSSModule module);
+        XSSObjectList read_instances(XSSObject module_data, XSSApplicationRenderer app, XSSModule module);
+        void          read_includes(XSSObject project_data);
+        void          read_include(fs::path def, fs::path src, XSSContext ctx, XSSApplicationRenderer app);
+        void          read_application(const str& app_file);
+        void          compile_ast(xs_container& ast, XSSContext ctx);
+        bool          options(const str& name);
+        Language      get_language(const str& name);
+        void          register_language_objects(const str& language_name, XSSContext context);
+        void          pre_process(XSSApplicationRenderer renderer, XSSObject obj, XSSObject parent, IPreprocessHandler* handler, bool exclude_module = false);
+        void          run();
+        void          copy_files(XSSObject project_data);
+        void          xss_args(const param_list params, param_list& result, fs::path& output_file, str& marker, MARKER_SOURCE& marker_source, XSSContext& ctx, str& html_template);
+        void          preprocess_type(XSSType clazz, XSSObject def_class, const str& super, XSSContext ctx, XSSApplicationRenderer app);
+        void          init_project_context(code_context& cctx);
       private:
         //id gen
         typedef std::map<str, int> genid_list;

@@ -38,6 +38,8 @@ struct variable_gather : code_visitor
     virtual void for_(stmt_for& info);
     virtual void iterfor_(stmt_iter_for& info);
     virtual void while_(stmt_while& info);
+    virtual void switch_(stmt_switch& info);
+    virtual void try_(stmt_try& info);
     virtual void expression_(stmt_expression& info);
 
     virtual void return_(stmt_return& info)           {}
@@ -45,8 +47,6 @@ struct variable_gather : code_visitor
     virtual void continue_()                          {}
     virtual void dsl_(dsl& info)                      {}
     virtual void dispatch(stmt_dispatch& info)        {}
-    virtual void switch_(stmt_switch& info)           {}
-    virtual void try_(stmt_try& info)                 {}
     virtual void throw_(stmt_throw& info)             {}
 
     private:

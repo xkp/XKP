@@ -43,7 +43,7 @@ void tag_list::push_back(const tag t)
     tags_.push_back(t);
   }
 
-int tag_list::find(const str& id)
+int tag_list::find(const str& id, bool include_tag_name)
   {
     std::vector<tag>::iterator it = tags_.begin();
     std::vector<tag>::iterator nd = tags_.end();
@@ -51,14 +51,15 @@ int tag_list::find(const str& id)
     int tag_index = 0;
     for(; it != nd; it++, tag_index++)
       {
+        if (include_tag_name && it->tag_name == id)
+          return tag_index;
+
         prop_list::iterator pit = it->props.begin();
         prop_list::iterator pnd = it->props.end();
         for(; pit != pnd; pit++)
           {
             if (pit->first == "id" && pit->second == id)
-              {
-                return tag_index;
-              }
+              return tag_index;
           }
       }
 
