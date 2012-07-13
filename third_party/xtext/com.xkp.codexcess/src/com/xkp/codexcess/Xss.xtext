@@ -1,0 +1,351 @@
+grammar com.xkp.codexcess.Xss hidden(WS, ML_COMMENT, SL_COMMENT)
+											
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+generate xss "http://www.xkp.com/codexcess/Xss"
+
+Program
+	:	program = (Block
+	|	ConstructList
+	|	Expression)
+	;
+
+
+//------------------------------------------------- High level constructs
+ConstructList
+	:	Construct+
+	;
+
+ConstructBlock
+	:	'{' ConstructList? '}'
+	;
+
+AdjList
+	:	Adjective+
+	;
+
+Adjective
+	:	'delegate'
+	|	'public'
+	|	'private'
+	|	'class'
+	;
+
+ArgDeclListOpt
+	:	ArgDeclList?
+	;
+
+ArgDeclList
+	:	ArgumentDecl (',' ArgumentDecl)*
+	;
+
+ArgumentDecl
+	:	Type? IDENTIFIER ('=' Expression)?
+	;
+
+ClassArgDeclList
+	:	ClassArgumentDecl (',' ClassArgumentDecl)*
+	;
+
+ClassArgumentDecl
+	:	IDENTIFIER ('=' PrimaryExpr)?
+	;
+
+ClassArgListOpt
+	:	('<' ClassArgDeclList '>')?
+	;
+
+Construct
+	:	AdjList? Property
+	|	AdjList? MethodDecl
+	|	'instance' QualifiedID TypeOpt ConstructBlock
+	|	'class' IDENTIFIER ClassArgListOpt TypeOpt ConstructBlock
+    |   'behaviour' IDENTIFIER TypeOpt ConstructBlock
+    |   'on' QualifiedID '(' ArgDeclListOpt ')' Block
+    |   'const' IDENTIFIER '=' Expression ';'
+    |	'event' IDENTIFIER '(' ArgDeclListOpt ')' ';'
+	|	'behave' 'as' IDENTIFIER Block
+	|	'behave' 'as' IDENTIFIER ';'
+	|	Expression '->' Expression ';'
+	|	DSL
+	;
+
+Property
+	:	'property' IDENTIFIER TypeOpt PropDescriptor
+	|	LocalVarDecl ';'
+	;
+
+MethodName
+	:	'method'
+	|	'function'
+	;
+
+MethodDecl
+	:	MethodName IDENTIFIER '(' ArgDeclListOpt ')' TypeOpt Block
+	|	Type IDENTIFIER '(' ArgDeclListOpt ')' Block
+	;
+
+TypeOpt
+	:	(':' Type)?
+	;
+
+PropDescriptor
+	:	Block
+	|	'=' Block Block?
+	|	'=' Expression Block
+	|	('=' Expression)? ';'
+	;
+
+
+//------------------------------------------------- Code
+StmList
+	:	Statement+
+	;
+
+Statement
+	:	LocalVarDecl ';'
+	|	'if' '(' Expression ')' Statement ('else' Statement)?
+	|	'for' '(' ForInitOpt ';' ForConditionOpt ';' ForIteratorOpt ')' Statement
+	|	'for' '(' Type IDENTIFIER 'in' Expression ')' Statement
+	|	'while' '(' Expression ')' Statement
+	|	'switch' '(' SwitchHeader ')' '{' SwitchSectionsOpt '}'
+	|	'dispatch' QualifiedID '(' ArgListOpt ')'
+	|	'break' ';'
+	|	'continue' ';'
+	|	'return' ExpressionOpt ';'
+	|	'try' Block CatchClauses FinallyClausesOpt
+	|	'throw' Expression ';'
+	|	Expression ';'
+	|	Block
+	|	DSL
+	;
+
+CatchClauses
+	:	CatchClause*
+	;
+
+CatchClause
+	:	'catch' ('(' Type IDENTIFIER? ')')? Block
+	;
+
+FinallyClausesOpt
+	:	('finally' Block)?
+	;
+
+Block
+	:	'{' StmList? '}'
+	;
+
+LocalVarDecl
+	:	Type VariableDeclarator
+	;
+
+VariableDeclarator
+	:	IDENTIFIER ('=' Expression)?
+	;
+
+SwitchHeader
+	:	Expression?
+	;
+
+SwitchSectionsOpt
+	:	SwitchSection*
+	;
+
+SwitchSection
+	:	SwitchLabels StmList
+	;
+
+SwitchLabels
+	:	SwitchLabel+
+	;
+
+SwitchLabel
+	:	'case' Expression ':'
+	|	'default' ':'
+	;
+
+ForInitOpt
+	:	(LocalVarDecl | Expression)?
+	;
+
+ForIteratorOpt
+	:	Expression?
+	;
+
+ForConditionOpt
+	:	Expression?
+	;
+
+
+//------------------------------------------------- DSLs
+DSL
+	:	DSLIdentifier (IDENTIFIER? '(' ArgListOpt ')')? '@' DEC_LITERAL
+	;
+
+
+//------------------------------------------------- Expressions
+ExpressionOpt
+	:	Expression?
+	;
+
+ExpressionList
+	:	Expression (',' Expression)*
+	;
+
+Expression
+	:	ConditionalExpr (('='|'+='|'-='|'*='|'/='|'<<='|'>>=') ConditionalExpr)*
+	;
+
+ConditionalExpr
+	:	OrExpr ('?' OrExpr ':' ConditionalExpr)?
+	;
+
+OrExpr
+	:	AndExpr ('||' AndExpr)*
+	;
+
+AndExpr
+	:	EqualityExpr ('&&' EqualityExpr)*
+	;
+
+EqualityExpr
+	:	CompExpr (('=='|'!=') CompExpr)*
+	;
+
+CompExpr
+	:	ShiftExpr (('<'|'>'|'<='|'>='|'as'|'is'|'has') ShiftExpr)*
+	;
+
+ShiftExpr
+	:	AddExpr (('<<'|'>>') AddExpr)*
+	;
+
+AddExpr
+	:	MultExpr (('+'|'-') MultExpr)*
+	;
+
+MultExpr
+	:	UnaryExpr (('*'|'/'|'%') UnaryExpr)*
+	;
+
+UnaryExpr
+	:	'!' UnaryExpr
+	|	'-' UnaryExpr
+	|	'++' UnaryExpr
+	|	'--' UnaryExpr
+	|	MethodExpr
+	;
+
+MethodExpr
+	:	PrimaryExpr+ Method*
+	;
+
+Method
+	:	MEMBER_NAME ( '(' ArgListOpt ')' )?
+	|	'[' ExpressionList ']'
+	|	'++'
+	|	'--'
+	;
+
+ObjectListOpt
+	:	ObjectList?
+	;
+
+ObjectList
+	:	ObjectValue (',' ObjectValue)*;
+
+ObjectValue
+	:	IDENTIFIER ':' Expression
+	;
+
+PrimaryExpr
+	:	Primary
+	|	'new' Type '(' ArgListOpt ')'
+	|	'{' ObjectListOpt '}'
+	|	('(' Expression ')')
+	;
+
+ArrayLiteral
+	:	'[' ArgListOpt ']'
+	;
+
+Primary
+	:	IDENTIFIER ( '(' ArgListOpt ')' )?
+	|	ArrayLiteral
+	|	Literal
+	;
+
+
+//------------------------------------------------- Types
+Type
+	:	IDENTIFIER ('<' TypeArgList '>')?
+	;
+
+TypeArgList
+	:	TypeArgument (',' TypeArgument)*
+	;
+
+TypeArgument
+	:	(IDENTIFIER '=')? PrimaryExpr
+	;
+
+
+//------------------------------------------------- Arguments
+ArgListOpt
+	:	ArgList?
+	;
+
+ArgList
+	:	Argument (',' Argument)*
+	;
+
+Argument
+	:	(IDENTIFIER '=')? ConditionalExpr
+	;
+
+
+//------------------------------------------------- Literals
+Literal
+	:	'true'
+	|	'false'
+	|	'null'
+	|	DEC_LITERAL
+	|	HEX_LITERAL
+	|	REAL_LITERAL
+	|	CHAR_LITERAL
+	|	STRING_LITERAL
+	;
+
+//------------------------------------------------- IDs
+DSLIdentifier
+	:	'@' IDENTIFIER
+	;
+
+MemberList
+	:	MEMBER_NAME+
+	;
+
+QualifiedID
+	:	IDENTIFIER MemberList?
+	;
+
+terminal MEMBER_NAME: '.' IDENTIFIER;
+terminal IDENTIFIER: ('a'..'z'|'A'..'Z') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*;
+terminal REAL_LITERAL: ('0'..'9')* '.' DEC_LITERAL;
+terminal DEC_LITERAL returns ecore::EInt: ('0'..'9')+;
+terminal HEX_LITERAL: '0' ('x'|'X') ('0'..'9'|'A'..'F'|'a'..'f')+;
+terminal CHAR_LITERAL:
+		"'" ( '\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|"'") ) "'"
+	;
+terminal STRING_LITERAL: 
+			'"' ( '\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|'"') )* '"' |
+			"'" ( '\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|"'") )* "'"
+		; 
+
+terminal ML_COMMENT	: '/*' -> '*/';
+terminal SL_COMMENT 	: '//' !('\n'|'\r')* ('\r'? '\n')?;
+
+terminal WS			: (' '|'\t'|'\r'|'\n')+;
+
+terminal ANY_OTHER: .;
