@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<plugin>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package 
+       uri = "http://www.xkp.com/codexcess/Xss" 
+       class = "com.xkp.codexcess.xss.XssPackage"
+       genModel = "com/xkp/codexcess/Xss.genmodel" /> 
+	
+  </extension>
+
+
+
+
+</plugin>

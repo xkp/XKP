@@ -2,6 +2,13 @@ bin/
 output/
 ipch/
 
+src-gen/
+xtend-gen/
+.metadata/
+.settings/
+.launch/
+META-INF/
+
 *.depend
 *.layout
 
