@@ -1,0 +1,35 @@
+<application src="wgl_shader_cl.xs" title="Test 3D" background="black">
+
+	<resources>	
+	
+		<image id="image_1" src="images/disturb.jpg"/>
+		
+	</resources>
+	
+	<materials>
+	
+		<my_material1 id="shader_mat1" 
+			time="1.0" resolution="vector2(0,0)" texture="images/disturb.jpg"
+		/>					
+		<my_material2 id="shader_mat2" 
+			time="1.0" resolution="vector2(0,0)"
+		/>						
+
+	</materials>
+		
+	<scene>			
+		
+		<camera id="camera_1" fov="70" aspect="1.5" near="1" far="1000" look_at="scene.position">
+			<position y="150" z="500"/>			
+		</camera>
+			
+		<cube id="cube_1" width="200" height="200" depth="200" x_segments="1" 
+				y_segments="1" z_segments="1" material="shader_mat2">			
+			<position y="150"/>			
+		</cube>
+		
+		<plane id="plane_1" width="200" height="200" material="shader_mat1"/>		
+				
+	</scene>
+	
+</application>

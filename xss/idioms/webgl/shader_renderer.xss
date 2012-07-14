@@ -26,6 +26,8 @@ if(!obj.use_default_shader)
 	}
 	for(var child_ in obj.children)
 	{
+		if(!child_.value)
+			child_.value = "null";
 		out()
 		{
 			<xss:e v = "obj.id"/>_uniforms.<xss:e v = "child_.id"/> = 
@@ -50,7 +52,23 @@ if(!obj.use_default_shader)
 			out()
 			{
 				<xss:e v = "obj.id"/>_uniforms.<xss:e v = "child_.id"/>.texture.wrapS = <xss:e v = "obj.id"/>_uniforms.<xss:e v = "child_.id"/>.texture.wrapT = THREE.Repeat;
-			}		
+			}
+		var value;
+		if(child_.texture)
+			value = child_.texture;	
+		else
+			value = child_.value;
+		var value_type = compiler.type_of(value);
+				
+		var setter = object();
+		setter.text = "uniforms."+child_.id+".value = {value}";
+		
+		var getter = object();
+		getter.text = "uniforms."+child_.id+".value";
+		
+        compiler.log(obj.id);
+		compiler.add_object_property(obj, child_.id, type = value_type, value = value, get = getter, set = setter);	
+		
 	}	
 	out(){
 	<xss:e v = "obj.id"/> = new <xss:e v="obj.type.output_id"/>(<xss:open_brace/>
@@ -73,6 +91,8 @@ else
 	}	
 	for(var child in obj.children)
 	{
+		if(!child.value)
+			child.value = "null";
 		out()
 		{
 			<xss:e v = "obj.id"/>_uniforms[ '<xss:e v = "child.id"/>' ]						

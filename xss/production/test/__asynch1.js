@@ -1,4 +1,4 @@
-importScripts("../js/resig.js");
+importScripts("../js/../js/resig.js");
 importScripts("../js/jsmanipulate/jsmanipulate.js");
 importScripts("../js/jsmanipulate/jsm-manager.js");
 importScripts("../js/jsmanipulate/jsm-utils.js");

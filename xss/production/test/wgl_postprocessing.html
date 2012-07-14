@@ -220,13 +220,13 @@ head_model.manager = manager;
 			effect_bleach.uniforms[ 'opacity' ]						
 				.value = 0.400000006
 			;
-		composer.addPass( effect_bleach );
+		composer.addPass( effect_bleach );	
 	effect_bleach.manager = manager;
 		effect_color = new THREE.ShaderPass( THREE.ShaderExtras[ "colorCorrection" ] );
-			effect_color.uniforms[ 'powRGB' ]		
+			effect_color.uniforms[ 'powRGB' ]						
 				.value = vector3(1.4, 1.45, 1.45)
 			;
-			effect_color.uniforms[ 'mulRGB' ]
+			effect_color.uniforms[ 'mulRGB' ]						
 				.value = vector3(1.1, 1.1, 1.1)
 			;
 		composer.addPass( effect_color );	

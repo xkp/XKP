@@ -46,7 +46,7 @@ on render_instances()
 		}	
 		compiler.xss("inst_renderer.xss", inst);	
 		if(inst.wait_for_package)
-			out(){<xss:close_brace/>);}
+			out(){<xss:close_brace/>);}		
     }	
 }
 
@@ -73,7 +73,7 @@ on render_inst_elems()
 
 on render_types()
 {
-	compiler.log("Rendering 3js Types...");
+	compiler.log("Rendering WebGL Types...");
 
     for(var ut in user_types)
     {

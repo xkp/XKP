@@ -1,6 +1,6 @@
 <xss:parameter id="clazz"/>
 
-<xss:code>
+<xss:code>		
     array param_values = [];
     clazz.instantiator = "instantiator.xss";	
     bool super_transform = false;
@@ -98,7 +98,7 @@
 		{
 			out()
 			{
-			 var <xss:e v="inst.id"/>;
+			var <xss:e v="inst.id"/>;
 			<xss:e v="inst.id"/> = <xss:e v="compiler.instantiate(inst.type, object = inst)"/> ;
 			}
 			

@@ -1584,6 +1584,20 @@ XSSProperty xss_compiler::add_object_property(const param_list params)
             xss_throw(error);
           }
 
+        if (pname == "type" || pname == "value")
+          continue;
+
+        if (pname == "set" || pname == "get")
+          {
+            XSSObject accesor = variant_cast<XSSObject>(params.get(i), XSSObject());
+            if (accesor)
+              {
+                accesor->set_id(pname);
+                result->add_child(accesor);
+              }
+            continue;
+          }
+
         result->add_attribute(pname, params.get(i));
       }
 
