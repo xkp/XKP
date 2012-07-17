@@ -263,6 +263,7 @@ xss_module::xss_module(XSSContext ctx):
   used_(false)
   {
     ev_pprocess_ = register_event("pre_process");
+    ev_pprocess_type_ = register_event("pre_process_type");
     DYNAMIC_INHERITANCE(xss_module)
   }
 
@@ -279,6 +280,13 @@ pre_process_result xss_module::pre_process(XSSObject obj, XSSObject parent)
       return PREPROCESS_HANDLED; //canceled by user
 
     return PREPROCESS_KEEPGOING;
+  }
+
+void xss_module::pre_process_type(XSSType type)
+  {
+    param_list args;
+    args.add("type", type);
+    dispatch_event(ev_pprocess_type_, args);
   }
 
 DynamicArray xss_module::instances()
@@ -2306,6 +2314,9 @@ void xss_compiler::read_types(XSSObject module_data, XSSApplicationRenderer app,
                 xss_throw(error);
               }
 
+            //let the idiom do custom processing
+            module->pre_process_type(type);
+
             //and register
             if (!alias)
               {
@@ -2656,6 +2667,9 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
             ictx->set_this(XSSObject(clazz));
 
             preprocess_type(clazz, def_class, ci.super, ictx, app);
+            XSSModule module = app->type_idiom(ci.super);
+            if (module)
+              module->pre_process_type(clazz);
 
 				    //then compile the code
             compile_ast(ci, ictx);
@@ -2690,6 +2704,10 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
 
         XSSContext ictx(new xss_context(ctx, path.parent_path()));
         preprocess_type(clazz, def_class, super, ictx, app);
+
+        XSSModule module = app->type_idiom(super);
+        if (module)
+          module->pre_process_type(clazz);
 
         clazz->set_context(ictx);
       }

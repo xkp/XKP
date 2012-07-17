@@ -22,6 +22,11 @@ on pre_process(obj)
 			obj.wait_for_package = obj.parent.wait_for_package;
 }
 
+on pre_process_type(type)
+{
+    compiler.log("Preprocessing " + type.id);
+}
+
 on render_dependencies()
 {
     var dependencies = compiler.idiom_dependencies("webgl");
