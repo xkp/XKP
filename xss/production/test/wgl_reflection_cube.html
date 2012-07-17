@@ -18,12 +18,20 @@
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
             <script type="text/javascript" src="../js/three/fonts.js"></script>
+            <script type="text/javascript" src="../js/three/ShaderExtras.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/EffectComposer.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/RenderPass.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/ShaderPass.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/BloomPass.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/FilmPass.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/DotScreenPass.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/TexturePass.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/MaskPass.js"></script>
 <script type="text/javascript">	
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 			var renderer = new THREE.WebGLRenderer( { antialias: false } );
 		var ui_;
 var canvas_position = {x:0, y:0};
-var active_camera;
 var g_elapsed;
 var g_delta;	
 var scene = new THREE.Scene();
@@ -38,6 +46,7 @@ application.events = new ev.EventHolder();
 // --------RESOURCES---------
 renderer.setSize( app_width, app_height );
 var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
+var three_utils = new threejs.Utils();
 manager.events = new ev.EventHolder();
 function render() {
 manager.canvas_position = getElementPosition(renderer.domElement);
@@ -63,17 +72,17 @@ var t_cube1;var material_sphere1;var camera_1;var __panorama_cube1;
 	    manager.scene.add(my_sphere);
 		my_sphere.events = new ev.EventHolder();
         var this__ = my_sphere;
+		if(my_sphere instanceof THREE.Object3D)
+			manager.scene.add(my_sphere);
+		my_sphere.manager = manager;        
         my_sphere.mat = null;
         my_sphere.mat_set = function (value)
         {
             my_sphere.mat = value;
             this.material = value;
         };
-		if(my_sphere instanceof THREE.Object3D)
-			manager.scene.add(my_sphere);
-		my_sphere.manager = manager;
-        return my_sphere;
-        }
+		return my_sphere;
+			}
 threejs_load_resources(manager, function()
 {
 		var urls = ["images/cube/pisa/px.png", "images/cube/pisa/nx.png",
@@ -86,11 +95,12 @@ color:White,envMap:t_cube1,
 	});
 material_sphere1.manager = manager;
 		    camera_1 = 
-		    new THREE.PerspectiveCamera(60, 1.5, 1, 100000, null) ;				
+		    new THREE.PerspectiveCamera(60, 1.5, 1, 100000, null) ;	
+			manager.active_camera = camera_1;
 camera_1.manager = manager;
 			var __panorama_cube1 = {};
 			var __panorama_cube1_shader = THREE.ShaderUtils.lib[ "cube" ];
-			__panorama_cube1_shader.uniforms[ "tCube" ].texture = __panorama_cube1;
+			__panorama_cube1_shader.uniforms[ "tCube" ].texture = t_cube1;
 			var __panorama_cube1_material = new THREE.ShaderMaterial( {
 				fragmentShader: __panorama_cube1_shader.fragmentShader,
 				vertexShader: __panorama_cube1_shader.vertexShader,

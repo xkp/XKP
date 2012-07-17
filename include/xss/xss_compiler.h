@@ -127,6 +127,7 @@ namespace xkp
         xss_module(XSSContext ctx);
       public:
         pre_process_result pre_process(XSSObject obj, XSSObject parent);
+        void               pre_process_type(XSSType type);
         DynamicArray       instances();
         fs::path           path();
         void               set_path(fs::path p);
@@ -141,6 +142,7 @@ namespace xkp
       private:
         XSSContext   ctx_;
         size_t       ev_pprocess_;
+        size_t       ev_pprocess_type_;
         fs::path     path_;
         bool         used_; 
         XSSModule    host_;

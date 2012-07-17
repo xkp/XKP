@@ -42,7 +42,7 @@
             </property>		
 		</class>		
 		
-		<class id="material" hasimagedata="true">
+		<class id="material" heritable="true" hasimagedata="true">
 			<constructor_params>
 				<parameter id="color" property="color" runtime="true"/> 
 				<parameter id="wireframe" property="wireframe" runtime="true"/>
@@ -131,7 +131,7 @@
 		
 		<class id="depth_material" super="material" output_id="THREE.MeshDepthMaterial" renderer="inst_no_params.xss"/>
 				
-		<class id="shader_material" super="material" output_id="THREE.ShaderMaterial" renderer="shader_renderer.xss">
+		<class id="shader_material" heritable="true" super="material" output_id="THREE.ShaderMaterial" renderer="shader_renderer.xss">
 			<constructor_params>				
 				<parameter id="lights" property="lights" runtime="true"/>							
 			</constructor_params>			
@@ -533,9 +533,9 @@
 			<property id="scale" type="vector3d"/>
 		</class>		
 		
-		<class id="effect_composer" renderer="postproc_renderer.xss"/>
+		<class id="effect_composer" renderer="postproc_renderer.xss" heritable="true"/>
 		
-		<class id="effect" renderer="postproc_renderer.xss">
+		<class id="effect" renderer="postproc_renderer.xss" heritable="true">
 			<property id="render_to_screen" output_id="renderToScreen" type="bool"/>
 			<property id="enabled" type="bool"/>
 		</class>	

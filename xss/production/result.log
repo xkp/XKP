@@ -2,137 +2,519 @@
 ===[ animtest.project.xml ]================
 
 
-Error [cannot-resolve] Unknown identifier
-	identifier = apk
-	file = c:/dev/XKP/xss/samples/android/animtest/../../../idioms/android/main.xssERROR: Project:  animtest.project.xml
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Sequence Types...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: lbl1
+log: Rendering instance: lbl2
+log: Rendering instance: lbl3
+log: Rendering instance: btn1
+log: Rendering instance: btn2
+log: Rendering instance: btn3
+log: Rendering instance: anim1
+log: Rendering instance: anim1
+log: Rendering instance: anim2
+log: Rendering instance: anim2
+log: Rendering instance: anim3
+log: Rendering instance: anim3
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: Copying files...
+log: Rendering Android Manifest...
 
+Success are greateful
 ===[ characters.project.xml ]================
 
 
-Error [cannot-resolve] Unknown identifier
-	identifier = apk
-	file = c:/dev/XKP/xss/samples/android/characters/../../../idioms/android/main.xssERROR: Project:  characters.project.xml
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering class: character
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: aladdin
+log: Rendering instance: mickey
+log: Rendering instance: pluto
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: i_aladdin
+log: Rendering instance: i_mickey
+log: Rendering instance: i_pluto
+log: Rendering instance: a_audio1
+log: Rendering instance: a_audio2
+log: Rendering instance: v_mickey
+log: Rendering instance: v_pluto
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: Rendering Android Manifest...
 
+Success are greateful
 ===[ contacts.project.xml ]================
 
 
-Error [cannot-resolve] Unknown identifier
-	identifier = apk
-	file = c:/dev/XKP/xss/samples/android/contacts/../../../idioms/android/main.xssERROR: Project:  contacts.project.xml
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: __div1
+log: Rendering instance: btnLeft
+log: Rendering instance: btnRight
+log: Rendering instance: swtStates
+log: Rendering instance: divAdd
+log: Rendering instance: lblFullName
+log: Rendering instance: lblPhone
+log: Rendering instance: edtFullName
+log: Rendering instance: edtPhoneNumber
+log: Rendering instance: chkVerifier
+log: Rendering instance: btnAddContact
+log: Rendering instance: divFind
+log: Rendering instance: lblFindType
+log: Rendering instance: rdbByName
+log: Rendering instance: rdbByPhone
+log: Rendering instance: lblCriterion
+log: Rendering instance: edtCriterion
+log: Rendering instance: divAbout
+log: Rendering instance: lblName
+log: Rendering instance: lblContact
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: Rendering Android Manifest...
 
+Success are greateful
 ===[ figures2d.project.xml ]================
 
 
-Error [cannot-resolve] Unknown identifier
-	identifier = apk
-	file = c:/dev/XKP/xss/samples/android/figures2d/../../../idioms/android/main.xssERROR: Project:  figures2d.project.xml
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: div1
+log: Rendering instance: c1
+log: Rendering instance: r1
+log: Rendering instance: p1
+log: Rendering instance: point1
+log: Rendering instance: point2
+log: Rendering instance: point3
+log: Rendering instance: point4
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: Rendering Android Manifest...
 
+Success are greateful
 ===[ gallery.project.xml ]================
 
 
-Error [cannot-resolve] Unknown identifier
-	identifier = apk
-	file = c:/dev/XKP/xss/samples/android/gallery/../../../idioms/android/main.xssERROR: Project:  gallery.project.xml
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: gallery
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: img01
+log: Rendering instance: img02
+log: Rendering instance: img03
+log: Rendering instance: img04
+log: Rendering instance: img05
+log: Rendering instance: img06
+log: Rendering instance: img07
+log: Rendering instance: img08
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: Rendering Android Manifest...
 
+Success are greateful
 ===[ images.project.xml ]================
 
 
-Error [cannot-resolve] Unknown identifier
-	identifier = apk
-	file = c:/dev/XKP/xss/samples/android/images/../../../idioms/android/main.xssERROR: Project:  images.project.xml
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: album
+log: Rendering instance: changer
+log: Rendering instance: identifier
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: img1
+log: Rendering instance: img2
+log: Rendering instance: img3
+log: Rendering instance: img4
+log: Rendering instance: img5
+log: Rendering instance: img6
+log: Rendering instance: img7
+log: Rendering instance: img8
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: Rendering Android Manifest...
 
+Success are greateful
 ===[ box2d1.project.xml ]================
 
 
-Error [cannot-resolve] Unknown identifier
-	identifier = apk
-	file = c:/dev/XKP/xss/samples/android/jbox2d_1/../../../idioms/android/main.xssERROR: Project:  box2d1.project.xml
+log: Rendering Android project...
+log: API Level = 7
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: [jbox2d] Copying default files...
+log: Rendering Android Manifest...
 
+Success are greateful
 ===[ box2d2.project.xml ]================
 
 
-Error [cannot-resolve] Unknown identifier
-	identifier = apk
-	file = c:/dev/XKP/xss/samples/android/jbox2d_2/../../../idioms/android/main.xssERROR: Project:  box2d2.project.xml
+log: Rendering Android project...
+log: API Level = 7
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: btn1
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: __image1
+log: Rendering instance: __image2
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: [jbox2d] Copying default files...
+log: Rendering Android Manifest...
 
+Success are greateful
 ===[ box2d3.project.xml ]================
 
 
-Error [cannot-resolve] Unknown identifier
-	identifier = apk
-	file = c:/dev/XKP/xss/samples/android/jbox2d_3/../../../idioms/android/main.xssERROR: Project:  box2d3.project.xml
+log: Rendering Android project...
+log: API Level = 7
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering class: smiley_ball
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: __img1
+log: Rendering instance: __img2
+log: Rendering instance: __img3
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: __image1
+log: Rendering instance: __image2
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: [jbox2d] Copying default files...
+log: Rendering Android Manifest...
 
+Success are greateful
 ===[ box2d4.project.xml ]================
 
 
-Error [cannot-resolve] Unknown identifier
-	identifier = apk
-	file = c:/dev/XKP/xss/samples/android/jbox2d_4/../../../idioms/android/main.xssERROR: Project:  box2d4.project.xml
+log: Rendering Android project...
+log: API Level = 7
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering instance: move_around
+log: Rendering instance: move_around
+log: Rendering instance: fade_out
+log: Rendering instance: fade_out
+log: Rendering class: bad_guy
+log: Rendering Android Imports...
+log: Rendering instance: move_around
+log: Rendering instance: move_around
+log: Rendering class: good_guy
+log: Rendering Android Imports...
+log: Rendering class: bullet
+log: Rendering Android Imports...
+log: Rendering class: floor
+log: Rendering Sequence Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: hero
+log: Rendering instance: __floor1
+log: Rendering instance: game_over
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: __image1
+log: Rendering instance: __image2
+log: Rendering instance: __image3
+log: Rendering instance: __image4
+log: Rendering instance: __image5
+log: Rendering instance: __image6
+log: Rendering instance: __audio1
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: [jbox2d] Copying default files...
+log: Copying files...
+log: Rendering Android Manifest...
 
+
+
+
+
+
+
+
+package xkp.android.jBox2d_4
+	
+public class move_action extends Sequence {
+	
+
+
+
+
+                var this__ = this;
+            
+
+
+
+
+
+			private Float speed = 130.000000f;
+		
+
+
+
+
+
+			private Double vx = Math.random();
+		
+
+
+
+
+
+			private Double vy = Math.random();
+		
+
+
+
+
+
+			private XKPImage target;
+		
+
+
+
+
+
+			private void tick(Object delta) {
+		
+				target.setLeft(target.getX1() + vx * speed * delta);
+target.setTop(target.getY1() + vy * speed * delta);
+if (target.getX1() < 10 || target.getX1() > 570)
+{
+	vx = vx * -1;
+}
+if (target.getY1() < 10 || target.getY1() > 200)
+{
+	vy = vy * -1;
+}
+			
+			}
+		
+
+}
+
+
+
+Success are greateful
 ===[ box2d5.project.xml ]================
 
 
-Error [cannot-resolve] Unknown identifier
-	identifier = apk
-	file = c:/dev/XKP/xss/samples/android/jbox2d_5/../../../idioms/android/main.xssERROR: Project:  box2d5.project.xml
+log: Rendering Android project...
+log: API Level = 7
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering class: body_1
+log: Rendering Android Imports...
+log: Rendering class: body_2
+log: Rendering Android Imports...
+log: Rendering class: body_3
+log: Rendering Android Imports...
+log: Rendering class: floor
+log: Rendering Android Imports...
+log: Rendering class: my_body
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: __label1
+log: Rendering instance: __label2
+log: Rendering instance: __label3
+log: Rendering instance: __label4
+log: Rendering instance: __label5
+log: Rendering instance: btn1
+log: Rendering instance: btn2
+log: Rendering instance: btn3
+log: Rendering instance: btn4
+log: Rendering instance: btn5
+log: Rendering instance: btn6
+log: Rendering instance: __floor1
+log: Rendering instance: __floor2
+log: Rendering instance: __floor3
+log: Rendering instance: __floor4
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: __image1
+log: Rendering instance: __image2
+log: Rendering instance: __image3
+log: Rendering instance: __image4
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: [jbox2d] Copying default files...
+log: Rendering Android Manifest...
 
+Success are greateful
 ===[ kitchensink.project.xml ]================
 
 
-Error [cannot-resolve] Unknown identifier
-	identifier = apk
-	file = c:/dev/XKP/xss/samples/android/kitchensink/../../../idioms/android/main.xssERROR: Project:  kitchensink.project.xml
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: kitchen
+log: Rendering instance: __div1
+log: Rendering instance: btn1
+log: Rendering instance: toggle1
+log: Rendering instance: imgbtn1
+log: Rendering instance: lbl1
+log: Rendering instance: edit1
+log: Rendering instance: chkb1
+log: Rendering instance: __scroller1
+log: Rendering instance: rdgTab3
+log: Rendering instance: radio1
+log: Rendering instance: radio2
+log: Rendering instance: radio3
+log: Rendering instance: radio4
+log: Rendering instance: radio5
+log: Rendering instance: radio6
+log: Rendering instance: radio7
+log: Rendering instance: radio8
+log: Rendering instance: radio9
+log: Rendering instance: __scroller2
+log: Rendering instance: img1
+log: Rendering instance: __div2
+log: Rendering instance: prgbar1
+log: Rendering instance: prgbar2
+log: Rendering instance: prgbar3
+log: Rendering instance: prgbar4
+log: Rendering instance: seekb1
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: dialog
+log: Rendering instance: emulator
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: Rendering Android Manifest...
 
+Success are greateful
 ===[ maps.project.xml ]================
 
 
-Error [cannot-resolve] Unknown identifier
-	identifier = apk
-	file = c:/dev/XKP/xss/samples/android/maps/../../../idioms/android/main.xssERROR: Project:  maps.project.xml
+log: Rendering Android project...
+log: API Level = 7
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: __div1
+log: Rendering instance: btnGallery
+log: Rendering instance: btnMaps
+log: Rendering instance: lblStatus
+log: Rendering instance: lblInformation
+log: Rendering instance: swtScene
+log: Rendering instance: lblSwicherInformation
+log: Rendering instance: imgGallery
+log: Rendering instance: mapController
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: ico_gallery
+log: Rendering instance: ico_maps
+log: Rendering instance: photos
+log: Rendering instance: worth_1
+log: Rendering instance: worth_2
+log: Rendering instance: worth_3
+log: Rendering instance: worth_4
+log: Rendering instance: worth_5
+log: Rendering instance: worth_6
+log: Rendering instance: worth_7
+log: Rendering instance: maps
+log: Rendering instance: holguin
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: Rendering Android Manifest...
 
+Success are greateful
 ===[ simple.project.xml ]================
 
 
-Error [cannot-resolve] Unknown identifier
-	identifier = apk
-	file = c:/dev/XKP/xss/samples/android/simpletest/../../../idioms/android/main.xssERROR: Project:  simple.project.xml
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: lblFirstName
+log: Rendering instance: edtFirstName
+log: Rendering instance: lblLastName
+log: Rendering instance: edtLastName
+log: Rendering instance: btnFullName
+log: Rendering instance: lblFullName
+log: Rendering instance: edtContainer
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: Rendering Android Manifest...
 
+Success are greateful
 ===[ touchme.project.xml ]================
 
 
-Error [cannot-resolve] Unknown identifier
-	identifier = apk
-	file = c:/dev/XKP/xss/samples/android/touchme/../../../idioms/android/main.xssERROR: Project:  touchme.project.xml
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: btnTouchme
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: Rendering Android Manifest...
 
+Success are greateful
 ===[ kitchensink.project.xml ]================
 
 
 Error [404] File not found
-<<<<<<< HEAD
 	file = c:/dev/XKP/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
-=======
-	file = d:/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
->>>>>>> 273df89e2f4f6f6016ad845cc461c087619d31da
 
 ===[ pairs.project.xml ]================
 
 
 Error [404] File not found
-<<<<<<< HEAD
 	file = c:/dev/XKP/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
-=======
-	file = d:/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
->>>>>>> 273df89e2f4f6f6016ad845cc461c087619d31da
 
 ===[ simple.project.xml ]================
 
 
 Error [404] File not found
-<<<<<<< HEAD
 	file = c:/dev/XKP/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
-=======
-	file = d:/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
->>>>>>> 273df89e2f4f6f6016ad845cc461c087619d31da
 
 ===[ 3js-ms.project.xml ]================(Tests)
 
@@ -150,11 +532,6 @@ log: Rendering Resources...
 log: Rendering 3js Types...
 log: Rendering UI Types...
 log: Rendering UI...
-Success are greateful
-===[ 3js_cameras.project.xml ]================(Tests)
-
-
-log: Rendering 3js Types...
 Success are greateful
 ===[ 3js_carousel.project.xml ]================(Tests)
 
@@ -288,6 +665,10 @@ log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+Success are greateful
+===[ fbtest.project.xml ]================(Tests)
+
+
 Success are greateful
 ===[ g_anim.project.xml ]================(Tests)
 
@@ -474,7 +855,7 @@ Success are greateful
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
 Success are greateful
 ===[ jquery1.project.xml ]================(Tests)
 
@@ -692,6 +1073,12 @@ log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
 Success are greateful
+===[ jquery_pp.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering WebGL Types...
+Success are greateful
 ===[ jsmanip.project.xml ]================(Tests)
 
 
@@ -734,21 +1121,15 @@ log: Rendering UI...
 Success are greateful
 ===[ paintings.project.xml ]================(Tests)
 
-ERROR: Project:  paintings.project.xml
+
+Error [language] Unknown identifier
+	identifier = resourceERROR: Project:  paintings.project.xml
 
 ===[ pixastic.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering UI Types...
-log: Rendering UI...
-Success are greateful
-===[ pixastic_test.project.xml ]================(Tests)
-
-
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering 3js Types...
 log: Rendering UI...
 Success are greateful
 ===[ query_properties.project.xml ]================(Tests)
@@ -859,166 +1240,390 @@ Success are greateful
 ===[ wax1.project.xml ]================(Tests)
 
 
-		method: foo
-        code: function __callback1() 
-{
-var x = 10;
-function __callback2() 
-{
-return_function(x);
-return true;
+Error [language] A registered dsl needs an idiom to be included
+	dsl = sql
+	file = c:/dev/XKP/xss/tests/wax_test.xssERROR: Project:  wax1.project.xml
 
-}
-bar(function()
-{__callback2()
-});
-}
-bar(function()
-{
-	if (return_value)
-	{
-var c;
-function __callback3() 
-{
-function __callback4() 
-{
-
-if (c < 20)
-{return_function(c);
-return true;
-
-
-}
-else
-{
-c += 20;
-bar_foo(function()
-{
-{
-return_function(return_value);
-});
-});
-}
-}
-foo_bar(function()
-{c += return_value;__callback4()
-});
-}
-foo_bar(function()
-{c = return_value;
-__callback3();
-});
-	}
-	else
-{
-bar_foo(function()
-{()
-});
-	}
-});
-	
-
-Success are greateful
 ===[ wax2.project.xml ]================(Tests)
 
 
+log: 1
+log: myService
 Success are greateful
 ===[ wax3.project.xml ]================(Tests)
 
 
+log: 0
 Success are greateful
 ===[ wax4.project.xml ]================(Tests)
 
 
+log: 1
+log: service1
 Success are greateful
 ===[ webgl_particle.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
-Success are greateful
-===[ wgl_cameras.project.xml ]================(Tests)
-
-
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_cube_img.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_firstperson.project.xml ]================(Tests)
 
 
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_head.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_icosahedron.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_materials.project.xml ]================(Tests)
 
 
-log: Rendering 3js Types...
-Success are greateful
-===[ wgl_model.project.xml ]================(Tests)
-
-
-log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_monster.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_package.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
+Success are greateful
+===[ wgl_postprocessing.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
+Success are greateful
+===[ wgl_postprocessing_cl.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
+Success are greateful
+===[ wgl_pp_embedded.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_reflection_cube.project.xml ]================(Tests)
 
 
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_refraction_cube.project.xml ]================(Tests)
 
 
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_shader.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
+Success are greateful
+===[ wgl_shader_cl.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_shader_fresnel.project.xml ]================(Tests)
 
 
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
-===[ wgl_sound.project.xml ]================(Tests)
+===[ wgl_shader_fresnel_cl.project.xml ]================(Tests)
 
 
-log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_text.project.xml ]================(Tests)
 
 
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ xss1.project.xml ]================(Tests)
 
@@ -1587,11 +2192,7 @@ Success are greateful
 Error [syntax-error] Error while compiling xs
 	line = 4
 	column = 1
-<<<<<<< HEAD
 	file = c:/dev/XKP/xss/tests/xss5.xssERROR: Project:  xss5.project.xml
-=======
-	file = d:/xkp/xss/tests/xss5.xssERROR: Project:  xss5.project.xml
->>>>>>> 273df89e2f4f6f6016ad845cc461c087619d31da
 
 ===[ xss6.project.xml ]================(Tests)
 

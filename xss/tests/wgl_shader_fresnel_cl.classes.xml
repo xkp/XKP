@@ -1,0 +1,6 @@
+<xss:classes>
+    <class id="my_sphere" super="sphere"/>
+	<class id="my_material" super="shader_material" use_default_shader="fresnel">
+		<uniform id="t_cube" output_id="tCube" load="texture_cube"/>
+	</class>	
+</xss:classes>

@@ -16,10 +16,10 @@ if(obj.class_name == "effect_composer")
 		<xss:e v="obj.id"/> = new THREE.ShaderPass( THREE.ShaderExtras[ "<xss:e v="obj.shader"/>" ] );
 	}
 	for(var child in obj.children)
-	{
+	{		
 		out()
 		{
-			<xss:e v = "obj.id"/>.uniforms[ '<xss:e v = "child.id"/>' ]						
+			<xss:e v = "obj.id"/>.uniforms[ '<xss:e v = "child.output_id"/>' ]						
 		}
 		if(child.texture)
 			out()
@@ -31,7 +31,7 @@ if(obj.class_name == "effect_composer")
 			{
 				.texture = <xss:e v="child.texture_cube"/>	
 			}
-		else
+		else if(child.value)
 			out()
 			{
 				.value = <xss:e v = "child.value"/>
@@ -40,10 +40,6 @@ if(obj.class_name == "effect_composer")
 		{
 			;
 		}
-	}
-	out()
-	{
-		<xss:e v = "obj.parent.id"/>.addPass( <xss:e v = "obj.id"/> );	
 	}	
 }
 

@@ -6,14 +6,13 @@
 <body>
 <style type="text/css">
 	body{
-	background:#356;
+	background:Black;
 	}
 </style>
             <script type="text/javascript" src="../js/resig.js"></script>
             <script type="text/javascript" src="../js/event.js"></script>
             <script type="text/javascript" src="../js/keys.js"></script>
             <script type="text/javascript" src="../js/colors.js"></script>
-            <script type="text/javascript" src="../js/streamer.js"></script>
             <script type="text/javascript" src="../js/three/Three.js"></script>
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
@@ -43,34 +42,8 @@ var app_height = window.innerHeight;
 var application = {};
 var clock = new THREE.Clock();
 application.events = new ev.EventHolder();
-		var streamer = new stream.Streamer();	
-		var ResourceUtils = new stream.ResourceUtils();
-	// --------RESOURCES---------
-		var global_package = new stream.Package(streamer);	
-                global_package.add_item(
-            {
-		id:				"model_1",
-		resource_type:	RESOURCE_JSON_MODEL,
-		src:			"model/monster/monster.js",
-		frame_width:	null,
-		frame_height:	null,
-		animations:		[]
-});	
-				var model_1;
-				global_package.events.addListener("loaded", function()
-				{
-					model_1 = streamer.get_resource("model_1");
-				});
-		global_package.add_item({
-			id:				"invalid_res",
-			resource_type:	RESOURCE_IMAGE,
-			src:			"images/no_res.png",
-			frame_width:	null,
-			frame_height:	null,
-			animations:		[]
-		});		
-		global_package.load();	
-    // --------RESOURCES---------
+// --------RESOURCES---------
+// --------RESOURCES---------
 renderer.setSize( app_width, app_height );
 var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
 var three_utils = new threejs.Utils();
@@ -90,67 +63,117 @@ manager.events.dispatch("update", [g_delta, g_elapsed]);
 				set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var material_wireframe;var camera_1;var a_ligth;var d_ligth_1;var monster_model;var plane_1;
+var t_cube1;var shader_mat1;var camera_1;var __panorama_cube1;
+    function create_my_sphere(
+    radius,x_segments,y_segments ) { 
+    var my_sphere;
+	    my_sphere_sphere = new THREE.SphereGeometry(radius, x_segments, y_segments) ;
+	    my_sphere = new THREE.Mesh(my_sphere_sphere, new THREE.MeshBasicMaterial());
+	    manager.scene.add(my_sphere);
+		my_sphere.events = new ev.EventHolder();
+        var this__ = my_sphere;
+		if(my_sphere instanceof THREE.Object3D)
+			manager.scene.add(my_sphere);
+		my_sphere.manager = manager;        
+        my_sphere.mat = null;
+        my_sphere.mat_set = function (value)
+        {
+            my_sphere.mat = value;
+            this.material = value;
+        };
+		return my_sphere;
+			}
+    function create_my_material(
+    color,wireframe,wireframe_linewidth,src,texture_object,shading,vertex_colors,env_map,combine,reflectivity,shininess,specular,transparent,refraction_ratio,ambient,blending,emissive,depth_test,skinning,morph_targets,fog,morph_normals,lights ) { 
+    var my_material;
+		var my_material_shader = THREE.ShaderUtils.lib[ "fresnel" ];
+		var my_material_uniforms = THREE.UniformsUtils.clone( my_material_shader.uniforms );
+			my_material_uniforms[ 'tCube' ]						
+			;
+	my_material = new THREE.ShaderMaterial({
+		uniforms: my_material_uniforms,
+		vertexShader: my_material_shader.vertexShader,
+		fragmentShader: my_material_shader.fragmentShader
+		});
+        var this__ = my_material;
+		if(my_material instanceof THREE.Object3D)
+			manager.scene.add(my_material);
+		my_material.manager = manager;        
+            my_material.uniforms['tCube'].texture = undefined;
+		return my_material;
+			}
 threejs_load_resources(manager, function()
 {
-material_wireframe = new THREE.MeshBasicMaterial({
-color:blanchedalmond,wireframe:true,
-	});
-material_wireframe.manager = manager;
+		var urls = ["images/cube/Park2/posx.jpg", "images/cube/Park2/negx.jpg",
+					"images/cube/Park2/posy.jpg", "images/cube/Park2/negy.jpg",
+					"images/cube/Park2/posz.jpg", "images/cube/Park2/negz.jpg" ];		
+			t_cube1 = THREE.ImageUtils.loadTextureCube( urls );
+t_cube1.manager = manager;
+			    shader_mat1 = 
+create_my_material(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)
+ ;
+			shader_mat1.manager = manager;
 		    camera_1 = 
-		    new THREE.PerspectiveCamera(75, 1.5, 1, 10000, null) ;	
+		    new THREE.PerspectiveCamera(60, 1.5, 1, 100000, null) ;	
 			manager.active_camera = camera_1;
 camera_1.manager = manager;
-	    a_ligth = 
-	    new THREE.AmbientLight(2232576) ;
-	    manager.scene.add(a_ligth);
-a_ligth.manager = manager;
-	    d_ligth_1 = 
-	    new THREE.DirectionalLight(16772829, 1, 0, null) ;
-	    manager.scene.add(d_ligth_1);
-d_ligth_1.manager = manager;
-	monster_model = new THREE.Object3D();
-	var monster_model_loader = 
-	generate_model_loader(manager.streamer.get_resource('model_1').type);
-		monster_model_loader.load(
-				manager.streamer.get_resource('model_1').asset , function( geometry )
-			{
-				var monster_model_mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
-				monster_model.add(monster_model_mesh);
-            monster_model.position.x = -110;
-            monster_model.position.y = -350;
-            monster_model.position.z = -350;
-            monster_model.scale.x = 0.5;
-            monster_model.scale.y = 0.5;
-            monster_model.scale.z = 0.5;
-				manager.scene.add(monster_model);
-			} 		
-	);
-	monster_model.events = new ev.EventHolder();
-monster_model.manager = manager;
-	    plane_1_plane = new THREE.PlaneGeometry(10000, 10000, 100, 100) ;
-	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
-	    manager.scene.add(plane_1);
-		plane_1.events = new ev.EventHolder();
-plane_1.manager = manager;
-            manager.events.addListener('update', function(){camera_1.lookAt(monster_model.position)});
-            camera_1.position.z = 1000;
-            d_ligth_1.position.y = -70;
-            d_ligth_1.position.z = 100;
-            plane_1.position.y = -500;
+			var __panorama_cube1 = {};
+			var __panorama_cube1_shader = THREE.ShaderUtils.lib[ "cube" ];
+			__panorama_cube1_shader.uniforms[ "tCube" ].texture = t_cube1;
+			var __panorama_cube1_material = new THREE.ShaderMaterial( {
+				fragmentShader: __panorama_cube1_shader.fragmentShader,
+				vertexShader: __panorama_cube1_shader.vertexShader,
+				uniforms: __panorama_cube1_shader.uniforms,
+				depthWrite: false
+			} ),
+			__panorama_cube1_mesh = 
+			new THREE.Mesh( new THREE.CubeGeometry( 100000, 100000, 100000 ), __panorama_cube1_material );
+			__panorama_cube1_mesh.flipSided = true;
+			scene.add( __panorama_cube1_mesh );
+__panorama_cube1.manager = manager;
+            shader_mat1.uniforms['tCube'].texture = t_cube1;
+            manager.events.addListener('update', function(){camera_1.lookAt(scene.position)});
+            camera_1.position.z = 3200;
             application.mouse_x = null;
             application.mouse_y = null;
+            application.spheres = [];
+            application.timer = null;
+	application.events.addListener("init", function()
+	{    
+		for(var i = 0; i < 200; i++)
+{
+var sphere_1 = 
+create_my_sphere(100, 32, 16)
+;
+sphere_1.mat_set(shader_mat1);
+sphere_1.position.x = Math.random() * 10000 - 5000;
+sphere_1.position.y = Math.random() * 10000 - 5000;
+sphere_1.position.z = Math.random() * 10000 - 5000;
+sphere_1.scale.x = Math.random() * 3 + 1;
+sphere_1.scale.y = sphere_1.scale.x;
+sphere_1.scale.z = sphere_1.scale.x;
+application.spheres.push(sphere_1);
+scene.add(sphere_1);
+}
+	}
+	);
 	application.events.addListener("update", function()
 	{    
-		camera_1.position.x = camera_1.position.x + (application.mouse_x - camera_1.position.x) * 0.0500000007;
+		application.timer = g_elapsed * 9.99999975e-005;
+camera_1.position.x = camera_1.position.x + (application.mouse_x - camera_1.position.x) * 0.0500000007;
 camera_1.position.y = camera_1.position.y + (-application.mouse_y - camera_1.position.y) * 0.0500000007;
-set_rotation_y(monster_model.rotation, get_rotation_y(monster_model.rotation) + 1);
+for(var i = 0; i < application.spheres.length; i++)
+{
+var sphere = application.spheres[i];
+sphere.position.x = 5000 * Math.cos(application.timer + i);
+sphere.position.y = 5000 * Math.sin(application.timer + i * 1.10000002);
+}
 	}
 	);
 	application.events.addListener("mousemove", function(x,y)
 	{    
-		application.mouse_x = x - app_width / 2;
-application.mouse_y = y - app_height / 2;
+		application.mouse_x = (x - window.innerWidth / 2) * 10;
+application.mouse_y = (y - window.innerHeight / 2) * 10;
 	}
 	);
 var event_manager = new ev.ThreeEventManager();

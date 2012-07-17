@@ -1,0 +1,12 @@
+<xss:classes>	
+    <class id="my_material1" super="shader_material" vertex_shader="vertex_shader1.glsl" fragment_shader="fragment_shader2.glsl">
+		<uniform id="time" shader_type="f"/>
+		<uniform id="resolution" shader_type="v2"/>			
+		<uniform id="texture" shader_type="t" load="texture"/>
+	</class>
+	<class id="my_material2" super="shader_material" vertex_shader="vertex_shader1.glsl" fragment_shader="fragment_shader1.glsl">
+		<uniform id="time" shader_type="f"/>
+		<uniform id="resolution" shader_type="v2"/>
+	</class>	
+</xss:classes>
+

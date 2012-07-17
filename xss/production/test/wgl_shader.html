@@ -86,12 +86,20 @@ void main(void)
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
             <script type="text/javascript" src="../js/three/fonts.js"></script>
+            <script type="text/javascript" src="../js/three/ShaderExtras.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/EffectComposer.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/RenderPass.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/ShaderPass.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/BloomPass.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/FilmPass.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/DotScreenPass.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/TexturePass.js"></script>
+            <script type="text/javascript" src="../js/three/postprocessing/MaskPass.js"></script>
 <script type="text/javascript">	
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 			var renderer = new THREE.WebGLRenderer( { antialias: false } );
 		var ui_;
 var canvas_position = {x:0, y:0};
-var active_camera;
 var g_elapsed;
 var g_delta;	
 var scene = new THREE.Scene();
@@ -132,6 +140,7 @@ application.events = new ev.EventHolder();
     // --------RESOURCES---------
 renderer.setSize( app_width, app_height );
 var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
+var three_utils = new threejs.Utils();
 manager.events = new ev.EventHolder();
 function render() {
 manager.canvas_position = getElementPosition(renderer.domElement);
@@ -158,12 +167,12 @@ threejs_load_resources(manager, function()
 			};
 			shader_mat1_uniforms.resolution = 
 					{
-					type: "v2", value: vector2(0, 0)					
+					type: "v2", value: three_utils.vector2(0, 0)					
 			};
 			shader_mat1_uniforms.texture = 
 					{
 					type: "t", value: 0					
-				, texture: THREE.ImageUtils.loadTexture( manager.streamer.get_resource('images/disturb.jpg').asset )			
+				, texture: THREE.ImageUtils.loadTexture( manager.streamer.get_resource('images/disturb.jpg').asset )
 			};
 				shader_mat1_uniforms.texture.texture.wrapS = shader_mat1_uniforms.texture.texture.wrapT = THREE.Repeat;
 	shader_mat1 = new THREE.ShaderMaterial({
@@ -179,7 +188,7 @@ threejs_load_resources(manager, function()
 			};
 			shader_mat2_uniforms.resolution = 
 					{
-					type: "v2", value: vector2(0, 0)					
+					type: "v2", value: three_utils.vector2(0, 0)					
 			};
 	shader_mat2 = new THREE.ShaderMaterial({
 		uniforms: shader_mat2_uniforms,
@@ -188,7 +197,8 @@ threejs_load_resources(manager, function()
 		});
 		shader_mat2.manager = manager;
 		    camera_1 = 
-		    new THREE.PerspectiveCamera(70, 1.5, 1, 1000, null) ;				
+		    new THREE.PerspectiveCamera(70, 1.5, 1, 1000, null) ;	
+			manager.active_camera = camera_1;
 camera_1.manager = manager;
 	    cube_1_cube = new THREE.CubeGeometry(200, 200, 200, 1, 1, 1, null, null) ;
 	    cube_1 = new THREE.Mesh(cube_1_cube, shader_mat2);

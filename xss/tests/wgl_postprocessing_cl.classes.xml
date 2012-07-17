@@ -1,0 +1,27 @@
+<xss:classes>	
+    <class id="my_material" super="shader_material" use_default_shader="normal" lights="true">
+		<uniform id="t_normal" output_id="tNormal" load="texture"/>
+		<uniform id="u_normal_scale" output_id="uNormalScale"/>			
+		<uniform id="t_diffuse" output_id="tDiffuse" load="texture"/>
+		<uniform id="t_specular" output_id="tSpecular" load="texture"/>
+		<uniform id="enable_ao" output_id="enableAO"/>	
+		<uniform id="enable_diffuse" output_id="enableDiffuse"/>	
+		<uniform id="enable_specular" output_id="enableSpecular"/>	
+		<uniform id="u_diffuse_color" output_id="uDiffuseColor"/>	
+		<uniform id="u_specular_color" output_id="uSpecularColor"/>	
+		<uniform id="u_ambient_color" output_id="uAmbientColor"/>	
+		<uniform id="u_shininess" output_id="uShininess"/>	
+		<uniform id="wrap_rgb" output_id="wrapRGB"/>
+	</class>
+	<class id="effect_bleach" super="effect" shader="bleachbypass">
+		<uniform id="opacity"/>
+	</class>
+	<class id="effect_color" super="effect" shader="colorCorrection">
+		<uniform id="pow_rgb" output_id="powRGB"/>
+		<uniform id="mul_rgb" output_id="mulRGB"/>
+	</class>
+	<class id="effect_fxaa" super="effect" shader="fxaa" render_to_screen="true">
+		<uniform id="resolution"/>
+	</class>	
+</xss:classes>
+

@@ -4,7 +4,7 @@
             <button id="preset_apply" caption="Apply Stack"/>
         </div>
         <accordion id="toolbox" height="360" placement="client" fillSpace="true">
-            <div caption="Brightness & Constrast">
+            <div caption="Brightness and Constrast">
                 <label caption="Level"/>     <br/> <br/>
                 <slider id="brightness"  min="-100" max="100" value="0"/>
                 <br/>
