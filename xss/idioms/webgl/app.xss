@@ -68,6 +68,7 @@ if(application.background)
     {
         //it is understood that dependencies will come out of
         //compile with their full path
+        compiler.log("dependency: " + ndep.href);
         compiler.xss("../common-js/dependency.xss", ndep, marker = "dependencies");
     }
 </xss:code>

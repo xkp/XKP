@@ -129,19 +129,22 @@
 			{
 				<xss:e v="clazz.id"/>.<xss:e v="inst.output_id"/> = <xss:e v="inst.output_id"/>;
 			}     
-    }  
+    }  	
+    out()
+    {
+		if(<xss:e v="clazz.id"/> instanceof THREE.Object3D)
+			manager.scene.add(<xss:e v="clazz.id"/>);
+		<xss:e v="clazz.id"/>.manager = manager;        
+    }
 	for(var inst_ in clazz.instances)
     {	
 		if(!inst_.dont_render)
 			compiler.xss("../common-js/instance.xss", inst_);
 	}
 	compiler.xss("../common-js/instance.xss", clazz); 
-    out()
-    {
-		if(<xss:e v="clazz.id"/> instanceof THREE.Object3D)
-			manager.scene.add(<xss:e v="clazz.id"/>);
-		<xss:e v="clazz.id"/>.manager = manager;
-        return <xss:e v="clazz.id"/>;
-        <xss:close_brace/>
-    }
+	out()
+	{
+		return <xss:e v="clazz.id"/>;
+			<xss:close_brace/>
+	}
 </xss:code>

@@ -10,12 +10,12 @@
 	
 		<shader_material id="shader_mat1" vertex_shader="vertex_shader1.glsl" fragment_shader="fragment_shader2.glsl">			
 			<uniform id="time" shader_type="f" value="1.0"/>
-			<uniform id="resolution" shader_type="v2" value="vector2(0, 0)"/>			
+			<uniform id="resolution" shader_type="v2" value="three_utils.vector2(0, 0)"/>			
 			<uniform id="texture" shader_type="t" value="0" texture="images/disturb.jpg"/>
 		</shader_material>
 		<shader_material id="shader_mat2" vertex_shader="vertex_shader1.glsl" fragment_shader="fragment_shader1.glsl">			
 			<uniform id="time" shader_type="f" value="1.0"/>
-			<uniform id="resolution" shader_type="v2" value="vector2(0, 0)"/>			
+			<uniform id="resolution" shader_type="v2" value="three_utils.vector2(0, 0)"/>			
 		</shader_material>
 
 	</materials>

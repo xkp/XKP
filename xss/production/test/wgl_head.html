@@ -115,6 +115,7 @@ application.events = new ev.EventHolder();
     // --------RESOURCES---------
 renderer.setSize( app_width, app_height );
 var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
+var three_utils = new threejs.Utils();
 manager.events = new ev.EventHolder();
 function render() {
 manager.canvas_position = getElementPosition(renderer.domElement);
@@ -140,7 +141,6 @@ threejs_load_resources(manager, function()
 				.texture = THREE.ImageUtils.loadTexture( manager.streamer.get_resource('model/leeperrysmith/Infinite-Level_02_Tangent_SmoothUV.jpg').asset )		
 			;
 			shader_mat1_uniforms[ 'uNormalScale' ]						
-				.value = -0.800000012
 			;
 			shader_mat1_uniforms[ 'tDiffuse' ]						
 				.texture = THREE.ImageUtils.loadTexture( manager.streamer.get_resource('model/leeperrysmith/Map-COL.jpg').asset )		
@@ -149,7 +149,6 @@ threejs_load_resources(manager, function()
 				.texture = THREE.ImageUtils.loadTexture( manager.streamer.get_resource('model/leeperrysmith/Map-SPEC.jpg').asset )		
 			;
 			shader_mat1_uniforms[ 'enableAO' ]						
-				.value = false
 			;
 			shader_mat1_uniforms[ 'enableDiffuse' ]						
 				.value = true
@@ -158,19 +157,19 @@ threejs_load_resources(manager, function()
 				.value = true
 			;
 			shader_mat1_uniforms[ 'uDiffuseColor' ]						
-				.value = color(0xbbbbbb)
+				.value = three_utils.color(0xbbbbbb)
 			;
 			shader_mat1_uniforms[ 'uSpecularColor' ]						
-				.value = color(0x060606)
+				.value = three_utils.color(0x060606)
 			;
 			shader_mat1_uniforms[ 'uAmbientColor' ]						
-				.value = color(0x111111)
+				.value = three_utils.color(0x111111)
 			;
 			shader_mat1_uniforms[ 'uShininess' ]						
 				.value = 35
 			;
 			shader_mat1_uniforms[ 'wrapRGB' ]						
-				.value = vector3(0.575, 0.5, 0.5)
+				.value = three_utils.vector3(0.575, 0.5, 0.5)
 			;
 	shader_mat1 = new THREE.ShaderMaterial({
 lights:true,

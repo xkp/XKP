@@ -140,6 +140,7 @@ application.events = new ev.EventHolder();
     // --------RESOURCES---------
 renderer.setSize( app_width, app_height );
 var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
+var three_utils = new threejs.Utils();
 manager.events = new ev.EventHolder();
 function render() {
 manager.canvas_position = getElementPosition(renderer.domElement);
@@ -166,12 +167,12 @@ threejs_load_resources(manager, function()
 			};
 			shader_mat1_uniforms.resolution = 
 					{
-					type: "v2", value: vector2(0, 0)					
+					type: "v2", value: three_utils.vector2(0, 0)					
 			};
 			shader_mat1_uniforms.texture = 
 					{
 					type: "t", value: 0					
-				, texture: THREE.ImageUtils.loadTexture( manager.streamer.get_resource('images/disturb.jpg').asset )			
+				, texture: THREE.ImageUtils.loadTexture( manager.streamer.get_resource('images/disturb.jpg').asset )
 			};
 				shader_mat1_uniforms.texture.texture.wrapS = shader_mat1_uniforms.texture.texture.wrapT = THREE.Repeat;
 	shader_mat1 = new THREE.ShaderMaterial({
@@ -187,7 +188,7 @@ threejs_load_resources(manager, function()
 			};
 			shader_mat2_uniforms.resolution = 
 					{
-					type: "v2", value: vector2(0, 0)					
+					type: "v2", value: three_utils.vector2(0, 0)					
 			};
 	shader_mat2 = new THREE.ShaderMaterial({
 		uniforms: shader_mat2_uniforms,

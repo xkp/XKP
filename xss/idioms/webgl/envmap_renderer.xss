@@ -22,7 +22,7 @@
 		out(){		
 			var <xss:e v="obj.id"/> = {};
 			var <xss:e v="obj.id"/>_shader = THREE.ShaderUtils.lib[ "cube" ];
-			<xss:e v="obj.id"/>_shader.uniforms[ "tCube" ].texture = <xss:e v="obj.id"/>;
+			<xss:e v="obj.id"/>_shader.uniforms[ "tCube" ].texture = <xss:e v="obj.texture_cube"/>;
 
 			var <xss:e v="obj.id"/>_material = new THREE.ShaderMaterial( {
 

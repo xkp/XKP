@@ -46,6 +46,7 @@ application.events = new ev.EventHolder();
 // --------RESOURCES---------
 renderer.setSize( app_width, app_height );
 var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
+var three_utils = new threejs.Utils();
 manager.events = new ev.EventHolder();
 function render() {
 manager.canvas_position = getElementPosition(renderer.domElement);
@@ -71,17 +72,17 @@ var t_cube1;var shader_mat1;var camera_1;var __panorama_cube1;
 	    manager.scene.add(my_sphere);
 		my_sphere.events = new ev.EventHolder();
         var this__ = my_sphere;
+		if(my_sphere instanceof THREE.Object3D)
+			manager.scene.add(my_sphere);
+		my_sphere.manager = manager;        
         my_sphere.mat = null;
         my_sphere.mat_set = function (value)
         {
             my_sphere.mat = value;
             this.material = value;
         };
-		if(my_sphere instanceof THREE.Object3D)
-			manager.scene.add(my_sphere);
-		my_sphere.manager = manager;
-        return my_sphere;
-        }
+		return my_sphere;
+			}
 threejs_load_resources(manager, function()
 {
 		var urls = ["images/cube/Park2/posx.jpg", "images/cube/Park2/negx.jpg",
@@ -106,7 +107,7 @@ t_cube1.manager = manager;
 camera_1.manager = manager;
 			var __panorama_cube1 = {};
 			var __panorama_cube1_shader = THREE.ShaderUtils.lib[ "cube" ];
-			__panorama_cube1_shader.uniforms[ "tCube" ].texture = __panorama_cube1;
+			__panorama_cube1_shader.uniforms[ "tCube" ].texture = t_cube1;
 			var __panorama_cube1_material = new THREE.ShaderMaterial( {
 				fragmentShader: __panorama_cube1_shader.fragmentShader,
 				vertexShader: __panorama_cube1_shader.vertexShader,
