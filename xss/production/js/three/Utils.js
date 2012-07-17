@@ -10,6 +10,25 @@ threejs.Manager = Class.extend(
 	},		
 });
 
+threejs.Utils = Class.extend(
+{
+	init: function()
+	{					
+	},	
+	color: function( hex )
+	{	
+		return new THREE.Color( hex );
+	},
+	vector2: function( x, y )
+	{	
+		return new THREE.Vector2( x, y );
+	},
+	vector3: function( x, y, z )
+	{	
+		return new THREE.Vector3( x, y, z );
+	},
+});
+
 function getElementPosition(element) {
 	var elem=element, tagname="", x=0, y=0;
 	while(elem && (typeof(elem) == "object") && (typeof(elem.tagName) != "undefined")) {
@@ -229,19 +248,13 @@ var program_stroke = function ( context )
 	context.stroke();
 }
 
-function vector2( x, y )
+function texture_shader_setter(path, value, complete_path, set_value)
 {	
-	return new THREE.Vector2( x, y );
-}
-
-function vector3( x, y, z )
-{	
-	return new THREE.Vector3( x, y, z );
-}
-
-function color( hex )
-{	
-	return new THREE.Color( hex );
+	var resource = path.manager.streamer.get_resource(value);
+	if(!resource)
+		resource = path.manager.streamer.get_resource("invalid_res");
+	complete_path.texture = THREE.ImageUtils.loadTexture( resource.asset );
+	complete_path.texture.wrapS = complete_path.texture.wrapT = THREE.Repeat;	
 }
 
 var flat_shading = THREE.FlatShading;

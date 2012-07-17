@@ -855,7 +855,7 @@ Success are greateful
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
 Success are greateful
 ===[ jquery1.project.xml ]================(Tests)
 
@@ -1077,7 +1077,7 @@ Success are greateful
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
 Success are greateful
 ===[ jsmanip.project.xml ]================(Tests)
 
@@ -1265,85 +1265,365 @@ Success are greateful
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_cube_img.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_firstperson.project.xml ]================(Tests)
 
 
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_head.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_icosahedron.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_materials.project.xml ]================(Tests)
 
 
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_monster.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_package.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_postprocessing.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
+Success are greateful
+===[ wgl_postprocessing_cl.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_pp_embedded.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_reflection_cube.project.xml ]================(Tests)
 
 
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_refraction_cube.project.xml ]================(Tests)
 
 
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_shader.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
+Success are greateful
+===[ wgl_shader_cl.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering WebGL Types...
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_shader_fresnel.project.xml ]================(Tests)
 
 
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
+Success are greateful
+===[ wgl_shader_fresnel_cl.project.xml ]================(Tests)
+
+
+log: Rendering WebGL Types...
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_text.project.xml ]================(Tests)
 
 
-log: Rendering 3js Types...
+log: Rendering WebGL Types...
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ xss1.project.xml ]================(Tests)
 

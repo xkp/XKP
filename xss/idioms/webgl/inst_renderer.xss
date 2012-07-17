@@ -22,7 +22,6 @@
 			out()
 			{
 			    <xss:e v="i.id"/> = <xss:e v="compiler.instantiate(i)"/> ;
-
 			}
 		}
 		if(i.class_name == "transform"){
@@ -33,6 +32,11 @@
 				<xss:e v="i.parent.id"/>.add(<xss:e v="i.id"/>);
 				manager.scene.add(<xss:e v="i.parent.id"/>);
 				}
-			}				
+			}		
+		if(i.parent.class_name == "effect_composer"){			
+				out(){				
+				<xss:e v="i.parent.id"/>.addPass(<xss:e v="i.id"/>);				
+				}
+			}	
 </xss:code>
 <xss:e v="i.id"/>.manager = manager;

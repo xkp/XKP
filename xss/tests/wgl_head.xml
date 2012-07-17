@@ -15,11 +15,11 @@
 			<uniform id="enableAO" value="false"/>	
 			<uniform id="enableDiffuse" value="true"/>	
 			<uniform id="enableSpecular" value="true"/>	
-			<uniform id="uDiffuseColor" value="color(0xbbbbbb)"/>	
-			<uniform id="uSpecularColor" value="color(0x060606)"/>	
-			<uniform id="uAmbientColor" value="color(0x111111)"/>	
+			<uniform id="uDiffuseColor" value="three_utils.color(0xbbbbbb)"/>	
+			<uniform id="uSpecularColor" value="three_utils.color(0x060606)"/>	
+			<uniform id="uAmbientColor" value="three_utils.color(0x111111)"/>	
 			<uniform id="uShininess" value="35"/>	
-			<uniform id="wrapRGB" value="vector3(0.575, 0.5, 0.5)"/>	
+			<uniform id="wrapRGB" value="three_utils.vector3(0.575, 0.5, 0.5)"/>	
 		</shader_material>
 	</materials>
 				

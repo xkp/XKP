@@ -22,9 +22,22 @@ on pre_process(obj)
 			obj.wait_for_package = obj.parent.wait_for_package;
 }
 
-on pre_process_type(type)
-{
-    compiler.log("Preprocessing " + type.id);
+on pre_process_type(type_)
+{		
+	if(type_.super)
+	{
+		if(type_.super.id == "shader_material")
+		{	
+			if(!type_.use_default_shader)
+				render_non_default_shader(type_);
+			else
+				render_default_shader(type_);
+		}	
+		if(type_.super.id == "effect")
+		{					
+			render_default_shader(type_);
+		}
+	}	
 }
 
 on render_dependencies()
@@ -84,4 +97,80 @@ on render_types()
     {
 		compiler.xss("class.xss", ut, renderer = "inst_renderer.xss");
     }
+}
+
+method render_non_default_shader(type_)
+{
+	for(var child_ in type_.children)
+	{						
+		var value;
+		if(child_.texture)
+			value = child_.texture;	
+		else
+			value = child_.value;
+			
+		if(!value)
+			value = "undefined";
+		var value_type = compiler.type_of(value);
+		
+		var setter = object();
+		var getter = object();
+		
+		if(child_.load == "texture")
+		{
+			setter.text = "texture_shader_setter({path}, '{value}', {path}.uniforms."+child_.output_id+")";
+			setter.global = true;
+			getter.text = "uniforms."+child_.output_id+".texture";
+		}					
+		else if(child_.load == "texture_cube")
+		{
+			setter.text = "uniforms."+child_.output_id+".texture = '{value}'";								
+			getter.text = "uniforms."+child_.output_id+".texture";
+		}	
+		else
+		{
+			setter.text = "uniforms."+child_.output_id+".value = {value}";								
+			getter.text = "uniforms."+child_.output_id+".value";
+		}				
+						
+		compiler.add_object_property(type_, child_.output_id, type = value_type, value = value, get = getter, set = setter, use_plain_value = true);					
+	}
+}
+
+method render_default_shader(type_)
+{
+	for(var child_ in type_.children)
+	{						
+		var value;
+		if(child_.texture)
+			value = child_.texture;	
+		else
+			value = child_.value;
+			
+		if(!value)
+			value = "undefined";
+		var value_type = compiler.type_of(value);
+		
+		var setter = object();
+		var getter = object();
+		
+		if(child_.load == "texture")
+		{
+			setter.text = "texture_shader_setter({path}, '{value}', {path}.uniforms['"+child_.output_id+"'])";
+			setter.global = true;
+			getter.text = "uniforms['"+child_.output_id+"'].texture";
+		}					
+		else if(child_.load == "texture_cube")
+		{
+			setter.text = "uniforms['"+child_.output_id+"'].texture = {value}";								
+			getter.text = "uniforms['"+child_.output_id+"'].texture";
+		}
+		else
+		{
+			setter.text = "uniforms['"+child_.output_id+"'].value = {value}";								
+			getter.text = "uniforms['"+child_.output_id+"'].value";
+		}				
+						
+		compiler.add_object_property(type_, child_.id, type = value_type, value = value, get = getter, set = setter, use_plain_value = true);					
+	}
 }

@@ -115,6 +115,7 @@ application.events = new ev.EventHolder();
     // --------RESOURCES---------
 renderer.setSize( app_width, app_height );
 var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
+var three_utils = new threejs.Utils();
 manager.events = new ev.EventHolder();
 function render() {
 manager.canvas_position = getElementPosition(renderer.domElement);
@@ -131,54 +132,109 @@ manager.events.dispatch("update", [g_delta, g_elapsed]);
 				set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var shader_mat1;var camera_1;var a_ligth;var d_ligth_1;var head_model;var composer;var effect_bleach;var effect_color;var effect_fxaa;
+var shader_mat1;var camera_1;var a_ligth;var d_ligth_1;var head_model;var composer;var eb;var ec;var ef;
+    function create_my_material(
+    color,wireframe,wireframe_linewidth,src,texture_object,shading,vertex_colors,env_map,combine,reflectivity,shininess,specular,transparent,refraction_ratio,ambient,blending,emissive,depth_test,skinning,morph_targets,fog,morph_normals,lights ) { 
+    var my_material;
+		var my_material_shader = THREE.ShaderUtils.lib[ "normal" ];
+		var my_material_uniforms = THREE.UniformsUtils.clone( my_material_shader.uniforms );
+			my_material_uniforms[ 'tNormal' ]						
+			;
+			my_material_uniforms[ 'uNormalScale' ]						
+			;
+			my_material_uniforms[ 'tDiffuse' ]						
+			;
+			my_material_uniforms[ 'tSpecular' ]						
+			;
+			my_material_uniforms[ 'enableAO' ]						
+			;
+			my_material_uniforms[ 'enableDiffuse' ]						
+			;
+			my_material_uniforms[ 'enableSpecular' ]						
+			;
+			my_material_uniforms[ 'uDiffuseColor' ]						
+			;
+			my_material_uniforms[ 'uSpecularColor' ]						
+			;
+			my_material_uniforms[ 'uAmbientColor' ]						
+			;
+			my_material_uniforms[ 'uShininess' ]						
+			;
+			my_material_uniforms[ 'wrapRGB' ]						
+			;
+	my_material = new THREE.ShaderMaterial({
+lights:true,
+		uniforms: my_material_uniforms,
+		vertexShader: my_material_shader.vertexShader,
+		fragmentShader: my_material_shader.fragmentShader
+		});
+        var this__ = my_material;
+		if(my_material instanceof THREE.Object3D)
+			manager.scene.add(my_material);
+		my_material.manager = manager;        
+            texture_shader_setter(my_material, 'undefined', my_material.uniforms['tNormal']);
+            my_material.uniforms['uNormalScale'].value = undefined;
+            texture_shader_setter(my_material, 'undefined', my_material.uniforms['tDiffuse']);
+            texture_shader_setter(my_material, 'undefined', my_material.uniforms['tSpecular']);
+            my_material.uniforms['enableAO'].value = undefined;
+            my_material.uniforms['enableDiffuse'].value = undefined;
+            my_material.uniforms['enableSpecular'].value = undefined;
+            my_material.uniforms['uDiffuseColor'].value = undefined;
+            my_material.uniforms['uSpecularColor'].value = undefined;
+            my_material.uniforms['uAmbientColor'].value = undefined;
+            my_material.uniforms['uShininess'].value = undefined;
+            my_material.uniforms['wrapRGB'].value = undefined;
+		return my_material;
+			}
+    function create_effect_bleach(
+     ) { 
+    var effect_bleach;
+		effect_bleach = new THREE.ShaderPass( THREE.ShaderExtras[ "bleachbypass" ] );
+			effect_bleach.uniforms[ 'opacity' ]						
+			;
+        var this__ = effect_bleach;
+		if(effect_bleach instanceof THREE.Object3D)
+			manager.scene.add(effect_bleach);
+		effect_bleach.manager = manager;        
+            effect_bleach.uniforms['opacity'].value = undefined;
+		return effect_bleach;
+			}
+    function create_effect_color(
+     ) { 
+    var effect_color;
+		effect_color = new THREE.ShaderPass( THREE.ShaderExtras[ "colorCorrection" ] );
+			effect_color.uniforms[ 'powRGB' ]						
+			;
+			effect_color.uniforms[ 'mulRGB' ]						
+			;
+        var this__ = effect_color;
+		if(effect_color instanceof THREE.Object3D)
+			manager.scene.add(effect_color);
+		effect_color.manager = manager;        
+            effect_color.uniforms['powRGB'].value = undefined;
+            effect_color.uniforms['mulRGB'].value = undefined;
+		return effect_color;
+			}
+    function create_effect_fxaa(
+     ) { 
+    var effect_fxaa;
+		effect_fxaa = new THREE.ShaderPass( THREE.ShaderExtras[ "fxaa" ] );
+			effect_fxaa.uniforms[ 'resolution' ]						
+			;
+        var this__ = effect_fxaa;
+		if(effect_fxaa instanceof THREE.Object3D)
+			manager.scene.add(effect_fxaa);
+		effect_fxaa.manager = manager;        
+            effect_fxaa.uniforms['resolution'].value = undefined;
+            effect_fxaa.renderToScreen = true;
+		return effect_fxaa;
+			}
 threejs_load_resources(manager, function()
 {
-		var shader_mat1_shader = THREE.ShaderUtils.lib[ "normal" ];
-		var shader_mat1_uniforms = THREE.UniformsUtils.clone( shader_mat1_shader.uniforms );
-			shader_mat1_uniforms[ 'tNormal' ]						
-				.texture = THREE.ImageUtils.loadTexture( manager.streamer.get_resource('model/leeperrysmith/Infinite-Level_02_Tangent_SmoothUV.jpg').asset )		
-			;
-			shader_mat1_uniforms[ 'uNormalScale' ]						
-				.value = -0.800000012
-			;
-			shader_mat1_uniforms[ 'tDiffuse' ]						
-				.texture = THREE.ImageUtils.loadTexture( manager.streamer.get_resource('model/leeperrysmith/Map-COL.jpg').asset )		
-			;
-			shader_mat1_uniforms[ 'tSpecular' ]						
-				.texture = THREE.ImageUtils.loadTexture( manager.streamer.get_resource('model/leeperrysmith/Map-SPEC.jpg').asset )		
-			;
-			shader_mat1_uniforms[ 'enableAO' ]						
-				.value = false
-			;
-			shader_mat1_uniforms[ 'enableDiffuse' ]						
-				.value = true
-			;
-			shader_mat1_uniforms[ 'enableSpecular' ]						
-				.value = true
-			;
-			shader_mat1_uniforms[ 'uDiffuseColor' ]						
-				.value = color(0xbbbbbb)
-			;
-			shader_mat1_uniforms[ 'uSpecularColor' ]						
-				.value = color(0x060606)
-			;
-			shader_mat1_uniforms[ 'uAmbientColor' ]						
-				.value = color(0x111111)
-			;
-			shader_mat1_uniforms[ 'uShininess' ]						
-				.value = 35
-			;
-			shader_mat1_uniforms[ 'wrapRGB' ]						
-				.value = vector3(0.575, 0.5, 0.5)
-			;
-	shader_mat1 = new THREE.ShaderMaterial({
-lights:true,
-		uniforms: shader_mat1_uniforms,
-		vertexShader: shader_mat1_shader.vertexShader,
-		fragmentShader: shader_mat1_shader.fragmentShader
-		});
-		shader_mat1.manager = manager;
+			    shader_mat1 = 
+create_my_material(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, true)
+ ;
+			shader_mat1.manager = manager;
 		    camera_1 = 
 		    new THREE.PerspectiveCamera(75, 1.5, 1, 10000, null) ;	
 			manager.active_camera = camera_1;
@@ -188,7 +244,7 @@ camera_1.manager = manager;
 	    manager.scene.add(a_ligth);
 a_ligth.manager = manager;
 	    d_ligth_1 = 
-	    new THREE.DirectionalLight(white, 1.20000005, 0, null) ;
+	    new THREE.DirectionalLight(white, 1, 0, null) ;
 	    manager.scene.add(d_ligth_1);
 d_ligth_1.manager = manager;
 	head_model = new THREE.Object3D();
@@ -200,8 +256,8 @@ d_ligth_1.manager = manager;
 				var head_model_mesh = new THREE.Mesh(geometry, shader_mat1);
 				head_model.add(head_model_mesh);
             if(1) geometry.computeTangents();
-            head_model.position.x = -300;
-            head_model.position.z = -400;
+            head_model.position.x = -110;
+            head_model.position.z = -350;
             head_model.position.y = -20;
             head_model.scale.x = 250;
             head_model.scale.y = 250;
@@ -216,41 +272,58 @@ head_model.manager = manager;
 		composer.addPass( renderModel );
 		manager.active_composer = composer;
 	composer.manager = manager;
-		effect_bleach = new THREE.ShaderPass( THREE.ShaderExtras[ "bleachbypass" ] );
-			effect_bleach.uniforms[ 'opacity' ]						
-				.value = 0.400000006
-			;
-		composer.addPass( effect_bleach );	
-	effect_bleach.manager = manager;
-		effect_color = new THREE.ShaderPass( THREE.ShaderExtras[ "colorCorrection" ] );
-			effect_color.uniforms[ 'powRGB' ]						
-				.value = vector3(1.4, 1.45, 1.45)
-			;
-			effect_color.uniforms[ 'mulRGB' ]						
-				.value = vector3(1.1, 1.1, 1.1)
-			;
-		composer.addPass( effect_color );	
-	effect_color.manager = manager;
-		effect_fxaa = new THREE.ShaderPass( THREE.ShaderExtras[ "fxaa" ] );
-			effect_fxaa.uniforms[ 'resolution' ]						
-				.value = vector3(1/app_width, 1/app_height)
-			;
-		composer.addPass( effect_fxaa );	
-	effect_fxaa.manager = manager;
+			    eb = 
+create_effect_bleach()
+ ;
+				composer.addPass(eb);				
+				eb.manager = manager;
+			    ec = 
+create_effect_color()
+ ;
+				composer.addPass(ec);				
+				ec.manager = manager;
+			    ef = 
+create_effect_fxaa()
+ ;
+				composer.addPass(ef);				
+				ef.manager = manager;
+            texture_shader_setter(shader_mat1, 'model/leeperrysmith/Infinite-Level_02_Tangent_SmoothUV.jpg', shader_mat1.uniforms['tNormal']);
+            shader_mat1.uniforms['uNormalScale'].value = -0.800000012;
+            texture_shader_setter(shader_mat1, 'model/leeperrysmith/Map-COL.jpg', shader_mat1.uniforms['tDiffuse']);
+            texture_shader_setter(shader_mat1, 'model/leeperrysmith/Map-SPEC.jpg', shader_mat1.uniforms['tSpecular']);
+            shader_mat1.uniforms['enableAO'].value = 0;
+            shader_mat1.uniforms['enableDiffuse'].value = 1;
+            shader_mat1.uniforms['enableSpecular'].value = 1;
+            shader_mat1.uniforms['uDiffuseColor'].value = three_utils.color(0xbbbbbb);
+            shader_mat1.uniforms['uSpecularColor'].value = three_utils.color(0x060606);
+            shader_mat1.uniforms['uAmbientColor'].value = three_utils.color(0x111111);
+            shader_mat1.uniforms['uShininess'].value = 35;
+            shader_mat1.uniforms['wrapRGB'].value = three_utils.vector3(0.575, 0.5, 0.5);
             manager.events.addListener('update', function(){camera_1.lookAt(head_model.position)});
             camera_1.position.z = 1000;
             d_ligth_1.position.y = -70;
             d_ligth_1.position.z = 100;
-            effect_fxaa.renderToScreen = true;
+            eb.uniforms['opacity'].value = 0.400000006;
+            ec.uniforms['powRGB'].value = three_utils.vector3(1.4, 1.45, 1.45);
+            ec.uniforms['mulRGB'].value = three_utils.vector3(1.1, 1.1, 1.1);
+            ef.uniforms['resolution'].value = three_utils.vector3(1/app_width, 1/app_height);
+            application.mouse_x = null;
+            application.mouse_y = null;
 	application.events.addListener("update", function()
 	{    
-		set_rotation_y(head_model.rotation, get_rotation_y(head_model.rotation) + 0.300000012);
-if (host.needs_update)
-{
-effect_bleach.enabled = host.bleachenabled;
-effect_color.enabled = host.colorenabled;
-host.needs_update = false;
-}
+		set_rotation_y(head_model.rotation, application.mouse_x * 0.300000012);
+set_rotation_x(head_model.rotation, application.mouse_y * 0.300000012);
+	}
+	);
+	application.events.addListener("mousemove", function(x,y)
+	{    
+		application.mouse_x = x - app_width / 2;
+application.mouse_y = y - app_height / 2;
+	}
+	);
+	application.events.addListener("click", function()
+	{    
+		ec.enabled = !ec.enabled;
 	}
 	);
 var event_manager = new ev.ThreeEventManager();

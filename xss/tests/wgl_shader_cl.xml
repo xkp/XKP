@@ -9,10 +9,10 @@
 	<materials>
 	
 		<my_material1 id="shader_mat1" 
-			time="1.0" resolution="vector2(0,0)" texture="images/disturb.jpg"
+			time="1.0" resolution="three_utils.vector2(0,0)" texture="images/disturb.jpg"
 		/>					
 		<my_material2 id="shader_mat2" 
-			time="1.0" resolution="vector2(0,0)"
+			time="1.0" resolution="three_utils.vector2(0,0)"
 		/>						
 
 	</materials>
