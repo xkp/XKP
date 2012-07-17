@@ -46,6 +46,7 @@ application.events = new ev.EventHolder();
 // --------RESOURCES---------
 renderer.setSize( app_width, app_height );
 var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
+var three_utils = new threejs.Utils();
 manager.events = new ev.EventHolder();
 function render() {
 manager.canvas_position = getElementPosition(renderer.domElement);
@@ -71,17 +72,17 @@ var material_wireframe;var all_in_one;var material_sphere1;var material_sphere2;
 	    manager.scene.add(my_sphere);
 		my_sphere.events = new ev.EventHolder();
         var this__ = my_sphere;
+		if(my_sphere instanceof THREE.Object3D)
+			manager.scene.add(my_sphere);
+		my_sphere.manager = manager;        
         my_sphere.mat = null;
         my_sphere.mat_set = function (value)
         {
             my_sphere.mat = value;
             this.material = value;
         };
-		if(my_sphere instanceof THREE.Object3D)
-			manager.scene.add(my_sphere);
-		my_sphere.manager = manager;
-        return my_sphere;
-        }
+		return my_sphere;
+			}
 threejs_load_resources(manager, function()
 {
 material_wireframe = new THREE.MeshBasicMaterial({

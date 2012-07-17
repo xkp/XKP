@@ -533,9 +533,9 @@
 			<property id="scale" type="vector3d"/>
 		</class>		
 		
-		<class id="effect_composer" renderer="postproc_renderer.xss"/>
+		<class id="effect_composer" renderer="postproc_renderer.xss" heritable="true"/>
 		
-		<class id="effect" renderer="postproc_renderer.xss">
+		<class id="effect" renderer="postproc_renderer.xss" heritable="true">
 			<property id="render_to_screen" output_id="renderToScreen" type="bool"/>
 			<property id="enabled" type="bool"/>
 		</class>	
