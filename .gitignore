@@ -7,7 +7,6 @@ xtend-gen/
 .metadata/
 .settings/
 .launch/
-META-INF/
 
 *.depend
 *.layout

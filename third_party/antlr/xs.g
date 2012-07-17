@@ -241,8 +241,7 @@ unaryExpr
 	;
 
 methodExpr
-	//:	method* primaryExpr?
-	:	primaryExpr+ method?
+	:	primaryExpr+ method*
 	;
 
 method
@@ -275,7 +274,6 @@ arrayLiteral
 	;
 
 primary
-	//:	qualifiedID ( '(' argListOpt ')' )?
 	:	Identifier ( '(' argListOpt ')' )?
 	|	arrayLiteral
 	|	Literal

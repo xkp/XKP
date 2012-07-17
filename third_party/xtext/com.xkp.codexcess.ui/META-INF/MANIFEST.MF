@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: com.xkp.codexcess.ui
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: com.xkp.codexcess.ui; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: com.xkp.codexcess;visibility:=reexport,
+ org.eclipse.xtext.ui,
+ org.eclipse.ui.editors;bundle-version="3.5.0",
+ org.eclipse.ui.ide;bundle-version="3.5.0",
+ org.eclipse.xtext.ui.shared,
+ org.eclipse.ui,
+ org.eclipse.xtext.builder,
+ org.antlr.runtime,
+ org.eclipse.xtext.common.types.ui,
+ org.eclipse.xtext.ui.codetemplates.ui,
+ org.eclipse.compare
+Import-Package: org.apache.log4j
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: com.xkp.codexcess.ui.contentassist,
+ com.xkp.codexcess.ui.contentassist.antlr,
+ com.xkp.codexcess.ui.internal
+Bundle-Activator: com.xkp.codexcess.ui.internal.XssActivator
