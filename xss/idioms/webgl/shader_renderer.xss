@@ -6,7 +6,9 @@ if(!obj.use_default_shader)
 	{
 	<script id="vertexShader_<xss:e v="obj.id"/>" type="x-shader/x-vertex">
 	}
-		compiler.xss("glsl_renderer.xss", "../../tests/" + obj.vertex_shader);
+    
+    string shader_path = compiler.project_path() + '/' + obj.vertex_shader;
+    compiler.xss("glsl_renderer.xss", shader_path);
 	out(marker = "dependencies", marker_source = "entry")
 	{
 	</script>
@@ -15,7 +17,9 @@ if(!obj.use_default_shader)
 	{
 	<script id="fragmentShader_<xss:e v="obj.id"/>" type="x-shader/x-fragment">
 	}
-		compiler.xss("glsl_renderer.xss", "../../tests/" + obj.fragment_shader);
+
+    shader_path = compiler.project_path() + '/' + obj.fragment_shader;
+	compiler.xss("glsl_renderer.xss", shader_path);
 	out(marker = "dependencies", marker_source = "entry")
 	{
 	</script>

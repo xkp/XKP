@@ -8,6 +8,8 @@
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>
 
+#include <boost/iostreams/stream.hpp>
+
 namespace bp = boost::processes;
 
 using namespace xkp;
@@ -24,8 +26,10 @@ struct shellworker : IWorker
       {
       }
 
-    virtual void work(const param_list& args)
+    virtual DynamicObject work(const param_list& args)
       {
+        DynamicObject result(new sponge_object);
+
         int curr = 0;
 
         variant v = args.get(curr++);
@@ -125,17 +129,27 @@ struct shellworker : IWorker
                 //    now all file descriptors are closed, then redirect to file or variable
                 bp::context ctx;
                 ctx.add(bp::close_stream(bp::stdin_fileno))
-                   .add(bp::close_stream(bp::stdout_fileno))
-                   .add(bp::close_stream(bp::stderr_fileno));
+                   .add(bp::capture_stream(bp::stdout_fileno))
+                   .add(bp::capture_stream(bp::stderr_fileno));
 
                 if (!working_path.empty())
                   ctx.work_directory = working_path;
 
                 bp::status s(0);
-                if (shell_cmd)
-                  s = bp::launch_shell(command, ctx).wait();
-                else
-                  s = bp::launch(exe, args, ctx).wait();
+                bp::child& child = launch(shell_cmd, command, exe, args, ctx);
+
+                if (!it->variable.empty())
+                  {
+                    DynamicArray shell_data(new dynamic_array);
+                    boost::iostreams::stream<bp::pipe_end> sout(child.get_stdout());
+                    std::string line; 
+                    while (std::getline(sout, line)) 
+                      shell_data->push_back(line);
+
+                    dynamic_set(result, it->variable, shell_data);
+                  }
+                
+                s = child.wait();
 
 //td: personalize class with static function or only functions
 #if defined(__unix__) || defined(__unix) || defined(unix) || defined(__linux__)
@@ -184,13 +198,23 @@ struct shellworker : IWorker
                   }
               }
           }
+
+        return result;
       }
     private:
       std::vector<ga_item> result_;
+
+      bp::child launch(bool shell_cmd, const str& command, const str& exe, const std::vector<str> args, bp::context& ctx)
+        {
+          if (shell_cmd)
+            return bp::launch_shell(command, ctx);
+          else
+            return bp::launch(exe, args, ctx);
+        }
   };
 
 //vm_dsl
-DSLWorker vm_shell::create_worker(dsl& info, code_linker& owner, std::vector<str>& expressions)
+DSLWorker vm_shell::create_worker(dsl& info, code_linker& owner, std::vector<str>& in, std::vector<str>& out)
   {
     ga_parser parser;
     std::vector<ga_item> result;
@@ -241,13 +265,16 @@ DSLWorker vm_shell::create_worker(dsl& info, code_linker& owner, std::vector<str
           }
       }
 
-    expressions.push_back(boost::lexical_cast<str>(count));
-    expressions.insert(expressions.end(), aux_exprs.begin(), aux_exprs.end());
+    in.push_back(boost::lexical_cast<str>(count));
+    in.insert(in.end(), aux_exprs.begin(), aux_exprs.end());
 
     std::vector<ga_item>::iterator it = result.begin();
     std::vector<ga_item>::iterator nd = result.end();
     for(; it != nd; it++)
       {
+        if (!it->variable.empty())
+          out.push_back(it->variable);
+
         //fun stuff, gather the params in the query (in the form @value)
         std::vector<shell_param>::reverse_iterator rpit = it->params.rbegin();
         std::vector<shell_param>::reverse_iterator rpnd = it->params.rend();
@@ -257,7 +284,7 @@ DSLWorker vm_shell::create_worker(dsl& info, code_linker& owner, std::vector<str
             if (rpit->id.empty())
               continue;
 
-            expressions.push_back(rpit->id);
+            in.push_back(rpit->id);
           }
       }
 

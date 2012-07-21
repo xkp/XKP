@@ -11,7 +11,7 @@ namespace xkp {
       public:
         vm_shell(XSSCompiler compiler) : vm_dsl(compiler) {}
       protected:
-		    virtual DSLWorker create_worker(dsl& info, code_linker& owner, std::vector<str>& expressions);
+		    virtual DSLWorker create_worker(dsl& info, code_linker& owner, std::vector<str>& in, std::vector<str>& out);
     };
 }
 
