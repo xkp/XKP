@@ -9,7 +9,7 @@ namespace xkp {
   
   struct IWorker
     {
-      virtual void work(const param_list& args) = 0;
+      virtual DynamicObject work(const param_list& args) = 0;
     };
 
   typedef reference<IWorker> DSLWorker;
@@ -23,7 +23,9 @@ namespace xkp {
       protected:
         XSSCompiler compiler_;
 
-		    virtual DSLWorker create_worker(dsl& info, code_linker& owner, std::vector<str>& expressions) = 0;
+        static int counter;
+
+		    virtual DSLWorker create_worker(dsl& info, code_linker& owner, std::vector<str>& in, std::vector<str>& out) = 0;
     };
 }
 
