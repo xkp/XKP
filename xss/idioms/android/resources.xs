@@ -98,9 +98,9 @@ on render_instances()
 		
 		//copying resource
 		//TRACE: log
-		compiler.log("Copying resource file " + srcf);
+		//compiler.log("Copying resource file " + srcf);
 		compiler.copy_file(src = srcf, dst = dstf);
-		compiler.log("File Copied " + srcf);
+		//compiler.log("File Copied " + srcf);
 		
 		pos = String.find_last(fn_img, ".");
 		string droidId = String.substr(fn_img, 0, pos);

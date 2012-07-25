@@ -116,4 +116,6 @@ private void onLayoutStarted() {
 					, true);
 				util.addXKPPackage(__resources1);
 			}
+			private void initapplication() {
+			}
 }

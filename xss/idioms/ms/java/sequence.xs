@@ -252,7 +252,6 @@ method render_instance(seq, seq_id, parent_id, path)
 	{
 		private <xss:e value="sClassName"/> <xss:e value="seq.output_id"/> = <xss:e value="compiler.instantiate(seq)"/>;
 	}
-	
 
     compiler.xss("../../java/instance.xss", seq, marker = "declarations", marker_source="previous", render_events = false);
     compiler.xss("../../java/instance.xss", seq, event_renderer = "event.xss", render_properties = false, render_methods = false);

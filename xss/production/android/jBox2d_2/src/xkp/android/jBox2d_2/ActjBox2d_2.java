@@ -15,6 +15,7 @@ import xkp.android.libs.Layout.XKPLayout;
 						import xkp.android.libs.Widget.XKPUtils;
 						import xkp.android.libs.Widget.XKPPackage;
 						import xkp.android.libs.Widget.XKPPackage.OnResourcePackageListener;
+import android.view.MotionEvent;
 import org.jbox2d.callbacks.QueryCallback;
 import org.jbox2d.collision.AABB;
 import org.jbox2d.dynamics.Body;
