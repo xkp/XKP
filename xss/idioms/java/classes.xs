@@ -29,6 +29,7 @@ on pre_process(obj)
 
 on render_instances()
 {
+	/*
 	compiler.log("Rendering Java instances...");
 	
 	instances += application;
@@ -36,6 +37,7 @@ on render_instances()
 	{
 		compiler.xss("instance.xss", i);
 	}
+	*/
 }
 
 on render_types()

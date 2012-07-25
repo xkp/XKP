@@ -712,17 +712,11 @@ Success are greateful
 ===[ java1.project.xml ]================(Tests)
 
 
-log: Rendering Java instances...
-log: Rendering instance: instance1
-log: Rendering instance: application
 
 Success are greateful
 ===[ java2.project.xml ]================(Tests)
 
 
-log: Rendering Java instances...
-log: Rendering instance: instance1
-log: Rendering instance: application
 
 Success are greateful
 ===[ java3.project.xml ]================(Tests)
