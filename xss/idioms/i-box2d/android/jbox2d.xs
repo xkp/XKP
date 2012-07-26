@@ -27,6 +27,9 @@ on render_type_initialization(clazz, bns)
 
 on render_initialization(clazz, bns)
 {
+	if(world == null)
+		return;
+	
 	compiler.xss("../../android/class.xss/mouseJoint.class.xss", clazz, world);
 	
 	if(!application.activity_config)
@@ -110,11 +113,12 @@ on render_types()
 
 on render_instances(clazz)
 {
+	if(world == null)
+		return;
+		//compiler.error("JBox2d requires a physics_world object");
+
 	if(clazz == null) clazz = this;
 	
-	if(world == null)
-		compiler.error("JBox2d requires a physics_world object");
-
 	for(var i in instances)
 	{
 		render_instance(i, clazz);
@@ -161,6 +165,10 @@ on render_update()
 
 on render_application_pause()
 {
+	if(world == null)
+		return;
+		//compiler.error("JBox2d requires a physics_world object");
+
 	out(indent = 1)
 	{
 		if(mHandler != null) mHandler.removeCallbacks(mRunnableWorld);
@@ -169,6 +177,10 @@ on render_application_pause()
 
 on render_application_stop()
 {
+	if(world == null)
+		return;
+		//compiler.error("JBox2d requires a physics_world object");
+
 	out(indent = 1)
 	{
 		if(mHandler != null) mHandler.removeCallbacks(mRunnableWorld);
@@ -177,6 +189,10 @@ on render_application_stop()
 
 on render_application_resume()
 {
+	if(world == null)
+		return;
+		//compiler.error("JBox2d requires a physics_world object");
+
 	out(indent = 1)
 	{
 		if(mHandler != null) mHandler.post(mRunnableWorld);
