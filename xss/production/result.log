@@ -2434,3 +2434,88 @@ ERROR: Project:  maps.project.xml
 ERROR: Project:  maps.project.xml
 ERROR: Project:  maps.project.xml
 ERROR: Project:  androidcollisions.project.xml
+
+===[ maps.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 7
+log: Rendering Android Types...
+log: Rendering Sequence Types...
+log: Rendering Java Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: __div1
+log: Rendering instance: btnGallery
+log: Rendering instance: btnMaps
+log: Rendering instance: lblStatus
+log: Rendering instance: lblInformation
+log: Rendering instance: swtScene
+log: Rendering instance: lblSwicherInformation
+log: Rendering instance: imgGallery
+log: Rendering instance: mapController
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: ico_gallery
+log: Rendering instance: ico_maps
+log: Rendering instance: photos
+log: Rendering instance: worth_1
+log: Rendering instance: worth_2
+log: Rendering instance: worth_3
+log: Rendering instance: worth_4
+log: Rendering instance: worth_5
+log: Rendering instance: worth_6
+log: Rendering instance: worth_7
+log: Rendering instance: maps
+log: Rendering instance: holguin
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: Copying files...
+log: [jbox2d] Copying default files...
+log: Rendering Android Manifest...
+log: Creating .apk bundle file...
+
+Success are greateful
+===[ maps.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 7
+log: Rendering Android Types...
+log: Rendering Sequence Types...
+log: Rendering Java Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: __div1
+log: Rendering instance: btnGallery
+log: Rendering instance: btnMaps
+log: Rendering instance: lblStatus
+log: Rendering instance: lblInformation
+log: Rendering instance: swtScene
+log: Rendering instance: lblSwicherInformation
+log: Rendering instance: imgGallery
+log: Rendering instance: mapController
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: ico_gallery
+log: Rendering instance: ico_maps
+log: Rendering instance: photos
+log: Rendering instance: worth_1
+log: Rendering instance: worth_2
+log: Rendering instance: worth_3
+log: Rendering instance: worth_4
+log: Rendering instance: worth_5
+log: Rendering instance: worth_6
+log: Rendering instance: worth_7
+log: Rendering instance: maps
+log: Rendering instance: holguin
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: Copying files...
+log: [jbox2d] Copying default files...
+log: Rendering Android Manifest...
+log: Creating .apk bundle file...
+
+Success are greateful
