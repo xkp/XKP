@@ -136,7 +136,7 @@ struct shellworker : IWorker
                   ctx.work_directory = working_path;
 
                 bp::status s(0);
-                bp::child& child = launch(shell_cmd, command, exe, args, ctx);
+                bp::child child = launch(shell_cmd, command, exe, args, ctx);
 
                 if (!it->variable.empty())
                   {
