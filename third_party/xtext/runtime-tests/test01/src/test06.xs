@@ -4,10 +4,10 @@ class my_cylinder : cylinder
 	{
 		color = value;
 	}
-	on mousein(){
+	on mousein() {
 		color = lightgreen;
 	}
-	on mouseout(){
+	on mouseout() {
 		color = red;
 	}
 }
