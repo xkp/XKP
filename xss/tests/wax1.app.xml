@@ -1,3 +1,12 @@
 <application src="wax1.app.xs">
     <service id="myService"/>
+    
+    <page id="myPage" src="wax1.html">
+        <element id="rnumber" />
+        <element id="smarty_div" />
+
+        <replicator id="rnumbers">
+            <element id="arnumber" />
+        </replicator>
+    </page>
 </application>

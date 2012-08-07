@@ -1,6 +1,7 @@
 #include <xss/lang/waxjs.h>
 #include <xss/dsl/sql.h>
 #include <xss/dsl/shell.h>
+#include <xss/dsl/smarty.h>
 #include <xss/xss_renderer.h>
 #include <xss/brace_parser.h>
 
@@ -373,6 +374,9 @@ void waxjs_lang::init_application_context(XSSContext ctx)
   {
     ctx->register_xss_dsl("sql", XSSDSL(new dsl_sql));
     ctx->register_xss_dsl("shell", XSSDSL(new dsl_shell));
+    
+    variant v = new dsl_smarty;
+    ctx->register_xss_dsl("smarty", XSSDSL(new dsl_smarty));
   }
 
 variant waxjs_lang::compile_code(code& cde, param_list_decl& params, XSSContext ctx)
@@ -691,6 +695,7 @@ str waxjs_code_renderer::render_page()
     result << "\nfunction return_function()";
     result << "\n{";
     result << "\n" << rf;
+    result << "\nresponse.end();";
     result << "\n}";
     return result.str();
   }
@@ -722,7 +727,7 @@ str waxjs_code_renderer::render_service()
     std::ostringstream result;
     result << "\nfunction return_function(return_value)";
     result << "\n{";
-    result << "\nrequest.end(JSON.stringify(return_value))";
+    result << "\nresponse.end(JSON.stringify(return_value))";
     result << "\n}";
     return result.str();
   }
@@ -1256,17 +1261,29 @@ struct visitor_45 : code_visitor
         info.try_code.visit(&v45);
       }
 
+    virtual void return_(stmt_return& info)
+      {
+      }
+
+    virtual void dsl_(dsl& info)
+      {
+        XSSDSL dsl = ctx_->get_xss_dsl(info.name);
+        if (dsl)
+          {
+            dsl->pre_process(info, ctx_);
+          }
+      }
+
     virtual void variable_(stmt_variable& info)       {}
-    virtual void return_(stmt_return& info)           {}
     virtual void break_()                             {}
     virtual void continue_()                          {}
-    virtual void dsl_(dsl& info)                      {}
     virtual void dispatch(stmt_dispatch& info)        {}
     virtual void switch_(stmt_switch& info)           {}
     virtual void throw_(stmt_throw& info)             {}
 
     private:
-     XSSContext ctx_;
+      XSSContext ctx_;
+      XSSObject  result_;
   }; 
 
 XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
@@ -1345,6 +1362,38 @@ XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
     visitor_45 tr(ctx);
     cde.visit(&tr);
 
+    //use case, some dsls may add modifiers, so lets take that into account
+    DynamicArray extra_modifiers = variant_cast<DynamicArray>(ctx->resolve("#extra_modifiers"), DynamicArray());
+    if (extra_modifiers)
+      {
+        std::vector<variant>::iterator eit = extra_modifiers->ref_begin();
+        std::vector<variant>::iterator end = extra_modifiers->ref_end();
+
+        for(; eit != end; eit++)
+          {
+            XSSObject em = *eit;
+            str html_id  = em->get<str>("html_id", str());
+            str modifier = em->get<str>("modifier", str());
+
+            if (!html_id.empty() && !modifier.empty())
+              {
+                std::vector<Object45>::iterator oit = items.begin();
+                std::vector<Object45>::iterator ond = items.end();
+
+                for(; oit != ond; oit++)
+                  {
+                    Object45 o45 = *oit;
+                    if (o45->id() == html_id)
+                      {
+                        o45->modifiers().push_back(modifier);
+                        break;
+                      }
+                  }
+              }
+          }
+      }
+
+
     //on pages the last intruction will be a call to the return_function
     stmt_expression rfe;
     xs_compiler xsc;
@@ -1414,7 +1463,7 @@ XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
               }
           }
 
-        curr = tt.close;
+        curr = tt.close + 1;
       }
 
     return_function << render_html_text(html_text.substr(curr, html_text.size() - curr));
@@ -1533,7 +1582,7 @@ str wax_utils::split_html(const str& html_text, code& cde, tag_list& tags, Dynam
               }
           }
 
-        curr = tt.close;
+        curr = tt.close + 1;
       }
 
     declarations = decl_builder.str();
@@ -1551,12 +1600,12 @@ void wax_utils::pre_process_args(XSSMethod methd)
 
     //add standard service/page parameters
     param_decl pd;
-    pd.name = "response";
+    pd.name = "request";
     pd.type = "object";
 
     rend->get().push_back(pd);
 
-    pd.name = "request";
+    pd.name = "response";
     rend->get().push_back(pd);
 
     //remember the original ones
@@ -1615,21 +1664,28 @@ bool wax_utils::custom_modifier(XSSObject obj, const str& modifier, const str& h
             xss_throw(error);
           }
         
+        tag& start_tag = tags.get(tag_idx);
+
         tag_list rep_tags;
         tags.inner_tags(tag_idx, rep_tags);
         
+        tag& end_tag = tags.get(tag_idx);
+        //tag_idx++;
+
         str decl;
-        str html_render = split_html(html_text, cdr->get_code(), rep_tags, obj->children(), rep_tags.get(0).start, rep_tags.get(rep_tags.size() - 1).close, decl);
+        str html_render = split_html(html_text, cdr->get_code(), rep_tags, obj->children(), rep_tags.get(0).start, rep_tags.get(rep_tags.size() - 1).close + 1, decl);
         
         std::ostringstream rep_text;
         str iterator = obj->id() + "_iterator";
-        rep_text << "\nfor(var " << iterator << " = 0; " << iterator << " < " << obj->id() << ".data.lenght; " << iterator << "++)";
+        rep_text << '\n' << render_html_text(str(html_text.begin() + start_tag.start, html_text.begin() + start_tag.close + 1));
+        rep_text << "\nfor(var " << iterator << " = 0; " << iterator << " < " << obj->id() << ".data.length; " << iterator << "++)";
         rep_text << "\n{";
         rep_text << "\nvar item = " << obj->id() << ".data[" << iterator << "];";
         rep_text << "\n" << decl;
         rep_text << "\n" << cdr->render();
         rep_text << "\n" << html_render;
         rep_text << "\n}";
+        rep_text << '\n' << render_html_text(str(html_text.begin() + end_tag.start, html_text.begin() + end_tag.close + 1));
 
         result = rep_text.str();
         return true;
@@ -1657,7 +1713,7 @@ bool wax_utils::custom_modifier(XSSObject obj, const str& modifier, const str& h
             ih_text << str(html_text.begin() + last.start, html_text.begin() + last.close + 1);
           }
 
-        tag_idx = closing + 1;
+        tag_idx = closing;
         ih_text << "\");";
         result = ih_text.str();
         return true;

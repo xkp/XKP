@@ -88,7 +88,6 @@ void tag_list::inner_tags(int& tag_idx, tag_list& result)
       {
         tag_idx++;
         tag& curr_tag = tags_[tag_idx];
-        result.push_back(curr_tag);
 
         if (curr_tag.tag_name == match_tag.tag_name)
           {
@@ -97,6 +96,9 @@ void tag_list::inner_tags(int& tag_idx, tag_list& result)
             else 
               matches++;
           }
+
+        if (matches > 0)
+          result.push_back(curr_tag);
       }
   }
 

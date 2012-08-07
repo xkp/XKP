@@ -100,6 +100,7 @@
     <ClInclude Include="..\..\..\include\xss\dsl\html5_asynch.h" />
     <ClInclude Include="..\..\..\include\xss\dsl\native.h" />
     <ClInclude Include="..\..\..\include\xss\dsl\shell.h" />
+    <ClInclude Include="..\..\..\include\xss\dsl\smarty.h" />
     <ClInclude Include="..\..\..\include\xss\dsl\sql.h" />
     <ClInclude Include="..\..\..\include\xss\dsl\vm_base.h" />
     <ClInclude Include="..\..\..\include\xss\dsl\vm_shell.h" />
@@ -143,6 +144,7 @@
     <ClCompile Include="..\..\..\src\xss\dsl\html5_asynch.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl\native.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl\shell.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\smarty.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl\sql.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl\vm_base.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl\vm_shell.cpp" />
