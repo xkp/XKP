@@ -130,7 +130,7 @@ struct shellworker : IWorker
                 bp::context ctx;
                 ctx.add(bp::close_stream(bp::stdin_fileno))
                    .add(bp::capture_stream(bp::stdout_fileno))
-                   .add(bp::capture_stream(bp::stderr_fileno));
+                   .add(bp::redirect_to_stdout(bp::stderr_fileno));
 
                 if (!working_path.empty())
                   ctx.work_directory = working_path;

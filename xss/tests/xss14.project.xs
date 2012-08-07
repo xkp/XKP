@@ -3,9 +3,9 @@ on finished()
     string file = project.js_path + "/source.xxx";
     compiler.log(file);
 	
-    shell()
+    shell(shell_cmd = true)
     {
-        result = git.exe --version
+        result = javac -version
     }
 
 	for(string line in result)
