@@ -135,6 +135,27 @@ struct expr_param_resolver : expression_visitor
       expression curr_expr_; 
   };
 
+struct funccall_param_resolver : expression_visitor
+  {
+    funccall_param_resolver() : recording_(true) {}
+
+    param_list& get();
+    str         func_name();
+
+    //expression_visitor
+    virtual void push(variant operand, bool top);
+    virtual void exec_operator(operator_type op, int pop_count, int push_count, bool top);
+
+    private:
+      typedef std::stack<variant> expr_stack;
+
+      bool       recording_; 
+      expr_stack stack_;
+      param_list result_;
+      expression curr_expr_;
+      str        func_name_; 
+  };
+
 struct expression_analizer
   {
     expression_analizer();
@@ -155,6 +176,7 @@ struct expression_analizer
     bool        is_call();
     XSSMethod   method();
     str         method_name();
+    param_list& call_arguments();
 
     private:
       bool        is_identifier_;
@@ -172,6 +194,7 @@ struct expression_analizer
       bool        first_property_;
       XSSMethod   method_;
       str         method_name_;
+      param_list  call_arguments_;
 
       void analyze_path(expression& expr, operator_type op, XSSContext ctx, str& last_id, XSSObject& instance);
   };

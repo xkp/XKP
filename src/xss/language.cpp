@@ -475,14 +475,15 @@ void expr_type_resolver::exec_operator(operator_type op, int pop_count, int push
             resolve_info call;
             if (!ctx_->resolve(ei.value, call))
               {
-                param_list error;
-                error.add("id", SLinker);
-                error.add("desc", SCannontResolve);
-                error.add("what", ei.value);
-                xss_throw(error);
+                stack_.push(XSSType());
+                //param_list error;
+                //error.add("id", SLinker);
+                //error.add("desc", SCannontResolve);
+                //error.add("what", ei.value);
+                //xss_throw(error);
               }
-
-            stack_.push(call.type);
+            else 
+              stack_.push(call.type);
             break;
           }
 
@@ -730,7 +731,6 @@ void expr_param_resolver::exec_operator(operator_type op, int pop_count, int pus
       {
         case op_call:
         case op_dot_call:
-        case op_func_call:
           {
             recording_ = true;
             break;
@@ -739,6 +739,61 @@ void expr_param_resolver::exec_operator(operator_type op, int pop_count, int pus
           {
             curr_expr_.pop();
 
+				    expression_identifier arg1 = stack_.top(); 
+            expression_identifier ei = arg1;
+            
+            result_.add(ei.value, curr_expr_);
+            curr_expr_.clear();
+            break;
+          }
+        default:
+          {
+            if (recording_)
+              curr_expr_.push_operator(op);
+          }
+
+        for(int i = 0; i < pop_count; i++)
+          stack_.pop();
+
+        for(int i = 0; i < push_count; i++)
+          stack_.push(variant());
+      }
+  }
+
+//funccall_param_resolver
+param_list& funccall_param_resolver::get()
+  {
+    return result_;
+  }
+
+str funccall_param_resolver::func_name()
+  {
+    return func_name_;
+  }
+
+void funccall_param_resolver::push(variant operand, bool top)
+  {
+    if (recording_)
+      curr_expr_.push_operand(operand);
+      
+		stack_.push(operand);
+  }
+
+void funccall_param_resolver::exec_operator(operator_type op, int pop_count, int push_count, bool top)
+  {
+    switch(op)
+      {
+        case op_func_call:
+          {
+            stack_.pop();
+            expression_identifier func_name = stack_.top();
+            func_name_ = func_name.value;
+            recording_ = false;
+            break;
+          }
+        case op_parameter:
+          {
+            curr_expr_.pop();
 				    expression_identifier arg1 = stack_.top(); 
             expression_identifier ei = arg1;
             
@@ -875,17 +930,26 @@ void expression_analizer::analyze(expression& expr, XSSContext ctx)
                 if (instance)
                     method_ = instance->get_method(method_name_);
 
+                expr_param_resolver epr;
+                expr.visit(&epr);
+
+                call_arguments_ = epr.get();
                 is_call_ = true;
                 break;
               }
             case op_func_call:
               {
-                XSSObject             instance = ctx->get_this();
-                expression_identifier ei       = expr.first();
-                method_name_                   = ei.value;
+                funccall_param_resolver fnpr;
+                expr.visit(&fnpr);
+
+                XSSObject instance = ctx->get_this();
+                method_name_ = fnpr.func_name();
+
                 if (instance)
                     method_ = instance->get_method(method_name_);
 
+
+                call_arguments_ = fnpr.get();
                 is_call_ = true;
                 break;
               }
@@ -968,6 +1032,11 @@ XSSMethod expression_analizer::method()
 str expression_analizer::method_name()
   {
     return method_name_;
+  }
+
+param_list& expression_analizer::call_arguments()
+  {
+    return call_arguments_;
   }
 
 void expression_analizer::analyze_path(expression& expr, operator_type op, XSSContext ctx, str& last_id, XSSObject& instance)

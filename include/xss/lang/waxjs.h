@@ -92,6 +92,8 @@ struct wax_utils
     XSSMethod compile_page(XSSObject page, variant code);
     void      pre_process_args(XSSMethod methd);
     str       escape(const str& text);
+    
+    static bool check_redirect(expression& return_expr, XSSContext ctx, param_list& args);
 
     private:
       XSSCompiler compiler_;

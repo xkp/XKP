@@ -21,6 +21,10 @@ const str STooManyReplicatorEvents("Replicators expect only one 'render' event")
 const str SReplicatorOnlyData("Replicators only contain the 'data' property");
 const str SReplicatorNoFork("Replicators 'render' event does not support offline operations");
 const str SMultipleCatchesNotImplemented("Multiple catch staments are not implemented");
+const str SPageDoesNotReturn("pages can only return a redirect");
+const str SRedirectToSmartyExpectsFile("redirect to smarty expects a file");
+const str SRedirectToPageExpectsFile("redirect to page expects a valid page name");
+const str SRedirectExpectsPageOrTpl("redirect expects either 'page' or 'tpl'");
 
 #define CHECK_ACTIVE  if (found_) return; curr_++;
 
@@ -349,9 +353,71 @@ struct waxjs_internal_renderer : public js_code_renderer
 
       virtual void return_(stmt_return& info)
         {
+          bool is_page = variant_cast<bool>(ctx_->resolve("#wax_page"), false);
+          bool is_service = variant_cast<bool>(ctx_->resolve("#wax_service"), false);
+
           std::ostringstream result;
-          result << "\n" << "return_function(" << render_expression(info.expr, ctx_) << ");";
-          result << "\n" << "return true;";
+          if (is_page)
+            {
+              param_list args;
+              if (wax_utils::check_redirect(info.expr, ctx_, args))
+                {
+                  if (args.has("tpl"))
+                    {
+                      str tpl_file;
+                      expression value = args.get("tpl");
+                      if (value.size() == 1)
+                        tpl_file = variant_cast<str>(value.first(), str());
+
+                      if (tpl_file.empty())
+                        {
+                          param_list error;
+                          error.add("id", SLanguage);
+                          error.add("desc", SRedirectToSmartyExpectsFile);
+                          xss_throw(error);
+                        }
+                    
+                      XSSCompiler compiler = ctx_->resolve("compiler");
+                      str tpl_contents = compiler->file(tpl_file);
+
+                      //td: generalize all this
+                      XSSDSL dsl = ctx_->get_xss_dsl("smarty");
+                      dsl_smarty* smarty = dynamic_cast<dsl_smarty*>(dsl.get()); assert(smarty); 
+                      result << "\nresponse.end(" << smarty->gen_call(tpl_contents, ctx_, args) << ");";
+                    }
+                  else if (args.has("page"))
+                    {
+                      str page;
+                      expression value = args.get("page");
+                      if (value.size() == 1)
+                        page = variant_cast<str>(value.first(), str());
+
+                      if (page.empty())
+                        {
+                          param_list error;
+                          error.add("id", SLanguage);
+                          error.add("desc", SRedirectToPageExpectsFile);
+                          xss_throw(error);
+                        }
+
+                      result << "\napplication." << page << "(request, response);";
+                    }
+                  else
+                    {
+                      param_list error;
+                      error.add("id", SLanguage);
+                      error.add("desc", SRedirectExpectsPageOrTpl);
+                      xss_throw(error);
+                    }
+                  
+                  result << "\nreturn true;";
+                }
+            }
+          else
+            {
+              result << "\n" << "return_function(" << render_expression(info.expr, ctx_) << ");";
+              result << "\n" << "return true;";
+            }
           
           add_line(result.str());
         }
@@ -425,6 +491,9 @@ str waxjs_code_renderer::render()
         is_service = owner_->get<bool>("wax_service", false);
         is_page = owner_->get<bool>("wax_page", false);
       }
+
+    ctx_->register_symbol(RESOLVE_CONST, "#wax_page", is_page, true);
+    ctx_->register_symbol(RESOLVE_CONST, "#wax_service", is_service, true);
 
     std::ostringstream result;
 
@@ -1263,15 +1332,48 @@ struct visitor_45 : code_visitor
 
     virtual void return_(stmt_return& info)
       {
+        bool is_page = variant_cast<bool>(ctx_->resolve("#wax_page"), false);
+        param_list args;
+        if (is_page && wax_utils::check_redirect(info.expr, ctx_, args))
+          {
+            if (args.has("tpl"))
+              {
+                str tpl_file;
+                expression value = args.get("tpl");
+                if (value.size() == 1)
+                  tpl_file = variant_cast<str>(value.first(), str());
+
+                if (tpl_file.empty())
+                  {
+                    param_list error;
+                    error.add("id", SLanguage);
+                    error.add("desc", SRedirectToSmartyExpectsFile);
+                    xss_throw(error);
+                  }
+                    
+                XSSCompiler compiler = ctx_->resolve("compiler");
+                str tpl_contents = compiler->file(tpl_file);
+
+                //td: generalize all this
+                XSSDSL dsl = ctx_->get_xss_dsl("smarty");
+                dsl_smarty* smarty = dynamic_cast<dsl_smarty*>(dsl.get()); assert(smarty); 
+                smarty->pre_process_file(tpl_contents, ctx_);
+              }
+          }
+        else
+          {
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", SPageDoesNotReturn);
+            xss_throw(error);
+          }
       }
 
     virtual void dsl_(dsl& info)
       {
         XSSDSL dsl = ctx_->get_xss_dsl(info.name);
         if (dsl)
-          {
             dsl->pre_process(info, ctx_);
-          }
       }
 
     virtual void variable_(stmt_variable& info)       {}
@@ -1321,6 +1423,7 @@ XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
     //then the code will be analyzed to find the changes intended for the html
     XSSContext ctx(new xss_context(compiler_->current_context()));
     ctx->search_native(true); //looks important...
+    ctx->register_symbol(RESOLVE_CONST, "#wax_page", true);
 
     DynamicArray elements = page->children();
 		std::vector<variant>::iterator it = elements->ref_begin();
@@ -1736,6 +1839,19 @@ str wax_utils::render_html_text(const str& text)
     boost::replace_all (result, "\n", "\\n");
     boost::replace_all (result, "\"", "\\\"");
     return "response.write(\"" + result + "\");\n";
+  }
+
+bool wax_utils::check_redirect(expression& return_expr, XSSContext ctx, param_list& args)
+  {
+    expression_analizer ea;
+    ea.analyze(return_expr, ctx);
+
+    if (ea.is_call() && ea.method_name() == "redirect")
+      {
+        args = ea.call_arguments();
+        return true;
+      }
+    return false;
   }
 
 //glue

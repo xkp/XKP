@@ -1,9 +1,13 @@
 
 on myPage.render()
 {
-    rnumber.inner_html = Math.random();
+    var number = Math.random();
+    if (number > 0.7)
+        return redirect(tpl = "wax1.tpl", target = number);
 
     var numbers = [Math.random(), Math.random(), Math.random()];
+
+    rnumber.inner_html = number;
     rnumbers.data = numbers;
 
     smarty(html_id = "smarty_div", items = numbers)

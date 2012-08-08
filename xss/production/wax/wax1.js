@@ -40,8 +40,18 @@ application.myPage = function (request, response)
         response.write("\n\n        <button type=\"button\" onclick=\"loadXMLDoc()\">Get From Service</button>\n        <div id=\"myDiv\">\n        </div>\n\n    </body>\n</html>\n\n");
         response.end();
     }
-    rnumber.inner_html = Math.random();
+    var number = Math.random();
+    if (number > 0.699999988)
+    {
+        response.end(application.tpl2306366569.fetch(
+        {
+            tpl: "wax1.tpl",
+            target: number
+        }));
+        return true;
+    }
     var numbers = [Math.random(), Math.random(), Math.random()];
+    rnumber.inner_html = number;
     rnumbers.data = numbers;
     smarty_div.inner_html = application.tpl4067313322.fetch(
     {
@@ -51,6 +61,7 @@ application.myPage = function (request, response)
 };
 application.init = function ()
 {
+    this.tpl2306366569 = new jSmart("<!DOCTYPE html>\n<html>\n    <body>\n        <h4>\n            Your 30% chance took you here: <strong>{$target}</strong>\n        </h4>\n        <a href=\"/myPage\">You can try again</a>\n    </body>\n</html>\n\n");
     this.tpl4067313322 = new jSmart("\n        <ul>\n        {foreach from=$items item=rn}\n            <li>{$rn}</li>\n        {/foreach}\n        </ul>    \n    ");
 }
 application.init();

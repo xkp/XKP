@@ -259,7 +259,7 @@ void expression_splitter::exec_operator(operator_type op, int pop_count, int pus
 	{
 		if (op == divider_ && top)
 			{
-        if (op == op_call)
+        if (op == op_call || op == op_func_call)
           {
             int p_count = result_[positions_.top() - 1];
             for(int i = 0; i < p_count; i++)
