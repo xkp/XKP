@@ -39,7 +39,7 @@ on pre_process_type(type_)
 		}
 	}	
 }
-
+	
 on render_dependencies()
 {
     var dependencies = compiler.idiom_dependencies("webgl");
