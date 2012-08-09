@@ -229,7 +229,7 @@ function generate_model_loader( type )
 {
 	if(type == RESOURCE_JSON_MODEL)
 		return new THREE.JSONLoader();
-	return new THREE.BinaryLoader();
+	return new THREE.ColladaLoader();
 }
 
 var program_fill = function ( context ) 

@@ -6,6 +6,7 @@ on pre_process(obj)
 
 on compile_dependency(dep)
 {
+    compiler.log("on resources.compile_dependency");
     if (!dep.idiom)
         return;
 

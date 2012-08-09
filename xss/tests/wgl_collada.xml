@@ -1,0 +1,37 @@
+<application src="wgl_collada.xs" title="Test 3D" background="black">
+
+	<resources>		
+		<collada_model id="model_1" src="model/monster/monster.dae"/>				
+	</resources>
+	<materials>	
+		<basic_material id="material_wireframe" color="grey" alpha="20"/>		
+	</materials>
+	
+	<scene>			
+		
+		<camera id="camera_1" fov="75" aspect="1.5" near="1" far="10000" look_at="scene.position">
+			<position z="1000"/>            
+		</camera>
+		
+		<ambient_light id="a_ligth" color="2232576"/>
+		
+		<directional_light id="d_ligth_1" color="16772829" intensity="1">			
+            <position y="-70" z="100"/>            
+		</directional_light>
+		
+		<point_light id="light1" color="Yellow" intensity="4"/>
+		<point_light id="light2" color="Red" intensity="4"/>
+		<point_light id="light3" color="Green" intensity="4"/>
+				
+		<model id="monster_model" src="model_1" model_type="collada">
+			<position x="-350"  y="-350" z="-350"/>	
+			<scale x="0.5" y="0.5" z="0.5"/>
+		</model>
+		
+		<plane id="plane_1" width="10000" height="10000" x_segments="100" y_segments="100" material="material_wireframe">
+			<position y="-500"/>			
+		</plane>	
+				
+	</scene>
+	
+</application>
