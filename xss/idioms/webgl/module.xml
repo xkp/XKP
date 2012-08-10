@@ -8,17 +8,7 @@
     <dependency href="../js/three/Stats.js"/>    
 	<dependency href="../js/three/Utils.js"/>
 	<dependency href="../js/three/Detector.js"/>
-	<dependency href="../js/three/fonts.js"/>
-	<dependency href="../js/three/ShaderExtras.js"/>
-	
-	<dependency href="../js/three/postprocessing/EffectComposer.js"/>
-	<dependency href="../js/three/postprocessing/RenderPass.js"/>
-	<dependency href="../js/three/postprocessing/ShaderPass.js"/>
-	<dependency href="../js/three/postprocessing/BloomPass.js"/>
-	<dependency href="../js/three/postprocessing/FilmPass.js"/>
-	<dependency href="../js/three/postprocessing/DotScreenPass.js"/>
-	<dependency href="../js/three/postprocessing/TexturePass.js"/>
-	<dependency href="../js/three/postprocessing/MaskPass.js"/>
+		
 	<types>
 	
 		<class id="vector3d">		
@@ -328,6 +318,7 @@
 		</class>	
 		
 		<class id="text" output_id="THREE.TextGeometry" renderer="text_renderer.xss" heritable="true">
+			<dependency href="../js/three/fonts.js"/>
 			<constructor_params>
 				<parameter id="size" property="size" runtime="true"/>
 				<parameter id="height" property="height" runtime="true"/>
@@ -523,19 +514,29 @@
 			<property id="size" type="int" dont_init="true"/>
 			<property id="texture_cube" type="string" dont_init="true"/>			
 		</class>
-	
+				
 		<class id="model" dont_render="true" renderer="model_renderer.xss">
+			<dependency href="../js/three/loaders/ColladaLoader.js"/>
 			<property id="compute_tangents" type="bool" use_plain_value="true">					
 				<set text="if({value}) geometry.computeTangents()" global = "true"/>
             </property>	
 			<property id="position" type="vector3d"/>
 			<property id="rotation" type="rotation_class"/>
 			<property id="scale" type="vector3d"/>
-		</class>		
+		</class>
 		
 		<class id="effect_composer" renderer="postproc_renderer.xss" heritable="true"/>
 		
 		<class id="effect" renderer="postproc_renderer.xss" heritable="true">
+			<dependency href="../js/three/ShaderExtras.js"/>	
+			<dependency href="../js/three/postprocessing/EffectComposer.js"/>
+			<dependency href="../js/three/postprocessing/RenderPass.js"/>
+			<dependency href="../js/three/postprocessing/ShaderPass.js"/>
+			<dependency href="../js/three/postprocessing/BloomPass.js"/>
+			<dependency href="../js/three/postprocessing/FilmPass.js"/>
+			<dependency href="../js/three/postprocessing/DotScreenPass.js"/>
+			<dependency href="../js/three/postprocessing/TexturePass.js"/>
+			<dependency href="../js/three/postprocessing/MaskPass.js"/>
 			<property id="render_to_screen" output_id="renderToScreen" type="bool"/>
 			<property id="enabled" type="bool"/>
 		</class>	

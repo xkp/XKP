@@ -26,7 +26,7 @@
 			<property id="src" type="string"/>			
 		</class>
 		
-		<class id="bin_model" resource_type="RESOURCE_BIN_MODEL">
+		<class id="collada_model" resource_type="RESOURCE_COLLADA_MODEL">
 			<property id="src" type="string"/>			
 		</class>
 		
