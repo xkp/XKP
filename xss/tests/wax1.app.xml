@@ -9,4 +9,8 @@
             <element id="arnumber" />
         </replicator>
     </page>
+
+    <page id="myApp" application="jquery1.project.xml">
+        <element id="btnFullName" />
+    </page>
 </application>

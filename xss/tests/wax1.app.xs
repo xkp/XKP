@@ -25,6 +25,11 @@ on myPage.rnumbers.render(item)
     arnumber.inner_html = item;
 }
 
+on myApp.render()
+{
+    btnFullName.value = Math.random();
+}
+
 method myService()
 {
     return [Math.random(), Math.random(), Math.random()];

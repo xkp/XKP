@@ -1391,8 +1391,35 @@ struct visitor_45 : code_visitor
 XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
   {
     //do the html thing
-    str page_data = page->get<str>("src", str()); 
-    str html_text = compiler_->file(page_data);
+    str html_text;
+    
+    str src = page->get<str>("application", str()); 
+    if (!src.empty())
+      {
+        JsonOutput json; 
+		
+        XSSCompiler compiler(new xss_compiler(&json));
+        fs::path app_path = fs::path(compiler_->project_path()) / src;
+        param_list pl;
+        compiler->no_ouput();
+        compiler->build(app_path, pl);
+        html_text = compiler->get_result();
+      }
+    else
+      {
+        src = page->get<str>("src", str()); 
+        html_text = compiler_->file(src);
+      }
+
+    if (html_text.empty())
+      {
+        param_list error;
+        error.add("id", SLanguage);
+        error.add("desc", SBadHTML);
+        error.add("file", src);
+        xss_throw(error);
+      }
+
     html_parser parser;
     tag_list    tags;
     if (!parser.parse(html_text, tags))
@@ -1400,7 +1427,7 @@ XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
         param_list error;
         error.add("id", SLanguage);
         error.add("desc", SBadHTML);
-        error.add("file", page_data);
+        error.add("file", src);
         xss_throw(error);
       }
 
