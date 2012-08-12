@@ -10,7 +10,7 @@ on update(){
 	position_items();
 }
 
-on init(){	
+on init() {
 	for(int i = 0; i < 5; i++){	
 		plane_array += my_plane();
 		plane_array[i].set_image(img_array[i]); 
@@ -18,7 +18,7 @@ on init(){
 	}
 }
 
-method position_items(){	
+method position_items() {	
 		start += speed;
 		if (start > max_rotation)
 			start = 0;	
@@ -29,7 +29,7 @@ method position_items(){
 		}		
 }
 
-on mousemove(x, y){	
+on mousemove(x, y) {	
 	if (x < app_width/2){
 		speed = -(0.2) * ( app_width/2 - x) / ( app_width/2);
 	}

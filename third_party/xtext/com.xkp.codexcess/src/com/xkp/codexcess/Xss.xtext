@@ -7,7 +7,26 @@ generate xss "http://www.xkp.com/codexcess/Xss"
 Program
 	:	program = (Block
 	|	ConstructList
-	|	Expression)
+	|	Expression
+	|	XmlApplication)
+	;
+
+
+//------------------------------------------------- XML GUI Application
+XmlApplication
+	:	elems += Element+
+	;
+
+Element
+	:	'<' tag = Tag attrs += Attribute* ('>' childrens += Element* '</' closeTag = Tag '>'
+	|	'/>')
+	;
+
+Attribute
+	:	name = IDENTIFIER "=" attrValue = STRING_LITERAL;
+
+Tag
+	:	name = IDENTIFIER
 	;
 
 
@@ -125,7 +144,7 @@ CatchClauses
 	;
 
 CatchClause
-	:	'catch' ('(' Type IDENTIFIER? ')')? block = Block
+	:	'catch' ('(' type = Type name = IDENTIFIER? ')')? block = Block
 	;
 
 FinallyClausesOpt
@@ -144,7 +163,7 @@ VariableDeclarator
 	:	name = IDENTIFIER ('=' expr = Expression)?
 	;
 
-SwitchHeader
+SwitchHeader returns Expr
 	:	{SwitchHeader} expr = Expression?
 	;
 
@@ -189,47 +208,47 @@ ExpressionOpt
 	:	{ExpressionOpt} exprOpt = Expression?
 	;
 
-ExpressionList returns Expression
-	:	exprList += Expression (',' exprList += Expression)*
+ExpressionList
+	:	expr += Expression (',' expr += Expression)*
 	;
 
-Expression returns Expression
-	:	expr += ConditionalExpr (('='|'+='|'-='|'*='|'/='|'<<='|'>>=') expr += ConditionalExpr)*
+Expression returns Expr
+	:	ConditionalExpr ({Assign.left=current} ('='|'+='|'-='|'*='|'/='|'<<='|'>>=') right = ConditionalExpr)*
 	;
 
-ConditionalExpr returns Expression
-	:	expr += OrExpr ('?' expr += OrExpr ':' expr += ConditionalExpr)?
+ConditionalExpr returns Expr
+	:	OrExpr ({Condition.cond=current} '?' true = OrExpr ':' false = ConditionalExpr)?
 	;
 
-OrExpr returns Expression
-	:	expr += AndExpr ('||' expr += AndExpr)*
+OrExpr returns Expr
+	:	AndExpr ({OrOperator.left=current} '||' right = AndExpr)*
 	;
 
-AndExpr returns Expression
-	:	expr += EqualityExpr ('&&' expr += EqualityExpr)*
+AndExpr returns Expr
+	:	EqualityExpr ({AndOperator.left=current} '&&' right = EqualityExpr)*
 	;
 
-EqualityExpr returns Expression
-	:	expr += CompExpr (('=='|'!=') expr += CompExpr)*
+EqualityExpr returns Expr
+	:	CompExpr ({EqualOperator.left=current} ('=='|'!=') right = CompExpr)*
 	;
 
-CompExpr returns Expression
-	:	expr += ShiftExpr (('<'|'>'|'<='|'>='|'as'|'is'|'has') expr += ShiftExpr)*
+CompExpr returns Expr
+	:	ShiftExpr ({CompareOperator.left=current} ('<'|'>'|'<='|'>='|'as'|'is'|'has') right = ShiftExpr)*
 	;
 
-ShiftExpr returns Expression
-	:	expr += AddExpr (('<<'|'>>') expr += AddExpr)*
+ShiftExpr returns Expr
+	:	AddExpr ({ShiftOperator.left=current} ('<<'|'>>') right = AddExpr)*
 	;
 
-AddExpr returns Expression
-	:	expr += MultExpr (('+'|'-') expr += MultExpr)*
+AddExpr returns Expr
+	:	MultExpr ({Addition.left=current} ('+'|'-') right = MultExpr)*
 	;
 
-MultExpr returns Expression
-	:	expr += UnaryExpr (('*'|'/'|'%') expr += UnaryExpr)*
+MultExpr returns Expr
+	:	UnaryExpr ({Factor.left=current} ('*'|'/'|'%') right = UnaryExpr)*
 	;
 
-UnaryExpr returns Expression
+UnaryExpr returns Expr
 	:	'!' expr += UnaryExpr
 	|	'-' expr += UnaryExpr
 	|	'++' expr += UnaryExpr
@@ -237,7 +256,7 @@ UnaryExpr returns Expression
 	|	expr += MethodExpr
 	;
 
-MethodExpr returns Expression
+MethodExpr returns Expr
 	:	expr += PrimaryExpr+ expr += Method*
 	;
 
@@ -253,7 +272,8 @@ ObjectListOpt
 	;
 
 ObjectList
-	:	objList += ObjectValue (',' objList += ObjectValue)*;
+	:	objList += ObjectValue (',' objList += ObjectValue)*
+	;
 
 ObjectValue
 	:	obj = IDENTIFIER ':' expr = Expression
@@ -273,7 +293,7 @@ ArrayLiteral
 Primary
 	:	primary = IDENTIFIER ( '(' argListOpt = ArgListOpt ')' )?
 	|	ArrayLiteral
-	|	Literal
+	|	literal = Literal
 	;
 
 
@@ -293,7 +313,7 @@ TypeArgument
 
 //------------------------------------------------- Arguments
 ArgListOpt
-	:	{ArgList}argListOpt = ArgList?
+	:	{ArgList} argListOpt = ArgList?
 	;
 
 ArgList
@@ -307,19 +327,19 @@ Argument
 
 //------------------------------------------------- Literals
 Literal
-	:	{Literal} (literal = 'true'
+	:	'true'
 	|	'false'
 	|	'null'
 	|	DEC_LITERAL
 	|	HEX_LITERAL
 	|	REAL_LITERAL
 	|	CHAR_LITERAL
-	|	STRING_LITERAL)
+	|	STRING_LITERAL
 	;
 
 //------------------------------------------------- IDs
 DSLIdentifier
-	:	'@' IDENTIFIER
+	:	'@' name = IDENTIFIER
 	;
 
 MemberList
@@ -338,7 +358,7 @@ terminal IDENTIFIER
 	:	('a'..'z'|'A'..'Z') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*
 	;
 
-terminal REAL_LITERAL
+terminal REAL_LITERAL returns ecore::EDouble
 	:	('0'..'9')* '.' DEC_LITERAL
 	;
 

@@ -1,13 +1,19 @@
 class my_cylinder : cylinder
-{	
+{
+	property name: integer
 	property hex
 	{
-		color = value;
+		string strVar;
+		
+		color = value12;
 	}
+	
 	on mousein() {
 		color = lightgreen;
 	}
+	
 	on mouseout() {
 		color = red;
 	}
+	
 }
