@@ -3,6 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http:///com/xkp/codexcess/model.ecore" nsPrefix="com.xkp.codexcess.model">
   <eClassifiers xsi:type="ecore:EClass" name="XSSClass">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="super" eType="#//XSSClass"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="xssimports" upperBound="-1"
         eType="#//XSSImport" eOpposite="#//XSSImport/xssclass"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="xssmethods" upperBound="-1"
@@ -14,6 +15,10 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="XSSEvent">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XSSIProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="XSSIdiom">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -29,13 +34,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="xssclass" eType="#//XSSClass"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="childs" upperBound="-1"
         eType="#//XSSInstance" containment="true" resolveProxies="false"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" containment="true"
-        resolveProxies="false">
-      <eGenericType eClassifier="#//Map">
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-      </eGenericType>
-    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//XSSIProperty" containment="true" resolveProxies="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//XSSInstance"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="XSSMethod">
@@ -53,10 +53,5 @@
   <eClassifiers xsi:type="ecore:EClass" name="XSSProperty">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Map" instanceClassName="java.util.Map"
-      abstract="true" interface="true">
-    <eTypeParameters name="T"/>
-    <eTypeParameters name="T1"/>
   </eClassifiers>
 </ecore:EPackage>

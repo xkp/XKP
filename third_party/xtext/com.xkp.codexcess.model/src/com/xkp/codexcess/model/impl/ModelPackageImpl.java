@@ -6,6 +6,7 @@ import com.xkp.codexcess.model.ModelFactory;
 import com.xkp.codexcess.model.ModelPackage;
 import com.xkp.codexcess.model.XSSClass;
 import com.xkp.codexcess.model.XSSEvent;
+import com.xkp.codexcess.model.XSSIProperty;
 import com.xkp.codexcess.model.XSSIdiom;
 import com.xkp.codexcess.model.XSSImport;
 import com.xkp.codexcess.model.XSSInstance;
@@ -13,11 +14,8 @@ import com.xkp.codexcess.model.XSSMethod;
 import com.xkp.codexcess.model.XSSProject;
 import com.xkp.codexcess.model.XSSProperty;
 
-import java.util.Map;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -43,6 +41,13 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	private EClass xssEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass xssiPropertyEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -85,13 +90,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	private EClass xssPropertyEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass mapEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -177,7 +175,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getXSSClass_Xssimports() {
+	public EReference getXSSClass_Super() {
 		return (EReference)xssClassEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -186,7 +184,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getXSSClass_Xssmethods() {
+	public EReference getXSSClass_Xssimports() {
 		return (EReference)xssClassEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -195,7 +193,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getXSSClass_Xssevents() {
+	public EReference getXSSClass_Xssmethods() {
 		return (EReference)xssClassEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -204,8 +202,17 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getXSSClass_Xssproperties() {
+	public EReference getXSSClass_Xssevents() {
 		return (EReference)xssClassEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getXSSClass_Xssproperties() {
+		return (EReference)xssClassEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -224,6 +231,33 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 */
 	public EAttribute getXSSEvent_Id() {
 		return (EAttribute)xssEventEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getXSSIProperty() {
+		return xssiPropertyEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getXSSIProperty_Id() {
+		return (EAttribute)xssiPropertyEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getXSSIProperty_Value() {
+		return (EAttribute)xssiPropertyEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -429,15 +463,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getMap() {
-		return mapEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public ModelFactory getModelFactory() {
 		return (ModelFactory)getEFactoryInstance();
 	}
@@ -463,6 +488,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		// Create classes and their features
 		xssClassEClass = createEClass(XSS_CLASS);
 		createEAttribute(xssClassEClass, XSS_CLASS__ID);
+		createEReference(xssClassEClass, XSS_CLASS__SUPER);
 		createEReference(xssClassEClass, XSS_CLASS__XSSIMPORTS);
 		createEReference(xssClassEClass, XSS_CLASS__XSSMETHODS);
 		createEReference(xssClassEClass, XSS_CLASS__XSSEVENTS);
@@ -470,6 +496,10 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
 		xssEventEClass = createEClass(XSS_EVENT);
 		createEAttribute(xssEventEClass, XSS_EVENT__ID);
+
+		xssiPropertyEClass = createEClass(XSSI_PROPERTY);
+		createEAttribute(xssiPropertyEClass, XSSI_PROPERTY__ID);
+		createEAttribute(xssiPropertyEClass, XSSI_PROPERTY__VALUE);
 
 		xssIdiomEClass = createEClass(XSS_IDIOM);
 		createEAttribute(xssIdiomEClass, XSS_IDIOM__ID);
@@ -498,8 +528,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		xssPropertyEClass = createEClass(XSS_PROPERTY);
 		createEAttribute(xssPropertyEClass, XSS_PROPERTY__ID);
 		createEAttribute(xssPropertyEClass, XSS_PROPERTY__TYPE);
-
-		mapEClass = createEClass(MAP);
 	}
 
 	/**
@@ -526,8 +554,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		setNsURI(eNS_URI);
 
 		// Create type parameters
-		addETypeParameter(mapEClass, "T");
-		addETypeParameter(mapEClass, "T1");
 
 		// Set bounds for type parameters
 
@@ -536,6 +562,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		// Initialize classes and features; add operations and parameters
 		initEClass(xssClassEClass, XSSClass.class, "XSSClass", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getXSSClass_Id(), ecorePackage.getEString(), "id", null, 0, 1, XSSClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getXSSClass_Super(), this.getXSSClass(), null, "super", null, 0, 1, XSSClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getXSSClass_Xssimports(), this.getXSSImport(), this.getXSSImport_Xssclass(), "xssimports", null, 0, -1, XSSClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getXSSClass_Xssmethods(), this.getXSSMethod(), null, "xssmethods", null, 0, -1, XSSClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getXSSClass_Xssevents(), this.getXSSEvent(), null, "xssevents", null, 0, -1, XSSClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -543,6 +570,10 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
 		initEClass(xssEventEClass, XSSEvent.class, "XSSEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getXSSEvent_Id(), ecorePackage.getEString(), "id", null, 0, 1, XSSEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(xssiPropertyEClass, XSSIProperty.class, "XSSIProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getXSSIProperty_Id(), ecorePackage.getEString(), "id", null, 0, 1, XSSIProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getXSSIProperty_Value(), ecorePackage.getEJavaObject(), "value", null, 0, 1, XSSIProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(xssIdiomEClass, XSSIdiom.class, "XSSIdiom", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getXSSIdiom_Id(), ecorePackage.getEString(), "id", null, 0, 1, XSSIdiom.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -555,12 +586,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		initEAttribute(getXSSInstance_Id(), ecorePackage.getEString(), "id", null, 0, 1, XSSInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getXSSInstance_Xssclass(), this.getXSSClass(), null, "xssclass", null, 0, 1, XSSInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getXSSInstance_Childs(), this.getXSSInstance(), null, "childs", null, 0, -1, XSSInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		EGenericType g1 = createEGenericType(this.getMap());
-		EGenericType g2 = createEGenericType(ecorePackage.getEString());
-		g1.getETypeArguments().add(g2);
-		g2 = createEGenericType(ecorePackage.getEJavaObject());
-		g1.getETypeArguments().add(g2);
-		initEReference(getXSSInstance_Properties(), g1, null, "properties", null, 0, 1, XSSInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getXSSInstance_Properties(), this.getXSSIProperty(), null, "properties", null, 0, -1, XSSInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getXSSInstance_Parent(), this.getXSSInstance(), null, "parent", null, 0, 1, XSSInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(xssMethodEClass, XSSMethod.class, "XSSMethod", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -576,8 +602,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		initEClass(xssPropertyEClass, XSSProperty.class, "XSSProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getXSSProperty_Id(), ecorePackage.getEString(), "id", null, 0, 1, XSSProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getXSSProperty_Type(), ecorePackage.getEString(), "type", null, 0, 1, XSSProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(mapEClass, Map.class, "Map", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

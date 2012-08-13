@@ -1,9 +1,8 @@
 package com.xkp.codexcess.model;
 
-import java.util.List;
-import java.util.Map;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import java.util.List;
 
 /**
  * @model
@@ -48,17 +47,7 @@ public interface XSSInstance extends EObject
 	/**
 	* @model containment="true"
 	*/
-	Map<String, Object> getProperties();
-
-	/**
-	 * Sets the value of the '{@link com.xkp.codexcess.model.XSSInstance#getProperties <em>Properties</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Properties</em>' containment reference.
-	 * @see #getProperties()
-	 * @generated
-	 */
-	void setProperties(Map<String, Object> value);
+	EList<XSSIProperty> getProperties();
 
 	/**
 	* @model

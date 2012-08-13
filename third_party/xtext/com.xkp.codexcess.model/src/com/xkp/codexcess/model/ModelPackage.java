@@ -75,13 +75,22 @@ public interface ModelPackage extends EPackage {
 	int XSS_CLASS__ID = 0;
 
 	/**
+	 * The feature id for the '<em><b>Super</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XSS_CLASS__SUPER = 1;
+
+	/**
 	 * The feature id for the '<em><b>Xssimports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int XSS_CLASS__XSSIMPORTS = 1;
+	int XSS_CLASS__XSSIMPORTS = 2;
 
 	/**
 	 * The feature id for the '<em><b>Xssmethods</b></em>' containment reference list.
@@ -90,7 +99,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int XSS_CLASS__XSSMETHODS = 2;
+	int XSS_CLASS__XSSMETHODS = 3;
 
 	/**
 	 * The feature id for the '<em><b>Xssevents</b></em>' containment reference list.
@@ -99,7 +108,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int XSS_CLASS__XSSEVENTS = 3;
+	int XSS_CLASS__XSSEVENTS = 4;
 
 	/**
 	 * The feature id for the '<em><b>Xssproperties</b></em>' containment reference list.
@@ -108,7 +117,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int XSS_CLASS__XSSPROPERTIES = 4;
+	int XSS_CLASS__XSSPROPERTIES = 5;
 
 	/**
 	 * The number of structural features of the '<em>XSS Class</em>' class.
@@ -117,7 +126,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int XSS_CLASS_FEATURE_COUNT = 5;
+	int XSS_CLASS_FEATURE_COUNT = 6;
 
 	/**
 	 * The meta object id for the '{@link com.xkp.codexcess.model.impl.XSSEventImpl <em>XSS Event</em>}' class.
@@ -148,6 +157,43 @@ public interface ModelPackage extends EPackage {
 	int XSS_EVENT_FEATURE_COUNT = 1;
 
 	/**
+	 * The meta object id for the '{@link com.xkp.codexcess.model.impl.XSSIPropertyImpl <em>XSSI Property</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.xkp.codexcess.model.impl.XSSIPropertyImpl
+	 * @see com.xkp.codexcess.model.impl.ModelPackageImpl#getXSSIProperty()
+	 * @generated
+	 */
+	int XSSI_PROPERTY = 2;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XSSI_PROPERTY__ID = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XSSI_PROPERTY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>XSSI Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XSSI_PROPERTY_FEATURE_COUNT = 2;
+
+	/**
 	 * The meta object id for the '{@link com.xkp.codexcess.model.impl.XSSIdiomImpl <em>XSS Idiom</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -155,7 +201,7 @@ public interface ModelPackage extends EPackage {
 	 * @see com.xkp.codexcess.model.impl.ModelPackageImpl#getXSSIdiom()
 	 * @generated
 	 */
-	int XSS_IDIOM = 2;
+	int XSS_IDIOM = 3;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -192,7 +238,7 @@ public interface ModelPackage extends EPackage {
 	 * @see com.xkp.codexcess.model.impl.ModelPackageImpl#getXSSImport()
 	 * @generated
 	 */
-	int XSS_IMPORT = 3;
+	int XSS_IMPORT = 4;
 
 	/**
 	 * The feature id for the '<em><b>Xssclass</b></em>' reference.
@@ -220,7 +266,7 @@ public interface ModelPackage extends EPackage {
 	 * @see com.xkp.codexcess.model.impl.ModelPackageImpl#getXSSInstance()
 	 * @generated
 	 */
-	int XSS_INSTANCE = 4;
+	int XSS_INSTANCE = 5;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -250,7 +296,7 @@ public interface ModelPackage extends EPackage {
 	int XSS_INSTANCE__CHILDS = 2;
 
 	/**
-	 * The feature id for the '<em><b>Properties</b></em>' containment reference.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -284,7 +330,7 @@ public interface ModelPackage extends EPackage {
 	 * @see com.xkp.codexcess.model.impl.ModelPackageImpl#getXSSMethod()
 	 * @generated
 	 */
-	int XSS_METHOD = 5;
+	int XSS_METHOD = 6;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -321,7 +367,7 @@ public interface ModelPackage extends EPackage {
 	 * @see com.xkp.codexcess.model.impl.ModelPackageImpl#getXSSProject()
 	 * @generated
 	 */
-	int XSS_PROJECT = 6;
+	int XSS_PROJECT = 7;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -376,7 +422,7 @@ public interface ModelPackage extends EPackage {
 	 * @see com.xkp.codexcess.model.impl.ModelPackageImpl#getXSSProperty()
 	 * @generated
 	 */
-	int XSS_PROPERTY = 7;
+	int XSS_PROPERTY = 8;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -405,25 +451,6 @@ public interface ModelPackage extends EPackage {
 	 */
 	int XSS_PROPERTY_FEATURE_COUNT = 2;
 
-	/**
-	 * The meta object id for the '{@link java.util.Map <em>Map</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see java.util.Map
-	 * @see com.xkp.codexcess.model.impl.ModelPackageImpl#getMap()
-	 * @generated
-	 */
-	int MAP = 8;
-
-	/**
-	 * The number of structural features of the '<em>Map</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAP_FEATURE_COUNT = 0;
-
 
 	/**
 	 * Returns the meta object for class '{@link com.xkp.codexcess.model.XSSClass <em>XSS Class</em>}'.
@@ -445,6 +472,17 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getXSSClass_Id();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.xkp.codexcess.model.XSSClass#getSuper <em>Super</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Super</em>'.
+	 * @see com.xkp.codexcess.model.XSSClass#getSuper()
+	 * @see #getXSSClass()
+	 * @generated
+	 */
+	EReference getXSSClass_Super();
 
 	/**
 	 * Returns the meta object for the reference list '{@link com.xkp.codexcess.model.XSSClass#getXssimports <em>Xssimports</em>}'.
@@ -510,6 +548,38 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getXSSEvent_Id();
+
+	/**
+	 * Returns the meta object for class '{@link com.xkp.codexcess.model.XSSIProperty <em>XSSI Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>XSSI Property</em>'.
+	 * @see com.xkp.codexcess.model.XSSIProperty
+	 * @generated
+	 */
+	EClass getXSSIProperty();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.xkp.codexcess.model.XSSIProperty#getId <em>Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Id</em>'.
+	 * @see com.xkp.codexcess.model.XSSIProperty#getId()
+	 * @see #getXSSIProperty()
+	 * @generated
+	 */
+	EAttribute getXSSIProperty_Id();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.xkp.codexcess.model.XSSIProperty#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see com.xkp.codexcess.model.XSSIProperty#getValue()
+	 * @see #getXSSIProperty()
+	 * @generated
+	 */
+	EAttribute getXSSIProperty_Value();
 
 	/**
 	 * Returns the meta object for class '{@link com.xkp.codexcess.model.XSSIdiom <em>XSS Idiom</em>}'.
@@ -608,10 +678,10 @@ public interface ModelPackage extends EPackage {
 	EReference getXSSInstance_Childs();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.xkp.codexcess.model.XSSInstance#getProperties <em>Properties</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.xkp.codexcess.model.XSSInstance#getProperties <em>Properties</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Properties</em>'.
+	 * @return the meta object for the containment reference list '<em>Properties</em>'.
 	 * @see com.xkp.codexcess.model.XSSInstance#getProperties()
 	 * @see #getXSSInstance()
 	 * @generated
@@ -748,17 +818,6 @@ public interface ModelPackage extends EPackage {
 	EAttribute getXSSProperty_Type();
 
 	/**
-	 * Returns the meta object for class '{@link java.util.Map <em>Map</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Map</em>'.
-	 * @see java.util.Map
-	 * @model instanceClass="java.util.Map" typeParameters="T T1"
-	 * @generated
-	 */
-	EClass getMap();
-
-	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -797,6 +856,14 @@ public interface ModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute XSS_CLASS__ID = eINSTANCE.getXSSClass_Id();
+
+		/**
+		 * The meta object literal for the '<em><b>Super</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference XSS_CLASS__SUPER = eINSTANCE.getXSSClass_Super();
 
 		/**
 		 * The meta object literal for the '<em><b>Xssimports</b></em>' reference list feature.
@@ -847,6 +914,32 @@ public interface ModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute XSS_EVENT__ID = eINSTANCE.getXSSEvent_Id();
+
+		/**
+		 * The meta object literal for the '{@link com.xkp.codexcess.model.impl.XSSIPropertyImpl <em>XSSI Property</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.xkp.codexcess.model.impl.XSSIPropertyImpl
+		 * @see com.xkp.codexcess.model.impl.ModelPackageImpl#getXSSIProperty()
+		 * @generated
+		 */
+		EClass XSSI_PROPERTY = eINSTANCE.getXSSIProperty();
+
+		/**
+		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute XSSI_PROPERTY__ID = eINSTANCE.getXSSIProperty_Id();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute XSSI_PROPERTY__VALUE = eINSTANCE.getXSSIProperty_Value();
 
 		/**
 		 * The meta object literal for the '{@link com.xkp.codexcess.model.impl.XSSIdiomImpl <em>XSS Idiom</em>}' class.
@@ -927,7 +1020,7 @@ public interface ModelPackage extends EPackage {
 		EReference XSS_INSTANCE__CHILDS = eINSTANCE.getXSSInstance_Childs();
 
 		/**
-		 * The meta object literal for the '<em><b>Properties</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Properties</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -1035,16 +1128,6 @@ public interface ModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute XSS_PROPERTY__TYPE = eINSTANCE.getXSSProperty_Type();
-
-		/**
-		 * The meta object literal for the '{@link java.util.Map <em>Map</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see java.util.Map
-		 * @see com.xkp.codexcess.model.impl.ModelPackageImpl#getMap()
-		 * @generated
-		 */
-		EClass MAP = eINSTANCE.getMap();
 
 	}
 

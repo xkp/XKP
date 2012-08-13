@@ -58,6 +58,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 		switch (eClass.getClassifierID()) {
 			case ModelPackage.XSS_CLASS: return createXSSClass();
 			case ModelPackage.XSS_EVENT: return createXSSEvent();
+			case ModelPackage.XSSI_PROPERTY: return createXSSIProperty();
 			case ModelPackage.XSS_IDIOM: return createXSSIdiom();
 			case ModelPackage.XSS_IMPORT: return createXSSImport();
 			case ModelPackage.XSS_INSTANCE: return createXSSInstance();
@@ -87,6 +88,16 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 	public XSSEvent createXSSEvent() {
 		XSSEventImpl xssEvent = new XSSEventImpl();
 		return xssEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public XSSIProperty createXSSIProperty() {
+		XSSIPropertyImpl xssiProperty = new XSSIPropertyImpl();
+		return xssiProperty;
 	}
 
 	/**

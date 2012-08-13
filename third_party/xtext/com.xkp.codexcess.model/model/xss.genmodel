@@ -8,6 +8,7 @@
       ecorePackage="model.ecore#/">
     <genClasses ecoreClass="model.ecore#//XSSClass">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute model.ecore#//XSSClass/id"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference model.ecore#//XSSClass/super"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference model.ecore#//XSSClass/xssimports"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference model.ecore#//XSSClass/xssmethods"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference model.ecore#//XSSClass/xssevents"/>
@@ -15,6 +16,10 @@
     </genClasses>
     <genClasses ecoreClass="model.ecore#//XSSEvent">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute model.ecore#//XSSEvent/id"/>
+    </genClasses>
+    <genClasses ecoreClass="model.ecore#//XSSIProperty">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute model.ecore#//XSSIProperty/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute model.ecore#//XSSIProperty/value"/>
     </genClasses>
     <genClasses ecoreClass="model.ecore#//XSSIdiom">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute model.ecore#//XSSIdiom/id"/>
@@ -43,10 +48,6 @@
     <genClasses ecoreClass="model.ecore#//XSSProperty">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute model.ecore#//XSSProperty/id"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute model.ecore#//XSSProperty/type"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="model.ecore#//Map">
-      <genTypeParameters ecoreTypeParameter="model.ecore#//Map/T"/>
-      <genTypeParameters ecoreTypeParameter="model.ecore#//Map/T1"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

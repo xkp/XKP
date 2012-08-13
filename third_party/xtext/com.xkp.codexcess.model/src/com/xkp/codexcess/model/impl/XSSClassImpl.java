@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.xkp.codexcess.model.impl.XSSClassImpl#getId <em>Id</em>}</li>
+ *   <li>{@link com.xkp.codexcess.model.impl.XSSClassImpl#getSuper <em>Super</em>}</li>
  *   <li>{@link com.xkp.codexcess.model.impl.XSSClassImpl#getXssimports <em>Xssimports</em>}</li>
  *   <li>{@link com.xkp.codexcess.model.impl.XSSClassImpl#getXssmethods <em>Xssmethods</em>}</li>
  *   <li>{@link com.xkp.codexcess.model.impl.XSSClassImpl#getXssevents <em>Xssevents</em>}</li>
@@ -63,6 +64,16 @@ public class XSSClassImpl extends EObjectImpl implements XSSClass {
 	 * @ordered
 	 */
 	protected String id = ID_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getSuper() <em>Super</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSuper()
+	 * @generated
+	 * @ordered
+	 */
+	protected XSSClass super_;
 
 	/**
 	 * The cached value of the '{@link #getXssimports() <em>Xssimports</em>}' reference list.
@@ -142,6 +153,44 @@ public class XSSClassImpl extends EObjectImpl implements XSSClass {
 		id = newId;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.XSS_CLASS__ID, oldId, id));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public XSSClass getSuper() {
+		if (super_ != null && super_.eIsProxy()) {
+			InternalEObject oldSuper = (InternalEObject)super_;
+			super_ = (XSSClass)eResolveProxy(oldSuper);
+			if (super_ != oldSuper) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ModelPackage.XSS_CLASS__SUPER, oldSuper, super_));
+			}
+		}
+		return super_;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public XSSClass basicGetSuper() {
+		return super_;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSuper(XSSClass newSuper) {
+		XSSClass oldSuper = super_;
+		super_ = newSuper;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.XSS_CLASS__SUPER, oldSuper, super_));
 	}
 
 	/**
@@ -237,6 +286,9 @@ public class XSSClassImpl extends EObjectImpl implements XSSClass {
 		switch (featureID) {
 			case ModelPackage.XSS_CLASS__ID:
 				return getId();
+			case ModelPackage.XSS_CLASS__SUPER:
+				if (resolve) return getSuper();
+				return basicGetSuper();
 			case ModelPackage.XSS_CLASS__XSSIMPORTS:
 				return getXssimports();
 			case ModelPackage.XSS_CLASS__XSSMETHODS:
@@ -260,6 +312,9 @@ public class XSSClassImpl extends EObjectImpl implements XSSClass {
 		switch (featureID) {
 			case ModelPackage.XSS_CLASS__ID:
 				setId((String)newValue);
+				return;
+			case ModelPackage.XSS_CLASS__SUPER:
+				setSuper((XSSClass)newValue);
 				return;
 			case ModelPackage.XSS_CLASS__XSSIMPORTS:
 				getXssimports().clear();
@@ -292,6 +347,9 @@ public class XSSClassImpl extends EObjectImpl implements XSSClass {
 			case ModelPackage.XSS_CLASS__ID:
 				setId(ID_EDEFAULT);
 				return;
+			case ModelPackage.XSS_CLASS__SUPER:
+				setSuper((XSSClass)null);
+				return;
 			case ModelPackage.XSS_CLASS__XSSIMPORTS:
 				getXssimports().clear();
 				return;
@@ -318,6 +376,8 @@ public class XSSClassImpl extends EObjectImpl implements XSSClass {
 		switch (featureID) {
 			case ModelPackage.XSS_CLASS__ID:
 				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
+			case ModelPackage.XSS_CLASS__SUPER:
+				return super_ != null;
 			case ModelPackage.XSS_CLASS__XSSIMPORTS:
 				return xssimports != null && !xssimports.isEmpty();
 			case ModelPackage.XSS_CLASS__XSSMETHODS:

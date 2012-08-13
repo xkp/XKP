@@ -4,10 +4,10 @@ package com.xkp.codexcess.model.impl;
 
 import com.xkp.codexcess.model.ModelPackage;
 import com.xkp.codexcess.model.XSSClass;
+import com.xkp.codexcess.model.XSSIProperty;
 import com.xkp.codexcess.model.XSSInstance;
 
 import java.util.Collection;
-import java.util.Map;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -82,14 +82,14 @@ public class XSSInstanceImpl extends EObjectImpl implements XSSInstance {
 	protected EList<XSSInstance> childs;
 
 	/**
-	 * The cached value of the '{@link #getProperties() <em>Properties</em>}' containment reference.
+	 * The cached value of the '{@link #getProperties() <em>Properties</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getProperties()
 	 * @generated
 	 * @ordered
 	 */
-	protected Map<String, Object> properties;
+	protected EList<XSSIProperty> properties;
 
 	/**
 	 * The cached value of the '{@link #getParent() <em>Parent</em>}' reference.
@@ -196,42 +196,11 @@ public class XSSInstanceImpl extends EObjectImpl implements XSSInstance {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Map<String, Object> getProperties() {
+	public EList<XSSIProperty> getProperties() {
+		if (properties == null) {
+			properties = new EObjectContainmentEList<XSSIProperty>(XSSIProperty.class, this, ModelPackage.XSS_INSTANCE__PROPERTIES);
+		}
 		return properties;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetProperties(Map<String, Object> newProperties, NotificationChain msgs) {
-		Map<String, Object> oldProperties = properties;
-		properties = newProperties;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ModelPackage.XSS_INSTANCE__PROPERTIES, oldProperties, newProperties);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setProperties(Map<String, Object> newProperties) {
-		if (newProperties != properties) {
-			NotificationChain msgs = null;
-			if (properties != null)
-				msgs = ((InternalEObject)properties).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ModelPackage.XSS_INSTANCE__PROPERTIES, null, msgs);
-			if (newProperties != null)
-				msgs = ((InternalEObject)newProperties).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ModelPackage.XSS_INSTANCE__PROPERTIES, null, msgs);
-			msgs = basicSetProperties(newProperties, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ModelPackage.XSS_INSTANCE__PROPERTIES, newProperties, newProperties));
 	}
 
 	/**
@@ -283,7 +252,7 @@ public class XSSInstanceImpl extends EObjectImpl implements XSSInstance {
 			case ModelPackage.XSS_INSTANCE__CHILDS:
 				return ((InternalEList<?>)getChilds()).basicRemove(otherEnd, msgs);
 			case ModelPackage.XSS_INSTANCE__PROPERTIES:
-				return basicSetProperties(null, msgs);
+				return ((InternalEList<?>)getProperties()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -332,7 +301,8 @@ public class XSSInstanceImpl extends EObjectImpl implements XSSInstance {
 				getChilds().addAll((Collection<? extends XSSInstance>)newValue);
 				return;
 			case ModelPackage.XSS_INSTANCE__PROPERTIES:
-				setProperties((Map<String, Object>)newValue);
+				getProperties().clear();
+				getProperties().addAll((Collection<? extends XSSIProperty>)newValue);
 				return;
 			case ModelPackage.XSS_INSTANCE__PARENT:
 				setParent((XSSInstance)newValue);
@@ -359,7 +329,7 @@ public class XSSInstanceImpl extends EObjectImpl implements XSSInstance {
 				getChilds().clear();
 				return;
 			case ModelPackage.XSS_INSTANCE__PROPERTIES:
-				setProperties((Map<String, Object>)null);
+				getProperties().clear();
 				return;
 			case ModelPackage.XSS_INSTANCE__PARENT:
 				setParent((XSSInstance)null);
@@ -383,7 +353,7 @@ public class XSSInstanceImpl extends EObjectImpl implements XSSInstance {
 			case ModelPackage.XSS_INSTANCE__CHILDS:
 				return childs != null && !childs.isEmpty();
 			case ModelPackage.XSS_INSTANCE__PROPERTIES:
-				return properties != null;
+				return properties != null && !properties.isEmpty();
 			case ModelPackage.XSS_INSTANCE__PARENT:
 				return parent != null;
 		}

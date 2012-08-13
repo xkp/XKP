@@ -25,6 +25,21 @@ public interface XSSClass extends EObject
 	void setId(String value);
 
 	/**
+	* @model
+	*/
+	XSSClass getSuper();
+
+	/**
+	 * Sets the value of the '{@link com.xkp.codexcess.model.XSSClass#getSuper <em>Super</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Super</em>' reference.
+	 * @see #getSuper()
+	 * @generated
+	 */
+	void setSuper(XSSClass value);
+
+	/**
 	* @model opposite="xssclass"
 	*/
 	EList<XSSImport> getXssimports();

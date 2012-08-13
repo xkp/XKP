@@ -4,8 +4,6 @@ package com.xkp.codexcess.model.util;
 
 import com.xkp.codexcess.model.*;
 
-import java.util.Map;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -24,7 +22,7 @@ import org.eclipse.emf.ecore.util.Switch;
  * @see com.xkp.codexcess.model.ModelPackage
  * @generated
  */
-public class ModelSwitch<T2> extends Switch<T2> {
+public class ModelSwitch<T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
@@ -66,53 +64,59 @@ public class ModelSwitch<T2> extends Switch<T2> {
 	 * @generated
 	 */
 	@Override
-	protected T2 doSwitch(int classifierID, EObject theEObject) {
+	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
 			case ModelPackage.XSS_CLASS: {
 				XSSClass xssClass = (XSSClass)theEObject;
-				T2 result = caseXSSClass(xssClass);
+				T result = caseXSSClass(xssClass);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ModelPackage.XSS_EVENT: {
 				XSSEvent xssEvent = (XSSEvent)theEObject;
-				T2 result = caseXSSEvent(xssEvent);
+				T result = caseXSSEvent(xssEvent);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ModelPackage.XSSI_PROPERTY: {
+				XSSIProperty xssiProperty = (XSSIProperty)theEObject;
+				T result = caseXSSIProperty(xssiProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ModelPackage.XSS_IDIOM: {
 				XSSIdiom xssIdiom = (XSSIdiom)theEObject;
-				T2 result = caseXSSIdiom(xssIdiom);
+				T result = caseXSSIdiom(xssIdiom);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ModelPackage.XSS_IMPORT: {
 				XSSImport xssImport = (XSSImport)theEObject;
-				T2 result = caseXSSImport(xssImport);
+				T result = caseXSSImport(xssImport);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ModelPackage.XSS_INSTANCE: {
 				XSSInstance xssInstance = (XSSInstance)theEObject;
-				T2 result = caseXSSInstance(xssInstance);
+				T result = caseXSSInstance(xssInstance);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ModelPackage.XSS_METHOD: {
 				XSSMethod xssMethod = (XSSMethod)theEObject;
-				T2 result = caseXSSMethod(xssMethod);
+				T result = caseXSSMethod(xssMethod);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ModelPackage.XSS_PROJECT: {
 				XSSProject xssProject = (XSSProject)theEObject;
-				T2 result = caseXSSProject(xssProject);
+				T result = caseXSSProject(xssProject);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ModelPackage.XSS_PROPERTY: {
 				XSSProperty xssProperty = (XSSProperty)theEObject;
-				T2 result = caseXSSProperty(xssProperty);
+				T result = caseXSSProperty(xssProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -131,7 +135,7 @@ public class ModelSwitch<T2> extends Switch<T2> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T2 caseXSSClass(XSSClass object) {
+	public T caseXSSClass(XSSClass object) {
 		return null;
 	}
 
@@ -146,7 +150,22 @@ public class ModelSwitch<T2> extends Switch<T2> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T2 caseXSSEvent(XSSEvent object) {
+	public T caseXSSEvent(XSSEvent object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>XSSI Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>XSSI Property</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseXSSIProperty(XSSIProperty object) {
 		return null;
 	}
 
@@ -161,7 +180,7 @@ public class ModelSwitch<T2> extends Switch<T2> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T2 caseXSSIdiom(XSSIdiom object) {
+	public T caseXSSIdiom(XSSIdiom object) {
 		return null;
 	}
 
@@ -176,7 +195,7 @@ public class ModelSwitch<T2> extends Switch<T2> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T2 caseXSSImport(XSSImport object) {
+	public T caseXSSImport(XSSImport object) {
 		return null;
 	}
 
@@ -191,7 +210,7 @@ public class ModelSwitch<T2> extends Switch<T2> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T2 caseXSSInstance(XSSInstance object) {
+	public T caseXSSInstance(XSSInstance object) {
 		return null;
 	}
 
@@ -206,7 +225,7 @@ public class ModelSwitch<T2> extends Switch<T2> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T2 caseXSSMethod(XSSMethod object) {
+	public T caseXSSMethod(XSSMethod object) {
 		return null;
 	}
 
@@ -221,7 +240,7 @@ public class ModelSwitch<T2> extends Switch<T2> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T2 caseXSSProject(XSSProject object) {
+	public T caseXSSProject(XSSProject object) {
 		return null;
 	}
 
@@ -236,22 +255,7 @@ public class ModelSwitch<T2> extends Switch<T2> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T2 caseXSSProperty(XSSProperty object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Map</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Map</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public <T, T1> T2 caseMap(Map<T, T1> object) {
+	public T caseXSSProperty(XSSProperty object) {
 		return null;
 	}
 
@@ -267,7 +271,7 @@ public class ModelSwitch<T2> extends Switch<T2> {
 	 * @generated
 	 */
 	@Override
-	public T2 defaultCase(EObject object) {
+	public T defaultCase(EObject object) {
 		return null;
 	}
 

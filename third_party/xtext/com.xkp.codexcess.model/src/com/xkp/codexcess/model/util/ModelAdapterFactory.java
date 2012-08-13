@@ -4,8 +4,6 @@ package com.xkp.codexcess.model.util;
 
 import com.xkp.codexcess.model.*;
 
-import java.util.Map;
-
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 
@@ -78,6 +76,10 @@ public class ModelAdapterFactory extends AdapterFactoryImpl {
 				return createXSSEventAdapter();
 			}
 			@Override
+			public Adapter caseXSSIProperty(XSSIProperty object) {
+				return createXSSIPropertyAdapter();
+			}
+			@Override
 			public Adapter caseXSSIdiom(XSSIdiom object) {
 				return createXSSIdiomAdapter();
 			}
@@ -100,10 +102,6 @@ public class ModelAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseXSSProperty(XSSProperty object) {
 				return createXSSPropertyAdapter();
-			}
-			@Override
-			public <T, T1> Adapter caseMap(Map<T, T1> object) {
-				return createMapAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -150,6 +148,20 @@ public class ModelAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createXSSEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.xkp.codexcess.model.XSSIProperty <em>XSSI Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.xkp.codexcess.model.XSSIProperty
+	 * @generated
+	 */
+	public Adapter createXSSIPropertyAdapter() {
 		return null;
 	}
 
@@ -234,20 +246,6 @@ public class ModelAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createXSSPropertyAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link java.util.Map <em>Map</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see java.util.Map
-	 * @generated
-	 */
-	public Adapter createMapAdapter() {
 		return null;
 	}
 

@@ -40,6 +40,15 @@ public interface ModelFactory extends EFactory {
 	XSSEvent createXSSEvent();
 
 	/**
+	 * Returns a new object of class '<em>XSSI Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>XSSI Property</em>'.
+	 * @generated
+	 */
+	XSSIProperty createXSSIProperty();
+
+	/**
 	 * Returns a new object of class '<em>XSS Idiom</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
