@@ -1,0 +1,46 @@
+<xss:parameter id="obj"/>
+<xss:parameter id="property_renderer" default="../common-js/property.xss"/>
+<xss:parameter id="method_renderer"   default="../common-js/method.xss"/>
+<xss:parameter id="event_renderer"    default="../common-js/event.xss"/>
+
+<xss:code>
+	if(!obj.material)
+		obj.material = "new THREE.MeshFaceMaterial()";
+	out(){
+	<xss:e v="obj.id"/> = new THREE.Object3D();
+	var <xss:e v="obj.id"/>_loader = 
+	generate_model_loader(manager.streamer.get_resource('<xss:e v="obj.src"/>').type);
+	} 
+	
+	out(){	
+		<xss:e value = "obj.id"/>_loader.load(
+				manager.streamer.get_resource('<xss:e v="obj.src"/>').asset , function( geometry )
+			<xss:open_brace/>
+				var <xss:e v="obj.id"/>_mesh = new THREE.Mesh(geometry, <xss:e v="obj.material"/>);
+				<xss:e v="obj.id"/>.add(<xss:e v="obj.id"/>_mesh);
+	}
+	//render properties
+	for(var prop in obj.properties)
+	{
+		if (prop.dont_init)
+			continue;    
+		compiler.xss(property_renderer, prop, obj, is_class = false);
+	}    			
+	out(){
+				manager.scene.add(<xss:e v="obj.id"/>);
+			<xss:close_brace/> 		
+	);
+	<xss:e v="obj.id"/>.events = new ev.EventHolder();
+	}
+
+for(var mthd in obj.methods)
+{
+    compiler.xss(method_renderer, mthd, obj, is_class = false);
+}
+
+//render events as functions
+for(var ev in obj.events)
+{
+    compiler.xss(event_renderer, ev, obj, is_class = false);
+}	
+</xss:code>

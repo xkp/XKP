@@ -214,7 +214,8 @@ class xss_type : public xss_object
 class xss_dsl : public xss_object
   {
     public:
-      virtual str render(dsl& info, XSSContext ctx) = 0;
+      virtual str  render(dsl& info, XSSContext ctx) = 0;
+      virtual void pre_process(dsl& info, XSSContext ctx) {}
   };
 
 //the language interface

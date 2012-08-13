@@ -91,6 +91,7 @@ struct wax_utils
 
     XSSMethod compile_page(XSSObject page, variant code);
     void      pre_process_args(XSSMethod methd);
+    str       escape(const str& text);
 
     private:
       XSSCompiler compiler_;
@@ -98,7 +99,6 @@ struct wax_utils
       str  split_html(const str& html_text, code& cde, tag_list& tags, DynamicArray elements, int hStart, int hEnd, str& declarations);
       bool custom_modifier(XSSObject obj, const str& modifier, const str& html_text, tag_list& tags, int& tag_idx, str& result);
       str  render_html_text(const str& text);
-      str  escape(const str& text);
   };
 
 typedef reference<wax_utils> WaxUtils;
@@ -121,6 +121,7 @@ struct wax_utils_schema : object_schema<wax_utils>
       {
         method_<XSSMethod, 2>("compile_page",      &wax_utils::compile_page);
         method_<void, 1>     ("pre_process_args",  &wax_utils::pre_process_args);
+        method_<str, 1>      ("escape",            &wax_utils::escape); 
       }
   };
 

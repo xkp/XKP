@@ -895,6 +895,11 @@ void expression_analizer::analyze(expression& expr, XSSContext ctx)
       }
   }
 
+bool expression_analizer::is_constant()
+  {
+    return is_constant_;
+  }
+
 bool expression_analizer::is_property()
   {
     return is_property_;
@@ -908,6 +913,11 @@ bool expression_analizer::is_identifier()
 bool expression_analizer::this_property()
   {
     return this_property_;
+  }
+
+variant expression_analizer::get_constant()
+  {
+    return constant_;
   }
 
 XSSProperty expression_analizer::get_property()

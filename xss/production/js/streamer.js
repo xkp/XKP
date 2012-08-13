@@ -3,7 +3,7 @@ var stream = {};
 var RESOURCE_IMAGE			 = 0;
 var RESOURCE_AUDIO			 = 1;
 var RESOURCE_JSON_MODEL		 = 2;
-var RESOURCE_BIN_MODEL		 = 3;
+var RESOURCE_COLLADA_MODEL	 = 3;
 var RESOURCE_SPRITE		 	 = 4;
 var RESOURCE_VIDEO			 = 5;
 var MAX_SIMULTANEOUS_LOADERS = 3;
@@ -139,11 +139,11 @@ stream.JSonModelLoader = stream.Loader.extend(
     }
 });
 
-stream.BinModelLoader = stream.Loader.extend(
+stream.ColladaModelLoader = stream.Loader.extend(
 {
     init: function(streamer)
     {
-		this._super(streamer, RESOURCE_BIN_MODEL);
+		this._super(streamer, RESOURCE_COLLADA_MODEL);
     },
 
     load: function(resource)
@@ -220,7 +220,7 @@ stream.Streamer = Class.extend(
 		 	new stream.ImageLoader(this),
 			new stream.AudioLoader(this),			
 			new stream.JSonModelLoader(this),
-			new stream.BinModelLoader(this),
+			new stream.ColladaModelLoader(this),
 			new stream.SpriteLoader(this),
 			new stream.VideoLoader(this),
 		];	
