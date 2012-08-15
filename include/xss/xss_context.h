@@ -11,12 +11,17 @@ namespace fs = boost::filesystem;
 namespace xkp {
 
 //forwards
+struct  xss_context;
 class		xss_object;
+class		xss_type;
+class   xss_expression;
+class   xss_value;
+class   xss_signature;
+class   xss_operator;
+class   xss_arguments;
 class   xss_property;
 class   xss_event;
 class   xss_method;
-struct  xss_context;
-class		xss_type;
 class   xss_dsl;
 
 //interfaces
@@ -28,12 +33,17 @@ struct IArgumentRenderer;
 
 //reference types
 typedef reference<xss_object>		        XSSObject;
-typedef reference<xss_property>         XSSProperty;
 typedef reference<xss_context>	        XSSContext;
-typedef reference<xss_event>		        XSSEvent;
+typedef reference<xss_expression>       XSSExpression;
+typedef reference<xss_value>            XSSValue;
+typedef reference<xss_operator>         XSSOperator;
+typedef reference<xss_arguments>        XSSArguments;
+typedef reference<xss_property>         XSSProperty;
 typedef reference<xss_method>		        XSSMethod;
+typedef reference<xss_event>		        XSSEvent;
 typedef reference<xss_type>		          XSSType;
 typedef reference<xss_dsl>		          XSSDSL;
+typedef reference<xss_signature>		    XSSSignature;
 typedef reference<ILanguage>		        Language;
 typedef reference<ICodeRenderer>	      CodeRenderer;
 typedef reference<IExpressionRenderer>  ExpressionRenderer;
@@ -45,6 +55,92 @@ enum MARKER_SOURCE
     MS_CURRENT,
     MS_PREVIOUS,
     MS_ENTRY,
+  };
+
+enum VALUE_OPERATION
+  {
+    OP_CONSTANT,
+    OP_READ,
+    OP_CALL,
+    OP_INDEX,
+    OP_INSTANTIATION,
+    OP_OBJECT,
+    OP_ARRAY,
+  };
+
+enum RESOLVE_ITEM
+  {
+    RESOLVE_ANY,
+    RESOLVE_INSTANCE,
+    RESOLVE_METHOD,
+    RESOLVE_PROPERTY,
+    RESOLVE_NATIVE,
+    RESOLVE_CONST,
+    RESOLVE_VARIABLE,
+    RESOLVE_TYPE,
+    RESOLVE_CHILD,
+  };
+
+//data
+class xss_parameter
+  {
+    public:
+      xss_parameter(str name, XSSExpression value):
+        name_(name),
+        value_(value)
+        {
+        }
+      
+      XSSExpression value();
+      str           name();
+      XSSType       type();
+    private:
+      str           name_;
+      XSSExpression value_;
+  };
+
+typedef std::vector<xss_parameter> xss_parameters;
+
+class xss_arguments
+  {
+    public:
+      void           bind(XSSContext ctx);
+      XSSType        type(); 
+      void           add(const str& name, XSSExpression value);
+      void           push_front(const str& name, XSSExpression value);
+    public:
+      //iterators
+      size_t                   size();
+      xss_parameter&           get(size_t idx);
+      xss_parameters::iterator begin();
+      xss_parameters::iterator end();
+    private:
+      xss_parameters args_;
+  };
+
+class value_operation
+  {
+    public:
+      value_operation(VALUE_OPERATION op, const str& identifier);
+
+      VALUE_OPERATION id();
+      variant         constant();
+      void            bind(RESOLVE_ITEM what, variant value);
+      XSSArguments    args();
+      str             identifier();
+
+      void set_operation(VALUE_OPERATION op);
+      void set_arguments(XSSArguments args);
+      void set_type_arguments(XSSArguments type_args);
+      void set_constant(variant constant);
+    private:
+      VALUE_OPERATION op_;
+      str             identifier_;
+      variant         constant_; 
+      XSSArguments    args_;
+      XSSArguments    type_args_;
+      RESOLVE_ITEM    resolve_what_;
+      variant         resolve_value_;
   };
 
 //misc
@@ -155,6 +251,8 @@ class xss_object : public editable_object<xss_object>,
 			XSSObject     idiom_;
 	};
 
+typedef std::vector<XSSType> XSSTypeList;
+
 class xss_type : public xss_object
   {
     public:
@@ -164,6 +262,9 @@ class xss_type : public xss_object
       //xss_object
       virtual bool resolve(const str& name, schema_item& result);
     public:
+      XSSOperator get_operator(operator_type op, XSSArguments args);
+    public:
+      //td: 0.9.5 rethink!
       void          set_super(XSSType super);
       void          set_definition(XSSObject def);
       schema*       native_type();
@@ -264,21 +365,8 @@ struct ILanguage
     virtual bool    custom_operator(XSSType lt, XSSType rt, str l, str r, operator_type op, str& res)     = 0;
   };
 
-//resolver
-enum RESOLVE_ITEM
-  {
-    RESOLVE_ANY,
-    RESOLVE_INSTANCE,
-    RESOLVE_METHOD,
-    RESOLVE_PROPERTY,
-    RESOLVE_NATIVE,
-    RESOLVE_CONST,
-    RESOLVE_VARIABLE,
-    RESOLVE_TYPE,
-    RESOLVE_CHILD,
-  };
-
 //code scope, this should not be public
+//td: 0.9.5 separate exec and data context
 struct xss_context_scope : scope
   {
     xss_context_scope() {}
@@ -292,6 +380,7 @@ struct xss_context_scope : scope
       XSSContext owner_; //td: !!! weak references
   };
 
+//context
 struct resolve_info
   {
     resolve_info():
@@ -359,6 +448,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       void          set_args(param_list& args);
       param_list&   get_args();
       void          search_native(bool enabled);
+      XSSType       get_operator_type(operator_type op, XSSType left, XSSType right);
     public:
       variant resolve(const str& id, RESOLVE_ITEM item_type = RESOLVE_ANY);
       bool    resolve(const str& id, resolve_info& info);
@@ -405,6 +495,79 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
 
 //these are basically copies of their xs counterpart, but offer xss stuff, like generating
 //they are also vm friendly, unlike the low level xs's ast.
+typedef std::vector<value_operation> value_operations;
+
+//expressions
+class xss_value
+  {
+    public:
+      void             bind(XSSContext ctx);
+      XSSType          type();
+      void             add_operation(value_operation& op);
+      value_operation& get_last();
+    private:
+      XSSType          type_;
+      value_operations operations_;      
+  };
+
+class xss_expression
+  {
+    public:
+      xss_expression(operator_type op, XSSExpression arg1, XSSExpression arg2 = XSSExpression(), XSSExpression arg3 = XSSExpression());
+      xss_expression(XSSValue value);
+    public:
+      void    bind(XSSContext ctx);
+      XSSType type();
+    private:
+      operator_type op_;
+      XSSType       type_;
+      XSSValue      value_;
+      XSSExpression arg1_;
+      XSSExpression arg2_;
+      XSSExpression arg3_;
+  };
+
+struct signature_item
+  {
+    signature_item();
+    signature_item(signature_item& other);
+    signature_item(str _name, XSSType _type, XSSExpression _value);
+
+    str           name;
+    XSSType       type;
+    XSSExpression default_value; 
+  };
+
+typedef std::vector<signature_item> signature_items;
+
+class xss_signature
+  {
+    public:
+      bool match(XSSArguments args);
+    private:
+      signature_items items_;
+  };
+
+class xss_operator
+  {
+    public:
+      xss_operator(operator_type op, XSSType result);
+      xss_operator(operator_type op, XSSType result, XSSType right);
+      xss_operator(operator_type op, XSSType result, XSSType left, XSSType right);
+      xss_operator(operator_type op, XSSType result, XSSSignature signature);
+    public:
+      XSSType type();
+      bool    match(XSSArguments args);
+      bool    match(XSSType type);
+    private:
+      operator_type op_;
+      XSSType       result_;
+      XSSType       left_;
+      XSSType       right_;
+      XSSSignature  signature_; 
+  };
+
+//constructs
 class xss_property : public xss_object
   {
 	  public:

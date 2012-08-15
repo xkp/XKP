@@ -38,7 +38,7 @@ const int operand_count[] =
     2, //op_div_equal,
     2, //op_dot,
     2, //op_dot_call
-    2, //op_index,
+    1, //op_index,
     1, //op_call,
     2, //op_func_call
     1, //op_array,

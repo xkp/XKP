@@ -116,6 +116,7 @@
     <ClInclude Include="..\..\..\include\xss\xss_compiler.h" />
     <ClInclude Include="..\..\..\include\xss\xss_context.h" />
     <ClInclude Include="..\..\..\include\xss\xss_error.h" />
+    <ClInclude Include="..\..\..\include\xss\xss_expression.h" />
     <ClInclude Include="..\..\..\include\xss\xss_parser.h" />
     <ClInclude Include="..\..\..\include\xss\xss_renderer.h" />
     <ClInclude Include="..\..\..\include\xs\array.h" />
@@ -159,6 +160,7 @@
     <ClCompile Include="..\..\..\src\xss\object_reader.cpp" />
     <ClCompile Include="..\..\..\src\xss\xss_compiler.cpp" />
     <ClCompile Include="..\..\..\src\xss\xss_context.cpp" />
+    <ClCompile Include="..\..\..\src\xss\xss_expression.cpp" />
     <ClCompile Include="..\..\..\src\xss\xss_parser.cpp" />
     <ClCompile Include="..\..\..\src\xss\xss_renderer.cpp" />
     <ClCompile Include="..\..\..\src\xs\array.cpp" />

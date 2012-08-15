@@ -41,6 +41,8 @@ enum xs_rules
     rule_qualified_id   = 0,        //<Qualified ID> ::= Identifier <Member List>
     rule_member_list    = 1,        //<Member List> ::= <Member List> MemberName
     rule_member_empty   = 2,        //<Member List> ::=
+    rule_single_expr    = 13,       //<Expression List> ::= <Expression>
+    rule_expr_list      = 14,       //<Expression List> ::= <Expression> ',' <Expression List>
     rule_assign         = 15,       //<Expression> ::= <Conditional Exp> '=' <Expression>
     rule_plusequal      = 16,       //<Expression> ::= <Conditional Exp> '+=' <Expression>
     rule_minusequal     = 17,       //<Expression> ::= <Conditional Exp> '-=' <Expression>
@@ -251,6 +253,21 @@ struct parameters_ : visitor_base<parameters_>
     void named_argument( TokenStruct* token, parsetree_visitor* visitor );
     void argument_list( TokenStruct* token, parsetree_visitor* visitor );
     void empty_args( TokenStruct* token, parsetree_visitor* visitor );
+  };
+
+struct expr_list_ : visitor_base<expr_list_>
+  {
+    expr_list_(expression_& _expr);
+
+    bool visit(TokenStruct* token, parsetree_visitor* visitor);
+
+    //data
+    expression_& expr;
+    int          param_count;
+
+    //rule handlers
+    void single_expr( TokenStruct* token, parsetree_visitor* visitor );
+    void expr_list( TokenStruct* token, parsetree_visitor* visitor );
   };
 
 struct expression_ : visitor_base<expression_>
@@ -475,6 +492,42 @@ void parameters_::empty_args( TokenStruct* token, parsetree_visitor* visitor )
     param_count = 0;
   }
 
+//expr_list_
+expr_list_::expr_list_(expression_& _expr):
+  expr(_expr),
+  param_count(0)
+  {
+    register_rule( rule_single_expr, &expr_list_::single_expr );
+    register_rule( rule_expr_list,   &expr_list_::expr_list );
+  }
+
+bool expr_list_::visit(TokenStruct* token, parsetree_visitor* visitor)
+  {
+    return visit_rule(this, token, visitor);
+  }
+
+void expr_list_::single_expr( TokenStruct* token, parsetree_visitor* visitor )
+  {
+    //<Expression List> ::= <Expression>
+    visitor->visit( token->Tokens[0], expr );
+    param_count++;
+  }
+
+void expr_list_::expr_list( TokenStruct* token, parsetree_visitor* visitor )
+  {
+    //<Expression List> ::= <Expression> ',' <Expression List>
+    if (token->Tokens[2]->ReductionRule == rule_expr_list)
+      visit( token->Tokens[2], visitor );
+    else
+      {
+        visitor->visit( token->Tokens[2], expr );
+        param_count++;
+      }
+
+    visitor->visit( token->Tokens[0], expr );
+    param_count++;
+  }
+
 //expression_
 
 expression_::expression_( expression& ctx )
@@ -572,7 +625,12 @@ bool expression_::visit(TokenStruct* token, parsetree_visitor* visitor)
 
 void expression_::index( TokenStruct* token, parsetree_visitor* visitor )
   {
-    visitor->visit( token->Tokens[1], *this );
+    expr_list_ args(*this);
+    visitor->visit(token->Tokens[1], args);
+
+    ctx_.push_operand( args.param_count );
+
+    //visitor->visit( token->Tokens[1], *this );
     ctx_.push_operator( op_index );
   }
 

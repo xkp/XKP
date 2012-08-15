@@ -596,7 +596,17 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
           }
         case op_index:
           {
-            resolve_operator(op, arg1, arg2, null);
+            constant    arg_count    = arg1;
+            int         args         = arg_count.value;
+            bool        named_params = has_parameter_names();
+
+            //pop the arguments
+            for(int i = 0; i < args; i++)
+              {
+                variant arg = stack_.top(); stack_.pop();
+                resolve_value(arg);
+              }
+            assert(false); //td: !!!
             break;
           }
         case op_assign:

@@ -18,6 +18,7 @@
 #include "xss/xss_parser.h"
 #include "xss/xss_error.h"
 #include "xss/xss_compiler.h"
+#include "xss/xss_expression.h"
 
 #include "boost/filesystem.hpp"
 
@@ -47,8 +48,29 @@ void print_error(param_list data)
       }
   }
 
+XSSExpression test_expression(const str& expr)
+  {
+    expression e;
+
+    xs_utils xs;
+    xs.compile_expression(expr, e);
+    XSSExpression result = xss_expression_utils::compile_expression(e);
+    return result;
+  }
+
+void test_expressions()
+  {
+    test_expression("a.b.c = c.d.e");
+    test_expression("a.b[i, j].c = c.d(j + 3, f).e");
+    test_expression("b[i, j] = new myobj( 3/(a+ b), null)");
+    test_expression("myobj( 3/(a+ b), null, hello = true)");
+    test_expression("a[5] = { a : 3, b : [2, 3, 4]}");
+  }
+
 int main(int argc, char* argv[])
   {
+    test_expressions(); //td: !!!DEBUG!!!
+
     if (argc < 2)
       {
         std::cout << "Usage: xss [Project File]";

@@ -21,7 +21,7 @@ on update(delta, elapsed){
 	if ( t > 30 ) t = 0;
 	if ( monster_model.skin ) {
 		for ( var i = 0; i < monster_model.skin.morphTargetInfluences.length; i++ ) {
-			monster_model.skin.morphTargetInfluences[ i ] = 0;
+			monster_model.skin.morphTargetInfluences[ i, 5 ] = 0;
 		}
 		monster_model.skin.morphTargetInfluences[ Math.floor( t ) ] = 1;
 		t += 0.5;

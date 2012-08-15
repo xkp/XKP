@@ -189,6 +189,9 @@
     <ClInclude Include="..\..\..\include\xss\dsl\smarty.h">
       <Filter>Header Files\xss\dsl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\xss_expression.h">
+      <Filter>Header Files\xss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -319,6 +322,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\xss\dsl\smarty.cpp">
       <Filter>Source Files\xss\dsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\xss_expression.cpp">
+      <Filter>Source Files\xss</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

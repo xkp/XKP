@@ -307,6 +307,12 @@ void xss_context::search_native(bool enabled)
     search_native_ = enabled;
   }
 
+XSSType xss_context::get_operator_type(operator_type op, XSSType left, XSSType right)
+  {
+    assert(false); //td:
+    return XSSType();
+  }
+
 variant xss_context::resolve(const str& id, RESOLVE_ITEM item_type)
   {
     resolve_info si;
@@ -1670,6 +1676,10 @@ bool xss_type::resolve(const str& name, schema_item& result)
       }
 
     return xss_object::resolve(name, result);
+  }
+
+XSSOperator xss_type::get_operator(operator_type op, XSSArguments args)
+  {
   }
 
 void xss_type::set_super(XSSType super)

@@ -49,6 +49,7 @@ namespace xkp
       op_parameter,         //37 
       op_instantiate,       //38
       op_object,            //39
+      op_none,              //MAKE SURE THIS IS ALWAYS LAST
     };    
     
   struct operator_exec
