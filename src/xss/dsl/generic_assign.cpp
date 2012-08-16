@@ -2,6 +2,7 @@
 #include <xss/dsl/generic_assign.h>
 #include <xss/xss_error.h>
 #include <xss/xss_renderer.h>
+#include <xss/language.h>
 
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_confix.hpp>
@@ -290,10 +291,10 @@ str dsl_generic_assign::render(dsl& info, XSSContext ctx)
                 tag->add_attribute("variable_type", type);
                 if (!type->is_array())
                   {
-                    if (type->is_object())
-                      tag->add_attribute("resolve_to_object", true);
-                    else if (type->is_native())
+                    if (type->is_native())
                       tag->add_attribute("resolve_to_value", true);
+                    else
+                      tag->add_attribute("resolve_to_object", true);
                   }
               }
             else
@@ -323,7 +324,7 @@ str dsl_generic_assign::render(dsl& info, XSSContext ctx)
     param_list pl;
     pl.add("target", tags);
 
-    add_parameters(pl, ctx);
+    add_parameters(pl, info, ctx);
 
     size_t evid = idiom->event_id(get_event());
     if (evid > 0)
@@ -335,6 +336,17 @@ str dsl_generic_assign::render(dsl& info, XSSContext ctx)
 
     compiler->pop_renderer();
     return renderer->get();
+  }
+
+void dsl_generic_assign::load_parameter(const str& param_name, XSSContext ctx, const param_list from, param_list& to)
+  {
+    if (from.has(param_name))
+      {
+        Language lang = ctx->get_language();
+        expression pvalue = from.get(param_name);
+        str pstr = lang->render_expression(pvalue, ctx);
+        to.add(param_name, pstr);
+      }
   }
 
 //glue

@@ -1,3 +1,4 @@
 <application src="wax2.app.xs">
-    <service id="myService"/>
+    <service id="compile"/>
+    <service id="list_projects"/>
 </application>

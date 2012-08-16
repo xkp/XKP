@@ -1,53 +1,47 @@
-method myService()
+property project_db = 
 {
-    try 
+    hostname: 'localhost', 
+    user: 'root', 
+    password: 'xs@2011', 
+    database: 'NodeTest'
+};
+
+/*
+function check_changes()
+{
+    var changes;
+    shell()
     {
-        var data = [];
-        sql()
-        {
-            data = SELECT * FROM FOLLOWERS
-                   WHERE USERID = @user.id
-        }
-
-        //fun with web services and caching
-        for(var user in data)
-        {
-            try
-            {
-                string img_cache;
-                sql() 
-                { 
-                    img_cache = SELECT fname FROM MapCache
-                                WHERE addr = @user.address
-                }
-                
-                if (!img_cache)
-                {
-                    var img_data = google_maps.staticmap(center = user.address, zoom = 5, sensor = false);
-                    
-                    //do the caching
-                    img_cache = 'mapcache/' + Math.random()*1000 + '.png';
-                    fs.writeFile(img_cache, img_data);
-
-                    sql()
-                    {
-                        INSERT INTO   MapCache(addr, fname)
-                               VALUES (@user.address, @img_cache)
-                    }
-                }
-                    
-                user.map = img_cache;
-            }
-            catch(err)
-            {
-                user.map = 'images/nomap.png';
-            }
-        }
-
-        return {success: true, users: data};
+        cd @project_info.LocalFolder;
+        changes = git diff master origin/master --summary
     }
-    catch
+
+    return changes.size > 0;
+}
+*/
+
+method compile(int project_id)
+{
+    object project_info;
+    sql(connection = project_db)
     {
+        project_info = SELECT * FROM  Project
+                                WHERE Id = @project_id
+    }
+
+    if (!project_info)
         return {success: false};
+
+    return {success: true, folder: project_info.LocalFolder};
+}
+
+method list_projects()
+{
+    var result;
+    shell(cwd = "/root/nodejs/samples/")
+    {
+        result = ls 
     }
+
+    return result.output;
 }
