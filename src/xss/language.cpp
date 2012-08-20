@@ -954,7 +954,8 @@ void expression_analizer::analyze(expression& expr, XSSContext ctx)
                 break;
               }
             default:
-              assert(false); //more test cases later
+              return; //td: !!!
+              //assert(false); //more test cases later
           }
       }
   }

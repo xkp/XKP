@@ -344,6 +344,119 @@ struct wax_splitter : code_visitor
         }
   };    
 
+struct wax_module_binder : code_visitor
+  {
+    public:
+      wax_module_binder(bind_map& search, XSSContext ctx):
+        search_(search),
+        ctx_(ctx)
+        {
+        }
+    public:
+      virtual void if_(stmt_if& info)
+        {
+          search_expression(info.expr);
+          search_code(info.if_code);
+          search_code(info.else_code);
+        }
+
+      virtual void variable_(stmt_variable& info)
+        {
+          search_expression(info.value);
+        }
+
+      virtual void for_(stmt_for& info)
+        {
+          search_expression(info.init_expr);
+          search_expression(info.iter_expr);
+          search_expression(info.cond_expr);
+
+          search_code(info.for_code);
+        }
+
+      virtual void iterfor_(stmt_iter_for& info)
+        {
+          search_expression(info.iter_expr);
+
+          search_code(info.for_code);
+        }
+
+      virtual void while_(stmt_while& info)
+        {
+          search_expression(info.expr);
+
+          search_code(info.while_code);
+        }
+
+      virtual void return_(stmt_return& info)
+        {
+          search_expression(info.expr);
+        }
+
+      virtual void expression_(stmt_expression& info)
+        {
+          search_expression(info.expr);
+        }
+
+      virtual void switch_(stmt_switch& info) 
+        {
+          search_expression(info.expr);
+          
+          std::vector<switch_section>::iterator it = info.sections.begin();
+          std::vector<switch_section>::iterator nd = info.sections.end();
+
+          for(; it != nd; it++)
+            search_code(it->case_code);
+
+          search_code(info.default_code);
+        }
+
+      virtual void try_(stmt_try& info)
+        {
+          search_code(info.try_code);
+          search_code(info.finally_code);
+
+          std::vector<catch_>::iterator it = info.catches.begin();
+          std::vector<catch_>::iterator nd = info.catches.end();
+
+          for(; it != nd; it++)
+            search_code(it->catch_code);
+        }
+
+      virtual void break_()                      {}
+      virtual void continue_()                   {}
+      virtual void dsl_(dsl& info)               {}
+      virtual void dispatch(stmt_dispatch& info) {}
+      virtual void throw_(stmt_throw& info)      {} 
+    private:
+      bind_map&  search_;
+      XSSContext ctx_;
+
+      void search_expression(expression& expr)
+        {
+          if (expr.empty())
+            return;
+
+          expression_analizer ea;
+          ea.analyze(expr, ctx_);
+
+          str id = ea.first_string();
+
+          if (id.empty())
+            return;
+
+          bind_map::iterator it = search_.find(id);
+          if (it != search_.end())
+            it->second.used = true;
+        }
+
+      void search_code(code& cde)
+        {
+          wax_module_binder binder(search_, ctx_);
+          cde.visit(&binder);
+        }
+  };
+
 struct waxjs_internal_renderer : public js_code_renderer
   {
       waxjs_internal_renderer(code& cde, param_list_decl& params, XSSContext ctx) : 
@@ -495,23 +608,63 @@ str waxjs_code_renderer::render()
     ctx_->register_symbol(RESOLVE_CONST, "#wax_page", is_page, true);
     ctx_->register_symbol(RESOLVE_CONST, "#wax_service", is_service, true);
 
-    std::ostringstream result;
+    std::ostringstream result_code;
 
     if (is_service)
-      result << render_service();
-
-    if (is_page)
-      result << render_page();
-
-    if (is_service || is_page)
-      result << render_parameters();
+      result_code << render_service();
+    else if (is_page)
+      result_code << render_page();
+    else if (fork)
+      {
+        fork->callback = "return_function"; //utility function
+        owner_->set<str>("callback_args", str("return_value"));
+        owner_->set_output_id("application." + owner_->id());
+      }
 
     if (!fork)
-      result << render_code(code_);
+      result_code << render_code(code_);
     else
-      result << render_split(fork, CodeSplit());
+      result_code << render_split(fork, CodeSplit());
 
-    return result.str();
+    //now that we have our code we must run it thru the appropiate renderer be it a service or a page
+    XSSObject src = owner_? owner_->get<XSSObject>("src", XSSObject()) : XSSObject();
+    if (!src)
+      return result_code.str();
+      
+    str          main_renderer = src->get<str>("renderer", str()); assert(!main_renderer.empty());
+    DynamicArray main_params   = variant_cast<DynamicArray>(dynamic_get(owner_, "#wax_parameters"), DynamicArray());
+    
+    param_list mr;
+    mr.add("it", src);
+    mr.add("code", result_code.str());
+    mr.add("args", main_params);
+    
+    str result = render_xss(main_renderer, mr);
+
+    //the fun never ends... here we find ot how many types want to get in on the fun
+    //and we shall render them in order so the code nests nicely
+    bind_map binds;
+    search_binds(binds);
+
+    wax_module_binder wmb(binds, ctx_);
+    code_.visit(&wmb);
+
+    bind_map::iterator bit = binds.begin();
+    bind_map::iterator bnd = binds.end();
+
+    for(; bit != bnd; bit++)
+      {
+        if (!bit->second.used)
+          continue;
+
+        param_list pl;
+        pl.add("code", result);
+        pl.add("it", src);
+    
+        result = render_xss(bit->second.renderer, pl);
+      }
+
+    return result;
   }
 
 bool waxjs_code_renderer::check_fork(variant owner)
@@ -820,25 +973,54 @@ DynamicArray waxjs_code_renderer::compile_args(expression& expr)
   {
     DynamicArray result(new dynamic_array);
 
-    expr_param_resolver params;
-    expr.visit(&params);
-
-    param_list& pl = params.get();
-
-    for(size_t i = 0; i < pl.size(); i++)
+    operator_type op;
+    if (expr.top_operator(op))
       {
-        str name = pl.get_name(i);
-        expression value = pl.get(i);
+        param_list pl;
+        if (op == op_func_call)
+          {
+            funccall_param_resolver params;
+            expr.visit(&params);
+            pl = params.get();
+          }
+        else
+          {
+            expr_param_resolver params;
+            expr.visit(&params);
+            pl = params.get();
+          }
 
-        str value_str = render_expression(value, ctx_);
-        XSSObject param(new xss_object);
-        param->set_id(name);
-        param->add_attribute("value", value_str);
+        for(size_t i = 0; i < pl.size(); i++)
+          {
+            str name = pl.get_name(i);
+            expression value = pl.get(i);
 
-        result->push_back(param);
+            str value_str = render_expression(value, ctx_);
+            XSSObject param(new xss_object);
+            param->set_id(name);
+            param->add_attribute("value", value_str);
+
+            result->push_back(param);
+          }
       }
 
     return result;
+  }
+
+void waxjs_code_renderer::search_binds(bind_map& binds)
+  {
+    XSSModule idiom = compiler_->idiom_by_id("wax"); //td: generalize
+    DynamicArray at = idiom->all_types();
+    std::vector<variant>::iterator it = at->ref_begin();
+    std::vector<variant>::iterator nd = at->ref_end();
+
+    for(; it != nd; it++)
+      {
+        XSSType type     = *it;
+        str     wax_bind = type->get<str>("wax_bind", str());
+        if (!wax_bind.empty())
+          binds.insert(bind_pair(type->id(), module_bind_data(wax_bind)));
+      }
   }
 
 str waxjs_code_renderer::split_expression(CodeSplit fork, const str& callback)
@@ -863,6 +1045,7 @@ str waxjs_code_renderer::split_expression(CodeSplit fork, const str& callback)
                 break;
               }
             case op_call:
+            case op_func_call:
               break;
             default:
               assert(false);
@@ -1185,20 +1368,51 @@ str waxjs_code_renderer::split_method(XSSMethod method, CodeSplit fork, DynamicA
         //args
         //td: !!! data model
         XSSObjectList methd_args = method->find_by_class("parameter");
-        XSSObjectList::iterator it = methd_args.begin();
-        XSSObjectList::iterator nd = methd_args.end();
-        int idx = 0;
-        for(; it != nd; it++, idx++)
+        if (!methd_args.empty())
           {
-            if (idx < args->size())
+            XSSObjectList::iterator it = methd_args.begin();
+            XSSObjectList::iterator nd = methd_args.end();
+            int idx = 0;
+            for(; it != nd; it++, idx++)
               {
-                XSSObject arg = args->at(idx); 
-                result << arg->get<str>("value", str());
-              }
-            else 
-                result << (*it)->get<str>("default_value", str());
+                if (idx < args->size())
+                  {
+                    XSSObject arg = args->at(idx); 
+                    result << arg->get<str>("value", str());
+                  }
+                else 
+                    result << (*it)->get<str>("default_value", str());
 
-            result << ", ";
+                result << ", ";
+              }
+          }
+        else
+          {
+            IArgumentRenderer* rend = variant_cast<IArgumentRenderer*>(method->get_parameters(), null); 
+
+            if (rend)
+              {
+                param_list_decl& params = rend->get();
+                param_list_decl::iterator it = params.begin();
+                param_list_decl::iterator nd = params.end();
+
+                int idx = 0;
+                for(; it != nd; it++, idx++)
+                  {
+                    if (idx < args->size())
+                      {
+                        XSSObject arg = args->at(idx); 
+                        result << arg->get<str>("value", str());
+                      }
+                    else 
+                      {
+                        Language lang = ctx_->get_language();
+                        result << lang->render_expression(it->default_value, ctx_);
+                      }
+
+                    result << ", ";
+                  }
+              }
           }
 
         result << "function(" << method->get<str>("callback_args", str()) << ")";
@@ -1218,6 +1432,23 @@ str waxjs_code_renderer::split_method(XSSMethod method, CodeSplit fork, DynamicA
         result << "\n});";
         return result.str();
       }
+  }
+
+str waxjs_code_renderer::render_xss(const str& file, const param_list args)
+  {
+    str render_file = compiler_->idiom_path(XSSObject(ctx_->get_type("page")), file);
+        
+    XSSRenderer renderer(new xss_renderer(compiler_, ctx_, ctx_->path()));
+    compiler_->push_renderer(renderer);
+
+    //let subclasses add parameters
+    param_list pl;
+    pl.add(render_file);
+    pl.append(args);
+    compiler_->xss(pl);
+
+    compiler_->pop_renderer();
+    return renderer->get();
   }
 
 //wax_utils
@@ -1388,7 +1619,7 @@ struct visitor_45 : code_visitor
       XSSObject  result_;
   }; 
 
-XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
+XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer, variant event_args)
   {
     //do the html thing
     str html_text;
@@ -1408,27 +1639,22 @@ XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
     else
       {
         src = page->get<str>("src", str()); 
-        html_text = compiler_->file(src);
+        if (!src.empty())
+          html_text = compiler_->file(src);
       }
 
-    if (html_text.empty())
-      {
-        param_list error;
-        error.add("id", SLanguage);
-        error.add("desc", SBadHTML);
-        error.add("file", src);
-        xss_throw(error);
-      }
-
-    html_parser parser;
     tag_list    tags;
-    if (!parser.parse(html_text, tags))
+    if (!html_text.empty())
       {
-        param_list error;
-        error.add("id", SLanguage);
-        error.add("desc", SBadHTML);
-        error.add("file", src);
-        xss_throw(error);
+        html_parser parser;
+        if (!parser.parse(html_text, tags))
+          {
+            param_list error;
+            error.add("id", SLanguage);
+            error.add("desc", SBadHTML);
+            error.add("file", src);
+            xss_throw(error);
+          }
       }
 
     //grab the code
@@ -1443,6 +1669,27 @@ XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
     XSSMethod result(new xss_method(page_id, XSSType(), reference<js_args_renderer>(args), code_renderer));
     result->add_attribute("asynch",   true);
     result->add_attribute("wax_page", true);
+    result->add_attribute("src", page);
+
+    cr->owner_ = result;
+
+    //attach the original parameters to be later resolved
+    IArgumentRenderer* eargs = variant_cast<IArgumentRenderer*>(event_args, null);
+    if (eargs)
+      {
+        DynamicArray wax_args(new dynamic_array);
+
+        param_list_decl& pldecl = eargs->get();
+        param_list_decl::iterator it = pldecl.begin();
+        param_list_decl::iterator nd = pldecl.end();
+
+        for(; it != nd; it++)
+          {
+             wax_args->push_back(it->name);
+          }
+
+        result->add_attribute("#wax_parameters", wax_args);
+      }
 
     cr->owner_ = result;
 
@@ -1583,7 +1830,7 @@ XSSMethod wax_utils::compile_page(XSSObject page, variant code_renderer)
                         return_function << pit->first << " = \\\"" << pit->second << "\\\"";
                       }
 
-                    return_function << "\");\n";
+                    return_function << ">\");\n";
                   }
                 else 
                   {
@@ -1702,7 +1949,7 @@ str wax_utils::split_html(const str& html_text, code& cde, tag_list& tags, Dynam
                         result << pit->first << " = \\\"" << pit->second << "\\\"";
                       }
 
-                    result << "\");\n";
+                    result << ">\");\n";
                   }
                 else
                   {

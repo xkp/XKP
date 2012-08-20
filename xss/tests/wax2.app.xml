@@ -1,4 +1,11 @@
 <application src="wax2.app.xs">
     <service id="compile"/>
-    <service id="list_projects"/>
+    <service id="compress_service" post="true" upload_dir="./upload"/>
+
+    <page id="compress_page" src="compress_result.html" post="true" upload_dir="./upload">
+        <element id="lblFile" />
+        <element id="lblLink" />
+    </page>
+
+    <file_server webroot="/root/nodejs/samples/files/"/>
 </application>

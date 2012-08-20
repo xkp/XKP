@@ -252,6 +252,7 @@ namespace xkp
         str          get_env_var(const str& key);
         str          get_os_name();
         void         no_ouput();
+        str          escape_file(const str& filename);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -392,6 +393,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<DynamicArray, 2>("find_files",         &xss_compiler::find_files);
         method_<str,          1>("get_env_var",        &xss_compiler::get_env_var);
         method_<str,          0>("os",                 &xss_compiler::get_os_name);
+        method_<str,          1>("escape_file",        &xss_compiler::escape_file);
       }
   };
 

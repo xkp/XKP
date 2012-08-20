@@ -1,6 +1,7 @@
 <module id="wax" src="wax.xs">
     <types>
-        <class id="page"/>
+        <class id="page" renderer="request_handler.xss"/>
+        <class id="service" renderer="request_handler.xss"/>
 
         <class id="fs">
             <method id="readFile" output_id="fs.readFile" asynch="true" callback_args="err, return_value" error_arg="err">
@@ -10,6 +11,13 @@
                 <parameter id="filename" type="string"/>
                 <parameter id="data" type="string"/>
             </method>
+            <method id="rename" output_id="fs.rename" asynch="true" callback_args="err" error_arg="err">
+                <parameter id="oldPath" type="string"/>
+                <parameter id="newPath" type="string"/>
+            </method>
         </class>
+
+        <class id="cookies" wax_bind="cookie_bind.xss"/>
+        <class id="session" wax_bind="session_bind.xss"/>
     </types>
 </module>
