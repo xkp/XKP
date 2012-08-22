@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http:///com/xkp/codexcess/model.ecore" nsPrefix="com.xkp.codexcess.model">
+  <eClassifiers xsi:type="ecore:EClass" name="XSSClass">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="super" eType="#//XSSClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="xssimports" upperBound="-1"
+        eType="#//XSSImport" eOpposite="#//XSSImport/xssclass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="xssmethods" upperBound="-1"
+        eType="#//XSSMethod" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="xssevents" upperBound="-1"
+        eType="#//XSSEvent" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="xssproperties" upperBound="-1"
+        eType="#//XSSProperty" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XSSEvent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XSSIProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XSSIdiom">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="xssclasses" upperBound="-1"
+        eType="#//XSSClass" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XSSImport">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="xssclass" eType="#//XSSClass"
+        eOpposite="#//XSSClass/xssimports"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XSSInstance">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="xssclass" eType="#//XSSClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="childs" upperBound="-1"
+        eType="#//XSSInstance" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//XSSIProperty" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//XSSInstance"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XSSMethod">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XSSProject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="xssidioms" upperBound="-1"
+        eType="#//XSSIdiom" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="xssclasses" upperBound="-1"
+        eType="#//XSSClass" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="application" eType="#//XSSInstance"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XSSProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

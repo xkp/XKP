@@ -319,5 +319,25 @@
             extensions="xs">
     </provider>
   </extension>
+  <extension
+        point="org.eclipse.ui.views">
+     <category
+           id="com.xkp.codexcess.ui.categoryNewAdded"
+           name="newCategoryAdded">
+     </category>
+  </extension>
+  <extension
+        point="org.eclipse.ui.actionSets">
+     <actionSet
+           id="com.xkp.codexcess.ui.excessExecuter"
+           label="XSS Executer">
+        <action
+              definitionId="com.xkp.codexcess.Xss.validate"
+              id="com.xkp.codexcess.ui.actions.build"
+              label="&amp;Build"
+              style="push">
+        </action>
+     </actionSet>
+  </extension>
 
 </plugin>

@@ -51,9 +51,9 @@ int main(int argc, char* argv[])
   {
     if (argc < 2)
       {
-        std::cout << "Usage: xss [Project File]";
-        std::cin.get();
-        return 0;
+        std::cout << "Usage: xss [Project File]" << std::endl;
+        //std::cin.get();
+        return -1;
       }
 
     char* fname = argv[1];
