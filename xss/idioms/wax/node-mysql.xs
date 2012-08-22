@@ -71,7 +71,11 @@ method render_statement(sts, idx, callback, error_handler, conn_id)
 
     bool last = idx == sts.size - 1;
     if (last)
-        out() {<xss:e v="callback"/>;}
+        out() 
+        {
+            <xss:e v="conn_id"/>.end();
+            <xss:e v="callback"/>;
+        }
     else
         render_statement(sts, idx + 1, callback, conn_id);
 
@@ -98,7 +102,6 @@ on render_statements(array statements, string callback, string error_handler, st
 
     render_statement(statements, 0, callback, error_handler, conn_id);
 
-    //close connect
     out()
     {
         <xss:close_brace/>);

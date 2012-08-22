@@ -10,6 +10,7 @@
             <method id="writeFile" output_id="fs.writeFile" asynch="true" callback_args="err" error_arg="err">
                 <parameter id="filename" type="string"/>
                 <parameter id="data" type="string"/>
+                <parameter id="encoding" type="string" default_value="utf8"/>
             </method>
             <method id="rename" output_id="fs.rename" asynch="true" callback_args="err" error_arg="err">
                 <parameter id="oldPath" type="string"/>

@@ -150,7 +150,11 @@ http.createServer(function(request, response)
         else 
             compiler.out(" else ");
 
-        compiler.out("if (pathname == '/" + i.id + "')");
+        string path = i.id;
+        if (i.home)
+            path = "";
+
+        compiler.out("if (pathname == '/" + path + "')");
         compiler.out("{");
 
         if (i.class_name == "service" || i.class_name == "page")

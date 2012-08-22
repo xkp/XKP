@@ -432,9 +432,8 @@ bool xss_context::resolve(const str& id, resolve_info& info)
                       }
                     case RESOLVE_VARIABLE:
                       {
-                        assert(info.left->type);
-                        assert(info.left->type->is_object() || info.left->type->is_variant());
-                        obj = info.left->value;
+                        if (info.left->type && (info.left->type->is_object() || info.left->type->is_variant()))
+                          obj = info.left->value;
                         break;
                       }
                     default:

@@ -1,0 +1,13 @@
+<project entry_point="../idioms/wax/server.xss" language="waxjs" target="xs_zip_users.xml" output="xs_zip_users.js">
+    <path>
+        <output path="../production/wax"/>
+    </path>
+
+    <include def="../idioms/web-service/google.xml"/>
+
+    <idiom src="../idioms/wax/wax.xml"/>
+    <idiom src="../idioms/wax/node-mysql.xml"/>
+    <idiom src="../idioms/wax/node-shell.xml"/>
+    <idiom src="../idioms/web-service/ws-node.xml"/>
+</project>
+

@@ -862,15 +862,20 @@ str waxjs_code_renderer::split_if(CodeSplit fork, const str& callback)
             result << split_and_render(stmnt.else_code, fork);
             result << "\n}";
           }
+        else
+          {
+            result << "\nelse\n{\n";
+            result << "\n" << callback << "();";
+            result << "\n}";
+          }
       }
     else if (fork->split_on_else)
       {
         result << "\nif (" << render_expression(stmnt.expr, ctx_) << ")";
         result << "\n{";
-
         result << render_plain_code(stmnt.if_code, fork->context);
-        
-        result << "\n" << render_callback(fork) << "\n}";
+        result << "\n" << callback << "();";
+        result << "\n}";
         result << "\nelse\n{\n";
         result << render_split(fork->split_code, fork);
         result << "\n}";
@@ -891,7 +896,11 @@ str waxjs_code_renderer::split_if(CodeSplit fork, const str& callback)
             method_body << "\n\t}";
           }
         else
-            method_body << render_callback(fork);
+          {
+            method_body << "\n\telse\n{\n";
+            result << "\n" << callback << "();";
+            method_body << "\n\t}";
+          }
 
         result << split_method(fork->method, fork, compile_args(stmnt.expr), method_body.str());
       }
