@@ -18,7 +18,7 @@
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
-            <script type="text/javascript" src="../js/three/fonts.js"></script>
+            <script type="text/javascript" src="../js/three/loaders/ColladaLoader.js"></script>
             <script type="text/javascript" src="../js/three/ShaderExtras.js"></script>
             <script type="text/javascript" src="../js/three/postprocessing/EffectComposer.js"></script>
             <script type="text/javascript" src="../js/three/postprocessing/RenderPass.js"></script>
@@ -199,12 +199,8 @@ d_ligth_1.manager = manager;
 				var head_model_mesh = new THREE.Mesh(geometry, shader_mat1);
 				head_model.add(head_model_mesh);
             if(1) geometry.computeTangents();
-            head_model.position.x = -110;
-            head_model.position.z = -350;
-            head_model.position.y = -20;
-            head_model.scale.x = 250;
-            head_model.scale.y = 250;
-            head_model.scale.z = 250;
+            head_model.position = ;
+            head_model.scale = ;
 				manager.scene.add(head_model);
 			} 		
 	);
@@ -236,9 +232,8 @@ head_model.manager = manager;
 				composer.addPass(effect_fxaa);				
 				effect_fxaa.manager = manager;
             manager.events.addListener('update', function(){camera_1.lookAt(head_model.position)});
-            camera_1.position.z = 1000;
-            d_ligth_1.position.y = -70;
-            d_ligth_1.position.z = 100;
+            camera_1.position = ;
+            d_ligth_1.position = ;
             effect_fxaa.renderToScreen = true;
             application.mouse_x = null;
             application.mouse_y = null;

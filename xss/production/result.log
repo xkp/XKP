@@ -87,36 +87,6 @@ log: [android] Rendering default files...
 log: Rendering Android Manifest...
 
 Success are greateful
-===[ animationsink.project.xml ]================
-
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/android/demos/androidanimation/../../../idioms/android/classes.xmlERROR: Project:  animationsink.project.xml
-
-===[ androidcollisions.project.xml ]================
-
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/android/demos/androidcollisions/../../../idioms/android/classes.xmlERROR: Project:  androidcollisions.project.xml
-
-===[ androidcomponents.project.xml ]================
-
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/android/demos/androidcomponents/../../../idioms/android/classes.xmlERROR: Project:  androidcomponents.project.xml
-
-===[ androidkitchensink.project.xml ]================
-
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/android/demos/androidkitchensink/../../../idioms/android/classes.xmlERROR: Project:  androidkitchensink.project.xml
-
-===[ androidmaps.project.xml ]================
-
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/android/demos/androidmaps/../../../idioms/android/classes.xmlERROR: Project:  androidmaps.project.xml
-
 ===[ figures2d.project.xml ]================
 
 
@@ -532,19 +502,19 @@ Success are greateful
 
 
 Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
+	file = c:/dev/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
 
 ===[ pairs.project.xml ]================
 
 
 Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
+	file = c:/dev/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
 
 ===[ simple.project.xml ]================
 
 
 Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
+	file = c:/dev/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
 
 ===[ 3js-ms.project.xml ]================(Tests)
 
@@ -554,6 +524,13 @@ log: Rendering 3js Types...
 log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ 3js-ui.project.xml ]================(Tests)
 
@@ -562,6 +539,12 @@ log: Rendering Resources...
 log: Rendering 3js Types...
 log: Rendering UI Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ 3js_carousel.project.xml ]================(Tests)
 
@@ -570,6 +553,12 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ 3js_class_test_1.project.xml ]================(Tests)
 
@@ -578,6 +567,12 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ 3js_class_test_2.project.xml ]================(Tests)
 
@@ -586,6 +581,12 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ 3js_cube.project.xml ]================(Tests)
 
@@ -613,6 +614,11 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering 3js Types...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ 3js_package.project.xml ]================(Tests)
 
@@ -621,6 +627,12 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ 3js_particle.project.xml ]================(Tests)
 
@@ -648,6 +660,9 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ box2d3.project.xml ]================(Tests)
 
@@ -655,6 +670,11 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ box2d4.project.xml ]================(Tests)
 
@@ -663,6 +683,12 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ box2d5.project.xml ]================(Tests)
 
@@ -670,6 +696,11 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ box2dcar.project.xml ]================(Tests)
 
@@ -677,6 +708,11 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ cube_ui.project.xml ]================(Tests)
 
@@ -686,6 +722,13 @@ log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ dd.project.xml ]================(Tests)
 
@@ -695,6 +738,13 @@ log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ fbtest.project.xml ]================(Tests)
 
@@ -708,6 +758,13 @@ log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ java1.project.xml ]================(Tests)
 
@@ -866,6 +923,12 @@ log: Rendering Resources...
 log: Rendering 3js Types...
 log: Rendering UI Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ jquery-3js1.project.xml ]================(Tests)
 
@@ -874,184 +937,29 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ jquery-webgl.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ jquery1.project.xml ]================(Tests)
 
-<html>
-<body>
+ERROR: Project:  jquery1.project.xml
 
-<table width="500" border="0">
-<tr>
-<td colspan="2" style="background-color:#FFA500;">
-<h1>Main Title of Web Page</h1>
-</td>
-</tr>
-
-<tr valign="top">
-<td style="background-color:#FFD700;width:100px;text-align:top;">
-<b>Menu</b><br />
-HTML<br />
-CSS<br />
-JavaScript
-</td>
-<td id="content" style="background-color:#EEEEEE;height:200px;width:400px;text-align:top;">
-
-
-
-<div id="__div1">
-
-
-
-				<input id="btnFullName"
-			
-						type="button" 
-					
-						name="btnFullName" 
-					
-						value="Click Me" 
-					>
-				</input>
-			
-
-
-
-				<label id="lblFullName"
-			>
-					
-				
-				</label>
-			
-</div>
-
-
-
-
-</td>
-</tr>
-
-<tr>
-<td colspan="2" style="background-color:#FFA500;text-align:center;">
-Copyright © 2011 W3Schools.com</td>
-</tr>
-</table>
-
-    <script type="text/javascript" src="../js/jquery/jquery.js"></script>
-    <script type="text/javascript" src="../js/jquery/jquery-ui.js"></script>
-    <script type="text/javascript" src="../js/jquery/utils.js"></script>
-
-
-            <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
-        
-
-
-
-            <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
-        
-
-
-
-            <script type="text/javascript" src="../js/jquery-idiom.js"></script>
-        
-
-
-
-            <link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css"></link>
-        
-
-<style>
-
-
-#__div1 {position : relative}
-
-
-#btnFullName {left : 140px;top : 110px;width : 200px;height : 43px;position : absolute}
-
-
-#lblFullName {left : 10px;top : 170px;width : 300px;height : 25px;position : absolute}
-
-</style>
-<script type="text/javascript">
-
-        var application = {};
-    
-			var __div1 = $("#__div1");
-		
-			var btnFullName = $("#btnFullName").button();
-		
-			var lblFullName = $("#lblFullName");
-		
-
-
-
-
-
-
-
-
-
-
-
-		    btnFullName.click( function() { 
-	    
-			lblFullName.text("Grabbing ");
-var loc;
-function __callback1() 
-{
-lblFullName.text(loc.geometry.location.Lat + " " + loc.geometry.location.Long);
-
-}
-
-
-
-
-
-
-        var __url1 = "http://maps.googleapis.com/maps/api/geocode/json"
-     + "?address=" + "780 NE 69st" + "&sensor=" + false;
-        $.ajax(
-		{
-		    url: __url1,
-			type: "get",
-			dataType: "json",
-			error: function()
-            {
-                throw e;
-			},
-			success: function(data)
-            {
-                var return_value = JSON.parse(data);
-                loc = return_value;
-__callback1();
-			}
-		});
-		
-		});
-	
-
-
-
-
-
-
-
-
-
-
-
-                    if (application.init)
-                        application.init();
-                
-</script>
-</body>
-</html>
-
-Success are greateful
 ===[ jquery2.project.xml ]================(Tests)
 
 
@@ -1080,6 +988,9 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ jquery8.project.xml ]================(Tests)
 
@@ -1096,12 +1007,21 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ jquery_pp.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ jsmanip.project.xml ]================(Tests)
 
@@ -1110,6 +1030,15 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ jsmanipulate.project.xml ]================(Tests)
 
@@ -1118,6 +1047,15 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ ms4.project.xml ]================(Tests)
 
@@ -1126,6 +1064,9 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ ms5.project.xml ]================(Tests)
 
@@ -1134,6 +1075,9 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ ms6.project.xml ]================(Tests)
 
@@ -1142,6 +1086,9 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ paintings.project.xml ]================(Tests)
 
@@ -1155,6 +1102,12 @@ Error [language] Unknown identifier
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ query_properties.project.xml ]================(Tests)
 
@@ -1188,6 +1141,8 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ ui_audio.project.xml ]================(Tests)
 
@@ -1195,6 +1150,8 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ ui_audio_1.project.xml ]================(Tests)
 
@@ -1202,6 +1159,8 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ ui_class_test.project.xml ]================(Tests)
 
@@ -1209,6 +1168,8 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ ui_kitchen_sink.project.xml ]================(Tests)
 
@@ -1216,6 +1177,8 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ ui_painter.project.xml ]================(Tests)
 
@@ -1223,6 +1186,8 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ ui_placement.project.xml ]================(Tests)
 
@@ -1230,6 +1195,8 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ ui_ripple.project.xml ]================(Tests)
 
@@ -1238,6 +1205,9 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ ui_sprite.project.xml ]================(Tests)
 
@@ -1245,6 +1215,8 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ ui_video.project.xml ]================(Tests)
 
@@ -1252,6 +1224,8 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ uibuffer_test.project.xml ]================(Tests)
 
@@ -1260,72 +1234,68 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 Success are greateful
 ===[ wax1.project.xml ]================(Tests)
 
-
-Error [language] A registered dsl needs an idiom to be included
-	dsl = sql
-	file = d:/xkp/xss/tests/wax_test.xssERROR: Project:  wax1.project.xml
+ERROR: Project:  wax1.project.xml
 
 ===[ wax2.project.xml ]================(Tests)
 
 
-log: 1
-log: myService
 Success are greateful
 ===[ wax3.project.xml ]================(Tests)
 
 
-log: 0
 Success are greateful
 ===[ wax4.project.xml ]================(Tests)
 
 
-log: 1
-log: service1
 Success are greateful
 ===[ webgl_particle.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
+===[ wgl_collada.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering WebGL Types...
+Error [xss-linker] Invalid assign
+	file = c:/dev/xkp/xss/idioms/common-js/event.xssERROR: Project:  wgl_collada.project.xml
+
 ===[ wgl_cube_img.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_firstperson.project.xml ]================(Tests)
 
@@ -1335,58 +1305,40 @@ log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_head.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
+log: dependency: ../js/three/loaders/ColladaLoader.js
 Success are greateful
 ===[ wgl_icosahedron.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_materials.project.xml ]================(Tests)
 
@@ -1396,70 +1348,67 @@ log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_monster.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
+log: dependency: ../js/three/loaders/ColladaLoader.js
 Success are greateful
 ===[ wgl_package.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_postprocessing.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
+log: dependency: ../js/three/loaders/ColladaLoader.js
 log: dependency: ../js/three/ShaderExtras.js
 log: dependency: ../js/three/postprocessing/EffectComposer.js
 log: dependency: ../js/three/postprocessing/RenderPass.js
@@ -1475,42 +1424,36 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
+log: dependency: ../js/three/loaders/ColladaLoader.js
 Success are greateful
 ===[ wgl_pp_embedded.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
+log: dependency: ../js/three/loaders/ColladaLoader.js
 Success are greateful
 ===[ wgl_reflection_cube.project.xml ]================(Tests)
 
@@ -1520,16 +1463,6 @@ log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_refraction_cube.project.xml ]================(Tests)
 
@@ -1539,58 +1472,38 @@ log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_shader.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_shader_cl.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: dependency: ../js/streamer.js
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_shader_fresnel.project.xml ]================(Tests)
 
@@ -1600,16 +1513,6 @@ log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_shader_fresnel_cl.project.xml ]================(Tests)
 
@@ -1619,16 +1522,6 @@ log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_text.project.xml ]================(Tests)
 
@@ -1639,15 +1532,18 @@ log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
 log: dependency: ../js/three/fonts.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
+Success are greateful
+===[ xs_zip_service.project.xml ]================(Tests)
+
+
+Success are greateful
+===[ xs_zip_session.project.xml ]================(Tests)
+
+
+Success are greateful
+===[ xs_zip_users.project.xml ]================(Tests)
+
+
 Success are greateful
 ===[ xss1.project.xml ]================(Tests)
 
@@ -1991,9 +1887,11 @@ log: </User Classes>
 
 
 log: /usr/lib/source.xxx
-log: 
-log:  world!
-Success are greateful
+Error [vm] Cannot resolve
+	object = null
+	property = begin
+	file = c:/dev/xkp/xss/tests/xss14.project.xmlERROR: Project:  xss14.project.xml
+
 ===[ xss15.project.xml ]================(Tests)
 
 
@@ -2217,7 +2115,7 @@ Success are greateful
 Error [syntax-error] Error while compiling xs
 	line = 4
 	column = 1
-	file = d:/xkp/xss/tests/xss5.xssERROR: Project:  xss5.project.xml
+	file = c:/dev/xkp/xss/tests/xss5.xssERROR: Project:  xss5.project.xml
 
 ===[ xss6.project.xml ]================(Tests)
 
@@ -2428,94 +2326,5 @@ Success are greateful
 		PARENT: application  
 		IDIOM: xssY_idiom2  
 	
-
-Success are greatefulERROR: Project:  maps.project.xml
-ERROR: Project:  maps.project.xml
-ERROR: Project:  maps.project.xml
-ERROR: Project:  maps.project.xml
-ERROR: Project:  androidcollisions.project.xml
-
-===[ maps.project.xml ]================
-
-
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Sequence Types...
-log: Rendering Java Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: __div1
-log: Rendering instance: btnGallery
-log: Rendering instance: btnMaps
-log: Rendering instance: lblStatus
-log: Rendering instance: lblInformation
-log: Rendering instance: swtScene
-log: Rendering instance: lblSwicherInformation
-log: Rendering instance: imgGallery
-log: Rendering instance: mapController
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: ico_gallery
-log: Rendering instance: ico_maps
-log: Rendering instance: photos
-log: Rendering instance: worth_1
-log: Rendering instance: worth_2
-log: Rendering instance: worth_3
-log: Rendering instance: worth_4
-log: Rendering instance: worth_5
-log: Rendering instance: worth_6
-log: Rendering instance: worth_7
-log: Rendering instance: maps
-log: Rendering instance: holguin
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Copying files...
-log: [jbox2d] Copying default files...
-log: Rendering Android Manifest...
-log: Creating .apk bundle file...
-
-Success are greateful
-===[ maps.project.xml ]================
-
-
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Sequence Types...
-log: Rendering Java Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: __div1
-log: Rendering instance: btnGallery
-log: Rendering instance: btnMaps
-log: Rendering instance: lblStatus
-log: Rendering instance: lblInformation
-log: Rendering instance: swtScene
-log: Rendering instance: lblSwicherInformation
-log: Rendering instance: imgGallery
-log: Rendering instance: mapController
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: ico_gallery
-log: Rendering instance: ico_maps
-log: Rendering instance: photos
-log: Rendering instance: worth_1
-log: Rendering instance: worth_2
-log: Rendering instance: worth_3
-log: Rendering instance: worth_4
-log: Rendering instance: worth_5
-log: Rendering instance: worth_6
-log: Rendering instance: worth_7
-log: Rendering instance: maps
-log: Rendering instance: holguin
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Copying files...
-log: [jbox2d] Copying default files...
-log: Rendering Android Manifest...
-log: Creating .apk bundle file...
 
 Success are greateful

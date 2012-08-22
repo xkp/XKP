@@ -17,16 +17,6 @@
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
-            <script type="text/javascript" src="../js/three/fonts.js"></script>
-            <script type="text/javascript" src="../js/three/ShaderExtras.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/EffectComposer.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/RenderPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/ShaderPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/BloomPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/FilmPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/DotScreenPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/TexturePass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/MaskPass.js"></script>
 <script type="text/javascript">	
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 			var renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -143,39 +133,23 @@ cube_2.manager = manager;
 	    manager.scene.add(plane_1);
 		plane_1.events = new ev.EventHolder();
 plane_1.manager = manager;
-            camera_1.position.x = -250;
-            camera_1.position.y = 25;
+            camera_1.position = ;
             __firstperson_controls1.movementSpeed = 70;
             __firstperson_controls1.lookSpeed = 0.0500000007;
             __firstperson_controls1.noFly = true;
             __firstperson_controls1.lookVertical = false;
-            light.position.y = 0.5;
-            light.position.z = 1;
-            sphere_1.position.x = 250;
-            sphere_1.position.y = 30;
-            sphere_2.position.x = -250;
-            sphere_2.position.y = 30;
-            set_rotation_x(cylinder_1.rotation, 212);
-            set_rotation_y(cylinder_1.rotation, 212);
-            cylinder_1.position.x = 100;
-            cylinder_1.position.y = 30;
-            cylinder_1.position.z = 100;
-            set_rotation_x(cylinder_2.rotation, 212);
-            set_rotation_y(cylinder_2.rotation, 212);
-            cylinder_2.position.x = -100;
-            cylinder_2.position.y = 30;
-            cylinder_2.position.z = 100;
-            cube_1.position.x = -100;
-            cube_1.position.y = 30;
-            cube_1.position.z = -100;
-            set_rotation_x(cube_1.rotation, 212);
-            set_rotation_y(cube_1.rotation, 212);
-            cube_2.position.x = 100;
-            cube_2.position.y = 30;
-            cube_2.position.z = -100;
-            set_rotation_x(cube_2.rotation, 212);
-            set_rotation_y(cube_2.rotation, 212);
-            plane_1.position.y = 0.100000001;
+            light.position = ;
+            sphere_1.position = ;
+            sphere_2.position = ;
+            cylinder_1.rotation = ;
+            cylinder_1.position = ;
+            cylinder_2.rotation = ;
+            cylinder_2.position = ;
+            cube_1.position = ;
+            cube_1.rotation = ;
+            cube_2.position = ;
+            cube_2.rotation = ;
+            plane_1.position = ;
 var event_manager = new ev.ThreeEventManager();
 document.onmousemove = function(ev)
 {

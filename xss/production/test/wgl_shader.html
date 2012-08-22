@@ -85,8 +85,6 @@ void main(void)
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
-            <script type="text/javascript" src="../js/three/fonts.js"></script>
-            
 <script type="text/javascript">	
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 			var renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -202,9 +200,8 @@ cube_1.manager = manager;
 	    manager.scene.add(plane_1);
 		plane_1.events = new ev.EventHolder();
 plane_1.manager = manager;
-            camera_1.position.y = 150;
-            camera_1.position.z = 500;
-            cube_1.position.y = 150;
+            camera_1.position = ;
+            cube_1.position = ;
             application.x_target_rotation = 0;
             application.x_target_rotation_on_mouse_down = 0;
             application.mouse_x = 0;

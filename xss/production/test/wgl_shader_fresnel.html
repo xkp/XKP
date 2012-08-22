@@ -17,8 +17,6 @@
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
-            <script type="text/javascript" src="../js/three/fonts.js"></script>
-            
 <script type="text/javascript">	
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 			var renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -112,7 +110,7 @@ camera_1.manager = manager;
 			scene.add( __panorama_cube1_mesh );
 __panorama_cube1.manager = manager;
             manager.events.addListener('update', function(){camera_1.lookAt(scene.position)});
-            camera_1.position.z = 3200;
+            camera_1.position = ;
             application.mouse_x = null;
             application.mouse_y = null;
             application.spheres = [];

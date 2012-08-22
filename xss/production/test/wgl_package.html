@@ -18,16 +18,6 @@
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
-            <script type="text/javascript" src="../js/three/fonts.js"></script>
-            <script type="text/javascript" src="../js/three/ShaderExtras.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/EffectComposer.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/RenderPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/ShaderPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/BloomPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/FilmPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/DotScreenPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/TexturePass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/MaskPass.js"></script>
 <script type="text/javascript">	
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 			var renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -194,35 +184,30 @@ plane_3.manager = manager;
 				manager.scene.add(container);
 				plane_5.manager = manager;
 });
-            camera_1.position.x = 100;
-            camera_1.position.y = 100;
-            camera_1.position.z = 1000;
+            camera_1.position = ;
             set_webgl_object_texture(plane_1, "images/test1.png");
-            plane_1.position.x = 100;
-            plane_1.position.y = 100;
-            set_rotation_x(plane_1.rotation, 90);
+            plane_1.position = ;
+            plane_1.rotation = ;
             set_webgl_object_texture(plane_2, "images/test2.png");
-            plane_2.position.x = 300;
-            plane_2.position.y = 100;
-            set_rotation_x(plane_2.rotation, 90);
+            plane_2.position = ;
+            plane_2.rotation = ;
             set_webgl_object_texture(plane_3, "images/test3.png");
-            plane_3.position.x = 100;
-            plane_3.position.y = 300;
-            set_rotation_x(plane_3.rotation, 90);
+            plane_3.position = ;
+            plane_3.rotation = ;
 				pack_1.events.addListener("loaded", function()
 				{
 });
 				pack_1.events.addListener("loaded", function()
 				{
             set_webgl_object_texture(plane_4, "images/test4.png");
-            plane_4.position.x = -100;
-            set_rotation_x(plane_4.rotation, 90);
+            plane_4.position = ;
+            plane_4.rotation = ;
 });
 				pack_1.events.addListener("loaded", function()
 				{
             set_webgl_object_texture(plane_5, "images/test5.png");
-            plane_5.position.x = -400;
-            set_rotation_x(plane_5.rotation, 90);
+            plane_5.position = ;
+            plane_5.rotation = ;
 });
 	application.events.addListener("click", function()
 	{    

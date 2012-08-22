@@ -124,16 +124,12 @@ cylinder_1.manager = manager;
             lbl2.set_x(240);
             lbl2.set_y(125);
             lbl2.text("Move mouse pressing CTRL to rotate the camera horizontally");
-            camera_1.position.z = 1000;
-            light.position.y = 0.5;
-            light.position.z = 1;
-            set_rotation_x(cylinder_1.rotation, 70);
-            set_rotation_y(cylinder_1.rotation, 70);
-            cylinder_1.position.x = 600;
-            cube_1.position.x = -600;
-            cube_1.position.y = -100;
-            set_rotation_x(cube_1.rotation, 70);
-            set_rotation_y(cube_1.rotation, 70);
+            camera_1.position = ;
+            light.position = ;
+            cylinder_1.rotation = ;
+            cylinder_1.position = ;
+            cube_1.position = ;
+            cube_1.rotation = ;
 	cube_1.events.addListener("mousein", function()
 	{    
 		set_rotation_x(cube_1.rotation, get_rotation_x(cube_1.rotation) + 0.5);
@@ -141,8 +137,7 @@ set_rotation_y(cube_1.rotation, get_rotation_y(cube_1.rotation) + 0.5);
 set_rotation_z(cube_1.rotation, get_rotation_z(cube_1.rotation) + 0.5);
 	}
 	);
-            sphere_1.position.x = -400;
-            sphere_1.position.y = 400;
+            sphere_1.position = ;
             application.is_shift_down = false;
             application.is_ctrl_down = false;
             application.theta = 45;

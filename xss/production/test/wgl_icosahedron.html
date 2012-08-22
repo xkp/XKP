@@ -17,16 +17,6 @@
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
-            <script type="text/javascript" src="../js/three/fonts.js"></script>
-            <script type="text/javascript" src="../js/three/ShaderExtras.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/EffectComposer.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/RenderPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/ShaderPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/BloomPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/FilmPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/DotScreenPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/TexturePass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/MaskPass.js"></script>
 <script type="text/javascript">	
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 			var renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -146,11 +136,9 @@ plane_3.manager = manager;
 	    new THREE.DirectionalLight(White, 1, 0, null) ;
 	    manager.scene.add(light_1);
 light_1.manager = manager;
-            camera_1.position.z = 1800;
-            icosahedron_1.position.x = -450;
-            icosahedron_1.scale.x = 200;
-            icosahedron_1.scale.y = 200;
-            icosahedron_1.scale.z = 200;
+            camera_1.position = ;
+            icosahedron_1.position = ;
+            icosahedron_1.scale = ;
 	icosahedron_1.events.addListener("mousein", function()
 	{    
 		set_rotation_x(icosahedron_1.rotation, get_rotation_x(icosahedron_1.rotation) + 2);
@@ -158,9 +146,7 @@ set_rotation_y(icosahedron_1.rotation, get_rotation_y(icosahedron_1.rotation) + 
 set_rotation_z(icosahedron_1.rotation, get_rotation_z(icosahedron_1.rotation) + 2);
 	}
 	);
-            icosahedron_2.scale.x = 200;
-            icosahedron_2.scale.y = 200;
-            icosahedron_2.scale.z = 200;
+            icosahedron_2.scale = ;
 	icosahedron_2.events.addListener("mousein", function()
 	{    
 		set_rotation_x(icosahedron_2.rotation, get_rotation_x(icosahedron_2.rotation) + 2);
@@ -168,10 +154,8 @@ set_rotation_y(icosahedron_2.rotation, get_rotation_y(icosahedron_2.rotation) + 
 set_rotation_z(icosahedron_2.rotation, get_rotation_z(icosahedron_2.rotation) + 2);
 	}
 	);
-            icosahedron_3.position.x = 450;
-            icosahedron_3.scale.x = 200;
-            icosahedron_3.scale.y = 200;
-            icosahedron_3.scale.z = 200;
+            icosahedron_3.position = ;
+            icosahedron_3.scale = ;
 	icosahedron_3.events.addListener("mousein", function()
 	{    
 		set_rotation_x(icosahedron_3.rotation, get_rotation_x(icosahedron_3.rotation) + 2);
@@ -179,12 +163,10 @@ set_rotation_y(icosahedron_3.rotation, get_rotation_y(icosahedron_3.rotation) + 
 set_rotation_z(icosahedron_3.rotation, get_rotation_z(icosahedron_3.rotation) + 2);
 	}
 	);
-            plane_1.position.x = -450;
-            plane_1.position.y = -250;
-            plane_2.position.y = -250;
-            plane_3.position.x = 450;
-            plane_3.position.y = -250;
-            light_1.position.z = 1;
+            plane_1.position = ;
+            plane_2.position = ;
+            plane_3.position = ;
+            light_1.position = ;
             application.mouseX = 0;
             application.mouseY = 0;
 	application.events.addListener("mousemove", function(x,y)

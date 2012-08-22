@@ -1,10 +1,19 @@
 var http = require("http");
 var url  = require("url");
 var fs = require('fs');
+var sessions = require("sessions");
 require("./smart.min.js");
+var application = {};
+//init sessions
+SessionManager = new sessions();
+SessionManager.on("expired", function(sid){
+    if (application.session_expired)
+    {
+        application.session_expired(sid);
+    }
+});
         var mysql  = require("mysql");
         var child_process  = require("child_process");
-var application = {};
             application.project_db = {hostname : "localhost",user : "root",password : "xs@2011",database : "NodeTest"};
 	application.compile = function(request,response) 
 	{
@@ -38,6 +47,7 @@ return true;
                     project_info = rows[0];
                 else
                     project_info = rows;
+            __connection1.end();
             __callback1();
         });
         });
@@ -103,6 +113,7 @@ __callback4();
 	};
 	application.compress_page = function(request,response) 
 	{
+var cookies = new require("cookies")( req, res);
         var _form = new require('formidable').IncomingForm();
         var post = {fields: [], field_values: {}, files: []};
             var upload_dir  = "./upload";
