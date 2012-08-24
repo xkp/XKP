@@ -131,11 +131,16 @@ stream.JSonModelLoader = stream.Loader.extend(
     {
 		this._super(streamer, RESOURCE_JSON_MODEL);
     },
-
     load: function(resource)
     {
-		var this_  = this;
-    	this_.on_loaded(resource, resource.data);        
+		var this_  = this;		
+		var model_loader = generate_model_loader(resource.type);
+		model_loader.load(resource.asset, function( geometry ){
+			var model = new THREE.Object3D();
+			var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial);
+			model.add(mesh);
+			this_.on_loaded(resource, model);
+		});    	        
     }
 });
 
@@ -149,8 +154,53 @@ stream.ColladaModelLoader = stream.Loader.extend(
     load: function(resource)
     {
 		var this_  = this;
-    	this_.on_loaded(resource, resource.data);        
-    }
+		var mesh;
+		var model_loader = generate_model_loader(resource.type);
+		model_loader.load(resource.asset, function colladaReady( collada ){			
+			mesh = collada.scene;
+			mesh.dae = collada
+			this_.render_children(resource.children, mesh);
+			this_.on_loaded(resource, mesh);
+		});        
+    },
+	
+	render_children: function(children, mesh)
+	{		
+		for(var name in children)
+		{
+			if(children[name].type_ == 'collada_camera')
+			{
+				for(var i = 0; i < mesh.children.length; i++)
+				{
+					if(mesh.children[i] instanceof THREE.PerspectiveCamera)				
+						if(!mesh.children[i].loaded)				
+						{
+							mesh[name] = new THREE.PerspectiveCamera(mesh.children[i].fov, mesh.children[i].aspect, mesh.children[i].near, mesh.children.far, mesh.children[i].target);
+							mesh[name].position.set(mesh.children[i].position.x, mesh.children[i].position.y, mesh.children[i].position.z);
+							mesh[name].scale.set(mesh.children[i].scale.x, mesh.children[i].scale.y, mesh.children[i].scale.z);
+							mesh[name].rotation.set(mesh.children[i].rotation.x, mesh.children[i].rotation.y, mesh.children[i].rotation.z);
+							mesh[name].lookAt(this.streamer.manager.scene.position);
+							mesh[name].manager = this.streamer.manager;
+							this.streamer.manager.scene.add(mesh[name]);							
+							mesh.children[i].loaded = true;	
+							break;
+						}				
+				}
+			}
+			else if(children[name].type_ == 'collada_skin')
+			{
+				for(var i = 0; i < mesh.dae.skins.length; i++)
+				{
+					if(mesh.dae.skins[i] instanceof THREE.SkinnedMesh)				
+						if(!mesh.dae.skins[i].loaded)				
+						{
+							mesh[name] = mesh.dae.skins[i];
+							mesh.dae.skins[i].loaded = true;
+						}				
+				}
+			}
+		}
+	}
 });
 
 stream.SpriteLoader = stream.Loader.extend(
@@ -346,7 +396,9 @@ stream.Streamer = Class.extend(
 				progress: 		this.progress,
 				frame_width:	resource.frame_width,
 				frame_height:	resource.frame_height,
-				animations:		resource.animations
+				animations:		resource.animations,
+				package:		resource.package,
+				children:		resource.children
 			};
 
 			if (this.progress)
@@ -364,8 +416,7 @@ stream.Streamer = Class.extend(
 		if (resource.progress)
 		{
 			resource.progress.items_confirmed++;
-		}
-
+		}		
 		resource.loaded = true;
 		if(data)
 		{
@@ -379,8 +430,8 @@ stream.Streamer = Class.extend(
 			req.listener.resource_loaded(resource, data, type);
 
 			req.waiting--;
-			if (req.waiting <= 0)
-				req.listener.finished_loading();
+			if (req.waiting <= 0)						
+				req.listener.finished_loading();			
 		}
 
 		if (this.on_loaded)
@@ -421,6 +472,7 @@ stream.Package = Class.extend(
 	
 	add_item: function(item)
 	{
+		item.package = this;
 		this.items.push(item);
 		this.state  = STATE_UNLOADED;
 		this.all_loaded = false;
@@ -438,7 +490,7 @@ stream.Package = Class.extend(
         {				
 			resources.push({id: this.items[i].id, type: this.items[i].resource_type, url: this.items[i].src,
 								frame_width: this.items[i].frame_width, frame_height: this.items[i].frame_height,
-								animations: this.items[i].animations
+								animations: this.items[i].animations, package: this, children: this.items[i].children
 								});
         }
 		
