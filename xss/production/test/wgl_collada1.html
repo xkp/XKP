@@ -6,7 +6,7 @@
 <body>
 <style type="text/css">
 	body{
-	background:Black;
+	background:skyblue;
 	}
 </style>
             <script type="text/javascript" src="../js/resig.js"></script>
@@ -18,6 +18,7 @@
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
+            <script type="text/javascript" src="../js/three/loaders/ColladaLoader.js"></script>
 <script type="text/javascript">	
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 			var renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -43,99 +44,64 @@ application.events = new ev.EventHolder();
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
 		{
-		id:				"__image1",
-		resource_type:	RESOURCE_IMAGE,
-		src:			"images/test1.png",
+		id:				"eurofighter",
+		resource_type:	RESOURCE_COLLADA_MODEL,
+		src:			"model/eurofighter/eurofighter.dae",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
 		children:		{}
 		}
 );	
-				var __image1;
+				var eurofighter;
 				global_package.events.addListener("loaded", function()
 				{
-					__image1 = streamer.get_resource("__image1");
+					eurofighter = streamer.get_resource("eurofighter");
 				});
-                global_package.add_item(
-		{
-		id:				"__image2",
-		resource_type:	RESOURCE_IMAGE,
-		src:			"images/test2.png",
-		frame_width:	null,
-		frame_height:	null,
-		animations:		[],	
-		children:		{}
-		}
-);	
-				var __image2;
-				global_package.events.addListener("loaded", function()
-				{
-					__image2 = streamer.get_resource("__image2");
-				});
-                global_package.add_item(
-		{
-		id:				"__image3",
-		resource_type:	RESOURCE_IMAGE,
-		src:			"images/test3.png",
-		frame_width:	null,
-		frame_height:	null,
-		animations:		[],	
-		children:		{}
-		}
-);	
-				var __image3;
-				global_package.events.addListener("loaded", function()
-				{
-					__image3 = streamer.get_resource("__image3");
-				});
-				var pack_1 = new stream.Package(streamer);				
 			var child_ = {};
-			child_.type_ = 'image';
+			child_.type_ = 'collada_camera';
 			for(var i = 0; i < global_package.items.length; i++)
 			{
-				if(global_package.items[i].id == "pack_1")
-					global_package.items[i].children['__image4'] = child_;
+				if(global_package.items[i].id == "eurofighter")
+					global_package.items[i].children['model_cam'] = child_;
 			}
+                global_package.add_item(
+		{
+		id:				"pump",
+		resource_type:	RESOURCE_COLLADA_MODEL,
+		src:			"model/pump/pump.dae",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var pump;
+				global_package.events.addListener("loaded", function()
+				{
+					pump = streamer.get_resource("pump");
+				});
 			var child_ = {};
-			child_.type_ = 'image';
+			child_.type_ = 'collada_camera';
 			for(var i = 0; i < global_package.items.length; i++)
 			{
-				if(global_package.items[i].id == "pack_1")
-					global_package.items[i].children['__image5'] = child_;
+				if(global_package.items[i].id == "pump")
+					global_package.items[i].children['model_cam1'] = child_;
 			}
-                pack_1.add_item(
-		{
-		id:				"__image4",
-		resource_type:	RESOURCE_IMAGE,
-		src:			"images/test4.png",
-		frame_width:	null,
-		frame_height:	null,
-		animations:		[],	
-		children:		{}
-		}
-);
-				var __image4;
-				pack_1.events.addListener("loaded", function()
-				{
-					__image4 = streamer.get_resource("__image4");
-				});
-                pack_1.add_item(
-		{
-		id:				"__image5",
-		resource_type:	RESOURCE_IMAGE,
-		src:			"images/test5.png",
-		frame_width:	null,
-		frame_height:	null,
-		animations:		[],	
-		children:		{}
-		}
-);
-				var __image5;
-				pack_1.events.addListener("loaded", function()
-				{
-					__image5 = streamer.get_resource("__image5");
-				});
+			var child_ = {};
+			child_.type_ = 'collada_camera';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "pump")
+					global_package.items[i].children['model_cam2'] = child_;
+			}
+			var child_ = {};
+			child_.type_ = 'collada_camera';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "pump")
+					global_package.items[i].children['model_cam3'] = child_;
+			}
 		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
@@ -163,87 +129,98 @@ manager.events.dispatch("update", [g_delta, g_elapsed]);
 				set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var camera_1;var plane_1;var plane_2;var plane_3;var container;var plane_4;var plane_5;
+var material_wireframe;var camera_1;var a_ligth;var d_ligth_1;var light1;var model1;var plane_1;
 threejs_load_resources(manager, function()
 {
+material_wireframe = new THREE.MeshBasicMaterial({
+color:grey,
+	});
+			material_wireframe.manager = manager;
 		    camera_1 = 
-		    new THREE.PerspectiveCamera(45, 1.5, 1, 10000, null) ;	
+		    new THREE.PerspectiveCamera(50, 1.76999998, 0.100000001, 100, null) ;	
 			manager.active_camera = camera_1;
 			camera_1.manager = manager;
-	    plane_1_plane = new THREE.PlaneGeometry(128, 164, 1, 1) ;
-	    plane_1 = new THREE.Mesh(plane_1_plane, new THREE.MeshBasicMaterial());
+	    a_ligth = 
+	    new THREE.AmbientLight(ivory) ;
+	    manager.scene.add(a_ligth);
+			a_ligth.manager = manager;
+	    d_ligth_1 = 
+	    new THREE.DirectionalLight(White, 2, 0, null) ;
+	    manager.scene.add(d_ligth_1);
+			d_ligth_1.manager = manager;
+	    light1 = 
+	    new THREE.PointLight(deepskyblue, 0.200000003, 0) ;
+	    manager.scene.add(light1);
+			light1.manager = manager;
+		model1 = clone3jsObject( manager.streamer.get_resource('eurofighter').data, manager );	
+		manager.scene.add(model1);
+		model1.events = new ev.EventHolder();			
+			model1.manager = manager;
+	    plane_1_plane = new THREE.PlaneGeometry(10000, 10000, 1, 1) ;
+	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    manager.scene.add(plane_1);
 		plane_1.events = new ev.EventHolder();
 			plane_1.manager = manager;
-	    plane_2_plane = new THREE.PlaneGeometry(128, 164, 1, 1) ;
-	    plane_2 = new THREE.Mesh(plane_2_plane, new THREE.MeshBasicMaterial());
-	    manager.scene.add(plane_2);
-		plane_2.events = new ev.EventHolder();
-			plane_2.manager = manager;
-	    plane_3_plane = new THREE.PlaneGeometry(128, 164, 1, 1) ;
-	    plane_3 = new THREE.Mesh(plane_3_plane, new THREE.MeshBasicMaterial());
-	    manager.scene.add(plane_3);
-		plane_3.events = new ev.EventHolder();
-			plane_3.manager = manager;
-				pack_1.events.addListener("loaded", function()
-				{				
-			    container = new THREE.Object3D() ;
-			container.events = new ev.EventHolder();
-			container.manager = manager;
-});				
-				pack_1.events.addListener("loaded", function()
-				{				
-	    plane_4_plane = new THREE.PlaneGeometry(128, 164, 1, 1) ;
-	    plane_4 = new THREE.Mesh(plane_4_plane, new THREE.MeshBasicMaterial());
-	    manager.scene.add(plane_4);
-		plane_4.events = new ev.EventHolder();
-				container.add(plane_4);
-				manager.scene.add(container);
-			plane_4.manager = manager;
-});				
-				pack_1.events.addListener("loaded", function()
-				{				
-	    plane_5_plane = new THREE.PlaneGeometry(128, 164, 1, 1) ;
-	    plane_5 = new THREE.Mesh(plane_5_plane, new THREE.MeshBasicMaterial());
-	    manager.scene.add(plane_5);
-		plane_5.events = new ev.EventHolder();
-				container.add(plane_5);
-				manager.scene.add(container);
-			plane_5.manager = manager;
-});
-            camera_1.position.x = 100;
-            camera_1.position.y = 100;
-            camera_1.position.z = 1000;
-            set_webgl_object_texture(plane_1, "images/test1.png");
-            plane_1.position.x = 100;
-            plane_1.position.y = 100;
-            set_rotation_x(plane_1.rotation, 90);
-            set_webgl_object_texture(plane_2, "images/test2.png");
-            plane_2.position.x = 300;
-            plane_2.position.y = 100;
-            set_rotation_x(plane_2.rotation, 90);
-            set_webgl_object_texture(plane_3, "images/test3.png");
-            plane_3.position.x = 100;
-            plane_3.position.y = 300;
-            set_rotation_x(plane_3.rotation, 90);
-				pack_1.events.addListener("loaded", function()
-				{
-});
-				pack_1.events.addListener("loaded", function()
-				{
-            set_webgl_object_texture(plane_4, "images/test4.png");
-            plane_4.position.x = -100;
-            set_rotation_x(plane_4.rotation, 90);
-});
-				pack_1.events.addListener("loaded", function()
-				{
-            set_webgl_object_texture(plane_5, "images/test5.png");
-            plane_5.position.x = -400;
-            set_rotation_x(plane_5.rotation, 90);
-});
+            set_material_alpha(material_wireframe, 20);
+            manager.events.addListener('update', function(){if(camera_1)camera_1.lookAt(scene.position)});
+            camera_1.position.x = 50;
+            camera_1.position.z = 50;
+            a_ligth.position.y = 3000;
+            a_ligth.position.z = 3000;
+            d_ligth_1.position.y = 3000;
+            d_ligth_1.position.z = 5000;
+            plane_1.position.y = -500;
+            application.mouse_x = null;
+            application.mouse_y = null;
+            application.t = 0;
+            application.cam = false;
+	application.events.addListener("update", function(delta,elapsed)
+	{    
+		var time = elapsed * 0.000500000024;
+light1.position.x = Math.sin(time * 7) * 3009;
+light1.position.y = Math.cos(time * 5) * 4000;
+light1.position.z = Math.cos(time * 3) * 3009;
+	}
+	);
 	application.events.addListener("click", function()
 	{    
-		pack_1.load();
+		model1 = createModelSrc(model1, "pump", model1.manager);
+	}
+	);
+	application.events.addListener("keydown", function(keycode)
+	{    
+		if (keycode == C)
+{
+application.cam = !application.cam;
+}
+if (keycode == LEFT_ARROW)
+{
+model1.position.x = model1.position.x - 1;
+}
+if (keycode == RIGHT_ARROW)
+{
+model1.position.x = model1.position.x + 1;
+}
+if (keycode == UP_ARROW)
+{
+model1.position.y = model1.position.y - 1;
+}
+if (keycode == DOWN_ARROW)
+{
+model1.position.y = model1.position.y + 1;
+}
+	}
+	);
+	application.events.addListener("switch_cameras", function()
+	{    
+		if (application.cam)
+{
+set_active_camera(model1.model_cam);
+}
+else
+{
+set_active_camera(camera_1);
+}
 	}
 	);
 var event_manager = new ev.ThreeEventManager();

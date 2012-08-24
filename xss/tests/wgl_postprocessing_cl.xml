@@ -1,12 +1,15 @@
 <application src="wgl_postprocessing_cl.xs" title="Test 3D" background="black">
 
 	<resources>		
-		<json_model id="res_model" src="model/leeperrysmith/LeePerrySmith.js"/>	
-		<image src="model/leeperrysmith/Infinite-Level_02_Tangent_SmoothUV.jpg"/>
-		<image src="model/leeperrysmith/Map-COL.jpg"/>
-		<image src="model/leeperrysmith/Map-SPEC.jpg"/>
+		<package id="model_pack">
+			<json_model id="res_model" src="model/leeperrysmith/LeePerrySmith.js"/>	
+			<image src="model/leeperrysmith/Infinite-Level_02_Tangent_SmoothUV.jpg"/>
+			<image src="model/leeperrysmith/Map-COL.jpg"/>
+			<image src="model/leeperrysmith/Map-SPEC.jpg"/>
+		</package>
 	</resources>
-	<materials>						
+	<materials>		
+		<lambert_material id="material_1" color="Math.random() * 0xffffff" shading="smooth_shading"/>	
 		<my_material id="shader_mat1"
 			t_normal="model/leeperrysmith/Infinite-Level_02_Tangent_SmoothUV.jpg"
 			u_normal_scale="-0.8"
@@ -20,12 +23,13 @@
 			u_ambient_color="three_utils.color(0x111111)"
 			u_shininess="35"
 			wrap_rgb="three_utils.vector3(0.575, 0.5, 0.5)"
+			wait_for_package="model_pack"
 		/>				
 	</materials>
 				
 	<scene>			
 		
-		<camera id="camera_1" fov="75" aspect="1.5" near="1" far="10000" look_at="head_model.position">
+		<camera id="camera_1" fov="75" aspect="1.5" near="1" far="10000" look_at="scene.position">
 			<position z="1000"/>            
 		</camera>
 		
@@ -34,8 +38,13 @@
 		<directional_light id="d_ligth_1" color="white" intensity="1">			
             <position y="-70" z="100"/>            
 		</directional_light>
+		
+		<text id="text_1"	caption="loading" size="200" height="50" curve_segments="3"
+							style="normal" material="material_1">	
+			<position x="-500"/>			
+		</text>
 				
-		<model id="head_model" src="res_model" material="shader_mat1" compute_tangents="true">
+		<model id="head_model" src="res_model" material="shader_mat1" compute_tangents="true" wait_for_package="model_pack">
 			<position x="-110" z="-350" y="-20"/>	
 			<scale x="250" y="250" z="250"/>			
 		</model>	

@@ -28,80 +28,94 @@ var g_delta;
 var scene = new THREE.Scene();
 scene.mouse_thru = true;
 var streamer;
+var manager = new threejs.Manager(scene, renderer, null, canvas_position);
+var three_utils = new threejs.Utils();
+manager.events = new ev.EventHolder();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 var clock = new THREE.Clock();
 application.events = new ev.EventHolder();
 		var streamer = new stream.Streamer();	
+		streamer.manager = manager;
 		var ResourceUtils = new stream.ResourceUtils();
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
-            {
+		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/sprites/snowflake1.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image1;
 				global_package.events.addListener("loaded", function()
 				{
 					__image1 = streamer.get_resource("__image1");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/sprites/snowflake2.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image2;
 				global_package.events.addListener("loaded", function()
 				{
 					__image2 = streamer.get_resource("__image2");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/sprites/snowflake3.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image3;
 				global_package.events.addListener("loaded", function()
 				{
 					__image3 = streamer.get_resource("__image3");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/sprites/snowflake4.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image4;
 				global_package.events.addListener("loaded", function()
 				{
 					__image4 = streamer.get_resource("__image4");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image5",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/sprites/snowflake5.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image5;
 				global_package.events.addListener("loaded", function()
 				{
@@ -118,9 +132,7 @@ application.events = new ev.EventHolder();
 		global_package.load();	
     // --------RESOURCES---------
 renderer.setSize( app_width, app_height );
-var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
-var three_utils = new threejs.Utils();
-manager.events = new ev.EventHolder();
+manager.streamer = streamer;
 function render() {
 manager.canvas_position = getElementPosition(renderer.domElement);
 var now   = new Date().getTime();
@@ -142,33 +154,33 @@ threejs_load_resources(manager, function()
 p_mat1 = new THREE.ParticleBasicMaterial({
 map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('images/sprites/snowflake1.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:10,
 	});
-p_mat1.manager = manager;
+			p_mat1.manager = manager;
 p_mat2 = new THREE.ParticleBasicMaterial({
 map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('images/sprites/snowflake2.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:20,
 	});
-p_mat2.manager = manager;
+			p_mat2.manager = manager;
 p_mat3 = new THREE.ParticleBasicMaterial({
 map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('images/sprites/snowflake3.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:15,
 	});
-p_mat3.manager = manager;
+			p_mat3.manager = manager;
 p_mat4 = new THREE.ParticleBasicMaterial({
 map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('images/sprites/snowflake4.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:5,
 	});
-p_mat4.manager = manager;
+			p_mat4.manager = manager;
 p_mat5 = new THREE.ParticleBasicMaterial({
 map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('images/sprites/snowflake5.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:8,
 	});
-p_mat5.manager = manager;
+			p_mat5.manager = manager;
 		    camera_1 = 
 		    new THREE.PerspectiveCamera(70, 1.5, 1, 1000, null) ;	
 			manager.active_camera = camera_1;
-camera_1.manager = manager;
+			camera_1.manager = manager;
 				__fly_controls1 = new THREE.FlyControls( camera_1 );
 				manager.events.addListener("update", function()
 				{				
 					__fly_controls1.update( c_delta );
 				})
-__fly_controls1.manager = manager;
+			__fly_controls1.manager = manager;
 		var geometry = new THREE.Geometry();
 		for ( i = 0; i < 10000; i ++ ) {
 			var vertex = new THREE.Vector3();								
@@ -179,7 +191,7 @@ __fly_controls1.manager = manager;
 		}
 		__particle_system1 = new THREE.ParticleSystem( geometry, p_mat1 );
 		manager.scene.add( __particle_system1 );	
-__particle_system1.manager = manager;
+			__particle_system1.manager = manager;
 		var geometry = new THREE.Geometry();
 		for ( i = 0; i < 10000; i ++ ) {
 			var vertex = new THREE.Vector3();								
@@ -190,7 +202,7 @@ __particle_system1.manager = manager;
 		}
 		__particle_system2 = new THREE.ParticleSystem( geometry, p_mat2 );
 		manager.scene.add( __particle_system2 );	
-__particle_system2.manager = manager;
+			__particle_system2.manager = manager;
 		var geometry = new THREE.Geometry();
 		for ( i = 0; i < 10000; i ++ ) {
 			var vertex = new THREE.Vector3();								
@@ -201,7 +213,7 @@ __particle_system2.manager = manager;
 		}
 		__particle_system3 = new THREE.ParticleSystem( geometry, p_mat3 );
 		manager.scene.add( __particle_system3 );	
-__particle_system3.manager = manager;
+			__particle_system3.manager = manager;
 		var geometry = new THREE.Geometry();
 		for ( i = 0; i < 10000; i ++ ) {
 			var vertex = new THREE.Vector3();								
@@ -212,7 +224,7 @@ __particle_system3.manager = manager;
 		}
 		__particle_system4 = new THREE.ParticleSystem( geometry, p_mat4 );
 		manager.scene.add( __particle_system4 );	
-__particle_system4.manager = manager;
+			__particle_system4.manager = manager;
 		var geometry = new THREE.Geometry();
 		for ( i = 0; i < 10000; i ++ ) {
 			var vertex = new THREE.Vector3();								
@@ -223,9 +235,10 @@ __particle_system4.manager = manager;
 		}
 		__particle_system5 = new THREE.ParticleSystem( geometry, p_mat5 );
 		manager.scene.add( __particle_system5 );	
-__particle_system5.manager = manager;
-            manager.events.addListener('update', function(){camera_1.lookAt(scene.position)});
-            camera_1.position = ;
+			__particle_system5.manager = manager;
+            manager.events.addListener('update', function(){if(camera_1)camera_1.lookAt(scene.position)});
+            camera_1.position.y = 300;
+            camera_1.position.z = 500;
             __fly_controls1.movementSpeed = 20;
             __fly_controls1.rollSpeed = 0.200000003;
 var event_manager = new ev.ThreeEventManager();

@@ -1,0 +1,17 @@
+<xss:parameter id="res"/>
+
+<xss:code>	
+	for(var child in res.children)
+	{
+		out()
+		{
+			var child_ = {};
+			child_.type_ = '<xss:e v="child.class_name"/>';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "<xss:e v="res.id"/>")
+					global_package.items[i].children['<xss:e v="child.id"/>'] = child_;
+			}
+		}			
+	}	
+</xss:code>

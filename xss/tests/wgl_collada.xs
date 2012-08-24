@@ -19,11 +19,11 @@ on update(delta, elapsed){
 	light3.position.z = Math.cos( time * 5 ) * 3009;
 	
 	if ( t > 30 ) t = 0;
-	if ( monster_model.skin ) {
-		for ( var i = 0; i < monster_model.skin.morphTargetInfluences.length; i++ ) {
-			monster_model.skin.morphTargetInfluences[ i ] = 0;
+	if ( monster_model.model_skin ) {
+		for ( var i = 0; i < monster_model.model_skin.morphTargetInfluences.length; i++ ) {
+			setMorphTargetInfluences(monster_model.model_skin, i, 0);
 		}
-		monster_model.skin.morphTargetInfluences[ Math.floor( t ) ] = 1;
+		setMorphTargetInfluences(monster_model.model_skin, Math.floor( t ), 1);
 		t += 0.5;
 	}
 }

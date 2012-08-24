@@ -71,10 +71,8 @@ else
     {        
         if (prop.value is string)
             value = prop.value;
-        else if (prop.value has "properties")
+        else
             compiler.xss("instance.xss", prop.value, path = prop_name ); //td: !!!
-        else 
-            value = prop.render_value();
     }
     else
     {
