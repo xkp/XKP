@@ -1,9 +1,17 @@
 property mouse_x;
 property mouse_y;
 
+on init()
+{
+	model_pack.load();
+}
+
 on update(){
-	head_model.rotation.y = mouse_x * 0.3;
-	head_model.rotation.x = mouse_y * 0.3;
+	if(head_model)
+	{
+		head_model.rotation.y = mouse_x * 0.3;
+		head_model.rotation.x = mouse_y * 0.3;
+	}
 }
 
 on mousemove(x,y){
@@ -11,6 +19,7 @@ on mousemove(x,y){
 	mouse_y = ( y - app_height/2 );
 }
 
-on click(){
-	ec.enabled = !ec.enabled;
+on model_pack.loaded()
+{
+	scene.remove(text_1);
 }

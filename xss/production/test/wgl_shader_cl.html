@@ -95,24 +95,30 @@ var g_delta;
 var scene = new THREE.Scene();
 scene.mouse_thru = true;
 var streamer;
+var manager = new threejs.Manager(scene, renderer, null, canvas_position);
+var three_utils = new threejs.Utils();
+manager.events = new ev.EventHolder();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 var clock = new THREE.Clock();
 application.events = new ev.EventHolder();
 		var streamer = new stream.Streamer();	
+		streamer.manager = manager;
 		var ResourceUtils = new stream.ResourceUtils();
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
-            {
+		{
 		id:				"image_1",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/disturb.jpg",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var image_1;
 				global_package.events.addListener("loaded", function()
 				{
@@ -129,9 +135,7 @@ application.events = new ev.EventHolder();
 		global_package.load();	
     // --------RESOURCES---------
 renderer.setSize( app_width, app_height );
-var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
-var three_utils = new threejs.Utils();
-manager.events = new ev.EventHolder();
+manager.streamer = streamer;
 function render() {
 manager.canvas_position = getElementPosition(renderer.domElement);
 var now   = new Date().getTime();
@@ -216,25 +220,26 @@ create_my_material2(null, null, null, null, null, null, null, null, null, null, 
 		    camera_1 = 
 		    new THREE.PerspectiveCamera(70, 1.5, 1, 1000, null) ;	
 			manager.active_camera = camera_1;
-camera_1.manager = manager;
+			camera_1.manager = manager;
 	    cube_1_cube = new THREE.CubeGeometry(200, 200, 200, 1, 1, 1, null, null) ;
 	    cube_1 = new THREE.Mesh(cube_1_cube, shader_mat2);
 	    manager.scene.add(cube_1);
 		cube_1.events = new ev.EventHolder();
-cube_1.manager = manager;
+			cube_1.manager = manager;
 	    plane_1_plane = new THREE.PlaneGeometry(200, 200, 1, 1) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, shader_mat1);
 	    manager.scene.add(plane_1);
 		plane_1.events = new ev.EventHolder();
-plane_1.manager = manager;
+			plane_1.manager = manager;
             shader_mat1.uniforms.time.value = 1;
             shader_mat1.uniforms.resolution.value = three_utils.vector2(0,0);
             texture_shader_setter(shader_mat1, 'images/disturb.jpg', shader_mat1.uniforms.texture);
             shader_mat2.uniforms.time.value = 1;
             shader_mat2.uniforms.resolution.value = three_utils.vector2(0,0);
-            manager.events.addListener('update', function(){camera_1.lookAt(scene.position)});
-            camera_1.position = ;
-            cube_1.position = ;
+            manager.events.addListener('update', function(){if(camera_1)camera_1.lookAt(scene.position)});
+            camera_1.position.y = 150;
+            camera_1.position.z = 500;
+            cube_1.position.y = 150;
             application.x_target_rotation = 0;
             application.x_target_rotation_on_mouse_down = 0;
             application.mouse_x = 0;

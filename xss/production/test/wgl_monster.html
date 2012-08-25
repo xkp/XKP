@@ -29,24 +29,30 @@ var g_delta;
 var scene = new THREE.Scene();
 scene.mouse_thru = true;
 var streamer;
+var manager = new threejs.Manager(scene, renderer, null, canvas_position);
+var three_utils = new threejs.Utils();
+manager.events = new ev.EventHolder();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 var clock = new THREE.Clock();
 application.events = new ev.EventHolder();
 		var streamer = new stream.Streamer();	
+		streamer.manager = manager;
 		var ResourceUtils = new stream.ResourceUtils();
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
-            {
+		{
 		id:				"model_1",
 		resource_type:	RESOURCE_JSON_MODEL,
 		src:			"model/monster/monster.js",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var model_1;
 				global_package.events.addListener("loaded", function()
 				{
@@ -63,9 +69,7 @@ application.events = new ev.EventHolder();
 		global_package.load();	
     // --------RESOURCES---------
 renderer.setSize( app_width, app_height );
-var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
-var three_utils = new threejs.Utils();
-manager.events = new ev.EventHolder();
+manager.streamer = streamer;
 function render() {
 manager.canvas_position = getElementPosition(renderer.domElement);
 var now   = new Date().getTime();
@@ -87,43 +91,39 @@ threejs_load_resources(manager, function()
 material_wireframe = new THREE.MeshBasicMaterial({
 color:blanchedalmond,wireframe:true,
 	});
-material_wireframe.manager = manager;
+			material_wireframe.manager = manager;
 		    camera_1 = 
 		    new THREE.PerspectiveCamera(75, 1.5, 1, 10000, null) ;	
 			manager.active_camera = camera_1;
-camera_1.manager = manager;
+			camera_1.manager = manager;
 	    a_ligth = 
 	    new THREE.AmbientLight(2232576) ;
 	    manager.scene.add(a_ligth);
-a_ligth.manager = manager;
+			a_ligth.manager = manager;
 	    d_ligth_1 = 
 	    new THREE.DirectionalLight(16772829, 1, 0, null) ;
 	    manager.scene.add(d_ligth_1);
-d_ligth_1.manager = manager;
-	monster_model = new THREE.Object3D();
-	var monster_model_loader = 
-	generate_model_loader(manager.streamer.get_resource('model_1').type);
-		monster_model_loader.load(
-				manager.streamer.get_resource('model_1').asset , function( geometry )
-			{
-				var monster_model_mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
-				monster_model.add(monster_model_mesh);
-            monster_model.position = ;
-            monster_model.scale = ;
-				manager.scene.add(monster_model);
-			} 		
-	);
-	monster_model.events = new ev.EventHolder();
-monster_model.manager = manager;
+			d_ligth_1.manager = manager;
+		monster_model = clone3jsObject( manager.streamer.get_resource('model_1').data, manager );	
+		manager.scene.add(monster_model);
+		monster_model.events = new ev.EventHolder();			
+			monster_model.manager = manager;
 	    plane_1_plane = new THREE.PlaneGeometry(10000, 10000, 100, 100) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    manager.scene.add(plane_1);
 		plane_1.events = new ev.EventHolder();
-plane_1.manager = manager;
-            manager.events.addListener('update', function(){camera_1.lookAt(monster_model.position)});
-            camera_1.position = ;
-            d_ligth_1.position = ;
-            plane_1.position = ;
+			plane_1.manager = manager;
+            manager.events.addListener('update', function(){if(camera_1)camera_1.lookAt(monster_model.position)});
+            camera_1.position.z = 1000;
+            d_ligth_1.position.y = -70;
+            d_ligth_1.position.z = 100;
+            monster_model.position.x = -110;
+            monster_model.position.y = -350;
+            monster_model.position.z = -350;
+            monster_model.scale.x = 0.5;
+            monster_model.scale.y = 0.5;
+            monster_model.scale.z = 0.5;
+            plane_1.position.y = -500;
             application.mouse_x = null;
             application.mouse_y = null;
 	application.events.addListener("update", function()

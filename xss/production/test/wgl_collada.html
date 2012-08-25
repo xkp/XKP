@@ -29,29 +29,42 @@ var g_delta;
 var scene = new THREE.Scene();
 scene.mouse_thru = true;
 var streamer;
+var manager = new threejs.Manager(scene, renderer, null, canvas_position);
+var three_utils = new threejs.Utils();
+manager.events = new ev.EventHolder();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 var clock = new THREE.Clock();
 application.events = new ev.EventHolder();
 		var streamer = new stream.Streamer();	
+		streamer.manager = manager;
 		var ResourceUtils = new stream.ResourceUtils();
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
-            {
+		{
 		id:				"model_1",
 		resource_type:	RESOURCE_COLLADA_MODEL,
 		src:			"model/monster/monster.dae",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var model_1;
 				global_package.events.addListener("loaded", function()
 				{
 					model_1 = streamer.get_resource("model_1");
 				});
+			var child_ = {};
+			child_.type_ = 'collada_skin';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "model_1")
+					global_package.items[i].children['model_skin'] = child_;
+			}
 		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
@@ -63,9 +76,7 @@ application.events = new ev.EventHolder();
 		global_package.load();	
     // --------RESOURCES---------
 renderer.setSize( app_width, app_height );
-var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
-var three_utils = new threejs.Utils();
-manager.events = new ev.EventHolder();
+manager.streamer = streamer;
 function render() {
 manager.canvas_position = getElementPosition(renderer.domElement);
 var now   = new Date().getTime();
@@ -81,67 +92,61 @@ manager.events.dispatch("update", [g_delta, g_elapsed]);
 				set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var material_wireframe;var camera_1;var a_ligth;var d_ligth_1;var light1;var light2;var light3;var monster_model;var plane_1;
+var material_wireframe;var camera_1;var a_ligth;var d_ligth_1;var d_ligth_2;var light1;var light2;var light3;var monster_model;var plane_1;
 threejs_load_resources(manager, function()
 {
 material_wireframe = new THREE.MeshBasicMaterial({
 color:grey,
 	});
-material_wireframe.manager = manager;
+			material_wireframe.manager = manager;
 		    camera_1 = 
 		    new THREE.PerspectiveCamera(75, 1.5, 1, 10000, null) ;	
 			manager.active_camera = camera_1;
-camera_1.manager = manager;
+			camera_1.manager = manager;
 	    a_ligth = 
 	    new THREE.AmbientLight(2232576) ;
 	    manager.scene.add(a_ligth);
-a_ligth.manager = manager;
+			a_ligth.manager = manager;
 	    d_ligth_1 = 
-	    new THREE.DirectionalLight(16772829, 1, 0, null) ;
+	    new THREE.DirectionalLight(ivory, 2, 0, null) ;
 	    manager.scene.add(d_ligth_1);
-d_ligth_1.manager = manager;
+			d_ligth_1.manager = manager;
+	    d_ligth_2 = 
+	    new THREE.DirectionalLight(skyblue, 2, 0, null) ;
+	    manager.scene.add(d_ligth_2);
+			d_ligth_2.manager = manager;
 	    light1 = 
 	    new THREE.PointLight(Yellow, 4, 0) ;
 	    manager.scene.add(light1);
-light1.manager = manager;
+			light1.manager = manager;
 	    light2 = 
 	    new THREE.PointLight(Red, 4, 0) ;
 	    manager.scene.add(light2);
-light2.manager = manager;
+			light2.manager = manager;
 	    light3 = 
 	    new THREE.PointLight(Green, 4, 0) ;
 	    manager.scene.add(light3);
-light3.manager = manager;
-	monster_model = new THREE.Object3D();
-	var monster_model_loader = 
-	generate_model_loader(manager.streamer.get_resource('model_1').type);
-	monster_model_loader.options.convertUpAxis = true;	
-		monster_model_loader.load(
-				manager.streamer.get_resource('model_1').asset , function colladaReady( collada )
-			{
-				monster_model = collada.scene;
-				monster_model.skin = collada.skins[0];				
-            monster_model.position.x = -350;
-            monster_model.position.y = -350;
-            monster_model.position.z = -350;
-            monster_model.scale.x = 0.5;
-            monster_model.scale.y = 0.5;
-            monster_model.scale.z = 0.5;
-				manager.scene.add(monster_model);
-			} 		
-	);
-	monster_model.events = new ev.EventHolder();
-monster_model.manager = manager;
+			light3.manager = manager;
+		monster_model = clone3jsObject( manager.streamer.get_resource('model_1').data, manager );	
+		manager.scene.add(monster_model);
+		monster_model.events = new ev.EventHolder();			
+			monster_model.manager = manager;
 	    plane_1_plane = new THREE.PlaneGeometry(10000, 10000, 100, 100) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    manager.scene.add(plane_1);
 		plane_1.events = new ev.EventHolder();
-plane_1.manager = manager;
+			plane_1.manager = manager;
             set_material_alpha(material_wireframe, 20);
-            manager.events.addListener('update', function(){camera_1.lookAt(scene.position)});
+            manager.events.addListener('update', function(){if(camera_1)camera_1.lookAt(scene.position)});
             camera_1.position.z = 1000;
-            d_ligth_1.position.y = -70;
-            d_ligth_1.position.z = 100;
+            d_ligth_1.position.y = -3000;
+            d_ligth_1.position.z = 3000;
+            d_ligth_2.position.y = 3000;
+            d_ligth_2.position.z = 3000;
+            monster_model.position.x = -350;
+            monster_model.position.y = -350;
+            monster_model.position.z = -350;
+            set_rotation_x(monster_model.rotation, -90);
             plane_1.position.y = -500;
             application.mouse_x = null;
             application.mouse_y = null;
@@ -164,13 +169,13 @@ if (application.t > 30)
 {
 application.t = 0;
 }
-if (monster_model.skin)
+if (monster_model.model_skin)
 {
-for(var i = 0; i < monster_model.skin.morphTargetInfluences.length; i++)
+for(var i = 0; i < monster_model.model_skin.morphTargetInfluences.length; i++)
 {
-monster_model.skin.morphTargetInfluences[ i ] = 0;
-		}
-		monster_model.skin.morphTargetInfluences[ Math.floor( application.t ) ] = 1;
+setMorphTargetInfluences(monster_model.model_skin, i, 0);
+}
+setMorphTargetInfluences(monster_model.model_skin, Math.floor(application.t), 1);
 application.t = application.t + 0.5;
 }
 	}
