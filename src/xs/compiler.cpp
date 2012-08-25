@@ -1729,6 +1729,135 @@ struct xs_ : visitor_base<xs_>
     xs_container& output_;
   };
 
+// validate parse's errors
+const unsigned int head_parse_errors_count = 7;
+const str parser_errors_head[head_parse_errors_count] = 
+  {
+    "",
+    "Lexical error", 
+    "Tokenizer error", 
+    "Syntax error", 
+    "Comment error", 
+    "Out of memory", 
+    ""
+  };
+
+const unsigned int descrip_parse_errors_count = 7;
+const str parser_errors_descrip[descrip_parse_errors_count] = 
+  {
+    "",
+    "The grammar does not specify what to do with '%S'.",
+    "The tokenizer returned a non-terminal.",
+    "Encountered '%S', but expected %S.",
+    "The comment has no end, it was started but not finished.",
+    "",
+    ""
+  };
+
+struct perrors_validate
+  {
+    perrors_validate(int result, TokenStruct *root) : 
+      parse_result(result),
+      descrip_ecode(result),
+      head_ecode(result),
+      tokens(root),
+      column(0),
+      line(0)
+      {
+        // do nothing
+        if (parse_result == PARSEACCEPT) return;
+
+        // trap another use cases
+        assert(head_ecode < head_parse_errors_count);
+
+        process_error();
+      }
+
+    void process_error()
+      {
+        // why is NULL?
+        assert(tokens != NULL);
+
+        int idx_lalr  = tokens->Symbol;
+        line          = tokens->Line;
+        column        = tokens->Column;
+        
+        if (tokens->Data != NULL)
+          token_data = wide2str(std::wstring(tokens->Data, 1024));
+
+        if (parse_result == PARSESYNTAXERROR)
+          {
+            assert(idx_lalr < Grammar.LalrStateCount);
+
+            LalrStateStruct &refLalrState = Grammar.LalrArray[idx_lalr];
+            for(int i = 0; i < refLalrState.ActionCount; ++i)
+              {
+                int symbol = refLalrState.Actions[i].Entry;
+                if (Grammar.SymbolArray[symbol].Kind == SYMBOLTERMINAL)
+                  {
+                    str token = wide2str(Grammar.SymbolArray[symbol].Name);
+                    expected_tokens.push_back(token);
+                  }
+              }
+          }
+      }
+
+    str head_error()
+      {
+        return parser_errors_head[head_ecode];
+      }
+
+    str descrip_error()
+      {
+        std::stringstream ss;
+        for (size_t i = 0; i < expected_tokens.size(); ++i)
+          {
+            if (i > 0) 
+              {
+                ss << ", ";
+                if (i >= expected_tokens.size() - 2) ss << "or ";
+              }
+            ss << "'" << expected_tokens[i] << "'";
+          }
+
+        str expected = ss.str();
+        const char *description = parser_errors_descrip[descrip_ecode].c_str();
+
+        char buffer[1024];
+        sprintf(buffer, description, token_data.c_str(), expected.c_str());
+
+        return str(buffer);
+      }
+
+    str error()
+      {
+        if (head_ecode == 0) 
+          return str();
+
+        std::stringstream ss;
+
+        ss << head_error() << 
+          " at line " << line << 
+          " column " << column << 
+          ". \n";
+
+        ss << descrip_error() << "\n";
+
+        return ss.str();
+      }
+
+    std::vector<str>  expected_tokens;
+    int               head_ecode;
+    int               descrip_ecode;
+    str               token_data;
+    unsigned int      line;
+    unsigned int      column;
+
+  private:
+    int               parse_result;
+    TokenStruct       *tokens;
+  };
+
 //xs_compiler
 xs_compiler::xs_compiler()
   {
@@ -1781,6 +1910,12 @@ bool xs_compiler::compile_code(const str& code_str, code& result)
       }
     else
       {
+        perrors_validate p_error(parse_result, root);
+        str res_error = p_error.error();
+
+        //cleanup
+        DeleteTokens(root);
+
         param_list error;
         error.add("id", SCompilerError);
         error.add("desc", SErrorCompiling);
@@ -1816,8 +1951,11 @@ bool xs_compiler::compile_xs(const str& code_str, xs_container& result)
 			{
         success = true;
 			}
-		else	
+		else
 			error = true;
+
+    perrors_validate p_error(parse_result, root);
+    str res_error = p_error.error();
 
     //cleanup
     DeleteTokens(root);
