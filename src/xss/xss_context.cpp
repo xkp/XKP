@@ -1678,8 +1678,24 @@ bool xss_type::resolve(const str& name, schema_item& result)
     return xss_object::resolve(name, result);
   }
 
-XSSOperator xss_type::get_operator(operator_type op, XSSArguments args)
+XSSOperator xss_type::get_operator(operator_type opid, XSSArguments args)
   {
+    std::vector<XSSOperator>::iterator it = operators_.begin();
+    std::vector<XSSOperator>::iterator nd = operators_.end();
+
+    for(; it != nd; it++)
+      {
+        XSSOperator op = *it;
+        if (op->opid() != opid)
+          continue;
+
+        if (!op->match(args))
+          continue;
+
+        return op;
+      }
+
+    return XSSOperator();
   }
 
 void xss_type::set_super(XSSType super)

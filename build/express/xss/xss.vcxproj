@@ -94,6 +94,7 @@
     <ClInclude Include="..\..\..\include\types.h" />
     <ClInclude Include="..\..\..\include\xs.h" />
     <ClInclude Include="..\..\..\include\xss\brace_parseer.h" />
+    <ClInclude Include="..\..\..\include\xss\data_reader.h" />
     <ClInclude Include="..\..\..\include\xss\dsl\ajax.h" />
     <ClInclude Include="..\..\..\include\xss\dsl\ga_parser.h" />
     <ClInclude Include="..\..\..\include\xss\dsl\generic_assign.h" />
@@ -111,8 +112,10 @@
     <ClInclude Include="..\..\..\include\xss\lang\debug.h" />
     <ClInclude Include="..\..\..\include\xss\lang\js.h" />
     <ClInclude Include="..\..\..\include\xss\lang\waxjs.h" />
+    <ClInclude Include="..\..\..\include\xss\object_model.h" />
     <ClInclude Include="..\..\..\include\xss\object_reader.h" />
     <ClInclude Include="..\..\..\include\xss\utils.h" />
+    <ClInclude Include="..\..\..\include\xss\xml_data_reader.h" />
     <ClInclude Include="..\..\..\include\xss\xss_compiler.h" />
     <ClInclude Include="..\..\..\include\xss\xss_context.h" />
     <ClInclude Include="..\..\..\include\xss\xss_error.h" />
@@ -139,6 +142,7 @@
     <ClCompile Include="..\..\..\src\dynamic_objects.cpp" />
     <ClCompile Include="..\..\..\src\xs.cpp" />
     <ClCompile Include="..\..\..\src\xss\brace_parser.cpp" />
+    <ClCompile Include="..\..\..\src\xss\data_reader.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl\ajax.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl\ga_parser.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl\generic_assign.cpp" />
@@ -157,7 +161,9 @@
     <ClCompile Include="..\..\..\src\xss\lang\java.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang\js.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang\waxjs.cpp" />
+    <ClCompile Include="..\..\..\src\xss\object_model.cpp" />
     <ClCompile Include="..\..\..\src\xss\object_reader.cpp" />
+    <ClCompile Include="..\..\..\src\xss\xml_data_reader.cpp" />
     <ClCompile Include="..\..\..\src\xss\xss_compiler.cpp" />
     <ClCompile Include="..\..\..\src\xss\xss_context.cpp" />
     <ClCompile Include="..\..\..\src\xss\xss_expression.cpp" />

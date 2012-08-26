@@ -303,6 +303,7 @@ class xss_type : public xss_object
       bool        is_unresolved_;
       XSSContext  ctx_;
     public:
+      //td: fix all these
       XSSType       super_;
       Language      lang_;
       DynamicArray  ctor_args_; //td: constructors
@@ -310,6 +311,9 @@ class xss_type : public xss_object
       DynamicArray  local_instances_;
       DynamicArray  foreign_instances_;
       XSSObjectList dependencies_;
+      
+      //0.9.5
+      std::vector<XSSOperator> operators_;
   };
 
 class xss_dsl : public xss_object
@@ -556,9 +560,10 @@ class xss_operator
       xss_operator(operator_type op, XSSType result, XSSType left, XSSType right);
       xss_operator(operator_type op, XSSType result, XSSSignature signature);
     public:
-      XSSType type();
-      bool    match(XSSArguments args);
-      bool    match(XSSType type);
+      XSSType       type();
+      operator_type opid();
+      bool          match(XSSArguments args);
+      bool          match(XSSType type);
     private:
       operator_type op_;
       XSSType       result_;

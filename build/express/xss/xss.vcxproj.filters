@@ -192,6 +192,15 @@
     <ClInclude Include="..\..\..\include\xss\xss_expression.h">
       <Filter>Header Files\xss</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\data_reader.h">
+      <Filter>Header Files\xss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\xml_data_reader.h">
+      <Filter>Header Files\xss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\object_model.h">
+      <Filter>Header Files\xss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -324,6 +333,15 @@
       <Filter>Source Files\xss\dsl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\xss\xss_expression.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\xml_data_reader.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\data_reader.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\object_model.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
   </ItemGroup>

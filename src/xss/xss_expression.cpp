@@ -378,6 +378,16 @@ xss_parameter& xss_arguments::get(size_t idx)
     return args_[idx];
   }
 
+xss_parameters::iterator xss_arguments::begin()
+  {
+    return args_.begin();
+  }
+
+xss_parameters::iterator xss_arguments::end()
+  {
+    return args_.end();
+  }
+
 //value_operation
 value_operation::value_operation(VALUE_OPERATION op, const str& identifier):
   op_(op),
@@ -683,6 +693,11 @@ xss_operator::xss_operator(operator_type op, XSSType result, XSSSignature signat
 XSSType xss_operator::type()
   {
     return result_;
+  }
+
+operator_type xss_operator::opid()
+  {
+    return op_;
   }
 
 bool xss_operator::match(XSSArguments args)
