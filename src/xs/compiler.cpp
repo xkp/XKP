@@ -1746,9 +1746,9 @@ const unsigned int descrip_parse_errors_count = 7;
 const str parser_errors_descrip[descrip_parse_errors_count] = 
   {
     "",
-    "The grammar does not specify what to do with '%S'.",
+    "The grammar does not specify what to do with '%s'.",
     "The tokenizer returned a non-terminal.",
-    "Encountered '%S', but expected %S.",
+    "Encountered '%s', but expected %s.",
     "The comment has no end, it was started but not finished.",
     "",
     ""
@@ -1823,7 +1823,7 @@ struct perrors_validate
         str expected = ss.str();
         const char *description = parser_errors_descrip[descrip_ecode].c_str();
 
-        char buffer[1024];
+        char buffer[2048];
         sprintf(buffer, description, token_data.c_str(), expected.c_str());
 
         return str(buffer);
@@ -1873,9 +1873,10 @@ xs_compiler::xs_compiler(std::vector<str>& dsls):
 bool xs_compiler::compile_expression(const str& expr, expression& result)
   {
     TokenStruct* root;
+    TokenStackStruct* token_stack;
     std::wstring buf          = str2wide(expr);
     bool         success      = false;
-    int          parse_result = Parse((wchar_t*)buf.c_str(), buf.size(), 1, 0, &root);
+    int          parse_result = Parse((wchar_t*)buf.c_str(), buf.size(), 1, 0, &root, &token_stack);
 
     if (parse_result == PARSEACCEPT)
       {
@@ -1887,6 +1888,7 @@ bool xs_compiler::compile_expression(const str& expr, expression& result)
 
     //cleanup
     DeleteTokens(root);
+    DeleteStack(token_stack);
     free(root);
 
     return success;
@@ -1898,9 +1900,10 @@ bool xs_compiler::compile_code(const str& code_str, code& result)
     str to_parse = process_dsl(code_str, v.dsl_text);
 
     TokenStruct* root;
+    TokenStackStruct* token_stack;
     std::wstring buf          = str2wide("{ " + to_parse + " }");
     bool         success      = false;
-    int          parse_result = Parse((wchar_t*)buf.c_str(), buf.size(), 1, 0, &root);
+    int          parse_result = Parse((wchar_t*)buf.c_str(), buf.size(), 1, 0, &root, &token_stack);
 
     if (parse_result == PARSEACCEPT)
       {
@@ -1915,6 +1918,7 @@ bool xs_compiler::compile_code(const str& code_str, code& result)
 
         //cleanup
         DeleteTokens(root);
+        DeleteStack(token_stack);
 
         param_list error;
         error.add("id", SCompilerError);
@@ -1936,9 +1940,10 @@ bool xs_compiler::compile_xs(const str& code_str, xs_container& result)
     str to_parse = process_dsl(code_str, v.dsl_text);
 
     TokenStruct* root;
+    TokenStackStruct* token_stack;
     std::wstring buf          = str2wide(to_parse);
     bool         success      = false;
-    int          parse_result = Parse((wchar_t*)buf.c_str(), buf.size(), 1, 0, &root);
+    int          parse_result = Parse((wchar_t*)buf.c_str(), buf.size(), 1, 0, &root, &token_stack);
 
     bool error = false;
     if (parse_result == PARSEACCEPT)
@@ -1959,6 +1964,7 @@ bool xs_compiler::compile_xs(const str& code_str, xs_container& result)
 
     //cleanup
     DeleteTokens(root);
+    DeleteStack(token_stack);
 
     if (error)
       {
