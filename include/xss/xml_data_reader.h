@@ -11,12 +11,12 @@ class xml_data_reader : public IDataReader
     public:
       bool load(const str& xml);
     public:
-      virtual entity_list& root();
+      virtual entity_list root();
     private:
       entity_list root_;
 
       bool parse_xml(const str& xml, TiXmlDocument& doc);
-      void read_node(TiXmlElement* node, data_entity& entity);
+      void read_node(TiXmlElement* node, DataEntity entity);
   };
 
 }

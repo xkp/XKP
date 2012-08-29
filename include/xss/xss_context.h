@@ -217,9 +217,14 @@ class xss_object : public editable_object<xss_object>,
       DynamicArray           get_event_code(const str& event_name);
       DynamicArray           get_attributes();
 		  bool                   is_injected(const str& name);
-      void                   add_method(const str& event_name, XSSMethod m);
+      void                   add_method(const str& name, XSSMethod m);
 		  bool                   empty();
       void                   propertize();
+    public:
+      //0.9.5
+      void insert_method(XSSMethod mthd);
+      void insert_event(XSSEvent ev);
+      void insert_property(XSSProperty prop);
     public:
       //children management
 			void add_child(XSSObject obj);
@@ -277,6 +282,10 @@ class xss_type : public xss_object
       XSSContext    context();
       void          set_context(XSSContext ctx);
       XSSObjectList get_dependencies();
+
+      //0.9.5
+      void add_constructor(XSSSignature ctor);
+      void import(XSSType import);
     public:
       void as_enum();
       void as_array(XSSType type);
@@ -367,6 +376,10 @@ struct ILanguage
     virtual str     instantiate(XSSType type, XSSObject instance, DynamicArray rt, param_list& args)      = 0;
     virtual str     render_ctor_args(XSSType type, XSSObject instance, DynamicArray rt, param_list& args) = 0;
     virtual bool    custom_operator(XSSType lt, XSSType rt, str l, str r, operator_type op, str& res)     = 0;
+    
+    //0.9.5
+    virtual XSSContext create_context() = 0;
+
   };
 
 //code scope, this should not be public
@@ -436,13 +449,15 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
     public:
       XSSType       get_type(const str& type);
       XSSType       get_type(schema* type);
+      XSSType       get_type(const str& type, const str& ns);
       XSSType       get_array_type(XSSType type);
       XSSType       add_type(const str& id, XSSType type, bool override_parent = false);
+      void          add_type(XSSType type, const str& ns);
       XSSObject     get_this();
       void          set_this(XSSObject this_);
       Language      get_language();
       void          set_language(Language lang);
-      code_context  get_compile_context();
+      code_context  get_compile_context(); //td: !!! 0.9.5
       fs::path      path();
       void          register_dsl(const str& id, DslLinker dsl);
       void          register_xss_dsl(const str& id, XSSDSL dsl);
@@ -548,6 +563,7 @@ class xss_signature
   {
     public:
       bool match(XSSArguments args);
+      void add_argument(str name, XSSType type, XSSExpression default_value);
     private:
       signature_items items_;
   };

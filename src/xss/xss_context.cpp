@@ -183,6 +183,16 @@ XSSType xss_context::add_type(const str& id, XSSType type, bool override_parent)
     return type;
   }
 
+void xss_context::add_type(XSSType type, const str& ns)
+  {
+    XSSType curr_type = get_type(type->id());
+    if (!curr_type)
+      types_.insert(type_list_pair(type->id(), type));
+
+    if (!ns.empty())
+      assert(false); //name spaces
+  }
+
 XSSObject xss_context::get_this()
   {
     if (this_)
@@ -1384,6 +1394,24 @@ void xss_object::propertize()
             add_property_(myprop);
           }
       }
+  }
+
+void xss_object::insert_method(XSSMethod mthd)
+  {
+    //td: !!! check dups
+    methods_->push_back(mthd);
+  }
+
+void xss_object::insert_event(XSSEvent ev)
+  {
+    //td: !!! check dups
+    events_->push_back(ev);
+  }
+
+void xss_object::insert_property(XSSProperty prop)
+  {
+    //td: !!! check dups
+    properties_->push_back(prop);
   }
 
 void xss_object::add_child(XSSObject obj)

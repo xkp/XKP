@@ -735,4 +735,14 @@ XSSExpression xss_expression_utils::compile_expression(expression& expr)
     return eb.get();    
   }  
 
+XSSExpression xss_expression_utils::compile_expression(const str& expr)
+  {
+    xs_compiler cmp;
+    expression  res; 
+    
+    if (!cmp.compile_expression(expr, res) )
+      return XSSExpression(); 
+
+    return compile_expression(res);
+  }
 

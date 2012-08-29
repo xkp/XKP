@@ -3276,8 +3276,6 @@ Language xss_compiler::get_language(const str& name)
       return Language(new js_lang());
     else if (name == "java")
       return Language(new java_lang());
-    else if (name == "debug")
-      return Language(new debug_language);
     else if (name == "waxjs")
       return Language(new waxjs_lang);
 

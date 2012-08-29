@@ -189,8 +189,10 @@ struct base_lang : public ILanguage
     virtual str     render_ctor_args(XSSType type, XSSObject instance, DynamicArray rt, param_list& args);
     virtual bool    custom_operator(XSSType lt, XSSType rt, str l, str r, operator_type op, str& res);
 
-    protected:
-      void compile_property(XSSProperty prop, XSSContext ctx);
+    void compile_property(XSSProperty prop, XSSContext ctx);
+    
+    //td: 0.9.5
+    XSSContext create_context() {return XSSContext();}
   };
 
 //interface glue
