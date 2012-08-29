@@ -1,9 +1,0 @@
-D:\Pabli\Trabajo\Excess\Projects\XKP\build\vs2010pro\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
-D:\Pabli\Trabajo\Excess\Projects\XKP\build\vs2010pro\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
-D:\Pabli\Trabajo\Excess\Projects\XKP\build\vs2010pro\WindowsFormsApplication1\WindowsFormsApplication1\obj\x86\Debug\ResolveAssemblyReference.cache
-D:\Pabli\Trabajo\Excess\Projects\XKP\build\vs2010pro\WindowsFormsApplication1\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.Form1.resources
-D:\Pabli\Trabajo\Excess\Projects\XKP\build\vs2010pro\WindowsFormsApplication1\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.Properties.Resources.resources
-D:\Pabli\Trabajo\Excess\Projects\XKP\build\vs2010pro\WindowsFormsApplication1\WindowsFormsApplication1\obj\x86\Debug\GenerateResource.read.1.tlog
-D:\Pabli\Trabajo\Excess\Projects\XKP\build\vs2010pro\WindowsFormsApplication1\WindowsFormsApplication1\obj\x86\Debug\GenerateResource.write.1.tlog
-D:\Pabli\Trabajo\Excess\Projects\XKP\build\vs2010pro\WindowsFormsApplication1\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.exe
-D:\Pabli\Trabajo\Excess\Projects\XKP\build\vs2010pro\WindowsFormsApplication1\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.pdb
