@@ -174,12 +174,13 @@ application.events.dispatch("switch_cameras", []);
 		img_reflect.events = new ev.EventHolder();
 				if(img_reflect instanceof THREE.Object3D)
 					my_plane.add(img_reflect);
-            img_plane.rotation = ;
+            set_rotation_x(img_plane.rotation, 90);
             img_reflect.doubleSided = true;
             set_object_alpha(img_reflect, 40);
-            img_reflect.scale = ;
-            img_reflect.position = ;
-            img_reflect.rotation = ;
+            img_reflect.scale.y = 0.800000012;
+            img_reflect.position.y = -140;
+            set_rotation_x(img_reflect.rotation, 90);
+            set_rotation_y(img_reflect.rotation, 180);
 	my_plane.set_image = function(value) 
 	{
 		set_transform_image(my_plane, value);
@@ -216,7 +217,9 @@ camera_1.manager = manager;
             lbl1.set_y(100);
             lbl1.set_color("Ivory");
             lbl1.text("Put the mouse over an image to zoom it");
-            camera_1.position = ;
+            camera_1.position.x = 100;
+            camera_1.position.y = 50;
+            camera_1.position.z = 1200;
             application.angle = null;
             application.start = 0;
             application.speed = 0.0199999996;
