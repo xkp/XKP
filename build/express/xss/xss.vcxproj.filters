@@ -201,6 +201,9 @@
     <ClInclude Include="..\..\..\include\xss\object_model.h">
       <Filter>Header Files\xss</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\xss_code.h">
+      <Filter>Header Files\xss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -342,6 +345,9 @@
       <Filter>Source Files\xss</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\xss\object_model.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\xss_code.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
   </ItemGroup>

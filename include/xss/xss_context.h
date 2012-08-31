@@ -23,6 +23,9 @@ class   xss_property;
 class   xss_event;
 class   xss_method;
 class   xss_dsl;
+struct  inline_renderer;
+class   xss_statement;
+class   xss_code;
 
 //interfaces
 struct ILanguage;
@@ -48,6 +51,9 @@ typedef reference<ILanguage>		        Language;
 typedef reference<ICodeRenderer>	      CodeRenderer;
 typedef reference<IExpressionRenderer>  ExpressionRenderer;
 typedef reference<IArgumentRenderer>    ArgumentRenderer;
+typedef reference<inline_renderer>      InlineRenderer;
+typedef reference<xss_statement>        XSSStatement;
+typedef reference<xss_code>             XSSCode;
 
 //enums
 enum MARKER_SOURCE
@@ -188,6 +194,9 @@ class xss_object : public editable_object<xss_object>,
 			virtual void      set_type(XSSType type);
 			virtual XSSObject	idiom();
 			virtual void      set_idiom(XSSObject id);
+
+      //0.9.5
+      void add_event_impl(XSSEvent ev, XSSCode code);
     public:
       struct query_info
         {
@@ -322,7 +331,8 @@ class xss_type : public xss_object
       XSSObjectList dependencies_;
       
       //0.9.5
-      std::vector<XSSOperator> operators_;
+      std::vector<XSSOperator>  operators_;
+      std::vector<XSSSignature> constructors_;
   };
 
 class xss_dsl : public xss_object
@@ -380,6 +390,11 @@ struct ILanguage
     //0.9.5
     virtual XSSContext create_context() = 0;
 
+  };
+
+struct ICodeCallback
+  {
+    virtual void notify(XSSCode code) = 0;
   };
 
 //code scope, this should not be public
@@ -516,6 +531,25 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
 //they are also vm friendly, unlike the low level xs's ast.
 typedef std::vector<value_operation> value_operations;
 
+//represents a position inside a code file
+struct code_pos
+  {
+    code_pos(int l, int c):
+      line(l),
+      column(c)
+      {
+      }
+
+    code_pos(const code_pos& other):
+      line(other.line),
+      column(other.column)
+      {
+      }
+
+    int line;
+    int column;
+  };
+
 //expressions
 class xss_value
   {
@@ -546,6 +580,145 @@ class xss_expression
       XSSExpression arg3_;
   };
 
+enum STATEMENT_TYPE
+  {
+    STATEMENT_IF,
+    STATEMENT_VAR,
+    STATEMENT_FOR,
+    STATEMENT_FOREACH,
+    STATEMENT_WHILE,
+    STATEMENT_SWITCH,
+    STATEMENT_TRY,
+    STATEMENT_BREAK,
+    STATEMENT_CONTINUE,
+    STATEMENT_RETURN,
+    STATEMENT_EXPRESSION,
+    STATEMENT_THROW,
+  };
+
+//statement interfaces
+struct IStatementIf
+  {
+    virtual XSSExpression expr()      = 0;
+    virtual XSSCode       if_code()   = 0;
+    virtual XSSCode       else_code() = 0;
+  };
+
+struct IStatementVar
+  {
+    virtual str           id()        = 0;
+    virtual str           type_name() = 0;
+    virtual XSSType       type()      = 0;
+    virtual XSSExpression value()     = 0;
+  };
+
+struct IStatementFor
+  {
+    virtual str           id()         = 0;
+    virtual str           type_name()  = 0;
+    virtual XSSType       type()       = 0;
+    virtual XSSExpression init_value() = 0;
+    virtual XSSExpression init_expr()  = 0;
+    virtual XSSExpression cond_expr()  = 0;
+    virtual XSSExpression iter_expr()  = 0;
+    virtual XSSCode       for_code()   = 0;
+  };
+
+struct IStatementForEach
+  {
+    virtual str           id()        = 0;
+    virtual str           type_name() = 0;
+    virtual XSSType       type()      = 0;
+    virtual XSSExpression iter_expr() = 0;
+    virtual XSSCode       for_code()  = 0;
+  };
+
+struct IStatementWhile
+  {
+    virtual XSSExpression expr() = 0;
+    virtual XSSCode       code() = 0;
+  };
+
+struct statement_switch_section
+  {
+    statement_switch_section(XSSCode _case_code):
+      case_code(_case_code)
+      {
+      }
+
+    std::vector<XSSExpression> cases;
+    XSSCode                    case_code;
+  };
+
+typedef std::vector<statement_switch_section> switch_sections;
+
+struct IStatementSwitch
+  {
+    virtual XSSExpression    expr()         = 0;
+    virtual XSSCode          default_code() = 0;
+    virtual switch_sections& sections()     = 0;
+  };
+
+struct statement_catch_section
+  {
+    statement_catch_section(const str& _id, const str& _type, XSSCode _catch_code):
+      type(_type),
+      id(_id),
+      catch_code(_catch_code)
+      {
+      }
+    
+    str     type;
+    str     id;
+    XSSCode catch_code;
+  };
+
+typedef std::vector<statement_catch_section> catch_sections;
+
+struct IStatementTry
+  {
+    virtual XSSCode         try_code()     = 0;
+    virtual XSSCode         finally_code() = 0;
+    virtual catch_sections& sections()     = 0;
+  };
+
+struct IStatementExpression
+  {
+    virtual XSSExpression expr() = 0;
+  };
+
+//the actual statement
+class xss_statement
+  {
+    public:
+      xss_statement(STATEMENT_TYPE id):
+        id_(id)
+        {
+        }
+
+    public:
+      template<typename T> T* cast()
+        {
+          return variant_cast<T*>(this, null);
+        }
+    protected:
+      STATEMENT_TYPE id_;
+      
+      //td: !!!
+      //code_pos       start;
+      //code_pos       end;
+  };
+
+typedef std::vector<XSSStatement> statement_list;
+
+class xss_code
+  {
+    public:
+      void add(XSSStatement st);
+    private:
+      statement_list statements_;
+  };
+
 struct signature_item
   {
     signature_item();
@@ -563,6 +736,8 @@ class xss_signature
   {
     public:
       bool match(XSSArguments args);
+      bool match_signature(XSSSignature sig);
+
       void add_argument(str name, XSSType type, XSSExpression default_value);
     private:
       signature_items items_;
@@ -586,6 +761,12 @@ class xss_operator
       XSSType       left_;
       XSSType       right_;
       XSSSignature  signature_; 
+  };
+
+//rendering helper
+struct inline_renderer
+  {
+    inline_renderer(str text, bool global);
   };
 
 //constructs
@@ -616,6 +797,19 @@ class xss_property : public xss_object
       //str     render_get();
       //str	    render_set(const str& value);
       variant eval(XSSContext ctx);
+      
+      //0.9.5
+      void expr_value(XSSExpression value);
+      void set_getter(InlineRenderer getter);
+      void set_setter(InlineRenderer setter);
+      void code_getter(XSSCode getter);
+      void code_setter(XSSCode setter);
+      void as_const();
+    private:
+      //0.9.5
+      XSSExpression  expr_value_;
+      InlineRenderer getter_;
+      InlineRenderer setter_;
   };
 
 class xss_event : public xss_object
@@ -631,6 +825,14 @@ class xss_event : public xss_object
 			variant			 args;
 
 			bool implemented();
+
+      //0.9.5
+      void         set_dispatcher(InlineRenderer dispatcher);
+      void         set_signature(XSSSignature sig);
+      XSSSignature signature();
+    private:
+      InlineRenderer dispatcher_;
+      XSSSignature   signature_;
   };
 
 class xss_method : public xss_object
@@ -650,6 +852,16 @@ class xss_method : public xss_object
 
 			variant args_;
 			variant code_;
+
+      //0.9.5
+      void return_type(XSSType type);
+      void set_caller(InlineRenderer caller);
+      void set_signature(XSSSignature sig);
+      void set_code(XSSCode code);
+    private:
+      XSSType        return_type_;
+      InlineRenderer caller_;
+      XSSSignature   signature_;
   };
 
 //utils

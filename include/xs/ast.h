@@ -11,6 +11,24 @@
 
 namespace xkp
 {
+  struct file_position
+    {
+      file_position(int l, int c):
+        line(l),
+        column(c)
+        {
+        }
+
+      file_position(const file_position& other):
+        line(other.line),
+        column(other.column)
+        {
+        }
+
+      int line;
+      int column;
+    };
+
   struct expression_visitor
     {
       virtual void push(variant operand, bool top)																					= 0;
@@ -25,7 +43,19 @@ namespace xkp
       str value;
     };
 
-  struct expression
+  struct ast_base
+    {
+      ast_base(file_position& _begin, file_position& _end):
+        begin(_begin),
+        end(_end)
+        {
+        }
+
+      file_position begin;
+      file_position end;
+    };
+
+  struct expression : ast_base
     {
       public:
         void    push_operator(operator_type op);
@@ -98,7 +128,7 @@ struct expression_splitter : expression_visitor
   //store variants for each statement and translate on visit.
   struct code_visitor;
   
-  struct code
+  struct code : ast_base
     {
       public:
         void     add_statement(variant st);
@@ -115,14 +145,14 @@ struct expression_splitter : expression_visitor
     };
     
   //statements
-  struct stmt_if
+  struct stmt_if : ast_base
     {
       expression expr;
       code       if_code;
       code       else_code;
     };
     
-  struct stmt_variable
+  struct stmt_variable : ast_base
     {
       str        type;
       str        id;
@@ -131,7 +161,7 @@ struct expression_splitter : expression_visitor
       bool empty() {return type.empty();}
     };
 
-  struct stmt_for
+  struct stmt_for : ast_base
     {
       stmt_variable init_variable;
       expression    init_expr;
@@ -140,7 +170,7 @@ struct expression_splitter : expression_visitor
       code          for_code;
     };
     
-  struct stmt_iter_for
+  struct stmt_iter_for : ast_base
     {
       xs_type    type;
       str        id;
@@ -148,65 +178,65 @@ struct expression_splitter : expression_visitor
       code       for_code;
     };
   
-  struct stmt_while
+  struct stmt_while : ast_base
     {
       expression expr;
       code       while_code;
     };
 
-  struct stmt_dispatch
+  struct stmt_dispatch : ast_base
     {
       std::vector<str> target;
       expression       args;
       int              arg_count;
     };
 
-  struct stmt_break     {};
-  struct stmt_continue  {};
+  struct stmt_break : ast_base     {};
+  struct stmt_continue : ast_base  {};
 
-  struct stmt_return
+  struct stmt_return : ast_base
     {
       expression expr;
     };
 
-  struct stmt_expression
+  struct stmt_expression : ast_base
     {
       expression expr;
     };
     
-  struct switch_section
+  struct switch_section : ast_base
     {
       std::vector<expression> cases;
       code                    case_code;
     };
 
-  struct stmt_switch
+  struct stmt_switch : ast_base
     {
       expression                  expr;
       std::vector<switch_section> sections;
       code                        default_code;
     };
 
-  struct catch_
+  struct catch_ : ast_base
     {
       xs_type type;
       str     id;
       code    catch_code;
     };
 
-  struct stmt_try
+  struct stmt_try : ast_base
     {
       code                try_code;
       std::vector<catch_> catches;
       code                finally_code;
     };
 
-  struct stmt_throw
+  struct stmt_throw : ast_base
     {
       expression expr;
     };
 
-  struct dsl
+  struct dsl : ast_base
     {
       str        name;
       str        id;
@@ -253,7 +283,7 @@ struct expression_splitter : expression_visitor
       adj_delegate  = 4,
     };
     
-  struct xs_property
+  struct xs_property : ast_base
     {
       xs_property() : adjetives(0) {}
       
@@ -268,7 +298,7 @@ struct expression_splitter : expression_visitor
   typedef std::vector<xs_property>    xs_property_list;     
   typedef reference<xs_property_list> xs_property_list_ref; 
     
-  struct xs_method
+  struct xs_method : ast_base
     {
       xs_method() : adjetives(0) {}
 
@@ -279,26 +309,26 @@ struct expression_splitter : expression_visitor
       int             adjetives; 
     };
     
-  struct xs_event
+  struct xs_event : ast_base
     {
       std::vector<str> name;
       param_list_decl  args;
       code             cde; 
     };
 
-  struct xs_event_decl
+  struct xs_event_decl : ast_base
     {
       str             name;
       param_list_decl args;
     };
 
-  struct xs_implement_behaviour
+  struct xs_implement_behaviour : ast_base
     {
       str  name;
       code cde; 
     };
 
-  struct xs_container
+  struct xs_container : ast_base
     {
       void    visit(xs_visitor* visitor);
       void    add(variant item);

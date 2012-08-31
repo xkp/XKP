@@ -639,6 +639,33 @@ XSSType xss_expression::type()
     return type_;
   }
 
+//xss_code
+void xss_code::add(XSSStatement st)
+  {
+    statements_.push_back(st);
+  }
+
+//signature_item
+signature_item::signature_item()
+  {
+  }
+
+signature_item::signature_item(signature_item& other):
+  name(other.name),
+  type(other.type),
+  default_value(other.default_value) 
+  {
+  }
+
+signature_item::signature_item(str _name, XSSType _type, XSSExpression _value):
+  name(_name),
+  type(_type),
+  default_value(_value) 
+  {
+  }
+
+
+
 //xss_signature
 bool xss_signature::match(XSSArguments args)
   {
@@ -659,6 +686,11 @@ bool xss_signature::match(XSSArguments args)
       }
 
     return pit == pnd;
+  }
+
+void xss_signature::add_argument(str name, XSSType type, XSSExpression default_value)
+  {
+    items_.push_back(signature_item(name, type, default_value));
   }
 
 //xss_operator
@@ -728,6 +760,16 @@ bool xss_operator::match(XSSType type)
   }
 
 //xss_expression_utils
+XSSExpression xss_expression_utils::constant_expression(variant value)
+  {
+    expression expr;
+    expr.push_operand(value);
+
+    expression_builder eb;
+    expr.visit(&eb);
+    return eb.get();    
+  }
+
 XSSExpression xss_expression_utils::compile_expression(expression& expr)
   {
     expression_builder eb;

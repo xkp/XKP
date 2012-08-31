@@ -4,6 +4,9 @@
 #include <xss/xss_context.h>
 #include <xss/xss_error.h>
 #include <xss/xss_expression.h>
+#include <xss/xss_code.h>
+
+#include <xs/compiler.h>
 
 using namespace xkp;
 
@@ -20,7 +23,11 @@ const str SIdiomsMustHaveId("Idioms must have id");
 const str SImportCannotInherit("Type imports do not support inheritance");
 const str SDupIdiom("Idiom already exists");
 const str SUnkownType("Type not found");
-
+const str SDupProperty("Duplicate property");
+const str SUnsoportedInclude("Only classes, instances and behaviors are valid on class files");
+const str SUndeclaredEvent("Event not found");
+const str SBadEventSignature("Event parameter mistmach");
+const str SDupEvent("There is already an event with this name");
 
 //idiom
 void idiom::bind(XSSContext ctx)
@@ -62,6 +69,10 @@ XSSType idiom::import(const str& id)
     return XSSType();
   }
 
+str idiom::get_namespace()
+  {
+    return namespace_;
+  }
 
 //application
 void application::entry_point(fs::path ep)
@@ -90,15 +101,50 @@ code_context& application::exec_context()
     return code_ctx_;
   }
 
+//document
+XSSContext document::find_context(int line, int column)
+  {
+    if (items_.empty())
+      return ctx_;
+
+    snap_shots::iterator it = items_.begin();
+    snap_shots::iterator nd = items_.end();
+
+    //candidate
+    XSSContext result = ctx_;
+
+    code_pos current(-1, -1);
+
+    for(; it != nd; it++)
+      {
+        if (it->begin.line > line)
+          continue;
+
+        if (it->begin.line == line && it->begin.column > column)
+          continue;
+
+        if (it->end.line < line)
+          continue;
+
+        if (it->end.line == line && it->end.column < column)
+          continue;
+
+        if (it->begin.line > current.line ||
+            it->begin.line == current.line && it->begin.column > current.column)
+          {
+            result  = it->context;
+            current = it->begin;
+          }
+      }
+
+    return result;
+  }
+
 //object_model
 Application object_model::load(DataReader project, param_list& args)
   {
     Application result(new application);
-
-    entity_list root = project->root();
-    validate_root(root);
-
-    DataEntity prj = root[0];
+    DataEntity  prj = assure_unique_root(project);
 
     //create the global context for this application
     Language   lang   = read_language(prj);
@@ -178,9 +224,7 @@ Application object_model::load(DataReader project, param_list& args)
         str        def = _include->attr("def");  
         str        src = _include->attr("src");  
 
-        Idiom idiom = compile_include(def, src);
-        if (idiom)
-          idiom->bind(global);
+        compile_include(def, src, global);
       }
 
     return result;
@@ -198,17 +242,6 @@ Language object_model::read_language(DataEntity project)
       }
 
     return languages_->create(language_name);
-  }
-
-void object_model::validate_root(entity_list& root)
-  {
-    if (root.size() != 1)
-      {
-        param_list error;
-        error.add("id", SProjectError);
-        error.add("desc", SApplicationsMustHaveOnlyOneRoot);
-        xss_throw(error);
-      }
   }
 
 variant object_model::read_value(DataEntity de)
@@ -335,10 +368,508 @@ Idiom object_model::read_idiom(DataEntity de, XSSContext ctx)
     return result;
   }
 
-Idiom object_model::compile_include(const str& def, const str& src)
+void object_model::compile_include(const str& def_file, const str& src_file, XSSContext ctx)
   {
+    type_map     classes;
+    instance_map instances;
+
+    fs::path path;
+    if (!def_file.empty())
+      {
+        DataReader def      = fs_->load_data(def_file);
+        DataEntity def_root = assure_unique_root(def);
+
+        classes   = read_include_def(def_root, ctx);
+        instances = read_include_singleton(def_root, ctx);
+      }
+
+    if (!src_file.empty())
+      {
+        str       code = fs_->load_file(src_file);
+        document& doc  = create_document(src_file);
+        compile_xs(code, ctx, classes, instances, doc);
+
+        assert(false); //td:
+      //  //we start by processing the classes that have some code
+      //  std::vector<xs_class>::iterator sit = source_classes.begin();
+      //  std::vector<xs_class>::iterator snd = source_classes.end();
+      //  for(; sit != snd; sit++)
+      //    {
+				  //  xs_class& ci  = *sit;
+
+      //      //lookup the classes
+      //      std::map<str, int>::iterator dcit = def_types.find(ci.name); assert(dcit != def_types.end());
+      //      XSSObject def_class = classdefs[dcit->second];
+						//XSSType   clazz     = classes[dcit->second];
+
+      //      //mark it as handled
+      //      def_types.erase(dcit);
+
+						//XSSType super;
+      //      XSSContext ictx(new xss_context(ctx, path.parent_path()));
+
+				  //  if (!ci.super.empty())
+					 //   {
+      //          str def_super = def_class? def_class->get<str>("super", str()) : str();
+      //          if (!def_super.empty() && def_super != ci.super)
+						//	    {
+						//		    param_list error;
+						//		    error.add("id", SProjectError);
+						//		    error.add("desc", SBadInheritance);
+						//		    error.add("class", ci.super);
+						//		    xss_throw(error);
+						//	    }
+
+						//    super = ctx->get_type(ci.super);
+						//    if (!super)
+						//	    {
+						//		    param_list error;
+						//		    error.add("id", SProjectError);
+						//		    error.add("desc", SUnknownClass);
+						//		    error.add("class", ci.super);
+						//		    xss_throw(error);
+						//	    }
+					 //   }
+
+      //      clazz->set_definition(def_class);
+      //      clazz->set_super(super);
+      //      clazz->set_context(ictx);
+      //      clazz->fixup_children(ictx);
+				  //  
+      //      ictx->set_this(XSSObject(clazz));
+
+      //      preprocess_type(clazz, def_class, ci.super, ictx, app);
+      //      XSSModule module = app->type_idiom(ci.super);
+      //      if (module)
+      //        module->pre_process_type(clazz);
+
+				  //  //then compile the code
+      //      compile_ast(ci, ictx);
+          //}
+			}
+
+    ////process the left over classes
+    //std::map<str, int>::iterator it = def_types.begin();
+    //std::map<str, int>::iterator nd = def_types.end();
+    //for(; it != nd; it++)
+    //  {
+    //    XSSObject def_class = classdefs[it->second];
+				//XSSType   clazz     = classes[it->second];
+
+    //    clazz->set_definition(def_class);
+
+    //    str super = def_class->get<str>("super", str());
+    //    if (!super.empty())
+    //      {
+    //        XSSType super_clazz = ctx->get_type(super);
+    //        if (!super_clazz)
+    //          {
+				//				param_list error;
+				//				error.add("id", SProjectError);
+				//				error.add("desc", SUnknownClass);
+				//				error.add("class", super);
+				//				xss_throw(error);
+    //          }
+
+    //        clazz->set_super(super_clazz);
+    //      }
+
+    //    XSSContext ictx(new xss_context(ctx, path.parent_path()));
+    //    preprocess_type(clazz, def_class, super, ictx, app);
+
+    //    XSSModule module = app->type_idiom(super);
+    //    if (module)
+    //      module->pre_process_type(clazz);
+
+    //    clazz->set_context(ictx);
+    //  }
+
+    //std::vector<XSSType>::iterator cit = classes.begin();
+    //std::vector<XSSType>::iterator cnd = classes.end();
+
+    //for(; cit != cnd; cit++)
+    //  {
+    //    XSSType ct = *cit;
+    //    ct->propertize();
+    //  }
+  }
+
+enum FIXUP_TYPE
+  {
+    FIXUP_OBJECT_TYPE,
+    FIXUP_INSTANCE_EVENT,
+    FIXUP_SUPER_TYPE, 
+  };
+
+struct fixup_data
+  {
+    fixup_data(FIXUP_TYPE _id, variant _data):
+      id(_id),
+      data(_data)
+      {
+      }      
+
+    FIXUP_TYPE id;
+    variant    data;
+  };
+
+typedef std::vector<fixup_data> fixup_list;
+
+//fixer uppers
+struct fixup_type
+  {
+    fixup_type(const str& _type_name, XSSObject _target):
+      type_name(_type_name),
+      target(_target)
+      {
+      }
+
+    str       type_name;
+    XSSObject target;
+  };
+
+struct fix_instance_event
+  {
+    fix_instance_event(std::vector<str>& _instance, XSSSignature _sig, XSSCode _code):
+      instance(_instance),
+      sig(_sig),
+      code(_code)
+      {
+      }
+
+    std::vector<str> instance;
+    XSSSignature     sig;
+    XSSCode          code;
+  };
+
+struct fixup_super
+  {
+    fixup_super(const str& _super, XSSType _type):
+      super(_super), 
+      type(_type)
+      {
+      }
+
+    str     super;
+    XSSType type;
+  };
+
+struct object_visitor : xs_visitor
+  {
+    object_visitor(XSSObject target, XSSContext ctx, fixup_list& fixup):
+      target_(target),
+      ctx_(ctx),
+      fixup_(fixup)
+      {
+      }
+
+    virtual void property_(xs_property& info)
+      {
+        XSSProperty result = target_->get_property(info.name);
+
+        if (result && !target_->get_shallow_property(info.name))
+          {
+					  param_list error;
+					  error.add("id", SProjectError);
+					  error.add("desc", SDupProperty);
+					  error.add("object", target_->id());
+					  error.add("property", info.name);
+					  xss_throw(error);
+          }
+
+        if (!result)
+          {
+            result = XSSProperty(new xss_property);
+            result->set_id(info.name);
+            target_->insert_property(result);
+          }
+        
+        fixup_.push_back(fixup_data(FIXUP_OBJECT_TYPE, fixup_type(info.type, XSSObject(result))));
+        
+        if (!info.value.empty())
+          {
+            XSSExpression value = xss_expression_utils::compile_expression(info.value);
+            result->expr_value(value);
+          }
+
+        if (!info.get.empty())
+          {
+            XSSCode getter = xss_code_utils::compile_code(info.get, null); //td: callback
+            result->code_getter(getter);
+          }
+
+        if (!info.set.empty())
+          {
+            XSSCode setter = xss_code_utils::compile_code(info.set, null); //td: callback
+            result->code_setter(setter);
+          }
+      }
+
+    virtual void method_(xs_method& info)
+      {
+        XSSMethod result = target_->get_method(info.name);
+
+        if (result)
+          {
+            assert(false); //td: overrides, multi-dispatch
+          }
+
+        if (!result)
+          {
+            result = XSSMethod(new xss_method);
+            result->set_id(info.name);
+            target_->insert_method(result);
+          }
+
+        fixup_.push_back(fixup_data(FIXUP_OBJECT_TYPE, fixup_type(info.type, XSSObject(result))));
+
+        XSSSignature sig  = xss_code_utils::compile_arg_list(info.args);
+        result->set_signature(sig);
+
+        XSSCode code = xss_code_utils::compile_code(info.cde, null); //td: callback
+        result->set_code(code);
+      }
+
+    virtual void event_(xs_event& info)
+      {
+        XSSSignature sig  = xss_code_utils::compile_arg_list(info.args);
+        XSSCode      code = xss_code_utils::compile_code(info.cde, null); //td: callback
+
+        if (info.name.size() > 1)
+          {
+            fixup_.push_back(fixup_data(FIXUP_INSTANCE_EVENT, fix_instance_event(info.name, sig, code)));
+            return;
+          }
+
+        XSSEvent ev = target_->get_event(info.name[0]);
+        if (!ev)
+          {
+					  param_list error;
+					  error.add("id", SProjectError);
+					  error.add("desc", SUndeclaredEvent);
+					  error.add("object", target_->id());
+					  error.add("method", info.name);
+					  xss_throw(error);
+          }
+
+        if (!ev->signature()->match_signature(sig))
+          {
+					  param_list error;
+					  error.add("id", SProjectError);
+					  error.add("desc", SBadEventSignature);
+					  error.add("object", target_->id());
+					  error.add("event", info.name[0]);
+					  xss_throw(error);
+          }
+
+        target_->add_event_impl(ev, code);
+      }
+
+    virtual void event_decl_(xs_event_decl& info)
+      {
+        XSSEvent result = target_->get_event(info.name);
+        if (result)
+          {
+					  param_list error;
+					  error.add("id", SProjectError);
+					  error.add("desc", SDupEvent);
+					  error.add("object", target_->id());
+					  error.add("event", info.name);
+					  xss_throw(error);
+          }
+
+        result = XSSEvent(new xss_event);
+        result->set_id(info.name);
+        result->set_signature(xss_code_utils::compile_arg_list(info.args));
+        target_->insert_event(result);
+      }
+
+    virtual void const_(xs_const& info)
+      {
+        XSSProperty result = target_->get_property(info.name);
+
+        if (result)
+          {
+					  param_list error;
+					  error.add("id", SProjectError);
+					  error.add("desc", SDupProperty);
+					  error.add("object", target_->id());
+					  error.add("const", info.name);
+					  xss_throw(error);
+          }
+
+        result = XSSProperty(new xss_property);
+        
+        XSSExpression value = xss_expression_utils::compile_expression(info.value);
+        result->expr_value(value);
+        result->as_const();
+
+        target_->insert_property(result);
+      }
+
+    virtual void behaveas_(xs_implement_behaviour& info)
+      {
+        assert(false); //td: !!!
+      }
+
+    virtual void dsl_(dsl& info)
+      {
+        assert(false); //td: !!!
+      }
+
+    virtual void instance_(xs_instance& info)   {assert(false);} //td: 0.9.5, these make sense inside an instance
+    virtual void class_(xs_class& info)         {assert(false);}
+    virtual void behaviour_(xs_behaviour& info) {assert(false);}
+
+    private:
+      XSSObject   target_;
+      XSSContext  ctx_;
+      fixup_list& fixup_;
+  };
+
+struct include_visitor : xs_visitor
+  {
+    include_visitor(XSSContext ctx, type_map& classes, instance_map& instances, document& doc, fixup_list& fixup):
+      ctx_(ctx),
+      classes_(classes),
+      instances_(instances),
+      doc_(doc),
+      fixup_(fixup)
+      {
+      }
+
+    virtual void instance_(xs_instance& info)
+      {
+        XSSObject instance;
+
+        assert(info.id.size() == 1); //td: !!!qualified
+        instance_map::iterator it = instances_.find(info.id[0]);
+        if (it != instances_.end())
+          instance = it->second;
+        else
+          {
+            str id = info.id[0];
+            
+            instance = XSSObject(new xss_object);
+            instance->set_id(id);
+            instances_.insert(std::pair<str, XSSObject>(id, instance));
+          }
+
+        object_visitor ov(instance, ctx_, fixup_);
+        info.visit(&ov);
+      }
+
+    virtual void class_(xs_class& info)
+      {
+        XSSType type;
+
+        type_map::iterator it = classes_.find(info.name);
+        if (it != classes_.end())
+          type = it->second;
+        else
+          {
+            type = XSSType(new xss_type);
+            type->set_id(info.name);
+            classes_.insert(std::pair<str, XSSType>(info.name, type));
+          }
+
+        if (!info.super.empty())
+          {
+            fixup_.push_back(fixup_data(FIXUP_SUPER_TYPE, fixup_super(info.super, type)));
+          }
+        
+        object_visitor ov(XSSObject(type), ctx_, fixup_);
+        info.visit(&ov);
+      }
+    
+    virtual void behaviour_(xs_behaviour& info)
+      {
+        assert(false); //td: !!!
+      }
+
+    virtual void dsl_(dsl& info)
+      {
+        assert(false); //td: instance dsl
+      }
+
+    virtual void property_(xs_property& info)             {error();}
+    virtual void method_(xs_method& info)                 {error();}
+    virtual void event_(xs_event& info)                   {error();}
+    virtual void event_decl_(xs_event_decl& info)         {error();}
+    virtual void const_(xs_const& info)                   {error();}
+    virtual void behaveas_(xs_implement_behaviour& info)  {error();}
+
+    private:
+      XSSContext    ctx_;
+      type_map&     classes_;
+      instance_map& instances_;
+      document&     doc_;
+      fixup_list&   fixup_;
+
+      void error()
+        {
+					param_list error;
+					error.add("id", SProjectError);
+					error.add("desc", SUnsoportedInclude);
+					xss_throw(error);
+        }
+  };
+
+
+void object_model::compile_xs(const str& text, XSSContext ctx, type_map& classes, instance_map& instances, document& doc)
+  {
+    xs_container results;
+    std::vector<str> dsls;
+    ctx->collect_xss_dsls(dsls);
+
+    xs_compiler compiler(dsls);
+    compiler.compile_xs(text, results); //td: errors
+
     assert(false);
-    return Idiom();
+    ////first we ought to register the type before processing
+    //std::vector<xs_class> source_classes;
+    //for(size_t i = 0; i < results.size(); i++)
+    //  {
+				//variant vv = results.get(i);
+				//if (!vv.is<xs_class>())
+				//	{
+				//		//what kinda class are you?
+				//		param_list error;
+				//		error.add("id", SProjectError);
+				//		error.add("desc", SOnlyClassAllowedInInclude);
+				//		xss_throw(error);
+				//	}
+
+    //    source_classes.push_back(vv);
+
+				//xs_class& ci  = source_classes.back();
+    //    str       cid = ci.name;
+
+    //    //look for a declaration on the xml file
+    //    XSSObject def_class;
+    //    std::map<str, int>::iterator dtit = def_types.find(cid);
+    //    if (dtit == def_types.end())
+    //      {
+				//    XSSType clazz(new xss_type());
+    //        clazz->set_id(cid);
+
+    //        def_types.insert(std::pair<str, int>(cid, classdefs.size()));
+				//		classdefs.push_back(XSSObject());
+				//		classes.push_back(clazz);
+
+    //        //register early
+    //        XSSModule module = app->type_idiom(ci.super);
+    //        if (module)
+    //          module->register_user_type(clazz);
+    //        else
+    //          app_types_.push_back(clazz);
+
+    //        //mark as defined user type
+    //        clazz->add_attribute("user_defined", true);
+
+    //        ctx->add_type(cid, clazz);
+    //      }
+    //  }
   }
 
 void object_model::assure_id(DataEntity de)
@@ -352,6 +883,18 @@ void object_model::assure_id(DataEntity de)
         error.add("type", de->type());
         xss_throw(error);
       }
+  }
+
+DataEntity object_model::assure_unique_root(DataReader dr)
+  {
+    if (dr->root().size() != 1)
+      {
+        param_list error;
+        error.add("id", SProjectError);
+        error.add("desc", SApplicationsMustHaveOnlyOneRoot);
+        xss_throw(error);
+      }
+    return dr->root()[0];
   }
 
 XSSType object_model::read_type(DataEntity de, Idiom parent, XSSContext ctx)
@@ -414,7 +957,7 @@ XSSType object_model::read_type(DataEntity de, Idiom parent, XSSContext ctx)
         DataEntity pd = *pit;
         assure_id(pd);
 
-        XSSProperty prop = read_property(pd, ctx);
+        XSSProperty prop = read_property(pd, parent, ctx);
 
         result->insert_property(prop);
       }
@@ -429,7 +972,7 @@ XSSType object_model::read_type(DataEntity de, Idiom parent, XSSContext ctx)
         DataEntity md = *mit;
         assure_id(md);
 
-        XSSMethod mthd = read_method(md, ctx);
+        XSSMethod mthd = read_method(md, parent, ctx);
         result->insert_method(mthd);
       }
 
@@ -443,7 +986,7 @@ XSSType object_model::read_type(DataEntity de, Idiom parent, XSSContext ctx)
         DataEntity ed = *eit;
         assure_id(ed);
 
-        XSSEvent ev = read_event(ed, ctx);
+        XSSEvent ev = read_event(ed, parent, ctx);
         result->insert_event(ev);
       }
 
@@ -551,7 +1094,7 @@ XSSProperty object_model::read_property(DataEntity de, Idiom idiom, XSSContext c
 
 XSSMethod object_model::read_method(DataEntity de, Idiom idiom, XSSContext ctx)
   {
-    XSSProperty result(new xss_property());
+    XSSMethod result(new xss_method());
     result->set_id(de->id());
 
     str stype = de->attr("return_type");
@@ -586,13 +1129,13 @@ XSSMethod object_model::read_method(DataEntity de, Idiom idiom, XSSContext ctx)
 
 XSSEvent object_model::read_event(DataEntity de, Idiom idiom, XSSContext ctx)
   {
-    XSSEvent result(new xss_event());
+    XSSEvent result(new xss_event);
     result->set_id(de->id());
 
-    DataEntity de = de->get("dispatch");
-    if (de)
+    DataEntity dse = de->get("dispatch");
+    if (dse)
       {
-        InlineRenderer dispatcher = read_inline_renderer(de);
+        InlineRenderer dispatcher = read_inline_renderer(dse);
         result->set_dispatcher(dispatcher);
       }
 
@@ -600,6 +1143,14 @@ XSSEvent object_model::read_event(DataEntity de, Idiom idiom, XSSContext ctx)
     result->set_signature(sig);
 
     return result;
+  }
+
+InlineRenderer object_model::read_inline_renderer(DataEntity de)
+  {
+    bool global = de->attr("global") == "true";
+    str  text   = de->attr("text");
+
+    return InlineRenderer(new inline_renderer(text, global));
   }
 
 void object_model::register_idiom(const str& id, Idiom idiom)
@@ -637,4 +1188,89 @@ XSSExpression object_model::read_expression(DataEntity de, XSSType type, const s
       return xss_expression_utils::compile_expression(svalue);
 
     return XSSExpression();
+  }
+
+type_map object_model::read_include_def(DataEntity de, XSSContext ctx)
+  {
+    type_map result;
+
+    entity_list           classes = de->find_all("class");
+    entity_list::iterator it      = classes.begin();
+    entity_list::iterator nd      = classes.end();
+
+    for(; it != nd; it++)
+      {
+        DataEntity cd = *it;
+
+        str cid   = cd->id();
+        str super = cd->attr("super");
+        
+        assert(false); //td: read_object
+				//std::map<str, int>::iterator dcit = def_types.find(cid);
+				//if (dcit != def_types.end())
+				//	{
+				//		param_list error;
+				//		error.add("id", SProjectError);
+				//		error.add("desc", SDuplicateClassOnLibrary);
+				//		error.add("class", cid);
+				//		xss_throw(error);
+				//	}
+
+    //    def_types.insert(std::pair<str, int>(cid, classdefs.size()));
+				//classdefs.push_back(clazz_data);
+
+				//XSSType clazz(new xss_type());
+    //    clazz->set_id(cid);
+				//classes.push_back(clazz);
+
+    //    //register early
+    //    XSSModule module = app->type_idiom(super);
+    //    if (module)
+    //      module->register_user_type(clazz);
+    //    else
+    //      app_types_.push_back(clazz);
+
+    //    //mark as defined user type
+    //    clazz->add_attribute("user_defined", true);
+
+    //    ctx->add_type(cid, clazz);
+      }
+
+    return result;
+  }
+
+instance_map object_model::read_include_singleton(DataEntity de, XSSContext ctx)
+  {
+    instance_map result;
+
+    entity_list           singletons = de->find_all("instance");
+    entity_list::iterator it         = singletons.begin();
+    entity_list::iterator nd         = singletons.end();
+
+    for(; it != nd; it++)
+      {
+        assert(false); //td: read_object 
+        //if (clazz_data->type_name() == "instance")
+        //  {
+        //    str type_name = clazz_data->get<str>("super", str());
+        //    XSSType stype = app->context()->get_type(type_name);
+        //    clazz_data->set_type(stype);
+        //    app->register_singleton(clazz_data); //td: code
+        //    continue;
+        //  }
+      }
+
+    return result;
+  }
+
+document& object_model::create_document(const str& src_file)
+  {
+    fs::path src = fs_->locate(src_file);
+    document_map::iterator it = documents_.find(src);
+    if (it != documents_.end())
+      return it->second;
+
+    documents_.insert(std::pair<fs::path, document>(src, document()));
+    it = documents_.find(src);
+    return it->second;
   }

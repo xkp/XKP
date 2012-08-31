@@ -119,6 +119,12 @@ XSSType xss_context::get_type(schema* type)
     return XSSType();
   }
 
+XSSType xss_context::get_type(const str& type, const str& ns)
+  {
+    assert(false); //td: namespaces
+    return XSSType();
+  }
+
 XSSType xss_context::get_array_type(XSSType type)
   {
     str type_name = type->id();
@@ -1857,6 +1863,16 @@ XSSObjectList xss_type::get_dependencies()
     return dependencies_;
   }
 
+void xss_type::add_constructor(XSSSignature ctor)
+  {
+    constructors_.push_back(ctor); 
+  }
+
+void xss_type::import(XSSType import)
+  {
+    assert(false); //td:
+  }
+
 void xss_type::as_enum()
   {
     is_enum_ = true;
@@ -1924,6 +1940,12 @@ Language xss_type::get_language()
 void xss_type::set_language(Language lang)
   {
     lang_ = lang;
+  }
+
+//inline_renderer
+inline_renderer::inline_renderer(str text, bool global)
+  {
+    //td: rendering
   }
 
 //xss_property
@@ -2057,6 +2079,21 @@ variant xss_property::eval(XSSContext ctx)
     return variant();
   }
 
+void xss_property::expr_value(XSSExpression value)
+  {
+    expr_value_ = value;
+  }
+
+void xss_property::set_getter(InlineRenderer getter)
+  {
+    getter_ = getter;
+  }
+
+void xss_property::set_setter(InlineRenderer setter)
+  {
+    setter_ = setter;
+  }
+
 XSSType xss_property::type()
   {
     if (!type_)
@@ -2113,6 +2150,16 @@ bool xss_event::implemented()
 		return impls->size() > 0;
 	}
 
+void xss_event::set_dispatcher(InlineRenderer dispatcher)
+  {
+    dispatcher_ = dispatcher;
+  }
+
+void xss_event::set_signature(XSSSignature sig)
+  {
+    signature_ = sig;
+  }
+
 //xss_method
 xss_method::xss_method()
   {
@@ -2155,6 +2202,21 @@ XSSType xss_method::type()
       }
 
     return type_;
+  }
+
+void xss_method::return_type(XSSType type)
+  {
+    return_type_ = type;
+  }
+
+void xss_method::set_caller(InlineRenderer caller)
+  {
+    caller_ = caller;
+  }
+
+void xss_method::set_signature(XSSSignature sig)
+  {
+    signature_ = sig;
   }
 
 variant xss_method::code()
