@@ -1754,16 +1754,193 @@ const str parser_errors_descrip[descrip_parse_errors_count] =
     ""
   };
 
+enum xs_smallrules
+  {
+    smallrule_none            = 0,
+    smallrule_parameters      = 1,
+    smallrule_expression      = 2,
+    smallrule_type            = 3,
+    smallrule_code            = 4,
+    smallrule_if              = 5,
+    smallrule_for             = 6,
+    smallrule_iter_for        = 7,
+    smallrule_while           = 8,
+    smallrule_variable        = 9,
+    smallrule_switch          = 10,
+    smallrule_try             = 11,
+    smallrule_throw           = 12,
+    smallrule_class           = 13,
+    smallrule_property        = 14,
+    smallrule_instance        = 15,
+    smallrule_event           = 16
+  };
+
+int symbol_rules[150] = {
+  /*   0  "EOF"                     */    0,
+  /*   1  "Error"                   */    0,
+  /*   2  "Whitespace"              */    0,
+  /*   3  "Comment End"             */    0,
+  /*   4  "Comment Line"            */    0,
+  /*   5  "Comment Start"           */    0,
+  /*   6  "-"                       */    2,
+  /*   7  "--"                      */    2,
+  /*   8  "!"                       */    2,
+  /*   9  "!="                      */    2,
+  /*  10  "%"                       */    2,
+  /*  11  "&&"                      */    2,
+  /*  12  "("                       */    0,
+  /*  13  ")"                       */    0,
+  /*  14  "*"                       */    2,
+  /*  15  "*="                      */    2,
+  /*  16  ","                       */    1,
+  /*  17  "/"                       */    2,
+  /*  18  "/="                      */    2,
+  /*  19  ":"                       */    1,
+  /*  20  ";"                       */    0,
+  /*  21  "?"                       */    2,
+  /*  22  "@"                       */    -1,
+  /*  23  "["                       */    2,
+  /*  24  "]"                       */    2,
+  /*  25  "{"                       */    -2,
+  /*  26  "||"                      */    2,
+  /*  27  "}"                       */    -2,
+  /*  28  "+"                       */    2,
+  /*  29  "++"                      */    2,
+  /*  30  "+="                      */    2,
+  /*  31  "<"                       */    2,
+  /*  32  "<<"                      */    2,
+  /*  33  "<<="                     */    2,
+  /*  34  "<="                      */    2,
+  /*  35  "="                       */    2,
+  /*  36  "-="                      */    2,
+  /*  37  "=="                      */    2,
+  /*  38  ">"                       */    2,
+  /*  39  "->"                      */    2,
+  /*  40  ">="                      */    2,
+  /*  41  ">>"                      */    2,
+  /*  42  ">>="                     */    2,
+  /*  43  "as"                      */    2,
+  /*  44  "behave"                  */    -1,
+  /*  45  "behaviour"               */    -1,
+  /*  46  "break"                   */    0,
+  /*  47  "case"                    */    10,
+  /*  48  "catch"                   */    11,
+  /*  49  "CharLiteral"             */    2,
+  /*  50  "class"                   */    13,
+  /*  51  "const"                   */    -1,
+  /*  52  "continue"                */    0,
+  /*  53  "DecLiteral"              */    2,
+  /*  54  "default"                 */    11,
+  /*  55  "delegate"                */    -1,
+  /*  56  "dispatch"                */    -1,
+  /*  57  "DSLIdentifier"           */    -1,
+  /*  58  "else"                    */    5,
+  /*  59  "event"                   */    -1,
+  /*  60  "false"                   */    2,
+  /*  61  "finally"                 */    11,
+  /*  62  "for"                     */    6,
+  /*  63  "function"                */    -1,
+  /*  64  "has"                     */    2,
+  /*  65  "HexLiteral"              */    2,
+  /*  66  "Identifier"              */    2,
+  /*  67  "if"                      */    5,
+  /*  68  "in"                      */    7,
+  /*  69  "instance"                */    15,
+  /*  70  "is"                      */    2,
+  /*  71  "MemberName"              */    2,
+  /*  72  "method"                  */    -1,
+  /*  73  "new"                     */    2,
+  /*  74  "null"                    */    2,
+  /*  75  "on"                      */    16,
+  /*  76  "private"                 */    -1,
+  /*  77  "property"                */    14,
+  /*  78  "public"                  */    -1,
+  /*  79  "RealLiteral"             */    2,
+  /*  80  "return"                  */    2,
+  /*  81  "StringLiteral"           */    2,
+  /*  82  "switch"                  */    10,
+  /*  83  "throw"                   */    12,
+  /*  84  "true"                    */    2,
+  /*  85  "try"                     */    11,
+  /*  86  "while"                   */    8,
+  /*  87  "Add Exp"                 */    2,
+  /*  88  "Adj List"                */    -1,
+  /*  89  "Adjetive"                */    -1,
+  /*  90  "And Exp"                 */    2,
+  /*  91  "Arg Decl List"           */    1,
+  /*  92  "Arg Decl List Opt"       */    1,
+  /*  93  "Arg List"                */    1,
+  /*  94  "Arg List Opt"            */    1,
+  /*  95  "Argument"                */    1,
+  /*  96  "Argument Decl"           */    1,
+  /*  97  "Array Literal"           */    2,
+  /*  98  "Block"                   */    -2,
+  /*  99  "Catch Clause"            */    11,
+  /* 100  "Catch Clauses"           */    11,
+  /* 101  "Class Arg Decl List"     */    13,
+  /* 102  "Class Arg List Opt"      */    13,
+  /* 103  "Class Argument Decl"     */    13,
+  /* 104  "Compare Exp"             */    2,
+  /* 105  "Conditional Exp"         */    2,
+  /* 106  "Construct"               */    -2,
+  /* 107  "Construct Block"         */    -2,
+  /* 108  "Construct List"          */    -2,
+  /* 109  "DSL"                     */    -1,
+  /* 110  "Equality Exp"            */    2,
+  /* 111  "Expression"              */    2,
+  /* 112  "Expression List"         */    2,
+  /* 113  "Expression Opt"          */    2,
+  /* 114  "Finally Clause Opt"      */    11,
+  /* 115  "For Condition Opt"       */    6,
+  /* 116  "For Init Opt"            */    6,
+  /* 117  "For Iterator Opt"        */    6,
+  /* 118  "Literal"                 */    2,
+  /* 119  "Local Var Decl"          */    9,
+  /* 120  "Member List"             */    2,
+  /* 121  "Method"                  */    2,
+  /* 122  "Method Decl"             */    -1,
+  /* 123  "Method Exp"              */    2,
+  /* 124  "Method Name"             */    -1,
+  /* 125  "Mult Exp"                */    2,
+  /* 126  "Object List"             */    2,
+  /* 127  "Object List Opt"         */    2,
+  /* 128  "Object Value"            */    2,
+  /* 129  "Or Exp"                  */    2,
+  /* 130  "Primary"                 */    2,
+  /* 131  "Primary Exp"             */    2,
+  /* 132  "Program"                 */    0,
+  /* 133  "Prop Descriptor"         */    14,
+  /* 134  "Property"                */    14,
+  /* 135  "Qualified ID"            */    2,
+  /* 136  "Shift Exp"               */    2,
+  /* 137  "Statement"               */    -3,
+  /* 138  "Stm List"                */    -3,
+  /* 139  "Switch Header"           */    10,
+  /* 140  "Switch Label"            */    10,
+  /* 141  "Switch Labels"           */    10,
+  /* 142  "Switch Section"          */    10,
+  /* 143  "Switch Sections Opt"     */    10,
+  /* 144  "Type"                    */    3,
+  /* 145  "Type Arg List"           */    3,
+  /* 146  "Type Argument"           */    3,
+  /* 147  "Type Opt"                */    3,
+  /* 148  "Unary Exp"               */    2,
+  /* 149  "Variable Declarator"     */    9
+  };
+
 struct perrors_validate
   {
-    perrors_validate(int result, TokenStruct *root) : 
+    perrors_validate(int result, TokenStruct *root, TokenStackStruct *stack) : 
       parse_result(result),
       descrip_ecode(result),
       head_ecode(result),
-      tokens(root),
+      token_stack(stack),
+      token(root),
       column(0),
       line(0)
       {
+        last_identifier.clear();
+
         // do nothing
         if (parse_result == PARSEACCEPT) return;
 
@@ -1776,30 +1953,93 @@ struct perrors_validate
     void process_error()
       {
         // why is NULL?
-        assert(tokens != NULL);
+        assert(token != NULL);
+        assert(token_stack != NULL);
 
-        int idx_lalr  = tokens->Symbol;
-        line          = tokens->Line;
-        column        = tokens->Column;
+        int idx_lalr  = token->Symbol;
+        line          = token->Line;
+        column        = token->Column;
         
-        if (tokens->Data != NULL)
-          token_data = wide2str(std::wstring(tokens->Data, 1024));
+        if (parse_result != PARSESYNTAXERROR)
+          return;
 
-        if (parse_result == PARSESYNTAXERROR)
+        if (token->Data != NULL)
+          token_data = wide2str(std::wstring(token->Data, 1024));
+
+        assert(idx_lalr < Grammar.LalrStateCount);
+
+        // get expected tokens in rule exploited
+        LalrStateStruct &refLalrState = Grammar.LalrArray[idx_lalr];
+        for(int i = 0; i < refLalrState.ActionCount; ++i)
           {
-            assert(idx_lalr < Grammar.LalrStateCount);
-
-            LalrStateStruct &refLalrState = Grammar.LalrArray[idx_lalr];
-            for(int i = 0; i < refLalrState.ActionCount; ++i)
+            int symbol = refLalrState.Actions[i].Entry;
+            if (Grammar.SymbolArray[symbol].Kind == SYMBOLTERMINAL)
               {
-                int symbol = refLalrState.Actions[i].Entry;
-                if (Grammar.SymbolArray[symbol].Kind == SYMBOLTERMINAL)
-                  {
-                    str token = wide2str(Grammar.SymbolArray[symbol].Name);
-                    expected_tokens.push_back(token);
-                  }
+                str symbol_name = wide2str(Grammar.SymbolArray[symbol].Name);
+                expected_tokens.push_back(symbol_name);
               }
           }
+
+        // more stuff...
+        rule_error = find_rule(token_stack);
+      }
+
+    int find_rule(TokenStackStruct *stack)
+      {
+        if (stack == NULL)
+          return smallrule_none;
+
+        TokenStruct *token = stack->Token;
+
+        // locate last identifier
+        if (token->Symbol == 66 && last_identifier.size() == 0)
+          last_identifier = wide2str(token->Data);
+
+        int small_rule = symbol_rules[token->Symbol];
+
+        switch (small_rule)
+          {
+            case smallrule_none:
+              {
+                return find_rule(stack->NextToken);
+              }
+
+            case smallrule_expression:
+            case smallrule_parameters:
+            case smallrule_type:
+              {
+                int res = find_rule(stack->NextToken);
+                return res != smallrule_none ? res : small_rule;
+              }
+
+            case smallrule_code:
+            case smallrule_if:
+            case smallrule_for:
+            case smallrule_iter_for:
+            case smallrule_while:
+            case smallrule_variable:
+            case smallrule_switch:
+            case smallrule_try:
+            case smallrule_throw:
+            case smallrule_class:
+            case smallrule_property:
+            case smallrule_instance:
+            case smallrule_event:
+              {
+                return small_rule;
+              }
+
+            // blocks delimiters...
+            case -2: break;
+
+            // statements delimiters...
+            case -3: break;
+
+            default:
+              assert(false); // trap other cases
+          }
+
+        return 0;
       }
 
     str head_error()
@@ -1846,7 +2086,11 @@ struct perrors_validate
         return ss.str();
       }
 
+    std::vector<TokenStackStruct *> token_list;
+
     std::vector<str>  expected_tokens;
+    str               last_identifier;
+    int               rule_error;
     int               head_ecode;
     int               descrip_ecode;
     str               token_data;
@@ -1855,7 +2099,8 @@ struct perrors_validate
 
   private:
     int               parse_result;
-    TokenStruct       *tokens;
+    TokenStruct       *token;
+    TokenStackStruct  *token_stack;
   };
 
 //xs_compiler
@@ -1903,7 +2148,7 @@ bool xs_compiler::compile_code(const str& code_str, code& result)
     TokenStackStruct* token_stack;
     std::wstring buf          = str2wide("{ " + to_parse + " }");
     bool         success      = false;
-    int          parse_result = Parse((wchar_t*)buf.c_str(), buf.size(), 1, 0, &root, &token_stack);
+    int          parse_result = Parse((wchar_t*)buf.c_str(), buf.size(), 1, 1, &root, &token_stack);
 
     if (parse_result == PARSEACCEPT)
       {
@@ -1913,7 +2158,7 @@ bool xs_compiler::compile_code(const str& code_str, code& result)
       }
     else
       {
-        perrors_validate p_error(parse_result, root);
+        perrors_validate p_error(parse_result, root, token_stack);
         str res_error = p_error.error();
 
         //cleanup
@@ -1943,7 +2188,7 @@ bool xs_compiler::compile_xs(const str& code_str, xs_container& result)
     TokenStackStruct* token_stack;
     std::wstring buf          = str2wide(to_parse);
     bool         success      = false;
-    int          parse_result = Parse((wchar_t*)buf.c_str(), buf.size(), 1, 0, &root, &token_stack);
+    int          parse_result = Parse((wchar_t*)buf.c_str(), buf.size(), 1, 1, &root, &token_stack);
 
     bool error = false;
     if (parse_result == PARSEACCEPT)
@@ -1959,7 +2204,7 @@ bool xs_compiler::compile_xs(const str& code_str, xs_container& result)
 		else
 			error = true;
 
-    perrors_validate p_error(parse_result, root);
+    perrors_validate p_error(parse_result, root, token_stack);
     str res_error = p_error.error();
 
     //cleanup
