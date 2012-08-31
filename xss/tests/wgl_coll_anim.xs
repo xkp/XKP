@@ -3,19 +3,15 @@ property mouse_y;
 property t = 0;
 property cam = 0;
   
-property timestamp; 
-property lastTimestamp;
-
 on init()
 {
-	start();
-	timestamp = lastTimestamp;
+	start();	
 }
 
 on update(delta, elapsed){		
 	
 	var time = elapsed * 0.0005;
-	var frameTime = ( timestamp - lastTimestamp ) * 0.001;
+	var frameTime = delta * 0.001;
 	
 	light1.position.x = Math.sin( time * 7 ) * 3009;
 	light1.position.y = Math.cos( time * 5 ) * 4000;
@@ -42,7 +38,6 @@ on update(delta, elapsed){
 	}
 
 	t += frameTime;	
-	lastTimestamp = timestamp;
 	
 }
 
@@ -59,12 +54,7 @@ on keydown(keycode)
 
 on switch_cameras()
 {
-	if(cam == 0)
-		set_active_camera(model1.model_cam);
-	else if(cam == 1)
-		set_active_camera(model1.model_cam1);
-	else
-		set_active_camera(model1.model_cam2);
+	set_active_camera(model1.model_cam2);
 }
 
 method start() 
@@ -100,7 +90,6 @@ method start()
 		}
 
 		animation.play( false, 0 );		
-		lastTimestamp = Date.now();
 	}
 
 }

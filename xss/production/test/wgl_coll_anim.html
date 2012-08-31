@@ -160,8 +160,6 @@ threejs_load_resources(manager, function()
             application.mouse_y = null;
             application.t = 0;
             application.cam = 0;
-            application.timestamp = null;
-            application.lastTimestamp = null;
 	application.start = function() 
 	{
 		for(var k = 0; k < model1.anim.length; k++)
@@ -190,19 +188,17 @@ obj.matrixWorldNeedsUpdate = true;
 }
 }
 animation.play(false, 0);
-application.lastTimestamp = Date.now();
 }
 	};
 	application.events.addListener("init", function()
 	{    
 		application.start();
-application.timestamp = application.lastTimestamp;
 	}
 	);
 	application.events.addListener("update", function(delta,elapsed)
 	{    
 		var time = elapsed * 0.000500000024;
-var frameTime = (application.timestamp - application.lastTimestamp) * 0.00100000005;
+var frameTime = delta * 0.00100000005;
 light1.position.x = Math.sin(time * 7) * 3009;
 light1.position.y = Math.cos(time * 5) * 4000;
 light1.position.z = Math.cos(time * 3) * 3009;
@@ -226,7 +222,6 @@ application.start();
 }
 }
 application.t = application.t + frameTime;
-application.lastTimestamp = application.timestamp;
 	}
 	);
 	application.events.addListener("keydown", function(keycode)
@@ -246,21 +241,7 @@ application.cam = 0;
 	);
 	application.events.addListener("switch_cameras", function()
 	{    
-		if (application.cam == 0)
-{
-set_active_camera(model1.model_cam);
-}
-else
-{
-if (application.cam == 1)
-{
-set_active_camera(model1.model_cam1);
-}
-else
-{
-set_active_camera(model1.model_cam2);
-}
-}
+		set_active_camera(model1.model_cam2);
 	}
 	);
 var event_manager = new ev.ThreeEventManager();
