@@ -199,6 +199,22 @@ stream.ColladaModelLoader = stream.Loader.extend(
 						}				
 				}
 			}
+			else if(children[name].type_ == 'collada_animation')
+			{
+				mesh[name] = [];
+				mesh[name].handler = THREE.AnimationHandler;
+				var animations = mesh.dae.animations;
+				for ( var i = 0; i < animations.length; ++i ) {
+					var animation = animations[ i ];
+					mesh[name].handler.add( animation );
+
+					var kfAnimation = new THREE.KeyFrameAnimation( animation.node, animation.name );
+					kfAnimation.timeScale = 1;
+					mesh[name].push( kfAnimation );
+				}
+				mesh[name].start_kf = children[name].start_kf;
+				mesh[name].end_kf = children[name].end_kf;
+			}
 		}
 	}
 });

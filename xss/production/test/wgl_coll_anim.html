@@ -59,6 +59,17 @@ application.events = new ev.EventHolder();
 					pump = streamer.get_resource("pump");
 				});
 			var child_ = {};
+			child_.type_ = 'collada_animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "pump")
+				{
+				child_.start_kf = 0;
+				child_.end_kf = 47;
+					global_package.items[i].children['anim'] = child_;
+				}					
+			}	
+			var child_ = {};
 			child_.type_ = 'collada_camera';
 			for(var i = 0; i < global_package.items.length; i++)
 			{
@@ -149,12 +160,73 @@ threejs_load_resources(manager, function()
             application.mouse_y = null;
             application.t = 0;
             application.cam = 0;
+            application.timestamp = null;
+            application.lastTimestamp = null;
+	application.start = function() 
+	{
+		for(var k = 0; k < model1.anim.length; k++)
+{
+var animation = model1.anim[k];
+var hl = animation.hierarchy.length;
+for(var h = 0; h < hl; h++)
+{
+var keys = animation.data.hierarchy[h].keys;
+var sids = animation.data.hierarchy[h].sids;
+var obj = animation.hierarchy[h];
+if (keys.length && sids)
+{
+for(var s = 0; s < sids.length; s++)
+{
+var sid = sids[s];
+var next = animation.getNextKeyWith(sid, h, 0);
+if (next)
+{
+next.apply(sid);
+}
+}
+obj.matrixAutoUpdate = false;
+animation.data.hierarchy[h].node.updateMatrix();
+obj.matrixWorldNeedsUpdate = true;
+}
+}
+animation.play(false, 0);
+application.lastTimestamp = Date.now();
+}
+	};
+	application.events.addListener("init", function()
+	{    
+		application.start();
+application.timestamp = application.lastTimestamp;
+	}
+	);
 	application.events.addListener("update", function(delta,elapsed)
 	{    
 		var time = elapsed * 0.000500000024;
+var frameTime = (application.timestamp - application.lastTimestamp) * 0.00100000005;
 light1.position.x = Math.sin(time * 7) * 3009;
 light1.position.y = Math.cos(time * 5) * 4000;
 light1.position.z = Math.cos(time * 3) * 3009;
+if (application.t >= model1.anim.start_kf && application.t <= model1.anim.end_kf)
+{
+for(var i = 0; i < model1.anim.length; i++)
+{
+model1.anim[i].update(frameTime);
+}
+}
+else
+{
+if (application.t > model1.anim.end_kf)
+{
+for(var j = 0; j < model1.anim.length; j++)
+{
+model1.anim[j].stop();
+}
+application.t = 0;
+application.start();
+}
+}
+application.t = application.t + frameTime;
+application.lastTimestamp = application.timestamp;
 	}
 	);
 	application.events.addListener("keydown", function(keycode)

@@ -1,4 +1,4 @@
-<project entry_point="../idioms/webgl/entry.xss" language="js" target="wgl_collada2.xml" output="wgl_collada2.html">
+<project entry_point="../idioms/webgl/entry.xss" language="js" target="wgl_coll_anim.xml" output="wgl_coll_anim.html">
     <path>
         <output path="../production/test"/>
     </path>

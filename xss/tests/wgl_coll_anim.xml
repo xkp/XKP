@@ -1,10 +1,11 @@
-<application src="wgl_collada2.xs" title="Test 3D" background="lightskyblue">
+<application src="wgl_coll_anim.xs" title="Test 3D" background="lightskyblue">
 
 	<resources>		
 		<collada_model id="pump" src="model/pump/pump.dae">
+			<collada_animation id="anim" start_kf="0" end_kf="47"/>
 			<collada_camera id="model_cam"/>
 			<collada_camera id="model_cam1"/>
-			<collada_camera id="model_cam2"/>
+			<collada_camera id="model_cam2"/>			
 		</collada_model>	
 	</resources>
 		
