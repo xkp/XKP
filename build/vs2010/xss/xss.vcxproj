@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9EB2B5F6-1CF5-4294-8327-5E65457458B7}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>xss</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\xkp.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\xkp.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\dynamic_objects.cpp" />
+    <ClCompile Include="..\..\..\src\xs.cpp" />
+    <ClCompile Include="..\..\..\src\xss\brace_parser.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\ajax.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\ga_parser.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\generic_assign.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\html5_asynch.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\native.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\shell.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\smarty.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\sql.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\vm_base.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\vm_shell.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl_out.cpp" />
+    <ClCompile Include="..\..\..\src\xss\html_parser.cpp" />
+    <ClCompile Include="..\..\..\src\xss\language.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang\base.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang\debug.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang\java.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang\js.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang\waxjs.cpp" />
+    <ClCompile Include="..\..\..\src\xss\object_reader.cpp" />
+    <ClCompile Include="..\..\..\src\xss\xss_compiler.cpp" />
+    <ClCompile Include="..\..\..\src\xss\xss_context.cpp" />
+    <ClCompile Include="..\..\..\src\xss\xss_parser.cpp" />
+    <ClCompile Include="..\..\..\src\xss\xss_renderer.cpp" />
+    <ClCompile Include="..\..\..\src\xs\array.cpp" />
+    <ClCompile Include="..\..\..\src\xs\ast.cpp" />
+    <ClCompile Include="..\..\..\src\xs\behaviour.cpp" />
+    <ClCompile Include="..\..\..\src\xs\compiler.cpp" />
+    <ClCompile Include="..\..\..\src\xs\engine.c" />
+    <ClCompile Include="..\..\..\src\xs\linker.cpp" />
+    <ClCompile Include="..\..\..\src\xs\operators.cpp" />
+    <ClCompile Include="..\..\..\src\xs\vm.cpp" />
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\lib_json\json_reader.cpp" />
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\lib_json\json_value.cpp" />
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\lib_json\json_writer.cpp" />
+    <ClCompile Include="..\..\..\third_party\tinyXml\tinystr.cpp" />
+    <ClCompile Include="..\..\..\third_party\tinyXml\tinyxml.cpp" />
+    <ClCompile Include="..\..\..\third_party\tinyXml\tinyxmlerror.cpp" />
+    <ClCompile Include="..\..\..\third_party\tinyXml\tinyxmlparser.cpp" />
+    <ClCompile Include="..\..\xss.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\base.h" />
+    <ClInclude Include="..\..\..\include\dynamic_objects.h" />
+    <ClInclude Include="..\..\..\include\node.h" />
+    <ClInclude Include="..\..\..\include\schema.h" />
+    <ClInclude Include="..\..\..\include\serial.h" />
+    <ClInclude Include="..\..\..\include\types.h" />
+    <ClInclude Include="..\..\..\include\xs.h" />
+    <ClInclude Include="..\..\..\include\xss\brace_parser.h" />
+    <ClInclude Include="..\..\..\include\xss\dsl\ajax.h" />
+    <ClInclude Include="..\..\..\include\xss\dsl\ga_parser.h" />
+    <ClInclude Include="..\..\..\include\xss\dsl\generic_assign.h" />
+    <ClInclude Include="..\..\..\include\xss\dsl\html5_asynch.h" />
+    <ClInclude Include="..\..\..\include\xss\dsl\native.h" />
+    <ClInclude Include="..\..\..\include\xss\dsl\shell.h" />
+    <ClInclude Include="..\..\..\include\xss\dsl\smarty.h" />
+    <ClInclude Include="..\..\..\include\xss\dsl\sql.h" />
+    <ClInclude Include="..\..\..\include\xss\dsl\vm_base.h" />
+    <ClInclude Include="..\..\..\include\xss\dsl\vm_shell.h" />
+    <ClInclude Include="..\..\..\include\xss\dsl_out.h" />
+    <ClInclude Include="..\..\..\include\xss\html_parser.h" />
+    <ClInclude Include="..\..\..\include\xss\language.h" />
+    <ClInclude Include="..\..\..\include\xss\lang\base.h" />
+    <ClInclude Include="..\..\..\include\xss\lang\debug.h" />
+    <ClInclude Include="..\..\..\include\xss\lang\java.h" />
+    <ClInclude Include="..\..\..\include\xss\lang\js.h" />
+    <ClInclude Include="..\..\..\include\xss\lang\waxjs.h" />
+    <ClInclude Include="..\..\..\include\xss\object_reader.h" />
+    <ClInclude Include="..\..\..\include\xss\utils.h" />
+    <ClInclude Include="..\..\..\include\xss\xss_compiler.h" />
+    <ClInclude Include="..\..\..\include\xss\xss_context.h" />
+    <ClInclude Include="..\..\..\include\xss\xss_error.h" />
+    <ClInclude Include="..\..\..\include\xss\xss_parser.h" />
+    <ClInclude Include="..\..\..\include\xss\xss_renderer.h" />
+    <ClInclude Include="..\..\..\include\xs\array.h" />
+    <ClInclude Include="..\..\..\include\xs\ast.h" />
+    <ClInclude Include="..\..\..\include\xs\behaviour.h" />
+    <ClInclude Include="..\..\..\include\xs\compiler.h" />
+    <ClInclude Include="..\..\..\include\xs\debug_utils.h" />
+    <ClInclude Include="..\..\..\include\xs\engine.h" />
+    <ClInclude Include="..\..\..\include\xs\grammar.h" />
+    <ClInclude Include="..\..\..\include\xs\linker.h" />
+    <ClInclude Include="..\..\..\include\xs\operators.h" />
+    <ClInclude Include="..\..\..\include\xs\pair_array.h" />
+    <ClInclude Include="..\..\..\include\xs\runtime_error.h" />
+    <ClInclude Include="..\..\..\include\xs\vm.h" />
+    <ClInclude Include="..\..\..\include\xs\xs_error.h" />
+    <ClInclude Include="..\..\..\third_party\jsoncpp\include\json\json.h" />
+    <ClInclude Include="..\..\..\third_party\tinyXml\tinystr.h" />
+    <ClInclude Include="..\..\..\third_party\tinyXml\tinyxml.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
