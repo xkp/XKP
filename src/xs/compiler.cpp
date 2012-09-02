@@ -1935,12 +1935,11 @@ struct perrors_validate
       descrip_ecode(result),
       head_ecode(result),
       token_stack(stack),
+      last_expr_state(0),
       token(root),
       column(0),
       line(0)
       {
-        last_identifier.clear();
-
         // do nothing
         if (parse_result == PARSEACCEPT) return;
 
@@ -1959,12 +1958,15 @@ struct perrors_validate
         int idx_lalr  = token->Symbol;
         line          = token->Line;
         column        = token->Column;
-        
-        if (parse_result != PARSESYNTAXERROR)
-          return;
 
+        // more stuff...
+        rule_error = find_rule(token_stack);
+        
         if (token->Data != NULL)
           token_data = wide2str(std::wstring(token->Data, 1024));
+
+        if (parse_result != PARSESYNTAXERROR)
+          return;
 
         assert(idx_lalr < Grammar.LalrStateCount);
 
@@ -1979,9 +1981,6 @@ struct perrors_validate
                 expected_tokens.push_back(symbol_name);
               }
           }
-
-        // more stuff...
-        rule_error = find_rule(token_stack);
       }
 
     int find_rule(TokenStackStruct *stack)
@@ -1990,12 +1989,39 @@ struct perrors_validate
           return smallrule_none;
 
         TokenStruct *token = stack->Token;
-
-        // locate last identifier
-        if (token->Symbol == 66 && last_identifier.size() == 0)
-          last_identifier = wide2str(token->Data);
-
         int small_rule = symbol_rules[token->Symbol];
+
+        // locate last identifier or expression
+        if (last_expr_state < 2)
+          {
+            if (token->Symbol == terminal_member_name)
+              {
+                str member = wide2str( token->Data );
+                member.erase(0, 1);
+                last_expression.push_identifier(member);
+                last_expression.push_operator(op_dot);
+                last_expr_state = 1;
+              }
+            else
+            if (token->Symbol == terminal_identifier)
+              {
+                last_expression.push_identifier( wide2str(token->Data) );
+                last_expr_state = 1;
+              }
+            else
+            if (token->ReductionRule > -1 && small_rule == smallrule_expression)
+              {
+                parsetree_visitor v;
+                expression_ ev(last_expression);
+                v.visit(token, ev);
+                last_expr_state = 2;
+              }
+          }
+        else
+        if (last_expr_state == 1)
+          {
+            last_expr_state = 2;
+          }
 
         switch (small_rule)
           {
@@ -2089,7 +2115,8 @@ struct perrors_validate
     std::vector<TokenStackStruct *> token_list;
 
     std::vector<str>  expected_tokens;
-    str               last_identifier;
+    expression        last_expression;
+    int               last_expr_state;
     int               rule_error;
     int               head_ecode;
     int               descrip_ecode;

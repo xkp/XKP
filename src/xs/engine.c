@@ -728,7 +728,10 @@ int Parse(
         /* If parse error then exit. */
         if (Grammar.SymbolArray[Work->Token->Symbol].Kind == SYMBOLERROR) 
           {
-            ParseCleanup(TokenStack, Work, FirstToken);
+            *FirstToken = Work->Token;
+            *TopTokenStack = TokenStack;
+
+            //ParseCleanup(TokenStack, Work, FirstToken);
             return (PARSELEXICALERROR);
           }
 

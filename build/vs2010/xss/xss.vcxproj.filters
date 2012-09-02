@@ -291,4 +291,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\third_party\gold\xs.grm" />
+  </ItemGroup>
 </Project>
