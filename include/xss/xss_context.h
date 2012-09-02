@@ -392,9 +392,9 @@ struct ILanguage
 
   };
 
-struct ICodeCallback
+struct IContextCallback
   {
-    virtual void notify(XSSCode code) = 0;
+    virtual void notify(XSSContext context) = 0;
   };
 
 //code scope, this should not be public
@@ -482,7 +482,12 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       void          set_args(param_list& args);
       param_list&   get_args();
       void          search_native(bool enabled);
-      XSSType       get_operator_type(operator_type op, XSSType left, XSSType right);
+      
+      //0.9.5
+      XSSType        get_operator_type(operator_type op, XSSType left, XSSType right);
+      void           set_extents(file_position& begin, file_position& end); 
+      file_position& begin();
+      file_position& end();
     public:
       variant resolve(const str& id, RESOLVE_ITEM item_type = RESOLVE_ANY);
       bool    resolve(const str& id, resolve_info& info);
@@ -500,6 +505,9 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       fs::path   path_;
       param_list args_;
       bool       search_native_;
+
+      file_position begin_;
+      file_position end_;
 
       variant empty_type_value(RESOLVE_ITEM item_type);
     protected:
@@ -530,25 +538,6 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
 //these are basically copies of their xs counterpart, but offer xss stuff, like generating
 //they are also vm friendly, unlike the low level xs's ast.
 typedef std::vector<value_operation> value_operations;
-
-//represents a position inside a code file
-struct code_pos
-  {
-    code_pos(int l, int c):
-      line(l),
-      column(c)
-      {
-      }
-
-    code_pos(const code_pos& other):
-      line(other.line),
-      column(other.column)
-      {
-      }
-
-    int line;
-    int column;
-  };
 
 //expressions
 class xss_value
@@ -691,9 +680,12 @@ struct IStatementExpression
 class xss_statement
   {
     public:
-      xss_statement(STATEMENT_TYPE id):
-        id_(id)
+      xss_statement(STATEMENT_TYPE id, file_position& begin, file_position& end):
+        id_(id),
+        begin_(begin),
+        end_(end)
         {
+          assert(begin_.line >= 0 && end_.line >= 0);
         }
 
     public:
@@ -703,10 +695,8 @@ class xss_statement
         }
     protected:
       STATEMENT_TYPE id_;
-      
-      //td: !!!
-      //code_pos       start;
-      //code_pos       end;
+      file_position  begin_;
+      file_position  end_;
   };
 
 typedef std::vector<XSSStatement> statement_list;
@@ -723,9 +713,11 @@ struct signature_item
   {
     signature_item();
     signature_item(signature_item& other);
-    signature_item(str _name, XSSType _type, XSSExpression _value);
+    signature_item(const str& _name, XSSType _type, XSSExpression _value);
+    signature_item(const str&_name, const str& _type_name, XSSExpression _value);
 
     str           name;
+    str           type_name;
     XSSType       type;
     XSSExpression default_value; 
   };
@@ -735,10 +727,13 @@ typedef std::vector<signature_item> signature_items;
 class xss_signature
   {
     public:
+      signature_items& items();
+
       bool match(XSSArguments args);
       bool match_signature(XSSSignature sig);
 
-      void add_argument(str name, XSSType type, XSSExpression default_value);
+      void add_argument(const str& name, XSSType type, XSSExpression default_value);
+      void add_argument(const str& name, const str& type_name, XSSExpression default_value);
     private:
       signature_items items_;
   };
@@ -810,6 +805,8 @@ class xss_property : public xss_object
       XSSExpression  expr_value_;
       InlineRenderer getter_;
       InlineRenderer setter_;
+      XSSCode        code_getter_;
+      XSSCode        code_setter_;
   };
 
 class xss_event : public xss_object
@@ -862,6 +859,7 @@ class xss_method : public xss_object
       XSSType        return_type_;
       InlineRenderer caller_;
       XSSSignature   signature_;
+      XSSCode        code__; //td: rid of old stuff 
   };
 
 //utils

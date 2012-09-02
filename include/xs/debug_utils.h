@@ -30,8 +30,8 @@ namespace xkp
       virtual void for_(stmt_for& info);
       virtual void iterfor_(stmt_iter_for& info);
       virtual void while_(stmt_while& info);
-      virtual void break_();
-      virtual void continue_();
+      virtual void break_(stmt_break& info);
+      virtual void continue_(stmt_continue& info);
       virtual void return_(stmt_return& info);
       virtual void expression_(stmt_expression& info);
       virtual void dsl_(dsl& info);

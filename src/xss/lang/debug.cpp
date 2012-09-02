@@ -150,12 +150,12 @@ struct code_renderer : ICodeRenderer,
         render_code(info.while_code);
       }
 
-    virtual void break_()
+    virtual void break_(stmt_break& info)
       {
         result_ += indent() + "BREAK\n";
       }
 
-    virtual void continue_()
+    virtual void continue_(stmt_continue& info)
       {
         result_ += indent() + "CONTINUE\n";
       }

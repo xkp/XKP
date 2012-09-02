@@ -84,13 +84,14 @@ struct document
   {
     public: 
       XSSContext find_context(int line, int column);
+      void       add(XSSContext context);
     private:
       fs::path   path_;
       XSSContext ctx_;
 
       struct snap_shot
         {
-          snap_shot(code_pos& _begin, code_pos& _end, XSSContext _context):
+          snap_shot(file_position& _begin, file_position& _end, XSSContext _context):
             begin(_begin),
             end(_end), 
             context(_context)
@@ -104,8 +105,8 @@ struct document
             {
             }
 
-          code_pos   begin;
-          code_pos   end;
+          file_position begin;
+          file_position end;
           XSSContext context;
         };
 

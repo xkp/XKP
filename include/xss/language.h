@@ -64,8 +64,8 @@ struct code_type_resolver : code_visitor
 
     virtual void expression_(stmt_expression& info)   {}
     virtual void variable_(stmt_variable& info)       {}
-    virtual void break_()                             {}
-    virtual void continue_()                          {}
+    virtual void break_(stmt_break& info)             {}
+    virtual void continue_(stmt_continue& info)       {}
     virtual void dsl_(dsl& info)                      {}
     virtual void dispatch(stmt_dispatch& info)        {}
     virtual void throw_(stmt_throw& info)             {}  

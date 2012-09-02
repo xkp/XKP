@@ -329,6 +329,22 @@ XSSType xss_context::get_operator_type(operator_type op, XSSType left, XSSType r
     return XSSType();
   }
 
+void xss_context::set_extents(file_position& begin, file_position& end)
+  {
+    begin_ = begin;
+    end_   = end;
+  }
+
+file_position& xss_context::begin()
+  {
+    return begin_;
+  }
+
+file_position& xss_context::end()
+  {
+    return end_;
+  }
+
 variant xss_context::resolve(const str& id, RESOLVE_ITEM item_type)
   {
     resolve_info si;
@@ -1124,6 +1140,11 @@ XSSObject	xss_object::idiom()
 void xss_object::set_idiom(XSSObject id)
   {
     idiom_ = id;
+  }
+
+void xss_object::add_event_impl(XSSEvent ev, XSSCode code)
+  {
+    assert(false); //td:
   }
 
 //struct xss_object::query_info
@@ -2094,6 +2115,21 @@ void xss_property::set_setter(InlineRenderer setter)
     setter_ = setter;
   }
 
+void xss_property::code_getter(XSSCode getter)
+  {
+    code_getter_ = getter;
+  }
+
+void xss_property::code_setter(XSSCode setter)
+  {
+    code_setter_ = setter;
+  }
+
+void xss_property::as_const()
+  {
+    assert(false); //td:
+  }
+
 XSSType xss_property::type()
   {
     if (!type_)
@@ -2160,6 +2196,11 @@ void xss_event::set_signature(XSSSignature sig)
     signature_ = sig;
   }
 
+XSSSignature xss_event::signature()
+  {
+    return signature_;
+  }
+
 //xss_method
 xss_method::xss_method()
   {
@@ -2217,6 +2258,11 @@ void xss_method::set_caller(InlineRenderer caller)
 void xss_method::set_signature(XSSSignature sig)
   {
     signature_ = sig;
+  }
+
+void xss_method::set_code(XSSCode code)
+  {
+    code__ = code;
   }
 
 variant xss_method::code()

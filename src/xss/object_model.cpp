@@ -102,6 +102,12 @@ code_context& application::exec_context()
   }
 
 //document
+void document::add(XSSContext context)
+  {
+    assert(context->begin().line >= 0 && context->end().line >= 0);
+    items_.push_back(snap_shot(context->begin(), context->end(), context));
+  }
+
 XSSContext document::find_context(int line, int column)
   {
     if (items_.empty())
@@ -113,7 +119,7 @@ XSSContext document::find_context(int line, int column)
     //candidate
     XSSContext result = ctx_;
 
-    code_pos current(-1, -1);
+    file_position current;
 
     for(; it != nd; it++)
       {
@@ -556,10 +562,11 @@ struct fixup_super
 
 struct object_visitor : xs_visitor
   {
-    object_visitor(XSSObject target, XSSContext ctx, fixup_list& fixup):
+    object_visitor(XSSObject target, XSSContext ctx, fixup_list& fixup, IContextCallback* cb):
       target_(target),
       ctx_(ctx),
-      fixup_(fixup)
+      fixup_(fixup),
+      callback_(cb)
       {
       }
 
@@ -722,19 +729,21 @@ struct object_visitor : xs_visitor
     virtual void behaviour_(xs_behaviour& info) {assert(false);}
 
     private:
-      XSSObject   target_;
-      XSSContext  ctx_;
-      fixup_list& fixup_;
+      XSSObject         target_;
+      XSSContext        ctx_;
+      fixup_list&       fixup_;
+      IContextCallback* callback_;
   };
 
 struct include_visitor : xs_visitor
   {
-    include_visitor(XSSContext ctx, type_map& classes, instance_map& instances, document& doc, fixup_list& fixup):
+    include_visitor(XSSContext ctx, type_map& classes, instance_map& instances, document& doc, fixup_list& fixup, IContextCallback* callback):
       ctx_(ctx),
       classes_(classes),
       instances_(instances),
       doc_(doc),
-      fixup_(fixup)
+      fixup_(fixup),
+      callback_(callback)
       {
       }
 
@@ -755,7 +764,7 @@ struct include_visitor : xs_visitor
             instances_.insert(std::pair<str, XSSObject>(id, instance));
           }
 
-        object_visitor ov(instance, ctx_, fixup_);
+        object_visitor ov(instance, ctx_, fixup_, callback_);
         info.visit(&ov);
       }
 
@@ -778,7 +787,7 @@ struct include_visitor : xs_visitor
             fixup_.push_back(fixup_data(FIXUP_SUPER_TYPE, fixup_super(info.super, type)));
           }
         
-        object_visitor ov(XSSObject(type), ctx_, fixup_);
+        object_visitor ov(XSSObject(type), ctx_, fixup_, callback_);
         info.visit(&ov);
       }
     
@@ -800,11 +809,12 @@ struct include_visitor : xs_visitor
     virtual void behaveas_(xs_implement_behaviour& info)  {error();}
 
     private:
-      XSSContext    ctx_;
-      type_map&     classes_;
-      instance_map& instances_;
-      document&     doc_;
-      fixup_list&   fixup_;
+      XSSContext        ctx_;
+      type_map&         classes_;
+      instance_map&     instances_;
+      document&         doc_;
+      fixup_list&       fixup_;
+      IContextCallback* callback_;
 
       void error()
         {
@@ -815,6 +825,21 @@ struct include_visitor : xs_visitor
         }
   };
 
+struct document_builder : IContextCallback
+  {
+    document_builder(document& doc):
+      doc_(doc)
+      {
+      }
+
+    virtual void notify(XSSContext context)
+      {
+        doc_.add(context);
+      }
+
+    private:
+      document& doc_;
+  };
 
 void object_model::compile_xs(const str& text, XSSContext ctx, type_map& classes, instance_map& instances, document& doc)
   {
@@ -825,7 +850,14 @@ void object_model::compile_xs(const str& text, XSSContext ctx, type_map& classes
     xs_compiler compiler(dsls);
     compiler.compile_xs(text, results); //td: errors
 
-    assert(false);
+    fixup_list       fu;
+    document_builder callback(doc);
+
+    include_visitor iv(ctx, classes, instances, doc, fu, &callback); 
+    results.visit(&iv);
+
+    assert(false); //td: fixup and registration
+
     ////first we ought to register the type before processing
     //std::vector<xs_class> source_classes;
     //for(size_t i = 0; i < results.size(); i++)

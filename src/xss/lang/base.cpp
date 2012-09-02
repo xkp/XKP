@@ -487,12 +487,12 @@ void base_code_renderer::while_(stmt_while& info)
 		add_line("}");
   }
 
-void base_code_renderer::break_()
+void base_code_renderer::break_(stmt_break& info)
   {
 		add_line("break;");
   }
 
-void base_code_renderer::continue_()
+void base_code_renderer::continue_(stmt_continue& info)
   {
 		add_line("continue;");
   }

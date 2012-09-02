@@ -398,12 +398,12 @@ void code_linker::while_(stmt_while& info)
     instruction_data( exit_jump, pc_ );
   }
 
-void code_linker::break_()
+void code_linker::break_(stmt_break& info)
   {
     add_fixup(add_instruction( i_jump ), fixup_break);
   }
 
-void code_linker::continue_()
+void code_linker::continue_(stmt_continue& info)
   {
     add_fixup(add_instruction( i_jump ), fixup_continue);
   }

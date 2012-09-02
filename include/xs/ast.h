@@ -13,6 +13,12 @@ namespace xkp
 {
   struct file_position
     {
+      file_position() : 
+        line(-1),
+        column(0)
+        {
+        }
+
       file_position(int l, int c):
         line(l),
         column(c)
@@ -23,6 +29,28 @@ namespace xkp
         line(other.line),
         column(other.column)
         {
+        }
+
+      void min(file_position& other)
+        {
+          if (line < 0 || line > other.line)
+            {
+              line = other.line;
+              column = other.column;
+            }
+          else if (line == other.line && column > other.column)
+              column = other.column;
+        }
+
+      void max(file_position& other)
+        {
+          if (line < 0 || line < other.line)
+            {
+              line = other.line;
+              column = other.column;
+            }
+          else if (line == other.line && column < other.column)
+              column = other.column;
         }
 
       int line;
@@ -45,12 +73,6 @@ namespace xkp
 
   struct ast_base
     {
-      ast_base(file_position& _begin, file_position& _end):
-        begin(_begin),
-        end(_end)
-        {
-        }
-
       file_position begin;
       file_position end;
     };
@@ -253,8 +275,8 @@ struct expression_splitter : expression_visitor
       virtual void for_(stmt_for& info)               = 0;
       virtual void iterfor_(stmt_iter_for& info)      = 0;
       virtual void while_(stmt_while& info)           = 0;
-      virtual void break_()                           = 0;
-      virtual void continue_()                        = 0;
+      virtual void break_(stmt_break& info)           = 0;
+      virtual void continue_(stmt_continue& info)     = 0;
       virtual void return_(stmt_return& info)         = 0;
       virtual void expression_(stmt_expression& info) = 0;
       virtual void dsl_(dsl& info)                    = 0;

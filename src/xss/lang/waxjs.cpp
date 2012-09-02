@@ -145,12 +145,12 @@ struct wax_splitter : code_visitor
           }
       }
 
-    virtual void break_()
+    virtual void break_(stmt_break& info)
       {
         CHECK_ACTIVE
       }
 
-    virtual void continue_()
+    virtual void continue_(stmt_continue& info)
       {
         CHECK_ACTIVE
       }
@@ -1377,8 +1377,8 @@ struct visitor_45 : code_visitor
       }
 
     virtual void variable_(stmt_variable& info)       {}
-    virtual void break_()                             {}
-    virtual void continue_()                          {}
+    virtual void break_(stmt_break& info)             {}
+    virtual void continue_(stmt_continue& info)       {}
     virtual void dispatch(stmt_dispatch& info)        {}
     virtual void switch_(stmt_switch& info)           {}
     virtual void throw_(stmt_throw& info)             {}

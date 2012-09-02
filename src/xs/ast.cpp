@@ -367,11 +367,13 @@ void code::visit(code_visitor* visitor)
           }
         else if (it->is<stmt_break>())
           {
-            visitor->break_();
+            stmt_break _break = *it;
+            visitor->break_(_break);
           }
         else if (it->is<stmt_continue>())
           {
-            visitor->continue_();
+            stmt_continue _continue = *it;
+            visitor->continue_(_continue);
           }
         else if (it->is<stmt_return>())
           {

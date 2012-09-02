@@ -657,16 +657,26 @@ signature_item::signature_item(signature_item& other):
   {
   }
 
-signature_item::signature_item(str _name, XSSType _type, XSSExpression _value):
+signature_item::signature_item(const str& _name, XSSType _type, XSSExpression _value):
   name(_name),
   type(_type),
   default_value(_value) 
   {
   }
 
-
+signature_item::signature_item(const str& _name, const str& _type_name, XSSExpression _value):
+  name(_name),
+  type_name(_type_name),
+  default_value(_value) 
+  {
+  }
 
 //xss_signature
+signature_items& xss_signature::items()
+  {
+    return items_;
+  }
+
 bool xss_signature::match(XSSArguments args)
   {
     //td: just straight matching as of now
@@ -688,9 +698,43 @@ bool xss_signature::match(XSSArguments args)
     return pit == pnd;
   }
 
-void xss_signature::add_argument(str name, XSSType type, XSSExpression default_value)
+bool xss_signature::match_signature(XSSSignature sig)
+  {
+    signature_items& other = sig->items();
+    if (other.size() > items_.size())
+      return false;
+
+    signature_items::iterator it  = items_.begin();
+    signature_items::iterator nd  = items_.end();
+    signature_items::iterator oit = other.begin();
+    signature_items::iterator ond = other.end();
+
+    for(; it != nd; it++, oit++)
+      {
+        if (oit == ond)
+          return true;
+
+        if (it->name != oit->name)
+          return false;
+
+        if (it->type && it->type != oit->type)
+          return false;
+
+        if (!it->type && it->type_name != oit->type_name)
+          return false;
+      }
+
+    return true;
+  }
+
+void xss_signature::add_argument(const str& name, XSSType type, XSSExpression default_value)
   {
     items_.push_back(signature_item(name, type, default_value));
+  }
+
+void xss_signature::add_argument(const str& name, const str& type_name, XSSExpression default_value)
+  {
+    items_.push_back(signature_item(name, type_name, default_value));
   }
 
 //xss_operator

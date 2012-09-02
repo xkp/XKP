@@ -10,8 +10,8 @@ class statement_if : public xss_statement,
                      public IStatementIf 
   {
     public:
-      statement_if(XSSExpression expr, XSSCode if_code, XSSCode else_code):
-        xss_statement(STATEMENT_IF),
+      statement_if(XSSExpression expr, XSSCode if_code, XSSCode else_code, file_position& begin, file_position& end):
+        xss_statement(STATEMENT_IF, begin, end),
         expr_(expr),
         if_code_(if_code),
         else_code_(else_code)
@@ -31,8 +31,8 @@ class statement_variable : public xss_statement,
                            public IStatementVar
   {
     public:
-      statement_variable(const str& id, const str& type, XSSExpression value):
-        xss_statement(STATEMENT_VAR),
+      statement_variable(const str& id, const str& type, XSSExpression value, file_position& begin, file_position& end):
+        xss_statement(STATEMENT_VAR, begin, end),
         id_(id),
         type_name_(type),
         value_(value)
@@ -56,8 +56,8 @@ class statement_for : public xss_statement,
     public:
       statement_for(const str& id, const str& type, XSSExpression init_value, 
                     XSSExpression init_expr, XSSExpression cond_expr, XSSExpression iter_expr,
-                    XSSCode for_code):
-        xss_statement(STATEMENT_FOR),
+                    XSSCode for_code, file_position& begin, file_position& end):
+        xss_statement(STATEMENT_FOR, begin, end),
         id_(id),
         type_name_(type),
         init_value_(init_value),
@@ -91,8 +91,8 @@ class statement_foreach : public xss_statement,
                           public IStatementForEach
   {
     public:
-      statement_foreach(const str& id, const str& type, XSSExpression iter_expr, XSSCode for_code):
-        xss_statement(STATEMENT_FOREACH),
+      statement_foreach(const str& id, const str& type, XSSExpression iter_expr, XSSCode for_code, file_position& begin, file_position& end):
+        xss_statement(STATEMENT_FOREACH, begin, end),
         id_(id),
         type_name_(type),
         iter_expr_(iter_expr),
@@ -117,8 +117,8 @@ class statement_while : public xss_statement,
                         public IStatementWhile
   {
     public:
-      statement_while(XSSExpression expr, XSSCode code):
-        xss_statement(STATEMENT_WHILE),
+      statement_while(XSSExpression expr, XSSCode code, file_position& begin, file_position& end):
+        xss_statement(STATEMENT_WHILE, begin, end),
         expr_(expr),
         code_(code)
         {
@@ -135,8 +135,8 @@ class statement_switch : public xss_statement,
                          public IStatementSwitch
   {
     public:
-      statement_switch(XSSExpression expr, XSSCode default_code):
-        xss_statement(STATEMENT_SWITCH),
+      statement_switch(XSSExpression expr, XSSCode default_code, file_position& begin, file_position& end):
+        xss_statement(STATEMENT_SWITCH, begin, end),
         expr_(expr),
         default_code_(default_code)
         {
@@ -161,8 +161,8 @@ class statement_try : public xss_statement,
                       public IStatementTry
   {
     public:
-      statement_try(XSSCode try_code, XSSCode finally_code):
-        xss_statement(STATEMENT_TRY),
+      statement_try(XSSCode try_code, XSSCode finally_code, file_position& begin, file_position& end):
+        xss_statement(STATEMENT_TRY, begin, end),
         try_code_(try_code),
         finally_code_(finally_code)
         {
@@ -187,8 +187,8 @@ class expr_statement : public xss_statement,
                        public IStatementExpression
   {
     public:
-      expr_statement(STATEMENT_TYPE id, XSSExpression expr):
-        xss_statement(id),
+      expr_statement(STATEMENT_TYPE id, XSSExpression expr, file_position& begin, file_position& end):
+        xss_statement(id, begin, end),
         expr_(expr)
         {
         }
@@ -200,7 +200,7 @@ class expr_statement : public xss_statement,
 
 struct xss_code_utils
   {
-    static XSSCode      compile_code(code& cde, ICodeCallback* callback);
+    static XSSCode      compile_code(code& cde, IContextCallback* callback);
     static XSSSignature compile_arg_list(param_list_decl& args);
   };
 

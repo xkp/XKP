@@ -6,7 +6,7 @@ using namespace xkp;
 
 struct code_builder : code_visitor
   {
-    code_builder(XSSCode result, ICodeCallback* callback):
+    code_builder(XSSCode result, IContextCallback* callback):
       result_(result), 
       callback_(callback)
       {
@@ -18,13 +18,13 @@ struct code_builder : code_visitor
         XSSCode       if_code   = info.if_code.empty()?    XSSCode() : compile_code(info.if_code);
         XSSCode       else_code = info.else_code.empty()?  XSSCode() : compile_code(info.else_code);
 
-        result_->add(XSSStatement(new statement_if(expr, if_code, else_code)));
+        result_->add(XSSStatement(new statement_if(expr, if_code, else_code, info.begin, info.end)));
       }
 
     virtual void variable_(stmt_variable& info)
       {
         XSSExpression value = xss_expression_utils::compile_expression(info.value);
-        result_->add(XSSStatement(new statement_variable(info.id, info.type, value)));
+        result_->add(XSSStatement(new statement_variable(info.id, info.type, value, info.begin, info.end)));
       }
 
     virtual void for_(stmt_for& info)
@@ -37,7 +37,7 @@ struct code_builder : code_visitor
 
         result_->add(XSSStatement(new statement_for(info.init_variable.id, info.init_variable.type, init_value,  
                                                     init_expr, cond_expr, iter_expr,
-                                                    for_code)));
+                                                    for_code, info.begin, info.end)));
 
       }
 
@@ -45,36 +45,36 @@ struct code_builder : code_visitor
       {
         XSSExpression iter_expr  = xss_expression_utils::compile_expression(info.iter_expr);
         XSSCode       for_code   = compile_code(info.for_code);
-        result_->add(XSSStatement(new statement_foreach(info.id, info.type.name, iter_expr, for_code)));
+        result_->add(XSSStatement(new statement_foreach(info.id, info.type.name, iter_expr, for_code, info.begin, info.end)));
       }
 
     virtual void while_(stmt_while& info)
       {
         XSSExpression expr  = xss_expression_utils::compile_expression(info.expr);
         XSSCode       code  = compile_code(info.while_code);
-        result_->add(XSSStatement(new statement_while(expr, code)));
+        result_->add(XSSStatement(new statement_while(expr, code, info.begin, info.end)));
       }
 
-    virtual void break_()
+    virtual void break_(stmt_break& info)
       {
-        result_->add(XSSStatement(new xss_statement(STATEMENT_BREAK)));
+        result_->add(XSSStatement(new xss_statement(STATEMENT_BREAK, info.begin, info.end)));
       }
 
-    virtual void continue_()
+    virtual void continue_(stmt_continue& info)
       {
-        result_->add(XSSStatement(new xss_statement(STATEMENT_CONTINUE)));
+        result_->add(XSSStatement(new xss_statement(STATEMENT_CONTINUE, info.begin, info.end)));
       }
 
     virtual void return_(stmt_return& info)
       {
         XSSExpression expr  = xss_expression_utils::compile_expression(info.expr);
-        result_->add(XSSStatement(new expr_statement(STATEMENT_RETURN, expr)));
+        result_->add(XSSStatement(new expr_statement(STATEMENT_RETURN, expr, info.begin, info.end)));
       }
 
     virtual void expression_(stmt_expression& info)
       {
         XSSExpression expr  = xss_expression_utils::compile_expression(info.expr);
-        result_->add(XSSStatement(new expr_statement(STATEMENT_EXPRESSION, expr)));
+        result_->add(XSSStatement(new expr_statement(STATEMENT_EXPRESSION, expr, info.begin, info.end)));
       }
 
     virtual void dsl_(dsl& info)
@@ -92,7 +92,7 @@ struct code_builder : code_visitor
         XSSExpression expr         = xss_expression_utils::compile_expression(info.expr);
         XSSCode       default_code = compile_code(info.default_code);
 
-        statement_switch* result = new statement_switch(expr, default_code);
+        statement_switch* result = new statement_switch(expr, default_code, info.begin, info.end);
 
         std::vector<switch_section>::iterator it = info.sections.begin();
         std::vector<switch_section>::iterator nd = info.sections.end();
@@ -117,7 +117,7 @@ struct code_builder : code_visitor
         XSSCode try_code     = compile_code(info.try_code);
         XSSCode finally_code = compile_code(info.finally_code);
         
-        statement_try* result = new statement_try(try_code, finally_code);
+        statement_try* result = new statement_try(try_code, finally_code, info.begin, info.end);
 
         std::vector<catch_>::iterator it = info.catches.begin();
         std::vector<catch_>::iterator nd = info.catches.end();
@@ -134,12 +134,12 @@ struct code_builder : code_visitor
     virtual void throw_(stmt_throw& info)
       {
         XSSExpression expr  = xss_expression_utils::compile_expression(info.expr);
-        result_->add(XSSStatement(new expr_statement(STATEMENT_THROW, expr)));
+        result_->add(XSSStatement(new expr_statement(STATEMENT_THROW, expr, info.begin, info.end)));
       }
 
     private:
-      XSSCode        result_;
-      ICodeCallback* callback_;
+      XSSCode           result_;
+      IContextCallback* callback_;
 
       XSSCode compile_code(code& cde)
         {
@@ -153,11 +153,30 @@ struct code_builder : code_visitor
 
 
 //xss_code_utils
-XSSCode xss_code_utils::compile_code(code& cde, ICodeCallback* callback)
+XSSCode xss_code_utils::compile_code(code& cde, IContextCallback* callback)
   {
     XSSCode result(new xss_code);
 
     code_builder cb(result, callback);
     cde.visit(&cb);
+    return result;
+  }
+
+XSSSignature xss_code_utils::compile_arg_list(param_list_decl& args)
+  {
+    XSSSignature result;
+
+    param_list_decl::iterator it = args.begin();
+    param_list_decl::iterator nd = args.end();
+
+    for(; it != nd; it++)
+      {
+        XSSExpression default_value;
+        if (!it->default_value.empty())
+          default_value = xss_expression_utils::compile_expression(it->default_value);
+        
+        result->add_argument(it->name, it->type, default_value);
+      }
+
     return result;
   }

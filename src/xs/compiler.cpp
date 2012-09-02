@@ -34,6 +34,11 @@ inline std::wstring str2wide(const str& s)
     return result;
   }
 
+inline file_position from_token(TokenStruct* token)
+  {
+    return file_position(token->Line, token->Column);
+  }
+
 //a list of rules of interest, note that this struct ought to be updated
 //everytime the grammar is changed, use the rule description as a guide
 enum xs_rules
@@ -185,15 +190,47 @@ struct parsetree_visitor
       {
         if (!data.visit(token, this))
           {
-            if (token->ReductionRule < 0) //ignore terminals
-              return;
-
-            //if a rule is ignored by the acting visitor lets traverse the cihldren
-            int TokenCount = Grammar.RuleArray[token->ReductionRule].SymbolsCount;
-            for(int i = 0; i < TokenCount; i++)
+            if (token->ReductionRule >= 0) //ignore terminals
               {
-                visit( token->Tokens[i], data );
+                //if a rule is ignored by the acting visitor lets traverse the children
+                int TokenCount = Grammar.RuleArray[token->ReductionRule].SymbolsCount;
+
+                for(int i = 0; i < TokenCount; i++)
+                  {
+                    visit(token->Tokens[i], data);
+                  }
               }
+          }
+
+        ast_base* target = data.target();
+        if (target)
+          {
+            file_position begin;
+            file_position end;
+            if (token->ReductionRule < 0)
+              {
+                //terminal
+                begin.line = token->Line;
+                begin.column = token->Column;
+                end.line = token->Line;
+                end.column = token->Column + wcslen(token->Data);
+              }
+            else
+              {
+                int TokenCount = Grammar.RuleArray[token->ReductionRule].SymbolsCount;
+
+                begin.line = token->Tokens[0]->Line;
+                begin.column = token->Tokens[0]->Column;
+                
+                TokenStruct* last = token->Tokens[TokenCount - 1];
+                end.line = last->Line;
+                end.column = last->Column;
+                if (last->ReductionRule < 0)
+                    end.column += wcslen(last->Data);
+              }
+
+            target->begin.min(begin);
+            target->end.max(end);
           }
       }
 
@@ -232,6 +269,11 @@ struct visitor_base
 
         return false;
       }
+
+    virtual ast_base* target()
+      {
+        return null;
+      }
   };
 
 //expressions
@@ -250,9 +292,9 @@ struct parameters_ : visitor_base<parameters_>
     str          curr_name; 
 
     //rule handlers
-    void named_argument( TokenStruct* token, parsetree_visitor* visitor );
-    void argument_list( TokenStruct* token, parsetree_visitor* visitor );
-    void empty_args( TokenStruct* token, parsetree_visitor* visitor );
+    void named_argument( TokenStruct* token, parsetree_visitor* visitor);
+    void argument_list( TokenStruct* token, parsetree_visitor* visitor);
+    void empty_args( TokenStruct* token, parsetree_visitor* visitor);
   };
 
 struct expr_list_ : visitor_base<expr_list_>
@@ -266,8 +308,8 @@ struct expr_list_ : visitor_base<expr_list_>
     int          param_count;
 
     //rule handlers
-    void single_expr( TokenStruct* token, parsetree_visitor* visitor );
-    void expr_list( TokenStruct* token, parsetree_visitor* visitor );
+    void single_expr( TokenStruct* token, parsetree_visitor* visitor);
+    void expr_list( TokenStruct* token, parsetree_visitor* visitor);
   };
 
 struct expression_ : visitor_base<expression_>
@@ -275,6 +317,10 @@ struct expression_ : visitor_base<expression_>
     expression_( expression& ctx );
 
     bool visit(TokenStruct* token, parsetree_visitor* visitor);
+    virtual ast_base* target()
+      {
+        return &ctx_;
+      }
 
     //data
     expression& ctx_;
@@ -289,7 +335,7 @@ struct expression_ : visitor_base<expression_>
 
     //actual handlers
     template <operator_type op>
-    void binary_operator( TokenStruct* token, parsetree_visitor* visitor )
+    void binary_operator( TokenStruct* token, parsetree_visitor* visitor)
       {
         visitor->visit( token->Tokens[0], *this );
         visitor->visit( token->Tokens[2], *this );
@@ -298,25 +344,25 @@ struct expression_ : visitor_base<expression_>
       }
 
     template <operator_type op>
-    void unary_operator( TokenStruct* token, parsetree_visitor* visitor )
+    void unary_operator( TokenStruct* token, parsetree_visitor* visitor)
       {
         visitor->visit( token->Tokens[1], *this );
         ctx_.push_operator( op );
       }
 
     template <operator_type op>
-    void post_unary_operator( TokenStruct* token, parsetree_visitor* visitor )
+    void post_unary_operator( TokenStruct* token, parsetree_visitor* visitor)
       {
         ctx_.push_operator( op );
       };
 
-    void index( TokenStruct* token, parsetree_visitor* visitor );
-    void function_call( TokenStruct* token, parsetree_visitor* visitor );
-    void member_call( TokenStruct* token, parsetree_visitor* visitor );
-    void instantiate( TokenStruct* token, parsetree_visitor* visitor );
-    void build_array( TokenStruct* token, parsetree_visitor* visitor );
-    void object( TokenStruct* token, parsetree_visitor* visitor );
-    void to_do( TokenStruct* token, parsetree_visitor* visitor );
+    void index( TokenStruct* token, parsetree_visitor* visitor);
+    void function_call( TokenStruct* token, parsetree_visitor* visitor);
+    void member_call( TokenStruct* token, parsetree_visitor* visitor);
+    void instantiate( TokenStruct* token, parsetree_visitor* visitor);
+    void build_array( TokenStruct* token, parsetree_visitor* visitor);
+    void object( TokenStruct* token, parsetree_visitor* visitor);
+    void to_do( TokenStruct* token, parsetree_visitor* visitor);
   };
 
 //types
@@ -329,8 +375,8 @@ struct type_ : visitor_base<type_>
       }
 
     bool visit(TokenStruct* token, parsetree_visitor* visitor);
-    void parametric( TokenStruct* token, parsetree_visitor* visitor );
-    void simple( TokenStruct* token, parsetree_visitor* visitor );
+    void parametric( TokenStruct* token, parsetree_visitor* visitor);
+    void simple( TokenStruct* token, parsetree_visitor* visitor);
 
     xs_type& output_;
   };
@@ -342,23 +388,28 @@ struct code_ : visitor_base<code_>
 
     bool visit(TokenStruct* token, parsetree_visitor* visitor);
 
-    void code_block( TokenStruct* token, parsetree_visitor* visitor );
-    void statement_if( TokenStruct* token, parsetree_visitor* visitor );
-    void statement_for( TokenStruct* token, parsetree_visitor* visitor );
-    void statement_iter_for( TokenStruct* token, parsetree_visitor* visitor );
-    void statement_while( TokenStruct* token, parsetree_visitor* visitor );
-    void statement_switch( TokenStruct* token, parsetree_visitor* visitor );
-    void statement_dispatch( TokenStruct* token, parsetree_visitor* visitor );
-    void statement_break( TokenStruct* token, parsetree_visitor* visitor );
-    void statement_continue( TokenStruct* token, parsetree_visitor* visitor );
-    void statement_return( TokenStruct* token, parsetree_visitor* visitor );
-    void statement_expression( TokenStruct* token, parsetree_visitor* visitor );
-    void statement_try( TokenStruct* token, parsetree_visitor* visitor );
-    void statement_throw( TokenStruct* token, parsetree_visitor* visitor );
-    void declare_variable( TokenStruct* token, parsetree_visitor* visitor );
+    virtual ast_base* target()
+      {
+        return &output_;
+      }
+
+    void code_block( TokenStruct* token, parsetree_visitor* visitor);
+    void statement_if( TokenStruct* token, parsetree_visitor* visitor);
+    void statement_for( TokenStruct* token, parsetree_visitor* visitor);
+    void statement_iter_for( TokenStruct* token, parsetree_visitor* visitor);
+    void statement_while( TokenStruct* token, parsetree_visitor* visitor);
+    void statement_switch( TokenStruct* token, parsetree_visitor* visitor);
+    void statement_dispatch( TokenStruct* token, parsetree_visitor* visitor);
+    void statement_break( TokenStruct* token, parsetree_visitor* visitor);
+    void statement_continue( TokenStruct* token, parsetree_visitor* visitor);
+    void statement_return( TokenStruct* token, parsetree_visitor* visitor);
+    void statement_expression( TokenStruct* token, parsetree_visitor* visitor);
+    void statement_try( TokenStruct* token, parsetree_visitor* visitor);
+    void statement_throw( TokenStruct* token, parsetree_visitor* visitor);
+    void declare_variable( TokenStruct* token, parsetree_visitor* visitor);
     void complete_dsl(TokenStruct* token, parsetree_visitor* visitor);
-    void parameter_dsl( TokenStruct* token, parsetree_visitor* visitor );
-    void simple_dsl( TokenStruct* token, parsetree_visitor* visitor );
+    void parameter_dsl( TokenStruct* token, parsetree_visitor* visitor);
+    void simple_dsl( TokenStruct* token, parsetree_visitor* visitor);
 
     code& output_;
   };
@@ -369,8 +420,13 @@ struct if_ : visitor_base<if_>
 
     bool visit(TokenStruct* token, parsetree_visitor* visitor);
 
-    void without_else( TokenStruct* token, parsetree_visitor* visitor );
-    void wih_else( TokenStruct* token, parsetree_visitor* visitor );
+    void without_else( TokenStruct* token, parsetree_visitor* visitor);
+    void wih_else( TokenStruct* token, parsetree_visitor* visitor);
+
+    virtual ast_base* target()
+      {
+        return &output_;
+      }
 
     stmt_if& output_;
   };
@@ -381,7 +437,12 @@ struct for_ : visitor_base<for_>
 
     bool visit(TokenStruct* token, parsetree_visitor* visitor);
 
-    void init_var( TokenStruct* token, parsetree_visitor* visitor );
+    void init_var( TokenStruct* token, parsetree_visitor* visitor);
+
+    virtual ast_base* target()
+      {
+        return &output_;
+      }
 
     stmt_for& output_;
   };
@@ -392,6 +453,11 @@ struct iterfor_ : visitor_base<iterfor_>
 
     bool visit(TokenStruct* token, parsetree_visitor* visitor);
 
+    virtual ast_base* target()
+      {
+        return &output_;
+      }
+
     stmt_iter_for& output_;
   };
 
@@ -400,6 +466,11 @@ struct while_ : visitor_base<while_>
     while_(stmt_while& output);
 
     bool visit(TokenStruct* token, parsetree_visitor* visitor);
+
+    virtual ast_base* target()
+      {
+        return &output_;
+      }
 
     stmt_while& output_;
   };
@@ -414,8 +485,13 @@ struct variable_ : visitor_base<variable_>
       }
 
     bool visit(TokenStruct* token, parsetree_visitor* visitor);
-    void var_no_init( TokenStruct* token, parsetree_visitor* visitor );
-    void var_init( TokenStruct* token, parsetree_visitor* visitor );
+    void var_no_init( TokenStruct* token, parsetree_visitor* visitor);
+    void var_init( TokenStruct* token, parsetree_visitor* visitor);
+
+    virtual ast_base* target()
+      {
+        return &output_;
+      }
 
     stmt_variable& output_;
   };
@@ -432,10 +508,15 @@ struct switch_ : visitor_base<switch_>
       }
 
     bool visit(TokenStruct* token, parsetree_visitor* visitor);
-    void main( TokenStruct* token, parsetree_visitor* visitor );
-    void case_( TokenStruct* token, parsetree_visitor* visitor );
-    void default_( TokenStruct* token, parsetree_visitor* visitor );
-    void section_( TokenStruct* token, parsetree_visitor* visitor );
+    void main( TokenStruct* token, parsetree_visitor* visitor);
+    void case_( TokenStruct* token, parsetree_visitor* visitor);
+    void default_( TokenStruct* token, parsetree_visitor* visitor);
+    void section_( TokenStruct* token, parsetree_visitor* visitor);
+
+    virtual ast_base* target()
+      {
+        return &output_;
+      }
 
     stmt_switch&            output_;
     std::vector<expression> cases_;
@@ -465,7 +546,7 @@ bool parameters_::visit(TokenStruct* token, parsetree_visitor* visitor)
     return true;
   };
 
-void parameters_::named_argument( TokenStruct* token, parsetree_visitor* visitor )
+void parameters_::named_argument( TokenStruct* token, parsetree_visitor* visitor)
   {
     //rule_named_argument = 73,       //<Argument> ::= Identifier '=' <Expression>
     TokenStruct* tpm = token->Tokens[0];        assert( tpm->ReductionRule < 0 );
@@ -473,21 +554,22 @@ void parameters_::named_argument( TokenStruct* token, parsetree_visitor* visitor
 
     expression  value;
     expression_ value_(value);
-    visitor->visit( token->Tokens[2], value_ );
+    visitor->visit( token->Tokens[2], value_);
+    
     values.add(param_name, value);
 
-    visitor->visit( token->Tokens[2], expr );
+    visitor->visit( token->Tokens[2], expr);
     expr.parameter_added(param_name);
     param_count++;
   }
 
-void parameters_::argument_list( TokenStruct* token, parsetree_visitor* visitor )
+void parameters_::argument_list( TokenStruct* token, parsetree_visitor* visitor)
   {
-    visit( token->Tokens[0], visitor );
-    visit( token->Tokens[2], visitor );
+    visit( token->Tokens[0], visitor);
+    visit( token->Tokens[2], visitor);
   }
 
-void parameters_::empty_args( TokenStruct* token, parsetree_visitor* visitor )
+void parameters_::empty_args( TokenStruct* token, parsetree_visitor* visitor)
   {
     param_count = 0;
   }
@@ -506,25 +588,25 @@ bool expr_list_::visit(TokenStruct* token, parsetree_visitor* visitor)
     return visit_rule(this, token, visitor);
   }
 
-void expr_list_::single_expr( TokenStruct* token, parsetree_visitor* visitor )
+void expr_list_::single_expr( TokenStruct* token, parsetree_visitor* visitor)
   {
     //<Expression List> ::= <Expression>
-    visitor->visit( token->Tokens[0], expr );
+    visitor->visit( token->Tokens[0], expr);
     param_count++;
   }
 
-void expr_list_::expr_list( TokenStruct* token, parsetree_visitor* visitor )
+void expr_list_::expr_list( TokenStruct* token, parsetree_visitor* visitor)
   {
     //<Expression List> ::= <Expression> ',' <Expression List>
     if (token->Tokens[2]->ReductionRule == rule_expr_list)
-      visit( token->Tokens[2], visitor );
+      visit( token->Tokens[2], visitor);
     else
       {
-        visitor->visit( token->Tokens[2], expr );
+        visitor->visit( token->Tokens[2], expr);
         param_count++;
       }
 
-    visitor->visit( token->Tokens[0], expr );
+    visitor->visit( token->Tokens[0], expr);
     param_count++;
   }
 
@@ -533,12 +615,12 @@ void expr_list_::expr_list( TokenStruct* token, parsetree_visitor* visitor )
 expression_::expression_( expression& ctx )
   : ctx_(ctx)
   {
-    register_rule(rule_assign,      &expression_::binary_operator<op_assign>);
-    register_rule(rule_plusequal,   &expression_::binary_operator<op_plus_equal>);
-    register_rule(rule_minusequal,  &expression_::binary_operator<op_minus_equal>);
-    register_rule(rule_multequal,   &expression_::binary_operator<op_mult_equal>);
-    register_rule(rule_divequal,    &expression_::binary_operator<op_div_equal>);
-    register_rule(rule_shiftlequal, &expression_::binary_operator<op_shift_left_equal>);
+    register_rule(rule_assign,        &expression_::binary_operator<op_assign>);
+    register_rule(rule_plusequal,     &expression_::binary_operator<op_plus_equal>);
+    register_rule(rule_minusequal,    &expression_::binary_operator<op_minus_equal>);
+    register_rule(rule_multequal,     &expression_::binary_operator<op_mult_equal>);
+    register_rule(rule_divequal,      &expression_::binary_operator<op_div_equal>);
+    register_rule(rule_shiftlequal,   &expression_::binary_operator<op_shift_left_equal>);
     register_rule(rule_shiftrequal,   &expression_::binary_operator<op_shift_right_equal>);
     register_rule(rule_or,            &expression_::binary_operator<op_or>);
     register_rule(rule_and,           &expression_::binary_operator<op_and>);
@@ -623,7 +705,7 @@ bool expression_::visit(TokenStruct* token, parsetree_visitor* visitor)
     return visit_rule(this, token, visitor);
   }
 
-void expression_::index( TokenStruct* token, parsetree_visitor* visitor )
+void expression_::index( TokenStruct* token, parsetree_visitor* visitor)
   {
     expr_list_ args(*this);
     visitor->visit(token->Tokens[1], args);
@@ -634,7 +716,7 @@ void expression_::index( TokenStruct* token, parsetree_visitor* visitor )
     ctx_.push_operator( op_index );
   }
 
-void expression_::function_call( TokenStruct* token, parsetree_visitor* visitor )
+void expression_::function_call( TokenStruct* token, parsetree_visitor* visitor)
   {
     //grab the parameters
     parameters_ args(*this);
@@ -642,14 +724,14 @@ void expression_::function_call( TokenStruct* token, parsetree_visitor* visitor 
 
     //save info on the call
     //td: named parameters
-    visitor->visit( token->Tokens[0], *this ); //push our identifier
+    visitor->visit( token->Tokens[0], *this); //push our identifier
     ctx_.push_operand( args.param_count );
     ctx_.push_operator( op_func_call );
   }
 
-void expression_::member_call( TokenStruct* token, parsetree_visitor* visitor )
+void expression_::member_call( TokenStruct* token, parsetree_visitor* visitor)
   {
-    visitor->visit( token->Tokens[0], *this ); //identifier
+    visitor->visit( token->Tokens[0], *this); //identifier
 
     //grab the parameters
     parameters_ args(*this);
@@ -661,7 +743,7 @@ void expression_::member_call( TokenStruct* token, parsetree_visitor* visitor )
     ctx_.push_operator( op_call );
   }
 
-void expression_::instantiate( TokenStruct* token, parsetree_visitor* visitor )
+void expression_::instantiate( TokenStruct* token, parsetree_visitor* visitor)
   {
     // new <Type> '(' <Arg List Opt> ')'
 
@@ -696,7 +778,7 @@ struct object_ : visitor_base<object_>
         return visit_rule(this, token, visitor);
       }
 
-    void object_value( TokenStruct* token, parsetree_visitor* visitor )
+    void object_value( TokenStruct* token, parsetree_visitor* visitor)
       {
         xs_const result;
         result.name =  wide2str(token->Tokens[0]->Data);
@@ -708,7 +790,7 @@ struct object_ : visitor_base<object_>
       }
   };
 
-void expression_::object( TokenStruct* token, parsetree_visitor* visitor )
+void expression_::object( TokenStruct* token, parsetree_visitor* visitor)
   {
     object_ obj;
     visitor->visit(token->Tokens[1], obj);
@@ -717,7 +799,7 @@ void expression_::object( TokenStruct* token, parsetree_visitor* visitor )
     ctx_.push_operator( op_object );
   }
 
-void expression_::build_array( TokenStruct* token, parsetree_visitor* visitor )
+void expression_::build_array( TokenStruct* token, parsetree_visitor* visitor)
   {
     parameters_ args(*this);
     visitor->visit(token->Tokens[1], args);
@@ -726,7 +808,7 @@ void expression_::build_array( TokenStruct* token, parsetree_visitor* visitor )
     ctx_.push_operator( op_array );
   }
 
-void expression_::to_do( TokenStruct* token, parsetree_visitor* visitor )
+void expression_::to_do( TokenStruct* token, parsetree_visitor* visitor)
   {
     assert( false );
   }
@@ -748,13 +830,13 @@ struct qualified_id_ : visitor_base<qualified_id_>
 
     std::vector<str>& output_;
 
-    void main( TokenStruct* token, parsetree_visitor* visitor )
+    void main( TokenStruct* token, parsetree_visitor* visitor)
       {
         output_.push_back( wide2str(token->Tokens[0]->Data) );
         visitor->visit(token->Tokens[1], *this);
       }
 
-    void member_list( TokenStruct* token, parsetree_visitor* visitor )
+    void member_list( TokenStruct* token, parsetree_visitor* visitor)
       {
         visitor->visit(token->Tokens[0], *this);
         str member_name = wide2str(token->Tokens[1]->Data);
@@ -762,7 +844,7 @@ struct qualified_id_ : visitor_base<qualified_id_>
         output_.push_back(member_name);
       }
 
-    void member_list_empty( TokenStruct* token, parsetree_visitor* visitor )
+    void member_list_empty( TokenStruct* token, parsetree_visitor* visitor)
       {
       }
   };
@@ -789,13 +871,13 @@ struct type_args_ : visitor_base<type_args_>
         return true;
       }
 
-    void argument_list( TokenStruct* token, parsetree_visitor* visitor )
+    void argument_list( TokenStruct* token, parsetree_visitor* visitor)
       {
         visit( token->Tokens[0], visitor );
         visit( token->Tokens[2], visitor );
       }
 
-    void named_argument( TokenStruct* token, parsetree_visitor* visitor )
+    void named_argument( TokenStruct* token, parsetree_visitor* visitor)
       {
         xs_const result;
 
@@ -826,7 +908,12 @@ struct try_ : visitor_base<try_>
         return visit_rule(this, token, visitor);
       }
     
-    void main( TokenStruct* token, parsetree_visitor* visitor )
+    virtual ast_base* target()
+      {
+        return &output_;
+      }
+
+    void main( TokenStruct* token, parsetree_visitor* visitor)
       {
         //try <Block> <Catch Clauses> <Finally Clause Opt>
         code_ try_code(output_.try_code);
@@ -836,7 +923,7 @@ struct try_ : visitor_base<try_>
         visitor->visit(token->Tokens[3], *this);
       }
 
-    void catch_any( TokenStruct* token, parsetree_visitor* visitor )
+    void catch_any( TokenStruct* token, parsetree_visitor* visitor)
       {
         //catch <Block>
         catch_ cc;
@@ -846,7 +933,7 @@ struct try_ : visitor_base<try_>
         output_.catches.push_back(cc);
       }
 
-    void catch_type( TokenStruct* token, parsetree_visitor* visitor )
+    void catch_type( TokenStruct* token, parsetree_visitor* visitor)
       {
         //catch '(' <Qualified ID> ')' <Block>
         catch_ cc;
@@ -859,7 +946,7 @@ struct try_ : visitor_base<try_>
         output_.catches.push_back(cc);
       }
 
-    void catch_id( TokenStruct* token, parsetree_visitor* visitor )
+    void catch_id( TokenStruct* token, parsetree_visitor* visitor)
       {
         //catch '(' <Qualified ID> Identifier ')' <Block>
         catch_ cc;
@@ -874,7 +961,7 @@ struct try_ : visitor_base<try_>
         output_.catches.push_back(cc);
       }
 
-    void finally_( TokenStruct* token, parsetree_visitor* visitor )
+    void finally_( TokenStruct* token, parsetree_visitor* visitor)
       {
         code_  cc_(output_.finally_code);
         visitor->visit(token->Tokens[1], cc_);
@@ -893,7 +980,7 @@ bool type_::visit(TokenStruct* token, parsetree_visitor* visitor)
     return true;
   }
 
-void type_::parametric( TokenStruct* token, parsetree_visitor* visitor )
+void type_::parametric( TokenStruct* token, parsetree_visitor* visitor)
   {
     output_.name = wide2str(token->Tokens[0]->Data);
 
@@ -901,7 +988,7 @@ void type_::parametric( TokenStruct* token, parsetree_visitor* visitor )
     visitor->visit(token->Tokens[2], args);
   }
 
-void type_::simple( TokenStruct* token, parsetree_visitor* visitor )
+void type_::simple( TokenStruct* token, parsetree_visitor* visitor)
   {
     output_.name = wide2str(token->Tokens[0]->Data);
   }
@@ -935,12 +1022,12 @@ bool code_::visit(TokenStruct* token, parsetree_visitor* visitor)
     return visit_rule(this, token, visitor);
   }
 
-void code_::code_block( TokenStruct* token, parsetree_visitor* visitor )
+void code_::code_block( TokenStruct* token, parsetree_visitor* visitor)
   {
     visitor->visit(token->Tokens[1], *this);
   }
 
-void code_::statement_if( TokenStruct* token, parsetree_visitor* visitor )
+void code_::statement_if( TokenStruct* token, parsetree_visitor* visitor)
   {
     stmt_if si;
     if_     v(si);
@@ -949,7 +1036,7 @@ void code_::statement_if( TokenStruct* token, parsetree_visitor* visitor )
     output_.add_statement( si );
   }
 
-void code_::statement_for( TokenStruct* token, parsetree_visitor* visitor )
+void code_::statement_for( TokenStruct* token, parsetree_visitor* visitor)
   {
     stmt_for sf;
     for_     f(sf);
@@ -958,7 +1045,7 @@ void code_::statement_for( TokenStruct* token, parsetree_visitor* visitor )
     output_.add_statement( sf );
   }
 
-void code_::statement_iter_for( TokenStruct* token, parsetree_visitor* visitor )
+void code_::statement_iter_for( TokenStruct* token, parsetree_visitor* visitor)
   {
     stmt_iter_for sif;
     iterfor_      iif(sif);
@@ -967,7 +1054,7 @@ void code_::statement_iter_for( TokenStruct* token, parsetree_visitor* visitor )
     output_.add_statement( sif );
   }
 
-void code_::statement_while( TokenStruct* token, parsetree_visitor* visitor )
+void code_::statement_while( TokenStruct* token, parsetree_visitor* visitor)
   {
     stmt_while sw;
     while_     w(sw);
@@ -976,7 +1063,7 @@ void code_::statement_while( TokenStruct* token, parsetree_visitor* visitor )
     output_.add_statement( sw );
   }
 
-void code_::statement_switch( TokenStruct* token, parsetree_visitor* visitor )
+void code_::statement_switch( TokenStruct* token, parsetree_visitor* visitor)
   {
     //<Statement> ::= switch '(' <Switch Header> ')' '{' <Switch Sections Opt> '}'
     
@@ -987,7 +1074,7 @@ void code_::statement_switch( TokenStruct* token, parsetree_visitor* visitor )
     output_.add_statement(ss);
   }
 
-void code_::statement_dispatch( TokenStruct* token, parsetree_visitor* visitor )
+void code_::statement_dispatch( TokenStruct* token, parsetree_visitor* visitor)
   {
     //<Statement> ::= dispatch <Qualified ID> '(' <Arg List Opt> ')' ';'
     stmt_dispatch sd;
@@ -1003,19 +1090,19 @@ void code_::statement_dispatch( TokenStruct* token, parsetree_visitor* visitor )
     output_.add_statement( sd );
   }
 
-void code_::statement_break( TokenStruct* token, parsetree_visitor* visitor )
+void code_::statement_break( TokenStruct* token, parsetree_visitor* visitor)
   {
     stmt_break sb;
     output_.add_statement( sb );
   }
 
-void code_::statement_continue( TokenStruct* token, parsetree_visitor* visitor )
+void code_::statement_continue( TokenStruct* token, parsetree_visitor* visitor)
   {
     stmt_continue sc;
     output_.add_statement( sc );
   }
 
-void code_::statement_return( TokenStruct* token, parsetree_visitor* visitor )
+void code_::statement_return( TokenStruct* token, parsetree_visitor* visitor)
   {
     stmt_return sr;
     expression_ expr(sr.expr);
@@ -1023,7 +1110,7 @@ void code_::statement_return( TokenStruct* token, parsetree_visitor* visitor )
     output_.add_statement( sr );
   }
 
-void code_::statement_expression( TokenStruct* token, parsetree_visitor* visitor )
+void code_::statement_expression( TokenStruct* token, parsetree_visitor* visitor)
   {
     stmt_expression se;
     expression_ expr(se.expr);
@@ -1032,7 +1119,7 @@ void code_::statement_expression( TokenStruct* token, parsetree_visitor* visitor
     output_.add_statement( se );
   }
 
-void code_::statement_try( TokenStruct* token, parsetree_visitor* visitor )
+void code_::statement_try( TokenStruct* token, parsetree_visitor* visitor)
   {
     // try <Block> <Catch Clauses> <Finally Clause Opt>
     stmt_try ts;
@@ -1042,7 +1129,7 @@ void code_::statement_try( TokenStruct* token, parsetree_visitor* visitor )
     output_.add_statement( ts );
   }
 
-void code_::statement_throw( TokenStruct* token, parsetree_visitor* visitor )
+void code_::statement_throw( TokenStruct* token, parsetree_visitor* visitor)
   {
     stmt_throw  tw;
     expression_ e(tw.expr);
@@ -1051,7 +1138,7 @@ void code_::statement_throw( TokenStruct* token, parsetree_visitor* visitor )
     output_.add_statement( tw );
   }
 
-void code_::declare_variable( TokenStruct* token, parsetree_visitor* visitor )
+void code_::declare_variable( TokenStruct* token, parsetree_visitor* visitor)
   {
     stmt_variable sv;
     variable_     v(sv);
@@ -1079,7 +1166,7 @@ void code_::complete_dsl(TokenStruct* token, parsetree_visitor* visitor)
     output_.add_statement( result );
   }
 
-void code_::parameter_dsl( TokenStruct* token, parsetree_visitor* visitor )
+void code_::parameter_dsl( TokenStruct* token, parsetree_visitor* visitor)
   {
     dsl result;
     result.name = wide2str(token->Tokens[0]->Data);
@@ -1099,7 +1186,7 @@ void code_::parameter_dsl( TokenStruct* token, parsetree_visitor* visitor )
     output_.add_statement( result );
   }
 
-void code_::simple_dsl( TokenStruct* token, parsetree_visitor* visitor )
+void code_::simple_dsl( TokenStruct* token, parsetree_visitor* visitor)
   {
     dsl result;
     result.name = wide2str(token->Tokens[0]->Data);
@@ -1124,7 +1211,7 @@ bool if_::visit(TokenStruct* token, parsetree_visitor* visitor)
     return visit_rule(this, token, visitor);
   }
 
-void if_::without_else( TokenStruct* token, parsetree_visitor* visitor )
+void if_::without_else( TokenStruct* token, parsetree_visitor* visitor)
   {
     expression_ expr(output_.expr);
     visitor->visit(token->Tokens[2], expr);
@@ -1133,7 +1220,7 @@ void if_::without_else( TokenStruct* token, parsetree_visitor* visitor )
     visitor->visit(token->Tokens[4], if_code);
   }
 
-void if_::wih_else( TokenStruct* token, parsetree_visitor* visitor )
+void if_::wih_else( TokenStruct* token, parsetree_visitor* visitor)
   {
     expression_ expr(output_.expr);
     visitor->visit(token->Tokens[2], expr);
@@ -1172,7 +1259,7 @@ bool for_::visit(TokenStruct* token, parsetree_visitor* visitor)
     return true;
   }
 
-void for_::init_var( TokenStruct* token, parsetree_visitor* visitor )
+void for_::init_var( TokenStruct* token, parsetree_visitor* visitor)
   {
     variable_     v(output_.init_variable);
     visitor->visit(token, v);
@@ -1224,12 +1311,12 @@ bool variable_::visit(TokenStruct* token, parsetree_visitor* visitor)
     return visit_rule(this, token->Tokens[1], visitor);
   }
 
-void variable_::var_no_init( TokenStruct* token, parsetree_visitor* visitor )
+void variable_::var_no_init( TokenStruct* token, parsetree_visitor* visitor)
   {
     output_.id = wide2str( token->Tokens[0]->Data );
   }
 
-void variable_::var_init( TokenStruct* token, parsetree_visitor* visitor )
+void variable_::var_init( TokenStruct* token, parsetree_visitor* visitor)
   {
     output_.id = wide2str( token->Tokens[0]->Data );
 
@@ -1243,7 +1330,7 @@ bool switch_::visit(TokenStruct* token, parsetree_visitor* visitor)
     return visit_rule(this, token, visitor);
   }
 
-void switch_::main( TokenStruct* token, parsetree_visitor* visitor )
+void switch_::main( TokenStruct* token, parsetree_visitor* visitor)
   {
     //switch '(' <Switch Header> ')' '{' <Switch Sections Opt> '}'
     expression_ expr(output_.expr);
@@ -1251,7 +1338,7 @@ void switch_::main( TokenStruct* token, parsetree_visitor* visitor )
     visitor->visit(token->Tokens[5], *this);
   }
 
-void switch_::case_( TokenStruct* token, parsetree_visitor* visitor )
+void switch_::case_( TokenStruct* token, parsetree_visitor* visitor)
   {
     //case <Expression> ':'
     expression  e;
@@ -1260,12 +1347,12 @@ void switch_::case_( TokenStruct* token, parsetree_visitor* visitor )
     cases_.push_back(e);
   }
 
-void switch_::default_( TokenStruct* token, parsetree_visitor* visitor )
+void switch_::default_( TokenStruct* token, parsetree_visitor* visitor)
   {
     has_default = true;
   }
 
-void switch_::section_( TokenStruct* token, parsetree_visitor* visitor )
+void switch_::section_( TokenStruct* token, parsetree_visitor* visitor)
   {
     //<Switch Labels> <Stm List>
     cases_.clear();
@@ -1354,7 +1441,7 @@ struct opt_type_ : visitor_base<opt_type_>
         return visit_rule(this, token, visitor);
       }
 
-    void main( TokenStruct* token, parsetree_visitor* visitor )
+    void main( TokenStruct* token, parsetree_visitor* visitor)
       {
         type_ = wide2str(token->Tokens[1]->Tokens[0]->Data);
       }
@@ -1366,12 +1453,12 @@ struct property_ : visitor_base<property_>
   {
     property_(xs_property& output) : output_(output)
       {
-        register_rule(rule_property,      &property_::main );
-        register_rule(rule_var_property,  &property_::as_var );
-        register_rule(rule_block,         &property_::set_only );
-        register_rule(rule_prop_get_set,  &property_::get_set );
-        register_rule(rule_prop_get,      &property_::get_only );
-        register_rule(rule_prop_value,    &property_::value );
+        register_rule(rule_property,        &property_::main );
+        register_rule(rule_var_property,    &property_::as_var );
+        register_rule(rule_block,           &property_::set_only );
+        register_rule(rule_prop_get_set,    &property_::get_set );
+        register_rule(rule_prop_get,        &property_::get_only );
+        register_rule(rule_prop_value,      &property_::value );
         register_rule(rule_prop_value_set,  &property_::value_set );
       }
 
@@ -1380,9 +1467,14 @@ struct property_ : visitor_base<property_>
         return visit_rule(this, token, visitor);
       }
 
+    virtual ast_base* target()
+      {
+        return &output_;
+      }
+
     xs_property& output_;
 
-    void main( TokenStruct* token, parsetree_visitor* visitor )
+    void main( TokenStruct* token, parsetree_visitor* visitor)
       {
         output_.name = wide2str(token->Tokens[1]->Data);
 
@@ -1393,7 +1485,7 @@ struct property_ : visitor_base<property_>
         visitor->visit(token->Tokens[3], *this);
       }
 
-    void as_var( TokenStruct* token, parsetree_visitor* visitor )
+    void as_var( TokenStruct* token, parsetree_visitor* visitor)
       {
         stmt_variable sv;
         variable_     v(sv);
@@ -1404,13 +1496,13 @@ struct property_ : visitor_base<property_>
         output_.value = sv.value;
       }
 
-    void set_only( TokenStruct* token, parsetree_visitor* visitor )
+    void set_only( TokenStruct* token, parsetree_visitor* visitor)
       {
         code_ cd(output_.set);
         visitor->visit(token, cd);
       }
 
-    void get_set( TokenStruct* token, parsetree_visitor* visitor )
+    void get_set( TokenStruct* token, parsetree_visitor* visitor)
       {
         code_ cd_get(output_.get);
         code_ cd_set(output_.set);
@@ -1418,19 +1510,19 @@ struct property_ : visitor_base<property_>
         visitor->visit(token->Tokens[2], cd_set);
       }
 
-    void get_only( TokenStruct* token, parsetree_visitor* visitor )
+    void get_only( TokenStruct* token, parsetree_visitor* visitor)
       {
         code_ cd_get(output_.get);
         visitor->visit(token->Tokens[1], cd_get);
       }
 
-    void value( TokenStruct* token, parsetree_visitor* visitor )
+    void value( TokenStruct* token, parsetree_visitor* visitor)
       {
         expression_ e(output_.value);
         visitor->visit(token->Tokens[1], e);
       }
 
-    void value_set( TokenStruct* token, parsetree_visitor* visitor )
+    void value_set( TokenStruct* token, parsetree_visitor* visitor)
       {
         expression_ e(output_.value);
         visitor->visit(token->Tokens[1], e);
@@ -1454,7 +1546,12 @@ struct method_ : visitor_base<method_>
         return visit_rule(this, token, visitor);
       }
 
-    void main( TokenStruct* token, parsetree_visitor* visitor )
+    virtual ast_base* target()
+      {
+        return &output_;
+      }
+
+    void main( TokenStruct* token, parsetree_visitor* visitor)
       {
         output_.name = wide2str(token->Tokens[1]->Data);
 
@@ -1469,7 +1566,7 @@ struct method_ : visitor_base<method_>
         visitor->visit(token->Tokens[6], cd);
       }
 
-    void main_c( TokenStruct* token, parsetree_visitor* visitor )
+    void main_c( TokenStruct* token, parsetree_visitor* visitor)
       {
         output_.type = wide2str(token->Tokens[0]->Tokens[0]->Data);
         output_.name = wide2str(token->Tokens[1]->Data);
@@ -1530,17 +1627,17 @@ struct class_args_ : visitor_base<class_args_>
         return true;
       }
 
-    void no_args( TokenStruct* token, parsetree_visitor* visitor )
+    void no_args( TokenStruct* token, parsetree_visitor* visitor)
       {
       }
 
-    void argument_list( TokenStruct* token, parsetree_visitor* visitor )
+    void argument_list( TokenStruct* token, parsetree_visitor* visitor)
       {
-        visit( token->Tokens[0], visitor );
-        visit( token->Tokens[2], visitor );
+        visit( token->Tokens[0], visitor);
+        visit( token->Tokens[2], visitor);
       }
 
-    void named_argument( TokenStruct* token, parsetree_visitor* visitor )
+    void named_argument( TokenStruct* token, parsetree_visitor* visitor)
       {
         xs_const result;
 
@@ -1583,7 +1680,12 @@ struct xs_ : visitor_base<xs_>
         return visit_rule(this, token, visitor);
       }
 
-    void adj_property( TokenStruct* token, parsetree_visitor* visitor )
+    virtual ast_base* target()
+      {
+        return &output_;
+      }
+
+    void adj_property( TokenStruct* token, parsetree_visitor* visitor)
       {
         xs_property xp;
 
@@ -1597,7 +1699,7 @@ struct xs_ : visitor_base<xs_>
         output_.add( xp );
       }
 
-    void adj_method( TokenStruct* token, parsetree_visitor* visitor )
+    void adj_method( TokenStruct* token, parsetree_visitor* visitor)
       {
         xs_method xm;
         adjetive_ adj;
@@ -1610,7 +1712,7 @@ struct xs_ : visitor_base<xs_>
         output_.add( xm );
       }
 
-    void instance( TokenStruct* token, parsetree_visitor* visitor )
+    void instance( TokenStruct* token, parsetree_visitor* visitor)
       {
         xs_instance   xi;
         qualified_id_ qi(xi.id);
@@ -1626,7 +1728,7 @@ struct xs_ : visitor_base<xs_>
         output_.add( xi );
       }
 
-    void class_( TokenStruct* token, parsetree_visitor* visitor )
+    void class_( TokenStruct* token, parsetree_visitor* visitor)
       {
         xs_class xc;
         xc.name = wide2str(token->Tokens[1]->Data);
@@ -1644,7 +1746,7 @@ struct xs_ : visitor_base<xs_>
         output_.add( xc );
       }
 
-    void behaviour_( TokenStruct* token, parsetree_visitor* visitor )
+    void behaviour_( TokenStruct* token, parsetree_visitor* visitor)
       {
         xs_behaviour xb;
         xb.name = wide2str( token->Tokens[1]->Data );
@@ -1659,7 +1761,7 @@ struct xs_ : visitor_base<xs_>
         output_.add( xb );
       }
 
-    void event_( TokenStruct* token, parsetree_visitor* visitor )
+    void event_( TokenStruct* token, parsetree_visitor* visitor)
       {
         xs_event xe;
         qualified_id_ qi(xe.name);
@@ -1674,7 +1776,7 @@ struct xs_ : visitor_base<xs_>
         output_.add( xe );
       }
 
-    void const_( TokenStruct* token, parsetree_visitor* visitor )
+    void const_( TokenStruct* token, parsetree_visitor* visitor)
       {
         xs_const xc;
         xc.name = wide2str(token->Tokens[1]->Data);
@@ -1685,7 +1787,7 @@ struct xs_ : visitor_base<xs_>
         output_.add( xc );
       }
 
-    void event_decl( TokenStruct* token, parsetree_visitor* visitor )
+    void event_decl( TokenStruct* token, parsetree_visitor* visitor)
       {
         xs_event_decl xe;
         xe.name = wide2str(token->Tokens[1]->Data);
@@ -1696,7 +1798,7 @@ struct xs_ : visitor_base<xs_>
         output_.add( xe );
       }
 
-    void add_property( TokenStruct* token, parsetree_visitor* visitor )
+    void add_property( TokenStruct* token, parsetree_visitor* visitor)
       {
         xs_property xp;
         property_   p(xp);
@@ -1705,7 +1807,7 @@ struct xs_ : visitor_base<xs_>
         output_.add( xp );
       }
 
-    void add_method( TokenStruct* token, parsetree_visitor* visitor )
+    void add_method( TokenStruct* token, parsetree_visitor* visitor)
       {
         xs_method xm;
         method_   m(xm);
@@ -1714,7 +1816,7 @@ struct xs_ : visitor_base<xs_>
         output_.add( xm );
       }
 
-    void complete_dsl( TokenStruct* token, parsetree_visitor* visitor )
+    void complete_dsl( TokenStruct* token, parsetree_visitor* visitor)
       {
         dsl result;
         result.name = wide2str(token->Tokens[0]->Data);
@@ -1733,7 +1835,7 @@ struct xs_ : visitor_base<xs_>
         output_.add( result );
       }
 
-    void parameter_dsl( TokenStruct* token, parsetree_visitor* visitor )
+    void parameter_dsl( TokenStruct* token, parsetree_visitor* visitor)
       {
         dsl result;
         result.name = wide2str(token->Tokens[0]->Data);
@@ -1751,7 +1853,7 @@ struct xs_ : visitor_base<xs_>
         output_.add( result );
       }
 
-    void simple_dsl( TokenStruct* token, parsetree_visitor* visitor )
+    void simple_dsl( TokenStruct* token, parsetree_visitor* visitor)
       {
         dsl result;
         result.name = wide2str(token->Tokens[0]->Data);
@@ -1763,7 +1865,7 @@ struct xs_ : visitor_base<xs_>
         output_.add( result );
       }
 
-    void behaveas_simple( TokenStruct* token, parsetree_visitor* visitor )
+    void behaveas_simple( TokenStruct* token, parsetree_visitor* visitor)
       {
         xs_implement_behaviour result;
 
@@ -1772,7 +1874,7 @@ struct xs_ : visitor_base<xs_>
         output_.add( result );
       }
 
-    void behaveas( TokenStruct* token, parsetree_visitor* visitor )
+    void behaveas( TokenStruct* token, parsetree_visitor* visitor)
       {
         xs_implement_behaviour result;
 
@@ -1808,6 +1910,8 @@ bool xs_compiler::compile_expression(const str& expr, expression& result)
 
     if (parse_result == PARSEACCEPT)
       {
+        file_position begin, end;
+
         success = true;
         parsetree_visitor  v;
         expression_ ev(result);
@@ -1833,6 +1937,7 @@ bool xs_compiler::compile_code(const str& code_str, code& result)
 
     if (parse_result == PARSEACCEPT)
       {
+        file_position begin, end;
         success = true;
         code_ cd_(result);
         v.visit(root, cd_);
@@ -1866,6 +1971,7 @@ bool xs_compiler::compile_xs(const str& code_str, xs_container& result)
     bool error = false;
     if (parse_result == PARSEACCEPT)
       {
+        file_position begin, end;
         success = true;
         xs_ xs(result);
         v.visit(root, xs);
