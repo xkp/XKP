@@ -214,6 +214,7 @@ stream.ColladaModelLoader = stream.Loader.extend(
 				}
 				mesh[name].start_kf = children[name].start_kf;
 				mesh[name].end_kf = children[name].end_kf;
+				mesh[name].time = children[name].time;				
 			}
 		}
 	}

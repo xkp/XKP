@@ -60,6 +60,8 @@ else
 
 g_elapsed = now; 
 
+if(!g_delta) g_delta = 0;
+
 c_delta = clock.getDelta(),
 c_elapsed = clock.getElapsedTime() * 10;
 

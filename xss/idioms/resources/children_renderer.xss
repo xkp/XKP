@@ -17,6 +17,7 @@
 			{
 				child_.start_kf = <xss:e v="child.start_kf"/>;
 				child_.end_kf = <xss:e v="child.end_kf"/>;
+				child_.time = <xss:e v="child.in"/>;
 			}
 		
 		out()
