@@ -31,7 +31,7 @@
 				
 		<model id="monster_model" src="model_1">
 			<position x="-350"  y="-350" z="-350"/>	
-			
+			<scale x="0.5" y="0.5" z="0.5"/>
 			<rotation x="-90"/>
 		</model>
 		

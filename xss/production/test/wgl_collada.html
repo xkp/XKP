@@ -32,6 +32,8 @@ var streamer;
 var manager = new threejs.Manager(scene, renderer, null, canvas_position);
 var three_utils = new threejs.Utils();
 manager.events = new ev.EventHolder();
+manager.events.parent = manager;
+manager.c_anims = [];
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
@@ -63,8 +65,10 @@ application.events = new ev.EventHolder();
 			for(var i = 0; i < global_package.items.length; i++)
 			{
 				if(global_package.items[i].id == "model_1")
+				{
 					global_package.items[i].children['model_skin'] = child_;
-			}
+				}					
+			}	
 		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
@@ -85,6 +89,7 @@ if (g_elapsed < 0)
 else
 	g_delta  = now - g_elapsed;  
 g_elapsed = now; 
+if(!g_delta) g_delta = 0;
 c_delta = clock.getDelta(),
 c_elapsed = clock.getElapsedTime() * 10;
 manager.events.dispatch("update", [g_delta, g_elapsed]);	
@@ -146,6 +151,9 @@ color:grey,
             monster_model.position.x = -350;
             monster_model.position.y = -350;
             monster_model.position.z = -350;
+            monster_model.scale.x = 0.5;
+            monster_model.scale.y = 0.5;
+            monster_model.scale.z = 0.5;
             set_rotation_x(monster_model.rotation, -90);
             plane_1.position.y = -500;
             application.mouse_x = null;

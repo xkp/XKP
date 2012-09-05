@@ -32,6 +32,8 @@ var streamer;
 var manager = new threejs.Manager(scene, renderer, null, canvas_position);
 var three_utils = new threejs.Utils();
 manager.events = new ev.EventHolder();
+manager.events.parent = manager;
+manager.c_anims = [];
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
@@ -105,6 +107,7 @@ if (g_elapsed < 0)
 else
 	g_delta  = now - g_elapsed;  
 g_elapsed = now; 
+if(!g_delta) g_delta = 0;
 c_delta = clock.getDelta(),
 c_elapsed = clock.getElapsedTime() * 10;
 manager.events.dispatch("update", [g_delta, g_elapsed]);	
