@@ -2,7 +2,7 @@
 
 	<resources>		
 		<collada_model id="pump" src="model/pump/pump.dae">
-			<collada_animation id="anim" start_kf="0" end_kf="47" in="30"/>
+			<collada_animation id="anim" start_frame="0" end_frame="47" in="30" />
 			<collada_camera id="model_cam"/>
 			<collada_camera id="model_cam1"/>
 			<collada_camera id="model_cam2"/>			

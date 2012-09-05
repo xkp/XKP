@@ -15,8 +15,8 @@
 		if(child.class_name == "collada_animation")
 			out()
 			{
-				child_.start_kf = <xss:e v="child.start_kf"/>;
-				child_.end_kf = <xss:e v="child.end_kf"/>;
+				child_.start_frame = <xss:e v="child.start_frame"/>;
+				child_.end_frame = <xss:e v="child.end_frame"/>;
 				child_.time = <xss:e v="child.in"/>;
 			}
 		

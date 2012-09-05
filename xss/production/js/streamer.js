@@ -212,9 +212,68 @@ stream.ColladaModelLoader = stream.Loader.extend(
 					kfAnimation.timeScale = 1;
 					mesh[name].push( kfAnimation );
 				}
-				mesh[name].start_kf = children[name].start_kf;
-				mesh[name].end_kf = children[name].end_kf;
-				mesh[name].time = children[name].time;				
+				mesh[name].start_frame = children[name].start_frame;
+				mesh[name].end_frame = children[name].end_frame;
+				mesh[name].time = children[name].time;
+				mesh[name].progress = 0;
+				mesh[name].playing = false;
+				mesh[name].loop = children[name].loop;				
+				this.streamer.manager.events.addListener("update", function(delta,elapsed)
+				{
+					if(model1.anim.playing)
+					{
+						var frameTime = delta * 0.001 / (model1.anim.time/(model1.anim.end_frame - model1.anim.start_frame));
+						if ( model1.anim.progress >= model1.anim.start_frame && model1.anim.progress <= model1.anim.end_frame ) {
+							for ( var i = 0; i < model1.anim.length; ++i ) {
+								model1.anim[ i ].update( frameTime );
+							}
+						} else if ( model1.anim.progress > model1.anim.end_frame ) {
+								if(model1.anim.loop)
+								{
+									model1.anim.init();
+									model1.anim.progress = 0;
+								}
+						}
+						model1.anim.progress += frameTime;	
+					}
+				});
+				mesh[name].init = function()
+				{
+					for ( var k = 0; k < this.length; ++k ) {
+						var animation = this[k];
+						var hl = animation.hierarchy.length;						
+						for ( var h = 0; h < hl; h++ ) {
+							var keys = animation.data.hierarchy[ h ].keys;
+							var sids = animation.data.hierarchy[ h ].sids;
+							var obj = animation.hierarchy[ h ];
+							if ( keys.length && sids ) {
+								for ( var s = 0; s < sids.length; s++ ) {
+									var sid = sids[ s ];
+									var next = animation.getNextKeyWith( sid, h, 0 );
+									if ( next ) next.apply( sid );
+								}
+								obj.matrixAutoUpdate = false;
+								animation.data.hierarchy[ h ].node.updateMatrix();
+								obj.matrixWorldNeedsUpdate = true;
+							}
+						}
+						animation.play( false, 0 );		
+					}
+				}
+				mesh[name].stop = function()
+				{
+					this.playing = false;
+					for ( var j = 0; j < this.length; ++j ) {
+						this[ j ].stop();
+					}
+					this.progress = 0;	
+					this.init();
+				}
+				mesh[name].start = function()
+				{
+					this.init();
+					this.playing = true;					
+				}
 			}
 		}
 	}
