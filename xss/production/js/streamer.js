@@ -199,6 +199,91 @@ stream.ColladaModelLoader = stream.Loader.extend(
 						}				
 				}
 			}
+			else if(children[name].type_ == 'collada_animation')
+			{
+				mesh[name] = [];
+				mesh[name].handler = THREE.AnimationHandler;
+				var animations = mesh.dae.animations;
+				for ( var i = 0; i < animations.length; ++i ) {
+					var animation = animations[ i ];
+					mesh[name].handler.add( animation );
+
+					var kfAnimation = new THREE.KeyFrameAnimation( animation.node, animation.name );
+					kfAnimation.timeScale = 1;
+					mesh[name].push( kfAnimation );
+				}
+				mesh[name].start_frame = children[name].start_frame;
+				mesh[name].end_frame = children[name].end_frame;
+				mesh[name].time = children[name].time;
+				mesh[name].progress = 0;
+				mesh[name].playing = false;
+				mesh[name].loop = children[name].loop;
+				if(!this.streamer.manager.c_anims.launched)
+				{				
+					this.streamer.manager.events.addListener("update", function(delta,elapsed)
+					{
+						for(var i = 0; i < this.parent.c_anims.length; ++i)
+						{
+							var anim = this.parent.c_anims[i];
+							if(anim.playing)
+							{
+								var frameTime = delta * 0.001 / (anim.time/(anim.end_frame - anim.start_frame));
+								if ( anim.progress >= anim.start_frame && anim.progress <= anim.end_frame ) {
+									for ( var i = 0; i < anim.length; ++i ) {
+										anim[ i ].update( frameTime );
+									}
+								} else if ( anim.progress > anim.end_frame ) {
+										if(anim.loop)
+										{
+											anim.init();
+											anim.progress = 0;
+										}
+								}
+								anim.progress += frameTime;	
+							}
+						}
+						this.parent.c_anims.launched = true;
+					});
+				}
+				mesh[name].init = function()
+				{
+					for ( var k = 0; k < this.length; ++k ) {
+						var animation = this[k];
+						var hl = animation.hierarchy.length;						
+						for ( var h = 0; h < hl; h++ ) {
+							var keys = animation.data.hierarchy[ h ].keys;
+							var sids = animation.data.hierarchy[ h ].sids;
+							var obj = animation.hierarchy[ h ];
+							if ( keys.length && sids ) {
+								for ( var s = 0; s < sids.length; s++ ) {
+									var sid = sids[ s ];
+									var next = animation.getNextKeyWith( sid, h, 0 );
+									if ( next ) next.apply( sid );
+								}
+								obj.matrixAutoUpdate = false;
+								animation.data.hierarchy[ h ].node.updateMatrix();
+								obj.matrixWorldNeedsUpdate = true;
+							}
+						}
+						animation.play( false, 0 );		
+					}
+				}
+				mesh[name].stop = function()
+				{
+					this.playing = false;
+					for ( var j = 0; j < this.length; ++j ) {
+						this[ j ].stop();
+					}
+					this.progress = 0;	
+					this.init();
+				}
+				mesh[name].start = function()
+				{
+					this.init();
+					this.playing = true;					
+				}
+				this.streamer.manager.c_anims.push(mesh[name]);
+			}
 		}
 	}
 });

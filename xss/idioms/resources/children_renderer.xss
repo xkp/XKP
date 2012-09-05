@@ -8,10 +8,23 @@
 			var child_ = {};
 			child_.type_ = '<xss:e v="child.class_name"/>';
 			for(var i = 0; i < global_package.items.length; i++)
-			{
+			<xss:open_brace/>
 				if(global_package.items[i].id == "<xss:e v="res.id"/>")
+				<xss:open_brace/>
+		}
+		if(child.class_name == "collada_animation")				
+			out()
+			{
+				child_.start_frame = <xss:e v="child.start_frame"/>;
+				child_.end_frame = <xss:e v="child.end_frame"/>;
+				child_.time = <xss:e v="child.in"/>;
+				child_.loop = <xss:e v="child.loop"/>;
+			}		
+		out()
+		{
 					global_package.items[i].children['<xss:e v="child.id"/>'] = child_;
-			}
+				<xss:close_brace/>					
+			<xss:close_brace/>	
 		}			
 	}	
 </xss:code>
