@@ -2,7 +2,9 @@ property mouse_x;
 property mouse_y;
   
 on init()
-{
+{		
+	model1.model_cam2.position.x += 5;	
+	model1.model_cam2.position.z += 5;	
 	model1.anim.start();	
 }
 
@@ -23,6 +25,6 @@ on update(delta, elapsed){
 }
 
 on switch_cameras()
-{
+{	
 	set_active_camera(model1.model_cam2);
 }

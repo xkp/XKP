@@ -217,26 +217,34 @@ stream.ColladaModelLoader = stream.Loader.extend(
 				mesh[name].time = children[name].time;
 				mesh[name].progress = 0;
 				mesh[name].playing = false;
-				mesh[name].loop = children[name].loop;				
-				this.streamer.manager.events.addListener("update", function(delta,elapsed)
-				{
-					if(model1.anim.playing)
+				mesh[name].loop = children[name].loop;
+				if(!this.streamer.manager.c_anims.launched)
+				{				
+					this.streamer.manager.events.addListener("update", function(delta,elapsed)
 					{
-						var frameTime = delta * 0.001 / (model1.anim.time/(model1.anim.end_frame - model1.anim.start_frame));
-						if ( model1.anim.progress >= model1.anim.start_frame && model1.anim.progress <= model1.anim.end_frame ) {
-							for ( var i = 0; i < model1.anim.length; ++i ) {
-								model1.anim[ i ].update( frameTime );
-							}
-						} else if ( model1.anim.progress > model1.anim.end_frame ) {
-								if(model1.anim.loop)
-								{
-									model1.anim.init();
-									model1.anim.progress = 0;
+						for(var i = 0; i < this.parent.c_anims.length; ++i)
+						{
+							var anim = this.parent.c_anims[i];
+							if(anim.playing)
+							{
+								var frameTime = delta * 0.001 / (anim.time/(anim.end_frame - anim.start_frame));
+								if ( anim.progress >= anim.start_frame && anim.progress <= anim.end_frame ) {
+									for ( var i = 0; i < anim.length; ++i ) {
+										anim[ i ].update( frameTime );
+									}
+								} else if ( anim.progress > anim.end_frame ) {
+										if(anim.loop)
+										{
+											anim.init();
+											anim.progress = 0;
+										}
 								}
+								anim.progress += frameTime;	
+							}
 						}
-						model1.anim.progress += frameTime;	
-					}
-				});
+						this.parent.c_anims.launched = true;
+					});
+				}
 				mesh[name].init = function()
 				{
 					for ( var k = 0; k < this.length; ++k ) {
@@ -274,6 +282,7 @@ stream.ColladaModelLoader = stream.Loader.extend(
 					this.init();
 					this.playing = true;					
 				}
+				this.streamer.manager.c_anims.push(mesh[name]);
 			}
 		}
 	}

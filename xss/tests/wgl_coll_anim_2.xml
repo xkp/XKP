@@ -2,18 +2,18 @@
 
 	<resources>		
 		<collada_model id="pump" src="model/pump/pump.dae">
-			<collada_animation id="anim" start_frame="0" end_frame="47" in="30" />
+			<collada_animation id="anim" start_frame="0" end_frame="47" in="45" loop="true"/>
 			<collada_camera id="model_cam"/>
 			<collada_camera id="model_cam1"/>
 			<collada_camera id="model_cam2"/>			
 		</collada_model>	
 	</resources>
 		
+	<materials>	
+		<basic_material id="material_wireframe" color="gray" wireframe="true" alpha="20"/>	
+	</materials>
+	
 	<scene>			
-		
-		<camera id="camera_1" fov="50" aspect="1.77" near="0.1" far="100" look_at="scene.position">
-			<position x="50" z="50"/>           
-		</camera>
 		
 		<ambient_light id="a_ligth" color="ivory">
 			<position y="3000" z="3000"/> 
@@ -30,6 +30,10 @@
 		<model id="model1" src="pump">
 			<scale x="1" y="1" z="1"/>		
 		</model>
+		
+		<plane id="plane_1" width="1000" height="1000" x_segments="50" y_segments="50" material="material_wireframe">
+			<position y="-70"/>			
+		</plane>
 						
 	</scene>
 	

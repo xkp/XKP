@@ -32,6 +32,8 @@ var streamer;
 var manager = new threejs.Manager(scene, renderer, null, canvas_position);
 var three_utils = new threejs.Utils();
 manager.events = new ev.EventHolder();
+manager.events.parent = manager;
+manager.c_anims = [];
 var app_width = <xss:e value="application.width"/>;
 var app_height = <xss:e value="application.height"/>;
 <xss:marker id="variables"/>
