@@ -34,6 +34,7 @@ var three_utils = new threejs.Utils();
 manager.events = new ev.EventHolder();
 manager.events.parent = manager;
 manager.c_anims = [];
+manager.c_skins = [];
 var app_width = <xss:e value="application.width"/>;
 var app_height = <xss:e value="application.height"/>;
 <xss:marker id="variables"/>

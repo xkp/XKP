@@ -34,6 +34,7 @@ var three_utils = new threejs.Utils();
 manager.events = new ev.EventHolder();
 manager.events.parent = manager;
 manager.c_anims = [];
+manager.c_skins = [];
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
@@ -65,7 +66,7 @@ application.events = new ev.EventHolder();
 			for(var i = 0; i < global_package.items.length; i++)
 			{
 				if(global_package.items[i].id == "pump")
-				{
+				{		
 					global_package.items[i].children['model_cam'] = child_;
 				}					
 			}	
@@ -74,7 +75,7 @@ application.events = new ev.EventHolder();
 			for(var i = 0; i < global_package.items.length; i++)
 			{
 				if(global_package.items[i].id == "pump")
-				{
+				{		
 					global_package.items[i].children['model_cam1'] = child_;
 				}					
 			}	
@@ -83,7 +84,7 @@ application.events = new ev.EventHolder();
 			for(var i = 0; i < global_package.items.length; i++)
 			{
 				if(global_package.items[i].id == "pump")
-				{
+				{		
 					global_package.items[i].children['model_cam2'] = child_;
 				}					
 			}	

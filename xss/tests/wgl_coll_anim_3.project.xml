@@ -1,0 +1,9 @@
+<project entry_point="../idioms/webgl/entry.xss" language="js" target="wgl_coll_anim_3.xml" output="wgl_coll_anim_3.html">
+    <path>
+        <output path="../production/test"/>
+    </path>
+
+    <idiom src="../idioms/webgl/module.xml"/>
+	<idiom src="../idioms/resources/resources.xml"/>
+    
+</project>

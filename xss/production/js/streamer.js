@@ -196,9 +196,55 @@ stream.ColladaModelLoader = stream.Loader.extend(
 						{
 							mesh[name] = mesh.dae.skins[i];
 							mesh.dae.skins[i].loaded = true;
+							mesh[name].animations = {};
+				
+							mesh[name].progress = 0;
+							mesh[name].playing = "none";
+							if(!this.streamer.manager.c_skins.launched)
+							{				
+								this.streamer.manager.events.addListener("update", function(delta,elapsed)
+								{
+									for(var i = 0; i < this.parent.c_skins.length; ++i)
+									{
+										var skin = this.parent.c_skins[i];
+										if(skin.playing != "none")
+										{
+											var frameTime = delta * 0.001 / (skin.animations[skin.playing].time/(skin.animations[skin.playing].end_frame - skin.animations[skin.playing].start_frame));
+											if ( skin.progress > skin.animations[skin.playing].end_frame ) 
+												if(skin.animations[skin.playing].loop)
+													skin.progress = skin.animations[skin.playing].start_frame;
+											skin.init();										
+											skin.morphTargetInfluences[ Math.floor( skin.progress ) ] = 1;													
+											skin.progress += frameTime;
+										}
+									}
+									this.parent.c_skins.launched = true;
+								});
+							}
+							mesh[name].stop = function(skin)
+							{
+								this.init();
+								this.playing = "none";									
+								this.progress = this.animations[skin].start_frame;								
+							}
+							mesh[name].start = function(skin)
+							{
+								if(skin != this.playing)
+								{									
+									this.progress = this.animations[skin].start_frame;	
+									this.playing = skin;	
+								}
+							}
+							mesh[name].init = function()
+							{
+								for ( var i = 0; i < this.morphTargetInfluences.length; i++ ) {
+									this.morphTargetInfluences[ i ] = 0;													
+								}					
+							}
+							this.streamer.manager.c_skins.push(mesh[name]);
 						}				
 				}
-			}
+			}			
 			else if(children[name].type_ == 'collada_animation')
 			{
 				mesh[name] = [];
@@ -212,12 +258,11 @@ stream.ColladaModelLoader = stream.Loader.extend(
 					kfAnimation.timeScale = 1;
 					mesh[name].push( kfAnimation );
 				}
-				mesh[name].start_frame = children[name].start_frame;
-				mesh[name].end_frame = children[name].end_frame;
-				mesh[name].time = children[name].time;
+				mesh[name].animations = {};
+				
 				mesh[name].progress = 0;
-				mesh[name].playing = false;
-				mesh[name].loop = children[name].loop;
+				mesh[name].playing = "none";
+				
 				if(!this.streamer.manager.c_anims.launched)
 				{				
 					this.streamer.manager.events.addListener("update", function(delta,elapsed)
@@ -225,18 +270,18 @@ stream.ColladaModelLoader = stream.Loader.extend(
 						for(var i = 0; i < this.parent.c_anims.length; ++i)
 						{
 							var anim = this.parent.c_anims[i];
-							if(anim.playing)
+							if(anim.playing != "none")
 							{
-								var frameTime = delta * 0.001 / (anim.time/(anim.end_frame - anim.start_frame));
-								if ( anim.progress >= anim.start_frame && anim.progress <= anim.end_frame ) {
+								var frameTime = delta * 0.001 / (anim.animations[anim.playing].time/(anim.animations[anim.playing].end_frame - anim.animations[anim.playing].start_frame));
+								if ( anim.progress >= anim.animations[anim.playing].start_frame && anim.progress <= anim.animations[anim.playing].end_frame ) {
 									for ( var i = 0; i < anim.length; ++i ) {
 										anim[ i ].update( frameTime );
 									}
-								} else if ( anim.progress > anim.end_frame ) {
-										if(anim.loop)
+								} else if ( anim.progress > anim.animations[anim.playing].end_frame ) {
+										if(anim.animations[anim.playing].loop)
 										{
 											anim.init();
-											anim.progress = 0;
+											anim.progress = anim.animations[anim.playing].start_frame;
 										}
 								}
 								anim.progress += frameTime;	
@@ -244,6 +289,7 @@ stream.ColladaModelLoader = stream.Loader.extend(
 						}
 						this.parent.c_anims.launched = true;
 					});
+					
 				}
 				mesh[name].init = function()
 				{
@@ -268,21 +314,34 @@ stream.ColladaModelLoader = stream.Loader.extend(
 						animation.play( false, 0 );		
 					}
 				}
-				mesh[name].stop = function()
+				mesh[name].stop = function(anim)
 				{
-					this.playing = false;
+					this.playing = "none";
 					for ( var j = 0; j < this.length; ++j ) {
 						this[ j ].stop();
 					}
-					this.progress = 0;	
+					this.progress = this.animations[anim].start_frame;	
 					this.init();
 				}
-				mesh[name].start = function()
+				mesh[name].start = function(anim)
 				{
-					this.init();
-					this.playing = true;					
+					if(anim != this.playing)
+					{
+						this.init();
+						this.playing = anim;
+					}					
 				}
 				this.streamer.manager.c_anims.push(mesh[name]);
+			}
+			else if(children[name].type_ == 'anim' || children[name].type_ == 'skin')
+			{
+				var anim = {};
+				anim.start_frame = children[name].start_frame;
+				anim.end_frame = children[name].end_frame;
+				anim.time = children[name].time;
+				anim.loop = children[name].loop;
+				anim.parent = children[name].parent;
+				mesh[children[name].parent].animations[name] = anim;
 			}
 		}
 	}

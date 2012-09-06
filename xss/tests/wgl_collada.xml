@@ -2,7 +2,9 @@
 
 	<resources>		
 		<collada_model id="model_1" src="model/monster/monster.dae">
-			<collada_skin id="model_skin"/>			
+			<collada_skin id="model_skin">	
+				<skin id="walk" start_frame="0" end_frame="29" in="1" loop="true"/>
+			</collada_skin>
 		</collada_model>	
 	</resources>
 	<materials>	

@@ -1,0 +1,36 @@
+<application src="wgl_collada3.xs" title="Test 3D" background="black">
+
+	<resources>		
+		<collada_model id="balldroid" src="model/balldroid/balldroid.dae">
+			<collada_animation id="anim">
+				<anim id="arm" start_frame="0" end_frame="8" in="10" loop="true"/>				
+			</collada_animation>
+		</collada_model>	
+	</resources>
+		
+	<materials>	
+		<basic_material id="material_wireframe" color="gray" wireframe="true" alpha="20"/>	
+	</materials>
+	
+	<scene>			
+		
+		<camera id="camera_1" fov="75" aspect="1.5" near="0.1" far="1000" look_at="scene.position">
+			<position y="50" z="500"/>			
+		</camera>
+		
+		<ambient_light id="a_ligth" color="ivory">
+			<position y="5000" z="5000"/> 
+		</ambient_light>
+		
+		<directional_light id="d_ligth_1" color="White" intensity="2">			
+            <position y="5000" z="5000"/>            
+		</directional_light>
+								
+		<model id="model1" src="balldroid">
+			<scale x="100" y="100" z="100"/>	
+			<rotation x="-75"/>
+		</model>
+								
+	</scene>
+	
+</application>
