@@ -33,10 +33,13 @@ struct IRenderer;
 struct ICodeRenderer;
 struct IExpressionRenderer;
 struct IArgumentRenderer;
+struct IErrorHandler;
 
 //reference types
 typedef reference<xss_object>		        XSSObject;
+typedef weak_reference<xss_object>	    WeakXSSObject;
 typedef reference<xss_context>	        XSSContext;
+typedef weak_reference<xss_context>	    WeakXSSContext;
 typedef reference<xss_expression>       XSSExpression;
 typedef reference<xss_value>            XSSValue;
 typedef reference<xss_operator>         XSSOperator;
@@ -54,6 +57,7 @@ typedef reference<IArgumentRenderer>    ArgumentRenderer;
 typedef reference<inline_renderer>      InlineRenderer;
 typedef reference<xss_statement>        XSSStatement;
 typedef reference<xss_code>             XSSCode;
+typedef reference<IErrorHandler>        ErrorHandler;
 
 //enums
 enum MARKER_SOURCE
@@ -67,6 +71,7 @@ enum VALUE_OPERATION
   {
     OP_CONSTANT,
     OP_READ,
+    OP_WRITE,
     OP_CALL,
     OP_INDEX,
     OP_INSTANTIATION,
@@ -80,11 +85,45 @@ enum RESOLVE_ITEM
     RESOLVE_INSTANCE,
     RESOLVE_METHOD,
     RESOLVE_PROPERTY,
+    RESOLVE_EVENT,
     RESOLVE_NATIVE,
     RESOLVE_CONST,
     RESOLVE_VARIABLE,
     RESOLVE_TYPE,
     RESOLVE_CHILD,
+  };
+
+//context
+struct resolve_info
+  {
+    resolve_info():
+      what(RESOLVE_ANY),
+      left(null),
+      search_this(true),
+      output(null),
+      found_this(false),
+      shallow(false)
+      {
+      }
+
+    resolve_info(const resolve_info& other):
+      what(other.what),
+      left(other.left),
+      search_this(other.search_this),
+      output(null),
+      found_this(false),
+      shallow(false)
+      {
+      }
+
+    RESOLVE_ITEM  what;
+    XSSType       type;
+    variant       value;
+    str*          output;
+    resolve_info* left;
+    bool          search_this;
+    bool          found_this;
+    bool          shallow;
   };
 
 //data
@@ -130,10 +169,13 @@ class value_operation
       value_operation(VALUE_OPERATION op, const str& identifier);
 
       VALUE_OPERATION id();
+      void            id(VALUE_OPERATION op);
       variant         constant();
       void            bind(RESOLVE_ITEM what, variant value);
       XSSArguments    args();
       str             identifier();
+      bool            is_constant();
+      bool            bound();
 
       void set_operation(VALUE_OPERATION op);
       void set_arguments(XSSArguments args);
@@ -197,6 +239,7 @@ class xss_object : public editable_object<xss_object>,
 
       //0.9.5
       void add_event_impl(XSSEvent ev, XSSCode code);
+      bool context_resolve(const str& id, resolve_info& info);
     public:
       struct query_info
         {
@@ -257,12 +300,16 @@ class xss_object : public editable_object<xss_object>,
       str           output_id_;
       str           type_name_;
 			XSSType       type_;
-			XSSObject     parent_; //td: !!! weaks
+			WeakXSSObject parent_; 
 			DynamicArray	children_;
 			DynamicArray	properties_;
 			DynamicArray	methods_;
 			DynamicArray	events_;
 			XSSObject     idiom_;
+
+      //0.9.5
+      //td: !!! finish the job
+      virtual void bind(XSSContext ctx);
 	};
 
 typedef std::vector<XSSType> XSSTypeList;
@@ -272,6 +319,7 @@ class xss_type : public xss_object
     public:
       xss_type();
       xss_type(schema* xs_type);
+      xss_type(const str& id, schema* xs_type = null);
     public:
       //xss_object
       virtual bool resolve(const str& name, schema_item& result);
@@ -288,8 +336,6 @@ class xss_type : public xss_object
       DynamicArray  ctor_args();
       void          register_instance(XSSObject obj);
       void          register_foreign_instance(XSSObject obj);
-      XSSContext    context();
-      void          set_context(XSSContext ctx);
       XSSObjectList get_dependencies();
 
       //0.9.5
@@ -319,7 +365,6 @@ class xss_type : public xss_object
       bool        is_object_;
       bool        is_variant_;
       bool        is_unresolved_;
-      XSSContext  ctx_;
     public:
       //td: fix all these
       XSSType       super_;
@@ -397,6 +442,11 @@ struct IContextCallback
     virtual void notify(XSSContext context) = 0;
   };
 
+struct IErrorHandler
+  {
+    virtual void add(const str& description, param_list* data, file_location& loc) = 0;
+  };
+
 //code scope, this should not be public
 //td: 0.9.5 separate exec and data context
 struct xss_context_scope : scope
@@ -412,39 +462,6 @@ struct xss_context_scope : scope
       XSSContext owner_; //td: !!! weak references
   };
 
-//context
-struct resolve_info
-  {
-    resolve_info():
-      what(RESOLVE_ANY),
-      left(null),
-      search_this(true),
-      output(null),
-      found_this(false),
-      shallow(false)
-      {
-      }
-
-    resolve_info(const resolve_info& other):
-      what(other.what),
-      left(other.left),
-      search_this(other.search_this),
-      output(null),
-      found_this(false),
-      shallow(false)
-      {
-      }
-
-    RESOLVE_ITEM  what;
-    XSSType       type;
-    variant       value;
-    str*          output;
-    resolve_info* left;
-    bool          search_this;
-    bool          found_this;
-    bool          shallow;
-  };
-
 struct symbol_data
   {
     symbol_data(RESOLVE_ITEM _type, variant _value):
@@ -457,9 +474,19 @@ struct symbol_data
     variant      value;
   };
 
+enum CONTEXT_IDENTITY
+  {
+    CTXID_NONE,
+    CTXID_CODE,
+    CTXID_INSTANCE,
+    CTXID_TYPE,
+    CTXID_FILE,
+  };
+
 struct xss_context : boost::enable_shared_from_this<xss_context>
   {
     xss_context(XSSContext parent, fs::path path = fs::path());
+    xss_context(CONTEXT_IDENTITY identity, variant idobj, XSSContext parent);
 
     public:
       XSSType       get_type(const str& type);
@@ -467,13 +494,14 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       XSSType       get_type(const str& type, const str& ns);
       XSSType       get_array_type(XSSType type);
       XSSType       add_type(const str& id, XSSType type, bool override_parent = false);
-      void          add_type(XSSType type, const str& ns);
+      XSSType       add_type(XSSType type, const str& ns);
       XSSObject     get_this();
       void          set_this(XSSObject this_);
       Language      get_language();
       void          set_language(Language lang);
       code_context  get_compile_context(); //td: !!! 0.9.5
       fs::path      path();
+      void          set_path(fs::path path);
       void          register_dsl(const str& id, DslLinker dsl);
       void          register_xss_dsl(const str& id, XSSDSL dsl);
       XSSDSL        get_xss_dsl(const str& id);
@@ -485,9 +513,16 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       
       //0.9.5
       XSSType        get_operator_type(operator_type op, XSSType left, XSSType right);
+      XSSType        assign_type(XSSType decl, XSSType value);
+      XSSType        assure_type(const str& type);
       void           set_extents(file_position& begin, file_position& end); 
       file_position& begin();
       file_position& end();
+      XSSContext     parent();
+      void           set_parent(XSSContext ctx);
+      void           identity(CONTEXT_IDENTITY id, variant idobj); 
+      ErrorHandler   errors();
+      void           errors(ErrorHandler handler); 
     public:
       variant resolve(const str& id, RESOLVE_ITEM item_type = RESOLVE_ANY);
       bool    resolve(const str& id, resolve_info& info);
@@ -498,16 +533,17 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       typedef std::map<str, XSSType>  type_list;
       typedef std::pair<str, XSSType> type_list_pair;
 
-			XSSContext parent_;
-      Language   lang_;
-      XSSObject  this_;
-      type_list  types_;
-      fs::path   path_;
-      param_list args_;
-      bool       search_native_;
+			WeakXSSContext parent_; 
+      Language       lang_;
+      XSSObject      this_;
+      type_list      types_;
+      fs::path       path_;
+      param_list     args_;
+      bool           search_native_;
 
       file_position begin_;
       file_position end_;
+      ErrorHandler  errors_;
 
       variant empty_type_value(RESOLVE_ITEM item_type);
     protected:
@@ -533,7 +569,21 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       typedef std::pair<str, XSSDSL> xss_dsl_pair;
 
       xss_dsl_list xss_dsls_;
-  };
+
+    private:
+      //0.9.5
+      CONTEXT_IDENTITY identity_;
+      variant          identity_obj_;
+      fs::path         src_file_;
+       
+      bool     resolve_dot(const str& id, resolve_info& info);
+      bool     identity_search(const str& id, resolve_info& info);
+    public:
+      //error handling
+      void     error(const str& desc, param_list* info, file_position begin, file_position end);
+      fs::path source_file();
+      void     source_file(fs::path& sf);
+};
 
 //these are basically copies of their xs counterpart, but offer xss stuff, like generating
 //they are also vm friendly, unlike the low level xs's ast.
@@ -543,13 +593,36 @@ typedef std::vector<value_operation> value_operations;
 class xss_value
   {
     public:
-      void             bind(XSSContext ctx);
+      xss_value(file_position& begin, file_position& end) :
+        state_(BS_UNBOUND),
+        begin_(begin),
+        end_(end)
+        {
+        }
+    public:
+      void             bind(XSSContext ctx, bool as_setter);
       XSSType          type();
       void             add_operation(value_operation& op);
       value_operation& get_last();
+      bool             is_constant();
+      file_position&   begin(); 
+      file_position&   end(); 
     private:
       XSSType          type_;
       value_operations operations_;      
+      file_position    begin_;
+      file_position    end_;
+    private:
+      //bind state
+      enum BIND_STATE
+        {
+          BS_UNBOUND,
+          BS_FIXUP,
+          BS_ERROR,
+          BS_BOUND,
+        };
+
+      BIND_STATE state_;
   };
 
 class xss_expression
@@ -559,7 +632,14 @@ class xss_expression
       xss_expression(XSSValue value);
     public:
       void    bind(XSSContext ctx);
-      XSSType type();
+    public:
+      XSSType  type();
+      bool     is_constant();
+      XSSValue value();
+    public:
+      void set_extents(file_position& begin, file_position& end);
+      file_position& begin();
+      file_position& end();
     private:
       operator_type op_;
       XSSType       type_;
@@ -567,6 +647,10 @@ class xss_expression
       XSSExpression arg1_;
       XSSExpression arg2_;
       XSSExpression arg3_;
+      bool          is_assign_;
+
+      file_position begin_;
+      file_position end_;
   };
 
 enum STATEMENT_TYPE
@@ -693,6 +777,8 @@ class xss_statement
         {
           return variant_cast<T*>(this, null);
         }
+
+      virtual void bind(XSSContext ctx) = 0;
     protected:
       STATEMENT_TYPE id_;
       file_position  begin_;
@@ -704,9 +790,21 @@ typedef std::vector<XSSStatement> statement_list;
 class xss_code
   {
     public:
-      void add(XSSStatement st);
+      xss_code() : 
+        ctx_(XSSContext(new xss_context(XSSContext())))
+        {
+        }
+    public:
+      void           add(XSSStatement st);
+      XSSContext     context();
+      void           bind(XSSContext ctx);
+      XSSType        return_type();
+      file_position& begin(); 
+      file_position& end(); 
     private:
       statement_list statements_;
+      XSSContext     ctx_; 
+      XSSType        return_type_;
   };
 
 struct signature_item
@@ -734,6 +832,8 @@ class xss_signature
 
       void add_argument(const str& name, XSSType type, XSSExpression default_value);
       void add_argument(const str& name, const str& type_name, XSSExpression default_value);
+
+      void bind(XSSContext ctx);
     private:
       signature_items items_;
   };
@@ -794,12 +894,16 @@ class xss_property : public xss_object
       variant eval(XSSContext ctx);
       
       //0.9.5
-      void expr_value(XSSExpression value);
-      void set_getter(InlineRenderer getter);
-      void set_setter(InlineRenderer setter);
-      void code_getter(XSSCode getter);
-      void code_setter(XSSCode setter);
-      void as_const();
+      void    expr_value(XSSExpression value);
+      void    set_getter(InlineRenderer getter);
+      void    set_setter(InlineRenderer setter);
+      void    code_getter(XSSCode getter);
+      void    code_setter(XSSCode setter);
+      void    as_const();
+      void    property_type(XSSType type);
+      XSSType property_type();
+      
+      virtual void bind(XSSContext ctx);
     private:
       //0.9.5
       XSSExpression  expr_value_;
@@ -807,6 +911,7 @@ class xss_property : public xss_object
       InlineRenderer setter_;
       XSSCode        code_getter_;
       XSSCode        code_setter_;
+      XSSType        prop_type_;
   };
 
 class xss_event : public xss_object
@@ -827,6 +932,8 @@ class xss_event : public xss_object
       void         set_dispatcher(InlineRenderer dispatcher);
       void         set_signature(XSSSignature sig);
       XSSSignature signature();
+
+      virtual void bind(XSSContext ctx);
     private:
       InlineRenderer dispatcher_;
       XSSSignature   signature_;
@@ -851,10 +958,13 @@ class xss_method : public xss_object
 			variant code_;
 
       //0.9.5
-      void return_type(XSSType type);
-      void set_caller(InlineRenderer caller);
-      void set_signature(XSSSignature sig);
-      void set_code(XSSCode code);
+      void    return_type(XSSType type);
+      XSSType return_type();
+      void    set_caller(InlineRenderer caller);
+      void    set_signature(XSSSignature sig);
+      void    set_code(XSSCode code);
+
+      virtual void bind(XSSContext ctx);
     private:
       XSSType        return_type_;
       InlineRenderer caller_;
@@ -883,7 +993,7 @@ struct xss_object_schema : editable_object_schema<T>
 				this->template property_<str>         ("type_name",		&T::type_name_);
 				this->template property_<str>         ("class_name",	&T::type_name_);
         this->template property_<XSSType>     ("type",        &T::type,       &T::set_type);
-				this->template property_<XSSObject>   ("parent",      &T::parent_);
+        this->template readonly_property<XSSObject> ("parent", &T::parent );
         this->template property_<XSSObject>   ("idiom",       &T::idiom_);
 
         this->template method_<DynamicArray, 1>("query_properties", &T::query_properties);

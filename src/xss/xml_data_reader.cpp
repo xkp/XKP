@@ -32,7 +32,10 @@ bool xml_data_reader::parse_xml(const str& xml, TiXmlDocument& doc)
 void xml_data_reader::read_node(TiXmlElement* node, DataEntity entity)
   {
     entity->set_type(node->Value());
-    entity->set_id(str(node->Attribute("id")));
+    
+    const char* id_data = node->Attribute("id");
+    if (id_data)
+      entity->set_id(str(id_data));
 
     const TiXmlAttribute* attr = node->FirstAttribute();
 	  while(attr)

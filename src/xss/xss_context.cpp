@@ -18,6 +18,9 @@ const str SCannotResolve("Cannot resolve");
 const str SArrayMismatch("An array has been declared that already exists on the super class as a non array");
 const str SPropertyAlreadyExists("Trying to add a property that already exists");
 const str SDupDSL("Duplicate dsl");
+const str SGetterNotReturning("property getters must return a value");
+const str SGetterTypeMismatch("property getters must return the same type as its property");
+const str SMethodReturnTypeMismatch("a method returns a different type than its declaration");
 
 str xss_utils::var_to_string(variant& v)
   {
@@ -84,8 +87,21 @@ xss_context::xss_context(XSSContext parent, fs::path path):
   path_(path),
   code_scope_(),
   got_dsls_(false),
-  search_native_(false)
+  search_native_(false),
+  identity_(CTXID_NONE)
   {
+    code_types_.add_type<xss_object>("object");
+    code_types_.add_type<DynamicArray>("array");
+  }
+
+xss_context::xss_context(CONTEXT_IDENTITY identity, variant idobj, XSSContext parent):
+  parent_(parent),
+  got_dsls_(false),
+  search_native_(false),
+  identity_(identity),
+  identity_obj_(idobj)
+  {
+    //td: !!! move to app
     code_types_.add_type<xss_object>("object");
     code_types_.add_type<DynamicArray>("array");
   }
@@ -96,8 +112,8 @@ XSSType xss_context::get_type(const str& type)
     if (it != types_.end())
       return it->second;
 
-    if (parent_)
-      return parent_->get_type(type);
+    if (XSSContext parent = parent_.lock())
+      return parent->get_type(type);
 
     return XSSType();
   }
@@ -113,16 +129,19 @@ XSSType xss_context::get_type(schema* type)
           return it->second;
       }
 
-    if (parent_)
-      return parent_->get_type(type);
+    if (XSSContext parent = parent_.lock())
+      return parent->get_type(type);
 
     return XSSType();
   }
 
 XSSType xss_context::get_type(const str& type, const str& ns)
   {
-    assert(false); //td: namespaces
-    return XSSType();
+    if (ns.empty())
+      return get_type(type);
+
+    //td: !!! namespaces
+    return get_type(type);
   }
 
 XSSType xss_context::get_array_type(XSSType type)
@@ -130,10 +149,7 @@ XSSType xss_context::get_array_type(XSSType type)
     str type_name = type->id();
     if (type_name.empty())
       {
-        param_list error;
-        error.add("id", SContextError);
-        error.add("desc", SEmptyArrayType);
-        xss_throw(error);
+        return XSSType();
       }
 
     str array_type_name = "array<" + type_name + ">"; //im gonna go basic on this one
@@ -147,7 +163,7 @@ XSSType xss_context::get_array_type(XSSType type)
             return type;
           }
         else
-          assert(false); //what's that
+          return XSSType();
       }
 
     //create it and register
@@ -159,6 +175,7 @@ XSSType xss_context::get_array_type(XSSType type)
 
 XSSType xss_context::add_type(const str& id, XSSType type, bool override_parent)
   {
+    //td: !!! revise this
     if (override_parent)
       {
         type_list::iterator it = types_.find(id);
@@ -189,22 +206,26 @@ XSSType xss_context::add_type(const str& id, XSSType type, bool override_parent)
     return type;
   }
 
-void xss_context::add_type(XSSType type, const str& ns)
+XSSType xss_context::add_type(XSSType type, const str& ns)
   {
     XSSType curr_type = get_type(type->id());
     if (!curr_type)
       types_.insert(type_list_pair(type->id(), type));
 
-    if (!ns.empty())
-      assert(false); //name spaces
+    //td: !!! namespaces
+    return type;
   }
 
 XSSObject xss_context::get_this()
   {
-    if (this_)
-      return this_;
+    assert(false); //gt rid of
+    //if (this_)
+    //  return this_;
 
-    return parent_? parent_->get_this() : XSSObject();
+    //if (XSSContext parent = parent_.lock())
+    //  return parent->get_type(type);
+
+    return XSSObject();
   }
 
 void xss_context::set_this(XSSObject _this_)
@@ -217,8 +238,8 @@ Language xss_context::get_language()
     if (lang_)
       return lang_;
 
-    if (parent_)
-      return parent_->get_language();
+    if (XSSContext parent = parent_.lock())
+      return parent->get_language();
 
     return Language();
   }
@@ -242,13 +263,18 @@ code_context xss_context::get_compile_context()
     return result;
   }
 
+void xss_context::set_path(fs::path path)
+  {
+    path_ = path;
+  }
+
 fs::path xss_context::path()
   {
     if (!path_.empty())
       return path_;
 
-    if (parent_)
-      return parent_->path();
+    if (XSSContext parent = parent_.lock())
+      return parent->path();
 
     param_list error;
     error.add("id", SContextError);
@@ -284,8 +310,8 @@ XSSDSL xss_context::get_xss_dsl(const str& id)
     if (it != xss_dsls_.end())
       return it->second;
 
-    if (parent_)
-      return parent_->get_xss_dsl(id);
+    if (XSSContext parent = parent_.lock())
+      return parent->get_xss_dsl(id);
 
     return XSSDSL();
   }
@@ -299,8 +325,8 @@ void xss_context::collect_xss_dsls(std::vector<str>& dsls)
         dsls.push_back(it->first);          
       }
 
-    if (parent_)
-      parent_->collect_xss_dsls(dsls);
+    if (XSSContext parent = parent_.lock())
+      parent->collect_xss_dsls(dsls);
   }
 
 void xss_context::add_parameter(const str& id, XSSType type)
@@ -325,8 +351,24 @@ void xss_context::search_native(bool enabled)
 
 XSSType xss_context::get_operator_type(operator_type op, XSSType left, XSSType right)
   {
-    assert(false); //td:
-    return XSSType();
+    return get_type("var"); //td: !!!
+  }
+
+XSSType xss_context::assign_type(XSSType decl, XSSType value)
+  {
+    if (!decl->is_variant() && decl != value)
+      return XSSType();
+
+    return value;
+  }
+
+XSSType xss_context::assure_type(const str& type)
+  {
+    XSSType result = get_type(type);
+    if (!result)
+      return result;
+
+    return result;
   }
 
 void xss_context::set_extents(file_position& begin, file_position& end)
@@ -343,6 +385,39 @@ file_position& xss_context::begin()
 file_position& xss_context::end()
   {
     return end_;
+  }
+
+XSSContext xss_context::parent()
+  {
+    return parent_.lock();
+  }
+
+void xss_context::set_parent(XSSContext ctx)
+  {
+    parent_ = ctx;
+  }
+
+void xss_context::identity(CONTEXT_IDENTITY id, variant idobj)
+  {
+    assert(identity_ == CTXID_NONE);
+    identity_     = id;
+    identity_obj_ = idobj;
+  }
+
+ErrorHandler xss_context::errors()
+  {
+    if (errors_)
+      return errors_;
+
+    if (XSSContext parent = parent_.lock())
+      return parent->errors();
+
+    return ErrorHandler();
+  }
+
+void xss_context::errors(ErrorHandler handler)
+  {
+    errors_ = handler;
   }
 
 variant xss_context::resolve(const str& id, RESOLVE_ITEM item_type)
@@ -372,7 +447,7 @@ variant xss_context::resolve(const str& id, XSSObject instance, RESOLVE_ITEM ite
     return empty_type_value(item_type);
   }
 
-bool xss_context::resolve(const str& id, resolve_info& info)
+bool xss_context::resolve_dot(const str& id, resolve_info& info)
   {
     bool any = false; //kids, dont do this at home
 
@@ -504,28 +579,58 @@ bool xss_context::resolve(const str& id, resolve_info& info)
           }
       }
 
-    if (info.left)
+    return false;
+  }
+
+bool xss_context::identity_search(const str& id, resolve_info& info)
+  {
+    switch(identity_)
       {
-        if (search_native_)
+        case CTXID_NONE:
+        case CTXID_CODE:
+          return false; //nothing to see here
+
+        case CTXID_INSTANCE:
+        case CTXID_TYPE:
           {
-            switch(info.left->what)
-              {
-                case RESOLVE_INSTANCE:
-                  {
-                    XSSObject obj = info.left->value; 
-                    schema_item sitm;
-                    if (obj->resolve(id, sitm))
-                      {
-                        info.what  = RESOLVE_NATIVE;
-                        info.type  = XSSType();
-                        info.value = sitm;
-                        return true;
-                      }
-                  }
-              }
+            XSSObject obj = variant_cast<XSSObject>(identity_obj_, XSSObject());
+            assert(obj); //bad context
+
+            return obj->context_resolve(id, info);
           }
-        return false;
       }
+    return false;
+  }
+
+fs::path xss_context::source_file()
+  {
+    if (!src_file_.empty())
+      return src_file_;
+
+    if (XSSContext parent = parent_.lock())
+      return parent->source_file();
+
+    return fs::path();
+  }
+
+void xss_context::source_file(fs::path& sf)
+  {
+    src_file_ = sf;
+  }
+
+void xss_context::error(const str& desc, param_list* info, file_position begin, file_position end)
+  {
+    ErrorHandler eh = errors(); assert(eh);
+    fs::path     ep = source_file(); 
+
+    file_location loc(ep, begin, end);
+    eh->add(desc, info, loc);
+  }
+
+bool xss_context::resolve(const str& id, resolve_info& info)
+  {
+    if (info.left)
+      return resolve_dot(id, info);
 
     //check globals now
     if (find_symbol(id, info))
@@ -567,11 +672,16 @@ bool xss_context::resolve(const str& id, resolve_info& info)
         return true;
       }
 
-    
+    if (identity_search(id, info))
+      return true;
+
     if (info.shallow)
       return false;
 
-    return parent_? parent_->resolve(id, info) : false;
+    if (XSSContext parent = parent_.lock())
+      return parent->resolve(id, info);
+    
+    return false;
   }
 
 bool xss_context::resolve_path(const std::vector<str>& path, resolve_info& info)
@@ -697,11 +807,7 @@ void xss_context::register_symbol(RESOLVE_ITEM type, const str& id, variant symb
           }
         else
           {
-            param_list error;
-            error.add("id", SContextError);
-            error.add("desc", SDuplicateSymbol);
-            error.add("symbol", id);
-            xss_throw(error);
+            assert(false); //check outside
           }
       }
 
@@ -740,11 +846,11 @@ void xss_context::collect_dsl()
     if (got_dsls_)
       return;
 
-    if (parent_)
+    if (XSSContext parent = parent_.lock())
       {
         //aint the most efficient way
         code_context pctx;
-        pctx = parent_->get_compile_context();
+        pctx = parent->get_compile_context();
         dsl_list::iterator it = pctx.dsl_->begin();
         dsl_list::iterator nd = pctx.dsl_->end();
 
@@ -1035,7 +1141,7 @@ XSSType	xss_object::type()
 
 XSSObject	xss_object::parent()
   {
-    return parent_;
+    return parent_.lock();
   }
 
 DynamicArray xss_object::children()
@@ -1070,27 +1176,8 @@ void xss_object::set_output_id(const str& id)
 
 void xss_object::set_type_name(const str& id)
   {
-    if (!type_name_.empty())
-      {
-        param_list error;
-        error.add("id", STypeMismatch);
-        error.add("desc", SCannotOverrideTypes);
-        error.add("object", id_);
-        error.add("old type", type_name_);
-        error.add("new type", id);
-        xss_throw(error);
-      }
-
-    if (type_ && type_->id() != id)
-      {
-        param_list error;
-        error.add("id", STypeMismatch);
-        error.add("desc", SCannotOverrideTypes);
-        error.add("object", id_);
-        error.add("old type", type_->id());
-        error.add("new type", id);
-        xss_throw(error);
-      }
+    assert(type_name_.empty());
+    assert(!type_ || type_->id() == id);
 
     type_name_ = id;
   }
@@ -1145,6 +1232,46 @@ void xss_object::set_idiom(XSSObject id)
 void xss_object::add_event_impl(XSSEvent ev, XSSCode code)
   {
     assert(false); //td:
+  }
+
+bool xss_object::context_resolve(const str& id, resolve_info& info)
+  {
+    if (info.what == RESOLVE_ANY || info.what == RESOLVE_PROPERTY)
+      {
+        XSSProperty prop = get_property(id);
+        if (prop)
+          {
+            info.what = RESOLVE_PROPERTY;
+            info.value = prop;
+            info.type  = prop->property_type();
+            return true;
+          }
+      }
+      
+    if (info.what == RESOLVE_ANY || info.what == RESOLVE_METHOD)
+      {
+        XSSMethod mthd = get_method(id);
+        if (mthd)
+          {
+            info.what = RESOLVE_METHOD;
+            info.value = mthd;
+            info.type  = mthd->return_type();
+            return true;
+          }
+      }
+
+    if (info.what == RESOLVE_ANY || info.what == RESOLVE_EVENT)
+      {
+        XSSEvent ev = get_event(id);
+        if (ev)
+          {
+            info.what = RESOLVE_EVENT;
+            info.value = ev;
+            return true;
+          }
+      }
+
+    return false;
   }
 
 //struct xss_object::query_info
@@ -1579,6 +1706,45 @@ variant xss_object::attribute_value(const str& name)
     return dynamic_get(this, name);
   }
 
+void xss_object::bind(XSSContext ctx)
+  {
+    std::vector<variant>::iterator it = children_->ref_begin();
+    std::vector<variant>::iterator nd = children_->ref_end();
+    for(; it != nd; it++)
+      {
+        XSSObject child = *it;
+        child->bind(XSSContext(new xss_context(CTXID_INSTANCE, child, ctx)));
+      }
+
+    //td: !!! property multimap
+    it = properties_->ref_begin();
+    nd = properties_->ref_end();
+    for(; it != nd; it++)
+      {
+        XSSProperty prop = *it;
+        prop->bind(ctx); //note we're not creating a new context for properties or methods, they'll use the instance context
+                         //dont see a case 
+      }
+
+    it = methods_->ref_begin();
+    nd = methods_->ref_end();
+    for(; it != nd; it++)
+      {
+        XSSMethod mthd = *it;
+        mthd->bind(ctx);
+      }
+
+    it = events_->ref_begin();
+    nd = events_->ref_end();
+    for(; it != nd; it++)
+      {
+        XSSEvent ev = *it;
+        ev->bind(ctx);
+      }
+
+    //td: !!! event implementation
+  }
+
 void xss_object::add_property_(XSSProperty prop)
   {
     std::vector<variant>::iterator it = properties_->ref_begin();
@@ -1710,6 +1876,23 @@ xss_type::xss_type(schema* _xs_type):
   local_instances_(new dynamic_array),
   foreign_instances_(new dynamic_array)
   {
+    DYNAMIC_INHERITANCE(xss_type)
+  }
+
+xss_type::xss_type(const str& id, schema* _xs_type):
+  xss_object(),
+  xs_type_(_xs_type),
+  is_enum_(false),
+  is_array_(false),
+  is_object_(false),
+  is_variant_(false),
+  is_unresolved_(false),
+  ctor_args_(new dynamic_array),
+  all_instances_(new dynamic_array),
+  local_instances_(new dynamic_array),
+  foreign_instances_(new dynamic_array)
+  {
+    id_ = id;
     DYNAMIC_INHERITANCE(xss_type)
   }
 
@@ -1854,29 +2037,20 @@ void xss_type::register_instance(XSSObject obj)
 
 void xss_type::register_foreign_instance(XSSObject obj)
   {
-    XSSObject id = obj->idiom();
-    if (id)
-      { 
-        //td: crap
-        xss_module* idiom = dynamic_cast<xss_module*>(id.get());
-        if (idiom)
-          idiom->used();
-      }
+	//td: !!! 0.9.5
+    //XSSObject id = obj->idiom();
+    //if (id)
+    //  { 
+    //    //td: crap
+    //    xss_module* idiom = dynamic_cast<xss_module*>(id.get());
+    //    if (idiom)
+    //      idiom->used();
+    //  }
 
-    obj->set_parent(shared_from_this());
+    //obj->set_parent(shared_from_this());
 
-    all_instances_->push_back(obj);
-    foreign_instances_->push_back(obj);
-  }
-
-XSSContext xss_type::context()
-  {
-    return ctx_;
-  }
-
-void xss_type::set_context(XSSContext ctx)
-  {
-    ctx_ = ctx;
+    //all_instances_->push_back(obj);
+    //foreign_instances_->push_back(obj);
   }
 
 XSSObjectList xss_type::get_dependencies()
@@ -2130,28 +2304,72 @@ void xss_property::as_const()
     assert(false); //td:
   }
 
-XSSType xss_property::type()
+void xss_property::property_type(XSSType type)
   {
-    if (!type_)
+    prop_type_ = type;
+  }
+
+XSSType xss_property::property_type()
+  {
+    return prop_type_;
+  }
+
+void xss_property::bind(XSSContext ctx)
+  {
+    xss_object::bind(ctx);
+    if (code_getter_)
       {
-        ICodeRenderer* icr = variant_cast<ICodeRenderer *>(get_, null);
-
-        if (icr)
+        code_getter_->bind(ctx);
+        XSSType rt = code_getter_->return_type();
+        if (!prop_type_)
           {
-            type_ = icr->type();
-          }
-        else
-          {
-            IExpressionRenderer *ier = variant_cast<IExpressionRenderer *>(value_, null);
-
-            if (ier)
+            prop_type_ = rt;
+            if (!prop_type_)
               {
-                type_ = ier->type();
+		            ctx->error(SGetterNotReturning, null, code_getter_->begin(), code_getter_->end());
+                prop_type_ = ctx->get_type("var");
               }
           }
+        else if (prop_type_ != rt)
+		      ctx->error(SGetterTypeMismatch, null, code_getter_->begin(), code_getter_->end());
       }
 
-    return type_;
+    if (!prop_type_)
+      prop_type_ = ctx->get_type("var");
+
+    if (code_setter_)
+      {
+        XSSContext sctx = code_setter_->context();
+        sctx->register_symbol(RESOLVE_VARIABLE, "value", prop_type_);
+        
+        code_setter_->bind(ctx);
+      }
+  }
+
+XSSType xss_property::type()
+  {
+    //if (!type_)
+    //  {
+    //    ICodeRenderer* icr = variant_cast<ICodeRenderer *>(get_, null);
+
+    //    if (icr)
+    //      {
+    //        type_ = icr->type();
+    //      }
+    //    else
+    //      {
+    //        IExpressionRenderer *ier = variant_cast<IExpressionRenderer *>(value_, null);
+
+    //        if (ier)
+    //          {
+    //            type_ = ier->type();
+    //          }
+    //      }
+    //  }
+
+    //return type_;
+    assert(false); //whats all this crap again?
+    return XSSType();
   }
 
 //xss_event
@@ -2199,6 +2417,14 @@ void xss_event::set_signature(XSSSignature sig)
 XSSSignature xss_event::signature()
   {
     return signature_;
+  }
+
+void xss_event::bind(XSSContext ctx)
+  {
+    xss_object::bind(ctx);
+    signature_->bind(ctx);
+
+    //td: !!! implemented events
   }
 
 //xss_method
@@ -2250,6 +2476,11 @@ void xss_method::return_type(XSSType type)
     return_type_ = type;
   }
 
+XSSType xss_method::return_type()
+  {
+    return return_type_;
+  }
+
 void xss_method::set_caller(InlineRenderer caller)
   {
     caller_ = caller;
@@ -2263,6 +2494,26 @@ void xss_method::set_signature(XSSSignature sig)
 void xss_method::set_code(XSSCode code)
   {
     code__ = code;
+  }
+
+void xss_method::bind(XSSContext ctx)
+  {
+    xss_object::bind(ctx);
+
+    if (signature_)
+      signature_->bind(ctx);
+    else
+      signature_ = XSSSignature(new xss_signature);
+
+    if (code__)
+      {
+        code__->bind(ctx);
+        XSSType rt = code__->return_type();
+        if (!return_type_)
+            return_type_ = rt;
+        else if (return_type_ != rt)
+		      ctx->error(SMethodReturnTypeMismatch, null, code__->begin(), code__->end());
+      }
   }
 
 variant xss_method::code()

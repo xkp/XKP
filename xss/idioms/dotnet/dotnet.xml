@@ -1,0 +1,24 @@
+<idiom id="dotnet" src="ws-node.xs">
+    <enum id="test_enum">
+        <item id="te1"/>
+        <item id="te2"/>
+        <item id="te3"/>
+    </enum>
+    <class id="console">
+        <constructor>
+            <argument id="x" type="float"/>
+            <argument id="y" type="float"/>
+        </constructor>
+        
+        <method id="log">
+            <argument id="what" type="var"/>
+        </method>
+            
+        <property id="test_property" type="int"/>
+            
+        <event id="test_event">
+            <argument id="x" type="float"/>
+            <argument id="y" type="float"/>
+        </event>
+    </class>
+</idiom>

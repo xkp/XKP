@@ -109,9 +109,12 @@
     <ClInclude Include="..\..\..\include\xss\html_parser.h" />
     <ClInclude Include="..\..\..\include\xss\language.h" />
     <ClInclude Include="..\..\..\include\xss\lang\base.h" />
+    <ClInclude Include="..\..\..\include\xss\lang\csharp.h" />
     <ClInclude Include="..\..\..\include\xss\lang\debug.h" />
     <ClInclude Include="..\..\..\include\xss\lang\js.h" />
     <ClInclude Include="..\..\..\include\xss\lang\waxjs.h" />
+    <ClInclude Include="..\..\..\include\xss\lang_factory.h" />
+    <ClInclude Include="..\..\..\include\xss\localfs.h" />
     <ClInclude Include="..\..\..\include\xss\object_model.h" />
     <ClInclude Include="..\..\..\include\xss\object_reader.h" />
     <ClInclude Include="..\..\..\include\xss\utils.h" />
@@ -158,10 +161,13 @@
     <ClCompile Include="..\..\..\src\xss\html_parser.cpp" />
     <ClCompile Include="..\..\..\src\xss\language.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang\base.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang\csharp.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang\debug.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang\java.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang\js.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang\waxjs.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang_factory.cpp" />
+    <ClCompile Include="..\..\..\src\xss\localfs.cpp" />
     <ClCompile Include="..\..\..\src\xss\object_model.cpp" />
     <ClCompile Include="..\..\..\src\xss\object_reader.cpp" />
     <ClCompile Include="..\..\..\src\xss\xml_data_reader.cpp" />

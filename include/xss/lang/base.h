@@ -192,7 +192,10 @@ struct base_lang : public ILanguage
     void compile_property(XSSProperty prop, XSSContext ctx);
     
     //td: 0.9.5
-    XSSContext create_context() {return XSSContext();}
+    virtual XSSContext create_context() 
+      {
+        return XSSContext(new xss_context(XSSContext()));
+      }
   };
 
 //interface glue

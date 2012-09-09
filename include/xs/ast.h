@@ -9,6 +9,10 @@
 #include <vector>
 #include <stack>
 
+#include <boost/filesystem.hpp>
+
+namespace fs = boost::filesystem;
+
 namespace xkp
 {
   struct file_position
@@ -55,6 +59,25 @@ namespace xkp
 
       int line;
       int column;
+    };
+
+  struct file_location
+    {
+      file_location()
+        {
+        }
+
+      file_location(fs::path& _file, file_position& _begin, file_position& _end):
+        file(_file),
+        begin(_begin),
+        end(_end)
+        {
+        }
+        
+
+      fs::path      file;
+      file_position begin;
+      file_position end;
     };
 
   struct expression_visitor
@@ -134,7 +157,7 @@ struct expression_splitter : expression_visitor
 	};
 
   //helpers
-  struct xs_const
+  struct xs_const : ast_base
     {
       str        name;
       expression value;

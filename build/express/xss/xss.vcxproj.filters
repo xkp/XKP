@@ -204,6 +204,15 @@
     <ClInclude Include="..\..\..\include\xss\xss_code.h">
       <Filter>Header Files\xss</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\localfs.h">
+      <Filter>Header Files\xss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\lang_factory.h">
+      <Filter>Header Files\xss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\lang\csharp.h">
+      <Filter>Header Files\xss\lang</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -349,6 +358,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\xss\xss_code.cpp">
       <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\localfs.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\lang_factory.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\lang\csharp.cpp">
+      <Filter>Source Files\xss\lang</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

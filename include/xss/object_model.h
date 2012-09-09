@@ -35,14 +35,17 @@ class ILanguageFactory
 class IFileSystem
   {
     public:
-      virtual fs::path   locate(const str& filename)    = 0;
-      virtual DataReader load_data(const str& filename) = 0;
-      virtual str        load_file(const str& filename) = 0;
+      virtual fs::path   locate(const str& filename, fs::path base_path)    = 0;
+      virtual DataReader load_data(const str& filename, fs::path base_path) = 0;
+      virtual str        load_file(const str& filename, fs::path base_path) = 0;
+      virtual str        load_file(fs::path file)                           = 0;
+      virtual DataReader load_data(fs::path file)                           = 0;
   };
 
 //data structures
-typedef std::vector<XSSType>   type_list;
-typedef std::map<str, XSSType> type_map;
+typedef std::vector<XSSType>      type_list;
+typedef std::map<str, XSSType>    type_map;
+typedef std::map<str, XSSContext> context_map;
 
 typedef std::map<str, Idiom> idiom_list;
 
@@ -116,12 +119,52 @@ struct document
 
 typedef std::map<fs::path, document> document_map;
 
+//lazy eval
+enum FIXUP_TYPE
+  {
+    FIXUP_OBJECT_TYPE,
+    FIXUP_PROPERTY_TYPE,
+    FIXUP_RETURN_TYPE,
+    FIXUP_INSTANCE_EVENT,
+    FIXUP_SUPER_TYPE, 
+  };
+
+struct fixup_data
+  {
+    fixup_data(FIXUP_TYPE _id, variant _data):
+      id(_id),
+      data(_data)
+      {
+      }      
+
+    FIXUP_TYPE id;
+    variant    data;
+  };
+
+typedef std::vector<fixup_data> fixup_list;
+
+//internal context
+struct om_context
+  {
+    om_context():
+      doc(NULL)
+      {
+      }
+
+    type_map     classes;
+    instance_map instances;
+    fixup_list   fixup;
+    context_map  contexts; 
+    
+    document*    doc;
+  };
+
 class object_model
   {
     public:
-      object_model();
+      object_model(FileSystem fs, LanguageFactory languages);
     public:
-      Application load(DataReader project, param_list& args);
+      Application load(DataReader project, param_list& args, fs::path base_path);
     private:
       LanguageFactory languages_;
       FileSystem      fs_;
@@ -131,8 +174,8 @@ class object_model
       DataEntity      assure_unique_root(DataReader dr);
       void            register_idiom(const str& id, Idiom idiom);
       Idiom           find_idiom(const str& idiom);
-      void            compile_include(const str& def, const str& src, XSSContext ctx);
-      void            compile_xs(const str& text, XSSContext ctx, type_map& classes, instance_map& instances, document& doc);
+      void            compile_include(const str& def, const str& src, XSSContext ctx, om_context& octx);
+      void            compile_xs(const str& text, XSSContext ctx, om_context& octx);
 
     private:
       //data reader
@@ -147,13 +190,37 @@ class object_model
       XSSEvent        read_event(DataEntity de, Idiom idiom, XSSContext ctx);
       InlineRenderer  read_inline_renderer(DataEntity de);
       XSSExpression   read_expression(DataEntity de, XSSType type, const str& attribute);
-      type_map        read_include_def(DataEntity de, XSSContext ctx);
-      instance_map    read_include_singleton(DataEntity de, XSSContext ctx);
+      void            read_include_def(DataEntity de, XSSContext ctx, om_context& octx);
+      void            read_include_singleton(DataEntity de, XSSContext ctx, om_context& octx);
     private:
       //document model
       document_map documents_;
 
-      document& create_document(const str& src_file);
+      document& create_document(const str& src_file, XSSContext ctx);
+      void      fix_it_up(XSSContext ctx, om_context& octx);
+      void      bind_it_up(XSSContext ctx, om_context& octx);
+      bool      check_type(XSSType type, const str& type_name, XSSContext ctx);
+    private:
+      //error handling
+      struct error_info
+        {
+          error_info(const str _desc, param_list* _info, file_location& _loc):
+            desc(_desc),
+            info(_info? *_info : param_list()),
+            loc(_loc)
+            {
+            }
+
+          str           desc;
+          param_list    info;
+          file_location loc;
+        };
+
+      typedef std::vector<error_info> error_list;
+
+      error_list errors_;
+    public:
+      void add_error(const str& desc, param_list* info, file_location& loc);
   };
 }
 #endif

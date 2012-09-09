@@ -854,16 +854,17 @@ void xss_compiler::xss_args(const param_list params, param_list& result, fs::pat
           }
         else if (pname == "context")
           {
-            XSSType only_types_for_now = variant_cast<XSSType>(value, XSSType());
-            if (!only_types_for_now)
-              {
-                param_list error;
-                error.add("id", SProjectError);
-                error.add("desc", SContextParamOnlyTypes);
-                xss_throw(error);
-              }
+            assert(false); //td: 0.9.5
+            //XSSType only_types_for_now = variant_cast<XSSType>(value, XSSType());
+            //if (!only_types_for_now)
+            //  {
+            //    param_list error;
+            //    error.add("id", SProjectError);
+            //    error.add("desc", SContextParamOnlyTypes);
+            //    xss_throw(error);
+            //  }
 
-            ctx = only_types_for_now->context();
+            //ctx = only_types_for_now->context();
             continue;
           }
         else if (pname == "html_template")
@@ -2661,7 +2662,7 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
 
             clazz->set_definition(def_class);
             clazz->set_super(super);
-            clazz->set_context(ictx);
+            //clazz->set_context(ictx);
             clazz->fixup_children(ictx);
 				    
             ictx->set_this(XSSObject(clazz));
@@ -2709,7 +2710,7 @@ void xss_compiler::read_include(fs::path def, fs::path src, XSSContext ctx, XSSA
         if (module)
           module->pre_process_type(clazz);
 
-        clazz->set_context(ictx);
+        //clazz->set_context(ictx);
       }
 
     std::vector<XSSType>::iterator cit = classes.begin();

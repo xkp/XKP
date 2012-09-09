@@ -1,0 +1,8 @@
+C:\dev\vsx\xsTest\MPFProj\bin\Debug\Microsoft.VisualStudio.Project.dll
+C:\dev\vsx\xsTest\MPFProj\bin\Debug\Microsoft.VisualStudio.Project.pdb
+C:\dev\vsx\xsTest\MPFProj\obj\Debug\ResolveAssemblyReference.cache
+C:\dev\vsx\xsTest\MPFProj\obj\Debug\Microsoft.VisualStudio.Project.VisualStudio.Project.resources
+C:\dev\vsx\xsTest\MPFProj\obj\Debug\GenerateResource.read.1.tlog
+C:\dev\vsx\xsTest\MPFProj\obj\Debug\GenerateResource.write.1.tlog
+C:\dev\vsx\xsTest\MPFProj\obj\Debug\Microsoft.VisualStudio.Project.dll
+C:\dev\vsx\xsTest\MPFProj\obj\Debug\Microsoft.VisualStudio.Project.pdb

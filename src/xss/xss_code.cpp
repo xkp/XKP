@@ -4,6 +4,154 @@
 
 using namespace xkp;
 
+const str SExpectingIterable("foreach expects an iterable");
+const str SExpectingConstantCase("case expression must be constant in this context");
+
+//statement_if
+void statement_if::bind(XSSContext ctx)
+  {
+      expr_->bind(ctx);
+      if_code_->bind(ctx);
+      if (else_code_)
+        else_code_->bind(ctx);
+  }
+
+//statement_variable
+void statement_variable::bind(XSSContext ctx)
+  {
+    type_ = ctx->get_type(type_name_);
+      
+    if (value_)
+      {
+        value_->bind(ctx);
+        type_ = ctx->assign_type(type_, value_->type());
+      }
+
+    assert(type_);
+    ctx->register_symbol(RESOLVE_VARIABLE, id_, type_);
+  }
+
+//statement_for
+void statement_for::bind(XSSContext ctx)
+  {
+    str           id_;
+    if (id_.empty())
+      {
+        init_expr_->bind(ctx);
+      }
+    else
+      {
+        type_ = ctx->get_type(type_name_);
+        init_value_->bind(ctx);
+        type_ = ctx->assign_type(type_, init_value_->type());
+        for_code_->context()->register_symbol(RESOLVE_VARIABLE, id_, type_);
+      }
+
+      if (cond_expr_)
+        cond_expr_->bind(ctx);
+
+      if (iter_expr_)
+        iter_expr_->bind(ctx);
+
+      for_code_->bind(ctx);
+  }
+
+//statement_foreach
+void statement_foreach::bind(XSSContext ctx)
+  {
+    str           id_;
+    
+    type_ = ctx->get_type(type_name_);
+    iter_expr_->bind(ctx);
+
+    XSSType iter_type = iter_expr_->type();
+    if (!iter_type)
+      {
+        //this error should have already be reported
+        iter_type = ctx->get_type("array");
+      }
+      
+    if (!iter_type->is_array())
+      {
+        ctx->error(SExpectingIterable, null, begin_, end_);
+        iter_type = ctx->get_type("array");
+      }
+
+    type_ = ctx->assign_type(type_, iter_type->array_type());
+    for_code_->context()->register_symbol(RESOLVE_VARIABLE, id_, type_);
+    for_code_->bind(ctx);
+  }
+
+//statement_while
+void statement_while::bind(XSSContext ctx)
+  {
+    expr_->bind(ctx);
+    code_->bind(ctx);
+  }
+
+//statement_switch
+void statement_switch::bind(XSSContext ctx)
+  {
+    default_code_->bind(ctx);
+    switch_sections::iterator it = sections_.begin();
+    switch_sections::iterator nd = sections_.end();
+
+    if (expr_)
+      expr_->bind(ctx);
+
+    for(; it != nd; it++)
+      {
+        std::vector<XSSExpression>::iterator eit = it->cases.begin();
+        std::vector<XSSExpression>::iterator end = it->cases.end();
+
+        for(; eit != end; eit++)
+          {
+            XSSExpression case_expr = *eit;
+            if (expr_)
+              {
+                if (!case_expr->is_constant())
+                  ctx->error(SExpectingConstantCase, null, case_expr->begin(), case_expr->end());
+              }
+            else 
+              case_expr->bind(ctx);
+          }
+
+        it->case_code->bind(ctx);
+      }
+  }
+
+//statement_try
+void statement_try::bind(XSSContext ctx)
+  {
+    try_code_->bind(ctx);
+    if (finally_code_)
+      finally_code_->bind(ctx);
+    
+    catch_sections::iterator it = sections_.begin();
+    catch_sections::iterator nd = sections_.end();
+
+    for(; it != nd; it++)
+      {
+        XSSType ct = ctx->assure_type(it->type);
+        it->catch_code->context()->register_symbol(RESOLVE_VARIABLE, it->id, ct);
+        it->catch_code->bind(ctx);
+      }
+  }
+
+//expr_statement
+void expr_statement::bind(XSSContext ctx)
+  {
+    //td: !!! notify return stuff
+    expr_->bind(ctx);
+  }
+
+//xss_loop_statement
+void xss_loop_statement::bind(XSSContext ctx)
+  {
+    //td: !!! check loop, notify context
+  }
+
+//utils
 struct code_builder : code_visitor
   {
     code_builder(XSSCode result, IContextCallback* callback):
@@ -57,12 +205,12 @@ struct code_builder : code_visitor
 
     virtual void break_(stmt_break& info)
       {
-        result_->add(XSSStatement(new xss_statement(STATEMENT_BREAK, info.begin, info.end)));
+        result_->add(XSSStatement(new xss_loop_statement(STATEMENT_BREAK, info.begin, info.end)));
       }
 
     virtual void continue_(stmt_continue& info)
       {
-        result_->add(XSSStatement(new xss_statement(STATEMENT_CONTINUE, info.begin, info.end)));
+        result_->add(XSSStatement(new xss_loop_statement(STATEMENT_CONTINUE, info.begin, info.end)));
       }
 
     virtual void return_(stmt_return& info)
@@ -159,6 +307,13 @@ XSSCode xss_code_utils::compile_code(code& cde, IContextCallback* callback)
 
     code_builder cb(result, callback);
     cde.visit(&cb);
+
+    XSSContext ctx = result->context();
+    ctx->set_extents(cde.begin, cde.end); 
+
+    if (callback)
+      callback->notify(ctx);
+
     return result;
   }
 

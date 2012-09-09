@@ -26,6 +26,12 @@ class xs_compiler
       str  file2str(const str& filename);
   };
 
+class grammar_utils
+  {
+    public:
+	  static wchar_t *GetToken(wchar_t *InputBuf, long InputSize, long *InputHere, long *Line, long *Column, int *Symbol);
+  };			
+
 }
 
 #endif

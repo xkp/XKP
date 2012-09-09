@@ -1,0 +1,15 @@
+<VSTemplate Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
+  <TemplateData>
+    <DefaultName>class.xs</DefaultName>
+    <Name>Class</Name>
+    <Description>An empty class definition</Description>
+    <Icon>__TemplateIcon.ico</Icon>
+    <ProjectType>Excess</ProjectType>
+    <SortOrder>10</SortOrder>
+  </TemplateData>
+  <TemplateContent>
+    <References />
+    <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xs" ReplaceParameters="true">class.xs</ProjectItem>
+    <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xml" ReplaceParameters="true">class.xml</ProjectItem>
+  </TemplateContent>
+</VSTemplate>

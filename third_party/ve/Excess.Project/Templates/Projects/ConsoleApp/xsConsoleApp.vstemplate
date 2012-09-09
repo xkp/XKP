@@ -1,0 +1,20 @@
+<VSTemplate Version="2.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>Excess Console Application</Name>
+    <Description>A project for creating a command-line xs application</Description>
+    <Icon>__TemplateIcon.ico</Icon>
+    <ProjectType>Excess</ProjectType>
+    <SortOrder>50</SortOrder>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>ConsoleApplication</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="xsConsoleApp.xsproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true">ConsoleApp.xs</ProjectItem>
+      <ProjectItem ReplaceParameters="true">ConsoleApp.project.xml</ProjectItem>
+    </Project>
+  </TemplateContent>
+</VSTemplate>

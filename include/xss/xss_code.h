@@ -18,6 +18,8 @@ class statement_if : public xss_statement,
         {
         }
     public:
+      virtual void bind(XSSContext ctx);
+    public:
       virtual XSSExpression expr()      {return expr_;}
       virtual XSSCode       if_code()   {return if_code_;}
       virtual XSSCode       else_code() {return else_code_;}
@@ -38,6 +40,8 @@ class statement_variable : public xss_statement,
         value_(value)
         {
         }
+    public:
+      virtual void bind(XSSContext ctx);
     public:
       virtual str           id()        {return id_;}
       virtual str           type_name() {return type_name_;}
@@ -67,6 +71,8 @@ class statement_for : public xss_statement,
         for_code_(for_code)
         {
         }
+    public:
+      virtual void bind(XSSContext ctx);
     public:
       virtual str           id()         {return id_;         }
       virtual str           type_name()  {return type_name_;  }
@@ -100,6 +106,8 @@ class statement_foreach : public xss_statement,
         {
         }
     public:
+      virtual void bind(XSSContext ctx);
+    public:
       virtual str           id()         {return id_;         }
       virtual str           type_name()  {return type_name_;  }
       virtual XSSType       type()       {return type_;       }
@@ -124,6 +132,8 @@ class statement_while : public xss_statement,
         {
         }
     public:
+      virtual void bind(XSSContext ctx);
+    public:
       virtual XSSExpression expr()  {return expr_;  } 
       virtual XSSCode       code()  {return code_;   } 
     private:
@@ -147,6 +157,8 @@ class statement_switch : public xss_statement,
           sections_.push_back(statement_switch_section(case_code));
           return *(sections_.end() - 1);
         }
+    public:
+      virtual void bind(XSSContext ctx);
     public:
       virtual XSSExpression    expr()          {return expr_;        } 
       virtual XSSCode          default_code()  {return default_code_;}
@@ -174,6 +186,8 @@ class statement_try : public xss_statement,
           return *(sections_.end() - 1);
         }
     public:
+      virtual void bind(XSSContext ctx);
+    public:
       virtual XSSCode         try_code()      {return try_code_;     } 
       virtual XSSCode         finally_code()  {return finally_code_; }
       virtual catch_sections& sections()      {return sections_;     } 
@@ -193,9 +207,22 @@ class expr_statement : public xss_statement,
         {
         }
     public:
+      virtual void bind(XSSContext ctx);
+    public:
       virtual XSSExpression expr() {return expr_; } 
     private:
       XSSExpression expr_;
+  };
+
+class xss_loop_statement : public xss_statement
+  {
+    public:
+      xss_loop_statement(STATEMENT_TYPE id, file_position& begin, file_position& end):
+        xss_statement(id, begin, end)
+        {
+        }
+    public:
+      virtual void bind(XSSContext ctx);
   };
 
 struct xss_code_utils

@@ -1033,6 +1033,12 @@ void code_::statement_if( TokenStruct* token, parsetree_visitor* visitor)
     if_     v(si);
     visitor->visit(token, v);
 
+    si.begin.min(from_token(token->Tokens[0]));
+    if (si.else_code.empty())
+      si.end.max(si.if_code.end);
+    else
+      si.end.max(si.else_code.end);
+
     output_.add_statement( si );
   }
 
@@ -1041,6 +1047,9 @@ void code_::statement_for( TokenStruct* token, parsetree_visitor* visitor)
     stmt_for sf;
     for_     f(sf);
     visitor->visit(token, f);
+
+    sf.begin.min(from_token(token->Tokens[0]));
+    sf.end.max(sf.for_code.end);
 
     output_.add_statement( sf );
   }
@@ -1051,6 +1060,8 @@ void code_::statement_iter_for( TokenStruct* token, parsetree_visitor* visitor)
     iterfor_      iif(sif);
     visitor->visit(token, iif);
 
+    sif.begin.min(from_token(token->Tokens[0]));
+    sif.end.max(sif.for_code.end);
     output_.add_statement( sif );
   }
 
@@ -1060,6 +1071,8 @@ void code_::statement_while( TokenStruct* token, parsetree_visitor* visitor)
     while_     w(sw);
     visitor->visit(token, w);
 
+    sw.begin.min(from_token(token->Tokens[0]));
+    sw.end.max(sw.while_code.end);
     output_.add_statement( sw );
   }
 
@@ -1070,6 +1083,9 @@ void code_::statement_switch( TokenStruct* token, parsetree_visitor* visitor)
     stmt_switch ss;
     switch_ s(ss);
     visitor->visit(token, s);
+
+    ss.begin.min(from_token(token->Tokens[0]));
+    ss.end.max(from_token(token->Tokens[6]));
 
     output_.add_statement(ss);
   }
@@ -1087,18 +1103,26 @@ void code_::statement_dispatch( TokenStruct* token, parsetree_visitor* visitor)
     visitor->visit(token->Tokens[3], args);
     sd.arg_count = args.param_count;
 
+    sd.begin.min(from_token(token->Tokens[0]));
+    sd.end.max(from_token(token->Tokens[5]));
     output_.add_statement( sd );
   }
 
 void code_::statement_break( TokenStruct* token, parsetree_visitor* visitor)
   {
     stmt_break sb;
+
+    sb.begin.min(from_token(token->Tokens[0]));
+    sb.end.max(from_token(token->Tokens[1]));
     output_.add_statement( sb );
   }
 
 void code_::statement_continue( TokenStruct* token, parsetree_visitor* visitor)
   {
     stmt_continue sc;
+    sc.begin.min(from_token(token->Tokens[0]));
+    sc.end.max(from_token(token->Tokens[1]));
+
     output_.add_statement( sc );
   }
 
@@ -1107,6 +1131,9 @@ void code_::statement_return( TokenStruct* token, parsetree_visitor* visitor)
     stmt_return sr;
     expression_ expr(sr.expr);
     visitor->visit(token->Tokens[1], expr);
+
+    sr.begin.min(from_token(token->Tokens[0]));
+    sr.end.max(from_token(token->Tokens[2]));
     output_.add_statement( sr );
   }
 
@@ -1116,6 +1143,8 @@ void code_::statement_expression( TokenStruct* token, parsetree_visitor* visitor
     expression_ expr(se.expr);
     visitor->visit(token, expr);
 
+    se.begin.min(from_token(token->Tokens[0]));
+    se.end.max(from_token(token->Tokens[1]));
     output_.add_statement( se );
   }
 
@@ -1126,6 +1155,9 @@ void code_::statement_try( TokenStruct* token, parsetree_visitor* visitor)
     try_     t(ts);
     visitor->visit(token, t);
 
+    ts.begin.min(from_token(token->Tokens[0]));
+    ts.end.max(ts.finally_code.end);
+
     output_.add_statement( ts );
   }
 
@@ -1135,6 +1167,9 @@ void code_::statement_throw( TokenStruct* token, parsetree_visitor* visitor)
     expression_ e(tw.expr);
     visitor->visit(token->Tokens[1], e);
 
+    tw.begin.min(from_token(token->Tokens[0]));
+    tw.end.max(from_token(token->Tokens[2]));
+
     output_.add_statement( tw );
   }
 
@@ -1143,6 +1178,9 @@ void code_::declare_variable( TokenStruct* token, parsetree_visitor* visitor)
     stmt_variable sv;
     variable_     v(sv);
     visitor->visit(token, v);
+
+    sv.begin.min(from_token(token->Tokens[0]));
+    sv.end.max(sv.value.end);
 
     output_.add_statement( sv );
   }
@@ -1784,6 +1822,8 @@ struct xs_ : visitor_base<xs_>
         expression_ ce(xc.value);
         visitor->visit(token->Tokens[3], ce);
 
+        xc.begin = from_token(token->Tokens[1]);
+        xc.end   = from_token(token->Tokens[4]);
         output_.add( xc );
       }
 
@@ -2207,3 +2247,9 @@ str xs_compiler::file2str(const str& filename)
 
    return ss.str();
   }
+
+//grammar_utils
+wchar_t* grammar_utils::GetToken(wchar_t *InputBuf, long InputSize, long *InputHere, long *Line, long *Column, int *Symbol)
+  {
+	return RetrieveToken(InputBuf, InputSize, InputHere, Line, Column, Symbol);
+  }		

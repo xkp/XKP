@@ -11,6 +11,7 @@ xtend-gen/
 *.depend
 *.layout
 
+*.tlog
 *.pdb
 *.ilk
 *.ncb
@@ -20,6 +21,7 @@ xtend-gen/
 *.opensdf
 
 *.exe
+*.dll
 *.obj
 
 Thumbs.db

@@ -22,6 +22,10 @@
 
 #include "boost/filesystem.hpp"
 
+#include "xss/object_model.h"
+#include "xss/localfs.h"
+#include "xss/lang_factory.h"
+
 using namespace xkp;
 
 const str SProjectError("project");
@@ -67,6 +71,18 @@ void test_expressions()
     test_expression("a[5] = { a : 3, b : [2, 3, 4]}");
   }
 
+void test_object_model(fs::path target)
+  {
+    FileSystem fs(new local_filesystem);
+    LanguageFactory lf(new lang_factory);
+
+    ObjectModel om(new object_model(fs, lf));
+
+    param_list args;
+    DataReader prj = fs->load_data(target);
+    om->load(prj, args, target.parent_path());
+  }
+
 int main(int argc, char* argv[])
   {
     test_expressions(); //td: !!!DEBUG!!!
@@ -90,6 +106,9 @@ int main(int argc, char* argv[])
 
         return -1;
       }
+
+    test_object_model(target); //td: !!!DEBUG!!!
+    return 0;
 
     bool wait = false;
     bool json_out = false;

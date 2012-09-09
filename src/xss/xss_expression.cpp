@@ -3,12 +3,70 @@
 
 using namespace xkp;
 
+const int operator_precedence[] =
+  {
+    2,  //"++",   //op_inc,
+    2,  //"--",   //op_dec,
+    2,  //"&",    //op_ref,
+    2,  //"+",    //op_unary_plus,
+    2,  //"-",    //op_unary_minus,
+    2,  //"!",    //op_not,
+    3,  //"*",    //op_mult,
+    3,  //"/",    //op_divide,
+    3,  //"%",    //op_mod,
+    2,  //"as",   //op_typecast,
+    2,  //"is",   //op_typecheck,
+    2,  //"has",  //op_namecheck,
+    4,  //"+",    //op_plus,
+    4,  //"-",    //op_minus,
+    5,  //">>",   //op_shift_right,
+    5,  //"<<",   //op_shift_left,
+    14, //">>=",  //op_shift_right_equal,
+    14, //"<<=",  //op_shift_left_equal,
+    7,  //"==",   //op_equal,
+    7,  //"!=",   //op_notequal,
+    6,  //">",    //op_gt,
+    6,  //"<",    //op_lt,
+    6,  //">=",   //op_ge,
+    6,  //"<=",   //op_le,
+    11, //"&&",   //op_and,
+    12, //"||",   //op_or,
+    14, //"=",    //op_assign,
+    14, //"+=",   //op_plus_equal,
+    14, //"-=",   //op_minus_equal,
+    14, //"*=",   //op_mult_equal,
+    14, //"/=",   //op_div_equal,
+    1,  //".",    //op_dot,
+    1,  //".",    //op_dot_call
+    1,  //"[]",   //op_index,
+    1,  //"",     //op_call,
+    1,  //"",     //op_func_call
+    1,  //"",     //op_array,
+    1,  //"",     //op_parameter
+    1,  //"new",  //op_instantiate
+    1,  //"{}",   //op_object
+  };
+
 const str SExpression("xss-expression");
 
 const str SAssignOperatorOnlyTop("Assign operators can only be used as the base of an expression");
+const str SInvalidAssign("Invalid assignment");
+const str SCannotResolve("Cannot resolve");
+const str SExpectingProperty("Assignment expects a property");
+const str SExpectingMethod("A call expects a method");
+const str SCannotResolveArrayOperator("This entity does not support the bracket operator");
+const str SCannotResolveExpressionType("Could not resolve the type of this expression");
+const str SCannotAssigningNonValue("Invalid assignment");
+
 
 struct expression_builder : expression_visitor
   {
+    expression_builder(file_position& begin, file_position& end):
+      begin_(begin), 
+      end_(end)
+      {
+      }
+
     virtual void push(variant operand, bool top)
       {
         if (operand.is<expression_identifier>())
@@ -35,7 +93,7 @@ struct expression_builder : expression_visitor
             default: assert(false);
           }
 
-        int op_prec = lang_utils::operator_prec(op);
+        int op_prec = operator_precedence[op];
         switch(op)
           {
             case op_dec:
@@ -46,6 +104,7 @@ struct expression_builder : expression_visitor
               {
                 XSSExpression curr = get_expression(arg1);
                 XSSExpression this_expr(new xss_expression(op, curr));
+                this_expr->set_extents(begin_, end_);
 
                 push(this_expr, top);
                 break;
@@ -90,6 +149,7 @@ struct expression_builder : expression_visitor
                 XSSExpression left  = get_expression(arg1);
                 XSSExpression right = get_expression(arg2);
                 XSSExpression this_expr(new xss_expression(op, left, right));
+                this_expr->set_extents(begin_, end_);
 
                 push(this_expr, top);
                 break;
@@ -137,7 +197,7 @@ struct expression_builder : expression_visitor
                     type_args->add(tpit->name, xss_expression_utils::compile_expression(tpit->value));
                   }
                 
-                XSSValue result(new xss_value);
+                XSSValue result(new xss_value(begin_, end_));
                 value_operation op(OP_INSTANTIATION, caller.name); 
                 op.set_arguments(args);
                 op.set_type_arguments(type_args);
@@ -159,7 +219,7 @@ struct expression_builder : expression_visitor
                     obj_values->add(it->name, xss_expression_utils::compile_expression(it->value));
                   }
 
-                XSSValue result(new xss_value);
+                XSSValue result(new xss_value(begin_, end_));
 
                 value_operation op(OP_OBJECT, str()); 
                 op.set_arguments(obj_values);
@@ -175,7 +235,7 @@ struct expression_builder : expression_visitor
                 int                   arg_count = arg2;
                 XSSArguments          args      = get_stack_arguments(arg_count, false);
 
-                XSSValue result(new xss_value);
+                XSSValue result(new xss_value(begin_, end_));
                 value_operation op(OP_CALL, ei.value); 
                 op.set_arguments(args);
 
@@ -210,7 +270,7 @@ struct expression_builder : expression_visitor
 						    int           arg_count = arg1;
                 XSSArguments  args      = get_stack_arguments(arg_count, true);
 
-                XSSValue result(new xss_value);
+                XSSValue result(new xss_value(begin_, end_));
                 value_operation op(OP_ARRAY, str()); 
                 op.set_arguments(args);
 
@@ -261,7 +321,10 @@ struct expression_builder : expression_visitor
           else 
             {
               XSSValue val = get_value(value);
-              return XSSExpression(new xss_expression(val));
+              XSSExpression result(new xss_expression(val));
+              result->set_extents(begin_, end_);
+              
+              return result;
             }
         }
 
@@ -272,7 +335,7 @@ struct expression_builder : expression_visitor
           else if (value.is<expression_identifier>())
             {
               expression_identifier ei = value;
-              XSSValue result(new xss_value);
+              XSSValue result(new xss_value(begin_, end_));
               value_operation op(OP_READ, ei.value); 
               result->add_operation(op);
               return result;
@@ -280,7 +343,7 @@ struct expression_builder : expression_visitor
           else 
             {
               //out to be a constant
-              XSSValue result(new xss_value);
+              XSSValue result(new xss_value(begin_, end_));
               value_operation op(OP_CONSTANT, str()); 
               op.set_constant(value);
               result->add_operation(op);
@@ -308,6 +371,9 @@ struct expression_builder : expression_visitor
 
           return result;
         }
+    private:
+      file_position begin_;
+      file_position end_;
   };
 
 //xss_parameter
@@ -401,6 +467,11 @@ VALUE_OPERATION value_operation::id()
     return op_;
   }
 
+void value_operation::id(VALUE_OPERATION op)
+  {
+    op_ = op;
+  }
+
 variant value_operation::constant()
   {
     return constant_;
@@ -420,6 +491,16 @@ XSSArguments value_operation::args()
 str value_operation::identifier()
   {
     return identifier_;
+  }
+
+bool value_operation::is_constant()
+  {
+    return op_ == OP_CONSTANT;
+  }
+
+bool value_operation::bound()
+  {
+    return op_ == OP_CONSTANT || resolve_what_ != RESOLVE_ANY;
   }
 
 void value_operation::set_operation(VALUE_OPERATION op)
@@ -443,8 +524,10 @@ void value_operation::set_constant(variant constant)
   }
 
 //xss_value
-void xss_value::bind(XSSContext ctx)
+void xss_value::bind(XSSContext ctx, bool as_setter)
   {
+    assert(state_ != BS_BOUND);
+
     value_operations::iterator it = operations_.begin();
     value_operations::iterator nd = operations_.end();
 
@@ -453,12 +536,31 @@ void xss_value::bind(XSSContext ctx)
     XSSType      current;
     for(; it != nd; it++)
       {
+        if ((state_ == BS_FIXUP || state_ == BS_ERROR) && it->bound())
+          continue;
+        
         resolve_info  ri;
         resolve_info& resolver = left;
         if (first)
           resolver = ri;
         else
           resolver.left = &left;
+
+        bool last = (it + 1) == nd;
+
+        //handle assignments
+        if (last && as_setter)
+          {
+            if (it->id() != OP_READ)
+              {
+		            ctx->error(SInvalidAssign, null, begin_, end_);
+                state_ = BS_ERROR;
+                continue;
+              }
+
+            it->id(OP_WRITE);
+
+          }
 
         switch(it->id())
           {
@@ -517,7 +619,36 @@ void xss_value::bind(XSSContext ctx)
                   }
                 else
                   {
-                    //td: 0.9.5 throw??
+                    state_ = BS_ERROR;
+		                
+                    param_list error;
+                    error.add("identifier", it->identifier());
+		                ctx->error(SCannotResolve, &error, begin_, end_);
+                  }
+                break;
+              }
+            case OP_WRITE:
+              {
+                if (ctx->resolve(it->identifier(), resolver))
+                  {
+                    current = resolver.type;
+                    if (resolver.what != RESOLVE_PROPERTY)
+                      {
+                        param_list error;
+                        error.add("identifier", it->identifier());
+		                    ctx->error(SExpectingProperty, null, begin_, end_);
+                        state_ = BS_ERROR;
+                      }
+
+                    it->bind(resolver.what, resolver.value);
+                    left = resolver;
+                  }
+                else
+                  {
+                    param_list error;
+                    error.add("identifier", it->identifier());
+		                ctx->error(SCannotResolve, &error, begin_, end_);
+                    state_ = BS_ERROR;
                   }
                 break;
               }
@@ -539,12 +670,18 @@ void xss_value::bind(XSSContext ctx)
                       }
                     else
                       {
-                        //td: 0.9.5 throw??
+                        param_list error;
+                        error.add("identifier", it->identifier());
+		                    ctx->error(SExpectingMethod, &error, begin_, end_);
+                        state_ = BS_ERROR;
                       }
                   }
                 else
                   {
-                    //td: 0.9.5 throw??
+                    param_list error;
+                    error.add("identifier", it->identifier());
+		                ctx->error(SCannotResolve, &error, begin_, end_);
+                    state_ = BS_ERROR;
                   }
                 break;
               }
@@ -565,21 +702,45 @@ void xss_value::bind(XSSContext ctx)
                       }
                     else
                       {
-                        //td: 0.9.5 throw??
+                        param_list error;
+                        error.add("identifier", it->identifier());
+		                    ctx->error(SCannotResolveArrayOperator, &error, begin_, end_);
+                        state_ = BS_ERROR;
                       }
                   }
                 else
                   {
-                    //td: 0.9.5 throw??
+                    param_list error;
+                    error.add("identifier", it->identifier());
+		                ctx->error(SCannotResolve, &error, begin_, end_);
+                    state_ = BS_ERROR;
                   }
                 break;
               }
           }
 
+        if (state_ == BS_ERROR)
+          break;
+
         first = false;
+
+        if (last)
+          state_ = BS_BOUND;
       }
 
-      type_ = current; assert(type_);
+    if (state_ == BS_BOUND)
+      {
+        type_ = current; 
+        
+        if (!type_)
+          {
+            //td: !!! fix up
+		        //ctx->error(SCannotResolveExpressionType, null, begin_, end_);
+            
+            state_ = BS_FIXUP;
+            type_ = ctx->get_type("var");
+          }
+      }
   }
 
 XSSType xss_value::type()
@@ -597,18 +758,26 @@ value_operation& xss_value::get_last()
     return *(operations_.end() - 1);
   }
 
+bool xss_value::is_constant()
+  {
+    value_operation& last = get_last();
+    return last.is_constant();
+  }
+
 //xss_expression
 xss_expression::xss_expression(operator_type op, XSSExpression arg1, XSSExpression arg2, XSSExpression arg3):
   op_(op),  
   arg1_(arg1), 
   arg2_(arg2), 
-  arg3_(arg3) 
+  arg3_(arg3),
+  is_assign_(false)
   {
   }
 
 xss_expression::xss_expression(XSSValue value):
   op_(op_none),
-  value_(value)
+  value_(value),
+  is_assign_(false)
   {
   }
 
@@ -618,19 +787,33 @@ void xss_expression::bind(XSSContext ctx)
 
     if (value_)
       {
-        value_->bind(ctx);
+        value_->bind(ctx, false);
         type_ = value_->type();
       }
     else
       {
-        arg1_->bind(ctx);
-        if (arg2_)
+        is_assign_ = xss_expression_utils::is_assignment(op_);
+        if (op_ == op_assign)
           {
+            XSSValue val = arg1_->value();
+            if (val)
+              val->bind(ctx, true);
+            else
+		          ctx->error(SCannotAssigningNonValue, null, begin_, end_);
+
             arg2_->bind(ctx);
-            type_ = ctx->get_operator_type(op_, arg1_->type(), arg2_->type());
           }
         else
-          type_ = ctx->get_operator_type(op_, arg1_->type(), XSSType());
+          {
+            arg1_->bind(ctx);
+            if (arg2_)
+              {
+                arg2_->bind(ctx);
+                type_ = ctx->get_operator_type(op_, arg1_->type(), arg2_->type());
+              }
+            else
+              type_ = ctx->get_operator_type(op_, arg1_->type(), XSSType());
+          }
       }
   }
 
@@ -639,10 +822,75 @@ XSSType xss_expression::type()
     return type_;
   }
 
+bool xss_expression::is_constant()
+  {
+    if (!value_)
+      return false;
+    return value_->is_constant();
+  }
+
+XSSValue xss_expression::value()
+  {
+    return value_;
+  }
+
+void xss_expression::set_extents(file_position& begin, file_position& end)
+  {
+    begin_ = begin;
+    end_   = end;
+  }
+
+file_position& xss_expression::begin()
+  {
+    return begin_;
+  }
+
+file_position& xss_expression::end()
+  {
+    return end_;
+  }
+
 //xss_code
+XSSContext xss_code::context()
+  {
+    return ctx_;
+  }
+
 void xss_code::add(XSSStatement st)
   {
     statements_.push_back(st);
+  }
+
+void xss_code::bind(XSSContext ctx)
+  {
+    assert(!ctx_->parent()); //not sure of the semantics of rebinding
+
+    ctx_->set_parent(ctx);
+    ctx_->identity(CTXID_CODE, variant()); //td: !!! investigate when the code is needed by the context, this is increasing coupling
+
+    statement_list::iterator it = statements_.begin();
+    statement_list::iterator nd = statements_.end();
+
+    for(; it != nd; it++)
+      {
+        XSSStatement st = *it;
+        st->bind(ctx_);
+      }
+  }
+
+XSSType xss_code::return_type()
+  {
+    return return_type_;
+  }
+
+file_position& xss_code::begin()
+  {
+    return ctx_->begin();
+  }
+
+file_position& xss_code::end()
+  {
+    return ctx_->end();
   }
 
 //signature_item
@@ -737,6 +985,22 @@ void xss_signature::add_argument(const str& name, const str& type_name, XSSExpre
     items_.push_back(signature_item(name, type_name, default_value));
   }
 
+void xss_signature::bind(XSSContext ctx)
+  {
+    signature_items::iterator it = items_.begin();
+    signature_items::iterator nd = items_.end();
+
+    for(; it != nd; it++)
+      {
+        it->type = ctx->assure_type(it->type_name);
+        if (it->default_value)
+          {
+            it->default_value->bind(ctx);
+            it->type = ctx->assign_type(it->type, it->default_value->type());
+          }
+      }
+  }
+
 //xss_operator
 xss_operator::xss_operator(operator_type op, XSSType result):
   op_(op),
@@ -808,15 +1072,16 @@ XSSExpression xss_expression_utils::constant_expression(variant value)
   {
     expression expr;
     expr.push_operand(value);
-
-    expression_builder eb;
-    expr.visit(&eb);
-    return eb.get();    
+    
+    file_position b, e;
+    expression_builder builder(b, e);
+    expr.visit(&builder);
+    return builder.get();    
   }
 
 XSSExpression xss_expression_utils::compile_expression(expression& expr)
   {
-    expression_builder eb;
+    expression_builder eb(expr.begin, expr.end);
     expr.visit(&eb);
     return eb.get();    
   }  
@@ -832,3 +1097,18 @@ XSSExpression xss_expression_utils::compile_expression(const str& expr)
     return compile_expression(res);
   }
 
+bool xss_expression_utils::is_assignment(operator_type op)
+  {
+    switch(op)
+      {
+        case op_shift_right_equal:
+        case op_shift_left_equal:
+        case op_plus_equal:
+        case op_minus_equal:
+        case op_mult_equal:
+        case op_div_equal:
+        case op_assign:
+          return true;
+      }
+    return false;
+  }
