@@ -8,10 +8,32 @@
 			var child_ = {};
 			child_.type_ = '<xss:e v="child.class_name"/>';
 			for(var i = 0; i < global_package.items.length; i++)
-			{
+			<xss:open_brace/>
 				if(global_package.items[i].id == "<xss:e v="res.id"/>")
+				<xss:open_brace/>		
 					global_package.items[i].children['<xss:e v="child.id"/>'] = child_;
+				<xss:close_brace/>					
+			<xss:close_brace/>	
+		}
+		for(var _child in child.children)
+		{
+			out()
+			{
+				var temp = {};
+				temp.type_ = '<xss:e v="_child.class_name"/>';
+				temp.start_frame = <xss:e v="_child.start_frame"/>;
+				temp.end_frame = <xss:e v="_child.end_frame"/>;
+				temp.time = <xss:e v="_child.in"/>;
+				temp.loop = <xss:e v="_child.loop"/>;
+				temp.parent = '<xss:e v="child.id"/>';
+				for(var i = 0; i < global_package.items.length; i++)
+				{
+					if(global_package.items[i].id == "<xss:e v="res.id"/>")
+					{
+						global_package.items[i].children['<xss:e v="_child.id"/>'] = temp;
+					}
+				}
 			}
-		}			
-	}	
+		}
+	}
 </xss:code>

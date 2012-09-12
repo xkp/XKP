@@ -1,6 +1,10 @@
 property mouse_x;
 property mouse_y;
-property t = 0;
+
+on init()
+{
+	monster_model.model_skin.start("walk");
+}
 
 on update(delta, elapsed){		
 	
@@ -16,16 +20,7 @@ on update(delta, elapsed){
 	light2.position.z = Math.cos( time * 7 ) * 3009;
 	light3.position.x = Math.sin( time * 7 ) * 3009;
 	light3.position.y = Math.cos( time * 3 ) * 4000;
-	light3.position.z = Math.cos( time * 5 ) * 3009;
-	
-	if ( t > 30 ) t = 0;
-	if ( monster_model.model_skin ) {
-		for ( var i = 0; i < monster_model.model_skin.morphTargetInfluences.length; i++ ) {
-			setMorphTargetInfluences(monster_model.model_skin, i, 0);
-		}
-		setMorphTargetInfluences(monster_model.model_skin, Math.floor( t ), 1);
-		t += 0.5;
-	}
+	light3.position.z = Math.cos( time * 5 ) * 3009;	
 }
 
 on mousemove(x, y){

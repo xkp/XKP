@@ -137,11 +137,84 @@ stream.JSonModelLoader = stream.Loader.extend(
 		var model_loader = generate_model_loader(resource.type);
 		model_loader.load(resource.asset, function( geometry ){
 			var model = new THREE.Object3D();
-			var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial);
-			model.add(mesh);
+			var material = geometry.materials[ 0 ];
+			material.morphTargets = true;
+			var mesh = new THREE.MorphAnimMesh(geometry, new THREE.MeshFaceMaterial);
+			model.add(mesh);			
+			this_.render_children(resource.children, mesh, model);			
 			this_.on_loaded(resource, model);
 		});    	        
-    }
+    },
+	render_children: function(children, mesh, model)
+	{
+		for(var name in children)
+		{
+			if(children[name].type_ == 'json_animation')
+			{
+				model[name] = mesh;
+				model[name].animations = {};				
+				model[name].time = 0;
+				model[name].playing = "none";
+				model[name].matrixAutoUpdate = false;
+				model[name].updateMatrix();
+				model[name].manager = this.streamer.manager;
+				if(!this.streamer.manager.js_anims.launched)
+				{				
+					this.streamer.manager.events.addListener("update", function(delta,elapsed)
+					{
+						for(var i = 0; i < this.parent.js_anims.length; ++i)
+						{
+							var anim = this.parent.js_anims[i];
+							if(anim.playing != "none")
+							{
+								var temp_time = anim.time + anim.direction * delta;
+								if(temp_time < anim.duration)
+									anim.updateAnimation( delta );	
+								else
+									if(anim.animations[anim.playing].loop)
+										anim.updateAnimation( delta );	
+							}							
+						}
+						this.parent.c_anims.launched = true;
+					});					
+				}
+				model[name].init = function()
+				{
+					if(this.playing != "none")
+					{
+						this.setFrameRange( this.animations[this.playing].start_frame, this.animations[this.playing].end_frame );
+						this.duration = 1000 * ( this.animations[this.playing].time );	
+						this.time = this.animations[this.playing].start_frame;
+					}
+				}	
+				model[name].start = function(anim)
+				{
+					if(anim != this.playing)
+					{						
+						this.playing = anim;
+						this.init();
+					}
+				}
+				model[name].stop = function(anim)
+				{					
+					this.init();	
+					this.playing = "none"
+					this.updateAnimation( this.manager.delta );						
+				}
+				this.streamer.manager.js_anims.push(model[name]);
+			}
+			else if(children[name].type_ == 'anim')
+			{
+				var anim = {};
+				anim.start_frame = children[name].start_frame;
+				anim.end_frame = children[name].end_frame;
+				anim.time = children[name].time;
+				anim.loop = children[name].loop;
+				anim.parent = children[name].parent;
+				model[children[name].parent].animations[name] = anim;
+			}
+		}
+	}
 });
 
 stream.ColladaModelLoader = stream.Loader.extend(
@@ -196,8 +269,152 @@ stream.ColladaModelLoader = stream.Loader.extend(
 						{
 							mesh[name] = mesh.dae.skins[i];
 							mesh.dae.skins[i].loaded = true;
+							mesh[name].animations = {};
+				
+							mesh[name].progress = 0;
+							mesh[name].playing = "none";
+							if(!this.streamer.manager.c_skins.launched)
+							{				
+								this.streamer.manager.events.addListener("update", function(delta,elapsed)
+								{
+									for(var i = 0; i < this.parent.c_skins.length; ++i)
+									{
+										var skin = this.parent.c_skins[i];
+										if(skin.playing != "none")
+										{
+											var frameTime = delta * 0.001 / (skin.animations[skin.playing].time/(skin.animations[skin.playing].end_frame - skin.animations[skin.playing].start_frame));
+											if ( skin.progress > skin.animations[skin.playing].end_frame ) 
+												if(skin.animations[skin.playing].loop)
+													skin.progress = skin.animations[skin.playing].start_frame;
+											skin.init();										
+											skin.morphTargetInfluences[ Math.floor( skin.progress ) ] = 1;													
+											skin.progress += frameTime;
+										}
+									}
+									this.parent.c_skins.launched = true;
+								});
+							}
+							mesh[name].stop = function(skin)
+							{
+								this.init();
+								this.playing = "none";									
+								this.progress = this.animations[skin].start_frame;								
+							}
+							mesh[name].start = function(skin)
+							{
+								if(skin != this.playing)
+								{									
+									this.progress = this.animations[skin].start_frame;	
+									this.playing = skin;	
+								}
+							}
+							mesh[name].init = function()
+							{
+								for ( var i = 0; i < this.morphTargetInfluences.length; i++ ) {
+									this.morphTargetInfluences[ i ] = 0;													
+								}					
+							}
+							this.streamer.manager.c_skins.push(mesh[name]);
 						}				
 				}
+			}			
+			else if(children[name].type_ == 'collada_animation')
+			{
+				mesh[name] = [];
+				mesh[name].handler = THREE.AnimationHandler;
+				var animations = mesh.dae.animations;
+				for ( var i = 0; i < animations.length; ++i ) {
+					var animation = animations[ i ];
+					mesh[name].handler.add( animation );
+
+					var kfAnimation = new THREE.KeyFrameAnimation( animation.node, animation.name );
+					kfAnimation.timeScale = 1;
+					mesh[name].push( kfAnimation );
+				}
+				mesh[name].animations = {};
+				
+				mesh[name].progress = 0;
+				mesh[name].playing = "none";
+				
+				if(!this.streamer.manager.c_anims.launched)
+				{				
+					this.streamer.manager.events.addListener("update", function(delta,elapsed)
+					{
+						for(var i = 0; i < this.parent.c_anims.length; ++i)
+						{
+							var anim = this.parent.c_anims[i];
+							if(anim.playing != "none")
+							{
+								var frameTime = delta * 0.001 / (anim.animations[anim.playing].time/(anim.animations[anim.playing].end_frame - anim.animations[anim.playing].start_frame));
+								if ( anim.progress >= anim.animations[anim.playing].start_frame && anim.progress <= anim.animations[anim.playing].end_frame ) {
+									for ( var i = 0; i < anim.length; ++i ) {
+										anim[ i ].update( frameTime );
+									}
+								} else if ( anim.progress > anim.animations[anim.playing].end_frame ) {
+										if(anim.animations[anim.playing].loop)
+										{
+											anim.init();
+											anim.progress = anim.animations[anim.playing].start_frame;
+										}
+								}
+								anim.progress += frameTime;	
+							}
+						}
+						this.parent.c_anims.launched = true;
+					});
+					
+				}
+				mesh[name].init = function()
+				{
+					for ( var k = 0; k < this.length; ++k ) {
+						var animation = this[k];
+						var hl = animation.hierarchy.length;						
+						for ( var h = 0; h < hl; h++ ) {
+							var keys = animation.data.hierarchy[ h ].keys;
+							var sids = animation.data.hierarchy[ h ].sids;
+							var obj = animation.hierarchy[ h ];
+							if ( keys.length && sids ) {
+								for ( var s = 0; s < sids.length; s++ ) {
+									var sid = sids[ s ];
+									var next = animation.getNextKeyWith( sid, h, 0 );
+									if ( next ) next.apply( sid );
+								}
+								obj.matrixAutoUpdate = false;
+								animation.data.hierarchy[ h ].node.updateMatrix();
+								obj.matrixWorldNeedsUpdate = true;
+							}
+						}
+						animation.play( false, 0 );		
+					}
+				}
+				mesh[name].stop = function(anim)
+				{
+					this.playing = "none";
+					for ( var j = 0; j < this.length; ++j ) {
+						this[ j ].stop();
+					}
+					this.progress = this.animations[anim].start_frame;	
+					this.init();
+				}
+				mesh[name].start = function(anim)
+				{
+					if(anim != this.playing)
+					{
+						this.init();
+						this.playing = anim;
+					}					
+				}
+				this.streamer.manager.c_anims.push(mesh[name]);
+			}
+			else if(children[name].type_ == 'anim' || children[name].type_ == 'skin')
+			{
+				var anim = {};
+				anim.start_frame = children[name].start_frame;
+				anim.end_frame = children[name].end_frame;
+				anim.time = children[name].time;
+				anim.loop = children[name].loop;
+				anim.parent = children[name].parent;
+				mesh[children[name].parent].animations[name] = anim;
 			}
 		}
 	}

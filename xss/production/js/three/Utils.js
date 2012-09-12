@@ -247,7 +247,7 @@ function createModelSrc( path, src, manager  )
 }
 
 function clone3jsObject( obj, manager )
-{	
+{
 	var clone = new THREE.Object3D();	
 	
 	for(var name in obj)

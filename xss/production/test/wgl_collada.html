@@ -32,6 +32,9 @@ var streamer;
 var manager = new threejs.Manager(scene, renderer, null, canvas_position);
 var three_utils = new threejs.Utils();
 manager.events = new ev.EventHolder();
+manager.events.parent = manager;
+manager.c_anims = [];
+manager.c_skins = [];
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
@@ -63,8 +66,24 @@ application.events = new ev.EventHolder();
 			for(var i = 0; i < global_package.items.length; i++)
 			{
 				if(global_package.items[i].id == "model_1")
+				{		
 					global_package.items[i].children['model_skin'] = child_;
-			}
+				}					
+			}	
+				var temp = {};
+				temp.type_ = 'skin';
+				temp.start_frame = 0;
+				temp.end_frame = 29;
+				temp.time = 1;
+				temp.loop = true;
+				temp.parent = 'model_skin';
+				for(var i = 0; i < global_package.items.length; i++)
+				{
+					if(global_package.items[i].id == "model_1")
+					{
+						global_package.items[i].children['walk'] = temp;
+					}
+				}
 		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
@@ -85,6 +104,7 @@ if (g_elapsed < 0)
 else
 	g_delta  = now - g_elapsed;  
 g_elapsed = now; 
+if(!g_delta) g_delta = 0;
 c_delta = clock.getDelta(),
 c_elapsed = clock.getElapsedTime() * 10;
 manager.events.dispatch("update", [g_delta, g_elapsed]);	
@@ -146,11 +166,18 @@ color:grey,
             monster_model.position.x = -350;
             monster_model.position.y = -350;
             monster_model.position.z = -350;
+            monster_model.scale.x = 0.5;
+            monster_model.scale.y = 0.5;
+            monster_model.scale.z = 0.5;
             set_rotation_x(monster_model.rotation, -90);
             plane_1.position.y = -500;
             application.mouse_x = null;
             application.mouse_y = null;
-            application.t = 0;
+	application.events.addListener("init", function()
+	{    
+		monster_model.model_skin.start("walk");
+	}
+	);
 	application.events.addListener("update", function(delta,elapsed)
 	{    
 		var time = elapsed * 0.000500000024;
@@ -165,19 +192,6 @@ light2.position.z = Math.cos(time * 7) * 3009;
 light3.position.x = Math.sin(time * 7) * 3009;
 light3.position.y = Math.cos(time * 3) * 4000;
 light3.position.z = Math.cos(time * 5) * 3009;
-if (application.t > 30)
-{
-application.t = 0;
-}
-if (monster_model.model_skin)
-{
-for(var i = 0; i < monster_model.model_skin.morphTargetInfluences.length; i++)
-{
-setMorphTargetInfluences(monster_model.model_skin, i, 0);
-}
-setMorphTargetInfluences(monster_model.model_skin, Math.floor(application.t), 1);
-application.t = application.t + 0.5;
-}
 	}
 	);
 	application.events.addListener("mousemove", function(x,y)

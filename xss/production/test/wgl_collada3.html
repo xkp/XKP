@@ -6,7 +6,7 @@
 <body>
 <style type="text/css">
 	body{
-	background:skyblue;
+	background:black;
 	}
 </style>
             <script type="text/javascript" src="../js/resig.js"></script>
@@ -34,6 +34,7 @@ var three_utils = new threejs.Utils();
 manager.events = new ev.EventHolder();
 manager.events.parent = manager;
 manager.c_anims = [];
+manager.c_skins = [];
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
@@ -46,72 +47,43 @@ application.events = new ev.EventHolder();
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
 		{
-		id:				"eurofighter",
+		id:				"balldroid",
 		resource_type:	RESOURCE_COLLADA_MODEL,
-		src:			"model/eurofighter/eurofighter.dae",
+		src:			"model/balldroid/balldroid.dae",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
 		children:		{}
 		}
 );	
-				var eurofighter;
+				var balldroid;
 				global_package.events.addListener("loaded", function()
 				{
-					eurofighter = streamer.get_resource("eurofighter");
+					balldroid = streamer.get_resource("balldroid");
 				});
 			var child_ = {};
-			child_.type_ = 'collada_camera';
+			child_.type_ = 'collada_animation';
 			for(var i = 0; i < global_package.items.length; i++)
 			{
-				if(global_package.items[i].id == "eurofighter")
-				{
-					global_package.items[i].children['model_cam'] = child_;
+				if(global_package.items[i].id == "balldroid")
+				{		
+					global_package.items[i].children['anim'] = child_;
 				}					
 			}	
-                global_package.add_item(
-		{
-		id:				"pump",
-		resource_type:	RESOURCE_COLLADA_MODEL,
-		src:			"model/pump/pump.dae",
-		frame_width:	null,
-		frame_height:	null,
-		animations:		[],	
-		children:		{}
-		}
-);	
-				var pump;
-				global_package.events.addListener("loaded", function()
+				var temp = {};
+				temp.type_ = 'anim';
+				temp.start_frame = 0;
+				temp.end_frame = 8;
+				temp.time = 10;
+				temp.loop = true;
+				temp.parent = 'anim';
+				for(var i = 0; i < global_package.items.length; i++)
 				{
-					pump = streamer.get_resource("pump");
-				});
-			var child_ = {};
-			child_.type_ = 'collada_camera';
-			for(var i = 0; i < global_package.items.length; i++)
-			{
-				if(global_package.items[i].id == "pump")
-				{
-					global_package.items[i].children['model_cam1'] = child_;
-				}					
-			}	
-			var child_ = {};
-			child_.type_ = 'collada_camera';
-			for(var i = 0; i < global_package.items.length; i++)
-			{
-				if(global_package.items[i].id == "pump")
-				{
-					global_package.items[i].children['model_cam2'] = child_;
-				}					
-			}	
-			var child_ = {};
-			child_.type_ = 'collada_camera';
-			for(var i = 0; i < global_package.items.length; i++)
-			{
-				if(global_package.items[i].id == "pump")
-				{
-					global_package.items[i].children['model_cam3'] = child_;
-				}					
-			}	
+					if(global_package.items[i].id == "balldroid")
+					{
+						global_package.items[i].children['arm'] = temp;
+					}
+				}
 		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
@@ -140,15 +112,15 @@ manager.events.dispatch("update", [g_delta, g_elapsed]);
 				set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var material_wireframe;var camera_1;var a_ligth;var d_ligth_1;var light1;var model1;var plane_1;
+var material_wireframe;var camera_1;var a_ligth;var d_ligth_1;var model1;
 threejs_load_resources(manager, function()
 {
 material_wireframe = new THREE.MeshBasicMaterial({
-color:grey,
+color:gray,wireframe:true,
 	});
 			material_wireframe.manager = manager;
 		    camera_1 = 
-		    new THREE.PerspectiveCamera(50, 1.76999998, 0.100000001, 100, null) ;	
+		    new THREE.PerspectiveCamera(75, 1.5, 0.100000001, 1000, null) ;	
 			manager.active_camera = camera_1;
 			camera_1.manager = manager;
 	    a_ligth = 
@@ -159,79 +131,27 @@ color:grey,
 	    new THREE.DirectionalLight(White, 2, 0, null) ;
 	    manager.scene.add(d_ligth_1);
 			d_ligth_1.manager = manager;
-	    light1 = 
-	    new THREE.PointLight(deepskyblue, 0.200000003, 0) ;
-	    manager.scene.add(light1);
-			light1.manager = manager;
-		model1 = clone3jsObject( manager.streamer.get_resource('eurofighter').data, manager );	
+		model1 = clone3jsObject( manager.streamer.get_resource('balldroid').data, manager );	
 		manager.scene.add(model1);
 		model1.events = new ev.EventHolder();			
 			model1.manager = manager;
-	    plane_1_plane = new THREE.PlaneGeometry(10000, 10000, 1, 1) ;
-	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
-	    manager.scene.add(plane_1);
-		plane_1.events = new ev.EventHolder();
-			plane_1.manager = manager;
             set_material_alpha(material_wireframe, 20);
             manager.events.addListener('update', function(){if(camera_1)camera_1.lookAt(scene.position)});
-            camera_1.position.x = 50;
-            camera_1.position.z = 50;
-            a_ligth.position.y = 3000;
-            a_ligth.position.z = 3000;
-            d_ligth_1.position.y = 3000;
+            camera_1.position.y = 50;
+            camera_1.position.z = 500;
+            a_ligth.position.y = 5000;
+            a_ligth.position.z = 5000;
+            d_ligth_1.position.y = 5000;
             d_ligth_1.position.z = 5000;
-            plane_1.position.y = -500;
+            model1.scale.x = 100;
+            model1.scale.y = 100;
+            model1.scale.z = 100;
+            set_rotation_x(model1.rotation, -75);
             application.mouse_x = null;
             application.mouse_y = null;
-            application.t = 0;
-            application.cam = false;
-	application.events.addListener("update", function(delta,elapsed)
+	application.events.addListener("init", function()
 	{    
-		var time = elapsed * 0.000500000024;
-light1.position.x = Math.sin(time * 7) * 3009;
-light1.position.y = Math.cos(time * 5) * 4000;
-light1.position.z = Math.cos(time * 3) * 3009;
-	}
-	);
-	application.events.addListener("click", function()
-	{    
-		model1 = createModelSrc(model1, "pump", model1.manager);
-	}
-	);
-	application.events.addListener("keydown", function(keycode)
-	{    
-		if (keycode == C)
-{
-application.cam = !application.cam;
-}
-if (keycode == LEFT_ARROW)
-{
-model1.position.x = model1.position.x - 1;
-}
-if (keycode == RIGHT_ARROW)
-{
-model1.position.x = model1.position.x + 1;
-}
-if (keycode == UP_ARROW)
-{
-model1.position.y = model1.position.y - 1;
-}
-if (keycode == DOWN_ARROW)
-{
-model1.position.y = model1.position.y + 1;
-}
-	}
-	);
-	application.events.addListener("switch_cameras", function()
-	{    
-		if (application.cam)
-{
-set_active_camera(model1.model_cam);
-}
-else
-{
-set_active_camera(camera_1);
-}
+		model1.anim.start("arm");
 	}
 	);
 var event_manager = new ev.ThreeEventManager();
