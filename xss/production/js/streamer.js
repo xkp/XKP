@@ -137,11 +137,76 @@ stream.JSonModelLoader = stream.Loader.extend(
 		var model_loader = generate_model_loader(resource.type);
 		model_loader.load(resource.asset, function( geometry ){
 			var model = new THREE.Object3D();
-			var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial);
+			var mesh = new THREE.MorphAnimMesh(geometry, new THREE.MeshFaceMaterial);
 			model.add(mesh);
+			this_.render_children(resource.children, mesh, model);			
 			this_.on_loaded(resource, model);
 		});    	        
-    }
+    },
+	render_children: function(children, mesh, model)
+	{
+		for(var name in children)
+		{
+			if(children[name].type_ == 'json_animation')
+			{
+				model[name] = mesh;
+				model[name].animations = {};				
+				model[name].time = 0;
+				model[name].playing = "none";
+				model[name].matrixAutoUpdate = false;
+				model[name].updateMatrix();
+				if(!this.streamer.manager.js_anims.launched)
+				{				
+					this.streamer.manager.events.addListener("update", function(delta,elapsed)
+					{
+						for(var i = 0; i < this.parent.js_anims.length; ++i)
+						{
+							var anim = this.parent.js_anims[i];
+							if(anim.playing != "none")
+							{
+								anim.updateAnimation( 1000 * c_delta );	
+							}
+						}
+						this.parent.c_anims.launched = true;
+					});					
+				}
+				model[name].init = function()
+				{
+					if(this.playing != "none")
+					{
+						this.setFrameRange( this.animations[this.playing].start_frame, this.animations[this.playing].end_frame );
+						this.duration = 1000 * ( this.animations[this.playing].time );
+						this.time = 1000 * Math.random();;
+					}
+				}	
+				model[name].start = function(anim)
+				{
+					if(anim != this.playing)
+					{						
+						this.playing = anim;
+						this.init();
+					}	
+				}
+				model[name].stop = function(anim)
+				{
+					this.init();
+					this.playing = "none";									
+					this.time = this.animations[anim].start_frame;
+				}
+				this.streamer.manager.js_anims.push(model[name]);
+			}
+			else if(children[name].type_ == 'anim')
+			{
+				var anim = {};
+				anim.start_frame = children[name].start_frame;
+				anim.end_frame = children[name].end_frame;
+				anim.time = children[name].time;
+				anim.loop = children[name].loop;
+				anim.parent = children[name].parent;
+				model[children[name].parent].animations[name] = anim;
+			}
+		}
+	}
 });
 
 stream.ColladaModelLoader = stream.Loader.extend(

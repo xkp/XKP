@@ -28,12 +28,13 @@ var g_elapsed;
 var g_delta;	
 var scene = new THREE.Scene();
 scene.mouse_thru = true;
-var streamer;
+var streamer = {};
 var manager = new threejs.Manager(scene, renderer, null, canvas_position);
 var three_utils = new threejs.Utils();
 manager.events = new ev.EventHolder();
 manager.events.parent = manager;
 manager.c_anims = [];
+manager.js_anims = [];
 manager.c_skins = [];
 var app_width = <xss:e value="application.width"/>;
 var app_height = <xss:e value="application.height"/>;
@@ -45,6 +46,7 @@ application.events = new ev.EventHolder();
 <xss:code>
     compiler.inject("render_initialization");
 </xss:code>
+streamer.manager = manager;
 // --------RESOURCES---------
 <xss:code>
     compiler.inject("render_resources");	

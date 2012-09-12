@@ -24,8 +24,7 @@ on render_initialization()
 {
 	out()
 	{
-		var streamer = new stream.Streamer();	
-		streamer.manager = manager;
+		var streamer = new stream.Streamer();		
 		var ResourceUtils = new stream.ResourceUtils();
 	}	
 }

@@ -28,7 +28,7 @@ var g_elapsed;
 var g_delta;	
 var scene = new THREE.Scene();
 scene.mouse_thru = true;
-var streamer;
+var streamer = {};
 var manager = new threejs.Manager(scene, renderer, null, canvas_position);
 var three_utils = new threejs.Utils();
 manager.events = new ev.EventHolder();
@@ -40,10 +40,10 @@ var app_height = window.innerHeight;
 var application = {};
 var clock = new THREE.Clock();
 application.events = new ev.EventHolder();
-		var streamer = new stream.Streamer();	
-		streamer.manager = manager;
+		var streamer = new stream.Streamer();		
 		var ResourceUtils = new stream.ResourceUtils();
-	// --------RESOURCES---------
+	streamer.manager = manager;
+// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
 		{
