@@ -137,8 +137,10 @@ stream.JSonModelLoader = stream.Loader.extend(
 		var model_loader = generate_model_loader(resource.type);
 		model_loader.load(resource.asset, function( geometry ){
 			var model = new THREE.Object3D();
+			var material = geometry.materials[ 0 ];
+			material.morphTargets = true;
 			var mesh = new THREE.MorphAnimMesh(geometry, new THREE.MeshFaceMaterial);
-			model.add(mesh);
+			model.add(mesh);			
 			this_.render_children(resource.children, mesh, model);			
 			this_.on_loaded(resource, model);
 		});    	        
@@ -155,6 +157,7 @@ stream.JSonModelLoader = stream.Loader.extend(
 				model[name].playing = "none";
 				model[name].matrixAutoUpdate = false;
 				model[name].updateMatrix();
+				model[name].manager = this.streamer.manager;
 				if(!this.streamer.manager.js_anims.launched)
 				{				
 					this.streamer.manager.events.addListener("update", function(delta,elapsed)
@@ -164,8 +167,13 @@ stream.JSonModelLoader = stream.Loader.extend(
 							var anim = this.parent.js_anims[i];
 							if(anim.playing != "none")
 							{
-								anim.updateAnimation( 1000 * c_delta );	
-							}
+								var temp_time = anim.time + anim.direction * delta;
+								if(temp_time < anim.duration)
+									anim.updateAnimation( delta );	
+								else
+									if(anim.animations[anim.playing].loop)
+										anim.updateAnimation( delta );	
+							}							
 						}
 						this.parent.c_anims.launched = true;
 					});					
@@ -175,8 +183,8 @@ stream.JSonModelLoader = stream.Loader.extend(
 					if(this.playing != "none")
 					{
 						this.setFrameRange( this.animations[this.playing].start_frame, this.animations[this.playing].end_frame );
-						this.duration = 1000 * ( this.animations[this.playing].time );
-						this.time = 1000 * Math.random();;
+						this.duration = 1000 * ( this.animations[this.playing].time );	
+						this.time = this.animations[this.playing].start_frame;
 					}
 				}	
 				model[name].start = function(anim)
@@ -185,13 +193,13 @@ stream.JSonModelLoader = stream.Loader.extend(
 					{						
 						this.playing = anim;
 						this.init();
-					}	
+					}
 				}
 				model[name].stop = function(anim)
-				{
-					this.init();
-					this.playing = "none";									
-					this.time = this.animations[anim].start_frame;
+				{					
+					this.init();	
+					this.playing = "none"
+					this.updateAnimation( this.manager.delta );						
 				}
 				this.streamer.manager.js_anims.push(model[name]);
 			}

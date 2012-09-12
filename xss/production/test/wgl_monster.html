@@ -163,13 +163,17 @@ color:blanchedalmond,wireframe:true,
 	{    
 		camera_1.position.x = camera_1.position.x + (application.mouse_x - camera_1.position.x) * 0.0500000007;
 camera_1.position.y = camera_1.position.y + (-application.mouse_y - camera_1.position.y) * 0.0500000007;
-set_rotation_y(monster_model.rotation, get_rotation_y(monster_model.rotation) + 1);
 	}
 	);
 	application.events.addListener("mousemove", function(x,y)
 	{    
 		application.mouse_x = x - app_width / 2;
 application.mouse_y = y - app_height / 2;
+	}
+	);
+	application.events.addListener("click", function()
+	{    
+		monster_model.model_skin.stop("walk");
 	}
 	);
 var event_manager = new ev.ThreeEventManager();
