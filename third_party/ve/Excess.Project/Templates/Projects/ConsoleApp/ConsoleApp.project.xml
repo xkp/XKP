@@ -1,5 +1,3 @@
-﻿<project entry_point="todo" language="js" target="$safeprojectname$.xml" output="$safeprojectname$.sln">
-  <idiom src="../idioms/ui/ui.xml"/>
-  <idiom src="../idioms/resources/resources.xml"/>
-  <idiom src="../idioms/threejs/module.xml"/>
+﻿<project entry_point="idioms/dotnet/main.xss" language="cs" src="ConsoleApp.xs">
+  <idiom src="idioms/dotnet/dotnet.xml"/>
 </project>

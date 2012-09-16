@@ -1,0 +1,11 @@
+C:\dev\XKP\third_party\ve\Excess.EditorExtensions\bin\Debug\Excess.EditorExtensions.dll
+C:\dev\XKP\third_party\ve\Excess.EditorExtensions\bin\Debug\Excess.EditorExtensions.pdb
+C:\dev\XKP\third_party\ve\Excess.EditorExtensions\bin\Debug\ExcessCompiler.dll
+C:\dev\XKP\third_party\ve\Excess.EditorExtensions\bin\Debug\Microsoft.Windows.Design.Extensibility.dll
+C:\dev\XKP\third_party\ve\Excess.EditorExtensions\bin\Debug\Microsoft.Windows.Design.Interaction.dll
+C:\dev\XKP\third_party\ve\Excess.EditorExtensions\bin\Debug\ExcessCompiler.pdb
+C:\dev\XKP\third_party\ve\Excess.EditorExtensions\bin\Debug\Microsoft.Windows.Design.Extensibility.xml
+C:\dev\XKP\third_party\ve\Excess.EditorExtensions\bin\Debug\Microsoft.Windows.Design.Interaction.xml
+C:\dev\XKP\third_party\ve\Excess.EditorExtensions\obj\Debug\ResolveAssemblyReference.cache
+C:\dev\XKP\third_party\ve\Excess.EditorExtensions\obj\Debug\Excess.EditorExtensions.dll
+C:\dev\XKP\third_party\ve\Excess.EditorExtensions\obj\Debug\Excess.EditorExtensions.pdb

@@ -1,5 +1,7 @@
 bin/
 output/
+debug/
+release/
 ipch/
 
 src-gen/
@@ -12,6 +14,7 @@ xtend-gen/
 *.layout
 
 *.tlog
+*.pch
 *.pdb
 *.ilk
 *.ncb

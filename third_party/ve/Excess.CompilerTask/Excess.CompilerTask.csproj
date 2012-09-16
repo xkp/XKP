@@ -40,10 +40,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="IronPython, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\IronPython\IronPython.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Tasks.v4.0" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
@@ -63,6 +59,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="ExcessCompilerTask.cs" />
+    <Compile Include="ExcessObjectModel.cs" />
     <Compile Include="Properties\Resources.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +69,12 @@
     <Content Include="Excess.targets">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Excess.Compiler\ExcessCompiler.vcxproj">
+      <Project>{F65BBAC7-1B48-4DDA-B5FD-BBAB4B4DA4DB}</Project>
+      <Name>ExcessCompiler</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <DeployDestination>$(MSBuildExtensionsPath)\Microsoft\IronPython\1.0\</DeployDestination>

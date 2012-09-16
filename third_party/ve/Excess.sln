@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Excess", "Excess.Shell\Visu
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExcessUI", "Excess.Shell\ExcessUI\ExcessUI.vcxproj", "{02C20B52-A28E-4226-9B43-32F1930716FB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xss", "xss\xss.vcxproj", "{AA3DD7C1-32B5-4846-9B2A-99FAF463F74C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,18 @@ Global
 		{02C20B52-A28E-4226-9B43-32F1930716FB}.Release|Win32.ActiveCfg = Release|Win32
 		{02C20B52-A28E-4226-9B43-32F1930716FB}.Release|Win32.Build.0 = Release|Win32
 		{02C20B52-A28E-4226-9B43-32F1930716FB}.Release|x86.ActiveCfg = Release|Win32
+		{AA3DD7C1-32B5-4846-9B2A-99FAF463F74C}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{AA3DD7C1-32B5-4846-9B2A-99FAF463F74C}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{AA3DD7C1-32B5-4846-9B2A-99FAF463F74C}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{AA3DD7C1-32B5-4846-9B2A-99FAF463F74C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AA3DD7C1-32B5-4846-9B2A-99FAF463F74C}.Debug|Win32.Build.0 = Debug|Win32
+		{AA3DD7C1-32B5-4846-9B2A-99FAF463F74C}.Debug|x86.ActiveCfg = Debug|Win32
+		{AA3DD7C1-32B5-4846-9B2A-99FAF463F74C}.Release|Any CPU.ActiveCfg = Release|Win32
+		{AA3DD7C1-32B5-4846-9B2A-99FAF463F74C}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{AA3DD7C1-32B5-4846-9B2A-99FAF463F74C}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{AA3DD7C1-32B5-4846-9B2A-99FAF463F74C}.Release|Win32.ActiveCfg = Release|Win32
+		{AA3DD7C1-32B5-4846-9B2A-99FAF463F74C}.Release|Win32.Build.0 = Release|Win32
+		{AA3DD7C1-32B5-4846-9B2A-99FAF463F74C}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

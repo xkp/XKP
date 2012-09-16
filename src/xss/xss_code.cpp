@@ -11,7 +11,8 @@ const str SExpectingConstantCase("case expression must be constant in this conte
 void statement_if::bind(XSSContext ctx)
   {
       expr_->bind(ctx);
-      if_code_->bind(ctx);
+      if (if_code_)
+		if_code_->bind(ctx);
       if (else_code_)
         else_code_->bind(ctx);
   }
@@ -292,6 +293,10 @@ struct code_builder : code_visitor
       XSSCode compile_code(code& cde)
         {
           XSSCode result(new xss_code);
+          result->set_extents(cde.begin, cde.end);
+
+          if (callback_)
+            callback_->notify(result->context());
 
           code_builder cb(result, callback_);
           cde.visit(&cb);
@@ -305,21 +310,21 @@ XSSCode xss_code_utils::compile_code(code& cde, IContextCallback* callback)
   {
     XSSCode result(new xss_code);
 
-    code_builder cb(result, callback);
-    cde.visit(&cb);
-
     XSSContext ctx = result->context();
     ctx->set_extents(cde.begin, cde.end); 
 
     if (callback)
       callback->notify(ctx);
 
+	code_builder cb(result, callback);
+    cde.visit(&cb);
+
     return result;
   }
 
 XSSSignature xss_code_utils::compile_arg_list(param_list_decl& args)
   {
-    XSSSignature result;
+    XSSSignature result(new xss_signature);
 
     param_list_decl::iterator it = args.begin();
     param_list_decl::iterator nd = args.end();

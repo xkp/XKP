@@ -5,6 +5,8 @@ using Microsoft.VisualStudio.Project;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Excess.CompilerTasks;
+using System.Xml;
 
 namespace Excess.Project
 {
@@ -98,17 +100,10 @@ namespace Excess.Project
 			return VSConstants.S_OK;
 		}
 
+        private List<string> files_ = new List<string>();
 		public override int OnAfterAddFilesEx(int cProjects, int cFiles, IVsProject[] projects, int[] firstIndices, string[] newFileNames, VSADDFILEFLAGS[] flags)
 		{
-			//Get the current value of the MainFile Property
-			string currentMainFile = this.project.GetProjectProperty(PythonProjectFileConstants.MainFile, true);
-			if(!string.IsNullOrEmpty(currentMainFile))
-				//No need for further operation since MainFile is already set
-				return VSConstants.S_OK;
-
-			string fullPathToMainFile = Path.Combine(Path.GetDirectoryName(this.project.BaseURI.Uri.LocalPath), currentMainFile);
-
-			//Investigate all of the newFileNames if they belong to the current project and set the first pythonFileNode found equal to MainFile
+			//Investigate all of the newFileNames if they belong to the current project
 			int index = 0;
 			foreach(string newfile in newFileNames)
 			{
@@ -116,13 +111,44 @@ namespace Excess.Project
 				IVsProject belongsToProject = projects[firstIndices[index]];
 				if(Utilities.IsSameComObject(belongsToProject, this.project))
 				{
-					//If the newfile is a python filenode we willl map this file to the MainFile property
-					PythonFileNode filenode = project.FindChild(newfile) as PythonFileNode;
-					if(filenode != null)
-					{
-						this.project.SetProjectProperty(PythonProjectFileConstants.MainFile, filenode.GetRelativePath());
-						break;
-					}
+                    files_.Add(newfile);
+
+                    //td: !!! this is way too specific
+                    if (files_.Count == 2)
+                    {
+                        string def = "";
+                        string src = ""; 
+                        foreach (string file in files_)
+                        {
+                            if (Path.GetExtension(file).Equals(".xs"))
+                                src = file;
+
+                            if (Path.GetExtension(file).Equals(".xml"))
+                                def = file;
+                        }
+
+                        ExcessModelService service = ExcessModelService.getInstance();
+                        string projectPath = Path.Combine(this.project.BaseURI.AbsoluteUrl, "ConsoleApp.project.xml"); //td: !!!!
+
+                        //the project file must be updated to reflect the new items, 
+                        //obviously this approach is kinda silly and must be made general
+                        XmlDocument xmlDocument = new System.Xml.XmlDocument();
+                        xmlDocument.Load(projectPath);
+
+                        XmlElement includeNode = xmlDocument.CreateElement("include");
+                        XmlAttribute srcAttr = xmlDocument.CreateAttribute("src");
+                        srcAttr.Value = Path.GetFileName(src); //td: account for folders
+                        XmlAttribute defAttr = xmlDocument.CreateAttribute("def");
+                        defAttr.Value = Path.GetFileName(def);
+
+                        includeNode.Attributes.Append(srcAttr);
+                        includeNode.Attributes.Append(defAttr);
+
+                        xmlDocument.DocumentElement.AppendChild(includeNode);
+                        xmlDocument.Save(projectPath);
+
+                        service.Model.addInclude(projectPath, def, src);
+                    }
 				}
 
 				index++;
@@ -130,7 +156,8 @@ namespace Excess.Project
 
 			return VSConstants.S_OK;
 		}
-		#endregion
+
+        #endregion
 
 	}
 }

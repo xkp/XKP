@@ -1,7 +1,7 @@
-<project entry_point="../idioms/dotnet/main.xss" language="cs" src="ve1.xs">
+<project entry_point="idioms/dotnet/main.xss" language="cs" src="ve1.xs">
     <include src="ve1.classes.xs"/>
 
-    <idiom src="../idioms/dotnet/dotnet.xml"/>
+    <idiom src="idioms/dotnet/dotnet.xml"/>
 </project>
            
          

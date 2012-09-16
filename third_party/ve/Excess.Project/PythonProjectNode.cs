@@ -20,6 +20,7 @@ using Excess.EditorExtensions;
 using Excess.Project.Library;
 
 using MSBuild = Microsoft.Build.Evaluation;
+using Excess.CompilerTasks;
 
 namespace Excess.Project
 {
@@ -304,12 +305,9 @@ namespace Excess.Project
             string xsPath = null;
             foreach (MSBuild.ProjectItem item in BuildProject.Items)
             {
-                if (String.Compare(item.ItemType, "None", StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    bool isIt = item.HasMetadata("xs_project");
-                    if (isIt)
-                        xsPath = item.GetMetadataValue("FullPath");
-                }
+                bool isIt = item.HasMetadata("xs_project");
+                if (isIt)
+                    xsPath = item.GetMetadataValue("FullPath");
             }
 
             if (xsPath == null)
@@ -317,6 +315,9 @@ namespace Excess.Project
                 canceled = 1;
                 throw new InvalidDataException("XS project not found");
             }
+
+            ExcessModelService service = ExcessModelService.getInstance();
+            service.Model.loadProject(xsPath, Path.GetDirectoryName(xsPath));
 
             // WAP ask the designer service for the CodeDomProvider corresponding to the project node.
             this.OleServiceProvider.AddService(typeof(SVSMDCodeDomProvider), new OleServiceProvider.ServiceCreatorCallback(this.CreateServices), false);
@@ -412,7 +413,7 @@ namespace Excess.Project
                 throw new ArgumentNullException("item");
             }
 
-            string include = item.GetMetadata(ProjectFileConstants.Include);
+            string include = item.GetMetadata("Size");
             PythonFileNode newNode = new PythonFileNode(this, item);
             newNode.OleServiceProvider.AddService(typeof(EnvDTE.Project), new OleServiceProvider.ServiceCreatorCallback(this.CreateServices), false);
             newNode.OleServiceProvider.AddService(typeof(EnvDTE.ProjectItem), newNode.ServiceCreator, false);

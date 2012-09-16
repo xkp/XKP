@@ -3,6 +3,19 @@
 #pragma once
 
 using namespace System;
+#using <mscorlib.dll>
+using namespace System::Runtime::InteropServices; 
+
+#include "../xss/interface.h"
+#include <map>
+
+using namespace System::Collections::Generic;
+
+[DllImport("xss.dll", EntryPoint = "create_object_model")]
+IObjectModel* create_object_model();
+
+[DllImport("xss.dll", EntryPoint = "get_token")]
+wchar_t* get_token(wchar_t *InputBuf, long InputSize, long *InputHere, long *Line, long *Column, int *Symbol);
 
 namespace ExcessCompiler {
 
@@ -64,5 +77,26 @@ namespace ExcessCompiler {
 			Compiler();
 		public:
 			Tokenizer^ CreateTokenizer(String^ s);
+	};
+
+	public ref class ExcessModel
+	{
+		public:	
+			ExcessModel();
+			~ExcessModel();
+		public:	
+			int  loadProject(String^ filename, String^ path);
+			void unloadProject(Guid project);
+			bool buildProject(Guid project);
+			bool buildAll();
+            void addInclude(String^ projectPath, String^ def, String^ src);
+            void notifyChange(String^ filename, String^ contents, int line, int col, int oldEndLine, int oldEndCol, int newEndLine, int newEndCol);
+			void updateChanges();
+		private:
+			IObjectModel*				model_; //wtf, no smart pointers?
+			std::map<std::string, int>*	projects_;
+			List<String^>				dirt_content_;
+			std::map<std::string, int>*	dirt_;
+			std::map<int, std::string>*	dirt_index_;
 	};
 }

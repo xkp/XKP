@@ -1,0 +1,10 @@
+C:\dev\XKP\third_party\ve\Debug\\Excess.exe.config
+C:\dev\XKP\third_party\ve\Debug\\Excess.winprf
+C:\dev\XKP\third_party\ve\Debug\\Excess.pkgundef
+C:\dev\XKP\third_party\ve\Debug\\Excess.pkgdef
+C:\dev\XKP\third_party\ve\Debug\\ApplicationIcon.ico
+C:\dev\XKP\third_party\ve\Debug\\Splash.bmp
+C:\dev\XKP\third_party\ve\Debug\\DebuggerProxy.dll
+C:\dev\XKP\third_party\ve\Debug\\DebuggerProxy.dll.manifest
+C:\dev\XKP\third_party\ve\Debug\\Profiles\General.vssettings
+C:\dev\XKP\third_party\ve\Debug\\Extensions\Application\Excess.Application.pkgdef

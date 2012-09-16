@@ -8,6 +8,8 @@ namespace xkp{
 class local_filesystem : public IFileSystem
   {
     public:
+	  local_filesystem();
+    public:
       virtual fs::path   locate(const str& filename, fs::path base_path);
       virtual DataReader load_data(const str& filename, fs::path base_path);
       virtual DataReader load_data(fs::path file);

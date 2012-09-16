@@ -7,21 +7,29 @@
 
 #include <xs.h>
 
+#include <boost/thread.hpp>
+
+namespace boost {
+    struct thread::dummy {};
+}
+
 namespace xkp{
 
 //forwards
 class idiom;
 class application;
 class object_model;
+class object_model_thread;
 class idiom;
 
 class ILanguageFactory;
 class IFileSystem;
 
 //references
-typedef reference<idiom>        Idiom;
-typedef reference<application>  Application;
-typedef reference<object_model> ObjectModel;
+typedef reference<idiom>			   Idiom;
+typedef reference<application>		   Application;
+typedef reference<object_model>		   ObjectModel;
+typedef reference<object_model_thread> ObjectModelThread;
 
 typedef reference<ILanguageFactory> LanguageFactory;
 typedef reference<IFileSystem>      FileSystem;
@@ -70,27 +78,39 @@ class idiom
 class application
   {
     public:
+      application(fs::path path);
+    public:
       void          entry_point(fs::path ep);
       void          output_file(const str& ep);
       void          compiler_options(DataEntity options);
       void          set_context(XSSContext ctx);
       code_context& exec_context();
+      XSSContext    context();
+      fs::path      path();
     private:
       fs::path     renderer_;
       fs::path     output_;
       XSSContext   ctx_;
       code_context code_ctx_;
       XSSObject    app_; 
+      fs::path     path_;
   };
 
 struct document
   {
     public: 
-      XSSContext find_context(int line, int column);
-      void       add(XSSContext context);
+      document();
+      document(Application app);
+    public: 
+      XSSContext  find_context(int line, int column);
+      void        add(XSSContext context);
+		  XSSContext  changed(int line, int col, int oldEndLine, int oldEndCol, int newEndLine, int newEndCol);	
+      Application application(); 
+      void        application(Application app);
     private:
-      fs::path   path_;
-      XSSContext ctx_;
+      fs::path    path_;
+      XSSContext  ctx_;
+      Application app_;
 
       struct snap_shot
         {
@@ -115,7 +135,9 @@ struct document
 
       typedef std::vector<snap_shot> snap_shots;
       snap_shots items_;
-  };
+
+	  void synch_extents();
+};
 
 typedef std::map<fs::path, document> document_map;
 
@@ -159,12 +181,40 @@ struct om_context
     document*    doc;
   };
 
+struct om_response
+  {
+    om_response():
+      id(0)
+      {
+      }
+
+	  om_response(int _id, XSSContext _ctx, om_context& _data, document& _doc, str _request_id):
+      id(_id),
+      ctx(_ctx),
+      data(_data),
+      doc(_doc),
+      request_id(_request_id)
+      {
+      }
+
+    int        id;
+    str        request_id; 
+    XSSContext ctx;
+    om_context data;
+    document   doc;
+  };
+
 class object_model
   {
     public:
       object_model(FileSystem fs, LanguageFactory languages);
     public:
       Application load(DataReader project, param_list& args, fs::path base_path);
+	  document*     get_document(const str& fname);
+	  void		      update_document(const str& fname, om_response& data);
+      void        add_include(Application app, const str& def, const str& src);
+    public:
+	    FileSystem filesystem() {return fs_;}	
     private:
       LanguageFactory languages_;
       FileSystem      fs_;
@@ -174,9 +224,9 @@ class object_model
       DataEntity      assure_unique_root(DataReader dr);
       void            register_idiom(const str& id, Idiom idiom);
       Idiom           find_idiom(const str& idiom);
-      void            compile_include(const str& def, const str& src, XSSContext ctx, om_context& octx);
-      void            compile_xs(const str& text, XSSContext ctx, om_context& octx);
-
+      void            compile_include(Application app, const str& def, const str& src, XSSContext ctx, om_context& octx);
+    public:
+      static void compile_xs(const str& text, XSSContext ctx, om_context& octx);
     private:
       //data reader
       Language        read_language(DataEntity project);
@@ -196,7 +246,7 @@ class object_model
       //document model
       document_map documents_;
 
-      document& create_document(const str& src_file, XSSContext ctx);
+      document& create_document(Application app, const str& src_file, XSSContext ctx);
       void      fix_it_up(XSSContext ctx, om_context& octx);
       void      bind_it_up(XSSContext ctx, om_context& octx);
       bool      check_type(XSSType type, const str& type_name, XSSContext ctx);
@@ -222,5 +272,53 @@ class object_model
     public:
       void add_error(const str& desc, param_list* info, file_location& loc);
   };
+
+class object_model_thread
+  {
+    public:
+      object_model_thread() : id_(0), stopped_(true) {}
+    public:
+      int  compile_request(const str& text, const str& id);
+      bool get(const str& id, om_response& result);
+      bool fetch(str& id, om_response& result);
+      void run();
+    private:
+      //state
+      typedef std::map<str, om_response>  response_map;
+      typedef std::pair<str, om_response> response_pair;
+
+      struct om_request
+        {
+          om_request():
+            response_id(-1)
+            {
+            }
+
+          om_request(const str& _id, const str& _text, int _response_id):
+            id(_id),
+            text(_text),
+            response_id(response_id)
+            {
+            }
+            
+          str         id;
+          str         text;
+          int         response_id;
+        };
+      
+      typedef std::vector<om_request> request_list;
+
+      request_list requests_; 
+      response_map responses_;
+      int          id_;
+
+      //thread
+      boost::shared_ptr<boost::thread> thread_;
+      boost::mutex                     mutex_;
+      bool                             stopped_;
+      
+      void do_work();
+  };
+
 }
 #endif

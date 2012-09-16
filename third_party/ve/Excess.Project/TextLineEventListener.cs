@@ -17,6 +17,10 @@ using Microsoft.VisualStudio.TextManager.Interop;
 
 using VSConstants = Microsoft.VisualStudio.VSConstants;
 using Excess.Project.Library;
+using Excess.CompilerTasks;
+using Microsoft.VisualStudio;
+using System.Runtime.InteropServices;
+using ExcessCompiler;
 
 namespace Excess.Project
 {
@@ -71,13 +75,50 @@ namespace Excess.Project
             // Do Nothing
         }
 
-        void IVsTextLinesEvents.OnChangeLineText(TextLineChange[] pTextLineChange, int fLast) {
-            TextLineChangeEvent eh = OnFileChangedImmediate;
-            if (null != eh) {
-                eh(this, pTextLineChange, fLast);
-            }
+        void IVsTextLinesEvents.OnChangeLineText(TextLineChange[] pTextLineChange, int fLast)
+        {
+            //TextLineChangeEvent eh = OnFileChangedImmediate;
+            //if (null != eh) {
+            //    eh(this, pTextLineChange, fLast);
+            //}
 
             isDirty = true;
+
+            //xs: just notify excess
+            ExcessModelService service = ExcessModelService.getInstance();
+
+            foreach(var tlc in pTextLineChange)
+            {
+                string contents;
+                int    size;
+                
+                buffer.GetSize(out size);
+
+                int startLine, startIndex, endLine, endIndex;
+                buffer.GetLineIndexOfPosition(0, out startLine, out startIndex);
+                buffer.GetLineIndexOfPosition(size, out endLine, out endIndex);
+
+                buffer.GetLineText(startLine, startIndex, endLine, endIndex, out contents);
+
+                service.Model.notifyChange(fileName, contents, tlc.iStartLine, tlc.iStartIndex, tlc.iOldEndLine, tlc.iOldEndIndex, tlc.iNewEndLine, tlc.iNewEndIndex);
+                //DirtResults change = service.Model.modifyContext(fileName, tlc.iStartLine, tlc.iStartIndex, tlc.iOldEndLine, tlc.iOldEndIndex, tlc.iNewEndLine, tlc.iNewEndIndex);
+                //if (change != null)
+                //{
+                //    int begin, end;
+                //    buffer.GetPositionOfLine(change.BeginLine - 1, out begin);
+                //    buffer.GetPositionOfLine(change.EndLine - 1, out end);
+
+                //    begin += change.BeginColumn;
+                //    end += change.EndColumn - 1; //td: xs is returning a bad end column
+
+                //    int startLine, startIndex, endLine, endIndex;
+                //    buffer.GetLineIndexOfPosition(begin, out startLine, out startIndex);
+                //    buffer.GetLineIndexOfPosition(end, out endLine, out endIndex);
+
+                //    buffer.GetLineText(startLine, startIndex, endLine, endIndex, out change.NewCode);
+                //}
+
+            }
         }
         #endregion
 

@@ -14,5 +14,13 @@ XSSContext cs_lang::create_context()
     result->add_type(XSSType(new xss_type("string", type_schema<str>())), str());
 
     XSSType var_type = result->add_type(XSSType(new xss_type("var", null)), str());
+    var_type->as_variant();
+
+    XSSType object_type = result->add_type(XSSType(new xss_type("object", null)), str());
+    object_type->as_variant();
+
+    XSSType array_type = result->add_type(XSSType(new xss_type("array", null)), str());
+    array_type->as_array(var_type);
+
     return result;
   }

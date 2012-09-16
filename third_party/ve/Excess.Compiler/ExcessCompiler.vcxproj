@@ -41,6 +41,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -51,7 +52,8 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions);BOOST_NO_MEMBER_TEMPLATE_FRIENDS;BOOST_NO_STATIC_ASSERT;TIXML_USE_STL</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>C:\dev\XKP\include;C:\dev\boost;C:\dev\boost\boost_1_44;C:\dev\XKP\third_party\tinyXml;C:\dev\XKP\third_party\jsoncpp\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\dev\XKP\include;C:\dev\boost;C:\dev\boost\boost_1_44</AdditionalIncludeDirectories>
+      <CompileAsManaged>true</CompileAsManaged>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -83,27 +85,6 @@
     <ClInclude Include="Stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\XKP\src\xs\engine.c">
-      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\dynamic_objects.cpp" />
-    <ClCompile Include="..\..\..\src\xs.cpp" />
-    <ClCompile Include="..\..\..\src\xss\data_reader.cpp" />
-    <ClCompile Include="..\..\..\src\xss\object_model.cpp" />
-    <ClCompile Include="..\..\..\src\xss\xss_code.cpp" />
-    <ClCompile Include="..\..\..\src\xss\xss_context.cpp" />
-    <ClCompile Include="..\..\..\src\xss\xss_expression.cpp" />
-    <ClCompile Include="..\..\..\src\xs\array.cpp" />
-    <ClCompile Include="..\..\..\src\xs\ast.cpp" />
-    <ClCompile Include="..\..\..\src\xs\behaviour.cpp" />
-    <ClCompile Include="..\..\..\src\xs\compiler.cpp" />
-    <ClCompile Include="..\..\..\src\xs\linker.cpp" />
-    <ClCompile Include="..\..\..\src\xs\operators.cpp" />
-    <ClCompile Include="..\..\..\src\xs\vm.cpp" />
-    <ClCompile Include="..\..\tinyXml\tinystr.cpp" />
-    <ClCompile Include="..\..\tinyXml\tinyxml.cpp" />
-    <ClCompile Include="..\..\tinyXml\tinyxmlerror.cpp" />
-    <ClCompile Include="..\..\tinyXml\tinyxmlparser.cpp" />
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="ExcessCompiler.cpp" />
     <ClCompile Include="Stdafx.cpp">

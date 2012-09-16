@@ -10,6 +10,9 @@ using Microsoft.VisualStudio.Package;
 using EnvDTE;
 using Excess.Project.Library;
 using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.TextManager.Interop;
+using System.Collections.Generic;
+using Excess.CompilerTasks;
 
 namespace Excess.Project
 {
@@ -42,10 +45,14 @@ namespace Excess.Project
     //"Excess", @"CodeSnippets\SnippetsIndex.xml", @"CodeSnippets\Snippets\", @"CodeSnippets\Snippets\")]
     [ProvideLanguageService(GuidList.guidExcessLanguageString, "Excess", 101, RequestStockColors = true)]
     [ProvideLanguageExtension(GuidList.guidExcessLanguageString, ".xs")]
-    public class PythonProjectPackage : ProjectPackage, IVsInstalledProduct, IOleComponent
+    public class PythonProjectPackage : ProjectPackage, IVsInstalledProduct, IOleComponent, IVsRunningDocTableEvents, IVsTextLinesEvents
 	{
         private PythonLibraryManager libraryManager;
         private uint componentID;
+        private ProjectItemsEvents projectEvents;
+        private uint _rdtEventCookie;
+        private Dictionary<uint, TextLineEventListener> documents = new Dictionary<uint, TextLineEventListener>();
+
 
 		protected override void Initialize()
 		{
@@ -58,19 +65,29 @@ namespace Excess.Project
                 this.RegisterEditorFactory(new EditorFactory(this));
             }
 
-            IServiceContainer container = this as IServiceContainer;
-            container.AddService(typeof(IPythonLibraryManager), CreateService, true);
-		}
+            //td: this library manager makes some sort of sense, review later
+            //IServiceContainer container = this as IServiceContainer;
+            //container.AddService(typeof(IPythonLibraryManager), CreateService, true);
+
+            //we'll do the events manually
+            IVsRunningDocumentTable rdt = GetService(typeof(SVsRunningDocumentTable)) as IVsRunningDocumentTable;
+            if (rdt != null)
+            {
+                rdt.AdviseRunningDocTableEvents((IVsRunningDocTableEvents)this, out this._rdtEventCookie);
+            }
+
+            RegisterForIdleTime();
+        }
 
         private object CreateService(IServiceContainer container, Type serviceType)
         {
             object service = null;
-            if(typeof(IPythonLibraryManager) == serviceType)
-            {
-                libraryManager = new PythonLibraryManager(this);
-                service = libraryManager as IPythonLibraryManager;
-                RegisterForIdleTime();
-            }
+            //if(typeof(IPythonLibraryManager) == serviceType)
+            //{
+            //    libraryManager = new PythonLibraryManager(this);
+            //    service = libraryManager as IPythonLibraryManager;
+            //    RegisterForIdleTime();
+            //}
             return service;
         }
 
@@ -109,6 +126,12 @@ namespace Excess.Project
                     libraryManager.Dispose();
                     libraryManager = null;
                 }
+
+                foreach (TextLineEventListener textListener in documents.Values)
+                {
+                    textListener.Dispose();
+                }
+                documents.Clear();
             }
             finally
             {
@@ -216,10 +239,8 @@ namespace Excess.Project
 
         public int FDoIdle(uint grfidlef)
         {
-            if (null != libraryManager)
-            {
-                libraryManager.OnIdle();
-            }
+            ExcessModelService service = ExcessModelService.getInstance();
+            service.Model.updateChanges();
             return 0;
         }
 
@@ -261,6 +282,127 @@ namespace Excess.Project
 
         public void Terminate()
         {
+        }
+
+        //IVsRunningDocTableEvents
+        public int OnAfterAttributeChange(uint docCookie, uint grfAttribs)
+        {
+            if ((grfAttribs & (uint)(__VSRDTATTRIB.RDTA_MkDocument)) == (uint)__VSRDTATTRIB.RDTA_MkDocument)
+            {
+                IVsRunningDocumentTable rdt = GetService(typeof(SVsRunningDocumentTable)) as IVsRunningDocumentTable;
+                if (rdt != null)
+                {
+                    uint flags, readLocks, editLocks, itemid;
+                    IVsHierarchy hier;
+                    IntPtr docData = IntPtr.Zero;
+                    string moniker;
+                    int hr;
+                    try
+                    {
+                        hr = rdt.GetDocumentInfo(docCookie, out flags, out readLocks, out editLocks, out moniker, out hier, out itemid, out docData);
+                        TextLineEventListener listner;
+                        if (documents.TryGetValue(docCookie, out listner))
+                        {
+                            listner.FileName = moniker;
+                        }
+                    }
+                    finally
+                    {
+                        if (IntPtr.Zero != docData)
+                        {
+                            Marshal.Release(docData);
+                        }
+                    }
+                }
+            }
+            return VSConstants.S_OK;
+        }
+
+        public int OnAfterFirstDocumentLock(uint docCookie, uint dwRDTLockType, uint dwReadLocksRemaining, uint dwEditLocksRemaining)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnAfterSave(uint docCookie)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnBeforeDocumentWindowShow(uint docCookie, int fFirstShow, IVsWindowFrame pFrame)
+        {
+            if (documents.ContainsKey(docCookie))
+            {
+                return VSConstants.S_OK;
+            }
+            // Get the information about this document from the RDT.
+            IVsRunningDocumentTable rdt = GetService(typeof(SVsRunningDocumentTable)) as IVsRunningDocumentTable;
+            if (null != rdt)
+            {
+                // Note that here we don't want to throw in case of error.
+                uint flags;
+                uint readLocks;
+                uint writeLoks;
+                string documentMoniker;
+                IVsHierarchy hierarchy;
+                uint itemId;
+                IntPtr unkDocData;
+                int hr = rdt.GetDocumentInfo(docCookie, out flags, out readLocks, out writeLoks,
+                                             out documentMoniker, out hierarchy, out itemId, out unkDocData);
+                try
+                {
+                    if (Microsoft.VisualStudio.ErrorHandler.Failed(hr) || (IntPtr.Zero == unkDocData))
+                    {
+                        return VSConstants.S_OK;
+                    }
+                    // Check the extension of the file to see if a listener is required.
+                    string extension = System.IO.Path.GetExtension(documentMoniker);
+                    if (0 != string.Compare(extension, ExcessConstants.xsFileExtension, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return VSConstants.S_OK;
+                    }
+
+                    // Create the module id for this document.
+                    ModuleId docId = new ModuleId(hierarchy, itemId);
+
+                    // Try to get the text buffer.
+                    IVsTextLines buffer = Marshal.GetObjectForIUnknown(unkDocData) as IVsTextLines;
+
+                    // Create the listener.
+                    TextLineEventListener listener = new TextLineEventListener(buffer, documentMoniker, docId);
+                    // Add the listener to the dictionary, so we will not create it anymore.
+                    documents.Add(docCookie, listener);
+                }
+                finally
+                {
+                    if (IntPtr.Zero != unkDocData)
+                    {
+                        Marshal.Release(unkDocData);
+                    }
+                }
+            }
+            // Always return success.
+            return VSConstants.S_OK;
+        }
+
+        public int OnAfterDocumentWindowHide(uint docCookie, IVsWindowFrame pFrame)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnBeforeLastDocumentUnlock(uint docCookie, uint dwRDTLockType, uint dwReadLocksRemaining, uint dwEditLocksRemaining)
+        {
+            return VSConstants.S_OK;
+        }
+
+        //
+        public void OnChangeLineAttributes(int iFirstLine, int iLastLine)
+        {
+        }
+
+        public void OnChangeLineText(TextLineChange[] pTextLineChange, int fLast)
+        {
+            int ii = 0;
+            ii++;
         }
     }
 }

@@ -7,7 +7,7 @@
 #include <wchar.h>
 #include "vcclr.h"
 
-#include <xs/compiler.h>
+#include <time.h>
 
 using namespace System::Runtime::InteropServices;
 
@@ -151,7 +151,7 @@ Token^ Tokenizer::Next()
 	long line, end_column;
 	int symbol;
 	long curr = curr_;
-	wchar_t* result = xkp::grammar_utils::GetToken(input, len_, &curr, &line, &end_column, &symbol);
+	wchar_t* result = get_token(input, len_, &curr, &line, &end_column, &symbol);
 
 	if (symbol == 5 || symbol == 4 || symbol == 3)
 		comment_ = true;
@@ -167,18 +167,6 @@ Token^ Tokenizer::Next()
 //Compiler
 Compiler::Compiler()
 {
-    //Grammar.CaseSensitive = False;
-    //Grammar.InitialSymbol = 132;
-    //Grammar.InitialDfaState = 0;
-    //Grammar.InitialLalrState = 0;
-    //Grammar.SymbolCount = 150;
-    //Grammar.SymbolArray = GrammarSymbolArray;
-    //Grammar.RuleCount = 191;
-    //Grammar.RuleArray = GrammarRuleArray;
-    //Grammar.DfaStateCount = 235;
-    //Grammar.DfaArray = GrammarDfaStateArray;
-    //Grammar.LalrStateCount = 372;
-    //Grammar.LalrArray = GrammarLalrStateArray;
 }
 
 Tokenizer^ Compiler::CreateTokenizer(String^ s)
@@ -186,4 +174,131 @@ Tokenizer^ Compiler::CreateTokenizer(String^ s)
 	return gcnew Tokenizer(s);
 }
 
+//ExcessModel
+ExcessModel::ExcessModel()
+{
+	model_ = create_object_model(); 
+	projects_ = new std::map<std::string, int>();
+	dirt_ = new std::map<std::string, int>();
+	dirt_index_ = new std::map<int, std::string>();
 }
+
+ExcessModel::~ExcessModel()
+{
+	delete model_;
+	delete projects_;
+	delete dirt_;
+	delete dirt_index_;
+}
+
+struct StringUtils
+{
+	static String^ toString(const std::string& s)
+	{
+		String^ result = gcnew String(s.c_str());
+		return result;
+	}
+
+	static std::string fromString(String^ s)
+	{
+		const char* chars = (const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
+		std::string result(chars);
+		Marshal::FreeHGlobal(IntPtr((void*)chars));	
+		return result;
+	}
+};
+
+int ExcessModel::loadProject(String^ filename, String^ path)
+{
+	std::string fname = StringUtils::fromString(filename);
+	int appId = model_->load(fname);
+	projects_->insert(std::pair<std::string, int>(fname, appId));
+
+	return appId;
+}
+
+void ExcessModel::unloadProject(Guid project)
+{
+}
+
+bool ExcessModel::buildProject(Guid project)
+{
+	return false;
+}
+
+bool ExcessModel::buildAll()
+{
+	return false;
+}
+
+void ExcessModel::addInclude(String^ project, String^ def, String^ src)
+{
+	std::string prj		 = StringUtils::fromString(project);
+	std::string def_file = StringUtils::fromString(def);
+	std::string src_file = StringUtils::fromString(src);
+
+	std::map<std::string, int>::iterator it = projects_->find(prj);
+	if (it != projects_->end())
+	{
+		model_->addIncludes(it->second, def_file, src_file);
+	}
+}
+
+void ExcessModel::notifyChange(String^ filename, String^ contents, int line, int col, int oldEndLine, int oldEndCol, int newEndLine, int newEndCol)
+{
+	std::string fname = StringUtils::fromString(filename);
+	if (model_->notifyChange(fname, line, col, oldEndLine, oldEndCol, newEndLine, newEndCol))
+	{
+		std::map<std::string, int>::iterator it = dirt_->find(fname);
+		if (it != dirt_->end())
+		{
+			dirt_content_[it->second] = contents;
+			//td: record change information
+		}
+		else
+		{
+			dirt_->insert(std::pair<std::string, int>(fname, dirt_content_.Count));
+			dirt_index_->insert(std::pair<int, std::string>(dirt_content_.Count, fname));
+			dirt_content_.Add(contents);
+		}
+	}
+}
+
+void ExcessModel::updateChanges()
+{
+	model_->updateChanges(1000); //give it a second or so
+
+	//queue jobs
+	for(int i = dirt_content_.Count - 1; i >= 0; i--)
+	{
+		std::map<int, std::string>::iterator it = dirt_index_->find(i); 
+		if (it != dirt_index_->end())
+			model_->queueChange(it->second, StringUtils::fromString(dirt_content_[i]));
+	}
+
+	//clear dirt
+	dirt_content_.Clear();
+	dirt_->clear();
+	dirt_index_->clear();
+
+
+	//clock_t start = clock();
+	//while(dirt_.Count > 0)
+	//{
+	//	DirtResults^ dirt = dirt_[0];
+	//	XSSContext   ctx  = dirt_ctx_->at(dirt->CtxId);
+
+	//	dirt_.RemoveAt(0);
+	//	dirt_ctx_->erase(dirt_ctx_->begin() + dirt->CtxId);
+
+	//	assert(false);//td: 
+
+	//	clock_t elapsed = clock() - start;
+	//	if (elapsed < 0 || elapsed > 1000)
+	//		break;
+	//}
+}
+
+}
+
+

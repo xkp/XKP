@@ -521,6 +521,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       XSSContext     parent();
       void           set_parent(XSSContext ctx);
       void           identity(CONTEXT_IDENTITY id, variant idobj); 
+	  CONTEXT_IDENTITY identity();
       ErrorHandler   errors();
       void           errors(ErrorHandler handler); 
     public:
@@ -533,7 +534,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       typedef std::map<str, XSSType>  type_list;
       typedef std::pair<str, XSSType> type_list_pair;
 
-			WeakXSSContext parent_; 
+	  WeakXSSContext parent_; 
       Language       lang_;
       XSSObject      this_;
       type_list      types_;
@@ -799,6 +800,7 @@ class xss_code
       XSSContext     context();
       void           bind(XSSContext ctx);
       XSSType        return_type();
+      void           set_extents(file_position& begin, file_position& end); 
       file_position& begin(); 
       file_position& end(); 
     private:

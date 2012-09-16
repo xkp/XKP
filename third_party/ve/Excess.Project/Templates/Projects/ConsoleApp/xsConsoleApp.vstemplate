@@ -14,7 +14,7 @@
   <TemplateContent>
     <Project File="xsConsoleApp.xsproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" OpenInEditor="true">ConsoleApp.xs</ProjectItem>
-      <ProjectItem ReplaceParameters="true">ConsoleApp.project.xml</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ConsoleApp.project.xml">ConsoleApp.project.xml</ProjectItem>
     </Project>
   </TemplateContent>
 </VSTemplate>

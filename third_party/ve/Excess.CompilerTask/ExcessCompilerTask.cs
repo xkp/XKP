@@ -146,6 +146,8 @@ namespace Excess.CompilerTasks
 		/// <returns></returns>
 		public override bool Execute()
 		{
+            ExcessModelService service = ExcessModelService.getInstance();
+
 			Log.LogMessage(MessageImportance.Normal, "Excess Compilation Task");
 
 			return false;

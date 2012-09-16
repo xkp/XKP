@@ -1,0 +1,54 @@
+ImageRuntimeVersion: v4.0.30319
+Assembly ExcessCompiler, Version=1.0.*, Culture=Invariant Language (Invariant Country): 
+	hash=SHA1, flags=PublicKey
+Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly Microsoft.VisualC, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a: 
+	hash=None, flags=None
+Class ExcessCompiler.Token: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(System.String, Int32, Int32, Int32, Int32, Int32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    Int32 StartLine : Public
+    Int32 EndLine : Public
+    Int32 StartColumn : Public
+    Int32 EndColumn : Public
+  Methods:
+    getText(): PrivateScope, Public, HideBySig
+    getSymbol(): PrivateScope, Public, HideBySig
+    classify(): PrivateScope, Public, HideBySig
+Class ExcessCompiler.Tokenizer: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Interfaces:
+    System.IDisposable
+  Methods:
+    Next(): PrivateScope, Public, HideBySig
+    Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
+Class ExcessCompiler.Compiler: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    CreateTokenizer(String): PrivateScope, Public, HideBySig
+Class ExcessCompiler.ExcessModel: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Interfaces:
+    System.IDisposable
+  Methods:
+    loadProject(String, String): PrivateScope, Public, HideBySig
+    unloadProject(Guid): PrivateScope, Public, HideBySig
+    buildProject(Guid): PrivateScope, Public, HideBySig
+    buildAll(): PrivateScope, Public, HideBySig
+    addInclude(String, String, String): PrivateScope, Public, HideBySig
+    notifyChange(String, String, Int32, Int32, Int32, Int32, Int32, Int32): PrivateScope, Public, HideBySig
+    updateChanges(): PrivateScope, Public, HideBySig
+    Dispose(): PrivateScope, Public, Final, Virtual, HideBySig
+Struct ExcessCompiler.TokenType: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName

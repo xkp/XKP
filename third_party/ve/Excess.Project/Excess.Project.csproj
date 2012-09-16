@@ -248,7 +248,7 @@
     <VSTemplate Include="Templates\Items\Class\Class.vstemplate" />
     <Content Include="Templates\Items\Class\class.xml" />
     <Content Include="Templates\Items\Class\__TemplateIcon.ico" />
-    <Content Include="Templates\Projects\ConsoleApp\ConsoleApp.project.xml" />
+    <None Include="Templates\Projects\ConsoleApp\ConsoleApp.project.xml" />
     <None Include="Templates\Items\Class\class.xs" />
     <None Include="Templates\Projects\ConsoleApp\__TemplateIcon.ico" />
     <None Include="Templates\Projects\ConsoleApp\ConsoleApp.xs" />
@@ -319,6 +319,10 @@
       <Name>Excess.CompilerTask</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
+    <ProjectReference Include="..\Excess.Compiler\ExcessCompiler.vcxproj">
+      <Project>{F65BBAC7-1B48-4DDA-B5FD-BBAB4B4DA4DB}</Project>
+      <Name>ExcessCompiler</Name>
     </ProjectReference>
     <ProjectReference Include="..\Excess.EditorExtensions\Excess.EditorExtensions.csproj">
       <Project>{6004EB71-76F9-41EA-9355-A273B61FBF3E}</Project>

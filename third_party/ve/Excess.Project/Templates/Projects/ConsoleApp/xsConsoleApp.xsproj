@@ -6,7 +6,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>$safeprojectname$</RootNamespace>
     <AssemblyName>$safeprojectname$</AssemblyName>
-    <MainFile>ConsoleApp.project.xml</MainFile>
+    <MainFile>ConsoleApp.xs</MainFile>
     <TargetFrameworkVersion>v$targetframeworkversion$</TargetFrameworkVersion>
     <TargetPlatform>v4</TargetPlatform>
   </PropertyGroup>
@@ -28,10 +28,10 @@
 
   <ItemGroup>
     <Compile Include="ConsoleApp.xs" />
-    <None Include="ConsoleApp.project.xml">
+    <Compile Include="ConsoleApp.project.xml">
       <Visible>false</Visible>
       <xs_project>true</xs_project>
-    </None>
+    </Compile>
   </ItemGroup>
   <Import Project="$(ExcessPath)\Excess.targets" />
 </Project>

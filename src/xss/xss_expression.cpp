@@ -883,6 +883,11 @@ XSSType xss_code::return_type()
     return return_type_;
   }
 
+void xss_code::set_extents(file_position& begin, file_position& end)
+  {
+    ctx_->set_extents(begin, end);
+  }
+
 file_position& xss_code::begin()
   {
     return ctx_->begin();

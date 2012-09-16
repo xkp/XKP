@@ -35,7 +35,7 @@ namespace xkp
         {
         }
 
-      void min(file_position& other)
+      void set_min(file_position& other)
         {
           if (line < 0 || line > other.line)
             {
@@ -46,7 +46,7 @@ namespace xkp
               column = other.column;
         }
 
-      void max(file_position& other)
+      void set_max(file_position& other)
         {
           if (line < 0 || line < other.line)
             {

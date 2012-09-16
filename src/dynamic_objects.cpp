@@ -106,7 +106,7 @@ size_t event_holder::add_event(const str& name, schema_item& item)
 
     event_info ei(ev_id);
 
-    item.flags |= CONST;
+    item.flags |= CONST_VALUE;
     item.get    = Getter( new const_getter(ei) );
 
     return ev_id;

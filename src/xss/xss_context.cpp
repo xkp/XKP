@@ -181,11 +181,9 @@ XSSType xss_context::add_type(const str& id, XSSType type, bool override_parent)
         type_list::iterator it = types_.find(id);
         if (it != types_.end())
           {
-            param_list error;
-            error.add("id", SContextError);
-            error.add("desc", SDupType);
-            error.add("type", id);
-            xss_throw(error);
+			  it->second = type;
+			  type->set_language(lang_);
+			  return type;
           }
       }
     else
@@ -420,6 +418,10 @@ void xss_context::errors(ErrorHandler handler)
     errors_ = handler;
   }
 
+CONTEXT_IDENTITY xss_context::identity()
+  {
+	return identity_;
+  }		
 variant xss_context::resolve(const str& id, RESOLVE_ITEM item_type)
   {
     resolve_info si;

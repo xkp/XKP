@@ -11,22 +11,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{E01D9ADE-42A0-4D4D-9035-6BDB7CD52492}</ProjectGuid>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <Keyword>ManagedCProj</Keyword>
+    <ProjectGuid>{AA3DD7C1-32B5-4846-9B2A-99FAF463F74C}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
     <RootNamespace>xss</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <CLRSupport>true</CLRSupport>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <CLRSupport>true</CLRSupport>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -47,32 +45,105 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;XSS_EXPORTS;%(PreprocessorDefinitions);BOOST_NO_MEMBER_TEMPLATE_FRIENDS;BOOST_NO_STATIC_ASSERT;TIXML_USE_STL;XSS_EXPORTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\dev\XKP\include;C:\dev\boost;C:\dev\boost\boost_1_44;C:\dev\XKP\third_party\tinyXml;C:\dev\XKP\third_party\jsoncpp\include</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm134 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\dev\boost\boost_1_44\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;XSS_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="XSCompiler.h" />
+    <ClInclude Include="interface.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="xss.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="XSCompiler.cpp" />
+    <ClCompile Include="..\..\..\src\dynamic_objects.cpp" />
+    <ClCompile Include="..\..\..\src\xs.cpp" />
+    <ClCompile Include="..\..\..\src\xss\brace_parser.cpp" />
+    <ClCompile Include="..\..\..\src\xss\data_reader.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\ajax.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\ga_parser.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\generic_assign.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\html5_asynch.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\native.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\shell.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\smarty.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\sql.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\vm_base.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl\vm_shell.cpp" />
+    <ClCompile Include="..\..\..\src\xss\dsl_out.cpp" />
+    <ClCompile Include="..\..\..\src\xss\html_parser.cpp" />
+    <ClCompile Include="..\..\..\src\xss\language.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang\base.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang\csharp.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang\debug.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang\java.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang\js.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang\waxjs.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang_factory.cpp" />
+    <ClCompile Include="..\..\..\src\xss\localfs.cpp" />
+    <ClCompile Include="..\..\..\src\xss\object_model.cpp" />
+    <ClCompile Include="..\..\..\src\xss\object_reader.cpp" />
+    <ClCompile Include="..\..\..\src\xss\utils.cpp" />
+    <ClCompile Include="..\..\..\src\xss\xml_data_reader.cpp" />
+    <ClCompile Include="..\..\..\src\xss\xss_code.cpp" />
+    <ClCompile Include="..\..\..\src\xss\xss_compiler.cpp" />
+    <ClCompile Include="..\..\..\src\xss\xss_context.cpp" />
+    <ClCompile Include="..\..\..\src\xss\xss_expression.cpp" />
+    <ClCompile Include="..\..\..\src\xss\xss_parser.cpp" />
+    <ClCompile Include="..\..\..\src\xss\xss_renderer.cpp" />
+    <ClCompile Include="..\..\..\src\xs\array.cpp" />
+    <ClCompile Include="..\..\..\src\xs\ast.cpp" />
+    <ClCompile Include="..\..\..\src\xs\behaviour.cpp" />
+    <ClCompile Include="..\..\..\src\xs\compiler.cpp" />
+    <ClCompile Include="..\..\..\src\xs\engine.c" />
+    <ClCompile Include="..\..\..\src\xs\linker.cpp" />
+    <ClCompile Include="..\..\..\src\xs\operators.cpp" />
+    <ClCompile Include="..\..\..\src\xs\vm.cpp" />
+    <ClCompile Include="..\..\jsoncpp\src\lib_json\json_reader.cpp" />
+    <ClCompile Include="..\..\jsoncpp\src\lib_json\json_value.cpp" />
+    <ClCompile Include="..\..\jsoncpp\src\lib_json\json_writer.cpp" />
+    <ClCompile Include="..\..\tinyXml\tinystr.cpp" />
+    <ClCompile Include="..\..\tinyXml\tinyxml.cpp" />
+    <ClCompile Include="..\..\tinyXml\tinyxmlerror.cpp" />
+    <ClCompile Include="..\..\tinyXml\tinyxmlparser.cpp" />
+    <ClCompile Include="dllmain.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</CompileAsManaged>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="xss.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

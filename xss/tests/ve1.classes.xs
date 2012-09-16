@@ -25,8 +25,3 @@ class test_class
         foo.bar = aa;
     }
 }
-
-class test_class_xs_only
-{
-    property some_prop = 10;
-}

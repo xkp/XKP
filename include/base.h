@@ -38,7 +38,7 @@ namespace xkp
   //its kind of nice to keep them low and well documented.
   enum schema_item_flags
     {
-      CONST           = 0x001,  //constant, you can call get only once on them, no instance required
+      CONST_VALUE     = 0x001,  //constant, you can call get only once on them, no instance required
       DYNAMIC_ACCESS  = 0x002,  //items marked like this will need an explicit dynamic object cast
                                 //at call time.
       EVENT           = 0x004,  //event, we'll use the get to obtain the event id and then exec

@@ -225,12 +225,12 @@ struct parsetree_visitor
                 TokenStruct* last = token->Tokens[TokenCount - 1];
                 end.line = last->Line;
                 end.column = last->Column;
-                if (last->ReductionRule < 0)
-                    end.column += wcslen(last->Data);
+                //if (last->ReductionRule < 0)
+                //    end.column += wcslen(last->Data);
               }
 
-            target->begin.min(begin);
-            target->end.max(end);
+            target->begin.set_min(begin);
+            target->end.set_max(end);
           }
       }
 
@@ -1033,11 +1033,11 @@ void code_::statement_if( TokenStruct* token, parsetree_visitor* visitor)
     if_     v(si);
     visitor->visit(token, v);
 
-    si.begin.min(from_token(token->Tokens[0]));
+    si.begin.set_min(from_token(token->Tokens[0]));
     if (si.else_code.empty())
-      si.end.max(si.if_code.end);
+      si.end.set_max(si.if_code.end);
     else
-      si.end.max(si.else_code.end);
+      si.end.set_max(si.else_code.end);
 
     output_.add_statement( si );
   }
@@ -1048,8 +1048,8 @@ void code_::statement_for( TokenStruct* token, parsetree_visitor* visitor)
     for_     f(sf);
     visitor->visit(token, f);
 
-    sf.begin.min(from_token(token->Tokens[0]));
-    sf.end.max(sf.for_code.end);
+    sf.begin.set_min(from_token(token->Tokens[0]));
+    sf.end.set_max(sf.for_code.end);
 
     output_.add_statement( sf );
   }
@@ -1060,8 +1060,8 @@ void code_::statement_iter_for( TokenStruct* token, parsetree_visitor* visitor)
     iterfor_      iif(sif);
     visitor->visit(token, iif);
 
-    sif.begin.min(from_token(token->Tokens[0]));
-    sif.end.max(sif.for_code.end);
+    sif.begin.set_min(from_token(token->Tokens[0]));
+    sif.end.set_max(sif.for_code.end);
     output_.add_statement( sif );
   }
 
@@ -1071,8 +1071,8 @@ void code_::statement_while( TokenStruct* token, parsetree_visitor* visitor)
     while_     w(sw);
     visitor->visit(token, w);
 
-    sw.begin.min(from_token(token->Tokens[0]));
-    sw.end.max(sw.while_code.end);
+    sw.begin.set_min(from_token(token->Tokens[0]));
+    sw.end.set_max(sw.while_code.end);
     output_.add_statement( sw );
   }
 
@@ -1084,8 +1084,8 @@ void code_::statement_switch( TokenStruct* token, parsetree_visitor* visitor)
     switch_ s(ss);
     visitor->visit(token, s);
 
-    ss.begin.min(from_token(token->Tokens[0]));
-    ss.end.max(from_token(token->Tokens[6]));
+    ss.begin.set_min(from_token(token->Tokens[0]));
+    ss.end.set_max(from_token(token->Tokens[6]));
 
     output_.add_statement(ss);
   }
@@ -1103,8 +1103,8 @@ void code_::statement_dispatch( TokenStruct* token, parsetree_visitor* visitor)
     visitor->visit(token->Tokens[3], args);
     sd.arg_count = args.param_count;
 
-    sd.begin.min(from_token(token->Tokens[0]));
-    sd.end.max(from_token(token->Tokens[5]));
+    sd.begin.set_min(from_token(token->Tokens[0]));
+    sd.end.set_max(from_token(token->Tokens[5]));
     output_.add_statement( sd );
   }
 
@@ -1112,16 +1112,16 @@ void code_::statement_break( TokenStruct* token, parsetree_visitor* visitor)
   {
     stmt_break sb;
 
-    sb.begin.min(from_token(token->Tokens[0]));
-    sb.end.max(from_token(token->Tokens[1]));
+    sb.begin.set_min(from_token(token->Tokens[0]));
+    sb.end.set_max(from_token(token->Tokens[1]));
     output_.add_statement( sb );
   }
 
 void code_::statement_continue( TokenStruct* token, parsetree_visitor* visitor)
   {
     stmt_continue sc;
-    sc.begin.min(from_token(token->Tokens[0]));
-    sc.end.max(from_token(token->Tokens[1]));
+    sc.begin.set_min(from_token(token->Tokens[0]));
+    sc.end.set_max(from_token(token->Tokens[1]));
 
     output_.add_statement( sc );
   }
@@ -1132,8 +1132,8 @@ void code_::statement_return( TokenStruct* token, parsetree_visitor* visitor)
     expression_ expr(sr.expr);
     visitor->visit(token->Tokens[1], expr);
 
-    sr.begin.min(from_token(token->Tokens[0]));
-    sr.end.max(from_token(token->Tokens[2]));
+    sr.begin.set_min(from_token(token->Tokens[0]));
+    sr.end.set_max(from_token(token->Tokens[2]));
     output_.add_statement( sr );
   }
 
@@ -1143,8 +1143,8 @@ void code_::statement_expression( TokenStruct* token, parsetree_visitor* visitor
     expression_ expr(se.expr);
     visitor->visit(token, expr);
 
-    se.begin.min(from_token(token->Tokens[0]));
-    se.end.max(from_token(token->Tokens[1]));
+    se.begin.set_min(from_token(token->Tokens[0]));
+    se.end.set_max(from_token(token->Tokens[1]));
     output_.add_statement( se );
   }
 
@@ -1155,8 +1155,8 @@ void code_::statement_try( TokenStruct* token, parsetree_visitor* visitor)
     try_     t(ts);
     visitor->visit(token, t);
 
-    ts.begin.min(from_token(token->Tokens[0]));
-    ts.end.max(ts.finally_code.end);
+    ts.begin.set_min(from_token(token->Tokens[0]));
+    ts.end.set_max(ts.finally_code.end);
 
     output_.add_statement( ts );
   }
@@ -1167,8 +1167,8 @@ void code_::statement_throw( TokenStruct* token, parsetree_visitor* visitor)
     expression_ e(tw.expr);
     visitor->visit(token->Tokens[1], e);
 
-    tw.begin.min(from_token(token->Tokens[0]));
-    tw.end.max(from_token(token->Tokens[2]));
+    tw.begin.set_min(from_token(token->Tokens[0]));
+    tw.end.set_max(from_token(token->Tokens[2]));
 
     output_.add_statement( tw );
   }
@@ -1179,8 +1179,8 @@ void code_::declare_variable( TokenStruct* token, parsetree_visitor* visitor)
     variable_     v(sv);
     visitor->visit(token, v);
 
-    sv.begin.min(from_token(token->Tokens[0]));
-    sv.end.max(sv.value.end);
+    sv.begin.set_min(from_token(token->Tokens[0]));
+    sv.end.set_max(sv.value.end);
 
     output_.add_statement( sv );
   }

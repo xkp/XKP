@@ -77,6 +77,11 @@ str idiom::get_namespace()
   }
 
 //application
+application::application(fs::path path):
+  path_(path)
+  {
+  }
+
 void application::entry_point(fs::path ep)
   {
     renderer_ = ep;
@@ -103,11 +108,140 @@ code_context& application::exec_context()
     return code_ctx_;
   }
 
+XSSContext application::context()
+  {
+    return ctx_;
+  }
+
+fs::path application::path()
+  {
+    return path_;
+  }
+
 //document
 void document::add(XSSContext context)
   {
     assert(context->begin().line >= 0 && context->end().line >= 0);
     items_.push_back(snap_shot(context->begin(), context->end(), context));
+  }
+
+void document::synch_extents()
+  {
+    snap_shots::iterator it = items_.begin();
+    snap_shots::iterator nd = items_.end();
+    for(; it != nd; it++)
+      {
+		it->context->set_extents(it->begin, it->end);
+	  }
+  }
+
+Application document::application()
+  {
+    return app_;
+  }
+
+void document::application(Application app)
+  {
+    app_ = app;
+  }
+
+XSSContext document::changed(int line, int col, int oldEndLine, int oldEndCol, int newEndLine, int newEndCol)
+  {
+    int diff = newEndLine - oldEndLine;
+
+    if (diff == 0)
+      return XSSContext(); //same line change, ignore
+
+    snap_shots::iterator it = items_.begin();
+    snap_shots::iterator nd = items_.end();
+
+    bool          unstable = false; //are we a little lost?
+    XSSContext    result = ctx_;
+    file_position result_pos;
+
+    for(; it != nd; it++)
+      {
+		int iiiiddd = it->context->identity();
+        if (it->end.line < line)
+          continue; //unaffected
+
+        if (it->begin.line > oldEndLine)
+          {
+            //simple modify
+            it->begin.line += diff;
+            it->end.line += diff;
+            continue;
+          }
+
+        if (unstable)
+          {
+            //just update boundaries
+            if (it->begin.line > oldEndLine)
+              {
+                it->begin.line += diff;
+                it->end.line += diff;
+              }
+            else if (it->end.line > oldEndLine)
+              it->end.line += diff;
+
+            continue;
+          }
+
+        //analize the intersection, use cases:
+        //1- boundaries of the context are broken, this will trigger a rebuild later
+        //2- fully inside, look for the best candidate
+        //3- fully contains, look for the best candidate
+
+        bool broken_up   = (line < it->begin.line && oldEndLine < it->end.line);
+        bool broken_down = (line > it->begin.line && oldEndLine > it->end.line);
+
+        if (broken_up)
+          {
+            it->begin.line = line;
+            it->end.line += diff;
+            result = it->context->parent();
+            unstable = true;
+          }
+        else if (broken_down)
+          {
+            it->end.line += diff;
+            result = it->context->parent();
+            unstable = true;
+          }
+        else
+          {
+            bool full_inside = line >= it->begin.line && oldEndLine <= it->end.line;
+            if (full_inside)
+              {
+                it->end.line += diff;
+
+                //is it a better candidate?
+                if (it->begin.line > result_pos.line)
+                  {
+                    result  = it->context;
+                    result_pos = it->begin;
+                  }
+              }
+            else
+              {
+                //the changed region contains this context, so it is no more
+                it->begin.line = -1;
+                it->end.line   = -1;
+              }
+          }
+      }
+    
+    synch_extents();
+	return result;
+  }
+
+document::document()
+  {
+  }
+
+document::document(Application app):
+  app_(app)
+  {
   }
 
 XSSContext document::find_context(int line, int column)
@@ -174,7 +308,7 @@ object_model::object_model(FileSystem fs, LanguageFactory languages):
 
 Application object_model::load(DataReader project, param_list& args, fs::path base_path)
   {
-    Application result(new application);
+    Application result(new application(base_path));
     DataEntity  prj = assure_unique_root(project);
 
     //create the global context for this application
@@ -276,13 +410,111 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
         str        src = _include->attr("src");  
 
         XSSContext include_ctx(new xss_context(CTXID_FILE, src, global));
-        compile_include(def, src, include_ctx, octx);
+        compile_include(result, def, src, include_ctx, octx);
       }
 
     fix_it_up(global, octx);
     bind_it_up(global, octx);
 
     return result;
+  }
+
+fs::path relativePath( const fs::path &path, const fs::path &relative_to )
+{
+    // create absolute paths
+    fs::path p = path;
+    fs::path r = relative_to;
+
+    // if root paths are different, return absolute path
+    if( p.root_path() != r.root_path() )
+        return p;
+
+    // initialize relative path
+    fs::path result;
+
+    // find out where the two paths diverge
+    fs::path::const_iterator itr_path = p.begin();
+    fs::path::const_iterator itr_relative_to = r.begin();
+    while( *itr_path == *itr_relative_to && itr_path != p.end() && itr_relative_to != r.end() ) {
+        ++itr_path;
+        ++itr_relative_to;
+    }
+
+    // add "../" for each remaining token in relative_to
+    if( itr_relative_to != r.end() ) {
+        ++itr_relative_to;
+        while( itr_relative_to != r.end() ) {
+            result /= "..";
+            ++itr_relative_to;
+        }
+    }
+
+    // add remaining path
+    while( itr_path != p.end() ) {
+        result /= *itr_path;
+        ++itr_path;
+    }
+
+    return result;
+}
+
+document* object_model::get_document(const str& fname)
+  {
+    document_map::iterator it = documents_.find(fname);
+    if (it != documents_.end())
+      return &it->second;
+    return null;
+  }
+
+void object_model::update_document(const str& fname, om_response& response)
+  {
+	  document* doc = get_document(fname);
+	  if (doc)
+	    {
+        Application app = doc->application(); assert(app);
+        XSSContext  ctx = app->context();
+
+        type_map::iterator it = response.data.classes.begin();
+        type_map::iterator nd = response.data.classes.end();
+
+        for(; it != nd; it++)
+          {
+            XSSType new_type = it->second; 
+            XSSType old_type = ctx->get_type(it->first);
+            ctx->add_type(it->first, new_type, true); //td: missing on a lot of optimizations by ignoring old_type
+
+            new_type->bind(ctx);
+          }
+
+        instance_map::iterator iit = response.data.instances.begin();
+        instance_map::iterator ind = response.data.instances.end();
+
+        for(; iit != ind; iit++)
+          {
+            XSSObject new_instance = iit->second; 
+            XSSObject old_instance = ctx->resolve(iit->first, RESOLVE_INSTANCE);
+            ctx->register_symbol(RESOLVE_INSTANCE, iit->first, new_instance, true); 
+
+            new_instance->bind(ctx);
+          }
+
+		    response.doc.application(doc->application());
+		    *doc = response.doc;
+	    }
+  }
+
+void object_model::add_include(Application app, const str& def, const str& src)
+  {
+    fs::path def_path = relativePath(def, app->path());
+    fs::path src_path = relativePath(src, app->path());
+
+    om_context octx;
+    XSSContext global = app->context();
+    XSSContext include_ctx(new xss_context(CTXID_FILE, str(src), global));
+    compile_include(app, def, src, include_ctx, octx);
+
+    fix_it_up(global, octx);
+    bind_it_up(global, octx);
   }
 
 Language object_model::read_language(DataEntity project)
@@ -412,7 +644,7 @@ Idiom object_model::read_idiom(DataEntity de, XSSContext ctx)
     return result;
   }
 
-void object_model::compile_include(const str& def_file, const str& src_file, XSSContext ctx, om_context& octx)
+void object_model::compile_include(Application app, const str& def_file, const str& src_file, XSSContext ctx, om_context& octx)
   {
     fs::path path;
     if (!def_file.empty())
@@ -438,7 +670,7 @@ void object_model::compile_include(const str& def_file, const str& src_file, XSS
         ctx->source_file(src_path);
 
         str       code = fs_->load_file(src_path);
-        document& doc  = create_document(src_file, ctx);
+        document& doc  = create_document(app, src_file, ctx);
         
         assert(!octx.doc);
         octx.doc = &doc;
@@ -1131,7 +1363,9 @@ XSSExpression object_model::read_expression(DataEntity de, XSSType type, const s
 
 void object_model::read_include_def(DataEntity de, XSSContext ctx, om_context& octx)
   {
-    entity_list           classes = de->find_all("class");
+    return; //td: !!!
+	  
+	entity_list           classes = de->find_all("class");
     entity_list::iterator it      = classes.begin();
     entity_list::iterator nd      = classes.end();
 
@@ -1194,14 +1428,14 @@ void object_model::read_include_singleton(DataEntity de, XSSContext ctx, om_cont
       }
   }
 
-document& object_model::create_document(const str& src_file, XSSContext ctx)
+document& object_model::create_document(Application app, const str& src_file, XSSContext ctx)
   {
     fs::path src = fs_->locate(src_file, ctx->path());
     document_map::iterator it = documents_.find(src);
     if (it != documents_.end())
       return it->second;
 
-    documents_.insert(std::pair<fs::path, document>(src, document()));
+    documents_.insert(std::pair<fs::path, document>(src, document(app)));
     it = documents_.find(src);
     return it->second;
   }
@@ -1322,3 +1556,105 @@ void object_model::add_error(const str& desc, param_list* info, file_location& l
   {
     errors_.push_back(error_info(desc, info, loc));
   }
+
+//object_model_thread
+int object_model_thread::compile_request(const str& text, const str& id)
+  {
+    boost::mutex::scoped_lock l(mutex_);
+    
+    int result = id_++;
+
+    //check there's no other reuqest queued
+    request_list::iterator it = requests_.begin();
+    request_list::iterator nd = requests_.end();
+    for(; it != nd; it++)
+      {
+        if (it->id == id)
+          {
+            it->text = text;
+            it->response_id = result;
+            return result;
+          }
+      }
+
+    requests_.push_back(om_request(id, text, result));
+    return result;
+  }
+
+bool object_model_thread::get(const str& id, om_response& result)
+  {
+    boost::mutex::scoped_lock l(mutex_);
+
+    response_map::iterator it = responses_.find(id); 
+    if (it != responses_.end())
+      {
+        result = it->second;
+        return true;
+      }
+
+    return false;
+  }
+
+bool object_model_thread::fetch(str& id, om_response& result)
+  {
+    boost::mutex::scoped_lock l(mutex_);
+
+    response_map::iterator it = responses_.begin(); 
+    if (it != responses_.end())
+      {
+		id = it->first;
+        result = it->second;
+		responses_.erase(it);
+        return true;
+      }
+
+    return false;
+  }
+
+void object_model_thread::run()
+  {
+    assert(stopped_);
+	stopped_ = false;
+    thread_  = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&object_model_thread::do_work, this)));  
+  }
+
+void object_model_thread::do_work()
+  {
+      while (true)
+        {
+          if (stopped_)
+            break;
+
+          bool       got_work = false;
+          om_request work;
+          {
+            boost::mutex::scoped_lock l(mutex_);
+            if (!requests_.empty())
+              {
+                got_work = true;
+                work = *requests_.begin();  
+                requests_.erase(requests_.begin());
+              }
+          }
+
+          if (!got_work)
+            boost::thread::sleep(boost::get_system_time() + boost::posix_time::milliseconds(250));
+          else
+            {
+              str        code = work.text;
+              document   doc;
+              om_context octx;
+
+              octx.doc = &doc;
+              XSSContext ctx(new xss_context(CTXID_FILE, work.id, XSSContext()));
+              object_model::compile_xs(code, ctx, octx);
+
+              boost::mutex::scoped_lock l(mutex_);
+              response_map::iterator it = responses_.find(work.id);
+              if (it != responses_.end())
+                it->second = om_response(work.response_id, ctx, octx, doc, work.id);
+              else
+                responses_.insert(response_pair(work.id, om_response(work.response_id, ctx, octx, doc, work.id)));
+            }
+        }
+  }           

@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\xss">
-      <UniqueIdentifier>{851b7e5c-9bf2-4a12-8709-78a913007571}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExcessCompiler.h">
@@ -37,63 +34,6 @@
     </ClCompile>
     <ClCompile Include="Stdafx.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\object_model.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\XKP\src\xs\engine.c">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\tinyXml\tinystr.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\tinyXml\tinyxml.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\tinyXml\tinyxmlerror.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\tinyXml\tinyxmlparser.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\xss_context.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\xss_expression.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xs.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\dynamic_objects.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xs\array.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xs\ast.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xs\behaviour.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xs\compiler.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xs\linker.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xs\operators.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xs\vm.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\data_reader.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\xss_code.cpp">
-      <Filter>Source Files\xss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
