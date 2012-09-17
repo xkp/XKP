@@ -445,6 +445,7 @@ struct IContextCallback
 struct IErrorHandler
   {
     virtual void add(const str& description, param_list* data, file_location& loc) = 0;
+    virtual bool has_errors()                                                      = 0;
   };
 
 //code scope, this should not be public

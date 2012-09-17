@@ -35,6 +35,8 @@ namespace Excess.EditorExtensions
             int position = session.GetTriggerPoint(session.TextView.TextBuffer).GetPosition(textBuffer.CurrentSnapshot);
             int line = textBuffer.CurrentSnapshot.GetLineNumberFromPosition(position);
             int column = position - textBuffer.CurrentSnapshot.GetLineFromPosition(position).Start.Position;
+            string xxx = textBuffer.CurrentSnapshot.GetText();
+            xxx = null;
 
             //td:
             //Microsoft.VisualStudio.IronPythonInference.Modules modules = new Microsoft.VisualStudio.IronPythonInference.Modules();

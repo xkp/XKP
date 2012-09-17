@@ -7,6 +7,7 @@
 #include <xss/xss_code.h>
 
 #include <xs/compiler.h>
+#include <xs/xs_error.h>
 
 using namespace xkp;
 
@@ -285,19 +286,40 @@ XSSContext document::find_context(int line, int column)
 struct om_error_handler : IErrorHandler
   {
     om_error_handler(object_model& model):
-      model_(model)
+      model_(model),
+      has_(false)
       {
       }
     
     virtual void add(const str& description, param_list* data, file_location& loc)
       {
+        has_ = true;
         model_.add_error(description, data, loc);
       }
 
+    virtual bool has_errors()
+      {
+        return has_;
+      }
     private:
       object_model& model_;
+      bool          has_;
   };
 
+struct local_error_handler : IErrorHandler
+  {
+    virtual void add(const str& description, param_list* data, file_location& loc)
+      {
+        errors_.push_back(error_info(description, data, loc));
+      }
+
+    virtual bool has_errors()
+      {
+        return !errors_.empty();
+      }
+    private:
+      error_list errors_;
+  };
 
 //object_model
 object_model::object_model(FileSystem fs, LanguageFactory languages):
@@ -468,9 +490,18 @@ document* object_model::get_document(const str& fname)
 
 void object_model::update_document(const str& fname, om_response& response)
   {
+
 	  document* doc = get_document(fname);
 	  if (doc)
 	    {
+        //bail on errors
+        ErrorHandler eh = response.ctx->errors();
+        if (eh && eh->has_errors())
+          {
+            //td: update error list
+            return;
+          }
+
         Application app = doc->application(); assert(app);
         XSSContext  ctx = app->context();
 
@@ -1035,14 +1066,28 @@ void object_model::compile_xs(const str& text, XSSContext ctx, om_context& octx)
     ctx->collect_xss_dsls(dsls);
 
     xs_compiler compiler(dsls);
-    compiler.compile_xs(text, results); //td: errors
+    bool        error = false;
+    try
+      {
+        compiler.compile_xs(text, results); //td: errors
+      }
+    catch(xs_error err)
+      {
+        error = true;
+        int l = variant_cast<int>(err.data.get("line"), -1);
+        int c = variant_cast<int>(err.data.get("column"), -1);
+        ctx->error("Syntax error", null, file_position(l, c), file_position(l, c)); //td: !!! handle errors better
+      }
 
-    document_builder callback(octx.doc);
-    ctx->set_extents(results.begin, results.end);
-    callback.notify(ctx);
+    if (!error)
+      {
+        document_builder callback(octx.doc);
+        ctx->set_extents(results.begin, results.end);
+        callback.notify(ctx);
 
-    include_visitor iv(ctx, octx, &callback); 
-    results.visit(&iv);
+        include_visitor iv(ctx, octx, &callback); 
+        results.visit(&iv);
+      }
   }
 
 void object_model::assure_id(DataEntity de)
@@ -1602,9 +1647,9 @@ bool object_model_thread::fetch(str& id, om_response& result)
     response_map::iterator it = responses_.begin(); 
     if (it != responses_.end())
       {
-		id = it->first;
+		    id = it->first;
         result = it->second;
-		responses_.erase(it);
+		    responses_.erase(it);
         return true;
       }
 
@@ -1614,7 +1659,7 @@ bool object_model_thread::fetch(str& id, om_response& result)
 void object_model_thread::run()
   {
     assert(stopped_);
-	stopped_ = false;
+	  stopped_ = false;
     thread_  = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&object_model_thread::do_work, this)));  
   }
 
@@ -1647,6 +1692,8 @@ void object_model_thread::do_work()
 
               octx.doc = &doc;
               XSSContext ctx(new xss_context(CTXID_FILE, work.id, XSSContext()));
+              ctx->errors(ErrorHandler(new local_error_handler));
+
               object_model::compile_xs(code, ctx, octx);
 
               boost::mutex::scoped_lock l(mutex_);

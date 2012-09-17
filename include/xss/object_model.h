@@ -204,6 +204,23 @@ struct om_response
     document   doc;
   };
 
+//error handling
+struct error_info
+  {
+    error_info(const str _desc, param_list* _info, file_location& _loc):
+      desc(_desc),
+      info(_info? *_info : param_list()),
+      loc(_loc)
+      {
+      }
+
+    str           desc;
+    param_list    info;
+    file_location loc;
+  };
+
+typedef std::vector<error_info> error_list;
+
 class object_model
   {
     public:
@@ -245,30 +262,12 @@ class object_model
     private:
       //document model
       document_map documents_;
+      error_list   errors_;
 
       document& create_document(Application app, const str& src_file, XSSContext ctx);
       void      fix_it_up(XSSContext ctx, om_context& octx);
       void      bind_it_up(XSSContext ctx, om_context& octx);
       bool      check_type(XSSType type, const str& type_name, XSSContext ctx);
-    private:
-      //error handling
-      struct error_info
-        {
-          error_info(const str _desc, param_list* _info, file_location& _loc):
-            desc(_desc),
-            info(_info? *_info : param_list()),
-            loc(_loc)
-            {
-            }
-
-          str           desc;
-          param_list    info;
-          file_location loc;
-        };
-
-      typedef std::vector<error_info> error_list;
-
-      error_list errors_;
     public:
       void add_error(const str& desc, param_list* info, file_location& loc);
   };
