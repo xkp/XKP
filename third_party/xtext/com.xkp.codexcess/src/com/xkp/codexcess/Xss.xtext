@@ -7,301 +7,321 @@ generate xss "http://www.xkp.com/codexcess/Xss"
 Program
 	:	program = (Block
 	|	ConstructList
-	|	Expression)
+	|	Expression
+	|	XmlApplication)
+	;
+
+
+//------------------------------------------------- XML GUI Application
+XmlApplication
+	:	elems += Element+
+	;
+
+Element
+	:	'<' tag = Tag attrs += Attribute* ('>' childrens += Element* '</' closeTag = Tag '>'
+	|	'/>')
+	;
+
+Attribute
+	:	name = IDENTIFIER "=" attrValue = STRING_LITERAL;
+
+Tag
+	:	name = IDENTIFIER
 	;
 
 
 //------------------------------------------------- High level constructs
 ConstructList
-	:	Construct+
+	:	construct += Construct+
 	;
 
 ConstructBlock
-	:	'{' ConstructList? '}'
+	:	{ConstructBlock} '{' construct = ConstructList? '}'
 	;
 
 AdjList
-	:	Adjective+
+	:	adjList += Adjective+
 	;
 
 Adjective
-	:	'delegate'
+	:	adj = ('delegate'
 	|	'public'
 	|	'private'
-	|	'class'
+	|	'class')
 	;
 
 ArgDeclListOpt
-	:	ArgDeclList?
+	:	{ArgDeclListOpt} argDecl = ArgDeclList?
 	;
 
 ArgDeclList
-	:	ArgumentDecl (',' ArgumentDecl)*
+	:	argDeclList += ArgumentDecl (',' argDeclList += ArgumentDecl)*
 	;
 
 ArgumentDecl
-	:	Type? IDENTIFIER ('=' Expression)?
+	:	type = Type? name = IDENTIFIER ('=' expr = Expression)?
 	;
 
 ClassArgDeclList
-	:	ClassArgumentDecl (',' ClassArgumentDecl)*
+	:	classArgDecl += ClassArgumentDecl (',' classArgDecl += ClassArgumentDecl)*
 	;
 
 ClassArgumentDecl
-	:	IDENTIFIER ('=' PrimaryExpr)?
+	:	name = IDENTIFIER ('=' expr = PrimaryExpr)?
 	;
 
 ClassArgListOpt
-	:	('<' ClassArgDeclList '>')?
+	:	{ClassArgListOpt} ('<' classArgDecl = ClassArgDeclList '>')?
 	;
 
 Construct
-	:	AdjList? Property
-	|	AdjList? MethodDecl
-	|	'instance' QualifiedID TypeOpt ConstructBlock
-	|	'class' IDENTIFIER ClassArgListOpt TypeOpt ConstructBlock
-    |   'behaviour' IDENTIFIER TypeOpt ConstructBlock
-    |   'on' QualifiedID '(' ArgDeclListOpt ')' Block
-    |   'const' IDENTIFIER '=' Expression ';'
-    |	'event' IDENTIFIER '(' ArgDeclListOpt ')' ';'
-	|	'behave' 'as' IDENTIFIER Block
-	|	'behave' 'as' IDENTIFIER ';'
-	|	Expression '->' Expression ';'
-	|	DSL
+	:	adjList = AdjList? prop = Property
+	|	adjList = AdjList? mthdDecl = MethodDecl
+	|	'instance' instName = QualifiedID type = TypeOpt construct = ConstructBlock
+	|	'class' className = IDENTIFIER classArgList = ClassArgListOpt type = TypeOpt construct = ConstructBlock
+    |   'behaviour' behaveName = IDENTIFIER type = TypeOpt construct = ConstructBlock
+    |   'on' eventName = QualifiedID '(' argDeclList = ArgDeclListOpt ')' block = Block
+    |   'const' constName = IDENTIFIER '=' expr = Expression ';'
+    |	'event' eventDecl = IDENTIFIER '(' argDeclList = ArgDeclListOpt ')' ';'
+	|	'behave' 'as' name = IDENTIFIER block = Block
+	|	'behave' 'as' name = IDENTIFIER ';'
+	|	firstExpr = Expression '->' secndExpr = Expression ';'
+	|	dsl = DSL
 	;
 
 Property
-	:	'property' IDENTIFIER TypeOpt PropDescriptor
-	|	LocalVarDecl ';'
+	:	'property' name = IDENTIFIER type = TypeOpt descript = PropDescriptor
+	|	varDecl = LocalVarDecl ';'
 	;
 
 MethodName
-	:	'method'
-	|	'function'
+	:	mthd = ('method'
+	|	'function')
 	;
 
 MethodDecl
-	:	MethodName IDENTIFIER '(' ArgDeclListOpt ')' TypeOpt Block
-	|	Type IDENTIFIER '(' ArgDeclListOpt ')' Block
+	:	mthdType = MethodName name = IDENTIFIER '(' argDeclList = ArgDeclListOpt ')' type = TypeOpt block = Block
+	|	type = Type name = IDENTIFIER '(' argDeclList = ArgDeclListOpt ')' block = Block
 	;
 
 TypeOpt
-	:	(':' Type)?
+	:	{TypeOpt} (':' type = Type)?
 	;
 
 PropDescriptor
-	:	Block
-	|	'=' Block Block?
-	|	'=' Expression Block
-	|	('=' Expression)? ';'
+	:	{PropDescriptor} (block = Block
+	|	'=' setBlock = Block getBlock = Block?
+	|	'=' expr = Expression block = Block
+	|	('=' expr = Expression)? ';')
 	;
 
 
 //------------------------------------------------- Code
 StmList
-	:	Statement+
+	:	stmt += Statement+
 	;
 
 Statement
-	:	LocalVarDecl ';'
-	|	'if' '(' Expression ')' Statement ('else' Statement)?
-	|	'for' '(' ForInitOpt ';' ForConditionOpt ';' ForIteratorOpt ')' Statement
-	|	'for' '(' Type IDENTIFIER 'in' Expression ')' Statement
-	|	'while' '(' Expression ')' Statement
-	|	'switch' '(' SwitchHeader ')' '{' SwitchSectionsOpt '}'
-	|	'dispatch' QualifiedID '(' ArgListOpt ')'
+	:	{Statement} (varDecl = LocalVarDecl ';'
+	|	'if' '(' expr += Expression ')' stmt += Statement ('else' stmt += Statement)?
+	|	'for' '(' expr += ForInitOpt ';' expr += ForConditionOpt ';' expr += ForIteratorOpt ')' stmt += Statement
+	|	'for' '(' type = Type id = IDENTIFIER 'in' expr += Expression ')' stmt += Statement
+	|	'while' '(' expr += Expression ')' stmt += Statement
+	|	'switch' '(' expr += SwitchHeader ')' '{' stmt += SwitchSectionsOpt '}'
+	|	'dispatch' name = QualifiedID '(' argListOpt = ArgListOpt ')'
 	|	'break' ';'
 	|	'continue' ';'
-	|	'return' ExpressionOpt ';'
-	|	'try' Block CatchClauses FinallyClausesOpt
-	|	'throw' Expression ';'
-	|	Expression ';'
-	|	Block
-	|	DSL
+	|	'return' expr += ExpressionOpt ';'
+	|	'try' block = Block stmt += CatchClauses stmt += FinallyClausesOpt
+	|	'throw' expr += Expression ';'
+	|	expr += Expression ';'
+	|	block = Block
+	|	dsl = DSL)
 	;
 
 CatchClauses
-	:	CatchClause*
+	:	{CatchClauses} clauses += CatchClause*
 	;
 
 CatchClause
-	:	'catch' ('(' Type IDENTIFIER? ')')? Block
+	:	'catch' ('(' type = Type name = IDENTIFIER? ')')? block = Block
 	;
 
 FinallyClausesOpt
-	:	('finally' Block)?
+	:	{FinallyClausesOpt} ('finally' block = Block)?
 	;
 
 Block
-	:	'{' StmList? '}'
+	:	{Block} '{' stmtList = StmList? '}'
 	;
 
 LocalVarDecl
-	:	Type VariableDeclarator
+	:	type = Type varDecl = VariableDeclarator
 	;
 
 VariableDeclarator
-	:	IDENTIFIER ('=' Expression)?
+	:	name = IDENTIFIER ('=' expr = Expression)?
 	;
 
-SwitchHeader
-	:	Expression?
+SwitchHeader returns Expr
+	:	{SwitchHeader} expr = Expression?
 	;
 
 SwitchSectionsOpt
-	:	SwitchSection*
+	:	{SwitchSectionsOpt} section += SwitchSection*
 	;
 
 SwitchSection
-	:	SwitchLabels StmList
+	:	labels = SwitchLabels stmt = StmList
 	;
 
 SwitchLabels
-	:	SwitchLabel+
+	:	label += SwitchLabel+
 	;
 
 SwitchLabel
-	:	'case' Expression ':'
-	|	'default' ':'
+	:	{SwitchLabel} ('case' expr = Expression ':'
+	|	'default' ':')
 	;
 
 ForInitOpt
-	:	(LocalVarDecl | Expression)?
+	:	{ForInitOpt} expr = (LocalVarDecl | Expression)?
 	;
 
 ForIteratorOpt
-	:	Expression?
+	:	{ForIteratorOpt} expr = Expression?
 	;
 
 ForConditionOpt
-	:	Expression?
+	:	{ForConditionOpt} expr = Expression?
 	;
 
 
 //------------------------------------------------- DSLs
 DSL
-	:	DSLIdentifier (IDENTIFIER? '(' ArgListOpt ')')? '@' DEC_LITERAL
+	:	dsl = DSLIdentifier (id = IDENTIFIER? '(' argListOpt = ArgListOpt ')')? '@' DEC_LITERAL
 	;
 
 
 //------------------------------------------------- Expressions
 ExpressionOpt
-	:	Expression?
+	:	{ExpressionOpt} exprOpt = Expression?
 	;
 
 ExpressionList
-	:	Expression (',' Expression)*
+	:	expr += Expression (',' expr += Expression)*
 	;
 
-Expression
-	:	ConditionalExpr (('='|'+='|'-='|'*='|'/='|'<<='|'>>=') ConditionalExpr)*
+Expression returns Expr
+	:	ConditionalExpr ({Assign.left=current} ('='|'+='|'-='|'*='|'/='|'<<='|'>>=') right = ConditionalExpr)*
 	;
 
-ConditionalExpr
-	:	OrExpr ('?' OrExpr ':' ConditionalExpr)?
+ConditionalExpr returns Expr
+	:	OrExpr ({Condition.cond=current} '?' true = OrExpr ':' false = ConditionalExpr)?
 	;
 
-OrExpr
-	:	AndExpr ('||' AndExpr)*
+OrExpr returns Expr
+	:	AndExpr ({OrOperator.left=current} '||' right = AndExpr)*
 	;
 
-AndExpr
-	:	EqualityExpr ('&&' EqualityExpr)*
+AndExpr returns Expr
+	:	EqualityExpr ({AndOperator.left=current} '&&' right = EqualityExpr)*
 	;
 
-EqualityExpr
-	:	CompExpr (('=='|'!=') CompExpr)*
+EqualityExpr returns Expr
+	:	CompExpr ({EqualOperator.left=current} ('=='|'!=') right = CompExpr)*
 	;
 
-CompExpr
-	:	ShiftExpr (('<'|'>'|'<='|'>='|'as'|'is'|'has') ShiftExpr)*
+CompExpr returns Expr
+	:	ShiftExpr ({CompareOperator.left=current} ('<'|'>'|'<='|'>='|'as'|'is'|'has') right = ShiftExpr)*
 	;
 
-ShiftExpr
-	:	AddExpr (('<<'|'>>') AddExpr)*
+ShiftExpr returns Expr
+	:	AddExpr ({ShiftOperator.left=current} ('<<'|'>>') right = AddExpr)*
 	;
 
-AddExpr
-	:	MultExpr (('+'|'-') MultExpr)*
+AddExpr returns Expr
+	:	MultExpr ({Addition.left=current} ('+'|'-') right = MultExpr)*
 	;
 
-MultExpr
-	:	UnaryExpr (('*'|'/'|'%') UnaryExpr)*
+MultExpr returns Expr
+	:	UnaryExpr ({Factor.left=current} ('*'|'/'|'%') right = UnaryExpr)*
 	;
 
-UnaryExpr
-	:	'!' UnaryExpr
-	|	'-' UnaryExpr
-	|	'++' UnaryExpr
-	|	'--' UnaryExpr
-	|	MethodExpr
+UnaryExpr returns Expr
+	:	'!' expr += UnaryExpr
+	|	'-' expr += UnaryExpr
+	|	'++' expr += UnaryExpr
+	|	'--' expr += UnaryExpr
+	|	expr += MethodExpr
 	;
 
-MethodExpr
-	:	PrimaryExpr+ Method*
+MethodExpr returns Expr
+	:	expr += PrimaryExpr+ expr += Method*
 	;
 
 Method
-	:	MEMBER_NAME ( '(' ArgListOpt ')' )?
-	|	'[' ExpressionList ']'
+	:	{Method} (name = MEMBER_NAME ( '(' argListOpt = ArgListOpt ')' )?
+	|	'[' exprList = ExpressionList ']'
 	|	'++'
-	|	'--'
+	|	'--')
 	;
 
 ObjectListOpt
-	:	ObjectList?
+	:	{ObjectList} objListOpt = ObjectList?
 	;
 
 ObjectList
-	:	ObjectValue (',' ObjectValue)*;
+	:	objList += ObjectValue (',' objList += ObjectValue)*
+	;
 
 ObjectValue
-	:	IDENTIFIER ':' Expression
+	:	obj = IDENTIFIER ':' expr = Expression
 	;
 
 PrimaryExpr
-	:	Primary
-	|	'new' Type '(' ArgListOpt ')'
-	|	'{' ObjectListOpt '}'
-	|	('(' Expression ')')
+	:	primary = Primary
+	|	'new' type = Type '(' argListOpt = ArgListOpt ')'
+	|	'{' objListOpt = ObjectListOpt '}'
+	|	('(' expr = Expression ')')
 	;
 
 ArrayLiteral
-	:	'[' ArgListOpt ']'
+	:	'[' argListOpt = ArgListOpt ']'
 	;
 
 Primary
-	:	IDENTIFIER ( '(' ArgListOpt ')' )?
+	:	primary = IDENTIFIER ( '(' argListOpt = ArgListOpt ')' )?
 	|	ArrayLiteral
-	|	Literal
+	|	literal = Literal
 	;
 
 
 //------------------------------------------------- Types
 Type
-	:	IDENTIFIER ('<' TypeArgList '>')?
+	:	type = IDENTIFIER ('<' typeList = TypeArgList '>')?
 	;
 
 TypeArgList
-	:	TypeArgument (',' TypeArgument)*
+	:	typeList += TypeArgument (',' typeList += TypeArgument)*
 	;
 
 TypeArgument
-	:	(IDENTIFIER '=')? PrimaryExpr
+	:	(type = IDENTIFIER '=')? primary = PrimaryExpr
 	;
 
 
 //------------------------------------------------- Arguments
 ArgListOpt
-	:	ArgList?
+	:	{ArgList} argListOpt = ArgList?
 	;
 
 ArgList
-	:	Argument (',' Argument)*
+	:	argsList += Argument (',' argsList += Argument)*
 	;
 
 Argument
-	:	(IDENTIFIER '=')? ConditionalExpr
+	:	(arg = IDENTIFIER '=')? cond = ConditionalExpr
 	;
 
 
@@ -319,33 +339,59 @@ Literal
 
 //------------------------------------------------- IDs
 DSLIdentifier
-	:	'@' IDENTIFIER
+	:	'@' name = IDENTIFIER
 	;
 
 MemberList
-	:	MEMBER_NAME+
+	:	(members += MEMBER_NAME)+
 	;
 
 QualifiedID
-	:	IDENTIFIER MemberList?
+	:	name = IDENTIFIER (member = MemberList)?
 	;
 
-terminal MEMBER_NAME: '.' IDENTIFIER;
-terminal IDENTIFIER: ('a'..'z'|'A'..'Z') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*;
-terminal REAL_LITERAL: ('0'..'9')* '.' DEC_LITERAL;
-terminal DEC_LITERAL returns ecore::EInt: ('0'..'9')+;
-terminal HEX_LITERAL: '0' ('x'|'X') ('0'..'9'|'A'..'F'|'a'..'f')+;
-terminal CHAR_LITERAL:
-		"'" ( '\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|"'") ) "'"
+terminal MEMBER_NAME
+	:	'.' IDENTIFIER
 	;
-terminal STRING_LITERAL: 
-			'"' ( '\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|'"') )* '"' |
-			"'" ( '\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|"'") )* "'"
-		; 
 
-terminal ML_COMMENT	: '/*' -> '*/';
-terminal SL_COMMENT 	: '//' !('\n'|'\r')* ('\r'? '\n')?;
+terminal IDENTIFIER
+	:	('a'..'z'|'A'..'Z') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*
+	;
 
-terminal WS			: (' '|'\t'|'\r'|'\n')+;
+terminal REAL_LITERAL returns ecore::EDouble
+	:	('0'..'9')* '.' DEC_LITERAL
+	;
 
-terminal ANY_OTHER: .;
+terminal DEC_LITERAL returns ecore::EInt
+	:	('0'..'9')+
+	;
+
+terminal HEX_LITERAL
+	:	'0' ('x'|'X') ('0'..'9'|'A'..'F'|'a'..'f')+
+	;
+
+terminal CHAR_LITERAL
+	:	"'" ( '\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|"'") ) "'"
+	;
+
+terminal STRING_LITERAL
+	:	'"' ( '\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|'"') )* '"' 
+	|	"'" ( '\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|"'") )* "'"
+	; 
+
+terminal ML_COMMENT	
+	:	'/*' -> '*/'
+	;
+
+terminal SL_COMMENT
+	:	'//' !('\n'|'\r')* ('\r'? '\n')?
+	;
+
+terminal WS
+	:	(' '|'\t'|'\r'|'\n')+
+	;
+
+terminal ANY_OTHER
+	:	.
+	;
+ 

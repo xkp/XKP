@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <b>Welcome: </b>
+        <b id="user_name"></b> <a href="/logout">Log out</a>
+        <br/>
+        <br/>
+        
+        <h3>Compress a file</h3>
+        <form action="/compress" enctype="multipart/form-data" method="post">
+            <p>
+                    <input type="file" name="datafile" size="40">
+            </p>
+            <div>
+                <input type="submit" value="Compress">
+            </div>
+        </form>
+
+        <h3>Or select one already compressed</h3>
+        <ul id="files">
+            <li>
+                <b id="file_name"></b>: <a id="link">Download link</a> 
+            </li>
+        </ul>
+        <h3>You also live here:</h3>
+        <img id="user_map"/>
+    </body>
+</html>

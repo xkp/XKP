@@ -105,7 +105,7 @@ void tag_list::inner_tags(int& tag_idx, tag_list& result)
 int tag_list::find_closing(int tag_idx)
   {
     tag& match_tag = tags_[tag_idx];
-    if (match_tag.closes)
+    if (match_tag.closes || match_tag.complete)
       return tag_idx;
 
     int  matches = 1;

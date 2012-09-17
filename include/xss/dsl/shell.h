@@ -17,7 +17,7 @@ namespace xkp {
       protected:
         virtual XSSModule get_idiom(XSSCompiler compiler, XSSContext ctx);
         virtual str       get_event();
-        virtual void      add_parameters(param_list& pl, XSSContext ctx);
+        virtual void      add_parameters(param_list& pl, dsl& info, XSSContext ctx);
     };
   
 }

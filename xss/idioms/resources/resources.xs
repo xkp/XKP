@@ -24,7 +24,7 @@ on render_initialization()
 {
 	out()
 	{
-		var streamer = new stream.Streamer();	
+		var streamer = new stream.Streamer();		
 		var ResourceUtils = new stream.ResourceUtils();
 	}	
 }
@@ -88,7 +88,8 @@ on render_resources()
 					<xss:e v="res.id"/> = streamer.get_resource("<xss:e v="res.id"/>");
 				});
 			}
-        }		
+        }
+		compiler.xss("children_renderer.xss", res);	
     }	
     out()
     {	
@@ -108,8 +109,6 @@ method render_resource(resource)
 {
 	var type = compiler.get_type(resource.class_name); 
     if (!type)
-        compiler.error("Unknown resource type", type = resource.class_name);
-	compiler.out("{");
-	compiler.xss("renderer.xss", resource);
-	compiler.out("}");		
+        compiler.error("Unknown resource type", type = resource.class_name);	
+	compiler.xss("renderer.xss", resource);			
 }

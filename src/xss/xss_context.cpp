@@ -547,9 +547,8 @@ bool xss_context::resolve_dot(const str& id, resolve_info& info)
                       }
                     case RESOLVE_VARIABLE:
                       {
-                        assert(info.left->type);
-                        assert(info.left->type->is_object() || info.left->type->is_variant());
-                        obj = info.left->value;
+                        if (info.left->type && (info.left->type->is_object() || info.left->type->is_variant()))
+                          obj = info.left->value;
                         break;
                       }
                     default:
@@ -1474,6 +1473,17 @@ DynamicArray xss_object::get_event_code(const str& event_name)
     return DynamicArray(new dynamic_array);
   }
 
+variant xss_object::get_event_args(const str& event_name)
+  {
+    for(size_t i = 0; i < events_->size(); i++)
+      {
+        XSSEvent ev = events_->at(i);
+        if (ev->id() == event_name)
+          return ev->args;
+      }
+    
+    return variant();
+  }
 DynamicArray xss_object::get_attributes()
   {
     DynamicArray result(new dynamic_array);

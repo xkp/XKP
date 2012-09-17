@@ -26,10 +26,10 @@
 			<property id="src" type="string"/>			
 		</class>
 		
-		<class id="collada_model" resource_type="RESOURCE_COLLADA_MODEL">
+		<class id="collada_model" resource_type="RESOURCE_COLLADA_MODEL">			
 			<property id="src" type="string"/>			
 		</class>
-		
+				
 		<class id="sprite_sheet" resource_type="RESOURCE_SPRITE">
 			<property id="src" type="string"/>
 			<property id="frame_width" type="int"/>

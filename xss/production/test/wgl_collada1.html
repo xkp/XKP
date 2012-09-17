@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test 3D</title>
+</head>
+<body>
+<style type="text/css">
+	body{
+	background:skyblue;
+	}
+</style>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/Detector.js"></script>
+            <script type="text/javascript" src="../js/three/loaders/ColladaLoader.js"></script>
+<script type="text/javascript">	
+if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+			var renderer = new THREE.WebGLRenderer( { antialias: false } );
+		var ui_;
+var canvas_position = {x:0, y:0};
+var g_elapsed;
+var g_delta;	
+var scene = new THREE.Scene();
+scene.mouse_thru = true;
+var streamer;
+var manager = new threejs.Manager(scene, renderer, null, canvas_position);
+var three_utils = new threejs.Utils();
+manager.events = new ev.EventHolder();
+manager.events.parent = manager;
+manager.c_anims = [];
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
+var application = {};
+var clock = new THREE.Clock();
+application.events = new ev.EventHolder();
+		var streamer = new stream.Streamer();	
+		streamer.manager = manager;
+		var ResourceUtils = new stream.ResourceUtils();
+	// --------RESOURCES---------
+		var global_package = new stream.Package(streamer);	
+                global_package.add_item(
+		{
+		id:				"eurofighter",
+		resource_type:	RESOURCE_COLLADA_MODEL,
+		src:			"model/eurofighter/eurofighter.dae",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var eurofighter;
+				global_package.events.addListener("loaded", function()
+				{
+					eurofighter = streamer.get_resource("eurofighter");
+				});
+			var child_ = {};
+			child_.type_ = 'collada_camera';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "eurofighter")
+				{
+					global_package.items[i].children['model_cam'] = child_;
+				}					
+			}	
+                global_package.add_item(
+		{
+		id:				"pump",
+		resource_type:	RESOURCE_COLLADA_MODEL,
+		src:			"model/pump/pump.dae",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var pump;
+				global_package.events.addListener("loaded", function()
+				{
+					pump = streamer.get_resource("pump");
+				});
+			var child_ = {};
+			child_.type_ = 'collada_camera';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "pump")
+				{
+					global_package.items[i].children['model_cam1'] = child_;
+				}					
+			}	
+			var child_ = {};
+			child_.type_ = 'collada_camera';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "pump")
+				{
+					global_package.items[i].children['model_cam2'] = child_;
+				}					
+			}	
+			var child_ = {};
+			child_.type_ = 'collada_camera';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "pump")
+				{
+					global_package.items[i].children['model_cam3'] = child_;
+				}					
+			}	
+		global_package.add_item({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});		
+		global_package.load();	
+    // --------RESOURCES---------
+renderer.setSize( app_width, app_height );
+manager.streamer = streamer;
+function render() {
+manager.canvas_position = getElementPosition(renderer.domElement);
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+	g_delta = 0; //first update
+else
+	g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+if(!g_delta) g_delta = 0;
+c_delta = clock.getDelta(),
+c_elapsed = clock.getElapsedTime() * 10;
+manager.events.dispatch("update", [g_delta, g_elapsed]);	
+				manager.scene.add(camera_1);
+				set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+var material_wireframe;var camera_1;var a_ligth;var d_ligth_1;var light1;var model1;var plane_1;
+threejs_load_resources(manager, function()
+{
+material_wireframe = new THREE.MeshBasicMaterial({
+color:grey,
+	});
+			material_wireframe.manager = manager;
+		    camera_1 = 
+		    new THREE.PerspectiveCamera(50, 1.76999998, 0.100000001, 100, null) ;	
+			manager.active_camera = camera_1;
+			camera_1.manager = manager;
+	    a_ligth = 
+	    new THREE.AmbientLight(ivory) ;
+	    manager.scene.add(a_ligth);
+			a_ligth.manager = manager;
+	    d_ligth_1 = 
+	    new THREE.DirectionalLight(White, 2, 0, null) ;
+	    manager.scene.add(d_ligth_1);
+			d_ligth_1.manager = manager;
+	    light1 = 
+	    new THREE.PointLight(deepskyblue, 0.200000003, 0) ;
+	    manager.scene.add(light1);
+			light1.manager = manager;
+		model1 = clone3jsObject( manager.streamer.get_resource('eurofighter').data, manager );	
+		manager.scene.add(model1);
+		model1.events = new ev.EventHolder();			
+			model1.manager = manager;
+	    plane_1_plane = new THREE.PlaneGeometry(10000, 10000, 1, 1) ;
+	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
+	    manager.scene.add(plane_1);
+		plane_1.events = new ev.EventHolder();
+			plane_1.manager = manager;
+            set_material_alpha(material_wireframe, 20);
+            manager.events.addListener('update', function(){if(camera_1)camera_1.lookAt(scene.position)});
+            camera_1.position.x = 50;
+            camera_1.position.z = 50;
+            a_ligth.position.y = 3000;
+            a_ligth.position.z = 3000;
+            d_ligth_1.position.y = 3000;
+            d_ligth_1.position.z = 5000;
+            plane_1.position.y = -500;
+            application.mouse_x = null;
+            application.mouse_y = null;
+            application.t = 0;
+            application.cam = false;
+	application.events.addListener("update", function(delta,elapsed)
+	{    
+		var time = elapsed * 0.000500000024;
+light1.position.x = Math.sin(time * 7) * 3009;
+light1.position.y = Math.cos(time * 5) * 4000;
+light1.position.z = Math.cos(time * 3) * 3009;
+	}
+	);
+	application.events.addListener("click", function()
+	{    
+		model1 = createModelSrc(model1, "pump", model1.manager);
+	}
+	);
+	application.events.addListener("keydown", function(keycode)
+	{    
+		if (keycode == C)
+{
+application.cam = !application.cam;
+}
+if (keycode == LEFT_ARROW)
+{
+model1.position.x = model1.position.x - 1;
+}
+if (keycode == RIGHT_ARROW)
+{
+model1.position.x = model1.position.x + 1;
+}
+if (keycode == UP_ARROW)
+{
+model1.position.y = model1.position.y - 1;
+}
+if (keycode == DOWN_ARROW)
+{
+model1.position.y = model1.position.y + 1;
+}
+	}
+	);
+	application.events.addListener("switch_cameras", function()
+	{    
+		if (application.cam)
+{
+set_active_camera(model1.model_cam);
+}
+else
+{
+set_active_camera(camera_1);
+}
+	}
+	);
+var event_manager = new ev.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(manager, ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(manager, ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(manager, ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(manager, ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(manager, ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(manager, ev.keyCode);                  
+};
+manager.events.addListener("mousedown", function(x,y)
+{    
+	application.events.dispatch("mousedown", [x, y]);
+});
+manager.events.addListener("mouseup", function(x,y)
+{    
+	application.events.dispatch("mouseup", [x, y]);
+});
+manager.events.addListener("mousemove", function(x,y)
+{    
+	application.events.dispatch("mousemove", [x, y]);
+});
+manager.events.addListener("click", function(x,y)
+{    
+	application.events.dispatch("click", [x, y]);
+});
+manager.events.addListener("drag", function(x,y)
+{    
+	application.events.dispatch("drag", [x, y]);
+});
+manager.events.addListener("dragend", function(x,y)
+{    
+	application.events.dispatch("dragend", [x, y]);
+});
+manager.events.addListener("keyup", function(keycode)
+{    
+	application.events.dispatch("keyup", [keycode]);
+});
+manager.events.addListener("keydown", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("keypress", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("update", function(delta, elapsed)
+{    
+	application.events.dispatch("update", [delta, elapsed]);
+});
+application.events.dispatch("init", []);
+		document.body.appendChild( renderer.domElement );
+animate();
+});
+function animate() {	
+	requestAnimationFrame( animate );
+	render();	
+}
+</script>
+</body>
+</html>

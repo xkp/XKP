@@ -1,0 +1,7 @@
+<xss:parameter id="it"/>
+<xss:parameter id="code"/>
+SessionManager.httpRequest(request, response, function (err, session) {
+    if (err) 
+        throw err;
+    <xss:e v="code"/>
+});

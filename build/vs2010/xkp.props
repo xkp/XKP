@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="UserMacros">
+    <BOOST_INCLUDE>d:\libraries\boost_1_44_0</BOOST_INCLUDE>
+    <XKP_INCLUDE>../../../include</XKP_INCLUDE>
+    <TEMP_DIR>d:\xkp\temp</TEMP_DIR>
+    <BOOST_LIB>$(BOOST_INCLUDE)/stage/lib</BOOST_LIB>
+    <JSON_INCLUDE>../../../third_party/jsoncpp/include</JSON_INCLUDE>
+    <TINY_XML_INCLUDE>../../../third_party/tinyXml</TINY_XML_INCLUDE>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir>../../../bin/$(Configuration)\</OutDir>
+    <IntDir>$(TEMP_DIR)/$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(XKP_INCLUDE);$(BOOST_INCLUDE);..\..\..\third_party\tinyXml;..\..\..\third_party\jsoncpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BOOST_NO_MEMBER_TEMPLATE_FRIENDS;TIXML_USE_STL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(BOOST_LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="BOOST_INCLUDE">
+      <Value>$(BOOST_INCLUDE)</Value>
+    </BuildMacro>
+    <BuildMacro Include="XKP_INCLUDE">
+      <Value>$(XKP_INCLUDE)</Value>
+    </BuildMacro>
+    <BuildMacro Include="TEMP_DIR">
+      <Value>$(TEMP_DIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="BOOST_LIB">
+      <Value>$(BOOST_LIB)</Value>
+    </BuildMacro>
+    <BuildMacro Include="JSON_INCLUDE">
+      <Value>$(JSON_INCLUDE)</Value>
+    </BuildMacro>
+    <BuildMacro Include="TINY_XML_INCLUDE">
+      <Value>$(TINY_XML_INCLUDE)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

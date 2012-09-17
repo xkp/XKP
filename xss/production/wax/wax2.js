@@ -1,223 +1,181 @@
 var http = require("http");
 var url  = require("url");
-        var mysql  = require("mysql");
+var fs = require('fs');
+var sessions = require("sessions");
+require("./smart.min.js");
 var application = {};
-	application.myService = function(response,request) 
+//init sessions
+SessionManager = new sessions();
+SessionManager.on("expired", function(sid){
+    if (application.session_expired)
+    {
+        application.session_expired(sid);
+    }
+});
+        var mysql  = require("mysql");
+        var child_process  = require("child_process");
+            application.project_db = {hostname : "localhost",user : "root",password : "xs@2011",database : "NodeTest"};
+	application.compile = function(request,response) 
 	{
+        var __params = url.parse(request.url, true).query;
+            var project_id = __params.project_id;
 function return_function(return_value)
 {
-request.end(JSON.stringify(return_value))
-}
-var __params = url.parse(request.url, true).query;
-function __catch1(__error)
-{return_function({success : false});
-return true;
-}
-try
-{var data = [];
+response.end(JSON.stringify(return_value))
+}var project_info;
 function __callback1() 
 {
-	try
-	{function __callback2() 
+if (!project_info)
 {
-	try
-	{return_function({success : true,users : data});
+return_function({success : false});
 return true;
-	}
-	catch(__error)
-	{
-		__catch1(__error);
-	}
 }
-var user_iterable = data;
-var user_iterator = 0;
-function __for_code1()
-{
-	var user = user_iterable[user_iterator];function __callback3() 
-{
-	try
-	{__for_iter1();
-	}
-	catch(__error)
-	{
-		__catch1(__error);
-	}
+return_function({success : true,folder : project_info.LocalFolder});
+return true;
 }
-function __catch2(__error)
-{
- var err = __error;user.map = "images/nomap.png";
-__callback3();
-}
-try
-{var img_cache;
-function __callback4() 
-{
-	try
-	{function __callback5() 
-{
-	try
-	{user.map = img_cache;
-__callback3();
-	}
-	catch(__error)
-	{
-		__catch2(__error);
-	}
-}
-if (!img_cache)
-{var img_data;
-function __callback6() 
-{
-	try
-	{img_cache = "mapcache/" + Math.random() * 1000 + ".png";
-function __callback7() 
-{
-	try
-	{
-        new mysql.Database({
-            hostname: 'localhost', 
-            user: 'user', 
-            password: 'password', 
-            database: 'test'
-        }).connect(function(error) {
+        var __connection1 = mysql.createConnection(application.project_db);
+        __connection1.connect(function(error) {
             if (error)
-     {__catch2(error); return;}
-        var __query1 = "INSERT INTO   MapCache(addr, fname)\n                               VALUES (" + user.address + ", " + img_cache + ")";
-        this.query(__query1).execute(function(error, rows, cols) {
+     throw error;
+        var __query1 = "SELECT * FROM  Project\n                                WHERE Id = " + project_id + "";
+        __connection1.query(__query1, function(error, rows, cols) {
             if (error)
-     {__catch2(error); return;}__callback5();
+     throw error;
+                if (rows.length == 0)
+                    project_info = null;
+                else if (rows.length == 1)
+                    project_info = rows[0];
+                else
+                    project_info = rows;
+            __connection1.end();
+            __callback1();
         });
         });
-	}
-	catch(__error)
+	};
+	application.compress_file = function(file,rename_to,return_function) 
 	{
-		__catch2(__error);
-	}
+		function __callback2() 
+{
+var new_path = "./files/compressed/" + rename_to;
+function __callback3() 
+{
+return_function({local_path : new_path,url : "compressed/" + rename_to});
+return true;
+return_function();
 }
-fs.writeFile(img_cache, img_data, function(err)
+fs.rename(file + ".gz", new_path, function(err)
 {
 	if (err)
-	{
-		__catch2(err); 
-		 return; 
-	}__callback7()
+		throw err;__callback3()
 });
-	}
-	catch(__error)
+}
+        var __cmd1 = "gzip " + file + "";
+        child_process.exec(__cmd1, {}, function(error, stdout, stderr){
+            if (error)
+     throw error;__callback2();
+        });
+    	};
+	application.compress_service = function(request,response) 
 	{
-		__catch2(__error);
-	}
+        var _form = new require('formidable').IncomingForm();
+        var post = {fields: [], field_values: {}, files: []};
+            var upload_dir  = "./upload";
+            _form.uploadDir = upload_dir;
+        _form.on('error', function(err) 
+        {
+            throw err;
+        }).on('field', function(field, value) 
+        {
+            post.fields.push([field, value]);
+            post.field_values[field] = value;
+        }).on('file', function(field, file) 
+        {
+            post.files.push(file);
+        }).on('end', function() 
+        {
+            var filename = post.field_values["filename"];
+function return_function(return_value)
+{
+response.end(JSON.stringify(return_value))
+}var uploaded_file = post.files[0].path;
+var result;
+function __callback4() 
+{
+return_function({success : true,url : result.url,local_path : result.local_path});
+return true;
 }
-        var __ws_options1_path = "/maps/api/directions/staticmap"
-     + "?center=" + user.address + "&zoom=" + 5 + "&sensor=" + false;
-        var __ws_options1 = {
-            host: 'http://maps.googleapis.com',
-            port: 80,
-            path: __ws_options1_path
-        };
-        http.get(__ws_options1, function(res) {
-            var data = '';
-            res.on('data', function(chunk){
-                data += chunk;
-            });
-            function done()
-            {
-                var return_value = data;
-                img_data = return_value;
-__callback6();
-            }
-            res.on('end', done);
-            res.on('close', done);
-        }).on('error', function(e) {
-          __catch2(e);
+application.compress_file(uploaded_file, filename, function(return_value)
+{result = return_value;
+__callback4();
+});
         });
-}
-	}
-	catch(__error)
+        _form.parse(request);    
+	};
+	application.compress_page = function(request,response) 
 	{
-		__catch2(__error);
-	}
-}
-        new mysql.Database({
-            hostname: 'localhost', 
-            user: 'user', 
-            password: 'password', 
-            database: 'test'
-        }).connect(function(error) {
-            if (error)
-     {__catch2(error); return;}
-        var __query2 = "SELECT fname FROM MapCache\n                                WHERE addr = " + user.address + "";
-        this.query(__query2).execute(function(error, rows, cols) {
-            if (error)
-     {__catch2(error); return;}
-                if (rows.lenght == 0)
-                    img_cache = null;
-                else if (rows.lenght == 1)
-                {
-                    var __found = false;
-                    var __obj = rows[0];
-                    for(var __prop in __obj)
-                    {
-                        if (!__found)
-                        {
-                            __found = true;
-                            img_cache = __obj[__prop];
-                            break;
-                        }
-                    }
-                    if (!__found)
-                        img_cache = null;
-                }
-                else
-                    throw {error: "Expecting a single value returned by query"};
-            __callback4();
-        });
-        });
-}
-catch(__error)
+var cookies = new require("cookies")( req, res);
+        var _form = new require('formidable').IncomingForm();
+        var post = {fields: [], field_values: {}, files: []};
+            var upload_dir  = "./upload";
+            _form.uploadDir = upload_dir;
+        _form.on('error', function(err) 
+        {
+            throw err;
+        }).on('field', function(field, value) 
+        {
+            post.fields.push([field, value]);
+            post.field_values[field] = value;
+        }).on('file', function(field, file) 
+        {
+            post.files.push(file);
+        }).on('end', function() 
+        {
+            var filename = post.field_values["filename"];
+            var lblFile = {};
+var lblLink = {};
+function return_function()
 {
-	__catch2(__error)
-}
-}
-function __for_iter1()
+response.write("<!DOCTYPE html>\n<html>\n    <body>\n        You requested a compressed file with name: ");
+response.write( "<b id=\"lblFile\">" + lblFile.inner_html + "</b>");response.write("<br>\n            Here is your ");
+response.write("<a href = ");
+response.write('\"' + lblLink.href + '\"' );
+response.write("id = \"lblLink\">");
+response.write("download link</a>\n    </body>\n</html>\n\n");
+response.end();
+}var last = cookies.get("last_file");
+lblFile.inner_html = filename;
+var uploaded_file = post.files[0].path;
+var result;
+function __callback5() 
 {
-	user_iterator++;
-	__for_cond1();
+lblLink.href = result.url;
+return_function();
 }
-function __for_cond1()
-{
-	if (user_iterator < user_iterable.length)
-	__for_code1();
-	else
-	__callback2();
-}
-__for_cond1();
-	}
-	catch(__error)
-	{
-		__catch1(__error);
-	}
-}
-        new mysql.Database({
-            hostname: 'localhost', 
-            user: 'user', 
-            password: 'password', 
-            database: 'test'
-        }).connect(function(error) {
-            if (error)
-     {__catch1(error); return;}
-        var __query3 = "SELECT * FROM FOLLOWERS\n                   WHERE USERID = " + user.id + "";
-        this.query(__query3).execute(function(error, rows, cols) {
-            if (error)
-     {__catch1(error); return;} data = rows; __callback1();
+application.compress_file(uploaded_file, filename, function(return_value)
+{result = return_value;
+__callback5();
+});
         });
-        });
-}
-catch(__error)
+        _form.parse(request);    
+	};
+application.init = function()
 {
-	__catch1(__error)
-}	};
+            var static = require('node-static');
+            this.file_server = new(static.Server)('/root/nodejs/samples/files/', { cache: 7200 });
+        }
+application.init();
 http.createServer(function(request, response) 
 {
     var pathname = url.parse(request.url).pathname;
-    if (pathname == 'myService'){application.myService(request, response);}}).listen(8888);
+    if (pathname == '/compile'){application.compile(request, response);} else if (pathname == '/compress_service'){application.compress_service(request, response);} else if (pathname == '/compress_page'){application.compress_page(request, response);}
+            else
+            {
+                application.file_server.serve(request, response, function (err, res) {
+                    if (err) { 
+                        console.error("> Error serving " + request.url + " - " + err.message);
+                        response.writeHead(err.status, err.headers);
+                        response.end();
+                    } 
+                });            
+            }
+        }).listen(8888);

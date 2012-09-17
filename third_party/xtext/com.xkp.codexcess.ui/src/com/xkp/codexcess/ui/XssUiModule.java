@@ -12,4 +12,10 @@ public class XssUiModule extends com.xkp.codexcess.ui.AbstractXssUiModule {
 	public XssUiModule(AbstractUIPlugin plugin) {
 		super(plugin);
 	}
+	
+	@Override
+	public Class<? extends org.eclipse.xtext.ui.editor.IXtextEditorCallback> bindIXtextEditorCallback() {
+		return org.eclipse.xtext.ui.editor.validation.ValidatingEditorCallback.class;
+	}
+	
 }

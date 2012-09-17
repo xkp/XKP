@@ -4,13 +4,12 @@
 <xss:parameter id="error_handler"/>
 
 <xss:code>
-    string options_id = compiler.genid("ws_options");
-    string path_id = options_id + "_path";
+    string path_id = compiler.genid("ws_url");
     
     //generate path
     out()
     {
-        var <xss:e v="path_id"/> = "<xss:e v="it.path"/>"
+        var <xss:e v="path_id"/> = "<xss:e v="it.host"/><xss:e v="it.path"/>"
     }
     
     bool   first = true;
@@ -37,17 +36,16 @@
         error_handler_str = error_handler + "(e);";
     else 
         error_handler_str = "throw e;";
+    
+    string encoding = "";
+    if (it.encoding)
+        encoding = "res.setEncoding('" + it.encoding + "')";
         
     out()
     {
-        var <xss:e v="options_id"/> = {
-            host: '<xss:e v="it.host"/>',
-            port: <xss:e v="it.port"/>,
-            path: <xss:e v="path_id"/>
-        };
-        
-        http.get(<xss:e v="options_id"/>, function(res) {
+        http.get(<xss:e v="path_id"/>, function(res) {
             var data = '';
+            <xss:e v="encoding"/>;
             res.on('data', function(chunk){
                 data += chunk;
             });

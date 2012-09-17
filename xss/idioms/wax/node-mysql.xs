@@ -6,14 +6,14 @@ on render_initialization()
     }
 }
 
-method render_statement(sts, idx, callback, error_handler)
+method render_statement(sts, idx, callback, error_handler, conn_id)
 {
     var    st       = sts[idx];
     string var_name = compiler.genid("query");
     out()
     {
         var <xss:e v="var_name"/> = <xss:e v="st.text.render_as_expr()"/>;
-        this.query(<xss:e v="var_name"/>).execute(function(error, rows, cols) <xss:open_brace/>
+        <xss:e v="conn_id"/>.query(<xss:e v="var_name"/>, function(error, rows, cols) <xss:open_brace/>
             if (error)
     }
 
@@ -28,21 +28,21 @@ method render_statement(sts, idx, callback, error_handler)
         {
             out()
             {
-                if (rows.lenght == 0)
+                if (rows.length == 0)
                     <xss:e v="st.variable"/> = null;
-                else if (rows.lenght == 1)
+                else if (rows.length == 1)
                     <xss:e v="st.variable"/> = rows[0];
                 else
-                    throw {error: "Expecting a single value returned by query"};
+                    <xss:e v="st.variable"/> = rows;
             }
         }
         else if (st.resolve_to_value)
         {
             out()
             {
-                if (rows.lenght == 0)
+                if (rows.length == 0)
                     <xss:e v="st.variable"/> = null;
-                else if (rows.lenght == 1)
+                else if (rows.length == 1)
                 {
                     var __found = false;
                     var __obj = rows[0];
@@ -71,9 +71,13 @@ method render_statement(sts, idx, callback, error_handler)
 
     bool last = idx == sts.size - 1;
     if (last)
-        out() {<xss:e v="callback"/>;}
+        out() 
+        {
+            <xss:e v="conn_id"/>.end();
+            <xss:e v="callback"/>;
+        }
     else
-        render_statement(sts, idx + 1, callback);
+        render_statement(sts, idx + 1, callback, conn_id);
 
     out()
     {
@@ -81,16 +85,13 @@ method render_statement(sts, idx, callback, error_handler)
     }
 }
 
-on render_statements(array statements, string callback, string error_handler)
+on render_statements(array statements, string callback, string error_handler, string connection)
 {
+    string conn_id = compiler.genid("connection");
     out()
     {
-        new mysql.Database({
-            hostname: 'localhost', 
-            user: 'user', 
-            password: 'password', 
-            database: 'test'
-        }).connect(function(error) <xss:open_brace/>
+        var <xss:e v="conn_id"/> = mysql.createConnection(<xss:e v="connection"/>);
+        <xss:e v="conn_id"/>.connect(function(error) <xss:open_brace/>
             if (error)
     }
 
@@ -99,9 +100,8 @@ on render_statements(array statements, string callback, string error_handler)
     else
         out() { throw error;}
 
-    render_statement(statements, 0, callback, error_handler);
+    render_statement(statements, 0, callback, error_handler, conn_id);
 
-    //close connect
     out()
     {
         <xss:close_brace/>);

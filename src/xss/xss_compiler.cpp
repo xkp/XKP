@@ -3198,6 +3198,14 @@ void xss_compiler::no_ouput()
     no_output_ = true;
   }
 
+str xss_compiler::escape_file(const str& filename)
+  {
+    str result = file(filename);
+    boost::replace_all (result, "\n", "\\n");
+    boost::replace_all (result, "\"", "\\\"");
+    return result;
+  }
+
 void xss_compiler::collect_dependencies(XSSType type, XSSType context)
   {
     if (type->has("#depcollected"))

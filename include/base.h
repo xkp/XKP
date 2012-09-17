@@ -590,6 +590,15 @@ namespace detail
             }
         }
 
+      void append(const param_list other)
+        {
+          for(size_t i = 0; i < other.size(); i++)
+            {
+              str pname = other.get_name(i);
+              add(pname, other.get(i));
+            }
+        }
+
       str get_name(size_t idx) const
         {
           name_container::const_iterator it = names_.begin();

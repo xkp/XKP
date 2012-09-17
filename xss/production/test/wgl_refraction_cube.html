@@ -17,16 +17,6 @@
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
-            <script type="text/javascript" src="../js/three/fonts.js"></script>
-            <script type="text/javascript" src="../js/three/ShaderExtras.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/EffectComposer.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/RenderPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/ShaderPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/BloomPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/FilmPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/DotScreenPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/TexturePass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/MaskPass.js"></script>
 <script type="text/javascript">	
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 			var renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -37,6 +27,9 @@ var g_delta;
 var scene = new THREE.Scene();
 scene.mouse_thru = true;
 var streamer;
+var manager = new threejs.Manager(scene, renderer, null, canvas_position);
+var three_utils = new threejs.Utils();
+manager.events = new ev.EventHolder();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
@@ -45,9 +38,7 @@ application.events = new ev.EventHolder();
 // --------RESOURCES---------
 // --------RESOURCES---------
 renderer.setSize( app_width, app_height );
-var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
-var three_utils = new threejs.Utils();
-manager.events = new ev.EventHolder();
+manager.streamer = streamer;
 function render() {
 manager.canvas_position = getElementPosition(renderer.domElement);
 var now   = new Date().getTime();
@@ -89,15 +80,15 @@ threejs_load_resources(manager, function()
 					"images/cube/skybox/py.jpg", "images/cube/skybox/ny.jpg",
 					"images/cube/skybox/pz.jpg", "images/cube/skybox/nz.jpg" ];		
 			t_cube1 = THREE.ImageUtils.loadTextureCube( urls, refraction_mapping);
-t_cube1.manager = manager;
+			t_cube1.manager = manager;
 material_sphere1 = new THREE.MeshBasicMaterial({
 color:White,envMap:t_cube1,refractionRatio:0.949999988,
 	});
-material_sphere1.manager = manager;
+			material_sphere1.manager = manager;
 		    camera_1 = 
 		    new THREE.PerspectiveCamera(60, 1.5, 1, 100000, null) ;	
 			manager.active_camera = camera_1;
-camera_1.manager = manager;
+			camera_1.manager = manager;
 			var __panorama_cube1 = {};
 			var __panorama_cube1_shader = THREE.ShaderUtils.lib[ "cube" ];
 			__panorama_cube1_shader.uniforms[ "tCube" ].texture = t_cube1;
@@ -111,8 +102,8 @@ camera_1.manager = manager;
 			new THREE.Mesh( new THREE.CubeGeometry( 100000, 100000, 100000 ), __panorama_cube1_material );
 			__panorama_cube1_mesh.flipSided = true;
 			scene.add( __panorama_cube1_mesh );
-__panorama_cube1.manager = manager;
-            manager.events.addListener('update', function(){camera_1.lookAt(scene.position)});
+			__panorama_cube1.manager = manager;
+            manager.events.addListener('update', function(){if(camera_1)camera_1.lookAt(scene.position)});
             camera_1.position.z = 3200;
             application.mouse_x = null;
             application.mouse_y = null;

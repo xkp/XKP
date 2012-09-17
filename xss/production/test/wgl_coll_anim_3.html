@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test 3D</title>
+</head>
+<body>
+<style type="text/css">
+	body{
+	background:black;
+	}
+</style>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/Detector.js"></script>
+            <script type="text/javascript" src="../js/three/loaders/ColladaLoader.js"></script>
+<script type="text/javascript">	
+if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+			var renderer = new THREE.WebGLRenderer( { antialias: false } );
+		var ui_;
+var canvas_position = {x:0, y:0};
+var g_elapsed;
+var g_delta;	
+var scene = new THREE.Scene();
+scene.mouse_thru = true;
+var streamer;
+var manager = new threejs.Manager(scene, renderer, null, canvas_position);
+var three_utils = new threejs.Utils();
+manager.events = new ev.EventHolder();
+manager.events.parent = manager;
+manager.c_anims = [];
+manager.c_skins = [];
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
+var application = {};
+var clock = new THREE.Clock();
+application.events = new ev.EventHolder();
+		var streamer = new stream.Streamer();	
+		streamer.manager = manager;
+		var ResourceUtils = new stream.ResourceUtils();
+	// --------RESOURCES---------
+		var global_package = new stream.Package(streamer);	
+                global_package.add_item(
+		{
+		id:				"character",
+		resource_type:	RESOURCE_COLLADA_MODEL,
+		src:			"model/character/character.dae",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var character;
+				global_package.events.addListener("loaded", function()
+				{
+					character = streamer.get_resource("character");
+				});
+			var child_ = {};
+			child_.type_ = 'collada_skin';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "character")
+				{		
+					global_package.items[i].children['char_anim'] = child_;
+				}					
+			}	
+				var temp = {};
+				temp.type_ = 'skin';
+				temp.start_frame = 5;
+				temp.end_frame = 100;
+				temp.time = 1;
+				temp.loop = true;
+				temp.parent = 'char_anim';
+				for(var i = 0; i < global_package.items.length; i++)
+				{
+					if(global_package.items[i].id == "character")
+					{
+						global_package.items[i].children['idle'] = temp;
+					}
+				}
+				var temp = {};
+				temp.type_ = 'skin';
+				temp.start_frame = 105;
+				temp.end_frame = 144;
+				temp.time = 1;
+				temp.loop = true;
+				temp.parent = 'char_anim';
+				for(var i = 0; i < global_package.items.length; i++)
+				{
+					if(global_package.items[i].id == "character")
+					{
+						global_package.items[i].children['walk'] = temp;
+					}
+				}
+				var temp = {};
+				temp.type_ = 'skin';
+				temp.start_frame = 150;
+				temp.end_frame = 179;
+				temp.time = 1;
+				temp.loop = true;
+				temp.parent = 'char_anim';
+				for(var i = 0; i < global_package.items.length; i++)
+				{
+					if(global_package.items[i].id == "character")
+					{
+						global_package.items[i].children['run'] = temp;
+					}
+				}
+				var temp = {};
+				temp.type_ = 'skin';
+				temp.start_frame = 185;
+				temp.end_frame = 284;
+				temp.time = 3;
+				temp.loop = true;
+				temp.parent = 'char_anim';
+				for(var i = 0; i < global_package.items.length; i++)
+				{
+					if(global_package.items[i].id == "character")
+					{
+						global_package.items[i].children['alert'] = temp;
+					}
+				}
+				var temp = {};
+				temp.type_ = 'skin';
+				temp.start_frame = 290;
+				temp.end_frame = 389;
+				temp.time = 3;
+				temp.loop = true;
+				temp.parent = 'char_anim';
+				for(var i = 0; i < global_package.items.length; i++)
+				{
+					if(global_package.items[i].id == "character")
+					{
+						global_package.items[i].children['conversation'] = temp;
+					}
+				}
+		global_package.add_item({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});		
+		global_package.load();	
+    // --------RESOURCES---------
+renderer.setSize( app_width, app_height );
+manager.streamer = streamer;
+function render() {
+manager.canvas_position = getElementPosition(renderer.domElement);
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+	g_delta = 0; //first update
+else
+	g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+if(!g_delta) g_delta = 0;
+c_delta = clock.getDelta(),
+c_elapsed = clock.getElapsedTime() * 10;
+manager.events.dispatch("update", [g_delta, g_elapsed]);	
+				manager.scene.add(camera_1);
+				set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+var material_wireframe;var camera_1;var a_ligth;var d_ligth_1;var light1;var light2;var light3;var model1;var plane_1;
+threejs_load_resources(manager, function()
+{
+material_wireframe = new THREE.MeshBasicMaterial({
+color:gray,wireframe:true,
+	});
+			material_wireframe.manager = manager;
+		    camera_1 = 
+		    new THREE.PerspectiveCamera(75, 1.5, 0.100000001, 1000, null) ;	
+			manager.active_camera = camera_1;
+			camera_1.manager = manager;
+	    a_ligth = 
+	    new THREE.AmbientLight(ivory) ;
+	    manager.scene.add(a_ligth);
+			a_ligth.manager = manager;
+	    d_ligth_1 = 
+	    new THREE.DirectionalLight(White, 2, 0, null) ;
+	    manager.scene.add(d_ligth_1);
+			d_ligth_1.manager = manager;
+	    light1 = 
+	    new THREE.PointLight(red, 0.200000003, 0) ;
+	    manager.scene.add(light1);
+			light1.manager = manager;
+	    light2 = 
+	    new THREE.PointLight(green, 0.200000003, 0) ;
+	    manager.scene.add(light2);
+			light2.manager = manager;
+	    light3 = 
+	    new THREE.PointLight(blue, 0.200000003, 0) ;
+	    manager.scene.add(light3);
+			light3.manager = manager;
+		model1 = clone3jsObject( manager.streamer.get_resource('character').data, manager );	
+		manager.scene.add(model1);
+		model1.events = new ev.EventHolder();			
+			model1.manager = manager;
+	    plane_1_plane = new THREE.PlaneGeometry(1000, 1000, 50, 50) ;
+	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
+	    manager.scene.add(plane_1);
+		plane_1.events = new ev.EventHolder();
+			plane_1.manager = manager;
+            set_material_alpha(material_wireframe, 20);
+            manager.events.addListener('update', function(){if(camera_1)camera_1.lookAt(scene.position)});
+            camera_1.position.y = 50;
+            camera_1.position.z = 500;
+            a_ligth.position.y = 5000;
+            a_ligth.position.z = 5000;
+            d_ligth_1.position.y = 5000;
+            d_ligth_1.position.z = 5000;
+            model1.scale.x = 20;
+            model1.scale.y = 20;
+            model1.scale.z = 20;
+            set_rotation_x(model1.rotation, -90);
+            model1.position.y = -50;
+            plane_1.position.y = -70;
+            application.mouse_x = null;
+            application.mouse_y = null;
+            application.status = "idle";
+	application.events.addListener("init", function()
+	{    
+		model1.char_anim.start("idle");
+	}
+	);
+	application.events.addListener("update", function(delta,elapsed)
+	{    
+		var time = elapsed * 0.000500000024;
+light1.position.x = Math.sin(time * 7) * 3009;
+light1.position.y = Math.cos(time * 5) * 4000;
+light1.position.z = Math.cos(time * 3) * 3009;
+light2.position.x = Math.sin(time * 7) * 3009;
+light2.position.y = Math.cos(time * 3) * 4000;
+light2.position.z = Math.cos(time * 5) * 3009;
+light3.position.x = Math.sin(time * 3) * 3009;
+light3.position.y = Math.cos(time * 5) * 4000;
+light3.position.z = Math.cos(time * 7) * 3009;
+	}
+	);
+	application.events.addListener("keydown", function(keycode)
+	{    
+		if (keycode == W)
+{
+model1.char_anim.start("walk");
+}
+else
+{
+if (keycode == R)
+{
+model1.char_anim.start("run");
+}
+else
+{
+if (keycode == C)
+{
+model1.char_anim.start("conversation");
+}
+else
+{
+if (keycode == A)
+{
+model1.char_anim.start("alert");
+}
+}
+}
+}
+	}
+	);
+	application.events.addListener("keyup", function()
+	{    
+		model1.char_anim.start("idle");
+	}
+	);
+var event_manager = new ev.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(manager, ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(manager, ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(manager, ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(manager, ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(manager, ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(manager, ev.keyCode);                  
+};
+manager.events.addListener("mousedown", function(x,y)
+{    
+	application.events.dispatch("mousedown", [x, y]);
+});
+manager.events.addListener("mouseup", function(x,y)
+{    
+	application.events.dispatch("mouseup", [x, y]);
+});
+manager.events.addListener("mousemove", function(x,y)
+{    
+	application.events.dispatch("mousemove", [x, y]);
+});
+manager.events.addListener("click", function(x,y)
+{    
+	application.events.dispatch("click", [x, y]);
+});
+manager.events.addListener("drag", function(x,y)
+{    
+	application.events.dispatch("drag", [x, y]);
+});
+manager.events.addListener("dragend", function(x,y)
+{    
+	application.events.dispatch("dragend", [x, y]);
+});
+manager.events.addListener("keyup", function(keycode)
+{    
+	application.events.dispatch("keyup", [keycode]);
+});
+manager.events.addListener("keydown", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("keypress", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("update", function(delta, elapsed)
+{    
+	application.events.dispatch("update", [delta, elapsed]);
+});
+application.events.dispatch("init", []);
+		document.body.appendChild( renderer.domElement );
+animate();
+});
+function animate() {	
+	requestAnimationFrame( animate );
+	render();	
+}
+</script>
+</body>
+</html>

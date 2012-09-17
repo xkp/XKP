@@ -603,13 +603,11 @@ plane2.manager = manager;
             lbl4.text("Material filter in a plane");
             lbl4.set_color("Azure");
             manager.events.addListener('update', function(){camera_1.lookAt(scene.position)});
-            camera_1.position.z = 1000;
-            plane1.position.x = -330;
-            plane1.position.y = -200;
-            set_rotation_x(plane1.rotation, 90);
-            plane2.position.x = 170;
-            plane2.position.y = -200;
-            set_rotation_x(plane2.rotation, 90);
+            camera_1.position = ;
+            plane1.position = ;
+            plane1.rotation = ;
+            plane2.position = ;
+            plane2.rotation = ;
 	application.events.addListener("update", function()
 	{    
 		if (host.needs_update)

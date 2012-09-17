@@ -956,7 +956,8 @@ void expression_analizer::analyze(expression& expr, XSSContext ctx)
             case op_index:
               break; //td: type system
             default:
-              assert(false); //more test cases later
+              return; //td: !!!
+              //assert(false); //more test cases later
           }
       }
   }

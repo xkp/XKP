@@ -33,163 +33,212 @@ var SoundUtils = new ui.SoundUtils();
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
 		}		
-		var streamer = new stream.Streamer();	
+		var streamer = new stream.Streamer();		
 		var ResourceUtils = new stream.ResourceUtils();
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
-            {
+		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/progress.full.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image1;
 				global_package.events.addListener("loaded", function()
 				{
 					__image1 = streamer.get_resource("__image1");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/progress.empty.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image2;
 				global_package.events.addListener("loaded", function()
 				{
 					__image2 = streamer.get_resource("__image2");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/smile_grin_48.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image3;
 				global_package.events.addListener("loaded", function()
 				{
 					__image3 = streamer.get_resource("__image3");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/smile_sad_48.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image4;
 				global_package.events.addListener("loaded", function()
 				{
 					__image4 = streamer.get_resource("__image4");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image5",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/arrow_left.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image5;
 				global_package.events.addListener("loaded", function()
 				{
 					__image5 = streamer.get_resource("__image5");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image6",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/arrow_right.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image6;
 				global_package.events.addListener("loaded", function()
 				{
 					__image6 = streamer.get_resource("__image6");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image7",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/arrow_right_48.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image7;
 				global_package.events.addListener("loaded", function()
 				{
 					__image7 = streamer.get_resource("__image7");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image8",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/arrow_right_green_48.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image8;
 				global_package.events.addListener("loaded", function()
 				{
 					__image8 = streamer.get_resource("__image8");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image9",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/arrow_left_48.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image9;
 				global_package.events.addListener("loaded", function()
 				{
 					__image9 = streamer.get_resource("__image9");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image10",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/arrow_left_green_48.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image10;
 				global_package.events.addListener("loaded", function()
 				{
 					__image10 = streamer.get_resource("__image10");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"monster_sheet",
 		resource_type:	RESOURCE_SPRITE,
 		src:			"images/monster.png",
 		frame_width:	64,
 		frame_height:	64,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var monster_sheet;
 				global_package.events.addListener("loaded", function()
 				{
 					monster_sheet = streamer.get_resource("monster_sheet");
 				});
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "monster_sheet")
+				{		
+					global_package.items[i].children['m_run_l'] = child_;
+				}					
+			}	
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "monster_sheet")
+				{		
+					global_package.items[i].children['m_run_d'] = child_;
+				}					
+			}	
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "monster_sheet")
+				{		
+					global_package.items[i].children['m_idle'] = child_;
+				}					
+			}	
 		for(var i = 0; i < global_package.items.length; i++)
         {						
 			if(global_package.items[i].id == "monster_sheet")

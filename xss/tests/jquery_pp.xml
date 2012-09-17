@@ -5,7 +5,7 @@
                 <checkbox id="color_enabled" caption="Enabled"/>
             </div> 
             <div caption="Power Color Effect">				
-               <label caption="Red"/>  <br/><br/>
+				<label caption="Red"/>  <br/><br/>
                 <slider id="pc_red" min="0" max="200" value="40"/>
                 <br/>
                 <label caption="Blue"/> <br/><br/>

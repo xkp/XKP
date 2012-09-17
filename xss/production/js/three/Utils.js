@@ -59,20 +59,26 @@ function distance3d(vector1, vector2)
 
 function set_active_camera( camera )
 {	
-	camera.manager.active_camera = camera;
-	if(camera.manager.active_composer)
-		camera.manager.active_composer.render();
-	else
-		camera.manager.renderer.render(camera.manager.scene, camera);		
+	if(camera)
+	{
+		camera.manager.active_camera = camera;
+		if(camera.manager.active_composer)
+			camera.manager.active_composer.render();
+		else
+			camera.manager.renderer.render(camera.manager.scene, camera);
+	}		
 }
 
 function set_active_composer( composer )
 {	
-	composer.manager.active_composer = composer;
-	if(composer.manager.active_composer)
-		composer.manager.active_composer.render();
-	else
-		composer.manager.renderer.render(composer.manager.scene, composer.manager.active_camera);		
+	if(composer)
+	{
+		composer.manager.active_composer = composer;
+		if(composer.manager.active_composer)
+			composer.manager.active_composer.render();
+		else
+			composer.manager.renderer.render(composer.manager.scene, composer.manager.active_camera);
+	}
 }
 
 function threejs_load_resources(manager, callback)
@@ -113,7 +119,7 @@ function set_transform_image( path, value )
 	{
 		var child = path.children[i];	
 		child.material.map = new THREE.Texture(resource.data);	
-	}	
+	}
 }
 
 function set_3js_object_texture( path, value )
@@ -223,6 +229,46 @@ function get_intersects( x, y, object )
 	var ray = new THREE.Ray( manager.active_camera.position, vector.subSelf( manager.active_camera.position ).normalize() );
 	var intersects = ray.intersectObject( object );	
 	return intersects;
+}
+
+function setMorphTargetInfluences( path, index, value)
+{
+	path.morphTargetInfluences[ index ] = value;
+}
+
+function createModelSrc( path, src, manager  )
+{	
+	manager.scene.remove(path);
+	var res = manager.streamer.get_resource(src).data;
+	var obj = clone3jsObject( res, manager )
+	obj.manager = manager;
+	manager.scene.add(obj);
+	return obj;
+}
+
+function clone3jsObject( obj, manager )
+{
+	var clone = new THREE.Object3D();	
+	
+	for(var name in obj)
+	{
+		if(obj[name] instanceof THREE.PerspectiveCamera)
+		{
+			clone[name] = new THREE.PerspectiveCamera(obj[name].fov, obj[name].aspect, obj[name].near, obj[name].far, obj[name].target);
+			clone[name].manager = manager;
+			clone[name].position = obj[name].position.clone();
+			clone[name].scale = obj[name].scale.clone();
+			clone[name].rotation = obj[name].rotation.clone();
+			clone[name].lookAt(manager.scene.position);
+			clone[name].manager.scene.add(clone[name]);
+		}
+		else if(obj[name] instanceof THREE.Vector3)
+			clone[name] = obj[name].clone();		
+		else
+			clone[name] = obj[name];			
+	}
+	
+	return clone;
 }
 
 function generate_model_loader( type )

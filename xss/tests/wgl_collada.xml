@@ -1,7 +1,11 @@
 <application src="wgl_collada.xs" title="Test 3D" background="black">
 
 	<resources>		
-		<collada_model id="model_1" src="model/monster/monster.dae"/>				
+		<collada_model id="model_1" src="model/monster/monster.dae">
+			<collada_skin id="model_skin">	
+				<skin id="walk" start_frame="0" end_frame="29" in="1" loop="true"/>
+			</collada_skin>
+		</collada_model>	
 	</resources>
 	<materials>	
 		<basic_material id="material_wireframe" color="grey" alpha="20"/>		
@@ -15,17 +19,22 @@
 		
 		<ambient_light id="a_ligth" color="2232576"/>
 		
-		<directional_light id="d_ligth_1" color="16772829" intensity="1">			
-            <position y="-70" z="100"/>            
+		<directional_light id="d_ligth_1" color="ivory" intensity="2">			
+            <position y="-3000" z="3000"/>            
+		</directional_light>
+		
+		<directional_light id="d_ligth_2" color="skyblue" intensity="2">			
+            <position y="3000" z="3000"/>            
 		</directional_light>
 		
 		<point_light id="light1" color="Yellow" intensity="4"/>
 		<point_light id="light2" color="Red" intensity="4"/>
 		<point_light id="light3" color="Green" intensity="4"/>
 				
-		<model id="monster_model" src="model_1" model_type="collada">
+		<model id="monster_model" src="model_1">
 			<position x="-350"  y="-350" z="-350"/>	
 			<scale x="0.5" y="0.5" z="0.5"/>
+			<rotation x="-90"/>
 		</model>
 		
 		<plane id="plane_1" width="10000" height="10000" x_segments="100" y_segments="100" material="material_wireframe">
