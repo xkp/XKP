@@ -4,8 +4,12 @@
 #include "stdafx.h"
 #include <xss/object_model.h>
 #include <xss/lang_factory.h>
+#include <xss/xss_expression.h>
+#include <xss/xss_context.h>
 #include <xss/localfs.h>
 #include <xs/compiler.h>
+
+#include <boost/algorithm/string.hpp>
 
 using namespace xkp;
 
@@ -68,10 +72,155 @@ class xss_object_model : public IObjectModel
 			thread_->compile_request(content, fname);
 		}
 
+		struct walker : context_visitor
+		{
+			walker(walk_list& results):
+			results_(results)
+			{
+			}
+			
+			virtual void visit(RESOLVE_ITEM type, const std::string& id, variant value)
+			{
+				switch(type)
+				{
+					case RESOLVE_ANY:
+					case RESOLVE_NATIVE:
+					case RESOLVE_CONST:
+						return; //ignore & insert nothing
+				}
+
+				int tid = (int)type;
+				
+				if (!id.empty())
+					results_.push_back(walk_info(tid, id));
+			}
+
+			private:
+				walk_list& results_;
+		};
+
+		virtual void walkContext(const std::string& fname, const std::string& text, int line, int col, walk_list& results)
+		{
+			document* doc = model_->get_document(fname);
+			if (doc)
+			{
+				XSSContext ctx = doc->find_context(line, col); assert(ctx);
+				
+				std::string s = find_expression(text);
+				walker		w(results);
+				if (!s.empty())
+				{
+					XSSExpression expr = xss_expression_utils::compile_expression(s);
+					if (expr)
+					{
+						expr->bind(ctx);
+						XSSValue val = expr->value();
+						if (!val)
+							return; //nothing to see here
+						
+						value_operation op = val->get_last();
+						RESOLVE_ITEM	ri = op.resolve_id();
+
+						switch(ri)
+						{
+							case RESOLVE_INSTANCE:
+							case RESOLVE_TYPE:
+							case RESOLVE_VARIABLE:
+							{
+								XSSObject obj = variant_cast<XSSObject>(op.resolve_value(), XSSObject());
+								if (obj)
+								{
+									obj->context_visit(&w);
+								}
+								break;
+							}
+						}
+					}
+				}
+				else
+					ctx->visit(&w); //get all
+			}
+		}
+
+		struct error_walker : error_visitor
+		{
+			error_walker(xss_error_info_list& results):
+			results_(results)
+			{
+			}
+			
+			virtual void visit(error_info& err)
+			{
+				std::ostringstream ss;
+				ss << err.desc;
+				if (!err.info.empty())
+				{
+					ss << " (";
+
+					bool first = true;
+					for(size_t i = 0; i < err.info.size(); i++)
+					{
+						if (first)
+							first = false;
+						else 
+							ss << ", ";
+
+						std::string name  = err.info.get_name(i);
+						std::string value = xss_utils::var_to_string(err.info.get(i));
+						ss << name << " : " << value;
+					}
+
+					ss << ") ";
+				}
+
+				results_.push_back(xss_error_info(ss.str(), err.loc.begin.line, err.loc.begin.column, err.loc.end.line, err.loc.end.column));
+			}
+
+			private:
+				xss_error_info_list& results_;
+		};
+
+		virtual void walkErrors(const std::string& fname, xss_error_info_list& errors)
+		{
+			error_walker ew(errors);
+			model_->visit_errors(fname, &ew);
+		}
 	private:
 		ObjectModel				 model_;
 		ObjectModelThread		 thread_;
 		std::vector<Application> apps_;
+
+		std::string find_expression(const std::string& text)
+		{
+			//td: !!! be serious, please
+			std::string result;
+
+			if (text.empty())
+				return result;
+
+			std::string::const_reverse_iterator it = text.rbegin();
+			std::string::const_reverse_iterator nd = text.rend();
+
+			bool finding_last = true;
+			for(; it != nd; it++)
+			{
+				char c = *it;
+
+				if (c == '.' && finding_last)
+				{
+					finding_last = false;
+					continue;
+				}
+
+				if (!isalpha(c) && c != '_')
+					break;
+				
+				if (!finding_last)
+					result.insert(result.begin(), c); 
+			}
+
+			return result;
+		}
 };
 
 

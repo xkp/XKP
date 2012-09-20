@@ -169,7 +169,7 @@
     <Compile Include="Completion\CompletionSourceProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Completion\PyCompletion.cs">
+    <Compile Include="Completion\ExcessCompletionItem.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Completion\SnippetsEnumerator.cs" />
@@ -179,7 +179,7 @@
     <Compile Include="TextBufferExtension.cs" />
     <Compile Include="Validation\ErrorListPresenter.cs" />
     <Compile Include="Validation\ErrorListFactory.cs" />
-    <Compile Include="Validation\PyErrorListProvider.cs">
+    <Compile Include="Validation\ExcessErrorProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Validation\ValidationError.cs" />
@@ -188,6 +188,10 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Excess.CompilerTask\Excess.CompilerTask.csproj">
+      <Project>{64796904-EF67-433F-81BB-B6864473236C}</Project>
+      <Name>Excess.CompilerTask</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Excess.Compiler\ExcessCompiler.vcxproj">
       <Project>{F65BBAC7-1B48-4DDA-B5FD-BBAB4B4DA4DB}</Project>
       <Name>ExcessCompiler</Name>

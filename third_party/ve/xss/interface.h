@@ -3,6 +3,41 @@
 #define XSS_INTERFACE_HH
 
 #include <string>
+#include <vector>
+
+struct walk_info
+{
+	walk_info(int _type, const std::string& _symbol):
+		type(_type),
+		symbol(_symbol)
+		{
+		}
+
+	int			type;
+	std::string symbol;
+};
+
+typedef std::vector<walk_info> walk_list;
+
+struct xss_error_info
+{
+	xss_error_info(const std::string& _desc, int _sline, int _scol, int _eline, int _ecol):
+	desc(_desc),
+	sline(_sline),
+	scol(_scol),
+	eline(_eline),
+	ecol(_ecol)
+	{
+	}
+
+	std::string desc;
+	int         sline;
+	int         scol;
+	int         eline;
+	int         ecol;
+};
+
+typedef std::vector<xss_error_info> xss_error_info_list;
 
 class IObjectModel
 {
@@ -13,6 +48,9 @@ class IObjectModel
 								  int oldEndLine, int oldEndCol, int newEndLine, int newEndCol)		  = 0;
 		virtual void updateChanges(int ms)															  = 0;
 		virtual void queueChange(const std::string& fname, const std::string& content)				  = 0;
+		virtual void walkContext(const std::string& fname, const std::string& text, 
+								 int line, int col, walk_list& results)								  = 0;
+		virtual void walkErrors(const std::string& fname, xss_error_info_list& errors)				  = 0;
 };
 
 #endif

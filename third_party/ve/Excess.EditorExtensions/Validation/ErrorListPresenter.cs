@@ -15,10 +15,10 @@ namespace Excess.EditorExtensions
     /// <summary>
     /// Shows errors in the error list
     /// </summary>
-    class ErrorListPresenter
+    public class ErrorListPresenter
     {
         private IWpfTextView textView;
-        private PyErrorListProvider errorListProvider;
+        private ExcessErrorProvider errorListProvider;
         private SimpleTagger<ErrorTag> squiggleTagger;
         Microsoft.VisualStudio.Shell.ErrorListProvider errorList;
 
@@ -31,7 +31,7 @@ namespace Excess.EditorExtensions
             this.textView.TextBuffer.Changed += OnTextBufferChanged;
             this.textView.Closed += new EventHandler(OnTextViewClosed);
 
-            this.errorListProvider = new PyErrorListProvider();
+            this.errorListProvider = new ExcessErrorProvider();
             this.squiggleTagger = squiggleProviderFactory.GetErrorTagger(textView.TextBuffer);
 
             errorList = new Microsoft.VisualStudio.Shell.ErrorListProvider(serviceProvider);
@@ -63,7 +63,7 @@ namespace Excess.EditorExtensions
             previousErrors.Clear();
         }
 
-        private void CreateErrors()
+        public void CreateErrors()
         {
             var errors = errorListProvider.GetErrors(textView.TextBuffer);
 

@@ -103,6 +103,7 @@ struct document
       document(Application app);
     public: 
       XSSContext  find_context(int line, int column);
+      XSSContext  context_by_identity(CONTEXT_IDENTITY id, variant value);
       void        add(XSSContext context);
 		  XSSContext  changed(int line, int col, int oldEndLine, int oldEndCol, int newEndLine, int newEndCol);	
       Application application(); 
@@ -136,7 +137,7 @@ struct document
       typedef std::vector<snap_shot> snap_shots;
       snap_shots items_;
 
-	  void synch_extents();
+	    void synch_extents();
 };
 
 typedef std::map<fs::path, document> document_map;
@@ -204,32 +205,18 @@ struct om_response
     document   doc;
   };
 
-//error handling
-struct error_info
-  {
-    error_info(const str _desc, param_list* _info, file_location& _loc):
-      desc(_desc),
-      info(_info? *_info : param_list()),
-      loc(_loc)
-      {
-      }
-
-    str           desc;
-    param_list    info;
-    file_location loc;
-  };
-
-typedef std::vector<error_info> error_list;
-
 class object_model
   {
     public:
       object_model(FileSystem fs, LanguageFactory languages);
     public:
       Application load(DataReader project, param_list& args, fs::path base_path);
-	  document*     get_document(const str& fname);
-	  void		      update_document(const str& fname, om_response& data);
+	    document*   get_document(const str& fname);
+	    void		    update_document(const str& fname, om_response& data);
       void        add_include(Application app, const str& def, const str& src);
+      void        add_error(const str& desc, param_list* info, file_location& loc);
+      void        visit_errors(const fs::path& fname, error_visitor* visitor);
+      error_list& errors();
     public:
 	    FileSystem filesystem() {return fs_;}	
     private:
@@ -268,8 +255,7 @@ class object_model
       void      fix_it_up(XSSContext ctx, om_context& octx);
       void      bind_it_up(XSSContext ctx, om_context& octx);
       bool      check_type(XSSType type, const str& type_name, XSSContext ctx);
-    public:
-      void add_error(const str& desc, param_list* info, file_location& loc);
+      void      clear_file_errors(const str& fname);
   };
 
 class object_model_thread

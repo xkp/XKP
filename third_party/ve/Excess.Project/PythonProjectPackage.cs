@@ -13,6 +13,9 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 using System.Collections.Generic;
 using Excess.CompilerTasks;
+using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Editor;
+using Excess.EditorExtensions;
 
 namespace Excess.Project
 {
@@ -241,6 +244,14 @@ namespace Excess.Project
         {
             ExcessModelService service = ExcessModelService.getInstance();
             service.Model.updateChanges();
+
+            if (currentView_ != null)
+            {
+                ErrorListPresenter ep = currentView_.Properties.GetOrCreateSingletonProperty<ErrorListPresenter>(() => null);
+                if (ep != null)
+                    ep.CreateErrors();
+            }
+
             return 0;
         }
 
@@ -328,8 +339,30 @@ namespace Excess.Project
             return VSConstants.S_OK;
         }
 
+        private IWpfTextView currentView_;
+        public void OnViewChange(IVsWindowFrame pFrame)
+        {
+            IVsTextView tv = VsShellUtilities.GetTextView(pFrame);
+            IWpfTextView view = null;
+            IVsUserData userData = tv as IVsUserData;
+
+            if (null != userData)
+            {
+                IWpfTextViewHost viewHost;
+                object holder;
+                Guid guidViewHost = DefGuidList.guidIWpfTextViewHost;
+                userData.GetData(ref guidViewHost, out holder);
+                viewHost = (IWpfTextViewHost)holder;
+                view = viewHost.TextView;
+            }
+
+            currentView_ = view;
+        }
+
         public int OnBeforeDocumentWindowShow(uint docCookie, int fFirstShow, IVsWindowFrame pFrame)
         {
+            OnViewChange(pFrame);
+            
             if (documents.ContainsKey(docCookie))
             {
                 return VSConstants.S_OK;

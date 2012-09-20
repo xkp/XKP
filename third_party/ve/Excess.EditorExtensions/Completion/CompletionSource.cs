@@ -7,6 +7,8 @@ using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.TextManager.Interop;
+using ExcessCompiler;
+using Excess.CompilerTasks;
 
 namespace Excess.EditorExtensions
 {
@@ -34,35 +36,15 @@ namespace Excess.EditorExtensions
         {
             int position = session.GetTriggerPoint(session.TextView.TextBuffer).GetPosition(textBuffer.CurrentSnapshot);
             int line = textBuffer.CurrentSnapshot.GetLineNumberFromPosition(position);
+            ITextSnapshotLine line_pos = textBuffer.CurrentSnapshot.GetLineFromPosition(position);
+            
             int column = position - textBuffer.CurrentSnapshot.GetLineFromPosition(position).Start.Position;
-            string xxx = textBuffer.CurrentSnapshot.GetText();
-            xxx = null;
+            
+            string LineContents = line_pos.GetText().Substring(0, column);
+            ExcessModelService service = ExcessModelService.getInstance();
+            List<ExcessCompletionItem> items = service.Model.getCompletion(textBuffer.GetFileName(), LineContents, line, column);
 
-            //td:
-            //Microsoft.VisualStudio.IronPythonInference.Modules modules = new Microsoft.VisualStudio.IronPythonInference.Modules();
-
-            //IList<Declaration> attributes;
-            //if (textBuffer.GetReadOnlyExtents(new Span(0, textBuffer.CurrentSnapshot.Length)).Count > 0)
-            //{
-            //    int start;
-            //    var readWriteText = TextOfLine(textBuffer, line, column, out start, true);
-            //    var module = modules.AnalyzeModule(new QuietCompilerSink(), textBuffer.GetFileName(), readWriteText);
-
-            //    attributes = module.GetAttributesAt(1, column - 1);
-
-            //    foreach (var attribute in GetEngineAttributes(readWriteText, column - start - 1))
-            //    {
-            //        attributes.Add(attribute);
-            //    }
-            //}
-            //else
-            //{
-            //    var module = modules.AnalyzeModule(new QuietCompilerSink(), textBuffer.GetFileName(), textBuffer.CurrentSnapshot.GetText());
-
-            //    attributes = module.GetAttributesAt(line + 1, column);
-            //}
-
-            //completionSets.Add(GetCompletions((List<Declaration>)attributes, session));
+            completionSets.Add(GetCompletions(items, session));
         }
 
         //private IList<Declaration> GetEngineAttributes(string lineText, int column)
@@ -133,34 +115,29 @@ namespace Excess.EditorExtensions
             return textSnapshot.TextBuffer.GetReadOnlyExtents(new Span(0, textSnapshot.Length)).Max(region => region.End);
         }
 
-        /// <summary>
-        /// Gets the declarations and snippet entries for the completion
-        /// </summary>
-        //private CompletionSet GetCompletions(List<Declaration> attributes, ICompletionSession session)
-        //{
-        //    // Add IPy completion
-        //    var completions = new List<Completion>();
-        //    completions.AddRange(attributes.Select(declaration => new PyCompletion(declaration, glyphService)));
+        private CompletionSet GetCompletions(List<ExcessCompletionItem> items, ICompletionSession session)
+        {
+            // Add IPy completion
+            var completions = new List<Completion>();
+            completions.AddRange(items.Select(item => new CompletionItem(item, glyphService)));
 
-        //    if (completions.Count > 0)
-        //    {
-        //        // Add Snippets entries
-        //        var expansionManager = (IVsTextManager2)this.serviceProvider.GetService(typeof(SVsTextManager));
-        //        var snippetsEnumerator = new SnippetsEnumerator(expansionManager, Constants.IronPythonLanguageServiceGuid);
-        //        completions.AddRange(snippetsEnumerator.Select(expansion => new PyCompletion(expansion, glyphService)));
-        //    }
+            if (completions.Count > 0)
+            {
+                //td:
+                //// Add Snippets entries
+                //var expansionManager = (IVsTextManager2)this.serviceProvider.GetService(typeof(SVsTextManager));
+                //var snippetsEnumerator = new SnippetsEnumerator(expansionManager, Constants.IronPythonLanguageServiceGuid);
+                //completions.AddRange(snippetsEnumerator.Select(expansion => new PyCompletion(expansion, glyphService)));
+            }
 
-        //    // we want the user to get a sorted list
-        //    completions.Sort();
-
-        //    return
-        //        new CompletionSet("IPyCompletion",
-        //            "IronPython Completion",
-        //            CreateTrackingSpan(session.GetTriggerPoint(session.TextView.TextBuffer).GetPosition(textBuffer.CurrentSnapshot)),
-        //            completions,
-        //            null)
-        //    ;
-        //}
+            return
+                new CompletionSet("xsCompletion",
+                    "Excess Completion",
+                    CreateTrackingSpan(session.GetTriggerPoint(session.TextView.TextBuffer).GetPosition(textBuffer.CurrentSnapshot)),
+                    completions,
+                    null)
+            ;
+        }
 
         private ITrackingSpan CreateTrackingSpan(int position)
         {

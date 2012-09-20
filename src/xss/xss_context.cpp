@@ -402,6 +402,35 @@ void xss_context::identity(CONTEXT_IDENTITY id, variant idobj)
     identity_obj_ = idobj;
   }
 
+void xss_context::visit(context_visitor* visitor)
+  {
+    switch(identity_)
+      {
+        case CTXID_INSTANCE:
+        case CTXID_TYPE:
+          {
+            XSSObject obj = variant_cast<XSSObject>(identity_obj_, XSSObject());
+            obj->context_visit(visitor);
+            break;
+          }
+      }
+
+    symbol_list::iterator it = symbols_.begin();
+    symbol_list::iterator nd = symbols_.end();
+
+    for(; it != nd; it++)
+      visitor->visit(it->second.type, it->first, it->second.value);
+
+    type_list::iterator tit = types_.begin();
+    type_list::iterator tnd = types_.end();
+
+    for(; tit != tnd; tit++)
+      visitor->visit(RESOLVE_TYPE, tit->second->id(), tit->second);
+
+    if (XSSContext parent = parent_.lock())
+      parent->visit(visitor);
+  }
+
 ErrorHandler xss_context::errors()
   {
     if (errors_)
@@ -420,8 +449,14 @@ void xss_context::errors(ErrorHandler handler)
 
 CONTEXT_IDENTITY xss_context::identity()
   {
-	return identity_;
-  }		
+	  return identity_;
+  }	
+
+variant xss_context::identity_value()
+  {
+	  return identity_obj_;
+  }
+  	
 variant xss_context::resolve(const str& id, RESOLVE_ITEM item_type)
   {
     resolve_info si;
@@ -676,6 +711,14 @@ bool xss_context::resolve(const str& id, resolve_info& info)
 
     if (identity_search(id, info))
       return true;
+
+	XSSType type = get_type(id);
+	if (type)
+	  {
+		  info.what = RESOLVE_TYPE;
+		  info.value = type;
+		  return true;
+	  }
 
     if (info.shallow)
       return false;
@@ -1276,6 +1319,39 @@ bool xss_object::context_resolve(const str& id, resolve_info& info)
     return false;
   }
 
+void xss_object::context_visit(context_visitor* visitor)
+  {
+    std::vector<variant>::iterator it = properties_->ref_begin();
+    std::vector<variant>::iterator nd = properties_->ref_end();
+
+    for(; it != nd; it++)
+      {
+        //td: !!! get rid of Dynamic Array
+        XSSProperty prop = *it;
+        visitor->visit(RESOLVE_PROPERTY, prop->id(), prop);
+      }
+      
+    it = methods_->ref_begin();
+    nd = methods_->ref_end();
+    for(; it != nd; it++)
+      {
+        //td: !!! get rid of Dynamic Array
+        XSSMethod mthd = *it;
+        visitor->visit(RESOLVE_METHOD, mthd->id(), mthd);
+      }
+
+    it = events_->ref_begin();
+    nd = events_->ref_end();
+    for(; it != nd; it++)
+      {
+        //td: !!! get rid of Dynamic Array
+        XSSEvent ev = *it;
+        visitor->visit(RESOLVE_EVENT, ev->id(), ev);
+      }
+
+    if (type_)
+      type_->context_visit(visitor);
+  }
 //struct xss_object::query_info
 void xss_object::query_info::add_property(XSSProperty prop)
   {
