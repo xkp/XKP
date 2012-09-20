@@ -6,7 +6,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>$safeprojectname$</RootNamespace>
     <AssemblyName>$safeprojectname$</AssemblyName>
-    <MainFile>ConsoleApp.xs</MainFile>
+    <MainFile>xsWindow.xaml</MainFile>
     <TargetFrameworkVersion>v$targetframeworkversion$</TargetFrameworkVersion>
     <TargetPlatform>v4</TargetPlatform>
   </PropertyGroup>
@@ -27,8 +27,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="ConsoleApp.xs" />
-    <Compile Include="ConsoleApp.project.xml">
+    <Compile Include="WPFApp.xs" />
+    <Compile Include="WPFApp.xml" />
+    <Compile Include="xsWindow.xaml" />
+    <Compile Include="WPFApp.project.xml">
       <Visible>false</Visible>
       <xs_project>true</xs_project>
     </Compile>

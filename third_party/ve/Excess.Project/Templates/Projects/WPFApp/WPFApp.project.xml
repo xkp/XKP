@@ -1,0 +1,3 @@
+﻿<project entry_point="idioms/dotnet/main.xss" language="cs" src="WPFApp.xs">
+  <idiom src="idioms/dotnet/dotnet.xml"/>
+</project>

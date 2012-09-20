@@ -423,11 +423,11 @@ struct wax_module_binder : code_visitor
             search_code(it->catch_code);
         }
 
-      virtual void break_()                      {}
-      virtual void continue_()                   {}
-      virtual void dsl_(dsl& info)               {}
-      virtual void dispatch(stmt_dispatch& info) {}
-      virtual void throw_(stmt_throw& info)      {} 
+      virtual void break_(stmt_break& info)       {}
+      virtual void continue_(stmt_continue& info) {}
+      virtual void dsl_(dsl& info)                {}
+      virtual void dispatch(stmt_dispatch& info)  {}
+      virtual void throw_(stmt_throw& info)       {} 
     private:
       bind_map&  search_;
       XSSContext ctx_;

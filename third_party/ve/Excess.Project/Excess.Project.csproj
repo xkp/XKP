@@ -252,7 +252,9 @@
     <None Include="Templates\Items\Class\class.xs" />
     <None Include="Templates\Projects\ConsoleApp\__TemplateIcon.ico" />
     <None Include="Templates\Projects\ConsoleApp\ConsoleApp.xs" />
-    <None Include="Templates\Projects\ConsoleApp\xsConsoleApp.xsproj" />
+    <None Include="Templates\Projects\ConsoleApp\xsConsoleApp.xsproj">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="IronPython_large.png">
@@ -262,6 +264,16 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="Project.jpg" />
+    <None Include="Templates\Projects\WPFApp\WPFApp.xs" />
+    <None Include="Templates\Projects\WPFApp\xsWPFApp.xsproj">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Templates\Projects\WPFApp\WPFApp.project.xml" />
+    <VSTemplate Include="Templates\Projects\WPFApp\xsWPFApp.vstemplate">
+      <SubType>Designer</SubType>
+    </VSTemplate>
+    <Content Include="Templates\Projects\WPFApp\WPFApp.ico" />
+    <Content Include="Templates\Projects\WPFApp\WPFApp.xml" />
     <Content Include="VSIXProject_large.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -331,7 +343,12 @@
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Page Include="Templates\Projects\WPFApp\xsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\VSSDK\Microsoft.VsSDK.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
