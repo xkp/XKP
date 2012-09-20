@@ -134,7 +134,7 @@ namespace Excess.EditorExtensions
 
         private void OnActiveSessionCommited(object sender, System.EventArgs e)
         {
-            var selectedCompletion = this.activeSession.SelectedCompletionSet.SelectionStatus.Completion as PyCompletion;
+            var selectedCompletion = this.activeSession.SelectedCompletionSet.SelectionStatus.Completion as CompletionItem;
 
             // Check if the selected completion is a code snippet
             if (selectedCompletion != null && selectedCompletion.VsExpansion.HasValue)

@@ -283,6 +283,52 @@ XSSContext document::find_context(int line, int column)
     return result;
   }
 
+XSSContext document::context_by_identity(CONTEXT_IDENTITY id, variant value)
+  {
+    snap_shots::iterator it = items_.begin();
+    snap_shots::iterator nd = items_.end();
+    for(; it != nd; it++)
+      {
+        XSSContext ctx = it->context;
+        if (ctx->identity() != id)
+          continue;
+
+        switch(id)
+          {
+            case CTXID_CODE:
+              {
+                XSSCode mine = variant_cast<XSSCode>(ctx->identity_value(), XSSCode());
+                XSSCode val  = variant_cast<XSSCode>(value, XSSCode());
+                if (mine && val && val == mine)
+                  return ctx;
+
+                break;
+              }
+            
+            case CTXID_INSTANCE:
+              {
+                XSSObject mine = variant_cast<XSSObject>(ctx->identity_value(), XSSObject());
+                XSSObject val  = variant_cast<XSSObject>(value, XSSObject());
+                if (mine && val && val == mine)
+                  return ctx;
+
+                break;
+              }
+            
+            case CTXID_TYPE:
+              {
+                XSSType mine = variant_cast<XSSType>(ctx->identity_value(), XSSType());
+                XSSType val  = variant_cast<XSSType>(value, XSSType());
+                if (mine && val && val == mine)
+                  return ctx;
+
+                break;
+              }
+          }
+      }
+    return XSSContext();
+  }
+
 struct om_error_handler : IErrorHandler
   {
     om_error_handler(object_model& model):
@@ -301,6 +347,11 @@ struct om_error_handler : IErrorHandler
       {
         return has_;
       }
+
+    virtual error_list& errors()
+      {
+        return model_.errors();
+      }
     private:
       object_model& model_;
       bool          has_;
@@ -316,6 +367,11 @@ struct local_error_handler : IErrorHandler
     virtual bool has_errors()
       {
         return !errors_.empty();
+      }
+
+    virtual error_list& errors()
+      {
+        return errors_;
       }
     private:
       error_list errors_;
@@ -498,13 +554,32 @@ void object_model::update_document(const str& fname, om_response& response)
         ErrorHandler eh = response.ctx->errors();
         if (eh && eh->has_errors())
           {
-            //td: update error list
+            //add new errors, keep old for presentation sake
+            error_list& errors = eh->errors();
+            error_list::iterator it = errors.begin();
+            error_list::iterator nd = errors.end();
+
+            for(; it != nd; it++)
+			        {
+                it->loc.file = fname;
+                add_error(it->desc, &it->info, it->loc);
+			        }
+
             return;
           }
 
         Application app = doc->application(); assert(app);
-        XSSContext  ctx = app->context();
 
+        response.ctx->errors(ErrorHandler()); //let them go thru
+		    response.ctx->set_parent(app->context());
+		    response.ctx->source_file(fs::path(fname));
+		
+		    XSSContext  ctx = response.ctx;
+
+        //the code compiled successfully, lets clear errors
+        clear_file_errors(fname);
+
+        //then bind
         type_map::iterator it = response.data.classes.begin();
         type_map::iterator nd = response.data.classes.end();
 
@@ -514,7 +589,8 @@ void object_model::update_document(const str& fname, om_response& response)
             XSSType old_type = ctx->get_type(it->first);
             ctx->add_type(it->first, new_type, true); //td: missing on a lot of optimizations by ignoring old_type
 
-            new_type->bind(ctx);
+            XSSContext tctx = response.doc.context_by_identity(CTXID_TYPE, new_type); assert(tctx);
+            new_type->bind(tctx);
           }
 
         instance_map::iterator iit = response.data.instances.begin();
@@ -526,7 +602,8 @@ void object_model::update_document(const str& fname, om_response& response)
             XSSObject old_instance = ctx->resolve(iit->first, RESOLVE_INSTANCE);
             ctx->register_symbol(RESOLVE_INSTANCE, iit->first, new_instance, true); 
 
-            new_instance->bind(ctx);
+            XSSContext ictx = response.doc.context_by_identity(CTXID_TYPE, new_instance); assert(ictx);
+            new_instance->bind(ictx);
           }
 
 		    response.doc.application(doc->application());
@@ -1069,7 +1146,7 @@ void object_model::compile_xs(const str& text, XSSContext ctx, om_context& octx)
     bool        error = false;
     try
       {
-        compiler.compile_xs(text, results); //td: errors
+        compiler.compile_xs(text, results); 
       }
     catch(xs_error err)
       {
@@ -1599,7 +1676,46 @@ bool object_model::check_type(XSSType type, const str& type_name, XSSContext ctx
 
 void object_model::add_error(const str& desc, param_list* info, file_location& loc)
   {
+    error_list::iterator it = errors_.begin();
+    error_list::iterator nd = errors_.end();
+
+    for(; it != nd; it++)
+      {
+        if (it->desc == desc && loc.file == it->loc.file && loc.begin.line == it->loc.begin.line)
+          {
+            //avoid dups
+            it->loc.begin.column = loc.begin.column;
+            return;
+          }
+      }
+
     errors_.push_back(error_info(desc, info, loc));
+  }
+
+void object_model::visit_errors(const fs::path& fname, error_visitor* visitor)
+  {
+    error_list::iterator it = errors_.begin();
+    error_list::iterator nd = errors_.end();
+
+    for(; it != nd; it++)
+      {
+        if (it->loc.file == fname)
+          visitor->visit(*it);
+      }
+  }
+
+error_list& object_model::errors()
+  {
+    return errors_;
+  }
+
+void object_model::clear_file_errors(const str& fname)
+  {
+	  for(int i = errors_.size() - 1; i >= 0; i--)
+      {
+        if (errors_[i].loc.file == fname)
+			errors_.erase(errors_.begin() + i);
+      }
   }
 
 //object_model_thread

@@ -94,6 +94,11 @@ enum RESOLVE_ITEM
   };
 
 //context
+struct context_visitor
+  {
+    virtual void visit(RESOLVE_ITEM type, const str& id, variant value) = 0;  
+  };
+
 struct resolve_info
   {
     resolve_info():
@@ -176,6 +181,8 @@ class value_operation
       str             identifier();
       bool            is_constant();
       bool            bound();
+      RESOLVE_ITEM    resolve_id();
+      variant         resolve_value();
 
       void set_operation(VALUE_OPERATION op);
       void set_arguments(XSSArguments args);
@@ -240,6 +247,7 @@ class xss_object : public editable_object<xss_object>,
       //0.9.5
       void add_event_impl(XSSEvent ev, XSSCode code);
       bool context_resolve(const str& id, resolve_info& info);
+      void context_visit(context_visitor* visitor);
     public:
       struct query_info
         {
@@ -443,10 +451,33 @@ struct IContextCallback
     virtual void notify(XSSContext context) = 0;
   };
 
+//error handling
+struct error_info
+  {
+    error_info(const str _desc, param_list* _info, file_location& _loc):
+      desc(_desc),
+      info(_info? *_info : param_list()),
+      loc(_loc)
+      {
+      }
+
+    str           desc;
+    param_list    info;
+    file_location loc;
+  };
+
+typedef std::vector<error_info> error_list;
+
+struct error_visitor
+  {
+    virtual void visit(error_info& err) = 0;
+  };
+
 struct IErrorHandler
   {
-    virtual void add(const str& description, param_list* data, file_location& loc) = 0;
-    virtual bool has_errors()                                                      = 0;
+    virtual void        add(const str& description, param_list* data, file_location& loc) = 0;
+    virtual bool        has_errors()                                                      = 0;
+    virtual error_list& errors()                                                          = 0;
   };
 
 //code scope, this should not be public
@@ -523,9 +554,11 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       XSSContext     parent();
       void           set_parent(XSSContext ctx);
       void           identity(CONTEXT_IDENTITY id, variant idobj); 
-	  CONTEXT_IDENTITY identity();
+	    CONTEXT_IDENTITY identity();
       ErrorHandler   errors();
       void           errors(ErrorHandler handler); 
+			void           visit(context_visitor* visitor);
+	    variant        identity_value();
     public:
       variant resolve(const str& id, RESOLVE_ITEM item_type = RESOLVE_ANY);
       bool    resolve(const str& id, resolve_info& info);

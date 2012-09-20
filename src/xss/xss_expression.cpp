@@ -508,6 +508,16 @@ void value_operation::set_operation(VALUE_OPERATION op)
     op_ = op;
   }
 
+RESOLVE_ITEM value_operation::resolve_id()
+  {
+    return resolve_what_;	   
+  }
+
+variant value_operation::resolve_value()
+  {
+	  return resolve_value_;	   
+  }
+
 void value_operation::set_arguments(XSSArguments args)
   {
       args_ = args;

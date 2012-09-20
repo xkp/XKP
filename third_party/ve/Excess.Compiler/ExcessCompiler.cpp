@@ -299,6 +299,56 @@ void ExcessModel::updateChanges()
 	//}
 }
 
+List<ExcessCompletionItem^>^ ExcessModel::getCompletion(String^ filename, String^ text, int line, int col)
+{
+	List<ExcessCompletionItem^>^ result = gcnew List<ExcessCompletionItem^>();
+
+	std::vector<walk_info> info;
+	model_->walkContext(StringUtils::fromString(filename), StringUtils::fromString(text), line, col, info);
+
+	std::vector<walk_info>::iterator it = info.begin();
+	std::vector<walk_info>::iterator nd = info.end();
+	for(; it != nd; it++)
+		result->Add(gcnew ExcessCompletionItem(StringUtils::toString(it->symbol), "", getCompletionType(it->type)));
+	return result;
+}
+
+List<ExcessErrorInfo^>^	ExcessModel::getErrors(String^ filename)
+{
+	std::vector<xss_error_info> errors;
+	model_->walkErrors(StringUtils::fromString(filename), errors);
+
+	//www
+	List<ExcessErrorInfo^>^ result = gcnew List<ExcessErrorInfo^>();
+	std::vector<xss_error_info>::iterator it = errors.begin();
+	std::vector<xss_error_info>::iterator nd = errors.end();
+	for(; it != nd; it++)
+		result->Add(gcnew ExcessErrorInfo(StringUtils::toString(it->desc), it->sline, it->scol, it->eline, it->ecol));
+	return result;
+}
+
+CompletionType ExcessModel::getCompletionType(int id)
+{
+	const int RESOLVE_INSTANCE	= 1;
+    const int RESOLVE_METHOD	= 2;
+    const int RESOLVE_PROPERTY	= 3;
+    const int RESOLVE_EVENT		= 4;
+    const int RESOLVE_VARIABLE	= 7;
+    const int RESOLVE_TYPE		= 8;
+
+	switch(id)
+	{
+		case RESOLVE_INSTANCE:	return CompletionType::Instance;
+		case RESOLVE_METHOD:	return CompletionType::Method;
+		case RESOLVE_PROPERTY:	return CompletionType::Property;
+		case RESOLVE_EVENT:		return CompletionType::Event;
+		case RESOLVE_VARIABLE:	return CompletionType::Variable;
+		case RESOLVE_TYPE:		return CompletionType::Type;
+	}
+
+	return CompletionType::Type;
+}
+
 }
 
 
