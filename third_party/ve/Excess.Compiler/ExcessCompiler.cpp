@@ -221,9 +221,9 @@ void ExcessModel::unloadProject(Guid project)
 {
 }
 
-bool ExcessModel::buildProject(Guid project)
+bool ExcessModel::buildProject(String^ filename)
 {
-	return false;
+	return model_->buildProject(StringUtils::fromString(filename));
 }
 
 bool ExcessModel::buildAll()

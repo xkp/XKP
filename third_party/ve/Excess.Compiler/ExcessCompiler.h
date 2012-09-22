@@ -138,7 +138,7 @@ namespace ExcessCompiler {
 		public:	
 			int  loadProject(String^ filename, String^ path);
 			void unloadProject(Guid project);
-			bool buildProject(Guid project);
+			bool buildProject(String^ filename);
 			bool buildAll();
             void addInclude(String^ projectPath, String^ def, String^ src);
             void notifyChange(String^ filename, String^ contents, int line, int col, int oldEndLine, int oldEndCol, int newEndLine, int newEndCol);

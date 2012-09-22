@@ -6,7 +6,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>$safeprojectname$</RootNamespace>
     <AssemblyName>$safeprojectname$</AssemblyName>
-    <MainFile>ConsoleApp.xs</MainFile>
+    <MainFile>ConsoleApp.project.xml</MainFile>
     <TargetFrameworkVersion>v$targetframeworkversion$</TargetFrameworkVersion>
     <TargetPlatform>v4</TargetPlatform>
   </PropertyGroup>

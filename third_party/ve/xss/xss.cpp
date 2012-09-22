@@ -25,20 +25,18 @@ class xss_object_model : public IObjectModel
 	public:
 		virtual int load(const std::string& filename)
 		{
-			fs::path filepath     = filename;
-			fs::path project_path = filepath.parent_path();
+			Application app = load_project(filename);
+			model_->register_app(filename, app);
 
-			param_list args;
-			DataReader prj = model_->filesystem()->load_data(filepath);
-			Application app = model_->load(prj, args, project_path);
-
-			apps_.push_back(app);
+			apps_.push_back(filename);
 			return apps_.size() - 1;
 		}
 		
 		virtual void addIncludes(int appId, const std::string& def_file, const std::string& src_file)
 		{
-			model_->add_include(apps_[appId], def_file, src_file);
+			Application app = model_->get_application(apps_[appId]);
+			if (app)
+				model_->add_include(app, def_file, src_file);
 		}
 
 		virtual bool notifyChange(const std::string& fname, int line, int col, int oldEndLine, int oldEndCol, int newEndLine, int newEndCol)
@@ -69,7 +67,9 @@ class xss_object_model : public IObjectModel
 
 		virtual void queueChange(const std::string& fname, const std::string& content)
 		{
-			thread_->compile_request(content, fname);
+			Application app = model_->app_by_file(fname);
+			if (app)
+				thread_->compile_request(content, fname, app);
 		}
 
 		struct walker : context_visitor
@@ -185,10 +185,23 @@ class xss_object_model : public IObjectModel
 			error_walker ew(errors);
 			model_->visit_errors(fname, &ew);
 		}
+
+		virtual bool buildProject(const std::string& fname)
+		{
+			//td: cache, this will probably wait until 
+			Application old_app = model_->remove_app(fname);
+			
+			Application app = load_project(fname);
+			if (!app)
+				return false;	
+			
+			model_->register_app(fname, app);
+		}
+
 	private:
 		ObjectModel				 model_;
 		ObjectModelThread		 thread_;
-		std::vector<Application> apps_;
+		std::vector<std::string> apps_;
 
 		std::string find_expression(const std::string& text)
 		{
@@ -218,6 +231,18 @@ class xss_object_model : public IObjectModel
 				if (!finding_last)
 					result.insert(result.begin(), c); 
 			}
+
+			return result;
+		}
+
+		Application load_project(const std::string& filename)
+		{
+			fs::path filepath     = filename;
+			fs::path project_path = filepath.parent_path();
+
+			param_list  args;
+			DataReader  prj	   = model_->filesystem()->load_data(filepath);
+			Application result = model_->load(prj, args, project_path);
 
 			return result;
 		}

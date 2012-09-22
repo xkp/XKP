@@ -146,7 +146,10 @@ namespace Excess.CompilerTasks
 		/// <returns></returns>
 		public override bool Execute()
 		{
+            string filePath = Path.Combine(projectPath, MainFile);
+
             ExcessModelService service = ExcessModelService.getInstance();
+            service.Model.buildProject(filePath);
 
 			Log.LogMessage(MessageImportance.Normal, "Excess Compilation Task");
 
