@@ -1,0 +1,16 @@
+<VSTemplate Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
+  <TemplateData>
+    <DefaultName>wclass.xs</DefaultName>
+    <Name>WPF Class</Name>
+    <Description>An empty WPF class definition</Description>
+    <Icon>WPFClass.ico</Icon>
+    <ProjectType>Excess</ProjectType>
+    <SortOrder>20</SortOrder>
+  </TemplateData>
+  <TemplateContent>
+    <References />
+    <ProjectItem SubType="Form" TargetFileName="$fileinputname$.xaml" ReplaceParameters="true">wclass.xaml</ProjectItem>
+    <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xs" ReplaceParameters="true">wclass.xs</ProjectItem>
+    <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xml" ReplaceParameters="true">wclass.xml</ProjectItem>
+  </TemplateContent>
+</VSTemplate>
