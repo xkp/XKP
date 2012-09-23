@@ -16,20 +16,22 @@ namespace boost {
 namespace xkp{
 
 //forwards
-class idiom;
-class application;
-class object_model;
-class object_model_thread;
-class idiom;
+class  idiom;
+class  application;
+class  object_model;
+class  object_model_thread;
+class  idiom;
+struct document;
 
 class ILanguageFactory;
 class IFileSystem;
 
 //references
-typedef reference<idiom>			   Idiom;
-typedef reference<application>		   Application;
-typedef reference<object_model>		   ObjectModel;
+typedef reference<idiom>			         Idiom;
+typedef reference<application>		     Application;
+typedef reference<object_model>		     ObjectModel;
 typedef reference<object_model_thread> ObjectModelThread;
+typedef reference<document>            Document;
 
 typedef reference<ILanguageFactory> LanguageFactory;
 typedef reference<IFileSystem>      FileSystem;
@@ -60,6 +62,10 @@ typedef std::map<str, Idiom> idiom_list;
 typedef std::vector<XSSObject>   instance_list; //td: !!! instances
 typedef std::map<str, XSSObject> instance_map;
 
+typedef std::map<fs::path, document> document_map;
+
+typedef std::map<fs::path, Application> application_list;
+
 class idiom
   {
     public:
@@ -87,6 +93,12 @@ class application
       code_context& exec_context();
       XSSContext    context();
       fs::path      path();
+      document*     create_document(fs::path fname, XSSContext ctx);
+      document*     get_document(fs::path path);
+      error_list&   errors();
+      void          add_error(const str& desc, param_list* info, file_location& loc);
+      void          visit_errors(const fs::path& fname, error_visitor* visitor);
+      void          clear_file_errors(const fs::path& fname);
     private:
       fs::path     renderer_;
       fs::path     output_;
@@ -94,24 +106,24 @@ class application
       code_context code_ctx_;
       XSSObject    app_; 
       fs::path     path_;
+
+      document_map documents_;
+      error_list   errors_;
   };
 
 struct document
   {
     public: 
       document();
-      document(Application app);
+      document(XSSContext ctx);
     public: 
       XSSContext  find_context(int line, int column);
       XSSContext  context_by_identity(CONTEXT_IDENTITY id, variant value);
       void        add(XSSContext context);
 		  XSSContext  changed(int line, int col, int oldEndLine, int oldEndCol, int newEndLine, int newEndCol);	
-      Application application(); 
-      void        application(Application app);
     private:
       fs::path    path_;
       XSSContext  ctx_;
-      Application app_;
 
       struct snap_shot
         {
@@ -139,8 +151,6 @@ struct document
 
 	    void synch_extents();
 };
-
-typedef std::map<fs::path, document> document_map;
 
 //lazy eval
 enum FIXUP_TYPE
@@ -178,7 +188,8 @@ struct om_context
     instance_map instances;
     fixup_list   fixup;
     context_map  contexts; 
-    
+    Application  application; 
+
     document*    doc;
   };
 
@@ -211,12 +222,15 @@ class object_model
       object_model(FileSystem fs, LanguageFactory languages);
     public:
       Application load(DataReader project, param_list& args, fs::path base_path);
+			void        register_app(const fs::path& fname, Application app);
+      Application remove_app(const fs::path& fname);
+      Application get_application(const str& fname);
 	    document*   get_document(const str& fname);
 	    void		    update_document(const str& fname, om_response& data);
       void        add_include(Application app, const str& def, const str& src);
       void        add_error(const str& desc, param_list* info, file_location& loc);
       void        visit_errors(const fs::path& fname, error_visitor* visitor);
-      error_list& errors();
+      Application app_by_file(const fs::path& path);
     public:
 	    FileSystem filesystem() {return fs_;}	
     private:
@@ -248,14 +262,13 @@ class object_model
       void            read_include_singleton(DataEntity de, XSSContext ctx, om_context& octx);
     private:
       //document model
-      document_map documents_;
-      error_list   errors_;
+      application_list apps_;
 
-      document& create_document(Application app, const str& src_file, XSSContext ctx);
-      void      fix_it_up(XSSContext ctx, om_context& octx);
-      void      bind_it_up(XSSContext ctx, om_context& octx);
-      bool      check_type(XSSType type, const str& type_name, XSSContext ctx);
-      void      clear_file_errors(const str& fname);
+      document* create_document(Application app, const str& src_file, XSSContext ctx);
+      void fix_it_up(XSSContext ctx, om_context& octx);
+      void bind_it_up(XSSContext ctx, om_context& octx);
+      bool check_type(XSSType type, const str& type_name, XSSContext ctx);
+      void clear_file_errors(const str& fname);
   };
 
 class object_model_thread
@@ -263,7 +276,7 @@ class object_model_thread
     public:
       object_model_thread() : id_(0), stopped_(true) {}
     public:
-      int  compile_request(const str& text, const str& id);
+      int  compile_request(const str& text, const str& id, Application app);
       bool get(const str& id, om_response& result);
       bool fetch(str& id, om_response& result);
       void run();
@@ -279,16 +292,18 @@ class object_model_thread
             {
             }
 
-          om_request(const str& _id, const str& _text, int _response_id):
+          om_request(const str& _id, const str& _text, int _response_id, Application _app):
             id(_id),
             text(_text),
-            response_id(response_id)
+            response_id(response_id),
+			app(_app)
             {
             }
             
           str         id;
           str         text;
           int         response_id;
+		  Application app;
         };
       
       typedef std::vector<om_request> request_list;

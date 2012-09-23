@@ -119,6 +119,66 @@ fs::path application::path()
     return path_;
   }
 
+document* application::create_document(fs::path fname, XSSContext ctx)
+  {
+    assert(documents_.find(fname) == documents_.end());
+    documents_.insert(std::pair<fs::path, document>(fname, document(ctx)));
+    return get_document(fname);
+  }
+
+document* application::get_document(fs::path path)
+  {
+    document_map::iterator it = documents_.find(path);
+    if (it != documents_.end())
+      return &it->second;
+
+    return null;
+  }
+
+error_list& application::errors()
+  {
+    return errors_;
+  }
+
+void application::add_error(const str& desc, param_list* info, file_location& loc)
+  {
+    error_list::iterator it = errors_.begin();
+    error_list::iterator nd = errors_.end();
+
+    for(; it != nd; it++)
+      {
+        if (it->desc == desc && loc.file == it->loc.file && loc.begin.line == it->loc.begin.line)
+          {
+            //avoid dups
+            it->loc.begin.column = loc.begin.column;
+            return;
+          }
+      }
+
+    errors_.push_back(error_info(desc, info, loc));
+  }
+
+void application::visit_errors(const fs::path& fname, error_visitor* visitor)
+  {
+    error_list::iterator it = errors_.begin();
+    error_list::iterator nd = errors_.end();
+
+    for(; it != nd; it++)
+      {
+        if (it->loc.file == fname)
+          visitor->visit(*it);
+      }
+  }
+
+void application::clear_file_errors(const fs::path& fname)
+  {
+	  for(int i = errors_.size() - 1; i >= 0; i--)
+      {
+        if (errors_[i].loc.file == fname)
+			    errors_.erase(errors_.begin() + i);
+      }
+  }
+
 //document
 void document::add(XSSContext context)
   {
@@ -132,18 +192,8 @@ void document::synch_extents()
     snap_shots::iterator nd = items_.end();
     for(; it != nd; it++)
       {
-		it->context->set_extents(it->begin, it->end);
-	  }
-  }
-
-Application document::application()
-  {
-    return app_;
-  }
-
-void document::application(Application app)
-  {
-    app_ = app;
+		    it->context->set_extents(it->begin, it->end);
+	    }
   }
 
 XSSContext document::changed(int line, int col, int oldEndLine, int oldEndCol, int newEndLine, int newEndCol)
@@ -240,8 +290,8 @@ document::document()
   {
   }
 
-document::document(Application app):
-  app_(app)
+document::document(XSSContext ctx):
+  ctx_(ctx)
   {
   }
 
@@ -331,30 +381,27 @@ XSSContext document::context_by_identity(CONTEXT_IDENTITY id, variant value)
 
 struct om_error_handler : IErrorHandler
   {
-    om_error_handler(object_model& model):
-      model_(model),
-      has_(false)
+    om_error_handler(Application app):
+      app_(app)
       {
       }
     
     virtual void add(const str& description, param_list* data, file_location& loc)
       {
-        has_ = true;
-        model_.add_error(description, data, loc);
+        app_->add_error(description, data, loc);
       }
 
     virtual bool has_errors()
       {
-        return has_;
+        return !app_->errors().empty();
       }
 
     virtual error_list& errors()
       {
-        return model_.errors();
+        return app_->errors();
       }
     private:
-      object_model& model_;
-      bool          has_;
+      Application app_;
   };
 
 struct local_error_handler : IErrorHandler
@@ -394,7 +441,7 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
     XSSContext global = lang->create_context();
     global->set_path(base_path);
 
-    ErrorHandler eh(new om_error_handler(*this));
+    ErrorHandler eh(new om_error_handler(result));
     global->errors(eh);
 
     //initialize the execution context on which the xss files will run, 
@@ -497,8 +544,35 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
     return result;
   }
 
+void object_model::register_app(const fs::path& fname, Application app)
+  {
+    apps_.insert(std::pair<fs::path, Application>(fname, app));
+  }
+
+Application object_model::remove_app(const fs::path& fname)
+  {
+    application_list::iterator it = apps_.find(fname);
+    if (it != apps_.end())
+      {
+		Application result = it->second;
+        apps_.erase(it);
+        return result;
+      }
+
+    return Application();
+  }
+
+Application object_model::get_application(const str& fname)
+  {
+    application_list::iterator it = apps_.find(fname);
+    if (it != apps_.end())
+      return it->second;
+
+    return Application();
+  }
+
 fs::path relativePath( const fs::path &path, const fs::path &relative_to )
-{
+  {
     // create absolute paths
     fs::path p = path;
     fs::path r = relative_to;
@@ -534,19 +608,29 @@ fs::path relativePath( const fs::path &path, const fs::path &relative_to )
     }
 
     return result;
-}
+  }
 
 document* object_model::get_document(const str& fname)
   {
-    document_map::iterator it = documents_.find(fname);
-    if (it != documents_.end())
-      return &it->second;
+    fs::path path(fname);
+    if (!fs::exists(path))
+      return null;
+
+    application_list::iterator it = apps_.begin();
+    application_list::iterator nd = apps_.end();
+
+    for(; it != nd; it++)
+      {
+        document* result = it->second->get_document(path);
+        if (result)
+          return result;
+      }
+
     return null;
   }
 
 void object_model::update_document(const str& fname, om_response& response)
   {
-
 	  document* doc = get_document(fname);
 	  if (doc)
 	    {
@@ -568,7 +652,7 @@ void object_model::update_document(const str& fname, om_response& response)
             return;
           }
 
-        Application app = doc->application(); assert(app);
+        Application app = response.data.application; assert(app);
 
         response.ctx->errors(ErrorHandler()); //let them go thru
 		    response.ctx->set_parent(app->context());
@@ -606,7 +690,6 @@ void object_model::update_document(const str& fname, om_response& response)
             new_instance->bind(ictx);
           }
 
-		    response.doc.application(doc->application());
 		    *doc = response.doc;
 	    }
   }
@@ -778,10 +861,10 @@ void object_model::compile_include(Application app, const str& def_file, const s
         ctx->source_file(src_path);
 
         str       code = fs_->load_file(src_path);
-        document& doc  = create_document(app, src_file, ctx);
+        document* doc  = create_document(app, src_file, ctx);
         
         assert(!octx.doc);
-        octx.doc = &doc;
+        octx.doc = doc;
         compile_xs(code, ctx, octx);
         octx.doc = null;
 			}
@@ -1550,16 +1633,18 @@ void object_model::read_include_singleton(DataEntity de, XSSContext ctx, om_cont
       }
   }
 
-document& object_model::create_document(Application app, const str& src_file, XSSContext ctx)
+document* object_model::create_document(Application app, const str& src_file, XSSContext ctx)
   {
     fs::path src = fs_->locate(src_file, ctx->path());
-    document_map::iterator it = documents_.find(src);
-    if (it != documents_.end())
-      return it->second;
+    if (!fs::exists(src))
+      {
+        param_list error;
+        error.add("file", src_file);
+        ctx->error("File not found", &error, file_position(), file_position());
+        return null;
+      }
 
-    documents_.insert(std::pair<fs::path, document>(src, document(app)));
-    it = documents_.find(src);
-    return it->second;
+    return app->create_document(src, ctx);
   }
 
 void object_model::fix_it_up(XSSContext ctx, om_context& octx)
@@ -1674,52 +1759,50 @@ bool object_model::check_type(XSSType type, const str& type_name, XSSContext ctx
     return false;
   }
 
-void object_model::add_error(const str& desc, param_list* info, file_location& loc)
+Application object_model::app_by_file(const fs::path& path)
   {
-    error_list::iterator it = errors_.begin();
-    error_list::iterator nd = errors_.end();
+    application_list::iterator it = apps_.begin();
+    application_list::iterator nd = apps_.end();
 
     for(; it != nd; it++)
       {
-        if (it->desc == desc && loc.file == it->loc.file && loc.begin.line == it->loc.begin.line)
-          {
-            //avoid dups
-            it->loc.begin.column = loc.begin.column;
-            return;
-          }
+        document* doc = it->second->get_document(path);
+        if (doc)
+          return it->second;
       }
+    return Application();
+  }
 
-    errors_.push_back(error_info(desc, info, loc));
+void object_model::add_error(const str& desc, param_list* info, file_location& loc)
+  {
+    Application app = app_by_file(loc.file); assert(app);
+    app->add_error(desc, info, loc);
   }
 
 void object_model::visit_errors(const fs::path& fname, error_visitor* visitor)
   {
-    error_list::iterator it = errors_.begin();
-    error_list::iterator nd = errors_.end();
+    application_list::iterator it = apps_.begin();
+    application_list::iterator nd = apps_.end();
 
     for(; it != nd; it++)
       {
-        if (it->loc.file == fname)
-          visitor->visit(*it);
+        it->second->visit_errors(fname, visitor);
       }
   }
 
-error_list& object_model::errors()
-  {
-    return errors_;
-  }
+//error_list& object_model::errors()
+//  {
+//    return errors_;
+//  }
 
 void object_model::clear_file_errors(const str& fname)
   {
-	  for(int i = errors_.size() - 1; i >= 0; i--)
-      {
-        if (errors_[i].loc.file == fname)
-			errors_.erase(errors_.begin() + i);
-      }
+    Application app = app_by_file(fname); assert(app);
+    app->clear_file_errors(fname);
   }
 
 //object_model_thread
-int object_model_thread::compile_request(const str& text, const str& id)
+int object_model_thread::compile_request(const str& text, const str& id, Application app)
   {
     boost::mutex::scoped_lock l(mutex_);
     
@@ -1738,7 +1821,7 @@ int object_model_thread::compile_request(const str& text, const str& id)
           }
       }
 
-    requests_.push_back(om_request(id, text, result));
+    requests_.push_back(om_request(id, text, result, app));
     return result;
   }
 
@@ -1805,8 +1888,9 @@ void object_model_thread::do_work()
               str        code = work.text;
               document   doc;
               om_context octx;
-
               octx.doc = &doc;
+			  octx.application = work.app;
+
               XSSContext ctx(new xss_context(CTXID_FILE, work.id, XSSContext()));
               ctx->errors(ErrorHandler(new local_error_handler));
 
