@@ -6,7 +6,7 @@
 <body>
 <style type="text/css">
 	body{
-	background:black;
+	background:#356;
 	}
 </style>
             <script type="text/javascript" src="../js/resig.js"></script>
@@ -23,7 +23,6 @@
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 			var renderer = new THREE.WebGLRenderer( { antialias: false } );
 		var ui_;
-		var model_src = "model/monster/monster.dae";
 var canvas_position = {x:0, y:0};
 var g_elapsed;
 var g_delta;	
@@ -50,9 +49,8 @@ application.events = new ev.EventHolder();
                 global_package.add_item(
 		{
 		id:				"model_1",
-		resource_type:	RESOURCE_COLLADA_MODEL,
-		src:			"null",
-		runtime_src:	model_src,
+		resource_type:	RESOURCE_JSON_MODEL,
+		src:			"model/flamingo/flamingo.js",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -65,7 +63,7 @@ application.events = new ev.EventHolder();
 					model_1 = streamer.get_resource("model_1");
 				});
 			var child_ = {};
-			child_.type_ = 'collada_skin';
+			child_.type_ = 'json_animation';
 			for(var i = 0; i < global_package.items.length; i++)
 			{
 				if(global_package.items[i].id == "model_1")
@@ -74,17 +72,17 @@ application.events = new ev.EventHolder();
 				}					
 			}	
 				var temp = {};
-				temp.type_ = 'skin';
+				temp.type_ = 'anim';
 				temp.start_frame = 0;
-				temp.end_frame = 29;
-				temp.time = 1;
+				temp.end_frame = 13;
+				temp.time = 5;
 				temp.loop = true;
 				temp.parent = 'model_skin';
 				for(var i = 0; i < global_package.items.length; i++)
 				{
 					if(global_package.items[i].id == "model_1")
 					{
-						global_package.items[i].children['walk'] = temp;
+						global_package.items[i].children['fly'] = temp;
 					}
 				}
 		global_package.add_item({
@@ -116,11 +114,11 @@ manager.events.dispatch("update", [g_delta, g_elapsed]);
 				set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var material_wireframe;var camera_1;var a_ligth;var d_ligth_1;var d_ligth_2;var light1;var light2;var light3;var monster_model;var plane_1;
+var material_wireframe;var camera_1;var a_ligth;var d_ligth_1;var bird_model;
 threejs_load_resources(manager, function()
 {
 material_wireframe = new THREE.MeshBasicMaterial({
-color:grey,
+color:blanchedalmond,wireframe:true,
 	});
 			material_wireframe.manager = manager;
 		    camera_1 = 
@@ -132,77 +130,55 @@ color:grey,
 	    manager.scene.add(a_ligth);
 			a_ligth.manager = manager;
 	    d_ligth_1 = 
-	    new THREE.DirectionalLight(ivory, 2, 0, null) ;
+	    new THREE.DirectionalLight(16772829, 1, 0, null) ;
 	    manager.scene.add(d_ligth_1);
 			d_ligth_1.manager = manager;
-	    d_ligth_2 = 
-	    new THREE.DirectionalLight(skyblue, 2, 0, null) ;
-	    manager.scene.add(d_ligth_2);
-			d_ligth_2.manager = manager;
-	    light1 = 
-	    new THREE.PointLight(Yellow, 4, 0) ;
-	    manager.scene.add(light1);
-			light1.manager = manager;
-	    light2 = 
-	    new THREE.PointLight(Red, 4, 0) ;
-	    manager.scene.add(light2);
-			light2.manager = manager;
-	    light3 = 
-	    new THREE.PointLight(Green, 4, 0) ;
-	    manager.scene.add(light3);
-			light3.manager = manager;
-		monster_model = clone3jsObject( manager.streamer.get_resource('model_1').data, manager );	
-		manager.scene.add(monster_model);
-		monster_model.events = new ev.EventHolder();			
-			monster_model.manager = manager;
-	    plane_1_plane = new THREE.PlaneGeometry(10000, 10000, 100, 100) ;
-	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
-	    manager.scene.add(plane_1);
-		plane_1.events = new ev.EventHolder();
-			plane_1.manager = manager;
-            set_material_alpha(material_wireframe, 20);
-            manager.events.addListener('update', function(){if(camera_1)camera_1.lookAt(scene.position)});
+		bird_model = clone3jsObject( manager.streamer.get_resource('model_1').data, manager );	
+		manager.scene.add(bird_model);
+		bird_model.events = new ev.EventHolder();			
+			bird_model.manager = manager;
+            manager.events.addListener('update', function(){if(camera_1)camera_1.lookAt(bird_model.position)});
             camera_1.position.z = 1000;
-            d_ligth_1.position.y = -3000;
-            d_ligth_1.position.z = 3000;
-            d_ligth_2.position.y = 3000;
-            d_ligth_2.position.z = 3000;
-            monster_model.position.x = -350;
-            monster_model.position.y = -350;
-            monster_model.position.z = -350;
-            monster_model.scale.x = 0.5;
-            monster_model.scale.y = 0.5;
-            monster_model.scale.z = 0.5;
-            set_rotation_x(monster_model.rotation, -90);
-            plane_1.position.y = -500;
+            d_ligth_1.position.y = -70;
+            d_ligth_1.position.z = 100;
+            bird_model.position.x = -110;
+            bird_model.position.y = -350;
+            bird_model.position.z = -350;
+            bird_model.scale.x = 10;
+            bird_model.scale.y = 10;
+            bird_model.scale.z = 10;
             application.mouse_x = null;
             application.mouse_y = null;
+            application.stopped = false;
 	application.events.addListener("init", function()
 	{    
-		var model_src = "model/monster/monster.dae";
-monster_model.model_skin.start("walk");
+		bird_model.model_skin.start("fly");
 	}
 	);
-	application.events.addListener("update", function(delta,elapsed)
+	application.events.addListener("update", function()
 	{    
-		var time = elapsed * 0.000500000024;
-camera_1.position.x = camera_1.position.x + (application.mouse_x - camera_1.position.x) * 0.0500000007;
+		camera_1.position.x = camera_1.position.x + (application.mouse_x - camera_1.position.x) * 0.0500000007;
 camera_1.position.y = camera_1.position.y + (-application.mouse_y - camera_1.position.y) * 0.0500000007;
-light1.position.x = Math.sin(time * 7) * 3009;
-light1.position.y = Math.cos(time * 5) * 4000;
-light1.position.z = Math.cos(time * 3) * 3009;
-light2.position.x = Math.sin(time * 3) * 3009;
-light2.position.y = Math.cos(time * 5) * 4000;
-light2.position.z = Math.cos(time * 7) * 3009;
-light3.position.x = Math.sin(time * 7) * 3009;
-light3.position.y = Math.cos(time * 3) * 4000;
-light3.position.z = Math.cos(time * 5) * 3009;
 	}
 	);
 	application.events.addListener("mousemove", function(x,y)
 	{    
 		application.mouse_x = x - app_width / 2;
 application.mouse_y = y - app_height / 2;
+	}
+	);
+	application.events.addListener("click", function()
+	{    
+		if (!application.stopped)
+{
+bird_model.model_skin.stop("fly");
+application.stopped = true;
+}
+else
+{
+bird_model.model_skin.start("fly");
+application.stopped = false;
+}
 	}
 	);
 var event_manager = new ev.ThreeEventManager();

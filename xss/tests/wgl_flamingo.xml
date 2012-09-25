@@ -1,0 +1,33 @@
+<application src="wgl_flamingo.xs" title="Test 3D" background="#356">
+
+	<resources>		
+		<json_model id="model_1" src="model/flamingo/flamingo.js">
+			<json_animation id="model_skin">	
+				<anim id="fly" start_frame="0" end_frame="13" in="5" loop="true"/>
+			</json_animation>
+		</json_model>
+	</resources>
+	<materials>	
+		<basic_material id="material_wireframe" color="blanchedalmond" wireframe="true"/>		
+	</materials>
+	
+	<scene>			
+		
+		<camera id="camera_1" fov="75" aspect="1.5" near="1" far="10000" look_at="bird_model.position">
+			<position z="1000"/>            
+		</camera>
+		
+		<ambient_light id="a_ligth" color="2232576"/>
+		
+		<directional_light id="d_ligth_1" color="16772829" intensity="1">			
+            <position y="-70" z="100"/>            
+		</directional_light>
+				
+		<model id="bird_model" src="model_1">
+			<position x="-110"  y="-350" z="-350"/>	
+			<scale x="10" y="10" z="10"/>
+		</model>			
+				
+	</scene>
+	
+</application>
