@@ -47,6 +47,51 @@ const int operator_precedence[] =
     1,  //"{}",   //op_object
   };
 
+//td: !!! stop duplicating this array
+const char* operator_str[] =
+  {
+    "++",   //op_inc,
+    "--",   //op_dec,
+    "&",    //op_ref,
+    "+",    //op_unary_plus,
+    "-",    //op_unary_minus,
+    "!",    //op_not,
+    "*",    //op_mult,
+    "/",    //op_divide,
+    "%",    //op_mod,
+    "as",   //op_typecast,
+    "is",   //op_typecheck,
+    "has",  //op_namecheck,
+    "+",    //op_plus,
+    "-",    //op_minus,
+    ">>",   //op_shift_right,
+    "<<",   //op_shift_left,
+    ">>=",  //op_shift_right_equal,
+    "<<=",  //op_shift_left_equal,
+    "==",   //op_equal,
+    "!=",   //op_notequal,
+    ">",    //op_gt,
+    "<",    //op_lt,
+    ">=",   //op_ge,
+    "<=",   //op_le,
+    "&&",   //op_and,
+    "||",   //op_or,
+    "=",    //op_assign,
+    "+=",   //op_plus_equal,
+    "-=",   //op_minus_equal,
+    "*=",   //op_mult_equal,
+    "/=",   //op_div_equal,
+    ".",    //op_dot,
+    ".",    //op_dot_call
+    "[]",   //op_index,
+    "",     //op_call,
+    "",     //op_func_call
+    "",     //op_array,
+    "",     //op_parameter
+    "",     //op_instantiate
+    "",     //op_object
+  };
+
 const str SExpression("xss-expression");
 
 const str SAssignOperatorOnlyTop("Assign operators can only be used as the base of an expression");
@@ -758,6 +803,16 @@ XSSType xss_value::type()
     return type_;
   }
 
+bool xss_value::bound()
+  {
+    return state_ == BS_BOUND;
+  }
+
+value_operations& xss_value::operations()
+  {
+    return operations_;
+  }
+
 void xss_value::add_operation(value_operation& op)
   {
     operations_.push_back(op);
@@ -772,6 +827,31 @@ bool xss_value::is_constant()
   {
     value_operation& last = get_last();
     return last.is_constant();
+  }
+
+variant xss_value::constant()
+  {
+    value_operation& last = get_last();
+    return last.constant();
+  }
+
+XSSValue xss_value::path()
+  { 
+    if (operations_.size() <= 1)
+      return XSSValue();
+
+    XSSValue result(new xss_value(begin_, end_));
+    result->state_ = state_;
+
+    value_operations::iterator it = operations_.begin();      
+    value_operations::iterator nd = operations_.end() - 1;      
+
+    for(; it != nd; it++)
+      {
+        result->add_operation(*it);
+      }
+
+    return result;
   }
 
 //xss_expression
@@ -837,6 +917,36 @@ bool xss_expression::is_constant()
     if (!value_)
       return false;
     return value_->is_constant();
+  }
+
+operator_type xss_expression::op()
+  {
+    return op_;
+  }
+
+bool xss_expression::is_assign()
+  {
+    return is_assign_;
+  }
+
+XSSExpression xss_expression::left()
+  {
+    return arg1_;
+  }
+
+XSSExpression xss_expression::right()
+  {
+    return arg2_;
+  }
+
+XSSExpression xss_expression::third()
+  {
+    return arg3_;
+  }
+
+XSSOperator xss_expression::xop()
+  {
+    return xop_;
   }
 
 XSSValue xss_expression::value()
@@ -906,6 +1016,11 @@ file_position& xss_code::begin()
 file_position& xss_code::end()
   {
     return ctx_->end();
+  }
+
+statement_list& xss_code::statements()
+  {
+    return statements_;
   }
 
 //signature_item
@@ -1082,6 +1197,11 @@ bool xss_operator::match(XSSType type)
     return false;
   }
 
+InlineRenderer xss_operator::renderer()
+  {
+    return renderer_;
+  }
+
 //xss_expression_utils
 XSSExpression xss_expression_utils::constant_expression(variant value)
   {
@@ -1127,3 +1247,15 @@ bool xss_expression_utils::is_assignment(operator_type op)
       }
     return false;
   }
+
+//operator_utils
+int operator_utils::precedence(operator_type op)
+  {
+    return operator_precedence[op];
+  }
+
+str operator_utils::to_string(operator_type op)
+  {
+    return str(operator_str[op]);
+  }
+

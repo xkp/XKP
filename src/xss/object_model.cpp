@@ -554,7 +554,7 @@ Application object_model::remove_app(const fs::path& fname)
     application_list::iterator it = apps_.find(fname);
     if (it != apps_.end())
       {
-		Application result = it->second;
+		    Application result = it->second;
         apps_.erase(it);
         return result;
       }
@@ -1004,10 +1004,10 @@ struct object_visitor : xs_visitor
           fixup_.push_back(fixup_data(FIXUP_RETURN_TYPE, fixup_return_type(info.type, result)));
 
         XSSSignature sig  = xss_code_utils::compile_arg_list(info.args);
-        result->set_signature(sig);
+        result->signature(sig);
 
         XSSCode code = xss_code_utils::compile_code(info.cde, callback_); 
-        result->set_code(code);
+        result->code(code);
       }
 
     virtual void event_(xs_event& info)
@@ -1457,14 +1457,14 @@ XSSProperty object_model::read_property(DataEntity de, Idiom idiom, XSSContext c
     if (ge)
       {
         InlineRenderer getter = read_inline_renderer(ge);
-        result->set_getter(getter);
+        result->getter(getter);
       }
 
     DataEntity se = de->get("set");
     if (se)
       {
         InlineRenderer setter = read_inline_renderer(se);
-        result->set_setter(setter);
+        result->setter(setter);
       }
 
     return result;
@@ -1496,11 +1496,11 @@ XSSMethod object_model::read_method(DataEntity de, Idiom idiom, XSSContext ctx)
     if (ce)
       {
         InlineRenderer caller = read_inline_renderer(ce);
-        result->set_caller(caller);
+        result->renderer(caller);
       }
 
     XSSSignature sig = read_signature(de, idiom, ctx);
-    result->set_signature(sig);
+    result->signature(sig);
 
     return result;
   }

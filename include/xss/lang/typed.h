@@ -1,0 +1,45 @@
+
+#ifndef XSS_TYPED_LANG_HH
+#define XSS_TYPED_LANG_HH
+
+#include <xss/xss_context.h>
+
+namespace xkp{
+
+//td: !!! base language
+struct typed_lang : ILanguage
+  {
+    virtual XSSContext create_context();
+
+    //generalities
+    virtual bool render_code(XSSCode code, XSSContext ctx, std::ostringstream& result);
+    virtual bool render_expression(XSSExpression expr, XSSContext ctx, std::ostringstream& result); 
+    virtual bool render_value(XSSValue value, XSSContext ctx, std::ostringstream& result);
+    
+    //code rendering
+    virtual bool render_if(IStatementIf* info, XSSContext ctx, std::ostringstream& result);
+    virtual bool render_variable(IStatementVar* info, XSSContext ctx, std::ostringstream& result);
+    virtual bool render_for(IStatementFor* info, XSSContext ctx, std::ostringstream& result);
+    virtual bool render_while(IStatementWhile* info, XSSContext ctx, std::ostringstream& result);
+    virtual bool render_switch(IStatementSwitch* info, XSSContext ctx, std::ostringstream& result);
+    virtual bool render_try(IStatementTry* info, XSSContext ctx, std::ostringstream& result);
+    virtual bool render_break(XSSContext ctx, std::ostringstream& result);
+    virtual bool render_continue(XSSContext ctx, std::ostringstream& result);
+    virtual bool render_return(IStatementExpression* info, XSSContext ctx, std::ostringstream& result);
+    virtual bool render_expr_statement(IStatementExpression* info, XSSContext ctx, std::ostringstream& result);
+    virtual bool render_throw(IStatementExpression* info, XSSContext ctx, std::ostringstream& result);
+
+    //expression rendering
+    virtual bool render_assignment(operator_type op, XSSValue left_value, XSSExpression right, XSSContext ctx, std::ostringstream& result);
+    virtual bool render_operator(XSSExpression expr, XSSContext ctx, std::ostringstream& result);
+    virtual bool render_constant(variant& value, XSSContext ctx, std::ostringstream& result); 
+    virtual bool render_read_operation(value_operation& op, XSSContext ctx, std::ostringstream& result);  
+    virtual bool render_call(value_operation& op, XSSContext ctx, std::ostringstream& result);  
+    virtual bool render_arguments(XSSArguments args, XSSContext ctx, std::ostringstream& result);  
+    virtual bool render_index_operation(value_operation& op, XSSContext ctx, std::ostringstream& result);  
+    virtual bool render_instantiation(XSSType type, XSSArguments args, XSSContext ctx, std::ostringstream& result);  
+  };
+
+}
+
+#endif

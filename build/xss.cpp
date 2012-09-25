@@ -110,113 +110,114 @@ int main(int argc, char* argv[])
     test_object_model(target); //td: !!!DEBUG!!!
     return 0;
 
-    bool wait = false;
-    bool json_out = false;
-    for(int i = 2; i < argc; i++)
-      {
-        str param(argv[i]);
-        if (param == "wait")
-          wait = true;
-        else if (param == "json")
-          json_out = true;
-      }
+    //0.9.5
+   // bool wait = false;
+   // bool json_out = false;
+   // for(int i = 2; i < argc; i++)
+   //   {
+   //     str param(argv[i]);
+   //     if (param == "wait")
+   //       wait = true;
+   //     else if (param == "json")
+   //       json_out = true;
+   //   }
 
-    //setup output
-    ConsoleOutput console;
-    JsonOutput    json; 
+   // //setup output
+   // ConsoleOutput console;
+   // JsonOutput    json; 
 
-    ICompilerOutput* out = &console;
-    if (json_out)
-      out = &json;
+   // ICompilerOutput* out = &console;
+   // if (json_out)
+   //   out = &json;
 		
-    XSSCompiler compiler(new xss_compiler(out));
+   // XSSCompiler compiler(new xss_compiler(out));
 
-    //handle errors 
-    int        error_number = 0;
-    param_list error;
-    
-    try
-      {
-        param_list args;
-        compiler->build(target, args);
-      }
-    catch(xs_error xse)
-      {
-        error_number = 1;
-        fs::path file;
+   // //handle errors 
+   // int        error_number = 0;
+   // param_list error;
+   // 
+   // try
+   //   {
+   //     param_list args;
+   //     compiler->build(target, args);
+   //   }
+   // catch(xs_error xse)
+   //   {
+   //     error_number = 1;
+   //     fs::path file;
 
-        if (xse.data.has("file"))
-          {
-            str ff = variant_cast<str>(xse.data.get("file"), str());
-            file = fs::path(ff);
-          }
-        else
-          {
-            fs::path compiling = compiler->compiling();
-            if (!compiling.empty())
-              file = compiling;
-            else
-              {
-                XSSRenderer rend = compiler->current_renderer();
-                if (rend)
-                  {
-                    file = rend->file();
-                  }
-              }
-          }
+   //     if (xse.data.has("file"))
+   //       {
+   //         str ff = variant_cast<str>(xse.data.get("file"), str());
+   //         file = fs::path(ff);
+   //       }
+   //     else
+   //       {
+   //         fs::path compiling = compiler->compiling();
+   //         if (!compiling.empty())
+   //           file = compiling;
+   //         else
+   //           {
+   //             XSSRenderer rend = compiler->current_renderer();
+   //             if (rend)
+   //               {
+   //                 file = rend->file();
+   //               }
+   //           }
+   //       }
 
-        error = xse.data;
-        if (!file.empty())
-          error.add("file", file.string());
-      }
-    catch(xss_error xsse)
-      {
-        error_number = 2;
+   //     error = xse.data;
+   //     if (!file.empty())
+   //       error.add("file", file.string());
+   //   }
+   // catch(xss_error xsse)
+   //   {
+   //     error_number = 2;
 
-        fs::path file;
+   //     fs::path file;
 
-        if (xsse.data.has("file"))
-          {
-            str ff = variant_cast<str>(xsse.data.get("file"), str());
-            file = fs::path(ff);
-          }
-        else
-          {
-            fs::path compiling = compiler->compiling();
-            if (!compiling.empty())
-              file = compiling;
-            else
-              {
-                XSSRenderer rend = compiler->current_renderer();
-                if (rend)
-                  {
-                    file = rend->file();
-                  }
-              }
-          }
+   //     if (xsse.data.has("file"))
+   //       {
+   //         str ff = variant_cast<str>(xsse.data.get("file"), str());
+   //         file = fs::path(ff);
+   //       }
+   //     else
+   //       {
+   //         fs::path compiling = compiler->compiling();
+   //         if (!compiling.empty())
+   //           file = compiling;
+   //         else
+   //           {
+   //             XSSRenderer rend = compiler->current_renderer();
+   //             if (rend)
+   //               {
+   //                 file = rend->file();
+   //               }
+   //           }
+   //       }
 
-        error = xsse.data;
-        if (!file.empty())
-          error.add("file", file.string());
-      }
-    catch(runtime_error rte)
-      {
-        error_number = 3;
+   //     error = xsse.data;
+   //     if (!file.empty())
+   //       error.add("file", file.string());
+   //   }
+   // catch(runtime_error rte)
+   //   {
+   //     error_number = 3;
 
-        error = rte.data;
-      }
+   //     error = rte.data;
+   //   }
 
-    if (error_number == 0)
-        out->success();
-    else
-        out->error(error);
+   // if (error_number == 0)
+   //     out->success();
+   // else
+   //     out->error(error);
 
-    str out_str = out->string();
-    if (!out_str.empty())
-      std::cout << out_str; //"Success are greateful";
+   // str out_str = out->string();
+   // if (!out_str.empty())
+   //   std::cout << out_str; //"Success are greateful";
 
-    if (wait)
-      std::cin.get();
+   // if (wait)
+   //   std::cin.get();
 
-	  return error_number;
+	  //return error_number;
   }

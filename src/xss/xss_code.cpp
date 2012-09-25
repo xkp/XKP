@@ -35,7 +35,6 @@ void statement_variable::bind(XSSContext ctx)
 //statement_for
 void statement_for::bind(XSSContext ctx)
   {
-    str           id_;
     if (id_.empty())
       {
         init_expr_->bind(ctx);
@@ -48,13 +47,13 @@ void statement_for::bind(XSSContext ctx)
         for_code_->context()->register_symbol(RESOLVE_VARIABLE, id_, type_);
       }
 
-      if (cond_expr_)
-        cond_expr_->bind(ctx);
+    if (cond_expr_)
+      cond_expr_->bind(ctx);
 
-      if (iter_expr_)
-        iter_expr_->bind(ctx);
+    if (iter_expr_)
+      iter_expr_->bind(ctx);
 
-      for_code_->bind(ctx);
+    for_code_->bind(ctx);
   }
 
 //statement_foreach
