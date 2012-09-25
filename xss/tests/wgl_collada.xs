@@ -3,6 +3,7 @@ property mouse_y;
 
 on init()
 {
+	string model_src = "model/monster/monster.dae";
 	monster_model.model_skin.start("walk");
 }
 

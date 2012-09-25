@@ -227,14 +227,18 @@ stream.ColladaModelLoader = stream.Loader.extend(
     load: function(resource)
     {
 		var this_  = this;
-		var mesh;
+		var mesh, asset;
 		var model_loader = generate_model_loader(resource.type);
-		model_loader.load(resource.asset, function colladaReady( collada ){			
+		if(resource.runtime_asset)
+			asset = resource.runtime_asset;
+		else
+			asset = resource.asset;
+		model_loader.load(asset, function colladaReady( collada ){			
 			mesh = collada.scene;
-			mesh.dae = collada
+			mesh.dae = collada;
 			this_.render_children(resource.children, mesh);
 			this_.on_loaded(resource, mesh);
-		});        
+		}); 		
     },
 	
 	render_children: function(children, mesh)
@@ -605,7 +609,8 @@ stream.Streamer = Class.extend(
 		{
 			result =
 			{	
-				id:		  		resource.id, 	 
+				id:		  		resource.id, 
+				runtime_asset:	resource.runtime_url,
 				asset:    		resource.url,
 				type:  			resource.type,
 				loaded:   		false,
@@ -705,9 +710,8 @@ stream.Package = Class.extend(
         var resources = [];
         for(var i = 0; i < this.items.length; i++)
         {				
-			resources.push({id: this.items[i].id, type: this.items[i].resource_type, url: this.items[i].src,
-								frame_width: this.items[i].frame_width, frame_height: this.items[i].frame_height,
-								animations: this.items[i].animations, package: this, children: this.items[i].children
+			resources.push({id: this.items[i].id, type: this.items[i].resource_type, url: this.items[i].src, 
+								runtime_url: this.items[i].runtime_src,	frame_width: this.items[i].frame_width, frame_height: this.items[i].frame_height, animations: this.items[i].animations, package: this, children: this.items[i].children
 								});
         }
 		

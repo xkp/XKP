@@ -1,7 +1,7 @@
 <application src="wgl_collada.xs" title="Test 3D" background="black">
 
 	<resources>		
-		<collada_model id="model_1" src="model/monster/monster.dae">
+		<collada_model id="model_1" runtime_src="model_src">
 			<collada_skin id="model_skin">	
 				<skin id="walk" start_frame="0" end_frame="29" in="1" loop="true"/>
 			</collada_skin>
