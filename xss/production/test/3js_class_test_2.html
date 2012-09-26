@@ -50,7 +50,7 @@ application.events = new ev.EventHolder();
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
 		}		
-		var streamer = new stream.Streamer();	
+		var streamer = new stream.Streamer();		
 		var ResourceUtils = new stream.ResourceUtils();
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
@@ -125,7 +125,7 @@ camera_1.manager = manager;
             lbl1.set_x(200);
             lbl1.set_y(100);
             lbl1.text("Pass the mouse over a cylinder to change its color");
-            camera_1.position = ;
+            camera_1.position.z = 1000;
 	application.events.addListener("init", function()
 	{    
 		var cylinder_1 = 

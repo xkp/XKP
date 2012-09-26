@@ -62,75 +62,90 @@ application.events = new ev.EventHolder();
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
 		}		
-		var streamer = new stream.Streamer();	
+		var streamer = new stream.Streamer();		
 		var ResourceUtils = new stream.ResourceUtils();
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
-            {
+		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test1.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image1;
 				global_package.events.addListener("loaded", function()
 				{
 					__image1 = streamer.get_resource("__image1");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test2.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image2;
 				global_package.events.addListener("loaded", function()
 				{
 					__image2 = streamer.get_resource("__image2");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test3.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image3;
 				global_package.events.addListener("loaded", function()
 				{
 					__image3 = streamer.get_resource("__image3");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test4.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image4;
 				global_package.events.addListener("loaded", function()
 				{
 					__image4 = streamer.get_resource("__image4");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image5",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test5.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image5;
 				global_package.events.addListener("loaded", function()
 				{
@@ -185,12 +200,13 @@ application.events.dispatch("switch_cameras", []);
 		img_reflect.events = new ev.EventHolder();
 				if(img_reflect instanceof THREE.Object3D)
 					my_plane.add(img_reflect);
-            img_plane.rotation = ;
+            set_rotation_x(img_plane.rotation, 90);
             img_reflect.doubleSided = true;
             set_object_alpha(img_reflect, 40);
-            img_reflect.scale = ;
-            img_reflect.position = ;
-            img_reflect.rotation = ;
+            img_reflect.scale.y = 0.800000012;
+            img_reflect.position.y = -140;
+            set_rotation_x(img_reflect.rotation, 90);
+            set_rotation_y(img_reflect.rotation, 180);
 	my_plane.set_image = function(value) 
 	{
 		set_transform_image(my_plane, value);
@@ -227,7 +243,9 @@ camera_1.manager = manager;
             lbl1.set_y(100);
             lbl1.set_color("Ivory");
             lbl1.text("Put the mouse over an image to zoom it");
-            camera_1.position = ;
+            camera_1.position.x = 100;
+            camera_1.position.y = 50;
+            camera_1.position.z = 1200;
             application.angle = null;
             application.start = 0;
             application.speed = 0.0199999996;

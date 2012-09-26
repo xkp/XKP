@@ -404,7 +404,7 @@ var r1;var lbl1;var img1;var lbl2;var img2;var lbl3;var lbl4;
 var material1;var material2;var camera_1;var plane1;var plane2;
 var application = {};
 application.events = new ev.EventHolder();	
-		var streamer = new stream.Streamer();	
+		var streamer = new stream.Streamer();		
 		var ResourceUtils = new stream.ResourceUtils();
 		if(drawingCanvas){
 			var client =
@@ -421,47 +421,65 @@ application.events = new ev.EventHolder();
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
-            {
+		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test1.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image1;
 				global_package.events.addListener("loaded", function()
 				{
 					__image1 = streamer.get_resource("__image1");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"res_img1",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test3.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var res_img1;
 				global_package.events.addListener("loaded", function()
 				{
 					res_img1 = streamer.get_resource("res_img1");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"image0",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test2.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var image0;
 				global_package.events.addListener("loaded", function()
 				{
 					image0 = streamer.get_resource("image0");
 				});
+			var child_ = {};
+			child_.type_ = 'rgbadjust';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "image0")
+				{		
+					global_package.items[i].children['rgb1'] = child_;
+				}					
+			}	
 		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
@@ -603,11 +621,13 @@ plane2.manager = manager;
             lbl4.text("Material filter in a plane");
             lbl4.set_color("Azure");
             manager.events.addListener('update', function(){camera_1.lookAt(scene.position)});
-            camera_1.position = ;
-            plane1.position = ;
-            plane1.rotation = ;
-            plane2.position = ;
-            plane2.rotation = ;
+            camera_1.position.z = 1000;
+            plane1.position.x = -330;
+            plane1.position.y = -200;
+            set_rotation_x(plane1.rotation, 90);
+            plane2.position.x = 170;
+            plane2.position.y = -200;
+            set_rotation_x(plane2.rotation, 90);
 	application.events.addListener("update", function()
 	{    
 		if (host.needs_update)

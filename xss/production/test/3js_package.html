@@ -39,7 +39,7 @@ var __label1;
 var camera_1;var plane_1;var plane_2;var plane_3;var container;var plane_4;var plane_5;
 var application = {};
 application.events = new ev.EventHolder();	
-		var streamer = new stream.Streamer();	
+		var streamer = new stream.Streamer();		
 		var ResourceUtils = new stream.ResourceUtils();
 		if(drawingCanvas){
 			var client =
@@ -56,71 +56,104 @@ application.events = new ev.EventHolder();
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
-            {
+		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test1.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image1;
 				global_package.events.addListener("loaded", function()
 				{
 					__image1 = streamer.get_resource("__image1");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test2.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image2;
 				global_package.events.addListener("loaded", function()
 				{
 					__image2 = streamer.get_resource("__image2");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test3.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image3;
 				global_package.events.addListener("loaded", function()
 				{
 					__image3 = streamer.get_resource("__image3");
 				});
 				var pack_1 = new stream.Package(streamer);				
+			var child_ = {};
+			child_.type_ = 'image';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "pack_1")
+				{		
+					global_package.items[i].children['__image4'] = child_;
+				}					
+			}	
+			var child_ = {};
+			child_.type_ = 'image';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "pack_1")
+				{		
+					global_package.items[i].children['__image5'] = child_;
+				}					
+			}	
                 pack_1.add_item(
-            {
+		{
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test4.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});
+		animations:		[],	
+		children:		{}
+		}
+);
 				var __image4;
 				pack_1.events.addListener("loaded", function()
 				{
 					__image4 = streamer.get_resource("__image4");
 				});
                 pack_1.add_item(
-            {
+		{
 		id:				"__image5",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test5.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});
+		animations:		[],	
+		children:		{}
+		}
+);
 				var __image5;
 				pack_1.events.addListener("loaded", function()
 				{
@@ -205,30 +238,35 @@ plane_3.manager = manager;
             __label1.set_y(75);
             __label1.set_color("Ivory");
             __label1.text("Press click to load the package");
-            camera_1.position = ;
+            camera_1.position.x = 100;
+            camera_1.position.y = 100;
+            camera_1.position.z = 1000;
             set_3js_object_texture(plane_1, "images/test1.png");
-            plane_1.position = ;
-            plane_1.rotation = ;
+            plane_1.position.x = 100;
+            plane_1.position.y = 100;
+            set_rotation_x(plane_1.rotation, 90);
             set_3js_object_texture(plane_2, "images/test2.png");
-            plane_2.position = ;
-            plane_2.rotation = ;
+            plane_2.position.x = 300;
+            plane_2.position.y = 100;
+            set_rotation_x(plane_2.rotation, 90);
             set_3js_object_texture(plane_3, "images/test3.png");
-            plane_3.position = ;
-            plane_3.rotation = ;
+            plane_3.position.x = 100;
+            plane_3.position.y = 300;
+            set_rotation_x(plane_3.rotation, 90);
 				pack_1.events.addListener("loaded", function()
 				{
 });
 				pack_1.events.addListener("loaded", function()
 				{
             set_3js_object_texture(plane_4, "images/test4.png");
-            plane_4.position = ;
-            plane_4.rotation = ;
+            plane_4.position.x = -100;
+            set_rotation_x(plane_4.rotation, 90);
 });
 				pack_1.events.addListener("loaded", function()
 				{
             set_3js_object_texture(plane_5, "images/test5.png");
-            plane_5.position = ;
-            plane_5.rotation = ;
+            plane_5.position.x = -400;
+            set_rotation_x(plane_5.rotation, 90);
 });
 	application.events.addListener("click", function()
 	{    

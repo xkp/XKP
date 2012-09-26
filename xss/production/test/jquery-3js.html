@@ -50,7 +50,7 @@ var lbl0;var btn1;var lbl2;
 var materials;var __basic_material1;var __basic_material2;var __basic_material3;var __basic_material4;var __basic_material5;var __basic_material6;var plane_material;var camera_1;var cube_1;var plane_1;
 var application = {};
 application.events = new ev.EventHolder();	
-		var streamer = new stream.Streamer();	
+		var streamer = new stream.Streamer();		
 		var ResourceUtils = new stream.ResourceUtils();
 		if(drawingCanvas){
 			var client =
@@ -67,28 +67,34 @@ application.events = new ev.EventHolder();
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
-            {
+		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/smile_grin_48.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image1;
 				global_package.events.addListener("loaded", function()
 				{
 					__image1 = streamer.get_resource("__image1");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/smile_sad_48.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image2;
 				global_package.events.addListener("loaded", function()
 				{
@@ -178,8 +184,9 @@ plane_1.manager = manager;
 		    btn1 = new ui.Button(g_ui_root.manager, g_ui_root, "images/smile_sad_48.png", "images/smile_grin_48.png");
 		    lbl2 = new ui.Label(g_ui_root.manager, g_ui_root, "Verdana");
             set_material_alpha(plane_material, 50);
-            camera_1.position = ;
-            cube_1.position = ;
+            camera_1.position.y = 150;
+            camera_1.position.z = 500;
+            cube_1.position.y = 150;
             lbl0.set_x(240);
             lbl0.set_y(75);
             lbl0.text("Click smile to count");

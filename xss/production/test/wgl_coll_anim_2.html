@@ -34,6 +34,7 @@ var three_utils = new threejs.Utils();
 manager.events = new ev.EventHolder();
 manager.events.parent = manager;
 manager.c_anims = [];
+manager.js_anims = [];
 manager.c_skins = [];
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
@@ -50,6 +51,7 @@ application.events = new ev.EventHolder();
 		id:				"pump",
 		resource_type:	RESOURCE_COLLADA_MODEL,
 		src:			"model/pump/pump.dae",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -132,6 +134,7 @@ else
 	g_delta  = now - g_elapsed;  
 g_elapsed = now; 
 if(!g_delta) g_delta = 0;
+manager.delta = g_delta;
 c_delta = clock.getDelta(),
 c_elapsed = clock.getElapsedTime() * 10;
 manager.events.dispatch("update", [g_delta, g_elapsed]);	
