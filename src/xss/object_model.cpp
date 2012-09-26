@@ -1236,7 +1236,8 @@ void object_model::compile_xs(const str& text, XSSContext ctx, om_context& octx)
         error = true;
         int l = variant_cast<int>(err.data.get("line"), -1);
         int c = variant_cast<int>(err.data.get("column"), -1);
-        ctx->error("Syntax error", null, file_position(l, c), file_position(l, c)); //td: !!! handle errors better
+        str desc = variant_cast<str>(err.data.get("desc"), str());
+        ctx->error(desc, null, file_position(l, c), file_position(l, c)); //td: !!! handle errors better
       }
 
     if (!error)
