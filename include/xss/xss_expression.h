@@ -16,6 +16,12 @@ struct xss_expression_utils
     static bool          is_assignment(operator_type op); 
   };
 
+struct operator_utils
+  {
+    static int precedence(operator_type op);
+    static str to_string(operator_type op);
+  };
+
 }
 
 #endif

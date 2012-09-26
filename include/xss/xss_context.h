@@ -348,8 +348,9 @@ class xss_type : public xss_object
       XSSObjectList get_dependencies();
 
       //0.9.5
-      void add_constructor(XSSSignature ctor);
-      void import(XSSType import);
+      void         add_constructor(XSSSignature ctor);
+      void         import(XSSType import);
+      XSSArguments get_constructor(XSSArguments args);
     public:
       void as_enum();
       void as_array(XSSType type);
@@ -417,33 +418,6 @@ struct IArgumentRenderer : public IRenderer
   {
     virtual void             add(const str& name, XSSType type) = 0;
     virtual param_list_decl& get()                              = 0;
-  };
-
-struct ILanguage
-  {
-    virtual variant compile_code(code& cde, param_list_decl& params, XSSContext ctx)	                    = 0;
-    virtual variant compile_expression(expression expr, XSSContext ctx)							                      = 0;
-		virtual variant compile_args(param_list_decl& params, XSSContext ctx)					                        = 0;
-    virtual str     resolve_this(XSSContext ctx)																			                    = 0;
-    virtual str     resolve_separator(XSSObject lh = XSSObject())										                      = 0;
-    virtual bool    can_cast(XSSType left, XSSType right)                                                 = 0;
-    virtual void    init_context(XSSContext ctx)                                                          = 0; //td: !!!
-    virtual void    init_application_context(XSSContext ctx)                                              = 0;
-    virtual XSSType resolve_array_type(XSSType type, const str& at_name, XSSContext ctx)                  = 0;
-    virtual str     render_value(XSSType type, variant value)                                             = 0;
-    virtual str     property_get(XSSProperty prop, const str& path, XSSContext ctx)                       = 0;
-    virtual str     property_set(XSSProperty prop, const str& path, const str& value, XSSContext ctx)     = 0;
-    virtual str     render_assignment(const str& path, const str& prop, const str& value)                 = 0;
-    virtual str     expression_path(const str& expr )                                                     = 0;
-    virtual str     array_operation(operator_type op, const str& arr, const str& value, XSSContext ctx)   = 0;
-    virtual str     render_expression(expression& expr, XSSContext ctx)                                   = 0;
-    virtual str     instantiate(XSSType type, XSSObject instance, DynamicArray rt, param_list& args)      = 0;
-    virtual str     render_ctor_args(XSSType type, XSSObject instance, DynamicArray rt, param_list& args) = 0;
-    virtual bool    custom_operator(XSSType lt, XSSType rt, str l, str r, operator_type op, str& res)     = 0;
-    
-    //0.9.5
-    virtual XSSContext create_context() = 0;
-
   };
 
 struct IContextCallback
@@ -636,13 +610,17 @@ class xss_value
         {
         }
     public:
-      void             bind(XSSContext ctx, bool as_setter);
-      XSSType          type();
-      void             add_operation(value_operation& op);
-      value_operation& get_last();
-      bool             is_constant();
-      file_position&   begin(); 
-      file_position&   end(); 
+      void              bind(XSSContext ctx, bool as_setter);
+      XSSType           type();
+      bool              bound();
+      value_operations& operations();      
+      void              add_operation(value_operation& op);
+      value_operation&  get_last();
+      bool              is_constant();
+      variant           constant();
+      file_position&    begin(); 
+      file_position&    end(); 
+      XSSValue          path();
     private:
       XSSType          type_;
       value_operations operations_;      
@@ -669,15 +647,22 @@ class xss_expression
     public:
       void    bind(XSSContext ctx);
     public:
-      XSSType  type();
-      bool     is_constant();
-      XSSValue value();
+      operator_type op();
+      XSSValue      value();
+      XSSType       type();
+      bool          is_constant();
+      bool          is_assign();
+      XSSExpression left();
+      XSSExpression right();
+      XSSExpression third();
+      XSSOperator   xop();
     public:
       void set_extents(file_position& begin, file_position& end);
       file_position& begin();
       file_position& end();
     private:
       operator_type op_;
+      XSSOperator   xop_;
       XSSType       type_;
       XSSValue      value_;
       XSSExpression arg1_;
@@ -809,6 +794,8 @@ class xss_statement
         }
 
     public:
+      STATEMENT_TYPE id() {return id_;}
+    public:
       template<typename T> T* cast()
         {
           return variant_cast<T*>(this, null);
@@ -831,13 +818,14 @@ class xss_code
         {
         }
     public:
-      void           add(XSSStatement st);
-      XSSContext     context();
-      void           bind(XSSContext ctx);
-      XSSType        return_type();
-      void           set_extents(file_position& begin, file_position& end); 
-      file_position& begin(); 
-      file_position& end(); 
+      void            add(XSSStatement st);
+      XSSContext      context();
+      void            bind(XSSContext ctx);
+      XSSType         return_type();
+      void            set_extents(file_position& begin, file_position& end); 
+      file_position&  begin(); 
+      file_position&  end(); 
+      statement_list& statements();
     private:
       statement_list statements_;
       XSSContext     ctx_; 
@@ -883,22 +871,82 @@ class xss_operator
       xss_operator(operator_type op, XSSType result, XSSType left, XSSType right);
       xss_operator(operator_type op, XSSType result, XSSSignature signature);
     public:
-      XSSType       type();
-      operator_type opid();
-      bool          match(XSSArguments args);
-      bool          match(XSSType type);
+      XSSType         type();
+      operator_type   opid();
+      bool            match(XSSArguments args);
+      bool            match(XSSType type);
+      InlineRenderer  renderer();
     private:
-      operator_type op_;
-      XSSType       result_;
-      XSSType       left_;
-      XSSType       right_;
-      XSSSignature  signature_; 
+      operator_type   op_;
+      XSSType         result_;
+      XSSType         left_;
+      XSSType         right_;
+      XSSSignature    signature_; 
+      InlineRenderer  renderer_;
+  };
+
+struct ILanguage
+  {
+    //0.9.5
+  //  virtual variant compile_code(code& cde, param_list_decl& params, XSSContext ctx)	                    = 0;
+  //  virtual variant compile_expression(expression expr, XSSContext ctx)							                      = 0;
+		//virtual variant compile_args(param_list_decl& params, XSSContext ctx)					                        = 0;
+  //  virtual str     resolve_this(XSSContext ctx)																			                    = 0;
+  //  virtual str     resolve_separator(XSSObject lh = XSSObject())										                      = 0;
+  //  virtual bool    can_cast(XSSType left, XSSType right)                                                 = 0;
+  //  virtual void    init_context(XSSContext ctx)                                                          = 0; //td: !!!
+  //  virtual void    init_application_context(XSSContext ctx)                                              = 0;
+  //  virtual XSSType resolve_array_type(XSSType type, const str& at_name, XSSContext ctx)                  = 0;
+  //  virtual str     render_value(XSSType type, variant value)                                             = 0;
+  //  virtual str     property_get(XSSProperty prop, const str& path, XSSContext ctx)                       = 0;
+  //  virtual str     property_set(XSSProperty prop, const str& path, const str& value, XSSContext ctx)     = 0;
+  //  virtual str     render_assignment(const str& path, const str& prop, const str& value)                 = 0;
+  //  virtual str     expression_path(const str& expr )                                                     = 0;
+  //  virtual str     array_operation(operator_type op, const str& arr, const str& value, XSSContext ctx)   = 0;
+  //  virtual str     render_expression(expression& expr, XSSContext ctx)                                   = 0;
+  //  virtual str     instantiate(XSSType type, XSSObject instance, DynamicArray rt, param_list& args)      = 0;
+  //  virtual str     render_ctor_args(XSSType type, XSSObject instance, DynamicArray rt, param_list& args) = 0;
+  //  virtual bool    custom_operator(XSSType lt, XSSType rt, str l, str r, operator_type op, str& res)     = 0;
+    
+    //0.9.5
+    virtual XSSContext create_context()                                                                  = 0;
+    virtual bool       render_code(XSSCode code, XSSContext ctx, std::ostringstream& result)             = 0; 
+    virtual bool       render_expression(XSSExpression expr, XSSContext ctx, std::ostringstream& result) = 0; 
+    virtual bool       render_value(XSSValue value, XSSContext ctx, std::ostringstream& result)          = 0;
+    
+    //code rendering
+    virtual bool render_if(IStatementIf* info, XSSContext ctx, std::ostringstream& result)                     = 0;
+    virtual bool render_variable(IStatementVar* info, XSSContext ctx, std::ostringstream& result)              = 0;
+    virtual bool render_for(IStatementFor* info, XSSContext ctx, std::ostringstream& result)                   = 0;
+    virtual bool render_foreach(IStatementForEach* info, XSSContext ctx, std::ostringstream& result)           = 0;
+    virtual bool render_while(IStatementWhile* info, XSSContext ctx, std::ostringstream& result)               = 0;
+    virtual bool render_switch(IStatementSwitch* info, XSSContext ctx, std::ostringstream& result)             = 0;
+    virtual bool render_try(IStatementTry* info, XSSContext ctx, std::ostringstream& result)                   = 0;
+    virtual bool render_break(XSSContext ctx, std::ostringstream& result)                                      = 0;
+    virtual bool render_continue(XSSContext ctx, std::ostringstream& result)                                   = 0;
+    virtual bool render_return(IStatementExpression* info, XSSContext ctx, std::ostringstream& result)         = 0;
+    virtual bool render_expr_statement(IStatementExpression* info, XSSContext ctx, std::ostringstream& result) = 0;
+    virtual bool render_throw(IStatementExpression* info, XSSContext ctx, std::ostringstream& result)          = 0;
+
+    //expression rendering
+    virtual bool render_assignment(operator_type op, XSSValue left_value, XSSExpression right, XSSContext ctx, std::ostringstream& result) = 0;
+    virtual bool render_operator(XSSExpression expr, XSSContext ctx, std::ostringstream& result)                                           = 0;
+    virtual bool render_constant(variant& value, XSSContext ctx, std::ostringstream& result)                                               = 0; 
+    virtual bool render_read_operation(value_operation& op, XSSContext ctx, std::ostringstream& result)                                    = 0;  
+    virtual bool render_call(value_operation& op, XSSContext ctx, std::ostringstream& result)                                              = 0;  
+    virtual bool render_arguments(XSSArguments args, XSSContext ctx, std::ostringstream& result)                                           = 0;  
+    virtual bool render_index_operation(value_operation& op, XSSContext ctx, std::ostringstream& result)                                   = 0;  
+    virtual bool render_object(value_operation& op, XSSContext ctx, std::ostringstream& result)                                            = 0;  
+    virtual bool render_array(value_operation& op, XSSContext ctx, std::ostringstream& result)                                             = 0;  
+    virtual bool render_instantiation(XSSType type, XSSArguments args, XSSContext ctx, std::ostringstream& result)                         = 0;  
   };
 
 //rendering helper
 struct inline_renderer
   {
     inline_renderer(str text, bool global);
+
+    bool render(param_list& pl, std::ostringstream& result);
   };
 
 //constructs
@@ -921,24 +969,30 @@ class xss_property : public xss_object
 		  XSSObject this_;
 		  variant   value_;
 
-      XSSObject get_get();
-      XSSObject get_set();
-
-      void    set_value(const variant value, XSSType type);
-      str     render_value();
+      //0.9.5
+      //XSSObject get_get();
+      //XSSObject get_set();
+      //void    set_value(const variant value, XSSType type);
+      //str     render_value();
       //str     render_get();
       //str	    render_set(const str& value);
-      variant eval(XSSContext ctx);
+      //variant eval(XSSContext ctx);
       
       //0.9.5
-      void    expr_value(XSSExpression value);
-      void    set_getter(InlineRenderer getter);
-      void    set_setter(InlineRenderer setter);
-      void    code_getter(XSSCode getter);
-      void    code_setter(XSSCode setter);
-      void    as_const();
-      void    property_type(XSSType type);
-      XSSType property_type();
+      void            expr_value(XSSExpression value);
+      XSSExpression   expr_value();
+      void            getter(InlineRenderer getter);
+      InlineRenderer  getter();
+      void            setter(InlineRenderer setter);
+      InlineRenderer  setter();
+      void            code_getter(XSSCode getter);
+      XSSCode         code_getter();
+      void            code_setter(XSSCode setter);
+      XSSCode         code_setter();
+      void            as_const();
+      bool            is_const();
+      void            property_type(XSSType type);
+      XSSType         property_type();
       
       virtual void bind(XSSContext ctx);
     private:
@@ -980,33 +1034,36 @@ class xss_method : public xss_object
   {
 		public:
 			xss_method();
-			xss_method(const xss_method& other);
-			xss_method(const str& name, XSSType type, variant args, variant code);
 
-			str      get_name();
-      variant  code();
-      void     add_parameter(const str& name);
-      variant& get_parameters(); 
+      //0.9.5
+			//xss_method(const xss_method& other);
+			//xss_method(const str& name, XSSType type, variant args, variant code);
+			//str      get_name();
+      //variant  code();
+      //void     add_parameter(const str& name);
+      //variant& get_parameters(); 
+			//variant args_;
+			//variant code_;
 
       //xss_object
 			virtual XSSType type();
 
-			variant args_;
-			variant code_;
-
       //0.9.5
-      void    return_type(XSSType type);
-      XSSType return_type();
-      void    set_caller(InlineRenderer caller);
-      void    set_signature(XSSSignature sig);
-      void    set_code(XSSCode code);
+      void           return_type(XSSType type);
+      XSSType        return_type();
+      void           renderer(InlineRenderer caller);
+      InlineRenderer renderer();
+      void           signature(XSSSignature sig);
+      XSSSignature   signature();
+      void           code(XSSCode code);
+      XSSCode        code();
 
       virtual void bind(XSSContext ctx);
     private:
       XSSType        return_type_;
-      InlineRenderer caller_;
+      InlineRenderer renderer_;
       XSSSignature   signature_;
-      XSSCode        code__; //td: rid of old stuff 
+      XSSCode        code_; //td: rid of old stuff 
   };
 
 //utils
@@ -1097,12 +1154,12 @@ struct xss_method_schema : xss_object_schema<xss_method>
 
 				inherit_from<xss_object>();
 
-        readonly_property<str>("name", &xss_method::get_name);
+        //0.9.5
+        //method_<void, 1>("add_parameter", &xss_method::add_parameter);
+        //readonly_property<str>("name", &xss_method::get_name);
 
-        property_("args", &xss_method::args_);
-        property_("code", &xss_method::code_);
-
-        method_<void, 1>("add_parameter", &xss_method::add_parameter);
+        //property_("args", &xss_method::args_);
+        //property_("code", &xss_method::code_);
       }
   };
 
@@ -1120,10 +1177,10 @@ struct xss_property_schema : xss_object_schema<xss_property>
         property_("set",   &xss_property::set_);
         property_("value", &xss_property::value_);
 
-        readonly_property<XSSObject>("get_", &xss_property::get_get);
-        readonly_property<XSSObject>("set_", &xss_property::get_set);
-
-        method_<str, 0>("render_value", &xss_property::render_value);
+        //0.9.5
+        //readonly_property<XSSObject>("get_", &xss_property::get_get);
+        //readonly_property<XSSObject>("set_", &xss_property::get_set);
+        //method_<str, 0>("render_value", &xss_property::render_value);
       }
   };
 

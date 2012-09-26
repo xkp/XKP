@@ -146,31 +146,33 @@ XSSType xss_context::get_type(const str& type, const str& ns)
 
 XSSType xss_context::get_array_type(XSSType type)
   {
-    str type_name = type->id();
-    if (type_name.empty())
-      {
-        return XSSType();
-      }
+    assert(false); //td:
+    return XSSType();
+    //str type_name = type->id();
+    //if (type_name.empty())
+    //  {
+    //    return XSSType();
+    //  }
 
-    str array_type_name = "array<" + type_name + ">"; //im gonna go basic on this one
+    //str array_type_name = "array<" + type_name + ">"; //im gonna go basic on this one
 
-    resolve_info ri;
-    if (resolve(array_type_name, ri))
-      {
-        if (ri.value.is<XSSType>())
-          {
-            XSSType type = ri.value;
-            return type;
-          }
-        else
-          return XSSType();
-      }
+    //resolve_info ri;
+    //if (resolve(array_type_name, ri))
+    //  {
+    //    if (ri.value.is<XSSType>())
+    //      {
+    //        XSSType type = ri.value;
+    //        return type;
+    //      }
+    //    else
+    //      return XSSType();
+    //  }
 
-    //create it and register
-    XSSType new_type = get_language()->resolve_array_type(type, array_type_name, XSSContext(new xss_context(*this)));
-    add_type(array_type_name, new_type, true);
+    ////create it and register
+    //XSSType new_type = get_language()->resolve_array_type(type, array_type_name, XSSContext(new xss_context(*this)));
+    //add_type(array_type_name, new_type, true);
 
-    return new_type;
+    //return new_type;
   }
 
 XSSType xss_context::add_type(const str& id, XSSType type, bool override_parent)
@@ -728,116 +730,117 @@ bool xss_context::resolve(const str& id, resolve_info& info)
     return false;
   }
 
-bool xss_context::resolve_path(const std::vector<str>& path, resolve_info& info)
-  {
-    std::vector<str>::const_iterator it = path.begin();
-    std::vector<str>::const_iterator nd = path.end();
-
-    Language lang = get_language();
-
-		//state
-    bool          first      = true;
-		bool          just_paste = false;
-    str           result;
-    XSSProperty   curr_property;
-    XSSObject     curr_instance;
-
-    //resolvers, we'll keep copies
-    resolve_info  ri = info;
-    resolve_info  last;
-    if (info.left)
-      {
-        last = *info.left;
-        ri.left = &last;
-      }
-
-    for(; it != nd; it++)
-      {
-        str item = *it;
-        if (just_paste)
-          {
-            result += lang->resolve_separator() + item;
-            continue;
-          }
-
-        if (!first)
-          ri.search_this = false;
-
-        bool is_last = (it + 1) == nd;
-
-        if (resolve(item, ri))
-          {
-            switch(ri.what)
-              {
-                case RESOLVE_INSTANCE:
-                  {
-                    curr_instance = ri.value;
-                    curr_property = XSSProperty();
-
-                    if (!is_last)
-                      {
-                        if (!first)
-                          result += lang->resolve_separator();
-                        result += curr_instance->output_id();
-                      }
-                    break;
-                  }
-                case RESOLVE_PROPERTY:
-                  {
-                    curr_instance = XSSObject();
-                    curr_property = ri.value;
-
-                    if (first)
-                      info.found_this = true;
-
-                    if (!is_last)
-                      {
-                        if (!first)
-                          result += lang->resolve_separator();
-                        result += curr_property->output_id();
-                      }
-                    break;
-                  }
-                default:
-                  {
-                    assert(false); //use case
-                  }
-              }
-
-            last = ri;
-            ri.left = &last;
-            ri.what = RESOLVE_ANY;
-          }
-        else
-          {
-            result = item;
-            just_paste = true;
-          }
-
-        if (first)
-          first = false;
-      }
-
-    if (info.output)
-      *info.output = result;
-
-    if (curr_instance)
-      {
-        info.what  = RESOLVE_INSTANCE;
-        info.value = curr_instance;
-      }
-    else if (curr_property)
-      {
-        info.what  = RESOLVE_PROPERTY;
-        info.value = curr_property;
-      }
-    else
-      {
-        info.value = variant(); //just makin' sure
-      }
-
-    return !just_paste;
-  }
+//0.9.5
+//bool xss_context::resolve_path(const std::vector<str>& path, resolve_info& info)
+//  {
+//    std::vector<str>::const_iterator it = path.begin();
+//    std::vector<str>::const_iterator nd = path.end();
+//
+//    Language lang = get_language();
+//
+//		//state
+//    bool          first      = true;
+//		bool          just_paste = false;
+//    str           result;
+//    XSSProperty   curr_property;
+//    XSSObject     curr_instance;
+//
+//    //resolvers, we'll keep copies
+//    resolve_info  ri = info;
+//    resolve_info  last;
+//    if (info.left)
+//      {
+//        last = *info.left;
+//        ri.left = &last;
+//      }
+//
+//    for(; it != nd; it++)
+//      {
+//        str item = *it;
+//        if (just_paste)
+//          {
+//            result += lang->resolve_separator() + item;
+//            continue;
+//          }
+//
+//        if (!first)
+//          ri.search_this = false;
+//
+//        bool is_last = (it + 1) == nd;
+//
+//        if (resolve(item, ri))
+//          {
+//            switch(ri.what)
+//              {
+//                case RESOLVE_INSTANCE:
+//                  {
+//                    curr_instance = ri.value;
+//                    curr_property = XSSProperty();
+//
+//                    if (!is_last)
+//                      {
+//                        if (!first)
+//                          result += lang->resolve_separator();
+//                        result += curr_instance->output_id();
+//                      }
+//                    break;
+//                  }
+//                case RESOLVE_PROPERTY:
+//                  {
+//                    curr_instance = XSSObject();
+//                    curr_property = ri.value;
+//
+//                    if (first)
+//                      info.found_this = true;
+//
+//                    if (!is_last)
+//                      {
+//                        if (!first)
+//                          result += lang->resolve_separator();
+//                        result += curr_property->output_id();
+//                      }
+//                    break;
+//                  }
+//                default:
+//                  {
+//                    assert(false); //use case
+//                  }
+//              }
+//
+//            last = ri;
+//            ri.left = &last;
+//            ri.what = RESOLVE_ANY;
+//          }
+//        else
+//          {
+//            result = item;
+//            just_paste = true;
+//          }
+//
+//        if (first)
+//          first = false;
+//      }
+//
+//    if (info.output)
+//      *info.output = result;
+//
+//    if (curr_instance)
+//      {
+//        info.what  = RESOLVE_INSTANCE;
+//        info.value = curr_instance;
+//      }
+//    else if (curr_property)
+//      {
+//        info.what  = RESOLVE_PROPERTY;
+//        info.value = curr_property;
+//      }
+//    else
+//      {
+//        info.value = variant(); //just makin' sure
+//      }
+//
+//    return !just_paste;
+//  }
 
 void xss_context::register_symbol(RESOLVE_ITEM type, const str& id, variant symbol, bool overrite)
   {
@@ -1849,27 +1852,28 @@ void xss_object::add_property_(XSSProperty prop)
           }
       }
 
-    if (mine)
-      {
-        mine->set_value(prop->value_, prop->type());
-      }
-    else
-      {
-        //search the type
-        mine = get_property(prop->id());
-        if (mine)
-          {
-            XSSProperty mashup(new xss_property);
-            mashup->copy(XSSObject(mine));
-            mashup->copy(XSSObject(prop));
-            mashup->this_ = shared_from_this();
-            properties_->push_back(mashup);
-          }
-        else
-          {
-            properties_->push_back(prop);
-          }
-      }
+    assert(false); //td:
+    //if (mine)
+    //  {
+    //    mine->set_value(prop->value_, prop->type());
+    //  }
+    //else
+    //  {
+    //    //search the type
+    //    mine = get_property(prop->id());
+    //    if (mine)
+    //      {
+    //        XSSProperty mashup(new xss_property);
+    //        mashup->copy(XSSObject(mine));
+    //        mashup->copy(XSSObject(prop));
+    //        mashup->this_ = shared_from_this();
+    //        properties_->push_back(mashup);
+    //      }
+    //    else
+    //      {
+    //        properties_->push_back(prop);
+    //      }
+    //  }
   }
 
 XSSProperty xss_object::add_property(const str& name, variant value, XSSType type)
@@ -1889,7 +1893,8 @@ XSSProperty xss_object::add_property(const str& name, variant value, XSSType typ
             XSSProperty prop = *it;
             if (prop->id() == name)
               {
-                prop->set_value(value, type);
+                assert(false); //td:
+                //prop->set_value(value, type);
                 return prop;
               }
           }
@@ -1898,7 +1903,9 @@ XSSProperty xss_object::add_property(const str& name, variant value, XSSType typ
         result = XSSProperty(new xss_property());
         result->copy(XSSObject(old_prop));
         result->this_ = shared_from_this();
-        result->set_value(value, type);
+        
+        assert(false);
+        //result->set_value(value, type);
       }
 
     if (!result)
@@ -2156,6 +2163,12 @@ void xss_type::import(XSSType import)
     assert(false); //td:
   }
 
+XSSArguments xss_type::get_constructor(XSSArguments args)
+  {
+    assert(false); //td:
+    return XSSArguments();
+  }
+
 void xss_type::as_enum()
   {
     is_enum_ = true;
@@ -2228,7 +2241,13 @@ void xss_type::set_language(Language lang)
 //inline_renderer
 inline_renderer::inline_renderer(str text, bool global)
   {
+  }
+
+bool inline_renderer::render(param_list& pl, std::ostringstream& result)
+  {
     //td: rendering
+    assert(false);
+    return false;
   }
 
 //xss_property
@@ -2309,72 +2328,83 @@ void xss_property::copy(XSSObject obj)
     xss_object::copy(obj);
   }
 
-XSSObject xss_property::get_get()
-  {
-    return find("get");
-  }
-
-XSSObject xss_property::get_set()
-  {
-    return find("set");
-  }
-
-void xss_property::set_value(const variant value, XSSType type)
-  {
-    value_ = value; //td: type checking
-    type_  = type;
-  }
-
-str xss_property::render_value()
-  {
-    if (value_.empty())
-      return "null"; //td: somehow the language must resolve this
-
-    IRenderer* renderer = variant_cast<IRenderer*>(value_, null);
-    if (renderer)
-      {
-        str result = renderer->render();
-        return result;
-      }
-
-    if (value_.is<str>())
-      {
-        str result = variant_cast<str>(value_, str());
-        return '"' + result + '"';
-      }
-
-    XSSType prop_type = type();
-    if (prop_type)
-      return prop_type->get_language()->render_value(prop_type, value_);
-
-    return xss_utils::var_to_string(value_);
-  }
-
-variant xss_property::eval(XSSContext ctx)
-  {
-    IExpressionRenderer *ier = variant_cast<IExpressionRenderer *>(value_, null);
-
-    if (ier)
-      {
-        return ier->eval(ctx);
-      }
-
-    return variant();
-  }
+//0.9.5
+//XSSObject xss_property::get_get()
+//  {
+//    return find("get");
+//  }
+//
+//XSSObject xss_property::get_set()
+//  {
+//    return find("set");
+//  }
+//
+//void xss_property::set_value(const variant value, XSSType type)
+//  {
+//    value_ = value; //td: type checking
+//    type_  = type;
+//  }
+//
+//str xss_property::render_value()
+//  {
+//    if (value_.empty())
+//      return "null"; //td: somehow the language must resolve this
+//
+//    IRenderer* renderer = variant_cast<IRenderer*>(value_, null);
+//    if (renderer)
+//      {
+//        str result = renderer->render();
+//        return result;
+//      }
+//
+//    if (value_.is<str>())
+//      {
+//        str result = variant_cast<str>(value_, str());
+//        return '"' + result + '"';
+//      }
+//
+//    XSSType prop_type = type();
+//    if (prop_type)
+//      return prop_type->get_language()->render_value(prop_type, value_);
+//
+//    return xss_utils::var_to_string(value_);
+//  }
+//
+//variant xss_property::eval(XSSContext ctx)
+//  {
+//    IExpressionRenderer *ier = variant_cast<IExpressionRenderer *>(value_, null);
+//
+//    if (ier)
+//      {
+//        return ier->eval(ctx);
+//      }
+//
+//    return variant();
+//  }
 
 void xss_property::expr_value(XSSExpression value)
   {
     expr_value_ = value;
   }
 
-void xss_property::set_getter(InlineRenderer getter)
+void xss_property::getter(InlineRenderer getter)
   {
     getter_ = getter;
   }
 
-void xss_property::set_setter(InlineRenderer setter)
+InlineRenderer xss_property::getter()
+  {
+    return getter_;
+  }
+
+void xss_property::setter(InlineRenderer setter)
   {
     setter_ = setter;
+  }
+
+InlineRenderer xss_property::setter()
+  {
+    return setter_;
   }
 
 void xss_property::code_getter(XSSCode getter)
@@ -2382,14 +2412,30 @@ void xss_property::code_getter(XSSCode getter)
     code_getter_ = getter;
   }
 
+XSSCode xss_property::code_getter()
+  {
+    return code_getter_;
+  }
+
 void xss_property::code_setter(XSSCode setter)
   {
     code_setter_ = setter;
   }
 
+XSSCode xss_property::code_setter()
+  {
+    return code_setter_;
+  }
+
 void xss_property::as_const()
   {
     assert(false); //td:
+  }
+
+bool xss_property::is_const()
+  {
+    assert(false); //td:
+    return false; 
   }
 
 void xss_property::property_type(XSSType type)
@@ -2521,28 +2567,29 @@ xss_method::xss_method()
     DYNAMIC_INHERITANCE(xss_method)
   }
 
-xss_method::xss_method(const xss_method& other):
-	args_(other.args_),
-  code_(other.code_)
-  {
-    DYNAMIC_INHERITANCE(xss_method)
-	  type_ = other.type_;
-    id_ = other.id_;
-  }
-
-xss_method::xss_method(const str& name, XSSType type, variant args, variant code):
-	args_(args),
-  code_(code)
-  {
-    DYNAMIC_INHERITANCE(xss_method)
-	  type_ = type;
-    id_ = name;
-  }
-
-str xss_method::get_name()
-  {
-    return id_;
-  }
+//0.9.5
+//xss_method::xss_method(const xss_method& other):
+//	args_(other.args_),
+//  code_(other.code_)
+//  {
+//    DYNAMIC_INHERITANCE(xss_method)
+//	  type_ = other.type_;
+//    id_ = other.id_;
+//  }
+//
+//xss_method::xss_method(const str& name, XSSType type, variant args, variant code):
+//	args_(args),
+//  code_(code)
+//  {
+//    DYNAMIC_INHERITANCE(xss_method)
+//	  type_ = type;
+//    id_ = name;
+//  }
+//
+//str xss_method::get_name()
+//  {
+//    return id_;
+//  }
 
 XSSType xss_method::type()
   {
@@ -2569,19 +2616,34 @@ XSSType xss_method::return_type()
     return return_type_;
   }
 
-void xss_method::set_caller(InlineRenderer caller)
+void xss_method::renderer(InlineRenderer caller)
   {
-    caller_ = caller;
+    renderer_ = caller;
   }
 
-void xss_method::set_signature(XSSSignature sig)
+InlineRenderer xss_method::renderer()
+  {
+    return renderer_;
+  }
+
+void xss_method::signature(XSSSignature sig)
   {
     signature_ = sig;
   }
 
-void xss_method::set_code(XSSCode code)
+XSSSignature xss_method::signature()
   {
-    code__ = code;
+    return signature_;
+  }
+
+void xss_method::code(XSSCode code)
+  {
+    code_ = code;
+  }
+
+XSSCode xss_method::code()
+  {
+    return code_;
   }
 
 void xss_method::bind(XSSContext ctx)
@@ -2593,30 +2655,31 @@ void xss_method::bind(XSSContext ctx)
     else
       signature_ = XSSSignature(new xss_signature);
 
-    if (code__)
+    if (code_)
       {
-        code__->bind(ctx);
-        XSSType rt = code__->return_type();
+        code_->bind(ctx);
+        XSSType rt = code_->return_type();
         if (!return_type_)
             return_type_ = rt;
         else if (return_type_ != rt)
-		      ctx->error(SMethodReturnTypeMismatch, null, code__->begin(), code__->end());
+		      ctx->error(SMethodReturnTypeMismatch, null, code_->begin(), code_->end());
       }
   }
 
-variant xss_method::code()
-  {
-    return code_;
-  }
-
-void xss_method::add_parameter(const str& name)
-  {
-    IArgumentRenderer* args = variant_cast<IArgumentRenderer*>(args_, null);
-    if (args)
-      args->add(name, XSSType()); //td: type
-  }
-
-variant& xss_method::get_parameters()
-  {
-    return args_;
-  }
+//0.9.5
+//variant xss_method::code()
+//  {
+//    return code_;
+//  }
+//
+//void xss_method::add_parameter(const str& name)
+//  {
+//    IArgumentRenderer* args = variant_cast<IArgumentRenderer*>(args_, null);
+//    if (args)
+//      args->add(name, XSSType()); //td: type
+//  }
+//
+//variant& xss_method::get_parameters()
+//  {
+//    return args_;
+//  }

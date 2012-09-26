@@ -491,8 +491,11 @@ str html_renderer::render(XSSObject this_, param_list* args)
   {
     str content = xss_renderer::render(this_, args);
 
-    XSSCompiler compiler = context_->resolve("compiler");
-    str html_text = compiler_->file(template_);
+    assert(false);
+    str html_text;
+    //0.9.5
+    //XSSCompiler compiler = context_->resolve("compiler");
+    //str html_text = compiler_->file(template_);
     
     html_parser parser;
     tag_list    tags;

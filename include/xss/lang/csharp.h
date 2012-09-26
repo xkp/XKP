@@ -2,13 +2,15 @@
 #ifndef XSS_CSHARP_HH
 #define XSS_CSHARP_HH
 
-#include "js.h"
+#include "typed.h"
 
 namespace xkp{
 
-struct cs_lang : public js_lang //td: !!! base_lang
+struct cs_lang : public typed_lang
   {
-    virtual XSSContext create_context();
+    virtual bool render_foreach(IStatementForEach* info, XSSContext ctx, std::ostringstream& result);
+    virtual bool render_object(value_operation& op, XSSContext ctx, std::ostringstream& result);
+    virtual bool render_array(value_operation& op, XSSContext ctx, std::ostringstream& result);
   };
 
 }

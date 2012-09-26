@@ -3,24 +3,66 @@
 
 using namespace xkp;
 
-XSSContext cs_lang::create_context()
+bool cs_lang::render_foreach(IStatementForEach* info, XSSContext ctx, std::ostringstream& result)
   {
-    XSSContext result(new xss_context(XSSContext()));
+    result << '\n' << "foreach(";
+    result << info->type()->output_id() << " " << info->id() << " in ";
+    if (!render_expression(info->iter_expr(), ctx, result))
+      return false;
 
-    result->add_type(XSSType(new xss_type("int",    type_schema<int>())), str());
-    result->add_type(XSSType(new xss_type("float",  type_schema<float>())), str());
-    result->add_type(XSSType(new xss_type("double", type_schema<double>())), str());
-    result->add_type(XSSType(new xss_type("bool",   type_schema<bool>())), str());
-    result->add_type(XSSType(new xss_type("string", type_schema<str>())), str());
+    result << ")";
+    result << '\n' << "{";
 
-    XSSType var_type = result->add_type(XSSType(new xss_type("var", null)), str());
-    var_type->as_variant();
+    if (!render_code(info->for_code(), ctx, result))
+      return false;
 
-    XSSType object_type = result->add_type(XSSType(new xss_type("object", null)), str());
-    object_type->as_variant();
-
-    XSSType array_type = result->add_type(XSSType(new xss_type("array", null)), str());
-    array_type->as_array(var_type);
-
-    return result;
+    result << '\n' << "}";
+    return true;
   }
+
+bool cs_lang::render_object(value_operation& op, XSSContext ctx, std::ostringstream& result)
+  {
+    assert(op.bound());
+    assert(op.resolve_id() == RESOLVE_CONST);
+    XSSType type = variant_cast<XSSType>(op.resolve_value(), XSSType()); assert(type);
+    return render_instantiation(type, op.args(), ctx, result);
+  }
+
+bool cs_lang::render_array(value_operation& op, XSSContext ctx, std::ostringstream& result)
+  {
+    assert(op.bound());
+    assert(op.resolve_id() == RESOLVE_CONST);
+    XSSType type       = variant_cast<XSSType>(op.resolve_value(), XSSType()); assert(type);
+    XSSType array_type = type->array_type(); assert(array_type);
+    
+    result << "new List<" << array_type->output_id() << ">(";
+    if (op.args()->size() > 0)
+      {
+        result << "new " << array_type->output_id() << "[]";
+        xss_parameters::iterator it = op.args()->begin();
+        xss_parameters::iterator nd = op.args()->end();
+
+        result << "{";
+        
+        bool first = true;
+        for(; it != nd; it++)
+          {
+            if (first)
+              first = false;
+            else
+              result << ", ";
+
+            if (!render_expression(it->value(), ctx, result))
+              return false;
+          }
+
+        result << "}";
+      }
+    else 
+      {
+        result << ")";
+      }
+
+    return true;
+  }
+
