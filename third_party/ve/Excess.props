@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <BOOST_INCLUDE>$(BOOST_PATH)\boost_1_44_0</BOOST_INCLUDE>
+    <BOOST_LIB>$(BOOST_INCLUDE)\stage\lib</BOOST_LIB>
+    <XSS_INCLUDE>..\..\..\include</XSS_INCLUDE>
+    <JSON_INCLUDE>..\..\..\third_party\jsoncpp\include</JSON_INCLUDE>
+    <TINY_XML_INCLUDE>..\..\..\third_party\tinyXml</TINY_XML_INCLUDE>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(XSS_INCLUDE);$(BOOST_INCLUDE);$(JSON_INCLUDE);$(TINY_XML_INCLUDE)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BOOST_NO_MEMBER_TEMPLATE_FRIENDS;BOOST_NO_STATIC_ASSERT;TIXML_USE_STL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(BOOST_LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="BOOST_INCLUDE">
+      <Value>$(BOOST_INCLUDE)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="BOOST_LIB">
+      <Value>$(BOOST_LIB)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="XSS_INCLUDE">
+      <Value>$(XSS_INCLUDE)</Value>
+    </BuildMacro>
+    <BuildMacro Include="JSON_INCLUDE">
+      <Value>$(JSON_INCLUDE)</Value>
+    </BuildMacro>
+    <BuildMacro Include="TINY_XML_INCLUDE">
+      <Value>$(TINY_XML_INCLUDE)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

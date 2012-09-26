@@ -1,6 +1,7 @@
 grammar xs;
 
 options {
+	language=C;
     backtrack = true;
     memoize = true;
 }

@@ -18,16 +18,6 @@
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
-            <script type="text/javascript" src="../js/three/fonts.js"></script>
-            <script type="text/javascript" src="../js/three/ShaderExtras.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/EffectComposer.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/RenderPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/ShaderPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/BloomPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/FilmPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/DotScreenPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/TexturePass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/MaskPass.js"></script>
 <script type="text/javascript">	
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 			var renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -38,81 +28,109 @@ var g_delta;
 var scene = new THREE.Scene();
 scene.mouse_thru = true;
 var streamer;
+var manager = new threejs.Manager(scene, renderer, null, canvas_position);
+var three_utils = new threejs.Utils();
+manager.events = new ev.EventHolder();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 var clock = new THREE.Clock();
 application.events = new ev.EventHolder();
 		var streamer = new stream.Streamer();	
+		streamer.manager = manager;
 		var ResourceUtils = new stream.ResourceUtils();
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
-            {
+		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test1.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image1;
 				global_package.events.addListener("loaded", function()
 				{
 					__image1 = streamer.get_resource("__image1");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test2.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image2;
 				global_package.events.addListener("loaded", function()
 				{
 					__image2 = streamer.get_resource("__image2");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test3.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image3;
 				global_package.events.addListener("loaded", function()
 				{
 					__image3 = streamer.get_resource("__image3");
 				});
 				var pack_1 = new stream.Package(streamer);				
+			var child_ = {};
+			child_.type_ = 'image';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "pack_1")
+					global_package.items[i].children['__image4'] = child_;
+			}
+			var child_ = {};
+			child_.type_ = 'image';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "pack_1")
+					global_package.items[i].children['__image5'] = child_;
+			}
                 pack_1.add_item(
-            {
+		{
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test4.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});
+		animations:		[],	
+		children:		{}
+		}
+);
 				var __image4;
 				pack_1.events.addListener("loaded", function()
 				{
 					__image4 = streamer.get_resource("__image4");
 				});
                 pack_1.add_item(
-            {
+		{
 		id:				"__image5",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test5.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});
+		animations:		[],	
+		children:		{}
+		}
+);
 				var __image5;
 				pack_1.events.addListener("loaded", function()
 				{
@@ -129,9 +147,7 @@ application.events = new ev.EventHolder();
 		global_package.load();	
     // --------RESOURCES---------
 renderer.setSize( app_width, app_height );
-var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
-var three_utils = new threejs.Utils();
-manager.events = new ev.EventHolder();
+manager.streamer = streamer;
 function render() {
 manager.canvas_position = getElementPosition(renderer.domElement);
 var now   = new Date().getTime();
@@ -153,26 +169,27 @@ threejs_load_resources(manager, function()
 		    camera_1 = 
 		    new THREE.PerspectiveCamera(45, 1.5, 1, 10000, null) ;	
 			manager.active_camera = camera_1;
-camera_1.manager = manager;
+			camera_1.manager = manager;
 	    plane_1_plane = new THREE.PlaneGeometry(128, 164, 1, 1) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, new THREE.MeshBasicMaterial());
 	    manager.scene.add(plane_1);
 		plane_1.events = new ev.EventHolder();
-plane_1.manager = manager;
+			plane_1.manager = manager;
 	    plane_2_plane = new THREE.PlaneGeometry(128, 164, 1, 1) ;
 	    plane_2 = new THREE.Mesh(plane_2_plane, new THREE.MeshBasicMaterial());
 	    manager.scene.add(plane_2);
 		plane_2.events = new ev.EventHolder();
-plane_2.manager = manager;
+			plane_2.manager = manager;
 	    plane_3_plane = new THREE.PlaneGeometry(128, 164, 1, 1) ;
 	    plane_3 = new THREE.Mesh(plane_3_plane, new THREE.MeshBasicMaterial());
 	    manager.scene.add(plane_3);
 		plane_3.events = new ev.EventHolder();
-plane_3.manager = manager;
+			plane_3.manager = manager;
 				pack_1.events.addListener("loaded", function()
 				{				
 			    container = new THREE.Object3D() ;
-			container.events = new ev.EventHolder();container.manager = manager;
+			container.events = new ev.EventHolder();
+			container.manager = manager;
 });				
 				pack_1.events.addListener("loaded", function()
 				{				
@@ -182,7 +199,7 @@ plane_3.manager = manager;
 		plane_4.events = new ev.EventHolder();
 				container.add(plane_4);
 				manager.scene.add(container);
-				plane_4.manager = manager;
+			plane_4.manager = manager;
 });				
 				pack_1.events.addListener("loaded", function()
 				{				
@@ -192,7 +209,7 @@ plane_3.manager = manager;
 		plane_5.events = new ev.EventHolder();
 				container.add(plane_5);
 				manager.scene.add(container);
-				plane_5.manager = manager;
+			plane_5.manager = manager;
 });
             camera_1.position.x = 100;
             camera_1.position.y = 100;

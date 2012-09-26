@@ -19,6 +19,7 @@
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
             <script type="text/javascript" src="../js/three/fonts.js"></script>
+            <script type="text/javascript" src="../js/three/loaders/ColladaLoader.js"></script>
             <script type="text/javascript" src="../js/three/ShaderExtras.js"></script>
             <script type="text/javascript" src="../js/three/postprocessing/EffectComposer.js"></script>
             <script type="text/javascript" src="../js/three/postprocessing/RenderPass.js"></script>
@@ -38,68 +39,114 @@ var g_delta;
 var scene = new THREE.Scene();
 scene.mouse_thru = true;
 var streamer;
+var manager = new threejs.Manager(scene, renderer, null, canvas_position);
+var three_utils = new threejs.Utils();
+manager.events = new ev.EventHolder();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 var clock = new THREE.Clock();
 application.events = new ev.EventHolder();
 		var streamer = new stream.Streamer();	
+		streamer.manager = manager;
 		var ResourceUtils = new stream.ResourceUtils();
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
-                global_package.add_item(
-            {
+				var model_pack = new stream.Package(streamer);				
+	model_pack.events.addListener("loaded", function()
+	{    
+		scene.remove(text_1);
+	}
+	);
+			var child_ = {};
+			child_.type_ = 'json_model';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "model_pack")
+					global_package.items[i].children['res_model'] = child_;
+			}
+			var child_ = {};
+			child_.type_ = 'image';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "model_pack")
+					global_package.items[i].children['__image1'] = child_;
+			}
+			var child_ = {};
+			child_.type_ = 'image';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "model_pack")
+					global_package.items[i].children['__image2'] = child_;
+			}
+			var child_ = {};
+			child_.type_ = 'image';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "model_pack")
+					global_package.items[i].children['__image3'] = child_;
+			}
+                model_pack.add_item(
+		{
 		id:				"res_model",
 		resource_type:	RESOURCE_JSON_MODEL,
 		src:			"model/leeperrysmith/LeePerrySmith.js",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);
 				var res_model;
-				global_package.events.addListener("loaded", function()
+				model_pack.events.addListener("loaded", function()
 				{
 					res_model = streamer.get_resource("res_model");
 				});
-                global_package.add_item(
-            {
+                model_pack.add_item(
+		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"model/leeperrysmith/Infinite-Level_02_Tangent_SmoothUV.jpg",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);
 				var __image1;
-				global_package.events.addListener("loaded", function()
+				model_pack.events.addListener("loaded", function()
 				{
 					__image1 = streamer.get_resource("__image1");
 				});
-                global_package.add_item(
-            {
+                model_pack.add_item(
+		{
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"model/leeperrysmith/Map-COL.jpg",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);
 				var __image2;
-				global_package.events.addListener("loaded", function()
+				model_pack.events.addListener("loaded", function()
 				{
 					__image2 = streamer.get_resource("__image2");
 				});
-                global_package.add_item(
-            {
+                model_pack.add_item(
+		{
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"model/leeperrysmith/Map-SPEC.jpg",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);
 				var __image3;
-				global_package.events.addListener("loaded", function()
+				model_pack.events.addListener("loaded", function()
 				{
 					__image3 = streamer.get_resource("__image3");
 				});
@@ -114,9 +161,7 @@ application.events = new ev.EventHolder();
 		global_package.load();	
     // --------RESOURCES---------
 renderer.setSize( app_width, app_height );
-var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
-var three_utils = new threejs.Utils();
-manager.events = new ev.EventHolder();
+manager.streamer = streamer;
 function render() {
 manager.canvas_position = getElementPosition(renderer.domElement);
 var now   = new Date().getTime();
@@ -132,7 +177,7 @@ manager.events.dispatch("update", [g_delta, g_elapsed]);
 				set_active_camera(camera_1);
 application.events.dispatch("switch_cameras", []);
 }
-var shader_mat1;var camera_1;var a_ligth;var d_ligth_1;var head_model;var composer;var eb;var ec;var ef;
+var material_1;var shader_mat1;var camera_1;var a_ligth;var d_ligth_1;var text_1;var head_model;var composer;var eb;var ec;var ef;
     function create_my_material(
     color,wireframe,wireframe_linewidth,src,texture_object,shading,vertex_colors,env_map,combine,reflectivity,shininess,specular,transparent,refraction_ratio,ambient,blending,emissive,depth_test,skinning,morph_targets,fog,morph_normals,lights ) { 
     var my_material;
@@ -231,62 +276,64 @@ lights:true,
 			}
 threejs_load_resources(manager, function()
 {
+material_1 = new THREE.MeshLambertMaterial({
+color:Math.random() * 0xffffff,shading:smooth_shading,
+	});
+			material_1.manager = manager;
+				model_pack.events.addListener("loaded", function()
+				{				
 			    shader_mat1 = 
 create_my_material(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, true)
  ;
 			shader_mat1.manager = manager;
+});
 		    camera_1 = 
 		    new THREE.PerspectiveCamera(75, 1.5, 1, 10000, null) ;	
 			manager.active_camera = camera_1;
-camera_1.manager = manager;
+			camera_1.manager = manager;
 	    a_ligth = 
 	    new THREE.AmbientLight(ivory) ;
 	    manager.scene.add(a_ligth);
-a_ligth.manager = manager;
+			a_ligth.manager = manager;
 	    d_ligth_1 = 
 	    new THREE.DirectionalLight(white, 1, 0, null) ;
 	    manager.scene.add(d_ligth_1);
-d_ligth_1.manager = manager;
-	head_model = new THREE.Object3D();
-	var head_model_loader = 
-	generate_model_loader(manager.streamer.get_resource('res_model').type);
-		head_model_loader.load(
-				manager.streamer.get_resource('res_model').asset , function( geometry )
-			{
-				var head_model_mesh = new THREE.Mesh(geometry, shader_mat1);
-				head_model.add(head_model_mesh);
-            if(1) geometry.computeTangents();
-            head_model.position.x = -110;
-            head_model.position.z = -350;
-            head_model.position.y = -20;
-            head_model.scale.x = 250;
-            head_model.scale.y = 250;
-            head_model.scale.z = 250;
-				manager.scene.add(head_model);
-			} 		
-	);
-	head_model.events = new ev.EventHolder();
-head_model.manager = manager;
+			d_ligth_1.manager = manager;
+var text_1_geometry = new THREE.TextGeometry("loading", {
+size:200,height:50,curveSegments:3,style:"normal"
+	});
+	text_1 = new THREE.Mesh(text_1_geometry, material_1); 
+	manager.scene.add(text_1);
+			text_1.manager = manager;
+				model_pack.events.addListener("loaded", function()
+				{				
+		head_model = clone3jsObject( manager.streamer.get_resource('res_model').data, manager );	
+		manager.scene.add(head_model);
+		head_model.events = new ev.EventHolder();			
+			head_model.manager = manager;
+});
 		var renderModel = new THREE.RenderPass( scene, manager.active_camera );
 		composer = new THREE.EffectComposer( renderer );
 		composer.addPass( renderModel );
 		manager.active_composer = composer;
-	composer.manager = manager;
+			composer.manager = manager;
 			    eb = 
 create_effect_bleach()
  ;
 				composer.addPass(eb);				
-				eb.manager = manager;
+			eb.manager = manager;
 			    ec = 
 create_effect_color()
  ;
 				composer.addPass(ec);				
-				ec.manager = manager;
+			ec.manager = manager;
 			    ef = 
 create_effect_fxaa()
  ;
 				composer.addPass(ef);				
-				ef.manager = manager;
+			ef.manager = manager;
+				model_pack.events.addListener("loaded", function()
+				{
             texture_shader_setter(shader_mat1, 'model/leeperrysmith/Infinite-Level_02_Tangent_SmoothUV.jpg', shader_mat1.uniforms['tNormal']);
             shader_mat1.uniforms['uNormalScale'].value = -0.800000012;
             texture_shader_setter(shader_mat1, 'model/leeperrysmith/Map-COL.jpg', shader_mat1.uniforms['tDiffuse']);
@@ -299,31 +346,47 @@ create_effect_fxaa()
             shader_mat1.uniforms['uAmbientColor'].value = three_utils.color(0x111111);
             shader_mat1.uniforms['uShininess'].value = 35;
             shader_mat1.uniforms['wrapRGB'].value = three_utils.vector3(0.575, 0.5, 0.5);
-            manager.events.addListener('update', function(){camera_1.lookAt(head_model.position)});
+});
+            manager.events.addListener('update', function(){if(camera_1)camera_1.lookAt(scene.position)});
             camera_1.position.z = 1000;
             d_ligth_1.position.y = -70;
             d_ligth_1.position.z = 100;
+            text_1.position.x = -500;
+				model_pack.events.addListener("loaded", function()
+				{
+            head_model.children[0].material = shader_mat1;
+            if(1) head_model.children[0].geometry.computeTangents();
+            head_model.position.x = -110;
+            head_model.position.z = -350;
+            head_model.position.y = -20;
+            head_model.scale.x = 250;
+            head_model.scale.y = 250;
+            head_model.scale.z = 250;
+});
             eb.uniforms['opacity'].value = 0.400000006;
             ec.uniforms['powRGB'].value = three_utils.vector3(1.4, 1.45, 1.45);
             ec.uniforms['mulRGB'].value = three_utils.vector3(1.1, 1.1, 1.1);
             ef.uniforms['resolution'].value = three_utils.vector3(1/app_width, 1/app_height);
             application.mouse_x = null;
             application.mouse_y = null;
+	application.events.addListener("init", function()
+	{    
+		model_pack.load();
+	}
+	);
 	application.events.addListener("update", function()
 	{    
-		set_rotation_y(head_model.rotation, application.mouse_x * 0.300000012);
+		if (head_model)
+{
+set_rotation_y(head_model.rotation, application.mouse_x * 0.300000012);
 set_rotation_x(head_model.rotation, application.mouse_y * 0.300000012);
+}
 	}
 	);
 	application.events.addListener("mousemove", function(x,y)
 	{    
 		application.mouse_x = x - app_width / 2;
 application.mouse_y = y - app_height / 2;
-	}
-	);
-	application.events.addListener("click", function()
-	{    
-		ec.enabled = !ec.enabled;
 	}
 	);
 var event_manager = new ev.ThreeEventManager();

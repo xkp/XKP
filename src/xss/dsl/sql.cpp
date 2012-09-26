@@ -15,10 +15,11 @@ str dsl_sql::get_event()
     return "render_statements";
   }
 
-void dsl_sql::add_parameters(param_list& pl, XSSContext ctx)
+void dsl_sql::add_parameters(param_list& pl, dsl& info, XSSContext ctx)
   {
     str callback = variant_cast<str>(ctx->resolve("#wax_callback"), str());
 
     pl.add("callback", callback);
     pl.add("error_handler", ctx->resolve("#wax_error_handler"));
+    load_parameter("connection", ctx, info.params, pl);
   }

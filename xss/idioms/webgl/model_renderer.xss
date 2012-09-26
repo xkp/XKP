@@ -1,8 +1,9 @@
 <xss:parameter id="obj"/>
 
-<xss:code>	
-	if(!obj.model_type || obj.model_type == "json")
-		compiler.xss("json_model_renderer.xss", obj);
-	if(obj.model_type == "collada")
-		compiler.xss("collada_renderer.xss", obj);
+<xss:code>
+	out(){			
+		<xss:e value = "obj.id"/> = clone3jsObject( manager.streamer.get_resource('<xss:e v="obj.src"/>').data, manager );	
+		manager.scene.add(<xss:e v="obj.id"/>);
+		<xss:e v="obj.id"/>.events = new ev.EventHolder();			
+	}
 </xss:code>

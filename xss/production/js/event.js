@@ -1,7 +1,7 @@
 var ev = {};
 
 ev.EventHolder = Class.extend(
-{
+{	
 	addListener: function(eventName, funcHandler)
     {
 		var handlerList = this[eventName];

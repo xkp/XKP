@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <b>Welcome: </b>
+        <b id="user_name"></b>
+        <br/>
+        <br/>
+        
+        <h3>Compress a file</h3>
+        <form action="/compress" enctype="multipart/form-data" method="post">
+            <p>
+                    <input type="file" name="datafile" size="40">
+                     <input type="submit" value="Compress">
+            </p>
+            </form>
+
+        <h3>Or select one already compressed in the session</h3>
+        <ul id="files">
+            <li>
+                <b id="file_name"></b>: <a id="link">Download link</a> 
+            </li>
+        </ul>
+    </body>
+</html>

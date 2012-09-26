@@ -18,16 +18,7 @@
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
-            <script type="text/javascript" src="../js/three/fonts.js"></script>
-            <script type="text/javascript" src="../js/three/ShaderExtras.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/EffectComposer.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/RenderPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/ShaderPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/BloomPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/FilmPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/DotScreenPass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/TexturePass.js"></script>
-            <script type="text/javascript" src="../js/three/postprocessing/MaskPass.js"></script>
+            <script type="text/javascript" src="../js/three/loaders/ColladaLoader.js"></script>
 <script type="text/javascript">	
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 			var renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -37,30 +28,63 @@ var g_elapsed;
 var g_delta;	
 var scene = new THREE.Scene();
 scene.mouse_thru = true;
-var streamer;
+var streamer = {};
+var manager = new threejs.Manager(scene, renderer, null, canvas_position);
+var three_utils = new threejs.Utils();
+manager.events = new ev.EventHolder();
+manager.events.parent = manager;
+manager.c_anims = [];
+manager.js_anims = [];
+manager.c_skins = [];
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 var clock = new THREE.Clock();
 application.events = new ev.EventHolder();
-		var streamer = new stream.Streamer();	
+		var streamer = new stream.Streamer();		
 		var ResourceUtils = new stream.ResourceUtils();
-	// --------RESOURCES---------
+	streamer.manager = manager;
+// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
-            {
+		{
 		id:				"model_1",
 		resource_type:	RESOURCE_JSON_MODEL,
 		src:			"model/monster/monster.js",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var model_1;
 				global_package.events.addListener("loaded", function()
 				{
 					model_1 = streamer.get_resource("model_1");
 				});
+			var child_ = {};
+			child_.type_ = 'json_animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "model_1")
+				{		
+					global_package.items[i].children['model_skin'] = child_;
+				}					
+			}	
+				var temp = {};
+				temp.type_ = 'anim';
+				temp.start_frame = 0;
+				temp.end_frame = 23;
+				temp.time = 1;
+				temp.loop = true;
+				temp.parent = 'model_skin';
+				for(var i = 0; i < global_package.items.length; i++)
+				{
+					if(global_package.items[i].id == "model_1")
+					{
+						global_package.items[i].children['walk'] = temp;
+					}
+				}
 		global_package.add_item({
 			id:				"invalid_res",
 			resource_type:	RESOURCE_IMAGE,
@@ -72,9 +96,7 @@ application.events = new ev.EventHolder();
 		global_package.load();	
     // --------RESOURCES---------
 renderer.setSize( app_width, app_height );
-var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
-var three_utils = new threejs.Utils();
-manager.events = new ev.EventHolder();
+manager.streamer = streamer;
 function render() {
 manager.canvas_position = getElementPosition(renderer.domElement);
 var now   = new Date().getTime();
@@ -83,6 +105,7 @@ if (g_elapsed < 0)
 else
 	g_delta  = now - g_elapsed;  
 g_elapsed = now; 
+if(!g_delta) g_delta = 0;
 c_delta = clock.getDelta(),
 c_elapsed = clock.getElapsedTime() * 10;
 manager.events.dispatch("update", [g_delta, g_elapsed]);	
@@ -96,62 +119,61 @@ threejs_load_resources(manager, function()
 material_wireframe = new THREE.MeshBasicMaterial({
 color:blanchedalmond,wireframe:true,
 	});
-material_wireframe.manager = manager;
+			material_wireframe.manager = manager;
 		    camera_1 = 
 		    new THREE.PerspectiveCamera(75, 1.5, 1, 10000, null) ;	
 			manager.active_camera = camera_1;
-camera_1.manager = manager;
+			camera_1.manager = manager;
 	    a_ligth = 
 	    new THREE.AmbientLight(2232576) ;
 	    manager.scene.add(a_ligth);
-a_ligth.manager = manager;
+			a_ligth.manager = manager;
 	    d_ligth_1 = 
 	    new THREE.DirectionalLight(16772829, 1, 0, null) ;
 	    manager.scene.add(d_ligth_1);
-d_ligth_1.manager = manager;
-	monster_model = new THREE.Object3D();
-	var monster_model_loader = 
-	generate_model_loader(manager.streamer.get_resource('model_1').type);
-		monster_model_loader.load(
-				manager.streamer.get_resource('model_1').asset , function( geometry )
-			{
-				var monster_model_mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial());
-				monster_model.add(monster_model_mesh);
-				
+			d_ligth_1.manager = manager;
+		monster_model = clone3jsObject( manager.streamer.get_resource('model_1').data, manager );	
+		manager.scene.add(monster_model);
+		monster_model.events = new ev.EventHolder();			
+			monster_model.manager = manager;
+	    plane_1_plane = new THREE.PlaneGeometry(10000, 10000, 100, 100) ;
+	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
+	    manager.scene.add(plane_1);
+		plane_1.events = new ev.EventHolder();
+			plane_1.manager = manager;
+            manager.events.addListener('update', function(){if(camera_1)camera_1.lookAt(monster_model.position)});
+            camera_1.position.z = 1000;
+            d_ligth_1.position.y = -70;
+            d_ligth_1.position.z = 100;
             monster_model.position.x = -110;
             monster_model.position.y = -350;
             monster_model.position.z = -350;
             monster_model.scale.x = 0.5;
             monster_model.scale.y = 0.5;
             monster_model.scale.z = 0.5;
-				manager.scene.add(monster_model);
-			} 		
-	);
-	monster_model.events = new ev.EventHolder();
-monster_model.manager = manager;
-	    plane_1_plane = new THREE.PlaneGeometry(10000, 10000, 100, 100) ;
-	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
-	    manager.scene.add(plane_1);
-		plane_1.events = new ev.EventHolder();
-plane_1.manager = manager;
-            manager.events.addListener('update', function(){camera_1.lookAt(monster_model.position)});
-            camera_1.position.z = 1000;
-            d_ligth_1.position.y = -70;
-            d_ligth_1.position.z = 100;
             plane_1.position.y = -500;
             application.mouse_x = null;
             application.mouse_y = null;
+	application.events.addListener("init", function()
+	{    
+		monster_model.model_skin.start("walk");
+	}
+	);
 	application.events.addListener("update", function()
 	{    
 		camera_1.position.x = camera_1.position.x + (application.mouse_x - camera_1.position.x) * 0.0500000007;
 camera_1.position.y = camera_1.position.y + (-application.mouse_y - camera_1.position.y) * 0.0500000007;
-set_rotation_y(monster_model.rotation, get_rotation_y(monster_model.rotation) + 1);
 	}
 	);
 	application.events.addListener("mousemove", function(x,y)
 	{    
 		application.mouse_x = x - app_width / 2;
 application.mouse_y = y - app_height / 2;
+	}
+	);
+	application.events.addListener("click", function()
+	{    
+		monster_model.model_skin.stop("walk");
 	}
 	);
 var event_manager = new ev.ThreeEventManager();

@@ -1,13 +1,24 @@
 var http = require("http");
 var url  = require("url");
-
+var fs = require('fs');
+var sessions = require("sessions");
 require("./smart.min.js");
 
+var application = {};
+
+//init sessions
+SessionManager = new sessions();
+  
+SessionManager.on("expired", function(sid){
+    if (application.session_expired)
+    {
+        application.session_expired(sid);
+    }
+});
+    
 <xss:code>
     compiler.inject("render_initialization");
 </xss:code>
-
-var application = {};
 
 <xss:code>
 //preprocess utility methods (those who aren't services)
@@ -21,12 +32,14 @@ for(var service_methd in application.methods)
     service_code.owner = service_methd;
 
     //find out whether these are services or utilities
-    bool is_service = false;
+    bool   is_service = false;
+    object owner_service;
     for(var service in services)
     {
         if (service.id == service_methd.id)
         {
             is_service = true;
+            owner_service = service;
             break;
         }
     }
@@ -34,6 +47,7 @@ for(var service_methd in application.methods)
     if (is_service)
     {
         service_methd.wax_service = true;
+        service_methd.src         = owner_service;
         wax_compiler.pre_process_args(service_methd);
         continue;
     }
@@ -50,21 +64,44 @@ for(var service_methd in application.methods)
 array<object> pages = application.find_by_type("page");
 for(var page in pages)
 {
-    var events = page.get_event_code("render");
-    if (events.size == 0)
-        compiler.error("web pages expect a render event");
+    var events     = page.get_event_code("render");
+    var event_args = page.get_event_args("render");
 
+    if (events.size == 0)
+        continue;
+
+    var code  = null;
     if (events.size > 1)
         compiler.error("web pages expect a single render event");
+    else if (events.size > 0)
+        code  = events[0];
 
-    var code  = events[0];
-
-    var methd = wax_compiler.compile_page(page, code);
+    page.has_code = true;
+    var methd = wax_compiler.compile_page(page, code, event_args);
     application.add_method(page.id, methd);
 }
 
 //render 'em
 compiler.xss("../common-js/instance.xss", application);
+
+//render pages without code
+for(var cpage in pages)
+{
+    if (cpage.has_code)
+        continue;
+
+    if (!cpage.src)
+        compiler.error("pages must have code or src", page = cpage.id);
+                
+    out()
+    {
+        application.<xss:e v="cpage.id"/> = function(request, response)
+        {
+            response.end("<xss:e v="compiler.escape_file(cpage.src)"/>");
+        }
+    }
+}
+
 </xss:code>
 
 application.init = function()
@@ -79,6 +116,20 @@ application.init = function()
                 compiler.xss(initializer.renderer, initializer);        
         }
     }
+
+    var fs = application.find("file_server");
+    if (fs)
+    {
+        string webroot = fs.webroot;
+        if (!webroot)
+            compiler.error("File server requires a webroot attribute");
+
+        out()
+        {
+            var static = require('node-static');
+            this.file_server = new(static.Server)('<xss:e v="webroot"/>', { cache: 7200 });
+        }
+    }
     </xss:code>
 }
 
@@ -88,15 +139,25 @@ http.createServer(function(request, response)
     var pathname = url.parse(request.url).pathname;
 
     <xss:code>
+    bool first = true;
     for(var i in application.children)
     {
-        if (i.class_name == "web_service")
+        if (i.class_name == "web_service" || i.class_name == "file_server")
             continue; //ignore
 
-        compiler.out("if (pathname == '/" + i.id + "')");
+        if (first)
+            first = false;
+        else 
+            compiler.out(" else ");
+
+        string path = i.id;
+        if (i.home)
+            path = "";
+
+        compiler.out("if (pathname == '/" + path + "')");
         compiler.out("{");
 
-        if (i.class_name == "page" || i.class_name == "service")
+        if (i.class_name == "service" || i.class_name == "page")
         {
             compiler.out("application." + i.id + "(request, response);");
         }
@@ -104,5 +165,24 @@ http.createServer(function(request, response)
 
         compiler.out("}");
     }
+
+    var fs = application.find("file_server");
+    if (fs)
+    {
+        out()
+        {
+            else
+            {
+                application.file_server.serve(request, response, function (err, res) {
+                    if (err) { 
+                        console.error("> Error serving " + request.url + " - " + err.message);
+                        response.writeHead(err.status, err.headers);
+                        response.end();
+                    } 
+                });            
+            }
+        }
+    }
+    
     </xss:code>
 }).listen(8888);

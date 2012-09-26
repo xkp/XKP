@@ -3252,6 +3252,12 @@ void xss_compiler::no_ouput()
     no_output_ = true;
   }
 
+str xss_compiler::escape_file(const str& filename)
+  {
+    assert(false);
+    return str();
+  }
+
 //td: !!! dependencies
 //0.9.5
 //void xss_compiler::collect_dependencies(XSSType type, XSSType context)

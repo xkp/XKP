@@ -1,0 +1,28 @@
+<application src="xs_zip_users.xs">
+    <page id="home" home="true"/>
+
+    <page id="login" src="xz_users_login.html"/>
+    <page id="do_login" post="true"/>
+    
+    <page id="logout"/>
+
+    <page id="register" src="xz_users_register.html"/>
+    <page id="do_register" post="true"/>
+
+    <page id="file_list" src="xz_users_list.html">
+        <element id="user_name" />
+        <element id="user_map" />
+        
+        <replicator id="files">
+            <element id="file_name"/>
+            <element id="link"/>
+        </replicator>
+    </page>
+
+    <page id="compress" src="xz_users_result.html" post="true" upload_dir="./upload">
+        <element id="file" />
+        <element id="link" />
+    </page>
+
+    <file_server webroot="/root/nodejs/samples/files/"/>
+</application>

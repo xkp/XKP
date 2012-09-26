@@ -1,0 +1,21 @@
+<application src="xs_zip_session.xs">
+    <page id="home" home="true"/>
+
+    <page id="login" src="xz_session_login.html"/>
+    <page id="do_login" post="true"/>
+
+    <page id="file_list" src="xz_session_list.html">
+        <element id="user_name" />
+        <replicator id="files">
+            <element id="file_name"/>
+            <element id="link"/>
+        </replicator>
+    </page>
+
+    <page id="compress" src="xz_session_result.html" post="true" upload_dir="./upload">
+        <element id="file" />
+        <element id="link" />
+    </page>
+
+    <file_server webroot="/root/nodejs/samples/files/"/>
+</application>

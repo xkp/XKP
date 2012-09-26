@@ -1,0 +1,7 @@
+<application src="xs_zip_service.xs">
+    <page id="home" home="true" src="xs_zip_service.html"/>
+    
+    <service id="compress" post="true" upload_dir="./upload"/>
+
+    <file_server webroot="/root/nodejs/samples/files/"/>
+</application>

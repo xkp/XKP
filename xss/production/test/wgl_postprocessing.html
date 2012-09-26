@@ -18,7 +18,7 @@
             <script type="text/javascript" src="../js/three/Stats.js"></script>
             <script type="text/javascript" src="../js/three/Utils.js"></script>
             <script type="text/javascript" src="../js/three/Detector.js"></script>
-            <script type="text/javascript" src="../js/three/fonts.js"></script>
+            <script type="text/javascript" src="../js/three/loaders/ColladaLoader.js"></script>
             <script type="text/javascript" src="../js/three/ShaderExtras.js"></script>
             <script type="text/javascript" src="../js/three/postprocessing/EffectComposer.js"></script>
             <script type="text/javascript" src="../js/three/postprocessing/RenderPass.js"></script>
@@ -38,66 +38,78 @@ var g_delta;
 var scene = new THREE.Scene();
 scene.mouse_thru = true;
 var streamer;
+var manager = new threejs.Manager(scene, renderer, null, canvas_position);
+var three_utils = new threejs.Utils();
+manager.events = new ev.EventHolder();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 var clock = new THREE.Clock();
 application.events = new ev.EventHolder();
 		var streamer = new stream.Streamer();	
+		streamer.manager = manager;
 		var ResourceUtils = new stream.ResourceUtils();
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
-            {
+		{
 		id:				"res_model",
 		resource_type:	RESOURCE_JSON_MODEL,
 		src:			"model/leeperrysmith/LeePerrySmith.js",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var res_model;
 				global_package.events.addListener("loaded", function()
 				{
 					res_model = streamer.get_resource("res_model");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"model/leeperrysmith/Infinite-Level_02_Tangent_SmoothUV.jpg",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image1;
 				global_package.events.addListener("loaded", function()
 				{
 					__image1 = streamer.get_resource("__image1");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"model/leeperrysmith/Map-COL.jpg",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image2;
 				global_package.events.addListener("loaded", function()
 				{
 					__image2 = streamer.get_resource("__image2");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"model/leeperrysmith/Map-SPEC.jpg",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image3;
 				global_package.events.addListener("loaded", function()
 				{
@@ -114,9 +126,7 @@ application.events = new ev.EventHolder();
 		global_package.load();	
     // --------RESOURCES---------
 renderer.setSize( app_width, app_height );
-var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
-var three_utils = new threejs.Utils();
-manager.events = new ev.EventHolder();
+manager.streamer = streamer;
 function render() {
 manager.canvas_position = getElementPosition(renderer.domElement);
 var now   = new Date().getTime();
@@ -177,49 +187,33 @@ lights:true,
 		vertexShader: shader_mat1_shader.vertexShader,
 		fragmentShader: shader_mat1_shader.fragmentShader
 		});
-		shader_mat1.manager = manager;
+			shader_mat1.manager = manager;
 		    camera_1 = 
 		    new THREE.PerspectiveCamera(75, 1.5, 1, 10000, null) ;	
 			manager.active_camera = camera_1;
-camera_1.manager = manager;
+			camera_1.manager = manager;
 	    a_ligth = 
 	    new THREE.AmbientLight(ivory) ;
 	    manager.scene.add(a_ligth);
-a_ligth.manager = manager;
+			a_ligth.manager = manager;
 	    d_ligth_1 = 
 	    new THREE.DirectionalLight(white, 1, 0, null) ;
 	    manager.scene.add(d_ligth_1);
-d_ligth_1.manager = manager;
-	head_model = new THREE.Object3D();
-	var head_model_loader = 
-	generate_model_loader(manager.streamer.get_resource('res_model').type);
-		head_model_loader.load(
-				manager.streamer.get_resource('res_model').asset , function( geometry )
-			{
-				var head_model_mesh = new THREE.Mesh(geometry, shader_mat1);
-				head_model.add(head_model_mesh);
-            if(1) geometry.computeTangents();
-            head_model.position.x = -110;
-            head_model.position.z = -350;
-            head_model.position.y = -20;
-            head_model.scale.x = 250;
-            head_model.scale.y = 250;
-            head_model.scale.z = 250;
-				manager.scene.add(head_model);
-			} 		
-	);
-	head_model.events = new ev.EventHolder();
-head_model.manager = manager;
+			d_ligth_1.manager = manager;
+		head_model = clone3jsObject( manager.streamer.get_resource('res_model').data, manager );	
+		manager.scene.add(head_model);
+		head_model.events = new ev.EventHolder();			
+			head_model.manager = manager;
 		var renderModel = new THREE.RenderPass( scene, manager.active_camera );
 		composer = new THREE.EffectComposer( renderer );
 		composer.addPass( renderModel );
 		manager.active_composer = composer;
-	composer.manager = manager;
+			composer.manager = manager;
 		effect_bleach = new THREE.ShaderPass( THREE.ShaderExtras[ "bleachbypass" ] );
 			effect_bleach.uniforms[ 'opacity' ]						
 			;
 				composer.addPass(effect_bleach);				
-				effect_bleach.manager = manager;
+			effect_bleach.manager = manager;
 		effect_color = new THREE.ShaderPass( THREE.ShaderExtras[ "colorCorrection" ] );
 			effect_color.uniforms[ 'powRGB' ]						
 				.value = three_utils.vector3(1.4, 1.45, 1.45)
@@ -228,17 +222,25 @@ head_model.manager = manager;
 				.value = three_utils.vector3(1.1, 1.1, 1.1)
 			;
 				composer.addPass(effect_color);				
-				effect_color.manager = manager;
+			effect_color.manager = manager;
 		effect_fxaa = new THREE.ShaderPass( THREE.ShaderExtras[ "fxaa" ] );
 			effect_fxaa.uniforms[ 'resolution' ]						
 				.value = three_utils.vector3(1/app_width, 1/app_height)
 			;
 				composer.addPass(effect_fxaa);				
-				effect_fxaa.manager = manager;
-            manager.events.addListener('update', function(){camera_1.lookAt(head_model.position)});
+			effect_fxaa.manager = manager;
+            manager.events.addListener('update', function(){if(camera_1)camera_1.lookAt(head_model.position)});
             camera_1.position.z = 1000;
             d_ligth_1.position.y = -70;
             d_ligth_1.position.z = 100;
+            head_model.children[0].material = shader_mat1;
+            if(1) head_model.children[0].geometry.computeTangents();
+            head_model.position.x = -110;
+            head_model.position.z = -350;
+            head_model.position.y = -20;
+            head_model.scale.x = 250;
+            head_model.scale.y = 250;
+            head_model.scale.z = 250;
             effect_fxaa.renderToScreen = true;
             application.mouse_x = null;
             application.mouse_y = null;

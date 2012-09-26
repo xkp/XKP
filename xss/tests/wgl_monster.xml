@@ -1,7 +1,11 @@
 <application src="wgl_monster.xs" title="Test 3D" background="#356">
 
 	<resources>		
-		<json_model id="model_1" src="model/monster/monster.js"/>				
+		<json_model id="model_1" src="model/monster/monster.js">
+			<json_animation id="model_skin">	
+				<anim id="walk" start_frame="0" end_frame="23" in="1" loop="true"/>
+			</json_animation>
+		</json_model>
 	</resources>
 	<materials>	
 		<basic_material id="material_wireframe" color="blanchedalmond" wireframe="true"/>		

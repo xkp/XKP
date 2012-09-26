@@ -252,11 +252,14 @@
     <VSTemplate Include="Templates\Items\Class\Class.vstemplate" />
     <Content Include="Templates\Items\Class\class.xml" />
     <Content Include="Templates\Items\Class\__TemplateIcon.ico" />
+    <None Include="Templates\Items\WPFClass\wclass.xs" />
     <None Include="Templates\Projects\ConsoleApp\ConsoleApp.project.xml" />
     <None Include="Templates\Items\Class\class.xs" />
     <None Include="Templates\Projects\ConsoleApp\__TemplateIcon.ico" />
     <None Include="Templates\Projects\ConsoleApp\ConsoleApp.xs" />
-    <None Include="Templates\Projects\ConsoleApp\xsConsoleApp.xsproj" />
+    <None Include="Templates\Projects\ConsoleApp\xsConsoleApp.xsproj">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="IronPython_large.png">
@@ -266,6 +269,19 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="Project.jpg" />
+    <None Include="Templates\Projects\WPFApp\WPFApp.xs" />
+    <None Include="Templates\Projects\WPFApp\xsWPFApp.xsproj">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Templates\Projects\WPFApp\WPFApp.project.xml" />
+    <VSTemplate Include="Templates\Projects\WPFApp\xsWPFApp.vstemplate">
+      <SubType>Designer</SubType>
+    </VSTemplate>
+    <VSTemplate Include="Templates\Items\WPFClass\WPFClass.vstemplate" />
+    <Content Include="Templates\Items\WPFClass\wclass.xml" />
+    <Content Include="Templates\Items\WPFClass\WPFClass.ico" />
+    <Content Include="Templates\Projects\WPFApp\WPFApp.ico" />
+    <Content Include="Templates\Projects\WPFApp\WPFApp.xml" />
     <Content Include="VSIXProject_large.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -334,6 +350,16 @@
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Templates\Items\WPFClass\wclass.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Templates\Projects\WPFApp\xsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

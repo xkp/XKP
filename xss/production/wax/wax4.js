@@ -1,16 +1,27 @@
 var http = require("http");
 var url  = require("url");
+var fs = require('fs');
+var sessions = require("sessions");
+require("./smart.min.js");
+var application = {};
+//init sessions
+SessionManager = new sessions();
+SessionManager.on("expired", function(sid){
+    if (application.session_expired)
+    {
+        application.session_expired(sid);
+    }
+});
         var mysql  = require("mysql");
         var child_process  = require("child_process");
-var application = {};
-	application.service1 = function(response,request) 
+	application.service1 = function(request,response) 
 	{
+        var __params = url.parse(request.url, true).query;
+            var file = __params.file;
 function return_function(return_value)
 {
-request.end(JSON.stringify(return_value))
-}
-var __params = url.parse(request.url, true).query;
-var file = __params.file;var data;
+response.end(JSON.stringify(return_value))
+}var data;
 function __callback1() 
 {
 var count = 0;
@@ -44,7 +55,7 @@ count--;
 __while_cond1();
 }
         var __cmd1 = "git mark " + curr_file + " " + count + "";
-        child_process.exec(__cmd1, function(error, stdout, stderr){
+        child_process.exec(__cmd1, {}, function(error, stdout, stderr){
             if (error)
      throw error;__callback6();
         });
@@ -67,23 +78,21 @@ return_function(result);
 return true;
 }
 }
-        new mysql.Database({
-            hostname: 'localhost', 
-            user: 'user', 
-            password: 'password', 
-            database: 'test'
-        }).connect(function(error) {
+        var __connection1 = mysql.createConnection(null);
+        __connection1.connect(function(error) {
             if (error)
      throw error;
         var __query1 = "INSERT INTO Registry(file_name, visited)\n            VALUES              (" + file + ", 1)";
-        this.query(__query1).execute(function(error, rows, cols) {
+        __connection1.query(__query1, function(error, rows, cols) {
             if (error)
-     throw error;__callback4();
+     throw error;
+            __connection1.end();
+            __callback4();
         });
         });
 }
         var __cmd2 = "git commit " + curr_file + "";
-        child_process.exec(__cmd2, function(error, stdout, stderr){
+        child_process.exec(__cmd2, {}, function(error, stdout, stderr){
             if (error)
      throw error;__callback3();
         });
@@ -102,22 +111,24 @@ function __for_cond1()
 }
 __for_cond1();
 }
-        new mysql.Database({
-            hostname: 'localhost', 
-            user: 'user', 
-            password: 'password', 
-            database: 'test'
-        }).connect(function(error) {
+        var __connection2 = mysql.createConnection(null);
+        __connection2.connect(function(error) {
             if (error)
      throw error;
         var __query2 = "SELECT  * \n                FROM    Registry\n                WHERE   file = " + file + " AND\n                        visited = 0";
-        this.query(__query2).execute(function(error, rows, cols) {
+        __connection2.query(__query2, function(error, rows, cols) {
             if (error)
-     throw error; data = rows; __callback1();
+     throw error; data = rows; 
+            __connection2.end();
+            __callback1();
         });
         });
-    	};
+	};
+application.init = function()
+{
+    }
+application.init();
 http.createServer(function(request, response) 
 {
     var pathname = url.parse(request.url).pathname;
-    if (pathname == 'service1'){application.service1(request, response);}}).listen(8888);
+    if (pathname == '/service1'){application.service1(request, response);}}).listen(8888);

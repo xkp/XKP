@@ -40,6 +40,21 @@ struct waxjs_lang : public js_lang
     virtual variant compile_code(code& cde, param_list_decl& params, XSSContext ctx);
 };
 
+struct module_bind_data
+  {
+    module_bind_data(str _renderer):
+      used(false),
+      renderer(_renderer)
+      {
+      }
+
+    bool used;
+    str  renderer;
+  };
+
+typedef std::map<str, module_bind_data>  bind_map;
+typedef std::pair<str, module_bind_data> bind_pair;
+
 struct waxjs_code_renderer : public base_code_renderer
   {
     waxjs_code_renderer();
@@ -80,6 +95,8 @@ struct waxjs_code_renderer : public base_code_renderer
       str render_page();
       str render_parameters();
       DynamicArray compile_args(expression& expr);
+      void search_binds(bind_map& binds);
+      str waxjs_code_renderer::render_xss(const str& file, const param_list args);
     public:
       XSSMethod owner_;
   };
@@ -89,7 +106,7 @@ struct wax_utils
     wax_utils(); 
     wax_utils(XSSCompiler compiler);
 
-    XSSMethod compile_page(XSSObject page, variant code);
+    XSSMethod compile_page(XSSObject page, variant code, variant args);
     void      pre_process_args(XSSMethod methd);
     str       escape(const str& text);
     
@@ -121,7 +138,7 @@ struct wax_utils_schema : object_schema<wax_utils>
   {
     virtual void declare()
       {
-        method_<XSSMethod, 2>("compile_page",      &wax_utils::compile_page);
+        method_<XSSMethod, 3>("compile_page",      &wax_utils::compile_page);
         method_<void, 1>     ("pre_process_args",  &wax_utils::pre_process_args);
         method_<str, 1>      ("escape",            &wax_utils::escape); 
       }

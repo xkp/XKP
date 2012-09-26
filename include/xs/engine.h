@@ -113,14 +113,25 @@ struct TokenStruct {
   };
 
 
+/* FIFO (first in first out) stack of Tokens. */
+struct TokenStackStruct {
+  struct TokenStruct *Token;
+  int LalrState;                      /* Index into Grammar.LalrArray[]. */
+  struct TokenStackStruct *NextToken; /* Pointer to next item. */
+  };
+
+
+
 /* Exported functions. */
 int Parse(
-  wchar_t *InputBuf,                  /* Pointer to the input data. */
-  long InputSize,                     /* Number of characters in the input. */
-  int TrimReductions,                 /* 0 = don't trim, 1 = trim reductions. */
-  int Debug,                          /* 0 = no debug, 1 = print debug info. */
-  struct TokenStruct **Token);        /* Output, the first Token. */
+  wchar_t *InputBuf,                        /* Pointer to the input data. */
+  long InputSize,                           /* Number of characters in the input. */
+  int TrimReductions,                       /* 0 = don't trim, 1 = trim reductions. */
+  int Debug,                                /* 0 = no debug, 1 = print debug info. */
+  struct TokenStruct **Token,               /* Output, the first Token. */
+  struct TokenStackStruct **TopTokenStack);        
 void DeleteTokens(struct TokenStruct *Token);
+void DeleteStack(struct TokenStackStruct *Stack);
 wchar_t *RetrieveToken(
   wchar_t *InputBuf,                  /* The input data. */
   long InputSize,                     /* Size of the input data. */

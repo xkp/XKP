@@ -1,0 +1,9 @@
+<project entry_point="../idioms/wax/server.xss" language="waxjs" target="xs_zip_service.xml" output="xs_zip_service.js">
+    <path>
+        <output path="../production/wax"/>
+    </path>
+
+    <idiom src="../idioms/wax/wax.xml"/>
+    <idiom src="../idioms/wax/node-shell.xml"/>
+</project>
+

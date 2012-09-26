@@ -1,0 +1,4 @@
+<xss:parameter id="it"/>
+<xss:parameter id="code"/>
+var cookies = new require("cookies")( req, res);
+<xss:e v="code"/>
