@@ -27,6 +27,9 @@ var g_delta;
 var scene = new THREE.Scene();
 scene.mouse_thru = true;
 var streamer;
+var manager = new threejs.Manager(scene, renderer, null, canvas_position);
+var three_utils = new threejs.Utils();
+manager.events = new ev.EventHolder();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
@@ -35,9 +38,7 @@ application.events = new ev.EventHolder();
 // --------RESOURCES---------
 // --------RESOURCES---------
 renderer.setSize( app_width, app_height );
-var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
-var three_utils = new threejs.Utils();
-manager.events = new ev.EventHolder();
+manager.streamer = streamer;
 function render() {
 manager.canvas_position = getElementPosition(renderer.domElement);
 var now   = new Date().getTime();
@@ -59,97 +60,113 @@ threejs_load_resources(manager, function()
 material_sphere1 = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading,
 	});
-material_sphere1.manager = manager;
+			material_sphere1.manager = manager;
 material_sphere2 = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading,
 	});
-material_sphere2.manager = manager;
+			material_sphere2.manager = manager;
 material_wireframe = new THREE.MeshLambertMaterial({
 color:MediumSlateBlue,wireframe:true,
 	});
-material_wireframe.manager = manager;
+			material_wireframe.manager = manager;
 cylinder_material = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading,
 	});
-cylinder_material.manager = manager;
+			cylinder_material.manager = manager;
 cylinder1_material = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading,
 	});
-cylinder1_material.manager = manager;
+			cylinder1_material.manager = manager;
 cube_material = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading,
 	});
-cube_material.manager = manager;
+			cube_material.manager = manager;
 cube1_material = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,shading:flat_shading,
 	});
-cube1_material.manager = manager;
+			cube1_material.manager = manager;
 		    camera_1 = 
 		    new THREE.PerspectiveCamera(50, 1.5, 1, 10000, null) ;	
 			manager.active_camera = camera_1;
-camera_1.manager = manager;
+			camera_1.manager = manager;
 				__firstperson_controls1 = new THREE.FirstPersonControls( camera_1 );
 				manager.events.addListener("update", function()
 				{				
 					__firstperson_controls1.update( c_delta );
 				})
-__firstperson_controls1.manager = manager;
+			__firstperson_controls1.manager = manager;
 	    light = 
 	    new THREE.DirectionalLight(16777215, 1, 0, null) ;
 	    manager.scene.add(light);
-light.manager = manager;
+			light.manager = manager;
 	    sphere_1_sphere = new THREE.SphereGeometry(20, 32, 16) ;
 	    sphere_1 = new THREE.Mesh(sphere_1_sphere, material_sphere1);
 	    manager.scene.add(sphere_1);
 		sphere_1.events = new ev.EventHolder();
-sphere_1.manager = manager;
+			sphere_1.manager = manager;
 	    sphere_2_sphere = new THREE.SphereGeometry(20, 32, 16) ;
 	    sphere_2 = new THREE.Mesh(sphere_2_sphere, material_sphere2);
 	    manager.scene.add(sphere_2);
 		sphere_2.events = new ev.EventHolder();
-sphere_2.manager = manager;
+			sphere_2.manager = manager;
 	    cylinder_1_cylinder = new THREE.CylinderGeometry(10, 10, 50, null, null, null) ;
 	    cylinder_1 = new THREE.Mesh(cylinder_1_cylinder, cylinder_material);
 	    manager.scene.add(cylinder_1);
 		cylinder_1.events = new ev.EventHolder();
-cylinder_1.manager = manager;
+			cylinder_1.manager = manager;
 	    cylinder_2_cylinder = new THREE.CylinderGeometry(10, 10, 50, null, null, null) ;
 	    cylinder_2 = new THREE.Mesh(cylinder_2_cylinder, cylinder1_material);
 	    manager.scene.add(cylinder_2);
 		cylinder_2.events = new ev.EventHolder();
-cylinder_2.manager = manager;
+			cylinder_2.manager = manager;
 	    cube_1_cube = new THREE.CubeGeometry(30, 30, 30, null, null, null, null, null) ;
 	    cube_1 = new THREE.Mesh(cube_1_cube, cube_material);
 	    manager.scene.add(cube_1);
 		cube_1.events = new ev.EventHolder();
-cube_1.manager = manager;
+			cube_1.manager = manager;
 	    cube_2_cube = new THREE.CubeGeometry(30, 30, 30, null, null, null, null, null) ;
 	    cube_2 = new THREE.Mesh(cube_2_cube, cube1_material);
 	    manager.scene.add(cube_2);
 		cube_2.events = new ev.EventHolder();
-cube_2.manager = manager;
+			cube_2.manager = manager;
 	    plane_1_plane = new THREE.PlaneGeometry(1000, 1000, 100, 100) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, material_wireframe);
 	    manager.scene.add(plane_1);
 		plane_1.events = new ev.EventHolder();
-plane_1.manager = manager;
-            camera_1.position = ;
+			plane_1.manager = manager;
+            camera_1.position.x = -250;
+            camera_1.position.y = 25;
             __firstperson_controls1.movementSpeed = 70;
             __firstperson_controls1.lookSpeed = 0.0500000007;
             __firstperson_controls1.noFly = true;
             __firstperson_controls1.lookVertical = false;
-            light.position = ;
-            sphere_1.position = ;
-            sphere_2.position = ;
-            cylinder_1.rotation = ;
-            cylinder_1.position = ;
-            cylinder_2.rotation = ;
-            cylinder_2.position = ;
-            cube_1.position = ;
-            cube_1.rotation = ;
-            cube_2.position = ;
-            cube_2.rotation = ;
-            plane_1.position = ;
+            light.position.y = 0.5;
+            light.position.z = 1;
+            sphere_1.position.x = 250;
+            sphere_1.position.y = 30;
+            sphere_2.position.x = -250;
+            sphere_2.position.y = 30;
+            set_rotation_x(cylinder_1.rotation, 212);
+            set_rotation_y(cylinder_1.rotation, 212);
+            cylinder_1.position.x = 100;
+            cylinder_1.position.y = 30;
+            cylinder_1.position.z = 100;
+            set_rotation_x(cylinder_2.rotation, 212);
+            set_rotation_y(cylinder_2.rotation, 212);
+            cylinder_2.position.x = -100;
+            cylinder_2.position.y = 30;
+            cylinder_2.position.z = 100;
+            cube_1.position.x = -100;
+            cube_1.position.y = 30;
+            cube_1.position.z = -100;
+            set_rotation_x(cube_1.rotation, 212);
+            set_rotation_y(cube_1.rotation, 212);
+            cube_2.position.x = 100;
+            cube_2.position.y = 30;
+            cube_2.position.z = -100;
+            set_rotation_x(cube_2.rotation, 212);
+            set_rotation_y(cube_2.rotation, 212);
+            plane_1.position.y = 0.100000001;
 var event_manager = new ev.ThreeEventManager();
 document.onmousemove = function(ev)
 {

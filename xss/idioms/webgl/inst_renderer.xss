@@ -7,6 +7,10 @@
                 return;
         }		
 		out(marker = "threejs_variables", marker_source = "previous") {var <xss:e v="i.id"/>;}
+		if(i.dont_instantiate)
+		{
+			return;
+		}
 		if(i.class_name == "camera")
 			out(marker = "render_function", marker_source = "previous")
 			{
@@ -37,6 +41,10 @@
 				out(){				
 				<xss:e v="i.parent.id"/>.addPass(<xss:e v="i.id"/>);				
 				}
-			}	
+			}
+		out()
+		{
+			<xss:e v="i.id"/>.manager = manager;
+		}
 </xss:code>
-<xss:e v="i.id"/>.manager = manager;
+

@@ -1,0 +1,49 @@
+<application src="wgl_coll_anim_3.xs" title="Test 3D" background="black">
+
+	<resources>		
+		<collada_model id="character" src="model/character/character.dae">
+			<collada_skin id="char_anim">
+				<skin id="idle" start_frame="5" end_frame="100" in="1" loop="true"/>
+				<skin id="walk" start_frame="105" end_frame="144" in="1" loop="true"/>
+				<skin id="run" start_frame="150" end_frame="179" in="1" loop="true"/>
+				<skin id="alert" start_frame="185" end_frame="284" in="3" loop="true"/>
+				<skin id="conversation" start_frame="290" end_frame="389" in="3" loop="true"/>
+			</collada_skin>
+		</collada_model>	
+	</resources>
+		
+	<materials>	
+		<basic_material id="material_wireframe" color="gray" wireframe="true" alpha="20"/>	
+	</materials>
+	
+	<scene>			
+		
+		<camera id="camera_1" fov="75" aspect="1.5" near="0.1" far="1000" look_at="scene.position">
+			<position y="50" z="500"/>			
+		</camera>
+		
+		<ambient_light id="a_ligth" color="ivory">
+			<position y="5000" z="5000"/> 
+		</ambient_light>
+		
+		<directional_light id="d_ligth_1" color="White" intensity="2">			
+            <position y="5000" z="5000"/>            
+		</directional_light>
+		
+		<point_light id="light1" color="red" intensity="0.2"/>
+		<point_light id="light2" color="green" intensity="0.2"/>
+		<point_light id="light3" color="blue" intensity="0.2"/>		
+				
+		<model id="model1" src="character">
+			<scale x="20" y="20" z="20"/>	
+			<rotation x="-90"/>	
+			<position y="-50" />
+		</model>
+		
+		<plane id="plane_1" width="1000" height="1000" x_segments="50" y_segments="50" material="material_wireframe">
+			<position y="-70"/>			
+		</plane>
+						
+	</scene>
+	
+</application>

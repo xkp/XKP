@@ -53,7 +53,7 @@ on render_dependencies()
 on render_instances()
 {	
 	for(var inst in instances)
-    {	
+    {			
 		if(inst.wait_for_package)
 		{			
 			out()
@@ -64,7 +64,7 @@ on render_instances()
 		}	
 		compiler.xss("inst_renderer.xss", inst);	
 		if(inst.wait_for_package)
-			out(){<xss:close_brace/>);}		
+			out(){<xss:close_brace/>);}			
     }	
 }
 

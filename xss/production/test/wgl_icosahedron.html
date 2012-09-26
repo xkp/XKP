@@ -27,24 +27,30 @@ var g_delta;
 var scene = new THREE.Scene();
 scene.mouse_thru = true;
 var streamer;
+var manager = new threejs.Manager(scene, renderer, null, canvas_position);
+var three_utils = new threejs.Utils();
+manager.events = new ev.EventHolder();
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 var clock = new THREE.Clock();
 application.events = new ev.EventHolder();
 		var streamer = new stream.Streamer();	
+		streamer.manager = manager;
 		var ResourceUtils = new stream.ResourceUtils();
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
-            {
+		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/shadow.png",
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image1;
 				global_package.events.addListener("loaded", function()
 				{
@@ -61,9 +67,7 @@ application.events = new ev.EventHolder();
 		global_package.load();	
     // --------RESOURCES---------
 renderer.setSize( app_width, app_height );
-var manager = new threejs.Manager(scene, renderer, streamer, canvas_position);
-var three_utils = new threejs.Utils();
-manager.events = new ev.EventHolder();
+manager.streamer = streamer;
 function render() {
 manager.canvas_position = getElementPosition(renderer.domElement);
 var now   = new Date().getTime();
@@ -85,60 +89,62 @@ threejs_load_resources(manager, function()
 mat_1 = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,
 	});
-mat_1.manager = manager;
+			mat_1.manager = manager;
 mat_2 = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,
 	});
-mat_2.manager = manager;
+			mat_2.manager = manager;
 mat_3 = new THREE.MeshLambertMaterial({
 color:Math.random() * 0xffffff,
 	});
-mat_3.manager = manager;
+			mat_3.manager = manager;
 shadow_mat = new THREE.MeshBasicMaterial({
 map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('images/shadow.png').asset),
 	});
-shadow_mat.manager = manager;
+			shadow_mat.manager = manager;
 		    camera_1 = 
 		    new THREE.PerspectiveCamera(40, 1.5, 1, 10000, null) ;	
 			manager.active_camera = camera_1;
-camera_1.manager = manager;
+			camera_1.manager = manager;
 	    icosahedron_1_icosahedron = new THREE.IcosahedronGeometry(1, null) ;
 	    icosahedron_1 = new THREE.Mesh(icosahedron_1_icosahedron, mat_1);
 	    manager.scene.add(icosahedron_1);
 		icosahedron_1.events = new ev.EventHolder();
-icosahedron_1.manager = manager;
+			icosahedron_1.manager = manager;
 	    icosahedron_2_icosahedron = new THREE.IcosahedronGeometry(1, null) ;
 	    icosahedron_2 = new THREE.Mesh(icosahedron_2_icosahedron, mat_2);
 	    manager.scene.add(icosahedron_2);
 		icosahedron_2.events = new ev.EventHolder();
-icosahedron_2.manager = manager;
+			icosahedron_2.manager = manager;
 	    icosahedron_3_icosahedron = new THREE.IcosahedronGeometry(1, null) ;
 	    icosahedron_3 = new THREE.Mesh(icosahedron_3_icosahedron, mat_3);
 	    manager.scene.add(icosahedron_3);
 		icosahedron_3.events = new ev.EventHolder();
-icosahedron_3.manager = manager;
+			icosahedron_3.manager = manager;
 	    plane_1_plane = new THREE.PlaneGeometry(300, 300, 1, 1) ;
 	    plane_1 = new THREE.Mesh(plane_1_plane, shadow_mat);
 	    manager.scene.add(plane_1);
 		plane_1.events = new ev.EventHolder();
-plane_1.manager = manager;
+			plane_1.manager = manager;
 	    plane_2_plane = new THREE.PlaneGeometry(300, 300, 1, 1) ;
 	    plane_2 = new THREE.Mesh(plane_2_plane, shadow_mat);
 	    manager.scene.add(plane_2);
 		plane_2.events = new ev.EventHolder();
-plane_2.manager = manager;
+			plane_2.manager = manager;
 	    plane_3_plane = new THREE.PlaneGeometry(300, 300, 1, 1) ;
 	    plane_3 = new THREE.Mesh(plane_3_plane, shadow_mat);
 	    manager.scene.add(plane_3);
 		plane_3.events = new ev.EventHolder();
-plane_3.manager = manager;
+			plane_3.manager = manager;
 	    light_1 = 
 	    new THREE.DirectionalLight(White, 1, 0, null) ;
 	    manager.scene.add(light_1);
-light_1.manager = manager;
-            camera_1.position = ;
-            icosahedron_1.position = ;
-            icosahedron_1.scale = ;
+			light_1.manager = manager;
+            camera_1.position.z = 1800;
+            icosahedron_1.position.x = -450;
+            icosahedron_1.scale.x = 200;
+            icosahedron_1.scale.y = 200;
+            icosahedron_1.scale.z = 200;
 	icosahedron_1.events.addListener("mousein", function()
 	{    
 		set_rotation_x(icosahedron_1.rotation, get_rotation_x(icosahedron_1.rotation) + 2);
@@ -146,7 +152,9 @@ set_rotation_y(icosahedron_1.rotation, get_rotation_y(icosahedron_1.rotation) + 
 set_rotation_z(icosahedron_1.rotation, get_rotation_z(icosahedron_1.rotation) + 2);
 	}
 	);
-            icosahedron_2.scale = ;
+            icosahedron_2.scale.x = 200;
+            icosahedron_2.scale.y = 200;
+            icosahedron_2.scale.z = 200;
 	icosahedron_2.events.addListener("mousein", function()
 	{    
 		set_rotation_x(icosahedron_2.rotation, get_rotation_x(icosahedron_2.rotation) + 2);
@@ -154,8 +162,10 @@ set_rotation_y(icosahedron_2.rotation, get_rotation_y(icosahedron_2.rotation) + 
 set_rotation_z(icosahedron_2.rotation, get_rotation_z(icosahedron_2.rotation) + 2);
 	}
 	);
-            icosahedron_3.position = ;
-            icosahedron_3.scale = ;
+            icosahedron_3.position.x = 450;
+            icosahedron_3.scale.x = 200;
+            icosahedron_3.scale.y = 200;
+            icosahedron_3.scale.z = 200;
 	icosahedron_3.events.addListener("mousein", function()
 	{    
 		set_rotation_x(icosahedron_3.rotation, get_rotation_x(icosahedron_3.rotation) + 2);
@@ -163,10 +173,12 @@ set_rotation_y(icosahedron_3.rotation, get_rotation_y(icosahedron_3.rotation) + 
 set_rotation_z(icosahedron_3.rotation, get_rotation_z(icosahedron_3.rotation) + 2);
 	}
 	);
-            plane_1.position = ;
-            plane_2.position = ;
-            plane_3.position = ;
-            light_1.position = ;
+            plane_1.position.x = -450;
+            plane_1.position.y = -250;
+            plane_2.position.y = -250;
+            plane_3.position.x = 450;
+            plane_3.position.y = -250;
+            light_1.position.z = 1;
             application.mouseX = 0;
             application.mouseY = 0;
 	application.events.addListener("mousemove", function(x,y)

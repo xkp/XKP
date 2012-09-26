@@ -1,0 +1,33 @@
+<application src="wgl_collada2.xs" title="Test 3D" background="lightskyblue">
+
+	<resources>		
+		<collada_model id="pump" src="model/pump/pump.dae">
+			<collada_camera id="model_cam"/>
+			<collada_camera id="model_cam1"/>
+			<collada_camera id="model_cam2"/>
+		</collada_model>	
+	</resources>
+		
+	<scene>			
+		
+		<camera id="camera_1" fov="50" aspect="1.77" near="0.1" far="100" look_at="scene.position">
+			<position x="50" z="50"/>           
+		</camera>
+		
+		<ambient_light id="a_ligth" color="ivory">
+			<position y="3000" z="3000"/> 
+		</ambient_light>
+		
+		<directional_light id="d_ligth_1" color="White" intensity="2">			
+            <position y="3000" z="5000"/>            
+		</directional_light>
+		
+		<point_light id="light1" color="deepskyblue" intensity="0.2"/>		
+				
+		<model id="model1" src="pump">
+			<scale x="0.5" y="0.5" z="0.5"/>		
+		</model>
+						
+	</scene>
+	
+</application>
