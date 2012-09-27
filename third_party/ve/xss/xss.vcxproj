@@ -51,7 +51,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;XSS_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(XSS_INCLUDE);$(BOOST_INCLUDE);$(JSON_INCLUDE);$(TINY_XML_INCLUDE)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zm134 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -87,29 +87,15 @@
     <ClCompile Include="..\..\..\src\xs.cpp" />
     <ClCompile Include="..\..\..\src\xss\brace_parser.cpp" />
     <ClCompile Include="..\..\..\src\xss\data_reader.cpp" />
-    <ClCompile Include="..\..\..\src\xss\dsl\ajax.cpp" />
-    <ClCompile Include="..\..\..\src\xss\dsl\ga_parser.cpp" />
-    <ClCompile Include="..\..\..\src\xss\dsl\generic_assign.cpp" />
-    <ClCompile Include="..\..\..\src\xss\dsl\html5_asynch.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl\native.cpp" />
-    <ClCompile Include="..\..\..\src\xss\dsl\shell.cpp" />
-    <ClCompile Include="..\..\..\src\xss\dsl\smarty.cpp" />
-    <ClCompile Include="..\..\..\src\xss\dsl\sql.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl\vm_base.cpp" />
-    <ClCompile Include="..\..\..\src\xss\dsl\vm_shell.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl_out.cpp" />
     <ClCompile Include="..\..\..\src\xss\html_parser.cpp" />
-    <ClCompile Include="..\..\..\src\xss\language.cpp" />
-    <ClCompile Include="..\..\..\src\xss\lang\base.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang\csharp.cpp" />
-    <ClCompile Include="..\..\..\src\xss\lang\debug.cpp" />
-    <ClCompile Include="..\..\..\src\xss\lang\java.cpp" />
-    <ClCompile Include="..\..\..\src\xss\lang\js.cpp" />
-    <ClCompile Include="..\..\..\src\xss\lang\waxjs.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang\typed.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang_factory.cpp" />
     <ClCompile Include="..\..\..\src\xss\localfs.cpp" />
     <ClCompile Include="..\..\..\src\xss\object_model.cpp" />
-    <ClCompile Include="..\..\..\src\xss\object_reader.cpp" />
     <ClCompile Include="..\..\..\src\xss\utils.cpp" />
     <ClCompile Include="..\..\..\src\xss\xml_data_reader.cpp" />
     <ClCompile Include="..\..\..\src\xss\xss_code.cpp" />

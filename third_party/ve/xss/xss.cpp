@@ -69,7 +69,7 @@ class xss_object_model : public IObjectModel
 		{
 			Application app = model_->app_by_file(fname);
 			if (app)
-				thread_->compile_request(content, fname, app);
+				thread_->compile_request(content, fname, app, app->app_item(fname));
 		}
 
 		struct walker : context_visitor

@@ -56,34 +56,10 @@
     <ClCompile Include="..\..\..\src\xss\data_reader.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\ajax.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\ga_parser.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\generic_assign.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\html5_asynch.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\xss\dsl\native.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\shell.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\smarty.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\sql.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\xss\dsl\vm_base.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\vm_shell.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\xss\dsl_out.cpp">
@@ -92,25 +68,7 @@
     <ClCompile Include="..\..\..\src\xss\html_parser.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\language.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\lang\base.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\xss\lang\csharp.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\lang\debug.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\lang\java.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\lang\js.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\lang\waxjs.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\xss\lang_factory.cpp">
@@ -122,13 +80,7 @@
     <ClCompile Include="..\..\..\src\xss\object_model.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\object_reader.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\xss\utils.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\xml_data_reader.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\xss\xss_code.cpp">
@@ -189,6 +141,12 @@
       <Filter>Source Files\xss</Filter>
     </ClCompile>
     <ClCompile Include="..\..\tinyXml\tinyxmlparser.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\lang\typed.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\xml_data_reader.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
   </ItemGroup>

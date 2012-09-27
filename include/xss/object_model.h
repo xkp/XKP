@@ -53,19 +53,25 @@ class IFileSystem
   };
 
 //data structures
-typedef std::vector<XSSType>      type_list;
-typedef std::map<str, XSSType>    type_map;
-typedef std::map<str, XSSContext> context_map;
-
-typedef std::map<str, Idiom> idiom_list;
-
-typedef std::vector<XSSObject>   instance_list; //td: !!! instances
-typedef std::map<str, XSSObject> instance_map;
-
-typedef std::map<fs::path, document> document_map;
-
+typedef std::vector<XSSType>            type_list;
+typedef std::map<str, XSSType>          type_map;
+typedef std::map<str, XSSContext>       context_map;
+typedef std::map<str, Idiom>            idiom_list;
+typedef std::vector<XSSObject>          instance_list; //td: !!! instances
+typedef std::map<str, XSSObject>        instance_map;
+typedef std::map<fs::path, document>    document_map;
 typedef std::map<fs::path, Application> application_list;
 
+//misc
+enum APPLICATION_ITEM
+  {
+    AI_NONE,
+    AI_INSTANCE,
+    AI_CLASS,
+    AI_APP,
+  };
+
+//classes
 class idiom
   {
     public:
@@ -86,19 +92,22 @@ class application
     public:
       application(fs::path path);
     public:
-      void          entry_point(fs::path ep);
-      void          output_file(const str& ep);
-      void          compiler_options(DataEntity options);
-      void          set_context(XSSContext ctx);
-      code_context& exec_context();
-      XSSContext    context();
-      fs::path      path();
-      document*     create_document(fs::path fname, XSSContext ctx);
-      document*     get_document(fs::path path);
-      error_list&   errors();
-      void          add_error(const str& desc, param_list* info, file_location& loc);
-      void          visit_errors(const fs::path& fname, error_visitor* visitor);
-      void          clear_file_errors(const fs::path& fname);
+      void              entry_point(fs::path ep);
+      void              output_file(const str& ep);
+      void              compiler_options(DataEntity options);
+      void              set_context(XSSContext ctx);
+      code_context&     exec_context();
+      XSSContext        context();
+      fs::path          path();
+      document*         create_document(fs::path fname, XSSContext ctx);
+      document*         get_document(fs::path path);
+      error_list&       errors();
+      void              add_error(const str& desc, param_list* info, file_location& loc);
+      void              visit_errors(const fs::path& fname, error_visitor* visitor);
+      void              clear_file_errors(const fs::path& fname);
+      APPLICATION_ITEM  app_item(const str& fname);
+      void              app_path(const fs::path& fname);
+      fs::path          app_path();
     private:
       fs::path     renderer_;
       fs::path     output_;
@@ -106,6 +115,7 @@ class application
       code_context code_ctx_;
       XSSObject    app_; 
       fs::path     path_;
+      fs::path     app_path_;
 
       document_map documents_;
       error_list   errors_;
@@ -121,6 +131,9 @@ struct document
       XSSContext  context_by_identity(CONTEXT_IDENTITY id, variant value);
       void        add(XSSContext context);
 		  XSSContext  changed(int line, int col, int oldEndLine, int oldEndCol, int newEndLine, int newEndCol);	
+      void        refresh_context(XSSContext ctx);
+      XSSContext  context();
+      void        context(XSSContext ctx);
     private:
       fs::path    path_;
       XSSContext  ctx_;
@@ -189,6 +202,7 @@ struct om_context
     fixup_list   fixup;
     context_map  contexts; 
     Application  application; 
+    XSSObject    instance;
 
     document*    doc;
   };
@@ -196,16 +210,18 @@ struct om_context
 struct om_response
   {
     om_response():
-      id(0)
+      id(0),
+      ai_(AI_NONE)
       {
       }
 
-	  om_response(int _id, XSSContext _ctx, om_context& _data, document& _doc, str _request_id):
+	  om_response(int _id, XSSContext _ctx, om_context& _data, document& _doc, str _request_id, APPLICATION_ITEM _ai):
       id(_id),
       ctx(_ctx),
       data(_data),
       doc(_doc),
-      request_id(_request_id)
+      request_id(_request_id),
+      ai_(_ai)
       {
       }
 
@@ -214,6 +230,7 @@ struct om_response
     XSSContext ctx;
     om_context data;
     document   doc;
+    APPLICATION_ITEM ai_;
   };
 
 class object_model
@@ -242,9 +259,12 @@ class object_model
       DataEntity      assure_unique_root(DataReader dr);
       void            register_idiom(const str& id, Idiom idiom);
       Idiom           find_idiom(const str& idiom);
-      void            compile_include(Application app, const str& def, const str& src, XSSContext ctx, om_context& octx);
+      void            handle_include(Application app, const str& def, const str& src, XSSContext ctx, om_context& octx);
+      void            handle_instance(Application app, XSSObject instance, const str& def_file, const str& src_file, XSSContext ctx, om_context& octx);
     public:
-      static void compile_xs(const str& text, XSSContext ctx, om_context& octx);
+      static bool compile_xs(const str& text, XSSContext ctx, om_context& octx, xs_visitor* visitor);
+      static bool compile_class(const str& text, XSSContext ctx, om_context& octx);
+      static bool compile_instance(XSSObject instance, const str& text, XSSContext ctx, om_context& octx);
     private:
       //data reader
       Language        read_language(DataEntity project);
@@ -276,7 +296,7 @@ class object_model_thread
     public:
       object_model_thread() : id_(0), stopped_(true) {}
     public:
-      int  compile_request(const str& text, const str& id, Application app);
+      int  compile_request(const str& text, const str& id, Application app, APPLICATION_ITEM ai);
       bool get(const str& id, om_response& result);
       bool fetch(str& id, om_response& result);
       void run();
@@ -292,18 +312,20 @@ class object_model_thread
             {
             }
 
-          om_request(const str& _id, const str& _text, int _response_id, Application _app):
+          om_request(const str& _id, APPLICATION_ITEM _ai, const str& _text, int _response_id, Application _app):
             id(_id),
             text(_text),
             response_id(response_id),
-			app(_app)
+			      app(_app),
+            app_item(_ai)
             {
             }
             
-          str         id;
-          str         text;
-          int         response_id;
-		  Application app;
+          str              id;
+          str              text;
+          int              response_id;
+		      Application      app;
+          APPLICATION_ITEM app_item;
         };
       
       typedef std::vector<om_request> request_list;
