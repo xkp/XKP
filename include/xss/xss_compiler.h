@@ -204,6 +204,7 @@ namespace xkp
 			  void         output_file(const str& fname, const str& contents);
 			  void         output_file(fs::path fpath, const str& contents);
         str          output_path();
+        void         set_output_path(const fs::path& path);
         str          project_path();
         str          genid(const str& what);
         void         xss(const param_list params);
@@ -234,6 +235,14 @@ namespace xkp
         str          instantiate(const param_list params);
         str          render_ctor_args(const param_list params);
         bool         application_object(XSSObject obj);
+
+        //0.9.5
+        void file_system(FileSystem fs);
+        void register_symbol(const str& symbol, variant value);
+        void build(const fs::path& entry, const fs::path& output);
+        XSSContext context();
+        void render_code(XSSCode code);
+
         //0.9.5
         //void         build(fs::path xml, param_list& args);
         //XSSModule    idiom_by_class(const str& class_name);
@@ -241,7 +250,7 @@ namespace xkp
         //void         using_idiom(const str& idiom);
         //XSSObject    analyze_expression(const param_list params);
         //str          file(fs::path path);
-        str          render_code(const str& code, param_list_decl& args, XSSContext ctx);
+        //str          render_code(const str& code, param_list_decl& args, XSSContext ctx);
         void         add_dependencies(XSSObjectList& dependencies, XSSObject idiom);
         DynamicArray get_dependencies();
         DynamicArray idiom_dependencies(const str& idiom);
@@ -260,7 +269,7 @@ namespace xkp
         XSSRenderer pop_renderer();
         XSSRenderer current_renderer();
         XSSRenderer previous_renderer();
-        XSSRenderer entry_renderer();
+        //XSSRenderer entry_renderer();
         XSSContext  current_context();
       public:
         XSSObject options_;
@@ -269,18 +278,22 @@ namespace xkp
         Application              app_;
         std::vector<XSSRenderer> renderers_;
         fs::path                 base_path_;
-        fs::path                 project_path_;
         fs::path                 output_path_;
-        fs::path                 app_path_;
         fs::path                 compiling_;
-        str                      result_;
-        XSSRenderer              entry_;
-        bool                     use_event_instance_;
         param_list               params_;
-        std::vector<XSSType>     app_types_;
         bool                     no_output_;    
 
         //0.9.5
+        XSSContext ctx_;         
+        FileSystem fs_;      
+
+        //0.9.5
+        //fs::path                 project_path_;
+        //fs::path                 app_path_;
+        //bool                     use_event_instance_;
+        //std::vector<XSSType>     app_types_;
+        //XSSRenderer              entry_;
+        //str                      result_;
         //XSSModule     read_module(const str& src, XSSApplicationRenderer app, XSSObject module);
         //XSSObject     read_project(fs::path xml_file, param_list& args);
         //void          read_application_types(std::vector<XSSObject> & applications, param_list& args);
@@ -306,7 +319,6 @@ namespace xkp
         genid_list genid_;
       private:
         //cache
-        FileSystem                      fs_;
         std::multimap<int, XSSRenderer> xss_cache;
         std::map<str, XSSRenderer>      xss_file_cache;
 
@@ -366,6 +378,12 @@ struct xss_compiler_schema : object_schema<xss_compiler>
 
         readonly_property<XSSObject>("options", &xss_compiler::options_);
 
+        //0.9.5
+        method_<void, 1>("render_code",	 &xss_compiler::render_code);
+
+        //0.9.5
+        //method_<str,          0>("project_path",       &xss_compiler::project_path);
+
         method_<str,          1>("genid",	             &xss_compiler::genid);
         method_<bool,         1>("parse_expression",	 &xss_compiler::parse_expression);
         method_<str,          2>("render_expression",  &xss_compiler::render_expression);
@@ -376,7 +394,6 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         method_<str,          2>("idiom_path",	       &xss_compiler::idiom_path);
         method_<str,          1>("full_path",	         &xss_compiler::full_path);
         method_<str,          0>("output_path",        &xss_compiler::output_path);
-        method_<str,          0>("project_path",       &xss_compiler::project_path);
         method_<void,         2>("copy_file",          &xss_compiler::copy_file);
         method_<void,         1>("out",                &xss_compiler::out);
         method_<XSSType,      1>("get_type",           &xss_compiler::get_type);

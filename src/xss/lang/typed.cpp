@@ -350,7 +350,7 @@ bool typed_lang::render_value(XSSValue val, XSSContext ctx, std::ostringstream& 
           first = false;
       }
 
-    result << my_value;
+    result << my_value.str();
     return true;
   }
 
@@ -384,10 +384,19 @@ bool typed_lang::render_if(IStatementIf* info, XSSContext ctx, std::ostringstrea
 
 bool typed_lang::render_variable(IStatementVar* info, XSSContext ctx, std::ostringstream& result)
   {
-    result << '\n' << info->type_name() << info->id();
+    str type_name = info->type_name();
+    if (info->type())
+      type_name = info->type()->output_id();
 
-    if (info->value() && !render_value(info->value()->value(), ctx, result))
-      return false;
+    result << '\n' << type_name << " " << info->id();
+
+    XSSExpression value = info->value();
+    if (value)
+      {
+        result << " = ";
+        if (!render_expression(value, ctx, result))
+          return false;
+      }
       
     result << ";";
     return true;
@@ -754,8 +763,13 @@ bool typed_lang::render_assignment(operator_type op, XSSValue left_value, XSSExp
 
 bool typed_lang::render_constant(variant& value, XSSContext ctx, std::ostringstream& result)
   {
-    assert(false); //td:
-    return false;
+    str vv = xss_utils::var_to_string(value);
+    if (value.is<str>())
+      result << '"' << vv << '"';
+    else
+      result << vv;
+
+    return true;
   }
 
 bool typed_lang::render_read_operation(value_operation& op, XSSContext ctx, std::ostringstream& result)

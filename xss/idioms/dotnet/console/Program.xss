@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace <xss:e v="application.name"/>
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            <xss:code>
+                var main = application.root.get_method("main");
+                compiler.render_code(main.code);
+            </xss:code>
+        }
+    }
+}

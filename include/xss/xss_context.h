@@ -798,7 +798,8 @@ class xss_statement
     public:
       template<typename T> T* cast()
         {
-          return variant_cast<T*>(this, null);
+          return dynamic_cast<T*>(this);
+          //return variant_cast<T*>(this, null);
         }
 
       virtual void bind(XSSContext ctx) = 0;
@@ -1063,7 +1064,8 @@ class xss_method : public xss_object
       XSSType        return_type_;
       InlineRenderer renderer_;
       XSSSignature   signature_;
-      XSSCode        code_; //td: rid of old stuff 
+    public:
+      XSSCode code_; 
   };
 
 //utils
@@ -1159,7 +1161,7 @@ struct xss_method_schema : xss_object_schema<xss_method>
         //readonly_property<str>("name", &xss_method::get_name);
 
         //property_("args", &xss_method::args_);
-        //property_("code", &xss_method::code_);
+        property_("code", &xss_method::code_);
       }
   };
 

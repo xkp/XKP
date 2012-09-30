@@ -1,4 +1,5 @@
-<application>
-    
-</application>           
-         
+
+method main()
+{
+    var foo = "foo";
+}

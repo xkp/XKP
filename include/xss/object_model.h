@@ -87,9 +87,11 @@ class idiom
       str       namespace_;
   };
 
-class application
+class application : public boost::enable_shared_from_this<application>
   {
     public:
+      application();
+      application(const application& other);
       application(fs::path path);
     public:
       void              entry_point(fs::path ep);
@@ -108,14 +110,28 @@ class application
       APPLICATION_ITEM  app_item(const str& fname);
       void              app_path(const fs::path& fname);
       fs::path          app_path();
+      void              build();
+      void              project_object(XSSObject project);
+      void              file_system(FileSystem fs);
+      void              output_path(const fs::path& fname);
+      fs::path          output_path();
+    public:
+      XSSObject root(); 
+      void      set_root(XSSObject r); 
+      str       name(); 
+      void      set_name(const str& name); 
     private:
       fs::path     renderer_;
       fs::path     output_;
+      fs::path     output_path_;
       XSSContext   ctx_;
       code_context code_ctx_;
       XSSObject    app_; 
       fs::path     path_;
       fs::path     app_path_;
+      XSSObject    project_;
+      FileSystem   fs_;
+      str          app_name_; 
 
       document_map documents_;
       error_list   errors_;
@@ -341,6 +357,17 @@ class object_model_thread
       
       void do_work();
   };
+
+struct application_schema : object_schema<application>
+  {
+    virtual void declare()
+      {
+        readonly_property<XSSObject>("root",  &application::root);
+        readonly_property<XSSObject>("name",  &application::name);
+      }
+  };
+
+register_complete_type(application,  application_schema);
 
 }
 #endif

@@ -5,6 +5,7 @@
 #include <xss/xss_error.h>
 #include <xss/xss_expression.h>
 #include <xss/xss_code.h>
+#include <xss/xss_compiler.h>
 
 #include <xs/compiler.h>
 #include <xs/xs_error.h>
@@ -96,6 +97,16 @@ str idiom::get_namespace()
   }
 
 //application
+application::application()
+  {
+    assert(false); //shouldn't be called
+  }
+
+application::application(const application& other)
+  {
+    assert(false); //shouldn't be called
+  }
+
 application::application(fs::path path):
   path_(path)
   {
@@ -213,6 +224,64 @@ void application::app_path(const fs::path& fname)
 fs::path application::app_path()
   {
     return app_path_;
+  }
+
+void application::build()
+  {
+    JsonOutput   json; 
+    XSSCompiler compiler(new xss_compiler(&json));
+    compiler->file_system(fs_);
+    compiler->set_output_path(output_path_);
+    
+    Application self = shared_from_this();
+    compiler->register_symbol("application", self);
+    compiler->register_symbol("compiler", compiler);
+    compiler->register_symbol("project", project_);
+    
+    XSSContext cctx = compiler->context();
+    cctx->set_language(ctx_->get_language());
+    
+    compiler->build(renderer_, output_);
+  }
+
+void application::project_object(XSSObject project)
+  {
+    project_ = project;
+  }
+
+void application::file_system(FileSystem fs)
+  {
+    fs_ = fs;
+  }
+
+void application::output_path(const fs::path& path)
+  {
+    output_path_ = path;
+  }
+
+fs::path application::output_path()
+  {
+    return output_path_;
+  }
+
+XSSObject application::root()
+  {
+    return app_;
+  }
+
+void application::set_root(XSSObject r)
+  {
+    app_ = r;
+  }
+
+str application::name()
+  {
+    return app_name_;
+  }
+
+void application::set_name(const str& name)
+  {
+    app_name_ = name;
   }
 
 //document
@@ -501,10 +570,24 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
     Application result(new application(base_path));
     DataEntity  prj = assure_unique_root(project);
 
+    //setup
+    str appname = prj->attr("name");
+    if (appname.empty())
+      appname = "untitled";
+
+    str outpath = prj->attr("output_path");
+    fs::path output_path = outpath;
+    if (!output_path.is_complete())
+      output_path = base_path / output_path;
+
+    result->set_name(appname);
+    result->output_path(output_path);
+
     //create the global context for this application
     Language   lang   = read_language(prj);
     XSSContext global = lang->create_context();
     global->set_path(base_path);
+    global->set_language(lang);
 
     ErrorHandler eh(new om_error_handler(result));
     global->errors(eh);
@@ -515,6 +598,7 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
 
     //in that context there will be a "project" object containing stuff of usability
     XSSObject app_project(new xss_object);
+    result->project_object(app_project);
 
     //read project params
     entity_list parameters = prj->find_all("parameter");
@@ -534,10 +618,6 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
 
         app_project->add_attribute(pid, read_value(param));
       }
-
-    //td: move this to the app/renderer
-    //code_ctx.scope_->register_symbol("project",     app_project);
-    //code_ctx.scope_->register_symbol("application", result);
 
     //fillup our application
     str ep_filename = prj->attr("entry_point");
@@ -608,7 +688,7 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
     str src = prj->attr("src");
     XSSContext app_ctx(new xss_context(CTXID_FILE, src, global));
     XSSObject  app_obj(new xss_object);
-	app_obj->set_id("application");
+	  app_obj->set_id("application");
     handle_instance(result, app_obj, def, src, app_ctx, octx);
 
     //compile
@@ -617,6 +697,7 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
 
     fs::path ap = fs_->locate(src, base_path);
     result->app_path(ap);
+    result->set_root(app_obj);
     return result;
   }
 

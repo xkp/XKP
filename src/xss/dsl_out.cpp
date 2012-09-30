@@ -285,8 +285,9 @@ struct worker
                     }
                   case MS_ENTRY:
                     {
-                      XSSRenderer rentry = compiler_->entry_renderer();
-						          rentry->append_at(result, marker_);
+                      assert(false); //td: is this still neccesary?
+                      //XSSRenderer rentry = compiler_->entry_renderer();
+						          //rentry->append_at(result, marker_);
                       break;
                     }
                   case MS_PREVIOUS:
