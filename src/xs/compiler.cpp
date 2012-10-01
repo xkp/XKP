@@ -1972,7 +1972,8 @@ enum xs_smallrules
     smallrule_class           = 13,
     smallrule_property        = 14,
     smallrule_instance        = 15,
-    smallrule_event           = 16
+    smallrule_event           = 16,
+    smallrule_func_mthd       = 17
   };
 
 int symbol_rules[150] = {
@@ -2039,7 +2040,7 @@ int symbol_rules[150] = {
   /*  60  "false"                   */    2,
   /*  61  "finally"                 */    11,
   /*  62  "for"                     */    6,
-  /*  63  "function"                */    -1,
+  /*  63  "function"                */    17,
   /*  64  "has"                     */    2,
   /*  65  "HexLiteral"              */    2,
   /*  66  "Identifier"              */    2,
@@ -2048,7 +2049,7 @@ int symbol_rules[150] = {
   /*  69  "instance"                */    15,
   /*  70  "is"                      */    2,
   /*  71  "MemberName"              */    2,
-  /*  72  "method"                  */    -1,
+  /*  72  "method"                  */    17,
   /*  73  "new"                     */    2,
   /*  74  "null"                    */    2,
   /*  75  "on"                      */    16,
@@ -2098,9 +2099,9 @@ int symbol_rules[150] = {
   /* 119  "Local Var Decl"          */    9,
   /* 120  "Member List"             */    2,
   /* 121  "Method"                  */    2,
-  /* 122  "Method Decl"             */    -1,
+  /* 122  "Method Decl"             */    17,
   /* 123  "Method Exp"              */    2,
-  /* 124  "Method Name"             */    -1,
+  /* 124  "Method Name"             */    17,
   /* 125  "Mult Exp"                */    2,
   /* 126  "Object List"             */    2,
   /* 127  "Object List Opt"         */    2,
@@ -2149,6 +2150,7 @@ struct perrors_validate
         process_error();
       }
 
+  private:
     void process_error()
       {
         // why is NULL?
@@ -2159,9 +2161,6 @@ struct perrors_validate
         line          = token->Line;
         column        = token->Column;
 
-        // more stuff...
-        rule_error = find_rule(token_stack);
-        
         if (token->Data != NULL)
           token_data = wide2str(std::wstring(token->Data, 1024));
 
@@ -2251,6 +2250,7 @@ struct perrors_validate
             case smallrule_property:
             case smallrule_instance:
             case smallrule_event:
+            case smallrule_func_mthd:
               {
                 return small_rule;
               }
@@ -2266,6 +2266,16 @@ struct perrors_validate
           }
 
         return 0;
+      }
+
+  public:
+    int get_last_expr(expression &expr)
+      {
+        // more stuff...
+        rule_error = find_rule(token_stack);
+        expr = last_expression;
+
+        return rule_error;
       }
 
     str head_error()
@@ -2297,32 +2307,29 @@ struct perrors_validate
 
     str error()
       {
-        if (head_ecode == 0) 
+        if (head_ecode == 0 || parse_result == PARSEACCEPT)
           return str();
 
         std::stringstream ss;
 
-        ss << head_error() << 
-          " at line " << line << 
-          " column " << column << 
-          ". \n";
-
-        ss << descrip_error() << "\n";
+        //ss << head_error() << " at line " << line << " column " << column << ". \n";
+        ss << head_error() << ". ";
+        ss << descrip_error();
 
         return ss.str();
       }
 
-    std::vector<TokenStackStruct *> token_list;
-
     std::vector<str>  expected_tokens;
     expression        last_expression;
-    int               last_expr_state;
     int               rule_error;
-    int               head_ecode;
-    int               descrip_ecode;
     str               token_data;
     unsigned int      line;
     unsigned int      column;
+
+  private:
+    int               last_expr_state;
+    int               head_ecode;
+    int               descrip_ecode;
 
   private:
     int               parse_result;
@@ -2388,8 +2395,8 @@ bool xs_compiler::compile_code(const str& code_str, code& result)
       }
     else
       {
-        perrors_validate p_error(parse_result, root, token_stack);
-        str res_error = p_error.error();
+        //perrors_validate p_error(parse_result, root, token_stack);
+        //str res_error = p_error.error();
 
         //cleanup
         DeleteTokens(root);
@@ -2446,7 +2453,8 @@ bool xs_compiler::compile_xs(const str& code_str, xs_container& result)
       {
         param_list error;
         error.add("id", SCompilerError);
-        error.add("desc", SErrorCompiling);
+        //error.add("desc", SErrorCompiling);
+        error.add("desc", res_error);
         error.add("line", (int)root->Line);
         error.add("column", (int)root->Column);
         xs_throw(error);
