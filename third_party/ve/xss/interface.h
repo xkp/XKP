@@ -52,6 +52,7 @@ class IObjectModel
 								 int line, int col, walk_list& results)								  = 0;
 		virtual void walkErrors(const std::string& fname, xss_error_info_list& errors)				  = 0;
 		virtual bool buildProject(const std::string& fname)											  = 0;
+		virtual std::string appName(const std::string& fname)										  = 0;
 };
 
 #endif

@@ -136,13 +136,14 @@ namespace ExcessCompiler {
 			ExcessModel();
 			~ExcessModel();
 		public:	
-			int  loadProject(String^ filename, String^ path);
-			void unloadProject(Guid project);
-			bool buildProject(String^ filename);
-			bool buildAll();
-            void addInclude(String^ projectPath, String^ def, String^ src);
-            void notifyChange(String^ filename, String^ contents, int line, int col, int oldEndLine, int oldEndCol, int newEndLine, int newEndCol);
-			void updateChanges();
+			int		loadProject(String^ filename, String^ path);
+			String^ getAppName(String^ filename);
+			void	unloadProject(Guid project);
+			bool	buildProject(String^ filename);
+			bool	buildAll();
+            void	addInclude(String^ projectPath, String^ def, String^ src);
+            void	notifyChange(String^ filename, String^ contents, int line, int col, int oldEndLine, int oldEndCol, int newEndLine, int newEndCol);
+			void	updateChanges();
 
 			//access
 			List<ExcessCompletionItem^>^ getCompletion(String^ filename, String^ text, int line, int col);

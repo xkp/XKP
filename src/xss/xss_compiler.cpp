@@ -918,7 +918,7 @@ void xss_compiler::xss(const param_list params)
 
     //resolve file name
     XSSRenderer r    = current_renderer();
-    XSSContext  rctx = r? r->context() : XSSContext(new xss_context(app_->context()));
+    XSSContext  rctx = r? r->context() : ctx_;
 
     fs::path file(file_name);
     if (!file.is_complete())
@@ -934,7 +934,13 @@ void xss_compiler::xss(const param_list params)
       }
 
     if (!ctx)
-      ctx = rctx;
+      {
+        ctx = XSSContext(new xss_context(ctx_));
+        ctx->source_file(file);
+      }
+
+    the_output_file = the_output_file.normalize();
+    ctx->output_file(the_output_file);
 
     XSSRenderer result = compile_xss_file(file, ctx, html_template);
 
@@ -1838,13 +1844,29 @@ XSSContext xss_compiler::context()
 
 void xss_compiler::render_code(XSSCode code)
   {
-    Language lang = ctx_->get_language();
+    Language    lang = ctx_->get_language();
+    XSSRenderer rend = current_renderer();
+
+    //prepare execution context, here the potential points of interest
+    //are the file being rendered and the source code it was generated from
+    XSSContext ctx(new xss_context(CTXID_RUNTIME_CODE, code, ctx_));
+    
+    fs::path src = code->context()->source_file();
+    fs::path dst = rend->context()->output_file();
+    
+    ctx->source_file(src);
+    ctx->set_path(dst);
+
+    if (!src.empty() && !dst.empty())
+      {
+        fs::path src_map = xss_utils::relative_path(src, dst);
+        ctx->register_symbol(RESOLVE_CONST, "#src_map", src_map.string());
+      }
 
     std::ostringstream result;
-    lang->render_code(code, ctx_, result);
+    lang->render_code(code, ctx, result);
     
-    XSSRenderer cr = current_renderer();
-    cr->append(result.str());
+    rend->append(result.str());
   }
 
 //0.9.5

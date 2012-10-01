@@ -36,6 +36,8 @@ bool typed_lang::render_code(XSSCode code, XSSContext ctx, std::ostringstream& r
     for(; it != nd; it++)
       {
         XSSStatement st = *it;
+
+        render_pre_statement(st, ctx, result);
         switch(st->id())
           {
             case STATEMENT_IF:
@@ -188,25 +190,32 @@ bool typed_lang::render_operator(XSSExpression expr, XSSContext ctx, std::ostrin
       }
 
     //op
-    result << " " << operator_utils::to_string(expr->op()) << " ";
-
-    //right
-    if (right->value())
+    if (right) //binary op
       {
-        if (!render_value(right->value(), ctx, result))
-          return false;
+        result << " " << operator_utils::to_string(expr->op()) << " ";
+
+        //right
+        if (right->value())
+          {
+            if (!render_value(right->value(), ctx, result))
+              return false;
+          }
+        else
+          {
+            int rprec = operator_utils::precedence(right->op());
+            if (op_prec < rprec)
+              result << "(";
+
+            if (!render_expression(right, ctx, result))
+              return false;
+
+            if (op_prec < rprec)
+              result << ")";
+          }
       }
     else
       {
-        int rprec = operator_utils::precedence(right->op());
-        if (op_prec < rprec)
-          result << "(";
-
-        if (!render_expression(right, ctx, result))
-          return false;
-
-        if (op_prec < rprec)
-          result << ")";
+        result << operator_utils::to_string(expr->op());
       }
 
     return true;
@@ -774,6 +783,7 @@ bool typed_lang::render_constant(variant& value, XSSContext ctx, std::ostringstr
 
 bool typed_lang::render_read_operation(value_operation& op, XSSContext ctx, std::ostringstream& result)
   {
+    str path = result.str();
     if (op.bound())
       {
         switch(op.resolve_id())
@@ -785,7 +795,6 @@ bool typed_lang::render_read_operation(value_operation& op, XSSContext ctx, std:
 
                 if (prop_getter)
                   {
-                    str path = result.str();
                     bool this_property = path.empty();
                     
                     param_list params;
@@ -801,7 +810,10 @@ bool typed_lang::render_read_operation(value_operation& op, XSSContext ctx, std:
                     if (code_getter)
                       {
                         //td: !! generalize this
-                        result << '.' << prop->id() << "__get()";
+                        if (!path.empty())
+                          result << '.';
+                        
+                        result<< prop->id() << "__get()";
                         return true;
                       }
                   }
@@ -810,7 +822,10 @@ bool typed_lang::render_read_operation(value_operation& op, XSSContext ctx, std:
           }
       }
 
-    result << '.' << op.identifier();
+	  if (!path.empty())
+		  result << '.';
+	
+	  result << op.identifier();
     return true;
   }
 

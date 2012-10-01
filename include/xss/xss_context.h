@@ -488,6 +488,7 @@ enum CONTEXT_IDENTITY
     CTXID_INSTANCE,
     CTXID_TYPE,
     CTXID_FILE,
+    CTXID_RUNTIME_CODE,
   };
 
 struct xss_context : boost::enable_shared_from_this<xss_context>
@@ -585,6 +586,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       CONTEXT_IDENTITY identity_;
       variant          identity_obj_;
       fs::path         src_file_;
+      fs::path         output_file_;
        
       bool     resolve_dot(const str& id, resolve_info& info);
       bool     identity_search(const str& id, resolve_info& info);
@@ -593,6 +595,8 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       void     error(const str& desc, param_list* info, file_position begin, file_position end);
       fs::path source_file();
       void     source_file(fs::path& sf);
+      fs::path output_file();
+      void     output_file(fs::path& of);
 };
 
 //these are basically copies of their xs counterpart, but offer xss stuff, like generating
@@ -802,6 +806,9 @@ class xss_statement
           //return variant_cast<T*>(this, null);
         }
 
+      file_position& begin() {return begin_;}
+      file_position& end()   {return end_;  }
+      
       virtual void bind(XSSContext ctx) = 0;
     protected:
       STATEMENT_TYPE id_;
@@ -940,6 +947,9 @@ struct ILanguage
     virtual bool render_object(value_operation& op, XSSContext ctx, std::ostringstream& result)                                            = 0;  
     virtual bool render_array(value_operation& op, XSSContext ctx, std::ostringstream& result)                                             = 0;  
     virtual bool render_instantiation(XSSType type, XSSArguments args, XSSContext ctx, std::ostringstream& result)                         = 0;  
+
+    //utils
+    virtual bool render_pre_statement(XSSStatement info, XSSContext ctx, std::ostringstream& result) = 0;  
   };
 
 //rendering helper
@@ -1072,6 +1082,7 @@ class xss_method : public xss_object
 struct xss_utils
   {
     static str var_to_string(variant& v);
+    static fs::path relative_path(fs::path& src, fs::path& dst);
   };
 
 //glue

@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Reflection;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
+using Microsoft.Build.BuildEngine;
 
 namespace Excess.CompilerTasks
 {
@@ -147,13 +148,50 @@ namespace Excess.CompilerTasks
 		public override bool Execute()
 		{
             string filePath = Path.Combine(projectPath, MainFile);
+            bool success = true;
 
             ExcessModelService service = ExcessModelService.getInstance();
-            service.Model.buildProject(filePath);
+            if (service.Model.buildProject(filePath))
+            {
+                Engine engine = new Engine();
 
-			Log.LogMessage(MessageImportance.Normal, "Excess Compilation Task");
+                // Instantiate a new FileLogger to generate build log
+                FileLogger logger = new FileLogger();
 
-			return false;
+                // Set the logfile parameter to indicate the log destination
+                logger.Parameters = @"logfile=C:\dev\XKP_BIN\build.log";
+
+                // Register the logger with the engine
+                engine.RegisterLogger(logger);
+
+                // Build a project file
+                string appName = service.Model.getAppName(filePath);
+                string slnPath = Path.Combine(projectPath, @"bin\debug\" + appName + ".sln");
+                try
+                {
+                    success = engine.BuildProjectFile(slnPath);
+                }
+                catch (Exception e)
+                {
+                    success = false;        
+                }
+
+                //Unregister all loggers to close the log file
+                engine.UnregisterAllLoggers();
+
+                if (success)
+                    Console.WriteLine("Build succeeded.");
+                else
+                    Console.WriteLine(@"Build failed. View C:\temp\build.log for details");
+                return true;
+            }
+            else
+            {
+                //td:
+                //Log.LogError
+            }
+
+			return success;
 		}
 
 		/// <summary>

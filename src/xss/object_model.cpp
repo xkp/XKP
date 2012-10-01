@@ -571,6 +571,7 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
     DataEntity  prj = assure_unique_root(project);
 
     //setup
+	result->file_system(fs_);
     str appname = prj->attr("name");
     if (appname.empty())
       appname = "untitled";
@@ -728,45 +729,6 @@ Application object_model::get_application(const str& fname)
     return Application();
   }
 
-fs::path relativePath( const fs::path &path, const fs::path &relative_to )
-  {
-    // create absolute paths
-    fs::path p = path;
-    fs::path r = relative_to;
-
-    // if root paths are different, return absolute path
-    if( p.root_path() != r.root_path() )
-        return p;
-
-    // initialize relative path
-    fs::path result;
-
-    // find out where the two paths diverge
-    fs::path::const_iterator itr_path = p.begin();
-    fs::path::const_iterator itr_relative_to = r.begin();
-    while( *itr_path == *itr_relative_to && itr_path != p.end() && itr_relative_to != r.end() ) {
-        ++itr_path;
-        ++itr_relative_to;
-    }
-
-    // add "../" for each remaining token in relative_to
-    if( itr_relative_to != r.end() ) {
-        ++itr_relative_to;
-        while( itr_relative_to != r.end() ) {
-            result /= "..";
-            ++itr_relative_to;
-        }
-    }
-
-    // add remaining path
-    while( itr_path != p.end() ) {
-        result /= *itr_path;
-        ++itr_path;
-    }
-
-    return result;
-  }
-
 document* object_model::get_document(const str& fname)
   {
     fs::path path(fname);
@@ -854,8 +816,8 @@ void object_model::update_document(const str& fname, om_response& response)
 
 void object_model::add_include(Application app, const str& def, const str& src)
   {
-    fs::path def_path = relativePath(def, app->path());
-    fs::path src_path = relativePath(src, app->path());
+    fs::path def_path = xss_utils::relative_path(fs::path(def), app->path());
+    fs::path src_path = xss_utils::relative_path(fs::path(src), app->path());
 
     om_context octx;
     XSSContext global = app->context();

@@ -217,6 +217,11 @@ int ExcessModel::loadProject(String^ filename, String^ path)
 	return appId;
 }
 
+String^ ExcessModel::getAppName(String^ filename)
+{
+	return StringUtils::toString(model_->appName(StringUtils::fromString(filename)));
+}
+
 void ExcessModel::unloadProject(Guid project)
 {
 }
