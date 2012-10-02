@@ -351,9 +351,17 @@ namespace Excess.Project
                 IWpfTextViewHost viewHost;
                 object holder;
                 Guid guidViewHost = DefGuidList.guidIWpfTextViewHost;
-                userData.GetData(ref guidViewHost, out holder);
-                viewHost = (IWpfTextViewHost)holder;
-                view = viewHost.TextView;
+
+                try
+                {
+                    userData.GetData(ref guidViewHost, out holder);
+                    viewHost = (IWpfTextViewHost)holder;
+                    view = viewHost.TextView;
+                }
+                catch (Exception e)
+                {
+                    view = null;
+                }
             }
 
             currentView_ = view;

@@ -140,7 +140,7 @@ namespace Excess.Project
 
         static PythonProjectNode()
         {
-            PythonImageList = Utilities.GetImageList(typeof(PythonProjectNode).Assembly.GetManifestResourceStream("Excess.Resources.PythonImageList.bmp"));
+            PythonImageList = Utilities.GetImageList(typeof(PythonProjectNode).Assembly.GetManifestResourceStream("Excess.Project.Resources.PythonImageList.bmp"));
         }
 
         public PythonProjectNode(PythonProjectPackage pkg)

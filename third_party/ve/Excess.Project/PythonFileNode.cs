@@ -139,7 +139,7 @@ namespace Excess.Project
 				{
 					return (int)ProjectNode.ImageName.WindowsForm;
 				}
-				if(this.FileName.ToLower().EndsWith(".py"))
+				if(this.FileName.ToLower().EndsWith(".xs"))
 				{
 					return PythonProjectNode.ImageOffset + (int)PythonProjectNode.PythonImageName.PyFile;
 				}

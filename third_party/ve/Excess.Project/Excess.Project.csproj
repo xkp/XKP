@@ -243,6 +243,7 @@
     </Content>
     <Content Include="..\Excess.CompilerTask\Excess.targets">
       <Link>Excess.targets</Link>
+      <SubType>Designer</SubType>
     </Content>
     <None Include="ClassDiagram1.cd" />
     <None Include="source.extension.vsixmanifest">
@@ -253,10 +254,10 @@
     <Content Include="Templates\Items\Class\class.xml" />
     <Content Include="Templates\Items\Class\__TemplateIcon.ico" />
     <None Include="Templates\Items\WPFClass\wclass.xs" />
-    <None Include="Templates\Projects\ConsoleApp\ConsoleApp.project.xml" />
+    <None Include="Templates\Projects\ConsoleApp\project.xml" />
     <None Include="Templates\Items\Class\class.xs" />
     <None Include="Templates\Projects\ConsoleApp\__TemplateIcon.ico" />
-    <None Include="Templates\Projects\ConsoleApp\ConsoleApp.xs" />
+    <None Include="Templates\Projects\ConsoleApp\application.xs" />
     <None Include="Templates\Projects\ConsoleApp\xsConsoleApp.xsproj">
       <SubType>Designer</SubType>
     </None>

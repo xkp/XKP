@@ -128,7 +128,7 @@ namespace Excess.Project
                         }
 
                         ExcessModelService service = ExcessModelService.getInstance();
-                        string projectPath = Path.Combine(this.project.BaseURI.AbsoluteUrl, "ConsoleApp.project.xml"); //td: !!!!
+                        string projectPath = Path.Combine(this.project.BaseURI.AbsoluteUrl, "project.xml"); //td: !!!!
 
                         //the project file must be updated to reflect the new items, 
                         //obviously this approach is kinda silly and must be made general

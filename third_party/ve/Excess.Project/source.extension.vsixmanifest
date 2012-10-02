@@ -4,7 +4,7 @@
     <Name>Excess</Name>
     <Author>Excess Team</Author>
     <Version>1.0</Version>
-    <Description xml:space="preserve">IDE for the Excess Platfoem</Description>
+    <Description xml:space="preserve">IDE for the Excess Platform</Description>
     <Locale>1033</Locale>
     <Icon>IronPython_small.png</Icon>
     <PreviewImage>IronPython_large.png</PreviewImage>

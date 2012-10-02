@@ -10,6 +10,6 @@
   <TemplateContent>
     <References />
     <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xs" ReplaceParameters="true" Size="2">class.xs</ProjectItem>
-    <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xml" ReplaceParameters="true" Size="2">class.xml</ProjectItem>
+    <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xs\$fileinputname$.xml" ReplaceParameters="true" Size="2">class.xml</ProjectItem>
   </TemplateContent>
 </VSTemplate>
