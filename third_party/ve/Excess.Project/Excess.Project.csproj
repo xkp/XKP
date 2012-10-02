@@ -26,7 +26,7 @@
     <RegisterWithCodebase>true</RegisterWithCodebase>
     <ProjectBasePath>..\..\MPFProj</ProjectBasePath>
     <CopyVsixExtensionFiles>true</CopyVsixExtensionFiles>
-    <CopyVsixExtensionLocation>$(SolutionDir)$(Configuration)\Extensions\Application\IronPython</CopyVsixExtensionLocation>
+    <CopyVsixExtensionLocation>$(SolutionDir)$(Configuration)\Extensions\Application\Excess</CopyVsixExtensionLocation>
   </PropertyGroup>
   <Import Project="..\..\MPFProj\ProjectBase.Files" />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -47,6 +47,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CopyVsixExtensionLocation>$(SolutionDir)$(Configuration)\Extensions\Application\Excess</CopyVsixExtensionLocation>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
