@@ -1951,9 +1951,11 @@ struct perrors_validate
 
     void process_error()
       {
+        if (!token_stack)
+          return;
+
         // why is NULL?
         assert(token != NULL);
-        assert(token_stack != NULL);
 
         int idx_lalr  = token->Symbol;
         line          = token->Line;
@@ -2175,7 +2177,7 @@ bool xs_compiler::compile_code(const str& code_str, code& result)
     TokenStackStruct* token_stack;
     std::wstring buf          = str2wide("{ " + to_parse + " }");
     bool         success      = false;
-    int          parse_result = Parse((wchar_t*)buf.c_str(), buf.size(), 1, 1, &root, &token_stack);
+    int          parse_result = Parse((wchar_t*)buf.c_str(), buf.size(), 1, 0, &root, &token_stack);
 
     if (parse_result == PARSEACCEPT)
       {
@@ -2215,7 +2217,7 @@ bool xs_compiler::compile_xs(const str& code_str, xs_container& result)
     TokenStackStruct* token_stack;
     std::wstring buf          = str2wide(to_parse);
     bool         success      = false;
-    int          parse_result = Parse((wchar_t*)buf.c_str(), buf.size(), 1, 1, &root, &token_stack);
+    int          parse_result = Parse((wchar_t*)buf.c_str(), buf.size(), 1, 0, &root, &token_stack);
 
     bool error = false;
     if (parse_result == PARSEACCEPT)
