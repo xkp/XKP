@@ -585,6 +585,7 @@ xss_compiler::xss_compiler()
 
 xss_compiler::xss_compiler(ICompilerOutput* out):
   out_(out),
+  ctx_(new xss_context(XSSContext())),
   no_output_(false)
   {
   }
@@ -769,10 +770,16 @@ str xss_compiler::output_path()
     return output_path_.string();
   }
 
-str xss_compiler::project_path()
+void xss_compiler::set_output_path(const fs::path& path)
   {
-    return project_path_.string();
+    output_path_ = path;
   }
+
+//0.9.5
+//str xss_compiler::project_path()
+//  {
+//    return project_path_.string();
+//  }
 
 str xss_compiler::genid(const str& what)
   {
@@ -911,7 +918,7 @@ void xss_compiler::xss(const param_list params)
 
     //resolve file name
     XSSRenderer r    = current_renderer();
-    XSSContext  rctx = r? r->context() : XSSContext(new xss_context(app_->context()));
+    XSSContext  rctx = r? r->context() : ctx_;
 
     fs::path file(file_name);
     if (!file.is_complete())
@@ -927,7 +934,13 @@ void xss_compiler::xss(const param_list params)
       }
 
     if (!ctx)
-      ctx = rctx;
+      {
+        ctx = XSSContext(new xss_context(ctx_));
+        ctx->source_file(file);
+      }
+
+    the_output_file = the_output_file.normalize();
+    ctx->output_file(the_output_file);
 
     XSSRenderer result = compile_xss_file(file, ctx, html_template);
 
@@ -990,11 +1003,12 @@ void xss_compiler::xss(const param_list params)
               }
             case MS_ENTRY:
               {
-                XSSRenderer rentry = entry_renderer();
-                if (marker.empty())
-						      rentry->append(render_result);
-                else
-						      rentry->append_at(render_result, marker);
+                assert(false); //remove the marker later... 
+            //    XSSRenderer rentry = entry_renderer();
+            //    if (marker.empty())
+						      //rentry->append(render_result);
+            //    else
+						      //rentry->append_at(render_result, marker);
                 break;
               }
             case MS_PREVIOUS:
@@ -1802,6 +1816,59 @@ bool xss_compiler::application_object(XSSObject obj)
     return false;
   }
 
+void xss_compiler::file_system(FileSystem fs)
+  {
+    fs_ = fs;
+  }
+
+void xss_compiler::register_symbol(const str& symbol, variant value)
+  {
+    ctx_->register_symbol(RESOLVE_CONST, symbol, value);
+  }
+
+void xss_compiler::build(const fs::path& entry, const fs::path& output)
+  {
+    //setup
+    ctx_->register_dsl("out", DslLinker(new out_linker(shared_from_this())));
+
+    XSSRenderer renderer = compile_xss_file(entry, ctx_);
+    str result = renderer->render(XSSObject(), null);
+    
+    //td: !!! copy output file, dependencies, etc
+  }
+
+XSSContext xss_compiler::context()
+  {
+    return ctx_;
+  }
+
+void xss_compiler::render_code(XSSCode code)
+  {
+    Language    lang = ctx_->get_language();
+    XSSRenderer rend = current_renderer();
+
+    //prepare execution context, here the potential points of interest
+    //are the file being rendered and the source code it was generated from
+    XSSContext ctx(new xss_context(CTXID_RUNTIME_CODE, code, ctx_));
+    
+    fs::path src = code->context()->source_file();
+    fs::path dst = rend->context()->output_file();
+    
+    ctx->source_file(src);
+    ctx->set_path(dst);
+
+    if (!src.empty() && !dst.empty())
+      {
+        fs::path src_map = xss_utils::relative_path(src, dst);
+        ctx->register_symbol(RESOLVE_CONST, "#src_map", src_map.string());
+      }
+
+    std::ostringstream result;
+    lang->render_code(code, ctx, result);
+    
+    rend->append(result.str());
+  }
+
 //0.9.5
 //XSSModule xss_compiler::idiom_by_class(const str& class_name)
 //  {
@@ -1812,24 +1879,21 @@ bool xss_compiler::application_object(XSSObject obj)
 //  {
 //    return current_app_->get_idiom(id);
 //  }
-
-str xss_compiler::render_code(const str& text, param_list_decl& args, XSSContext ctx)
-  {
-    assert(false);
-    return str();
-    //0.9.5
-    //code_context code_ctx;
-    //code_ctx = ctx->get_compile_context();
-    //Language lang = ctx->get_language();
-    //xs_utils     xs;
-
-    //code cde;
-    //xs.compile_code(text, code_ctx, ctx->path(), cde);
-
-    //variant cc = lang->compile_code(cde, args, ctx);
-    //ICodeRenderer* compiled = variant_cast<ICodeRenderer*>(cc, null); assert(compiled);
-    //return compiled->render();
-  }
+//
+//str xss_compiler::render_code(const str& text, param_list_decl& args, XSSContext ctx)
+//  {
+//    code_context code_ctx;
+//    code_ctx = ctx->get_compile_context();
+//    Language lang = ctx->get_language();
+//    xs_utils     xs;
+//
+//    code cde;
+//    xs.compile_code(text, code_ctx, ctx->path(), cde);
+//
+//    variant cc = lang->compile_code(cde, args, ctx);
+//    ICodeRenderer* compiled = variant_cast<ICodeRenderer*>(cc, null); assert(compiled);
+//    return compiled->render();
+//  }
 
 void xss_compiler::add_dependencies(XSSObjectList& dependencies, XSSObject idiom)
   {
@@ -1916,10 +1980,11 @@ str xss_compiler::build_project(const param_list params)
     //return compiler->get_result();
   }
 
-str xss_compiler::get_result()
-  {
-    return result_;
-  }
+//0.9.5
+//str xss_compiler::get_result()
+//  {
+//    return result_;
+//  }
 
 DynamicArray xss_compiler::get_dependencies()
   {
@@ -1960,9 +2025,6 @@ DynamicArray xss_compiler::idiom_dependencies(const str& idiom_id)
 
 void xss_compiler::push_renderer(XSSRenderer renderer)
   {
-    if (renderers_.empty())
-      entry_ = renderer;
-
     renderers_.push_back(renderer);
   }
 
@@ -1970,9 +2032,6 @@ XSSRenderer xss_compiler::pop_renderer()
   {
     XSSRenderer result = renderers_.back();
     renderers_.pop_back();
-
-    if (renderers_.empty())
-      entry_ = XSSRenderer();
 
     return result;
   }
@@ -1992,11 +2051,12 @@ XSSRenderer xss_compiler::previous_renderer()
     return renderers_.at(renderers_.size() - 2);
   }
 
-XSSRenderer xss_compiler::entry_renderer()
-  {
-    return entry_;
-  }
-
+//0.9.5
+//XSSRenderer xss_compiler::entry_renderer()
+//  {
+//    return entry_;
+//  }
+//
 //XSSObject xss_compiler::read_project(fs::path xml_file, param_list& args)
 //  {
 //    xss_object_reader reader;

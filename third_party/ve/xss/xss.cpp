@@ -69,7 +69,7 @@ class xss_object_model : public IObjectModel
 		{
 			Application app = model_->app_by_file(fname);
 			if (app)
-				thread_->compile_request(content, fname, app);
+				thread_->compile_request(content, fname, app, app->app_item(fname));
 		}
 
 		struct walker : context_visitor
@@ -195,7 +195,9 @@ class xss_object_model : public IObjectModel
 			if (!app)
 				return false;	
 			
+			app->build();
 			model_->register_app(fname, app);
+			return true;
 		}
 
 	private:
@@ -246,6 +248,15 @@ class xss_object_model : public IObjectModel
 
 			return result;
 		}
+
+		virtual std::string appName(const std::string& fname)
+		{
+			Application result = model_->get_application(fname);
+			if (result)
+				return result->name();	
+			return str();
+		}
+
 };
 
 

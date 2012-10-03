@@ -2,8 +2,9 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <BOOST_INCLUDE>$(BOOST_PATH)\boost_1_44_0</BOOST_INCLUDE>
-    <BOOST_LIB>$(BOOST_INCLUDE)\stage\lib</BOOST_LIB>
+    <BOOST_PATH>C:\dev\boost</BOOST_PATH>
+    <BOOST_INCLUDE>$(BOOST_PATH)\boost_1_44</BOOST_INCLUDE>
+    <BOOST_LIB>$(BOOST_PATH)\boost_1_44\lib</BOOST_LIB>
     <XSS_INCLUDE>..\..\..\include</XSS_INCLUDE>
     <JSON_INCLUDE>..\..\..\third_party\jsoncpp\include</JSON_INCLUDE>
     <TINY_XML_INCLUDE>..\..\..\third_party\tinyXml</TINY_XML_INCLUDE>
@@ -19,6 +20,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <BuildMacro Include="BOOST_PATH">
+      <Value>$(BOOST_PATH)</Value>
+    </BuildMacro>
     <BuildMacro Include="BOOST_INCLUDE">
       <Value>$(BOOST_INCLUDE)</Value>
       <EnvironmentVariable>true</EnvironmentVariable>

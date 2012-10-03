@@ -56,16 +56,10 @@
     <ClCompile Include="..\..\..\src\xss\data_reader.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\ga_parser.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\xss\dsl\native.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\xss\dsl\vm_base.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\vm_shell.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\xss\dsl_out.cpp">
@@ -87,9 +81,6 @@
       <Filter>Source Files\xss</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\xss\utils.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\xml_data_reader.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\xss\xss_code.cpp">

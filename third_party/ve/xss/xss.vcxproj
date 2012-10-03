@@ -51,7 +51,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;XSS_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(XSS_INCLUDE);$(BOOST_INCLUDE);$(JSON_INCLUDE);$(TINY_XML_INCLUDE)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zm134 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -88,10 +88,8 @@
     <ClCompile Include="..\..\..\src\xs.cpp" />
     <ClCompile Include="..\..\..\src\xss\brace_parser.cpp" />
     <ClCompile Include="..\..\..\src\xss\data_reader.cpp" />
-    <ClCompile Include="..\..\..\src\xss\dsl\ga_parser.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl\native.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl\vm_base.cpp" />
-    <ClCompile Include="..\..\..\src\xss\dsl\vm_shell.cpp" />
     <ClCompile Include="..\..\..\src\xss\dsl_out.cpp" />
     <ClCompile Include="..\..\..\src\xss\html_parser.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang\csharp.cpp" />

@@ -53,6 +53,45 @@ str xss_utils::var_to_string(variant& v)
     return variant_cast<str>(v, str());
   }
 
+fs::path xss_utils::relative_path(fs::path& src, fs::path& dst)
+  {
+    // create absolute paths
+    fs::path p = src;
+    fs::path r = dst;
+
+    // if root paths are different, return absolute path
+    if( p.root_path() != r.root_path() )
+        return p;
+
+    // initialize relative path
+    fs::path result;
+
+    // find out where the two paths diverge
+    fs::path::const_iterator itr_path = p.begin();
+    fs::path::const_iterator itr_relative_to = r.begin();
+    while( *itr_path == *itr_relative_to && itr_path != p.end() && itr_relative_to != r.end() ) {
+        ++itr_path;
+        ++itr_relative_to;
+    }
+
+    // add "../" for each remaining token in relative_to
+    if( itr_relative_to != r.end() ) {
+        ++itr_relative_to;
+        while( itr_relative_to != r.end() ) {
+            result /= "..";
+            ++itr_relative_to;
+        }
+    }
+
+    // add remaining path
+    while( itr_path != p.end() ) {
+        result /= *itr_path;
+        ++itr_path;
+    }
+
+    return result;
+  }
+
 //xss_context_scope
 xss_context_scope::xss_context_scope(XSSContext owner):
   owner_(owner)
@@ -654,6 +693,22 @@ fs::path xss_context::source_file()
 void xss_context::source_file(fs::path& sf)
   {
     src_file_ = sf;
+  }
+
+fs::path xss_context::output_file()
+  {
+    if (!output_file_.empty())
+      return output_file_;
+
+    if (XSSContext parent = parent_.lock())
+      return parent->output_file();
+
+    return fs::path();
+  }
+
+void xss_context::output_file(fs::path& of)
+  {
+    output_file_ = of;
   }
 
 void xss_context::error(const str& desc, param_list* info, file_position begin, file_position end)

@@ -1,6 +1,4 @@
-<project entry_point="idioms/dotnet/main.xss" language="cs" src="ve1.xs">
-    <include src="ve1.classes.xs"/>
-
+<project name="VE1" entry_point="idioms/dotnet/console/entry.xss" language="cs" src="ve1.xs" output_path="../../../XKP_BIN/dotnet/ve1">
     <idiom src="idioms/dotnet/dotnet.xml"/>
 </project>
            

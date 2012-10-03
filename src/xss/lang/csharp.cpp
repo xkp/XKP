@@ -66,3 +66,14 @@ bool cs_lang::render_array(value_operation& op, XSSContext ctx, std::ostringstre
     return true;
   }
 
+bool cs_lang::render_pre_statement(XSSStatement info, XSSContext ctx, std::ostringstream& result)
+  {
+    str src_map = variant_cast<str>(ctx->resolve("#src_map", RESOLVE_CONST), str());
+    if (!src_map.empty())
+      {
+        file_position pos = info->begin();
+        result << '\n' << "#line " << pos.line << " \"" << src_map << '"';
+      }
+
+    return true;
+  }

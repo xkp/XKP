@@ -80,7 +80,40 @@ void test_object_model(fs::path target)
 
     param_list args;
     DataReader prj = fs->load_data(target);
-    om->load(prj, args, target.parent_path());
+    Application app = om->load(prj, args, target.parent_path());
+    app->file_system(fs);
+    
+    try
+      {
+        app->build();
+      }
+    catch(xs_error xse)
+      {
+        str id   = variant_cast<str>(xse.data.get("id"), "");
+        str idd  = variant_cast<str>(xse.data.get("identifier"), "");
+        str desc = variant_cast<str>(xse.data.get("desc"), "");
+        str file = variant_cast<str>(xse.data.get("file"), "");
+        int line = variant_cast<int>(xse.data.get("line"), 0);
+        int col  = variant_cast<int>(xse.data.get("column"), 0);
+      }
+    catch(xss_error xsse)
+      {
+        str id   = variant_cast<str>(xsse.data.get("id"), "");
+        str idd  = variant_cast<str>(xsse.data.get("identifier"), "");
+        str desc = variant_cast<str>(xsse.data.get("desc"), "");
+        str file = variant_cast<str>(xsse.data.get("file"), "");
+        int line = variant_cast<int>(xsse.data.get("line"), 0);
+        int col  = variant_cast<int>(xsse.data.get("column"), 0);
+      }
+    catch(runtime_error rte)
+      {
+        str id   = variant_cast<str>(rte.data.get("id"), "");
+        str idd  = variant_cast<str>(rte.data.get("identifier"), "");
+        str desc = variant_cast<str>(rte.data.get("desc"), "");
+        str file = variant_cast<str>(rte.data.get("file"), "");
+        int line = variant_cast<int>(rte.data.get("line"), 0);
+        int col  = variant_cast<int>(rte.data.get("column"), 0);
+      }
   }
 
 int main(int argc, char* argv[])
