@@ -243,9 +243,9 @@ namespace Excess.Project
         public int FDoIdle(uint grfidlef)
         {
             ExcessModelService service = ExcessModelService.getInstance();
-            service.Model.updateChanges();
+            bool changed = service.Model.updateChanges();
 
-            if (currentView_ != null)
+            if (changed && currentView_ != null)
             {
                 ErrorListPresenter ep = currentView_.Properties.GetOrCreateSingletonProperty<ErrorListPresenter>(() => null);
                 if (ep != null)

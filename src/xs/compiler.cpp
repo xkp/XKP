@@ -218,15 +218,15 @@ struct parsetree_visitor
             else
               {
                 int TokenCount = Grammar.RuleArray[token->ReductionRule].SymbolsCount;
-
-                begin.line = token->Tokens[0]->Line;
-                begin.column = token->Tokens[0]->Column;
+				if (TokenCount > 0)
+				  {
+					begin.line = token->Tokens[0]->Line;
+					begin.column = token->Tokens[0]->Column;
                 
-                TokenStruct* last = token->Tokens[TokenCount - 1];
-                end.line = last->Line;
-                end.column = last->Column;
-                //if (last->ReductionRule < 0)
-                //    end.column += wcslen(last->Data);
+					TokenStruct* last = token->Tokens[TokenCount - 1];
+					end.line = last->Line;
+					end.column = last->Column;
+				  }
               }
 
             target->begin.set_min(begin);

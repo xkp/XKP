@@ -25,17 +25,21 @@ namespace Excess.EditorExtensions
         public Span Span { get; private set; }
         public ValidationErrorSeverity Severity { get; private set; }
         public ValidationErrorType Type { get; private set; }
+        public int Line { get; private set; }
+        public int Column { get; private set; }
 
-        public ValidationError(Span span, string description)
+        public ValidationError(Span span, string description, int line, int col)
         {
             Span = span;
             Description = description;
             Severity = ValidationErrorSeverity.Error;
             Type = ValidationErrorType.Syntactic;
+            Line = line;
+            Column = col;
         }
 
-        public ValidationError(Span span, string description, ValidationErrorSeverity severity, ValidationErrorType type)
-            : this(span, description)
+        public ValidationError(Span span, string description, ValidationErrorSeverity severity, ValidationErrorType type, int line, int col)
+            : this(span, description, line, col)
         {
             Severity = severity;
             Type = type;

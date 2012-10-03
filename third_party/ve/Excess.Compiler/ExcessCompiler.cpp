@@ -269,9 +269,9 @@ void ExcessModel::notifyChange(String^ filename, String^ contents, int line, int
 	}
 }
 
-void ExcessModel::updateChanges()
+bool ExcessModel::updateChanges()
 {
-	model_->updateChanges(1000); //give it a second or so
+	bool changed = model_->updateChanges(1000); //give it a second or so
 
 	//queue jobs
 	for(int i = dirt_content_.Count - 1; i >= 0; i--)
@@ -285,7 +285,7 @@ void ExcessModel::updateChanges()
 	dirt_content_.Clear();
 	dirt_->clear();
 	dirt_index_->clear();
-
+	return changed;
 
 	//clock_t start = clock();
 	//while(dirt_.Count > 0)

@@ -143,7 +143,7 @@ namespace ExcessCompiler {
 			bool	buildAll();
             void	addInclude(String^ projectPath, String^ def, String^ src);
             void	notifyChange(String^ filename, String^ contents, int line, int col, int oldEndLine, int oldEndCol, int newEndLine, int newEndCol);
-			void	updateChanges();
+			bool	updateChanges();
 
 			//access
 			List<ExcessCompletionItem^>^ getCompletion(String^ filename, String^ text, int line, int col);

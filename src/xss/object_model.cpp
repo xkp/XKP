@@ -180,6 +180,7 @@ void application::add_error(const str& desc, param_list* info, file_location& lo
           {
             //avoid dups
             it->loc.begin.column = loc.begin.column;
+			it->desc = desc; 
             return;
           }
       }

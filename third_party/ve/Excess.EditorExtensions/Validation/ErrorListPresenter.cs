@@ -68,8 +68,40 @@ namespace Excess.EditorExtensions
             var errors = errorListProvider.GetErrors(textView.TextBuffer);
 
             // Check if we should update the error list based on the error count to avoid refreshing the list without changes
-            if (errors != null && errors.Count != this.previousErrors.Count)
+            if (errors != null)
             {
+                //do not recreate if errors are the same
+                if (errors.Count > 10 && errors.Count == this.previousErrors.Count)
+                    return; //bail
+
+                if (errors.Count == this.previousErrors.Count)
+                {
+                    bool different = false;
+                    for (int idx = 0; idx < errors.Count; idx++)
+                    {
+                        bool found = false;
+                        for (int prev_idx = 0; prev_idx < previousErrors.Count; prev_idx++)
+                        {
+                            if (previousErrors[prev_idx].Line == errors[idx].Line &&
+                                previousErrors[prev_idx].Column == errors[idx].Column &&
+                                previousErrors[prev_idx].Text == errors[idx].Description)
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        if (!found)
+                        {
+                            different = true;
+                            break;
+                        }
+                    }
+
+                    if (!different)
+                        return;
+                }
+
                 // remove any previously created errors to get a clean start
                 ClearErrors();
 

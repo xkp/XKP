@@ -6,6 +6,8 @@ using namespace xkp;
 
 const str SExpectingIterable("foreach expects an iterable");
 const str SExpectingConstantCase("case expression must be constant in this context");
+const str SUnknownType("cannot resolve type");
+const str STypeMismatch("type mismatch");
 
 //statement_if
 void statement_if::bind(XSSContext ctx)
@@ -21,14 +23,47 @@ void statement_if::bind(XSSContext ctx)
 void statement_variable::bind(XSSContext ctx)
   {
     type_ = ctx->get_type(type_name_);
+    if (!type_)
+	    {
+	      param_list pl;
+	      pl.add("type", type_name_);
+	      ctx->error(SUnknownType, &pl, begin_, end_);
+      }
       
     if (value_)
       {
         value_->bind(ctx);
-        type_ = ctx->assign_type(type_, value_->type());
+        XSSType vtype = value_->type();
+
+        if (type_ && vtype)
+          {
+            TYPE_MATCH tm;
+            if (ctx->match_types(type_, vtype, tm))
+              {
+                switch(tm)
+                  {
+                    case VARIANT:
+                      {
+                        type_ = vtype;
+                        break;
+                      }
+                    case TYPECAST:
+                      {
+                        needs_cast_ = true;
+                        break;
+                      }
+                  }
+              }
+            else
+              {
+	              param_list pl;
+	              pl.add("type1", type_->id());
+	              pl.add("type2", vtype->id());
+	              ctx->error(STypeMismatch, &pl, begin_, end_);
+              }
+          }
       }
 
-    assert(type_);
     ctx->register_symbol(RESOLVE_VARIABLE, id_, type_);
   }
 
@@ -42,8 +77,44 @@ void statement_for::bind(XSSContext ctx)
     else
       {
         type_ = ctx->get_type(type_name_);
+        if (!type_)
+	        {
+	          param_list pl;
+	          pl.add("type", type_name_);
+	          ctx->error(SUnknownType, &pl, begin_, end_);
+          }
+
         init_value_->bind(ctx);
-        type_ = ctx->assign_type(type_, init_value_->type());
+        XSSType vtype = init_value_->type();
+
+        if (type_ && vtype)
+          {
+            TYPE_MATCH tm;
+            if (ctx->match_types(type_, vtype, tm))
+              {
+                switch(tm)
+                  {
+                    case VARIANT:
+                      {
+                        type_ = vtype;
+                        break;
+                      }
+                    case TYPECAST:
+                      {
+                        needs_cast_ = true;
+                        break;
+                      }
+                  }
+              }
+            else
+              {
+	              param_list pl;
+	              pl.add("type1", type_->id());
+	              pl.add("type2", vtype->id());
+	              ctx->error(STypeMismatch, &pl, begin_, end_);
+              }
+          }
+        
         for_code_->context()->register_symbol(RESOLVE_VARIABLE, id_, type_);
       }
 
@@ -59,25 +130,49 @@ void statement_for::bind(XSSContext ctx)
 //statement_foreach
 void statement_foreach::bind(XSSContext ctx)
   {
-    str           id_;
-    
     type_ = ctx->get_type(type_name_);
+    if (!type_)
+	    {
+	      param_list pl;
+	      pl.add("type", type_name_);
+	      ctx->error(SUnknownType, &pl, begin_, end_);
+      }
+
     iter_expr_->bind(ctx);
 
     XSSType iter_type = iter_expr_->type();
-    if (!iter_type)
-      {
-        //this error should have already be reported
-        iter_type = ctx->get_type("array");
-      }
-      
-    if (!iter_type->is_array())
-      {
+    if (iter_type && !iter_type->is_array())
         ctx->error(SExpectingIterable, null, begin_, end_);
-        iter_type = ctx->get_type("array");
+
+    XSSType vtype = iter_type? iter_type->array_type() : XSSType();
+    if (type_ && vtype)
+      {
+        TYPE_MATCH tm;
+        if (ctx->match_types(type_, vtype, tm))
+          {
+            switch(tm)
+              {
+                case VARIANT:
+                  {
+                    type_ = vtype;
+                    break;
+                  }
+                case TYPECAST:
+                  {
+                    needs_cast_ = true;
+                    break;
+                  }
+              }
+          }
+        else
+          {
+	          param_list pl;
+	          pl.add("type1", type_->id());
+	          pl.add("type2", vtype->id());
+	          ctx->error(STypeMismatch, &pl, begin_, end_);
+          }
       }
 
-    type_ = ctx->assign_type(type_, iter_type->array_type());
     for_code_->context()->register_symbol(RESOLVE_VARIABLE, id_, type_);
     for_code_->bind(ctx);
   }
@@ -171,7 +266,9 @@ struct code_builder : code_visitor
 
     virtual void variable_(stmt_variable& info)
       {
-        XSSExpression value = xss_expression_utils::compile_expression(info.value);
+		XSSExpression value;
+		if (!info.value.empty())
+			value = xss_expression_utils::compile_expression(info.value);
         result_->add(XSSStatement(new statement_variable(info.id, info.type, value, info.begin, info.end)));
       }
 

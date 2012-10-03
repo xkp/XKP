@@ -18,12 +18,19 @@ namespace Excess.EditorExtensions
             List<ExcessErrorInfo> errors = service.Model.getErrors(textBuffer.GetFileName());
             foreach(ExcessErrorInfo eei in errors)
             {
-                int spos = textBuffer.CurrentSnapshot.GetLineFromLineNumber(eei.BeginLine - 1).Start.Position;
-                int epos = textBuffer.CurrentSnapshot.GetLineFromLineNumber(eei.BeginLine - 1).Start.Position;
-
-                spos += eei.BeginColumn - 1;
-                epos += eei.EndColumn - 1;
-                result.Add(new ValidationError(new Span(spos, spos < epos ? epos - spos : 1), eei.desc));
+                int spos;
+                int epos;
+                if (eei.BeginLine == eei.EndLine)
+                {
+                    spos = textBuffer.CurrentSnapshot.GetLineFromLineNumber(eei.BeginLine - 1).Start.Position + eei.BeginColumn - 1;
+                    epos = textBuffer.CurrentSnapshot.GetLineFromLineNumber(eei.BeginLine - 1).Start.Position + eei.EndColumn - 1;
+                }
+                else
+                {
+                    spos = textBuffer.CurrentSnapshot.GetLineFromLineNumber(eei.BeginLine - 1).Start.Position + eei.BeginColumn - 1;
+                    epos = textBuffer.CurrentSnapshot.GetLineFromLineNumber(eei.BeginLine - 1).End.Position;
+                }
+                result.Add(new ValidationError(new Span(spos, spos < epos ? epos - spos : 1), eei.desc, eei.BeginLine - 1, eei.BeginColumn - 1));
             }
 
             return result;

@@ -222,7 +222,7 @@ namespace Excess.Project
         #region overridden methods
         protected override ReferenceContainerNode CreateReferenceContainerNode()
         {
-            return new PythonReferenceContainerNode(this);
+            return null; //td:  new PythonReferenceContainerNode(this);
         }
 
         public override int GetGuidProperty(int propid, out Guid guid)

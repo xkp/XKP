@@ -185,33 +185,25 @@ XSSType xss_context::get_type(const str& type, const str& ns)
 
 XSSType xss_context::get_array_type(XSSType type)
   {
-    assert(false); //td:
-    return XSSType();
-    //str type_name = type->id();
-    //if (type_name.empty())
-    //  {
-    //    return XSSType();
-    //  }
+    str type_name = type->id();
+    if (type_name.empty())
+      {
+        return XSSType();
+      }
 
-    //str array_type_name = "array<" + type_name + ">"; //im gonna go basic on this one
+    str array_type_name = "array<" + type_name + ">"; //im gonna go basic on this one
 
-    //resolve_info ri;
-    //if (resolve(array_type_name, ri))
-    //  {
-    //    if (ri.value.is<XSSType>())
-    //      {
-    //        XSSType type = ri.value;
-    //        return type;
-    //      }
-    //    else
-    //      return XSSType();
-    //  }
+    XSSType new_type = get_type(array_type_name);
+    if (new_type)
+      return new_type;
 
-    ////create it and register
-    //XSSType new_type = get_language()->resolve_array_type(type, array_type_name, XSSContext(new xss_context(*this)));
-    //add_type(array_type_name, new_type, true);
+    //create it and register
+    new_type = XSSType(new xss_type);
+    new_type->set_id(array_type_name);
+    new_type->as_array(type);
+    add_type(array_type_name, new_type, true);
 
-    //return new_type;
+    return new_type;
   }
 
 XSSType xss_context::add_type(const str& id, XSSType type, bool override_parent)
@@ -222,9 +214,9 @@ XSSType xss_context::add_type(const str& id, XSSType type, bool override_parent)
         type_list::iterator it = types_.find(id);
         if (it != types_.end())
           {
-			  it->second = type;
-			  type->set_language(lang_);
-			  return type;
+			      it->second = type;
+			      type->set_language(lang_);
+			      return type;
           }
       }
     else
@@ -393,12 +385,37 @@ XSSType xss_context::get_operator_type(operator_type op, XSSType left, XSSType r
     return get_type("var"); //td: !!!
   }
 
-XSSType xss_context::assign_type(XSSType decl, XSSType value)
+bool xss_context::match_types(XSSType left, XSSType right, TYPE_MATCH& result)
   {
-    if (!decl->is_variant() && decl != value)
-      return XSSType();
+	  if (!left || !right)
+	    return false;
 
-    return value;
+    if (left == right)
+      {
+        result = MATCH;
+	      return true;
+      }
+
+	  if (left->is_variant())
+      {
+        result = VARIANT;
+	      return true;
+      }
+    
+	  if (right->is_variant())
+      {
+        result = TYPECAST;
+	      return true;
+      }
+
+	  if (left->is_array() && right->is_array())
+      {
+        XSSType atl = left->array_type();
+        XSSType atr = right->array_type();
+        return match_types(atl, atr, result);
+      }
+
+    return false;
   }
 
 XSSType xss_context::assure_type(const str& type)

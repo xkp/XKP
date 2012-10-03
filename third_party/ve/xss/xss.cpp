@@ -50,19 +50,22 @@ class xss_object_model : public IObjectModel
 			return false;		
 		}
 
-		virtual void updateChanges(int ms)
+		virtual bool updateChanges(int ms)
 		{
 			str			fname;
 			om_response data;
-
+			bool		worked = false;	
 			while(true)
 			{
 				bool has_job = thread_->fetch(fname, data);
 				if (!has_job)
 					break;
 
+				worked = true;
 				model_->update_document(fname, data);
 			}
+
+			return worked;
 		}
 
 		virtual void queueChange(const std::string& fname, const std::string& content)

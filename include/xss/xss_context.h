@@ -491,6 +491,13 @@ enum CONTEXT_IDENTITY
     CTXID_RUNTIME_CODE,
   };
 
+enum TYPE_MATCH
+  {
+    MATCH,
+    VARIANT,
+    TYPECAST
+  };
+
 struct xss_context : boost::enable_shared_from_this<xss_context>
   {
     xss_context(XSSContext parent, fs::path path = fs::path());
@@ -521,7 +528,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       
       //0.9.5
       XSSType        get_operator_type(operator_type op, XSSType left, XSSType right);
-      XSSType        assign_type(XSSType decl, XSSType value);
+      bool           match_types(XSSType left, XSSType right, TYPE_MATCH& result);
       XSSType        assure_type(const str& type);
       void           set_extents(file_position& begin, file_position& end); 
       file_position& begin();
@@ -704,10 +711,11 @@ struct IStatementIf
 
 struct IStatementVar
   {
-    virtual str           id()        = 0;
-    virtual str           type_name() = 0;
-    virtual XSSType       type()      = 0;
-    virtual XSSExpression value()     = 0;
+    virtual str           id()          = 0;
+    virtual str           type_name()   = 0;
+    virtual XSSType       type()        = 0;
+    virtual XSSExpression value()       = 0;
+    virtual bool          needs_cast()  = 0;
   };
 
 struct IStatementFor
@@ -720,15 +728,17 @@ struct IStatementFor
     virtual XSSExpression cond_expr()  = 0;
     virtual XSSExpression iter_expr()  = 0;
     virtual XSSCode       for_code()   = 0;
+    virtual bool          cast_init()  = 0;
   };
 
 struct IStatementForEach
   {
-    virtual str           id()        = 0;
-    virtual str           type_name() = 0;
-    virtual XSSType       type()      = 0;
-    virtual XSSExpression iter_expr() = 0;
-    virtual XSSCode       for_code()  = 0;
+    virtual str           id()          = 0;
+    virtual str           type_name()   = 0;
+    virtual XSSType       type()        = 0;
+    virtual XSSExpression iter_expr()   = 0;
+    virtual XSSCode       for_code()    = 0;
+    virtual bool          needs_cast()  = 0;
   };
 
 struct IStatementWhile
@@ -851,6 +861,7 @@ struct signature_item
     str           type_name;
     XSSType       type;
     XSSExpression default_value; 
+    bool          cast_default; //default_value's type must be cast
   };
 
 typedef std::vector<signature_item> signature_items;

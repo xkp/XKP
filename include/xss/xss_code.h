@@ -37,21 +37,24 @@ class statement_variable : public xss_statement,
         xss_statement(STATEMENT_VAR, begin, end),
         id_(id),
         type_name_(type),
-        value_(value)
+        value_(value),
+        needs_cast_(false)
         {
         }
     public:
       virtual void bind(XSSContext ctx);
     public:
-      virtual str           id()        {return id_;}
-      virtual str           type_name() {return type_name_;}
-      virtual XSSType       type()      {return type_;}
-      virtual XSSExpression value()     {return value_;}
+      virtual str           id()          {return id_;}
+      virtual str           type_name()   {return type_name_;}
+      virtual XSSType       type()        {return type_;}
+      virtual XSSExpression value()       {return value_;}
+      virtual bool          needs_cast()  {return needs_cast_;}
     private:
       str           id_;
       str           type_name_;
       XSSType       type_;
       XSSExpression value_;
+      bool          needs_cast_;
   };
 
 class statement_for : public xss_statement, 
@@ -68,7 +71,8 @@ class statement_for : public xss_statement,
         init_expr_(init_expr),
         cond_expr_(cond_expr),
         iter_expr_(iter_expr),
-        for_code_(for_code)
+        for_code_(for_code),
+        needs_cast_(false)
         {
         }
     public:
@@ -82,6 +86,7 @@ class statement_for : public xss_statement,
       virtual XSSExpression cond_expr()  {return cond_expr_;  } 
       virtual XSSExpression iter_expr()  {return iter_expr_;  } 
       virtual XSSCode       for_code()   {return for_code_;   } 
+      virtual bool          cast_init()  {return needs_cast_;}
     private:
       str           id_;
       str           type_name_;
@@ -91,6 +96,7 @@ class statement_for : public xss_statement,
       XSSExpression cond_expr_;
       XSSExpression iter_expr_;
       XSSCode       for_code_;
+      bool          needs_cast_;
   };
 
 class statement_foreach : public xss_statement, 
@@ -102,7 +108,8 @@ class statement_foreach : public xss_statement,
         id_(id),
         type_name_(type),
         iter_expr_(iter_expr),
-        for_code_(for_code)
+        for_code_(for_code),
+        needs_cast_(false)
         {
         }
     public:
@@ -113,12 +120,14 @@ class statement_foreach : public xss_statement,
       virtual XSSType       type()       {return type_;       }
       virtual XSSExpression iter_expr()  {return iter_expr_;  } 
       virtual XSSCode       for_code()   {return for_code_;   } 
+      virtual bool          needs_cast() {return needs_cast_; }  
     private:
       str           id_;
       str           type_name_;
       XSSType       type_;
       XSSExpression iter_expr_;
       XSSCode       for_code_;
+      bool          needs_cast_;
   };
 
 class statement_while : public xss_statement, 

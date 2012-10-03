@@ -54,7 +54,7 @@ namespace Microsoft.Samples.VisualStudio.CodeDomCodeModel {
             throw new NotImplementedException();
         }
         public CodeElements CodeElements {
-            get { throw new NotImplementedException(); }
+            get { return null; } //throw new NotImplementedException()
         }
         public DTE DTE {
             get {

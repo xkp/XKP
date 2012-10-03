@@ -50,7 +50,7 @@ namespace Microsoft.VisualStudio.Project.Automation
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
 		public virtual object DesignTimeOutputMonikers
 		{
-			get { throw new NotImplementedException(); }
+            get { return null; }
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]

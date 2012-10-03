@@ -3,6 +3,19 @@
 
 using namespace xkp;
 
+const str SExpression("xss-expression");
+
+const str SAssignOperatorOnlyTop("Assign operators can only be used as the base of an expression");
+const str SInvalidAssign("Invalid assignment");
+const str SCannotResolve("Cannot resolve");
+const str SExpectingProperty("Assignment expects a property");
+const str SExpectingMethod("A call expects a method");
+const str SCannotResolveArrayOperator("This entity does not support the bracket operator");
+const str SCannotResolveExpressionType("Could not resolve the type of this expression");
+const str SCannotAssigningNonValue("Invalid assignment");
+const str STypeMismatch("type mismatch");
+
+//stuff
 const int operator_precedence[] =
   {
     2,  //"++",   //op_inc,
@@ -91,18 +104,6 @@ const char* operator_str[] =
     "",     //op_instantiate
     "",     //op_object
   };
-
-const str SExpression("xss-expression");
-
-const str SAssignOperatorOnlyTop("Assign operators can only be used as the base of an expression");
-const str SInvalidAssign("Invalid assignment");
-const str SCannotResolve("Cannot resolve");
-const str SExpectingProperty("Assignment expects a property");
-const str SExpectingMethod("A call expects a method");
-const str SCannotResolveArrayOperator("This entity does not support the bracket operator");
-const str SCannotResolveExpressionType("Could not resolve the type of this expression");
-const str SCannotAssigningNonValue("Invalid assignment");
-
 
 struct expression_builder : expression_visitor
   {
@@ -594,12 +595,9 @@ void xss_value::bind(XSSContext ctx, bool as_setter)
         if ((state_ == BS_FIXUP || state_ == BS_ERROR) && it->bound())
           continue;
         
-        resolve_info  ri;
-        resolve_info& resolver = left;
-        if (first)
-          resolver = ri;
-        else
-          resolver.left = &left;
+        resolve_info  resolver;
+        if (!first)
+		  resolver.left = &left;
 
         bool last = (it + 1) == nd;
 
@@ -635,8 +633,8 @@ void xss_value::bind(XSSContext ctx, bool as_setter)
                 XSSArguments args = it->args();
                 args->bind(ctx);
 
-                current = ctx->get_type(it->identifier());
-                it->bind(RESOLVE_INSTANCE, current);
+                type_ = ctx->get_type(it->identifier());
+                it->bind(RESOLVE_INSTANCE, type_);
                 return;
               };
             case OP_OBJECT:
@@ -647,8 +645,8 @@ void xss_value::bind(XSSContext ctx, bool as_setter)
                 XSSArguments args = it->args();
                 args->bind(ctx);
 
-                current = ctx->get_type("var"); //td: 0.9.5 instance_type(args)
-                it->bind(RESOLVE_INSTANCE, current);
+                type_ = ctx->get_type("var"); //td: 0.9.5 instance_type(args)
+                it->bind(RESOLVE_INSTANCE, type_);
                 return;
               };
             case OP_ARRAY:
@@ -659,8 +657,8 @@ void xss_value::bind(XSSContext ctx, bool as_setter)
                 XSSArguments args = it->args();
                 args->bind(ctx);
 
-                current = ctx->get_array_type(args->type()); 
-                it->bind(RESOLVE_INSTANCE, current);
+                type_ = ctx->get_array_type(args->type()); 
+                it->bind(RESOLVE_CONST, type_);
                 return;
               };
 
@@ -1024,21 +1022,24 @@ statement_list& xss_code::statements()
   }
 
 //signature_item
-signature_item::signature_item()
+signature_item::signature_item():
+  cast_default(false)
   {
   }
 
 signature_item::signature_item(signature_item& other):
   name(other.name),
   type(other.type),
-  default_value(other.default_value) 
+  default_value(other.default_value),
+  cast_default(other.cast_default)
   {
   }
 
 signature_item::signature_item(const str& _name, XSSType _type, XSSExpression _value):
   name(_name),
   type(_type),
-  default_value(_value) 
+  default_value(_value),
+  cast_default(false)
   {
   }
 
@@ -1126,7 +1127,37 @@ void xss_signature::bind(XSSContext ctx)
         if (it->default_value)
           {
             it->default_value->bind(ctx);
-            it->type = ctx->assign_type(it->type, it->default_value->type());
+
+            XSSType type1 = it->type;
+            XSSType type2 = it->default_value->type();
+
+            if (type1 && type2)
+              {
+                TYPE_MATCH tm;
+                if (ctx->match_types(type1, type2, tm))
+                  {
+                    switch(tm)
+                      {
+                        case VARIANT:
+                          {
+                            it->type = type2;
+                            break;
+                          }
+                        case TYPECAST:
+                          {
+                            it->cast_default = true;
+                            break;
+                          }
+                      }
+                  }
+                else
+                  {
+	                  param_list pl;
+	                  pl.add("type1", type1->id());
+	                  pl.add("type2", type2->id());
+	                  ctx->error(STypeMismatch, &pl, ctx->begin(), ctx->begin()); //td: location for parameters, etc
+                  }
+              }
           }
       }
   }
