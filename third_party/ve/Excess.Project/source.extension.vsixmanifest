@@ -8,7 +8,7 @@
     <Locale>1033</Locale>
     <Icon>IronPython_small.png</Icon>
     <PreviewImage>IronPython_large.png</PreviewImage>
-    <InstalledByMsi>false</InstalledByMsi>
+    <InstalledByMsi>true</InstalledByMsi>
     <SupportedProducts>
       <VisualStudio Version="10.0">
         <Edition>Pro</Edition>

@@ -86,15 +86,6 @@
     <ClCompile Include="..\..\..\src\xss\xss_code.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\xss_compiler.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\xss_context.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\xss_expression.cpp">
-      <Filter>Source Files\xss</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\xss\xss_parser.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
@@ -143,10 +134,16 @@
     <ClCompile Include="..\..\tinyXml\tinyxmlparser.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\lang\typed.cpp">
+    <ClCompile Include="..\..\..\src\xss\xss_compiler.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\xml_data_reader.cpp">
+    <ClCompile Include="..\..\..\src\xss\xss_context.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\xss_expression.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\lang\typed.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
   </ItemGroup>

@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <BOOST_PATH>C:\dev\boost</BOOST_PATH>
     <BOOST_INCLUDE>$(BOOST_PATH)\boost_1_44</BOOST_INCLUDE>
     <BOOST_LIB>$(BOOST_PATH)\boost_1_44\lib</BOOST_LIB>
     <XSS_INCLUDE>..\..\..\include</XSS_INCLUDE>
