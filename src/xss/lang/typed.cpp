@@ -139,7 +139,7 @@ bool typed_lang::render_expression(XSSExpression expr, XSSContext ctx, std::ostr
     if (expr->is_assign())  
       {
         XSSValue left_value = expr->left()->value(); assert(left_value);
-        return render_assignment(expr->op(), left_value, expr->right(), ctx, result);
+        return render_assignment(expr, left_value, expr->right(), ctx, result);
       }
     
     return render_operator(expr, ctx, result);
@@ -501,7 +501,7 @@ bool typed_lang::render_switch(IStatementSwitch* info, XSSContext ctx, std::ostr
               for(; cit != cnd; cit++)
                 {
                   XSSExpression case_expr = *cit;
-                  assert(!case_expr->is_constant());
+                  assert(case_expr->is_constant());
                   variant case_value = case_expr->value()->constant();
 
                   result << "\ncase ";
@@ -686,84 +686,91 @@ bool typed_lang::render_throw(IStatementExpression* info, XSSContext ctx, std::o
     return true;
   }
 
-bool typed_lang::render_assignment(operator_type op, XSSValue left_value, XSSExpression right, XSSContext ctx, std::ostringstream& result)
+bool typed_lang::render_assignment(XSSExpression expr, XSSValue left_value, XSSExpression right, XSSContext ctx, std::ostringstream& result)
   {
-    assert(op == op_assign); 
-
-    if (left_value->bound())
+    if (expr->op() == op_assign)
       {
-        XSSValue path = left_value->path();
-        str           path_str;
-        if (path)
+        if (left_value->bound())
           {
-            std::ostringstream path_;
-            if (!render_value(path, ctx, path_))
-              return false;
-
-            path_str = path_.str();
-          }
-
-        value_operation& vop = left_value->get_last();
-        switch(vop.resolve_id())
-          {
-            case RESOLVE_PROPERTY:
+            XSSValue path = left_value->path();
+            str           path_str;
+            if (path)
               {
-                bool this_property = path_str.empty();
-                XSSProperty prop = vop.resolve_value();
-
-                assert(!prop->is_const());
-
-                InlineRenderer prop_setter = prop->setter();
-                if (prop_setter)
-                  {
-                    std::ostringstream value_;
-                    if (!render_expression(right, ctx, value_))
-                      return false;
-                    
-                    param_list params;
-                    params.add("path", path);
-                    params.add("value", value_.str());
-
-                    prop_setter->render(params, result);
-                  }
-                else
-                  {
-                    XSSCode code_setter = prop->code_setter();
-                    if (code_setter)
-                      {
-                        //td: !! generalize this
-                        result << path << '.' << prop->id() << "__set("; 
-                        if (!render_expression(right, ctx, result))
-                          return false;
-                        result << ")";
-                      }
-                    else 
-                      {
-                        result << path << "." << prop->output_id() << " = ";
-                        if (!render_expression(right, ctx, result))
-                          return false;
-                      }
-                  }
-                
-                break;
-              }
-            case RESOLVE_VARIABLE:
-              {
-                result << vop.identifier() << " = ";
-                if (!render_expression(right, ctx, result))
+                std::ostringstream path_;
+                if (!render_value(path, ctx, path_))
                   return false;
+
+                path_str = path_.str();
               }
-            default: assert(false);
+
+            value_operation& vop = left_value->get_last();
+            switch(vop.resolve_id())
+              {
+                case RESOLVE_PROPERTY:
+                  {
+                    bool this_property = path_str.empty();
+                    XSSProperty prop = vop.resolve_value();
+
+                    assert(!prop->is_const());
+
+                    InlineRenderer prop_setter = prop->setter();
+                    if (prop_setter)
+                      {
+                        std::ostringstream value_;
+                        if (!render_expression(right, ctx, value_))
+                          return false;
+                    
+                        param_list params;
+                        params.add("path", path);
+                        params.add("value", value_.str());
+
+                        prop_setter->render(params, result);
+                      }
+                    else
+                      {
+                        XSSCode code_setter = prop->code_setter();
+                        if (code_setter)
+                          {
+                            //td: !! generalize this
+                            result << path << '.' << prop->id() << "__set("; 
+                            if (!render_expression(right, ctx, result))
+                              return false;
+                            result << ")";
+                          }
+                        else 
+                          {
+                            result << path << "." << prop->output_id() << " = ";
+                            if (!render_expression(right, ctx, result))
+                              return false;
+                          }
+                      }
+                
+                    break;
+                  }
+                case RESOLVE_VARIABLE:
+                  {
+                    result << vop.identifier() << " = ";
+                    if (!render_expression(right, ctx, result))
+                      return false;
+					break;
+                  }
+                default: assert(false);
+              }
+          }
+        else
+          {
+            if (!render_value(left_value, ctx, result))
+              return false;
+        
+            result << " = ";
+        
+            if (!render_expression(right, ctx, result))
+              return false;
           }
       }
     else
       {
-        if (!render_value(left_value, ctx, result))
-          return false;
-        
-        result << " = ";
-        
-        if (!render_expression(right, ctx, result))
+        if (!render_operator(expr, ctx, result))
           return false;
       }
 

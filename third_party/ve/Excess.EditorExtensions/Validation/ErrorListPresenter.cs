@@ -120,9 +120,12 @@ namespace Excess.EditorExtensions
                     errorList.Tasks.Add(task);
                     previousErrors.Add(task);
 
-                    ITrackingSpan span = textView.TextSnapshot.CreateTrackingSpan(error.Span, SpanTrackingMode.EdgeNegative);
-                    squiggleTagger.CreateTagSpan(span, new ErrorTag("syntax error", error.Description));
-                    previousSquiggles.Add(new TrackingTagSpan<IErrorTag>(span, new ErrorTag("syntax error", error.Description)));
+                    if (error.Span.Start + error.Span.Length < textView.TextSnapshot.Length)
+                    {
+                        ITrackingSpan span = textView.TextSnapshot.CreateTrackingSpan(error.Span, SpanTrackingMode.EdgeNegative);
+                        squiggleTagger.CreateTagSpan(span, new ErrorTag("syntax error", error.Description));
+                        previousSquiggles.Add(new TrackingTagSpan<IErrorTag>(span, new ErrorTag("syntax error", error.Description)));
+                    }
                 }
             }
         }

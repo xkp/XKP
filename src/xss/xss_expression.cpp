@@ -8,7 +8,7 @@ const str SExpression("xss-expression");
 const str SAssignOperatorOnlyTop("Assign operators can only be used as the base of an expression");
 const str SInvalidAssign("Invalid assignment");
 const str SCannotResolve("Cannot resolve");
-const str SExpectingProperty("Assignment expects a property");
+const str SExpectingProperty("Assignment expects a property or variable");
 const str SExpectingMethod("A call expects a method");
 const str SCannotResolveArrayOperator("This entity does not support the bracket operator");
 const str SCannotResolveExpressionType("Could not resolve the type of this expression");
@@ -685,7 +685,8 @@ void xss_value::bind(XSSContext ctx, bool as_setter)
                 if (ctx->resolve(it->identifier(), resolver))
                   {
                     current = resolver.type;
-                    if (resolver.what != RESOLVE_PROPERTY)
+                    if (resolver.what != RESOLVE_PROPERTY &&
+                        resolver.what != RESOLVE_VARIABLE)
                       {
                         param_list error;
                         error.add("identifier", it->identifier());
@@ -1021,6 +1022,11 @@ statement_list& xss_code::statements()
     return statements_;
   }
 
+bool xss_code::empty()
+  {
+    return statements_.empty();
+  }
+
 //signature_item
 signature_item::signature_item():
   cast_default(false)
@@ -1247,6 +1253,9 @@ XSSExpression xss_expression_utils::constant_expression(variant value)
 
 XSSExpression xss_expression_utils::compile_expression(expression& expr)
   {
+    if (expr.empty())
+      return XSSExpression();
+
     expression_builder eb(expr.begin, expr.end);
     expr.visit(&eb);
     return eb.get();    

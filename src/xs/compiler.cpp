@@ -2442,8 +2442,8 @@ bool xs_compiler::compile_xs(const str& code_str, xs_container& result)
 		else
 			error = true;
 
-    perrors_validate p_error(parse_result, root, token_stack);
-    str res_error = p_error.error();
+    //perrors_validate p_error(parse_result, root, token_stack);
+    //str res_error = p_error.error();
 
     //cleanup
     DeleteTokens(root);
@@ -2453,8 +2453,8 @@ bool xs_compiler::compile_xs(const str& code_str, xs_container& result)
       {
         param_list error;
         error.add("id", SCompilerError);
-        //error.add("desc", SErrorCompiling);
-        error.add("desc", res_error);
+        error.add("desc", SErrorCompiling);
+        //error.add("desc", res_error);
         error.add("line", (int)root->Line);
         error.add("column", (int)root->Column);
         xs_throw(error);

@@ -12,11 +12,11 @@ const str STypeMismatch("type mismatch");
 //statement_if
 void statement_if::bind(XSSContext ctx)
   {
-      expr_->bind(ctx);
-      if (if_code_)
-		if_code_->bind(ctx);
-      if (else_code_)
-        else_code_->bind(ctx);
+    expr_->bind(ctx);
+    if (if_code_)
+		  if_code_->bind(ctx);
+    if (else_code_)
+      else_code_->bind(ctx);
   }
 
 //statement_variable
@@ -187,7 +187,9 @@ void statement_while::bind(XSSContext ctx)
 //statement_switch
 void statement_switch::bind(XSSContext ctx)
   {
-    default_code_->bind(ctx);
+    if (default_code_)
+      default_code_->bind(ctx);
+    
     switch_sections::iterator it = sections_.begin();
     switch_sections::iterator nd = sections_.end();
 
@@ -211,14 +213,17 @@ void statement_switch::bind(XSSContext ctx)
               case_expr->bind(ctx);
           }
 
-        it->case_code->bind(ctx);
+        if (it->case_code)
+          it->case_code->bind(ctx);
       }
   }
 
 //statement_try
 void statement_try::bind(XSSContext ctx)
   {
-    try_code_->bind(ctx);
+    if (try_code_)
+      try_code_->bind(ctx);
+    
     if (finally_code_)
       finally_code_->bind(ctx);
     
@@ -227,6 +232,9 @@ void statement_try::bind(XSSContext ctx)
 
     for(; it != nd; it++)
       {
+        if (!it->catch_code)
+          continue;
+
         XSSType ct = ctx->assure_type(it->type);
         it->catch_code->context()->register_symbol(RESOLVE_VARIABLE, it->id, ct);
         it->catch_code->bind(ctx);
@@ -334,8 +342,13 @@ struct code_builder : code_visitor
 
     virtual void switch_(stmt_switch& info)
       {
-        XSSExpression expr         = xss_expression_utils::compile_expression(info.expr);
-        XSSCode       default_code = compile_code(info.default_code);
+        XSSExpression expr;
+		    if (!info.expr.empty())
+			    expr = xss_expression_utils::compile_expression(info.expr);
+        
+		    XSSCode default_code;
+		    if (!info.default_code.empty())
+			    default_code = compile_code(info.default_code);
 
         statement_switch* result = new statement_switch(expr, default_code, info.begin, info.end);
 
@@ -344,6 +357,9 @@ struct code_builder : code_visitor
 
         for(; it != nd; it++)
           {
+            if (it->case_code.empty())
+              continue;
+
             XSSCode case_code = compile_code(it->case_code);
             statement_switch_section& section = result->create_section(case_code);
 
@@ -359,8 +375,13 @@ struct code_builder : code_visitor
 
     virtual void try_(stmt_try& info)
       {
-        XSSCode try_code     = compile_code(info.try_code);
-        XSSCode finally_code = compile_code(info.finally_code);
+        XSSCode try_code;
+        if (!info.try_code.empty())
+          try_code = compile_code(info.try_code);
+
+        XSSCode finally_code;
+        if (!info.finally_code.empty())
+          finally_code = compile_code(info.finally_code);
         
         statement_try* result = new statement_try(try_code, finally_code, info.begin, info.end);
 
@@ -369,6 +390,9 @@ struct code_builder : code_visitor
 
         for(; it != nd; it++)
           {
+            if (it->catch_code.empty())
+              continue;
+
             XSSCode catch_code = compile_code(it->catch_code);
             result->create_section(it->id, it->type.name, catch_code); //td: !!! generics
           }
@@ -412,7 +436,7 @@ XSSCode xss_code_utils::compile_code(code& cde, IContextCallback* callback)
     if (callback)
       callback->notify(ctx);
 
-	code_builder cb(result, callback);
+	  code_builder cb(result, callback);
     cde.visit(&cb);
 
     return result;

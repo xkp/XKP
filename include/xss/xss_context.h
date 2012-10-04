@@ -844,6 +844,7 @@ class xss_code
       file_position&  begin(); 
       file_position&  end(); 
       statement_list& statements();
+      bool            empty();
     private:
       statement_list statements_;
       XSSContext     ctx_; 
@@ -948,16 +949,16 @@ struct ILanguage
     virtual bool render_throw(IStatementExpression* info, XSSContext ctx, std::ostringstream& result)          = 0;
 
     //expression rendering
-    virtual bool render_assignment(operator_type op, XSSValue left_value, XSSExpression right, XSSContext ctx, std::ostringstream& result) = 0;
-    virtual bool render_operator(XSSExpression expr, XSSContext ctx, std::ostringstream& result)                                           = 0;
-    virtual bool render_constant(variant& value, XSSContext ctx, std::ostringstream& result)                                               = 0; 
-    virtual bool render_read_operation(value_operation& op, XSSContext ctx, std::ostringstream& result)                                    = 0;  
-    virtual bool render_call(value_operation& op, XSSContext ctx, std::ostringstream& result)                                              = 0;  
-    virtual bool render_arguments(XSSArguments args, XSSContext ctx, std::ostringstream& result)                                           = 0;  
-    virtual bool render_index_operation(value_operation& op, XSSContext ctx, std::ostringstream& result)                                   = 0;  
-    virtual bool render_object(value_operation& op, XSSContext ctx, std::ostringstream& result)                                            = 0;  
-    virtual bool render_array(value_operation& op, XSSContext ctx, std::ostringstream& result)                                             = 0;  
-    virtual bool render_instantiation(XSSType type, XSSArguments args, XSSContext ctx, std::ostringstream& result)                         = 0;  
+    virtual bool render_assignment(XSSExpression expr, XSSValue left_value, XSSExpression right, XSSContext ctx, std::ostringstream& result) = 0;
+    virtual bool render_operator(XSSExpression expr, XSSContext ctx, std::ostringstream& result)                                             = 0;
+    virtual bool render_constant(variant& value, XSSContext ctx, std::ostringstream& result)                                                 = 0; 
+    virtual bool render_read_operation(value_operation& op, XSSContext ctx, std::ostringstream& result)                                      = 0;  
+    virtual bool render_call(value_operation& op, XSSContext ctx, std::ostringstream& result)                                                = 0;  
+    virtual bool render_arguments(XSSArguments args, XSSContext ctx, std::ostringstream& result)                                             = 0;  
+    virtual bool render_index_operation(value_operation& op, XSSContext ctx, std::ostringstream& result)                                     = 0;  
+    virtual bool render_object(value_operation& op, XSSContext ctx, std::ostringstream& result)                                              = 0;  
+    virtual bool render_array(value_operation& op, XSSContext ctx, std::ostringstream& result)                                               = 0;  
+    virtual bool render_instantiation(XSSType type, XSSArguments args, XSSContext ctx, std::ostringstream& result)                           = 0;  
 
     //utils
     virtual bool render_pre_statement(XSSStatement info, XSSContext ctx, std::ostringstream& result) = 0;  
