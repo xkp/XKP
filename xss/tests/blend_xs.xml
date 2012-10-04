@@ -29,6 +29,6 @@
 		<button id="apply" caption="Apply"/>		
     </div>
 
-     <canvas id="app" application="wgl_collada3.project.xml" width="500" height="300" html_id="left-container"/>
+     <canvas id="app" application="blend_xs_wgl.project.xml" width="500" height="500" html_id="left-container"/>
     
 </application>

@@ -14,4 +14,5 @@ on blend.render()
 
 on edit_page.render()
 {
+	initial_script.inner_html = "var dynamic_src = 'model/balldroid/balldroid.dae';";
 }

@@ -1,8 +1,10 @@
 <application src="xs_blend_service.xs">
     <page id="home" home="true" src="xs_blend_service.html"/>
-	<page id="edit_page" application="blend_xs.project.xml"/>
+    <page id="edit_page" application="blend_xs.project.xml">
+        <element id="initial_script"/>
+    </page>
     
     <page id="blend" post="true" upload_dir="./upload"/>
 
-    <file_server webroot="/root/nodejs/samples/files/"/>
+    <file_server webroot="C:\Users\Pablo"/>
 </application>
