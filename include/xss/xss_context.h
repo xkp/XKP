@@ -770,14 +770,15 @@ struct IStatementSwitch
 struct statement_catch_section
   {
     statement_catch_section(const str& _id, const str& _type, XSSCode _catch_code):
-      type(_type),
+      type_name(_type),
       id(_id),
       catch_code(_catch_code)
       {
       }
     
-    str     type;
+    str     type_name;
     str     id;
+    XSSType type;
     XSSCode catch_code;
   };
 
@@ -930,9 +931,11 @@ struct ILanguage
     
     //0.9.5
     virtual XSSContext create_context()                                                                  = 0;
+    virtual void       init_compile_context(XSSContext ctx)                                              = 0;
     virtual bool       render_code(XSSCode code, XSSContext ctx, std::ostringstream& result)             = 0; 
     virtual bool       render_expression(XSSExpression expr, XSSContext ctx, std::ostringstream& result) = 0; 
     virtual bool       render_value(XSSValue value, XSSContext ctx, std::ostringstream& result)          = 0;
+    virtual bool       render_type_name(XSSType type, XSSContext ctx, std::ostringstream& result)        = 0;
     
     //code rendering
     virtual bool render_if(IStatementIf* info, XSSContext ctx, std::ostringstream& result)                     = 0;

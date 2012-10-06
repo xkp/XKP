@@ -6,6 +6,7 @@
 #include <xss/lang_factory.h>
 #include <xss/xss_expression.h>
 #include <xss/xss_context.h>
+#include <xss/xss_error.h>
 #include <xss/localfs.h>
 #include <xs/compiler.h>
 
@@ -25,7 +26,8 @@ class xss_object_model : public IObjectModel
 	public:
 		virtual int load(const std::string& filename)
 		{
-			Application app = load_project(filename);
+			xss_error_info_list errors;
+			Application app = load_project(filename, errors); //td: !!! handle loading errors
 			model_->register_app(filename, app);
 
 			apps_.push_back(filename);
@@ -176,7 +178,7 @@ class xss_object_model : public IObjectModel
 					ss << ") ";
 				}
 
-				results_.push_back(xss_error_info(ss.str(), err.loc.begin.line, err.loc.begin.column, err.loc.end.line, err.loc.end.column));
+				results_.push_back(xss_error_info(ss.str(), err.loc.file.string(), err.loc.begin.line, err.loc.begin.column, err.loc.end.line, err.loc.end.column));
 			}
 
 			private:
@@ -189,18 +191,30 @@ class xss_object_model : public IObjectModel
 			model_->visit_errors(fname, &ew);
 		}
 
-		virtual bool buildProject(const std::string& fname)
+		virtual bool buildProject(const std::string& fname, xss_error_info_list& errors)
 		{
 			//td: cache, this will probably wait until 
 			Application old_app = model_->remove_app(fname);
 			
-			Application app = load_project(fname);
+			Application app = load_project(fname, errors);
 			if (!app)
 				return false;	
 			
-			app->build();
+			error_list _errors = app->errors();
+			bool success = _errors.empty();
+			if (success)
+				app->build();
+			
+			success = _errors.empty();
+			error_list::iterator it = _errors.begin();
+			error_list::iterator nd = _errors.end();
+			for(; it != nd; it++)
+			  {
+				  errors.push_back(xss_error_info(it->desc, it->loc.file.string(), it->loc.begin.line, it->loc.begin.column, it->loc.end.line, it->loc.end.column));
+			  }
+
 			model_->register_app(fname, app);
-			return true;
+			return success;
 		}
 
 	private:
@@ -240,14 +254,22 @@ class xss_object_model : public IObjectModel
 			return result;
 		}
 
-		Application load_project(const std::string& filename)
+		Application load_project(const std::string& filename, xss_error_info_list& errors)
 		{
 			fs::path filepath     = filename;
 			fs::path project_path = filepath.parent_path();
 
 			param_list  args;
-			DataReader  prj	   = model_->filesystem()->load_data(filepath);
-			Application result = model_->load(prj, args, project_path);
+			Application result;
+			try
+			  {
+				DataReader prj	= model_->filesystem()->load_data(filepath);
+				result = model_->load(prj, args, project_path);
+			  }
+			catch(xss_error err)
+			  {
+				//td: notify these sort of errors					  
+			  }
 
 			return result;
 		}

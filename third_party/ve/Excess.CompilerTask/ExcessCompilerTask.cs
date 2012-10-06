@@ -6,6 +6,7 @@ using System.Reflection;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
 using Microsoft.Build.BuildEngine;
+using ExcessCompiler;
 
 namespace Excess.CompilerTasks
 {
@@ -148,15 +149,16 @@ namespace Excess.CompilerTasks
 		public override bool Execute()
 		{
             string filePath = Path.Combine(projectPath, MainFile);
-            bool success = true;
 
             ExcessModelService service = ExcessModelService.getInstance();
-            if (service.Model.buildProject(filePath))
+            List<ExcessErrorInfo> errors = new List<ExcessErrorInfo>();
+            bool success = service.Model.buildProject(filePath, errors);
+            if (errors.Count == 0)
             {
                 Engine engine = new Engine();
 
                 // Instantiate a new FileLogger to generate build log
-                FileLogger logger = new FileLogger();
+                myLogger logger = new myLogger();
 
                 // Set the logfile parameter to indicate the log destination
                 logger.Parameters = @"logfile=C:\dev\XKP_BIN\build.log";
@@ -191,7 +193,12 @@ namespace Excess.CompilerTasks
                 //Log.LogError
             }
 
-			return success;
+            //foreach (ExcessErrorInfo error in errors)
+            //{
+            //    Log.LogError("", "", "", error.File, error.BeginLine, error.BeginColumn, error.BeginLine, error.BeginColumn + 1, error.desc);
+            //}
+
+            return success;
 		}
 
 		/// <summary>
@@ -203,4 +210,21 @@ namespace Excess.CompilerTasks
 			return true;
 		}
 	}
+
+    internal class myLogger : Logger
+    {
+        public override void Initialize(Microsoft.Build.Framework.IEventSource eventSource)
+        {
+            ////Register for the ProjectStarted, TargetStarted, and ProjectFinished events
+            //eventSource. ProjectStarted += new ProjectStartedEventHandler(eventSource_ProjectStarted);
+            //eventSource.TargetStarted += new TargetStartedEventHandler(eventSource_TargetStarted);
+            eventSource.ErrorRaised += new BuildErrorEventHandler(ErrorHandler);
+        }
+
+        private void ErrorHandler(object sender, BuildErrorEventArgs e)
+        { 
+            //td: !! send the errors back to xs
+            Console.WriteLine(e.Message);
+        }
+    }
 }

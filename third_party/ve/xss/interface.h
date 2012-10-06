@@ -21,16 +21,18 @@ typedef std::vector<walk_info> walk_list;
 
 struct xss_error_info
 {
-	xss_error_info(const std::string& _desc, int _sline, int _scol, int _eline, int _ecol):
+	xss_error_info(const std::string& _desc, const std::string& _file, int _sline, int _scol, int _eline, int _ecol):
 	desc(_desc),
 	sline(_sline),
 	scol(_scol),
 	eline(_eline),
-	ecol(_ecol)
+	ecol(_ecol),
+	file(_file)
 	{
 	}
 
 	std::string desc;
+	std::string file;
 	int         sline;
 	int         scol;
 	int         eline;
@@ -51,7 +53,7 @@ class IObjectModel
 		virtual void walkContext(const std::string& fname, const std::string& text, 
 								 int line, int col, walk_list& results)								  = 0;
 		virtual void walkErrors(const std::string& fname, xss_error_info_list& errors)				  = 0;
-		virtual bool buildProject(const std::string& fname)											  = 0;
+		virtual bool buildProject(const std::string& fname, xss_error_info_list& errors)			  = 0;
 		virtual std::string appName(const std::string& fname)										  = 0;
 };
 

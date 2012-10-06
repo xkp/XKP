@@ -235,8 +235,22 @@ void statement_try::bind(XSSContext ctx)
         if (!it->catch_code)
           continue;
 
-        XSSType ct = ctx->assure_type(it->type);
-        it->catch_code->context()->register_symbol(RESOLVE_VARIABLE, it->id, ct);
+        if (it->type_name.empty())
+          {
+            it->type = variant_cast<XSSType>(ctx->resolve("#default_exception"), XSSType());
+          }
+        else
+          {
+            it->type = ctx->get_type(it->type_name);
+            if (!it->type)
+              {
+	              param_list pl;
+	              pl.add("type", it->type_name);
+	              ctx->error(SUnknownType, &pl, begin_, end_);
+              }
+          }
+        
+        it->catch_code->context()->register_symbol(RESOLVE_VARIABLE, it->id, it->type);
         it->catch_code->bind(ctx);
       }
   }
@@ -394,7 +408,16 @@ struct code_builder : code_visitor
               continue;
 
             XSSCode catch_code = compile_code(it->catch_code);
-            result->create_section(it->id, it->type.name, catch_code); //td: !!! generics
+            
+			str cid	  = it->id;
+			str ctype = it->type.name;
+			if (cid.empty())
+			  {
+				  cid = ctype;
+				  ctype = str();
+			  }
+
+			result->create_section(cid, ctype, catch_code); //td: !!! generics
           }
 
         result_->add(XSSStatement(result));

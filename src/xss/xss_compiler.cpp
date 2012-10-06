@@ -1830,6 +1830,9 @@ void xss_compiler::build(const fs::path& entry, const fs::path& output)
   {
     //setup
     ctx_->register_dsl("out", DslLinker(new out_linker(shared_from_this())));
+    
+    Language lang = ctx_->get_language();
+    lang->init_compile_context(ctx_);
 
     XSSRenderer renderer = compile_xss_file(entry, ctx_);
     str result = renderer->render(XSSObject(), null);

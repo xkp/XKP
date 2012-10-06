@@ -114,8 +114,9 @@ namespace ExcessCompiler {
 	public ref class ExcessErrorInfo
 	{
 		public:
-			ExcessErrorInfo(String^ _desc, int _BeginLine, int	_BeginColumn, int _EndLine, int	_EndColumn):
+			ExcessErrorInfo(String^ _desc, String^ file, int _BeginLine, int	_BeginColumn, int _EndLine, int	_EndColumn):
 			desc(_desc),
+			File(file),
 			BeginLine(_BeginLine),
 			BeginColumn(_BeginColumn),
 			EndLine(_EndLine),
@@ -124,6 +125,7 @@ namespace ExcessCompiler {
 			}
 
 		String^ desc;
+		String^ File;
 		int		BeginLine;
 		int		BeginColumn;
 		int		EndLine;
@@ -139,7 +141,7 @@ namespace ExcessCompiler {
 			int		loadProject(String^ filename, String^ path);
 			String^ getAppName(String^ filename);
 			void	unloadProject(Guid project);
-			bool	buildProject(String^ filename);
+			bool	buildProject(String^ filename, List<ExcessErrorInfo^>^ errors);
 			bool	buildAll();
             void	addInclude(String^ projectPath, String^ def, String^ src);
             void	notifyChange(String^ filename, String^ contents, int line, int col, int oldEndLine, int oldEndCol, int newEndLine, int newEndCol);

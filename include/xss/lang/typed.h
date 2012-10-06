@@ -10,11 +10,13 @@ namespace xkp{
 struct typed_lang : ILanguage
   {
     virtual XSSContext create_context();
+	virtual void init_compile_context(XSSContext ctx);
 
     //generalities
     virtual bool render_code(XSSCode code, XSSContext ctx, std::ostringstream& result);
     virtual bool render_expression(XSSExpression expr, XSSContext ctx, std::ostringstream& result); 
     virtual bool render_value(XSSValue value, XSSContext ctx, std::ostringstream& result);
+    virtual bool render_type_name(XSSType type, XSSContext ctx, std::ostringstream& result);
     
     //code rendering
     virtual bool render_if(IStatementIf* info, XSSContext ctx, std::ostringstream& result);

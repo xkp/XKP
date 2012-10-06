@@ -1129,6 +1129,7 @@ struct object_visitor : xs_visitor
           {
             result = XSSProperty(new xss_property);
             result->set_id(info.name);
+
             target_->insert_property(result);
           }
         
@@ -1470,6 +1471,7 @@ XSSType object_model::read_type(DataEntity de, Idiom parent, XSSContext ctx)
   {
     XSSType result(new xss_type());
     result->set_id(de->id());
+    result->set_output_id(de->attr("output_id"));
     
     str super = de->attr("super");
     if (!super.empty())
@@ -1572,6 +1574,7 @@ XSSType object_model::read_enum(DataEntity de, XSSContext ctx)
 
     XSSType result(new xss_type);
     result->set_id(de->id());
+    result->set_output_id(de->attr("output_id"));
     result->as_enum();
     
     entity_list items = de->find_all("item");
@@ -1627,6 +1630,7 @@ XSSProperty object_model::read_property(DataEntity de, Idiom idiom, XSSContext c
   {
     XSSProperty result(new xss_property());
     result->set_id(de->id());
+    result->set_output_id(de->attr("output_id"));
 
     str stype = de->attr("type");
     XSSType type = ctx->get_type(stype, idiom->get_namespace());
@@ -1667,6 +1671,7 @@ XSSMethod object_model::read_method(DataEntity de, Idiom idiom, XSSContext ctx)
   {
     XSSMethod result(new xss_method());
     result->set_id(de->id());
+    result->set_output_id(de->attr("output_id"));
 
     str stype = de->attr("return_type");
     if (!stype.empty())
@@ -1702,6 +1707,7 @@ XSSEvent object_model::read_event(DataEntity de, Idiom idiom, XSSContext ctx)
   {
     XSSEvent result(new xss_event);
     result->set_id(de->id());
+    result->set_output_id(de->attr("output_id"));
 
     DataEntity dse = de->get("dispatch");
     if (dse)
@@ -1979,7 +1985,8 @@ void object_model::visit_errors(const fs::path& fname, error_visitor* visitor)
 
     for(; it != nd; it++)
       {
-        it->second->visit_errors(fname, visitor);
+		if (it->second)
+			it->second->visit_errors(fname, visitor);
       }
   }
 

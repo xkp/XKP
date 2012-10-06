@@ -1010,9 +1010,12 @@ namespace Microsoft.VisualStudio.Project
         {
             // Refresh the reference container node for assemblies that could be resolved.
             IReferenceContainer referenceContainer = this.config.ProjectMgr.GetReferenceContainer();
-            foreach(ReferenceNode referenceNode in referenceContainer.EnumReferences())
+            if (referenceContainer != null)
             {
-                referenceNode.RefreshReference();
+                foreach (ReferenceNode referenceNode in referenceContainer.EnumReferences())
+                {
+                    referenceNode.RefreshReference();
+                }
             }
         }
         #endregion

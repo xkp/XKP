@@ -226,9 +226,16 @@ void ExcessModel::unloadProject(Guid project)
 {
 }
 
-bool ExcessModel::buildProject(String^ filename)
+bool ExcessModel::buildProject(String^ filename, List<ExcessErrorInfo^>^ errors)
 {
-	return model_->buildProject(StringUtils::fromString(filename));
+	std::vector<xss_error_info> _errors;
+	bool result = model_->buildProject(StringUtils::fromString(filename), _errors);
+	std::vector<xss_error_info>::iterator it = _errors.begin();
+	std::vector<xss_error_info>::iterator nd = _errors.end();
+	for(; it != nd; it++)
+		errors->Add(gcnew ExcessErrorInfo(StringUtils::toString(it->desc), StringUtils::toString(it->file), it->sline, it->scol, it->eline, it->ecol));
+
+	return result;
 }
 
 bool ExcessModel::buildAll()
@@ -328,7 +335,7 @@ List<ExcessErrorInfo^>^	ExcessModel::getErrors(String^ filename)
 	std::vector<xss_error_info>::iterator it = errors.begin();
 	std::vector<xss_error_info>::iterator nd = errors.end();
 	for(; it != nd; it++)
-		result->Add(gcnew ExcessErrorInfo(StringUtils::toString(it->desc), it->sline, it->scol, it->eline, it->ecol));
+		result->Add(gcnew ExcessErrorInfo(StringUtils::toString(it->desc), StringUtils::toString(it->file), it->sline, it->scol, it->eline, it->ecol));
 	return result;
 }
 

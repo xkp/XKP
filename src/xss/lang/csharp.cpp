@@ -3,6 +3,40 @@
 
 using namespace xkp;
 
+XSSContext cs_lang::create_context()
+  {
+	XSSContext result = typed_lang::create_context();
+    
+	//td: generalize
+    XSSType exception_type(new xss_type("Exception"));
+    result->add_type(exception_type, str());
+
+    result->register_symbol(RESOLVE_CONST, "#default_exception", exception_type);
+
+	return result;
+  }
+
+bool cs_lang::render_type_name(XSSType type, XSSContext ctx, std::ostringstream& result)
+  {
+    if (type->is_array())
+      {
+        result << "List<";
+        XSSType at = type->array_type();
+        if (!render_type_name(at, ctx, result))
+          return false;
+
+        result << ">";
+      }
+    else if (type->is_variant())
+      {
+        result << "object";
+      }
+    else
+      return typed_lang::render_type_name(type, ctx, result);
+    
+    return true;
+  }
+
 bool cs_lang::render_foreach(IStatementForEach* info, XSSContext ctx, std::ostringstream& result)
   {
     result << '\n' << "foreach(";
@@ -58,11 +92,8 @@ bool cs_lang::render_array(value_operation& op, XSSContext ctx, std::ostringstre
 
         result << "}";
       }
-    else 
-      {
-        result << ")";
-      }
 
+    result << ")";
     return true;
   }
 

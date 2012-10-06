@@ -27,6 +27,11 @@ XSSContext typed_lang::create_context()
     return result;
   }
 
+void typed_lang::init_compile_context(XSSContext ctx)
+  {
+	//do nothing
+  }		
+
 bool typed_lang::render_code(XSSCode code, XSSContext ctx, std::ostringstream& result)
   {
     statement_list& sl = code->statements();
@@ -363,6 +368,12 @@ bool typed_lang::render_value(XSSValue val, XSSContext ctx, std::ostringstream& 
     return true;
   }
 
+bool typed_lang::render_type_name(XSSType type, XSSContext ctx, std::ostringstream& result)
+  {
+    result << type->output_id();
+    return true;
+  }
+
 bool typed_lang::render_if(IStatementIf* info, XSSContext ctx, std::ostringstream& result)
   {
     result << '\n' << "if (";
@@ -393,11 +404,18 @@ bool typed_lang::render_if(IStatementIf* info, XSSContext ctx, std::ostringstrea
 
 bool typed_lang::render_variable(IStatementVar* info, XSSContext ctx, std::ostringstream& result)
   {
-    str type_name = info->type_name();
-    if (info->type())
-      type_name = info->type()->output_id();
+    result << '\n';
 
-    result << '\n' << type_name << " " << info->id();
+    XSSType type = info->type();
+    if (type)
+      {
+        if (!render_type_name(type, ctx, result))
+          return false; 
+      }
+    else
+      result << info->type_name();
+
+    result << " " << info->id();
 
     XSSExpression value = info->value();
     if (value)
@@ -442,11 +460,15 @@ bool typed_lang::render_for(IStatementFor* info, XSSContext ctx, std::ostringstr
     if (cond_expr && !render_expression(cond_expr, ctx, result))
           return false;
       
+    result << ';';
+
     XSSExpression iter_expr = info->iter_expr();
     if (iter_expr && !render_expression(iter_expr, ctx, result))
           return false;
 
-    XSSCode for_code = info->for_code();
+    result << ')';
+
+	XSSCode for_code = info->for_code();
     result << '\n' << "{";
     if (for_code && !render_code(for_code, ctx, result))
       return false;
@@ -589,7 +611,6 @@ bool typed_lang::render_switch(IStatementSwitch* info, XSSContext ctx, std::ostr
             if (!render_code(default_code, ctx, result))
               return false;
 
-            result << '\n' << "break;";
             result << '\n' << "}";
           }
       }
@@ -615,7 +636,12 @@ bool typed_lang::render_try(IStatementTry* info, XSSContext ctx, std::ostringstr
     for(; it != nd; it++)
       {
         //td: !!! catch type unresolved
-        result << '\n' << "catch(" << it->type << " " << it->id << ")";
+        XSSType exception_type = it->type;        
+        result << '\n' << "catch(";
+        if (!render_type_name(exception_type, ctx, result))
+          return false;
+        
+        result << " " << it->id << ")";
         result << '\n' << "{";
 
         if (!render_code(it->catch_code, ctx, result))
@@ -826,6 +852,24 @@ bool typed_lang::render_read_operation(value_operation& op, XSSContext ctx, std:
                   }
                 break;
               }
+			case RESOLVE_TYPE:
+			  {
+				XSSType type = op.resolve_value();
+                if (!path.empty())
+                    result << '.';
+                
+				result << type->output_id();
+                return true;
+			  }
+			case RESOLVE_INSTANCE:
+			  {
+				XSSObject inst = op.resolve_value();
+                if (!path.empty())
+                    result << '.';
+                
+				result << inst->output_id();
+                return true;
+			  }
           }
       }
 

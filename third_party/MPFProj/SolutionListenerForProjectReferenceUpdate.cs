@@ -182,14 +182,15 @@ namespace Microsoft.VisualStudio.Project
 					IReferenceContainerProvider provider = hierarchy as IReferenceContainerProvider;
 					if(provider != null)
 					{
-						IReferenceContainer referenceContainer = provider.GetReferenceContainer();
+                        //td: no more references?
+                        //IReferenceContainer referenceContainer = provider.GetReferenceContainer();
 
-						Debug.Assert(referenceContainer != null, "Could not found the References virtual node");
-						ProjectReferenceNode projectReferenceNode = GetProjectReferenceOnNodeForHierarchy(referenceContainer.EnumReferences(), inputHierarchy);
-						if(projectReferenceNode != null)
-						{
-							projectReferences.Add(projectReferenceNode);
-						}
+                        //Debug.Assert(referenceContainer != null, "Could not found the References virtual node");
+                        //ProjectReferenceNode projectReferenceNode = GetProjectReferenceOnNodeForHierarchy(referenceContainer.EnumReferences(), inputHierarchy);
+                        //if(projectReferenceNode != null)
+                        //{
+                        //    projectReferences.Add(projectReferenceNode);
+                        //}
 					}
 				}
 			} while(returnValue == VSConstants.S_OK && fetched == 1);
