@@ -993,18 +993,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_A85538F1932E46499A07287915E6CE80"
-        "OwnerKey" = "8:_04F90B774D1541F3A1F3275A36C4B5E1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A85538F1932E46499A07287915E6CE80"
-        "OwnerKey" = "8:_BC5272DA59A647FCA3C38880A289DB3F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_A9D6D05419CCDFB99FF113F3FB39E9F5"
         "OwnerKey" = "8:_4592E424A3938A99D37A4AEBC738A044"
         "MsmSig" = "8:_UNDEFINED"
@@ -1269,6 +1257,24 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_E5D3C3656BB941D59FAA86B46EEE1BD4"
+        "OwnerKey" = "8:_04F90B774D1541F3A1F3275A36C4B5E1"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E5D3C3656BB941D59FAA86B46EEE1BD4"
+        "OwnerKey" = "8:_BC5272DA59A647FCA3C38880A289DB3F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E5D3C3656BB941D59FAA86B46EEE1BD4"
+        "OwnerKey" = "8:_A67FF7DED3AC41ADA9AD33B7D0477596"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_ED452A17313C4C06B1CFDE3DD72DB82D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1288,18 +1294,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_3BAA05B8930E46A181E7DA03CDDBCF14"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_2D6E19D978B241A9BE7B4A052300B6B9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_62F24E6540544A2EFF2ED19CBB87525E"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1307,6 +1301,18 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_59017CC5C57FCF18B27D149A422D7E18"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_3BAA05B8930E46A181E7DA03CDDBCF14"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_2D6E19D978B241A9BE7B4A052300B6B9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1602,7 +1608,7 @@
             {
             "Enabled" = "11:TRUE"
             "PromptEnabled" = "11:TRUE"
-            "PrerequisitesLocation" = "2:1"
+            "PrerequisitesLocation" = "2:2"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
                 "Items"
@@ -1611,6 +1617,11 @@
                     {
                     "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
                     "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Visual.C++.10.0.x86"
+                    {
+                    "Name" = "8:Visual C++ 2010 Runtime Libraries (x86)"
+                    "ProductCode" = "8:Microsoft.Visual.C++.10.0.x86"
                     }
                     "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
                     {
@@ -2585,7 +2596,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ExcessCompiler, Version=1.0.4660.2316, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:ExcessCompiler, Version=1.0.4663.19430, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_6E3ED9C5E9C4F0B2DE9FCD4DB208125A"
@@ -3641,7 +3652,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ExcessIDE"
         "ProductCode" = "8:{3EA28B1F-71C7-4E7D-91EC-F151274BF301}"
-        "PackageCode" = "8:{5E2EC20A-9E8A-4375-A81C-4458F091EFB8}"
+        "PackageCode" = "8:{CDF5CCE7-F8E0-4886-A750-342347ECC159}"
         "UpgradeCode" = "8:{DE445DA7-18B3-49B9-96C9-D6A1C39AD040}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -4157,7 +4168,7 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_A85538F1932E46499A07287915E6CE80"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_E5D3C3656BB941D59FAA86B46EEE1BD4"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -4166,7 +4177,7 @@
                 {
                 }
             "LanguageId" = "3:0"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "Folder" = "8:"
             "Feature" = "8:"
             "IsolateTo" = "8:"
