@@ -18,7 +18,13 @@ XSSContext cs_lang::create_context()
 
 bool cs_lang::render_type_name(XSSType type, XSSContext ctx, std::ostringstream& result)
   {
-    if (type->is_array())
+    if (!type)
+	  {
+		result << "void";		
+		return true;
+	  }
+
+	if (type->is_array())
       {
         result << "List<";
         XSSType at = type->array_type();
@@ -107,4 +113,9 @@ bool cs_lang::render_pre_statement(XSSStatement info, XSSContext ctx, std::ostri
       }
 
     return true;
+  }
+
+bool cs_lang::render_operator(XSSExpression expr, XSSContext ctx, std::ostringstream& result)
+  {
+    return typed_lang::render_operator(expr, ctx, result);
   }

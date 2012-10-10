@@ -158,7 +158,7 @@ namespace Excess.CompilerTasks
                 Engine engine = new Engine();
 
                 // Instantiate a new FileLogger to generate build log
-                myLogger logger = new myLogger();
+                myLogger logger = new myLogger(Log);
 
                 // Set the logfile parameter to indicate the log destination
                 logger.Parameters = @"logfile=C:\dev\XKP_BIN\build.log";
@@ -187,11 +187,6 @@ namespace Excess.CompilerTasks
                     Console.WriteLine(@"Build failed. View C:\temp\build.log for details");
                 return true;
             }
-            else
-            {
-                //td:
-                //Log.LogError
-            }
 
             //foreach (ExcessErrorInfo error in errors)
             //{
@@ -213,6 +208,11 @@ namespace Excess.CompilerTasks
 
     internal class myLogger : Logger
     {
+        public myLogger(TaskLoggingHelper log)
+        {
+            log_ = log;
+        }
+
         public override void Initialize(Microsoft.Build.Framework.IEventSource eventSource)
         {
             ////Register for the ProjectStarted, TargetStarted, and ProjectFinished events
@@ -224,7 +224,9 @@ namespace Excess.CompilerTasks
         private void ErrorHandler(object sender, BuildErrorEventArgs e)
         { 
             //td: !! send the errors back to xs
-            Console.WriteLine(e.Message);
+            log_.LogError(e.Subcategory, e.Code, e.HelpKeyword, e.File, e.LineNumber, e.ColumnNumber, e.EndLineNumber, e.EndColumnNumber, e.Message);
         }
+
+        private TaskLoggingHelper log_;
     }
 }

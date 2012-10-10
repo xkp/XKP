@@ -507,6 +507,8 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       XSSType       get_type(const str& type);
       XSSType       get_type(schema* type);
       XSSType       get_type(const str& type, const str& ns);
+      XSSType       get_type(const xs_type& type, const str& ns = str());
+
       XSSType       get_array_type(XSSType type);
       XSSType       add_type(const str& id, XSSType type, bool override_parent = false);
       XSSType       add_type(XSSType type, const str& ns);
@@ -614,6 +616,9 @@ typedef std::vector<value_operation> value_operations;
 class xss_value
   {
     public:
+      xss_value()                       {assert(false);} //forced by variants
+      xss_value(const xss_value& other) {assert(false);}
+
       xss_value(file_position& begin, file_position& end) :
         state_(BS_UNBOUND),
         begin_(begin),
@@ -623,11 +628,13 @@ class xss_value
     public:
       void              bind(XSSContext ctx, bool as_setter);
       XSSType           type();
+	  void              type(XSSType type);
       bool              bound();
       value_operations& operations();      
       void              add_operation(value_operation& op);
       value_operation&  get_last();
       bool              is_constant();
+	  bool              is_array();
       variant           constant();
       file_position&    begin(); 
       file_position&    end(); 
@@ -653,6 +660,9 @@ class xss_value
 class xss_expression
   {
     public:
+      xss_expression()                            {assert(false);} //forced by variants
+      xss_expression(const xss_expression& other) {assert(false);}
+
       xss_expression(operator_type op, XSSExpression arg1, XSSExpression arg2 = XSSExpression(), XSSExpression arg3 = XSSExpression());
       xss_expression(XSSValue value);
     public:
@@ -661,6 +671,7 @@ class xss_expression
       operator_type op();
       XSSValue      value();
       XSSType       type();
+      void          type(XSSType t);
       bool          is_constant();
       bool          is_assign();
       XSSExpression left();
@@ -855,7 +866,7 @@ class xss_code
 struct signature_item
   {
     signature_item();
-    signature_item(signature_item& other);
+    signature_item(const signature_item& other);
     signature_item(const str& _name, XSSType _type, XSSExpression _value);
     signature_item(const str&_name, const str& _type_name, XSSExpression _value);
 
@@ -870,6 +881,9 @@ typedef std::vector<signature_item> signature_items;
 
 class xss_signature
   {
+    public:
+      xss_signature();
+      xss_signature(const xss_signature& other);
     public:
       signature_items& items();
 
@@ -936,6 +950,7 @@ struct ILanguage
     virtual bool       render_expression(XSSExpression expr, XSSContext ctx, std::ostringstream& result) = 0; 
     virtual bool       render_value(XSSValue value, XSSContext ctx, std::ostringstream& result)          = 0;
     virtual bool       render_type_name(XSSType type, XSSContext ctx, std::ostringstream& result)        = 0;
+    virtual bool       render_signature(XSSSignature type, XSSContext ctx, std::ostringstream& result)   = 0;
     
     //code rendering
     virtual bool render_if(IStatementIf* info, XSSContext ctx, std::ostringstream& result)                     = 0;
@@ -953,6 +968,7 @@ struct ILanguage
 
     //expression rendering
     virtual bool render_assignment(XSSExpression expr, XSSValue left_value, XSSExpression right, XSSContext ctx, std::ostringstream& result) = 0;
+    virtual bool render_array_assignment(XSSExpression expr, XSSArguments index, XSSContext ctx, std::ostringstream& result)                 = 0;
     virtual bool render_operator(XSSExpression expr, XSSContext ctx, std::ostringstream& result)                                             = 0;
     virtual bool render_constant(variant& value, XSSContext ctx, std::ostringstream& result)                                                 = 0; 
     virtual bool render_read_operation(value_operation& op, XSSContext ctx, std::ostringstream& result)                                      = 0;  
@@ -1021,7 +1037,7 @@ class xss_property : public xss_object
       XSSType         property_type();
       
       virtual void bind(XSSContext ctx);
-    private:
+    public:
       //0.9.5
       XSSExpression  expr_value_;
       InlineRenderer getter_;
@@ -1086,11 +1102,11 @@ class xss_method : public xss_object
 
       virtual void bind(XSSContext ctx);
     private:
-      XSSType        return_type_;
       InlineRenderer renderer_;
-      XSSSignature   signature_;
     public:
-      XSSCode code_; 
+      XSSCode      code_; 
+      XSSSignature signature_;
+      XSSType      return_type_;
   };
 
 //utils
@@ -1187,7 +1203,9 @@ struct xss_method_schema : xss_object_schema<xss_method>
         //readonly_property<str>("name", &xss_method::get_name);
 
         //property_("args", &xss_method::args_);
-        property_("code", &xss_method::code_);
+        property_                      ("code",        &xss_method::code_);
+        readonly_property<XSSSignature>("signature",   &xss_method::signature_);
+        readonly_property<XSSType>     ("return_type", &xss_method::return_type_);
       }
   };
 
@@ -1203,20 +1221,55 @@ struct xss_property_schema : xss_object_schema<xss_property>
 
         property_("get",   &xss_property::get_);
         property_("set",   &xss_property::set_);
-        property_("value", &xss_property::value_);
 
         //0.9.5
+        //property_("value", &xss_property::value_);
         //readonly_property<XSSObject>("get_", &xss_property::get_get);
         //readonly_property<XSSObject>("set_", &xss_property::get_set);
         //method_<str, 0>("render_value", &xss_property::render_value);
+
+        //0.9.5
+        readonly_property<XSSType>      ("property_type", &xss_property::prop_type_);
+        readonly_property<XSSExpression>("value",         &xss_property::expr_value_);
+      
+        //td: !!! do property interface, its a mess
+      //XSSExpression  expr_value_;
+      //InlineRenderer getter_;
+      //InlineRenderer setter_;
+      //XSSCode        code_getter_;
+      //XSSCode        code_setter_;
       }
   };
 
-register_complete_type(xss_object,    xss_object_schema<xss_object>);
-register_complete_type(xss_type,      xss_type_schema);
-register_complete_type(xss_event,		  xss_event_schema);
-register_complete_type(xss_property,  xss_property_schema);
-register_complete_type(xss_method,	  xss_method_schema);
+struct xss_signature_schema : object_schema<xss_signature>
+  {
+    virtual void declare()
+      {
+			}
+  };
+
+struct xss_expression_schema : object_schema<xss_expression>
+  {
+    virtual void declare()
+      {
+			}
+  };
+
+struct xss_value_schema : object_schema<xss_value>
+  {
+    virtual void declare()
+      {
+			}
+  };
+
+register_complete_type(xss_object,      xss_object_schema<xss_object>);
+register_complete_type(xss_type,        xss_type_schema);
+register_complete_type(xss_event,		    xss_event_schema);
+register_complete_type(xss_property,    xss_property_schema);
+register_complete_type(xss_method,	    xss_method_schema);
+register_complete_type(xss_signature,	  xss_signature_schema);
+register_complete_type(xss_expression,	xss_expression_schema);
+register_complete_type(xss_value,	      xss_value_schema);
 
 register_iterator(XSSObject);
 

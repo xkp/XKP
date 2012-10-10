@@ -33,10 +33,10 @@ class statement_variable : public xss_statement,
                            public IStatementVar
   {
     public:
-      statement_variable(const str& id, const str& type, XSSExpression value, file_position& begin, file_position& end):
+      statement_variable(const str& id, const xs_type& type, XSSExpression value, file_position& begin, file_position& end):
         xss_statement(STATEMENT_VAR, begin, end),
         id_(id),
-        type_name_(type),
+        type_info_(type),
         value_(value),
         needs_cast_(false)
         {
@@ -45,13 +45,14 @@ class statement_variable : public xss_statement,
       virtual void bind(XSSContext ctx);
     public:
       virtual str           id()          {return id_;}
-      virtual str           type_name()   {return type_name_;}
+      virtual str           type_name()   {return type_info_.name;}
+      virtual xs_type&      type_info()   {return type_info_;}
       virtual XSSType       type()        {return type_;}
       virtual XSSExpression value()       {return value_;}
       virtual bool          needs_cast()  {return needs_cast_;}
     private:
       str           id_;
-      str           type_name_;
+      xs_type       type_info_;
       XSSType       type_;
       XSSExpression value_;
       bool          needs_cast_;
@@ -61,12 +62,12 @@ class statement_for : public xss_statement,
                       public IStatementFor
   {
     public:
-      statement_for(const str& id, const str& type, XSSExpression init_value, 
+      statement_for(const str& id, const xs_type& type, XSSExpression init_value, 
                     XSSExpression init_expr, XSSExpression cond_expr, XSSExpression iter_expr,
                     XSSCode for_code, file_position& begin, file_position& end):
         xss_statement(STATEMENT_FOR, begin, end),
         id_(id),
-        type_name_(type),
+        type_info_(type),
         init_value_(init_value),
         init_expr_(init_expr),
         cond_expr_(cond_expr),
@@ -78,18 +79,19 @@ class statement_for : public xss_statement,
     public:
       virtual void bind(XSSContext ctx);
     public:
-      virtual str           id()         {return id_;         }
-      virtual str           type_name()  {return type_name_;  }
-      virtual XSSType       type()       {return type_;       }
-      virtual XSSExpression init_value() {return init_value_; }
-      virtual XSSExpression init_expr()  {return init_expr_;  } 
-      virtual XSSExpression cond_expr()  {return cond_expr_;  } 
-      virtual XSSExpression iter_expr()  {return iter_expr_;  } 
-      virtual XSSCode       for_code()   {return for_code_;   } 
-      virtual bool          cast_init()  {return needs_cast_;}
+      virtual str           id()         {return id_;             }
+      virtual str           type_name()  {return type_info_.name; }
+      virtual xs_type&      type_info()  {return type_info_;      } 
+      virtual XSSType       type()       {return type_;           }
+      virtual XSSExpression init_value() {return init_value_;     }
+      virtual XSSExpression init_expr()  {return init_expr_;      } 
+      virtual XSSExpression cond_expr()  {return cond_expr_;      } 
+      virtual XSSExpression iter_expr()  {return iter_expr_;      } 
+      virtual XSSCode       for_code()   {return for_code_;       } 
+      virtual bool          cast_init()  {return needs_cast_;     }
     private:
       str           id_;
-      str           type_name_;
+      xs_type       type_info_;
       XSSType       type_;
       XSSExpression init_value_;
       XSSExpression init_expr_;

@@ -1,6 +1,7 @@
 
 #include "xss/xss_renderer.h"
 #include "xss/xss_error.h"
+#include "xs/xs_error.h"
 #include "xss/html_parser.h"
 
 using namespace xkp;
@@ -18,6 +19,7 @@ const str SUnnamedParameter("xss:parameter must have an id");
 const str SUnknownParameterType("xss:parameter must have a valid type");
 const str SBadHTML("Invalid html file");
 const str SInvalidTag("HTML tag not found");
+const str SSnafu("Something went wrong");
 
 //text_renderer
 text_renderer::text_renderer(const str& text):
@@ -35,8 +37,11 @@ struct xss_code_renderer : item_renderer
     //item_renderer
     virtual str render(XSSObject this_, param_list* args)
       {
-        execution_context ctx(code_, this_, args);
-        ctx.execute();
+        if (code_)
+		  {
+			execution_context ctx(code_, this_, args);
+			ctx.execute();
+		  }
         return str();
       }
 
@@ -46,8 +51,35 @@ struct xss_code_renderer : item_renderer
         code_context code_ctx;
         code_ctx = ctx->get_compile_context();
 
-        code_  = xs.compile_code(text, code_ctx, file);
-        code_->file = file;
+		    bool	   success = false;
+		    param_list error_info;
+        try
+		      {
+			      code_  = xs.compile_code(text, code_ctx, file);
+			      code_->file = file;
+			      success = true;
+		      }
+		    catch(xss_error xsse)
+		      {
+			      error_info = xsse.data; 
+		      }
+		    catch(xs_error xse)
+		      {
+			      error_info = xse.data; 
+		      }
+		    catch(...)
+		      {
+			      error_info.add("desc", SSnafu); 
+			      error_info.add("file", file.string()); 
+		      }
+
+		    if (!success)
+		      {
+			      int l = variant_cast<int>(error_info.get("line"), -1);
+			      int c = variant_cast<int>(error_info.get("column"), -1);
+			      str desc = variant_cast<str>(error_info.get("desc"), str());
+			      ctx->error(desc, &error_info, file_position(l, c), file_position(l, c)); //td: !!! handle errors better
+		      }
       }
     private:
       ByteCode code_;

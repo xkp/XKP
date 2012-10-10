@@ -7,12 +7,49 @@ namespace <xss:e v="application.name"/>
 {
     class Program
     {
+        <xss:code>
+			for(var prop in application.root.properties)
+			{
+				string prop_type = compiler.type_to_string(prop.property_type);
+				out()
+				{
+					private static <xss:e v="prop_type"/> <xss:e v="prop.id"/>
+				}
+
+				compiler.log(prop.value);
+				if (prop.value)
+					out()
+					{
+						 = <xss:e v="compiler.expression_to_string(prop.value)"/>;
+					}
+				else 
+					out() 
+					{
+						;
+					}
+			}
+
+			for(var mthd in application.root.methods)
+			{
+				string type_name = compiler.type_to_string(mthd.return_type);
+				out()
+				{
+					private static <xss:e v="type_name"/> <xss:e v="mthd.id"/>(<xss:e v="compiler.signature_to_string(mthd.signature)"/>)
+					<xss:open_brace/>
+				}
+
+				compiler.render_code(mthd.code);
+
+				out()
+				{
+					<xss:close_brace/>
+				}
+			}
+        </xss:code>
+
         static void Main(string[] args)
         {
-            <xss:code>
-                var main = application.root.get_method("main");
-                compiler.render_code(main.code);
-            </xss:code>
+			main();
         }
     }
 }

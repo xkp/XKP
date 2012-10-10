@@ -3873,7 +3873,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ExcessIDE"
         "ProductCode" = "8:{3EA28B1F-71C7-4E7D-91EC-F151274BF301}"
-        "PackageCode" = "8:{6D7AE95C-5130-45CF-A909-DE2B9EA65310}"
+        "PackageCode" = "8:{5F24862F-EB9F-4437-9FAF-FB069955EB88}"
         "UpgradeCode" = "8:{DE445DA7-18B3-49B9-96C9-D6A1C39AD040}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

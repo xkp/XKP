@@ -3,6 +3,7 @@
 #include "xss/xss_error.h"
 #include "xss/language.h"
 #include "xss/lang/base.h"
+#include "xss/xss_expression.h"
 
 using namespace xkp;
 
@@ -181,6 +182,87 @@ XSSType xss_context::get_type(const str& type, const str& ns)
 
     //td: !!! namespaces
     return get_type(type);
+  }
+
+XSSType xss_context::get_type(const xs_type& type, const str& ns)
+  {
+    XSSType result = get_type(type.name, ns);
+    if (type.args.empty() || !result)
+      return result;
+
+	  if (type.name == "array" && type.args.size() == 1)
+	    {
+        expression    e          = type.args[0].value;
+        XSSExpression value_exp  = xss_expression_utils::compile_expression(e);	
+        XSSValue      value      = value_exp->value();
+        XSSType	      value_type = get_type(value->get_last().identifier());
+        if (!value_type)
+          return XSSType();
+
+        return get_array_type(value_type);
+	    }
+
+	  assert(false); //td: finish implementing generics
+    return XSSType();
+    //if (!result->is_generic())
+    //  {
+    //    error(SUngeneric, 
+    //    return XSSType();
+    //  }
+
+    //XSSSignature        sig;
+    //std::ostringstream  sig_string;
+    //sig_string << type.name << "<";
+
+    //std::vector<xs_const>::const_iterator it = type.args.begin();
+    //std::vector<xs_const>::const_iterator nd = type.args.end();
+    //bool first = true;
+    //for(; it != nd; it++)
+    //  {
+    //    XSSExpression value_exp = xss_expression_utils::compile_expression(it->value);
+    //    XSSValue      value     = value_exp->value();
+    //    
+    //    if (!value)  
+    //      {
+    //        error(SNoExprInGenerics,
+    //        return XSSType();
+    //      }
+
+    //    value_operations& ops = value->operations();
+    //    if (ops.size() != 1)
+    //      {
+    //        error(SOnlyIdentifiersInGenerics,
+    //        return XSSType();
+    //      }
+    //    
+    //    str type_name = ops[0].identifier();
+    //    if (type_name.empty())
+    //      {
+    //        error(SOnlyIdentifiersInGenerics,
+    //        return XSSType();
+    //      }
+
+    //    XSSType gtype = assure_type(type_name);
+    //    sig->add_argument(str(), gtype, XSSExpression()); 
+
+    //    if (first)
+    //      first = false;
+    //    else 
+    //      sig_string << ", ";
+    //    
+    //    sig_string<< type_name;
+    //  }
+
+    //sig_string << ">";
+
+    //XSSType cached_type = get_type(sig_string.str());
+    //if (!cached_type)
+    //  {
+    //    cached_type = result->instantiate_generic(sig);
+
+    //  }
+
+    //return cached_type;
   }
 
 XSSType xss_context::get_array_type(XSSType type)
@@ -2506,7 +2588,6 @@ void xss_property::as_const()
 
 bool xss_property::is_const()
   {
-    assert(false); //td:
     return false; 
   }
 
@@ -2549,6 +2630,56 @@ void xss_property::bind(XSSContext ctx)
         sctx->register_symbol(RESOLVE_VARIABLE, "value", prop_type_);
         
         code_setter_->bind(ctx);
+      }
+
+    if (expr_value_)
+      {
+        expr_value_->bind(ctx);
+        XSSType etype = expr_value_->type();
+
+        //td: !!! stop repeating this code
+        TYPE_MATCH tm;
+        if (ctx->match_types(prop_type_, etype, tm))
+          {
+            switch(tm)
+              {
+                case VARIANT:
+                  {
+                    prop_type_ = etype;
+                    break;
+                  }
+                case TYPECAST:
+                  {
+						        //array case, due to initialization not knowing its type (i.e. typeof([]) == array<var>)
+						        if (prop_type_->is_array())
+						          {
+							          XSSValue value = expr_value_->value();
+							          if (value && value->is_array())
+							            {
+								            value_operation& arr = value->get_last();
+								            if (arr.args()->size() == 0)
+								              {
+									              //retype
+									              expr_value_->type(prop_type_);
+									              value->type(prop_type_);
+									              arr.bind(RESOLVE_CONST, prop_type_);
+								              }
+							            }
+						          }
+
+                    //td: value needs cast
+                    //needs_cast_ = true;
+                    break;
+                  }
+              }
+          }
+        else
+          {
+	          param_list pl;
+	          pl.add("type1", type_->id());
+	          pl.add("type2", etype->id());
+	          ctx->error(STypeMismatch, &pl, expr_value_->begin(), expr_value_->end());
+          }
       }
   }
 
@@ -2729,11 +2860,23 @@ void xss_method::bind(XSSContext ctx)
 
     if (code_)
       {
+        //register arguments
+        XSSContext code_ctx = code_->context();
+
+        signature_items&          args = signature_->items();
+        signature_items::iterator it   = args.begin();
+        signature_items::iterator nd   = args.end();
+
+        for(; it != nd; it++)
+          {
+            code_ctx->register_symbol(RESOLVE_VARIABLE, it->name, it->type);
+          }        
+
         code_->bind(ctx);
         XSSType rt = code_->return_type();
         if (!return_type_)
             return_type_ = rt;
-        else if (return_type_ != rt)
+        else if (rt && (return_type_ != rt))
 		      ctx->error(SMethodReturnTypeMismatch, null, code_->begin(), code_->end());
       }
   }

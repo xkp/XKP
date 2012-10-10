@@ -84,6 +84,7 @@ const str SNamelessProjectParameter("project parameters expect a 'name' tag");
 const str SDependencyNeedsHRef("class dependencies expect a 'href' tag");
 const str SBuildProjectExpectsProject("compiler.build expects project as first argument");
 const str SBuildProjectExpectsNamedParameters("compiler.build expects named arguments after project path");
+const str SSnafu("Something went wrong");
 
 //dependency_list
 void dependency_list::add(XSSObject dep)
@@ -980,7 +981,36 @@ void xss_compiler::xss(const param_list params)
           }
       }
 
-    str render_result = result->render(XSSObject(), &result_params);
+    str      render_result;
+    bool	   success = false;
+    param_list error_info;
+    try
+	    {
+	      render_result = result->render(XSSObject(), &result_params);
+		    success = true;
+	    }
+    catch(xss_error xsse)
+	    {
+		    error_info = xsse.data; 
+	    }
+    catch(xs_error xse)
+	    {
+		    error_info = xse.data; 
+	    }
+    catch(...)
+	    {
+		    error_info.add("desc", SSnafu); 
+		    error_info.add("file", file.string()); 
+	    }
+
+    if (!success)
+	    {
+		    int l = variant_cast<int>(error_info.get("line"), -1);
+		    int c = variant_cast<int>(error_info.get("column"), -1);
+		    str desc = variant_cast<str>(error_info.get("desc"), str());
+		    ctx->error(desc, &error_info, file_position(l, c), file_position(l, c)); //td: !!! handle errors better
+	    }
+
     if (the_output_file.empty())
       {
         if (!r)
@@ -1207,11 +1237,11 @@ str xss_compiler::render_expr(const expression& expr, XSSObject this_)
   //  return rend->render();
   }
 
-str xss_compiler::render_expression(const str& expr, XSSObject this_)
-	{
-    assert(false);
-    return str();
-    //0.9.5
+//0.9.5
+//str xss_compiler::render_expression(const str& expr, XSSObject this_)
+//	{
+//    assert(false);
+//    return str();
 		//xs_utils	 xs;
 		//expression e;
 		//if (!xs.compile_expression(expr, e))
@@ -1238,7 +1268,7 @@ str xss_compiler::render_expression(const str& expr, XSSObject this_)
   //  //and render
 		////return rend->render(this_, null);
   //  return rend->render();
-	}
+	//}
 
 str xss_compiler::replace_identifier(const str& s, const str& src, const str& dst)
 	{
@@ -1847,6 +1877,13 @@ XSSContext xss_compiler::context()
 
 void xss_compiler::render_code(XSSCode code)
   {
+    str         result = code_to_string(code);
+    XSSRenderer rend   = current_renderer();
+    rend->append(result);
+  }
+
+str xss_compiler::code_to_string(XSSCode code)
+  {
     Language    lang = ctx_->get_language();
     XSSRenderer rend = current_renderer();
 
@@ -1868,8 +1905,49 @@ void xss_compiler::render_code(XSSCode code)
 
     std::ostringstream result;
     lang->render_code(code, ctx, result);
-    
-    rend->append(result.str());
+    return result.str();
+  }
+
+void xss_compiler::render_signature(XSSSignature sig)
+  {
+    str         result = signature_to_string(sig);
+    XSSRenderer rend   = current_renderer();
+    rend->append(result);
+  }
+
+str xss_compiler::signature_to_string(XSSSignature sig)
+  {
+    Language    lang = ctx_->get_language();
+    XSSRenderer rend = current_renderer();
+
+    std::ostringstream result;
+    lang->render_signature(sig, ctx_, result);
+    return result.str();
+  }
+
+str xss_compiler::type_to_string(XSSType type)
+  {
+    Language    lang = ctx_->get_language();
+    XSSRenderer rend = current_renderer();
+
+    std::ostringstream result;
+    lang->render_type_name(type, ctx_, result);
+    return result.str();
+  }
+
+void xss_compiler::render_expression(XSSExpression expr)
+  {
+    str         result = expression_to_string(expr);
+    XSSRenderer rend   = current_renderer();
+    rend->append(result);
+  }
+
+str xss_compiler::expression_to_string(XSSExpression expr)
+  {
+    Language           lang = ctx_->get_language();
+    std::ostringstream result;
+    lang->render_expression(expr, ctx_, result);
+    return result.str();
   }
 
 //0.9.5

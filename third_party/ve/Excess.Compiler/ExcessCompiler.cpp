@@ -339,6 +339,20 @@ List<ExcessErrorInfo^>^	ExcessModel::getErrors(String^ filename)
 	return result;
 }
 
+List<ExcessErrorInfo^>^	ExcessModel::getAllErrors()
+{
+	std::vector<xss_error_info> errors;
+	model_->walkErrors(std::string(), errors);
+
+	//www
+	List<ExcessErrorInfo^>^ result = gcnew List<ExcessErrorInfo^>();
+	std::vector<xss_error_info>::iterator it = errors.begin();
+	std::vector<xss_error_info>::iterator nd = errors.end();
+	for(; it != nd; it++)
+		result->Add(gcnew ExcessErrorInfo(StringUtils::toString(it->desc), StringUtils::toString(it->file), it->sline, it->scol, it->eline, it->ecol));
+	return result;
+}
+
 CompletionType ExcessModel::getCompletionType(int id)
 {
 	const int RESOLVE_INSTANCE	= 1;

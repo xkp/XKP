@@ -195,7 +195,7 @@ void application::visit_errors(const fs::path& fname, error_visitor* visitor)
 
     for(; it != nd; it++)
       {
-        if (it->loc.file == fname)
+        if (it->loc.file == fname || fname.empty())
           visitor->visit(*it);
       }
   }
@@ -241,6 +241,7 @@ void application::build()
     
     XSSContext cctx = compiler->context();
     cctx->set_language(ctx_->get_language());
+    cctx->errors(ctx_->errors());
     
     compiler->build(renderer_, output_);
   }
@@ -562,7 +563,8 @@ struct local_error_handler : IErrorHandler
 //object_model
 object_model::object_model(FileSystem fs, LanguageFactory languages):
   fs_(fs),
-  languages_(languages)
+  languages_(languages),
+  changed_(false)
   {
   }
 
@@ -706,6 +708,7 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
 void object_model::register_app(const fs::path& fname, Application app)
   {
     apps_.insert(std::pair<fs::path, Application>(fname, app));
+	changed_ = true;
   }
 
 Application object_model::remove_app(const fs::path& fname)
@@ -782,6 +785,8 @@ void object_model::update_document(const str& fname, om_response& response)
 
         //the code compiled successfully, lets clear errors
         clear_file_errors(fname);
+
+		fix_it_up(response.ctx, response.data);
 
         //then bind
         type_map::iterator it = response.data.classes.begin();
@@ -1055,13 +1060,13 @@ struct fixup_type
 
 struct fixup_property_type
   {
-    fixup_property_type(const str& _type_name, XSSProperty _target):
+    fixup_property_type(const xs_type& _type_name, XSSProperty _target):
       type_name(_type_name),
       target(_target)
       {
       }
 
-    str         type_name;
+    xs_type     type_name;
     XSSProperty target;
   };
 
@@ -1133,7 +1138,7 @@ struct object_visitor : xs_visitor
             target_->insert_property(result);
           }
         
-        if (!info.type.empty())
+        if (!info.type.name.empty())
           fixup_.push_back(fixup_data(FIXUP_PROPERTY_TYPE, fixup_property_type(info.type, result)));
         
         if (!info.value.empty())
@@ -1171,8 +1176,8 @@ struct object_visitor : xs_visitor
             target_->insert_method(result);
           }
 
-        if (!info.type.empty())
-          fixup_.push_back(fixup_data(FIXUP_RETURN_TYPE, fixup_return_type(info.type, result)));
+        if (!info.type.name.empty()) //td: generics
+          fixup_.push_back(fixup_data(FIXUP_RETURN_TYPE, fixup_return_type(info.type.name, result)));
 
         XSSSignature sig  = xss_code_utils::compile_arg_list(info.args);
         result->signature(sig);
@@ -1867,7 +1872,7 @@ void object_model::fix_it_up(XSSContext ctx, om_context& octx)
               {
                 fixup_property_type fu = it->data;
                 XSSType type = ctx->get_type(fu.type_name);
-                if (check_type(type, fu.type_name, ctx))
+				if (check_type(type, fu.type_name.name, ctx))
                   fu.target->property_type(type);
                 break;
               }
@@ -1970,6 +1975,13 @@ Application object_model::app_by_file(const fs::path& path)
           return it->second;
       }
     return Application();
+  }
+
+bool object_model::changed()
+  {
+	bool result = changed_;
+	changed_ = false;
+	return result;
   }
 
 void object_model::add_error(const str& desc, param_list* info, file_location& loc)

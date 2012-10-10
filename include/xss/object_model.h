@@ -264,12 +264,15 @@ class object_model
       void        add_error(const str& desc, param_list* info, file_location& loc);
       void        visit_errors(const fs::path& fname, error_visitor* visitor);
       Application app_by_file(const fs::path& path);
+      bool        changed();
+	  
     public:
 	    FileSystem filesystem() {return fs_;}	
     private:
       LanguageFactory languages_;
       FileSystem      fs_;
       idiom_list      idioms_;
+	  bool			  changed_;	
 
       void            assure_id(DataEntity de);
       DataEntity      assure_unique_root(DataReader dr);

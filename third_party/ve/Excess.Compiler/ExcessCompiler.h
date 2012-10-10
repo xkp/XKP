@@ -150,6 +150,7 @@ namespace ExcessCompiler {
 			//access
 			List<ExcessCompletionItem^>^ getCompletion(String^ filename, String^ text, int line, int col);
             List<ExcessErrorInfo^>^		 getErrors(String^ filename);
+            List<ExcessErrorInfo^>^		 getAllErrors();
 		private:
 			IObjectModel*				model_; //wtf, no smart pointers?
 			std::map<std::string, int>*	projects_;
