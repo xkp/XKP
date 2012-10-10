@@ -13,12 +13,7 @@
         <method id="log" output_id="WriteLine">
             <argument id="what" type="var"/>
         </method>
-            
-        <property id="test_property" type="int"/>
-            
-        <event id="test_event">
-            <argument id="x" type="float"/>
-            <argument id="y" type="float"/>
-        </event>
-    </class>
+
+		<method id="read" output_id="ReadLine"/>
+	</class>
 </idiom>
