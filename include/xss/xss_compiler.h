@@ -198,6 +198,9 @@ namespace xkp
         xss_compiler();
         xss_compiler(ICompilerOutput* out);
       public:
+        //0.9.5
+        //str          render_expression(const str& expr, XSSObject this_);
+
 				XSSRenderer  compile_xss_file(const str& src_file, XSSContext ctx, const str& html_template = str());
 				XSSRenderer  compile_xss_file(fs::path src_file, XSSContext ctx, const str& html_template = str());
 				XSSRenderer  compile_xss(const str& src, XSSContext ctx, fs::path path = fs::path(), const str& html_template = str());
@@ -213,7 +216,6 @@ namespace xkp
         void         error(const param_list params);
         bool         parse_expression(variant v);
         variant      compile_expression(const str& expr);
-        str          render_expression(const str& expr, XSSObject this_);
         str          render_expr(const expression& expr, XSSObject this_);
         str          replace_identifier(const str& s, const str& src, const str& dst);
         variant      evaluate_property(XSSProperty prop);
@@ -237,11 +239,17 @@ namespace xkp
         bool         application_object(XSSObject obj);
 
         //0.9.5
-        void file_system(FileSystem fs);
-        void register_symbol(const str& symbol, variant value);
-        void build(const fs::path& entry, const fs::path& output);
+        void       file_system(FileSystem fs);
+        void       register_symbol(const str& symbol, variant value);
+        void       build(const fs::path& entry, const fs::path& output);
         XSSContext context();
-        void render_code(XSSCode code);
+        void       render_code(XSSCode code);
+        str        code_to_string(XSSCode code); 
+        void       render_signature(XSSSignature sig);
+        str        signature_to_string(XSSSignature sig); 
+        str        type_to_string(XSSType sig); 
+        void       render_expression(XSSExpression expr);
+        str        expression_to_string(XSSExpression expr); 
 
         //0.9.5
         //void         build(fs::path xml, param_list& args);
@@ -379,14 +387,21 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         readonly_property<XSSObject>("options", &xss_compiler::options_);
 
         //0.9.5
-        method_<void, 1>("render_code",	 &xss_compiler::render_code);
+        method_<void, 1>("render_code",	        &xss_compiler::render_code);
+        method_<str,  1>("code_to_string",      &xss_compiler::code_to_string);
+        method_<void, 1>("render_signature",	  &xss_compiler::render_signature);
+        method_<str,  1>("signature_to_string", &xss_compiler::signature_to_string);
+        method_<str,  1>("type_to_string",      &xss_compiler::type_to_string);
+        method_<void, 1>("render_expression",   &xss_compiler::render_expression);
+        method_<str,  1>("expression_to_string",&xss_compiler::expression_to_string);
+
 
         //0.9.5
         //method_<str,          0>("project_path",       &xss_compiler::project_path);
+        //method_<str,          2>("render_expression",  &xss_compiler::render_expression);
 
         method_<str,          1>("genid",	             &xss_compiler::genid);
         method_<bool,         1>("parse_expression",	 &xss_compiler::parse_expression);
-        method_<str,          2>("render_expression",  &xss_compiler::render_expression);
         method_<variant,      1>("compile_expression", &xss_compiler::compile_expression);
         method_<str,	        3>("replace_identifier", &xss_compiler::replace_identifier);
         method_<variant,      1>("evaluate_property",  &xss_compiler::evaluate_property);

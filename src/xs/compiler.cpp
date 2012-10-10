@@ -585,7 +585,14 @@ expr_list_::expr_list_(expression_& _expr):
 
 bool expr_list_::visit(TokenStruct* token, parsetree_visitor* visitor)
   {
-    return visit_rule(this, token, visitor);
+    if (token->ReductionRule == rule_expr_list || token->ReductionRule == rule_single_expr)
+		return visit_rule(this, token, visitor);
+
+	//standard expression
+	expression_ _expr(expr);
+	visitor->visit(token, _expr);
+    param_count++;
+	return true;
   }
 
 void expr_list_::single_expr( TokenStruct* token, parsetree_visitor* visitor)
@@ -1344,7 +1351,10 @@ bool while_::visit(TokenStruct* token, parsetree_visitor* visitor)
 //variable_
 bool variable_::visit(TokenStruct* token, parsetree_visitor* visitor)
   {
-    output_.type = wide2str( token->Tokens[0]->Tokens[0]->Data );
+    type_ tt(output_.type);
+    visitor->visit(token->Tokens[0], tt);
+
+    //output_.type = wide2str( token->Tokens[0]->Tokens[0]->Data );
 
     return visit_rule(this, token->Tokens[1], visitor);
   }
@@ -1481,10 +1491,12 @@ struct opt_type_ : visitor_base<opt_type_>
 
     void main( TokenStruct* token, parsetree_visitor* visitor)
       {
-        type_ = wide2str(token->Tokens[1]->Tokens[0]->Data);
+        type_ tp(type);
+        visitor->visit(token->Tokens[1], tp);
+        //type = wide2str(token->Tokens[1]->Tokens[0]->Data);
       }
 
-    str type_;
+    xs_type type;
   };
 
 struct property_ : visitor_base<property_>
@@ -1518,7 +1530,7 @@ struct property_ : visitor_base<property_>
 
         opt_type_ tp;
         visitor->visit(token->Tokens[2], tp);
-        output_.type = tp.type_;
+        output_.type = tp.type;
 
         visitor->visit(token->Tokens[3], *this);
       }
@@ -1598,7 +1610,7 @@ struct method_ : visitor_base<method_>
 
         opt_type_ tp;
         visitor->visit(token->Tokens[5], tp);
-        output_.type = tp.type_;
+        output_.type = tp.type;
 
         code_ cd(output_.cde);
         visitor->visit(token->Tokens[6], cd);
@@ -1606,8 +1618,11 @@ struct method_ : visitor_base<method_>
 
     void main_c( TokenStruct* token, parsetree_visitor* visitor)
       {
-        output_.type = wide2str(token->Tokens[0]->Tokens[0]->Data);
-        output_.name = wide2str(token->Tokens[1]->Data);
+		type_ tp(output_.type);
+		visitor->visit(token->Tokens[0], tp);
+        //output_.type = wide2str(token->Tokens[0]->Tokens[0]->Data);
+        
+		output_.name = wide2str(token->Tokens[1]->Data);
 
         param_decl_ pd(output_.args);
         visitor->visit(token->Tokens[3], pd);
@@ -1758,7 +1773,7 @@ struct xs_ : visitor_base<xs_>
 
         opt_type_ tp;
         visitor->visit(token->Tokens[2], tp);
-        xi.class_name = tp.type_;
+        xi.class_name = tp.type.name; //td: generics
 
         xs_ c(xi);
         visitor->visit(token->Tokens[3], c);
@@ -1776,7 +1791,7 @@ struct xs_ : visitor_base<xs_>
 
         opt_type_ tp;
         visitor->visit(token->Tokens[3], tp);
-        xc.super = tp.type_;
+        xc.super = tp.type.name; //td: generics
 
         xs_ c(xc);
         visitor->visit(token->Tokens[4], c);
@@ -1791,7 +1806,7 @@ struct xs_ : visitor_base<xs_>
 
         opt_type_ tp;
         visitor->visit(token->Tokens[2], tp);
-        xb.super = tp.type_;
+        xb.super = tp.type.name; //td: generics
 
         xs_ c(xb);
         visitor->visit(token->Tokens[3], c);

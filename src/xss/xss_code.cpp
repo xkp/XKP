@@ -22,11 +22,11 @@ void statement_if::bind(XSSContext ctx)
 //statement_variable
 void statement_variable::bind(XSSContext ctx)
   {
-    type_ = ctx->get_type(type_name_);
+    type_ = ctx->get_type(type_info_);
     if (!type_)
 	    {
 	      param_list pl;
-	      pl.add("type", type_name_);
+	      pl.add("type", type_info_.name);
 	      ctx->error(SUnknownType, &pl, begin_, end_);
       }
       
@@ -49,6 +49,23 @@ void statement_variable::bind(XSSContext ctx)
                       }
                     case TYPECAST:
                       {
+						            //array case, due to initialization not knowing its type (i.e. typeof([]) == array<var>)
+						            if (type_->is_array())
+						              {
+							              XSSValue value = value_->value();
+							              if (value && value->is_array())
+							                {
+								                value_operation& arr = value->get_last();
+								                if (arr.args()->size() == 0)
+								                  {
+									                  //retype
+									                  value_->type(type_);
+									                  value->type(type_);
+									                  arr.bind(RESOLVE_CONST, type_);
+								                  }
+							                }
+						              }
+
                         needs_cast_ = true;
                         break;
                       }
@@ -76,11 +93,11 @@ void statement_for::bind(XSSContext ctx)
       }
     else
       {
-        type_ = ctx->get_type(type_name_);
+        type_ = ctx->get_type(type_info_);
         if (!type_)
 	        {
 	          param_list pl;
-	          pl.add("type", type_name_);
+	          pl.add("type", type_info_.name);
 	          ctx->error(SUnknownType, &pl, begin_, end_);
           }
 
@@ -119,10 +136,10 @@ void statement_for::bind(XSSContext ctx)
       }
 
     if (cond_expr_)
-      cond_expr_->bind(ctx);
+      cond_expr_->bind(for_code_->context());
 
     if (iter_expr_)
-      iter_expr_->bind(ctx);
+      iter_expr_->bind(for_code_->context());
 
     for_code_->bind(ctx);
   }
@@ -288,9 +305,10 @@ struct code_builder : code_visitor
 
     virtual void variable_(stmt_variable& info)
       {
-		XSSExpression value;
-		if (!info.value.empty())
-			value = xss_expression_utils::compile_expression(info.value);
+		    XSSExpression value;
+		    if (!info.value.empty())
+			    value = xss_expression_utils::compile_expression(info.value);
+
         result_->add(XSSStatement(new statement_variable(info.id, info.type, value, info.begin, info.end)));
       }
 

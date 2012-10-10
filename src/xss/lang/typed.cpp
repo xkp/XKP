@@ -150,6 +150,49 @@ bool typed_lang::render_expression(XSSExpression expr, XSSContext ctx, std::ostr
     return render_operator(expr, ctx, result);
   }
 
+bool typed_lang::render_array_assignment(XSSExpression expr, XSSArguments index, XSSContext ctx, std::ostringstream& result)
+  {
+    operator_type op = expr->op(); 
+    if (index)
+      {
+        //here we render the "get" expression which will include the brackets,
+		  //this will break if the target language does not support the operator directly
+        if (!render_expression(expr->left(), ctx, result))
+          return false;
+
+		//result << '[';
+        //
+        //if (!render_arguments(index, ctx, result))
+        //  return false;
+
+        //result << "] ";
+		
+		result << operator_utils::to_string(op) << " ";
+        if (!render_expression(expr->right(), ctx, result))
+          return false;
+      }
+    else
+      {
+        //td: !!! move to csharp
+        assert(op == op_plus_equal || op == op_minus_equal);
+        str opstr = "Add";
+        if (expr->op() == op_minus_equal)
+          opstr = "Remove";
+
+        if (!render_expression(expr->left(), ctx, result))
+          return false;
+
+        result << "." << opstr << "(";
+
+        if (!render_expression(expr->right(), ctx, result))
+          return false;
+
+        result << ")";
+      }
+
+    return true;
+  }
+
 bool typed_lang::render_operator(XSSExpression expr, XSSContext ctx, std::ostringstream& result)
   {
     int op_prec = operator_utils::precedence(expr->op());
@@ -175,29 +218,30 @@ bool typed_lang::render_operator(XSSExpression expr, XSSContext ctx, std::ostrin
           }
       }
 
-    //typical expression, render left << op << right
-    if (left->value())
-      {
-        if (!render_value(left->value(), ctx, result))
-          return false;
-      }
-    else
-      {
-        int lprec = operator_utils::precedence(left->op());
-        if (op_prec < lprec)
-          result << "(";
-
-        if (!render_expression(left, ctx, result))
-          return false;
-
-        if (op_prec < lprec)
-          result << ")";
-      }
 
     //op
     if (right) //binary op
       {
-        result << " " << operator_utils::to_string(expr->op()) << " ";
+		//typical expression, render left << op << right
+		if (left->value())
+		  {
+			if (!render_value(left->value(), ctx, result))
+			  return false;
+		  }
+		else
+		  {
+			int lprec = operator_utils::precedence(left->op());
+			if (op_prec < lprec)
+			  result << "(";
+
+			if (!render_expression(left, ctx, result))
+			  return false;
+
+			if (op_prec < lprec)
+			  result << ")";
+		  }
+
+		result << " " << operator_utils::to_string(expr->op()) << " ";
 
         //right
         if (right->value())
@@ -218,10 +262,44 @@ bool typed_lang::render_operator(XSSExpression expr, XSSContext ctx, std::ostrin
               result << ")";
           }
       }
-    else
+    else //unary
       {
-        result << operator_utils::to_string(expr->op());
-      }
+		operator_type op = expr->op();
+		bool pre = true;
+		switch(op)
+		  {
+			case op_inc:
+			case op_dec:
+			  {
+				pre = false;
+				break;
+			  }
+		  }
+		
+		if (pre)
+		  result << operator_utils::to_string(op);
+
+        if (left->value())
+          {
+            if (!render_value(left->value(), ctx, result))
+              return false;
+          }
+        else
+          {
+            int rprec = operator_utils::precedence(left->op());
+            if (op_prec < rprec)
+              result << "(";
+
+            if (!render_expression(left, ctx, result))
+              return false;
+
+            if (op_prec < rprec)
+              result << ")";
+          }
+
+		if (!pre)
+		  result << operator_utils::to_string(op);
+	}
 
     return true;
   }
@@ -371,6 +449,29 @@ bool typed_lang::render_value(XSSValue val, XSSContext ctx, std::ostringstream& 
 bool typed_lang::render_type_name(XSSType type, XSSContext ctx, std::ostringstream& result)
   {
     result << type->output_id();
+    return true;
+  }
+
+bool typed_lang::render_signature(XSSSignature sig, XSSContext ctx, std::ostringstream& result)
+  {
+    signature_items& items = sig->items();
+    signature_items::iterator it = items.begin();
+    signature_items::iterator nd = items.end();
+
+    bool first = true;
+    for(; it!= nd; it++)
+      {
+        if (first)
+          first = false;
+        else
+          result << ", ";
+
+        if (!render_type_name(it->type, ctx, result))
+          return false;
+
+        result << " " << it->name;
+      }
+
     return true;
   }
 
@@ -714,6 +815,16 @@ bool typed_lang::render_throw(IStatementExpression* info, XSSContext ctx, std::o
 
 bool typed_lang::render_assignment(XSSExpression expr, XSSValue left_value, XSSExpression right, XSSContext ctx, std::ostringstream& result)
   {
+	  //check for array operations
+    XSSType is_array_type = left_value->type();
+    if (is_array_type && is_array_type->is_array() && expr->op() != op_assign)
+      return render_array_assignment(expr, XSSArguments(), ctx, result); //handled as a separate case, for complications
+
+    value_operation& last_op = left_value->get_last();
+    if (last_op.id() == OP_INDEX)
+      return render_array_assignment(expr, last_op.args(), ctx, result); //indexing in the same way
+
+    //regular case
     if (expr->op() == op_assign)
       {
         if (left_value->bound())
@@ -729,13 +840,12 @@ bool typed_lang::render_assignment(XSSExpression expr, XSSValue left_value, XSSE
                 path_str = path_.str();
               }
 
-            value_operation& vop = left_value->get_last();
-            switch(vop.resolve_id())
+            switch(last_op.resolve_id())
               {
                 case RESOLVE_PROPERTY:
                   {
                     bool this_property = path_str.empty();
-                    XSSProperty prop = vop.resolve_value();
+                    XSSProperty prop = last_op.resolve_value();
 
                     assert(!prop->is_const());
 
@@ -775,7 +885,7 @@ bool typed_lang::render_assignment(XSSExpression expr, XSSValue left_value, XSSE
                   }
                 case RESOLVE_VARIABLE:
                   {
-                    result << vop.identifier() << " = ";
+                    result << last_op.identifier() << " = ";
                     if (!render_expression(right, ctx, result))
                       return false;
 					break;
@@ -882,6 +992,7 @@ bool typed_lang::render_read_operation(value_operation& op, XSSContext ctx, std:
 
 bool typed_lang::render_call(value_operation& op, XSSContext ctx, std::ostringstream& result)
   {
+    str path = result.str();
     if (op.bound())
       {
         assert(op.resolve_id() == RESOLVE_METHOD);
@@ -889,7 +1000,6 @@ bool typed_lang::render_call(value_operation& op, XSSContext ctx, std::ostringst
         InlineRenderer renderer = mthd->renderer();
         if (renderer)
           {
-            str path = result.str();
             bool this_property = path.empty();
                     
             std::ostringstream args;
@@ -905,7 +1015,9 @@ bool typed_lang::render_call(value_operation& op, XSSContext ctx, std::ostringst
           }
         else
           {
-            result << '.' << mthd->output_id() << '(';
+			if (!path.empty())
+			  result << '.';
+			result << mthd->output_id() << '(';
             if (!render_arguments(op.args(), ctx, result))
               return false;
             result << ')';
@@ -987,7 +1099,9 @@ bool typed_lang::render_index_operation(value_operation& op, XSSContext ctx, std
       }
 
     //no special case
-    result << '.' << op.identifier() << '[';
+	if (!result.str().empty())
+		result << '.';
+	result << op.identifier() << '[';
     if (!render_arguments(op.args(), ctx, result))
       return false;
     result << ']';

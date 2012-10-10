@@ -597,22 +597,31 @@ void xss_value::bind(XSSContext ctx, bool as_setter)
         
         resolve_info  resolver;
         if (!first)
-		  resolver.left = &left;
+		      resolver.left = &left;
 
         bool last = (it + 1) == nd;
 
         //handle assignments
         if (last && as_setter)
           {
-            if (it->id() != OP_READ)
-              {
-		            ctx->error(SInvalidAssign, null, begin_, end_);
-                state_ = BS_ERROR;
-                continue;
-              }
-
-            it->id(OP_WRITE);
-
+            switch(it->id())
+			        {
+				        case OP_READ:
+				          {
+                    it->id(OP_WRITE);
+                    break;
+				          }
+                case OP_INDEX:
+                  {
+                    break;
+                  }
+                default:
+                  {
+		                ctx->error(SInvalidAssign, null, begin_, end_);
+                    state_ = BS_ERROR;
+                    continue;
+                  }
+			        }
           }
 
         switch(it->id())
@@ -657,7 +666,11 @@ void xss_value::bind(XSSContext ctx, bool as_setter)
                 XSSArguments args = it->args();
                 args->bind(ctx);
 
-                type_ = ctx->get_array_type(args->type()); 
+				        XSSType arg_type = args->type();
+				if (arg_type)
+					type_ = ctx->get_array_type(arg_type); 
+				else if (args->size() == 0)
+					type_ = ctx->get_array_type(ctx->get_type("var")); 
                 it->bind(RESOLVE_CONST, type_);
                 return;
               };
@@ -754,7 +767,14 @@ void xss_value::bind(XSSContext ctx, bool as_setter)
                         left.what  = RESOLVE_TYPE;
                         left.type  = current;
                       }
-                    else
+					else if (resolver.type->is_array())
+					  {
+                        current = resolver.type->array_type();
+						it->bind(resolver.what, resolver.value);
+						left.what  = RESOLVE_TYPE;
+						left.type  = current;
+					  }
+					else 
                       {
                         param_list error;
                         error.add("identifier", it->identifier());
@@ -802,6 +822,11 @@ XSSType xss_value::type()
     return type_;
   }
 
+void xss_value::type(XSSType type)
+  {
+	  type_ = type;
+  }
+
 bool xss_value::bound()
   {
     return state_ == BS_BOUND;
@@ -826,6 +851,15 @@ bool xss_value::is_constant()
   {
     value_operation& last = get_last();
     return last.is_constant();
+  }
+
+bool xss_value::is_array()
+  {
+	if (operations_.size() != 1)
+	  return false;
+    
+	value_operation& last = get_last();
+	return last.id() == OP_ARRAY;
   }
 
 variant xss_value::constant()
@@ -909,6 +943,11 @@ void xss_expression::bind(XSSContext ctx)
 XSSType xss_expression::type()
   {
     return type_;
+  }
+
+void xss_expression::type(XSSType t)
+  { 
+    type_ = t;
   }
 
 bool xss_expression::is_constant()
@@ -1033,9 +1072,10 @@ signature_item::signature_item():
   {
   }
 
-signature_item::signature_item(signature_item& other):
+signature_item::signature_item(const signature_item& other):
   name(other.name),
   type(other.type),
+  type_name(other.type_name),
   default_value(other.default_value),
   cast_default(other.cast_default)
   {
@@ -1057,6 +1097,15 @@ signature_item::signature_item(const str& _name, const str& _type_name, XSSExpre
   }
 
 //xss_signature
+xss_signature::xss_signature()
+  {
+  }
+
+xss_signature::xss_signature(const xss_signature& other):
+  items_(other.items_)
+  {
+  }
+
 signature_items& xss_signature::items()
   {
     return items_;

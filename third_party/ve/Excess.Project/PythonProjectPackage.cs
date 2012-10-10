@@ -247,9 +247,12 @@ namespace Excess.Project
 
             if (changed && currentView_ != null)
             {
-                ErrorListPresenter ep = currentView_.Properties.GetOrCreateSingletonProperty<ErrorListPresenter>(() => null);
-                if (ep != null)
-                    ep.CreateErrors();
+                if (currentView_.Properties.ContainsProperty(typeof(ErrorListPresenter)))
+                {
+                    ErrorListPresenter ep = currentView_.Properties.GetOrCreateSingletonProperty<ErrorListPresenter>(() => null);
+                    if (ep != null)
+                        ep.CreateErrors();
+                }
             }
 
             return 0;

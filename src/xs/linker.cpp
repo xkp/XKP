@@ -1336,7 +1336,7 @@ bool code_linker::has_parameter_names()
 
 int code_linker::register_variable(stmt_variable& info)
   {
-    return register_variable(info.id, info.type, &info.value);
+    return register_variable(info.id, info.type.name, &info.value);
   }
 
 int code_linker::register_variable(const str& name, const str& type, expression* value)
@@ -1943,7 +1943,7 @@ struct decode_property
   {
     decode_property(code_context& ctx, xs_property& info, DynamicObject output, fs::path file)
       {
-        itm.type  = info.type.empty()? null : ctx.types_->get_type(info.type);
+        itm.type  = info.type.name.empty()? null : ctx.types_->get_type(info.type.name);
         itm.flags = DYNAMIC_ACCESS;
 
         variant value;
@@ -2035,12 +2035,12 @@ void base_xs_linker::property_(xs_property& info)
     schema_item itm;
     itm.flags = DYNAMIC_ACCESS;
 
-    if (info.type.empty())
+    if (info.type.name.empty())
       itm.type  = null;
     else
       {
-        itm.type = ctx_.types_->get_type(info.type);
-        if (!itm.type && info.type != "var")
+        itm.type = ctx_.types_->get_type(info.type.name);
+        if (!itm.type && info.type.name != "var")
           {
             param_list error;
             error.add("id", SUnknownIdentifier);

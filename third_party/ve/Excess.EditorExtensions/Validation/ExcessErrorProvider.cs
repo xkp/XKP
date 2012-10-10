@@ -15,21 +15,27 @@ namespace Excess.EditorExtensions
             List<ValidationError> result = new List<ValidationError>();
 
             ExcessModelService service = ExcessModelService.getInstance();
-            List<ExcessErrorInfo> errors = service.Model.getErrors(textBuffer.GetFileName());
-            foreach(ExcessErrorInfo eei in errors)
+            //List<ExcessErrorInfo> errors = service.Model.getErrors(textBuffer.GetFileName());
+            List<ExcessErrorInfo> errors = service.Model.getAllErrors();
+            foreach (ExcessErrorInfo eei in errors)
             {
-                int spos;
-                int epos;
-                if (eei.BeginLine == eei.EndLine)
+                int spos = 0;
+                int epos = 0;
+
+                if (eei.BeginLine > 0)
                 {
-                    spos = textBuffer.CurrentSnapshot.GetLineFromLineNumber(eei.BeginLine - 1).Start.Position + eei.BeginColumn - 1;
-                    epos = textBuffer.CurrentSnapshot.GetLineFromLineNumber(eei.BeginLine - 1).Start.Position + eei.EndColumn - 1;
+                    if (eei.BeginLine == eei.EndLine)
+                    {
+                        spos = textBuffer.CurrentSnapshot.GetLineFromLineNumber(eei.BeginLine - 1).Start.Position + eei.BeginColumn - 1;
+                        epos = textBuffer.CurrentSnapshot.GetLineFromLineNumber(eei.BeginLine - 1).Start.Position + eei.EndColumn - 1;
+                    }
+                    else
+                    {
+                        spos = textBuffer.CurrentSnapshot.GetLineFromLineNumber(eei.BeginLine - 1).Start.Position + eei.BeginColumn - 1;
+                        epos = textBuffer.CurrentSnapshot.GetLineFromLineNumber(eei.BeginLine - 1).End.Position;
+                    }
                 }
-                else
-                {
-                    spos = textBuffer.CurrentSnapshot.GetLineFromLineNumber(eei.BeginLine - 1).Start.Position + eei.BeginColumn - 1;
-                    epos = textBuffer.CurrentSnapshot.GetLineFromLineNumber(eei.BeginLine - 1).End.Position;
-                }
+
                 result.Add(new ValidationError(new Span(spos, spos < epos ? epos - spos : 1), eei.desc, eei.BeginLine - 1, eei.BeginColumn - 1));
             }
 

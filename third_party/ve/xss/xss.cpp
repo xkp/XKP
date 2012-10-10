@@ -67,7 +67,7 @@ class xss_object_model : public IObjectModel
 				model_->update_document(fname, data);
 			}
 
-			return worked;
+			return worked || model_->changed();
 		}
 
 		virtual void queueChange(const std::string& fname, const std::string& content)
@@ -203,7 +203,10 @@ class xss_object_model : public IObjectModel
 			error_list _errors = app->errors();
 			bool success = _errors.empty();
 			if (success)
+			  {
 				app->build();
+				_errors = app->errors();
+			  }
 			
 			success = _errors.empty();
 			error_list::iterator it = _errors.begin();

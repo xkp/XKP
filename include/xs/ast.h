@@ -199,11 +199,11 @@ struct expression_splitter : expression_visitor
     
   struct stmt_variable : ast_base
     {
-      str        type;
+      xs_type    type;
       str        id;
       expression value;
       
-      bool empty() {return type.empty();}
+      bool empty() {return type.name.empty();}
     };
 
   struct stmt_for : ast_base
@@ -332,8 +332,8 @@ struct expression_splitter : expression_visitor
     {
       xs_property() : adjetives(0) {}
       
-      str name;
-      str type;
+      str        name;
+      xs_type    type;
       expression value;
       int        adjetives; 
       code       get; 
@@ -348,7 +348,7 @@ struct expression_splitter : expression_visitor
       xs_method() : adjetives(0) {}
 
       str             name;
-      str             type;
+      xs_type         type;
       param_list_decl args;
       code            cde; 
       int             adjetives; 
