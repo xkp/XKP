@@ -633,18 +633,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_781B1B4B135046169F040009607E9ED1"
-        "OwnerKey" = "8:_04F90B774D1541F3A1F3275A36C4B5E1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_781B1B4B135046169F040009607E9ED1"
-        "OwnerKey" = "8:_BC5272DA59A647FCA3C38880A289DB3F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_7A59482C07F35550DFFB3AF062B6FB93"
         "OwnerKey" = "8:_13A962CC3143BA050E75C319FB1B2A4E"
         "MsmSig" = "8:_UNDEFINED"
@@ -791,6 +779,18 @@
         {
         "MsmKey" = "8:_9B10A29862CBE99BA3C5E32C32DA4A3B"
         "OwnerKey" = "8:_C0CB771FD57D818816C4179BCF98444D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9F6A09C567E74B99BB3BE18D7F0E70FA"
+        "OwnerKey" = "8:_04F90B774D1541F3A1F3275A36C4B5E1"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9F6A09C567E74B99BB3BE18D7F0E70FA"
+        "OwnerKey" = "8:_BC5272DA59A647FCA3C38880A289DB3F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -3550,9 +3550,32 @@
         }
         "LaunchCondition"
         {
+            "{836E08B8-0285-4809-BA42-01DB6754A45D}:_33241C87E30C46ADBEFB0C72AC378164"
+            {
+            "Name" = "8:CheckForIsoShell"
+            "Condition" = "8:NOT((NOT(VS2010INSTALL)) AND (NOT (VSISOSHELLINSTALLDIR)))"
+            "Message" = "8:This application requires Visual Studio Isolated Shell.  Do you like to install Visual Studio Isolated Shell now?"
+            "InstallUrl" = "8:http://www.microsoft.com/en-us/download/details.aspx?id=1366"
+            }
         }
         "Locator"
         {
+            "{CF66B7F7-B7DA-4B08-A67A-233430638C9C}:_8963579585FF41DEAD08FF7AD01A3FA0"
+            {
+            "Name" = "8:Search for Visual Studio Isolated Shell registration"
+            "Root" = "2:1"
+            "RegKey" = "8:Software\\Microsoft\\VisualStudio\\10.0\\Setup\\IsoShell\\1033\\ProductDir"
+            "Value" = "8:InstallDir"
+            "Property" = "8:VSISOSHELLINSTALLDIR"
+            }
+            "{CF66B7F7-B7DA-4B08-A67A-233430638C9C}:_D54A2BA61A2E4ADD9D0FDCD9640BCFCC"
+            {
+            "Name" = "8:Search for Visual Studio 2010 registration"
+            "Root" = "2:3"
+            "RegKey" = "8:VisualStudio.DTE.10.0"
+            "Value" = "8:"
+            "Property" = "8:VS2010INSTALL"
+            }
         }
         "MsiBootstrapper"
         {
@@ -3564,7 +3587,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ExcessIDE"
         "ProductCode" = "8:{3EA28B1F-71C7-4E7D-91EC-F151274BF301}"
-        "PackageCode" = "8:{28D5B9A9-A859-449F-8EA8-BF249160EF1F}"
+        "PackageCode" = "8:{C5336D2B-75DC-43FD-9189-2F7C15A86BA0}"
         "UpgradeCode" = "8:{DE445DA7-18B3-49B9-96C9-D6A1C39AD040}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -4180,7 +4203,7 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_781B1B4B135046169F040009607E9ED1"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_9F6A09C567E74B99BB3BE18D7F0E70FA"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
